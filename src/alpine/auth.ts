@@ -42,6 +42,18 @@ import {
   initSupplierSetupForm,
   type SupplierSetupFormData,
 } from '../components/auth/SupplierSetupForm'
+
+const COUNTRY_CODE_MAP: Record<string, string> = {
+  TR: 'Turkey', US: 'United States', DE: 'Germany', GB: 'United Kingdom',
+  FR: 'France', IT: 'Italy', ES: 'Spain', NL: 'Netherlands', BE: 'Belgium',
+  AT: 'Austria', CH: 'Switzerland', PL: 'Poland', SE: 'Sweden', NO: 'Norway',
+  DK: 'Denmark', FI: 'Finland', RU: 'Russia', CN: 'China', JP: 'Japan',
+  KR: 'South Korea', IN: 'India', AE: 'United Arab Emirates', SA: 'Saudi Arabia',
+  AU: 'Australia', CA: 'Canada', BR: 'Brazil', MX: 'Mexico',
+}
+function countryCodeToEnglish(code?: string): string {
+  return (code && COUNTRY_CODE_MAP[code]) || 'Turkey'
+}
 import { validatePassword, isPasswordValid } from '../utils/password-validation'
 
 /* ── Register Page ──────────────────────────────────── */
@@ -99,6 +111,8 @@ Alpine.data('registerPage', () => ({
   },
 
   async submitEmail() {
+    if (this.loading) return; // Prevent double submit
+
     const input = (this.$refs as Record<string, HTMLInputElement>).emailInput;
     const value = input?.value.trim() || '';
 
@@ -222,8 +236,8 @@ Alpine.data('registerPage', () => ({
                   first_name: formData.firstName,
                   last_name: formData.lastName,
                   account_type: 'buyer',
-                  phone: '',
-                  country: 'Turkey',
+                  phone: formData.phone || '',
+                  country: countryCodeToEnglish(formData.country?.code) || 'Turkey',
                   accept_terms: true,
                   accept_kvkk: true,
                   registration_token: this.registration_token,

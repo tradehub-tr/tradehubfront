@@ -5,7 +5,7 @@ Alpine.data('floatingPanel', () => ({
   chatOpen: false,
   lensOpen: false,
   isSeller: false,
-  sellerPanelUrl: (import.meta as unknown as { env: Record<string, string> }).env.VITE_SELLER_PANEL_URL || 'http://localhost:8082/',
+  sellerPanelUrl: (import.meta.env as Record<string, string>).VITE_SELLER_PANEL_URL || 'http://localhost:8082/',
 
   async init() {
     this.showScrollTop = window.scrollY > 300;
@@ -18,8 +18,8 @@ Alpine.data('floatingPanel', () => ({
         credentials: 'include',
       });
       if (res.ok) {
-        const data = await res.json() as { message?: { logged_in?: boolean; user?: { is_seller?: boolean } } };
-        if (data.message?.logged_in && data.message?.user?.is_seller) {
+        const data = await res.json() as { message?: { logged_in?: boolean; user?: { has_seller_profile?: boolean } } };
+        if (data.message?.logged_in && data.message?.user?.has_seller_profile) {
           this.isSeller = true;
         }
       }
