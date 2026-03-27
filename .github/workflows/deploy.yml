@@ -19,6 +19,6 @@ jobs:
             cd /opt/tradehub/storefront
             git pull origin main
             cd /opt/tradehub
-            docker compose build --no-cache storefront
-            docker compose up -d --force-recreate storefront
+            docker compose build storefront
+            docker compose up -d storefront
             echo "✅ Storefront deploy tamamlandı"
