@@ -630,7 +630,7 @@ function renderAuthButtons(): string {
           </a>
         </div>
 
-        <!-- Social Login -->
+        <!-- Social Login (disabled)
         <div class="px-5 pb-3 text-center">
           <p class="text-[12px] text-gray-500 mb-2"><span data-i18n="header.continueWith">${t('header.continueWith')}</span></p>
           <div class="flex items-center justify-center gap-4">
@@ -650,6 +650,7 @@ function renderAuthButtons(): string {
             <a href="#" class="underline"><span data-i18n="header.privacyPolicy">${t('header.privacyPolicy')}</span></a>.
           </p>
         </div>
+        -->
       </div>
     </div>
   `;
