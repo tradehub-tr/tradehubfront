@@ -52,9 +52,21 @@ jobs:
           VERSION=${{ steps.version.outputs.version }}
           DATE=$(date +%Y-%m-%d)
 
-          FEATS=$(git log ${PREV}..HEAD --pretty=format:"- %s (@%an)" | grep "^- feat" || echo "")
-          FIXES=$(git log ${PREV}..HEAD --pretty=format:"- %s (@%an)" | grep "^- fix" || echo "")
-          REFACTORS=$(git log ${PREV}..HEAD --pretty=format:"- %s (@%an)" | grep "^- refactor" || echo "")
+          if git rev-parse "${PREV}" >/dev/null 2>&1; then
+            LOG_RANGE="${PREV}..HEAD"
+          else
+            LOG_RANGE=""
+          fi
+
+          if [ -n "$LOG_RANGE" ]; then
+            FEATS=$(git log ${LOG_RANGE} --pretty=format:"- %s (@%an)" | grep "^- feat" || echo "")
+            FIXES=$(git log ${LOG_RANGE} --pretty=format:"- %s (@%an)" | grep "^- fix" || echo "")
+            REFACTORS=$(git log ${LOG_RANGE} --pretty=format:"- %s (@%an)" | grep "^- refactor" || echo "")
+          else
+            FEATS=""
+            FIXES=""
+            REFACTORS=""
+          fi
 
           ENTRY="## [${VERSION}] - ${DATE} PROD\n\n"
           ENTRY+="Bu surum istoc.com'da yayindadir.\n\n"
