@@ -1,0 +1,92 @@
+name: Prod Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: 'Versiyon tipi'
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+permissions:
+  contents: write
+
+jobs:
+  prod-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Kodu cek
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Git ayarlari
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Prod versiyon belirle
+        id: version
+        run: |
+          LAST=$(git tag --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1)
+          LAST=${LAST:-"v1.0.0"}
+          IFS='.' read -r MAJOR MINOR PATCH <<< "${LAST#v}"
+          case "${{ inputs.version_type }}" in
+            major) MAJOR=$((MAJOR+1)); MINOR=0; PATCH=0 ;;
+            minor) MINOR=$((MINOR+1)); PATCH=0 ;;
+            patch) PATCH=$((PATCH+1)) ;;
+          esac
+          NEW_VERSION="v${MAJOR}.${MINOR}.${PATCH}"
+          echo "version=${NEW_VERSION}" >> $GITHUB_OUTPUT
+          echo "prev_version=${LAST}" >> $GITHUB_OUTPUT
+
+      - name: Prod CHANGELOG olustur
+        id: changelog
+        run: |
+          PREV=${{ steps.version.outputs.prev_version }}
+          VERSION=${{ steps.version.outputs.version }}
+          DATE=$(date +%Y-%m-%d)
+
+          FEATS=$(git log ${PREV}..HEAD --pretty=format:"- %s (@%an)" | grep "^- feat" || echo "")
+          FIXES=$(git log ${PREV}..HEAD --pretty=format:"- %s (@%an)" | grep "^- fix" || echo "")
+          REFACTORS=$(git log ${PREV}..HEAD --pretty=format:"- %s (@%an)" | grep "^- refactor" || echo "")
+
+          ENTRY="## [${VERSION}] - ${DATE} PROD\n\n"
+          ENTRY+="Bu surum istoc.com'da yayindadir.\n\n"
+
+          if [ -n "$FEATS" ]; then ENTRY+="### Eklendi\n${FEATS}\n\n"; fi
+          if [ -n "$FIXES" ]; then ENTRY+="### Duzeltildi\n${FIXES}\n\n"; fi
+          if [ -n "$REFACTORS" ]; then ENTRY+="### Degistirildi\n${REFACTORS}\n\n"; fi
+          ENTRY+="---\n"
+
+          printf "${ENTRY}" > /tmp/new_entry.md
+          cat /tmp/new_entry.md CHANGELOG.md > /tmp/merged.md
+          mv /tmp/merged.md CHANGELOG.md
+
+          echo "entry<<EOF" >> $GITHUB_OUTPUT
+          printf "${ENTRY}" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Commit ve tag
+        run: |
+          VERSION=${{ steps.version.outputs.version }}
+          git add CHANGELOG.md
+          git commit -m "chore: ${VERSION} prod changelog guncellendi"
+          git push origin main
+          git tag ${VERSION}
+          git push origin ${VERSION}
+
+      - name: GitHub Prod Release olustur
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version.outputs.version }}
+          release_name: "PROD - ${{ steps.version.outputs.version }}"
+          body: ${{ steps.changelog.outputs.entry }}
+          prerelease: false

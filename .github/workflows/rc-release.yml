@@ -1,0 +1,81 @@
+name: RC Release
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  rc-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Kodu cek
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Git ayarlari
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: RC versiyon belirle
+        id: version
+        run: |
+          LAST_PROD=$(git tag --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1)
+          LAST_PROD=${LAST_PROD:-"v1.0.0"}
+          RC_COUNT=$(git tag --sort=-v:refname | grep "^${LAST_PROD}-rc\." | wc -l)
+          RC_NUM=$((RC_COUNT + 1))
+          RC_VERSION="${LAST_PROD}-rc.${RC_NUM}"
+          echo "rc_version=${RC_VERSION}" >> $GITHUB_OUTPUT
+          echo "last_prod=${LAST_PROD}" >> $GITHUB_OUTPUT
+
+      - name: RC CHANGELOG olustur
+        id: changelog
+        run: |
+          PREV=${{ steps.version.outputs.last_prod }}
+          RC_VERSION=${{ steps.version.outputs.rc_version }}
+          DATE=$(date +%Y-%m-%d)
+
+          FEATS=$(git log ${PREV}..HEAD --pretty=format:"- %s (@%an)" | grep "^- feat" || echo "")
+          FIXES=$(git log ${PREV}..HEAD --pretty=format:"- %s (@%an)" | grep "^- fix" || echo "")
+          REFACTORS=$(git log ${PREV}..HEAD --pretty=format:"- %s (@%an)" | grep "^- refactor" || echo "")
+
+          ENTRY="## [${RC_VERSION}] - ${DATE} RC\n\n"
+          ENTRY+="Bu surum rc.istoc.com'da test asamasindadir.\n\n"
+
+          if [ -n "$FEATS" ]; then ENTRY+="### Eklendi\n${FEATS}\n\n"; fi
+          if [ -n "$FIXES" ]; then ENTRY+="### Duzeltildi\n${FIXES}\n\n"; fi
+          if [ -n "$REFACTORS" ]; then ENTRY+="### Degistirildi\n${REFACTORS}\n\n"; fi
+          ENTRY+="---\n"
+
+          printf "${ENTRY}" > /tmp/new_entry.md
+          cat /tmp/new_entry.md CHANGELOG.md > /tmp/merged.md
+          mv /tmp/merged.md CHANGELOG.md
+
+          echo "entry<<EOF" >> $GITHUB_OUTPUT
+          printf "${ENTRY}" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Commit ve tag
+        run: |
+          RC_VERSION=${{ steps.version.outputs.rc_version }}
+          git add CHANGELOG.md
+          git commit -m "chore: ${RC_VERSION} RC changelog guncellendi"
+          git push origin main
+          git tag ${RC_VERSION}
+          git push origin ${RC_VERSION}
+
+      - name: GitHub RC Release olustur
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version.outputs.rc_version }}
+          release_name: "RC - ${{ steps.version.outputs.rc_version }}"
+          body: ${{ steps.changelog.outputs.entry }}
+          prerelease: true
