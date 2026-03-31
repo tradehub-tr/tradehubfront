@@ -71,11 +71,9 @@ jobs:
           git push origin ${RC_VERSION}
 
       - name: GitHub RC Release olustur
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.version.outputs.rc_version }}
-          release_name: "RC - ${{ steps.version.outputs.rc_version }}"
+          name: "RC - ${{ steps.version.outputs.rc_version }}"
           body: ${{ steps.changelog.outputs.entry }}
           prerelease: true
