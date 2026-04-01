@@ -35,10 +35,7 @@ jobs:
         run: |
           LAST=$(git tag --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1)
           LAST=${LAST:-"v1.0.0"}
-          VERSION_NUM="${LAST#v}"
-          MAJOR=$(echo "$VERSION_NUM" | cut -d'.' -f1)
-          MINOR=$(echo "$VERSION_NUM" | cut -d'.' -f2)
-          PATCH=$(echo "$VERSION_NUM" | cut -d'.' -f3)
+          IFS='.' read -r MAJOR MINOR PATCH <<< "${LAST#v}"
           case "${{ inputs.version_type }}" in
             major) MAJOR=$((MAJOR+1)); MINOR=0; PATCH=0 ;;
             minor) MINOR=$((MINOR+1)); PATCH=0 ;;
@@ -50,39 +47,38 @@ jobs:
 
       - name: Prod CHANGELOG olustur
         id: changelog
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           PREV=${{ steps.version.outputs.prev_version }}
           VERSION=${{ steps.version.outputs.version }}
           DATE=$(date +%Y-%m-%d)
 
-          FEATS=""
-          FIXES=""
-          REFACTORS=""
           if git rev-parse "${PREV}" >/dev/null 2>&1; then
-            COMMITS=$(gh api "repos/${{ github.repository }}/compare/${PREV}...HEAD" \
-              --jq '.commits[] | "- \(.commit.message | split("\n")[0]) (@\(.author.login // .commit.author.name))"')
-            FEATS=$(echo "$COMMITS" | grep "^- feat" || true)
-            FIXES=$(echo "$COMMITS" | grep "^- fix" || true)
-            REFACTORS=$(echo "$COMMITS" | grep "^- refactor" || true)
+            LOG_RANGE="${PREV}..HEAD"
+          else
+            LOG_RANGE=""
+          fi
+
+          if [ -n "$LOG_RANGE" ]; then
+            FEATS=$(git log ${LOG_RANGE} --pretty=format:"- %s (@%an)" | grep "^- feat" || echo "")
+            FIXES=$(git log ${LOG_RANGE} --pretty=format:"- %s (@%an)" | grep "^- fix" || echo "")
+            REFACTORS=$(git log ${LOG_RANGE} --pretty=format:"- %s (@%an)" | grep "^- refactor" || echo "")
+          else
+            FEATS=""
+            FIXES=""
+            REFACTORS=""
           fi
 
           ENTRY="## [${VERSION}] - ${DATE} PROD\n\n"
-          ENTRY="${ENTRY}Bu surum istoc.com'da yayindadir.\n\n"
+          ENTRY+="Bu surum istoc.com'da yayindadir.\n\n"
 
-          if [ -n "$FEATS" ]; then ENTRY="${ENTRY}### Eklendi\n${FEATS}\n\n"; fi
-          if [ -n "$FIXES" ]; then ENTRY="${ENTRY}### Duzeltildi\n${FIXES}\n\n"; fi
-          if [ -n "$REFACTORS" ]; then ENTRY="${ENTRY}### Degistirildi\n${REFACTORS}\n\n"; fi
-          ENTRY="${ENTRY}---\n"
+          if [ -n "$FEATS" ]; then ENTRY+="### Eklendi\n${FEATS}\n\n"; fi
+          if [ -n "$FIXES" ]; then ENTRY+="### Duzeltildi\n${FIXES}\n\n"; fi
+          if [ -n "$REFACTORS" ]; then ENTRY+="### Degistirildi\n${REFACTORS}\n\n"; fi
+          ENTRY+="---\n"
 
-          if [ -f CHANGELOG.md ]; then
-            printf "${ENTRY}" > /tmp/new_entry.md
-            cat /tmp/new_entry.md CHANGELOG.md > /tmp/merged.md
-            mv /tmp/merged.md CHANGELOG.md
-          else
-            printf "# Changelog\n\n${ENTRY}" > CHANGELOG.md
-          fi
+          printf "${ENTRY}" > /tmp/new_entry.md
+          cat /tmp/new_entry.md CHANGELOG.md > /tmp/merged.md
+          mv /tmp/merged.md CHANGELOG.md
 
           echo "entry<<EOF" >> $GITHUB_OUTPUT
           printf "${ENTRY}" >> $GITHUB_OUTPUT
