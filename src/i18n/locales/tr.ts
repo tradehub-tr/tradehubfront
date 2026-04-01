@@ -1338,9 +1338,9 @@ const tr = {
         section3Title: '3. Fonksiyonel Çerezler',
         section3Content: '<p>Bu çerezler, tercihlerinizi hatırlayarak daha kişiselleştirilmiş bir deneyim sunar. Dil seçiminiz, para birimi tercihiniz veya bölge ayarlarınız gibi bilgileri saklar.</p><p>Bu çerezleri devre dışı bırakırsanız, bazı kişiselleştirme özellikleri çalışmayabilir.</p>',
         section4Title: '4. Analitik Çerezler',
-        section4Content: '<p>Bu çerezler, ziyaretçilerin sitemizi nasıl kullandığını anlamamıza yardımcı olur. Sayfa görüntülemeleri, oturum süresi, hemen çıkma oranı gibi istatistiksel veriler toplar.</p><p>Toplanan veriler anonimleştirilir ve yalnızca Platform hizmetlerinin iyileştirilmesi amacıyla kullanılır. Bu amaçla Google Analytics ve benzeri araçlar kullanılmaktadır.</p>',
+        section4Content: '<p>Bu çerezler, ziyaretçilerin sitemizi nasıl kullandığını anlamamıza yardımcı olur. Sayfa görüntülemeleri, oturum süresi, hemen çıkma oranı gibi istatistiksel veriler toplar.</p><p>Toplanan veriler anonimleştirilir ve yalnızca Platform hizmetlerinin iyileştirilmesi amacıyla kullanılır. Bu amaçla aşağıdaki araçlar kullanılmaktadır:</p><ul class="list-disc pl-5 space-y-1"><li><strong>Google Tag Manager (GTM):</strong> Sitemizdeki izleme etiketlerini yönetmemizi ve dağıtmamızı sağlayan bir etiket yönetim sistemidir. GTM kendisi kişisel veri toplamaz ancak diğer analitik ve pazarlama scriptlerinin yüklenmesini kolaylaştırır.</li><li><strong>Google Analytics:</strong> Sayfa görüntülemeleri, oturumlar, kullanıcı davranış akışları ve demografik bilgiler hakkında anonim istatistikler toplar.</li><li><strong>Yandex Metrica:</strong> Ziyaretçilerin sayfalarımızla nasıl etkileşimde bulunduğunu anlamamıza yardımcı olan ısı haritaları, oturum kayıtları (WebVisor), kaydırma derinliği analizi ve form etkileşim takibi sağlar.</li></ul>',
         section5Title: '5. Pazarlama Çerezleri',
-        section5Content: '<p>Bu çerezler, ilgi alanlarınıza uygun reklamlar göstermek için kullanılır. Farklı web sitelerinde gezinme alışkanlıklarınızı takip edebilir.</p><p>Bu çerezleri devre dışı bırakmak, reklam görmeyeceğiniz anlamına gelmez; yalnızca size gösterilen reklamların ilgi alanlarınıza göre kişiselleştirilmediği anlamına gelir.</p>',
+        section5Content: '<p>Bu çerezler, ilgi alanlarınıza uygun reklamlar göstermek için kullanılır. Farklı web sitelerinde gezinme alışkanlıklarınızı takip edebilir.</p><p>Platformumuzda aşağıdaki pazarlama ve yeniden hedefleme hizmetleri kullanılmaktadır:</p><ul class="list-disc pl-5 space-y-1"><li><strong>Facebook Pixel (Meta):</strong> Facebook reklamlarından gelen dönüşümleri takip eder, gelecekteki reklamlar için hedef kitleler oluşturur ve siteyi daha önce ziyaret eden kullanıcılara yeniden hedefleme yapılmasını sağlar.</li><li><strong>Criteo:</strong> Sitemizdeki gezinme geçmişinize ve ürün etkileşimlerinize dayalı olarak kişiselleştirilmiş ürün önerileri ve reklamlar gösteren bir yeniden hedefleme platformudur.</li><li><strong>Google Ads:</strong> Dönüşümleri takip eder ve Platform ile daha önce etkileşimde bulunmuş kullanıcılara yeniden pazarlama yapılmasını sağlar.</li></ul><p>Bu çerezleri devre dışı bırakmak, reklam görmeyeceğiniz anlamına gelmez; yalnızca size gösterilen reklamların ilgi alanlarınıza göre kişiselleştirilmediği anlamına gelir.</p>',
         section6Title: '6. Çerez Yönetimi',
         section6Content: '<p>Tarayıcı ayarlarınızdan çerezleri silme veya engelleme seçeneğiniz bulunmaktadır. Ancak zorunlu çerezlerin engellenmesi, Platform\'un düzgün çalışmamasına neden olabilir.</p><p>Aşağıdaki bağlantılardan popüler tarayıcıların çerez ayarlarına erişebilirsiniz:</p><ul class="list-disc pl-5 space-y-1"><li>Google Chrome: Ayarlar > Gizlilik ve Güvenlik > Çerezler</li><li>Mozilla Firefox: Seçenekler > Gizlilik ve Güvenlik</li><li>Safari: Tercihler > Gizlilik</li><li>Microsoft Edge: Ayarlar > Gizlilik, Arama ve Hizmetler</li></ul><p class="mt-3">Ayrıca bu sayfadaki çerez tercih panelini kullanarak kategori bazında çerez izinlerinizi yönetebilirsiniz.</p>',
       },
@@ -1704,10 +1704,35 @@ const tr = {
       twoYears: '2 yıl',
       twentyFourHours: '24 saat',
       threeMonths: '3 ay',
+      sixMonths: '6 ay',
+      thirteenMonths: '13 ay',
       typeNecessary: 'Zorunlu',
       typeFunctional: 'İşlevsel',
       typeAnalytics: 'Analitik',
       typeMarketing: 'Pazarlama',
+      // Yandex Metrica çerezleri
+      metricaUserId: 'Benzersiz ziyaretçi tanımlayıcı',
+      metricaFirstVisit: 'İlk ziyaret tarihi',
+      metricaAdBlock: 'Reklam engelleyici tespiti',
+      metricaVisor: 'Oturum tekrarı kaydı',
+      // Criteo çerezleri
+      criteoBundle: 'Reklam kişiselleştirme',
+      criteoRetargeting: 'Yeniden hedefleme kampanyaları',
+    },
+
+    // ============================================================
+    // ÇEREZ BANNERI
+    // ============================================================
+    cookieBanner: {
+      ariaLabel: 'Çerez onayı',
+      title: 'Çerez kullanıyoruz',
+      description: 'Deneyiminizi iyileştirmek, trafiği analiz etmek ve içeriği kişiselleştirmek için çerezler ve benzer teknolojiler kullanıyoruz. Tercihlerinizi yönetebilir veya tüm çerezleri kabul edebilirsiniz. Detaylar için <a href="/pages/legal/cookies.html" class="text-primary-600 underline hover:text-primary-700">Çerez Politikamızı</a> okuyun.',
+      acceptAll: 'Tümünü Kabul Et',
+      rejectAll: 'Tümünü Reddet',
+      managePreferences: 'Tercihleri Yönet',
+      showDetails: 'Çerez detaylarını göster',
+      hideDetails: 'Çerez detaylarını gizle',
+      alwaysOn: 'Her zaman açık',
     },
 
     // ============================================================

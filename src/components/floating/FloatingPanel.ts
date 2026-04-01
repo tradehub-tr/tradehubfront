@@ -2,10 +2,13 @@
  * FloatingPanel Component
  * Fixed right-bottom panel with chat button (badge showing 9+),
  * visual search lens button, and scroll-to-top button.
+ * Also includes the global CookieBanner overlay.
  *
  * Reactivity handled by Alpine.js via x-data="floatingPanel".
  * Alpine.data('floatingPanel') is registered in src/alpine.ts.
  */
+
+import { CookieBanner } from '../legal/CookieBanner';
 
 /**
  * Generates the chat button with message badge.
@@ -313,6 +316,9 @@ export function FloatingPanel(): string {
       <!-- Visual Search / Lens Modal (hidden by default, toggled by lensOpen) -->
       ${renderLensModal()}
     </div>
+
+    <!-- Global Cookie Consent Banner -->
+    ${CookieBanner()}
   `;
 }
 
