@@ -1,3 +1,12 @@
+## [v1.0.1-rc.4] - 2026-04-01 RC
+
+Bu surum rc.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat: sipariş başarı yönlendirmesini uygula, vitrin arayüz bileşenlerini güncelle ve i18n yerelleştirme dosyalarını temizle (@ahmet)
+- feat:HelpCenterHeader'a dil seçici bileşenini ekleyin ve yardım merkezi sayfalarına entegre edin. (@ahmet)
+
+---
 ## [v1.0.1-rc.3] - 2026-04-01 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
