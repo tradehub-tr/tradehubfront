@@ -7,7 +7,7 @@ import { initFlowbite } from 'flowbite'
 
 import { FloatingPanel } from '../components/floating'
 import { startAlpine } from '../alpine'
-import { HelpCenterLayout, HelpCenterHeader } from '../components/help-center'
+import { HelpCenterLayout, HelpCenterHeader, initHelpCenterLangSelector } from '../components/help-center'
 
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.classList.add('relative');
@@ -25,4 +25,5 @@ appEl.innerHTML = `
 `;
 
 initFlowbite();
+initHelpCenterLangSelector();
 startAlpine();
