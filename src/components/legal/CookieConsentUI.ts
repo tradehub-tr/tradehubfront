@@ -14,14 +14,27 @@ export function CookieConsentUI(): string {
   ];
 
   const cookieTable = [
+    // Necessary
     { name: '_istoc_session', provider: 'iSTOC', purpose: t('cookieConsent.sessionManagement'), duration: t('cookieConsent.session'), type: t('cookieConsent.typeNecessary') },
     { name: '_istoc_csrf', provider: 'iSTOC', purpose: t('cookieConsent.csrfProtection'), duration: t('cookieConsent.session'), type: t('cookieConsent.typeNecessary') },
+    // Functional
     { name: '_istoc_prefs', provider: 'iSTOC', purpose: t('cookieConsent.userPreferences'), duration: t('cookieConsent.oneYear'), type: t('cookieConsent.typeFunctional') },
     { name: '_istoc_lang', provider: 'iSTOC', purpose: t('cookieConsent.languagePreference'), duration: t('cookieConsent.oneYear'), type: t('cookieConsent.typeFunctional') },
+    // Analytics — Google
     { name: '_ga', provider: 'Google', purpose: t('cookieConsent.visitorStats'), duration: t('cookieConsent.twoYears'), type: t('cookieConsent.typeAnalytics') },
     { name: '_gid', provider: 'Google', purpose: t('cookieConsent.visitorId'), duration: t('cookieConsent.twentyFourHours'), type: t('cookieConsent.typeAnalytics') },
+    // Analytics — Yandex Metrica
+    { name: '_ym_uid', provider: 'Yandex', purpose: t('cookieConsent.metricaUserId'), duration: t('cookieConsent.oneYear'), type: t('cookieConsent.typeAnalytics') },
+    { name: '_ym_d', provider: 'Yandex', purpose: t('cookieConsent.metricaFirstVisit'), duration: t('cookieConsent.oneYear'), type: t('cookieConsent.typeAnalytics') },
+    { name: '_ym_isad', provider: 'Yandex', purpose: t('cookieConsent.metricaAdBlock'), duration: t('cookieConsent.twentyFourHours'), type: t('cookieConsent.typeAnalytics') },
+    { name: '_ym_visorc', provider: 'Yandex', purpose: t('cookieConsent.metricaVisor'), duration: t('cookieConsent.session'), type: t('cookieConsent.typeAnalytics') },
+    // Marketing — Facebook
     { name: '_fbp', provider: 'Facebook', purpose: t('cookieConsent.adTargeting'), duration: t('cookieConsent.threeMonths'), type: t('cookieConsent.typeMarketing') },
+    // Marketing — Google Ads
     { name: '_gcl_au', provider: 'Google Ads', purpose: t('cookieConsent.conversionTracking'), duration: t('cookieConsent.threeMonths'), type: t('cookieConsent.typeMarketing') },
+    // Marketing — Criteo
+    { name: 'cto_bundle', provider: 'Criteo', purpose: t('cookieConsent.criteoBundle'), duration: t('cookieConsent.thirteenMonths'), type: t('cookieConsent.typeMarketing') },
+    { name: 'cto_bidid', provider: 'Criteo', purpose: t('cookieConsent.criteoRetargeting'), duration: t('cookieConsent.sixMonths'), type: t('cookieConsent.typeMarketing') },
   ];
 
   const typeNecessary = t('cookieConsent.typeNecessary');
