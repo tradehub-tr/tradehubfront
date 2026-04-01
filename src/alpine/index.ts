@@ -1,5 +1,6 @@
 import Alpine from 'alpinejs'
 import { initLinkRewriter } from '../utils/url'
+import { initTracking } from '../utils/trackingManager'
 
 // Import all Alpine.data() module registrations (side-effect imports)
 import './orders'
@@ -39,4 +40,6 @@ window.Alpine = Alpine;
 export function startAlpine(): void {
   initLinkRewriter();
   Alpine.start();
+  // Load tracking scripts based on saved cookie consent preferences
+  initTracking();
 }
