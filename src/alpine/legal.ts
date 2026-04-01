@@ -1,4 +1,5 @@
 import Alpine from 'alpinejs'
+import { acceptAllCookies, rejectAllCookies, onConsentUpdate, hasConsentBeenGiven } from '../utils/trackingManager'
 
 // ─── Legal TOC scrollspy ───────────────────────────────────────────────
 Alpine.data('legalToc', () => ({
@@ -66,6 +67,8 @@ Alpine.data('cookieConsent', () => ({
 
   savePreferences() {
     localStorage.setItem('istoc_cookie_prefs', JSON.stringify(this.categories));
+    // Trigger tracking scripts based on new preferences
+    onConsentUpdate();
     // Show brief confirmation
     const el = document.getElementById('cookie-save-toast');
     if (el) {
@@ -82,6 +85,42 @@ Alpine.data('cookieConsent', () => ({
         this.categories = { ...this.categories, ...parsed, necessary: true };
       } catch { /* ignore */ }
     }
+  },
+}));
+
+// ─── Cookie Banner (global) ────────────────────────────────────────────
+Alpine.data('cookieBanner', () => ({
+  visible: false,
+  showDetails: false,
+  categories: {
+    necessary: true,
+    functional: false,
+    analytics: false,
+    marketing: false,
+  },
+
+  init() {
+    // Show banner only if user hasn't given consent yet
+    this.visible = !hasConsentBeenGiven();
+  },
+
+  acceptAll() {
+    acceptAllCookies();
+    this.visible = false;
+  },
+
+  rejectAll() {
+    rejectAllCookies();
+    this.visible = false;
+  },
+
+  saveCustom() {
+    localStorage.setItem('istoc_cookie_prefs', JSON.stringify({
+      ...this.categories,
+      necessary: true,
+    }));
+    onConsentUpdate();
+    this.visible = false;
   },
 }));
 
