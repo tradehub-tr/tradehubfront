@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import type { Plugin } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
 import { resolve } from 'path'
@@ -83,22 +83,25 @@ function notFoundFallbackPlugin(): Plugin {
     };
 }
 
-export default defineConfig({
-    base: process.env.GITHUB_PAGES === 'true' ? '/tradehubfront/' : '/',
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '')
+  const backend = env.VITE_FRAPPE_BACKEND || 'https://rcistoc.cronbi.com'
+  const isLocal = backend.includes('localhost')
+  const proxyOpts = {
+    target: backend,
+    changeOrigin: true,
+    secure: false,
+    cookieDomainRewrite: 'localhost',
+    ...(isLocal ? { headers: { Host: 'dev.localhost' } } : {}),
+  }
+
+  return {
+    base: env.GITHUB_PAGES === 'true' ? '/tradehubfront/' : '/',
     server: {
         proxy: {
-            '/api': {
-                target: 'http://localhost:8000',
-                changeOrigin: true,
-            },
-            '/files': {
-                target: 'http://localhost:8000',
-                changeOrigin: true,
-            },
-            '/private/files': {
-                target: 'http://localhost:8000',
-                changeOrigin: true,
-            },
+            '/api': proxyOpts,
+            '/files': proxyOpts,
+            '/private/files': proxyOpts,
         },
     },
     plugins: [
@@ -137,4 +140,5 @@ export default defineConfig({
             },
         },
     },
+  }
 })
