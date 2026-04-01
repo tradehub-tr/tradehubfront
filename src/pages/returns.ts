@@ -5,7 +5,7 @@ import '../style.css'
 import { initFlowbite } from 'flowbite'
 import { FloatingPanel } from '../components/floating'
 import { startAlpine } from '../alpine'
-import { HelpCenterHeader } from '../components/help-center'
+import { HelpCenterHeader, initHelpCenterLangSelector } from '../components/help-center'
 import { LegalPageLayout, ReturnProcessSteps, ReturnFAQ } from '../components/legal'
 import { returnsContent } from '../data/legalContent'
 
@@ -24,4 +24,5 @@ appEl.innerHTML = `
 `;
 
 initFlowbite();
+initHelpCenterLangSelector();
 startAlpine();
