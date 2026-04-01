@@ -205,6 +205,12 @@ Alpine.data('remittanceComponent', () => ({
       );
 
       this.step = 'success';
+
+      // Redirect to thank you page after short delay
+      setTimeout(() => {
+        this.reset(true);
+        window.location.href = `/pages/order/order-success.html?status=success&count=1&orderNumbers=${encodeURIComponent(this.orderNumber)}`;
+      }, 1500);
     } catch (err: any) {
       this.apiError = err?.message || 'Bir hata oluştu. Lütfen tekrar deneyin.';
       this.step = 'form';
