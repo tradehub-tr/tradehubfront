@@ -1,3 +1,12 @@
+## [v1.0.1-rc.5] - 2026-04-01 RC
+
+Bu surum rc.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(release): prod ve rc release iş akışları eklendi (@ahmet)
+- feat(tracking): çerez onay yönetimi için CookieBanner ve TrackingManager eklendi (@ahmet)
+
+---
 ## [v1.0.1-rc.4] - 2026-04-01 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
