@@ -1,3 +1,11 @@
+## [v1.0.1-rc.3] - 2026-04-01 RC
+
+Bu surum rc.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat:HelpCenterHeader'a dil seçici bileşenini ekleyin ve yardım merkezi sayfalarına entegre edin. (@ahmet)
+
+---
 ## [v1.0.1-rc.2] - 2026-04-01 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
