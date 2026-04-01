@@ -1349,9 +1349,9 @@ const en = {
         section3Title: '3. Functional Cookies',
         section3Content: '<p>These cookies provide a more personalized experience by remembering your preferences. They store information such as your language selection, currency preference or region settings.</p><p>If you disable these cookies, some personalization features may not work.</p>',
         section4Title: '4. Analytics Cookies',
-        section4Content: '<p>These cookies help us understand how visitors use our site. They collect statistical data such as page views, session duration and bounce rate.</p><p>The collected data is anonymized and used solely for the purpose of improving Platform services. The following tools are used for this purpose:</p><ul class="list-disc pl-5 space-y-1"><li><strong>Google Tag Manager (GTM):</strong> A tag management system that enables us to manage and deploy tracking tags on our site. GTM itself does not collect personal data but facilitates loading of other analytics and marketing scripts.</li><li><strong>Google Analytics:</strong> Collects anonymous statistics about page views, sessions, user behavior flows and demographic information.</li><li><strong>Yandex Metrica:</strong> Provides heatmaps, session recordings (WebVisor), scroll depth analysis and form interaction tracking to help us understand how visitors interact with our pages.</li></ul>',
+        section4Content: '<p>These cookies help us understand how visitors use our site. They collect statistical data such as page views, session duration and bounce rate.</p><p>The collected data is anonymized and used solely for the purpose of improving Platform services. Google Analytics and similar tools are used for this purpose.</p>',
         section5Title: '5. Marketing Cookies',
-        section5Content: '<p>These cookies are used to show advertisements relevant to your interests. They can track your browsing habits across different websites.</p><p>The following marketing and retargeting services are used on our Platform:</p><ul class="list-disc pl-5 space-y-1"><li><strong>Facebook Pixel (Meta):</strong> Tracks conversions from Facebook ads, builds targeted audiences for future ads, and enables retargeting of users who have already visited the site.</li><li><strong>Criteo:</strong> A retargeting platform that displays personalized product recommendations and ads based on your browsing history and product interactions on our site.</li><li><strong>Google Ads:</strong> Tracks conversions and enables remarketing to users who have previously interacted with the Platform.</li></ul><p>Disabling these cookies does not mean you will not see advertisements; it only means that the advertisements shown to you will not be personalized based on your interests.</p>',
+        section5Content: '<p>These cookies are used to show advertisements relevant to your interests. They can track your browsing habits across different websites.</p><p>Disabling these cookies does not mean you will not see advertisements; it only means that the advertisements shown to you will not be personalized based on your interests.</p>',
         section6Title: '6. Cookie Management',
         section6Content: '<p>You have the option to delete or block cookies from your browser settings. However, blocking essential cookies may cause the Platform to not function properly.</p><p>You can access the cookie settings of popular browsers from the following links:</p><ul class="list-disc pl-5 space-y-1"><li>Google Chrome: Settings > Privacy and Security > Cookies</li><li>Mozilla Firefox: Options > Privacy and Security</li><li>Safari: Preferences > Privacy</li><li>Microsoft Edge: Settings > Privacy, Search and Services</li></ul><p class="mt-3">You can also manage your cookie permissions by category using the cookie preference panel on this page.</p>',
       },
@@ -1716,35 +1716,10 @@ const en = {
       twoYears: '2 years',
       twentyFourHours: '24 hours',
       threeMonths: '3 months',
-      sixMonths: '6 months',
-      thirteenMonths: '13 months',
       typeNecessary: 'Necessary',
       typeFunctional: 'Functional',
       typeAnalytics: 'Analytics',
       typeMarketing: 'Marketing',
-      // Yandex Metrica cookies
-      metricaUserId: 'Unique visitor identifier',
-      metricaFirstVisit: 'First visit date',
-      metricaAdBlock: 'Ad blocker detection',
-      metricaVisor: 'Session replay recording',
-      // Criteo cookies
-      criteoBundle: 'Ad personalization',
-      criteoRetargeting: 'Retargeting campaigns',
-    },
-
-    // ============================================================
-    // COOKIE BANNER
-    // ============================================================
-    cookieBanner: {
-      ariaLabel: 'Cookie consent',
-      title: 'We use cookies',
-      description: 'We use cookies and similar technologies to improve your experience, analyze traffic, and personalize content. You can manage your preferences or accept all cookies. Read our <a href="/pages/legal/cookies.html" class="text-primary-600 underline hover:text-primary-700">Cookie Policy</a> for details.',
-      acceptAll: 'Accept All',
-      rejectAll: 'Reject All',
-      managePreferences: 'Manage Preferences',
-      showDetails: 'Show cookie details',
-      hideDetails: 'Hide cookie details',
-      alwaysOn: 'Always on',
     },
 
     // ============================================================
