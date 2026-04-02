@@ -91,11 +91,11 @@ export function HelpCenterLayout(): string {
           <ul class="divide-y divide-gray-100">
             <template x-for="(r, i) in searchResults" :key="i">
               <li class="py-3">
-                <a href="#" class="group flex items-start gap-3">
+                <a :href="'faq-detail.html?cat=' + r.cat + '&sub=' + r.sub" class="group flex items-start gap-3">
                   <span class="mt-0.5 w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center" style="background: var(--color-primary-50)">
                     <svg class="w-3 h-3 text-primary-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 0 1 0-1.414L10.586 10 7.293 6.707a1 1 0 0 1 1.414-1.414l4 4a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414 0z" clip-rule="evenodd"/></svg>
                   </span>
-                  <span class="text-sm text-gray-700 group-hover:text-primary-600 transition-colors" x-text="r"></span>
+                  <span class="text-sm text-gray-700 group-hover:text-primary-600 transition-colors" x-text="r.text"></span>
                 </a>
               </li>
             </template>
@@ -118,7 +118,7 @@ export function HelpCenterLayout(): string {
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <template x-for="card in learningCards" :key="card.id">
               <a
-                href="#"
+                :href="'faq.html?cat=' + (card.id === 'app' ? 'app-settings' : card.id === 'assurance' ? 'guaranteed' : card.id)"
                 @click.prevent="selectLearningCard(card)"
                 class="group flex flex-col items-center text-center p-4 rounded-xl border-2 transition-all duration-200 cursor-pointer"
                 :class="activeLearningCard === card.id
@@ -164,18 +164,18 @@ export function HelpCenterLayout(): string {
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-2">
                   <template x-for="(question, qi) in tab.questions" :key="qi">
                     <a
-                      href="#"
+                      :href="'faq-detail.html?cat=' + question.cat + '&sub=' + question.sub"
                       class="flex items-start gap-1.5 py-1.5 text-[13px] text-gray-700 hover:text-primary-600 transition-colors group"
                       :class="qi % 5 === 1 ? 'font-medium text-primary-500 hover:text-primary-700' : ''"
                     >
                       <span class="text-primary-400 mt-0.5 shrink-0">›</span>
-                      <span x-text="question"></span>
+                      <span x-text="question.text"></span>
                     </a>
                   </template>
                 </div>
                 <!-- View more link -->
                 <div class="mt-5 pt-4 border-t border-gray-100 text-center">
-                  <a href="#" class="inline-flex items-center gap-1 text-sm text-primary-500 hover:underline font-medium">
+                  <a :href="'faq.html?cat=' + tab.faqCat" class="inline-flex items-center gap-1 text-sm text-primary-500 hover:underline font-medium">
                     <span data-i18n="help.viewMore">${t('help.viewMore')}</span>
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6"/></svg>
                   </a>
@@ -191,7 +191,7 @@ export function HelpCenterLayout(): string {
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
             <!-- Online Service -->
-            <a href="#" class="group flex items-center gap-4 p-5 rounded-xl border border-gray-200 hover:border-primary-300 hover:shadow-md transition-all duration-200">
+            <a href="contact.html" class="group flex items-center gap-4 p-5 rounded-xl border border-gray-200 hover:border-primary-300 hover:shadow-md transition-all duration-200">
               <div class="w-12 h-12 rounded-full bg-primary-50 flex items-center justify-center shrink-0 group-hover:bg-primary-100 transition-colors">
                 <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 0 1 .778-.332 48.294 48.294 0 0 0 5.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z"/>
@@ -205,7 +205,7 @@ export function HelpCenterLayout(): string {
             </a>
 
             <!-- Survey -->
-            <a href="#" class="group flex items-center gap-4 p-5 rounded-xl border border-gray-200 hover:border-primary-300 hover:shadow-md transition-all duration-200">
+            <a href="contact.html" class="group flex items-center gap-4 p-5 rounded-xl border border-gray-200 hover:border-primary-300 hover:shadow-md transition-all duration-200">
               <div class="w-12 h-12 rounded-full bg-primary-50 flex items-center justify-center shrink-0 group-hover:bg-primary-100 transition-colors">
                 <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"/>
@@ -251,17 +251,17 @@ export function HelpCenterLayout(): string {
         <!-- ── Useful Links Strip ─────────────── -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 px-6 py-5">
           <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[12px] text-gray-500">
-            <a href="#" class="hover:text-primary-500 transition-colors" data-i18n="help.productListingPolicy">${t('help.productListingPolicy')}</a>
+            <a href="/pages/legal/product-listing.html" class="hover:text-primary-500 transition-colors" data-i18n="help.productListingPolicy">${t('help.productListingPolicy')}</a>
             <span class="text-gray-200">|</span>
-            <a href="#" class="hover:text-primary-500 transition-colors" data-i18n="help.ipProtection">${t('help.ipProtection')}</a>
+            <a href="/pages/legal/ip.html" class="hover:text-primary-500 transition-colors" data-i18n="help.ipProtection">${t('help.ipProtection')}</a>
             <span class="text-gray-200">|</span>
-            <a href="#" class="hover:text-primary-500 transition-colors" data-i18n="help.privacyPolicy">${t('help.privacyPolicy')}</a>
+            <a href="/pages/legal/privacy.html" class="hover:text-primary-500 transition-colors" data-i18n="help.privacyPolicy">${t('help.privacyPolicy')}</a>
             <span class="text-gray-200">|</span>
-            <a href="#" class="hover:text-primary-500 transition-colors" data-i18n="help.termsOfUse">${t('help.termsOfUse')}</a>
+            <a href="/pages/legal/terms.html" class="hover:text-primary-500 transition-colors" data-i18n="help.termsOfUse">${t('help.termsOfUse')}</a>
             <span class="text-gray-200">|</span>
-            <a href="#" class="hover:text-primary-500 transition-colors" data-i18n="help.userInfoLaws">${t('help.userInfoLaws')}</a>
+            <a href="/pages/legal/notice.html" class="hover:text-primary-500 transition-colors" data-i18n="help.userInfoLaws">${t('help.userInfoLaws')}</a>
             <span class="text-gray-200">|</span>
-            <a href="#" class="hover:text-primary-500 transition-colors" data-i18n="help.contactGuide">${t('help.contactGuide')}</a>
+            <a href="contact.html" class="hover:text-primary-500 transition-colors" data-i18n="help.contactGuide">${t('help.contactGuide')}</a>
           </div>
           <p class="text-center text-[11px] text-gray-400 mt-3" data-i18n="help.copyright">${t('help.copyright')}</p>
         </div>
