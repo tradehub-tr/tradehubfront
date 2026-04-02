@@ -18,6 +18,47 @@ export function initAllSwipers(): void {
   initHeroSwiper();
   initCertificatesSwiper();
   initCompanyCarousel();
+  initMainProductsSwiper();
+}
+
+/**
+ * Main Products Carousel (seller storefront)
+ */
+function initMainProductsSwiper(): Swiper | null {
+  const el = document.querySelector('.main-products-swiper');
+  if (!el) {
+    // Alpine might render it later, retry once after a short delay
+    setTimeout(() => {
+      if (document.querySelector('.main-products-swiper')) {
+        new Swiper('.main-products-swiper', {
+          modules: [Navigation],
+          slidesPerView: 1.2,
+          spaceBetween: 12,
+          navigation: { nextEl: '.main-products-next', prevEl: '.main-products-prev' },
+          breakpoints: {
+            480: { slidesPerView: 2, spaceBetween: 12 },
+            640: { slidesPerView: 3, spaceBetween: 16 },
+            1024: { slidesPerView: 4, spaceBetween: 16 },
+            1280: { slidesPerView: 5, spaceBetween: 16 },
+          },
+        });
+      }
+    }, 800);
+    return null;
+  }
+
+  return new Swiper('.main-products-swiper', {
+    modules: [Navigation],
+    slidesPerView: 1.2,
+    spaceBetween: 12,
+    navigation: { nextEl: '.main-products-next', prevEl: '.main-products-prev' },
+    breakpoints: {
+      480: { slidesPerView: 2, spaceBetween: 12 },
+      640: { slidesPerView: 3, spaceBetween: 16 },
+      1024: { slidesPerView: 4, spaceBetween: 16 },
+      1280: { slidesPerView: 5, spaceBetween: 16 },
+    },
+  });
 }
 
 /**
