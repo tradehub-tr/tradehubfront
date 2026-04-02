@@ -1,8 +1,7 @@
 import { t } from '../../i18n';
 // Currency formatting via window.csFormatPrice / window.csFormatPriceRange (set by currencyService)
 
-
-// Mock Review Data Type (to be added to types/seller/types.ts)
+// ─── Shared Types ──────────────────────────────────────────────
 export interface SellerReview {
   id: string;
   reviewerName: string;
@@ -26,158 +25,414 @@ export interface SellerPerformanceStats {
   productQualityScore: number;
 }
 
-function ContactSidebar(): string {
-  return `
-    <div class="company-profile__sidebar sticky top-[100px] bg-white rounded-(--radius-md) border border-gray-200 p-4 sm:p-6" x-show="activeTab !== 'contact'" x-transition>
-      <h3 class="text-[18px] font-bold text-gray-900 mb-4">${t('seller.sf.contactSupplier')}</h3>
+// ─── Shared Helpers (inlined into x-data) ──────────────────────
+const SHARED_FORMAT_PRICE = `
+  formatPrice(p) {
+    if (!p.price_min) return '';
+    const min = parseFloat(p.price_min);
+    const max = p.price_max ? parseFloat(p.price_max) : 0;
+    if (max > min && window.csFormatPriceRange) return window.csFormatPriceRange(min, max, 'USD');
+    if (window.csFormatPrice) return window.csFormatPrice(min, 'USD');
+    return min.toFixed(2);
+  }
+`;
 
-      <div class="flex items-center gap-3 mb-6">
-        <div class="w-12 h-12 flex items-center justify-center rounded overflow-hidden shadow-sm border border-gray-100 p-1 bg-gray-50">
-          <img x-show="seller?.logo" :src="seller?.logo" :alt="seller?.seller_name || ''" class="w-full h-full object-contain" />
-          <svg x-show="!seller?.logo" class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
-        </div>
-        <div>
-          <h4 class="text-[14px] font-medium text-gray-900 leading-tight line-clamp-2" x-text="seller?.seller_name || '—'"></h4>
+const SELLER_CODE_INIT = `new URLSearchParams(window.location.search).get('seller') || ''`;
+
+// ─── Main Products Carousel (always visible above tabs) ────────
+function MainProductsCarousel(): string {
+  return `
+    <div
+      x-data="{
+        sellerCode: ${SELLER_CODE_INIT},
+        products: [
+          { name: 'mock-1', product_name: '\u00d6zel Tasar\u0131m \u00c7evre Dostu Ti\u015f\u00f6rtler i\u00e7in Karton Ser...', image: 'https://picsum.photos/seed/mp1/400/400', price_min: '7.35', price_max: '17.50', moq: 100, moq_unit: 'Adet', category: 'Main product', sold_count: 40, video_url: true },
+          { name: 'mock-2', product_name: '\u00d6zelle\u015ftirilmi\u015f karton \u015fapka \u015fapka ekran stan...', image: 'https://picsum.photos/seed/mp2/400/400', price_min: '6.35', price_max: '17.50', moq: 100, moq_unit: 'Adet', category: 'Main product', video_url: true },
+          { name: 'mock-3', product_name: 'Raf haz\u0131r kutu g\u00f6zya\u015f\u0131 uzakta ambalaj ka\u011f\u0131t...', image: 'https://picsum.photos/seed/mp3/400/400', price_min: '0.38', price_max: '1.02', moq: 100, moq_unit: 'Adet', category: 'Main product', sold_count: 2, video_url: true },
+          { name: 'mock-4', product_name: '\u00d6zel Tasar\u0131m Geri D\u00f6n\u00fc\u015ft\u00fcr\u00fclebilir Kancal\u0131...', image: 'https://picsum.photos/seed/mp4/400/400', price_min: '7.35', price_max: '17.50', moq: 100, moq_unit: 'Adet', category: 'Main product', badge: 'FSC Certified', sold_count: 62, video_url: true },
+          { name: 'mock-5', product_name: 'Tebrik kart\u0131 \u00f6zel bask\u0131 karton hediye kutusu', image: 'https://picsum.photos/seed/mp5/400/400', price_min: '5.35', price_max: '12.00', moq: 100, moq_unit: 'Adet', category: 'Main product', video_url: true },
+        ],
+        loading: true,
+        async init() {
+          if (!this.sellerCode) { this.loading = false; return; }
+          try {
+            const apiBase = (window.API_BASE || '/api');
+            const res = await fetch(apiBase + '/method/tradehub_core.api.seller.get_seller_products?seller_code=' + this.sellerCode + '&page_size=10', { credentials: 'omit' }).then(r => r.json());
+            const real = res.message?.products || [];
+            if (real.length > 0) this.products = real;
+          } catch(e) {}
+          this.loading = false;
+        },
+        ${SHARED_FORMAT_PRICE}
+      }"
+    >
+      <!-- Header -->
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-[18px] font-bold text-gray-900 uppercase">${t('seller.sf.mainProducts')}</h3>
+        <div class="flex items-center gap-2">
+          <button class="main-products-prev w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 transition-colors" aria-label="Previous">
+            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          </button>
+          <button class="main-products-next w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 transition-colors" aria-label="Next">
+            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </button>
         </div>
       </div>
 
-      <div class="flex flex-col gap-3">
-        <button @click="setTab('contact')" class="w-full th-btn th-btn-pill company-profile__contact-btn">
-          ${t('seller.sf.contactNow')}
-        </button>
-        <button @click="setTab('contact')" class="w-full bg-white hover:bg-gray-50 text-gray-900 border border-gray-300 font-medium py-2.5 px-4 rounded-full transition-colors text-[14px] company-profile__inquiry-btn">
-          ${t('seller.sf.sendInquiry')}
-        </button>
+      <!-- Loading -->
+      <div x-show="loading" class="flex gap-4 overflow-hidden">
+        <template x-for="i in 5">
+          <div class="animate-pulse bg-gray-100 rounded-md min-w-[180px] aspect-[3/4] flex-shrink-0"></div>
+        </template>
+      </div>
+
+      <!-- Empty -->
+      <div x-show="!loading && products.length === 0" class="text-gray-400 text-[14px] py-8 text-center">
+        ${t('seller.sf.noProducts')}
+      </div>
+
+      <!-- Swiper Carousel -->
+      <div x-show="!loading && products.length > 0" class="main-products-swiper swiper">
+        <div class="swiper-wrapper">
+          <template x-for="(p, idx) in products" :key="p.name">
+            <div class="swiper-slide">
+              <a :href="'/pages/product-detail.html?id=' + encodeURIComponent(p.name)" class="block no-underline group">
+                <div class="relative rounded-md overflow-hidden border border-gray-200 bg-white aspect-square mb-3">
+                  <img x-show="p.image" :src="p.image" :alt="p.product_name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+                  <div x-show="!p.image" class="w-full h-full flex items-center justify-center text-gray-200 bg-gray-50">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="m3 9 4-4 4 4 4-6 6 6"/></svg>
+                  </div>
+                  <!-- Video play overlay -->
+                  <div x-show="p.video_url" class="absolute inset-0 flex items-center justify-center">
+                    <div class="w-9 h-9 bg-black/40 rounded-full flex items-center justify-center">
+                      <svg class="w-4 h-4 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <!-- Category + Badge -->
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="text-[12px] text-gray-400" x-text="p.category || 'Main product'"></span>
+                    <span x-show="p.badge" class="text-[10px] font-bold text-blue-700 bg-blue-50 border border-blue-200 px-1.5 py-0.5 rounded" x-text="p.badge"></span>
+                  </div>
+                  <div class="text-[13px] text-gray-800 line-clamp-2 leading-snug mb-1.5" x-text="p.product_name"></div>
+                  <div class="text-[14px] font-bold text-gray-900 mb-1" x-text="formatPrice(p)"></div>
+                  <div class="text-[12px] text-gray-500" x-show="p.moq" x-text="'Min. Sipari\u015f ' + p.moq + ' ' + (p.moq_unit || 'Adet')"></div>
+                  <div class="text-[12px] text-gray-400 mt-0.5" x-show="p.sold_count" x-text="p.sold_count + ' sold'"></div>
+                </div>
+              </a>
+            </div>
+          </template>
+        </div>
       </div>
     </div>
   `;
 }
 
-// ─── Overview Tab (Genel Bakış) ────────────────────────────────
+// ─── Overview Tab (Genel Bakis) ────────────────────────────────
 function OverviewTab(): string {
   return `
     <div class="company-profile__tab-content" x-show="activeTab === 'overview'" x-transition.opacity.duration.300ms id="tab-overview">
-      
-      <!-- Performance Section -->
-      <section class="bg-white rounded-(--radius-md) border border-gray-200 p-6 mb-6">
-        <h3 class="text-[18px] font-bold text-gray-900 mb-6">${t('seller.sf.performance')}</h3>
-        
-        <div class="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-8">
-          <!-- Stats -->
-          <div>
-            <div class="flex items-end gap-2 mb-4">
-              <span class="text-[32px] font-bold leading-none text-gray-900" x-text="seller?.average_rating ? seller.average_rating.toFixed(1) : '—'"></span>
-              <span class="text-[14px] text-gray-500 mb-1">/5</span>
-              <div class="ml-2">
-                <span class="block text-[12px] text-gray-900 font-medium">${t('seller.sf.satisfactory')}</span>
-                <button type="button" @click="setTab('reviews')" class="text-[12px] text-blue-600 hover:underline cursor-pointer">
-                  <span x-text="seller?.total_reviews || 0"></span> ${t('seller.sf.reviews')}
-                </button>
-              </div>
-            </div>
 
-            <div class="pt-4 border-t border-gray-100">
-              <template x-if="seller?.city || seller?.country">
-                <ul class="space-y-1 text-[13px] text-gray-600 mb-4">
-                  <template x-if="seller?.city">
-                    <li class="flex items-center gap-2">
-                      <svg class="w-4 h-4 text-blue-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                      <span x-text="sellerLocation"></span>
-                    </li>
-                  </template>
-                  <template x-if="seller?.website">
-                    <li class="flex items-center gap-2">
-                      <svg class="w-4 h-4 text-blue-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
-                      <a :href="seller.website" target="_blank" rel="noopener" class="hover:text-blue-600 transition-colors truncate" x-text="seller.website"></a>
-                    </li>
-                  </template>
-                </ul>
-              </template>
-            </div>
-          </div>
-
-          <!-- Banner image -->
-          <div class="relative rounded-lg overflow-hidden bg-gray-100 aspect-video">
-            <template x-if="seller?.cover_image">
-              <img :src="seller.cover_image" :alt="seller.seller_name" class="w-full h-full object-cover" />
-            </template>
-            <div x-show="!seller?.cover_image" class="w-full h-full flex items-center justify-center text-gray-200">
-              <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5"/></svg>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      <!-- Main Products Section -->
-      <section class="bg-white rounded-(--radius-md) border border-gray-200 p-6"
+      <!-- Single white card for entire profile (like Alibaba) -->
+      <section class="bg-white rounded-md border border-gray-200 p-6 mb-6"
         x-data="{
-          sellerCode: new URLSearchParams(window.location.search).get('seller') || '',
-          products: [],
-          loading: true,
-          _cv: 0,
-          async init() {
-            document.addEventListener('currency-changed', () => { this._cv++; });
-            if (!this.sellerCode) { this.loading = false; return; }
-            const apiBase = window.API_BASE || '/api';
-            const res = await fetch(
-              apiBase + '/method/tradehub_core.api.seller.get_seller_products?seller_code=' + this.sellerCode + '&page_size=8',
-              { credentials: 'omit' }
-            ).then(r => r.json());
-            this.products = res.message?.products || [];
-            this.loading = false;
-          },
-          formatPrice(p) {
-            void this._cv;
-            if (!p.price_min) return '';
-            const min = parseFloat(p.price_min);
-            const max = p.price_max ? parseFloat(p.price_max) : 0;
-            const cur = p.currency || 'USD';
-            if (max > min) return window.csFormatPriceRange(min, max, cur);
-            return window.csFormatPrice(min, cur);
+          get certList() {
+            if (!this.seller?.certifications) return [];
+            return this.seller.certifications.split(',').map(c => c.trim()).filter(Boolean);
           }
         }"
       >
-        <h3 class="text-[18px] font-bold text-gray-900 mb-6 uppercase">${t('seller.sf.mainProducts')}</h3>
+
+        <!-- Profile Header -->
+        <div class="flex items-center justify-between flex-wrap gap-3 pb-6 mb-6 border-b border-gray-100">
+          <h3 class="text-[18px] font-bold text-gray-900">${t('seller.sf.profile')}</h3>
+          <div class="flex items-center gap-4">
+            <a href="#" class="text-[13px] text-blue-600 hover:underline flex items-center gap-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              ${t('seller.sf.downloadReport')}
+            </a>
+            <span x-show="seller?.verified || seller?.is_verified" class="inline-flex items-baseline gap-1 text-[13px] font-semibold">
+              <img src="/src/assets/images/verifiedminilogo.png" alt="Verified" class="h-[16px] w-auto self-baseline" />
+              <img src="/src/assets/images/istoc-logo.png" alt="iSTOC" class="h-[10px] w-auto self-baseline" />
+              <span class="text-[10px] text-[#999] font-medium">ile</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Genel Bakış -->
+        <div class="pb-6 mb-6 border-b border-gray-100">
+          <h4 class="text-[16px] font-bold text-gray-900 mb-5">${t('seller.sf.generalOverview')}</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 text-[14px]">
+            <div class="flex justify-between py-2 border-b border-gray-50">
+              <span class="text-gray-500">${t('seller.sf.registrationDate')}</span>
+              <span class="text-gray-900 font-medium" x-text="seller?.founded_year || '\u2014'"></span>
+            </div>
+            <div class="flex justify-between py-2 border-b border-gray-50">
+              <span class="text-gray-500">${t('seller.sf.floorArea')}</span>
+              <span class="text-gray-900 font-medium" x-text="seller?.factory_size ? seller.factory_size + ' m\u00B2' : '\u2014'"></span>
+            </div>
+            <div class="flex justify-between py-2 border-b border-gray-50">
+              <span class="text-gray-500">${t('seller.sf.businessType')}</span>
+              <span class="text-gray-900 font-medium" x-text="seller?.business_type || '\u2014'"></span>
+            </div>
+            <div class="flex justify-between py-2 border-b border-gray-50">
+              <span class="text-gray-500">${t('seller.sf.employees')}</span>
+              <span class="text-gray-900 font-medium" x-text="seller?.staff_count || '\u2014'"></span>
+            </div>
+            <div class="flex justify-between py-2 border-b border-gray-50">
+              <span class="text-gray-500">${t('seller.sf.annualRevenue')}</span>
+              <span class="text-gray-900 font-medium" x-text="seller?.annual_revenue || '\u2014'"></span>
+            </div>
+            <div class="flex justify-between py-2 border-b border-gray-50">
+              <span class="text-gray-500">${t('seller.sf.mainMarkets')}</span>
+              <span class="text-gray-900 font-medium" x-text="seller?.main_markets || '\u2014'"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sertifikalar -->
+        <div class="pb-6 mb-6 border-b border-gray-100">
+          <h4 class="text-[16px] font-bold text-gray-900 mb-5">${t('seller.sf.certificates')}</h4>
+          <div x-show="certList.length > 0" class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <template x-for="(cert, idx) in certList" :key="idx">
+              <div class="bg-white border border-gray-200 rounded-md p-4 flex flex-col items-center text-center hover:shadow-sm transition-shadow">
+                <div class="w-full aspect-[3/4] bg-gray-50 rounded flex items-center justify-center mb-3">
+                  <svg class="w-16 h-16 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                </div>
+                <span class="text-[13px] font-bold text-gray-900" x-text="cert"></span>
+              </div>
+            </template>
+          </div>
+          <div x-show="certList.length === 0" class="text-gray-400 text-[14px] py-4 text-center">
+            ${t('seller.sf.noCertificates')}
+          </div>
+        </div>
+
+        <!-- Üretim Özellikleri -->
+        <div class="pb-6 mb-6 border-b border-gray-100">
+          <h4 class="text-[16px] font-bold text-gray-900 mb-5">${t('seller.sf.qualityControlSection')}</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 text-[14px]">
+            <div class="flex justify-between py-2 border-b border-gray-50">
+              <span class="text-gray-500">${t('seller.sf.businessType')}</span>
+              <span class="text-gray-900 font-medium" x-text="seller?.business_type || '\u2014'"></span>
+            </div>
+            <div class="flex justify-between py-2 border-b border-gray-50">
+              <span class="text-gray-500">${t('seller.sf.allProductionLines')}</span>
+              <span class="text-gray-900 font-medium" x-text="seller?.production_lines || '\u2014'"></span>
+            </div>
+            <div class="flex justify-between py-2 border-b border-gray-50">
+              <span class="text-gray-500">${t('seller.sf.floorArea')}</span>
+              <span class="text-gray-900 font-medium" x-text="seller?.factory_size ? seller.factory_size + ' m\u00B2' : '\u2014'"></span>
+            </div>
+            <div class="flex justify-between py-2 border-b border-gray-50">
+              <span class="text-gray-500">${t('seller.sf.employees')}</span>
+              <span class="text-gray-900 font-medium" x-text="seller?.staff_count || '\u2014'"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kalite Kontrol -->
+        <div>
+          <h4 class="text-[16px] font-bold text-gray-900 mb-5">${t('seller.sf.qualityControl')}</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 text-[14px]">
+            <div class="flex justify-between py-2 border-b border-gray-50">
+              <span class="text-gray-500">${t('seller.sf.rawMaterialSupport')}</span>
+              <span class="text-gray-900 font-medium" x-text="seller?.raw_material_traceability || '\u2014'"></span>
+            </div>
+            <div class="flex justify-between py-2 border-b border-gray-50">
+              <span class="text-gray-500">${t('seller.sf.inspectionMethod')}</span>
+              <span class="text-gray-900 font-medium" x-text="seller?.inspection_method || '\u2014'"></span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Hizmet (Service) Card -->
+      <section class="bg-white rounded-md border border-gray-200 p-6 mb-6">
+        <div class="flex items-center justify-between flex-wrap gap-3 pb-6 mb-6 border-b border-gray-100">
+          <h3 class="text-[18px] font-bold text-gray-900">${t('seller.sf.serviceTab')}</h3>
+          <span x-show="seller?.verified || seller?.is_verified" class="inline-flex items-baseline gap-1 text-[13px] font-semibold">
+            <img src="/src/assets/images/verifiedminilogo.png" alt="Verified" class="h-[16px] w-auto self-baseline" />
+            <img src="/src/assets/images/istoc-logo.png" alt="iSTOC" class="h-[10px] w-auto self-baseline" />
+            <span class="text-[10px] text-[#999] font-medium">ile</span>
+          </span>
+        </div>
+
+        <!-- Customization services -->
+        <div class="flex items-center gap-2 mb-4 text-[14px] text-gray-700">
+          <svg class="w-5 h-5 text-gray-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"/></svg>
+          <span class="font-medium">${t('seller.sf.customizationServices')}</span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4"
+          x-data="{
+            sellerCode: ${SELLER_CODE_INIT},
+            serviceProducts: [
+              { name: 'mock-1', product_name: 'Sevgililer G\u00fcn\u00fc Pelu\u015f A...', image: 'https://picsum.photos/seed/prod1/400/400', price_min: '2.98', price_max: '5.98', moq: 50, moq_unit: 'Adet' },
+              { name: 'mock-2', product_name: 'CE CPC OEM ODM...', image: 'https://picsum.photos/seed/prod2/400/400', price_min: '1.43', price_max: '2.28', moq: 50, moq_unit: 'Adet' },
+              { name: 'mock-3', product_name: 'Pelu\u015f anahtarl\u0131k uyku...', image: 'https://picsum.photos/seed/prod3/400/400', price_min: '0.35', price_max: '1.24', moq: 50, moq_unit: 'Paket' },
+            ],
+            async init() {
+              if (!this.sellerCode) return;
+              try {
+                const apiBase = (window.API_BASE || '/api');
+                const res = await fetch(apiBase + '/method/tradehub_core.api.seller.get_seller_products?seller_code=' + this.sellerCode + '&page_size=3', { credentials: 'omit' }).then(r => r.json());
+                const real = res.message?.products || [];
+                if (real.length > 0) this.serviceProducts = real;
+              } catch(e) {}
+            },
+            ${SHARED_FORMAT_PRICE}
+          }"
+        >
+          <!-- Info card -->
+          <div class="bg-gray-50 rounded-md p-5 sm:w-[260px] shrink-0">
+            <h4 class="text-[16px] font-bold text-gray-900 mb-3">${t('seller.sf.lowMoqCustomization')}</h4>
+            <ul class="text-[13px] text-gray-600 space-y-1.5">
+              <li class="flex items-center gap-1.5">
+                <span class="w-1 h-1 bg-gray-400 rounded-full shrink-0"></span>
+                <span x-text="(navCategories?.length || 2) + '${t('seller.sf.categoriesAvailable')}'"></span>
+              </li>
+              <li class="flex items-center gap-1.5">
+                <span class="w-1 h-1 bg-gray-400 rounded-full shrink-0"></span>
+                <span x-text="(seller?.total_orders || 269) + '${t('seller.sf.productsAvailable')}'"></span>
+              </li>
+            </ul>
+            <button @click="setTab('products')" class="mt-4 text-[13px] border border-gray-300 rounded-full px-4 py-1.5 text-gray-700 hover:bg-gray-100 transition-colors">
+              ${t('seller.sf.viewMore')}
+            </button>
+          </div>
+
+          <!-- Product thumbnails -->
+          <div class="flex-1 flex gap-3 overflow-x-auto scrollbar-hide sm:grid sm:grid-cols-3">
+            <template x-for="(p, idx) in serviceProducts.slice(0, 3)" :key="p.name">
+              <a :href="'/pages/product-detail.html?id=' + encodeURIComponent(p.name)" class="block no-underline group shrink-0 w-[140px] sm:w-auto">
+                <div class="relative rounded-md overflow-hidden bg-gray-100 aspect-square mb-2">
+                  <img x-show="p.image" :src="p.image" :alt="p.product_name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+                </div>
+                <div class="text-[12px] text-gray-800 line-clamp-2 leading-snug mb-0.5" x-text="p.product_name"></div>
+                <div class="text-[13px] font-semibold text-gray-900" x-text="formatPrice(p)"></div>
+                <div class="text-[11px] text-gray-500" x-show="p.moq" x-text="'Min. Sipari\u015f ' + p.moq + ' ' + (p.moq_unit || 'Adet')"></div>
+              </a>
+            </template>
+          </div>
+        </div>
+      </section>
+
+      <!-- Şirket Değerlendirmeleri (Company Reviews) Card -->
+      <section class="bg-white rounded-md border border-gray-200 p-6 mb-6">
+        <h3 class="text-[18px] font-bold text-gray-900 mb-6">
+          ${t('seller.sf.companyReviews')}
+          <span class="text-gray-500 font-normal" x-text="'(' + (seller?.review_count || 0) + ')'"></span>
+        </h3>
+
+        <!-- Rating summary -->
+        <div class="flex flex-col sm:flex-row gap-8 pb-6 mb-6 border-b border-gray-100">
+          <!-- Big rating number -->
+          <div class="shrink-0">
+            <span class="text-[48px] font-bold text-gray-900 leading-none" x-text="seller?.rating ? seller.rating.toFixed(1) : '\u2014'"></span>
+            <span class="text-[18px] text-gray-400">/5</span>
+            <div class="text-[14px] font-medium text-gray-700 mt-1">${t('seller.sf.satisfactory')}</div>
+          </div>
+          <!-- Rating bars -->
+          <div class="flex-1 flex flex-col gap-3">
+            <div class="flex items-center gap-3">
+              <span class="text-[13px] text-gray-600 w-[160px] shrink-0">${t('seller.sf.supplierService')}</span>
+              <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-[#cc9900] rounded-full" :style="'width:' + ((seller?.rating || 0) / 5 * 100) + '%'"></div></div>
+              <span class="text-[13px] font-medium text-gray-900 w-8 text-right" x-text="seller?.rating ? seller.rating.toFixed(1) : '\u2014'"></span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-[13px] text-gray-600 w-[160px] shrink-0">${t('seller.sf.onTimeDeliveryRate')}</span>
+              <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-[#cc9900] rounded-full" :style="'width:' + (seller?.on_time_delivery || 0) + '%'"></div></div>
+              <span class="text-[13px] font-medium text-gray-900 w-8 text-right" x-text="seller?.on_time_delivery ? (seller.on_time_delivery / 20).toFixed(1) : '\u2014'"></span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-[13px] text-gray-600 w-[160px] shrink-0">${t('seller.sf.productQuality')}</span>
+              <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-[#cc9900] rounded-full" :style="'width:' + ((seller?.rating || 0) / 5 * 100) + '%'"></div></div>
+              <span class="text-[13px] font-medium text-gray-900 w-8 text-right" x-text="seller?.rating ? (seller.rating - 0.1).toFixed(1) : '\u2014'"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reviews list placeholder -->
+        <div class="text-gray-400 text-[14px] py-4 text-center">
+          ${t('seller.sf.noReviewsYet')}
+        </div>
+
+        <!-- View all reviews button -->
+        <div class="text-center mt-4">
+          <button @click="setTab('reviews')" class="text-[14px] border border-gray-300 rounded-full px-6 py-2 text-gray-700 hover:bg-gray-50 transition-colors font-medium">
+            ${t('seller.sf.viewAllReviews')}
+          </button>
+        </div>
+      </section>
+
+      <!-- Ürünler (Products) Card -->
+      <section class="bg-white rounded-md border border-gray-200 p-6 mb-6"
+        x-data="{
+          sellerCode: ${SELLER_CODE_INIT},
+          overviewProducts: [
+            { name: 'mock-1', product_name: 'Pelu\u015f Hayvan Oyuncaklar\u0131 Sevimli Oyuncak Ay\u0131 Karikat\u00fcr...', image: 'https://picsum.photos/seed/p1/400/400', price_min: '0.70', price_max: '0.90', moq: 50, moq_unit: 'Paket', sold_count: 20 },
+            { name: 'mock-2', product_name: 'OEM ODM \u00dcretici \u00d6zel Pelu\u015f Oyuncaklar Yumu\u015fak Dokunusl...', image: 'https://picsum.photos/seed/p2/400/400', price_min: '1', price_max: '3', moq: 50, moq_unit: 'Adet', sold_count: 1362 },
+            { name: 'mock-3', product_name: 'High-End \u00f6zel 10cm ve 20cm pelu\u015f hayvanlar \u00fcreticinin...', image: 'https://picsum.photos/seed/p3/400/400', price_min: '1', price_max: '4.80', moq: 50, moq_unit: 'Adet', sold_count: 5309 },
+            { name: 'mock-4', product_name: '\u00dcretici \u00d6zel Y\u00fcksek Kaliteli D\u00fc\u015f\u00fck Minimum Sipari\u015f...', image: 'https://picsum.photos/seed/p4/400/400', price_min: '1', price_max: '3', moq: 50, moq_unit: 'Adet' },
+            { name: 'mock-5', product_name: 'Pelu\u015f Oyuncak \u00dcreticisi \u00d6zel Tasar\u0131m 20cm Pelu\u015f Bebek \u00d6ze...', image: 'https://picsum.photos/seed/p5/400/400', price_min: '1', price_max: '3', moq: 50, moq_unit: 'Adet' },
+            { name: 'mock-6', product_name: 'CE CPC OEM ODM \u00d6zel 2026 Maskot \u00d6zel Yap\u0131m Hayvan Pel...', image: 'https://picsum.photos/seed/p6/400/400', price_min: '0.90', price_max: '1.77', moq: 50, moq_unit: 'Parsel' },
+            { name: 'mock-7', product_name: '\u00d6zel Tasar\u0131m 2026 Maskotu Y\u00fcksek Kaliteli Pelu\u015f Oyuncakla...', image: 'https://picsum.photos/seed/p7/400/400', price_min: '0.90', price_max: '1.77', moq: 50, moq_unit: 'Parsel' },
+            { name: 'mock-8', product_name: '\u00d6zel 2026 Maskotu Y\u00fcksek Kaliteli Pelu\u015f Oyuncaklar \u00d6zel...', image: 'https://picsum.photos/seed/p8/400/400', price_min: '0.90', price_max: '1.77', moq: 50, moq_unit: 'Parsel', sold_count: 5 },
+          ],
+          loading: true,
+          async init() {
+            if (!this.sellerCode) { this.loading = false; return; }
+            try {
+              const apiBase = (window.API_BASE || '/api');
+              const res = await fetch(apiBase + '/method/tradehub_core.api.seller.get_seller_products?seller_code=' + this.sellerCode + '&page_size=8', { credentials: 'omit' }).then(r => r.json());
+              const real = res.message?.products || [];
+              if (real.length > 0) this.overviewProducts = real;
+            } catch(e) {}
+            this.loading = false;
+          },
+          ${SHARED_FORMAT_PRICE}
+        }"
+      >
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-[18px] font-bold text-gray-900">${t('seller.sf.productsTab')}</h3>
+        </div>
 
         <!-- Loading -->
-        <div x-show="loading" class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
-          <template x-for="i in 8">
-            <div class="animate-pulse bg-gray-100 rounded-lg aspect-square"></div>
+        <div x-show="loading" class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <template x-for="i in 4"><div class="animate-pulse bg-gray-100 rounded-md aspect-square"></div></template>
+        </div>
+
+        <!-- Products grid -->
+        <div x-show="!loading && overviewProducts.length > 0" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+          <template x-for="(p, idx) in overviewProducts" :key="p.name">
+            <a :href="'/pages/product-detail.html?id=' + encodeURIComponent(p.name)" class="block no-underline group">
+              <div class="relative rounded-md overflow-hidden bg-gray-100 aspect-square mb-2">
+                <img x-show="p.image" :src="p.image" :alt="p.product_name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+                <div x-show="!p.image" class="w-full h-full flex items-center justify-center text-gray-200">
+                  <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                </div>
+                <div x-show="p.video_url" class="absolute inset-0 flex items-center justify-center">
+                  <div class="w-8 h-8 bg-black/50 rounded-full flex items-center justify-center">
+                    <svg class="w-4 h-4 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                  </div>
+                </div>
+              </div>
+              <div class="text-[11px] sm:text-[12px] text-gray-800 line-clamp-2 leading-snug mb-0.5" x-text="p.product_name"></div>
+              <div class="text-[12px] sm:text-[13px] font-semibold text-gray-900 mb-0.5" x-text="formatPrice(p)"></div>
+              <div class="text-[10px] sm:text-[11px] text-gray-500">
+                <span x-show="p.moq" x-text="'Min. Sipari\u015f ' + p.moq + ' ' + (p.moq_unit || 'Adet')"></span>
+                <span x-show="p.sold_count" class="text-gray-400 ml-1" x-text="p.sold_count + ' sold'"></span>
+              </div>
+            </a>
           </template>
         </div>
 
         <!-- Empty -->
-        <div x-show="!loading && products.length === 0" class="text-gray-400 text-[14px] py-8 text-center">
-          Henüz ürün eklenmemiş.
-        </div>
-
-        <!-- Products -->
-        <div x-show="!loading && products.length > 0" class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4 product-grid">
-          <template x-for="(p, idx) in products" :key="p.name">
-            <a :href="'/pages/product-detail.html?id=' + encodeURIComponent(p.name)" class="product-card flex flex-col gap-2 overflow-hidden text-sm text-start no-underline group">
-              <div class="product-card__image-area relative rounded-lg overflow-hidden bg-gray-100 aspect-square">
-                <img x-show="p.image" :src="p.image" :alt="p.product_name" class="product-card__img block w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
-                <div x-show="!p.image" class="w-full h-full flex items-center justify-center text-gray-200">
-                  <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="m3 9 4-4 4 4 4-6 6 6"/></svg>
-                </div>
-                <div class="product-card__lens-wrap absolute inset-0 flex items-end justify-end p-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div class="w-8 h-8 bg-white/80 rounded-full flex items-center justify-center shadow">
-                    <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 9a2 2 0 0 1 2-2h2l1-2h8l1 2h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z"/><circle cx="12" cy="13" r="3"/></svg>
-                  </div>
-                </div>
-              </div>
-              <div class="flex flex-col gap-1">
-                <div class="product-card__title line-clamp-2 text-[13px] leading-snug text-gray-800" x-text="p.product_name"></div>
-                <div class="product-card__price font-semibold text-[14px] text-gray-900" x-text="formatPrice(p)"></div>
-                <div x-show="p.moq" class="text-[12px] text-gray-500">
-                  <span x-text="p.moq + ' ' + (p.moq_unit || 'Adet')"></span>
-                  <span class="text-gray-300 mx-1">·</span>
-                  <span>0 adet satıldı</span>
-                </div>
-              </div>
-            </a>
-          </template>
+        <div x-show="!loading && overviewProducts.length === 0" class="text-gray-400 text-[14px] py-8 text-center">
+          ${t('seller.sf.noProducts')}
         </div>
       </section>
 
@@ -190,79 +445,38 @@ function ReviewsTab(): string {
   return `
     <div class="company-profile__tab-content" x-show="activeTab === 'reviews'" x-transition.opacity.duration.300ms id="tab-reviews"
       x-data="{
-        sellerCode: new URLSearchParams(window.location.search).get('seller') || '',
+        sellerCode: ${SELLER_CODE_INIT},
         seller: null,
         reviews: [],
         total: 0,
         loading: true,
-        sessionUser: null,
-        reviewRating: 0,
-        reviewHover: 0,
-        reviewComment: '',
-        submitting: false,
-        submitSuccess: false,
-        submitError: '',
         async init() {
           if (!this.sellerCode) { this.loading = false; return; }
-          const apiBase = window.API_BASE || '/api';
-          const [sellerRes, reviewRes, sessionRes] = await Promise.all([
-            fetch(apiBase + '/method/tradehub_core.api.seller.get_seller?slug=' + this.sellerCode, {credentials:'omit'}).then(r=>r.json()),
-            fetch(apiBase + '/method/tradehub_core.api.seller.get_reviews?seller_code=' + this.sellerCode + '&page_size=10', {credentials:'omit'}).then(r=>r.json()),
-            fetch('/api/method/tradehub_core.api.v1.auth.get_session_user', {credentials:'include'}).then(r=>r.json()).catch(()=>null)
-          ]);
-          this.seller = sellerRes.message || null;
-          this.reviews = reviewRes.message?.reviews || [];
-          this.total = reviewRes.message?.total || 0;
-          this.sessionUser = sessionRes?.message?.logged_in ? sessionRes.message.user : null;
-          this.loading = false;
-        },
-        async reloadReviews() {
-          const apiBase = window.API_BASE || '/api';
-          const reviewRes = await fetch(apiBase + '/method/tradehub_core.api.seller.get_reviews?seller_code=' + this.sellerCode + '&page_size=10', {credentials:'omit'}).then(r=>r.json());
-          this.reviews = reviewRes.message?.reviews || [];
-          this.total = reviewRes.message?.total || 0;
-        },
-        async submitReview() {
-          if (!this.reviewRating) { this.submitError = '${t('seller.sf.reviewRatingRequired')}'; return; }
-          if (!this.reviewComment.trim()) { this.submitError = '${t('seller.sf.reviewCommentRequired')}'; return; }
-          this.submitting = true;
-          this.submitError = '';
           try {
-            const apiBase = window.API_BASE || '/api';
-            const csrf = document.cookie.match(/csrf_token=([^;]+)/)?.[1] || 'None';
-            const res = await fetch(apiBase + '/method/tradehub_core.api.seller.submit_review', {
-              method: 'POST',
-              credentials: 'include',
-              headers: {'Content-Type': 'application/json', 'X-Frappe-CSRF-Token': csrf},
-              body: JSON.stringify({seller_code: this.sellerCode, rating: this.reviewRating, comment: this.reviewComment})
-            }).then(r=>r.json());
-            if (res.message?.success) {
-              this.submitSuccess = true;
-              this.reviewRating = 0;
-              this.reviewComment = '';
-              await this.reloadReviews();
-            } else {
-              this.submitError = res.message || 'Bir hata oluştu.';
-            }
-          } catch {
-            this.submitError = 'Yorum gönderilemedi. Lütfen tekrar deneyin.';
-          } finally {
-            this.submitting = false;
-          }
+            const apiBase = (window.API_BASE || '/api');
+            const [sellerRes, reviewRes] = await Promise.all([
+              fetch(apiBase + '/method/tradehub_core.api.seller.get_seller?slug=' + this.sellerCode, {credentials:'omit'}).then(r=>r.json()),
+              fetch(apiBase + '/method/tradehub_core.api.seller.get_reviews?seller_code=' + this.sellerCode + '&page_size=10', {credentials:'omit'}).then(r=>r.json())
+            ]);
+            this.seller = sellerRes.message || null;
+            this.reviews = reviewRes.message?.reviews || [];
+            this.total = reviewRes.message?.total || 0;
+          } catch(e) { console.error('Reviews fetch error', e); }
+          this.loading = false;
         },
         formatDate(d) {
           if (!d) return '';
           return new Date(d).toLocaleDateString('tr-TR', {day:'2-digit', month:'short', year:'numeric'});
         },
         maskName(n) {
-          if (!n) return '—';
+          if (!n) return '\u2014';
           if (n.length <= 2) return n;
-          return n[0] + '*'.repeat(Math.min(n.length - 2, 8)) + n[n.length - 1];
+          return n[0] + '*'.repeat(Math.min(n.length - 2, 5)) + n[n.length - 1];
         },
         ratingPct(r) { return r ? ((r / 5) * 100) + '%' : '0%'; }
       }"
     >
-      <section class="bg-white rounded-(--radius-md) border border-gray-200 p-6">
+      <section class="bg-white rounded-md border border-gray-200 p-6">
 
         <!-- Loading -->
         <div x-show="loading" class="space-y-4 animate-pulse">
@@ -276,96 +490,44 @@ function ReviewsTab(): string {
           <div>
             <h3 class="text-[18px] font-bold text-gray-900 mb-8">${t('seller.sf.companyReviews')} (<span x-text="total"></span>)</h3>
 
-            <!-- Score Breakdown -->
-            <div class="flex flex-col md:flex-row gap-12 mb-10 pb-10 border-b border-gray-100">
-              <div class="flex flex-col">
+            <!-- Rating Summary -->
+            <div class="flex flex-col md:flex-row gap-10 mb-10 pb-10 border-b border-gray-100">
+              <!-- Score -->
+              <div class="flex flex-col items-center md:items-start">
                 <div class="text-[48px] font-bold text-gray-900 leading-none">
-                  <span x-text="seller?.average_rating ? seller.average_rating.toFixed(1) : '—'"></span>
+                  <span x-text="seller?.average_rating ? seller.average_rating.toFixed(1) : '\u2014'"></span>
                   <span class="text-[16px] text-gray-500 font-normal">/5</span>
                 </div>
-                <div class="text-[14px] text-gray-600 font-medium mt-1">${t('seller.sf.satisfied')}</div>
+                <div class="text-[14px] text-amber-600 font-semibold mt-1">${t('seller.sf.satisfied')}</div>
               </div>
 
-              <div class="flex-1 max-w-md">
-                <div x-show="total === 0" class="text-[14px] text-gray-400 py-4">
-                  Henüz değerlendirme yok.
-                </div>
-              </div>
-            </div>
-
-            <!-- Write Review Form -->
-            <div class="mb-10 pb-10 border-b border-gray-100">
-              <!-- Logged in: show form -->
-              <template x-if="sessionUser">
-                <div>
-                  <h4 class="text-[15px] font-semibold text-gray-800 mb-4">${t('seller.sf.writeReview')}</h4>
-
-                  <!-- Success message -->
-                  <div x-show="submitSuccess" class="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg text-[13px] text-green-700">
-                    ${t('seller.sf.reviewSuccess')}
+              <!-- Progress Bars -->
+              <div class="flex-1 max-w-md space-y-3">
+                <!-- Supplier Service -->
+                <div class="flex items-center gap-3">
+                  <span class="text-[13px] text-gray-600 w-40 shrink-0">${t('seller.sf.supplierService')}</span>
+                  <div class="flex-1 bg-gray-100 rounded-full h-2.5 overflow-hidden">
+                    <div class="h-full bg-[#cc9900] rounded-full transition-all duration-500" :style="'width:' + ratingPct(seller?.average_rating)"></div>
                   </div>
-
-                  <template x-if="!submitSuccess">
-                    <div class="space-y-4">
-                      <!-- Star Rating -->
-                      <div>
-                        <label class="block text-[12px] font-medium text-gray-600 mb-2">${t('seller.sf.reviewRatingLabel')}</label>
-                        <div class="flex gap-1">
-                          <template x-for="i in 5" :key="i">
-                            <button type="button"
-                              @click="reviewRating = i"
-                              @mouseenter="reviewHover = i"
-                              @mouseleave="reviewHover = 0"
-                              class="focus:outline-none"
-                            >
-                              <svg :class="(reviewHover || reviewRating) >= i ? 'text-yellow-400' : 'text-gray-200'" class="w-7 h-7 transition-colors" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                              </svg>
-                            </button>
-                          </template>
-                        </div>
-                      </div>
-
-                      <!-- Comment -->
-                      <div>
-                        <label class="block text-[12px] font-medium text-gray-600 mb-2">${t('seller.sf.reviewCommentLabel')}</label>
-                        <textarea
-                          x-model="reviewComment"
-                          rows="4"
-                          placeholder="${t('seller.sf.reviewCommentPlaceholder')}"
-                          class="w-full px-3 py-2 border border-gray-200 rounded-lg text-[13px] text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[var(--color-brand)] resize-none"
-                        ></textarea>
-                      </div>
-
-                      <!-- Error -->
-                      <p x-show="submitError" x-text="submitError" class="text-[12px] text-red-500"></p>
-
-                      <!-- Submit -->
-                      <button
-                        type="button"
-                        @click="submitReview()"
-                        :disabled="submitting"
-                        class="px-6 py-2.5 bg-[var(--color-brand)] text-white text-[13px] font-semibold rounded-full hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        <span x-show="!submitting">${t('seller.sf.reviewSubmit')}</span>
-                        <span x-show="submitting" class="flex items-center gap-2">
-                          <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/></svg>
-                          Gönderiliyor...
-                        </span>
-                      </button>
-                    </div>
-                  </template>
+                  <span class="text-[13px] text-gray-700 font-medium w-8 text-right" x-text="seller?.average_rating ? seller.average_rating.toFixed(1) : '\u2014'"></span>
                 </div>
-              </template>
-
-              <!-- Not logged in: prompt -->
-              <template x-if="!sessionUser">
-                <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-                  <svg class="w-5 h-5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                  <p class="text-[13px] text-gray-600">${t('seller.sf.reviewLoginPrompt')}</p>
-                  <a href="/pages/auth/login.html" class="ml-auto text-[13px] font-semibold text-[var(--color-brand)] hover:underline whitespace-nowrap">${t('seller.sf.reviewLoginBtn')}</a>
+                <!-- On-Time Shipment -->
+                <div class="flex items-center gap-3">
+                  <span class="text-[13px] text-gray-600 w-40 shrink-0">${t('seller.sf.onTimeShipment')}</span>
+                  <div class="flex-1 bg-gray-100 rounded-full h-2.5 overflow-hidden">
+                    <div class="h-full bg-[#cc9900] rounded-full transition-all duration-500" :style="'width:' + ratingPct(seller?.average_rating)"></div>
+                  </div>
+                  <span class="text-[13px] text-gray-700 font-medium w-8 text-right" x-text="seller?.average_rating ? seller.average_rating.toFixed(1) : '\u2014'"></span>
                 </div>
-              </template>
+                <!-- Product Quality -->
+                <div class="flex items-center gap-3">
+                  <span class="text-[13px] text-gray-600 w-40 shrink-0">${t('seller.sf.productQuality')}</span>
+                  <div class="flex-1 bg-gray-100 rounded-full h-2.5 overflow-hidden">
+                    <div class="h-full bg-[#cc9900] rounded-full transition-all duration-500" :style="'width:' + ratingPct(seller?.average_rating)"></div>
+                  </div>
+                  <span class="text-[13px] text-gray-700 font-medium w-8 text-right" x-text="seller?.average_rating ? seller.average_rating.toFixed(1) : '\u2014'"></span>
+                </div>
+              </div>
             </div>
 
             <!-- Empty state -->
@@ -373,49 +535,61 @@ function ReviewsTab(): string {
               <svg class="w-12 h-12 mx-auto mb-3 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
               </svg>
-              <p class="text-[14px]">Henüz değerlendirme eklenmemiş.</p>
+              <p class="text-[14px]">${t('seller.sf.noReviews')}</p>
             </div>
 
             <!-- Reviews List -->
-            <div x-show="reviews.length > 0" class="space-y-8">
+            <div x-show="reviews.length > 0" class="space-y-6">
               <template x-for="review in reviews" :key="review.name">
-                <div class="flex flex-col sm:flex-row gap-4 sm:gap-8">
-                  <div class="w-full sm:w-48 flex-shrink-0">
-                    <div class="flex items-center gap-2 text-[13px] font-medium text-gray-900 mb-1">
-                      <span x-text="maskName(review.reviewer_name)"></span>
-                      <template x-if="review.verified_purchase">
-                        <span class="text-[11px] text-green-600 font-normal bg-green-50 px-1.5 py-0.5 rounded">✓ Doğrulanmış</span>
+                <div class="border-b border-gray-50 pb-6 last:border-b-0">
+                  <div class="flex flex-col sm:flex-row gap-4 sm:gap-6">
+                    <!-- Left: Reviewer Info -->
+                    <div class="w-full sm:w-44 flex-shrink-0">
+                      <div class="flex items-center gap-2 mb-1">
+                        <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-[12px] font-bold text-gray-500" x-text="(review.reviewer_name || '?')[0].toUpperCase()"></div>
+                        <div>
+                          <div class="text-[13px] font-medium text-gray-900" x-text="maskName(review.reviewer_name)"></div>
+                          <div class="text-[11px] text-gray-400" x-text="formatDate(review.creation)"></div>
+                        </div>
+                      </div>
+                      <template x-if="review.rating">
+                        <div class="flex gap-0.5 mt-1 ml-10">
+                          <template x-for="i in 5" :key="i">
+                            <svg :class="i <= review.rating ? 'text-yellow-400' : 'text-gray-200'" class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                            </svg>
+                          </template>
+                        </div>
                       </template>
                     </div>
-                    <div class="text-[12px] text-gray-400" x-text="formatDate(review.creation)"></div>
-                    <template x-if="review.rating">
-                      <div class="flex gap-0.5 mt-1">
-                        <template x-for="i in 5" :key="i">
-                          <svg :class="i <= review.rating ? 'text-yellow-400' : 'text-gray-200'" class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                          </svg>
-                        </template>
-                      </div>
-                    </template>
-                  </div>
 
-                  <div class="flex-1">
-                    <p class="text-[14px] text-gray-700 mb-3" x-text="review.comment"></p>
-                    <template x-if="review.product_name">
-                      <div class="flex items-center gap-3 bg-gray-50 p-3 rounded-md border border-gray-100">
-                        <div class="w-10 h-10 bg-gray-200 rounded shrink-0 flex items-center justify-center text-gray-400">
-                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                    <!-- Right: Comment & Product -->
+                    <div class="flex-1">
+                      <p class="text-[14px] text-gray-700 leading-relaxed mb-3" x-text="review.comment"></p>
+                      <template x-if="review.product_name">
+                        <div class="flex items-center gap-3 bg-gray-50 p-3 rounded-md border border-gray-100">
+                          <div class="w-12 h-12 bg-gray-200 rounded shrink-0 overflow-hidden flex items-center justify-center">
+                            <template x-if="review.product_image">
+                              <img :src="review.product_image" :alt="review.product_name" class="w-full h-full object-cover" />
+                            </template>
+                            <template x-if="!review.product_image">
+                              <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                            </template>
+                          </div>
+                          <div class="min-w-0">
+                            <span class="text-[12px] text-gray-600 line-clamp-1 block" x-text="review.product_name"></span>
+                            <span x-show="review.product_price" class="text-[12px] text-gray-900 font-medium" x-text="review.product_price"></span>
+                          </div>
                         </div>
-                        <span class="text-[12px] text-gray-600 line-clamp-2" x-text="review.product_name"></span>
-                      </div>
-                    </template>
+                      </template>
+                    </div>
                   </div>
                 </div>
               </template>
             </div>
 
             <div x-show="reviews.length > 0" class="mt-8 text-center">
-              <button class="px-6 py-2 border border-gray-300 rounded-full text-[14px] font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors">
+              <button class="px-6 py-2.5 border border-gray-300 rounded-full text-[14px] font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors">
                 ${t('seller.sf.browseAllReviews')}
               </button>
             </div>
@@ -427,241 +601,346 @@ function ReviewsTab(): string {
   `;
 }
 
-// ─── Products Tab (Ürünler) ────────────────────────────────────
+// ─── Products Tab (Urunler) ────────────────────────────────────
 function ProductsTab(): string {
   return `
     <div class="company-profile__tab-content" x-show="activeTab === 'products'" x-transition.opacity.duration.300ms id="tab-products"
-      @store:nav-category.window="prodCat = String($event.detail.id)"
       x-data="{
-        sellerCode: new URLSearchParams(window.location.search).get('seller') || '',
+        sellerCode: ${SELLER_CODE_INIT},
         prodCat: 'all',
         categories: [],
         products: [],
         loading: true,
-        _cv: 0,
+        currentPage: 1,
+        pageSize: 20,
+        get totalPages() {
+          const filtered = this.filteredProducts();
+          return Math.ceil(filtered.length / this.pageSize) || 1;
+        },
+        get paginatedProducts() {
+          const filtered = this.filteredProducts();
+          const start = (this.currentPage - 1) * this.pageSize;
+          return filtered.slice(start, start + this.pageSize);
+        },
         async init() {
-          document.addEventListener('currency-changed', () => { this._cv++; });
-          const apiBase = window.API_BASE || '/api';
-          const [catRes, prodRes] = await Promise.all([
-            fetch(apiBase + '/method/tradehub_core.api.seller.get_seller_categories?seller_code=' + this.sellerCode, {credentials:'omit'}).then(r=>r.json()),
-            fetch(apiBase + '/method/tradehub_core.api.seller.get_seller_products?seller_code=' + this.sellerCode + '&page_size=80', {credentials:'omit'}).then(r=>r.json())
-          ]);
-          this.categories = catRes.message?.categories || [];
-          this.products = prodRes.message?.products || [];
+          try {
+            const apiBase = (window.API_BASE || '/api');
+            const [catRes, prodRes] = await Promise.all([
+              fetch(apiBase + '/method/tradehub_core.api.seller.get_seller_categories?seller_code=' + this.sellerCode, {credentials:'omit'}).then(r=>r.json()),
+              fetch(apiBase + '/method/tradehub_core.api.seller.get_seller_products?seller_code=' + this.sellerCode + '&page_size=80', {credentials:'omit'}).then(r=>r.json())
+            ]);
+            this.categories = catRes.message?.categories || [];
+            this.products = prodRes.message?.products || [];
+          } catch(e) { console.error('Products fetch error', e); }
           this.loading = false;
         },
         filteredProducts() {
           if (this.prodCat === 'all') return this.products;
           if (this.prodCat === 'featured') return this.products.filter(p => p.is_featured);
+          if (this.prodCat === 'discount') return this.products.filter(p => p.discount_percent > 0);
           return this.products.filter(p => String(p.category) === String(this.prodCat));
         },
-        formatPrice(p) {
-          void this._cv;
-          if (!p.price_min) return '';
-          const min = parseFloat(p.price_min);
-          const max = p.price_max ? parseFloat(p.price_max) : 0;
-          const cur = p.currency || 'USD';
-          if (max > min) return window.csFormatPriceRange(min, max, cur);
-          return window.csFormatPrice(min, cur);
-        }
+        setCategory(cat) {
+          this.prodCat = cat;
+          this.currentPage = 1;
+        },
+        ${SHARED_FORMAT_PRICE}
       }"
     >
-      <div class="flex bg-white rounded-(--radius-md) border border-gray-200 overflow-hidden min-h-[500px]">
-
-        <!-- Sol Sidebar: Kategoriler -->
-        <aside class="hidden md:flex flex-col w-[180px] xl:w-[220px] shrink-0 border-r border-gray-200">
-          <button
-            @click="prodCat = 'featured'"
-            :class="prodCat === 'featured' ? 'bg-[var(--color-primary-50)] text-[var(--color-primary-600)]' : 'text-gray-700 hover:bg-gray-50'"
-            class="flex items-center gap-2.5 px-4 py-3.5 text-[13px] font-semibold border-b border-gray-100 transition-colors"
-          >
-            <span class="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center text-base shrink-0">⭐</span>
-            İlk Seçilenler
+      <!-- Category Filter Tabs -->
+      <div class="bg-white rounded-md border border-gray-200 mb-4">
+        <div class="flex overflow-x-auto no-scrollbar px-4 gap-1">
+          <button @click="setCategory('all')" :class="prodCat === 'all' ? 'text-amber-700 border-b-2 border-amber-500 font-semibold' : 'text-gray-600 hover:text-gray-900'" class="whitespace-nowrap px-4 py-3 text-[13px] transition-colors shrink-0">
+            ${t('seller.sf.all')}
           </button>
-          <div class="px-4 pt-4 pb-2">
-            <span class="text-[12px] font-bold text-[var(--color-primary-500)] border-b-2 border-[var(--color-primary-500)] pb-1 block">Ürün Kategorileri</span>
-          </div>
-          <button
-            @click="prodCat = 'all'"
-            :class="prodCat === 'all' ? 'text-[var(--color-primary-600)] font-semibold bg-[var(--color-primary-50)]' : 'text-gray-700 hover:bg-gray-50'"
-            class="text-left text-[13px] px-4 py-2 transition-colors"
-          >Tümü</button>
+          <button @click="setCategory('featured')" :class="prodCat === 'featured' ? 'text-amber-700 border-b-2 border-amber-500 font-semibold' : 'text-gray-600 hover:text-gray-900'" class="whitespace-nowrap px-4 py-3 text-[13px] transition-colors shrink-0">
+            ${t('seller.sf.topSelling')}
+          </button>
+          <button @click="setCategory('discount')" :class="prodCat === 'discount' ? 'text-amber-700 border-b-2 border-amber-500 font-semibold' : 'text-gray-600 hover:text-gray-900'" class="whitespace-nowrap px-4 py-3 text-[13px] transition-colors shrink-0">
+            ${t('seller.sf.superDiscount')}
+          </button>
           <template x-for="cat in categories" :key="cat.name">
-            <button
-              @click="prodCat = String(cat.name)"
-              :class="String(prodCat) === String(cat.name) ? 'text-[var(--color-primary-600)] font-semibold bg-[var(--color-primary-50)]' : 'text-gray-700 hover:bg-gray-50'"
-              class="text-left text-[13px] px-4 py-2 truncate transition-colors"
-              x-text="cat.category_name"
-            ></button>
+            <button @click="setCategory(String(cat.name))" :class="String(prodCat) === String(cat.name) ? 'text-amber-700 border-b-2 border-amber-500 font-semibold' : 'text-gray-600 hover:text-gray-900'" class="whitespace-nowrap px-4 py-3 text-[13px] transition-colors shrink-0" x-text="cat.category_name"></button>
           </template>
-        </aside>
+        </div>
+      </div>
 
-        <!-- Sağ: Ürün Alanı -->
-        <div class="flex-1 min-w-0 p-4 xl:p-6">
-          <!-- Mobil kategori seçici -->
-          <div class="md:hidden flex gap-2 overflow-x-auto no-scrollbar mb-4 pb-1">
-            <button @click="prodCat='all'" :class="prodCat==='all'?'bg-gray-900 text-white':'bg-white text-gray-700 border border-gray-300'" class="whitespace-nowrap px-3 py-1.5 rounded-full text-[13px] font-medium shrink-0">Tümü</button>
-            <template x-for="cat in categories" :key="cat.name">
-              <button @click="prodCat=String(cat.name)" :class="String(prodCat)===String(cat.name)?'bg-gray-900 text-white':'bg-white text-gray-700 border border-gray-300'" class="whitespace-nowrap px-3 py-1.5 rounded-full text-[13px] font-medium shrink-0" x-text="cat.category_name"></button>
+      <!-- Product Grid -->
+      <div class="bg-white rounded-md border border-gray-200 p-4 xl:p-6">
+        <!-- Loading -->
+        <div x-show="loading" class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
+          <template x-for="i in 8">
+            <div class="animate-pulse bg-gray-100 rounded-md aspect-square"></div>
+          </template>
+        </div>
+
+        <!-- Empty -->
+        <div x-show="!loading && filteredProducts().length === 0" class="text-center py-16 text-gray-400">
+          <svg class="w-12 h-12 mx-auto mb-3 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="m3 9 4-4 4 4 4-6 6 6"/></svg>
+          <p class="text-[14px]">${t('seller.sf.noProducts')}</p>
+        </div>
+
+        <!-- Products -->
+        <div x-show="!loading && filteredProducts().length > 0">
+          <div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4 product-grid">
+            <template x-for="(p, idx) in paginatedProducts" :key="p.name">
+              <a :href="'/pages/product-detail.html?id=' + encodeURIComponent(p.name)" class="product-card flex flex-col gap-2 overflow-hidden text-sm text-start no-underline group">
+                <div class="product-card__image-area relative rounded-md overflow-hidden bg-gray-100 aspect-square">
+                  <img x-show="p.image" :src="p.image" :alt="p.product_name" class="product-card__img block w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+                  <div x-show="!p.image" class="w-full h-full flex items-center justify-center text-gray-200">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="m3 9 4-4 4 4 4-6 6 6"/></svg>
+                  </div>
+                  <!-- Video play overlay -->
+                  <div x-show="p.video_url" class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div class="w-10 h-10 bg-black/50 rounded-full flex items-center justify-center">
+                      <svg class="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                  </div>
+                  <!-- Certification badges -->
+                  <template x-if="p.certifications">
+                    <div class="absolute bottom-2 left-2 flex flex-wrap gap-1">
+                      <template x-for="badge in (p.certifications || '').split(',').slice(0,2)" :key="badge">
+                        <span class="bg-white/90 text-[10px] text-gray-700 font-medium px-1.5 py-0.5 rounded shadow-sm" x-text="badge.trim()"></span>
+                      </template>
+                    </div>
+                  </template>
+                </div>
+                <div class="flex flex-col gap-1 px-0.5">
+                  <div class="product-card__title line-clamp-2 text-[13px] leading-snug text-gray-800" x-text="p.product_name"></div>
+                  <div class="product-card__price font-semibold text-[14px] text-gray-900" x-text="formatPrice(p)"></div>
+                  <div class="flex items-center gap-1.5 text-[11px] text-gray-500">
+                    <span x-show="p.moq" x-text="'${t('seller.sf.minOrder')} ' + p.moq + ' ' + (p.moq_unit || 'Adet')"></span>
+                    <span x-show="p.moq && p.sold_count" class="text-gray-300">&middot;</span>
+                    <span x-show="p.sold_count" x-text="p.sold_count + ' ${t('seller.sf.sold')}'"></span>
+                  </div>
+                </div>
+              </a>
             </template>
           </div>
 
-          <!-- Başlık -->
-          <div class="flex items-center justify-between mb-5">
-            <h3 class="text-[16px] font-bold text-gray-900" x-text="prodCat === 'all' ? 'Tüm ürünler' : prodCat === 'featured' ? 'İlk Seçilenler' : (categories.find(c=>String(c.name)===String(prodCat))?.category_name || '')"></h3>
+          <!-- Pagination -->
+          <div x-show="totalPages > 1" class="flex items-center justify-center gap-1 mt-8">
+            <button @click="currentPage = Math.max(1, currentPage - 1)" :disabled="currentPage === 1" class="w-8 h-8 flex items-center justify-center rounded border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+            <template x-for="pg in totalPages" :key="pg">
+              <button @click="currentPage = pg" :class="currentPage === pg ? 'bg-amber-500 text-white border-amber-500' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'" class="w-8 h-8 flex items-center justify-center rounded border text-[13px] font-medium transition-colors" x-text="pg"></button>
+            </template>
+            <button @click="currentPage = Math.min(totalPages, currentPage + 1)" :disabled="currentPage === totalPages" class="w-8 h-8 flex items-center justify-center rounded border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
           </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
 
-          <!-- Loading -->
-          <div x-show="loading" class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3">
-            <template x-for="i in 8">
-              <div class="animate-pulse bg-gray-100 rounded-lg aspect-square"></div>
+// ─── Videos Tab (Videolar) ─────────────────────────────────────
+function VideosTab(): string {
+  return `
+    <div class="company-profile__tab-content" x-show="activeTab === 'videos'" x-transition.opacity.duration.300ms id="tab-videos"
+      x-data="{
+        sellerCode: ${SELLER_CODE_INIT},
+        videos: [],
+        loading: true,
+        showModal: false,
+        activeVideo: null,
+        visibleCount: 12,
+        async init() {
+          if (!this.sellerCode) { this.loading = false; return; }
+          try {
+            const apiBase = (window.API_BASE || '/api');
+            const res = await fetch(apiBase + '/method/tradehub_core.api.seller.get_seller_products?seller_code=' + this.sellerCode + '&page_size=50', { credentials: 'omit' }).then(r => r.json());
+            const products = res.message?.products || [];
+            this.videos = products.filter(p => p.video_url);
+          } catch(e) { console.error('Videos fetch error', e); }
+          this.loading = false;
+        },
+        getYoutubeId(url) {
+          if (!url) return null;
+          const m = url.match(/(?:youtube\\.com\\/(?:watch\\?v=|embed\\/)|youtu\\.be\\/)([\\w-]{11})/);
+          return m ? m[1] : null;
+        },
+        getThumbnail(v) {
+          const ytId = this.getYoutubeId(v.video_url);
+          if (ytId) return 'https://img.youtube.com/vi/' + ytId + '/mqdefault.jpg';
+          return v.image || '';
+        },
+        isYoutube(url) {
+          return url && (url.includes('youtube.com') || url.includes('youtu.be'));
+        },
+        isVimeo(url) {
+          return url && url.includes('vimeo.com');
+        },
+        getEmbedUrl(url) {
+          if (!url) return '';
+          const ytId = this.getYoutubeId(url);
+          if (ytId) return 'https://www.youtube.com/embed/' + ytId + '?autoplay=1';
+          if (this.isVimeo(url)) {
+            const vimeoMatch = url.match(/vimeo\\.com\\/(\\d+)/);
+            return vimeoMatch ? 'https://player.vimeo.com/video/' + vimeoMatch[1] + '?autoplay=1' : url;
+          }
+          return url;
+        },
+        openVideo(v) {
+          this.activeVideo = v;
+          this.showModal = true;
+          document.body.style.overflow = 'hidden';
+        },
+        closeModal() {
+          this.showModal = false;
+          this.activeVideo = null;
+          document.body.style.overflow = '';
+        }
+      }"
+      @keydown.escape.window="closeModal()"
+    >
+      <div class="bg-white rounded-md border border-gray-200 p-4 xl:p-6">
+
+        <!-- Loading -->
+        <div x-show="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <template x-for="i in 8">
+            <div class="animate-pulse bg-gray-100 rounded-md aspect-video"></div>
+          </template>
+        </div>
+
+        <!-- Empty -->
+        <div x-show="!loading && videos.length === 0" class="text-center py-16 text-gray-400">
+          <svg class="w-14 h-14 mx-auto mb-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+          </svg>
+          <p class="text-[14px]">${t('seller.sf.noVideos')}</p>
+        </div>
+
+        <!-- Video Grid -->
+        <div x-show="!loading && videos.length > 0">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <template x-for="(v, idx) in videos.slice(0, visibleCount)" :key="v.name">
+              <div class="cursor-pointer group" @click="openVideo(v)">
+                <div class="relative rounded-md overflow-hidden bg-gray-100 aspect-video mb-2">
+                  <!-- Thumbnail -->
+                  <img x-show="getThumbnail(v)" :src="getThumbnail(v)" :alt="v.product_name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+                  <div x-show="!getThumbnail(v)" class="w-full h-full flex items-center justify-center text-gray-300">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                  </div>
+                  <!-- Play button overlay -->
+                  <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="w-12 h-12 bg-black/60 rounded-full flex items-center justify-center group-hover:bg-black/80 transition-colors">
+                      <svg class="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                  </div>
+                  <!-- Duration badge (placeholder) -->
+                  <div class="absolute top-2 left-2 bg-black/60 text-white text-[11px] px-2 py-0.5 rounded flex items-center gap-1">
+                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    <span>0:44</span>
+                  </div>
+                </div>
+                <div class="text-[13px] text-gray-800 line-clamp-2 leading-snug" x-text="v.product_name"></div>
+              </div>
             </template>
           </div>
 
-          <!-- Ürünler -->
-          <div x-show="!loading">
-            <div x-show="filteredProducts().length === 0" class="text-gray-400 text-[14px] py-12 text-center">Bu kategoride ürün bulunamadı.</div>
-            <div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3 xl:gap-4 product-grid">
-              <template x-for="(p, idx) in filteredProducts()" :key="p.name">
-                <a :href="'/pages/product-detail.html?id=' + encodeURIComponent(p.name)" class="product-card flex flex-col gap-2 overflow-hidden text-sm text-start no-underline">
-                  <div class="product-card__image-area relative">
-                    <div class="product-card__image-wrap relative w-full overflow-hidden rounded-md bg-gray-100">
-                      <img x-show="p.image" :src="p.image" :alt="p.product_name" class="product-card__img block w-full h-full object-cover" loading="lazy" />
-                      <div x-show="!p.image" class="w-full aspect-square bg-gray-100 flex items-center justify-center text-gray-300">
-                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="m3 9 4-4 4 4 4-6 6 6"/></svg>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="flex flex-col gap-1">
-                    <div class="product-card__title line-clamp-2 text-[13px] leading-snug" x-text="p.product_name"></div>
-                    <div class="product-card__price font-semibold text-[13px]" x-text="formatPrice(p)"></div>
-                    <div x-show="p.moq" class="product-card__moq-line text-[12px] text-gray-500">
-                      <span x-text="p.moq + ' ' + (p.moq_unit || 'Adet')"></span>
-                    </div>
-                  </div>
-                </a>
+          <!-- View More -->
+          <div x-show="videos.length > visibleCount" class="text-center mt-6">
+            <button @click="visibleCount += 12" class="px-6 py-2.5 border border-gray-300 rounded-full text-[14px] font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+              ${t('seller.sf.viewMore')}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Video Modal -->
+      <template x-if="showModal && activeVideo">
+        <div class="fixed inset-0 z-[9999] flex items-center justify-center p-4" @click.self="closeModal()">
+          <!-- Overlay -->
+          <div class="absolute inset-0 bg-black/70" @click="closeModal()"></div>
+          <!-- Modal Content -->
+          <div class="relative z-10 bg-white rounded-md shadow-2xl w-full max-w-3xl overflow-hidden">
+            <!-- Close button -->
+            <button @click="closeModal()" class="absolute top-3 right-3 z-20 w-8 h-8 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center transition-colors">
+              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            <!-- Video Player -->
+            <div class="aspect-video bg-black">
+              <template x-if="isYoutube(activeVideo.video_url) || isVimeo(activeVideo.video_url)">
+                <iframe :src="getEmbedUrl(activeVideo.video_url)" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              </template>
+              <template x-if="!isYoutube(activeVideo.video_url) && !isVimeo(activeVideo.video_url)">
+                <video :src="activeVideo.video_url" class="w-full h-full" controls autoplay></video>
               </template>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-// ─── Categories Tab (Kategoriler) ────────────────────────────────────
-function CategoriesTab(): string {
-  return `
-    <div class="company-profile__tab-content" x-show="activeTab === 'categories'" x-transition.opacity.duration.300ms id="tab-categories"
-      x-data="{
-        sellerCode: new URLSearchParams(window.location.search).get('seller') || '',
-        categories: [],
-        loading: true,
-        async init() {
-          const apiBase = window.API_BASE || '/api';
-          const res = await fetch(apiBase + '/method/tradehub_core.api.seller.get_seller_categories?seller_code=' + this.sellerCode, {credentials:'omit'}).then(r=>r.json());
-          this.categories = res.message?.categories || [];
-          this.loading = false;
-        }
-      }"
-    >
-      <div class="bg-white rounded-(--radius-md) border border-gray-200 p-6">
-        <!-- Loading -->
-        <div x-show="loading" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          <template x-for="i in 6">
-            <div class="animate-pulse bg-gray-100 rounded-xl aspect-[4/3]"></div>
-          </template>
-        </div>
-
-        <!-- Boş durum -->
-        <div x-show="!loading && categories.length === 0" class="text-center py-16 text-gray-400">
-          <svg class="w-12 h-12 mx-auto mb-3 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-          <p class="text-[14px]">Henüz kategori eklenmemiş.</p>
-        </div>
-
-        <!-- Kategori grid -->
-        <div x-show="!loading && categories.length > 0" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          <template x-for="(cat, i) in categories" :key="cat.name">
-            <div
-              class="relative overflow-hidden rounded-xl cursor-pointer group"
-              :style="'background:' + ['#d4e157','#90caf9','#bdbdbd','#80deea','#a5d6a7','#ffcc80','#f48fb1','#ce93d8'][i % 8]"
-              @click="$dispatch('store:category-click', {id: cat.name})"
-            >
-              <div class="aspect-[4/3] flex flex-col justify-between p-3 sm:p-4">
-                <p class="text-[11px] sm:text-[13px] font-bold text-gray-800 uppercase leading-tight" x-text="cat.category_name"></p>
-                <img
-                  x-show="cat.image"
-                  :src="cat.image"
-                  :alt="cat.category_name"
-                  class="w-[55%] ml-auto object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-300"
-                  loading="lazy"
-                />
-                <div x-show="!cat.image" class="w-[55%] ml-auto h-16 bg-white/20 rounded flex items-center justify-center">
-                  <svg class="w-8 h-8 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
-                </div>
-              </div>
-            </div>
-          </template>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-// ─── Company Info Tab (Şirket Bilgileri) ─────────────────────────────
-function CompanyTab(): string {
-  return `
-    <div class="company-profile__tab-content" x-show="activeTab === 'company'" x-transition.opacity.duration.300ms id="tab-company">
-      <div class="bg-white rounded-(--radius-md) border border-gray-200 p-6 mb-6">
-        <h3 class="text-[18px] font-bold text-gray-900 mb-6">${t('seller.sf.companyProfile')}</h3>
-
-        <template x-if="seller">
-          <div class="space-y-4 text-[14px] text-gray-700">
-            <div x-show="seller?.seller_name" class="flex gap-2">
-              <span class="font-semibold text-gray-500 w-32 shrink-0">Şirket Adı</span>
-              <span x-text="seller.seller_name"></span>
-            </div>
-            <div x-show="seller?.city || seller?.country" class="flex gap-2">
-              <span class="font-semibold text-gray-500 w-32 shrink-0">Konum</span>
-              <span x-text="sellerLocation"></span>
-            </div>
-            <div x-show="seller?.email" class="flex gap-2">
-              <span class="font-semibold text-gray-500 w-32 shrink-0">E-posta</span>
-              <a :href="'mailto:' + seller.email" class="hover:text-[var(--color-primary-500)]" x-text="seller.email"></a>
-            </div>
-            <div x-show="seller?.phone" class="flex gap-2">
-              <span class="font-semibold text-gray-500 w-32 shrink-0">Telefon</span>
-              <a :href="'tel:' + seller.phone" class="hover:text-[var(--color-primary-500)]" x-text="seller.phone"></a>
-            </div>
-            <div x-show="seller?.website" class="flex gap-2">
-              <span class="font-semibold text-gray-500 w-32 shrink-0">Web Sitesi</span>
-              <a :href="seller.website" target="_blank" rel="noopener" class="hover:text-[var(--color-primary-500)] truncate" x-text="seller.website"></a>
-            </div>
-            <div x-show="seller?.description" class="flex gap-2">
-              <span class="font-semibold text-gray-500 w-32 shrink-0">Hakkında</span>
-              <span x-text="seller.description"></span>
-            </div>
-            <div x-show="seller?.joined_at" class="flex gap-2">
-              <span class="font-semibold text-gray-500 w-32 shrink-0">Katılım Tarihi</span>
-              <span x-text="seller.joined_at ? new Date(seller.joined_at).toLocaleDateString('tr-TR') : ''"></span>
+            <!-- Title -->
+            <div class="p-4">
+              <h4 class="text-[15px] font-medium text-gray-900" x-text="activeVideo.product_name"></h4>
             </div>
           </div>
-        </template>
-
-        <div x-show="!seller" class="text-gray-400 text-[14px] py-8 text-center">
-          Şirket bilgisi yükleniyor...
         </div>
-      </div>
+      </template>
+
     </div>
   `;
 }
 
-// ─── Contact Info Tab (İletişim) ─────────────────────────────────────
+// ─── Contact Sidebar (Right) ──────────────────────────────────
+function ContactSidebar(): string {
+  return `
+    <div class="company-profile__sidebar sticky top-0">
+      <div class="bg-white rounded-md border border-gray-200 shadow-sm" style="padding: 24px 20px 20px;">
+
+        <!-- Header Title -->
+        <h3 class="text-[17px] font-bold text-gray-900 mb-5">${t('seller.sf.contactSupplierTitle')}</h3>
+
+        <!-- Seller Logo & Name -->
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-12 h-12 flex items-center justify-center rounded-md overflow-hidden border border-gray-100 p-1 bg-gray-50 shrink-0">
+            <img x-show="seller?.logo" :src="seller?.logo" :alt="seller?.seller_name || ''" class="w-full h-full object-contain" />
+            <svg x-show="!seller?.logo" class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+          </div>
+          <div class="min-w-0">
+            <h4 class="text-[14px] font-medium text-gray-900 leading-tight line-clamp-2" x-text="seller?.seller_name || '\u2014'"></h4>
+          </div>
+        </div>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-col gap-3 mb-5">
+          <button @click="setTab('contact')" class="w-full bg-[#cc9900] hover:bg-[#b38600] text-white font-semibold py-3 px-4 rounded-full transition-colors text-[14px] shadow-sm company-profile__contact-btn">
+            ${t('seller.sf.contactNow')}
+          </button>
+          <button @click="setTab('contact')" class="w-full bg-white hover:bg-gray-50 text-gray-900 border border-gray-300 font-medium py-3 px-4 rounded-full transition-colors text-[14px] company-profile__inquiry-btn">
+            ${t('seller.sf.sendInquiry')}
+          </button>
+        </div>
+
+        <!-- Divider + Visit Store -->
+        <div class="border-t border-gray-100 pt-4">
+          <a :href="'/pages/seller-storefront.html?seller=' + (seller?.slug || '')" class="flex items-center justify-center gap-2 text-[13px] text-blue-600 hover:text-blue-700 font-medium transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z"/></svg>
+            ${t('seller.sf.visitStore')}
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Mobile Contact Bar (shown on small screens) -->
+    <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 z-50 flex gap-3 shadow-lg">
+      <button @click="setTab('contact')" class="flex-1 bg-[#cc9900] hover:bg-[#b38600] text-white font-semibold py-2.5 px-4 rounded-full transition-colors text-[14px]">
+        ${t('seller.sf.contactNow')}
+      </button>
+      <button @click="setTab('contact')" class="flex-1 bg-white hover:bg-gray-50 text-gray-900 border border-gray-300 font-medium py-2.5 px-4 rounded-full transition-colors text-[14px]">
+        ${t('seller.sf.sendInquiry')}
+      </button>
+    </div>
+  `;
+}
+
+// ─── Contact Tab (Iletisim - hidden tab for contact form) ─────
 function ContactTab(): string {
   return `
     <div class="company-profile__tab-content" x-show="activeTab === 'contact'" x-transition.opacity.duration.300ms id="tab-contact"
       x-data="{
-        sellerCode: new URLSearchParams(window.location.search).get('seller') || '',
+        sellerCode: ${SELLER_CODE_INIT},
         seller: null,
         loading: true,
         msgText: '',
@@ -670,9 +949,11 @@ function ContactTab(): string {
         shareCard: true,
         sending: false,
         async init() {
-          const apiBase = window.API_BASE || '/api';
-          const res = await fetch(apiBase + '/method/tradehub_core.api.seller.get_seller?slug=' + this.sellerCode, {credentials:'omit'}).then(r=>r.json());
-          this.seller = res.message || null;
+          try {
+            const apiBase = (window.API_BASE || '/api');
+            const res = await fetch(apiBase + '/method/tradehub_core.api.seller.get_seller?slug=' + this.sellerCode, {credentials:'omit'}).then(r=>r.json());
+            this.seller = res.message || null;
+          } catch(e) { console.error('Contact fetch error', e); }
           this.loading = false;
         },
         async sendMsg() {
@@ -680,7 +961,7 @@ function ContactTab(): string {
           this.sending = true;
           this.msgError = '';
           try {
-            const apiBase = window.API_BASE || '/api';
+            const apiBase = (window.API_BASE || '/api');
             const params = new URLSearchParams({
               seller_code: this.sellerCode,
               message: this.msgText.trim(),
@@ -692,115 +973,99 @@ function ContactTab(): string {
               credentials: 'omit',
               body: params.toString()
             }).then(r => r.json());
-            if (res.exc) throw new Error(res._error_message || 'Gönderilemedi');
+            if (res.exc) throw new Error(res._error_message || 'Failed');
             this.msgSent = true;
             this.msgText = '';
           } catch(e) {
-            this.msgError = 'Mesaj gönderilemedi. Lütfen tekrar deneyin.';
+            this.msgError = 'Mesaj gonderilemedi. Lutfen tekrar deneyin.';
           }
           this.sending = false;
         }
       }"
     >
-      <section id="contact-form" class="contact-form py-12" aria-label="${t('seller.sf.contactFormLabel')}">
-        <div class="max-w-[800px] sm:max-w-full mx-auto px-8 sm:px-6 xs:px-4">
-          <div class="contact-form__card bg-white dark:bg-gray-800 border border-(--card-border-color) dark:border-gray-700 rounded-(--radius-lg) shadow-md dark:shadow-lg p-8 sm:p-6 xs:p-4">
+      <section class="bg-white rounded-md border border-gray-200 p-6">
 
-            <!-- Loading -->
-            <div x-show="loading" class="space-y-3 animate-pulse">
-              <div class="h-6 bg-gray-100 rounded w-2/3 mx-auto"></div>
-              <div class="h-4 bg-gray-100 rounded w-1/2"></div>
+        <!-- Loading -->
+        <div x-show="loading" class="space-y-3 animate-pulse">
+          <div class="h-6 bg-gray-100 rounded w-2/3 mx-auto"></div>
+          <div class="h-4 bg-gray-100 rounded w-1/2"></div>
+        </div>
+
+        <template x-if="!loading">
+          <div class="max-w-lg mx-auto">
+            <!-- Title -->
+            <h2 class="text-[18px] font-bold text-gray-900 text-center mb-6">
+              ${t('seller.sf.sendMessageToSupplier')}
+            </h2>
+
+            <!-- Seller contact info -->
+            <div x-show="seller" class="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-3 text-[14px]">
+              <template x-if="seller?.email">
+                <div class="flex items-center gap-2 text-gray-700">
+                  <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                  <a :href="'mailto:' + seller.email" class="hover:text-amber-600 transition-colors" x-text="seller.email"></a>
+                </div>
+              </template>
+              <template x-if="seller?.phone">
+                <div class="flex items-center gap-2 text-gray-700">
+                  <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                  <a :href="'tel:' + seller.phone" class="hover:text-amber-600 transition-colors" x-text="seller.phone"></a>
+                </div>
+              </template>
             </div>
 
-            <template x-if="!loading">
-              <div>
-                <!-- Title -->
-                <h2 class="contact-form__title text-[18px] font-bold text-[#111827] dark:text-gray-50 text-center mb-6">
-                  ${t('seller.sf.sendMessageToSupplier')}
-                </h2>
+            <!-- Recipient -->
+            <div class="flex items-center gap-2 mb-4">
+              <span class="text-[14px] text-gray-500">${t('seller.sf.to')}</span>
+              <span class="text-[14px] text-gray-900 font-semibold" x-text="seller?.seller_name || '\u2014'"></span>
+            </div>
 
-                <!-- Seller contact info -->
-                <div x-show="seller" class="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-3 text-[14px]">
-                  <template x-if="seller?.email">
-                    <div class="flex items-center gap-2 text-gray-700">
-                      <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                      <a :href="'mailto:' + seller.email" class="hover:text-[var(--color-primary-500)] transition-colors" x-text="seller.email"></a>
-                    </div>
-                  </template>
-                  <template x-if="seller?.phone">
-                    <div class="flex items-center gap-2 text-gray-700">
-                      <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                      <a :href="'tel:' + seller.phone" class="hover:text-[var(--color-primary-500)] transition-colors" x-text="seller.phone"></a>
-                    </div>
-                  </template>
-                  <template x-if="seller?.website">
-                    <div class="flex items-center gap-2 text-gray-700">
-                      <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
-                      <a :href="seller.website" target="_blank" rel="noopener" class="hover:text-[var(--color-primary-500)] transition-colors truncate" x-text="seller.website"></a>
-                    </div>
-                  </template>
-                  <template x-if="seller?.city">
-                    <div class="flex items-center gap-2 text-gray-700">
-                      <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                      <span x-text="seller.city"></span>
-                    </div>
-                  </template>
-                </div>
+            <!-- Success message -->
+            <div x-show="msgSent" class="mb-4 p-3 bg-green-50 border border-green-200 rounded-md text-[14px] text-green-700 text-center">
+              Mesajiniz basariyla gonderildi!
+            </div>
 
-                <!-- Recipient -->
-                <div class="contact-form__recipient flex items-center gap-2 mb-4">
-                  <span class="text-[14px] text-[#6b7280] dark:text-gray-400">${t('seller.sf.to')}</span>
-                  <span class="text-[14px] text-[#111827] dark:text-gray-50 font-semibold" x-text="seller?.seller_name || '—'"></span>
-                </div>
+            <!-- Error message -->
+            <div x-show="msgError" class="mb-4 p-3 bg-red-50 border border-red-200 rounded-md text-[14px] text-red-700 text-center" x-text="msgError"></div>
 
-                <!-- Success message -->
-                <div x-show="msgSent" class="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg text-[14px] text-green-700 text-center">
-                  Mesajınız başarıyla gönderildi!
-                </div>
-
-                <!-- Error message -->
-                <div x-show="msgError" class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-[14px] text-red-700 text-center" x-text="msgError"></div>
-
-                <!-- Message Area -->
-                <div x-show="!msgSent" class="contact-form__message-wrapper mb-4">
-                  <label class="text-[14px] text-[#6b7280] dark:text-gray-400 mb-1 block" for="contact-textarea">
-                    <span class="text-red-500">*</span> ${t('seller.sf.message')}
-                  </label>
-                  <div class="relative">
-                    <textarea
-                      id="contact-textarea"
-                      x-model="msgText"
-                      class="contact-form__textarea w-full border border-(--input-border-color) dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 rounded-(--radius-input) p-3 text-[14px] text-[#374151] min-h-[120px] sm:min-h-[100px] xs:min-h-[80px] resize-y focus:border-(--input-focus-border-color) focus:outline-none focus:ring-2 focus:ring-[#cc9900]/20 transition-colors"
-                      placeholder="${t('seller.sf.enterInquiryDetails')}"
-                      maxlength="8000"
-                      aria-required="true"
-                      rows="5"
-                    ></textarea>
-                    <span class="contact-form__counter absolute right-3 bottom-3 text-[12px] text-[#9ca3af] dark:text-gray-500" x-text="msgText.length + '/8000'"></span>
-                  </div>
-                </div>
-
-                <!-- Send Button -->
-                <div x-show="!msgSent" class="flex justify-center mb-4">
-                  <button @click="sendMsg()" :disabled="sending || !msgText || msgText.trim().length < 10" class="contact-form__send th-btn xs:w-full disabled:opacity-50 disabled:cursor-not-allowed">
-                    <span x-show="!sending">${t('seller.sf.send')}</span>
-                    <span x-show="sending">Gönderiliyor...</span>
-                  </button>
-                </div>
-
-                <!-- Business Card Checkbox -->
-                <div x-show="!msgSent" class="contact-form__checkbox flex items-center gap-2 justify-center">
-                  <input type="checkbox" id="business-card" x-model="shareCard"
-                         class="w-4 h-4 text-[var(--color-primary-500)] border-[#d1d5db] rounded focus:ring-[var(--color-primary-500)]" />
-                  <label for="business-card" class="text-[13px] text-[#6b7280] dark:text-gray-400">
-                    ${t('seller.sf.agreeBusinessCard')}
-                  </label>
-                </div>
+            <!-- Message Area -->
+            <div x-show="!msgSent" class="mb-4">
+              <label class="text-[14px] text-gray-500 mb-1 block" for="contact-textarea">
+                <span class="text-red-500">*</span> ${t('seller.sf.message')}
+              </label>
+              <div class="relative">
+                <textarea
+                  id="contact-textarea"
+                  x-model="msgText"
+                  class="w-full border border-gray-300 rounded-md p-3 text-[14px] text-gray-700 min-h-[120px] resize-y focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-colors"
+                  placeholder="${t('seller.sf.enterInquiryDetails')}"
+                  maxlength="8000"
+                  aria-required="true"
+                  rows="5"
+                ></textarea>
+                <span class="absolute right-3 bottom-3 text-[12px] text-gray-400" x-text="msgText.length + '/8000'"></span>
               </div>
-            </template>
+            </div>
 
+            <!-- Send Button -->
+            <div x-show="!msgSent" class="flex justify-center mb-4">
+              <button @click="sendMsg()" :disabled="sending || !msgText || msgText.trim().length < 10" class="bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2.5 px-8 rounded-full transition-colors text-[14px] disabled:opacity-50 disabled:cursor-not-allowed">
+                <span x-show="!sending">${t('seller.sf.send')}</span>
+                <span x-show="sending">Gonderiliyor...</span>
+              </button>
+            </div>
+
+            <!-- Business Card Checkbox -->
+            <div x-show="!msgSent" class="flex items-center gap-2 justify-center">
+              <input type="checkbox" id="business-card" x-model="shareCard"
+                     class="w-4 h-4 text-amber-500 border-gray-300 rounded focus:ring-amber-500" />
+              <label for="business-card" class="text-[13px] text-gray-500">
+                ${t('seller.sf.agreeBusinessCard')}
+              </label>
+            </div>
           </div>
-        </div>
+        </template>
+
       </section>
     </div>
   `;
@@ -809,23 +1074,53 @@ function ContactTab(): string {
 // ─── Main Wrapper ──────────────────────────────────────────────
 export function CompanyProfileComponent(): string {
   return `
-    <section class="company-profile bg-[#f9fafb] py-8 min-h-screen" aria-label="${t('seller.sf.sellerProfile')}">
-      <div class="max-w-(--container-xl) mx-auto px-[clamp(0.75rem,0.5rem+1vw,1.5rem)] lg:px-6 xl:px-8">
+    <section class="company-profile bg-[#f5f5f5] pt-5 pb-8 min-h-screen" aria-label="${t('seller.sf.sellerProfile')}">
+      <div class="max-w-[1200px] mx-auto px-4 lg:px-8">
 
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div class="flex flex-col lg:flex-row gap-5">
 
-          <!-- Left Content Area (Tabs) -->
-          <div class="lg:col-span-3">
+          <!-- Main Content Area -->
+          <div class="flex-1 min-w-0">
+
+            <!-- 1. ANA ÜRÜNLER — white card -->
+            <div class="bg-white rounded-md border border-gray-200" style="padding: 24px 40px;">
+              ${MainProductsCarousel()}
+            </div>
+
+            <!-- 2. Gap (gray bg shows through) -->
+
+            <!-- 3. Tab Navigation — on gray bg -->
+            <div id="store-tab-nav" class="sticky top-0 z-40 bg-white border border-gray-200 rounded-md mt-5 mb-5" style="padding: 0 40px;">
+              <div class="flex items-center gap-6 sm:gap-10 overflow-x-auto scrollbar-hide">
+                <button @click="setTab('overview')"
+                  :class="activeTab === 'overview' ? 'text-[#222] border-b-[3px] border-[#222] font-bold' : 'text-gray-500 border-b-[3px] border-transparent font-medium hover:text-gray-900'"
+                  class="py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t('seller.sf.myAccount')}</button>
+                <button @click="setTab('service')"
+                  :class="activeTab === 'service' ? 'text-[#222] border-b-[3px] border-[#222] font-bold' : 'text-gray-500 border-b-[3px] border-transparent font-medium hover:text-gray-900'"
+                  class="py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t('seller.sf.serviceTab')}</button>
+                <button @click="setTab('reviews')"
+                  :class="activeTab === 'reviews' ? 'text-[#222] border-b-[3px] border-[#222] font-bold' : 'text-gray-500 border-b-[3px] border-transparent font-medium hover:text-gray-900'"
+                  class="py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t('seller.sf.reviewsTab')}</button>
+                <button @click="setTab('products')"
+                  :class="activeTab === 'products' ? 'text-[#222] border-b-[3px] border-[#222] font-bold' : 'text-gray-500 border-b-[3px] border-transparent font-medium hover:text-gray-900'"
+                  class="py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t('seller.sf.productsTab')}</button>
+                <button @click="setTab('videos')"
+                  :class="activeTab === 'videos' ? 'text-[#222] border-b-[3px] border-[#222] font-bold' : 'text-gray-500 border-b-[3px] border-transparent font-medium hover:text-gray-900'"
+                  class="py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t('seller.sf.videoTips')}</button>
+              </div>
+            </div>
+
+            <!-- 4. Tab Content — each section is its own white card -->
             ${OverviewTab()}
             ${ReviewsTab()}
             ${ProductsTab()}
-            ${CategoriesTab()}
-            ${CompanyTab()}
+            ${VideosTab()}
             ${ContactTab()}
+
           </div>
 
-          <!-- Right Sidebar -->
-          <div class="lg:col-span-1 border-l border-gray-100 lg:pl-2">
+          <!-- Right Sidebar (220px fixed) -->
+          <div class="hidden lg:block w-[220px] shrink-0">
             ${ContactSidebar()}
           </div>
 
