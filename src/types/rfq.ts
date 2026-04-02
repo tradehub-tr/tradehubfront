@@ -32,6 +32,11 @@ export interface RFQFormData {
   details: string;
   files: File[];
   aiEnabled: boolean;
+  productName: string;
+  quantity: number | null;
+  unit: string;
+  shareBusinessCard: boolean;
+  agreePostingRules: boolean;
 }
 
 export type AllowedFileExtension =

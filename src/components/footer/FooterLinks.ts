@@ -63,7 +63,7 @@ const footerColumnsI18n: FooterColumnI18n[] = [
   {
     titleKey: 'footer.sourceOnIstoc',
     links: [
-      { labelKey: 'footer.rfq', href: '/rfq' },
+      { labelKey: 'footer.rfq', href: '/pages/dashboard/rfq.html' },
       { labelKey: 'footer.membership', href: '/membership' },
       { labelKey: 'footer.salesTax', href: '/tax' },
       { labelKey: 'footer.istocReads', href: '/blog' },
