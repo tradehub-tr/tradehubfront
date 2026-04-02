@@ -163,6 +163,161 @@ export function cookiesContent(): LegalPageData {
   };
 }
 
+export function noticeContent(): LegalPageData {
+  return {
+    pageTitle: t('legal.notice.pageTitle'),
+    lastUpdated: t('legal.notice.lastUpdated'),
+    breadcrumbLabel: t('legal.notice.breadcrumbLabel'),
+    sections: [
+      {
+        id: 'sirket-bilgileri',
+        title: t('legal.notice.section1Title'),
+        content: t('legal.notice.section1Content'),
+      },
+      {
+        id: 'platform-hakkinda',
+        title: t('legal.notice.section2Title'),
+        content: t('legal.notice.section2Content'),
+      },
+      {
+        id: 'sorumluluk-siniri',
+        title: t('legal.notice.section3Title'),
+        content: t('legal.notice.section3Content'),
+      },
+      {
+        id: 'denetim-sikayet',
+        title: t('legal.notice.section4Title'),
+        content: t('legal.notice.section4Content'),
+      },
+      {
+        id: 'uygulanacak-hukuk',
+        title: t('legal.notice.section5Title'),
+        content: t('legal.notice.section5Content'),
+      },
+    ],
+  };
+}
+
+export function productListingContent(): LegalPageData {
+  return {
+    pageTitle: t('legal.productListing.pageTitle'),
+    lastUpdated: t('legal.productListing.lastUpdated'),
+    breadcrumbLabel: t('legal.productListing.breadcrumbLabel'),
+    sections: [
+      {
+        id: 'genel-ilkeler',
+        title: t('legal.productListing.section1Title'),
+        content: t('legal.productListing.section1Content'),
+      },
+      {
+        id: 'urun-bilgileri',
+        title: t('legal.productListing.section2Title'),
+        content: t('legal.productListing.section2Content'),
+      },
+      {
+        id: 'yasakli-urunler',
+        title: t('legal.productListing.section3Title'),
+        content: t('legal.productListing.section3Content'),
+      },
+      {
+        id: 'gorsel-standartlari',
+        title: t('legal.productListing.section4Title'),
+        content: t('legal.productListing.section4Content'),
+      },
+      {
+        id: 'fiyatlandirma',
+        title: t('legal.productListing.section5Title'),
+        content: t('legal.productListing.section5Content'),
+      },
+      {
+        id: 'ihlal-yaptirimlar',
+        title: t('legal.productListing.section6Title'),
+        content: t('legal.productListing.section6Content'),
+      },
+    ],
+  };
+}
+
+export function ipContent(): LegalPageData {
+  return {
+    pageTitle: t('legal.ip.pageTitle'),
+    lastUpdated: t('legal.ip.lastUpdated'),
+    breadcrumbLabel: t('legal.ip.breadcrumbLabel'),
+    sections: [
+      {
+        id: 'koruma-taahhudu',
+        title: t('legal.ip.section1Title'),
+        content: t('legal.ip.section1Content'),
+      },
+      {
+        id: 'istoc-haklari',
+        title: t('legal.ip.section2Title'),
+        content: t('legal.ip.section2Content'),
+      },
+      {
+        id: 'ihlal-bildirimi',
+        title: t('legal.ip.section3Title'),
+        content: t('legal.ip.section3Content'),
+      },
+      {
+        id: 'inceleme-sureci',
+        title: t('legal.ip.section4Title'),
+        content: t('legal.ip.section4Content'),
+      },
+      {
+        id: 'karsi-bildirim',
+        title: t('legal.ip.section5Title'),
+        content: t('legal.ip.section5Content'),
+      },
+      {
+        id: 'tekrarlayan-ihlaller',
+        title: t('legal.ip.section6Title'),
+        content: t('legal.ip.section6Content'),
+      },
+    ],
+  };
+}
+
+export function accessibilityContent(): LegalPageData {
+  return {
+    pageTitle: t('legal.accessibility.pageTitle'),
+    lastUpdated: t('legal.accessibility.lastUpdated'),
+    breadcrumbLabel: t('legal.accessibility.breadcrumbLabel'),
+    sections: [
+      {
+        id: 'taahhudumuz',
+        title: t('legal.accessibility.section1Title'),
+        content: t('legal.accessibility.section1Content'),
+      },
+      {
+        id: 'ozellikler',
+        title: t('legal.accessibility.section2Title'),
+        content: t('legal.accessibility.section2Content'),
+      },
+      {
+        id: 'yardimci-teknolojiler',
+        title: t('legal.accessibility.section3Title'),
+        content: t('legal.accessibility.section3Content'),
+      },
+      {
+        id: 'sinirlamalar',
+        title: t('legal.accessibility.section4Title'),
+        content: t('legal.accessibility.section4Content'),
+      },
+      {
+        id: 'geri-bildirim',
+        title: t('legal.accessibility.section5Title'),
+        content: t('legal.accessibility.section5Content'),
+      },
+      {
+        id: 'surekli-iyilestirme',
+        title: t('legal.accessibility.section6Title'),
+        content: t('legal.accessibility.section6Content'),
+      },
+    ],
+  };
+}
+
 export function returnsContent(): LegalPageData {
   return {
     pageTitle: t('legal.returns.pageTitle'),

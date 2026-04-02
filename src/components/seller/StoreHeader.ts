@@ -1,172 +1,436 @@
 /**
- * C1: Store Profile Header — Alpine-driven, no static data
+ * C1: Store Profile Header — Alibaba-style pixel-perfect layout
+ * Two sections: Company Header (gray) + Stats & Media Card (white)
  */
 import { t } from '../../i18n';
 
 export function StoreHeader(): string {
+  /* Reusable SVG: blue filled circle with white checkmark */
+  const blueCheck = `<img src="/src/assets/images/verfied.png" alt="✓" class="shrink-0" style="width:13px;height:12px;" />`;
+
+  /* Reusable SVG: info tooltip icon */
+  const infoIcon = `
+    <svg class="w-3.5 h-3.5 text-gray-400 shrink-0 cursor-help" viewBox="0 0 16 16" fill="currentColor">
+      <circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1"/>
+      <text x="8" y="12" text-anchor="middle" font-size="10" fill="currentColor">i</text>
+    </svg>`;
+
+  /* Store icon for "Mağazayı ziyaret et" button */
+  const storeIcon = `
+    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z"/>
+    </svg>`;
+
   return `
-    <section id="store-header" class="store-header relative bg-white dark:bg-gray-800 border-b border-(--color-border-default) dark:border-gray-700 transition-opacity duration-200" aria-label="${t('seller.sf.storeProfileHeader')}">
-      <div class="store-header__container max-w-(--container-lg) mx-auto px-[clamp(0.75rem,0.5rem+1vw,1.5rem)] py-4 lg:px-6 lg:py-5 xl:px-8 xl:py-5 flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4 overflow-hidden">
+    <section id="store-header" class="store-header" aria-label="${t('seller.sf.storeProfileHeader')}">
 
-        <!-- Loading skeleton -->
-        <div x-show="loading" class="flex items-start gap-4 animate-pulse w-full">
-          <div class="w-[80px] h-[48px] bg-gray-100 rounded shrink-0"></div>
-          <div class="flex-1 space-y-2">
-            <div class="h-5 bg-gray-100 rounded w-1/2"></div>
-            <div class="h-4 bg-gray-100 rounded w-1/3"></div>
-            <div class="h-4 bg-gray-100 rounded w-2/3"></div>
+      <!-- ========== LOADING SKELETON ========== -->
+      <div x-show="loading" class="bg-white">
+        <div class="max-w-[1200px] mx-auto px-6 lg:px-10 py-6 animate-pulse">
+          <div class="flex flex-col gap-4">
+            <div class="h-7 bg-gray-200 rounded w-1/3"></div>
+            <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+            <div class="h-4 bg-gray-200 rounded w-1/4"></div>
+          </div>
+          <div class="mt-8 flex flex-col lg:flex-row gap-8">
+            <div class="flex-1 space-y-4">
+              <div class="h-16 bg-gray-200 rounded w-1/3"></div>
+              <div class="h-4 bg-gray-200 rounded w-full"></div>
+              <div class="grid grid-cols-3 gap-4">
+                <div class="h-16 bg-gray-200 rounded"></div>
+                <div class="h-16 bg-gray-200 rounded"></div>
+                <div class="h-16 bg-gray-200 rounded"></div>
+              </div>
+            </div>
+            <div class="lg:w-[500px] h-[300px] bg-gray-200 rounded-lg shrink-0"></div>
           </div>
         </div>
-
-        <!-- Left: Logo + Info -->
-        <div x-show="!loading" class="store-header__info flex items-start gap-3 lg:gap-5 min-w-0">
-          <!-- Logo -->
-          <template x-if="seller?.logo">
-            <img
-              :src="seller.logo"
-              :alt="seller.seller_name || ''"
-              class="store-header__logo w-[80px] max-h-[48px] lg:max-h-[52px] xl:w-[100px] xl:max-h-[60px] object-contain flex-shrink-0 hover:scale-105 transition-transform duration-200"
-              onerror="this.style.display='none'"
-            />
-          </template>
-
-          <div class="store-header__details flex flex-col gap-1 min-w-0">
-            <!-- Company Name -->
-            <div class="store-header__name-row flex items-center gap-2">
-              <h1
-                class="store-header__name text-[18px] lg:text-[20px] xl:text-[22px] font-bold text-(--color-text-primary) dark:text-gray-50 leading-tight"
-                x-text="seller?.seller_name || ''"
-              ></h1>
-              <svg class="store-header__chevron w-4 h-4 text-(--color-text-tertiary) cursor-pointer transition-transform hover:text-(--color-text-secondary)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-
-            <!-- Badge Row -->
-            <div class="store-header__badges flex items-center gap-2 flex-wrap">
-              <template x-if="seller?.verified">
-                <span class="store-header__badge store-header__badge--verified flex items-center gap-1 text-[13px] text-[#2563eb]">
-                  <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none">
-                    <circle cx="8" cy="8" r="7" fill="#2563eb"/>
-                    <path d="M5.5 8.5l2 2 4-4" stroke="#fff" stroke-width="1.5" fill="none"/>
-                  </svg>
-                  <span x-text="seller.verification_status || 'Verified'"></span>
-                </span>
-              </template>
-              <template x-if="sellerYears">
-                <span>
-                  <span class="store-header__separator text-(--color-border-strong)">&middot;</span>
-                  <span class="store-header__years text-[13px] text-(--color-text-tertiary) dark:text-gray-400" x-text="sellerYears"></span>
-                </span>
-              </template>
-              <template x-if="sellerLocation">
-                <span>
-                  <span class="store-header__separator text-(--color-border-strong)">&middot;</span>
-                  <span class="store-header__location text-[13px] text-(--color-text-tertiary) dark:text-gray-400" x-text="sellerLocation"></span>
-                </span>
-              </template>
-            </div>
-
-            <!-- Description / Main Categories -->
-            <template x-if="seller?.description">
-              <p class="store-header__categories text-[13px] text-(--color-text-tertiary) dark:text-gray-400 break-words" x-text="seller.short_description || seller.description"></p>
-            </template>
-
-            <!-- Email -->
-            <template x-if="seller?.email">
-              <p class="store-header__email text-[13px] text-(--color-text-tertiary) dark:text-gray-400 flex items-center gap-1">
-                <svg class="w-4 h-4 shrink-0" viewBox="0 0 16 16" fill="none">
-                  <rect x="2" y="4" width="12" height="8" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                  <path d="M2 4l6 5 6-5" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                </svg>
-                <span x-text="seller.email"></span>
-              </p>
-            </template>
-
-            <!-- Badges -->
-            <div class="store-header__tags flex flex-wrap items-center gap-2 mt-1">
-              <template x-if="seller?.is_top_seller">
-                <span class="store-header__assessment-badge inline-flex items-center text-[12px] text-(--color-text-tertiary) gap-1">
-                  <span class="w-2 h-2 rounded-full bg-[#2563eb] inline-block"></span>
-                  Sertifikalı Tedarikçi
-                </span>
-              </template>
-            </div>
-
-            <!-- Joined date -->
-            <template x-if="seller?.joined_at">
-              <p class="store-header__tuv text-[11px] text-(--color-text-muted) dark:text-gray-500 mt-1">
-                Verified by TÜVRheinland &mdash;
-                <span x-text="new Date(seller.joined_at).toLocaleDateString('tr-TR')"></span>
-                <span class="inline-block ml-1 cursor-help">&oplus;</span>
-              </p>
-            </template>
-          </div>
-        </div>
-
-        <!-- Right: CTA Buttons -->
-        <div x-show="!loading" class="store-header__actions flex flex-col w-full gap-2 mt-3 lg:flex-row lg:w-auto lg:gap-3 lg:mt-0 flex-shrink-0">
-          <button class="store-header__contact-btn w-full lg:w-auto th-btn"
-                  onclick="document.getElementById('contact-form')?.scrollIntoView({behavior:'smooth'})">
-            ${t('seller.sf.contactSupplierBtn')}
-          </button>
-          <button class="store-header__chat-btn w-full lg:w-auto th-btn-outline">
-            ${t('seller.sf.chatNow')}
-          </button>
-        </div>
-
       </div>
 
-      <!-- Tab Navigation -->
-      <div class="max-w-(--container-lg) mx-auto px-[clamp(0.75rem,0.5rem+1vw,1.5rem)] lg:px-6 xl:px-8">
-        <div class="flex items-center gap-4 sm:gap-8 border-t border-gray-100">
+      <!-- ========== WHITE CARD on GRAY BG ========== -->
+      <div x-show="!loading" class="bg-[#f5f5f5]">
+        <div class="max-w-[1200px] mx-auto px-4 lg:px-8 py-6">
+          <div class="rounded-md shadow-sm overflow-hidden bg-white bg-[url('/images/verified.jpg')] bg-no-repeat bg-right-top [background-size:400px_100px] sm:[background-size:700px_180px] lg:[background-size:1200px_250px]">
 
-          <button @click="setTab('overview')" :class="activeTab === 'overview' ? 'font-bold text-gray-900 border-b-2 border-gray-900' : 'font-medium text-gray-500 hover:text-gray-900 border-b-2 border-transparent'" class="py-3.5 text-[14px] transition-colors whitespace-nowrap">${t('seller.sf.myAccount')}</button>
+            <!-- SECTION 1: Company Header -->
+            <div class="relative px-4 py-6 sm:px-6 md:px-10 md:py-6 md:pb-10">
 
-          <button @click="setTab('reviews')" :class="activeTab === 'reviews' ? 'font-bold text-gray-900 border-b-2 border-gray-900' : 'font-medium text-gray-500 hover:text-gray-900 border-b-2 border-transparent'" class="py-3.5 text-[14px] transition-colors whitespace-nowrap">${t('seller.sf.reviewsTab')}</button>
-
-          <!-- Ürünler dropdown -->
-          <div class="relative self-stretch flex items-center" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
-            <button @click="setTab('products')"
-              :class="activeTab === 'products' ? 'font-bold text-gray-900 border-b-2 border-gray-900' : 'font-medium text-gray-500 hover:text-gray-900 border-b-2 border-transparent'"
-              class="py-3.5 text-[14px] transition-colors whitespace-nowrap flex items-center gap-1">
-              ${t('seller.sf.productsTab')}
-              <svg class="w-3.5 h-3.5 transition-transform duration-150" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-              </svg>
+          <!-- CTA Buttons: absolute top-right on desktop -->
+          <div class="hidden lg:flex items-center gap-3 absolute top-6 right-10">
+            <a :href="'/pages/seller/seller-shop.html?seller=' + (seller?.seller_code || '')"
+               class="inline-flex items-center gap-2 text-[14px] font-normal text-[#222] hover:text-[#cc9900] transition-colors whitespace-nowrap"
+               style="padding: 5px 5px 5px 25px;">
+              ${storeIcon}
+              ${t('seller.sf.viewStore')}
+            </a>
+            <button
+              class="bg-[#cc9900] hover:bg-[#b38600] text-white text-[14px] font-semibold rounded-full transition-colors whitespace-nowrap"
+              style="width: 180px; height: 40px; padding: 0px 12px;"
+              onclick="document.getElementById('contact-form')?.scrollIntoView({behavior:'smooth'})">
+              ${t('seller.sf.contactNow')}
             </button>
-            <!-- Dropdown -->
-            <div x-show="open" x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 -translate-y-1" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-1"
-              class="absolute top-full left-0 z-50 bg-white border border-gray-200 rounded-xl shadow-lg min-w-[180px] py-1.5"
-              style="display:none;">
-              <button @click="setTab('products'); open = false" class="w-full text-left px-4 py-2.5 text-[13px] font-semibold text-gray-700 hover:bg-gray-50 transition-colors">
-                Tüm Ürünler
+          </div>
+
+          <!-- Company name -->
+          <h1 class="text-[28px] font-bold text-[#222] leading-tight mb-2 pr-0 lg:pr-96"
+              x-text="seller?.seller_name || '\u2014'"></h1>
+
+          <!-- Company info row: location · years · employees · main products -->
+          <div class="text-[13px] text-[#999] mb-3 flex flex-wrap items-center gap-x-1 leading-5">
+            <template x-if="sellerLocation">
+              <span>
+                <span x-text="sellerLocation"></span>
+                <span class="mx-1">&middot;</span>
+              </span>
+            </template>
+            <template x-if="sellerYears">
+              <span>
+                iSTOC'ta <span x-text="sellerYears"></span>
+                <span class="mx-1">&middot;</span>
+              </span>
+            </template>
+            <template x-if="seller?.staff_count">
+              <span>
+                <span x-text="seller.staff_count"></span> ${t('seller.sf.employees').replace('{{count}} ', '')}
+                <span class="mx-1">&middot;</span>
+              </span>
+            </template>
+            <template x-if="seller?.short_description || seller?.main_markets">
+              <span>
+                <span class="font-semibold text-[#333]">${t('seller.sf.mainProducts')}:</span>
+                <span x-text="seller.short_description || seller.main_markets || '\u2014'"></span>
+              </span>
+            </template>
+          </div>
+
+          <!-- Badges row: Verified PRO + Manufacturer type + Best seller -->
+          <div class="flex flex-wrap items-center gap-3">
+            <!-- Verified badge -->
+            <template x-if="seller?.verified">
+              <span class="inline-flex items-center gap-1">
+                <img src="/src/assets/images/verifiedminilogo.png" alt="Verified" class="h-[14px] w-auto" />
+                <template x-if="seller?.verification_type === 'PRO'">
+                  <span class="bg-[#cc9900] text-white text-[10px] font-bold rounded px-1 py-0.5 leading-none">PRO</span>
+                </template>
+              </span>
+            </template>
+
+            <!-- Manufacturer type -->
+            <template x-if="seller?.business_type">
+              <span class="inline-flex items-center gap-1.5 text-sm text-[#333]">
+                <span class="font-medium" x-text="seller.business_type_display || '${t('seller.sf.manufacturer')}'"></span>
+                ${infoIcon}
+              </span>
+            </template>
+
+            <!-- Best seller badge -->
+            <template x-if="seller?.best_seller_rank">
+              <a href="#" @click.prevent
+                 class="inline-flex items-center gap-1 text-sm text-[#222] border-b border-[#222] pb-0.5 hover:text-[#cc9900] hover:border-[#cc9900] transition-colors">
+                <span x-text="'#' + seller.best_seller_rank + ' best seller in ' + (seller.best_seller_category || '')"></span>
+              </a>
+            </template>
+          </div>
+
+
+            </div>
+
+            <!-- Mobile CTA buttons — stacked below header -->
+            <div class="flex flex-col lg:hidden gap-2 px-4 py-3 sm:px-6">
+              <a :href="'/pages/seller/seller-shop.html?seller=' + (seller?.seller_code || '')"
+                 class="w-full inline-flex items-center justify-center gap-1.5 py-2.5 border border-gray-300 rounded-full bg-white text-[13px] font-medium text-gray-600 hover:border-gray-400 transition-colors">
+                ${storeIcon}
+                ${t('seller.sf.viewStore')}
+              </a>
+              <button
+                class="w-full py-2.5 bg-[#cc9900] hover:bg-[#b38600] text-white text-[13px] font-semibold rounded-full transition-colors"
+                onclick="document.getElementById('contact-form')?.scrollIntoView({behavior:'smooth'})">
+                ${t('seller.sf.contactNow')}
               </button>
-              <template x-if="navCategories.length > 0">
-                <div>
-                  <div class="mx-3 my-1 border-t border-gray-100"></div>
-                  <div class="px-3 py-1 text-[11px] font-bold text-gray-400 uppercase tracking-wide">Kategoriler</div>
-                  <template x-for="cat in navCategories" :key="cat.name">
-                    <button
-                      @click="setTab('products'); $dispatch('store:nav-category', {id: cat.name}); open = false"
-                      class="w-full text-left px-4 py-2 text-[13px] text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors truncate"
-                      x-text="cat.category_name">
-                    </button>
+            </div>
+
+            <!-- SECTION 2: Stats + Media Card -->
+            <div class="px-4 sm:px-6 lg:px-10 py-6 lg:py-8 lg:pb-10">
+              <div class="flex flex-col-reverse lg:flex-row gap-6 lg:gap-8">
+
+            <!-- ─── LEFT SIDE: Stats & Capabilities ─── -->
+            <div class="flex-1 min-w-0">
+
+              <!-- Rating row -->
+              <div class="flex items-baseline gap-2 pb-6 mb-6 border-b border-gray-100" style="min-height:65px;">
+                <span class="text-[36px] sm:text-[48px] font-bold text-[#222] leading-none tracking-tight"
+                      x-text="seller?.rating ? seller.rating.toFixed(1) : '\u2014'"></span>
+                <span class="text-[16px] sm:text-[20px] text-[#999] font-normal">/5</span>
+                <div class="ml-3 flex flex-col">
+                  <span class="text-[13px] sm:text-[14px] font-bold text-[#222]">${t('seller.sf.satisfactory')}</span>
+                  <template x-if="seller?.review_count">
+                    <a href="#reviews"
+                       @click.prevent="setTab('reviews')"
+                       class="text-[12px] sm:text-[13px] text-[#cc9900] hover:underline leading-snug"
+                       x-text="seller.review_count + ' ${t('seller.sf.reviews')}'"></a>
                   </template>
                 </div>
-              </template>
-              <template x-if="navCategories.length === 0">
-                <p class="px-4 py-2 text-[12px] text-gray-400">Kategori bulunamadı</p>
+              </div>
+
+              <!-- 3-column stats row -->
+              <div class="grid grid-cols-3 gap-3 sm:gap-6 mb-6">
+                <div class="flex flex-col gap-1.5">
+                  <span class="text-[11px] sm:text-[13px] text-[#999] leading-snug">${t('seller.sf.avgResponseTime')}</span>
+                  <span class="text-[18px] sm:text-[24px] font-bold text-[#222] leading-none"
+                        x-text="seller?.response_time ? ('\u2264' + seller.response_time) : '\u2014'"></span>
+                </div>
+                <div class="flex flex-col gap-1.5">
+                  <span class="text-[11px] sm:text-[13px] text-[#999] leading-snug">${t('seller.sf.onTimeDeliveryRate')}</span>
+                  <span class="text-[18px] sm:text-[24px] font-bold text-[#222] leading-none"
+                        x-text="seller?.on_time_delivery ? (seller.on_time_delivery + '%') : '\u2014'"></span>
+                </div>
+                <div class="flex flex-col gap-1.5">
+                  <span class="text-[11px] sm:text-[13px] text-[#999] leading-snug"
+                        x-text="(seller?.total_orders || 0) + ' ${t('seller.sf.orders')}'"></span>
+                  <span class="text-[18px] sm:text-[24px] font-bold text-[#222] leading-none"
+                        x-text="seller?.total_orders ? ('US $' + (seller.total_orders * 500).toLocaleString() + '+') : '\u2014'"></span>
+                </div>
+              </div>
+
+              <!-- Capabilities -->
+              <div class="border-t border-[#f0f0f0] mb-6"></div>
+              <div class="flex flex-col gap-2.5 mb-4">
+                <div class="flex items-center gap-2">
+                  ${blueCheck}
+                  <span class="text-[13px] font-bold text-[#333]">${t('seller.sf.drawingCustomization')}</span>
+                  ${infoIcon}
+                </div>
+                <div class="flex items-center gap-2">
+                  ${blueCheck}
+                  <span class="text-[13px] font-bold text-[#333]">${t('seller.sf.fullCustomization')}</span>
+                  ${infoIcon}
+                </div>
+                <div class="flex items-center gap-2">
+                  ${blueCheck}
+                  <span class="text-[13px] font-bold text-[#333]">${t('seller.sf.rawMaterialTracing')}</span>
+                  ${infoIcon}
+                </div>
+                <div class="flex items-center gap-2">
+                  ${blueCheck}
+                  <span class="text-[13px] font-bold text-[#333]">${t('seller.sf.finalProductInspection')}</span>
+                  ${infoIcon}
+                </div>
+                <div class="flex items-center gap-2">
+                  ${blueCheck}
+                  <span class="text-[13px] font-bold text-[#333]">${t('seller.sf.ceCertificate')}</span>
+                </div>
+              </div>
+              <template x-if="seller?.certifications">
+                <a href="#"
+                   class="inline-flex items-center gap-1 text-[13px] text-[#cc9900] hover:underline font-medium mt-1"
+                   @click.prevent>
+                  <span x-text="'${t('seller.sf.viewAllCapabilities').replace('({{count}})', '')}' + '(' + (Array.isArray(seller.certifications) ? seller.certifications.length : 0) + ')'"></span>
+                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                  </svg>
+                </a>
               </template>
             </div>
-          </div>
 
-          <button @click="setTab('categories')" :class="activeTab === 'categories' ? 'font-bold text-gray-900 border-b-2 border-gray-900' : 'font-medium text-gray-500 hover:text-gray-900 border-b-2 border-transparent'" class="py-3.5 text-[14px] transition-colors whitespace-nowrap">${t('seller.sf.categoriesTab')}</button>
-          <button @click="setTab('company')" :class="activeTab === 'company' ? 'font-bold text-gray-900 border-b-2 border-gray-900' : 'font-medium text-gray-500 hover:text-gray-900 border-b-2 border-transparent'" class="py-3.5 text-[14px] transition-colors whitespace-nowrap">${t('seller.sf.companyProfile')}</button>
-          <button @click="setTab('contact')" :class="activeTab === 'contact' ? 'font-bold text-gray-900 border-b-2 border-gray-900' : 'font-medium text-gray-500 hover:text-gray-900 border-b-2 border-transparent'" class="py-3.5 text-[14px] transition-colors whitespace-nowrap">${t('seller.sf.contactTab')}</button>
+            <!-- ─── VIDEO (mobile: 1st via flex-col-reverse, desktop: right) ─── -->
+            <div class="w-full lg:w-[500px] shrink-0"
+                 x-data="{
+                   activeThumb: 0,
+                   playing: false,
+                   muted: true,
+                   progress: 0,
+                   currentTime: '00:00',
+                   duration: '00:00',
+                   thumbs: [
+                     { id: 0, label: '${t('seller.sf.generalOverview')}', count: 9, type: 'video',
+                       src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
+                       poster: 'https://picsum.photos/seed/factory1/800/500' },
+                     { id: 1, label: '360\u00b0 g\u00f6r\u00fcn\u00fcm', count: 0, type: 'image',
+                       src: 'https://picsum.photos/seed/factory2/800/500' },
+                     { id: 2, label: '\u00dcretim', count: 14, type: 'image',
+                       src: 'https://picsum.photos/seed/factory3/800/500' },
+                     { id: 3, label: 'Kalite kontrol', count: 0, type: 'image',
+                       src: 'https://picsum.photos/seed/factory4/800/500' },
+                   ],
+                   get current() { return this.thumbs[this.activeThumb] || this.thumbs[0]; },
+                   get isVideo() { return this.current.type === 'video'; },
+                   formatTime(s) {
+                     const m = Math.floor(s / 60);
+                     const sec = Math.floor(s % 60);
+                     return String(m).padStart(2,'0') + ':' + String(sec).padStart(2,'0');
+                   },
+                   selectThumb(idx) {
+                     this.pauseVideo();
+                     this.activeThumb = idx;
+                     this.playing = false;
+                     this.progress = 0;
+                     this.currentTime = '00:00';
+                   },
+                   pauseVideo() {
+                     const v = this.$refs.headerVideo;
+                     if (v && !v.paused) { v.pause(); }
+                   },
+                   togglePlay() {
+                     const v = this.$refs.headerVideo;
+                     if (!v) return;
+                     if (v.paused) { v.play(); this.playing = true; }
+                     else { v.pause(); this.playing = false; }
+                   },
+                   toggleMute() {
+                     const v = this.$refs.headerVideo;
+                     if (!v) return;
+                     v.muted = !v.muted;
+                     this.muted = v.muted;
+                   },
+                   seek(e) {
+                     const v = this.$refs.headerVideo;
+                     if (!v || !v.duration) return;
+                     const rect = e.currentTarget.getBoundingClientRect();
+                     v.currentTime = ((e.clientX - rect.left) / rect.width) * v.duration;
+                   },
+                   updateProgress() {
+                     const v = this.$refs.headerVideo;
+                     if (!v || !v.duration) return;
+                     this.progress = (v.currentTime / v.duration) * 100;
+                     this.currentTime = this.formatTime(v.currentTime);
+                     this.duration = this.formatTime(v.duration);
+                   },
+                   fullscreen() {
+                     const v = this.$refs.headerVideo;
+                     if (v?.requestFullscreen) v.requestFullscreen();
+                   },
+                   canScrollLeft: false,
+                   canScrollRight: true,
+                   updateScrollArrows() {
+                     const el = this.$refs.thumbScroll;
+                     if (!el) return;
+                     this.canScrollLeft = el.scrollLeft > 5;
+                     this.canScrollRight = el.scrollLeft < (el.scrollWidth - el.clientWidth - 5);
+                   },
+                   scrollLeft() {
+                     this.$refs.thumbScroll.scrollBy({left: -150, behavior: 'smooth'});
+                     setTimeout(() => this.updateScrollArrows(), 350);
+                   },
+                   scrollRight() {
+                     this.$refs.thumbScroll.scrollBy({left: 150, behavior: 'smooth'});
+                     setTimeout(() => this.updateScrollArrows(), 350);
+                   },
+                 }">
 
+              <!-- ══ MAIN MEDIA AREA ══ -->
+              <div class="relative w-full rounded-sm overflow-hidden bg-gray-900 aspect-video">
+
+                <!-- VIDEO -->
+                <template x-if="isVideo">
+                  <video x-ref="headerVideo"
+                         :src="current.src"
+                         :poster="current.poster"
+                         class="w-full h-full object-cover"
+                         @timeupdate="updateProgress()"
+                         @loadedmetadata="duration = formatTime($refs.headerVideo.duration)"
+                         @ended="playing = false"
+                         playsinline preload="metadata" muted>
+                  </video>
+                </template>
+
+                <!-- IMAGE -->
+                <template x-if="!isVideo">
+                  <img :src="current.src" :alt="current.label" class="w-full h-full object-cover" />
+                </template>
+
+                <!-- Center Play Button (video only, when paused) -->
+                <template x-if="isVideo && !playing">
+                  <button @click="togglePlay()"
+                          class="absolute inset-0 flex items-center justify-center z-10">
+                    <div class="w-14 h-14 bg-black/50 rounded-full flex items-center justify-center hover:bg-black/70 transition-colors">
+                      <svg class="w-7 h-7 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                  </button>
+                </template>
+
+                <!-- "Verified" overlay top-left -->
+                <div class="absolute inset-x-0 top-0 h-14 bg-gradient-to-b from-black/40 to-transparent pointer-events-none"></div>
+                <span class="absolute top-3 left-4 text-white text-[18px] italic font-light tracking-wide drop-shadow-lg pointer-events-none">
+                  ${t('seller.sf.verified')}
+                </span>
+
+                <!-- Video Controls Bar (video only) -->
+                <template x-if="isVideo">
+                  <div class="absolute bottom-0 inset-x-0 px-3 py-2.5 flex items-center gap-2"
+                       style="background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, transparent 100%);">
+                    <!-- Play/Pause -->
+                    <button @click="togglePlay()" class="text-white shrink-0">
+                      <svg x-show="!playing" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                      <svg x-show="playing" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>
+                    </button>
+                    <!-- Time -->
+                    <span class="text-white text-[11px] font-mono shrink-0" x-text="currentTime"></span>
+                    <!-- Progress -->
+                    <div class="flex-1 h-[3px] bg-white/30 rounded-full cursor-pointer group relative" @click="seek($event)">
+                      <div class="h-full bg-[#ff4500] rounded-full relative" :style="'width:'+progress+'%'">
+                        <div class="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      </div>
+                    </div>
+                    <!-- Duration -->
+                    <span class="text-white text-[11px] font-mono shrink-0" x-text="duration"></span>
+                    <!-- Volume -->
+                    <button @click="toggleMute()" class="text-white shrink-0">
+                      <svg x-show="!muted" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072M17.95 6.05a8 8 0 010 11.9M6 9H4a1 1 0 00-1 1v4a1 1 0 001 1h2l4 4V5L6 9z"/></svg>
+                      <svg x-show="muted" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707A1 1 0 0112 5.586v12.828a1 1 0 01-1.707.707L5.586 15zM17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"/></svg>
+                    </button>
+                    <!-- Fullscreen -->
+                    <button @click="fullscreen()" class="text-white shrink-0">
+                      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8V6a2 2 0 012-2h2M4 16v2a2 2 0 002 2h2M16 4h2a2 2 0 012 2v2M16 20h2a2 2 0 002-2v-2"/></svg>
+                    </button>
+                  </div>
+                </template>
+              </div>
+
+              <!-- ══ THUMBNAIL ROW ══ -->
+              <div class="mt-3 flex items-center gap-1" x-init="$nextTick(() => updateScrollArrows())">
+                <!-- Left arrow -->
+                <button x-show="canScrollLeft" x-transition.opacity @click="scrollLeft()"
+                        class="shrink-0 w-9 h-9 bg-white border border-gray-200 rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors shadow">
+                  <svg class="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+
+                <!-- Thumbs -->
+                <div class="flex-1 overflow-x-auto overflow-y-visible scrollbar-hide py-1 -my-1" style="scroll-behavior:smooth;" x-ref="thumbScroll" @scroll="updateScrollArrows()">
+                  <div class="flex gap-2">
+                    <template x-for="(thumb, idx) in thumbs" :key="thumb.id">
+                      <div @click="selectThumb(idx)"
+                           class="relative cursor-pointer transition-all rounded-sm shrink-0 overflow-visible"
+                           :class="activeThumb === idx ? 'ring-2 ring-gray-800 ring-offset-1' : 'hover:opacity-80'"
+                           style="width: 117px; min-width: 100px; max-width: 120px;"
+                           >
+                        <div class="relative w-full overflow-hidden rounded-sm" style="aspect-ratio:117/50;">
+                          <img :src="thumb.type === 'video' ? (thumb.poster || thumb.src) : thumb.src"
+                               :alt="thumb.label"
+                               class="w-full h-full object-cover" />
+                          <div class="absolute inset-0 bg-black/40 flex items-end p-2">
+                            <span class="text-white text-[11px] leading-tight font-semibold truncate"
+                                  x-text="thumb.count ? thumb.label + '(' + thumb.count + ')' : thumb.label"></span>
+                          </div>
+                        </div>
+                      </div>
+                    </template>
+                  </div>
+                </div>
+
+                <!-- Right arrow -->
+                <button x-show="canScrollRight" x-transition.opacity @click="scrollRight()"
+                        class="shrink-0 w-9 h-9 bg-white border border-gray-200 rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors shadow">
+                  <svg class="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                </button>
+              </div>
+            </div>
+
+              </div>
+            </div>
+
+          </div><!-- /bg-white card -->
         </div>
-      </div>
+      </div><!-- /bg-[#f5f5f5] -->
 
     </section>
   `;

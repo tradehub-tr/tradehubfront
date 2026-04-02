@@ -18,7 +18,7 @@ function renderCategoriesTrigger(): string {
   return `
     <button
       id="mega-menu-trigger"
-      class="mega-trigger subheader-link th-subheader-link relative flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 sm:py-2.5 rounded-md text-sm sm:text-base dark:text-primary-400 dark:hover:text-primary-300 dark:hover:bg-gray-800/60 transition-all"
+      class="mega-trigger subheader-link th-subheader-link relative flex items-center gap-1.5 sm:gap-2   py-2 sm:py-2.5 rounded-md text-sm sm:text-base dark:text-primary-400 dark:hover:text-primary-300 dark:hover:bg-gray-800/60 transition-all"
       style="color:var(--subheader-active-color)"
       type="button"
       aria-expanded="false"
@@ -85,7 +85,7 @@ function renderUtilityLinks(): string {
       ${utilityLinks.map(link => `
         <a
           href="${link.href}"
-          class="th-subheader-link px-2 xl:px-3 py-2.5 rounded-md text-sm whitespace-nowrap dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all"
+          class="th-subheader-link  py-2.5 rounded-md text-sm whitespace-nowrap dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all"
         >
           <span data-i18n="${link.labelKey}">${t(link.labelKey)}</span>
         </a>

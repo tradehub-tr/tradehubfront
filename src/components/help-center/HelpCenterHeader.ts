@@ -18,7 +18,7 @@ const getBaseUrl = (): string => {
   return '/';
 };
 
-type ActivePage = 'home' | 'faq' | 'contact' | 'ticket-new' | 'tickets' | 'terms' | 'privacy' | 'cookies' | 'returns';
+type ActivePage = 'home' | 'faq' | 'contact' | 'ticket-new' | 'tickets' | 'terms' | 'privacy' | 'cookies' | 'returns' | 'notice' | 'product-listing' | 'ip' | 'accessibility';
 
 interface HelpCenterHeaderOptions {
   activePage?: ActivePage;
