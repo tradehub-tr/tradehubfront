@@ -149,8 +149,8 @@ appEl.innerHTML = `
               ></textarea>
             </div>
               
-            <!-- Action Bar (Outside Textarea) -->
-            <div class="mt-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            <!-- Action Bar -->
+            <div class="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div class="flex flex-wrap items-center gap-3">
                 <!-- Flowbite Tooltip -->
                 <div id="upload-tooltip" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
@@ -158,14 +158,8 @@ appEl.innerHTML = `
                   <div class="tooltip-arrow" data-popper-arrow></div>
                 </div>
 
-                <!-- AI Toggle -->
                 <label class="inline-flex cursor-pointer items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="rfq-ai-toggle"
-                    class="h-4 w-4 rounded border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-500"
-                    checked
-                  />
+                  <input type="checkbox" id="rfq-ai-toggle" class="h-4 w-4 rounded border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-500" checked />
                   <div class="flex flex-wrap items-center text-xs text-[#666666] sm:text-sm">
                     <img src="${aiIconUrl}" alt="AI" class="mr-1 h-4 w-4 shrink-0 object-contain" />
                     <span data-i18n="rfq.aiCreateRfq">${t('rfq.aiCreateRfq')}</span>
@@ -174,10 +168,9 @@ appEl.innerHTML = `
                 </label>
               </div>
 
-              <!-- Submit CTA (Dynamic Color) -->
-              <button type="submit" class="th-btn th-btn-pill w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 sm:min-w-[260px] sm:w-auto">
+              <a href="/pages/dashboard/rfq-form.html" id="rfq-write-details-btn" class="th-btn th-btn-pill w-full text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 sm:min-w-[260px] sm:w-auto">
                 <span data-i18n="rfq.writeRfqDetails">${t('rfq.writeRfqDetails')}</span>
-              </button>
+              </a>
             </div>
           </form>
         </div>
@@ -325,31 +318,28 @@ uploadBtn.addEventListener('drop', (e) => {
   }
 });
 
-// --- Form Validation ---
+// --- Form: "RFQ detaylarını yaz" navigates to rfq-form.html ---
 const form = document.getElementById('rfq-form-element') as HTMLFormElement;
 const textarea = document.getElementById('rfq-details') as HTMLTextAreaElement;
 const textareaContainer = document.getElementById('rfq-textarea-container') as HTMLDivElement;
+const writeBtn = document.getElementById('rfq-write-details-btn') as HTMLAnchorElement;
 
-form.addEventListener('submit', (e) => {
+// If user typed details, pass via URL params to rfq-form page
+if (writeBtn) {
+  writeBtn.addEventListener('click', (e) => {
+    const details = textarea?.value.trim();
+    if (details) {
+      e.preventDefault();
+      const params = new URLSearchParams({ details });
+      window.location.href = `/pages/dashboard/rfq-form.html?${params}`;
+    }
+  });
+}
+
+form?.addEventListener('submit', (e) => {
   e.preventDefault();
-
   const details = textarea.value.trim();
-
-  if (!details) {
-    textareaContainer.classList.add('border-error-500');
-    textarea.focus();
-    return;
+  if (details) {
+    window.location.href = `/pages/dashboard/rfq-form.html?details=${encodeURIComponent(details)}`;
   }
-
-  textareaContainer.classList.remove('border-error-500');
-
-  const aiCheckbox = document.getElementById('rfq-ai-toggle') as HTMLInputElement;
-  const formData: RFQFormData = {
-    details,
-    files: fileInput.files ? Array.from(fileInput.files) : [],
-    aiEnabled: aiCheckbox.checked,
-  };
-
-  // TODO: send formData to API
-  void formData;
 });

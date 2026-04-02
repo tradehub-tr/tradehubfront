@@ -118,7 +118,7 @@ function renderUserButton(): string {
           ${user?.has_seller_profile ? `<li><a href="${getSellerStoreUrl(user!)}" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myStore">${t('header.myStore')}</span></a></li>` : ''}
           <li><a href="/pages/dashboard/orders.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myOrders">${t('header.myOrders')}</span></a></li>
           <li><a href="/pages/dashboard/messages.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myMessages">${t('header.myMessages')}</span></a></li>
-          <li><a href="/pages/dashboard/rfq.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myRfq">${t('header.myRfq')}</span></a></li>
+          <li><a href="/pages/dashboard/inquiries.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myRfq">${t('header.myRfq')}</span></a></li>
           <li><a href="/pages/dashboard/favorites.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myFavorites">${t('header.myFavorites')}</span></a></li>
           <li><a href="/pages/dashboard/settings.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.accountSettings">${t('header.accountSettings')}</span></a></li>
         </ul>
