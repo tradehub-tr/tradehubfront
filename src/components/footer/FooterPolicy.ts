@@ -16,14 +16,14 @@ interface PolicyLink {
 }
 
 const policyLinksDef: PolicyLink[] = [
-  { i18nKey: 'footer.legalNotice', href: '/legal/notice' },
+  { i18nKey: 'footer.legalNotice', href: '/pages/legal/notice.html' },
   { i18nKey: 'footer.privacyPolicy', href: '/pages/legal/privacy.html' },
-  { i18nKey: 'footer.productListing', href: '/legal/product-listing' },
+  { i18nKey: 'footer.productListing', href: '/pages/legal/product-listing.html' },
   { i18nKey: 'footer.termsOfUse', href: '/pages/legal/terms.html' },
   { i18nKey: 'footer.cookiePolicy', href: '/pages/legal/cookies.html' },
   { i18nKey: 'footer.returnPolicy', href: '/pages/legal/returns.html' },
-  { i18nKey: 'footer.intellectualProperty', href: '/legal/ip' },
-  { i18nKey: 'footer.accessibility', href: '/accessibility' },
+  { i18nKey: 'footer.intellectualProperty', href: '/pages/legal/ip.html' },
+  { i18nKey: 'footer.accessibility', href: '/pages/legal/accessibility.html' },
 ];
 
 /**

@@ -320,8 +320,6 @@ const tr = {
         firstNamePlaceholder: 'Adınız',
         lastName: 'Soyad',
         lastNamePlaceholder: 'Soyadınız',
-        phone: 'Telefon',
-        phonePlaceholder: '05XX XXX XX XX',
         password: 'Şifre',
         passwordPlaceholder: 'Şifrenizi oluşturun',
         minChars: 'En az 8 karakter',
@@ -348,7 +346,6 @@ const tr = {
       otpSentTo: 'gönderilen 6 haneli kodu girin',
       otpSentFallback: 'E-posta adresinize',
       otpInvalidCode: 'Geçersiz doğrulama kodu. Lütfen tekrar deneyin.',
-      otpTooManyAttempts: 'Çok fazla hatalı deneme. Lütfen yeni bir kod isteyin.',
       otpResent: 'Doğrulama kodu tekrar gönderildi.',
       otpDidntReceive: 'Kod almadınız mı?',
       otpResend: 'Tekrar gönder',
@@ -441,7 +438,6 @@ const tr = {
       subtotalExTax: 'Ara toplam (vergi hariç)',
       youSaved: 'Siparişinizde {{amount}} tasarruf edildi',
       checkout: 'Ödeme yap',
-      multiSupplierWarning: 'Birden fazla satıcı seçili. Her satıcı için ayrı ayrı "Bu satıcıya ödeme yap" butonunu kullanın.',
       orderProtection: 'iSTOC sipariş koruması',
       securePayment: 'Güvenli Ödeme',
       securePaymentDesc: 'Her ödeme güvenli ve emniyetlidir',
@@ -1338,9 +1334,9 @@ const tr = {
         section3Title: '3. Fonksiyonel Çerezler',
         section3Content: '<p>Bu çerezler, tercihlerinizi hatırlayarak daha kişiselleştirilmiş bir deneyim sunar. Dil seçiminiz, para birimi tercihiniz veya bölge ayarlarınız gibi bilgileri saklar.</p><p>Bu çerezleri devre dışı bırakırsanız, bazı kişiselleştirme özellikleri çalışmayabilir.</p>',
         section4Title: '4. Analitik Çerezler',
-        section4Content: '<p>Bu çerezler, ziyaretçilerin sitemizi nasıl kullandığını anlamamıza yardımcı olur. Sayfa görüntülemeleri, oturum süresi, hemen çıkma oranı gibi istatistiksel veriler toplar.</p><p>Toplanan veriler anonimleştirilir ve yalnızca Platform hizmetlerinin iyileştirilmesi amacıyla kullanılır. Bu amaçla aşağıdaki araçlar kullanılmaktadır:</p><ul class="list-disc pl-5 space-y-1"><li><strong>Google Tag Manager (GTM):</strong> Sitemizdeki izleme etiketlerini yönetmemizi ve dağıtmamızı sağlayan bir etiket yönetim sistemidir. GTM kendisi kişisel veri toplamaz ancak diğer analitik ve pazarlama scriptlerinin yüklenmesini kolaylaştırır.</li><li><strong>Google Analytics:</strong> Sayfa görüntülemeleri, oturumlar, kullanıcı davranış akışları ve demografik bilgiler hakkında anonim istatistikler toplar.</li><li><strong>Yandex Metrica:</strong> Ziyaretçilerin sayfalarımızla nasıl etkileşimde bulunduğunu anlamamıza yardımcı olan ısı haritaları, oturum kayıtları (WebVisor), kaydırma derinliği analizi ve form etkileşim takibi sağlar.</li></ul>',
+        section4Content: '<p>Bu çerezler, ziyaretçilerin sitemizi nasıl kullandığını anlamamıza yardımcı olur. Sayfa görüntülemeleri, oturum süresi, hemen çıkma oranı gibi istatistiksel veriler toplar.</p><p>Toplanan veriler anonimleştirilir ve yalnızca Platform hizmetlerinin iyileştirilmesi amacıyla kullanılır. Bu amaçla Google Analytics ve benzeri araçlar kullanılmaktadır.</p>',
         section5Title: '5. Pazarlama Çerezleri',
-        section5Content: '<p>Bu çerezler, ilgi alanlarınıza uygun reklamlar göstermek için kullanılır. Farklı web sitelerinde gezinme alışkanlıklarınızı takip edebilir.</p><p>Platformumuzda aşağıdaki pazarlama ve yeniden hedefleme hizmetleri kullanılmaktadır:</p><ul class="list-disc pl-5 space-y-1"><li><strong>Facebook Pixel (Meta):</strong> Facebook reklamlarından gelen dönüşümleri takip eder, gelecekteki reklamlar için hedef kitleler oluşturur ve siteyi daha önce ziyaret eden kullanıcılara yeniden hedefleme yapılmasını sağlar.</li><li><strong>Criteo:</strong> Sitemizdeki gezinme geçmişinize ve ürün etkileşimlerinize dayalı olarak kişiselleştirilmiş ürün önerileri ve reklamlar gösteren bir yeniden hedefleme platformudur.</li><li><strong>Google Ads:</strong> Dönüşümleri takip eder ve Platform ile daha önce etkileşimde bulunmuş kullanıcılara yeniden pazarlama yapılmasını sağlar.</li></ul><p>Bu çerezleri devre dışı bırakmak, reklam görmeyeceğiniz anlamına gelmez; yalnızca size gösterilen reklamların ilgi alanlarınıza göre kişiselleştirilmediği anlamına gelir.</p>',
+        section5Content: '<p>Bu çerezler, ilgi alanlarınıza uygun reklamlar göstermek için kullanılır. Farklı web sitelerinde gezinme alışkanlıklarınızı takip edebilir.</p><p>Bu çerezleri devre dışı bırakmak, reklam görmeyeceğiniz anlamına gelmez; yalnızca size gösterilen reklamların ilgi alanlarınıza göre kişiselleştirilmediği anlamına gelir.</p>',
         section6Title: '6. Çerez Yönetimi',
         section6Content: '<p>Tarayıcı ayarlarınızdan çerezleri silme veya engelleme seçeneğiniz bulunmaktadır. Ancak zorunlu çerezlerin engellenmesi, Platform\'un düzgün çalışmamasına neden olabilir.</p><p>Aşağıdaki bağlantılardan popüler tarayıcıların çerez ayarlarına erişebilirsiniz:</p><ul class="list-disc pl-5 space-y-1"><li>Google Chrome: Ayarlar > Gizlilik ve Güvenlik > Çerezler</li><li>Mozilla Firefox: Seçenekler > Gizlilik ve Güvenlik</li><li>Safari: Tercihler > Gizlilik</li><li>Microsoft Edge: Ayarlar > Gizlilik, Arama ve Hizmetler</li></ul><p class="mt-3">Ayrıca bu sayfadaki çerez tercih panelini kullanarak kategori bazında çerez izinlerinizi yönetebilirsiniz.</p>',
       },
@@ -1362,6 +1358,72 @@ const tr = {
         section6Content: '<p>İade onaylandıktan sonra ödemeniz, orijinal ödeme yöntemine göre iade edilir:</p><ul class="list-disc pl-5 space-y-1"><li><strong>Kredi/Banka kartı:</strong> 3-5 iş günü içinde kartınıza iade edilir</li><li><strong>Havale/EFT:</strong> 1-3 iş günü içinde banka hesabınıza aktarılır</li><li><strong>Platform bakiyesi:</strong> Anında bakiyenize eklenir</li></ul><p>Taksitli ödemelerde iade, bankanız tarafından taksit planınıza yansıtılır. Bu süre bankadan bankaya farklılık gösterebilir.</p>',
         section7Title: '7. İade Edilemeyecek Ürünler',
         section7Content: '<p>Aşağıdaki ürün kategorileri iade kapsamı dışındadır:</p><ul class="list-disc pl-5 space-y-1"><li>Kişiye özel üretilen veya özelleştirilen ürünler</li><li>Ambalajı açılmış hijyen ürünleri (iç giyim, kozmetik vb.)</li><li>Dijital ürünler ve yazılım lisansları (kullanılmaya başlandıysa)</li><li>Hızlı bozulabilir veya son kullanma tarihi geçme riski olan ürünler</li><li>Gazete, dergi gibi süreli yayınlar</li><li>Satıcı tarafından "iade edilemez" olarak belirtilen kampanya ürünleri</li></ul><p>Bu istisnalar, ürünün hatalı veya hasarlı olması durumunda geçerli değildir. Hatalı/hasarlı ürünlerde her koşulda iade hakkınız saklıdır.</p>',
+      },
+      notice: {
+        pageTitle: 'Yasal Bildirim',
+        lastUpdated: '15 Şubat 2026',
+        breadcrumbLabel: 'Yasal Bildirim',
+        section1Title: '1. Şirket Bilgileri',
+        section1Content: '<p><strong>Ticaret Unvanı:</strong> iSTOC Teknoloji Anonim Şirketi</p><p><strong>Merkez Adresi:</strong> İstanbul Ticaret Merkezi, Kat 12, Maslak, Sarıyer, İstanbul</p><p><strong>Ticaret Sicil Numarası:</strong> 123456</p><p><strong>Mersis Numarası:</strong> 0123456789012345</p><p><strong>Vergi Dairesi / No:</strong> Maslak V.D. / 1234567890</p><p><strong>KEP Adresi:</strong> istoc@hs01.kep.tr</p><p><strong>Telefon:</strong> +90 800 123 4567</p><p><strong>E-posta:</strong> info@istoc.com</p>',
+        section2Title: '2. Platform Hakkında',
+        section2Content: '<p>iSTOC TradeHub, işletmeler arası (B2B) ticareti kolaylaştırmak amacıyla kurulmuş bir elektronik ticaret platformudur. Platform, 6563 sayılı Elektronik Ticaretin Düzenlenmesi Hakkında Kanun ve ilgili mevzuat çerçevesinde aracı hizmet sağlayıcı olarak faaliyet göstermektedir.</p><p>Platform üzerinde sunulan ürün ve hizmetlerin sorumluluğu, ilgili satıcılara aittir. iSTOC, satıcı ile alıcı arasındaki ticari ilişkide aracı konumundadır.</p>',
+        section3Title: '3. Sorumluluğun Sınırlandırılması',
+        section3Content: '<p>Platform üzerinde yayınlanan bilgiler, doğruluğu ve güncelliği konusunda azami özen gösterilmekle birlikte, yalnızca bilgilendirme amaçlıdır. iSTOC, bu bilgilerin eksiksiz, doğru veya güncel olduğuna dair herhangi bir garanti vermemektedir.</p><p>Platform üzerinden erişilen üçüncü taraf web sitelerinin içeriğinden iSTOC sorumlu değildir.</p><p>Teknik arızalar, bakım çalışmaları veya mücbir sebepler nedeniyle oluşabilecek erişim kesintilerinden iSTOC sorumlu tutulamaz.</p>',
+        section4Title: '4. Denetim ve Şikayet',
+        section4Content: '<p>Platform faaliyetleri, T.C. Ticaret Bakanlığı denetimine tabidir.</p><p>Tüketici şikayetleri için:</p><ul class="list-disc pl-5 space-y-1"><li><strong>Tüketici Hakem Heyetleri:</strong> İkamet ettiğiniz ilin Kaymakamlık veya Valilik bünyesindeki Tüketici Hakem Heyetlerine başvurabilirsiniz.</li><li><strong>Tüketici Mahkemeleri:</strong> Hakem heyeti sınırlarını aşan uyuşmazlıklarda Tüketici Mahkemelerine başvuru hakkınız saklıdır.</li><li><strong>e-Devlet:</strong> turkiye.gov.tr üzerinden online şikayet bildirimi yapabilirsiniz.</li></ul>',
+        section5Title: '5. Uygulanacak Hukuk',
+        section5Content: '<p>Bu yasal bildirim ve Platform kullanımı, Türkiye Cumhuriyeti kanunlarına tabidir. Her türlü uyuşmazlıkta İstanbul Mahkemeleri ve İcra Daireleri yetkilidir.</p><p>İşbu yasal bildirim, Platform\'un kullanımına ilişkin genel bilgilendirme amacı taşımakta olup, hukuki danışmanlık niteliği taşımamaktadır.</p>',
+      },
+      productListing: {
+        pageTitle: 'Ürün Listeleme Politikası',
+        lastUpdated: '15 Şubat 2026',
+        breadcrumbLabel: 'Ürün Listeleme Politikası',
+        section1Title: '1. Genel İlkeler',
+        section1Content: '<p>iSTOC TradeHub platformunda ürün listeleme, belirli standart ve kurallara tabidir. Tüm satıcılar, ürünlerini listelemeden önce bu politikayı okumuş ve kabul etmiş sayılır.</p><p>Listelenen ürünlerin Türkiye Cumhuriyeti mevzuatına, uluslararası ticaret kurallarına ve Platform politikalarına uygun olması zorunludur.</p>',
+        section2Title: '2. Ürün Bilgileri ve Doğruluk',
+        section2Content: '<p>Satıcılar, listeledikleri ürünlere ilişkin aşağıdaki bilgileri doğru ve eksiksiz olarak sağlamakla yükümlüdür:</p><ul class="list-disc pl-5 space-y-1"><li><strong>Ürün Başlığı:</strong> Açık, anlaşılır ve ürünü doğru tanımlayan başlık</li><li><strong>Açıklama:</strong> Ürünün özelliklerini, malzeme bilgilerini ve kullanım alanlarını içeren detaylı açıklama</li><li><strong>Görseller:</strong> Ürünü gerçeğe uygun şekilde yansıtan, yüksek kaliteli ve orijinal fotoğraflar</li><li><strong>Fiyatlandırma:</strong> KDV dahil/hariç durumu açıkça belirtilmiş, güncel fiyat bilgisi</li><li><strong>Stok Durumu:</strong> Gerçek zamanlı ve doğru stok bilgisi</li><li><strong>Minimum Sipariş:</strong> B2B satışlar için minimum sipariş miktarı</li></ul>',
+        section3Title: '3. Yasaklı ve Kısıtlı Ürünler',
+        section3Content: '<p>Aşağıdaki ürünlerin Platform üzerinde listelenmesi kesinlikle yasaktır:</p><ul class="list-disc pl-5 space-y-1"><li>Yasa dışı ürünler ve kaçak mallar</li><li>Sahte, taklit veya korsan ürünler</li><li>Silah, mühimmat ve patlayıcı maddeler</li><li>Uyuşturucu ve psikotrop maddeler</li><li>İnsan organları ve dokuları</li><li>Nesli tükenmekte olan türlerden elde edilen ürünler</li><li>Çocuk istismarı içeren veya çağrıştıran ürünler</li><li>Kişisel verilerin satışına yönelik ürün/hizmetler</li></ul><p>Belirli kategorilerdeki ürünler (gıda, ilaç, tıbbi cihaz, kimyasal maddeler vb.) ek belge ve sertifika gerektirebilir.</p>',
+        section4Title: '4. Görsel ve İçerik Standartları',
+        section4Content: '<p>Ürün görselleri ve içerikleri aşağıdaki standartlara uygun olmalıdır:</p><ul class="list-disc pl-5 space-y-1"><li>Minimum 800x800 piksel çözünürlükte, net ve aydınlık görseller</li><li>Filigran, promosyon metni veya başka platformların logoları içermeyen görseller</li><li>Yanıltıcı veya abartılı ifadeler içermeyen açıklamalar</li><li>Rakip ürün veya markaları kötüleyen ifadeler kullanılmaması</li><li>İletişim bilgisi (telefon, e-posta, web sitesi) içermeyen açıklamalar</li></ul><p>iSTOC, standartlara uymayan görselleri ve içerikleri önceden bildirmeksizin kaldırma hakkını saklı tutar.</p>',
+        section5Title: '5. Fiyatlandırma Kuralları',
+        section5Content: '<p>Satıcılar, fiyatlandırma konusunda aşağıdaki kurallara uymakla yükümlüdür:</p><ul class="list-disc pl-5 space-y-1"><li>Fiyatlar gerçekçi ve piyasa koşullarına uygun olmalıdır</li><li>Yanıltıcı indirim ve kampanya uygulamaları yasaktır</li><li>Toptan ve perakende fiyatlar açıkça belirtilmelidir</li><li>Kargo ücreti ve ek masraflar şeffaf bir şekilde gösterilmelidir</li></ul><p>iSTOC, piyasa koşullarına aykırı veya manipülatif fiyatlandırma tespit ettiğinde ilgili listelemeyi askıya alma hakkına sahiptir.</p>',
+        section6Title: '6. İhlal ve Yaptırımlar',
+        section6Content: '<p>Bu politikanın ihlali halinde aşağıdaki yaptırımlar uygulanabilir:</p><ul class="list-disc pl-5 space-y-1"><li><strong>Uyarı:</strong> İlk ihlalde yazılı uyarı</li><li><strong>Listeleme Kaldırma:</strong> Kurallara aykırı ürün listelerinin kaldırılması</li><li><strong>Hesap Askıya Alma:</strong> Tekrarlayan ihlallerde hesabın geçici olarak askıya alınması</li><li><strong>Hesap Kapatma:</strong> Ağır veya sürekli ihlallerde hesabın kalıcı olarak kapatılması</li></ul><p>Satıcılar, yaptırım kararlarına karşı 15 iş günü içinde itiraz hakkına sahiptir.</p>',
+      },
+      ip: {
+        pageTitle: 'Fikri Mülkiyet',
+        lastUpdated: '15 Şubat 2026',
+        breadcrumbLabel: 'Fikri Mülkiyet',
+        section1Title: '1. Fikri Mülkiyet Koruma Taahhüdü',
+        section1Content: '<p>iSTOC TradeHub, fikri mülkiyet haklarına saygı gösterilmesini en üst düzeyde önemser. Platform, telif hakları, ticari markalar, patentler ve diğer fikri mülkiyet haklarının korunması için gerekli tedbirleri almaktadır.</p><p>Platform kullanıcıları, üçüncü tarafların fikri mülkiyet haklarını ihlal eden içerik yayınlamamak ve ürün listelememekle yükümlüdür.</p>',
+        section2Title: '2. İSTOC Fikri Mülkiyet Hakları',
+        section2Content: '<p>Aşağıdakiler dahil ancak bunlarla sınırlı olmamak üzere, Platform üzerindeki tüm içerik ve materyaller iSTOC\'un veya lisans verenlerinin fikri mülkiyetindedir:</p><ul class="list-disc pl-5 space-y-1"><li>iSTOC adı, logosu ve tüm ticari markaları</li><li>Platform tasarımı, arayüz düzeni ve kullanıcı deneyimi</li><li>Yazılım kodu, algoritmalar ve veritabanları</li><li>Platform tarafından üretilen içerik, raporlar ve analizler</li><li>Eğitim materyalleri ve dokümantasyonlar</li></ul><p>Bu materyallerin iSTOC\'un yazılı izni olmaksızın kopyalanması, çoğaltılması, dağıtılması veya ticari amaçla kullanılması yasaktır.</p>',
+        section3Title: '3. İhlal Bildirimi',
+        section3Content: '<p>Fikri mülkiyet haklarınızın ihlal edildiğini düşünüyorsanız, aşağıdaki bilgilerle birlikte bize başvurabilirsiniz:</p><ul class="list-disc pl-5 space-y-1"><li>Hak sahibinin veya yetkili temsilcisinin kimlik bilgileri</li><li>İhlal edildiği iddia edilen fikri mülkiyet hakkının açıklaması</li><li>İhlal içeren içeriğin Platform üzerindeki konumu (URL)</li><li>İhlal iddiasını destekleyen belgeler (tescil belgesi, lisans sözleşmesi vb.)</li><li>İyi niyetle yapılan bir bildirim olduğuna dair beyan</li></ul><p><strong>Bildirim adresi:</strong> ipr@istoc.com</p>',
+        section4Title: '4. İnceleme ve Değerlendirme Süreci',
+        section4Content: '<p>Fikri mülkiyet ihlal bildirimleri aşağıdaki süreçle değerlendirilir:</p><ol class="list-decimal pl-5 space-y-2"><li><strong>Bildirim Alındı:</strong> Başvurunuz 24 saat içinde kaydedilir ve size bildirim numarası iletilir.</li><li><strong>Ön İnceleme:</strong> Ekibimiz başvurunuzu 3 iş günü içinde ön incelemeye alır.</li><li><strong>Satıcı Bildirimi:</strong> İhlal iddiası ilgili satıcıya iletilir ve 5 iş günü içinde yanıt istenir.</li><li><strong>Karar:</strong> Tüm deliller değerlendirilerek karar verilir ve taraflara bildirilir.</li><li><strong>Uygulama:</strong> İhlal tespit edilmesi halinde ilgili içerik kaldırılır.</li></ol>',
+        section5Title: '5. Karşı Bildirim Hakkı',
+        section5Content: '<p>İçeriği kaldırılan satıcılar, kaldırma işlemine karşı bildirimde bulunma hakkına sahiptir. Karşı bildirim aşağıdaki bilgileri içermelidir:</p><ul class="list-disc pl-5 space-y-1"><li>Satıcının kimlik ve iletişim bilgileri</li><li>Kaldırılan içeriğin tanımı</li><li>İçeriğin neden hak ihlali oluşturmadığına dair açıklama ve destekleyici belgeler</li><li>Yanlış bildirim durumunda yasal sorumluluğu kabul ettiğine dair beyan</li></ul><p>Karşı bildirimler, kaldırma işleminden itibaren 10 iş günü içinde yapılmalıdır.</p>',
+        section6Title: '6. Tekrarlayan İhlaller',
+        section6Content: '<p>iSTOC, tekrarlayan fikri mülkiyet ihlallerine karşı sıfır tolerans politikası uygulamaktadır:</p><ul class="list-disc pl-5 space-y-1"><li><strong>İlk ihlal:</strong> Yazılı uyarı ve içerik kaldırma</li><li><strong>İkinci ihlal:</strong> 30 gün hesap askıya alma</li><li><strong>Üçüncü ihlal:</strong> Hesabın kalıcı olarak kapatılması</li></ul><p>Kasıtlı ve organizasyonel ihlallerde iSTOC, ilk ihlalde dahi hesabı kalıcı olarak kapatma ve yasal işlem başlatma hakkını saklı tutar.</p>',
+      },
+      accessibility: {
+        pageTitle: 'Erişilebilirlik',
+        lastUpdated: '15 Şubat 2026',
+        breadcrumbLabel: 'Erişilebilirlik',
+        section1Title: '1. Erişilebilirlik Taahhüdümüz',
+        section1Content: '<p>iSTOC TradeHub olarak, platformumuzun engelli bireyler dahil tüm kullanıcılar tarafından erişilebilir olmasını sağlamayı taahhüt ediyoruz. Dijital erişilebilirlik, kurumsal sorumluluğumuzun ayrılmaz bir parçasıdır.</p><p>Platformumuz, Web İçerik Erişilebilirlik Yönergeleri (WCAG) 2.1 AA standardına uygun olacak şekilde sürekli olarak geliştirilmektedir.</p>',
+        section2Title: '2. Erişilebilirlik Özellikleri',
+        section2Content: '<p>Platformumuzda aşağıdaki erişilebilirlik özelliklerini sunmaktayız:</p><ul class="list-disc pl-5 space-y-1"><li><strong>Klavye Navigasyonu:</strong> Tüm Platform özellikleri yalnızca klavye kullanılarak erişilebilir</li><li><strong>Ekran Okuyucu Desteği:</strong> İçeriklerimiz, popüler ekran okuyucu yazılımlarıyla uyumludur</li><li><strong>Metin Boyutu Ayarı:</strong> Kullanıcılar metin boyutunu tarayıcı ayarlarından değiştirebilir</li><li><strong>Renk Kontrastı:</strong> WCAG AA standartlarını karşılayan renk kontrastı oranları</li><li><strong>Alternatif Metinler:</strong> Görseller için açıklayıcı alternatif metinler</li><li><strong>Form Etiketleri:</strong> Tüm form alanları için açık ve anlaşılır etiketler</li><li><strong>Odak Göstergeleri:</strong> Klavye ile gezinirken görünür odak göstergeleri</li></ul>',
+        section3Title: '3. Desteklenen Yardımcı Teknolojiler',
+        section3Content: '<p>Platformumuz aşağıdaki yardımcı teknolojilerle test edilmiştir:</p><ul class="list-disc pl-5 space-y-1"><li><strong>Ekran Okuyucular:</strong> NVDA, JAWS, VoiceOver (macOS/iOS), TalkBack (Android)</li><li><strong>Büyütme Yazılımları:</strong> ZoomText, Windows Büyüteç</li><li><strong>Ses Tanıma:</strong> Dragon NaturallySpeaking, Windows Ses Tanıma</li><li><strong>Alternatif Giriş Cihazları:</strong> Switch erişim, göz izleme sistemleri</li></ul><p>Farklı tarayıcı ve cihaz kombinasyonlarında en iyi deneyimi sağlamak için düzenli testler yapmaktayız.</p>',
+        section4Title: '4. Bilinen Sınırlamalar',
+        section4Content: '<p>Erişilebilirlik konusunda sürekli iyileştirme çalışmalarımıza rağmen, bazı alanlarda sınırlamalar olabilir:</p><ul class="list-disc pl-5 space-y-1"><li>Satıcılar tarafından yüklenen bazı ürün görselleri alternatif metin içermeyebilir</li><li>Üçüncü taraf entegrasyonları (ödeme sayfaları, harita servisleri) kendi erişilebilirlik standartlarına tabidir</li><li>Bazı eski PDF belgeler tam erişilebilir olmayabilir</li></ul><p>Bu sınırlamaları gidermek için aktif olarak çalışmaktayız.</p>',
+        section5Title: '5. Geri Bildirim ve İletişim',
+        section5Content: '<p>Erişilebilirlik konusundaki geri bildirimleriniz bizim için çok değerlidir. Platformumuzda erişilebilirlik sorunu yaşıyorsanız veya önerileriniz varsa lütfen bize ulaşın:</p><p><strong>E-posta:</strong> erisebilirlik@istoc.com<br><strong>Telefon:</strong> +90 800 123 4567 (Dahili: 5)<br><strong>Posta:</strong> iSTOC Teknoloji A.Ş., Erişilebilirlik Birimi, İstanbul Ticaret Merkezi, Kat 12, Maslak, İstanbul</p><p>Geri bildirimleriniz 5 iş günü içinde değerlendirilecek ve size dönüş yapılacaktır.</p>',
+        section6Title: '6. Sürekli İyileştirme',
+        section6Content: '<p>Erişilebilirlik çalışmalarımız kapsamında:</p><ul class="list-disc pl-5 space-y-1"><li>Düzenli erişilebilirlik denetimleri gerçekleştirmekteyiz</li><li>Geliştirici ekibimiz erişilebilirlik eğitimleri almaktadır</li><li>Yeni özellikler, erişilebilirlik testlerinden geçirildikten sonra yayınlanmaktadır</li><li>Engelli kullanıcılardan oluşan danışma grubuyla periyodik değerlendirmeler yapmaktayız</li></ul><p>Erişilebilirlik yol haritamız, kullanıcı geri bildirimleri ve teknolojik gelişmeler doğrultusunda sürekli güncellenmektedir.</p>',
       },
     },
     // ============================================================
@@ -1704,35 +1766,10 @@ const tr = {
       twoYears: '2 yıl',
       twentyFourHours: '24 saat',
       threeMonths: '3 ay',
-      sixMonths: '6 ay',
-      thirteenMonths: '13 ay',
       typeNecessary: 'Zorunlu',
       typeFunctional: 'İşlevsel',
       typeAnalytics: 'Analitik',
       typeMarketing: 'Pazarlama',
-      // Yandex Metrica çerezleri
-      metricaUserId: 'Benzersiz ziyaretçi tanımlayıcı',
-      metricaFirstVisit: 'İlk ziyaret tarihi',
-      metricaAdBlock: 'Reklam engelleyici tespiti',
-      metricaVisor: 'Oturum tekrarı kaydı',
-      // Criteo çerezleri
-      criteoBundle: 'Reklam kişiselleştirme',
-      criteoRetargeting: 'Yeniden hedefleme kampanyaları',
-    },
-
-    // ============================================================
-    // ÇEREZ BANNERI
-    // ============================================================
-    cookieBanner: {
-      ariaLabel: 'Çerez onayı',
-      title: 'Çerez kullanıyoruz',
-      description: 'Deneyiminizi iyileştirmek, trafiği analiz etmek ve içeriği kişiselleştirmek için çerezler ve benzer teknolojiler kullanıyoruz. Tercihlerinizi yönetebilir veya tüm çerezleri kabul edebilirsiniz. Detaylar için <a href="/pages/legal/cookies.html" class="text-primary-600 underline hover:text-primary-700">Çerez Politikamızı</a> okuyun.',
-      acceptAll: 'Tümünü Kabul Et',
-      rejectAll: 'Tümünü Reddet',
-      managePreferences: 'Tercihleri Yönet',
-      showDetails: 'Çerez detaylarını göster',
-      hideDetails: 'Çerez detaylarını gizle',
-      alwaysOn: 'Her zaman açık',
     },
 
     // ============================================================
@@ -1844,6 +1881,7 @@ const tr = {
       sf: {
         // CompanyProfile - ContactSidebar
         contactSupplier: 'Tedarikçiye Ulaşın',
+        contactSupplierTitle: 'Tedarikçiye Ulaşın',
         contactNow: 'Şimdi iletişime geçin',
         sendInquiry: 'Sorgu gönder',
         // CompanyProfile - OverviewTab
@@ -1867,20 +1905,17 @@ const tr = {
         onTimeShipment: 'Zamanında Sevkiyat',
         productQuality: 'Ürün Kalitesi',
         browseAllReviews: 'Tüm değerlendirmelere göz at',
-        writeReview: 'Değerlendirme Yaz',
-        reviewRatingLabel: 'Puanınız',
-        reviewCommentLabel: 'Yorumunuz',
-        reviewCommentPlaceholder: 'Bu satıcı hakkındaki deneyimlerinizi paylaşın...',
-        reviewSubmit: 'Gönder',
-        reviewSuccess: 'Değerlendirmeniz başarıyla gönderildi.',
-        reviewLoginPrompt: 'Değerlendirme yapabilmek için giriş yapmalısınız.',
-        reviewLoginBtn: 'Giriş Yap',
-        reviewRatingRequired: 'Lütfen bir puan seçin.',
-        reviewCommentRequired: 'Yorum boş olamaz.',
+        noReviewsYet: 'Henüz değerlendirme yapılmamış.',
+        viewAllReviews: 'Tüm değerlendirmelere göz at',
+        customizationServices: 'Düşük MOQ\'lu siparişler için özelleştirme hizmetleri',
+        lowMoqCustomization: 'Düşük MOQ özelleştirme ve Hızlı Sevkiyat',
+        categoriesAvailable: ' kategori mevcut',
+        productsAvailable: ' ürün mevcut',
         // CompanyProfile - ProductsTab
         all: 'Tümü',
         // CompanyProfile - Main Tabs
         myAccount: 'Hesabım',
+        serviceTab: 'Hizmet',
         reviewsTab: 'Yorumlar',
         productsTab: 'Ürünler',
         categoriesTab: 'Kategoriler',
@@ -1925,6 +1960,7 @@ const tr = {
         storeHeroBanner: 'Mağaza hero banner',
         // Certificates
         certificates: 'Sertifikalar',
+        noCertificates: 'Henüz sertifika eklenmemiş.',
         prevCertificate: 'Önceki sertifika',
         nextCertificate: 'Sonraki sertifika',
         // CategoryGrid
@@ -1957,6 +1993,69 @@ const tr = {
         // CategoryProductListing extras
         minOrder: 'Min. Sipariş',
         sold: 'satıldı',
+
+        // === YENİ: Storefront Yeniden Tasarım (Alibaba stili) ===
+        // Header istatistikleri
+        platformYears: 'iSTOC\'ta {{count}} yıl',
+        employees: '{{count}} çalışan',
+        totalOrders: '{{count}} sipariş',
+        transactionVolume: 'US ${{amount}}+',
+        viewStore: 'Mağazayı ziyaret et',
+        viewAllCapabilities: 'Tüm doğrulanmış olanaklara ({{count}}) göz atın',
+
+        // Yetenekler
+        fullCustomization: 'Tam özelleştirme',
+        rawMaterialTracing: 'Ham madde tanımlaması ve takibi',
+        ceCertificate: 'CE sertifika',
+        rohsCertificate: 'RoHS sertifika',
+
+        // Profil tab
+        profile: 'Profil',
+        downloadReport: 'Raporu indirin',
+        generalOverview: 'Genel Bakış',
+        registrationDate: 'Şirket tescil tarihi',
+        floorArea: 'Zemin alanı',
+        businessType: 'İş türü',
+        annualRevenue: 'Yıllık gelir',
+        qualityControlSection: 'Kalite Kontrol',
+        rawMaterialSupport: 'Ham maddelerin Ürün Destek izlenebilirliği',
+        inspectionMethod: 'Ürün denetim yöntemi',
+        qcInspectors: 'QA/QC müfettişleri',
+        allProductionLines: 'Tüm üretim hatlarında yürütülen kalite kontrol',
+        tradeHistory: 'Ticaret Geçmişi',
+        mainMarkets: 'Ana pazarlar',
+        customerTypes: 'Ana müşteri türleri',
+        rdCapabilities: 'R&D Olanakları',
+        rdEngineers: 'R&D mühendisleri',
+        customizationOptions: 'Özelleştirme seçenekleri',
+        engineerEducation: 'R&D mühendisi eğitim düzeyleri',
+
+        // Yorumlar tab ek
+        filterByRating: 'Puana göre filtrele',
+        allRatings: 'Tümü',
+
+        // Ürünler tab ek
+        topSelling: 'Üst satış ürünü',
+        superDiscount: 'Süper indirim ürünü',
+        featured: 'İlk Seçilenler',
+        videoAvailable: 'Video',
+        noProducts: 'Henüz ürün eklenmemiş.',
+        page: 'Sayfa',
+
+        // Video ipuçları tab
+        videoTips: 'Video ipuçları',
+        duration: 'Süre',
+        viewMore: 'Daha fazlasını görüntüleyin',
+        noVideos: 'Henüz video bulunmuyor.',
+        watchVideo: 'Videoyu izle',
+
+        // Genel
+        visitStore: 'Mağazayı ziyaret et',
+        manufacturer: 'Üretici',
+        wholesaler: 'Toptancı',
+        retailer: 'Perakendeci',
+        yes: 'Evet',
+        no: 'Hayır',
       },
     },
 
@@ -2005,6 +2104,93 @@ const tr = {
       secureConnection: 'Güvenli bağlantı — SSL şifreli',
       verifyingPayment: 'Ödeme doğrulanıyor...',
       almostDone: 'Neredeyse bitti, lütfen bekleyin',
+    },
+
+    // ============================================================
+    // ORDER SUCCESS / THANK YOU PAGE
+    // ============================================================
+    orderSuccess: {
+      // Page meta
+      pageTitle: 'Sipariş Onayı',
+      orders: 'Siparişler',
+      orderConfirmation: 'Sipariş Onayı',
+
+      // Success Banner
+      orderPlacedTitle: 'Siparişiniz başarıyla oluşturuldu!',
+      ordersPlacedTitle: '{{count}} siparişiniz başarıyla oluşturuldu!',
+      orderPlacedSubtitle: 'Satın aldığınız için teşekkürler. Siparişiniz işleniyor ve yakında kargoya verilecek.',
+      pendingPaymentTitle: 'Sipariş alındı — ödeme bekleniyor',
+      pendingPaymentSubtitle: 'İşleme devam etmek için ödemenizi tamamlayın.',
+
+      // Next Steps Timeline
+      nextSteps: 'Sonraki adımlar neler?',
+      stepOrderPlaced: 'Sipariş Verildi',
+      stepPaymentConfirmed: 'Ödeme Onaylandı',
+      stepSupplierProcessing: 'İşleniyor',
+      stepShipped: 'Kargoda',
+      stepDelivered: 'Teslim Edildi',
+      completed: 'Tamamlandı',
+      inProgress: 'Devam Ediyor',
+      upcoming: 'Beklemede',
+
+      // Order Details
+      orderDetails: 'Sipariş Detayları',
+      supplierLabel: 'Tedarikçi',
+      orderNumberLabel: 'Sipariş',
+      product: 'Ürün',
+      variation: 'Varyant',
+      quantity: 'Adet',
+      unitPrice: 'Birim Fiyat',
+      totalPrice: 'Toplam',
+      items: '{{count}} ürün',
+      itemsPlural: '{{count}} ürün',
+
+      // Shipping Info
+      shippingInfo: 'Kargo Bilgileri',
+      shippingAddress: 'Teslimat Adresi',
+      shippingMethod: 'Kargo Yöntemi',
+      incoterms: 'Incoterms',
+      shipFrom: 'Çıkış Noktası',
+      estimatedDelivery: 'Tahmini Teslimat',
+
+      // Payment Summary
+      paymentSummary: 'Ödeme Özeti',
+      subtotal: 'Ara Toplam',
+      shippingFee: 'Kargo Ücreti',
+      grandTotal: 'Genel Toplam',
+      paymentMethod: 'Ödeme Yöntemi',
+
+      // Payment method labels
+      bankTransfer: 'Banka Havale/EFT',
+      creditCard: 'Kredi Kartı',
+      installment: 'Taksitli Ödeme',
+      negotiated: 'Anlaşmalı Vade',
+      checkPromissory: 'Çek / Senet',
+
+      // Action Buttons
+      trackOrder: 'Siparişi Takip Et',
+      downloadInvoice: 'Fatura İndir',
+      continueShopping: 'Alışverişe Devam Et',
+      makePayment: 'Ödeme Yap',
+
+      // Need Help
+      needHelp: 'Yardıma mı ihtiyacınız var?',
+      needHelpDesc: 'Siparişinizle ilgili herhangi bir sorunuz varsa, size yardımcı olmaktan memnuniyet duyarız.',
+      contactSupport: 'Destek ile İletişime Geçin',
+      visitHelpCenter: 'Yardım Merkezi',
+
+      // All Orders
+      allOrders: 'Bu Satın Almadaki Tüm Siparişler',
+      orderDate: 'Sipariş Tarihi',
+
+      // Havale Bekliyor
+      bankTransferPending: 'Ödeme dekontu gerekli',
+      bankTransferPendingDesc: 'Siparişinizi tamamlamak için lütfen siparişler sayfasından havale dekontunuzu gönderin.',
+      goToUploadReceipt: 'Havale Makbuzu Gönder',
+
+      // Loading & Fallback
+      loadingOrders: 'Sipariş detaylarınız yükleniyor...',
+      fallbackMessage: 'Sipariş numaralarınız kaydedildi. Tam detaylar için siparişler sayfanızı ziyaret edin.',
     },
 
     // ============================================================
@@ -2812,27 +2998,6 @@ const tr = {
       invalidVerifyCode: 'Geçerli bir doğrulama kodu girin.',
       selectReason: 'Lütfen bir ayrılma nedeni seçin.',
 
-      // ── Profile Extended Fields ──────────────────────────────────
-      profileCompleteBanner: 'Profilinizi %{{pct}} tamamladınız. Tam profil daha fazla tedarikçi ilgisi çekmektedir.',
-      incompleteLabel: 'Tamamlanmamış',
-      cardBasicInfo: 'Temel Bilgiler',
-      cardBusinessInfo: 'İş Bilgileri',
-      cardMoreInfo: 'Şirket Detayları',
-      cardSourcingPrefs: 'Tedarik Tercihleri',
-      avatarLabel: 'Profil Fotoğrafı',
-      businessTypeLabel: 'İş Türü',
-      companyNameLabel: 'Şirket Adı',
-      jobTitleLabel: 'Unvan',
-      websiteLabel: 'Web Sitesi',
-      sellingPlatformsLabel: 'Satış Platformları',
-      yearEstablishedLabel: 'Kuruluş Yılı',
-      employeeCountLabel: 'Çalışan Sayısı',
-      aboutUsLabel: 'Hakkımızda',
-      industryPrefsLabel: 'Sektör Tercihleri',
-      sourcingFreqLabel: 'Tedarik Sıklığı',
-      annualSpendingLabel: 'Yıllık Harcama',
-      yearJoined: 'Üyelik Yılı',
-
       // ── SettingsTaxInfo ──────────────────────────────────────────
       taxInfoTitle: 'Information',
       taxInfoTab: 'Vergi Bilgileri',
@@ -3074,9 +3239,7 @@ const tr = {
       signOut: 'Çıkış yap',
       accountInfoCardTitle: 'Hesap bilgileri',
       myProfile: 'Profilim',
-      myMembership: 'Hesabım',
-      myAccountNav: 'Hesabım',
-      myAccountTitle: 'Hesabım',
+      myMembership: 'Üyelik hesabım',
       linkedAccountsNav: 'Bağlı hesaplar',
       taxInfoNav: 'Vergi bilgileri',
       accountSecurityTitle: 'Hesap güvenliği',
@@ -3286,6 +3449,555 @@ const tr = {
       appSettingsLabel: 'İSTOC Uygulama Ayarları',
       localization: 'Dil ve Yerelleştirme',
       localizationSettings: 'İSTOC Dil Ayarları',
+    },
+    faqDetail: {
+      // UI
+      home: 'Ana Sayfa',
+      faq: 'SSS',
+      backToFaq: 'SSS\'ye Dön',
+      wasHelpful: 'Bu makale yardımcı oldu mu?',
+      yes: 'Evet',
+      no: 'Hayır',
+      thankYou: 'Geri bildiriminiz için teşekkürler!',
+      noContent: 'Bu konu için henüz içerik bulunmamaktadır.',
+      relatedTopics: 'İlgili Konular',
+
+      // ── İSTOC Giriş ──
+      introDesc_title: 'İSTOC Tanıtımı',
+      introDesc_desc: 'İSTOC platformu hakkında genel bilgiler ve nasıl çalıştığını öğrenin.',
+      introDesc_items: [
+        { q: 'İSTOC nedir?', a: 'İSTOC, Türkiye merkezli bir B2B (işletmeden işletmeye) e-ticaret platformudur. Üreticiler, toptancılar ve distribütörler ile alıcıları bir araya getirerek güvenli ve verimli ticaret yapılmasını sağlar. Platform üzerinde binlerce kategoride milyonlarca ürün bulunmaktadır.' },
+        { q: 'İSTOC\'u kimler kullanabilir?', a: 'İSTOC, hem bireysel girişimciler hem de kurumsal alıcılar ve satıcılar tarafından kullanılabilir. <strong>Alıcılar</strong> toptan fiyatlarla ürün temin edebilirken, <strong>satıcılar</strong> geniş bir alıcı kitlesine ulaşabilir. Platforma kayıt olmak ücretsizdir.' },
+        { q: 'İSTOC\'un diğer platformlardan farkı nedir?', a: 'İSTOC, Ticaret Güvencesi programı ile alıcı ve satıcıları koruma altına alır. Entegre lojistik çözümleri, güvenli ödeme sistemi ve 7/24 müşteri desteği ile öne çıkar. Ayrıca AI destekli tedarikçi eşleştirme ve kalite denetim hizmetleri sunar.' },
+        { q: 'İSTOC\'ta hangi kategorilerde ürün bulunur?', a: 'Platformda Tekstil & Giyim, Elektronik, Gıda & İçecek, Otomotiv, Makine & Ekipman, İnşaat & Yapı Malzemeleri, Kozmetik, Mobilya, Tarım ürünleri ve daha birçok kategoride ürün listelenmektedir.' },
+      ],
+
+      introMembership_title: 'İSTOC Üyeliği',
+      introMembership_desc: 'Üyelik türleri, avantajları ve yükseltme seçenekleri hakkında bilgi alın.',
+      introMembership_items: [
+        { q: 'İSTOC\'ta hangi üyelik türleri var?', a: 'İSTOC\'ta üç temel üyelik türü bulunur: <strong>Ücretsiz Üyelik</strong> (temel özellikler, sınırlı listeleme), <strong>Gold Üyelik</strong> (öncelikli listeleme, gelişmiş analitik) ve <strong>Verified Üyelik</strong> (doğrulanmış rozet, özel hesap yöneticisi, sınırsız listeleme).' },
+        { q: 'Ücretsiz üyelik ile neler yapabilirim?', a: 'Ücretsiz üyelik ile ürün arayabilir, tedarikçilere mesaj gönderebilir, teklif isteyebilir ve sınırlı sayıda ürün listeleyebilirsiniz. Temel ticaret güvencesi kapsamı da ücretsiz üyeliğe dahildir.' },
+        { q: 'Gold üyeliğe nasıl yükseltirim?', a: 'Hesap ayarlarınızdan "Üyeliği Yükselt" seçeneğine tıklayarak Gold üyeliğe geçiş yapabilirsiniz. Aylık veya yıllık ödeme planları mevcuttur. Yıllık planda <strong>%20 indirim</strong> uygulanır.' },
+        { q: 'Verified üyelik avantajları nelerdir?', a: 'Verified üyelik; doğrulanmış rozet, arama sonuçlarında öncelik, özel hesap yöneticisi, genişletilmiş analitik paneli, sınırsız ürün listeleme ve öncelikli müşteri desteği gibi avantajlar sunar.' },
+      ],
+
+      // ── Hesap Yönetimi ──
+      accountSettings_title: 'Hesap Ayarları',
+      accountSettings_desc: 'Hesap bilgilerinizi güncelleme ve profil ayarlarınızı yönetme.',
+      accountSettings_items: [
+        { q: 'Profil bilgilerimi nasıl güncellerim?', a: 'Sağ üst köşedeki profil simgenize tıklayın, ardından <strong>"Hesap Ayarları"</strong> bölümüne gidin. Burada ad, soyad, şirket bilgileri, iletişim bilgileri ve profil fotoğrafınızı güncelleyebilirsiniz.' },
+        { q: 'E-posta adresimi değiştirebilir miyim?', a: 'Evet, Hesap Ayarları > İletişim Bilgileri bölümünden e-posta adresinizi değiştirebilirsiniz. Yeni e-posta adresinize bir doğrulama kodu gönderilecektir. Doğrulama tamamlanana kadar eski e-posta adresiniz aktif kalır.' },
+        { q: 'Şifremi nasıl değiştiririm?', a: 'Hesap Ayarları > Güvenlik bölümünden şifrenizi değiştirebilirsiniz. Mevcut şifrenizi girdikten sonra yeni şifrenizi iki kez yazmanız gerekir. Şifreniz en az 8 karakter, bir büyük harf ve bir rakam içermelidir.' },
+        { q: 'Bildirim tercihlerimi nasıl ayarlarım?', a: 'Hesap Ayarları > Bildirimler bölümünden e-posta, SMS ve uygulama içi bildirim tercihlerinizi yönetebilirsiniz. Sipariş güncellemeleri, mesajlar, promosyonlar ve güvenlik uyarıları için ayrı ayrı ayar yapabilirsiniz.' },
+      ],
+
+      accountCancelReactivate_title: 'İptal & Yeniden Etkinleştirme',
+      accountCancelReactivate_desc: 'Hesabınızı iptal etme veya yeniden etkinleştirme süreçleri.',
+      accountCancelReactivate_items: [
+        { q: 'Hesabımı nasıl iptal ederim?', a: 'Hesap Ayarları > Hesap Yönetimi bölümünden "Hesabı Kapat" seçeneğini kullanabilirsiniz. İptal işlemi öncesinde açık siparişlerinizin ve anlaşmazlıklarınızın çözülmüş olması gerekir. Hesap kapatma işlemi <strong>30 gün</strong> içinde geri alınabilir.' },
+        { q: 'Hesabımı yeniden etkinleştirebilir miyim?', a: 'Evet, hesabınızı kapattıktan sonraki 30 gün içinde kayıtlı e-posta adresinizle giriş yaparak hesabınızı yeniden etkinleştirebilirsiniz. 30 gün sonrasında hesap kalıcı olarak silinir ve veriler kurtarılamaz.' },
+        { q: 'Gold/Verified üyeliğimi iptal edersem ne olur?', a: 'Premium üyeliğinizi iptal ettiğinizde, mevcut fatura dönemi sonuna kadar tüm özellikler aktif kalır. Dönem bitiminde hesabınız otomatik olarak ücretsiz üyeliğe düşürülür. Yıllık planda kalan süre için kısmi iade yapılır.' },
+      ],
+
+      accountLogin_title: 'Giriş',
+      accountLogin_desc: 'Hesabınıza giriş yapma ve giriş sorunlarını çözme.',
+      accountLogin_items: [
+        { q: 'İSTOC\'a nasıl giriş yaparım?', a: 'Ana sayfadaki "Giriş" butonuna tıklayarak e-posta adresiniz ve şifrenizle giriş yapabilirsiniz. Ayrıca Google, Apple veya telefon numarası ile hızlı giriş seçeneklerini de kullanabilirsiniz.' },
+        { q: 'Şifremi unuttum, ne yapmalıyım?', a: 'Giriş ekranındaki <strong>"Şifremi Unuttum"</strong> bağlantısına tıklayın. Kayıtlı e-posta adresinize bir şifre sıfırlama bağlantısı gönderilecektir. Bağlantı 24 saat geçerlidir. E-posta gelmediyse spam klasörünü kontrol edin.' },
+        { q: 'İki faktörlü doğrulama (2FA) nasıl etkinleştirilir?', a: 'Hesap Ayarları > Güvenlik bölümünden iki faktörlü doğrulamayı etkinleştirebilirsiniz. SMS veya authenticator uygulaması (Google Authenticator, Authy) seçeneklerinden birini kullanabilirsiniz. 2FA etkinleştirildiğinde her girişte ek bir doğrulama kodu istenecektir.' },
+        { q: 'Hesabım kilitlendi, ne yapmalıyım?', a: 'Art arda 5 başarısız giriş denemesinden sonra hesabınız güvenlik amacıyla geçici olarak kilitlenir. 30 dakika bekleyerek tekrar deneyebilir veya "Şifremi Unuttum" ile şifrenizi sıfırlayabilirsiniz. Sorun devam ederse müşteri hizmetleriyle iletişime geçin.' },
+      ],
+
+      accountRegister_title: 'Kayıt',
+      accountRegister_desc: 'İSTOC\'a yeni hesap oluşturma adımları.',
+      accountRegister_items: [
+        { q: 'İSTOC\'a nasıl kayıt olurum?', a: 'Ana sayfadaki "Kayıt Ol" butonuna tıklayın. E-posta adresinizi girin, bir şifre belirleyin ve kullanım koşullarını kabul edin. Kayıt sonrası e-posta doğrulaması yapmanız gerekecektir.' },
+        { q: 'Kayıt için hangi bilgiler gerekli?', a: 'Temel kayıt için <strong>e-posta adresi</strong> ve <strong>şifre</strong> yeterlidir. Satıcı olarak kayıt olmak istiyorsanız ek olarak şirket adı, vergi numarası ve iletişim bilgileri gereklidir.' },
+        { q: 'E-posta doğrulaması yapamıyorum, ne yapmalıyım?', a: 'Doğrulama e-postası gelmezse öncelikle spam/istenmeyen posta klasörünüzü kontrol edin. Yeni doğrulama e-postası göndermek için giriş sayfasından tekrar deneyebilirsiniz. Sorun devam ederse farklı bir e-posta adresi ile kayıt olmayı deneyin veya destek ekibiyle iletişime geçin.' },
+      ],
+
+      accountBecomeSeller_title: 'Satıcı Ol',
+      accountBecomeSeller_desc: 'İSTOC\'ta satıcı olma süreci ve gereksinimleri.',
+      accountBecomeSeller_items: [
+        { q: 'İSTOC\'ta satıcı olmak için ne gerekir?', a: 'Satıcı olmak için geçerli bir ticaret sicili, vergi levhası ve şirket iletişim bilgilerine ihtiyacınız vardır. Kayıt formunu doldurduktan sonra belgeleriniz <strong>1-3 iş günü</strong> içinde incelenir ve onaylanır.' },
+        { q: 'Satıcı kaydı ücretsiz mi?', a: 'Evet, satıcı kaydı tamamen ücretsizdir. Ücretsiz planda belirli sayıda ürün listeleyebilirsiniz. Daha fazla listeleme ve gelişmiş özellikler için Gold veya Verified üyelik planlarını tercih edebilirsiniz.' },
+        { q: 'Hangi ürünleri satabilirim?', a: 'İSTOC\'ta yasalara uygun tüm B2B ürünleri satabilirsiniz. Yasaklı ürünler listesi (silah, uyuşturucu, taklit ürünler vb.) platform kurallarında belirtilmiştir. Gıda ve ilaç gibi özel kategorilerde ek belgeler gerekebilir.' },
+        { q: 'Satıcı onay süreci ne kadar sürer?', a: 'Satıcı başvurunuz genellikle <strong>1-3 iş günü</strong> içinde değerlendirilir. Belgeleriniz eksiksiz ise süreç daha hızlı tamamlanır. Eksik belge durumunda e-posta ile bilgilendirilirsiniz.' },
+      ],
+
+      // ── Kaynak Bulma ──
+      sourcingSearch_title: 'Arama',
+      sourcingSearch_desc: 'İSTOC\'ta ürün ve tedarikçi arama yöntemleri.',
+      sourcingSearch_items: [
+        { q: 'Ürün araması nasıl yapılır?', a: 'Ana sayfadaki arama çubuğuna ürün adı, kategori veya anahtar kelime yazarak arama yapabilirsiniz. Sonuçları fiyat, minimum sipariş miktarı, konum ve tedarikçi puanına göre filtreleyebilirsiniz.' },
+        { q: 'Gelişmiş arama filtreleri nelerdir?', a: 'Arama sonuçlarını daraltmak için <strong>fiyat aralığı</strong>, <strong>minimum sipariş miktarı</strong>, <strong>tedarikçi konumu</strong>, <strong>doğrulama durumu</strong>, <strong>kargo seçenekleri</strong> ve <strong>ödeme yöntemleri</strong> gibi filtreleri kullanabilirsiniz.' },
+        { q: 'Görsel arama özelliği var mı?', a: 'Evet, arama çubuğundaki kamera simgesine tıklayarak bir ürün fotoğrafı yükleyebilir ve benzer ürünleri bulabilirsiniz. Bu özellik AI teknolojisi ile desteklenmektedir ve en doğru sonuçları verir.' },
+      ],
+
+      sourcingSupplierEval_title: 'Tedarikçi Değerlendirme',
+      sourcingSupplierEval_desc: 'Tedarikçileri değerlendirme ve karşılaştırma yöntemleri.',
+      sourcingSupplierEval_items: [
+        { q: 'Tedarikçi güvenilirliğini nasıl kontrol ederim?', a: 'Her tedarikçi profilinde <strong>doğrulama durumu</strong>, <strong>işlem geçmişi</strong>, <strong>müşteri puanları</strong> ve <strong>yanıt süresi</strong> bilgileri yer alır. Verified rozeti taşıyan tedarikçiler üçüncü taraf denetimden geçmiştir.' },
+        { q: 'Tedarikçi puanları nasıl hesaplanır?', a: 'Tedarikçi puanları; zamanında teslimat oranı, ürün kalitesi değerlendirmeleri, iletişim hızı ve anlaşmazlık çözüm oranına göre hesaplanır. Puan 1-5 arasında olup, 4.5 üzeri "Mükemmel Tedarikçi" olarak işaretlenir.' },
+        { q: 'Tedarikçi denetim raporu nedir?', a: 'Denetim raporu, bağımsız üçüncü taraf firmalar tarafından tedarikçinin fabrika kapasitesi, üretim süreçleri, kalite kontrol sistemleri ve finansal durumunu değerlendiren kapsamlı bir belgedir. Verified tedarikçiler için bu rapor mevcut olup profil sayfasından görüntülenebilir.' },
+      ],
+
+      sourcingTradeInfo_title: 'Ticaret Bilgisi',
+      sourcingTradeInfo_desc: 'Uluslararası ticaret bilgileri ve düzenlemeler.',
+      sourcingTradeInfo_items: [
+        { q: 'Ticaret bilgisi sayfasında hangi bilgilere ulaşabilirim?', a: 'Ticaret bilgisi sayfasında gümrük vergileri, ithalat/ihracat düzenlemeleri, ülkelere göre ticaret anlaşmaları, HS kodları ve sektörel ticaret istatistikleri gibi kapsamlı bilgilere ulaşabilirsiniz.' },
+        { q: 'HS kodu nedir ve nasıl bulurum?', a: 'HS (Harmonized System) kodu, uluslararası ticarette ürünleri sınıflandırmak için kullanılan standart bir koddur. İSTOC\'ta ürün detay sayfasında veya ticaret bilgisi aracını kullanarak ürününüzün HS kodunu bulabilirsiniz.' },
+        { q: 'Gümrük vergisi hesaplama aracı nasıl kullanılır?', a: 'Ticaret bilgisi sayfasındaki vergisi hesaplama aracına ürün kategorisi, HS kodu, menşei ülke ve hedef ülkeyi girerek tahmini gümrük vergisini hesaplayabilirsiniz. Sonuçlar bilgilendirme amaçlıdır ve resmi oranlardan farklılık gösterebilir.' },
+      ],
+
+      sourcingRecommender_title: 'Öneren',
+      sourcingRecommender_desc: 'AI destekli tedarikçi ve ürün önerme sistemi.',
+      sourcingRecommender_items: [
+        { q: 'Öneren sistemi nasıl çalışır?', a: 'İSTOC Öneren sistemi, arama geçmişiniz, satın alma alışkanlıklarınız ve sektör trendlerine göre size uygun ürün ve tedarikçileri AI algoritmaları ile önerir. Sistem kullandıkça daha kişiselleştirilmiş öneriler sunar.' },
+        { q: 'Önerileri nasıl kişiselleştirebilirim?', a: 'Profilinizdeki sektör, ilgi alanları ve tercih edilen kategorileri güncelleyerek önerileri kişiselleştirebilirsiniz. Ayrıca beğendiğiniz veya beğenmediğiniz önerileri işaretleyerek sistemin öğrenmesine yardımcı olabilirsiniz.' },
+        { q: 'Öneren özelliğini kapatabilir miyim?', a: 'Evet, Hesap Ayarları > Gizlilik bölümünden kişiselleştirilmiş önerileri kapatabilirsiniz. Bu durumda genel popüler ürünler ve trendler gösterilecektir.' },
+      ],
+
+      sourcingAiApp_title: 'AI Uygulaması',
+      sourcingAiApp_desc: 'Yapay zeka destekli ticaret araçları ve özellikleri.',
+      sourcingAiApp_items: [
+        { q: 'İSTOC AI uygulaması ne işe yarar?', a: 'İSTOC AI uygulaması; görsel ürün arama, otomatik tedarikçi eşleştirme, fiyat analizi, pazar trendi tahmini ve akıllı sohbet asistanı gibi AI destekli özellikler sunar.' },
+        { q: 'AI sohbet asistanını nasıl kullanırım?', a: 'Ekranın sağ alt köşesindeki sohbet simgesine tıklayarak AI asistana erişebilirsiniz. Ürün bulma, fiyat karşılaştırma, sipariş takibi veya genel sorularınız için AI asistandan yardım alabilirsiniz.' },
+        { q: 'AI fiyat analizi nasıl çalışır?', a: 'AI fiyat analizi, piyasa verilerini ve geçmiş fiyat trendlerini analiz ederek ürünler için adil piyasa fiyatı aralığını belirler. Bu sayede alıcılar, tedarikçilerin sunduğu fiyatların piyasa koşullarına uygun olup olmadığını değerlendirebilir.' },
+      ],
+
+      sourcingSourcing_title: 'Kaynak Bulma',
+      sourcingSourcing_desc: 'Toptan ürün kaynak bulma stratejileri ve ipuçları.',
+      sourcingSourcing_items: [
+        { q: 'Toptan kaynak bulma süreci nasıl işler?', a: 'İSTOC\'ta kaynak bulma süreci: ürün araştırması, tedarikçi değerlendirmesi, numune talebi, fiyat müzakeresi ve sipariş verme adımlarından oluşur. Her adımda platform araçları size rehberlik eder.' },
+        { q: 'RFQ (Teklif İsteme) göndermeli miyim?', a: 'Evet, özellikle büyük siparişlerde RFQ göndermek önerilir. RFQ ile birden fazla tedarikçiden aynı anda teklif alabilir, fiyat ve koşulları karşılaştırabilirsiniz. RFQ\'nuz genellikle <strong>24 saat</strong> içinde yanıt alır.' },
+        { q: 'Numune nasıl talep ederim?', a: 'Ürün detay sayfasındaki "Numune İste" butonuna tıklayarak numune talebinde bulunabilirsiniz. Numune ücreti ve kargo bedeli tedarikçiye göre değişir. Bazı tedarikçiler ilk numuneyi ücretsiz gönderir.' },
+      ],
+
+      // ── Ticari Müzakere ──
+      negotiationRfq_title: 'RFQ',
+      negotiationRfq_desc: 'Teklif isteme (RFQ) süreci ve yönetimi.',
+      negotiationRfq_items: [
+        { q: 'RFQ nasıl gönderilir?', a: 'Ana menüdeki "RFQ Gönder" butonuna tıklayın. Ürün açıklaması, miktar, hedef fiyat, teslimat süresi ve varsa ürün görseli ekleyerek talebinizi gönderin. RFQ\'nuz ilgili tedarikçilere otomatik olarak iletilir.' },
+        { q: 'RFQ\'ma kaç teklif alabilirim?', a: 'Genellikle bir RFQ\'ya <strong>5-20 teklif</strong> gelir. Teklif sayısı ürün kategorisine ve talep detaylarına göre değişir. Teklifleri fiyat, kalite, teslimat süresi ve tedarikçi puanına göre karşılaştırabilirsiniz.' },
+        { q: 'RFQ\'mu düzenleyebilir veya iptal edebilir miyim?', a: 'Evet, henüz teklif almamış bir RFQ\'yu düzenleyebilirsiniz. İptal etmek için RFQ detay sayfasından "İptal Et" seçeneğini kullanabilirsiniz. Teklif almış bir RFQ iptal edildiğinde tedarikçiler bilgilendirilir.' },
+      ],
+
+      negotiationMessages_title: 'Mesajlar',
+      negotiationMessages_desc: 'Tedarikçilerle mesajlaşma ve iletişim.',
+      negotiationMessages_items: [
+        { q: 'Tedarikçiye nasıl mesaj gönderirim?', a: 'Tedarikçi profilindeki veya ürün detay sayfasındaki "Mesaj Gönder" butonuna tıklayarak iletişime geçebilirsiniz. Metin, görsel ve dosya gönderebilirsiniz.' },
+        { q: 'Mesajlarıma yanıt gelmezse ne yapmalıyım?', a: 'Tedarikçinin ortalama yanıt süresi profil sayfasında görüntülenir. 48 saat içinde yanıt gelmezse hatırlatma mesajı gönderebilir veya alternatif tedarikçilere ulaşabilirsiniz. Ayrıca tedarikçi değerlendirmesinde yanıt süresini puanlayabilirsiniz.' },
+        { q: 'Mesaj geçmişimi nereden görebilirim?', a: 'Sol menüdeki "Mesajlar" bölümünden tüm mesaj geçmişinize erişebilirsiniz. Konuşmaları tedarikçi adı veya ürün bazında filtreleyebilir, önemli mesajları yıldızlayabilirsiniz.' },
+      ],
+
+      negotiationOtherIssues_title: 'Diğer İletişim Sorunları',
+      negotiationOtherIssues_desc: 'Tedarikçi iletişiminde karşılaşılan sorunlar ve çözümleri.',
+      negotiationOtherIssues_items: [
+        { q: 'Tedarikçi ile dil sorunu yaşıyorum, ne yapmalıyım?', a: 'İSTOC\'un yerleşik çeviri özelliği mesajlarınızı otomatik olarak çevirir. Mesaj yazma alanındaki çeviri simgesini etkinleştirerek mesajlarınızı tedarikçinin diline otomatik çevirebilirsiniz.' },
+        { q: 'Şüpheli bir tedarikçiyi nasıl bildiririm?', a: 'Tedarikçi profilindeki "Bildir" butonuna tıklayarak şüpheli durumu raporlayabilirsiniz. Sahte ürün, yanıltıcı bilgi veya dolandırıcılık şüphesi gibi durumlarda güvenlik ekibimiz konuyu <strong>24 saat</strong> içinde inceler.' },
+        { q: 'Video görüşme yapabilir miyim?', a: 'Evet, mesajlaşma ekranındaki video kamera simgesine tıklayarak tedarikçi ile video görüşme başlatabilirsiniz. Bu özellik Gold ve Verified üyelere sunulmaktadır. Fabrika turları ve ürün incelemeleri için idealdir.' },
+      ],
+
+      // ── Sipariş Ver ──
+      placeOrderTradeAssurance_title: 'Ticaret Güvencesi Tanıtımı',
+      placeOrderTradeAssurance_desc: 'İSTOC Ticaret Güvencesi programı hakkında bilgi.',
+      placeOrderTradeAssurance_items: [
+        { q: 'Ticaret Güvencesi nedir?', a: 'Ticaret Güvencesi, İSTOC\'un alıcı ve satıcıları koruyan bir programdır. Sipariş edilen ürünler sözleşme şartlarına uygun teslim edilmezse, alıcıya tam veya kısmi geri ödeme yapılmasını garanti eder.' },
+        { q: 'Ticaret Güvencesi kapsamında neler korunur?', a: 'Program kapsamında <strong>ürün kalitesi</strong>, <strong>zamanında teslimat</strong>, <strong>sipariş miktarı doğruluğu</strong> ve <strong>ödeme güvenliği</strong> korunmaktadır. Sorun yaşandığında arabuluculuk hizmeti de sağlanır.' },
+        { q: 'Ticaret Güvencesi ücretsiz mi?', a: 'Evet, Ticaret Güvencesi temel kapsamı tüm İSTOC kullanıcıları için ücretsizdir. Gold ve Verified üyeliklerde genişletilmiş koruma limitleri ve öncelikli arabuluculuk hizmeti sunulur.' },
+      ],
+
+      placeOrderPlace_title: 'Sipariş Ver',
+      placeOrderPlace_desc: 'Sipariş verme adımları ve dikkat edilmesi gerekenler.',
+      placeOrderPlace_items: [
+        { q: 'Nasıl sipariş veririm?', a: 'Ürün detay sayfasında miktar ve varyant seçimini yaptıktan sonra "Sepete Ekle" veya "Hemen Al" butonuna tıklayın. Teslimat adresinizi girin, ödeme yönteminizi seçin ve siparişinizi onaylayın.' },
+        { q: 'Minimum sipariş miktarı (MOQ) nedir?', a: 'MOQ, tedarikçinin kabul ettiği en düşük sipariş miktarıdır. Bu miktar ürün detay sayfasında belirtilir. MOQ altında sipariş vermek istiyorsanız tedarikçi ile mesaj yoluyla görüşebilirsiniz.' },
+        { q: 'Sipariş verirken hangi bilgileri kontrol etmeliyim?', a: 'Sipariş vermeden önce <strong>ürün spesifikasyonlarını</strong>, <strong>fiyatı</strong>, <strong>kargo ücretini</strong>, <strong>tahmini teslimat süresini</strong>, <strong>ödeme koşullarını</strong> ve <strong>iade politikasını</strong> dikkatlice kontrol edin.' },
+      ],
+
+      placeOrderConfirm_title: 'Siparişi Onayla',
+      placeOrderConfirm_desc: 'Sipariş onaylama süreci ve kontrol noktaları.',
+      placeOrderConfirm_items: [
+        { q: 'Siparişimi nasıl onaylarım?', a: 'Sipariş özeti ekranında tüm detayları kontrol ettikten sonra "Siparişi Onayla" butonuna tıklayın. Ödeme işlemi tamamlandığında sipariş onayı e-posta ve uygulama bildirimi olarak gönderilir.' },
+        { q: 'Sipariş onayından sonra değişiklik yapabilir miyim?', a: 'Sipariş henüz tedarikçi tarafından kabul edilmemişse miktar, renk veya boyut gibi değişiklikler yapabilirsiniz. Kabul edildikten sonra değişiklik için tedarikçi ile doğrudan iletişime geçmeniz gerekir.' },
+        { q: 'Sipariş onay e-postası gelmedi, ne yapmalıyım?', a: 'Öncelikle spam klasörünüzü kontrol edin. Siparişinizi "Siparişlerim" sayfasından görüntüleyebilirsiniz. E-posta gelmezse Hesap Ayarları > Bildirimler bölümünden e-posta bildirimlerinizin açık olduğundan emin olun.' },
+      ],
+
+      placeOrderManage_title: 'Sipariş Yönetimi',
+      placeOrderManage_desc: 'Siparişlerinizi takip etme ve yönetme.',
+      placeOrderManage_items: [
+        { q: 'Siparişlerimi nereden takip edebilirim?', a: '"Siparişlerim" sayfasından tüm aktif ve geçmiş siparişlerinizi görüntüleyebilirsiniz. Her siparişin durumu (Onay Bekliyor, Hazırlanıyor, Kargoda, Teslim Edildi) gerçek zamanlı olarak güncellenir.' },
+        { q: 'Siparişimi iptal edebilir miyim?', a: 'Sipariş henüz kargoya verilmemişse "Siparişlerim" sayfasından iptal talebinde bulunabilirsiniz. Tedarikçi onayından sonra ödemeniz iade edilir. Kargoya verildikten sonra iptal için iade süreci başlatmanız gerekir.' },
+        { q: 'Toplu sipariş nasıl yönetirim?', a: 'Birden fazla siparişi "Siparişlerim" sayfasında toplu seçim yaparak yönetebilirsiniz. Toplu olarak durum kontrolü, mesaj gönderme ve kargo takibi yapabilirsiniz.' },
+      ],
+
+      // ── Sipariş Ödemesi ──
+      paymentOrderPayment_title: 'Sipariş Ödemesi',
+      paymentOrderPayment_desc: 'Sipariş ödeme süreçleri ve güvenli ödeme.',
+      paymentOrderPayment_items: [
+        { q: 'Hangi ödeme yöntemleriyle ödeme yapabilirim?', a: 'İSTOC\'ta <strong>kredi kartı</strong>, <strong>banka kartı</strong>, <strong>havale/EFT</strong>, <strong>online bankacılık</strong> ve <strong>İSTOC Cüzdan</strong> ile ödeme yapabilirsiniz. Bazı tedarikçiler ayrıca LC (akreditif) ve T/T ödemelerini de kabul eder.' },
+        { q: 'Ödeme güvenliği nasıl sağlanır?', a: 'Tüm ödemeler 256-bit SSL şifreleme ile korunur. Ticaret Güvencesi kapsamında ödemeniz, ürün teslim alınana ve onaylanana kadar güvende tutulur. 3D Secure doğrulaması kredi kartı ödemelerinde zorunludur.' },
+        { q: 'Taksitli ödeme yapabilir miyim?', a: 'Evet, kredi kartı ile yapılan ödemelerde 3, 6, 9 ve 12 taksit seçenekleri mevcuttur. Taksit seçenekleri ve oranları bankanıza göre değişiklik gösterebilir.' },
+      ],
+
+      paymentReceipt_title: 'Ödeme Makbuzu',
+      paymentReceipt_desc: 'Ödeme makbuzu ve fatura bilgileri.',
+      paymentReceipt_items: [
+        { q: 'Ödeme makbuzumu nereden görüntüleyebilirim?', a: '"Siparişlerim" sayfasında ilgili siparişin detaylarına girerek ödeme makbuzunuzu PDF olarak indirebilirsiniz. Makbuz ayrıca kayıtlı e-posta adresinize de gönderilir.' },
+        { q: 'Fatura nasıl talep ederim?', a: 'Sipariş verirken fatura bilgilerinizi (şirket adı, vergi numarası, adres) girmeniz yeterlidir. E-fatura otomatik olarak düzenlenir ve "Belgelerim" bölümünden erişilebilir.' },
+        { q: 'Fatura bilgilerimi değiştirebilir miyim?', a: 'Fatura düzenlenmeden önce sipariş detaylarından fatura bilgilerinizi güncelleyebilirsiniz. Fatura düzenlendikten sonra değişiklik için müşteri hizmetleriyle iletişime geçmeniz gerekir.' },
+      ],
+
+      paymentFinancial_title: 'Finansal',
+      paymentFinancial_desc: 'Finansal hizmetler ve ticaret finansmanı.',
+      paymentFinancial_items: [
+        { q: 'İSTOC finansman hizmetleri nelerdir?', a: 'İSTOC, alıcılara ticaret finansmanı, kredi limiti ve vadeli ödeme seçenekleri sunar. Bu hizmetler anlaşmalı finans kuruluşları aracılığıyla sağlanır ve uygun koşullarda kullanılabilir.' },
+        { q: 'Kredi limiti nasıl başvururum?', a: 'Hesap sayfanızdan "Finansal Hizmetler" bölümüne giderek kredi limiti başvurusunda bulunabilirsiniz. Başvuru için şirket belgeleri ve finansal bilgiler gereklidir. Onay süreci genellikle <strong>3-5 iş günü</strong> sürer.' },
+        { q: 'Vadeli ödeme seçenekleri nelerdir?', a: 'Onaylanmış alıcılar 30, 60 veya 90 gün vadeli ödeme seçeneklerinden faydalanabilir. Vade süreleri ve limitler, kredi değerlendirmesine göre belirlenir.' },
+      ],
+
+      paymentPayment_title: 'Ödeme',
+      paymentPayment_desc: 'Genel ödeme bilgileri ve sorun çözme.',
+      paymentPayment_items: [
+        { q: 'Ödemem başarısız oldu, ne yapmalıyım?', a: 'Öncelikle kartınızın limitini ve geçerlilik süresini kontrol edin. 3D Secure doğrulamasını tamamladığınızdan emin olun. Sorun devam ederse farklı bir ödeme yöntemi deneyin veya bankanızla iletişime geçin.' },
+        { q: 'Çift çekim yapıldı, ne yapmalıyım?', a: 'Çift çekim durumunda hemen müşteri hizmetleriyle iletişime geçin. Ödeme ekranından çıkmadan sayfayı yenilemek çift çekime neden olabilir. Fazla çekim <strong>5-10 iş günü</strong> içinde otomatik olarak iade edilir.' },
+        { q: 'Döviz kuru nasıl hesaplanır?', a: 'İSTOC\'ta fiyatlar varsayılan olarak Türk Lirası cinsinden gösterilir. Döviz bazlı ödemelerde güncel kur, ödeme anında banka tarafından uygulanır. Kur farkından kaynaklanabilecek tutarlar bilgilendirme amaçlıdır.' },
+      ],
+
+      paymentTypes_title: 'Ödeme Türleri',
+      paymentTypes_desc: 'Desteklenen ödeme türleri ve detayları.',
+      paymentTypes_items: [
+        { q: 'Hangi ödeme türleri destekleniyor?', a: 'İSTOC\'ta Visa, Mastercard, American Express kredi/banka kartları, banka havalesi/EFT, online bankacılık, İSTOC Cüzdan ve uluslararası siparişlerde LC (Akreditif), T/T (Telegrafik Transfer) gibi ödeme türleri desteklenmektedir.' },
+        { q: 'İSTOC Cüzdan nedir?', a: 'İSTOC Cüzdan, platform içi dijital cüzdan sistemidir. Bakiye yükleyerek hızlı ve komisyonsuz ödeme yapabilirsiniz. İadeler de cüzdana anında yansır. Cüzdan bakiyesini istediğiniz zaman banka hesabınıza çekebilirsiniz.' },
+        { q: 'LC (Akreditif) ödeme nasıl çalışır?', a: 'LC ödeme, alıcının bankasının satıcıya ödemeyi garanti ettiği bir uluslararası ödeme yöntemidir. Genellikle büyük siparişlerde tercih edilir. LC açılışı için bankanızla iletişime geçmeniz gerekir.' },
+      ],
+
+      // ── Vergi Yönetimi ──
+      taxSubmitInfo_title: 'Vergi Bilgisi Gönder',
+      taxSubmitInfo_desc: 'Vergi bilgilerinizi sisteme kaydetme ve güncelleme.',
+      taxSubmitInfo_items: [
+        { q: 'Vergi bilgilerimi nasıl kayıt ederim?', a: 'Hesap Ayarları > Vergi Bilgileri bölümünden vergi kimlik numaranızı, vergi dairenizi ve şirket bilgilerinizi girebilirsiniz. Bu bilgiler fatura düzenlenmesi için gereklidir.' },
+        { q: 'Birden fazla vergi bilgisi ekleyebilir miyim?', a: 'Evet, farklı şirketler veya şubeler için birden fazla vergi bilgisi ekleyebilirsiniz. Sipariş verirken hangi vergi bilgisinin kullanılacağını seçebilirsiniz.' },
+        { q: 'Vergi bilgilerimi ne zaman güncellemeliyim?', a: 'Şirket unvanı, vergi numarası veya adres değişikliklerinde vergi bilgilerinizi hemen güncellemeniz önerilir. Güncel olmayan bilgiler fatura sorunlarına neden olabilir.' },
+      ],
+
+      taxTypes_title: 'Vergi Türleri',
+      taxTypes_desc: 'İSTOC işlemlerinde uygulanan vergi türleri.',
+      taxTypes_items: [
+        { q: 'İSTOC\'ta hangi vergiler uygulanır?', a: 'İSTOC işlemlerinde <strong>KDV (Katma Değer Vergisi)</strong>, ithalat işlemlerinde <strong>gümrük vergisi</strong> ve bazı ürün gruplarında <strong>ÖTV (Özel Tüketim Vergisi)</strong> uygulanabilir.' },
+        { q: 'KDV oranları nedir?', a: 'KDV oranları ürün kategorisine göre değişir. Genel oran %20, indirimli oran %10 ve süper indirimli oran %1\'dir. Ürün detay sayfasında KDV dahil ve hariç fiyatlar gösterilir.' },
+        { q: 'KDV iadesi alabilir miyim?', a: 'İhracat işlemlerinde KDV iadesi alınabilir. KDV iade süreçleri vergi dairesi üzerinden yürütülür. İSTOC, gerekli belgeleri (fatura, gümrük beyannamesi vb.) dijital olarak sunar.' },
+      ],
+
+      taxInvoice_title: 'Vergi Faturası',
+      taxInvoice_desc: 'Vergi faturası düzenleme ve görüntüleme.',
+      taxInvoice_items: [
+        { q: 'Vergi faturası nasıl düzenlenir?', a: 'Sipariş tamamlandığında vergi faturası otomatik olarak e-fatura formatında düzenlenir. Fatura, kayıtlı vergi bilgilerinize göre oluşturulur ve "Belgelerim" bölümünden erişilebilir.' },
+        { q: 'Faturamda hata var, nasıl düzeltirim?', a: 'Faturadaki hatalar için müşteri hizmetleriyle iletişime geçin. Gerekli durumlarda iptal faturası düzenlenip yeni fatura oluşturulur. Fatura düzeltme işlemi <strong>3-5 iş günü</strong> sürebilir.' },
+        { q: 'Proforma fatura alabilir miyim?', a: 'Evet, sipariş vermeden önce proforma fatura talep edebilirsiniz. Tedarikçiye mesaj göndererek veya ürün detay sayfasından proforma fatura isteğinizi iletebilirsiniz.' },
+      ],
+
+      taxVerifyInfo_title: 'Vergi Bilgisini Doğrula',
+      taxVerifyInfo_desc: 'Vergi bilgilerinin doğrulama süreci.',
+      taxVerifyInfo_items: [
+        { q: 'Vergi bilgileri nasıl doğrulanır?', a: 'Girdiğiniz vergi bilgileri, GİB (Gelir İdaresi Başkanlığı) veritabanı ile otomatik olarak doğrulanır. Doğrulama işlemi birkaç dakika içinde tamamlanır ve sonuç hesabınızda görüntülenir.' },
+        { q: 'Vergi bilgisi doğrulaması başarısız oldu, ne yapmalıyım?', a: 'Vergi numaranızı ve şirket unvanınızı doğru girdiğinizden emin olun. Bilgiler GİB kayıtları ile eşleşmelidir. Sorun devam ederse vergi levhanızın güncel olduğunu kontrol edin veya müşteri hizmetleriyle iletişime geçin.' },
+        { q: 'Yabancı şirketler vergi doğrulaması yapabilir mi?', a: 'Evet, yabancı şirketler kendi ülkelerindeki vergi kayıt belgelerini yükleyerek doğrulama yapabilir. Belge incelemesi manuel olarak yapılır ve <strong>2-3 iş günü</strong> sürebilir.' },
+      ],
+
+      taxOrderManage_title: 'Vergi Sipariş Yönetimi',
+      taxOrderManage_desc: 'Vergi açısından sipariş yönetimi.',
+      taxOrderManage_items: [
+        { q: 'Siparişlerimde vergi bilgilerini nasıl değiştiririm?', a: 'Sipariş onaylanmadan önce "Sipariş Detayları" bölümünden fatura/vergi bilgilerinizi değiştirebilirsiniz. Onaylanan siparişlerde değişiklik için müşteri hizmetleriyle iletişime geçin.' },
+        { q: 'Vergisiz sipariş verebilir miyim?', a: 'Serbest bölge işlemleri ve bazı özel ticaret anlaşmaları kapsamında vergisiz sipariş verilebilir. Bu durumlar için gerekli belgeleri sipariş sırasında yüklemeniz gerekir.' },
+        { q: 'Toplu siparişlerde vergi hesaplaması nasıl yapılır?', a: 'Toplu siparişlerde vergi, toplam sipariş tutarı üzerinden hesaplanır. Farklı KDV oranlarına tabi ürünler ayrı ayrı hesaplanarak toplam vergi tutarı belirlenir.' },
+      ],
+
+      taxRefund_title: 'Vergi İadesi',
+      taxRefund_desc: 'Vergi iadesi süreçleri ve koşulları.',
+      taxRefund_items: [
+        { q: 'Vergi iadesi nasıl talep ederim?', a: 'İhracat işlemlerinde vergi iadesi için "Belgelerim" bölümünden gerekli belgeleri indirip vergi dairenize başvurabilirsiniz. İSTOC, gümrük beyannamesi ve fatura gibi belgeleri dijital olarak sunar.' },
+        { q: 'Vergi iadesi ne kadar sürede tamamlanır?', a: 'Vergi iadesi süreci vergi dairesi tarafından yürütülür ve genellikle <strong>30-90 gün</strong> sürer. İSTOC tarafındaki belge hazırlığı ise 3-5 iş günü içinde tamamlanır.' },
+        { q: 'KDV iadesi için hangi belgeler gerekli?', a: 'KDV iadesi için <strong>gümrük beyannamesi</strong>, <strong>satış faturası</strong>, <strong>ödeme belgesi</strong> ve <strong>taşıma belgesi</strong> gereklidir. Tüm belgeler İSTOC platform üzerinden dijital olarak temin edilebilir.' },
+      ],
+
+      // ── Kargo ──
+      shippingShipping_title: 'Kargo',
+      shippingShipping_desc: 'Kargo seçenekleri ve teslimat süreçleri.',
+      shippingShipping_items: [
+        { q: 'Hangi kargo seçenekleri mevcut?', a: 'İSTOC\'ta <strong>standart kargo</strong>, <strong>hızlı kargo</strong>, <strong>ekspres kargo</strong> ve <strong>deniz yolu</strong> gibi farklı teslimat seçenekleri mevcuttur. Seçenekler ürün boyutu, ağırlığı ve teslimat adresine göre değişir.' },
+        { q: 'Kargo ücreti nasıl hesaplanır?', a: 'Kargo ücreti; ürün ağırlığı, boyutları, teslimat adresi ve seçilen kargo yöntemine göre otomatik hesaplanır. Sipariş özeti ekranında kesin kargo ücreti gösterilir. Bazı tedarikçiler belirli tutarın üzerindeki siparişlerde ücretsiz kargo sunar.' },
+        { q: 'Kargo takibi nasıl yapılır?', a: '"Siparişlerim" sayfasından kargo takip numaranızı görebilir ve kargonuzun anlık konumunu izleyebilirsiniz. Kargo durumu değiştiğinde otomatik bildirim alırsınız.' },
+      ],
+
+      shippingLogistics_title: 'İSTOC Lojistik Hizmetleri',
+      shippingLogistics_desc: 'İSTOC\'un entegre lojistik çözümleri.',
+      shippingLogistics_items: [
+        { q: 'İSTOC Lojistik nedir?', a: 'İSTOC Lojistik, platformun kendi entegre kargo ve lojistik çözümüdür. Kapıdan kapıya teslimat, depolama, gümrükleme ve son mil teslimat hizmetlerini tek bir çatı altında sunar.' },
+        { q: 'İSTOC Lojistik\'in avantajları nelerdir?', a: 'Rekabetçi fiyatlar, uçtan uca takip, gümrük işlemleri desteği, sigorta kapsamı ve öncelikli müşteri desteği gibi avantajlar sunar. Ayrıca Ticaret Güvencesi ile tam entegrasyon sağlar.' },
+        { q: 'İSTOC Lojistik hangi ülkelere teslimat yapar?', a: 'İSTOC Lojistik, <strong>45+ ülkeye</strong> teslimat hizmeti sunmaktadır. Teslimat yapılan ülkeler ve tahmini süreleri sipariş sırasında görüntüleyebilirsiniz.' },
+      ],
+
+      shippingMaersk_title: 'MSK Kargo Hizmetleri (Maersk)',
+      shippingMaersk_desc: 'Maersk deniz yolu kargo hizmetleri.',
+      shippingMaersk_items: [
+        { q: 'Maersk kargo hizmeti nedir?', a: 'Maersk, İSTOC\'un anlaşmalı deniz yolu kargo ortağıdır. Konteyner bazlı uluslararası kargo hizmeti sunar. Özellikle büyük hacimli ve ağır yükler için ekonomik bir seçenektir.' },
+        { q: 'Maersk ile kargo ne kadar sürede ulaşır?', a: 'Teslimat süresi rota ve limanlara göre değişir. Avrupa içi gönderilerde <strong>5-10 gün</strong>, Uzak Doğu rotalarında <strong>20-35 gün</strong> ve Amerika rotalarında <strong>15-25 gün</strong> sürebilir.' },
+        { q: 'Maersk kargo takibi nasıl yapılır?', a: 'İSTOC platform üzerinden konteyner numaranız ile gerçek zamanlı kargo takibi yapabilirsiniz. Gemi pozisyonu, tahmini varış tarihi ve liman bilgileri görüntülenir.' },
+      ],
+
+      shippingImportFees_title: 'İthalat Ücretleri',
+      shippingImportFees_desc: 'İthalat gümrük vergileri ve ek ücretler.',
+      shippingImportFees_items: [
+        { q: 'İthalat ücretleri nelerdir?', a: 'İthalat ücretleri; <strong>gümrük vergisi</strong>, <strong>KDV</strong>, <strong>anti-damping vergisi</strong> (varsa), <strong>gümrük müşaviri ücreti</strong> ve <strong>liman hizmet bedeli</strong> gibi kalemlerden oluşabilir.' },
+        { q: 'İthalat ücretlerini önceden hesaplayabilir miyim?', a: 'Evet, İSTOC\'un ithalat ücreti hesaplama aracını kullanarak tahmini maliyetleri önceden görebilirsiniz. Ürün kategorisi, HS kodu, menşei ve hedef ülke bilgilerini girerek hesaplama yapılır.' },
+        { q: 'Gümrük vergisinden muaf ürünler var mı?', a: 'Bazı ürün kategorileri serbest ticaret anlaşmaları kapsamında gümrük vergisinden muaf olabilir. Muafiyet durumu menşei ülke ve ürün kategorisine göre değişir. Detaylı bilgi için gümrük müşavirinize danışmanızı önerilir.' },
+      ],
+
+      // ── Sipariş Alımı ──
+      receiptDelivery_title: 'Sipariş Teslimatı',
+      receiptDelivery_desc: 'Sipariş teslimat süreci ve kontroller.',
+      receiptDelivery_items: [
+        { q: 'Siparişim ne zaman teslim edilir?', a: 'Tahmini teslimat süresi sipariş detaylarınızda belirtilir. Süre; üretim süresi, kargo yöntemi ve teslimat adresine göre değişir. Kargo takip numaranız ile anlık durum kontrolü yapabilirsiniz.' },
+        { q: 'Teslimat sırasında nelere dikkat etmeliyim?', a: 'Teslimat sırasında <strong>paket bütünlüğünü</strong>, <strong>ürün miktarını</strong> ve <strong>görsel durumu</strong> kontrol edin. Hasarlı veya eksik ürün varsa teslimat görevlisi huzurunda tutanak tutun ve 24 saat içinde İSTOC\'a bildirin.' },
+        { q: 'Teslimat adresimi değiştirebilir miyim?', a: 'Sipariş henüz kargoya verilmemişse "Siparişlerim" sayfasından teslimat adresini değiştirebilirsiniz. Kargoya verildikten sonra kargo firmasıyla iletişime geçerek adres yönlendirmesi talep edebilirsiniz.' },
+      ],
+
+      receiptCompletion_title: 'Sipariş Tamamlanma',
+      receiptCompletion_desc: 'Sipariş tamamlama onayı ve sonrası.',
+      receiptCompletion_items: [
+        { q: 'Sipariş tamamlanma onayı nedir?', a: 'Ürünü teslim aldıktan ve kontrol ettikten sonra "Siparişi Tamamla" butonuna tıklayarak siparişi onaylarsınız. Bu onay ile ödeme tedarikçiye serbest bırakılır. Onay vermezseniz 15 gün sonra otomatik olarak tamamlanır.' },
+        { q: 'Tamamlanma onayı vermeden iade yapabilir miyim?', a: 'Evet, ürünü teslim aldığınızda sorun varsa tamamlanma onayı vermeden "İade/Anlaşmazlık Başlat" seçeneğini kullanabilirsiniz. Bu durumda ödeme askıda kalır ve sorun çözülene kadar tedarikçiye aktarılmaz.' },
+        { q: 'Sipariş tamamlandıktan sonra değerlendirme yapabilir miyim?', a: 'Evet, sipariş tamamlandıktan sonra ürün kalitesi, teslimat süresi ve tedarikçi iletişimi hakkında değerlendirme yapabilirsiniz. Değerlendirmeleriniz diğer alıcılara yardımcı olur.' },
+      ],
+
+      // ── Denetim & Üretim İzleme ──
+      inspectionServices_title: 'Denetim Hizmetleri',
+      inspectionServices_desc: 'Ürün kalite denetim hizmetleri.',
+      inspectionServices_items: [
+        { q: 'Denetim hizmeti nedir?', a: 'İSTOC Denetim Hizmeti, bağımsız denetçiler tarafından ürünlerinizin kalite kontrolünü, üretim standartlarına uygunluğunu ve sipariş spesifikasyonlarını yerinde denetleyen profesyonel bir hizmettir.' },
+        { q: 'Hangi denetim türleri sunulmaktadır?', a: '<strong>Üretim öncesi denetim</strong> (hammadde kontrolü), <strong>üretim sırası denetim</strong> (süreç kontrolü), <strong>sevk öncesi denetim</strong> (son ürün kontrolü) ve <strong>konteyner yükleme denetimi</strong> hizmetleri sunulmaktadır.' },
+        { q: 'Denetim hizmeti nasıl talep edilir?', a: 'Sipariş detay sayfasından "Denetim Talep Et" butonuna tıklayarak veya müşteri hizmetleri üzerinden denetim talebinde bulunabilirsiniz. Denetim ücreti denetim türü ve konumuna göre belirlenir.' },
+      ],
+
+      inspectionMonitoring_title: 'Üretim İzleme Hizmetleri',
+      inspectionMonitoring_desc: 'Üretim sürecini uzaktan izleme.',
+      inspectionMonitoring_items: [
+        { q: 'Üretim izleme hizmeti nedir?', a: 'Üretim izleme, siparişinizin üretim sürecini başından sonuna kadar takip etmenizi sağlayan bir hizmettir. Düzenli fotoğraf/video güncellemeleri, ilerleme raporları ve kalite kontrol noktaları ile üretimi uzaktan izleyebilirsiniz.' },
+        { q: 'Üretim izleme ücretli mi?', a: 'Temel üretim güncellemeleri (fotoğraf ve ilerleme raporu) ücretsizdir. Detaylı video izleme, canlı fabrika bağlantısı ve özel denetçi atama gibi premium hizmetler ek ücrete tabidir.' },
+        { q: 'Üretimde sorun tespit edilirse ne olur?', a: 'Üretim izleme sırasında kalite sorunu veya sipariş spesifikasyonlarına uyumsuzluk tespit edilirse, hemen bilgilendirilirsiniz. Sorunun çözümü için tedarikçi ile koordinasyon sağlanır ve gerekirse Ticaret Güvencesi devreye girer.' },
+      ],
+
+      // ── Satış Sonrası Servis ──
+      afterSalesDispute_title: 'Sipariş Anlaşmazlığı',
+      afterSalesDispute_desc: 'Sipariş anlaşmazlıkları ve çözüm yolları.',
+      afterSalesDispute_items: [
+        { q: 'Sipariş anlaşmazlığı nasıl açılır?', a: '"Siparişlerim" sayfasından ilgili siparişi seçip "Anlaşmazlık Başlat" butonuna tıklayın. Sorununuzu açıklayın, kanıt (fotoğraf, video) ekleyin ve istediğiniz çözümü (iade, kısmi geri ödeme, yeniden gönderim) belirtin.' },
+        { q: 'Anlaşmazlık süreci ne kadar sürer?', a: 'Anlaşmazlık süreci genellikle <strong>7-15 iş günü</strong> içinde çözümlenir. Öncelikle taraflar arasında uzlaşma aranır. Uzlaşma sağlanamazsa İSTOC arabuluculuk ekibi devreye girer.' },
+        { q: 'Anlaşmazlık süresince ödemem ne olur?', a: 'Anlaşmazlık süresince ödemeniz güvenli şekilde askıda tutulur ve tedarikçiye aktarılmaz. Çözüm lehine sonuçlanırsa ödemeniz iade edilir.' },
+      ],
+
+      afterSalesReturn_title: 'Sipariş İadesi',
+      afterSalesReturn_desc: 'Ürün iade koşulları ve süreci.',
+      afterSalesReturn_items: [
+        { q: 'Ürün iadesi nasıl yapılır?', a: '"Siparişlerim" sayfasından "İade Talebi" oluşturun. İade nedenini seçin, gerekirse fotoğraf ekleyin. Tedarikçi onayından sonra iade kargo bilgileri ve talimatlar gönderilir.' },
+        { q: 'İade koşulları nelerdir?', a: 'Ürün, teslim alındığı tarihten itibaren <strong>15 gün</strong> içinde iade edilebilir. Ürünün kullanılmamış, orijinal ambalajında ve hasarsız olması gerekir. Özel üretim ve kişiselleştirilmiş ürünler iade kapsamı dışındadır.' },
+        { q: 'İade kargo ücreti kime aittir?', a: 'Ürün hatalıysa veya sipariş spesifikasyonlarına uymuyorsa kargo ücreti tedarikçiye aittir. Müşteri kaynaklı iadelerde (fikir değişikliği vb.) kargo ücreti alıcıya aittir.' },
+      ],
+
+      afterSalesDisputeProcess_title: 'Anlaşmazlık Süreci',
+      afterSalesDisputeProcess_desc: 'Anlaşmazlık çözüm sürecinin adımları.',
+      afterSalesDisputeProcess_items: [
+        { q: 'Anlaşmazlık çözüm süreci nasıl işler?', a: 'Süreç şu adımlardan oluşur: <strong>1)</strong> Anlaşmazlık başlatma, <strong>2)</strong> Tedarikçi yanıtı (3 gün), <strong>3)</strong> Taraflar arası müzakere (5 gün), <strong>4)</strong> İSTOC arabuluculuğu (gerekirse), <strong>5)</strong> Karar ve uygulama.' },
+        { q: 'Arabuluculuk kararına itiraz edebilir miyim?', a: 'Evet, arabuluculuk kararına 7 gün içinde itiraz edebilirsiniz. İtiraz, üst düzey bir arabuluculuk komitesi tarafından incelenir. Komitenin kararı nihaidir.' },
+        { q: 'Kanıt olarak neleri sunabilirim?', a: 'Fotoğraf, video, yazışma kayıtları, denetim raporları, kargo belgeleri ve sözleşme/sipariş detayları kanıt olarak sunulabilir. Kanıtlar ne kadar detaylı olursa çözüm o kadar hızlı ve adil olur.' },
+      ],
+
+      afterSalesGoodsIssue_title: 'Mal Sorunu',
+      afterSalesGoodsIssue_desc: 'Teslim alınan mallarda karşılaşılan sorunlar.',
+      afterSalesGoodsIssue_items: [
+        { q: 'Yanlış ürün gönderildi, ne yapmalıyım?', a: 'Hemen fotoğraf çekin ve "Siparişlerim" sayfasından anlaşmazlık başlatın. Yanlış ürün gönderimi Ticaret Güvencesi kapsamındadır. Tedarikçi doğru ürünü yeniden göndermekle veya tam iade yapmakla yükümlüdür.' },
+        { q: 'Ürün hasarlı geldi, ne yapmalıyım?', a: 'Teslimat anında hasarı belgelendirin (fotoğraf/video). 24 saat içinde İSTOC üzerinden bildirimde bulunun. Kargo sigortası kapsamında hasar tazminatı veya yeniden gönderim sağlanır.' },
+        { q: 'Ürün kalitesi beklentilerimi karşılamıyor, ne yapmalıyım?', a: 'Ürünü numune veya sipariş spesifikasyonları ile karşılaştırın. Farkları belgelendirerek anlaşmazlık başlatın. Kalite uyumsuzluğu Ticaret Güvencesi kapsamında değerlendirilir.' },
+      ],
+
+      afterSalesDisputeRules_title: 'Anlaşmazlık Kuralları',
+      afterSalesDisputeRules_desc: 'Anlaşmazlık çözümünde uygulanan kurallar.',
+      afterSalesDisputeRules_items: [
+        { q: 'Anlaşmazlık açma süresi ne kadardır?', a: 'Siparişin teslim alınmasından itibaren <strong>30 gün</strong> içinde anlaşmazlık açılabilir. Bu süre, sipariş otomatik tamamlanma süresinden önce işletilmelidir.' },
+        { q: 'Hangi konularda anlaşmazlık açılabilir?', a: 'Ürün kalitesi, miktar eksikliği, yanlış ürün, teslimat gecikmesi, açıklama uyumsuzluğu ve hasarlı ürün konularında anlaşmazlık açılabilir. Her anlaşmazlık türü için farklı kanıt gereksinimleri uygulanır.' },
+        { q: 'Anlaşmazlıkta tarafların yükümlülükleri nelerdir?', a: '<strong>Alıcı:</strong> kanıt sunmak, iletişime yanıt vermek. <strong>Satıcı:</strong> 3 gün içinde yanıt vermek, çözüm önerisi sunmak. Yanıt vermeyen taraf aleyhine karar verilebilir.' },
+      ],
+
+      afterSalesRefund_title: 'Geri Ödeme',
+      afterSalesRefund_desc: 'Geri ödeme süreçleri ve süreleri.',
+      afterSalesRefund_items: [
+        { q: 'Geri ödeme nasıl yapılır?', a: 'Anlaşmazlık veya iade sonucunda onaylanan geri ödemeler, orijinal ödeme yönteminize iade edilir. Kredi kartı ödemelerinde <strong>5-10 iş günü</strong>, banka havalelerinde <strong>3-5 iş günü</strong> içinde iade tamamlanır.' },
+        { q: 'Kısmi geri ödeme nedir?', a: 'Ürünün bir kısmı hatalıysa veya küçük bir kalite sorunu varsa, tam iade yerine kısmi geri ödeme yapılabilir. Kısmi iade tutarı, sorunun boyutuna göre taraflar arasında veya arabuluculuk ile belirlenir.' },
+        { q: 'Geri ödeme durumumu nasıl takip ederim?', a: '"Siparişlerim" > "İadeler" bölümünden geri ödeme durumunuzu takip edebilirsiniz. İade onaylandığında, işlendiğinde ve tamamlandığında bildirim alırsınız.' },
+      ],
+
+      // ── Sipariş Geri Bildirimi ──
+      feedbackManagement_title: 'Geri Bildirim Yönetimi',
+      feedbackManagement_desc: 'Sipariş değerlendirme ve geri bildirim sistemi.',
+      feedbackManagement_items: [
+        { q: 'Değerlendirme nasıl yapılır?', a: 'Sipariş tamamlandıktan sonra "Değerlendir" butonuna tıklayarak 1-5 yıldız puanlama ve yazılı yorum yapabilirsiniz. Ürün kalitesi, teslimat süresi ve tedarikçi iletişimi için ayrı puanlama yapılır.' },
+        { q: 'Değerlendirmemi düzenleyebilir veya silebilir miyim?', a: 'Değerlendirmenizi yayınlandıktan sonraki <strong>30 gün</strong> içinde düzenleyebilirsiniz. Silme işlemi için müşteri hizmetleriyle iletişime geçmeniz gerekir. Gerçeğe aykırı değerlendirmeler kaldırılabilir.' },
+        { q: 'Fotoğraflı değerlendirme nasıl yaparım?', a: 'Değerlendirme formunda "Fotoğraf Ekle" butonuna tıklayarak ürün fotoğraflarınızı yükleyebilirsiniz. Fotoğraflı değerlendirmeler diğer alıcılar için daha faydalıdır ve ekstra puan kazandırır.' },
+      ],
+
+      feedbackRules_title: 'Geri Bildirim Kuralları',
+      feedbackRules_desc: 'Değerlendirme ve geri bildirim politikaları.',
+      feedbackRules_items: [
+        { q: 'Hangi değerlendirmeler yasaktır?', a: 'Kişisel saldırı, hakaret, ırkçılık, reklam içerikli, gerçeğe aykırı ve rakip ürün tanıtımı yapan değerlendirmeler yasaktır. Bu tür değerlendirmeler tespit edildiğinde kaldırılır.' },
+        { q: 'Sahte değerlendirmeyi nasıl bildiririm?', a: 'Değerlendirmenin altındaki "Bildir" butonuna tıklayarak sahte veya uygunsuz değerlendirmeleri bildirebilirsiniz. Ekibimiz bildirimi <strong>48 saat</strong> içinde inceler.' },
+        { q: 'Değerlendirme puanım satıcı statümü etkiler mi?', a: 'Evet, satıcı olarak aldığınız değerlendirme puanları arama sıralamanızı, Verified statünüzü ve platform üzerindeki görünürlüğünüzü doğrudan etkiler.' },
+      ],
+
+      // ── Güvenlik & İSTOC Kuralları ──
+      securityFraud_title: 'Dolandırıcılık/Sahte E-posta',
+      securityFraud_desc: 'Dolandırıcılık ve sahte e-postaları tanıma ve bildirme.',
+      securityFraud_items: [
+        { q: 'Dolandırıcılık girişimini nasıl tanırım?', a: 'Platform dışında ödeme yapmanızı isteyen, olağanüstü düşük fiyat sunan, kişisel bilgi isteyen ve acil ödeme baskısı yapan mesajlara dikkat edin. İSTOC hiçbir zaman platform dışı ödeme talep etmez.' },
+        { q: 'Sahte e-posta aldım, ne yapmalıyım?', a: 'İSTOC\'tan geldiğini iddia eden şüpheli e-postalar alırsanız, e-posta adresinin @istoc.com uzantılı olduğunu doğrulayın. Sahte e-postaları <strong>security@istoc.com</strong> adresine yönlendirerek bildirin. E-postadaki linklere tıklamayın.' },
+        { q: 'Hesabım ele geçirildi, ne yapmalıyım?', a: 'Hemen şifrenizi değiştirin ve iki faktörlü doğrulamayı etkinleştirin. Yetkisiz işlemler varsa müşteri hizmetlerini arayın. Hesabınız geçici olarak dondurulabilir ve güvenlik incelemesi yapılabilir.' },
+      ],
+
+      securityIpr_title: 'IPR Şikayeti',
+      securityIpr_desc: 'Fikri mülkiyet hakları ihlali bildirimi.',
+      securityIpr_items: [
+        { q: 'IPR (Fikri Mülkiyet Hakları) şikayeti nasıl yapılır?', a: '"Güvenlik Merkezi" > "IPR Şikayet" bölümünden fikri mülkiyet hakkı ihlali bildiriminde bulunabilirsiniz. Marka tescil belgesi, patent belgesi veya telif hakkı kanıtını yüklemeniz gerekir.' },
+        { q: 'IPR şikayeti sonrası ne olur?', a: 'Şikayetiniz <strong>3-5 iş günü</strong> içinde incelenir. İhlal tespit edilirse ilgili ürün listesi kaldırılır ve satıcıya uyarı verilir. Tekrarlayan ihlallerde satıcı hesabı askıya alınabilir.' },
+        { q: 'Yanlış IPR şikayeti yapılırsa ne olur?', a: 'İtham edilen satıcı itiraz hakkına sahiptir. Yeterli kanıt sunulursa ürün yeniden listelenir. Kasıtlı olarak yanlış IPR şikayeti yapan kullanıcılara yaptırım uygulanabilir.' },
+      ],
+
+      // ── Diğerleri ──
+      othersCustomerService_title: 'Müşteri Hizmetleri Operasyonları',
+      othersCustomerService_desc: 'Müşteri hizmetlerine ulaşma yolları.',
+      othersCustomerService_items: [
+        { q: 'Müşteri hizmetlerine nasıl ulaşabilirim?', a: 'Müşteri hizmetlerine <strong>canlı sohbet</strong>, <strong>telefon</strong> (0800 123 45 67), <strong>e-posta</strong> (support@istoc.com) ve <strong>destek talebi</strong> oluşturarak ulaşabilirsiniz. Canlı sohbet 7/24 hizmet vermektedir.' },
+        { q: 'Müşteri hizmetleri hangi dillerde destek veriyor?', a: 'İSTOC müşteri hizmetleri Türkçe ve İngilizce dillerinde destek sunmaktadır. Diğer diller için çeviri desteği mevcuttur.' },
+        { q: 'Destek talebimin yanıt süresi ne kadardır?', a: 'Canlı sohbette ortalama <strong>2-5 dakika</strong>, e-posta ile <strong>12-24 saat</strong> ve destek talebi ile <strong>24-48 saat</strong> içinde yanıt alabilirsiniz. Acil durumlar için telefon hattını kullanmanızı öneriyoruz.' },
+      ],
+
+      othersUnclearConcern_title: 'Belirsiz Endişe',
+      othersUnclearConcern_desc: 'Kategorize edilemeyen sorunlar için yardım.',
+      othersUnclearConcern_items: [
+        { q: 'Sorunumu hangi kategoriye bildireceğimi bilmiyorum, ne yapmalıyım?', a: 'Endişenizi genel destek kanalından iletebilirsiniz. Müşteri temsilcimiz sorununuzu analiz edip doğru ekibe yönlendirecektir. Canlı sohbet üzerinden hızlıca yardım alabilirsiniz.' },
+        { q: 'Geri bildirim veya öneri göndermek istiyorum, nasıl yapabilirim?', a: 'Sayfanın altındaki "Geri Bildirim" bağlantısından veya Hesap > Geri Bildirim bölümünden önerilerinizi iletebilirsiniz. Her geri bildirim değerlendirilerek platform iyileştirmelerine katkı sağlar.' },
+        { q: 'Platform hatası bildirmek istiyorum, nasıl yapabilirim?', a: 'Teknik hataları "Destek Talebi Oluştur" > "Teknik Sorun" kategorisinden bildirebilirsiniz. Hata ekran görüntüsü ve hangi cihaz/tarayıcıda yaşandığı bilgisini eklemeniz çözüm süresini hızlandırır.' },
+      ],
+
+      othersOfflineService_title: 'Çevrimdışı Hizmet',
+      othersOfflineService_desc: 'İSTOC\'un fiziksel hizmet noktaları.',
+      othersOfflineService_items: [
+        { q: 'İSTOC\'un fiziksel ofisleri var mı?', a: 'Evet, İSTOC\'un İstanbul, Ankara ve İzmir\'de ofisleri bulunmaktadır. Ofislerimizde yüz yüze görüşme, sözleşme imzalama ve eğitim hizmetleri sunulmaktadır.' },
+        { q: 'Fuar ve etkinliklere katılıyor musunuz?', a: 'İSTOC, yıl boyunca çeşitli sektörel fuarlara ve ticaret etkinliklerine katılmaktadır. Yaklaşan etkinlikler ana sayfadaki "Etkinlikler" bölümünden takip edilebilir.' },
+        { q: 'Yüz yüze randevu nasıl alırım?', a: 'İletişim sayfamızdan veya müşteri hizmetleri üzerinden yüz yüze görüşme randevusu alabilirsiniz. Randevular genellikle <strong>2-3 iş günü</strong> öncesinden planlanmalıdır.' },
+      ],
+
+      // ── Promosyonlar & Alışveriş Rehberi ──
+      promotionsShoppingGuide_title: 'Alışveriş Rehberi',
+      promotionsShoppingGuide_desc: 'İSTOC\'ta etkili alışveriş yapma rehberi.',
+      promotionsShoppingGuide_items: [
+        { q: 'İSTOC\'ta ilk alışverişimi nasıl yapmalıyım?', a: 'İlk olarak ihtiyacınız olan ürünü arayın, birkaç tedarikçiyi karşılaştırın, numune isteyin ve memnun kaldıktan sonra sipariş verin. İlk siparişte küçük miktarlarla başlamanızı öneriyoruz.' },
+        { q: 'En iyi fiyatı nasıl bulurum?', a: 'Birden fazla tedarikçiden teklif alın, RFQ gönderin ve miktar bazlı indirim müzakeresi yapın. İSTOC AI fiyat analizi aracı da piyasa değerini değerlendirmenize yardımcı olur.' },
+        { q: 'Güvenli alışveriş için ipuçları nelerdir?', a: 'Ticaret Güvencesi kapsamındaki tedarikçileri tercih edin, numune almadan büyük sipariş vermeyin, platform dışı ödeme yapmayın ve tedarikçi değerlendirmelerini mutlaka okuyun.' },
+      ],
+
+      promotionsScenario_title: 'Senaryolu Promosyon',
+      promotionsScenario_desc: 'Senaryo bazlı promosyon kampanyaları.',
+      promotionsScenario_items: [
+        { q: 'Senaryolu promosyon nedir?', a: 'Belirli koşullar sağlandığında otomatik olarak uygulanan indirimlerdir. Örneğin: "3 ürün al, 1 ürün bedava" veya "500 TL üzeri alışverişe %10 indirim" gibi senaryolar uygulanır.' },
+        { q: 'Aktif promosyonları nasıl görebilirim?', a: 'Ana sayfadaki "Kampanyalar" bölümünden veya ürün detay sayfalarındaki promosyon etiketlerinden aktif kampanyaları görebilirsiniz. Ayrıca e-posta bültenleri ile kampanyalardan haberdar olabilirsiniz.' },
+        { q: 'Promosyonlar birleştirilebilir mi?', a: 'Genellikle kampanyalar birleştirilemez. Her siparişe en avantajlı tek bir promosyon uygulanır. İstisnalar kampanya detaylarında belirtilir.' },
+      ],
+
+      promotionsSuper_title: 'Süper Promosyon',
+      promotionsSuper_desc: 'Büyük indirim kampanyaları ve özel fırsatlar.',
+      promotionsSuper_items: [
+        { q: 'Süper Promosyon etkinlikleri ne zaman yapılır?', a: 'Süper Promosyon etkinlikleri yılda birkaç kez düzenlenir: <strong>Bahar Festivali</strong>, <strong>Yaz İndirimleri</strong>, <strong>Kasım Kampanyası</strong> ve <strong>Yıl Sonu Fırsatları</strong> başlıca etkinliklerdir.' },
+        { q: 'Süper Promosyon\'a nasıl katılırım?', a: 'Etkinlik dönemlerinde ana sayfada özel kampanya alanı oluşturulur. E-posta bildirimleri açık olan kullanıcılar önceden bilgilendirilir. Stoklar sınırlı olduğundan erken harekete geçmenizi öneriyoruz.' },
+        { q: 'Flash Sale (Anlık İndirim) nedir?', a: 'Flash Sale, sınırlı süre ve sınırlı stokla sunulan çok avantajlı indirimlerdir. Genellikle 24 veya 48 saat sürer. Flash Sale ürünleri "Anlık Fırsatlar" bölümünden takip edilebilir.' },
+      ],
+
+      promotionsPayment_title: 'Ödeme Promosyonları',
+      promotionsPayment_desc: 'Ödeme yöntemine özel indirim ve kampanyalar.',
+      promotionsPayment_items: [
+        { q: 'Ödeme yöntemine özel indirimler var mı?', a: 'Evet, zaman zaman belirli banka kartlarına, İSTOC Cüzdan ile yapılan ödemelere veya banka havalelerine özel indirimler sunulmaktadır. Aktif ödeme promosyonları ödeme sayfasında gösterilir.' },
+        { q: 'İlk sipariş indirimi var mı?', a: 'Yeni kayıt olan kullanıcılar için genellikle ilk sipariş indirimi sunulmaktadır. İndirim tutarı ve koşulları dönemsel olarak değişebilir.' },
+        { q: 'Kupon kodu nasıl kullanılır?', a: 'Ödeme sayfasında "Kupon Kodu" alanına kodunuzu girin ve "Uygula" butonuna tıklayın. Kupon indirimi sipariş toplamından otomatik düşülür. Her kuponun kullanım koşulları ve geçerlilik süresi farklıdır.' },
+      ],
+
+      promotionsOtherIssues_title: 'Diğer Promosyon Sorunları',
+      promotionsOtherIssues_desc: 'Promosyon ve kampanyalarla ilgili genel sorunlar.',
+      promotionsOtherIssues_items: [
+        { q: 'Promosyon uygulanmadı, ne yapmalıyım?', a: 'Promosyonun geçerlilik süresini, minimum sipariş tutarını ve kapsam dışı ürünleri kontrol edin. Koşulları sağlamanıza rağmen uygulanmadıysa müşteri hizmetleriyle iletişime geçin.' },
+        { q: 'Kampanya ürünü iade edilirse indirim ne olur?', a: 'Kampanyalı ürün iade edildiğinde, indirimli tutar üzerinden geri ödeme yapılır. Eğer iade, kampanya koşulunu bozan bir durum oluşturursa (örn. minimum adet altına düşme) kalan ürünlere indirim uygulanmayabilir.' },
+        { q: 'Satıcı olarak kampanya nasıl oluştururum?', a: 'Satıcı panelinden "Promosyonlar" > "Yeni Kampanya Oluştur" bölümünden indirim türü, oran, süre ve kapsam belirleyerek kampanya oluşturabilirsiniz.' },
+      ],
+
+      // ── İSTOC Garantisi ──
+      guaranteedShipping_title: 'Garantili Kargo',
+      guaranteedShipping_desc: 'İSTOC kargo garantisi programı.',
+      guaranteedShipping_items: [
+        { q: 'Garantili Kargo nedir?', a: 'İSTOC Garantili Kargo, siparişinizin belirtilen sürede teslim edilmesini garanti eder. Gecikme durumunda kargo ücretinin tamamı veya bir kısmı iade edilir.' },
+        { q: 'Kargo gecikmesinde tazminat nasıl alırım?', a: 'Teslimat, garanti edilen süreden geç yapılırsa otomatik olarak tazminat hesaplanır ve İSTOC Cüzdan\'ınıza veya orijinal ödeme yönteminize iade edilir.' },
+        { q: 'Hangi kargo yöntemleri garantili?', a: 'İSTOC Lojistik ve anlaşmalı kargo firmalarıyla yapılan gönderilerde kargo garantisi geçerlidir. Tedarikçinin kendi kargo anlaşması ile gönderilen ürünlerde garanti kapsamı farklılık gösterebilir.' },
+      ],
+
+      guaranteedAfterSales_title: 'Garantili Satış Sonrası',
+      guaranteedAfterSales_desc: 'Satış sonrası garanti kapsamı.',
+      guaranteedAfterSales_items: [
+        { q: 'Garantili Satış Sonrası Servis nedir?', a: 'İSTOC\'un alıcılara sunduğu ek koruma programıdır. Ürün sorunlarında hızlandırılmış arabuluculuk, öncelikli müşteri desteği ve genişletilmiş iade süresi gibi avantajlar sunar.' },
+        { q: 'Bu garanti ne kadar süre geçerlidir?', a: 'Standart garanti süresi siparişin tamamlanmasından itibaren <strong>60 gün</strong>dır. Gold ve Verified üyelerde bu süre 90 güne çıkar.' },
+        { q: 'Garanti kapsamında olmayan durumlar nelerdir?', a: 'Kullanıcı hatası, normal aşınma, doğal afet zararları, yetkisiz modifikasyon ve sipariş spesifikasyonlarına uygun ürünlerdeki subjektif memnuniyetsizlik garanti kapsamı dışındadır.' },
+      ],
+
+      guaranteedPreSales_title: 'Garantili Ön Satış',
+      guaranteedPreSales_desc: 'Sipariş öncesi garanti ve koruma.',
+      guaranteedPreSales_items: [
+        { q: 'Garantili Ön Satış nedir?', a: 'Sipariş vermeden önce tedarikçi doğrulama, numune kalite güvencesi ve fiyat koruma gibi hizmetleri kapsayan bir programdır. Alıcıların doğru tedarikçiyi seçmesine yardımcı olur.' },
+        { q: 'Numune kalite güvencesi nasıl çalışır?', a: 'Garanti kapsamında gönderilen numuneler, nihai siparişle aynı kalitede olmalıdır. Numune ile nihai ürün arasında önemli fark tespit edilirse tam iade veya yeniden üretim garanti edilir.' },
+        { q: 'Fiyat koruma garantisi nedir?', a: 'Sipariş sonrası tedarikçinin tek taraflı olarak fiyat artırması durumunda, orijinal anlaşma fiyatı korunur. Bu koruma sipariş onayından sevkiyata kadar geçerlidir.' },
+      ],
+
+      guaranteedPlaceOrder_title: 'Garantili Sipariş Verme',
+      guaranteedPlaceOrder_desc: 'Güvenli sipariş verme garantileri.',
+      guaranteedPlaceOrder_items: [
+        { q: 'Garantili Sipariş nedir?', a: 'Ticaret Güvencesi kapsamında verilen siparişlerde ödemeniz, ürün teslim alınıp onaylanana kadar güvende tutulur. Sorun yaşandığında tam veya kısmi geri ödeme garanti edilir.' },
+        { q: 'Sipariş güvencesi için ek ücret var mı?', a: 'Hayır, Ticaret Güvencesi kapsamındaki sipariş koruması ücretsizdir. Tüm İSTOC kullanıcıları bu korumadan otomatik olarak yararlanır.' },
+        { q: 'Garantili sipariş limiti nedir?', a: 'Ücretsiz üyelikte sipariş koruma limiti <strong>50.000 TL</strong>, Gold üyelikte <strong>250.000 TL</strong> ve Verified üyelikte <strong>1.000.000 TL</strong>\'dir.' },
+      ],
+
+      guaranteedOverseasWarehouse_title: 'Denizaşırı Doğrulanmış Depo',
+      guaranteedOverseasWarehouse_desc: 'Yurt dışı doğrulanmış depo hizmetleri.',
+      guaranteedOverseasWarehouse_items: [
+        { q: 'Denizaşırı Doğrulanmış Depo nedir?', a: 'İSTOC\'un yurt dışındaki anlaşmalı ve denetlenmiş depo tesisleridir. Bu depolar üzerinden yapılan gönderilerde ürün kalitesi ve stok doğrulaması yapılmıştır. Daha hızlı teslimat ve yerel iade imkanı sunar.' },
+        { q: 'Hangi ülkelerde doğrulanmış depo var?', a: 'Şu anda <strong>Almanya</strong>, <strong>ABD</strong>, <strong>İngiltere</strong>, <strong>BAE</strong> ve <strong>Japonya</strong>\'da doğrulanmış depolarımız bulunmaktadır. Yeni lokasyonlar sürekli eklenmektedir.' },
+        { q: 'Doğrulanmış depodan sipariş avantajları nelerdir?', a: 'Hızlı teslimat (genellikle <strong>3-7 gün</strong>), düşük kargo ücreti, yerel iade kolaylığı, önceden kalite kontrolden geçmiş ürünler ve gümrük işlemi gerektirmeden teslimat avantajları sunar.' },
+      ],
+
+      // ── İSTOC Uygulama Ayarları ──
+      appSettingsLabel_title: 'İSTOC Uygulama Ayarları',
+      appSettingsLabel_desc: 'Mobil uygulama ayarları ve konfigürasyonu.',
+      appSettingsLabel_items: [
+        { q: 'İSTOC mobil uygulaması nereden indirilir?', a: 'İSTOC uygulaması <strong>App Store</strong> (iOS) ve <strong>Google Play Store</strong> (Android) üzerinden ücretsiz olarak indirilebilir. QR kodu ana sayfamızdan tarayarak da indirebilirsiniz.' },
+        { q: 'Uygulama bildirimleri nasıl ayarlanır?', a: 'Uygulama içinden Ayarlar > Bildirimler bölümünden push bildirimlerini yönetebilirsiniz. Sipariş güncellemeleri, mesajlar, kampanyalar ve güvenlik uyarıları için ayrı ayrı açma/kapama yapabilirsiniz.' },
+        { q: 'Uygulama dilini nasıl değiştiririm?', a: 'Uygulama Ayarları > Dil & Bölge bölümünden uygulamanın arayüz dilini değiştirebilirsiniz. Türkçe ve İngilizce seçenekleri mevcuttur.' },
+        { q: 'Uygulama çok yer kaplıyor, ne yapmalıyım?', a: 'Ayarlar > Depolama bölümünden önbelleği temizleyebilirsiniz. Ayrıca otomatik medya indirme ayarlarını kapatarak veri kullanımını azaltabilirsiniz.' },
+      ],
+
+      // ── Dil ve Yerelleştirme ──
+      localizationSettings_title: 'İSTOC Dil Ayarları',
+      localizationSettings_desc: 'Platform dil ve bölge ayarları.',
+      localizationSettings_items: [
+        { q: 'Platform dilini nasıl değiştiririm?', a: 'Sayfanın üst kısmındaki dil seçicisinden veya Hesap Ayarları > Dil & Bölge bölümünden platform dilini değiştirebilirsiniz. Değişiklik anında uygulanır.' },
+        { q: 'Hangi diller destekleniyor?', a: 'İSTOC şu anda <strong>Türkçe</strong> ve <strong>İngilizce</strong> dillerini desteklemektedir. Ek dil seçenekleri gelecekte eklenecektir.' },
+        { q: 'Para birimi ayarını nasıl değiştiririm?', a: 'Dil seçicisinin yanındaki para birimi seçicisinden tercih ettiğiniz para birimini seçebilirsiniz. Fiyatlar seçtiğiniz para birimine dönüştürülerek gösterilir. Döviz kurları günlük olarak güncellenir.' },
+        { q: 'Bölge ayarı ürün aramalarını etkiler mi?', a: 'Evet, bölge ayarı varsayılan olarak yerel tedarikçileri ve kargo seçeneklerini öncelikli gösterir. Ancak global arama yaparak tüm tedarikçilere de erişebilirsiniz.' },
+      ],
     },
     contactForm: {
       subjectOrder: 'Sipariş',

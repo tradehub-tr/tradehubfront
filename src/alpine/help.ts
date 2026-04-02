@@ -219,155 +219,155 @@ Alpine.data('faqPage', () => ({
       {
         id: 'intro', label: t('faq.intro'),
         subs: [
-          { label: t('faq.introDesc') },
-          { label: t('faq.introMembership'), highlight: true },
+          { key: 'introDesc', label: t('faq.introDesc') },
+          { key: 'introMembership', label: t('faq.introMembership'), highlight: true },
         ],
       },
       {
         id: 'account', label: t('faq.account'),
         subs: [
-          { label: t('faq.accountSettings') },
-          { label: t('faq.accountCancelReactivate') },
-          { label: t('faq.accountLogin'), highlight: true },
-          { label: t('faq.accountRegister') },
-          { label: t('faq.accountBecomeSeller') },
+          { key: 'accountSettings', label: t('faq.accountSettings') },
+          { key: 'accountCancelReactivate', label: t('faq.accountCancelReactivate') },
+          { key: 'accountLogin', label: t('faq.accountLogin'), highlight: true },
+          { key: 'accountRegister', label: t('faq.accountRegister') },
+          { key: 'accountBecomeSeller', label: t('faq.accountBecomeSeller') },
         ],
       },
       {
         id: 'sourcing', label: t('faq.sourcing'),
         subs: [
-          { label: t('faq.sourcingSearch') },
-          { label: t('faq.sourcingSupplierEval') },
-          { label: t('faq.sourcingTradeInfo'), highlight: true },
-          { label: t('faq.sourcingRecommender'), highlight: true },
-          { label: t('faq.sourcingAiApp') },
-          { label: t('faq.sourcingSourcing') },
+          { key: 'sourcingSearch', label: t('faq.sourcingSearch') },
+          { key: 'sourcingSupplierEval', label: t('faq.sourcingSupplierEval') },
+          { key: 'sourcingTradeInfo', label: t('faq.sourcingTradeInfo'), highlight: true },
+          { key: 'sourcingRecommender', label: t('faq.sourcingRecommender'), highlight: true },
+          { key: 'sourcingAiApp', label: t('faq.sourcingAiApp') },
+          { key: 'sourcingSourcing', label: t('faq.sourcingSourcing') },
         ],
       },
       {
         id: 'negotiation', label: t('faq.negotiation'),
         subs: [
-          { label: t('faq.negotiationRfq') },
-          { label: t('faq.negotiationMessages') },
-          { label: t('faq.negotiationOtherIssues'), highlight: true },
+          { key: 'negotiationRfq', label: t('faq.negotiationRfq') },
+          { key: 'negotiationMessages', label: t('faq.negotiationMessages') },
+          { key: 'negotiationOtherIssues', label: t('faq.negotiationOtherIssues'), highlight: true },
         ],
       },
       {
         id: 'place-order', label: t('faq.placeOrder'),
         subs: [
-          { label: t('faq.placeOrderTradeAssurance') },
-          { label: t('faq.placeOrderPlace') },
-          { label: t('faq.placeOrderConfirm') },
-          { label: t('faq.placeOrderManage') },
+          { key: 'placeOrderTradeAssurance', label: t('faq.placeOrderTradeAssurance') },
+          { key: 'placeOrderPlace', label: t('faq.placeOrderPlace') },
+          { key: 'placeOrderConfirm', label: t('faq.placeOrderConfirm') },
+          { key: 'placeOrderManage', label: t('faq.placeOrderManage') },
         ],
       },
       {
         id: 'payment', label: t('faq.payment'),
         subs: [
-          { label: t('faq.paymentOrderPayment'), highlight: true },
-          { label: t('faq.paymentReceipt') },
-          { label: t('faq.paymentFinancial') },
-          { label: t('faq.paymentPayment') },
-          { label: t('faq.paymentTypes') },
+          { key: 'paymentOrderPayment', label: t('faq.paymentOrderPayment'), highlight: true },
+          { key: 'paymentReceipt', label: t('faq.paymentReceipt') },
+          { key: 'paymentFinancial', label: t('faq.paymentFinancial') },
+          { key: 'paymentPayment', label: t('faq.paymentPayment') },
+          { key: 'paymentTypes', label: t('faq.paymentTypes') },
         ],
       },
       {
         id: 'tax', label: t('faq.tax'),
         subs: [
-          { label: t('faq.taxSubmitInfo') },
-          { label: t('faq.taxTypes') },
-          { label: t('faq.taxInvoice') },
-          { label: t('faq.taxVerifyInfo') },
-          { label: t('faq.taxOrderManage') },
-          { label: t('faq.taxRefund'), highlight: true },
+          { key: 'taxSubmitInfo', label: t('faq.taxSubmitInfo') },
+          { key: 'taxTypes', label: t('faq.taxTypes') },
+          { key: 'taxInvoice', label: t('faq.taxInvoice') },
+          { key: 'taxVerifyInfo', label: t('faq.taxVerifyInfo') },
+          { key: 'taxOrderManage', label: t('faq.taxOrderManage') },
+          { key: 'taxRefund', label: t('faq.taxRefund'), highlight: true },
         ],
       },
       {
         id: 'shipping', label: t('faq.shipping'),
         subs: [
-          { label: t('faq.shippingShipping') },
-          { label: t('faq.shippingLogistics'), highlight: true },
-          { label: t('faq.shippingMaersk') },
-          { label: t('faq.shippingImportFees') },
+          { key: 'shippingShipping', label: t('faq.shippingShipping') },
+          { key: 'shippingLogistics', label: t('faq.shippingLogistics'), highlight: true },
+          { key: 'shippingMaersk', label: t('faq.shippingMaersk') },
+          { key: 'shippingImportFees', label: t('faq.shippingImportFees') },
         ],
       },
       {
         id: 'receipt', label: t('faq.receipt'),
         subs: [
-          { label: t('faq.receiptDelivery') },
-          { label: t('faq.receiptCompletion') },
+          { key: 'receiptDelivery', label: t('faq.receiptDelivery') },
+          { key: 'receiptCompletion', label: t('faq.receiptCompletion') },
         ],
       },
       {
         id: 'inspection', label: t('faq.inspection'),
         subs: [
-          { label: t('faq.inspectionServices'), highlight: true },
-          { label: t('faq.inspectionMonitoring') },
+          { key: 'inspectionServices', label: t('faq.inspectionServices'), highlight: true },
+          { key: 'inspectionMonitoring', label: t('faq.inspectionMonitoring') },
         ],
       },
       {
         id: 'after-sales', label: t('faq.afterSales'),
         subs: [
-          { label: t('faq.afterSalesDispute') },
-          { label: t('faq.afterSalesReturn'), highlight: true },
-          { label: t('faq.afterSalesDisputeProcess') },
-          { label: t('faq.afterSalesGoodsIssue') },
-          { label: t('faq.afterSalesDisputeRules') },
-          { label: t('faq.afterSalesRefund') },
+          { key: 'afterSalesDispute', label: t('faq.afterSalesDispute') },
+          { key: 'afterSalesReturn', label: t('faq.afterSalesReturn'), highlight: true },
+          { key: 'afterSalesDisputeProcess', label: t('faq.afterSalesDisputeProcess') },
+          { key: 'afterSalesGoodsIssue', label: t('faq.afterSalesGoodsIssue') },
+          { key: 'afterSalesDisputeRules', label: t('faq.afterSalesDisputeRules') },
+          { key: 'afterSalesRefund', label: t('faq.afterSalesRefund') },
         ],
       },
       {
         id: 'feedback', label: t('faq.feedback'),
         subs: [
-          { label: t('faq.feedbackManagement'), highlight: true },
-          { label: t('faq.feedbackRules') },
+          { key: 'feedbackManagement', label: t('faq.feedbackManagement'), highlight: true },
+          { key: 'feedbackRules', label: t('faq.feedbackRules') },
         ],
       },
       {
         id: 'security', label: t('faq.security'),
         subs: [
-          { label: t('faq.securityFraud') },
-          { label: t('faq.securityIpr') },
+          { key: 'securityFraud', label: t('faq.securityFraud') },
+          { key: 'securityIpr', label: t('faq.securityIpr') },
         ],
       },
       {
         id: 'others', label: t('faq.others'),
         subs: [
-          { label: t('faq.othersCustomerService') },
-          { label: t('faq.othersUnclearConcern') },
-          { label: t('faq.othersOfflineService') },
+          { key: 'othersCustomerService', label: t('faq.othersCustomerService') },
+          { key: 'othersUnclearConcern', label: t('faq.othersUnclearConcern') },
+          { key: 'othersOfflineService', label: t('faq.othersOfflineService') },
         ],
       },
       {
         id: 'promotions', label: t('faq.promotions'),
         subs: [
-          { label: t('faq.promotionsShoppingGuide') },
-          { label: t('faq.promotionsScenario'), highlight: true },
-          { label: t('faq.promotionsSuper'), highlight: true },
-          { label: t('faq.promotionsPayment') },
-          { label: t('faq.promotionsOtherIssues') },
+          { key: 'promotionsShoppingGuide', label: t('faq.promotionsShoppingGuide') },
+          { key: 'promotionsScenario', label: t('faq.promotionsScenario'), highlight: true },
+          { key: 'promotionsSuper', label: t('faq.promotionsSuper'), highlight: true },
+          { key: 'promotionsPayment', label: t('faq.promotionsPayment') },
+          { key: 'promotionsOtherIssues', label: t('faq.promotionsOtherIssues') },
         ],
       },
       {
         id: 'guaranteed', label: t('faq.guaranteed'),
         subs: [
-          { label: t('faq.guaranteedShipping'), highlight: true },
-          { label: t('faq.guaranteedAfterSales') },
-          { label: t('faq.guaranteedPreSales'), highlight: true },
-          { label: t('faq.guaranteedPlaceOrder') },
-          { label: t('faq.guaranteedOverseasWarehouse') },
+          { key: 'guaranteedShipping', label: t('faq.guaranteedShipping'), highlight: true },
+          { key: 'guaranteedAfterSales', label: t('faq.guaranteedAfterSales') },
+          { key: 'guaranteedPreSales', label: t('faq.guaranteedPreSales'), highlight: true },
+          { key: 'guaranteedPlaceOrder', label: t('faq.guaranteedPlaceOrder') },
+          { key: 'guaranteedOverseasWarehouse', label: t('faq.guaranteedOverseasWarehouse') },
         ],
       },
       {
         id: 'app-settings', label: t('faq.appSettings'),
         subs: [
-          { label: t('faq.appSettingsLabel') },
+          { key: 'appSettingsLabel', label: t('faq.appSettingsLabel') },
         ],
       },
       {
         id: 'localization', label: t('faq.localization'),
         subs: [
-          { label: t('faq.localizationSettings'), highlight: true },
+          { key: 'localizationSettings', label: t('faq.localizationSettings'), highlight: true },
         ],
       },
     ];
@@ -409,6 +409,117 @@ Alpine.data('faqPage', () => ({
     if (this.searchQuery.trim()) {
       this.activeCategory = 'all';
     }
+  },
+}));
+
+// ─── FAQ Detail Page ──────────────────────────────────────────────────
+Alpine.data('faqDetail', () => ({
+  catParam: '',
+  subParam: '',
+  openItem: null as number | null,
+  helpful: '' as '' | 'yes' | 'no',
+
+  // Map category IDs to their subcategory keys
+  categorySubsMap: {
+    intro: ['introDesc', 'introMembership'],
+    account: ['accountSettings', 'accountCancelReactivate', 'accountLogin', 'accountRegister', 'accountBecomeSeller'],
+    sourcing: ['sourcingSearch', 'sourcingSupplierEval', 'sourcingTradeInfo', 'sourcingRecommender', 'sourcingAiApp', 'sourcingSourcing'],
+    negotiation: ['negotiationRfq', 'negotiationMessages', 'negotiationOtherIssues'],
+    'place-order': ['placeOrderTradeAssurance', 'placeOrderPlace', 'placeOrderConfirm', 'placeOrderManage'],
+    payment: ['paymentOrderPayment', 'paymentReceipt', 'paymentFinancial', 'paymentPayment', 'paymentTypes'],
+    tax: ['taxSubmitInfo', 'taxTypes', 'taxInvoice', 'taxVerifyInfo', 'taxOrderManage', 'taxRefund'],
+    shipping: ['shippingShipping', 'shippingLogistics', 'shippingMaersk', 'shippingImportFees'],
+    receipt: ['receiptDelivery', 'receiptCompletion'],
+    inspection: ['inspectionServices', 'inspectionMonitoring'],
+    'after-sales': ['afterSalesDispute', 'afterSalesReturn', 'afterSalesDisputeProcess', 'afterSalesGoodsIssue', 'afterSalesDisputeRules', 'afterSalesRefund'],
+    feedback: ['feedbackManagement', 'feedbackRules'],
+    security: ['securityFraud', 'securityIpr'],
+    others: ['othersCustomerService', 'othersUnclearConcern', 'othersOfflineService'],
+    promotions: ['promotionsShoppingGuide', 'promotionsScenario', 'promotionsSuper', 'promotionsPayment', 'promotionsOtherIssues'],
+    guaranteed: ['guaranteedShipping', 'guaranteedAfterSales', 'guaranteedPreSales', 'guaranteedPlaceOrder', 'guaranteedOverseasWarehouse'],
+    'app-settings': ['appSettingsLabel'],
+    localization: ['localizationSettings'],
+  } as Record<string, string[]>,
+
+  // Category label map
+  categoryLabelMap: {
+    intro: 'faq.intro',
+    account: 'faq.account',
+    sourcing: 'faq.sourcing',
+    negotiation: 'faq.negotiation',
+    'place-order': 'faq.placeOrder',
+    payment: 'faq.payment',
+    tax: 'faq.tax',
+    shipping: 'faq.shipping',
+    receipt: 'faq.receipt',
+    inspection: 'faq.inspection',
+    'after-sales': 'faq.afterSales',
+    feedback: 'faq.feedback',
+    security: 'faq.security',
+    others: 'faq.others',
+    promotions: 'faq.promotions',
+    guaranteed: 'faq.guaranteed',
+    'app-settings': 'faq.appSettings',
+    localization: 'faq.localization',
+  } as Record<string, string>,
+
+  init() {
+    const params = new URLSearchParams(window.location.search);
+    this.catParam = params.get('cat') || '';
+    this.subParam = params.get('sub') || '';
+  },
+
+  get categoryLabel(): string {
+    const key = this.categoryLabelMap[this.catParam];
+    return key ? t(key) : '';
+  },
+
+  get subTitle(): string {
+    return t(`faqDetail.${this.subParam}_title` as any) || t(`faq.${this.subParam}` as any) || '';
+  },
+
+  get subDescription(): string {
+    return t(`faqDetail.${this.subParam}_desc` as any) || '';
+  },
+
+  get faqItems(): { q: string; a: string }[] {
+    const items = t(`faqDetail.${this.subParam}_items` as any, { returnObjects: true });
+    if (Array.isArray(items)) return items;
+    return [];
+  },
+
+  get siblings(): { key: string; label: string }[] {
+    const subs = this.categorySubsMap[this.catParam] || [];
+    return subs.map((key: string) => ({
+      key,
+      label: t(`faq.${key}` as any) || key,
+    }));
+  },
+
+  get relatedTopics(): { key: string; cat: string; label: string }[] {
+    const topics: { key: string; cat: string; label: string }[] = [];
+    const allCats = Object.keys(this.categorySubsMap);
+    // Find 2-3 related subcategories from neighboring categories
+    const catIdx = allCats.indexOf(this.catParam);
+    const neighborCats = [
+      allCats[(catIdx + 1) % allCats.length],
+      allCats[(catIdx + 2) % allCats.length],
+    ];
+    for (const nc of neighborCats) {
+      const subs = this.categorySubsMap[nc] || [];
+      if (subs.length > 0) {
+        topics.push({
+          key: subs[0],
+          cat: nc,
+          label: t(`faq.${subs[0]}` as any) || subs[0],
+        });
+      }
+    }
+    return topics;
+  },
+
+  toggleItem(idx: number) {
+    this.openItem = this.openItem === idx ? null : idx;
   },
 }));
 

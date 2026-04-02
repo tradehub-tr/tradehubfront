@@ -86,7 +86,7 @@ export function FAQPageLayout(): string {
                   <template x-for="(sub, si) in cat.subs" :key="si">
                     <span class="flex items-center">
                       <a
-                        href="#"
+                        :href="'faq-detail.html?cat=' + cat.id + '&sub=' + (sub.key || '')"
                         class="text-[12px] transition-colors"
                         :class="sub.highlight ? 'text-primary-500 hover:text-primary-700' : 'text-gray-600 hover:text-primary-500'"
                         x-text="sub.label"
