@@ -186,49 +186,40 @@ export function StoreHeader(): string {
                 </div>
                 <div class="flex flex-col gap-1.5">
                   <span class="text-[11px] sm:text-[13px] text-[#999] leading-snug"
-                        x-text="(seller?.total_orders || 0) + ' ${t('seller.sf.orders')}'"></span>
+                        x-text="seller?.total_orders ? (seller.total_orders + ' ${t('seller.sf.orders')}') : '${t('seller.sf.orders')}'"></span>
                   <span class="text-[18px] sm:text-[24px] font-bold text-[#222] leading-none"
-                        x-text="seller?.total_orders ? ('US $' + (seller.total_orders * 500).toLocaleString() + '+') : '\u2014'"></span>
+                        x-text="seller?.annual_revenue || '\u2014'"></span>
                 </div>
               </div>
 
-              <!-- Capabilities -->
-              <div class="border-t border-[#f0f0f0] mb-6"></div>
-              <div class="flex flex-col gap-2.5 mb-4">
-                <div class="flex items-center gap-2">
-                  ${blueCheck}
-                  <span class="text-[13px] font-bold text-[#333]">${t('seller.sf.drawingCustomization')}</span>
-                  ${infoIcon}
+              <!-- Capabilities — API'den gelen sertifikalar/capabilities -->
+              <template x-if="seller?.certifications || seller?.capabilities">
+                <div>
+                  <div class="border-t border-[#f0f0f0] mb-6"></div>
+                  <div class="flex flex-col gap-2.5 mb-4"
+                       x-data="{ items: (() => {
+                         const raw = seller?.capabilities || seller?.certifications || '';
+                         if (Array.isArray(raw)) return raw;
+                         return raw.split(',').map((s) => s.trim()).filter(Boolean);
+                       })() }">
+                    <template x-for="(item, idx) in items.slice(0, 5)" :key="idx">
+                      <div class="flex items-center gap-2">
+                        ${blueCheck}
+                        <span class="text-[13px] font-bold text-[#333]" x-text="item"></span>
+                      </div>
+                    </template>
+                    <template x-if="items.length > 5">
+                      <a href="#"
+                         class="inline-flex items-center gap-1 text-[13px] text-[#cc9900] hover:underline font-medium mt-1"
+                         @click.prevent>
+                        <span x-text="'${t('seller.sf.viewAllCapabilities').replace('({{count}})', '')}(' + items.length + ')'"></span>
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                        </svg>
+                      </a>
+                    </template>
+                  </div>
                 </div>
-                <div class="flex items-center gap-2">
-                  ${blueCheck}
-                  <span class="text-[13px] font-bold text-[#333]">${t('seller.sf.fullCustomization')}</span>
-                  ${infoIcon}
-                </div>
-                <div class="flex items-center gap-2">
-                  ${blueCheck}
-                  <span class="text-[13px] font-bold text-[#333]">${t('seller.sf.rawMaterialTracing')}</span>
-                  ${infoIcon}
-                </div>
-                <div class="flex items-center gap-2">
-                  ${blueCheck}
-                  <span class="text-[13px] font-bold text-[#333]">${t('seller.sf.finalProductInspection')}</span>
-                  ${infoIcon}
-                </div>
-                <div class="flex items-center gap-2">
-                  ${blueCheck}
-                  <span class="text-[13px] font-bold text-[#333]">${t('seller.sf.ceCertificate')}</span>
-                </div>
-              </div>
-              <template x-if="seller?.certifications">
-                <a href="#"
-                   class="inline-flex items-center gap-1 text-[13px] text-[#cc9900] hover:underline font-medium mt-1"
-                   @click.prevent>
-                  <span x-text="'${t('seller.sf.viewAllCapabilities').replace('({{count}})', '')}' + '(' + (Array.isArray(seller.certifications) ? seller.certifications.length : 0) + ')'"></span>
-                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
-                  </svg>
-                </a>
               </template>
             </div>
 

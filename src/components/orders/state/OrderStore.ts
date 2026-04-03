@@ -46,10 +46,13 @@ interface ApiOrder {
   incoterms: string;
   cancel_reason: string;
   remittance_amount: number;
+  receipt_url: string;
   refund_status: string;
   refund_reason: string;
   refund_amount: number;
   refund_requested_at: string;
+  tracking_number: string;
+  carrier: string;
   items: ApiOrderItem[];
 }
 
@@ -86,6 +89,8 @@ function apiOrderToOrder(apiOrder: ApiOrder): Order {
       shipFrom: apiOrder.ship_from || '',
       method: apiOrder.shipping_method || 'Standard',
       incoterms: apiOrder.incoterms || 'DAP',
+      trackingNumber: apiOrder.tracking_number || '',
+      carrier: apiOrder.carrier || '',
     },
     payment: {
       status: apiOrder.payment_status || 'Unpaid',
@@ -103,6 +108,7 @@ function apiOrderToOrder(apiOrder: ApiOrder): Order {
     paymentMethod: apiOrder.payment_method || '',
     createdAt: apiOrder.order_date ? new Date(apiOrder.order_date).getTime() : Date.now(),
     remittanceAmount: apiOrder.remittance_amount || 0,
+    receiptUrl: apiOrder.receipt_url || '',
     refundStatus: apiOrder.refund_status || '',
     refundReason: apiOrder.refund_reason || '',
     refundAmount: apiOrder.refund_amount || 0,
