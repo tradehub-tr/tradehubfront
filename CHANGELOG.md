@@ -1,3 +1,18 @@
+## [v1.0.1-rc.6] - 2026-04-03 RC
+
+Bu surum rc.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat:HelpCenterHeader'a dil seçici bileşenini ekleyin ve yardım merkezi sayfalarına entegre edin. (@TurksabYonetim)
+- feat: sipariş başarı yönlendirmesini uygula, vitrin arayüz bileşenlerini güncelle ve i18n yerelleştirme dosyalarını temizle (@TurksabYonetim)
+- feat(seller_storefront): ana ürün kaydırıcısı ve bölüm kaydı işlevselliği eklendi seller front  detaylı değişilik yapıldı ve footerdaki bottomdaki çalışmayan linkler düzeltildi (@TurksabYonetim)
+- feat: footer'daki tüm bilgi sayfaları (iade politikası, kargo (@TurksabYonetim)
+- feat: Ticaret Güvencesi, kargo lojistiği ve satış sonrası sayfaları eklendi (@TurksabYonetim)
+
+### Duzeltildi
+- fix(ci): release changelog'da yanlış kullanıcı etiketlenmesini düzelt (@TurksabYonetim)
+
+---
 ## [v1.0.1-rc.5] - 2026-04-02 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
