@@ -147,6 +147,7 @@ const en = {
     mega: {
       topRanking: 'Top ranking',
       newArrivals: 'New arrivals',
+      tailoredSelections: 'Tailored selections',
       topDeals: 'Top deals',
       dropshippingCenter: 'Dropshipping center',
       sampleCenter: 'Sample center',
