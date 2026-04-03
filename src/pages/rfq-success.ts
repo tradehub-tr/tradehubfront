@@ -11,6 +11,16 @@ import { startAlpine } from '../alpine'
 import { TopBar, SubHeader, initMobileDrawer, initStickyHeaderSearch, MegaMenu, initMegaMenu } from '../components/header'
 import { initLanguageSelector } from '../components/header/TopBar'
 import { FooterLinks } from '../components/footer'
+import { requireAuth } from '../utils/auth-guard'
+
+await requireAuth();
+
+// Guard: only accessible after actual RFQ submission
+if (!sessionStorage.getItem('rfq_submitted')) {
+  window.location.href = '/pages/dashboard/rfq.html';
+  throw new Error('redirect');
+}
+sessionStorage.removeItem('rfq_submitted');
 
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.classList.add('relative');
