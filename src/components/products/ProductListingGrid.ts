@@ -194,7 +194,7 @@ function renderProductListingCard(card: ProductListingCard): string {
     : '';
 
   return `
-    <div class="fy26-product-card-wrapper flex flex-col justify-between w-full rounded-xl overflow-hidden bg-white pb-2 border-0">
+    <div class="fy26-product-card-wrapper flex flex-col justify-between w-full rounded-md overflow-hidden bg-white pb-2 border-0">
       <!-- Image area -->
       <a href="${card.href}" class="searchx-img-area relative mb-2 block">
         ${renderImageSlider(card)}
@@ -228,11 +228,11 @@ function renderProductListingCard(card: ProductListingCard): string {
 
       <!-- Action buttons -->
       <div class="action-area-layout flex gap-2 px-1 items-center">
-        <button type="button" class="searchx-product-e-abutton flex items-center justify-center h-9 px-2 sm:px-[15px] border border-[#222] rounded-full text-xs sm:text-sm font-medium text-gray-900 bg-transparent cursor-pointer whitespace-nowrap transition-colors hover:bg-gray-100 min-w-0"
+        <button type="button" class="searchx-product-e-abutton flex-1 flex items-center justify-center h-9 border border-[#222] rounded-full text-xs sm:text-sm font-medium text-gray-900 bg-transparent cursor-pointer whitespace-nowrap transition-colors hover:bg-gray-100"
                 data-add-to-cart="${card.id}">
           ${t('products.addToCart')}
         </button>
-        <button type="button" class="searchx-product-e-abutton flex items-center justify-center h-9 px-2 sm:px-[15px] border border-[#222] rounded-full text-xs sm:text-sm font-medium text-gray-900 bg-transparent cursor-pointer whitespace-nowrap transition-colors hover:bg-gray-100 min-w-0"
+        <button type="button" class="searchx-product-e-abutton flex-1 flex items-center justify-center h-9 border border-[#222] rounded-full text-xs sm:text-sm font-medium text-gray-900 bg-transparent cursor-pointer whitespace-nowrap transition-colors hover:bg-gray-100"
                 onclick="event.preventDefault(); event.stopPropagation();">
           ${t('products.chat')}
         </button>

@@ -482,6 +482,7 @@ const tr = {
       changeShipping: 'Değiştir',
       favorite: 'Favori',
       colorLabel: 'Renk',
+      sizeLabel: 'Beden',
       couponCode: 'Kupon Kodu',
       couponPlaceholder: 'Kupon kodunu girin',
       couponApply: 'Uygula',
