@@ -66,89 +66,95 @@ Alpine.data('helpCenter', () => ({
     return [
       {
         id: 'account',
+        faqCat: 'account',
         label: t('helpCenter.tabAccount'),
         icon: `<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/></svg>`,
         questions: [
-          t('helpCenter.q_account_1'),
-          t('helpCenter.q_account_2'),
-          t('helpCenter.q_account_3'),
-          t('helpCenter.q_account_4'),
-          t('helpCenter.q_account_5'),
-          t('helpCenter.q_account_6'),
-          t('helpCenter.q_account_7'),
-          t('helpCenter.q_account_8'),
-          t('helpCenter.q_account_9'),
+          { text: t('helpCenter.q_account_1'), cat: 'account', sub: 'accountLogin' },
+          { text: t('helpCenter.q_account_2'), cat: 'account', sub: 'accountRegister' },
+          { text: t('helpCenter.q_account_3'), cat: 'account', sub: 'accountRegister' },
+          { text: t('helpCenter.q_account_4'), cat: 'account', sub: 'accountLogin' },
+          { text: t('helpCenter.q_account_5'), cat: 'account', sub: 'accountCancelReactivate' },
+          { text: t('helpCenter.q_account_6'), cat: 'others', sub: 'othersCustomerService' },
+          { text: t('helpCenter.q_account_7'), cat: 'account', sub: 'accountSettings' },
+          { text: t('helpCenter.q_account_8'), cat: 'account', sub: 'accountLogin' },
+          { text: t('helpCenter.q_account_9'), cat: 'account', sub: 'accountCancelReactivate' },
         ],
       },
       {
         id: 'sourcing',
+        faqCat: 'sourcing',
         label: t('helpCenter.tabSourcing'),
         icon: `<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35m1.6-5.15a6.75 6.75 0 1 1-13.5 0 6.75 6.75 0 0 1 13.5 0Z"/></svg>`,
         questions: [
-          t('helpCenter.q_sourcing_1'),
-          t('helpCenter.q_sourcing_2'),
-          t('helpCenter.q_sourcing_3'),
-          t('helpCenter.q_sourcing_4'),
-          t('helpCenter.q_sourcing_5'),
-          t('helpCenter.q_sourcing_6'),
-          t('helpCenter.q_sourcing_7'),
-          t('helpCenter.q_sourcing_8'),
-          t('helpCenter.q_sourcing_9'),
+          { text: t('helpCenter.q_sourcing_1'), cat: 'sourcing', sub: 'sourcingSearch' },
+          { text: t('helpCenter.q_sourcing_2'), cat: 'sourcing', sub: 'sourcingSearch' },
+          { text: t('helpCenter.q_sourcing_3'), cat: 'sourcing', sub: 'sourcingSearch' },
+          { text: t('helpCenter.q_sourcing_4'), cat: 'sourcing', sub: 'sourcingTradeInfo' },
+          { text: t('helpCenter.q_sourcing_5'), cat: 'sourcing', sub: 'sourcingSupplierEval' },
+          { text: t('helpCenter.q_sourcing_6'), cat: 'sourcing', sub: 'sourcingSourcing' },
+          { text: t('helpCenter.q_sourcing_7'), cat: 'sourcing', sub: 'sourcingSourcing' },
+          { text: t('helpCenter.q_sourcing_8'), cat: 'sourcing', sub: 'sourcingSourcing' },
+          { text: t('helpCenter.q_sourcing_9'), cat: 'sourcing', sub: 'sourcingSupplierEval' },
         ],
       },
       {
         id: 'negotiation',
+        faqCat: 'negotiation',
         label: t('helpCenter.tabNegotiation'),
         icon: `<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 0 1 .778-.332 48.294 48.294 0 0 0 5.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z"/></svg>`,
         questions: [
-          t('helpCenter.q_negotiation_1'),
-          t('helpCenter.q_negotiation_2'),
-          t('helpCenter.q_negotiation_3'),
-          t('helpCenter.q_negotiation_4'),
-          t('helpCenter.q_negotiation_5'),
-          t('helpCenter.q_negotiation_6'),
+          { text: t('helpCenter.q_negotiation_1'), cat: 'negotiation', sub: 'negotiationRfq' },
+          { text: t('helpCenter.q_negotiation_2'), cat: 'negotiation', sub: 'negotiationOtherIssues' },
+          { text: t('helpCenter.q_negotiation_3'), cat: 'negotiation', sub: 'negotiationMessages' },
+          { text: t('helpCenter.q_negotiation_4'), cat: 'negotiation', sub: 'negotiationRfq' },
+          { text: t('helpCenter.q_negotiation_5'), cat: 'negotiation', sub: 'negotiationRfq' },
+          { text: t('helpCenter.q_negotiation_6'), cat: 'negotiation', sub: 'negotiationMessages' },
         ],
       },
       {
         id: 'payment',
+        faqCat: 'payment',
         label: t('helpCenter.tabPayment'),
         icon: `<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z"/></svg>`,
         questions: [
-          t('helpCenter.q_payment_1'),
-          t('helpCenter.q_payment_2'),
-          t('helpCenter.q_payment_3'),
-          t('helpCenter.q_payment_4'),
-          t('helpCenter.q_payment_5'),
-          t('helpCenter.q_payment_6'),
-          t('helpCenter.q_payment_7'),
-          t('helpCenter.q_payment_8'),
-          t('helpCenter.q_payment_9'),
+          { text: t('helpCenter.q_payment_1'), cat: 'payment', sub: 'paymentTypes' },
+          { text: t('helpCenter.q_payment_2'), cat: 'payment', sub: 'paymentOrderPayment' },
+          { text: t('helpCenter.q_payment_3'), cat: 'payment', sub: 'paymentReceipt' },
+          { text: t('helpCenter.q_payment_4'), cat: 'payment', sub: 'paymentOrderPayment' },
+          { text: t('helpCenter.q_payment_5'), cat: 'payment', sub: 'paymentFinancial' },
+          { text: t('helpCenter.q_payment_6'), cat: 'payment', sub: 'paymentPayment' },
+          { text: t('helpCenter.q_payment_7'), cat: 'payment', sub: 'paymentFinancial' },
+          { text: t('helpCenter.q_payment_8'), cat: 'payment', sub: 'paymentPayment' },
+          { text: t('helpCenter.q_payment_9'), cat: 'payment', sub: 'paymentOrderPayment' },
         ],
       },
       {
         id: 'after-sales',
+        faqCat: 'after-sales',
         label: t('helpCenter.tabAfterSales'),
         icon: `<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"/></svg>`,
         questions: [
-          t('helpCenter.q_aftersales_1'),
-          t('helpCenter.q_aftersales_2'),
-          t('helpCenter.q_aftersales_3'),
-          t('helpCenter.q_aftersales_4'),
-          t('helpCenter.q_aftersales_5'),
-          t('helpCenter.q_aftersales_6'),
+          { text: t('helpCenter.q_aftersales_1'), cat: 'after-sales', sub: 'afterSalesGoodsIssue' },
+          { text: t('helpCenter.q_aftersales_2'), cat: 'after-sales', sub: 'afterSalesReturn' },
+          { text: t('helpCenter.q_aftersales_3'), cat: 'after-sales', sub: 'afterSalesDispute' },
+          { text: t('helpCenter.q_aftersales_4'), cat: 'after-sales', sub: 'afterSalesReturn' },
+          { text: t('helpCenter.q_aftersales_5'), cat: 'after-sales', sub: 'afterSalesDisputeProcess' },
+          { text: t('helpCenter.q_aftersales_6'), cat: 'after-sales', sub: 'afterSalesDisputeRules' },
         ],
       },
       {
         id: 'self-service',
+        faqCat: 'others',
         label: t('helpCenter.tabSelfService'),
         icon: `<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008Z"/></svg>`,
         questions: [
-          t('helpCenter.q_selfservice_1'),
-          t('helpCenter.q_selfservice_2'),
-          t('helpCenter.q_selfservice_3'),
-          t('helpCenter.q_selfservice_4'),
-          t('helpCenter.q_selfservice_5'),
-          t('helpCenter.q_selfservice_6'),
+          { text: t('helpCenter.q_selfservice_1'), cat: 'others', sub: 'othersCustomerService' },
+          { text: t('helpCenter.q_selfservice_2'), cat: 'others', sub: 'othersCustomerService' },
+          { text: t('helpCenter.q_selfservice_3'), cat: 'app-settings', sub: 'appSettingsLabel' },
+          { text: t('helpCenter.q_selfservice_4'), cat: 'app-settings', sub: 'appSettingsLabel' },
+          { text: t('helpCenter.q_selfservice_5'), cat: 'others', sub: 'othersCustomerService' },
+          { text: t('helpCenter.q_selfservice_6'), cat: 'others', sub: 'othersCustomerService' },
         ],
       },
     ];
@@ -166,8 +172,8 @@ Alpine.data('helpCenter', () => ({
 
     // Flat-map all questions from all tabs and filter
     const allQuestions = this.tabs.flatMap((t: any) => t.questions);
-    this.searchResults = allQuestions.filter((question: string) =>
-      question.toLowerCase().includes(q)
+    this.searchResults = allQuestions.filter((item: any) =>
+      item.text.toLowerCase().includes(q)
     );
   },
 
@@ -219,155 +225,155 @@ Alpine.data('faqPage', () => ({
       {
         id: 'intro', label: t('faq.intro'),
         subs: [
-          { label: t('faq.introDesc') },
-          { label: t('faq.introMembership'), highlight: true },
+          { key: 'introDesc', label: t('faq.introDesc') },
+          { key: 'introMembership', label: t('faq.introMembership'), highlight: true },
         ],
       },
       {
         id: 'account', label: t('faq.account'),
         subs: [
-          { label: t('faq.accountSettings') },
-          { label: t('faq.accountCancelReactivate') },
-          { label: t('faq.accountLogin'), highlight: true },
-          { label: t('faq.accountRegister') },
-          { label: t('faq.accountBecomeSeller') },
+          { key: 'accountSettings', label: t('faq.accountSettings') },
+          { key: 'accountCancelReactivate', label: t('faq.accountCancelReactivate') },
+          { key: 'accountLogin', label: t('faq.accountLogin'), highlight: true },
+          { key: 'accountRegister', label: t('faq.accountRegister') },
+          { key: 'accountBecomeSeller', label: t('faq.accountBecomeSeller') },
         ],
       },
       {
         id: 'sourcing', label: t('faq.sourcing'),
         subs: [
-          { label: t('faq.sourcingSearch') },
-          { label: t('faq.sourcingSupplierEval') },
-          { label: t('faq.sourcingTradeInfo'), highlight: true },
-          { label: t('faq.sourcingRecommender'), highlight: true },
-          { label: t('faq.sourcingAiApp') },
-          { label: t('faq.sourcingSourcing') },
+          { key: 'sourcingSearch', label: t('faq.sourcingSearch') },
+          { key: 'sourcingSupplierEval', label: t('faq.sourcingSupplierEval') },
+          { key: 'sourcingTradeInfo', label: t('faq.sourcingTradeInfo'), highlight: true },
+          { key: 'sourcingRecommender', label: t('faq.sourcingRecommender'), highlight: true },
+          { key: 'sourcingAiApp', label: t('faq.sourcingAiApp') },
+          { key: 'sourcingSourcing', label: t('faq.sourcingSourcing') },
         ],
       },
       {
         id: 'negotiation', label: t('faq.negotiation'),
         subs: [
-          { label: t('faq.negotiationRfq') },
-          { label: t('faq.negotiationMessages') },
-          { label: t('faq.negotiationOtherIssues'), highlight: true },
+          { key: 'negotiationRfq', label: t('faq.negotiationRfq') },
+          { key: 'negotiationMessages', label: t('faq.negotiationMessages') },
+          { key: 'negotiationOtherIssues', label: t('faq.negotiationOtherIssues'), highlight: true },
         ],
       },
       {
         id: 'place-order', label: t('faq.placeOrder'),
         subs: [
-          { label: t('faq.placeOrderTradeAssurance') },
-          { label: t('faq.placeOrderPlace') },
-          { label: t('faq.placeOrderConfirm') },
-          { label: t('faq.placeOrderManage') },
+          { key: 'placeOrderTradeAssurance', label: t('faq.placeOrderTradeAssurance') },
+          { key: 'placeOrderPlace', label: t('faq.placeOrderPlace') },
+          { key: 'placeOrderConfirm', label: t('faq.placeOrderConfirm') },
+          { key: 'placeOrderManage', label: t('faq.placeOrderManage') },
         ],
       },
       {
         id: 'payment', label: t('faq.payment'),
         subs: [
-          { label: t('faq.paymentOrderPayment'), highlight: true },
-          { label: t('faq.paymentReceipt') },
-          { label: t('faq.paymentFinancial') },
-          { label: t('faq.paymentPayment') },
-          { label: t('faq.paymentTypes') },
+          { key: 'paymentOrderPayment', label: t('faq.paymentOrderPayment'), highlight: true },
+          { key: 'paymentReceipt', label: t('faq.paymentReceipt') },
+          { key: 'paymentFinancial', label: t('faq.paymentFinancial') },
+          { key: 'paymentPayment', label: t('faq.paymentPayment') },
+          { key: 'paymentTypes', label: t('faq.paymentTypes') },
         ],
       },
       {
         id: 'tax', label: t('faq.tax'),
         subs: [
-          { label: t('faq.taxSubmitInfo') },
-          { label: t('faq.taxTypes') },
-          { label: t('faq.taxInvoice') },
-          { label: t('faq.taxVerifyInfo') },
-          { label: t('faq.taxOrderManage') },
-          { label: t('faq.taxRefund'), highlight: true },
+          { key: 'taxSubmitInfo', label: t('faq.taxSubmitInfo') },
+          { key: 'taxTypes', label: t('faq.taxTypes') },
+          { key: 'taxInvoice', label: t('faq.taxInvoice') },
+          { key: 'taxVerifyInfo', label: t('faq.taxVerifyInfo') },
+          { key: 'taxOrderManage', label: t('faq.taxOrderManage') },
+          { key: 'taxRefund', label: t('faq.taxRefund'), highlight: true },
         ],
       },
       {
         id: 'shipping', label: t('faq.shipping'),
         subs: [
-          { label: t('faq.shippingShipping') },
-          { label: t('faq.shippingLogistics'), highlight: true },
-          { label: t('faq.shippingMaersk') },
-          { label: t('faq.shippingImportFees') },
+          { key: 'shippingShipping', label: t('faq.shippingShipping') },
+          { key: 'shippingLogistics', label: t('faq.shippingLogistics'), highlight: true },
+          { key: 'shippingMaersk', label: t('faq.shippingMaersk') },
+          { key: 'shippingImportFees', label: t('faq.shippingImportFees') },
         ],
       },
       {
         id: 'receipt', label: t('faq.receipt'),
         subs: [
-          { label: t('faq.receiptDelivery') },
-          { label: t('faq.receiptCompletion') },
+          { key: 'receiptDelivery', label: t('faq.receiptDelivery') },
+          { key: 'receiptCompletion', label: t('faq.receiptCompletion') },
         ],
       },
       {
         id: 'inspection', label: t('faq.inspection'),
         subs: [
-          { label: t('faq.inspectionServices'), highlight: true },
-          { label: t('faq.inspectionMonitoring') },
+          { key: 'inspectionServices', label: t('faq.inspectionServices'), highlight: true },
+          { key: 'inspectionMonitoring', label: t('faq.inspectionMonitoring') },
         ],
       },
       {
         id: 'after-sales', label: t('faq.afterSales'),
         subs: [
-          { label: t('faq.afterSalesDispute') },
-          { label: t('faq.afterSalesReturn'), highlight: true },
-          { label: t('faq.afterSalesDisputeProcess') },
-          { label: t('faq.afterSalesGoodsIssue') },
-          { label: t('faq.afterSalesDisputeRules') },
-          { label: t('faq.afterSalesRefund') },
+          { key: 'afterSalesDispute', label: t('faq.afterSalesDispute') },
+          { key: 'afterSalesReturn', label: t('faq.afterSalesReturn'), highlight: true },
+          { key: 'afterSalesDisputeProcess', label: t('faq.afterSalesDisputeProcess') },
+          { key: 'afterSalesGoodsIssue', label: t('faq.afterSalesGoodsIssue') },
+          { key: 'afterSalesDisputeRules', label: t('faq.afterSalesDisputeRules') },
+          { key: 'afterSalesRefund', label: t('faq.afterSalesRefund') },
         ],
       },
       {
         id: 'feedback', label: t('faq.feedback'),
         subs: [
-          { label: t('faq.feedbackManagement'), highlight: true },
-          { label: t('faq.feedbackRules') },
+          { key: 'feedbackManagement', label: t('faq.feedbackManagement'), highlight: true },
+          { key: 'feedbackRules', label: t('faq.feedbackRules') },
         ],
       },
       {
         id: 'security', label: t('faq.security'),
         subs: [
-          { label: t('faq.securityFraud') },
-          { label: t('faq.securityIpr') },
+          { key: 'securityFraud', label: t('faq.securityFraud') },
+          { key: 'securityIpr', label: t('faq.securityIpr') },
         ],
       },
       {
         id: 'others', label: t('faq.others'),
         subs: [
-          { label: t('faq.othersCustomerService') },
-          { label: t('faq.othersUnclearConcern') },
-          { label: t('faq.othersOfflineService') },
+          { key: 'othersCustomerService', label: t('faq.othersCustomerService') },
+          { key: 'othersUnclearConcern', label: t('faq.othersUnclearConcern') },
+          { key: 'othersOfflineService', label: t('faq.othersOfflineService') },
         ],
       },
       {
         id: 'promotions', label: t('faq.promotions'),
         subs: [
-          { label: t('faq.promotionsShoppingGuide') },
-          { label: t('faq.promotionsScenario'), highlight: true },
-          { label: t('faq.promotionsSuper'), highlight: true },
-          { label: t('faq.promotionsPayment') },
-          { label: t('faq.promotionsOtherIssues') },
+          { key: 'promotionsShoppingGuide', label: t('faq.promotionsShoppingGuide') },
+          { key: 'promotionsScenario', label: t('faq.promotionsScenario'), highlight: true },
+          { key: 'promotionsSuper', label: t('faq.promotionsSuper'), highlight: true },
+          { key: 'promotionsPayment', label: t('faq.promotionsPayment') },
+          { key: 'promotionsOtherIssues', label: t('faq.promotionsOtherIssues') },
         ],
       },
       {
         id: 'guaranteed', label: t('faq.guaranteed'),
         subs: [
-          { label: t('faq.guaranteedShipping'), highlight: true },
-          { label: t('faq.guaranteedAfterSales') },
-          { label: t('faq.guaranteedPreSales'), highlight: true },
-          { label: t('faq.guaranteedPlaceOrder') },
-          { label: t('faq.guaranteedOverseasWarehouse') },
+          { key: 'guaranteedShipping', label: t('faq.guaranteedShipping'), highlight: true },
+          { key: 'guaranteedAfterSales', label: t('faq.guaranteedAfterSales') },
+          { key: 'guaranteedPreSales', label: t('faq.guaranteedPreSales'), highlight: true },
+          { key: 'guaranteedPlaceOrder', label: t('faq.guaranteedPlaceOrder') },
+          { key: 'guaranteedOverseasWarehouse', label: t('faq.guaranteedOverseasWarehouse') },
         ],
       },
       {
         id: 'app-settings', label: t('faq.appSettings'),
         subs: [
-          { label: t('faq.appSettingsLabel') },
+          { key: 'appSettingsLabel', label: t('faq.appSettingsLabel') },
         ],
       },
       {
         id: 'localization', label: t('faq.localization'),
         subs: [
-          { label: t('faq.localizationSettings'), highlight: true },
+          { key: 'localizationSettings', label: t('faq.localizationSettings'), highlight: true },
         ],
       },
     ];
@@ -398,7 +404,13 @@ Alpine.data('faqPage', () => ({
     return cards;
   },
 
-  init() { },
+  init() {
+    const params = new URLSearchParams(window.location.search);
+    const cat = params.get('cat');
+    if (cat && this.categories.some((c: any) => c.id === cat)) {
+      this.activeCategory = cat;
+    }
+  },
 
   selectCategory(id: string) {
     this.activeCategory = id;
@@ -409,6 +421,117 @@ Alpine.data('faqPage', () => ({
     if (this.searchQuery.trim()) {
       this.activeCategory = 'all';
     }
+  },
+}));
+
+// ─── FAQ Detail Page ──────────────────────────────────────────────────
+Alpine.data('faqDetail', () => ({
+  catParam: '',
+  subParam: '',
+  openItem: null as number | null,
+  helpful: '' as '' | 'yes' | 'no',
+
+  // Map category IDs to their subcategory keys
+  categorySubsMap: {
+    intro: ['introDesc', 'introMembership'],
+    account: ['accountSettings', 'accountCancelReactivate', 'accountLogin', 'accountRegister', 'accountBecomeSeller'],
+    sourcing: ['sourcingSearch', 'sourcingSupplierEval', 'sourcingTradeInfo', 'sourcingRecommender', 'sourcingAiApp', 'sourcingSourcing'],
+    negotiation: ['negotiationRfq', 'negotiationMessages', 'negotiationOtherIssues'],
+    'place-order': ['placeOrderTradeAssurance', 'placeOrderPlace', 'placeOrderConfirm', 'placeOrderManage'],
+    payment: ['paymentOrderPayment', 'paymentReceipt', 'paymentFinancial', 'paymentPayment', 'paymentTypes'],
+    tax: ['taxSubmitInfo', 'taxTypes', 'taxInvoice', 'taxVerifyInfo', 'taxOrderManage', 'taxRefund'],
+    shipping: ['shippingShipping', 'shippingLogistics', 'shippingMaersk', 'shippingImportFees'],
+    receipt: ['receiptDelivery', 'receiptCompletion'],
+    inspection: ['inspectionServices', 'inspectionMonitoring'],
+    'after-sales': ['afterSalesDispute', 'afterSalesReturn', 'afterSalesDisputeProcess', 'afterSalesGoodsIssue', 'afterSalesDisputeRules', 'afterSalesRefund'],
+    feedback: ['feedbackManagement', 'feedbackRules'],
+    security: ['securityFraud', 'securityIpr'],
+    others: ['othersCustomerService', 'othersUnclearConcern', 'othersOfflineService'],
+    promotions: ['promotionsShoppingGuide', 'promotionsScenario', 'promotionsSuper', 'promotionsPayment', 'promotionsOtherIssues'],
+    guaranteed: ['guaranteedShipping', 'guaranteedAfterSales', 'guaranteedPreSales', 'guaranteedPlaceOrder', 'guaranteedOverseasWarehouse'],
+    'app-settings': ['appSettingsLabel'],
+    localization: ['localizationSettings'],
+  } as Record<string, string[]>,
+
+  // Category label map
+  categoryLabelMap: {
+    intro: 'faq.intro',
+    account: 'faq.account',
+    sourcing: 'faq.sourcing',
+    negotiation: 'faq.negotiation',
+    'place-order': 'faq.placeOrder',
+    payment: 'faq.payment',
+    tax: 'faq.tax',
+    shipping: 'faq.shipping',
+    receipt: 'faq.receipt',
+    inspection: 'faq.inspection',
+    'after-sales': 'faq.afterSales',
+    feedback: 'faq.feedback',
+    security: 'faq.security',
+    others: 'faq.others',
+    promotions: 'faq.promotions',
+    guaranteed: 'faq.guaranteed',
+    'app-settings': 'faq.appSettings',
+    localization: 'faq.localization',
+  } as Record<string, string>,
+
+  init() {
+    const params = new URLSearchParams(window.location.search);
+    this.catParam = params.get('cat') || '';
+    this.subParam = params.get('sub') || '';
+  },
+
+  get categoryLabel(): string {
+    const key = this.categoryLabelMap[this.catParam];
+    return key ? t(key) : '';
+  },
+
+  get subTitle(): string {
+    return t(`faqDetail.${this.subParam}_title` as any) || t(`faq.${this.subParam}` as any) || '';
+  },
+
+  get subDescription(): string {
+    return t(`faqDetail.${this.subParam}_desc` as any) || '';
+  },
+
+  get faqItems(): { q: string; a: string }[] {
+    const items = t(`faqDetail.${this.subParam}_items` as any, { returnObjects: true });
+    if (Array.isArray(items)) return items;
+    return [];
+  },
+
+  get siblings(): { key: string; label: string }[] {
+    const subs = this.categorySubsMap[this.catParam] || [];
+    return subs.map((key: string) => ({
+      key,
+      label: t(`faq.${key}` as any) || key,
+    }));
+  },
+
+  get relatedTopics(): { key: string; cat: string; label: string }[] {
+    const topics: { key: string; cat: string; label: string }[] = [];
+    const allCats = Object.keys(this.categorySubsMap);
+    // Find 2-3 related subcategories from neighboring categories
+    const catIdx = allCats.indexOf(this.catParam);
+    const neighborCats = [
+      allCats[(catIdx + 1) % allCats.length],
+      allCats[(catIdx + 2) % allCats.length],
+    ];
+    for (const nc of neighborCats) {
+      const subs = this.categorySubsMap[nc] || [];
+      if (subs.length > 0) {
+        topics.push({
+          key: subs[0],
+          cat: nc,
+          label: t(`faq.${subs[0]}` as any) || subs[0],
+        });
+      }
+    }
+    return topics;
+  },
+
+  toggleItem(idx: number) {
+    this.openItem = this.openItem === idx ? null : idx;
   },
 }));
 

@@ -147,6 +147,7 @@ const en = {
     mega: {
       topRanking: 'Top ranking',
       newArrivals: 'New arrivals',
+      tailoredSelections: 'Tailored selections',
       topDeals: 'Top deals',
       dropshippingCenter: 'Dropshipping center',
       sampleCenter: 'Sample center',
@@ -321,7 +322,6 @@ const en = {
         lastName: 'Last Name',
         lastNamePlaceholder: 'Your last name',
         phone: 'Phone',
-        phonePlaceholder: '05XX XXX XX XX',
         password: 'Password',
         passwordPlaceholder: 'Create your password',
         minChars: 'At least 8 characters',
@@ -348,7 +348,6 @@ const en = {
       otpSentTo: 'Enter the 6-digit code sent to',
       otpSentFallback: 'your email address',
       otpInvalidCode: 'Invalid verification code. Please try again.',
-      otpTooManyAttempts: 'Too many wrong attempts. Please request a new code.',
       otpResent: 'Verification code has been resent.',
       otpDidntReceive: "Didn't receive the code?",
       otpResend: 'Resend',
@@ -441,7 +440,6 @@ const en = {
       subtotalExTax: 'Subtotal (excl. tax)',
       youSaved: '{{amount}} saved on your order',
       checkout: 'Checkout',
-      multiSupplierWarning: 'Multiple suppliers selected. Use the "Pay this supplier" button for each supplier separately.',
       orderProtection: 'iSTOC order protection',
       securePayment: 'Secure Payment',
       securePaymentDesc: 'Every payment is safe and secure',
@@ -997,9 +995,9 @@ const en = {
       // Order steps
       stepOrder: 'Order',
       stepPayment: 'Payment',
-      stepShipping: 'Shipping',
-      stepDelivery: 'Delivery',
-      stepReview: 'Review',
+      stepShipping: 'Preparing',
+      stepDelivery: 'Shipping',
+      stepReview: 'Delivered',
       // Order protection
       orderProtection: 'Order protection',
       securePayments: 'Secure Payments',
@@ -1349,9 +1347,9 @@ const en = {
         section3Title: '3. Functional Cookies',
         section3Content: '<p>These cookies provide a more personalized experience by remembering your preferences. They store information such as your language selection, currency preference or region settings.</p><p>If you disable these cookies, some personalization features may not work.</p>',
         section4Title: '4. Analytics Cookies',
-        section4Content: '<p>These cookies help us understand how visitors use our site. They collect statistical data such as page views, session duration and bounce rate.</p><p>The collected data is anonymized and used solely for the purpose of improving Platform services. The following tools are used for this purpose:</p><ul class="list-disc pl-5 space-y-1"><li><strong>Google Tag Manager (GTM):</strong> A tag management system that enables us to manage and deploy tracking tags on our site. GTM itself does not collect personal data but facilitates loading of other analytics and marketing scripts.</li><li><strong>Google Analytics:</strong> Collects anonymous statistics about page views, sessions, user behavior flows and demographic information.</li><li><strong>Yandex Metrica:</strong> Provides heatmaps, session recordings (WebVisor), scroll depth analysis and form interaction tracking to help us understand how visitors interact with our pages.</li></ul>',
+        section4Content: '<p>These cookies help us understand how visitors use our site. They collect statistical data such as page views, session duration and bounce rate.</p><p>The collected data is anonymized and used solely for the purpose of improving Platform services. Google Analytics and similar tools are used for this purpose.</p>',
         section5Title: '5. Marketing Cookies',
-        section5Content: '<p>These cookies are used to show advertisements relevant to your interests. They can track your browsing habits across different websites.</p><p>The following marketing and retargeting services are used on our Platform:</p><ul class="list-disc pl-5 space-y-1"><li><strong>Facebook Pixel (Meta):</strong> Tracks conversions from Facebook ads, builds targeted audiences for future ads, and enables retargeting of users who have already visited the site.</li><li><strong>Criteo:</strong> A retargeting platform that displays personalized product recommendations and ads based on your browsing history and product interactions on our site.</li><li><strong>Google Ads:</strong> Tracks conversions and enables remarketing to users who have previously interacted with the Platform.</li></ul><p>Disabling these cookies does not mean you will not see advertisements; it only means that the advertisements shown to you will not be personalized based on your interests.</p>',
+        section5Content: '<p>These cookies are used to show advertisements relevant to your interests. They can track your browsing habits across different websites.</p><p>Disabling these cookies does not mean you will not see advertisements; it only means that the advertisements shown to you will not be personalized based on your interests.</p>',
         section6Title: '6. Cookie Management',
         section6Content: '<p>You have the option to delete or block cookies from your browser settings. However, blocking essential cookies may cause the Platform to not function properly.</p><p>You can access the cookie settings of popular browsers from the following links:</p><ul class="list-disc pl-5 space-y-1"><li>Google Chrome: Settings > Privacy and Security > Cookies</li><li>Mozilla Firefox: Options > Privacy and Security</li><li>Safari: Preferences > Privacy</li><li>Microsoft Edge: Settings > Privacy, Search and Services</li></ul><p class="mt-3">You can also manage your cookie permissions by category using the cookie preference panel on this page.</p>',
       },
@@ -1373,6 +1371,72 @@ const en = {
         section6Content: '<p>After the return is approved, your payment will be refunded according to the original payment method:</p><ul class="list-disc pl-5 space-y-1"><li><strong>Credit/Debit card:</strong> Refunded to your card within 3-5 business days</li><li><strong>Bank transfer/Wire:</strong> Transferred to your bank account within 1-3 business days</li><li><strong>Platform balance:</strong> Instantly added to your balance</li></ul><p>For installment payments, the refund is reflected in your installment plan by your bank. This period may vary from bank to bank.</p>',
         section7Title: '7. Non-Returnable Products',
         section7Content: '<p>The following product categories are excluded from the return scope:</p><ul class="list-disc pl-5 space-y-1"><li>Custom-made or personalized products</li><li>Hygiene products with opened packaging (underwear, cosmetics, etc.)</li><li>Digital products and software licenses (if usage has begun)</li><li>Perishable products or products at risk of expiration</li><li>Periodicals such as newspapers and magazines</li><li>Campaign products marked as "non-returnable" by the seller</li></ul><p>These exceptions do not apply if the product is defective or damaged. Your right to return is reserved in all cases of defective/damaged products.</p>',
+      },
+      notice: {
+        pageTitle: 'Legal Notice',
+        lastUpdated: 'February 15, 2026',
+        breadcrumbLabel: 'Legal Notice',
+        section1Title: '1. Company Information',
+        section1Content: '<p><strong>Company Name:</strong> iSTOC Teknoloji Anonim Sirketi</p><p><strong>Headquarters:</strong> Istanbul Trade Center, Floor 12, Maslak, Sariyer, Istanbul</p><p><strong>Trade Registry Number:</strong> 123456</p><p><strong>MERSIS Number:</strong> 0123456789012345</p><p><strong>Tax Office / No:</strong> Maslak T.O. / 1234567890</p><p><strong>KEP Address:</strong> istoc@hs01.kep.tr</p><p><strong>Phone:</strong> +90 800 123 4567</p><p><strong>Email:</strong> info@istoc.com</p>',
+        section2Title: '2. About the Platform',
+        section2Content: '<p>iSTOC TradeHub is an electronic commerce platform established to facilitate business-to-business (B2B) trade. The Platform operates as an intermediary service provider within the framework of the Law No. 6563 on the Regulation of Electronic Commerce and related legislation.</p><p>Responsibility for products and services offered on the Platform belongs to the respective sellers. iSTOC acts as an intermediary in the commercial relationship between seller and buyer.</p>',
+        section3Title: '3. Limitation of Liability',
+        section3Content: '<p>While every effort is made to ensure the accuracy and currency of information published on the Platform, it is for informational purposes only. iSTOC does not guarantee that this information is complete, accurate, or up-to-date.</p><p>iSTOC is not responsible for the content of third-party websites accessed through the Platform.</p><p>iSTOC cannot be held responsible for access interruptions due to technical malfunctions, maintenance work, or force majeure events.</p>',
+        section4Title: '4. Oversight and Complaints',
+        section4Content: '<p>Platform activities are subject to the supervision of the Republic of Turkey Ministry of Trade.</p><p>For consumer complaints:</p><ul class="list-disc pl-5 space-y-1"><li><strong>Consumer Arbitration Committees:</strong> You can apply to Consumer Arbitration Committees within the District Governorship or Governorship of your province of residence.</li><li><strong>Consumer Courts:</strong> Your right to apply to Consumer Courts for disputes exceeding arbitration committee limits is reserved.</li><li><strong>e-Government:</strong> You can file online complaints through turkiye.gov.tr.</li></ul>',
+        section5Title: '5. Applicable Law',
+        section5Content: '<p>This legal notice and the use of the Platform are subject to the laws of the Republic of Turkey. Istanbul Courts and Enforcement Offices are authorized for all disputes.</p><p>This legal notice is for general informational purposes regarding the use of the Platform and does not constitute legal advice.</p>',
+      },
+      productListing: {
+        pageTitle: 'Product Listing Policy',
+        lastUpdated: 'February 15, 2026',
+        breadcrumbLabel: 'Product Listing Policy',
+        section1Title: '1. General Principles',
+        section1Content: '<p>Product listing on the iSTOC TradeHub platform is subject to specific standards and rules. All sellers are deemed to have read and accepted this policy before listing their products.</p><p>Listed products must comply with the legislation of the Republic of Turkey, international trade rules, and Platform policies.</p>',
+        section2Title: '2. Product Information and Accuracy',
+        section2Content: '<p>Sellers are obligated to provide the following information accurately and completely for their listed products:</p><ul class="list-disc pl-5 space-y-1"><li><strong>Product Title:</strong> Clear, understandable title that accurately describes the product</li><li><strong>Description:</strong> Detailed description including product features, material information, and use cases</li><li><strong>Images:</strong> High-quality, original photographs that accurately represent the product</li><li><strong>Pricing:</strong> Current price information with VAT included/excluded status clearly stated</li><li><strong>Stock Status:</strong> Real-time and accurate stock information</li><li><strong>Minimum Order:</strong> Minimum order quantity for B2B sales</li></ul>',
+        section3Title: '3. Prohibited and Restricted Products',
+        section3Content: '<p>Listing of the following products on the Platform is strictly prohibited:</p><ul class="list-disc pl-5 space-y-1"><li>Illegal products and contraband goods</li><li>Counterfeit, fake, or pirated products</li><li>Weapons, ammunition, and explosive materials</li><li>Narcotic and psychotropic substances</li><li>Human organs and tissues</li><li>Products derived from endangered species</li><li>Products containing or suggesting child exploitation</li><li>Products/services aimed at selling personal data</li></ul><p>Products in certain categories (food, pharmaceuticals, medical devices, chemical substances, etc.) may require additional documents and certificates.</p>',
+        section4Title: '4. Image and Content Standards',
+        section4Content: '<p>Product images and content must comply with the following standards:</p><ul class="list-disc pl-5 space-y-1"><li>Clear and well-lit images with minimum 800x800 pixel resolution</li><li>Images without watermarks, promotional text, or logos of other platforms</li><li>Descriptions without misleading or exaggerated claims</li><li>No disparaging statements about competitor products or brands</li><li>Descriptions without contact information (phone, email, website)</li></ul><p>iSTOC reserves the right to remove images and content that do not meet standards without prior notice.</p>',
+        section5Title: '5. Pricing Rules',
+        section5Content: '<p>Sellers are obligated to comply with the following pricing rules:</p><ul class="list-disc pl-5 space-y-1"><li>Prices must be realistic and in line with market conditions</li><li>Misleading discount and campaign practices are prohibited</li><li>Wholesale and retail prices must be clearly stated</li><li>Shipping costs and additional charges must be displayed transparently</li></ul><p>iSTOC has the right to suspend relevant listings when it detects pricing that is contrary to market conditions or manipulative.</p>',
+        section6Title: '6. Violations and Sanctions',
+        section6Content: '<p>The following sanctions may be applied in case of violation of this policy:</p><ul class="list-disc pl-5 space-y-1"><li><strong>Warning:</strong> Written warning for first violation</li><li><strong>Listing Removal:</strong> Removal of product listings that violate rules</li><li><strong>Account Suspension:</strong> Temporary suspension of account for repeated violations</li><li><strong>Account Closure:</strong> Permanent closure of account for severe or continuous violations</li></ul><p>Sellers have the right to appeal sanction decisions within 15 business days.</p>',
+      },
+      ip: {
+        pageTitle: 'Intellectual Property',
+        lastUpdated: 'February 15, 2026',
+        breadcrumbLabel: 'Intellectual Property',
+        section1Title: '1. Intellectual Property Protection Commitment',
+        section1Content: '<p>iSTOC TradeHub places the highest importance on respect for intellectual property rights. The Platform takes necessary measures to protect copyrights, trademarks, patents, and other intellectual property rights.</p><p>Platform users are obligated not to publish content or list products that infringe on the intellectual property rights of third parties.</p>',
+        section2Title: '2. iSTOC Intellectual Property Rights',
+        section2Content: '<p>All content and materials on the Platform, including but not limited to the following, are the intellectual property of iSTOC or its licensors:</p><ul class="list-disc pl-5 space-y-1"><li>The iSTOC name, logo, and all trademarks</li><li>Platform design, interface layout, and user experience</li><li>Software code, algorithms, and databases</li><li>Content, reports, and analyses generated by the Platform</li><li>Training materials and documentation</li></ul><p>Copying, reproducing, distributing, or using these materials for commercial purposes without the written permission of iSTOC is prohibited.</p>',
+        section3Title: '3. Infringement Notification',
+        section3Content: '<p>If you believe your intellectual property rights have been infringed, you can contact us with the following information:</p><ul class="list-disc pl-5 space-y-1"><li>Identity information of the rights holder or authorized representative</li><li>Description of the intellectual property right allegedly infringed</li><li>Location (URL) of the infringing content on the Platform</li><li>Documents supporting the infringement claim (registration certificate, license agreement, etc.)</li><li>Statement that the notification is made in good faith</li></ul><p><strong>Notification address:</strong> ipr@istoc.com</p>',
+        section4Title: '4. Review and Evaluation Process',
+        section4Content: '<p>Intellectual property infringement notifications are evaluated through the following process:</p><ol class="list-decimal pl-5 space-y-2"><li><strong>Notification Received:</strong> Your application is registered within 24 hours and a notification number is sent to you.</li><li><strong>Preliminary Review:</strong> Our team takes your application for preliminary review within 3 business days.</li><li><strong>Seller Notification:</strong> The infringement claim is forwarded to the relevant seller and a response is requested within 5 business days.</li><li><strong>Decision:</strong> All evidence is evaluated, a decision is made and communicated to the parties.</li><li><strong>Implementation:</strong> If infringement is found, the relevant content is removed.</li></ol>',
+        section5Title: '5. Counter-Notification Right',
+        section5Content: '<p>Sellers whose content has been removed have the right to file a counter-notification against the removal. Counter-notifications must include:</p><ul class="list-disc pl-5 space-y-1"><li>Seller\'s identity and contact information</li><li>Description of the removed content</li><li>Explanation and supporting documents as to why the content does not constitute infringement</li><li>Statement accepting legal responsibility in case of false notification</li></ul><p>Counter-notifications must be made within 10 business days of the removal.</p>',
+        section6Title: '6. Repeat Infringements',
+        section6Content: '<p>iSTOC applies a zero tolerance policy against repeat intellectual property infringements:</p><ul class="list-disc pl-5 space-y-1"><li><strong>First infringement:</strong> Written warning and content removal</li><li><strong>Second infringement:</strong> 30-day account suspension</li><li><strong>Third infringement:</strong> Permanent account closure</li></ul><p>For intentional and organizational infringements, iSTOC reserves the right to permanently close the account and initiate legal proceedings even on the first infringement.</p>',
+      },
+      accessibility: {
+        pageTitle: 'Accessibility',
+        lastUpdated: 'February 15, 2026',
+        breadcrumbLabel: 'Accessibility',
+        section1Title: '1. Our Accessibility Commitment',
+        section1Content: '<p>At iSTOC TradeHub, we are committed to ensuring our platform is accessible to all users, including people with disabilities. Digital accessibility is an integral part of our corporate responsibility.</p><p>Our platform is continuously being developed to comply with the Web Content Accessibility Guidelines (WCAG) 2.1 AA standard.</p>',
+        section2Title: '2. Accessibility Features',
+        section2Content: '<p>We offer the following accessibility features on our platform:</p><ul class="list-disc pl-5 space-y-1"><li><strong>Keyboard Navigation:</strong> All Platform features are accessible using keyboard only</li><li><strong>Screen Reader Support:</strong> Our content is compatible with popular screen reader software</li><li><strong>Text Size Adjustment:</strong> Users can change text size through browser settings</li><li><strong>Color Contrast:</strong> Color contrast ratios meeting WCAG AA standards</li><li><strong>Alternative Text:</strong> Descriptive alternative text for images</li><li><strong>Form Labels:</strong> Clear and understandable labels for all form fields</li><li><strong>Focus Indicators:</strong> Visible focus indicators when navigating with keyboard</li></ul>',
+        section3Title: '3. Supported Assistive Technologies',
+        section3Content: '<p>Our platform has been tested with the following assistive technologies:</p><ul class="list-disc pl-5 space-y-1"><li><strong>Screen Readers:</strong> NVDA, JAWS, VoiceOver (macOS/iOS), TalkBack (Android)</li><li><strong>Magnification Software:</strong> ZoomText, Windows Magnifier</li><li><strong>Voice Recognition:</strong> Dragon NaturallySpeaking, Windows Speech Recognition</li><li><strong>Alternative Input Devices:</strong> Switch access, eye tracking systems</li></ul><p>We conduct regular testing to ensure the best experience across different browser and device combinations.</p>',
+        section4Title: '4. Known Limitations',
+        section4Content: '<p>Despite our continuous improvement efforts in accessibility, there may be limitations in some areas:</p><ul class="list-disc pl-5 space-y-1"><li>Some product images uploaded by sellers may not contain alternative text</li><li>Third-party integrations (payment pages, map services) are subject to their own accessibility standards</li><li>Some older PDF documents may not be fully accessible</li></ul><p>We are actively working to address these limitations.</p>',
+        section5Title: '5. Feedback and Contact',
+        section5Content: '<p>Your feedback on accessibility is very valuable to us. If you experience accessibility issues on our platform or have suggestions, please contact us:</p><p><strong>Email:</strong> accessibility@istoc.com<br><strong>Phone:</strong> +90 800 123 4567 (Extension: 5)<br><strong>Post:</strong> iSTOC Teknoloji A.S., Accessibility Unit, Istanbul Trade Center, Floor 12, Maslak, Istanbul</p><p>Your feedback will be reviewed within 5 business days and you will receive a response.</p>',
+        section6Title: '6. Continuous Improvement',
+        section6Content: '<p>As part of our accessibility efforts:</p><ul class="list-disc pl-5 space-y-1"><li>We conduct regular accessibility audits</li><li>Our development team receives accessibility training</li><li>New features are published after passing accessibility tests</li><li>We conduct periodic evaluations with an advisory group of users with disabilities</li></ul><p>Our accessibility roadmap is continuously updated in line with user feedback and technological developments.</p>',
       },
     },
 
@@ -1736,6 +1800,21 @@ const en = {
     },
 
     // ============================================================
+    // COOKIE BANNER
+    // ============================================================
+    cookieBanner: {
+      ariaLabel: 'Cookie consent notification',
+      title: 'We Use Cookies',
+      description: 'We use cookies to provide you with the best experience on our website. Learn more about our <a href="/pages/legal/cookies.html" class="underline text-primary-600 hover:text-primary-700">Cookie Policy</a>.',
+      rejectAll: 'Reject All',
+      managePreferences: 'Manage Preferences',
+      acceptAll: 'Accept All',
+      alwaysOn: 'Always On',
+      showDetails: 'Show Details',
+      hideDetails: 'Hide Details',
+    },
+
+    // ============================================================
     // COOKIE CONSENT
     // ============================================================
     cookieConsent: {
@@ -1768,35 +1847,10 @@ const en = {
       twoYears: '2 years',
       twentyFourHours: '24 hours',
       threeMonths: '3 months',
-      sixMonths: '6 months',
-      thirteenMonths: '13 months',
       typeNecessary: 'Necessary',
       typeFunctional: 'Functional',
       typeAnalytics: 'Analytics',
       typeMarketing: 'Marketing',
-      // Yandex Metrica cookies
-      metricaUserId: 'Unique visitor identifier',
-      metricaFirstVisit: 'First visit date',
-      metricaAdBlock: 'Ad blocker detection',
-      metricaVisor: 'Session replay recording',
-      // Criteo cookies
-      criteoBundle: 'Ad personalization',
-      criteoRetargeting: 'Retargeting campaigns',
-    },
-
-    // ============================================================
-    // COOKIE BANNER
-    // ============================================================
-    cookieBanner: {
-      ariaLabel: 'Cookie consent',
-      title: 'We use cookies',
-      description: 'We use cookies and similar technologies to improve your experience, analyze traffic, and personalize content. You can manage your preferences or accept all cookies. Read our <a href="/pages/legal/cookies.html" class="text-primary-600 underline hover:text-primary-700">Cookie Policy</a> for details.',
-      acceptAll: 'Accept All',
-      rejectAll: 'Reject All',
-      managePreferences: 'Manage Preferences',
-      showDetails: 'Show cookie details',
-      hideDetails: 'Hide cookie details',
-      alwaysOn: 'Always on',
     },
 
     // ============================================================
@@ -1905,6 +1959,7 @@ const en = {
       sf: {
         // CompanyProfile - ContactSidebar
         contactSupplier: 'Contact Supplier',
+        contactSupplierTitle: 'Contact Supplier',
         contactNow: 'Contact now',
         sendInquiry: 'Send inquiry',
         // CompanyProfile - OverviewTab
@@ -1928,20 +1983,17 @@ const en = {
         onTimeShipment: 'On-Time Shipment',
         productQuality: 'Product Quality',
         browseAllReviews: 'Browse all reviews',
-        writeReview: 'Write a Review',
-        reviewRatingLabel: 'Your Rating',
-        reviewCommentLabel: 'Your Comment',
-        reviewCommentPlaceholder: 'Share your experience with this supplier...',
-        reviewSubmit: 'Submit',
-        reviewSuccess: 'Your review was submitted successfully.',
-        reviewLoginPrompt: 'Please log in to write a review.',
-        reviewLoginBtn: 'Log In',
-        reviewRatingRequired: 'Please select a rating.',
-        reviewCommentRequired: 'Comment cannot be empty.',
+        noReviewsYet: 'No reviews yet.',
+        viewAllReviews: 'View all reviews',
+        customizationServices: 'Customization services for low MOQ orders',
+        lowMoqCustomization: 'Low MOQ Customization & Fast Shipping',
+        categoriesAvailable: ' categories available',
+        productsAvailable: ' products available',
         // CompanyProfile - ProductsTab
         all: 'All',
         // CompanyProfile - Main Tabs
         myAccount: 'My Account',
+        serviceTab: 'Service',
         reviewsTab: 'Reviews',
         productsTab: 'Products',
         categoriesTab: 'Categories',
@@ -1986,6 +2038,7 @@ const en = {
         storeHeroBanner: 'Store hero banner',
         // Certificates
         certificates: 'Certificates',
+        noCertificates: 'No certificates added yet.',
         prevCertificate: 'Previous certificate',
         nextCertificate: 'Next certificate',
         // CategoryGrid
@@ -2018,6 +2071,69 @@ const en = {
         // CategoryProductListing extras
         minOrder: 'Min. Order',
         sold: 'sold',
+
+        // === NEW: Storefront Redesign (Alibaba-style) ===
+        // Header stats
+        platformYears: '{{count}} years on iSTOC',
+        employees: '{{count}} employees',
+        totalOrders: '{{count}} orders',
+        transactionVolume: 'US ${{amount}}+',
+        viewStore: 'Visit store',
+        viewAllCapabilities: 'View all verified capabilities ({{count}})',
+
+        // Capabilities
+        fullCustomization: 'Full customization',
+        rawMaterialTracing: 'Raw material tracing',
+        ceCertificate: 'CE certificate',
+        rohsCertificate: 'RoHS certificate',
+
+        // Profile tab
+        profile: 'Profile',
+        downloadReport: 'Download report',
+        generalOverview: 'General Overview',
+        registrationDate: 'Date of establishment',
+        floorArea: 'Floor area',
+        businessType: 'Business type',
+        annualRevenue: 'Annual revenue',
+        qualityControlSection: 'Quality Control',
+        rawMaterialSupport: 'Raw material traceability support',
+        inspectionMethod: 'Inspection method',
+        qcInspectors: 'QA/QC inspectors',
+        allProductionLines: 'QC on all production lines',
+        tradeHistory: 'Trade History',
+        mainMarkets: 'Main markets',
+        customerTypes: 'Main customer types',
+        rdCapabilities: 'R&D Capabilities',
+        rdEngineers: 'R&D engineers',
+        customizationOptions: 'Customization options',
+        engineerEducation: 'Engineer education level',
+
+        // Reviews tab extras
+        filterByRating: 'Filter by rating',
+        allRatings: 'All',
+
+        // Products tab extras
+        topSelling: 'Top selling',
+        superDiscount: 'Super discount',
+        featured: 'Featured',
+        videoAvailable: 'Video',
+        noProducts: 'No products added yet.',
+        page: 'Page',
+
+        // Video tips tab
+        videoTips: 'Video tips',
+        duration: 'Duration',
+        viewMore: 'View more',
+        noVideos: 'No videos available yet.',
+        watchVideo: 'Watch video',
+
+        // General
+        visitStore: 'Visit store',
+        manufacturer: 'Manufacturer',
+        wholesaler: 'Wholesaler',
+        retailer: 'Retailer',
+        yes: 'Yes',
+        no: 'No',
       },
     },
 
@@ -2066,6 +2182,93 @@ const en = {
       secureConnection: 'Secure connection — SSL encrypted',
       verifyingPayment: 'Verifying payment...',
       almostDone: 'Almost done, please wait',
+    },
+
+    // ============================================================
+    // ORDER SUCCESS / THANK YOU PAGE
+    // ============================================================
+    orderSuccess: {
+      // Page meta
+      pageTitle: 'Order Confirmation',
+      orders: 'Orders',
+      orderConfirmation: 'Order Confirmation',
+
+      // Success Banner
+      orderPlacedTitle: 'Your order has been placed!',
+      ordersPlacedTitle: 'Your {{count}} orders have been placed!',
+      orderPlacedSubtitle: 'Thank you for your purchase. Your order is being processed and will be shipped soon.',
+      pendingPaymentTitle: 'Order received — payment pending',
+      pendingPaymentSubtitle: 'Complete your payment to proceed with processing.',
+
+      // Next Steps Timeline
+      nextSteps: 'What happens next?',
+      stepOrderPlaced: 'Order Placed',
+      stepPaymentConfirmed: 'Payment Confirmed',
+      stepSupplierProcessing: 'Processing',
+      stepShipped: 'Shipped',
+      stepDelivered: 'Delivered',
+      completed: 'Completed',
+      inProgress: 'In Progress',
+      upcoming: 'Upcoming',
+
+      // Order Details
+      orderDetails: 'Order Details',
+      supplierLabel: 'Supplier',
+      orderNumberLabel: 'Order',
+      product: 'Product',
+      variation: 'Variation',
+      quantity: 'Qty',
+      unitPrice: 'Unit Price',
+      totalPrice: 'Total',
+      items: '{{count}} item',
+      itemsPlural: '{{count}} items',
+
+      // Shipping Info
+      shippingInfo: 'Shipping Information',
+      shippingAddress: 'Shipping Address',
+      shippingMethod: 'Shipping Method',
+      incoterms: 'Incoterms',
+      shipFrom: 'Ship From',
+      estimatedDelivery: 'Estimated Delivery',
+
+      // Payment Summary
+      paymentSummary: 'Payment Summary',
+      subtotal: 'Subtotal',
+      shippingFee: 'Shipping',
+      grandTotal: 'Grand Total',
+      paymentMethod: 'Payment Method',
+
+      // Payment method labels
+      bankTransfer: 'Bank Transfer',
+      creditCard: 'Credit Card',
+      installment: 'Installment Payment',
+      negotiated: 'Negotiated Terms',
+      checkPromissory: 'Check / Promissory Note',
+
+      // Action Buttons
+      trackOrder: 'Track Order',
+      downloadInvoice: 'Download Invoice',
+      continueShopping: 'Continue Shopping',
+      makePayment: 'Make Payment',
+
+      // Need Help
+      needHelp: 'Need Help?',
+      needHelpDesc: 'If you have any questions about your order, we\'re here to help.',
+      contactSupport: 'Contact Support',
+      visitHelpCenter: 'Help Center',
+
+      // All Orders
+      allOrders: 'All Orders in This Purchase',
+      orderDate: 'Order Date',
+
+      // Bank Transfer Pending
+      bankTransferPending: 'Payment receipt required',
+      bankTransferPendingDesc: 'To complete your order, please submit your bank transfer receipt from the orders page.',
+      goToUploadReceipt: 'Submit Transfer Receipt',
+
+      // Loading & Fallback
+      loadingOrders: 'Loading your order details...',
+      fallbackMessage: 'Your order numbers have been recorded. Visit your orders page for full details.',
     },
 
     // ============================================================
@@ -2957,27 +3160,6 @@ const en = {
       invalidVerifyCode: 'Enter a valid verification code.',
       selectReason: 'Please select a reason for leaving.',
 
-      // ── Profile Extended Fields ──────────────────────────────────
-      profileCompleteBanner: 'Your profile is %{{pct}} complete. A complete profile attracts more supplier interest.',
-      incompleteLabel: 'Incomplete',
-      cardBasicInfo: 'Basic Information',
-      cardBusinessInfo: 'Business Information',
-      cardMoreInfo: 'More Information',
-      cardSourcingPrefs: 'Sourcing Preferences',
-      avatarLabel: 'Profile Photo',
-      businessTypeLabel: 'Business Type',
-      companyNameLabel: 'Company Name',
-      jobTitleLabel: 'Job Title',
-      websiteLabel: 'Website',
-      sellingPlatformsLabel: 'Platforms I Sell On',
-      yearEstablishedLabel: 'Year Established',
-      employeeCountLabel: 'Total Number of Employees',
-      aboutUsLabel: 'About Us',
-      industryPrefsLabel: 'Industry Preferences',
-      sourcingFreqLabel: 'Sourcing Frequency',
-      annualSpendingLabel: 'Annual Spending',
-      yearJoined: 'Year Joined',
-
       // ── SettingsTaxInfo ──────────────────────────────────────────
       taxInfoTitle: 'Information',
       taxInfoTab: 'Tax Information',
@@ -3218,9 +3400,7 @@ const en = {
       signOut: 'Sign out',
       accountInfoCardTitle: 'Account information',
       myProfile: 'My Profile',
-      myMembership: 'My Account',
-      myAccountNav: 'My Account',
-      myAccountTitle: 'My Account',
+      myMembership: 'My membership account',
       linkedAccountsNav: 'Linked accounts',
       taxInfoNav: 'Tax information',
       accountSecurityTitle: 'Account security',
@@ -3430,6 +3610,555 @@ const en = {
       appSettingsLabel: 'iSTOC App Settings',
       localization: 'Language & Localization',
       localizationSettings: 'iSTOC Language Settings',
+    },
+    faqDetail: {
+      // UI
+      home: 'Home',
+      faq: 'FAQ',
+      backToFaq: 'Back to FAQ',
+      wasHelpful: 'Was this article helpful?',
+      yes: 'Yes',
+      no: 'No',
+      thankYou: 'Thank you for your feedback!',
+      noContent: 'No content available for this topic yet.',
+      relatedTopics: 'Related Topics',
+
+      // ── iSTOC Introduction ──
+      introDesc_title: 'iSTOC Introduction',
+      introDesc_desc: 'Learn about the iSTOC platform and how it works.',
+      introDesc_items: [
+        { q: 'What is iSTOC?', a: 'iSTOC is a Turkey-based B2B (business-to-business) e-commerce platform. It connects manufacturers, wholesalers, and distributors with buyers to facilitate safe and efficient trade. The platform features millions of products across thousands of categories.' },
+        { q: 'Who can use iSTOC?', a: 'iSTOC can be used by both individual entrepreneurs and corporate buyers and sellers. <strong>Buyers</strong> can source products at wholesale prices, while <strong>sellers</strong> can reach a wide audience of buyers. Registration on the platform is free.' },
+        { q: 'What makes iSTOC different from other platforms?', a: 'iSTOC stands out with its Trade Assurance program that protects both buyers and sellers. It features integrated logistics solutions, a secure payment system, and 24/7 customer support. Additionally, it offers AI-powered supplier matching and quality inspection services.' },
+        { q: 'What product categories are available on iSTOC?', a: 'The platform lists products in Textiles & Apparel, Electronics, Food & Beverages, Automotive, Machinery & Equipment, Construction & Building Materials, Cosmetics, Furniture, Agricultural products, and many more categories.' },
+      ],
+
+      introMembership_title: 'iSTOC Membership',
+      introMembership_desc: 'Learn about membership types, benefits, and upgrade options.',
+      introMembership_items: [
+        { q: 'What membership types are available on iSTOC?', a: 'iSTOC offers three membership tiers: <strong>Free Membership</strong> (basic features, limited listings), <strong>Gold Membership</strong> (priority listing, advanced analytics), and <strong>Verified Membership</strong> (verified badge, dedicated account manager, unlimited listings).' },
+        { q: 'What can I do with a free membership?', a: 'With a free membership, you can search for products, message suppliers, request quotes, and list a limited number of products. Basic Trade Assurance coverage is also included with free membership.' },
+        { q: 'How do I upgrade to Gold membership?', a: 'You can upgrade to Gold membership from Account Settings > "Upgrade Membership." Monthly and annual payment plans are available. You get a <strong>20% discount</strong> on the annual plan.' },
+        { q: 'What are the benefits of Verified membership?', a: 'Verified membership offers a verified badge, priority in search results, a dedicated account manager, an expanded analytics dashboard, unlimited product listings, and priority customer support.' },
+      ],
+
+      // ── Account Management ──
+      accountSettings_title: 'Account Settings',
+      accountSettings_desc: 'Update your account information and manage your profile settings.',
+      accountSettings_items: [
+        { q: 'How do I update my profile information?', a: 'Click on your profile icon in the top right corner, then go to <strong>"Account Settings."</strong> Here you can update your name, company details, contact information, and profile photo.' },
+        { q: 'Can I change my email address?', a: 'Yes, you can change your email address from Account Settings > Contact Information. A verification code will be sent to your new email address. Your old email will remain active until verification is complete.' },
+        { q: 'How do I change my password?', a: 'You can change your password from Account Settings > Security. After entering your current password, you need to type your new password twice. Your password must contain at least 8 characters, one uppercase letter, and one number.' },
+        { q: 'How do I manage my notification preferences?', a: 'You can manage your email, SMS, and in-app notification preferences from Account Settings > Notifications. You can configure settings separately for order updates, messages, promotions, and security alerts.' },
+      ],
+
+      accountCancelReactivate_title: 'Cancel & Reactivate',
+      accountCancelReactivate_desc: 'Account cancellation and reactivation processes.',
+      accountCancelReactivate_items: [
+        { q: 'How do I cancel my account?', a: 'You can use the "Close Account" option from Account Settings > Account Management. Before cancellation, all open orders and disputes must be resolved. Account closure can be reversed within <strong>30 days</strong>.' },
+        { q: 'Can I reactivate my account?', a: 'Yes, within 30 days of closing your account, you can reactivate it by logging in with your registered email address. After 30 days, the account is permanently deleted and data cannot be recovered.' },
+        { q: 'What happens if I cancel my Gold/Verified membership?', a: 'When you cancel your premium membership, all features remain active until the end of the current billing period. At the end of the period, your account is automatically downgraded to free membership. A partial refund is issued for remaining time on annual plans.' },
+      ],
+
+      accountLogin_title: 'Login',
+      accountLogin_desc: 'Log in to your account and troubleshoot login issues.',
+      accountLogin_items: [
+        { q: 'How do I log in to iSTOC?', a: 'Click the "Login" button on the homepage and enter your email address and password. You can also use quick login options with Google, Apple, or phone number.' },
+        { q: 'I forgot my password, what should I do?', a: 'Click the <strong>"Forgot Password"</strong> link on the login screen. A password reset link will be sent to your registered email address. The link is valid for 24 hours. If you don\'t receive the email, check your spam folder.' },
+        { q: 'How do I enable two-factor authentication (2FA)?', a: 'You can enable two-factor authentication from Account Settings > Security. You can choose between SMS or an authenticator app (Google Authenticator, Authy). Once 2FA is enabled, an additional verification code will be required at each login.' },
+        { q: 'My account is locked, what should I do?', a: 'After 5 consecutive failed login attempts, your account is temporarily locked for security purposes. You can wait 30 minutes and try again, or reset your password using "Forgot Password." If the issue persists, contact customer service.' },
+      ],
+
+      accountRegister_title: 'Register',
+      accountRegister_desc: 'Steps to create a new iSTOC account.',
+      accountRegister_items: [
+        { q: 'How do I register on iSTOC?', a: 'Click the "Sign Up" button on the homepage. Enter your email address, set a password, and accept the terms of use. After registration, you will need to verify your email.' },
+        { q: 'What information is required for registration?', a: 'For basic registration, an <strong>email address</strong> and <strong>password</strong> are sufficient. If you want to register as a seller, you will also need a company name, tax number, and contact information.' },
+        { q: 'I can\'t complete email verification, what should I do?', a: 'If you don\'t receive the verification email, first check your spam/junk mail folder. You can try to send a new verification email from the login page. If the issue persists, try registering with a different email address or contact the support team.' },
+      ],
+
+      accountBecomeSeller_title: 'Become a Seller',
+      accountBecomeSeller_desc: 'Process and requirements for becoming a seller on iSTOC.',
+      accountBecomeSeller_items: [
+        { q: 'What do I need to become a seller on iSTOC?', a: 'To become a seller, you need a valid trade registry, tax certificate, and company contact information. After filling out the registration form, your documents will be reviewed and approved within <strong>1-3 business days</strong>.' },
+        { q: 'Is seller registration free?', a: 'Yes, seller registration is completely free. You can list a certain number of products on the free plan. For more listings and advanced features, you can opt for Gold or Verified membership plans.' },
+        { q: 'What products can I sell?', a: 'You can sell any legal B2B products on iSTOC. The prohibited products list (weapons, drugs, counterfeit goods, etc.) is specified in the platform rules. Special categories like food and pharmaceuticals may require additional documentation.' },
+        { q: 'How long does the seller approval process take?', a: 'Your seller application is typically reviewed within <strong>1-3 business days</strong>. If your documents are complete, the process is completed faster. In case of missing documents, you will be notified by email.' },
+      ],
+
+      // ── Sourcing ──
+      sourcingSearch_title: 'Search',
+      sourcingSearch_desc: 'Product and supplier search methods on iSTOC.',
+      sourcingSearch_items: [
+        { q: 'How do I search for products?', a: 'You can search by entering a product name, category, or keyword in the search bar on the homepage. You can filter results by price, minimum order quantity, location, and supplier rating.' },
+        { q: 'What advanced search filters are available?', a: 'You can narrow search results using <strong>price range</strong>, <strong>minimum order quantity</strong>, <strong>supplier location</strong>, <strong>verification status</strong>, <strong>shipping options</strong>, and <strong>payment methods</strong> filters.' },
+        { q: 'Is there a visual search feature?', a: 'Yes, you can click the camera icon in the search bar to upload a product photo and find similar products. This feature is powered by AI technology and provides the most accurate results.' },
+      ],
+
+      sourcingSupplierEval_title: 'Supplier Evaluation',
+      sourcingSupplierEval_desc: 'Methods for evaluating and comparing suppliers.',
+      sourcingSupplierEval_items: [
+        { q: 'How do I check supplier reliability?', a: 'Each supplier profile includes <strong>verification status</strong>, <strong>transaction history</strong>, <strong>customer ratings</strong>, and <strong>response time</strong> information. Suppliers with the Verified badge have undergone third-party auditing.' },
+        { q: 'How are supplier ratings calculated?', a: 'Supplier ratings are calculated based on on-time delivery rate, product quality reviews, communication speed, and dispute resolution rate. Ratings range from 1-5, with 4.5+ marked as "Excellent Supplier."' },
+        { q: 'What is a supplier audit report?', a: 'An audit report is a comprehensive document by independent third-party firms that evaluates a supplier\'s factory capacity, production processes, quality control systems, and financial status. This report is available for Verified suppliers and can be viewed on their profile page.' },
+      ],
+
+      sourcingTradeInfo_title: 'Trade Information',
+      sourcingTradeInfo_desc: 'International trade information and regulations.',
+      sourcingTradeInfo_items: [
+        { q: 'What information can I find on the trade information page?', a: 'The trade information page provides comprehensive details on customs duties, import/export regulations, trade agreements by country, HS codes, and industry trade statistics.' },
+        { q: 'What is an HS code and how do I find it?', a: 'An HS (Harmonized System) code is a standard code used to classify products in international trade. On iSTOC, you can find your product\'s HS code on the product detail page or using the trade information tool.' },
+        { q: 'How do I use the customs duty calculator?', a: 'Enter the product category, HS code, country of origin, and destination country into the duty calculator on the trade information page to estimate customs duties. Results are for informational purposes and may differ from official rates.' },
+      ],
+
+      sourcingRecommender_title: 'Recommender',
+      sourcingRecommender_desc: 'AI-powered supplier and product recommendation system.',
+      sourcingRecommender_items: [
+        { q: 'How does the recommender system work?', a: 'The iSTOC Recommender system uses AI algorithms to suggest suitable products and suppliers based on your search history, purchasing habits, and industry trends. The system provides more personalized recommendations the more you use it.' },
+        { q: 'How can I customize recommendations?', a: 'You can customize recommendations by updating your industry, interests, and preferred categories in your profile. You can also help the system learn by marking recommendations as liked or not liked.' },
+        { q: 'Can I turn off the recommender feature?', a: 'Yes, you can turn off personalized recommendations from Account Settings > Privacy. In that case, general popular products and trends will be shown instead.' },
+      ],
+
+      sourcingAiApp_title: 'AI Application',
+      sourcingAiApp_desc: 'AI-powered trading tools and features.',
+      sourcingAiApp_items: [
+        { q: 'What does the iSTOC AI application do?', a: 'The iSTOC AI application offers AI-powered features including visual product search, automatic supplier matching, price analysis, market trend forecasting, and a smart chat assistant.' },
+        { q: 'How do I use the AI chat assistant?', a: 'Click the chat icon in the bottom right corner to access the AI assistant. You can get help from the AI assistant for product finding, price comparison, order tracking, or general questions.' },
+        { q: 'How does AI price analysis work?', a: 'AI price analysis analyzes market data and historical price trends to determine the fair market price range for products. This allows buyers to evaluate whether the prices offered by suppliers are in line with market conditions.' },
+      ],
+
+      sourcingSourcing_title: 'Sourcing',
+      sourcingSourcing_desc: 'Wholesale product sourcing strategies and tips.',
+      sourcingSourcing_items: [
+        { q: 'How does the wholesale sourcing process work?', a: 'The sourcing process on iSTOC consists of: product research, supplier evaluation, sample request, price negotiation, and placing an order. Platform tools guide you at each step.' },
+        { q: 'Should I send an RFQ (Request for Quotation)?', a: 'Yes, sending an RFQ is recommended especially for large orders. With an RFQ, you can receive quotes from multiple suppliers simultaneously and compare prices and terms. Your RFQ typically receives responses within <strong>24 hours</strong>.' },
+        { q: 'How do I request a sample?', a: 'Click the "Request Sample" button on the product detail page. Sample fees and shipping costs vary by supplier. Some suppliers offer the first sample for free.' },
+      ],
+
+      // ── Trade Negotiation ──
+      negotiationRfq_title: 'RFQ',
+      negotiationRfq_desc: 'Request for Quotation process and management.',
+      negotiationRfq_items: [
+        { q: 'How do I send an RFQ?', a: 'Click the "Send RFQ" button in the main menu. Submit your request by adding a product description, quantity, target price, delivery time, and optionally a product image. Your RFQ will be automatically forwarded to relevant suppliers.' },
+        { q: 'How many quotes can I receive for my RFQ?', a: 'Typically, an RFQ receives <strong>5-20 quotes</strong>. The number of quotes varies depending on the product category and request details. You can compare quotes by price, quality, delivery time, and supplier rating.' },
+        { q: 'Can I edit or cancel my RFQ?', a: 'Yes, you can edit an RFQ that hasn\'t received any quotes yet. To cancel, use the "Cancel" option on the RFQ detail page. When an RFQ with existing quotes is cancelled, suppliers are notified.' },
+      ],
+
+      negotiationMessages_title: 'Messages',
+      negotiationMessages_desc: 'Messaging and communication with suppliers.',
+      negotiationMessages_items: [
+        { q: 'How do I send a message to a supplier?', a: 'You can initiate contact by clicking the "Send Message" button on the supplier profile or product detail page. You can send text, images, and files.' },
+        { q: 'What should I do if I don\'t get a response to my messages?', a: 'The supplier\'s average response time is displayed on their profile page. If you don\'t receive a response within 48 hours, you can send a reminder message or reach out to alternative suppliers. You can also rate the response time in the supplier evaluation.' },
+        { q: 'Where can I view my message history?', a: 'You can access all your message history from the "Messages" section in the left menu. You can filter conversations by supplier name or product, and star important messages.' },
+      ],
+
+      negotiationOtherIssues_title: 'Other Communication Issues',
+      negotiationOtherIssues_desc: 'Common issues in supplier communication and their solutions.',
+      negotiationOtherIssues_items: [
+        { q: 'I\'m having language issues with a supplier, what should I do?', a: 'iSTOC\'s built-in translation feature automatically translates your messages. Enable the translation icon in the message input area to automatically translate your messages to the supplier\'s language.' },
+        { q: 'How do I report a suspicious supplier?', a: 'Click the "Report" button on the supplier profile to report a suspicious situation. In cases of counterfeit products, misleading information, or suspected fraud, our security team investigates within <strong>24 hours</strong>.' },
+        { q: 'Can I make video calls?', a: 'Yes, you can start a video call with a supplier by clicking the video camera icon on the messaging screen. This feature is available to Gold and Verified members. It\'s ideal for factory tours and product inspections.' },
+      ],
+
+      // ── Place Order ──
+      placeOrderTradeAssurance_title: 'Trade Assurance Introduction',
+      placeOrderTradeAssurance_desc: 'Information about the iSTOC Trade Assurance program.',
+      placeOrderTradeAssurance_items: [
+        { q: 'What is Trade Assurance?', a: 'Trade Assurance is an iSTOC program that protects both buyers and sellers. It guarantees full or partial refund to the buyer if the ordered products are not delivered according to the contract terms.' },
+        { q: 'What is covered under Trade Assurance?', a: 'The program covers <strong>product quality</strong>, <strong>on-time delivery</strong>, <strong>order quantity accuracy</strong>, and <strong>payment security</strong>. Mediation services are also provided when issues arise.' },
+        { q: 'Is Trade Assurance free?', a: 'Yes, basic Trade Assurance coverage is free for all iSTOC users. Gold and Verified memberships offer extended protection limits and priority mediation services.' },
+      ],
+
+      placeOrderPlace_title: 'Place Order',
+      placeOrderPlace_desc: 'Steps and considerations for placing an order.',
+      placeOrderPlace_items: [
+        { q: 'How do I place an order?', a: 'After selecting the quantity and variant on the product detail page, click "Add to Cart" or "Buy Now." Enter your delivery address, select your payment method, and confirm your order.' },
+        { q: 'What is Minimum Order Quantity (MOQ)?', a: 'MOQ is the minimum quantity that a supplier accepts for an order. This quantity is specified on the product detail page. If you want to order below the MOQ, you can negotiate with the supplier via messages.' },
+        { q: 'What information should I check before placing an order?', a: 'Before placing an order, carefully check the <strong>product specifications</strong>, <strong>price</strong>, <strong>shipping cost</strong>, <strong>estimated delivery time</strong>, <strong>payment terms</strong>, and <strong>return policy</strong>.' },
+      ],
+
+      placeOrderConfirm_title: 'Confirm Order',
+      placeOrderConfirm_desc: 'Order confirmation process and checkpoints.',
+      placeOrderConfirm_items: [
+        { q: 'How do I confirm my order?', a: 'After reviewing all details on the order summary screen, click "Confirm Order." Once payment is completed, an order confirmation will be sent via email and app notification.' },
+        { q: 'Can I make changes after order confirmation?', a: 'If the order has not yet been accepted by the supplier, you can make changes such as quantity, color, or size. After acceptance, you need to contact the supplier directly for changes.' },
+        { q: 'I didn\'t receive an order confirmation email, what should I do?', a: 'First check your spam folder. You can view your order on the "My Orders" page. If the email doesn\'t arrive, make sure your email notifications are enabled in Account Settings > Notifications.' },
+      ],
+
+      placeOrderManage_title: 'Order Management',
+      placeOrderManage_desc: 'Track and manage your orders.',
+      placeOrderManage_items: [
+        { q: 'Where can I track my orders?', a: 'You can view all your active and past orders on the "My Orders" page. Each order\'s status (Pending Approval, Preparing, Shipped, Delivered) is updated in real-time.' },
+        { q: 'Can I cancel my order?', a: 'If the order has not yet been shipped, you can request cancellation from the "My Orders" page. After supplier approval, your payment will be refunded. Once shipped, you need to initiate a return process.' },
+        { q: 'How do I manage bulk orders?', a: 'You can manage multiple orders by making bulk selections on the "My Orders" page. You can perform bulk status checks, send messages, and track shipping.' },
+      ],
+
+      // ── Order Payment ──
+      paymentOrderPayment_title: 'Order Payment',
+      paymentOrderPayment_desc: 'Order payment processes and secure payment.',
+      paymentOrderPayment_items: [
+        { q: 'What payment methods can I use?', a: 'On iSTOC, you can pay with <strong>credit cards</strong>, <strong>debit cards</strong>, <strong>bank transfer/wire</strong>, <strong>online banking</strong>, and <strong>iSTOC Wallet</strong>. Some suppliers also accept LC (Letter of Credit) and T/T payments.' },
+        { q: 'How is payment security ensured?', a: 'All payments are protected with 256-bit SSL encryption. Under Trade Assurance, your payment is held securely until the product is received and confirmed. 3D Secure verification is required for credit card payments.' },
+        { q: 'Can I pay in installments?', a: 'Yes, 3, 6, 9, and 12 installment options are available for credit card payments. Installment options and rates may vary depending on your bank.' },
+      ],
+
+      paymentReceipt_title: 'Payment Receipt',
+      paymentReceipt_desc: 'Payment receipt and invoice information.',
+      paymentReceipt_items: [
+        { q: 'Where can I view my payment receipt?', a: 'You can download your payment receipt as a PDF by going to the relevant order details on the "My Orders" page. The receipt is also sent to your registered email address.' },
+        { q: 'How do I request an invoice?', a: 'Simply enter your invoice details (company name, tax number, address) when placing an order. An e-invoice is automatically generated and accessible from the "My Documents" section.' },
+        { q: 'Can I change my invoice details?', a: 'You can update your invoice details from the order details before the invoice is generated. After the invoice is issued, you need to contact customer service for changes.' },
+      ],
+
+      paymentFinancial_title: 'Financial',
+      paymentFinancial_desc: 'Financial services and trade financing.',
+      paymentFinancial_items: [
+        { q: 'What financial services does iSTOC offer?', a: 'iSTOC offers buyers trade financing, credit limits, and deferred payment options. These services are provided through partner financial institutions and available under eligible conditions.' },
+        { q: 'How do I apply for a credit limit?', a: 'Go to "Financial Services" from your account page to apply for a credit limit. Company documents and financial information are required. The approval process typically takes <strong>3-5 business days</strong>.' },
+        { q: 'What deferred payment options are available?', a: 'Approved buyers can benefit from 30, 60, or 90-day deferred payment options. Terms and limits are determined based on credit assessment.' },
+      ],
+
+      paymentPayment_title: 'Payment',
+      paymentPayment_desc: 'General payment information and troubleshooting.',
+      paymentPayment_items: [
+        { q: 'My payment failed, what should I do?', a: 'First, check your card limit and expiration date. Make sure you completed the 3D Secure verification. If the issue persists, try a different payment method or contact your bank.' },
+        { q: 'I was charged twice, what should I do?', a: 'In case of double charging, contact customer service immediately. Refreshing the page without leaving the payment screen can cause double charges. The excess charge is automatically refunded within <strong>5-10 business days</strong>.' },
+        { q: 'How are exchange rates calculated?', a: 'Prices on iSTOC are displayed in Turkish Lira by default. For currency-based payments, the current exchange rate is applied by the bank at the time of payment. Amounts due to exchange rate differences are for informational purposes.' },
+      ],
+
+      paymentTypes_title: 'Payment Types',
+      paymentTypes_desc: 'Supported payment types and details.',
+      paymentTypes_items: [
+        { q: 'What payment types are supported?', a: 'iSTOC supports Visa, Mastercard, American Express credit/debit cards, bank transfer/wire, online banking, iSTOC Wallet, and for international orders, LC (Letter of Credit) and T/T (Telegraphic Transfer).' },
+        { q: 'What is iSTOC Wallet?', a: 'iSTOC Wallet is an in-platform digital wallet system. You can load a balance and make fast, commission-free payments. Refunds are instantly reflected in your wallet. You can withdraw your wallet balance to your bank account at any time.' },
+        { q: 'How does LC (Letter of Credit) payment work?', a: 'LC payment is an international payment method where the buyer\'s bank guarantees payment to the seller. It is usually preferred for large orders. You need to contact your bank to open an LC.' },
+      ],
+
+      // ── Tax Management ──
+      taxSubmitInfo_title: 'Submit Tax Information',
+      taxSubmitInfo_desc: 'Register and update your tax information in the system.',
+      taxSubmitInfo_items: [
+        { q: 'How do I register my tax information?', a: 'You can enter your tax ID number, tax office, and company information from Account Settings > Tax Information. This information is required for invoice generation.' },
+        { q: 'Can I add multiple tax profiles?', a: 'Yes, you can add multiple tax profiles for different companies or branches. You can select which tax information to use when placing an order.' },
+        { q: 'When should I update my tax information?', a: 'It is recommended to update your tax information immediately when there are changes to your company name, tax number, or address. Outdated information can cause invoice issues.' },
+      ],
+
+      taxTypes_title: 'Tax Types',
+      taxTypes_desc: 'Types of taxes applied to iSTOC transactions.',
+      taxTypes_items: [
+        { q: 'What taxes are applied on iSTOC?', a: '<strong>VAT (Value Added Tax)</strong> is applied on iSTOC transactions. For import transactions, <strong>customs duty</strong> may apply, and some product groups may have <strong>special consumption tax</strong>.' },
+        { q: 'What are the VAT rates?', a: 'VAT rates vary by product category. The general rate is 20%, the reduced rate is 10%, and the super-reduced rate is 1%. VAT-inclusive and VAT-exclusive prices are shown on the product detail page.' },
+        { q: 'Can I get a VAT refund?', a: 'VAT refunds are available for export transactions. VAT refund processes are conducted through the tax office. iSTOC provides the necessary documents (invoices, customs declarations, etc.) digitally.' },
+      ],
+
+      taxInvoice_title: 'Tax Invoice',
+      taxInvoice_desc: 'Tax invoice generation and viewing.',
+      taxInvoice_items: [
+        { q: 'How are tax invoices generated?', a: 'When an order is completed, a tax invoice is automatically generated in e-invoice format. The invoice is created based on your registered tax information and is accessible from the "My Documents" section.' },
+        { q: 'There is an error on my invoice, how do I fix it?', a: 'Contact customer service for invoice errors. If necessary, a cancellation invoice is issued and a new invoice is created. The invoice correction process may take <strong>3-5 business days</strong>.' },
+        { q: 'Can I get a proforma invoice?', a: 'Yes, you can request a proforma invoice before placing an order. You can send a message to the supplier or submit your proforma invoice request from the product detail page.' },
+      ],
+
+      taxVerifyInfo_title: 'Verify Tax Information',
+      taxVerifyInfo_desc: 'Tax information verification process.',
+      taxVerifyInfo_items: [
+        { q: 'How is tax information verified?', a: 'The tax information you enter is automatically verified against the Revenue Administration (GIB) database. The verification process is completed within a few minutes and the result is displayed in your account.' },
+        { q: 'Tax information verification failed, what should I do?', a: 'Make sure you entered your tax number and company name correctly. The information must match GIB records. If the issue persists, check that your tax certificate is current or contact customer service.' },
+        { q: 'Can foreign companies do tax verification?', a: 'Yes, foreign companies can verify by uploading their tax registration documents from their own countries. Document review is done manually and may take <strong>2-3 business days</strong>.' },
+      ],
+
+      taxOrderManage_title: 'Tax Order Management',
+      taxOrderManage_desc: 'Order management from a tax perspective.',
+      taxOrderManage_items: [
+        { q: 'How do I change tax information on my orders?', a: 'You can change your invoice/tax information from the "Order Details" section before the order is confirmed. For confirmed orders, contact customer service for changes.' },
+        { q: 'Can I place tax-free orders?', a: 'Tax-free orders can be placed for free zone transactions and under certain special trade agreements. You need to upload the required documents during the ordering process.' },
+        { q: 'How is tax calculated for bulk orders?', a: 'For bulk orders, tax is calculated on the total order amount. Products subject to different VAT rates are calculated separately to determine the total tax amount.' },
+      ],
+
+      taxRefund_title: 'Tax Refund',
+      taxRefund_desc: 'Tax refund processes and conditions.',
+      taxRefund_items: [
+        { q: 'How do I request a tax refund?', a: 'For export transactions, you can download the required documents from the "My Documents" section and apply to your tax office. iSTOC provides documents such as customs declarations and invoices digitally.' },
+        { q: 'How long does a tax refund take?', a: 'The tax refund process is conducted by the tax office and typically takes <strong>30-90 days</strong>. Document preparation on the iSTOC side is completed within 3-5 business days.' },
+        { q: 'What documents are required for a VAT refund?', a: '<strong>Customs declaration</strong>, <strong>sales invoice</strong>, <strong>payment proof</strong>, and <strong>shipping document</strong> are required for a VAT refund. All documents can be obtained digitally through the iSTOC platform.' },
+      ],
+
+      // ── Shipping ──
+      shippingShipping_title: 'Shipping',
+      shippingShipping_desc: 'Shipping options and delivery processes.',
+      shippingShipping_items: [
+        { q: 'What shipping options are available?', a: 'iSTOC offers <strong>standard shipping</strong>, <strong>express shipping</strong>, <strong>priority shipping</strong>, and <strong>sea freight</strong> delivery options. Options vary based on product size, weight, and delivery address.' },
+        { q: 'How is the shipping fee calculated?', a: 'The shipping fee is automatically calculated based on product weight, dimensions, delivery address, and the selected shipping method. The exact shipping fee is shown on the order summary screen. Some suppliers offer free shipping on orders above a certain amount.' },
+        { q: 'How do I track my shipment?', a: 'You can see your tracking number and monitor your shipment in real-time on the "My Orders" page. You will receive automatic notifications when the shipping status changes.' },
+      ],
+
+      shippingLogistics_title: 'iSTOC Logistics Services',
+      shippingLogistics_desc: 'iSTOC\'s integrated logistics solutions.',
+      shippingLogistics_items: [
+        { q: 'What is iSTOC Logistics?', a: 'iSTOC Logistics is the platform\'s own integrated shipping and logistics solution. It offers door-to-door delivery, warehousing, customs clearance, and last-mile delivery services under a single umbrella.' },
+        { q: 'What are the advantages of iSTOC Logistics?', a: 'It offers competitive pricing, end-to-end tracking, customs processing support, insurance coverage, and priority customer support. It also provides full integration with Trade Assurance.' },
+        { q: 'Which countries does iSTOC Logistics deliver to?', a: 'iSTOC Logistics offers delivery services to <strong>45+ countries</strong>. You can view the countries and estimated delivery times during the ordering process.' },
+      ],
+
+      shippingMaersk_title: 'MSK Shipping Services (Maersk)',
+      shippingMaersk_desc: 'Maersk ocean freight shipping services.',
+      shippingMaersk_items: [
+        { q: 'What is the Maersk shipping service?', a: 'Maersk is iSTOC\'s partner for ocean freight shipping. It offers container-based international cargo services. It\'s an economical option especially for high-volume and heavy loads.' },
+        { q: 'How long does Maersk shipping take?', a: 'Delivery time varies by route and ports. Intra-European shipments take <strong>5-10 days</strong>, Far East routes <strong>20-35 days</strong>, and American routes <strong>15-25 days</strong>.' },
+        { q: 'How do I track Maersk shipments?', a: 'You can track your shipment in real-time through the iSTOC platform using your container number. Vessel position, estimated arrival date, and port information are displayed.' },
+      ],
+
+      shippingImportFees_title: 'Import Fees',
+      shippingImportFees_desc: 'Import customs duties and additional fees.',
+      shippingImportFees_items: [
+        { q: 'What are import fees?', a: 'Import fees may include <strong>customs duty</strong>, <strong>VAT</strong>, <strong>anti-dumping duty</strong> (if applicable), <strong>customs broker fee</strong>, and <strong>port service charges</strong>.' },
+        { q: 'Can I calculate import fees in advance?', a: 'Yes, you can use iSTOC\'s import fee calculator to see estimated costs in advance. Enter the product category, HS code, origin, and destination country to calculate.' },
+        { q: 'Are there products exempt from customs duty?', a: 'Some product categories may be exempt from customs duty under free trade agreements. The exemption status varies by country of origin and product category. We recommend consulting your customs broker for detailed information.' },
+      ],
+
+      // ── Order Receipt ──
+      receiptDelivery_title: 'Order Delivery',
+      receiptDelivery_desc: 'Order delivery process and checks.',
+      receiptDelivery_items: [
+        { q: 'When will my order be delivered?', a: 'The estimated delivery time is indicated in your order details. The time varies based on production time, shipping method, and delivery address. You can check real-time status using your tracking number.' },
+        { q: 'What should I check during delivery?', a: 'During delivery, check the <strong>package integrity</strong>, <strong>product quantity</strong>, and <strong>visual condition</strong>. If there are damaged or missing products, document it in the presence of the delivery person and report to iSTOC within 24 hours.' },
+        { q: 'Can I change my delivery address?', a: 'If the order has not yet been shipped, you can change the delivery address from the "My Orders" page. After shipping, you can contact the carrier to request address redirection.' },
+      ],
+
+      receiptCompletion_title: 'Order Completion',
+      receiptCompletion_desc: 'Order completion confirmation and what follows.',
+      receiptCompletion_items: [
+        { q: 'What is order completion confirmation?', a: 'After receiving and inspecting the product, click the "Complete Order" button to confirm. This confirmation releases the payment to the supplier. If you don\'t confirm, it is automatically completed after 15 days.' },
+        { q: 'Can I return the product without giving completion confirmation?', a: 'Yes, if there is an issue with the product upon receipt, you can use the "Start Return/Dispute" option without confirming completion. The payment remains on hold and is not transferred to the supplier until the issue is resolved.' },
+        { q: 'Can I leave a review after order completion?', a: 'Yes, after order completion, you can review the product quality, delivery time, and supplier communication. Your reviews help other buyers make informed decisions.' },
+      ],
+
+      // ── Inspection & Production Monitoring ──
+      inspectionServices_title: 'Inspection Services',
+      inspectionServices_desc: 'Product quality inspection services.',
+      inspectionServices_items: [
+        { q: 'What is the inspection service?', a: 'The iSTOC Inspection Service is a professional service where independent inspectors perform quality control of your products, verify compliance with production standards, and check order specifications on-site.' },
+        { q: 'What types of inspection are offered?', a: '<strong>Pre-production inspection</strong> (raw material control), <strong>during production inspection</strong> (process control), <strong>pre-shipment inspection</strong> (final product control), and <strong>container loading inspection</strong> services are offered.' },
+        { q: 'How do I request an inspection?', a: 'You can request an inspection by clicking the "Request Inspection" button on the order detail page or through customer service. The inspection fee is determined based on the type and location of the inspection.' },
+      ],
+
+      inspectionMonitoring_title: 'Production Monitoring Services',
+      inspectionMonitoring_desc: 'Remote production process monitoring.',
+      inspectionMonitoring_items: [
+        { q: 'What is production monitoring?', a: 'Production monitoring is a service that allows you to track the production process of your order from start to finish. You can monitor production remotely with regular photo/video updates, progress reports, and quality control checkpoints.' },
+        { q: 'Is production monitoring paid?', a: 'Basic production updates (photos and progress reports) are free. Premium services such as detailed video monitoring, live factory connections, and dedicated inspector assignments are subject to additional fees.' },
+        { q: 'What happens if a problem is detected during production?', a: 'If a quality issue or non-compliance with order specifications is detected during production monitoring, you will be immediately notified. Coordination with the supplier is provided to resolve the issue, and Trade Assurance kicks in if necessary.' },
+      ],
+
+      // ── After-Sales Service ──
+      afterSalesDispute_title: 'Order Dispute',
+      afterSalesDispute_desc: 'Order disputes and resolution methods.',
+      afterSalesDispute_items: [
+        { q: 'How do I open an order dispute?', a: 'Select the relevant order from the "My Orders" page and click "Start Dispute." Describe your issue, attach evidence (photos, videos), and specify your desired resolution (refund, partial refund, re-shipment).' },
+        { q: 'How long does the dispute process take?', a: 'The dispute process is typically resolved within <strong>7-15 business days</strong>. First, a settlement between the parties is sought. If no settlement is reached, the iSTOC mediation team steps in.' },
+        { q: 'What happens to my payment during the dispute?', a: 'During the dispute, your payment is securely held on hold and is not transferred to the supplier. If the resolution is in your favor, your payment is refunded.' },
+      ],
+
+      afterSalesReturn_title: 'Order Return',
+      afterSalesReturn_desc: 'Product return conditions and process.',
+      afterSalesReturn_items: [
+        { q: 'How do I return a product?', a: 'Create a "Return Request" from the "My Orders" page. Select the return reason and attach photos if needed. After supplier approval, return shipping information and instructions will be sent.' },
+        { q: 'What are the return conditions?', a: 'Products can be returned within <strong>15 days</strong> of receipt. The product must be unused, in original packaging, and undamaged. Custom-made and personalized products are excluded from returns.' },
+        { q: 'Who pays the return shipping cost?', a: 'If the product is defective or doesn\'t meet order specifications, the shipping cost is borne by the supplier. For buyer-initiated returns (change of mind, etc.), the shipping cost is borne by the buyer.' },
+      ],
+
+      afterSalesDisputeProcess_title: 'Dispute Process',
+      afterSalesDisputeProcess_desc: 'Steps of the dispute resolution process.',
+      afterSalesDisputeProcess_items: [
+        { q: 'How does the dispute resolution process work?', a: 'The process consists of: <strong>1)</strong> Filing the dispute, <strong>2)</strong> Supplier response (3 days), <strong>3)</strong> Negotiation between parties (5 days), <strong>4)</strong> iSTOC mediation (if needed), <strong>5)</strong> Decision and execution.' },
+        { q: 'Can I appeal the mediation decision?', a: 'Yes, you can appeal the mediation decision within 7 days. The appeal is reviewed by a senior mediation committee. The committee\'s decision is final.' },
+        { q: 'What can I submit as evidence?', a: 'Photos, videos, communication records, inspection reports, shipping documents, and contract/order details can be submitted as evidence. The more detailed the evidence, the faster and fairer the resolution.' },
+      ],
+
+      afterSalesGoodsIssue_title: 'Goods Issue',
+      afterSalesGoodsIssue_desc: 'Issues encountered with delivered goods.',
+      afterSalesGoodsIssue_items: [
+        { q: 'Wrong product was sent, what should I do?', a: 'Take photos immediately and start a dispute from the "My Orders" page. Wrong product shipment is covered by Trade Assurance. The supplier is obligated to re-send the correct product or issue a full refund.' },
+        { q: 'Product arrived damaged, what should I do?', a: 'Document the damage at the time of delivery (photos/videos). Report on iSTOC within 24 hours. Damage compensation or re-shipment is provided under shipping insurance.' },
+        { q: 'Product quality doesn\'t meet expectations, what should I do?', a: 'Compare the product with the sample or order specifications. Document the differences and start a dispute. Quality non-compliance is evaluated under Trade Assurance.' },
+      ],
+
+      afterSalesDisputeRules_title: 'Dispute Rules',
+      afterSalesDisputeRules_desc: 'Rules applied in dispute resolution.',
+      afterSalesDisputeRules_items: [
+        { q: 'What is the time limit for opening a dispute?', a: 'A dispute can be opened within <strong>30 days</strong> of order receipt. This period must be exercised before the automatic order completion time.' },
+        { q: 'What issues can a dispute be opened for?', a: 'Disputes can be opened for product quality, quantity shortage, wrong product, delivery delay, description mismatch, and damaged product issues. Different evidence requirements apply for each dispute type.' },
+        { q: 'What are the obligations of the parties in a dispute?', a: '<strong>Buyer:</strong> present evidence, respond to communication. <strong>Seller:</strong> respond within 3 days, propose a resolution. A decision may be made against the non-responsive party.' },
+      ],
+
+      afterSalesRefund_title: 'Refund',
+      afterSalesRefund_desc: 'Refund processes and timelines.',
+      afterSalesRefund_items: [
+        { q: 'How are refunds processed?', a: 'Approved refunds from disputes or returns are refunded to your original payment method. Credit card refunds take <strong>5-10 business days</strong>, bank transfers take <strong>3-5 business days</strong>.' },
+        { q: 'What is a partial refund?', a: 'If part of the product is defective or has a minor quality issue, a partial refund may be issued instead of a full refund. The partial refund amount is determined between the parties or through mediation based on the extent of the issue.' },
+        { q: 'How do I track my refund status?', a: 'You can track your refund status from "My Orders" > "Returns." You will receive notifications when the refund is approved, processed, and completed.' },
+      ],
+
+      // ── Order Feedback ──
+      feedbackManagement_title: 'Feedback Management',
+      feedbackManagement_desc: 'Order review and feedback system.',
+      feedbackManagement_items: [
+        { q: 'How do I leave a review?', a: 'After order completion, click the "Review" button to give a 1-5 star rating and written comment. Separate ratings are given for product quality, delivery time, and supplier communication.' },
+        { q: 'Can I edit or delete my review?', a: 'You can edit your review within <strong>30 days</strong> of publication. For deletion, contact customer service. Reviews containing false information may be removed.' },
+        { q: 'How do I leave a photo review?', a: 'Click the "Add Photo" button on the review form to upload your product photos. Photo reviews are more helpful for other buyers and earn extra points.' },
+      ],
+
+      feedbackRules_title: 'Feedback Rules',
+      feedbackRules_desc: 'Review and feedback policies.',
+      feedbackRules_items: [
+        { q: 'What reviews are prohibited?', a: 'Reviews containing personal attacks, insults, racism, advertising content, false information, and competitor product promotion are prohibited. Such reviews are removed when detected.' },
+        { q: 'How do I report a fake review?', a: 'Click the "Report" button below the review to report fake or inappropriate reviews. Our team reviews the report within <strong>48 hours</strong>.' },
+        { q: 'Does my review score affect my seller status?', a: 'Yes, as a seller, the review scores you receive directly affect your search ranking, Verified status, and visibility on the platform.' },
+      ],
+
+      // ── Security & iSTOC Rules ──
+      securityFraud_title: 'Fraud/Fake Email',
+      securityFraud_desc: 'Recognizing and reporting fraud and fake emails.',
+      securityFraud_items: [
+        { q: 'How do I recognize a fraud attempt?', a: 'Watch out for messages requesting off-platform payments, offering unusually low prices, asking for personal information, and pressuring for urgent payment. iSTOC never requests payment outside the platform.' },
+        { q: 'I received a fake email, what should I do?', a: 'If you receive suspicious emails claiming to be from iSTOC, verify that the email address has the @istoc.com extension. Report fake emails by forwarding them to <strong>security@istoc.com</strong>. Do not click links in the email.' },
+        { q: 'My account has been compromised, what should I do?', a: 'Immediately change your password and enable two-factor authentication. If there are unauthorized transactions, call customer service. Your account may be temporarily frozen and a security review conducted.' },
+      ],
+
+      securityIpr_title: 'IPR Complaint',
+      securityIpr_desc: 'Intellectual property rights violation reporting.',
+      securityIpr_items: [
+        { q: 'How do I file an IPR complaint?', a: 'You can report intellectual property rights violations from "Security Center" > "IPR Complaint." You need to upload a trademark registration certificate, patent certificate, or copyright proof.' },
+        { q: 'What happens after an IPR complaint?', a: 'Your complaint is reviewed within <strong>3-5 business days</strong>. If a violation is found, the relevant product listing is removed and the seller receives a warning. Repeat violations may result in account suspension.' },
+        { q: 'What happens if a false IPR complaint is made?', a: 'The accused seller has the right to appeal. If sufficient evidence is provided, the product is re-listed. Users who intentionally file false IPR complaints may face penalties.' },
+      ],
+
+      // ── Others ──
+      othersCustomerService_title: 'Customer Service Operations',
+      othersCustomerService_desc: 'Ways to reach customer service.',
+      othersCustomerService_items: [
+        { q: 'How can I reach customer service?', a: 'You can reach customer service through <strong>live chat</strong>, <strong>phone</strong> (0800 123 45 67), <strong>email</strong> (support@istoc.com), and by creating a <strong>support ticket</strong>. Live chat is available 24/7.' },
+        { q: 'What languages does customer service support?', a: 'iSTOC customer service provides support in Turkish and English. Translation support is available for other languages.' },
+        { q: 'What is the response time for my support request?', a: 'You can expect a response within <strong>2-5 minutes</strong> via live chat, <strong>12-24 hours</strong> via email, and <strong>24-48 hours</strong> via support tickets. For urgent situations, we recommend using the phone line.' },
+      ],
+
+      othersUnclearConcern_title: 'Unclear Concern',
+      othersUnclearConcern_desc: 'Help for issues that cannot be categorized.',
+      othersUnclearConcern_items: [
+        { q: 'I don\'t know which category to report my issue under, what should I do?', a: 'You can submit your concern through the general support channel. Our customer representative will analyze your issue and direct it to the right team. You can get quick help through live chat.' },
+        { q: 'I want to send feedback or suggestions, how do I do it?', a: 'You can submit your suggestions through the "Feedback" link at the bottom of the page or from Account > Feedback. Every piece of feedback is evaluated and contributes to platform improvements.' },
+        { q: 'I want to report a platform bug, how do I do it?', a: 'You can report technical errors from "Create Support Ticket" > "Technical Issue" category. Including a screenshot and information about which device/browser the error occurs on speeds up the resolution time.' },
+      ],
+
+      othersOfflineService_title: 'Offline Service',
+      othersOfflineService_desc: 'iSTOC physical service points.',
+      othersOfflineService_items: [
+        { q: 'Does iSTOC have physical offices?', a: 'Yes, iSTOC has offices in Istanbul, Ankara, and Izmir. Our offices provide face-to-face meetings, contract signing, and training services.' },
+        { q: 'Do you participate in fairs and events?', a: 'iSTOC participates in various industry fairs and trade events throughout the year. Upcoming events can be followed from the "Events" section on the homepage.' },
+        { q: 'How do I book a face-to-face appointment?', a: 'You can book an in-person meeting appointment through our contact page or customer service. Appointments should generally be planned <strong>2-3 business days</strong> in advance.' },
+      ],
+
+      // ── Promotions & Shopping Guide ──
+      promotionsShoppingGuide_title: 'Shopping Guide',
+      promotionsShoppingGuide_desc: 'Guide to effective shopping on iSTOC.',
+      promotionsShoppingGuide_items: [
+        { q: 'How should I make my first purchase on iSTOC?', a: 'First, search for the product you need, compare several suppliers, request samples, and place an order once satisfied. We recommend starting with small quantities for your first order.' },
+        { q: 'How do I find the best price?', a: 'Get quotes from multiple suppliers, send RFQs, and negotiate volume-based discounts. The iSTOC AI price analysis tool also helps you evaluate market value.' },
+        { q: 'What are the tips for safe shopping?', a: 'Prefer suppliers with Trade Assurance coverage, don\'t place large orders without getting samples first, never make payments outside the platform, and always read supplier reviews.' },
+      ],
+
+      promotionsScenario_title: 'Scenario Promotion',
+      promotionsScenario_desc: 'Scenario-based promotional campaigns.',
+      promotionsScenario_items: [
+        { q: 'What is a scenario promotion?', a: 'These are discounts automatically applied when certain conditions are met. For example: "Buy 3 items, get 1 free" or "10% discount on orders over 500 TL."' },
+        { q: 'How can I see active promotions?', a: 'You can see active campaigns from the "Campaigns" section on the homepage or promotion tags on product detail pages. You can also stay informed about campaigns through email newsletters.' },
+        { q: 'Can promotions be combined?', a: 'Generally, campaigns cannot be combined. The most advantageous single promotion is applied to each order. Exceptions are specified in the campaign details.' },
+      ],
+
+      promotionsSuper_title: 'Super Promotion',
+      promotionsSuper_desc: 'Major discount campaigns and special offers.',
+      promotionsSuper_items: [
+        { q: 'When do Super Promotion events take place?', a: 'Super Promotion events are held several times a year: <strong>Spring Festival</strong>, <strong>Summer Sales</strong>, <strong>November Campaign</strong>, and <strong>Year-End Deals</strong> are the main events.' },
+        { q: 'How do I participate in Super Promotion?', a: 'During event periods, a special campaign area is created on the homepage. Users with email notifications enabled are informed in advance. We recommend acting early as stocks are limited.' },
+        { q: 'What is a Flash Sale?', a: 'Flash Sales are very advantageous discounts offered for a limited time and limited stock. They usually last 24 or 48 hours. Flash Sale products can be tracked from the "Instant Deals" section.' },
+      ],
+
+      promotionsPayment_title: 'Payment Promotions',
+      promotionsPayment_desc: 'Payment method-specific discounts and campaigns.',
+      promotionsPayment_items: [
+        { q: 'Are there discounts for specific payment methods?', a: 'Yes, from time to time, special discounts are offered for certain bank cards, payments made with iSTOC Wallet, or bank transfers. Active payment promotions are shown on the payment page.' },
+        { q: 'Is there a first order discount?', a: 'Newly registered users are generally offered a first order discount. The discount amount and conditions may change periodically.' },
+        { q: 'How do I use a coupon code?', a: 'Enter your code in the "Coupon Code" field on the payment page and click "Apply." The coupon discount is automatically deducted from the order total. Each coupon has different terms of use and validity period.' },
+      ],
+
+      promotionsOtherIssues_title: 'Other Promotion Issues',
+      promotionsOtherIssues_desc: 'General issues related to promotions and campaigns.',
+      promotionsOtherIssues_items: [
+        { q: 'The promotion wasn\'t applied, what should I do?', a: 'Check the promotion\'s validity period, minimum order amount, and excluded products. If you meet the conditions but it still wasn\'t applied, contact customer service.' },
+        { q: 'What happens to the discount if a campaign product is returned?', a: 'When a promotional product is returned, a refund is made based on the discounted amount. If the return creates a situation that breaks the campaign conditions (e.g., falling below the minimum quantity), the discount may not apply to the remaining products.' },
+        { q: 'How do I create a campaign as a seller?', a: 'From the seller panel, go to "Promotions" > "Create New Campaign" to create a campaign by specifying the discount type, rate, duration, and scope.' },
+      ],
+
+      // ── iSTOC Guarantee ──
+      guaranteedShipping_title: 'Guaranteed Shipping',
+      guaranteedShipping_desc: 'iSTOC shipping guarantee program.',
+      guaranteedShipping_items: [
+        { q: 'What is Guaranteed Shipping?', a: 'iSTOC Guaranteed Shipping guarantees that your order will be delivered within the specified time. In case of delay, the full or partial shipping fee is refunded.' },
+        { q: 'How do I get compensation for shipping delays?', a: 'If delivery is made after the guaranteed time, compensation is automatically calculated and refunded to your iSTOC Wallet or original payment method.' },
+        { q: 'Which shipping methods are guaranteed?', a: 'Shipping guarantee is valid for shipments made with iSTOC Logistics and contracted carriers. Guarantee coverage may differ for products shipped with the supplier\'s own shipping arrangement.' },
+      ],
+
+      guaranteedAfterSales_title: 'Guaranteed After-Sales',
+      guaranteedAfterSales_desc: 'After-sales guarantee coverage.',
+      guaranteedAfterSales_items: [
+        { q: 'What is the Guaranteed After-Sales Service?', a: 'It is an additional protection program offered by iSTOC to buyers. It offers advantages such as accelerated mediation for product issues, priority customer support, and extended return periods.' },
+        { q: 'How long is this guarantee valid?', a: 'The standard guarantee period is <strong>60 days</strong> from order completion. For Gold and Verified members, this period extends to 90 days.' },
+        { q: 'What situations are not covered by the guarantee?', a: 'User error, normal wear, natural disaster damage, unauthorized modification, and subjective dissatisfaction with products that meet order specifications are not covered by the guarantee.' },
+      ],
+
+      guaranteedPreSales_title: 'Guaranteed Pre-Sales',
+      guaranteedPreSales_desc: 'Pre-order guarantee and protection.',
+      guaranteedPreSales_items: [
+        { q: 'What is Guaranteed Pre-Sales?', a: 'It is a program covering supplier verification, sample quality assurance, and price protection services before placing an order. It helps buyers choose the right supplier.' },
+        { q: 'How does sample quality assurance work?', a: 'Samples sent under the guarantee must be of the same quality as the final order. If a significant difference between the sample and the final product is found, a full refund or re-production is guaranteed.' },
+        { q: 'What is the price protection guarantee?', a: 'If the supplier unilaterally raises the price after the order, the original agreement price is maintained. This protection is valid from order confirmation to shipment.' },
+      ],
+
+      guaranteedPlaceOrder_title: 'Guaranteed Order Placement',
+      guaranteedPlaceOrder_desc: 'Secure order placement guarantees.',
+      guaranteedPlaceOrder_items: [
+        { q: 'What is a Guaranteed Order?', a: 'For orders placed under Trade Assurance, your payment is held securely until the product is received and confirmed. Full or partial refund is guaranteed if issues arise.' },
+        { q: 'Is there an additional fee for order assurance?', a: 'No, order protection under Trade Assurance is free. All iSTOC users automatically benefit from this protection.' },
+        { q: 'What is the guaranteed order limit?', a: 'The order protection limit is <strong>50,000 TL</strong> for free membership, <strong>250,000 TL</strong> for Gold membership, and <strong>1,000,000 TL</strong> for Verified membership.' },
+      ],
+
+      guaranteedOverseasWarehouse_title: 'Overseas Verified Warehouse',
+      guaranteedOverseasWarehouse_desc: 'Overseas verified warehouse services.',
+      guaranteedOverseasWarehouse_items: [
+        { q: 'What is an Overseas Verified Warehouse?', a: 'These are iSTOC\'s contracted and audited warehouse facilities abroad. Products shipped from these warehouses have undergone product quality and stock verification. They offer faster delivery and local return options.' },
+        { q: 'Which countries have verified warehouses?', a: 'Currently, we have verified warehouses in <strong>Germany</strong>, <strong>USA</strong>, <strong>UK</strong>, <strong>UAE</strong>, and <strong>Japan</strong>. New locations are continuously being added.' },
+        { q: 'What are the advantages of ordering from a verified warehouse?', a: 'Faster delivery (usually <strong>3-7 days</strong>), lower shipping costs, easy local returns, pre-quality-checked products, and delivery without customs processing are the key advantages.' },
+      ],
+
+      // ── iSTOC App Settings ──
+      appSettingsLabel_title: 'iSTOC App Settings',
+      appSettingsLabel_desc: 'Mobile app settings and configuration.',
+      appSettingsLabel_items: [
+        { q: 'Where can I download the iSTOC mobile app?', a: 'The iSTOC app can be downloaded for free from the <strong>App Store</strong> (iOS) and <strong>Google Play Store</strong> (Android). You can also download it by scanning the QR code on our homepage.' },
+        { q: 'How do I configure app notifications?', a: 'You can manage push notifications from Settings > Notifications within the app. You can turn on/off notifications separately for order updates, messages, campaigns, and security alerts.' },
+        { q: 'How do I change the app language?', a: 'You can change the app interface language from App Settings > Language & Region. Turkish and English options are available.' },
+        { q: 'The app is taking up too much space, what should I do?', a: 'You can clear the cache from Settings > Storage. You can also reduce data usage by turning off automatic media download settings.' },
+      ],
+
+      // ── Language & Localization ──
+      localizationSettings_title: 'iSTOC Language Settings',
+      localizationSettings_desc: 'Platform language and regional settings.',
+      localizationSettings_items: [
+        { q: 'How do I change the platform language?', a: 'You can change the platform language from the language selector at the top of the page or from Account Settings > Language & Region. The change takes effect immediately.' },
+        { q: 'What languages are supported?', a: 'iSTOC currently supports <strong>Turkish</strong> and <strong>English</strong>. Additional language options will be added in the future.' },
+        { q: 'How do I change the currency setting?', a: 'You can select your preferred currency from the currency selector next to the language selector. Prices are converted and displayed in your selected currency. Exchange rates are updated daily.' },
+        { q: 'Does the regional setting affect product searches?', a: 'Yes, the regional setting prioritizes local suppliers and shipping options by default. However, you can access all suppliers by performing a global search.' },
+      ],
     },
     contactForm: {
       subjectOrder: 'Order',
