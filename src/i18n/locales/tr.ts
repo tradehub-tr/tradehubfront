@@ -147,6 +147,7 @@ const tr = {
     mega: {
       topRanking: 'En çok satanlar',
       newArrivals: 'Yeni gelenler',
+      tailoredSelections: 'Size özel seçimler',
       topDeals: 'En iyi fırsatlar',
       dropshippingCenter: 'Stoksuz satış merkezi',
       sampleCenter: 'Numune merkezi',

@@ -176,7 +176,7 @@ Alpine.data('sellerShop', () => ({
       this.filteredProducts = [...this.products];
     } else {
       this.activeCategory = categoryName;
-      const cat = this.categories.find((c: any) => c.name === categoryName);
+      const cat = this.categories.find((c: any) => c.name === categoryName) as any;
       this.activeCategoryName = cat?.category_name || categoryName;
       this.filteredProducts = this.products.filter(
         (p: any) => p.category === categoryName || p.category_name === categoryName

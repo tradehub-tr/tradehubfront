@@ -185,13 +185,13 @@ export const megaCategories: MegaMenuCategory[] = [
 const featureCards = [
   {
     titleKey: 'mega.topRanking',
-    href: '/top-ranking',
+    href: '/pages/top-ranking.html',
     icon: `<svg class="w-10 h-10" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="14" stroke="#222" stroke-width="1.5"/><circle cx="20" cy="20" r="7" stroke="#222" stroke-width="1.5"/><circle cx="20" cy="20" r="2" fill="#222"/><line x1="20" y1="2" x2="20" y2="8" stroke="#222" stroke-width="1.5"/><line x1="20" y1="32" x2="20" y2="38" stroke="#222" stroke-width="1.5"/><line x1="2" y1="20" x2="8" y2="20" stroke="#222" stroke-width="1.5"/><line x1="32" y1="20" x2="38" y2="20" stroke="#222" stroke-width="1.5"/></svg>`,
   },
   {
-    titleKey: 'mega.newArrivals',
-    href: '/new-arrivals',
-    icon: `<svg class="w-10 h-10" viewBox="0 0 40 40" fill="none"><rect x="4" y="8" width="32" height="24" rx="3" stroke="#222" stroke-width="1.5"/><rect x="8" y="13" width="24" height="14" rx="1.5" stroke="#222" stroke-width="1"/><text x="20" y="24" text-anchor="middle" font-size="10" font-weight="700" fill="#222" font-family="sans-serif">NEW</text></svg>`,
+    titleKey: 'mega.tailoredSelections',
+    href: '/pages/tailored-selections.html',
+    icon: `<svg class="w-10 h-10" viewBox="0 0 40 40" fill="none"><path d="M20 6l2.47 7.6h8l-6.47 4.7 2.47 7.6L20 21.2l-6.47 4.7 2.47-7.6-6.47-4.7h8z" stroke="#222" stroke-width="1.5" stroke-linejoin="round"/></svg>`,
   },
   {
     titleKey: 'mega.topDeals',
@@ -212,22 +212,22 @@ const quickLinks = [
 const protectionCards = [
   {
     titleKey: 'mega.safePayments',
-    href: '/order-protections/payments',
+    href: '/pages/info/payments.html',
     icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"/></svg>`,
   },
   {
     titleKey: 'mega.moneyBack',
-    href: '/order-protections/refund',
+    href: '/pages/info/refund-policy.html',
     icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>`,
   },
   {
     titleKey: 'mega.shippingLogistics',
-    href: '/order-protections/shipping',
+    href: '/pages/info/shipping-logistics.html',
     icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/></svg>`,
   },
   {
     titleKey: 'mega.afterSales',
-    href: '/order-protections/after-sales',
+    href: '/pages/info/after-sales.html',
     icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008Z"/></svg>`,
   },
 ];
@@ -372,7 +372,7 @@ function renderProtectionsView(): string {
             <h3 class="text-lg font-bold" style="color:var(--mega-heading-color)">Trade Assurance</h3>
           </div>
           <p class="text-xl font-semibold leading-snug mb-6" style="color:var(--mega-heading-color)">Enjoy protection from payment to delivery</p>
-          <a href="/order-protections" class="th-btn th-btn-pill inline-block px-6 py-2.5 transition-colors" data-i18n="common.learnMore">
+          <a href="/pages/info/trade-assurance-detail.html" class="th-btn th-btn-pill inline-block px-6 py-2.5 transition-colors" data-i18n="common.learnMore">
             ${t('common.learnMore')}
           </a>
         </div>
@@ -419,10 +419,10 @@ const buyerCentralColumns: BuyerCentralColumn[] = [
   {
     titleKey: 'mega.tradeServices',
     links: [
-      { labelKey: 'mega.orderProtections', href: '/order-protections' },
+      { labelKey: 'mega.orderProtections', href: '/pages/info/payments' },
       { labelKey: 'mega.letterOfCredit', href: '/letter-of-credit' },
-      { labelKey: 'mega.productionMonitoring', href: '/inspection' },
-      { labelKey: 'mega.taxCompliance', href: '/tax-compliance' },
+      { labelKey: 'mega.productionMonitoring', href: '/pages/info/monitoring' },
+      { labelKey: 'mega.taxCompliance', href: '/pages/info/tax' },
     ],
   },
   {
