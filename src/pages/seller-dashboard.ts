@@ -275,7 +275,7 @@ appEl.innerHTML = `
                     </td>
                     <td class="px-4 py-3 text-gray-600" x-text="getCategoryName(product.category) || '—'"></td>
                     <td class="px-4 py-3 text-gray-900">
-                      <span x-text="product.price_min > 0 ? (product.price_max > product.price_min ? window.csFormatPriceRange(product.price_min, product.price_max, product.currency || 'USD') : window.csFormatPrice(product.price_min, product.currency || 'USD')) : '—'"></span>
+                      <span x-text="product.price_min > 0 ? (product.price_max > product.price_min ? window.csFormatPriceRange(product.price_min, product.price_max, product.currency || 'TRY') : window.csFormatPrice(product.price_min, product.currency || 'TRY')) : '—'"></span>
                     </td>
                     <td class="px-4 py-3 text-gray-600" x-text="product.moq + ' ' + (product.moq_unit || 'Adet')"></td>
                     <td class="px-4 py-3">
@@ -541,6 +541,209 @@ appEl.innerHTML = `
           </div>
         </div>
       </div>
+
+      <!-- ─── Siparişler Tab ───────────────────────────────────── -->
+      <div x-show="activeTab === 'orders'" x-transition.opacity>
+
+        <!-- Sipariş listesi -->
+        <div x-show="!selectedOrder">
+          <div class="bg-white rounded-xl border border-gray-200">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 flex-wrap gap-3">
+              <h2 class="text-base font-bold text-gray-900">Siparişler (<span x-text="ordersTotal"></span>)</h2>
+              <div class="flex items-center gap-2 flex-wrap">
+                <template x-for="s in [['all','Tümü'],['unpaid','Ödeme Bekl.'],['confirming','Onaylanıyor'],['delivering','Kargoda'],['completed','Tamamlandı'],['cancelled','İptal']]" :key="s[0]">
+                  <button @click="setOrdersStatus(s[0])"
+                    :class="ordersStatus === s[0] ? 'bg-[var(--color-primary-500)] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
+                    class="px-3 py-1 text-xs font-medium rounded-full transition-colors"
+                    x-text="s[1]"></button>
+                </template>
+              </div>
+            </div>
+
+            <div x-show="ordersLoading" class="flex justify-center py-10">
+              <div class="w-7 h-7 border-3 border-[var(--color-primary-500)] border-t-transparent rounded-full animate-spin"></div>
+            </div>
+
+            <div x-show="!ordersLoading && orders.length === 0" class="text-center py-12">
+              <svg class="w-12 h-12 mx-auto mb-3 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+              <p class="text-sm font-medium text-gray-500">Sipariş bulunamadı</p>
+            </div>
+
+            <div x-show="!ordersLoading && orders.length > 0" class="divide-y divide-gray-100">
+              <template x-for="order in orders" :key="order.name">
+                <div class="flex items-center gap-4 px-6 py-4 hover:bg-gray-50 transition-colors">
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-3 flex-wrap">
+                      <span class="text-sm font-semibold text-gray-900 font-mono" x-text="order.name"></span>
+                      <span :class="orderStatusClass(order.status_en)"
+                            class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium border"
+                            x-text="orderStatusLabel(order.status_en)"></span>
+                    </div>
+                    <div class="mt-1 flex items-center gap-3 text-xs text-gray-400 flex-wrap">
+                      <span x-text="order.order_date ? String(order.order_date).substring(0,10) : ''"></span>
+                      <span x-show="order.buyer_name">· <span x-text="order.buyer_name"></span></span>
+                      <span x-show="order.payment_method">· <span x-text="order.payment_method"></span></span>
+                    </div>
+                    <div class="mt-1.5 flex flex-wrap gap-2">
+                      <template x-for="item in (order.items || []).slice(0,2)" :key="item.product_name">
+                        <span class="text-[11px] text-gray-500 bg-gray-100 px-2 py-0.5 rounded-md" x-text="item.product_name + ' ×' + item.quantity"></span>
+                      </template>
+                      <span x-show="(order.items || []).length > 2" class="text-[11px] text-gray-400">+<span x-text="(order.items || []).length - 2"></span> daha</span>
+                    </div>
+                  </div>
+                  <div class="text-right shrink-0">
+                    <div class="text-sm font-bold text-gray-900" x-text="(order.currency || '') + ' ' + parseFloat(order.total || 0).toFixed(2)"></div>
+                    <div class="mt-2 flex items-center gap-2 justify-end">
+                      <button x-show="order.status_en === 'Waiting for payment'"
+                        @click="confirmPayment(order.name)"
+                        :disabled="confirmingOrderId === order.name"
+                        class="px-3 py-1.5 text-xs font-semibold text-white bg-green-600 hover:bg-green-700 rounded-lg transition-colors disabled:opacity-60">
+                        <span x-show="confirmingOrderId !== order.name">Ödeme Onayla</span>
+                        <span x-show="confirmingOrderId === order.name">Onaylanıyor...</span>
+                      </button>
+                      <button x-show="order.status_en === 'Confirming'"
+                        @click="openShipModal(order.name)"
+                        :disabled="confirmingOrderId === order.name"
+                        class="px-3 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors disabled:opacity-60">
+                        <span x-show="confirmingOrderId !== order.name">Kargoya Ver</span>
+                        <span x-show="confirmingOrderId === order.name">İşleniyor...</span>
+                      </button>
+                      <button @click="viewOrder(order)"
+                        class="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
+                        Detay
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sipariş detayı -->
+        <div x-show="selectedOrder">
+          <div class="bg-white rounded-xl border border-gray-200">
+            <div class="flex items-center gap-3 px-6 py-4 border-b border-gray-200">
+              <button @click="backToOrders()" class="p-1.5 text-gray-400 hover:text-gray-700 rounded-lg hover:bg-gray-100 transition-colors">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+              </button>
+              <div class="flex-1">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <h2 class="text-base font-bold text-gray-900 font-mono" x-text="selectedOrder?.name"></h2>
+                  <span :class="orderStatusClass(selectedOrder?.status_en)"
+                        class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium border"
+                        x-text="orderStatusLabel(selectedOrder?.status_en)"></span>
+                </div>
+                <p class="text-xs text-gray-400 mt-0.5" x-text="selectedOrder?.order_date ? String(selectedOrder.order_date).substring(0,10) : ''"></p>
+              </div>
+              <button x-show="selectedOrder?.status_en === 'Waiting for payment'"
+                @click="confirmPayment(selectedOrder.name)"
+                :disabled="confirmingOrderId === selectedOrder?.name"
+                class="px-4 py-2 text-sm font-semibold text-white bg-green-600 hover:bg-green-700 rounded-lg transition-colors disabled:opacity-60">
+                <span x-show="confirmingOrderId !== selectedOrder?.name">Ödemeyi Onayla</span>
+                <span x-show="confirmingOrderId === selectedOrder?.name">Onaylanıyor...</span>
+              </button>
+              <button x-show="selectedOrder?.status_en === 'Confirming'"
+                @click="openShipModal(selectedOrder.name)"
+                :disabled="confirmingOrderId === selectedOrder?.name"
+                class="px-4 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors disabled:opacity-60">
+                <span x-show="confirmingOrderId !== selectedOrder?.name">Kargoya Ver</span>
+                <span x-show="confirmingOrderId === selectedOrder?.name">İşleniyor...</span>
+              </button>
+            </div>
+
+            <div class="p-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div>
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Alıcı Bilgileri</p>
+                <div class="bg-gray-50 rounded-xl p-4 space-y-2">
+                  <div class="flex justify-between text-sm">
+                    <span class="text-gray-500">Alıcı</span>
+                    <span class="font-medium text-gray-900" x-text="selectedOrder?.buyer_name || selectedOrder?.buyer"></span>
+                  </div>
+                  <div class="flex justify-between text-sm" x-show="selectedOrder?.payment_method">
+                    <span class="text-gray-500">Ödeme Yöntemi</span>
+                    <span class="font-medium text-gray-900" x-text="selectedOrder?.payment_method"></span>
+                  </div>
+                  <div x-show="selectedOrder?.remittance_date || selectedOrder?.remittance_amount">
+                    <div class="mt-2 pt-2 border-t border-gray-200">
+                      <p class="text-xs font-semibold text-amber-700 mb-2">Havale Bilgileri</p>
+                      <div class="space-y-1">
+                        <div class="flex justify-between text-sm" x-show="selectedOrder?.remittance_date">
+                          <span class="text-gray-500">Havale Tarihi</span>
+                          <span class="text-gray-900" x-text="String(selectedOrder?.remittance_date || '').substring(0,10)"></span>
+                        </div>
+                        <div class="flex justify-between text-sm" x-show="selectedOrder?.remittance_amount">
+                          <span class="text-gray-500">Gönderilen Tutar</span>
+                          <span class="text-gray-900" x-text="(selectedOrder?.currency || '') + ' ' + parseFloat(selectedOrder?.remittance_amount || 0).toFixed(2)"></span>
+                        </div>
+                        <div class="flex justify-between text-sm" x-show="selectedOrder?.remittance_sender">
+                          <span class="text-gray-500">Gönderen Ad</span>
+                          <span class="text-gray-900" x-text="selectedOrder?.remittance_sender"></span>
+                        </div>
+                        <div x-show="selectedOrder?.receipt_url" class="pt-1">
+                          <a :href="selectedOrder?.receipt_url" target="_blank"
+                            class="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 font-medium">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                            Dekontu Görüntüle
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Ödeme Özeti</p>
+                <div class="bg-gray-50 rounded-xl p-4 space-y-2">
+                  <div class="flex justify-between text-sm">
+                    <span class="text-gray-500">Ara Toplam</span>
+                    <span x-text="(selectedOrder?.currency || '') + ' ' + parseFloat(selectedOrder?.subtotal || 0).toFixed(2)"></span>
+                  </div>
+                  <div class="flex justify-between text-sm">
+                    <span class="text-gray-500">Kargo</span>
+                    <span x-text="(selectedOrder?.currency || '') + ' ' + parseFloat(selectedOrder?.shipping_fee || 0).toFixed(2)"></span>
+                  </div>
+                  <div class="border-t border-gray-200 pt-2 flex justify-between text-sm font-bold">
+                    <span>Toplam</span>
+                    <span x-text="(selectedOrder?.currency || '') + ' ' + parseFloat(selectedOrder?.total || 0).toFixed(2)"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="px-6 pb-6">
+              <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">Sipariş Kalemleri</p>
+              <div class="border border-gray-200 rounded-xl overflow-hidden">
+                <table class="w-full text-sm">
+                  <thead class="bg-gray-50">
+                    <tr>
+                      <th class="px-4 py-2.5 text-left text-xs font-semibold text-gray-500">Ürün</th>
+                      <th class="px-4 py-2.5 text-center text-xs font-semibold text-gray-500">Adet</th>
+                      <th class="px-4 py-2.5 text-right text-xs font-semibold text-gray-500">Birim</th>
+                      <th class="px-4 py-2.5 text-right text-xs font-semibold text-gray-500">Toplam</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-100">
+                    <template x-for="item in (selectedOrder?.items || [])" :key="item.product_name">
+                      <tr>
+                        <td class="px-4 py-3">
+                          <div class="font-medium text-gray-900" x-text="item.product_name"></div>
+                          <div x-show="item.variation" class="text-xs text-gray-400" x-text="item.variation"></div>
+                        </td>
+                        <td class="px-4 py-3 text-center text-gray-600" x-text="item.quantity"></td>
+                        <td class="px-4 py-3 text-right text-gray-600" x-text="parseFloat(item.unit_price || 0).toFixed(2)"></td>
+                        <td class="px-4 py-3 text-right font-semibold text-gray-900" x-text="parseFloat(item.total_price || 0).toFixed(2)"></td>
+                      </tr>
+                    </template>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
 
     <!-- ─── Başarı Toast ───────────────────────────────────────── -->
@@ -666,6 +869,28 @@ appEl.innerHTML = `
             :disabled="categoryModal.saving"
             class="flex-1 py-2.5 bg-[var(--color-primary-500)] hover:bg-[var(--color-primary-600)] text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-60">
             <span x-text="categoryModal.saving ? 'Kaydediliyor...' : 'Kaydet'"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── Kargoya Ver Modal ────────────────────────────────────── -->
+    <div x-show="shipModalOpen" x-transition class="fixed inset-0 bg-black/50 z-[999] flex items-center justify-center p-4">
+      <div class="bg-white rounded-xl shadow-xl w-full max-w-sm p-6">
+        <h3 class="text-base font-bold text-gray-900 mb-1">Kargoya Ver</h3>
+        <p class="text-sm text-gray-500 mb-4"><strong x-text="shipModalOrderNumber"></strong> numaralı sipariş kargoya verildi olarak işaretlenecek.</p>
+        <div class="mb-4">
+          <label class="block text-xs font-semibold text-gray-600 mb-1.5">Kargo Takip Numarası <span class="text-gray-400 font-normal">(opsiyonel)</span></label>
+          <input x-model="shipModalTracking" type="text" placeholder="örn. 1234567890"
+            class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
+        </div>
+        <p class="text-xs text-blue-600 bg-blue-50 border border-blue-200 rounded-lg px-3 py-2 mb-5">Onayladığınızda sipariş "Kargoda" durumuna geçecek.</p>
+        <div class="flex gap-3">
+          <button @click="shipModalOpen = false" class="flex-1 py-2.5 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors">İptal</button>
+          <button @click="doShipOrder()" :disabled="confirmingOrderId !== ''"
+            class="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition-colors disabled:opacity-60">
+            <span x-show="confirmingOrderId === ''">Kargoya Ver</span>
+            <span x-show="confirmingOrderId !== ''">İşleniyor...</span>
           </button>
         </div>
       </div>

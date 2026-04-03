@@ -993,9 +993,9 @@ const en = {
       // Order steps
       stepOrder: 'Order',
       stepPayment: 'Payment',
-      stepShipping: 'Shipping',
-      stepDelivery: 'Delivery',
-      stepReview: 'Review',
+      stepShipping: 'Preparing',
+      stepDelivery: 'Shipping',
+      stepReview: 'Delivered',
       // Order protection
       orderProtection: 'Order protection',
       securePayments: 'Secure Payments',

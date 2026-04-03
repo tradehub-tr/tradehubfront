@@ -7,9 +7,9 @@ import '../style.css'
 import { initFlowbite } from 'flowbite'
 import { t } from '../i18n'
 import { getBaseUrl } from '../utils/url'
-import { initCurrency } from '../services/currencyService'
+
 import { isLoggedIn } from '../utils/auth'
-import { apiCreateOrder, apiValidateCoupon, fetchShippingMethodsForListing } from '../services/cartService'
+import { apiCreateOrder, apiValidateCoupon, fetchShippingMethodsForListing, fetchCart } from '../services/cartService'
 import type { ListingShippingMethod } from '../services/cartService'
 import { showToast } from '../utils/toast'
 
@@ -33,7 +33,7 @@ import { startAlpine } from '../alpine'
 import { CheckoutHeader, CheckoutLayout, ShippingAddressForm, OrderSummary, PaymentMethodSection, ItemsDeliverySection, OrderProtectionModal, OrderReviewModal } from '../components/checkout'
 import { protectionSummaryItems, tradeAssuranceText, modalSections, paymentIcons, infoBoxBullets } from '../data/mockCheckout'
 import { cartStore } from '../components/cart/state/CartStore'
-import { getSelectedCurrencyInfo } from '../services/currencyService'
+import { initCurrency, getSelectedCurrencyInfo, convertPrice } from '../services/currencyService'
 import type { OrderSummary as OrderSummaryData } from '../types/checkout'
 import type { CartProduct, CartSku, CartShippingMethod } from '../types/cart'
 import type { CheckoutDeliveryOrderGroup, CheckoutDeliveryMethod } from '../components/checkout'
@@ -96,12 +96,13 @@ function buildProductCard(product: CartProduct): { card: CheckoutDeliveryOrderGr
     id: sku.id,
     image: sku.skuImage,
     variantText: sku.variantText,
-    unitPrice: sku.unitPrice,
+    // Fiyatı baz para biriminden seçili display para birimine çevir (cart'la tutarlı)
+    unitPrice: convertPrice(sku.unitPrice, sku.baseCurrency || 'USD'),
     quantity: sku.quantity,
     listingVariant: sku.listingVariant,
   }));
 
-  const subtotal = selectedSkus.reduce((sum, sku) => sum + (sku.unitPrice * sku.quantity), 0);
+  const subtotal = selectedSkus.reduce((sum, sku) => sum + (convertPrice(sku.unitPrice, sku.baseCurrency || 'USD') * sku.quantity), 0);
   const image = selectedSkus[0]?.skuImage || '';
 
   return {
@@ -452,8 +453,12 @@ window.addEventListener('checkout:confirm-order', () => {
     anlasmali: 'negotiated',
     cek_senet: 'check_promissory',
     banka_havale: 'bank_transfer',
+    // Gelecekte eklenecek: kredi_karti → 'credit_card'
   };
   const paymentMethod = paymentMethodMap[selectedPaymentValue] || 'bank_transfer';
+
+  // Anında ödeme tamamlanan yöntemler (ödeme gateway'i onaylar)
+  const INSTANT_PAYMENT_METHODS = ['credit_card', 'iyzico', 'paytr', 'stripe'];
 
   const reviewData = gatherReviewData();
   const shippingAddress = reviewData.shippingAddress;
@@ -501,11 +506,11 @@ window.addEventListener('checkout:confirm-order', () => {
     if (isSampleMode) localStorage.removeItem('tradehub_sample_order');
     const encoded = encodeURIComponent(orderNumbers);
 
-    if (paymentMethod === 'installment') {
-      // Kredi kartı / taksitli ödeme → ödeme işleme sayfasına yönlendir (OTP sonrası success)
-      window.location.href = `${getBaseUrl()}pages/order/payment-processing.html?method=credit_card&count=${orderCount}&orderNumbers=${encoded}`;
+    if (INSTANT_PAYMENT_METHODS.includes(paymentMethod)) {
+      // Kredi kartı / gateway ödemesi → ödeme işleme sayfasına yönlendir
+      window.location.href = `${getBaseUrl()}pages/order/payment-processing.html?method=${paymentMethod}&count=${orderCount}&orderNumbers=${encoded}`;
     } else {
-      // Havale, çek/senet, anlaşmalı vade → pending sayfasına yönlendir (dekont yükleme)
+      // Havale, çek/senet, elden taksit, anlaşmalı vade → pending sayfasına yönlendir (dekont yükleme)
       window.location.href = `${getBaseUrl()}pages/order/order-success.html?status=pending&count=${orderCount}&orderNumbers=${encoded}&method=${paymentMethod}`;
     }
   }
@@ -555,6 +560,17 @@ if (!isLoggedIn()) {
   }
 }
 
+// Giriş yapmış kullanıcılar için cart localStorage yerine backend'den yüklenir
+// (CartStore.save() logged-in kullanıcılar için localStorage'a yazmaz)
+if (isLoggedIn() && !isSampleMode) {
+  try {
+    const apiCart = await fetchCart();
+    if (apiCart.suppliers.length > 0) {
+      cartStore.init(apiCart.suppliers, 0, getSelectedCurrencyInfo().symbol, 0);
+    }
+  } catch { /* localStorage'daki veriyi koru */ }
+}
+
 await enrichMissingShippingMethods();
 
 checkoutDeliveryOrders = isSampleMode ? buildSampleDeliveryOrders() : buildDeliveryOrders();
@@ -567,6 +583,9 @@ currentDefaultShippingFee = Number(
 
 const sampleSubtotal = sampleOrderData ? sampleOrderData.samplePrice * sampleOrderData.quantity : 0;
 
+// Backend'den yükleme sonrası taze summary
+const freshCartSummary = cartStore.getSummary();
+
 currentCheckoutOrderSummary = isSampleMode ? {
   itemCount: 1,
   thumbnails: sampleOrderData?.color?.imageUrl ? [{ image: sampleOrderData.color.imageUrl, quantity: 1 }] : [],
@@ -577,13 +596,13 @@ currentCheckoutOrderSummary = isSampleMode ? {
   total: sampleSubtotal + currentDefaultShippingFee,
   currency: getSelectedCurrencyInfo().code,
 } : {
-  itemCount: cartSummary!.selectedCount || cartSummary!.items.reduce((s, i) => s + i.quantity, 0),
-  thumbnails: cartSummary!.items.map(i => ({ image: i.image, quantity: i.quantity })),
-  itemSubtotal: cartSummary!.productSubtotal,
+  itemCount: freshCartSummary.selectedCount || freshCartSummary.items.reduce((s, i) => s + i.quantity, 0),
+  thumbnails: freshCartSummary.items.map(i => ({ image: i.image, quantity: i.quantity })),
+  itemSubtotal: freshCartSummary.productSubtotal,
   shipping: currentDefaultShippingFee,
-  subtotal: cartSummary!.productSubtotal + currentDefaultShippingFee - cartSummary!.discount,
+  subtotal: freshCartSummary.productSubtotal + currentDefaultShippingFee - freshCartSummary.discount,
   processingFee: 0,
-  total: cartSummary!.productSubtotal + currentDefaultShippingFee - cartSummary!.discount,
+  total: freshCartSummary.productSubtotal + currentDefaultShippingFee - freshCartSummary.discount,
   currency: getSelectedCurrencyInfo().code,
 };
 
