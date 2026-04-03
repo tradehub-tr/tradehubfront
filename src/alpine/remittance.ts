@@ -1,5 +1,6 @@
 import Alpine from 'alpinejs'
 import { callMethod } from '../utils/api'
+import { getSelectedCurrencyInfo, convertPrice } from '../services/currencyService'
 
 Alpine.data('remittanceComponent', () => ({
   step: 'iban' as 'iban' | 'upload' | 'form' | 'submitting' | 'success',
@@ -7,6 +8,9 @@ Alpine.data('remittanceComponent', () => ({
 
   // Order & seller bank info
   orderNumber: '',
+  orderTotal: 0 as number,
+  orderCurrency: 'TRY' as string,
+  paymentMethod: '' as string,
   sellerIban: '',
   sellerBankName: '',
   sellerAccountHolder: '',
@@ -35,9 +39,13 @@ Alpine.data('remittanceComponent', () => ({
   apiError: '',
 
   // Computed
+  get isCheckPayment(): boolean {
+    return this.paymentMethod === 'check_promissory';
+  },
+
   get isFormValid(): boolean {
     const f = this.form;
-    return !!(f.remittanceDate && f.currency && f.amount && f.bankName && f.senderName);
+    return !!(f.bankName && f.senderName);
   },
 
   get hasFile(): boolean {
@@ -47,9 +55,26 @@ Alpine.data('remittanceComponent', () => ({
   init() {
     // Listen for open event dispatched by "Ödeme Yap" button
     document.addEventListener('remittance:open', async (e: Event) => {
-      const orderNumber = (e as CustomEvent).detail?.orderNumber || '';
+      const detail = (e as CustomEvent).detail || {};
+      const orderNumber = detail.orderNumber || '';
+      const orderTotal = typeof detail.orderTotal === 'number' ? detail.orderTotal : parseFloat(detail.orderTotal || '0');
+      const orderCurrency = detail.orderCurrency || 'TRY';
+
       this.orderNumber = orderNumber;
+      this.orderTotal = orderTotal;
+      this.orderCurrency = orderCurrency;
+      this.paymentMethod = detail.paymentMethod || '';
       this.reset(false); // reset state without closing modal
+
+      // Bugünün tarihi ve sipariş tutarını otomatik doldur
+      const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+      this.form.remittanceDate = today;
+      if (orderTotal > 0) {
+        const displayCurrency = getSelectedCurrencyInfo();
+        const convertedAmount = convertPrice(orderTotal, orderCurrency || 'USD');
+        this.form.currency = displayCurrency.code;
+        this.form.amount = convertedAmount.toFixed(2);
+      }
 
       // Open modal
       const modal = document.getElementById('remittance-modal');
@@ -151,7 +176,7 @@ Alpine.data('remittanceComponent', () => ({
 
   validateAll(): boolean {
     this.errors = {};
-    const required = ['remittanceDate', 'currency', 'amount', 'bankName', 'senderName'];
+    const required = ['bankName', 'senderName'];
     required.forEach(f => this.validateField(f));
     return Object.keys(this.errors).length === 0;
   },
@@ -205,6 +230,12 @@ Alpine.data('remittanceComponent', () => ({
       );
 
       this.step = 'success';
+
+      // Redirect to thank you page after short delay
+      setTimeout(() => {
+        this.reset(true);
+        window.location.href = `/pages/order/order-success.html?status=success&count=1&orderNumbers=${encodeURIComponent(this.orderNumber)}`;
+      }, 1500);
     } catch (err: any) {
       this.apiError = err?.message || 'Bir hata oluştu. Lütfen tekrar deneyin.';
       this.step = 'form';
@@ -227,6 +258,9 @@ Alpine.data('remittanceComponent', () => ({
 
     if (closeModal) {
       this.orderNumber = '';
+      this.orderTotal = 0;
+      this.orderCurrency = 'TRY';
+      this.paymentMethod = '';
       this.sellerIban = '';
       this.sellerBankName = '';
       this.sellerAccountHolder = '';

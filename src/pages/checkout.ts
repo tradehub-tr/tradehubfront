@@ -7,8 +7,8 @@ import '../style.css'
 import { initFlowbite } from 'flowbite'
 import { t } from '../i18n'
 import { getBaseUrl } from '../utils/url'
-import { initCurrency } from '../services/currencyService'
-import { isLoggedIn, getSessionUser } from '../utils/auth'
+
+import { isLoggedIn } from '../utils/auth'
 import { apiCreateOrder, apiValidateCoupon, fetchShippingMethodsForListing, fetchCart } from '../services/cartService'
 import type { ListingShippingMethod } from '../services/cartService'
 import { showToast } from '../utils/toast'
@@ -33,12 +33,13 @@ import { startAlpine } from '../alpine'
 import { CheckoutHeader, CheckoutLayout, ShippingAddressForm, OrderSummary, PaymentMethodSection, ItemsDeliverySection, OrderProtectionModal, OrderReviewModal } from '../components/checkout'
 import { protectionSummaryItems, tradeAssuranceText, modalSections, paymentIcons, infoBoxBullets } from '../data/mockCheckout'
 import { cartStore } from '../components/cart/state/CartStore'
-import { getSelectedCurrencyInfo } from '../services/currencyService'
+import { initCurrency, getSelectedCurrencyInfo, convertPrice } from '../services/currencyService'
 import type { OrderSummary as OrderSummaryData } from '../types/checkout'
 import type { CartProduct, CartSku, CartShippingMethod } from '../types/cart'
 import type { CheckoutDeliveryOrderGroup, CheckoutDeliveryMethod } from '../components/checkout'
 import { initStickyHeights } from '../utils/stickyHeights'
 import { orderStore } from '../components/orders/state/OrderStore'
+import type { Order } from '../types/order'
 
 // Expose coupon validator for Alpine component
 (window as unknown as Record<string, unknown>).__validateCoupon = apiValidateCoupon;
@@ -69,8 +70,13 @@ if (isSampleMode) {
   }
 }
 
-// cartSummary — renderCheckout içinde async olarak doldurulur
-let cartSummary: ReturnType<typeof cartStore.getSummary> | null = null;
+// CartStore'dan checkout order summary oluştur
+cartStore.load();
+if (cartStore.hasSelectedSkuMoqViolation()) {
+  window.location.replace('/pages/cart.html');
+}
+
+const cartSummary = cartStore.getSummary();
 
 function formatMonthDay(date: Date): string {
   return date.toLocaleDateString('en-US', { month: 'short', day: '2-digit' });
@@ -90,12 +96,13 @@ function buildProductCard(product: CartProduct): { card: CheckoutDeliveryOrderGr
     id: sku.id,
     image: sku.skuImage,
     variantText: sku.variantText,
-    unitPrice: sku.unitPrice,
+    // Fiyatı baz para biriminden seçili display para birimine çevir (cart'la tutarlı)
+    unitPrice: convertPrice(sku.unitPrice, sku.baseCurrency || 'USD'),
     quantity: sku.quantity,
     listingVariant: sku.listingVariant,
   }));
 
-  const subtotal = selectedSkus.reduce((sum, sku) => sum + (sku.unitPrice * sku.quantity), 0);
+  const subtotal = selectedSkus.reduce((sum, sku) => sum + (convertPrice(sku.unitPrice, sku.baseCurrency || 'USD') * sku.quantity), 0);
   const image = selectedSkus[0]?.skuImage || '';
 
   return {
@@ -235,7 +242,7 @@ function buildDeliveryOrders(): CheckoutDeliveryOrderGroup[] {
       methods = fetchedMethods;
     } else {
       // Fallback: listing'de kargo tanımlanmamışsa hesaplanmış tahmini değerler
-      const shippingShare = subtotalTotal > 0 ? ((cartSummary?.shippingFee ?? 0) * row.subtotal) / subtotalTotal : 0;
+      const shippingShare = subtotalTotal > 0 ? (cartSummary.shippingFee * row.subtotal) / subtotalTotal : 0;
       const method1Fee = Number(Math.max(5, shippingShare).toFixed(2));
       const method2Fee = Number(Math.max(method1Fee + 5, shippingShare * 1.35).toFixed(2));
       const start1 = addDays(now, 10 + (index * 2));
@@ -301,6 +308,80 @@ window.addEventListener('checkout:notes-updated', (e: Event) => {
   if (detail?.notesByOrderId) currentSupplierNotes = { ...detail.notesByOrderId };
 });
 
+// Build Order objects from checkout data
+function buildOrdersFromCheckout(
+  paymentMethod: string,
+  shippingAddressStr = '',
+  backendOrderNumbers: string[] = [],
+): Order[] {
+  const now = Date.now();
+  const dateStr = new Date().toLocaleDateString('tr-TR', {
+    month: 'short',
+    day: '2-digit',
+    year: 'numeric',
+  });
+
+  return checkoutDeliveryOrders.map((deliveryOrder, idx) => {
+    const supplier = cartStore.getSupplier(deliveryOrder.sellerId);
+    const selectedMethodId = selectedShippingMethodByOrderId[deliveryOrder.orderId];
+    const selectedMethod = (selectedMethodId
+      ? deliveryOrder.methods.find((m) => m.id === selectedMethodId)
+      : null) ?? deliveryOrder.methods.find((m) => m.isDefault) ?? deliveryOrder.methods[0];
+    const shippingFee = selectedMethod?.shippingFee ?? 0;
+
+    const products = deliveryOrder.products.map((p) => {
+      const totalQty = p.skuLines.reduce((sum, sku) => sum + sku.quantity, 0);
+      const totalPrice = p.skuLines.reduce((sum, sku) => sum + sku.unitPrice * sku.quantity, 0);
+      return {
+        name: p.title,
+        variation: p.skuLines.map((s) => s.variantText).filter(Boolean).join(', '),
+        unitPrice: (totalPrice / totalQty).toFixed(2),
+        quantity: totalQty,
+        totalPrice: totalPrice.toFixed(2),
+        image: p.image,
+      };
+    });
+
+    const subtotal = products.reduce((sum, p) => sum + Number(p.totalPrice), 0);
+    const grandTotal = subtotal + shippingFee;
+    const orderNumber = backendOrderNumbers[idx] ?? `ORD-${(now + idx).toString(36).toUpperCase()}`;
+
+    return {
+      id: `ord-${now}-${idx}`,
+      orderNumber,
+      orderDate: dateStr,
+      total: grandTotal.toFixed(2),
+      currency: getSelectedCurrencyInfo().code,
+      seller: supplier?.name ?? deliveryOrder.sellerName,
+      status: 'Waiting for payment',
+      statusColor: 'text-amber-600',
+      statusDescription: 'Ödemenizi tamamlayın.',
+      products,
+      shipping: {
+        trackingStatus: 'Pending',
+        address: shippingAddressStr,
+        shipFrom: '',
+        method: selectedMethod?.etaLabel ?? '',
+        incoterms: '',
+      },
+      payment: {
+        status: 'Unpaid',
+        hasRecord: false,
+        subtotal: subtotal.toFixed(2),
+        shippingFee: shippingFee.toFixed(2),
+        grandTotal: grandTotal.toFixed(2),
+      },
+      supplier: {
+        name: supplier?.name ?? deliveryOrder.sellerName,
+        contact: '',
+        phone: '',
+        email: '',
+      },
+      paymentMethod,
+      createdAt: now,
+    } as Order;
+  });
+}
 
 // Gather review data from DOM + module-level state
 function gatherReviewData() {
@@ -372,8 +453,12 @@ window.addEventListener('checkout:confirm-order', () => {
     anlasmali: 'negotiated',
     cek_senet: 'check_promissory',
     banka_havale: 'bank_transfer',
+    // Gelecekte eklenecek: kredi_karti → 'credit_card'
   };
   const paymentMethod = paymentMethodMap[selectedPaymentValue] || 'bank_transfer';
+
+  // Anında ödeme tamamlanan yöntemler (ödeme gateway'i onaylar)
+  const INSTANT_PAYMENT_METHODS = ['credit_card', 'iyzico', 'paytr', 'stripe'];
 
   const reviewData = gatherReviewData();
   const shippingAddress = reviewData.shippingAddress;
@@ -417,13 +502,24 @@ window.addEventListener('checkout:confirm-order', () => {
     }
   }
 
-  function redirectToSuccess(orderNumbers: string) {
+  function redirectAfterOrder(orderNumbers: string) {
     if (isSampleMode) localStorage.removeItem('tradehub_sample_order');
-    window.location.href = `${getBaseUrl()}pages/order/order-success.html?status=pending&count=${orderCount}&orderNumbers=${encodeURIComponent(orderNumbers)}`;
+    const encoded = encodeURIComponent(orderNumbers);
+
+    if (INSTANT_PAYMENT_METHODS.includes(paymentMethod)) {
+      // Kredi kartı / gateway ödemesi → ödeme işleme sayfasına yönlendir
+      window.location.href = `${getBaseUrl()}pages/order/payment-processing.html?method=${paymentMethod}&count=${orderCount}&orderNumbers=${encoded}`;
+    } else {
+      // Havale, çek/senet, elden taksit, anlaşmalı vade → pending sayfasına yönlendir (dekont yükleme)
+      window.location.href = `${getBaseUrl()}pages/order/order-success.html?status=pending&count=${orderCount}&orderNumbers=${encoded}&method=${paymentMethod}`;
+    }
   }
 
   if (!isLoggedIn()) {
-    window.location.replace(`/pages/auth/login.html?redirect=${encodeURIComponent(window.location.href)}`);
+    // Misafir: frontend üretilen numaralarla devam et
+    const newOrders = buildOrdersFromCheckout(paymentMethod, shippingAddress);
+    orderStore.load();
+    redirectAfterOrder(newOrders.map((o) => o.orderNumber).join(','));
     return;
   }
 
@@ -441,7 +537,7 @@ window.addEventListener('checkout:confirm-order', () => {
 
       const orderNumbers = backendNums.join(',');
 
-      redirectToSuccess(orderNumbers);
+      redirectAfterOrder(orderNumbers);
     })
     .catch((err: unknown) => {
       setConfirmLoading(false);
@@ -454,45 +550,25 @@ window.addEventListener('checkout:confirm-order', () => {
 async function renderCheckout() {
 await initCurrency();
 
-// Cart yükleme: oturumu async kontrol et, giriş yapmış → API, misafir → localStorage
-{
-  const { symbol: sym } = getSelectedCurrencyInfo();
-  try {
-    const sessionUser = await getSessionUser();
-    if (sessionUser) {
-      const apiCart = await fetchCart();
-      cartStore.init(apiCart.suppliers, 0, sym, 0);
-
-      // URL'deki ?suppliers=ID1,ID2 parametresine göre seçimi filtrele
-      const suppliersParam = new URLSearchParams(window.location.search).get('suppliers');
-      if (suppliersParam) {
-        const allowedIds = new Set(suppliersParam.split(',').map((id) => id.trim()).filter(Boolean));
-        for (const supplier of cartStore.getSuppliers()) {
-          const isAllowed = allowedIds.has(supplier.id);
-          cartStore.toggleSupplierSelection(supplier.id, isAllowed);
-        }
-      }
-    } else {
-      cartStore.load();
-    }
-  } catch {
-    cartStore.load();
-  }
-}
-
-if (!isSampleMode && cartStore.hasSelectedSkuMoqViolation()) {
-  window.location.replace('/pages/cart.html');
-  return;
-}
-cartSummary = cartStore.getSummary();
-
 // Auth kontrolü: giriş yapmamış kullanıcıları login sayfasına yönlendir
 if (!isLoggedIn()) {
+  const { getSessionUser } = await import('../utils/auth');
   const sessionUser = await getSessionUser().catch(() => null);
   if (!sessionUser) {
     window.location.replace(`/pages/auth/login.html?redirect=${encodeURIComponent(window.location.href)}`);
     return;
   }
+}
+
+// Giriş yapmış kullanıcılar için cart localStorage yerine backend'den yüklenir
+// (CartStore.save() logged-in kullanıcılar için localStorage'a yazmaz)
+if (isLoggedIn() && !isSampleMode) {
+  try {
+    const apiCart = await fetchCart();
+    if (apiCart.suppliers.length > 0) {
+      cartStore.init(apiCart.suppliers, 0, getSelectedCurrencyInfo().symbol, 0);
+    }
+  } catch { /* localStorage'daki veriyi koru */ }
 }
 
 await enrichMissingShippingMethods();
@@ -507,6 +583,9 @@ currentDefaultShippingFee = Number(
 
 const sampleSubtotal = sampleOrderData ? sampleOrderData.samplePrice * sampleOrderData.quantity : 0;
 
+// Backend'den yükleme sonrası taze summary
+const freshCartSummary = cartStore.getSummary();
+
 currentCheckoutOrderSummary = isSampleMode ? {
   itemCount: 1,
   thumbnails: sampleOrderData?.color?.imageUrl ? [{ image: sampleOrderData.color.imageUrl, quantity: 1 }] : [],
@@ -517,13 +596,13 @@ currentCheckoutOrderSummary = isSampleMode ? {
   total: sampleSubtotal + currentDefaultShippingFee,
   currency: getSelectedCurrencyInfo().code,
 } : {
-  itemCount: cartSummary!.selectedCount || cartSummary!.items.reduce((s, i) => s + i.quantity, 0),
-  thumbnails: cartSummary!.items.map(i => ({ image: i.image, quantity: i.quantity })),
-  itemSubtotal: cartSummary!.productSubtotal,
+  itemCount: freshCartSummary.selectedCount || freshCartSummary.items.reduce((s, i) => s + i.quantity, 0),
+  thumbnails: freshCartSummary.items.map(i => ({ image: i.image, quantity: i.quantity })),
+  itemSubtotal: freshCartSummary.productSubtotal,
   shipping: currentDefaultShippingFee,
-  subtotal: cartSummary!.productSubtotal + currentDefaultShippingFee - cartSummary!.discount,
+  subtotal: freshCartSummary.productSubtotal + currentDefaultShippingFee - freshCartSummary.discount,
   processingFee: 0,
-  total: cartSummary!.productSubtotal + currentDefaultShippingFee - cartSummary!.discount,
+  total: freshCartSummary.productSubtotal + currentDefaultShippingFee - freshCartSummary.discount,
   currency: getSelectedCurrencyInfo().code,
 };
 

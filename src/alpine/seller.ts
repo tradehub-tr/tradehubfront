@@ -143,6 +143,13 @@ Alpine.data('sellerStorefront', () => ({
       this.seller = sellerRes.message || null;
       this.navCategories = catRes.message?.categories || [];
     } catch (e) {}
+
+    // Slug ve seller_code her zaman URL'den gelsin
+    if (this.seller) {
+      if (!this.seller.slug) this.seller.slug = code;
+      if (!this.seller.seller_code) this.seller.seller_code = code;
+    }
+
     this.loading = false;
   },
 
@@ -158,7 +165,14 @@ Alpine.data('sellerStorefront', () => ({
 
   setTab(tab: string) {
     this.activeTab = tab;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Scroll to tab content area (below sticky tab bar)
+    const tabNav = document.getElementById('store-tab-nav');
+    if (tabNav) {
+      const top = tabNav.getBoundingClientRect().top + window.scrollY - 10;
+      window.scrollTo({ top, behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   },
 
   toggleMobileMenu() {
@@ -181,6 +195,15 @@ Alpine.data('sellerDashboard', () => ({
   galleryNewCaption: '',
   galleryAdding: false,
 
+  // ─── Siparişler ──────────────────────────────────────────
+  orders: [] as Record<string, unknown>[],
+  ordersTotal: 0,
+  ordersPage: 1,
+  ordersStatus: 'all' as string,
+  ordersLoading: false,
+  selectedOrder: null as Record<string, unknown> | null,
+  confirmingOrderId: '' as string,
+
   tabs: [
     { id: 'account',    label: 'Hesabım',        icon: '<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>' },
     { id: 'reviews',    label: 'Yorumlar',        icon: '<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>' },
@@ -189,6 +212,7 @@ Alpine.data('sellerDashboard', () => ({
     { id: 'gallery',    label: 'Galeri',          icon: '<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>' },
     { id: 'company',    label: 'Şirket Profili',  icon: '<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>' },
     { id: 'contact',    label: 'İletişim',        icon: '<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>' },
+    { id: 'orders',     label: 'Siparişler',      icon: '<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>' },
   ],
 
   form: {
@@ -241,8 +265,8 @@ Alpine.data('sellerDashboard', () => ({
       this.form.company = { company_name: p.company_name, business_type: p.business_type || 'Manufacturer', founded_year: p.founded_year || '', staff_count: p.staff_count || '', annual_revenue: p.annual_revenue || '', factory_size: p.factory_size || '', tax_id: p.tax_id, tax_office: p.tax_office, main_markets: p.main_markets || '' };
       this.form.contact = { phone: p.phone, website: p.website, address_line1: p.address_line1, address_line2: p.address_line2, city: p.city, district: p.district, postal_code: p.postal_code, iban: p.iban };
 
-      // Ürün, kategori ve galeriyi yükle
-      await Promise.all([this.loadProducts(), this.loadCategories(), this.loadGallery()]);
+      // Ürün, kategori, galeri ve siparişleri yükle
+      await Promise.all([this.loadProducts(), this.loadCategories(), this.loadGallery(), this.loadOrders()]);
 
     } catch {
       // session hatası
@@ -436,6 +460,105 @@ Alpine.data('sellerDashboard', () => ({
       this._showToast((e as Error).message || 'Hata', 'error');
     }
   },
+
+  // ─── Siparişler ────────────────────────────────────────────
+  async loadOrders() {
+    this.ordersLoading = true;
+    try {
+      const res = await this._post('tradehub_core.api.order.get_seller_orders', {
+        status: this.ordersStatus,
+        page: this.ordersPage,
+        page_size: 20,
+      }) as { orders: Record<string, unknown>[]; total: number };
+      this.orders = res.orders || [];
+      this.ordersTotal = res.total || 0;
+    } catch {
+      this.orders = [];
+    } finally {
+      this.ordersLoading = false;
+    }
+  },
+
+  async setOrdersStatus(status: string) {
+    this.ordersStatus = status;
+    this.ordersPage = 1;
+    await this.loadOrders();
+  },
+
+  viewOrder(order: Record<string, unknown>) {
+    this.selectedOrder = order;
+  },
+
+  backToOrders() {
+    this.selectedOrder = null;
+  },
+
+  async confirmPayment(orderNumber: string) {
+    if (!confirm('Ödeme alındığını onaylamak istiyor musunuz? Sipariş durumu "Onaylanıyor" olarak güncellenecek.')) return;
+    this.confirmingOrderId = orderNumber;
+    try {
+      await this._post('tradehub_core.api.order.seller_confirm_payment', { order_number: orderNumber });
+      this._showToast('Ödeme onaylandı, sipariş işleme alındı');
+      await this.loadOrders();
+      this.selectedOrder = null;
+    } catch (e) {
+      this._showToast((e as Error).message || 'Onaylama başarısız', 'error');
+    } finally {
+      this.confirmingOrderId = '';
+    }
+  },
+
+  shipModalOpen: false,
+  shipModalOrderNumber: '',
+  shipModalTracking: '',
+
+  openShipModal(orderNumber: string) {
+    this.shipModalOrderNumber = orderNumber;
+    this.shipModalTracking = '';
+    this.shipModalOpen = true;
+  },
+
+  async doShipOrder() {
+    const orderNumber = this.shipModalOrderNumber;
+    if (!orderNumber) return;
+    this.confirmingOrderId = orderNumber;
+    try {
+      await this._post('tradehub_core.api.order.seller_ship_order', {
+        order_number: orderNumber,
+        tracking_number: (this.shipModalTracking as string).trim(),
+      });
+      this.shipModalOpen = false;
+      this._showToast('Sipariş kargoya verildi olarak işaretlendi');
+      await this.loadOrders();
+      this.selectedOrder = null;
+    } catch (e) {
+      this._showToast((e as Error).message || 'İşlem başarısız', 'error');
+    } finally {
+      this.confirmingOrderId = '';
+    }
+  },
+
+  orderStatusLabel(statusEn: string): string {
+    const map: Record<string, string> = {
+      'Waiting for payment': 'Ödeme Bekleniyor',
+      'Confirming': 'Onaylanıyor',
+      'Delivering': 'Kargoda',
+      'Completed': 'Tamamlandı',
+      'Cancelled': 'İptal Edildi',
+    };
+    return map[statusEn] || statusEn;
+  },
+
+  orderStatusClass(statusEn: string): string {
+    const map: Record<string, string> = {
+      'Waiting for payment': 'bg-amber-50 text-amber-700 border-amber-200',
+      'Confirming': 'bg-blue-50 text-blue-700 border-blue-200',
+      'Delivering': 'bg-green-50 text-green-700 border-green-200',
+      'Completed': 'bg-gray-50 text-gray-600 border-gray-200',
+      'Cancelled': 'bg-red-50 text-red-700 border-red-200',
+    };
+    return map[statusEn] || 'bg-gray-50 text-gray-600 border-gray-200';
+  },
 }));
 
 // ─── Application Pending Page ─────────────────────────────────────────
@@ -455,16 +578,12 @@ Alpine.data('applicationPendingPage', () => ({
       return;
     }
 
-    // Approved seller with active profile → redirect to seller panel
-    if (user.has_seller_profile) {
-      const panelUrl = import.meta.env.VITE_SELLER_PANEL_URL || 'http://localhost:8082/';
-      window.location.href = panelUrl;
-      return;
-    }
-
     // Show the application status dynamically
+    // Pending application takes priority over profile status
     if (user.pending_seller_application) {
       this.status = user.seller_application_status || 'Under Review';
+    } else if (user.has_seller_profile) {
+      this.status = 'Approved';
     } else {
       this.status = user.seller_application_status || 'Draft';
     }

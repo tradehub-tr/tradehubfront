@@ -59,7 +59,7 @@ function renderAllOrders(): string {
       <div class="flex items-center justify-between gap-2 px-5 max-sm:px-3 pt-6 max-[480px]:pt-4 pb-5 max-[480px]:pb-3 border-b border-gray-100">
         <h1 class="text-[22px] max-sm:text-lg max-[480px]:text-base font-bold text-gray-900" data-i18n="orders.yourOrders">${t('orders.yourOrders')}</h1>
         <template x-if="filteredOrders.some((o) => o.status === 'Waiting for payment')">
-          <button @click="openRemittanceModal(filteredOrders.find((o) => o.status === 'Waiting for payment')?.orderNumber || '')"
+          <button @click="openRemittanceModal(filteredOrders.find((o) => o.status === 'Waiting for payment')?.orderNumber || '', filteredOrders.find((o) => o.status === 'Waiting for payment')?.total, filteredOrders.find((o) => o.status === 'Waiting for payment')?.currency, filteredOrders.find((o) => o.status === 'Waiting for payment')?.paymentMethod)"
             class="px-5 max-sm:px-3 max-[480px]:px-2.5 py-2 text-sm max-sm:text-xs text-gray-700 bg-white border border-gray-300 rounded-full cursor-pointer whitespace-nowrap transition-colors hover:border-gray-400 hover:bg-gray-50">
             ${t('orders.submitRemittanceProof')}
           </button>
@@ -322,17 +322,22 @@ function renderAllOrders(): string {
                 </div>
                 <!-- Right: Status + Cancel + Total -->
                 <div class="flex items-center gap-2 max-[480px]:gap-1.5">
-                  <button @click="cancellingOrder = order; openModal('showCancelOrder')" class="text-gray-400 hover:text-red-500 bg-transparent border-none cursor-pointer transition-colors text-xs whitespace-nowrap">
-                    ${t('orders.cancelOrderBtn')}
-                  </button>
-                  <span class="text-gray-300">|</span>
+                  <template x-if="canCancel(order)">
+                    <button @click="cancellingOrder = order; openModal('showCancelOrder')" class="text-gray-400 hover:text-red-500 bg-transparent border-none cursor-pointer transition-colors text-xs whitespace-nowrap">
+                      ${t('orders.cancelOrderBtn')}
+                    </button>
+                  </template>
+                  <span class="text-gray-300" x-show="canCancel(order)">|</span>
                   <span class="inline-flex items-center px-2.5 py-0.5 max-[480px]:px-1.5 rounded text-[11px] max-[480px]:text-[10px] font-bold uppercase tracking-wide"
-                        :class="order.statusColor === 'text-amber-600' ? 'bg-amber-100 text-amber-700'
+                        :class="order.refundStatus === 'Pending'  ? 'bg-orange-100 text-orange-700'
+                              : order.refundStatus === 'Approved' ? 'bg-purple-100 text-purple-700'
+                              : order.refundStatus === 'Rejected' ? 'bg-red-100 text-red-700'
+                              : order.statusColor === 'text-amber-600' ? 'bg-amber-100 text-amber-700'
                               : order.statusColor === 'text-green-600' ? 'bg-green-100 text-green-700'
                               : order.statusColor === 'text-blue-600' ? 'bg-blue-100 text-blue-700'
                               : order.statusColor === 'text-red-600' ? 'bg-red-100 text-red-700'
                               : 'bg-gray-100 text-gray-700'"
-                        x-text="order.status"></span>
+                        x-text="getStatusLabel(order)"></span>
                   <span class="text-[15px] max-[480px]:text-[13px] font-bold text-gray-900" x-text="order.currency + ' ' + order.total"></span>
                 </div>
               </div>
@@ -373,9 +378,15 @@ function renderAllOrders(): string {
                   ${t('orders.viewDetails')}
                 </button>
                 <template x-if="canPay(order)">
-                  <button @click="openRemittanceModal(order.orderNumber)" class="h-9 px-5 max-[480px]:px-3 max-[480px]:flex-1 text-[13px] max-[480px]:text-xs font-medium text-white bg-(--color-cta-primary) border border-(--color-cta-primary) rounded-lg cursor-pointer whitespace-nowrap transition-colors hover:bg-(--color-cta-primary-hover)">
+                  <button @click="openRemittanceModal(order.orderNumber, order.total, order.currency, order.paymentMethod)" class="h-9 px-5 max-[480px]:px-3 max-[480px]:flex-1 text-[13px] max-[480px]:text-xs font-medium text-white bg-(--color-cta-primary) border border-(--color-cta-primary) rounded-lg cursor-pointer whitespace-nowrap transition-colors hover:bg-(--color-cta-primary-hover)">
                     ${t('orders.makePayment')}
                   </button>
+                </template>
+                <template x-if="hasReceipt(order)">
+                  <a :href="order.receiptUrl" target="_blank" class="h-9 px-5 max-[480px]:px-3 max-[480px]:flex-1 text-[13px] max-[480px]:text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg cursor-pointer whitespace-nowrap transition-colors hover:bg-emerald-100 inline-flex items-center gap-1.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                    Dekontu görüntüle
+                  </a>
                 </template>
               </div>
             </div>
@@ -456,8 +467,38 @@ function renderAllOrders(): string {
               <span class="text-sm font-medium text-red-700">${t('orders.orderCancelled') || 'Bu sipariş iptal edilmiştir'}</span>
             </div>
           </template>
-          <!-- Normal stepper (only for non-cancelled orders) -->
-          <template x-if="!isCancelled(selectedOrder)">
+          <!-- İade stepper (iade talebi varsa) -->
+          <template x-if="!isCancelled(selectedOrder) && hasActiveRefund(selectedOrder)">
+            <div class="flex items-center justify-between max-w-lg mx-auto max-sm:max-w-full">
+              <!-- Step 1: İade Talebi -->
+              <div class="flex flex-col items-center gap-1.5 relative z-10">
+                <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
+                     :class="getRefundStepIndex(selectedOrder) >= 0 ? getRefundStepColor(selectedOrder) + ' text-white' : 'bg-gray-200 text-gray-500'">1</div>
+                <span class="text-xs max-sm:text-[10px] text-gray-600 whitespace-nowrap">İade Talebi</span>
+              </div>
+              <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3"
+                   :class="getRefundStepIndex(selectedOrder) >= 1 ? getRefundStepColor(selectedOrder) : 'bg-gray-200'"></div>
+              <!-- Step 2: İnceleniyor -->
+              <div class="flex flex-col items-center gap-1.5 relative z-10">
+                <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
+                     :class="getRefundStepIndex(selectedOrder) >= 1 ? getRefundStepColor(selectedOrder) + ' text-white' : 'bg-gray-200 text-gray-500'">2</div>
+                <span class="text-xs max-sm:text-[10px] text-gray-600 whitespace-nowrap">İnceleniyor</span>
+              </div>
+              <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3"
+                   :class="getRefundStepIndex(selectedOrder) >= 2 ? getRefundStepColor(selectedOrder) : 'bg-gray-200'"></div>
+              <!-- Step 3: Sonuç -->
+              <div class="flex flex-col items-center gap-1.5 relative z-10">
+                <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
+                     :class="getRefundStepIndex(selectedOrder) >= 2 ? getRefundStepColor(selectedOrder) + ' text-white' : 'bg-gray-200 text-gray-500'">3</div>
+                <span class="text-xs max-sm:text-[10px] whitespace-nowrap"
+                      :class="selectedOrder.refundStatus === 'Rejected' ? 'text-red-500' : selectedOrder.refundStatus === 'Approved' ? 'text-orange-600 font-medium' : 'text-gray-600'">
+                  <span x-text="selectedOrder.refundStatus === 'Rejected' ? 'İade Reddedildi' : 'İade Onaylandı'"></span>
+                </span>
+              </div>
+            </div>
+          </template>
+          <!-- Normal stepper (iade yoksa ve iptal değilse) -->
+          <template x-if="!isCancelled(selectedOrder) && !hasActiveRefund(selectedOrder)">
             <div class="flex items-center justify-between max-w-2xl mx-auto max-sm:max-w-full">
               <!-- Step 1: Siparis -->
               <div class="flex flex-col items-center gap-1.5 relative z-10">
@@ -473,21 +514,21 @@ function renderAllOrders(): string {
                 <span class="text-xs max-sm:text-[10px] text-gray-600 whitespace-nowrap">${t('orders.stepPayment')}</span>
               </div>
               <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3" :class="getStepIndex(selectedOrder) >= 2 ? 'bg-amber-500' : 'bg-gray-200'"></div>
-              <!-- Step 3: Kargolama -->
+              <!-- Step 3: Hazırlanıyor -->
               <div class="flex flex-col items-center gap-1.5 relative z-10">
                 <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
                      :class="getStepIndex(selectedOrder) >= 2 ? 'bg-amber-500 text-white' : 'bg-gray-200 text-gray-500'">3</div>
                 <span class="text-xs max-sm:text-[10px] text-gray-600 whitespace-nowrap">${t('orders.stepShipping')}</span>
               </div>
               <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3" :class="getStepIndex(selectedOrder) >= 3 ? 'bg-amber-500' : 'bg-gray-200'"></div>
-              <!-- Step 4: Teslimat -->
+              <!-- Step 4: Kargoda -->
               <div class="flex flex-col items-center gap-1.5 relative z-10">
                 <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
                      :class="getStepIndex(selectedOrder) >= 3 ? 'bg-amber-500 text-white' : 'bg-gray-200 text-gray-500'">4</div>
                 <span class="text-xs max-sm:text-[10px] text-gray-600 whitespace-nowrap">${t('orders.stepDelivery')}</span>
               </div>
               <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3" :class="getStepIndex(selectedOrder) >= 4 ? 'bg-amber-500' : 'bg-gray-200'"></div>
-              <!-- Step 5: Degerlendirme -->
+              <!-- Step 5: Teslim Edildi -->
               <div class="flex flex-col items-center gap-1.5 relative z-10">
                 <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
                      :class="getStepIndex(selectedOrder) >= 4 ? 'bg-amber-500 text-white' : 'bg-gray-200 text-gray-500'">5</div>
@@ -499,8 +540,8 @@ function renderAllOrders(): string {
 
         <!-- Section 3: Status -->
         <div class="px-7 max-sm:px-3 py-5 border-b border-gray-100">
-          <p class="text-base font-bold mb-1" :class="selectedOrder.statusColor" x-text="selectedOrder.status"></p>
-          <p class="text-sm text-gray-500" x-text="selectedOrder.statusDescription"></p>
+          <p class="text-base font-bold mb-1" :class="getStatusColor(selectedOrder)" x-text="getStatusLabel(selectedOrder)"></p>
+          <p class="text-sm text-gray-500" x-text="getStatusDescription(selectedOrder)"></p>
         </div>
 
         <!-- Info Box: Inspection + Payment Info -->
@@ -541,9 +582,15 @@ function renderAllOrders(): string {
           <!-- Action Buttons (status-aware) -->
           <div class="flex items-center gap-3 mt-4 flex-wrap" x-show="isActionable(selectedOrder)">
             <template x-if="canPay(selectedOrder)">
-              <button @click="openRemittanceModal(selectedOrder.orderNumber)" class="th-btn th-btn-pill">
+              <button @click="openRemittanceModal(selectedOrder.orderNumber, selectedOrder.total, selectedOrder.currency, selectedOrder.paymentMethod)" class="th-btn th-btn-pill">
                 ${t('orders.makePayment')}
               </button>
+            </template>
+            <template x-if="hasReceipt(selectedOrder)">
+              <a :href="selectedOrder.receiptUrl" target="_blank" class="th-btn-outline th-btn-pill inline-flex items-center gap-1.5 text-emerald-700 border-emerald-200 bg-emerald-50 hover:bg-emerald-100">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                Dekontu görüntüle
+              </a>
             </template>
             <button @click="openModal('showModifyShipping')" class="th-btn-outline th-btn-pill">
               ${t('orders.modifyShippingDetails')}
@@ -670,10 +717,12 @@ function renderAllOrders(): string {
                     <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                     ${t('orders.downloadInvoice')}
                   </button>
-                  <button @click="openRefundModal(selectedOrder); moreOpen = false" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 bg-transparent border-none cursor-pointer flex items-center gap-2">
-                    <svg class="w-3.5 h-3.5 text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
-                    ${t('orders.requestRefund')}
-                  </button>
+                  <template x-if="canRefund(selectedOrder)">
+                    <button @click="openRefundModal(selectedOrder); moreOpen = false" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 bg-transparent border-none cursor-pointer flex items-center gap-2">
+                      <svg class="w-3.5 h-3.5 text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
+                      ${t('orders.requestRefund')}
+                    </button>
+                  </template>
                 </div>
               </div>
             </div>
@@ -1453,7 +1502,7 @@ function renderAllOrders(): string {
           <!-- Modal Header -->
           <div class="flex items-center justify-between px-6 pt-5 pb-4 border-b border-gray-100 sticky top-0 bg-white z-10 rounded-t-xl">
             <div class="flex items-center gap-3">
-              <h3 class="text-lg font-bold text-gray-900">${t('orders.submitRemittanceProof')}</h3>
+              <h3 class="text-lg font-bold text-gray-900" x-text="isCheckPayment ? 'Evrak Gönder' : '${t('orders.submitRemittanceProof')}'"></h3>
               <!-- Step indicator (3 steps) -->
               <div class="flex items-center gap-1.5" x-show="step !== 'success'">
                 <span class="w-2 h-2 rounded-full transition-colors" :class="step === 'iban' ? 'bg-amber-500' : 'bg-gray-300'"></span>
@@ -1521,7 +1570,7 @@ function renderAllOrders(): string {
                 <!-- Warning note -->
                 <div class="flex items-start gap-2.5 bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 mb-6">
                   <svg class="w-4 h-4 text-blue-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                  <p class="text-xs text-blue-700">Havaleyi yaptıktan sonra <strong>"Ödeme Yaptım"</strong> butonuna tıklayın ve dekontunuzu yükleyin. Satıcı ödemeyi onayladıktan sonra siparişiniz hazırlanmaya başlayacaktır.</p>
+                  <p class="text-xs text-blue-700" x-text="isCheckPayment ? 'Ödemeyi yaptıktan sonra &quot;Ödeme Yaptım&quot; butonuna tıklayın ve evrakınızı yükleyin. Satıcı inceledikten sonra siparişiniz hazırlanmaya başlayacaktır.' : 'Havaleyi yaptıktan sonra &quot;Ödeme Yaptım&quot; butonuna tıklayın ve dekontunuzu yükleyin. Satıcı ödemeyi onayladıktan sonra siparişiniz hazırlanmaya başlayacaktır.'"></p>
                 </div>
 
                 <!-- Actions -->
@@ -1530,7 +1579,7 @@ function renderAllOrders(): string {
                   <button @click="goToUpload()" :disabled="!sellerIban"
                     class="flex items-center gap-2 px-7 py-3 text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl cursor-pointer transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                    Ödeme Yaptım — Dekont Yükle
+                    <span x-text="isCheckPayment ? 'Ödeme Yaptım — Evrak Yükle' : 'Ödeme Yaptım — Dekont Yükle'"></span>
                   </button>
                 </div>
               </div>
@@ -1666,39 +1715,27 @@ function renderAllOrders(): string {
 
                 <div class="space-y-4">
 
-                  <!-- Remittance Date -->
+                  <!-- Remittance Date (read-only — sipariş tarihinden otomatik) -->
                   <div>
                     <label class="block text-sm text-gray-700 mb-1.5">
-                      <span class="text-red-500">*</span> ${t('orders.remitDate')}
+                      ${t('orders.remitDate')}
                     </label>
                     <input type="date" x-model="form.remittanceDate"
-                      @blur="submitted && validateField('remittanceDate')"
-                      :class="errors.remittanceDate ? 'border-red-400! ring-1! ring-red-200!' : ''"
-                      class="w-full h-10 px-3 text-sm border border-gray-300 rounded-lg outline-none bg-white text-gray-700 transition-colors focus:border-amber-400 focus:ring-1 focus:ring-amber-200" />
-                    <p x-show="errors.remittanceDate" class="text-xs text-red-500 mt-1">${t('common.required')}</p>
+                      readonly
+                      class="w-full h-10 px-3 text-sm border border-gray-200 rounded-lg outline-none bg-gray-50 text-gray-700 cursor-default" />
                   </div>
 
-                  <!-- Amount -->
+                  <!-- Amount (read-only — sipariş tutarından otomatik) -->
                   <div>
                     <label class="block text-sm text-gray-700 mb-1.5">
-                      <span class="text-red-500">*</span> ${t('orders.remitAmount')}
+                      ${t('orders.remitAmount')}
                     </label>
                     <div class="flex gap-2">
-                      <select x-model="form.currency"
-                        class="h-10 px-3 text-sm border border-gray-300 rounded-lg outline-none bg-white text-gray-700 transition-colors focus:border-amber-400 focus:ring-1 focus:ring-amber-200 w-[100px]">
-                        <option value="USD">USD</option>
-                        <option value="EUR">EUR</option>
-                        <option value="GBP">GBP</option>
-                        <option value="TRY">TRY</option>
-                        <option value="CNY">CNY</option>
-                      </select>
-                      <input type="number" step="0.01" min="0" x-model="form.amount"
-                        @blur="submitted && validateField('amount')"
-                        :class="errors.amount ? 'border-red-400! ring-1! ring-red-200!' : ''"
-                        placeholder="${t('orders.remitPlaceholderEnter')}"
-                        class="flex-1 h-10 px-3 text-sm border border-gray-300 rounded-lg outline-none bg-white text-gray-700 transition-colors focus:border-amber-400 focus:ring-1 focus:ring-amber-200" />
+                      <div class="h-10 px-3 text-sm border border-gray-200 rounded-lg bg-gray-50 text-gray-700 flex items-center w-[100px] font-medium" x-text="form.currency"></div>
+                      <input type="text" x-model="form.amount"
+                        readonly
+                        class="flex-1 h-10 px-3 text-sm border border-gray-200 rounded-lg outline-none bg-gray-50 text-gray-700 cursor-default font-medium" />
                     </div>
-                    <p x-show="errors.amount" class="text-xs text-red-500 mt-1">${t('common.required')}</p>
                   </div>
 
                   <!-- Bank Name -->
