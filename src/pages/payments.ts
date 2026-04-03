@@ -10,7 +10,8 @@ import { FooterLinks } from '../components/footer'
 import { FloatingPanel } from '../components/floating'
 import { startAlpine } from '../alpine'
 import { TradeAssuranceFooterCards } from '../components/shared/TradeAssuranceFooterCards'
-import videoPaymentImg from '../assets/images/videopayment.avif'
+import guvenliOdemelerImg from '../assets/images/güvenliödemeler.avif'
+import taLogoUrl from '../assets/images/ta-logo.svg'
 
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.classList.add('relative');
@@ -23,43 +24,35 @@ appEl.innerHTML = `
 
   <main class="flex-1 min-w-0">
 
-    <!-- ═══ HERO SECTION ═══ -->
-    <section class="bg-white py-12 sm:py-16 lg:py-20">
-      <div class="container-boxed px-3 sm:px-4 lg:px-6">
-        <div class="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
-
-          <!-- Left: Text Content -->
-          <div class="w-full lg:w-1/2 max-w-[500px]">
-            <h1 class="text-3xl sm:text-4xl lg:text-[42px] font-bold text-gray-900 leading-tight mb-6">
-              Güvenli ve çeşitli ödeme seçenekleri
-            </h1>
-            <p class="text-gray-600 text-base sm:text-lg leading-relaxed mb-4">
-              iSTOC aracılığıyla yaptığınız her ödeme şifrelenmiştir, güvenlidir ve 2 saat gibi kısa bir sürede işlenir.
-            </p>
-            <p class="text-gray-600 text-base sm:text-lg leading-relaxed mb-8">
-              Kredi/banka kartları, dijital cüzdanlar, doğrudan banka hesabına transferler ve esnek ödeme planları* dahil olmak üzere bildiğiniz ve güvendiğiniz ödeme yöntemlerini destekliyoruz.
-            </p>
-            <div class="flex flex-wrap items-center gap-3 mb-4">
-              <a href="#" class="inline-flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-full px-6 py-3 text-sm sm:text-base transition-colors">
-                Destekleyici ürünleri tedarik edin
-              </a>
-              <a href="#process" class="inline-flex items-center justify-center border-2 border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white font-semibold rounded-full px-6 py-3 text-sm sm:text-base transition-colors">
-                Nasıl çalıştığını öğrenin
-              </a>
-            </div>
-            <p class="text-gray-400 text-xs">*Uygun alıcılar için</p>
+    <!-- ═══ HERO BANNER ═══ -->
+    <section class="relative w-full overflow-hidden" style="min-height:320px">
+      <img src="${guvenliOdemelerImg}" alt="Güvenli ödeme" class="absolute inset-0 w-full h-full object-cover" />
+      <div class="absolute inset-0 bg-gradient-to-r from-black/50 via-black/30 to-transparent"></div>
+      <div class="relative container-boxed px-3 sm:px-4 lg:px-6 flex flex-col justify-center" style="min-height:320px">
+        <div class="max-w-[550px] py-12 sm:py-16 lg:py-20">
+          <div class="inline-flex items-center px-5 py-2.5 rounded-full bg-white/15 backdrop-blur-sm mb-2">
+            <img src="${taLogoUrl}" alt="Trade Assurance" class="h-7 sm:h-8" />
           </div>
-
-          <!-- Right: Media -->
-          <div class="w-full lg:w-1/2">
-            <div class="rounded-2xl overflow-hidden shadow-lg">
-              <img src="${videoPaymentImg}" alt="Güvenli ödeme" class="w-full h-auto object-cover" />
-            </div>
-          </div>
-
+          <h1 class="text-3xl sm:text-4xl lg:text-[42px] font-bold text-white leading-tight mb-4">
+            Güvenli ve çeşitli ödeme seçenekleri
+          </h1>
+          <p class="text-white/80 text-base sm:text-lg">
+            Karmaşık olmayan B2B ödemeleri
+          </p>
         </div>
       </div>
     </section>
+
+    <!-- Breadcrumb -->
+    <div class="bg-white border-b border-gray-100">
+      <div class="container-boxed px-3 sm:px-4 lg:px-6 py-4">
+        <nav class="flex items-center gap-2 text-sm text-gray-500">
+          <a href="/pages/info/trade-assurance-detail.html" class="hover:text-gray-700 transition-colors">Trade Assurance</a>
+          <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
+          <span class="text-gray-700">Güvenli ve çeşitli ödeme seçenekleri</span>
+        </nav>
+      </div>
+    </div>
 
     <!-- ═══ MAIN CONTENT ═══ -->
     <section class="bg-white py-12 sm:py-16 lg:py-20">
