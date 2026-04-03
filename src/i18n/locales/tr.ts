@@ -320,6 +320,7 @@ const tr = {
         firstNamePlaceholder: 'Adınız',
         lastName: 'Soyad',
         lastNamePlaceholder: 'Soyadınız',
+        phone: 'Telefon',
         password: 'Şifre',
         passwordPlaceholder: 'Şifrenizi oluşturun',
         minChars: 'En az 8 karakter',
