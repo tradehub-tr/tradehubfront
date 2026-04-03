@@ -36,7 +36,7 @@ const customProducts = getCustomProducts();
 const testimonials = getTestimonials();
 
 // Types
-import type { Product, RFQFormData } from '../types/rfq'
+import type { Product } from '../types/rfq'
 import { FILE_UPLOAD_CONFIG } from '../types/rfq'
 import { requireAuth } from '../utils/auth-guard'
 
@@ -137,8 +137,9 @@ appEl.innerHTML = `
                   id="rfq-file-input"
                   class="hidden"
                   multiple
-                  accept="${FILE_UPLOAD_CONFIG.allowedExtensions.join(',')}"
+                  accept="image/jpeg,image/png,image/gif,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                 />
+                <div id="rfq-file-list" class="mt-2 space-y-1"></div>
               </div>
 
               <textarea
@@ -149,8 +150,8 @@ appEl.innerHTML = `
               ></textarea>
             </div>
               
-            <!-- Action Bar (Outside Textarea) -->
-            <div class="mt-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            <!-- Action Bar -->
+            <div class="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div class="flex flex-wrap items-center gap-3">
                 <!-- Flowbite Tooltip -->
                 <div id="upload-tooltip" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
@@ -158,14 +159,8 @@ appEl.innerHTML = `
                   <div class="tooltip-arrow" data-popper-arrow></div>
                 </div>
 
-                <!-- AI Toggle -->
                 <label class="inline-flex cursor-pointer items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="rfq-ai-toggle"
-                    class="h-4 w-4 rounded border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-500"
-                    checked
-                  />
+                  <input type="checkbox" id="rfq-ai-toggle" class="h-4 w-4 rounded border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-500" checked />
                   <div class="flex flex-wrap items-center text-xs text-[#666666] sm:text-sm">
                     <img src="${aiIconUrl}" alt="AI" class="mr-1 h-4 w-4 shrink-0 object-contain" />
                     <span data-i18n="rfq.aiCreateRfq">${t('rfq.aiCreateRfq')}</span>
@@ -174,10 +169,9 @@ appEl.innerHTML = `
                 </label>
               </div>
 
-              <!-- Submit CTA (Dynamic Color) -->
-              <button type="submit" class="th-btn th-btn-pill w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 sm:min-w-[260px] sm:w-auto">
+              <a href="/pages/dashboard/rfq-form.html" id="rfq-write-details-btn" class="th-btn th-btn-pill w-full text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 sm:min-w-[260px] sm:w-auto">
                 <span data-i18n="rfq.writeRfqDetails">${t('rfq.writeRfqDetails')}</span>
-              </button>
+              </a>
             </div>
           </form>
         </div>
@@ -274,35 +268,53 @@ new Swiper('#rfq-testimonials .swiper', {
 // --- File Upload Handling ---
 const uploadBtn = document.getElementById('rfq-upload-btn') as HTMLButtonElement;
 const fileInput = document.getElementById('rfq-file-input') as HTMLInputElement;
+const rfqFileList = document.getElementById('rfq-file-list')!;
+let rfqSelectedFiles: File[] = [];
 
 uploadBtn.addEventListener('click', () => {
   fileInput.click();
 });
 
-function validateFiles(files: FileList): boolean {
-  if (files.length > FILE_UPLOAD_CONFIG.maxFiles) {
-    showToast({ message: t('rfq.maxFilesAlert'), type: 'warning' });
-    fileInput.value = '';
+function isAllowedFileRfq(file: File): boolean {
+  const ext = ('.' + file.name.split('.').pop()!.toLowerCase());
+  if (!FILE_UPLOAD_CONFIG.allowedExtensions.includes(ext as any)) {
+    showToast({ message: t('rfq.unsupportedFormat', { fileName: file.name }), type: 'error' });
     return false;
   }
-
-  for (let i = 0; i < files.length; i++) {
-    const fileName = files[i].name;
-    const ext = ('.' + fileName.split('.').pop()!.toLowerCase()) as string;
-    if (!FILE_UPLOAD_CONFIG.allowedExtensions.includes(ext as any)) {
-      showToast({ message: t('rfq.unsupportedFormat', { fileName }), type: 'error' });
-      fileInput.value = '';
-      return false;
-    }
-  }
-
   return true;
 }
 
-fileInput.addEventListener('change', () => {
-  if (fileInput.files) {
-    validateFiles(fileInput.files);
+function addFilesRfq(files: FileList | File[]) {
+  for (const f of Array.from(files)) {
+    if (rfqSelectedFiles.length >= FILE_UPLOAD_CONFIG.maxFiles) {
+      showToast({ message: t('rfq.maxFilesAlert'), type: 'warning' });
+      break;
+    }
+    if (!isAllowedFileRfq(f)) continue;
+    rfqSelectedFiles.push(f);
   }
+  renderRfqFileList();
+}
+
+function renderRfqFileList() {
+  rfqFileList.innerHTML = rfqSelectedFiles.map((f, i) => `
+    <div class="flex items-center gap-2 text-sm text-gray-600">
+      <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
+      <span class="truncate max-w-xs">${f.name}</span>
+      <button type="button" data-remove="${i}" class="rfq-remove-file text-red-400 hover:text-red-600 ml-1">&times;</button>
+    </div>
+  `).join('');
+  rfqFileList.querySelectorAll('.rfq-remove-file').forEach(btn => {
+    btn.addEventListener('click', () => {
+      rfqSelectedFiles.splice(Number((btn as HTMLElement).dataset.remove), 1);
+      renderRfqFileList();
+    });
+  });
+}
+
+fileInput.addEventListener('change', () => {
+  if (fileInput.files) addFilesRfq(fileInput.files);
+  fileInput.value = '';
 });
 
 // Drag-and-drop on upload button
@@ -318,38 +330,52 @@ uploadBtn.addEventListener('dragleave', () => {
 uploadBtn.addEventListener('drop', (e) => {
   e.preventDefault();
   uploadBtn.classList.remove('border-primary-500', 'bg-primary-50');
-  if (e.dataTransfer?.files) {
-    if (validateFiles(e.dataTransfer.files)) {
-      fileInput.files = e.dataTransfer.files;
-    }
-  }
+  if (e.dataTransfer?.files) addFilesRfq(e.dataTransfer.files);
 });
 
-// --- Form Validation ---
+// --- IndexedDB helpers for transferring files between pages ---
+function openFilesDB(): Promise<IDBDatabase> {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open('rfq_files', 1);
+    req.onupgradeneeded = () => req.result.createObjectStore('files');
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function storeFilesToDB(files: File[]) {
+  if (!files.length) return;
+  const db = await openFilesDB();
+  const tx = db.transaction('files', 'readwrite');
+  const store = tx.objectStore('files');
+  store.clear();
+  files.forEach((f, i) => store.put(f, i));
+  return new Promise<void>((resolve) => { tx.oncomplete = () => { db.close(); resolve(); }; });
+}
+
+// --- Form: "RFQ detaylarını yaz" navigates to rfq-form.html ---
 const form = document.getElementById('rfq-form-element') as HTMLFormElement;
 const textarea = document.getElementById('rfq-details') as HTMLTextAreaElement;
-const textareaContainer = document.getElementById('rfq-textarea-container') as HTMLDivElement;
+const writeBtn = document.getElementById('rfq-write-details-btn') as HTMLAnchorElement;
 
-form.addEventListener('submit', (e) => {
+async function navigateToForm() {
+  const details = textarea?.value.trim() || '';
+  // Store files to IndexedDB so rfq-form.html can retrieve them
+  await storeFilesToDB(rfqSelectedFiles);
+  const params = new URLSearchParams();
+  if (details) params.set('details', details);
+  if (rfqSelectedFiles.length) params.set('hasFiles', '1');
+  window.location.href = `/pages/dashboard/rfq-form.html?${params}`;
+}
+
+if (writeBtn) {
+  writeBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    navigateToForm();
+  });
+}
+
+form?.addEventListener('submit', (e) => {
   e.preventDefault();
-
-  const details = textarea.value.trim();
-
-  if (!details) {
-    textareaContainer.classList.add('border-error-500');
-    textarea.focus();
-    return;
-  }
-
-  textareaContainer.classList.remove('border-error-500');
-
-  const aiCheckbox = document.getElementById('rfq-ai-toggle') as HTMLInputElement;
-  const formData: RFQFormData = {
-    details,
-    files: fileInput.files ? Array.from(fileInput.files) : [],
-    aiEnabled: aiCheckbox.checked,
-  };
-
-  // TODO: send formData to API
-  void formData;
+  navigateToForm();
 });
