@@ -3,8 +3,6 @@
  * Mock data for "My Inquiries" and "My RFQs" tabs.
  */
 
-import { t } from '../i18n';
-
 export interface MockInquiry {
   id: string;
   date: string;
