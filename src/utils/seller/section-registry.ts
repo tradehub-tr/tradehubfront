@@ -21,7 +21,7 @@ type SectionRenderer = (settings: Record<string, any>) => string;
  * Each renderer receives the section's settings object and returns HTML string.
  */
 const SECTION_RENDERERS: Record<string, SectionRenderer> = {
-  hero_banner: (settings) => {
+  hero_banner: (_settings) => {
     // Hero banner is rendered via Alpine x-data, slides come from seller data or mock
     return `
       <section class="storefront-section" data-section="hero_banner">
