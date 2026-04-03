@@ -321,6 +321,7 @@ const en = {
         firstNamePlaceholder: 'Your first name',
         lastName: 'Last Name',
         lastNamePlaceholder: 'Your last name',
+        phone: 'Phone',
         password: 'Password',
         passwordPlaceholder: 'Create your password',
         minChars: 'At least 8 characters',
