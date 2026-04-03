@@ -2,7 +2,7 @@ import { getBaseUrl } from './url'
 
 const BASE_URL = import.meta.env.VITE_API_URL || ''
 
-function getCsrfToken(): string {
+export function getCsrfToken(): string {
   const match = document.cookie.match(/csrf_token=([^;]+)/) || document.cookie.match(/csrftoken=([^;]+)/);
   return match ? match[1] : 'Guest';
 }
