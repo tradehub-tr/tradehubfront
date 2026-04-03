@@ -24,15 +24,17 @@ function toShippingOptions(product: ProductDetail): CartDrawerShippingOption[] {
 }
 
 function toColors(product: ProductDetail): CartDrawerColorModel[] {
-  const colorVariant = product.variants.find((v) => v.type === 'color');
-  if (!colorVariant || colorVariant.options.length === 0) return [];
-  return colorVariant.options.map((option, index) => ({
-    id: option.id || `color-${index + 1}`,
-    label: option.label,
-    colorHex: option.value,
-    imageKind: 'jewelry' as const,
-    imageUrl: option.thumbnail || product.images[0]?.src,
-  }));
+  const colorVariants = product.variants.filter((v) => v.type === 'color');
+  if (colorVariants.length === 0) return [];
+  return colorVariants.flatMap((variant, groupIdx) =>
+    variant.options.map((option, i) => ({
+      id: option.id || `color-${groupIdx}-${i + 1}`,
+      label: option.label,
+      colorHex: option.value,
+      imageKind: 'jewelry' as const,
+      imageUrl: option.thumbnail || product.images[0]?.src,
+    }))
+  );
 }
 
 function toDrawerItem(product: ProductDetail): CartDrawerItemModel {
@@ -49,6 +51,17 @@ function toDrawerItem(product: ProductDetail): CartDrawerItemModel {
       price: tier.price,
     })),
     colors: toColors(product),
+    sizeGroups: product.variants
+      .filter((v) => v.type !== 'color')
+      .map((v) => ({
+        groupLabel: v.label,
+        options: v.options.map((o, i) => ({
+          id: o.id || `${v.label}-${i}`,
+          label: o.label,
+          rawPrice: o.rawPrice ?? undefined,
+        })),
+      }))
+      .filter((g) => g.options.length > 0),
     shippingOptions: toShippingOptions(product),
   };
 }

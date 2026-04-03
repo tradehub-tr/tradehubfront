@@ -29,11 +29,19 @@ export async function fetchCart(): Promise<CartResponse> {
 export async function apiAddToCart(
   listing: string,
   quantity: number,
-  listingVariant?: string
+  listingVariant?: string,
+  variantLabel?: string,
+  colorVariant?: string
 ): Promise<CartResponse> {
   return callMethod<CartResponse>(
     'tradehub_core.api.cart.add_to_cart',
-    { listing, quantity, ...(listingVariant ? { listing_variant: listingVariant } : {}) },
+    {
+      listing,
+      quantity,
+      ...(listingVariant ? { listing_variant: listingVariant } : {}),
+      ...(variantLabel ? { variant_label: variantLabel } : {}),
+      ...(colorVariant ? { color_variant: colorVariant } : {}),
+    },
     true
   );
 }

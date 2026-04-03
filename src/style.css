@@ -3024,11 +3024,32 @@ body.gallery-lightbox-open {
    Sticky: pinned at bottom of scrollable area */
 #pd-cta-buttons {
     display: flex;
-    gap: 8px;
+    gap: 10px;
     padding: 16px 20px;
     border-top: 1px solid var(--color-border-default, #e5e5e5);
     border-bottom: 1px solid var(--color-border-default, #e5e5e5);
     background: var(--color-surface, #ffffff);
+}
+
+#pd-cta-buttons button {
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+}
+
+#pd-add-to-cart {
+    flex: 1.4;
+}
+
+#pd-chat-now {
+    --btn-outline-border-color: var(--color-border-default, #d1d5db);
+    --btn-outline-text: var(--color-text-body, #374151);
+    --btn-outline-bg: transparent;
+}
+
+#pd-chat-now:hover {
+    --btn-outline-bg: var(--color-surface-hover, #f9fafb);
+    filter: none;
 }
 
 .pd-sticky #pd-cta-buttons {
