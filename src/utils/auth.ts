@@ -149,7 +149,7 @@ export async function login(email: string, password: string): Promise<LoginRespo
   const data = await res.json() as LoginResponse;
 
   if (data.requires_2fa) {
-    console.warn('[Auth] 2FA gerekli — henüz implement edilmedi', data);
+    if (import.meta.env.DEV) console.warn('[Auth] 2FA gerekli — henüz implement edilmedi');
     throw new Error('2FA_REQUIRED');
   }
 
