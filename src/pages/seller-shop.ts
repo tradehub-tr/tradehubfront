@@ -224,12 +224,15 @@ async function renderPage() {
                   <svg class="w-3 h-3 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                 </button>
                 <div x-show="open" x-transition.opacity.duration.150ms
-                     class="absolute top-full left-0 bg-white rounded-b-md shadow-lg border border-gray-200 min-w-[200px] py-1 z-50">
+                     class="absolute top-full left-0 rounded-b-md shadow-lg min-w-[200px] py-1 z-50"
+                     style="background-color: var(--store-nav-bg);">
                   <a href="#" @click.prevent="filterByCategory(''); switchPage('products'); open = false"
-                     class="block px-4 py-2 text-[13px] text-gray-700 hover:bg-gray-50 font-medium">Tum Urunler</a>
+                     class="block px-4 py-2 text-[13px] font-medium hover:bg-white/10 transition-colors"
+                     style="color: var(--store-nav-text, #fff);">Tum Urunler</a>
                   <template x-for="cat in categories" :key="cat.name">
                     <a href="#" @click.prevent="filterByCategory(cat.name); switchPage('products'); open = false"
-                       class="block px-4 py-2 text-[13px] text-gray-600 hover:bg-gray-50"
+                       class="block px-4 py-2 text-[13px] hover:bg-white/10 transition-colors"
+                       style="color: var(--store-nav-text, #fff);"
                        x-text="cat.category_name || cat.name"></a>
                   </template>
                 </div>
@@ -244,11 +247,14 @@ async function renderPage() {
                   <svg class="w-3 h-3 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                 </button>
                 <div x-show="open" x-transition.opacity.duration.150ms
-                     class="absolute top-full left-0 bg-white rounded-b-md shadow-lg border border-gray-200 min-w-[180px] py-1 z-50">
+                     class="absolute top-full left-0 rounded-b-md shadow-lg min-w-[180px] py-1 z-50"
+                     style="background-color: var(--store-nav-bg);">
                   <a href="#" @click.prevent="switchPage('profile'); open = false"
-                     class="block px-4 py-2 text-[13px] text-gray-700 hover:bg-gray-50">Sirket Profili</a>
+                     class="block px-4 py-2 text-[13px] hover:bg-white/10 transition-colors"
+                     style="color: var(--store-nav-text, #fff);">Sirket Profili</a>
                   <a :href="'/pages/seller/seller-storefront.html?seller=' + sellerCode"
-                     class="block px-4 py-2 text-[13px] text-gray-600 hover:bg-gray-50">Detayli Profil</a>
+                     class="block px-4 py-2 text-[13px] hover:bg-white/10 transition-colors"
+                     style="color: var(--store-nav-text, #fff);">Detayli Profil</a>
                 </div>
               </div>
 

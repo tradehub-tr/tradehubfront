@@ -113,7 +113,7 @@ Alpine.data('sellerShop', () => ({
         ]);
 
         this.seller = sellerRes?.message || null;
-        this.categories = catRes?.message || [];
+        this.categories = catRes?.message?.categories || catRes?.message || [];
         this.products = prodRes?.message?.products || [];
 
         if (layoutRes?.message) {
@@ -135,6 +135,12 @@ Alpine.data('sellerShop', () => ({
 
     this.filteredProducts = [...this.products];
     this.applyTheme();
+    // URL hash'ten aktif sayfayı oku (#products, #profile, #contacts)
+    const VALID_PAGES = new Set(['home', 'products', 'profile', 'contacts']);
+    const hash = window.location.hash.replace('#', '');
+    if (hash && VALID_PAGES.has(hash)) {
+      this.activePage = hash;
+    }
     this.loading = false;
   },
 
@@ -148,8 +154,8 @@ Alpine.data('sellerShop', () => ({
 
   switchPage(page: string) {
     this.activePage = page;
+    window.location.hash = page === 'home' ? '' : page;
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    // Urunler sayfasina gecince filtre sifirla
     if (page === 'products' && !this.activeCategory) {
       this.filteredProducts = [...this.products];
     }
@@ -207,9 +213,10 @@ Alpine.data('sellerShop', () => ({
     if (!p.price_min) return '';
     const min = parseFloat(p.price_min);
     const max = p.price_max ? parseFloat(p.price_max) : 0;
-    if (max > min && (window as any).csFormatPriceRange) return (window as any).csFormatPriceRange(min, max, 'USD');
-    if ((window as any).csFormatPrice) return (window as any).csFormatPrice(min, 'USD');
-    return `$${min.toFixed(2)}`;
+    const cur = (p as any).currency || 'TRY';
+    if (max > min && (window as any).csFormatPriceRange) return (window as any).csFormatPriceRange(min, max, cur);
+    if ((window as any).csFormatPrice) return (window as any).csFormatPrice(min, cur);
+    return `₺${min.toFixed(2)}`;
   },
 
   async submitShopInquiry() {

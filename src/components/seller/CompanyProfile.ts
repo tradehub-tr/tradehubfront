@@ -31,8 +31,9 @@ const SHARED_FORMAT_PRICE = `
     if (!p.price_min) return '';
     const min = parseFloat(p.price_min);
     const max = p.price_max ? parseFloat(p.price_max) : 0;
-    if (max > min && window.csFormatPriceRange) return window.csFormatPriceRange(min, max, 'USD');
-    if (window.csFormatPrice) return window.csFormatPrice(min, 'USD');
+    const cur = p.currency || 'TRY';
+    if (max > min && window.csFormatPriceRange) return window.csFormatPriceRange(min, max, cur);
+    if (window.csFormatPrice) return window.csFormatPrice(min, cur);
     return min.toFixed(2);
   }
 `;
@@ -45,13 +46,7 @@ function MainProductsCarousel(): string {
     <div
       x-data="{
         sellerCode: ${SELLER_CODE_INIT},
-        products: [
-          { name: 'mock-1', product_name: '\u00d6zel Tasar\u0131m \u00c7evre Dostu Ti\u015f\u00f6rtler i\u00e7in Karton Ser...', image: 'https://picsum.photos/seed/mp1/400/400', price_min: '7.35', price_max: '17.50', moq: 100, moq_unit: 'Adet', category: 'Main product', sold_count: 40, video_url: true },
-          { name: 'mock-2', product_name: '\u00d6zelle\u015ftirilmi\u015f karton \u015fapka \u015fapka ekran stan...', image: 'https://picsum.photos/seed/mp2/400/400', price_min: '6.35', price_max: '17.50', moq: 100, moq_unit: 'Adet', category: 'Main product', video_url: true },
-          { name: 'mock-3', product_name: 'Raf haz\u0131r kutu g\u00f6zya\u015f\u0131 uzakta ambalaj ka\u011f\u0131t...', image: 'https://picsum.photos/seed/mp3/400/400', price_min: '0.38', price_max: '1.02', moq: 100, moq_unit: 'Adet', category: 'Main product', sold_count: 2, video_url: true },
-          { name: 'mock-4', product_name: '\u00d6zel Tasar\u0131m Geri D\u00f6n\u00fc\u015ft\u00fcr\u00fclebilir Kancal\u0131...', image: 'https://picsum.photos/seed/mp4/400/400', price_min: '7.35', price_max: '17.50', moq: 100, moq_unit: 'Adet', category: 'Main product', badge: 'FSC Certified', sold_count: 62, video_url: true },
-          { name: 'mock-5', product_name: 'Tebrik kart\u0131 \u00f6zel bask\u0131 karton hediye kutusu', image: 'https://picsum.photos/seed/mp5/400/400', price_min: '5.35', price_max: '12.00', moq: 100, moq_unit: 'Adet', category: 'Main product', video_url: true },
-        ],
+        products: [],
         loading: true,
         async init() {
           if (!this.sellerCode) { this.loading = false; return; }
@@ -269,11 +264,7 @@ function OverviewTab(): string {
         <div class="flex flex-col sm:flex-row gap-4"
           x-data="{
             sellerCode: ${SELLER_CODE_INIT},
-            serviceProducts: [
-              { name: 'mock-1', product_name: 'Sevgililer G\u00fcn\u00fc Pelu\u015f A...', image: 'https://picsum.photos/seed/prod1/400/400', price_min: '2.98', price_max: '5.98', moq: 50, moq_unit: 'Adet' },
-              { name: 'mock-2', product_name: 'CE CPC OEM ODM...', image: 'https://picsum.photos/seed/prod2/400/400', price_min: '1.43', price_max: '2.28', moq: 50, moq_unit: 'Adet' },
-              { name: 'mock-3', product_name: 'Pelu\u015f anahtarl\u0131k uyku...', image: 'https://picsum.photos/seed/prod3/400/400', price_min: '0.35', price_max: '1.24', moq: 50, moq_unit: 'Paket' },
-            ],
+            serviceProducts: [],
             async init() {
               if (!this.sellerCode) return;
               try {
@@ -372,16 +363,7 @@ function OverviewTab(): string {
       <section class="bg-white rounded-md border border-gray-200 p-6 mb-6"
         x-data="{
           sellerCode: ${SELLER_CODE_INIT},
-          overviewProducts: [
-            { name: 'mock-1', product_name: 'Pelu\u015f Hayvan Oyuncaklar\u0131 Sevimli Oyuncak Ay\u0131 Karikat\u00fcr...', image: 'https://picsum.photos/seed/p1/400/400', price_min: '0.70', price_max: '0.90', moq: 50, moq_unit: 'Paket', sold_count: 20 },
-            { name: 'mock-2', product_name: 'OEM ODM \u00dcretici \u00d6zel Pelu\u015f Oyuncaklar Yumu\u015fak Dokunusl...', image: 'https://picsum.photos/seed/p2/400/400', price_min: '1', price_max: '3', moq: 50, moq_unit: 'Adet', sold_count: 1362 },
-            { name: 'mock-3', product_name: 'High-End \u00f6zel 10cm ve 20cm pelu\u015f hayvanlar \u00fcreticinin...', image: 'https://picsum.photos/seed/p3/400/400', price_min: '1', price_max: '4.80', moq: 50, moq_unit: 'Adet', sold_count: 5309 },
-            { name: 'mock-4', product_name: '\u00dcretici \u00d6zel Y\u00fcksek Kaliteli D\u00fc\u015f\u00fck Minimum Sipari\u015f...', image: 'https://picsum.photos/seed/p4/400/400', price_min: '1', price_max: '3', moq: 50, moq_unit: 'Adet' },
-            { name: 'mock-5', product_name: 'Pelu\u015f Oyuncak \u00dcreticisi \u00d6zel Tasar\u0131m 20cm Pelu\u015f Bebek \u00d6ze...', image: 'https://picsum.photos/seed/p5/400/400', price_min: '1', price_max: '3', moq: 50, moq_unit: 'Adet' },
-            { name: 'mock-6', product_name: 'CE CPC OEM ODM \u00d6zel 2026 Maskot \u00d6zel Yap\u0131m Hayvan Pel...', image: 'https://picsum.photos/seed/p6/400/400', price_min: '0.90', price_max: '1.77', moq: 50, moq_unit: 'Parsel' },
-            { name: 'mock-7', product_name: '\u00d6zel Tasar\u0131m 2026 Maskotu Y\u00fcksek Kaliteli Pelu\u015f Oyuncakla...', image: 'https://picsum.photos/seed/p7/400/400', price_min: '0.90', price_max: '1.77', moq: 50, moq_unit: 'Parsel' },
-            { name: 'mock-8', product_name: '\u00d6zel 2026 Maskotu Y\u00fcksek Kaliteli Pelu\u015f Oyuncaklar \u00d6zel...', image: 'https://picsum.photos/seed/p8/400/400', price_min: '0.90', price_max: '1.77', moq: 50, moq_unit: 'Parsel', sold_count: 5 },
-          ],
+          overviewProducts: [],
           loading: true,
           async init() {
             if (!this.sellerCode) { this.loading = false; return; }
