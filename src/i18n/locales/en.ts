@@ -482,6 +482,7 @@ const en = {
       changeShipping: 'Change',
       favorite: 'Favorite',
       colorLabel: 'Color',
+      sizeLabel: 'Size',
       couponCode: 'Coupon Code',
       couponPlaceholder: 'Enter coupon code',
       couponApply: 'Apply',

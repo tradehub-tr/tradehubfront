@@ -2,9 +2,36 @@ import { getBaseUrl } from './url'
 
 const BASE_URL = import.meta.env.VITE_API_URL || ''
 
-function getCsrfToken(): string {
-  const match = document.cookie.match(/csrf_token=([^;]+)/) || document.cookie.match(/csrftoken=([^;]+)/);
-  return match ? match[1] : 'Guest';
+// ─── CSRF Token Cache ─────────────────────────────────────────────────────────
+// Frappe CSRF token cookie'de tutulmaz — session'da sunucu tarafında saklanır.
+// get_session_user endpoint'inden çekip cache'leriz.
+
+let _csrfToken: string | null = null
+let _csrfFetchPromise: Promise<string | null> | null = null
+
+async function fetchCsrfToken(): Promise<string | null> {
+  if (_csrfToken) return _csrfToken
+  if (!_csrfFetchPromise) {
+    _csrfFetchPromise = fetch('/api/method/tradehub_core.api.v1.auth.get_session_user', {
+      credentials: 'include',
+    })
+      .then((r) => r.json())
+      .then((d) => {
+        _csrfToken = d?.message?.csrf_token || null
+        _csrfFetchPromise = null
+        return _csrfToken
+      })
+      .catch(() => {
+        _csrfFetchPromise = null
+        return null
+      })
+  }
+  return _csrfFetchPromise
+}
+
+export function clearCsrfCache(): void {
+  _csrfToken = null
+  _csrfFetchPromise = null
 }
 
 /** Extract a human-readable error message from a Frappe JSON error body. */
@@ -25,12 +52,17 @@ export async function api<T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> {
+  const method = (options.method || 'GET').toUpperCase()
+  const csrf = ['POST', 'PUT', 'DELETE', 'PATCH'].includes(method)
+    ? ((await fetchCsrfToken()) ?? 'None')
+    : 'None'
+
   const res = await fetch(`${BASE_URL}${endpoint}`, {
     ...options,
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
-      'X-Frappe-CSRF-Token': getCsrfToken(),
+      'X-Frappe-CSRF-Token': csrf,
       ...options.headers,
     },
   })
@@ -80,7 +112,7 @@ export async function callMethod<T = unknown>(
   post = false
 ): Promise<T> {
   const url = `${BASE_URL}/method/${method}`
-  const csrf = getCsrfToken()
+  const csrf = post ? ((await fetchCsrfToken()) ?? 'None') : 'None'
 
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
@@ -139,9 +171,11 @@ export async function frappeLogin(email: string, password: string): Promise<void
 
 /** Frappe native logout endpoint'i */
 export async function frappeLogout(): Promise<void> {
+  const csrf = (await fetchCsrfToken()) ?? 'None'
+  clearCsrfCache()
   await fetch(`${BASE_URL}/method/logout`, {
     method: 'POST',
     credentials: 'include',
-    headers: { 'X-Frappe-CSRF-Token': getCsrfToken() },
+    headers: { 'X-Frappe-CSRF-Token': csrf },
   })
 }
