@@ -515,7 +515,7 @@ function renderOrdersButton(): string {
         </div>
 
         <!-- Learn More Link -->
-        <a href="/trade-assurance" class="text-sm font-medium text-gray-900 hover:text-primary-600 dark:text-white dark:hover:text-primary-400 underline transition-colors">
+        <a href="/pages/trade-assurance" class="text-sm font-medium text-gray-900 hover:text-primary-600 dark:text-white dark:hover:text-primary-400 underline transition-colors">
           <span data-i18n="common.learnMore">${t('common.learnMore')}</span>
         </a>
       </div>
