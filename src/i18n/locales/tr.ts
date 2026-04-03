@@ -1736,6 +1736,21 @@ const tr = {
     },
 
     // ============================================================
+    // COOKIE BANNER
+    // ============================================================
+    cookieBanner: {
+      ariaLabel: 'Çerez onay bildirimi',
+      title: 'Çerezleri Kullanıyoruz',
+      description: 'Web sitemizde size en iyi deneyimi sunmak için çerezleri kullanıyoruz. <a href="/pages/legal/cookies.html" class="underline text-primary-600 hover:text-primary-700">Çerez Politikamız</a> hakkında daha fazla bilgi edinin.',
+      rejectAll: 'Tümünü Reddet',
+      managePreferences: 'Tercihleri Yönet',
+      acceptAll: 'Tümünü Kabul Et',
+      alwaysOn: 'Her Zaman Açık',
+      showDetails: 'Detayları Göster',
+      hideDetails: 'Detayları Gizle',
+    },
+
+    // ============================================================
     // COOKIE CONSENT
     // ============================================================
     cookieConsent: {

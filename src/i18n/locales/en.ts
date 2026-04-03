@@ -1748,6 +1748,21 @@ const en = {
     },
 
     // ============================================================
+    // COOKIE BANNER
+    // ============================================================
+    cookieBanner: {
+      ariaLabel: 'Cookie consent notification',
+      title: 'We Use Cookies',
+      description: 'We use cookies to provide you with the best experience on our website. Learn more about our <a href="/pages/legal/cookies.html" class="underline text-primary-600 hover:text-primary-700">Cookie Policy</a>.',
+      rejectAll: 'Reject All',
+      managePreferences: 'Manage Preferences',
+      acceptAll: 'Accept All',
+      alwaysOn: 'Always On',
+      showDetails: 'Show Details',
+      hideDetails: 'Hide Details',
+    },
+
+    // ============================================================
     // COOKIE CONSENT
     // ============================================================
     cookieConsent: {
