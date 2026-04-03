@@ -8,6 +8,7 @@ import {
   openSharedCartDrawer,
   openSharedShippingModal,
   type CartDrawerColorModel,
+  type CartDrawerSizeGroup,
   type CartDrawerItemModel,
   type CartDrawerShippingOption,
   type CartDrawerTierModel,
@@ -42,19 +43,34 @@ function toShippingOptions(product: ProductDetail): CartDrawerShippingOption[] {
 }
 
 function toColors(product: ProductDetail): CartDrawerColorModel[] {
-  const colorVariant = product.variants.find((variant) => variant.type === 'color');
-  if (!colorVariant || colorVariant.options.length === 0) {
-    return [];
-  }
+  // Filter ALL color variant groups and flatten options (backend may return multiple groups for same attribute)
+  const colorVariants = product.variants.filter((v) => v.type === 'color');
+  if (colorVariants.length === 0) return [];
 
-  return colorVariant.options.map((option, index) => ({
-    id: option.id || `color-${index + 1}`,
-    label: option.label,
-    colorHex: option.value,
-    imageKind: 'jewelry',
-    imageUrl: option.thumbnail || product.images[0]?.src,
-    rawPrice: option.rawPrice ?? undefined,
-  }));
+  return colorVariants.flatMap((variant, groupIdx) =>
+    variant.options.map((option, i) => ({
+      id: option.id || `color-${groupIdx}-${i + 1}`,
+      label: option.label,
+      colorHex: option.value,
+      imageKind: 'jewelry' as const,
+      imageUrl: option.thumbnail || product.images[0]?.src,
+      rawPrice: option.rawPrice ?? undefined,
+    }))
+  );
+}
+
+function toSizeGroups(product: ProductDetail): CartDrawerSizeGroup[] {
+  return product.variants
+    .filter((v) => v.type !== 'color')
+    .map((v) => ({
+      groupLabel: v.label,
+      options: v.options.map((o, i) => ({
+        id: o.id || `${v.label}-${i}`,
+        label: o.label,
+        rawPrice: o.rawPrice ?? undefined,
+      })),
+    }))
+    .filter((g) => g.options.length > 0);
 }
 
 function toDrawerItem(product: ProductDetail, context?: CartDrawerContext | null): CartDrawerItemModel {
@@ -74,6 +90,7 @@ function toDrawerItem(product: ProductDetail, context?: CartDrawerContext | null
     currency: product.baseCurrency || 'USD',
     priceTiers: tiers,
     colors: toColors(product),
+    sizeGroups: toSizeGroups(product),
     shippingOptions: toShippingOptions(product),
   };
 }

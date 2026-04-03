@@ -35,6 +35,17 @@ export interface CartDrawerColorModel {
   rawPrice?: number;
 }
 
+export interface CartDrawerSizeOption {
+  id: string;
+  label: string;
+  rawPrice?: number;
+}
+
+export interface CartDrawerSizeGroup {
+  groupLabel: string;
+  options: CartDrawerSizeOption[];
+}
+
 export interface CartDrawerItemModel {
   id: string;
   title: string;
@@ -44,23 +55,33 @@ export interface CartDrawerItemModel {
   imageKind: ProductImageKind;
   priceTiers: CartDrawerTierModel[];
   colors: CartDrawerColorModel[];
+  sizeGroups: CartDrawerSizeGroup[];
   shippingOptions: CartDrawerShippingOption[];
   samplePrice?: number;
   currency?: string;
 }
 
+// ─── State ────────────────────────────────────────────────────────────────────
+
 interface DrawerState {
   mode: 'cart' | 'sample';
   item: CartDrawerItemModel | null;
   selectedShippingIndex: number;
-  colorQuantities: Map<string, number>;
+  /** Chip-selected color ID. '' when no colors. */
+  selectedColorId: string;
+  /** qty per size option ID. Used when sizeGroups exist. */
+  sizeQuantities: Map<string, number>;
+  /** single qty when there are no sizeGroups (colors-only or no-variant) */
+  noVariantQty: number;
   previewColorIndex: number;
   footerExpanded: boolean;
 }
 
 interface CartMemoryItem {
   item: CartDrawerItemModel;
-  colorQuantities: Map<string, number>;
+  selectedColorId: string;
+  sizeQuantities: Map<string, number>;
+  noVariantQty: number;
 }
 
 interface ProductVisual {
@@ -84,7 +105,9 @@ const state: DrawerState = {
   mode: 'cart',
   item: null,
   selectedShippingIndex: 0,
-  colorQuantities: new Map(),
+  selectedColorId: '',
+  sizeQuantities: new Map(),
+  noVariantQty: 0,
   previewColorIndex: 0,
   footerExpanded: false,
 };
@@ -96,6 +119,8 @@ let shippingInitialized = false;
 let productsById = new Map<string, CartDrawerItemModel>();
 let onItemMissing: ((id: string, mode: 'cart' | 'sample') => Promise<void>) | null = null;
 
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
 function escapeHtml(value: string): string {
   return value
     .replace(/&/g, '&amp;')
@@ -105,17 +130,22 @@ function escapeHtml(value: string): string {
     .replace(/'/g, '&#39;');
 }
 
-function renderColorThumb(color: CartDrawerColorModel, size = 64): string {
-  if (color.imageUrl) {
-    return `
-      <div style="width:${size}px;height:${size}px;border-radius:50%;overflow:hidden;flex-shrink:0;background:#f5f5f5;">
-        <img src="${color.imageUrl}" alt="${escapeHtml(color.label)}" style="width:100%;height:100%;object-fit:cover;" loading="lazy" />
-      </div>
-    `;
+function hasSizeGroups(): boolean {
+  return (state.item?.sizeGroups.length ?? 0) > 0;
+}
+
+/** Returns the base unit price accounting for selected color's rawPrice. */
+function getBasePrice(tierPrice: number): number {
+  if (!state.item) return tierPrice;
+  const color = state.item.colors.find((c) => c.id === state.selectedColorId);
+  return (color?.rawPrice != null && color.rawPrice > 0) ? color.rawPrice : tierPrice;
+}
+
+function getTotalQty(): number {
+  if (hasSizeGroups()) {
+    return Array.from(state.sizeQuantities.values()).reduce((acc, q) => acc + q, 0);
   }
-  return `
-    <div style="width:${size}px;height:${size}px;border-radius:50%;overflow:hidden;flex-shrink:0;background:${color.colorHex};"></div>
-  `;
+  return state.noVariantQty;
 }
 
 function formatTierLabel(tier: CartDrawerTierModel, unit: string): string {
@@ -140,27 +170,42 @@ function getTotals(): {
   grandTotal: number;
   variationCount: number;
 } {
-  const totalQty = Array.from(state.colorQuantities.values()).reduce((acc, qty) => acc + qty, 0);
+  const totalQty = getTotalQty();
   const tierIndex = getActiveTierIndex(totalQty);
   const activeTier = state.item?.priceTiers[tierIndex];
-  const activePrice = state.mode === 'sample'
+  const tierPrice = state.mode === 'sample'
     ? (state.item?.samplePrice ?? 30)
     : (activeTier?.rawPrice ?? activeTier?.price ?? 0);
-  let itemSubtotal: number;
-  if (state.item && state.item.colors.length > 0) {
-    itemSubtotal = state.item.colors.reduce((sum, color) => {
-      const qty = state.colorQuantities.get(color.id) ?? 0;
-      const price = (color.rawPrice != null && color.rawPrice > 0) ? color.rawPrice : activePrice;
-      return sum + price * qty;
-    }, 0);
+  const activePrice = getBasePrice(tierPrice);
+
+  let itemSubtotal = 0;
+  if (hasSizeGroups() && state.item) {
+    for (const group of state.item.sizeGroups) {
+      for (const opt of group.options) {
+        const qty = state.sizeQuantities.get(opt.id) ?? 0;
+        if (qty === 0) continue;
+        const unitPrice = (opt.rawPrice != null && opt.rawPrice > 0) ? opt.rawPrice : activePrice;
+        itemSubtotal += unitPrice * qty;
+      }
+    }
   } else {
     itemSubtotal = activePrice * totalQty;
   }
+
   const shippingCost = state.item?.shippingOptions[state.selectedShippingIndex]?.cost ?? 0;
   const grandTotal = itemSubtotal + shippingCost;
-  const variationCount = Array.from(state.colorQuantities.values()).filter((qty) => qty > 0).length;
+
+  let variationCount: number;
+  if (hasSizeGroups()) {
+    variationCount = Array.from(state.sizeQuantities.values()).filter((q) => q > 0).length;
+  } else {
+    variationCount = totalQty > 0 ? 1 : 0;
+  }
+
   return { totalQty, activePrice, tierIndex, itemSubtotal, shippingCost, grandTotal, variationCount };
 }
+
+// ─── DOM helpers ──────────────────────────────────────────────────────────────
 
 function getDrawerElements(): {
   overlay: HTMLElement | null;
@@ -218,20 +263,16 @@ function updatePreview(): void {
   if (!color) return;
 
   if (color.imageUrl) {
-    image.innerHTML = `
-      <img src="${color.imageUrl}" alt="${escapeHtml(color.label)}" style="width:100%;height:100%;object-fit:cover;" />
-    `;
+    image.innerHTML = `<img src="${color.imageUrl}" alt="${escapeHtml(color.label)}" style="width:100%;height:100%;object-fit:cover;" />`;
   } else {
-    image.innerHTML = `
-      <div style="width:100%;height:100%;background:${color.colorHex};"></div>
-    `;
+    image.innerHTML = `<div style="width:100%;height:100%;background:${color.colorHex};"></div>`;
   }
   label.textContent = `color : ${color.label}`;
 }
 
 function showSampleMaxToast(): void {
   const existing = document.getElementById('sample-max-toast');
-  if (existing) return; // already visible
+  if (existing) return;
 
   const toast = document.createElement('div');
   toast.id = 'sample-max-toast';
@@ -245,6 +286,8 @@ function showSampleMaxToast(): void {
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 2800);
 }
+
+// ─── Render ───────────────────────────────────────────────────────────────────
 
 function renderPriceSectionHtml(totals: ReturnType<typeof getTotals>): string {
   if (!state.item) return '';
@@ -269,59 +312,120 @@ function renderPriceSectionHtml(totals: ReturnType<typeof getTotals>): string {
   `;
 }
 
+/** Renders color thumbnail as a chip (small, horizontal). */
+function renderColorChip(color: CartDrawerColorModel, isSelected: boolean): string {
+  const selectedStyle = isSelected
+    ? 'border-text-heading bg-text-heading'
+    : 'border-border-default bg-surface hover:border-text-secondary';
+
+  const thumb = color.imageUrl
+    ? `<img src="${color.imageUrl}" alt="${escapeHtml(color.label)}" class="w-7 h-7 rounded-full object-cover shrink-0" loading="lazy" />`
+    : `<span class="w-5 h-5 rounded-full shrink-0 border border-white/30" style="background:${color.colorHex};"></span>`;
+
+  const labelColor = isSelected ? 'text-surface' : 'text-text-heading';
+
+  return `
+    <button type="button"
+      data-color-chip="${escapeHtml(color.id)}"
+      class="inline-flex items-center gap-1.5 px-2 py-1.5 rounded-lg border transition-all ${selectedStyle}">
+      ${thumb}
+      <span class="text-xs font-medium ${labelColor} max-w-[72px] truncate">${escapeHtml(color.label)}</span>
+    </button>
+  `;
+}
+
+/** Renders a qty stepper pill (reused for sizes and no-variant). */
+function renderQtyStepper(id: string, qty: number, dataAttr = 'data-qty-size'): string {
+  return `
+    <div class="inline-flex items-center border border-border-default rounded-full overflow-hidden shrink-0">
+      <button type="button" data-qty-action="minus" ${dataAttr}="${escapeHtml(id)}"
+        class="w-9 h-9 bg-surface text-text-secondary hover:bg-surface-raised transition-colors">−</button>
+      <input type="number" data-qty-input-size="${escapeHtml(id)}" value="${qty}" min="0"
+        class="w-11 h-9 text-center border-x border-border-default bg-surface text-sm font-semibold text-text-heading [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none" />
+      <button type="button" data-qty-action="plus" ${dataAttr}="${escapeHtml(id)}"
+        class="w-9 h-9 bg-surface text-text-secondary hover:bg-surface-raised transition-colors">+</button>
+    </div>
+  `;
+}
+
 function renderDrawerBody(): void {
   const { body } = getDrawerElements();
   if (!body || !state.item) return;
 
+  const item = state.item;
   const totals = getTotals();
+  const itemCurrency = item.currency || getSelectedCurrency();
   const priceSection = renderPriceSectionHtml(totals);
 
+  // ── Color chips section ──
+  let colorSection = '';
+  if (item.colors.length > 0) {
+    const selectedColor = item.colors.find((c) => c.id === state.selectedColorId);
+    const colorLabel = selectedColor
+      ? `${t('cart.colorLabel')}: <span class="font-normal text-text-secondary">${escapeHtml(selectedColor.label)}</span>`
+      : t('cart.colorLabel');
+
+    colorSection = `
+      <div class="mb-5">
+        <h5 class="text-sm font-semibold text-text-heading mb-2">${colorLabel}</h5>
+        <div class="flex flex-wrap gap-2">
+          ${item.colors.map((color) => renderColorChip(color, color.id === state.selectedColorId)).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  // ── Size rows section (leaf variant with qty steppers) ──
+  let sizeSection = '';
+  if (item.sizeGroups.length > 0) {
+    sizeSection = item.sizeGroups.map((group) => {
+      const rows = group.options.map((opt) => {
+        const qty = state.sizeQuantities.get(opt.id) ?? 0;
+        const hasQty = qty > 0;
+        const displayPrice = (opt.rawPrice != null && opt.rawPrice > 0) ? opt.rawPrice : totals.activePrice;
+        return `
+          <div class="flex items-center gap-3 py-2.5 border-b border-border-default last:border-b-0">
+            <span class="flex-1 text-sm font-medium text-text-heading">${escapeHtml(opt.label)}</span>
+            <span class="text-sm font-semibold ${hasQty ? 'text-cta-primary' : 'text-text-tertiary'} whitespace-nowrap shrink-0">
+              ${formatCurrency(displayPrice, itemCurrency)}
+            </span>
+            ${renderQtyStepper(opt.id, qty)}
+          </div>
+        `;
+      }).join('');
+
+      return `
+        <div class="mb-4">
+          <h5 class="text-sm font-semibold text-text-heading mb-1">${escapeHtml(group.groupLabel)}</h5>
+          <div>${rows}</div>
+        </div>
+      `;
+    }).join('');
+  } else {
+    // No size groups → single qty row (colors-only or no-variant)
+    const qty = state.noVariantQty;
+    const singleId = '__no_variant__';
+    sizeSection = `
+      <div class="mb-5">
+        <div class="flex items-center gap-3 py-2.5 border-b border-border-default">
+          <span class="flex-1 text-sm font-medium text-text-heading">${escapeHtml(item.title)}</span>
+          <span class="text-sm font-semibold text-text-tertiary whitespace-nowrap shrink-0">
+            ${formatCurrency(totals.activePrice, itemCurrency)}
+          </span>
+          ${renderQtyStepper(singleId, qty)}
+        </div>
+      </div>
+    `;
+  }
+
   body.innerHTML = `
-    <h4 class="text-base font-bold text-text-heading leading-tight mb-4">${escapeHtml(state.item.title)}</h4>
+    <h4 class="text-base font-bold text-text-heading leading-tight mb-4">${escapeHtml(item.title)}</h4>
 
     ${priceSection}
 
-    ${state.item.colors.length > 0 ? `
-    <div class="mb-5">
-      <h5 class="text-base font-bold text-text-heading mb-3">${t('cart.colorLabel')}</h5>
-      <div class="divide-y divide-border-default">
-        ${state.item.colors.map((color) => {
-    const qty = state.colorQuantities.get(color.id) ?? 0;
-    const selectedBorder = qty > 0 ? 'border-primary-500' : 'border-border-default';
-    const displayPrice = (color.rawPrice != null && color.rawPrice > 0) ? color.rawPrice : totals.activePrice;
-    const displayCurrency = state.item?.currency || getSelectedCurrency();
-    return `
-            <div class="flex items-center gap-4 py-3" data-color-id="${escapeHtml(color.id)}">
-              <button type="button" data-preview-color="${escapeHtml(color.id)}" class="shrink-0 rounded-full border-2 ${selectedBorder}">
-                ${renderColorThumb(color, 72)}
-              </button>
-              <div class="flex-1 min-w-0">
-                <p class="text-base font-semibold text-text-heading truncate">${escapeHtml(color.label)}</p>
-              </div>
-              <span class="text-[15px] font-semibold text-text-heading whitespace-nowrap">${formatCurrency(displayPrice, displayCurrency)}</span>
-              <div class="inline-flex items-center border border-border-default rounded-full overflow-hidden shrink-0">
-                <button type="button" data-qty-action="minus" data-qty-color="${escapeHtml(color.id)}" class="w-9 h-9 bg-surface text-text-secondary hover:bg-surface-raised transition-colors">−</button>
-                <input type="number" data-qty-input="${escapeHtml(color.id)}" value="${qty}" min="0" class="w-11 h-9 text-center border-x border-border-default bg-surface text-sm font-semibold text-text-heading [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none" />
-                <button type="button" data-qty-action="plus" data-qty-color="${escapeHtml(color.id)}" class="w-9 h-9 bg-surface text-text-secondary hover:bg-surface-raised transition-colors">+</button>
-              </div>
-            </div>
-          `;
-  }).join('')}
-      </div>
-    </div>
-    ` : `
-    <div class="mb-5">
-      <div class="flex items-center justify-between py-3 border-b border-border-default">
-        <span class="text-base font-semibold text-text-heading">${escapeHtml(state.item.title)}</span>
-        <span class="text-[15px] font-semibold text-text-heading whitespace-nowrap">${formatCurrency(totals.activePrice, state.item?.currency || getSelectedCurrency())}</span>
-        <div class="inline-flex items-center border border-border-default rounded-full overflow-hidden shrink-0">
-          <button type="button" data-qty-action="minus" data-qty-color="__no_variant__" class="w-9 h-9 bg-surface text-text-secondary hover:bg-surface-raised transition-colors">−</button>
-          <input type="number" data-qty-input="__no_variant__" value="${state.colorQuantities.get('__no_variant__') ?? 0}" min="0" class="w-11 h-9 text-center border-x border-border-default bg-surface text-sm font-semibold text-text-heading [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none" />
-          <button type="button" data-qty-action="plus" data-qty-color="__no_variant__" class="w-9 h-9 bg-surface text-text-secondary hover:bg-surface-raised transition-colors">+</button>
-        </div>
-      </div>
-    </div>
-    `}
+    ${colorSection}
+
+    ${sizeSection}
 
     <div class="mt-5 mb-2 rounded-3xl border border-border-default p-5">
       <div class="flex items-start justify-between gap-3">
@@ -393,6 +497,8 @@ function rerenderDrawer(): void {
   updatePreview();
 }
 
+// ─── Shipping modal ───────────────────────────────────────────────────────────
+
 function updateShippingModal(quantityOverride?: number): void {
   const qtyEl = document.getElementById('shared-cart-shipping-qty');
   const optionsEl = document.getElementById('shared-cart-shipping-options');
@@ -435,14 +541,27 @@ function setShippingModalOpen(open: boolean): void {
   }
 }
 
-function buildGroupedItemsForEvent(): Array<{ supplierName: string; productTitle: string; items: Array<{ label: string; unitPrice: number; qty: number; colorValue: string }> }> {
-  const groups = new Map<string, { supplierName: string; productTitle: string; items: Array<{ label: string; unitPrice: number; qty: number; colorValue: string }> }>();
+// ─── Cart / SKU helpers ───────────────────────────────────────────────────────
+
+function buildGroupedItemsForEvent(): Array<{
+  supplierName: string;
+  productTitle: string;
+  items: Array<{ label: string; unitPrice: number; qty: number; colorValue: string }>;
+}> {
+  const groups = new Map<string, {
+    supplierName: string;
+    productTitle: string;
+    items: Array<{ label: string; unitPrice: number; qty: number; colorValue: string }>;
+  }>();
 
   cartMemory.forEach((memory) => {
-    const qty = Array.from(memory.colorQuantities.values()).reduce((acc, value) => acc + value, 0);
-    if (qty <= 0) return;
+    const totalQty = hasSizesInMemory(memory)
+      ? Array.from(memory.sizeQuantities.values()).reduce((a, b) => a + b, 0)
+      : memory.noVariantQty;
 
-    const tierIndex = getActiveTierIndex(qty);
+    if (totalQty <= 0) return;
+
+    const tierIndex = getActiveTierIndex(totalQty);
     const unitPrice = memory.item.priceTiers[tierIndex]?.price ?? memory.item.priceTiers[0]?.price ?? 0;
     const supplierKey = memory.item.supplierName || 'Supplier';
 
@@ -455,9 +574,9 @@ function buildGroupedItemsForEvent(): Array<{ supplierName: string; productTitle
     }
 
     groups.get(supplierKey)!.items.push({
-      label: `${qty} ${memory.item.unit}, ${memory.item.title.length > 40 ? `${memory.item.title.slice(0, 40)}...` : memory.item.title}`,
+      label: `${totalQty} ${memory.item.unit}, ${memory.item.title.length > 40 ? `${memory.item.title.slice(0, 40)}...` : memory.item.title}`,
       unitPrice,
-      qty,
+      qty: totalQty,
       colorValue: productVisuals[memory.item.imageKind].stroke,
     });
   });
@@ -465,14 +584,25 @@ function buildGroupedItemsForEvent(): Array<{ supplierName: string; productTitle
   return Array.from(groups.values());
 }
 
+function hasSizesInMemory(memory: CartMemoryItem): boolean {
+  return (memory.item.sizeGroups.length > 0);
+}
+
 function toSlug(name: string): string {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 }
 
-function syncToCartStore(item: CartDrawerItemModel, colorQuantities: Map<string, number>, unitPrice: number): void {
+function buildVariantText(item: CartDrawerItemModel, sizeLabel: string, sizeOptionLabel: string): string {
+  const colorLabel = item.colors.find((c) => c.id === state.selectedColorId)?.label;
+  const parts: string[] = [];
+  if (colorLabel) parts.push(`${t('cart.colorLabel')}: ${colorLabel}`);
+  if (sizeLabel && sizeOptionLabel) parts.push(`${sizeLabel}: ${sizeOptionLabel}`);
+  return parts.join(' | ');
+}
+
+function syncToCartStore(item: CartDrawerItemModel, unitPrice: number): void {
   const supplierId = toSlug(item.supplierName || 'unknown-supplier');
 
-  // Supplier yoksa oluştur
   if (!cartStore.getSupplier(supplierId)) {
     const supplier: CartSupplier = {
       id: supplierId,
@@ -484,7 +614,6 @@ function syncToCartStore(item: CartDrawerItemModel, colorQuantities: Map<string,
     cartStore.addSupplier(supplier);
   }
 
-  // Product yoksa oluştur
   const productId = item.id;
   if (!cartStore.getProduct(productId)) {
     const product: CartProduct = {
@@ -501,40 +630,77 @@ function syncToCartStore(item: CartDrawerItemModel, colorQuantities: Map<string,
     cartStore.addProduct(supplierId, product);
   }
 
-  // Her renk/miktar çifti → SKU
-  colorQuantities.forEach((qty, colorId) => {
+  const selectedColor = item.colors.find((c) => c.id === state.selectedColorId);
+  const skuImage = selectedColor?.imageUrl || 'https://placehold.co/120x120/f5f5f5/999?text=SKU';
+
+  if (hasSizeGroups()) {
+    // One SKU per size option that has qty > 0
+    for (const group of item.sizeGroups) {
+      for (const opt of group.options) {
+        const qty = state.sizeQuantities.get(opt.id) ?? 0;
+        if (qty <= 0) continue;
+
+        const skuId = `${item.id}-${state.selectedColorId || 'no-color'}-${opt.id}`;
+        const effectivePrice = (opt.rawPrice != null && opt.rawPrice > 0) ? opt.rawPrice : unitPrice;
+        const variantText = buildVariantText(item, group.groupLabel, opt.label);
+        const existing = cartStore.getSku(skuId);
+
+        if (existing) {
+          cartStore.updateSkuQuantity(skuId, existing.sku.quantity + qty);
+        } else {
+          const sku: CartSku = {
+            id: skuId,
+            skuImage,
+            variantText,
+            unitPrice: effectivePrice,
+            currency: getCurrencySymbol(),
+            unit: item.unit,
+            quantity: qty,
+            minQty: item.moq,
+            maxQty: 9999,
+            selected: true,
+            baseUnitPrice: effectivePrice,
+            basePriceAddon: 0,
+            baseCurrency: getSelectedCurrency(),
+            listingVariant: opt.id,
+          };
+          cartStore.addSku(productId, sku);
+        }
+      }
+    }
+  } else {
+    // Single SKU
+    const qty = state.noVariantQty;
     if (qty <= 0) return;
 
-    const color = item.colors.find((c) => c.id === colorId);
-    if (!color) return;
-
+    const colorId = state.selectedColorId || '__no_variant__';
+    const isFallback = !state.selectedColorId;
     const skuId = `${item.id}-${colorId}`;
+    const variantText = selectedColor ? `${t('cart.colorLabel')}: ${selectedColor.label}` : '';
     const existing = cartStore.getSku(skuId);
 
     if (existing) {
       cartStore.updateSkuQuantity(skuId, existing.sku.quantity + qty);
     } else {
-      const isFallbackColor = colorId.startsWith('fallback-');
-      const effectivePrice = (color.rawPrice != null && color.rawPrice > 0) ? color.rawPrice : unitPrice;
       const sku: CartSku = {
         id: skuId,
-        skuImage: color.imageUrl || 'https://placehold.co/120x120/f5f5f5/999?text=SKU',
-        variantText: `${t('cart.colorLabel')}: ${color.label}`,
-        unitPrice: effectivePrice,
+        skuImage,
+        variantText,
+        unitPrice,
         currency: getCurrencySymbol(),
         unit: item.unit,
         quantity: qty,
         minQty: item.moq,
         maxQty: 9999,
         selected: true,
-        baseUnitPrice: effectivePrice,
+        baseUnitPrice: unitPrice,
         basePriceAddon: 0,
         baseCurrency: getSelectedCurrency(),
-        ...(isFallbackColor ? {} : { listingVariant: colorId }),
+        ...(isFallback ? {} : { listingVariant: colorId }),
       };
       cartStore.addSku(productId, sku);
     }
-  });
+  }
 }
 
 async function dispatchCartAdd(): Promise<boolean> {
@@ -543,12 +709,20 @@ async function dispatchCartAdd(): Promise<boolean> {
   const totals = getTotals();
   if (totals.totalQty <= 0) return false;
 
-  // Giriş yapmışsa backend'e stok kontrolü + ekleme yap
   if (isLoggedIn()) {
+    // Stock check
     try {
-      for (const [colorId, qty] of state.colorQuantities) {
-        if (qty <= 0) continue;
-        await apiCheckStock(state.item.id, qty, colorId || undefined);
+      if (hasSizeGroups()) {
+        for (const group of state.item.sizeGroups) {
+          for (const opt of group.options) {
+            const qty = state.sizeQuantities.get(opt.id) ?? 0;
+            if (qty <= 0) continue;
+            await apiCheckStock(state.item.id, qty, opt.id);
+          }
+        }
+      } else {
+        const colorId = state.selectedColorId || undefined;
+        await apiCheckStock(state.item.id, state.noVariantQty, colorId);
       }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
@@ -556,24 +730,35 @@ async function dispatchCartAdd(): Promise<boolean> {
       return false;
     }
 
-    // Backend'e her varyant için ekle
+    // Add to cart backend
     try {
       let lastResponse = null;
-      for (const [colorId, qty] of state.colorQuantities) {
-        if (qty <= 0) continue;
-        const isFallback = colorId.startsWith('fallback-') || colorId === '__no_variant__';
-        lastResponse = await apiAddToCart(
-          state.item.id,
-          qty,
-          isFallback ? undefined : colorId
-        );
+      const selectedColor = state.item.colors.find((c) => c.id === state.selectedColorId);
+
+      if (hasSizeGroups()) {
+        for (const group of state.item.sizeGroups) {
+          for (const opt of group.options) {
+            const qty = state.sizeQuantities.get(opt.id) ?? 0;
+            if (qty <= 0) continue;
+            // Build human-readable label: "Renk: Lacivert | Beden: S"
+            const labelParts: string[] = [];
+            if (selectedColor) labelParts.push(`${t('cart.colorLabel')}: ${selectedColor.label}`);
+            labelParts.push(`${group.groupLabel}: ${opt.label}`);
+            const variantLabel = labelParts.join(' | ');
+            lastResponse = await apiAddToCart(state.item.id, qty, opt.id, variantLabel, state.selectedColorId || undefined);
+          }
+        }
+      } else {
+        const colorId = state.selectedColorId || undefined;
+        const isFallback = !state.selectedColorId;
+        const variantLabel = selectedColor ? `${t('cart.colorLabel')}: ${selectedColor.label}` : undefined;
+        lastResponse = await apiAddToCart(state.item.id, state.noVariantQty, isFallback ? undefined : colorId, variantLabel, colorId);
       }
-      // Backend'den dönen güncel sepeti store'a yaz
+
       if (lastResponse) {
         const sym = _getCurrencySymbolForCart();
         cartStore.init(lastResponse.suppliers, 0, sym, 0);
       } else {
-        // Tüm qty 0 idiyse son durumu çek
         const refreshed = await fetchCart();
         const sym = _getCurrencySymbolForCart();
         cartStore.init(refreshed.suppliers, 0, sym, 0);
@@ -585,24 +770,27 @@ async function dispatchCartAdd(): Promise<boolean> {
     }
   }
 
-  // Misafir kullanıcı için CartStore'a kaydet (localStorage)
   if (!isLoggedIn()) {
-    syncToCartStore(state.item, state.colorQuantities, totals.activePrice);
+    syncToCartStore(state.item, totals.activePrice);
   }
 
+  // Persist to cartMemory
   const existing = cartMemory.get(state.item.id);
   if (existing) {
-    state.colorQuantities.forEach((qty, colorId) => {
-      if (qty > 0) {
-        existing.colorQuantities.set(colorId, (existing.colorQuantities.get(colorId) ?? 0) + qty);
-      }
-    });
+    if (hasSizeGroups()) {
+      state.sizeQuantities.forEach((qty, sizeId) => {
+        if (qty > 0) existing.sizeQuantities.set(sizeId, (existing.sizeQuantities.get(sizeId) ?? 0) + qty);
+      });
+    } else {
+      existing.noVariantQty += state.noVariantQty;
+    }
   } else {
-    const copy = new Map<string, number>();
-    state.colorQuantities.forEach((qty, colorId) => {
-      if (qty > 0) copy.set(colorId, qty);
+    cartMemory.set(state.item.id, {
+      item: state.item,
+      selectedColorId: state.selectedColorId,
+      sizeQuantities: new Map(state.sizeQuantities),
+      noVariantQty: state.noVariantQty,
     });
-    cartMemory.set(state.item.id, { item: state.item, colorQuantities: copy });
   }
 
   const groupedItems = buildGroupedItemsForEvent();
@@ -620,8 +808,11 @@ async function dispatchCartAdd(): Promise<boolean> {
       groupedItems,
     },
   }));
+
   return true;
 }
+
+// ─── Open drawer ──────────────────────────────────────────────────────────────
 
 function openDrawer(itemId?: string, mode: 'cart' | 'sample' = 'cart'): void {
   const item = itemId ? productsById.get(itemId) : Array.from(productsById.values())[0];
@@ -630,11 +821,19 @@ function openDrawer(itemId?: string, mode: 'cart' | 'sample' = 'cart'): void {
   state.mode = mode;
   state.item = item;
   state.selectedShippingIndex = 0;
-  state.previewColorIndex = 0;
   state.footerExpanded = false;
-  state.colorQuantities = item.colors.length > 0
-    ? new Map(item.colors.map((color) => [color.id, 0]))
-    : new Map([['__no_variant__', 0]]);
+
+  // Color: select first chip by default
+  state.selectedColorId = item.colors[0]?.id ?? '';
+  state.previewColorIndex = 0;
+
+  // Sizes: all start at 0
+  state.sizeQuantities = new Map(
+    item.sizeGroups.flatMap((g) => g.options.map((o) => [o.id, 0]))
+  );
+
+  // No-variant qty
+  state.noVariantQty = 0;
 
   const heading = document.getElementById('shared-cart-heading');
   if (heading) {
@@ -644,6 +843,8 @@ function openDrawer(itemId?: string, mode: 'cart' | 'sample' = 'cart'): void {
   rerenderDrawer();
   applyDrawerTransform(true);
 }
+
+// ─── Event binding ────────────────────────────────────────────────────────────
 
 function bindShippingEvents(): void {
   if (shippingInitialized) return;
@@ -696,6 +897,8 @@ function bindShippingEvents(): void {
   });
 }
 
+// ─── Public HTML template ─────────────────────────────────────────────────────
+
 export function SharedCartDrawer(): string {
   return `
     <div id="shared-cart-overlay" class="fixed inset-0 z-(--z-backdrop,40) bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300">
@@ -743,6 +946,8 @@ export function SharedShippingModal(): string {
   `;
 }
 
+// ─── Init ─────────────────────────────────────────────────────────────────────
+
 export function initSharedCartDrawer(items: CartDrawerItemModel[]): void {
   productsById = new Map(items.map((item) => [item.id, item]));
 
@@ -763,11 +968,10 @@ export function initSharedCartDrawer(items: CartDrawerItemModel[]): void {
   closeBtn?.addEventListener('click', () => applyDrawerTransform(false));
 
   overlay.addEventListener('click', (event) => {
-    if (event.target === overlay) {
-      applyDrawerTransform(false);
-    }
+    if (event.target === overlay) applyDrawerTransform(false);
   });
 
+  // Global triggers (data-add-to-cart / data-order-sample)
   document.addEventListener('click', (event) => {
     const target = event.target as HTMLElement;
 
@@ -798,39 +1002,48 @@ export function initSharedCartDrawer(items: CartDrawerItemModel[]): void {
     }
   });
 
+  // Body click events
   body.addEventListener('click', (event) => {
     const target = event.target as HTMLElement;
 
-    const previewTrigger = target.closest<HTMLElement>('[data-preview-color]');
-    if (previewTrigger && state.item) {
-      const colorId = previewTrigger.dataset.previewColor;
-      const index = state.item.colors.findIndex((color) => color.id === colorId);
-      if (index >= 0) {
-        state.previewColorIndex = index;
-        updatePreview();
-        setPreviewVisible(window.innerWidth >= 1280);
+    // Color chip selection
+    const colorChip = target.closest<HTMLElement>('[data-color-chip]');
+    if (colorChip && state.item) {
+      const colorId = colorChip.dataset.colorChip ?? '';
+      const colorIndex = state.item.colors.findIndex((c) => c.id === colorId);
+      state.selectedColorId = colorId;
+      if (colorIndex >= 0) {
+        state.previewColorIndex = colorIndex;
       }
+      rerenderDrawer();
       return;
     }
 
-    const qtyTrigger = target.closest<HTMLElement>('[data-qty-action]');
-    if (qtyTrigger) {
-      const action = qtyTrigger.dataset.qtyAction;
-      const colorId = qtyTrigger.dataset.qtyColor ?? '';
-      const current = state.colorQuantities.get(colorId) ?? 0;
+    // Size / no-variant qty buttons
+    const qtyBtn = target.closest<HTMLElement>('[data-qty-action]');
+    if (qtyBtn) {
+      const action = qtyBtn.dataset.qtyAction;
+      const sizeId = qtyBtn.dataset.qtySize ?? '';
+      const isNoVariant = sizeId === '__no_variant__';
+
+      const current = isNoVariant
+        ? state.noVariantQty
+        : (state.sizeQuantities.get(sizeId) ?? 0);
 
       if (action === 'plus') {
         if (state.mode === 'sample') {
-          const totalQty = Array.from(state.colorQuantities.values()).reduce((a, b) => a + b, 0);
-          if (totalQty >= 1) {
-            showSampleMaxToast();
-            return;
-          }
+          const totalQty = getTotalQty();
+          if (totalQty >= 1) { showSampleMaxToast(); return; }
         }
-        state.colorQuantities.set(colorId, current + 1);
+        const next = current + 1;
+        if (isNoVariant) state.noVariantQty = next;
+        else state.sizeQuantities.set(sizeId, next);
       }
+
       if (action === 'minus') {
-        state.colorQuantities.set(colorId, Math.max(0, current - 1));
+        const next = Math.max(0, current - 1);
+        if (isNoVariant) state.noVariantQty = next;
+        else state.sizeQuantities.set(sizeId, next);
       }
 
       rerenderDrawer();
@@ -842,19 +1055,22 @@ export function initSharedCartDrawer(items: CartDrawerItemModel[]): void {
     }
   });
 
+  // Body change events (qty inputs)
   body.addEventListener('change', (event) => {
-    const input = (event.target as HTMLElement).closest<HTMLInputElement>('[data-qty-input]');
+    const input = (event.target as HTMLElement).closest<HTMLInputElement>('[data-qty-input-size]');
     if (!input) return;
 
-    const colorId = input.dataset.qtyInput ?? '';
+    const sizeId = input.dataset.qtyInputSize ?? '';
+    const isNoVariant = sizeId === '__no_variant__';
     let nextValue = Number(input.value);
     if (Number.isNaN(nextValue) || nextValue < 0) nextValue = 0;
 
     if (state.mode === 'sample') {
-      // Sum of other colors + this one cannot exceed 1
-      const othersTotal = Array.from(state.colorQuantities.entries())
-        .filter(([id]) => id !== colorId)
-        .reduce((a, [, b]) => a + b, 0);
+      const othersTotal = isNoVariant
+        ? 0
+        : Array.from(state.sizeQuantities.entries())
+          .filter(([id]) => id !== sizeId)
+          .reduce((a, [, b]) => a + b, 0);
       if (othersTotal + nextValue > 1) {
         nextValue = Math.max(0, 1 - othersTotal);
         input.value = String(nextValue);
@@ -862,10 +1078,15 @@ export function initSharedCartDrawer(items: CartDrawerItemModel[]): void {
       }
     }
 
-    state.colorQuantities.set(colorId, nextValue);
+    if (isNoVariant) {
+      state.noVariantQty = nextValue;
+    } else {
+      state.sizeQuantities.set(sizeId, nextValue);
+    }
     rerenderDrawer();
   });
 
+  // Footer events
   footer.addEventListener('click', (event) => {
     const target = event.target as HTMLElement;
 
@@ -893,27 +1114,29 @@ export function initSharedCartDrawer(items: CartDrawerItemModel[]): void {
       }
 
       if (state.mode === 'sample') {
-        // Sample mode: go directly to checkout (same as Alibaba "Order sample" flow)
         applyDrawerTransform(false);
         const base = (typeof import.meta !== 'undefined' ? import.meta.env?.BASE_URL : undefined) || '/';
         window.location.href = `${base}pages/order/checkout.html`;
       } else {
-        dispatchCartAdd().then(success => {
+        dispatchCartAdd().then((success) => {
           if (success) applyDrawerTransform(false);
         });
       }
     }
   });
 
+  // Preview navigation
   previewPrev?.addEventListener('click', () => {
     if (!state.item || state.item.colors.length === 0) return;
     state.previewColorIndex = (state.previewColorIndex - 1 + state.item.colors.length) % state.item.colors.length;
+    state.selectedColorId = state.item.colors[state.previewColorIndex]?.id ?? state.selectedColorId;
     updatePreview();
   });
 
   previewNext?.addEventListener('click', () => {
     if (!state.item || state.item.colors.length === 0) return;
     state.previewColorIndex = (state.previewColorIndex + 1) % state.item.colors.length;
+    state.selectedColorId = state.item.colors[state.previewColorIndex]?.id ?? state.selectedColorId;
     updatePreview();
   });
 
@@ -929,6 +1152,8 @@ export function initSharedCartDrawer(items: CartDrawerItemModel[]): void {
     }
   });
 }
+
+// ─── Public API ───────────────────────────────────────────────────────────────
 
 export function openSharedCartDrawer(itemId?: string, mode: 'cart' | 'sample' = 'cart'): void {
   openDrawer(itemId, mode);
@@ -954,9 +1179,11 @@ export function openSharedShippingModal(quantity?: number): void {
     state.selectedShippingIndex = 0;
     state.previewColorIndex = 0;
     state.footerExpanded = false;
-    state.colorQuantities = fallback.colors.length > 0
-      ? new Map(fallback.colors.map((color) => [color.id, 0]))
-      : new Map([['__no_variant__', 0]]);
+    state.selectedColorId = fallback.colors[0]?.id ?? '';
+    state.sizeQuantities = new Map(
+      fallback.sizeGroups.flatMap((g) => g.options.map((o) => [o.id, 0]))
+    );
+    state.noVariantQty = 0;
   }
   updateShippingModal(quantity);
   setShippingModalOpen(true);
