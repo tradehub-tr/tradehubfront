@@ -32,6 +32,8 @@ export interface OrderShipping {
   shipFrom: string;
   method: string;
   incoterms: string;
+  trackingNumber: string;
+  carrier: string;
 }
 
 export interface OrderPayment {
@@ -66,6 +68,7 @@ export interface Order {
   paymentMethod: string;
   createdAt: number;
   remittanceAmount: number;
+  receiptUrl: string;
   refundStatus: string;
   refundReason: string;
   refundAmount: number;

@@ -98,6 +98,20 @@ Alpine.data('ordersListComponent', () => ({
     return t('orders.orderDate');
   },
 
+  get timeRangeLabel(): string {
+    const fmt = (iso: string) => {
+      if (!iso) return '';
+      const [y, m, d] = iso.split('-');
+      return `${d}.${m}.${y}`;
+    };
+    const from = fmt(this.dateFrom);
+    const to = fmt(this.dateTo);
+    if (from && to) return `${from} - ${to}`;
+    if (from) return `${from} →`;
+    if (to) return `← ${to}`;
+    return t('orders.selectDateRange');
+  },
+
   setDateFilter(val: string) {
     this.dateFilter = val;
     if (val !== 'custom') {
@@ -242,12 +256,85 @@ Alpine.data('ordersListComponent', () => ({
   getStepIndex(order: any) {
     if (!order) return -1;
     if (order.status === 'Cancelled') return -2;
-    if (order.status === 'Waiting for payment') return 0;
-    if (order.status === 'Confirming') return 1;
-    if (order.status === 'Preparing Shipment') return 2;
+    // Receipt yüklendi ama satıcı henüz onaylamadı → Ödeme adımı aktif (index 1)
+    if (order.status === 'Waiting for payment') return order.receiptUrl ? 1 : 0;
+    // Satıcı onayladı → Hazırlanıyor/Kargo adımı aktif (index 2)
+    if (order.status === 'Confirming') return 2;
     if (order.status === 'Delivering') return 3;
     if (order.status === 'Completed') return 4;
     return 0;
+  },
+
+  getStatusLabel(order: any): string {
+    if (!order) return '';
+    // İade durumu ana statüden önce gelir
+    if (order.refundStatus === 'Pending') return 'İade İnceleniyor';
+    if (order.refundStatus === 'Approved') return 'İade Onaylandı';
+    if (order.refundStatus === 'Rejected') return 'İade Reddedildi';
+    // Normal akış
+    if (order.status === 'Waiting for payment') {
+      return order.receiptUrl ? 'Ödeme Onaylanıyor' : 'Ödeme Bekleniyor';
+    }
+    const labels: Record<string, string> = {
+      'Confirming': 'Hazırlanıyor',
+      'Delivering': 'Kargoda',
+      'Completed': 'Tamamlandı',
+      'Cancelled': 'İptal Edildi',
+    };
+    return labels[order.status] || order.status || 'Bilinmeyen Durum';
+  },
+
+  getStatusDescription(order: any): string {
+    if (!order) return '';
+    // İade durumu açıklamaları
+    if (order.refundStatus === 'Pending') {
+      return 'İade talebiniz satıcı tarafından inceleniyor. En kısa sürede geri dönüş yapılacaktır.';
+    }
+    if (order.refundStatus === 'Approved') {
+      const amt = order.refundAmount ? `${order.currency} ${Number(order.refundAmount).toLocaleString('tr-TR', { minimumFractionDigits: 2 })} tutarındaki` : '';
+      return `${amt} iade talebiniz onaylandı. Ödeme bilgilerinizi kontrol edin.`;
+    }
+    if (order.refundStatus === 'Rejected') {
+      return 'Satıcı iade talebinizi reddetti. Detaylar için satıcıyla iletişime geçin.';
+    }
+    // Normal akış açıklamaları
+    if (order.status === 'Waiting for payment') {
+      return order.receiptUrl
+        ? 'Havale dekontu inceleniyor. Satıcı ödemenizi onayladıktan sonra sipariş hazırlanmaya başlayacak.'
+        : 'Ödemenizi tamamlamak için havale makbuzunu gönderin.';
+    }
+    return order.statusDescription || '';
+  },
+
+  getStatusColor(order: any): string {
+    if (!order) return 'text-gray-500';
+    // İade renkleri
+    if (order.refundStatus === 'Pending') return 'text-orange-600';
+    if (order.refundStatus === 'Approved') return 'text-purple-600';
+    if (order.refundStatus === 'Rejected') return 'text-red-600';
+    // Normal akış
+    if (order.status === 'Waiting for payment') {
+      return order.receiptUrl ? 'text-blue-600' : 'text-amber-600';
+    }
+    return order.statusColor || 'text-gray-500';
+  },
+
+  hasActiveRefund(order: any): boolean {
+    return order && ['Pending', 'Approved', 'Rejected'].includes(order.refundStatus);
+  },
+
+  // İade adım barı index'i: 0=talep edildi, 1=inceleniyor, 2=sonuçlandı
+  getRefundStepIndex(order: any): number {
+    if (!order) return 0;
+    if (order.refundStatus === 'Pending') return 1;
+    if (order.refundStatus === 'Approved' || order.refundStatus === 'Rejected') return 2;
+    return 0;
+  },
+
+  getRefundStepColor(order: any): string {
+    if (order?.refundStatus === 'Rejected') return 'bg-red-500';
+    if (order?.refundStatus === 'Approved') return 'bg-emerald-500';
+    return 'bg-orange-500';
   },
 
   isCancelled(order: any) {
@@ -259,11 +346,15 @@ Alpine.data('ordersListComponent', () => ({
   },
 
   canPay(order: any) {
-    return order && (order.status === 'Waiting for payment');
+    return order && order.status === 'Waiting for payment' && !order.receiptUrl;
   },
 
-  openRemittanceModal(orderNumber: string) {
-    document.dispatchEvent(new CustomEvent('remittance:open', { detail: { orderNumber } }));
+  hasReceipt(order: any) {
+    return order && !!order.receiptUrl;
+  },
+
+  openRemittanceModal(orderNumber: string, orderTotal?: number, orderCurrency?: string, paymentMethod?: string) {
+    document.dispatchEvent(new CustomEvent('remittance:open', { detail: { orderNumber, orderTotal, orderCurrency, paymentMethod } }));
   },
 
   async downloadInvoice(order: any) {
@@ -286,6 +377,15 @@ Alpine.data('ordersListComponent', () => ({
 
   openRefundModal(order: any) {
     if (!order) return;
+    // Kargoya verilmemiş veya teslim edilmemişse iade yapılamaz
+    if (!this.canRefund(order)) {
+      this.refundBlocked = true;
+      this.refundError = 'İade talebi yalnızca kargoya verilmiş veya teslim edilmiş siparişler için açılabilir.';
+      this.refundSuccess = false;
+      this.showRefundModal = true;
+      document.body.style.overflow = 'hidden';
+      return;
+    }
     // Bekleyen veya onaylanmış iade varsa yeni talep açılamaz
     if (['Pending', 'Approved'].includes(order.refundStatus)) {
       this.refundBlocked = true;
@@ -297,7 +397,7 @@ Alpine.data('ordersListComponent', () => ({
       document.body.style.overflow = 'hidden';
       return;
     }
-    const grandTotal = order.payment?.grandTotal || order.grandTotal || '';
+    const grandTotal = order.total || 0;
     this.refundForm = { reason: '', amount: String(grandTotal) };
     this.refundBlocked = false;
     this.refundSuccess = false;
@@ -329,8 +429,22 @@ Alpine.data('ordersListComponent', () => ({
     }
   },
 
-  canCancel(order: any) {
-    return order && order.status !== 'Cancelled' && order.status !== 'Completed' && order.status !== 'Delivering';
+  // Kargoya verilmiş veya teslim edilmişse iade edilebilir
+  canRefund(order: any): boolean {
+    if (!order) return false;
+    if (!['Delivering', 'Completed'].includes(order.status)) return false;
+    // Zaten aktif iade varsa tekrar açılamaz
+    if (['Pending', 'Approved'].includes(order.refundStatus)) return false;
+    return true;
+  },
+
+  // Kargoya verilmemiş veya teslim edilmemişse iptal edilebilir
+  canCancel(order: any): boolean {
+    if (!order) return false;
+    if (['Cancelled', 'Completed', 'Delivering'].includes(order.status)) return false;
+    // İade süreci aktifse iptal edilemez
+    if (['Pending', 'Approved'].includes(order.refundStatus)) return false;
+    return true;
   }
 }));
 

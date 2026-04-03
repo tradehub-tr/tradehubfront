@@ -13,6 +13,11 @@
   transition: box-shadow 0.2s ease;
 }
 
+.store-nav__dropdown {
+  background-color: var(--store-nav-bg) !important;
+  color: var(--store-nav-text, #ffffff);
+}
+
 .store-nav--scrolled {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   background-color: #ffffff !important;
