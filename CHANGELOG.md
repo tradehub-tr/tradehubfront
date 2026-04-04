@@ -1,3 +1,23 @@
+## [v1.1.0] - 2026-04-04 PROD
+
+Bu surum istoc.com'da yayindadir.
+
+### Eklendi
+- feat: Sepet çekmecesinde beden varyant desteği eklendi, CSRF token yönetimi güncellendi ve sepete ekleme servisine varyanta özel alanlar eklendi (@Bora)
+- feat: Beden gruplarıyla çoklu varyant desteği eklendi, sepet servisi API’si güncellendi ve ürün CTA butonları yeniden tasarlandı (@Bora)
+- feat: Telefon alanı etiketini İngilizce ve Türkçe yerelleştirme dosyalarına eklendi. (@Bora)
+- feat: Satıcı vitrinleri için URL hash tabanlı gezinme ve dinamik para birimi desteğini uygula. (@Bora)
+- feat: Ticaret Güvencesi, kargo lojistiği ve satış sonrası sayfaları eklendi (@ahmet)
+- feat: footer'daki tüm bilgi sayfaları (iade politikası, kargo   güvencesi, vergi, üyelik vb.) ve ortak sayfa düzeni oluşturuldu. ve   FloatingPanel (yüzen menü/widget) — "Mesajlarım", "Görsel Arama", "En üste çık" butonları olan kısım güncellendi. (@ahmet)
+- feat(seller_storefront): ana ürün kaydırıcısı ve bölüm kaydı işlevselliği eklendi seller front  detaylı değişilik yapıldı ve footerdaki bottomdaki çalışmayan linkler düzeltildi (@ahmet)
+- feat: sipariş başarı yönlendirmesini uygula, vitrin arayüz bileşenlerini güncelle ve i18n yerelleştirme dosyalarını temizle (@ahmet)
+- feat:HelpCenterHeader'a dil seçici bileşenini ekleyin ve yardım merkezi sayfalarına entegre edin. (@ahmet)
+
+### Duzeltildi
+- fix(ci): release changelog'da yanlış kullanıcı etiketlenmesini düzelt (@ahmet)
+- fix: Dockerfile ARG'leri local Docker için relative URL yapıldı. (@Ali)
+
+---
 ## [v1.0.1-rc.11] - 2026-04-03 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
