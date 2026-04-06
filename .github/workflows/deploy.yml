@@ -55,7 +55,6 @@ jobs:
       - name: Build for GitHub Pages
         run: npx vite build
         env:
-          GITHUB_PAGES: 'true'
           VITE_API_URL: https://rc.istoc.com/api
 
       - name: Setup Pages
