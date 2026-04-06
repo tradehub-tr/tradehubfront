@@ -2888,6 +2888,8 @@ const en = {
       customProducts: 'Custom Products',
       getQuote: 'Get a quote',
       noProducts: 'No products available yet.',
+      prefillLookingFor: "I'm looking for {{product}}.",
+      prefillSpecs: 'Product specifications:',
       customerTestimonials: 'What Our Customers Say?',
       heroAriaLabel: 'RFQ request for quotation',
       formAriaLabel: 'Quotation request form',

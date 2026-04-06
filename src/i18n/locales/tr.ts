@@ -2880,6 +2880,8 @@ const tr = {
       customProducts: 'Özel Ürünler',
       getQuote: 'Fiyat teklifi al',
       noProducts: 'Henüz ürün bulunmamaktadır.',
+      prefillLookingFor: '{{product}} ürünü arıyorum.',
+      prefillSpecs: 'Ürün özellikleri:',
       customerTestimonials: 'Müşterilerimiz Ne Diyor?',
       heroAriaLabel: 'RFQ fiyat teklifi talebi',
       formAriaLabel: 'Fiyat teklifi formu',
