@@ -1,8 +1,8 @@
-name: Deploy Storefront
+hayıname: Deploy Storefront
 
 on:
   push:
-    branches: [ ahmet, ali, bora ]
+    branches: [ main, ahmet, ali, bora ]
 
 permissions:
   contents: read
@@ -40,8 +40,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: ahmet
 
       - name: Setup Node
         uses: actions/setup-node@v4
