@@ -1,5 +1,6 @@
 import Alpine from 'alpinejs'
 import { initLinkRewriter } from '../utils/url'
+import { initMediaRewriter } from '../utils/mediaUrl'
 import { initTracking } from '../utils/trackingManager'
 
 // Import all Alpine.data() module registrations (side-effect imports)
@@ -40,6 +41,7 @@ window.Alpine = Alpine;
  */
 export function startAlpine(): void {
   initLinkRewriter();
+  initMediaRewriter();
   Alpine.start();
   // Load tracking scripts based on saved cookie consent preferences
   initTracking();
