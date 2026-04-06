@@ -54,6 +54,7 @@ jobs:
         run: npx vite build
         env:
           VITE_API_URL: https://rc.istoc.com/api
+          VITE_MEDIA_BASE: https://rc.istoc.com
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
