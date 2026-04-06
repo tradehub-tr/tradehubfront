@@ -335,18 +335,16 @@ if (prefillProductId) {
       productNameInput.value = product.title;
     }
 
-    // Pre-fill category from product breadcrumb
-    if (product.category && product.category.length > 0) {
-      const lastCat = product.category[product.category.length - 1];
-      if (lastCat) {
-        categoryHidden.value = typeof lastCat === 'string' ? lastCat : (lastCat as any).name || '';
-        const pathText = Array.isArray(product.category)
-          ? product.category.map((c: any) => typeof c === 'string' ? c : c.name || '').join(' >> ')
-          : '';
-        if (pathText) {
-          categoryLink.textContent = pathText;
-          categoryResult.classList.remove('hidden');
-        }
+    // Pre-fill category from product data
+    const catId = (product as any).productCategoryId;
+    if (catId) {
+      categoryHidden.value = catId;
+      const pathText = Array.isArray(product.category)
+        ? product.category.map((c: any) => typeof c === 'string' ? c : c.name || '').join(' >> ')
+        : '';
+      if (pathText) {
+        categoryLink.textContent = pathText;
+        categoryResult.classList.remove('hidden');
       }
     }
 
