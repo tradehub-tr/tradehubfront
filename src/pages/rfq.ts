@@ -59,7 +59,7 @@ function renderProductCard(product: ProductListingCard): string {
       </div>
       <div class="p-3 sm:p-4">
         <h3 class="my-1 mb-3 line-clamp-2 text-sm text-text-heading">${product.name}</h3>
-        <a href="${product.href || '#'}" class="inline-block text-sm text-text-heading underline transition-colors duration-200 hover:text-primary-600">${t('rfq.getQuote')}</a>
+        <a href="/pages/dashboard/rfq-form.html?productId=${product.id}&productName=${encodeURIComponent(product.name)}" class="inline-block text-sm text-text-heading underline transition-colors duration-200 hover:text-primary-600">${t('rfq.getQuote')}</a>
       </div>
     </div>
   `;
