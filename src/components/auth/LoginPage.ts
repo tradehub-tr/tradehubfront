@@ -28,6 +28,18 @@ export function LoginPage(): string {
         <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2" data-i18n="auth.login.title">${t('auth.login.title')}</h1>
       </div>
 
+      <!-- Email verified success banner -->
+      <div id="login-verified-success" class="hidden mb-4 p-3 rounded-lg bg-green-50 border border-green-200 flex items-center gap-2">
+        <svg class="w-5 h-5 text-green-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg>
+        <span class="text-sm text-green-700">${t('auth.login.emailVerified')}</span>
+      </div>
+
+      <!-- Email verification failed banner -->
+      <div id="login-verified-fail" class="hidden mb-4 p-3 rounded-lg bg-red-50 border border-red-200 flex items-center gap-2">
+        <svg class="w-5 h-5 text-red-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"/></svg>
+        <span class="text-sm text-red-700">${t('auth.login.emailVerificationFailed')}</span>
+      </div>
+
       <!-- Error message -->
       <p id="login-error" class="text-sm text-red-600 mb-4 hidden"></p>
 
@@ -131,6 +143,14 @@ export function initLoginPage(options: LoginPageOptions = {}): void {
       e.preventDefault();
       options.onCreateAccount!();
     });
+  }
+
+  // Email verification banners
+  const verifiedParam = new URLSearchParams(window.location.search).get('verified');
+  if (verifiedParam === '1') {
+    document.getElementById('login-verified-success')?.classList.remove('hidden');
+  } else if (verifiedParam === '0') {
+    document.getElementById('login-verified-fail')?.classList.remove('hidden');
   }
 
   // Password toggle
