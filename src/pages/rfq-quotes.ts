@@ -218,7 +218,7 @@ loadQuotes().then(() => {
       btn.disabled = true;
       btn.textContent = '...';
       try {
-        const res = await fetch('/api/method/tradehub_core.api.rfq.accept_quote', {
+        const res = await fetch(((window as any).API_BASE || '/api') + '/method/tradehub_core.api.rfq.accept_quote', {
           method: 'POST', credentials: 'include',
           headers: { 'Content-Type': 'application/json', 'X-Frappe-CSRF-Token': getCsrfToken() },
           body: JSON.stringify({ quote_id: quoteId }),
@@ -240,7 +240,7 @@ loadQuotes().then(() => {
       btn.disabled = true;
       btn.textContent = '...';
       try {
-        const res = await fetch('/api/method/tradehub_core.api.rfq.reject_quote', {
+        const res = await fetch(((window as any).API_BASE || '/api') + '/method/tradehub_core.api.rfq.reject_quote', {
           method: 'POST', credentials: 'include',
           headers: { 'Content-Type': 'application/json', 'X-Frappe-CSRF-Token': getCsrfToken() },
           body: JSON.stringify({ quote_id: quoteId }),
@@ -283,7 +283,7 @@ loadQuotes().then(() => {
       closeBtn.disabled = true;
       closeBtn.textContent = '...';
       try {
-        const res = await fetch('/api/method/tradehub_core.api.rfq.close_rfq', {
+        const res = await fetch(((window as any).API_BASE || '/api') + '/method/tradehub_core.api.rfq.close_rfq', {
           method: 'POST', credentials: 'include',
           headers: { 'Content-Type': 'application/json', 'X-Frappe-CSRF-Token': getCsrfToken() },
           body: JSON.stringify({ rfq_id: rfqId }),

@@ -160,7 +160,7 @@ startAlpine();
 const PRIORITY_UOMS = ['Nos','Unit','Box','Pair','Kg','Gram','Metre','Meter','Set','Ton','Tonne','Bag','Roll','Pack','Dozen','Litre','Pallet','Carton','Bundle','Sheet','Ream','Piece'];
 
 const unitSelect = document.getElementById('rfq-unit') as HTMLSelectElement;
-fetch('/api/method/tradehub_core.api.rfq.get_uom_list', { credentials: 'include' })
+fetch(((window as any).API_BASE || '/api') + '/method/tradehub_core.api.rfq.get_uom_list', { credentials: 'include' })
   .then(r => r.json())
   .then(d => {
     const uoms: string[] = d.message || [];
@@ -417,7 +417,7 @@ form.addEventListener('submit', (e) => {
 
   async function submitRfq() {
     // 1. Create RFQ
-    const res = await fetch('/api/method/tradehub_core.api.rfq.create_rfq', {
+    const res = await fetch(((window as any).API_BASE || '/api') + '/method/tradehub_core.api.rfq.create_rfq', {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json', 'X-Frappe-CSRF-Token': getCsrfToken() },
@@ -444,7 +444,7 @@ form.addEventListener('submit', (e) => {
       fd.append('doctype', 'RFQ');
       fd.append('docname', rfqId);
       fd.append('is_private', '0');
-      const uploadRes = await fetch('/api/method/upload_file', {
+      const uploadRes = await fetch(((window as any).API_BASE || '/api') + '/method/upload_file', {
         method: 'POST',
         credentials: 'include',
         body: fd,
@@ -452,7 +452,7 @@ form.addEventListener('submit', (e) => {
       const uploadData = await uploadRes.json();
       const fileUrl = uploadData?.message?.file_url;
       if (fileUrl) {
-        await fetch('/api/method/tradehub_core.api.rfq.add_rfq_attachment', {
+        await fetch(((window as any).API_BASE || '/api') + '/method/tradehub_core.api.rfq.add_rfq_attachment', {
           method: 'POST',
           credentials: 'include',
           headers: { 'Content-Type': 'application/json', 'X-Frappe-CSRF-Token': getCsrfToken() },
