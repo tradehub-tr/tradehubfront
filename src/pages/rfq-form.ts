@@ -336,7 +336,7 @@ if (prefillProductId) {
     }
 
     // Pre-fill category from product data
-    const catId = (product as any).productCategoryId;
+    const catId = product.productCategoryId;
     if (catId) {
       categoryHidden.value = catId;
       const pathText = Array.isArray(product.category)
