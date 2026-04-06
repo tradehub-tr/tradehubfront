@@ -85,6 +85,7 @@ export function LoginPage(): string {
           type="submit"
           id="login-submit-btn"
           class="w-full h-12 th-btn th-btn-pill disabled:opacity-50 disabled:cursor-not-allowed"
+          style="background: #dc2626;"
         >
           <span id="login-submit-text" data-i18n="auth.login.continue">${t('auth.login.continue')}</span>
           <span id="login-submit-loading" class="hidden items-center gap-2">
