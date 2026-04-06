@@ -41,11 +41,11 @@ export async function requireSeller(): Promise<void> {
     await new Promise(() => {})
   }
   if (user!.pending_seller_application || user!.rejected_seller_application) {
-    window.location.href = '/pages/seller/application-pending.html'
+    window.location.href = `${getBaseUrl()}pages/seller/application-pending.html`
     return
   }
   if (!user!.is_seller || !user!.has_seller_profile) {
-    window.location.href = '/'
+    window.location.href = getBaseUrl()
   }
 
   installBfcacheGuard((check) => {
