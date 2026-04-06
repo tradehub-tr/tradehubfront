@@ -111,6 +111,7 @@ export interface ProductDetail {
   id: string;
   title: string;
   category: string[];
+  productCategoryId?: string;
   images: ProductImage[];
   priceTiers: PriceTier[];
   priceMin?: number;

@@ -391,6 +391,7 @@ function mapListingDetail(raw: any): ProductDetail {
     id: raw.id,
     title: raw.title || '',
     category: raw.category || [],
+    productCategoryId: raw.productCategoryId || '',
     images,
     priceTiers,
     ...derivePriceRange(raw, priceTiers, variants, baseCur),
