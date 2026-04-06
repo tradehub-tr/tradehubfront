@@ -3,14 +3,6 @@
  * Types for RFQ form, products, customization cards, and testimonials.
  */
 
-export interface Product {
-  id: string;
-  name: string;
-  image: string;
-  supplierCount: number;
-  ctaText: string;
-}
-
 export interface CustomizationCard {
   id: string;
   title: string;

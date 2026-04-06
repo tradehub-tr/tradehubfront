@@ -20,12 +20,15 @@ import { UOM_OPTIONS } from '../data/inquiries-mock-data' // fallback
 import aiGifUrl from '../assets/images/O1CN01c52zHR1b2SGRtmBlT_!!6000000003407-1-tps-300-300.gif'
 import { FILE_UPLOAD_CONFIG } from '../types/rfq'
 import { getCsrfToken } from '../utils/api'
+import { getListingDetail } from '../services/listingService'
 
 await requireAuth();
 
-// Read details from URL params (passed from rfq.html step 1)
+// Read details from URL params (passed from rfq.html step 1 or product card)
 const params = new URLSearchParams(window.location.search);
 const prefillDetails = params.get('details') || '';
+const prefillProductName = params.get('productName') || '';
+const prefillProductId = params.get('productId') || '';
 
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.classList.add('relative');
@@ -318,6 +321,66 @@ if (params.get('hasFiles') === '1') {
     indexedDB.deleteDatabase('rfq_files');
     if (selectedFiles.length) renderFileList();
   } catch { /* ignore — files are optional */ }
+}
+
+// ── Pre-fill from product card (productId / productName) ──
+if (prefillProductName) {
+  productNameInput.value = decodeURIComponent(prefillProductName);
+}
+
+if (prefillProductId) {
+  getListingDetail(prefillProductId).then(product => {
+    // Pre-fill product name if not already set
+    if (!productNameInput.value && product.title) {
+      productNameInput.value = product.title;
+    }
+
+    // Pre-fill category from product breadcrumb
+    if (product.category && product.category.length > 0) {
+      const lastCat = product.category[product.category.length - 1];
+      if (lastCat) {
+        categoryHidden.value = typeof lastCat === 'string' ? lastCat : (lastCat as any).name || '';
+        const pathText = Array.isArray(product.category)
+          ? product.category.map((c: any) => typeof c === 'string' ? c : c.name || '').join(' >> ')
+          : '';
+        if (pathText) {
+          categoryLink.textContent = pathText;
+          categoryResult.classList.remove('hidden');
+        }
+      }
+    }
+
+    // Pre-fill requirements from specs and description
+    const requirementsEl = document.getElementById('rfq-requirements') as HTMLTextAreaElement;
+    if (!requirementsEl.value.trim()) {
+      const lines: string[] = [];
+      lines.push(t('rfq.prefillLookingFor', { product: product.title }));
+      if (product.specs && product.specs.length > 0) {
+        lines.push(t('rfq.prefillSpecs'));
+        for (const spec of product.specs) {
+          lines.push(`· ${spec.key}: ${spec.value}`);
+        }
+      }
+      requirementsEl.value = lines.join('\n');
+    }
+
+    // Pre-fill product image as file attachment
+    if (product.images && product.images.length > 0) {
+      const imgSrc = product.images[0].src;
+      if (imgSrc) {
+        fetch(imgSrc, { credentials: 'include' })
+          .then(r => r.blob())
+          .then(blob => {
+            const fileName = imgSrc.split('/').pop() || 'product-image.jpg';
+            const file = new File([blob], fileName, { type: blob.type });
+            addFiles([file]);
+          })
+          .catch(() => { /* image fetch failed, skip */ });
+      }
+    }
+  }).catch(err => {
+    console.warn('[RFQ Form] Failed to load product details:', err);
+  });
 }
 
 // ── Form submission ──

@@ -29,26 +29,28 @@ import aiIconUrl from '../assets/images/O1CN01WQ8Lqg1SIdpcL5OHE_!!6000000002224-
 // Utilities
 import { initAnimatedPlaceholder } from '../utils/animatedPlaceholder'
 
-// Mock data
-import { getSelectedProducts, getCustomProducts, getTestimonials } from '../data/rfq-mock-data'
-const selectedProducts = getSelectedProducts();
-const customProducts = getCustomProducts();
+// API services
+import { searchListings } from '../services/listingService'
+import { initCurrency } from '../services/currencyService'
+
+// Mock data (testimonials only)
+import { getTestimonials } from '../data/rfq-mock-data'
 const testimonials = getTestimonials();
 
 // Types
-import type { Product } from '../types/rfq'
+import type { ProductListingCard } from '../types/productListing'
 import { FILE_UPLOAD_CONFIG } from '../types/rfq'
 import { requireAuth } from '../utils/auth-guard'
 
 await requireAuth();
 
 // --- Helper: Product Card HTML ---
-function renderProductCard(product: Product): string {
+function renderProductCard(product: ProductListingCard): string {
   return `
-    <div class="group overflow-hidden rounded-xl border border-border-default bg-white transition-shadow duration-200 hover:shadow-lg" data-product-id="${product.id}">
+    <div class="group overflow-hidden rounded-lg border border-border-default bg-white transition-shadow duration-200 hover:shadow-lg" data-product-id="${product.id}">
       <div class="aspect-square overflow-hidden bg-surface-raised">
         <img
-          src="${product.image || ''}"
+          src="${product.imageSrc || ''}"
           alt="${product.name}"
           loading="lazy"
           class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
@@ -56,9 +58,22 @@ function renderProductCard(product: Product): string {
         />
       </div>
       <div class="p-3 sm:p-4">
-        <p class="text-xs text-text-tertiary">${product.supplierCount} ${t('rfq.suppliersProvide')}</p>
         <h3 class="my-1 mb-3 line-clamp-2 text-sm text-text-heading">${product.name}</h3>
-        <a href="#" class="inline-block text-sm text-text-heading underline transition-colors duration-200 hover:text-primary-600">${product.ctaText}</a>
+        <a href="/pages/dashboard/rfq-form.html?productId=${product.id}&productName=${encodeURIComponent(product.name)}" class="inline-block text-sm text-text-heading underline transition-colors duration-200 hover:text-primary-600">${t('rfq.getQuote')}</a>
+      </div>
+    </div>
+  `;
+}
+
+// --- Helper: Skeleton Card HTML ---
+function renderSkeletonCard(): string {
+  return `
+    <div class="overflow-hidden rounded-lg border border-border-default bg-white">
+      <div class="aspect-square animate-pulse bg-gray-200"></div>
+      <div class="p-3 sm:p-4 space-y-2">
+        <div class="h-4 w-3/4 animate-pulse rounded bg-gray-200"></div>
+        <div class="h-4 w-1/2 animate-pulse rounded bg-gray-200"></div>
+        <div class="h-3 w-1/3 animate-pulse rounded bg-gray-200 mt-2"></div>
       </div>
     </div>
   `;
@@ -182,8 +197,8 @@ appEl.innerHTML = `
     <section id="rfq-selected-products" class="bg-(--color-surface-muted) py-8 sm:py-10 lg:py-12" aria-label="${t('rfq.selectedProducts')}">
       <div class="container-boxed">
         <h2 class="mb-4 text-lg font-bold text-text-heading sm:mb-6 sm:text-xl" data-i18n="rfq.selectedProducts">${t('rfq.selectedProducts')}</h2>
-        <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5 xl:grid-cols-6">
-          ${selectedProducts.map(p => renderProductCard(p)).join('')}
+        <div id="selected-products-grid" class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5 xl:grid-cols-6">
+          ${Array(6).fill(renderSkeletonCard()).join('')}
         </div>
       </div>
     </section>
@@ -192,8 +207,8 @@ appEl.innerHTML = `
     <section id="rfq-custom-products" class="bg-(--color-surface) py-8 sm:py-10 lg:py-12" aria-label="${t('rfq.customProducts')}">
       <div class="container-boxed">
         <h2 class="mb-4 text-lg font-bold text-text-heading sm:mb-6 sm:text-xl" data-i18n="rfq.customProducts">${t('rfq.customProducts')}</h2>
-        <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5 xl:grid-cols-6">
-          ${customProducts.map(p => renderProductCard(p)).join('')}
+        <div id="custom-products-grid" class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5 xl:grid-cols-6">
+          ${Array(12).fill(renderSkeletonCard()).join('')}
         </div>
       </div>
     </section>
@@ -263,6 +278,33 @@ new Swiper('#rfq-testimonials .swiper', {
     el: '#rfq-testimonials .swiper-pagination',
     clickable: true,
   },
+});
+
+// --- Load Products from API ---
+initCurrency().then(() => Promise.all([
+  searchListings({ is_featured: true, page_size: 6 }),
+  searchListings({ page_size: 36 }),
+])).then(([featuredResult, customResult]) => {
+  const selectedGrid = document.getElementById('selected-products-grid');
+  const customGrid = document.getElementById('custom-products-grid');
+
+  if (selectedGrid) {
+    selectedGrid.innerHTML = featuredResult.products.length > 0
+      ? featuredResult.products.map(p => renderProductCard(p)).join('')
+      : `<p class="col-span-full text-sm text-text-tertiary">${t('rfq.noProducts')}</p>`;
+  }
+
+  if (customGrid) {
+    customGrid.innerHTML = customResult.products.length > 0
+      ? customResult.products.map(p => renderProductCard(p)).join('')
+      : `<p class="col-span-full text-sm text-text-tertiary">${t('rfq.noProducts')}</p>`;
+  }
+}).catch(err => {
+  console.warn('[RFQ] Failed to load products:', err);
+  const selectedGrid = document.getElementById('selected-products-grid');
+  const customGrid = document.getElementById('custom-products-grid');
+  if (selectedGrid) selectedGrid.innerHTML = '';
+  if (customGrid) customGrid.innerHTML = '';
 });
 
 // --- File Upload Handling ---
