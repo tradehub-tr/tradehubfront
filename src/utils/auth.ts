@@ -20,6 +20,7 @@ export interface AuthUser {
   is_seller: boolean;
   is_buyer: boolean;
   has_seller_profile: boolean;
+  email_verified?: boolean;
   pending_seller_application: boolean;
   rejected_seller_application?: boolean;
   seller_application_status?: string;
@@ -351,6 +352,15 @@ export async function resetPassword(
       method: 'POST',
       body: JSON.stringify({ key, new_password }),
     }
+  );
+  return res.message;
+}
+
+/** Resend email verification link for the current user */
+export async function resendVerificationEmail(): Promise<SimpleResponse> {
+  const res = await api<{ message: SimpleResponse }>(
+    '/method/tradehub_core.api.v1.identity.resend_verification_email',
+    { method: 'POST' },
   );
   return res.message;
 }

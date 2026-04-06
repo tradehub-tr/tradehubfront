@@ -50,6 +50,9 @@ Alpine.data('settingsChangePassword', () => ({
   step: 1,
   error: '',
   loading: false,
+  showCurrent: false,
+  showNew: false,
+  showConfirm: false,
 
   init() {
     // Reset form when navigating back to this section
