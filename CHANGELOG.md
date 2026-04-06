@@ -1,3 +1,11 @@
+## [v1.1.1-rc.2] - 2026-04-06 RC
+
+Bu surum rc.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat: export getCsrfToken function to retrieve current token or default value (@TurksabYonetim)
+
+---
 ## [v1.1.1-rc.1] - 2026-04-06 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
