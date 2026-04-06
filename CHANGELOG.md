@@ -1,3 +1,24 @@
+## [v1.1.2-rc.7] - 2026-04-06 RC
+
+Bu surum rc.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat: add GitHub Pages deployment workflow for ahmet branch and update CI permissions (@TurksabYonetim)
+- feat: configure CORS headers and SameSite cookie flags for API proxy in nginx.conf (@TurksabYonetim)
+- feat: add preview.istoc.com to allowed CORS origins in nginx configuration (@TurksabYonetim)
+- feat: add admin-preview.istoc.com to CORS allowed origins in nginx configuration (@TurksabYonetim)
+- feat: apply red background color to login submit button (@TurksabYonetim)
+- feat(RFQ): Sabit kodlanmış ürünler dinamik API çağrılarıyla değiştirildi. (@Ali)
+- feat(RFQ): Ürün kartındaki liste bilgilerini kullanarak RFQ formu önceden otomatik doldurtuluyor (@Ali)
+- feat(auth): add email verification banners to login page, password visibility toggles to settings, and email verify slide to dashboard (@TurksabYonetim)
+
+### Duzeltildi
+- fix: update auth-guard redirects to use dynamic base URL (@TurksabYonetim)
+- fix(RFQ): RFQ formunun önceden doldurulması için ad yerine kategori UUID'si kullanıldı (@Ali)
+- fix(RFQ): Kategori ön doldurmasını düzeltmek için "productCategoryId" değeri mapper aracılığıyla aktarıldı (@TurksabYonetim)
+- fix: correct typo in deployment workflow name (@TurksabYonetim)
+
+---
 ## [v1.1.2-rc.6] - 2026-04-06 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
