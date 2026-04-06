@@ -1,3 +1,29 @@
+## [v1.1.3] - 2026-04-06 PROD
+
+Bu surum istoc.com'da yayindadir.
+
+### Eklendi
+- feat: implement media URL rewriting to support backend routing on GitHub Pages (@ahmet)
+- feat(auth): add email verification banners to login page, password visibility toggles to settings, and email verify slide to dashboard (@ahmet)
+- feat(RFQ): Ürün kartındaki liste bilgilerini kullanarak RFQ formu önceden otomatik doldurtuluyor (@Ali)
+- feat(RFQ): Sabit kodlanmış ürünler dinamik API çağrılarıyla değiştirildi. (@Ali)
+- feat: apply red background color to login submit button (@ahmet)
+- feat: add admin-preview.istoc.com to CORS allowed origins in nginx configuration (@ahmet)
+- feat: add preview.istoc.com to allowed CORS origins in nginx configuration (@ahmet)
+- feat: configure CORS headers and SameSite cookie flags for API proxy in nginx.conf (@ahmet)
+- feat: add GitHub Pages deployment workflow for ahmet branch and update CI permissions (@ahmet)
+
+### Duzeltildi
+- fix: prevent duplicate CORS headers by hiding backend-provided headers in nginx proxy configuration (@ahmet)
+- fix: correct typo in deployment workflow name (@ahmet)
+- fix(RFQ): Kategori ön doldurmasını düzeltmek için "productCategoryId" değeri mapper aracılığıyla aktarıldı (@Ali)
+- fix(RFQ): RFQ formunun önceden doldurulması için ad yerine kategori UUID'si kullanıldı (@Ali)
+- fix: update auth-guard redirects to use dynamic base URL (@ahmet)
+
+### Degistirildi
+- refactor: make API base URL configurable via window.API_BASE across all fetch requests (@ahmet)
+
+---
 ## [v1.1.2-rc.10] - 2026-04-06 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
