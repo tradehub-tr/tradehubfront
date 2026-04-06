@@ -2,6 +2,9 @@ import { getBaseUrl } from './url'
 
 const BASE_URL = import.meta.env.VITE_API_URL || '/api'
 
+// Alpine component'leri window.API_BASE üzerinden erişir
+;(window as any).API_BASE = BASE_URL
+
 // ─── CSRF Token Cache ─────────────────────────────────────────────────────────
 // Frappe CSRF token cookie'de tutulmaz — session'da sunucu tarafında saklanır.
 // get_session_user endpoint'inden çekip cache'leriz.
@@ -12,7 +15,7 @@ let _csrfFetchPromise: Promise<string | null> | null = null
 async function fetchCsrfToken(): Promise<string | null> {
   if (_csrfToken) return _csrfToken
   if (!_csrfFetchPromise) {
-    _csrfFetchPromise = fetch('/api/method/tradehub_core.api.v1.auth.get_session_user', {
+    _csrfFetchPromise = fetch(`${BASE_URL}/method/tradehub_core.api.v1.auth.get_session_user`, {
       credentials: 'include',
     })
       .then((r) => r.json())

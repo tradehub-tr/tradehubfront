@@ -327,7 +327,7 @@ function showQuoteSubmitModal(rfq: SellerRFQItem, onSuccess: () => void): void {
 
   // Load seller's listings into dropdown
   const listingSelect = document.getElementById('quote-listing') as HTMLSelectElement;
-  fetch('/api/method/tradehub_core.api.rfq.get_my_listings', { credentials: 'include' })
+  fetch(((window as any).API_BASE || '/api') + '/method/tradehub_core.api.rfq.get_my_listings', { credentials: 'include' })
     .then(r => r.json()).then(d => {
       const listings = d.message || [];
       listings.forEach((l: any) => {
@@ -349,7 +349,7 @@ function showQuoteSubmitModal(rfq: SellerRFQItem, onSuccess: () => void): void {
     submitBtn.disabled = true;
     submitBtn.textContent = '...';
     try {
-      const res = await fetch('/api/method/tradehub_core.api.rfq.submit_quote', {
+      const res = await fetch(((window as any).API_BASE || '/api') + '/method/tradehub_core.api.rfq.submit_quote', {
         method: 'POST', credentials: 'include',
         headers: { 'Content-Type': 'application/json', 'X-Frappe-CSRF-Token': getCsrfToken() },
         body: JSON.stringify({
@@ -588,7 +588,7 @@ async function fetchRfqs(status = 'all'): Promise<RFQItem[]> {
 
 async function fetchSellerRfqs(): Promise<SellerRFQItem[]> {
   try {
-    const res = await fetch('/api/method/tradehub_core.api.rfq.get_seller_rfqs', { credentials: 'include' });
+    const res = await fetch(((window as any).API_BASE || '/api') + '/method/tradehub_core.api.rfq.get_seller_rfqs', { credentials: 'include' });
     const d = await res.json();
     return d.message?.data || [];
   } catch { return []; }
@@ -596,7 +596,7 @@ async function fetchSellerRfqs(): Promise<SellerRFQItem[]> {
 
 async function fetchMyQuotes(): Promise<MyQuoteItem[]> {
   try {
-    const res = await fetch('/api/method/tradehub_core.api.rfq.get_my_quotes', { credentials: 'include' });
+    const res = await fetch(((window as any).API_BASE || '/api') + '/method/tradehub_core.api.rfq.get_my_quotes', { credentials: 'include' });
     const d = await res.json();
     return d.message?.data || [];
   } catch { return []; }
@@ -604,7 +604,7 @@ async function fetchMyQuotes(): Promise<MyQuoteItem[]> {
 
 async function checkIsSeller(): Promise<boolean> {
   try {
-    const res = await fetch('/api/method/tradehub_core.api.rfq.get_seller_rfqs?limit_page_length=1', { credentials: 'include' });
+    const res = await fetch(((window as any).API_BASE || '/api') + '/method/tradehub_core.api.rfq.get_seller_rfqs?limit_page_length=1', { credentials: 'include' });
     // 200 = seller
     // Any error (403, 417, 500) = not a seller or backend error
     return res.ok;
@@ -657,7 +657,7 @@ export function initInquiriesLayout(): void {
           closeBtn.disabled = true;
           closeBtn.textContent = '...';
           try {
-            const res = await fetch('/api/method/tradehub_core.api.rfq.close_rfq', {
+            const res = await fetch(((window as any).API_BASE || '/api') + '/method/tradehub_core.api.rfq.close_rfq', {
               method: 'POST', credentials: 'include',
               headers: { 'Content-Type': 'application/json', 'X-Frappe-CSRF-Token': getCsrfToken() },
               body: JSON.stringify({ rfq_id: id }),
@@ -706,7 +706,7 @@ export function initInquiriesLayout(): void {
             submitBtn.disabled = true;
             submitBtn.textContent = '...';
             try {
-              const res = await fetch('/api/method/tradehub_core.api.rfq.add_rfq_details', {
+              const res = await fetch(((window as any).API_BASE || '/api') + '/method/tradehub_core.api.rfq.add_rfq_details', {
                 method: 'POST', credentials: 'include',
                 headers: { 'Content-Type': 'application/json', 'X-Frappe-CSRF-Token': getCsrfToken() },
                 body: JSON.stringify({ rfq_id: rfqId, additional_details: text }),
@@ -879,7 +879,7 @@ export function initInquiriesLayout(): void {
       return;
     }
     try {
-      const res = await fetch('/api/method/tradehub_core.api.rfq.trash_inquiry', {
+      const res = await fetch(((window as any).API_BASE || '/api') + '/method/tradehub_core.api.rfq.trash_inquiry', {
         method: 'POST', credentials: 'include',
         headers: { 'Content-Type': 'application/json', 'X-Frappe-CSRF-Token': getCsrfToken() },
         body: JSON.stringify({ inquiry_id: selectedInquiryId }),
