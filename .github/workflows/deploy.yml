@@ -2,7 +2,7 @@ name: Deploy Storefront
 
 on:
   push:
-    branches: [ main, ahmet ]
+    branches: [ ahmet, ali, bora ]
 
 permissions:
   contents: read
@@ -30,9 +30,9 @@ jobs:
             docker compose up -d storefront
             echo "✅ Storefront deploy tamamlandı"
 
-  # ── 2. GitHub Pages deploy (sadece ahmet) ─────────────
+  # ── 2. GitHub Pages deploy (ahmet, ali, bora) ──────────
   deploy-pages:
-    if: github.ref == 'refs/heads/ahmet'
+    if: github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
