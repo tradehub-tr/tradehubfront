@@ -241,7 +241,7 @@ Alpine.data('sellerDashboard', () => ({
 
   async init() {
     try {
-      const res = await fetch('/api/method/tradehub_core.api.auth.get_current_user', { credentials: 'include' });
+      const res = await fetch(((window as any).API_BASE || '/api') + '/method/tradehub_core.api.auth.get_current_user', { credentials: 'include' });
       const data = await res.json() as { message: { is_guest: boolean; is_seller?: boolean; seller?: Record<string, unknown> } };
       const user = data.message;
 
@@ -252,7 +252,7 @@ Alpine.data('sellerDashboard', () => ({
       this.isSeller = true;
 
       // Profil yükle
-      const profileRes = await fetch('/api/method/tradehub_core.api.seller.get_my_profile', {
+      const profileRes = await fetch(((window as any).API_BASE || '/api') + '/method/tradehub_core.api.seller.get_my_profile', {
         method: 'POST', credentials: 'include',
         headers: { 'X-Frappe-CSRF-Token': this._csrf() },
       });
