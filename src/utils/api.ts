@@ -29,6 +29,10 @@ async function fetchCsrfToken(): Promise<string | null> {
   return _csrfFetchPromise
 }
 
+export function getCsrfToken(): string {
+  return _csrfToken ?? 'None'
+}
+
 export function clearCsrfCache(): void {
   _csrfToken = null
   _csrfFetchPromise = null
