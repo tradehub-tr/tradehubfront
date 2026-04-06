@@ -1,6 +1,6 @@
 import { getBaseUrl } from './url'
 
-const BASE_URL = import.meta.env.VITE_API_URL || ''
+const BASE_URL = import.meta.env.VITE_API_URL || '/api'
 
 // ─── CSRF Token Cache ─────────────────────────────────────────────────────────
 // Frappe CSRF token cookie'de tutulmaz — session'da sunucu tarafında saklanır.

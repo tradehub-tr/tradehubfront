@@ -2,10 +2,17 @@ name: Deploy Storefront
 
 on:
   push:
-    branches: [ main ]
+    branches: [ ahmet, ali, bora ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
-  deploy:
+  # ── 1. Sunucuya deploy (sadece main) ──────────────────
+  deploy-server:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to server via SSH
@@ -22,3 +29,42 @@ jobs:
             docker compose build storefront
             docker compose up -d storefront
             echo "✅ Storefront deploy tamamlandı"
+
+  # ── 2. GitHub Pages deploy (ahmet, ali, bora) ──────────
+  deploy-pages:
+    if: github.ref != 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ahmet
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build for GitHub Pages
+        run: npx vite build
+        env:
+          VITE_API_URL: https://rc.istoc.com/api
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
