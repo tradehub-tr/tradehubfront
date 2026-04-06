@@ -8,9 +8,13 @@ import { initFlowbite } from 'flowbite'
 import { startAlpine } from '../alpine'
 import { t } from '../i18n'
 import { requireAuth } from '../utils/auth-guard'
+import { getSessionUser, resendVerificationEmail } from '../utils/auth'
+import { showToast } from '../utils/toast'
 
 // Block page until auth is confirmed
 await requireAuth();
+const sessionUser = await getSessionUser();
+const emailVerified = sessionUser?.email_verified ?? true;
 
 // Header components (simplified for dashboard — no search bar / mega menu)
 import { TopBar, initMobileDrawer, initHeaderCart } from '../components/header'
@@ -47,7 +51,16 @@ function renderMainContent(view: DashboardView): string {
   if (view === 'other-services') {
     return OtherServicesLayout();
   }
-  return BuyerDashboardLayout({ data: getMockBuyerDashboardData() });
+  const dashData = getMockBuyerDashboardData();
+  if (!emailVerified) {
+    dashData.notifications.unshift({
+      title: t('dashboard.notifVerifyEmail'),
+      linkText: t('dashboard.notifVerifyEmailLink'),
+      linkHref: '#verify-email',
+      bgColor: '#FFF3E0',
+    });
+  }
+  return BuyerDashboardLayout({ data: dashData });
 }
 
 function getBreadcrumbItems(view: DashboardView): { label: string; href?: string }[] {
@@ -121,6 +134,21 @@ function initCurrentView(): void {
 
 initCurrentView();
 startAlpine();
+
+// Handle verify-email link click in slider
+if (!emailVerified) {
+  document.addEventListener('click', async (e) => {
+    const link = (e.target as HTMLElement).closest('a[href="#verify-email"]');
+    if (!link) return;
+    e.preventDefault();
+    try {
+      await resendVerificationEmail();
+      showToast({ message: t('dashboard.verificationEmailSent'), type: 'success' });
+    } catch {
+      showToast({ message: t('dashboard.verificationEmailFailed'), type: 'error' });
+    }
+  });
+}
 
 // Handle hash changes to switch between views
 window.addEventListener('hashchange', () => {
