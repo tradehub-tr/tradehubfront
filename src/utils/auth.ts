@@ -134,7 +134,7 @@ export function invalidateAuthCache(): void {
 
 /** Login with email and password via Frappe */
 export async function login(email: string, password: string): Promise<LoginResponse> {
-  const BASE_URL = import.meta.env.VITE_API_URL || '';
+  const BASE_URL = import.meta.env.VITE_API_URL || '/api';
   const res = await fetch(`${BASE_URL}/method/login`, {
     method: 'POST',
     credentials: 'include',
@@ -162,7 +162,7 @@ export async function login(email: string, password: string): Promise<LoginRespo
 
 /** Logout via Frappe */
 export async function logout(): Promise<void> {
-  const BASE_URL = import.meta.env.VITE_API_URL || '';
+  const BASE_URL = import.meta.env.VITE_API_URL || '/api';
   try {
     await fetch(`${BASE_URL}/method/logout`, {
       method: 'POST',
