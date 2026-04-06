@@ -1,4 +1,4 @@
-hayıname: Deploy Storefront
+name: Deploy Storefront
 
 on:
   push:
