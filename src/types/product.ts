@@ -71,6 +71,7 @@ export interface ReviewMentionTag {
 }
 
 export interface SupplierInfo {
+  id: string;
   name: string;
   verified: boolean;
   yearsInBusiness: number;

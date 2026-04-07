@@ -237,6 +237,7 @@ export function getMockProduct(): ProductDetail {
       },
     ],
     supplier: {
+      id: 'mock-supplier-001',
       name: 'Guangzhou Golden Craft Jewelry Co., Ltd.',
       verified: true,
       yearsInBusiness: 8,
