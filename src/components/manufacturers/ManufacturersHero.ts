@@ -1,275 +1,6 @@
 import { t } from '../../i18n';
 import { getBrowsingHistory } from '../../services/browsingHistoryService';
 
-interface SubcategoryGroup {
-  title: string;
-  items: string[];
-}
-
-interface SourceCategory {
-  id: string;
-  label: string;
-  icon: string; // SVG string
-  subcategoryGroups: SubcategoryGroup[];
-}
-
-function getSourceCategories(): SourceCategory[] {
-  return [
-    {
-      id: 'valiz-canta',
-      label: t('mfr.cat.luggageBagsCases'),
-      icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>`,
-      subcategoryGroups: [
-        {
-          title: t('mfr.subcat.womenBags'),
-          items: [
-            t('mfr.item.handbags'),
-            t('mfr.item.womenDrawstringBags'),
-            t('mfr.item.womenCrossbodyBags'),
-            t('mfr.item.womenCanvasBags'),
-            t('mfr.item.womenSaddleShoulderBags'),
-            t('mfr.item.womenClutchBags'),
-          ],
-        },
-        {
-          title: t('mfr.subcat.menBags'),
-          items: [
-            t('mfr.item.menMessengerBags'),
-            t('mfr.item.menHandbags'),
-            t('mfr.item.briefcases'),
-            t('mfr.item.menChestBags'),
-            t('mfr.item.menBackpacks'),
-            t('mfr.item.menShoulderBags'),
-          ],
-        },
-        {
-          title: t('mfr.subcat.walletsCardHolders'),
-          items: [
-            t('mfr.item.lipstickBags'),
-            t('mfr.item.certificateBags'),
-            t('mfr.item.coinPurses'),
-            t('mfr.item.wallets'),
-            t('mfr.item.moneyClips'),
-            t('mfr.item.keychainWallets'),
-          ],
-        },
-        {
-          title: t('mfr.subcat.specialPurposeBagsCases'),
-          items: [
-            t('mfr.item.petBags'),
-            t('mfr.item.fireproofBag'),
-            t('mfr.item.digitalEquipmentCameraBags'),
-            t('mfr.item.businessBagsCases'),
-            t('mfr.item.garmentBags'),
-            t('mfr.item.phoneCases'),
-          ],
-        },
-        {
-          title: t('mfr.subcat.luggageTravelBags'),
-          items: [
-            t('mfr.item.travelBags'),
-            t('mfr.item.sportsBags'),
-            t('mfr.item.luggageCarts'),
-            t('mfr.item.luggage'),
-          ],
-        },
-        {
-          title: t('mfr.subcat.waistBags'),
-          items: [],
-        },
-      ],
-    },
-    {
-      id: 'spor-giyim',
-      label: t('mfr.cat.sportswearOutdoor'),
-      icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.57a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.57a2 2 0 00-1.34-2.23z"/></svg>`,
-      subcategoryGroups: [
-        {
-          title: t('mfr.subcat.sportswear'),
-          items: [
-            t('mfr.item.runningClothes'),
-            t('mfr.item.tracksuits'),
-            t('mfr.item.sportsLeggings'),
-            t('mfr.item.fitnessTshirts'),
-            t('mfr.item.sportsBras'),
-            t('mfr.item.swimwear'),
-          ],
-        },
-        {
-          title: t('mfr.subcat.outdoorClothing'),
-          items: [
-            t('mfr.item.windbreakers'),
-            t('mfr.item.skiJackets'),
-            t('mfr.item.raincoats'),
-            t('mfr.item.softshellJackets'),
-            t('mfr.item.thermalUnderwear'),
-            t('mfr.item.fleeceJackets'),
-          ],
-        },
-        {
-          title: t('mfr.subcat.sportsAccessories'),
-          items: [
-            t('mfr.item.sportsSocks'),
-            t('mfr.item.headbands'),
-            t('mfr.item.wristbands'),
-            t('mfr.item.sportsBagsAcc'),
-            t('mfr.item.waterBottles'),
-            t('mfr.item.towels'),
-          ],
-        },
-      ],
-    },
-    {
-      id: 'elektronik',
-      label: t('mfr.cat.personalElectronics'),
-      icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg>`,
-      subcategoryGroups: [
-        {
-          title: t('mfr.subcat.smartWatchesBracelets'),
-          items: [
-            t('mfr.item.smartWatches'),
-            t('mfr.item.fitnessBracelets'),
-            t('mfr.item.watchBands'),
-            t('mfr.item.chargingCables'),
-          ],
-        },
-        {
-          title: t('mfr.subcat.headphones'),
-          items: [
-            t('mfr.item.wirelessHeadphones'),
-            t('mfr.item.bluetoothHeadphones'),
-            t('mfr.item.gamingHeadphones'),
-            t('mfr.item.inEarHeadphones'),
-          ],
-        },
-        {
-          title: t('mfr.subcat.portableElectronics'),
-          items: [
-            t('mfr.item.powerbank'),
-            t('mfr.item.bluetoothSpeakers'),
-            t('mfr.item.actionCameras'),
-            t('mfr.item.portableFans'),
-          ],
-        },
-      ],
-    },
-    {
-      id: 'taki-gozluk',
-      label: t('mfr.cat.jewelryEyewearWatches'),
-      icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
-      subcategoryGroups: [
-        {
-          title: t('mfr.subcat.jewelry'),
-          items: [
-            t('mfr.item.rings'),
-            t('mfr.item.necklaces'),
-            t('mfr.item.earrings'),
-            t('mfr.item.bracelets'),
-            t('mfr.item.brooches'),
-            t('mfr.item.jewelrySets'),
-          ],
-        },
-        {
-          title: t('mfr.subcat.eyewear'),
-          items: [
-            t('mfr.item.sunglasses'),
-            t('mfr.item.opticalFrames'),
-            t('mfr.item.sportsGlasses'),
-            t('mfr.item.eyewearAccessories'),
-          ],
-        },
-        {
-          title: t('mfr.subcat.watches'),
-          items: [
-            t('mfr.item.wristwatches'),
-            t('mfr.item.pocketWatches'),
-            t('mfr.item.watchBoxes'),
-            t('mfr.item.watchMechanisms'),
-          ],
-        },
-      ],
-    },
-    {
-      id: 'ayakkabi',
-      label: t('mfr.cat.shoesAccessories'),
-      icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 18H2a1 1 0 01-1-1v-1c0-1.5 1-2.5 2-3l3-1 5-6h2l2 4 3 1c1 .5 2 1.5 2 3v2a1 1 0 01-1 1z"/></svg>`,
-      subcategoryGroups: [
-        {
-          title: t('mfr.subcat.womenShoes'),
-          items: [
-            t('mfr.item.heels'),
-            t('mfr.item.balletFlats'),
-            t('mfr.item.womenBoots'),
-            t('mfr.item.womenSneakers'),
-            t('mfr.item.sandals'),
-            t('mfr.item.slippers'),
-          ],
-        },
-        {
-          title: t('mfr.subcat.menShoes'),
-          items: [
-            t('mfr.item.menDressShoes'),
-            t('mfr.item.menSneakers'),
-            t('mfr.item.menBoots'),
-            t('mfr.item.loafers'),
-            t('mfr.item.menSandals'),
-          ],
-        },
-        {
-          title: t('mfr.subcat.shoeAccessories'),
-          items: [
-            t('mfr.item.insoles'),
-            t('mfr.item.shoeCareProducts'),
-            t('mfr.item.laces'),
-            t('mfr.item.shoeTrees'),
-          ],
-        },
-      ],
-    },
-    {
-      id: 'anne-cocuk',
-      label: t('mfr.cat.motherChildToys'),
-      icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="3"/><path d="M12 8c-3 0-6 1.5-6 4v1h12v-1c0-2.5-3-4-6-4z"/><path d="M5 13H3a1 1 0 00-1 1v5a1 1 0 001 1h18a1 1 0 001-1v-5a1 1 0 00-1-1h-2"/></svg>`,
-      subcategoryGroups: [
-        {
-          title: t('mfr.subcat.babyProducts'),
-          items: [
-            t('mfr.item.babyClothes'),
-            t('mfr.item.strollers'),
-            t('mfr.item.highChairs'),
-            t('mfr.item.babyCareProducts'),
-            t('mfr.item.nursingProducts'),
-          ],
-        },
-        {
-          title: t('mfr.subcat.childrenClothing'),
-          items: [
-            t('mfr.item.childrenDresses'),
-            t('mfr.item.childrenShoes'),
-            t('mfr.item.childrenAccessories'),
-            t('mfr.item.schoolBags'),
-          ],
-        },
-        {
-          title: t('mfr.subcat.toys'),
-          items: [
-            t('mfr.item.educationalToys'),
-            t('mfr.item.plushToys'),
-            t('mfr.item.puzzles'),
-            t('mfr.item.rcCars'),
-            t('mfr.item.blockToys'),
-          ],
-        },
-      ],
-    },
-    {
-      id: 'tum-kategoriler',
-      label: t('mfr.allCategories'),
-      icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>`,
-      subcategoryGroups: [],
-    },
-  ];
-}
 
 export function ManufacturersHero(): string {
   return `
@@ -317,167 +48,105 @@ export function ManufacturersHero(): string {
 
 const ALL_CATEGORIES_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>`;
 
-function renderSubcategoryFlyout(cat: SourceCategory): string {
-  const visibleGroups = cat.subcategoryGroups.filter(g => g.items.length > 0);
-  if (visibleGroups.length === 0) return '';
 
-  return `
-    <div
-      class="pointer-events-none opacity-0 translate-x-2
-             absolute left-full top-0 z-50 ml-1
-             w-[656px] h-full overflow-y-auto
-             pt-5 px-5 pb-2.5
-             transition-all duration-150 ease-out"
-      style="background-color: var(--mfr-flyout-bg, #f4f4f4); border-radius: var(--mfr-hero-card-radius, 6px); box-shadow: var(--mfr-hero-card-shadow, 0 0 12px rgba(0,0,0,0.05))"
-      data-flyout-id="${cat.id}"
-      role="region"
-      aria-label="${cat.label}"
-    >
-      <!-- Flyout subcategory grid -- 3 columns -->
-      <div class="grid grid-cols-3 gap-x-0 gap-y-1.5">
-        ${visibleGroups.map(group => `
-          <div class="flex flex-col">
-            <p class="text-sm font-bold mb-2.5" style="color: var(--mfr-flyout-heading-color, #111827)">${group.title}</p>
-            <ul class="flex flex-col">
-              ${group.items.map(item => `
-                <li>
-                  <a
-                    href="#"
-                    class="block text-xs hover:text-primary-600 hover:underline leading-5 transition-colors duration-150"
-                    style="color: var(--mfr-flyout-link-color, #767676)"
-                  >${item}</a>
-                </li>
-              `).join('')}
-            </ul>
-          </div>
-        `).join('')}
-      </div>
-    </div>
-  `;
-}
-
-function getAllCategoriesFlyoutRows(): string[][] {
-  return [
-    [t('mfr.allCat.vehiclePartsAccessories'), t('mfr.allCat.vehicleAccessoriesElectronicsTools'), t('mfr.allCat.vehiclesTransportation')],
-    [t('mfr.allCat.industrialMachinery'), t('mfr.allCat.constructionBuildingMachinery')],
-    [t('mfr.allCat.personalElectronics'), t('mfr.allCat.homeAppliances')],
-    [t('mfr.allCat.clothingAccessories'), t('mfr.allCat.jewelryEyewearWatches')],
-    [t('mfr.allCat.lampsLighting'), t('mfr.allCat.constructionRealEstate')],
-    [t('mfr.allCat.homeGarden'), t('mfr.allCat.furniture'), t('mfr.allCat.petProducts'), t('mfr.allCat.giftsHobbies')],
-    [t('mfr.allCat.cosmetics'), t('mfr.allCat.personalCareHomeCleaning'), t('mfr.allCat.healthServices'), t('mfr.allCat.medicalDevices')],
-    [t('mfr.allCat.packagingPrinting'), t('mfr.allCat.schoolOfficeSupplies'), t('mfr.allCat.testEquipment')],
-    [t('mfr.allCat.handToolsHardware'), t('mfr.allCat.security'), t('mfr.allCat.occupationalSafety'), t('mfr.allCat.manufacturingServices')],
-    [t('mfr.allCat.electricalEquipment'), t('mfr.allCat.electronicPartsTelecom')],
-    [t('mfr.allCat.sportsEntertainment'), t('mfr.allCat.motherChildToys'), t('mfr.allCat.sportswearOutdoor')],
-    [t('mfr.allCat.luggageBagsCases'), t('mfr.allCat.shoesAccessories')],
-    [t('mfr.allCat.metalAlloys'), t('mfr.allCat.chemicals'), t('mfr.allCat.rubberPlastics'), t('mfr.allCat.fabricTextileRawMaterials')],
-    [t('mfr.allCat.agriculture'), t('mfr.allCat.foodBeverage')],
-    [t('mfr.allCat.commercialEquipmentMachinery')],
-    [t('mfr.allCat.renewableEnergy'), t('mfr.allCat.environment')],
-    [t('mfr.allCat.powerTransmission'), t('mfr.allCat.materialHandling')],
-  ];
-}
 
 function renderSourceByCategory(): string {
-  const categories = getSourceCategories();
-  // Exclude the last "all categories" item -- it's rendered separately below
-  const mainCategories = categories.filter(c => c.id !== 'tum-kategoriler');
-
   return `
     <!-- Sidebar wrapper: position:relative so flyout can be absolutely positioned to the right -->
-    <div class="relative flex-1" data-category-sidebar>
+    <div class="relative flex-1" data-category-sidebar
+      x-data="{
+        cats: [],
+        activeCat: null,
+        _hideTimer: null,
+        async init() {
+          try {
+            const url = (window.API_BASE || '/api') + '/method/tradehub_core.api.category.get_mega_menu';
+            const res = await fetch(url, { credentials: 'include' }).then(r => r.json());
+            const data = res.message || [];
+            this.cats = data.map(c => ({
+              ...c,
+              iconSvg: window.__getCatIcon ? window.__getCatIcon(c.icon_class || '', c.name) : ''
+            }));
+          } catch(e) { console.error('Category sidebar fetch failed', e); }
+        },
+        showFlyout(id) { clearTimeout(this._hideTimer); this.activeCat = id; },
+        hideFlyout() { this._hideTimer = setTimeout(() => { this.activeCat = null; }, 150); },
+        keepFlyout() { clearTimeout(this._hideTimer); }
+      }"
+    >
       <div class="p-4 flex flex-col h-full" style="background-color: var(--mfr-sidebar-bg, #ffffff); border-radius: var(--mfr-hero-card-radius, 6px); box-shadow: var(--mfr-hero-card-shadow, 0 0 12px rgba(0,0,0,0.05))">
         <h3 class="text-lg font-bold mb-3" style="color: var(--mfr-sidebar-heading-color, #111827)">
           ${t('mfr.sourceByCategory')}
         </h3>
 
-        <ul class="flex-1 flex flex-col" data-category-list>
-          ${mainCategories.map(cat => `
-            <li data-category-id="${cat.id}">
+        <ul class="flex-1 flex flex-col overflow-hidden">
+
+          <!-- Dynamic categories from API -->
+          <template x-for="cat in cats" :key="cat.id">
+            <li :data-category-id="cat.id"
+                @mouseenter="showFlyout(cat.id)"
+                @mouseleave="hideFlyout()"
+            >
               <a
-                href="#"
-                class="flex items-center justify-between py-0 px-4 h-10 mb-2 rounded-md
-                       hover:bg-gray-50 dark:hover:bg-gray-700/50
-                       transition-colors duration-150"
+                :href="'/pages/products.html?cat=' + cat.slug"
+                class="flex items-center justify-between py-0 px-4 h-10 mb-1 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150"
               >
                 <div class="flex items-center gap-3 min-w-0 flex-1">
                   <span
-                    class="w-5 h-5 flex-shrink-0 flex items-center justify-center
-                           transition-colors duration-150"
+                    class="w-5 h-5 flex-shrink-0 flex items-center justify-center transition-colors duration-150"
                     style="color: var(--mfr-sidebar-icon-color, #6b7280)"
-                  >
-                    ${cat.icon}
-                  </span>
-                  <span class="text-sm font-medium truncate" style="color: var(--mfr-sidebar-text-color, #374151)">
-                    ${cat.label}
-                  </span>
+                    x-html="cat.iconSvg"
+                  ></span>
+                  <span class="text-sm font-medium truncate" style="color: var(--mfr-sidebar-text-color, #374151)" x-text="cat.name"></span>
                 </div>
-
-                <!-- Right chevron -->
-                <svg
-                  class="w-4 h-4 flex-shrink-0 ml-2"
-                  style="color: var(--mfr-sidebar-chevron-color, #d1d5db)"
-                  fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                >
+                <svg class="w-4 h-4 flex-shrink-0 ml-2" style="color: var(--mfr-sidebar-chevron-color, #d1d5db)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                 </svg>
               </a>
 
-              <!-- Flyout panel -- toggled by JS via data-flyout-id / data-category-id -->
-              ${renderSubcategoryFlyout(cat)}
+              <!-- Flyout panel -->
+              <div
+                x-show="activeCat === cat.id"
+                x-cloak
+                @mouseenter="keepFlyout()"
+                @mouseleave="hideFlyout()"
+                class="absolute left-full top-0 z-50 w-[calc(200%+3rem)] h-full overflow-y-auto pt-5 px-5 pb-2.5"
+                style="background-color: var(--mfr-flyout-bg, #f4f4f4); border-radius: var(--mfr-hero-card-radius, 6px); box-shadow: var(--mfr-hero-card-shadow, 0 0 12px rgba(0,0,0,0.05))"
+                :aria-label="cat.name"
+              >
+                <p class="text-sm font-bold mb-3" style="color: var(--mfr-flyout-heading-color, #111827)" x-text="cat.name"></p>
+                <div class="grid grid-cols-4 gap-x-4 gap-y-1.5">
+                  <template x-for="child in cat.children" :key="child.id">
+                    <a
+                      :href="'/pages/products.html?cat=' + child.slug"
+                      class="text-xs hover:text-primary-600 hover:underline leading-5 transition-colors"
+                      style="color: var(--mfr-flyout-link-color, #767676)"
+                      x-text="child.name"
+                    ></a>
+                  </template>
+                </div>
+              </div>
             </li>
-          `).join('')}
+          </template>
 
           <!-- All categories -- separated by top border -->
-          <li class="mt-1 pt-2 border-t border-gray-100 dark:border-gray-700" data-category-id="tum-kategoriler">
+          <li class="mt-auto pt-2 border-t border-gray-100 dark:border-gray-700">
             <a
-              href="#"
-              data-all-categories
-              class="flex items-center justify-between py-0 px-4 h-10 mb-2 rounded-md
-                     hover:bg-gray-50 dark:hover:bg-gray-700/50
-                     transition-colors duration-150 group"
+              href="/pages/categories"
+              class="flex items-center justify-between py-0 px-4 h-10 mb-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150"
             >
               <div class="flex items-center gap-3 min-w-0 flex-1">
-                <span
-                  class="w-5 h-5 flex-shrink-0 flex items-center justify-center
-                         transition-colors duration-150"
-                  style="color: var(--mfr-sidebar-icon-color, #6b7280)"
-                >
+                <span class="w-5 h-5 flex-shrink-0 flex items-center justify-center" style="color: var(--mfr-sidebar-icon-color, #6b7280)">
                   ${ALL_CATEGORIES_ICON}
                 </span>
                 <span class="text-sm font-semibold truncate" style="color: var(--mfr-sidebar-heading-color, #111827)">
                   ${t('mfr.allCategories')}
                 </span>
               </div>
-              <svg
-                class="w-4 h-4 flex-shrink-0 ml-2"
-                style="color: var(--mfr-sidebar-chevron-color, #d1d5db)"
-                fill="none" stroke="currentColor" viewBox="0 0 24 24"
-              >
+              <svg class="w-4 h-4 flex-shrink-0 ml-2" style="color: var(--mfr-sidebar-chevron-color, #d1d5db)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
               </svg>
             </a>
-
-            <!-- All categories flyout -->
-            <div
-              class="pointer-events-none opacity-0 translate-x-2
-                     absolute left-full top-0 z-50 ml-1
-                     w-[656px] h-full overflow-y-auto
-                     pt-5 px-5 pb-2.5
-                     transition-all duration-150 ease-out"
-              style="background-color: var(--mfr-flyout-bg, #f4f4f4); border-radius: var(--mfr-hero-card-radius, 6px); box-shadow: var(--mfr-hero-card-shadow, 0 0 12px rgba(0,0,0,0.05))"
-              data-flyout-id="tum-kategoriler"
-              role="region"
-              aria-label="${t('mfr.allCategories')}"
-            >
-              <div class="flex flex-wrap gap-y-2.5 leading-5">
-                ${getAllCategoriesFlyoutRows().map(row => `
-                  <div class="w-full flex flex-wrap items-center">
-                    ${row.map((cat, i) => `<a href="#" class="text-xs hover:text-primary-600 hover:underline transition-colors" style="color: var(--mfr-flyout-link-color, #222222)">${cat}</a>${i < row.length - 1 ? '<span class="text-xs text-[#999] mx-2">/</span>' : ''}`).join('')}
-                  </div>
-                `).join('')}
-              </div>
-            </div>
           </li>
         </ul>
       </div>
