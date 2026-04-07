@@ -64,9 +64,9 @@ const footerColumnsI18n: FooterColumnI18n[] = [
     titleKey: 'footer.sourceOnIstoc',
     links: [
       { labelKey: 'footer.rfq', href: '/pages/dashboard/rfq.html' },
-      { labelKey: 'footer.membership', href: '/membership' },
-      { labelKey: 'footer.salesTax', href: '/tax' },
-      { labelKey: 'footer.istocReads', href: '/blog' },
+      // { labelKey: 'footer.membership', href: '/membership' },    // TODO: Sayfa henüz hazır değil
+      // { labelKey: 'footer.salesTax', href: '/tax' },             // TODO: Sayfa henüz hazır değil
+      // { labelKey: 'footer.istocReads', href: '/blog' },          // TODO: Sayfa henüz hazır değil
     ],
   },
   {
