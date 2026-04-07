@@ -781,6 +781,7 @@ const tr = {
       productInspection: 'Ürün Denetimi',
       settings: 'Ayarlar',
       accountSettings: 'Hesap Ayarları',
+      myAddresses: 'Adreslerim',
       exploreSellerSite: 'Satıcı Sitesini Keşfedin',
       messagesLabel: 'Mesajlar',
       quotationsLabel: 'Teklifler',

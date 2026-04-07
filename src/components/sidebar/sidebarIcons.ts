@@ -24,6 +24,8 @@ export const sidebarIcons = {
 
   settings: `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.00004 12.9999L13.6667 15.9166V11.7499H12.5209V14.1646L7.00004 11.7492L1.47921 14.1646V1.22909H12.5209V4.24992H13.6667V0.708252C13.6667 0.363074 13.3869 0.083252 13.0417 0.083252H0.958374C0.613196 0.083252 0.333374 0.363074 0.333374 0.708252V15.9166L7.00004 12.9999Z" fill="currentColor"/><path d="M12.9896 5.08325V7.427H15.3334V8.57284H12.9896V10.9166H11.8438V8.57284H9.50004V7.427H11.8438V5.08325H12.9896Z" fill="currentColor"/></svg>`,
 
+  addresses: `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 0.5C5.51472 0.5 3.5 2.51472 3.5 5C3.5 8.375 8 15.5 8 15.5C8 15.5 12.5 8.375 12.5 5C12.5 2.51472 10.4853 0.5 8 0.5ZM8 6.875C6.96447 6.875 6.125 6.03553 6.125 5C6.125 3.96447 6.96447 3.125 8 3.125C9.03553 3.125 9.875 3.96447 9.875 5C9.875 6.03553 9.03553 6.875 8 6.875Z" fill="currentColor"/></svg>`,
+
   discover: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect x="2" y="3" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
     <path d="M2 7h16" stroke="currentColor" stroke-width="1.5"/>

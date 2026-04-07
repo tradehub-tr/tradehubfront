@@ -3,7 +3,7 @@
  * All auth-related API calls go through the api() wrapper from utils/api.ts.
  */
 
-import { api } from './api';
+import { api, frappeLogout } from './api';
 
 const FRAPPE_BASE = import.meta.env.VITE_FRAPPE_BASE || '';
 
@@ -163,14 +163,8 @@ export async function login(email: string, password: string): Promise<LoginRespo
 
 /** Logout via Frappe */
 export async function logout(): Promise<void> {
-  const BASE_URL = import.meta.env.VITE_API_URL || '/api';
   try {
-    await fetch(`${BASE_URL}/method/logout`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      redirect: 'manual',
-    });
+    await frappeLogout();
   } catch {
     // Network errors are fine — session cookie is already cleared by the server
   }

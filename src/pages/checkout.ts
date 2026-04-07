@@ -47,6 +47,10 @@ import type { Order } from '../types/order'
 // Sample mode detection
 const isSampleMode = new URLSearchParams(window.location.search).get('mode') === 'sample';
 
+// Supplier filter — set when navigating from cart's "Bu satıcıya ödeme yap" button
+// e.g. ?suppliers=SEL-00002 or ?suppliers=SEL-00001,SEL-00002 (global checkout)
+const supplierFilter = new URLSearchParams(window.location.search).get('suppliers')?.split(',').filter(Boolean) ?? [];
+
 interface SampleOrderData {
   productId: string;
   title: string;
@@ -121,7 +125,10 @@ function buildProductCard(product: CartProduct): { card: CheckoutDeliveryOrderGr
 async function enrichMissingShippingMethods(): Promise<void> {
   if (isSampleMode) return;
 
-  const suppliers = cartStore.getSuppliers();
+  const allSuppliers = cartStore.getSuppliers();
+  const suppliers = supplierFilter.length > 0
+    ? allSuppliers.filter((s) => supplierFilter.includes(s.id))
+    : allSuppliers;
   const selectedSuppliers = suppliers.filter((s) =>
     s.products.some((p) => p.skus.some((sku) => sku.selected))
   );
@@ -212,7 +219,10 @@ function buildSampleDeliveryOrders(): CheckoutDeliveryOrderGroup[] {
 }
 
 function buildDeliveryOrders(): CheckoutDeliveryOrderGroup[] {
-  const suppliers = cartStore.getSuppliers();
+  const allSuppliers = cartStore.getSuppliers();
+  const suppliers = supplierFilter.length > 0
+    ? allSuppliers.filter((s) => supplierFilter.includes(s.id))
+    : allSuppliers;
   const selectedSuppliers = suppliers
     .map((supplier) => {
       const products = supplier.products
@@ -273,6 +283,41 @@ function buildDeliveryOrders(): CheckoutDeliveryOrderGroup[] {
       products: row.products,
     };
   });
+}
+
+/** Sadece supplierFilter'daki satıcıların seçili ürünlerini özetler; filtre yoksa tüm sepet */
+function getFilteredCartSummary() {
+  if (supplierFilter.length === 0) return cartStore.getSummary();
+
+  const filtered = cartStore.getSuppliers().filter((s) => supplierFilter.includes(s.id));
+  let selectedCount = 0;
+  let productSubtotal = 0;
+  const items: { image: string; quantity: number }[] = [];
+
+  for (const supplier of filtered) {
+    for (const product of supplier.products) {
+      for (const sku of product.skus) {
+        if (sku.selected && sku.isAvailable !== false) {
+          selectedCount++;
+          const converted = convertPrice(sku.unitPrice, sku.baseCurrency || 'USD');
+          productSubtotal += converted * sku.quantity;
+          items.push({ image: sku.skuImage, quantity: sku.quantity });
+        }
+      }
+    }
+  }
+
+  return {
+    selectedCount,
+    items,
+    productSubtotal,
+    discount: 0,
+    couponDiscount: 0,
+    couponCode: '',
+    shippingFee: 0,
+    subtotal: productSubtotal,
+    currency: getSelectedCurrencyInfo().symbol,
+  };
 }
 
 // Tedarikçi bazlı gerçek kargo yöntemleri — enrichMissingShippingMethods ile doldurulur
@@ -583,8 +628,8 @@ currentDefaultShippingFee = Number(
 
 const sampleSubtotal = sampleOrderData ? sampleOrderData.samplePrice * sampleOrderData.quantity : 0;
 
-// Backend'den yükleme sonrası taze summary
-const freshCartSummary = cartStore.getSummary();
+// Backend'den yükleme sonrası taze summary (sadece checkout'taki satıcı(lar))
+const freshCartSummary = getFilteredCartSummary();
 
 currentCheckoutOrderSummary = isSampleMode ? {
   itemCount: 1,
@@ -626,7 +671,7 @@ appEl.innerHTML = `
   leftContent: `
         ${CheckoutHeader()}
         ${ShippingAddressForm()}
-        ${PaymentMethodSection({ suppliers: cartStore.getSuppliers().filter(s => s.products.some(p => p.skus.some(sku => sku.selected))), isSupplierCheckout: new URLSearchParams(window.location.search).has('supplier') })}
+        ${PaymentMethodSection({ suppliers: cartStore.getSuppliers().filter(s => s.products.some(p => p.skus.some(sku => sku.selected))), isSupplierCheckout: supplierFilter.length > 0 })}
         ${ItemsDeliverySection({ orders: checkoutDeliveryOrders })}
       `,
   rightContent: `
