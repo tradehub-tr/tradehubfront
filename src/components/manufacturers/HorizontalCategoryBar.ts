@@ -1,72 +1,5 @@
 import { t } from '../../i18n';
 
-function getTabCategories(): string[] {
-  return [
-    t('mfr.allCategories'),
-    t('mfr.cat.luggageBagsCases'),
-    t('mfr.cat.sportswearOutdoor'),
-    t('mfr.cat.personalElectronics'),
-    t('mfr.cat.jewelryEyewearWatches'),
-    t('mfr.cat.motherChildToys'),
-    t('mfr.cat.shoesAccessories'),
-  ];
-}
-
-function getAllCategories(): string[] {
-  return [
-    // Column 1
-    t('mfr.allCategories'),
-    t('mfr.allCat.jewelryEyewearWatches'),
-    t('mfr.allCat.electricalEquipment'),
-    t('mfr.allCat.foodBeverage'),
-    t('mfr.allCat.chemicals'),
-    t('mfr.allCat.medicalDevices'),
-    t('mfr.allCat.vehiclePartsAccessories'),
-    t('mfr.allCat.cosmetics'),
-    t('mfr.allCat.furniture'),
-    t('mfr.allCat.materialHandling'),
-    t('mfr.allCat.personalCareHomeCleaning'),
-    // Column 2
-    t('mfr.allCat.luggageBagsCases'),
-    t('mfr.allCat.motherChildToys'),
-    t('mfr.allCat.packagingPrinting'),
-    t('mfr.allCat.clothingAccessories'),
-    t('mfr.allCat.metalAlloys'),
-    t('mfr.allCat.sportsEntertainment'),
-    t('mfr.allCat.lampsLighting'),
-    t('mfr.allCat.rubberPlastics'),
-    t('mfr.allCat.commercialEquipmentMachinery'),
-    t('mfr.allCat.renewableEnergy'),
-    t('mfr.allCat.constructionBuildingMachinery'),
-    // Column 3
-    t('mfr.allCat.sportswearOutdoor'),
-    t('mfr.allCat.shoesAccessories'),
-    t('mfr.allCat.homeGarden'),
-    t('mfr.allCat.fabricTextileRawMaterials'),
-    t('mfr.allCat.environment'),
-    t('mfr.allCat.schoolOfficeSupplies'),
-    t('mfr.allCat.manufacturingServices'),
-    t('mfr.allCat.electronicPartsTelecom'),
-    t('mfr.allCat.vehiclesTransportation'),
-    t('mfr.allCat.occupationalSafety'),
-    t('mfr.allCat.petProducts'),
-    // Column 4
-    t('mfr.allCat.personalElectronics'),
-    t('mfr.allCat.giftsHobbies'),
-    t('mfr.allCat.agriculture'),
-    t('mfr.allCat.homeAppliances'),
-    t('mfr.allCat.constructionRealEstate'),
-    t('mfr.allCat.security'),
-    t('mfr.allCat.industrialMachinery'),
-    t('mfr.allCat.handToolsHardware'),
-    t('mfr.allCat.powerTransmission'),
-    t('mfr.allCat.testEquipment'),
-  ];
-}
-
-// Column header indices (first item of each column is bold)
-const COLUMN_HEADERS = [0, 11, 22, 33];
-
 function getSubTabFilters(): string[] {
   return [
     t('mfr.filter.lowMoqCustomization'),
@@ -89,8 +22,6 @@ function getSubTabMoreFilters(): string[] {
 }
 
 export function HorizontalCategoryBar(): string {
-  const TAB_CATEGORIES = getTabCategories();
-  const ALL_CATEGORIES = getAllCategories();
   const SUB_TAB_FILTERS = getSubTabFilters();
   const SUB_TAB_MORE_FILTERS = getSubTabMoreFilters();
 
@@ -101,13 +32,7 @@ export function HorizontalCategoryBar(): string {
       <!-- Tab Bar -->
       <div class="flex items-center h-[62px] border-b border-[#d8d8d8]">
         <ul class="flex items-center h-full overflow-hidden flex-1 list-none m-0 p-0" data-factory-tab>
-          ${TAB_CATEGORIES.map((cat, i) => `
-            <li class="whitespace-nowrap cursor-pointer px-5 h-[61px] leading-[61px] text-base transition-colors
-                       ${i === 0 ? 'factory-tab-active font-bold text-[#222]' : 'font-normal text-[#222] hover:text-[#666]'}"
-                data-tab-index="${i}">
-              ${cat}
-            </li>
-          `).join('')}
+          <!-- Dinamik olarak doldurulacak -->
         </ul>
 
         <!-- View more button -->
@@ -124,18 +49,8 @@ export function HorizontalCategoryBar(): string {
 
       <!-- More Content Dropdown (absolutely positioned below tab bar) -->
       <div id="hm-mega-menu" class="hidden absolute left-0 right-0 top-[62px] z-50 bg-white rounded-b-lg py-8 px-5" style="box-shadow: rgba(0,0,0,0.12) 0 8px 20px 0">
-        <ul class="grid grid-cols-4 grid-flow-col max-h-[400px] overflow-y-auto list-none m-0 p-0" style="grid-template-rows: repeat(11, auto);">
-          ${ALL_CATEGORIES.map((cat, i) => {
-    const isHeader = COLUMN_HEADERS.includes(i);
-    return `
-              <li class="mb-3 pr-4 ${isHeader ? 'font-bold' : 'font-normal'} text-[#222]"
-                  style="font-size: 14px; line-height: 21px;"
-                  data-dropdown-cat="${cat}"
-                  ${isHeader ? 'data-column-header' : ''}>
-                <a href="#" class="hover:text-primary-600 transition-colors">${cat}</a>
-              </li>
-            `;
-  }).join('')}
+        <ul id="hm-mega-menu-list" class="grid grid-cols-4 grid-flow-col max-h-[400px] overflow-y-auto list-none m-0 p-0" style="grid-template-rows: repeat(11, auto);">
+          <!-- Dinamik olarak doldurulacak -->
         </ul>
       </div>
 
@@ -182,47 +97,119 @@ export function HorizontalCategoryBar(): string {
   `;
 }
 
-export function initHorizontalCategoryBar(): void {
+interface ApiCategory {
+  id: string;
+  name: string;
+  slug: string;
+  children: Array<{ id: string; name: string; slug: string }>;
+}
+
+export async function initHorizontalCategoryBar(): Promise<void> {
   const btn = document.getElementById('hm-view-more');
   const menu = document.getElementById('hm-mega-menu');
   const icon = document.getElementById('hm-view-more-icon');
   const tabUl = document.querySelector<HTMLElement>('[data-factory-tab]');
+  const megaList = document.getElementById('hm-mega-menu-list');
 
   const subBtn = document.getElementById('sub-tab-more-btn');
   const subIcon = document.getElementById('sub-tab-more-icon');
   const subDropdown = document.getElementById('sub-tab-dropdown');
 
-  if (!btn || !menu || !tabUl) return;
+  if (!btn || !menu || !tabUl || !megaList) return;
 
-  function closeMain() {
-    if (menu) menu.classList.add('hidden');
-    if (icon) icon.style.transform = 'rotate(0deg)';
+  // ── Kategorileri API'den çek ──────────────────────────────────────────────
+  let categories: ApiCategory[] = [];
+  try {
+    const url = (window as any).API_BASE
+      ? `${(window as any).API_BASE}/method/tradehub_core.api.category.get_mega_menu`
+      : '/api/method/tradehub_core.api.category.get_mega_menu';
+    const res = await fetch(url, { credentials: 'include' }).then(r => r.json());
+    categories = (res.message || []) as ApiCategory[];
+  } catch (e) {
+    console.error('HorizontalCategoryBar fetch failed', e);
   }
 
+  // ── Tab bar ───────────────────────────────────────────────────────────────
+  const allCatLabel = t('mfr.allCategories');
+  const TAB_LIMIT = 5; // "Tüm kategoriler" + ilk 4 kategori görünür, geri kalanlar dropdown'da
+  const tabCats = [{ id: '__all__', name: allCatLabel, slug: '' }, ...categories].slice(0, TAB_LIMIT + 1);
+
+  tabUl.innerHTML = tabCats.map((cat, i) => `
+    <li class="whitespace-nowrap cursor-pointer px-5 h-[61px] leading-[61px] text-base transition-colors
+               ${i === 0 ? 'factory-tab-active font-bold text-[#222]' : 'font-normal text-[#222] hover:text-[#666]'}"
+        data-tab-index="${i}"
+        data-tab-slug="${cat.slug}"
+        data-tab-name="${cat.name}">
+      ${cat.name}
+    </li>
+  `).join('');
+
+  // ── "Daha fazlası" dropdown: 4 kolon ────────────────────────────────────
+  // Kolon 1: "Tüm kategoriler" başlığı + tüm ana kategori isimleri
+  // Kolon 2-4: ilk 3 kategorinin alt kategorileri
+  const col1Items = [
+    { name: allCatLabel, slug: '', isHeader: true },
+    ...categories.map(c => ({ name: c.name, slug: c.slug, isHeader: false })),
+  ];
+
+  const col2Cat = categories[0];
+  const col3Cat = categories[1];
+  const col4Cat = categories[2];
+
+  function buildCol(header: string, items: Array<{ name: string; slug: string }>): string {
+    return [
+      `<li class="mb-3 pr-4 font-bold text-[#222]" style="font-size:14px;line-height:21px;">
+         <a href="${header === allCatLabel ? '/pages/categories' : `/pages/products.html?cat=${items[0]?.slug || ''}`}" class="hover:text-primary-600 transition-colors">${header}</a>
+       </li>`,
+      ...items.map(it => `
+        <li class="mb-3 pr-4 font-normal text-[#222]" style="font-size:14px;line-height:21px;" data-dropdown-cat="${it.name}">
+          <a href="/pages/products.html?cat=${it.slug}" class="hover:text-primary-600 transition-colors">${it.name}</a>
+        </li>`),
+    ].join('');
+  }
+
+  // grid-flow-col ile 4 sütun — her kolon ayrı <ul> içinde olmadığından
+  // grid-template-rows ile satır sayısını hesapla
+  const maxRows = Math.max(
+    col1Items.length,
+    (col2Cat?.children.length ?? 0) + 1,
+    (col3Cat?.children.length ?? 0) + 1,
+    (col4Cat?.children.length ?? 0) + 1,
+  );
+  megaList.style.gridTemplateRows = `repeat(${maxRows}, auto)`;
+
+  megaList.innerHTML = [
+    buildCol(allCatLabel, col1Items.slice(1)),
+    col2Cat ? buildCol(col2Cat.name, col2Cat.children) : '',
+    col3Cat ? buildCol(col3Cat.name, col3Cat.children) : '',
+    col4Cat ? buildCol(col4Cat.name, col4Cat.children) : '',
+  ].join('');
+
+  // ── Event listeners ───────────────────────────────────────────────────────
+  function closeMain() {
+    menu!.classList.add('hidden');
+    if (icon) icon.style.transform = 'rotate(0deg)';
+  }
   function closeSub() {
     if (subDropdown) subDropdown.classList.add('hidden');
     if (subIcon) subIcon.style.transform = 'rotate(0deg)';
   }
 
-  // Main "View more" toggle -- close sub when opening
   btn.addEventListener('click', (e) => {
     e.stopPropagation();
-    const isHidden = menu.classList.contains('hidden');
-    if (isHidden) {
+    if (menu!.classList.contains('hidden')) {
       closeSub();
-      menu.classList.remove('hidden');
+      menu!.classList.remove('hidden');
       if (icon) icon.style.transform = 'rotate(180deg)';
     } else {
       closeMain();
     }
   });
 
-  // Sub-tab "View more" toggle -- close main when opening
   if (subBtn && subDropdown) {
     subBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      const isHidden = subDropdown.classList.contains('hidden');
-      if (isHidden) {
+      if (subDropdown.classList.contains('hidden')) {
         closeMain();
         subDropdown.classList.remove('hidden');
         if (subIcon) subIcon.style.transform = 'rotate(180deg)';
@@ -232,31 +219,14 @@ export function initHorizontalCategoryBar(): void {
     });
   }
 
-  // Close all on outside click
   document.addEventListener('click', (e) => {
     const target = e.target as Node;
-    if (!menu.contains(target) && !btn.contains(target)) closeMain();
+    if (!menu!.contains(target) && !btn.contains(target)) closeMain();
     if (subDropdown && subBtn && !subDropdown.contains(target) && !subBtn.contains(target)) closeSub();
   });
 
-  // Tab switching + dropdown active sync
+  // Tab switching
   const tabs = Array.from(tabUl.querySelectorAll<HTMLElement>('[data-tab-index]'));
-  const dropdownItems = menu.querySelectorAll<HTMLElement>('[data-dropdown-cat]');
-
-  function syncDropdownActive(activeTabName: string) {
-    dropdownItems.forEach(item => {
-      const isHeader = item.hasAttribute('data-column-header');
-      const isActive = item.dataset.dropdownCat === activeTabName;
-      if (isHeader || isActive) {
-        item.classList.add('font-bold');
-        item.classList.remove('font-normal');
-      } else {
-        item.classList.remove('font-bold');
-        item.classList.add('font-normal');
-      }
-    });
-  }
-
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       tabs.forEach(t => {
@@ -266,9 +236,17 @@ export function initHorizontalCategoryBar(): void {
       tab.classList.add('factory-tab-active', 'font-bold');
       tab.classList.remove('font-normal');
 
-      const idx = parseInt(tab.dataset.tabIndex || '0');
-      const TAB_CATEGORIES = getTabCategories();
-      syncDropdownActive(TAB_CATEGORIES[idx]);
+      // Dropdown'da aktif kategoriye göre bold yap
+      const activeName = tab.dataset.tabName || '';
+      megaList.querySelectorAll<HTMLElement>('[data-dropdown-cat]').forEach(item => {
+        if (item.dataset.dropdownCat === activeName) {
+          item.classList.add('font-bold');
+          item.classList.remove('font-normal');
+        } else {
+          item.classList.remove('font-bold');
+          item.classList.add('font-normal');
+        }
+      });
     });
   });
 }
