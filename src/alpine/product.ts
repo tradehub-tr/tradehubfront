@@ -26,7 +26,7 @@ const emptyProduct: ProductDetail = {
   specs: [], packagingSpecs: [], description: '', packaging: '',
   rating: 0, reviewCount: 0, orderCount: '0', reviews: [],
   baseCurrency: 'USD',
-  supplier: { name: '', verified: false, yearsInBusiness: 0, responseTime: '', responseRate: '', onTimeDelivery: '', mainProducts: [], employees: '', annualRevenue: '', certifications: [] },
+  supplier: { id: '', name: '', verified: false, yearsInBusiness: 0, responseTime: '', responseRate: '', onTimeDelivery: '', mainProducts: [], employees: '', annualRevenue: '', certifications: [] },
   faq: [], leadTimeRanges: [], customizationOptions: [],
   reviewCategoryRatings: [], storeReviewCount: 0, reviewMentionTags: [],
 };
