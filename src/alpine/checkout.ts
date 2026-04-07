@@ -7,6 +7,13 @@ import type { SavedAddress } from '../types/checkout'
 import { getUser, isLoggedIn } from '../utils/auth'
 import { formatCurrency } from '../services/currencyService'
 import { t } from '../i18n'
+import {
+  fetchAddresses,
+  saveAddressApi,
+  deleteAddressApi,
+  setDefaultAddressApi,
+  type BuyerAddressData,
+} from '../services/cartService'
 
 interface CheckoutDeliveryMethod {
   id: string;
@@ -338,10 +345,8 @@ Alpine.data('checkoutAccordion', (props?: { initialExpanded?: boolean }) => ({
 interface CheckoutStoredAddress extends SavedAddress {
   id: string;
   isDefault: boolean;
-}
-
-interface CheckoutAddressBookStorage {
-  [userKey: string]: CheckoutStoredAddress[];
+  company?: string;
+  note?: string;
 }
 
 interface CheckoutAddAddressForm {
@@ -349,16 +354,25 @@ interface CheckoutAddAddressForm {
   fullName: string;
   phonePrefix: string;
   phone: string;
+  company: string;
   street: string;
   apartment: string;
   state: string;
   city: string;
   postalCode: string;
+  note: string;
   isDefaultAddress: boolean;
 }
 
-const CHECKOUT_ADDRESS_BOOK_KEY = 'tradehub_checkout_address_book';
+const ADDRESS_BOOK_KEY = 'tradehub_address_book';
 const defaultShippingCountry = checkoutCountries.find(c => c.code === 'TR') ?? checkoutCountries[0];
+
+// BuyerAddress — cartService'ten re-export (döngüsel import yok)
+type BuyerAddress = BuyerAddressData;
+
+interface BuyerAddressBookStorage {
+  [userKey: string]: BuyerAddress[];
+}
 
 function generateAddressId(): string {
   return `addr-${Date.now()}-${Math.random().toString(16).slice(2, 8)}`;
@@ -374,19 +388,65 @@ function splitFullName(fullName: string): { firstName: string; lastName: string 
   };
 }
 
-function readCheckoutAddressBook(): CheckoutAddressBookStorage {
+// ── Guest localStorage fallback (tradehub_address_book) ──────────────────
+
+function readAddressBook(): BuyerAddressBookStorage {
   try {
-    const raw = localStorage.getItem(CHECKOUT_ADDRESS_BOOK_KEY);
-    if (!raw) return {};
-    return JSON.parse(raw) as CheckoutAddressBookStorage;
+    return JSON.parse(localStorage.getItem(ADDRESS_BOOK_KEY) || '{}') as BuyerAddressBookStorage;
   } catch {
     return {};
   }
 }
 
-function writeCheckoutAddressBook(storage: CheckoutAddressBookStorage): void {
-  localStorage.setItem(CHECKOUT_ADDRESS_BOOK_KEY, JSON.stringify(storage));
+function writeAddressBook(storage: BuyerAddressBookStorage): void {
+  localStorage.setItem(ADDRESS_BOOK_KEY, JSON.stringify(storage));
 }
+
+// BuyerAddress → CheckoutStoredAddress
+// Artık field isimleri aynı — sadece isDefault / is_default ve firstName/lastName dönüşümü gerekiyor
+function buyerAddressToCheckout(addr: BuyerAddress): CheckoutStoredAddress {
+  const parts = addr.contact_name.trim().split(/\s+/);
+  const fullAddr = [addr.street, addr.apartment, addr.city, addr.state, addr.country === 'TR' ? 'Turkey/Turkiye' : addr.country]
+    .filter(Boolean).join(', ');
+  return {
+    id: addr.id,
+    isDefault: addr.is_default,
+    label: addr.title || 'Adres',
+    country: addr.country || 'TR',
+    countryName: addr.country === 'TR' ? 'Turkey/Turkiye' : addr.country,
+    firstName: parts[0] ?? '',
+    lastName: parts.slice(1).join(' '),
+    phonePrefix: addr.phone_prefix || '+90',
+    phone: addr.phone,
+    street: addr.street,
+    apartment: addr.apartment || '',
+    state: addr.state,
+    city: addr.city,
+    postalCode: addr.postal_code || '',
+    fullAddress: fullAddr,
+  };
+}
+
+// CheckoutStoredAddress → BuyerAddress
+function checkoutToBuyerAddress(addr: CheckoutStoredAddress): BuyerAddress {
+  return {
+    id: addr.id,
+    title: addr.label || 'Shipping Address',
+    contact_name: `${addr.firstName} ${addr.lastName}`.trim(),
+    company: addr.company ?? '',
+    phone_prefix: addr.phonePrefix || '+90',
+    phone: addr.phone,
+    country: addr.country || 'TR',
+    state: addr.state,
+    city: addr.city,
+    street: addr.street,
+    apartment: addr.apartment || '',
+    postal_code: addr.postalCode || '',
+    note: addr.note ?? '',
+    is_default: addr.isDefault,
+  };
+}
+
 
 function getCountryByCode(code: string) {
   return checkoutCountries.find((country) => country.code === code) ?? defaultShippingCountry;
@@ -443,18 +503,21 @@ Alpine.data('shippingForm', () => ({
     fullName: '',
     phonePrefix: defaultShippingCountry.phonePrefix,
     phone: '',
+    company: '',
     street: '',
     apartment: '',
     state: '',
     city: '',
     postalCode: '',
+    note: '',
     isDefaultAddress: false,
   } as CheckoutAddAddressForm,
   addFormErrors: {} as Record<string, boolean>,
 
   init() {
-    this.loadAddressesForCurrentUser();
-    this.updateCityDropdown(this.stateDisplay);
+    this.loadAddressesForCurrentUser().then(() => {
+      this.updateCityDropdown(this.stateDisplay);
+    });
   },
 
   getAddressOwnerKey(): string {
@@ -465,12 +528,23 @@ Alpine.data('shippingForm', () => ({
     return 'guest';
   },
 
-  loadAddressesForCurrentUser() {
-    const storage = readCheckoutAddressBook();
-    const ownerKey = this.getAddressOwnerKey();
-    const addresses = storage[ownerKey] ?? [];
+  async loadAddressesForCurrentUser() {
+    let buyerAddresses: BuyerAddress[] = [];
 
-    this.savedAddresses = addresses;
+    if (isLoggedIn()) {
+      try {
+        buyerAddresses = await fetchAddresses();
+      } catch {
+        // API başarısız olursa guest localStorage'a düş
+        const book = readAddressBook();
+        buyerAddresses = book[this.getAddressOwnerKey()] ?? [];
+      }
+    } else {
+      const book = readAddressBook();
+      buyerAddresses = book[this.getAddressOwnerKey()] ?? [];
+    }
+
+    this.savedAddresses = buyerAddresses.map(buyerAddressToCheckout);
 
     if (this.savedAddresses.length === 0) {
       this.showAddressForm = true;
@@ -487,10 +561,13 @@ Alpine.data('shippingForm', () => ({
     this.showAddressForm = false;
   },
 
-  persistAddresses() {
-    const storage = readCheckoutAddressBook();
-    storage[this.getAddressOwnerKey()] = this.savedAddresses;
-    writeCheckoutAddressBook(storage);
+  // Sadece guest kullanıcılar için localStorage'a yazar.
+  // Logged-in kullanıcılar için bireysel API çağrıları kullanılır.
+  _persistGuestAddresses() {
+    if (isLoggedIn()) return;
+    const book = readAddressBook();
+    book[this.getAddressOwnerKey()] = this.savedAddresses.map(checkoutToBuyerAddress);
+    writeAddressBook(book);
   },
 
   fillMainFormFromAddress(address: CheckoutStoredAddress) {
@@ -528,7 +605,10 @@ Alpine.data('shippingForm', () => ({
 
     this.selectedAddressId = address.id;
     this.pendingAddressId = address.id;
-    this.selectedAddressName = `${address.firstName} ${address.lastName}`.trim();
+    this.selectedAddressName = [
+      `${address.firstName} ${address.lastName}`.trim(),
+      address.company,
+    ].filter(Boolean).join(' / ');
     this.selectedAddressPhone = `${address.phonePrefix} ${address.phone}`.trim();
     this.selectedAddressLine = address.fullAddress || formatAddressLine(address);
     this.fillMainFormFromAddress(address);
@@ -562,11 +642,13 @@ Alpine.data('shippingForm', () => ({
       fullName: '',
       phonePrefix: defaultShippingCountry.phonePrefix,
       phone: '',
+      company: '',
       street: '',
       apartment: '',
       state: '',
       city: '',
       postalCode: '',
+      note: '',
       isDefaultAddress: false,
     };
     this.addFormErrors = {};
@@ -601,11 +683,13 @@ Alpine.data('shippingForm', () => ({
       fullName: `${address.firstName} ${address.lastName}`.trim(),
       phonePrefix: address.phonePrefix,
       phone: address.phone,
+      company: address.company ?? '',
       street: address.street,
       apartment: address.apartment,
       state: address.state,
       city: address.city,
       postalCode: address.postalCode,
+      note: address.note ?? '',
       isDefaultAddress: address.isDefault,
     };
     this.addFormErrors = {};
@@ -613,11 +697,15 @@ Alpine.data('shippingForm', () => ({
     this.isAddAddressModalOpen = true;
   },
 
-  deleteAddress(addressId: string) {
+  async deleteAddress(addressId: string) {
+    if (isLoggedIn()) {
+      try { await deleteAddressApi(addressId); } catch { /* UI state zaten güncellenecek */ }
+    }
+
     this.savedAddresses = this.savedAddresses.filter((address) => address.id !== addressId);
 
     if (this.savedAddresses.length === 0) {
-      this.persistAddresses();
+      this._persistGuestAddresses();
       this.selectedAddressId = '';
       this.pendingAddressId = '';
       this.selectedAddressName = '';
@@ -636,16 +724,19 @@ Alpine.data('shippingForm', () => ({
       ?? this.savedAddresses.find((address) => address.isDefault)
       ?? this.savedAddresses[0];
 
-    this.persistAddresses();
+    this._persistGuestAddresses();
     this.applySelectedAddress(nextAddress.id);
   },
 
-  setDefaultAddress(addressId: string) {
+  async setDefaultAddress(addressId: string) {
+    if (isLoggedIn()) {
+      try { await setDefaultAddressApi(addressId); } catch { /* sessiz hata */ }
+    }
     this.savedAddresses = this.savedAddresses.map((address) => ({
       ...address,
       isDefault: address.id === addressId,
     }));
-    this.persistAddresses();
+    this._persistGuestAddresses();
   },
 
   validateAddAddressForm(): boolean {
@@ -700,34 +791,62 @@ Alpine.data('shippingForm', () => ({
     return {
       id: this.editingAddressId || generateAddressId(),
       isDefault: this.addAddressForm.isDefaultAddress,
+      company: this.addAddressForm.company.trim(),
+      note: this.addAddressForm.note.trim(),
       ...baseAddress,
     };
   },
 
-  submitAddAddress() {
+  async submitAddAddress() {
     if (!this.validateAddAddressForm()) return;
 
     const candidate = this.buildAddressFromAddForm();
 
-    if (this.isEditingAddress && this.editingAddressId) {
-      this.savedAddresses = this.savedAddresses.map((address) => (
-        address.id === this.editingAddressId ? candidate : address
-      ));
+    if (isLoggedIn()) {
+      try {
+        const buyerPayload = checkoutToBuyerAddress(candidate);
+        const saved = await saveAddressApi(buyerPayload);
+        const savedAsCheckout = buyerAddressToCheckout(saved);
+
+        if (this.isEditingAddress && this.editingAddressId) {
+          this.savedAddresses = this.savedAddresses.map((a) =>
+            a.id === this.editingAddressId ? savedAsCheckout : a
+          );
+        } else {
+          this.savedAddresses = [savedAsCheckout, ...this.savedAddresses];
+        }
+
+        if (savedAsCheckout.isDefault) {
+          this.savedAddresses = this.savedAddresses.map((a) => ({
+            ...a,
+            isDefault: a.id === savedAsCheckout.id,
+          }));
+        }
+
+        this.applySelectedAddress(savedAsCheckout.id);
+      } catch { /* API hatası — devam et */ }
     } else {
-      this.savedAddresses = [candidate, ...this.savedAddresses];
+      if (this.isEditingAddress && this.editingAddressId) {
+        this.savedAddresses = this.savedAddresses.map((address) => (
+          address.id === this.editingAddressId ? candidate : address
+        ));
+      } else {
+        this.savedAddresses = [candidate, ...this.savedAddresses];
+      }
+
+      if (candidate.isDefault || this.savedAddresses.length === 1) {
+        this.savedAddresses = this.savedAddresses.map((address) => ({
+          ...address,
+          isDefault: address.id === candidate.id,
+        }));
+      } else if (!this.savedAddresses.some((address) => address.isDefault)) {
+        this.savedAddresses[0].isDefault = true;
+      }
+
+      this._persistGuestAddresses();
+      this.applySelectedAddress(candidate.id);
     }
 
-    if (candidate.isDefault || this.savedAddresses.length === 1) {
-      this.savedAddresses = this.savedAddresses.map((address) => ({
-        ...address,
-        isDefault: address.id === candidate.id,
-      }));
-    } else if (!this.savedAddresses.some((address) => address.isDefault)) {
-      this.savedAddresses[0].isDefault = true;
-    }
-
-    this.persistAddresses();
-    this.applySelectedAddress(candidate.id);
     this.showAddressForm = false;
     this.isAddAddressModalOpen = false;
     this.isAddressSelectorOpen = false;
@@ -812,7 +931,7 @@ Alpine.data('shippingForm', () => ({
     this.errors[fieldName] = false;
   },
 
-  handleSubmit() {
+  async handleSubmit() {
     const requiredFields = ['country', 'firstName', 'phone', 'streetAddress', 'state', 'city', 'postalCode'];
     requiredFields.forEach(field => { this.errors[field] = false; });
 
@@ -892,8 +1011,23 @@ Alpine.data('shippingForm', () => ({
       }));
     }
 
-    this.persistAddresses();
-    this.applySelectedAddress(candidate.id);
+    if (isLoggedIn()) {
+      try {
+        const saved = await saveAddressApi(checkoutToBuyerAddress(candidate));
+        const savedCheckout = buyerAddressToCheckout(saved);
+        // Temp ID yerine gerçek backend ID ile güncelle
+        this.savedAddresses = this.savedAddresses.map((a) =>
+          a.id === candidate.id ? savedCheckout : a
+        );
+        this.applySelectedAddress(savedCheckout.id);
+      } catch {
+        this.applySelectedAddress(candidate.id);
+      }
+    } else {
+      this._persistGuestAddresses();
+      this.applySelectedAddress(candidate.id);
+    }
+
     this.showAddressForm = false;
     this.isAddressSelectorOpen = false;
     this.isAddAddressModalOpen = false;

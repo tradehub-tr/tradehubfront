@@ -21,6 +21,7 @@ import './help'
 import './legal'
 import './seller'
 import './sellerShop'
+import './addresses'
 
 // Augment Window interface for Alpine global access (debugging)
 declare global {

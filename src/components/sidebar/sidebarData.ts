@@ -139,6 +139,12 @@ export function getSidebarSections(): SidebarSection[] {
           icon: 'settings',
           href: '/pages/dashboard/settings.html',
         },
+        {
+          id: 'addresses',
+          label: t('dashboard.myAddresses'),
+          icon: 'addresses',
+          href: '/pages/dashboard/addresses.html',
+        },
       ],
     },
   ];

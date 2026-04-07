@@ -245,6 +245,16 @@ function renderAddAddressModal(countryOptions: string): string {
               </div>
             </div>
 
+            <div>
+              <label class="block text-[14px] text-[#6b7280] mb-1">Company name (optional)</label>
+              <input class="w-full h-12 rounded-lg border border-[#d1d5db] px-3 text-[14px] text-[#111827] outline-none focus:border-[#111827]" type="text" x-model="addAddressForm.company" />
+            </div>
+
+            <div>
+              <label class="block text-[14px] text-[#6b7280] mb-1">Delivery note (optional)</label>
+              <input class="w-full h-12 rounded-lg border border-[#d1d5db] px-3 text-[14px] text-[#111827] outline-none focus:border-[#111827]" type="text" placeholder="e.g. Leave at the door" x-model="addAddressForm.note" />
+            </div>
+
             <label class="inline-flex items-center gap-2 text-[14px] text-[#374151]">
               <input type="checkbox" class="h-4 w-4 rounded border-[#d1d5db] accent-[#111827]" x-model="addAddressForm.isDefaultAddress" />
               <span>Set as default shipping address</span>

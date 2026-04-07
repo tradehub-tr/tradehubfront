@@ -181,6 +181,62 @@ export async function fetchShippingMethodsForListing(listingId: string): Promise
   return result?.data ?? [];
 }
 
+// ── Address Book ─────────────────────────────────────────────────────────────
+
+/** Birleşik adres tipi — DocType ile birebir eşleşir. */
+export interface BuyerAddressData {
+  id: string
+  title: string
+  contact_name: string
+  company: string
+  phone_prefix: string
+  phone: string
+  country: string
+  state: string       // İl / Province
+  city: string        // İlçe / District
+  street: string      // Açık adres satırı
+  apartment: string   // Daire / Bina (opsiyonel)
+  postal_code: string
+  note: string
+  is_default: boolean
+}
+
+/** Kullanıcının tüm adreslerini çeker. */
+export async function fetchAddresses(): Promise<BuyerAddressData[]> {
+  return callMethod<BuyerAddressData[]>('tradehub_core.api.buyer.get_addresses');
+}
+
+/** Adres oluşturur veya günceller. `id` varsa güncelleme, yoksa yeni kayıt. */
+export async function saveAddressApi(
+  address: Omit<BuyerAddressData, 'id'> & { id?: string }
+): Promise<BuyerAddressData> {
+  return callMethod<BuyerAddressData>(
+    'tradehub_core.api.buyer.save_address',
+    { address_json: JSON.stringify(address) },
+    true,
+  );
+}
+
+/** Bir adresi siler. */
+export async function deleteAddressApi(addressId: string): Promise<void> {
+  await callMethod<{ success: boolean }>(
+    'tradehub_core.api.buyer.delete_address',
+    { address_id: addressId },
+    true,
+  );
+}
+
+/** Bir adresi varsayılan yapar. */
+export async function setDefaultAddressApi(addressId: string): Promise<void> {
+  await callMethod<{ success: boolean }>(
+    'tradehub_core.api.buyer.set_default_address',
+    { address_id: addressId },
+    true,
+  );
+}
+
+// ── Orders ────────────────────────────────────────────────────────────────────
+
 /** Ödeme onayı sonrası siparişleri backend'e kaydeder. */
 export async function apiCreateOrder(
   orders: BackendOrder[],
