@@ -92,7 +92,7 @@ export function SupplierCard(): string {
           </svg>
           ${t('product.contactUs')}
         </button>
-        <a href="#" class="text-center text-xs font-medium hover:underline" style="color: var(--pd-breadcrumb-link-color, #cc9900);">
+        <a href="/pages/seller/seller-storefront.html?id=${encodeURIComponent(s.id)}" class="text-center text-xs font-medium hover:underline" style="color: var(--pd-breadcrumb-link-color, #cc9900);">
           ${t('product.viewCompany')} →
         </a>
       </div>

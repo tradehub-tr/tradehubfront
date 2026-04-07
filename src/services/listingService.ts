@@ -354,7 +354,8 @@ function mapListingDetail(raw: any): ProductDetail {
   // Map supplier
   const supplier: SupplierInfo = raw.supplier
     ? {
-        name: raw.supplier.name || '',
+        id: raw.supplier.name || '',
+        name: raw.supplier.display_name || raw.supplier.name || '',
         verified: raw.supplier.verified || false,
         yearsInBusiness: raw.supplier.yearsInBusiness || 0,
         responseTime: raw.supplier.responseTime || '',
@@ -366,6 +367,7 @@ function mapListingDetail(raw: any): ProductDetail {
         certifications: raw.supplier.certifications || [],
       }
     : {
+        id: '',
         name: '',
         verified: false,
         yearsInBusiness: 0,
