@@ -24,6 +24,9 @@ import { initCurrency } from '../services/currencyService'
 
 // Manufacturers specific components
 import { ManufacturersLayout, initHorizontalCategoryBar, initCategoryFlyout, initFactorySliders } from '../components/manufacturers'
+import { getCategoryIcon, getIconByName } from '../components/header/MegaMenu';
+(window as any).__getCatIcon = (iconClass: string, name: string) =>
+  iconClass ? getCategoryIcon(iconClass) : getIconByName(name);
 
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.classList.add('relative');
