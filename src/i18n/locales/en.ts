@@ -779,6 +779,7 @@ const en = {
       productInspection: 'Product Inspection',
       settings: 'Settings',
       accountSettings: 'Account Settings',
+      myAddresses: 'My Addresses',
       exploreSellerSite: 'Explore Seller Site',
       messagesLabel: 'Messages',
       quotationsLabel: 'Quotations',
