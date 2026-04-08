@@ -157,6 +157,8 @@ const en = {
       moneyBack: 'Money-back policy',
       shippingLogistics: 'Shipping & logistics services',
       afterSales: 'After-sales protections',
+      tradeAssuranceTitle: 'Trade Assurance System',
+      tradeAssuranceSubtitle: 'Enjoy protection from payment to delivery',
       getStarted: 'Get started',
       whatIsIstoc: 'What is iSTOC',
       whyIstoc: 'Why iSTOC',

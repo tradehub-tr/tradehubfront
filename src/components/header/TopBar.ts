@@ -32,7 +32,6 @@ const countryOptions: LocaleOption[] = [
 const languageOptions: LocaleOption[] = [
   { code: 'TR', name: 'Türkçe', flag: '🇹🇷' },
   { code: 'EN', name: 'English', flag: '🇬🇧' },
-  { code: 'DE', name: 'Deutsch', flag: '🇩🇪' },
 ];
 
 /** Default currency options (names resolved via i18n) */
@@ -288,18 +287,16 @@ function renderCountrySelector(): string {
         <p class="text-sm text-gray-500 dark:text-gray-400 mb-4"><span data-i18n="header.shippingVary">${t('header.shippingVary')}</span></p>
 
         <!-- Add Address Button -->
-        <button type="button" class="th-btn th-btn-pill w-full px-4 py-2.5 text-sm font-medium transition-colors mb-4">
+        <a href="/pages/dashboard/addresses.html" class="th-btn th-btn-pill w-full px-4 py-2.5 text-sm font-medium transition-colors mb-4 inline-block text-center">
           <span data-i18n="header.addAddress">${t('header.addAddress')}</span>
-        </button>
+        </a>
 
-        <!-- Or Divider -->
+        <!-- DISABLED: Ülke/posta kodu seçimi — ileride geliştirilecek
         <div class="flex items-center gap-3 mb-4">
           <div class="flex-1 border-t border-gray-200 dark:border-gray-600"></div>
           <span class="text-sm text-gray-400" data-i18n="common.or">${t('common.or')}</span>
           <div class="flex-1 border-t border-gray-200 dark:border-gray-600"></div>
         </div>
-
-        <!-- Country Select -->
         <div class="mb-3">
           <select class="th-input w-full px-3 py-2.5 text-sm bg-white border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white appearance-none cursor-pointer">
             ${countryOptions.map(country => `
@@ -307,8 +304,6 @@ function renderCountrySelector(): string {
             `).join('')}
           </select>
         </div>
-
-        <!-- ZIP Code Input -->
         <div class="mb-4">
           <input
             type="text"
@@ -316,13 +311,11 @@ function renderCountrySelector(): string {
             class="th-input w-full px-3 py-2.5 text-sm bg-white border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
           />
         </div>
-
-        <!-- Save Button -->
         <button type="button" class="th-btn th-btn-pill w-full px-4 py-2.5 text-sm font-medium transition-colors">
           <span data-i18n="common.save">${t('common.save')}</span>
         </button>
+        -->
       </div>
-      <div data-popper-arrow></div>
     </div>
   `;
 }
@@ -378,7 +371,6 @@ function renderLanguageCurrencySelector(): string {
           <span data-i18n="common.save">${t('common.save')}</span>
         </button>
       </div>
-      <div data-popper-arrow></div>
     </div>
   `;
 }
@@ -441,7 +433,6 @@ function renderMessagesButton(): string {
           <span data-i18n="common.viewMore">${t('common.viewMore')}</span>
         </a>
       </div>
-      <div data-popper-arrow></div>
     </div>
   `;
 }
@@ -457,7 +448,6 @@ function renderOrdersButton(): string {
       class="th-header-icon hidden lg:flex items-center justify-center p-2 rounded-full hover:bg-gray-100 dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800 transition-colors cursor-pointer shrink-0"
       type="button"
       aria-label="Orders"
-      title="Orders"
     >
       <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
@@ -473,12 +463,8 @@ function renderOrdersButton(): string {
 
         <!-- Trade Assurance Header -->
         <div class="flex items-center gap-2 mb-2">
-          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-yellow-100">
-            <svg class="w-5 h-5 text-yellow-600" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.94s4.18 1.36 4.18 3.85c0 1.89-1.44 2.98-3.12 3.19z"/>
-            </svg>
-          </span>
-          <span class="text-lg font-bold text-gray-900 dark:text-white" data-i18n="header.tradeAssurance">${t('header.tradeAssurance')}</span>
+          <img src="${new URL('../../assets/images/tas_logo.png', import.meta.url).href}" alt="${t('mega.tradeAssuranceTitle')}" class="w-8 h-8 object-contain" />
+          <span class="text-lg font-bold text-gray-900 dark:text-white">${t('mega.tradeAssuranceTitle')}</span>
         </div>
         <p class="text-sm text-gray-500 dark:text-gray-400 mb-5"><span data-i18n="header.tradeAssuranceDesc">${t('header.tradeAssuranceDesc')}</span></p>
 
@@ -523,7 +509,6 @@ function renderOrdersButton(): string {
           <span data-i18n="common.learnMore">${t('common.learnMore')}</span>
         </a>
       </div>
-      <div data-popper-arrow></div>
     </div>
   `;
 }
@@ -593,7 +578,6 @@ function renderCartButton(itemCount: number = 0): string {
           <span data-i18n="header.goToCart">${t('header.goToCart')}</span>
         </a>
       </div>
-      <div data-popper-arrow></div>
     </div>
   `;
 }
