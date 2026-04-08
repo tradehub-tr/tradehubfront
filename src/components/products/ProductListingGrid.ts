@@ -13,16 +13,16 @@ import type { ProductListingCard, ViewMode } from '../../types/productListing';
 // Placeholder images removed — all images come from API now
 
 /**
- * Camera search icon for image search overlay
+ * Camera search icon for image search overlay - DISABLED
  */
-function cameraSearchIcon(): string {
-  return `
-    <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-      <path d="M3 9a2 2 0 0 1 2-2h2l1-2h8l1 2h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z" />
-      <circle cx="12" cy="13" r="3" />
-    </svg>
-  `;
-}
+// function cameraSearchIcon(): string {
+//   return `
+//     <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+//       <path d="M3 9a2 2 0 0 1 2-2h2l1-2h8l1 2h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z" />
+//       <circle cx="12" cy="13" r="3" />
+//     </svg>
+//   `;
+// }
 
 /**
  * Render image slider for product card (iSTOC-style)
@@ -33,6 +33,24 @@ function cameraSearchIcon(): string {
  * - Camera icon at bottom-left
  */
 function renderImageSlider(card: ProductListingCard): string {
+  // ──────────────────────────────────────────────────────────────
+  // DISABLED: Camera/visual search icon (bottom-left overlay)
+  // İleride tekrar etkinleştirmek için:
+  //   1) Yukarıdaki cameraSearchIcon() fonksiyonunun yorumunu kaldır
+  //   2) Aşağıdaki cameraIconHtml'i return template'ine ekle
+  //      (compare checkbox label'ının altına)
+  //
+  // const cameraIconHtml = `
+  //   <div
+  //     class="absolute bottom-2 left-2 z-10 flex h-6 w-6 items-center justify-center rounded-full opacity-60 group-hover/img:opacity-100 transition-opacity"
+  //     style="background: rgba(0,0,0,0.4); color: #ffffff;"
+  //     aria-hidden="true"
+  //   >
+  //     ${cameraSearchIcon()}
+  //   </div>
+  // `;
+  // ──────────────────────────────────────────────────────────────
+
   // Use real image if available, otherwise fallback to category placeholder
   const realImageSrc = card.imageSrc || '';
   const hasRealImage = realImageSrc.length > 0;
@@ -99,14 +117,7 @@ function renderImageSlider(card: ProductListingCard): string {
         ${t('products.addToCompare')}
       </label>
 
-      <!-- Camera icon (bottom-left) -->
-      <div
-        class="absolute bottom-2 left-2 z-10 flex h-6 w-6 items-center justify-center rounded-full opacity-60 group-hover/img:opacity-100 transition-opacity"
-        style="background: rgba(0,0,0,0.4); color: #ffffff;"
-        aria-hidden="true"
-      >
-        ${cameraSearchIcon()}
-      </div>
+      <!-- Camera icon (bottom-left) - DISABLED -->
     </div>
   `;
 }
