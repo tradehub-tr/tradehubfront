@@ -1,7 +1,7 @@
 /**
  * MobileLayout Component
  * Mobile-only product detail layout for TradeHub B2B e-commerce,
- * styled after Alibaba's mobile product detail page.
+ * styled after iSTOC's mobile product detail page.
  * Uses reusable collapsibleSection() and bottomSheet() builders
  * with data-attribute-driven JS initialization.
  */

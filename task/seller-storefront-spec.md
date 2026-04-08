@@ -2669,7 +2669,7 @@ C6 Category Product Listing dark mode'da kart arka plan, border ve metin renkler
 > **Referans Görseller:** Görsel 5 + 8 (Calin — Variant A: verified banner + fabrika görseli + logo + açıklama), Görsel 18 (Haers — Variant B: scrollable metin + carousel + lokasyon kartları)
 > **Durum:** ✅ Zorunlu — Tüm mağaza tiplerinde kullanılır. Satıcının mağaza tipine göre Variant A veya Variant B render edilir.
 
-Company Info / About Us, satıcının şirket tanıtımını, fabrika görsellerini ve lokasyon bilgilerini gösteren zorunlu bir bileşendir. İki varyant mevcuttur: **Variant A (Calin tarzı)** — koyu mavi "COMPANY" başlığı, turuncu-kırmızı gradient verified supplier banner'ı (Alibaba.com + TÜV logoları + tarih), 55/45 oranında iki sütunlu içerik (sol: gradient overlay'li büyük fabrika görseli, sağ: logo + uzun açıklama paragrafı) ve altında 3'lü fabrika fotoğraf grid'i içerir. **Variant B (Haers tarzı)** — bej arka plan üzerine 40/60 oranında iki sütunlu layout (sol: kahverengi italic "About us" başlığı + max-height/overflow-y ile scrollable metin alanı + custom scrollbar, sağ: Swiper.js fabrika fotoğraf carousel'i + alt kısımda caption) ve altında 4'lü lokasyon kartları (fotoğraf + koyu overlay + beyaz lokasyon metni) barındırır.
+Company Info / About Us, satıcının şirket tanıtımını, fabrika görsellerini ve lokasyon bilgilerini gösteren zorunlu bir bileşendir. İki varyant mevcuttur: **Variant A (Calin tarzı)** — koyu mavi "COMPANY" başlığı, turuncu-kırmızı gradient verified supplier banner'ı (iSTOC.com + TÜV logoları + tarih), 55/45 oranında iki sütunlu içerik (sol: gradient overlay'li büyük fabrika görseli, sağ: logo + uzun açıklama paragrafı) ve altında 3'lü fabrika fotoğraf grid'i içerir. **Variant B (Haers tarzı)** — bej arka plan üzerine 40/60 oranında iki sütunlu layout (sol: kahverengi italic "About us" başlığı + max-height/overflow-y ile scrollable metin alanı + custom scrollbar, sağ: Swiper.js fabrika fotoğraf carousel'i + alt kısımda caption) ve altında 4'lü lokasyon kartları (fotoğraf + koyu overlay + beyaz lokasyon metni) barındırır.
 
 ### 10.1 Variant A — Metin + Görsel Yan Yana (Calin tarzı)
 
@@ -2688,7 +2688,7 @@ Company Info / About Us, satıcının şirket tanıtımını, fabrika görseller
 
     <!-- Verified Supplier Banner -->
     <div class="company-info__verified-banner flex items-center gap-4 bg-gradient-to-r from-[#ea580c] to-[#dc2626] text-white px-6 py-3 rounded-t-[var(--radius-md)] text-[13px]">
-      <img src="/assets/alibaba-logo-white.svg" alt="Alibaba.com" class="h-5" />
+      <img src="/assets/istoc-logo-white.svg" alt="iSTOC.com" class="h-5" />
       <span class="font-semibold">Verified Supplier</span>
       <img src="/assets/tuv-logo-white.svg" alt="TÜV Rheinland" class="h-5 ml-auto" />
       <span>{{ seller.verificationDate }}</span>
@@ -2731,7 +2731,7 @@ Company Info / About Us, satıcının şirket tanıtımını, fabrika görseller
 #### 10.1.2 HTML Yapı Notları (Variant A)
 
 - **Başlık (`<h2>`):** `text-[54px]` desktop'ta, `xl:text-[48px]` (≤1024px), `md:text-[36px]` (≤640px) ile responsive. `font-black` (900 weight), `text-[#1e3a5f]` koyu mavi renk, `uppercase`, `tracking-tight` dar harf aralığı, `text-center` ortalı, `mb-8` (32px) alt boşluk.
-- **Verified Banner:** `bg-gradient-to-r from-[#ea580c] to-[#dc2626]` ile turuncu-kırmızı gradient. `flex items-center gap-4` ile yatay hizalı. Sol'da Alibaba.com beyaz logosu, ortada "Verified Supplier" bold beyaz metin, sağ'da TÜV Rheinland logosu + doğrulama tarihi (`ml-auto` ile sağa itilir). `rounded-t-[var(--radius-md)]` ile sadece üst köşeler yuvarlak (8px), alt kenar düz — aşağıdaki iki sütunlu içerikle birleşir. `text-[13px]` kompakt metin boyutu.
+- **Verified Banner:** `bg-gradient-to-r from-[#ea580c] to-[#dc2626]` ile turuncu-kırmızı gradient. `flex items-center gap-4` ile yatay hizalı. Sol'da iSTOC.com beyaz logosu, ortada "Verified Supplier" bold beyaz metin, sağ'da TÜV Rheinland logosu + doğrulama tarihi (`ml-auto` ile sağa itilir). `rounded-t-[var(--radius-md)]` ile sadece üst köşeler yuvarlak (8px), alt kenar düz — aşağıdaki iki sütunlu içerikle birleşir. `text-[13px]` kompakt metin boyutu.
 - **İki Sütun Grid:** `grid-cols-[55%_45%]` ile sol sütun %55, sağ sütun %45. `mt-0` ile verified banner'a yapışık. `gap-6` (24px) sütunlar arası boşluk. `lg:grid-cols-1` ile tablet altında tek sütuna düşer.
 - **Fabrika Hero Görseli:** `h-[400px]` sabit yükseklik (tablet'te `lg:h-[300px]`). `rounded-bl-[var(--radius-md)]` ile sadece sol-alt köşe yuvarlak. Gradient overlay `bg-gradient-to-t from-black/60 to-transparent` alttan yukarıya kararan overlay ile görselin alt kısmında başlık ve alt metin okunabilir hale gelir.
 - **Logo + Açıklama:** `flex flex-col gap-4 py-4` ile dikey layout. Logo `w-[120px]` genişliğinde, açıklama metni `text-[14px] text-[#4b5563] leading-[1.7]` ile okunabilir satır yüksekliğinde.
@@ -2744,7 +2744,7 @@ Company Info / About Us, satıcının şirket tanıtımını, fabrika görseller
 │                                 COMPANY                                      │  ← text-[54px], font-black, #1e3a5f
 │                                                                              │     uppercase, tracking-tight, text-center
 ├──────────────────────────────────────────────────────────────────────────────┤
-│  [Alibaba.com logo]  Verified Supplier  ✓       [TÜV logo]  2024-01-15      │  ← bg gradient #ea580c → #dc2626
+│  [iSTOC.com logo]  Verified Supplier  ✓       [TÜV logo]  2024-01-15      │  ← bg gradient #ea580c → #dc2626
 │                                                                              │     text-white, text-[13px], rounded-t-md
 ├──────────────────────────────────────────────────────────────────────────────┤
 │                         55%                    │            45%               │
@@ -5263,7 +5263,7 @@ export function initFloatingActions(): void {
   // Chat Now — placeholder
   chatBtn?.addEventListener('click', () => {
     // Placeholder: canlı sohbet widget'ı açılır
-    // Gerçek implementasyonda Alibaba chat SDK entegrasyonu
+    // Gerçek implementasyonda iSTOC chat SDK entegrasyonu
   });
 }
 ```

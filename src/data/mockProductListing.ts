@@ -1,7 +1,7 @@
 /**
  * Mock Product Listing Data
  * Diverse products for testing the product listing/search results page.
- * Alibaba B2B style product cards with varied categories and attributes.
+ * iSTOC B2B style product cards with varied categories and attributes.
  */
 
 import { t } from '../i18n';

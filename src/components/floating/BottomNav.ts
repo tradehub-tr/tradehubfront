@@ -1,6 +1,6 @@
 /**
  * BottomNav Component
- * Mobile-only fixed bottom navigation bar (Alibaba-style).
+ * Mobile-only fixed bottom navigation bar (iSTOC-style).
  * Visible on screens below md breakpoint.
  *
  * All click handlers are now inline Alpine.js @click directives.

@@ -1,6 +1,6 @@
 /**
  * Mock Product Data
- * Static data for the product detail page — Alibaba B2B style.
+ * Static data for the product detail page — iSTOC B2B style.
  * Internationalized: all user-visible strings use t() calls.
  */
 

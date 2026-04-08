@@ -1,6 +1,6 @@
 /**
  * FAQPageLayout Component
- * Alibaba-style FAQ page: search header + left category sidebar + 2-column category grid
+ * iSTOC-style FAQ page: search header + left category sidebar + 2-column category grid
  * Alpine.js drives sidebar selection & search filtering
  */
 

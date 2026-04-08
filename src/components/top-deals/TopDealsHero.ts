@@ -1,6 +1,6 @@
 /**
  * TopDealsHero Component
- * Gradient hero banner for Top Deals page (Alibaba-style)
+ * Gradient hero banner for Top Deals page (iSTOC-style)
  * - Mobile: Compact header bar with back arrow, title, search icon
  * - Desktop: Full hero banner with lightning bolt icons
  */

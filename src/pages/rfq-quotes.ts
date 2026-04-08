@@ -1,5 +1,5 @@
 /**
- * RFQ Quotes Comparison Page — Alibaba-style quote comparison table.
+ * RFQ Quotes Comparison Page — iSTOC-style quote comparison table.
  */
 
 import '../style.css'

@@ -15,7 +15,7 @@
 | --------------- | ----------------------------------------------- |
 | **Page Name**   | RFQ - Fiyat Teklifi Talebi                      |
 | **Route**       | `/rfq/new`                                      |
-| **HTML Title**  | `RFQ - Fiyat Teklifi Talebi \| Alibaba`         |
+| **HTML Title**  | `RFQ - Fiyat Teklifi Talebi \| iSTOC`         |
 | **Language**    | Turkish (`lang="tr"`)                           |
 | **Content**     | Static page with mock data (no backend API)     |
 | **Entry Point** | `index.html` → `/src/main.ts` (ES Module)      |
@@ -154,7 +154,7 @@ This section defines the **complete semantic HTML structure** of the RFQ page. E
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RFQ - Fiyat Teklifi Talebi | Alibaba</title>
+    <title>RFQ - Fiyat Teklifi Talebi | iSTOC</title>
 
     <!-- Roboto Variable Font (100-900 weight, italic support) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -3392,7 +3392,7 @@ The Testimonial Carousel is the final content section on the RFQ page. It displa
 
             <!-- Quote (blockquote) -->
             <blockquote class="rfq-testimonial__quote">
-              "Alibaba.com üzerinden RFQ gönderdikten sadece birkaç saat içinde onlarca tedarikçiden rekabetçi fiyat teklifleri aldım. Süreç inanılmaz hızlı ve şeffaf, satın alma maliyetlerimizi %30 oranında düşürdük."
+              "iSTOC.com üzerinden RFQ gönderdikten sadece birkaç saat içinde onlarca tedarikçiden rekabetçi fiyat teklifleri aldım. Süreç inanılmaz hızlı ve şeffaf, satın alma maliyetlerimizi %30 oranında düşürdük."
             </blockquote>
 
             <!-- Avatar + Attribution -->
@@ -3933,7 +3933,7 @@ The Testimonial Carousel is inherently responsive due to its **single-column cen
 ┌─────────────────────────────────┐
 │ ░░░░░░ DARK GRADIENT BG ░░░░░░ │
 │                                  │
-│    "Alibaba.com üzerinden RFQ   │
+│    "iSTOC.com üzerinden RFQ   │
 │     gönderdikten sadece birkaç  │
 │     saat içinde onlarca         │
 │     tedarikçiden rekabetçi      │
@@ -3971,7 +3971,7 @@ The Testimonial Carousel is inherently responsive due to its **single-column cen
 ┌──────────────────────────────────────────────┐
 │ ░░░░░░░░░░░░ DARK GRADIENT BG ░░░░░░░░░░░░░ │
 │                                                │
-│      "Alibaba.com üzerinden RFQ gönderdikten  │
+│      "iSTOC.com üzerinden RFQ gönderdikten  │
 │       sadece birkaç saat içinde onlarca       │
 │       tedarikçiden rekabetçi fiyat teklifleri  │
 │       aldım. Süreç inanılmaz hızlı..."       │
@@ -4000,7 +4000,7 @@ The Testimonial Carousel is inherently responsive due to its **single-column cen
 ┌────────────────────────────────────────────────────────────────────────────────────┐
 │ ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ DARK GRADIENT BG ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ │
 │                                                                                     │
-│           "Alibaba.com üzerinden RFQ gönderdikten sadece birkaç saat               │
+│           "iSTOC.com üzerinden RFQ gönderdikten sadece birkaç saat               │
 │            içinde onlarca tedarikçiden rekabetçi fiyat teklifleri aldım.            │
 │            Süreç inanılmaz hızlı ve şeffaf, satın alma maliyetlerimizi             │
 │            %30 oranında düşürdük."                                                  │
@@ -4517,7 +4517,7 @@ Same `Product` interface as Selected Products (Section 9.2). The only difference
 | **5** | custom-25: Ahşap Mobilya Oturma | custom-26: PVC Pencere ve Kapı | custom-27: Tekstil Boyama Kimyasalları | custom-28: Endüstriyel Jeneratör Dizel | custom-29: Paslanmaz Çelik Mutfak | custom-30: Gıda Ambalaj Filmi Streç |
 | **6** | custom-31: Spor Ayakkabı Erkek | custom-32: Lazer Kesim Makinesi | custom-33: Güvenlik Kamerası IP 4K | custom-34: Kozmetik Cilt Bakım Seti | custom-35: Ticari Buzdolabı Dik Tip | custom-36: Kauçuk Conta Sızdırmazlık |
 
-> **Category Diversity:** The 36 custom products span a wide range of B2B categories to demonstrate the breadth of Alibaba's marketplace: textiles (1, 16, 27), energy (2), metals/casting (3, 24), machinery (4, 6, 15, 28, 32), packaging (5, 30), fashion/accessories (7, 31), electronics/tech (8, 21, 33), construction (9, 13, 22, 26), manufacturing (10), food/agriculture (11, 20), vehicles (12, 17), medical (14), water treatment (18), cosmetics/glass (19, 34), baby products (23), furniture (25), kitchen (29), refrigeration (35), and industrial parts (36).
+> **Category Diversity:** The 36 custom products span a wide range of B2B categories to demonstrate the breadth of iSTOC's marketplace: textiles (1, 16, 27), energy (2), metals/casting (3, 24), machinery (4, 6, 15, 28, 32), packaging (5, 30), fashion/accessories (7, 31), electronics/tech (8, 21, 33), construction (9, 13, 22, 26), manufacturing (10), food/agriculture (11, 20), vehicles (12, 17), medical (14), water treatment (18), cosmetics/glass (19, 34), baby products (23), furniture (25), kitchen (29), refrigeration (35), and industrial parts (36).
 
 ### 9.4 Testimonials
 
@@ -4545,7 +4545,7 @@ interface Testimonial {
 [
   {
     "id": "testimonial-1",
-    "quote": "\"Alibaba.com üzerinden RFQ gönderdikten sadece birkaç saat içinde onlarca tedarikçiden rekabetçi fiyat teklifleri aldım. Süreç inanılmaz hızlı ve şeffaf, satın alma maliyetlerimizi %30 oranında düşürdük.\"",
+    "quote": "\"iSTOC.com üzerinden RFQ gönderdikten sadece birkaç saat içinde onlarca tedarikçiden rekabetçi fiyat teklifleri aldım. Süreç inanılmaz hızlı ve şeffaf, satın alma maliyetlerimizi %30 oranında düşürdük.\"",
     "avatar": "/images/avatars/avatar-1.jpg",
     "name": "Hasib Uddin",
     "title": "Satın Alma Müdürü",
@@ -4575,7 +4575,7 @@ interface Testimonial {
 | Field | Type | Description | Example |
 |-------|------|-------------|---------|
 | `id` | `string` | Unique identifier, prefixed with `testimonial-` followed by a sequential number (1–3) | `"testimonial-1"` |
-| `quote` | `string` | Full testimonial quote in Turkish. Enclosed in escaped double quotes (`\"`). Describes the user's RFQ experience on Alibaba.com. Rendered in italic white text, max-width 650px | `"\"Alibaba.com üzerinden RFQ gönderdikten...\"" ` |
+| `quote` | `string` | Full testimonial quote in Turkish. Enclosed in escaped double quotes (`\"`). Describes the user's RFQ experience on iSTOC.com. Rendered in italic white text, max-width 650px | `"\"iSTOC.com üzerinden RFQ gönderdikten...\"" ` |
 | `avatar` | `string` | Path to avatar image in `/images/avatars/` directory. Pattern: `avatar-{N}.jpg`. Rendered as 68px circle with semi-transparent white border | `"/images/avatars/avatar-1.jpg"` |
 | `name` | `string` | Full name of the testimonial author. Rendered in bold white 16px text | `"Hasib Uddin"` |
 | `title` | `string` | Job title in Turkish. Rendered in semi-transparent white 14px text, before company name | `"Satın Alma Müdürü"` |

@@ -1,7 +1,7 @@
 /**
  * TopDealsGrid Component
  * 5-column product grid with lightweight deal cards
- * Matches Alibaba top-deals reference design
+ * Matches iSTOC top-deals reference design
  */
 
 import { t } from '../../i18n';
