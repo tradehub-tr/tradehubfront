@@ -1,14 +1,31 @@
 /**
  * MobileCategoryBar Component
- * iSTOC-style horizontal scrollable category tabs + product thumbnails
+ * iSTOC-style horizontal scrollable category tabs + subcategory thumbnails
  * Bottom sheet drawer for category selection
  * Visible only on mobile/tablet (xl:hidden)
+ * Kategoriler API'den dinamik olarak yüklenir (categoryService).
  */
 
-import { megaCategories } from '../header';
+import { onCategoriesLoaded } from '../../services/categoryService';
+import type { ApiCategory } from '../../services/categoryService';
 import { t } from '../../i18n';
 
-/* ──── Bottom Sheet ──── */
+/* ──── Subcategory thumbnail renderer ──── */
+
+function renderMobileSubcategory(name: string, slug: string): string {
+  return `
+    <a href="/pages/products.html?cat=${slug}" class="mcb-product flex-shrink-0 flex flex-col items-center gap-1 w-[52px] sm:w-[60px]">
+      <div class="w-[52px] h-[52px] sm:w-[60px] sm:h-[60px] rounded-md bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-gray-300 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75Z"/>
+        </svg>
+      </div>
+      <span class="text-[11px] text-gray-600 dark:text-gray-400 text-center leading-tight line-clamp-2 w-full">${name}</span>
+    </a>
+  `;
+}
+
+/* ──── Bottom Sheet (skeleton until API loads) ──── */
 
 function renderBottomSheet(): string {
   return `
@@ -38,19 +55,12 @@ function renderBottomSheet(): string {
           </div>
         </div>
 
-        <!-- Category List -->
-        <div class="overflow-y-auto flex-1 pb-6">
-          ${megaCategories.map((cat, i) => `
-            <button
-              type="button"
-              class="mcb-sheet-item flex items-center w-full px-5 py-4 text-left transition-colors border-b border-gray-50 dark:border-gray-700/50"
-              data-mcb-sheet-cat="${cat.id}"
-            >
-              <span class="flex-1 text-[15px] text-gray-800 dark:text-gray-300">${cat.name}</span>
-              <span class="mcb-sheet-radio flex-shrink-0 w-5 h-5 rounded-full border-2 ${i === 0 ? 'border-primary-500 bg-primary-500' : 'border-gray-300 dark:border-gray-600 bg-transparent'} flex items-center justify-center transition-colors">
-                <span class="w-2 h-2 rounded-full ${i === 0 ? 'bg-white' : 'bg-transparent'} transition-colors"></span>
-              </span>
-            </button>
+        <!-- Category List (skeleton, replaced after API) -->
+        <div id="mcb-sheet-list" class="overflow-y-auto flex-1 pb-6">
+          ${Array.from({ length: 6 }, () => `
+            <div class="flex items-center w-full px-5 py-4 border-b border-gray-50 dark:border-gray-700/50 animate-pulse">
+              <div class="h-4 rounded bg-gray-200 dark:bg-gray-700 flex-1"></div>
+            </div>
           `).join('')}
         </div>
       </div>
@@ -61,23 +71,15 @@ function renderBottomSheet(): string {
 /* ──── HTML ──── */
 
 export function MobileCategoryBar(): string {
-  const firstCat = megaCategories[0];
-
   return `
     <div id="mobile-category-bar" class="xl:hidden bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-      <!-- Row 1: Category Tabs -->
+      <!-- Row 1: Category Tabs (skeleton, replaced after API) -->
       <div class="relative">
         <div id="mcb-tabs" class="flex overflow-x-auto scrollbar-hide gap-0.5 pr-10">
-          ${megaCategories.map((cat, i) => `
-            <button
-              type="button"
-              class="mcb-tab flex-shrink-0 px-3 py-2 text-xs whitespace-nowrap transition-colors ${
-                i === 0
-                  ? 'font-bold text-gray-900 dark:text-white border-b-2 border-gray-900 dark:border-white'
-                  : 'text-gray-500 dark:text-gray-400 font-normal border-b-2 border-transparent'
-              }"
-              data-mcb-cat="${cat.id}"
-            >${cat.name}</button>
+          ${Array.from({ length: 6 }, (_, i) => `
+            <div class="flex-shrink-0 px-3 py-2 animate-pulse">
+              <div class="h-3 rounded bg-gray-200 dark:bg-gray-700 ${i === 0 ? 'w-24' : 'w-16'}"></div>
+            </div>
           `).join('')}
         </div>
         <!-- Dropdown button with gradient fade -->
@@ -96,9 +98,14 @@ export function MobileCategoryBar(): string {
         </button>
       </div>
 
-      <!-- Row 2: Product Items -->
+      <!-- Row 2: Subcategory Items (skeleton, replaced after API) -->
       <div id="mcb-products" class="flex overflow-x-auto scrollbar-hide gap-2 sm:gap-3 px-2 sm:px-3 py-2.5">
-        ${firstCat.products.slice(0, 10).map(p => renderMobileProduct(p)).join('')}
+        ${Array.from({ length: 6 }, () => `
+          <div class="flex-shrink-0 flex flex-col items-center gap-1 w-[52px] sm:w-[60px] animate-pulse">
+            <div class="w-[52px] h-[52px] sm:w-[60px] sm:h-[60px] rounded-md bg-gray-200 dark:bg-gray-700"></div>
+            <div class="h-2.5 w-10 rounded bg-gray-200 dark:bg-gray-700"></div>
+          </div>
+        `).join('')}
       </div>
     </div>
 
@@ -106,53 +113,39 @@ export function MobileCategoryBar(): string {
   `;
 }
 
-function renderMobileProduct(product: { name: string; href: string }): string {
-  return `
-    <a href="${product.href}" class="mcb-product flex-shrink-0 flex flex-col items-center gap-1 w-[52px] sm:w-[60px]">
-      <div class="w-[52px] h-[52px] sm:w-[60px] sm:h-[60px] rounded-md bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-gray-300 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75Z"/>
-        </svg>
-      </div>
-      <span class="text-[11px] text-gray-600 dark:text-gray-400 text-center leading-tight line-clamp-2 w-full">${product.name}</span>
-    </a>
-  `;
-}
-
 /* ──── Init ──── */
 
 export function initMobileCategoryBar(): void {
-  const tabs = document.querySelectorAll<HTMLButtonElement>('.mcb-tab');
+  const tabsContainer = document.getElementById('mcb-tabs');
   const productsContainer = document.getElementById('mcb-products');
   const dropdownBtn = document.getElementById('mcb-dropdown-btn');
   const sheetOverlay = document.getElementById('mcb-sheet-overlay');
   const sheetPanel = document.getElementById('mcb-sheet-panel');
   const sheetClose = document.getElementById('mcb-sheet-close');
-  const sheetItems = document.querySelectorAll<HTMLButtonElement>('.mcb-sheet-item');
+  const sheetList = document.getElementById('mcb-sheet-list');
 
-  if (!productsContainer || tabs.length === 0) return;
+  if (!productsContainer || !tabsContainer) return;
 
   const TAB_ACT = ['font-bold', 'text-gray-900', 'dark:text-white', 'border-gray-900', 'dark:border-white'];
   const TAB_INACT = ['text-gray-500', 'dark:text-gray-400', 'font-normal', 'border-transparent'];
 
-  /* ── Shared: select a category ── */
-  function selectCategory(catId: string): void {
+  let _cats: ApiCategory[] = [];
 
+  function selectCategory(catId: string): void {
     // Update tab bar
-    tabs.forEach(t => {
+    tabsContainer!.querySelectorAll<HTMLButtonElement>('.mcb-tab').forEach(t => {
       t.classList.remove(...TAB_ACT);
       t.classList.add(...TAB_INACT);
     });
-    const activeTab = document.querySelector<HTMLButtonElement>(`.mcb-tab[data-mcb-cat="${catId}"]`);
+    const activeTab = tabsContainer!.querySelector<HTMLButtonElement>(`.mcb-tab[data-mcb-cat="${catId}"]`);
     if (activeTab) {
       activeTab.classList.remove(...TAB_INACT);
       activeTab.classList.add(...TAB_ACT);
-      // Scroll tab into view
       activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     }
 
-    // Update bottom sheet selected state (bold text + radio for active category)
-    sheetItems.forEach(item => {
+    // Update bottom sheet selected state
+    sheetList?.querySelectorAll<HTMLButtonElement>('.mcb-sheet-item').forEach(item => {
       const id = item.getAttribute('data-mcb-sheet-cat');
       const label = item.querySelector('span:first-child');
       const radio = item.querySelector('.mcb-sheet-radio') as HTMLElement | null;
@@ -170,23 +163,15 @@ export function initMobileCategoryBar(): void {
       }
     });
 
-    // Update products row
-    const cat = megaCategories.find(c => c.id === catId);
-    if (cat) {
-      productsContainer!.innerHTML = cat.products
+    // Update subcategories row
+    const cat = _cats.find(c => c.id === catId);
+    if (cat && productsContainer) {
+      productsContainer.innerHTML = cat.children
         .slice(0, 10)
-        .map(p => renderMobileProduct(p))
+        .map(ch => renderMobileSubcategory(ch.name, ch.slug))
         .join('');
     }
   }
-
-  /* ── Tab bar clicks ── */
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      const catId = tab.getAttribute('data-mcb-cat');
-      if (catId) selectCategory(catId);
-    });
-  });
 
   /* ── Bottom sheet open/close ── */
   function openSheet(): void {
@@ -205,12 +190,7 @@ export function initMobileCategoryBar(): void {
     document.body.style.overflow = '';
   }
 
-  // Dropdown button → open bottom sheet
-  if (dropdownBtn) {
-    dropdownBtn.addEventListener('click', openSheet);
-  }
-
-  // Close triggers
+  if (dropdownBtn) dropdownBtn.addEventListener('click', openSheet);
   if (sheetClose) sheetClose.addEventListener('click', closeSheet);
   if (sheetOverlay) sheetOverlay.addEventListener('click', closeSheet);
   document.addEventListener('keydown', (e) => {
@@ -236,9 +216,7 @@ export function initMobileCategoryBar(): void {
       if (!dragging) return;
       currentY = e.touches[0].clientY;
       const deltaY = currentY - startY;
-      if (deltaY > 0) {
-        sheetPanel!.style.transform = `translateY(${deltaY}px)`;
-      }
+      if (deltaY > 0) sheetPanel!.style.transform = `translateY(${deltaY}px)`;
     }, { passive: true });
 
     dragTarget.addEventListener('touchend', () => {
@@ -255,14 +233,65 @@ export function initMobileCategoryBar(): void {
     });
   }
 
-  // Sheet item clicks → select category + close sheet
-  sheetItems.forEach(item => {
-    item.addEventListener('click', () => {
-      const catId = item.getAttribute('data-mcb-sheet-cat');
-      if (catId) {
-        selectCategory(catId);
-        closeSheet();
-      }
+  // ──── Populate from API ────
+  onCategoriesLoaded((cats) => {
+    if (!cats.length) return;
+    _cats = cats;
+
+    // Render tab bar
+    tabsContainer.innerHTML = cats.map((cat, i) => `
+      <button
+        type="button"
+        class="mcb-tab flex-shrink-0 px-3 py-2 text-xs whitespace-nowrap transition-colors ${
+          i === 0
+            ? 'font-bold text-gray-900 dark:text-white border-b-2 border-gray-900 dark:border-white'
+            : 'text-gray-500 dark:text-gray-400 font-normal border-b-2 border-transparent'
+        }"
+        data-mcb-cat="${cat.id}"
+      >${cat.name}</button>
+    `).join('');
+
+    // Bind tab clicks
+    tabsContainer.querySelectorAll<HTMLButtonElement>('.mcb-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const catId = tab.getAttribute('data-mcb-cat');
+        if (catId) selectCategory(catId);
+      });
     });
+
+    // Render bottom sheet list
+    if (sheetList) {
+      sheetList.innerHTML = cats.map((cat, i) => `
+        <button
+          type="button"
+          class="mcb-sheet-item flex items-center w-full px-5 py-4 text-left transition-colors border-b border-gray-50 dark:border-gray-700/50"
+          data-mcb-sheet-cat="${cat.id}"
+        >
+          <span class="flex-1 text-[15px] ${i === 0 ? 'font-semibold text-gray-900 dark:text-white' : 'text-gray-800 dark:text-gray-300'}">${cat.name}</span>
+          <span class="mcb-sheet-radio flex-shrink-0 w-5 h-5 rounded-full border-2 ${i === 0 ? 'border-primary-500 bg-primary-500' : 'border-gray-300 dark:border-gray-600 bg-transparent'} flex items-center justify-center transition-colors">
+            <span class="w-2 h-2 rounded-full ${i === 0 ? 'bg-white' : 'bg-transparent'} transition-colors"></span>
+          </span>
+        </button>
+      `).join('');
+
+      // Bind sheet item clicks
+      sheetList.querySelectorAll<HTMLButtonElement>('.mcb-sheet-item').forEach(item => {
+        item.addEventListener('click', () => {
+          const catId = item.getAttribute('data-mcb-sheet-cat');
+          if (catId) {
+            selectCategory(catId);
+            closeSheet();
+          }
+        });
+      });
+    }
+
+    // Render first category's subcategories
+    if (cats[0]) {
+      productsContainer.innerHTML = cats[0].children
+        .slice(0, 10)
+        .map(ch => renderMobileSubcategory(ch.name, ch.slug))
+        .join('');
+    }
   });
 }

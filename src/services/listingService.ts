@@ -51,6 +51,13 @@ export interface ListingSearchParams {
   is_best_seller?: boolean
   is_new_arrival?: boolean
   free_shipping?: boolean
+  verified_supplier?: boolean
+  min_rating?: number
+  country?: string
+  paid_samples?: boolean
+  certifications?: string
+  mgmt_certifications?: string
+  product_certifications?: string
 }
 
 export interface ListingSearchResult {
@@ -81,6 +88,13 @@ export async function searchListings(params: ListingSearchParams): Promise<Listi
   if (params.is_best_seller) queryParams.set('is_best_seller', '1')
   if (params.is_new_arrival) queryParams.set('is_new_arrival', '1')
   if (params.free_shipping) queryParams.set('free_shipping', '1')
+  if (params.verified_supplier) queryParams.set('verified_supplier', '1')
+  if (params.min_rating !== undefined) queryParams.set('min_rating', String(params.min_rating))
+  if (params.country) queryParams.set('country', params.country)
+  if (params.paid_samples) queryParams.set('paid_samples', '1')
+  if (params.certifications) queryParams.set('certifications', params.certifications)
+  if (params.mgmt_certifications) queryParams.set('mgmt_certifications', params.mgmt_certifications)
+  if (params.product_certifications) queryParams.set('product_certifications', params.product_certifications)
 
   const qs = queryParams.toString()
   const url = `/method/tradehub_core.api.listing.get_listings${qs ? '?' + qs : ''}`
@@ -153,6 +167,28 @@ export async function getCategories(parent?: string) {
     `/method/tradehub_core.api.listing.get_categories${params}`
   )
   return response.message.data || []
+}
+
+/** Facet counts for sidebar filters */
+export interface FilterFacets {
+  countries: { value: string; label: string; code?: string; count: number }[]
+  categories: { id: string; name: string; slug: string; count: number }[]
+  managementCertifications: { label: string; value: string; count: number }[]
+  productCertifications: { label: string; value: string; count: number }[]
+}
+
+/**
+ * Get filter facets (country + category counts) for sidebar
+ */
+export async function getFilterFacets(query?: string, category?: string): Promise<FilterFacets> {
+  const params = new URLSearchParams()
+  if (query) params.set('query', query)
+  if (category) params.set('category', category)
+  const qs = params.toString()
+  const response = await api<{ message: { data: FilterFacets } }>(
+    `/method/tradehub_core.api.listing.get_filter_facets${qs ? '?' + qs : ''}`
+  )
+  return response.message.data || { countries: [], categories: [] }
 }
 
 /**
@@ -266,10 +302,10 @@ function mapListingCard(raw: any): ProductListingCard {
     href: raw.href || `/pages/product-detail.html?id=${raw.id}`,
     price: priceDisplay,
     moq: raw.moq || '1 adet',
-    stats: raw.stats || '',
+    stats: '',
     imageKind: 'jewelry',
     imageSrc: raw.imageSrc || undefined,
-    images: undefined,
+    images: raw.images || undefined,
     promo: raw.promo || raw.sellingPoint || undefined,
     verified: raw.verified,
     supplierYears: raw.supplierYears,
