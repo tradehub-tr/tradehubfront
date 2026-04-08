@@ -56,6 +56,8 @@ export interface ListingSearchParams {
   country?: string
   paid_samples?: boolean
   certifications?: string
+  mgmt_certifications?: string
+  product_certifications?: string
 }
 
 export interface ListingSearchResult {
@@ -91,6 +93,8 @@ export async function searchListings(params: ListingSearchParams): Promise<Listi
   if (params.country) queryParams.set('country', params.country)
   if (params.paid_samples) queryParams.set('paid_samples', '1')
   if (params.certifications) queryParams.set('certifications', params.certifications)
+  if (params.mgmt_certifications) queryParams.set('mgmt_certifications', params.mgmt_certifications)
+  if (params.product_certifications) queryParams.set('product_certifications', params.product_certifications)
 
   const qs = queryParams.toString()
   const url = `/method/tradehub_core.api.listing.get_listings${qs ? '?' + qs : ''}`
@@ -169,7 +173,8 @@ export async function getCategories(parent?: string) {
 export interface FilterFacets {
   countries: { value: string; label: string; code?: string; count: number }[]
   categories: { id: string; name: string; slug: string; count: number }[]
-  certifications: { label: string; value: string; count: number }[]
+  managementCertifications: { label: string; value: string; count: number }[]
+  productCertifications: { label: string; value: string; count: number }[]
 }
 
 /**

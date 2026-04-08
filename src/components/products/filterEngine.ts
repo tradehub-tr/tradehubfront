@@ -145,13 +145,22 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
       (params as any).paid_samples = true;
     }
 
-    // Certifications — collect all checked certification checkboxes
-    const certCheckboxes = document.querySelectorAll<HTMLInputElement>(
-      '[data-filter-section="certifications"]:checked'
+    // Management certifications
+    const mgmtCertCbs = document.querySelectorAll<HTMLInputElement>(
+      '[data-filter-section="mgmt-certifications"]:checked'
     );
-    if (certCheckboxes.length > 0) {
-      const certs = Array.from(certCheckboxes).map(cb => cb.value || cb.dataset.filterValue || '');
-      (params as any).certifications = certs.filter(Boolean).join(',');
+    if (mgmtCertCbs.length > 0) {
+      (params as any).mgmt_certifications = Array.from(mgmtCertCbs)
+        .map(cb => cb.value || cb.dataset.filterValue || '').filter(Boolean).join(',');
+    }
+
+    // Product certifications
+    const prodCertCbs = document.querySelectorAll<HTMLInputElement>(
+      '[data-filter-section="product-certifications"]:checked'
+    );
+    if (prodCertCbs.length > 0) {
+      (params as any).product_certifications = Array.from(prodCertCbs)
+        .map(cb => cb.value || cb.dataset.filterValue || '').filter(Boolean).join(',');
     }
 
     return params;
