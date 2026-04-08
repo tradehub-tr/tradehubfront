@@ -22,14 +22,15 @@ interface ProductCard {
 
 const productCardSeed: ProductCard[] = [];
 
-function lensIcon(): string {
-  return `
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-      <path d="M3 9a2 2 0 0 1 2-2h2l1-2h8l1 2h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z" />
-      <circle cx="12" cy="13" r="3" />
-    </svg>
-  `;
-}
+// Camera/lens search icon - DISABLED
+// function lensIcon(): string {
+//   return `
+//     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+//       <path d="M3 9a2 2 0 0 1 2-2h2l1-2h8l1 2h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z" />
+//       <circle cx="12" cy="13" r="3" />
+//     </svg>
+//   `;
+// }
 
 function renderProductCard(card: ProductCard, index: number): string {
   const safeName = card.name.replace(/"/g, '&quot;');
@@ -42,6 +43,28 @@ function renderProductCard(card: ProductCard, index: number): string {
   const supplierYearsText = card.supplierYearCount
     ? `${card.supplierYearCount} ${t('productGrid.yr')}`
     : '';
+
+  // ──────────────────────────────────────────────────────────────
+  // DISABLED: "Find similar" (visual search) button
+  // İleride tekrar etkinleştirmek için:
+  //   1) Yukarıdaki lensIcon() fonksiyonunun yorumunu kaldır
+  //   2) Aşağıdaki lensButtonHtml'i kullan ve return template'ine ekle:
+  //      ${lensButtonHtml}  (image-area div'inin içine)
+  //
+  // const lensButtonHtml = `
+  //   <div class="product-card__lens-wrap absolute">
+  //     <div
+  //       class="product-card__lens flex relative items-center justify-center w-full h-full rounded-full"
+  //       role="button"
+  //       aria-label="${t('productGrid.findSimilar')}"
+  //       data-i18n-aria-label="productGrid.findSimilar"
+  //       tabindex="0"
+  //     >
+  //       ${lensIcon()}
+  //     </div>
+  //   </div>
+  // `;
+  // ──────────────────────────────────────────────────────────────
 
   return `
     <a
@@ -61,17 +84,7 @@ function renderProductCard(card: ProductCard, index: number): string {
             loading="lazy"
           />
         </div>
-        <div class="product-card__lens-wrap absolute">
-          <div
-            class="product-card__lens flex relative items-center justify-center w-full h-full rounded-full"
-            role="button"
-            aria-label="${t('productGrid.findSimilar')}"
-            data-i18n-aria-label="productGrid.findSimilar"
-            tabindex="0"
-          >
-            ${lensIcon()}
-          </div>
-        </div>
+        <!-- Find similar (visual search) button - DISABLED: re-enable using lensButtonHtml above -->
       </div>
 
       <!-- Content area -->
