@@ -1,7 +1,7 @@
 /**
  * TailoredSelectionsHero Component
  * Dark hero section with Swiper coverflow carousel of category cards.
- * Dimensions match the Alibaba reference exactly:
+ * Dimensions match the iSTOC referansı exactly:
  *   – Section height: ~419px (desktop)
  *   – Title wrapper: 1440px max-width, ~100px height
  *   – Swiper coverflow height: 291px

@@ -155,7 +155,7 @@ export function OrderSummary({ data, protectionItems, tradeAssuranceText }: Orde
 
       <!-- Order Protection Link -->
       <button type="button" class="flex items-center justify-between w-full mb-3 cursor-pointer bg-transparent text-left hover:opacity-80 transition-opacity" data-modal-target="order-protection-modal" data-modal-toggle="order-protection-modal">
-        <span class="text-[16px] font-bold text-[#222222]">Alibaba.com order protection</span>
+        <span class="text-[16px] font-bold text-[#222222]">iSTOC.com order protection</span>
         <svg class="w-[18px] h-[18px] text-[#222222] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
       </button>
 

@@ -1,6 +1,6 @@
 /**
  * Mock Cart Data
- * Static data for the shopping cart page — Alibaba B2B style.
+ * Static data for the shopping cart page — iSTOC B2B style.
  */
 
 import { t } from '../i18n';

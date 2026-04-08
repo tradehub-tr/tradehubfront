@@ -57,7 +57,7 @@ function getProductImage(card: ProductListingCard): string {
   return urls[idOffset % urls.length];
 }
 
-/** Render a compact dropshipping product card (Alibaba reference style) */
+/** Render a compact dropshipping product card (iSTOC referansı style) */
 function renderDsCard(card: ProductListingCard): string {
   const imgUrl = card.imageSrc || getProductImage(card);
 

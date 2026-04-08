@@ -1,7 +1,7 @@
 /**
- * FooterLinks Component (Alibaba-style Light Footer)
+ * FooterLinks Component (iSTOC-style Light Footer)
  * Clean light/white background layout with:
- * - 5 link columns: Get support, Payments and protections, Source on Alibaba.com, Sell on Alibaba.com, Get to know us
+ * - 5 link columns: Get support, Payments and protections, Source on iSTOC.com, Sell on iSTOC.com, Get to know us
  * - Social media icons under "Stay Connected" in last column
  * - Simple top border separator
  * - No logo section
@@ -31,7 +31,7 @@ const getBaseUrl = (): string => {
 void getBaseUrl;
 
 /**
- * Footer columns configuration — Alibaba-style 5 columns
+ * Footer columns configuration — iSTOC-style 5 columns
  * Now uses i18n translation keys for all labels and titles.
  */
 interface FooterColumnI18n {
@@ -220,7 +220,7 @@ function renderLastColumn(column: FooterColumnI18n): string {
 }
 
 /**
- * FooterLinks Component (Alibaba-style Light Footer)
+ * FooterLinks Component (iSTOC-style Light Footer)
  * Renders the complete footer with:
  * - Simple top border
  * - 5 link columns in a clean grid

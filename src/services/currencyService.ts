@@ -1,7 +1,7 @@
 /**
  * Currency Service — handles multi-currency display for TradeHub
  *
- * Approach (same as Alibaba):
+ * Approach (same as iSTOC):
  * - Products store prices in their base currency (usually USD)
  * - User selects preferred display currency from header
  * - All prices are converted for display using exchange rates

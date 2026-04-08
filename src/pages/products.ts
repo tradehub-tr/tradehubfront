@@ -1,7 +1,7 @@
 /**
  * Products Listing Page — Entry Point
  * Assembles header, filter sidebar, search header, product grid, and footer.
- * Alibaba-style product listing with left filter panel and responsive product grid.
+ * iSTOC-style product listing with left filter panel and responsive product grid.
  */
 
 import '../style.css'

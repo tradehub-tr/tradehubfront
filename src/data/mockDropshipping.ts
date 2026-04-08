@@ -16,7 +16,7 @@ export interface CollectionChip {
 
 export function getCollectionChips(): CollectionChip[] {
   return [
-    { id: 'alibaba-picks', label: t('dropshipping.chipAlibabaPicks'), active: true },
+    { id: 'istoc-picks', label: t('dropshipping.chipIstocPicks'), active: true },
     { id: '48h-ship', label: t('dropshipping.chip48hShip') },
     { id: 'hot-sale', label: t('dropshipping.chipHotSale') },
     { id: 'branded', label: t('dropshipping.chipBranded') },

@@ -742,7 +742,7 @@ export const sectionEditors: SectionEditor[] = [
       { var: '--product-card-shadow', type: 'text', default: 'none', label: 'Card Shadow' },
       { var: '--product-card-hover-shadow', type: 'text', default: 'none', label: 'Card Hover Shadow' },
       { var: '--product-grid-gap', type: 'range', default: 8, min: 4, max: 32, step: 1, unit: 'px', label: 'Grid Gap' },
-      { var: '--product-font-family', type: 'text', default: 'Alibaba_B2B_Sans, Inter, "SF Pro Text", Roboto, "Helvetica Neue", Helvetica, Tahoma, Arial, "PingFang SC", "Microsoft YaHei", sans-serif', label: 'Card Font Family' },
+      { var: '--product-font-family', type: 'text', default: 'Inter, "SF Pro Text", Roboto, "Helvetica Neue", Helvetica, Tahoma, Arial, "PingFang SC", "Microsoft YaHei", sans-serif', label: 'Card Font Family' },
       { var: '--product-image-bg', type: 'color', default: '#ffffff', label: 'Image Background' },
       { var: '--product-image-radius', type: 'range', default: 8, min: 0, max: 32, step: 1, unit: 'px', label: 'Image Radius' },
       { var: '--product-image-padding', type: 'range', default: 0, min: 0, max: 32, step: 1, unit: 'px', label: 'Image Padding' },

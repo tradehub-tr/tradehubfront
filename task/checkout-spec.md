@@ -1,8 +1,8 @@
-# Specification: Checkout (Odeme) Page — Frontend Specification from Alibaba.com Reference
+# Specification: Checkout (Odeme) Page — Frontend Specification from iSTOC.com Reference
 
 ## Overview
 
-This task produces a **pixel-perfect static Checkout page** that clones the Alibaba.com checkout flow (`biz.alibaba.com/contract/ShoppingCart.htm`). The output is a fully-functional frontend page with 8 interactive components: a shipping address form with float-label inputs, cascading country/state/city dropdowns, form validation, two collapsed accordion sections (Payment Method, Items & Delivery), a sticky order summary sidebar, a scrollable order-protection modal, a geolocation feature, and an address-autocomplete popup. There is **no backend** — all data comes from mock JSON, and form submissions are logged via `console.log`. All client-side interactions (dropdowns, validation, float labels, modal open/close, accordion toggle) must be fully functional.
+This task produces a **pixel-perfect static Checkout page that clones the iSTOC.com checkout flow. The output is a fully-functional frontend page with 8 interactive components: a shipping address form with float-label inputs, cascading country/state/city dropdowns, form validation, two collapsed accordion sections (Payment Method, Items & Delivery), a sticky order summary sidebar, a scrollable order-protection modal, a geolocation feature, and an address-autocomplete popup. There is **no backend** — all data comes from mock JSON, and form submissions are logged via `console.log`. All client-side interactions (dropdowns, validation, float labels, modal open/close, accordion toggle) must be fully functional.
 
 ## Workflow Type
 
@@ -162,7 +162,7 @@ From existing `index.html`:
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Checkout | Alibaba</title>
+    <title>Checkout | iSTOC</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
@@ -214,7 +214,7 @@ From existing `index.html`:
    - Acceptance: Submitting with empty Phone and Postal code shows red borders + "Required" text on both fields; filling a field and re-submitting clears that field's error
 
 5. **Order Summary Sidebar (C5)**
-   - Description: Sticky card with product thumbnails (2x2 grid + "200" badge), line-item price breakdown, "Alibaba.com order protection >" link, trust icons, Trade Assurance footer
+   - Description: Sticky card with product thumbnails (2x2 grid + "200" badge), line-item price breakdown, "iSTOC.com order protection >" link, trust icons, Trade Assurance footer
    - Acceptance: Sidebar sticks to viewport on scroll; all price values display correctly; clicking "order protection" link opens modal
 
 6. **Order Protection Modal (C6)**
@@ -691,7 +691,7 @@ function initFloatLabels(): void {
 | Property | Value | Token |
 |----------|-------|-------|
 | Text | "Continue to payment" | From mock data |
-| Background | `#ea580c` (Alibaba checkout orange) | Custom — NOT `var(--color-btn-bg)` |
+| Background | `#ea580c` (iSTOC checkout orange) | Custom — NOT `var(--color-btn-bg)` |
 | Alt option | `var(--color-btn-bg)` (#cc9900) if brand consistency preferred | Project primary |
 | Text color | #ffffff | `text-white` |
 | Font size | 15-16px | `var(--font-size-md)` |
@@ -705,7 +705,7 @@ function initFloatLabels(): void {
 | Alignment | Left (not centered) | Default block |
 
 **IMPORTANT: Color Decision**
-The original Alibaba checkout uses `#ea580c` (orange-red). The project design system uses `#cc9900` (amber/gold). The spec provides both options. **Recommendation: Use `#ea580c` for visual accuracy to Alibaba reference.**
+The original iSTOC checkout uses `#ea580c` (orange-red). The project design system uses `#cc9900` (amber/gold). The spec provides both options. **Recommendation: Use `#ea580c` for visual accuracy to iSTOC referansı.**
 
 ---
 
@@ -870,7 +870,7 @@ Pay in USD                    USD 475.82       ← large total
 
 | Property | Value |
 |----------|-------|
-| Text | "Alibaba.com order protection" |
+| Text | "iSTOC.com order protection" |
 | Color | #111827 |
 | Font weight | 600 |
 | Font size | 14px |
@@ -888,7 +888,7 @@ Each item: icon + bold title + description paragraph
 
 | Item | Icon | Title | Description |
 |------|------|-------|-------------|
-| 1 | ✅ Green check circle (20px) | "Secure payments" | "Every payment you make on Alibaba.com is secured with strict SSL encryption and PCI DSS data protection protocols." |
+| 1 | ✅ Green check circle (20px) | "Secure payments" | "Every payment you make on iSTOC.com is secured with strict SSL encryption and PCI DSS data protection protocols." |
 | 2 | 🚚 Green truck (20px) | "On-time Dispatch Guarantee" | "Dispatched within 7 days of payment or receive a 10% delay compensation." |
 | 3 | 💰 Green shield/money (20px) | "Money-back protection" | "Claim a refund if your order doesn't ship, is missing, or arrives with product issues." |
 
@@ -905,7 +905,7 @@ Each item: icon + bold title + description paragraph
 
 | Property | Value |
 |----------|-------|
-| Text | "Only orders placed and paid through Alibaba.com can enjoy free protection by 🛡 Trade Assurance" |
+| Text | "Only orders placed and paid through iSTOC.com can enjoy free protection by 🛡 Trade Assurance" |
 | Font size | 12px |
 | Color | #9ca3af |
 | Line height | 1.5 |
@@ -946,7 +946,7 @@ Each item: icon + bold title + description paragraph
 ### Modal Header
 | Property | Value |
 |----------|-------|
-| Title | "Alibaba.com order protection" |
+| Title | "iSTOC.com order protection" |
 | Font size | 20px (`text-xl`) |
 | Font weight | 700 |
 | Color | #111827 |
@@ -970,7 +970,7 @@ Each item: icon + bold title + description paragraph
 |----------|-------|
 | Icon | ✅ Green check circle, ~28px |
 | Title | "Secure payments", 18px, font-weight 700, #111827 |
-| Description | "Choose your preferred local payment methods, currencies, bank transfers, or deferred payment plans to pay. Every transaction you make through Alibaba.com is protected by SSL encryption and PCI DSS data security protocols." |
+| Description | "Choose your preferred local payment methods, currencies, bank transfers, or deferred payment plans to pay. Every transaction you make through iSTOC.com is protected by SSL encryption and PCI DSS data security protocols." |
 | Description style | 14px, #374151, line-height 1.6 |
 | **Payment Icons** | 11 icons in flex-wrap row, gap 8px, margin 16px 0 |
 | Learn link | "Learn about secure payments" — underline, 13px, #374151 |
@@ -1030,7 +1030,7 @@ Each item: icon + bold title + description paragraph
 |----------|-------|
 | Icon | 🔒 Green lock, ~28px |
 | Title | "Data privacy" |
-| Description | "We never share your data with third parties without your consent. All personal information is handled in accordance with the Alibaba.com Privacy Policy." |
+| Description | "We never share your data with third parties without your consent. All personal information is handled in accordance with the iSTOC.com Privacy Policy." |
 | Learn link | "Learn how we protect your data" |
 | Padding | 24px 0 |
 | Border bottom | None (last section) |
@@ -1285,7 +1285,7 @@ export const pageContent = {
   paymentTitle: "Payment method",
   itemsTitle: "Items and delivery options",
   orderSummaryTitle: "Order summary",
-  orderProtectionTitle: "Alibaba.com order protection",
+  orderProtectionTitle: "iSTOC.com order protection",
   // ... all display text
 };
 ```
@@ -1498,7 +1498,7 @@ The task is complete when:
 7. [ ] Form validation shows red borders + "Required" on empty required fields
 8. [ ] "Continue to payment" logs form data to console on successful validation
 9. [ ] Order summary sidebar sticks on scroll (desktop)
-10. [ ] "Alibaba.com order protection" link opens scrollable modal with 6 sections + 11 payment icons
+10. [ ] "iSTOC.com order protection" link opens scrollable modal with 6 sections + 11 payment icons
 11. [ ] Modal closes via X button, backdrop click, and ESC key
 12. [ ] Accordion sections (Payment, Items) toggle open/closed with animation
 13. [ ] "Use my current location" triggers geolocation prompt and mock-fills form

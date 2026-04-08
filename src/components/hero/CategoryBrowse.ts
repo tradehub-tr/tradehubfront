@@ -1,6 +1,6 @@
 /**
  * CategoryBrowse Component
- * Alibaba-style vertical category list placed below the welcome bar.
+ * iSTOC-style vertical category list placed below the welcome bar.
  * Clicking a category opens a popup modal with sidebar + product grid
  * (same logic as MegaMenu "All Categories" view).
  */

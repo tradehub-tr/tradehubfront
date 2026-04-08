@@ -3,7 +3,7 @@
  * Internal left-nav with grouped sections:
  *   Özet: Ödeme yönetimi, İşlemler
  *   T/T: Havale hesapları, Havale Takibi
- *   Ek hizmetler: Alibaba.com Kartı, Pay Later for Business
+ *   Ek hizmetler: iSTOC.com Kartı, Pay Later for Business
  *
  * Modals: "Yeni bir kart ekle", "Tedarikçinin hesabını doğrula"
  * Inline view: "Havale dekontu yükle"
@@ -39,7 +39,7 @@ const NAV_GROUPS: PayNavGroup[] = [
   {
     title: t('payment.navAdditionalServices'),
     items: [
-      { id: 'alibaba-card', label: t('payment.alibabaCard') },
+      { id: 'istoc-card', label: t('payment.istocCard') },
       { id: 'pay-later', label: t('payment.payLater') },
     ],
   },
@@ -387,11 +387,11 @@ function renderTTTracking(): string {
 }
 
 /* ────────────────────────────────────────
-   SECTION: Alibaba.com Kartı
+   SECTION: iSTOC.com Kartı
    ──────────────────────────────────────── */
-function renderAlibabaCard(): string {
+function renderIstocCard(): string {
   return `
-    <div class="mb-6"><h1 class="text-[22px] font-bold text-text-primary m-0 max-sm:text-lg truncate">${t('payment.alibabaCardTitle')}</h1></div>
+    <div class="mb-6"><h1 class="text-[22px] font-bold text-text-primary m-0 max-sm:text-lg truncate">${t('payment.istocCardTitle')}</h1></div>
     <div class="flex flex-col items-center justify-center py-20 px-6 text-center">
       <div class="opacity-50 mb-4">${RECEIPT_ICON}</div>
       <p class="text-sm text-text-tertiary m-0">${t('payment.comingSoon')}</p>
@@ -457,7 +457,7 @@ const SECTIONS: Record<string, () => string> = {
   'transactions': renderTransactions,
   'tt-accounts': renderTTAccounts,
   'tt-tracking': renderTTTracking,
-  'alibaba-card': renderAlibabaCard,
+  'istoc-card': renderIstocCard,
   'pay-later': renderPayLater,
   'upload-receipt': renderUpload,
 };

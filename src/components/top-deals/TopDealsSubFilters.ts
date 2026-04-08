@@ -1,6 +1,6 @@
 /**
  * TopDealsSubFilters Component
- * Pill-shaped sub-filter buttons (Alibaba reference: rounded border pills)
+ * Pill-shaped sub-filter buttons (iSTOC referansı: rounded border pills)
  * Mobile: single-row horizontal scroll with truncated pills
  * Desktop: wrapping multi-row layout
  */

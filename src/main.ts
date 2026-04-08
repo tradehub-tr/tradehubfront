@@ -51,7 +51,7 @@ appEl.innerHTML = `
   <!-- Mobile Search Tabs (Products | Manufacturers) — non-sticky -->
   ${MobileSearchTabs('products', { hideWorldwide: true })}
 
-  <!-- Mobile Category Bar (Alibaba-style, mobile/tablet only) -->
+  <!-- Mobile Category Bar (iSTOC-style, mobile/tablet only) -->
   ${MobileCategoryBar()}
 
   <!-- Mega Menu (fixed overlay, positioned by JS) -->

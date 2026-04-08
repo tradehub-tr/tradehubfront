@@ -625,7 +625,7 @@
     --product-card-shadow: none;
     --product-card-hover-shadow: none;
     --product-grid-gap: 8px;
-    --product-font-family: Alibaba_B2B_Sans, Inter, "SF Pro Text", Roboto, "Helvetica Neue", Helvetica, Tahoma, Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+    --product-font-family: Inter, "SF Pro Text", Roboto, "Helvetica Neue", Helvetica, Tahoma, Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
     --product-image-bg: var(--color-surface);
     --product-image-radius: 8px;
     --product-image-padding: 0px;
@@ -1341,7 +1341,7 @@
     .product-card {
         min-height: var(--product-card-min-height, 384px);
         padding: var(--product-card-padding, 12px);
-        font-family: var(--product-font-family, Alibaba_B2B_Sans, Inter, "SF Pro Text", Roboto, "Helvetica Neue", Helvetica, Tahoma, Arial, "PingFang SC", "Microsoft YaHei", sans-serif);
+        font-family: var(--product-font-family, Inter, "SF Pro Text", Roboto, "Helvetica Neue", Helvetica, Tahoma, Arial, "PingFang SC", "Microsoft YaHei", sans-serif);
         color: var(--color-text-primary);
         background: var(--product-card-bg, #ffffff);
         border: var(--product-card-border-width, 0px) solid var(--product-card-border, #e5e7eb);
@@ -1694,13 +1694,13 @@
 }
 
 /* ============================================================
-   PRODUCT TITLE BAR — Above gallery, full-width (Alibaba-style)
+   PRODUCT TITLE BAR — Above gallery, full-width (iSTOC-style)
    ============================================================ */
 
 /* ProductTitleBar — migrated to Tailwind in ProductTitleBar.ts */
 
 /* ============================================================
-   PRODUCT IMAGE GALLERY — Alibaba-style
+   PRODUCT IMAGE GALLERY — iSTOC-style
    ============================================================ */
 
 /* Gallery container: thumbnail strip (left) + main image (right) */
@@ -2144,7 +2144,7 @@ body.gallery-lightbox-open {
 /* Customization styles — migrated to Tailwind in AttributesTabContent.ts */
 
 /* ============================================================
-   REVIEWS REDESIGN — Alibaba-style reviews section
+   REVIEWS REDESIGN — iSTOC-style reviews section
    ============================================================ */
 
 /* Sub-tabs (Urun Yorumlari | Magaza Yorumlari) */
@@ -2808,7 +2808,7 @@ body.gallery-lightbox-open {
 /* sp-* classes migrated to Tailwind in CompanyProfile.ts */
 
 /* ============================================================
-   PRODUCT INFO CARD — Alibaba layout-stick style
+   PRODUCT INFO CARD — iSTOC layout-stick style
    ============================================================ */
 
 #product-info {
@@ -2828,7 +2828,7 @@ body.gallery-lightbox-open {
     box-shadow: 0 10px 28px -18px rgba(17, 24, 39, 0.35);
 }
 
-/* Card Tabs — "Ürün Fiyatları" / "Toplu Teklif" (Alibaba-style) */
+/* Card Tabs — "Ürün Fiyatları" / "Toplu Teklif" (iSTOC-style) */
 #pd-card-tabs {
     display: flex;
     margin: -20px -20px 0;
@@ -2954,7 +2954,7 @@ body.gallery-lightbox-open {
     margin-bottom: 0;
 }
 
-/* Color variant thumbnails (Alibaba-style product images) */
+/* Color variant thumbnails (iSTOC-style product images) */
 .pd-color-thumbs {
     display: flex;
     flex-wrap: wrap;
@@ -2994,7 +2994,7 @@ body.gallery-lightbox-open {
     cursor: not-allowed;
 }
 
-/* Variant pill buttons (Alibaba-style bordered pills) */
+/* Variant pill buttons (iSTOC-style bordered pills) */
 .pd-variant-btn {
     padding: 6px 16px;
     border-radius: 16px;
@@ -3019,7 +3019,7 @@ body.gallery-lightbox-open {
 /* .pd-info-section, .pd-section-title, .pd-verified-badge, .pd-customization-list,
    .pd-shipping-card and children migrated to Tailwind in ProductInfo.ts */
 
-/* CTA Buttons — two-state positioning (Alibaba-style)
+/* CTA Buttons — two-state positioning (iSTOC-style)
    Non-sticky: normal flow with top+bottom dividers
    Sticky: pinned at bottom of scrollable area */
 #pd-cta-buttons {
@@ -3082,7 +3082,7 @@ body.gallery-lightbox-open {
 
 
 /* ============================================================
-   MOBILE PRODUCT DETAIL -- Alibaba-Style Layout
+   MOBILE PRODUCT DETAIL -- iSTOC-Style Layout
    Layout via Tailwind classes in MobileLayout.ts.
    Only transitions, states, pseudo-elements remain in CSS.
    ============================================================ */

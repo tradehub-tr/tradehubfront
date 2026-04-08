@@ -1,6 +1,6 @@
 /**
  * CompanyProfile Component
- * Alibaba "Know Your Supplier" design: hero banner, stat counters,
+ * iSTOC "Know Your Supplier" design: hero banner, stat counters,
  * company details table, factory capabilities, certifications.
  */
 

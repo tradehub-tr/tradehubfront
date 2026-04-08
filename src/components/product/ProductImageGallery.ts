@@ -1,9 +1,9 @@
 /**
  * ProductImageGallery Component
- * Alibaba-style: vertical scrollable thumbnail strip (left) + large main image (right).
+ * iSTOC-style: vertical scrollable thumbnail strip (left) + large main image (right).
  * Thumbnails change main image on HOVER. Up/down scroll arrows on thumbnail strip.
  * Prev/next arrows on main image. Favorite + camera icons top-right.
- * Gallery container uses aspect-ratio 16/10 matching Alibaba layout.
+ * Gallery container uses aspect-ratio 16/10 matching iSTOC layout.
  *
  * Interactivity powered by Alpine.js (imageGallery component registered in alpine.ts).
  */

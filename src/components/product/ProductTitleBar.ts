@@ -1,6 +1,6 @@
 /**
  * ProductTitleBar Component
- * Full-width section above the product hero grid (Alibaba-style).
+ * Full-width section above the product hero grid (iSTOC-style).
  * Contains: product title (h1), rating/review/order line, supplier company bar.
  */
 

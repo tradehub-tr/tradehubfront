@@ -1,6 +1,6 @@
 /**
  * RFQ Success Page — Shown after successful RFQ submission
- * Alibaba-style: success message, quality rating, promotional banner.
+ * iSTOC-style: success message, quality rating, promotional banner.
  */
 
 import '../style.css'
