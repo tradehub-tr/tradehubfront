@@ -44,7 +44,7 @@ import { ShippingModal, initShippingModal } from '../components/product'
 import { initCurrency } from '../services/currencyService'
 
 // Category data for slug/ID → name mapping (dynamic, API-based)
-import { loadCategories, findCategoryBySlug, findCategoryById } from '../services/categoryService'
+import { findCategoryBySlug, findCategoryById } from '../services/categoryService'
 
 // Utilities
 import { initAnimatedPlaceholder } from '../utils/animatedPlaceholder'
@@ -254,27 +254,12 @@ const baseParams = {
   category: categoryParam || undefined,
 };
 
-// Kategoriler ve para birimi paralel yüklensin; breadcrumb/header kategori adıyla güncellenir
-loadCategories().then(() => {
-  if (categoryParam) {
-    const resolvedKeyword = resolveKeyword();
-    if (resolvedKeyword && resolvedKeyword !== initialKeyword) {
-      updateSearchHeader({ keyword: resolvedKeyword });
-    }
-  }
-}).catch(() => { /* sessiz hata */ });
+// Filter engine reference
+let engine: ReturnType<typeof initFilterEngine> | null = null;
 
-initCurrency().then(() => searchListings(searchParams)).then(result => {
-  const products = result.products;
-
-  // Render products
-  rerenderProductGrid(products);
-
-  // Update search header with real counts (kategori adı zaten resolveKeyword ile güncellendi)
-  updateSearchHeader({
-    totalProducts: result.searchHeader.totalProducts,
-    keyword: result.searchHeader.keyword || resolveKeyword() || undefined,
-  });
+// Initialize currency, then set up filter engine
+// Load dynamic sidebar facets (categories, countries)
+initFilterSidebar(queryParam || undefined, categoryParam || undefined);
 
 initCurrency().then(() => {
   engine = initFilterEngine({
@@ -284,7 +269,7 @@ initCurrency().then(() => {
       rerenderProductGrid(products);
       updateSearchHeader({
         totalProducts: total,
-        keyword: searchKeyword || undefined,
+        keyword: resolveKeyword() || undefined,
       });
       if (engine) updateFilterChips(engine.getState());
 
