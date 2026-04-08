@@ -1,6 +1,6 @@
 /**
  * TopDeals Component
- * Alibaba-style: Swiper slider with individual product cards, spacing between them,
+ * iSTOC-style: Swiper slider with individual product cards, spacing between them,
  * and prev/next navigation arrows.
  */
 

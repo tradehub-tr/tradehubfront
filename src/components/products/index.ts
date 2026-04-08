@@ -3,7 +3,7 @@
  * Re-exports all products page components for easier importing
  */
 
-// FilterSidebar component - Alibaba-style filter panel with multiple filter types
+// FilterSidebar component - iSTOC-style filter panel with multiple filter types
 export { FilterSidebar, initFilterSidebar, getDefaultFilterSections } from './FilterSidebar';
 
 // ProductListingGrid component - responsive product grid with image slider

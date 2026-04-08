@@ -1,6 +1,6 @@
 /**
  * InquiriesLayout Component
- * Alibaba-style "My Inquiries" + "My RFQs" dashboard.
+ * iSTOC-style "My Inquiries" + "My RFQs" dashboard.
  * Two tabs — data fetched from real API.
  */
 

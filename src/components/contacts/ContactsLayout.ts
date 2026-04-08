@@ -1,7 +1,7 @@
 /**
  * ContactsLayout Component
  * "Kişilerim" page — 2-panel: contact list (left) + contact detail (right).
- * Alibaba-style with search, sort dropdown, and empty states.
+ * iSTOC-style with search, sort dropdown, and empty states.
  */
 
 import { t } from '../../i18n';

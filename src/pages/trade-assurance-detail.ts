@@ -1,6 +1,6 @@
 /**
  * Trade Assurance Detay — "Daha fazla bilgi" sayfası
- * Alibaba'daki "Alibaba.com'da ödemeden teslimata korumadan faydalanın" detay sayfası
+ * iSTOC'taki "iSTOC.com'da ödemeden teslimata korumadan faydalanın" detay sayfası
  */
 import '../style.css'
 import { initFlowbite } from 'flowbite'

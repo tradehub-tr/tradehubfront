@@ -1454,7 +1454,7 @@ const tr = {
     // DROPSHIPPING
     // ============================================================
     dropshipping: {
-      alibabaPicks: 'iSTOC seçimleri',
+      istocPicks: 'iSTOC seçimleri',
       hotSales: 'Sıcak satış',
       brandedProducts: 'Markalı ürünler',
       complianceReady: 'Uyumluluk Hazır',
@@ -1647,7 +1647,7 @@ const tr = {
     // LOGISTICS
     // ============================================================
     logistics: {
-      ordersBannerInfo: 'Bilgilendirme: Lojistik pazar yeri siparişleri, ticaret güvencesi siparişlerine yükseltilmiştir. Ticaret güvencesi siparişlerinizi alibaba> siparişler menüsünden yönetebilirsiniz.',
+      ordersBannerInfo: 'Bilgilendirme: Lojistik pazar yeri siparişleri, ticaret güvencesi siparişlerine yükseltilmiştir. Ticaret güvencesi siparişlerinizi iSTOC> siparişler menüsünden yönetebilirsiniz.',
       reviewsBannerInfo: 'Bilgilendirme: Lojistik pazar yeri siparişleri yaklaşık 20 Şubat tarihinden itibaren ticaret güvencesi siparişlerine yükseltilecektir.',
       manageOrders: 'Lojistik siparişlerini yönet',
       myReviews: 'Değerlendirmelerim',
@@ -1703,7 +1703,7 @@ const tr = {
       transactions: 'İşlemler',
       ttAccounts: 'Havale hesapları',
       ttTracking: 'Havale Takibi',
-      alibabaCard: 'Alibaba.com Kart',
+      istocCard: 'iSTOC.com Kart',
       payLater: 'İşletme İçin Sonra Öde',
       paymentTitle: 'Ödeme',
       paymentManagementTitle: 'Ödeme yönetimi',
@@ -1750,7 +1750,7 @@ const tr = {
       bankWireTransferAccounts: 'Banka Havale Hesapları',
       verifySupplierAccount: 'Tedarikçi hesabını doğrula',
       uploadWireReceipt: 'Havale dekontu yükle',
-      tooltipVerify: 'Tedarikçinin hesabının resmi bir Alibaba.com banka hesabı olup olmadığını doğrulayın. Ödemenizin Alibaba.com tarafından korunduğunu doğrulamak için bir havale dekontu yükleyin.',
+      tooltipVerify: 'Tedarikçinin hesabının resmi bir iSTOC.com banka hesabı olup olmadığını doğrulayın. Ödemenizin iSTOC.com tarafından korunduğunu doğrulamak için bir havale dekontu yükleyin.',
       allTab: 'Tümü',
       pendingMatchTab: 'Tedarikçi Eşleşmesi Bekleniyor',
       matchedTab: 'Tedarikçi Tarafından Tam Eşleşme',
@@ -1763,7 +1763,7 @@ const tr = {
       thTotalWireAmount: 'Toplam Havale Tutarı',
       verifyModalTitle: 'Tedarikçi hesabını doğrula',
       verifyWarning: 'Ödeme yapmadan önce tedarikçinin banka hesabını her zaman doğrulayın',
-      verifyDescription: 'Bir tedarikçiden ödeme talimatı aldığınızda, ödeme yapmadan önce hesap numarasının resmi Alibaba.com banka hesabına ait olduğunu doğrulayın. Bu şekilde sipariş korumasından yararlanabilirsiniz.',
+      verifyDescription: 'Bir tedarikçiden ödeme talimatı aldığınızda, ödeme yapmadan önce hesap numarasının resmi iSTOC.com banka hesabına ait olduğunu doğrulayın. Bu şekilde sipariş korumasından yararlanabilirsiniz.',
       supplierAccountPlaceholder: 'Tedarikçinin banka hesap numarası *',
       cancelBtn: 'İptal',
       verifyBtn: 'Doğrula',
@@ -1773,7 +1773,7 @@ const tr = {
       thWireAmount: 'Havale Tutarı',
       thSendDate: 'Gönderim Tarihi',
       noTrackingRecord: 'Havale takip kaydı bulunamadı',
-      alibabaCardTitle: 'Alibaba.com Kart',
+      istocCardTitle: 'iSTOC.com Kart',
       comingSoon: 'Bu hizmet yakında kullanıma sunulacaktır',
       payLaterTitle: 'İşletme İçin Sonra Öde',
       uploadReceiptTitle: 'Havale dekontu yükle',
@@ -1913,14 +1913,14 @@ const tr = {
       ptParagraph2: 'Yaşanabilecek herhangi bir rahatsızlık için içtenlikle özür dileriz ve daha iyi çözümler sunmak için çalışırken anlayışınız için minnettarız. Hâlâ ödeme çözümü hizmetlerine ihtiyacınız varsa, <strong class="text-gray-900 font-bold">Şimdi Al Sonra Öde</strong> veya <strong class="text-gray-900 font-bold">İşletme İçin Sonra Öde</strong> ödeme seçeneklerini değerlendirebilirsiniz. Daha fazla bilgi için <a href="/pages/dashboard/payment.html#pay-later" class="text-blue-600 underline underline-offset-2 font-medium hover:text-blue-700">buraya</a> tıklayın.',
       ptParagraph3: 'Süregelen desteğiniz için teşekkür ederiz!',
       ptRegards: 'Saygılarımızla,',
-      ptTeam: 'Alibaba.com Ödeme Koşulları Ekibi',
+      ptTeam: 'iSTOC.com Ödeme Koşulları Ekibi',
       piTitle: 'Ürün Denetim Hizmeti',
       piSubtitle: 'Tedarikçi ürünlerinizi profesyonel olarak denetletin',
       piDearBuyers: 'Sayın alıcılar,',
       piParagraph1: 'Ürün denetim hizmetimiz ile siparişlerinizin kalitesini sevkiyat öncesinde profesyonel denetçiler tarafından kontrol ettirebilirsiniz. Bu hizmet şu anda yapılandırılmaktadır.',
       piParagraph2: 'Denetim hizmeti hakkında daha fazla bilgi için müşteri hizmetlerimizle iletişime geçebilirsiniz.',
       piRegards: 'Saygılarımızla,',
-      piTeam: 'Alibaba.com Kalite Denetim Ekibi',
+      piTeam: 'iSTOC.com Kalite Denetim Ekibi',
     },
 
     // ============================================================
@@ -2072,7 +2072,7 @@ const tr = {
         minOrder: 'Min. Sipariş',
         sold: 'satıldı',
 
-        // === YENİ: Storefront Yeniden Tasarım (Alibaba stili) ===
+        // === YENİ: Storefront Yeniden Tasarım (iSTOC stili) ===
         // Header istatistikleri
         platformYears: 'iSTOC\'ta {{count}} yıl',
         employees: '{{count}} çalışan',
@@ -3276,13 +3276,13 @@ const tr = {
       customsPlaceholder: 'Gümrük muayenesi bilgileri burada görüntülenecek.',
       faqTitle: 'Sıkça Sorulan Sorular',
       taxUsTitle: 'ABD satış vergisi muafiyeti için',
-      taxUsDesc: 'Yeniden satış veya üretim için ürün satın alıyorsanız doğrulanması için vergi bilgilerinizi gönderin ve Alibaba.com\'da vergiden muaf siparişler verin.',
+      taxUsDesc: 'Yeniden satış veya üretim için ürün satın alıyorsanız doğrulanması için vergi bilgilerinizi gönderin ve iSTOC.com\'da vergiden muaf siparişler verin.',
       taxUsBtn: 'Vergi muafiyeti ekleyin veya değiştirin',
       taxEuTitle: 'AB/Norveç/Birleşik Krallık/İsviçre veya Avustralya/Yeni Zelanda/Singapur/Şili vergi bilgisi gönderimi',
-      taxEuDesc: 'AB/Norveç/Birleşik Krallık/İsviçre veya Avustralya/Yeni Zelanda/Singapur/Şili ülkelerindeki ticari satın alımlarda, doğrulanması için vergi bilgilerinizi göndererek Alibaba.com\'da vergiden muaf siparişler verebilirsiniz. İsviçre\'deki ticari satın alımlarda vergi düzenlemelerine uymak için KDV numaranızı buradan gönderin.',
+      taxEuDesc: 'AB/Norveç/Birleşik Krallık/İsviçre veya Avustralya/Yeni Zelanda/Singapur/Şili ülkelerindeki ticari satın alımlarda, doğrulanması için vergi bilgilerinizi göndererek iSTOC.com\'da vergiden muaf siparişler verebilirsiniz. İsviçre\'deki ticari satın alımlarda vergi düzenlemelerine uymak için KDV numaranızı buradan gönderin.',
       taxEuBtn: 'Vergi bilgilerinizi ekleyin',
       taxCaTitle: 'Kanada PST vergi muafiyeti için',
-      taxCaDesc: 'Yeniden satış veya üretim için ürün satın alıyorsanız doğrulanması için vergi bilgilerinizi gönderin ve Alibaba.com\'da vergiden muaf siparişler verin.',
+      taxCaDesc: 'Yeniden satış veya üretim için ürün satın alıyorsanız doğrulanması için vergi bilgilerinizi gönderin ve iSTOC.com\'da vergiden muaf siparişler verin.',
       taxCaBtn: 'PST bilgisini ekle',
       faqNoTaxInfoTitle: 'Vergi bilgilerim yoksa ne yapmalıyım?',
       faqNoTaxInfoDesc: 'Yerel vergi kurumunuzun web sitesini kontrol ederek vergi muafiyeti için uygunluk kriterlerinizi inceleyin. Uygunluk şartlarını sağlıyorsanız, vergi kurumundan vergi muafiyeti belgenizi alıp, bu sayfa üzerinden göndererek vergi muafiyetine sahip bir alıcı olabilirsiniz.',
@@ -3309,7 +3309,7 @@ const tr = {
       sectionContactInfo: 'İletişim bilgileri',
       sectionSpam: 'Kişi ekleme, engelleme ve spam durumunuz',
       sectionSourcingInfo: 'Tedarik bilgileri',
-      sectionActivity: 'Alibaba.com\'daki aktiviteniz',
+      sectionActivity: 'iSTOC.com\'daki aktiviteniz',
       sectionIndustries: 'İlgilendiğiniz endüstriler',
       sectionTopKeywords: 'En çok aranan anahtar kelimeler',
       sectionRecentKeywords: 'Son aranan anahtar kelimeler ve görüntülenen ürünler',
@@ -3487,13 +3487,13 @@ const tr = {
       emailPreferencesFor: 'E-posta tercihleri için',
       unsubscribeAll: 'Tüm abonelikten çıkın',
       allNotificationEmails: 'Tüm bildirim e-postaları',
-      notificationEmailsDesc: 'Alibaba.Com\'da önemli hesap güncellemeleri ve etkinlikleri hakkında sizi bilgilendiren e-postalar',
+      notificationEmailsDesc: 'iSTOC.com\'da önemli hesap güncellemeleri ve etkinlikleri hakkında sizi bilgilendiren e-postalar',
       generalNotificationEmails: 'Genel bildirim e-postaları',
       generalNotificationEmailsDesc: 'Hesaplarınız, iletişimleriniz, siparişleriniz, gönderilerinize ilgili güncellemeler dahil olmak üzere platformdaki faaliyetleriniz tarafından tetiklenen e-postalar.',
       disputeUpdates: 'Anlaşmazlık güncellemeleri',
       disputeUpdatesDesc: 'Taraf olduğunuz herhangi bir anlaşmazlık olması durumunda (sizin tarafınız tarafından başlatılmış olsun ya da olmasın), sizi bilgilendirecek ve ilerlemesi konusunda sizi bilgilendireceğiz.',
       allMarketingEmails: 'Tüm pazarlama e-postaları',
-      marketingEmailsDesc: 'Alibaba.Com\'da ürünler ve hizmetler hakkında tanıtım mesajları içeren e-postalar',
+      marketingEmailsDesc: 'iSTOC.com\'da ürünler ve hizmetler hakkında tanıtım mesajları içeren e-postalar',
       generalMarketingEmails: 'Genel pazarlama e-postaları',
       generalMarketingEmailsDesc: 'İşletmenize fayda sağlayabilecek ürün indirimleri, özel teklifler, etkinlikler ve hizmet teklifleri dahil olmak üzere fırsatlar, etkinlikler ve hizmet güncellemeleri hakkında sizi bilgilendirmek için e-postalar.',
       surveys: 'Anketler',
@@ -5091,7 +5091,7 @@ const tr = {
 
     // Collection chips
     collectionLabel: 'Koleksiyon',
-    chipAlibabaPicks: 'TradeHub Seçimleri',
+    chipIstocPicks: 'TradeHub Seçimleri',
     chip48hShip: '48 Saat Kargo',
     chipHotSale: 'Çok Satan',
     chipBranded: 'Markalı',

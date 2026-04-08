@@ -2,7 +2,7 @@ import { t } from '../../i18n';
 import { formatPrice } from '../../utils/currency';
 /**
  * ProductListingGrid Component
- * Alibaba-style product listing grid for products page.
+ * iSTOC-style product listing grid for products page.
  * Responsive grid with hover zoom effect on product images.
  * Uses CSS transitions for smooth 500ms zoom animation.
  */
@@ -25,7 +25,7 @@ function cameraSearchIcon(): string {
 }
 
 /**
- * Render image slider for product card (Alibaba-style)
+ * Render image slider for product card (iSTOC-style)
  * - translateX-based horizontal sliding with CSS transition
  * - group/img for hover detection on image area only
  * - Prev/next arrows + dot indicators visible on hover

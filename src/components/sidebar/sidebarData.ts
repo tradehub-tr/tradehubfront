@@ -68,7 +68,7 @@ export function getSidebarSections(): SidebarSection[] {
             { label: t('dashboard.transactions'), href: '/pages/dashboard/payment.html#transactions', group: t('sidebar.groupSummary') },
             { label: t('dashboard.bankAccounts'), href: '/pages/dashboard/payment.html#tt-accounts', group: 'T/T' },
             { label: t('dashboard.wireTransfer'), href: '/pages/dashboard/payment.html#tt-tracking', group: 'T/T' },
-            { label: t('dashboard.istocCard'), href: '/pages/dashboard/payment.html#alibaba-card', group: t('sidebar.groupAdditionalServices') },
+            { label: t('dashboard.istocCard'), href: '/pages/dashboard/payment.html#istoc-card', group: t('sidebar.groupAdditionalServices') },
             { label: t('dashboard.payLater'), href: '/pages/dashboard/payment.html#pay-later', group: t('sidebar.groupAdditionalServices') },
           ],
         },

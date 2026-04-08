@@ -1,6 +1,6 @@
 /**
  * SettingsMyAccount Component
- * "Hesabım" page — member profile details (Alibaba-style Edit Member Profile).
+ * "Hesabım" page — member profile details (iSTOC-style Edit Member Profile).
  * View/Edit toggle, backed by get_user_profile / update_user_profile API.
  */
 

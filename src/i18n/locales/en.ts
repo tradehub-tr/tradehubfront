@@ -1466,7 +1466,7 @@ const en = {
     // DROPSHIPPING
     // ============================================================
     dropshipping: {
-      alibabaPicks: 'iSTOC picks',
+      istocPicks: 'iSTOC picks',
       hotSales: 'Hot sales',
       brandedProducts: 'Branded products',
       complianceReady: 'Compliance Ready',
@@ -1658,7 +1658,7 @@ const en = {
     // LOGISTICS
     // ============================================================
     logistics: {
-      ordersBannerInfo: 'Notice: logistics marketplace orders have been upgraded to trade assurance orders. You can manage your trade assurance orders in the alibaba> orders menu.',
+      ordersBannerInfo: 'Notice: logistics marketplace orders have been upgraded to trade assurance orders. You can manage your trade assurance orders in the iSTOC> orders menu.',
       reviewsBannerInfo: 'Notice: logistics marketplace orders will be upgraded to trade assurance orders starting approximately February 20.',
       manageOrders: 'Manage logistics orders',
       myReviews: 'My reviews',
@@ -1714,7 +1714,7 @@ const en = {
       transactions: 'Transactions',
       ttAccounts: 'Wire transfer accounts',
       ttTracking: 'Wire Transfer Tracking',
-      alibabaCard: 'Alibaba.com Card',
+      istocCard: 'iSTOC.com Card',
       payLater: 'Pay Later for Business',
       paymentTitle: 'Payment',
       paymentManagementTitle: 'Payment management',
@@ -1761,7 +1761,7 @@ const en = {
       bankWireTransferAccounts: 'Bank Wire Transfer Accounts',
       verifySupplierAccount: 'Verify supplier\'s account',
       uploadWireReceipt: 'Upload wire receipt',
-      tooltipVerify: 'Verify whether the supplier\'s account is an official Alibaba.com bank account. Upload a wire receipt to verify that your payment is protected by Alibaba.com.',
+      tooltipVerify: 'Verify whether the supplier\'s account is an official iSTOC.com bank account. Upload a wire receipt to verify that your payment is protected by iSTOC.com.',
       allTab: 'All',
       pendingMatchTab: 'Pending Supplier Match',
       matchedTab: 'Full Match by Supplier',
@@ -1774,7 +1774,7 @@ const en = {
       thTotalWireAmount: 'Total Wire Amount',
       verifyModalTitle: 'Verify supplier\'s account',
       verifyWarning: 'Always verify the supplier\'s bank account before making a payment',
-      verifyDescription: 'When you receive a payment instruction from a supplier, verify that the account number belongs to the official Alibaba.com bank account before making a payment. This way you can benefit from order protection.',
+      verifyDescription: 'When you receive a payment instruction from a supplier, verify that the account number belongs to the official iSTOC.com bank account before making a payment. This way you can benefit from order protection.',
       supplierAccountPlaceholder: 'Supplier\'s bank account number *',
       cancelBtn: 'Cancel',
       verifyBtn: 'Verify',
@@ -1784,7 +1784,7 @@ const en = {
       thWireAmount: 'Wire Amount',
       thSendDate: 'Send Date',
       noTrackingRecord: 'No wire tracking record found',
-      alibabaCardTitle: 'Alibaba.com Card',
+      istocCardTitle: 'iSTOC.com Card',
       comingSoon: 'This service will be available soon',
       payLaterTitle: 'Pay Later for Business',
       uploadReceiptTitle: 'Upload wire receipt',
@@ -1924,14 +1924,14 @@ const en = {
       ptParagraph2: 'We sincerely apologize for any inconvenience and are grateful for your understanding as we work on providing better solutions. If you still need payment solution services, you can consider <strong class="text-gray-900 font-bold">Buy Now Pay Later</strong> or <strong class="text-gray-900 font-bold">Pay Later for Business</strong> payment options. Click <a href="/pages/dashboard/payment.html#pay-later" class="text-blue-600 underline underline-offset-2 font-medium hover:text-blue-700">here</a> to learn more.',
       ptParagraph3: 'Thank you for your continued support!',
       ptRegards: 'Best regards,',
-      ptTeam: 'Alibaba.com Payment Terms Team',
+      ptTeam: 'iSTOC.com Payment Terms Team',
       piTitle: 'Product Inspection Service',
       piSubtitle: 'Get your supplier products professionally inspected',
       piDearBuyers: 'Dear buyers,',
       piParagraph1: 'With our product inspection service, you can have the quality of your orders checked by professional inspectors before shipment. This service is currently being configured.',
       piParagraph2: 'For more information about the inspection service, you can contact our customer service.',
       piRegards: 'Best regards,',
-      piTeam: 'Alibaba.com Quality Inspection Team',
+      piTeam: 'iSTOC.com Quality Inspection Team',
     },
 
     // ============================================================
@@ -2080,7 +2080,7 @@ const en = {
         minOrder: 'Min. Order',
         sold: 'sold',
 
-        // === NEW: Storefront Redesign (Alibaba-style) ===
+        // === NEW: Storefront Redesign (iSTOC-style) ===
         // Header stats
         platformYears: '{{count}} years on iSTOC',
         employees: '{{count}} employees',
@@ -2924,7 +2924,7 @@ const en = {
       step1Desc: 'Write your detailed requirements in this form and post it as an RFQ',
       step2Title: 'Get accurate quotes',
       step2Desc: 'Receive quotations from matching suppliers via message or email',
-      step3Title: 'Compare quotes in "My Alibaba-RFQs"',
+      step3Title: 'Compare quotes in "My iSTOC-RFQs"',
       step3Desc: 'Communicate with suppliers that meet your exact needs to finalize order details',
       manageRfq: 'Manage RFQ',
       // RFQ Success page
@@ -3180,13 +3180,13 @@ const en = {
       customsPlaceholder: 'Customs inspection information will be displayed here.',
       faqTitle: 'Frequently Asked Questions',
       taxUsTitle: 'For US sales tax exemption',
-      taxUsDesc: 'If you are purchasing products for resale or manufacturing, submit your tax information for verification and place tax-exempt orders on Alibaba.com.',
+      taxUsDesc: 'If you are purchasing products for resale or manufacturing, submit your tax information for verification and place tax-exempt orders on iSTOC.com.',
       taxUsBtn: 'Add or change tax exemption',
       taxEuTitle: 'EU/Norway/UK/Switzerland or Australia/New Zealand/Singapore/Chile tax information submission',
-      taxEuDesc: 'For business purchases in EU/Norway/UK/Switzerland or Australia/New Zealand/Singapore/Chile countries, you can place tax-exempt orders on Alibaba.com by submitting your tax information for verification. For business purchases in Switzerland, submit your VAT number here to comply with tax regulations.',
+      taxEuDesc: 'For business purchases in EU/Norway/UK/Switzerland or Australia/New Zealand/Singapore/Chile countries, you can place tax-exempt orders on iSTOC.com by submitting your tax information for verification. For business purchases in Switzerland, submit your VAT number here to comply with tax regulations.',
       taxEuBtn: 'Add your tax information',
       taxCaTitle: 'For Canada PST tax exemption',
-      taxCaDesc: 'If you are purchasing products for resale or manufacturing, submit your tax information for verification and place tax-exempt orders on Alibaba.com.',
+      taxCaDesc: 'If you are purchasing products for resale or manufacturing, submit your tax information for verification and place tax-exempt orders on iSTOC.com.',
       taxCaBtn: 'Add PST information',
       faqNoTaxInfoTitle: 'What should I do if I don\'t have tax information?',
       faqNoTaxInfoDesc: 'Check your tax exemption eligibility criteria on your local tax authority\'s website. If you meet the eligibility requirements, obtain your tax exemption certificate from the tax authority and submit it through this page to become a tax-exempt buyer.',
@@ -3213,7 +3213,7 @@ const en = {
       sectionContactInfo: 'Contact information',
       sectionSpam: 'Contact adding, blocking and spam status',
       sectionSourcingInfo: 'Sourcing information',
-      sectionActivity: 'Your activity on Alibaba.com',
+      sectionActivity: 'Your activity on iSTOC.com',
       sectionIndustries: 'Industries you are interested in',
       sectionTopKeywords: 'Most searched keywords',
       sectionRecentKeywords: 'Recently searched keywords and viewed products',
@@ -3390,13 +3390,13 @@ const en = {
       emailPreferencesFor: 'Email preferences for',
       unsubscribeAll: 'Unsubscribe from all',
       allNotificationEmails: 'All notification emails',
-      notificationEmailsDesc: 'Emails that inform you about important account updates and events on Alibaba.com',
+      notificationEmailsDesc: 'Emails that inform you about important account updates and events on iSTOC.com',
       generalNotificationEmails: 'General notification emails',
       generalNotificationEmailsDesc: 'Emails triggered by your activities on the platform, including updates on your accounts, communications, orders, and shipments.',
       disputeUpdates: 'Dispute updates',
       disputeUpdatesDesc: 'If there is any dispute you are a party to (whether initiated by you or not), we will inform you and keep you updated on its progress.',
       allMarketingEmails: 'All marketing emails',
-      marketingEmailsDesc: 'Emails containing promotional messages about products and services on Alibaba.com',
+      marketingEmailsDesc: 'Emails containing promotional messages about products and services on iSTOC.com',
       generalMarketingEmails: 'General marketing emails',
       generalMarketingEmailsDesc: 'Emails to inform you about opportunities, events, and service updates, including product discounts, special offers, events, and service offerings that may benefit your business.',
       surveys: 'Surveys',
@@ -4717,7 +4717,7 @@ const en = {
     faq4Q: 'How does the waterproof guarantee work?',
     faq4A: 'Our IP67-rated products are tested for water resistance. If any product shows water damage within the 2-year warranty period, we will replace it free of charge.',
     faq5Q: 'What payment methods do you accept?',
-    faq5A: 'We accept T/T (bank transfer), PayPal, Alibaba Trade Assurance, and L/C for orders over $10,000. A 30% deposit is required with the balance before shipping.',
+    faq5A: 'We accept T/T (bank transfer), PayPal, iSTOC Trade Assurance, and L/C for orders over $10,000. A 30% deposit is required with the balance before shipping.',
     faq6Q: 'Can you provide certificates for the materials?',
     faq6A: 'Yes, we can provide SGS test reports, ROHS compliance certificates, and nickel-free declarations. These can be sent digitally or as originals with your shipment.',
     leadTimeNegotiate: 'Negotiable',
@@ -4995,7 +4995,7 @@ const en = {
 
     // Collection chips
     collectionLabel: 'Collection',
-    chipAlibabaPicks: 'TradeHub Picks',
+    chipIstocPicks: 'TradeHub Picks',
     chip48hShip: '48h Shipping',
     chipHotSale: 'Hot Sale',
     chipBranded: 'Branded',

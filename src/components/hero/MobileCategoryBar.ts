@@ -1,6 +1,6 @@
 /**
  * MobileCategoryBar Component
- * Alibaba-style horizontal scrollable category tabs + product thumbnails
+ * iSTOC-style horizontal scrollable category tabs + product thumbnails
  * Bottom sheet drawer for category selection
  * Visible only on mobile/tablet (xl:hidden)
  */

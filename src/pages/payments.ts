@@ -1,6 +1,6 @@
 /**
  * Güvenli ve Kolay Ödemeler — Trade Assurance Payment Page
- * Alibaba Trade Assurance tarzında tasarlanmış ödeme bilgilendirme sayfası
+ * iSTOC Trade Assurance tarzında tasarlanmış ödeme bilgilendirme sayfası
  */
 import '../style.css'
 import { initFlowbite } from 'flowbite'

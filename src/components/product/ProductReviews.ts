@@ -1,6 +1,6 @@
 /**
  * ProductReviews Component
- * Alibaba-style reviews: sub-tabs, rating summary, category bars,
+ * iSTOC-style reviews: sub-tabs, rating summary, category bars,
  * filter/mention pills, review cards with badges & supplier replies.
  */
 

@@ -85,7 +85,7 @@ function renderCompactLogo(): string {
 }
 
 /**
- * User profile button with dropdown for compact header (Alibaba-style)
+ * User profile button with dropdown for compact header (iSTOC-style)
  * Only shown when user is logged in.
  */
 function renderUserButton(): string {
@@ -595,7 +595,7 @@ function renderCartButton(itemCount: number = 0): string {
 }
 
 /**
- * Generates the sign-in button with dropdown panel (Alibaba-style)
+ * Generates the sign-in button with dropdown panel (iSTOC-style)
  * Shows person icon + "Sign in" text; dropdown has sign-in CTA, social logins, and nav links
  */
 function renderAuthButtons(): string {
@@ -1061,7 +1061,7 @@ export function TopBar(props?: TopBarProps): string {
   const compact = props?.compact ?? false;
 
   if (compact) {
-    /* ──── Compact Dashboard Header (Alibaba-style ~40px) ──── */
+    /* ──── Compact Dashboard Header (iSTOC-style ~40px) ──── */
     return `
       <div class="relative z-30" style="background:#F5F5F5">
         <div class="container-boxed">
@@ -1071,7 +1071,7 @@ export function TopBar(props?: TopBarProps): string {
               ${renderCompactLogo()}
             </div>
 
-            <!-- "Hesabım" label like Alibaba's "Alibabam" -->
+            <!-- "Hesabım" label like iSTOC's "iSTOC'um" -->
             <span class="text-[#666] text-[13px] font-normal border-l border-gray-300 pl-2 sm:pl-3 truncate" data-i18n="header.myAccount">${t('header.myAccount')}</span>
 
             <!-- Spacer -->

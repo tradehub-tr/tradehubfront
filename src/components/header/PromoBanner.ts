@@ -1,6 +1,6 @@
 /**
  * PromoBanner Component
- * Top promotional banner with gradient background (Alibaba-style)
+ * Top promotional banner with gradient background (iSTOC-style)
  * Dismissable campaign banner shown above the main header
  */
 
