@@ -1,3 +1,12 @@
+## [v1.1.3-rc.6] - 2026-04-08 RC
+
+Bu surum rc.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat: alıcı adres defteri ve backend API entegrasyonu (@TurksabYonetim)
+- feat(Search): Ürün listeleme sayfası filtre sidebar'ı, arama ve sayfalama implementasyonu yapıldı (@TurksabYonetim)
+
+---
 ## [v1.1.3-rc.5] - 2026-04-08 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
