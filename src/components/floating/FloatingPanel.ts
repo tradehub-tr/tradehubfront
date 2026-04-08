@@ -213,6 +213,11 @@ function renderChatDrawer(): string {
  * Body scroll lock is managed via x-effect when chat drawer or lens modal is open.
  */
 export function FloatingPanel(): string {
+  // Görsel Arama (Lens) şu an devre dışı — fonksiyonları referansla tut ki
+  // TypeScript "unused" uyarısı vermesin, ileride tekrar aktif edilebilsin.
+  void renderLensItem;
+  void renderLensPopup;
+
   return `
     <div
       x-data="floatingPanel"
@@ -224,16 +229,15 @@ export function FloatingPanel(): string {
         class="group fixed bottom-16 md:bottom-15 right-0 z-35"
         aria-label="Quick actions panel"
       >
-        <!-- Lens Popup (sidebar'ın soluna yapışık dikdörtgen) -->
-        ${renderLensPopup()}
+        <!-- Görsel Arama (Lens) geçici olarak devre dışı -->
+        <!-- Lens Popup: ${/* renderLensPopup() — disabled */ ''} -->
 
         <!-- Sidebar butonları -->
         <div class="inline-flex flex-col gap-2 bg-white rounded-l-[8px] shadow-[0_2px_6px_2px_rgba(0,0,0,0.12)] p-2">
           <!-- Mesajlarım -->
           ${renderMessagesItem()}
 
-          <!-- Görsel Arama -->
-          ${renderLensItem()}
+          <!-- Görsel Arama: ${/* renderLensItem() — disabled */ ''} -->
 
           <!-- En üste çık (shown on scroll > 300px via x-show) -->
           ${renderScrollTopItem()}

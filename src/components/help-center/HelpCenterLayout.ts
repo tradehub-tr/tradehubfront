@@ -13,7 +13,6 @@ export function HelpCenterLayout(): string {
     <div
       id="help-center-root"
       x-data="helpCenter()"
-      x-init="init()"
       class="min-h-screen bg-[#F5F5F5]"
     >
 
@@ -107,37 +106,6 @@ export function HelpCenterLayout(): string {
            MAIN CONTENT
       ══════════════════════════════════════════ -->
       <div x-show="!searchActive" class="max-w-[960px] mx-auto px-4 py-8 space-y-8">
-
-        <!-- ── Learning Center ───────────────── -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 px-6 py-7">
-          <h2 class="text-[17px] font-bold text-gray-800 mb-6 flex items-center gap-2">
-            <span class="w-1 h-5 rounded-full inline-block" style="background: linear-gradient(135deg, var(--color-primary-400), var(--color-primary-600))"></span>
-            <span data-i18n="help.learningCenter">${t('help.learningCenter')}</span>
-          </h2>
-
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <template x-for="card in learningCards" :key="card.id">
-              <a
-                :href="'faq.html?cat=' + (card.id === 'app' ? 'app-settings' : card.id === 'assurance' ? 'guaranteed' : card.id)"
-                @click.prevent="selectLearningCard(card)"
-                class="group flex flex-col items-center text-center p-4 rounded-xl border-2 transition-all duration-200 cursor-pointer"
-                :class="activeLearningCard === card.id
-                  ? 'border-primary-400 bg-primary-50 shadow-md'
-                  : 'border-transparent hover:border-primary-200 hover:bg-primary-50/50'"
-              >
-                <!-- Icon circle -->
-                <div
-                  class="w-16 h-16 rounded-full flex items-center justify-center mb-3 transition-transform group-hover:scale-110 duration-200"
-                  :class="activeLearningCard === card.id ? 'bg-primary-100' : 'bg-gray-50'"
-                >
-                  <span x-html="card.icon" class="text-3xl"></span>
-                </div>
-                <p class="text-sm font-semibold text-gray-800 group-hover:text-primary-600 transition-colors" x-text="card.title"></p>
-                <p class="text-[11px] text-gray-500 mt-1" x-text="card.subtitle"></p>
-              </a>
-            </template>
-          </div>
-        </div>
 
         <!-- ── Category Tabs + FAQ Grid ─────────── -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
