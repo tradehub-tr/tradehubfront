@@ -1,11 +1,13 @@
 /**
- * Filter Engine
- * Connects FilterSidebar UI to ProductListingGrid.
- * Uses document-level event delegation to capture filter changes from
- * both desktop sidebar and mobile drawer without requiring custom events.
+ * Filter Engine — Server-side filtering via backend API
+ *
+ * Captures filter/sort changes from FilterSidebar and SearchHeader,
+ * builds API parameters, and calls searchListings() with debounce.
+ * Uses document-level event delegation for both desktop sidebar and mobile drawer.
  */
 
 import type { ProductListingCard } from '../../types/productListing';
+import { searchListings, type ListingSearchParams } from '../../services/listingService';
 
 /* ── Types ── */
 
@@ -28,42 +30,41 @@ export type SortKey =
   | 'min-order'
   | 'supplier-rating';
 
+/** Maps frontend sort keys to backend sort_by parameter */
+const SORT_MAP: Record<SortKey, string> = {
+  'best-match': 'relevance',
+  'orders': 'orders',
+  'newest': 'newest',
+  'price-asc': 'price_asc',
+  'price-desc': 'price_desc',
+  'min-order': 'orders',
+  'supplier-rating': 'rating',
+};
+
 export interface FilterEngineOptions {
-  /** Source product data */
-  products: ProductListingCard[];
-  /** Callback when filters/sort produce new results */
-  onUpdate: (filtered: ProductListingCard[], count: number) => void;
+  /** Base search parameters (query, category) from URL */
+  baseParams: ListingSearchParams;
+  /** Page size for pagination */
+  pageSize?: number;
+  /** Callback when API returns new results */
+  onUpdate: (products: ProductListingCard[], total: number, page: number, totalPages: number, hasNext: boolean, hasPrev: boolean) => void;
+  /** Callback when loading starts */
+  onLoading?: () => void;
+  /** Callback on error */
+  onError?: (err: unknown) => void;
 }
 
 export interface FilterEngine {
-  /** Get current filter state */
   getState: () => Readonly<FilterState>;
-  /** Get current sort key */
   getSortKey: () => SortKey;
-  /** Remove all event listeners */
+  /** Navigate to a specific page */
+  goToPage: (page: number) => void;
+  /** Force a refresh with current filters */
+  refresh: () => void;
   destroy: () => void;
 }
 
-/* ── Parsing Helpers ── */
-
-/** Parse price string like "$1.80-2.50" and return the minimum price */
-function parseMinPrice(priceStr: string): number {
-  const match = priceStr.match(/\$?([\d.]+)/);
-  return match ? parseFloat(match[1]) : 0;
-}
-
-/** Parse MOQ string like "10 adet" or "1000 adet" and return number */
-function parseMoq(moqStr: string): number {
-  const match = moqStr.match(/(\d+)/);
-  return match ? parseInt(match[1], 10) : 0;
-}
-
-/** Parse stats string like "4,056 satis" and return number */
-function parseSales(stats: string): number {
-  return parseInt(stats.replace(/[^0-9]/g, '')) || 0;
-}
-
-/* ── Filter Application (AND logic) ── */
+/* ── Helpers ── */
 
 function createDefaultState(): FilterState {
   return {
@@ -77,75 +78,240 @@ function createDefaultState(): FilterState {
   };
 }
 
-function applyFilters(products: ProductListingCard[], state: FilterState): ProductListingCard[] {
-  return products.filter(p => {
-    if (state.verified && !p.verified) return false;
-    if (state.verifiedPro && (!p.verified || (p.supplierYears ?? 0) < 5)) return false;
-    if (state.minRating !== null && (p.rating ?? 0) < state.minRating) return false;
-
-    if (state.priceMin !== null || state.priceMax !== null) {
-      const minPrice = parseMinPrice(p.price);
-      if (state.priceMin !== null && minPrice < state.priceMin) return false;
-      if (state.priceMax !== null && minPrice > state.priceMax) return false;
-    }
-
-    if (state.minOrder !== null) {
-      const moq = parseMoq(p.moq);
-      if (moq > state.minOrder) return false;
-    }
-
-    if (state.supplierCountries.length > 0) {
-      if (!p.supplierCountry || !state.supplierCountries.includes(p.supplierCountry)) return false;
-    }
-
-    return true;
-  });
-}
-
-/* ── Sorting ── */
-
-function applySorting(products: ProductListingCard[], sortKey: SortKey): ProductListingCard[] {
-  const sorted = [...products];
-
-  switch (sortKey) {
-    case 'best-match':
-      return sorted;
-    case 'orders':
-      return sorted.sort((a, b) => parseSales(b.stats) - parseSales(a.stats));
-    case 'newest':
-      return sorted.reverse();
-    case 'price-asc':
-      return sorted.sort((a, b) => parseMinPrice(a.price) - parseMinPrice(b.price));
-    case 'price-desc':
-      return sorted.sort((a, b) => parseMinPrice(b.price) - parseMinPrice(a.price));
-    case 'min-order':
-      return sorted.sort((a, b) => parseMoq(a.moq) - parseMoq(b.moq));
-    case 'supplier-rating':
-      return sorted.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
-    default:
-      return sorted;
-  }
+/** Debounce helper */
+function debounce(fn: () => void, ms: number): () => void {
+  let timer: ReturnType<typeof setTimeout>;
+  return () => {
+    clearTimeout(timer);
+    timer = setTimeout(fn, ms);
+  };
 }
 
 /* ── Engine ── */
 
 export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
-  const { products, onUpdate } = options;
+  const { baseParams, onUpdate, onLoading, onError, pageSize = 40 } = options;
   const state = createDefaultState();
   let currentSort: SortKey = 'best-match';
+  let currentPage = 1;
+  let abortCtrl: AbortController | null = null;
   const ac = new AbortController();
   const { signal } = ac;
 
-  function update(): void {
-    const filtered = applyFilters(products, state);
-    const sorted = applySorting(filtered, currentSort);
-    onUpdate(sorted, sorted.length);
+  /** Build API params from current filter state */
+  function buildParams(): ListingSearchParams {
+    const params: ListingSearchParams = {
+      ...baseParams,
+      page: currentPage,
+      page_size: pageSize,
+    };
+
+    // Sort
+    params.sort_by = SORT_MAP[currentSort] || 'relevance';
+
+    // Verified supplier (both verified and verified-pro map to verified_supplier)
+    if (state.verified || state.verifiedPro) {
+      params.verified_supplier = true;
+    }
+
+    // Rating
+    if (state.minRating !== null) {
+      params.min_rating = state.minRating;
+    }
+
+    // Price range
+    if (state.priceMin !== null) params.min_price = state.priceMin;
+    if (state.priceMax !== null) params.max_price = state.priceMax;
+
+    // Supplier countries — backend accepts single country for now
+    // Send first selected country (backend can be extended for multi later)
+    if (state.supplierCountries.length > 0) {
+      params.country = state.supplierCountries[0];
+    }
+
+    // Trade Assurance → free_shipping backend filter
+    const freeShipEl = document.querySelector<HTMLInputElement>(
+      '[data-filter-section="trade-assurance"]'
+    );
+    if (freeShipEl?.checked) {
+      params.free_shipping = true;
+    }
+
+    // Paid Samples
+    const paidSamplesEl = document.querySelector<HTMLInputElement>(
+      '[data-filter-section="product-features"][data-filter-value="paid-samples"]'
+    );
+    if (paidSamplesEl?.checked) {
+      (params as any).paid_samples = true;
+    }
+
+    // Management certifications
+    const mgmtCertCbs = document.querySelectorAll<HTMLInputElement>(
+      '[data-filter-section="mgmt-certifications"]:checked'
+    );
+    if (mgmtCertCbs.length > 0) {
+      (params as any).mgmt_certifications = Array.from(mgmtCertCbs)
+        .map(cb => cb.value || cb.dataset.filterValue || '').filter(Boolean).join(',');
+    }
+
+    // Product certifications
+    const prodCertCbs = document.querySelectorAll<HTMLInputElement>(
+      '[data-filter-section="product-certifications"]:checked'
+    );
+    if (prodCertCbs.length > 0) {
+      (params as any).product_certifications = Array.from(prodCertCbs)
+        .map(cb => cb.value || cb.dataset.filterValue || '').filter(Boolean).join(',');
+    }
+
+    return params;
+  }
+
+  /** Fetch from backend with current filters */
+  async function fetchResults(): Promise<void> {
+    // Cancel any in-flight request
+    if (abortCtrl) abortCtrl.abort();
+    abortCtrl = new AbortController();
+
+    onLoading?.();
+
+    try {
+      const params = buildParams();
+      const result = await searchListings(params);
+
+      syncToUrl();
+
+      onUpdate(
+        result.products,
+        result.searchHeader.totalProducts,
+        result.searchHeader.currentPage || currentPage,
+        result.searchHeader.totalPages || 1,
+        result.hasNext,
+        result.hasPrev,
+      );
+    } catch (err) {
+      if ((err as Error).name !== 'AbortError') {
+        onError?.(err);
+      }
+    }
+  }
+
+  const debouncedFetch = debounce(fetchResults, 300);
+
+  /** Sync current filter state to URL query parameters */
+  function syncToUrl(): void {
+    const url = new URL(window.location.href);
+    const p = url.searchParams;
+
+    // Preserve base params (q, cat/category)
+    // Update filter params
+    if (state.verified || state.verifiedPro) p.set('verified', '1'); else p.delete('verified');
+    if (state.minRating !== null) p.set('min_rating', String(state.minRating)); else p.delete('min_rating');
+    if (state.priceMin !== null) p.set('min_price', String(state.priceMin)); else p.delete('min_price');
+    if (state.priceMax !== null) p.set('max_price', String(state.priceMax)); else p.delete('max_price');
+    if (state.supplierCountries.length > 0) p.set('country', state.supplierCountries.join(',')); else p.delete('country');
+    if (currentSort !== 'best-match') p.set('sort', currentSort); else p.delete('sort');
+    if (currentPage > 1) p.set('page', String(currentPage)); else p.delete('page');
+
+    window.history.replaceState(null, '', url.toString());
+  }
+
+  /** Read filter state from URL query parameters (on page load) */
+  function readFromUrl(): void {
+    const p = new URLSearchParams(window.location.search);
+
+    if (p.get('verified') === '1') state.verified = true;
+    const minRating = p.get('min_rating');
+    if (minRating) state.minRating = parseFloat(minRating);
+    const minPrice = p.get('min_price');
+    if (minPrice) state.priceMin = parseFloat(minPrice);
+    const maxPrice = p.get('max_price');
+    if (maxPrice) state.priceMax = parseFloat(maxPrice);
+    const country = p.get('country');
+    if (country) state.supplierCountries = country.split(',');
+    const sort = p.get('sort') as SortKey | null;
+    if (sort && sort in SORT_MAP) currentSort = sort;
+    const page = p.get('page');
+    if (page) currentPage = parseInt(page, 10);
+  }
+
+  /** Restore sidebar DOM elements from current filter state */
+  function restoreSidebarFromState(): void {
+    // Verified supplier
+    if (state.verified) {
+      document.querySelectorAll<HTMLInputElement>(
+        '[data-filter-section="supplier-features"][data-filter-value="verified"]'
+      ).forEach(el => el.checked = true);
+    }
+    if (state.verifiedPro) {
+      document.querySelectorAll<HTMLInputElement>(
+        '[data-filter-section="supplier-features"][data-filter-value="verified-pro"]'
+      ).forEach(el => el.checked = true);
+    }
+
+    // Store reviews radio
+    if (state.minRating !== null) {
+      document.querySelectorAll<HTMLInputElement>(
+        `[data-filter-section="store-reviews"][value="${state.minRating}"]`
+      ).forEach(el => el.checked = true);
+    }
+
+    // Price inputs
+    if (state.priceMin !== null) {
+      document.querySelectorAll<HTMLInputElement>(
+        '[data-filter-section="price"][data-filter-type="min"]'
+      ).forEach(el => el.value = String(state.priceMin));
+    }
+    if (state.priceMax !== null) {
+      document.querySelectorAll<HTMLInputElement>(
+        '[data-filter-section="price"][data-filter-type="max"]'
+      ).forEach(el => el.value = String(state.priceMax));
+    }
+
+    // Supplier countries — dynamic elements may not exist yet, retry after delay
+    if (state.supplierCountries.length > 0) {
+      const restoreCountries = () => {
+        state.supplierCountries.forEach(c => {
+          document.querySelectorAll<HTMLInputElement>(
+            `[data-filter-section="supplier-country"][data-filter-value="${c}"]`
+          ).forEach(el => el.checked = true);
+        });
+      };
+      restoreCountries();
+      // Retry after dynamic facets load
+      setTimeout(restoreCountries, 1500);
+    }
+  }
+
+  // Initialize state from URL
+  readFromUrl();
+  // Restore sidebar DOM after a tick (elements need to be rendered first)
+  requestAnimationFrame(() => restoreSidebarFromState());
+
+  /** Reset page to 1 and fetch */
+  function filterChanged(): void {
+    currentPage = 1;
+    debouncedFetch();
+  }
+
+  /** Sync matching checkboxes/radios across desktop + mobile sidebars */
+  function syncDuplicateInputs(source: HTMLInputElement): void {
+    const section = source.dataset.filterSection;
+    const value = source.dataset.filterValue ?? source.value;
+    if (!section) return;
+    document.querySelectorAll<HTMLInputElement>(
+      `[data-filter-section="${section}"][data-filter-value="${value}"]`
+    ).forEach(el => {
+      if (el !== source) el.checked = source.checked;
+    });
   }
 
   /* ── Checkbox / radio changes via event delegation ── */
   document.addEventListener('change', (e: Event) => {
     const target = e.target as HTMLInputElement;
     if (!target.dataset?.filterSection) return;
+
+    // Keep desktop ↔ mobile sidebar in sync
+    syncDuplicateInputs(target);
 
     const section = target.dataset.filterSection;
     const value = target.dataset.filterValue ?? target.value;
@@ -170,16 +336,19 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
         }
         break;
 
-      // trade-assurance, product-features, certifications: no matching mock data
+      case 'trade-assurance':
+      case 'product-features':
+        // These trigger a fetch too
+        break;
     }
 
-    update();
+    filterChanged();
   }, { signal });
 
   /* ── Price range & min order "OK" buttons ── */
   document.addEventListener('click', (e: Event) => {
-    const target = e.target as HTMLElement;
-    if (target.dataset?.filterAction !== 'apply') return;
+    const target = (e.target as HTMLElement).closest<HTMLElement>('[data-filter-action="apply"]');
+    if (!target) return;
 
     const section = target.dataset.filterSection;
     if (!section) return;
@@ -193,7 +362,7 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
       );
       state.priceMin = minInput?.value ? parseFloat(minInput.value) : null;
       state.priceMax = maxInput?.value ? parseFloat(maxInput.value) : null;
-      update();
+      filterChanged();
     }
 
     if (section === 'min-order') {
@@ -201,45 +370,90 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
         '[data-filter-section="min-order"][data-filter-type="value"]'
       );
       state.minOrder = valueInput?.value ? parseInt(valueInput.value, 10) : null;
-      update();
+      filterChanged();
     }
   }, { signal });
 
   /* ── Clear All ── */
   document.addEventListener('click', (e: Event) => {
-    const target = e.target as HTMLElement;
-    if (target.dataset?.filterAction !== 'clear-all') return;
+    const target = (e.target as HTMLElement).closest<HTMLElement>('[data-filter-action="clear-all"]');
+    if (!target) return;
 
     Object.assign(state, createDefaultState());
     currentSort = 'best-match';
-    update();
+
+    // Also clear all sidebar checkboxes, radios, inputs
+    document.querySelectorAll<HTMLInputElement>('[data-filter-section]').forEach(el => {
+      if (el.type === 'checkbox' || el.type === 'radio') el.checked = false;
+      else if (el.type === 'number' || el.type === 'text') el.value = '';
+    });
+
+    filterChanged();
   }, { signal });
 
-  /* ── Generic filter-change (re-read price/min-order inputs from DOM) ── */
+  /* ── Generic filter-change (re-read all non-checkbox state from DOM) ── */
   document.addEventListener('filter-change', () => {
+    // Price inputs
     const priceMin = document.querySelector<HTMLInputElement>('[data-filter-section="price"][data-filter-type="min"]');
     const priceMax = document.querySelector<HTMLInputElement>('[data-filter-section="price"][data-filter-type="max"]');
     state.priceMin = priceMin?.value ? parseFloat(priceMin.value) : null;
     state.priceMax = priceMax?.value ? parseFloat(priceMax.value) : null;
 
+    // Min order input
     const moqInput = document.querySelector<HTMLInputElement>('[data-filter-section="min-order"][data-filter-type="value"]');
     state.minOrder = moqInput?.value ? parseInt(moqInput.value, 10) : null;
 
-    update();
+    // Store reviews radio — read from DOM since Alpine handleRadioClick may toggle
+    const checkedRadio = document.querySelector<HTMLInputElement>(
+      '[data-filter-section="store-reviews"]:checked'
+    );
+    state.minRating = checkedRadio ? parseFloat(checkedRadio.value) : null;
+
+    // Supplier features checkboxes
+    const verifiedEl = document.querySelector<HTMLInputElement>(
+      '[data-filter-section="supplier-features"][data-filter-value="verified"]'
+    );
+    const verifiedProEl = document.querySelector<HTMLInputElement>(
+      '[data-filter-section="supplier-features"][data-filter-value="verified-pro"]'
+    );
+    state.verified = verifiedEl?.checked ?? false;
+    state.verifiedPro = verifiedProEl?.checked ?? false;
+
+    // Supplier countries
+    const countryCheckboxes = document.querySelectorAll<HTMLInputElement>(
+      '[data-filter-section="supplier-country"]:checked'
+    );
+    state.supplierCountries = Array.from(countryCheckboxes).map(cb => cb.value || cb.dataset.filterValue || '').filter(Boolean);
+
+    filterChanged();
   }, { signal });
 
   /* ── Sorting from SearchHeader ── */
   document.addEventListener('sort-change', ((e: CustomEvent) => {
     currentSort = (e.detail?.value as SortKey) || 'best-match';
-    update();
+    filterChanged();
   }) as EventListener, { signal });
 
-  // Initial render
-  update();
+  /* ── Browser back/forward support ── */
+  window.addEventListener('popstate', () => {
+    Object.assign(state, createDefaultState());
+    currentSort = 'best-match';
+    currentPage = 1;
+    readFromUrl();
+    fetchResults();
+  }, { signal });
 
   return {
     getState: () => ({ ...state }),
     getSortKey: () => currentSort,
-    destroy: () => ac.abort(),
+    goToPage: (page: number) => {
+      currentPage = page;
+      fetchResults();
+    },
+    refresh: () => fetchResults(),
+    destroy: () => {
+      ac.abort();
+      if (abortCtrl) abortCtrl.abort();
+    },
   };
 }
