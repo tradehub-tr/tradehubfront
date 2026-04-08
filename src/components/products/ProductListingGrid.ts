@@ -33,20 +33,20 @@ function cameraSearchIcon(): string {
  * - Camera icon at bottom-left
  */
 function renderImageSlider(card: ProductListingCard): string {
-  // Use real image if available, otherwise fallback to category placeholder
-  const realImageSrc = card.imageSrc || '';
-  const hasRealImage = realImageSrc.length > 0;
+  // Build image list: use images array from API, fallback to imageSrc
+  const imageList: string[] = (card.images && card.images.length > 0)
+    ? card.images as string[]
+    : (card.imageSrc ? [card.imageSrc] : []);
+  const hasMultiple = imageList.length > 1;
 
   let slidesHtml: string;
-  let hasMultiple = false;
 
-  if (hasRealImage) {
-    // Use the actual product image from API
-    slidesHtml = `
+  if (imageList.length > 0) {
+    slidesHtml = imageList.map((src, i) => `
       <div class="w-full h-full flex-shrink-0">
-        <img src="${realImageSrc}" alt="${card.name}" class="w-full h-full object-cover" loading="lazy" />
+        <img src="${src}" alt="${card.name}${i > 0 ? ` - ${i + 1}` : ''}" class="w-full h-full object-cover" ${i > 0 ? 'loading="lazy"' : ''} />
       </div>
-    `;
+    `).join('');
   } else {
     // No image — show placeholder
     slidesHtml = `
@@ -61,23 +61,29 @@ function renderImageSlider(card: ProductListingCard): string {
   const arrowsHtml = hasMultiple ? `
     <!-- Prev arrow -->
     <button type="button"
-      class="product-slider-prev absolute left-1.5 top-1/2 -translate-y-1/2 z-10 w-7 h-7 flex items-center justify-center rounded-full bg-white/80 shadow-sm opacity-0 group-hover/img:opacity-100 transition-opacity hover:bg-white"
-      data-slider-prev="${card.id}" aria-label="Previous">
-      <svg class="w-3.5 h-3.5 text-gray-700" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+      class="product-slider-prev absolute left-1.5 top-1/2 -translate-y-1/2 z-10 w-7 h-7 flex items-center justify-center rounded-full bg-white/80 shadow-sm opacity-0 group-hover/img:opacity-100 transition-opacity hover:bg-white cursor-pointer"
+      data-slider-prev="${card.id}" aria-label="Previous"
+      onclick="event.preventDefault(); event.stopPropagation(); this.dispatchEvent(new CustomEvent('slider-nav', {detail:{id:'${card.id}',dir:-1},bubbles:true}));">
+      <svg class="w-3.5 h-3.5 text-gray-700 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
         <path d="M15 19l-7-7 7-7"/>
       </svg>
     </button>
     <!-- Next arrow -->
     <button type="button"
-      class="product-slider-next absolute right-1.5 top-1/2 -translate-y-1/2 z-10 w-7 h-7 flex items-center justify-center rounded-full bg-white/80 shadow-sm opacity-0 group-hover/img:opacity-100 transition-opacity hover:bg-white"
-      data-slider-next="${card.id}" aria-label="Next">
-      <svg class="w-3.5 h-3.5 text-gray-700" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+      class="product-slider-next absolute right-1.5 top-1/2 -translate-y-1/2 z-10 w-7 h-7 flex items-center justify-center rounded-full bg-white/80 shadow-sm opacity-0 group-hover/img:opacity-100 transition-opacity hover:bg-white cursor-pointer"
+      data-slider-next="${card.id}" aria-label="Next"
+      onclick="event.preventDefault(); event.stopPropagation(); this.dispatchEvent(new CustomEvent('slider-nav', {detail:{id:'${card.id}',dir:1},bubbles:true}));">
+      <svg class="w-3.5 h-3.5 text-gray-700 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
         <path d="M9 5l7 7-7 7"/>
       </svg>
     </button>
   ` : '';
 
-  const dotsHtml = '';
+  const dotsHtml = hasMultiple ? `
+    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 z-10 flex gap-1 opacity-0 group-hover/img:opacity-100 transition-opacity">
+      ${imageList.map((_, i) => `<div class="w-1.5 h-1.5 rounded-full ${i === 0 ? 'bg-white' : 'bg-white/50'}" data-slider-dot="${card.id}" data-dot-index="${i}"></div>`).join('')}
+    </div>
+  ` : '';
 
   return `
     <div class="relative aspect-square w-full flex-shrink-0 overflow-hidden group/img">
@@ -341,32 +347,21 @@ function navigateSliderTo(sliderId: string, targetIndex: number): void {
  * Uses event delegation on document for prev/next arrows and dot clicks.
  * Prevents navigation events from following the product card link.
  */
+let _slidersInitialized = false;
 export function initProductSliders(): void {
+  if (_slidersInitialized) return;
+  _slidersInitialized = true;
+
+  // Arrow buttons use inline onclick (stopPropagation to prevent <a> navigate)
+  // and dispatch custom 'slider-nav' event that bubbles to document
+  document.addEventListener('slider-nav', ((e: CustomEvent) => {
+    const { id, dir } = e.detail || {};
+    if (id && typeof dir === 'number') navigateSlider(id, dir);
+  }) as EventListener);
+
+  // Dot clicks
   document.addEventListener('click', (e: MouseEvent) => {
-    const target = e.target as HTMLElement;
-
-    // Check for prev button
-    const prevBtn = target.closest<HTMLElement>('[data-slider-prev]');
-    if (prevBtn) {
-      e.preventDefault();
-      e.stopPropagation();
-      const sliderId = prevBtn.getAttribute('data-slider-prev');
-      if (sliderId) navigateSlider(sliderId, -1);
-      return;
-    }
-
-    // Check for next button
-    const nextBtn = target.closest<HTMLElement>('[data-slider-next]');
-    if (nextBtn) {
-      e.preventDefault();
-      e.stopPropagation();
-      const sliderId = nextBtn.getAttribute('data-slider-next');
-      if (sliderId) navigateSlider(sliderId, 1);
-      return;
-    }
-
-    // Check for dot click
-    const dotEl = target.closest<HTMLElement>('[data-dot-index]');
+    const dotEl = (e.target as HTMLElement).closest<HTMLElement>('[data-dot-index]');
     if (dotEl) {
       e.preventDefault();
       e.stopPropagation();
