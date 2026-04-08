@@ -12,19 +12,22 @@
  */
 
 import type { SearchHeaderInfo, SortOption, ViewMode } from '../../types/productListing';
+import { t } from '../../i18n';
 
 /**
  * Default sort options for product listing
  */
-const defaultSortOptions: SortOption[] = [
-  { id: 'best-match', label: 'Best Match', value: 'best-match' },
-  { id: 'orders', label: 'Orders', value: 'orders' },
-  { id: 'newest', label: 'Newest', value: 'newest' },
-  { id: 'price-asc', label: 'Price: Low to High', value: 'price-asc' },
-  { id: 'price-desc', label: 'Price: High to Low', value: 'price-desc' },
-  { id: 'min-order', label: 'Min. Order', value: 'min-order' },
-  { id: 'supplier-rating', label: 'Supplier Rating', value: 'supplier-rating' },
-];
+function getDefaultSortOptions(): SortOption[] {
+  return [
+    { id: 'best-match', label: t('products.sortBestMatch'), value: 'best-match' },
+    { id: 'orders', label: t('products.sortOrders'), value: 'orders' },
+    { id: 'newest', label: t('products.sortNewest'), value: 'newest' },
+    { id: 'price-asc', label: t('products.sortPriceLowHigh'), value: 'price-asc' },
+    { id: 'price-desc', label: t('products.sortPriceHighLow'), value: 'price-desc' },
+    { id: 'min-order', label: t('products.sortMinOrder'), value: 'min-order' },
+    { id: 'supplier-rating', label: t('products.sortSupplierRating'), value: 'supplier-rating' },
+  ];
+}
 
 /**
  * Default search header info for initial render
@@ -35,7 +38,7 @@ const defaultSearchHeaderInfo: SearchHeaderInfo = {
   currentPage: 1,
   totalPages: 1,
   freeShippingAvailable: false,
-  sortOptions: defaultSortOptions,
+  sortOptions: getDefaultSortOptions(),
   selectedSort: 'best-match',
 };
 
@@ -56,7 +59,7 @@ function renderFreeShippingBanner(): string {
         <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.029-.504 1.029-1.125a3.75 3.75 0 0 0-3.75-3.75H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
       </svg>
       <span class="text-sm font-medium text-green-700 dark:text-green-300">
-        Free shipping available
+        ${t('products.freeShippingAvailable')}
       </span>
     </div>
   `;
@@ -86,7 +89,7 @@ function renderSortingDropdown(options: SortOption[], selectedValue: string): st
         aria-haspopup="listbox"
         :aria-expanded="sortOpen"
       >
-        <span class="hidden sm:inline">Sort by:</span>
+        <span class="hidden sm:inline">${t('products.sortByLabel')}</span>
         <span x-text="sortLabel" class="font-semibold truncate max-w-[100px] sm:max-w-none">${selectedOption.label}</span>
         <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
@@ -230,12 +233,13 @@ export function SearchHeader(
         <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
           <!-- Search results count -->
           <h1 class="text-base sm:text-xl font-bold text-gray-900 dark:text-white min-w-0 break-words">
-            Showing
-            <span id="search-header-count">${formatNumber(totalProducts)}+</span>
-            <span class="font-normal text-gray-600 dark:text-gray-400">
-              products from global suppliers for
-            </span>
-            <span class="text-primary-600 dark:text-primary-400">"${keyword}"</span>
+            <span id="search-header-count">${t('products.showingResults', { count: formatNumber(totalProducts) })}</span>
+            ${keyword ? `
+              <span class="font-normal text-gray-600 dark:text-gray-400">
+                ${t('products.resultsFor')}
+              </span>
+              <span class="text-primary-600 dark:text-primary-400">"${keyword}"</span>
+            ` : ''}
           </h1>
 
           <!-- Free shipping banner (desktop: inline, mobile: below) -->
@@ -296,6 +300,6 @@ export function updateSearchHeader(info: Partial<SearchHeaderInfo>): void {
   const countEl = document.getElementById('search-header-count');
 
   if (countEl && info.totalProducts !== undefined) {
-    countEl.textContent = formatNumber(info.totalProducts);
+    countEl.textContent = t('products.showingResults', { count: formatNumber(info.totalProducts) });
   }
 }
