@@ -1,3 +1,19 @@
+## [v1.1.3-rc.10] - 2026-04-08 RC
+
+Bu surum rc.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat: alıcı adres defteri ve backend API entegrasyonu (@TurksabYonetim)
+- feat(Search): Ürün listeleme sayfası filtre sidebar'ı, arama ve sayfalama implementasyonu yapıldı (@TurksabYonetim)
+- feat(Search): Sidebar filtre sertifika bölümleri yönetim/ürün olarak ayrıldı (@TurksabYonetim)
+
+### Duzeltildi
+- fix: products.ts merge conflict çözüldü (filter engine yaklaşımı korundu) (@TurksabYonetim)
+
+### Degistirildi
+- refactor: Ürün bileşenlerindeki (ProductCard, ProductList, SearchBar vb.) (@TurksabYonetim)
+
+---
 ## [v1.1.3-rc.9] - 2026-04-08 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
