@@ -71,7 +71,7 @@ function renderUtilityLinks(): string {
       ${utilityLinks.map(link => `
         <a
           href="${link.href}"
-          class="th-subheader-link  py-2.5 rounded-md text-sm whitespace-nowrap dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all"
+          class="subheader-link th-subheader-link relative px-2 xl:px-3 py-2.5 rounded-md text-sm whitespace-nowrap dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all"
         >
           <span data-i18n="${link.labelKey}">${t(link.labelKey)}</span>
         </a>
