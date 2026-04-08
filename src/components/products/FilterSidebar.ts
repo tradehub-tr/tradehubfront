@@ -169,8 +169,17 @@ function buildDefaultFilterSections(): FilterSection[] {
       options: [],
     } as SearchableCheckboxFilterSection,
     {
-      id: 'certifications',
+      id: 'mgmt-certifications',
       title: t('products.filterMgmtCertifications'),
+      type: 'searchable-checkbox',
+      collapsible: true,
+      collapsed: false,
+      searchPlaceholder: t('products.filterSearch'),
+      options: [],
+    } as SearchableCheckboxFilterSection,
+    {
+      id: 'product-certifications',
+      title: t('products.filterProductCertifications'),
       type: 'searchable-checkbox',
       collapsible: true,
       collapsed: false,
@@ -349,7 +358,7 @@ function renderMinOrder(section: MinOrderFilterSection): string {
  * Renders a searchable checkbox section
  */
 function renderSearchableCheckbox(section: SearchableCheckboxFilterSection, idPrefix = ''): string {
-  const isCertSection = section.id === 'certifications';
+  const isCertSection = section.id === 'mgmt-certifications' || section.id === 'product-certifications';
   const isCountrySection = section.id === 'supplier-country';
   const isDynamic = (isCountrySection || isCertSection) && section.options.length === 0;
 
@@ -371,7 +380,7 @@ function renderSearchableCheckbox(section: SearchableCheckboxFilterSection, idPr
         />
       </div>
       <!-- Options list -->
-      <div class="space-y-0.5 max-h-[180px] overflow-y-auto" ${isDynamic ? `data-filter-dynamic="${isCertSection ? 'certifications' : 'countries'}"` : ''}>
+      <div class="space-y-0.5 max-h-[180px] overflow-y-auto" ${isDynamic ? `data-filter-dynamic="${isCountrySection ? 'countries' : section.id}"` : ''}>
         ${isDynamic ? `
           <div class="animate-pulse space-y-2">
             <div class="h-4 bg-gray-200 rounded w-3/4"></div>
@@ -702,36 +711,41 @@ export function initFilterSidebar(query?: string, category?: string): void {
         }).join('');
       });
 
-      // Update certifications sections
-      document.querySelectorAll<HTMLElement>('[data-filter-dynamic="certifications"]').forEach(container => {
-        const certs = facets.certifications || [];
-        if (certs.length === 0) {
-          container.innerHTML = '';
-          return;
-        }
-        const idPrefix = container.closest('[data-filter-prefix]')?.getAttribute('data-filter-prefix') || '';
-        container.innerHTML = certs.map((c: any) => {
-          const checkboxId = `filter-${idPrefix ? idPrefix + '-' : ''}certifications-cert-${c.value.toLowerCase().replace(/\s+/g, '-')}`;
-          return `
-            <label for="${checkboxId}" class="flex items-center gap-2 cursor-pointer group py-1 filter-searchable-item">
-              <div class="relative flex items-center justify-center w-4 h-4">
-                <input type="checkbox" id="${checkboxId}" name="certifications" value="${c.value}"
-                  class="peer sr-only" data-filter-section="certifications" data-filter-value="${c.value}"
-                  @change="$dispatch('filter-change')" />
-                <div class="absolute inset-0 border rounded transition-colors duration-150
-                  peer-checked:bg-primary-500 peer-checked:border-primary-500
-                  peer-focus:ring-2 peer-focus:ring-primary-200"
-                  style="border-color: var(--filter-checkbox-border, #d1d5db);"></div>
-                <span class="relative z-10 text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-150">
-                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-                </span>
-              </div>
-              <span class="text-[13px] leading-tight group-hover:text-primary-600 transition-colors duration-150" style="color: var(--filter-text-color, #374151);">${c.label}</span>
-              <span class="text-[11px] ml-auto" style="color: var(--filter-count-color, #9ca3af);">(${c.count})</span>
-            </label>
-          `;
-        }).join('');
-      });
+      // Update certification sections (management + product)
+      const certSections = [
+        { key: 'mgmt-certifications', data: facets.managementCertifications || [] },
+        { key: 'product-certifications', data: facets.productCertifications || [] },
+      ];
+      for (const { key, data } of certSections) {
+        document.querySelectorAll<HTMLElement>(`[data-filter-dynamic="${key}"]`).forEach(container => {
+          if (data.length === 0) {
+            container.innerHTML = '';
+            return;
+          }
+          const idPrefix = container.closest('[data-filter-prefix]')?.getAttribute('data-filter-prefix') || '';
+          container.innerHTML = data.map((c: any) => {
+            const checkboxId = `filter-${idPrefix ? idPrefix + '-' : ''}${key}-cert-${c.value.toLowerCase().replace(/\s+/g, '-')}`;
+            return `
+              <label for="${checkboxId}" class="flex items-center gap-2 cursor-pointer group py-1 filter-searchable-item">
+                <div class="relative flex items-center justify-center w-4 h-4">
+                  <input type="checkbox" id="${checkboxId}" name="${key}" value="${c.value}"
+                    class="peer sr-only" data-filter-section="${key}" data-filter-value="${c.value}"
+                    @change="$dispatch('filter-change')" />
+                  <div class="absolute inset-0 border rounded transition-colors duration-150
+                    peer-checked:bg-primary-500 peer-checked:border-primary-500
+                    peer-focus:ring-2 peer-focus:ring-primary-200"
+                    style="border-color: var(--filter-checkbox-border, #d1d5db);"></div>
+                  <span class="relative z-10 text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-150">
+                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                  </span>
+                </div>
+                <span class="text-[13px] leading-tight group-hover:text-primary-600 transition-colors duration-150" style="color: var(--filter-text-color, #374151);">${c.label}</span>
+                <span class="text-[11px] ml-auto" style="color: var(--filter-count-color, #9ca3af);">(${c.count})</span>
+              </label>
+            `;
+          }).join('');
+        });
+      }
     }).catch(() => {
       // Silently fail — sidebar shows without dynamic data
     });
