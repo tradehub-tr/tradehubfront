@@ -7,59 +7,9 @@ Alpine.data('helpCenter', () => ({
   searchActive: false,
   searchResults: [] as string[],
   activeTab: 'account',
-  activeLearningCard: '' as string,
 
   get popularSearches() {
     return [t('helpCenter.search1'), t('helpCenter.search2'), t('helpCenter.search3'), t('helpCenter.search4')];
-  },
-
-  get learningCards() {
-    return [
-      {
-        id: 'sourcing',
-        icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-9 h-9" viewBox="0 0 64 64" fill="none">
-        <circle cx="26" cy="26" r="18" stroke="#FF8C00" stroke-width="4" fill="#FFF3E0"/>
-        <path d="M39 39 L54 54" stroke="#FF8C00" stroke-width="5" stroke-linecap="round"/>
-        <path d="M20 26 L26 32 L34 22" stroke="#FF8C00" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>`,
-        title: t('helpCenter.sourcing'),
-        subtitle: t('helpCenter.sourcingDesc'),
-      },
-      {
-        id: 'assurance',
-        icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-9 h-9" viewBox="0 0 64 64" fill="none">
-        <path d="M32 6L10 16v16c0 12 9.8 22.4 22 25 12.2-2.6 22-13 22-25V16L32 6z" fill="#FFF3E0" stroke="#FF8C00" stroke-width="4"/>
-        <circle cx="32" cy="30" r="8" fill="#FF8C00" opacity="0.3"/>
-        <path d="M26 30l4 4 8-8" stroke="#FF8C00" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M28 18h8M28 42h8" stroke="#FF8C00" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-      </svg>`,
-        title: t('helpCenter.tradeAssurance'),
-        subtitle: t('helpCenter.tradeAssuranceDesc'),
-      },
-      {
-        id: 'app',
-        icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-9 h-9" viewBox="0 0 64 64" fill="none">
-        <rect x="18" y="6" width="28" height="52" rx="5" fill="#FFF3E0" stroke="#FF8C00" stroke-width="4"/>
-        <rect x="24" y="14" width="16" height="10" rx="2" fill="#FF8C00" opacity="0.3"/>
-        <circle cx="32" cy="50" r="3" fill="#FF8C00"/>
-        <path d="M26 30h12M26 38h8" stroke="#FF8C00" stroke-width="2.5" stroke-linecap="round"/>
-      </svg>`,
-        title: t('helpCenter.downloadApp'),
-        subtitle: t('helpCenter.downloadAppDesc'),
-      },
-      {
-        id: 'logistics',
-        icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-9 h-9" viewBox="0 0 64 64" fill="none">
-        <rect x="6" y="20" width="36" height="26" rx="3" fill="#FFF3E0" stroke="#FF8C00" stroke-width="3.5"/>
-        <path d="M42 30h10l6 10v10H42V30z" fill="#FFF3E0" stroke="#FF8C00" stroke-width="3.5"/>
-        <circle cx="16" cy="50" r="5" fill="#FF8C00"/>
-        <circle cx="48" cy="50" r="5" fill="#FF8C00"/>
-        <path d="M10 20V14a4 4 0 0 1 4-4h16a4 4 0 0 1 4 4v6" stroke="#FF8C00" stroke-width="3" stroke-linecap="round"/>
-      </svg>`,
-        title: t('helpCenter.logistics'),
-        subtitle: t('helpCenter.logisticsDesc'),
-      },
-    ];
   },
 
   get tabs() {
@@ -160,34 +110,95 @@ Alpine.data('helpCenter', () => ({
     ];
   },
 
-  init() {
-    // Initialize with first learning card active
-    this.activeLearningCard = 'sourcing';
+  // Sub-key → category-id map for routing search results to faq-detail.html
+  // Mirrors the categorySubsMap on faqDetail() (kept in sync manually).
+  _subToCat: {
+    introDesc: 'intro', introMembership: 'intro',
+    accountSettings: 'account', accountCancelReactivate: 'account', accountLogin: 'account', accountRegister: 'account', accountBecomeSeller: 'account',
+    sourcingSearch: 'sourcing', sourcingSupplierEval: 'sourcing', sourcingTradeInfo: 'sourcing', sourcingRecommender: 'sourcing', sourcingAiApp: 'sourcing', sourcingSourcing: 'sourcing',
+    negotiationRfq: 'negotiation', negotiationMessages: 'negotiation', negotiationOtherIssues: 'negotiation',
+    placeOrderTradeAssurance: 'place-order', placeOrderPlace: 'place-order', placeOrderConfirm: 'place-order', placeOrderManage: 'place-order',
+    paymentOrderPayment: 'payment', paymentReceipt: 'payment', paymentFinancial: 'payment', paymentPayment: 'payment', paymentTypes: 'payment',
+    taxSubmitInfo: 'tax', taxTypes: 'tax', taxInvoice: 'tax', taxVerifyInfo: 'tax', taxOrderManage: 'tax', taxRefund: 'tax',
+    shippingShipping: 'shipping', shippingLogistics: 'shipping', shippingMaersk: 'shipping', shippingImportFees: 'shipping',
+    receiptDelivery: 'receipt', receiptCompletion: 'receipt',
+    inspectionServices: 'inspection', inspectionMonitoring: 'inspection',
+    afterSalesDispute: 'after-sales', afterSalesReturn: 'after-sales', afterSalesDisputeProcess: 'after-sales', afterSalesGoodsIssue: 'after-sales', afterSalesDisputeRules: 'after-sales', afterSalesRefund: 'after-sales',
+    feedbackManagement: 'feedback', feedbackRules: 'feedback',
+    securityFraud: 'security', securityIpr: 'security',
+    othersCustomerService: 'others', othersUnclearConcern: 'others', othersOfflineService: 'others',
+    promotionsShoppingGuide: 'promotions', promotionsScenario: 'promotions', promotionsSuper: 'promotions', promotionsPayment: 'promotions', promotionsOtherIssues: 'promotions',
+    guaranteedShipping: 'guaranteed', guaranteedAfterSales: 'guaranteed', guaranteedPreSales: 'guaranteed', guaranteedPlaceOrder: 'guaranteed', guaranteedOverseasWarehouse: 'guaranteed',
+    appSettingsLabel: 'app-settings',
+    localizationSettings: 'localization',
+  } as Record<string, string>,
+
+  // Build a flat searchable index of every FAQ Q&A across the whole help system.
+  // Each entry: { text (q), cat, sub, answer, qIndex }
+  _searchIndex: null as any[] | null,
+  _buildSearchIndex() {
+    const index: any[] = [];
+    for (const sub of Object.keys(this._subToCat)) {
+      const cat = this._subToCat[sub];
+      const items = t(`faqDetail.${sub}_items` as any, { returnObjects: true });
+      if (Array.isArray(items)) {
+        items.forEach((item: any, qIndex: number) => {
+          if (item && typeof item.q === 'string') {
+            index.push({ text: item.q, cat, sub, answer: typeof item.a === 'string' ? item.a : '', qIndex });
+          }
+        });
+      }
+    }
+    return index;
   },
 
   doSearch() {
-    const q = this.searchQuery.trim().toLowerCase();
+    const q = this.searchQuery.trim().toLocaleLowerCase('tr');
     if (!q) return;
     this.searchActive = true;
 
-    // Flat-map all questions from all tabs and filter
-    const allQuestions = this.tabs.flatMap((t: any) => t.questions);
-    this.searchResults = allQuestions.filter((item: any) =>
-      item.text.toLowerCase().includes(q)
-    );
+    // Turkish-aware: lower + tokenize
+    const tokens = q.split(/\s+/).filter((w: string) => w.length >= 2);
+
+    // Lazy build of full FAQ search index
+    if (!this._searchIndex) this._searchIndex = this._buildSearchIndex();
+
+    // Strip basic html tags from answers for matching
+    const stripHtml = (s: string) => s.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+
+    const scored = this._searchIndex
+      .map((item: any) => {
+        const qText = item.text.toLocaleLowerCase('tr');
+        const aText = stripHtml(item.answer || '').toLocaleLowerCase('tr');
+
+        // Exact phrase: question >> answer
+        let score = 0;
+        if (qText.includes(q)) score += 1000;
+        else if (aText.includes(q)) score += 200;
+
+        // Per-token matches
+        for (const token of tokens) {
+          if (qText.includes(token)) score += 30;
+          else if (token.length >= 4) {
+            const prefix = token.slice(0, Math.max(4, token.length - 2));
+            if (qText.includes(prefix)) score += 15;
+          }
+          if (aText.includes(token)) score += 5;
+        }
+        return { item, score };
+      })
+      .filter((r: any) => r.score > 0)
+      .sort((a: any, b: any) => b.score - a.score)
+      .slice(0, 30)
+      .map((r: any) => r.item);
+
+    this.searchResults = scored;
   },
 
   clearSearch() {
     this.searchQuery = '';
     this.searchActive = false;
     this.searchResults = [];
-  },
-
-  selectLearningCard(card: any) {
-    this.activeLearningCard = card.id;
-    // Scroll to matching tab if it exists
-    const matchTab = this.tabs.find((t: any) => t.id === card.id);
-    if (matchTab) this.activeTab = card.id;
   },
 }));
 

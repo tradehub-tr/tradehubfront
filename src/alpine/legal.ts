@@ -51,9 +51,9 @@ Alpine.data('legalToc', () => ({
 Alpine.data('cookieConsent', () => ({
   categories: {
     necessary: true,
-    functional: false,
-    analytics: false,
-    marketing: false,
+    functional: true,
+    analytics: true,
+    marketing: true,
   },
 
   init() {
@@ -94,9 +94,9 @@ Alpine.data('cookieBanner', () => ({
   showDetails: false,
   categories: {
     necessary: true,
-    functional: false,
-    analytics: false,
-    marketing: false,
+    functional: true,
+    analytics: true,
+    marketing: true,
   },
 
   init() {

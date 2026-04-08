@@ -86,6 +86,13 @@ function notFoundFallbackPlugin(): Plugin {
 export default defineConfig({
     base: process.env.GITHUB_PAGES === 'true' ? '/tradehubfront/' : '/',
     server: {
+        host: '0.0.0.0',
+        // Docker bind mount'larda inotify dosya değişikliklerini kaçırabiliyor.
+        // Polling ile tüm değişiklikler garanti şekilde algılanır (HMR).
+        watch: {
+            usePolling: true,
+            interval: 300,
+        },
         proxy: {
             '/api': {
                 target: 'http://localhost:8000',

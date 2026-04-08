@@ -108,7 +108,7 @@ function getFooterColumns(): FooterColumn[] {
  * Social media links
  */
 const socialLinks: SocialLink[] = [
-  { platform: 'facebook', href: 'https://facebook.com/istoc', icon: 'facebook', ariaLabel: 'Follow us on Facebook' },
+  { platform: 'facebook', href: 'https://www.facebook.com/istoccom', icon: 'facebook', ariaLabel: 'Follow us on Facebook' },
   { platform: 'instagram', href: 'https://instagram.com/istoc', icon: 'instagram', ariaLabel: 'Follow us on Instagram' },
   { platform: 'twitter', href: 'https://twitter.com/istoc', icon: 'twitter', ariaLabel: 'Follow us on X (Twitter)' },
   { platform: 'linkedin', href: 'https://linkedin.com/company/istoc', icon: 'linkedin', ariaLabel: 'Connect with us on LinkedIn' },
