@@ -1,6 +1,6 @@
 /**
  * FloatingPanel Component
- * Alibaba-style fixed right sidebar toolbar with:
+ * iSTOC-style fixed right sidebar toolbar with:
  * - Mesajlarım (messages) button
  * - Görsel Arama (visual search lens) button
  * - En üste çık (scroll-to-top) button
@@ -206,7 +206,7 @@ function renderChatDrawer(): string {
 
 /**
  * FloatingPanel Component
- * Renders Alibaba-style sidebar toolbar at the right edge of the viewport.
+ * Renders iSTOC-style sidebar toolbar at the right edge of the viewport.
  * Card-style panel with icon + text labels (text hidden on mobile).
  *
  * All interactivity is handled declaratively via Alpine.js x-data="floatingPanel".
@@ -218,7 +218,7 @@ export function FloatingPanel(): string {
       x-data="floatingPanel"
       x-effect="document.body.style.overflow = chatOpen ? 'hidden' : ''"
     >
-      <!-- Floating Sidebar Toolbar (Alibaba style) -->
+      <!-- Floating Sidebar Toolbar (iSTOC style) -->
       <div
         id="floating-panel"
         class="group fixed bottom-16 md:bottom-15 right-0 z-35"

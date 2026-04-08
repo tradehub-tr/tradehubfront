@@ -1,7 +1,7 @@
 import { getCurrencySymbol } from '../../utils/currency';
 
 /**
- * FilterSidebar Component (Alibaba-style Filter Panel)
+ * FilterSidebar Component (iSTOC-style Filter Panel)
  * Left sidebar filter panel with:
  * - Trade Assurance checkbox
  * - Supplier features (Verified Supplier, Verified PRO)

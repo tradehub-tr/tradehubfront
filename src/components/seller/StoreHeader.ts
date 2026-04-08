@@ -1,5 +1,5 @@
 /**
- * C1: Store Profile Header — Alibaba-style pixel-perfect layout
+ * C1: Store Profile Header — iSTOC-style pixel-perfect layout
  * Two sections: Company Header (gray) + Stats & Media Card (white)
  */
 import { t } from '../../i18n';

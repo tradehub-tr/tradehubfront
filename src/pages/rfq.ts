@@ -133,7 +133,7 @@ appEl.innerHTML = `
           <form id="rfq-form-element" class="w-full" novalidate>
             <div id="rfq-textarea-container" class="min-h-[136px] overflow-hidden rounded-lg border border-[#e5e5e5] bg-[#f8f8f8] p-3 transition-colors duration-200 hover:border-primary-500 sm:p-4">
               
-              <!-- File Upload Button inside textbox area (Alibaba style) -->
+              <!-- File Upload Button inside textbox area (iSTOC style) -->
               <div class="mb-3">
                 <button
                   type="button"

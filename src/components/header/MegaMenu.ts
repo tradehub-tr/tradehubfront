@@ -1,5 +1,5 @@
 /**
- * MegaMenu Component — Dynamic multi-view Alibaba-style
+ * MegaMenu Component — Dynamic multi-view iSTOC-style
  * Each SubHeader nav item triggers a different mega menu view:
  * - "All Categories" → category sidebar + product panels
  * - "Featured Selections" → featured cards + quick links

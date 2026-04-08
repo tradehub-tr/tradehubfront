@@ -139,7 +139,7 @@ function renderDesktopSearchBar(): string {
 
 
 /**
- * Renders the Alibaba-style welcome row with action links
+ * Renders the iSTOC-style welcome row with action links
  */
 function renderWelcomeRow(): string {
   return `

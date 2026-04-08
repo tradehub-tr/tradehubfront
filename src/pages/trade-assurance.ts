@@ -1,6 +1,6 @@
 /**
  * Trade Assurance — Ana Landing Page
- * Alibaba Trade Assurance tarzında tasarlanmış, tüm korumaları kapsayan ana sayfa
+ * iSTOC Trade Assurance tarzında tasarlanmış, tüm korumaları kapsayan ana sayfa
  */
 import '../style.css'
 import { initFlowbite } from 'flowbite'
@@ -219,7 +219,7 @@ function SecurePaymentsSection(): string {
             </div>
             <p class="text-xs text-gray-400 mt-2">*Uygun alıcılar için</p>
           </div>
-          <!-- Right: Image + Payment Card Overlay (Alibaba tarzı) -->
+          <!-- Right: Image + Payment Card Overlay (iSTOC tarzı) -->
           <div class="lg:w-1/2">
             <div class="relative">
               <!-- Ana görsel -->

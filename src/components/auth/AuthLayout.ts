@@ -1,7 +1,7 @@
 /**
  * AuthLayout Component
  * Shared layout for login and register pages with split-screen desktop
- * and full-screen mobile layouts (Alibaba-style).
+ * and full-screen mobile layouts (iSTOC-style).
  *
  * Desktop: Orange promotional banner on left (40%), form content on right (60%)
  * Mobile: Full orange background with centered white card overlay

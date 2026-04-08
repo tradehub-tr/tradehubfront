@@ -2,7 +2,7 @@
 
 > **Versiyon:** 1.0  
 > **Tarih:** 2026-02-24  
-> **Hedef:** Alibaba.com alıcı kontrol panelinin birebir klonu — TR TradeHub markası altında
+> **Hedef:** iSTOC.com alıcı kontrol panelinin birebir klonu — TR TradeHub markası altında
 
 ---
 
@@ -28,7 +28,7 @@
 
 ## 1. Proje Tanımı ve Hedef
 
-**TR TradeHub**, Alibaba.com'un alıcı (buyer) kontrol panelini birebir referans alan bir B2B marketplace platformudur. Bu mega prompt, alıcı dashboard sayfasının **tüm görünür bileşenlerini** tek bir tutarlı doküman altında tanımlar.
+**TR TradeHub**, iSTOC.com'un alıcı (buyer) kontrol panelini birebir referans alan bir B2B marketplace platformudur. Bu mega prompt, alıcı dashboard sayfasının **tüm görünür bileşenlerini** tek bir tutarlı doküman altında tanımlar.
 
 ### Referans Görseller
 
@@ -39,17 +39,17 @@ Ekte verilen iki ekran görüntüsü **tek kaynak doğruluk noktası (single sou
 
 > ⚠️ **KRİTİK KURAL:** Görseldeki piksel düzeni, renk tonları, aralıklar ve hiyerarşi her zaman spec metninden önceliklidir. Spec ile görsel arasında çelişki varsa, **görsele sadık kal.**
 
-### Alibaba → TR TradeHub Marka Dönüşümü
+### iSTOC → TR TradeHub Marka Dönüşümü
 
-| Orijinal (Alibaba) | Dönüşüm (TR TradeHub) |
+| Orijinal (iSTOC) | Dönüşüm (TR TradeHub) |
 |---|---|
-| Alibaba.com logosu | TR TradeHub logosu (prop ile alınır) |
-| "Alibabam" metni | Tamamen kaldırılır |
-| "Alibaba.com deneyiminizi kişiselleştirin" | "TR TradeHub deneyiminizi kişiselleştirin" |
-| Alibaba domain referansları | TR TradeHub domain'i ile değiştirilir |
+| iSTOC.com logosu | TR TradeHub logosu (prop ile alınır) |
+| "iSTOC'um" metni | Tamamen kaldırılır |
+| "iSTOC.com deneyiminizi kişiselleştirin" | "TR TradeHub deneyiminizi kişiselleştirin" |
+| iSTOC domain referansları | TR TradeHub domain'i ile değiştirilir |
 | "Trade Assurance" | "Güvenli Ticaret" olarak Türkçeleştirilir |
 
-Bunun dışında tüm UI yapısı, renkler, boyutlar ve davranışlar Alibaba.com ile **birebir aynı** kalır.
+Bunun dışında tüm UI yapısı, renkler, boyutlar ve davranışlar iSTOC.com ile **birebir aynı** kalır.
 
 ---
 
@@ -205,7 +205,7 @@ Tam genişlik, sabit üst bar. Sayfa scroll edildiğinde sabit kalır (`sticky t
 
 ### Sol Taraf — Logo
 
-- TR TradeHub logosu (Alibaba logosu ve "Alibabam" metni **KALDIRILIR**)
+- TR TradeHub logosu (iSTOC logosu ve "iSTOC'um" metni **KALDIRILIR**)
 - Logo yüksekliği: `28-32px`
 - `<a>` etiketi içinde, `href="/"` ile ana sayfaya yönlendirir
 - Logo `src` değeri dışarıdan prop/konfigürasyon ile alınabilir olmalı
@@ -339,7 +339,7 @@ Sol tarafta dikey navigasyon menüsü. İki modda çalışır: **Expanded** (met
 |---|---|---|---|---|
 | 2 | Mesajlarım | `>` | Mesajlarım | Tedarikçi mesajlarım, Ürün sorularım ve RFQ, Kişilerim |
 | 3 | Siparişlerim | `>` | Siparişlerim | Tüm siparişlerim, Para iadesi ve satış sonrası, Değerlendirmelerim, Kupon ve kredilerim, Vergi bilgilerim |
-| 4 | Ödeme | `>` | Ödeme | **Özet:** Ödeme yönetimi, İşlemler · **T/T:** Havale hesapları, Havale takibi · **Ek hizmetler:** Alibaba.com Kartı, Pay Later for Business |
+| 4 | Ödeme | `>` | Ödeme | **Özet:** Ödeme yönetimi, İşlemler · **T/T:** Havale hesapları, Havale takibi · **Ek hizmetler:** iSTOC.com Kartı, Pay Later for Business |
 | 5 | Kaydettiklerim ve geçmişim | `>` | Kaydettiklerim ve geçmişim | Favorilerim, Göz atma geçmişiniz |
 
 #### Bölüm: `Eklenti hizmetleri`
@@ -1155,7 +1155,7 @@ Responsive breakpoint'ler **doğrudan `style.css` içinde `@media` query'leri** 
 
 - [ ] Header arka planı `#2B2B2B`, tam genişlik, sticky
 - [ ] İç konteyner max 1425px, padding 0 40px, ortalanmış
-- [ ] Sol: TR TradeHub logosu (Alibaba logosu ve "Alibabam" YOK)
+- [ ] Sol: TR TradeHub logosu (iSTOC logosu ve "iSTOC'um" YOK)
 - [ ] Sağ: 8 öğe doğru sırada
 - [ ] Tüm ikonlar SVG, outlined, beyaz, 18-20px
 - [ ] Sepet badge kırmızı, dinamik sayı
@@ -1227,7 +1227,7 @@ Responsive breakpoint'ler **doğrudan `style.css` içinde `@media` query'leri** 
 3. **DRY** — Aynı bileşeni 2 kez yazma, props ile yönet
 4. **Statik HTML yasak** — Her bileşen dinamik, konfigürasyon nesnesi ile çalışır
 5. **Framework yasak** — React, Vue, Angular, Svelte kullanma
-6. **Alibaba markası kaldır** — Logo, "Alibabam", domain referansları → TR TradeHub
+6. **iSTOC markası kaldır** — Logo, "iSTOC'um", domain referansları → TR TradeHub
 7. **Tailwind v4 syntax** — `@import "tailwindcss"` kullan, eski syntax'ı kullanma
 8. **TypeScript strict** — `any` tipi kullanma, tüm elementlere doğru tip ata
 9. **Swiper > Flowbite carousel** — Slider için kesinlikle Swiper kullan

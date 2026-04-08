@@ -88,7 +88,7 @@ export function OrderProtectionModal({
   sections,
   paymentIcons,
   infoBoxBullets,
-  title = 'Alibaba.com order protection',
+  title = 'iSTOC.com order protection',
 }: OrderProtectionModalProps): string {
   const infoSection = sections.find(s => s.id === 'info-box');
   const contentSections = sections.filter(s => s.id !== 'info-box');

@@ -1,6 +1,6 @@
 /**
  * Mock Checkout Data
- * Static data for the checkout page — Alibaba B2B style.
+ * Static data for the checkout page — iSTOC B2B style.
  */
 
 import type {
@@ -556,7 +556,7 @@ export const modalSections: ModalSection[] = [
     iconType: 'check',
     title: 'Secure payments',
     description:
-      'Choose your preferred local payment methods, currencies, bank transfers, or deferred payment plans to pay. Every transaction you make through Alibaba.com is protected by SSL encryption and PCI DSS data security protocols.',
+      'Choose your preferred local payment methods, currencies, bank transfers, or deferred payment plans to pay. Every transaction you make through iSTOC.com is protected by SSL encryption and PCI DSS data security protocols.',
     learnMoreText: 'Learn about secure payments',
     learnMoreUrl: '#',
   },
@@ -592,7 +592,7 @@ export const modalSections: ModalSection[] = [
     iconType: 'lock',
     title: 'Data privacy',
     description:
-      'We never share your data with third parties without your consent. All personal information is handled in accordance with the Alibaba.com Privacy Policy.',
+      'We never share your data with third parties without your consent. All personal information is handled in accordance with the iSTOC.com Privacy Policy.',
     learnMoreText: 'Learn how we protect your data',
     learnMoreUrl: '#',
   },
@@ -603,12 +603,12 @@ export const infoBoxBullets = [
   {
     dotColor: '#3b82f6',
     title: 'When placing an order yourself:',
-    description: 'Place and pay for your order directly through Alibaba.com to enjoy full protection.',
+    description: 'Place and pay for your order directly through iSTOC.com to enjoy full protection.',
   },
   {
     dotColor: '#22c55e',
     title: 'When supplier drafts an order for you:',
-    description: 'Review the order details carefully before confirming and paying through Alibaba.com.',
+    description: 'Review the order details carefully before confirming and paying through iSTOC.com.',
   },
 ];
 
@@ -660,7 +660,7 @@ export const protectionSummaryItems = [
     key: 'secure' as const,
     title: 'Secure payments',
     description:
-      'Every payment you make on Alibaba.com is secured with strict SSL encryption and PCI DSS data protection protocols.',
+      'Every payment you make on iSTOC.com is secured with strict SSL encryption and PCI DSS data protection protocols.',
   },
   {
     icon: '🚚',
@@ -685,7 +685,7 @@ export const pageContent: PageContent = {
   paymentMethodTitle: 'Payment method',
   itemsDeliveryTitle: 'Items and delivery options',
   orderSummaryTitle: 'Order summary',
-  orderProtectionTitle: 'Alibaba.com order protection',
+  orderProtectionTitle: 'iSTOC.com order protection',
   submitButtonText: 'Continue to payment',
   useCurrentLocationText: 'Use my current location',
   savedAddressLabel: 'Kayitli adres kullan',
@@ -700,13 +700,13 @@ export const pageContent: PageContent = {
   cityLabel: 'City',
   postalCodeLabel: 'Postal code',
   defaultAddressCheckbox: 'Set as default shipping address',
-  orderProtectionLinkText: 'Alibaba.com order protection',
+  orderProtectionLinkText: 'iSTOC.com order protection',
   trustIconsLabel: 'Trade Assurance',
 };
 
 // 11. Trade Assurance footer text
 export const tradeAssuranceText =
-  'Only orders placed and paid through Alibaba.com can enjoy free protection by 🛡 Trade Assurance';
+  'Only orders placed and paid through iSTOC.com can enjoy free protection by 🛡 Trade Assurance';
 
 // 12. Coupon & Credit type definitions (mock data kaldırıldı — veriler backend'den gelir)
 export interface CouponData {

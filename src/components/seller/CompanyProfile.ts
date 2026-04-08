@@ -129,7 +129,7 @@ function OverviewTab(): string {
   return `
     <div class="company-profile__tab-content" x-show="activeTab === 'overview'" x-transition.opacity.duration.300ms id="tab-overview">
 
-      <!-- Single white card for entire profile (like Alibaba) -->
+      <!-- Single white card for entire profile (iSTOC-style) -->
       <section class="bg-white rounded-md border border-gray-200 p-6 mb-6"
         x-data="{
           get certList() {

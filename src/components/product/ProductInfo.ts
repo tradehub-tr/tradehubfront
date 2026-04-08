@@ -1,6 +1,6 @@
 /**
  * ProductInfo Component
- * Right sticky card (Alibaba layout-stick style).
+ * Right sticky card (iSTOC layout-stick style).
  * Contains: price tiers, variations, shipping, CTAs.
  */
 

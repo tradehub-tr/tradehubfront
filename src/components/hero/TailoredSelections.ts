@@ -1,6 +1,6 @@
 /**
  * TailoredSelections Component
- * Alibaba-style: Swiper slider with curated collection cards.
+ * iSTOC-style: Swiper slider with curated collection cards.
  * Each card has a title, views subtitle, two product images side by side, and prices.
  */
 

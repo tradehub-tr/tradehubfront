@@ -1,6 +1,6 @@
 /**
  * Sidebar Icons — SVG string constants
- * Filled style icons from Alibaba design reference, using currentColor for theming.
+ * Filled style icons from iSTOC design reference, using currentColor for theming.
  */
 
 export const sidebarIcons = {

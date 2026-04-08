@@ -1,6 +1,6 @@
 /**
  * SettingsAccountEdit Component
- * 4-card Alibaba-style profile page backed by backend API.
+ * 4-card iSTOC-style profile page backed by backend API.
  * Detects account type (buyer/seller) and shows role-specific fields.
  */
 

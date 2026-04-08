@@ -1,5 +1,5 @@
 /**
- * RFQ Form Page (Step 2) — Alibaba-style detailed RFQ form
+ * RFQ Form Page (Step 2) — iSTOC-style detailed RFQ form
  * Product name, detailed requirements, file upload, sourcing quantity + unit,
  * consent checkboxes, "Post request" button. Right sidebar with "How to use RFQ".
  */
@@ -135,7 +135,7 @@ appEl.innerHTML = `
           <p class="text-xs text-gray-400 pl-6">${t('rfq.createRfqDesc')}</p>
         </div>
 
-        <!-- Submit (sticky bottom like Alibaba) -->
+        <!-- Submit (sticky bottom iSTOC-style) -->
         <div class="sticky bottom-0 z-10 mt-5 py-3 flex justify-center bg-white/90 backdrop-blur-sm">
           <button type="submit" class="px-16 h-11 rounded-full bg-amber-500 text-white text-sm font-semibold hover:bg-amber-600 transition-colors shadow-sm">
             ${t('rfq.postRequest')}
