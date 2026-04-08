@@ -42,7 +42,7 @@ export function LegalPageLayout({ pageTitle, lastUpdated, sections, breadcrumbLa
           </button>
         </div>
 
-        <div class="flex gap-8">
+        <div class="flex flex-col lg:flex-row gap-4 lg:gap-8">
           <!-- TOC Sidebar (Desktop) -->
           <aside class="hidden lg:block w-[240px] shrink-0">
             <nav class="sticky top-[72px]">
