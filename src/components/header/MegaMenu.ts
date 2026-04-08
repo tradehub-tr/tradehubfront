@@ -10,12 +10,17 @@
  */
 
 import { t } from '../../i18n';
-import { callMethod } from '../../utils/api';
+import { loadCategories } from '../../services/categoryService';
+import type { ApiCategory } from '../../services/categoryService';
 
 /* ════════════════════════════════════════════════════
    DATA
    ════════════════════════════════════════════════════ */
 
+/**
+ * @deprecated Kullanmayın — categoryService.ts kullanın.
+ * Geriye dönük uyumluluk için boş dizi olarak bırakıldı.
+ */
 export interface MegaMenuCategory {
   id: string;
   name: string;
@@ -23,162 +28,8 @@ export interface MegaMenuCategory {
   products: { name: string; href: string; badge?: boolean }[];
 }
 
-export const megaCategories: MegaMenuCategory[] = [
-  {
-    id: 'apparel',
-    name: 'Apparel & Accessories',
-    icon: 'shirt',
-    products: [
-      { name: 'Bridesmaid Dresses', href: 'products.html?q=bridesmaid+dresses' },
-      { name: 'Carnival Costume', href: 'products.html?q=carnival+costume' },
-      { name: 'Rhinestones', href: 'products.html?q=rhinestones' },
-      { name: 'Camouflage', href: 'products.html?q=camouflage' },
-      { name: 'Polyester Ties', href: 'products.html?q=polyester+ties' },
-      { name: 'Ice Hockey', href: 'products.html?q=ice+hockey' },
-      { name: 'Mittens', href: 'products.html?q=mittens' },
-    ],
-  },
-  {
-    id: 'consumer-electronics',
-    name: 'Consumer Electronics',
-    icon: 'chip',
-    products: [
-      { name: 'Smart Watches', href: 'products.html?q=smart+watches' },
-      { name: 'Wireless Earbuds', href: 'products.html?q=wireless+earbuds' },
-      { name: 'Bluetooth Speakers', href: 'products.html?q=bluetooth+speakers' },
-      { name: 'Action Cameras', href: 'products.html?q=action+cameras' },
-      { name: 'LED Monitors', href: 'products.html?q=led+monitors' },
-      { name: 'Drone', href: 'products.html?q=drone' },
-      { name: 'VR Headset', href: 'products.html?q=vr+headset' },
-    ],
-  },
-  {
-    id: 'sports',
-    name: 'Sports & Entertainment',
-    icon: 'trophy',
-    products: [
-      { name: 'Fitness Equipment', href: 'products.html?q=fitness+equipment' },
-      { name: 'Yoga Mats', href: 'products.html?q=yoga+mats' },
-      { name: 'Boxing Gloves', href: 'products.html?q=boxing+gloves' },
-      { name: 'Camping Tents', href: 'products.html?q=camping+tents' },
-      { name: 'Fishing Rods', href: 'products.html?q=fishing+rods' },
-      { name: 'Skateboard', href: 'products.html?q=skateboard' },
-      { name: 'Golf Clubs', href: 'products.html?q=golf+clubs' },
-    ],
-  },
-  {
-    id: 'sportswear',
-    name: 'Sportswear & Outdoor Apparel',
-    icon: 'running',
-    products: [
-      { name: 'Running Shoes', href: 'products.html?q=running+shoes' },
-      { name: 'Track Suits', href: 'products.html?q=track+suits' },
-      { name: 'Hiking Boots', href: 'products.html?q=hiking+boots' },
-      { name: 'Windbreakers', href: 'products.html?q=windbreakers' },
-      { name: 'Ski Jackets', href: 'products.html?q=ski+jackets' },
-      { name: 'Cycling Wear', href: 'products.html?q=cycling+wear' },
-      { name: 'Sports Bras', href: 'products.html?q=sports+bras' },
-    ],
-  },
-  {
-    id: 'shoes',
-    name: 'Shoes & Accessories',
-    icon: 'shoe',
-    products: [
-      { name: 'Sneakers', href: 'products.html?q=sneakers' },
-      { name: 'Leather Boots', href: 'products.html?q=leather+boots' },
-      { name: 'Sandals', href: 'products.html?q=sandals' },
-      { name: 'High Heels', href: 'products.html?q=high+heels' },
-      { name: 'Belts', href: 'products.html?q=belts' },
-      { name: 'Sunglasses', href: 'products.html?q=sunglasses' },
-      { name: 'Wallets', href: 'products.html?q=wallets' },
-    ],
-  },
-  {
-    id: 'home-garden',
-    name: 'Home & Garden',
-    icon: 'home',
-    products: [
-      { name: 'Garden Furniture', href: 'products.html?q=garden+furniture' },
-      { name: 'Kitchen Appliances', href: 'products.html?q=kitchen+appliances' },
-      { name: 'Bed Sheets', href: 'products.html?q=bed+sheets' },
-      { name: 'LED Lights', href: 'products.html?q=led+lights' },
-      { name: 'Curtains', href: 'products.html?q=curtains' },
-      { name: 'Storage Boxes', href: 'products.html?q=storage+boxes' },
-      { name: 'Wall Decor', href: 'products.html?q=wall+decor' },
-    ],
-  },
-  {
-    id: 'beauty',
-    name: 'Beauty',
-    icon: 'sparkles',
-    products: [
-      { name: 'Skincare Set', href: 'products.html?q=skincare+set' },
-      { name: 'Hair Extensions', href: 'products.html?q=hair+extensions' },
-      { name: 'Makeup Brushes', href: 'products.html?q=makeup+brushes' },
-      { name: 'Perfume', href: 'products.html?q=perfume' },
-      { name: 'Nail Art', href: 'products.html?q=nail+art' },
-      { name: 'Face Masks', href: 'products.html?q=face+masks' },
-      { name: 'Hair Dryers', href: 'products.html?q=hair+dryers' },
-    ],
-  },
-  {
-    id: 'jewelry',
-    name: 'Jewelry, Eyewear & Watches',
-    icon: 'diamond',
-    products: [
-      { name: 'Fashion Rings', href: 'products.html?q=fashion+rings' },
-      { name: 'Necklaces', href: 'products.html?q=necklaces' },
-      { name: 'Wrist Watches', href: 'products.html?q=wrist+watches' },
-      { name: 'Earrings', href: 'products.html?q=earrings' },
-      { name: 'Bracelets', href: 'products.html?q=bracelets' },
-      { name: 'Reading Glasses', href: 'products.html?q=reading+glasses' },
-      { name: 'Pendants', href: 'products.html?q=pendants' },
-    ],
-  },
-  {
-    id: 'luggage',
-    name: 'Luggage, Bags & Cases',
-    icon: 'bag',
-    products: [
-      { name: 'Travel Suitcase', href: 'products.html?q=travel+suitcase' },
-      { name: 'Backpacks', href: 'products.html?q=backpacks' },
-      { name: 'Laptop Bags', href: 'products.html?q=laptop+bags' },
-      { name: 'Cosmetic Bags', href: 'products.html?q=cosmetic+bags' },
-      { name: 'Messenger Bags', href: 'products.html?q=messenger+bags' },
-      { name: 'Phone Cases', href: 'products.html?q=phone+cases' },
-      { name: 'Wallets', href: 'products.html?q=wallets' },
-    ],
-  },
-  {
-    id: 'packaging',
-    name: 'Packaging & Printing',
-    icon: 'box',
-    products: [
-      { name: 'Gift Boxes', href: 'products.html?q=gift+boxes' },
-      { name: 'Paper Bags', href: 'products.html?q=paper+bags' },
-      { name: 'Labels', href: 'products.html?q=labels' },
-      { name: 'Bubble Wrap', href: 'products.html?q=bubble+wrap' },
-      { name: 'Stickers', href: 'products.html?q=stickers' },
-      { name: 'Tape', href: 'products.html?q=packaging+tape' },
-      { name: 'Tissue Paper', href: 'products.html?q=tissue+paper' },
-    ],
-  },
-  {
-    id: 'kids',
-    name: 'Parents, Kids & Toys',
-    icon: 'baby',
-    products: [
-      { name: 'Building Blocks', href: 'products.html?q=building+blocks' },
-      { name: 'Strollers', href: 'products.html?q=strollers' },
-      { name: 'Plush Toys', href: 'products.html?q=plush+toys' },
-      { name: 'Diapers', href: 'products.html?q=diapers' },
-      { name: 'Baby Clothes', href: 'products.html?q=baby+clothes' },
-      { name: 'RC Cars', href: 'products.html?q=rc+cars' },
-      { name: 'Puzzles', href: 'products.html?q=puzzles' },
-    ],
-  },
-];
+/** @deprecated Kullanmayın — categoryService.getCategories() kullanın. */
+export const megaCategories: MegaMenuCategory[] = [];
 
 /* ──── Featured Selections data ──── */
 
@@ -804,13 +655,10 @@ export function initMegaMenu(): void {
 
   bindCategoryInteractions();
 
-  // ──── Load dynamic categories from API ────
+  // ──── Load dynamic categories from categoryService (shared cache) ────
   (async () => {
     try {
-      const cats = await callMethod('tradehub_core.api.category.get_mega_menu') as Array<{
-        id: string; name: string; slug: string; image?: string; icon_class?: string;
-        children: Array<{ id: string; name: string; slug: string; image?: string }>;
-      }>;
+      const cats = await loadCategories() as ApiCategory[];
       if (!cats || cats.length === 0) return;
 
       const sidebarUl = document.querySelector<HTMLElement>('#mega-sidebar ul');
@@ -867,7 +715,7 @@ export function initMegaMenu(): void {
 
       bindCategoryInteractions();
     } catch (_) {
-      // API başarısız olursa statik kategoriler kalır
+      // API başarısız olursa loading spinner kalır
     }
   })();
 }

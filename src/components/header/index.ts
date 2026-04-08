@@ -13,7 +13,9 @@ export { SubHeader } from './SubHeader';
 export { initStickyHeaderSearch } from './StickyHeaderSearch';
 
 // MegaMenu component - full-width category dropdown
-export { MegaMenu, initMegaMenu, megaCategories, getCategoryIcon } from './MegaMenu';
+export { MegaMenu, initMegaMenu, getCategoryIcon, getIconByName } from './MegaMenu';
+/** @deprecated Kullanmayın. categoryService.getCategories() kullanın. */
+export { megaCategories } from './MegaMenu';
 export type { MegaMenuCategory } from './MegaMenu';
 
 // PromoBanner component - top promotional banner (iSTOC-style)

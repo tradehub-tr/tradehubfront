@@ -302,7 +302,7 @@ function mapListingCard(raw: any): ProductListingCard {
     href: raw.href || `/pages/product-detail.html?id=${raw.id}`,
     price: priceDisplay,
     moq: raw.moq || '1 adet',
-    stats: raw.stats || '',
+    stats: '',
     imageKind: 'jewelry',
     imageSrc: raw.imageSrc || undefined,
     images: raw.images || undefined,
