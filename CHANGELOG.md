@@ -1,3 +1,11 @@
+## [v1.1.3-rc.5] - 2026-04-08 RC
+
+Bu surum rc.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat: alıcı adres defteri ve backend API entegrasyonu (@TurksabYonetim)
+
+---
 ## [v1.1.3-rc.4] - 2026-04-07 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
