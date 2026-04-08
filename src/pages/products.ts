@@ -27,6 +27,7 @@ import { startAlpine } from '../alpine'
 // Products listing components
 import {
   FilterSidebar,
+  initFilterSidebar,
   ProductListingGrid,
   initProductSliders,
   ListingCartDrawer,
@@ -40,9 +41,7 @@ import {
 } from '../components/products'
 import { ShippingModal, initShippingModal } from '../components/product'
 
-import { searchListings } from '../services/listingService'
 import { initCurrency } from '../services/currencyService'
-import type { ProductListingCard } from '../types/productListing'
 
 // Category data for slug/ID → name mapping (dynamic, API-based)
 import { loadCategories, findCategoryBySlug, findCategoryById } from '../services/categoryService'
@@ -129,7 +128,10 @@ appEl.innerHTML = `
           </div>
 
           <!-- Product Grid (starts empty, filled by API) -->
-          ${ProductListingGrid([])}
+          <div class="flex-1 min-w-0">
+            ${ProductListingGrid([])}
+            <div id="pagination-controls"></div>
+          </div>
         </div>
       </div>
     </section>
@@ -214,28 +216,42 @@ document.addEventListener('view-mode-change', (e: Event) => {
 // Initialize shipping modal
 initShippingModal();
 
-// Filter engine reference
-let engine: ReturnType<typeof initFilterEngine> | null = null;
-
 // Show loading state in grid
-const loadingGrid = document.querySelector<HTMLElement>('.product-grid');
-if (loadingGrid) {
-  loadingGrid.innerHTML = `
-    <div class="col-span-full flex items-center justify-center py-16">
-      <div class="flex flex-col items-center gap-3">
-        <div class="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin"></div>
-        <span class="text-sm text-text-muted">Ürünler yükleniyor...</span>
+function showGridLoading(): void {
+  const grid = document.querySelector<HTMLElement>('.product-grid');
+  if (grid) {
+    grid.innerHTML = `
+      <div class="col-span-full flex items-center justify-center py-16">
+        <div class="flex flex-col items-center gap-3">
+          <div class="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin"></div>
+          <span class="text-sm text-text-muted">Ürünler yükleniyor...</span>
+        </div>
       </div>
-    </div>
-  `;
+    `;
+  }
 }
 
-// Initialize currency, then load data from API
-const searchParams = {
+function showGridError(): void {
+  const grid = document.querySelector<HTMLElement>('.product-grid');
+  if (grid) {
+    grid.innerHTML = `
+      <div class="col-span-full flex items-center justify-center py-16">
+        <div class="text-center">
+          <p class="text-text-muted mb-2">Ürünler yüklenemedi</p>
+          <button onclick="window.location.reload()" class="text-sm text-primary hover:underline">Tekrar dene</button>
+        </div>
+      </div>
+    `;
+  }
+}
+
+// Show initial loading
+showGridLoading();
+
+// Base search parameters from URL (these don't change with filters)
+const baseParams = {
   query: queryParam || undefined,
   category: categoryParam || undefined,
-  page: 1,
-  page_size: 40,
 };
 
 // Kategoriler ve para birimi paralel yüklensin; breadcrumb/header kategori adıyla güncellenir
@@ -260,34 +276,88 @@ initCurrency().then(() => searchListings(searchParams)).then(result => {
     keyword: result.searchHeader.keyword || resolveKeyword() || undefined,
   });
 
-  // Initialize filter engine with real data
+initCurrency().then(() => {
   engine = initFilterEngine({
-    products,
-    onUpdate: (filtered: ProductListingCard[], count: number) => {
-      rerenderProductGrid(filtered);
-      updateSearchHeader({ totalProducts: count });
+    baseParams,
+    pageSize: 40,
+    onUpdate: (products, total, page, totalPages, hasNext, hasPrev) => {
+      rerenderProductGrid(products);
+      updateSearchHeader({
+        totalProducts: total,
+        keyword: searchKeyword || undefined,
+      });
       if (engine) updateFilterChips(engine.getState());
+
+      // Update pagination UI
+      const paginationEl = document.getElementById('pagination-controls');
+      if (paginationEl) {
+        paginationEl.innerHTML = renderPagination(page, totalPages, hasNext, hasPrev);
+      }
+
+      // Initialize listing cart drawer with current products
+      initListingCartDrawer(products);
+      initProductSliders();
+    },
+    onLoading: showGridLoading,
+    onError: (err) => {
+      console.error('[products] API error:', err);
+      showGridError();
     },
   });
 
-  // Initialize listing cart drawer with real data
-  initListingCartDrawer(products);
+  // Trigger initial load
+  engine.refresh();
 
-  // Re-init product sliders for new cards
-  initProductSliders();
-
-  console.info('[products] Loaded', products.length, 'listings from API');
+  console.info('[products] Filter engine initialized');
 }).catch(err => {
-  console.error('[products] Failed to load listings from API:', err);
-  // Show error state
-  if (loadingGrid) {
-    loadingGrid.innerHTML = `
-      <div class="col-span-full flex items-center justify-center py-16">
-        <div class="text-center">
-          <p class="text-text-muted mb-2">Ürünler yüklenemedi</p>
-          <button onclick="window.location.reload()" class="text-sm text-primary hover:underline">Tekrar dene</button>
-        </div>
-      </div>
-    `;
+  console.error('[products] Init failed:', err);
+  showGridError();
+});
+
+/* ── Pagination ── */
+
+function renderPagination(page: number, totalPages: number, hasNext: boolean, hasPrev: boolean): string {
+  if (totalPages <= 1) return '';
+
+  const pages: string[] = [];
+  const maxVisible = 5;
+  let startPage = Math.max(1, page - Math.floor(maxVisible / 2));
+  const endPage = Math.min(totalPages, startPage + maxVisible - 1);
+  if (endPage - startPage < maxVisible - 1) {
+    startPage = Math.max(1, endPage - maxVisible + 1);
+  }
+
+  // Previous button
+  pages.push(`<button data-page="${page - 1}" ${!hasPrev ? 'disabled' : ''} class="px-3 py-2 text-sm rounded-md ${hasPrev ? 'hover:bg-gray-100 text-gray-700 cursor-pointer' : 'text-gray-300 cursor-not-allowed'}">←</button>`);
+
+  if (startPage > 1) {
+    pages.push(`<button data-page="1" class="px-3 py-2 text-sm rounded-md hover:bg-gray-100 text-gray-700 cursor-pointer">1</button>`);
+    if (startPage > 2) pages.push(`<span class="px-2 py-2 text-gray-400">…</span>`);
+  }
+
+  for (let i = startPage; i <= endPage; i++) {
+    const isActive = i === page;
+    pages.push(`<button data-page="${i}" class="px-3 py-2 text-sm rounded-md ${isActive ? 'bg-primary text-white font-medium' : 'hover:bg-gray-100 text-gray-700 cursor-pointer'}">${i}</button>`);
+  }
+
+  if (endPage < totalPages) {
+    if (endPage < totalPages - 1) pages.push(`<span class="px-2 py-2 text-gray-400">…</span>`);
+    pages.push(`<button data-page="${totalPages}" class="px-3 py-2 text-sm rounded-md hover:bg-gray-100 text-gray-700 cursor-pointer">${totalPages}</button>`);
+  }
+
+  // Next button
+  pages.push(`<button data-page="${page + 1}" ${!hasNext ? 'disabled' : ''} class="px-3 py-2 text-sm rounded-md ${hasNext ? 'hover:bg-gray-100 text-gray-700 cursor-pointer' : 'text-gray-300 cursor-not-allowed'}">→</button>`);
+
+  return `<div class="flex items-center justify-center gap-1 mt-6">${pages.join('')}</div>`;
+}
+
+// Pagination click handler
+document.addEventListener('click', (e: Event) => {
+  const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-page]');
+  if (!btn || btn.disabled || !engine) return;
+  const page = parseInt(btn.dataset.page!, 10);
+  if (page > 0) {
+    engine.goToPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 });
