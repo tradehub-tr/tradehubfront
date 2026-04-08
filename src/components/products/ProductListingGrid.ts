@@ -51,9 +51,10 @@ function renderImageSlider(card: ProductListingCard): string {
   // `;
   // ──────────────────────────────────────────────────────────────
 
-  // Use real image if available, otherwise fallback to category placeholder
+  // Build image list from available source
   const realImageSrc = card.imageSrc || '';
-  const hasRealImage = realImageSrc.length > 0;
+  const imageList: string[] = realImageSrc ? [realImageSrc] : [];
+  const hasMultiple = imageList.length > 1;
 
   let slidesHtml: string;
 

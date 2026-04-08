@@ -178,8 +178,8 @@ function renderCategoriesView(): string {
 function renderFeaturedView(): string {
   return `
     <div data-mega-view="featured" class="hidden py-4 sm:py-6">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-        <!-- Left: 3 Feature cards -->
+      <div class="grid grid-cols-3 gap-3 sm:gap-4 max-w-3xl mx-auto">
+        <!-- Feature cards (centered) -->
         ${featureCards.map(card => `
           <a href="${card.href}" class="th-card th-mega-card flex flex-col items-center justify-center gap-3 hover:shadow-md transition-all group">
             <span class="transition-colors" style="color:var(--mega-icon-color)">
@@ -188,7 +188,7 @@ function renderFeaturedView(): string {
             <span class="text-sm font-semibold transition-colors" style="color:var(--mega-heading-color)" data-i18n="${card.titleKey}">${t(card.titleKey)}</span>
           </a>
         `).join('')}
-        <!-- Right: Quick links -->
+        <!-- DISABLED: Quick links — ileride geliştirilecek
         <div class="flex flex-col justify-center">
           <ul class="space-y-4">
             ${quickLinks.map(link => `
@@ -201,6 +201,7 @@ function renderFeaturedView(): string {
             `).join('')}
           </ul>
         </div>
+        -->
       </div>
     </div>
   `;
@@ -217,12 +218,10 @@ function renderProtectionsView(): string {
         <!-- Left: Trade Assurance branding -->
         <div class="w-full md:w-2/5 md:flex-shrink-0">
           <div class="flex items-center gap-3 mb-4">
-            <span class="flex items-center justify-center w-10 h-10 rounded-full" style="background-color:var(--mega-accent-bg)">
-              <svg class="w-6 h-6" style="color:var(--mega-accent-color)" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
-            </span>
-            <h3 class="text-lg font-bold" style="color:var(--mega-heading-color)">Trade Assurance</h3>
+            <img src="${new URL('../../assets/images/tas_logo.png', import.meta.url).href}" alt="Ticari Güvence Sistemi" class="w-10 h-10 object-contain" />
+            <h3 class="text-lg font-bold" style="color:var(--mega-heading-color)" data-i18n="mega.tradeAssuranceTitle">${t('mega.tradeAssuranceTitle')}</h3>
           </div>
-          <p class="text-xl font-semibold leading-snug mb-6" style="color:var(--mega-heading-color)">Enjoy protection from payment to delivery</p>
+          <p class="text-xl font-semibold leading-snug mb-6" style="color:var(--mega-heading-color)" data-i18n="mega.tradeAssuranceSubtitle">${t('mega.tradeAssuranceSubtitle')}</p>
           <a href="/pages/info/trade-assurance-detail.html" class="th-btn th-btn-pill inline-block px-6 py-2.5 transition-colors" data-i18n="common.learnMore">
             ${t('common.learnMore')}
           </a>
