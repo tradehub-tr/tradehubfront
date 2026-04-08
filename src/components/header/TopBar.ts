@@ -6,7 +6,8 @@
  */
 
 import type { LocaleOption, CurrencyOption } from '../../types/navigation';
-import { megaCategories } from './MegaMenu';
+import { onCategoriesLoaded } from '../../services/categoryService';
+import type { ApiCategory } from '../../services/categoryService';
 import { cartStore } from '../cart/state/CartStore';
 import { isLoggedIn, getUser, getSessionUser, waitForAuth, logout } from '../../utils/auth';
 import { getSellerStoreUrl } from '../../utils/seller';
@@ -662,9 +663,6 @@ function renderAuthButtons(): string {
  */
 function renderMobileDrawer(): string {
   const baseUrl = getBaseUrl();
-  const filteredCategories = megaCategories.filter(
-    cat => !cat.id.startsWith('featured') && !cat.id.startsWith('new-') && !cat.id.startsWith('deal')
-  );
 
   return `
     <!-- Mobile Menu Drawer -->
@@ -847,17 +845,13 @@ function renderMobileDrawer(): string {
             <span class="th-badge inline-flex items-center px-2 py-0.5 text-[10px] font-bold" style="background:var(--btn-bg);color:var(--btn-text)">ALL</span>
           </div>
 
-          <!-- Category List -->
-          <div class="divide-y divide-gray-100 dark:divide-gray-700">
-            ${filteredCategories.map(cat => `
-              <button
-                type="button"
-                data-drawer-cat-id="${cat.id}"
-                class="flex items-center justify-between w-full px-4 py-3 text-sm text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-              >
-                <span>${cat.name}</span>
-                <svg class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
-              </button>
+          <!-- Category List (skeleton, replaced after API) -->
+          <div id="drawer-category-list" class="divide-y divide-gray-100 dark:divide-gray-700">
+            ${Array.from({ length: 8 }, () => `
+              <div class="flex items-center justify-between w-full px-4 py-3 animate-pulse">
+                <div class="h-3.5 rounded bg-gray-200 dark:bg-gray-700 w-32"></div>
+                <div class="w-5 h-5 rounded bg-gray-200 dark:bg-gray-700"></div>
+              </div>
             `).join('')}
           </div>
 
@@ -968,28 +962,48 @@ export function initMobileDrawer(): void {
     });
   }
 
-  // Open subcategory panel
-  const catButtons = document.querySelectorAll<HTMLButtonElement>('[data-drawer-cat-id]');
+  // Open subcategory panel — bağlanır, kategori verileri API'den gelince güncellenir
   const subcategoryTitle = document.getElementById('drawer-subcategory-title');
   const subcategoryLink = document.getElementById('drawer-subcategory-link') as HTMLAnchorElement | null;
   const subcategoryList = document.getElementById('drawer-subcategory-list');
 
-  catButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const catId = btn.getAttribute('data-drawer-cat-id');
-      const cat = megaCategories.find(c => c.id === catId);
-      if (!cat || !panelCategories || !panelSubcategory || !subcategoryTitle || !subcategoryLink || !subcategoryList) return;
+  function bindDrawerCategoryButtons(cats: ApiCategory[]): void {
+    const categoryList = document.getElementById('drawer-category-list');
+    if (!categoryList) return;
 
-      subcategoryTitle.textContent = cat.name;
-      subcategoryLink.href = `/categories/${cat.id}`;
-      subcategoryList.innerHTML = cat.products.map(
-        p => `<a href="${p.href}" class="block px-4 py-3 text-sm text-gray-900 hover:bg-gray-50 dark:text-white dark:hover:bg-gray-700 transition-colors">${p.name}</a>`
-      ).join('');
+    // Kategori listesini yeniden render et
+    categoryList.innerHTML = cats.map(cat => `
+      <button
+        type="button"
+        data-drawer-cat-id="${cat.id}"
+        class="flex items-center justify-between w-full px-4 py-3 text-sm text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+      >
+        <span>${cat.name}</span>
+        <svg class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
+      </button>
+    `).join('');
 
-      panelCategories.classList.add('-translate-x-full');
-      panelSubcategory.classList.remove('translate-x-full');
+    // Tıklama eventlerini bağla
+    categoryList.querySelectorAll<HTMLButtonElement>('[data-drawer-cat-id]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const catId = btn.getAttribute('data-drawer-cat-id');
+        const cat = cats.find(c => c.id === catId);
+        if (!cat || !panelCategories || !panelSubcategory || !subcategoryTitle || !subcategoryLink || !subcategoryList) return;
+
+        subcategoryTitle.textContent = cat.name;
+        subcategoryLink.href = `/pages/products.html?cat=${cat.slug}`;
+        subcategoryList.innerHTML = cat.children.map(
+          ch => `<a href="/pages/products.html?cat=${ch.slug}" class="block px-4 py-3 text-sm text-gray-900 hover:bg-gray-50 dark:text-white dark:hover:bg-gray-700 transition-colors">${ch.name}</a>`
+        ).join('');
+
+        panelCategories.classList.add('-translate-x-full');
+        panelSubcategory.classList.remove('translate-x-full');
+      });
     });
-  });
+  }
+
+  // API yüklenince kategori listesini doldur
+  onCategoriesLoaded(bindDrawerCategoryButtons);
 
   // Back from subcategory
   const subcategoryBack = document.getElementById('drawer-subcategory-back');

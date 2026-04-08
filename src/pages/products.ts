@@ -43,8 +43,8 @@ import { ShippingModal, initShippingModal } from '../components/product'
 
 import { initCurrency } from '../services/currencyService'
 
-// Category data for ID → name mapping
-import { megaCategories } from '../components/header'
+// Category data for slug/ID → name mapping (dynamic, API-based)
+import { loadCategories, findCategoryBySlug, findCategoryById } from '../services/categoryService'
 
 // Utilities
 import { initAnimatedPlaceholder } from '../utils/animatedPlaceholder'
@@ -63,15 +63,17 @@ function escapeHtml(str: string): string {
 
 /* ── Read URL parameters ── */
 const urlParams = new URLSearchParams(window.location.search);
-// Both ?category= (MegaMenu) and ?cat= (categories page) are supported
+// Both ?category= (MegaMenu ID) and ?cat= (URL slug) are supported
 const categoryParam = urlParams.get('category') || urlParams.get('cat');
 const queryParam = urlParams.get('q');
 
-/** Resolve display keyword from URL params */
+/**
+ * Resolve display keyword from URL params.
+ * categoryParam önce slug olarak, yoksa ID olarak aranır.
+ */
 function resolveKeyword(): string {
   if (categoryParam) {
-    const cat = megaCategories.find(c => c.id === categoryParam);
-    // Category names from megaCategories are safe (hardcoded), but fallback ID needs escaping
+    const cat = findCategoryBySlug(categoryParam) || findCategoryById(categoryParam);
     return cat ? cat.name : escapeHtml(categoryParam);
   }
   if (queryParam) {
@@ -80,18 +82,16 @@ function resolveKeyword(): string {
   return '';
 }
 
-const searchKeyword = resolveKeyword();
+// Başlangıçta query param'dan keyword (kategoriler henüz yüklenmedi)
+const initialKeyword = queryParam ? escapeHtml(queryParam.replace(/\+/g, ' ')) : escapeHtml(categoryParam || '');
 
-// Build dynamic breadcrumb from URL params
+// Build initial breadcrumb (category name henüz bilinmiyor, güncellenir)
 const productsBreadcrumb = (() => {
   const crumbs: { label: string; href?: string }[] = [
     { label: t('search.products'), href: 'products.html' },
   ];
-  if (categoryParam) {
-    const cat = megaCategories.find(c => c.id === categoryParam);
-    crumbs.push({ label: cat ? cat.name : escapeHtml(categoryParam) });
-  } else if (queryParam) {
-    crumbs.push({ label: escapeHtml(queryParam.replace(/\+/g, ' ')) });
+  if (categoryParam || queryParam) {
+    crumbs.push({ label: initialKeyword });
   }
   return crumbs;
 })();
@@ -115,7 +115,7 @@ appEl.innerHTML = `
       <div class="container-boxed">
         ${Breadcrumb(productsBreadcrumb)}
         <!-- Search Header (keyword, product count, sorting, view toggle) -->
-        ${SearchHeader({ keyword: searchKeyword, totalProducts: 0 })}
+        ${SearchHeader({ keyword: initialKeyword, totalProducts: 0 })}
 
         <!-- Active Filter Chips -->
         <div id="active-filter-chips" x-data="filterChips" class="flex flex-wrap gap-2 mb-3 empty:hidden"></div>
@@ -254,12 +254,27 @@ const baseParams = {
   category: categoryParam || undefined,
 };
 
-// Filter engine reference
-let engine: ReturnType<typeof initFilterEngine> | null = null;
+// Kategoriler ve para birimi paralel yüklensin; breadcrumb/header kategori adıyla güncellenir
+loadCategories().then(() => {
+  if (categoryParam) {
+    const resolvedKeyword = resolveKeyword();
+    if (resolvedKeyword && resolvedKeyword !== initialKeyword) {
+      updateSearchHeader({ keyword: resolvedKeyword });
+    }
+  }
+}).catch(() => { /* sessiz hata */ });
 
-// Initialize currency, then set up filter engine
-// Load dynamic sidebar facets (categories, countries)
-initFilterSidebar(queryParam || undefined, categoryParam || undefined);
+initCurrency().then(() => searchListings(searchParams)).then(result => {
+  const products = result.products;
+
+  // Render products
+  rerenderProductGrid(products);
+
+  // Update search header with real counts (kategori adı zaten resolveKeyword ile güncellendi)
+  updateSearchHeader({
+    totalProducts: result.searchHeader.totalProducts,
+    keyword: result.searchHeader.keyword || resolveKeyword() || undefined,
+  });
 
 initCurrency().then(() => {
   engine = initFilterEngine({

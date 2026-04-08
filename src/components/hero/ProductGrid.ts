@@ -35,7 +35,7 @@ function renderProductCard(card: ProductCard, index: number): string {
   const safeName = card.name.replace(/"/g, '&quot;');
   const unitLabel = card.moqUnit === 'kg' ? t('productGrid.kg') : t('productGrid.pcs');
   const moqText = `${card.moqCount} ${unitLabel}`;
-  const soldText = t('productGrid.unitsSold', { count: card.soldCount });
+  const soldText = '';
   const discountText = card.discountPercent
     ? t('productGrid.discount', { percent: card.discountPercent })
     : '';
@@ -94,7 +94,7 @@ function renderProductCard(card: ProductCard, index: number): string {
             <!-- MOQ + sold -->
             <div class="product-card__moq-line overflow-hidden h-[18px] leading-[18px]">
               <div class="product-card__moq inline mr-1"><bdi>${moqText}</bdi></div>
-              <span class="product-card__stats" title="${soldText}">${soldText}</span>
+              ${soldText ? `<span class="product-card__stats" title="${soldText}">${soldText}</span>` : ''}
             </div>
 
             <!-- Supplier info -->

@@ -168,10 +168,6 @@ function renderProductListingCard(card: ProductListingCard): string {
     ? `<div class="text-sm font-normal leading-[18px] text-gray-900">${t('products.minOrder', { moq: card.moq })}</div>`
     : '';
 
-  // Sold
-  const soldHtml = card.stats
-    ? `<div class="text-sm font-normal leading-[18px] text-[#767676]">${card.stats}</div>`
-    : '';
 
   // Supplier name
   const supplierNameHtml = card.supplierName
@@ -221,7 +217,6 @@ function renderProductListingCard(card: ProductListingCard): string {
           <div class="fy26-price text-xl font-semibold leading-[26px] text-gray-900">${formatPrice(card.price)}</div>
           <div class="fy26-moq-stats flex gap-1.5 flex-wrap mt-0.5">
             ${moqHtml}
-            ${soldHtml}
           </div>
         </div>
 
