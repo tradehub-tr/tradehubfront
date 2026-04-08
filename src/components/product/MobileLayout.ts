@@ -139,9 +139,12 @@ export function MobileProductLayout(): string {
         <button type="button" data-favorite-btn class="pdm-gallery-action-btn w-9 h-9 rounded-full bg-white/85 border-none flex items-center justify-center text-text-muted cursor-pointer shadow-[0_1px_3px_rgba(0,0,0,0.12)]" aria-label="${t('product.addToFavorites')}">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
         </button>
+        <!-- Mobile product gallery gorsel arama (kamera) butonu — DISABLED -->
+        <!--
         <button type="button" class="pdm-gallery-action-btn w-9 h-9 rounded-full bg-white/85 border-none flex items-center justify-center text-text-muted cursor-pointer shadow-[0_1px_3px_rgba(0,0,0,0.12)]" aria-label="${t('product.imageSearchLabel')}">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9a2 2 0 012-2h2l1-2h8l1 2h2a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><circle cx="12" cy="13" r="3"/></svg>
         </button>
+        -->
       </div>
       <!-- Counter pill -->
       <div id="pdm-gallery-counter" class="absolute bottom-3.5 left-1/2 -translate-x-1/2 bg-surface text-text-body text-xs font-medium py-1 px-3.5 rounded-[14px] pointer-events-none z-5 tracking-wide whitespace-nowrap shadow-[0_1px_4px_rgba(0,0,0,0.15)]">${t('product.mobilePhotosCounter')} <span id="pdm-counter-current">1</span>/${p.images.length}</div>

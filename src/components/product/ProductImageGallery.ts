@@ -118,6 +118,22 @@ export function ProductImageGallery(): string {
     >${renderGalleryMedia(img.src, img.alt, defaultVisual, 'thumb')}</button>
   `).join('');
 
+  // ──────────────────────────────────────────────────────────────
+  // DISABLED: "Find similar" (visual search) button - lightbox toolbar
+  // İleride tekrar etkinleştirmek için aşağıdaki findSimilarButtonHtml'i
+  // aktif et ve return template'inde `gallery-lightbox-actions` div'i
+  // içinde Favorite butonundan sonra ${'$'}{findSimilarButtonHtml} olarak ekle.
+  //
+  // const findSimilarButtonHtml = `
+  //   <button type="button" class="gallery-lightbox-action-btn max-[960px]:!text-[15px] max-[960px]:!gap-[5px]" aria-label="${t('product.findSimilar')}">
+  //     <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24">
+  //       <path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5A2.5 2.5 0 0 1 5.5 5h2A2.5 2.5 0 0 1 10 7.5v2A2.5 2.5 0 0 1 7.5 12h-2A2.5 2.5 0 0 1 3 9.5v-2zm11 0A2.5 2.5 0 0 1 16.5 5h2A2.5 2.5 0 0 1 21 7.5v2a2.5 2.5 0 0 1-2.5 2.5h-2A2.5 2.5 0 0 1 14 9.5v-2zm-11 9A2.5 2.5 0 0 1 5.5 14h2A2.5 2.5 0 0 1 10 16.5v2A2.5 2.5 0 0 1 7.5 21h-2A2.5 2.5 0 0 1 3 18.5v-2zm13.5-2.5a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9zm0 2.5v2l1.6 1"/>
+  //     </svg>
+  //     <span class="max-[960px]:hidden">Find similar</span>
+  //   </button>
+  // `;
+  // ──────────────────────────────────────────────────────────────
+
   return `
     <div x-data="imageGallery">
     <div id="product-gallery">
@@ -171,9 +187,12 @@ export function ProductImageGallery(): string {
         <button type="button" data-favorite-btn class="gallery-action-btn w-9 h-9 rounded-full flex items-center justify-center border-0 cursor-pointer transition-colors" style="background: var(--color-surface, #ffffff); box-shadow: 0 1px 6px rgba(0,0,0,.12); color: var(--color-text-placeholder, #999999);" aria-label="${t('product.addToFavorites')}">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
         </button>
+        <!-- Gorsel arama (kamera) butonu — DISABLED, ileride tekrar etkinlestirilecek -->
+        <!--
         <button type="button" class="gallery-action-btn w-9 h-9 rounded-full flex items-center justify-center border-0 cursor-pointer transition-colors" style="background: var(--color-surface, #ffffff); box-shadow: 0 1px 6px rgba(0,0,0,.12); color: var(--color-text-placeholder, #999999);" aria-label="${t('product.imageSearchLabel')}">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9a2 2 0 012-2h2l1-2h8l1 2h2a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><circle cx="12" cy="13" r="3"/></svg>
         </button>
+        -->
       </div>
 
     </div>
@@ -197,12 +216,7 @@ export function ProductImageGallery(): string {
             </svg>
             <span class="max-[960px]:hidden">Favorite</span>
           </button>
-          <button type="button" class="gallery-lightbox-action-btn max-[960px]:!text-[15px] max-[960px]:!gap-[5px]" aria-label="${t('product.findSimilar')}">
-            <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5A2.5 2.5 0 0 1 5.5 5h2A2.5 2.5 0 0 1 10 7.5v2A2.5 2.5 0 0 1 7.5 12h-2A2.5 2.5 0 0 1 3 9.5v-2zm11 0A2.5 2.5 0 0 1 16.5 5h2A2.5 2.5 0 0 1 21 7.5v2a2.5 2.5 0 0 1-2.5 2.5h-2A2.5 2.5 0 0 1 14 9.5v-2zm-11 9A2.5 2.5 0 0 1 5.5 14h2A2.5 2.5 0 0 1 10 16.5v2A2.5 2.5 0 0 1 7.5 21h-2A2.5 2.5 0 0 1 3 18.5v-2zm13.5-2.5a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9zm0 2.5v2l1.6 1"/>
-            </svg>
-            <span class="max-[960px]:hidden">Find similar</span>
-          </button>
+          <!-- Find similar button - DISABLED: see findSimilarButtonHtml above renderer -->
         </div>
 
         <div id="gallery-lightbox-count" class="max-[960px]:!text-sm" x-text="(lightboxIndex + 1) + '/${images.length}'">${images.length > 0 ? `1/${images.length}` : '0/0'}</div>
