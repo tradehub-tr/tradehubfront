@@ -157,6 +157,8 @@ const tr = {
       moneyBack: 'Para iade politikası',
       shippingLogistics: 'Kargo ve lojistik hizmetleri',
       afterSales: 'Satış sonrası korumalar',
+      tradeAssuranceTitle: 'Ticari Güvence Sistemi',
+      tradeAssuranceSubtitle: 'Ödemeden teslimata kadar koruma',
       getStarted: 'Başlangıç',
       whatIsIstoc: 'iSTOC nedir',
       whyIstoc: 'Neden iSTOC',
