@@ -68,7 +68,7 @@ function renderTaxSection(section: TaxSection): string {
         <h3 class="text-[15px] max-sm:text-sm font-bold mb-2 m-0" style="color:var(--color-text-heading, #111827)">${section.title}</h3>
         <p class="text-[13px] max-sm:text-xs leading-normal m-0" style="color:var(--color-text-muted, #666666)">${section.description}</p>
       </div>
-      <button class="th-btn-outline th-btn-pill th-btn-sm flex-shrink-0 text-[13px] whitespace-normal text-center" type="button">${section.buttonLabel}</button>
+      <button class="th-btn-outline th-btn-sm flex-shrink-0 text-[13px] whitespace-normal text-center" type="button">${section.buttonLabel}</button>
     </div>
   `;
 }

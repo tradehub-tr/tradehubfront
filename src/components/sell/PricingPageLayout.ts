@@ -101,7 +101,7 @@ export function PricingPageLayout(): string {
           ${PLANS.map(plan => {
             const planName = t(plan.nameKey);
             return `
-            <div class="relative bg-white rounded-xl ${plan.recommended ? 'border-2 border-primary-500 shadow-lg' : 'border border-gray-200 shadow-sm'} p-6 sm:p-8 flex flex-col">
+            <div class="relative bg-white rounded-md ${plan.recommended ? 'border-2 border-primary-500 shadow-lg' : 'border border-gray-200 shadow-sm'} p-6 sm:p-8 flex flex-col">
               ${plan.recommended ? `<div class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-primary-500 text-white text-xs font-semibold rounded-full">${t('sellPage.pricing.popular')}</div>` : ''}
               <h3 class="text-xl font-bold text-gray-900">${planName}</h3>
               <div class="mt-4 mb-6">

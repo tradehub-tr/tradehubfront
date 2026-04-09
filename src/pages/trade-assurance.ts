@@ -56,7 +56,7 @@ function HeroBanner(): string {
           <h1 class="text-3xl sm:text-4xl lg:text-[52px] font-bold text-white leading-tight mb-6">
             iSTOC'da ödemeden teslimata korumadan faydalanın
           </h1>
-          <a href="#how-it-works" class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-full px-7 py-3.5 text-base transition-colors shadow-lg">
+          <a href="#how-it-works" class="th-btn inline-flex items-center gap-2 font-semibold px-7 py-3.5 text-base shadow-lg">
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             Süreç şu şekilde işler:
           </a>
@@ -139,7 +139,7 @@ function HowItWorks(): string {
           ${stepCard('04', 'Sipariş koşulları karşılanmazsa paranızı geri alın', 'Para iadelerinde ve sorunlu siparişlerde tazminat talebinde bulunduğunuzda bir çözüme ulaşmanız için size yardımcı olacağız.')}
         </div>
         <!-- Escrow Video -->
-        <div class="max-w-[1000px] mx-auto rounded-2xl overflow-hidden">
+        <div class="max-w-[1000px] mx-auto rounded-md overflow-hidden">
           <video class="w-full object-cover auto-play-video" style="aspect-ratio:1200/362" muted loop playsinline preload="metadata">
             <source src="/src/assets/video/güvenliödeme video.mp4" type="video/mp4" />
           </video>
@@ -180,7 +180,7 @@ function stepCard(num: string, title: string, desc: string): string {
 
 function coverageCard(icon: string, title: string, href: string): string {
   return `
-    <a href="${href}" class="bg-white rounded-2xl hover:shadow-md transition-all duration-300 group block" style="padding:26px 26px 38px">
+    <a href="${href}" class="bg-white rounded-md hover:shadow-md transition-all duration-300 group block" style="padding:26px 26px 38px">
       <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center mb-6" style="background:#FFF3C4;color:#92400e">
         ${icon}
       </div>
@@ -210,10 +210,10 @@ function SecurePaymentsSection(): string {
               Kredi/banka kartları, dijital cüzdanlar, doğrudan banka hesabına transferler ve esnek ödeme planları* dahil olmak üzere bildiğiniz ve güvendiğiniz ödeme yöntemlerini destekliyoruz.
             </p>
             <div class="flex flex-wrap gap-3 mb-4">
-              <a href="/pages/info/payments" class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-full px-6 py-3 text-sm transition-colors">
+              <a href="/pages/info/payments" class="th-btn inline-flex items-center gap-2 font-semibold px-6 py-3 text-sm">
                 Destekleyici ürünleri tedarik edin
               </a>
-              <a href="/pages/info/payments" class="inline-flex items-center gap-2 border border-gray-300 hover:border-gray-400 text-gray-700 font-semibold rounded-full px-6 py-3 text-sm transition-colors">
+              <a href="/pages/info/payments" class="th-btn-outline inline-flex items-center gap-2 font-semibold px-6 py-3 text-sm">
                 Nasıl çalıştığını öğrenin
               </a>
             </div>
@@ -223,9 +223,9 @@ function SecurePaymentsSection(): string {
           <div class="lg:w-1/2">
             <div class="relative">
               <!-- Ana görsel -->
-              <img src="${videoPaymentImg}" alt="Güvenli ödeme" class="w-[65%] rounded-2xl object-cover shadow-lg" style="aspect-ratio:4/4.5" />
+              <img src="${videoPaymentImg}" alt="Güvenli ödeme" class="w-[65%] rounded-md object-cover shadow-lg" style="aspect-ratio:4/4.5" />
               <!-- Ödeme kartları overlay -->
-              <div class="absolute top-8 right-0 w-[55%] bg-white rounded-2xl shadow-xl p-5" style="z-index:2">
+              <div class="absolute top-8 right-0 w-[55%] bg-white rounded-md shadow-xl p-5" style="z-index:2">
                 <p class="text-xs font-semibold text-gray-700 mb-3">Pay online via our checkout</p>
                 <div class="grid grid-cols-3 gap-2 mb-4">
                   <span class="flex items-center justify-center h-9 rounded-lg border border-gray-200 text-xs font-bold text-[#1a1f71]">VISA</span>
@@ -271,7 +271,7 @@ function RefundPolicySection(): string {
         <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
           <!-- Left: Video (autoplay on scroll) -->
           <div class="lg:w-1/2 order-2 lg:order-1">
-            <div class="rounded-2xl overflow-hidden shadow-xl">
+            <div class="rounded-md overflow-hidden shadow-xl">
               <video class="w-full object-cover auto-play-video" style="aspect-ratio:528/564" muted loop playsinline preload="metadata">
                 <source src="/src/assets/video/kargo.mp4" type="video/mp4" />
               </video>
@@ -289,10 +289,10 @@ function RefundPolicySection(): string {
               Uygun bir ülkede* bulunuyorsanız kusurlu ürünleri yerel olarak ücretsiz iade etmek için Easy Return hizmetimizden de yararlanabilirsiniz.
             </p>
             <div class="flex flex-wrap gap-3 mb-4">
-              <a href="/pages/info/refund-policy" class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-full px-6 py-3 text-sm transition-colors">
+              <a href="/pages/info/refund-policy" class="th-btn inline-flex items-center gap-2 font-semibold px-6 py-3 text-sm">
                 Destekleyici ürünleri tedarik edin
               </a>
-              <a href="/pages/info/refund-policy" class="inline-flex items-center gap-2 border border-gray-300 hover:border-gray-400 text-gray-700 font-semibold rounded-full px-6 py-3 text-sm transition-colors">
+              <a href="/pages/info/refund-policy" class="th-btn-outline inline-flex items-center gap-2 font-semibold px-6 py-3 text-sm">
                 Nasıl çalıştığını öğrenin
               </a>
             </div>
@@ -322,12 +322,12 @@ function ShippingSection(): string {
           <p class="text-gray-600 text-base leading-relaxed mb-8">
             iSTOC Logistics ile lojistik ağımızın güvenilirliğinden yararlanabilir ve gönderinizi dünyanın birçok ülkesi ve bölgesinde gerçek zamanlı olarak takip edebilirsiniz.
           </p>
-          <a href="/pages/info/shipping-logistics" class="inline-flex items-center gap-2 border border-gray-300 hover:border-gray-400 text-gray-700 font-semibold rounded-full px-6 py-3 text-sm transition-colors">
+          <a href="/pages/info/shipping-logistics" class="th-btn-outline inline-flex items-center gap-2 font-semibold px-6 py-3 text-sm">
             Nasıl çalıştığını öğrenin
           </a>
         </div>
         <!-- Liman Görseli -->
-        <div class="mt-12 rounded-2xl overflow-hidden shadow-lg">
+        <div class="mt-12 rounded-md overflow-hidden shadow-lg">
           <img src="${limanImg}" alt="Lojistik ve Gönderim" class="w-full h-auto max-h-[500px] object-cover" />
         </div>
       </div>
@@ -346,7 +346,7 @@ function AfterSalesSection(): string {
         <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
           <!-- Left: Video (autoplay on scroll) -->
           <div class="lg:w-1/2">
-            <div class="rounded-2xl overflow-hidden shadow-xl">
+            <div class="rounded-md overflow-hidden shadow-xl">
               <video class="w-full object-cover auto-play-video" style="aspect-ratio:528/564" muted loop playsinline preload="metadata">
                 <source src="/src/assets/video/service.mp4" type="video/mp4" />
               </video>
@@ -361,10 +361,10 @@ function AfterSalesSection(): string {
               Uygun ürünlerde yerinde kurulum, bakım, onarım ve ücretsiz yedek parça hizmetlerimizle hizmet kapınıza gelsin.
             </p>
             <div class="flex flex-wrap gap-3">
-              <a href="/pages/info/after-sales" class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-full px-6 py-3 text-sm transition-colors">
+              <a href="/pages/info/after-sales" class="th-btn inline-flex items-center gap-2 font-semibold px-6 py-3 text-sm">
                 Destekleyici ürünleri tedarik edin
               </a>
-              <a href="/pages/info/after-sales" class="inline-flex items-center gap-2 border border-gray-300 hover:border-gray-400 text-gray-700 font-semibold rounded-full px-6 py-3 text-sm transition-colors">
+              <a href="/pages/info/after-sales" class="th-btn-outline inline-flex items-center gap-2 font-semibold px-6 py-3 text-sm">
                 Nasıl çalıştığını öğrenin
               </a>
             </div>
@@ -420,7 +420,7 @@ function TestimonialsSection(): string {
               <div class="swiper-slide">
                 <div class="text-center px-4 sm:px-8">
                   <!-- Video placeholder -->
-                  <div class="relative rounded-2xl overflow-hidden shadow-xl mx-auto max-w-[780px] mb-8 cursor-pointer group" data-video-trigger="testimonial">
+                  <div class="relative rounded-md overflow-hidden shadow-xl mx-auto max-w-[780px] mb-8 cursor-pointer group" data-video-trigger="testimonial">
                     <div class="w-full aspect-video bg-gray-800 flex items-center justify-center">
                       <div class="w-16 h-16 rounded-full bg-white/30 flex items-center justify-center group-hover:bg-white/50 transition-colors">
                         <svg class="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>

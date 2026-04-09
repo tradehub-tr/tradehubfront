@@ -30,7 +30,7 @@ export function CartPage({ suppliers, summary, assuranceItems }: CartPageProps):
           </svg>
           <h2 class="text-2xl font-bold text-text-heading mb-2" data-i18n="cart.empty">${t('cart.empty')}</h2>
           <p class="text-base text-text-secondary mb-8 max-w-md" data-i18n="cart.emptyDesc">${t('cart.emptyDesc')}</p>
-          <a href="/pages/products.html" class="inline-flex items-center justify-center th-btn-dark th-btn-pill no-underline" data-i18n="cart.continueShopping">
+          <a href="/pages/products.html" class="inline-flex items-center justify-center th-btn-dark no-underline" data-i18n="cart.continueShopping">
             ${t('cart.continueShopping')}
           </a>
         </div>

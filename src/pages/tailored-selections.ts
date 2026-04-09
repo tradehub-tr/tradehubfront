@@ -124,7 +124,7 @@ appEl.innerHTML = `
     ${TailoredSelectionsHero(categories)}
 
     <!-- Products area: rounded top corners, overlaps hero bottom -->
-    <div class="relative z-10 -mt-3 rounded-t-2xl" style="background: var(--products-bg, #f5f5f5);">
+    <div class="relative z-10 -mt-3 rounded-t-md" style="background: var(--products-bg, #f5f5f5);">
       <!-- Breadcrumb (desktop only) -->
       <div class="container-boxed pt-5 pb-2 hidden xl:block">
         ${Breadcrumb(breadcrumbItems)}

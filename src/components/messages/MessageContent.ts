@@ -117,7 +117,7 @@ export function MessageContent(): string {
                   </template>
                 </div>
                 <div>
-                  <div class="bg-(--color-surface,#ffffff) rounded-2xl rounded-bl-sm px-4 py-2.5 shadow-sm border border-(--color-border-light,#f0f0f0)">
+                  <div class="bg-(--color-surface,#ffffff) rounded-md rounded-bl-sm px-4 py-2.5 shadow-sm border border-(--color-border-light,#f0f0f0)">
                     <p class="text-[13px] text-(--color-text-body,#333333) leading-relaxed whitespace-pre-wrap break-words" x-text="msg.text"></p>
                   </div>
                   <span class="text-[11px] text-(--color-text-placeholder,#999999) mt-1 ml-1 block" x-text="msg.time"></span>
@@ -129,7 +129,7 @@ export function MessageContent(): string {
             <template x-if="msg.isMe">
               <div class="flex items-end gap-2 max-w-[75%] max-sm:max-w-[85%] flex-row-reverse">
                 <div>
-                  <div class="bg-(--color-cta-primary,#cc9900)/10 rounded-2xl rounded-br-sm px-4 py-2.5">
+                  <div class="bg-(--color-cta-primary,#cc9900)/10 rounded-md rounded-br-sm px-4 py-2.5">
                     <p class="text-[13px] text-(--color-text-body,#333333) leading-relaxed whitespace-pre-wrap break-words" x-text="msg.text"></p>
                   </div>
                   <span class="text-[11px] text-(--color-text-placeholder,#999999) mt-1 mr-1 block text-right" x-text="msg.time"></span>
@@ -157,7 +157,7 @@ export function MessageContent(): string {
             <textarea x-model="newMessage"
                       @keydown.enter.prevent="if (!$event.shiftKey) sendMessage()"
                       rows="1"
-                      class="w-full resize-none border border-(--color-border-default,#e5e5e5) rounded-2xl px-4 py-2.5 text-[13px] text-(--color-text-body,#333333) bg-(--color-surface-muted,#fafafa) outline-none transition-[border-color] duration-150 placeholder:text-(--color-text-placeholder,#999999) focus:border-(--color-cta-primary,#cc9900) focus:bg-(--color-surface,#ffffff) max-h-24 overflow-y-auto leading-snug"
+                      class="w-full resize-none border border-(--color-border-default,#e5e5e5) rounded-md px-4 py-2.5 text-[13px] text-(--color-text-body,#333333) bg-(--color-surface-muted,#fafafa) outline-none transition-[border-color] duration-150 placeholder:text-(--color-text-placeholder,#999999) focus:border-(--color-cta-primary,#cc9900) focus:bg-(--color-surface,#ffffff) max-h-24 overflow-y-auto leading-snug"
                       placeholder="${t('messages.typePlaceholder')}"
                       style="field-sizing: content;"></textarea>
           </div>

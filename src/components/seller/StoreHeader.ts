@@ -58,13 +58,13 @@ export function StoreHeader(): string {
           <!-- CTA Buttons: absolute top-right on desktop -->
           <div class="hidden lg:flex items-center gap-3 absolute top-6 right-10">
             <a :href="'/pages/seller/seller-shop.html?seller=' + (seller?.seller_code || '')"
-               class="inline-flex items-center gap-2 text-[14px] font-normal text-[#222] hover:text-[#cc9900] transition-colors whitespace-nowrap"
+               class="inline-flex items-center gap-2 text-[14px] font-normal text-text-heading hover:text-(--btn-bg) transition-colors whitespace-nowrap"
                style="padding: 5px 5px 5px 25px;">
               ${storeIcon}
               ${t('seller.sf.viewStore')}
             </a>
             <button
-              class="bg-[#cc9900] hover:bg-[#b38600] text-white text-[14px] font-semibold rounded-full transition-colors whitespace-nowrap"
+              class="bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white text-[14px] font-semibold rounded-full transition-colors whitespace-nowrap"
               style="width: 180px; height: 40px; padding: 0px 12px;"
               onclick="document.getElementById('contact-form')?.scrollIntoView({behavior:'smooth'})">
               ${t('seller.sf.contactNow')}
@@ -110,7 +110,7 @@ export function StoreHeader(): string {
               <span class="inline-flex items-center gap-1">
                 <img src="/src/assets/images/verifiedminilogo.png" alt="Verified" class="h-[14px] w-auto" />
                 <template x-if="seller?.verification_type === 'PRO'">
-                  <span class="bg-[#cc9900] text-white text-[10px] font-bold rounded px-1 py-0.5 leading-none">PRO</span>
+                  <span class="bg-(--btn-bg) text-white text-[10px] font-bold rounded px-1 py-0.5 leading-none">PRO</span>
                 </template>
               </span>
             </template>
@@ -138,12 +138,12 @@ export function StoreHeader(): string {
             <!-- Mobile CTA buttons — stacked below header -->
             <div class="flex flex-col lg:hidden gap-2 px-4 py-3 sm:px-6">
               <a :href="'/pages/seller/seller-shop.html?seller=' + (seller?.seller_code || '')"
-                 class="w-full inline-flex items-center justify-center gap-1.5 py-2.5 border border-gray-300 rounded-full bg-white text-[13px] font-medium text-gray-600 hover:border-gray-400 transition-colors">
+                 class="w-full inline-flex items-center justify-center gap-1.5 py-2.5 border-(length:--btn-outline-border-width) border-(--btn-outline-border-color) rounded-full bg-(--btn-outline-bg) text-[13px] font-medium text-(--btn-outline-text) hover:bg-(--btn-outline-hover-bg) hover:text-(--btn-outline-hover-text) transition-colors">
                 ${storeIcon}
                 ${t('seller.sf.viewStore')}
               </a>
               <button
-                class="w-full py-2.5 bg-[#cc9900] hover:bg-[#b38600] text-white text-[13px] font-semibold rounded-full transition-colors"
+                class="w-full py-2.5 bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white text-[13px] font-semibold rounded-full transition-colors"
                 onclick="document.getElementById('contact-form')?.scrollIntoView({behavior:'smooth'})">
                 ${t('seller.sf.contactNow')}
               </button>
@@ -381,7 +381,7 @@ export function StoreHeader(): string {
               <div class="mt-3 flex items-center gap-1" x-init="$nextTick(() => updateScrollArrows())">
                 <!-- Left arrow -->
                 <button x-show="canScrollLeft" x-transition.opacity @click="scrollLeft()"
-                        class="shrink-0 w-9 h-9 bg-white border border-gray-200 rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors shadow">
+                        class="th-btn-outline shrink-0 w-9 h-9 flex items-center justify-center shadow">
                   <svg class="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
                 </button>
 
@@ -410,7 +410,7 @@ export function StoreHeader(): string {
 
                 <!-- Right arrow -->
                 <button x-show="canScrollRight" x-transition.opacity @click="scrollRight()"
-                        class="shrink-0 w-9 h-9 bg-white border border-gray-200 rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors shadow">
+                        class="th-btn-outline shrink-0 w-9 h-9 flex items-center justify-center shadow">
                   <svg class="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                 </button>
               </div>

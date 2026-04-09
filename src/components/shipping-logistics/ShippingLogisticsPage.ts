@@ -28,7 +28,7 @@ function yellowIcon(svgContent: string): string {
 
 function featureCard(icon: string, title: string, description: string): string {
   return `
-    <div class="border border-gray-200 rounded-xl p-6 flex flex-col gap-3">
+    <div class="border border-gray-200 rounded-md p-6 flex flex-col gap-3">
       ${yellowIcon(icon)}
       <h3 class="text-lg font-semibold text-gray-900">${title}</h3>
       <p class="text-sm text-gray-600 leading-relaxed">${description}</p>
@@ -174,17 +174,17 @@ function moreAboutSection(): string {
           iSTOC Lojistik, saygın lojistik sağlayıcıları bulmanıza ve gönderileri gerçek zamanlı olarak takip etmenize yardımcı olan resmi pazar yerimizdir.
         </p>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="bg-white border border-gray-200 rounded-xl p-6 flex flex-col gap-3">
+          <div class="bg-white border border-gray-200 rounded-md p-6 flex flex-col gap-3">
             <div class="w-16 h-16">${iconCustomization}</div>
             <h3 class="text-lg font-semibold text-gray-900">Daha akıllı kargo</h3>
             <p class="text-sm text-gray-600 leading-relaxed">Akıllı platformumuz; gönderilerinizin görünürlüğünü ve planlama sürecini iyileştirmek için net maliyetler, en uygun rotalar ve gerçek zamanlı takip fırsatı sunar.</p>
           </div>
-          <div class="bg-white border border-gray-200 rounded-xl p-6 flex flex-col gap-3">
+          <div class="bg-white border border-gray-200 rounded-md p-6 flex flex-col gap-3">
             <div class="w-16 h-16">${iconGlobeCustom}</div>
             <h3 class="text-lg font-semibold text-gray-900">Dünya çapında teminat</h3>
             <p class="text-sm text-gray-600 leading-relaxed">Dünya çapında pek çok ülkede ve bölgede teslimat takibinin tadını çıkarın.</p>
           </div>
-          <div class="bg-white border border-gray-200 rounded-xl p-6 flex flex-col gap-3">
+          <div class="bg-white border border-gray-200 rounded-md p-6 flex flex-col gap-3">
             <div class="w-16 h-16">${iconMoneyDoc}</div>
             <h3 class="text-lg font-semibold text-gray-900">Güvenilirlik garantisi</h3>
             <p class="text-sm text-gray-600 leading-relaxed">200'den fazla ülke/bölgede teslimat garantisi* ve kayıp veya hasarlı gönderilere karşı tam finansal koruma ile içiniz rahat olsun. *Yalnızca uygun siparişlerde geçerlidir</p>

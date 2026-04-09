@@ -108,7 +108,7 @@ async function loadQuotes() {
                   <td class="p-3 text-center text-sm border-l border-gray-100 align-top">
                     ${q.status === 'Submitted' ? `
                       <div class="flex justify-center gap-1.5">
-                        <button class="quote-accept-btn px-3 py-1 rounded-full bg-amber-500 text-white text-xs font-medium hover:bg-amber-600" data-quote="${q.name}">${t('rfq.accept')}</button>
+                        <button class="quote-accept-btn px-3 py-1 rounded-full bg-(--btn-bg) text-white text-xs font-medium hover:bg-(--btn-hover-bg)" data-quote="${q.name}">${t('rfq.accept')}</button>
                         <button class="quote-reject-btn px-3 py-1 rounded-full border border-gray-300 text-gray-700 text-xs font-medium hover:bg-gray-50" data-quote="${q.name}">${t('rfq.reject')}</button>
                       </div>
                     ` : `<span class="text-xs font-medium ${q.status === 'Accepted' ? 'text-green-600' : q.status === 'Rejected' ? 'text-red-500' : 'text-gray-400'}">${q.status}</span>`}

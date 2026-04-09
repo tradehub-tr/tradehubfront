@@ -46,7 +46,7 @@ async function init() {
         </div>
       </header>
       <div class="min-h-[calc(100vh-58px)] bg-gray-100 flex items-start justify-center pt-8 sm:pt-12 pb-12 px-2 sm:px-4">
-        <div class="w-full max-w-xl bg-white rounded-xl shadow-sm p-5 sm:p-8 md:p-12">
+        <div class="w-full max-w-xl bg-white rounded-md shadow-sm p-5 sm:p-8 md:p-12">
           <h1 class="text-2xl font-bold text-gray-900 text-center mb-2">${t('auth.supplierSetup.title')}</h1>
           <p class="text-sm text-gray-500 text-center mb-6">${t('auth.supplierSetup.subtitle')}</p>
           <div id="supplier-form-container">

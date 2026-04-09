@@ -297,7 +297,7 @@ function renderAllOrders(): string {
               <div class="flex flex-col items-center gap-2">
                 <h3 class="text-base font-bold text-gray-900">${t('orders.noOrdersYet')}</h3>
                 <p class="text-sm text-gray-500 max-w-[400px]">${t('orders.startSourcingDesc')}</p>
-                <a href="/" class="th-btn-outline th-btn-pill mt-2">${t('orders.startSourcing')}</a>
+                <a href="/" class="th-btn-outline mt-2">${t('orders.startSourcing')}</a>
               </div>
             </template>
           </div>
@@ -374,7 +374,7 @@ function renderAllOrders(): string {
               </a>
               <!-- Buttons -->
               <div class="flex items-center gap-2.5 max-[480px]:w-full">
-                <button @click="viewDetail(order)" class="h-9 px-5 max-[480px]:px-3 max-[480px]:flex-1 text-[13px] max-[480px]:text-xs text-gray-700 bg-white border border-gray-300 rounded-lg cursor-pointer font-medium whitespace-nowrap transition-colors hover:border-gray-400 hover:bg-gray-50">
+                <button @click="viewDetail(order)" class="th-btn-outline h-9 px-5 max-[480px]:px-3 max-[480px]:flex-1 text-[13px] max-[480px]:text-xs cursor-pointer font-medium whitespace-nowrap">
                   ${t('orders.viewDetails')}
                 </button>
                 <template x-if="canPay(order)">
@@ -503,35 +503,35 @@ function renderAllOrders(): string {
               <!-- Step 1: Siparis -->
               <div class="flex flex-col items-center gap-1.5 relative z-10">
                 <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
-                     :class="getStepIndex(selectedOrder) >= 0 ? 'bg-amber-500 text-white' : 'bg-gray-200 text-gray-500'">1</div>
+                     :class="getStepIndex(selectedOrder) >= 0 ? 'bg-(--btn-bg) text-white' : 'bg-gray-200 text-gray-500'">1</div>
                 <span class="text-xs max-sm:text-[10px] text-gray-600 whitespace-nowrap">${t('orders.stepOrder')}</span>
               </div>
-              <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3" :class="getStepIndex(selectedOrder) >= 1 ? 'bg-amber-500' : 'bg-gray-200'"></div>
+              <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3" :class="getStepIndex(selectedOrder) >= 1 ? 'bg-(--btn-bg)' : 'bg-gray-200'"></div>
               <!-- Step 2: Ödeme -->
               <div class="flex flex-col items-center gap-1.5 relative z-10">
                 <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
-                     :class="getStepIndex(selectedOrder) >= 1 ? 'bg-amber-500 text-white' : 'bg-gray-200 text-gray-500'">2</div>
+                     :class="getStepIndex(selectedOrder) >= 1 ? 'bg-(--btn-bg) text-white' : 'bg-gray-200 text-gray-500'">2</div>
                 <span class="text-xs max-sm:text-[10px] text-gray-600 whitespace-nowrap">${t('orders.stepPayment')}</span>
               </div>
-              <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3" :class="getStepIndex(selectedOrder) >= 2 ? 'bg-amber-500' : 'bg-gray-200'"></div>
+              <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3" :class="getStepIndex(selectedOrder) >= 2 ? 'bg-(--btn-bg)' : 'bg-gray-200'"></div>
               <!-- Step 3: Hazırlanıyor -->
               <div class="flex flex-col items-center gap-1.5 relative z-10">
                 <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
-                     :class="getStepIndex(selectedOrder) >= 2 ? 'bg-amber-500 text-white' : 'bg-gray-200 text-gray-500'">3</div>
+                     :class="getStepIndex(selectedOrder) >= 2 ? 'bg-(--btn-bg) text-white' : 'bg-gray-200 text-gray-500'">3</div>
                 <span class="text-xs max-sm:text-[10px] text-gray-600 whitespace-nowrap">${t('orders.stepShipping')}</span>
               </div>
-              <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3" :class="getStepIndex(selectedOrder) >= 3 ? 'bg-amber-500' : 'bg-gray-200'"></div>
+              <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3" :class="getStepIndex(selectedOrder) >= 3 ? 'bg-(--btn-bg)' : 'bg-gray-200'"></div>
               <!-- Step 4: Kargoda -->
               <div class="flex flex-col items-center gap-1.5 relative z-10">
                 <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
-                     :class="getStepIndex(selectedOrder) >= 3 ? 'bg-amber-500 text-white' : 'bg-gray-200 text-gray-500'">4</div>
+                     :class="getStepIndex(selectedOrder) >= 3 ? 'bg-(--btn-bg) text-white' : 'bg-gray-200 text-gray-500'">4</div>
                 <span class="text-xs max-sm:text-[10px] text-gray-600 whitespace-nowrap">${t('orders.stepDelivery')}</span>
               </div>
-              <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3" :class="getStepIndex(selectedOrder) >= 4 ? 'bg-amber-500' : 'bg-gray-200'"></div>
+              <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3" :class="getStepIndex(selectedOrder) >= 4 ? 'bg-(--btn-bg)' : 'bg-gray-200'"></div>
               <!-- Step 5: Teslim Edildi -->
               <div class="flex flex-col items-center gap-1.5 relative z-10">
                 <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
-                     :class="getStepIndex(selectedOrder) >= 4 ? 'bg-amber-500 text-white' : 'bg-gray-200 text-gray-500'">5</div>
+                     :class="getStepIndex(selectedOrder) >= 4 ? 'bg-(--btn-bg) text-white' : 'bg-gray-200 text-gray-500'">5</div>
                 <span class="text-xs max-sm:text-[10px] text-gray-600 whitespace-nowrap">${t('orders.stepReview')}</span>
               </div>
             </div>
@@ -582,21 +582,21 @@ function renderAllOrders(): string {
           <!-- Action Buttons (status-aware) -->
           <div class="flex items-center gap-3 mt-4 flex-wrap" x-show="isActionable(selectedOrder)">
             <template x-if="canPay(selectedOrder)">
-              <button @click="openRemittanceModal(selectedOrder.orderNumber, selectedOrder.total, selectedOrder.currency, selectedOrder.paymentMethod)" class="th-btn th-btn-pill">
+              <button @click="openRemittanceModal(selectedOrder.orderNumber, selectedOrder.total, selectedOrder.currency, selectedOrder.paymentMethod)" class="th-btn">
                 ${t('orders.makePayment')}
               </button>
             </template>
             <template x-if="hasReceipt(selectedOrder)">
-              <a :href="selectedOrder.receiptUrl" target="_blank" class="th-btn-outline th-btn-pill inline-flex items-center gap-1.5 text-emerald-700 border-emerald-200 bg-emerald-50 hover:bg-emerald-100">
+              <a :href="selectedOrder.receiptUrl" target="_blank" class="th-btn-outline inline-flex items-center gap-1.5 text-emerald-700 border-emerald-200 bg-emerald-50 hover:bg-emerald-100">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                 Dekontu görüntüle
               </a>
             </template>
-            <button @click="openModal('showModifyShipping')" class="th-btn-outline th-btn-pill">
+            <button @click="openModal('showModifyShipping')" class="th-btn-outline">
               ${t('orders.modifyShippingDetails')}
             </button>
             <template x-if="canCancel(selectedOrder)">
-              <button @click="openModal('showCancelOrder')" class="th-btn-outline th-btn-pill">
+              <button @click="openModal('showCancelOrder')" class="th-btn-outline">
                 ${t('orders.cancelOrderBtn')}
               </button>
             </template>
@@ -868,7 +868,7 @@ function renderAllOrders(): string {
               <p class="text-sm text-gray-700 mb-1">${t('orders.ensureProductQuality')}</p>
               <p class="text-xs text-gray-500">${t('orders.asLowAs')} <strong class="text-amber-600">${getCurrencyCode()} 48.00</strong></p>
             </div>
-            <button @click="openModal('showAddServices')" class="th-btn th-btn-pill whitespace-nowrap">
+            <button @click="openModal('showAddServices')" class="th-btn whitespace-nowrap">
               ${t('orders.addServices')}
             </button>
           </div>
@@ -876,10 +876,10 @@ function renderAllOrders(): string {
 
         <!-- Section 10: Action Buttons -->
         <div class="px-7 max-sm:px-3 py-5 flex items-center gap-3 flex-wrap">
-          <button @click="openModal('showOperationHistory')" class="th-btn-outline th-btn-pill whitespace-nowrap">
+          <button @click="openModal('showOperationHistory')" class="th-btn-outline whitespace-nowrap">
             ${t('orders.operationHistory')}
           </button>
-          <button class="th-btn-outline th-btn-pill whitespace-nowrap">
+          <button class="th-btn-outline whitespace-nowrap">
             ${t('orders.viewContract')}
           </button>
         </div>
@@ -892,7 +892,7 @@ function renderAllOrders(): string {
       <template x-if="showOperationHistory">
         <div class="fixed inset-0 z-50 flex items-center justify-center p-4" @keydown.escape.window="closeModal('showOperationHistory')">
           <div class="absolute inset-0 bg-black/50" @click="closeModal('showOperationHistory')"></div>
-          <div class="relative bg-white rounded-xl shadow-2xl w-full max-w-lg max-h-[80vh] overflow-hidden" @click.stop>
+          <div class="relative bg-white rounded-md shadow-2xl w-full max-w-lg max-h-[80vh] overflow-hidden" @click.stop>
             <!-- Header -->
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
               <h3 class="text-lg font-bold text-gray-900">${t('orders.operationHistory')}</h3>
@@ -905,7 +905,7 @@ function renderAllOrders(): string {
               <div class="relative pl-6 border-l-2 border-gray-200 space-y-6">
                 <!-- Step 1: Order submitted (always) -->
                 <div class="relative">
-                  <div class="absolute -left-[25px] top-1 w-3 h-3 bg-amber-500 rounded-full border-2 border-white"></div>
+                  <div class="absolute -left-[25px] top-1 w-3 h-3 bg-(--btn-bg) rounded-full border-2 border-white"></div>
                   <p class="text-sm font-medium text-gray-900">${t('orders.orderSubmitted')}</p>
                   <p class="text-xs text-gray-500 mt-0.5" x-text="selectedOrder.orderDate"></p>
                   <p class="text-xs text-gray-400 mt-1" x-text="'${t('orders.orderPrefix')} ' + selectedOrder.orderNumber"></p>
@@ -926,7 +926,7 @@ function renderAllOrders(): string {
                     <!-- Step 2: Payment -->
                     <div class="relative">
                       <div class="absolute -left-[25px] top-1 w-3 h-3 rounded-full border-2 border-white"
-                           :class="getStepIndex(selectedOrder) >= 1 ? 'bg-amber-500' : 'bg-gray-300'"></div>
+                           :class="getStepIndex(selectedOrder) >= 1 ? 'bg-(--btn-bg)' : 'bg-gray-300'"></div>
                       <p class="text-sm font-medium" :class="getStepIndex(selectedOrder) >= 1 ? 'text-gray-900' : 'text-gray-400'"
                          x-text="getStepIndex(selectedOrder) === 0 ? '${t('orders.awaitingPayment')}' : '${t('orders.orderConfirming')}'"></p>
                       <p class="text-xs text-gray-400 mt-1"
@@ -935,7 +935,7 @@ function renderAllOrders(): string {
                     <!-- Step 3: Preparing -->
                     <template x-if="getStepIndex(selectedOrder) >= 2">
                       <div class="relative">
-                        <div class="absolute -left-[25px] top-1 w-3 h-3 bg-amber-500 rounded-full border-2 border-white"></div>
+                        <div class="absolute -left-[25px] top-1 w-3 h-3 bg-(--btn-bg) rounded-full border-2 border-white"></div>
                         <p class="text-sm font-medium text-gray-900">${t('orders.orderPreparing')}</p>
                         <p class="text-xs text-gray-400 mt-1">${t('orders.orderPreparingMessage')}</p>
                       </div>
@@ -943,7 +943,7 @@ function renderAllOrders(): string {
                     <!-- Step 4: Delivering -->
                     <template x-if="getStepIndex(selectedOrder) >= 3">
                       <div class="relative">
-                        <div class="absolute -left-[25px] top-1 w-3 h-3 bg-amber-500 rounded-full border-2 border-white"></div>
+                        <div class="absolute -left-[25px] top-1 w-3 h-3 bg-(--btn-bg) rounded-full border-2 border-white"></div>
                         <p class="text-sm font-medium text-gray-900">${t('orders.orderDelivering')}</p>
                         <p class="text-xs text-gray-400 mt-1">${t('orders.orderDeliveringMessage')}</p>
                       </div>
@@ -988,7 +988,7 @@ function renderAllOrders(): string {
             </div>
             <!-- Footer -->
             <div class="px-6 py-4 border-t border-gray-100 flex justify-end">
-              <button @click="closeModal('showOperationHistory')" class="px-5 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-full cursor-pointer hover:bg-gray-50 transition-colors">
+              <button @click="closeModal('showOperationHistory')" class="th-btn-outline px-5 py-2 text-sm font-medium cursor-pointer">
                 ${t('common.close')}
               </button>
             </div>
@@ -1000,7 +1000,7 @@ function renderAllOrders(): string {
       <template x-if="showAddServices">
         <div class="fixed inset-0 z-50 flex items-center justify-center p-4" @keydown.escape.window="closeModal('showAddServices')">
           <div class="absolute inset-0 bg-black/50" @click="closeModal('showAddServices')"></div>
-          <div class="relative bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden" @click.stop>
+          <div class="relative bg-white rounded-md shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden" @click.stop>
             <!-- Header -->
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
               <h3 class="text-lg font-bold text-gray-900">${t('orders.chooseAService')}</h3>
@@ -1021,7 +1021,7 @@ function renderAllOrders(): string {
                     <p class="text-sm text-gray-600 mb-2">${t('orders.productionMonitoringDesc')}</p>
                     <p class="text-xs text-gray-500">${t('orders.startingFrom')} <strong class="text-amber-600">${getCurrencyCode()} 48.00</strong></p>
                   </div>
-                  <button class="th-btn th-btn-pill whitespace-nowrap shrink-0">
+                  <button class="th-btn whitespace-nowrap shrink-0">
                     ${t('orders.selectService')}
                   </button>
                 </div>
@@ -1037,7 +1037,7 @@ function renderAllOrders(): string {
                     <p class="text-sm text-gray-600 mb-2">${t('orders.preShipmentInspectionDesc')}</p>
                     <p class="text-xs text-gray-500">${t('orders.startingFrom')} <strong class="text-amber-600">${getCurrencyCode()} 88.00</strong></p>
                   </div>
-                  <button class="th-btn th-btn-pill whitespace-nowrap shrink-0">
+                  <button class="th-btn whitespace-nowrap shrink-0">
                     ${t('orders.selectService')}
                   </button>
                 </div>
@@ -1045,7 +1045,7 @@ function renderAllOrders(): string {
             </div>
             <!-- Footer -->
             <div class="px-6 py-4 border-t border-gray-100 flex justify-end">
-              <button @click="closeModal('showAddServices')" class="px-5 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-full cursor-pointer hover:bg-gray-50 transition-colors">
+              <button @click="closeModal('showAddServices')" class="th-btn-outline px-5 py-2 text-sm font-medium cursor-pointer">
                 ${t('common.cancel')}
               </button>
             </div>
@@ -1057,7 +1057,7 @@ function renderAllOrders(): string {
       <template x-if="showPaymentHistory">
         <div class="fixed inset-0 z-50 flex items-center justify-center p-4" @keydown.escape.window="closeModal('showPaymentHistory')">
           <div class="absolute inset-0 bg-black/50" @click="closeModal('showPaymentHistory')"></div>
-          <div class="relative bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden" @click.stop>
+          <div class="relative bg-white rounded-md shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden" @click.stop>
             <!-- Header -->
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
               <h3 class="text-lg font-bold text-gray-900">${t('orders.paymentHistoryTitle')}</h3>
@@ -1165,7 +1165,7 @@ function renderAllOrders(): string {
                     <p class="py-12 text-center text-gray-400 text-sm">${t('orders.noWireTransferRecords')}</p>
                   </template>
                   <template x-for="rec in wireRecords" :key="rec.name">
-                    <div class="border border-gray-100 rounded-xl p-5 mb-3 space-y-3">
+                    <div class="border border-gray-100 rounded-md p-5 mb-3 space-y-3">
                       <div class="flex items-center justify-between">
                         <span class="text-xs font-semibold text-gray-500 uppercase">Havale / EFT</span>
                         <span class="inline-flex px-2.5 py-0.5 text-xs font-medium rounded-full"
@@ -1201,7 +1201,7 @@ function renderAllOrders(): string {
             </div>
             <!-- Footer -->
             <div class="px-6 py-4 border-t border-gray-100 flex justify-end">
-              <button @click="closeModal('showPaymentHistory')" class="px-5 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-full cursor-pointer hover:bg-gray-50 transition-colors">
+              <button @click="closeModal('showPaymentHistory')" class="th-btn-outline px-5 py-2 text-sm font-medium cursor-pointer">
                 ${t('common.close')}
               </button>
             </div>
@@ -1213,7 +1213,7 @@ function renderAllOrders(): string {
       <template x-if="showRefundModal">
         <div class="fixed inset-0 z-50 flex items-center justify-center p-4" @keydown.escape.window="closeModal('showRefundModal')">
           <div class="absolute inset-0 bg-black/50" @click="closeModal('showRefundModal')"></div>
-          <div class="relative bg-white rounded-xl shadow-2xl w-full max-w-lg overflow-hidden" @click.stop>
+          <div class="relative bg-white rounded-md shadow-2xl w-full max-w-lg overflow-hidden" @click.stop>
             <!-- Header -->
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
               <h3 class="text-base font-bold text-gray-900">İade Talebi</h3>
@@ -1229,7 +1229,7 @@ function renderAllOrders(): string {
                 </div>
                 <h4 class="text-base font-semibold text-gray-900 mb-2">İade talebi oluşturulamaz</h4>
                 <p class="text-sm text-gray-500 mb-6" x-text="refundError"></p>
-                <button @click="closeModal('showRefundModal')" class="px-6 py-2 text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 rounded-full border-none cursor-pointer transition-colors">Kapat</button>
+                <button @click="closeModal('showRefundModal')" class="px-6 py-2 text-sm font-medium text-white bg-(--btn-hover-bg) hover:bg-(--btn-hover-bg) rounded-full border-none cursor-pointer transition-colors">Kapat</button>
               </div>
             </template>
             <!-- Success state -->
@@ -1269,7 +1269,7 @@ function renderAllOrders(): string {
                 <p x-show="refundError" x-text="refundError" class="text-xs text-red-500 mb-3"></p>
                 <!-- Actions -->
                 <div class="flex gap-3 justify-end">
-                  <button @click="closeModal('showRefundModal')" class="px-5 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-full cursor-pointer hover:bg-gray-50 transition-colors">İptal</button>
+                  <button @click="closeModal('showRefundModal')" class="th-btn-outline px-5 py-2 text-sm font-medium cursor-pointer">İptal</button>
                   <button @click="submitRefundRequest()"
                     :disabled="submittingRefund || !refundForm.reason.trim()"
                     class="px-5 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-full border-none cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
@@ -1289,7 +1289,7 @@ function renderAllOrders(): string {
       <template x-if="showTrackPackage">
         <div class="fixed inset-0 z-50 flex items-center justify-center p-4" @keydown.escape.window="closeModal('showTrackPackage')">
           <div class="absolute inset-0 bg-black/50" @click="closeModal('showTrackPackage')"></div>
-          <div class="relative bg-white rounded-xl shadow-2xl w-full max-w-lg max-h-[80vh] overflow-hidden" @click.stop>
+          <div class="relative bg-white rounded-md shadow-2xl w-full max-w-lg max-h-[80vh] overflow-hidden" @click.stop>
             <!-- Header -->
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
               <h3 class="text-lg font-bold text-gray-900">${t('orders.trackPackage')}</h3>
@@ -1331,7 +1331,7 @@ function renderAllOrders(): string {
             </div>
             <!-- Footer -->
             <div class="px-6 py-4 border-t border-gray-100 flex justify-end">
-              <button @click="closeModal('showTrackPackage')" class="px-5 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-full cursor-pointer hover:bg-gray-50 transition-colors">
+              <button @click="closeModal('showTrackPackage')" class="th-btn-outline px-5 py-2 text-sm font-medium cursor-pointer">
                 ${t('common.close')}
               </button>
             </div>
@@ -1343,7 +1343,7 @@ function renderAllOrders(): string {
       <template x-if="showModifyShipping">
         <div class="fixed inset-0 z-50 flex items-center justify-center p-4" @keydown.escape.window="closeModal('showModifyShipping')">
           <div class="absolute inset-0 bg-black/50" @click="closeModal('showModifyShipping')"></div>
-          <div class="relative bg-white rounded-xl shadow-2xl w-full max-w-lg max-h-[85vh] overflow-hidden" @click.stop>
+          <div class="relative bg-white rounded-md shadow-2xl w-full max-w-lg max-h-[85vh] overflow-hidden" @click.stop>
             <!-- Header -->
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
               <h3 class="text-lg font-bold text-gray-900">${t('orders.modifyShippingDetails')}</h3>
@@ -1403,10 +1403,10 @@ function renderAllOrders(): string {
             </div>
             <!-- Footer -->
             <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-end gap-3">
-              <button @click="closeModal('showModifyShipping')" class="th-btn-outline th-btn-pill">
+              <button @click="closeModal('showModifyShipping')" class="th-btn-outline">
                 ${t('common.cancel')}
               </button>
-              <button @click="closeModal('showModifyShipping')" class="th-btn th-btn-pill">
+              <button @click="closeModal('showModifyShipping')" class="th-btn">
                 ${t('orders.submitChanges')}
               </button>
             </div>
@@ -1422,7 +1422,7 @@ function renderAllOrders(): string {
       <template x-if="showCancelOrder">
         <div class="fixed inset-0 z-50 flex items-center justify-center p-4" @keydown.escape.window="closeModal('showCancelOrder')">
           <div class="absolute inset-0 bg-black/50" @click="cancelReason = ''; cancellingOrder = null; closeModal('showCancelOrder')"></div>
-          <div class="relative bg-white rounded-xl shadow-2xl w-full max-w-md max-h-[85vh] overflow-hidden" @click.stop>
+          <div class="relative bg-white rounded-md shadow-2xl w-full max-w-md max-h-[85vh] overflow-hidden" @click.stop>
             <!-- Header -->
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
               <h3 class="text-lg font-bold text-gray-900">${t('orders.cancelOrderTitle')}</h3>
@@ -1476,12 +1476,12 @@ function renderAllOrders(): string {
             <!-- Footer -->
             <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-end gap-3">
               <button @click="confirmCancelOrder()"
-                :class="cancelReason ? 'th-btn th-btn-pill' : 'bg-gray-200 text-gray-400 border-gray-200 cursor-not-allowed rounded-full'"
+                :class="cancelReason ? 'th-btn' : 'bg-gray-200 text-gray-400 border-gray-200 cursor-not-allowed '"
                 :disabled="!cancelReason"
                 class="px-6 py-2 text-sm font-medium rounded-full cursor-pointer transition-colors border">
                 ${t('orders.confirmCancel')}
               </button>
-              <button @click="cancelReason = ''; cancellingOrder = null; closeModal('showCancelOrder')" class="th-btn-outline th-btn-pill">
+              <button @click="cancelReason = ''; cancellingOrder = null; closeModal('showCancelOrder')" class="th-btn-outline">
                 ${t('common.cancel')}
               </button>
             </div>
@@ -1496,18 +1496,18 @@ function renderAllOrders(): string {
            ════════════════════════════════════════ -->
       <div class="os-modal hidden fixed inset-0 z-[9999] items-center justify-center" id="remittance-modal">
         <div class="os-modal__overlay absolute inset-0 bg-black/45"></div>
-        <div class="os-modal__dialog relative bg-white rounded-xl w-[740px] max-w-[calc(100vw-32px)] max-h-[calc(100vh-64px)] overflow-y-auto shadow-[0_20px_60px_rgba(0,0,0,0.2)]" style="animation: osModalIn 200ms ease-out"
+        <div class="os-modal__dialog relative bg-white rounded-md w-[740px] max-w-[calc(100vw-32px)] max-h-[calc(100vh-64px)] overflow-y-auto shadow-[0_20px_60px_rgba(0,0,0,0.2)]" style="animation: osModalIn 200ms ease-out"
              x-data="remittanceComponent()">
 
           <!-- Modal Header -->
-          <div class="flex items-center justify-between px-6 pt-5 pb-4 border-b border-gray-100 sticky top-0 bg-white z-10 rounded-t-xl">
+          <div class="flex items-center justify-between px-6 pt-5 pb-4 border-b border-gray-100 sticky top-0 bg-white z-10 rounded-t-md">
             <div class="flex items-center gap-3">
               <h3 class="text-lg font-bold text-gray-900" x-text="isCheckPayment ? 'Evrak Gönder' : '${t('orders.submitRemittanceProof')}'"></h3>
               <!-- Step indicator (3 steps) -->
               <div class="flex items-center gap-1.5" x-show="step !== 'success'">
-                <span class="w-2 h-2 rounded-full transition-colors" :class="step === 'iban' ? 'bg-amber-500' : 'bg-gray-300'"></span>
-                <span class="w-2 h-2 rounded-full transition-colors" :class="step === 'upload' ? 'bg-amber-500' : 'bg-gray-300'"></span>
-                <span class="w-2 h-2 rounded-full transition-colors" :class="step === 'form' || step === 'submitting' ? 'bg-amber-500' : 'bg-gray-300'"></span>
+                <span class="w-2 h-2 rounded-full transition-colors" :class="step === 'iban' ? 'bg-(--btn-bg)' : 'bg-gray-300'"></span>
+                <span class="w-2 h-2 rounded-full transition-colors" :class="step === 'upload' ? 'bg-(--btn-bg)' : 'bg-gray-300'"></span>
+                <span class="w-2 h-2 rounded-full transition-colors" :class="step === 'form' || step === 'submitting' ? 'bg-(--btn-bg)' : 'bg-gray-300'"></span>
               </div>
             </div>
             <button @click="reset()" class="os-modal__close bg-transparent border-none cursor-pointer p-1.5 rounded-lg flex items-center justify-center transition-colors hover:bg-gray-100" aria-label="${t('common.close')}">
@@ -1531,7 +1531,7 @@ function renderAllOrders(): string {
                 <p class="text-sm text-gray-600 mb-5">Aşağıdaki banka hesabına havale/EFT yapın, ardından <strong>"Ödeme Yaptım"</strong> butonuna tıklayın.</p>
 
                 <!-- IBAN Card -->
-                <div class="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 rounded-xl p-5 mb-5">
+                <div class="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 rounded-md p-5 mb-5">
                   <div class="flex items-center gap-2 mb-4">
                     <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
                     <h4 class="font-bold text-amber-900 text-sm">Ödeme Bilgileri</h4>
@@ -1577,7 +1577,7 @@ function renderAllOrders(): string {
                 <div class="flex items-center justify-between gap-3">
                   <button @click="reset()" class="text-sm text-gray-500 hover:text-gray-700 bg-transparent border-none cursor-pointer transition-colors">İptal</button>
                   <button @click="goToUpload()" :disabled="!sellerIban"
-                    class="flex items-center gap-2 px-7 py-3 text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl cursor-pointer transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+                    class="flex items-center gap-2 px-7 py-3 text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-md cursor-pointer transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                     <span x-text="isCheckPayment ? 'Ödeme Yaptım — Evrak Yükle' : 'Ödeme Yaptım — Dekont Yükle'"></span>
                   </button>
@@ -1597,7 +1597,7 @@ function renderAllOrders(): string {
             </template>
 
             <!-- Upload Zone -->
-            <div class="border-2 border-dashed rounded-xl p-8 max-sm:p-5 text-center transition-colors cursor-pointer"
+            <div class="border-2 border-dashed rounded-md p-8 max-sm:p-5 text-center transition-colors cursor-pointer"
                  :class="dragging ? 'border-amber-400 bg-amber-50/60' : hasFile ? 'border-green-300 bg-green-50/30' : 'border-gray-300 bg-gray-50/50 hover:border-gray-400'"
                  @dragover.prevent="dragging = true"
                  @dragleave.prevent="dragging = false"
@@ -2153,7 +2153,7 @@ function renderTaxInfo(): string {
     <!-- ═══ MODAL: PST bilgileri ═══ -->
     <div class="os-modal hidden fixed inset-0 z-[9999] items-center justify-center" id="pst-modal">
       <div class="os-modal__overlay absolute inset-0 bg-black/45"></div>
-      <div class="os-modal__dialog relative bg-(--color-surface,#fff) rounded-xl w-[480px] max-w-[calc(100vw-32px)] max-h-[calc(100vh-64px)] overflow-y-auto shadow-[0_20px_60px_rgba(0,0,0,0.2)]" style="animation: osModalIn 200ms ease-out">
+      <div class="os-modal__dialog relative bg-(--color-surface,#fff) rounded-md w-[480px] max-w-[calc(100vw-32px)] max-h-[calc(100vh-64px)] overflow-y-auto shadow-[0_20px_60px_rgba(0,0,0,0.2)]" style="animation: osModalIn 200ms ease-out">
         <div class="flex items-center justify-between px-6 pt-5 pb-4 border-b border-(--color-border-light,#f0f0f0)">
           <h3 class="text-base font-semibold text-(--color-text-heading,#111827)">${t('orders.pstInfo')}</h3>
           <button class="os-modal__close bg-transparent border-none cursor-pointer p-1 rounded flex items-center justify-center transition-colors hover:bg-(--color-surface-raised,#f5f5f5)" aria-label="${t('common.close')}">
@@ -2190,7 +2190,7 @@ function renderTaxInfo(): string {
     <!-- ═══ MODAL: KDV/GST Numarası Ekleyin ═══ -->
     <div class="os-modal hidden fixed inset-0 z-[9999] items-center justify-center" id="vat-modal">
       <div class="os-modal__overlay absolute inset-0 bg-black/45"></div>
-      <div class="os-modal__dialog relative bg-(--color-surface,#fff) rounded-xl w-[480px] max-w-[calc(100vw-32px)] max-h-[calc(100vh-64px)] overflow-y-auto shadow-[0_20px_60px_rgba(0,0,0,0.2)]" style="animation: osModalIn 200ms ease-out">
+      <div class="os-modal__dialog relative bg-(--color-surface,#fff) rounded-md w-[480px] max-w-[calc(100vw-32px)] max-h-[calc(100vh-64px)] overflow-y-auto shadow-[0_20px_60px_rgba(0,0,0,0.2)]" style="animation: osModalIn 200ms ease-out">
         <div class="flex items-center justify-between px-6 pt-5 pb-4 border-b border-(--color-border-light,#f0f0f0)">
           <h3 class="text-base font-semibold text-(--color-text-heading,#111827)">${t('orders.addVatGstNumber')}</h3>
           <button class="os-modal__close bg-transparent border-none cursor-pointer p-1 rounded flex items-center justify-center transition-colors hover:bg-(--color-surface-raised,#f5f5f5)" aria-label="${t('common.close')}">
@@ -2238,7 +2238,7 @@ function renderTaxInfo(): string {
     <!-- ═══ MODAL: Gümrük muayenesi bilgileri ═══ -->
     <div class="os-modal hidden fixed inset-0 z-[9999] items-center justify-center" id="customs-modal">
       <div class="os-modal__overlay absolute inset-0 bg-black/45"></div>
-      <div class="os-modal__dialog relative bg-(--color-surface,#fff) rounded-xl w-[480px] max-w-[calc(100vw-32px)] max-h-[calc(100vh-64px)] overflow-y-auto shadow-[0_20px_60px_rgba(0,0,0,0.2)]" style="animation: osModalIn 200ms ease-out">
+      <div class="os-modal__dialog relative bg-(--color-surface,#fff) rounded-md w-[480px] max-w-[calc(100vw-32px)] max-h-[calc(100vh-64px)] overflow-y-auto shadow-[0_20px_60px_rgba(0,0,0,0.2)]" style="animation: osModalIn 200ms ease-out">
         <div class="flex items-center justify-between px-6 pt-5 pb-4 border-b border-(--color-border-light,#f0f0f0)">
           <h3 class="text-base font-semibold text-(--color-text-heading,#111827)">${t('orders.customsInspectionInfo')}</h3>
           <button class="os-modal__close bg-transparent border-none cursor-pointer p-1 rounded flex items-center justify-center transition-colors hover:bg-(--color-surface-raised,#f5f5f5)" aria-label="${t('common.close')}">

@@ -114,7 +114,7 @@ function renderMainView(): string {
     <!-- Header -->
     <div class="flex items-center justify-between px-7 max-sm:px-3 pt-6 pb-5 max-sm:flex-col max-sm:items-start max-sm:gap-3">
       <h1 class="text-[20px] font-bold text-gray-900">${t('subscription.aiMode')}</h1>
-      <button class="px-5 max-sm:px-4 py-2 max-sm:py-1.5 text-[14px] max-sm:text-[13px] text-gray-700 bg-white border border-gray-300 rounded-full cursor-pointer hover:border-gray-400 transition-colors" id="sub-manage-btn">${t('subscription.managePlan')}</button>
+      <button class="th-btn-outline px-5 max-sm:px-4 py-2 max-sm:py-1.5 text-[14px] max-sm:text-[13px] cursor-pointer" id="sub-manage-btn">${t('subscription.managePlan')}</button>
     </div>
 
     <!-- Current Plan Card -->
@@ -128,7 +128,7 @@ function renderMainView(): string {
       </div>
       <div class="flex items-center justify-between px-6 py-3.5 bg-primary-50 text-[14px] text-gray-700 max-md:flex-col max-md:items-start max-md:gap-3">
         <span>${t('subscription.tryBeforeUpgrade')}</span>
-        <button class="th-btn-dark th-btn-pill whitespace-nowrap max-sm:!py-2 max-sm:!px-4 max-sm:!text-[13px]" id="sub-try-btn">${t('subscription.tryAiModeFree')}</button>
+        <button class="th-btn-dark whitespace-nowrap max-sm:!py-2 max-sm:!px-4 max-sm:!text-[13px]" id="sub-try-btn">${t('subscription.tryAiModeFree')}</button>
       </div>
     </div>
 
@@ -175,9 +175,9 @@ function renderPlanCard(plan: Plan, isYearly: boolean): string {
   if (plan.currentPlan) {
     btnHtml = `<button class="w-full py-3 max-sm:py-2 px-5 text-[14px] max-sm:text-[13px] font-semibold rounded-full bg-gray-200 text-gray-400 cursor-default" disabled>${t('subscription.currentPlan')}</button>`;
   } else if (plan.popular) {
-    btnHtml = `<button class="w-full th-btn th-btn-pill max-sm:!py-2 max-sm:!px-4 max-sm:!text-[13px]">${t('subscription.startFreeTrial')}</button>`;
+    btnHtml = `<button class="w-full th-btn max-sm:!py-2 max-sm:!px-4 max-sm:!text-[13px]">${t('subscription.startFreeTrial')}</button>`;
   } else {
-    btnHtml = `<button class="w-full th-btn-dark th-btn-pill max-sm:!py-2 max-sm:!px-4 max-sm:!text-[13px]">${t('subscription.startFreeTrial')}</button>`;
+    btnHtml = `<button class="w-full th-btn-dark max-sm:!py-2 max-sm:!px-4 max-sm:!text-[13px]">${t('subscription.startFreeTrial')}</button>`;
   }
 
   return `

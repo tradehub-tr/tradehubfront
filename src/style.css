@@ -393,12 +393,16 @@
     --btn-font-size: 0.875rem;
     --btn-font-weight: 600;
     --btn-shadow: none;
+    --btn-hover-bg: var(--color-primary-600);
+    --btn-hover-text: var(--color-surface);
 
     /* --- Button Outline Variant --- */
     --btn-outline-bg: var(--color-surface);
     --btn-outline-text: var(--color-primary-500);
     --btn-outline-border-width: 2px;
     --btn-outline-border-color: var(--color-primary-500);
+    --btn-outline-hover-bg: rgba(204, 153, 0, 0.08);
+    --btn-outline-hover-text: var(--color-primary-500);
 
     /* --- Auth Pages (Login, Register, Forgot Password) --- */
     --auth-accent: var(--color-primary-500);
@@ -482,8 +486,6 @@
     --search-tab-color: #6b7280;
     --search-tab-active-color: var(--color-primary-500);
     --search-input-border-color: var(--color-primary-500);
-    --search-btn-gradient-start: var(--color-primary-400);
-    --search-btn-gradient-end: var(--color-primary-600);
     --search-box-bg: var(--color-surface);
     --search-input-text: var(--color-text-heading);
     --search-image-link-color: #6b7280;
@@ -783,11 +785,12 @@
     --animate-fade-out: fade-out var(--duration-default) var(--ease-default);
     --animate-slide-up: slide-up var(--duration-default) var(--ease-default);
 
-    /* --- CTA Semantic (Secondary / Dark) --- */
-    --color-cta-primary: var(--color-secondary-600);
-    --color-cta-primary-hover: var(--color-secondary-700);
-    --color-cta-primary-light: var(--color-secondary-500);
-    --color-cta-primary-tint: var(--color-secondary-50);
+    /* --- CTA Semantic (Secondary / Dark) ---
+       Eskiden secondary-600/700 (koyu gri) idi. Admin panelden tek yerden
+       buton yönetimi için --btn-* token ailesine alias edildi. Dark buton
+       artık solid primary buton ile aynı renk kaynağını kullanır. */
+    --color-cta-primary: var(--btn-bg);
+    --color-cta-primary-hover: var(--btn-hover-bg);
 }
 
 
@@ -991,7 +994,8 @@
     }
 
     .th-btn:hover {
-        filter: brightness(0.9);
+        background: var(--btn-hover-bg, var(--btn-bg));
+        color: var(--btn-hover-text, var(--btn-text));
     }
 
     .th-btn:disabled {
@@ -1019,7 +1023,8 @@
     }
 
     .th-btn-outline:hover {
-        filter: brightness(0.95);
+        background: var(--btn-outline-hover-bg, var(--btn-outline-bg));
+        color: var(--btn-outline-hover-text, var(--btn-outline-text));
     }
 
     /* --- Button Size Modifiers --- */
@@ -1033,33 +1038,55 @@
         font-size: calc(var(--btn-font-size) * 1.15);
     }
 
-    .th-btn-pill {
-        border-radius: var(--radius-full);
-    }
-
-    /* --- Dark Button (CTA: Add to Cart, Checkout, etc.) --- */
+    /* --- Dark Button (CTA: Add to Cart, Checkout, etc.) ---
+       Admin panel --btn-* token'larına bağlı. Eskiden --color-cta-primary
+       kullanıyordu; artık solid buton ile aynı token ailesine yönlendirildi
+       ki admin panelden tek yerden yönetilebilsin. */
     .th-btn-dark {
         display: inline-flex;
         align-items: center;
         justify-content: center;
         gap: 0.375rem;
-        background: var(--color-cta-primary, #333333);
-        color: var(--color-text-inverse, #ffffff);
-        border: none;
+        background: var(--btn-bg);
+        color: var(--btn-text);
+        border: var(--btn-border-width) solid var(--btn-border-color);
         border-radius: var(--radius-button);
         padding: var(--spacing-button-y) var(--spacing-button-x);
         font-size: var(--btn-font-size);
         font-weight: var(--btn-font-weight);
+        box-shadow: var(--btn-shadow);
         cursor: pointer;
         line-height: 1.25;
         transition: all 0.15s ease;
     }
 
     .th-btn-dark:hover {
-        background: var(--color-cta-primary-hover, #1f1f1f);
+        background: var(--btn-hover-bg, var(--btn-bg));
+        color: var(--btn-hover-text, var(--btn-text));
     }
 
     .th-btn-dark:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    /* --- Gradient Button Modifier ---
+       `.th-btn` veya `.th-btn-dark` ile birlikte kullanılır. Doğrudan
+       --btn-bg ve --btn-hover-bg'yi gradient'in iki ucu olarak kullanır —
+       ayrı gradient token'ı YOK. Admin panelde Dolu Buton BG/Hover
+       değiştirilince gradient butonlar da otomatik senkron olur. */
+    .th-btn-gradient {
+        background: linear-gradient(135deg, var(--btn-bg), var(--btn-hover-bg));
+        color: var(--btn-text);
+        border: none;
+    }
+
+    .th-btn-gradient:hover {
+        background: linear-gradient(135deg, var(--btn-hover-bg), var(--btn-bg));
+        color: var(--btn-hover-text, var(--btn-text));
+    }
+
+    .th-btn-gradient:disabled {
         opacity: 0.5;
         cursor: not-allowed;
     }
@@ -2931,20 +2958,22 @@ body.gallery-lightbox-open {
 
 /* #pd-sample-price and .pd-sample-left migrated to Tailwind in ProductInfo.ts */
 
+/* Numune Al butonu — admin panel --btn-outline-* token'larına bağlı. */
 .pd-sample-btn {
     padding: 6px 20px;
     font-size: 13px;
     font-weight: 500;
-    border: 1px solid #222;
-    border-radius: 20px;
-    background: var(--color-surface, #ffffff);
-    color: var(--color-text-heading, #111827);
+    border: var(--btn-outline-border-width) solid var(--btn-outline-border-color);
+    border-radius: var(--radius-full, 9999px);
+    background: var(--btn-outline-bg);
+    color: var(--btn-outline-text);
     cursor: pointer;
-    transition: background .15s;
+    transition: background .15s, color .15s, border-color .15s;
 }
 
 .pd-sample-btn:hover {
-    background: var(--color-surface-raised, #f5f5f5);
+    background: var(--btn-outline-hover-bg, var(--btn-outline-bg));
+    color: var(--btn-outline-hover-text, var(--btn-outline-text));
 }
 
 /* #pd-variations-section, .pd-section-header, .pd-select-now migrated to Tailwind in ProductInfo.ts */
@@ -3133,7 +3162,7 @@ body.gallery-lightbox-open {
 }
 
 .pdm-sample-btn:active {
-    background: var(--color-surface-raised, #f5f5f5);
+    background: var(--btn-outline-hover-bg, var(--color-surface-raised, #f5f5f5));
 }
 
 /* -- Reviews star SVG -- */
@@ -3206,7 +3235,7 @@ body.gallery-lightbox-open {
 }
 
 .pdm-supplier-btn:active {
-    background: var(--color-surface-raised, #f5f5f5);
+    background: var(--btn-outline-hover-bg, var(--color-surface-raised, #f5f5f5));
 }
 
 .pdm-bottom-sheet {
@@ -3443,7 +3472,7 @@ body.pdm-sheet-open {
 }
 
 .pdm-bar-cart-btn:active {
-    background: var(--color-surface-raised, #f5f5f5);
+    background: var(--btn-outline-hover-bg, var(--color-surface-raised, #f5f5f5));
 }
 
 .pdm-bar-order-btn {
@@ -3451,7 +3480,7 @@ body.pdm-sheet-open {
 }
 
 .pdm-bar-order-btn:active {
-    background: var(--color-cta-primary-hover, #b38600);
+    background: var(--btn-hover-bg, var(--btn-bg));
 }
 
 /* -- 375px overrides for elements not in modifiable TS files -- */
@@ -3532,7 +3561,7 @@ footer {
 
 /* Layout now in Tailwind: flex flex-col gap-3 */
 
-/* Layout now in Tailwind: flex items-center gap-3.5 w-full py-4 px-[18px] rounded-xl text-left relative cursor-pointer transition-all */
+/* Layout now in Tailwind: flex items-center gap-3.5 w-full py-4 px-[18px] rounded-md text-left relative cursor-pointer transition-all */
 .auth-account-type-card {
     border: 1.5px solid var(--color-border-default, #e5e5e5);
     background: var(--color-surface, #ffffff);

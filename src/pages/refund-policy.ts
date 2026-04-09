@@ -25,7 +25,7 @@ const clipboardIcon = `<svg width="64" height="64" viewBox="0 0 30 30" fill="non
 
 const stepImagePlaceholder = `
   <div class="flex gap-4 mt-6">
-    <div class="relative w-[220px] h-[150px] bg-gray-100 rounded-xl border border-gray-200 shadow-sm overflow-hidden flex flex-col">
+    <div class="relative w-[220px] h-[150px] bg-gray-100 rounded-md border border-gray-200 shadow-sm overflow-hidden flex flex-col">
       <div class="bg-gray-200 px-3 py-2 text-xs font-semibold text-gray-600">Adım 1: Siparişlerim</div>
       <div class="flex-1 flex items-center justify-center">
         <div class="text-center px-4">
@@ -34,7 +34,7 @@ const stepImagePlaceholder = `
         </div>
       </div>
     </div>
-    <div class="relative w-[220px] h-[150px] bg-gray-100 rounded-xl border border-gray-200 shadow-sm overflow-hidden flex flex-col -ml-4 mt-4">
+    <div class="relative w-[220px] h-[150px] bg-gray-100 rounded-md border border-gray-200 shadow-sm overflow-hidden flex flex-col -ml-4 mt-4">
       <div class="bg-gray-200 px-3 py-2 text-xs font-semibold text-gray-600">Adım 2: Sipariş Detayları</div>
       <div class="flex-1 flex items-center justify-center">
         <div class="text-center px-4">
@@ -127,7 +127,7 @@ function MoneyBackPolicySection(): string {
       <!-- 3 Feature Cards -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <!-- Card 1 -->
-        <div class="border border-gray-200 rounded-2xl p-6 hover:shadow-md transition-shadow duration-300">
+        <div class="border border-gray-200 rounded-md p-6 hover:shadow-md transition-shadow duration-300">
           <div class="mb-4">${timerIcon}</div>
           <h3 class="text-lg font-bold text-gray-900 mb-2">30 veya 60 günde para iadesi*</h3>
           <p class="text-gray-600 text-sm leading-relaxed">
@@ -135,7 +135,7 @@ function MoneyBackPolicySection(): string {
           </p>
         </div>
         <!-- Card 2 -->
-        <div class="border border-gray-200 rounded-2xl p-6 hover:shadow-md transition-shadow duration-300">
+        <div class="border border-gray-200 rounded-md p-6 hover:shadow-md transition-shadow duration-300">
           <div class="mb-4">${lightningIcon}</div>
           <h3 class="text-lg font-bold text-gray-900 mb-2">Hızlı para iadeleri</h3>
           <p class="text-gray-600 text-sm leading-relaxed">
@@ -143,7 +143,7 @@ function MoneyBackPolicySection(): string {
           </p>
         </div>
         <!-- Card 3 -->
-        <div class="border border-gray-200 rounded-2xl p-6 hover:shadow-md transition-shadow duration-300">
+        <div class="border border-gray-200 rounded-md p-6 hover:shadow-md transition-shadow duration-300">
           <div class="mb-4">${clipboardIcon}</div>
           <h3 class="text-lg font-bold text-gray-900 mb-2">Çözüm desteği</h3>
           <p class="text-gray-600 text-sm leading-relaxed">
@@ -189,7 +189,7 @@ function HowToApplySection(): string {
 
       <!-- CTA Button -->
       <div class="mt-10">
-        <a href="#" class="inline-flex items-center gap-2 border-2 border-gray-900 text-gray-900 font-semibold rounded-full px-6 py-3 text-sm hover:bg-gray-900 hover:text-white transition-all duration-300">
+        <a href="#" class="th-btn-outline inline-flex items-center gap-2 font-semibold px-6 py-3 text-sm">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z"/></svg>
           Adım adım eğitim videolarını izleyin
         </a>
@@ -211,7 +211,7 @@ function EasyReturnSection(): string {
         <!-- 3 Feature Cards -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
           <!-- Card 1 -->
-          <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
+          <div class="bg-white rounded-md p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
             <div class="mb-4">${timerIcon}</div>
             <h3 class="text-lg font-bold text-gray-900 mb-2">Kolay ve ücretsiz iadeler</h3>
             <p class="text-gray-600 text-sm leading-relaxed">
@@ -219,7 +219,7 @@ function EasyReturnSection(): string {
             </p>
           </div>
           <!-- Card 2 -->
-          <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
+          <div class="bg-white rounded-md p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
             <div class="mb-4">${lightningIcon}</div>
             <h3 class="text-lg font-bold text-gray-900 mb-2">Teslimat için harcanan süreyi azaltın</h3>
             <p class="text-gray-600 text-sm leading-relaxed">
@@ -227,7 +227,7 @@ function EasyReturnSection(): string {
             </p>
           </div>
           <!-- Card 3 -->
-          <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
+          <div class="bg-white rounded-md p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
             <div class="mb-4">${clipboardIcon}</div>
             <h3 class="text-lg font-bold text-gray-900 mb-2">Paranızı geri alın</h3>
             <p class="text-gray-600 text-sm leading-relaxed">
@@ -280,7 +280,7 @@ function EasyReturnStepsSection(): string {
 
         <!-- CTA Button -->
         <div class="mt-10">
-          <a href="#" class="inline-flex items-center gap-2 border-2 border-gray-900 text-gray-900 font-semibold rounded-full px-6 py-3 text-sm hover:bg-gray-900 hover:text-white transition-all duration-300">
+          <a href="#" class="th-btn-outline inline-flex items-center gap-2 font-semibold px-6 py-3 text-sm">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z"/></svg>
             Adım adım eğitim videolarını izleyin
           </a>

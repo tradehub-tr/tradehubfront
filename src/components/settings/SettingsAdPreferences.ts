@@ -72,7 +72,7 @@ export function SettingsAdPreferences(): string {
         ${prefs.map(renderToggle).join('')}
       </div>
       <div class="mt-12 flex justify-center">
-        <a href="#" class="ad-pref__back-btn inline-flex items-center justify-center py-3 px-20 max-sm:px-10 max-sm:w-full border border-gray-300 rounded-3xl text-sm font-medium no-underline transition-all hover:bg-surface-raised hover:border-gray-400" style="color:var(--color-text-heading, #111827)">${t('settings.adBack')}</a>
+        <a href="#" class="ad-pref__back-btn inline-flex items-center justify-center py-3 px-20 max-sm:px-10 max-sm:w-full border border-gray-300 rounded-md text-sm font-medium no-underline transition-all hover:bg-surface-raised hover:border-gray-400" style="color:var(--color-text-heading, #111827)">${t('settings.adBack')}</a>
       </div>
     </div>
   `;

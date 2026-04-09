@@ -104,7 +104,7 @@ function renderPromoBanner(): string {
         </p>
 
         <!-- Stats row -->
-        <div class="flex justify-center items-center gap-0 mb-10 rounded-2xl bg-white/10 border border-white/15 overflow-hidden">
+        <div class="flex justify-center items-center gap-0 mb-10 rounded-md bg-white/10 border border-white/15 overflow-hidden">
           <div class="flex-1 py-4 px-2 text-center">
             <div class="text-xl font-bold text-white">200K+</div>
             <div class="text-xs text-orange-100/70 mt-0.5">Suppliers</div>
@@ -213,7 +213,7 @@ export function AuthLayout(content: string, options: AuthLayoutOptions = {}): st
             </div>
 
             <!-- Single content area (mobile: white card, desktop: clean white) -->
-            <div class="bg-white dark:bg-gray-900 mx-2 sm:mx-4 mb-8 px-6 sm:px-8 py-8 rounded-2xl shadow-xl lg:mx-0 lg:mb-0 lg:px-20 lg:py-0 lg:rounded-none lg:shadow-none lg:bg-white lg:dark:bg-gray-900 lg:h-full lg:min-h-screen lg:flex lg:items-center">
+            <div class="bg-white dark:bg-gray-900 mx-2 sm:mx-4 mb-8 px-6 sm:px-8 py-8 rounded-md shadow-xl lg:mx-0 lg:mb-0 lg:px-20 lg:py-0 lg:rounded-none lg:shadow-none lg:bg-white lg:dark:bg-gray-900 lg:h-full lg:min-h-screen lg:flex lg:items-center">
               <div class="w-full max-w-md mx-auto">
                 ${content}
               </div>

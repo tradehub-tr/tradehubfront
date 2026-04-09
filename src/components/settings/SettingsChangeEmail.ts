@@ -9,7 +9,7 @@ export function SettingsChangeEmail(): string {
   return `
     <div class="flex justify-center">
       <div class="w-full max-w-[640px]">
-        <div class="bg-white rounded-xl p-8 shadow-sm max-md:p-6 max-sm:px-4 max-sm:py-5 text-center">
+        <div class="bg-white rounded-md p-8 shadow-sm max-md:p-6 max-sm:px-4 max-sm:py-5 text-center">
           <div class="mb-4">
             <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="22" fill="#f3f4f6"/><path d="M16 20l8 6 8-6" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="12" y="16" width="24" height="16" rx="3" stroke="#9ca3af" stroke-width="2"/></svg>
           </div>

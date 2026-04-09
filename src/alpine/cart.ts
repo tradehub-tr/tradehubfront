@@ -584,7 +584,7 @@ Alpine.data('cartPage', () => ({
       modal.className = 'fixed inset-0 z-[9999] hidden items-center justify-center';
       modal.innerHTML = `
         <div class="absolute inset-0 bg-black/40 backdrop-blur-[2px] transition-opacity" data-modal-backdrop></div>
-        <div class="relative bg-white rounded-xl shadow-2xl w-[90vw] max-w-[480px] max-h-[80vh] flex flex-col overflow-hidden" style="animation: modalSlideUp 0.25s ease-out;">
+        <div class="relative bg-white rounded-md shadow-2xl w-[90vw] max-w-[480px] max-h-[80vh] flex flex-col overflow-hidden" style="animation: modalSlideUp 0.25s ease-out;">
           <div class="flex items-center justify-between px-5 py-4 border-b border-[#e5e5e5]">
             <h3 class="text-base font-bold text-[#222]"><span>${t('cart.orderSummary')}</span> — <span class="sc-modal-item-count text-[#f59e0b]"></span></h3>
             <button type="button" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#f5f5f5] transition-colors" data-close-view-all aria-label="${t('common.close')}">
@@ -687,7 +687,7 @@ Alpine.data('cartPage', () => ({
         </svg>
         <h2 class="text-2xl font-bold text-text-heading mb-2">${t('cart.empty')}</h2>
         <p class="text-base text-text-secondary mb-8 max-w-md">${t('cart.emptyDesc')}</p>
-        <a href="/pages/products.html" class="inline-flex items-center justify-center th-btn-dark th-btn-pill no-underline">
+        <a href="/pages/products.html" class="inline-flex items-center justify-center th-btn-dark no-underline">
           ${t('cart.continueShopping')}
         </a>
       </div>
