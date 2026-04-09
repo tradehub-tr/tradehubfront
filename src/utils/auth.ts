@@ -14,6 +14,7 @@ export interface AuthUser {
   full_name: string;
   first_name: string;
   last_name: string;
+  user_image?: string;
   member_id: string;
   roles: string[];
   is_admin: boolean;

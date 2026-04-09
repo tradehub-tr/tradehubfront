@@ -3450,6 +3450,7 @@ const en = {
       accountInfoCardTitle: 'Account information',
       myProfile: 'My Profile',
       myMembership: 'My membership account',
+      myAccountNav: 'My Account',
       linkedAccountsNav: 'Linked accounts',
       taxInfoNav: 'Tax information',
       accountSecurityTitle: 'Account security',
