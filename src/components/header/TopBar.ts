@@ -1243,6 +1243,9 @@ export function TopBar(props?: TopBarProps): string {
       </div>
 
       ${renderMobileDrawer()}
+
+      <!-- Bildirim Poller (görünmez, sadece toast tetikler) -->
+      <div x-data="notificationPoller" class="hidden"></div>
     </div>
   `;
 }
