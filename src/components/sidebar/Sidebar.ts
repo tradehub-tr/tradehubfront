@@ -94,7 +94,7 @@ export function renderSidebar(expanded = true): string {
       @mouseleave.capture="handleMouseLeave($event)"
       @scroll.window.passive="handleScroll()"
       @resize.window.passive="handleResize()"
-      class="sidebar sidebar--${expanded ? 'expanded' : 'collapsed'} sticky top-[42px] z-20 flex ${widthClass} flex-col bg-gray-100 dark:bg-gray-900 rounded-lg h-[calc(100vh-42px)] transition-shadow duration-300 hover:shadow-[0_0_12px_0_rgba(0,0,0,0.12)]"
+      class="sidebar sidebar--${expanded ? 'expanded' : 'collapsed'} sticky top-[42px] z-20 flex ${widthClass} flex-col bg-[#F5F5F5] dark:bg-gray-900 rounded-lg h-[calc(100vh-42px)] transition-shadow duration-300 hover:shadow-[0_0_12px_0_rgba(0,0,0,0.12)]"
       role="navigation"
       aria-label="Buyer dashboard sidebar"
     >

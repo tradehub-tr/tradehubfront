@@ -9,7 +9,11 @@ Alpine.data('settingsLayout', () => ({
   userName: '',
   userEmail: '',
   userInitial: '',
+  userImage: '',
   memberId: '',
+  copied: false,
+  uploadingPhoto: false,
+  photoError: '',
 
   init() {
     this.currentSection = window.location.hash || '';
@@ -23,6 +27,7 @@ Alpine.data('settingsLayout', () => ({
         this.userName = user.full_name || '';
         this.userEmail = user.email || '';
         this.userInitial = (user.full_name || user.email || '?').charAt(0).toLowerCase();
+        this.userImage = user.user_image || '';
         this.memberId = user.member_id || '';
       }
     } catch { /* ignore */ }
@@ -34,13 +39,74 @@ Alpine.data('settingsLayout', () => ({
   },
 
   copyMemberId() {
-    navigator.clipboard.writeText(this.memberId || this.userEmail).then(() => {
-      const btn = (this.$refs as Record<string, HTMLElement>).copyBtn;
-      if (btn) {
-        btn.title = t('orders.copied');
-        setTimeout(() => { btn.title = t('orders.copy'); }, 2000);
+    const text = this.memberId || this.userEmail;
+    if (!text) return;
+    navigator.clipboard.writeText(text).then(() => {
+      this.copied = true;
+      setTimeout(() => { this.copied = false; }, 1800);
+    }).catch(() => { /* ignore clipboard errors */ });
+  },
+
+  gotoChangeEmail() {
+    window.location.hash = '#eposta-degistir';
+  },
+
+  triggerPhotoUpload() {
+    const input = (this.$refs as Record<string, HTMLInputElement>).photoInput;
+    if (input) input.click();
+  },
+
+  async uploadProfilePhoto(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    this.photoError = '';
+
+    if (!/^image\/(jpeg|png|webp|gif)$/i.test(file.type)) {
+      this.photoError = t('settings.photoInvalidType') || 'Geçersiz dosya türü.';
+      input.value = '';
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      this.photoError = t('settings.photoTooLarge') || 'Dosya 5 MB\'dan küçük olmalı.';
+      input.value = '';
+      return;
+    }
+
+    this.uploadingPhoto = true;
+    try {
+      const filedata = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result || ''));
+        reader.onerror = () => reject(new Error('read_failed'));
+        reader.readAsDataURL(file);
+      });
+
+      const res = await api<{ message: { success: boolean; user_image: string } }>(
+        '/method/tradehub_core.api.v1.identity.update_profile_image',
+        {
+          method: 'POST',
+          body: JSON.stringify({ filename: file.name, filedata }),
+        },
+      );
+
+      const nextUrl = res.message?.user_image || '';
+      if (nextUrl) {
+        // Cache-bust so the browser fetches the new image even if URL is the same
+        this.userImage = nextUrl + (nextUrl.includes('?') ? '&' : '?') + 't=' + Date.now();
       }
-    });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : '';
+      if (msg === 'RATE_LIMIT') {
+        this.photoError = t('common.rateLimitError');
+      } else {
+        this.photoError = t('settings.photoUploadFailed') || 'Fotoğraf yüklenemedi.';
+      }
+    } finally {
+      this.uploadingPhoto = false;
+      input.value = '';
+    }
   },
 }));
 
