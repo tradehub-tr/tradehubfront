@@ -35,14 +35,14 @@ export function AboutPageLayout(): string {
     <section class="py-14 sm:py-20 bg-gray-50">
       <div class="max-w-[1200px] mx-auto px-4 sm:px-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div class="bg-white rounded-xl p-8 border border-gray-100 shadow-sm">
+          <div class="bg-white rounded-md p-8 border border-gray-100 shadow-sm">
             <div class="w-12 h-12 rounded-lg bg-primary-100 flex items-center justify-center text-primary-600 mb-4">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg>
             </div>
             <h3 class="text-xl font-bold text-gray-900 mb-3">${t('about.mission')}</h3>
             <p class="text-gray-600 leading-relaxed">${t('about.missionText')}</p>
           </div>
-          <div class="bg-white rounded-xl p-8 border border-gray-100 shadow-sm">
+          <div class="bg-white rounded-md p-8 border border-gray-100 shadow-sm">
             <div class="w-12 h-12 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600 mb-4">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
             </div>
@@ -58,19 +58,19 @@ export function AboutPageLayout(): string {
       <div class="max-w-[1200px] mx-auto px-4 sm:px-6">
         <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-10 text-center">${t('about.statsTitle')}</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <div class="text-center p-6 bg-white rounded-xl border border-gray-100 shadow-sm">
+          <div class="text-center p-6 bg-white rounded-md border border-gray-100 shadow-sm">
             <div class="text-3xl sm:text-4xl font-bold text-primary-600" x-text="counters.users.toLocaleString('tr-TR') + '+'"></div>
             <div class="text-sm text-gray-500 mt-2">${t('about.counterUsers')}</div>
           </div>
-          <div class="text-center p-6 bg-white rounded-xl border border-gray-100 shadow-sm">
+          <div class="text-center p-6 bg-white rounded-md border border-gray-100 shadow-sm">
             <div class="text-3xl sm:text-4xl font-bold text-primary-600" x-text="counters.sellers.toLocaleString('tr-TR') + '+'"></div>
             <div class="text-sm text-gray-500 mt-2">${t('about.counterSellers')}</div>
           </div>
-          <div class="text-center p-6 bg-white rounded-xl border border-gray-100 shadow-sm">
+          <div class="text-center p-6 bg-white rounded-md border border-gray-100 shadow-sm">
             <div class="text-3xl sm:text-4xl font-bold text-primary-600" x-text="counters.countries + '+'"></div>
             <div class="text-sm text-gray-500 mt-2">${t('about.counterCountries')}</div>
           </div>
-          <div class="text-center p-6 bg-white rounded-xl border border-gray-100 shadow-sm">
+          <div class="text-center p-6 bg-white rounded-md border border-gray-100 shadow-sm">
             <div class="text-3xl sm:text-4xl font-bold text-primary-600" x-text="counters.categories + '+'"></div>
             <div class="text-sm text-gray-500 mt-2">${t('about.counterCategories')}</div>
           </div>

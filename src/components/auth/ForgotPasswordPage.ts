@@ -66,7 +66,7 @@ function ForgotPasswordHeader(): string {
 function ForgotPasswordCard(content: string): string {
   return `
     <div class="min-h-[calc(100vh-58px)] bg-gray-100 flex items-start justify-center pt-8 sm:pt-12 pb-12 px-2 sm:px-4">
-      <div class="w-full max-w-xl bg-white rounded-xl shadow-sm p-5 sm:p-8 md:p-12">
+      <div class="w-full max-w-xl bg-white rounded-md shadow-sm p-5 sm:p-8 md:p-12">
         ${content}
       </div>
     </div>
@@ -100,7 +100,7 @@ function StepFindAccount(): string {
           type="submit"
           :disabled="!email.trim() || loading"
           disabled
-          class="w-full h-12 th-btn th-btn-pill disabled:opacity-50 disabled:cursor-not-allowed"
+          class="w-full h-12 th-btn disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <span x-show="!loading" data-i18n="auth.forgot.continue">${t('auth.forgot.continue')}</span>
           <span x-show="loading" x-cloak class="inline-flex items-center gap-2">
@@ -138,7 +138,7 @@ function StepLinkSent(): string {
         <!-- Back to login -->
         <a
           href="${baseUrl}pages/auth/login.html"
-          class="inline-block w-full h-12 leading-[3rem] text-center th-btn th-btn-pill no-underline"
+          class="inline-block w-full h-12 leading-[3rem] text-center th-btn no-underline"
         >
           <span data-i18n="auth.forgot.backToLogin">${t('auth.forgot.backToLogin')}</span>
         </a>

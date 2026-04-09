@@ -23,7 +23,7 @@ export function CookieBanner(): string {
       role="dialog"
       aria-label="${t('cookieBanner.ariaLabel')}"
     >
-      <div class="max-w-5xl mx-auto bg-white border border-gray-200 rounded-xl shadow-2xl overflow-hidden">
+      <div class="max-w-5xl mx-auto bg-white border border-gray-200 rounded-md shadow-2xl overflow-hidden">
         <!-- Main bar -->
         <div class="p-4 sm:p-6">
           <div class="flex flex-col lg:flex-row lg:items-start gap-4">
@@ -45,7 +45,7 @@ export function CookieBanner(): string {
             <div class="flex flex-col sm:flex-row gap-2 shrink-0 lg:ml-4">
               <button
                 @click="rejectAll()"
-                class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer whitespace-nowrap"
+                class="th-btn-outline px-4 py-2 text-sm font-medium cursor-pointer whitespace-nowrap"
                 data-i18n="cookieBanner.rejectAll"
               >${t('cookieBanner.rejectAll')}</button>
               <a
@@ -55,7 +55,7 @@ export function CookieBanner(): string {
               >${t('cookieBanner.managePreferences')}</a>
               <button
                 @click="acceptAll()"
-                class="th-btn px-5 py-2 text-sm font-medium rounded-lg transition-colors cursor-pointer whitespace-nowrap"
+                class="th-btn px-5 py-2 text-sm font-medium transition-colors cursor-pointer whitespace-nowrap"
                 data-i18n="cookieBanner.acceptAll"
               >${t('cookieBanner.acceptAll')}</button>
             </div>
@@ -95,7 +95,7 @@ export function CookieBanner(): string {
           <div class="flex justify-end mt-3">
             <button
               @click="saveCustom()"
-              class="th-btn px-4 py-2 text-sm font-medium rounded-lg transition-colors cursor-pointer"
+              class="th-btn px-4 py-2 text-sm font-medium transition-colors cursor-pointer"
               data-i18n="cookieConsent.savePreferences"
             >${t('cookieConsent.savePreferences')}</button>
           </div>

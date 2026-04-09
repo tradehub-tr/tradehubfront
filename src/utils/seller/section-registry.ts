@@ -164,7 +164,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                     <div class="flex items-center gap-2">
                       ${showSort ? `
                       <div class="relative" x-data="{ sortOpen: false }">
-                        <button @click="sortOpen = !sortOpen" class="flex items-center gap-1.5 text-[13px] border border-gray-300 rounded-full px-4 py-1.5 bg-white hover:border-gray-400 transition-colors">
+                        <button @click="sortOpen = !sortOpen" class="th-btn-outline flex items-center gap-1.5 text-[13px] px-4 py-1.5">
                           <span x-text="sortBy === 'default' ? 'Yeni' : sortBy === 'price_asc' ? 'Fiyat: Dusuk' : sortBy === 'price_desc' ? 'Fiyat: Yuksek' : sortBy === 'best_selling' ? 'Cok Satan' : 'En Yeni'">Yeni</span>
                           <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </button>
@@ -432,12 +432,12 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                 <!-- CTA Butonlari -->
                 <div class="space-y-2.5">
                   <button
-                    class="w-full bg-[#cc9900] hover:bg-[#b38600] text-white text-[13px] font-semibold rounded-full py-2.5 transition-colors"
+                    class="w-full bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white text-[13px] font-semibold rounded-full py-2.5 transition-colors"
                     @click="showInquiryModal = true">
                     Simdi iletisime gecin
                   </button>
                   <button
-                    class="w-full border border-gray-300 bg-white text-[13px] font-medium text-gray-700 rounded-full py-2.5 hover:border-gray-400 transition-colors"
+                    class="th-btn-outline w-full text-[13px] font-medium py-2.5"
                     @click="showInquiryModal = true">
                     Sorgu gonder
                   </button>

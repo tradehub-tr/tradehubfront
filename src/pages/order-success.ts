@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <p class="text-[#666] text-sm mb-6"><span data-i18n="paymentStatus.paymentCompleted">${t('paymentStatus.paymentCompleted')}</span></p>
 
         <!-- Order Summary Card -->
-        <div class="bg-white border border-[#e5e5e5] rounded-xl p-5 mb-6 text-left max-w-sm mx-auto shadow-sm">
+        <div class="bg-white border border-[#e5e5e5] rounded-md p-5 mb-6 text-left max-w-sm mx-auto shadow-sm">
           <div class="flex items-center justify-between mb-3">
             <span class="text-xs font-medium text-[#999] uppercase tracking-wide" data-i18n="paymentStatus.orderNumber">${t('paymentStatus.orderNumber')}</span>
             <span class="text-sm font-bold text-[#222]">${displayOrderNumber}</span>
@@ -68,11 +68,11 @@ document.addEventListener('DOMContentLoaded', () => {
         <!-- Actions -->
         <div class="flex flex-col gap-3 max-w-[320px] mx-auto">
           <a href="/pages/dashboard/orders.html"
-            class="w-full bg-[#d24600] hover:bg-[#b03b00] text-white font-bold py-3 px-6 rounded-full transition-colors text-[15px] text-center block no-underline">
+            class="th-btn w-full font-bold py-3 px-6 text-[15px] text-center block no-underline">
             <span data-i18n="paymentStatus.trackOrder">${t('paymentStatus.trackOrder')}</span>
           </a>
           <a href="/"
-            class="w-full bg-white border border-[#ccc] hover:border-[#999] hover:bg-gray-50 text-[#333] font-bold py-3 px-6 rounded-full transition-all text-center block text-[15px] no-underline">
+            class="th-btn-outline w-full font-bold py-3 px-6 text-center block text-[15px] no-underline">
             <span data-i18n="paymentStatus.continueShopping">${t('paymentStatus.continueShopping')}</span>
           </a>
         </div>
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <p class="text-[#666] text-sm mb-6"><span data-i18n="paymentStatus.notPaidYet">${t('paymentStatus.notPaidYet')}</span></p>
 
         <!-- Order Summary Card -->
-        <div class="bg-white border border-[#e5e5e5] rounded-xl p-5 mb-6 text-left max-w-sm mx-auto shadow-sm">
+        <div class="bg-white border border-[#e5e5e5] rounded-md p-5 mb-6 text-left max-w-sm mx-auto shadow-sm">
           <div class="flex items-center justify-between mb-3">
             <span class="text-xs font-medium text-[#999] uppercase tracking-wide" data-i18n="paymentStatus.orderNumber">${t('paymentStatus.orderNumber')}</span>
             <span class="text-sm font-bold text-[#222]">${displayOrderNumber}</span>
@@ -122,11 +122,11 @@ document.addEventListener('DOMContentLoaded', () => {
         <!-- Actions -->
         <div class="flex flex-col gap-3 max-w-[320px] mx-auto">
           <a href="/pages/dashboard/orders.html"
-            class="w-full bg-[#d24600] hover:bg-[#b03b00] text-white font-bold py-3 px-6 rounded-full transition-colors text-[15px] text-center block no-underline">
+            class="th-btn w-full font-bold py-3 px-6 text-[15px] text-center block no-underline">
             <span data-i18n="paymentStatus.viewAllOrders">${t('paymentStatus.viewAllOrders')}</span>
           </a>
           <a href="/"
-            class="w-full bg-white border border-[#ccc] hover:border-[#999] hover:bg-gray-50 text-[#333] font-bold py-3 px-6 rounded-full transition-all text-center block text-[15px] no-underline">
+            class="th-btn-outline w-full font-bold py-3 px-6 text-center block text-[15px] no-underline">
             <span data-i18n="paymentStatus.continueShopping">${t('paymentStatus.continueShopping')}</span>
           </a>
         </div>

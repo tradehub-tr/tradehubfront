@@ -96,7 +96,7 @@ function renderVariantSection(variant: ProductVariant): string {
 
   // Size / Material — pill layout
   const pills = variant.options.map(opt => `
-    <button type="button" class="pdm-variant-pill px-4 py-[7px] border border-border-medium rounded-2xl text-[13px] text-text-body bg-surface cursor-pointer${!opt.available ? ' pdm-disabled' : ''}"
+    <button type="button" class="pdm-variant-pill px-4 py-[7px] border border-border-medium rounded-md text-[13px] text-text-body bg-surface cursor-pointer${!opt.available ? ' pdm-disabled' : ''}"
       data-value="${opt.id}" data-label="${opt.label}" ${opt.price ? `data-variant-price="${opt.price}"` : ''} ${!opt.available ? 'disabled' : ''}>
       ${opt.label}
     </button>
@@ -174,7 +174,7 @@ export function MobileProductLayout(): string {
   const sampleSection = p.samplePrice ? `
     <div id="pdm-sample-row" class="flex items-center justify-between px-4 py-2.5 max-[374px]:px-3 max-[374px]:py-2 bg-surface text-[13px] max-[374px]:text-xs text-text-body">
       <span>${t('product.samplePrice')}: <strong>${formatCurrency(p.samplePrice, getSelectedCurrency())}</strong></span>
-      <button type="button" data-order-sample="${p.id}" class="pdm-sample-btn px-[18px] py-1.5 max-[374px]:px-3.5 max-[374px]:py-[5px] border border-[#333] rounded-[20px] text-[13px] max-[374px]:text-xs font-medium bg-surface cursor-pointer text-text-body">${t('cart.orderSample')}</button>
+      <button type="button" data-order-sample="${p.id}" class="pdm-sample-btn th-btn-outline px-[18px] py-1.5 max-[374px]:px-3.5 max-[374px]:py-[5px] text-[13px] max-[374px]:text-xs font-medium cursor-pointer">${t('cart.orderSample')}</button>
     </div>
   ` : '';
 
@@ -300,8 +300,8 @@ export function MobileProductLayout(): string {
         `).join('')}
       </div>
       <div class="pdm-supplier-btns grid grid-cols-2 gap-2">
-        <button type="button" class="pdm-supplier-btn py-2.5 px-2 border border-border-medium rounded-[22px] bg-surface text-[13px] font-medium text-text-heading cursor-pointer text-center">${t('product.companyProfile')}</button>
-        <button type="button" class="pdm-supplier-btn py-2.5 px-2 border border-border-medium rounded-[22px] bg-surface text-[13px] font-medium text-text-heading cursor-pointer text-center">${t('product.otherProducts')}</button>
+        <button type="button" class="pdm-supplier-btn th-btn-outline text-[13px] cursor-pointer text-center">${t('product.companyProfile')}</button>
+        <button type="button" class="pdm-supplier-btn th-btn-outline text-[13px] cursor-pointer text-center">${t('product.otherProducts')}</button>
       </div>
     </div>
   `;

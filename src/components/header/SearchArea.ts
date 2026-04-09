@@ -109,8 +109,7 @@ function renderDesktopSearchBar(): string {
               <button
                 type="submit"
                 id="search-submit-button"
-                class="flex items-center justify-center h-full gap-1.5 px-4 sm:px-6 text-sm font-semibold text-white rounded-full transition-all hover:shadow-lg"
-                style="background: linear-gradient(135deg, var(--search-btn-gradient-start) 0%, var(--search-btn-gradient-end) 100%);"
+                class="th-btn th-btn-gradient flex items-center justify-center h-full gap-1.5 px-4 sm:px-6 text-sm font-semibold transition-all hover:shadow-lg"
                 aria-label="${t('common.search')}"
               >
                 ${renderAIIcon()}

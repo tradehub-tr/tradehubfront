@@ -51,8 +51,7 @@ export function HelpCenterLayout(): string {
               <button
                 type="submit"
                 id="hc-search-btn"
-                class="px-5 py-3 text-sm font-semibold text-white transition-all hover:opacity-90 shrink-0"
-                style="background: linear-gradient(135deg, var(--color-primary-400), var(--color-primary-600))"
+                class="th-btn th-btn-gradient px-5 py-3 text-sm font-semibold transition-all hover:opacity-90 shrink-0"
               >
                 <span data-i18n="help.searchBtn">${t('help.searchBtn')}</span>
               </button>
@@ -77,7 +76,7 @@ export function HelpCenterLayout(): string {
            SEARCH RESULTS (shown only when active)
       ══════════════════════════════════════════ -->
       <div x-show="searchActive" x-transition class="max-w-[900px] mx-auto px-4 py-6">
-        <div class="bg-white rounded-xl shadow p-6">
+        <div class="bg-white rounded-md shadow p-6">
           <div class="flex items-center justify-between mb-4">
             <h2 class="text-lg font-bold text-gray-800">
               "<span x-text="searchQuery"></span>" ${t('help.searchResultsFor')}
@@ -108,7 +107,7 @@ export function HelpCenterLayout(): string {
       <div x-show="!searchActive" class="max-w-[960px] mx-auto px-4 py-8 space-y-8">
 
         <!-- ── Category Tabs + FAQ Grid ─────────── -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden">
           <!-- Tab bar -->
           <div class="flex overflow-x-auto scrollbar-none border-b border-gray-100">
             <template x-for="tab in tabs" :key="tab.id">
@@ -154,12 +153,12 @@ export function HelpCenterLayout(): string {
         </div>
 
         <!-- ── Contact Us ───────────────────── -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 px-6 py-7">
+        <div class="bg-white rounded-md shadow-sm border border-gray-100 px-6 py-7">
           <h2 class="text-[17px] font-bold text-gray-800 mb-5 text-center" data-i18n="help.contactUs">${t('help.contactUs')}</h2>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
             <!-- Online Service -->
-            <a href="contact.html" class="group flex items-center gap-4 p-5 rounded-xl border border-gray-200 hover:border-primary-300 hover:shadow-md transition-all duration-200">
+            <a href="contact.html" class="group flex items-center gap-4 p-5 rounded-md border border-gray-200 hover:border-primary-300 hover:shadow-md transition-all duration-200">
               <div class="w-12 h-12 rounded-full bg-primary-50 flex items-center justify-center shrink-0 group-hover:bg-primary-100 transition-colors">
                 <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 0 1 .778-.332 48.294 48.294 0 0 0 5.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z"/>
@@ -173,7 +172,7 @@ export function HelpCenterLayout(): string {
             </a>
 
             <!-- Survey -->
-            <a href="contact.html" class="group flex items-center gap-4 p-5 rounded-xl border border-gray-200 hover:border-primary-300 hover:shadow-md transition-all duration-200">
+            <a href="contact.html" class="group flex items-center gap-4 p-5 rounded-md border border-gray-200 hover:border-primary-300 hover:shadow-md transition-all duration-200">
               <div class="w-12 h-12 rounded-full bg-primary-50 flex items-center justify-center shrink-0 group-hover:bg-primary-100 transition-colors">
                 <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"/>
@@ -187,7 +186,7 @@ export function HelpCenterLayout(): string {
             </a>
 
             <!-- Phone Support -->
-            <a href="tel:+908001234567" class="group flex items-center gap-4 p-5 rounded-xl border border-gray-200 hover:border-primary-300 hover:shadow-md transition-all duration-200">
+            <a href="tel:+908001234567" class="group flex items-center gap-4 p-5 rounded-md border border-gray-200 hover:border-primary-300 hover:shadow-md transition-all duration-200">
               <div class="w-12 h-12 rounded-full bg-primary-50 flex items-center justify-center shrink-0 group-hover:bg-primary-100 transition-colors">
                 <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z"/>
@@ -201,7 +200,7 @@ export function HelpCenterLayout(): string {
             </a>
 
             <!-- Email -->
-            <a href="mailto:support@istoc.com" class="group flex items-center gap-4 p-5 rounded-xl border border-gray-200 hover:border-primary-300 hover:shadow-md transition-all duration-200">
+            <a href="mailto:support@istoc.com" class="group flex items-center gap-4 p-5 rounded-md border border-gray-200 hover:border-primary-300 hover:shadow-md transition-all duration-200">
               <div class="w-12 h-12 rounded-full bg-primary-50 flex items-center justify-center shrink-0 group-hover:bg-primary-100 transition-colors">
                 <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/>
@@ -217,7 +216,7 @@ export function HelpCenterLayout(): string {
         </div>
 
         <!-- ── Useful Links Strip ─────────────── -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 px-6 py-5">
+        <div class="bg-white rounded-md shadow-sm border border-gray-100 px-6 py-5">
           <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[12px] text-gray-500">
             <a href="/pages/legal/product-listing.html" class="hover:text-primary-500 transition-colors" data-i18n="help.productListingPolicy">${t('help.productListingPolicy')}</a>
             <span class="text-gray-200">|</span>

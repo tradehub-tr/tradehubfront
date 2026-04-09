@@ -37,7 +37,7 @@ function HeroSection(): string {
           <h1 class="text-3xl sm:text-4xl lg:text-[48px] font-bold text-white leading-tight mb-6">
             iSTOC'da ödemeden teslimata korumadan faydalanın
           </h1>
-          <a href="#process" class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-full px-7 py-3.5 text-base transition-colors shadow-lg">
+          <a href="#process" class="th-btn inline-flex items-center gap-2 font-semibold px-7 py-3.5 text-base shadow-lg">
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             Süreç şu şekilde işler:
           </a>
@@ -155,7 +155,7 @@ function WhatsCovered(): string {
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
           <!-- 1: Güvenli Ödemeler -->
-          <a href="/pages/info/payments.html" class="block bg-white rounded-2xl p-6 pt-7 hover:shadow-lg transition-shadow">
+          <a href="/pages/info/payments.html" class="block bg-white rounded-md p-6 pt-7 hover:shadow-lg transition-shadow">
             <div class="w-12 h-12 rounded-full flex items-center justify-center mb-5" style="background:#FFF3C4">
               <svg class="w-6 h-6 text-amber-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
             </div>
@@ -163,7 +163,7 @@ function WhatsCovered(): string {
           </a>
 
           <!-- 2: Para İade -->
-          <a href="/pages/info/refund-policy.html" class="block bg-white rounded-2xl p-6 pt-7 hover:shadow-lg transition-shadow">
+          <a href="/pages/info/refund-policy.html" class="block bg-white rounded-md p-6 pt-7 hover:shadow-lg transition-shadow">
             <div class="w-12 h-12 rounded-full flex items-center justify-center mb-5" style="background:#FFF3C4">
               <svg class="w-6 h-6 text-amber-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             </div>
@@ -171,7 +171,7 @@ function WhatsCovered(): string {
           </a>
 
           <!-- 3: Kargo & Lojistik -->
-          <a href="/pages/info/shipping-logistics.html" class="block bg-white rounded-2xl p-6 pt-7 hover:shadow-lg transition-shadow">
+          <a href="/pages/info/shipping-logistics.html" class="block bg-white rounded-md p-6 pt-7 hover:shadow-lg transition-shadow">
             <div class="w-12 h-12 rounded-full flex items-center justify-center mb-5" style="background:#FFF3C4">
               <svg class="w-6 h-6 text-amber-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/></svg>
             </div>
@@ -179,7 +179,7 @@ function WhatsCovered(): string {
           </a>
 
           <!-- 4: Satış Sonrası -->
-          <a href="/pages/info/after-sales.html" class="block bg-white rounded-2xl p-6 pt-7 hover:shadow-lg transition-shadow">
+          <a href="/pages/info/after-sales.html" class="block bg-white rounded-md p-6 pt-7 hover:shadow-lg transition-shadow">
             <div class="w-12 h-12 rounded-full flex items-center justify-center mb-5" style="background:#FFF3C4">
               <svg class="w-6 h-6 text-amber-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437"/></svg>
             </div>
@@ -214,7 +214,7 @@ function PaymentHeroSection(): string {
               Kredi/banka kartları, dijital cüzdanlar, doğrudan banka hesabına transferler ve esnek ödeme planları* dahil olmak üzere bildiğiniz ve güvendiğiniz ödeme yöntemlerini destekliyoruz.
             </p>
             <div class="flex flex-wrap items-center gap-3 mb-4">
-              <a href="#" class="inline-flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-full px-6 py-3 text-sm sm:text-base transition-colors">
+              <a href="#" class="th-btn inline-flex items-center justify-center font-semibold px-6 py-3 text-sm sm:text-base">
                 Destekleyici ürünleri tedarik edin
               </a>
               <a href="#" class="inline-flex items-center justify-center border-2 border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white font-semibold rounded-full px-6 py-3 text-sm sm:text-base transition-colors">
@@ -226,7 +226,7 @@ function PaymentHeroSection(): string {
 
           <!-- Right: Media -->
           <div class="w-full lg:w-1/2">
-            <div class="rounded-2xl overflow-hidden shadow-lg">
+            <div class="rounded-md overflow-hidden shadow-lg">
               <img src="${videoPaymentImg}" alt="Güvenli ödeme" class="w-full h-auto object-cover" />
             </div>
           </div>
@@ -249,7 +249,7 @@ function RefundPolicySection(): string {
 
           <!-- Left: Video -->
           <div class="w-full lg:w-1/2">
-            <video id="kargo-video" class="w-full rounded-2xl shadow-lg" muted playsinline preload="metadata" loop>
+            <video id="kargo-video" class="w-full rounded-md shadow-lg" muted playsinline preload="metadata" loop>
               <source src="${kargoVideo}" type="video/mp4" />
             </video>
           </div>
@@ -266,7 +266,7 @@ function RefundPolicySection(): string {
               Uygun bir ülkede* bulunuyorsanız kusurlu ürünleri yerel olarak ücretsiz iade etmek için Easy Return hizmetimizden de yararlanabilirsiniz.
             </p>
             <div class="flex flex-wrap items-center gap-3 mb-6">
-              <a href="/pages/info/refund-policy.html" class="inline-flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-full px-6 py-3 text-sm sm:text-base transition-colors">
+              <a href="/pages/info/refund-policy.html" class="th-btn inline-flex items-center justify-center font-semibold px-6 py-3 text-sm sm:text-base">
                 Destekleyici ürünleri tedarik edin
               </a>
               <a href="/pages/info/refund-policy.html" class="inline-flex items-center justify-center border-2 border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white font-semibold rounded-full px-6 py-3 text-sm sm:text-base transition-colors">
@@ -304,7 +304,7 @@ function ShippingSection(): string {
             Nasıl çalıştığını öğrenin
           </a>
         </div>
-        <div class="rounded-2xl overflow-hidden shadow-lg">
+        <div class="rounded-md overflow-hidden shadow-lg">
           <img src="${limanImg}" alt="Gönderim ve lojistik" class="w-full h-auto object-cover" />
         </div>
       </div>
@@ -324,7 +324,7 @@ function AfterSalesSection(): string {
 
           <!-- Left: Video -->
           <div class="w-full lg:w-1/2">
-            <video id="service-video" class="w-full rounded-2xl shadow-lg" muted playsinline preload="metadata" loop>
+            <video id="service-video" class="w-full rounded-md shadow-lg" muted playsinline preload="metadata" loop>
               <source src="${serviceVideo}" type="video/mp4" />
             </video>
           </div>
@@ -338,7 +338,7 @@ function AfterSalesSection(): string {
               Uygun ürünlerde yerinde kurulum, bakım, onarım ve ücretsiz yedek parça hizmetlerimizle hizmet kapınıza gelsin.
             </p>
             <div class="flex flex-wrap items-center gap-3">
-              <a href="/pages/info/after-sales.html" class="inline-flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-full px-6 py-3 text-sm sm:text-base transition-colors">
+              <a href="/pages/info/after-sales.html" class="th-btn inline-flex items-center justify-center font-semibold px-6 py-3 text-sm sm:text-base">
                 Destekleyici ürünleri tedarik edin
               </a>
               <a href="/pages/info/after-sales.html" class="inline-flex items-center justify-center border-2 border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white font-semibold rounded-full px-6 py-3 text-sm sm:text-base transition-colors">
@@ -390,7 +390,7 @@ function TestimonialsSection(): string {
             ${testimonials.map(item => `
               <div class="swiper-slide">
                 <div class="text-center">
-                  <div class="relative rounded-2xl overflow-hidden shadow-xl mb-8 mx-auto max-w-[800px] bg-gray-200 aspect-video flex items-center justify-center">
+                  <div class="relative rounded-md overflow-hidden shadow-xl mb-8 mx-auto max-w-[800px] bg-gray-200 aspect-video flex items-center justify-center">
                     <div class="w-16 h-16 rounded-full bg-white/80 flex items-center justify-center cursor-pointer hover:bg-white transition-colors">
                       <svg class="w-8 h-8 text-gray-700 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                     </div>

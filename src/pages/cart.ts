@@ -126,7 +126,7 @@ function renderCartSkeleton(): void {
 
           <!-- Left: supplier cards -->
           <section class="w-full xl:min-w-0 xl:flex-1 space-y-4">
-            <div class="rounded-3xl border border-[#e5e5e5] bg-white overflow-hidden">
+            <div class="rounded-md border border-[#e5e5e5] bg-white overflow-hidden">
               <!-- Supplier header -->
               <div class="flex items-center gap-3 px-5 py-4 border-b border-[#e5e5e5]">
                 <div class="w-5 h-5 ${pulse}"></div>

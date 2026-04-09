@@ -101,7 +101,7 @@ function renderProductCards(items: FavoriteItem[]): string {
         <p class="text-[12px] text-[#999] opacity-80">${p.minOrder}</p>
       </a>
       <div class="mt-4 flex gap-2 w-full pt-3 border-t border-[#f2f2f2] opacity-0 group-hover:opacity-100 transition-opacity">
-        <button class="flex-1 th-btn th-btn-pill th-btn-sm">${t('favorites.orderNow')}</button>
+        <button class="flex-1 th-btn th-btn-sm">${t('favorites.orderNow')}</button>
       </div>
       ${p.listIds.length > 0 ? `
         <div class="mt-2 flex flex-wrap gap-1">
@@ -168,7 +168,7 @@ function renderFavorites(): string {
     <!-- Modal: New list -->
     <div class="fav-modal hidden fixed inset-0 z-[9999] items-center justify-center" id="fav-list-modal">
       <div class="fav-modal__overlay absolute inset-0 bg-black/45"></div>
-      <div class="relative bg-surface rounded-xl w-[440px] max-w-[calc(100vw-32px)] shadow-[0_20px_60px_rgba(0,0,0,0.2)] animate-[favModalIn_200ms_ease-out]">
+      <div class="relative bg-surface rounded-md w-[440px] max-w-[calc(100vw-32px)] shadow-[0_20px_60px_rgba(0,0,0,0.2)] animate-[favModalIn_200ms_ease-out]">
         <div class="flex items-center justify-between px-6 pt-5 pb-4">
           <h3 class="text-lg font-bold text-text-primary">${t('favorites.addNewList')}</h3>
           <button class="fav-modal__close bg-transparent border-none cursor-pointer p-1 rounded flex items-center justify-center transition-[background] duration-150 hover:bg-surface-raised" aria-label="${t('common.close')}">
@@ -183,7 +183,7 @@ function renderFavorites(): string {
         </div>
         <div class="flex justify-center gap-4 px-6 pb-6">
           <button class="fav-modal__btn--cancel py-2.5 px-8 text-sm font-medium rounded-[20px] cursor-pointer transition-all duration-150 bg-surface text-text-secondary border border-border-strong hover:border-secondary-400">${t('common.cancel')}</button>
-          <button class="fav-modal__btn--save th-btn th-btn-pill" disabled>${t('common.save')}</button>
+          <button class="fav-modal__btn--save th-btn" disabled>${t('common.save')}</button>
         </div>
       </div>
     </div>

@@ -90,7 +90,7 @@ export function EmailVerification(email: string = ''): string {
       <button
         type="button"
         id="otp-continue-btn"
-        class="th-btn th-btn-pill w-full py-3 text-base font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        class="th-btn w-full py-3 text-base font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         disabled
       >
         ${t('auth.otpVerifyAndContinue')}

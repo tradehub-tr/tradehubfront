@@ -38,7 +38,7 @@ appEl.innerHTML = `
     <div class="border-b border-gray-200 bg-white">
       <div class="container-boxed flex items-center gap-4 py-3">
         <div class="flex items-center gap-2">
-          <span class="inline-flex items-center justify-center w-7 h-7 rounded bg-amber-500 text-white text-xs font-bold">RFQ</span>
+          <span class="inline-flex items-center justify-center w-7 h-7 rounded bg-(--btn-bg) text-white text-xs font-bold">RFQ</span>
           <span class="text-base font-semibold text-gray-800">${t('rfq.requestQuote')}</span>
         </div>
         <a href="/pages/dashboard/inquiries.html" class="text-sm text-gray-500 hover:text-gray-700">${t('rfq.manageRfq')}</a>
@@ -72,7 +72,7 @@ appEl.innerHTML = `
       <div class="rounded-lg overflow-hidden bg-gradient-to-r from-sky-600 to-cyan-400 p-6 flex items-center justify-between mb-6">
         <div>
           <div class="flex items-center gap-2 mb-1">
-            <span class="inline-flex items-center justify-center w-6 h-6 rounded bg-amber-500 text-white text-[10px] font-bold">RFQ</span>
+            <span class="inline-flex items-center justify-center w-6 h-6 rounded bg-(--btn-bg) text-white text-[10px] font-bold">RFQ</span>
             <span class="text-xs text-white/80">${t('rfq.requestQuote')}</span>
           </div>
           <h3 class="text-xl font-bold text-white">${t('rfq.sourceSmarter')}</h3>

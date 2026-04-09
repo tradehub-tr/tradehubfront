@@ -30,7 +30,7 @@ appEl.innerHTML = `
 
     <!-- Auth guard: not logged in -->
     <div x-show="!loading && !isAuthenticated" class="flex items-center justify-center min-h-[60vh]">
-      <div class="bg-white rounded-xl p-8 text-center shadow-sm border border-gray-200 max-w-sm mx-4">
+      <div class="bg-white rounded-md p-8 text-center shadow-sm border border-gray-200 max-w-sm mx-4">
         <svg class="w-12 h-12 text-gray-300 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
         </svg>
@@ -42,7 +42,7 @@ appEl.innerHTML = `
 
     <!-- Auth guard: not seller -->
     <div x-show="!loading && isAuthenticated && !isSeller" class="flex items-center justify-center min-h-[60vh]">
-      <div class="bg-white rounded-xl p-8 text-center shadow-sm border border-gray-200 max-w-sm mx-4">
+      <div class="bg-white rounded-md p-8 text-center shadow-sm border border-gray-200 max-w-sm mx-4">
         <svg class="w-12 h-12 text-yellow-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
@@ -80,7 +80,7 @@ appEl.innerHTML = `
       </div>
 
       <!-- Tab Navigasyonu -->
-      <div class="bg-white rounded-xl border border-gray-200 mb-6 overflow-x-auto">
+      <div class="bg-white rounded-md border border-gray-200 mb-6 overflow-x-auto">
         <div class="flex items-center px-2 min-w-max">
           <template x-for="tab in tabs" :key="tab.id">
             <button
@@ -103,7 +103,7 @@ appEl.innerHTML = `
 
           <!-- Sol: Temel Bilgiler -->
           <div class="lg:col-span-2 space-y-6">
-            <div class="bg-white rounded-xl border border-gray-200 p-6">
+            <div class="bg-white rounded-md border border-gray-200 p-6">
               <h2 class="text-base font-bold text-gray-900 mb-5">Temel Bilgiler</h2>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
@@ -152,7 +152,7 @@ appEl.innerHTML = `
 
           <!-- Sağ: Logo & Banner -->
           <div class="space-y-6">
-            <div class="bg-white rounded-xl border border-gray-200 p-6">
+            <div class="bg-white rounded-md border border-gray-200 p-6">
               <h2 class="text-base font-bold text-gray-900 mb-5">Logo & Banner</h2>
 
               <div class="mb-5">
@@ -185,7 +185,7 @@ appEl.innerHTML = `
             </div>
 
             <!-- Performans Kartı -->
-            <div class="bg-white rounded-xl border border-gray-200 p-6">
+            <div class="bg-white rounded-md border border-gray-200 p-6">
               <h2 class="text-base font-bold text-gray-900 mb-4">Performans</h2>
               <div class="space-y-3">
                 <div class="flex justify-between items-center">
@@ -212,7 +212,7 @@ appEl.innerHTML = `
 
       <!-- ─── Yorumlar Tab ─────────────────────────────────────── -->
       <div x-show="activeTab === 'reviews'" x-transition.opacity>
-        <div class="bg-white rounded-xl border border-gray-200 p-6">
+        <div class="bg-white rounded-md border border-gray-200 p-6">
           <h2 class="text-base font-bold text-gray-900 mb-5">Müşteri Yorumları</h2>
           <div class="text-center py-12 text-gray-400">
             <svg class="w-12 h-12 mx-auto mb-3 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -226,7 +226,7 @@ appEl.innerHTML = `
 
       <!-- ─── Ürünler Tab ──────────────────────────────────────── -->
       <div x-show="activeTab === 'products'" x-transition.opacity>
-        <div class="bg-white rounded-xl border border-gray-200">
+        <div class="bg-white rounded-md border border-gray-200">
           <!-- Başlık + Ekle butonu -->
           <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
             <h2 class="text-base font-bold text-gray-900">Ürünler (<span x-text="products.length"></span>)</h2>
@@ -305,7 +305,7 @@ appEl.innerHTML = `
 
       <!-- ─── Kategoriler Tab ─────────────────────────────────── -->
       <div x-show="activeTab === 'categories'" x-transition.opacity>
-        <div class="bg-white rounded-xl border border-gray-200">
+        <div class="bg-white rounded-md border border-gray-200">
           <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
             <h2 class="text-base font-bold text-gray-900">Kategoriler (<span x-text="categories.length"></span>)</h2>
             <button @click="openCategoryModal(null)"
@@ -322,7 +322,7 @@ appEl.innerHTML = `
 
           <div x-show="categories.length > 0" class="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             <template x-for="cat in categories" :key="cat.name">
-              <div class="border border-gray-200 rounded-xl overflow-hidden group hover:border-[var(--color-primary-400)] hover:shadow-sm transition-all">
+              <div class="border border-gray-200 rounded-md overflow-hidden group hover:border-[var(--color-primary-400)] hover:shadow-sm transition-all">
                 <div class="aspect-video bg-gray-100 overflow-hidden">
                   <img x-show="cat.image" :src="cat.image" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                   <div x-show="!cat.image" class="w-full h-full flex items-center justify-center">
@@ -348,7 +348,7 @@ appEl.innerHTML = `
 
       <!-- ─── Galeri Tab ──────────────────────────────────────── -->
       <div x-show="activeTab === 'gallery'" x-transition.opacity>
-        <div class="bg-white rounded-xl border border-gray-200">
+        <div class="bg-white rounded-md border border-gray-200">
           <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
             <div>
               <h2 class="text-base font-bold text-gray-900">Fabrika / Mağaza Fotoğrafları</h2>
@@ -409,7 +409,7 @@ appEl.innerHTML = `
           <!-- Fotoğraf grid -->
           <div x-show="gallery.length > 0" class="p-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             <template x-for="(item, idx) in gallery" :key="item.name">
-              <div class="group relative aspect-square rounded-xl overflow-hidden border border-gray-200 bg-gray-100">
+              <div class="group relative aspect-square rounded-md overflow-hidden border border-gray-200 bg-gray-100">
                 <img :src="item.image" :alt="item.caption || 'Galeri fotoğrafı'" class="w-full h-full object-cover" />
                 <!-- Sıra numarası -->
                 <div class="absolute top-2 left-2 bg-black/50 text-white text-[10px] px-1.5 py-0.5 rounded font-mono" x-text="idx + 1"></div>
@@ -437,7 +437,7 @@ appEl.innerHTML = `
 
       <!-- ─── Şirket Profili Tab ────────────────────────────────── -->
       <div x-show="activeTab === 'company'" x-transition.opacity>
-        <div class="bg-white rounded-xl border border-gray-200 p-6">
+        <div class="bg-white rounded-md border border-gray-200 p-6">
           <h2 class="text-base font-bold text-gray-900 mb-5">Şirket Profili</h2>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -495,7 +495,7 @@ appEl.innerHTML = `
 
       <!-- ─── İletişim Tab ─────────────────────────────────────── -->
       <div x-show="activeTab === 'contact'" x-transition.opacity>
-        <div class="bg-white rounded-xl border border-gray-200 p-6">
+        <div class="bg-white rounded-md border border-gray-200 p-6">
           <h2 class="text-base font-bold text-gray-900 mb-5">İletişim Bilgileri</h2>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -547,7 +547,7 @@ appEl.innerHTML = `
 
         <!-- Sipariş listesi -->
         <div x-show="!selectedOrder">
-          <div class="bg-white rounded-xl border border-gray-200">
+          <div class="bg-white rounded-md border border-gray-200">
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 flex-wrap gap-3">
               <h2 class="text-base font-bold text-gray-900">Siparişler (<span x-text="ordersTotal"></span>)</h2>
               <div class="flex items-center gap-2 flex-wrap">
@@ -622,7 +622,7 @@ appEl.innerHTML = `
 
         <!-- Sipariş detayı -->
         <div x-show="selectedOrder">
-          <div class="bg-white rounded-xl border border-gray-200">
+          <div class="bg-white rounded-md border border-gray-200">
             <div class="flex items-center gap-3 px-6 py-4 border-b border-gray-200">
               <button @click="backToOrders()" class="p-1.5 text-gray-400 hover:text-gray-700 rounded-lg hover:bg-gray-100 transition-colors">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
@@ -655,7 +655,7 @@ appEl.innerHTML = `
             <div class="p-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
                 <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Alıcı Bilgileri</p>
-                <div class="bg-gray-50 rounded-xl p-4 space-y-2">
+                <div class="bg-gray-50 rounded-md p-4 space-y-2">
                   <div class="flex justify-between text-sm">
                     <span class="text-gray-500">Alıcı</span>
                     <span class="font-medium text-gray-900" x-text="selectedOrder?.buyer_name || selectedOrder?.buyer"></span>
@@ -695,7 +695,7 @@ appEl.innerHTML = `
 
               <div>
                 <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Ödeme Özeti</p>
-                <div class="bg-gray-50 rounded-xl p-4 space-y-2">
+                <div class="bg-gray-50 rounded-md p-4 space-y-2">
                   <div class="flex justify-between text-sm">
                     <span class="text-gray-500">Ara Toplam</span>
                     <span x-text="(selectedOrder?.currency || '') + ' ' + parseFloat(selectedOrder?.subtotal || 0).toFixed(2)"></span>
@@ -714,7 +714,7 @@ appEl.innerHTML = `
 
             <div class="px-6 pb-6">
               <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">Sipariş Kalemleri</p>
-              <div class="border border-gray-200 rounded-xl overflow-hidden">
+              <div class="border border-gray-200 rounded-md overflow-hidden">
                 <table class="w-full text-sm">
                   <thead class="bg-gray-50">
                     <tr>
@@ -749,7 +749,7 @@ appEl.innerHTML = `
     <!-- ─── Başarı Toast ───────────────────────────────────────── -->
     <div x-show="toast.show" x-transition.opacity
       :class="toast.type === 'success' ? 'bg-green-600' : 'bg-red-600'"
-      class="fixed bottom-6 right-6 text-white px-5 py-3 rounded-xl shadow-lg flex items-center gap-3 text-sm font-medium z-[9999]">
+      class="fixed bottom-6 right-6 text-white px-5 py-3 rounded-md shadow-lg flex items-center gap-3 text-sm font-medium z-[9999]">
       <svg x-show="toast.type === 'success'" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
       <svg x-show="toast.type === 'error'" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
       <span x-text="toast.message"></span>
@@ -757,7 +757,7 @@ appEl.innerHTML = `
 
     <!-- ─── Ürün Modal ─────────────────────────────────────────── -->
     <div x-show="productModal.open" x-transition class="fixed inset-0 bg-black/50 z-[999] flex items-center justify-center p-4">
-      <div @click.stop class="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+      <div @click.stop class="bg-white rounded-md shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
           <h3 class="text-base font-bold text-gray-900" x-text="productModal.editId ? 'Ürün Düzenle' : 'Yeni Ürün Ekle'"></h3>
           <button @click="productModal.open = false" class="text-gray-400 hover:text-gray-600 transition-colors">
@@ -836,7 +836,7 @@ appEl.innerHTML = `
 
     <!-- ─── Kategori Modal ─────────────────────────────────────── -->
     <div x-show="categoryModal.open" x-transition class="fixed inset-0 bg-black/50 z-[999] flex items-center justify-center p-4">
-      <div @click.stop class="bg-white rounded-2xl shadow-xl w-full max-w-sm">
+      <div @click.stop class="bg-white rounded-md shadow-xl w-full max-w-sm">
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
           <h3 class="text-base font-bold text-gray-900" x-text="categoryModal.editId ? 'Kategori Düzenle' : 'Yeni Kategori'"></h3>
           <button @click="categoryModal.open = false" class="text-gray-400 hover:text-gray-600 transition-colors">
@@ -876,7 +876,7 @@ appEl.innerHTML = `
 
     <!-- ─── Kargoya Ver Modal ────────────────────────────────────── -->
     <div x-show="shipModalOpen" x-transition class="fixed inset-0 bg-black/50 z-[999] flex items-center justify-center p-4">
-      <div class="bg-white rounded-xl shadow-xl w-full max-w-sm p-6">
+      <div class="bg-white rounded-md shadow-xl w-full max-w-sm p-6">
         <h3 class="text-base font-bold text-gray-900 mb-1">Kargoya Ver</h3>
         <p class="text-sm text-gray-500 mb-4"><strong x-text="shipModalOrderNumber"></strong> numaralı sipariş kargoya verildi olarak işaretlenecek.</p>
         <div class="mb-4">

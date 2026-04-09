@@ -87,7 +87,7 @@ async function renderPage() {
 
       <!-- SELLER NOT FOUND -->
       <div x-show="!loading && !seller" class="max-w-[1200px] mx-auto px-4 lg:px-8 py-20 text-center w-full">
-        <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gray-100 flex items-center justify-center">
+        <div class="w-16 h-16 mx-auto mb-4 rounded-md bg-gray-100 flex items-center justify-center">
           <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349"/></svg>
         </div>
         <h2 class="text-lg font-bold text-gray-700 mb-1">Magaza bulunamadi</h2>
@@ -164,12 +164,12 @@ async function renderPage() {
                       <span class="text-[10px] text-[#999] font-medium">ile</span>
                     </div>
                     <button
-                      class="bg-[#cc9900] hover:bg-[#b38600] text-white text-[12px] font-medium rounded-md px-5 py-2 transition-all whitespace-nowrap hover:shadow-sm"
+                      class="bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white text-[12px] font-medium rounded-md px-5 py-2 transition-all whitespace-nowrap hover:shadow-sm"
                       @click="switchPage('contacts')">
                       Tedarikçiye Ulasin
                     </button>
                     <a :href="'/pages/seller/seller-storefront.html?seller=' + sellerCode"
-                       class="border border-gray-200 bg-white text-[12px] font-medium text-[#555] rounded-md px-5 py-2 text-center hover:border-gray-300 hover:text-[#333] transition-all whitespace-nowrap">
+                       class="th-btn-outline text-[12px] font-medium text-[#555] px-5 py-2 text-center hover:text-[#333] whitespace-nowrap">
                       Profili Goruntule
                     </a>
                   </div>
@@ -180,12 +180,12 @@ async function renderPage() {
             <!-- Mobile CTA -->
             <div class="flex sm:hidden gap-2 mt-4">
               <button
-                class="flex-1 bg-[#cc9900] hover:bg-[#b38600] text-white text-[12px] font-medium rounded-md py-2 transition-all"
+                class="flex-1 bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white text-[12px] font-medium rounded-md py-2 transition-all"
                 @click="switchPage('contacts')">
                 Tedarikçiye Ulasin
               </button>
               <a :href="'/pages/seller/seller-storefront.html?seller=' + sellerCode"
-                 class="flex-1 border border-gray-200 bg-white text-[12px] font-medium text-[#555] rounded-md py-2 text-center hover:border-gray-300 transition-all">
+                 class="th-btn-outline flex-1 text-[12px] font-medium text-[#555] py-2 text-center">
                 Profil
               </a>
             </div>
@@ -320,7 +320,7 @@ async function renderPage() {
         <!-- ═══ FLOATING CONTACT BUTTONS (sag kenar) ═══ -->
         <div class="fixed right-0 top-1/2 -translate-y-1/2 z-40 flex flex-col gap-0.5">
           <button @click="switchPage('contacts')"
-                  class="w-[52px] h-[52px] bg-[#cc9900] hover:bg-[#b38600] text-white flex flex-col items-center justify-center rounded-l-md shadow-lg transition-colors">
+                  class="w-[52px] h-[52px] bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white flex flex-col items-center justify-center rounded-l-md shadow-lg transition-colors">
             <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
             <span class="text-[8px] font-bold leading-none">Contact</span>
             <span class="text-[8px] font-bold leading-none">Supplier</span>

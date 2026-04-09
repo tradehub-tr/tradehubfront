@@ -44,7 +44,7 @@ export function renderProductCard(product: TailoredProduct, index: number): stri
       aria-label="${safeName}"
     >
       <!-- Image area -->
-      <div class="relative aspect-square w-full overflow-hidden rounded-xl bg-gray-100 mb-2">
+      <div class="relative aspect-square w-full overflow-hidden rounded-md bg-gray-100 mb-2">
         <img
           class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           src="${product.imageSrc}"

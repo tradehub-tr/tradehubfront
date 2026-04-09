@@ -18,28 +18,28 @@ export function TradeAssuranceFooterCards(): string {
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
 
           <!-- Card: Hükümler ve Koşullar -->
-          <a href="/pages/legal/terms" class="group block bg-[#000]/40 hover:bg-[#000]/60 rounded-xl p-6 transition-all duration-300">
+          <a href="/pages/legal/terms" class="group block bg-[#000]/40 hover:bg-[#000]/60 rounded-md p-6 transition-all duration-300">
             <div class="mb-4">${iconBookmark}</div>
             <h3 class="text-base font-bold text-white mb-3">Hükümler ve Koşullar</h3>
             <span class="text-[#FFC200] text-sm font-medium group-hover:underline">Okuyun &rarr;</span>
           </a>
 
           <!-- Card: Trade Assurance kılavuzu -->
-          <a href="/pages/help/help-center" class="group block bg-[#000]/40 hover:bg-[#000]/60 rounded-xl p-6 transition-all duration-300">
+          <a href="/pages/help/help-center" class="group block bg-[#000]/40 hover:bg-[#000]/60 rounded-md p-6 transition-all duration-300">
             <div class="mb-4">${iconCalendar}</div>
             <h3 class="text-base font-bold text-white mb-3">Trade Assurance kılavuzu</h3>
             <span class="text-[#FFC200] text-sm font-medium group-hover:underline">İndir &rarr;</span>
           </a>
 
           <!-- Card: Müşteri Hizmetleri -->
-          <a href="/pages/help/help-center" class="group block bg-[#000]/40 hover:bg-[#000]/60 rounded-xl p-6 transition-all duration-300">
+          <a href="/pages/help/help-center" class="group block bg-[#000]/40 hover:bg-[#000]/60 rounded-md p-6 transition-all duration-300">
             <div class="mb-4">${iconHeadset}</div>
             <h3 class="text-base font-bold text-white mb-3">Müşteri Hizmetleri</h3>
             <span class="text-[#FFC200] text-sm font-medium group-hover:underline">Yardım alın &rarr;</span>
           </a>
 
           <!-- Card: Eğitici videolar -->
-          <a href="#" class="group block bg-[#000]/40 hover:bg-[#000]/60 rounded-xl p-6 transition-all duration-300">
+          <a href="#" class="group block bg-[#000]/40 hover:bg-[#000]/60 rounded-md p-6 transition-all duration-300">
             <div class="mb-4">${iconVideo}</div>
             <h3 class="text-base font-bold text-white mb-3">Eğitici videolar</h3>
             <span class="text-[#FFC200] text-sm font-medium group-hover:underline">İzleyin &rarr;</span>

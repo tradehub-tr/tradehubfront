@@ -1,5 +1,15 @@
 import './style.css'
 import { initFlowbite } from 'flowbite'
+import { applyTheme, loadTheme } from './utils/themeStorage'
+
+// Site geneli tema — HEAD inline script'i (vite.config.ts → themeBootstrapPlugin)
+// cache'ten uygulayıp arka planda fetch ediyor. Burada sadece yerel geliştirici
+// drawer'ının override'larını remote'un üzerine tekrar uyguluyoruz ki dev
+// deneyimi bozulmasın.
+(() => {
+  const localDev = loadTheme()
+  if (Object.keys(localDev).length) applyTheme(localDev)
+})()
 
 // i18n
 import { initLanguageSelector } from './components/header/TopBar'

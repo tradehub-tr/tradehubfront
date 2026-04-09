@@ -38,7 +38,7 @@ export function InfoPageLayout({ title, subtitle, icon, sections }: InfoPageLayo
         </svg>
       </div>
       <div class="max-w-[900px] mx-auto px-4 sm:px-6 text-center relative z-10">
-        <div class="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white/20 backdrop-blur-sm text-white mb-5 shadow-lg">
+        <div class="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-md bg-white/20 backdrop-blur-sm text-white mb-5 shadow-lg">
           ${icon}
         </div>
         <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-3 leading-tight">${title}</h1>
@@ -51,7 +51,7 @@ export function InfoPageLayout({ title, subtitle, icon, sections }: InfoPageLayo
       <div class="max-w-[900px] mx-auto px-4 sm:px-6">
         <div class="space-y-6">
           ${sections.map((section, index) => `
-            <article class="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden">
+            <article class="bg-white rounded-md border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden">
               <div class="flex items-start gap-4 p-6 sm:p-8">
                 <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-orange-50 flex items-center justify-center text-orange-600 font-bold text-sm mt-0.5">
                   ${index + 1}
@@ -69,7 +69,7 @@ export function InfoPageLayout({ title, subtitle, icon, sections }: InfoPageLayo
 
         <!-- Bottom CTA -->
         <div class="mt-10 text-center">
-          <div class="inline-flex items-center gap-2 px-5 py-3 bg-orange-50 border border-orange-200 rounded-xl text-sm text-orange-800">
+          <div class="inline-flex items-center gap-2 px-5 py-3 bg-orange-50 border border-orange-200 rounded-md text-sm text-orange-800">
             <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"/>
             </svg>

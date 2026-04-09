@@ -142,7 +142,7 @@ export function AccountSetupForm(defaultCountry: string = 'TR'): string {
             <button
               type="button"
               id="country-select-btn"
-              class="flex items-center justify-between w-full px-4 py-3 text-left bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-md text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 dark:focus:border-orange-400 transition-all"
+              class="th-btn-outline flex items-center justify-between w-full px-4 py-3 text-left dark:bg-gray-800 dark:border-gray-600 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 dark:focus:border-orange-400"
               aria-haspopup="listbox"
               aria-expanded="false"
               aria-controls="country-dropdown"
@@ -301,7 +301,7 @@ export function AccountSetupForm(defaultCountry: string = 'TR'): string {
         <button
           type="submit"
           id="account-setup-submit-btn"
-          class="th-btn th-btn-pill w-full py-3 text-base font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-6"
+          class="th-btn w-full py-3 text-base font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-6"
           disabled
         >
           <span data-i18n="auth.setup.createAccount">${t('auth.setup.createAccount')}</span>

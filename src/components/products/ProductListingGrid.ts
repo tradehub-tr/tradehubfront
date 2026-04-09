@@ -239,11 +239,11 @@ function renderProductListingCard(card: ProductListingCard): string {
 
       <!-- Action buttons -->
       <div class="action-area-layout flex gap-2 px-1 items-center">
-        <button type="button" class="searchx-product-e-abutton flex-1 flex items-center justify-center h-9 border border-[#222] rounded-full text-xs sm:text-sm font-medium text-gray-900 bg-transparent cursor-pointer whitespace-nowrap transition-colors hover:bg-gray-100"
+        <button type="button" class="searchx-product-e-abutton th-btn-outline flex-1 flex items-center justify-center h-9 text-xs sm:text-sm font-medium cursor-pointer whitespace-nowrap"
                 data-add-to-cart="${card.id}">
           ${t('products.addToCart')}
         </button>
-        <button type="button" class="searchx-product-e-abutton flex-1 flex items-center justify-center h-9 border border-[#222] rounded-full text-xs sm:text-sm font-medium text-gray-900 bg-transparent cursor-pointer whitespace-nowrap transition-colors hover:bg-gray-100"
+        <button type="button" class="searchx-product-e-abutton th-btn-outline flex-1 flex items-center justify-center h-9 text-xs sm:text-sm font-medium cursor-pointer whitespace-nowrap"
                 onclick="event.preventDefault(); event.stopPropagation();">
           ${t('products.chat')}
         </button>
@@ -278,7 +278,7 @@ function renderNoResults(): string {
       </p>
       <button
         type="button"
-        class="th-btn th-btn-pill inline-flex items-center gap-2 px-6 py-2.5 text-sm font-semibold transition-colors"
+        class="th-btn inline-flex items-center gap-2 px-6 py-2.5 text-sm font-semibold transition-colors"
         data-filter-action="clear-all"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
