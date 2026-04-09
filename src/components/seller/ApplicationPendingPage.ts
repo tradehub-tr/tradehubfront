@@ -45,7 +45,7 @@ function StatusDraft(): string {
       <p class="text-sm text-gray-500 text-center mb-8" data-i18n="sellerApplication.draft.desc">${t('sellerApplication.draft.desc')}</p>
       <a
         href="/pages/seller/supplier-setup.html"
-        class="block w-full h-12 leading-[3rem] text-center th-btn th-btn-pill no-underline"
+        class="block w-full h-12 leading-[3rem] text-center th-btn no-underline"
       >
         <span data-i18n="sellerApplication.draft.cta">${t('sellerApplication.draft.cta')}</span>
       </a>
@@ -101,7 +101,7 @@ function StatusRejected(): string {
       <p class="text-sm text-gray-500 text-center mb-8" data-i18n="sellerApplication.rejected.desc">${t('sellerApplication.rejected.desc')}</p>
       <a
         href="mailto:destek@istoc.com"
-        class="block w-full h-12 leading-[3rem] text-center th-btn th-btn-pill no-underline mb-3"
+        class="block w-full h-12 leading-[3rem] text-center th-btn no-underline mb-3"
       >
         <span data-i18n="sellerApplication.rejected.cta">${t('sellerApplication.rejected.cta')}</span>
       </a>
@@ -174,7 +174,7 @@ export function ApplicationPendingPage(): string {
     <div id="application-pending-page" x-data="applicationPendingPage">
       ${PageHeader()}
       <div class="min-h-[calc(100vh-58px)] bg-gray-100 flex items-start justify-center pt-8 sm:pt-12 pb-12 px-2 sm:px-4">
-        <div class="w-full max-w-xl bg-white rounded-xl shadow-sm p-5 sm:p-8 md:p-12 text-center">
+        <div class="w-full max-w-xl bg-white rounded-md shadow-sm p-5 sm:p-8 md:p-12 text-center">
           ${StatusLoading()}
           ${StatusDraft()}
           ${StatusSubmitted()}

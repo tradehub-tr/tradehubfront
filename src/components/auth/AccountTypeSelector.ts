@@ -34,7 +34,7 @@ export function AccountTypeSelector(defaultType: AccountType = 'buyer'): string 
       <!-- Buyer Card -->
       <button
         type="button"
-        class="auth-account-type-card flex items-center gap-3.5 w-full py-4 px-[18px] rounded-xl text-left relative cursor-pointer transition-all${defaultType === 'buyer' ? ' selected' : ''}"
+        class="auth-account-type-card flex items-center gap-3.5 w-full py-4 px-[18px] rounded-md text-left relative cursor-pointer transition-all${defaultType === 'buyer' ? ' selected' : ''}"
         data-account-type="buyer"
         aria-pressed="${defaultType === 'buyer' ? 'true' : 'false'}"
         role="radio"
@@ -53,7 +53,7 @@ export function AccountTypeSelector(defaultType: AccountType = 'buyer'): string 
       <!-- Supplier Card -->
       <button
         type="button"
-        class="auth-account-type-card flex items-center gap-3.5 w-full py-4 px-[18px] rounded-xl text-left relative cursor-pointer transition-all${defaultType === 'supplier' ? ' selected' : ''}"
+        class="auth-account-type-card flex items-center gap-3.5 w-full py-4 px-[18px] rounded-md text-left relative cursor-pointer transition-all${defaultType === 'supplier' ? ' selected' : ''}"
         data-account-type="supplier"
         aria-pressed="${defaultType === 'supplier' ? 'true' : 'false'}"
         role="radio"

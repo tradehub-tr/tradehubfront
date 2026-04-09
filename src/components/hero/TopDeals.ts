@@ -218,7 +218,7 @@ export function TopDeals(): string {
           <!-- Navigation arrows -->
           <button
             aria-label="Previous deals"
-            class="topdeals-prev absolute left-0 top-[94px] z-10 hidden h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-lg transition-all duration-200 hover:text-gray-900 opacity-0 pointer-events-none md:flex group-hover/topdeals:opacity-100 group-hover/topdeals:pointer-events-auto disabled:opacity-0 disabled:pointer-events-none"
+            class="th-btn-outline topdeals-prev absolute left-0 top-[94px] z-10 hidden h-10 w-10 -translate-x-1/2 items-center justify-center text-gray-500 shadow-lg hover:text-gray-900 opacity-0 pointer-events-none md:flex group-hover/topdeals:opacity-100 group-hover/topdeals:pointer-events-auto disabled:opacity-0 disabled:pointer-events-none"
           >
             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
@@ -227,7 +227,7 @@ export function TopDeals(): string {
 
           <button
             aria-label="Next deals"
-            class="topdeals-next absolute right-0 top-[94px] z-10 hidden h-10 w-10 translate-x-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-lg transition-all duration-200 hover:text-gray-900 opacity-0 pointer-events-none md:flex group-hover/topdeals:opacity-100 group-hover/topdeals:pointer-events-auto disabled:opacity-0 disabled:pointer-events-none"
+            class="th-btn-outline topdeals-next absolute right-0 top-[94px] z-10 hidden h-10 w-10 translate-x-1/2 items-center justify-center text-gray-500 shadow-lg hover:text-gray-900 opacity-0 pointer-events-none md:flex group-hover/topdeals:opacity-100 group-hover/topdeals:pointer-events-auto disabled:opacity-0 disabled:pointer-events-none"
           >
             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>

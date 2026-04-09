@@ -276,7 +276,7 @@ function showSampleMaxToast(): void {
 
   const toast = document.createElement('div');
   toast.id = 'sample-max-toast';
-  toast.className = 'fixed bottom-24 left-1/2 -translate-x-1/2 z-[9999] flex items-start gap-3 bg-[#1a1a1a] text-white text-sm rounded-2xl px-5 py-4 shadow-xl max-w-xs w-max pointer-events-none';
+  toast.className = 'fixed bottom-24 left-1/2 -translate-x-1/2 z-[9999] flex items-start gap-3 bg-[#1a1a1a] text-white text-sm rounded-md px-5 py-4 shadow-xl max-w-xs w-max pointer-events-none';
   toast.innerHTML = `
     <svg class="shrink-0 mt-0.5" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e05c25" stroke-width="2">
       <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
@@ -427,7 +427,7 @@ function renderDrawerBody(): void {
 
     ${sizeSection}
 
-    <div class="mt-5 mb-2 rounded-3xl border border-border-default p-5">
+    <div class="mt-5 mb-2 rounded-md border border-border-default p-5">
       <div class="flex items-start justify-between gap-3">
         <div>
           <h5 class="text-base font-bold text-text-heading">${t('cart.shipping')}</h5>
@@ -487,7 +487,7 @@ function renderDrawerFooter(): void {
 
   footer.innerHTML = `
     ${details}
-    <button type="button" id="shared-cart-confirm" class="w-full th-btn-dark th-btn-pill h-12 text-lg">${state.mode === 'sample' ? t('cart.orderSample') : t('cart.addToCartBtn')}</button>
+    <button type="button" id="shared-cart-confirm" class="w-full th-btn-dark h-12 text-lg">${state.mode === 'sample' ? t('cart.orderSample') : t('cart.addToCartBtn')}</button>
   `;
 }
 
@@ -511,7 +511,7 @@ function updateShippingModal(quantityOverride?: number): void {
   optionsEl.innerHTML = state.item.shippingOptions.map((option, index) => {
     const active = index === state.selectedShippingIndex;
     return `
-      <label class="flex items-center justify-between rounded-2xl border px-4 py-3 cursor-pointer transition-colors ${active ? 'border-primary-500 bg-primary-50' : 'border-border-default bg-surface-muted hover:bg-surface'}" data-shipping-option-index="${index}">
+      <label class="flex items-center justify-between rounded-md border px-4 py-3 cursor-pointer transition-colors ${active ? 'border-primary-500 bg-primary-50' : 'border-border-default bg-surface-muted hover:bg-surface'}" data-shipping-option-index="${index}">
         <span class="flex items-center gap-3">
           <span class="w-7 h-7 rounded-full border inline-flex items-center justify-center ${active ? 'border-primary-500 bg-primary-500 text-white' : 'border-border-medium text-transparent'}">
             ${active ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 13 4 4L19 7"/></svg>' : ''}
@@ -903,7 +903,7 @@ export function SharedCartDrawer(): string {
   return `
     <div id="shared-cart-overlay" class="fixed inset-0 z-(--z-backdrop,40) bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300">
       <div id="shared-cart-preview" class="hidden fixed left-0 top-0 bottom-0 right-[600px] z-(--z-modal,50) items-center justify-center px-8 pointer-events-none">
-        <div class="relative w-full max-w-[760px] h-[78vh] rounded-2xl overflow-hidden pointer-events-auto shadow-2xl bg-surface">
+        <div class="relative w-full max-w-[760px] h-[78vh] rounded-md overflow-hidden pointer-events-auto shadow-2xl bg-surface">
           <button type="button" id="shared-cart-preview-prev" class="absolute left-5 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 hover:bg-white text-secondary-700 border border-border-default shadow-md z-20">‹</button>
           <div id="shared-cart-preview-image" class="w-full h-full"></div>
           <button type="button" id="shared-cart-preview-next" class="absolute right-5 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 hover:bg-white text-secondary-700 border border-border-default shadow-md z-20">›</button>
@@ -911,7 +911,7 @@ export function SharedCartDrawer(): string {
         </div>
       </div>
 
-      <aside id="shared-cart-drawer" class="fixed right-0 top-0 h-full w-full sm:w-[500px] lg:w-[600px] max-w-full bg-surface shadow-[-8px_0_30px_rgba(0,0,0,0.18)] xl:rounded-l-2xl xl:border-l xl:border-border-default flex flex-col transition-transform duration-300">
+      <aside id="shared-cart-drawer" class="fixed right-0 top-0 h-full w-full sm:w-[500px] lg:w-[600px] max-w-full bg-surface shadow-[-8px_0_30px_rgba(0,0,0,0.18)] xl:rounded-l-md xl:border-l xl:border-border-default flex flex-col transition-transform duration-300">
         <div class="flex items-center justify-between px-6 py-4 border-b border-border-default shrink-0 max-md:px-4 max-md:py-3">
           <h3 id="shared-cart-heading" class="text-lg font-bold text-text-heading">${t('cart.selectVariation')}</h3>
           <button type="button" id="shared-cart-close" class="w-8 h-8 rounded-full text-secondary-400 hover:text-secondary-900 hover:bg-surface-raised transition-colors">
@@ -929,7 +929,7 @@ export function SharedCartDrawer(): string {
 export function SharedShippingModal(): string {
   return `
     <div id="shared-cart-shipping-modal" class="fixed inset-0 z-[210] bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300">
-      <div id="shared-cart-shipping-sheet" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[45%] w-[min(92vw,760px)] bg-surface rounded-3xl border border-border-default shadow-2xl p-6 translate-y-4 transition-transform duration-300 max-md:w-full max-md:max-w-full max-md:rounded-t-2xl max-md:rounded-b-none max-md:top-auto max-md:bottom-0 max-md:-translate-x-1/2 max-md:-translate-y-0 max-md:p-4">
+      <div id="shared-cart-shipping-sheet" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[45%] w-[min(92vw,760px)] bg-surface rounded-md border border-border-default shadow-2xl p-6 translate-y-4 transition-transform duration-300 max-md:w-full max-md:max-w-full max-md:rounded-t-md max-md:rounded-b-none max-md:top-auto max-md:bottom-0 max-md:-translate-x-1/2 max-md:-translate-y-0 max-md:p-4">
         <div class="flex items-center justify-between">
           <h4 class="text-xl font-bold text-text-heading">${t('cart.selectShipping')}</h4>
           <button type="button" id="shared-cart-shipping-close" class="w-8 h-8 rounded-full text-secondary-400 hover:text-secondary-900 hover:bg-surface-raised transition-colors">
@@ -940,7 +940,7 @@ export function SharedShippingModal(): string {
         <p class="mt-4 text-base text-text-secondary">${t('cart.shippingTo')}: <strong>${t('countries.TR')}</strong> · ${t('cart.shippingQty')}: <span id="shared-cart-shipping-qty">1 ${state.item?.unit ?? 'pc'}</span></p>
         <div id="shared-cart-shipping-options" class="mt-5 space-y-3 max-h-[46vh] overflow-y-auto"></div>
 
-        <button type="button" id="shared-cart-shipping-apply" class="mt-6 w-full th-btn-dark th-btn-pill h-12">${t('common.apply')}</button>
+        <button type="button" id="shared-cart-shipping-apply" class="mt-6 w-full th-btn-dark h-12">${t('common.apply')}</button>
       </div>
     </div>
   `;

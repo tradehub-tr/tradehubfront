@@ -100,7 +100,7 @@ export function RelatedProducts(): string {
           <!-- Navigation Arrows -->
           <button
             aria-label="${t('product.previousProducts')}"
-            class="related-prev absolute left-0 top-[35%] z-10 hidden h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-lg transition-all duration-200 hover:text-gray-900 opacity-0 pointer-events-none md:flex group-hover/related-slider:opacity-100 group-hover/related-slider:pointer-events-auto disabled:opacity-0 disabled:pointer-events-none"
+            class="th-btn-outline related-prev absolute left-0 top-[35%] z-10 hidden h-10 w-10 -translate-x-1/2 items-center justify-center text-gray-500 shadow-lg hover:text-gray-900 opacity-0 pointer-events-none md:flex group-hover/related-slider:opacity-100 group-hover/related-slider:pointer-events-auto disabled:opacity-0 disabled:pointer-events-none"
           >
             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
@@ -108,7 +108,7 @@ export function RelatedProducts(): string {
           </button>
           <button
             aria-label="${t('product.nextProducts')}"
-            class="related-next absolute right-0 top-[35%] z-10 hidden h-10 w-10 translate-x-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-lg transition-all duration-200 hover:text-gray-900 opacity-0 pointer-events-none md:flex group-hover/related-slider:opacity-100 group-hover/related-slider:pointer-events-auto disabled:opacity-0 disabled:pointer-events-none"
+            class="th-btn-outline related-next absolute right-0 top-[35%] z-10 hidden h-10 w-10 translate-x-1/2 items-center justify-center text-gray-500 shadow-lg hover:text-gray-900 opacity-0 pointer-events-none md:flex group-hover/related-slider:opacity-100 group-hover/related-slider:pointer-events-auto disabled:opacity-0 disabled:pointer-events-none"
           >
             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>

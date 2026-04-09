@@ -58,7 +58,7 @@ const RECEIPT_ICON = `<svg width="48" height="48" viewBox="0 0 48 48" fill="none
 function renderPaymentManagement(): string {
   const cards = paymentCardStore.getCards();
   const savedCardsHtml = cards.length > 0 ? cards.map(c => `
-      <div data-card-id="${c.id}" class="relative shrink-0 w-[200px] max-sm:w-[160px] h-[120px] max-sm:h-[100px] rounded-xl p-4 max-sm:p-3 flex flex-col justify-between group cursor-default"
+      <div data-card-id="${c.id}" class="relative shrink-0 w-[200px] max-sm:w-[160px] h-[120px] max-sm:h-[100px] rounded-md p-4 max-sm:p-3 flex flex-col justify-between group cursor-default"
            style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%); box-shadow: 0 4px 12px rgba(0,0,0,0.18);">
         <div class="flex items-center justify-between">
           <span class="text-[10px] max-sm:text-[8px] font-bold tracking-widest text-white/50 uppercase">TradeHub</span>
@@ -88,7 +88,7 @@ function renderPaymentManagement(): string {
 
   // Add-card button as a card-shaped tile
   const addCardTile = `
-    <div id="pay-add-card-btn" class="pay-add-card shrink-0 w-[200px] max-sm:w-[160px] h-[120px] max-sm:h-[100px] rounded-xl flex flex-col items-center justify-center gap-2 border-2 border-dashed cursor-pointer transition-[border-color,background] duration-200"
+    <div id="pay-add-card-btn" class="pay-add-card shrink-0 w-[200px] max-sm:w-[160px] h-[120px] max-sm:h-[100px] rounded-md flex flex-col items-center justify-center gap-2 border-2 border-dashed cursor-pointer transition-[border-color,background] duration-200"
          style="border-color: var(--color-border-strong, #ccc); background: transparent;"
          data-action="open-card-modal"
          onmouseenter="this.style.borderColor='var(--btn-bg, #ff6600)'; this.style.background='var(--color-primary-50, #fff9f5)';"
@@ -134,7 +134,7 @@ function renderPaymentManagement(): string {
     <!-- Modal: Yeni bir kart ekle -->
     <div class="pay-modal hidden fixed inset-0 z-[9999] items-center justify-center" id="pay-card-modal">
       <div class="pay-modal__overlay fixed inset-0 bg-black/45 z-[1]"></div>
-      <div class="pay-modal__dialog relative z-[2] bg-surface rounded-xl shadow-[0_20px_60px_rgba(0,0,0,0.15)] w-[90%] max-w-[480px] max-h-[90vh] overflow-y-auto animate-[payModalIn_200ms_ease-out]">
+      <div class="pay-modal__dialog relative z-[2] bg-surface rounded-md shadow-[0_20px_60px_rgba(0,0,0,0.15)] w-[90%] max-w-[480px] max-h-[90vh] overflow-y-auto animate-[payModalIn_200ms_ease-out]">
         <div class="flex items-center justify-between px-6 max-sm:px-4 pt-5 pb-4 border-b border-[#f0f0f0]">
           <h3 class="text-lg max-sm:text-base font-bold text-text-primary m-0 truncate mr-2">${t('payment.addCardModalTitle')}</h3>
           <button class="pay-modal__close flex items-center justify-center w-8 h-8 shrink-0 bg-transparent border-none rounded-md cursor-pointer transition-[background] duration-150 hover:bg-surface-raised" aria-label="${t('payment.closeBtn')}">
@@ -218,10 +218,10 @@ function renderTransactions(): string {
       <div class="flex items-center gap-3 py-4 flex-wrap">
         <span class="text-[13px] font-semibold text-text-primary whitespace-nowrap">${t('payment.statusLabel')}</span>
         <div class="pay-pills flex flex-wrap gap-2">
-          <button class="pay-pill pay-pill--active py-1.5 px-3.5 text-xs rounded-2xl border cursor-pointer whitespace-nowrap transition-all duration-150 text-white bg-[#222] border-[#222]">${t('payment.statusAll')}</button>
-          <button class="pay-pill py-1.5 px-3.5 text-xs rounded-2xl border cursor-pointer whitespace-nowrap transition-all duration-150 text-text-secondary bg-surface-raised border-border-default hover:border-[#bbb] hover:bg-[#eee]">${t('payment.paymentsNotArrived')}</button>
-          <button class="pay-pill py-1.5 px-3.5 text-xs rounded-2xl border cursor-pointer whitespace-nowrap transition-all duration-150 text-text-secondary bg-surface-raised border-border-default hover:border-[#bbb] hover:bg-[#eee]">${t('payment.pendingSupplierMatch')}</button>
-          <button class="pay-pill py-1.5 px-3.5 text-xs rounded-2xl border cursor-pointer whitespace-nowrap transition-all duration-150 text-text-secondary bg-surface-raised border-border-default hover:border-[#bbb] hover:bg-[#eee]">${t('payment.completed')}</button>
+          <button class="pay-pill pay-pill--active py-1.5 px-3.5 text-xs rounded-md border cursor-pointer whitespace-nowrap transition-all duration-150 text-white bg-[#222] border-[#222]">${t('payment.statusAll')}</button>
+          <button class="pay-pill py-1.5 px-3.5 text-xs rounded-md border cursor-pointer whitespace-nowrap transition-all duration-150 text-text-secondary bg-surface-raised border-border-default hover:border-[#bbb] hover:bg-[#eee]">${t('payment.paymentsNotArrived')}</button>
+          <button class="pay-pill py-1.5 px-3.5 text-xs rounded-md border cursor-pointer whitespace-nowrap transition-all duration-150 text-text-secondary bg-surface-raised border-border-default hover:border-[#bbb] hover:bg-[#eee]">${t('payment.pendingSupplierMatch')}</button>
+          <button class="pay-pill py-1.5 px-3.5 text-xs rounded-md border cursor-pointer whitespace-nowrap transition-all duration-150 text-text-secondary bg-surface-raised border-border-default hover:border-[#bbb] hover:bg-[#eee]">${t('payment.completed')}</button>
         </div>
       </div>
 
@@ -327,7 +327,7 @@ function renderTTAccounts(): string {
     <!-- Modal: Tedarikçinin hesabını doğrula -->
     <div class="pay-modal hidden fixed inset-0 z-[9999] items-center justify-center" id="pay-verify-modal">
       <div class="pay-modal__overlay fixed inset-0 bg-black/45 z-[1]"></div>
-      <div class="pay-modal__dialog relative z-[2] bg-surface rounded-xl shadow-[0_20px_60px_rgba(0,0,0,0.15)] w-[90%] max-w-[480px] max-h-[90vh] overflow-y-auto animate-[payModalIn_200ms_ease-out]">
+      <div class="pay-modal__dialog relative z-[2] bg-surface rounded-md shadow-[0_20px_60px_rgba(0,0,0,0.15)] w-[90%] max-w-[480px] max-h-[90vh] overflow-y-auto animate-[payModalIn_200ms_ease-out]">
         <div class="flex items-center justify-between px-6 max-sm:px-4 pt-5 pb-4 border-b border-[#f0f0f0]">
           <h3 class="text-lg max-sm:text-base font-bold text-text-primary m-0 truncate mr-2">${t('payment.verifyModalTitle')}</h3>
           <button class="pay-modal__close flex items-center justify-center w-8 h-8 shrink-0 bg-transparent border-none rounded-md cursor-pointer transition-[background] duration-150 hover:bg-surface-raised" aria-label="${t('payment.closeBtn')}">
@@ -669,7 +669,7 @@ function initPayModals(): void {
         if (addBtn) {
           const savedId = Math.random().toString(36).substr(2, 9);
           const cardRow = document.createElement('div');
-          cardRow.className = 'relative shrink-0 w-[200px] max-sm:w-[160px] h-[120px] max-sm:h-[100px] rounded-xl p-4 max-sm:p-3 flex flex-col justify-between group cursor-default';
+          cardRow.className = 'relative shrink-0 w-[200px] max-sm:w-[160px] h-[120px] max-sm:h-[100px] rounded-md p-4 max-sm:p-3 flex flex-col justify-between group cursor-default';
           cardRow.style.cssText = 'background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%); box-shadow: 0 4px 12px rgba(0,0,0,0.18);';
           cardRow.dataset.cardId = savedId;
           cardRow.innerHTML = `

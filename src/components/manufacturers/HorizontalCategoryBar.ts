@@ -85,7 +85,7 @@ export function HorizontalCategoryBar(): string {
 
     <!-- Mobile layout (Filter bar) -->
     <div class="lg:hidden flex items-center overflow-x-auto gap-2.5 pb-2 mb-1 no-scrollbar scroll-smooth">
-      <button class="flex items-center justify-center w-[30px] h-[30px] border border-gray-300 rounded-full shrink-0 bg-white">
+      <button class="th-btn-outline flex items-center justify-center w-[30px] h-[30px] shrink-0">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" class="w-4 h-4 text-[#222]">
           <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 0H3.75m12 12h3.75m-3.75 0a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 0H3.75m9.75-6h3.75m-3.75 0a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 0H3.75" />
         </svg>

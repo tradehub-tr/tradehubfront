@@ -330,17 +330,17 @@ function OverviewTab(): string {
           <div class="flex-1 flex flex-col gap-3">
             <div class="flex items-center gap-3">
               <span class="text-[13px] text-gray-600 w-[160px] shrink-0">${t('seller.sf.supplierService')}</span>
-              <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-[#cc9900] rounded-full" :style="'width:' + ((seller?.rating || 0) / 5 * 100) + '%'"></div></div>
+              <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-(--btn-bg) rounded-full" :style="'width:' + ((seller?.rating || 0) / 5 * 100) + '%'"></div></div>
               <span class="text-[13px] font-medium text-gray-900 w-8 text-right" x-text="seller?.rating ? seller.rating.toFixed(1) : '\u2014'"></span>
             </div>
             <div class="flex items-center gap-3">
               <span class="text-[13px] text-gray-600 w-[160px] shrink-0">${t('seller.sf.onTimeDeliveryRate')}</span>
-              <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-[#cc9900] rounded-full" :style="'width:' + (seller?.on_time_delivery || 0) + '%'"></div></div>
+              <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-(--btn-bg) rounded-full" :style="'width:' + (seller?.on_time_delivery || 0) + '%'"></div></div>
               <span class="text-[13px] font-medium text-gray-900 w-8 text-right" x-text="seller?.on_time_delivery ? (seller.on_time_delivery / 20).toFixed(1) : '\u2014'"></span>
             </div>
             <div class="flex items-center gap-3">
               <span class="text-[13px] text-gray-600 w-[160px] shrink-0">${t('seller.sf.productQuality')}</span>
-              <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-[#cc9900] rounded-full" :style="'width:' + ((seller?.rating || 0) / 5 * 100) + '%'"></div></div>
+              <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-(--btn-bg) rounded-full" :style="'width:' + ((seller?.rating || 0) / 5 * 100) + '%'"></div></div>
               <span class="text-[13px] font-medium text-gray-900 w-8 text-right" x-text="seller?.rating ? (seller.rating - 0.1).toFixed(1) : '\u2014'"></span>
             </div>
           </div>
@@ -489,7 +489,7 @@ function ReviewsTab(): string {
                 <div class="flex items-center gap-3">
                   <span class="text-[13px] text-gray-600 w-40 shrink-0">${t('seller.sf.supplierService')}</span>
                   <div class="flex-1 bg-gray-100 rounded-full h-2.5 overflow-hidden">
-                    <div class="h-full bg-[#cc9900] rounded-full transition-all duration-500" :style="'width:' + ratingPct(seller?.average_rating)"></div>
+                    <div class="h-full bg-(--btn-bg) rounded-full transition-all duration-500" :style="'width:' + ratingPct(seller?.average_rating)"></div>
                   </div>
                   <span class="text-[13px] text-gray-700 font-medium w-8 text-right" x-text="seller?.average_rating ? seller.average_rating.toFixed(1) : '\u2014'"></span>
                 </div>
@@ -497,7 +497,7 @@ function ReviewsTab(): string {
                 <div class="flex items-center gap-3">
                   <span class="text-[13px] text-gray-600 w-40 shrink-0">${t('seller.sf.onTimeShipment')}</span>
                   <div class="flex-1 bg-gray-100 rounded-full h-2.5 overflow-hidden">
-                    <div class="h-full bg-[#cc9900] rounded-full transition-all duration-500" :style="'width:' + ratingPct(seller?.average_rating)"></div>
+                    <div class="h-full bg-(--btn-bg) rounded-full transition-all duration-500" :style="'width:' + ratingPct(seller?.average_rating)"></div>
                   </div>
                   <span class="text-[13px] text-gray-700 font-medium w-8 text-right" x-text="seller?.average_rating ? seller.average_rating.toFixed(1) : '\u2014'"></span>
                 </div>
@@ -505,7 +505,7 @@ function ReviewsTab(): string {
                 <div class="flex items-center gap-3">
                   <span class="text-[13px] text-gray-600 w-40 shrink-0">${t('seller.sf.productQuality')}</span>
                   <div class="flex-1 bg-gray-100 rounded-full h-2.5 overflow-hidden">
-                    <div class="h-full bg-[#cc9900] rounded-full transition-all duration-500" :style="'width:' + ratingPct(seller?.average_rating)"></div>
+                    <div class="h-full bg-(--btn-bg) rounded-full transition-all duration-500" :style="'width:' + ratingPct(seller?.average_rating)"></div>
                   </div>
                   <span class="text-[13px] text-gray-700 font-medium w-8 text-right" x-text="seller?.average_rating ? seller.average_rating.toFixed(1) : '\u2014'"></span>
                 </div>
@@ -706,7 +706,7 @@ function ProductsTab(): string {
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
             </button>
             <template x-for="pg in totalPages" :key="pg">
-              <button @click="currentPage = pg" :class="currentPage === pg ? 'bg-amber-500 text-white border-amber-500' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'" class="w-8 h-8 flex items-center justify-center rounded border text-[13px] font-medium transition-colors" x-text="pg"></button>
+              <button @click="currentPage = pg" :class="currentPage === pg ? 'bg-(--btn-bg) text-white border-amber-500' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'" class="w-8 h-8 flex items-center justify-center rounded border text-[13px] font-medium transition-colors" x-text="pg"></button>
             </template>
             <button @click="currentPage = Math.min(totalPages, currentPage + 1)" :disabled="currentPage === totalPages" class="w-8 h-8 flex items-center justify-center rounded border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
@@ -886,10 +886,10 @@ function ContactSidebar(): string {
 
         <!-- CTA Buttons -->
         <div class="flex flex-col gap-3 mb-5">
-          <button @click="setTab('contact')" class="w-full bg-[#cc9900] hover:bg-[#b38600] text-white font-semibold py-3 px-4 rounded-full transition-colors text-[14px] shadow-sm company-profile__contact-btn">
+          <button @click="setTab('contact')" class="w-full bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white font-semibold py-3 px-4 rounded-full transition-colors text-[14px] shadow-sm company-profile__contact-btn">
             ${t('seller.sf.contactNow')}
           </button>
-          <button @click="setTab('contact')" class="w-full bg-white hover:bg-gray-50 text-gray-900 border border-gray-300 font-medium py-3 px-4 rounded-full transition-colors text-[14px] company-profile__inquiry-btn">
+          <button @click="setTab('contact')" class="th-btn-outline w-full text-gray-900 font-medium py-3 px-4 text-[14px] company-profile__inquiry-btn">
             ${t('seller.sf.sendInquiry')}
           </button>
         </div>
@@ -907,10 +907,10 @@ function ContactSidebar(): string {
 
     <!-- Mobile Contact Bar (shown on small screens) -->
     <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 z-50 flex gap-3 shadow-lg">
-      <button @click="setTab('contact')" class="flex-1 bg-[#cc9900] hover:bg-[#b38600] text-white font-semibold py-2.5 px-4 rounded-full transition-colors text-[14px]">
+      <button @click="setTab('contact')" class="flex-1 bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white font-semibold py-2.5 px-4 rounded-full transition-colors text-[14px]">
         ${t('seller.sf.contactNow')}
       </button>
-      <button @click="setTab('contact')" class="flex-1 bg-white hover:bg-gray-50 text-gray-900 border border-gray-300 font-medium py-2.5 px-4 rounded-full transition-colors text-[14px]">
+      <button @click="setTab('contact')" class="th-btn-outline flex-1 text-gray-900 font-medium py-2.5 px-4 text-[14px]">
         ${t('seller.sf.sendInquiry')}
       </button>
     </div>
@@ -1031,7 +1031,7 @@ function ContactTab(): string {
 
             <!-- Send Button -->
             <div x-show="!msgSent" class="flex justify-center mb-4">
-              <button @click="sendMsg()" :disabled="sending || !msgText || msgText.trim().length < 10" class="bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2.5 px-8 rounded-full transition-colors text-[14px] disabled:opacity-50 disabled:cursor-not-allowed">
+              <button @click="sendMsg()" :disabled="sending || !msgText || msgText.trim().length < 10" class="bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white font-semibold py-2.5 px-8 rounded-full transition-colors text-[14px] disabled:opacity-50 disabled:cursor-not-allowed">
                 <span x-show="!sending">${t('seller.sf.send')}</span>
                 <span x-show="sending">Gonderiliyor...</span>
               </button>

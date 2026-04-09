@@ -69,7 +69,7 @@ export function OrderSummary({ data, protectionItems, tradeAssuranceText }: Orde
 
   return `
     <div
-      class="checkout-sidebar w-full p-4 sm:p-5 xl:p-[28px] bg-[#FFFFFF] border border-[#e5e5e5] rounded-xl xl:max-h-[calc(100vh-48px)] overflow-y-auto [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-black/20 hover:[&::-webkit-scrollbar-thumb]:bg-black/30 [&::-webkit-scrollbar-thumb]:rounded-full"
+      class="checkout-sidebar w-full p-4 sm:p-5 xl:p-[28px] bg-[#FFFFFF] border border-[#e5e5e5] rounded-md xl:max-h-[calc(100vh-48px)] overflow-y-auto [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-black/20 hover:[&::-webkit-scrollbar-thumb]:bg-black/30 [&::-webkit-scrollbar-thumb]:rounded-full"
       x-data="checkoutOrderSummary({ itemSubtotal: ${data.itemSubtotal}, discount: ${implicitDiscount}, initialShippingFee: ${data.shipping}, currency: '${cur}' })"
     >
       <!-- Title -->
@@ -145,7 +145,7 @@ export function OrderSummary({ data, protectionItems, tradeAssuranceText }: Orde
       </div>
 
       <!-- Place Order Button -->
-      <button type="button" class="w-full mt-[20px] mb-[12px] flex items-center justify-center th-btn-dark th-btn-pill leading-none" id="summary-place-order-btn">
+      <button type="button" class="w-full mt-[20px] mb-[12px] flex items-center justify-center th-btn-dark leading-none" id="summary-place-order-btn">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="mr-2 shrink-0"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span data-i18n="checkout.placeOrder">${t('checkout.placeOrder')}</span>
       </button>

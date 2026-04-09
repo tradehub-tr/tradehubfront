@@ -81,17 +81,17 @@ function warrantySection(): string {
 
         <!-- Feature highlights -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-          <div class="border border-gray-200 rounded-xl p-6 flex flex-col gap-3">
+          <div class="border border-gray-200 rounded-md p-6 flex flex-col gap-3">
             ${yellowIcon(iconWrench)}
             <h3 class="text-lg font-semibold text-gray-900">Yerinde teknik servis</h3>
             <p class="text-sm text-gray-600 leading-relaxed">Profesyonel mühendisler bölgenize gelerek kurulum, bakım ve onarım hizmeti sunar.</p>
           </div>
-          <div class="border border-gray-200 rounded-xl p-6 flex flex-col gap-3">
+          <div class="border border-gray-200 rounded-md p-6 flex flex-col gap-3">
             ${yellowIcon(iconCube)}
             <h3 class="text-lg font-semibold text-gray-900">Ücretsiz yedek parça</h3>
             <p class="text-sm text-gray-600 leading-relaxed">Garanti kapsamındaki ürünler için yedek parçalar ücretsiz olarak temin edilir ve kargo masrafları karşılanır.</p>
           </div>
-          <div class="border border-gray-200 rounded-xl p-6 flex flex-col gap-3">
+          <div class="border border-gray-200 rounded-md p-6 flex flex-col gap-3">
             ${yellowIcon(iconCurrency)}
             <h3 class="text-lg font-semibold text-gray-900">Tazminat hakkı</h3>
             <p class="text-sm text-gray-600 leading-relaxed">Hizmet beklentilerinizi karşılamazsa sipariş tutarınızın %30'una kadar geri ödeme talep edebilirsiniz.</p>
@@ -144,7 +144,7 @@ function applicationStepsSection(): string {
 
                 ${step.num === '02' ? `
                   <!-- Visual step guide -->
-                  <div class="mt-6 bg-white rounded-xl border border-gray-200 p-6 sm:p-8 max-w-4xl">
+                  <div class="mt-6 bg-white rounded-md border border-gray-200 p-6 sm:p-8 max-w-4xl">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10">
                       <!-- Step 1: My orders -->
                       <div>

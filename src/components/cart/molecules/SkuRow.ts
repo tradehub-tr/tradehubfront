@@ -32,7 +32,7 @@ export function SkuRow({ sku, productHref }: SkuRowProps): string {
     : imgContent;
 
   return `
-    <article class="sc-c-sku-container-new rounded-xl grid grid-cols-[auto_92px_minmax(0,1fr)] gap-3 items-start p-3 max-sm:p-2 max-sm:grid-cols-[auto_72px_minmax(0,1fr)] max-sm:gap-2 transition-colors${unavailable ? ' opacity-60 bg-surface-muted' : ''}" data-sku-id="${escapeHtml(sku.id)}" x-data>
+    <article class="sc-c-sku-container-new rounded-md grid grid-cols-[auto_92px_minmax(0,1fr)] gap-3 items-start p-3 max-sm:p-2 max-sm:grid-cols-[auto_72px_minmax(0,1fr)] max-sm:gap-2 transition-colors${unavailable ? ' opacity-60 bg-surface-muted' : ''}" data-sku-id="${escapeHtml(sku.id)}" x-data>
       <div class="pt-9 max-sm:pt-7">
         ${Checkbox({ id: `sku-checkbox-${sku.id}`, checked: sku.selected, onChange: unavailable ? '' : `sku-select-${sku.id}`, disabled: unavailable })}
       </div>

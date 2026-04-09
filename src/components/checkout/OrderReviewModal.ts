@@ -38,10 +38,10 @@ export function OrderReviewModal(): string {
         x-transition:leave="transition ease-in duration-200"
         x-transition:leave-start="opacity-100 scale-100"
         x-transition:leave-end="opacity-0 scale-95"
-        class="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[85vh] overflow-y-auto [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-black/20 hover:[&::-webkit-scrollbar-thumb]:bg-black/30 [&::-webkit-scrollbar-thumb]:rounded-full"
+        class="bg-white rounded-md shadow-xl max-w-2xl w-full max-h-[85vh] overflow-y-auto [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-black/20 hover:[&::-webkit-scrollbar-thumb]:bg-black/30 [&::-webkit-scrollbar-thumb]:rounded-full"
       >
         <!-- Header -->
-        <div class="flex items-center justify-between px-6 py-4 border-b border-[#e5e5e5] sticky top-0 bg-white z-10 rounded-t-xl">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-[#e5e5e5] sticky top-0 bg-white z-10 rounded-t-md">
           <h2 id="review-modal-title" class="text-[20px] font-bold text-[#222222]">Review your order</h2>
           <button
             type="button"
@@ -130,17 +130,17 @@ export function OrderReviewModal(): string {
         </div>
 
         <!-- Footer Buttons -->
-        <div class="flex flex-col sm:flex-row gap-3 px-6 py-4 border-t border-[#e5e5e5] bg-[#f9fafb] rounded-b-xl">
+        <div class="flex flex-col sm:flex-row gap-3 px-6 py-4 border-t border-[#e5e5e5] bg-[#f9fafb] rounded-b-md">
           <button
             type="button"
             @click="open = false"
-            class="flex-1 th-btn-outline th-btn-pill"
+            class="flex-1 th-btn-outline"
           >Back to checkout</button>
           <button
             type="button"
             id="review-confirm-btn"
             @click="confirmOrder()"
-            class="flex-1 flex items-center justify-center th-btn-dark th-btn-pill"
+            class="flex-1 flex items-center justify-center th-btn-dark"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" class="mr-2 shrink-0"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             Confirm order

@@ -98,7 +98,7 @@ function renderLensPopup(): string {
       <!-- CTA Button -->
       <button
         type="button"
-        class="inline-flex items-center px-5 py-2.5 bg-[#ffc000] hover:bg-[#e6ad00] text-white text-sm font-semibold rounded-full transition-colors duration-150"
+        class="th-btn inline-flex items-center px-5 py-2.5 hover:bg-[#e6ad00] text-sm font-semibold"
       >
         Uzantıyı İndir
       </button>

@@ -46,7 +46,7 @@ appEl.innerHTML = `
     <div class="border-b border-gray-200">
       <div class="container-boxed flex items-center gap-4 py-3">
         <div class="flex items-center gap-2">
-          <span class="inline-flex items-center justify-center w-7 h-7 rounded bg-amber-500 text-white text-xs font-bold">RFQ</span>
+          <span class="inline-flex items-center justify-center w-7 h-7 rounded bg-(--btn-bg) text-white text-xs font-bold">RFQ</span>
           <span class="text-base font-semibold text-gray-800">${t('rfq.requestQuote')}</span>
         </div>
         <a href="/pages/dashboard/inquiries.html" class="text-sm text-gray-500 hover:text-gray-700">${t('rfq.manageRfq')}</a>
@@ -59,7 +59,7 @@ appEl.innerHTML = `
 
       <form id="rfq-detail-form" novalidate>
         <!-- OUTER card: everything inside -->
-        <div class="max-w-5xl mx-auto border border-gray-200 rounded-xl bg-white p-3 sm:p-6 lg:p-8">
+        <div class="max-w-5xl mx-auto border border-gray-200 rounded-md bg-white p-3 sm:p-6 lg:p-8">
           <div class="flex gap-6 items-start max-lg:flex-col">
             <!-- Left: all form fields -->
             <div class="flex-1 min-w-0 space-y-6 max-w-full">
@@ -109,13 +109,13 @@ appEl.innerHTML = `
             <div class="w-[300px] max-sm:hidden max-lg:w-full shrink-0 max-lg:shrink">
               <div class="border border-gray-100 rounded-lg bg-[#f5f5f5] px-7 py-6">
                 <h3 class="flex items-center gap-2 text-base font-bold text-gray-800 mb-5">
-                  <span class="inline-flex items-center justify-center w-6 h-6 rounded bg-amber-500 text-white text-[10px] font-bold">RFQ</span>
+                  <span class="inline-flex items-center justify-center w-6 h-6 rounded bg-(--btn-bg) text-white text-[10px] font-bold">RFQ</span>
                   ${t('rfq.howToUseRfq')}
                 </h3>
                 <div class="space-y-5">
-                  <div class="flex gap-3"><span class="flex items-center justify-center w-7 h-7 rounded-full bg-amber-500 text-white text-sm font-bold shrink-0">1</span><div><p class="text-sm font-semibold text-gray-800">${t('rfq.step1Title')}</p><p class="text-xs text-gray-500 mt-0.5">${t('rfq.step1Desc')}</p></div></div>
-                  <div class="flex gap-3"><span class="flex items-center justify-center w-7 h-7 rounded-full bg-amber-500 text-white text-sm font-bold shrink-0">2</span><div><p class="text-sm font-semibold text-gray-800">${t('rfq.step2Title')}</p><p class="text-xs text-gray-500 mt-0.5">${t('rfq.step2Desc')}</p></div></div>
-                  <div class="flex gap-3"><span class="flex items-center justify-center w-7 h-7 rounded-full bg-amber-500 text-white text-sm font-bold shrink-0">3</span><div><p class="text-sm font-semibold text-gray-800">${t('rfq.step3Title')}</p><p class="text-xs text-gray-500 mt-0.5">${t('rfq.step3Desc')}</p></div></div>
+                  <div class="flex gap-3"><span class="flex items-center justify-center w-7 h-7 rounded-full bg-(--btn-bg) text-white text-sm font-bold shrink-0">1</span><div><p class="text-sm font-semibold text-gray-800">${t('rfq.step1Title')}</p><p class="text-xs text-gray-500 mt-0.5">${t('rfq.step1Desc')}</p></div></div>
+                  <div class="flex gap-3"><span class="flex items-center justify-center w-7 h-7 rounded-full bg-(--btn-bg) text-white text-sm font-bold shrink-0">2</span><div><p class="text-sm font-semibold text-gray-800">${t('rfq.step2Title')}</p><p class="text-xs text-gray-500 mt-0.5">${t('rfq.step2Desc')}</p></div></div>
+                  <div class="flex gap-3"><span class="flex items-center justify-center w-7 h-7 rounded-full bg-(--btn-bg) text-white text-sm font-bold shrink-0">3</span><div><p class="text-sm font-semibold text-gray-800">${t('rfq.step3Title')}</p><p class="text-xs text-gray-500 mt-0.5">${t('rfq.step3Desc')}</p></div></div>
                 </div>
               </div>
             </div>
@@ -137,7 +137,7 @@ appEl.innerHTML = `
 
         <!-- Submit (sticky bottom iSTOC-style) -->
         <div class="sticky bottom-0 z-10 mt-5 py-3 flex justify-center bg-white/90 backdrop-blur-sm">
-          <button type="submit" class="px-16 h-11 rounded-full bg-amber-500 text-white text-sm font-semibold hover:bg-amber-600 transition-colors shadow-sm">
+          <button type="submit" class="px-16 h-11 rounded-full bg-(--btn-bg) text-white text-sm font-semibold hover:bg-(--btn-hover-bg) transition-colors shadow-sm">
             ${t('rfq.postRequest')}
           </button>
         </div>

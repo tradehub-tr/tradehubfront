@@ -19,7 +19,7 @@ function renderCategorySlide(category: TailoredCategory, index: number): string 
   return `
     <div class="swiper-slide" style="height: auto;" data-bg-color="${category.bgColor}">
       <div
-        class="list-card-container relative rounded-xl overflow-hidden h-full group cursor-pointer"
+        class="list-card-container relative rounded-md overflow-hidden h-full group cursor-pointer"
         style="--list-card-background-color: ${category.bgColor}; --list-card-border-color: #6a6145; --list-card-description-max-lines: 2; background-color: var(--list-card-background-color); border: 1px solid var(--list-card-border-color); padding: 16px;"
       >
         <!-- Background image (--background-image) -->

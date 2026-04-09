@@ -109,11 +109,10 @@ function getFooterColumns(): FooterColumn[] {
  */
 const socialLinks: SocialLink[] = [
   { platform: 'facebook', href: 'https://www.facebook.com/istoccom', icon: 'facebook', ariaLabel: 'Follow us on Facebook' },
-  { platform: 'instagram', href: 'https://instagram.com/istoc', icon: 'instagram', ariaLabel: 'Follow us on Instagram' },
-  { platform: 'twitter', href: 'https://twitter.com/istoc', icon: 'twitter', ariaLabel: 'Follow us on X (Twitter)' },
-  { platform: 'linkedin', href: 'https://linkedin.com/company/istoc', icon: 'linkedin', ariaLabel: 'Connect with us on LinkedIn' },
-  { platform: 'youtube', href: 'https://youtube.com/@istoc', icon: 'youtube', ariaLabel: 'Subscribe to our YouTube channel' },
-  { platform: 'tiktok', href: 'https://tiktok.com/@istoc', icon: 'tiktok', ariaLabel: 'Follow us on TikTok' },
+  { platform: 'instagram', href: 'https://www.instagram.com/istoc_com', icon: 'instagram', ariaLabel: 'Follow us on Instagram' },
+  { platform: 'twitter', href: 'https://x.com/istoc_com', icon: 'twitter', ariaLabel: 'Follow us on X (Twitter)' },
+  { platform: 'linkedin', href: 'https://www.linkedin.com/company/istoc-com', icon: 'linkedin', ariaLabel: 'Connect with us on LinkedIn' },
+  { platform: 'youtube', href: 'https://youtube.com/@istoccom', icon: 'youtube', ariaLabel: 'Subscribe to our YouTube channel' },
 ];
 
 /**
@@ -135,9 +134,6 @@ function getSocialIcon(platform: string): string {
     </svg>`,
     youtube: `<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
       <path fill-rule="evenodd" d="M19.812 5.418c.861.23 1.538.907 1.768 1.768C21.998 8.746 22 12 22 12s0 3.255-.418 4.814a2.504 2.504 0 0 1-1.768 1.768c-1.56.419-7.814.419-7.814.419s-6.255 0-7.814-.419a2.505 2.505 0 0 1-1.768-1.768C2 15.255 2 12 2 12s0-3.255.417-4.814a2.507 2.507 0 0 1 1.768-1.768C5.744 5 11.998 5 11.998 5s6.255 0 7.814.418ZM15.194 12 10 15V9l5.194 3Z" clip-rule="evenodd" />
-    </svg>`,
-    tiktok: `<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.48V13a8.28 8.28 0 005.58 2.17V11.7a4.84 4.84 0 01-3.77-1.78V6.69h3.77z"/>
     </svg>`,
   };
   return icons[platform] || '';

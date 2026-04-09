@@ -88,7 +88,7 @@ function renderAddressSelectorModal(): string {
       x-show="isAddressSelectorOpen"
       @keydown.escape.window="closeAddressSelector()"
     >
-      <div class="w-full max-w-[840px] max-h-[88vh] overflow-hidden rounded-xl bg-white shadow-xl">
+      <div class="w-full max-w-[840px] max-h-[88vh] overflow-hidden rounded-md bg-white shadow-xl">
         <div class="flex items-center justify-between px-4 py-4 sm:px-6 sm:py-5 border-b border-[#e5e7eb]">
           <h3 class="text-lg sm:text-xl xl:text-[32px] font-bold text-[#111827] leading-tight">Select shipping address</h3>
           <button type="button" class="text-[#111827] hover:opacity-70" @click="closeAddressSelector()">
@@ -152,14 +152,14 @@ function renderAddressSelectorModal(): string {
         <div class="flex flex-col sm:flex-row items-center justify-end gap-3 border-t border-[#e5e7eb] px-4 py-4 sm:px-6 sm:py-5">
           <button
             type="button"
-            class="min-w-0 w-full sm:min-w-[200px] sm:w-auto th-btn-outline th-btn-pill"
+            class="min-w-0 w-full sm:min-w-[200px] sm:w-auto th-btn-outline"
             @click="closeAddressSelector()"
           >
             Cancel
           </button>
           <button
             type="button"
-            class="min-w-0 w-full sm:min-w-[200px] sm:w-auto th-btn th-btn-pill"
+            class="min-w-0 w-full sm:min-w-[200px] sm:w-auto th-btn"
             @click="confirmSelectedAddress()"
           >
             Ship to this address
@@ -178,7 +178,7 @@ function renderAddAddressModal(countryOptions: string): string {
       x-show="isAddAddressModalOpen"
       @keydown.escape.window="closeAddAddressModal()"
     >
-      <div class="w-full max-w-[980px] max-h-[92vh] overflow-hidden rounded-xl bg-white shadow-xl">
+      <div class="w-full max-w-[980px] max-h-[92vh] overflow-hidden rounded-md bg-white shadow-xl">
         <div class="flex items-center justify-between border-b border-[#e5e7eb] px-6 py-5">
           <div>
             <h3 class="text-xl sm:text-2xl xl:text-[32px] font-bold text-[#111827]" x-text="isEditingAddress ? 'Edit address' : 'Add address'">Add address</h3>
@@ -265,14 +265,14 @@ function renderAddAddressModal(countryOptions: string): string {
         <div class="flex flex-col sm:flex-row items-center justify-end gap-3 border-t border-[#e5e7eb] px-4 py-4 sm:px-6 sm:py-5">
           <button
             type="button"
-            class="min-w-0 w-full sm:min-w-[200px] sm:w-auto th-btn-outline th-btn-pill"
+            class="min-w-0 w-full sm:min-w-[200px] sm:w-auto th-btn-outline"
             @click="closeAddAddressModal()"
           >
             Cancel
           </button>
           <button
             type="button"
-            class="min-w-0 w-full sm:min-w-[200px] sm:w-auto th-btn th-btn-pill"
+            class="min-w-0 w-full sm:min-w-[200px] sm:w-auto th-btn"
             @click="submitAddAddress()"
           >
             Submit
@@ -306,7 +306,7 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
 
       <div class="checkout-section__content px-3 sm:px-4 xl:px-5 pb-5">
         <div
-          class="rounded-xl border border-[#e5e7eb] bg-white p-4"
+          class="rounded-md border border-[#e5e7eb] bg-white p-4"
           x-cloak
           x-show="selectedAddressId && !showAddressForm"
         >
@@ -426,7 +426,7 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
             <button
               type="submit"
               id="continue-payment-btn"
-              class="th-btn th-btn-pill self-start"
+              class="th-btn self-start"
             >
               Save and continue
             </button>

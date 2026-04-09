@@ -222,7 +222,7 @@ export function SupplierSetupForm(): string {
         <button type="button" id="ss-back-btn" class="hidden flex-1 py-3 text-sm font-semibold text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
           ${t('auth.supplierSetup.back')}
         </button>
-        <button type="button" id="ss-next-btn" class="flex-1 th-btn th-btn-pill py-3 text-base font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+        <button type="button" id="ss-next-btn" class="flex-1 th-btn py-3 text-base font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed" disabled>
           ${t('auth.supplierSetup.next')}
         </button>
       </div>

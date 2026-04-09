@@ -103,7 +103,7 @@ export function RegisterPage(initialStep: RegisterStep = 'account-type'): string
           type="button"
           id="register-account-type-continue"
           @click="goToStep('email')"
-          class="th-btn th-btn-pill w-full py-3 text-base font-semibold transition-all mt-6"
+          class="th-btn w-full py-3 text-base font-semibold transition-all mt-6"
         >
           <span data-i18n="auth.register.continue">${t('auth.register.continue')}</span>
         </button>
@@ -168,7 +168,7 @@ export function RegisterPage(initialStep: RegisterStep = 'account-type'): string
             id="register-email-continue"
             :disabled="!emailValid"
             disabled
-            class="th-btn th-btn-pill w-full py-3 text-base font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            class="th-btn w-full py-3 text-base font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <span data-i18n="auth.register.sendCode">${t('auth.register.sendCode')}</span>
           </button>

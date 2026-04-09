@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <input type="text" maxlength="1" class="w-12 h-14 text-center text-xl font-bold border-2 border-gray-300 rounded-lg focus:border-[#3b82f6] focus:outline-none transition-colors" data-otp-index="3" inputmode="numeric" />
             </div>
             <p class="text-xs text-red-500 hidden mb-3" id="otp-error"><span data-i18n="paymentStatus.incorrectCode">${t('paymentStatus.incorrectCode')}</span></p>
-            <button id="otp-verify-btn" class="w-full bg-[#3b82f6] hover:bg-[#2563eb] text-white font-bold py-3 px-6 rounded-full transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+            <button id="otp-verify-btn" class="th-btn w-full font-bold py-3 px-6 text-sm disabled:opacity-50 disabled:cursor-not-allowed" disabled>
               <span data-i18n="paymentStatus.verify">${t('paymentStatus.verify')}</span>
             </button>
           </div>

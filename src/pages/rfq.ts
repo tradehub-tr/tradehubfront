@@ -128,7 +128,7 @@ appEl.innerHTML = `
     <!-- Section 2: RFQ Form Card (overlapping hero) -->
     <section id="rfq-form" class="relative z-20 mt-3 md:-mt-10" aria-label="${t('rfq.formAriaLabel')}">
       <div class="container-boxed">
-        <div class="mx-auto w-full max-w-[1200px] rounded-2xl border border-border-default bg-white p-4 shadow-md sm:p-6 lg:p-7">
+        <div class="mx-auto w-full max-w-[1200px] rounded-md border border-border-default bg-white p-4 shadow-md sm:p-6 lg:p-7">
           <h2 class="mb-4 text-lg font-bold text-text-heading sm:mb-5 sm:text-xl" data-i18n="rfq.writeDetails">${t('rfq.writeDetails')}</h2>
           <form id="rfq-form-element" class="w-full" novalidate>
             <div id="rfq-textarea-container" class="min-h-[136px] overflow-hidden rounded-lg border border-[#e5e5e5] bg-[#f8f8f8] p-3 transition-colors duration-200 hover:border-primary-500 sm:p-4">
@@ -138,7 +138,7 @@ appEl.innerHTML = `
                 <button
                   type="button"
                   id="rfq-upload-btn"
-                  class="inline-flex min-h-[44px] items-center justify-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 sm:min-h-0 sm:py-1.5"
+                  class="th-btn-outline inline-flex min-h-[44px] items-center justify-center px-3 py-2 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 sm:min-h-0 sm:py-1.5"
                   data-tooltip-target="upload-tooltip"
                   data-tooltip-placement="top"
                 >
@@ -184,7 +184,7 @@ appEl.innerHTML = `
                 </label>
               </div>
 
-              <a href="/pages/dashboard/rfq-form.html" id="rfq-write-details-btn" class="th-btn th-btn-pill w-full text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 sm:min-w-[260px] sm:w-auto">
+              <a href="/pages/dashboard/rfq-form.html" id="rfq-write-details-btn" class="th-btn w-full text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 sm:min-w-[260px] sm:w-auto">
                 <span data-i18n="rfq.writeRfqDetails">${t('rfq.writeRfqDetails')}</span>
               </a>
             </div>

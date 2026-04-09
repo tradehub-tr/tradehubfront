@@ -103,7 +103,7 @@ function renderFormModal(): string {
          x-transition:leave-end="opacity-0 translate-y-4"
          class="fixed inset-x-0 bottom-0 sm:inset-0 sm:flex sm:items-center sm:justify-center z-50 p-0 sm:p-4"
          style="display:none">
-      <div class="bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-xl shadow-2xl max-h-[90vh] flex flex-col"
+      <div class="bg-white w-full sm:max-w-lg rounded-t-md sm:rounded-md shadow-2xl max-h-[90vh] flex flex-col"
            @click.stop>
 
         <!-- Modal header -->
@@ -313,7 +313,7 @@ function renderDeleteConfirm(): string {
          x-transition:leave-end="opacity-0 scale-95"
          class="fixed inset-0 z-50 flex items-center justify-center p-4"
          style="display:none">
-      <div class="bg-white rounded-xl shadow-2xl max-w-sm w-full p-6 text-center" @click.stop>
+      <div class="bg-white rounded-md shadow-2xl max-w-sm w-full p-6 text-center" @click.stop>
         <div class="flex justify-center mb-3 text-amber-500">${ICONS.warning}</div>
         <h3 class="text-base font-semibold text-gray-900 mb-1">Adresi Sil</h3>
         <p class="text-sm text-gray-500 mb-5">

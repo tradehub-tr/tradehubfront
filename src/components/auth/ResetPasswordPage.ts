@@ -39,7 +39,7 @@ function ResetPasswordHeader(): string {
 function ResetPasswordCard(content: string): string {
   return `
     <div class="min-h-[calc(100vh-58px)] bg-gray-100 flex items-start justify-center pt-8 sm:pt-12 pb-12 px-2 sm:px-4">
-      <div class="w-full max-w-xl bg-white rounded-xl shadow-sm p-5 sm:p-8 md:p-12">
+      <div class="w-full max-w-xl bg-white rounded-md shadow-sm p-5 sm:p-8 md:p-12">
         ${content}
       </div>
     </div>
@@ -101,7 +101,7 @@ function StepForm(): string {
           type="submit"
           :disabled="!passwordValid || loading"
           disabled
-          class="w-full h-12 th-btn th-btn-pill disabled:opacity-50 disabled:cursor-not-allowed"
+          class="w-full h-12 th-btn disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <span x-show="!loading" data-i18n="auth.reset.submit">${t('auth.reset.submit')}</span>
           <span x-show="loading" x-cloak class="inline-flex items-center gap-2">
@@ -130,7 +130,7 @@ function StepSuccess(): string {
         <p class="text-sm text-gray-500 mb-8" data-i18n="auth.reset.successDesc">${t('auth.reset.successDesc')}</p>
         <a
           href="${baseUrl}pages/auth/login.html"
-          class="inline-block w-full h-12 leading-[3rem] text-center th-btn th-btn-pill no-underline"
+          class="inline-block w-full h-12 leading-[3rem] text-center th-btn no-underline"
         >
           <span data-i18n="auth.reset.goToLogin">${t('auth.reset.goToLogin')}</span>
         </a>
@@ -155,7 +155,7 @@ function StepError(): string {
         <p class="text-sm text-gray-500 mb-8" x-text="error || '${t('auth.reset.invalidLinkDesc')}'"></p>
         <a
           href="${baseUrl}pages/auth/forgot-password.html"
-          class="inline-block w-full h-12 leading-[3rem] text-center th-btn th-btn-pill no-underline"
+          class="inline-block w-full h-12 leading-[3rem] text-center th-btn no-underline"
         >
           <span data-i18n="auth.reset.requestNewLink">${t('auth.reset.requestNewLink')}</span>
         </a>
