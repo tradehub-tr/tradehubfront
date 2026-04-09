@@ -3,50 +3,12 @@
  * Horizontal scrollable category tab bar with arrow navigation
  * Mobile: chevron opens a bottom sheet for category selection
  * Desktop: arrow buttons for scroll navigation
+ * Categories loaded dynamically from apiCategories (API)
  */
 
 import { t } from '../../i18n';
-import { getRankingTabs } from '../../data/mockTopRanking';
 
 export function TopRankingCategoryTabs(): string {
-  const tabs = getRankingTabs();
-
-  const tabsHtml = tabs.map(tab => `
-    <button
-      type="button"
-      class="top-ranking-tab flex-shrink-0 whitespace-nowrap px-[10px] sm:px-4 py-2 sm:py-3 text-[11px] sm:text-sm transition-colors border-b-[3px] border-transparent"
-      :class="activeTab === '${tab.id}'
-        ? '!border-secondary-800 !text-text-primary font-semibold'
-        : 'text-text-tertiary hover:text-text-primary'"
-      @click="setTab('${tab.id}')"
-      data-i18n="${tab.labelKey}"
-    >${t(tab.labelKey)}</button>
-  `).join('');
-
-  // Bottom sheet tab list items
-  const sheetItemsHtml = tabs.map(tab => `
-    <button
-      type="button"
-      class="flex items-center w-full px-5 py-4 text-left transition-colors border-b border-gray-50 active:bg-gray-50"
-      @click="setTab('${tab.id}'); showTabSheet = false"
-    >
-      <span
-        class="flex-1 text-[15px]"
-        :class="activeTab === '${tab.id}' ? 'font-semibold text-gray-900' : 'text-gray-600'"
-        data-i18n="${tab.labelKey}"
-      >${t(tab.labelKey)}</span>
-      <span
-        class="flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors"
-        :class="activeTab === '${tab.id}' ? 'border-gray-900 bg-gray-900' : 'border-gray-300 bg-transparent'"
-      >
-        <span
-          class="w-2 h-2 rounded-full transition-colors"
-          :class="activeTab === '${tab.id}' ? 'bg-white' : 'bg-transparent'"
-        ></span>
-      </span>
-    </button>
-  `).join('');
-
   return `
     <div class="relative flex items-center" x-ref="tabsContainer">
       <!-- Left arrow (desktop only) -->
@@ -70,7 +32,29 @@ export function TopRankingCategoryTabs(): string {
         @scroll="updateScrollState()"
         style="scroll-behavior: smooth;"
       >
-        ${tabsHtml}
+        <!-- "All" tab (always first) -->
+        <button
+          type="button"
+          class="top-ranking-tab flex-shrink-0 whitespace-nowrap px-[10px] sm:px-4 py-2 sm:py-3 text-[11px] sm:text-sm transition-colors border-b-[3px] border-transparent"
+          :class="activeTab === 'all'
+            ? '!border-secondary-800 !text-text-primary font-semibold'
+            : 'text-text-tertiary hover:text-text-primary'"
+          @click="setTab('all')"
+          data-i18n="topRankingPage.tabAll"
+        >${t('topRankingPage.tabAll')}</button>
+
+        <!-- Dynamic category tabs from API -->
+        <template x-for="cat in apiCategories" :key="'tab-' + cat.slug">
+          <button
+            type="button"
+            class="top-ranking-tab flex-shrink-0 whitespace-nowrap px-[10px] sm:px-4 py-2 sm:py-3 text-[11px] sm:text-sm transition-colors border-b-[3px] border-transparent"
+            :class="activeTab === cat.slug
+              ? '!border-secondary-800 !text-text-primary font-semibold'
+              : 'text-text-tertiary hover:text-text-primary'"
+            @click="setTab(cat.slug)"
+            x-text="cat.name"
+          ></button>
+        </template>
       </div>
 
       <!-- Mobile chevron -> opens bottom sheet -->
@@ -110,7 +94,7 @@ export function TopRankingCategoryTabs(): string {
       class="lg:hidden fixed inset-0 z-[99] bg-black/50 transition-opacity duration-300"
       :class="showTabSheet ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'"
       @click="showTabSheet = false"
-      x-effect="if(showTabSheet) document.body.style.overflow = 'hidden'; else if(!showRegionSheet && !showCategorySheet) document.body.style.overflow = ''"
+      x-effect="if(showTabSheet) document.body.style.overflow = 'hidden'; else if(!showCategorySheet) document.body.style.overflow = ''"
     ></div>
 
     <!-- Sheet Panel -->
@@ -126,7 +110,50 @@ export function TopRankingCategoryTabs(): string {
 
         <!-- Tab List -->
         <div class="overflow-y-auto flex-1 pb-6 overscroll-contain">
-          ${sheetItemsHtml}
+          <!-- "All" option -->
+          <button
+            type="button"
+            class="flex items-center w-full px-5 py-4 text-left transition-colors border-b border-gray-50 active:bg-gray-50"
+            @click="setTab('all'); showTabSheet = false"
+          >
+            <span
+              class="flex-1 text-[15px]"
+              :class="activeTab === 'all' ? 'font-semibold text-gray-900' : 'text-gray-600'"
+              data-i18n="topRankingPage.tabAll"
+            >${t('topRankingPage.tabAll')}</span>
+            <span
+              class="flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors"
+              :class="activeTab === 'all' ? 'border-gray-900 bg-gray-900' : 'border-gray-300 bg-transparent'"
+            >
+              <span
+                class="w-2 h-2 rounded-full transition-colors"
+                :class="activeTab === 'all' ? 'bg-white' : 'bg-transparent'"
+              ></span>
+            </span>
+          </button>
+          <!-- Dynamic category items -->
+          <template x-for="cat in apiCategories" :key="'sheet-' + cat.slug">
+            <button
+              type="button"
+              class="flex items-center w-full px-5 py-4 text-left transition-colors border-b border-gray-50 active:bg-gray-50"
+              @click="setTab(cat.slug); showTabSheet = false"
+            >
+              <span
+                class="flex-1 text-[15px]"
+                :class="activeTab === cat.slug ? 'font-semibold text-gray-900' : 'text-gray-600'"
+                x-text="cat.name"
+              ></span>
+              <span
+                class="flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors"
+                :class="activeTab === cat.slug ? 'border-gray-900 bg-gray-900' : 'border-gray-300 bg-transparent'"
+              >
+                <span
+                  class="w-2 h-2 rounded-full transition-colors"
+                  :class="activeTab === cat.slug ? 'bg-white' : 'bg-transparent'"
+                ></span>
+              </span>
+            </button>
+          </template>
         </div>
       </div>
     </div>

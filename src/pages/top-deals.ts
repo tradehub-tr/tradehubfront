@@ -30,7 +30,6 @@ import {
   TopDealsHero,
   TopDealsMobileHeader,
   TopDealsStickyMobileHeader,
-  TopDealsPromoBar,
   TopDealsCategoryTabs,
   TopDealsSubFilters,
   TopDealsGrid,
@@ -48,6 +47,26 @@ import type { TopDealsProduct } from '../types/topDeals'
 // Utilities
 import { initAnimatedPlaceholder } from '../utils/animatedPlaceholder'
 
+/* ── Helper: fetch products from API ── */
+
+async function fetchProducts(categorySlug?: string): Promise<TopDealsProduct[]> {
+  const params: Record<string, any> = { page_size: 40 };
+  if (categorySlug && categorySlug !== 'all') {
+    params.category = categorySlug;
+  }
+  const result = await searchListings(params);
+  return result.products.map(p => ({
+    id: p.id || '',
+    name: p.name,
+    href: p.href || `/pages/product-detail.html?id=${p.id}`,
+    price: p.price,
+    imageKind: 'jewelry' as const,
+    imageSrc: p.imageSrc || undefined,
+    moq: p.moq || '1 adet',
+    category: p.category || 'all',
+  }));
+}
+
 /* ── Alpine Data Registration ── */
 
 const allProducts: TopDealsProduct[] = [];
@@ -61,27 +80,14 @@ Alpine.data('topDealsPage', () => ({
   canScrollRight: true,
   showCategorySheet: false,
   allProducts: allProducts,
+  loading: false,
 
   get subFilters(): { id: string; labelKey: string }[] {
     return [];
   },
 
   get filteredProducts(): TopDealsProduct[] {
-    let products = this.allProducts;
-
-    // Filter by category
-    if (this.activeCategory === 'free-shipping') {
-      products = products.filter(p => p.featureTags?.includes('Free shipping'));
-    } else if (this.activeCategory !== 'all') {
-      products = products.filter(p => p.category === this.activeCategory);
-    }
-
-    // Filter by sub-filter
-    if (this.activeSubFilter !== 'all') {
-      products = products.filter(p => p.subCategory === this.activeSubFilter);
-    }
-
-    return products;
+    return this.allProducts;
   },
 
   get visibleProducts(): TopDealsProduct[] {
@@ -92,6 +98,15 @@ Alpine.data('topDealsPage', () => ({
     this.activeCategory = categoryId;
     this.activeSubFilter = 'all';
     this.visibleCount = ITEMS_PER_PAGE;
+    // Fetch products for the selected category from API
+    this.loading = true;
+    fetchProducts(categoryId).then(products => {
+      this.allProducts = products;
+      this.loading = false;
+    }).catch(err => {
+      console.warn('[TopDeals] Category fetch failed:', err);
+      this.loading = false;
+    });
   },
 
   setSubFilter(filterId: string) {
@@ -130,7 +145,6 @@ Alpine.data('topDealsPage', () => ({
 /* ── Page Assembly ── */
 
 const breadcrumbItems = [
-  { label: t('common.home'), href: '/' },
   { label: t('topDealsPage.breadcrumb') },
 ];
 
@@ -162,9 +176,6 @@ appEl.innerHTML = `
           ${Breadcrumb(breadcrumbItems)}
         </div>
         ${TopDealsHero()}
-        <div class="hidden md:block">
-          ${TopDealsPromoBar()}
-        </div>
       </div>
     </section>
 
@@ -203,24 +214,14 @@ initLanguageSelector();
 initCategoryTabs();
 initAnimatedPlaceholder('#topbar-compact-search-input');
 
-// Load products from API
-initCurrency().then(() => searchListings({ page_size: 20 })).then(result => {
-  if (result.products.length > 0) {
-    // Update Alpine reactive data
+// Load products from API (initial load — all categories)
+initCurrency().then(() => fetchProducts('all')).then(products => {
+  if (products.length > 0) {
     const mainEl = document.querySelector<HTMLElement>('[x-data="topDealsPage"]');
     if (mainEl && (mainEl as any)._x_dataStack) {
       const data = (mainEl as any)._x_dataStack[0];
       if (data) {
-        data.allProducts = result.products.map(p => ({
-          id: p.id || '',
-          name: p.name,
-          href: p.href || `/pages/product-detail.html?id=${p.id}`,
-          price: p.price,
-          imageKind: 'jewelry' as const,
-          imageSrc: p.imageSrc || undefined,
-          moq: p.moq || '1 adet',
-          category: 'all',
-        }));
+        data.allProducts = products;
       }
     }
   }

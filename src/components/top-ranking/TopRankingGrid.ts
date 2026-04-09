@@ -63,7 +63,7 @@ export function TopRankingGrid(): string {
       </div>
 
       <!-- Load more button -->
-      <div class="flex justify-center mt-8" x-show="visibleGroupCount < filteredGroups.length">
+      <div class="flex justify-center mt-8" x-show="visibleGroupCount < allGroups.length">
         <button
           type="button"
           class="px-8 py-2.5 rounded-full border border-border-default text-sm font-semibold text-text-secondary bg-surface hover:bg-surface-raised transition-colors"
