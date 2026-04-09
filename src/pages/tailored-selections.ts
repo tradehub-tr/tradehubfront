@@ -57,7 +57,6 @@ const categoryPillsHtml = categories.map(cat => `
 /* ── Breadcrumb ── */
 
 const breadcrumbItems = [
-  { label: t('tailoredPage.breadcrumbHome'), href: '/' },
   { label: t('tailoredPage.breadcrumb') },
 ];
 

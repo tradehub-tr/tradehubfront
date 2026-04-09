@@ -40,6 +40,8 @@ import { renderRankingGroupCard } from '../components/top-ranking/TopRankingGrid
 // Services
 import { searchListings } from '../services/listingService'
 import { initCurrency } from '../services/currencyService'
+import { loadCategories } from '../services/categoryService'
+import type { ApiCategory } from '../services/categoryService'
 
 // Data (types only)
 import type { RankingCategoryGroup } from '../types/topRanking'
@@ -53,15 +55,23 @@ const allGroups: RankingCategoryGroup[] = [];
 const GROUPS_PER_PAGE = 12;
 
 Alpine.data('topRankingPage', () => ({
+  init() {
+    // Load categories then products after Alpine is ready
+    loadCategories().then(cats => {
+      this.apiCategories = cats;
+    }).catch(err => console.warn('[TopRanking] Category load failed:', err));
+
+    initCurrency().then(() => {
+      this.fetchProducts();
+    }).catch(err => console.warn('[TopRanking] Init failed:', err));
+  },
+
   // Filter state
-  activeRegion: 'europe' as string,
   activeTab: 'all',
   activeSort: 'hot-selling',
 
   // Dropdown state (desktop)
-  regionDropdownOpen: false,
   categoryDropdownOpen: false,
-  pendingRegion: 'europe' as string,
 
   // Category dropdown navigation
   categoryDropdownLevel: 1 as 1 | 2,
@@ -69,7 +79,6 @@ Alpine.data('topRankingPage', () => ({
   pendingSubCategory: null as string | null,
 
   // Mobile bottom sheet state
-  showRegionSheet: false,
   showCategorySheet: false,
   showTabSheet: false,
 
@@ -80,32 +89,69 @@ Alpine.data('topRankingPage', () => ({
   // Pagination
   visibleGroupCount: GROUPS_PER_PAGE,
 
-  // Static data
+  // Loading state
+  loading: false,
+
+  // Dynamic data from API
+  apiCategories: [] as ApiCategory[],
   allGroups: allGroups,
 
-  get filteredGroups(): RankingCategoryGroup[] {
-    let groups = this.allGroups;
-
-    // Filter by tab
-    if (this.activeTab !== 'all') {
-      groups = groups.filter(g => g.categoryId === this.activeTab);
-    }
-
-    // Filter by selected main category from dropdown
-    if (this.selectedMainCategory) {
-      groups = groups.filter(g => g.categoryId === this.selectedMainCategory);
-    }
-
-    return groups;
+  get visibleGroups(): RankingCategoryGroup[] {
+    return this.allGroups.slice(0, this.visibleGroupCount);
   },
 
-  get visibleGroups(): RankingCategoryGroup[] {
-    return this.filteredGroups.slice(0, this.visibleGroupCount);
+  async fetchProducts(category?: string) {
+    this.loading = true;
+    try {
+      const params: Record<string, unknown> = { page_size: 60 };
+      if (category && category !== 'all') {
+        params.category = category;
+      }
+      const result = await searchListings(params as any);
+      // Group products by category name
+      const categoryMap = new Map<string, typeof result.products>();
+      for (const p of result.products) {
+        const cat = (p as any).category || 'Diğer';
+        if (!categoryMap.has(cat)) categoryMap.set(cat, []);
+        categoryMap.get(cat)!.push(p);
+      }
+      const groups: RankingCategoryGroup[] = [];
+      let idx = 0;
+      for (const [catName, products] of categoryMap) {
+        // Split into groups of up to 3
+        for (let i = 0; i < products.length; i += 3) {
+          const chunk = products.slice(i, i + 3);
+          groups.push({
+            id: `rg-api-${idx++}`,
+            name: catName,
+            nameKey: '',
+            categoryId: category || 'all',
+            products: chunk.map((p, ri) => ({
+              id: p.id || `rp-${idx}-${ri}`,
+              name: p.name,
+              href: p.href || `/pages/product-detail.html?id=${p.id}`,
+              price: p.price,
+              imageSrc: p.imageSrc || '',
+              moq: p.moq || '1 adet',
+              rank: (ri + 1) as 1 | 2 | 3,
+            })),
+          });
+        }
+      }
+      this.allGroups = groups;
+    } catch (err) {
+      console.warn('[TopRanking] fetchProducts failed:', err);
+    } finally {
+      this.loading = false;
+    }
   },
 
   setTab(tabId: string) {
     this.activeTab = tabId;
+    this.selectedMainCategory = tabId === 'all' ? null : tabId;
+    this.pendingSubCategory = null;
     this.visibleGroupCount = GROUPS_PER_PAGE;
+    this.fetchProducts(tabId);
   },
 
   setSort(sortMode: string) {
@@ -134,12 +180,6 @@ Alpine.data('topRankingPage', () => ({
     this.canScrollRight = el.scrollLeft < el.scrollWidth - el.clientWidth - 1;
   },
 
-  // Region dropdown
-  applyRegion() {
-    this.activeRegion = this.pendingRegion;
-    this.regionDropdownOpen = false;
-  },
-
   // Category dropdown
   openCategoryLevel2(mainCatId: string) {
     this.selectedMainCategory = mainCatId;
@@ -152,10 +192,12 @@ Alpine.data('topRankingPage', () => ({
   },
 
   applyCategoryFilter() {
+    const category = this.pendingSubCategory || this.selectedMainCategory || 'all';
     this.activeTab = this.selectedMainCategory || 'all';
     this.categoryDropdownOpen = false;
     this.categoryDropdownLevel = 1;
     this.visibleGroupCount = GROUPS_PER_PAGE;
+    this.fetchProducts(category);
   },
 
   // i18n helper for Alpine templates
@@ -246,42 +288,7 @@ initLanguageSelector();
 initRankingCategoryTabs();
 initAnimatedPlaceholder('#topbar-compact-search-input');
 
-// Load products from API and group them into ranking groups
-initCurrency().then(() => searchListings({ page_size: 20 })).then(result => {
-  if (result.products.length >= 3) {
-    // Group products into ranking groups of 3
-    const groups: RankingCategoryGroup[] = [];
-    for (let i = 0; i + 2 < result.products.length; i += 3) {
-      const groupProducts = result.products.slice(i, i + 3);
-      const cat = (groupProducts[0] as any).category || 'Diger';
-      groups.push({
-        id: `rg-api-${i}`,
-        name: cat,
-        nameKey: '',
-        categoryId: 'all',
-        products: groupProducts.map((p, idx) => ({
-          id: p.id || `rp-${i + idx}`,
-          name: p.name,
-          href: p.href || `/pages/product-detail.html?id=${p.id}`,
-          price: p.price,
-          imageSrc: p.imageSrc || '',
-          moq: p.moq || '1 adet',
-          rank: (idx + 1) as 1 | 2 | 3,
-        })),
-      });
-    }
-
-    if (groups.length > 0) {
-      const mainEl = document.querySelector<HTMLElement>('[x-data="topRankingPage"]');
-      if (mainEl && (mainEl as any)._x_dataStack) {
-        const data = (mainEl as any)._x_dataStack[0];
-        if (data) {
-          data.allGroups = groups;
-        }
-      }
-    }
-  }
-}).catch(err => console.warn('[TopRanking Page] API load failed:', err));
+// Categories and products are loaded via Alpine init() lifecycle hook
 
 // Show/hide sticky compact mobile header based on hero visibility
 // Also adjust sort pills sticky position when mobile header appears

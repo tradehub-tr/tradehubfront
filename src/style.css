@@ -1359,7 +1359,8 @@
         left: 0;
     }
 
-    .subheader-link--active::after {
+    .subheader-link--active::after,
+    .subheader-link.active::after {
         width: 100%;
         left: 0;
     }

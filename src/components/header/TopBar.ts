@@ -11,7 +11,7 @@ import type { ApiCategory } from '../../services/categoryService';
 import { cartStore } from '../cart/state/CartStore';
 import { isLoggedIn, getUser, getSessionUser, waitForAuth, logout } from '../../utils/auth';
 import { getSellerStoreUrl } from '../../utils/seller';
-import { mockConversations } from '../../data/mockMessages';
+// DISABLED: import { mockConversations } from '../../data/mockMessages';
 import { t, getCurrentLang, updatePageTranslations } from '../../i18n';
 import type { SupportedLang } from '../../i18n';
 import { getSelectedCurrency, setSelectedCurrency, getCurrencySymbol } from '../../utils/currency';
@@ -238,11 +238,13 @@ function renderCompactStickySearch(): string {
         <div id="topbar-compact-reco-list" class="mt-3 space-y-2">
         </div>
 
-        <div class="mt-4 flex items-center justify-between gap-4">
-          <p class="text-sm font-semibold text-primary-600 dark:text-primary-400">
-            <span class="mr-1" aria-hidden="true">&#10022;</span>
-            <span data-i18n="header.deepSearch">${t('header.deepSearch')}</span>
-          </p>
+        <!-- DISABLED: Deep Search Row — ileride geliştirilecek
+        <p class="text-sm font-semibold text-primary-600 dark:text-primary-400">
+          <span class="mr-1" aria-hidden="true">&#10022;</span>
+          <span data-i18n="header.deepSearch">${t('header.deepSearch')}</span>
+        </p>
+        -->
+        <div class="mt-4 flex items-center justify-end">
           <a
             href="/pages/legal/terms.html"
             tabindex="-1"
@@ -377,7 +379,8 @@ function renderLanguageCurrencySelector(): string {
 /**
  * Generates the Messages icon button with popover panel
  */
-function renderMessagesButton(): string {
+/* DISABLED: Mesajlar butonu — ileride geliştirilecek
+function renderMessagesButton_DISABLED(): string {
   const conversations = mockConversations();
   const recentMessages = conversations.slice(0, 3);
   const unreadTotal = conversations.reduce((sum, msg) => sum + (msg.unreadCount || 0), 0);
@@ -393,47 +396,14 @@ function renderMessagesButton(): string {
       <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 0 1 .778-.332 48.294 48.294 0 0 0 5.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
       </svg>
-      ${unreadTotal > 0 ? `<span class="th-badge absolute -top-0.5 -right-0.5 flex items-center justify-center w-4 h-4 text-[10px] font-bold" style="background:var(--color-error-500);color:#fff">${unreadTotal > 9 ? '9+' : unreadTotal}</span>` : ''}
+      unreadTotal badge...
     </button>
-
-    <!-- Messages Popover -->
-    <div data-popover id="popover-messages" role="tooltip"
-      class="absolute z-50 invisible inline-block w-96 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 transition-opacity duration-300 dark:bg-gray-800 dark:border-gray-700"
-    >
-      <div class="p-5">
-        <h3 class="text-base font-bold text-gray-900 dark:text-white mb-4"><span data-i18n="header.messages">${t('header.messages')}</span></h3>
-
-        <!-- Message Items -->
-        <div class="space-y-2 mb-4">
-          ${recentMessages.map(msg => `
-          <a href="/pages/dashboard/messages.html" class="flex items-start gap-3 p-2 -mx-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer group">
-            <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center flex-shrink-0 overflow-hidden">
-              ${msg.avatar ? `<img src="${msg.avatar}" alt="${msg.name}" class="w-full h-full object-cover" />` : `
-              <svg class="w-5 h-5 text-blue-500 dark:text-blue-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-              </svg>
-              `}
-            </div>
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center justify-between">
-                <p class="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">${msg.name}</p>
-                <span class="text-xs text-gray-400">${msg.date}</span>
-              </div>
-              <p class="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5 truncate">${msg.company || 'iSTOC'}</p>
-              <p class="text-xs text-gray-600 dark:text-gray-300 mt-0.5 line-clamp-1">${msg.preview}</p>
-            </div>
-            ${msg.unreadCount > 0 ? `<span class="th-badge flex items-center justify-center min-w-5 h-5 px-1 text-[10px] font-bold" style="background:var(--color-error-500);color:#fff">${msg.unreadCount}</span>` : ''}
-          </a>
-          `).join('')}
-        </div>
-
-        <!-- View More Button -->
-        <a href="/pages/dashboard/messages.html" class="th-btn block w-full px-4 py-2.5 text-sm font-medium text-center transition-colors">
-          <span data-i18n="common.viewMore">${t('common.viewMore')}</span>
-        </a>
-      </div>
-    </div>
+    Messages Popover...
   `;
+}
+*/
+function renderMessagesButton(): string {
+  return '';
 }
 
 /**
@@ -1609,21 +1579,40 @@ function initCompactSearchSuggestions(): void {
     try {
       const data = await getSearchSuggestions();
 
-      // Populate large-text suggestion list (first 3 suggestions)
+      // Populate large-text suggestion list (first 3 suggestions) — click navigates to search
       if (recoList) {
         const items = data.suggestions.slice(0, 3);
-        recoList.innerHTML = items.map(item => `
-          <button type="button" tabindex="-1" data-compact-expanded-interactive="true" data-search-value="${item.text}" @click="pickValue($event.currentTarget.dataset.searchValue)" class="block w-full text-left text-[22px] font-normal leading-tight text-gray-900 transition-colors hover:text-primary-600 dark:text-white dark:hover:text-primary-400 truncate">${item.text}</button>
+        recoList.innerHTML = items.map((item: any) => `
+          <button type="button" tabindex="-1" data-compact-expanded-interactive="true" data-suggestion-text="${item.text.replace(/"/g, '&quot;')}" class="compact-suggestion-btn block w-full text-left text-[22px] font-normal leading-tight text-gray-900 transition-colors hover:text-primary-600 dark:text-white dark:hover:text-primary-400 truncate">${item.text}</button>
         `).join('');
       }
 
-      // Populate chip buttons (categories or fallback to remaining suggestions)
+      // Populate chip buttons (categories or fallback) — click navigates to category or search
       if (chipsContainer) {
         const chipItems = data.chips.length > 0 ? data.chips : data.suggestions.slice(3, 6);
-        chipsContainer.innerHTML = chipItems.map(item => `
-          <button type="button" tabindex="-1" data-compact-expanded-interactive="true" data-search-value="${item.text}" @click="pickValue($event.currentTarget.dataset.searchValue)" class="inline-flex items-center gap-1.5 rounded-md border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 min-w-0 overflow-hidden"><span class="text-primary-500 shrink-0">&#10022;</span><span class="truncate">${item.text}</span></button>
-        `).join('');
+        chipsContainer.innerHTML = chipItems.map((item: any) => {
+          const href = item.type === 'category' && item.slug
+            ? '/pages/products.html?cat=' + encodeURIComponent(item.slug)
+            : '/pages/products.html?q=' + encodeURIComponent(item.text);
+          return '<button type="button" tabindex="-1" data-compact-expanded-interactive="true" data-chip-href="' + href + '" data-chip-text="' + item.text.replace(/"/g, '&quot;') + '" data-chip-slug="' + (item.slug || '').replace(/"/g, '&quot;') + '" class="compact-chip-btn inline-flex items-center gap-1.5 rounded-md border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 min-w-0 overflow-hidden"><span class="text-primary-500 shrink-0">&#10022;</span><span class="truncate">' + item.text + '</span></button>';
+        }).join('');
       }
+
+      // Bind click handlers for suggestions (logging handled by products.ts)
+      recoList?.querySelectorAll<HTMLButtonElement>('.compact-suggestion-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const text = btn.getAttribute('data-suggestion-text') || '';
+          window.location.href = '/pages/products.html?q=' + encodeURIComponent(text);
+        });
+      });
+
+      // Bind click handlers for chips (logging handled by products.ts)
+      chipsContainer?.querySelectorAll<HTMLButtonElement>('.compact-chip-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const href = btn.getAttribute('data-chip-href') || '';
+          window.location.href = href;
+        });
+      });
     } catch {
       // Silently fail — areas stay empty
     }

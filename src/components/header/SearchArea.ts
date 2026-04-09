@@ -120,13 +120,14 @@ function renderDesktopSearchBar(): string {
 
           <!-- Search Dropdown (shown on input focus) -->
           <div id="search-dropdown" class="hidden absolute left-0 right-0 z-10 rounded-md px-3 sm:px-5 py-2.5 sm:py-3 shadow-lg mt-2" style="background-color:var(--search-dropdown-bg);border:1px solid var(--search-dropdown-border)">
-            <!-- Deep Search Row -->
-            <div class="flex items-center justify-between mb-2.5">
-              <div class="flex items-center gap-2 text-sm" style="color:var(--search-dropdown-text)">
-                <span class="w-2 h-2 rounded-full inline-block flex-shrink-0" style="background-color:var(--search-chip-accent)"></span>
-                <span data-i18n="header.deepSearch">${t('header.deepSearch')}</span>
-              </div>
-              <a href="/pages/legal/terms.html" class="text-xs whitespace-nowrap ml-4 transition-colors" style="color:var(--search-dropdown-muted)" data-i18n="header.termsOfUse">${t('header.termsOfUse')}</a>
+            <!-- DISABLED: Deep Search Row — ileride geliştirilecek
+            <div class="flex items-center gap-2 text-sm" style="color:var(--search-dropdown-text)">
+              <span class="w-2 h-2 rounded-full inline-block flex-shrink-0" style="background-color:var(--search-chip-accent)"></span>
+              <span data-i18n="header.deepSearch">${t('header.deepSearch')}</span>
+            </div>
+            -->
+            <div class="flex items-center justify-end mb-2.5">
+              <a href="/pages/legal/terms.html" class="text-xs whitespace-nowrap transition-colors" style="color:var(--search-dropdown-muted)" data-i18n="header.termsOfUse">${t('header.termsOfUse')}</a>
             </div>
             <!-- Suggestion Chips (dynamically loaded) -->
             <div id="search-chips-container" class="flex items-center gap-2 flex-wrap">
@@ -299,9 +300,16 @@ export function initSearchArea(): void {
           const chips = searchDropdown.querySelectorAll('.search-chip');
           chips.forEach(chip => {
             chip.addEventListener('click', () => {
+              const chipEl = chip as HTMLElement;
+              const type = chipEl.dataset.chipType || 'product';
+              const slug = chipEl.dataset.chipSlug || '';
               const text = chip.querySelector('span:last-child')?.textContent || '';
-              (searchInput as HTMLInputElement).value = text;
               hideDropdown();
+              if (type === 'category' && slug) {
+                window.location.href = `/pages/products.html?cat=${encodeURIComponent(slug)}`;
+              } else {
+                window.location.href = `/pages/products.html?q=${encodeURIComponent(text)}`;
+              }
             });
           });
         };
@@ -311,8 +319,8 @@ export function initSearchArea(): void {
           try {
             const data = await getSearchSuggestions();
             const chipItems = data.chips.length > 0 ? data.chips : data.suggestions.slice(0, 3);
-            chipsContainer.innerHTML = chipItems.map(item => `
-              <button type="button" class="search-chip flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-full transition-colors max-w-[220px]" style="color:var(--search-chip-text);background-color:var(--search-chip-bg);border:1px solid var(--search-chip-border)">
+            chipsContainer.innerHTML = chipItems.map((item: any) => `
+              <button type="button" class="search-chip flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-full transition-colors max-w-[220px]" style="color:var(--search-chip-text);background-color:var(--search-chip-bg);border:1px solid var(--search-chip-border)" data-chip-type="${item.type || 'product'}" data-chip-slug="${item.slug || ''}">
                 <span class="text-xs shrink-0" style="color:var(--search-chip-accent)">&#10022;</span>
                 <span class="truncate">${item.text}</span>
               </button>
