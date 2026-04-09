@@ -64,7 +64,7 @@ function renderMethodOption(order: CheckoutDeliveryOrderGroup, method: CheckoutD
   const safeMethodId = escapeJsSingleQuoted(method.id);
   return `
     <label
-      class="flex items-center gap-3 rounded-xl border px-4 py-3 cursor-pointer transition-colors"
+      class="flex items-center gap-3 rounded-md border px-4 py-3 cursor-pointer transition-colors"
       @click="selectMethod('${safeOrderId}', '${safeMethodId}')"
       :class="isMethodSelected('${safeOrderId}', '${safeMethodId}')
         ? 'border-[#111827] bg-white'
@@ -188,7 +188,7 @@ function renderSupplierNoteModal(): string {
       @click.self="closeNoteModal()"
       @keydown.escape.window="closeNoteModal()"
     >
-      <div class="w-full max-w-[760px] rounded-xl bg-white shadow-xl">
+      <div class="w-full max-w-[760px] rounded-md bg-white shadow-xl">
         <div class="flex items-center justify-between px-4 py-4 sm:px-6 sm:py-5">
           <h3 class="text-xl sm:text-2xl xl:text-[32px] font-bold leading-tight text-[#111827]">Note to the supplier</h3>
           <button type="button" class="text-[#111827] hover:opacity-70" @click="closeNoteModal()">
@@ -212,14 +212,14 @@ function renderSupplierNoteModal(): string {
           <div class="mt-6 flex items-center justify-center gap-3">
             <button
               type="button"
-              class="min-w-0 w-full sm:min-w-[200px] sm:w-auto th-btn th-btn-pill"
+              class="min-w-0 w-full sm:min-w-[200px] sm:w-auto th-btn"
               @click="saveNote()"
             >
               Confirm
             </button>
             <button
               type="button"
-              class="min-w-0 w-full sm:min-w-[200px] sm:w-auto th-btn-outline th-btn-pill"
+              class="min-w-0 w-full sm:min-w-[200px] sm:w-auto th-btn-outline"
               @click="closeNoteModal()"
             >
               Cancel

@@ -85,7 +85,7 @@ function renderSortingDropdown(options: SortOption[], selectedValue: string): st
         id="search-header-sort-btn"
         type="button"
         @click="sortOpen = !sortOpen"
-        class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors"
+        class="th-btn-outline inline-flex items-center gap-2 px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:"
         aria-haspopup="listbox"
         :aria-expanded="sortOpen"
       >
@@ -197,7 +197,7 @@ function renderMobileFilterToggle(): string {
       id="mobile-filter-toggle"
       data-drawer-target="filter-sidebar-drawer"
       data-drawer-toggle="filter-sidebar-drawer"
-      class="lg:hidden inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors"
+      class="th-btn-outline lg:hidden inline-flex items-center gap-2 px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:"
       aria-label="Open filters"
     >
       <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">

@@ -36,7 +36,7 @@ export function FAQDetailLayout(): string {
 
         <!-- Sidebar: category subs -->
         <aside class="w-[220px] flex-shrink-0 hidden lg:block sticky top-[80px]">
-          <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <div class="bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden">
             <div class="px-4 py-3 border-b border-gray-100" style="background: linear-gradient(135deg, var(--color-primary-50), white)">
               <h3 class="text-sm font-bold text-gray-800" x-text="categoryLabel"></h3>
             </div>
@@ -67,7 +67,7 @@ export function FAQDetailLayout(): string {
           </a>
 
           <!-- Title & description -->
-          <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-4">
+          <div class="bg-white rounded-md shadow-sm border border-gray-100 p-6 mb-4">
             <h1 class="text-xl font-bold text-gray-800 mb-2" x-text="subTitle"></h1>
             <p class="text-sm text-gray-500" x-text="subDescription"></p>
           </div>
@@ -75,7 +75,7 @@ export function FAQDetailLayout(): string {
           <!-- FAQ Accordion Items -->
           <div class="space-y-3">
             <template x-for="(item, idx) in faqItems" :key="idx">
-              <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-shadow hover:shadow-md">
+              <div class="bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden transition-shadow hover:shadow-md">
                 <!-- Question -->
                 <button
                   @click="toggleItem(idx)"
@@ -121,7 +121,7 @@ export function FAQDetailLayout(): string {
 
           <!-- No content fallback -->
           <template x-if="faqItems.length === 0">
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 text-center">
+            <div class="bg-white rounded-md shadow-sm border border-gray-100 p-8 text-center">
               <svg class="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"/>
               </svg>
@@ -133,7 +133,7 @@ export function FAQDetailLayout(): string {
           </template>
 
           <!-- Helpful section -->
-          <div x-show="faqItems.length > 0" class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 mt-4">
+          <div x-show="faqItems.length > 0" class="bg-white rounded-md shadow-sm border border-gray-100 p-5 mt-4">
             <div class="flex items-center justify-between">
               <p class="text-sm text-gray-600">${t('faqDetail.wasHelpful')}</p>
               <div class="flex items-center gap-2">
@@ -157,7 +157,7 @@ export function FAQDetailLayout(): string {
           </div>
 
           <!-- Related topics -->
-          <div x-show="relatedTopics.length > 0" class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 mt-4">
+          <div x-show="relatedTopics.length > 0" class="bg-white rounded-md shadow-sm border border-gray-100 p-5 mt-4">
             <h3 class="text-sm font-bold text-gray-800 mb-3">${t('faqDetail.relatedTopics')}</h3>
             <div class="flex flex-wrap gap-2">
               <template x-for="rel in relatedTopics" :key="rel.key">

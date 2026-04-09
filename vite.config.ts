@@ -5,6 +5,29 @@ import { resolve } from 'path'
 import { readFileSync, writeFileSync, existsSync } from 'fs'
 import fg from 'fast-glob'
 
+/**
+ * Her HTML giriş dosyasının <head>'ine FOUC önleme scripti enjekte eder.
+ * Script, localStorage'daki remote-theme cache'ini okuyup CSS vars'ı ilk
+ * paint'ten önce :root'a uygular. Boş cache varsa no-op.
+ */
+function themeBootstrapPlugin(): Plugin {
+    // 1) Cache'ten CSS vars'ı ilk paint öncesi uygula (FOUC önleme)
+    // 2) Arka planda taze veriyi fetch et, cache'i güncelle (bir sonraki sayfa taze olsun)
+    // Değişen değerleri hemen de uygula (aynı oturumda admin paneli güncellemesi görünsün)
+    const inlineScript = `<script>(function(){try{var k='tradehub-theme-remote';var o=JSON.parse(localStorage.getItem(k)||'{}');var r=document.documentElement;function apply(m){for(var n in m){if(typeof n==='string'&&n.indexOf('--')===0&&typeof m[n]==='string'){r.style.setProperty(n,m[n]);}}}apply(o);if(typeof fetch==='function'){fetch('/api/method/tradehub_core.api.theme.get_public_theme',{credentials:'same-origin'}).then(function(x){return x.ok?x.json():null;}).then(function(d){if(!d||!d.message)return;var ov=d.message.overrides||{};var clean={};for(var q in ov){if(typeof q==='string'&&q.indexOf('--')===0&&typeof ov[q]==='string')clean[q]=ov[q];}try{localStorage.setItem(k,JSON.stringify(clean));}catch(e){}apply(clean);}).catch(function(){});}}catch(e){}})();</script>`;
+    return {
+        name: 'theme-bootstrap-inject',
+        transformIndexHtml: {
+            order: 'pre',
+            handler(html) {
+                // <head> açılış tag'inin hemen ardına ekle — stylesheet'ten önce
+                if (html.includes('tradehub-theme-remote')) return html; // idempotent
+                return html.replace(/<head([^>]*)>/i, `<head$1>\n    ${inlineScript}`);
+            },
+        },
+    };
+}
+
 /** Dev-only plugin: POST /__save-css to update @theme variables in style.css */
 function cssEditorPlugin(): Plugin {
     return {
@@ -110,6 +133,7 @@ export default defineConfig({
     },
     plugins: [
         tailwindcss(),
+        themeBootstrapPlugin(),
         cssEditorPlugin(),
         notFoundFallbackPlugin(),
     ],

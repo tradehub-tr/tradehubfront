@@ -18,7 +18,7 @@ function getSteps() {
 export function ReturnProcessSteps(): string {
   const STEPS = getSteps();
   return `
-    <div class="my-10 py-8 px-4 bg-gradient-to-r from-primary-50 to-orange-50 rounded-xl">
+    <div class="my-10 py-8 px-4 bg-gradient-to-r from-primary-50 to-orange-50 rounded-md">
       <h3 class="text-lg font-semibold text-gray-900 text-center mb-8">${t('returnProcess.title')}</h3>
 
       <!-- Desktop: horizontal -->

@@ -61,7 +61,7 @@ export function openFavoritesDropdown(anchorBtn: HTMLElement, product: ProductDa
   const dropdown = document.createElement('div');
   dropdown.id = 'fav-dropdown';
   dropdown.className =
-    'fixed z-[9999] w-[280px] bg-white rounded-xl shadow-[0_8px_30px_rgba(0,0,0,0.16)] border border-gray-100 ' +
+    'fixed z-[9999] w-[280px] bg-white rounded-md shadow-[0_8px_30px_rgba(0,0,0,0.16)] border border-gray-100 ' +
     'opacity-0 scale-95 pointer-events-none transition-all duration-150 origin-top';
 
   dropdown.innerHTML = buildDropdownContent(isFav, itemListIds, lists);
@@ -169,7 +169,7 @@ function buildDropdownContent(
     ${isFav ? `
     <!-- Remove from all -->
     <div class="border-t border-gray-100">
-      <button type="button" class="fav-remove-all-btn flex items-center gap-2.5 w-full px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors rounded-b-xl">
+      <button type="button" class="fav-remove-all-btn flex items-center gap-2.5 w-full px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors rounded-b-md">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
         <span>${t('favorites.removeFromAll')}</span>
       </button>

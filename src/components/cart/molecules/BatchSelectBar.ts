@@ -17,7 +17,7 @@ export function BatchSelectBar({ totalCount, selectedCount }: BatchSelectBarProp
   const someSelected = selectedCount > 0 && selectedCount < totalCount;
 
   return `
-    <div class="sc-c-batch-select-bar flex items-center justify-between gap-3 px-5 py-4 rounded-3xl border border-border-default bg-surface max-md:px-3 max-md:py-3" x-data @checkbox-change="$dispatch('batch-select-toggle', { selectAll: $event.detail.checked })">
+    <div class="sc-c-batch-select-bar flex items-center justify-between gap-3 px-5 py-4 rounded-md border border-border-default bg-surface max-md:px-3 max-md:py-3" x-data @checkbox-change="$dispatch('batch-select-toggle', { selectAll: $event.detail.checked })">
       <div class="flex items-center gap-3 min-w-0">
         ${Checkbox({ id: 'batch-select-all', checked: allSelected, indeterminate: someSelected, onChange: 'batch-select-all' })}
         <p class="text-base text-text-heading truncate">${t('cart.selectAll')} <span class="sc-c-batch-count text-text-tertiary">(${totalCount})</span></p>

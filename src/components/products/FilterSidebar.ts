@@ -640,8 +640,7 @@ export function FilterSidebar(sections?: FilterSection[], idPrefix = ''): string
         <!-- Clear All Filters Button -->
         <button
           type="button"
-          class="w-full mt-4 py-2 text-[13px] font-medium border rounded hover:bg-gray-50 transition-colors duration-150"
-          style="border-color: var(--filter-input-border, #d1d5db); color: var(--filter-text-color, #374151);"
+          class="th-btn-outline th-btn-sm w-full mt-4 py-2 text-[13px] font-medium"
           data-filter-action="clear-all"
           @click="clearAllFilters()"
         >

@@ -150,7 +150,7 @@ function renderCompactStickySearch(): string {
         :aria-expanded="expanded ? 'true' : 'false'"
         aria-controls="topbar-compact-dropdown"
         class="absolute left-0 right-0 top-[7px] z-[50] w-full border border-gray-300 bg-white shadow-sm transition-all duration-300 ease-in-out overflow-hidden dark:border-gray-600 dark:bg-gray-800"
-        :class="expanded ? 'rounded-2xl shadow-md h-[100px] pt-1.5' : 'rounded-full h-[42px]'"
+        :class="expanded ? 'rounded-md shadow-md h-[100px] pt-1.5' : 'rounded-full h-[42px]'"
       >
         <div id="topbar-compact-primary-row" class="flex items-center gap-1.5 transition-all duration-300 ease-in-out shrink-0" :class="expanded ? 'px-3 h-[40px] w-full' : 'px-1.5 h-[40px]'">
           <div class="relative min-w-0 flex-1 h-full">
@@ -194,9 +194,8 @@ function renderCompactStickySearch(): string {
             id="topbar-compact-search-submit"
             type="submit"
             tabindex="-1"
-            class="th-btn inline-flex items-center justify-center gap-1.5 font-semibold transition-all duration-300 ease-in-out shrink-0"
-            :class="expanded ? 'px-6 py-2 text-base absolute right-4 bottom-2 th-btn-pill' : 'px-5 h-[32px] text-[13px] rounded-full ml-1'"
-            style="background: linear-gradient(135deg, var(--search-btn-gradient-start) 0%, var(--search-btn-gradient-end) 100%); color: white; border: none;"
+            class="th-btn th-btn-gradient inline-flex items-center justify-center gap-1.5 font-semibold transition-all duration-300 ease-in-out shrink-0"
+            :class="expanded ? 'px-6 py-2 text-base absolute right-4 bottom-2' : 'px-5 h-[32px] text-[13px] rounded-full ml-1'"
           >
             <span x-show="!expanded" data-i18n="common.search">${t('common.search')}</span>
             <svg x-show="expanded" class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -222,7 +221,7 @@ function renderCompactStickySearch(): string {
         x-cloak
         aria-hidden="true"
         :aria-hidden="expanded ? 'false' : 'true'"
-        class="absolute left-0 right-0 top-[110px] z-(--z-modal) rounded-2xl border border-gray-200 bg-white px-5 py-4 shadow-xl dark:border-gray-700 dark:bg-gray-800"
+        class="absolute left-0 right-0 top-[110px] z-(--z-modal) rounded-md border border-gray-200 bg-white px-5 py-4 shadow-xl dark:border-gray-700 dark:bg-gray-800"
       >
         <div class="flex items-center justify-between gap-4">
           <h3 class="text-lg font-bold text-gray-900 dark:text-white"><span data-i18n="header.recommendedForYou">${t('header.recommendedForYou')}</span></h3>
@@ -287,7 +286,7 @@ function renderCountrySelector(): string {
         <p class="text-sm text-gray-500 dark:text-gray-400 mb-4"><span data-i18n="header.shippingVary">${t('header.shippingVary')}</span></p>
 
         <!-- Add Address Button -->
-        <a href="/pages/dashboard/addresses.html" class="th-btn th-btn-pill w-full px-4 py-2.5 text-sm font-medium transition-colors mb-4 inline-block text-center">
+        <a href="/pages/dashboard/addresses.html" class="th-btn w-full px-4 py-2.5 text-sm font-medium transition-colors mb-4 inline-block text-center">
           <span data-i18n="header.addAddress">${t('header.addAddress')}</span>
         </a>
 
@@ -311,7 +310,7 @@ function renderCountrySelector(): string {
             class="th-input w-full px-3 py-2.5 text-sm bg-white border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
           />
         </div>
-        <button type="button" class="th-btn th-btn-pill w-full px-4 py-2.5 text-sm font-medium transition-colors">
+        <button type="button" class="th-btn w-full px-4 py-2.5 text-sm font-medium transition-colors">
           <span data-i18n="common.save">${t('common.save')}</span>
         </button>
         -->
@@ -367,7 +366,7 @@ function renderLanguageCurrencySelector(): string {
         </div>
 
         <!-- Save Button -->
-        <button type="button" class="th-btn th-btn-pill w-full px-4 py-2.5 text-sm font-medium transition-colors">
+        <button type="button" class="th-btn w-full px-4 py-2.5 text-sm font-medium transition-colors">
           <span data-i18n="common.save">${t('common.save')}</span>
         </button>
       </div>
@@ -429,7 +428,7 @@ function renderMessagesButton(): string {
         </div>
 
         <!-- View More Button -->
-        <a href="/pages/dashboard/messages.html" class="th-btn th-btn-pill block w-full px-4 py-2.5 text-sm font-medium text-center transition-colors">
+        <a href="/pages/dashboard/messages.html" class="th-btn block w-full px-4 py-2.5 text-sm font-medium text-center transition-colors">
           <span data-i18n="common.viewMore">${t('common.viewMore')}</span>
         </a>
       </div>
@@ -540,7 +539,7 @@ function renderCartButton(itemCount: number = 0): string {
 
     <!-- Cart Popover -->
     <div data-popover id="popover-cart" role="tooltip"
-      class="absolute z-50 invisible inline-block w-[400px] max-w-[calc(100vw-16px)] bg-white border border-gray-100 rounded-2xl shadow-2xl opacity-0 transition-opacity duration-300 overflow-hidden"
+      class="absolute z-50 invisible inline-block w-[400px] max-w-[calc(100vw-16px)] bg-white border border-gray-100 rounded-md shadow-2xl opacity-0 transition-opacity duration-300 overflow-hidden"
     >
       <!-- Header -->
       <div class="flex items-center justify-between px-5 pt-4 pb-3 border-b border-gray-100">
@@ -554,7 +553,7 @@ function renderCartButton(itemCount: number = 0): string {
       <div class="px-5 py-4" id="header-cart-body">
         <!-- Empty Cart State -->
         <div id="header-cart-empty" class="flex flex-col items-center py-8">
-          <div class="w-16 h-16 rounded-2xl bg-amber-50 flex items-center justify-center mb-3">
+          <div class="w-16 h-16 rounded-md bg-amber-50 flex items-center justify-center mb-3">
             <svg class="w-8 h-8 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/>
             </svg>
@@ -573,7 +572,7 @@ function renderCartButton(itemCount: number = 0): string {
         </div>
 
         <!-- Go to Cart Button -->
-        <a href="${baseUrl}pages/cart.html" class="inline-flex items-center justify-center w-full mt-4 h-11 px-4 text-sm font-bold text-center rounded-full text-white transition-all hover:opacity-90 hover:shadow-md gap-2" style="background:linear-gradient(135deg,var(--btn-bg,#d97706),var(--btn-bg-end,#b45309))">
+        <a href="${baseUrl}pages/cart.html" class="th-btn th-btn-gradient inline-flex items-center justify-center w-full mt-4 h-11 px-4 text-sm font-bold text-center transition-all hover:opacity-90 hover:shadow-md gap-2">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138A60.114 60.114 0 0 0 3.375 5.272M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/></svg>
           <span data-i18n="header.goToCart">${t('header.goToCart')}</span>
         </a>
@@ -613,7 +612,7 @@ function renderAuthButtons(): string {
           <p class="text-[15px] font-semibold text-[#222] mb-3"><span data-i18n="header.signBackIn">${t('header.signBackIn')}</span></p>
           <a
             href="${baseUrl}pages/auth/login.html"
-            class="block w-full text-center th-btn th-btn-pill"
+            class="block w-full text-center th-btn"
           >
             <span data-i18n="header.signIn">${t('header.signIn')}</span>
           </a>
@@ -626,7 +625,7 @@ function renderAuthButtons(): string {
             <a href="#" class="w-10 h-10 rounded-full bg-[#1877F2] flex items-center justify-center text-white hover:opacity-90 transition-opacity">
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
             </a>
-            <a href="#" class="w-10 h-10 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors">
+            <a href="#" class="th-btn-outline w-10 h-10 flex items-center justify-center">
               <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
             </a>
             <a href="#" class="w-10 h-10 rounded-full bg-[#0A66C2] flex items-center justify-center text-white hover:opacity-90 transition-opacity">
@@ -1176,8 +1175,7 @@ export function TopBar(props?: TopBarProps): string {
                 -->
                 <button
                   type="submit"
-                  class="flex items-center justify-center h-9 sm:h-10 px-3 sm:px-4 text-white rounded-r-md transition-colors cursor-pointer shrink-0"
-                  style="background: linear-gradient(135deg, var(--search-btn-gradient-start) 0%, var(--search-btn-gradient-end) 100%);"
+                  class="th-btn-gradient flex items-center justify-center h-9 sm:h-10 px-3 sm:px-4 rounded-r-md transition-colors cursor-pointer shrink-0"
                   aria-label="Search"
                 >
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -1318,11 +1316,11 @@ export function initHeaderCart(): void {
         for (const product of supplier.products) {
           for (const sku of product.skus) {
             const thumbHtml = sku.skuImage
-              ? `<img src="${sku.skuImage}" alt="sku" class="w-[52px] h-[52px] rounded-xl object-cover border border-gray-100 flex-shrink-0 shadow-sm">`
-              : `<div class="w-[52px] h-[52px] rounded-xl flex-shrink-0 bg-gray-100 border border-gray-100 flex items-center justify-center"><svg class="w-5 h-5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Z"/></svg></div>`;
+              ? `<img src="${sku.skuImage}" alt="sku" class="w-[52px] h-[52px] rounded-md object-cover border border-gray-100 flex-shrink-0 shadow-sm">`
+              : `<div class="w-[52px] h-[52px] rounded-md flex-shrink-0 bg-gray-100 border border-gray-100 flex items-center justify-center"><svg class="w-5 h-5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Z"/></svg></div>`;
 
             html += `
-              <div class="flex items-center gap-3 py-2.5 px-1 rounded-xl hover:bg-gray-50 transition-colors group">
+              <div class="flex items-center gap-3 py-2.5 px-1 rounded-md hover:bg-gray-50 transition-colors group">
                 ${thumbHtml}
                 <div class="flex-1 min-w-0">
                   <p class="text-[12px] font-medium text-gray-800 leading-tight line-clamp-2 mb-1">${product.title}</p>
@@ -1408,7 +1406,7 @@ export function initHeaderCart(): void {
           html += '<div class="max-h-[340px] overflow-y-auto pr-1 space-y-3">';
           for (const group of groupedItems) {
             html += `
-              <div class="rounded-xl border border-border-light bg-surface px-3 py-2">
+              <div class="rounded-md border border-border-light bg-surface px-3 py-2">
                 <p class="text-xs font-semibold text-text-tertiary mb-1 truncate">${group.supplierName || 'Supplier'}</p>
                 <p class="text-[13px] font-medium text-text-heading mb-2 leading-tight overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]">${group.productTitle}</p>`;
             for (const item of group.items) {

@@ -173,7 +173,7 @@ export function TopDealsGrid(): string {
       <div class="flex justify-center mt-8" x-show="visibleCount < filteredProducts.length">
         <button
           type="button"
-          class="px-8 py-2.5 rounded-full border border-gray-300 text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+          class="th-btn-outline px-8 py-2.5 text-sm font-semibold"
           @click="loadMore()"
           data-i18n="topDealsPage.loadMore"
         >${t('topDealsPage.loadMore')}</button>

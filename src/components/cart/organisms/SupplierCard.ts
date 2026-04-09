@@ -31,7 +31,7 @@ export function SupplierCard({ supplier, isSingleSupplier = true }: SupplierCard
   const supplierIndeterminate = selectedSupplierSkus > 0 && selectedSupplierSkus < totalSupplierSkus;
 
   return `
-    <section class="sc-c-supplier-container rounded-3xl border border-border-default bg-surface overflow-hidden"
+    <section class="sc-c-supplier-container rounded-md border border-border-default bg-surface overflow-hidden"
       data-supplier-id="${escapeHtml(supplier.id)}"
       x-data="{ expanded: ${isOpen} }"
       @checkbox-change="if ($event.detail.handlerId === 'supplier-select-${escapeHtml(supplier.id)}') $dispatch('supplier-select', { supplierId: '${escapeHtml(supplier.id)}', selected: $event.detail.checked })">

@@ -102,7 +102,7 @@ export function TopDealsStickyMobileHeader(): string {
 export function TopDealsHero(): string {
   return `
     <section
-      class="hidden md:block relative overflow-hidden rounded-xl px-6 py-12 md:py-16 text-center"
+      class="hidden md:block relative overflow-hidden rounded-md px-6 py-12 md:py-16 text-center"
       style="background: var(--topdeals-page-hero-gradient, linear-gradient(135deg, #ff6b35 0%, #ee2737 50%, #c41442 100%));"
     >
       <div class="relative z-10 flex flex-col items-center gap-2">

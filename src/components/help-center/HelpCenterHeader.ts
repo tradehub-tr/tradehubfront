@@ -106,7 +106,7 @@ export function HelpCenterHeader(opts: HelpCenterHeaderOptions = {}): string {
                     <option value="${lang.code}" ${lang.code === currentLangCode ? 'selected' : ''}>${lang.flag} ${lang.name}</option>
                   `).join('')}
                 </select>
-                <button type="button" id="hc-lang-save-btn" class="mt-3 w-full px-4 py-2 text-sm font-medium text-white bg-primary-500 hover:bg-primary-600 rounded-md transition-colors cursor-pointer">
+                <button type="button" id="hc-lang-save-btn" class="th-btn mt-3 w-full px-4 py-2 text-sm font-medium hover: cursor-pointer">
                   ${t('common.save') || 'Kaydet'}
                 </button>
               </div>

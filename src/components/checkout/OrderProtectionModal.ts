@@ -44,7 +44,7 @@ function renderPaymentIcon(icon: PaymentIcon): string {
 
 function renderInfoBox(section: ModalSection, bullets: { dotColor: string; title: string; description: string }[]): string {
   return `
-    <div class="checkout-modal__info-box bg-[#f3f4f6] rounded-xl p-4 px-5 mb-6">
+    <div class="checkout-modal__info-box bg-[#f3f4f6] rounded-md p-4 px-5 mb-6">
       <div class="flex items-center gap-2 mb-3">
         ${renderIcon(section.iconType)}
         <h3 class="text-[15px] font-semibold text-[#111827]">${section.title}</h3>
@@ -123,7 +123,7 @@ export function OrderProtectionModal({
         x-transition:leave="transition ease-in duration-200"
         x-transition:leave-start="opacity-100 scale-100"
         x-transition:leave-end="opacity-0 scale-95"
-        class="checkout-modal__card bg-white rounded-xl shadow-xl max-w-lg w-[calc(100%-2rem)] max-h-[80vh] overflow-y-auto p-7 sm:p-8 relative"
+        class="checkout-modal__card bg-white rounded-md shadow-xl max-w-lg w-[calc(100%-2rem)] max-h-[80vh] overflow-y-auto p-7 sm:p-8 relative"
       >
         <!-- Header -->
         <div class="checkout-modal__header flex items-center justify-between mb-4 sticky top-0 bg-white pb-2 z-10">

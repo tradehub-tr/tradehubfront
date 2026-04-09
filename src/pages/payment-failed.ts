@@ -54,11 +54,11 @@ document.addEventListener('DOMContentLoaded', () => {
       <!-- Action buttons -->
       <div class="flex flex-col gap-3 w-full max-w-[320px]">
         <a href="/pages/order/checkout.html${retryQuery}"
-          class="w-full bg-[#d24600] hover:bg-[#b03b00] text-white font-bold py-3 px-6 rounded-full transition-colors text-[15px] text-center block no-underline">
+          class="th-btn w-full font-bold py-3 px-6 text-[15px] text-center block no-underline">
           <span data-i18n="paymentStatus.tryAgainBtn">${t('paymentStatus.tryAgainBtn')}</span>
         </a>
         <a href="/pages/order/checkout.html${retryQuery}"
-          class="w-full bg-white border border-[#ccc] hover:border-[#999] hover:bg-gray-50 text-[#333] font-bold py-3 px-6 rounded-full transition-all text-center block text-[15px] no-underline">
+          class="th-btn-outline w-full font-bold py-3 px-6 text-center block text-[15px] no-underline">
           <span data-i18n="paymentStatus.useDifferentBtn">${t('paymentStatus.useDifferentBtn')}</span>
         </a>
         <a href="/pages/dashboard/orders.html"

@@ -71,7 +71,7 @@ appEl.innerHTML = `
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 mb-16">
 
           <!-- Card 1: İstediğiniz gibi ödeyin -->
-          <div class="border border-gray-200 rounded-2xl hover:shadow-lg transition-shadow duration-300" style="padding:36px 19px 30px 30px">
+          <div class="border border-gray-200 rounded-md hover:shadow-lg transition-shadow duration-300" style="padding:36px 19px 30px 30px">
             <div class="w-16 h-16 rounded-full flex items-center justify-center mb-5" style="background-color:#FFE285">
               <svg class="w-8 h-8" viewBox="0 0 50 50" fill="none">
                 <path d="M33.9285714,5.95238095 C37.6269068,5.95238095 40.625,8.96223137 40.625,12.67507 C40.625,16.3879087 37.6269068,19.3977591 33.9285714,19.3977591 C32.06392,19.3977591 30.377273,18.6326424 29.1631379,17.3980713 L24.498854,20.9113809 C24.8109828,21.8046044 24.9861953,22.7624836 24.9992175,23.7596455 L32.6655168,26.3258058 C33.6703576,24.8489324 35.3608084,23.8795518 37.2767857,23.8795518 C40.3587319,23.8795518 42.8571429,26.3877605 42.8571429,29.4817927 C42.8571429,32.5758249 40.3587319,35.0840336 37.2767857,35.0840336 C34.2125174,35.0840336 31.7251092,32.6045162 31.6966748,29.534976 L24.404768,27.1042798 C23.9035821,28.4087626 23.1072378,29.5659679 22.0979161,30.4933924 L25.5530133,35.1193396 C25.7374335,35.0960395 25.9253559,35.0840336 26.1160714,35.0840336 C28.5816283,35.0840336 30.5803571,37.0906006 30.5803571,39.5658263 C30.5803571,42.0410521 28.5816283,44.047619 26.1160714,44.047619 C23.6505145,44.047619 21.6517857,42.0410521 21.6517857,39.5658263 C21.6517857,38.5158954 22.0114073,37.550288 22.6137358,36.786377 L19.2347967,32.2642878 C18.2515211,32.6383706 17.1852943,32.8431373 16.0714286,32.8431373 C11.1403147,32.8431373 7.14285714,28.8300034 7.14285714,23.8795518 C7.14285714,18.9291003 11.1403147,14.9159664 16.0714286,14.9159664 C18.7561777,14.9159664 21.1641661,16.1055665 22.8009276,17.9883615 L27.4731212,14.4686944 C27.3160555,13.8976965 27.2321429,13.2962211 27.2321429,12.67507 C27.2321429,8.96223137 30.2302361,5.95238095 33.9285714,5.95238095 Z M26.1160714,38.4453782 C25.4996822,38.4453782 25,38.9470199 25,39.5658263 C25,40.1846328 25.4996822,40.6862745 26.1160714,40.6862745 C26.7324607,40.6862745 27.2321429,40.1846328 27.2321429,39.5658263 C27.2321429,38.9470199 26.7324607,38.4453782 26.1160714,38.4453782 Z M37.2767857,27.2408964 C36.0440073,27.2408964 35.0446429,28.2441798 35.0446429,29.4817927 C35.0446429,30.7194056 36.0440073,31.7226891 37.2767857,31.7226891 C38.5095642,31.7226891 39.5089286,30.7194056 39.5089286,29.4817927 C39.5089286,28.2441798 38.5095642,27.2408964 37.2767857,27.2408964 Z M16.0714286,18.2773109 C12.9894824,18.2773109 10.4910714,20.7855196 10.4910714,23.8795518 C10.4910714,26.973584 12.9894824,29.4817927 16.0714286,29.4817927 C19.1533747,29.4817927 21.6517857,26.973584 21.6517857,23.8795518 C21.6517857,20.7855196 19.1533747,18.2773109 16.0714286,18.2773109 Z M33.9285714,9.31372549 C32.0794037,9.31372549 30.5803571,10.8186507 30.5803571,12.67507 C30.5803571,14.5314894 32.0794037,16.0364146 33.9285714,16.0364146 C35.7777391,16.0364146 37.2767857,14.5314894 37.2767857,12.67507 C37.2767857,10.8186507 35.7777391,9.31372549 33.9285714,9.31372549 Z" fill="#222222" fill-rule="nonzero"/>
@@ -90,7 +90,7 @@ appEl.innerHTML = `
           </div>
 
           <!-- Card 2: Esnek finansman çözümleri -->
-          <div class="border border-gray-200 rounded-2xl hover:shadow-lg transition-shadow duration-300" style="padding:36px 19px 30px 30px">
+          <div class="border border-gray-200 rounded-md hover:shadow-lg transition-shadow duration-300" style="padding:36px 19px 30px 30px">
             <div class="w-16 h-16 rounded-full flex items-center justify-center mb-5" style="background-color:#FFE285">
               <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24">
                 <path d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="#222" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -158,9 +158,9 @@ appEl.innerHTML = `
         </div>
 
         <!-- Checkout Preview -->
-        <div class="bg-gray-50 rounded-2xl border border-gray-200 p-6 sm:p-10 mb-16">
+        <div class="bg-gray-50 rounded-md border border-gray-200 p-6 sm:p-10 mb-16">
           <div class="max-w-[800px] mx-auto">
-            <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+            <div class="bg-white rounded-md shadow-lg border border-gray-100 overflow-hidden">
               <!-- Mock Checkout Header -->
               <div class="bg-gray-50 border-b border-gray-200 px-6 py-4 flex items-center gap-3">
                 <svg class="w-5 h-5 text-orange-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1l3.09 6.26L22 8.27l-5 4.87 1.18 6.88L12 16.77l-6.18 3.25L7 13.14 2 8.27l6.91-1.01L12 1z"/></svg>
@@ -199,7 +199,7 @@ appEl.innerHTML = `
                       <span>Toplam</span>
                       <span>₺ 1.295,00</span>
                     </div>
-                    <button class="w-full mt-3 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold py-2.5 rounded-lg transition-colors">
+                    <button class="th-btn w-full mt-3 text-sm font-semibold py-2.5">
                       Şimdi öde
                     </button>
                     <div class="flex items-center justify-center gap-1.5 mt-3">

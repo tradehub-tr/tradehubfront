@@ -52,7 +52,7 @@ export function TopDealsCategoryTabs(): string {
       <!-- Left arrow (desktop only) -->
       <button
         type="button"
-        class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 w-7 h-7 items-center justify-center rounded-full bg-white shadow border border-gray-200 text-gray-500 hover:text-gray-900 transition-all"
+        class="th-btn-outline hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 w-7 h-7 items-center justify-center shadow text-gray-500 hover:text-gray-900"
         x-show="canScrollLeft"
         x-transition
         @click="scrollTabs('left')"
@@ -92,7 +92,7 @@ export function TopDealsCategoryTabs(): string {
       <!-- Right arrow (desktop only) -->
       <button
         type="button"
-        class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 w-7 h-7 items-center justify-center rounded-full bg-white shadow border border-gray-200 text-gray-500 hover:text-gray-900 transition-all"
+        class="th-btn-outline hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 w-7 h-7 items-center justify-center shadow text-gray-500 hover:text-gray-900"
         x-show="canScrollRight"
         x-transition
         @click="scrollTabs('right')"
@@ -118,7 +118,7 @@ export function TopDealsCategoryTabs(): string {
       class="md:hidden fixed inset-x-0 bottom-0 z-[100] transition-transform duration-300 ease-out"
       :class="showCategorySheet ? 'translate-y-0' : 'translate-y-full'"
     >
-      <div class="bg-white rounded-t-2xl max-h-[85vh] flex flex-col shadow-2xl">
+      <div class="bg-white rounded-t-md max-h-[85vh] flex flex-col shadow-2xl">
         <!-- Drag Handle -->
         <div class="flex-shrink-0 flex items-center justify-center pt-3 pb-2">
           <div class="w-9 h-1 rounded-full bg-gray-300"></div>

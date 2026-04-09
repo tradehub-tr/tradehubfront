@@ -90,7 +90,7 @@ export function HeroSideBannerSlider(): string {
 
       <button
         type="button"
-        class="hero-side-prev absolute left-3 top-1/2 z-20 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-lg transition-[opacity,color] duration-200 ease-out opacity-0 pointer-events-none xl:flex group-hover/hero-side:opacity-100 group-hover/hero-side:pointer-events-auto focus-visible:opacity-100 focus-visible:pointer-events-auto focus-visible:ring-2 focus-visible:ring-primary-300 hover:text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:hover:text-white"
+        class="th-btn-outline hero-side-prev absolute left-3 top-1/2 z-20 hidden h-11 w-11 -translate-y-1/2 items-center justify-center text-gray-500 shadow-lg -[opacity,color] duration-200 ease-out opacity-0 pointer-events-none xl:flex group-hover/hero-side:opacity-100 group-hover/hero-side:pointer-events-auto focus-visible:opacity-100 focus-visible:pointer-events-auto focus-visible:ring-2 focus-visible:ring-primary-300 hover:text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:hover:text-white"
         aria-label="Previous side banner"
       >
         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -100,7 +100,7 @@ export function HeroSideBannerSlider(): string {
 
       <button
         type="button"
-        class="hero-side-next absolute right-3 top-1/2 z-20 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-lg transition-[opacity,color] duration-200 ease-out opacity-0 pointer-events-none xl:flex group-hover/hero-side:opacity-100 group-hover/hero-side:pointer-events-auto focus-visible:opacity-100 focus-visible:pointer-events-auto focus-visible:ring-2 focus-visible:ring-primary-300 hover:text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:hover:text-white"
+        class="th-btn-outline hero-side-next absolute right-3 top-1/2 z-20 hidden h-11 w-11 -translate-y-1/2 items-center justify-center text-gray-500 shadow-lg -[opacity,color] duration-200 ease-out opacity-0 pointer-events-none xl:flex group-hover/hero-side:opacity-100 group-hover/hero-side:pointer-events-auto focus-visible:opacity-100 focus-visible:pointer-events-auto focus-visible:ring-2 focus-visible:ring-primary-300 hover:text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:hover:text-white"
         aria-label="Next side banner"
       >
         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -46,8 +46,8 @@ export function SellPageLayout(): string {
         <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-10 text-center">${t('sellPage.benefitsTitle')}</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           ${benefits.map(b => `
-            <div class="text-center p-6 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-              <div class="w-14 h-14 mx-auto mb-4 rounded-xl bg-primary-50 text-primary-500 flex items-center justify-center">${b.icon}</div>
+            <div class="text-center p-6 bg-white rounded-md border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+              <div class="w-14 h-14 mx-auto mb-4 rounded-md bg-primary-50 text-primary-500 flex items-center justify-center">${b.icon}</div>
               <h3 class="text-base font-semibold text-gray-900 mb-2">${b.title}</h3>
               <p class="text-sm text-gray-500 leading-relaxed">${b.desc}</p>
             </div>
@@ -90,7 +90,7 @@ export function SellPageLayout(): string {
         <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-10 text-center">${t('sellPage.testimonialsTitle')}</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           ${testimonials.map(tm => `
-            <div class="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
+            <div class="bg-white rounded-md p-6 border border-gray-100 shadow-sm">
               <div class="flex items-center gap-3 mb-4">
                 <div class="w-10 h-10 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center font-semibold text-sm">${tm.name[0]}</div>
                 <div>

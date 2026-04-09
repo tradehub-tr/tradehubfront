@@ -39,7 +39,7 @@ export function LoginModal(): string {
         x-transition:leave="transition ease-in duration-200"
         x-transition:leave-start="opacity-100 scale-100"
         x-transition:leave-end="opacity-0 scale-95"
-        class="rv-login-modal max-w-[420px] w-[95%] p-0 rounded-2xl bg-surface shadow-modal overflow-hidden relative max-sm:!w-full max-sm:!max-w-full max-sm:!rounded-none max-sm:!min-h-screen"
+        class="rv-login-modal max-w-[420px] w-[95%] p-0 rounded-md bg-surface shadow-modal overflow-hidden relative max-sm:!w-full max-sm:!max-w-full max-sm:!rounded-none max-sm:!min-h-screen"
       >
         <!-- Close Button -->
         <button
