@@ -50,6 +50,7 @@ export interface ListingSearchParams {
   is_featured?: boolean
   is_best_seller?: boolean
   is_new_arrival?: boolean
+  is_deal?: boolean
   free_shipping?: boolean
   verified_supplier?: boolean
   min_rating?: number
@@ -87,6 +88,7 @@ export async function searchListings(params: ListingSearchParams): Promise<Listi
   if (params.is_featured) queryParams.set('is_featured', '1')
   if (params.is_best_seller) queryParams.set('is_best_seller', '1')
   if (params.is_new_arrival) queryParams.set('is_new_arrival', '1')
+  if (params.is_deal) queryParams.set('is_deal', '1')
   if (params.free_shipping) queryParams.set('free_shipping', '1')
   if (params.verified_supplier) queryParams.set('verified_supplier', '1')
   if (params.min_rating !== undefined) queryParams.set('min_rating', String(params.min_rating))
@@ -157,6 +159,152 @@ export async function getFeaturedListings(limit = 10): Promise<ProductListingCar
   )
   return (response.message.data || []).map(mapListingCard)
 }
+
+// ── Top Deals (deals grouped by category) ──
+
+/** Top Deals: a category preview group returned by get_top_deals_grouped */
+export interface TopDealsCategoryGroup {
+  id: string
+  name: string
+  slug: string
+  products: ProductListingCard[]
+  totalInCategory: number
+}
+
+export interface TopDealsGroupedResult {
+  groups: TopDealsCategoryGroup[]
+  page: number
+  pageSize: number
+  totalCategories: number
+  hasNext: boolean
+}
+
+/**
+ * Get a paginated list of category groups with their top deal previews.
+ * Drives the "Tümü" tab of the Top Deals page (Alibaba-style category cards).
+ */
+export async function getTopDealsGrouped(
+  page = 1,
+  pageSize = 8,
+  productsPerCategory = 6,
+): Promise<TopDealsGroupedResult> {
+  const qs = new URLSearchParams({
+    page: String(page),
+    page_size: String(pageSize),
+    products_per_category: String(productsPerCategory),
+  }).toString()
+  const response = await api<FrappeResponse<Array<{
+    id: string
+    name: string
+    slug: string
+    products: Record<string, unknown>[]
+    total_in_category: number
+  }>>>(`/method/tradehub_core.api.listing.get_top_deals_grouped?${qs}`)
+  const msg = response.message
+  const groups: TopDealsCategoryGroup[] = (msg.data || []).map(g => ({
+    id: g.id,
+    name: g.name,
+    slug: g.slug,
+    products: (g.products || []).map(mapListingCard),
+    totalInCategory: g.total_in_category || 0,
+  }))
+  return {
+    groups,
+    page: msg.page || 1,
+    pageSize: msg.page_size || pageSize,
+    totalCategories: (msg as any).total_categories || 0,
+    hasNext: msg.has_next || false,
+  }
+}
+
+
+// ── Top Ranking (best-sellers grouped by category) ──
+
+/** Top Ranking: a category card returned by get_top_ranking_categories */
+export interface TopRankingCategory {
+  id: string
+  name: string
+  slug: string
+  image: string
+  icon: string
+  totalOrders: number
+  totalListings: number
+}
+
+/**
+ * Get the top N best-selling categories for the homepage "En Çok Satanlar"
+ * section (6 cards by default).
+ */
+export async function getTopRankingCategories(
+  limit = 6,
+  sort: 'hot-selling' | 'most-popular' | 'best-reviewed' = 'hot-selling',
+): Promise<TopRankingCategory[]> {
+  const qs = new URLSearchParams({ limit: String(limit), sort }).toString()
+  const response = await api<FrappeResponse<TopRankingCategory[]>>(
+    `/method/tradehub_core.api.listing.get_top_ranking_categories?${qs}`,
+  )
+  return response.message.data || []
+}
+
+/** Top Ranking: a category group returned by get_top_ranking_grouped */
+export interface TopRankingGroup {
+  id: string
+  name: string
+  slug: string
+  categoryId: string
+  products: ProductListingCard[]
+}
+
+export interface TopRankingGroupedResult {
+  groups: TopRankingGroup[]
+  page: number
+  pageSize: number
+  totalCategories: number
+  hasNext: boolean
+}
+
+/**
+ * Get a paginated list of category groups with their top best-seller previews.
+ * Drives the Top Ranking page (Alibaba-style category cards with #1/#2/#3 ranks).
+ */
+export async function getTopRankingGrouped(
+  page = 1,
+  pageSize = 12,
+  productsPerCategory = 3,
+  category?: string,
+  sort: 'hot-selling' | 'most-popular' | 'best-reviewed' = 'hot-selling',
+): Promise<TopRankingGroupedResult> {
+  const qs = new URLSearchParams({
+    page: String(page),
+    page_size: String(pageSize),
+    products_per_category: String(productsPerCategory),
+    sort,
+  })
+  if (category && category !== 'all') qs.set('category', category)
+  const response = await api<FrappeResponse<Array<{
+    id: string
+    name: string
+    slug: string
+    categoryId: string
+    products: Record<string, unknown>[]
+  }>>>(`/method/tradehub_core.api.listing.get_top_ranking_grouped?${qs.toString()}`)
+  const msg = response.message
+  const groups: TopRankingGroup[] = (msg.data || []).map(g => ({
+    id: g.id,
+    name: g.name,
+    slug: g.slug,
+    categoryId: g.categoryId || g.id,
+    products: (g.products || []).map(mapListingCard),
+  }))
+  return {
+    groups,
+    page: msg.page || 1,
+    pageSize: msg.page_size || pageSize,
+    totalCategories: (msg as any).total_categories || 0,
+    hasNext: msg.has_next || false,
+  }
+}
+
 
 /**
  * Get categories for filter sidebar
@@ -296,6 +444,17 @@ function mapListingCard(raw: any): ProductListingCard {
     }
   }
 
+  // Strikethrough source = the seller's day-to-day selling price BEFORE the
+  // campaign discount was applied. Backend exposes it as raw.originalSellingPrice
+  // (numeric) only when a campaign is active (dp > 0); otherwise it's null.
+  // We re-format it through the currency-aware path so the strikethrough
+  // renders in the same locale (e.g. ₺900,00 in TR) as the deal price.
+  if (typeof raw.originalSellingPrice === 'number' && raw.originalSellingPrice > 0) {
+    originalPriceDisplay = formatPrice(raw.originalSellingPrice, baseCurrency)
+  } else {
+    originalPriceDisplay = undefined
+  }
+
   return {
     id: raw.id || '',
     name: raw.name || '',
@@ -317,6 +476,9 @@ function mapListingCard(raw: any): ProductListingCard {
     supplierName: raw.supplierName || undefined,
     sellingPoint: raw.sellingPoint || undefined,
     category: raw.categoryName || raw.category || undefined,
+    discountPercentage: typeof raw.discountPercentage === 'number'
+      ? raw.discountPercentage
+      : (raw.discountPercentage ? Number(raw.discountPercentage) : undefined),
   }
 }
 
@@ -337,6 +499,11 @@ function mapListingDetail(raw: any): ProductDetail {
     maxQty: t.maxQty,
     price: convertPrice(t.price, baseCur),
     basePrice: t.price,
+    // When a campaign is active, backend sets t.originalPrice to the
+    // pre-discount tier price. The detail page renders it as strikethrough.
+    originalPrice: typeof t.originalPrice === 'number'
+      ? convertPrice(t.originalPrice, baseCur)
+      : undefined,
     currency: selectedCur.code,
   }))
 

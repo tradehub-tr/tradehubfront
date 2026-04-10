@@ -164,8 +164,8 @@ export function MobileProductLayout(): string {
         <div class="pdm-tier-col flex flex-col items-center px-3 border-r border-border-default last:border-r-0">
           <span class="pdm-tier-price text-lg max-[374px]:text-[15px] font-bold text-[#111] leading-[1.3]">${formatCurrency(tier.price, getSelectedCurrency())}</span>
           <span class="pdm-tier-qty text-[11px] max-[374px]:text-[10px] text-text-placeholder mt-[3px] text-center">${tier.maxQty !== null
-      ? `${tier.minQty} - ${tier.maxQty} ${p.unit}`
-      : `>= ${tier.minQty} ${p.unit}`}</span>
+      ? t('product.moqRange', { min: tier.minQty, max: tier.maxQty })
+      : t('product.moqSingle', { count: tier.minQty })}</span>
         </div>
       `).join('')}
     </div>

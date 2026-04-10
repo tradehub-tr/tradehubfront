@@ -1,12 +1,11 @@
 /**
- * TopDeals Component
- * iSTOC-style: Swiper slider with individual product cards, spacing between them,
- * and prev/next navigation arrows.
+ * TopDeals Component (Homepage)
+ * Alibaba-style "Top Deals" section: a fixed 6-product grid with no slider.
+ * Layout: 2 cols mobile / 3 cols tablet / 6 cols desktop.
+ * Products are loaded from the API filtered by is_deal=1 (sorted by biggest
+ * discount first).
  */
 
-import Swiper from 'swiper';
-import { Navigation } from 'swiper/modules';
-import 'swiper/swiper-bundle.css';
 import { t } from '../../i18n';
 import { formatStartingPrice } from '../../utils/currency';
 import { searchListings } from '../../services/listingService';
@@ -16,31 +15,18 @@ interface TopDealCard {
   name: string;
   href: string;
   price: string;
-  originalPrice: string;
+  imageSrc: string;
   moqCount: number;
   moqUnitKey: string;
-  badge?: string;
-  badgeKey?: string;
-  imageSrc: string;
-  /** Numeric starting price for display (already converted to selected currency) */
+  /** Already converted starting price (e.g. "₺123,00") */
   startingPrice?: string;
+  /** Original (pre-discount) price as currency-formatted string, e.g. "₺1.000,00" */
+  originalPrice?: string;
+  /** Numeric discount percent for the corner badge (0-100) */
+  discountPercent?: number;
 }
 
-// Empty — populated from API in initTopDeals()
-const topDealCards: TopDealCard[] = [];
-
-function renderDealImage(card: TopDealCard): string {
-  return `
-    <div class="relative w-full h-full overflow-hidden rounded-md bg-gray-100" aria-hidden="true">
-      <img
-        src="${card.imageSrc}"
-        alt="${card.name}"
-        loading="lazy"
-        class="w-full h-full object-cover transition-transform duration-300 group-hover/deal:scale-110"
-      />
-    </div>
-  `;
-}
+const FIXED_GRID_COUNT = 6;
 
 function lightningBoltIcon(): string {
   return `
@@ -56,121 +42,144 @@ function lightningBoltIcon(): string {
   `;
 }
 
-function renderDealSlide(card: TopDealCard): string {
+function renderDealImage(card: TopDealCard): string {
+  if (!card.imageSrc) {
+    return `
+      <div class="w-full h-full flex items-center justify-center bg-gray-100">
+        <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.41a2.25 2.25 0 013.182 0l2.909 2.91m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5z"/>
+        </svg>
+      </div>
+    `;
+  }
   return `
-    <div class="swiper-slide">
-      <a
-        href="${card.href}"
-        class="group/deal relative flex flex-col min-w-0"
-        aria-label="${card.name}"
-      >
-        ${card.badgeKey ? `
+    <img
+      src="${card.imageSrc}"
+      alt="${card.name}"
+      loading="lazy"
+      class="w-full h-full object-cover transition-transform duration-300 group-hover/deal:scale-110"
+    />
+  `;
+}
+
+function renderDealCard(card: TopDealCard): string {
+  const moqI18nOptions = JSON.stringify({ count: card.moqCount, unit: t(card.moqUnitKey) });
+  const moqText = t('topDeals.moq', { count: card.moqCount, unit: t(card.moqUnitKey) });
+
+  // Discount badge — top-left of image, only when we have a positive percent.
+  const discountBadge = card.discountPercent && card.discountPercent > 0
+    ? `<span
+         class="absolute top-2 left-2 z-10 inline-flex items-center rounded-sm font-bold leading-none text-white"
+         style="background-color: var(--topdeals-badge-bg, #DE0505); padding: 3px 5px; font-size: 10px;"
+       >%${card.discountPercent}</span>`
+    : '';
+
+  // Strikethrough original price — only when present and different from current.
+  const originalPriceLabel = card.originalPrice
+    ? `<span
+         class="line-through shrink-0"
+         style="color: var(--topdeals-original-price-color, #9ca3af); font-size: 11px;"
+       >${card.originalPrice}</span>`
+    : '';
+
+  return `
+    <a
+      href="${card.href}"
+      class="group/deal relative flex flex-col min-w-0"
+      aria-label="${card.name}"
+    >
+      <!-- Image with discount badge overlay -->
+      <div class="relative aspect-square w-full mb-2 flex-shrink-0 overflow-hidden rounded-md bg-gray-100">
+        ${discountBadge}
+        ${renderDealImage(card)}
+      </div>
+
+      <!-- Product name: 2-line truncate, fixed height so card heights stay aligned -->
+      <p
+        class="leading-snug line-clamp-2"
+        style="color: var(--topdeals-name-color, #6b7280); font-size: 13px; min-height: 2.6em;"
+        title="${card.name}"
+      >${card.name}</p>
+
+      <!-- Price row: deal price + strikethrough original (no MOQ here) -->
+      <div class="mt-1.5 flex items-center gap-1.5 min-w-0">
+        <span
+          class="inline-flex items-center gap-0.5 rounded-sm shrink-0"
+          style="background: var(--topdeals-price-bg, #FFEDED); padding: 2px 8px 2px 4px;"
+        >
+          ${lightningBoltIcon()}
           <span
-            class="absolute top-2 left-2 z-10 inline-flex items-center rounded-sm text-[10px] font-bold leading-none"
-            style="background-color: var(--topdeals-badge-bg, #DE0505); color: var(--topdeals-badge-text, #ffffff); padding: 2px 4px;"
-          ><span data-i18n="${card.badgeKey}">${t(card.badgeKey)}</span></span>
-        ` : ''}
+            class="font-bold leading-none"
+            style="color: var(--topdeals-price-color, #dc2626); font-size: var(--text-product-price, 15px);"
+          >${card.startingPrice || card.price}</span>
+        </span>
+        ${originalPriceLabel}
+      </div>
 
-        <!-- Square image area -->
-        <div class="aspect-square w-full mb-3 flex-shrink-0">
-          ${renderDealImage(card)}
-        </div>
+      <!-- MOQ on its own row, always below the price row -->
+      <p
+        class="mt-1 leading-none truncate"
+        style="color: var(--topdeals-moq-color, #9ca3af); font-size: 11px;"
+      ><span data-i18n="topDeals.moq" data-i18n-options='${moqI18nOptions}'>${moqText}</span></p>
+    </a>
+  `;
+}
 
-        <!-- Price row -->
-        <div class="flex items-center gap-1.5 min-w-0">
-          <span
-            class="inline-flex items-center gap-0.5 rounded-sm shrink-0"
-            style="background: var(--topdeals-price-bg, #FFEDED); padding: 2px 12px 2px 4px;"
-          >
-            ${lightningBoltIcon()}
-            <span
-              class="text-(length:--text-product-price) font-bold leading-none"
-              style="color: var(--topdeals-price-color, #dc2626); font-size: var(--text-product-price, 15px);"
-            >${card.startingPrice || card.price}</span>
-          </span>
-        </div>
-
-        <!-- MOQ -->
-        <p
-          class="mt-1.5 font-medium leading-none truncate"
-          style="color: var(--topdeals-moq-color, #222222); font-size: var(--text-product-meta, 14px);"
-        ><span data-i18n="topDeals.moq" data-i18n-options='${JSON.stringify({ count: card.moqCount, unit: t(card.moqUnitKey) })}'>${t('topDeals.moq', { count: card.moqCount, unit: t(card.moqUnitKey) })}</span></p>
-      </a>
+/** Skeleton placeholder used while the API request is in flight. */
+function renderSkeletonCard(): string {
+  return `
+    <div class="flex flex-col min-w-0 animate-pulse">
+      <div class="aspect-square w-full mb-2 rounded-md bg-gray-200"></div>
+      <div class="h-3 w-full rounded bg-gray-200 mb-1"></div>
+      <div class="h-3 w-3/4 rounded bg-gray-200 mb-2"></div>
+      <div class="flex items-center gap-2">
+        <div class="h-5 w-16 rounded bg-gray-200"></div>
+        <div class="h-3 w-10 rounded bg-gray-200"></div>
+      </div>
     </div>
   `;
 }
 
 export function initTopDeals(): void {
-  const el = document.querySelector<HTMLElement>('.topdeals-swiper');
-  if (!el) return;
+  const grid = document.getElementById('top-deals-grid');
+  if (!grid) return;
 
-  new Swiper(el, {
-    modules: [Navigation],
-    spaceBetween: 12,
-    navigation: {
-      nextEl: '.topdeals-next',
-      prevEl: '.topdeals-prev',
-    },
-    breakpoints: {
-      0: {
-        slidesPerView: 2.3,
-        spaceBetween: 10,
-      },
-      480: {
-        slidesPerView: 3.3,
-        spaceBetween: 10,
-      },
-      640: {
-        slidesPerView: 4,
-        spaceBetween: 12,
-      },
-      768: {
-        slidesPerView: 4.5,
-        spaceBetween: 12,
-      },
-      1024: {
-        slidesPerView: 5.5,
-        spaceBetween: 14,
-      },
-      1280: {
-        slidesPerView: 6.5,
-        spaceBetween: 16,
-      },
-    },
-  });
+  // Render skeletons while loading so layout doesn't jump
+  grid.innerHTML = Array.from({ length: FIXED_GRID_COUNT }).map(renderSkeletonCard).join('');
 
-  // Load real products from API
-  initCurrency().then(() => searchListings({ is_featured: true, page_size: 8 })).then(result => {
-    if (result.products.length > 0) {
-      // Hide empty state
-      const emptyState = document.getElementById('top-deals-empty');
-      if (emptyState) emptyState.style.display = 'none';
-
-      const wrapper = document.querySelector('#top-deals-swiper .swiper-wrapper');
-      if (wrapper) {
-        wrapper.innerHTML = result.products.map(p => {
-          const card: TopDealCard = {
-            name: p.name,
-            href: p.href || `/pages/product-detail.html?id=${p.id}`,
-            price: p.price,
-            startingPrice: formatStartingPrice(p.price),
-            originalPrice: p.originalPrice || '',
-            moqCount: parseInt(p.moq) || 1,
-            moqUnitKey: 'topDeals.pieces',
-            badge: p.sellingPoint || undefined,
-            badgeKey: undefined,
-            imageSrc: p.imageSrc || '',
-          };
-          return renderDealSlide(card);
-        }).join('');
-        // Reinit swiper
-        const swiperEl = document.querySelector('#top-deals-swiper') as HTMLElement;
-        if (swiperEl && (swiperEl as any).swiper) {
-          (swiperEl as any).swiper.update();
-        }
+  initCurrency()
+    .then(() => searchListings({ is_deal: true, page_size: FIXED_GRID_COUNT, sort_by: 'discount' }))
+    .then(result => {
+      const empty = document.getElementById('top-deals-empty');
+      if (result.products.length === 0) {
+        grid.innerHTML = '';
+        if (empty) empty.style.display = '';
+        return;
       }
-    }
-  }).catch(err => console.warn('[TopDeals] API load failed:', err));
+      if (empty) empty.style.display = 'none';
+
+      const cards: TopDealCard[] = result.products.slice(0, FIXED_GRID_COUNT).map(p => ({
+        name: p.name,
+        href: p.href || `/pages/product-detail.html?id=${p.id}`,
+        price: p.price,
+        startingPrice: formatStartingPrice(p.price),
+        // p.originalPrice is already currency-formatted by mapListingCard
+        originalPrice: p.originalPrice || undefined,
+        discountPercent: p.discountPercentage && p.discountPercentage > 0
+          ? Math.round(p.discountPercentage)
+          : undefined,
+        imageSrc: p.imageSrc || '',
+        moqCount: parseInt(p.moq) || 1,
+        moqUnitKey: 'topDeals.pieces',
+      }));
+      grid.innerHTML = cards.map(renderDealCard).join('');
+    })
+    .catch(err => {
+      console.warn('[TopDeals] API load failed:', err);
+      grid.innerHTML = '';
+      const empty = document.getElementById('top-deals-empty');
+      if (empty) empty.style.display = '';
+    });
 }
 
 export function TopDeals(): string {
@@ -178,62 +187,41 @@ export function TopDeals(): string {
     <section class="py-4 lg:py-6" aria-label="Top Deals" style="margin-top: 28px;">
       <div class="container-boxed">
         <div class="rounded-md" style="background-color: var(--topdeals-bg, #F8F8F8); padding: var(--space-card-padding, 16px);">
-        <!-- Section header -->
-        <div class="mb-4 flex items-end justify-between gap-4">
-          <div>
-            <h2
-              class="text-[20px] sm:text-[22px] font-bold leading-tight"
-              style="color: var(--topdeals-title-color, #111827);"
-            ><span data-i18n="topDeals.title">${t('topDeals.title')}</span></h2>
-            <p
-              class="mt-0.5 text-[13px]"
-              style="color: var(--topdeals-subtitle-color, #6b7280);"
-            ><span data-i18n="topDeals.subtitle">${t('topDeals.subtitle')}</span></p>
-          </div>
-          <a
-            href="/pages/top-deals.html"
-            class="flex-shrink-0 text-[13px] font-semibold transition-colors duration-150 hover:underline"
-            style="color: var(--topdeals-link-color, #111827);"
-          ><span data-i18n="common.viewMore">${t('common.viewMore')}</span> &gt;</a>
-        </div>
-
-        <!-- Swiper slider -->
-        <div class="group/topdeals relative">
-          <div id="top-deals-swiper" class="swiper topdeals-swiper overflow-hidden" aria-label="Top deal products">
-            <div class="swiper-wrapper">
-              ${topDealCards.length > 0 ? topDealCards.map(card => renderDealSlide(card)).join('') : ''}
+          <!-- Section header -->
+          <div class="mb-4 flex items-end justify-between gap-4">
+            <div>
+              <h2
+                class="text-[20px] sm:text-[22px] font-bold leading-tight"
+                style="color: var(--topdeals-title-color, #111827);"
+              ><span data-i18n="topDeals.title">${t('topDeals.title')}</span></h2>
+              <p
+                class="mt-0.5 text-[13px]"
+                style="color: var(--topdeals-subtitle-color, #6b7280);"
+              ><span data-i18n="topDeals.subtitle">${t('topDeals.subtitle')}</span></p>
             </div>
+            <a
+              href="/pages/top-deals.html"
+              class="flex-shrink-0 text-[13px] font-semibold transition-colors duration-150 hover:underline"
+              style="color: var(--topdeals-link-color, #111827);"
+            ><span data-i18n="common.viewMore">${t('common.viewMore')}</span> &gt;</a>
           </div>
-          ${topDealCards.length === 0 ? `
-          <div id="top-deals-empty" class="flex items-center justify-center py-12">
+
+          <!-- Fixed 6-product grid -->
+          <div
+            id="top-deals-grid"
+            class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 lg:gap-4"
+            aria-label="Top deal products"
+          ></div>
+
+          <!-- Empty state (hidden by default; shown when API returns no products) -->
+          <div id="top-deals-empty" class="flex items-center justify-center py-12" style="display:none;">
             <div class="text-center">
               <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
               </svg>
-              <p class="text-sm text-gray-400">Yak\u0131nda yeni \u00fcr\u00fcnler eklenecek</p>
+              <p class="text-sm text-gray-400" data-i18n="topDeals.empty">${t('topDeals.empty')}</p>
             </div>
           </div>
-          ` : ''}
-
-          <!-- Navigation arrows -->
-          <button
-            aria-label="Previous deals"
-            class="topdeals-prev absolute left-0 top-[94px] z-10 hidden h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-lg transition-all duration-200 hover:text-gray-900 opacity-0 pointer-events-none md:flex group-hover/topdeals:opacity-100 group-hover/topdeals:pointer-events-auto disabled:opacity-0 disabled:pointer-events-none"
-          >
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-            </svg>
-          </button>
-
-          <button
-            aria-label="Next deals"
-            class="topdeals-next absolute right-0 top-[94px] z-10 hidden h-10 w-10 translate-x-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-lg transition-all duration-200 hover:text-gray-900 opacity-0 pointer-events-none md:flex group-hover/topdeals:opacity-100 group-hover/topdeals:pointer-events-auto disabled:opacity-0 disabled:pointer-events-none"
-          >
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-            </svg>
-          </button>
-        </div>
         </div>
       </div>
     </section>

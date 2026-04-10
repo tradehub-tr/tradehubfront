@@ -549,6 +549,8 @@ const en = {
     // PRODUCT
     // ============================================================
     product: {
+      moqSingle: 'MSQ: {{count}} piece',
+      moqRange: 'MSQ: {{min}} - {{max}} piece',
       attributes: 'Attributes',
       reviews: 'Reviews',
       supplier: 'Supplier',
@@ -2582,6 +2584,7 @@ const en = {
       moq: 'MOQ: {{count}} {{unit}}',
       pieces: 'pieces',
       pairs: 'pairs',
+      empty: 'New deals coming soon',
     },
 
     // ============================================================
@@ -2593,6 +2596,7 @@ const en = {
       hotSelling: 'Hot selling',
       risingTrend: 'Rising trend',
       steadyGrowth: 'Steady growth',
+      empty: 'No categories to show right now',
       consumerElectronics: 'Consumer Electronics',
       fashionApparel: 'Fashion & Apparel',
       homeGarden: 'Home & Garden',
@@ -4963,6 +4967,8 @@ const en = {
     offPercent: '{{percent}}% off',
     loadMore: 'Load more',
     breadcrumb: 'Top Deals',
+    loading: 'Loading...',
+    noResults: 'No deals in this category yet',
   },
 
   // ============================================================
@@ -4983,6 +4989,8 @@ const en = {
     apply: 'Apply',
     back: 'Back',
     loadMore: 'Load more',
+    loading: 'Loading…',
+    empty: 'No results to show for this filter',
 
     // Tabs
     tabAll: 'All',

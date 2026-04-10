@@ -35,40 +35,99 @@ import {
   TopRankingGrid,
   initRankingCategoryTabs,
 } from '../components/top-ranking'
-import { renderRankingGroupCard } from '../components/top-ranking/TopRankingGrid'
+import {
+  renderRankingGroupCard,
+  renderRankingFlatCard,
+} from '../components/top-ranking/TopRankingGrid'
 
 // Services
-import { searchListings } from '../services/listingService'
+import {
+  getTopRankingGrouped,
+  searchListings,
+  type TopRankingGroup,
+} from '../services/listingService'
 import { initCurrency } from '../services/currencyService'
 import { loadCategories } from '../services/categoryService'
 import type { ApiCategory } from '../services/categoryService'
 
 // Data (types only)
-import type { RankingCategoryGroup } from '../types/topRanking'
+import type { RankingCategoryGroup, RankedProduct } from '../types/topRanking'
 
 // Utilities
 import { initAnimatedPlaceholder } from '../utils/animatedPlaceholder'
 
-/* ── Alpine Data Registration ── */
+/* ── Constants ── */
 
-const allGroups: RankingCategoryGroup[] = [];
+/** Number of category cards loaded per "Daha fazla yükle" click in grouped (Tümü) mode. Bounded server-side at 30. */
 const GROUPS_PER_PAGE = 12;
+
+/** Frontend "rank badge" only fits #1/#2/#3, so the page always asks the API for 3 previews per card. */
+const PRODUCTS_PER_GROUP = 3;
+
+/** Number of products loaded per "Daha fazla yükle" click in flat (single category) mode. 2 rows × 5 cols on desktop. */
+const FLAT_PAGE_SIZE = 10;
+
+/** Allowed sort metric ids — must match _TOP_RANKING_SORTS in tradehub_core.api.listing */
+type SortKey = 'hot-selling' | 'most-popular' | 'best-reviewed';
+
+/** Display mode the page is currently in. Determined by which tab is active. */
+type RankingMode = 'grouped' | 'flat';
+
+/** Map a frontend sort pill to the get_listings sort_by query param (used in flat mode). */
+const SORT_KEY_TO_BACKEND: Record<SortKey, string> = {
+  'hot-selling':   'orders',
+  'most-popular':  'views',
+  'best-reviewed': 'rating',
+};
+
+/* ── Helpers ── */
+
+/**
+ * Adapt the API's TopRankingGroup payload to the RankingCategoryGroup shape
+ * the existing renderer expects. Keeps the renderer untouched.
+ */
+function toRankingGroup(g: TopRankingGroup): RankingCategoryGroup {
+  return {
+    id: g.id,
+    name: g.name,
+    nameKey: '',
+    categoryId: g.categoryId || g.id,
+    slug: g.slug,
+    products: (g.products || []).slice(0, PRODUCTS_PER_GROUP).map((p, idx) => ({
+      id: p.id || `rp-${g.id}-${idx}`,
+      name: p.name,
+      // Link each ranked thumbnail directly to the product detail page.
+      href: p.href || `/pages/product-detail.html?id=${p.id}`,
+      price: p.price,
+      imageSrc: p.imageSrc || '',
+      moq: p.moq || '1',
+      rank: ((idx + 1) as 1 | 2 | 3),
+    } satisfies RankedProduct)),
+  };
+}
+
+/* ── Alpine Data Registration ── */
 
 Alpine.data('topRankingPage', () => ({
   init() {
-    // Load categories then products after Alpine is ready
+    // Load categories first (drives the tabs), then issue the first listings
+    // request. The two are intentionally sequenced so the tab strip and the
+    // grid render with consistent state.
     loadCategories().then(cats => {
       this.apiCategories = cats;
     }).catch(err => console.warn('[TopRanking] Category load failed:', err));
 
-    initCurrency().then(() => {
-      this.fetchProducts();
-    }).catch(err => console.warn('[TopRanking] Init failed:', err));
+    initCurrency()
+      .then(() => this.fetchActive(true))
+      .catch(err => console.warn('[TopRanking] Init failed:', err));
   },
 
-  // Filter state
-  activeTab: 'all',
-  activeSort: 'hot-selling',
+  // ── Filter state ──
+  activeTab: 'all' as string,
+  activeSort: 'hot-selling' as SortKey,
+
+  // Display mode — derived from activeTab. 'all' → grouped, anything else → flat.
+  mode: 'grouped' as RankingMode,
 
   // Dropdown state (desktop)
   categoryDropdownOpen: false,
@@ -86,94 +145,161 @@ Alpine.data('topRankingPage', () => ({
   canScrollLeft: false,
   canScrollRight: true,
 
-  // Pagination
-  visibleGroupCount: GROUPS_PER_PAGE,
-
-  // Loading state
+  // ── Server pagination state ──
+  /** Next grouped page to request (1-indexed). */
+  nextPage: 1,
+  /** Next flat page to request (1-indexed). */
+  flatNextPage: 1,
+  /** True while a fetch is in flight. Drives the load-more spinner. */
   loading: false,
+  /** True after the last fetch indicated no further pages. */
+  hasMore: true,
+  /** Total number of category groups available for the current filter (from API). */
+  totalCategories: 0,
 
-  // Dynamic data from API
+  // ── Data ──
   apiCategories: [] as ApiCategory[],
-  allGroups: allGroups,
+  /** Already-rendered groups for grouped mode (Tümü tab). */
+  allGroups: [] as RankingCategoryGroup[],
+  /** Already-rendered products for flat mode (single category tab). */
+  flatProducts: [] as RankedProduct[],
 
+  /** Backwards-compatible alias for templates that read visibleGroups. */
   get visibleGroups(): RankingCategoryGroup[] {
-    return this.allGroups.slice(0, this.visibleGroupCount);
+    return this.allGroups;
   },
 
-  async fetchProducts(category?: string) {
+  get visibleGroupCount(): number {
+    return this.allGroups.length;
+  },
+
+  /* ── Active-mode dispatcher ──
+     Single entry point: figure out which mode is active and call the right
+     fetcher. Keeps setTab/setSort/loadMore code paths uniform. */
+  async fetchActive(reset = false): Promise<void> {
+    if (this.mode === 'grouped') {
+      await this.fetchGroupedPage(reset);
+    } else {
+      await this.fetchFlatPage(reset);
+    }
+  },
+
+  /**
+   * Grouped mode fetch — Tümü tab. Each card = a category with 3 ranked products.
+   */
+  async fetchGroupedPage(reset = false): Promise<void> {
+    if (this.loading) return;
+    if (!reset && !this.hasMore) return;
+
     this.loading = true;
+    if (reset) {
+      this.nextPage = 1;
+      this.hasMore = true;
+      this.allGroups = [];
+      this.flatProducts = [];
+      this.totalCategories = 0;
+    }
+
     try {
-      const params: Record<string, unknown> = { page_size: 60 };
-      if (category && category !== 'all') {
-        params.category = category;
-      }
-      const result = await searchListings(params as any);
-      // Group products by category name
-      const categoryMap = new Map<string, typeof result.products>();
-      for (const p of result.products) {
-        const cat = (p as any).category || 'Diğer';
-        if (!categoryMap.has(cat)) categoryMap.set(cat, []);
-        categoryMap.get(cat)!.push(p);
-      }
-      const groups: RankingCategoryGroup[] = [];
-      let idx = 0;
-      for (const [catName, products] of categoryMap) {
-        // Split into groups of up to 3
-        for (let i = 0; i < products.length; i += 3) {
-          const chunk = products.slice(i, i + 3);
-          groups.push({
-            id: `rg-api-${idx++}`,
-            name: catName,
-            nameKey: '',
-            categoryId: category || 'all',
-            products: chunk.map((p, ri) => ({
-              id: p.id || `rp-${idx}-${ri}`,
-              name: p.name,
-              href: p.href || `/pages/product-detail.html?id=${p.id}`,
-              price: p.price,
-              imageSrc: p.imageSrc || '',
-              moq: p.moq || '1 adet',
-              rank: (ri + 1) as 1 | 2 | 3,
-            })),
-          });
-        }
-      }
-      this.allGroups = groups;
+      const result = await getTopRankingGrouped(
+        this.nextPage,
+        GROUPS_PER_PAGE,
+        PRODUCTS_PER_GROUP,
+        undefined,
+        this.activeSort,
+      );
+      const incoming = (result.groups || []).map(toRankingGroup);
+      this.allGroups = reset ? incoming : this.allGroups.concat(incoming);
+      this.totalCategories = result.totalCategories || this.allGroups.length;
+      this.hasMore = result.hasNext;
+      this.nextPage = (result.page || this.nextPage) + 1;
     } catch (err) {
-      console.warn('[TopRanking] fetchProducts failed:', err);
+      console.warn('[TopRanking] fetchGroupedPage failed:', err);
+      this.hasMore = false;
     } finally {
       this.loading = false;
     }
   },
 
-  setTab(tabId: string) {
+  /**
+   * Flat mode fetch — single category tab. Returns a flat list of products
+   * (10 per page, 2 rows × 5 cols on desktop) sorted by the active metric.
+   */
+  async fetchFlatPage(reset = false): Promise<void> {
+    if (this.loading) return;
+    if (!reset && !this.hasMore) return;
+    if (this.activeTab === 'all') return; // safety: flat needs a real category
+
+    this.loading = true;
+    if (reset) {
+      this.flatNextPage = 1;
+      this.hasMore = true;
+      this.flatProducts = [];
+      this.allGroups = [];
+    }
+
+    try {
+      const result = await searchListings({
+        category: this.activeTab,
+        sort_by: SORT_KEY_TO_BACKEND[this.activeSort],
+        page: this.flatNextPage,
+        page_size: FLAT_PAGE_SIZE,
+      });
+      const incoming: RankedProduct[] = (result.products || []).map((p, idx) => ({
+        id: p.id || `flat-${this.flatNextPage}-${idx}`,
+        name: p.name,
+        href: p.href || `/pages/product-detail.html?id=${p.id}`,
+        price: p.price,
+        imageSrc: p.imageSrc || '',
+        moq: p.moq || '1',
+        rank: 1, // unused in flat mode
+      }));
+      this.flatProducts = reset ? incoming : this.flatProducts.concat(incoming);
+      this.hasMore = result.hasNext;
+      this.flatNextPage += 1;
+    } catch (err) {
+      console.warn('[TopRanking] fetchFlatPage failed:', err);
+      this.hasMore = false;
+    } finally {
+      this.loading = false;
+    }
+  },
+
+  setTab(tabId: string): void {
+    if (this.activeTab === tabId) return;
     this.activeTab = tabId;
     this.selectedMainCategory = tabId === 'all' ? null : tabId;
     this.pendingSubCategory = null;
-    this.visibleGroupCount = GROUPS_PER_PAGE;
-    this.fetchProducts(tabId);
+    this.mode = tabId === 'all' ? 'grouped' : 'flat';
+    this.fetchActive(true);
   },
 
-  setSort(sortMode: string) {
-    this.activeSort = sortMode;
+  setSort(sortMode: string): void {
+    if (this.activeSort === sortMode) return;
+    this.activeSort = sortMode as SortKey;
+    this.fetchActive(true);
   },
 
-  loadMore() {
-    this.visibleGroupCount += GROUPS_PER_PAGE;
+  loadMore(): void {
+    this.fetchActive(false);
   },
 
   renderGroupCard(group: RankingCategoryGroup): string {
     return renderRankingGroupCard(group);
   },
 
-  scrollTabs(direction: 'left' | 'right') {
+  renderFlatCard(product: RankedProduct): string {
+    return renderRankingFlatCard(product);
+  },
+
+  scrollTabs(direction: 'left' | 'right'): void {
     const el = (this.$refs as Record<string, HTMLElement>).tabsScroll;
     if (!el) return;
     const scrollAmount = 200;
     el.scrollLeft += direction === 'left' ? -scrollAmount : scrollAmount;
   },
 
-  updateScrollState() {
+  updateScrollState(): void {
     const el = (this.$refs as Record<string, HTMLElement>).tabsScroll;
     if (!el) return;
     this.canScrollLeft = el.scrollLeft > 0;
@@ -181,23 +307,23 @@ Alpine.data('topRankingPage', () => ({
   },
 
   // Category dropdown
-  openCategoryLevel2(mainCatId: string) {
+  openCategoryLevel2(mainCatId: string): void {
     this.selectedMainCategory = mainCatId;
     this.pendingSubCategory = null;
     this.categoryDropdownLevel = 2;
   },
 
-  goBackToLevel1() {
+  goBackToLevel1(): void {
     this.categoryDropdownLevel = 1;
   },
 
-  applyCategoryFilter() {
+  applyCategoryFilter(): void {
     const category = this.pendingSubCategory || this.selectedMainCategory || 'all';
-    this.activeTab = this.selectedMainCategory || 'all';
     this.categoryDropdownOpen = false;
     this.categoryDropdownLevel = 1;
-    this.visibleGroupCount = GROUPS_PER_PAGE;
-    this.fetchProducts(category);
+    this.activeTab = category;
+    this.mode = category === 'all' ? 'grouped' : 'flat';
+    this.fetchActive(true);
   },
 
   // i18n helper for Alpine templates

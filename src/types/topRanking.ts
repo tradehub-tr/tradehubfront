@@ -13,5 +13,8 @@ export interface RankingCategoryGroup {
   name: string;
   nameKey: string;
   categoryId: string;
+  /** URL-friendly slug for the category. Used by the storefront listing
+   * link so the products page receives a slug (not a UUID-shaped name). */
+  slug?: string;
   products: RankedProduct[];
 }
