@@ -37,7 +37,7 @@ export function ContactsLayout(): string {
 
           <!-- Search -->
           <div class="flex items-center border border-(--color-border-medium,#d1d5db) rounded mb-3 overflow-hidden">
-            <input type="text" class="contacts-list__search-input flex-1 h-8 px-2.5 text-[13px] text-(--color-text-body,#333333) border-none outline-none bg-(--color-surface,#ffffff) placeholder:text-(--color-text-placeholder,#999999) focus:shadow-[inset_0_0_0_1px_var(--color-cta-primary,#cc9900)]" placeholder="${t('contacts.searchPlaceholder')}" />
+            <input type="text" class="th-input th-input-sm th-input-borderless flex-1" placeholder="${t('contacts.searchPlaceholder')}" />
             <button class="flex items-center justify-center w-8 h-8 border-none border-l border-l-(--color-border-medium,#d1d5db) bg-(--color-surface-muted,#fafafa) text-(--color-text-muted,#666666) cursor-pointer hover:bg-(--color-border-light) hover:text-(--color-text-heading,#111827)" aria-label="${t('inquiries.searchPlaceholder')}">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="8"/>

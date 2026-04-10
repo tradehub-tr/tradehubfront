@@ -163,7 +163,7 @@ export function StoreNav(data: StoreNavData): string {
         <!-- Desktop Search -->
         <div class="store-nav__search relative hidden xl:block">
           <input type="text"
-                 class="store-nav__search-input bg-gray-50 border border-gray-300 rounded-full px-4 py-1.5 pr-9 text-[13px] text-[#374151] placeholder-gray-400 w-[250px] outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors"
+                 class="th-input th-input-sm store-nav__search-input pr-9 w-[250px]"
                  placeholder="${data.searchPlaceholder}"
                  aria-label="${t('seller.sf.storeSearch')}" />
           <svg class="store-nav__search-icon absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 cursor-pointer hover:text-primary-500 transition-colors"

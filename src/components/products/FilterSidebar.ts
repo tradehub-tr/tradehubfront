@@ -274,7 +274,7 @@ function renderRadioOption(option: StoreReviewFilter, sectionId: string, idPrefi
         ></div>
         <div class="w-2 h-2 rounded-full bg-primary-500 opacity-0 peer-checked:opacity-100 transition-opacity duration-150"></div>
       </div>
-      <div class="flex items-center gap-1" style="color: var(--color-cta-primary, #cc9900);">
+      <div class="flex items-center gap-1" style="color: var(--color-primary-500);">
         ${Array.from({ length: stars }, () => icons.star).join('')}
         ${hasHalf ? icons.starEmpty : ''}
       </div>
@@ -298,7 +298,7 @@ function renderPriceRange(section: PriceRangeFilterSection): string {
         type="number"
         placeholder="${t('products.filterMin')}"
         min="0"
-        class="w-full min-w-0 px-3 py-1.5 text-[13px] border rounded focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-primary-400"
+        class="th-input th-input-sm min-w-0"
         style="border-color: var(--filter-input-border, #d1d5db); color: var(--filter-text-color, #374151);"
         data-filter-section="${section.id}"
         data-filter-type="min"
@@ -308,7 +308,7 @@ function renderPriceRange(section: PriceRangeFilterSection): string {
         type="number"
         placeholder="${t('products.filterMax')}"
         min="0"
-        class="w-full min-w-0 px-3 py-1.5 text-[13px] border rounded focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-primary-400"
+        class="th-input th-input-sm min-w-0"
         style="border-color: var(--filter-input-border, #d1d5db); color: var(--filter-text-color, #374151);"
         data-filter-section="${section.id}"
         data-filter-type="max"
@@ -334,7 +334,7 @@ function renderMinOrder(section: MinOrderFilterSection): string {
         type="number"
         placeholder="${t('products.filterQuantity')}"
         min="1"
-        class="w-full min-w-0 px-3 py-1.5 text-[13px] border rounded focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-primary-400"
+        class="th-input th-input-sm min-w-0"
         style="border-color: var(--filter-input-border, #d1d5db); color: var(--filter-text-color, #374151);"
         data-filter-section="${section.id}"
         data-filter-type="value"
@@ -372,7 +372,7 @@ function renderSearchableCheckbox(section: SearchableCheckboxFilterSection, idPr
         <input
           type="text"
           placeholder="${section.searchPlaceholder || 'Search...'}"
-          class="w-full pl-8 pr-3 py-1.5 text-[13px] border rounded focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-primary-400"
+          class="th-input th-input-sm pl-8"
           style="border-color: var(--filter-input-border, #d1d5db); color: var(--filter-text-color, #374151);"
           data-filter-section="${section.id}"
           data-filter-type="search"

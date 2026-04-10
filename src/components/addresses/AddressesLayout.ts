@@ -19,16 +19,16 @@ function renderAddressCard(): string {
   return `
     <template x-for="addr in addresses" :key="addr.id">
       <div class="bg-white rounded-lg p-5 max-sm:p-4 border-2 transition-colors"
-           :class="addr.is_default ? 'border-[var(--color-primary,#cc9900)]' : 'border-transparent'">
+           :class="addr.is_default ? 'border-[var(--color-primary-500)]' : 'border-transparent'">
 
         <!-- Header: title + default badge -->
         <div class="flex items-start justify-between gap-2 mb-3">
           <div class="flex items-center gap-2 min-w-0">
-            <span class="text-[var(--color-primary,#cc9900)]">${ICONS.pin}</span>
+            <span class="text-[var(--color-primary-500)]">${ICONS.pin}</span>
             <span class="font-semibold text-sm text-gray-900 truncate" x-text="addr.title"></span>
           </div>
           <span x-show="addr.is_default"
-                class="flex-shrink-0 inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-[var(--color-primary,#cc9900)] text-white">
+                class="flex-shrink-0 inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-[var(--color-primary-500)] text-white">
             ${ICONS.check}
             Varsayılan
           </span>
@@ -56,7 +56,7 @@ function renderAddressCard(): string {
             ${ICONS.trash} Sil
           </button>
           <button x-show="!addr.is_default" @click="setDefault(addr.id)"
-                  class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded border border-gray-200 text-gray-600 hover:border-[var(--color-primary,#cc9900)] hover:text-[var(--color-primary,#cc9900)] transition-colors ml-auto">
+                  class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded border border-gray-200 text-gray-600 hover:border-[var(--color-primary-500)] hover:text-[var(--color-primary-500)] transition-colors ml-auto">
             Varsayılan Yap
           </button>
         </div>
@@ -128,8 +128,8 @@ function renderFormModal(): string {
                      x-model="form.title"
                      placeholder="örn. Merkez Ofis, Depo"
                      maxlength="60"
-                     class="w-full h-10 px-3 border rounded text-sm transition-colors"
-                     :class="errors.title ? 'border-red-400 bg-red-50' : 'border-gray-300 focus:border-[var(--color-primary,#cc9900)]'"
+                     class="th-input th-input-md"
+                     :class="{ 'is-error': errors.title }"
                      @input="errors.title = false" />
               <p x-show="errors.title" class="text-red-500 text-xs mt-1">Bu alan zorunludur.</p>
             </div>
@@ -143,8 +143,8 @@ function renderFormModal(): string {
                      x-model="form.contact_name"
                      placeholder="Ad Soyad"
                      maxlength="80"
-                     class="w-full h-10 px-3 border rounded text-sm transition-colors"
-                     :class="errors.contact_name ? 'border-red-400 bg-red-50' : 'border-gray-300 focus:border-[var(--color-primary,#cc9900)]'"
+                     class="th-input th-input-md"
+                     :class="{ 'is-error': errors.contact_name }"
                      @input="errors.contact_name = false" />
               <p x-show="errors.contact_name" class="text-red-500 text-xs mt-1">Bu alan zorunludur.</p>
             </div>
@@ -158,8 +158,8 @@ function renderFormModal(): string {
                      x-model="form.company"
                      placeholder="Şirket A.Ş."
                      maxlength="120"
-                     class="w-full h-10 px-3 border rounded text-sm transition-colors"
-                     :class="errors.company ? 'border-red-400 bg-red-50' : 'border-gray-300 focus:border-[var(--color-primary,#cc9900)]'"
+                     class="th-input th-input-md"
+                     :class="{ 'is-error': errors.company }"
                      @input="errors.company = false" />
               <p x-show="errors.company" class="text-red-500 text-xs mt-1">Bu alan zorunludur.</p>
             </div>
@@ -173,8 +173,8 @@ function renderFormModal(): string {
                      x-model="form.phone"
                      placeholder="0212 000 00 00"
                      maxlength="20"
-                     class="w-full h-10 px-3 border rounded text-sm transition-colors"
-                     :class="errors.phone ? 'border-red-400 bg-red-50' : 'border-gray-300 focus:border-[var(--color-primary,#cc9900)]'"
+                     class="th-input th-input-md"
+                     :class="{ 'is-error': errors.phone }"
                      @input="errors.phone = false" />
               <p x-show="errors.phone" class="text-red-500 text-xs mt-1">Bu alan zorunludur.</p>
             </div>
@@ -187,8 +187,8 @@ function renderFormModal(): string {
                 </label>
                 <select x-model="form.state"
                         @change="form.city = ''; errors.state = false"
-                        class="w-full h-10 px-3 border rounded text-sm bg-white transition-colors"
-                        :class="errors.state ? 'border-red-400 bg-red-50' : 'border-gray-300 focus:border-[var(--color-primary,#cc9900)]'">
+                        class="th-input th-input-md"
+                        :class="{ 'is-error': errors.state }">
                   <option value="">Seçiniz</option>
                   <template x-for="p in provinces" :key="p">
                     <option :value="p" x-text="p"></option>
@@ -199,7 +199,7 @@ function renderFormModal(): string {
               <div>
                 <label class="block text-xs font-medium text-gray-700 mb-1">İlçe</label>
                 <select x-model="form.city"
-                        class="w-full h-10 px-3 border border-gray-300 rounded text-sm bg-white focus:border-[var(--color-primary,#cc9900)] transition-colors"
+                        class="th-input th-input-md"
                         :disabled="!form.state">
                   <option value="">Seçiniz</option>
                   <template x-for="d in districtOptions" :key="d">
@@ -218,8 +218,8 @@ function renderFormModal(): string {
                         placeholder="Mahalle, sokak, bina adı"
                         rows="2"
                         maxlength="300"
-                        class="w-full px-3 py-2 border rounded text-sm resize-none transition-colors"
-                        :class="errors.street ? 'border-red-400 bg-red-50' : 'border-gray-300 focus:border-[var(--color-primary,#cc9900)]'"
+                        class="th-input resize-none"
+                        :class="{ 'is-error': errors.street }"
                         @input="errors.street = false"></textarea>
               <p x-show="errors.street" class="text-red-500 text-xs mt-1">Bu alan zorunludur.</p>
             </div>
@@ -232,7 +232,7 @@ function renderFormModal(): string {
                        x-model="form.apartment"
                        placeholder="Kat 3, Daire 7"
                        maxlength="80"
-                       class="w-full h-10 px-3 border border-gray-300 rounded text-sm focus:border-[var(--color-primary,#cc9900)] transition-colors" />
+                       class="th-input th-input-md" />
               </div>
               <div>
                 <label class="block text-xs font-medium text-gray-700 mb-1">Posta Kodu</label>
@@ -240,7 +240,7 @@ function renderFormModal(): string {
                        x-model="form.postal_code"
                        placeholder="34000"
                        maxlength="10"
-                       class="w-full h-10 px-3 border border-gray-300 rounded text-sm focus:border-[var(--color-primary,#cc9900)] transition-colors" />
+                       class="th-input th-input-md" />
               </div>
             </div>
 
@@ -253,14 +253,14 @@ function renderFormModal(): string {
                      x-model="form.note"
                      placeholder="örn. Hafta içi 09:00-18:00 teslimat"
                      maxlength="150"
-                     class="w-full h-10 px-3 border border-gray-300 rounded text-sm focus:border-[var(--color-primary,#cc9900)] transition-colors" />
+                     class="th-input th-input-md" />
             </div>
 
             <!-- Varsayılan checkbox -->
             <label class="flex items-center gap-2.5 cursor-pointer select-none">
               <input type="checkbox"
                      x-model="form.is_default"
-                     class="w-4 h-4 rounded accent-[var(--color-primary,#cc9900)]" />
+                     class="w-4 h-4 rounded accent-[var(--color-primary-500)]" />
               <span class="text-sm text-gray-700">Varsayılan teslimat adresi olarak ayarla</span>
             </label>
 

@@ -34,7 +34,7 @@ function renderServiceNav(activeId: ServiceId): string {
       const activeClasses = isActive
         ? 'os-nav__item--active bg-blue-50 text-gray-800 font-semibold border-l-blue-600 max-md:border-l-transparent max-md:border-b-blue-600'
         : 'border-l-transparent max-md:border-b-transparent hover:bg-[#fafafa] hover:text-gray-800';
-      return `<a href="#${item.id}" class="os-nav__item block py-2.5 px-4 text-[13px] no-underline border-l-[3px] max-md:border-l-0 max-md:border-b-2 max-[480px]:py-2 max-[480px]:px-3 max-[480px]:text-xs transition-all ${activeClasses}" style="color:var(--color-text-muted, #666666)" data-service="${item.id}">${item.label}</a>`;
+      return `<a href="#${item.id}" class="os-nav__item block py-2.5 px-4 text-[13px] no-underline border-l-[3px] max-md:border-l-0 max-md:border-b-2 max-[480px]:py-2 max-[480px]:px-3 max-[480px]:text-xs transition-all ${activeClasses}" style="color:var(--color-text-secondary)" data-service="${item.id}">${item.label}</a>`;
     }
   ).join('');
 
@@ -62,22 +62,22 @@ function renderPaymentTerms(): string {
           </svg>
         </div>
         <h1 class="text-xl font-bold text-gray-800 mb-2 max-[480px]:text-base max-[360px]:text-[15px]">${t('otherServices.paymentTermsTitle')}</h1>
-        <p class="text-sm mb-8 max-[480px]:text-xs max-[480px]:mb-5 max-[480px]:leading-relaxed" style="color:var(--color-text-muted, #666666)">${t('otherServices.terminationDate')} <strong class="text-gray-800">${t('otherServices.terminationDateValue')}</strong> ${t('otherServices.terminationDateNote')}</p>
+        <p class="text-sm mb-8 max-[480px]:text-xs max-[480px]:mb-5 max-[480px]:leading-relaxed" style="color:var(--color-text-secondary)">${t('otherServices.terminationDate')} <strong class="text-gray-800">${t('otherServices.terminationDateValue')}</strong> ${t('otherServices.terminationDateNote')}</p>
 
         <div class="max-w-[760px] mx-auto text-left bg-white border border-gray-200 rounded-lg p-8 max-md:p-5 max-[480px]:p-3.5 max-[360px]:p-3">
-          <p class="text-sm mb-4 max-[480px]:text-xs max-[480px]:mb-3" style="color:var(--color-text-body, #333333)">${t('otherServices.ptDearBuyers')}</p>
+          <p class="text-sm mb-4 max-[480px]:text-xs max-[480px]:mb-3" style="color:var(--color-text-primary)">${t('otherServices.ptDearBuyers')}</p>
 
-          <p class="text-sm leading-[1.7] mb-4 max-[480px]:text-xs max-[480px]:leading-[1.6] max-[480px]:mb-3" style="color:var(--color-text-body, #333333)">
+          <p class="text-sm leading-[1.7] mb-4 max-[480px]:text-xs max-[480px]:leading-[1.6] max-[480px]:mb-3" style="color:var(--color-text-primary)">
             ${t('otherServices.ptParagraph1')}
           </p>
 
-          <p class="text-sm leading-[1.7] mb-4 max-[480px]:text-xs max-[480px]:leading-[1.6] max-[480px]:mb-3" style="color:var(--color-text-body, #333333)">
+          <p class="text-sm leading-[1.7] mb-4 max-[480px]:text-xs max-[480px]:leading-[1.6] max-[480px]:mb-3" style="color:var(--color-text-primary)">
             ${t('otherServices.ptParagraph2')}
           </p>
 
-          <p class="text-sm leading-[1.7] mb-4 max-[480px]:text-xs max-[480px]:leading-[1.6] max-[480px]:mb-3" style="color:var(--color-text-body, #333333)">${t('otherServices.ptParagraph3')}</p>
+          <p class="text-sm leading-[1.7] mb-4 max-[480px]:text-xs max-[480px]:leading-[1.6] max-[480px]:mb-3" style="color:var(--color-text-primary)">${t('otherServices.ptParagraph3')}</p>
 
-          <div class="mt-6 text-sm leading-relaxed max-[480px]:mt-4 max-[480px]:text-xs" style="color:var(--color-text-body, #333333)">
+          <div class="mt-6 text-sm leading-relaxed max-[480px]:mt-4 max-[480px]:text-xs" style="color:var(--color-text-primary)">
             <p class="m-0">${t('otherServices.ptRegards')}</p>
             <p class="m-0">${t('otherServices.ptTeam')}</p>
           </div>
@@ -100,17 +100,17 @@ function renderProductInspection(): string {
           </svg>
         </div>
         <h1 class="text-xl font-bold text-gray-800 mb-2 max-[480px]:text-base max-[360px]:text-[15px]">${t('otherServices.piTitle')}</h1>
-        <p class="text-sm mb-8 max-[480px]:text-xs max-[480px]:mb-5 max-[480px]:leading-relaxed" style="color:var(--color-text-muted, #666666)">${t('otherServices.piSubtitle')}</p>
+        <p class="text-sm mb-8 max-[480px]:text-xs max-[480px]:mb-5 max-[480px]:leading-relaxed" style="color:var(--color-text-secondary)">${t('otherServices.piSubtitle')}</p>
 
         <div class="max-w-[760px] mx-auto text-left bg-white border border-gray-200 rounded-lg p-8 max-md:p-5 max-[480px]:p-3.5 max-[360px]:p-3">
-          <p class="text-sm mb-4 max-[480px]:text-xs max-[480px]:mb-3" style="color:var(--color-text-body, #333333)">${t('otherServices.piDearBuyers')}</p>
-          <p class="text-sm leading-[1.7] mb-4 max-[480px]:text-xs max-[480px]:leading-[1.6] max-[480px]:mb-3" style="color:var(--color-text-body, #333333)">
+          <p class="text-sm mb-4 max-[480px]:text-xs max-[480px]:mb-3" style="color:var(--color-text-primary)">${t('otherServices.piDearBuyers')}</p>
+          <p class="text-sm leading-[1.7] mb-4 max-[480px]:text-xs max-[480px]:leading-[1.6] max-[480px]:mb-3" style="color:var(--color-text-primary)">
             ${t('otherServices.piParagraph1')}
           </p>
-          <p class="text-sm leading-[1.7] mb-4 max-[480px]:text-xs max-[480px]:leading-[1.6] max-[480px]:mb-3" style="color:var(--color-text-body, #333333)">
+          <p class="text-sm leading-[1.7] mb-4 max-[480px]:text-xs max-[480px]:leading-[1.6] max-[480px]:mb-3" style="color:var(--color-text-primary)">
             ${t('otherServices.piParagraph2')}
           </p>
-          <div class="mt-6 text-sm leading-relaxed max-[480px]:mt-4 max-[480px]:text-xs" style="color:var(--color-text-body, #333333)">
+          <div class="mt-6 text-sm leading-relaxed max-[480px]:mt-4 max-[480px]:text-xs" style="color:var(--color-text-primary)">
             <p class="m-0">${t('otherServices.piRegards')}</p>
             <p class="m-0">${t('otherServices.piTeam')}</p>
           </div>
