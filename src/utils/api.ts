@@ -12,7 +12,7 @@ const BASE_URL = import.meta.env.VITE_API_URL || '/api'
 let _csrfToken: string | null = null
 let _csrfFetchPromise: Promise<string | null> | null = null
 
-async function fetchCsrfToken(): Promise<string | null> {
+export async function fetchCsrfToken(): Promise<string | null> {
   if (_csrfToken) return _csrfToken
   if (!_csrfFetchPromise) {
     _csrfFetchPromise = fetch(`${BASE_URL}/method/tradehub_core.api.v1.auth.get_session_user`, {
