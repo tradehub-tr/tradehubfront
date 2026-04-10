@@ -114,7 +114,7 @@ function buildDropdownContent(
     const checked = itemListIds.includes(list.id);
     return `
       <label class="flex items-center gap-3 px-4 py-2.5 cursor-pointer hover:bg-gray-50 transition-colors" data-list-id="${list.id}">
-        <input type="checkbox" class="fav-list-checkbox w-[18px] h-[18px] rounded border-gray-300 text-primary-600 focus:ring-primary-500 cursor-pointer accent-[#F60]" ${checked ? 'checked' : ''} data-list-id="${list.id}" />
+        <input type="checkbox" class="fav-list-checkbox w-[18px] h-[18px] cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" ${checked ? 'checked' : ''} data-list-id="${list.id}" />
         <div class="flex-1 min-w-0">
           <span class="block text-sm text-gray-700 truncate">${escapeHtml(list.name)}</span>
         </div>
@@ -135,7 +135,7 @@ function buildDropdownContent(
     <!-- Default favorites -->
     <div class="border-b border-gray-100">
       <label class="flex items-center gap-3 px-4 py-2.5 cursor-pointer hover:bg-gray-50 transition-colors" data-list-id="${DEFAULT_LIST_ID}">
-        <input type="checkbox" class="fav-list-checkbox w-[18px] h-[18px] rounded border-gray-300 text-primary-600 focus:ring-primary-500 cursor-pointer accent-[#F60]" ${defaultChecked ? 'checked' : ''} data-list-id="${DEFAULT_LIST_ID}" />
+        <input type="checkbox" class="fav-list-checkbox w-[18px] h-[18px] cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" ${defaultChecked ? 'checked' : ''} data-list-id="${DEFAULT_LIST_ID}" />
         <div class="flex items-center gap-2 flex-1 min-w-0">
           <svg class="w-5 h-5 text-red-500 shrink-0" fill="${defaultChecked ? '#ef4444' : 'none'}" stroke="#ef4444" stroke-width="2" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
           <span class="text-sm font-medium text-gray-700">${t('favorites.defaultList')}</span>
@@ -158,7 +158,7 @@ function buildDropdownContent(
       <!-- Inline create form (hidden by default) -->
       <div class="hidden px-4 pb-3" id="fav-inline-create">
         <div class="flex gap-2">
-          <input type="text" id="fav-inline-input" maxlength="25" placeholder="${t('favorites.enterName')}" class="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg outline-none focus:border-[#F60] focus:ring-1 focus:ring-[#F60]/30 transition-colors" />
+          <input type="text" id="fav-inline-input" maxlength="25" placeholder="${t('favorites.enterName')}" class="th-input th-input-md flex-1" />
           <button type="button" id="fav-inline-save" class="px-3 py-2 text-sm font-medium text-white bg-[#F60] rounded-lg hover:bg-[#e55a00] transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
             ${t('common.save')}
           </button>
@@ -318,7 +318,7 @@ function saveNewList(
     newLabel.className = 'flex items-center gap-3 px-4 py-2.5 cursor-pointer hover:bg-gray-50 transition-colors';
     newLabel.dataset.listId = list.id;
     newLabel.innerHTML = `
-      <input type="checkbox" class="fav-list-checkbox w-[18px] h-[18px] rounded border-gray-300 text-primary-600 focus:ring-primary-500 cursor-pointer accent-[#F60]" checked data-list-id="${list.id}" />
+      <input type="checkbox" class="fav-list-checkbox w-[18px] h-[18px] cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" checked data-list-id="${list.id}" />
       <div class="flex-1 min-w-0">
         <span class="block text-sm text-gray-700 truncate">${escapeHtml(list.name)}</span>
       </div>

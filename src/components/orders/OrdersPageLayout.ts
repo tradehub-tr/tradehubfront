@@ -106,7 +106,7 @@ function renderAllOrders(): string {
             x-model.debounce.300ms="searchQuery"
             @keydown.escape="searchQuery = ''"
             placeholder="${t('orders.searchPlaceholder')}"
-            class="w-full h-9 pl-9 pr-8 text-sm text-gray-700 border border-gray-300 rounded-lg outline-none bg-white placeholder:text-gray-400 transition-colors focus:border-gray-400 focus:ring-1 focus:ring-gray-200"
+            class="th-input th-input-sm pl-9 pr-8"
             :class="searchQuery.trim() ? 'border-amber-400! ring-1! ring-amber-200!' : ''"
           />
           <button
@@ -204,13 +204,13 @@ function renderAllOrders(): string {
               <div class="flex-1">
                 <label class="block text-xs text-gray-500 mb-1">${t('orders.startDate')}</label>
                 <input type="date" x-model="dateFrom"
-                  class="w-full h-9 px-2 text-sm border border-gray-300 rounded-lg outline-none bg-white text-gray-700 focus:border-amber-400 focus:ring-1 focus:ring-amber-200" />
+                  class="th-input th-input-sm" />
               </div>
               <span class="text-gray-300 mt-4">—</span>
               <div class="flex-1">
                 <label class="block text-xs text-gray-500 mb-1">${t('orders.endDate')}</label>
                 <input type="date" x-model="dateTo"
-                  class="w-full h-9 px-2 text-sm border border-gray-300 rounded-lg outline-none bg-white text-gray-700 focus:border-amber-400 focus:ring-1 focus:ring-amber-200" />
+                  class="th-input th-input-sm" />
               </div>
             </div>
             <div class="flex items-center justify-end gap-2">
@@ -1255,14 +1255,14 @@ function renderAllOrders(): string {
                   <div class="relative">
                     <span class="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-gray-400" x-text="selectedOrder?.currency || 'TRY'"></span>
                     <input type="text" :value="Number(refundForm.amount).toLocaleString('tr-TR', {minimumFractionDigits: 2})" readonly
-                      class="w-full border border-gray-100 bg-gray-50 rounded-lg py-2.5 pl-12 pr-3 text-sm text-gray-700 cursor-default select-none" />
+                      class="th-input th-input-md pl-12" aria-disabled="true" />
                   </div>
                 </div>
                 <!-- Reason -->
                 <div class="mb-5">
                   <label class="block text-xs font-semibold text-gray-600 mb-1.5">İade sebebi <span class="text-red-500">*</span></label>
                   <textarea x-model="refundForm.reason" rows="4"
-                    class="w-full border border-gray-200 rounded-lg py-2.5 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-300 focus:border-violet-400 resize-none"
+                    class="th-input resize-none"
                     placeholder="Ürün beklentilerinizi karşılamadıysa veya bir sorun yaşadıysanız lütfen açıklayın..."></textarea>
                 </div>
                 <!-- Error -->
@@ -1356,17 +1356,17 @@ function renderAllOrders(): string {
               <!-- Address -->
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">${t('orders.shippingAddress')}</label>
-                <textarea class="w-full h-20 px-3 py-2 text-sm border border-gray-300 rounded-lg outline-none bg-white text-gray-700 focus:border-amber-400 focus:ring-1 focus:ring-amber-200 resize-none" x-model="selectedOrder.shipping.address" placeholder="${t('orders.enterShippingAddress')}"></textarea>
+                <textarea class="th-input h-20 resize-none" x-model="selectedOrder.shipping.address" placeholder="${t('orders.enterShippingAddress')}"></textarea>
               </div>
               <!-- Country -->
               <div class="grid grid-cols-2 gap-4">
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1.5">${t('orders.shipFrom')}</label>
-                  <input type="text" class="w-full h-10 px-3 text-sm border border-gray-300 rounded-lg outline-none bg-gray-50 text-gray-500 cursor-not-allowed" :value="selectedOrder.shipping.shipFrom" disabled />
+                  <input type="text" class="th-input th-input-md" :value="selectedOrder.shipping.shipFrom" disabled />
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1.5">Incoterms</label>
-                  <input type="text" class="w-full h-10 px-3 text-sm border border-gray-300 rounded-lg outline-none bg-gray-50 text-gray-500 cursor-not-allowed" :value="selectedOrder.shipping.incoterms" disabled />
+                  <input type="text" class="th-input th-input-md" :value="selectedOrder.shipping.incoterms" disabled />
                 </div>
               </div>
               <!-- Service line -->
@@ -1380,7 +1380,7 @@ function renderAllOrders(): string {
                 <template x-if="!shippingMethodsLoading">
                   <select
                     x-model="selectedShippingMethod"
-                    class="w-full h-10 px-3 text-sm border border-gray-300 rounded-lg outline-none bg-white text-gray-700 focus:border-amber-400 focus:ring-1 focus:ring-amber-200 cursor-pointer"
+                    class="th-input th-input-md cursor-pointer"
                   >
                     <template x-if="shippingMethods.length === 0">
                       <option value="">${t('orders.noShippingMethods') || 'Kargo yöntemi bulunamadı'}</option>
@@ -1436,39 +1436,39 @@ function renderAllOrders(): string {
               <p class="text-sm text-gray-500 mb-5">${t('orders.cancelReasonSubtext')}</p>
               <div class="space-y-3">
                 <label class="flex items-center gap-3 cursor-pointer group">
-                  <input type="radio" name="cancelReason" value="shipping_fee" x-model="cancelReason" class="w-4 h-4 accent-[#FF6600] cursor-pointer" />
+                  <input type="radio" name="cancelReason" value="shipping_fee" x-model="cancelReason" class="w-4 h-4 cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" />
                   <span class="text-sm text-gray-700 group-hover:text-gray-900">${t('orders.cancelShippingFee')}</span>
                 </label>
                 <label class="flex items-center gap-3 cursor-pointer group">
-                  <input type="radio" name="cancelReason" value="no_stock" x-model="cancelReason" class="w-4 h-4 accent-[#FF6600] cursor-pointer" />
+                  <input type="radio" name="cancelReason" value="no_stock" x-model="cancelReason" class="w-4 h-4 cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" />
                   <span class="text-sm text-gray-700 group-hover:text-gray-900">${t('orders.cancelNoStock')}</span>
                 </label>
                 <label class="flex items-center gap-3 cursor-pointer group">
-                  <input type="radio" name="cancelReason" value="not_paid_30" x-model="cancelReason" class="w-4 h-4 accent-[#FF6600] cursor-pointer" />
+                  <input type="radio" name="cancelReason" value="not_paid_30" x-model="cancelReason" class="w-4 h-4 cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" />
                   <span class="text-sm text-gray-700 group-hover:text-gray-900">${t('orders.cancelNotPaid30Days')}</span>
                 </label>
                 <label class="flex items-center gap-3 cursor-pointer group">
-                  <input type="radio" name="cancelReason" value="shipping_method" x-model="cancelReason" class="w-4 h-4 accent-[#FF6600] cursor-pointer" />
+                  <input type="radio" name="cancelReason" value="shipping_method" x-model="cancelReason" class="w-4 h-4 cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" />
                   <span class="text-sm text-gray-700 group-hover:text-gray-900">${t('orders.cancelShippingMethod')}</span>
                 </label>
                 <label class="flex items-center gap-3 cursor-pointer group">
-                  <input type="radio" name="cancelReason" value="shipping_time" x-model="cancelReason" class="w-4 h-4 accent-[#FF6600] cursor-pointer" />
+                  <input type="radio" name="cancelReason" value="shipping_time" x-model="cancelReason" class="w-4 h-4 cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" />
                   <span class="text-sm text-gray-700 group-hover:text-gray-900">${t('orders.cancelShippingTime')}</span>
                 </label>
                 <label class="flex items-center gap-3 cursor-pointer group">
-                  <input type="radio" name="cancelReason" value="no_longer_needed" x-model="cancelReason" class="w-4 h-4 accent-[#FF6600] cursor-pointer" />
+                  <input type="radio" name="cancelReason" value="no_longer_needed" x-model="cancelReason" class="w-4 h-4 cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" />
                   <span class="text-sm text-gray-700 group-hover:text-gray-900">${t('orders.cancelNoLongerNeeded')}</span>
                 </label>
                 <label class="flex items-center gap-3 cursor-pointer group">
-                  <input type="radio" name="cancelReason" value="wrong_info" x-model="cancelReason" class="w-4 h-4 accent-[#FF6600] cursor-pointer" />
+                  <input type="radio" name="cancelReason" value="wrong_info" x-model="cancelReason" class="w-4 h-4 cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" />
                   <span class="text-sm text-gray-700 group-hover:text-gray-900">${t('orders.cancelWrongOrder')}</span>
                 </label>
                 <label class="flex items-center gap-3 cursor-pointer group">
-                  <input type="radio" name="cancelReason" value="price_increased" x-model="cancelReason" class="w-4 h-4 accent-[#FF6600] cursor-pointer" />
+                  <input type="radio" name="cancelReason" value="price_increased" x-model="cancelReason" class="w-4 h-4 cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" />
                   <span class="text-sm text-gray-700 group-hover:text-gray-900">${t('orders.cancelPriceIncreased')}</span>
                 </label>
                 <label class="flex items-center gap-3 cursor-pointer group">
-                  <input type="radio" name="cancelReason" value="others" x-model="cancelReason" class="w-4 h-4 accent-[#FF6600] cursor-pointer" />
+                  <input type="radio" name="cancelReason" value="others" x-model="cancelReason" class="w-4 h-4 cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" />
                   <span class="text-sm text-gray-700 group-hover:text-gray-900">${t('orders.cancelOther')}</span>
                 </label>
               </div>
@@ -1933,7 +1933,7 @@ function renderReviews(): string {
 
     <div class="flex justify-end px-7 max-sm:px-3 py-3">
       <div class="flex border border-(--color-border-medium,#d1d5db) rounded overflow-hidden w-full max-w-[320px] max-sm:max-w-full">
-        <input type="text" placeholder="${t('orders.reviewSearchPlaceholder')}" class="os-reviews-toolbar__input flex-1 min-w-0 h-8 px-2.5 text-[13px] border-none outline-none text-(--color-text-body,#333)" />
+        <input type="text" placeholder="${t('orders.reviewSearchPlaceholder')}" class="th-input th-input-sm th-input-borderless flex-1 min-w-0" />
         <button class="flex items-center justify-center w-8 h-8 shrink-0 border-none border-l border-l-(--color-border-medium,#d1d5db) bg-(--color-surface-muted,#fafafa) text-(--color-text-muted,#666) cursor-pointer hover:bg-(--color-border-light) hover:text-(--color-text-heading,#111827)" aria-label="${t('common.search')}">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/>
@@ -2178,7 +2178,7 @@ function renderTaxInfo(): string {
           </div>
           <div class="mb-5">
             <label class="block text-[13px] font-semibold text-(--color-text-body,#333) mb-2">${t('orders.rstNumber')} <span class="text-[#e53935]">*</span></label>
-            <input type="text" class="os-modal__input w-full py-2.5 px-3 text-sm border border-(--color-border-medium,#d1d5db) rounded-md outline-none text-(--color-text-heading,#111827) transition-colors box-border focus:border-(--color-cta-primary,#cc9900) focus:shadow-[0_0_0_2px_rgba(249,115,22,0.1)]" placeholder="${t('orders.enterRstNumber')}" />
+            <input type="text" class="th-input th-input-md" placeholder="${t('orders.enterRstNumber')}" />
           </div>
         </div>
         <div class="px-6 pt-4 pb-5 flex justify-end gap-3 border-t border-(--color-border-light,#f0f0f0)">
@@ -2222,11 +2222,11 @@ function renderTaxInfo(): string {
           </div>
           <div class="mb-5">
             <label class="block text-[13px] font-semibold text-(--color-text-body,#333) mb-2">${t('orders.taxNumber')} <span class="text-[#e53935]">*</span></label>
-            <input type="text" class="os-modal__input w-full py-2.5 px-3 text-sm border border-(--color-border-medium,#d1d5db) rounded-md outline-none text-(--color-text-heading,#111827) transition-colors box-border focus:border-(--color-cta-primary,#cc9900) focus:shadow-[0_0_0_2px_rgba(249,115,22,0.1)]" placeholder="${t('orders.enterTaxNumber')}" />
+            <input type="text" class="th-input th-input-md" placeholder="${t('orders.enterTaxNumber')}" />
           </div>
           <div class="mb-5">
             <label class="block text-[13px] font-semibold text-(--color-text-body,#333) mb-2">${t('orders.fullRegistrationName')} <span class="text-[#e53935]">*</span></label>
-            <input type="text" class="os-modal__input w-full py-2.5 px-3 text-sm border border-(--color-border-medium,#d1d5db) rounded-md outline-none text-(--color-text-heading,#111827) transition-colors box-border focus:border-(--color-cta-primary,#cc9900) focus:shadow-[0_0_0_2px_rgba(249,115,22,0.1)]" placeholder="${t('orders.enterFullRegistrationName')}" />
+            <input type="text" class="th-input th-input-md" placeholder="${t('orders.enterFullRegistrationName')}" />
           </div>
         </div>
         <div class="px-6 pt-4 pb-5 flex justify-end gap-3 border-t border-(--color-border-light,#f0f0f0)">
@@ -2268,7 +2268,7 @@ function renderTaxInfo(): string {
           </div>
           <div class="mb-5">
             <label class="block text-[13px] font-semibold text-(--color-text-body,#333) mb-2">${t('orders.einLabel')} <span class="text-[#e53935]">*</span></label>
-            <input type="text" class="os-modal__input w-full py-2.5 px-3 text-sm border border-(--color-border-medium,#d1d5db) rounded-md outline-none text-(--color-text-heading,#111827) transition-colors box-border focus:border-(--color-cta-primary,#cc9900) focus:shadow-[0_0_0_2px_rgba(249,115,22,0.1)]" placeholder="${t('orders.enterEin')}" />
+            <input type="text" class="th-input th-input-md" placeholder="${t('orders.enterEin')}" />
           </div>
           <div class="flex items-start gap-1.5 text-xs text-(--color-text-placeholder,#999) leading-normal mb-1">
             <svg class="shrink-0 mt-px" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1a4 4 0 00-4 4v2H2a1 1 0 00-1 1v4a1 1 0 001 1h10a1 1 0 001-1V8a1 1 0 00-1-1h-1V5a4 4 0 00-4-4zm-2 4a2 2 0 114 0v2H5V5z" fill="#999"/></svg>

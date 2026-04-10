@@ -72,12 +72,12 @@ export function SupplierSetupForm(): string {
           <!-- Business Name -->
           <div>
             <label for="ss-business-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">${t('auth.supplierSetup.businessName')}</label>
-            <input type="text" id="ss-business-name" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-md text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all" placeholder="${t('auth.supplierSetup.businessNamePh')}" required />
+            <input type="text" id="ss-business-name" class="th-input th-input-lg" placeholder="${t('auth.supplierSetup.businessNamePh')}" required />
           </div>
           <!-- Contact Phone -->
           <div>
             <label for="ss-contact-phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">${t('auth.supplierSetup.contactPhone')}</label>
-            <input type="tel" id="ss-contact-phone" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-md text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all" placeholder="05XX XXX XX XX" required />
+            <input type="tel" id="ss-contact-phone" class="th-input th-input-lg" placeholder="05XX XXX XX XX" required />
             <p id="ss-phone-error" class="text-xs text-red-500 mt-1 hidden"></p>
           </div>
         </div>
@@ -96,7 +96,7 @@ export function SupplierSetupForm(): string {
             <!-- Tax ID (VKN) -->
             <div>
               <label for="ss-tax-id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">${t('auth.supplierSetup.taxId')}</label>
-              <input type="text" id="ss-tax-id" maxlength="11" inputmode="numeric" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-md text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all" placeholder="${t('auth.supplierSetup.taxIdPh')}" required />
+              <input type="text" id="ss-tax-id" maxlength="11" inputmode="numeric" class="th-input th-input-lg" placeholder="${t('auth.supplierSetup.taxIdPh')}" required />
               <p id="ss-taxid-error" class="text-xs text-red-500 mt-1 hidden"></p>
             </div>
             <!-- Tax Office -->
@@ -111,7 +111,7 @@ export function SupplierSetupForm(): string {
           <!-- Address -->
           <div>
             <label for="ss-address" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">${t('auth.supplierSetup.address')}</label>
-            <input type="text" id="ss-address" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-md text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all" placeholder="${t('auth.supplierSetup.addressPh')}" required />
+            <input type="text" id="ss-address" class="th-input th-input-lg" placeholder="${t('auth.supplierSetup.addressPh')}" required />
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <!-- City (81 il dropdown) -->
@@ -125,7 +125,7 @@ export function SupplierSetupForm(): string {
             <!-- Country (read-only) -->
             <div>
               <label for="ss-country" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">${t('auth.supplierSetup.country')}</label>
-              <input type="text" id="ss-country" value="Turkey" readonly class="w-full px-4 py-3 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md text-gray-900 dark:text-white cursor-not-allowed" />
+              <input type="text" id="ss-country" value="Turkey" readonly class="th-input th-input-lg" aria-disabled="true" />
             </div>
           </div>
         </div>
@@ -141,19 +141,19 @@ export function SupplierSetupForm(): string {
           <!-- Bank Name -->
           <div>
             <label for="ss-bank-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">${t('auth.supplierSetup.bankName')}</label>
-            <input type="text" id="ss-bank-name" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-md text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all" placeholder="${t('auth.supplierSetup.bankNamePh')}" required />
+            <input type="text" id="ss-bank-name" class="th-input th-input-lg" placeholder="${t('auth.supplierSetup.bankNamePh')}" required />
           </div>
           <!-- IBAN -->
           <div>
             <label for="ss-iban" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">${t('auth.supplierSetup.iban')}</label>
-            <input type="text" id="ss-iban" maxlength="32" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-md text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all" placeholder="TR..." required />
+            <input type="text" id="ss-iban" maxlength="32" class="th-input th-input-lg" placeholder="TR..." required />
             <p id="ss-iban-error" class="text-xs text-red-500 mt-1 hidden"></p>
             <p id="ss-iban-bank" class="text-xs text-green-600 mt-1 hidden"></p>
           </div>
           <!-- Account Holder Name -->
           <div>
             <label for="ss-account-holder" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">${t('auth.supplierSetup.accountHolder')}</label>
-            <input type="text" id="ss-account-holder" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-md text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all" placeholder="${t('auth.supplierSetup.accountHolderPh')}" required />
+            <input type="text" id="ss-account-holder" class="th-input th-input-lg" placeholder="${t('auth.supplierSetup.accountHolderPh')}" required />
           </div>
         </div>
       </div>
@@ -176,7 +176,7 @@ export function SupplierSetupForm(): string {
           <!-- Identity Document Number (TCKN) -->
           <div>
             <label for="ss-id-number" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">${t('auth.supplierSetup.idNumber')}</label>
-            <input type="text" id="ss-id-number" maxlength="11" inputmode="numeric" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-md text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all" placeholder="${t('auth.supplierSetup.idNumberPh')}" required />
+            <input type="text" id="ss-id-number" maxlength="11" inputmode="numeric" class="th-input th-input-lg" placeholder="${t('auth.supplierSetup.idNumberPh')}" required />
             <p id="ss-tckn-error" class="text-xs text-red-500 mt-1 hidden"></p>
           </div>
           <!-- Hidden expiry field -->
@@ -194,23 +194,23 @@ export function SupplierSetupForm(): string {
           <!-- Agreements -->
           <div class="space-y-3 pt-2">
             <label class="flex items-start gap-3">
-              <input type="checkbox" id="ss-terms" class="mt-1 w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-orange-500 focus:ring-orange-500/20 bg-white dark:bg-gray-800" required />
+              <input type="checkbox" id="ss-terms" class="mt-1 w-4 h-4 flex-shrink-0" style="accent-color: var(--checkbox-checked-bg);" required />
               <span class="text-sm text-gray-600 dark:text-gray-400">${t('auth.supplierSetup.termsAccept')}</span>
             </label>
             <label class="flex items-start gap-3">
-              <input type="checkbox" id="ss-privacy" class="mt-1 w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-orange-500 focus:ring-orange-500/20 bg-white dark:bg-gray-800" required />
+              <input type="checkbox" id="ss-privacy" class="mt-1 w-4 h-4 flex-shrink-0" style="accent-color: var(--checkbox-checked-bg);" required />
               <span class="text-sm text-gray-600 dark:text-gray-400">${t('auth.supplierSetup.privacyAccept')}</span>
             </label>
             <label class="flex items-start gap-3">
-              <input type="checkbox" id="ss-kvkk" class="mt-1 w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-orange-500 focus:ring-orange-500/20 bg-white dark:bg-gray-800" required />
+              <input type="checkbox" id="ss-kvkk" class="mt-1 w-4 h-4 flex-shrink-0" style="accent-color: var(--checkbox-checked-bg);" required />
               <span class="text-sm text-gray-600 dark:text-gray-400">${t('auth.supplierSetup.kvkkAccept')}</span>
             </label>
             <label class="flex items-start gap-3">
-              <input type="checkbox" id="ss-commission" class="mt-1 w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-orange-500 focus:ring-orange-500/20 bg-white dark:bg-gray-800" required />
+              <input type="checkbox" id="ss-commission" class="mt-1 w-4 h-4 flex-shrink-0" style="accent-color: var(--checkbox-checked-bg);" required />
               <span class="text-sm text-gray-600 dark:text-gray-400">${t('auth.supplierSetup.commissionAccept')}</span>
             </label>
             <label class="flex items-start gap-3">
-              <input type="checkbox" id="ss-return" class="mt-1 w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-orange-500 focus:ring-orange-500/20 bg-white dark:bg-gray-800" required />
+              <input type="checkbox" id="ss-return" class="mt-1 w-4 h-4 flex-shrink-0" style="accent-color: var(--checkbox-checked-bg);" required />
               <span class="text-sm text-gray-600 dark:text-gray-400">${t('auth.supplierSetup.returnAccept')}</span>
             </label>
           </div>

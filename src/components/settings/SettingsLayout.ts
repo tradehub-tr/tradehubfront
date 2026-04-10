@@ -46,12 +46,12 @@ function renderSettingsItem(item: SettingsItem): string {
   const rightContent = item.rightIcon
     ? `<span class="flex items-center">${item.rightIcon}</span>`
     : item.rightText
-      ? `<span class="text-[13px]" style="color:var(--color-text-placeholder, #999999)">${item.rightText}</span>`
+      ? `<span class="text-[13px]" style="color:var(--color-text-tertiary)">${item.rightText}</span>`
       : '';
 
   return `
     <a href="${item.href}" class="flex items-center justify-between py-3 no-underline transition-colors rounded -mx-2 px-2 hover:bg-(--color-surface-muted,#fafafa) group">
-      <span class="text-sm max-sm:text-[13px]" style="color:var(--color-text-body, #333333); group-hover:color:var(--color-text-heading, #111827)">${item.label}</span>
+      <span class="text-sm max-sm:text-[13px]" style="color:var(--color-text-primary); group-hover:color:var(--color-text-primary)">${item.label}</span>
       <span class="flex items-center gap-2 flex-shrink-0">
         ${rightContent}
         ${ICONS.chevron}
@@ -72,8 +72,8 @@ function renderSettingsCard(card: SettingsCard): string {
   return `
     <div class="bg-white rounded-lg p-6 max-sm:p-3.5">
       <div class="flex items-center gap-2.5">
-        <span class="flex items-center justify-center" style="color:var(--color-text-body, #333333)">${card.icon}</span>
-        <h2 class="text-base max-sm:text-[15px] font-bold m-0" style="color:var(--color-text-heading, #111827)">${card.title}</h2>
+        <span class="flex items-center justify-center" style="color:var(--color-text-primary)">${card.icon}</span>
+        <h2 class="text-base max-sm:text-[15px] font-bold m-0" style="color:var(--color-text-primary)">${card.title}</h2>
       </div>
       <div class="h-px bg-gray-200 my-4 max-sm:my-3"></div>
       <div class="flex flex-col">
@@ -90,30 +90,42 @@ function renderProfileHeader(): string {
     <div class="flex items-center justify-between gap-6 bg-white rounded-lg py-6 px-8 max-lg:flex-col max-lg:items-start max-lg:px-5 max-lg:py-5 max-sm:px-3 max-sm:py-3 max-lg:gap-4">
       <div class="flex items-center gap-5 max-sm:flex-col max-sm:items-start min-w-0">
         <div class="relative flex-shrink-0">
-          <div class="w-[72px] h-[72px] max-sm:w-[60px] max-sm:h-[60px] rounded-full flex items-center justify-center border-3 border-primary-200" style="background:linear-gradient(135deg, var(--color-primary-400, #e6b212) 0%, var(--color-primary-500, #cc9900) 100%)">
-            <span class="text-[32px] max-sm:text-[26px] font-bold text-white lowercase leading-none" x-text="userInitial || '?'"></span>
+          <input type="file" x-ref="photoInput" @change="uploadProfilePhoto($event)" accept="image/jpeg,image/png,image/webp,image/gif" class="hidden" />
+          <div class="w-[72px] h-[72px] max-sm:w-[60px] max-sm:h-[60px] rounded-full flex items-center justify-center border-3 border-primary-200 overflow-hidden" style="background:linear-gradient(135deg, var(--color-primary-400, #e6b212) 0%, var(--color-primary-500, #cc9900) 100%)">
+            <template x-if="userImage">
+              <img :src="userImage" alt="" class="w-full h-full object-cover" />
+            </template>
+            <template x-if="!userImage">
+              <span class="text-[32px] max-sm:text-[26px] font-bold text-white lowercase leading-none" x-text="userInitial || '?'"></span>
+            </template>
           </div>
-          <button class="absolute -bottom-0.5 -left-0.5 w-7 h-7 max-sm:w-6 max-sm:h-6 rounded-full bg-white border border-border-default flex items-center justify-center cursor-pointer transition-all hover:bg-surface-raised" style="color:var(--color-text-muted, #666666)" title="${t('settings.changePhoto')}">
+          <button type="button" @click="triggerPhotoUpload()" :disabled="uploadingPhoto" class="absolute -bottom-0.5 -left-0.5 w-7 h-7 max-sm:w-6 max-sm:h-6 rounded-full bg-white border border-border-default flex items-center justify-center cursor-pointer transition-all hover:bg-surface-raised disabled:opacity-60 disabled:cursor-wait" style="color:var(--color-text-secondary)" :title="uploadingPhoto ? '${t('common.loading')}' : '${t('settings.changePhoto')}'">
             ${ICONS.camera}
           </button>
         </div>
         <div class="flex flex-col gap-1 min-w-0">
-          <h2 class="text-lg max-sm:text-base font-bold mb-1 m-0" style="color:var(--color-text-heading, #111827)" x-text="userName || '...'"></h2>
+          <h2 class="text-lg max-sm:text-base font-bold mb-1 m-0" style="color:var(--color-text-primary)" x-text="userName || '...'"></h2>
+          <template x-if="photoError">
+            <p class="text-[11px] m-0 -mt-0.5" style="color:#dc2626" x-text="photoError"></p>
+          </template>
           <div class="flex items-center gap-2 text-[13px] max-sm:text-xs flex-wrap">
-            <span class="min-w-[110px] max-sm:min-w-0 flex-shrink-0" style="color:var(--color-text-placeholder, #999999)">${t('settings.emailLayoutLabel')}</span>
-            <span class="font-mono truncate" style="color:var(--color-text-body, #333333)" x-text="userEmail || '...'"></span>
-            <button class="inline-flex items-center justify-center w-6 h-6 border-none bg-none rounded cursor-pointer transition-all hover:bg-surface-raised flex-shrink-0" style="color:var(--color-text-placeholder, #999999)" title="${t('settings.changeEmailNav')}">${ICONS.edit}</button>
+            <span class="min-w-[110px] max-sm:min-w-0 flex-shrink-0" style="color:var(--color-text-tertiary)">${t('settings.emailLayoutLabel')}</span>
+            <span class="font-mono truncate" style="color:var(--color-text-primary)" x-text="userEmail || '...'"></span>
+            <button type="button" @click="gotoChangeEmail()" class="inline-flex items-center justify-center w-6 h-6 border-none bg-none rounded cursor-pointer transition-all hover:bg-surface-raised flex-shrink-0" style="color:var(--color-text-tertiary)" title="${t('settings.changeEmailNav')}">${ICONS.edit}</button>
           </div>
           <div class="flex items-center gap-2 text-[13px] max-sm:text-xs flex-wrap">
-            <span class="min-w-[110px] max-sm:min-w-0 flex-shrink-0" style="color:var(--color-text-placeholder, #999999)">${t('settings.membershipNumber')}</span>
-            <span class="font-mono truncate" style="color:var(--color-text-body, #333333)" x-text="memberId || '...'"></span>
-            <button x-ref="copyBtn" @click="copyMemberId()" class="inline-flex items-center justify-center w-6 h-6 border-none bg-none rounded cursor-pointer transition-all hover:bg-surface-raised flex-shrink-0" style="color:var(--color-text-placeholder, #999999)" title="${t('settings.copyTooltip')}">${ICONS.copy}</button>
+            <span class="min-w-[110px] max-sm:min-w-0 flex-shrink-0" style="color:var(--color-text-tertiary)">${t('settings.membershipNumber')}</span>
+            <span class="font-mono truncate" style="color:var(--color-text-primary)" x-text="memberId || '...'"></span>
+            <button type="button" x-ref="copyBtn" @click="copyMemberId()" class="inline-flex items-center justify-center w-6 h-6 border-none bg-none rounded cursor-pointer transition-all hover:bg-surface-raised flex-shrink-0" :style="copied ? 'color:#16a34a' : 'color:var(--color-text-tertiary)'" :title="copied ? '${t('orders.copied')}' : '${t('settings.copyTooltip')}'">
+              <template x-if="!copied">${ICONS.copy}</template>
+              <template x-if="copied"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7.5l2.5 2.5L11 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></template>
+            </button>
           </div>
         </div>
       </div>
       <div class="flex items-center gap-4 flex-shrink-0 max-lg:w-full">
-        <a href="#profilim" class="inline-flex items-center justify-center px-6 max-sm:px-3 h-10 rounded-full text-sm max-sm:text-[13px] font-semibold no-underline transition-all whitespace-nowrap text-white max-lg:flex-1 max-lg:text-center" style="background:var(--color-text-heading)">${t('settings.editProfile')}</a>
-        <button @click="handleLogout()" class="inline-flex items-center justify-center px-6 max-sm:px-3 h-10 rounded-full text-sm max-sm:text-[13px] font-semibold no-underline transition-all whitespace-nowrap bg-none hover:underline max-lg:flex-1 max-lg:text-center cursor-pointer border-none" style="color:var(--color-text-body, #333333)">${t('settings.signOut')}</button>
+        <a href="#profilim" class="th-btn no-underline whitespace-nowrap max-lg:flex-1 max-lg:text-center">${t('settings.editProfile')}</a>
+        <button @click="handleLogout()" class="inline-flex items-center justify-center px-6 max-sm:px-3 h-10 rounded-full text-sm max-sm:text-[13px] font-semibold no-underline transition-all whitespace-nowrap bg-none hover:underline max-lg:flex-1 max-lg:text-center cursor-pointer border-none" style="color:var(--color-text-primary)">${t('settings.signOut')}</button>
       </div>
     </div>
   `;

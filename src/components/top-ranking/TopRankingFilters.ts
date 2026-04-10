@@ -23,7 +23,7 @@ export function TopRankingFilters(): string {
         type="radio"
         name="region"
         :checked="pendingRegion === '${r.id}'"
-        class="w-4 h-4 text-primary-500 border-border-default focus:ring-primary-400"
+        class="w-4 h-4 flex-shrink-0" style="accent-color: var(--checkbox-checked-bg);"
       />
       <span class="text-sm text-text-secondary" data-i18n="${r.labelKey}">${t(r.labelKey)}</span>
     </label>
@@ -57,7 +57,7 @@ export function TopRankingFilters(): string {
             type="radio"
             name="subcategory"
             :checked="pendingSubCategory === '${sub.id}'"
-            class="w-4 h-4 text-primary-500 border-border-default focus:ring-primary-400"
+            class="w-4 h-4 flex-shrink-0" style="accent-color: var(--checkbox-checked-bg);"
           />
           <span class="text-sm text-text-secondary" data-i18n="${sub.nameKey}">${t(sub.nameKey)}</span>
         </label>
@@ -73,7 +73,7 @@ export function TopRankingFilters(): string {
               type="radio"
               name="subcategory"
               :checked="pendingSubCategory === null"
-              class="w-4 h-4 text-primary-500 border-border-default focus:ring-primary-400"
+              class="w-4 h-4 flex-shrink-0" style="accent-color: var(--checkbox-checked-bg);"
             />
             <span class="text-sm text-text-secondary font-medium">${t('topRankingPage.allCategories')} - ${t(cat.nameKey)}</span>
           </label>

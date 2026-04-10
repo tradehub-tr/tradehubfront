@@ -64,18 +64,18 @@ function getDefaultSections(): PrivacySection[] {
 
 function renderPrivacySection(section: PrivacySection): string {
   const optionsHtml = section.options.map(opt => `
-    <label class="privacy__radio flex items-center gap-2 text-sm max-sm:text-[13px] cursor-pointer leading-normal" style="color:var(--color-text-body, #333333)">
+    <label class="privacy__radio flex items-center gap-2 text-sm max-sm:text-[13px] cursor-pointer leading-normal" style="color:var(--color-text-primary)">
       <input type="radio" name="privacy-${section.id}" value="${opt.value}" class="m-0 flex-shrink-0" style="accent-color:var(--color-primary-500, #cc9900)" ${opt.value === section.selected ? 'checked' : ''} />
       <span class="flex-1 min-w-0">${opt.label}</span>
-      ${opt.tooltip ? `<span class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 text-[10px] cursor-help flex-shrink-0" style="color:var(--color-text-placeholder, #999999)" title="${t('settings.moreInfo')}">?</span>` : ''}
+      ${opt.tooltip ? `<span class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 text-[10px] cursor-help flex-shrink-0" style="color:var(--color-text-tertiary)" title="${t('settings.moreInfo')}">?</span>` : ''}
     </label>
   `).join('');
 
   return `
     <div>
-      <h3 class="text-sm max-sm:text-[13px] font-bold mb-3 max-sm:mb-2 m-0 flex items-center gap-1.5" style="color:var(--color-text-heading, #111827)">
+      <h3 class="text-sm max-sm:text-[13px] font-bold mb-3 max-sm:mb-2 m-0 flex items-center gap-1.5" style="color:var(--color-text-primary)">
         ${section.title}
-        ${section.tooltip ? `<span class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 text-[10px] cursor-help flex-shrink-0" style="color:var(--color-text-placeholder, #999999)" title="${t('settings.moreInfo')}">?</span>` : ''}
+        ${section.tooltip ? `<span class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 text-[10px] cursor-help flex-shrink-0" style="color:var(--color-text-tertiary)" title="${t('settings.moreInfo')}">?</span>` : ''}
       </h3>
       <div class="flex flex-col gap-2 max-sm:gap-1.5 pl-1">
         ${optionsHtml}
@@ -89,7 +89,7 @@ export function SettingsPrivacy(sections?: PrivacySection[]): string {
 
   return `
     <div class="bg-white rounded-lg p-8 max-md:p-5 max-sm:px-4 max-sm:py-4">
-      <h2 class="text-xl max-sm:text-lg font-bold m-0" style="color:var(--color-text-heading, #111827)">${t('settings.privacyTitle')}</h2>
+      <h2 class="text-xl max-sm:text-lg font-bold m-0" style="color:var(--color-text-primary)">${t('settings.privacyTitle')}</h2>
       <div class="h-px bg-gray-200 mt-4 mb-6 max-sm:mt-3 max-sm:mb-4"></div>
       <div class="flex flex-col gap-7 max-sm:gap-5">
         ${items.map(renderPrivacySection).join('')}

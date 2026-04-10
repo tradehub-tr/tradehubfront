@@ -25,7 +25,7 @@ function ResetPasswordHeader(): string {
           <img src="${baseUrl}images/istoc-logo.png" alt="iSTOC" class="h-7" />
         </a>
         <div class="relative">
-          <select class="text-sm text-gray-600 border border-gray-300 rounded px-2 py-1 bg-white appearance-none pr-6 cursor-pointer auth-input-focus">
+          <select class="th-input th-input-sm w-auto cursor-pointer">
             <option>${t('common.turkish')}</option>
             <option>${t('common.english')}</option>
           </select>
@@ -64,7 +64,7 @@ function StepForm(): string {
             name="new-password"
             x-ref="newPassword"
             @input="onPasswordInput()"
-            class="w-full h-12 px-4 pr-12 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 auth-input-focus transition-colors"
+            class="th-input th-input-lg pr-12"
             placeholder="${t('auth.reset.newPassword')}" data-i18n-placeholder="auth.reset.newPassword"
             required
             autocomplete="new-password"

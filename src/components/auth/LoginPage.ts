@@ -53,7 +53,7 @@ export function LoginPage(): string {
             type="email"
             id="email"
             name="email"
-            class="w-full h-12 px-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white placeholder-gray-500 auth-input-focus transition-colors"
+            class="th-input th-input-lg"
             placeholder="${t('auth.login.email')}" data-i18n-placeholder="auth.login.email"
             required
           >
@@ -66,7 +66,7 @@ export function LoginPage(): string {
             type="password"
             id="password"
             name="password"
-            class="w-full h-12 px-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white placeholder-gray-500 auth-input-focus transition-colors"
+            class="th-input th-input-lg"
             placeholder="${t('auth.login.password')}" data-i18n-placeholder="auth.login.password"
             required
           >

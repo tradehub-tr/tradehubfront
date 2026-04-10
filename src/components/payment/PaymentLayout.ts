@@ -173,18 +173,18 @@ function renderPaymentManagement(): string {
             <div class="h-7 px-2 border rounded flex items-center justify-center bg-white transition-opacity text-[10px] font-bold text-[#0e4c96]" :class="brand ? 'opacity-30' : 'opacity-100'" style="border-color: var(--color-border-default, #e5e5e5);">JCB</div>
           </div>
           <div class="mb-4">
-            <input id="pay-card-num" x-ref="numInput" x-model="ccNum" @input="formatCard" type="text" class="w-full py-2.5 px-3.5 text-sm border border-border-strong rounded-lg outline-none text-text-primary transition-[border-color] duration-150 focus:border-[#999]" placeholder="${t('payment.cardNumberPlaceholder')}" maxlength="19" />
+            <input id="pay-card-num" x-ref="numInput" x-model="ccNum" @input="formatCard" type="text" class="th-input th-input-md" placeholder="${t('payment.cardNumberPlaceholder')}" maxlength="19" />
           </div>
           <div class="flex gap-3 mb-4">
-            <input id="pay-card-fn" type="text" class="flex-1 py-2.5 px-3.5 text-sm border border-border-strong rounded-lg outline-none text-text-primary transition-[border-color] duration-150 focus:border-[#999]" placeholder="${t('payment.firstNamePlaceholder')}" />
-            <input id="pay-card-ln" type="text" class="flex-1 py-2.5 px-3.5 text-sm border border-border-strong rounded-lg outline-none text-text-primary transition-[border-color] duration-150 focus:border-[#999]" placeholder="${t('payment.lastNamePlaceholder')}" />
+            <input id="pay-card-fn" type="text" class="th-input th-input-md flex-1" placeholder="${t('payment.firstNamePlaceholder')}" />
+            <input id="pay-card-ln" type="text" class="th-input th-input-md flex-1" placeholder="${t('payment.lastNamePlaceholder')}" />
           </div>
           <div class="flex gap-3 max-sm:gap-2 mb-4 items-center flex-wrap">
-            <select id="pay-card-month" class="py-2.5 px-3.5 max-sm:py-2 max-sm:px-2.5 text-sm max-sm:text-xs border border-border-strong rounded-lg outline-none text-text-primary bg-surface cursor-pointer min-w-[80px] max-sm:min-w-[60px]"><option value="">${t('payment.monthPlaceholder')}</option>${Array.from({ length: 12 }, (_, i) => `<option value="${String(i + 1).padStart(2, '0')}">${String(i + 1).padStart(2, '0')}</option>`).join('')}</select>
+            <select id="pay-card-month" class="th-input th-input-md min-w-[80px] max-sm:min-w-[60px] cursor-pointer"><option value="">${t('payment.monthPlaceholder')}</option>${Array.from({ length: 12 }, (_, i) => `<option value="${String(i + 1).padStart(2, '0')}">${String(i + 1).padStart(2, '0')}</option>`).join('')}</select>
             <span class="text-base text-text-tertiary px-0.5">/</span>
-            <select id="pay-card-year" class="py-2.5 px-3.5 max-sm:py-2 max-sm:px-2.5 text-sm max-sm:text-xs border border-border-strong rounded-lg outline-none text-text-primary bg-surface cursor-pointer min-w-[90px] max-sm:min-w-[70px]"><option value="">${t('payment.yearPlaceholder')}</option>${Array.from({ length: 10 }, (_, i) => `<option value="${2025 + i}">${2025 + i}</option>`).join('')}</select>
+            <select id="pay-card-year" class="th-input th-input-md min-w-[90px] max-sm:min-w-[70px] cursor-pointer"><option value="">${t('payment.yearPlaceholder')}</option>${Array.from({ length: 10 }, (_, i) => `<option value="${2025 + i}">${2025 + i}</option>`).join('')}</select>
             <div class="flex items-center gap-2 ml-auto">
-              <input type="text" class="w-[100px] max-sm:w-[80px] py-2.5 px-3.5 max-sm:py-2 max-sm:px-2.5 text-sm max-sm:text-xs border border-border-strong rounded-lg outline-none text-text-primary transition-[border-color] duration-150 focus:border-[#999]" placeholder="CVV/CVC *" maxlength="4" />
+              <input type="text" class="th-input th-input-md w-[100px] max-sm:w-[80px]" placeholder="CVV/CVC *" maxlength="4" />
               <div class="flex gap-1 opacity-60 max-sm:hidden">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 5a2 2 0 012-2h8a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V5z" stroke="#999" stroke-width="1.2"/><path d="M2 7h12" stroke="#999" stroke-width="1.2"/></svg>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="#999" stroke-width="1.2"/><path d="M8 5v3m0 2.5h.01" stroke="#999" stroke-width="1.2" stroke-linecap="round"/></svg>
@@ -229,11 +229,11 @@ function renderTransactions(): string {
       <div class="flex items-center justify-between gap-3 py-3 flex-wrap max-md:flex-col max-md:items-start">
         <div class="flex items-center gap-2.5 flex-wrap">
           <div class="relative flex items-center gap-1.5">
-            <input type="text" class="py-2 px-3 text-[13px] border border-border-strong rounded-md outline-none text-text-primary min-w-[160px] max-sm:min-w-0 max-sm:w-full transition-[border-color] duration-150 pr-8 focus:border-[#999]" placeholder="${t('payment.selectTime')}" readonly />
+            <input type="text" class="th-input th-input-sm min-w-[160px] max-sm:min-w-0 max-sm:w-full pr-8" placeholder="${t('payment.selectTime')}" readonly />
             <span class="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none">${CALENDAR_ICON}</span>
           </div>
-          <input type="text" class="py-2 px-3 text-[13px] border border-border-strong rounded-md outline-none text-text-primary min-w-[160px] max-sm:min-w-0 max-sm:w-full transition-[border-color] duration-150 focus:border-[#999]" placeholder="${t('payment.searchByAmount')}" />
-          <select class="py-2 px-3 text-[13px] border border-border-strong rounded-md outline-none text-text-primary bg-surface cursor-pointer min-w-[120px]"><option>${t('payment.currencyLabel')}</option><option>USD</option><option>EUR</option><option>TRY</option></select>
+          <input type="text" class="th-input th-input-sm min-w-[160px] max-sm:min-w-0 max-sm:w-full" placeholder="${t('payment.searchByAmount')}" />
+          <select class="th-input th-input-sm min-w-[120px] cursor-pointer"><option>${t('payment.currencyLabel')}</option><option>USD</option><option>EUR</option><option>TRY</option></select>
           <a href="#" class="text-[13px] text-text-secondary no-underline whitespace-nowrap transition-[color] duration-150 hover:text-text-primary hover:underline">${t('payment.removeFilters')}</a>
         </div>
         <button class="th-btn-dark inline-flex items-center gap-1.5 whitespace-nowrap">
@@ -303,7 +303,7 @@ function renderTTAccounts(): string {
           <button class="flex items-center justify-center px-2.5 bg-transparent border-none border-l border-border-default cursor-pointer transition-[background] duration-150 hover:bg-surface-raised">${SEARCH_ICON}</button>
         </div>
         <div class="relative flex items-center gap-1.5">
-          <input type="text" class="py-2 px-3 text-[13px] border border-border-strong rounded-md outline-none text-text-primary min-w-[160px] max-sm:min-w-0 max-sm:w-full transition-[border-color] duration-150 pr-8 focus:border-[#999]" placeholder="${t('payment.selectTime')}" readonly />
+          <input type="text" class="th-input th-input-sm min-w-[160px] max-sm:min-w-0 max-sm:w-full pr-8" placeholder="${t('payment.selectTime')}" readonly />
           <span class="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none">${CALENDAR_ICON}</span>
         </div>
         <a href="#" class="text-[13px] text-text-secondary no-underline whitespace-nowrap transition-[color] duration-150 hover:text-text-primary hover:underline">${t('payment.removeFilters')}</a>
@@ -341,7 +341,7 @@ function renderTTAccounts(): string {
           </div>
           <p class="text-[13px] text-text-secondary leading-relaxed mb-4">${t('payment.verifyDescription')}</p>
           <div class="mb-4">
-            <input type="text" class="w-full py-2.5 px-3.5 text-sm border border-border-strong rounded-lg outline-none text-text-primary transition-[border-color] duration-150 focus:border-[#999]" placeholder="${t('payment.supplierAccountPlaceholder')}" />
+            <input type="text" class="th-input th-input-md" placeholder="${t('payment.supplierAccountPlaceholder')}" />
           </div>
         </div>
         <div class="flex justify-between gap-2.5 px-6 max-sm:px-4 pb-5 pt-4 border-t border-[#f0f0f0] max-sm:flex-col-reverse">
@@ -369,7 +369,7 @@ function renderTTTracking(): string {
           <button class="flex items-center justify-center px-2.5 bg-transparent border-none border-l border-border-default cursor-pointer transition-[background] duration-150 hover:bg-surface-raised">${SEARCH_ICON}</button>
         </div>
         <div class="relative flex items-center gap-1.5">
-          <input type="text" class="py-2 px-3 text-[13px] border border-border-strong rounded-md outline-none text-text-primary min-w-[160px] max-sm:min-w-0 max-sm:w-full transition-[border-color] duration-150 pr-8 focus:border-[#999]" placeholder="${t('payment.selectTime')}" readonly />
+          <input type="text" class="th-input th-input-sm min-w-[160px] max-sm:min-w-0 max-sm:w-full pr-8" placeholder="${t('payment.selectTime')}" readonly />
           <span class="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none">${CALENDAR_ICON}</span>
         </div>
         <a href="#" class="text-[13px] text-text-secondary no-underline whitespace-nowrap transition-[color] duration-150 hover:text-text-primary hover:underline">${t('payment.removeFilters')}</a>

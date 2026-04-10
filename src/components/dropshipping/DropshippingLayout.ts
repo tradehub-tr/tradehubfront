@@ -170,7 +170,7 @@ function renderHeroBanner(): string {
       </div>
       <div class="ds-hero__search-wrapper flex-shrink-0 lg:min-w-[468px] pt-1 max-lg:w-full">
         <div class="flex items-center h-10 bg-white border-2 border-primary-500 rounded-full py-1 pl-5 pr-1 max-md:w-full">
-          <input type="text" class="flex-1 p-0 border-none outline-none text-sm leading-[18px] text-secondary-800 bg-transparent min-w-0 placeholder:text-secondary-300" placeholder="${t('dropshipping.searchPlaceholder')}" />
+          <input type="text" class="th-input th-input-borderless flex-1 min-w-0" placeholder="${t('dropshipping.searchPlaceholder')}" />
           <button class="th-btn inline-flex items-center gap-1.5 px-5 h-8 border-none text-sm font-semibold cursor-pointer whitespace-nowrap flex-shrink-0 hover: max-[480px]:px-3.5 max-[480px]:text-[13px]">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="2"/><path d="M10.5 10.5L14.5 14.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
             ${t('dropshipping.searchBtn')}

@@ -36,38 +36,38 @@ export function SettingsDeleteAccount(): string {
       <div x-show="step === 1">
         <div class="max-w-[640px] mx-auto">
           <div class="flex justify-center mb-4">${ICONS.trash}</div>
-          <h2 class="text-xl max-sm:text-base font-bold mb-3 m-0 text-center" style="color:var(--color-text-heading, #111827)">${t('settings.deleteConfirmTitle')}</h2>
-          <p class="text-sm max-sm:text-[13px] mb-5 m-0 text-center" style="color:var(--color-text-muted, #666666)">${t('settings.deleteConfirmDesc')}</p>
+          <h2 class="text-xl max-sm:text-base font-bold mb-3 m-0 text-center" style="color:var(--color-text-primary)">${t('settings.deleteConfirmTitle')}</h2>
+          <p class="text-sm max-sm:text-[13px] mb-5 m-0 text-center" style="color:var(--color-text-secondary)">${t('settings.deleteConfirmDesc')}</p>
 
           <ul class="list-none p-0 m-0 mb-6 flex flex-col gap-2">
-            <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-body, #333333)">
+            <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-primary)">
               <span class="text-red-500 mt-0.5 flex-shrink-0">&#8226;</span>
               ${t('settings.deleteItemProfile')}
             </li>
-            <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-body, #333333)">
+            <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-primary)">
               <span class="text-red-500 mt-0.5 flex-shrink-0">&#8226;</span>
               ${t('settings.deleteItemOrders')}
             </li>
-            <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-body, #333333)">
+            <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-primary)">
               <span class="text-red-500 mt-0.5 flex-shrink-0">&#8226;</span>
               ${t('settings.deleteItemFavorites')}
             </li>
-            <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-body, #333333)">
+            <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-primary)">
               <span class="text-red-500 mt-0.5 flex-shrink-0">&#8226;</span>
               ${t('settings.deleteItemMessages')}
             </li>
           </ul>
 
           <div class="mb-5">
-            <label class="block text-[13px] font-medium mb-1.5" style="color:var(--color-text-muted, #666666)">${t('settings.selectReasonLabel')}</label>
-            <select class="w-full py-2.5 px-3.5 border border-gray-300 rounded-lg text-sm outline-none bg-white cursor-pointer focus:border-primary-500 focus:ring-2 focus:ring-primary-500/10" x-ref="reason">
+            <label class="block text-[13px] font-medium mb-1.5" style="color:var(--color-text-secondary)">${t('settings.selectReasonLabel')}</label>
+            <select class="th-input th-input-md cursor-pointer" x-ref="reason">
               ${reasonOptions}
             </select>
           </div>
 
           <div class="flex items-center gap-3 max-sm:flex-col">
             <button class="th-btn bg-red-600 hover:bg-red-700 max-sm:w-full" type="button" @click="goToStep2()">${t('settings.wantToDelete')}</button>
-            <a href="#" class="text-[13px] font-medium no-underline hover:underline max-sm:text-center" style="color:var(--color-text-muted, #666666)">${t('settings.cancelAction')}</a>
+            <a href="#" class="text-[13px] font-medium no-underline hover:underline max-sm:text-center" style="color:var(--color-text-secondary)">${t('settings.cancelAction')}</a>
           </div>
         </div>
       </div>
@@ -79,16 +79,16 @@ export function SettingsDeleteAccount(): string {
             ${ICONS.warning}
             <p class="text-sm m-0 font-medium text-red-700">${t('settings.deleteIrreversible')}</p>
           </div>
-          <p class="text-sm mb-5 m-0" style="color:var(--color-text-muted, #666666)">${t('settings.deleteIrreversibleDesc')}</p>
+          <p class="text-sm mb-5 m-0" style="color:var(--color-text-secondary)">${t('settings.deleteIrreversibleDesc')}</p>
 
           <div class="mb-4 max-sm:mb-3">
-            <label class="block text-[13px] max-sm:text-xs font-medium mb-1.5" style="color:var(--color-text-muted, #666666)">${t('settings.currentPassword')}</label>
-            <input type="password" class="w-full max-w-[360px] max-sm:max-w-full py-2.5 px-3.5 border border-gray-300 rounded-lg text-sm outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/10" x-ref="deletePassword" placeholder="${t('settings.currentPassword')}" />
+            <label class="block text-[13px] max-sm:text-xs font-medium mb-1.5" style="color:var(--color-text-secondary)">${t('settings.currentPassword')}</label>
+            <input type="password" class="th-input th-input-md is-error max-w-[360px] max-sm:max-w-full" x-ref="deletePassword" placeholder="${t('settings.currentPassword')}" />
           </div>
 
           <label class="flex items-start gap-2.5 cursor-pointer mb-5">
             <input type="checkbox" class="mt-0.5 w-4 h-4 flex-shrink-0" style="accent-color:#dc2626" x-ref="confirmCheck" />
-            <span class="text-sm" style="color:var(--color-text-body, #333333)">${t('settings.confirmDeleteCheck')}</span>
+            <span class="text-sm" style="color:var(--color-text-primary)">${t('settings.confirmDeleteCheck')}</span>
           </label>
 
           <p class="text-[13px] text-red-500 mb-3" x-show="error" x-text="error" x-cloak></p>
@@ -101,7 +101,7 @@ export function SettingsDeleteAccount(): string {
                 ${t('common.loading')}
               </span>
             </button>
-            <button class="text-[13px] font-medium bg-none border-none cursor-pointer hover:underline max-sm:text-center" style="color:var(--color-text-muted, #666666)" type="button" @click="step = 1">${t('settings.cancelAction')}</button>
+            <button class="text-[13px] font-medium bg-none border-none cursor-pointer hover:underline max-sm:text-center" style="color:var(--color-text-secondary)" type="button" @click="step = 1">${t('settings.cancelAction')}</button>
           </div>
         </div>
       </div>
@@ -109,8 +109,8 @@ export function SettingsDeleteAccount(): string {
       <!-- Step 3: Done -->
       <div x-show="step === 3" x-cloak>
         <div class="max-w-[640px] mx-auto text-center py-4 max-sm:py-2">
-          <h3 class="text-lg max-sm:text-base font-bold mb-2 m-0" style="color:var(--color-text-heading, #111827)">${t('settings.accountDeleted')}</h3>
-          <p class="text-sm max-sm:text-[13px] mb-6 max-sm:mb-4 m-0" style="color:var(--color-text-muted, #666666)">${t('settings.accountDeletedDesc')}</p>
+          <h3 class="text-lg max-sm:text-base font-bold mb-2 m-0" style="color:var(--color-text-primary)">${t('settings.accountDeleted')}</h3>
+          <p class="text-sm max-sm:text-[13px] mb-6 max-sm:mb-4 m-0" style="color:var(--color-text-secondary)">${t('settings.accountDeletedDesc')}</p>
           <a href="/pages/auth/login.html" class="th-btn no-underline inline-flex max-sm:w-full max-sm:justify-center">${t('settings.goToLogin')}</a>
         </div>
       </div>

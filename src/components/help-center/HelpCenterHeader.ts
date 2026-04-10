@@ -101,7 +101,7 @@ export function HelpCenterHeader(opts: HelpCenterHeaderOptions = {}): string {
             >
               <div class="p-4">
                 <h3 class="text-sm font-bold text-gray-900 mb-3">${t('header.language') || 'Dil'}</h3>
-                <select id="hc-lang-select" class="w-full px-3 py-2 text-sm bg-white border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 appearance-none cursor-pointer">
+                <select id="hc-lang-select" class="th-input th-input-sm cursor-pointer">
                   ${languageOptions.map(lang => `
                     <option value="${lang.code}" ${lang.code === currentLangCode ? 'selected' : ''}>${lang.flag} ${lang.name}</option>
                   `).join('')}
