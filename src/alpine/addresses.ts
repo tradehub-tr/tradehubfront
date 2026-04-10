@@ -9,6 +9,7 @@ import Alpine from 'alpinejs'
 import { getUser, isLoggedIn } from '../utils/auth'
 import { turkishProvinces, districtsByProvince } from '../data/mockCheckout'
 import { showToast } from '../utils/toast'
+import { validatePhone, normalizePhone } from '../utils/tr-validation'
 import {
   fetchAddresses,
   saveAddressApi,
@@ -22,6 +23,11 @@ import {
 export type BuyerAddress = BuyerAddressData
 
 type AddressForm = Omit<BuyerAddress, 'id'>
+
+/* ── Constants ──────────────────────────────────────── */
+
+/** Kullanıcı başına maksimum adres sayısı. Backend MAX_ADDRESSES sabiti ile senkron. */
+const MAX_ADDRESSES = 10
 
 /* ── Guest localStorage fallback ────────────────────── */
 
@@ -95,12 +101,13 @@ function emptyForm(): AddressForm {
 Alpine.data('addressesManager', () => ({
   addresses: [] as BuyerAddress[],
   loading: true,
+  maxAddresses: MAX_ADDRESSES,
 
   // Form modal
   isModalOpen: false,
   editingId: '' as string,
   form: emptyForm() as AddressForm,
-  errors: {} as Record<string, boolean>,
+  errors: {} as Record<string, string>,
   saving: false,
 
   // Delete confirm
@@ -118,7 +125,44 @@ Alpine.data('addressesManager', () => ({
   /* ── Lifecycle ─────────────────────────────────── */
 
   async init() {
+    // Modal açıldığında auto-focus: ilk odaklanabilir element'e odakla (a11y).
+    this.$watch('isModalOpen', (val: boolean) => {
+      if (val) {
+        this.$nextTick(() => {
+          const firstInput = document.querySelector<HTMLElement>(
+            '#buyer-address-form input:not([disabled]), #buyer-address-form select:not([disabled]), #buyer-address-form textarea:not([disabled])'
+          )
+          firstInput?.focus()
+        })
+      }
+    })
     await this.loadAddresses()
+  },
+
+  /* ── A11y: focus trap ──────────────────────────── */
+
+  /**
+   * Modal için basit focus trap — Tab / Shift+Tab tuşları modal dışına çıkmasın.
+   * Alpine `@alpinejs/focus` plugin'i olmadığı için manuel.
+   */
+  handleFocusTrap(e: KeyboardEvent) {
+    if (e.key !== 'Tab') return
+    const modal = document.getElementById('buyer-address-form')?.closest('[role="dialog"]')
+    if (!modal) return
+    const focusables = modal.querySelectorAll<HTMLElement>(
+      'input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )
+    if (focusables.length === 0) return
+    const first = focusables[0]
+    const last = focusables[focusables.length - 1]
+    const active = document.activeElement as HTMLElement | null
+    if (e.shiftKey && active === first) {
+      e.preventDefault()
+      last.focus()
+    } else if (!e.shiftKey && active === last) {
+      e.preventDefault()
+      first.focus()
+    }
   },
 
   /* ── Load ──────────────────────────────────────── */
@@ -139,7 +183,7 @@ Alpine.data('addressesManager', () => ({
               try {
                 // id'yi çıkar — backend yeni kayıt oluştursun
                 const { id: _id, ...addrWithoutId } = addr
-                const saved = await saveAddressApi(addrWithoutId)
+                const { address: saved } = await saveAddressApi(addrWithoutId)
                 migrated.push(saved)
               } catch {
                 failed.push(addr)
@@ -175,7 +219,13 @@ Alpine.data('addressesManager', () => ({
   /* ── Modal open/close ──────────────────────────── */
 
   openAdd() {
-    if (this.addresses.length >= 10) return
+    if (this.addresses.length >= MAX_ADDRESSES) {
+      showToast({
+        message: `En fazla ${MAX_ADDRESSES} adres ekleyebilirsiniz. Yeni adres eklemek için mevcut bir adresi silin.`,
+        type: 'warning',
+      })
+      return
+    }
     this.editingId = ''
     this.form = emptyForm()
     if (this.addresses.length === 0) this.form.is_default = true
@@ -186,6 +236,8 @@ Alpine.data('addressesManager', () => ({
   openEdit(addr: BuyerAddress) {
     this.editingId = addr.id
     const { id: _id, ...formData } = addr
+    // Eski kayıtlarda phone_prefix boş olabilir — TR sabit prefix'e fallback
+    if (!formData.phone_prefix) formData.phone_prefix = '+90'
     this.form = formData
     this.errors = {}
     this.isModalOpen = true
@@ -200,14 +252,21 @@ Alpine.data('addressesManager', () => ({
   /* ── Validate ──────────────────────────────────── */
 
   validate(): boolean {
-    const required: (keyof AddressForm)[] = ['title', 'contact_name', 'phone', 'state', 'street']
+    const required: (keyof AddressForm)[] = ['title', 'contact_name', 'company', 'phone', 'state', 'street']
     let valid = true
     this.errors = {}
     for (const field of required) {
       if (!String(this.form[field]).trim()) {
-        this.errors[field] = true
+        this.errors[field] = 'Bu alan zorunludur.'
         valid = false
       }
+    }
+    // Telefon format kontrolü — yalnızca boş değilse (boş durumu zaten yukarıda yakalandı)
+    if (this.form.phone.trim() && !validatePhone(this.form.phone, this.form.phone_prefix)) {
+      this.errors.phone = this.form.phone_prefix === '+90'
+        ? 'Geçerli bir telefon numarası giriniz. (örn. 0212 555 00 00)'
+        : 'Geçerli bir telefon numarası giriniz (7-15 rakam).'
+      valid = false
     }
     return valid
   },
@@ -218,31 +277,33 @@ Alpine.data('addressesManager', () => ({
     if (!this.validate()) return
     this.saving = true
     try {
+      // Telefonu backend'e tutarlı formatta gönder (boşluk/tire/parantez temizlenmiş)
+      const normalizedForm = { ...this.form, phone: normalizePhone(this.form.phone) }
       if (isLoggedIn()) {
         const payload = this.editingId
-          ? { ...this.form, id: this.editingId }
-          : { ...this.form }
-        const saved = await saveAddressApi(payload)
+          ? { ...normalizedForm, id: this.editingId }
+          : { ...normalizedForm }
+        const { address: saved, default_id } = await saveAddressApi(payload)
         if (this.editingId) {
           const idx = this.addresses.findIndex(a => a.id === this.editingId)
           if (idx !== -1) this.addresses[idx] = saved
         } else {
           this.addresses.push(saved)
         }
-        // Sync default flag across list
-        if (saved.is_default) {
-          this.addresses = this.addresses.map(a => ({ ...a, is_default: a.id === saved.id }))
-        }
+        // Tüm listedeki is_default flag'ını backend'in verdiği default_id'ye göre senkronize et.
+        // Bu, kullanıcının mevcut default'u kaldırması durumunda backend'in
+        // _ensure_one_default ile başka bir adresi default yapmasını da yansıtır.
+        this.addresses = this.addresses.map(a => ({ ...a, is_default: a.id === default_id }))
       } else {
         // Guest: localStorage
-        if (this.form.is_default) {
+        if (normalizedForm.is_default) {
           this.addresses = this.addresses.map(a => ({ ...a, is_default: false }))
         }
         if (this.editingId) {
           const idx = this.addresses.findIndex(a => a.id === this.editingId)
-          if (idx !== -1) this.addresses[idx] = { ...this.form, id: this.editingId }
+          if (idx !== -1) this.addresses[idx] = { ...normalizedForm, id: this.editingId }
         } else {
-          this.addresses.push({ ...this.form, id: generateGuestId() })
+          this.addresses.push({ ...normalizedForm, id: generateGuestId() })
         }
         if (!this.addresses.some(a => a.is_default) && this.addresses.length > 0) {
           this.addresses[0].is_default = true

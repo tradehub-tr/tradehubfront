@@ -38,7 +38,7 @@ function renderAddressCard(): string {
         <div class="space-y-1 text-sm text-gray-600 mb-4">
           <p class="font-medium text-gray-800" x-text="addr.contact_name"></p>
           <p x-text="addr.company"></p>
-          <p x-text="addr.phone"></p>
+          <p x-text="(addr.phone_prefix ? addr.phone_prefix + ' ' : '') + addr.phone"></p>
           <p x-text="addr.state + (addr.city ? ', ' + addr.city : '')"></p>
           <p class="text-gray-500 line-clamp-2" x-text="addr.street + (addr.apartment ? ', ' + addr.apartment : '')"></p>
           <p x-show="addr.postal_code" class="text-gray-400 text-xs" x-text="addr.postal_code"></p>
@@ -101,6 +101,11 @@ function renderFormModal(): string {
          x-transition:leave="transition ease-in duration-150"
          x-transition:leave-start="opacity-100 translate-y-0"
          x-transition:leave-end="opacity-0 translate-y-4"
+         @keydown.escape.window="isModalOpen && closeModal()"
+         @keydown.tab="handleFocusTrap($event)"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="address-modal-title"
          class="fixed inset-x-0 bottom-0 sm:inset-0 sm:flex sm:items-center sm:justify-center z-50 p-0 sm:p-4"
          style="display:none">
       <div class="bg-white w-full sm:max-w-lg rounded-t-md sm:rounded-md shadow-2xl max-h-[90vh] flex flex-col"
@@ -108,16 +113,20 @@ function renderFormModal(): string {
 
         <!-- Modal header -->
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 flex-shrink-0">
-          <h2 class="text-base font-semibold text-gray-900"
+          <h2 id="address-modal-title"
+              class="text-base font-semibold text-gray-900"
               x-text="editingId ? 'Adresi Düzenle' : 'Yeni Adres Ekle'"></h2>
-          <button @click="closeModal()" class="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors">
+          <button type="button"
+                  @click="closeModal()"
+                  aria-label="Kapat"
+                  class="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors">
             ${ICONS.close}
           </button>
         </div>
 
         <!-- Modal body: form -->
         <div class="overflow-y-auto flex-1 px-6 py-5">
-          <form @submit.prevent="saveAddress()" class="space-y-4">
+          <form @submit.prevent="saveAddress()" id="buyer-address-form" class="space-y-4">
 
             <!-- Adres Başlığı -->
             <div>
@@ -130,8 +139,8 @@ function renderFormModal(): string {
                      maxlength="60"
                      class="th-input th-input-md"
                      :class="{ 'is-error': errors.title }"
-                     @input="errors.title = false" />
-              <p x-show="errors.title" class="text-red-500 text-xs mt-1">Bu alan zorunludur.</p>
+                     @input="errors.title = ''" />
+              <p x-show="errors.title" x-text="errors.title" class="text-red-500 text-xs mt-1"></p>
             </div>
 
             <!-- İrtibat Kişisi -->
@@ -145,8 +154,8 @@ function renderFormModal(): string {
                      maxlength="80"
                      class="th-input th-input-md"
                      :class="{ 'is-error': errors.contact_name }"
-                     @input="errors.contact_name = false" />
-              <p x-show="errors.contact_name" class="text-red-500 text-xs mt-1">Bu alan zorunludur.</p>
+                     @input="errors.contact_name = ''" />
+              <p x-show="errors.contact_name" x-text="errors.contact_name" class="text-red-500 text-xs mt-1"></p>
             </div>
 
             <!-- Şirket Adı -->
@@ -160,11 +169,11 @@ function renderFormModal(): string {
                      maxlength="120"
                      class="th-input th-input-md"
                      :class="{ 'is-error': errors.company }"
-                     @input="errors.company = false" />
-              <p x-show="errors.company" class="text-red-500 text-xs mt-1">Bu alan zorunludur.</p>
+                     @input="errors.company = ''" />
+              <p x-show="errors.company" x-text="errors.company" class="text-red-500 text-xs mt-1"></p>
             </div>
 
-            <!-- Telefon -->
+            <!-- Telefon (TR sabit prefix +90) -->
             <div>
               <label class="block text-xs font-medium text-gray-700 mb-1">
                 Telefon <span class="text-red-500">*</span>
@@ -173,10 +182,10 @@ function renderFormModal(): string {
                      x-model="form.phone"
                      placeholder="0212 000 00 00"
                      maxlength="20"
-                     class="th-input th-input-md"
+                     class="th-input th-input-md w-full"
                      :class="{ 'is-error': errors.phone }"
-                     @input="errors.phone = false" />
-              <p x-show="errors.phone" class="text-red-500 text-xs mt-1">Bu alan zorunludur.</p>
+                     @input="errors.phone = ''" />
+              <p x-show="errors.phone" x-text="errors.phone" class="text-red-500 text-xs mt-1"></p>
             </div>
 
             <!-- İl + İlçe (yan yana) -->
@@ -186,7 +195,7 @@ function renderFormModal(): string {
                   İl <span class="text-red-500">*</span>
                 </label>
                 <select x-model="form.state"
-                        @change="form.city = ''; errors.state = false"
+                        @change="form.city = ''; errors.state = ''"
                         class="th-input th-input-md"
                         :class="{ 'is-error': errors.state }">
                   <option value="">Seçiniz</option>
@@ -194,7 +203,7 @@ function renderFormModal(): string {
                     <option :value="p" x-text="p"></option>
                   </template>
                 </select>
-                <p x-show="errors.state" class="text-red-500 text-xs mt-1">Bu alan zorunludur.</p>
+                <p x-show="errors.state" x-text="errors.state" class="text-red-500 text-xs mt-1"></p>
               </div>
               <div>
                 <label class="block text-xs font-medium text-gray-700 mb-1">İlçe</label>
@@ -220,8 +229,8 @@ function renderFormModal(): string {
                         maxlength="300"
                         class="th-input resize-none"
                         :class="{ 'is-error': errors.street }"
-                        @input="errors.street = false"></textarea>
-              <p x-show="errors.street" class="text-red-500 text-xs mt-1">Bu alan zorunludur.</p>
+                        @input="errors.street = ''"></textarea>
+              <p x-show="errors.street" x-text="errors.street" class="text-red-500 text-xs mt-1"></p>
             </div>
 
             <!-- Daire / Posta Kodu (yan yana) -->
@@ -269,11 +278,13 @@ function renderFormModal(): string {
 
         <!-- Modal footer -->
         <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 flex-shrink-0">
-          <button @click="closeModal()"
+          <button type="button"
+                  @click="closeModal()"
                   class="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-200 rounded hover:bg-gray-50 transition-colors">
             İptal
           </button>
-          <button @click="saveAddress()"
+          <button type="submit"
+                  form="buyer-address-form"
                   :disabled="saving"
                   class="px-5 py-2 text-sm font-medium rounded th-btn disabled:opacity-60 disabled:cursor-not-allowed min-w-[80px]">
             <span x-show="!saving">Kaydet</span>
@@ -311,20 +322,27 @@ function renderDeleteConfirm(): string {
          x-transition:leave="transition ease-in duration-100"
          x-transition:leave-start="opacity-100 scale-100"
          x-transition:leave-end="opacity-0 scale-95"
+         @keydown.escape.window="isDeleteConfirmOpen && (isDeleteConfirmOpen = false)"
+         role="alertdialog"
+         aria-modal="true"
+         aria-labelledby="delete-confirm-title"
+         aria-describedby="delete-confirm-desc"
          class="fixed inset-0 z-50 flex items-center justify-center p-4"
          style="display:none">
       <div class="bg-white rounded-md shadow-2xl max-w-sm w-full p-6 text-center" @click.stop>
         <div class="flex justify-center mb-3 text-amber-500">${ICONS.warning}</div>
-        <h3 class="text-base font-semibold text-gray-900 mb-1">Adresi Sil</h3>
-        <p class="text-sm text-gray-500 mb-5">
+        <h3 id="delete-confirm-title" class="text-base font-semibold text-gray-900 mb-1">Adresi Sil</h3>
+        <p id="delete-confirm-desc" class="text-sm text-gray-500 mb-5">
           <strong x-text="deletingTitle"></strong> adresini silmek istediğinize emin misiniz?
         </p>
         <div class="flex gap-3">
-          <button @click="isDeleteConfirmOpen = false"
+          <button type="button"
+                  @click="isDeleteConfirmOpen = false"
                   class="flex-1 py-2 text-sm font-medium border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
             İptal
           </button>
-          <button @click="deleteAddress()"
+          <button type="button"
+                  @click="deleteAddress()"
                   class="flex-1 py-2 text-sm font-medium bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
             Sil
           </button>
@@ -336,14 +354,18 @@ function renderDeleteConfirm(): string {
 
 export function AddressesLayout(): string {
   return `
-    <section x-data="addressesManager" class="py-4 pb-8">
+    <section x-data="addressesManager"
+             x-effect="document.documentElement.style.overflowY = (isModalOpen || isDeleteConfirmOpen) ? 'hidden' : ''; document.body.style.overflow = (isModalOpen || isDeleteConfirmOpen) ? 'hidden' : ''"
+             class="py-4 pb-8">
 
       <!-- Page header -->
       <div class="flex items-center justify-between mb-4">
         <h1 class="text-lg font-bold text-gray-900">Adreslerim</h1>
         <button x-show="addresses.length > 0"
                 @click="openAdd()"
-                class="inline-flex items-center gap-1.5 px-4 py-2 rounded th-btn text-sm font-medium">
+                :disabled="addresses.length >= maxAddresses"
+                :title="addresses.length >= maxAddresses ? 'Maksimum adres limitine ulaştınız' : ''"
+                class="inline-flex items-center gap-1.5 px-4 py-2 rounded th-btn text-sm font-medium disabled:opacity-60 disabled:cursor-not-allowed">
           ${ICONS.plus} Yeni Adres Ekle
         </button>
       </div>
@@ -363,10 +385,10 @@ export function AddressesLayout(): string {
       </div>
 
       <!-- Limit uyarısı -->
-      <div x-show="addresses.length >= 10 && !loading"
+      <div x-show="addresses.length >= maxAddresses && !loading"
            class="mb-4 flex items-center gap-2 text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-4 py-2.5">
         ${ICONS.warning}
-        <span>Maksimum 10 adres limitine ulaştınız. Yeni adres eklemek için mevcut bir adresi silin.</span>
+        <span x-text="'Maksimum ' + maxAddresses + ' adres limitine ulaştınız. Yeni adres eklemek için mevcut bir adresi silin.'"></span>
       </div>
 
       <!-- Address cards grid -->

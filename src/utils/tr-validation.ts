@@ -7,10 +7,36 @@ import { TR_TAX_OFFICE_TO_CITY } from '../data/tr-tax-offices';
 
 /* ── Phone ─────────────────────────────────────────── */
 
-const PHONE_RE = /^(\+90|0)?5\d{9}$/;
+/**
+ * TR telefon formatı — hem mobil hem sabit:
+ *   mobil: 0(5XX) XXX XX XX      → 05XXXXXXXXX
+ *   sabit: 0(212/312/...) ...    → 0[2-4]XXXXXXXXX
+ *   prefix: +90 veya 0 opsiyonel
+ * Toplam alan kodu sonrası 10 hane, ilk hane 2-5.
+ */
+const PHONE_RE = /^(\+90|0)?[2-5]\d{9}$/;
 
-export function validatePhone(value: string): boolean {
-  return PHONE_RE.test(value.replace(/[\s\-\(\)]/g, ''));
+/** Uluslararası (TR dışı) telefon için gevşek kontrol: yalnız rakamlar, 7-15 hane (E.164 genel sınırı). */
+const INTL_PHONE_RE = /^\d{7,15}$/;
+
+/** Kullanıcı girdisinden format karakterlerini (boşluk, tire, parantez) temizler. */
+export function normalizePhone(value: string): string {
+  return value.replace(/[\s\-()]/g, '');
+}
+
+/**
+ * Telefon doğrulaması.
+ * - `+90` veya prefix verilmemiş ise TR formatı (sabit + mobil) kontrol edilir.
+ * - Diğer prefix'lerde gevşek E.164 kontrolü (7-15 rakam).
+ */
+export function validatePhone(value: string, prefix?: string): boolean {
+  const normalized = normalizePhone(value);
+  if (!prefix || prefix === '+90') {
+    return PHONE_RE.test(normalized);
+  }
+  // TR dışı: prefix'i ayrı tuttuğumuz için phone alanında yalnız rakamlar olmalı.
+  const digitsOnly = normalized.replace(/^\+?/, '');
+  return INTL_PHONE_RE.test(digitsOnly);
 }
 
 /* ── TCKN (TC Kimlik No — 11 digit, mod-10) ────────── */

@@ -49,59 +49,60 @@ export const countries: Country[] = [
   { code: 'MY', name: 'Malaysia', flag: '🇲🇾', phonePrefix: '+60' },
 ];
 
-// 2. Turkish Provinces (all 81, alphabetical)
+// 2. Turkish Provinces (all 81, by license-plate code).
+// Names use proper Turkish diacritics; values are stored as-is in Addresses.state.
 export const turkishProvinces: Province[] = [
   { code: '01', name: 'Adana' },
-  { code: '02', name: 'Adiyaman' },
+  { code: '02', name: 'Adıyaman' },
   { code: '03', name: 'Afyonkarahisar' },
-  { code: '04', name: 'Agri' },
+  { code: '04', name: 'Ağrı' },
   { code: '05', name: 'Amasya' },
   { code: '06', name: 'Ankara' },
   { code: '07', name: 'Antalya' },
   { code: '08', name: 'Artvin' },
-  { code: '09', name: 'Aydin' },
-  { code: '10', name: 'Balikesir' },
+  { code: '09', name: 'Aydın' },
+  { code: '10', name: 'Balıkesir' },
   { code: '11', name: 'Bilecik' },
-  { code: '12', name: 'Bingol' },
+  { code: '12', name: 'Bingöl' },
   { code: '13', name: 'Bitlis' },
   { code: '14', name: 'Bolu' },
   { code: '15', name: 'Burdur' },
   { code: '16', name: 'Bursa' },
-  { code: '17', name: 'Canakkale' },
-  { code: '18', name: 'Cankiri' },
-  { code: '19', name: 'Corum' },
+  { code: '17', name: 'Çanakkale' },
+  { code: '18', name: 'Çankırı' },
+  { code: '19', name: 'Çorum' },
   { code: '20', name: 'Denizli' },
-  { code: '21', name: 'Diyarbakir' },
+  { code: '21', name: 'Diyarbakır' },
   { code: '22', name: 'Edirne' },
-  { code: '23', name: 'Elazig' },
+  { code: '23', name: 'Elazığ' },
   { code: '24', name: 'Erzincan' },
   { code: '25', name: 'Erzurum' },
-  { code: '26', name: 'Eskisehir' },
+  { code: '26', name: 'Eskişehir' },
   { code: '27', name: 'Gaziantep' },
   { code: '28', name: 'Giresun' },
-  { code: '29', name: 'Gumushane' },
+  { code: '29', name: 'Gümüşhane' },
   { code: '30', name: 'Hakkari' },
   { code: '31', name: 'Hatay' },
   { code: '32', name: 'Isparta' },
   { code: '33', name: 'Mersin' },
-  { code: '34', name: 'Istanbul' },
-  { code: '35', name: 'Izmir' },
+  { code: '34', name: 'İstanbul' },
+  { code: '35', name: 'İzmir' },
   { code: '36', name: 'Kars' },
   { code: '37', name: 'Kastamonu' },
   { code: '38', name: 'Kayseri' },
-  { code: '39', name: 'Kirklareli' },
-  { code: '40', name: 'Kirsehir' },
+  { code: '39', name: 'Kırklareli' },
+  { code: '40', name: 'Kırşehir' },
   { code: '41', name: 'Kocaeli' },
   { code: '42', name: 'Konya' },
-  { code: '43', name: 'Kutahya' },
+  { code: '43', name: 'Kütahya' },
   { code: '44', name: 'Malatya' },
   { code: '45', name: 'Manisa' },
-  { code: '46', name: 'Kahramanmaras' },
+  { code: '46', name: 'Kahramanmaraş' },
   { code: '47', name: 'Mardin' },
-  { code: '48', name: 'Mugla' },
-  { code: '49', name: 'Mus' },
-  { code: '50', name: 'Nevsehir' },
-  { code: '51', name: 'Nigde' },
+  { code: '48', name: 'Muğla' },
+  { code: '49', name: 'Muş' },
+  { code: '50', name: 'Nevşehir' },
+  { code: '51', name: 'Niğde' },
   { code: '52', name: 'Ordu' },
   { code: '53', name: 'Rize' },
   { code: '54', name: 'Sakarya' },
@@ -109,39 +110,42 @@ export const turkishProvinces: Province[] = [
   { code: '56', name: 'Siirt' },
   { code: '57', name: 'Sinop' },
   { code: '58', name: 'Sivas' },
-  { code: '59', name: 'Tekirdag' },
+  { code: '59', name: 'Tekirdağ' },
   { code: '60', name: 'Tokat' },
   { code: '61', name: 'Trabzon' },
   { code: '62', name: 'Tunceli' },
-  { code: '63', name: 'Sanliurfa' },
-  { code: '64', name: 'Usak' },
+  { code: '63', name: 'Şanlıurfa' },
+  { code: '64', name: 'Uşak' },
   { code: '65', name: 'Van' },
   { code: '66', name: 'Yozgat' },
   { code: '67', name: 'Zonguldak' },
   { code: '68', name: 'Aksaray' },
   { code: '69', name: 'Bayburt' },
   { code: '70', name: 'Karaman' },
-  { code: '71', name: 'Kirikkale' },
+  { code: '71', name: 'Kırıkkale' },
   { code: '72', name: 'Batman' },
-  { code: '73', name: 'Sirnak' },
-  { code: '74', name: 'Bartin' },
+  { code: '73', name: 'Şırnak' },
+  { code: '74', name: 'Bartın' },
   { code: '75', name: 'Ardahan' },
-  { code: '76', name: 'Igdir' },
+  { code: '76', name: 'Iğdır' },
   { code: '77', name: 'Yalova' },
-  { code: '78', name: 'Karabuk' },
+  { code: '78', name: 'Karabük' },
   { code: '79', name: 'Kilis' },
   { code: '80', name: 'Osmaniye' },
-  { code: '81', name: 'Duzce' },
+  { code: '81', name: 'Düzce' },
 ];
 
-// 3. Districts per province (all 81 provinces)
+// 3. Districts per province (all 81 provinces).
+// Keys MUST match `turkishProvinces[].name` exactly — the consumer does
+// `districtsByProvince[address.state]` lookup. Province keys are diacritic-correct;
+// district values are still in ASCII (legacy) and will be normalised in a follow-up.
 export const districtsByProvince: Record<string, string[]> = {
   Adana: [
     'Aladag', 'Ceyhan', 'Cukurova', 'Feke', 'Imamoglu',
     'Karaisali', 'Karatas', 'Kozan', 'Pozanti', 'Saimbeyli',
     'Saricam', 'Seyhan', 'Tufanbeyli', 'Yumurtalik', 'Yuregir',
   ],
-  Adiyaman: [
+  Adıyaman: [
     'Besni', 'Celikhan', 'Gerger', 'Golbasi', 'Kahta',
     'Merkez', 'Samsat', 'Sincik', 'Tut',
   ],
@@ -151,7 +155,7 @@ export const districtsByProvince: Record<string, string[]> = {
     'Ihsaniye', 'Iscehisar', 'Kiziloren', 'Merkez', 'Sandikli',
     'Sinanpasa', 'Sultandagi', 'Suhut',
   ],
-  Agri: [
+  Ağrı: [
     'Diyadin', 'Dogubayazit', 'Elesfkirt', 'Hamur', 'Merkez',
     'Patnos', 'Taslicay', 'Tutak',
   ],
@@ -176,13 +180,13 @@ export const districtsByProvince: Record<string, string[]> = {
     'Ardanuc', 'Arhavi', 'Borcka', 'Hopa', 'Merkez',
     'Murgul', 'Savsat', 'Yusufeli',
   ],
-  Aydin: [
+  Aydın: [
     'Bozdogan', 'Buharkent', 'Cine', 'Didim', 'Efeler',
     'Germencik', 'Incirliova', 'Karacasu', 'Karpuzlu', 'Kocarli',
     'Kosk', 'Kusadasi', 'Kuyucak', 'Nazilli', 'Soke',
     'Sultanhisar', 'Yenipazar',
   ],
-  Balikesir: [
+  Balıkesir: [
     'Altieylul', 'Ayvalik', 'Balya', 'Bandirma', 'Bigadic',
     'Burhaniye', 'Dursunbey', 'Edremit', 'Erdek', 'Gomec',
     'Gonen', 'Havran', 'Ivrindi', 'Karesi', 'Kepsut',
@@ -192,7 +196,7 @@ export const districtsByProvince: Record<string, string[]> = {
     'Bozuyuk', 'Golpazari', 'Inhisar', 'Merkez', 'Osmaneli',
     'Pazaryeri', 'Sogut', 'Yenipazar',
   ],
-  Bingol: [
+  Bingöl: [
     'Adakli', 'Genc', 'Karliova', 'Kigi', 'Merkez',
     'Solhan', 'Yayladere', 'Yedisu',
   ],
@@ -215,17 +219,17 @@ export const districtsByProvince: Record<string, string[]> = {
     'Mustafakemalpasa', 'Nilufer', 'Orhaneli', 'Orhangazi',
     'Osmangazi', 'Yenisehir', 'Yildirim',
   ],
-  Canakkale: [
+  Çanakkale: [
     'Ayvacik', 'Bayramiç', 'Biga', 'Bozcaada', 'Can',
     'Eceabat', 'Ezine', 'Gelibolu', 'Gokceada', 'Lapseki',
     'Merkez', 'Yenice',
   ],
-  Cankiri: [
+  Çankırı: [
     'Atkaracalar', 'Bayramoren', 'Cerkes', 'Eldivan', 'Ilgaz',
     'Kizilirmak', 'Korgun', 'Kursuniu', 'Merkez', 'Orta',
     'Sabanozu', 'Yaprakli',
   ],
-  Corum: [
+  Çorum: [
     'Alaca', 'Bayat', 'Bogaslkale', 'Dodurga', 'Iskilip',
     'Kargi', 'Lacin', 'Mecitözu', 'Merkez', 'Oguzlar',
     'Ortakoy', 'Osmancik', 'Sungurlu', 'Ugurludag',
@@ -236,7 +240,7 @@ export const districtsByProvince: Record<string, string[]> = {
     'Civril', 'Guney', 'Honaz', 'Kale', 'Merkezefendi',
     'Pamukkale', 'Saraykoy', 'Serinhisar', 'Tavas',
   ],
-  Diyarbakir: [
+  Diyarbakır: [
     'Baglar', 'Bismil', 'Cermik', 'Cinar', 'Cungus',
     'Dicle', 'Egil', 'Ergani', 'Hani', 'Hazro',
     'Kayapinar', 'Kocakoy', 'Kulp', 'Lice', 'Silvan',
@@ -246,7 +250,7 @@ export const districtsByProvince: Record<string, string[]> = {
     'Enez', 'Havsa', 'Ipsala', 'Kesan', 'Lalapasa',
     'Meric', 'Merkez', 'Suloglu', 'Uzunkopru',
   ],
-  Elazig: [
+  Elazığ: [
     'Agin', 'Alacakaya', 'Aricak', 'Baskil', 'Karakocan',
     'Keban', 'Kovancilar', 'Maden', 'Merkez', 'Palu',
     'Sivrice',
@@ -261,7 +265,7 @@ export const districtsByProvince: Record<string, string[]> = {
     'Oltu', 'Olur', 'Palandoken', 'Pasinler', 'Pazaryolu',
     'Senkaya', 'Tekman', 'Tortum', 'Uzundere', 'Yakutiye',
   ],
-  Eskisehir: [
+  Eskişehir: [
     'Alpu', 'Beylikova', 'Çifteler', 'Gunyuzu', 'Han',
     'Inonu', 'Mahmudiye', 'Mihalgazi', 'Mihaliccik', 'Odunpazari',
     'Saricakaya', 'Seyitgazi', 'Sivrihisar', 'Tepebasi',
@@ -276,7 +280,7 @@ export const districtsByProvince: Record<string, string[]> = {
     'Kesap', 'Merkez', 'Piraziz', 'Sebinkarahisar', 'Tirebolu',
     'Yaglidere',
   ],
-  Gumushane: [
+  Gümüşhane: [
     'Kelkit', 'Köse', 'Kurtun', 'Merkez', 'Siran', 'Torul',
   ],
   Hakkari: [
@@ -297,7 +301,7 @@ export const districtsByProvince: Record<string, string[]> = {
     'Erdemli', 'Gulnar', 'Mezitli', 'Mut', 'Silifke',
     'Tarsus', 'Toroslar', 'Yenisehir',
   ],
-  Istanbul: [
+  İstanbul: [
     'Adalar', 'Arnavutkoy', 'Atasehir', 'Avcilar', 'Bagcilar',
     'Bahcelievler', 'Bakirkoy', 'Basaksehir', 'Bayrampasa', 'Besiktas',
     'Beykoz', 'Beylikduzu', 'Beyoglu', 'Buyukcekmece', 'Catalca',
@@ -307,7 +311,7 @@ export const districtsByProvince: Record<string, string[]> = {
     'Silivri', 'Sultanbeyli', 'Sultangazi', 'Sile', 'Sisli',
     'Tuzla', 'Umraniye', 'Uskudar', 'Zeytinburnu',
   ],
-  Izmir: [
+  İzmir: [
     'Aliaga', 'Balcova', 'Bayindir', 'Bayrakli', 'Bergama',
     'Beydag', 'Bornova', 'Buca', 'Cesme', 'Cigli',
     'Dikili', 'Foca', 'Gaziemir', 'Guzelbahce', 'Karabaglar',
@@ -331,11 +335,11 @@ export const districtsByProvince: Record<string, string[]> = {
     'Sarioglan', 'Sariz', 'Talas', 'Tomarza', 'Yahyali',
     'Yesilhisar',
   ],
-  Kirklareli: [
+  Kırklareli: [
     'Babaaeski', 'Demirkoy', 'Kofalca', 'Luleburgaz', 'Merkez',
     'Pehlivankoy', 'Pinarhisar', 'Vize',
   ],
-  Kirsehir: [
+  Kırşehir: [
     'Akçakent', 'Akpinar', 'Boztepe', 'Cicekdagi', 'Kaman',
     'Merkez', 'Mucur',
   ],
@@ -353,7 +357,7 @@ export const districtsByProvince: Record<string, string[]> = {
     'Selcuklu', 'Seydisehir', 'Taskent', 'Tuzlukcu', 'Yalihüyuk',
     'Yunak',
   ],
-  Kutahya: [
+  Kütahya: [
     'Altintas', 'Aslanapa', 'Cavdarhisar', 'Domanic', 'Dumlupinar',
     'Emet', 'Gediz', 'Hisarcik', 'Merkez', 'Pazarlar',
     'Simav', 'Saphane', 'Tavsanli',
@@ -369,7 +373,7 @@ export const districtsByProvince: Record<string, string[]> = {
     'Sarigol', 'Saruhanli', 'Selendi', 'Soma', 'Sehzadeler',
     'Turgutlu', 'Yunusemre',
   ],
-  Kahramanmaras: [
+  Kahramanmaraş: [
     'Afsin', 'Andirin', 'Caglayancerit', 'Dulkadiroglu', 'Ekinozu',
     'Elbistan', 'Goksun', 'Nurhak', 'Onikisubat', 'Pazarcik',
     'Turkoglu',
@@ -378,19 +382,19 @@ export const districtsByProvince: Record<string, string[]> = {
     'Artuklu', 'Dargecit', 'Derik', 'Kiziltepe', 'Mazidagi',
     'Midyat', 'Nusaybin', 'Omerli', 'Savur', 'Yesilli',
   ],
-  Mugla: [
+  Muğla: [
     'Bodrum', 'Dalaman', 'Datca', 'Fethiye', 'Kavaklidere',
     'Koycegiz', 'Marmaris', 'Mentese', 'Milas', 'Ortaca',
     'Seydikemer', 'Ula', 'Yatagan',
   ],
-  Mus: [
+  Muş: [
     'Bulanik', 'Haskoy', 'Korkut', 'Malazgirt', 'Merkez', 'Varto',
   ],
-  Nevsehir: [
+  Nevşehir: [
     'Acigol', 'Avanos', 'Derinkuyu', 'Gulsehir', 'Hacibektas',
     'Kozakli', 'Merkez', 'Urgup',
   ],
-  Nigde: [
+  Niğde: [
     'Altunhisar', 'Bor', 'Camardi', 'Ciftlik', 'Merkez', 'Ulukisla',
   ],
   Ordu: [
@@ -430,7 +434,7 @@ export const districtsByProvince: Record<string, string[]> = {
     'Koyulhisar', 'Merkez', 'Sarkisla', 'Susehri', 'Ulas',
     'Yildizeli', 'Zara',
   ],
-  Tekirdag: [
+  Tekirdağ: [
     'Cerkezkoy', 'Corlu', 'Ergene', 'Hayrabolu', 'Kapakli',
     'Malkara', 'Marmaraereglisi', 'Muratli', 'Saray', 'Suleymanpasa',
     'Sarkoy',
@@ -450,12 +454,12 @@ export const districtsByProvince: Record<string, string[]> = {
     'Cemisgezek', 'Hozat', 'Mazgirt', 'Merkez', 'Nazimiye',
     'Ovacik', 'Pertek', 'Pulumur',
   ],
-  Sanliurfa: [
+  Şanlıurfa: [
     'Akcakale', 'Birecik', 'Bozova', 'Ceylanpinar', 'Eyyubiye',
     'Halfeti', 'Haliliye', 'Harran', 'Hilvan', 'Karakopru',
     'Siverek', 'Suruc', 'Viransehir',
   ],
-  Usak: [
+  Uşak: [
     'Banaz', 'Esme', 'Karahalli', 'Merkez', 'Sivasli', 'Ulubey',
   ],
   Van: [
@@ -483,31 +487,31 @@ export const districtsByProvince: Record<string, string[]> = {
     'Ayranci', 'Basyayla', 'Ermenek', 'Kazimkarabekir', 'Merkez',
     'Sariveliler',
   ],
-  Kirikkale: [
+  Kırıkkale: [
     'Bahsili', 'Baliseyh', 'Celebi', 'Delice', 'Karakecili',
     'Keskin', 'Merkez', 'Sulakyurt', 'Yahsihan',
   ],
   Batman: [
     'Besiri', 'Gercus', 'Hasankeyf', 'Kozluk', 'Merkez', 'Sason',
   ],
-  Sirnak: [
+  Şırnak: [
     'Beytussebap', 'Cizre', 'Guclukonak', 'Idil', 'Merkez',
     'Silopi', 'Uludere',
   ],
-  Bartin: [
+  Bartın: [
     'Amasra', 'Kurucasile', 'Merkez', 'Ulus',
   ],
   Ardahan: [
     'Cildir', 'Damal', 'Gole', 'Hanak', 'Merkez', 'Posof',
   ],
-  Igdir: [
+  Iğdır: [
     'Aralik', 'Karakoyunlu', 'Merkez', 'Tuzluca',
   ],
   Yalova: [
     'Altinova', 'Armutlu', 'Cinarcik', 'Ciftlikkoy', 'Merkez',
     'Termal',
   ],
-  Karabuk: [
+  Karabük: [
     'Eflani', 'Eskipazar', 'Merkez', 'Ovacik', 'Safranbolu',
     'Yenice',
   ],
@@ -518,7 +522,7 @@ export const districtsByProvince: Record<string, string[]> = {
     'Bahce', 'Duzici', 'Hasanbeyli', 'Kadirli', 'Merkez',
     'Sumbas', 'Toprakkale',
   ],
-  Duzce: [
+  Düzce: [
     'Akcakoca', 'Cumayeri', 'Cilimli', 'Golyaka', 'Gumusova',
     'Kaynasli', 'Merkez', 'Yigılca',
   ],
@@ -630,7 +634,7 @@ export const paymentIcons: PaymentIcon[] = [
 // 7. Saved Address (1 entry for autocomplete popup)
 export const savedAddress: SavedAddress = {
   label: 'Home Address',
-  fullAddress: 'Gulbahar Mah. Cemal Sururi Sk. No:12, Sisli, Istanbul 34394, Turkey',
+  fullAddress: 'Gulbahar Mah. Cemal Sururi Sk. No:12, Sisli, İstanbul 34394, Turkey',
   country: 'TR',
   countryName: 'Turkey/Turkiye',
   firstName: 'Ali',
@@ -639,7 +643,7 @@ export const savedAddress: SavedAddress = {
   phonePrefix: '+90',
   street: 'Gulbahar Mah. Cemal Sururi Sk. No:12',
   apartment: 'Kat: 3, Daire: 7',
-  state: 'Istanbul',
+  state: 'İstanbul',
   city: 'Sisli',
   postalCode: '34394',
 };
@@ -647,7 +651,7 @@ export const savedAddress: SavedAddress = {
 // 8. Geolocation mock address
 export const geolocationMockAddress = {
   street: 'Gulbahar Mah. Cemal Sururi Sk. No:12',
-  state: 'Istanbul',
+  state: 'İstanbul',
   city: 'Sisli',
   postalCode: '34394',
   country: 'TR',
