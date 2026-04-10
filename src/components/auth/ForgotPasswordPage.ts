@@ -51,7 +51,7 @@ function ForgotPasswordHeader(): string {
           <img src="${baseUrl}images/istoc-logo.png" alt="iSTOC" class="h-7" />
         </a>
         <div class="relative">
-          <select class="text-sm text-gray-600 border border-gray-300 rounded px-2 py-1 bg-white appearance-none pr-6 cursor-pointer auth-input-focus">
+          <select class="th-input th-input-sm w-auto cursor-pointer">
             <option>${t('common.turkish')}</option>
             <option>${t('common.english')}</option>
           </select>
@@ -89,7 +89,7 @@ function StepFindAccount(): string {
             id="fp-email"
             name="email"
             x-model="email"
-            class="w-full h-12 px-4 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 auth-input-focus transition-colors"
+            class="th-input th-input-lg"
             placeholder="${t('auth.forgot.usernameOrEmail')}" data-i18n-placeholder="auth.forgot.usernameOrEmail"
             required
             autocomplete="email"

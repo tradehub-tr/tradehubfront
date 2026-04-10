@@ -30,15 +30,15 @@ function getDefaultAccounts(): LinkedAccount[] {
 
 function renderAccountRow(account: LinkedAccount): string {
   const statusHtml = account.connected
-    ? `<span class="text-[13px]" style="color:var(--color-text-muted, #666666)">${account.connectedLabel || t('settings.linkedConnected')}</span>
-       <a href="#" class="linked-acc__remove text-[13px] font-medium no-underline hover:underline" style="color:var(--color-cta-primary, #333333)">${t('settings.linkedRemove')}</a>`
-    : `<span class="text-[13px]" style="color:var(--color-text-placeholder, #999999)">${t('settings.linkedNotConnected')}</span>`;
+    ? `<span class="text-[13px]" style="color:var(--color-text-secondary)">${account.connectedLabel || t('settings.linkedConnected')}</span>
+       <a href="#" class="linked-acc__remove text-[13px] font-medium no-underline hover:underline" style="color:var(--color-text-primary)">${t('settings.linkedRemove')}</a>`
+    : `<span class="text-[13px]" style="color:var(--color-text-tertiary)">${t('settings.linkedNotConnected')}</span>`;
 
   return `
     <div class="linked-acc__row flex items-center justify-between py-4 px-6 border-b border-border-default last:border-b-0 max-sm:px-3 max-sm:py-3 max-sm:gap-2">
       <div class="flex items-center gap-3 max-sm:gap-2">
         <span class="flex items-center flex-shrink-0">${account.icon}</span>
-        <span class="text-sm max-sm:text-[13px] font-medium" style="color:var(--color-text-heading, #111827)">${account.name}</span>
+        <span class="text-sm max-sm:text-[13px] font-medium" style="color:var(--color-text-primary)">${account.name}</span>
       </div>
       <div class="linked-acc__right flex items-center gap-4 max-sm:gap-2 flex-shrink-0">
         ${statusHtml}
@@ -52,7 +52,7 @@ export function SettingsLinkedAccounts(accounts?: LinkedAccount[]): string {
 
   return `
     <div class="bg-white rounded-lg p-8 max-sm:p-5">
-      <h2 class="text-lg font-semibold mb-5 m-0" style="color:var(--color-text-heading, #111827)">${t('settings.linkedAccountsTitle')}</h2>
+      <h2 class="text-lg font-semibold mb-5 m-0" style="color:var(--color-text-primary)">${t('settings.linkedAccountsTitle')}</h2>
       <div class="border border-border-default rounded-lg overflow-hidden">
         ${items.map(renderAccountRow).join('')}
       </div>
@@ -68,7 +68,7 @@ export function initSettingsLinkedAccounts(): void {
       if (row) {
         const right = row.querySelector('.linked-acc__right');
         if (right) {
-          right.innerHTML = `<span class="text-[13px]" style="color:var(--color-text-placeholder, #999999)">${t('settings.linkedNotConnected')}</span>`;
+          right.innerHTML = `<span class="text-[13px]" style="color:var(--color-text-tertiary)">${t('settings.linkedNotConnected')}</span>`;
         }
       }
     });

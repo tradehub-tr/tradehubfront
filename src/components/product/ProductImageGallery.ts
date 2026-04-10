@@ -142,7 +142,7 @@ export function ProductImageGallery(): string {
       <div id="pd-thumb-strip" class="hidden 2xl:flex flex-col items-center shrink-0 w-[68px]">
 
         ${needsScroll ? `
-        <button type="button" id="thumb-scroll-up" class="pd-thumb-arrow flex items-center justify-center w-[56px] h-[28px] rounded-md border cursor-pointer flex-shrink-0 transition-colors" style="background: var(--color-surface, #ffffff); border-color: var(--color-border-default, #e5e5e5); color: var(--color-text-placeholder, #999999);" aria-label="${t('product.scrollUp')}" @click="scrollThumbs(-1)">
+        <button type="button" id="thumb-scroll-up" class="pd-thumb-arrow flex items-center justify-center w-[56px] h-[28px] rounded-md border cursor-pointer flex-shrink-0 transition-colors" style="background: var(--color-surface, #ffffff); border-color: var(--color-border-default, #e5e5e5); color: var(--color-text-tertiary);" aria-label="${t('product.scrollUp')}" @click="scrollThumbs(-1)">
           <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
         </button>
         ` : ''}
@@ -153,7 +153,7 @@ export function ProductImageGallery(): string {
         </div>
 
         ${needsScroll ? `
-        <button type="button" id="thumb-scroll-down" class="pd-thumb-arrow flex items-center justify-center w-[56px] h-[28px] rounded-md border cursor-pointer flex-shrink-0 transition-colors" style="background: var(--color-surface, #ffffff); border-color: var(--color-border-default, #e5e5e5); color: var(--color-text-placeholder, #999999);" aria-label="${t('product.scrollDown')}" @click="scrollThumbs(1)">
+        <button type="button" id="thumb-scroll-down" class="pd-thumb-arrow flex items-center justify-center w-[56px] h-[28px] rounded-md border cursor-pointer flex-shrink-0 transition-colors" style="background: var(--color-surface, #ffffff); border-color: var(--color-border-default, #e5e5e5); color: var(--color-text-tertiary);" aria-label="${t('product.scrollDown')}" @click="scrollThumbs(1)">
           <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
         </button>
         ` : ''}
@@ -184,12 +184,12 @@ export function ProductImageGallery(): string {
 
       <!-- Action buttons — always visible -->
       <div class="absolute top-3 right-3 z-5 flex flex-col gap-2">
-        <button type="button" data-favorite-btn class="gallery-action-btn w-9 h-9 rounded-full flex items-center justify-center border-0 cursor-pointer transition-colors" style="background: var(--color-surface, #ffffff); box-shadow: 0 1px 6px rgba(0,0,0,.12); color: var(--color-text-placeholder, #999999);" aria-label="${t('product.addToFavorites')}">
+        <button type="button" data-favorite-btn class="gallery-action-btn w-9 h-9 rounded-full flex items-center justify-center border-0 cursor-pointer transition-colors" style="background: var(--color-surface, #ffffff); box-shadow: 0 1px 6px rgba(0,0,0,.12); color: var(--color-text-tertiary);" aria-label="${t('product.addToFavorites')}">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
         </button>
         <!-- Gorsel arama (kamera) butonu — DISABLED, ileride tekrar etkinlestirilecek -->
         <!--
-        <button type="button" class="gallery-action-btn w-9 h-9 rounded-full flex items-center justify-center border-0 cursor-pointer transition-colors" style="background: var(--color-surface, #ffffff); box-shadow: 0 1px 6px rgba(0,0,0,.12); color: var(--color-text-placeholder, #999999);" aria-label="${t('product.imageSearchLabel')}">
+        <button type="button" class="gallery-action-btn w-9 h-9 rounded-full flex items-center justify-center border-0 cursor-pointer transition-colors" style="background: var(--color-surface, #ffffff); box-shadow: 0 1px 6px rgba(0,0,0,.12); color: var(--color-text-tertiary);" aria-label="${t('product.imageSearchLabel')}">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9a2 2 0 012-2h2l1-2h8l1 2h2a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><circle cx="12" cy="13" r="3"/></svg>
         </button>
         -->

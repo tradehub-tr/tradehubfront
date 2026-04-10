@@ -19,8 +19,8 @@ function renderStatItem(stat: UserStat, index: number, total: number): string {
 
   return `
     <a href="${stat.href}" class="flex-1 min-w-0 flex flex-col items-center gap-1 no-underline transition-opacity hover:opacity-80" aria-label="${stat.label}: ${stat.count}">
-      <span class="text-[clamp(1rem,0.9rem+0.4vw,1.25rem)] font-bold leading-none" style="color:var(--color-text-body, #333333)">${stat.count}</span>
-      <span class="text-[clamp(0.625rem,0.6rem+0.1vw,0.75rem)] text-center leading-[1.3] line-clamp-2" style="color:var(--color-text-muted, #666666)">${stat.label}</span>
+      <span class="text-[clamp(1rem,0.9rem+0.4vw,1.25rem)] font-bold leading-none" style="color:var(--color-text-primary)">${stat.count}</span>
+      <span class="text-[clamp(0.625rem,0.6rem+0.1vw,0.75rem)] text-center leading-[1.3] line-clamp-2" style="color:var(--color-text-secondary)">${stat.label}</span>
     </a>
     ${divider}
   `;
@@ -46,7 +46,7 @@ export function UserInfoCard(props: UserInfoCardProps): string {
           <span class="text-xl font-bold text-gray-500 uppercase" x-text="userInitial || '?'"></span>
         </div>
         <div class="flex flex-col gap-1 min-w-0">
-          <span class="text-base font-bold whitespace-nowrap overflow-hidden text-ellipsis" style="color:var(--color-text-body, #333333)" x-text="userName || '${user.username}'">${user.username}</span>
+          <span class="text-base font-bold whitespace-nowrap overflow-hidden text-ellipsis" style="color:var(--color-text-primary)" x-text="userName || '${user.username}'">${user.username}</span>
           <a href="/pages/dashboard/settings.html#profilim" class="text-[13px] text-blue-600 no-underline inline-flex items-center transition-colors hover:text-blue-700 hover:underline">
             ${t('dashboard.viewProfile')}
             <svg class="w-3 h-3 ml-1 inline-block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">

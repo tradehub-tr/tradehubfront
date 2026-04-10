@@ -177,7 +177,7 @@ function renderFavorites(): string {
         </div>
         <div class="px-6 pb-5">
           <div class="relative">
-            <input type="text" class="fav-modal__input w-full py-3 pr-[50px] pl-3.5 text-sm border border-border-strong rounded-[20px] outline-none text-text-primary transition-[border-color] duration-150 focus:border-secondary-800 placeholder:text-text-tertiary" placeholder="${t('favorites.enterName')}" maxlength="25" id="fav-list-input" />
+            <input type="text" class="th-input th-input-md pr-[50px]" placeholder="${t('favorites.enterName')}" maxlength="25" id="fav-list-input" />
             <span class="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs text-text-tertiary"><span id="fav-char-count">0</span>/25</span>
           </div>
         </div>

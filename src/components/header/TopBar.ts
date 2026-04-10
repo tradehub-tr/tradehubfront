@@ -297,7 +297,7 @@ function renderCountrySelector(): string {
           <div class="flex-1 border-t border-gray-200 dark:border-gray-600"></div>
         </div>
         <div class="mb-3">
-          <select class="th-input w-full px-3 py-2.5 text-sm bg-white border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white appearance-none cursor-pointer">
+          <select class="th-input th-input-md cursor-pointer">
             ${countryOptions.map(country => `
               <option value="${country.code}">${country.flag} ${country.name}</option>
             `).join('')}
@@ -307,7 +307,7 @@ function renderCountrySelector(): string {
           <input
             type="text"
             placeholder="${t('header.enterZip')}" data-i18n-placeholder="header.enterZip"
-            class="th-input w-full px-3 py-2.5 text-sm bg-white border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
+            class="th-input th-input-md"
           />
         </div>
         <button type="button" class="th-btn w-full px-4 py-2.5 text-sm font-medium transition-colors">
@@ -348,7 +348,7 @@ function renderLanguageCurrencySelector(): string {
         <!-- Language Select -->
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2" data-i18n="header.language">${t('header.language')}</label>
-          <select id="lang-select" class="th-input w-full px-3 py-2.5 text-sm bg-white border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white appearance-none cursor-pointer">
+          <select id="lang-select" class="th-input th-input-md cursor-pointer">
             ${languageOptions.map(lang => `
               <option value="${lang.code}">${lang.name}</option>
             `).join('')}
@@ -358,7 +358,7 @@ function renderLanguageCurrencySelector(): string {
         <!-- Currency Select -->
         <div class="mb-5">
           <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2" data-i18n="header.currency">${t('header.currency')}</label>
-          <select id="currency-select" class="th-input w-full px-3 py-2.5 text-sm bg-white border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white appearance-none cursor-pointer">
+          <select id="currency-select" class="th-input th-input-md cursor-pointer">
             ${getCurrencyOptions().map(currency => `
               <option value="${currency.code}">${currency.code} - ${currency.name}</option>
             `).join('')}
@@ -796,7 +796,7 @@ function renderMobileDrawer(): string {
           <!-- Deliver to -->
           <div class="mx-4 mt-4 mb-6">
             <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1" data-i18n="header.deliverTo">${t('header.deliverTo')}</label>
-            <select class="w-full px-3 py-2 text-sm bg-white border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white appearance-none cursor-pointer">
+            <select class="th-input th-input-sm cursor-pointer">
               ${countryOptions.map(country => `
                 <option value="${country.code}">${country.flag} ${country.name}</option>
               `).join('')}

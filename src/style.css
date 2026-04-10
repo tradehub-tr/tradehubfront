@@ -431,13 +431,63 @@
     --card-supplier-color: #9ca3af;
     --card-supplier-size: 9px;
 
-    /* --- Input / Search --- */
+    /* --- Input / Form Field (v4) --- */
     --input-bg: var(--color-surface);
     --input-border-width: 1px;
     --input-border-color: var(--color-border-default);
+    --input-border-color-hover: var(--color-border-strong);
     --input-text-color: var(--color-text-primary);
+    --input-placeholder-color: var(--color-text-tertiary);
     --input-font-size: 0.875rem;
+    --input-font-weight: 400;
+    --input-line-height: 1.5;
+
+    /* Focus state */
     --input-focus-border-color: var(--color-primary-500);
+    --input-focus-ring-color: rgba(204, 153, 0, 0.12);
+    --input-focus-ring-width: 2px;
+    --input-focus-ring-offset: 0px;
+
+    /* Disabled state */
+    --input-disabled-bg: var(--color-surface-muted);
+    --input-disabled-text: var(--color-text-disabled);
+    --input-disabled-border-color: var(--color-border-default);
+    --input-disabled-opacity: 0.6;
+
+    /* Error state */
+    --input-error-border-color: var(--color-error-500);
+    --input-error-bg: var(--color-error-50);
+    --input-error-text: var(--color-error-700);
+    --input-error-ring-color: rgba(239, 68, 68, 0.15);
+
+    /* Size variants (yükseklik) */
+    --input-height-sm: 32px;
+    --input-height-md: 40px;
+    --input-height-lg: 48px;
+
+    /* --- Checkbox / Radio (v4) --- */
+    --checkbox-size: 20px;
+    --checkbox-radius: 4px;
+    --checkbox-border-width: 1px;
+    --checkbox-border-color: var(--color-border-strong);
+    --checkbox-bg: var(--color-surface);
+    --checkbox-checked-bg: var(--color-primary-500);
+    --checkbox-checked-border: var(--color-primary-500);
+    --checkbox-checked-icon: #ffffff;
+    --checkbox-disabled-opacity: 0.5;
+
+    /* --- Quantity Stepper (v4) --- */
+    --quantity-height: 40px;
+    --quantity-width: 136px;
+    --quantity-bg: var(--color-surface);
+    --quantity-border-width: 1px;
+    --quantity-border-color: var(--color-border-default);
+    --quantity-radius: 9999px;
+    --quantity-button-size: 36px;
+    --quantity-button-bg-hover: var(--color-surface-muted);
+    --quantity-text-color: var(--color-text-primary);
+    --quantity-text-size: 14px;
+    --quantity-disabled-opacity: 0.4;
 
     /* --- Badge --- */
     --badge-font-size: 0.75rem;
@@ -1123,24 +1173,191 @@
         font-weight: var(--card-title-weight);
     }
 
-    /* --- Input --- */
+    /* =====================================================
+       INPUT — base + size variants + state variants (v4)
+       ===================================================== */
     .th-input {
+        display: block;
+        width: 100%;
+        height: var(--input-height-md);
         background: var(--input-bg);
         color: var(--input-text-color);
+        font-size: var(--input-font-size);
+        font-weight: var(--input-font-weight);
+        line-height: var(--input-line-height);
         border: var(--input-border-width) solid var(--input-border-color);
         border-radius: var(--radius-input);
-        padding: var(--spacing-input-y) var(--spacing-input-x);
-        font-size: var(--input-font-size);
+        padding: 0 var(--spacing-input-x);
         outline: none;
-        transition: border-color 0.15s ease;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
     }
 
+    /* textarea özel — tek satır yüksekliği iptal */
+    textarea.th-input {
+        height: auto;
+        min-height: calc(var(--input-height-md) * 2);
+        padding: var(--spacing-input-y) var(--spacing-input-x);
+        line-height: 1.5;
+        resize: vertical;
+    }
+
+    /* select — native caret'i kapat ve SVG caret ekle */
+    select.th-input {
+        padding-right: calc(var(--spacing-input-x) + 24px);
+        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23737373' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right var(--spacing-input-x) center;
+        background-size: 16px;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }
+
+    /* Hover (focus olmadığı sürece) */
+    .th-input:hover:not(:focus):not(:disabled) {
+        border-color: var(--input-border-color-hover);
+    }
+
+    /* Focus state */
     .th-input:focus {
         border-color: var(--input-focus-border-color);
+        box-shadow: 0 0 0 var(--input-focus-ring-width) var(--input-focus-ring-color);
     }
 
+    /* Placeholder */
     .th-input::placeholder {
-        color: var(--color-text-tertiary);
+        color: var(--input-placeholder-color);
+        opacity: 1; /* Firefox varsayılan opacity 0.54 — override */
+    }
+
+    /* Disabled state */
+    .th-input:disabled,
+    .th-input[aria-disabled="true"] {
+        background: var(--input-disabled-bg);
+        color: var(--input-disabled-text);
+        border-color: var(--input-disabled-border-color);
+        opacity: var(--input-disabled-opacity);
+        cursor: not-allowed;
+    }
+
+    /* Error state (.is-error veya aria-invalid="true") */
+    .th-input.is-error,
+    .th-input[aria-invalid="true"] {
+        border-color: var(--input-error-border-color);
+        background: var(--input-error-bg);
+        color: var(--input-error-text);
+    }
+    .th-input.is-error:focus,
+    .th-input[aria-invalid="true"]:focus {
+        box-shadow: 0 0 0 var(--input-focus-ring-width) var(--input-error-ring-color);
+    }
+
+    /* Size variants */
+    .th-input-sm { height: var(--input-height-sm); font-size: 0.75rem; }
+    .th-input-md { height: var(--input-height-md); }
+    .th-input-lg { height: var(--input-height-lg); font-size: 1rem; }
+
+    /* Borderless (toolbar / inline search) */
+    .th-input-borderless {
+        border: none;
+        background: transparent;
+        padding: 0 8px;
+    }
+    .th-input-borderless:focus {
+        box-shadow: none;
+    }
+
+    /* =====================================================
+       CHECKBOX — BEM, Alpine-compatible (v4)
+       ===================================================== */
+    .th-checkbox {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: var(--checkbox-size);
+        height: var(--checkbox-size);
+        background: var(--checkbox-bg);
+        border: var(--checkbox-border-width) solid var(--checkbox-border-color);
+        border-radius: var(--checkbox-radius);
+        color: transparent;
+        transition: background 0.15s, border-color 0.15s, color 0.15s;
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+    .th-checkbox.is-checked,
+    .th-checkbox[data-checked="true"] {
+        background: var(--checkbox-checked-bg);
+        border-color: var(--checkbox-checked-border);
+        color: var(--checkbox-checked-icon);
+    }
+    .th-checkbox[aria-disabled="true"],
+    .th-checkbox.is-disabled {
+        opacity: var(--checkbox-disabled-opacity);
+        cursor: not-allowed;
+    }
+
+    /* =====================================================
+       QUANTITY STEPPER (v4)
+       ===================================================== */
+    .th-quantity {
+        display: inline-flex;
+        align-items: center;
+        width: var(--quantity-width);
+        height: var(--quantity-height);
+        background: var(--quantity-bg);
+        border: var(--quantity-border-width) solid var(--quantity-border-color);
+        border-radius: var(--quantity-radius);
+        padding: 2px;
+        user-select: none;
+    }
+    .th-quantity__button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: var(--quantity-button-size);
+        height: var(--quantity-button-size);
+        border-radius: 9999px;
+        color: var(--quantity-text-color);
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        transition: background 0.15s ease;
+    }
+    .th-quantity__button:hover:not(:disabled) {
+        background: var(--quantity-button-bg-hover);
+    }
+    .th-quantity__button:disabled {
+        opacity: var(--quantity-disabled-opacity);
+        cursor: not-allowed;
+    }
+    .th-quantity__input {
+        flex: 1;
+        min-width: 0;
+        width: 0;
+        height: 100%;
+        border: none;
+        background: transparent;
+        text-align: center;
+        font-size: var(--quantity-text-size);
+        font-weight: 500;
+        color: var(--quantity-text-color);
+        padding: 0;
+        outline: none;
+    }
+    .th-quantity__input:focus {
+        outline: none;
+        box-shadow: none;
+    }
+    /* Native number spinner'ları gizle */
+    .th-quantity__input[type="number"] {
+        -moz-appearance: textfield;
+        appearance: textfield;
+    }
+    .th-quantity__input[type="number"]::-webkit-outer-spin-button,
+    .th-quantity__input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
     }
 
     /* --- Badge --- */

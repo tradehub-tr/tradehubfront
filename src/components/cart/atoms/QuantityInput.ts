@@ -25,8 +25,8 @@ export function QuantityInput({
   const plusDisabled = value >= max ? 'disabled' : '';
 
   return `
-    <div class="number-picker inline-flex items-center w-[136px] h-[40px] px-[2px] bg-white border border-[#ddd] rounded-full select-none" x-data="quantityInput({ value: ${value}, min: ${min}, max: ${max}, step: ${step}, id: '${id}' })">
-      <button type="button" class="number-picker-button number-picker-minus flex items-center justify-center shrink-0 w-[36px] h-[36px] rounded-full text-text-primary hover:bg-[#F2F2F2] transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:text-[#bbb] disabled:hover:bg-transparent" @click="decrement()" :disabled="value <= min" ${minusDisabled} aria-label="${t('cart.quantityDecrease')}">
+    <div class="th-quantity number-picker" x-data="quantityInput({ value: ${value}, min: ${min}, max: ${max}, step: ${step}, id: '${id}' })">
+      <button type="button" class="th-quantity__button number-picker-button number-picker-minus" @click="decrement()" :disabled="value <= min" ${minusDisabled} aria-label="${t('cart.quantityDecrease')}">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M5 12h14" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -35,7 +35,7 @@ export function QuantityInput({
         type="number"
         id="${id}"
         x-ref="input"
-        class="number-picker-input flex-1 w-0 h-full border-none focus:ring-0 focus:outline-none focus:border-none text-center text-[14px] font-medium text-text-heading bg-transparent p-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+        class="th-quantity__input number-picker-input"
         :value="value"
         value="${value}"
         @change="clampAndDispatch()"
@@ -44,7 +44,7 @@ export function QuantityInput({
         step="${step}"
         aria-label="${t('cart.quantityLabel')}"
       />
-      <button type="button" class="number-picker-button number-picker-plus flex items-center justify-center shrink-0 w-[36px] h-[36px] rounded-full text-text-primary hover:bg-[#F2F2F2] transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:text-[#bbb] disabled:hover:bg-transparent" @click="increment()" :disabled="value >= max" ${plusDisabled} aria-label="${t('cart.quantityIncrease')}">
+      <button type="button" class="th-quantity__button number-picker-button number-picker-plus" @click="increment()" :disabled="value >= max" ${plusDisabled} aria-label="${t('cart.quantityIncrease')}">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M12 5v14M5 12h14" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
