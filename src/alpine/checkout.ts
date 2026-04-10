@@ -805,7 +805,7 @@ Alpine.data('shippingForm', () => ({
     if (isLoggedIn()) {
       try {
         const buyerPayload = checkoutToBuyerAddress(candidate);
-        const saved = await saveAddressApi(buyerPayload);
+        const { address: saved, default_id } = await saveAddressApi(buyerPayload);
         const savedAsCheckout = buyerAddressToCheckout(saved);
 
         if (this.isEditingAddress && this.editingAddressId) {
@@ -816,12 +816,12 @@ Alpine.data('shippingForm', () => ({
           this.savedAddresses = [savedAsCheckout, ...this.savedAddresses];
         }
 
-        if (savedAsCheckout.isDefault) {
-          this.savedAddresses = this.savedAddresses.map((a) => ({
-            ...a,
-            isDefault: a.id === savedAsCheckout.id,
-          }));
-        }
+        // Backend'in verdiği default_id ile tüm listedeki isDefault flag'ını senkronize et.
+        // _ensure_one_default kullanıcının mevcut default'unu değiştirmiş olabilir.
+        this.savedAddresses = this.savedAddresses.map((a) => ({
+          ...a,
+          isDefault: a.id === default_id,
+        }));
 
         this.applySelectedAddress(savedAsCheckout.id);
       } catch { /* API hatası — devam et */ }
@@ -1013,12 +1013,17 @@ Alpine.data('shippingForm', () => ({
 
     if (isLoggedIn()) {
       try {
-        const saved = await saveAddressApi(checkoutToBuyerAddress(candidate));
+        const { address: saved, default_id } = await saveAddressApi(checkoutToBuyerAddress(candidate));
         const savedCheckout = buyerAddressToCheckout(saved);
         // Temp ID yerine gerçek backend ID ile güncelle
         this.savedAddresses = this.savedAddresses.map((a) =>
           a.id === candidate.id ? savedCheckout : a
         );
+        // Backend default_id ile tüm listedeki isDefault'u senkronize et.
+        this.savedAddresses = this.savedAddresses.map((a) => ({
+          ...a,
+          isDefault: a.id === default_id,
+        }));
         this.applySelectedAddress(savedCheckout.id);
       } catch {
         this.applySelectedAddress(candidate.id);

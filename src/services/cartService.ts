@@ -206,11 +206,22 @@ export async function fetchAddresses(): Promise<BuyerAddressData[]> {
   return callMethod<BuyerAddressData[]>('tradehub_core.api.buyer.get_addresses');
 }
 
+/**
+ * save_address endpoint response.
+ * `address`: kaydedilen/güncellenen adres
+ * `default_id`: save sonrası kullanıcının *mevcut* varsayılan adres id'si
+ *   (backend _ensure_one_default otomatik reassign yapmış olabilir)
+ */
+export interface SaveAddressResult {
+  address: BuyerAddressData;
+  default_id: string;
+}
+
 /** Adres oluşturur veya günceller. `id` varsa güncelleme, yoksa yeni kayıt. */
 export async function saveAddressApi(
   address: Omit<BuyerAddressData, 'id'> & { id?: string }
-): Promise<BuyerAddressData> {
-  return callMethod<BuyerAddressData>(
+): Promise<SaveAddressResult> {
+  return callMethod<SaveAddressResult>(
     'tradehub_core.api.buyer.save_address',
     { address_json: JSON.stringify(address) },
     true,
