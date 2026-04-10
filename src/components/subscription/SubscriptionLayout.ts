@@ -113,23 +113,8 @@ function renderMainView(): string {
   return `
     <!-- Header -->
     <div class="flex items-center justify-between px-7 max-sm:px-3 pt-6 pb-5 max-sm:flex-col max-sm:items-start max-sm:gap-3">
-      <h1 class="text-[20px] font-bold text-gray-900">${t('subscription.aiMode')}</h1>
+      <h1 class="text-[20px] font-bold text-gray-900">${t('subscription.subscriptionTitle')}</h1>
       <button class="th-btn-outline px-5 max-sm:px-4 py-2 max-sm:py-1.5 text-[14px] max-sm:text-[13px] cursor-pointer" id="sub-manage-btn">${t('subscription.managePlan')}</button>
-    </div>
-
-    <!-- Current Plan Card -->
-    <div class="mx-7 max-sm:mx-3 border border-border-default rounded-[10px] overflow-hidden">
-      <div class="flex items-center justify-between px-6 pt-6 pb-5 max-md:flex-col max-md:items-start max-md:gap-3">
-        <span class="text-[22px] max-sm:text-[18px] font-bold text-gray-900">${t('subscription.currentPlanFree')}</span>
-        <div class="flex items-center gap-3 text-[14px] text-gray-500 border border-border-default rounded-lg px-4 py-2.5">
-          <span>${t('subscription.aiModeTasks')}</span>
-          <span class="text-[18px] font-bold text-gray-900">3</span>
-        </div>
-      </div>
-      <div class="flex items-center justify-between px-6 py-3.5 bg-primary-50 text-[14px] text-gray-700 max-md:flex-col max-md:items-start max-md:gap-3">
-        <span>${t('subscription.tryBeforeUpgrade')}</span>
-        <button class="th-btn-dark whitespace-nowrap max-sm:!py-2 max-sm:!px-4 max-sm:!text-[13px]" id="sub-try-btn">${t('subscription.tryAiModeFree')}</button>
-      </div>
     </div>
 
     <!-- Invoice History -->

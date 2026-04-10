@@ -6,12 +6,11 @@
 
 import type { BuyerDashboardData } from '../../types/buyerDashboard';
 import { t } from '../../i18n';
-import { NewBuyerInfo, initNewBuyerInfo } from './NewBuyerInfo';
+import { NewBuyerInfo } from './NewBuyerInfo';
 import { OrdersSection, initOrdersSection } from './OrdersSection';
-import { initOperationSlider } from './OperationSlider';
 import { FavoritesSection } from '../right-panel/FavoritesSection';
 import { BrowsingHistorySection } from '../right-panel/BrowsingHistorySection';
-import { PromotionSection, initPromotionSection } from '../right-panel/PromotionSection';
+// import { PromotionSection, initPromotionSection } from '../right-panel/PromotionSection';
 import { getBrowsingHistory } from '../../services/browsingHistoryService';
 
 export interface BuyerDashboardLayoutProps {
@@ -37,7 +36,7 @@ export function BuyerDashboardLayout({ data, emailVerified = true }: BuyerDashbo
         <div class="flex gap-[clamp(0.5rem,0.4rem+0.4vw,0.875rem)] items-start max-lg:flex-col max-lg:items-stretch">
           <!-- Center Column -->
           <div class="flex-1 min-w-0 flex flex-col gap-[clamp(0.5rem,0.4rem+0.4vw,0.875rem)] max-lg:w-full">
-            ${NewBuyerInfo({ user: data.user, stats: data.stats, notifications: data.notifications })}
+            ${NewBuyerInfo({ user: data.user, stats: data.stats })}
             ${OrdersSection()}
           </div>
 
@@ -52,7 +51,7 @@ export function BuyerDashboardLayout({ data, emailVerified = true }: BuyerDashbo
               minOrder: h.minOrder ?? '',
               href: h.href,
             })))}
-            ${PromotionSection(data.promotions)}
+            ${/* PromotionSection(data.promotions) */ ''}
           </div>
         </div>
       </div>
@@ -64,8 +63,6 @@ export function BuyerDashboardLayout({ data, emailVerified = true }: BuyerDashbo
  * Initialize all BuyerDashboardLayout interactive behaviors.
  */
 export function initBuyerDashboardLayout(): void {
-  initNewBuyerInfo();
-  initOperationSlider();
   initOrdersSection();
-  initPromotionSection();
+  // initPromotionSection();
 }

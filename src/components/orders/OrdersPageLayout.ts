@@ -60,7 +60,7 @@ function renderAllOrders(): string {
         <h1 class="text-[22px] max-sm:text-lg max-[480px]:text-base font-bold text-gray-900" data-i18n="orders.yourOrders">${t('orders.yourOrders')}</h1>
         <template x-if="filteredOrders.some((o) => o.status === 'Waiting for payment')">
           <button @click="openRemittanceModal(filteredOrders.find((o) => o.status === 'Waiting for payment')?.orderNumber || '', filteredOrders.find((o) => o.status === 'Waiting for payment')?.total, filteredOrders.find((o) => o.status === 'Waiting for payment')?.currency, filteredOrders.find((o) => o.status === 'Waiting for payment')?.paymentMethod)"
-            class="px-5 max-sm:px-3 max-[480px]:px-2.5 py-2 text-sm max-sm:text-xs text-gray-700 bg-white border border-gray-300 rounded-full cursor-pointer whitespace-nowrap transition-colors hover:border-gray-400 hover:bg-gray-50">
+            class="th-btn-outline px-5 max-sm:px-3 max-[480px]:px-2.5 py-2 text-sm max-sm:text-xs whitespace-nowrap">
             ${t('orders.submitRemittanceProof')}
           </button>
         </template>
@@ -378,12 +378,12 @@ function renderAllOrders(): string {
                   ${t('orders.viewDetails')}
                 </button>
                 <template x-if="canPay(order)">
-                  <button @click="openRemittanceModal(order.orderNumber, order.total, order.currency, order.paymentMethod)" class="h-9 px-5 max-[480px]:px-3 max-[480px]:flex-1 text-[13px] max-[480px]:text-xs font-medium text-white bg-(--color-cta-primary) border border-(--color-cta-primary) rounded-lg cursor-pointer whitespace-nowrap transition-colors hover:bg-(--color-cta-primary-hover)">
+                  <button @click="openRemittanceModal(order.orderNumber, order.total, order.currency, order.paymentMethod)" class="th-btn h-9 px-5 max-[480px]:px-3 max-[480px]:flex-1 text-[13px] max-[480px]:text-xs whitespace-nowrap">
                     ${t('orders.makePayment')}
                   </button>
                 </template>
                 <template x-if="hasReceipt(order)">
-                  <a :href="order.receiptUrl" target="_blank" class="h-9 px-5 max-[480px]:px-3 max-[480px]:flex-1 text-[13px] max-[480px]:text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg cursor-pointer whitespace-nowrap transition-colors hover:bg-emerald-100 inline-flex items-center gap-1.5">
+                  <a :href="order.receiptUrl" target="_blank" class="th-btn-outline h-9 px-5 max-[480px]:px-3 max-[480px]:flex-1 text-[13px] max-[480px]:text-xs font-medium text-emerald-700 bg-emerald-50 border-emerald-200 whitespace-nowrap hover:bg-emerald-100">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                     Dekontu görüntüle
                   </a>

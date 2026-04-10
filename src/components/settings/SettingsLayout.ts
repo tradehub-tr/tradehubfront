@@ -9,7 +9,6 @@
 import { t } from '../../i18n';
 import { SettingsAccountEdit, initSettingsAccountEdit } from './SettingsAccountEdit';
 import { SettingsTaxInfo, initSettingsTaxInfo } from './SettingsTaxInfo';
-import { SettingsLinkedAccounts, initSettingsLinkedAccounts } from './SettingsLinkedAccounts';
 import { SettingsPrivacy, initSettingsPrivacy } from './SettingsPrivacy';
 import { SettingsAdPreferences, initSettingsAdPreferences } from './SettingsAdPreferences';
 import { SettingsEmailPreferences, initSettingsEmailPreferences } from './SettingsEmailPreferences';
@@ -140,7 +139,6 @@ function getAccountInfoCard(): SettingsCard {
     items: [
       { label: t('settings.myProfile'), href: '#profilim' },
       { label: t('settings.myAccountNav') || t('settings.myMembership'), href: '#hesabim' },
-      { label: t('settings.linkedAccountsNav'), href: '#bagli-hesaplar', rightIcon: ICONS.google },
       { label: t('settings.taxInfoNav'), href: '#vergi' },
     ],
   };
@@ -206,7 +204,6 @@ function getSectionMap(): Record<string, { title: string; render: () => string }
     '#profilim': { title: t('settings.myProfile'), render: () => SettingsAccountEdit() },
     '#hesabim': { title: t('settings.myAccountNav') || 'Hesabım', render: () => SettingsMyAccount() },
     '#vergi': { title: t('settings.taxInfoNav'), render: () => SettingsTaxInfo() },
-    '#bagli-hesaplar': { title: t('settings.linkedAccountsNav'), render: () => SettingsLinkedAccounts() },
     '#gizlilik': { title: t('settings.privacySettingsNav'), render: () => SettingsPrivacy() },
     '#reklam': { title: t('settings.adPreferencesNav'), render: () => SettingsAdPreferences() },
     '#eposta': { title: t('settings.emailPreferencesNav'), render: () => SettingsEmailPreferences() },
@@ -221,7 +218,6 @@ const INIT_MAP: Record<string, () => void> = {
   '#profilim': initSettingsAccountEdit,
   '#hesabim': initSettingsMyAccount,
   '#vergi': initSettingsTaxInfo,
-  '#bagli-hesaplar': initSettingsLinkedAccounts,
   '#gizlilik': initSettingsPrivacy,
   '#reklam': initSettingsAdPreferences,
   '#eposta': initSettingsEmailPreferences,

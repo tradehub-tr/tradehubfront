@@ -12,6 +12,7 @@ declare global {
         removeSavedCard: (id: string) => void;
         addSavedCard: (card: Omit<SavedCard, 'id'>) => void;
         getSavedCards: () => SavedCard[];
+        editSavedCard: (id: string) => void;
     }
 }
 
@@ -35,6 +36,14 @@ export const paymentCardStore = {
         const cards = this.getCards();
         localStorage.setItem('tradehub_saved_cards', JSON.stringify(cards.filter(c => c.id !== id)));
         window.dispatchEvent(new Event('hashchange')); // hacky way to re-render in PaymentLayout
+    },
+    updateCard(id: string, card: Omit<SavedCard, 'id'>) {
+        const cards = this.getCards();
+        const idx = cards.findIndex(c => c.id === id);
+        if (idx === -1) return;
+        const masked = card.cardNumber.replace(/.(?=.{4})/g, '*');
+        cards[idx] = { ...card, cardNumber: masked, id };
+        localStorage.setItem('tradehub_saved_cards', JSON.stringify(cards));
     }
 };
 
