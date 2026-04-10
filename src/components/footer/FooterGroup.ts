@@ -25,9 +25,9 @@ export function FooterGroup(): string {
                 <path d="M16 8.8a10 10 0 0 1 0 14.4 10 10 0 0 1 0-14.4z" fill="#FF5F00"/>
               </svg>
             </span>
-            <!-- iyzico -->
-            <span class="inline-flex items-center px-3 py-1.5 rounded-md bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-sm font-bold">
-              <span class="text-blue-600">iy</span><span class="text-blue-800 dark:text-blue-400">zico</span>
+            <!-- American Express -->
+            <span class="inline-flex items-center px-3 py-1.5 rounded-md bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600">
+              <img src="${new URL('../../assets/images/amex.svg', import.meta.url).href}" alt="American Express" width="36" height="22" />
             </span>
           </div>
         </div>

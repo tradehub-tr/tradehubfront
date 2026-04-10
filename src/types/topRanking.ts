@@ -1,6 +1,3 @@
-export type RankingRegion = 'global' | 'us' | 'europe';
-export type RankingSortMode = 'hot-selling' | 'most-popular' | 'best-reviewed';
-
 export interface RankedProduct {
   id: string;
   name: string;

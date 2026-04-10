@@ -2,7 +2,7 @@
  * TopRankingHero Component
  * Full-width beige gradient hero banner containing:
  * - Title + subtitle (centered, desktop only)
- * - Region + Category dropdown filters (centered, both mobile and desktop)
+ * - Category dropdown filter (centered, both mobile and desktop)
  *
  * Also exports mobile-specific headers:
  * - TopRankingMobileHeader()  — compact header that scrolls with content

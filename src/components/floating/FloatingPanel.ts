@@ -217,6 +217,8 @@ export function FloatingPanel(): string {
   // TypeScript "unused" uyarısı vermesin, ileride tekrar aktif edilebilsin.
   void renderLensItem;
   void renderLensPopup;
+  void renderMessagesItem;
+  void renderChatDrawer;
 
   return `
     <div
@@ -234,8 +236,8 @@ export function FloatingPanel(): string {
 
         <!-- Sidebar butonları -->
         <div class="inline-flex flex-col gap-2 bg-white rounded-l-[8px] shadow-[0_2px_6px_2px_rgba(0,0,0,0.12)] p-2">
-          <!-- Mesajlarım -->
-          ${renderMessagesItem()}
+          <!-- DISABLED: Mesajlarım — ileride geliştirilecek -->
+          <!-- ${/* renderMessagesItem() */ ''} -->
 
           <!-- Görsel Arama: ${/* renderLensItem() — disabled */ ''} -->
 
@@ -244,8 +246,8 @@ export function FloatingPanel(): string {
         </div>
       </div>
 
-      <!-- Chat Support Drawer (hidden by default, toggled by chatOpen) -->
-      ${renderChatDrawer()}
+      <!-- DISABLED: Chat Support Drawer — ileride geliştirilecek -->
+      <!-- ${/* renderChatDrawer() */ ''} -->
 
     </div>
 

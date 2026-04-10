@@ -2,9 +2,6 @@
  * Mock data for Top Ranking page
  */
 
-export type RankingRegion = 'global' | 'us' | 'europe';
-export type RankingSortMode = 'hot-selling' | 'most-popular' | 'best-reviewed';
-
 export interface RankedProduct {
   id: string;
   name: string;
@@ -21,92 +18,6 @@ export interface RankingCategoryGroup {
   nameKey: string;
   categoryId: string;
   products: RankedProduct[];
-}
-
-export interface RankingMainCategory {
-  id: string;
-  nameKey: string;
-  subCategories?: { id: string; nameKey: string }[];
-}
-
-export interface RankingTab {
-  id: string;
-  labelKey: string;
-}
-
-export interface RegionOption {
-  id: RankingRegion;
-  labelKey: string;
-}
-
-export function getRegionOptions(): RegionOption[] {
-  return [
-    { id: 'global', labelKey: 'topRankingPage.regionGlobal' },
-    { id: 'us', labelKey: 'topRankingPage.regionUS' },
-    { id: 'europe', labelKey: 'topRankingPage.regionEurope' },
-  ];
-}
-
-export function getRankingTabs(): RankingTab[] {
-  return [
-    { id: 'all', labelKey: 'topRankingPage.tabAll' },
-    { id: 'luggage-bags', labelKey: 'topRankingPage.tabLuggageBags' },
-    { id: 'jewelry-eyewear', labelKey: 'topRankingPage.tabJewelryEyewear' },
-    { id: 'consumer-electronics', labelKey: 'topRankingPage.tabConsumerElectronics' },
-    { id: 'home-garden', labelKey: 'topRankingPage.tabHomeGarden' },
-    { id: 'gifts-crafts', labelKey: 'topRankingPage.tabGiftsCrafts' },
-    { id: 'sports-entertainment', labelKey: 'topRankingPage.tabSportsEntertainment' },
-  ];
-}
-
-export function getRankingMainCategories(): RankingMainCategory[] {
-  return [
-    {
-      id: 'consumer-electronics',
-      nameKey: 'topRankingPage.catConsumerElectronics',
-      subCategories: [
-        { id: 'phones', nameKey: 'topRankingPage.catPhones' },
-        { id: 'audio', nameKey: 'topRankingPage.catAudio' },
-        { id: 'computers', nameKey: 'topRankingPage.catComputers' },
-        { id: 'networking', nameKey: 'topRankingPage.catNetworking' },
-      ],
-    },
-    {
-      id: 'jewelry-eyewear',
-      nameKey: 'topRankingPage.catJewelryEyewear',
-      subCategories: [
-        { id: 'bracelets', nameKey: 'topRankingPage.catBracelets' },
-        { id: 'brooches', nameKey: 'topRankingPage.catBrooches' },
-      ],
-    },
-    {
-      id: 'luggage-bags',
-      nameKey: 'topRankingPage.catLuggageBags',
-      subCategories: [
-        { id: 'caps-hats', nameKey: 'topRankingPage.catCapsHats' },
-        { id: 'labels', nameKey: 'topRankingPage.catLabels' },
-      ],
-    },
-    {
-      id: 'home-garden',
-      nameKey: 'topRankingPage.catHomeGarden',
-    },
-    {
-      id: 'gifts-crafts',
-      nameKey: 'topRankingPage.catGiftsCrafts',
-      subCategories: [
-        { id: 'nails', nameKey: 'topRankingPage.catNails' },
-        { id: 'skincare', nameKey: 'topRankingPage.catSkincare' },
-      ],
-    },
-    {
-      id: 'sports-entertainment',
-      nameKey: 'topRankingPage.catSportsEntertainment',
-      subCategories: [
-        { id: 'hockey', nameKey: 'topRankingPage.catHockey' },
-      ],
-    },
-  ];
 }
 
 export function getMockRankingGroups(): RankingCategoryGroup[] {

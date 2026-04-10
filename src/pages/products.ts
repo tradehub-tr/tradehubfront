@@ -67,6 +67,16 @@ const urlParams = new URLSearchParams(window.location.search);
 const categoryParam = urlParams.get('category') || urlParams.get('cat');
 const queryParam = urlParams.get('q');
 
+// Log search/category visit for personalization (dedup handled by backend)
+if (categoryParam || queryParam) {
+  fetch('/api/method/tradehub_core.api.listing.log_search', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({ query: categoryParam || queryParam, category: categoryParam || '' }),
+  }).catch(() => {});
+}
+
 /**
  * Resolve display keyword from URL params.
  * categoryParam önce slug olarak, yoksa ID olarak aranır.
@@ -267,11 +277,23 @@ initCurrency().then(() => {
     pageSize: 40,
     onUpdate: (products, total, page, totalPages, hasNext, hasPrev) => {
       rerenderProductGrid(products);
+      const resolvedKeyword = resolveKeyword() || undefined;
       updateSearchHeader({
         totalProducts: total,
-        keyword: resolveKeyword() || undefined,
+        keyword: resolvedKeyword,
       });
       if (engine) updateFilterChips(engine.getState());
+
+      // Update breadcrumb with resolved category name (async categories may now be loaded)
+      if (resolvedKeyword && categoryParam) {
+        const breadcrumbNav = document.querySelector('nav[aria-label="Breadcrumb"]');
+        if (breadcrumbNav) {
+          const lastItem = breadcrumbNav.querySelector('li:last-child span');
+          if (lastItem && lastItem.textContent?.trim() !== resolvedKeyword) {
+            lastItem.textContent = resolvedKeyword;
+          }
+        }
+      }
 
       // Update pagination UI
       const paginationEl = document.getElementById('pagination-controls');

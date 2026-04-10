@@ -23,7 +23,7 @@ const sideBannerSlides: HeroSideBannerSlide[] = [
     titleKey: 'heroBanner.newSuppliersDesc',
     descriptionKey: 'heroBanner.newSuppliersText',
     ctaKey: 'heroBanner.seeMore',
-    href: '/suppliers/new',
+    href: '/pages/manufacturers.html',
     background: 'linear-gradient(135deg, #8cc9f7 0%, #6aa8de 45%, #74b8e9 100%)',
   },
   {
@@ -31,7 +31,7 @@ const sideBannerSlides: HeroSideBannerSlide[] = [
     titleKey: 'heroBanner.topPicked',
     descriptionKey: 'heroBanner.topPickedText',
     ctaKey: 'heroBanner.exploreNow',
-    href: '/trending',
+    href: '/pages/top-ranking.html',
     background: 'linear-gradient(135deg, #87d4b4 0%, #56b08b 42%, #69be9a 100%)',
   },
   {
@@ -39,7 +39,7 @@ const sideBannerSlides: HeroSideBannerSlide[] = [
     titleKey: 'heroBanner.privateLabelDesc',
     descriptionKey: 'heroBanner.privateLabelText',
     ctaKey: 'heroBanner.startRequest',
-    href: '/customization',
+    href: '/pages/dashboard/rfq-form.html',
     background: 'linear-gradient(135deg, #9faef8 0%, #778be8 45%, #8598ef 100%)',
   },
   {
@@ -47,7 +47,7 @@ const sideBannerSlides: HeroSideBannerSlide[] = [
     titleKey: 'heroBanner.rfqDesc',
     descriptionKey: 'heroBanner.rfqText',
     ctaKey: 'heroBanner.createRfq',
-    href: '/rfq/create',
+    href: '/pages/dashboard/rfq.html',
     background: 'linear-gradient(135deg, #f8b58a 0%, #f28e63 44%, #f3a075 100%)',
   },
 ];
