@@ -102,7 +102,7 @@ export function OrderSummary({ data, protectionItems, tradeAssuranceText }: Orde
               x-model="couponCode"
               @keydown.enter="applyCoupon()"
               placeholder="${t('checkout.couponPlaceholder')}" data-i18n-placeholder="checkout.couponPlaceholder"
-              class="flex-1 h-[38px] px-3 text-[14px] border border-[#d1d5db] rounded-lg focus:outline-none focus:border-[#e87400] focus:ring-1 focus:ring-[#e87400] transition-colors"
+              class="th-input th-input-md flex-1"
             />
             <button
               type="button"

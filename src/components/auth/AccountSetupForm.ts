@@ -182,7 +182,7 @@ export function AccountSetupForm(defaultCountry: string = 'TR'): string {
               name="firstName"
               placeholder="${t('auth.setup.firstNamePlaceholder')}" data-i18n-placeholder="auth.setup.firstNamePlaceholder"
               autocomplete="given-name"
-              class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-md text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 dark:focus:border-orange-400 transition-all"
+              class="th-input th-input-lg"
               required
             />
           </div>
@@ -198,7 +198,7 @@ export function AccountSetupForm(defaultCountry: string = 'TR'): string {
               name="lastName"
               placeholder="${t('auth.setup.lastNamePlaceholder')}" data-i18n-placeholder="auth.setup.lastNamePlaceholder"
               autocomplete="family-name"
-              class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-md text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 dark:focus:border-orange-400 transition-all"
+              class="th-input th-input-lg"
               required
             />
           </div>
@@ -215,7 +215,7 @@ export function AccountSetupForm(defaultCountry: string = 'TR'): string {
             name="phone"
             placeholder="05XX XXX XX XX"
             autocomplete="tel"
-            class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-md text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 dark:focus:border-orange-400 transition-all"
+            class="th-input th-input-lg"
           />
           <p id="phone-error" class="text-xs text-red-500 mt-1 hidden"></p>
         </div>
@@ -232,7 +232,7 @@ export function AccountSetupForm(defaultCountry: string = 'TR'): string {
               name="password"
               placeholder="${t('auth.setup.passwordPlaceholder')}" data-i18n-placeholder="auth.setup.passwordPlaceholder"
               autocomplete="new-password"
-              class="w-full px-4 py-3 pr-12 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-md text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 dark:focus:border-orange-400 transition-all"
+              class="th-input th-input-lg pr-12"
               required
             />
             <button
@@ -288,7 +288,8 @@ export function AccountSetupForm(defaultCountry: string = 'TR'): string {
             type="checkbox"
             id="terms-checkbox"
             name="terms"
-            class="mt-1 w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-orange-500 focus:ring-orange-500/20 bg-white dark:bg-gray-800"
+            class="mt-1 w-4 h-4 flex-shrink-0"
+            style="accent-color: var(--checkbox-checked-bg);"
             required
           />
           <label for="terms-checkbox" class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">

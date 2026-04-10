@@ -17,7 +17,7 @@ export function InboxPanel(): string {
         </svg>
         <input type="text"
                x-model.debounce.300ms="searchQuery"
-               class="w-full h-9 pl-9 pr-3 border border-(--color-border-default,#e5e5e5) rounded-full text-[13px] text-(--color-text-body,#333333) bg-(--color-surface-muted,#fafafa) outline-none transition-[border-color] duration-150 placeholder:text-(--color-text-placeholder,#999999) focus:border-(--color-cta-primary,#cc9900) focus:bg-(--color-surface,#ffffff)"
+               class="th-input th-input-sm pl-9"
                placeholder="${t('common.search')}" />
         <!-- Clear -->
         <button x-show="searchQuery.length > 0"

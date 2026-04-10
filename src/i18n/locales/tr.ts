@@ -3547,6 +3547,7 @@ const tr = {
       accountInfoCardTitle: 'Hesap bilgileri',
       myProfile: 'Profilim',
       myMembership: 'Üyelik hesabım',
+      myAccountNav: 'Hesabım',
       linkedAccountsNav: 'Bağlı hesaplar',
       taxInfoNav: 'Vergi bilgileri',
       accountSecurityTitle: 'Hesap güvenliği',

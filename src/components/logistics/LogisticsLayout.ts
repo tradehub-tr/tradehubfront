@@ -73,14 +73,14 @@ function renderOrders(): string {
     <div class="px-4 sm:px-7 py-5">
       <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 mb-4">
         <div class="flex-1 flex border border-border-default rounded-md overflow-hidden min-w-0">
-          <input type="text" class="flex-1 min-w-0 px-3.5 py-2.5 text-[14px] border-none outline-none text-gray-900 placeholder:text-gray-400" placeholder="${t('logistics.searchByOrderNo')}" />
+          <input type="text" class="th-input th-input-borderless flex-1 min-w-0" placeholder="${t('logistics.searchByOrderNo')}" />
           <button class="flex items-center gap-1.5 px-4 sm:px-5 py-2.5 text-[14px] text-gray-700 bg-white border-none border-l border-l-border-default cursor-pointer whitespace-nowrap hover:bg-gray-100 transition-colors">${SEARCH_ICON} ${t('logistics.searchBtn')}</button>
         </div>
         <a href="#" class="text-[13px] text-primary-500 no-underline whitespace-nowrap hover:underline self-end sm:self-auto">${t('logistics.resetAll')}</a>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <div class="relative">
-          <input type="text" class="w-full py-2.5 pl-3.5 pr-9 text-[14px] border border-border-default rounded-md outline-none text-gray-900 bg-white cursor-pointer box-border" placeholder="${t('logistics.orderPlaced')}" readonly />
+          <input type="text" class="th-input th-input-md pl-3.5 pr-9 cursor-pointer" placeholder="${t('logistics.orderPlaced')}" readonly />
           <svg class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="11" rx="2" stroke="#999" stroke-width="1.2"/><path d="M2 6h12M5 1v3M11 1v3" stroke="#999" stroke-width="1.2" stroke-linecap="round"/></svg>
         </div>
         <div>
@@ -152,7 +152,7 @@ function renderReviews(): string {
     <!-- Search -->
     <div class="px-4 sm:px-7 py-5">
       <div class="flex border border-border-default rounded-md overflow-hidden max-w-[500px]">
-        <input type="text" class="flex-1 min-w-0 px-3.5 py-2.5 text-[14px] border-none outline-none text-gray-900" placeholder="" />
+        <input type="text" class="th-input th-input-borderless flex-1 min-w-0" placeholder="" />
         <button class="flex items-center gap-1.5 px-4 sm:px-5 py-2.5 text-[14px] text-gray-700 bg-white border-none border-l border-l-border-default cursor-pointer whitespace-nowrap hover:bg-gray-100 transition-colors">${SEARCH_ICON} ${t('logistics.searchBtn')}</button>
       </div>
     </div>

@@ -56,7 +56,7 @@ export function TicketForm(): string {
                   <!-- Sub Category -->
                   <div x-show="category">
                     <label class="block text-sm font-medium text-gray-700 mb-1">${t('helpCenter.subCategoryLabel')}</label>
-                    <select x-model="subCategory" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none">
+                    <select x-model="subCategory" class="th-input th-input-md">
                       <option value="">${t('helpCenter.subCategoryPlaceholder')}</option>
                       <template x-for="sub in subCategories" :key="sub">
                         <option :value="sub" x-text="sub"></option>
@@ -67,7 +67,7 @@ export function TicketForm(): string {
                   <!-- Subject -->
                   <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">${t('helpCenter.subjectLabel')}</label>
-                    <input type="text" x-model="subject" class="w-full px-4 py-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none" :class="errors.subject ? 'border-red-400' : 'border-gray-300'" placeholder="${t('helpCenter.subjectPlaceholder')}">
+                    <input type="text" x-model="subject" class="th-input th-input-md" :class="{ 'is-error': errors.subject }" placeholder="${t('helpCenter.subjectPlaceholder')}">
                     <p x-show="errors.subject" x-text="errors.subject" class="text-xs text-red-500 mt-1"></p>
                   </div>
                 </div>
@@ -80,7 +80,7 @@ export function TicketForm(): string {
                   <!-- Description -->
                   <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">${t('helpCenter.descriptionLabel')}</label>
-                    <textarea x-model="description" rows="6" class="w-full px-4 py-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none resize-y" :class="errors.description ? 'border-red-400' : 'border-gray-300'" placeholder="${t('helpCenter.descriptionPlaceholder')}"></textarea>
+                    <textarea x-model="description" rows="6" class="th-input resize-y" :class="{ 'is-error': errors.description }" placeholder="${t('helpCenter.descriptionPlaceholder')}"></textarea>
                     <div class="flex justify-between mt-1">
                       <p x-show="errors.description" x-text="errors.description" class="text-xs text-red-500"></p>
                       <span class="text-xs text-gray-400 ml-auto" x-text="charCount + ' ${t('helpCenter.characters')}'"></span>
@@ -144,7 +144,7 @@ export function TicketForm(): string {
                   <!-- Order Reference -->
                   <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">${t('helpCenter.orderRefLabel')}</label>
-                    <input type="text" x-model="orderRef" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none" placeholder="ORD-XXXX">
+                    <input type="text" x-model="orderRef" class="th-input th-input-md" placeholder="ORD-XXXX">
                   </div>
 
                   <!-- Summary -->

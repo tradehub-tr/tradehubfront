@@ -59,21 +59,21 @@ export function ContactPageLayout(): string {
                 <!-- Name -->
                 <div>
                   <label for="contact-name" class="block text-sm font-medium text-gray-700 mb-1">${t('helpCenter.fullNameLabel')}</label>
-                  <input id="contact-name" type="text" x-model="name" class="w-full px-4 py-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-colors" :class="errors.name ? 'border-red-400' : 'border-gray-300'" placeholder="${t('helpCenter.fullNamePlaceholder')}">
+                  <input id="contact-name" type="text" x-model="name" class="th-input th-input-md" :class="{ 'is-error': errors.name }" placeholder="${t('helpCenter.fullNamePlaceholder')}">
                   <p x-show="errors.name" x-text="errors.name" class="text-xs text-red-500 mt-1"></p>
                 </div>
 
                 <!-- Email -->
                 <div>
                   <label for="contact-email" class="block text-sm font-medium text-gray-700 mb-1">${t('helpCenter.emailLabel')}</label>
-                  <input id="contact-email" type="email" x-model="email" class="w-full px-4 py-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-colors" :class="errors.email ? 'border-red-400' : 'border-gray-300'" placeholder="ornek@email.com">
+                  <input id="contact-email" type="email" x-model="email" class="th-input th-input-md" :class="{ 'is-error': errors.email }" placeholder="ornek@email.com">
                   <p x-show="errors.email" x-text="errors.email" class="text-xs text-red-500 mt-1"></p>
                 </div>
 
                 <!-- Subject -->
                 <div>
                   <label for="contact-subject" class="block text-sm font-medium text-gray-700 mb-1">${t('helpCenter.contactSubjectLabel')}</label>
-                  <select id="contact-subject" x-model="subject" class="w-full px-4 py-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-colors" :class="errors.subject ? 'border-red-400' : 'border-gray-300'">
+                  <select id="contact-subject" x-model="subject" class="th-input th-input-md" :class="{ 'is-error': errors.subject }">
                     <option value="">${t('helpCenter.contactSubjectPlaceholder')}</option>
                     <template x-for="opt in subjectOptions" :key="opt">
                       <option :value="opt" x-text="opt"></option>
@@ -85,7 +85,7 @@ export function ContactPageLayout(): string {
                 <!-- Message -->
                 <div>
                   <label for="contact-message" class="block text-sm font-medium text-gray-700 mb-1">${t('helpCenter.messageLabel')}</label>
-                  <textarea id="contact-message" x-model="message" rows="5" class="w-full px-4 py-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-colors resize-y" :class="errors.message ? 'border-red-400' : 'border-gray-300'" placeholder="${t('helpCenter.messagePlaceholder')}"></textarea>
+                  <textarea id="contact-message" x-model="message" rows="5" class="th-input resize-y" :class="{ 'is-error': errors.message }" placeholder="${t('helpCenter.messagePlaceholder')}"></textarea>
                   <p x-show="errors.message" x-text="errors.message" class="text-xs text-red-500 mt-1"></p>
                 </div>
 

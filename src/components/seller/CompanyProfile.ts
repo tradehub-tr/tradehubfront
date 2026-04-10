@@ -1019,7 +1019,7 @@ function ContactTab(): string {
                 <textarea
                   id="contact-textarea"
                   x-model="msgText"
-                  class="w-full border border-gray-300 rounded-md p-3 text-[14px] text-gray-700 min-h-[120px] resize-y focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-colors"
+                  class="th-input min-h-[120px] resize-y"
                   placeholder="${t('seller.sf.enterInquiryDetails')}"
                   maxlength="8000"
                   aria-required="true"

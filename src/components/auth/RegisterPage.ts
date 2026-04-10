@@ -144,7 +144,7 @@ export function RegisterPage(initialStep: RegisterStep = 'account-type'): string
               placeholder="${t('auth.register.emailPlaceholder')}" data-i18n-placeholder="auth.register.emailPlaceholder"
               autocomplete="email"
               @input="validateEmail()"
-              class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-md text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 auth-input-focus transition-all"
+              class="th-input th-input-lg"
               required
             />
             <p id="register-email-error" x-show="emailError" x-cloak class="mt-1 text-sm text-red-500" data-i18n="auth.register.emailError">

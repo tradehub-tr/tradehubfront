@@ -157,7 +157,7 @@ export function MessageContent(): string {
             <textarea x-model="newMessage"
                       @keydown.enter.prevent="if (!$event.shiftKey) sendMessage()"
                       rows="1"
-                      class="w-full resize-none border border-(--color-border-default,#e5e5e5) rounded-md px-4 py-2.5 text-[13px] text-(--color-text-body,#333333) bg-(--color-surface-muted,#fafafa) outline-none transition-[border-color] duration-150 placeholder:text-(--color-text-placeholder,#999999) focus:border-(--color-cta-primary,#cc9900) focus:bg-(--color-surface,#ffffff) max-h-24 overflow-y-auto leading-snug"
+                      class="th-input resize-none max-h-24 overflow-y-auto leading-snug"
                       placeholder="${t('messages.typePlaceholder')}"
                       style="field-sizing: content;"></textarea>
           </div>

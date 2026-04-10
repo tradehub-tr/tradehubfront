@@ -35,7 +35,7 @@ export function ContactForm(data: ContactFormData): string {
             <div class="relative">
               <textarea
                 id="contact-textarea"
-                class="contact-form__textarea w-full border border-(--input-border-color) dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 rounded-(--radius-input) p-3 text-[14px] text-[#374151] min-h-[120px] sm:min-h-[100px] xs:min-h-[80px] resize-y focus:border-(--input-focus-border-color) focus:outline-none focus:ring-2 focus:ring-[#cc9900]/20 transition-colors"
+                class="th-input contact-form__textarea min-h-[120px] sm:min-h-[100px] xs:min-h-[80px] resize-y"
                 placeholder="${placeholder}"
                 maxlength="${maxLength}"
                 aria-required="true"

@@ -18,7 +18,7 @@ function floatField(id: string, name: string, label: string, required: boolean, 
   return `
     <div class="relative mb-4 group checkout-field-container" data-field="${name}" x-bind:data-error="errors.${name}">
       <input
-        class="peer w-full h-[48px] pt-[18px] px-3 pb-0 text-[14px] text-[var(--color-text-primary)] border border-[var(--color-border-medium)] rounded-lg bg-[var(--color-surface)] outline-none transition-colors focus:border-[var(--color-primary-500)] data-[error=true]:border-[var(--color-error-500)] placeholder-transparent"
+        class="peer w-full h-[48px] pt-[18px] px-3 pb-0 text-[14px] text-[var(--color-text-primary)] border border-[var(--color-border-default)] rounded-lg bg-[var(--color-surface)] outline-none transition-colors focus:border-[var(--color-primary-500)] data-[error=true]:border-[var(--color-error-500)] placeholder-transparent"
         type="${type}"
         id="${id}"
         name="${name}"
@@ -61,7 +61,7 @@ function dropdownField(
     <div class="relative mb-4 group checkout-dropdown-container" data-field="${name}" data-dropdown="${id}"${containerAlpine}>
       <button
         type="button"
-        class="w-full h-[48px] flex items-center justify-between pt-[18px] px-3 pb-0 text-[14px] text-[var(--color-text-primary)] border border-[var(--color-border-medium)] rounded-lg bg-[var(--color-surface)] cursor-pointer outline-none transition-colors focus:border-[var(--color-primary-500)] group-data-[error=true]:border-[var(--color-error-500)] dropdown-trigger"
+        class="w-full h-[48px] flex items-center justify-between pt-[18px] px-3 pb-0 text-[14px] text-[var(--color-text-primary)] border border-[var(--color-border-default)] rounded-lg bg-[var(--color-surface)] cursor-pointer outline-none transition-colors focus:border-[var(--color-primary-500)] group-data-[error=true]:border-[var(--color-error-500)] dropdown-trigger"
         id="${id}"
         aria-haspopup="listbox"
         ${triggerAlpine}
@@ -72,7 +72,7 @@ function dropdownField(
       <label class="absolute left-3 top-[12px] -translate-y-1/2 text-[12px] text-[#767676] transition-all duration-200 ease-in-out pointer-events-none group-data-[error=true]:text-[var(--color-error-500)] dropdown-label">
         ${label} <span class="text-[var(--color-error-500)]">*</span>
       </label>
-      <ul class="absolute top-full left-0 right-0 z-50 max-h-[260px] overflow-y-auto bg-[var(--color-surface)] border border-[var(--color-border-medium)] rounded-lg shadow-lg mt-1 hidden group-data-[open=true]:block" role="listbox" data-list${listAlpine}>${items || ''}</ul>
+      <ul class="absolute top-full left-0 right-0 z-50 max-h-[260px] overflow-y-auto bg-[var(--color-surface)] border border-[var(--color-border-default)] rounded-lg shadow-lg mt-1 hidden group-data-[open=true]:block" role="listbox" data-list${listAlpine}>${items || ''}</ul>
       <div class="hidden text-[12px] text-[var(--color-error-500)] mt-1 group-data-[error=true]:block">${pageContent.requiredFieldError}</div>
     </div>
   `;
@@ -193,7 +193,7 @@ function renderAddAddressModal(countryOptions: string): string {
           <div class="grid grid-cols-1 gap-4">
             <div>
               <label class="block text-[14px] text-[#6b7280] mb-1">Country / region *</label>
-              <select class="w-full h-12 rounded-lg border border-[#d1d5db] px-3 text-[14px] text-[#111827] outline-none focus:border-[#111827]" x-model="addAddressForm.country" @change="syncAddAddressCountry()">
+              <select class="th-input th-input-lg" x-model="addAddressForm.country" @change="syncAddAddressCountry()">
                 ${countryOptions}
               </select>
             </div>
@@ -201,14 +201,14 @@ function renderAddAddressModal(countryOptions: string): string {
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label class="block text-[14px] text-[#6b7280] mb-1">First name and Last name *</label>
-                <input class="w-full h-12 rounded-lg border border-[#d1d5db] px-3 text-[14px] text-[#111827] outline-none focus:border-[#111827]" type="text" x-model="addAddressForm.fullName" />
+                <input class="th-input th-input-lg" type="text" x-model="addAddressForm.fullName" />
                 <p class="mt-1 text-[12px] text-[#dc2626]" x-show="addFormErrors.fullName">Required</p>
               </div>
               <div>
                 <label class="block text-[14px] text-[#6b7280] mb-1">Phone number *</label>
                 <div class="flex gap-2">
                   <div class="w-[84px] h-12 rounded-lg border border-[#d1d5db] flex items-center justify-center text-[14px] text-[#111827]" x-text="addAddressForm.phonePrefix"></div>
-                  <input class="flex-1 h-12 rounded-lg border border-[#d1d5db] px-3 text-[14px] text-[#111827] outline-none focus:border-[#111827]" type="tel" x-model="addAddressForm.phone" />
+                  <input class="th-input th-input-lg flex-1" type="tel" x-model="addAddressForm.phone" />
                 </div>
                 <p class="mt-1 text-[12px] text-[#dc2626]" x-show="addFormErrors.phone">Required</p>
               </div>
@@ -217,46 +217,46 @@ function renderAddAddressModal(countryOptions: string): string {
             <div>
               <label class="block text-[14px] text-[#6b7280] mb-1">Street address or P.O. box *</label>
               <div class="relative">
-                <input class="w-full h-12 rounded-lg border border-[#d1d5db] px-3 text-[14px] text-[#111827] outline-none focus:border-[#111827]" type="text" x-model="addAddressForm.street" />
+                <input class="th-input th-input-lg" type="text" x-model="addAddressForm.street" />
               </div>
               <p class="mt-1 text-[12px] text-[#dc2626]" x-show="addFormErrors.street">Required</p>
             </div>
 
             <div>
               <label class="block text-[14px] text-[#6b7280] mb-1">Apartment, suite, unit, building, floor (optional)</label>
-              <input class="w-full h-12 rounded-lg border border-[#d1d5db] px-3 text-[14px] text-[#111827] outline-none focus:border-[#111827]" type="text" x-model="addAddressForm.apartment" />
+              <input class="th-input th-input-lg" type="text" x-model="addAddressForm.apartment" />
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label class="block text-[14px] text-[#6b7280] mb-1">State / province *</label>
-                <input class="w-full h-12 rounded-lg border border-[#d1d5db] px-3 text-[14px] text-[#111827] outline-none focus:border-[#111827]" type="text" x-model="addAddressForm.state" />
+                <input class="th-input th-input-lg" type="text" x-model="addAddressForm.state" />
                 <p class="mt-1 text-[12px] text-[#dc2626]" x-show="addFormErrors.state">Required</p>
               </div>
               <div>
                 <label class="block text-[14px] text-[#6b7280] mb-1">City *</label>
-                <input class="w-full h-12 rounded-lg border border-[#d1d5db] px-3 text-[14px] text-[#111827] outline-none focus:border-[#111827]" type="text" x-model="addAddressForm.city" />
+                <input class="th-input th-input-lg" type="text" x-model="addAddressForm.city" />
                 <p class="mt-1 text-[12px] text-[#dc2626]" x-show="addFormErrors.city">Required</p>
               </div>
               <div>
                 <label class="block text-[14px] text-[#6b7280] mb-1">Postal code *</label>
-                <input class="w-full h-12 rounded-lg border border-[#d1d5db] px-3 text-[14px] text-[#111827] outline-none focus:border-[#111827]" type="text" x-model="addAddressForm.postalCode" />
+                <input class="th-input th-input-lg" type="text" x-model="addAddressForm.postalCode" />
                 <p class="mt-1 text-[12px] text-[#dc2626]" x-show="addFormErrors.postalCode">Required</p>
               </div>
             </div>
 
             <div>
               <label class="block text-[14px] text-[#6b7280] mb-1">Company name (optional)</label>
-              <input class="w-full h-12 rounded-lg border border-[#d1d5db] px-3 text-[14px] text-[#111827] outline-none focus:border-[#111827]" type="text" x-model="addAddressForm.company" />
+              <input class="th-input th-input-lg" type="text" x-model="addAddressForm.company" />
             </div>
 
             <div>
               <label class="block text-[14px] text-[#6b7280] mb-1">Delivery note (optional)</label>
-              <input class="w-full h-12 rounded-lg border border-[#d1d5db] px-3 text-[14px] text-[#111827] outline-none focus:border-[#111827]" type="text" placeholder="e.g. Leave at the door" x-model="addAddressForm.note" />
+              <input class="th-input th-input-lg" type="text" placeholder="e.g. Leave at the door" x-model="addAddressForm.note" />
             </div>
 
             <label class="inline-flex items-center gap-2 text-[14px] text-[#374151]">
-              <input type="checkbox" class="h-4 w-4 rounded border-[#d1d5db] accent-[#111827]" x-model="addAddressForm.isDefaultAddress" />
+              <input type="checkbox" class="h-4 w-4 flex-shrink-0" style="accent-color: var(--checkbox-checked-bg);" x-model="addAddressForm.isDefaultAddress" />
               <span>Set as default shipping address</span>
             </label>
           </div>
@@ -342,12 +342,12 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
             ${floatField('first-name', 'firstName', 'First name and Last name', true)}
 
             <div class="relative mb-4 group checkout-field-container flex gap-2" data-field="phone" x-bind:data-error="errors.phone">
-              <div class="flex items-center justify-center w-[70px] h-[48px] rounded-lg border border-[var(--color-border-medium)] bg-transparent text-[14px] text-[var(--color-text-primary)] shrink-0">
+              <div class="flex items-center justify-center w-[70px] h-[48px] rounded-lg border border-[var(--color-border-default)] bg-transparent text-[14px] text-[var(--color-text-primary)] shrink-0">
                 <span id="phone-prefix" x-text="phonePrefix">${defaultCountry.phonePrefix}</span>
               </div>
               <div class="relative flex-1">
                 <input
-                  class="peer w-full h-[48px] pt-[18px] px-3 pb-0 text-[14px] text-[var(--color-text-primary)] border border-[var(--color-border-medium)] rounded-lg bg-[var(--color-surface)] outline-none transition-colors focus:border-[var(--color-primary-500)] data-[error=true]:border-[var(--color-error-500)] placeholder-transparent"
+                  class="peer w-full h-[48px] pt-[18px] px-3 pb-0 text-[14px] text-[var(--color-text-primary)] border border-[var(--color-border-default)] rounded-lg bg-[var(--color-surface)] outline-none transition-colors focus:border-[var(--color-primary-500)] data-[error=true]:border-[var(--color-error-500)] placeholder-transparent"
                   type="tel"
                   id="phone"
                   name="phone"
@@ -385,7 +385,7 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
               <div class="relative mb-4 group checkout-dropdown-container" data-field="city" data-dropdown="city-dropdown" x-bind:data-open="cityOpen" x-bind:data-error="errors.city" @click.outside="cityOpen = false">
                 <button
                   type="button"
-                  class="w-full h-[48px] flex items-center justify-between pt-[18px] px-3 pb-0 text-[14px] text-[var(--color-text-primary)] border border-[var(--color-border-medium)] rounded-lg bg-[var(--color-surface)] cursor-pointer outline-none transition-colors focus:border-[var(--color-primary-500)] group-data-[error=true]:border-[var(--color-error-500)] dropdown-trigger"
+                  class="w-full h-[48px] flex items-center justify-between pt-[18px] px-3 pb-0 text-[14px] text-[var(--color-text-primary)] border border-[var(--color-border-default)] rounded-lg bg-[var(--color-surface)] cursor-pointer outline-none transition-colors focus:border-[var(--color-primary-500)] group-data-[error=true]:border-[var(--color-error-500)] dropdown-trigger"
                   id="city-dropdown"
                   aria-haspopup="listbox"
                   @click.prevent="toggleDropdown('city')"
@@ -397,7 +397,7 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
                 <label class="absolute left-3 top-[12px] -translate-y-1/2 text-[12px] text-[#767676] transition-all duration-200 ease-in-out pointer-events-none group-data-[error=true]:text-[var(--color-error-500)] dropdown-label">
                   City <span class="text-[var(--color-error-500)]">*</span>
                 </label>
-                <ul class="absolute top-full left-0 right-0 z-50 max-h-[260px] overflow-y-auto bg-[var(--color-surface)] border border-[var(--color-border-medium)] rounded-lg shadow-lg mt-1 hidden group-data-[open=true]:block" role="listbox" data-list @click="selectCityItem($event)">
+                <ul class="absolute top-full left-0 right-0 z-50 max-h-[260px] overflow-y-auto bg-[var(--color-surface)] border border-[var(--color-border-default)] rounded-lg shadow-lg mt-1 hidden group-data-[open=true]:block" role="listbox" data-list @click="selectCityItem($event)">
                   <template x-for="city in cityOptions" :key="city">
                     <li class="px-3 py-2 text-[14px] text-[var(--color-text-primary)] cursor-pointer hover:bg-[#f5f5f5] transition-colors" role="option" :data-value="city" x-text="city"></li>
                   </template>
@@ -416,7 +416,7 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
                 type="checkbox"
                 id="default-address"
                 name="isDefaultAddress"
-                class="w-4 h-4 rounded border-[var(--color-border-medium)] text-[var(--color-primary-500)] focus:ring-[var(--color-primary-500)]"
+                class="w-4 h-4 rounded border-[var(--color-border-default)] text-[var(--color-primary-500)] focus:ring-[var(--color-primary-500)]"
               />
               <label for="default-address" class="text-sm text-[var(--color-text-secondary)] cursor-pointer select-none">
                 ${pageContent.defaultAddressCheckbox}

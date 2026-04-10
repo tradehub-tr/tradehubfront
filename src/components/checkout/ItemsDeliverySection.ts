@@ -200,7 +200,7 @@ function renderSupplierNoteModal(): string {
         <div class="px-4 pb-4 sm:px-6 sm:pb-6">
           <div class="relative">
             <textarea
-              class="h-[160px] w-full resize-none rounded-md border border-[#d1d5db] p-3 sm:p-4 text-sm sm:text-[16px] text-[#111827] outline-none transition-colors focus:border-[#111827]"
+              class="th-input h-[160px] resize-none"
               placeholder="Please fill in"
               maxlength="2000"
               x-model="noteDraft"
