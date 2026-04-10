@@ -11,17 +11,25 @@ import type { PriceTier, ProductVariant } from '../../types/product';
 import { openShippingModal, openCartDrawer } from './CartDrawer';
 
 function renderPriceTiers(tiers: PriceTier[]): string {
-  const mockProduct = getCurrentProduct();
+  // When a campaign is active the backend sets each tier's originalPrice
+  // (pre-discount). We show it as a strikethrough next to the deal price.
+  // The qty label is fully localised via product.moqSingle / product.moqRange
+  // so each locale controls its own abbreviation + unit (TR: "MSA: 1 adet",
+  // EN: "MSQ: 1 piece").
   return `
     <div id="pd-price-tiers">
       ${tiers.map((tier, i) => {
     const qtyLabel = tier.maxQty
-      ? `${tier.minQty} - ${tier.maxQty} ${mockProduct.unit}`
-      : `>= ${tier.minQty} ${mockProduct.unit}`;
+      ? t('product.moqRange', { min: tier.minQty, max: tier.maxQty })
+      : t('product.moqSingle', { count: tier.minQty });
+    const hasDiscount = typeof tier.originalPrice === 'number' && tier.originalPrice > tier.price;
+    const strikethrough = hasDiscount
+      ? `<span class="pd-price-tier-original" style="text-decoration: line-through; color: var(--color-text-tertiary, #9ca3af); font-size: 12px; margin-right: 6px;">${formatCurrency(tier.originalPrice!, getSelectedCurrency())}</span>`
+      : '';
     return `
           <div class="pd-price-tier ${i === 0 ? 'active' : ''}" data-tier-index="${i}">
             <span class="pd-price-tier-qty">${qtyLabel}</span>
-            <span class="pd-price-tier-price shrink-0">${formatCurrency(tier.price, getSelectedCurrency())}</span>
+            <span class="pd-price-tier-price shrink-0 flex items-baseline gap-1">${strikethrough}${formatCurrency(tier.price, getSelectedCurrency())}</span>
           </div>
         `;
   }).join('')}

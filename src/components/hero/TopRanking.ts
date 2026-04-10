@@ -1,41 +1,55 @@
 /**
- * TopRanking Component
- * En çok satan ürünleri gösterir — API'den order_count DESC sırasıyla çeker.
+ * TopRanking Component (Homepage)
+ * Alibaba-style "Top Ranking" section: 6 best-selling category cards.
+ *
+ * Each card shows the category image, a "TOP" badge, the category name, and
+ * a "hot selling" subtitle. Clicking a card navigates to the per-category
+ * product listing.
+ *
+ * Data source: tradehub_core.api.listing.get_top_ranking_categories
+ * (returns the 6 categories with the highest aggregate order_count).
  */
 
 import topBadgeUrl from '../../assets/images/top.avif';
 import { t } from '../../i18n';
-import { searchListings } from '../../services/listingService';
+import {
+  getTopRankingCategories,
+  type TopRankingCategory,
+} from '../../services/listingService';
 import { initCurrency } from '../../services/currencyService';
-import { formatPrice } from '../../utils/currency';
+
+const SKELETON_COUNT = 6;
 
 /* ── Skeleton card ── */
 function renderSkeletonCard(): string {
   return `
-    <div class="flex-shrink-0 flex flex-col w-[156px] sm:w-[188px] h-[230px] sm:h-[262px] rounded-md border border-gray-100 animate-pulse"
+    <div class="flex-shrink-0 flex flex-col items-center w-[156px] sm:w-[188px] rounded-md border border-gray-100 animate-pulse"
          style="background: var(--topranking-card-bg, #ffffff); padding: var(--space-card-padding, 12px);">
-      <div class="flex-1 rounded-md bg-gray-200"></div>
-      <div class="mt-7 space-y-1.5">
-        <div class="h-3.5 w-4/5 rounded bg-gray-200"></div>
-        <div class="h-3 w-3/5 rounded bg-gray-200"></div>
-        <div class="h-3 w-2/5 rounded bg-gray-200"></div>
+      <div class="w-full aspect-square rounded-md bg-gray-200"></div>
+      <div class="mt-7 w-full space-y-1.5">
+        <div class="h-3.5 w-4/5 mx-auto rounded bg-gray-200"></div>
+        <div class="h-3 w-3/5 mx-auto rounded bg-gray-200"></div>
       </div>
     </div>
   `;
 }
 
-/* ── Product card ── */
-function renderProductCard(p: {
-  id: string;
-  name: string;
-  href: string;
-  price: string;
-  stats: string;
-  imageSrc?: string;
-}): string {
-  const safeName = p.name.replace(/"/g, '&quot;');
-  const imgHtml = p.imageSrc
-    ? `<img src="${p.imageSrc}" alt="${safeName}" loading="lazy"
+/** HTML-encode user-controlled strings before injecting into innerHTML. */
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/* ── Category card ── */
+function renderCategoryCard(cat: TopRankingCategory): string {
+  const safeName = escapeHtml(cat.name || '');
+  const href = `/pages/products.html?cat=${encodeURIComponent(cat.slug || cat.id)}&sort=orders`;
+  const imgHtml = cat.image
+    ? `<img src="${escapeHtml(cat.image)}" alt="${safeName}" loading="lazy"
             class="w-full h-full object-cover transition-transform duration-300 group-hover/rank:scale-110" />`
     : `<div class="w-full h-full flex items-center justify-center">
          <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -46,13 +60,14 @@ function renderProductCard(p: {
 
   return `
     <a
-      href="${p.href}"
-      class="group/rank relative flex-shrink-0 flex flex-col w-[156px] sm:w-[188px] h-[230px] sm:h-[262px] rounded-md border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md no-underline"
+      href="${href}"
+      class="group/rank relative flex-shrink-0 flex flex-col w-[156px] sm:w-[188px] rounded-md border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md no-underline"
       style="background: var(--topranking-card-bg, #ffffff); border-color: var(--topranking-card-border, #e5e7eb); padding: var(--space-card-padding, 12px);"
       aria-label="${safeName}"
+      data-cat-slug="${escapeHtml(cat.slug || '')}"
     >
       <!-- Image area -->
-      <div class="relative w-full flex-1 min-h-0">
+      <div class="relative w-full aspect-square">
         <div class="absolute inset-0 overflow-hidden rounded-md bg-gray-100">
           ${imgHtml}
         </div>
@@ -63,20 +78,20 @@ function renderProductCard(p: {
       </div>
 
       <!-- Info area -->
-      <div class="flex flex-col min-w-0" style="margin-top: 28px;">
-        <p class="truncate font-semibold leading-tight text-sm"
+      <div class="flex flex-col items-center min-w-0 text-center" style="margin-top: 28px;">
+        <p class="truncate w-full font-semibold leading-tight text-sm"
            style="color: var(--topranking-name-color, #222222);"
-           title="${safeName}">${p.name}</p>
-        <p class="truncate text-xs font-semibold mt-0.5"
-           style="color: var(--topranking-label-color, #111827);">${formatPrice(p.price)}</p>
+           title="${safeName}">${safeName}</p>
+        <p class="truncate w-full text-xs mt-0.5"
+           style="color: var(--topranking-subtitle-color, #6b7280);">${escapeHtml(t('topRanking.hotSelling'))}</p>
       </div>
     </a>
   `;
 }
 
-/** Render skeleton rows while API loads */
+/** Render skeleton rows while API loads. */
 export function TopRanking(): string {
-  const skeletons = Array.from({ length: 8 }, () => `<div role="listitem">${renderSkeletonCard()}</div>`).join('');
+  const skeletons = Array.from({ length: SKELETON_COUNT }, () => `<div role="listitem">${renderSkeletonCard()}</div>`).join('');
 
   return `
     <section class="py-4 lg:py-6" aria-label="Top Ranking" style="margin-top: 28px;">
@@ -105,7 +120,7 @@ export function TopRanking(): string {
             <div id="top-ranking-cards"
                  class="flex gap-3 overflow-x-auto pb-2 scrollbar-hide"
                  role="list"
-                 aria-label="Top ranking products">
+                 aria-label="Top ranking categories">
               ${skeletons}
             </div>
           </div>
@@ -115,44 +130,42 @@ export function TopRanking(): string {
   `;
 }
 
-/** Fetch best-sellers from API and replace skeletons */
+/** Empty-state placeholder shown when the API returns nothing. */
+function renderEmptyState(): string {
+  const msg = escapeHtml(t('topRanking.empty'));
+  return `
+    <div class="flex items-center justify-center py-12 w-full">
+      <div class="text-center">
+        <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+        </svg>
+        <p class="text-sm text-gray-400">${msg}</p>
+      </div>
+    </div>
+  `;
+}
+
+/** Fetch best-selling categories from API and replace skeletons. */
 export function initTopRanking(): void {
   initCurrency()
-    .then(() => searchListings({ sort_by: 'orders', page_size: 12 }))
-    .then(result => {
+    .then(() => getTopRankingCategories(SKELETON_COUNT, 'hot-selling'))
+    .then(categories => {
       const container = document.getElementById('top-ranking-cards');
       if (!container) return;
 
-      const products = result.products;
-      if (!products.length) {
-        container.innerHTML = `
-          <div class="flex items-center justify-center py-12 w-full">
-            <div class="text-center">
-              <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                  d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-              </svg>
-              <p class="text-sm text-gray-400">Yakında yeni ürünler eklenecek</p>
-            </div>
-          </div>
-        `;
+      if (!categories.length) {
+        container.innerHTML = renderEmptyState();
         return;
       }
 
-      container.innerHTML = products
-        .map(p => `<div role="listitem">${renderProductCard({
-          id: p.id,
-          name: p.name,
-          href: p.href || `/pages/product-detail.html?id=${p.id}`,
-          price: p.price,
-          stats: p.stats || '',
-          imageSrc: p.imageSrc,
-        })}</div>`)
+      container.innerHTML = categories
+        .map(c => `<div role="listitem">${renderCategoryCard(c)}</div>`)
         .join('');
     })
     .catch(err => {
       console.warn('[TopRanking] API load failed:', err);
       const container = document.getElementById('top-ranking-cards');
-      if (container) container.innerHTML = '';
+      if (container) container.innerHTML = renderEmptyState();
     });
 }

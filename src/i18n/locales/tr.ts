@@ -549,6 +549,8 @@ const tr = {
     // PRODUCT
     // ============================================================
     product: {
+      moqSingle: 'MSA: {{count}} adet',
+      moqRange: 'MSA: {{min}} - {{max}} adet',
       attributes: 'Özellikler',
       reviews: 'Yorumlar',
       supplier: 'Tedarikçi',
@@ -2568,9 +2570,10 @@ const tr = {
       title: 'En İyi Fırsatlar',
       subtitle: 'iSTOC\'ta en düşük fiyatları yakalayın',
       topPicks: 'En seçkinler',
-      moq: 'MOQ: {{count}} {{unit}}',
+      moq: 'MSA: {{count}} {{unit}}',
       pieces: 'adet',
       pairs: 'çift',
+      empty: 'Yakında yeni fırsatlar eklenecek',
     },
 
     // ============================================================
@@ -2582,6 +2585,7 @@ const tr = {
       hotSelling: 'Çok satan',
       risingTrend: 'Yükselen trend',
       steadyGrowth: 'İstikrarlı büyüme',
+      empty: 'Şimdilik gösterilecek kategori yok',
       consumerElectronics: 'Tüketici Elektroniği',
       fashionApparel: 'Moda ve Giyim',
       homeGarden: 'Ev ve Bahçe',
@@ -5037,6 +5041,8 @@ const tr = {
     offPercent: '%{{percent}} indirim',
     loadMore: 'Daha fazla yükle',
     breadcrumb: 'En İyi Fırsatlar',
+    loading: 'Yükleniyor...',
+    noResults: 'Bu kategoride henüz fırsat ürünü yok',
   },
 
   // ============================================================
@@ -5057,6 +5063,8 @@ const tr = {
     apply: 'Uygula',
     back: 'Geri',
     loadMore: 'Daha fazla yükle',
+    loading: 'Yükleniyor…',
+    empty: 'Bu filtre için gösterilecek sonuç yok',
 
     // Tabs
     tabAll: 'Tümü',

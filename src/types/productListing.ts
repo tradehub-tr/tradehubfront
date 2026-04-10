@@ -50,6 +50,8 @@ export interface ProductListingCard {
   sellingPoint?: string;
   /** Category name for grouping (e.g. "Elektronik") */
   category?: string;
+  /** Numeric discount percent (0-100), if any */
+  discountPercentage?: number;
 }
 
 /**

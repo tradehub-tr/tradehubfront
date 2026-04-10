@@ -15,6 +15,8 @@ export interface PriceTier {
   maxQty: number | null;
   price: number;
   basePrice?: number;
+  /** Pre-campaign price; only set when a discount is active. */
+  originalPrice?: number;
   currency: string;
 }
 
