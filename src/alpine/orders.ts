@@ -452,6 +452,29 @@ Alpine.data('ordersSection', () => ({
   activeTabId: getOrderTabs()[0].id,
   selectedFilterId: getOrderFilters()[0].id as string | null,
   dropdownOpen: false,
+  orders: [] as any[],
+  loading: true,
+
+  async init() {
+    orderStore.subscribe(() => {
+      this.orders = orderStore.getOrders();
+      this.loading = orderStore.isLoading();
+    });
+    await orderStore.load();
+    this.orders = orderStore.getOrders();
+    this.loading = false;
+  },
+
+  get filteredOrders() {
+    const tabStatusMap: Record<string, string[]> = {
+      delivery: ['Delivering', 'Confirming', 'Waiting for payment'],
+      refunds: ['Cancelled'],
+      completed: ['Completed'],
+    };
+    const allowed = tabStatusMap[this.activeTabId];
+    if (!allowed || allowed.length === 0) return this.orders;
+    return this.orders.filter((o: any) => allowed.includes(o.status));
+  },
 
   selectTab(tabId: string, hasDropdown: boolean) {
     if (hasDropdown) {

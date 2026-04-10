@@ -26,9 +26,6 @@ const itemI18nKeys: Record<string, string> = {
   payment: 'dashboard.payment',
   saved: 'dashboard.savedHistory',
   subscription: 'dashboard.subscription',
-  logistics: 'dashboard.logisticsServices',
-  dropshipping: 'dashboard.dropshipping',
-  'other-services': 'dashboard.otherServices',
   settings: 'dashboard.accountSettings',
   discover: 'dashboard.exploreSellerSite',
 };

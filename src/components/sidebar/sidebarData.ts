@@ -96,36 +96,6 @@ export function getSidebarSections(): SidebarSection[] {
           href: '/pages/dashboard/subscription.html',
           badge: 'New',
         },
-        {
-          id: 'logistics',
-          label: t('dashboard.logisticsServices'),
-          icon: 'logistics',
-          href: '/pages/dashboard/logistics.html',
-          submenu: [
-            { label: t('dashboard.logisticsOrders'), href: '/pages/dashboard/logistics.html#orders' },
-            { label: t('dashboard.logisticsReviews'), href: '/pages/dashboard/logistics.html#reviews' },
-          ],
-        },
-        {
-          id: 'dropshipping',
-          label: t('dashboard.dropshipping'),
-          icon: 'dropshipping',
-          href: '/pages/dashboard/dropshipping.html',
-          submenu: [
-            { label: t('dashboard.findProducts'), href: '/pages/dashboard/dropshipping.html#find-products' },
-            { label: t('dashboard.manageOrders'), href: '/pages/dashboard/dropshipping.html#manage-orders' },
-          ],
-        },
-        {
-          id: 'other-services',
-          label: t('dashboard.otherServices'),
-          icon: 'otherServices',
-          href: '/pages/dashboard/buyer-dashboard.html#payment-terms',
-          submenu: [
-            { label: t('dashboard.flexiblePayment'), href: '/pages/dashboard/buyer-dashboard.html#payment-terms' },
-            { label: t('dashboard.productInspection'), href: '/pages/dashboard/buyer-dashboard.html#product-inspection' },
-          ],
-        },
       ],
     },
 

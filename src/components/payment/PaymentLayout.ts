@@ -3,7 +3,6 @@
  * Internal left-nav with grouped sections:
  *   Özet: Ödeme yönetimi, İşlemler
  *   T/T: Havale hesapları, Havale Takibi
- *   Ek hizmetler: iSTOC.com Kartı, Pay Later for Business
  *
  * Modals: "Yeni bir kart ekle", "Tedarikçinin hesabını doğrula"
  * Inline view: "Havale dekontu yükle"
@@ -36,13 +35,6 @@ const NAV_GROUPS: PayNavGroup[] = [
       { id: 'tt-tracking', label: t('payment.ttTracking') },
     ],
   },
-  {
-    title: t('payment.navAdditionalServices'),
-    items: [
-      { id: 'istoc-card', label: t('payment.istocCard') },
-      { id: 'pay-later', label: t('payment.payLater') },
-    ],
-  },
 ];
 
 /* ────────────────────────────────────────
@@ -61,8 +53,7 @@ function renderPaymentManagement(): string {
       <div data-card-id="${c.id}" class="relative shrink-0 w-[200px] max-sm:w-[160px] h-[120px] max-sm:h-[100px] rounded-md p-4 max-sm:p-3 flex flex-col justify-between group cursor-default"
            style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%); box-shadow: 0 4px 12px rgba(0,0,0,0.18);">
         <div class="flex items-center justify-between">
-          <span class="text-[10px] max-sm:text-[8px] font-bold tracking-widest text-white/50 uppercase">TradeHub</span>
-          <span class="text-[11px] max-sm:text-[9px] font-black tracking-wide px-1.5 py-0.5 rounded"
+          <span class="text-[11px] max-sm:text-[9px] font-black tracking-wide px-1.5 py-0.5 rounded ml-auto"
                 style="background: rgba(255,255,255,0.15); color: white;">${c.brand}</span>
         </div>
         <div>
@@ -78,11 +69,17 @@ function renderPaymentManagement(): string {
             </div>
           </div>
         </div>
-        <!-- Sil button -->
-        <button class="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center text-white bg-red-500/70 hover:bg-red-500 opacity-0 group-hover:opacity-100 transition-opacity border-none cursor-pointer text-[10px] font-bold"
-                onclick="this.closest('[data-card-id]').remove(); if(window.removeSavedCard) window.removeSavedCard('${c.id}')" title="${t('payment.deleteBtn')}">
-          &times;
-        </button>
+        <!-- Edit + Sil buttons -->
+        <div class="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          <button class="w-5 h-5 rounded-full flex items-center justify-center text-white bg-white/20 hover:bg-white/40 border-none cursor-pointer transition-colors"
+                  onclick="if(window.editSavedCard) window.editSavedCard('${c.id}')" title="${t('payment.editCardBtn')}">
+            <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M8.5 1.5l2 2L4 10H2v-2l6.5-6.5z" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="w-5 h-5 rounded-full flex items-center justify-center text-white bg-red-500/70 hover:bg-red-500 border-none cursor-pointer text-[10px] font-bold transition-colors"
+                  onclick="this.closest('[data-card-id]').remove(); if(window.removeSavedCard) window.removeSavedCard('${c.id}')" title="${t('payment.deleteBtn')}">
+            &times;
+          </button>
+        </div>
       </div>
   `).join('') : '';
 
@@ -104,7 +101,7 @@ function renderPaymentManagement(): string {
     <!-- Kayıtlı kartlar -->
     <div class="mb-8">
       <h2 class="text-base font-semibold text-text-primary mb-4">${t('payment.savedCardsTitle')}</h2>
-      <div class="flex gap-4 max-sm:gap-3 overflow-x-auto pb-3" style="scrollbar-width: thin; scrollbar-color: var(--color-border-strong, #ccc) transparent;">
+      <div class="flex gap-4 max-sm:gap-3 overflow-x-auto pb-3 scrollbar-hide">
         ${savedCardsHtml}
         ${addCardTile}
       </div>
@@ -113,17 +110,17 @@ function renderPaymentManagement(): string {
     <!-- İşlemler -->
     <div class="mb-8">
       <h2 class="text-base font-semibold text-text-primary mb-4">${t('payment.transactionsTitle')}</h2>
-      <div class="pay-tabs flex border-b border-border-default overflow-x-auto" data-tabgroup="pay-mgmt">
+      <div class="pay-tabs flex border-b border-border-default overflow-x-auto overflow-y-hidden" data-tabgroup="pay-mgmt">
         <button class="pay-tabs__tab pay-tabs__tab--active py-3 px-5 max-sm:py-2.5 max-sm:px-3 text-[13px] max-sm:text-xs font-medium text-text-secondary bg-transparent border-none border-b-2 border-transparent cursor-pointer transition-[color,border-color] duration-150 -mb-px whitespace-nowrap hover:text-text-primary" data-tab="pay-mgmt-payments">${t('payment.paymentsTab')}</button>
         <button class="pay-tabs__tab py-3 px-5 max-sm:py-2.5 max-sm:px-3 text-[13px] max-sm:text-xs font-medium text-text-secondary bg-transparent border-none border-b-2 border-transparent cursor-pointer transition-[color,border-color] duration-150 -mb-px whitespace-nowrap hover:text-text-primary" data-tab="pay-mgmt-refunds">${t('payment.refundsTab')}</button>
       </div>
-      <div class="pay-tab-content pay-tab-content--active" data-content="pay-mgmt-payments">
+      <div class="block" data-tab-panel data-content="pay-mgmt-payments">
         <div class="pay-empty flex flex-col items-center justify-center py-12 px-6 text-center">
           <div class="opacity-50 mb-4">${RECEIPT_ICON}</div>
           <p class="text-sm text-text-tertiary m-0">${t('payment.noPaymentRecord')}</p>
         </div>
       </div>
-      <div class="pay-tab-content" data-content="pay-mgmt-refunds">
+      <div class="hidden" data-tab-panel data-content="pay-mgmt-refunds">
         <div class="pay-empty flex flex-col items-center justify-center py-12 px-6 text-center">
           <div class="opacity-50 mb-4">${RECEIPT_ICON}</div>
           <p class="text-sm text-text-tertiary m-0">${t('payment.noRefundRecord')}</p>
@@ -131,67 +128,171 @@ function renderPaymentManagement(): string {
       </div>
     </div>
 
-    <!-- Modal: Yeni bir kart ekle -->
+    <!-- Modal: Yeni bir kart ekle (Interactive Card) -->
     <div class="pay-modal hidden fixed inset-0 z-[9999] items-center justify-center" id="pay-card-modal">
       <div class="pay-modal__overlay fixed inset-0 bg-black/45 z-[1]"></div>
-      <div class="pay-modal__dialog relative z-[2] bg-surface rounded-md shadow-[0_20px_60px_rgba(0,0,0,0.15)] w-[90%] max-w-[480px] max-h-[90vh] overflow-y-auto animate-[payModalIn_200ms_ease-out]">
-        <div class="flex items-center justify-between px-6 max-sm:px-4 pt-5 pb-4 border-b border-[#f0f0f0]">
-          <h3 class="text-lg max-sm:text-base font-bold text-text-primary m-0 truncate mr-2">${t('payment.addCardModalTitle')}</h3>
+      <div class="pay-modal__dialog relative z-[2] bg-surface rounded-lg shadow-[0_20px_60px_rgba(0,0,0,0.15)] w-[90%] max-w-[570px] max-h-[90vh] overflow-y-auto animate-[payModalIn_200ms_ease-out]"
+           x-data="interactiveCard">
+
+        <!-- Header -->
+        <div class="flex items-center justify-between px-6 max-sm:px-4 pt-5 pb-4">
+          <h3 id="pay-card-modal-title" class="text-lg max-sm:text-base font-bold text-text-primary m-0 truncate mr-2">${t('payment.addCardModalTitle')}</h3>
           <button class="pay-modal__close flex items-center justify-center w-8 h-8 shrink-0 bg-transparent border-none rounded-md cursor-pointer transition-[background] duration-150 hover:bg-surface-raised" aria-label="${t('payment.closeBtn')}">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M14 4L4 14M4 4l10 10" stroke="#333" stroke-width="1.8" stroke-linecap="round"/></svg>
           </button>
         </div>
-        <div class="pay-modal__body px-6 max-sm:px-4 py-5" x-data="{
-          ccNum: '',
-          get brand() {
-             if (!this.ccNum) return '';
-             const first = this.ccNum[0];
-             return first === '4' ? 'VISA' : first === '5' ? 'MC' : first === '3' ? 'AMEX' : '';
-          },
-          formatCard() {
-             let v = this.ccNum.replace(/\\D/g, '').substring(0, 16);
-             this.ccNum = v.match(/.{1,4}/g)?.join(' ') || '';
-             // Sync back to underlying element for the vanilla JS save handler
-             $refs.numInput.value = this.ccNum;
-          }
-        }">
-          <div class="flex gap-2 flex-wrap mb-5">
-            <!-- VISA -->
-            <div class="h-7 px-2 border rounded flex items-center justify-center bg-white transition-opacity" :class="brand && brand !== 'VISA' ? 'opacity-30' : 'opacity-100'" style="border-color: var(--color-border-default, #e5e5e5);">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" class="h-3 object-contain" alt="Visa" />
-            </div>
-            <!-- Mastercard -->
-            <div class="h-7 px-2 border rounded flex items-center justify-center bg-white transition-opacity" :class="brand && brand !== 'MC' ? 'opacity-30' : 'opacity-100'" style="border-color: var(--color-border-default, #e5e5e5);">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" class="h-4 object-contain" alt="Mastercard" />
-            </div>
-            <!-- AMEX -->
-            <div class="h-7 px-2 border rounded flex items-center justify-center bg-white transition-opacity" :class="brand && brand !== 'AMEX' ? 'opacity-30' : 'opacity-100'" style="border-color: var(--color-border-default, #e5e5e5);">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/American_Express_logo_%282018%29.svg/1200px-American_Express_logo_%282018%29.svg.png" class="h-4 object-contain" alt="Amex" />
-            </div>
-            <!-- Diğer logolar (Görsel tutarlılık için) -->
-            <div class="h-7 px-2 border rounded flex items-center justify-center bg-white transition-opacity text-[10px] font-bold text-[#ff6000]" :class="brand ? 'opacity-30' : 'opacity-100'" style="border-color: var(--color-border-default, #e5e5e5);">Discover</div>
-            <div class="h-7 px-2 border rounded flex items-center justify-center bg-white transition-opacity text-[10px] font-bold text-[#0e4c96]" :class="brand ? 'opacity-30' : 'opacity-100'" style="border-color: var(--color-border-default, #e5e5e5);">JCB</div>
-          </div>
-          <div class="mb-4">
-            <input id="pay-card-num" x-ref="numInput" x-model="ccNum" @input="formatCard" type="text" class="th-input th-input-md" placeholder="${t('payment.cardNumberPlaceholder')}" maxlength="19" />
-          </div>
-          <div class="flex gap-3 mb-4">
-            <input id="pay-card-fn" type="text" class="th-input th-input-md flex-1" placeholder="${t('payment.firstNamePlaceholder')}" />
-            <input id="pay-card-ln" type="text" class="th-input th-input-md flex-1" placeholder="${t('payment.lastNamePlaceholder')}" />
-          </div>
-          <div class="flex gap-3 max-sm:gap-2 mb-4 items-center flex-wrap">
-            <select id="pay-card-month" class="th-input th-input-md min-w-[80px] max-sm:min-w-[60px] cursor-pointer"><option value="">${t('payment.monthPlaceholder')}</option>${Array.from({ length: 12 }, (_, i) => `<option value="${String(i + 1).padStart(2, '0')}">${String(i + 1).padStart(2, '0')}</option>`).join('')}</select>
-            <span class="text-base text-text-tertiary px-0.5">/</span>
-            <select id="pay-card-year" class="th-input th-input-md min-w-[90px] max-sm:min-w-[70px] cursor-pointer"><option value="">${t('payment.yearPlaceholder')}</option>${Array.from({ length: 10 }, (_, i) => `<option value="${2025 + i}">${2025 + i}</option>`).join('')}</select>
-            <div class="flex items-center gap-2 ml-auto">
-              <input type="text" class="th-input th-input-md w-[100px] max-sm:w-[80px]" placeholder="CVV/CVC *" maxlength="4" />
-              <div class="flex gap-1 opacity-60 max-sm:hidden">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 5a2 2 0 012-2h8a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V5z" stroke="#999" stroke-width="1.2"/><path d="M2 7h12" stroke="#999" stroke-width="1.2"/></svg>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="#999" stroke-width="1.2"/><path d="M8 5v3m0 2.5h.01" stroke="#999" stroke-width="1.2" stroke-linecap="round"/></svg>
+
+        <!-- Interactive 3D Card Preview — pure Tailwind v4 3D transforms -->
+        <div class="px-6 max-sm:px-4 pb-2">
+          <div class="relative mx-auto max-w-[430px] h-[270px] max-sm:max-w-[310px] max-sm:h-[220px] w-full z-[2] perspective-[2000px]">
+
+            <!-- FRONT SIDE -->
+            <div class="absolute inset-0 transform-3d backface-hidden transition-transform duration-800 ease-[cubic-bezier(0.71,0.03,0.56,0.85)] rounded-[15px] overflow-hidden shadow-[0_20px_60px_0_rgba(14,42,90,0.55)] h-full"
+                 :class="isFlipped ? 'rotate-y-180' : 'rotate-y-0'">
+              <!-- Cover background -->
+              <div class="absolute inset-0 h-full left-0 top-0 w-full rounded-[15px] overflow-hidden after:content-[''] after:absolute after:inset-0 after:bg-[rgba(6,2,29,0.45)]"
+                   style="background: linear-gradient(135deg, #0c1220 0%, #162544 40%, #1a3a6e 70%, #0f2847 100%);"></div>
+              <!-- Card content -->
+              <div class="relative z-[4] h-full p-[25px_15px] max-sm:p-[20px_10px] flex flex-col select-none"
+                   style="font-family: 'Source Code Pro', monospace; text-shadow: 7px 6px 10px rgba(14,42,90,0.8);">
+                <!-- Top: Chip + Brand -->
+                <div class="flex items-start justify-between mb-10 max-sm:mb-6 px-2.5">
+                  <svg width="50" height="40" viewBox="0 0 50 40" fill="none" class="max-sm:w-10">
+                    <rect x="1" y="4" width="48" height="32" rx="6" fill="url(#chipGrad2)" stroke="#b8963e" stroke-width="0.6"/>
+                    <rect x="9" y="11" width="32" height="18" rx="2.5" stroke="#c9a84c" stroke-width="0.6" fill="none"/>
+                    <line x1="25" y1="11" x2="25" y2="29" stroke="#c9a84c" stroke-width="0.5"/>
+                    <line x1="9" y1="20" x2="41" y2="20" stroke="#c9a84c" stroke-width="0.5"/>
+                    <defs><linearGradient id="chipGrad2" x1="0" y1="0" x2="48" y2="36"><stop offset="0%" stop-color="#e8cb80"/><stop offset="50%" stop-color="#d4a84a"/><stop offset="100%" stop-color="#c49a3c"/></linearGradient></defs>
+                  </svg>
+                  <div class="h-[45px] max-sm:h-10 flex items-center justify-end max-w-[100px] ml-auto w-full relative">
+                    <template x-if="brand === 'VISA'">
+                      <svg width="70" height="24" viewBox="0 0 70 24" fill="none"><text x="0" y="20" font-family="Arial,sans-serif" font-size="24" font-weight="bold" font-style="italic" fill="white" opacity="0.95">VISA</text></svg>
+                    </template>
+                    <template x-if="brand === 'MC'">
+                      <div class="flex items-center"><div class="w-9 h-9 rounded-full bg-[#eb001b] opacity-90"></div><div class="w-9 h-9 rounded-full bg-[#f79e1b] opacity-90 -ml-4"></div></div>
+                    </template>
+                    <template x-if="brand === 'AMEX'">
+                      <span class="text-base font-black tracking-[2px] text-white/90">AMEX</span>
+                    </template>
+                    <template x-if="brand === 'TROY'">
+                      <span class="text-base font-bold tracking-wider text-[#00a0e3]">TROY</span>
+                    </template>
+                    <template x-if="!brand">
+                      <span class="text-xs font-medium tracking-[3px] text-white/30 uppercase">KART</span>
+                    </template>
+                  </div>
+                </div>
+                <!-- Card Number -->
+                <div class="text-white font-medium leading-none text-[27px] max-sm:text-[21px] mb-9 max-sm:mb-4 px-[15px] max-sm:px-2.5 whitespace-nowrap"
+                     x-text="displayNumber"></div>
+                <!-- Bottom: Name + Expiry -->
+                <div class="flex items-start mt-auto text-white">
+                  <div class="flex-1 min-w-0 px-[15px] max-sm:px-2.5 py-2.5 max-w-[calc(100%-85px)]">
+                    <div class="text-[13px] max-sm:text-xs opacity-70 mb-1.5">Kart Sahibi</div>
+                    <div class="text-lg max-sm:text-base font-medium leading-none uppercase truncate"
+                         x-text="cardName || 'AD SOYAD'"></div>
+                  </div>
+                  <div class="shrink-0 w-20 px-2.5 py-2.5 flex flex-wrap whitespace-nowrap">
+                    <div class="text-[13px] max-sm:text-xs opacity-70 pb-1.5 w-full">SKT</div>
+                    <span x-text="displayExpiry" class="text-lg max-sm:text-base font-medium leading-none"></span>
+                  </div>
+                </div>
               </div>
+            </div>
+
+            <!-- BACK SIDE -->
+            <div class="absolute inset-0 transform-3d backface-hidden transition-transform duration-800 ease-[cubic-bezier(0.71,0.03,0.56,0.85)] z-[2] rounded-[15px] overflow-hidden shadow-[0_20px_60px_0_rgba(14,42,90,0.55)] p-0"
+                 :class="isFlipped ? 'rotate-y-0' : '-rotate-y-180'">
+              <!-- Cover (counter-rotated to prevent mirror) -->
+              <div class="rotate-y-180 absolute inset-0 h-full left-0 top-0 w-full rounded-[15px] overflow-hidden after:content-[''] after:absolute after:inset-0 after:bg-[rgba(6,2,29,0.45)]"
+                   style="background: linear-gradient(135deg, #0c1220 0%, #162544 40%, #1a3a6e 70%, #0f2847 100%);"></div>
+              <!-- Magnetic strip -->
+              <div class="relative z-[2] w-full h-[50px] max-sm:h-10 mt-[30px] max-sm:mt-5 bg-[rgba(0,0,19,0.8)]"></div>
+              <!-- CVV section -->
+              <div class="relative z-[2] text-right p-[15px] max-sm:p-[10px_15px]">
+                <div class="text-[15px] font-medium text-white pr-2.5 mb-1">CVV</div>
+                <div class="h-[45px] max-sm:h-10 bg-white mb-[30px] max-sm:mb-5 flex items-center justify-end pr-2.5 text-[#1a3b5d] text-lg rounded shadow-[0px_10px_20px_-7px_rgba(32,56,117,0.35)]">
+                  <span class="font-mono tracking-[4px]" x-text="cvv ? cvv.replace(/./g, '*') : ''"></span>
+                </div>
+                <div class="h-[45px] max-sm:h-10 flex items-center justify-end max-w-[100px] ml-auto relative opacity-70">
+                  <template x-if="brand === 'VISA'">
+                    <svg width="60" height="20" viewBox="0 0 60 20" fill="none"><text x="0" y="17" font-family="Arial,sans-serif" font-size="20" font-weight="bold" font-style="italic" fill="white">VISA</text></svg>
+                  </template>
+                  <template x-if="brand === 'MC'">
+                    <div class="flex items-center"><div class="w-7 h-7 rounded-full bg-[#eb001b]"></div><div class="w-7 h-7 rounded-full bg-[#f79e1b] -ml-3"></div></div>
+                  </template>
+                  <template x-if="brand === 'AMEX'">
+                    <span class="text-sm font-black tracking-wider text-white">AMEX</span>
+                  </template>
+                  <template x-if="brand === 'TROY'">
+                    <span class="text-sm font-bold tracking-wider text-[#00a0e3]">TROY</span>
+                  </template>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Form -->
+        <div class="pay-modal__body px-6 max-sm:px-4 pt-4 pb-5">
+          <!-- Card Number -->
+          <div class="mb-3">
+            <label class="text-xs font-medium text-text-secondary mb-1.5 block">${t('payment.cardNumberPlaceholder')}</label>
+            <input id="pay-card-num" type="text" class="th-input th-input-md font-mono tracking-wider"
+                   x-model="cardNumber"
+                   @input="formatCardNumber()"
+                   @focus="focusField = 'number'; isFlipped = false"
+                   maxlength="19"
+                   placeholder="0000 0000 0000 0000"
+                   inputmode="numeric" />
+          </div>
+          <!-- Cardholder Name -->
+          <div class="mb-3">
+            <label class="text-xs font-medium text-text-secondary mb-1.5 block">Kart Sahibi</label>
+            <input id="pay-card-fn" type="text" class="th-input th-input-md"
+                   x-model="firstName"
+                   @focus="focusField = 'name'; isFlipped = false"
+                   placeholder="${t('payment.firstNamePlaceholder')}" />
+          </div>
+          <div class="mb-3 hidden">
+            <input id="pay-card-ln" type="text" x-model="lastName" />
+          </div>
+          <!-- Expiry + CVV row -->
+          <div class="flex gap-3 max-sm:gap-2">
+            <div class="flex-1">
+              <label class="text-xs font-medium text-text-secondary mb-1.5 block">Son Kullanma Tarihi</label>
+              <div class="flex gap-2 items-center">
+                <select id="pay-card-month" class="th-input th-input-md flex-1 cursor-pointer"
+                        x-model="month"
+                        @focus="focusField = 'expiry'; isFlipped = false">
+                  <option value="">${t('payment.monthPlaceholder')}</option>
+                  ${Array.from({ length: 12 }, (_, i) => `<option value="${String(i + 1).padStart(2, '0')}">${String(i + 1).padStart(2, '0')}</option>`).join('')}
+                </select>
+                <span class="text-text-tertiary">/</span>
+                <select id="pay-card-year" class="th-input th-input-md flex-1 cursor-pointer"
+                        x-model="year"
+                        @focus="focusField = 'expiry'; isFlipped = false">
+                  <option value="">${t('payment.yearPlaceholder')}</option>
+                  ${Array.from({ length: 10 }, (_, i) => `<option value="${2025 + i}">${2025 + i}</option>`).join('')}
+                </select>
+              </div>
+            </div>
+            <div class="w-[120px] max-sm:w-[100px]">
+              <label class="text-xs font-medium text-text-secondary mb-1.5 block">CVV</label>
+              <input id="pay-card-cvv" type="text" class="th-input th-input-md font-mono tracking-widest text-center"
+                     x-model="cvv"
+                     @focus="focusField = 'cvv'; isFlipped = true"
+                     @blur="isFlipped = false"
+                     @input="cvv = cvv.replace(/\\D/g, '').substring(0, brand === 'AMEX' ? 4 : 3)"
+                     :maxlength="brand === 'AMEX' ? 4 : 3"
+                     placeholder="***"
+                     inputmode="numeric" />
             </div>
           </div>
         </div>
+
+        <!-- Footer -->
         <div class="flex justify-end gap-2.5 px-6 max-sm:px-4 pb-5 pt-4 border-t border-[#f0f0f0]">
           <button class="pay-modal__btn--primary th-btn-dark max-sm:w-full">${t('payment.saveBtn')}</button>
         </div>
@@ -208,17 +309,17 @@ function renderTransactions(): string {
     <div class="text-[13px] text-text-tertiary mb-2">${t('payment.breadcrumbTransactions')}</div>
     <div class="mb-6"><h1 class="text-[22px] font-bold text-text-primary m-0 max-sm:text-lg truncate">${t('payment.allTransactions')}</h1></div>
 
-    <div class="pay-tabs flex border-b border-border-default overflow-x-auto" data-tabgroup="pay-trans">
+    <div class="pay-tabs flex border-b border-border-default overflow-x-auto overflow-y-hidden" data-tabgroup="pay-trans">
       <button class="pay-tabs__tab pay-tabs__tab--active py-3 px-5 max-sm:py-2.5 max-sm:px-3 text-[13px] max-sm:text-xs font-medium text-text-secondary bg-transparent border-none border-b-2 border-transparent cursor-pointer transition-[color,border-color] duration-150 -mb-px whitespace-nowrap hover:text-text-primary" data-tab="pay-trans-payments">${t('payment.paymentTab')}</button>
       <button class="pay-tabs__tab py-3 px-5 max-sm:py-2.5 max-sm:px-3 text-[13px] max-sm:text-xs font-medium text-text-secondary bg-transparent border-none border-b-2 border-transparent cursor-pointer transition-[color,border-color] duration-150 -mb-px whitespace-nowrap hover:text-text-primary" data-tab="pay-trans-refunds">${t('payment.refundTab')}</button>
     </div>
 
-    <div class="pay-tab-content pay-tab-content--active" data-content="pay-trans-payments">
+    <div class="block" data-tab-panel data-content="pay-trans-payments">
       <!-- Status pills -->
       <div class="flex items-center gap-3 py-4 flex-wrap">
         <span class="text-[13px] font-semibold text-text-primary whitespace-nowrap">${t('payment.statusLabel')}</span>
         <div class="pay-pills flex flex-wrap gap-2">
-          <button class="pay-pill pay-pill--active py-1.5 px-3.5 text-xs rounded-md border cursor-pointer whitespace-nowrap transition-all duration-150 text-white bg-[#222] border-[#222]">${t('payment.statusAll')}</button>
+          <button class="pay-pill pay-pill--active py-1.5 px-3.5 text-xs rounded-md border cursor-pointer whitespace-nowrap transition-all duration-150 !text-white !bg-[#222] !border-[#222]">${t('payment.statusAll')}</button>
           <button class="pay-pill py-1.5 px-3.5 text-xs rounded-md border cursor-pointer whitespace-nowrap transition-all duration-150 text-text-secondary bg-surface-raised border-border-default hover:border-[#bbb] hover:bg-[#eee]">${t('payment.paymentsNotArrived')}</button>
           <button class="pay-pill py-1.5 px-3.5 text-xs rounded-md border cursor-pointer whitespace-nowrap transition-all duration-150 text-text-secondary bg-surface-raised border-border-default hover:border-[#bbb] hover:bg-[#eee]">${t('payment.pendingSupplierMatch')}</button>
           <button class="pay-pill py-1.5 px-3.5 text-xs rounded-md border cursor-pointer whitespace-nowrap transition-all duration-150 text-text-secondary bg-surface-raised border-border-default hover:border-[#bbb] hover:bg-[#eee]">${t('payment.completed')}</button>
@@ -253,7 +354,7 @@ function renderTransactions(): string {
       </div>
     </div>
 
-    <div class="pay-tab-content" data-content="pay-trans-refunds">
+    <div class="hidden" data-tab-panel data-content="pay-trans-refunds">
       <div class="pay-empty flex flex-col items-center justify-center py-12 px-6 text-center">
         <div class="opacity-50 mb-4">${RECEIPT_ICON}</div>
         <p class="text-sm text-text-tertiary m-0">${t('payment.noRefundRecord')}</p>
@@ -289,7 +390,7 @@ function renderTTAccounts(): string {
       </div>
     </div>
 
-    <div class="pay-tabs flex border-b border-border-default overflow-x-auto" data-tabgroup="pay-tt">
+    <div class="pay-tabs flex border-b border-border-default overflow-x-auto overflow-y-hidden" data-tabgroup="pay-tt">
       <button class="pay-tabs__tab pay-tabs__tab--active py-3 px-5 max-sm:py-2.5 max-sm:px-3 text-[13px] max-sm:text-xs font-medium text-text-secondary bg-transparent border-none border-b-2 border-transparent cursor-pointer transition-[color,border-color] duration-150 -mb-px whitespace-nowrap hover:text-text-primary" data-tab="pay-tt-all">${t('payment.allTab')}</button>
       <button class="pay-tabs__tab py-3 px-5 max-sm:py-2.5 max-sm:px-3 text-[13px] max-sm:text-xs font-medium text-text-secondary bg-transparent border-none border-b-2 border-transparent cursor-pointer transition-[color,border-color] duration-150 -mb-px whitespace-nowrap hover:text-text-primary" data-tab="pay-tt-pending">${t('payment.pendingMatchTab')}</button>
       <button class="pay-tabs__tab py-3 px-5 max-sm:py-2.5 max-sm:px-3 text-[13px] max-sm:text-xs font-medium text-text-secondary bg-transparent border-none border-b-2 border-transparent cursor-pointer transition-[color,border-color] duration-150 -mb-px whitespace-nowrap hover:text-text-primary" data-tab="pay-tt-matched">${t('payment.matchedTab')}</button>
@@ -386,31 +487,6 @@ function renderTTTracking(): string {
   `;
 }
 
-/* ────────────────────────────────────────
-   SECTION: iSTOC.com Kartı
-   ──────────────────────────────────────── */
-function renderIstocCard(): string {
-  return `
-    <div class="mb-6"><h1 class="text-[22px] font-bold text-text-primary m-0 max-sm:text-lg truncate">${t('payment.istocCardTitle')}</h1></div>
-    <div class="flex flex-col items-center justify-center py-20 px-6 text-center">
-      <div class="opacity-50 mb-4">${RECEIPT_ICON}</div>
-      <p class="text-sm text-text-tertiary m-0">${t('payment.comingSoon')}</p>
-    </div>
-  `;
-}
-
-/* ────────────────────────────────────────
-   SECTION: Pay Later for Business
-   ──────────────────────────────────────── */
-function renderPayLater(): string {
-  return `
-    <div class="mb-6"><h1 class="text-[22px] font-bold text-text-primary m-0 max-sm:text-lg truncate">${t('payment.payLaterTitle')}</h1></div>
-    <div class="flex flex-col items-center justify-center py-20 px-6 text-center">
-      <div class="opacity-50 mb-4">${RECEIPT_ICON}</div>
-      <p class="text-sm text-text-tertiary m-0">${t('payment.comingSoon')}</p>
-    </div>
-  `;
-}
 
 /* ────────────────────────────────────────
    UPLOAD VIEW (inline, replaces content)
@@ -457,8 +533,6 @@ const SECTIONS: Record<string, () => string> = {
   'transactions': renderTransactions,
   'tt-accounts': renderTTAccounts,
   'tt-tracking': renderTTTracking,
-  'istoc-card': renderIstocCard,
-  'pay-later': renderPayLater,
   'upload-receipt': renderUpload,
 };
 
@@ -563,8 +637,10 @@ function initPayTabs(): void {
         tab.classList.add('!text-text-primary', '!font-semibold', '!border-b-[#222]');
         const parent = tabGroup.parentElement;
         if (!parent) return;
-        parent.querySelectorAll<HTMLElement>('.pay-tab-content').forEach(panel => {
-          panel.classList.toggle('pay-tab-content--active', panel.dataset.content === targetId);
+        parent.querySelectorAll<HTMLElement>('[data-tab-panel]').forEach(panel => {
+          const isActive = panel.dataset.content === targetId;
+          panel.classList.toggle('hidden', !isActive);
+          panel.classList.toggle('block', isActive);
         });
       });
     });
@@ -606,6 +682,11 @@ function closePayModal(modal: HTMLElement): void {
   modal.classList.add('hidden');
   modal.classList.remove('flex');
   document.body.style.overflow = '';
+  // Reset modal title if it was in edit mode
+  if (modal.id === 'pay-card-modal') {
+    const titleEl = document.getElementById('pay-card-modal-title');
+    if (titleEl) titleEl.textContent = t('payment.addCardModalTitle');
+  }
 }
 
 function initPayModals(): void {
@@ -627,6 +708,48 @@ function initPayModals(): void {
     const cancelBtn = modal.querySelector('.pay-modal__btn--cancel');
     if (cancelBtn) cancelBtn.addEventListener('click', () => closePayModal(modal));
   });
+
+  // Edit card: open modal with pre-filled data
+  let editingCardId: string | null = null;
+  window.editSavedCard = (id: string) => {
+    const cards = paymentCardStore.getCards();
+    const card = cards.find(c => c.id === id);
+    if (!card) return;
+    editingCardId = id;
+
+    const titleEl = document.getElementById('pay-card-modal-title');
+    if (titleEl) titleEl.textContent = t('payment.editCardModalTitle');
+
+    const numEl = document.getElementById('pay-card-num') as HTMLInputElement;
+    const fnEl = document.getElementById('pay-card-fn') as HTMLInputElement;
+    const monthEl = document.getElementById('pay-card-month') as HTMLSelectElement;
+    const yearEl = document.getElementById('pay-card-year') as HTMLSelectElement;
+
+    // Pre-fill form with existing card data
+    if (numEl) numEl.value = card.cardNumber;
+    if (fnEl) fnEl.value = card.cardholderName;
+    if (monthEl && card.expiry) monthEl.value = card.expiry.split('/')[0] || '';
+    if (yearEl && card.expiry) yearEl.value = card.expiry.split('/')[1] || '';
+
+    // Sync Alpine state
+    const cardModalEl = document.getElementById('pay-card-modal');
+    if (cardModalEl) {
+      const alpineEl = cardModalEl.querySelector<HTMLElement>('[x-data]');
+      if (alpineEl && (alpineEl as any)._x_dataStack) {
+        const data = (alpineEl as any)._x_dataStack[0];
+        if (data) {
+          data.cardNumber = card.cardNumber;
+          data.firstName = card.cardholderName;
+          data.lastName = '';
+          data.month = card.expiry?.split('/')[0] || '';
+          data.year = card.expiry?.split('/')[1] || '';
+          data.cvv = '';
+          data.isFlipped = false;
+        }
+      }
+      openPayModal('pay-card-modal');
+    }
+  };
 
   // Save card button in card modal
   const cardModal = document.getElementById('pay-card-modal');
@@ -658,46 +781,17 @@ function initPayModals(): void {
         const firstDigit = cardNumber[0];
         const brand = firstDigit === '4' ? 'VISA' : firstDigit === '5' ? 'MC' : firstDigit === '3' ? 'AMEX' : 'CARD';
 
-        // Save to store
-        paymentCardStore.addCard({ cardNumber, expiry, cardholderName, brand });
+        const isEditing = !!editingCardId;
 
-        // Get the masked card (last 4 digits)
-        const masked = cardNumber.replace(/\d(?=\d{4})/g, '*');
-
-        // Dynamically insert card row before the add-card button
-        const addBtn = document.getElementById('pay-add-card-btn');
-        if (addBtn) {
-          const savedId = Math.random().toString(36).substr(2, 9);
-          const cardRow = document.createElement('div');
-          cardRow.className = 'relative shrink-0 w-[200px] max-sm:w-[160px] h-[120px] max-sm:h-[100px] rounded-md p-4 max-sm:p-3 flex flex-col justify-between group cursor-default';
-          cardRow.style.cssText = 'background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%); box-shadow: 0 4px 12px rgba(0,0,0,0.18);';
-          cardRow.dataset.cardId = savedId;
-          cardRow.innerHTML = `
-            <div class="flex items-center justify-between">
-              <span class="text-[10px] max-sm:text-[8px] font-bold tracking-widest uppercase" style="color: rgba(255,255,255,0.5);">TradeHub</span>
-              <span class="text-[11px] max-sm:text-[9px] font-black tracking-wide px-1.5 py-0.5 rounded" style="background: rgba(255,255,255,0.15); color: white;">${brand}</span>
-            </div>
-            <div>
-              <div class="text-sm max-sm:text-xs font-mono font-bold text-white tracking-widest mb-1 truncate">${masked}</div>
-              <div class="flex items-center justify-between">
-                <div class="min-w-0 flex-1">
-                  <div class="text-[9px] max-sm:text-[8px] uppercase tracking-wide" style="color: rgba(255,255,255,0.4);">${t('payment.nameLabel')}</div>
-                  <div class="text-[11px] max-sm:text-[10px] text-white font-medium truncate">${cardholderName}</div>
-                </div>
-                <div class="text-right shrink-0 ml-2">
-                  <div class="text-[9px] max-sm:text-[8px] uppercase tracking-wide" style="color: rgba(255,255,255,0.4);">${t('payment.lastUsedLabel')}</div>
-                  <div class="text-[11px] max-sm:text-[10px] text-white font-medium">${expiry || '—'}</div>
-                </div>
-              </div>
-            </div>
-            <button class="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity border-none cursor-pointer text-[10px] font-bold"
-                    style="background: rgba(239,68,68,0.7);"
-                    onmouseenter="this.style.background='rgb(239,68,68)'" onmouseleave="this.style.background='rgba(239,68,68,0.7)'"
-                    onclick="this.closest('[data-card-id]').remove(); if(window.removeSavedCard) window.removeSavedCard('${savedId}')" title="${t('payment.deleteBtn')}">
-              &times;
-            </button>
-          `;
-          addBtn.parentElement?.insertBefore(cardRow, addBtn);
+        if (isEditing) {
+          // Update existing card
+          paymentCardStore.updateCard(editingCardId!, { cardNumber, expiry, cardholderName, brand });
+          editingCardId = null;
+          const titleEl = document.getElementById('pay-card-modal-title');
+          if (titleEl) titleEl.textContent = t('payment.addCardModalTitle');
+        } else {
+          // Save new card to store
+          paymentCardStore.addCard({ cardNumber, expiry, cardholderName, brand });
         }
 
         // Clear inputs and close modal
@@ -706,7 +800,26 @@ function initPayModals(): void {
         if (lnEl) lnEl.value = '';
         if (monthEl) monthEl.selectedIndex = 0;
         if (yearEl) yearEl.selectedIndex = 0;
+        const cvvEl = document.getElementById('pay-card-cvv') as HTMLInputElement;
+        if (cvvEl) cvvEl.value = '';
+        // Reset Alpine state
+        const alpineEl = cardModal.querySelector<HTMLElement>('[x-data]');
+        if (alpineEl && (alpineEl as any)._x_dataStack) {
+          const data = (alpineEl as any)._x_dataStack[0];
+          if (data) {
+            data.cardNumber = '';
+            data.firstName = '';
+            data.lastName = '';
+            data.month = '';
+            data.year = '';
+            data.cvv = '';
+            data.isFlipped = false;
+          }
+        }
         closePayModal(cardModal);
+
+        // Re-render to show updated/new card
+        window.dispatchEvent(new Event('hashchange'));
       });
     }
   }

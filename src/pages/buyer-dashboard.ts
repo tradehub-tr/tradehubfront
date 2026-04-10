@@ -30,50 +30,20 @@ import { FooterLinks } from '../components/footer'
 import { FloatingPanel, initFloatingPanel } from '../components/floating'
 
 // Buyer Dashboard components
-import { BuyerDashboardLayout, initBuyerDashboardLayout, OtherServicesLayout, initOtherServicesLayout } from '../components/buyer-dashboard'
+import { BuyerDashboardLayout, initBuyerDashboardLayout } from '../components/buyer-dashboard'
 import { renderSidebar } from '../components/sidebar'
 
 // Mock data (used for browsing history, promotions etc. — user data comes from Alpine)
 import { getMockBuyerDashboardData } from '../data/mockBuyerDashboard'
 
-// ── Hash routing: dashboard vs other-services sub-pages ──
-type DashboardView = 'dashboard' | 'other-services';
-
-const OTHER_SERVICE_HASHES = ['payment-terms', 'product-inspection'];
-
-function getActiveView(): DashboardView {
-  const hash = window.location.hash.replace('#', '');
-  if (OTHER_SERVICE_HASHES.includes(hash)) return 'other-services';
-  return 'dashboard';
-}
-
-function renderMainContent(view: DashboardView): string {
-  if (view === 'other-services') {
-    return OtherServicesLayout();
-  }
+function renderMainContent(): string {
   const dashData = getMockBuyerDashboardData();
-  if (!emailVerified) {
-    dashData.notifications.unshift({
-      title: t('dashboard.notifVerifyEmail'),
-      linkText: t('dashboard.notifVerifyEmailLink'),
-      linkHref: '#verify-email',
-      bgColor: '#FFF3E0',
-    });
-  }
   return BuyerDashboardLayout({ data: dashData });
 }
 
-function getBreadcrumbItems(view: DashboardView): { label: string; href?: string }[] {
-  if (view === 'other-services') {
-    return [
-      { label: t('header.myAccount'), href: '/pages/dashboard/buyer-dashboard.html' },
-      { label: t('dashboard.otherServices') },
-    ];
-  }
+function getBreadcrumbItems(): { label: string; href?: string }[] {
   return [{ label: t('header.myAccount') }];
 }
-
-const activeView = getActiveView();
 
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.classList.add('relative');
@@ -95,12 +65,12 @@ appEl.innerHTML = `
       <div class="flex-1 min-w-0 overflow-hidden">
         <!-- Breadcrumb -->
         <div class="pt-4 max-sm:pt-3" id="bd-breadcrumb">
-          ${Breadcrumb(getBreadcrumbItems(activeView))}
+          ${Breadcrumb(getBreadcrumbItems())}
         </div>
 
         <!-- Main Content -->
         <main id="bd-main-content">
-          ${renderMainContent(activeView)}
+          ${renderMainContent()}
         </main>
 
         <!-- Footer -->
@@ -122,17 +92,7 @@ initFloatingPanel();
 initMobileDrawer();
 initLanguageSelector();
 
-// Init based on current view
-function initCurrentView(): void {
-  const view = getActiveView();
-  if (view === 'other-services') {
-    initOtherServicesLayout();
-  } else {
-    initBuyerDashboardLayout();
-  }
-}
-
-initCurrentView();
+initBuyerDashboardLayout();
 startAlpine();
 
 // Handle verify-email link click in slider
@@ -149,17 +109,3 @@ if (!emailVerified) {
     }
   });
 }
-
-// Handle hash changes to switch between views
-window.addEventListener('hashchange', () => {
-  const view = getActiveView();
-  const mainEl = document.getElementById('bd-main-content');
-  const breadcrumbEl = document.getElementById('bd-breadcrumb');
-  if (mainEl) {
-    mainEl.innerHTML = renderMainContent(view);
-  }
-  if (breadcrumbEl) {
-    breadcrumbEl.innerHTML = Breadcrumb(getBreadcrumbItems(view));
-  }
-  initCurrentView();
-});

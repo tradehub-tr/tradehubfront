@@ -22,9 +22,6 @@ const flyoutHeadingI18nKeys: Record<string, string> = {
   orders: 'dashboard.myOrders',
   payment: 'dashboard.payment',
   saved: 'dashboard.savedHistory',
-  logistics: 'dashboard.logisticsServices',
-  dropshipping: 'dashboard.dropshipping',
-  'other-services': 'dashboard.otherServices',
 };
 
 /**
@@ -53,15 +50,6 @@ const submenuI18nKeys: Record<string, string> = {
   // Saved & History
   '/pages/dashboard/favorites.html#favorites': 'dashboard.myFavorites',
   '/pages/dashboard/favorites.html#browsing-history': 'dashboard.browsingHistory',
-  // Logistics
-  '/pages/dashboard/logistics.html#orders': 'dashboard.logisticsOrders',
-  '/pages/dashboard/logistics.html#reviews': 'dashboard.logisticsReviews',
-  // Dropshipping
-  '/pages/dashboard/dropshipping.html#find-products': 'dashboard.findProducts',
-  '/pages/dashboard/dropshipping.html#manage-orders': 'dashboard.manageOrders',
-  // Other Services
-  '/pages/dashboard/buyer-dashboard.html#payment-terms': 'dashboard.flexiblePayment',
-  '/pages/dashboard/buyer-dashboard.html#product-inspection': 'dashboard.productInspection',
 };
 
 /* ════════════════════════════════════════════════════
