@@ -85,16 +85,23 @@ export function initTailoredSelectionsHero(options?: { onCategoryChange?: (slug:
   const el = document.querySelector<HTMLElement>('.ts-hero-swiper');
   if (!el) return;
 
-  // Loop + coverflow'un sağ/sol sarmalaması için Swiper yeterli clone ihtiyaç
-  // duyar. < 3 slaytta "sağ ok stuck" oluyor. O durumda loop'u ve ok butonlarını
-  // kapatıyoruz; ≥ 3 slaytta iki yönde de sorunsuz çalışır.
+  // loop + coverflow + az slayt (< 6) kombinasyonunda Swiper'ın clone sayısı
+  // yetersiz kalıp atlama, yanlış komşu ve "sağ ok stuck" sorunlarına yol açıyor.
+  // Bunun yerine rewind kullanıyoruz: son slayttan sonraki sağ ok başa, ilk
+  // slayttan önceki sol ok sona döner. Clone yok → slideToClickedSlide de
+  // tıklanan kartı doğru şekilde merkeze alır. ≥ 2 slayt olduğunda oklar aktif.
   const slideCount = el.querySelectorAll('.swiper-slide').length;
-  const enableLoop = slideCount >= 3;
+  const enableNav = slideCount >= 2;
 
   const prevBtn = document.querySelector<HTMLElement>('.ts-hero-prev');
   const nextBtn = document.querySelector<HTMLElement>('.ts-hero-next');
-  if (prevBtn) prevBtn.style.display = enableLoop ? '' : 'none';
-  if (nextBtn) nextBtn.style.display = enableLoop ? '' : 'none';
+  if (prevBtn) prevBtn.style.display = enableNav ? '' : 'none';
+  if (nextBtn) nextBtn.style.display = enableNav ? '' : 'none';
+
+  // loop kaldırıldığı için `centeredSlides: true` + index 0 başlangıçta
+  // merkezde ama solu boş kalıyor. Ortadaki slaytı initial olarak seç →
+  // loop'un eski başlangıç görünümü korunur.
+  const initialSlide = Math.max(0, Math.floor(slideCount / 2));
 
   new Swiper(el, {
     modules: [Navigation, EffectCoverflow],
@@ -108,9 +115,11 @@ export function initTailoredSelectionsHero(options?: { onCategoryChange?: (slug:
       scale: 0.85,
     },
     centeredSlides: true,
-    loop: enableLoop,
+    loop: false,
+    rewind: true,
+    initialSlide,
     slideToClickedSlide: true,
-    navigation: enableLoop ? {
+    navigation: enableNav ? {
       nextEl: '.ts-hero-next',
       prevEl: '.ts-hero-prev',
     } : false,
