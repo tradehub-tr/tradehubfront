@@ -4,7 +4,6 @@
  * Includes badges, price tags, MOQ, ratings, views, and special labels.
  */
 
-import { t } from '../../i18n';
 import { formatPrice } from '../../utils/currency';
 import type { TailoredProduct } from '../../types/tailoredSelections';
 
@@ -167,43 +166,7 @@ export function TailoredProductGrid(products: TailoredProduct[]): string {
         >
           ${products.map((p, i) => renderProductCard(p, i)).join('')}
         </div>
-
-        <!-- Load More Button -->
-        <div id="ts-load-more-wrap" class="flex justify-center mt-8">
-          <button
-            id="ts-load-more-btn"
-            class="px-8 py-2.5 rounded-full text-sm font-semibold border-2 transition-all duration-200 hover:shadow-md"
-            style="color: var(--color-primary-700, #92400e); border-color: var(--color-primary-300, #fcd34d); background: white;"
-            x-data="{ loading: false }"
-            @click="
-              loading = true;
-              setTimeout(() => {
-                const grid = document.getElementById('ts-product-grid');
-                const btn = document.getElementById('ts-load-more-btn');
-                const wrap = document.getElementById('ts-load-more-wrap');
-                if (grid && wrap) {
-                  const currentCount = grid.children.length;
-                  if (currentCount >= 40) {
-                    wrap.style.display = 'none';
-                    return;
-                  }
-                  const existing = grid.innerHTML;
-                  grid.innerHTML = existing + existing;
-                }
-                loading = false;
-              }, 600);
-            "
-          >
-            <span x-show="!loading" data-i18n="common.loadMore">${t('common.loadMore')}</span>
-            <span x-show="loading" class="inline-flex items-center gap-2">
-              <svg class="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              Loading...
-            </span>
-          </button>
-        </div>
+        <!-- Load More butonu tailored-selections.ts içinde API'ye göre dinamik render edilir (ts-load-more-wrapper). -->
       </div>
     </section>
   `;
