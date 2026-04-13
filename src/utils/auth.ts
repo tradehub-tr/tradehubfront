@@ -170,6 +170,8 @@ export async function logout(): Promise<void> {
     // Network errors are fine — session cookie is already cleared by the server
   }
   invalidateAuthCache();
+  // Per-user store'ları (favoriler vb.) sıfırlamak için event yay
+  window.dispatchEvent(new CustomEvent('auth-logout'));
 }
 
 /* ── Session ────────────────────────────────────────── */

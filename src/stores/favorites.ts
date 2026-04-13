@@ -1,7 +1,17 @@
 /**
  * Favorites Store
- * YouTube-like list-based favorites system with localStorage persistence.
+ * YouTube-like list-based favorites system.
+ *
+ * Mimari:
+ * - localStorage = anlık UI cache (sync okuma için)
+ * - Login olduğunda backend (Buyer Favorite Item/List DocType) ile senkronlanır
+ * - Misafir kullanıcılar sadece localStorage kullanır
+ * - Tüm mutation'lar localStorage'a anında yazılır + login varsa backend'e
+ *   fire-and-forget gönderilir (UI bloklamaz)
  */
+
+import { callMethod } from '../utils/api';
+import { isLoggedIn, waitForAuth } from '../utils/auth';
 
 export interface FavoriteList {
   id: string;
@@ -26,6 +36,9 @@ export interface FavoritesState {
 
 const STORAGE_KEY = 'tradehub-favorites-v2';
 const DEFAULT_LIST_ID = 'default';
+
+// Backend senkron işlemleri sırasında re-entrant çağrıları engellemek için flag
+let _suppressBackendSync = false;
 
 // ── Migration from old format ──
 function migrateOldData(): void {
@@ -82,6 +95,17 @@ function saveState(state: FavoritesState): void {
   window.dispatchEvent(new CustomEvent('favorites-changed', { detail: state }));
 }
 
+// ── Backend sync helpers (fire-and-forget; UI bloklamaz) ──
+
+function _bgSync(method: string, params: Record<string, unknown>): void {
+  if (_suppressBackendSync) return;
+  if (!isLoggedIn()) return;
+  callMethod(method, params, true).catch((err) => {
+    // Backend hata verirse sessizce yut; localStorage zaten güncel
+    if (import.meta.env.DEV) console.warn('[favorites] backend sync failed:', method, err);
+  });
+}
+
 // ── Public API ──
 
 export function getFavoritesState(): FavoritesState {
@@ -113,20 +137,27 @@ export function addToFavorites(
 ): void {
   const state = getState();
   const existing = state.items.find(i => i.id === product.id);
+  const targetLists = listIds && listIds.length > 0 ? listIds : [DEFAULT_LIST_ID];
 
   if (existing) {
-    // Update list memberships
-    const targetLists = listIds && listIds.length > 0 ? listIds : [DEFAULT_LIST_ID];
     existing.listIds = [...new Set([...existing.listIds, ...targetLists])];
   } else {
     state.items.push({
       ...product,
-      listIds: listIds && listIds.length > 0 ? listIds : [DEFAULT_LIST_ID],
+      listIds: targetLists,
       addedAt: Date.now(),
     });
   }
 
   saveState(state);
+  _bgSync('tradehub_core.api.favorites.upsert_favorite', {
+    listing: product.id,
+    list_ids: JSON.stringify(targetLists),
+    image: product.image,
+    title: product.title,
+    price_range: product.priceRange,
+    min_order: product.minOrder,
+  });
 }
 
 /** Remove item from all favorites */
@@ -134,6 +165,7 @@ export function removeFromFavorites(productId: string): void {
   const state = getState();
   state.items = state.items.filter(i => i.id !== productId);
   saveState(state);
+  _bgSync('tradehub_core.api.favorites.remove_favorite', { listing: productId });
 }
 
 /** Toggle item in a specific list. Returns true if item was added to list, false if removed. */
@@ -144,6 +176,17 @@ export function toggleItemInList(
   const state = getState();
   let item = state.items.find(i => i.id === product.id);
 
+  const syncToBackend = (): void => {
+    _bgSync('tradehub_core.api.favorites.toggle_favorite_in_list', {
+      listing: product.id,
+      list_id: listId,
+      image: product.image,
+      title: product.title,
+      price_range: product.priceRange,
+      min_order: product.minOrder,
+    });
+  };
+
   if (!item) {
     // New item, add to this list
     state.items.push({
@@ -152,6 +195,7 @@ export function toggleItemInList(
       addedAt: Date.now(),
     });
     saveState(state);
+    syncToBackend();
     return true;
   }
 
@@ -164,11 +208,13 @@ export function toggleItemInList(
       state.items = state.items.filter(i => i.id !== product.id);
     }
     saveState(state);
+    syncToBackend();
     return false;
   } else {
     // Add to this list
     item.listIds.push(listId);
     saveState(state);
+    syncToBackend();
     return true;
   }
 }
@@ -183,6 +229,10 @@ export function createList(name: string): FavoriteList {
   };
   state.lists.push(list);
   saveState(state);
+  _bgSync('tradehub_core.api.favorites.create_favorite_list', {
+    name: list.name,
+    list_id: list.id,
+  });
   return list;
 }
 
@@ -197,6 +247,7 @@ export function deleteList(listId: string): void {
   // Remove orphaned items
   state.items = state.items.filter(i => i.listIds.length > 0);
   saveState(state);
+  _bgSync('tradehub_core.api.favorites.delete_favorite_list', { list_id: listId });
 }
 
 /** Rename a list */
@@ -206,6 +257,10 @@ export function renameList(listId: string, newName: string): void {
   if (list) {
     list.name = newName.trim();
     saveState(state);
+    _bgSync('tradehub_core.api.favorites.rename_favorite_list', {
+      list_id: listId,
+      new_name: list.name,
+    });
   }
 }
 
@@ -223,3 +278,99 @@ export function getListItemCount(listId: string): number {
 export function getTotalCount(): number {
   return getState().items.length;
 }
+
+// ──────────────────────────── Backend Sync ────────────────────────────────
+
+/**
+ * Backend'den state'i çekip localStorage'a yazar (overwrite).
+ * Login olunduğunda çağrılır — backend kullanıcının "ground truth"udur.
+ */
+async function fetchFromBackend(): Promise<FavoritesState | null> {
+  try {
+    const res = await callMethod<{ message: FavoritesState }>(
+      'tradehub_core.api.favorites.get_my_favorites'
+    );
+    const remote = (res as any)?.message ?? res;
+    if (!remote || typeof remote !== 'object') return null;
+    return {
+      lists: Array.isArray(remote.lists) ? remote.lists : [],
+      items: Array.isArray(remote.items) ? remote.items : [],
+    };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Misafir kullanıcı login olduğunda localStorage state'ini backend ile birleştirir.
+ * Backend birleştirilmiş state'i geri döndürür ve localStorage güncellenir.
+ */
+async function mergeLocalIntoBackend(): Promise<FavoritesState | null> {
+  const local = getState();
+  if (local.items.length === 0 && local.lists.length === 0) {
+    // Yerel boş — direkt backend'den çek
+    return fetchFromBackend();
+  }
+  try {
+    const res = await callMethod<{ message: FavoritesState }>(
+      'tradehub_core.api.favorites.sync_favorites',
+      { state: JSON.stringify(local) },
+      true
+    );
+    const merged = (res as any)?.message ?? res;
+    if (!merged || typeof merged !== 'object') return null;
+    return {
+      lists: Array.isArray(merged.lists) ? merged.lists : [],
+      items: Array.isArray(merged.items) ? merged.items : [],
+    };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Auth durumu hazır olduğunda favorileri senkronla.
+ * - Login: backend'den çek + localStorage'ı merge et
+ * - Misafir: hiçbir şey yapma (localStorage zaten var)
+ *
+ * Idempotent: birden fazla çağrılırsa son çağrı kazanır.
+ */
+let _initPromise: Promise<void> | null = null;
+export function initFavoritesSync(): Promise<void> {
+  if (_initPromise) return _initPromise;
+  _initPromise = (async () => {
+    try {
+      const user = await waitForAuth();
+      if (!user) return;
+
+      // Login → localStorage'ı backend'e merge et, sonra fresh state'i yaz
+      _suppressBackendSync = true;
+      const merged = await mergeLocalIntoBackend();
+      if (merged) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+        window.dispatchEvent(new CustomEvent('favorites-changed', { detail: merged }));
+      }
+    } finally {
+      _suppressBackendSync = false;
+    }
+  })();
+  return _initPromise;
+}
+
+/**
+ * Logout sonrası çağrılır — localStorage'ı temizler ki başka kullanıcı
+ * önceki kullanıcının favorilerini görmesin.
+ */
+export function clearFavoritesOnLogout(): void {
+  _initPromise = null;
+  localStorage.removeItem(STORAGE_KEY);
+  window.dispatchEvent(new CustomEvent('favorites-changed', { detail: { lists: [], items: [] } }));
+}
+
+// Modül yüklenince otomatik senkron başlat (her sayfa için)
+initFavoritesSync();
+
+// Logout event'ini dinle ve localStorage'ı temizle
+window.addEventListener('auth-logout', () => {
+  clearFavoritesOnLogout();
+});
