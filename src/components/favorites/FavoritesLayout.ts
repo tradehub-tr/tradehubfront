@@ -85,12 +85,14 @@ function renderSidebarLists(): string {
 function renderProductCards(items: FavoriteItem[]): string {
   if (items.length === 0) return renderEmptyState();
 
-  const cards = items.map(p => `
+  const cards = items.map(p => {
+    const detailHref = `/pages/product-detail.html?id=${encodeURIComponent(p.id)}`;
+    return `
     <div class="relative bg-white rounded-lg border border-[#eee] hover:border-[#F60] hover:shadow-[0_12px_24px_rgba(0,0,0,0.12)] transition-all p-4 group" data-fav-item-id="${p.id}">
       <button type="button" class="fav-remove-item absolute top-2 right-2 w-8 h-8 rounded-full bg-[#f4f4f4] flex items-center justify-center cursor-pointer hover:bg-red-100 z-10 transition-colors" data-remove-id="${p.id}" title="${t('favorites.removeFromAll')}">
         <svg class="w-[18px] h-[18px] text-[#f60]" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" stroke-width="1.5"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
       </button>
-      <a href="#" class="block no-underline">
+      <a href="${detailHref}" class="block no-underline">
         <div class="w-full aspect-square rounded overflow-hidden mb-3 bg-[#f5f5f5]">
           <img src="${p.image}" alt="${escapeHtml(p.title)}" class="w-full h-full object-cover mix-blend-multiply" loading="lazy" />
         </div>
@@ -100,9 +102,6 @@ function renderProductCards(items: FavoriteItem[]): string {
         </div>
         <p class="text-[12px] text-[#999] opacity-80">${p.minOrder}</p>
       </a>
-      <div class="mt-4 flex gap-2 w-full pt-3 border-t border-[#f2f2f2] opacity-0 group-hover:opacity-100 transition-opacity">
-        <button class="flex-1 th-btn th-btn-sm">${t('favorites.orderNow')}</button>
-      </div>
       ${p.listIds.length > 0 ? `
         <div class="mt-2 flex flex-wrap gap-1">
           ${p.listIds.filter(id => id !== DEFAULT_LIST_ID).map(id => {
@@ -112,7 +111,8 @@ function renderProductCards(items: FavoriteItem[]): string {
         </div>
       ` : ''}
     </div>
-  `).join('');
+  `;
+  }).join('');
 
   return `
     <div class="px-7 pt-5 pb-7 max-sm:px-3">
