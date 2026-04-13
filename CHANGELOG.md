@@ -1,3 +1,12 @@
+## [v1.1.4-rc.6] - 2026-04-13 RC
+
+Bu surum rc.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(tailored): "Size Özel Seçimler" landing bloğu ve detay sayfası API'ye bağlandı. (@aliiball)
+- feat(tailored): Detay sayfası hero carousel'i API'ye bağla + SPA davranışı yapıldı. (@aliiball)
+
+---
 ## [v1.1.4-rc.5] - 2026-04-13 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
