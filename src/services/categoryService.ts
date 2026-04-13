@@ -73,12 +73,24 @@ export function onCategoriesLoaded(fn: (cats: ApiCategory[]) => void): void {
   loadCategories()
 }
 
-/** URL slug ile kategori bulur */
-export function findCategoryBySlug(slug: string): ApiCategory | undefined {
-  return (_cache ?? []).find(c => c.slug === slug)
+/** URL slug ile kategori bulur (üst + alt kategoriler dahil) */
+export function findCategoryBySlug(slug: string): ApiCategory | ApiCategoryChild | undefined {
+  const cats = _cache ?? []
+  for (const c of cats) {
+    if (c.slug === slug) return c
+    const child = c.children?.find(ch => ch.slug === slug)
+    if (child) return child
+  }
+  return undefined
 }
 
-/** Frappe document ID ile kategori bulur */
-export function findCategoryById(id: string): ApiCategory | undefined {
-  return (_cache ?? []).find(c => c.id === id)
+/** Frappe document ID ile kategori bulur (üst + alt kategoriler dahil) */
+export function findCategoryById(id: string): ApiCategory | ApiCategoryChild | undefined {
+  const cats = _cache ?? []
+  for (const c of cats) {
+    if (c.id === id) return c
+    const child = c.children?.find(ch => ch.id === id)
+    if (child) return child
+  }
+  return undefined
 }

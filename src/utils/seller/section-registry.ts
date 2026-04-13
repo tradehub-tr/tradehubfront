@@ -16,37 +16,174 @@ export interface LayoutConfig {
 
 type SectionRenderer = (settings: Record<string, any>) => string;
 
+// ─── Hero Banner helpers ─────────────────────────────────────────────────────
+interface HeroSlide {
+  id?: string;
+  image?: string;
+  title?: string;
+  subtitle?: string;
+  ctaText?: string;
+  ctaLink?: string;
+  textPosition?: 'left' | 'center' | 'right';
+  textColor?: 'white' | 'dark';
+}
+
+function escapeHtml(s: any): string {
+  if (s == null) return '';
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function escapeAttr(s: any): string {
+  return escapeHtml(s);
+}
+
+function renderSlideOverlay(slide: HeroSlide): string {
+  const hasContent = slide.title || slide.subtitle || slide.ctaText;
+  if (!hasContent) return '';
+  const justifyMap: Record<string, string> = { left: 'justify-start text-left', center: 'justify-center text-center', right: 'justify-end text-right' };
+  const justify = justifyMap[slide.textPosition || 'left'] || justifyMap.left;
+  const isWhite = (slide.textColor || 'white') === 'white';
+  const textColor = isWhite ? 'text-white' : 'text-gray-900';
+  const titleShadow = isWhite ? 'drop-shadow-lg' : '';
+  const overlayBg = isWhite ? 'bg-gradient-to-r from-black/40 via-black/20 to-transparent' : 'bg-gradient-to-r from-white/40 via-white/20 to-transparent';
+  return `
+    <div class="absolute inset-0 flex items-center ${justify} ${overlayBg}">
+      <div class="max-w-[1200px] mx-auto px-6 md:px-12 w-full ${textColor}">
+        <div class="max-w-[600px] inline-block">
+          ${slide.title ? `<h2 class="text-2xl md:text-4xl lg:text-5xl font-bold mb-2 ${titleShadow}">${escapeHtml(slide.title)}</h2>` : ''}
+          ${slide.subtitle ? `<p class="text-sm md:text-lg lg:text-xl mb-4 ${titleShadow}">${escapeHtml(slide.subtitle)}</p>` : ''}
+          ${slide.ctaText ? `<a href="${escapeAttr(slide.ctaLink || '#')}" class="inline-block px-5 md:px-7 py-2 md:py-3 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-md transition-colors text-sm md:text-base">${escapeHtml(slide.ctaText)}</a>` : ''}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function resolveImageUrl(url: string | undefined): string {
+  if (!url) return '';
+  if (/^(https?:)?\/\//i.test(url) || url.startsWith('data:')) return url;
+  // Relative path (/files/...) → Frappe backend base URL ekle
+  const base = (import.meta as any).env?.VITE_API_BASE || '';
+  // url zaten "/" ile basliyorsa iki kez / olmasin
+  if (base && url.startsWith('/')) return base.replace(/\/$/, '') + url;
+  return url;
+}
+
+function renderSlideImage(slide: HeroSlide, isStatic: boolean): string {
+  const heightCls = 'w-full h-[180px] sm:h-[220px] md:h-[320px] lg:h-[400px] object-cover';
+  const fallback = `this.style.display='none'; this.parentElement.style.background='linear-gradient(135deg, #1f1f1f, #cc9900)'; this.parentElement.style.minHeight='300px';`;
+  const wrapper = isStatic ? 'block relative' : 'block relative w-full h-full';
+  // CTA varsa link sarmalayalim, ama overlay icindeki CTA da link; cakismayi onlemek icin sadece overlay yoksa whole image link
+  const hasOverlay = !!(slide.title || slide.subtitle || slide.ctaText);
+  const link = !hasOverlay && slide.ctaLink ? slide.ctaLink : '';
+  const resolvedSrc = resolveImageUrl(slide.image);
+  const innerImg = `<img src="${escapeAttr(resolvedSrc)}" alt="${escapeAttr(slide.title || 'Banner')}" class="${heightCls}" onerror="${fallback}" />${renderSlideOverlay(slide)}`;
+  return link
+    ? `<a href="${escapeAttr(link)}" class="${wrapper}">${innerImg}</a>`
+    : `<div class="${wrapper}">${innerImg}</div>`;
+}
+
+function renderHeroBanner(settings: Record<string, any>): string {
+  const mode = (settings?.mode === 'static') ? 'static' : 'slider';
+  const autoplay = settings?.autoplay !== false;
+  const delay = Number(settings?.delay) || 5000;
+  const bgColor = settings?.bgColor || '';
+  const bgStyle = bgColor ? `style="background-color: ${escapeAttr(bgColor)};"` : '';
+
+  // DEBUG: settings'in tam halini logla
+  console.log('[Hero Banner RENDER]', {
+    mode,
+    autoplay,
+    delay,
+    slidesInSettings: settings?.slides,
+    slidesType: typeof settings?.slides,
+    slidesIsArray: Array.isArray(settings?.slides),
+    slidesLength: Array.isArray(settings?.slides) ? settings.slides.length : 'N/A',
+    fullSettings: settings,
+  });
+
+  const rawSlides: HeroSlide[] = Array.isArray(settings?.slides) && settings.slides.length > 0
+    ? settings.slides
+    : [
+        { id: 'placeholder-1', image: 'https://picsum.photos/seed/hero1/1200/400', title: '', subtitle: '', ctaText: '', ctaLink: '' },
+        { id: 'placeholder-2', image: 'https://picsum.photos/seed/hero2/1200/400', title: '', subtitle: '', ctaText: '', ctaLink: '' },
+        { id: 'placeholder-3', image: 'https://picsum.photos/seed/hero3/1200/400', title: '', subtitle: '', ctaText: '', ctaLink: '' },
+      ];
+
+  console.log('[Hero Banner RENDER] rawSlides:', rawSlides.map((s, i) => ({
+    index: i,
+    hasImage: !!s?.image,
+    image: s?.image,
+    title: s?.title,
+  })));
+
+  // STATIC: ilk slayt, swiper yok
+  if (mode === 'static') {
+    const first = rawSlides[0];
+    return `
+      <section class="storefront-section" data-section="hero_banner" data-hero-mode="static">
+        <div class="store-hero" ${bgStyle}>
+          <div class="store-hero__static relative w-full overflow-hidden">
+            ${renderSlideImage(first, true)}
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  // SLIDER: Swiper kullan — sadece gercek gorseli olan slaytlari al
+  const validSlides = rawSlides.filter((s) => s && s.image);
+  const slidesToRender = validSlides.length > 0 ? validSlides : rawSlides;
+  const slidesHtml = slidesToRender.map((slide) => `
+    <div class="swiper-slide relative">
+      ${renderSlideImage(slide, false)}
+    </div>
+  `).join('');
+
+  // Coklu slayt varsa navigation oklari goster (swiper container ICINDE)
+  const showNav = slidesToRender.length > 1;
+  const navHtml = showNav ? `
+    <button type="button" class="store-hero__prev absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center transition-colors backdrop-blur-sm cursor-pointer" aria-label="Onceki">
+      <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+    </button>
+    <button type="button" class="store-hero__next absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center transition-colors backdrop-blur-sm cursor-pointer" aria-label="Sonraki">
+      <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+    </button>
+  ` : '';
+
+  // Eger kullanici slider sectiyse ama 0-1 valid slayt varsa konsola uyari (debug)
+  if (typeof console !== 'undefined' && validSlides.length < 2) {
+    console.info(`[Hero Banner] Slider modu aktif ama gecerli slayt sayisi: ${validSlides.length} (toplam: ${rawSlides.length}). Slider gecisi icin en az 2 gorselli slayt gerekir.`);
+  }
+
+  return `
+    <section class="storefront-section" data-section="hero_banner" data-hero-mode="slider"
+             data-hero-autoplay="${autoplay ? '1' : '0'}" data-hero-delay="${delay}"
+             data-hero-slides="${slidesToRender.length}">
+      <div class="store-hero" ${bgStyle}>
+        <div class="store-hero__swiper swiper w-full relative overflow-hidden" style="min-height: 180px;">
+          <div class="swiper-wrapper">
+            ${slidesHtml}
+          </div>
+          ${navHtml}
+          <div class="store-hero__pagination swiper-pagination absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10"></div>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
 /**
  * Registry of available section types → renderer functions.
  * Each renderer receives the section's settings object and returns HTML string.
  */
 const SECTION_RENDERERS: Record<string, SectionRenderer> = {
-  hero_banner: (_settings) => {
-    // Hero banner is rendered via Alpine x-data, slides come from seller data or mock
-    return `
-      <section class="storefront-section" data-section="hero_banner">
-        <div class="store-hero">
-          <div class="store-hero__swiper swiper w-full">
-            <div class="swiper-wrapper">
-              <template x-for="(slide, idx) in (seller?.hero_slides || [
-                { id: '1', image: 'https://picsum.photos/seed/hero1/1200/400', title: '', link: '' },
-                { id: '2', image: 'https://picsum.photos/seed/hero2/1200/400', title: '', link: '' },
-                { id: '3', image: 'https://picsum.photos/seed/hero3/1200/400', title: '', link: '' }
-              ])" :key="slide.id || idx">
-                <div class="swiper-slide">
-                  <a :href="slide.link || '#'" class="block">
-                    <img :src="slide.image" :alt="slide.title || 'Banner'" class="w-full h-[180px] sm:h-[220px] md:h-[320px] lg:h-[400px] object-cover"
-                         onerror="this.style.display='none'; this.parentElement.style.background='linear-gradient(135deg, #1f1f1f, #cc9900)'; this.parentElement.style.minHeight='300px';" />
-                  </a>
-                </div>
-              </template>
-            </div>
-            <div class="store-hero__pagination swiper-pagination absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10"></div>
-          </div>
-        </div>
-      </section>
-    `;
-  },
+  hero_banner: (settings) => renderHeroBanner(settings),
 
   category_grid: (_settings) => {
     // CategoryGrid reads data from Alpine x-data context
@@ -365,7 +502,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
               <!-- Kisi Bilgisi -->
               <div class="flex items-center gap-4 mb-6 pb-6 border-b border-gray-100">
                 <div class="w-[56px] h-[56px] rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center overflow-hidden shrink-0">
-                  <img x-show="seller?.logo" :src="seller.logo" class="w-full h-full object-contain p-1" />
+                  <img x-show="seller?.logo" :src="seller?.logo" class="w-full h-full object-contain p-1" />
                   <svg x-show="!seller?.logo" class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0"/></svg>
                 </div>
                 <div>
@@ -447,7 +584,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                 <!-- Sirket Mini Karti -->
                 <div class="flex items-center gap-3 mb-5 pb-4 border-b border-gray-100">
                   <div class="w-10 h-10 rounded-md border border-gray-200 bg-gray-50 flex items-center justify-center overflow-hidden shrink-0">
-                    <img x-show="seller?.logo" :src="seller.logo" class="w-full h-full object-contain p-0.5" />
+                    <img x-show="seller?.logo" :src="seller?.logo" class="w-full h-full object-contain p-0.5" />
                   </div>
                   <p class="text-[13px] font-medium text-gray-800 line-clamp-2" x-text="seller?.seller_name || ''"></p>
                 </div>

@@ -44,7 +44,7 @@ import { ShippingModal, initShippingModal } from '../components/product'
 import { initCurrency } from '../services/currencyService'
 
 // Category data for slug/ID → name mapping (dynamic, API-based)
-import { findCategoryBySlug, findCategoryById } from '../services/categoryService'
+import { findCategoryBySlug, findCategoryById, onCategoriesLoaded } from '../services/categoryService'
 
 // Utilities
 import { initAnimatedPlaceholder } from '../utils/animatedPlaceholder'
@@ -257,6 +257,24 @@ function showGridError(): void {
 
 // Show initial loading
 showGridLoading();
+
+// Kategoriler async yüklenince keyword'u gerçek kategori adıyla güncelle
+if (categoryParam) {
+  onCategoriesLoaded(() => {
+    const resolvedKeyword = resolveKeyword();
+    if (resolvedKeyword && resolvedKeyword !== categoryParam) {
+      updateSearchHeader({ keyword: resolvedKeyword });
+      // Breadcrumb'u da güncelle
+      const breadcrumbNav = document.querySelector('nav[aria-label="Breadcrumb"]');
+      if (breadcrumbNav) {
+        const lastItem = breadcrumbNav.querySelector('li:last-child span');
+        if (lastItem && lastItem.textContent?.trim() !== resolvedKeyword) {
+          lastItem.textContent = resolvedKeyword;
+        }
+      }
+    }
+  });
+}
 
 // Base search parameters from URL (these don't change with filters)
 const baseParams = {
