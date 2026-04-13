@@ -1,3 +1,11 @@
+## [v1.1.4-rc.4] - 2026-04-13 RC
+
+Bu surum rc.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(tailored): "Size Özel Seçimler" landing bloğu ve detay sayfası API'ye bağlandı. (@aliiball)
+
+---
 ## [v1.1.4-rc.3] - 2026-04-13 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
