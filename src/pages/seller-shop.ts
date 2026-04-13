@@ -22,6 +22,9 @@ import '../alpine/sellerShop';
 import { renderDynamicSections, SECTION_RENDERERS_REF } from '../utils/seller/section-registry';
 import type { LayoutConfig } from '../utils/seller/section-registry';
 
+// Interactions (Swiper init, dropdowns, etc.)
+import { initAllSwipers } from '../utils/seller/interactions';
+
 // ─── Pre-fetch layout for SSR-like initial render ───────
 const API_BASE = (window as any).API_BASE || '/api';
 const sellerCode = new URLSearchParams(window.location.search).get('seller') || '';
@@ -107,7 +110,7 @@ async function renderPage() {
               <!-- Logo (arka plan yok, radius dinamik) -->
               <div class="w-[120px] h-[120px] sm:w-[140px] sm:h-[140px] overflow-hidden shrink-0"
                    :style="'border-radius:' + (seller?.logo_radius || '8') + 'px'">
-                <img x-show="seller?.logo" :src="seller.logo" :alt="seller?.seller_name"
+                <img x-show="seller?.logo" :src="seller?.logo" :alt="seller?.seller_name"
                      class="w-full h-full object-cover"
                      :style="'border-radius:' + (seller?.logo_radius || '8') + 'px'" />
                 <div x-show="!seller?.logo" class="w-full h-full bg-gray-100 flex items-center justify-center"
@@ -374,39 +377,11 @@ async function renderPage() {
   startAlpine();
 
   // Init Swipers after Alpine is ready
+  // initAllSwipers (interactions.ts) Swiper'i bundler ile import eder — window.Swiper global'i gerekmez.
+  // Hero banner: Navigation + Autoplay + Pagination ile dinamik init (data-hero-* attribute'lari okur)
   setTimeout(() => {
-    initShopSwipers();
+    initAllSwipers();
   }, 500);
-}
-
-function initShopSwipers() {
-  // @ts-ignore — Swiper loaded via CSS import
-  const Swiper = (window as any).Swiper;
-  if (!Swiper) return;
-
-  // Hero banner swiper
-  const heroEl = document.querySelector('.store-hero__swiper');
-  if (heroEl) {
-    new Swiper(heroEl, {
-      loop: true,
-      autoplay: { delay: 5000, disableOnInteraction: false },
-      pagination: { el: '.store-hero__pagination', clickable: true },
-    });
-  }
-
-  // Hot products swiper
-  const hotEl = document.querySelector('.hot-products-swiper');
-  if (hotEl) {
-    new Swiper(hotEl, {
-      slidesPerView: 2,
-      spaceBetween: 12,
-      navigation: { nextEl: '.hot-next', prevEl: '.hot-prev' },
-      breakpoints: {
-        640: { slidesPerView: 3 },
-        1024: { slidesPerView: 5 },
-      },
-    });
-  }
 }
 
 // Start

@@ -62,24 +62,103 @@ function initMainProductsSwiper(): Swiper | null {
 }
 
 /**
- * Hero Banner Swiper (C3)
+ * Hero Banner Swiper (C3) — admin panelden gelen ayarlara gore dinamik init
  */
-function initHeroSwiper(): Swiper | null {
-  const el = document.querySelector('.store-hero__swiper');
-  if (!el) return null;
+let heroSwiperInstance: Swiper | null = null;
 
-  return new Swiper('.store-hero__swiper', {
-    modules: [Autoplay, Pagination],
-    loop: true,
-    autoplay: { delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true },
+function buildHeroSwiper(): Swiper | null {
+  const el = document.querySelector<HTMLElement>('.store-hero__swiper');
+  if (!el) {
+    console.warn('[Hero Swiper] .store-hero__swiper elementi bulunamadi');
+    return null;
+  }
+
+  const section = el.closest<HTMLElement>('[data-section="hero_banner"]');
+  const mode = section?.getAttribute('data-hero-mode') || 'slider';
+  const dataSlideCount = section?.getAttribute('data-hero-slides');
+  console.log('[Hero Swiper BUILD]', {
+    mode,
+    autoplayAttr: section?.getAttribute('data-hero-autoplay'),
+    delayAttr: section?.getAttribute('data-hero-delay'),
+    dataSlideCount,
+    domSlideCount: el.querySelectorAll('.swiper-slide').length,
+    elWidth: el.offsetWidth,
+    elVisible: el.offsetWidth > 0 && el.offsetHeight > 0,
+  });
+  if (mode !== 'slider') return null;
+
+  const autoplay = section?.getAttribute('data-hero-autoplay') === '1';
+  const delayAttr = parseInt(section?.getAttribute('data-hero-delay') || '5000', 10);
+  const delay = Number.isFinite(delayAttr) && delayAttr >= 1000 ? delayAttr : 5000;
+
+  const slideCount = el.querySelectorAll('.swiper-slide').length;
+  if (slideCount === 0) {
+    console.warn('[Hero Swiper] swiper-slide DOM elementi yok, init iptal');
+    return null;
+  }
+  const enableLoop = slideCount > 1;
+
+  // Eski instance varsa temizle (Alpine seller fetch sonrasi yeniden init icin)
+  if (heroSwiperInstance) {
+    try { heroSwiperInstance.destroy(true, true); } catch { /* ignore */ }
+    heroSwiperInstance = null;
+  }
+
+  heroSwiperInstance = new Swiper(el, {
+    modules: [Autoplay, Pagination, Navigation],
+    loop: enableLoop,
+    autoplay: autoplay && slideCount > 1
+      ? { delay, disableOnInteraction: false, pauseOnMouseEnter: true }
+      : false,
     speed: 600,
+    // observer: parent x-show degisince (Alpine loading->loaded) Swiper boyutu yeniden hesaplar
+    observer: true,
+    observeParents: true,
+    observeSlideChildren: true,
     pagination: {
       el: '.store-hero__pagination',
       clickable: true,
       bulletClass: 'store-hero__dot',
       bulletActiveClass: 'store-hero__dot--active',
     },
+    navigation: slideCount > 1 ? {
+      nextEl: '.store-hero__next',
+      prevEl: '.store-hero__prev',
+    } : false,
   });
+  console.log('[Hero Swiper READY]', {
+    slideCount,
+    enableLoop,
+    autoplayActive: autoplay && slideCount > 1,
+    delay,
+    swiperWidth: heroSwiperInstance?.width,
+    hasNavigation: slideCount > 1,
+  });
+  return heroSwiperInstance;
+}
+
+function initHeroSwiper(): Swiper | null {
+  const result = buildHeroSwiper();
+
+  // Alpine x-show="!loading && seller" baslangicta gizli — gorunur olunca yeniden init et
+  // Hero section gorunurluk degisimini izle, Swiper'i yeniden olustur ki dogru genislikte render edilsin
+  const section = document.querySelector<HTMLElement>('[data-section="hero_banner"]');
+  if (section) {
+    const parentObserver = new MutationObserver(() => {
+      // Parent x-show ile display:none -> '' olunca rebuild
+      const swiperEl = document.querySelector<HTMLElement>('.store-hero__swiper');
+      if (swiperEl && swiperEl.offsetWidth > 0 && (!heroSwiperInstance || heroSwiperInstance.width === 0)) {
+        buildHeroSwiper();
+      }
+    });
+    // Tum atalardaki style/class degisimlerini izle (Alpine x-show display:none toggle)
+    let parent: HTMLElement | null = section.parentElement;
+    while (parent) {
+      parentObserver.observe(parent, { attributes: true, attributeFilter: ['style', 'class'] });
+      parent = parent.parentElement;
+    }
+  }
+  return result;
 }
 
 /**

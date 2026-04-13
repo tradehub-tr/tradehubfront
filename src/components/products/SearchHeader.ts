@@ -234,12 +234,12 @@ export function SearchHeader(
           <!-- Search results count -->
           <h1 class="text-base sm:text-xl font-bold text-gray-900 dark:text-white min-w-0 break-words">
             <span id="search-header-count">${t('products.showingResults', { count: formatNumber(totalProducts) })}</span>
-            ${keyword ? `
+            <span id="search-header-keyword-wrapper" ${keyword ? '' : 'style="display:none"'}>
               <span class="font-normal text-gray-600 dark:text-gray-400">
                 ${t('products.resultsFor')}
               </span>
-              <span class="text-primary-600 dark:text-primary-400">"${keyword}"</span>
-            ` : ''}
+              <span id="search-header-keyword" class="text-primary-600 dark:text-primary-400">"${keyword || ''}"</span>
+            </span>
           </h1>
 
           <!-- Free shipping banner (desktop: inline, mobile: below) -->
@@ -301,5 +301,18 @@ export function updateSearchHeader(info: Partial<SearchHeaderInfo>): void {
 
   if (countEl && info.totalProducts !== undefined) {
     countEl.textContent = t('products.showingResults', { count: formatNumber(info.totalProducts) });
+  }
+
+  if (info.keyword !== undefined) {
+    const wrapperEl = document.getElementById('search-header-keyword-wrapper');
+    const keywordEl = document.getElementById('search-header-keyword');
+    if (wrapperEl && keywordEl) {
+      if (info.keyword) {
+        keywordEl.textContent = `"${info.keyword}"`;
+        wrapperEl.style.display = '';
+      } else {
+        wrapperEl.style.display = 'none';
+      }
+    }
   }
 }
