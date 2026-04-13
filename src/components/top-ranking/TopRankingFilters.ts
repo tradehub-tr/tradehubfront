@@ -12,14 +12,14 @@ export function TopRankingFilters(): string {
   return `
     <div class="flex items-center justify-center mt-1 lg:mt-5 px-[10px] sm:px-0">
       <!-- Category Dropdown -->
-      <div class="relative" @click.outside="categoryDropdownOpen = false; categoryDropdownLevel = 1">
+      <div class="relative" @click.outside="categoryDropdownOpen = false">
         <button
           type="button"
           class="th-btn-outline inline-flex items-center gap-1 sm:gap-2 text-[10px] sm:text-sm font-medium py-[7px] px-[10px] sm:px-6 sm:py-3"
-          @click="if(window.innerWidth >= 1024) { categoryDropdownOpen = !categoryDropdownOpen; categoryDropdownLevel = 1 } else { showCategorySheet = true; categoryDropdownLevel = 1 }"
+          @click="openCategoryDropdown()"
         >
           <svg class="w-3 h-3 sm:w-4 sm:h-4 text-secondary-500 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
-          <span class="mr-[3px] sm:mr-0" x-text="selectedMainCategory ? apiCategories.find(c => c.slug === selectedMainCategory)?.name || $t('topRankingPage.allCategories') : $t('topRankingPage.allCategories')">${t('topRankingPage.allCategories')}</span>
+          <span class="mr-[3px] sm:mr-0" x-text="selectedCategoryLabel">${t('topRankingPage.allCategories')}</span>
           <svg class="w-3 h-3 sm:w-4 sm:h-4 text-secondary-400 transition-transform flex-shrink-0" :class="categoryDropdownOpen && 'rotate-180'" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
         </button>
 
@@ -128,7 +128,7 @@ export function TopRankingFilters(): string {
         <!-- Header -->
         <div class="flex items-center justify-between px-5 pb-3">
           <h3 class="text-base font-bold text-gray-900">Select category</h3>
-          <button type="button" @click="showCategorySheet = false; categoryDropdownLevel = 1" class="p-1 text-gray-400 hover:text-gray-700">
+          <button type="button" @click="showCategorySheet = false" class="p-1 text-gray-400 hover:text-gray-700">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
             </svg>

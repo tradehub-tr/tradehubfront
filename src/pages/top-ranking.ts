@@ -123,16 +123,19 @@ Alpine.data('topRankingPage', () => ({
   },
 
   // ── Filter state ──
+  // activeTab → tab bar highlight (her zaman ana kategori slug'ı veya 'all')
+  // activeCategory → fetch parametresi (ana VEYA alt kategori slug'ı, veya 'all')
   activeTab: 'all' as string,
+  activeCategory: 'all' as string,
   activeSort: 'hot-selling' as SortKey,
 
-  // Display mode — derived from activeTab. 'all' → grouped, anything else → flat.
+  // Display mode — derived from activeCategory. 'all' → grouped, anything else → flat.
   mode: 'grouped' as RankingMode,
 
   // Dropdown state (desktop)
   categoryDropdownOpen: false,
 
-  // Category dropdown navigation
+  // Category dropdown navigation — edit state (uygulanmadan önceki UI seçimi)
   categoryDropdownLevel: 1 as 1 | 2,
   selectedMainCategory: null as string | null,
   pendingSubCategory: null as string | null,
@@ -228,7 +231,7 @@ Alpine.data('topRankingPage', () => ({
   async fetchFlatPage(reset = false): Promise<void> {
     if (this.loading) return;
     if (!reset && !this.hasMore) return;
-    if (this.activeTab === 'all') return; // safety: flat needs a real category
+    if (this.activeCategory === 'all') return; // safety: flat needs a real category
 
     this.loading = true;
     if (reset) {
@@ -240,7 +243,7 @@ Alpine.data('topRankingPage', () => ({
 
     try {
       const result = await searchListings({
-        category: this.activeTab,
+        category: this.activeCategory,
         sort_by: SORT_KEY_TO_BACKEND[this.activeSort],
         page: this.flatNextPage,
         page_size: FLAT_PAGE_SIZE,
@@ -266,8 +269,9 @@ Alpine.data('topRankingPage', () => ({
   },
 
   setTab(tabId: string): void {
-    if (this.activeTab === tabId) return;
+    if (this.activeTab === tabId && this.activeCategory === tabId) return;
     this.activeTab = tabId;
+    this.activeCategory = tabId;
     this.selectedMainCategory = tabId === 'all' ? null : tabId;
     this.pendingSubCategory = null;
     this.mode = tabId === 'all' ? 'grouped' : 'flat';
@@ -318,12 +322,46 @@ Alpine.data('topRankingPage', () => ({
   },
 
   applyCategoryFilter(): void {
-    const category = this.pendingSubCategory || this.selectedMainCategory || 'all';
     this.categoryDropdownOpen = false;
-    this.categoryDropdownLevel = 1;
-    this.activeTab = category;
-    this.mode = category === 'all' ? 'grouped' : 'flat';
+    const mainCat = this.selectedMainCategory || 'all';
+    const finalCat = this.pendingSubCategory || mainCat;
+    // Tab bar her zaman ANA kategoriyi highlight eder (alt kategori seçilse bile)
+    this.activeTab = mainCat;
+    // Fetch son seçim üzerinden yapılır (ana veya alt)
+    this.activeCategory = finalCat;
+    this.mode = finalCat === 'all' ? 'grouped' : 'flat';
     this.fetchActive(true);
+  },
+
+  // Dropdown açılış — edit state'i applied state'ten senkronize eder,
+  // böylece son seçim radio'sunda işaretli görünür ve seviye korunur.
+  openCategoryDropdown(): void {
+    const isDesktop = window.innerWidth >= 1024;
+    const opening = isDesktop ? !this.categoryDropdownOpen : true;
+    if (opening) {
+      this.selectedMainCategory = this.activeTab === 'all' ? null : this.activeTab;
+      this.pendingSubCategory = (this.activeCategory !== this.activeTab) ? this.activeCategory : null;
+      // Level 2 sadece seçili ana kategorinin alt kategorisi varsa anlamlı — yoksa Level 1'de kal
+      const mainCat = this.apiCategories.find(c => c.slug === this.selectedMainCategory);
+      const hasChildren = !!(mainCat?.children && mainCat.children.length > 0);
+      this.categoryDropdownLevel = hasChildren ? 2 : 1;
+    }
+    if (isDesktop) {
+      this.categoryDropdownOpen = opening;
+    } else {
+      this.showCategorySheet = true;
+    }
+  },
+
+  // Dropdown butonunda gösterilecek metin — son uygulanmış seçim (ana veya alt kategori)
+  get selectedCategoryLabel(): string {
+    if (this.activeCategory === 'all') return t('topRankingPage.allCategories');
+    for (const main of this.apiCategories) {
+      if (main.slug === this.activeCategory) return main.name;
+      const sub = main.children?.find(c => c.slug === this.activeCategory);
+      if (sub) return sub.name;
+    }
+    return t('topRankingPage.allCategories');
   },
 
   // i18n helper for Alpine templates
