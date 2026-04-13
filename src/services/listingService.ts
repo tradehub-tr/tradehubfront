@@ -634,3 +634,95 @@ function mapListingDetail(raw: any): ProductDetail {
     reviewMentionTags: [],
   }
 }
+
+
+// ── Tailored Selections ──────────────────────────────────────────────────────
+
+export interface TailoredGroup {
+  slug: string
+  categoryId: string
+  name: string
+  image: string
+  parent: string | null
+  viewsCount: number
+  products: ProductListingCard[]
+}
+
+export interface TailoredSelectionsResult {
+  limit: number
+  personalized: boolean
+  isGuest: boolean
+  groups: TailoredGroup[]
+  total: number
+}
+
+export interface TailoredGroupDetailResult {
+  page: number
+  pageSize: number
+  hasNext: boolean
+  products: ProductListingCard[]
+  category: {
+    slug: string
+    name: string
+    image: string
+    categoryId: string
+  }
+  subCategories: Array<{ slug: string; name: string }>
+}
+
+/**
+ * Get the Tailored Selections block (9 personalized group cards) for the
+ * landing page. Falls back to global top categories for guests or users
+ * below the interaction threshold.
+ */
+export async function getTailoredSelections(limit = 9): Promise<TailoredSelectionsResult> {
+  const qs = new URLSearchParams({ limit: String(limit) })
+  const response = await api<{ message: TailoredSelectionsResult & { groups: Array<Omit<TailoredGroup, 'products'> & { products: any[] }> } }>(
+    `/method/tradehub_core.api.tailored.get_tailored_selections?${qs.toString()}`
+  )
+  const msg = response.message
+  return {
+    limit: msg.limit,
+    personalized: msg.personalized,
+    isGuest: msg.isGuest,
+    total: msg.total,
+    groups: (msg.groups || []).map(g => ({
+      slug: g.slug,
+      categoryId: g.categoryId,
+      name: g.name,
+      image: g.image,
+      parent: g.parent,
+      viewsCount: (g as any).viewsCount || 0,
+      products: (g.products || []).map(mapListingCard),
+    })),
+  }
+}
+
+/**
+ * Get a single Tailored Selections group's full product list (detail page).
+ * Supports optional sub-category filtering and pagination.
+ */
+export async function getTailoredGroupDetail(
+  category: string,
+  options: { subcategory?: string; page?: number; pageSize?: number } = {}
+): Promise<TailoredGroupDetailResult> {
+  const { subcategory, page = 1, pageSize = 20 } = options
+  const qs = new URLSearchParams({
+    category,
+    page: String(page),
+    page_size: String(pageSize),
+  })
+  if (subcategory) qs.set('subcategory', subcategory)
+  const response = await api<{ message: TailoredGroupDetailResult & { products: any[] } }>(
+    `/method/tradehub_core.api.tailored.get_tailored_group_detail?${qs.toString()}`
+  )
+  const msg = response.message
+  return {
+    page: msg.page,
+    pageSize: msg.pageSize || (msg as any).page_size,
+    hasNext: msg.hasNext || (msg as any).has_next,
+    products: (msg.products || []).map(mapListingCard),
+    category: msg.category,
+    subCategories: msg.subCategories || (msg as any).sub_categories || [],
+  }
+}

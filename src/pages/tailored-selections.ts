@@ -28,7 +28,7 @@ import { startAlpine } from '../alpine'
 import { TailoredSelectionsHero, initTailoredSelectionsHero, TailoredProductGrid, renderTailoredProductCard } from '../components/tailored-selections'
 
 // Services
-import { searchListings } from '../services/listingService'
+import { searchListings, getTailoredGroupDetail } from '../services/listingService'
 import { initCurrency } from '../services/currencyService'
 
 // Data
@@ -155,35 +155,132 @@ initTailoredSelectionsHero();
 initAnimatedPlaceholder('#topbar-compact-search-input');
 initTailoredScrollBehavior();
 
-// Load products from API
-initCurrency().then(() => searchListings({ page_size: 20 })).then(result => {
-  if (result.products.length > 0) {
-    // Hide empty state
-    const emptyState = document.getElementById('ts-product-grid-empty');
-    if (emptyState) emptyState.style.display = 'none';
+/* ── Product loading + pagination ── */
 
-    const grid = document.getElementById('ts-product-grid');
-    if (grid) {
-      grid.classList.remove('hidden');
-      grid.innerHTML = result.products.map((p, i) => {
-        const product: TailoredProduct = {
-          id: p.id || '',
-          name: p.name,
-          href: p.href || `/pages/product-detail.html?id=${p.id}`,
-          price: p.price,
-          originalPrice: p.originalPrice || undefined,
-          discountPercent: p.discount ? parseInt(p.discount) : undefined,
-          moqCount: parseInt(p.moq) || 1,
-          moqUnit: 'pcs',
-          imageSrc: p.imageSrc || '',
-          soldCount: p.stats?.replace(/[^\d.+K]/gi, '') || undefined,
-          verifiedBadge: p.verified,
-        };
-        return renderTailoredProductCard(product, i);
-      }).join('');
-    }
+// URL parametreleri: ?category=SLUG&subcategory=SLUG
+const urlParams = new URLSearchParams(window.location.search);
+const categorySlug = urlParams.get('category');
+const subCategorySlug = urlParams.get('subcategory') || undefined;
+
+// Pagination state
+let currentPage = 1;
+let hasNextPage = false;
+let activeSubCategory: string | undefined = subCategorySlug;
+const PAGE_SIZE = 20;
+
+function toTailoredProduct(p: any): TailoredProduct {
+  return {
+    id: p.id || '',
+    name: p.name,
+    href: p.href || `/pages/product-detail.html?id=${p.id}`,
+    price: p.price,
+    originalPrice: p.originalPrice || undefined,
+    discountPercent: p.discount ? parseInt(p.discount) : undefined,
+    moqCount: parseInt(p.moq) || 1,
+    moqUnit: 'pcs',
+    imageSrc: p.imageSrc || '',
+    soldCount: p.stats?.replace(/[^\d.+K]/gi, '') || undefined,
+    verifiedBadge: p.verified,
+  };
+}
+
+function appendProducts(items: TailoredProduct[], reset = false): void {
+  const grid = document.getElementById('ts-product-grid');
+  if (!grid) return;
+  grid.classList.remove('hidden');
+  const html = items.map((p, i) => renderTailoredProductCard(p, i)).join('');
+  if (reset) {
+    grid.innerHTML = html;
+  } else {
+    grid.insertAdjacentHTML('beforeend', html);
   }
-}).catch(err => console.warn('[TailoredSelections Page] API load failed:', err));
+}
+
+function toggleEmptyState(hide: boolean): void {
+  const emptyState = document.getElementById('ts-product-grid-empty');
+  if (emptyState) emptyState.style.display = hide ? 'none' : '';
+}
+
+function renderLoadMoreButton(): void {
+  const existing = document.getElementById('ts-load-more-wrapper');
+  if (existing) existing.remove();
+  if (!hasNextPage) return;
+  const grid = document.getElementById('ts-product-grid');
+  if (!grid || !grid.parentElement) return;
+  const wrapper = document.createElement('div');
+  wrapper.id = 'ts-load-more-wrapper';
+  wrapper.className = 'flex justify-center py-6';
+  wrapper.innerHTML = `
+    <button id="ts-load-more-btn"
+      class="th-btn-outline px-6 py-2.5 text-sm font-semibold rounded-full"
+      data-i18n="common.loadMore">${t('common.loadMore') || 'Daha fazla yükle'}</button>
+  `;
+  grid.parentElement.appendChild(wrapper);
+  const btn = wrapper.querySelector<HTMLButtonElement>('#ts-load-more-btn');
+  btn?.addEventListener('click', () => loadPage(currentPage + 1, false));
+}
+
+function renderSubCategoryPills(subs: Array<{ slug: string; name: string }>): void {
+  if (!subs || subs.length === 0) return;
+  const container = document.getElementById('ts-category-pills');
+  if (!container) return;
+  const allLabel = t('common.all') || 'Tümü';
+  const pillsHtml = [
+    `<button class="ts-sub-pill ${!activeSubCategory ? 'is-active' : ''}" data-sub="">${allLabel}</button>`,
+    ...subs.map(s => `<button class="ts-sub-pill ${activeSubCategory === s.slug ? 'is-active' : ''}" data-sub="${s.slug}">${s.name}</button>`),
+  ].join('');
+  container.innerHTML = `
+    <div class="flex gap-2 px-3 py-2 overflow-x-auto scrollbar-hide">${pillsHtml}</div>
+  `;
+  container.style.display = '';
+  container.querySelectorAll<HTMLButtonElement>('.ts-sub-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const sub = btn.dataset.sub || undefined;
+      if (sub === activeSubCategory) return;
+      activeSubCategory = sub;
+      container.querySelectorAll('.ts-sub-pill').forEach(b => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      loadPage(1, true);
+    });
+  });
+}
+
+async function loadPage(page: number, reset: boolean): Promise<void> {
+  try {
+    if (categorySlug) {
+      const result = await getTailoredGroupDetail(categorySlug, {
+        subcategory: activeSubCategory,
+        page,
+        pageSize: PAGE_SIZE,
+      });
+      currentPage = page;
+      hasNextPage = result.hasNext;
+      const items = result.products.map(toTailoredProduct);
+      if (reset) {
+        appendProducts(items, true);
+        if (items.length > 0) toggleEmptyState(true);
+        renderSubCategoryPills(result.subCategories);
+      } else {
+        appendProducts(items, false);
+      }
+      renderLoadMoreButton();
+    } else {
+      // Fallback: kategori param yoksa genel popüler ürünler
+      const result = await searchListings({ page, page_size: PAGE_SIZE });
+      currentPage = page;
+      hasNextPage = result.hasNext;
+      const items = result.products.map(toTailoredProduct);
+      if (reset) appendProducts(items, true);
+      else appendProducts(items, false);
+      if (items.length > 0) toggleEmptyState(true);
+      renderLoadMoreButton();
+    }
+  } catch (err) {
+    console.warn('[TailoredSelections Page] load failed:', err);
+  }
+}
+
+initCurrency().then(() => loadPage(1, true));
 
 /* ── Scroll-based header & category pills behavior ── */
 

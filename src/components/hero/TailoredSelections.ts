@@ -9,7 +9,7 @@ import { Navigation } from 'swiper/modules';
 import 'swiper/swiper-bundle.css';
 import { t } from '../../i18n';
 import { formatPrice } from '../../utils/currency';
-import { searchListings } from '../../services/listingService';
+import { getTailoredSelections } from '../../services/listingService';
 import { initCurrency } from '../../services/currencyService';
 
 interface CollectionProduct {
@@ -22,7 +22,7 @@ interface TailoredCollection {
   title: string;
   titleKey: string;
   views: string;
-  viewsCount: string;
+  viewsCount: string | number;
   href: string;
   products: [CollectionProduct, CollectionProduct];
 }
@@ -43,27 +43,40 @@ function renderProductImage(product: CollectionProduct): string {
   `;
 }
 
+function formatViews(n: number | string): string {
+  const num = typeof n === 'number' ? n : parseInt(String(n), 10) || 0;
+  if (num >= 1000000) return `${(num / 1000000).toFixed(1).replace(/\.0$/, '')}M+`;
+  if (num >= 1000) return `${(num / 1000).toFixed(1).replace(/\.0$/, '')}K+`;
+  return String(num);
+}
+
 function renderCollectionSlide(collection: TailoredCollection): string {
   const [product1, product2] = collection.products;
+  // Kategori adı: API'den gelen `title` öncelikli, yoksa i18n key
+  const titleLabel = collection.title || t(collection.titleKey) || '';
+  // Views count: 0 ise satırı hiç render etme
+  const rawCount = collection.viewsCount;
+  const countNum = typeof rawCount === 'number' ? rawCount : parseInt(String(rawCount), 10) || 0;
+  const formattedCount = formatViews(countNum);
+  const viewsHtml = countNum > 0
+    ? `<p class="truncate" style="color: var(--tailored-views-color, #767676); font-size: var(--text-product-meta, 16px); margin: 0 0 12px;"><span data-i18n="tailored.views" data-i18n-options='${JSON.stringify({ count: formattedCount })}'>${t('tailored.views', { count: formattedCount })}</span></p>`
+    : '<div style="margin: 0 0 12px;"></div>';
   return `
     <div class="swiper-slide tailored-slide">
       <a
         href="${collection.href}"
         class="group/col flex flex-col h-full rounded-md overflow-hidden cursor-pointer"
         style="background: var(--tailored-card-bg, #ffffff); padding: var(--space-card-padding, 16px);"
-        aria-label="${t(collection.titleKey)}"
+        aria-label="${titleLabel}"
       >
         <!-- Title -->
         <h3
           class="truncate font-bold leading-tight"
           style="color: var(--tailored-collection-title-color, #222222); font-size: var(--text-product-price, 20px);"
-        ><span data-i18n="${collection.titleKey}">${t(collection.titleKey)}</span></h3>
+        >${titleLabel}</h3>
 
         <!-- Views subtitle -->
-        <p
-          class="truncate"
-          style="color: var(--tailored-views-color, #767676); font-size: var(--text-product-meta, 16px); margin: 0 0 12px;"
-        ><span data-i18n="tailored.views" data-i18n-options='${JSON.stringify({ count: collection.viewsCount })}'>${t('tailored.views', { count: collection.viewsCount })}</span></p>
+        ${viewsHtml}
 
         <!-- Product images side by side — 164x164 each -->
         <div class="flex gap-2 flex-1">
@@ -122,48 +135,43 @@ export function initTailoredSelections(): void {
     },
   });
 
-  // Load real products grouped by category
-  initCurrency().then(() => searchListings({ page_size: 20 })).then(result => {
-    if (result.products.length >= 4) {
-      // Group products by category
-      const groups: Record<string, typeof result.products> = {};
-      for (const p of result.products) {
-        const cat = (p as any).category || 'Diger';
-        if (!groups[cat]) groups[cat] = [];
-        groups[cat].push(p);
-      }
+  // Load tailored recommendations — 9 grup kartı, kategori başına 2 ürün.
+  // Giriş yapmış kullanıcıda aktiviteye göre kişiselleştirilir, aksi halde
+  // global top kategoriler (cold-start) döner.
+  initCurrency().then(() => getTailoredSelections(9)).then(result => {
+    if (!result.groups || result.groups.length === 0) return;
 
-      const collections: TailoredCollection[] = [];
-      for (const [cat, products] of Object.entries(groups)) {
-        if (products.length >= 2) {
-          collections.push({
-            title: cat,
-            titleKey: '',
-            views: `${Math.floor(Math.random() * 50 + 10)}K+ views`,
-            viewsCount: '',
-            href: `/pages/products.html?category=${encodeURIComponent(cat)}`,
-            products: products.slice(0, 2).map(p => ({
-              name: p.name,
-              price: p.price,
-              imageSrc: p.imageSrc || '',
-            })) as [CollectionProduct, CollectionProduct],
-          });
-        }
-      }
+    const collections: TailoredCollection[] = result.groups
+      .filter(g => g.products && g.products.length >= 1)
+      .map(g => {
+        // En az 1 ürün varsa slot'ları doldur (2 ürün gerekli render için)
+        const p1 = g.products[0];
+        const p2 = g.products[1] || g.products[0];
+        return {
+          title: g.name,
+          titleKey: '',
+          views: '',
+          viewsCount: g.viewsCount || 0,
+          href: `/pages/tailored-selections.html?category=${encodeURIComponent(g.slug)}`,
+          products: [
+            { name: p1.name, price: p1.price, imageSrc: p1.imageSrc || '' },
+            { name: p2.name, price: p2.price, imageSrc: p2.imageSrc || '' },
+          ] as [CollectionProduct, CollectionProduct],
+        };
+      });
 
-      if (collections.length > 0) {
-        // Hide empty state
-        const emptyState = document.getElementById('tailored-empty');
-        if (emptyState) emptyState.style.display = 'none';
+    if (collections.length === 0) return;
 
-        const wrapper = document.querySelector('#tailored-swiper .swiper-wrapper');
-        if (wrapper) {
-          wrapper.innerHTML = collections.map(c => renderCollectionSlide(c)).join('');
-          const swiperEl = document.querySelector('#tailored-swiper') as HTMLElement;
-          if (swiperEl && (swiperEl as any).swiper) {
-            (swiperEl as any).swiper.update();
-          }
-        }
+    // Hide empty state
+    const emptyState = document.getElementById('tailored-empty');
+    if (emptyState) emptyState.style.display = 'none';
+
+    const wrapper = document.querySelector('#tailored-swiper .swiper-wrapper');
+    if (wrapper) {
+      wrapper.innerHTML = collections.map(c => renderCollectionSlide(c)).join('');
+      const swiperEl = document.querySelector('#tailored-swiper') as HTMLElement;
+      if (swiperEl && (swiperEl as any).swiper) {
+        (swiperEl as any).swiper.update();
       }
     }
   }).catch(err => console.warn('[TailoredSelections] API load failed:', err));
