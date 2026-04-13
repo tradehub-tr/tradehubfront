@@ -4234,8 +4234,8 @@ input:checked+.email-pref__toggle-slider::before {
 
 /* Email checkbox custom styling - needs pseudo-elements */
 .email-pref__checkbox input:checked+.email-pref__checkmark {
-    background: #2563eb;
-    border-color: #2563eb;
+    background: var(--color-primary-500, #cc9900);
+    border-color: var(--color-primary-500, #cc9900);
 }
 
 .email-pref__checkbox input:checked+.email-pref__checkmark::after {

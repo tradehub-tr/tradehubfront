@@ -56,13 +56,13 @@ export function TopDealsCategoryTabs(): string {
       <!-- Left arrow (desktop only) -->
       <button
         type="button"
-        class="th-btn-outline hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 w-7 h-7 items-center justify-center shadow text-gray-500 hover:text-gray-900"
+        class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center rounded-full bg-white border border-gray-200 shadow-md text-gray-500 hover:text-gray-900 hover:shadow-lg transition-all cursor-pointer"
         x-show="canScrollLeft"
         x-transition
         @click="scrollTabs('left')"
         aria-label="Scroll left"
       >
-        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
         </svg>
       </button>
@@ -97,13 +97,13 @@ export function TopDealsCategoryTabs(): string {
       <!-- Right arrow (desktop only) -->
       <button
         type="button"
-        class="th-btn-outline hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 w-7 h-7 items-center justify-center shadow text-gray-500 hover:text-gray-900"
+        class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center rounded-full bg-white border border-gray-200 shadow-md text-gray-500 hover:text-gray-900 hover:shadow-lg transition-all cursor-pointer"
         x-show="canScrollRight"
         x-transition
         @click="scrollTabs('right')"
         aria-label="Scroll right"
       >
-        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
         </svg>
       </button>

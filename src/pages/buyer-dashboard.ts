@@ -33,12 +33,9 @@ import { FloatingPanel, initFloatingPanel } from '../components/floating'
 import { BuyerDashboardLayout, initBuyerDashboardLayout } from '../components/buyer-dashboard'
 import { renderSidebar } from '../components/sidebar'
 
-// Mock data (used for browsing history, promotions etc. — user data comes from Alpine)
-import { getMockBuyerDashboardData } from '../data/mockBuyerDashboard'
-
 function renderMainContent(): string {
-  const dashData = getMockBuyerDashboardData();
-  return BuyerDashboardLayout({ data: dashData });
+  const defaultUser = { avatar: '', username: '', profileHref: '/profile' };
+  return BuyerDashboardLayout({ data: { user: defaultUser, stats: [], notifications: [], browsingHistory: [], promotions: [] } });
 }
 
 function getBreadcrumbItems(): { label: string; href?: string }[] {

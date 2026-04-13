@@ -215,31 +215,6 @@ export function MobileProductLayout(): string {
     `,
   });
 
-  const protectionsSection = collapsibleSection({
-    id: 'pdm-protections-section',
-    title: t('product.protectionsTitle'),
-    sheetId: 'pdm-sheet-protections',
-    previewHtml: `
-      <div id="pdm-protections-preview" class="px-4 pb-3.5">
-        <div class="pdm-protection-item flex items-center gap-2.5 py-1.5 text-[13px] text-text-body">
-          <div class="pdm-protection-icon shrink-0 w-5 h-5 text-text-muted">
-            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          </div>
-          <span>${t('product.securePayments')}</span>
-        </div>
-        <div class="pdm-protection-item flex items-center gap-2.5 py-1.5 text-[13px] text-text-body">
-          <div class="pdm-protection-icon shrink-0 w-5 h-5 text-text-muted">
-            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 14l-4-4 4-4"/><path d="M5 10h11a4 4 0 010 8h-1"/></svg>
-          </div>
-          <span>${t('product.standardReturnPolicy')}</span>
-        </div>
-        <div class="pdm-trade-badge flex items-center gap-1.5 pt-2 text-[13px] font-semibold text-cta-primary">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="#e85d04"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4" fill="none" stroke="#fff" stroke-width="2"/></svg>
-          ${t('product.tradeAssurance')}
-        </div>
-      </div>
-    `,
-  });
 
   const keyAttrsSection = collapsibleSection({
     id: 'pdm-keyattrs-section',
@@ -309,25 +284,6 @@ export function MobileProductLayout(): string {
   // ── Bottom Sheets (all use bottomSheet builder) ──
 
   const sheets = [
-    bottomSheet('pdm-sheet-protections', t('product.protectionsTitle'), `
-      <h3 class="pdm-sheet-section-title">${t('product.protectionAtEveryStep')}</h3>
-      <div class="pdm-sheet-protection-block">
-        <h4>${t('product.securePayments')}</h4>
-        <p>${t('product.securePaymentDesc')}</p>
-        <div class="pdm-payment-icons">
-          ${['VISA', 'MC', 'PayPal', 'T/T', 'L/C'].map(m => `<span class="pdm-payment-icon">${m}</span>`).join('')}
-        </div>
-      </div>
-      <div class="pdm-sheet-protection-block">
-        <h4>${t('product.returnPolicy')}</h4>
-        <p>${t('product.returnPolicyDesc')}</p>
-      </div>
-      <div class="pdm-trade-badge flex items-center gap-1.5 pt-2 text-[13px] font-semibold text-cta-primary">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="#e85d04"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4" fill="none" stroke="#fff" stroke-width="2"/></svg>
-        ${t('product.tradeAssurance')}
-      </div>
-    `),
-
     bottomSheet('pdm-sheet-keyattrs', t('product.keyAttributes'), `
       <table class="pdm-attrs-table">
         ${p.specs.map(s => `<tr><td>${s.key}</td><td>${s.value}</td></tr>`).join('')}
@@ -374,7 +330,6 @@ export function MobileProductLayout(): string {
       <!-- Details section -->
       <div id="pdm-sec-details">
         ${shippingSection}
-        ${protectionsSection}
         ${keyAttrsSection}
         ${customizationSection}
       </div>

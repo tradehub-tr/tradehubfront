@@ -3,14 +3,12 @@
  * Account settings page with profile header and settings cards.
  * Uses Alpine.js x-data="settingsLayout" for hash-based section routing.
  * Supports hash routing for sub-sections:
- *   #profilim, #vergi, #bagli-hesaplar, #gizlilik, #reklam, #eposta, #sifre, #eposta-degistir, #telefon
+ *   #profilim, #vergi, #bagli-hesaplar, #eposta, #sifre, #eposta-degistir, #telefon
  */
 
 import { t } from '../../i18n';
 import { SettingsAccountEdit, initSettingsAccountEdit } from './SettingsAccountEdit';
 import { SettingsTaxInfo, initSettingsTaxInfo } from './SettingsTaxInfo';
-import { SettingsPrivacy, initSettingsPrivacy } from './SettingsPrivacy';
-import { SettingsAdPreferences, initSettingsAdPreferences } from './SettingsAdPreferences';
 import { SettingsEmailPreferences, initSettingsEmailPreferences } from './SettingsEmailPreferences';
 import { SettingsChangePassword, initSettingsChangePassword } from './SettingsChangePassword';
 import { SettingsChangeEmail, initSettingsChangeEmail } from './SettingsChangeEmail';
@@ -162,9 +160,7 @@ function getPreferencesCard(): SettingsCard {
     icon: ICONS.preferences,
     title: t('settings.preferencesCardTitle'),
     items: [
-      { label: t('settings.privacySettingsNav'), href: '#gizlilik' },
       { label: t('settings.emailPreferencesNav'), href: '#eposta' },
-      { label: t('settings.adPreferencesNav'), href: '#reklam' },
     ],
   };
 }
@@ -204,8 +200,6 @@ function getSectionMap(): Record<string, { title: string; render: () => string }
     '#profilim': { title: t('settings.myProfile'), render: () => SettingsAccountEdit() },
     '#hesabim': { title: t('settings.myAccountNav') || 'Hesabım', render: () => SettingsMyAccount() },
     '#vergi': { title: t('settings.taxInfoNav'), render: () => SettingsTaxInfo() },
-    '#gizlilik': { title: t('settings.privacySettingsNav'), render: () => SettingsPrivacy() },
-    '#reklam': { title: t('settings.adPreferencesNav'), render: () => SettingsAdPreferences() },
     '#eposta': { title: t('settings.emailPreferencesNav'), render: () => SettingsEmailPreferences() },
     '#sifre': { title: t('settings.changePasswordNav'), render: () => SettingsChangePassword() },
     '#eposta-degistir': { title: t('settings.changeEmailNav'), render: () => SettingsChangeEmail() },
@@ -218,8 +212,6 @@ const INIT_MAP: Record<string, () => void> = {
   '#profilim': initSettingsAccountEdit,
   '#hesabim': initSettingsMyAccount,
   '#vergi': initSettingsTaxInfo,
-  '#gizlilik': initSettingsPrivacy,
-  '#reklam': initSettingsAdPreferences,
   '#eposta': initSettingsEmailPreferences,
   '#sifre': initSettingsChangePassword,
   '#eposta-degistir': initSettingsChangeEmail,

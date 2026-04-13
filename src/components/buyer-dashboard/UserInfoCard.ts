@@ -4,30 +4,15 @@
  * '24H Çevrimiçi destek' badge (top-right), 3-column stats grid with vertical dividers.
  */
 
-import type { UserProfile, UserStat } from '../../types/buyerDashboard';
+import type { UserProfile } from '../../types/buyerDashboard';
 import { t } from '../../i18n';
 
 export interface UserInfoCardProps {
   user: UserProfile;
-  stats: UserStat[];
-}
-
-function renderStatItem(stat: UserStat, index: number, total: number): string {
-  const divider = index < total - 1
-    ? '<div class="w-px bg-gray-200 self-stretch"></div>'
-    : '';
-
-  return `
-    <a href="${stat.href}" class="flex-1 min-w-0 flex flex-col items-center gap-1 no-underline transition-opacity hover:opacity-80" aria-label="${stat.label}: ${stat.count}">
-      <span class="text-[clamp(1rem,0.9rem+0.4vw,1.25rem)] font-bold leading-none" style="color:var(--color-text-primary)">${stat.count}</span>
-      <span class="text-[clamp(0.625rem,0.6rem+0.1vw,0.75rem)] text-center leading-[1.3] line-clamp-2" style="color:var(--color-text-secondary)">${stat.label}</span>
-    </a>
-    ${divider}
-  `;
 }
 
 export function UserInfoCard(props: UserInfoCardProps): string {
-  const { user, stats } = props;
+  const { user } = props;
 
   return `
     <div class="relative p-[clamp(0.75rem,0.5rem+1vw,1.25rem)]" x-data="buyerUserInfo">
@@ -58,7 +43,20 @@ export function UserInfoCard(props: UserInfoCardProps): string {
 
       <!-- Stats Grid -->
       <div class="flex items-stretch border-t pt-4" style="border-color:var(--color-border-light, #f0f0f0)" role="list" aria-label="${t('dashboard.ariaUserStats')}">
-        ${stats.map((stat, i) => renderStatItem(stat, i, stats.length)).join('')}
+        <a href="/messages" class="flex-1 min-w-0 flex flex-col items-center gap-1 no-underline transition-opacity hover:opacity-80">
+          <span class="text-[clamp(1rem,0.9rem+0.4vw,1.25rem)] font-bold leading-none" style="color:var(--color-text-primary)" x-text="statsMessages">0</span>
+          <span class="text-[clamp(0.625rem,0.6rem+0.1vw,0.75rem)] text-center leading-[1.3] line-clamp-2" style="color:var(--color-text-secondary)">${t('dashboard.statsMessages')}</span>
+        </a>
+        <div class="w-px bg-gray-200 self-stretch"></div>
+        <a href="/quotations" class="flex-1 min-w-0 flex flex-col items-center gap-1 no-underline transition-opacity hover:opacity-80">
+          <span class="text-[clamp(1rem,0.9rem+0.4vw,1.25rem)] font-bold leading-none" style="color:var(--color-text-primary)" x-text="statsQuotations">0</span>
+          <span class="text-[clamp(0.625rem,0.6rem+0.1vw,0.75rem)] text-center leading-[1.3] line-clamp-2" style="color:var(--color-text-secondary)">${t('dashboard.statsQuotations')}</span>
+        </a>
+        <div class="w-px bg-gray-200 self-stretch"></div>
+        <a href="/coupons" class="flex-1 min-w-0 flex flex-col items-center gap-1 no-underline transition-opacity hover:opacity-80">
+          <span class="text-[clamp(1rem,0.9rem+0.4vw,1.25rem)] font-bold leading-none" style="color:var(--color-text-primary)" x-text="statsCoupons">0</span>
+          <span class="text-[clamp(0.625rem,0.6rem+0.1vw,0.75rem)] text-center leading-[1.3] line-clamp-2" style="color:var(--color-text-secondary)">${t('dashboard.statsCoupons')}</span>
+        </a>
       </div>
     </div>
   `;

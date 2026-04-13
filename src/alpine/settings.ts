@@ -110,7 +110,85 @@ Alpine.data('settingsLayout', () => ({
   },
 }));
 
-// settingsChangeEmail — disabled (coming soon), no Alpine data needed
+Alpine.data('settingsChangeEmail', () => ({
+  step: 1,
+  error: '',
+  loading: false,
+  showPassword: false,
+  currentEmail: '',
+
+  async init() {
+    try {
+      const user = await getSessionUser();
+      if (user) {
+        this.currentEmail = user.email || '';
+      }
+    } catch { /* ignore */ }
+
+    // Reset form when navigating back to this section
+    window.addEventListener('hashchange', () => {
+      if (window.location.hash === '#eposta-degistir') {
+        this.step = 1;
+        this.error = '';
+        const refs = this.$refs as Record<string, HTMLInputElement>;
+        if (refs.newEmail) refs.newEmail.value = '';
+        if (refs.emailPassword) refs.emailPassword.value = '';
+      }
+    });
+  },
+
+  async saveEmail() {
+    const newEmail = (this.$refs as Record<string, HTMLInputElement>).newEmail.value.trim();
+    const password = (this.$refs as Record<string, HTMLInputElement>).emailPassword.value;
+
+    if (!newEmail) {
+      this.error = t('settings.newEmailRequired');
+      return;
+    }
+
+    // Basic email format validation
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) {
+      this.error = t('settings.invalidEmailFormat');
+      return;
+    }
+
+    // Cannot be same as current
+    if (newEmail.toLowerCase() === this.currentEmail.toLowerCase()) {
+      this.error = t('settings.emailSameAsCurrent');
+      return;
+    }
+
+    if (!password) {
+      this.error = t('settings.currentPasswordRequired');
+      return;
+    }
+
+    this.error = '';
+    this.loading = true;
+    try {
+      await api('/method/tradehub_core.api.v1.identity.change_email', {
+        method: 'POST',
+        body: JSON.stringify({ new_email: newEmail, password }),
+      });
+      this.step = 2;
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : '';
+      if (msg === 'RATE_LIMIT') {
+        this.error = t('common.rateLimitError');
+      } else if (msg.includes('Incorrect') || msg.includes('incorrect') || msg.includes('Invalid')) {
+        this.error = t('settings.currentPasswordWrong');
+      } else if (msg.includes('already exists') || msg.includes('Duplicate')) {
+        this.error = t('settings.emailAlreadyExists');
+      } else if (msg.includes('same as')) {
+        this.error = t('settings.emailSameAsCurrent');
+      } else {
+        this.error = t('settings.emailChangeFailed');
+      }
+    } finally {
+      this.loading = false;
+    }
+  },
+}));
 
 Alpine.data('settingsChangePassword', () => ({
   step: 1,

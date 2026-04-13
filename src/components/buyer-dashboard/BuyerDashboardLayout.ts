@@ -36,7 +36,7 @@ export function BuyerDashboardLayout({ data, emailVerified = true }: BuyerDashbo
         <div class="flex gap-[clamp(0.5rem,0.4rem+0.4vw,0.875rem)] items-start max-lg:flex-col max-lg:items-stretch">
           <!-- Center Column -->
           <div class="flex-1 min-w-0 flex flex-col gap-[clamp(0.5rem,0.4rem+0.4vw,0.875rem)] max-lg:w-full">
-            ${NewBuyerInfo({ user: data.user, stats: data.stats })}
+            ${NewBuyerInfo({ user: data.user })}
             ${OrdersSection()}
           </div>
 

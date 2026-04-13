@@ -148,43 +148,6 @@ export function ProductInfo(): string {
           </div>
         </div>
 
-        <!-- Trade Assurance / Order Protection -->
-        <div id="pd-trade-assurance">
-          <div class="flex items-center justify-between cursor-pointer mb-3.5">
-            <h4 class="text-sm font-bold m-0 flex items-center gap-1.5" style="color: var(--color-text-primary);">
-              <svg viewBox="0 0 20 20" fill="currentColor" style="color:#16a34a; width:16px; height:16px;"><path fill-rule="evenodd" d="M10 1a.75.75 0 01.65.378l1.855 3.27 3.69.53a.75.75 0 01.416 1.279l-2.668 2.6.63 3.67a.75.75 0 01-1.088.79L10 11.347l-3.485 1.832a.75.75 0 01-1.088-.79l.63-3.67-2.668-2.6a.75.75 0 01.416-1.28l3.69-.53L9.35 1.379A.75.75 0 0110 1z" clip-rule="evenodd"/></svg>
-              ${t('product.orderProtectionTitle')}
-            </h4>
-            <svg class="w-4 h-4 transition-transform" style="color: var(--color-text-tertiary);" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd"/></svg>
-          </div>
-
-          <div class="flex items-start gap-2.5 mb-3.5">
-            <svg class="flex-shrink-0 w-5 h-5 mt-px" style="color: #16a34a;" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.403 12.652a3 3 0 000-5.304 3 3 0 00-3.75-3.751 3 3 0 00-5.305 0 3 3 0 00-3.751 3.75 3 3 0 000 5.305 3 3 0 003.75 3.751 3 3 0 005.305 0 3 3 0 003.751-3.75zm-2.546-4.46a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.06l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
-            <div>
-              <h5 class="text-[13px] font-semibold m-0 mb-1" style="color: var(--color-text-primary);">${t('product.securePaymentTitle')}</h5>
-              <p class="text-xs m-0 leading-normal" style="color: var(--color-text-secondary);">${t('product.securePaymentDesc')}</p>
-              <div class="flex items-center gap-1.5 mt-1.5 flex-wrap">
-                ${['VISA', 'MC', 'PayPal', 'Apple Pay', 'GPay'].map(icon => `
-                  <span class="h-5 px-1.5 rounded-[3px] border text-[10px] font-bold inline-flex items-center shrink-0" style="border-color: var(--color-border-default, #e5e5e5); color: var(--color-text-primary); background: var(--color-surface, #ffffff);">${icon}</span>
-                `).join('')}
-              </div>
-            </div>
-          </div>
-
-          <div class="flex items-start gap-2.5">
-            <svg class="flex-shrink-0 w-5 h-5 mt-px" style="color: #16a34a;" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.403 12.652a3 3 0 000-5.304 3 3 0 00-3.75-3.751 3 3 0 00-5.305 0 3 3 0 00-3.751 3.75 3 3 0 000 5.305 3 3 0 003.75 3.751 3 3 0 005.305 0 3 3 0 003.751-3.75zm-2.546-4.46a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.06l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
-            <div>
-              <h5 class="text-[13px] font-semibold m-0 mb-1" style="color: var(--color-text-primary);">${t('product.moneyBackTitle')}</h5>
-              <p class="text-xs m-0 leading-normal" style="color: var(--color-text-secondary);">${t('product.moneyBackDesc')}</p>
-            </div>
-          </div>
-
-          <div class="inline-flex items-center gap-1 mt-3 px-2.5 py-1.5 rounded-md text-xs font-semibold" style="background: #f0fdf4; color: #16a34a;">
-            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 1a.75.75 0 01.65.378l1.855 3.27 3.69.53a.75.75 0 01.416 1.279l-2.668 2.6.63 3.67a.75.75 0 01-1.088.79L10 11.347l-3.485 1.832a.75.75 0 01-1.088-.79l.63-3.67-2.668-2.6a.75.75 0 01.416-1.28l3.69-.53L9.35 1.379A.75.75 0 0110 1z" clip-rule="evenodd"/></svg>
-            ${t('product.tradeAssurance')}
-          </div>
-        </div>
-
         <!-- CTA Buttons -->
         <div id="pd-cta-buttons">
           <button type="button" id="pd-add-to-cart" data-add-to-cart="${mockProduct.id}" class="th-btn-dark">

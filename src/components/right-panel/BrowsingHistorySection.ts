@@ -9,9 +9,14 @@ import { SectionHeader } from '../shared/SectionHeader';
 import { ProductCard } from '../shared/ProductCard';
 import { getBrowsingHistoryConfig } from './rightPanelData';
 
+const MAX_VISIBLE = 3;
+
 export function BrowsingHistorySection(products: BrowsingHistoryProduct[]): string {
   const browsingHistoryConfig = getBrowsingHistoryConfig();
-  const cards = products.map((p) =>
+  const hasMore = products.length > MAX_VISIBLE;
+  const visibleProducts = products.slice(0, MAX_VISIBLE);
+
+  const cards = visibleProducts.map((p) =>
     ProductCard({
       image: p.image,
       price: p.price.toFixed(2),
@@ -25,8 +30,8 @@ export function BrowsingHistorySection(products: BrowsingHistoryProduct[]): stri
     children: `
       ${SectionHeader({
         title: browsingHistoryConfig.title,
-        actionText: browsingHistoryConfig.actionText,
-        actionHref: browsingHistoryConfig.actionHref,
+        actionText: hasMore ? browsingHistoryConfig.actionText : undefined,
+        actionHref: hasMore ? browsingHistoryConfig.actionHref : undefined,
       })}
       <div class="flex gap-3 overflow-x-auto scrollbar-hide">
         ${cards}

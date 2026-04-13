@@ -1,12 +1,11 @@
 /**
  * SettingsEmailPreferences Component
  * Email notification preferences with master toggles and sub-checkboxes.
- * localStorage CRUD: tradehub_email_preferences
+ * Fetches categories dynamically from API, saves user preferences to backend.
  */
 
 import { t } from '../../i18n';
-
-const STORAGE_KEY = 'tradehub_email_preferences';
+import { api } from '../../utils/api';
 
 export interface EmailCategory {
   id: string;
@@ -23,89 +22,31 @@ export interface EmailItem {
   checked: boolean;
 }
 
-function getDefaultCategories(): EmailCategory[] {
-  return [
-    {
-      id: 'notification',
-      title: t('settings.allNotificationEmails'),
-      description: t('settings.notificationEmailsDesc'),
-      enabled: true,
-      items: [
-        {
-          id: 'general_notification',
-          title: t('settings.generalNotificationEmails'),
-          description: t('settings.generalNotificationEmailsDesc'),
-          checked: true,
-        },
-        {
-          id: 'dispute_updates',
-          title: t('settings.disputeUpdates'),
-          description: t('settings.disputeUpdatesDesc'),
-          checked: true,
-        },
-      ],
-    },
-    {
-      id: 'marketing',
-      title: t('settings.allMarketingEmails'),
-      description: t('settings.marketingEmailsDesc'),
-      enabled: true,
-      items: [
-        {
-          id: 'general_marketing',
-          title: t('settings.generalMarketingEmails'),
-          description: t('settings.generalMarketingEmailsDesc'),
-          checked: true,
-        },
-        {
-          id: 'surveys',
-          title: t('settings.surveys'),
-          description: t('settings.surveysDesc'),
-          checked: true,
-        },
-      ],
-    },
-  ];
-}
+// ── API ─────────────────────────────────────────────────────────
 
-// ── CRUD ─────────────────────────────────────────────────────────
-
-interface SavedEmailPrefs {
-  toggles: Record<string, boolean>;
-  checks: Record<string, boolean>;
-}
-
-function readEmailPrefs(): EmailCategory[] {
+async function fetchEmailPreferences(): Promise<EmailCategory[] | null> {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) {
-      const saved: SavedEmailPrefs = JSON.parse(raw);
-      const defaults = getDefaultCategories();
-      return defaults.map(cat => ({
-        ...cat,
-        enabled: saved.toggles[cat.id] ?? cat.enabled,
-        items: cat.items.map(item => ({
-          ...item,
-          checked: saved.checks[item.id] ?? item.checked,
-        })),
-      }));
-    }
-  } catch { /* ignore */ }
-  return getDefaultCategories().map(cat => ({ ...cat, items: cat.items.map(i => ({ ...i })) }));
+    const res = await api<{ message: { categories: EmailCategory[] } }>(
+      '/method/tradehub_core.api.v1.email_preferences.get_email_preferences'
+    );
+    return res.message?.categories ?? [];
+  } catch {
+    return null;
+  }
 }
 
-function saveEmailPrefs(): void {
-  const toggles: Record<string, boolean> = {};
-  const checks: Record<string, boolean> = {};
-
-  document.querySelectorAll<HTMLInputElement>('[data-cat-toggle]').forEach(el => {
-    toggles[el.dataset.catToggle!] = el.checked;
-  });
-  document.querySelectorAll<HTMLInputElement>('[data-email-check]').forEach(el => {
-    checks[el.dataset.emailCheck!] = el.checked;
-  });
-
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({ toggles, checks }));
+async function savePrefsToAPI(
+  toggles: Record<string, boolean>,
+  checks: Record<string, boolean>,
+): Promise<void> {
+  try {
+    await api('/method/tradehub_core.api.v1.email_preferences.save_email_preferences', {
+      method: 'POST',
+      body: JSON.stringify({ preferences: { toggles, checks } }),
+    });
+  } catch {
+    // optimistic UI — sessiz hata
+  }
 }
 
 // ── Renderers ────────────────────────────────────────────────────
@@ -135,7 +76,7 @@ function renderCategory(cat: EmailCategory): string {
         </div>
         <label class="relative inline-flex w-12 h-[26px] flex-shrink-0 cursor-pointer">
           <input type="checkbox" data-cat-toggle="${cat.id}" ${cat.enabled ? 'checked' : ''} class="opacity-0 w-0 h-0 absolute" />
-          <span class="email-pref__toggle-slider absolute inset-0 rounded-[13px] transition-colors" style="background:var(--color-border-default)"></span>
+          <span class="email-pref__toggle-slider absolute inset-0 rounded-[13px] transition-colors"></span>
         </label>
       </div>
       <div class="border border-border-default border-t-0 rounded-b-lg">
@@ -145,8 +86,7 @@ function renderCategory(cat: EmailCategory): string {
   `;
 }
 
-export function SettingsEmailPreferences(): string {
-  const categories = readEmailPrefs();
+function renderContent(categories: EmailCategory[]): string {
   return `
     <div class="bg-white rounded-lg p-8 max-md:p-5 max-sm:p-3.5">
       <p class="text-[13px] max-sm:text-xs mb-2 m-0" style="color:var(--color-text-secondary)">${t('settings.emailServices')}</p>
@@ -157,28 +97,146 @@ export function SettingsEmailPreferences(): string {
         ${categories.map(renderCategory).join('')}
       </div>
       <div class="mt-5">
-        <a href="#" class="text-[13px] text-blue-600 no-underline hover:underline">${t('settings.unsubscribeAll')}</a>
+        <a href="#" id="email-prefs-unsubscribe-all" class="text-[13px] no-underline hover:underline" style="color:var(--color-primary-500, #cc9900)">${t('settings.unsubscribeAll')}</a>
       </div>
     </div>
   `;
 }
 
-export function initSettingsEmailPreferences(): void {
-  document.querySelectorAll<HTMLInputElement>('[data-cat-toggle], [data-email-check]').forEach(input => {
-    input.addEventListener('change', () => {
-      saveEmailPrefs();
-    });
-  });
+function renderLoading(): string {
+  return `
+    <div class="bg-white rounded-lg p-8 max-md:p-5 max-sm:p-3.5 flex items-center justify-center min-h-[200px]">
+      <span class="text-sm" style="color:var(--color-text-secondary)">${t('common.loading')}</span>
+    </div>
+  `;
+}
 
-  document.querySelectorAll<HTMLInputElement>('[data-cat-toggle]').forEach(toggle => {
-    toggle.addEventListener('change', () => {
-      const category = toggle.closest('.email-pref__category');
-      if (category) {
-        category.querySelectorAll<HTMLInputElement>('[data-email-check]').forEach(cb => {
-          cb.checked = toggle.checked;
-        });
-        saveEmailPrefs();
-      }
+function renderEmpty(): string {
+  return `
+    <div class="bg-white rounded-lg p-8 max-md:p-5 max-sm:p-3.5 flex items-center justify-center min-h-[200px]">
+      <p class="text-sm m-0" style="color:var(--color-text-secondary)">Henüz e-posta tercihi yapılandırılmamış.</p>
+    </div>
+  `;
+}
+
+function renderError(): string {
+  return `
+    <div class="bg-white rounded-lg p-8 max-md:p-5 max-sm:p-3.5 flex flex-col items-center justify-center gap-3 min-h-[200px]">
+      <p class="text-sm m-0" style="color:var(--color-text-secondary)">Tercihler yüklenirken bir hata oluştu.</p>
+      <button type="button" id="email-prefs-retry" class="text-sm bg-none border-none cursor-pointer hover:underline" style="color:var(--color-primary-500, #cc9900)">Tekrar dene</button>
+    </div>
+  `;
+}
+
+// ── Exports ─────────────────────────────────────────────────────
+
+export function SettingsEmailPreferences(): string {
+  return `<div id="email-prefs-root">${renderLoading()}</div>`;
+}
+
+export function initSettingsEmailPreferences(): void {
+  const root = document.getElementById('email-prefs-root')!;
+  if (!root) return;
+
+  let saveTimeout: ReturnType<typeof setTimeout> | null = null;
+
+  // ── Helpers ──
+
+  function isAnyChecked(): boolean {
+    return Array.from(root.querySelectorAll<HTMLInputElement>('[data-email-check]')).some(cb => cb.checked);
+  }
+
+  function syncToggleWithCheckboxes(category: Element): void {
+    const toggle = category.querySelector<HTMLInputElement>('[data-cat-toggle]');
+    if (!toggle) return;
+    const anyChecked = Array.from(
+      category.querySelectorAll<HTMLInputElement>('[data-email-check]')
+    ).some(cb => cb.checked);
+    toggle.checked = anyChecked;
+  }
+
+  function updateUnsubscribeLabel(): void {
+    const btn = document.getElementById('email-prefs-unsubscribe-all');
+    if (!btn) return;
+    btn.textContent = isAnyChecked()
+      ? t('settings.unsubscribeAll')
+      : t('settings.resubscribeAll');
+  }
+
+  function onPrefsChanged(): void {
+    updateUnsubscribeLabel();
+    if (saveTimeout) clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(() => {
+      const toggles: Record<string, boolean> = {};
+      const checks: Record<string, boolean> = {};
+      root.querySelectorAll<HTMLInputElement>('[data-cat-toggle]').forEach(el => {
+        toggles[el.dataset.catToggle!] = el.checked;
+      });
+      root.querySelectorAll<HTMLInputElement>('[data-email-check]').forEach(el => {
+        checks[el.dataset.emailCheck!] = el.checked;
+      });
+      savePrefsToAPI(toggles, checks);
+    }, 500);
+  }
+
+  // ── Events ──
+
+  function bindEvents(): void {
+    root.querySelectorAll<HTMLInputElement>('[data-cat-toggle]').forEach(toggle => {
+      toggle.addEventListener('change', () => {
+        const category = toggle.closest('.email-pref__category');
+        if (category) {
+          category.querySelectorAll<HTMLInputElement>('[data-email-check]').forEach(cb => {
+            cb.checked = toggle.checked;
+          });
+        }
+        onPrefsChanged();
+      });
     });
-  });
+
+    root.querySelectorAll<HTMLInputElement>('[data-email-check]').forEach(cb => {
+      cb.addEventListener('change', () => {
+        const category = cb.closest('.email-pref__category');
+        if (category) syncToggleWithCheckboxes(category);
+        onPrefsChanged();
+      });
+    });
+
+    const unsubBtn = document.getElementById('email-prefs-unsubscribe-all');
+    if (unsubBtn) {
+      unsubBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const newState = !isAnyChecked();
+        root.querySelectorAll<HTMLInputElement>('[data-cat-toggle]').forEach(el => { el.checked = newState; });
+        root.querySelectorAll<HTMLInputElement>('[data-email-check]').forEach(el => { el.checked = newState; });
+        onPrefsChanged();
+      });
+    }
+  }
+
+  // ── Load ──
+
+  async function loadAndRender(): Promise<void> {
+    root.innerHTML = renderLoading();
+    const categories = await fetchEmailPreferences();
+
+    // null = API hatası, [] = henüz kategori yok
+    if (categories === null) {
+      root.innerHTML = renderError();
+      document.getElementById('email-prefs-retry')?.addEventListener('click', loadAndRender);
+      return;
+    }
+
+    if (categories.length === 0) {
+      root.innerHTML = renderEmpty();
+      return;
+    }
+
+    root.innerHTML = renderContent(categories);
+    root.querySelectorAll('.email-pref__category').forEach(cat => syncToggleWithCheckboxes(cat));
+    bindEvents();
+    updateUnsubscribeLabel();
+  }
+
+  loadAndRender();
 }
