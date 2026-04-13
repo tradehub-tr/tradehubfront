@@ -182,7 +182,7 @@ function renderFavorites(): string {
           </div>
         </div>
         <div class="flex justify-center gap-4 px-6 pb-6">
-          <button class="fav-modal__btn--cancel py-2.5 px-8 text-sm font-medium rounded-[20px] cursor-pointer transition-all duration-150 bg-surface text-text-secondary border border-border-strong hover:border-secondary-400">${t('common.cancel')}</button>
+          <button class="fav-modal__btn--cancel th-btn-outline">${t('common.cancel')}</button>
           <button class="fav-modal__btn--save th-btn" disabled>${t('common.save')}</button>
         </div>
       </div>

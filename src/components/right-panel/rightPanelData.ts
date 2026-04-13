@@ -51,7 +51,7 @@ export function getBrowsingHistoryConfig(): RightPanelSectionConfig {
     id: 'browsing-history',
     title: t('dashboard.browsingHistoryTitle'),
     actionText: t('dashboard.viewAllHistory'),
-    actionHref: '/browsing-history',
+    actionHref: '/pages/dashboard/favorites.html#browsing-history',
   };
 }
 

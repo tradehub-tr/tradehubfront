@@ -50,7 +50,7 @@ export function CookieBanner(): string {
               >${t('cookieBanner.rejectAll')}</button>
               <a
                 href="/pages/legal/cookies.html"
-                class="px-4 py-2 text-sm font-medium text-primary-600 bg-primary-50 border border-primary-200 rounded-lg hover:bg-primary-100 transition-colors text-center whitespace-nowrap"
+                class="th-btn-outline px-4 py-2 text-sm font-medium cursor-pointer text-center whitespace-nowrap"
                 data-i18n="cookieBanner.managePreferences"
               >${t('cookieBanner.managePreferences')}</a>
               <button

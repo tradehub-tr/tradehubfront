@@ -817,63 +817,6 @@ function renderAllOrders(): string {
           </div>
         </div>
 
-        <!-- Section 8: iSTOC TradeHub sipariş koruması -->
-        <div class="px-7 max-sm:px-3 py-5 border-b border-gray-100">
-          <div class="flex items-center gap-2 mb-4">
-            <svg class="w-5 h-5 text-amber-500 shrink-0" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
-            </svg>
-            <h2 class="text-base font-bold text-gray-900">${t('orders.orderProtection')}</h2>
-          </div>
-
-          <div class="space-y-4 max-sm:space-y-3">
-            <div class="flex items-start gap-3 max-sm:gap-2">
-              <svg class="w-5 h-5 text-green-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-              </svg>
-              <div class="flex-1 min-w-0">
-                <p class="text-sm font-medium text-gray-800 mb-0.5">${t('orders.securePayments')}</p>
-                <p class="text-xs text-gray-500 leading-relaxed">${t('orders.securePaymentsDesc')}</p>
-                <a href="#" class="text-xs text-blue-600 hover:underline mt-1 inline-block">${t('orders.viewDetails')}</a>
-              </div>
-            </div>
-
-            <div class="flex items-start gap-3 max-sm:gap-2">
-              <svg class="w-5 h-5 text-green-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-              </svg>
-              <div class="flex-1 min-w-0">
-                <p class="text-sm font-medium text-gray-800 mb-0.5">${t('orders.refundGuarantee')}</p>
-                <p class="text-xs text-gray-500 leading-relaxed">${t('orders.refundGuaranteeDesc')}</p>
-                <a href="#" class="text-xs text-blue-600 hover:underline mt-1 inline-block">${t('orders.viewDetails')}</a>
-              </div>
-            </div>
-
-            <p class="text-[11px] text-gray-400 leading-relaxed pl-8 max-sm:pl-7">${t('orders.tradeAssuranceNote')}</p>
-          </div>
-        </div>
-
-        <!-- Section 9: Production Monitoring & Inspection Services -->
-        <div class="px-7 max-sm:px-3 py-5 border-b border-gray-100">
-          <div class="flex items-center justify-between gap-3 mb-4 flex-wrap">
-            <div class="flex items-center gap-2">
-              <svg class="w-5 h-5 text-gray-500 shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
-              </svg>
-              <h2 class="text-base font-bold text-gray-900">${t('orders.productionMonitoringTitle')}</h2>
-            </div>
-          </div>
-          <div class="bg-gray-50 rounded-lg p-4 flex items-center justify-between gap-4 flex-wrap">
-            <div>
-              <p class="text-sm text-gray-700 mb-1">${t('orders.ensureProductQuality')}</p>
-              <p class="text-xs text-gray-500">${t('orders.asLowAs')} <strong class="text-amber-600">${getCurrencyCode()} 48.00</strong></p>
-            </div>
-            <button @click="openModal('showAddServices')" class="th-btn whitespace-nowrap">
-              ${t('orders.addServices')}
-            </button>
-          </div>
-        </div>
-
         <!-- Section 10: Action Buttons -->
         <div class="px-7 max-sm:px-3 py-5 flex items-center gap-3 flex-wrap">
           <button @click="openModal('showOperationHistory')" class="th-btn-outline whitespace-nowrap">
@@ -2089,25 +2032,13 @@ function renderTaxInfo(): string {
     </div>
     <div class="os-tabs flex border-b overflow-x-auto scrollbar-hide border-(--color-border-default,#e5e5e5) px-7 max-sm:px-3" data-tabgroup="tax">
       <button class="os-tabs__tab os-tabs__tab--active py-3 px-4 text-sm bg-transparent border-none border-b-2 border-b-transparent cursor-pointer whitespace-nowrap transition-colors" data-tab="tax-info-tab">${t('orders.taxInfoTab')}</button>
-      <button class="os-tabs__tab py-3 px-4 text-sm bg-transparent border-none border-b-2 border-b-transparent cursor-pointer whitespace-nowrap transition-colors text-(--color-text-muted,#666)" data-tab="tax-customs">${t('orders.customsInspectionInfo')}</button>
     </div>
 
     <!-- Tab: Vergi Bilgileri -->
     <div class="os-tab-content os-tab-content--active" data-content="tax-info-tab">
-      <div class="flex items-center justify-between gap-6 px-7 max-sm:px-3 py-5 border-b border-(--color-border-light,#f0f0f0) max-md:flex-col max-md:items-start">
-        <div class="flex-1 min-w-0">
-          <h4 class="text-sm font-semibold text-(--color-text-heading,#111827) mb-1.5">${t('orders.vatExemptionFor')}</h4>
-          <p class="text-[13px] text-(--color-text-muted,#666) leading-normal">${t('orders.vatExemptionDesc')}</p>
-        </div>
-        <button class="os-info-card__btn px-5 py-2 text-[13px] text-(--color-text-body,#333) bg-(--color-surface,#fff) border border-(--color-border-medium,#d1d5db) rounded-[20px] cursor-pointer whitespace-nowrap shrink-0 transition-colors hover:border-[#999]" data-modal="pst-modal">${t('orders.addOrChangeTaxExemption')}</button>
-      </div>
-
-      <div class="flex items-center justify-between gap-6 px-7 max-sm:px-3 py-5 border-b border-(--color-border-light,#f0f0f0) max-md:flex-col max-md:items-start">
-        <div class="flex-1 min-w-0">
-          <h4 class="text-sm font-semibold text-(--color-text-heading,#111827) mb-1.5">${t('orders.euNorwayTaxSubmission')}</h4>
-          <p class="text-[13px] text-(--color-text-muted,#666) leading-normal">${t('orders.euNorwayTaxDesc')}</p>
-        </div>
-        <button class="os-info-card__btn px-5 py-2 text-[13px] text-(--color-text-body,#333) bg-(--color-surface,#fff) border border-(--color-border-medium,#d1d5db) rounded-[20px] cursor-pointer whitespace-nowrap shrink-0 transition-colors hover:border-[#999]" data-modal="vat-modal">${t('orders.addTaxInfo')}</button>
+      <div class="flex items-start gap-2.5 px-7 max-sm:px-3 py-4 text-[13px] text-(--color-text-muted,#666) leading-normal">
+        <svg class="shrink-0 mt-0.5" width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#2563eb" stroke-width="1.2"/><path d="M8 7v4M8 5h0" stroke="#2563eb" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <span>${t('orders.taxInfoNotice')}</span>
       </div>
 
       <h3 class="text-base font-bold text-(--color-text-heading,#111827) px-7 max-sm:px-3 pt-5 pb-3">${t('orders.faq')}</h3>
@@ -2139,153 +2070,7 @@ function renderTaxInfo(): string {
       </div>
     </div>
 
-    <!-- Tab: Gümrük muayenesi bilgileri -->
-    <div class="os-tab-content" data-content="tax-customs">
-      <div class="flex items-center justify-between gap-6 px-7 max-sm:px-3 py-5 border-b border-(--color-border-light,#f0f0f0) max-md:flex-col max-md:items-start">
-        <div class="flex-1 min-w-0">
-          <h4 class="text-sm font-semibold text-(--color-text-heading,#111827) mb-1.5">${t('orders.customsProcessing')}</h4>
-          <p class="text-[13px] text-(--color-text-muted,#666) leading-normal">${t('orders.customsProcessingDesc')}</p>
-        </div>
-        <button class="os-info-card__btn px-5 py-2 text-[13px] text-(--color-text-body,#333) bg-(--color-surface,#fff) border border-(--color-border-medium,#d1d5db) rounded-[20px] cursor-pointer whitespace-nowrap shrink-0 transition-colors hover:border-[#999]" data-modal="customs-modal">${t('orders.addCustomsInspectionInfo')}</button>
-      </div>
-    </div>
 
-    <!-- ═══ MODAL: PST bilgileri ═══ -->
-    <div class="os-modal hidden fixed inset-0 z-[9999] items-center justify-center" id="pst-modal">
-      <div class="os-modal__overlay absolute inset-0 bg-black/45"></div>
-      <div class="os-modal__dialog relative bg-(--color-surface,#fff) rounded-md w-[480px] max-w-[calc(100vw-32px)] max-h-[calc(100vh-64px)] overflow-y-auto shadow-[0_20px_60px_rgba(0,0,0,0.2)]" style="animation: osModalIn 200ms ease-out">
-        <div class="flex items-center justify-between px-6 pt-5 pb-4 border-b border-(--color-border-light,#f0f0f0)">
-          <h3 class="text-base font-semibold text-(--color-text-heading,#111827)">${t('orders.pstInfo')}</h3>
-          <button class="os-modal__close bg-transparent border-none cursor-pointer p-1 rounded flex items-center justify-center transition-colors hover:bg-(--color-surface-raised,#f5f5f5)" aria-label="${t('common.close')}">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M12 4L4 12M4 4l8 8" stroke="#666" stroke-width="1.5" stroke-linecap="round"/></svg>
-          </button>
-        </div>
-        <div class="px-6 py-5">
-          <div class="mb-5">
-            <label class="block text-[13px] font-semibold text-(--color-text-body,#333) mb-2">${t('orders.province')} <span class="text-[#e53935]">*</span></label>
-            <div class="flex flex-col gap-2.5">
-              <label class="os-modal__radio flex items-center gap-2 text-sm text-(--color-text-body,#333) cursor-pointer">
-                <input type="radio" name="pst-province" value="manitoba" checked class="hidden" />
-                <span class="os-modal__radio-custom w-[18px] h-[18px] border-2 border-(--color-border-medium,#d1d5db) rounded-full shrink-0 relative transition-colors"></span>
-                Manitoba
-              </label>
-              <label class="os-modal__radio flex items-center gap-2 text-sm text-(--color-text-body,#333) cursor-pointer">
-                <input type="radio" name="pst-province" value="saskatchewan" class="hidden" />
-                <span class="os-modal__radio-custom w-[18px] h-[18px] border-2 border-(--color-border-medium,#d1d5db) rounded-full shrink-0 relative transition-colors"></span>
-                Saskatchewan
-              </label>
-            </div>
-          </div>
-          <div class="mb-5">
-            <label class="block text-[13px] font-semibold text-(--color-text-body,#333) mb-2">${t('orders.rstNumber')} <span class="text-[#e53935]">*</span></label>
-            <input type="text" class="th-input th-input-md" placeholder="${t('orders.enterRstNumber')}" />
-          </div>
-        </div>
-        <div class="px-6 pt-4 pb-5 flex justify-end gap-3 border-t border-(--color-border-light,#f0f0f0)">
-          <button class="os-modal__btn os-modal__btn--primary px-6 py-2.5 text-sm font-medium rounded-[20px] cursor-pointer border-none transition-all bg-(--color-cta-primary,#333333) text-white hover:bg-(--color-cta-primary-hover,#1f1f1f)">${t('orders.verify')}</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ═══ MODAL: KDV/GST Numarası Ekleyin ═══ -->
-    <div class="os-modal hidden fixed inset-0 z-[9999] items-center justify-center" id="vat-modal">
-      <div class="os-modal__overlay absolute inset-0 bg-black/45"></div>
-      <div class="os-modal__dialog relative bg-(--color-surface,#fff) rounded-md w-[480px] max-w-[calc(100vw-32px)] max-h-[calc(100vh-64px)] overflow-y-auto shadow-[0_20px_60px_rgba(0,0,0,0.2)]" style="animation: osModalIn 200ms ease-out">
-        <div class="flex items-center justify-between px-6 pt-5 pb-4 border-b border-(--color-border-light,#f0f0f0)">
-          <h3 class="text-base font-semibold text-(--color-text-heading,#111827)">${t('orders.addVatGstNumber')}</h3>
-          <button class="os-modal__close bg-transparent border-none cursor-pointer p-1 rounded flex items-center justify-center transition-colors hover:bg-(--color-surface-raised,#f5f5f5)" aria-label="${t('common.close')}">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M12 4L4 12M4 4l8 8" stroke="#666" stroke-width="1.5" stroke-linecap="round"/></svg>
-          </button>
-        </div>
-        <div class="px-6 py-5">
-          <div class="mb-5">
-            <label class="block text-[13px] font-semibold text-(--color-text-body,#333) mb-2">${t('orders.countryRegion')} <span class="text-[#e53935]">*</span></label>
-            <div class="relative">
-              <select class="os-modal__select w-full py-2.5 pl-3 pr-9 text-sm border border-(--color-border-medium,#d1d5db) rounded-md outline-none text-(--color-text-heading,#111827) bg-(--color-surface,#fff) appearance-none cursor-pointer transition-colors focus:border-(--color-cta-primary,#cc9900) focus:shadow-[0_0_0_2px_rgba(249,115,22,0.1)]">
-                <option value="">${t('orders.selectCountryRegion')}</option>
-                <option value="TR">${t('orders.countryTR')}</option>
-                <option value="DE">${t('orders.countryDE')}</option>
-                <option value="FR">${t('orders.countryFR')}</option>
-                <option value="GB">${t('orders.countryGB')}</option>
-                <option value="NL">${t('orders.countryNL')}</option>
-                <option value="IT">${t('orders.countryIT')}</option>
-                <option value="ES">${t('orders.countryES')}</option>
-                <option value="NO">${t('orders.countryNO')}</option>
-                <option value="CH">${t('orders.countryCH')}</option>
-                <option value="AU">${t('orders.countryAU')}</option>
-                <option value="NZ">${t('orders.countryNZ')}</option>
-                <option value="SG">${t('orders.countrySG')}</option>
-                <option value="CL">${t('orders.countryCL')}</option>
-              </select>
-              <svg class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5l3 3 3-3" stroke="#666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
-          </div>
-          <div class="mb-5">
-            <label class="block text-[13px] font-semibold text-(--color-text-body,#333) mb-2">${t('orders.taxNumber')} <span class="text-[#e53935]">*</span></label>
-            <input type="text" class="th-input th-input-md" placeholder="${t('orders.enterTaxNumber')}" />
-          </div>
-          <div class="mb-5">
-            <label class="block text-[13px] font-semibold text-(--color-text-body,#333) mb-2">${t('orders.fullRegistrationName')} <span class="text-[#e53935]">*</span></label>
-            <input type="text" class="th-input th-input-md" placeholder="${t('orders.enterFullRegistrationName')}" />
-          </div>
-        </div>
-        <div class="px-6 pt-4 pb-5 flex justify-end gap-3 border-t border-(--color-border-light,#f0f0f0)">
-          <button class="os-modal__btn os-modal__btn--primary px-6 py-2.5 text-sm font-medium rounded-[20px] cursor-pointer border-none transition-all bg-(--color-cta-primary,#333333) text-white hover:bg-(--color-cta-primary-hover,#1f1f1f)">${t('orders.verify')}</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ═══ MODAL: Gümrük muayenesi bilgileri ═══ -->
-    <div class="os-modal hidden fixed inset-0 z-[9999] items-center justify-center" id="customs-modal">
-      <div class="os-modal__overlay absolute inset-0 bg-black/45"></div>
-      <div class="os-modal__dialog relative bg-(--color-surface,#fff) rounded-md w-[480px] max-w-[calc(100vw-32px)] max-h-[calc(100vh-64px)] overflow-y-auto shadow-[0_20px_60px_rgba(0,0,0,0.2)]" style="animation: osModalIn 200ms ease-out">
-        <div class="flex items-center justify-between px-6 pt-5 pb-4 border-b border-(--color-border-light,#f0f0f0)">
-          <h3 class="text-base font-semibold text-(--color-text-heading,#111827)">${t('orders.customsInspectionInfo')}</h3>
-          <button class="os-modal__close bg-transparent border-none cursor-pointer p-1 rounded flex items-center justify-center transition-colors hover:bg-(--color-surface-raised,#f5f5f5)" aria-label="${t('common.close')}">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M12 4L4 12M4 4l8 8" stroke="#666" stroke-width="1.5" stroke-linecap="round"/></svg>
-          </button>
-        </div>
-        <div class="px-6 py-5">
-          <div class="flex items-start gap-2.5 px-3.5 py-3 bg-primary-50 border border-primary-200 rounded-md text-[13px] text-primary-800 leading-normal mb-5">
-            <svg class="shrink-0 mt-px" width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#E8912D" stroke-width="1.5"/><path d="M8 5v3m0 2.5h.01" stroke="#E8912D" stroke-width="1.5" stroke-linecap="round"/></svg>
-            <span>${t('orders.customsTaxInfoNotice')}</span>
-          </div>
-
-          <div class="mb-5">
-            <label class="block text-[13px] font-semibold text-(--color-text-body,#333) mb-2">${t('orders.taxpayerType')} <span class="text-[#e53935]">*</span></label>
-            <div class="flex flex-col gap-2.5">
-              <label class="os-modal__radio flex items-center gap-2 text-sm text-(--color-text-body,#333) cursor-pointer">
-                <input type="radio" name="customs-type" value="business" checked class="hidden" />
-                <span class="os-modal__radio-custom w-[18px] h-[18px] border-2 border-(--color-border-medium,#d1d5db) rounded-full shrink-0 relative transition-colors"></span>
-                ${t('orders.business')}
-              </label>
-              <label class="os-modal__radio flex items-center gap-2 text-sm text-(--color-text-body,#333) cursor-pointer">
-                <input type="radio" name="customs-type" value="personal" class="hidden" />
-                <span class="os-modal__radio-custom w-[18px] h-[18px] border-2 border-(--color-border-medium,#d1d5db) rounded-full shrink-0 relative transition-colors"></span>
-                ${t('orders.personal')}
-              </label>
-            </div>
-          </div>
-          <div class="mb-5">
-            <label class="block text-[13px] font-semibold text-(--color-text-body,#333) mb-2">${t('orders.einLabel')} <span class="text-[#e53935]">*</span></label>
-            <input type="text" class="th-input th-input-md" placeholder="${t('orders.enterEin')}" />
-          </div>
-          <div class="flex items-start gap-1.5 text-xs text-(--color-text-placeholder,#999) leading-normal mb-1">
-            <svg class="shrink-0 mt-px" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1a4 4 0 00-4 4v2H2a1 1 0 00-1 1v4a1 1 0 001 1h10a1 1 0 001-1V8a1 1 0 00-1-1h-1V5a4 4 0 00-4-4zm-2 4a2 2 0 114 0v2H5V5z" fill="#999"/></svg>
-            <span>${t('orders.privacyNotice')} <a href="#" class="text-(--color-cta-primary,#333333) no-underline hover:underline">${t('orders.privacyPolicy')}</a> ${t('orders.privacyNoticeEnd')}</span>
-          </div>
-          <label class="os-modal__checkbox flex items-start gap-2.5 text-[13px] text-(--color-text-body,#333) leading-normal cursor-pointer mt-4">
-            <input type="checkbox" class="hidden" />
-            <span class="os-modal__checkbox-custom w-4 h-4 border-2 border-(--color-border-medium,#d1d5db) rounded-[3px] shrink-0 mt-0.5 relative transition-all"></span>
-            <span>${t('orders.customsConsentText')}</span>
-          </label>
-        </div>
-        <div class="px-6 pt-4 pb-5 flex justify-end gap-3 border-t border-(--color-border-light,#f0f0f0)">
-          <button class="os-modal__btn os-modal__btn--cancel px-6 py-2.5 text-sm font-medium rounded-[20px] cursor-pointer transition-all bg-(--color-surface,#fff) text-(--color-text-body,#333) border border-(--color-border-medium,#d1d5db) hover:border-[#999]">${t('common.cancel')}</button>
-          <button class="os-modal__btn os-modal__btn--primary px-6 py-2.5 text-sm font-medium rounded-[20px] cursor-pointer border-none transition-all bg-(--color-cta-primary,#333333) text-white hover:bg-(--color-cta-primary-hover,#1f1f1f)">${t('common.save')}</button>
-        </div>
-      </div>
-    </div>
   `;
 }
 
