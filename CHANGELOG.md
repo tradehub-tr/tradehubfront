@@ -1,3 +1,61 @@
+## [v1.1.3-rc.26] - 2026-04-13 RC
+
+Bu surum rc.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat:HelpCenterHeader'a dil seçici bileşenini ekleyin ve yardım merkezi sayfalarına entegre edin. (@TurksabYonetim)
+- feat: sipariş başarı yönlendirmesini uygula, vitrin arayüz bileşenlerini güncelle ve i18n yerelleştirme dosyalarını temizle (@TurksabYonetim)
+- feat(seller_storefront): ana ürün kaydırıcısı ve bölüm kaydı işlevselliği eklendi seller front  detaylı değişilik yapıldı ve footerdaki bottomdaki çalışmayan linkler düzeltildi (@TurksabYonetim)
+- feat: footer'daki tüm bilgi sayfaları (iade politikası, kargo (@TurksabYonetim)
+- feat: Ticaret Güvencesi, kargo lojistiği ve satış sonrası sayfaları eklendi (@TurksabYonetim)
+- feat: Satıcı vitrinleri için URL hash tabanlı gezinme ve dinamik para birimi desteğini uygula. (@boraydeger32)
+- feat: Telefon alanı etiketini İngilizce ve Türkçe yerelleştirme dosyalarına eklendi. (@boraydeger32)
+- feat: Beden gruplarıyla çoklu varyant desteği eklendi, sepet servisi API’si güncellendi ve ürün CTA butonları yeniden tasarlandı (@boraydeger32)
+- feat: Sepet çekmecesinde beden varyant desteği eklendi, CSRF token yönetimi güncellendi ve sepete ekleme servisine varyanta özel alanlar eklendi (@boraydeger32)
+- feat: export getCsrfToken function to retrieve current token or default value (@TurksabYonetim)
+- feat: add GitHub Pages deployment workflow for ahmet branch and update CI permissions (@TurksabYonetim)
+- feat: configure CORS headers and SameSite cookie flags for API proxy in nginx.conf (@TurksabYonetim)
+- feat: add preview.istoc.com to allowed CORS origins in nginx configuration (@TurksabYonetim)
+- feat: add admin-preview.istoc.com to CORS allowed origins in nginx configuration (@TurksabYonetim)
+- feat: apply red background color to login submit button (@TurksabYonetim)
+- feat(RFQ): Sabit kodlanmış ürünler dinamik API çağrılarıyla değiştirildi. (@Ali)
+- feat(RFQ): Ürün kartındaki liste bilgilerini kullanarak RFQ formu önceden otomatik doldurtuluyor (@Ali)
+- feat(auth): add email verification banners to login page, password visibility toggles to settings, and email verify slide to dashboard (@TurksabYonetim)
+- feat: implement media URL rewriting to support backend routing on GitHub Pages (@TurksabYonetim)
+- feat: alıcı adres defteri ve backend API entegrasyonu (@boraydeger32)
+- feat: alıcı adres defteri ve backend API entegrasyonu (@TurksabYonetim)
+- feat(Search): Ürün listeleme sayfası filtre sidebar'ı, arama ve sayfalama implementasyonu yapıldı (@TurksabYonetim)
+- feat(Search): Ürün listeleme sayfası filtre sidebar'ı, arama ve sayfalama implementasyonu yapıldı (@TurksabYonetim)
+- feat(Search): Sidebar filtre sertifika bölümleri yönetim/ürün olarak ayrıldı (@TurksabYonetim)
+- feat(Search): Sidebar filtre sertifika bölümleri yönetim/ürün olarak ayrıldı (@TurksabYonetim)
+- feat(storefront): UI düzeltmeleri, kişiselleştirilmiş öneriler ve dinamik sayfalar (@TurksabYonetim)
+- feat(top-deals): Mağaza ön yüzüne “En İyi Fırsatlar” için arka uç iş akışı eklendi (@aliiball)
+
+### Duzeltildi
+- fix: Dockerfile ARG'leri local Docker için relative URL yapıldı. (@Ali)
+- fix(ci): release changelog'da yanlış kullanıcı etiketlenmesini düzelt (@TurksabYonetim)
+- fix: update auth-guard redirects to use dynamic base URL (@TurksabYonetim)
+- fix(RFQ): RFQ formunun önceden doldurulması için ad yerine kategori UUID'si kullanıldı (@Ali)
+- fix(RFQ): Kategori ön doldurmasını düzeltmek için "productCategoryId" değeri mapper aracılığıyla aktarıldı (@TurksabYonetim)
+- fix: correct typo in deployment workflow name (@TurksabYonetim)
+- fix: prevent duplicate CORS headers by hiding backend-provided headers in nginx proxy configuration (@TurksabYonetim)
+- fix: products.ts merge conflict çözüldü (filter engine yaklaşımı korundu) (@boraydeger32)
+- fix: products.ts merge conflict çözüldü (filter engine yaklaşımı korundu) (@TurksabYonetim)
+- fix(header): Popover ve mega menü UI düzeltmeleri + Ticari Güvence Sistemi logo eklemesi yapıldı. (@TurksabYonetim)
+- fix(header): Popover ve mega menü UI düzeltmeleri + Ticari Güvence Sistemi logo eklemesi yapıldı. (@TurksabYonetim)
+- fix(ci): prevent silent deploy failures with set -e and git reset (@ahmeetseker)
+- fix(top-ranking): alt kategori seçiminde ana kategori tab'ı aktif hale getirildi. (@aliiball)
+
+### Degistirildi
+- refactor: make API base URL configurable via window.API_BASE across all fetch requests (@TurksabYonetim)
+- refactor: Ürün bileşenlerindeki (ProductCard, ProductList, SearchBar vb.) (@TurksabYonetim)
+- refactor: Ürün bileşenlerindeki (ProductCard, ProductList, SearchBar vb.) (@TurksabYonetim)
+- refactor: Buton stilleri global tema sınıflarıyla bileşenler genelinde standartlaştırıldı (@TurksabYonetim)
+- refactor: Buton stilleri global tema sınıflarıyla bileşenler genelinde standartlaştırıldı (@TurksabYonetim)
+- refactor: "Trade Assurance" ifadesini "Ticari Güvence" olarak yeniden adlandır ve uygulama genelinde footer kart düzenini güncelle (@TurksabYonetim)
+- refactor: Input, checkbox ve quantity bileşenlerini tema token sistemine taşı (v4)   style.css'e input/form field (hover, focus, disabled, error state),    checkbox/radio ve quantity stepper CSS değişkenleri eklendi  - 55+ bileşendeki inline Tailwind input sınıfları th-input / th-input-sm/md/lg                                                       tema sınıflarıyla değiştirildi                                                      - Hardcoded renk fallback'leri (--color-text-heading, --color-text-muted vb.) (@TurksabYonetim)
+
+---
 ## [v1.1.3-rc.25] - 2026-04-10 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
