@@ -39,6 +39,8 @@ const tr = {
       loadMore: 'Daha fazla yükle',
       error: 'Bir hata oluştu.',
       rateLimitError: 'Çok fazla istek gönderildi. Lütfen birkaç dakika sonra tekrar deneyin.',
+      moq: 'MSA: {{count}} {{unit}}',
+      moqUnit: 'adet',
     },
 
     // ============================================================

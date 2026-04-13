@@ -26,6 +26,17 @@ function escapeHtml(str: string): string {
     .replace(/'/g, '&#39;');
 }
 
+/** Parse numeric MOQ out of legacy backend format ("532 Nos" → 532). */
+function moqCount(moq: string | undefined): number {
+  if (!moq) return 1;
+  const m = String(moq).match(/(\d+)/);
+  return m ? parseInt(m[1], 10) || 1 : 1;
+}
+
+function moqLabel(moq: string | undefined): string {
+  return t('common.moq', { count: moqCount(moq), unit: t('common.moqUnit') });
+}
+
 /** Build the URL for a category's "Daha fazla yükle" detail page. */
 function categoryHref(group: RankingCategoryGroup): string {
   // /pages/products.html?cat=<slug> — must be the URL-friendly slug, not
@@ -67,7 +78,7 @@ export function renderRankingGroupCard(group: RankingCategoryGroup): string {
         </div>
         <div class="mt-1.5">
           <p class="text-sm font-semibold text-text-primary">${formatPrice(product.price)}</p>
-          <p class="text-xs text-text-tertiary mt-0.5">MOQ: ${safeMoq}</p>
+          <p class="text-xs text-text-tertiary mt-0.5">${escapeHtml(moqLabel(safeMoq))}</p>
         </div>
       </a>
     `;
@@ -114,8 +125,8 @@ export function renderRankingFlatCard(product: RankedProduct): string {
         />
       </div>
       <p class="text-sm font-semibold text-text-primary">${formatPrice(product.price)}</p>
-      <p class="text-xs text-text-tertiary mt-0.5 truncate">MOQ: ${safeMoq}</p>
       <p class="text-xs text-text-secondary mt-1 line-clamp-2 min-h-[2.4em]">${safeProductName}</p>
+      <p class="text-xs text-text-tertiary mt-0.5 truncate">${escapeHtml(moqLabel(safeMoq))}</p>
     </a>
   `;
 }

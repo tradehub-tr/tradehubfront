@@ -33,16 +33,35 @@ function renderProductImage(imgSrc: string, name: string): string {
   `;
 }
 
+/** Parse the numeric MOQ count out of a string like "532 Nos" or "1 adet".
+ *  Backend formats this field for legacy consumers; cards re-format via i18n. */
+function moqCount(moq: string | undefined): number {
+  if (!moq) return 1;
+  const m = String(moq).match(/(\d+)/);
+  return m ? parseInt(m[1], 10) || 1 : 1;
+}
+
+function moqLabel(moq: string | undefined): string {
+  return t('common.moq', { count: moqCount(moq), unit: t('common.moqUnit') });
+}
+
 /** Single product card used by both All and per-category tabs. */
 export function renderTopDealsFlatCard(product: TopDealsProduct): string {
+  const hasDiscount = product.originalPrice && product.discountPercent && product.discountPercent > 0;
   return `
-    <a href="${product.href}" class="group/product flex flex-col bg-surface border border-border-default rounded-md p-3 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200">
+    <a href="${product.href}" class="group/product flex flex-col bg-surface border border-border-default rounded-md p-3 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 relative">
       <div class="relative aspect-square w-full overflow-hidden rounded-md bg-surface-raised mb-2">
         ${renderProductImage(product.imageSrc || '', product.name)}
+        ${hasDiscount ? `
+          <span class="absolute top-1.5 left-1.5 inline-flex items-center bg-red-500 text-white text-[11px] font-bold px-1.5 py-0.5 rounded">%${product.discountPercent}</span>
+        ` : ''}
       </div>
-      <p class="text-sm font-semibold text-text-primary">${formatPrice(product.price)}</p>
-      <p class="text-xs text-text-tertiary mt-0.5 truncate">MOQ: ${product.moq}</p>
+      <div class="flex items-baseline gap-1.5 flex-wrap">
+        <span class="text-sm font-semibold text-text-primary">${formatPrice(product.price)}</span>
+        ${hasDiscount ? `<span class="text-xs text-gray-400 line-through">${product.originalPrice}</span>` : ''}
+      </div>
       <p class="text-xs text-text-secondary mt-1 line-clamp-2 min-h-[2.4em]">${product.name}</p>
+      <p class="text-xs text-text-tertiary mt-0.5 truncate">${moqLabel(product.moq)}</p>
     </a>
   `;
 }

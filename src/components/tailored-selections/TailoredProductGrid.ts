@@ -5,7 +5,12 @@
  */
 
 import { formatPrice } from '../../utils/currency';
+import { t } from '../../i18n';
 import type { TailoredProduct } from '../../types/tailoredSelections';
+
+function moqLabel(count: number): string {
+  return t('common.moq', { count: count || 1, unit: t('common.moqUnit') });
+}
 
 function renderStarRating(rating: number, count: number): string {
     const fullStars = Math.floor(rating);
@@ -32,7 +37,7 @@ function renderStarRating(rating: number, count: number): string {
 
 export function renderProductCard(product: TailoredProduct, index: number): string {
     const safeName = product.name.replace(/"/g, '&quot;');
-    const moqText = `MOQ: ${product.moqCount}`;
+    const moqText = moqLabel(product.moqCount || 1);
 
     return `
     <a
@@ -91,18 +96,13 @@ export function renderProductCard(product: TailoredProduct, index: number): stri
         <!-- Price row -->
         <div class="flex flex-wrap items-baseline gap-1.5">
           <span class="text-base font-bold text-gray-900">${formatPrice(product.price)}</span>
-          <span class="text-xs text-gray-500">${moqText}</span>
-        </div>
-
-        <!-- Original price + discount -->
-        ${product.originalPrice ? `
-          <div class="flex items-center gap-1.5">
+          ${product.originalPrice ? `
             <span class="text-xs text-gray-400 line-through">${product.originalPrice}</span>
-            ${product.discountPercent ? `
-              <span class="text-xs font-semibold text-orange-600">${product.discountPercent}% off</span>
-            ` : ''}
-          </div>
-        ` : ''}
+          ` : ''}
+          ${product.discountPercent ? `
+            <span class="text-xs font-semibold text-orange-600">%${product.discountPercent} indirim</span>
+          ` : ''}
+        </div>
 
         <!-- Tags section -->
         <div class="flex flex-col gap-0.5 mt-0.5">
@@ -139,6 +139,9 @@ export function renderProductCard(product: TailoredProduct, index: number): stri
         ${product.viewCount ? `
           <div class="text-[11px] text-gray-400 mt-0.5">${product.viewCount} views</div>
         ` : ''}
+
+        <!-- MOQ (en altta) -->
+        <p class="text-[11px] text-gray-500 mt-1">${moqText}</p>
       </div>
     </a>
   `;

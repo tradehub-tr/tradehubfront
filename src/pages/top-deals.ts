@@ -62,14 +62,22 @@ const PAGE_SIZE = 24  // products per page in both All and per-category tabs
 /* ── Mappers ─────────────────────────────────────────────────────────── */
 
 function cardToTopDealsProduct(card: ProductListingCard): TopDealsProduct {
+  // card.discount formatı: "%20 indirim" veya "%X off" → sayıyı ayır
+  let discountPercent: number | undefined = undefined
+  if (typeof card.discount === 'string') {
+    const m = card.discount.match(/(\d+)/)
+    if (m) discountPercent = parseInt(m[1], 10) || undefined
+  }
   return {
     id: card.id || '',
     name: card.name,
     href: card.href || `/pages/product-detail.html?id=${card.id}`,
     price: card.price,
+    originalPrice: card.originalPrice,
     imageKind: 'jewelry' as const,
     imageSrc: card.imageSrc || undefined,
     moq: card.moq || '1 adet',
+    discountPercent,
     category: card.category || '',
   }
 }

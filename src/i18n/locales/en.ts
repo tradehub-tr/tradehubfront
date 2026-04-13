@@ -39,6 +39,8 @@ const en = {
       loadMore: 'Load more',
       error: 'An error occurred.',
       rateLimitError: 'Too many requests. Please try again in a few minutes.',
+      moq: 'MOQ: {{count}} {{unit}}',
+      moqUnit: 'pieces',
     },
 
     // ============================================================
