@@ -25,34 +25,39 @@ import { FloatingPanel } from '../components/floating'
 import { startAlpine } from '../alpine'
 
 // Tailored Selections components
-import { TailoredSelectionsHero, initTailoredSelectionsHero, TailoredProductGrid, renderTailoredProductCard } from '../components/tailored-selections'
+import { TailoredSelectionsHero, initTailoredSelectionsHero, renderTailoredHeroCategories, TailoredProductGrid, renderTailoredProductCard } from '../components/tailored-selections'
 
 // Services
-import { searchListings, getTailoredGroupDetail } from '../services/listingService'
+import { searchListings, getTailoredGroupDetail, getTailoredSelections } from '../services/listingService'
 import { initCurrency } from '../services/currencyService'
 
 // Data
-import { getTailoredCategories } from '../data/mockTailoredSelections'
-import type { TailoredProduct } from '../types/tailoredSelections'
+import type { TailoredProduct, TailoredCategory } from '../types/tailoredSelections'
 
 // Utilities
 import { initAnimatedPlaceholder } from '../utils/animatedPlaceholder'
 
 /* ── Data ── */
 
-// Hero categories are editorial content (curated images, descriptions, colors) — kept static
-const categories = getTailoredCategories();
-// Products are loaded from API below
+// Hero kategorileri API'den async yüklenir. İlk render'da boş başlatılır,
+// loadHero() çağrısı sonrası swiper slide'larına inject edilir.
+const categories: TailoredCategory[] = [];
 const products: TailoredProduct[] = [];
 
-/* ── Category Pills HTML ── */
+// Kategori slug'ına göre deterministik hero background color seçer.
+// Mock data'daki bgColor alanının yerini alır.
+const BG_COLORS = ['#373224', '#1e3a2e', '#3b2e1a', '#2a1f3b', '#1a2e3b', '#3b1a2a', '#2a3b1a', '#1a3b2a', '#3b1a3a'];
+function colorForSlug(slug: string): string {
+  let hash = 0;
+  for (let i = 0; i < slug.length; i++) {
+    hash = ((hash << 5) - hash + slug.charCodeAt(i)) | 0;
+  }
+  return BG_COLORS[Math.abs(hash) % BG_COLORS.length];
+}
 
-const categoryPillsHtml = categories.map(cat => `
-  <button class="ts-cat-pill flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-xs font-medium text-gray-700 shrink-0 transition-colors" data-cat-id="${cat.id}">
-    <img src="${cat.imageSrc}" alt="" class="w-7 h-7 rounded object-cover" loading="lazy" />
-    <span class="whitespace-nowrap">${cat.title}</span>
-  </button>
-`).join('');
+/* ── Category Pills HTML ──
+   Mobile sticky header'daki küçük pill çubuğu. API sonrası doldurulur. */
+const categoryPillsHtml = '';
 
 /* ── Breadcrumb ── */
 
@@ -151,7 +156,7 @@ startAlpine();
 initHeaderCart();
 initMobileDrawer();
 initLanguageSelector();
-initTailoredSelectionsHero();
+// initTailoredSelectionsHero() — API yanıtı geldikten sonra çağırılır (loadHeroAndInit içinde)
 initAnimatedPlaceholder('#topbar-compact-search-input');
 initTailoredScrollBehavior();
 
@@ -159,13 +164,14 @@ initTailoredScrollBehavior();
 
 // URL parametreleri: ?category=SLUG&subcategory=SLUG
 const urlParams = new URLSearchParams(window.location.search);
-const categorySlug = urlParams.get('category');
+const initialCategorySlug = urlParams.get('category');
 const subCategorySlug = urlParams.get('subcategory') || undefined;
 
-// Pagination state
+// Pagination + aktif seçim state'i
+let activeCategorySlug: string | null = initialCategorySlug;
+let activeSubCategory: string | undefined = subCategorySlug;
 let currentPage = 1;
 let hasNextPage = false;
-let activeSubCategory: string | undefined = subCategorySlug;
 const PAGE_SIZE = 20;
 
 function toTailoredProduct(p: any): TailoredProduct {
@@ -247,8 +253,8 @@ function renderSubCategoryPills(subs: Array<{ slug: string; name: string }>): vo
 
 async function loadPage(page: number, reset: boolean): Promise<void> {
   try {
-    if (categorySlug) {
-      const result = await getTailoredGroupDetail(categorySlug, {
+    if (activeCategorySlug) {
+      const result = await getTailoredGroupDetail(activeCategorySlug, {
         subcategory: activeSubCategory,
         page,
         pageSize: PAGE_SIZE,
@@ -265,7 +271,7 @@ async function loadPage(page: number, reset: boolean): Promise<void> {
       }
       renderLoadMoreButton();
     } else {
-      // Fallback: kategori param yoksa genel popüler ürünler
+      // Fallback: hiç kategori yoksa (cold-start edge) genel popüler ürünler
       const result = await searchListings({ page, page_size: PAGE_SIZE });
       currentPage = page;
       hasNextPage = result.hasNext;
@@ -280,7 +286,78 @@ async function loadPage(page: number, reset: boolean): Promise<void> {
   }
 }
 
-initCurrency().then(() => loadPage(1, true));
+/* ── Hero yükleme + aktif kategori yönetimi (SPA davranışı) ── */
+
+function setActiveCategory(slug: string, pushUrl: boolean): void {
+  if (slug === activeCategorySlug) return;
+  activeCategorySlug = slug;
+  activeSubCategory = undefined;
+  currentPage = 1;
+  if (pushUrl) {
+    const newUrl = `${window.location.pathname}?category=${encodeURIComponent(slug)}`;
+    history.pushState({ category: slug }, '', newUrl);
+  }
+  loadPage(1, true);
+}
+
+async function loadHeroAndInit(): Promise<void> {
+  try {
+    const result = await getTailoredSelections(9);
+    const cats: TailoredCategory[] = (result.groups || []).map(g => ({
+      id: g.categoryId,
+      slug: g.slug,
+      title: g.name,
+      titleKey: '',
+      description: g.editorialText || '',
+      descriptionKey: '',
+      imageSrc: g.image || '',
+      bgColor: colorForSlug(g.slug),
+      badge: g.badge,
+    }));
+
+    if (cats.length === 0) {
+      // Hero verisi yoksa — fallback genel grid
+      loadPage(1, true);
+      return;
+    }
+
+    // URL'de kategori yoksa listedeki ilk kategoriyi aktif yap
+    if (!activeCategorySlug) {
+      activeCategorySlug = cats[0].slug || null;
+    }
+
+    // Hero slide'larını swiper-wrapper'a inject et
+    const wrapper = document.querySelector('.ts-hero-swiper .swiper-wrapper');
+    if (wrapper) {
+      wrapper.innerHTML = renderTailoredHeroCategories(cats);
+    }
+
+    // Swiper init — slide değişimi / tıklama → setActiveCategory
+    initTailoredSelectionsHero({
+      onCategoryChange: (slug) => setActiveCategory(slug, true),
+    });
+
+    // İlk grid yüklemesi
+    loadPage(1, true);
+
+    // Mobile/desktop categories ref — sticky pills vb. için de veri tutalım (şimdilik kullanılmıyor)
+    categories.push(...cats);
+  } catch (err) {
+    console.warn('[TailoredSelections] hero load failed:', err);
+    loadPage(1, true);
+  }
+}
+
+// Tarayıcı back/forward tuşu — popstate dinleyicisi
+window.addEventListener('popstate', () => {
+  const params = new URLSearchParams(window.location.search);
+  const slug = params.get('category');
+  if (slug && slug !== activeCategorySlug) {
+    setActiveCategory(slug, false);
+  }
+});
+
+initCurrency().then(() => loadHeroAndInit());
 
 /* ── Scroll-based header & category pills behavior ── */
 

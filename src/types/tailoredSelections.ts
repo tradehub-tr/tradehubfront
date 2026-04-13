@@ -1,11 +1,13 @@
 export interface TailoredCategory {
     id: string;
+    slug?: string;
     title: string;
     titleKey: string;
     description: string;
     descriptionKey: string;
     imageSrc: string;
     bgColor: string;
+    badge?: 'personal' | 'trend' | 'quality' | null;
 }
 
 export interface TailoredProduct {

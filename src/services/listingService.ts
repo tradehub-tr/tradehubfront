@@ -645,6 +645,8 @@ export interface TailoredGroup {
   image: string
   parent: string | null
   viewsCount: number
+  editorialText: string
+  badge: 'personal' | 'trend' | 'quality' | null
   products: ProductListingCard[]
 }
 
@@ -693,6 +695,8 @@ export async function getTailoredSelections(limit = 9): Promise<TailoredSelectio
       image: g.image,
       parent: g.parent,
       viewsCount: (g as any).viewsCount || 0,
+      editorialText: (g as any).editorialText || '',
+      badge: (g as any).badge || null,
       products: (g.products || []).map(mapListingCard),
     })),
   }

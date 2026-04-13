@@ -5,6 +5,7 @@ export interface TopDealsProduct {
   name: string;
   href: string;
   price: string;
+  originalPrice?: string;
   imageKind: ProductImageKind;
   imageSrc?: string;
   moq: string;
