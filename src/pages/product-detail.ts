@@ -183,8 +183,8 @@ async function renderProductPage() {
                 <div id="pd-hero-gallery" class="w-full">
                   ${ProductImageGallery()}
                 </div>
-                ${RelatedProducts()}
                 ${ProductTabs()}
+                ${RelatedProducts()}
               </div>
               <div id="pd-hero-info" class="w-full xl:flex xl:flex-col">
                 ${ProductInfo()}

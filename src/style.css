@@ -1919,6 +1919,24 @@
     height: auto;
 }
 
+/* Related Products (tabs layout) — product detail */
+.rp-tab {
+    position: relative;
+}
+.rp-tab.rp-tab-active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: var(--pd-tab-active-border, #cc9900);
+}
+.rp-card {
+    text-decoration: none;
+    color: inherit;
+}
+
 /* Mobile sticky bottom bar visibility now controlled by Tailwind classes in product-detail.ts */
 
 /* ProductTabs — inside left column (no container-boxed) */

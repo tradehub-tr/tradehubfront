@@ -150,6 +150,138 @@ export async function getRelatedListings(listingId: string, limit = 8): Promise<
   return (response.message.data || []).map(mapListingCard)
 }
 
+// ── Related Products Grouped (Benzer/İkame/Tamamlayıcı/Aksesuar) ──
+
+export type RelatedRelationType = 'similar' | 'substitute' | 'complementary' | 'accessory'
+
+export interface RelatedListingsGrouped {
+  similar: ProductListingCard[]
+  substitute: ProductListingCard[]
+  complementary: ProductListingCard[]
+  accessory: ProductListingCard[]
+}
+
+/**
+ * Fetch grouped related listings for the 4-tab Related Products section.
+ *
+ * Hits the real backend endpoint. If the endpoint is unreachable (offline
+ * dev, backend restarting), falls back to dummy data so the storefront
+ * keeps rendering — this is also what makes the `?demo_related=…` URL
+ * override useful for frontend-only sanity checks.
+ */
+export async function getRelatedListingsGrouped(
+  listingId: string
+): Promise<RelatedListingsGrouped> {
+  const urlOverride = typeof window !== 'undefined'
+    ? new URLSearchParams(window.location.search).get('demo_related')
+    : null
+  if (urlOverride) {
+    // Explicit dev override always wins so screenshots/sanity checks stay
+    // reproducible even when backend has different data.
+    return getDummyRelatedGrouped(listingId)
+  }
+
+  try {
+    const response = await api<FrappeResponse<RelatedListingsGrouped>>(
+      `/method/tradehub_core.api.listing.get_related_listings_grouped?listing_id=${encodeURIComponent(listingId)}`
+    )
+    const data = response.message?.data
+    if (data && typeof data === 'object') {
+      return {
+        similar: Array.isArray(data.similar) ? data.similar.map(mapListingCard) : [],
+        substitute: Array.isArray(data.substitute) ? data.substitute.map(mapListingCard) : [],
+        complementary: Array.isArray(data.complementary) ? data.complementary.map(mapListingCard) : [],
+        accessory: Array.isArray(data.accessory) ? data.accessory.map(mapListingCard) : [],
+      }
+    }
+    return { similar: [], substitute: [], complementary: [], accessory: [] }
+  } catch (err) {
+    console.warn('[RelatedProducts] API unreachable, falling back to empty groups:', err)
+    return { similar: [], substitute: [], complementary: [], accessory: [] }
+  }
+}
+
+function getDummyRelatedGrouped(_listingId: string): RelatedListingsGrouped {
+  // URL-level scenario override (debugging aid, not used by real users)
+  const scenario =
+    typeof window !== 'undefined'
+      ? new URLSearchParams(window.location.search).get('demo_related') || 'all'
+      : 'all'
+
+  const all = buildDummyAllFilled()
+  if (scenario === 'none') {
+    return { similar: [], substitute: [], complementary: [], accessory: [] }
+  }
+  if (scenario === 'one') {
+    return { similar: [], substitute: [], complementary: all.complementary, accessory: [] }
+  }
+  if (scenario === 'partial') {
+    return { similar: [], substitute: all.substitute, complementary: [], accessory: all.accessory }
+  }
+  return all
+}
+
+function dummyCard(
+  id: string,
+  name: string,
+  price: string,
+  originalPrice: string | undefined,
+  discount: string | undefined,
+  moq: string,
+  sold: string,
+  years: number,
+  country: string,
+  imageKind: string
+): ProductListingCard {
+  return {
+    id,
+    name,
+    href: `/pages/product-detail.html?id=${id}`,
+    price,
+    originalPrice,
+    discount,
+    moq,
+    stats: sold,
+    imageKind: imageKind as ProductListingCard['imageKind'],
+    supplierYears: years,
+    supplierCountry: country,
+    verified: true,
+  }
+}
+
+function buildDummyAllFilled(): RelatedListingsGrouped {
+  return {
+    similar: [
+      dummyCard('LST-R-S01', 'Kırmızı Erkek Kazak - XL', '₺750,00', '₺890,00', '15%', '50 adet', '120+ satıldı', 3, 'TR', 'clothing'),
+      dummyCard('LST-R-S02', 'Triko Kazak Pamuk Karışımı', '₺820,00', undefined, undefined, '30 adet', '80+ satıldı', 5, 'TR', 'clothing'),
+      dummyCard('LST-R-S03', 'Lacivert V Yaka Kazak', '₺690,00', '₺770,00', '10%', '20 adet', '200+ satıldı', 2, 'TR', 'clothing'),
+      dummyCard('LST-R-S04', 'Yarım Balıkçı Örme Kazak', '₺880,00', undefined, undefined, '25 adet', '45+ satıldı', 7, 'IT', 'clothing'),
+      dummyCard('LST-R-S05', 'Oversize Boğazlı Kazak', '₺920,00', '₺1.150,00', '20%', '15 adet', '60+ satıldı', 1, 'TR', 'clothing'),
+      dummyCard('LST-R-S06', 'Hardal Sarısı Kalın Triko', '₺780,00', undefined, undefined, '40 adet', '35+ satıldı', 4, 'TR', 'clothing'),
+      dummyCard('LST-R-S07', 'Fitilli İnce Yün Kazak', '₺710,00', '₺770,00', '8%', '30 adet', '90+ satıldı', 6, 'TR', 'clothing'),
+      dummyCard('LST-R-S08', 'Çizgili Bisiklet Yaka Kazak', '₺640,00', undefined, undefined, '50 adet', '110+ satıldı', 2, 'CN', 'clothing'),
+    ],
+    substitute: [
+      dummyCard('LST-R-U01', 'Polar Erkek Sweatshirt', '₺550,00', '₺625,00', '12%', '40 adet', '300+ satıldı', 6, 'TR', 'clothing'),
+      dummyCard('LST-R-U02', 'İnce Hırka - Yün Karışımı', '₺720,00', undefined, undefined, '20 adet', '50+ satıldı', 3, 'TR', 'clothing'),
+      dummyCard('LST-R-U03', 'Sweat Kapüşonlu Üst', '₺480,00', '₺585,00', '18%', '60 adet', '500+ satıldı', 8, 'TR', 'clothing'),
+      dummyCard('LST-R-U04', 'Kalın Pamuklu Tişört', '₺380,00', undefined, undefined, '100 adet', '1K+ satıldı', 4, 'CN', 'clothing'),
+    ],
+    complementary: [
+      dummyCard('LST-R-C01', 'Kot Pantolon Slim Fit', '₺920,00', undefined, undefined, '30 adet', '150+ satıldı', 5, 'TR', 'clothing'),
+      dummyCard('LST-R-C02', 'Kargo Pantolon Haki', '₺870,00', '₺970,00', '10%', '25 adet', '75+ satıldı', 4, 'TR', 'clothing'),
+      dummyCard('LST-R-C03', 'Örgü Atkı Seti', '₺210,00', undefined, undefined, '50 adet', '220+ satıldı', 2, 'TR', 'accessory'),
+      dummyCard('LST-R-C04', 'Klasik Yün Bere', '₺150,00', '₺158,00', '5%', '60 adet', '300+ satıldı', 6, 'TR', 'accessory'),
+      dummyCard('LST-R-C05', 'Deri Kemer - Kahverengi', '₺320,00', undefined, undefined, '40 adet', '90+ satıldı', 3, 'IT', 'accessory'),
+    ],
+    accessory: [
+      dummyCard('LST-R-A01', 'Sökülebilir Yaka Süsü', '₺80,00', undefined, undefined, '100 adet', '40+ satıldı', 1, 'TR', 'accessory'),
+      dummyCard('LST-R-A02', 'Kazak Bakım Seti - Tüy Alıcı + Sprey', '₺120,00', undefined, undefined, '80 adet', '60+ satıldı', 2, 'TR', 'packaging'),
+      dummyCard('LST-R-A03', 'Düğme Değişim Kiti', '₺45,00', '₺48,00', '7%', '200 adet', '25+ satıldı', 1, 'TR', 'tools'),
+    ],
+  }
+}
+
 /**
  * Get featured listings for homepage
  */
