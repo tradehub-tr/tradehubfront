@@ -18,6 +18,7 @@ export interface CartSku {
   unit: string;
   quantity: number;
   minQty: number;
+  sellInMoqMultiples?: boolean;
   maxQty: number;
   selected: boolean;
   baseUnitPrice: number;

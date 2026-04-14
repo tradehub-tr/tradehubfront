@@ -223,6 +223,16 @@ document.addEventListener('view-mode-change', (e: Event) => {
   setGridViewMode((e as CustomEvent).detail.mode);
 });
 
+// Close mobile filter drawer when user presses the global "Ara" (Apply) button
+document.addEventListener('filter-apply', (e: Event) => {
+  const source = (e.target as HTMLElement | null)?.closest('[data-filter-prefix-root]');
+  if (!source || source.getAttribute('data-filter-prefix-root') !== 'mobile') return;
+  const hideBtn = document.querySelector<HTMLElement>(
+    '[data-drawer-hide="filter-sidebar-drawer"]'
+  );
+  hideBtn?.click();
+});
+
 // Initialize shipping modal
 initShippingModal();
 

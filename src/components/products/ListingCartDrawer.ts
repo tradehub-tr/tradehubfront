@@ -44,11 +44,15 @@ function toDrawerItem(product: ProductDetail): CartDrawerItemModel {
     supplierName: product.supplier.name,
     unit: product.unit,
     moq: product.moq,
+    sellInMoqMultiples: !!product.sellInMoqMultiples,
     imageKind: 'jewelry',
+    currency: product.baseCurrency || 'USD',
+    samplePrice: product.baseSamplePrice ?? product.samplePrice,
     priceTiers: product.priceTiers.map((tier) => ({
       minQty: tier.minQty,
       maxQty: tier.maxQty,
       price: tier.price,
+      rawPrice: tier.basePrice,
     })),
     colors: toColors(product),
     sizeGroups: product.variants

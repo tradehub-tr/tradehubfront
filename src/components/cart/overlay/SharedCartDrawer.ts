@@ -52,6 +52,7 @@ export interface CartDrawerItemModel {
   supplierName: string;
   unit: string;
   moq: number;
+  sellInMoqMultiples?: boolean;
   imageKind: ProductImageKind;
   priceTiers: CartDrawerTierModel[];
   colors: CartDrawerColorModel[];
@@ -315,21 +316,19 @@ function renderPriceSectionHtml(totals: ReturnType<typeof getTotals>): string {
 /** Renders color thumbnail as a chip (small, horizontal). */
 function renderColorChip(color: CartDrawerColorModel, isSelected: boolean): string {
   const selectedStyle = isSelected
-    ? 'border-text-heading bg-text-heading'
+    ? 'border-text-heading bg-surface ring-1 ring-text-heading'
     : 'border-border-default bg-surface hover:border-text-secondary';
 
   const thumb = color.imageUrl
     ? `<img src="${color.imageUrl}" alt="${escapeHtml(color.label)}" class="w-7 h-7 rounded-full object-cover shrink-0" loading="lazy" />`
-    : `<span class="w-5 h-5 rounded-full shrink-0 border border-white/30" style="background:${color.colorHex};"></span>`;
-
-  const labelColor = isSelected ? 'text-surface' : 'text-text-heading';
+    : `<span class="w-5 h-5 rounded-full shrink-0 border border-border-default" style="background:${color.colorHex || '#e5e5e5'};"></span>`;
 
   return `
     <button type="button"
       data-color-chip="${escapeHtml(color.id)}"
-      class="inline-flex items-center gap-1.5 px-2 py-1.5 rounded-lg border transition-all ${selectedStyle}">
+      class="inline-flex items-center gap-1.5 px-2 py-1.5 rounded-lg border transition-all text-text-heading ${selectedStyle}">
       ${thumb}
-      <span class="text-xs font-medium ${labelColor} max-w-[72px] truncate">${escapeHtml(color.label)}</span>
+      <span class="text-xs font-medium max-w-[72px] truncate">${escapeHtml(color.label)}</span>
     </button>
   `;
 }
@@ -427,14 +426,46 @@ function renderDrawerBody(): void {
 
     ${sizeSection}
 
-    <div class="mt-5 mb-2 rounded-md border border-border-default p-5">
-      <div class="flex items-start justify-between gap-3">
-        <div>
-          <h5 class="text-base font-bold text-text-heading">${t('cart.shipping')}</h5>
-          <p class="mt-2 text-sm text-text-secondary">${t('cart.shippingNegotiate')}</p>
-        </div>
-        <button type="button" data-shipping-change class="text-base font-semibold text-cta-primary hover:text-cta-primary-hover hover:underline">${t('cart.changeShipping')} ›</button>
+    <div class="mt-4 mb-2 rounded-md border border-border-default overflow-hidden bg-surface">
+      <div class="flex items-center gap-2.5 px-4 pt-3 pb-2">
+        <span
+          class="shrink-0 w-8 h-8 rounded-full inline-flex items-center justify-center"
+          style="background: var(--color-primary-50, #fdf3dd); color: var(--color-primary-600, #b88600);"
+          aria-hidden="true"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 7h11v10H3z"/>
+            <path d="M14 10h4l3 4v3h-7"/>
+            <circle cx="7.5" cy="18.5" r="1.75"/>
+            <circle cx="17.5" cy="18.5" r="1.75"/>
+          </svg>
+        </span>
+        <h5 class="text-[15px] font-bold text-text-heading leading-tight">${t('cart.shipping')}</h5>
       </div>
+
+      <p class="px-4 pb-3 text-[13px] leading-snug text-text-secondary">
+        ${t('cart.shippingNegotiate')}
+      </p>
+
+      <div class="mx-4 border-t border-dashed border-border-default"></div>
+
+      <button
+        type="button"
+        data-shipping-change
+        class="group w-full flex items-center justify-between gap-3 px-4 py-2.5 transition-colors hover:bg-surface-muted focus:outline-none focus-visible:bg-surface-muted"
+      >
+        <span class="text-[13px] font-semibold text-cta-primary">${t('cart.changeShippingLong')}</span>
+        <span
+          class="shrink-0 w-6 h-6 rounded-full inline-flex items-center justify-center transition-transform duration-200 group-hover:translate-x-0.5"
+          style="background: var(--color-primary-500, #cc9900); color: #ffffff;"
+          aria-hidden="true"
+        >
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"/>
+            <path d="M13 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </button>
     </div>
   `;
 }
@@ -814,7 +845,7 @@ async function dispatchCartAdd(): Promise<boolean> {
 
 // ─── Open drawer ──────────────────────────────────────────────────────────────
 
-function openDrawer(itemId?: string, mode: 'cart' | 'sample' = 'cart'): void {
+function openDrawer(itemId?: string, mode: 'cart' | 'sample' = 'cart', preselectedColor?: string, preselectedSize?: string): void {
   const item = itemId ? productsById.get(itemId) : Array.from(productsById.values())[0];
   if (!item) return;
 
@@ -823,17 +854,41 @@ function openDrawer(itemId?: string, mode: 'cart' | 'sample' = 'cart'): void {
   state.selectedShippingIndex = 0;
   state.footerExpanded = false;
 
-  // Color: select first chip by default
-  state.selectedColorId = item.colors[0]?.id ?? '';
-  state.previewColorIndex = 0;
+  // Color: prefer preselected (by id or label), fallback to first chip
+  let preselectedIndex = -1;
+  if (preselectedColor) {
+    const needle = preselectedColor.toLowerCase();
+    preselectedIndex = item.colors.findIndex(
+      (c) => c.id === preselectedColor || c.label.toLowerCase() === needle
+    );
+  }
+  if (preselectedIndex < 0) preselectedIndex = 0;
+  state.selectedColorId = item.colors[preselectedIndex]?.id ?? '';
+  state.previewColorIndex = Math.max(0, preselectedIndex);
 
-  // Sizes: all start at 0
+  // Sample mode → user picks one size manually (all start 0); cart mode → seed first/selected size with MOQ
+  const initialQty = mode === 'sample' ? 1 : Math.max(1, item.moq || 1);
+  let targetSizeId: string | undefined;
+  if (mode !== 'sample') {
+    if (preselectedSize) {
+      const sizeNeedle = preselectedSize.toLowerCase();
+      for (const group of item.sizeGroups) {
+        const match = group.options.find(
+          (o) => o.id === preselectedSize || o.label.toLowerCase() === sizeNeedle
+        );
+        if (match) { targetSizeId = match.id; break; }
+      }
+    }
+    if (!targetSizeId) targetSizeId = item.sizeGroups[0]?.options[0]?.id;
+  }
   state.sizeQuantities = new Map(
-    item.sizeGroups.flatMap((g) => g.options.map((o) => [o.id, 0]))
+    item.sizeGroups.flatMap((g) =>
+      g.options.map((o) => [o.id, targetSizeId && o.id === targetSizeId ? initialQty : 0])
+    )
   );
 
-  // No-variant qty
-  state.noVariantQty = 0;
+  // No-variant qty: sample → 1, cart → MOQ
+  state.noVariantQty = (item.sizeGroups.length === 0) ? initialQty : 0;
 
   const heading = document.getElementById('shared-cart-heading');
   if (heading) {
@@ -1030,20 +1085,35 @@ export function initSharedCartDrawer(items: CartDrawerItemModel[]): void {
         ? state.noVariantQty
         : (state.sizeQuantities.get(sizeId) ?? 0);
 
+      const moq = Math.max(1, state.item?.moq || 1);
+      const step = (state.mode !== 'sample' && state.item?.sellInMoqMultiples) ? moq : 1;
+
       if (action === 'plus') {
         if (state.mode === 'sample') {
           const totalQty = getTotalQty();
           if (totalQty >= 1) { showSampleMaxToast(); return; }
         }
-        const next = current + 1;
+        const next = current + step;
         if (isNoVariant) state.noVariantQty = next;
         else state.sizeQuantities.set(sizeId, next);
       }
 
       if (action === 'minus') {
-        const next = Math.max(0, current - 1);
-        if (isNoVariant) state.noVariantQty = next;
-        else state.sizeQuantities.set(sizeId, next);
+        if (state.mode === 'sample') {
+          const next = Math.max(0, current - 1);
+          if (isNoVariant) state.noVariantQty = next;
+          else state.sizeQuantities.set(sizeId, next);
+        } else {
+          if (isNoVariant) {
+            state.noVariantQty = Math.max(moq, current - step);
+          } else {
+            const othersSum = Array.from(state.sizeQuantities.entries())
+              .filter(([id]) => id !== sizeId)
+              .reduce((a, [, b]) => a + b, 0);
+            const minForThis = Math.max(0, moq - othersSum);
+            state.sizeQuantities.set(sizeId, Math.max(minForThis, current - step));
+          }
+        }
       }
 
       rerenderDrawer();
@@ -1064,6 +1134,24 @@ export function initSharedCartDrawer(items: CartDrawerItemModel[]): void {
     const isNoVariant = sizeId === '__no_variant__';
     let nextValue = Number(input.value);
     if (Number.isNaN(nextValue) || nextValue < 0) nextValue = 0;
+
+    const moq = Math.max(1, state.item?.moq || 1);
+    if (state.mode !== 'sample') {
+      if (isNoVariant) {
+        nextValue = Math.max(moq, nextValue);
+      } else {
+        const othersSum = Array.from(state.sizeQuantities.entries())
+          .filter(([id]) => id !== sizeId)
+          .reduce((a, [, b]) => a + b, 0);
+        const minForThis = Math.max(0, moq - othersSum);
+        nextValue = Math.max(minForThis, nextValue);
+      }
+      // MOQ katlarıyla satış aktifse yukarı yuvarla
+      if (state.item?.sellInMoqMultiples && moq > 1 && nextValue > 0 && nextValue % moq !== 0) {
+        nextValue = Math.ceil(nextValue / moq) * moq;
+      }
+      input.value = String(nextValue);
+    }
 
     if (state.mode === 'sample') {
       const othersTotal = isNoVariant
@@ -1155,8 +1243,8 @@ export function initSharedCartDrawer(items: CartDrawerItemModel[]): void {
 
 // ─── Public API ───────────────────────────────────────────────────────────────
 
-export function openSharedCartDrawer(itemId?: string, mode: 'cart' | 'sample' = 'cart'): void {
-  openDrawer(itemId, mode);
+export function openSharedCartDrawer(itemId?: string, mode: 'cart' | 'sample' = 'cart', preselectedColor?: string, preselectedSize?: string): void {
+  openDrawer(itemId, mode, preselectedColor, preselectedSize);
 }
 
 export function setOnItemMissing(cb: ((id: string, mode: 'cart' | 'sample') => Promise<void>) | null): void {
@@ -1180,10 +1268,14 @@ export function openSharedShippingModal(quantity?: number): void {
     state.previewColorIndex = 0;
     state.footerExpanded = false;
     state.selectedColorId = fallback.colors[0]?.id ?? '';
+    const fallbackMoq = Math.max(1, fallback.moq || 1);
+    const fallbackFirstId = fallback.sizeGroups[0]?.options[0]?.id;
     state.sizeQuantities = new Map(
-      fallback.sizeGroups.flatMap((g) => g.options.map((o) => [o.id, 0]))
+      fallback.sizeGroups.flatMap((g) =>
+        g.options.map((o) => [o.id, o.id === fallbackFirstId ? fallbackMoq : 0])
+      )
     );
-    state.noVariantQty = 0;
+    state.noVariantQty = fallbackMoq;
   }
   updateShippingModal(quantity);
   setShippingModalOpen(true);

@@ -189,6 +189,9 @@ export function initCategoryBrowse(): void {
   // Close handlers
   closeBtn.addEventListener('click', closePopup);
   overlay.addEventListener('click', closePopup);
+  panel.addEventListener('click', (e) => {
+    if (!(e.target as HTMLElement).closest('#cat-popup-sheet')) closePopup();
+  });
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closePopup();
   });

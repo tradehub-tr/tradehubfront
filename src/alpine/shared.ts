@@ -136,20 +136,28 @@ Alpine.data('quantityInput', (props: { value: number; min: number; max: number; 
 
   decrement() {
     const current = this.value || this.min;
-    this.value = Math.min(Math.max(current - this.step, this.min), this.max);
+    const target = current - this.step;
+    const snapped = this.step > 1 ? Math.floor(target / this.step) * this.step : target;
+    this.value = Math.min(Math.max(snapped, this.min), this.max);
     this.$dispatch('quantity-change', { id: this.id, value: this.value });
   },
 
   increment() {
     const current = this.value || this.min;
-    this.value = Math.min(Math.max(current + this.step, this.min), this.max);
+    const target = current + this.step;
+    const snapped = this.step > 1 ? Math.ceil(target / this.step) * this.step : target;
+    this.value = Math.min(Math.max(snapped, this.min), this.max);
     this.$dispatch('quantity-change', { id: this.id, value: this.value });
   },
 
   clampAndDispatch() {
     const input = (this.$refs as Record<string, HTMLInputElement>).input;
     const raw = Number(input.value);
-    this.value = Math.min(Math.max(Number.isNaN(raw) ? this.min : raw, this.min), this.max);
+    let next = Number.isNaN(raw) ? this.min : raw;
+    if (this.step > 1 && next > 0 && next % this.step !== 0) {
+      next = Math.ceil(next / this.step) * this.step;
+    }
+    this.value = Math.min(Math.max(next, this.min), this.max);
     this.$dispatch('quantity-change', { id: this.id, value: this.value });
   },
 }));

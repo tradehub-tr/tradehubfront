@@ -94,10 +94,9 @@ export function ProductInfo(): string {
   return `
     <div id="product-info">
       <div id="pd-info-scrollable">
-        <!-- Wholesale / Customization Tabs -->
+        <!-- Wholesale Tab -->
         <div id="pd-card-tabs">
           <button type="button" class="pd-card-tab active">${t('product.wholesaleSales')}</button>
-          <button type="button" class="pd-card-tab">${t('product.customization')}</button>
         </div>
 
         <!-- Ready to Ship Badge -->
@@ -182,15 +181,22 @@ export function initProductInfo(): void {
     });
   });
 
+  const getSelectedVariantLabels = (): { color: string; size: string } => {
+    const activeColorBtn = document.querySelector<HTMLButtonElement>('.variant-group[data-variant-type="color"] .variant-option.active');
+    const activeSizeBtn = document.querySelector<HTMLButtonElement>('.variant-group:not([data-variant-type="color"]) .variant-option.active');
+    return {
+      color: activeColorBtn?.getAttribute('data-variant-label') || '',
+      size: activeSizeBtn?.getAttribute('data-variant-label') || '',
+    };
+  };
+
   // "Seçim yap" link → open cart drawer
   const makeSelectionLink = document.querySelector<HTMLAnchorElement>('#pd-variations-section a[href="#"]');
   if (makeSelectionLink) {
     makeSelectionLink.addEventListener('click', (e) => {
       e.preventDefault();
-      // Find the currently selected color variant label
-      const activeColorBtn = document.querySelector<HTMLButtonElement>('.variant-group[data-variant-type="color"] .variant-option.active');
-      const colorLabel = activeColorBtn?.getAttribute('data-variant-label') || '';
-      openCartDrawer(colorLabel);
+      const { color, size } = getSelectedVariantLabels();
+      openCartDrawer(color, size);
     });
   }
 
@@ -228,8 +234,8 @@ export function initProductInfo(): void {
         }
 
         // Open cart drawer with the selected variant pre-selected
-        const clickedLabel = btn.getAttribute('data-variant-label') || '';
-        openCartDrawer(clickedLabel);
+        const { color, size } = getSelectedVariantLabels();
+        openCartDrawer(color, size);
       });
     });
   });

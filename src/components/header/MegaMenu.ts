@@ -464,6 +464,25 @@ export function initMegaMenu(): void {
 
   if (!megaMenu || triggers.length === 0 || !views) return;
 
+  // Mark the trigger whose mega view contains the current page as persistently active.
+  // Uses the `.active` class (not `--active`) so close() does not strip it.
+  const pageToTarget: Record<string, string> = {};
+  featureCards.forEach((c) => { pageToTarget[c.href] = 'featured'; });
+  protectionCards.forEach((c) => { pageToTarget[c.href] = 'protections'; });
+  pageToTarget['/pages/info/trade-assurance-detail.html'] = 'protections';
+  buyerCentralColumns.forEach((col) => {
+    col.links.forEach((l) => { pageToTarget[l.href] = 'buyer-central'; });
+  });
+  const currentPath = window.location.pathname;
+  const activeTarget = pageToTarget[currentPath];
+  if (activeTarget) {
+    triggers.forEach((t) => {
+      if (t.getAttribute('data-mega-target') === activeTarget) {
+        t.classList.add('active');
+      }
+    });
+  }
+
   let isOpen = false;
   let closeTimer: number | null = null;
   let activeView: string | null = null;

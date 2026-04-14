@@ -293,33 +293,36 @@ function renderRadioOption(option: StoreReviewFilter, sectionId: string, idPrefi
  */
 function renderPriceRange(section: PriceRangeFilterSection): string {
   return `
-    <div class="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto] items-center gap-2 mt-2">
+    <div class="flex items-center gap-1.5 mt-2">
       <input
         type="number"
         placeholder="${t('products.filterMin')}"
         min="0"
-        class="th-input th-input-sm min-w-0"
+        class="th-input th-input-sm flex-1 min-w-0 w-0 px-2 text-[13px]"
         style="border-color: var(--filter-input-border, #d1d5db); color: var(--filter-text-color, #374151);"
         data-filter-section="${section.id}"
         data-filter-type="min"
+        @keydown.enter="applySection('${section.id}')"
       />
-      <span class="text-gray-400">-</span>
+      <span class="text-gray-400 text-[13px] shrink-0">-</span>
       <input
         type="number"
         placeholder="${t('products.filterMax')}"
         min="0"
-        class="th-input th-input-sm min-w-0"
+        class="th-input th-input-sm flex-1 min-w-0 w-0 px-2 text-[13px]"
         style="border-color: var(--filter-input-border, #d1d5db); color: var(--filter-text-color, #374151);"
         data-filter-section="${section.id}"
         data-filter-type="max"
+        @keydown.enter="applySection('${section.id}')"
       />
       <button
         type="button"
-        class="th-btn th-btn-sm whitespace-nowrap"
+        class="shrink-0 w-8 h-8 flex items-center justify-center rounded bg-primary-500 hover:bg-primary-600 text-white text-base font-semibold leading-none border border-primary-500 hover:border-primary-600 transition-colors cursor-pointer"
+        aria-label="${t('products.filterApply')}"
         data-filter-section="${section.id}"
         data-filter-action="apply"
-        @click="$dispatch('filter-change')"
-      >${t('products.filterOk')}</button>
+        @click="applySection('${section.id}')"
+      >&rsaquo;</button>
     </div>
   `;
 }
@@ -329,27 +332,29 @@ function renderPriceRange(section: PriceRangeFilterSection): string {
  */
 function renderMinOrder(section: MinOrderFilterSection): string {
   return `
-    <div class="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-2 mt-2">
+    <div class="flex items-center gap-1.5 mt-2">
       <input
         type="number"
         placeholder="${t('products.filterQuantity')}"
         min="1"
-        class="th-input th-input-sm min-w-0"
+        class="th-input th-input-sm flex-1 min-w-0 w-0 px-2 text-[13px]"
         style="border-color: var(--filter-input-border, #d1d5db); color: var(--filter-text-color, #374151);"
         data-filter-section="${section.id}"
         data-filter-type="value"
+        @keydown.enter="applySection('${section.id}')"
       />
       <span
-        class="text-[12px] whitespace-nowrap"
+        class="text-[12px] whitespace-nowrap shrink-0"
         style="color: var(--filter-text-color, #6b7280);"
       >${section.filter.unit}</span>
       <button
         type="button"
-        class="th-btn th-btn-sm whitespace-nowrap"
+        class="shrink-0 w-8 h-8 flex items-center justify-center rounded bg-primary-500 hover:bg-primary-600 text-white text-base font-semibold leading-none border border-primary-500 hover:border-primary-600 transition-colors cursor-pointer"
+        aria-label="${t('products.filterApply')}"
         data-filter-section="${section.id}"
         data-filter-action="apply"
-        @click="$dispatch('filter-change')"
-      >${t('products.filterOk')}</button>
+        @click="applySection('${section.id}')"
+      >&rsaquo;</button>
     </div>
   `;
 }
@@ -615,37 +620,51 @@ export function FilterSidebar(sections?: FilterSection[], idPrefix = ''): string
     ? `filterSidebar({${collapsedEntries.join(', ')}})`
     : 'filterSidebar';
 
+  const isMobile = idPrefix === 'mobile';
+
   return `
     <aside
-      class="w-full lg:w-60 xl:w-64 flex-shrink-0"
+      class="w-full lg:w-60 xl:w-64 flex-shrink-0 rounded-md border flex flex-col"
       aria-label="Product filters"
       x-data="${xDataArg}"
+      data-filter-prefix-root="${idPrefix || 'desktop'}"
+      style="background: var(--filter-bg, #ffffff); border-color: var(--filter-border-color, #e5e7eb);"
     >
-      <div
-        class="sticky top-[120px] p-4 rounded-md border"
-        style="background: var(--filter-bg, #ffffff); border-color: var(--filter-border-color, #e5e7eb);"
-      >
-        <!-- Header -->
+      <!-- Header: title + inline Clear link -->
+      <div class="flex items-center justify-between px-4 pt-4 pb-2">
         <h2
-          class="text-[15px] font-bold mb-2"
+          class="text-[15px] font-bold"
           style="color: var(--filter-heading-color, #111827);"
         >${t('products.filters')}</h2>
+        <button
+          type="button"
+          class="text-[12px] font-medium transition-colors hover:underline"
+          style="color: var(--filter-count-color, #6b7280);"
+          data-filter-action="clear-all"
+          @click="clearAllFilters()"
+        >${t('products.filterClearAll')}</button>
+      </div>
 
+      <!-- Filter sections (natural flow, no internal scroll) -->
+      <div class="px-4 pb-2">
         <!-- Trade Assurance (special section with icon) -->
         ${tradeAssurance ? renderTradeAssuranceSection(idPrefix) : ''}
 
         <!-- Other filter sections -->
         ${otherSections.map(section => renderFilterSection(section, idPrefix)).join('')}
+      </div>
 
-        <!-- Clear All Filters Button -->
+      <!-- Sahibinden-style: sticks to viewport bottom while sidebar is visible -->
+      <div
+        class="${isMobile ? '' : 'lg:sticky lg:bottom-0 z-10'} px-4 py-3 border-t"
+        style="background: var(--filter-bg, #ffffff); border-color: var(--filter-divider-color, #e5e7eb);"
+      >
         <button
           type="button"
-          class="th-btn-outline th-btn-sm w-full mt-4 py-2 text-[13px] font-medium"
-          data-filter-action="clear-all"
-          @click="clearAllFilters()"
-        >
-          ${t('products.filterClearAll')}
-        </button>
+          class="w-full py-2.5 rounded-md bg-primary-500 hover:bg-primary-600 text-white text-sm font-semibold border border-primary-500 hover:border-primary-600 transition-colors cursor-pointer"
+          data-filter-action="apply-all"
+          @click="applyFilters()"
+        >${t('products.filterApply')}</button>
       </div>
     </aside>
   `;
@@ -745,8 +764,17 @@ export function initFilterSidebar(query?: string, category?: string): void {
           }).join('');
         });
       }
-    }).catch(() => {
-      // Silently fail — sidebar shows without dynamic data
+    }).catch((err) => {
+      console.warn('[FilterSidebar] getFilterFacets failed:', err);
+      // Replace skeleton with "no results" so user knows the load finished
+      document.querySelectorAll<HTMLElement>('[data-filter-dynamic]').forEach(container => {
+        container.innerHTML = `<p class="text-xs" style="color:#9ca3af">${t('products.noResults')}</p>`;
+      });
+    });
+  }).catch((err) => {
+    console.warn('[FilterSidebar] listingService import failed:', err);
+    document.querySelectorAll<HTMLElement>('[data-filter-dynamic]').forEach(container => {
+      container.innerHTML = `<p class="text-xs" style="color:#9ca3af">${t('products.noResults')}</p>`;
     });
   });
 }
