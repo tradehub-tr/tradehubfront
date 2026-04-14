@@ -14,6 +14,7 @@ import type { ProductVariant } from '../../types/product';
 import { openShippingModal, openCartDrawer } from './CartDrawer';
 import { openLoginModal } from './LoginModal';
 import { renderStars } from './ProductReviews';
+import { RelatedProducts } from './RelatedProducts';
 
 // Product loaded lazily — getCurrentProduct() called inside functions
 
@@ -337,6 +338,9 @@ export function MobileProductLayout(): string {
       <!-- Supplier / Recommendations section -->
       <div id="pdm-sec-supplier">
         ${supplierSection}
+        <div class="px-3 pb-4">
+          ${RelatedProducts()}
+        </div>
       </div>
     </div>
     ${sheets}
