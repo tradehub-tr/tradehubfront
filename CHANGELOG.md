@@ -1,3 +1,16 @@
+## [v1.1.4-rc.10] - 2026-04-14 RC
+
+Bu surum rc.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(tailored): "Size Özel Seçimler" landing bloğu ve detay sayfası API'ye bağlandı. (@aliiball)
+- feat(tailored): Detay sayfası hero carousel'i API'ye bağla + SPA davranışı yapıldı. (@aliiball)
+- feat(product-detail): İlgili Ürünler 4-tab section'ı (Benzer/İkame/Tamamlayıcı/Aksesuar) (@aliiball)
+
+### Duzeltildi
+- fix(tailored-hero): Coverflow+loop atlamalarını rewind ile çözüldü. (@aliiball)
+
+---
 ## [v1.1.4-rc.9] - 2026-04-14 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
