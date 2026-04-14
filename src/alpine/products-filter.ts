@@ -3,12 +3,21 @@ import Alpine from 'alpinejs'
 Alpine.data('filterSidebar', (initialCollapsed: Record<string, boolean> = {}) => ({
   collapsed: { ...initialCollapsed } as Record<string, boolean>,
   lastRadioValue: {} as Record<string, string | null>,
+  isDirty: false as boolean,
 
   init() {
     (this.$el as HTMLElement).querySelectorAll<HTMLInputElement>('[data-filter-section][type="radio"]').forEach((radio) => {
       const section = radio.dataset.filterSection ?? '';
       if (radio.checked) this.lastRadioValue[section] = radio.value;
       else if (!(section in this.lastRadioValue)) this.lastRadioValue[section] = null;
+    });
+    // Mark dirty when user types into any filter input (price / min-order)
+    (this.$el as HTMLElement).addEventListener('input', (e) => {
+      const t = e.target as HTMLInputElement;
+      if (!t.dataset?.filterSection) return;
+      if (t.type === 'number' || (t.type === 'text' && t.dataset.filterType !== 'search')) {
+        this.isDirty = true;
+      }
     });
   },
 
@@ -41,6 +50,19 @@ Alpine.data('filterSidebar', (initialCollapsed: Record<string, boolean> = {}) =>
     });
   },
 
+  /** Arrow button next to price/min-order: commit this section immediately */
+  applySection(_sectionId: string) {
+    this.isDirty = false;
+    this.$dispatch('filter-change');
+  },
+
+  /** Global "Ara" footer button: commit all pending filters */
+  applyFilters() {
+    this.isDirty = false;
+    this.$dispatch('filter-change');
+    this.$dispatch('filter-apply');
+  },
+
   clearAllFilters() {
     (this.$el as HTMLElement).querySelectorAll<HTMLInputElement>('[data-filter-section]').forEach((input) => {
       if (input.type === 'checkbox' || input.type === 'radio') {
@@ -53,6 +75,7 @@ Alpine.data('filterSidebar', (initialCollapsed: Record<string, boolean> = {}) =>
       label.style.display = '';
     });
     for (const key in this.lastRadioValue) this.lastRadioValue[key] = null;
+    this.isDirty = false;
     this.$dispatch('filter-change');
   },
 }));

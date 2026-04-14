@@ -65,7 +65,7 @@ export function SkuRow({ sku, productHref }: SkuRowProps): string {
         <div class="mt-3 flex items-end justify-between gap-3 flex-wrap">
           ${PriceDisplay({ amount: sku.unitPrice, fromCurrency: sku.baseCurrency || 'USD', unit: `/${sku.unit}` })}
           <div class="flex flex-col items-end ${unavailable ? 'pointer-events-none opacity-50' : ''}">
-            ${QuantityInput({ id: `sku-qty-${sku.id}`, value: sku.quantity, min: 1, max: sku.maxQty })}
+            ${QuantityInput({ id: `sku-qty-${sku.id}`, value: sku.quantity, min: sku.minQty || 1, max: sku.maxQty, step: sku.sellInMoqMultiples ? (sku.minQty || 1) : 1 })}
             ${!unavailable ? `<span class="sc-c-sku-line-total mt-1 text-[12px] font-semibold text-[#555]">${formatPrice(sku.unitPrice * sku.quantity, sku.baseCurrency || 'USD')}</span>` : ''}
             ${!unavailable ? `<div class="sc-c-sku-moq-warning mt-2 text-right text-[14px] leading-[20px] text-[#dc2626] hidden">
               <span class="sc-c-sku-moq-missing">0</span> more required to check out

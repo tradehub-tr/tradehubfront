@@ -592,7 +592,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                 <!-- CTA Butonlari -->
                 <div class="space-y-2.5">
                   <button
-                    class="w-full bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white text-[13px] font-semibold rounded-full py-2.5 transition-colors"
+                    class="w-full bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white text-[13px] font-semibold rounded-[var(--radius-button)] py-2.5 transition-colors"
                     @click="showInquiryModal = true">
                     Simdi iletisime gecin
                   </button>

@@ -120,6 +120,7 @@ export interface ProductDetail {
   priceMin?: number;
   priceMax?: number;
   moq: number;
+  sellInMoqMultiples?: boolean;
   unit: string;
   leadTime: string;
   shipping: ShippingInfo[];

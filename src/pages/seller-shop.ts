@@ -167,7 +167,7 @@ async function renderPage() {
                       <span class="text-[10px] text-[#999] font-medium">ile</span>
                     </div>
                     <button
-                      class="bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white text-[12px] font-medium rounded-md px-5 py-2 transition-all whitespace-nowrap hover:shadow-sm"
+                      class="bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white text-[12px] font-medium rounded-[var(--radius-button)] px-5 py-2 transition-all whitespace-nowrap hover:shadow-sm"
                       @click="switchPage('contacts')">
                       Tedarikçiye Ulasin
                     </button>
@@ -183,7 +183,7 @@ async function renderPage() {
             <!-- Mobile CTA -->
             <div class="flex sm:hidden gap-2 mt-4">
               <button
-                class="flex-1 bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white text-[12px] font-medium rounded-md py-2 transition-all"
+                class="flex-1 bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white text-[12px] font-medium rounded-[var(--radius-button)] py-2 transition-all"
                 @click="switchPage('contacts')">
                 Tedarikçiye Ulasin
               </button>

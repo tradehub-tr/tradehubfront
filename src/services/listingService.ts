@@ -643,10 +643,12 @@ function mapListingDetail(raw: any): ProductDetail {
   const variants: ProductVariant[] = (raw.variants || []).map((v: any) => {
     const nameLower = (v.name || '').toLowerCase()
     let type: 'color' | 'size' | 'material' = 'material'
-    if (v.type === 'image' || nameLower.includes('renk') || nameLower.includes('color')) {
+    if (nameLower.includes('renk') || nameLower.includes('color') || nameLower.includes('colour')) {
       type = 'color'
-    } else if (nameLower.includes('boyut') || nameLower.includes('size') || nameLower.includes('uzunlu')) {
+    } else if (nameLower.includes('beden') || nameLower.includes('boyut') || nameLower.includes('size') || nameLower.includes('uzunlu')) {
       type = 'size'
+    } else if (v.type === 'image') {
+      type = 'color'
     }
     return {
       type,
@@ -733,6 +735,7 @@ function mapListingDetail(raw: any): ProductDetail {
     priceTiers,
     ...derivePriceRange(raw, priceTiers, variants, baseCur),
     moq: raw.moq || 1,
+    sellInMoqMultiples: !!raw.sellInMoqMultiples,
     unit: raw.unit || 'adet',
     leadTime: raw.leadTime || '',
     shipping,

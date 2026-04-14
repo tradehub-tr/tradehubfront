@@ -86,9 +86,11 @@ function toDrawerItem(product: ProductDetail, context?: CartDrawerContext | null
     supplierName: product.supplier.name,
     unit,
     moq,
+    sellInMoqMultiples: !!product.sellInMoqMultiples,
     imageKind: 'jewelry',
     currency: product.baseCurrency || 'USD',
     priceTiers: tiers,
+    samplePrice: product.baseSamplePrice ?? product.samplePrice,
     colors: toColors(product),
     sizeGroups: toSizeGroups(product),
     shippingOptions: toShippingOptions(product),
@@ -103,10 +105,10 @@ export function setCartDrawerContext(context: CartDrawerContext | null): void {
   currentContext = context;
 }
 
-export function openCartDrawer(_preselectedColor?: string): void {
+export function openCartDrawer(preselectedColor?: string, preselectedSize?: string): void {
   const item = buildActiveItem();
   initSharedCartDrawer([item]);
-  openSharedCartDrawer(item.id);
+  openSharedCartDrawer(item.id, 'cart', preselectedColor, preselectedSize);
 }
 
 export function CartDrawer(): string {

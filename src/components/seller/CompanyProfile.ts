@@ -886,7 +886,7 @@ function ContactSidebar(): string {
 
         <!-- CTA Buttons -->
         <div class="flex flex-col gap-3 mb-5">
-          <button @click="setTab('contact')" class="w-full bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white font-semibold py-3 px-4 rounded-full transition-colors text-[14px] shadow-sm company-profile__contact-btn">
+          <button @click="setTab('contact')" class="w-full bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white font-semibold py-3 px-4 rounded-[var(--radius-button)] transition-colors text-[14px] shadow-sm company-profile__contact-btn">
             ${t('seller.sf.contactNow')}
           </button>
           <button @click="setTab('contact')" class="th-btn-outline w-full text-gray-900 font-medium py-3 px-4 text-[14px] company-profile__inquiry-btn">
@@ -907,7 +907,7 @@ function ContactSidebar(): string {
 
     <!-- Mobile Contact Bar (shown on small screens) -->
     <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 z-50 flex gap-3 shadow-lg">
-      <button @click="setTab('contact')" class="flex-1 bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white font-semibold py-2.5 px-4 rounded-full transition-colors text-[14px]">
+      <button @click="setTab('contact')" class="flex-1 bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white font-semibold py-2.5 px-4 rounded-[var(--radius-button)] transition-colors text-[14px]">
         ${t('seller.sf.contactNow')}
       </button>
       <button @click="setTab('contact')" class="th-btn-outline flex-1 text-gray-900 font-medium py-2.5 px-4 text-[14px]">

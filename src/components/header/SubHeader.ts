@@ -60,11 +60,13 @@ function renderNavigationLinks(): string {
  * Generates the right-side utility links
  */
 function renderUtilityLinks(): string {
+  const helpHref = '/pages/help/help-center.html';
+  const helpActive = window.location.pathname === helpHref;
   return `
     <div class="hidden xl:flex items-center gap-0.5">
       <a
-        href="/pages/help/help-center.html"
-        class="subheader-link th-subheader-link relative px-2 xl:px-3 py-2.5 rounded-md text-sm whitespace-nowrap dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all"
+        href="${helpHref}"
+        class="subheader-link th-subheader-link relative px-2 xl:px-3 py-2.5 rounded-md text-sm whitespace-nowrap dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all${helpActive ? ' active' : ''}"
       >
         <span data-i18n="subheader.helpCenter">${t('subheader.helpCenter')}</span>
       </a>

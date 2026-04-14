@@ -64,9 +64,9 @@ export function StoreHeader(): string {
               ${t('seller.sf.viewStore')}
             </a>
             <button
-              class="bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white text-[14px] font-semibold rounded-full transition-colors whitespace-nowrap"
+              class="bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white text-[14px] font-semibold rounded-[var(--radius-button)] transition-colors whitespace-nowrap"
               style="width: 180px; height: 40px; padding: 0px 12px;"
-              onclick="document.getElementById('contact-form')?.scrollIntoView({behavior:'smooth'})">
+              @click="setTab('contact')">
               ${t('seller.sf.contactNow')}
             </button>
           </div>
@@ -138,13 +138,13 @@ export function StoreHeader(): string {
             <!-- Mobile CTA buttons — stacked below header -->
             <div class="flex flex-col lg:hidden gap-2 px-4 py-3 sm:px-6">
               <a :href="'/pages/seller/seller-shop.html?seller=' + (seller?.seller_code || '')"
-                 class="w-full inline-flex items-center justify-center gap-1.5 py-2.5 border-(length:--btn-outline-border-width) border-(--btn-outline-border-color) rounded-full bg-(--btn-outline-bg) text-[13px] font-medium text-(--btn-outline-text) hover:bg-(--btn-outline-hover-bg) hover:text-(--btn-outline-hover-text) transition-colors">
+                 class="w-full inline-flex items-center justify-center gap-1.5 py-2.5 border-(length:--btn-outline-border-width) border-(--btn-outline-border-color) rounded-[var(--radius-button)] bg-(--btn-outline-bg) text-[13px] font-medium text-(--btn-outline-text) hover:bg-(--btn-outline-hover-bg) hover:text-(--btn-outline-hover-text) transition-colors">
                 ${storeIcon}
                 ${t('seller.sf.viewStore')}
               </a>
               <button
-                class="w-full py-2.5 bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white text-[13px] font-semibold rounded-full transition-colors"
-                onclick="document.getElementById('contact-form')?.scrollIntoView({behavior:'smooth'})">
+                class="w-full py-2.5 bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white text-[13px] font-semibold rounded-[var(--radius-button)] transition-colors"
+                @click="setTab('contact')">
                 ${t('seller.sf.contactNow')}
               </button>
             </div>
