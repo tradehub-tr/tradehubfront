@@ -432,17 +432,25 @@ function ReviewsTab(): string {
         reviews: [],
         total: 0,
         loading: true,
+        isAuthenticated: false,
+        csrfToken: '',
+        form: { rating: 0, hoverRating: 0, comment: '', submitting: false, error: '' },
+        toast: { show: false, message: '', type: 'success' },
         async init() {
           if (!this.sellerCode) { this.loading = false; return; }
+          const apiBase = (window.API_BASE || '/api');
           try {
-            const apiBase = (window.API_BASE || '/api');
-            const [sellerRes, reviewRes] = await Promise.all([
+            const [sellerRes, reviewRes, sessionRes] = await Promise.all([
               fetch(apiBase + '/method/tradehub_core.api.seller.get_seller?slug=' + this.sellerCode, {credentials:'omit'}).then(r=>r.json()),
-              fetch(apiBase + '/method/tradehub_core.api.seller.get_reviews?seller_code=' + this.sellerCode + '&page_size=10', {credentials:'omit'}).then(r=>r.json())
+              fetch(apiBase + '/method/tradehub_core.api.seller.get_reviews?seller_code=' + this.sellerCode + '&page_size=10', {credentials:'omit'}).then(r=>r.json()),
+              fetch(apiBase + '/method/tradehub_core.api.v1.auth.get_session_user', {credentials:'include'}).then(r=>r.json()).catch(() => ({ message: { logged_in: false } }))
             ]);
             this.seller = sellerRes.message || null;
             this.reviews = reviewRes.message?.reviews || [];
             this.total = reviewRes.message?.total || 0;
+            const sess = sessionRes?.message || {};
+            this.isAuthenticated = !!sess.logged_in;
+            this.csrfToken = sess.csrf_token || '';
           } catch(e) { console.error('Reviews fetch error', e); }
           this.loading = false;
         },
@@ -455,7 +463,41 @@ function ReviewsTab(): string {
           if (n.length <= 2) return n;
           return n[0] + '*'.repeat(Math.min(n.length - 2, 5)) + n[n.length - 1];
         },
-        ratingPct(r) { return r ? ((r / 5) * 100) + '%' : '0%'; }
+        ratingPct(r) { return r ? ((r / 5) * 100) + '%' : '0%'; },
+        setRating(n) { this.form.rating = n; this.form.error = ''; },
+        setHover(n) { this.form.hoverRating = n; },
+        showToast(msg, type) { this.toast = { show: true, message: msg, type: type || 'success' }; setTimeout(() => { this.toast.show = false; }, 3000); },
+        async submitReview() {
+          if (!this.form.rating) { this.form.error = '${t('seller.sf.ratingRequired')}'; return; }
+          const comment = (this.form.comment || '').trim();
+          if (!comment) { this.form.error = '${t('seller.sf.commentRequired')}'; return; }
+          this.form.submitting = true; this.form.error = '';
+          try {
+            const apiBase = (window.API_BASE || '/api');
+            const headers = { 'Content-Type': 'application/json', 'X-Frappe-CSRF-Token': this.csrfToken || 'None' };
+            const res = await fetch(apiBase + '/method/tradehub_core.api.seller.submit_review', {
+              method: 'POST',
+              credentials: 'include',
+              headers,
+              body: JSON.stringify({ seller_code: this.sellerCode, rating: this.form.rating, comment })
+            });
+            const data = await res.json();
+            if (!res.ok || data.exc) {
+              let msg = '${t('seller.sf.reviewError')}';
+              try { const sm = JSON.parse(data._server_messages || '[]'); if (sm.length) { const first = JSON.parse(sm[0]); msg = first.message || msg; } } catch(_) {}
+              throw new Error(msg);
+            }
+            this.form.rating = 0; this.form.comment = ''; this.form.hoverRating = 0;
+            this.showToast('${t('seller.sf.reviewSubmitted')}', 'success');
+            const reviewRes = await fetch(apiBase + '/method/tradehub_core.api.seller.get_reviews?seller_code=' + this.sellerCode + '&page_size=10', {credentials:'omit'}).then(r=>r.json());
+            this.reviews = reviewRes.message?.reviews || [];
+            this.total = reviewRes.message?.total || 0;
+          } catch(e) {
+            this.form.error = (e && e.message) ? e.message : '${t('seller.sf.reviewError')}';
+          } finally {
+            this.form.submitting = false;
+          }
+        }
       }"
     >
       <section class="bg-white rounded-md border border-gray-200 p-6">
@@ -477,7 +519,7 @@ function ReviewsTab(): string {
               <!-- Score -->
               <div class="flex flex-col items-center md:items-start">
                 <div class="text-[48px] font-bold text-gray-900 leading-none">
-                  <span x-text="seller?.average_rating ? seller.average_rating.toFixed(1) : '\u2014'"></span>
+                  <span x-text="seller?.rating ? Number(seller.rating).toFixed(1) : '\u2014'"></span>
                   <span class="text-[16px] text-gray-500 font-normal">/5</span>
                 </div>
                 <div class="text-[14px] text-amber-600 font-semibold mt-1">${t('seller.sf.satisfied')}</div>
@@ -489,28 +531,75 @@ function ReviewsTab(): string {
                 <div class="flex items-center gap-3">
                   <span class="text-[13px] text-gray-600 w-40 shrink-0">${t('seller.sf.supplierService')}</span>
                   <div class="flex-1 bg-gray-100 rounded-full h-2.5 overflow-hidden">
-                    <div class="h-full bg-(--btn-bg) rounded-full transition-all duration-500" :style="'width:' + ratingPct(seller?.average_rating)"></div>
+                    <div class="h-full bg-(--btn-bg) rounded-full transition-all duration-500" :style="'width:' + ratingPct(seller?.rating)"></div>
                   </div>
-                  <span class="text-[13px] text-gray-700 font-medium w-8 text-right" x-text="seller?.average_rating ? seller.average_rating.toFixed(1) : '\u2014'"></span>
+                  <span class="text-[13px] text-gray-700 font-medium w-8 text-right" x-text="seller?.rating ? Number(seller.rating).toFixed(1) : '\u2014'"></span>
                 </div>
                 <!-- On-Time Shipment -->
                 <div class="flex items-center gap-3">
                   <span class="text-[13px] text-gray-600 w-40 shrink-0">${t('seller.sf.onTimeShipment')}</span>
                   <div class="flex-1 bg-gray-100 rounded-full h-2.5 overflow-hidden">
-                    <div class="h-full bg-(--btn-bg) rounded-full transition-all duration-500" :style="'width:' + ratingPct(seller?.average_rating)"></div>
+                    <div class="h-full bg-(--btn-bg) rounded-full transition-all duration-500" :style="'width:' + ratingPct(seller?.rating)"></div>
                   </div>
-                  <span class="text-[13px] text-gray-700 font-medium w-8 text-right" x-text="seller?.average_rating ? seller.average_rating.toFixed(1) : '\u2014'"></span>
+                  <span class="text-[13px] text-gray-700 font-medium w-8 text-right" x-text="seller?.rating ? Number(seller.rating).toFixed(1) : '\u2014'"></span>
                 </div>
                 <!-- Product Quality -->
                 <div class="flex items-center gap-3">
                   <span class="text-[13px] text-gray-600 w-40 shrink-0">${t('seller.sf.productQuality')}</span>
                   <div class="flex-1 bg-gray-100 rounded-full h-2.5 overflow-hidden">
-                    <div class="h-full bg-(--btn-bg) rounded-full transition-all duration-500" :style="'width:' + ratingPct(seller?.average_rating)"></div>
+                    <div class="h-full bg-(--btn-bg) rounded-full transition-all duration-500" :style="'width:' + ratingPct(seller?.rating)"></div>
                   </div>
-                  <span class="text-[13px] text-gray-700 font-medium w-8 text-right" x-text="seller?.average_rating ? seller.average_rating.toFixed(1) : '\u2014'"></span>
+                  <span class="text-[13px] text-gray-700 font-medium w-8 text-right" x-text="seller?.rating ? Number(seller.rating).toFixed(1) : '\u2014'"></span>
                 </div>
               </div>
             </div>
+
+            <!-- ── Review Form / Login Prompt ── -->
+            <div class="mb-10 pb-10 border-b border-gray-100">
+              <div x-show="isAuthenticated">
+                <h4 class="text-[16px] font-bold text-gray-900 mb-4">${t('seller.sf.writeReview')}</h4>
+                <div class="flex items-center gap-2 mb-4">
+                  <span class="text-[13px] text-gray-600 mr-2">${t('seller.sf.yourRating')}:</span>
+                  <template x-for="i in 5" :key="i">
+                    <button type="button"
+                      @click="setRating(i)"
+                      @mouseenter="setHover(i)"
+                      @mouseleave="setHover(0)"
+                      class="p-0.5 transition-transform hover:scale-110 focus:outline-none"
+                      :aria-label="'Rate ' + i + ' stars'">
+                      <svg class="w-6 h-6" :class="i <= (form.hoverRating || form.rating) ? 'text-yellow-400' : 'text-gray-300'" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                      </svg>
+                    </button>
+                  </template>
+                </div>
+                <textarea
+                  x-model="form.comment"
+                  rows="3"
+                  :placeholder="'${t('seller.sf.yourComment')}'"
+                  class="w-full border border-gray-300 rounded-md p-3 text-[14px] text-gray-700 focus:outline-none focus:border-gray-500 resize-none"
+                  :disabled="form.submitting"></textarea>
+                <div x-show="form.error" class="text-red-600 text-[13px] mt-2" x-text="form.error"></div>
+                <div class="flex justify-end mt-3">
+                  <button type="button"
+                    @click="submitReview"
+                    :disabled="form.submitting"
+                    class="px-6 py-2.5 rounded-full text-[14px] font-medium bg-(--btn-bg) text-white hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed">
+                    <span x-show="!form.submitting">${t('seller.sf.submitReview')}</span>
+                    <span x-show="form.submitting">${t('seller.sf.submittingReview')}</span>
+                  </button>
+                </div>
+              </div>
+              <div x-show="!isAuthenticated" class="text-center py-4 text-[14px] text-gray-500">
+                ${t('seller.sf.loginToReview')}
+                <a href="/pages/auth/login.html" class="text-blue-600 hover:underline font-medium">${t('seller.sf.loginLink')}</a>.
+              </div>
+            </div>
+
+            <!-- ── Toast ── -->
+            <div x-show="toast.show" x-transition class="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-md shadow-lg text-white text-[14px]"
+              :class="toast.type === 'success' ? 'bg-green-600' : 'bg-red-600'"
+              x-text="toast.message"></div>
 
             <!-- Empty state -->
             <div x-show="reviews.length === 0" class="text-center py-12 text-gray-400">
