@@ -10,7 +10,6 @@ export function TicketForm(): string {
   const steps = [
     { label: t('helpCenter.categoryAndSubject') },
     { label: t('helpCenter.details') },
-    { label: t('helpCenter.send') },
   ];
 
   return `
@@ -34,7 +33,7 @@ export function TicketForm(): string {
 
             ${StepIndicator({ steps, currentStep: 1 })}
             <!-- Dynamic step indicator override -->
-            <div x-show="false" x-ref="stepIndicatorData" data-steps="3"></div>
+            <div x-show="false" x-ref="stepIndicatorData" data-steps="2"></div>
 
             <div class="bg-white rounded-lg border border-gray-200 p-6 sm:p-8 mt-4">
               <!-- Step 1: Category & Subject -->
@@ -119,42 +118,46 @@ export function TicketForm(): string {
                 </div>
               </div>
 
-              <!-- Step 3: Priority & Submit -->
-              <div x-show="currentStep === 3">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4">${t('helpCenter.priorityAndSubmit')}</h2>
-                <div class="space-y-4">
-                  <!-- Priority -->
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">${t('helpCenter.priorityLabel')}</label>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                      ${[`low:${t('helpCenter.priorityLow')}`, `normal:${t('helpCenter.priorityNormal')}`, `high:${t('helpCenter.priorityHigh')}`, `urgent:${t('helpCenter.priorityUrgent')}`].map(p => {
-                        const [val, label] = p.split(':');
-                        const colorMap: Record<string, string> = { low: 'blue', normal: 'green', high: 'amber', urgent: 'red' };
-                        const color = colorMap[val];
-                        return `
-                          <label class="cursor-pointer">
-                            <input type="radio" name="priority" value="${val}" x-model="priority" class="sr-only peer">
-                            <div class="py-2.5 px-3 rounded-lg border text-center text-sm transition-all peer-checked:border-${color}-500 peer-checked:bg-${color}-50 peer-checked:text-${color}-700 border-gray-300 text-gray-600 hover:bg-gray-50">${label}</div>
-                          </label>
-                        `;
-                      }).join('')}
-                    </div>
-                  </div>
+              <!-- Step 2 devami: Sipariş Referansı + Ozet -->
+              <div x-show="currentStep === 2" class="mt-4 space-y-4">
+                <!-- Sipariş Referansı (opsiyonel) -->
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">${t('helpCenter.orderRefLabel')}</label>
 
-                  <!-- Order Reference -->
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">${t('helpCenter.orderRefLabel')}</label>
+                  <!-- Login'li musteri + siparis varsa dropdown -->
+                  <template x-if="!loadingOrders && orders.length > 0">
+                    <select x-model="orderRef" class="th-input th-input-md">
+                      <option value="">— Sipariş seçme (genel soru) —</option>
+                      <template x-for="o in orders" :key="o.order_number">
+                        <option :value="o.order_number"
+                          x-text="o.order_number + ' · ' + (o.seller_name || '') + (o.order_date ? ' · ' + o.order_date : '')">
+                        </option>
+                      </template>
+                    </select>
+                  </template>
+
+                  <!-- Siparisi olmayan / guest kullanici: manuel giris -->
+                  <template x-if="!loadingOrders && orders.length === 0">
                     <input type="text" x-model="orderRef" class="th-input th-input-md" placeholder="ORD-XXXX">
-                  </div>
+                  </template>
 
-                  <!-- Summary -->
-                  <div class="bg-gray-50 rounded-lg p-4 text-sm space-y-2">
-                    <h3 class="font-medium text-gray-800">${t('helpCenter.ticketSummary')}</h3>
-                    <p><span class="text-gray-500">${t('helpCenter.summaryCategory')}</span> <span x-text="categories.find(c => c.id === category)?.label || '-'"></span></p>
-                    <p><span class="text-gray-500">${t('helpCenter.summarySubject')}</span> <span x-text="subject || '-'"></span></p>
-                    <p><span class="text-gray-500">${t('helpCenter.summaryFile')}</span> <span x-text="files.length + ' ${t('helpCenter.summaryFileCount')}'"></span></p>
-                  </div>
+                  <template x-if="loadingOrders">
+                    <div class="text-xs text-gray-400 py-2">Siparişler yükleniyor...</div>
+                  </template>
+
+                  <p class="text-xs text-gray-400 mt-1">Bir sipariş ile ilgili ise seçin — talep doğrudan satıcıya iletilir. Platform destek ekibi de görür.</p>
                 </div>
+
+                <!-- Ozet -->
+                <div class="bg-gray-50 rounded-lg p-4 text-sm space-y-2">
+                  <h3 class="font-medium text-gray-800">${t('helpCenter.ticketSummary')}</h3>
+                  <p><span class="text-gray-500">${t('helpCenter.summaryCategory')}</span> <span x-text="categories.find(c => c.id === category)?.label || '-'"></span></p>
+                  <p><span class="text-gray-500">${t('helpCenter.summarySubject')}</span> <span x-text="subject || '-'"></span></p>
+                  <p><span class="text-gray-500">${t('helpCenter.summaryFile')}</span> <span x-text="files.length + ' ${t('helpCenter.summaryFileCount')}'"></span></p>
+                </div>
+
+                <!-- Submit hatasi -->
+                <p x-show="errors.submit" x-text="errors.submit" class="text-sm text-red-500 text-center"></p>
               </div>
 
               <!-- Navigation Buttons -->
@@ -163,10 +166,10 @@ export function TicketForm(): string {
                   ${t('helpCenter.backBtn')}
                 </button>
                 <div x-show="currentStep === 1" class="w-1"></div>
-                <button x-show="currentStep < 3" @click="nextStep()" class="th-btn cursor-pointer ml-auto">
+                <button x-show="currentStep < 2" @click="nextStep()" class="th-btn cursor-pointer ml-auto">
                   ${t('helpCenter.nextBtn')}
                 </button>
-                <button x-show="currentStep === 3" @click="submitTicket()" class="th-btn cursor-pointer ml-auto">
+                <button x-show="currentStep === 2" @click="submitTicket()" class="th-btn cursor-pointer ml-auto">
                   ${t('helpCenter.submitTicket')}
                 </button>
               </div>

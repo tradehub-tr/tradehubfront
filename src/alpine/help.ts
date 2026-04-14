@@ -1,6 +1,30 @@
 import Alpine from 'alpinejs'
 import { t } from '../i18n'
 import { getBaseUrl } from '../components/auth/AuthLayout'
+import {
+  createTicket,
+  listMyTickets,
+  listMyOrdersForTicket,
+  fetchTicketStatusCounts,
+  getTicket,
+  getTicketCommunications,
+  replyTicket,
+  updateTicketStatus,
+  type TicketSummary,
+  type TicketDetail,
+  type OrderForTicket,
+  type StatusCounts,
+} from '../services/supportService'
+import { createLead } from '../services/leadService'
+
+// HD Ticket status → UI tab mapping
+// Backend: Open, Replied, Resolved, Closed
+// UI tabs: all, open (Open), pending (Replied), closed (Resolved+Closed)
+function statusToTab(s: string): 'open' | 'pending' | 'closed' {
+  if (s === 'Open') return 'open'
+  if (s === 'Replied') return 'pending'
+  return 'closed'
+}
 
 Alpine.data('helpCenter', () => ({
   searchQuery: '',
@@ -578,13 +602,25 @@ Alpine.data('contactPage', () => ({
     return Object.keys(this.errors).length === 0;
   },
 
-  submitForm() {
+  async submitForm() {
     if (!this.validateForm()) return;
     this.formSubmitting = true;
-    setTimeout(() => {
-      this.formSubmitting = false;
+    this.errors = {};
+    try {
+      const [first_name, ...rest] = this.name.trim().split(/\s+/);
+      await createLead({
+        email: this.email.trim(),
+        first_name: first_name || this.name.trim(),
+        last_name: rest.join(' '),
+        message: `Konu: ${this.subject}\n\n${this.message}`,
+        source: 'Website Contact Form',
+      });
       this.formSubmitted = true;
-    }, 1500);
+    } catch (e: any) {
+      this.errors.submit = e?.message || t('contactForm.submitError');
+    } finally {
+      this.formSubmitting = false;
+    }
   },
 
   resetForm() {
@@ -605,11 +641,20 @@ Alpine.data('ticketForm', () => ({
   subCategory: '',
   subject: '',
   description: '',
-  priority: 'normal',
   orderRef: '',
   files: [] as { name: string; size: number }[],
   errors: {} as Record<string, string>,
   submitted: false,
+  orders: [] as OrderForTicket[],
+  loadingOrders: true,
+
+  async init() {
+    try {
+      this.orders = await listMyOrdersForTicket()
+    } finally {
+      this.loadingOrders = false
+    }
+  },
 
   get categories() {
     return [
@@ -660,7 +705,8 @@ Alpine.data('ticketForm', () => ({
 
   nextStep() {
     if (this.validateStep(this.currentStep)) {
-      this.currentStep++;
+      // 2 adıma dusuruldu: max step = 2
+      if (this.currentStep < 2) this.currentStep++;
     }
   },
 
@@ -668,61 +714,321 @@ Alpine.data('ticketForm', () => ({
     if (this.currentStep > 1) this.currentStep--;
   },
 
-  submitTicket() {
+  async submitTicket() {
     if (!this.validateStep(this.currentStep)) return;
-    this.submitted = true;
-    setTimeout(() => {
-      window.location.href = `${getBaseUrl()}pages/help/help-tickets.html`;
-    }, 2000);
+    this.errors = {};
+    try {
+      const subjectLabel = this.categories.find((c: any) => c.id === this.category)?.label || '';
+      const compositeSubject = subjectLabel
+        ? `[${subjectLabel}] ${this.subject.trim()}`
+        : this.subject.trim();
+
+      let description = this.description.trim();
+      if (this.subCategory) description = `Alt kategori: ${this.subCategory}\n\n${description}`;
+      if (this.orderRef) description = `${description}\n\nSipariş referansı: ${this.orderRef}`;
+
+      // ticket_type backend'te Link(HD Ticket Type) — biz form kategorilerini
+      // subject ve description icine yazdigimiz icin alani bos birakiyoruz.
+      await createTicket({
+        subject: compositeSubject,
+        description,
+        priority: 'Medium',
+        order_ref: this.orderRef.trim() || undefined,
+      });
+      this.submitted = true;
+      setTimeout(() => {
+        window.location.href = `${getBaseUrl()}pages/help/help-tickets.html`;
+      }, 1500);
+    } catch (e: any) {
+      // Login gerekli ise auth sayfasina redirect
+      if (e?.message === 'Unauthorized') return;
+      this.errors.submit = e?.message || t('helpCenter.ticketSubmitError');
+    }
   },
 }));
 
-// ─── Tickets List ──────────────────────────────────────────────────────
+// ─── Tickets List (HD Ticket, headless API) ───────────────────────────
+const UI_TO_BACKEND_STATUS: Record<string, string> = {
+  open: 'Open',
+  pending: 'Replied',
+  closed: 'Closed',
+}
+
+function formatTicketDate(s: string): string {
+  if (!s) return ''
+  try {
+    return new Date(s).toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' })
+  } catch { return s }
+}
+
+// Musteri UI etiketleri
+const STATUS_LABELS: Record<string, string> = {
+  Open: 'Açık', Replied: 'Yanıtlandı', Resolved: 'Çözüldü', Closed: 'Kapalı',
+}
+const PRIORITY_LABELS: Record<string, string> = {
+  Low: 'Düşük', Medium: 'Orta', High: 'Yüksek', Urgent: 'Acil',
+}
+
+function _statusDirectCls(s: string): string {
+  const m: Record<string, string> = {
+    Open: 'bg-blue-50 text-blue-700',
+    Replied: 'bg-amber-50 text-amber-700',
+    Resolved: 'bg-emerald-50 text-emerald-700',
+    Closed: 'bg-gray-100 text-gray-600',
+  }
+  return m[s] || 'bg-gray-100 text-gray-600'
+}
+function _statusDotDirectCls(s: string): string {
+  const m: Record<string, string> = {
+    Open: 'bg-blue-400', Replied: 'bg-amber-400',
+    Resolved: 'bg-emerald-400', Closed: 'bg-gray-400',
+  }
+  return m[s] || 'bg-gray-300'
+}
+function _priorityChipDirectCls(p: string): string {
+  const m: Record<string, string> = {
+    Low: 'bg-gray-100 text-gray-500',
+    Medium: 'bg-blue-50 text-blue-600',
+    High: 'bg-amber-50 text-amber-700',
+    Urgent: 'bg-rose-50 text-rose-700',
+  }
+  return m[p] || 'bg-gray-100 text-gray-500'
+}
+function _fmtDT(s: string): string {
+  if (!s) return ''
+  try {
+    return new Date(s).toLocaleString('tr-TR', {
+      day: '2-digit', month: '2-digit', year: 'numeric',
+      hour: '2-digit', minute: '2-digit',
+    })
+  } catch { return s }
+}
+function _initial(s: string): string {
+  return s ? String(s).trim().charAt(0).toUpperCase() : '?'
+}
+
 Alpine.data('ticketsList', () => ({
   activeTab: 'all' as 'all' | 'open' | 'pending' | 'closed',
   searchQuery: '',
   currentPage: 1,
   pageSize: 10,
-  expandedTicket: null as string | null,
+  loading: false,
+  errorMsg: '',
+  tickets: [] as any[],
+  total: 0,
+  statusCounts: { all: 0, Open: 0, Replied: 0, Resolved: 0, Closed: 0 } as StatusCounts,
 
-  get tickets(): any[] {
-    // Import mock tickets inline to avoid circular deps at module level
-    return (window as any).__mockTickets || [];
+  async init() {
+    await Promise.all([this.reload(), this.loadCounts()])
+  },
+
+  async loadCounts() {
+    try {
+      this.statusCounts = await fetchTicketStatusCounts()
+    } catch {
+      // sessizce yok say — count yoksa 0 gosterilir
+    }
   },
 
   get filteredTickets(): any[] {
-    return this.tickets.filter((t: any) => {
-      const matchTab = this.activeTab === 'all' || t.status === this.activeTab;
-      const q = this.searchQuery.toLowerCase().trim();
-      const matchSearch = !q || t.id.toLowerCase().includes(q) || t.subject.toLowerCase().includes(q);
-      return matchTab && matchSearch;
-    });
+    const q = this.searchQuery.toLowerCase().trim()
+    if (!q) return this.tickets
+    return this.tickets.filter((t: any) =>
+      String(t.id).toLowerCase().includes(q) || (t.subject || '').toLowerCase().includes(q)
+    )
   },
 
-  get paginatedTickets(): any[] {
-    const start = (this.currentPage - 1) * this.pageSize;
-    return this.filteredTickets.slice(start, start + this.pageSize);
-  },
+  get paginatedTickets(): any[] { return this.filteredTickets },
 
   get totalPages(): number {
-    return Math.max(1, Math.ceil(this.filteredTickets.length / this.pageSize));
+    return Math.max(1, Math.ceil(this.total / this.pageSize))
   },
 
   tabCount(status: string): number {
-    if (status === 'all') return this.tickets.length;
-    return this.tickets.filter((t: any) => t.status === status).length;
+    const map: Record<string, keyof StatusCounts> = {
+      all: 'all',
+      open: 'Open',
+      pending: 'Replied',
+      closed: 'Closed',
+    }
+    const key = map[status]
+    return key ? (this.statusCounts[key] || 0) : 0
   },
 
   setTab(tab: string) {
-    this.activeTab = tab as any;
-    this.currentPage = 1;
+    if (this.activeTab === tab) return
+    this.activeTab = tab as any
+    this.currentPage = 1
+    this.reload()
   },
 
   setPage(page: number) {
-    this.currentPage = page;
+    if (this.currentPage === page) return
+    this.currentPage = page
+    this.reload()
   },
 
-  toggleTicket(id: string) {
-    this.expandedTicket = this.expandedTicket === id ? null : id;
+  // Frappe status (Open/Replied/Resolved/Closed) → user-facing label
+  statusLabel(raw: string): string {
+    // raw burada 'open'/'pending'/'closed' (UI tab keyi) olarak gelir
+    const m: Record<string, string> = {
+      open: STATUS_LABELS.Open,
+      pending: STATUS_LABELS.Replied,
+      closed: STATUS_LABELS.Resolved,
+    }
+    return m[raw] || raw
   },
-}));
+
+  statusCls(raw: string): string {
+    const m: Record<string, string> = {
+      open: 'bg-blue-50 text-blue-700',
+      pending: 'bg-amber-50 text-amber-700',
+      closed: 'bg-emerald-50 text-emerald-700',
+    }
+    return m[raw] || 'bg-gray-100 text-gray-600'
+  },
+
+  statusDotCls(raw: string): string {
+    const m: Record<string, string> = {
+      open: 'bg-blue-400', pending: 'bg-amber-400', closed: 'bg-emerald-400',
+    }
+    return m[raw] || 'bg-gray-300'
+  },
+
+  priorityLabel(p: string): string { return PRIORITY_LABELS[p] || p || '' },
+
+  priorityChipCls(p: string): string {
+    const m: Record<string, string> = {
+      Low: 'bg-gray-100 text-gray-500',
+      Medium: 'bg-blue-50 text-blue-600',
+      High: 'bg-amber-50 text-amber-700',
+      Urgent: 'bg-rose-50 text-rose-700',
+    }
+    return m[p] || 'bg-gray-100 text-gray-500'
+  },
+
+  priorityBarCls(p: string): string {
+    const m: Record<string, string> = {
+      Low: 'bg-gray-200', Medium: 'bg-blue-300',
+      High: 'bg-amber-300', Urgent: 'bg-rose-400',
+    }
+    return m[p] || 'bg-gray-100'
+  },
+
+  async reload() {
+    this.loading = true
+    this.errorMsg = ''
+    try {
+      const backendStatus =
+        this.activeTab === 'all' ? 'all' : UI_TO_BACKEND_STATUS[this.activeTab] || 'all'
+      const res = await listMyTickets({
+        status: backendStatus,
+        page: this.currentPage,
+        pageSize: this.pageSize,
+      })
+      this.tickets = res.data.map((it: TicketSummary) => ({
+        id: it.name,
+        status: statusToTab(it.status),
+        priority: it.priority || '',
+        createdDate: formatTicketDate(it.creation),
+        subject: it.subject || '(konusuz)',
+        category: it.ticket_type || '-',
+        lastReplyLabel: formatTicketDate(it.modified),
+      }))
+      this.total = res.total
+      // Sayilari her listede tazele
+      this.loadCounts()
+    } catch (e: any) {
+      if (e?.message !== 'Unauthorized') {
+        this.errorMsg = e?.message || 'Talepler yüklenemedi'
+      }
+    } finally {
+      this.loading = false
+    }
+  },
+}))
+
+
+// ─── Ticket Detail (tekil talep + yanit yazma) ────────────────────────
+Alpine.data('ticketDetail', () => ({
+  ticketId: '' as string,
+  ticket: null as TicketDetail | null,
+  messages: [] as Array<{ id: string; sender: 'user' | 'support'; from: string; text: string; date: string }>,
+  loading: true,
+  errorMsg: '',
+  replyText: '',
+  sending: false,
+  sendError: '',
+  closing: false,
+
+  async init() {
+    this.ticketId = new URLSearchParams(window.location.search).get('id') || ''
+    if (!this.ticketId) {
+      this.loading = false
+      this.errorMsg = 'Talep ID verilmedi (?id=...).'
+      return
+    }
+    await this.loadAll()
+  },
+
+  async loadAll() {
+    this.loading = true
+    this.errorMsg = ''
+    try {
+      const [tk, comms] = await Promise.all([
+        getTicket(this.ticketId),
+        getTicketCommunications(this.ticketId),
+      ])
+      this.ticket = tk
+      this.messages = comms.map((c) => ({
+        id: c.name,
+        sender: c.sent_or_received === 'Sent' ? 'support' : 'user',
+        from: c.sender_full_name || c.sender || '',
+        text: (c.content || '').replace(/<[^>]+>/g, '').trim(),
+        date: c.communication_date ? _fmtDT(c.communication_date) : '',
+      }))
+    } catch (e: any) {
+      if (e?.message !== 'Unauthorized') {
+        this.errorMsg = e?.message || 'Talep yüklenemedi'
+      }
+    } finally {
+      this.loading = false
+    }
+  },
+
+  async sendReply() {
+    if (!this.replyText.trim() || !this.ticketId) return
+    this.sending = true
+    this.sendError = ''
+    try {
+      await replyTicket(this.ticketId, this.replyText.trim())
+      this.replyText = ''
+      await this.loadAll()
+    } catch (e: any) {
+      this.sendError = e?.message || 'Yanıt gönderilemedi'
+    } finally {
+      this.sending = false
+    }
+  },
+
+  async closeTicket() {
+    if (!this.ticketId) return
+    this.closing = true
+    try {
+      await updateTicketStatus(this.ticketId, 'Closed')
+      await this.loadAll()
+    } catch (e: any) {
+      this.sendError = e?.message || 'Talep kapatılamadı'
+    } finally {
+      this.closing = false
+    }
+  },
+
+  initial(s: string): string { return _initial(s) },
+  fmtDT(s: string): string { return _fmtDT(s) },
+  statusLabel(s: string): string { return STATUS_LABELS[s] || s || '-' },
+  statusCls(s: string): string { return _statusDirectCls(s) },
+  statusDotCls(s: string): string { return _statusDotDirectCls(s) },
+  priorityLabel(p: string): string { return PRIORITY_LABELS[p] || p || '' },
+  priorityChipCls(p: string): string { return _priorityChipDirectCls(p) },
+}))
