@@ -1,24 +1,29 @@
 /**
- * TicketsListLayout Component
- * Lists support tickets with tab filters, search, and pagination
+ * TicketsListLayout — müşteri destek talepleri listesi.
+ *
+ * Headless: frappe/helpdesk Vue UI kapalı. HD Ticket verisi Frappe REST
+ * üzerinden çekilir. Kartlar tıklanınca /pages/help/help-ticket.html?id=X
+ * detay sayfasına yönlendirir.
  */
-
 import { t } from '../../i18n';
 
 const STATUS_TABS = [
-  { id: 'all', label: t('helpCenter.statusAll') },
-  { id: 'open', label: t('helpCenter.statusOpen') },
+  { id: 'all',     label: t('helpCenter.statusAll') },
+  { id: 'open',    label: t('helpCenter.statusOpen') },
   { id: 'pending', label: t('helpCenter.statusPending') },
-  { id: 'closed', label: t('helpCenter.statusResolved') },
+  { id: 'closed',  label: t('helpCenter.statusResolved') },
 ];
 
 export function TicketsListLayout(): string {
   return `
-    <div class="bg-gray-50 min-h-screen" x-data="ticketsList()">
-      <div class="max-w-[1200px] mx-auto px-4 sm:px-6 py-8">
+    <div class="bg-gray-50 min-h-screen" x-data="ticketsList()" x-init="init()">
+      <div class="max-w-[1100px] mx-auto px-4 sm:px-6 py-8">
         <!-- Header -->
         <div class="flex items-center justify-between mb-6">
-          <h1 class="text-2xl font-bold text-gray-900">${t('helpCenter.myTickets')}</h1>
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900">${t('helpCenter.myTickets')}</h1>
+            <p class="text-sm text-gray-500 mt-0.5"><span x-text="total"></span> talep</p>
+          </div>
           <a href="/pages/help/help-ticket-new.html" class="th-btn th-btn-sm inline-flex items-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
             ${t('helpCenter.newTicket')}
@@ -40,70 +45,94 @@ export function TicketsListLayout(): string {
         </div>
 
         <!-- Search -->
-        <div class="mb-6">
-          <div class="relative max-w-[400px]">
+        <div class="mb-5">
+          <div class="relative max-w-[420px]">
             <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
             <input type="text" x-model="searchQuery" placeholder="${t('helpCenter.ticketSearchPlaceholder')}" class="th-input th-input-md pl-10">
           </div>
         </div>
 
-        <!-- Ticket Cards -->
-        <template x-if="filteredTickets.length > 0">
+        <!-- Yukleniyor -->
+        <template x-if="loading">
+          <div class="bg-white border border-gray-200 rounded-xl p-12 text-center">
+            <svg class="w-6 h-6 mx-auto text-primary-500 animate-spin" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 12a8 8 0 018-8V4a8 8 0 018 8h-2a6 6 0 00-6-6 6 6 0 00-6 6H4z"/>
+            </svg>
+            <p class="text-sm text-gray-400 mt-3">Talepler yükleniyor...</p>
+          </div>
+        </template>
+
+        <!-- Hata -->
+        <template x-if="!loading && errorMsg">
+          <div class="bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-700" x-text="errorMsg"></div>
+        </template>
+
+        <!-- Liste -->
+        <template x-if="!loading && !errorMsg && filteredTickets.length > 0">
           <div class="space-y-3">
             <template x-for="ticket in paginatedTickets" :key="ticket.id">
-              <div class="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-shadow cursor-pointer" @click="toggleTicket(ticket.id)">
-                <div class="flex items-center justify-between mb-2">
-                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
-                    :class="{
-                      'bg-green-100 text-green-700': ticket.status === 'open',
-                      'bg-amber-100 text-amber-700': ticket.status === 'pending',
-                      'bg-gray-100 text-gray-600': ticket.status === 'closed'
-                    }"
-                    x-text="ticket.status === 'open' ? '${t('helpCenter.statusOpen')}' : ticket.status === 'pending' ? '${t('helpCenter.statusPending')}' : '${t('helpCenter.statusResolved')}'">
-                  </span>
-                  <span class="text-xs text-gray-400" x-text="ticket.createdDate"></span>
-                </div>
-                <div class="flex items-start gap-2 mb-2">
-                  <div class="min-w-0">
-                    <h4 class="text-sm font-semibold text-gray-900" x-text="ticket.subject"></h4>
-                    <span class="text-xs text-gray-500" x-text="'#' + ticket.id + ' \u00b7 ' + ticket.category"></span>
-                  </div>
-                </div>
-                <template x-if="ticket.snippet">
-                  <div class="pt-2 border-t border-gray-100">
-                    <p class="text-xs text-gray-500 line-clamp-2" x-text="ticket.snippet"></p>
-                  </div>
-                </template>
+              <a
+                :href="'/pages/help/help-ticket.html?id=' + encodeURIComponent(ticket.id)"
+                class="block bg-white border border-gray-200 rounded-xl p-4 hover:border-primary-300 hover:shadow-sm transition-all cursor-pointer"
+              >
+                <div class="flex items-start gap-3">
+                  <!-- Priority bar -->
+                  <div class="w-1 rounded-full self-stretch flex-shrink-0"
+                    :class="priorityBarCls(ticket.priority)"></div>
 
-                <!-- Expanded messages -->
-                <template x-if="expandedTicket === ticket.id && ticket.messages">
-                  <div class="mt-3 pt-3 border-t border-gray-200 space-y-3">
-                    <template x-for="(msg, mi) in ticket.messages" :key="mi">
-                      <div class="flex gap-3" :class="msg.sender === 'support' ? 'flex-row-reverse' : ''">
-                        <div class="w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-xs font-medium"
-                          :class="msg.sender === 'user' ? 'bg-primary-100 text-primary-600' : 'bg-gray-100 text-gray-600'"
-                          x-text="msg.sender === 'user' ? 'S' : 'D'">
-                        </div>
-                        <div class="rounded-lg px-3 py-2 text-sm max-w-[80%]"
-                          :class="msg.sender === 'user' ? 'bg-primary-50 text-gray-800' : 'bg-gray-50 text-gray-700'">
-                          <p x-text="msg.text"></p>
-                          <span class="text-[10px] text-gray-400 mt-1 block" x-text="msg.date"></span>
-                        </div>
-                      </div>
-                    </template>
+                  <div class="flex-1 min-w-0">
+                    <!-- Top row: status + tarih -->
+                    <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                      <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold"
+                        :class="statusCls(ticket.status)">
+                        <span class="w-1.5 h-1.5 rounded-full mr-1" :class="statusDotCls(ticket.status)"></span>
+                        <span x-text="statusLabel(ticket.status)"></span>
+                      </span>
+                      <span x-show="ticket.priority && ticket.priority !== 'Medium'"
+                        class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-medium"
+                        :class="priorityChipCls(ticket.priority)"
+                        x-text="priorityLabel(ticket.priority)"></span>
+                      <span x-show="ticket.category && ticket.category !== '-'"
+                        class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-medium bg-gray-100 text-gray-600"
+                        x-text="ticket.category"></span>
+                      <span class="ml-auto text-[11px] text-gray-400" x-text="ticket.createdDate"></span>
+                    </div>
+
+                    <!-- Subject -->
+                    <h3 class="text-sm font-semibold text-gray-900 mb-1 truncate" x-text="ticket.subject"></h3>
+
+                    <!-- Meta -->
+                    <div class="flex items-center gap-3 text-[11px] text-gray-500 flex-wrap">
+                      <span class="font-mono">#<span x-text="ticket.id"></span></span>
+                      <span class="inline-flex items-center gap-1" x-show="ticket.lastReplyLabel">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span x-text="ticket.lastReplyLabel"></span>
+                      </span>
+                    </div>
                   </div>
-                </template>
-              </div>
+
+                  <!-- Chevron -->
+                  <svg class="w-5 h-5 text-gray-300 mt-1 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                  </svg>
+                </div>
+              </a>
             </template>
           </div>
         </template>
 
-        <!-- Empty State -->
-        <template x-if="filteredTickets.length === 0">
-          <div class="bg-white border border-gray-200 rounded-lg p-12 text-center">
-            <svg class="w-12 h-12 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m6 4.125l2.25 2.25m0 0l2.25 2.25M12 13.875l2.25-2.25M12 13.875l-2.25 2.25M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"/></svg>
-            <h3 class="text-base font-medium text-gray-700 mb-1">${t('helpCenter.noTickets')}</h3>
-            <p class="text-sm text-gray-400">${t('helpCenter.noTicketsDesc')}</p>
+        <!-- Empty -->
+        <template x-if="!loading && !errorMsg && filteredTickets.length === 0">
+          <div class="bg-white border border-gray-200 rounded-xl p-12 text-center">
+            <svg class="w-14 h-14 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            <h3 class="text-base font-semibold text-gray-700 mb-1">${t('helpCenter.noTickets')}</h3>
+            <p class="text-sm text-gray-400 mb-4">${t('helpCenter.noTicketsDesc')}</p>
+            <a href="/pages/help/help-ticket-new.html" class="th-btn th-btn-sm inline-flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+              ${t('helpCenter.newTicket')}
+            </a>
           </div>
         </template>
 
