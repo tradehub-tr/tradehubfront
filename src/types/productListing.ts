@@ -52,6 +52,14 @@ export interface ProductListingCard {
   category?: string;
   /** Numeric discount percent (0-100), if any */
   discountPercentage?: number;
+  /** Brand display name (e.g. "Nike") */
+  brandName?: string;
+  /** Brand slug for /brands/{slug} link */
+  brandSlug?: string;
+  /** Brand logo URL */
+  brandLogo?: string;
+  /** Raw brand code (e.g. "NIKE") */
+  brand?: string;
 }
 
 /**

@@ -243,6 +243,27 @@ async function renderProductPage() {
   // Favorites
   initFavorites(product);
 
+  // Variant change → swap document.title + page H1
+  document.addEventListener('product-variant-change', ((e: CustomEvent) => {
+    const title = e.detail?.title as string | undefined;
+    if (title && title.trim()) {
+      const h1 = document.getElementById('pd-product-title');
+      if (h1) h1.textContent = title;
+      document.title = `${title} - iSTOC`;
+    }
+  }) as EventListener);
+
+  // If URL has ?variant=VAR-XXX, auto-click that variant after render
+  const preselectVariant = new URLSearchParams(window.location.search).get('variant');
+  if (preselectVariant) {
+    requestAnimationFrame(() => {
+      const btn = document.querySelector<HTMLButtonElement>(
+        `.variant-option[data-variant-id="${preselectVariant}"]`
+      );
+      if (btn) btn.click();
+    });
+  }
+
   // Start Alpine LAST
   startAlpine();
 

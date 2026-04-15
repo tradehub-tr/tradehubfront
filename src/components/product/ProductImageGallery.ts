@@ -78,16 +78,37 @@ export function ProductImageGallery(): string {
   const firstImage = images[0];
   const needsLightboxThumbScroll = images.length > 6;
 
-  const thumbsHtml = images.map((img, i) => `
-    <div
-      class="gallery-thumb"
-      :class="{ 'active': currentIndex === ${i} }"
-      data-index="${i}"
-      aria-label="${img.alt}"
-      @mouseenter="goToSlide(${i})"
-      @click="goToSlide(${i})"
-    >${renderGalleryMedia(img.src, img.alt, defaultVisual, 'thumb')}</div>
-  `).join('');
+  const thumbsHtml = images.map((img, i) => {
+    if (img.isVideo) {
+      return `
+        <div
+          class="gallery-thumb gallery-thumb-video relative"
+          :class="{ 'active': currentIndex === ${i} }"
+          data-index="${i}"
+          aria-label="Video"
+          @mouseenter="goToSlide(${i})"
+          @click="goToSlide(${i})"
+        >
+          <div class="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
+            <svg width="22" height="22" fill="#fff" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+          </div>
+          <span class="absolute bottom-0.5 right-0.5 bg-black/80 text-white text-[9px] font-bold px-1 rounded">VIDEO</span>
+        </div>
+      `;
+    }
+    return `
+      <div
+        class="gallery-thumb"
+        :class="{ 'active': currentIndex === ${i} }"
+        data-index="${i}"
+        aria-label="${img.alt}"
+        @mouseenter="goToSlide(${i})"
+        @click="goToSlide(${i})"
+      >${renderGalleryMedia(img.src, img.alt, defaultVisual, 'thumb')}</div>
+    `;
+  }).join('');
 
   // Attributes thumbnail — last slide
   const attrThumbHtml = `
@@ -107,16 +128,35 @@ export function ProductImageGallery(): string {
     </div>
   `;
 
-  const lightboxThumbsHtml = images.map((img, i) => `
-    <button
-      type="button"
-      class="gallery-lightbox-thumb max-[960px]:!w-[68px] max-[960px]:!h-[68px]"
-      :class="{ 'active': lightboxIndex === ${i} }"
-      data-index="${i}"
-      aria-label="${img.alt}"
-      @click="selectLightboxThumb(${i})"
-    >${renderGalleryMedia(img.src, img.alt, defaultVisual, 'thumb')}</button>
-  `).join('');
+  const lightboxThumbsHtml = images.map((img, i) => {
+    if (img.isVideo) {
+      return `
+        <button
+          type="button"
+          class="gallery-lightbox-thumb relative max-[960px]:!w-[68px] max-[960px]:!h-[68px]"
+          :class="{ 'active': lightboxIndex === ${i} }"
+          data-index="${i}"
+          aria-label="Video"
+          @click="selectLightboxThumb(${i})"
+        >
+          <div class="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
+            <svg width="22" height="22" fill="#fff" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <span class="absolute bottom-0.5 right-0.5 bg-black/80 text-white text-[9px] font-bold px-1 rounded">VIDEO</span>
+        </button>
+      `;
+    }
+    return `
+      <button
+        type="button"
+        class="gallery-lightbox-thumb max-[960px]:!w-[68px] max-[960px]:!h-[68px]"
+        :class="{ 'active': lightboxIndex === ${i} }"
+        data-index="${i}"
+        aria-label="${img.alt}"
+        @click="selectLightboxThumb(${i})"
+      >${renderGalleryMedia(img.src, img.alt, defaultVisual, 'thumb')}</button>
+    `;
+  }).join('');
 
   // ──────────────────────────────────────────────────────────────
   // DISABLED: "Find similar" (visual search) button - lightbox toolbar
@@ -163,10 +203,10 @@ export function ProductImageGallery(): string {
       <!-- RIGHT: Main Image Area (content only) -->
       <div id="gallery-main-image"
         x-ref="mainImage"
-        :class="{ 'hidden': currentIndex === attrsIndex, 'zoom-enabled': supportsHoverZoom, 'is-zooming': isZooming }"
-        @pointermove="handleZoomMove($event)"
+        :class="{ 'hidden': currentIndex === attrsIndex, 'zoom-enabled': supportsHoverZoom && !isVideoSlide(), 'is-zooming': isZooming && !isVideoSlide() }"
+        @pointermove="!isVideoSlide() && handleZoomMove($event)"
         @pointerleave="resetZoom()"
-        @click="currentIndex !== attrsIndex && openLightbox(currentIndex)"
+        @click="currentIndex !== attrsIndex && !isVideoSlide() && openLightbox(currentIndex)"
       >
         ${renderGalleryMedia(firstImage?.src, firstImage?.alt ?? t('product.productImage'), defaultVisual, 'large')}
       </div>

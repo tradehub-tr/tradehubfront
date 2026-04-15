@@ -184,6 +184,16 @@ function renderProductListingCard(card: ProductListingCard): string {
     ? `<a class="block text-xs font-normal text-[#767676] no-underline whitespace-nowrap overflow-hidden text-ellipsis mb-0.5">${card.supplierName}</a>`
     : '';
 
+  // Brand chip — small badge with brand name (logo if available)
+  const brandHtml = card.brandName
+    ? `<a class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded border border-gray-200 bg-gray-50 text-[10px] font-medium text-gray-700 hover:bg-gray-100 no-underline max-w-full"
+          href="${card.brandSlug ? `/pages/brand.html?slug=${card.brandSlug}` : '#'}"
+          title="${card.brandName}">
+        ${card.brandLogo ? `<img src="${card.brandLogo}" alt="${card.brandName}" class="w-3 h-3 object-contain" />` : ''}
+        <span class="whitespace-nowrap overflow-hidden text-ellipsis">${card.brandName}</span>
+      </a>`
+    : '';
+
   // Supplier info: year, country, rating
   const yearCountryParts: string[] = [];
   if (card.supplierYears) yearCountryParts.push(`<span>${t('products.yearLabel', { count: String(card.supplierYears) })}</span>`);
@@ -216,6 +226,7 @@ function renderProductListingCard(card: ProductListingCard): string {
       <div class="fy26-product-card-content flex-1 flex flex-col">
         <!-- Title area -->
         <div class="px-1">
+          ${brandHtml ? `<div class="mb-1">${brandHtml}</div>` : ''}
           <h2 class="searchx-product-e-title text-sm font-normal leading-[18px] h-[54px] text-[#333] overflow-hidden text-ellipsis line-clamp-3 m-0">
             <a href="${card.href}" target="_blank" class="text-inherit no-underline hover:text-primary-500"><span>${card.name}</span></a>
           </h2>

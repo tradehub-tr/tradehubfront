@@ -19,6 +19,9 @@ export interface FilterState {
   priceMax: number | null;
   minOrder: number | null;
   supplierCountries: string[];
+  brands: string[];
+  /** attribute_code → selected values (OR within attribute, AND across attributes) */
+  attributes: Record<string, string[]>;
 }
 
 export type SortKey =
@@ -75,6 +78,8 @@ function createDefaultState(): FilterState {
     priceMax: null,
     minOrder: null,
     supplierCountries: [],
+    brands: [],
+    attributes: {},
   };
 }
 
@@ -163,6 +168,17 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
         .map(cb => cb.value || cb.dataset.filterValue || '').filter(Boolean).join(',');
     }
 
+    // Brand multi-select
+    if (state.brands.length > 0) {
+      params.brands = state.brands.join(',');
+    }
+
+    // Dynamic attribute filters → "CODE:V1,V2|CODE2:V"
+    const attrEntries = Object.entries(state.attributes).filter(([, vs]) => vs.length > 0);
+    if (attrEntries.length > 0) {
+      params.attrs = attrEntries.map(([code, vals]) => `${code}:${vals.join(',')}`).join('|');
+    }
+
     return params;
   }
 
@@ -209,6 +225,14 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
     if (state.priceMin !== null) p.set('min_price', String(state.priceMin)); else p.delete('min_price');
     if (state.priceMax !== null) p.set('max_price', String(state.priceMax)); else p.delete('max_price');
     if (state.supplierCountries.length > 0) p.set('country', state.supplierCountries.join(',')); else p.delete('country');
+    if (state.brands.length > 0) p.set('brands', state.brands.join(',')); else p.delete('brands');
+
+    // Drop any previous attr_* params, then write current ones
+    Array.from(p.keys()).filter(k => k.startsWith('attr_')).forEach(k => p.delete(k));
+    for (const [code, vals] of Object.entries(state.attributes)) {
+      if (vals.length > 0) p.set(`attr_${code}`, vals.join(','));
+    }
+
     if (currentSort !== 'best-match') p.set('sort', currentSort); else p.delete('sort');
     if (currentPage > 1) p.set('page', String(currentPage)); else p.delete('page');
 
@@ -228,6 +252,14 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
     if (maxPrice) state.priceMax = parseFloat(maxPrice);
     const country = p.get('country');
     if (country) state.supplierCountries = country.split(',');
+    const brands = p.get('brands');
+    if (brands) state.brands = brands.split(',').filter(Boolean);
+    for (const [key, val] of p.entries()) {
+      if (key.startsWith('attr_') && val) {
+        const code = key.slice(5);
+        state.attributes[code] = val.split(',').filter(Boolean);
+      }
+    }
     const sort = p.get('sort') as SortKey | null;
     if (sort && sort in SORT_MAP) currentSort = sort;
     const page = p.get('page');
@@ -277,8 +309,37 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
         });
       };
       restoreCountries();
-      // Retry after dynamic facets load
       setTimeout(restoreCountries, 1500);
+    }
+
+    // Brands (dynamic)
+    if (state.brands.length > 0) {
+      const restoreBrands = () => {
+        state.brands.forEach(b => {
+          document.querySelectorAll<HTMLInputElement>(
+            `[data-filter-section="brands"][data-filter-value="${b}"]`
+          ).forEach(el => el.checked = true);
+        });
+      };
+      restoreBrands();
+      setTimeout(restoreBrands, 1500);
+    }
+
+    // Dynamic attributes
+    const attrEntries = Object.entries(state.attributes);
+    if (attrEntries.length > 0) {
+      const restoreAttrs = () => {
+        for (const [code, vals] of attrEntries) {
+          const section = `attr-${code.toLowerCase()}`;
+          vals.forEach(v => {
+            document.querySelectorAll<HTMLInputElement>(
+              `[data-filter-section="${section}"][data-filter-value="${v}"]`
+            ).forEach(el => el.checked = true);
+          });
+        }
+      };
+      restoreAttrs();
+      setTimeout(restoreAttrs, 1500);
     }
   }
 
@@ -336,9 +397,31 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
         }
         break;
 
+      case 'brands':
+        if (target.checked) {
+          if (!state.brands.includes(value)) state.brands.push(value);
+        } else {
+          state.brands = state.brands.filter(b => b !== value);
+        }
+        break;
+
       case 'trade-assurance':
       case 'product-features':
         // These trigger a fetch too
+        break;
+
+      default:
+        // Dynamic attribute facets — data-filter-section starts with "attr-"
+        if (section.startsWith('attr-')) {
+          const code = target.dataset.attributeCode || section.slice(5).toUpperCase();
+          const bucket = state.attributes[code] || (state.attributes[code] = []);
+          if (target.checked) {
+            if (!bucket.includes(value)) bucket.push(value);
+          } else {
+            state.attributes[code] = bucket.filter(v => v !== value);
+            if (state.attributes[code].length === 0) delete state.attributes[code];
+          }
+        }
         break;
     }
 

@@ -16,6 +16,17 @@ import {
   LIGHTBOX_THUMB_SIZE,
   LIGHTBOX_THUMB_GAP,
 } from '../components/product/ProductImageGallery'
+import { toVideoEmbedHtml } from '../components/product/ProductVideoSection'
+
+function renderInlineVideo(url: string): string {
+  return `
+    <div class="relative w-full h-full bg-black flex items-center justify-center" data-gallery-main-media="true">
+      <div class="relative w-full h-full" style="max-height: 100%">
+        ${toVideoEmbedHtml(url)}
+      </div>
+    </div>
+  `
+}
 import { getListingDetail } from '../services/listingService'
 import type { ProductDetail } from '../types/product'
 
@@ -221,6 +232,117 @@ Alpine.data('imageGallery', () => ({
     document.addEventListener('gallery-go-to', ((e: CustomEvent) => {
       this.goToSlide(e.detail.index);
     }) as EventListener);
+
+    // Listen for variant change — swap gallery images entirely
+    document.addEventListener('product-variant-change', ((e: CustomEvent) => {
+      const images = e.detail?.images as string[] | undefined;
+      const videoUrl = e.detail?.videoUrl as string | undefined;
+      if (Array.isArray(images) && images.length > 0) {
+        this.swapGalleryImages(images, videoUrl);
+      }
+    }) as EventListener);
+  },
+
+  swapGalleryImages(imageUrls: string[], videoUrl?: string) {
+    // Auto-detect video files by extension so uploaded .mp4/etc render as video.
+    const isVideoFile = (url: string) => {
+      if (!url) return false;
+      if (/youtube\.com|youtu\.be|vimeo\.com/i.test(url)) return true;
+      return /\.(mp4|webm|ogg|mov|m4v)(\?|$)/i.test(url);
+    };
+
+    // Mutate currentProduct.images so downstream reads see new values.
+    const newImages: any[] = imageUrls.map((src, i) => ({
+      id: `variant-img-${i + 1}`,
+      src,
+      alt: `Variant image ${i + 1}`,
+      isVideo: isVideoFile(src),
+    }));
+    if (videoUrl && !newImages.some(im => im.src === videoUrl)) {
+      newImages.push({
+        id: 'variant-video',
+        src: videoUrl,
+        alt: 'Variant video',
+        isVideo: true,
+      });
+    }
+    currentProduct.images.length = 0;
+    currentProduct.images.push(...newImages as any);
+
+    const totalCount = newImages.length;
+    this.imageCount = totalCount;
+    this.totalSlides = totalCount + 1;
+    this.attrsIndex = totalCount;
+
+    // Re-render thumbnail strips + main image
+    const thumbList = (this.$refs as Record<string, HTMLElement>).thumbList;
+    if (thumbList) {
+      thumbList.querySelectorAll<HTMLElement>('.gallery-thumb:not(.gallery-thumb-attrs)').forEach(el => el.remove());
+      const attrThumb = thumbList.querySelector('.gallery-thumb-attrs');
+      newImages.forEach((img, i) => {
+        const thumb = document.createElement('div');
+        thumb.className = 'gallery-thumb' + (img.isVideo ? ' gallery-thumb-video relative' : '') + (i === 0 ? ' active' : '');
+        thumb.setAttribute('data-index', String(i));
+        if (img.isVideo) {
+          thumb.innerHTML = `
+            <div class="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
+              <svg width="22" height="22" fill="#fff" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <span class="absolute bottom-0.5 right-0.5 bg-black/80 text-white text-[9px] font-bold px-1 rounded">VIDEO</span>
+          `;
+        } else {
+          thumb.innerHTML = `<img src="${img.src}" alt="${img.alt}" class="gallery-media-asset gallery-media-asset--thumb" loading="lazy" />`;
+        }
+        thumb.addEventListener('click', () => this.goToSlide(i));
+        thumb.addEventListener('mouseenter', () => this.goToSlide(i));
+        if (attrThumb) thumbList.insertBefore(thumb, attrThumb);
+        else thumbList.appendChild(thumb);
+      });
+    }
+
+    // Lightbox thumbs (include video)
+    const lbThumbList = (this.$refs as Record<string, HTMLElement>).lightboxThumbList;
+    if (lbThumbList) {
+      lbThumbList.innerHTML = newImages.map((img, i) => {
+        if (img.isVideo) {
+          return `
+            <button type="button" class="gallery-lightbox-thumb relative ${i === 0 ? 'active' : ''}" data-index="${i}">
+              <div class="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
+                <svg width="22" height="22" fill="#fff" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+              <span class="absolute bottom-0.5 right-0.5 bg-black/80 text-white text-[9px] font-bold px-1 rounded">VIDEO</span>
+            </button>
+          `;
+        }
+        return `
+          <button type="button" class="gallery-lightbox-thumb ${i === 0 ? 'active' : ''}" data-index="${i}">
+            <img src="${img.src}" alt="${img.alt}" class="gallery-media-asset gallery-media-asset--thumb" loading="lazy" />
+          </button>
+        `;
+      }).join('');
+      lbThumbList.querySelectorAll<HTMLElement>('.gallery-lightbox-thumb').forEach((el, i) => {
+        el.addEventListener('click', () => this.selectLightboxThumb(i));
+      });
+    }
+
+    // Reset main view to first image/video
+    this.currentIndex = 0;
+    this.lightboxIndex = 0;
+    const mainImage = (this.$refs as Record<string, HTMLElement>).mainImage;
+    const first = newImages[0];
+    if (mainImage && first) {
+      if (first.isVideo) {
+        mainImage.innerHTML = renderInlineVideo(first.src);
+      } else {
+        mainImage.innerHTML = `<img src="${first.src}" alt="Variant" data-gallery-main-media="true" class="gallery-media-asset gallery-media-asset--large" />`;
+      }
+      this.resetZoom();
+    }
+  },
+
+  isVideoSlide(): boolean {
+    const img = currentProduct.images[this.currentIndex];
+    return !!(img && (img as any).isVideo);
   },
 
   getMainMedia(): HTMLElement | null {
@@ -287,18 +409,23 @@ Alpine.data('imageGallery', () => ({
     const attrCard = document.getElementById('pd-attributes-card');
     attrCard?.classList.toggle('hidden', !isAttrs);
 
-    // Update main image content when showing a photo slide
+    // Update main image content when showing a photo/video slide
     if (!isAttrs) {
       const mainImage = (this.$refs as Record<string, HTMLElement>).mainImage;
       if (mainImage) {
         const image = currentProduct.images[index];
-        mainImage.innerHTML = renderGalleryMedia(
-          image?.src,
-          image?.alt ?? `Product view ${index + 1}`,
-          defaultVisual,
-          'large',
-        );
-        this.resetZoom();
+        if (image && (image as any).isVideo) {
+          mainImage.innerHTML = renderInlineVideo(image.src);
+          this.resetZoom();
+        } else {
+          mainImage.innerHTML = renderGalleryMedia(
+            image?.src,
+            image?.alt ?? `Product view ${index + 1}`,
+            defaultVisual,
+            'large',
+          );
+          this.resetZoom();
+        }
       }
     }
 
@@ -323,12 +450,16 @@ Alpine.data('imageGallery', () => ({
     const lightboxImage = (this.$refs as Record<string, HTMLElement>).lightboxImage;
     if (lightboxImage) {
       const image = currentProduct.images[index];
-      lightboxImage.innerHTML = renderGalleryMedia(
-        image?.src,
-        image?.alt ?? `Product view ${index + 1}`,
-        defaultVisual,
-        'large',
-      );
+      if (image && (image as any).isVideo) {
+        lightboxImage.innerHTML = renderInlineVideo(image.src);
+      } else {
+        lightboxImage.innerHTML = renderGalleryMedia(
+          image?.src,
+          image?.alt ?? `Product view ${index + 1}`,
+          defaultVisual,
+          'large',
+        );
+      }
     }
 
     this.syncLightboxThumbInView(index);
