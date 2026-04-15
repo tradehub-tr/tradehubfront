@@ -119,45 +119,32 @@ export async function callMethod<T = unknown>(
   post = false
 ): Promise<T> {
   const url = `${BASE_URL}/method/${method}`
+  const csrf = post ? ((await fetchCsrfToken()) ?? 'None') : 'None'
 
-  const doFetch = async (csrfOverride?: string): Promise<Response> => {
-    const csrf = post
-      ? (csrfOverride ?? (await fetchCsrfToken()) ?? 'None')
-      : 'None'
-    const headers: HeadersInit = {
-      'Content-Type': 'application/json',
-      'X-Frappe-CSRF-Token': csrf,
-    }
-    if (post) {
-      return fetch(url, {
-        method: 'POST',
-        credentials: 'include',
-        headers,
-        body: JSON.stringify(params),
-      })
-    }
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+    'X-Frappe-CSRF-Token': csrf,
+  }
+
+  let res: Response
+  if (post) {
+    res = await fetch(url, {
+      method: 'POST',
+      credentials: 'include',
+      headers,
+      body: JSON.stringify(params),
+    })
+  } else {
     const qs = new URLSearchParams(
       Object.fromEntries(
         Object.entries(params).map(([k, v]) => [k, String(v)])
       )
     ).toString()
-    return fetch(qs ? `${url}?${qs}` : url, {
+    res = await fetch(qs ? `${url}?${qs}` : url, {
       method: 'GET',
       credentials: 'include',
       headers,
     })
-  }
-
-  let res = await doFetch()
-
-  // 403: CSRF stale olabilir (örn. login sonrası rotate edildi).
-  // Cache'i bir kez yenileyip POST isteğini tekrar dene; yine 403 ise gerçekten oturum düşmüştür.
-  if (res.status === 403 && post) {
-    clearCsrfCache()
-    const freshCsrf = (await fetchCsrfToken()) ?? 'None'
-    if (freshCsrf !== 'None') {
-      res = await doFetch(freshCsrf)
-    }
   }
 
   if (res.status === 403) {

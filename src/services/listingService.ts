@@ -59,6 +59,10 @@ export interface ListingSearchParams {
   certifications?: string
   mgmt_certifications?: string
   product_certifications?: string
+  /** Comma-separated brand codes, e.g. "NIKE,ADIDAS" */
+  brands?: string
+  /** Compact attribute filter: "CODE:VAL1,VAL2|CODE2:VAL". e.g. "RENK:RED,BLUE|BEDEN:M" */
+  attrs?: string
 }
 
 export interface ListingSearchResult {
@@ -97,6 +101,8 @@ export async function searchListings(params: ListingSearchParams): Promise<Listi
   if (params.certifications) queryParams.set('certifications', params.certifications)
   if (params.mgmt_certifications) queryParams.set('mgmt_certifications', params.mgmt_certifications)
   if (params.product_certifications) queryParams.set('product_certifications', params.product_certifications)
+  if (params.brands) queryParams.set('brands', params.brands)
+  if (params.attrs) queryParams.set('attrs', params.attrs)
 
   const qs = queryParams.toString()
   const url = `/method/tradehub_core.api.listing.get_listings${qs ? '?' + qs : ''}`
@@ -450,11 +456,35 @@ export async function getCategories(parent?: string) {
 }
 
 /** Facet counts for sidebar filters */
+export interface BrandFacet {
+  code: string
+  value: string
+  label: string
+  slug?: string
+  logo?: string
+  count: number
+}
+
+export interface AttributeFacetOption {
+  value: string
+  label: string
+  color?: string
+  count: number
+}
+
+export interface AttributeFacet {
+  code: string
+  label: string
+  options: AttributeFacetOption[]
+}
+
 export interface FilterFacets {
   countries: { value: string; label: string; code?: string; count: number }[]
   categories: { id: string; name: string; slug: string; count: number }[]
   managementCertifications: { label: string; value: string; count: number }[]
   productCertifications: { label: string; value: string; count: number }[]
+  brands: BrandFacet[]
+  attributes: AttributeFacet[]
 }
 
 /**
@@ -468,7 +498,7 @@ export async function getFilterFacets(query?: string, category?: string): Promis
   const response = await api<{ message: { data: FilterFacets } }>(
     `/method/tradehub_core.api.listing.get_filter_facets${qs ? '?' + qs : ''}`
   )
-  return response.message.data || { countries: [], categories: [] }
+  return response.message.data || { countries: [], categories: [], managementCertifications: [], productCertifications: [], brands: [], attributes: [] }
 }
 
 /**
@@ -611,17 +641,40 @@ function mapListingCard(raw: any): ProductListingCard {
     discountPercentage: typeof raw.discountPercentage === 'number'
       ? raw.discountPercentage
       : (raw.discountPercentage ? Number(raw.discountPercentage) : undefined),
+    brand: raw.brand || undefined,
+    brandName: raw.brandName || undefined,
+    brandSlug: raw.brandSlug || undefined,
+    brandLogo: raw.brandLogo || undefined,
   }
 }
 
+function isVideoFileUrl(url: string): boolean {
+  if (!url) return false
+  // YouTube/Vimeo URLs are handled separately as embeds; mark them as video too
+  if (/youtube\.com|youtu\.be|vimeo\.com/i.test(url)) return true
+  return /\.(mp4|webm|ogg|mov|m4v)(\?|$)/i.test(url)
+}
+
 function mapListingDetail(raw: any): ProductDetail {
-  // Map images
+  // Map images — auto-detect video files by extension so uploaded .mp4/.webm
+  // files in the gallery render as video slides, not broken <img> tags.
   const images: ProductImage[] = (raw.images || []).map((src: string, i: number) => ({
     id: `img-${i + 1}`,
     src: src || '',
     alt: `${raw.title || ''} - ${i + 1}`,
-    isVideo: false,
+    isVideo: isVideoFileUrl(src),
   }))
+
+  // Promo video is appended as a pseudo-image at the end of the gallery so
+  // it becomes a regular slide (with a play-icon thumbnail + iframe in main area).
+  if (raw.videoUrl) {
+    images.push({
+      id: 'video-main',
+      src: raw.videoUrl,
+      alt: `${raw.title || ''} - Video`,
+      isVideo: true,
+    })
+  }
 
   // Map price tiers with currency conversion
   const baseCur = raw.currency || 'USD'
@@ -663,6 +716,10 @@ function mapListingDetail(raw: any): ProductDetail {
         price: o.price ? convertPrice(o.price, baseCur) : undefined,
         priceAddon: o.priceAddon ? convertPrice(o.priceAddon, baseCur) : 0,
         basePriceAddon: o.priceAddon || 0,
+        images: Array.isArray(o.images) && o.images.length > 0 ? o.images : undefined,
+        videoUrl: o.videoUrl || undefined,
+        title: o.title || undefined,
+        sku: o.sku || undefined,
       })),
     }
   })
@@ -767,6 +824,24 @@ function mapListingDetail(raw: any): ProductDetail {
     reviewCategoryRatings: [],
     storeReviewCount: 0,
     reviewMentionTags: [],
+    specGroups: (raw.specGroups || []).map((g: any) => ({
+      code: g.code || '',
+      label: g.label || 'Genel',
+      items: (g.items || []).map((it: any) => ({ label: it.label, value: it.value })),
+    })),
+    brandInfo: raw.brandInfo
+      ? {
+          code: raw.brandInfo.code || '',
+          name: raw.brandInfo.name || '',
+          slug: raw.brandInfo.slug || '',
+          logo: raw.brandInfo.logo || '',
+          isApproved: !!raw.brandInfo.isApproved,
+        }
+      : null,
+    productTypeName: raw.productTypeName || undefined,
+    productFamilyName: raw.productFamilyName || undefined,
+    attributeSetName: raw.attributeSetName || undefined,
+    videoUrl: raw.videoUrl || undefined,
   }
 }
 

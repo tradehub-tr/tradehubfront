@@ -15,6 +15,7 @@ export { ProductFAQ } from './ProductFAQ';
 export { RelatedProducts, initRelatedProducts } from './RelatedProducts';
 export { ProductAttributes } from './ProductAttributes';
 export { AttributesTabContent, initAttributesTab } from './AttributesTabContent';
+export { ProductVideoSection, initProductVideoSection, setProductVideo } from './ProductVideoSection';
 export { ReviewsModal, initReviewsModal, showReviewsModal } from './ReviewsModal';
 export { LoginModal, initLoginModal, showLoginModal, hideLoginModal, openLoginModal } from './LoginModal';
 export { CartDrawer, initCartDrawer, ShippingModal, initShippingModal, openShippingModal, openCartDrawer, setCartDrawerContext } from './CartDrawer';

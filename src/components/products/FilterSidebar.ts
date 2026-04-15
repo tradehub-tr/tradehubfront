@@ -160,6 +160,15 @@ function buildDefaultFilterSections(): FilterSection[] {
       },
     } as MinOrderFilterSection,
     {
+      id: 'brands',
+      title: t('products.filterBrand', { defaultValue: 'Marka' }),
+      type: 'searchable-checkbox',
+      collapsible: true,
+      collapsed: false,
+      searchPlaceholder: t('products.filterSearchBrand', { defaultValue: 'Marka ara...' }),
+      options: [],
+    } as SearchableCheckboxFilterSection,
+    {
       id: 'supplier-country',
       title: t('products.filterSupplierCountry'),
       type: 'searchable-checkbox',
@@ -646,7 +655,7 @@ export function FilterSidebar(sections?: FilterSection[], idPrefix = ''): string
       </div>
 
       <!-- Filter sections (natural flow, no internal scroll) -->
-      <div class="px-4 pb-2">
+      <div class="px-4 pb-2" data-filter-sections-container>
         <!-- Trade Assurance (special section with icon) -->
         ${tradeAssurance ? renderTradeAssuranceSection(idPrefix) : ''}
 
@@ -728,6 +737,101 @@ export function initFilterSidebar(query?: string, category?: string): void {
           `;
         }).join('');
       });
+
+      // Update brand sections
+      document.querySelectorAll<HTMLElement>('[data-filter-dynamic="brands"]').forEach(container => {
+        const brands = (facets as any).brands || [];
+        if (brands.length === 0) {
+          container.innerHTML = `<p class="text-xs" style="color:#9ca3af">${t('products.noResults')}</p>`;
+          return;
+        }
+        const idPrefix = container.closest('[data-filter-prefix]')?.getAttribute('data-filter-prefix') || '';
+        container.innerHTML = brands.map((b: any) => {
+          const checkboxId = `filter-${idPrefix ? idPrefix + '-' : ''}brands-brand-${String(b.value).toLowerCase().replace(/\s+/g, '-')}`;
+          const logoHtml = b.logo ? `<img src="${b.logo}" alt="${b.label}" class="w-4 h-4 object-contain mr-1" />` : '';
+          return `
+            <label for="${checkboxId}" class="flex items-center gap-2 cursor-pointer group py-1 filter-searchable-item">
+              <div class="relative flex items-center justify-center w-4 h-4">
+                <input type="checkbox" id="${checkboxId}" name="brands" value="${b.value}"
+                  class="peer sr-only" data-filter-section="brands" data-filter-value="${b.value}"
+                  @change="$dispatch('filter-change')" />
+                <div class="absolute inset-0 border rounded transition-colors duration-150
+                  peer-checked:bg-primary-500 peer-checked:border-primary-500
+                  peer-focus:ring-2 peer-focus:ring-primary-200"
+                  style="border-color: var(--filter-checkbox-border, #d1d5db);"></div>
+                <span class="relative z-10 text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-150">
+                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                </span>
+              </div>
+              ${logoHtml}
+              <span class="text-[13px] leading-tight group-hover:text-primary-600 transition-colors duration-150" style="color: var(--filter-text-color, #374151);">${b.label}</span>
+              <span class="text-[11px] ml-auto" style="color: var(--filter-count-color, #9ca3af);">(${b.count})</span>
+            </label>
+          `;
+        }).join('');
+      });
+
+      // Render dynamic attribute facets (Renk, Beden, Malzeme, ...)
+      const attributes = (facets as any).attributes || [];
+      if (attributes.length > 0) {
+        document.querySelectorAll<HTMLElement>('[data-filter-sections-container]').forEach(container => {
+          // Remove any previously-injected attribute facets to avoid dupes on re-render
+          container.querySelectorAll('[data-dynamic-attr-section]').forEach(el => el.remove());
+          const root = container.closest<HTMLElement>('[data-filter-prefix-root]');
+          const idPrefix = root && root.getAttribute('data-filter-prefix-root') !== 'desktop'
+            ? root.getAttribute('data-filter-prefix-root') || ''
+            : '';
+
+          const sectionsHtml = attributes.map((attr: any) => {
+            const sectionId = `attr-${attr.code.toLowerCase()}`;
+            const optionsHtml = (attr.options || []).map((opt: any) => {
+              const checkboxId = `filter-${idPrefix ? idPrefix + '-' : ''}${sectionId}-${String(opt.value).toLowerCase().replace(/\s+/g, '-')}`;
+              const colorSwatch = opt.color
+                ? `<span class="inline-block w-3.5 h-3.5 rounded-full border border-gray-300 flex-shrink-0" style="background:${opt.color};"></span>`
+                : '';
+              return `
+                <label for="${checkboxId}" class="flex items-center gap-2 cursor-pointer group py-1 filter-searchable-item">
+                  <div class="relative flex items-center justify-center w-4 h-4 flex-shrink-0">
+                    <input type="checkbox" id="${checkboxId}" name="${sectionId}" value="${opt.value}"
+                      class="peer sr-only" data-filter-section="${sectionId}" data-filter-value="${opt.value}"
+                      data-attribute-code="${attr.code}"
+                      @change="$dispatch('filter-change')" />
+                    <div class="absolute inset-0 border rounded transition-colors duration-150
+                      peer-checked:bg-primary-500 peer-checked:border-primary-500
+                      peer-focus:ring-2 peer-focus:ring-primary-200"
+                      style="border-color: var(--filter-checkbox-border, #d1d5db);"></div>
+                    <span class="relative z-10 text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-150">
+                      <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                    </span>
+                  </div>
+                  ${colorSwatch}
+                  <span class="text-[13px] leading-tight group-hover:text-primary-600 transition-colors duration-150 truncate" style="color: var(--filter-text-color, #374151);">${opt.label}</span>
+                  <span class="text-[11px] ml-auto flex-shrink-0" style="color: var(--filter-count-color, #9ca3af);">(${opt.count})</span>
+                </label>
+              `;
+            }).join('');
+            return `
+              <div class="py-3 border-t" data-dynamic-attr-section="${attr.code}"
+                style="border-color: var(--filter-divider-color, #e5e7eb);">
+                <button type="button"
+                  class="flex items-center justify-between w-full mb-2 cursor-pointer bg-transparent border-0 p-0"
+                  @click="toggle && toggle('${sectionId}')">
+                  <span class="text-[11px] font-bold uppercase tracking-wider" style="color: var(--filter-heading-color, #111827);">${attr.label}</span>
+                  <svg class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <div class="flex flex-col gap-0.5">
+                  ${optionsHtml}
+                </div>
+              </div>
+            `;
+          }).join('');
+
+          // Insert attribute sections at end of filter sections container
+          container.insertAdjacentHTML('beforeend', sectionsHtml);
+        });
+      }
 
       // Update certification sections (management + product)
       const certSections = [

@@ -36,11 +36,33 @@ export interface VariantOption {
   rawPrice?: number;
   priceAddon?: number;
   basePriceAddon?: number;
+  /** Full image list for gallery swap when this variant is selected. */
+  images?: string[];
+  /** Optional promo video for this specific variant. */
+  videoUrl?: string;
+  /** Composed title to display (e.g. "Siyah Polo Yaka T-shirt"). */
+  title?: string;
+  /** SKU for cart / reporting. */
+  sku?: string;
 }
 
 export interface ProductSpec {
   key: string;
   value: string;
+}
+
+export interface ProductSpecGroup {
+  code: string;
+  label: string;
+  items: { label: string; value: string }[];
+}
+
+export interface BrandInfo {
+  code: string;
+  name: string;
+  slug: string;
+  logo?: string;
+  isApproved?: boolean;
 }
 
 export interface ProductReview {
@@ -126,7 +148,14 @@ export interface ProductDetail {
   shipping: ShippingInfo[];
   variants: ProductVariant[];
   specs: ProductSpec[];
+  specGroups?: ProductSpecGroup[];
   packagingSpecs: ProductSpec[];
+  brandInfo?: BrandInfo | null;
+  productTypeName?: string;
+  productFamilyName?: string;
+  attributeSetName?: string;
+  /** Optional listing-level promo video URL (YouTube/Vimeo/MP4). */
+  videoUrl?: string;
   description: string;
   packaging: string;
   rating: number;

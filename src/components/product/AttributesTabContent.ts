@@ -23,14 +23,30 @@ function buildTableRows(specs: { key: string; value: string }[]): string {
 
 export function AttributesTabContent(): string {
   const p = getCurrentProduct();
+
+  // Build grouped specs HTML when backend provided specGroups,
+  // otherwise fall back to flat specs table.
+  const specGroups = (p as any).specGroups as Array<{ code: string; label: string; items: { label: string; value: string }[] }> | undefined;
+  const groupedHtml = specGroups && specGroups.length > 0
+    ? specGroups.map(g => `
+        <div class="mb-6">
+          <h4 class="text-sm font-semibold uppercase tracking-wider mb-2" style="color: var(--pd-spec-key-color, #6b7280);">${g.label}</h4>
+          <table class="pd-attrs-table">
+            <tbody>
+              ${buildTableRows(g.items.map(it => ({ key: it.label, value: it.value })))}
+            </tbody>
+          </table>
+        </div>`).join('')
+    : `<table class="pd-attrs-table">
+         <tbody>
+           ${buildTableRows(p.specs)}
+         </tbody>
+       </table>`;
+
   return `
     <div id="pd-tab-attributes">
       <h3 class="text-lg font-bold mb-4" style="color: var(--pd-title-color, #111827);">${t('product.keyAttributes')}</h3>
-      <table class="pd-attrs-table">
-        <tbody>
-          ${buildTableRows(p.specs)}
-        </tbody>
-      </table>
+      ${groupedHtml}
 
       <h3 class="text-lg font-bold mb-4 mt-8" style="color: var(--pd-title-color, #111827);">${t('product.packagingDelivery')}</h3>
       <table class="pd-attrs-table">
