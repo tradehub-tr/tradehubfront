@@ -25,11 +25,24 @@ export function ProductTitleBar(): string {
   const mockProduct = getCurrentProduct();
   const p = mockProduct;
   const s = p.supplier;
+  const brand = (p as any).brandInfo as { code: string; name: string; slug: string; logo?: string } | null | undefined;
+
+  const brandRowHtml = brand && brand.name
+    ? `<a href="/pages/brand.html?slug=${encodeURIComponent(brand.slug)}"
+          class="inline-flex items-center gap-1.5 px-2 py-1 mb-2 rounded-md border border-gray-200 bg-white hover:bg-gray-50 text-[12px] font-medium no-underline"
+          style="color: var(--pd-title-color, #222222);"
+          title="${brand.name}">
+        ${brand.logo ? `<img src="${brand.logo}" alt="${brand.name}" class="w-4 h-4 object-contain" />` : ''}
+        <span>${t('product.brandLabel', { defaultValue: 'Marka' })}:</span>
+        <strong>${brand.name}</strong>
+      </a>`
+    : '';
 
   return `
     <div id="pd-title-bar" class="mb-5">
+      ${brandRowHtml}
       <!-- Product Title -->
-      <h1 class="text-lg font-bold leading-snug mb-1.5 line-clamp-2 break-words" style="color: var(--pd-title-color, #222222);">${p.title}</h1>
+      <h1 id="pd-product-title" class="text-lg font-bold leading-snug mb-1.5 line-clamp-2 break-words" style="color: var(--pd-title-color, #222222);">${p.title}</h1>
 
       <!-- Rating + Reviews + Orders -->
       <div class="flex items-center gap-2 flex-wrap text-[13px] mb-3">

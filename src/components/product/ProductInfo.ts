@@ -52,6 +52,9 @@ function renderVariant(variant: ProductVariant): string {
               data-variant-id="${opt.id}"
               data-variant-label="${opt.label}"
               data-variant-image="${opt.thumbnail || ''}"
+              data-variant-video="${(opt as any).videoUrl || ''}"
+              data-variant-title="${encodeURIComponent((opt as any).title || '')}"
+              data-variant-images="${encodeURIComponent(JSON.stringify((opt as any).images || []))}"
               data-variant-value="${opt.value}"
               ${opt.price ? `data-variant-price="${opt.price}"` : ''}
               ${opt.available ? '' : 'disabled'}
@@ -76,6 +79,9 @@ function renderVariant(variant: ProductVariant): string {
             class="variant-option pd-variant-btn ${i === 0 && opt.available ? 'active' : ''} ${opt.available ? '' : 'opacity-40 cursor-not-allowed'}"
             data-variant-id="${opt.id}"
             data-variant-label="${opt.label}"
+            data-variant-video="${(opt as any).videoUrl || ''}"
+            data-variant-title="${encodeURIComponent((opt as any).title || '')}"
+            data-variant-images="${encodeURIComponent(JSON.stringify((opt as any).images || []))}"
             ${opt.price ? `data-variant-price="${opt.price}"` : ''}
             ${opt.available ? '' : 'disabled'}
           >
@@ -218,24 +224,41 @@ export function initProductInfo(): void {
           labelEl.textContent = variantLabel;
         }
 
-        // Navigate gallery slider to the variant's image
-        const variantImage = btn.getAttribute('data-variant-image');
-        if (variantImage) {
-          const thumbList = document.querySelector<HTMLElement>('[x-ref="thumbList"]');
-          if (thumbList) {
-            const thumbs = thumbList.querySelectorAll<HTMLElement>('.gallery-thumb, [data-thumb-index]');
-            thumbs.forEach((thumb, idx) => {
-              const thumbImg = thumb.querySelector<HTMLImageElement>('img');
-              if (thumbImg && thumbImg.src.includes(variantImage.replace('/files/', ''))) {
-                document.dispatchEvent(new CustomEvent('gallery-go-to', { detail: { index: idx } }));
-              }
-            });
-          }
+        // Read all variant-specific data from the clicked button
+        const variantId = btn.getAttribute('data-variant-id') || '';
+        const variantVideo = btn.getAttribute('data-variant-video') || '';
+        let variantImages: string[] = [];
+        try {
+          const raw = decodeURIComponent(btn.getAttribute('data-variant-images') || '[]');
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) variantImages = parsed.filter(Boolean);
+        } catch (_) { /* noop */ }
+        const variantTitle = decodeURIComponent(btn.getAttribute('data-variant-title') || '');
+
+        // Dispatch a single event that the gallery + video + title listeners consume
+        document.dispatchEvent(new CustomEvent('product-variant-change', {
+          detail: {
+            variantId,
+            videoUrl: variantVideo,
+            images: variantImages,
+            title: variantTitle,
+          },
+        }));
+
+        // Update URL so the selected variant is shareable / persistent on reload
+        if (variantId) {
+          const url = new URL(window.location.href);
+          url.searchParams.set('variant', variantId);
+          window.history.replaceState(null, '', url.toString());
         }
 
-        // Open cart drawer with the selected variant pre-selected
-        const { color, size } = getSelectedVariantLabels();
-        openCartDrawer(color, size);
+        // Open drawer only for NON-photo variant groups (size, material, etc.).
+        // Photo-based variants (color) just swap the gallery — no drawer popup.
+        const hasVariantPhoto = !!btn.getAttribute('data-variant-image');
+        if (!hasVariantPhoto) {
+          const { color, size } = getSelectedVariantLabels();
+          openCartDrawer(color, size);
+        }
       });
     });
   });
