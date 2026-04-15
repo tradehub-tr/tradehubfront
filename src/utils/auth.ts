@@ -3,7 +3,7 @@
  * All auth-related API calls go through the api() wrapper from utils/api.ts.
  */
 
-import { api, frappeLogout } from './api';
+import { api, frappeLogout, clearCsrfCache } from './api';
 
 const FRAPPE_BASE = import.meta.env.VITE_FRAPPE_BASE || '';
 
@@ -158,6 +158,12 @@ export async function login(email: string, password: string): Promise<LoginRespo
   if (data.requires_consent_renewal) {
     console.warn('[Auth] Consent yenileme gerekli', data);
   }
+
+  // Frappe login sonrası session yeniden üretilir ve CSRF token rotate olur.
+  // Cache'lenmiş (pre-login) token'i temizle — sonraki POST'lar stale token ile
+  // 403 alıp "Oturum süresi doldu" fırlatmasın.
+  clearCsrfCache();
+  invalidateAuthCache();
 
   return data;
 }
