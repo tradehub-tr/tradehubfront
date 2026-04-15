@@ -17,7 +17,6 @@ import { callMethod, api } from '../utils/api'
 export interface CreateTicketInput {
   subject: string
   description: string
-  email?: string         // Guest icin zorunlu, login'li icin opsiyonel
   name?: string
   phone?: string
   priority?: '' | 'Low' | 'Medium' | 'High' | 'Urgent'
