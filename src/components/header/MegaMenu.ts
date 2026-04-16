@@ -693,7 +693,7 @@ export function initMegaMenu(): void {
         const href = isViewAll ? '/pages/categories' : `/pages/products.html?cat=${slug}`;
         return `
           <a href="${href}" class="flex flex-col items-center gap-1.5 sm:gap-2 group/product min-h-[44px]">
-            <div class="relative w-14 h-14 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full flex items-center justify-center overflow-hidden group-hover/product:ring-2 transition-all" style="background:var(--card-bg);--tw-ring-color:var(--nav-hover-color);${borderStyle}">
+            <div class="relative w-14 h-14 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full flex items-center justify-center overflow-hidden group-hover/product:ring-2 transition-all" style="background:var(--product-card-bg, var(--card-bg));--tw-ring-color:var(--nav-hover-color);${borderStyle}">
               ${inner}
             </div>
             <span class="th-nav-link text-center leading-tight transition-colors max-w-[4rem] sm:max-w-[5rem] lg:max-w-[6rem]" style="font-size:var(--mega-font-size)">${name}</span>

@@ -17,7 +17,7 @@ export function HotProducts(products: SimpleProduct[]): string {
         </h2>
         <div class="hot-products__grid grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-[clamp(0.75rem,0.5rem+0.5vw,1.25rem)]">
           ${products.map(product => `
-            <div class="hot-products__card bg-white dark:bg-gray-800 border border-(--card-border-color) dark:border-gray-700 rounded-(--radius-card) p-6 flex flex-col items-center text-center hover:shadow-md dark:hover:shadow-lg transition-shadow duration-300">
+            <div class="hot-products__card dark:bg-gray-800 dark:border-gray-700 flex flex-col items-center text-center hover:shadow-md dark:hover:shadow-lg transition-shadow duration-300">
               <div class="hot-products__image-wrapper w-full h-[200px] flex items-center justify-center mb-4 overflow-hidden">
                 <img src="${product.image}" alt="${product.name}" class="max-h-full max-w-full object-contain" loading="lazy"
                      onerror="this.parentElement.innerHTML='<div class=\\'w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center\\'><svg class=\\'w-8 h-8 text-gray-300\\' fill=\\'none\\' stroke=\\'currentColor\\' viewBox=\\'0 0 24 24\\'><path stroke-linecap=\\'round\\' stroke-linejoin=\\'round\\' stroke-width=\\'2\\' d=\\'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z\\'/></svg></div>'" />

@@ -8,7 +8,7 @@ import { formatPrice } from '../../utils/currency';
 
 export function ProductCard({ image, price, currency, minOrder, href }: ProductCardProps): string {
   return `
-    <a href="${href}" class="block w-full min-w-0 max-w-[169.5px] flex-shrink-0 rounded-lg overflow-hidden hover:shadow-md transition-shadow cursor-pointer">
+    <a href="${href}" class="pc-mini block w-full min-w-0 max-w-[169.5px] flex-shrink-0 overflow-hidden hover:shadow-md transition-shadow cursor-pointer">
       <div class="w-full aspect-square bg-gray-100 dark:bg-gray-700 overflow-hidden">
         <img
           src="${image}"

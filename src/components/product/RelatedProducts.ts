@@ -47,7 +47,7 @@ function renderCard(card: ProductListingCard): string {
 
   return `
     <a
-      class="rp-card flex flex-col h-full rounded-lg overflow-hidden bg-white border border-gray-100 transition-shadow hover:shadow-md no-underline"
+      class="rp-card flex flex-col h-full overflow-hidden transition-shadow hover:shadow-md no-underline"
       href="${card.href}"
       aria-label="${safeName}"
     >

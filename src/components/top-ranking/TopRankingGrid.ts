@@ -115,7 +115,7 @@ export function renderRankingFlatCard(product: RankedProduct): string {
   const safeHref = escapeHtml(product.href || '#');
 
   return `
-    <a href="${safeHref}" class="group/product flex flex-col bg-surface border border-border-default rounded-md p-3 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200" aria-label="${safeProductName}">
+    <a href="${safeHref}" class="pc-topranking group/product flex flex-col hover:-translate-y-0.5 hover:shadow-md transition-all duration-200" aria-label="${safeProductName}">
       <div class="relative aspect-square w-full overflow-hidden rounded-md bg-surface-raised mb-2">
         <img
           src="${safeImg}"

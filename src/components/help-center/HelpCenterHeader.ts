@@ -5,6 +5,7 @@
  */
 
 import { t, getCurrentLang } from '../../i18n';
+import { waitForAuth } from '../../utils/auth';
 
 const languageOptions = [
   { code: 'TR', name: 'Türkçe', flag: '🇹🇷' },
@@ -24,12 +25,12 @@ interface HelpCenterHeaderOptions {
   activePage?: ActivePage;
 }
 
-const NAV_LINKS: { id: ActivePage; label: string; href: string }[] = [
+const NAV_LINKS: { id: ActivePage; label: string; href: string; authOnly?: boolean }[] = [
   { id: 'home', label: t('helpCenter.navHome'), href: '/pages/help/help-center.html' },
   { id: 'faq', label: t('helpCenter.navFaq'), href: '/pages/help/faq.html' },
   { id: 'contact', label: t('helpCenter.navContact'), href: '/pages/help/contact.html' },
-  { id: 'ticket-new', label: t('helpCenter.navNewTicket'), href: '/pages/help/help-ticket-new.html' },
-  { id: 'tickets', label: t('helpCenter.navMyTickets'), href: '/pages/help/help-tickets.html' },
+  { id: 'ticket-new', label: t('helpCenter.navNewTicket'), href: '/pages/help/help-ticket-new.html', authOnly: true },
+  { id: 'tickets', label: t('helpCenter.navMyTickets'), href: '/pages/help/help-tickets.html', authOnly: true },
 ];
 
 export function HelpCenterHeader(opts: HelpCenterHeaderOptions = {}): string {
@@ -72,8 +73,8 @@ export function HelpCenterHeader(opts: HelpCenterHeaderOptions = {}): string {
               <a
                 id="hc-nav-${link.id}"
                 href="${link.href}"
+                ${link.authOnly ? 'data-auth-only="1" style="display:none;"' : `style="${activePage === link.id ? activeStyle : inactiveStyle}"`}
                 class="relative px-3 py-1.5 text-sm transition-colors whitespace-nowrap"
-                style="${activePage === link.id ? activeStyle : inactiveStyle}"
               >
                 ${link.label}
               </a>
@@ -137,4 +138,12 @@ export function initHelpCenterLangSelector(): void {
       window.location.reload();
     });
   }
+
+  // Auth durumuna göre "Talep Oluştur" + "Taleplerim" linklerini göster
+  waitForAuth().then(user => {
+    if (!user) return;
+    document.querySelectorAll<HTMLElement>('[data-auth-only="1"]').forEach(el => {
+      el.style.display = '';
+    });
+  });
 }
