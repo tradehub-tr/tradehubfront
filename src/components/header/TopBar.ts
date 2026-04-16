@@ -34,8 +34,22 @@ const languageOptions: LocaleOption[] = [
   { code: 'EN', name: 'English', flag: '🇬🇧' },
 ];
 
-/** Default currency options (names resolved via i18n) */
+/** Currency options — loaded from localStorage cache (populated by currencyService) */
 function getCurrencyOptions(): CurrencyOption[] {
+  try {
+    const raw = localStorage.getItem('tradehub_currency_meta');
+    if (raw) {
+      const list = JSON.parse(raw) as Array<{ code: string; symbol: string; name: string; nameTr: string }>;
+      if (list.length > 0) {
+        const lang = getCurrentLang();
+        return list.map(c => ({
+          code: c.code,
+          symbol: c.symbol,
+          name: lang === 'tr' ? (c.nameTr || c.name) : c.name,
+        }));
+      }
+    }
+  } catch { /* fall through to defaults */ }
   return [
     { code: 'TRY', symbol: '₺', name: t('header.currencyTRY') },
     { code: 'USD', symbol: '$', name: t('header.currencyUSD') },
