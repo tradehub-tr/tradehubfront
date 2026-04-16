@@ -47,7 +47,7 @@ await requireAuth();
 // --- Helper: Product Card HTML ---
 function renderProductCard(product: ProductListingCard): string {
   return `
-    <div class="group overflow-hidden rounded-lg border border-border-default bg-white transition-shadow duration-200 hover:shadow-lg" data-product-id="${product.id}">
+    <div class="rfq-search-card group overflow-hidden transition-shadow duration-200 hover:shadow-lg" data-product-id="${product.id}">
       <div class="aspect-square overflow-hidden bg-surface-raised">
         <img
           src="${product.imageSrc || ''}"

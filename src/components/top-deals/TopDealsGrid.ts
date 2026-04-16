@@ -49,7 +49,7 @@ function moqLabel(moq: string | undefined): string {
 export function renderTopDealsFlatCard(product: TopDealsProduct): string {
   const hasDiscount = product.originalPrice && product.discountPercent && product.discountPercent > 0;
   return `
-    <a href="${product.href}" class="group/product flex flex-col bg-surface border border-border-default rounded-md p-3 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 relative">
+    <a href="${product.href}" class="pc-topdeals group/product flex flex-col hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 relative">
       <div class="relative aspect-square w-full overflow-hidden rounded-md bg-surface-raised mb-2">
         ${renderProductImage(product.imageSrc || '', product.name)}
         ${hasDiscount ? `
@@ -69,7 +69,7 @@ export function renderTopDealsFlatCard(product: TopDealsProduct): string {
 /** Skeleton placeholder used while a fetch is in flight (initial load only). */
 function renderSkeletonCard(): string {
   return `
-    <div class="bg-surface border border-border-default rounded-md p-3 animate-pulse">
+    <div class="pc-topdeals animate-pulse">
       <div class="aspect-square bg-gray-200 rounded-md mb-2"></div>
       <div class="h-4 w-16 bg-gray-200 rounded mb-1"></div>
       <div class="h-3 w-12 bg-gray-200 rounded"></div>

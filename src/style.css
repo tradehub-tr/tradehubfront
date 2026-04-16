@@ -1173,6 +1173,48 @@
         font-weight: var(--card-title-weight);
     }
 
+    /* --- Product Card: varyant-başına bağımsız layout token'ları ---
+     * Her varyant kendi --pc-{v}-* ailesini kullanır. Default'lar orijinal
+     * görünümü birebir korur — admin override etmedikçe hiçbir şey değişmez. */
+
+    /* Mini kart — shared/ProductCard (buyer dashboard, browsing history, 404 explore) */
+    .pc-mini {
+        background: var(--pc-mini-bg, transparent);
+        border: var(--pc-mini-border-width, 0px) solid var(--pc-mini-border-color, transparent);
+        border-radius: var(--pc-mini-radius, 8px);
+    }
+
+    /* Top Deals kartı — top-deals.html flat grid */
+    .pc-topdeals {
+        background: var(--pc-topdeals-bg, var(--color-surface));
+        border: var(--pc-topdeals-border-width, 1px) solid var(--pc-topdeals-border-color, var(--color-border-default));
+        border-radius: var(--pc-topdeals-radius, 6px);
+        padding: var(--pc-topdeals-padding, 12px);
+    }
+
+    /* Top Ranking kartı — top-ranking.html flat grid (group mode dokunulmaz) */
+    .pc-topranking {
+        background: var(--pc-topranking-bg, var(--color-surface));
+        border: var(--pc-topranking-border-width, 1px) solid var(--pc-topranking-border-color, var(--color-border-default));
+        border-radius: var(--pc-topranking-radius, 6px);
+        padding: var(--pc-topranking-padding, 12px);
+    }
+
+    /* RFQ arama sonucu kartı — rfq.ts renderProductCard */
+    .rfq-search-card {
+        background: var(--pc-rfq-bg, #ffffff);
+        border: var(--pc-rfq-border-width, 1px) solid var(--pc-rfq-border-color, #e5e7eb);
+        border-radius: var(--pc-rfq-radius, 8px);
+    }
+
+    /* Featured kartı — seller/HotProducts (Buy Now CTA'lı, fiyat yok) */
+    .hot-products__card {
+        background: var(--pc-featured-bg, #ffffff);
+        border: var(--pc-featured-border-width, 1px) solid var(--pc-featured-border-color, #e5e7eb);
+        border-radius: var(--pc-featured-radius, 8px);
+        padding: var(--pc-featured-padding, 24px);
+    }
+
     /* =====================================================
        INPUT — base + size variants + state variants (v4)
        ===================================================== */
@@ -1936,6 +1978,9 @@
 .rp-card {
     text-decoration: none;
     color: inherit;
+    background: var(--pc-related-bg, #ffffff);
+    border: var(--pc-related-border-width, 1px) solid var(--pc-related-border-color, #f3f4f6);
+    border-radius: var(--pc-related-radius, 8px);
 }
 
 /* Mobile sticky bottom bar visibility now controlled by Tailwind classes in product-detail.ts */
