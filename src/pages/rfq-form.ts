@@ -231,7 +231,7 @@ document.addEventListener('click', (e) => {
 const uploadArea = document.getElementById('rfq-upload-area')!;
 const fileInput = document.getElementById('rfq-file-input') as HTMLInputElement;
 const fileList = document.getElementById('rfq-file-list')!;
-let selectedFiles: File[] = [];
+const selectedFiles: File[] = [];
 
 uploadArea.addEventListener('click', () => fileInput.click());
 

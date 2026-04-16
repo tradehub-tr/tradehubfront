@@ -318,7 +318,7 @@ export function initSupplierSetupForm(options: SupplierSetupFormOptions = {}): v
     let valid = false;
     switch (currentStep) {
       case 1: {
-        const phoneVal = contactPhone.value.replace(/[\s\-\(\)]/g, '');
+        const phoneVal = contactPhone.value.replace(/[\s\-()]/g, '');
         const phoneOk = !phoneVal || validatePhone(phoneVal);
         showFieldError(phoneError, phoneVal && !phoneOk ? t('auth.supplierSetup.invalidPhone') : '');
         valid = !!sellerType.value && !!businessName.value.trim() && !!phoneVal && phoneOk;

@@ -1,0 +1,7 @@
+dist
+node_modules
+public
+pages
+*.html
+package-lock.json
+CHANGELOG.md

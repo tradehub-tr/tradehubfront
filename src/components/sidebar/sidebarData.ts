@@ -54,8 +54,7 @@ export function getSidebarSections(): SidebarSection[] {
             { label: t('dashboard.allOrders'), href: '/pages/dashboard/orders.html' },
             { label: t('dashboard.refundsAfterSales'), href: '/pages/dashboard/orders.html#refunds' },
             { label: t('dashboard.myReviews'), href: '/pages/dashboard/orders.html#reviews' },
-            { label: t('dashboard.couponsCredits'), href: '/pages/dashboard/orders.html#coupons' },
-            { label: t('dashboard.taxInfo'), href: '/pages/dashboard/orders.html#tax-info' },
+            { label: t('dashboard.coupons'), href: '/pages/dashboard/orders.html#coupons' },
           ],
         },
         {
@@ -66,8 +65,6 @@ export function getSidebarSections(): SidebarSection[] {
           submenu: [
             { label: t('dashboard.paymentManagement'), href: '/pages/dashboard/payment.html#payment-management', group: t('sidebar.groupSummary') },
             { label: t('dashboard.transactions'), href: '/pages/dashboard/payment.html#transactions', group: t('sidebar.groupSummary') },
-            { label: t('dashboard.bankAccounts'), href: '/pages/dashboard/payment.html#tt-accounts', group: 'T/T' },
-            { label: t('dashboard.wireTransfer'), href: '/pages/dashboard/payment.html#tt-tracking', group: 'T/T' },
           ],
         },
         {

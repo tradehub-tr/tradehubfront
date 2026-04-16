@@ -15,10 +15,9 @@ interface OrdersNavItem {
 function getNavItems(): OrdersNavItem[] {
   return [
     { id: 'all-orders', label: t('orders.allOrders') },
-    { id: 'refunds', label: t('orders.refundsAfterSalesTitle') },
+    { id: 'refunds', label: t('orders.refundsTab') },
     { id: 'reviews', label: t('orders.reviews') },
-    { id: 'coupons', label: t('orders.couponsAndCredits') },
-    { id: 'tax-info', label: t('orders.taxInformation') },
+    { id: 'coupons', label: t('orders.coupons') },
   ];
 }
 
@@ -451,10 +450,6 @@ function renderAllOrders(): string {
                 <span class="text-sm text-gray-500" x-text="'${t('orders.orderDateLabel')} ' + selectedOrder.orderDate"></span>
               </div>
             </div>
-            <a href="#" class="flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 transition-colors whitespace-nowrap shrink-0">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M12 5v14M5 12h14"/></svg>
-              ${t('orders.downloadDetails')}
-            </a>
           </div>
         </div>
 
@@ -544,42 +539,8 @@ function renderAllOrders(): string {
           <p class="text-sm text-gray-500" x-text="getStatusDescription(selectedOrder)"></p>
         </div>
 
-        <!-- Info Box: Inspection + Payment Info -->
+        <!-- Action Buttons (status-aware) -->
         <div class="px-7 max-sm:px-3 py-5 border-b border-gray-100">
-          <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-3">
-            <!-- Inspection services -->
-            <div class="flex items-center gap-3 flex-wrap">
-              <span class="text-sm text-gray-700">${t('orders.inspectionServicesBy')}</span>
-              <div class="flex items-center gap-2">
-                <span class="inline-flex items-center px-2 py-0.5 text-xs font-bold text-blue-800 bg-blue-100 rounded">SGS</span>
-                <span class="inline-flex items-center px-2 py-0.5 text-xs font-bold text-red-800 bg-red-100 rounded">BV</span>
-                <span class="inline-flex items-center px-2 py-0.5 text-xs font-bold text-green-800 bg-green-100 rounded">TÜV</span>
-              </div>
-              <a href="#" class="text-sm text-blue-600 hover:underline">${t('common.learnMore')} &gt;</a>
-            </div>
-            <!-- Payment amount / Refund status -->
-            <template x-if="selectedOrder.refundStatus === 'Approved'">
-              <div class="flex items-center gap-2">
-                <svg class="w-4 h-4 text-purple-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"/></svg>
-                <span class="text-sm text-purple-700 font-semibold">İade onaylandı — <span x-text="selectedOrder.currency + ' ' + Number(selectedOrder.total).toLocaleString('tr-TR', {minimumFractionDigits: 2})"></span> iade edildi.</span>
-              </div>
-            </template>
-            <template x-if="selectedOrder.refundStatus !== 'Approved'">
-              <div class="flex items-center gap-2">
-                <svg class="w-4 h-4 text-amber-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 11H9v-2h2v2zm0-4H9V5h2v4z"/>
-                </svg>
-                <span class="text-sm text-gray-800">${t('orders.yourPaymentAmount')}: <strong x-text="selectedOrder.currency + ' ' + selectedOrder.total"></strong></span>
-              </div>
-            </template>
-            <!-- Notes -->
-            <ul class="text-xs text-gray-600 space-y-1 pl-4 list-disc">
-              <li>${t('orders.orderTermsNote')}</li>
-              <li>${t('orders.onlinePaymentProtected')}</li>
-            </ul>
-          </div>
-
-          <!-- Action Buttons (status-aware) -->
           <div class="flex items-center gap-3 mt-4 flex-wrap" x-show="isActionable(selectedOrder)">
             <template x-if="canPay(selectedOrder)">
               <button @click="openRemittanceModal(selectedOrder.orderNumber, selectedOrder.total, selectedOrder.currency, selectedOrder.paymentMethod)" class="th-btn">
@@ -822,7 +783,7 @@ function renderAllOrders(): string {
           <button @click="openModal('showOperationHistory')" class="th-btn-outline whitespace-nowrap">
             ${t('orders.operationHistory')}
           </button>
-          <button class="th-btn-outline whitespace-nowrap">
+          <button @click="openModal('showContract')" class="whitespace-nowrap px-4 py-2 text-sm font-medium text-gray-500 bg-gray-100 border border-gray-300 rounded-full hover:bg-gray-200 cursor-pointer transition-colors">
             ${t('orders.viewContract')}
           </button>
         </div>
@@ -1763,14 +1724,8 @@ function renderRefunds(): string {
   return `
     <div x-data="refundsComponent()" x-cloak>
     <div class="flex items-center justify-between px-7 max-sm:px-3 pt-6 pb-5 border-b border-(--color-border-light,#f0f0f0)">
-      <h1 class="text-[22px] font-bold text-(--color-text-heading,#111827)">${t('orders.refundsAfterSalesTitle')}</h1>
+      <h1 class="text-[22px] font-bold text-(--color-text-heading,#111827)">${t('orders.refundsTab')}</h1>
     </div>
-    <div class="os-tabs flex border-b overflow-x-auto scrollbar-hide border-(--color-border-default,#e5e5e5) px-7 max-sm:px-3" data-tabgroup="refunds">
-      <button class="os-tabs__tab os-tabs__tab--active py-3 px-4 text-sm bg-transparent border-none border-b-2 border-b-transparent cursor-pointer whitespace-nowrap transition-colors" data-tab="refund-returns">${t('orders.refundsTab')}</button>
-      <button class="os-tabs__tab py-3 px-4 text-sm bg-transparent border-none border-b-2 border-b-transparent cursor-pointer whitespace-nowrap transition-colors text-(--color-text-muted,#666)" data-tab="refund-tax">${t('orders.taxRefundsTab')}</button>
-      <button class="os-tabs__tab py-3 px-4 text-sm bg-transparent border-none border-b-2 border-b-transparent cursor-pointer whitespace-nowrap transition-colors text-(--color-text-muted,#666)" data-tab="refund-after">${t('orders.afterSalesServicesTab')}</button>
-    </div>
-
     <!-- Tab: Para İadeleri (dynamic) -->
     <div class="os-tab-content os-tab-content--active" data-content="refund-returns">
       <!-- Loading -->
@@ -1821,39 +1776,6 @@ function renderRefunds(): string {
       </template>
     </div>
 
-    <!-- Tab: Vergi iadeleri (table) -->
-    <div class="os-tab-content" data-content="refund-tax">
-      <div class="px-7 max-sm:px-3">
-        <div class="overflow-x-auto"><table class="os-table w-full border-collapse border border-(--color-border-default,#e5e5e5) rounded-md overflow-hidden">
-          <thead>
-            <tr>
-              <th class="px-4 py-3 text-[13px] font-semibold text-(--color-text-body,#333) bg-(--color-surface-muted,#fafafa) border-b border-(--color-border-default,#e5e5e5) text-left whitespace-nowrap">${t('orders.orderNumber')}</th>
-              <th class="px-4 py-3 text-[13px] font-semibold text-(--color-text-body,#333) bg-(--color-surface-muted,#fafafa) border-b border-(--color-border-default,#e5e5e5) text-left whitespace-nowrap">${t('orders.caseNumber')}</th>
-              <th class="px-4 py-3 text-[13px] font-semibold text-(--color-text-body,#333) bg-(--color-surface-muted,#fafafa) border-b border-(--color-border-default,#e5e5e5) text-left whitespace-nowrap">${t('orders.applicationDate')}</th>
-              <th class="px-4 py-3 text-[13px] font-semibold text-(--color-text-body,#333) bg-(--color-surface-muted,#fafafa) border-b border-(--color-border-default,#e5e5e5) text-left whitespace-nowrap">${t('orders.refundAmount')}</th>
-              <th class="px-4 py-3 text-[13px] font-semibold text-(--color-text-body,#333) bg-(--color-surface-muted,#fafafa) border-b border-(--color-border-default,#e5e5e5) text-left whitespace-nowrap">${t('orders.status')}</th>
-              <th class="px-4 py-3 text-[13px] font-semibold text-(--color-text-body,#333) bg-(--color-surface-muted,#fafafa) border-b border-(--color-border-default,#e5e5e5) text-left whitespace-nowrap">${t('orders.bankRefundStatus')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td colspan="6" class="text-center !py-[60px] px-4">
-                ${EMPTY_RECEIPT_ICON}
-                <p class="text-sm text-(--color-text-muted,#666)">${t('orders.noAfterSalesRequest')}</p>
-              </td>
-            </tr>
-          </tbody>
-        </table></div>
-      </div>
-    </div>
-
-    <!-- Tab: Satış sonrası hizmetler (empty) -->
-    <div class="os-tab-content" data-content="refund-after">
-      <div class="flex flex-col items-center justify-center gap-3 px-10 max-sm:px-4 py-20 text-center">
-        ${EMPTY_RECEIPT_ICON}
-        <p class="text-sm text-(--color-text-muted,#666)">${t('orders.noAfterSalesRequest')}</p>
-      </div>
-    </div>
     </div>
   `;
 }
@@ -1911,19 +1833,11 @@ function renderCoupons(): string {
   return `
     <div x-data="couponsPageComponent()">
       <div class="flex items-center justify-between px-7 max-sm:px-3 pt-6 pb-5 border-b border-(--color-border-light,#f0f0f0)">
-        <h1 class="text-[22px] font-bold text-(--color-text-heading,#111827)">${t('orders.couponsAndCredits')}</h1>
-      </div>
-
-      <!-- Tabs -->
-      <div class="os-tabs flex border-b overflow-x-auto scrollbar-hide border-(--color-border-default,#e5e5e5) px-7 max-sm:px-3">
-        <button @click="switchTab('coupons-list')" class="os-tabs__tab py-3 px-4 text-sm bg-transparent border-none border-b-2 border-b-transparent cursor-pointer whitespace-nowrap transition-colors"
-          :class="activeTab === 'coupons-list' ? 'os-tabs__tab--active' : 'text-(--color-text-muted,#666)'">${t('orders.coupons')}</button>
-        <button @click="switchTab('coupons-credit')" class="os-tabs__tab py-3 px-4 text-sm bg-transparent border-none border-b-2 border-b-transparent cursor-pointer whitespace-nowrap transition-colors"
-          :class="activeTab === 'coupons-credit' ? 'os-tabs__tab--active' : 'text-(--color-text-muted,#666)'">${t('orders.credit')}</button>
+        <h1 class="text-[22px] font-bold text-(--color-text-heading,#111827)">${t('orders.coupons')}</h1>
       </div>
 
       <!-- Tab: Kuponlar -->
-      <div x-show="activeTab === 'coupons-list'">
+      <div>
         <!-- Pill filters -->
         <div class="os-pill-filters flex gap-2 px-7 max-sm:px-3 py-4">
           <template x-for="pill in [{id:'available',label:'${t('orders.available')}'},{id:'used',label:'${t('orders.used')}'},{id:'expired',label:'${t('orders.expired')}'}]" :key="pill.id">
@@ -1973,104 +1887,7 @@ function renderCoupons(): string {
         </div>
       </div>
 
-      <!-- Tab: Kredi -->
-      <div x-show="activeTab === 'coupons-credit'">
-        <div class="mx-7 my-5 p-5 border border-(--color-border-default,#e5e5e5) rounded-lg">
-          <p class="text-sm text-(--color-text-body,#333) mb-2">${t('orders.totalCreditBalance')}</p>
-          <p class="text-[28px] font-bold text-(--color-text-heading,#111827) mb-2" x-text="'${getCurrencySymbol()}' + creditBalance.toFixed(2)"></p>
-          <p class="text-[13px] text-(--color-text-muted,#666)">${t('orders.creditEqualsUsd')} <a href="#terms" class="text-(--color-text-link,#cc9900) hover:text-(--color-text-link-hover,#b38600) underline">${t('orders.termsAndConditions')}</a></p>
-        </div>
-
-        <h3 class="text-base font-bold text-(--color-text-heading,#111827) px-7 max-sm:px-3 pt-5 pb-3">${t('orders.history')}</h3>
-        <div class="px-7 max-sm:px-3">
-          <div class="overflow-x-auto"><table class="w-full border-collapse border border-(--color-border-default,#e5e5e5) rounded-md overflow-hidden">
-            <thead>
-              <tr>
-                <th class="px-4 py-3 text-[13px] font-semibold text-(--color-text-body,#333) bg-(--color-surface-muted,#fafafa) border-b border-(--color-border-default,#e5e5e5) text-left whitespace-nowrap">${t('orders.transaction')}</th>
-                <th class="px-4 py-3 text-[13px] font-semibold text-(--color-text-body,#333) bg-(--color-surface-muted,#fafafa) border-b border-(--color-border-default,#e5e5e5) text-left whitespace-nowrap">${t('orders.details')}</th>
-                <th class="px-4 py-3 text-[13px] font-semibold text-(--color-text-body,#333) bg-(--color-surface-muted,#fafafa) border-b border-(--color-border-default,#e5e5e5) text-left whitespace-nowrap">${t('orders.dateUtc8')}</th>
-                <th class="px-4 py-3 text-[13px] font-semibold text-(--color-text-body,#333) bg-(--color-surface-muted,#fafafa) border-b border-(--color-border-default,#e5e5e5) text-left whitespace-nowrap">${t('orders.amount')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Empty state -->
-              <template x-if="creditHistory.length === 0">
-                <tr>
-                  <td colspan="4" class="text-center py-10 px-4 text-[13px] text-(--color-text-placeholder,#999)">${t('orders.noRecordsYet')}</td>
-                </tr>
-              </template>
-              <!-- Credit rows -->
-              <template x-for="entry in creditHistory" :key="entry.id">
-                <tr class="border-b border-(--color-border-light,#f0f0f0) last:border-b-0">
-                  <td class="px-4 py-3 text-[13px]">
-                    <span class="px-2 py-0.5 rounded-full text-xs font-medium"
-                      :class="creditBadgeClass(entry.type)"
-                      x-text="creditTypeLabel(entry.type)"></span>
-                  </td>
-                  <td class="px-4 py-3 text-[13px] text-(--color-text-body,#333)" x-text="entry.description"></td>
-                  <td class="px-4 py-3 text-[13px] text-(--color-text-muted,#666) whitespace-nowrap" x-text="formatDate(entry.date)"></td>
-                  <td class="px-4 py-3 text-[13px] font-semibold whitespace-nowrap" :class="creditAmountClass(entry.type)"
-                    x-text="(entry.amount >= 0 ? '+' : '') + '${getCurrencySymbol()}' + Math.abs(entry.amount).toFixed(2)"></td>
-                </tr>
-              </template>
-            </tbody>
-          </table></div>
-        </div>
-
-        <div class="flex items-center justify-end gap-2 px-7 max-sm:px-3 py-4">
-          <span class="text-[13px] text-(--color-text-muted,#666)" x-text="creditHistory.length + ' ${t('orders.records')}'"></span>
-        </div>
-      </div>
     </div>
-  `;
-}
-
-function renderTaxInfo(): string {
-  return `
-    <div class="flex items-center justify-between px-7 max-sm:px-3 pt-6 pb-5 border-b border-(--color-border-light,#f0f0f0)">
-      <h1 class="text-[22px] font-bold text-(--color-text-heading,#111827)">${t('orders.taxInformation')}</h1>
-    </div>
-    <div class="os-tabs flex border-b overflow-x-auto scrollbar-hide border-(--color-border-default,#e5e5e5) px-7 max-sm:px-3" data-tabgroup="tax">
-      <button class="os-tabs__tab os-tabs__tab--active py-3 px-4 text-sm bg-transparent border-none border-b-2 border-b-transparent cursor-pointer whitespace-nowrap transition-colors" data-tab="tax-info-tab">${t('orders.taxInfoTab')}</button>
-    </div>
-
-    <!-- Tab: Vergi Bilgileri -->
-    <div class="os-tab-content os-tab-content--active" data-content="tax-info-tab">
-      <div class="flex items-start gap-2.5 px-7 max-sm:px-3 py-4 text-[13px] text-(--color-text-muted,#666) leading-normal">
-        <svg class="shrink-0 mt-0.5" width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#2563eb" stroke-width="1.2"/><path d="M8 7v4M8 5h0" stroke="#2563eb" stroke-width="1.5" stroke-linecap="round"/></svg>
-        <span>${t('orders.taxInfoNotice')}</span>
-      </div>
-
-      <h3 class="text-base font-bold text-(--color-text-heading,#111827) px-7 max-sm:px-3 pt-5 pb-3">${t('orders.faq')}</h3>
-
-      <div class="px-7 max-sm:px-3 pb-7">
-        <div class="grid grid-cols-3 gap-4 mb-5 max-md:grid-cols-1">
-          <div class="p-5 border border-(--color-border-default,#e5e5e5) rounded-lg">
-            <h5 class="text-sm font-semibold text-(--color-text-heading,#111827) mb-2">${t('orders.faqNoTaxInfo')}</h5>
-            <p class="text-[13px] text-(--color-text-muted,#666) leading-normal">${t('orders.faqNoTaxInfoAnswer')}</p>
-          </div>
-          <div class="p-5 border border-(--color-border-default,#e5e5e5) rounded-lg">
-            <h5 class="text-sm font-semibold text-(--color-text-heading,#111827) mb-2">${t('orders.faqTaxNotApproved')}</h5>
-            <p class="text-[13px] text-(--color-text-muted,#666) leading-normal">${t('orders.faqTaxNotApprovedAnswer')}</p>
-          </div>
-          <div class="p-5 border border-(--color-border-default,#e5e5e5) rounded-lg">
-            <h5 class="text-sm font-semibold text-(--color-text-heading,#111827) mb-2">${t('orders.faqHowToApplyRefund')}</h5>
-            <p class="text-[13px] text-(--color-text-muted,#666) leading-normal">${t('orders.faqHowToApplyRefundAnswer')}</p>
-          </div>
-        </div>
-
-        <details class="os-faq__accordion border-b border-(--color-border-default,#e5e5e5) py-3.5">
-          <summary class="text-sm text-(--color-text-heading,#111827) cursor-pointer list-none flex justify-between items-center">${t('orders.whatIsSalesTax')}</summary>
-          <p class="pt-3 pb-1 text-[13px] text-(--color-text-muted,#666) leading-relaxed">${t('orders.whatIsSalesTaxAnswer')}</p>
-        </details>
-        <details class="os-faq__accordion border-b border-(--color-border-default,#e5e5e5) py-3.5">
-          <summary class="text-sm text-(--color-text-heading,#111827) cursor-pointer list-none flex justify-between items-center">${t('orders.whatIsVat')}</summary>
-          <p class="pt-3 pb-1 text-[13px] text-(--color-text-muted,#666) leading-relaxed">${t('orders.whatIsVatAnswer')}</p>
-        </details>
-      </div>
-    </div>
-
-
   `;
 }
 
@@ -2082,7 +1899,6 @@ const SECTIONS: Record<string, () => string> = {
   'refunds': renderRefunds,
   'reviews': renderReviews,
   'coupons': renderCoupons,
-  'tax-info': renderTaxInfo,
 };
 
 /* ────────────────────────────────────────

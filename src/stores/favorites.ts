@@ -174,7 +174,7 @@ export function toggleItemInList(
   listId: string
 ): boolean {
   const state = getState();
-  let item = state.items.find(i => i.id === product.id);
+  const item = state.items.find(i => i.id === product.id);
 
   const syncToBackend = (): void => {
     _bgSync('tradehub_core.api.favorites.toggle_favorite_in_list', {

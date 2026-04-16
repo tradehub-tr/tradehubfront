@@ -1,7 +1,19 @@
 /**
  * 404 Page — Entry Point
+ * Eski bildirim URL'lerini (ör. /buyer-dashboard?tab=orders&order=XXX)
+ * doğru yola yönlendirmeyi de üstleniyor.
  */
 import '../style.css'
+
+(function redirectLegacyPaths() {
+  if (window.location.pathname.startsWith('/buyer-dashboard')) {
+    const orderNum = new URLSearchParams(window.location.search).get('order');
+    const target = orderNum
+      ? `/pages/dashboard/orders.html?order=${encodeURIComponent(orderNum)}`
+      : '/pages/dashboard/orders.html';
+    window.location.replace(target);
+  }
+})();
 import { initFlowbite } from 'flowbite'
 import { TopBar, SubHeader, MegaMenu, initMegaMenu, initStickyHeaderSearch, initMobileDrawer } from '../components/header'
 import { initLanguageSelector } from '../components/header/TopBar'

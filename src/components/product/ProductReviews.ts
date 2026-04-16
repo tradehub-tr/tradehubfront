@@ -261,7 +261,7 @@ export function ProductReviews(): string {
 /* ── Init logic ──────────────────────────────────────── */
 
 /** Auth flag — set to false to simulate logged-out user */
-let isLoggedIn = false;
+const isLoggedIn = false;
 
 export type SortMode = 'relevant' | 'newest' | 'highest' | 'lowest';
 

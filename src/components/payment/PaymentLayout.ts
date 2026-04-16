@@ -2,10 +2,8 @@
  * PaymentLayout Component
  * Internal left-nav with grouped sections:
  *   Özet: Ödeme yönetimi, İşlemler
- *   T/T: Havale hesapları, Havale Takibi
  *
- * Modals: "Yeni bir kart ekle", "Tedarikçinin hesabını doğrula"
- * Inline view: "Havale dekontu yükle"
+ * Modals: "Yeni bir kart ekle"
  */
 
 import { paymentCardStore } from './state/PaymentCardStore';
@@ -27,20 +25,12 @@ const NAV_GROUPS: PayNavGroup[] = [
       { id: 'transactions', label: t('payment.transactions') },
     ],
   },
-  {
-    title: t('payment.navTT'),
-    items: [
-      { id: 'tt-accounts', label: t('payment.ttAccounts') },
-      { id: 'tt-tracking', label: t('payment.ttTracking') },
-    ],
-  },
 ];
 
 /* ────────────────────────────────────────
    SHARED ICONS
    ──────────────────────────────────────── */
-const SEARCH_ICON = `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5.5" stroke="#666" stroke-width="1.3"/><path d="M11 11l3 3" stroke="#666" stroke-width="1.3" stroke-linecap="round"/></svg>`;
-const RECEIPT_ICON = `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect x="10" y="4" width="28" height="36" rx="3" fill="#E5E7EB" stroke="#D1D5DB" stroke-width="1"/><rect x="16" y="12" width="16" height="2.5" rx="1.25" fill="#D1D5DB"/><rect x="16" y="18" width="12" height="2.5" rx="1.25" fill="#D1D5DB"/><rect x="16" y="24" width="14" height="2.5" rx="1.25" fill="#D1D5DB"/><path d="M10 40l3-2.5 3 2.5 3-2.5 3 2.5 3-2.5 3 2.5 3-2.5 3 2.5V4H10v36z" fill="#E5E7EB"/></svg>`;
+const RECEIPT_ICON =`<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect x="10" y="4" width="28" height="36" rx="3" fill="#E5E7EB" stroke="#D1D5DB" stroke-width="1"/><rect x="16" y="12" width="16" height="2.5" rx="1.25" fill="#D1D5DB"/><rect x="16" y="18" width="12" height="2.5" rx="1.25" fill="#D1D5DB"/><rect x="16" y="24" width="14" height="2.5" rx="1.25" fill="#D1D5DB"/><path d="M10 40l3-2.5 3 2.5 3-2.5 3 2.5 3-2.5 3 2.5 3-2.5 3 2.5V4H10v36z" fill="#E5E7EB"/></svg>`;
 
 /* ────────────────────────────────────────
    SECTION: Ödeme yönetimi
@@ -460,258 +450,11 @@ function renderTransactions(): string {
 }
 
 /* ────────────────────────────────────────
-   SECTION: Havale hesapları (Banka Havalesi Hesapları)
-   ──────────────────────────────────────── */
-function renderTTAccounts(): string {
-  return `
-    <div x-data="bankAccounts">
-    <div class="text-[13px] text-text-tertiary mb-2">${t('payment.breadcrumbTTAccounts')}</div>
-    <div class="flex items-center justify-between flex-wrap gap-3 mb-6 max-md:flex-col max-md:items-start">
-      <h1 class="text-[22px] font-bold text-text-primary m-0 max-sm:text-lg truncate">${t('payment.bankWireTransferAccounts')}</h1>
-      <div class="flex items-center gap-2 relative max-md:flex-wrap max-sm:w-full">
-        <button class="inline-flex items-center gap-1.5 py-2 px-4 max-sm:px-3 text-[13px] max-sm:text-xs text-text-primary bg-surface border border-border-strong rounded-full cursor-pointer transition-[border-color,background] duration-150 whitespace-nowrap hover:border-[#999] hover:bg-surface-muted max-sm:flex-1" data-action="open-verify-modal">
-          <svg class="w-4 h-4 shrink-0" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="2" stroke="#333" stroke-width="1.2"/><path d="M6 8l2 2 4-4" stroke="#333" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span class="truncate">${t('payment.verifySupplierAccount')}</span>
-        </button>
-        <button class="inline-flex items-center gap-1.5 py-2 px-4 max-sm:px-3 text-[13px] max-sm:text-xs text-text-primary bg-surface border border-border-strong rounded-full cursor-pointer transition-[border-color,background] duration-150 whitespace-nowrap hover:border-[#999] hover:bg-surface-muted max-sm:flex-1" data-action="show-upload">
-          <svg class="w-4 h-4 shrink-0" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="#333" stroke-width="1.2"/><path d="M8 5v6M5 8h6" stroke="#333" stroke-width="1.2" stroke-linecap="round"/></svg>
-          <span class="truncate">${t('payment.uploadWireReceipt')}</span>
-        </button>
-        <button class="inline-flex items-center justify-center w-8 h-8 bg-transparent border border-border-strong rounded-full cursor-pointer transition-[border-color,background] duration-150 hover:border-[#999] hover:bg-surface-muted" aria-label="Bilgi" data-action="toggle-tooltip">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="#666" stroke-width="1.2"/><path d="M8 5v3m0 2.5h.01" stroke="#666" stroke-width="1.2" stroke-linecap="round"/></svg>
-        </button>
-        <div class="pay-tooltip hidden absolute top-full right-0 mt-2 py-3.5 px-4.5 bg-surface border border-border-default rounded-lg shadow-[0_4px_16px_rgba(0,0,0,0.1)] text-[13px] text-text-secondary leading-normal min-w-[280px] max-w-[360px] z-[100] max-md:right-auto max-md:left-0 max-md:min-w-[220px]" id="pay-tt-tooltip">
-          ${t('payment.tooltipVerify')}
-          <button class="pay-tooltip__close absolute top-2 right-2.5 bg-transparent border-none text-lg text-text-tertiary cursor-pointer leading-none hover:text-text-primary" aria-label="${t('payment.closeBtn')}">&times;</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Tabs -->
-    <div class="flex border-b border-border-default overflow-x-auto overflow-y-hidden">
-      <button @click="setTab('all')" :class="activeTab === 'all' ? '!text-text-primary !font-semibold !border-b-[#222]' : ''" class="py-3 px-5 max-sm:py-2.5 max-sm:px-3 text-[13px] max-sm:text-xs font-medium text-text-secondary bg-transparent border-none border-b-2 border-transparent cursor-pointer transition-[color,border-color] duration-150 -mb-px whitespace-nowrap hover:text-text-primary">${t('payment.allTab')}</button>
-      <button @click="setTab('pending')" :class="activeTab === 'pending' ? '!text-text-primary !font-semibold !border-b-[#222]' : ''" class="py-3 px-5 max-sm:py-2.5 max-sm:px-3 text-[13px] max-sm:text-xs font-medium text-text-secondary bg-transparent border-none border-b-2 border-transparent cursor-pointer transition-[color,border-color] duration-150 -mb-px whitespace-nowrap hover:text-text-primary">${t('payment.pendingMatchTab')}</button>
-      <button @click="setTab('matched')" :class="activeTab === 'matched' ? '!text-text-primary !font-semibold !border-b-[#222]' : ''" class="py-3 px-5 max-sm:py-2.5 max-sm:px-3 text-[13px] max-sm:text-xs font-medium text-text-secondary bg-transparent border-none border-b-2 border-transparent cursor-pointer transition-[color,border-color] duration-150 -mb-px whitespace-nowrap hover:text-text-primary">${t('payment.matchedTab')}</button>
-    </div>
-
-    <!-- Search + Filters + Summary -->
-    <div class="flex items-center justify-between gap-4 py-4 flex-wrap max-md:flex-col max-md:items-start">
-      <div class="flex items-center gap-2.5 flex-wrap">
-        <div class="flex items-stretch border border-border-strong rounded-md overflow-hidden">
-          <input type="text" x-model="filters.search" @input.debounce.400ms="loadInteractions()" class="py-2 px-3 text-[13px] border-none rounded-none outline-none text-text-primary min-w-[200px] max-sm:min-w-0 max-sm:w-full" placeholder="${t('payment.searchSupplierEmail')}" />
-          <button @click="loadInteractions()" class="flex items-center justify-center px-2.5 bg-transparent border-none border-l border-border-default cursor-pointer transition-[background] duration-150 hover:bg-surface-raised">${SEARCH_ICON}</button>
-        </div>
-        <input type="date" x-model="filters.dateFrom" @change="loadInteractions()" class="th-input th-input-sm min-w-[140px] max-sm:min-w-0 max-sm:w-full" />
-        <a href="#" @click.prevent="clearFilters()" class="text-[13px] text-text-secondary no-underline whitespace-nowrap transition-[color] duration-150 hover:text-text-primary hover:underline">${t('payment.removeFilters')}</a>
-      </div>
-      <div class="flex items-center gap-4 flex-wrap">
-        <span class="text-[13px] text-text-secondary whitespace-nowrap">${t('payment.totalWireAmount')}: <strong class="text-text-primary font-semibold" x-text="formatAmount(summary.total_wire_amount)"></strong></span>
-        <span class="text-[13px] text-text-secondary whitespace-nowrap">${t('payment.pendingMatchAmount')}: <strong class="text-text-primary font-semibold" x-text="formatAmount(summary.pending_match_amount)"></strong></span>
-      </div>
-    </div>
-
-    <!-- Loading -->
-    <div x-show="loading" class="flex items-center justify-center py-12">
-      <svg class="animate-spin h-8 w-8 text-text-tertiary" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-    </div>
-
-    <!-- Empty State -->
-    <template x-if="!loading && interactions.length === 0">
-      <div class="flex flex-col items-center justify-center py-12 px-6 text-center">
-        <div class="opacity-50 mb-4">${RECEIPT_ICON}</div>
-        <p class="text-sm text-text-tertiary m-0">${t('payment.noPaymentRecord')}</p>
-      </div>
-    </template>
-
-    <!-- Table -->
-    <template x-if="!loading && interactions.length > 0">
-      <div class="overflow-x-auto mt-2">
-        <table class="w-full border-collapse text-[13px]">
-          <thead><tr>
-            <th class="text-left py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t('payment.thLastArrivalTime')}</th>
-            <th class="text-left py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t('payment.thSupplierInfo')}</th>
-            <th class="text-left py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t('payment.thSupplierTTAccount')}</th>
-            <th class="text-left py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t('payment.thTotalWireAmount')}</th>
-            <th class="text-left py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t('payment.thStatus')}</th>
-          </tr></thead>
-          <tbody>
-            <template x-for="bi in interactions" :key="bi.name">
-              <tr class="border-b border-border-default hover:bg-surface-muted transition-colors">
-                <td class="py-3 px-4 whitespace-nowrap" x-text="formatDate(bi.last_transaction_date)"></td>
-                <td class="py-3 px-4">
-                  <div class="font-medium" x-text="bi.seller_name || '—'"></div>
-                  <div class="text-xs text-text-tertiary" x-text="bi.seller_bank_name || ''"></div>
-                </td>
-                <td class="py-3 px-4 font-mono text-xs" x-text="bi.seller_iban || '—'"></td>
-                <td class="py-3 px-4 font-medium" x-text="formatAmount(bi.total_wire_amount, bi.currency)"></td>
-                <td class="py-3 px-4"><span class="text-xs font-medium" x-text="bi.match_status_en"></span></td>
-              </tr>
-            </template>
-          </tbody>
-        </table>
-      </div>
-    </template>
-
-    <!-- Modal: Tedarikçinin hesabını doğrula -->
-    <div class="pay-modal hidden fixed inset-0 z-[9999] items-center justify-center" id="pay-verify-modal">
-      <div class="pay-modal__overlay fixed inset-0 bg-black/45 z-[1]"></div>
-      <div class="pay-modal__dialog relative z-[2] bg-surface rounded-md shadow-[0_20px_60px_rgba(0,0,0,0.15)] w-[90%] max-w-[480px] max-h-[90vh] overflow-y-auto animate-[payModalIn_200ms_ease-out]">
-        <div class="flex items-center justify-between px-6 max-sm:px-4 pt-5 pb-4 border-b border-[#f0f0f0]">
-          <h3 class="text-lg max-sm:text-base font-bold text-text-primary m-0 truncate mr-2">${t('payment.verifyModalTitle')}</h3>
-          <button class="pay-modal__close flex items-center justify-center w-8 h-8 shrink-0 bg-transparent border-none rounded-md cursor-pointer transition-[background] duration-150 hover:bg-surface-raised" aria-label="${t('payment.closeBtn')}">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M14 4L4 14M4 4l10 10" stroke="#333" stroke-width="1.8" stroke-linecap="round"/></svg>
-          </button>
-        </div>
-        <div class="pay-modal__body px-6 max-sm:px-4 py-5">
-          <div class="flex items-center gap-2.5 py-3 px-4 bg-[#FEF3C7] rounded-lg text-[13px] text-primary-800 mb-4">
-            <span class="w-2 h-2 rounded-full bg-warning-500 shrink-0"></span>
-            <span>${t('payment.verifyWarning')}</span>
-          </div>
-          <p class="text-[13px] text-text-secondary leading-relaxed mb-4">${t('payment.verifyDescription')}</p>
-          <div class="mb-4">
-            <input type="text" x-model="verifyIban" class="th-input th-input-md" placeholder="${t('payment.supplierAccountPlaceholder')}" />
-          </div>
-          <!-- Verify Result -->
-          <template x-if="verifyResult && verifyResult.verified">
-            <div class="p-4 bg-green-50 border border-green-200 rounded-lg text-[13px]">
-              <div class="font-semibold text-green-800 mb-1">Doğrulandı</div>
-              <div class="text-green-700"><span class="font-medium">Tedarikçi:</span> <span x-text="verifyResult.seller_name"></span></div>
-              <div class="text-green-700"><span class="font-medium">Banka:</span> <span x-text="verifyResult.bank_name"></span></div>
-              <div class="text-green-700"><span class="font-medium">Hesap Sahibi:</span> <span x-text="verifyResult.account_holder"></span></div>
-            </div>
-          </template>
-          <template x-if="verifyResult && !verifyResult.verified">
-            <div class="p-4 bg-red-50 border border-red-200 rounded-lg text-[13px] text-red-700" x-text="verifyResult.message"></div>
-          </template>
-        </div>
-        <div class="flex justify-between gap-2.5 px-6 max-sm:px-4 pb-5 pt-4 border-t border-[#f0f0f0] max-sm:flex-col-reverse">
-          <button class="pay-modal__btn--cancel py-2.5 px-6 text-sm max-sm:text-xs font-medium rounded-lg border border-border-strong bg-surface text-text-secondary cursor-pointer transition-all duration-150 hover:border-[#999] hover:bg-surface-muted max-sm:w-full">${t('payment.cancelBtn')}</button>
-          <button @click="verifyAccount()" :disabled="verifying" class="th-btn-dark inline-flex items-center justify-center gap-1.5 max-sm:w-full disabled:opacity-50">
-            <template x-if="!verifying">
-              <span class="inline-flex items-center gap-1.5">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.5 3.5L13 5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                ${t('payment.verifyBtn')}
-              </span>
-            </template>
-            <template x-if="verifying">
-              <span>Doğrulanıyor...</span>
-            </template>
-          </button>
-        </div>
-      </div>
-    </div>
-    </div>
-  `;
-}
-
-/* ────────────────────────────────────────
-   SECTION: Havale Takibi
-   ──────────────────────────────────────── */
-function renderTTTracking(): string {
-  return `
-    <div x-data="wireTracking">
-    <div class="mb-6"><h1 class="text-[22px] font-bold text-text-primary m-0 max-sm:text-lg truncate">${t('payment.ttTrackingTitle')}</h1></div>
-    <div class="flex items-center justify-between gap-4 py-4 flex-wrap max-md:flex-col max-md:items-start">
-      <div class="flex items-center gap-2.5 flex-wrap">
-        <div class="flex items-stretch border border-border-strong rounded-md overflow-hidden">
-          <input type="text" x-model="filters.search" @input.debounce.400ms="loadTransfers()" class="py-2 px-3 text-[13px] border-none rounded-none outline-none text-text-primary min-w-[200px] max-sm:min-w-0 max-sm:w-full" placeholder="${t('payment.searchRefNumber')}" />
-          <button @click="loadTransfers()" class="flex items-center justify-center px-2.5 bg-transparent border-none border-l border-border-default cursor-pointer transition-[background] duration-150 hover:bg-surface-raised">${SEARCH_ICON}</button>
-        </div>
-        <input type="date" x-model="filters.dateFrom" @change="loadTransfers()" class="th-input th-input-sm min-w-[140px] max-sm:min-w-0 max-sm:w-full" />
-        <input type="date" x-model="filters.dateTo" @change="loadTransfers()" class="th-input th-input-sm min-w-[140px] max-sm:min-w-0 max-sm:w-full" />
-        <a href="#" @click.prevent="clearFilters()" class="text-[13px] text-text-secondary no-underline whitespace-nowrap transition-[color] duration-150 hover:text-text-primary hover:underline">${t('payment.removeFilters')}</a>
-      </div>
-    </div>
-
-    <!-- Loading -->
-    <div x-show="loading" class="flex items-center justify-center py-12">
-      <svg class="animate-spin h-8 w-8 text-text-tertiary" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-    </div>
-
-    <!-- Empty State -->
-    <template x-if="!loading && transfers.length === 0">
-      <div class="flex flex-col items-center justify-center py-12 px-6 text-center">
-        <div class="opacity-50 mb-4">${RECEIPT_ICON}</div>
-        <p class="text-sm text-text-tertiary m-0">${t('payment.noTrackingRecord')}</p>
-      </div>
-    </template>
-
-    <!-- Table -->
-    <template x-if="!loading && transfers.length > 0">
-      <div class="overflow-x-auto mt-2">
-        <table class="w-full border-collapse text-[13px]">
-          <thead><tr>
-            <th class="text-left py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t('payment.thRefNo')}</th>
-            <th class="text-left py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t('payment.thSupplier')}</th>
-            <th class="text-left py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t('payment.thWireAmount')}</th>
-            <th class="text-left py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t('payment.thSendDate')}</th>
-            <th class="text-left py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t('payment.thStatus')}</th>
-          </tr></thead>
-          <tbody>
-            <template x-for="wt in transfers" :key="wt.name">
-              <tr class="border-b border-border-default hover:bg-surface-muted transition-colors">
-                <td class="py-3 px-4 font-mono text-xs" x-text="wt.reference_number || wt.name"></td>
-                <td class="py-3 px-4" x-text="wt.seller_name || '—'"></td>
-                <td class="py-3 px-4 font-medium" x-text="formatAmount(wt.amount, wt.currency)"></td>
-                <td class="py-3 px-4 whitespace-nowrap" x-text="formatDate(wt.transaction_date)"></td>
-                <td class="py-3 px-4"><span class="text-xs font-medium" :class="wt.status_color" x-text="wt.status_en"></span></td>
-              </tr>
-            </template>
-          </tbody>
-        </table>
-      </div>
-    </template>
-    </div>
-  `;
-}
-
-
-/* ────────────────────────────────────────
-   UPLOAD VIEW (inline, replaces content)
-   ──────────────────────────────────────── */
-function renderUpload(): string {
-  return `
-    <div class="mb-6"><h1 class="text-[22px] font-bold text-text-primary m-0 max-sm:text-lg truncate">${t('payment.uploadReceiptTitle')}</h1></div>
-    <div class="mt-2">
-      <p class="text-[13px] text-text-secondary leading-normal mb-5"><span class="text-error-500 font-semibold">*</span> ${t('payment.uploadDescription')} <a href="#" class="text-[#2563eb] no-underline hover:underline">${t('payment.viewExamples')}</a></p>
-      <div class="flex gap-8 items-start p-6 border-2 border-dashed border-border-strong rounded-lg bg-surface-muted max-md:flex-col max-md:items-center max-md:text-center">
-        <div class="shrink-0">
-          <svg width="120" height="160" viewBox="0 0 120 160" fill="none">
-            <rect x="4" y="4" width="112" height="152" rx="4" fill="#F9FAFB" stroke="#D1D5DB" stroke-width="1" stroke-dasharray="4 4"/>
-            <rect x="16" y="20" width="88" height="8" rx="2" fill="#E5E7EB"/>
-            <rect x="16" y="36" width="60" height="6" rx="2" fill="#E5E7EB"/>
-            <rect x="16" y="50" width="70" height="6" rx="2" fill="#E5E7EB"/>
-            <rect x="16" y="64" width="50" height="6" rx="2" fill="#E5E7EB"/>
-            <rect x="16" y="84" width="88" height="1" fill="#E5E7EB"/>
-            <rect x="16" y="96" width="60" height="6" rx="2" fill="#E5E7EB"/>
-            <rect x="16" y="110" width="40" height="6" rx="2" fill="#E5E7EB"/>
-            <rect x="16" y="126" width="70" height="6" rx="2" fill="#E5E7EB"/>
-          </svg>
-        </div>
-        <div class="flex-1 text-[13px] text-text-secondary leading-[1.7] [&_p]:m-0 [&_p]:mb-1.5 [&_strong]:text-text-primary">
-          <p><strong>${t('payment.ensureDetails')}</strong></p>
-          <p>${t('payment.fileSizeLimit')}</p>
-          <p>${t('payment.supportedFormats')}</p>
-          <p>Ayrıca manuel olarak <a href="#" class="text-[#2563eb] no-underline hover:underline">${t('payment.manualEntry')}</a></p>
-          <button class="th-btn-dark inline-flex items-center gap-2 mt-4">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v8m0-8l-3 3m3-3l3 3M3 12h10" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            ${t('payment.uploadFile')}
-          </button>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-/* ────────────────────────────────────────
    SECTION MAP
    ──────────────────────────────────────── */
 const SECTIONS: Record<string, () => string> = {
   'payment-management': renderPaymentManagement,
   'transactions': renderTransactions,
-  'tt-accounts': renderTTAccounts,
-  'tt-tracking': renderTTTracking,
-  'upload-receipt': renderUpload,
 };
 
 function getActiveSection(): string {
@@ -780,7 +523,6 @@ export function initPaymentLayout(): void {
     initPayTabs();
     initPayModals();
     initPayPills();
-    initPayTooltip();
   }
 
   window.addEventListener('hashchange', navigate);
@@ -797,7 +539,6 @@ export function initPaymentLayout(): void {
   initPayTabs();
   initPayModals();
   initPayPills();
-  initPayTooltip();
 }
 
 function initPayTabs(): void {
@@ -870,14 +611,6 @@ function closePayModal(modal: HTMLElement): void {
 function initPayModals(): void {
   // Card modal
   document.querySelector<HTMLElement>('[data-action="open-card-modal"]')?.addEventListener('click', () => openPayModal('pay-card-modal'));
-
-  // Verify modal
-  document.querySelector<HTMLElement>('[data-action="open-verify-modal"]')?.addEventListener('click', () => openPayModal('pay-verify-modal'));
-
-  // Upload view
-  document.querySelector<HTMLElement>('[data-action="show-upload"]')?.addEventListener('click', () => {
-    window.location.hash = 'upload-receipt';
-  });
 
   // Close handlers for all modals
   document.querySelectorAll<HTMLElement>('.pay-modal').forEach(modal => {
@@ -1010,16 +743,3 @@ function initPayModals(): void {
   });
 }
 
-function initPayTooltip(): void {
-  const toggleBtn = document.querySelector<HTMLElement>('[data-action="toggle-tooltip"]');
-  const tooltip = document.getElementById('pay-tt-tooltip');
-  if (!toggleBtn || !tooltip) return;
-
-  toggleBtn.addEventListener('click', () => {
-    tooltip.classList.toggle('hidden');
-  });
-
-  tooltip.querySelector('.pay-tooltip__close')?.addEventListener('click', () => {
-    tooltip.classList.add('hidden');
-  });
-}

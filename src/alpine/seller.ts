@@ -142,7 +142,9 @@ Alpine.data('sellerStorefront', () => ({
       ]);
       this.seller = sellerRes.message || null;
       this.navCategories = catRes.message?.categories || [];
-    } catch (e) {}
+    } catch {
+      // network failure — navCategories/seller stays empty
+    }
 
     // Slug ve seller_code her zaman URL'den gelsin
     if (this.seller) {

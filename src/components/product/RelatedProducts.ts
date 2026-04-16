@@ -1,5 +1,5 @@
 /**
- * RelatedProducts Component — 4-tab layout
+ * RelatedProducts Component — 4-tab layout with horizontal slider per tab
  *
  * Renders the "İlgili Ürünler" section under the product detail page.
  * Tabs: Benzer (similar) / İkame (substitute) / Tamamlayıcı (complementary) / Aksesuar (accessory).
@@ -8,11 +8,16 @@
  *  - An empty category's tab button is not rendered.
  *  - When all four categories are empty, the entire section is hidden.
  *  - The first non-empty tab becomes active on load.
+ *  - Each tab's products are shown as a single-row Swiper carousel with
+ *    desktop hover-revealed prev/next buttons; mobile is touch-swipe.
  *
  * The component is ID-agnostic so it can appear in both desktop and mobile
  * layouts on the same page — init walks every `[data-rp-root]` element.
  */
 
+import Swiper from 'swiper';
+import { Navigation } from 'swiper/modules';
+import 'swiper/swiper-bundle.css';
 import { t } from '../../i18n';
 import { formatPrice } from '../../utils/currency';
 import {
@@ -28,6 +33,11 @@ interface TabMeta {
   label: string;
   description: string;
 }
+
+// Track Swiper instances per (root, tab) so we can lazily init on first
+// tab activation and destroy on root teardown without leaking listeners.
+const swiperRegistry = new WeakMap<HTMLElement, Map<string, Swiper>>();
+let rootCounter = 0;
 
 function tabsMeta(): TabMeta[] {
   return [
@@ -47,7 +57,7 @@ function renderCard(card: ProductListingCard): string {
 
   return `
     <a
-      class="rp-card flex flex-col h-full overflow-hidden transition-shadow hover:shadow-md no-underline"
+      class="rp-card flex flex-col h-full overflow-hidden border border-gray-200 rounded-md bg-white transition-shadow hover:shadow-md no-underline"
       href="${card.href}"
       aria-label="${safeName}"
     >
@@ -127,7 +137,16 @@ function renderTabButton(meta: TabMeta, count: number, active: boolean): string 
   `;
 }
 
+/**
+ * Renders one tabpanel containing a Swiper. Each card sits in its own
+ * `swiper-slide` so Swiper measures real content widths; breakpoints
+ * decide how many slides per view at each viewport.
+ */
 function renderPanel(meta: TabMeta, cards: ProductListingCard[], active: boolean): string {
+  const slides = cards
+    .map(card => `<div class="swiper-slide h-auto">${renderCard(card)}</div>`)
+    .join('');
+
   return `
     <div
       role="tabpanel"
@@ -136,11 +155,89 @@ function renderPanel(meta: TabMeta, cards: ProductListingCard[], active: boolean
       aria-hidden="${active ? 'false' : 'true'}"
     >
       <p class="text-xs text-gray-500 mb-3">${meta.description}</p>
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-        ${cards.map(renderCard).join('')}
+
+      <div class="relative group/rp-slider">
+        <div class="swiper rp-swiper" data-rp-swiper="${meta.key}">
+          <div class="swiper-wrapper">${slides}</div>
+        </div>
+
+        <button
+          type="button"
+          aria-label="Önceki ürünler"
+          data-rp-prev="${meta.key}"
+          class="rp-swiper-prev hidden md:flex absolute -left-2 top-[40%] -translate-y-1/2 z-10
+                 h-9 w-9 rounded-full border border-gray-200 bg-white shadow-md
+                 items-center justify-center text-gray-600 hover:text-gray-900
+                 opacity-0 group-hover/rp-slider:opacity-100 transition-opacity duration-200
+                 disabled:opacity-0 disabled:pointer-events-none"
+        >
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+          </svg>
+        </button>
+
+        <button
+          type="button"
+          aria-label="Sonraki ürünler"
+          data-rp-next="${meta.key}"
+          class="rp-swiper-next hidden md:flex absolute -right-2 top-[40%] -translate-y-1/2 z-10
+                 h-9 w-9 rounded-full border border-gray-200 bg-white shadow-md
+                 items-center justify-center text-gray-600 hover:text-gray-900
+                 opacity-0 group-hover/rp-slider:opacity-100 transition-opacity duration-200
+                 disabled:opacity-0 disabled:pointer-events-none"
+        >
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </button>
       </div>
     </div>
   `;
+}
+
+/**
+ * Lazily initialise (or re-update) the Swiper for a given panel.
+ *
+ * Re-init logic: tab switches don't destroy the panel, so the next
+ * activation can either reuse the existing instance (calling .update())
+ * or create a fresh one if the panel was first activated now. This
+ * keeps initial render cheap — only the active tab's Swiper exists on
+ * page load.
+ */
+function ensurePanelSwiper(root: HTMLElement, key: string): void {
+  const swiperEl = root.querySelector<HTMLElement>(`[data-rp-swiper="${key}"]`);
+  if (!swiperEl) return;
+
+  let registry = swiperRegistry.get(root);
+  if (!registry) {
+    registry = new Map();
+    swiperRegistry.set(root, registry);
+  }
+  const existing = registry.get(key);
+  if (existing) {
+    existing.update();
+    return;
+  }
+
+  const prevBtn = root.querySelector<HTMLElement>(`[data-rp-prev="${key}"]`);
+  const nextBtn = root.querySelector<HTMLElement>(`[data-rp-next="${key}"]`);
+
+  const swiper = new Swiper(swiperEl, {
+    modules: [Navigation],
+    slidesPerView: 1.4,
+    spaceBetween: 12,
+    watchOverflow: true,
+    navigation: prevBtn && nextBtn ? { prevEl: prevBtn, nextEl: nextBtn } : undefined,
+    breakpoints: {
+      // Tuned to read like a single product row across breakpoints
+      480:  { slidesPerView: 2.2, spaceBetween: 12 },
+      640:  { slidesPerView: 3,   spaceBetween: 14 },
+      960:  { slidesPerView: 4,   spaceBetween: 16 },
+      1280: { slidesPerView: 5,   spaceBetween: 16 },
+    },
+  });
+
+  registry.set(key, swiper);
 }
 
 export function initRelatedProducts(): void {
@@ -172,6 +269,13 @@ function renderIntoRoot(root: HTMLElement, data: RelatedListingsGrouped): void {
   const panelsContainer = root.querySelector<HTMLElement>('[data-rp-panels]');
   if (!tabsNav || !panelsContainer) return;
 
+  // Per-root unique ID lets multiple roots on the same page (desktop +
+  // mobile) own independent swiper registries without collisions.
+  if (!root.dataset.rpRootId) {
+    rootCounter += 1;
+    root.dataset.rpRootId = String(rootCounter);
+  }
+
   const metas = tabsMeta();
   const filledMetas = metas.filter((m) => Array.isArray(data[m.key]) && data[m.key].length > 0);
 
@@ -191,6 +295,10 @@ function renderIntoRoot(root: HTMLElement, data: RelatedListingsGrouped): void {
     .join('');
 
   root.classList.remove('hidden');
+
+  // Initialise Swiper for the initially-active tab; others are deferred
+  // until the user clicks them (saves layout/measure work on hidden panels).
+  ensurePanelSwiper(root, firstKey);
 
   tabsNav.addEventListener('click', (e) => {
     const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.rp-tab');
@@ -216,5 +324,10 @@ function renderIntoRoot(root: HTMLElement, data: RelatedListingsGrouped): void {
       panel.classList.toggle('hidden', !isMatch);
       panel.setAttribute('aria-hidden', isMatch ? 'false' : 'true');
     });
+
+    // Lazy-init / refresh the Swiper for the newly visible tab. Hidden
+    // Swipers can't measure container width correctly, so we defer
+    // initialisation until they're shown.
+    ensurePanelSwiper(root, tabKey);
   });
 }

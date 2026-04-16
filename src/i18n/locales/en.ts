@@ -813,6 +813,7 @@ const en = {
       refundsAfterSales: 'Refunds and After-sales',
       myReviews: 'My Reviews',
       couponsCredits: 'Coupons & Credits',
+      coupons: 'Coupons',
       taxInfo: 'Tax Information',
       payment: 'Payment',
       paymentManagement: 'Payment Management',

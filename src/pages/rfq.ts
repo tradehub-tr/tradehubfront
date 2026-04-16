@@ -311,7 +311,7 @@ initCurrency().then(() => Promise.all([
 const uploadBtn = document.getElementById('rfq-upload-btn') as HTMLButtonElement;
 const fileInput = document.getElementById('rfq-file-input') as HTMLInputElement;
 const rfqFileList = document.getElementById('rfq-file-list')!;
-let rfqSelectedFiles: File[] = [];
+const rfqSelectedFiles: File[] = [];
 
 uploadBtn.addEventListener('click', () => {
   fileInput.click();

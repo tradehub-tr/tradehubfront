@@ -505,7 +505,7 @@ export function initAccountSetupForm(options: AccountSetupFormOptions = {}): Acc
       state.data.phone = phoneInput.value.trim();
       // Validate only if user has typed something
       if (state.data.phone) {
-        const cleaned = state.data.phone.replace(/[\s\-\(\)]/g, '');
+        const cleaned = state.data.phone.replace(/[\s\-()]/g, '');
         const isValid = /^(\+90|0)?5\d{9}$/.test(cleaned);
         if (phoneError) {
           if (!isValid) {
@@ -585,7 +585,7 @@ export function initAccountSetupForm(options: AccountSetupFormOptions = {}): Acc
     const hasCountry = state.data.country !== null;
     const hasAcceptedTerms = termsCheckbox?.checked ?? false;
     // Phone is optional but if entered must be valid
-    const phoneOk = !state.data.phone || /^(\+90|0)?5\d{9}$/.test(state.data.phone.replace(/[\s\-\(\)]/g, ''));
+    const phoneOk = !state.data.phone || /^(\+90|0)?5\d{9}$/.test(state.data.phone.replace(/[\s\-()]/g, ''));
 
     state.isValid = hasValidPassword && hasFirstName && hasLastName && hasCountry && hasAcceptedTerms && phoneOk;
 

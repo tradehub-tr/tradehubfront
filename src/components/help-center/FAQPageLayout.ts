@@ -67,7 +67,7 @@ export function FAQPageLayout(): string {
         <div class="flex-1 min-w-0">
 
           <!-- Category heading -->
-          <p class="text-[15px] font-semibold text-gray-700 mb-4" x-text="activeCategoryLabel + (searchQuery ? ' — \"' + searchQuery + '\" ${t('helpCenter.faqSearchResults')}' : '')"></p>
+          <p class="text-[15px] font-semibold text-gray-700 mb-4" x-text="activeCategoryLabel + (searchQuery ? ' — &quot;' + searchQuery + '&quot; ${t('helpCenter.faqSearchResults')}' : '')"></p>
 
           <!-- No results -->
           <template x-if="visibleCategories.length === 0">

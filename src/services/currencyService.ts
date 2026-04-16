@@ -249,7 +249,9 @@ function _saveCachedRates(settings: CurrencySettings): void {
 function _saveCachedMeta(currencies: CurrencyInfo[]): void {
   try {
     localStorage.setItem(META_CACHE_KEY, JSON.stringify(currencies))
-  } catch {}
+  } catch {
+    // localStorage full / disabled — ignore
+  }
 }
 
 function _buildCurrencyMeta(currencies?: CurrencyInfo[]): Record<string, CurrencyInfo> {
@@ -269,7 +271,9 @@ function _buildCurrencyMeta(currencies?: CurrencyInfo[]): Record<string, Currenc
         return meta
       }
     }
-  } catch {}
+  } catch {
+    // invalid JSON in cache — use defaults
+  }
 
   return { ...DEFAULT_CURRENCY_META }
 }
