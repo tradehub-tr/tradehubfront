@@ -1726,11 +1726,6 @@ function renderRefunds(): string {
     <div class="flex items-center justify-between px-7 max-sm:px-3 pt-6 pb-5 border-b border-(--color-border-light,#f0f0f0)">
       <h1 class="text-[22px] font-bold text-(--color-text-heading,#111827)">${t('orders.refundsTab')}</h1>
     </div>
-    <div class="os-tabs flex border-b overflow-x-auto scrollbar-hide border-(--color-border-default,#e5e5e5) px-7 max-sm:px-3" data-tabgroup="refunds">
-      <button class="os-tabs__tab os-tabs__tab--active py-3 px-4 text-sm bg-transparent border-none border-b-2 border-b-transparent cursor-pointer whitespace-nowrap transition-colors" data-tab="refund-returns">${t('orders.refundsTab')}</button>
-      <button class="os-tabs__tab py-3 px-4 text-sm bg-transparent border-none border-b-2 border-b-transparent cursor-pointer whitespace-nowrap transition-colors text-(--color-text-muted,#666)" data-tab="refund-tax">${t('orders.taxRefundsTab')}</button>
-    </div>
-
     <!-- Tab: Para İadeleri (dynamic) -->
     <div class="os-tab-content os-tab-content--active" data-content="refund-returns">
       <!-- Loading -->
@@ -1779,32 +1774,6 @@ function renderRefunds(): string {
           </div>
         </div>
       </template>
-    </div>
-
-    <!-- Tab: Vergi iadeleri (table) -->
-    <div class="os-tab-content" data-content="refund-tax">
-      <div class="px-7 max-sm:px-3">
-        <div class="overflow-x-auto"><table class="os-table w-full border-collapse border border-(--color-border-default,#e5e5e5) rounded-md overflow-hidden">
-          <thead>
-            <tr>
-              <th class="px-4 py-3 text-[13px] font-semibold text-(--color-text-body,#333) bg-(--color-surface-muted,#fafafa) border-b border-(--color-border-default,#e5e5e5) text-left whitespace-nowrap">${t('orders.orderNumber')}</th>
-              <th class="px-4 py-3 text-[13px] font-semibold text-(--color-text-body,#333) bg-(--color-surface-muted,#fafafa) border-b border-(--color-border-default,#e5e5e5) text-left whitespace-nowrap">${t('orders.caseNumber')}</th>
-              <th class="px-4 py-3 text-[13px] font-semibold text-(--color-text-body,#333) bg-(--color-surface-muted,#fafafa) border-b border-(--color-border-default,#e5e5e5) text-left whitespace-nowrap">${t('orders.applicationDate')}</th>
-              <th class="px-4 py-3 text-[13px] font-semibold text-(--color-text-body,#333) bg-(--color-surface-muted,#fafafa) border-b border-(--color-border-default,#e5e5e5) text-left whitespace-nowrap">${t('orders.refundAmount')}</th>
-              <th class="px-4 py-3 text-[13px] font-semibold text-(--color-text-body,#333) bg-(--color-surface-muted,#fafafa) border-b border-(--color-border-default,#e5e5e5) text-left whitespace-nowrap">${t('orders.status')}</th>
-              <th class="px-4 py-3 text-[13px] font-semibold text-(--color-text-body,#333) bg-(--color-surface-muted,#fafafa) border-b border-(--color-border-default,#e5e5e5) text-left whitespace-nowrap">${t('orders.bankRefundStatus')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td colspan="6" class="text-center !py-[60px] px-4">
-                ${EMPTY_RECEIPT_ICON}
-                <p class="text-sm text-(--color-text-muted,#666)">${t('orders.noAfterSalesRequest')}</p>
-              </td>
-            </tr>
-          </tbody>
-        </table></div>
-      </div>
     </div>
 
     </div>

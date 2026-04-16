@@ -34,7 +34,9 @@ function getCurrencyMap(): Record<string, CurrencyInfo> {
         return map;
       }
     }
-  } catch {}
+  } catch {
+    // ignore parse errors, fallback below
+  }
   return FALLBACK_CURRENCIES;
 }
 
@@ -73,7 +75,7 @@ export function formatPrice(price: string): string {
 
 export function formatStartingPrice(price: string): string {
   const { symbol, code } = getSelectedCurrency();
-  const rangeMatch = price.match(/[\$€₺£¥]?([\d.,]+)\s*-\s*[\$€₺£¥]?([\d.,]+)/);
+  const rangeMatch = price.match(/[$€₺£¥]?([\d.,]+)\s*-\s*[$€₺£¥]?([\d.,]+)/);
   if (rangeMatch) {
     const parseNum = (s: string): number => {
       if (code === 'TRY') {

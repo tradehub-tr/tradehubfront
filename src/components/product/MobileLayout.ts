@@ -235,22 +235,6 @@ export function MobileProductLayout(): string {
     `,
   });
 
-  const customizationSection = collapsibleSection({
-    id: 'pdm-customization-section',
-    title: t('product.customizationOptions'),
-    sheetId: 'pdm-sheet-customization',
-    previewHtml: `
-      <div id="pdm-custom-preview" class="px-4 pb-3.5">
-        ${p.customizationOptions.map(o => `
-          <div class="pdm-custom-item flex items-center gap-2 text-[13px] text-text-body">
-            <svg class="w-4 h-4 text-text-muted shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
-            <span>${o.name}</span>
-          </div>
-        `).join('')}
-      </div>
-    `,
-  });
-
   // ── Section 11: Supplier Card ──
 
   const si = p.supplier;
@@ -291,14 +275,6 @@ export function MobileProductLayout(): string {
       </table>
     `),
 
-    bottomSheet('pdm-sheet-customization', t('product.customizationOptions'), `
-      <table class="pdm-custom-table">
-        <thead><tr><th>${t('product.option')}</th><th>${t('product.minOrderLabel')}</th><th>${t('product.unitPriceLabel')}</th></tr></thead>
-        <tbody>
-          ${p.customizationOptions.map(o => `<tr><td>${o.name}</td><td>${o.minOrder}</td><td>${o.priceAddon}</td></tr>`).join('')}
-        </tbody>
-      </table>
-    `),
   ].join('');
 
   // ── Sticky section tabs ──
@@ -332,7 +308,6 @@ export function MobileProductLayout(): string {
       <div id="pdm-sec-details">
         ${shippingSection}
         ${keyAttrsSection}
-        ${customizationSection}
       </div>
 
       <!-- Supplier / Recommendations section -->

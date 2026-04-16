@@ -1,10 +1,6 @@
 import { callMethod } from '../../../utils/api'
 import type {
   PaymentTransaction,
-  BankInteraction,
-  WireTransfer,
-  BankInteractionSummary,
-  VerifyResult,
 } from '../../../types/payment'
 
 const API = 'tradehub_core.api.payment'
@@ -78,65 +74,3 @@ export async function exportTransactions(params: {
   return unwrap(res)
 }
 
-// --- Section 3: Havale Hesapları ---
-
-export async function fetchBankInteractions(params: {
-  match_status?: string
-  search?: string
-  date_from?: string
-  date_to?: string
-  page?: number
-  page_size?: number
-}) {
-  const res = await callMethod<ApiResponse<{
-    success: boolean
-    interactions: BankInteraction[]
-    total: number
-    page: number
-    page_size: number
-  }>>(`${API}.get_bank_interactions`, params)
-  return unwrap(res)
-}
-
-export async function fetchBankInteractionSummary() {
-  const res = await callMethod<ApiResponse<BankInteractionSummary & { success: boolean }>>(
-    `${API}.get_bank_interaction_summary`
-  )
-  return unwrap(res)
-}
-
-export async function verifySupplierAccount(iban: string) {
-  const res = await callMethod<ApiResponse<VerifyResult & { success: boolean }>>(
-    `${API}.verify_supplier_account`,
-    { iban },
-    true
-  )
-  return unwrap(res)
-}
-
-// --- Section 4: Havale Takibi ---
-
-export async function fetchWireTransfers(params: {
-  search?: string
-  date_from?: string
-  date_to?: string
-  page?: number
-  page_size?: number
-}) {
-  const res = await callMethod<ApiResponse<{
-    success: boolean
-    transfers: WireTransfer[]
-    total: number
-    page: number
-    page_size: number
-  }>>(`${API}.get_wire_transfers`, params)
-  return unwrap(res)
-}
-
-export async function fetchWireTransferDetail(transactionName: string) {
-  const res = await callMethod<ApiResponse<{
-    success: boolean
-    transaction: WireTransfer
-  }>>(`${API}.get_wire_transfer_detail`, { transaction_name: transactionName })
-  return unwrap(res)
-}

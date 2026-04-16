@@ -65,8 +65,6 @@ export function getSidebarSections(): SidebarSection[] {
           submenu: [
             { label: t('dashboard.paymentManagement'), href: '/pages/dashboard/payment.html#payment-management', group: t('sidebar.groupSummary') },
             { label: t('dashboard.transactions'), href: '/pages/dashboard/payment.html#transactions', group: t('sidebar.groupSummary') },
-            { label: t('dashboard.bankAccounts'), href: '/pages/dashboard/payment.html#tt-accounts', group: 'T/T' },
-            { label: t('dashboard.wireTransfer'), href: '/pages/dashboard/payment.html#tt-tracking', group: 'T/T' },
           ],
         },
         {

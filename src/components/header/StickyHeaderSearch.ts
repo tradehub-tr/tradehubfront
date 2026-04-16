@@ -5,5 +5,5 @@
  * This file retains a no-op export for backward compatibility with page entry files.
  */
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
+ 
 export function initStickyHeaderSearch(): void {}

@@ -25,7 +25,7 @@ const tabs: TabConfig[] = [
 
 export function ProductTabs(): string {
   return `
-    <section id="product-tabs-section" x-data="{ activeTab: 'attributes' }" class="py-6" style="background: var(--pd-bg, #ffffff);">
+    <section id="product-tabs-section" x-data="{ activeTab: 'attributes' }" class="py-6 px-6" style="background: var(--pd-bg, #ffffff);">
       <!-- Tab Navigation -->
       <div
         id="product-tabs-nav"
@@ -37,7 +37,7 @@ export function ProductTabs(): string {
           <button
             type="button"
             id="tab-btn-${tab.id}"
-            class="product-tab-btn whitespace-nowrap px-5 py-3 text-sm font-medium transition-colors relative"
+            class="product-tab-btn whitespace-nowrap px-3 py-2 text-sm font-medium transition-colors relative"
             :style="activeTab === '${tab.id}' ? 'color: var(--pd-tab-active-color, #cc9900)' : 'color: var(--pd-tab-color, #6b7280)'"
             role="tab"
             :aria-selected="(activeTab === '${tab.id}').toString()"
@@ -46,7 +46,7 @@ export function ProductTabs(): string {
           >
             <span data-i18n="${tab.i18nKey}">${tab.label}</span>
             <span
-              class="absolute bottom-0 left-0 right-0 h-0.5 transition-all"
+              class="absolute bottom-2 left-0 right-0 h-0.5 transition-all"
               :style="activeTab === '${tab.id}' ? 'background: var(--pd-tab-active-border, #cc9900)' : 'background: transparent'"
             ></span>
           </button>
@@ -57,7 +57,7 @@ export function ProductTabs(): string {
       ${tabs.map((tab, i) => `
         <div
           id="tab-content-${tab.id}"
-          class="product-tab-panel"
+          class="product-tab-panel pt-6"
           role="tabpanel"
           aria-labelledby="tab-btn-${tab.id}"
           x-show="activeTab === '${tab.id}'"

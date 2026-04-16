@@ -133,22 +133,6 @@ export function ProductInfo(): string {
           ${p.variants.map(v => renderVariant(v)).join('')}
         </div>
 
-        <!-- Supplier Customization -->
-        <div class="py-5" style="border-bottom: 1px solid var(--color-border-light, #f0f0f0);">
-          <h3 class="text-sm font-bold mb-3 flex items-center gap-1.5 m-0" style="color: var(--pd-title-color, #111827);">
-            ${t('product.supplierCustomization')}
-            <span class="inline-flex items-center gap-[3px] text-xs font-semibold" style="color: #16a34a;">
-              <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor" style="color: #16a34a;"><path fill-rule="evenodd" d="M16.403 12.652a3 3 0 000-5.304 3 3 0 00-3.75-3.751 3 3 0 00-5.305 0 3 3 0 00-3.751 3.75 3 3 0 000 5.305 3 3 0 003.75 3.751 3 3 0 005.305 0 3 3 0 003.751-3.75zm-2.546-4.46a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.06l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
-              Verified
-            </span>
-          </h3>
-          <ul class="list-disc pl-[18px] m-0 text-[13px] leading-[1.8]" style="color: var(--pd-title-color, #111827);">
-            <li>${t('product.drawingCustomization')}</li>
-            <li>${t('product.sampleCustomization')}</li>
-            <li>${t('product.fullCustomization')}</li>
-          </ul>
-        </div>
-
         <!-- Shipping -->
         <div class="py-5" style="border-bottom: 1px solid var(--color-border-light, #f0f0f0);">
           <h3 class="text-sm font-bold mb-3 flex items-center gap-1.5 m-0" style="color: var(--pd-title-color, #111827);">${t('product.shippingLabel')}</h3>

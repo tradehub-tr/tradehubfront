@@ -42,8 +42,6 @@ const submenuI18nKeys: Record<string, string> = {
   // Payment
   '/pages/dashboard/payment.html#payment-management': 'dashboard.paymentManagement',
   '/pages/dashboard/payment.html#transactions': 'dashboard.transactions',
-  '/pages/dashboard/payment.html#tt-accounts': 'dashboard.bankAccounts',
-  '/pages/dashboard/payment.html#tt-tracking': 'dashboard.wireTransfer',
   '/pages/dashboard/payment.html#istoc-card': 'dashboard.istocCard',
   '/pages/dashboard/payment.html#pay-later': 'dashboard.payLater',
   // Saved & History

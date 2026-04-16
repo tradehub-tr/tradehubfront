@@ -80,22 +80,6 @@ export function AttributesTabContent(): string {
           </table>
         </div>
       </div>
-
-      <!-- Customization Options -->
-      <div class="mt-8 pt-6" style="border-top: 1px solid var(--pd-spec-border, #e5e5e5);">
-        <h3 class="text-lg font-bold mb-4" style="color: var(--pd-title-color, #111827);">${t('product.customizationOptions')}</h3>
-        ${p.customizationOptions.map(opt => `
-          <div class="flex items-baseline gap-2 mb-2 text-sm">
-            <strong style="color: var(--pd-spec-value-color, #111827);">${opt.name}</strong>
-            <span style="color: var(--pd-spec-key-color, #6b7280);">${opt.priceAddon}</span>
-            <span style="color: var(--pd-spec-key-color, #6b7280);">(${opt.minOrder})</span>
-          </div>
-        `).join('')}
-        <a class="text-sm underline cursor-pointer" style="color: var(--pd-title-color, #111827);">${t('product.viewDetails')}</a>
-        <div>
-          <button type="button" class="inline-flex items-center gap-1.5 mt-3 px-6 py-2.5 text-sm font-medium rounded-full cursor-pointer transition-colors" style="border: 1px solid #333; background: var(--color-surface, #ffffff);">${t('product.startChat')}</button>
-        </div>
-      </div>
     </div>
   `;
 }

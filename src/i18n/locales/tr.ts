@@ -336,7 +336,7 @@ const tr = {
         number: 'En az 1 rakam (0-9)',
         termsOfUse: 'Kullanım Koşulları',
         privacyPolicy: 'Gizlilik Politikası',
-        agreeTerms: "\'nı okudum ve kabul ediyorum.",
+        agreeTerms: "'nı okudum ve kabul ediyorum.",
         createAccount: 'Hesap Oluştur',
       },
       social: {

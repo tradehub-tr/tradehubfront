@@ -321,7 +321,7 @@ Alpine.data('checkoutAccordion', (props?: { initialExpanded?: boolean }) => ({
     if (this.expanded) {
       // Collapse: set explicit height first, then animate to 0
       content.style.height = `${content.scrollHeight}px`;
-      content.offsetHeight; // force reflow
+      void content.offsetHeight; // force reflow
       content.style.height = '0';
       content.style.overflow = 'hidden';
       this.expanded = false;
