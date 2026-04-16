@@ -37,18 +37,46 @@ function renderPriceTiers(tiers: PriceTier[]): string {
   `;
 }
 
-function renderVariant(variant: ProductVariant): string {
-  const selectedOpt = variant.options.find(o => o.available) || variant.options[0];
+/**
+ * Check if a non-color option is available for a specific color using the skuMatrix.
+ * For axis2 options, checks axis2 match. For extra axes, checks extraAxes match.
+ * Returns true if no skuMatrix exists (fallback to global availability).
+ */
+function isOptionAvailableForColor(
+  skuMatrix: any[] | undefined,
+  colorLabel: string,
+  optionLabel: string,
+  axisIndex: number, // 1 = axis2, 2+ = extra axis
+  axisName?: string, // required for extra axes
+): boolean {
+  if (!skuMatrix || skuMatrix.length === 0) return true;
+  const matches = skuMatrix.filter((row: any) => {
+    if (row.axis1 !== colorLabel) return false;
+    if (axisIndex === 1) return row.axis2 === optionLabel;
+    // Extra axis
+    return (row.extraAxes || {})[axisName!] === optionLabel;
+  });
+  if (matches.length === 0) return false;
+  return matches.some((row: any) => row.available);
+}
+
+function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): string {
+  // Default: isDefault flag; fallback: first available option
+  const defaultOpt = variant.options.find(o => (o as any).isDefault && o.available)
+  const selectedOpt = defaultOpt || variant.options.find(o => o.available) || variant.options[0];
 
   if (variant.type === 'color') {
     return `
       <div class="variant-group" data-variant-type="${variant.type}" data-variant-label="${variant.label}">
         <h4 class="pd-variant-label"><strong>${variant.label}:</strong> <span class="variant-selected-label">${selectedOpt.label}</span></h4>
         <div class="pd-color-thumbs">
-          ${variant.options.map((opt, i) => `
+          ${variant.options.map((opt) => {
+            const isDef = !!(opt as any).isDefault
+            const isActive = opt.id === selectedOpt.id
+            return `
             <button
               type="button"
-              class="variant-option pd-color-thumb ${i === 0 && opt.available ? 'active' : ''} ${opt.available ? '' : 'pd-color-thumb-disabled'}"
+              class="variant-option pd-color-thumb ${isActive ? 'active' : ''} ${opt.available ? '' : 'pd-color-thumb-disabled'}"
               data-variant-id="${opt.id}"
               data-variant-label="${opt.label}"
               data-variant-image="${opt.thumbnail || ''}"
@@ -56,6 +84,7 @@ function renderVariant(variant: ProductVariant): string {
               data-variant-title="${encodeURIComponent((opt as any).title || '')}"
               data-variant-images="${encodeURIComponent(JSON.stringify((opt as any).images || []))}"
               data-variant-value="${opt.value}"
+              data-is-default="${isDef ? '1' : '0'}"
               ${opt.price ? `data-variant-price="${opt.price}"` : ''}
               ${opt.available ? '' : 'disabled'}
               aria-label="${opt.label}"
@@ -63,31 +92,53 @@ function renderVariant(variant: ProductVariant): string {
             >
               <img src="${opt.thumbnail || ''}" alt="${opt.label}" style="background:${opt.value};">
             </button>
-          `).join('')}
+          `}).join('')}
         </div>
       </div>
     `;
   }
 
+  // For non-color variants (size, material, etc.): check stock against the default/selected color
+  const colorVariant = allVariants.find(v => v.type === 'color');
+  const skuMatrix = colorVariant?.skuMatrix;
+  const defaultColor = colorVariant?.options.find(o => (o as any).isDefault && o.available)
+    || colorVariant?.options.find(o => o.available)
+    || colorVariant?.options[0];
+  const defaultColorLabel = defaultColor?.label || '';
+
+  // Determine axis index: axis2 = index 1 (second group), extra axes = index 2+
+  const variantIndex = allVariants.indexOf(variant);
+  const axisIndex = variantIndex >= 1 ? variantIndex : 1;
+
   return `
     <div class="variant-group" data-variant-type="${variant.type}" data-variant-label="${variant.label}">
       <h4 class="pd-variant-label"><strong>${variant.label}:</strong> <span class="variant-selected-label">${selectedOpt.label}</span></h4>
       <div class="flex flex-wrap gap-2 mt-2">
-        ${variant.options.map((opt, i) => `
+        ${variant.options.map((opt) => {
+          const isDef = !!(opt as any).isDefault
+          const isActive = opt.id === selectedOpt.id
+          // Check availability for the default color (not just global availability)
+          const availableForColor = defaultColorLabel
+            ? isOptionAvailableForColor(skuMatrix, defaultColorLabel, opt.label, axisIndex, variant.label)
+            : opt.available;
+          const isAvailable = opt.available && availableForColor;
+          return `
           <button
             type="button"
-            class="variant-option pd-variant-btn ${i === 0 && opt.available ? 'active' : ''} ${opt.available ? '' : 'opacity-40 cursor-not-allowed'}"
+            class="variant-option pd-variant-btn ${isActive ? 'active' : ''} ${isAvailable ? '' : 'opacity-40 line-through cursor-not-allowed'}"
             data-variant-id="${opt.id}"
             data-variant-label="${opt.label}"
             data-variant-video="${(opt as any).videoUrl || ''}"
             data-variant-title="${encodeURIComponent((opt as any).title || '')}"
             data-variant-images="${encodeURIComponent(JSON.stringify((opt as any).images || []))}"
+            data-is-default="${isDef ? '1' : '0'}"
             ${opt.price ? `data-variant-price="${opt.price}"` : ''}
-            ${opt.available ? '' : 'disabled'}
+            ${isAvailable ? '' : 'disabled'}
+            title="${isAvailable ? opt.label : `${opt.label} — tükendi`}"
           >
             ${opt.label}
           </button>
-        `).join('')}
+        `}).join('')}
       </div>
     </div>
   `;
@@ -130,7 +181,7 @@ export function ProductInfo(): string {
           </div>
 
           <!-- Variant Groups -->
-          ${p.variants.map(v => renderVariant(v)).join('')}
+          ${p.variants.map(v => renderVariant(v, p.variants)).join('')}
         </div>
 
         <!-- Shipping -->
@@ -159,6 +210,105 @@ export function ProductInfo(): string {
       </div>
     </div>
   `;
+}
+
+/**
+ * Get the axis field name in a skuMatrix row for a given variant group label.
+ * axis1 name → "axis1", axis2 name → "axis2", extra axes → "extraAxes.{name}"
+ */
+function getSkuAxisKey(variants: any[], groupLabel: string): { field: 'axis1' | 'axis2' | 'extra'; extraName?: string } {
+  if (variants[0]?.label === groupLabel) return { field: 'axis1' };
+  if (variants[1]?.label === groupLabel) return { field: 'axis2' };
+  return { field: 'extra', extraName: groupLabel };
+}
+
+function getSkuValueForAxis(sku: any, axisKey: ReturnType<typeof getSkuAxisKey>): string {
+  if (axisKey.field === 'axis1') return sku.axis1 || '';
+  if (axisKey.field === 'axis2') return sku.axis2 || '';
+  return (sku.extraAxes || {})[axisKey.extraName!] || '';
+}
+
+/**
+ * Collect currently selected values from all variant groups.
+ * Returns a map: groupLabel → selectedValue
+ */
+function getSelectedAxes(): Map<string, string> {
+  const selected = new Map<string, string>();
+  document.querySelectorAll<HTMLElement>('.variant-group').forEach(group => {
+    const label = group.getAttribute('data-variant-label') || '';
+    const activeBtn = group.querySelector<HTMLButtonElement>('.variant-option.active');
+    if (activeBtn && label) {
+      selected.set(label, activeBtn.getAttribute('data-variant-label') || '');
+    }
+  });
+  return selected;
+}
+
+/**
+ * Cross-disable: when a variant axis value is selected, disable options in
+ * OTHER axes that have no available SKU for this combination.
+ * Supports N axes (Color, Size, Material, etc.).
+ */
+function crossDisableVariants(_selectedAxisLabel: string, _selectedValue: string): void {
+  const product = getCurrentProduct() as any;
+  const variants = product.variants || [];
+
+  // Find the skuMatrix (attached to the first group)
+  let skuMatrix: any[] = [];
+  for (const v of variants) {
+    if (v.skuMatrix) {
+      skuMatrix = v.skuMatrix;
+      break;
+    }
+  }
+  if (skuMatrix.length === 0) return;
+
+  // Collect currently selected values from all variant groups
+  const selectedAxes = getSelectedAxes();
+
+  // For each variant group, check which options are available given ALL other selections
+  document.querySelectorAll<HTMLElement>('.variant-group').forEach(group => {
+    const groupLabel = group.getAttribute('data-variant-label') || '';
+    const groupAxisKey = getSkuAxisKey(variants, groupLabel);
+
+    group.querySelectorAll<HTMLButtonElement>('.variant-option').forEach(btn => {
+      const btnValue = btn.getAttribute('data-variant-label') || '';
+
+      // Check if ANY SKU row matches: this button's value + all OTHER selected axis values
+      let hasStock = false;
+      for (const sku of skuMatrix) {
+        // Check this button's value matches on its axis
+        if (getSkuValueForAxis(sku, groupAxisKey) !== btnValue) continue;
+
+        // Check all other selected axes match
+        let allMatch = true;
+        for (const [axLabel, axValue] of selectedAxes) {
+          if (axLabel === groupLabel) continue; // skip self
+          const axKey = getSkuAxisKey(variants, axLabel);
+          if (getSkuValueForAxis(sku, axKey) !== axValue) {
+            allMatch = false;
+            break;
+          }
+        }
+
+        if (allMatch && sku.available) {
+          hasStock = true;
+          break;
+        }
+      }
+
+      if (!hasStock && btnValue) {
+        btn.classList.add('opacity-40', 'line-through', 'cursor-not-allowed');
+        btn.classList.remove('active');
+        btn.setAttribute('title', `${btnValue} — tükendi`);
+        btn.setAttribute('disabled', '');
+      } else {
+        btn.classList.remove('opacity-40', 'line-through', 'cursor-not-allowed');
+        btn.removeAttribute('disabled');
+        btn.setAttribute('title', btnValue);
+      }
+    });
+  });
 }
 
 export function initProductInfo(): void {
@@ -190,60 +340,69 @@ export function initProductInfo(): void {
     });
   }
 
-  // Variant selection — updates active state, label, gallery image
+  // Variant selection — event delegation so dynamically re-enabled buttons also work
   const variantGroups = document.querySelectorAll<HTMLElement>('.variant-group');
   variantGroups.forEach(group => {
-    const buttons = group.querySelectorAll<HTMLButtonElement>('.variant-option:not([disabled])');
     const labelEl = group.querySelector<HTMLElement>('.variant-selected-label');
 
-    buttons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        // Update active state
-        buttons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+    group.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.variant-option');
+      if (!btn || btn.disabled) return;
 
-        // Update label text (e.g., "Renk: Altın" → "Renk: Gümüş")
-        const variantLabel = btn.getAttribute('data-variant-label');
-        if (labelEl && variantLabel) {
-          labelEl.textContent = variantLabel;
-        }
+      // Update active state — clear all siblings, activate clicked
+      group.querySelectorAll<HTMLButtonElement>('.variant-option').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
 
-        // Read all variant-specific data from the clicked button
-        const variantId = btn.getAttribute('data-variant-id') || '';
-        const variantVideo = btn.getAttribute('data-variant-video') || '';
-        let variantImages: string[] = [];
-        try {
-          const raw = decodeURIComponent(btn.getAttribute('data-variant-images') || '[]');
-          const parsed = JSON.parse(raw);
-          if (Array.isArray(parsed)) variantImages = parsed.filter(Boolean);
-        } catch (_) { /* noop */ }
-        const variantTitle = decodeURIComponent(btn.getAttribute('data-variant-title') || '');
+      // Update label text (e.g., "Renk: Altın" → "Renk: Gümüş")
+      const variantLabel = btn.getAttribute('data-variant-label');
+      if (labelEl && variantLabel) {
+        labelEl.textContent = variantLabel;
+      }
 
-        // Dispatch a single event that the gallery + video + title listeners consume
-        document.dispatchEvent(new CustomEvent('product-variant-change', {
-          detail: {
-            variantId,
-            videoUrl: variantVideo,
-            images: variantImages,
-            title: variantTitle,
-          },
-        }));
+      // Read all variant-specific data from the clicked button
+      const variantId = btn.getAttribute('data-variant-id') || '';
+      const variantVideo = btn.getAttribute('data-variant-video') || '';
+      const isDefaultVariant = btn.getAttribute('data-is-default') === '1';
+      let variantImages: string[] = [];
+      try {
+        const raw = decodeURIComponent(btn.getAttribute('data-variant-images') || '[]');
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) variantImages = parsed.filter(Boolean);
+      } catch (_) { /* noop */ }
+      const variantTitle = decodeURIComponent(btn.getAttribute('data-variant-title') || '');
 
-        // Update URL so the selected variant is shareable / persistent on reload
-        if (variantId) {
-          const url = new URL(window.location.href);
-          url.searchParams.set('variant', variantId);
-          window.history.replaceState(null, '', url.toString());
-        }
+      // Dispatch a single event that the gallery + video + title listeners consume
+      document.dispatchEvent(new CustomEvent('product-variant-change', {
+        detail: {
+          variantId,
+          videoUrl: variantVideo,
+          images: variantImages,
+          title: variantTitle,
+          isDefault: isDefaultVariant,
+        },
+      }));
 
-        // Open drawer only for NON-photo variant groups (size, material, etc.).
-        // Photo-based variants (color) just swap the gallery — no drawer popup.
-        const hasVariantPhoto = !!btn.getAttribute('data-variant-image');
-        if (!hasVariantPhoto) {
-          const { color, size } = getSelectedVariantLabels();
-          openCartDrawer(color, size);
-        }
-      });
+      // Cross-disable: update other axis buttons based on skuMatrix availability
+      crossDisableVariants(
+        group.getAttribute('data-variant-label') || '',
+        btn.getAttribute('data-variant-label') || '',
+      );
+
+      // Update URL so the selected variant is shareable / persistent on reload
+      if (variantId) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('variant', variantId);
+        window.history.replaceState(null, '', url.toString());
+      }
+
+      // Open drawer only for NON-photo variant groups (size, material, etc.)
+      // AND only on real user clicks (not auto-selection on page load).
+      const hasVariantPhoto = !!btn.getAttribute('data-variant-image');
+      const isAutoSelect = btn.hasAttribute('data-auto-select');
+      if (!hasVariantPhoto && !isAutoSelect) {
+        const { color, size } = getSelectedVariantLabels();
+        openCartDrawer(color, size);
+      }
     });
   });
 
@@ -278,4 +437,18 @@ export function initProductInfo(): void {
     const detailEl = document.querySelector('#pd-shipping-card .pd-shipping-card-detail');
     if (detailEl) detailEl.textContent = `${t('product.shippingCost', { cost: costStr, days: estimatedDays })}`;
   }) as EventListener);
+
+  // Apply cross-disable for the initially active color (without relying on auto-click)
+  const activeColorBtn = document.querySelector<HTMLButtonElement>(
+    '.variant-group[data-variant-type="color"] .variant-option.active'
+  );
+  if (activeColorBtn) {
+    const colorGroup = activeColorBtn.closest<HTMLElement>('.variant-group');
+    if (colorGroup) {
+      crossDisableVariants(
+        colorGroup.getAttribute('data-variant-label') || '',
+        activeColorBtn.getAttribute('data-variant-label') || '',
+      );
+    }
+  }
 }

@@ -20,10 +20,22 @@ export interface PriceTier {
   currency: string;
 }
 
+export interface SkuMatrixEntry {
+  axis1: string;
+  axis2: string;
+  stock: number;
+  price: number;
+  available: boolean;
+  sku: string;
+  variantId: string;
+  extraAxes?: Record<string, string>;
+}
+
 export interface ProductVariant {
   type: 'color' | 'size' | 'material';
   label: string;
   options: VariantOption[];
+  skuMatrix?: SkuMatrixEntry[];
 }
 
 export interface VariantOption {
@@ -44,6 +56,8 @@ export interface VariantOption {
   title?: string;
   /** SKU for cart / reporting. */
   sku?: string;
+  /** True if this variant is the default (pre-selected on page load). */
+  isDefault?: boolean;
 }
 
 export interface ProductSpec {

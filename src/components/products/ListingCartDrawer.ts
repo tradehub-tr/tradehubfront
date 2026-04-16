@@ -38,6 +38,7 @@ function toColors(product: ProductDetail): CartDrawerColorModel[] {
 }
 
 function toDrawerItem(product: ProductDetail): CartDrawerItemModel {
+  const colorVariant = product.variants.find((v) => v.type === 'color');
   return {
     id: product.id,
     title: product.title,
@@ -55,8 +56,9 @@ function toDrawerItem(product: ProductDetail): CartDrawerItemModel {
       rawPrice: tier.basePrice,
     })),
     colors: toColors(product),
+    colorAxisLabel: colorVariant?.label,
     sizeGroups: product.variants
-      .filter((v) => v.type !== 'color')
+      .filter((v) => v.type === 'size')
       .map((v) => ({
         groupLabel: v.label,
         options: v.options.map((o, i) => ({
@@ -66,7 +68,19 @@ function toDrawerItem(product: ProductDetail): CartDrawerItemModel {
         })),
       }))
       .filter((g) => g.options.length > 0),
+    selectableGroups: product.variants
+      .filter((v) => v.type === 'material')
+      .map((v) => ({
+        groupLabel: v.label,
+        axisName: v.label,
+        options: v.options.map((o, i) => ({
+          id: o.id || `${v.label}-${i}`,
+          label: o.label,
+        })),
+      }))
+      .filter((g) => g.options.length > 0),
     shippingOptions: toShippingOptions(product),
+    skuMatrix: colorVariant?.skuMatrix,
   };
 }
 

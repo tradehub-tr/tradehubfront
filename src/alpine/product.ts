@@ -237,8 +237,17 @@ Alpine.data('imageGallery', () => ({
     document.addEventListener('product-variant-change', ((e: CustomEvent) => {
       const images = e.detail?.images as string[] | undefined;
       const videoUrl = e.detail?.videoUrl as string | undefined;
+      const isDefault = e.detail?.isDefault as boolean | undefined;
+
       if (Array.isArray(images) && images.length > 0) {
+        // Variant has its own images — swap to them
         this.swapGalleryImages(images, videoUrl);
+      } else if (isDefault) {
+        // Default variant without own images — restore listing's original images
+        this.restoreOriginalImages();
+      } else {
+        // Non-default variant without images — restore originals (better than showing nothing)
+        this.restoreOriginalImages();
       }
     }) as EventListener);
   },
@@ -338,6 +347,19 @@ Alpine.data('imageGallery', () => ({
       }
       this.resetZoom();
     }
+  },
+
+  restoreOriginalImages() {
+    const originals = (window as any).__originalListingImages;
+    if (!originals || originals.length === 0) return;
+    const urls = originals.map((img: any) => img.src).filter(Boolean);
+    if (urls.length === 0) return;
+    // Restore without adding variant video — use listing's own video if present
+    const listingVideo = originals.find((img: any) => img.isVideo);
+    this.swapGalleryImages(
+      urls.filter((u: string) => !originals.find((im: any) => im.src === u && im.isVideo)),
+      listingVideo?.src || undefined,
+    );
   },
 
   isVideoSlide(): boolean {

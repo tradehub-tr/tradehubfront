@@ -455,6 +455,8 @@ const en = {
       moneyBack: 'Your money is refunded if you are not satisfied',
       moqWarning: 'Some products do not meet the minimum order quantity. Click "Add all" to complete.',
       stockError: 'Not enough stock for this product.',
+      outOfStock: 'Out of Stock',
+      lowStock: 'Only {{count}} left',
       selectAtLeastOne: 'Select at least 1 product for checkout.',
       selectAll: 'Select all products',
       deleteSelected: 'Delete selected',
