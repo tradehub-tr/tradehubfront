@@ -6,12 +6,24 @@
 
 export class CouponStore {
   load(): void {}
-  getCoupons(): never[] { return []; }
-  getByStatus(): never[] { return []; }
-  useCoupon(_code: string): boolean { return false; }
-  getCreditBalance(): number { return 0; }
-  getCreditHistory(): never[] { return []; }
-  subscribe(_listener: () => void): () => void { return () => {}; }
+  getCoupons(): never[] {
+    return [];
+  }
+  getByStatus(): never[] {
+    return [];
+  }
+  useCoupon(_code: string): boolean {
+    return false;
+  }
+  getCreditBalance(): number {
+    return 0;
+  }
+  getCreditHistory(): never[] {
+    return [];
+  }
+  subscribe(_listener: () => void): () => void {
+    return () => {};
+  }
 }
 
 export const couponStore = new CouponStore();

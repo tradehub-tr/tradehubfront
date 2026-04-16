@@ -6,7 +6,7 @@
  * Categories loaded dynamically from apiCategories (API)
  */
 
-import { t } from '../../i18n';
+import { t } from "../../i18n";
 
 export function TopRankingCategoryTabs(): string {
   return `
@@ -41,7 +41,7 @@ export function TopRankingCategoryTabs(): string {
             : 'text-text-tertiary hover:text-text-primary'"
           @click="setTab('all')"
           data-i18n="topRankingPage.tabAll"
-        >${t('topRankingPage.tabAll')}</button>
+        >${t("topRankingPage.tabAll")}</button>
 
         <!-- Dynamic category tabs from API -->
         <template x-for="cat in apiCategories" :key="'tab-' + cat.slug">
@@ -120,7 +120,7 @@ export function TopRankingCategoryTabs(): string {
               class="flex-1 text-[15px]"
               :class="activeTab === 'all' ? 'font-semibold text-gray-900' : 'text-gray-600'"
               data-i18n="topRankingPage.tabAll"
-            >${t('topRankingPage.tabAll')}</span>
+            >${t("topRankingPage.tabAll")}</span>
             <span
               class="flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors"
               :class="activeTab === 'all' ? 'border-gray-900 bg-gray-900' : 'border-gray-300 bg-transparent'"
@@ -164,7 +164,7 @@ export function initRankingCategoryTabs(): void {
   setTimeout(() => {
     const scrollEl = document.querySelector<HTMLElement>('[x-ref="tabsScroll"]');
     if (scrollEl) {
-      scrollEl.dispatchEvent(new Event('scroll'));
+      scrollEl.dispatchEvent(new Event("scroll"));
     }
   }, 100);
 }

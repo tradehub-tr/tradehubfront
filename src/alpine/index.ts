@@ -1,34 +1,34 @@
-import Alpine from 'alpinejs'
-import { initLinkRewriter } from '../utils/url'
-import { initMediaRewriter } from '../utils/mediaUrl'
-import { initTracking } from '../utils/trackingManager'
+import Alpine from "alpinejs";
+import { initLinkRewriter } from "../utils/url";
+import { initMediaRewriter } from "../utils/mediaUrl";
+import { initTracking } from "../utils/trackingManager";
 
 // Import all Alpine.data() module registrations (side-effect imports)
-import './orders'
-import './remittance'
-import './coupons'
-import './product'
-import './cart'
-import './checkout'
-import './auth'
-import './settings'
-import './payment'
-import './dashboard'
-import './messages'
-import './sidebar'
-import './products-filter'
-import './shared'
-import './help'
-import './legal'
-import './seller'
-import './sellerShop'
-import './addresses'
-import './notifications'
+import "./orders";
+import "./remittance";
+import "./coupons";
+import "./product";
+import "./cart";
+import "./checkout";
+import "./auth";
+import "./settings";
+import "./payment";
+import "./dashboard";
+import "./messages";
+import "./sidebar";
+import "./products-filter";
+import "./shared";
+import "./help";
+import "./legal";
+import "./seller";
+import "./sellerShop";
+import "./addresses";
+import "./notifications";
 
 // Augment Window interface for Alpine global access (debugging)
 declare global {
   interface Window {
-    Alpine: typeof Alpine
+    Alpine: typeof Alpine;
   }
 }
 

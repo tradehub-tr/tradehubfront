@@ -5,9 +5,15 @@
  * Expanded state: 400px wide panel sliding from right
  */
 
-import { sectionEditors, themeTokenGroups, type ThemeToken } from '../../utils/themeTokens';
-import { themePresets } from '../../utils/themePresets';
-import { loadTheme, saveTheme, clearTheme, applyTheme, collectOverrides } from '../../utils/themeStorage';
+import { sectionEditors, themeTokenGroups, type ThemeToken } from "../../utils/themeTokens";
+import { themePresets } from "../../utils/themePresets";
+import {
+  loadTheme,
+  saveTheme,
+  clearTheme,
+  applyTheme,
+  collectOverrides,
+} from "../../utils/themeStorage";
 
 /**
  * ThemeEditorPanel Component
@@ -48,12 +54,12 @@ export function initThemeEditorPanel(): void {
     applyTheme(saved);
   }
 
-  const triggerBtn = document.getElementById('theme-editor-trigger');
+  const triggerBtn = document.getElementById("theme-editor-trigger");
 
   if (!triggerBtn) return;
 
   // Open drawer on trigger click
-  triggerBtn.addEventListener('click', () => {
+  triggerBtn.addEventListener("click", () => {
     openThemeEditorDrawer();
   });
 }
@@ -66,10 +72,16 @@ type TokenControl = ThemeToken;
 /**
  * Renders a collapsible theme section with controls
  */
-function renderThemeSection(id: string, title: string, collapsed: boolean, tokens: TokenControl[], icon?: string): string {
+function renderThemeSection(
+  id: string,
+  title: string,
+  collapsed: boolean,
+  tokens: TokenControl[],
+  icon?: string
+): string {
   const sectionId = `theme-section-${id}`;
-  const chevronRotation = collapsed ? '' : 'rotate-90';
-  const contentVisibility = collapsed ? 'hidden' : '';
+  const chevronRotation = collapsed ? "" : "rotate-90";
+  const contentVisibility = collapsed ? "hidden" : "";
 
   return `
     <div class="border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900 overflow-hidden">
@@ -85,7 +97,7 @@ function renderThemeSection(id: string, title: string, collapsed: boolean, token
           <svg class="theme-chevron w-4 h-4 text-gray-400 transition-transform ${chevronRotation}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="m9 5 7 7-7 7"/>
           </svg>
-          ${icon ? `<span class="text-base" aria-hidden="true">${icon}</span>` : ''}
+          ${icon ? `<span class="text-base" aria-hidden="true">${icon}</span>` : ""}
           <span class="text-sm font-semibold text-gray-900 dark:text-white">${title}</span>
           <span class="text-[10px] text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded-full" aria-label="${tokens.length} controls">${tokens.length}</span>
         </span>
@@ -101,7 +113,7 @@ function renderThemeSection(id: string, title: string, collapsed: boolean, token
       </button>
       <div id="${sectionId}" class="${contentVisibility} px-4 pb-4" role="region" aria-labelledby="${sectionId}-btn">
         <div class="space-y-4 pt-2">
-          ${tokens.map((token, index) => renderTokenControl(id, index, token)).join('')}
+          ${tokens.map((token, index) => renderTokenControl(id, index, token)).join("")}
         </div>
       </div>
     </div>
@@ -116,7 +128,7 @@ function renderTokenControl(sectionId: string, index: number, token: TokenContro
   const label = token.label || token.var;
   const value = token.default;
 
-  if (token.type === 'color') {
+  if (token.type === "color") {
     return `
       <div class="space-y-1.5">
         <label for="${controlId}" class="block text-[11px] font-mono text-gray-600 dark:text-gray-400 truncate" title="${token.var}">${label}</label>
@@ -136,7 +148,7 @@ function renderTokenControl(sectionId: string, index: number, token: TokenContro
     `;
   }
 
-  if (token.type === 'range') {
+  if (token.type === "range") {
     const displayValue = token.unit ? `${value}${token.unit}` : `${value}`;
     return `
       <div class="space-y-1.5">
@@ -152,7 +164,7 @@ function renderTokenControl(sectionId: string, index: number, token: TokenContro
           step="${token.step}"
           value="${value}"
           data-var="${token.var}"
-          data-unit="${token.unit || ''}"
+          data-unit="${token.unit || ""}"
           aria-label="${label} slider"
           aria-valuemin="${token.min}"
           aria-valuemax="${token.max}"
@@ -164,8 +176,14 @@ function renderTokenControl(sectionId: string, index: number, token: TokenContro
     `;
   }
 
-  if (token.type === 'font') {
-    const options = token.options?.map(opt => `<option value="${opt.value}" ${opt.value === value ? 'selected' : ''}>${opt.label}</option>`).join('') || '';
+  if (token.type === "font") {
+    const options =
+      token.options
+        ?.map(
+          (opt) =>
+            `<option value="${opt.value}" ${opt.value === value ? "selected" : ""}>${opt.label}</option>`
+        )
+        .join("") || "";
     return `
       <div class="space-y-1.5">
         <label for="${controlId}" class="block text-[11px] font-mono text-gray-600 dark:text-gray-400 truncate" title="${token.var}">${label}</label>
@@ -207,23 +225,25 @@ function renderTokenControl(sectionId: string, index: number, token: TokenContro
  */
 function openThemeEditorDrawer(): void {
   // Prevent duplicate drawers
-  if (document.getElementById('theme-editor-drawer')) {
+  if (document.getElementById("theme-editor-drawer")) {
     return;
   }
 
   // Create backdrop (semi-transparent overlay on mobile)
-  const backdrop = document.createElement('div');
-  backdrop.id = 'theme-editor-backdrop';
-  backdrop.className = 'fixed inset-0 z-[calc(var(--z-toast)-1)] bg-black/30 transition-opacity duration-300 opacity-0 md:hidden';
-  backdrop.setAttribute('aria-hidden', 'true');
+  const backdrop = document.createElement("div");
+  backdrop.id = "theme-editor-backdrop";
+  backdrop.className =
+    "fixed inset-0 z-[calc(var(--z-toast)-1)] bg-black/30 transition-opacity duration-300 opacity-0 md:hidden";
+  backdrop.setAttribute("aria-hidden", "true");
 
   // Create drawer
-  const drawer = document.createElement('div');
-  drawer.id = 'theme-editor-drawer';
-  drawer.className = 'fixed top-0 right-0 z-(--z-toast) h-full w-full md:max-w-[400px] bg-white dark:bg-gray-800 shadow-2xl flex flex-col transition-transform duration-300 translate-x-full';
-  drawer.setAttribute('role', 'dialog');
-  drawer.setAttribute('aria-modal', 'true'); // Modal on mobile
-  drawer.setAttribute('aria-label', 'Theme Editor');
+  const drawer = document.createElement("div");
+  drawer.id = "theme-editor-drawer";
+  drawer.className =
+    "fixed top-0 right-0 z-(--z-toast) h-full w-full md:max-w-[400px] bg-white dark:bg-gray-800 shadow-2xl flex flex-col transition-transform duration-300 translate-x-full";
+  drawer.setAttribute("role", "dialog");
+  drawer.setAttribute("aria-modal", "true"); // Modal on mobile
+  drawer.setAttribute("aria-label", "Theme Editor");
 
   drawer.innerHTML = `
     <!-- Header -->
@@ -273,11 +293,15 @@ function openThemeEditorDrawer(): void {
       <div class="sticky top-0 z-10 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-5 py-4">
         <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3" id="theme-presets-label">Theme Presets</h3>
         <div class="grid grid-cols-3 gap-2" role="group" aria-labelledby="theme-presets-label">
-          ${themePresets.map((preset, i) => `
+          ${themePresets
+            .map(
+              (preset, i) => `
             <button type="button" class="theme-preset-btn px-3 py-2 text-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 active:scale-95 rounded-md transition-all focus:outline-none focus:ring-2 focus:ring-primary-400" data-preset-index="${i}" aria-label="Apply ${preset.name} theme preset" title="${preset.description}">
               <span class="mr-1">${preset.icon}</span>${preset.name}
             </button>
-          `).join('')}
+          `
+            )
+            .join("")}
         </div>
       </div>
 
@@ -291,16 +315,25 @@ function openThemeEditorDrawer(): void {
 
       <!-- Page Sections Tab -->
       <div id="theme-tab-sections" class="px-5 py-4 space-y-3">
-        ${sectionEditors.map((section, index) =>
-          renderThemeSection(section.id, section.name, index > 0, section.tokens, section.icon)
-        ).join('')}
+        ${sectionEditors
+          .map((section, index) =>
+            renderThemeSection(section.id, section.name, index > 0, section.tokens, section.icon)
+          )
+          .join("")}
       </div>
 
       <!-- Global Tokens Tab (hidden by default) -->
       <div id="theme-tab-globals" class="px-5 py-4 space-y-3 hidden">
-        ${themeTokenGroups.map((group, index) =>
-          renderThemeSection(`global-${index}`, group.name, group.collapsed !== false, group.tokens)
-        ).join('')}
+        ${themeTokenGroups
+          .map((group, index) =>
+            renderThemeSection(
+              `global-${index}`,
+              group.name,
+              group.collapsed !== false,
+              group.tokens
+            )
+          )
+          .join("")}
       </div>
     </div>
 
@@ -356,21 +389,22 @@ function openThemeEditorDrawer(): void {
 
   // Prevent body scroll on mobile when drawer is open
   const preventBodyScroll = (): void => {
-    if (window.innerWidth < 768) { // Mobile only
-      document.body.style.overflow = 'hidden';
+    if (window.innerWidth < 768) {
+      // Mobile only
+      document.body.style.overflow = "hidden";
     }
   };
 
   const restoreBodyScroll = (): void => {
-    document.body.style.overflow = '';
+    document.body.style.overflow = "";
   };
 
   preventBodyScroll();
 
   // Close handler
   const closeDrawer = (): void => {
-    drawer.classList.add('translate-x-full');
-    backdrop.classList.add('opacity-0');
+    drawer.classList.add("translate-x-full");
+    backdrop.classList.add("opacity-0");
     restoreBodyScroll();
     setTimeout(() => {
       backdrop.remove();
@@ -385,26 +419,27 @@ function openThemeEditorDrawer(): void {
 
   // Animate in on next frame
   requestAnimationFrame(() => {
-    backdrop.classList.remove('opacity-0');
-    backdrop.classList.add('opacity-100');
-    drawer.classList.remove('translate-x-full');
-    drawer.classList.add('translate-x-0');
+    backdrop.classList.remove("opacity-0");
+    backdrop.classList.add("opacity-100");
+    drawer.classList.remove("translate-x-full");
+    drawer.classList.add("translate-x-0");
     // Focus the close button for accessibility
-    const closeBtn = document.getElementById('theme-editor-close-btn');
+    const closeBtn = document.getElementById("theme-editor-close-btn");
     closeBtn?.focus();
   });
 
   // Close on backdrop click (mobile only)
-  backdrop.addEventListener('click', closeDrawer);
+  backdrop.addEventListener("click", closeDrawer);
 
   // Focus trap: Keep focus within the drawer
-  const focusableSelectors = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+  const focusableSelectors =
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
   const focusableElements = drawer.querySelectorAll(focusableSelectors);
   const firstFocusable = focusableElements[0] as HTMLElement;
   const lastFocusable = focusableElements[focusableElements.length - 1] as HTMLElement;
 
   const handleFocusTrap = (e: KeyboardEvent): void => {
-    if (e.key !== 'Tab') return;
+    if (e.key !== "Tab") return;
 
     if (e.shiftKey) {
       // Shift + Tab: Focus previous element
@@ -421,24 +456,24 @@ function openThemeEditorDrawer(): void {
     }
   };
 
-  drawer.addEventListener('keydown', handleFocusTrap);
+  drawer.addEventListener("keydown", handleFocusTrap);
 
   // Close button handler
-  const closeBtn = document.getElementById('theme-editor-close-btn');
-  closeBtn?.addEventListener('click', closeDrawer);
+  const closeBtn = document.getElementById("theme-editor-close-btn");
+  closeBtn?.addEventListener("click", closeDrawer);
 
   // Minimize button handler
-  const minimizeBtn = document.getElementById('theme-editor-minimize-btn');
-  minimizeBtn?.addEventListener('click', minimizeDrawer);
+  const minimizeBtn = document.getElementById("theme-editor-minimize-btn");
+  minimizeBtn?.addEventListener("click", minimizeDrawer);
 
   // Close on Escape key
   const handleKeyDown = (e: KeyboardEvent): void => {
-    if (e.key === 'Escape') {
+    if (e.key === "Escape") {
       closeDrawer();
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener("keydown", handleKeyDown);
     }
   };
-  document.addEventListener('keydown', handleKeyDown);
+  document.addEventListener("keydown", handleKeyDown);
 
   // Swipe-to-close gesture for mobile
   let touchStartX = 0;
@@ -448,21 +483,29 @@ function openThemeEditorDrawer(): void {
   const SWIPE_THRESHOLD = 100; // Minimum distance for swipe
   const SWIPE_ANGLE_THRESHOLD = 30; // Maximum angle deviation from horizontal
 
-  drawer.addEventListener('touchstart', (e: TouchEvent) => {
-    touchStartX = e.changedTouches[0].screenX;
-    touchStartY = e.changedTouches[0].screenY;
-  }, { passive: true });
+  drawer.addEventListener(
+    "touchstart",
+    (e: TouchEvent) => {
+      touchStartX = e.changedTouches[0].screenX;
+      touchStartY = e.changedTouches[0].screenY;
+    },
+    { passive: true }
+  );
 
-  drawer.addEventListener('touchend', (e: TouchEvent) => {
-    touchEndX = e.changedTouches[0].screenX;
-    touchEndY = e.changedTouches[0].screenY;
-    handleSwipeGesture();
-  }, { passive: true });
+  drawer.addEventListener(
+    "touchend",
+    (e: TouchEvent) => {
+      touchEndX = e.changedTouches[0].screenX;
+      touchEndY = e.changedTouches[0].screenY;
+      handleSwipeGesture();
+    },
+    { passive: true }
+  );
 
   const handleSwipeGesture = (): void => {
     const deltaX = touchEndX - touchStartX;
     const deltaY = touchEndY - touchStartY;
-    const angle = Math.abs(Math.atan2(deltaY, deltaX) * 180 / Math.PI);
+    const angle = Math.abs((Math.atan2(deltaY, deltaX) * 180) / Math.PI);
 
     // Swipe right to close (only if mostly horizontal)
     if (deltaX > SWIPE_THRESHOLD && angle < SWIPE_ANGLE_THRESHOLD) {
@@ -471,91 +514,93 @@ function openThemeEditorDrawer(): void {
   };
 
   // Tab switching (Page Sections / Global Tokens)
-  const tabs = drawer.querySelectorAll('.theme-tab');
-  const tabSections = drawer.querySelector('#theme-tab-sections');
-  const tabGlobals = drawer.querySelector('#theme-tab-globals');
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      const target = tab.getAttribute('data-tab');
-      tabs.forEach(t => {
-        t.classList.remove('border-primary-500', 'text-primary-600');
-        t.classList.add('border-transparent', 'text-gray-500');
-        t.setAttribute('aria-selected', 'false');
+  const tabs = drawer.querySelectorAll(".theme-tab");
+  const tabSections = drawer.querySelector("#theme-tab-sections");
+  const tabGlobals = drawer.querySelector("#theme-tab-globals");
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const target = tab.getAttribute("data-tab");
+      tabs.forEach((t) => {
+        t.classList.remove("border-primary-500", "text-primary-600");
+        t.classList.add("border-transparent", "text-gray-500");
+        t.setAttribute("aria-selected", "false");
       });
-      tab.classList.remove('border-transparent', 'text-gray-500');
-      tab.classList.add('border-primary-500', 'text-primary-600');
-      tab.setAttribute('aria-selected', 'true');
-      if (target === 'sections') {
-        tabSections?.classList.remove('hidden');
-        tabGlobals?.classList.add('hidden');
+      tab.classList.remove("border-transparent", "text-gray-500");
+      tab.classList.add("border-primary-500", "text-primary-600");
+      tab.setAttribute("aria-selected", "true");
+      if (target === "sections") {
+        tabSections?.classList.remove("hidden");
+        tabGlobals?.classList.add("hidden");
       } else {
-        tabSections?.classList.add('hidden');
-        tabGlobals?.classList.remove('hidden');
+        tabSections?.classList.add("hidden");
+        tabGlobals?.classList.remove("hidden");
       }
     });
   });
 
   // Accordion toggle functionality
-  const accordionButtons = drawer.querySelectorAll('.theme-accordion-btn');
-  accordionButtons.forEach(btn => {
+  const accordionButtons = drawer.querySelectorAll(".theme-accordion-btn");
+  accordionButtons.forEach((btn) => {
     const toggleAccordion = (e?: Event) => {
       // Don't toggle if clicking the reset button
-      if (e && (e.target as HTMLElement).closest('.theme-reset-section')) {
+      if (e && (e.target as HTMLElement).closest(".theme-reset-section")) {
         return;
       }
 
-      const targetId = btn.getAttribute('data-target');
-      const panel = document.getElementById(targetId || '');
-      const chevron = btn.querySelector('.theme-chevron');
+      const targetId = btn.getAttribute("data-target");
+      const panel = document.getElementById(targetId || "");
+      const chevron = btn.querySelector(".theme-chevron");
 
       if (panel) {
-        const isHidden = panel.classList.contains('hidden');
-        panel.classList.toggle('hidden');
-        btn.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+        const isHidden = panel.classList.contains("hidden");
+        panel.classList.toggle("hidden");
+        btn.setAttribute("aria-expanded", isHidden ? "true" : "false");
       }
       if (chevron) {
-        chevron.classList.toggle('rotate-90');
+        chevron.classList.toggle("rotate-90");
       }
     };
 
-    btn.addEventListener('click', toggleAccordion);
+    btn.addEventListener("click", toggleAccordion);
 
     // Keyboard navigation: Enter or Space to toggle
-    (btn as HTMLElement).addEventListener('keydown', (e: KeyboardEvent) => {
-      if (e.key === 'Enter' || e.key === ' ') {
+    (btn as HTMLElement).addEventListener("keydown", (e: KeyboardEvent) => {
+      if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         toggleAccordion();
       }
     });
 
     // Live preview: Highlight corresponding page section on hover
-    btn.addEventListener('mouseenter', () => {
-      const sectionId = btn.getAttribute('data-section-id');
+    btn.addEventListener("mouseenter", () => {
+      const sectionId = btn.getAttribute("data-section-id");
       highlightPageSection(sectionId);
     });
 
-    btn.addEventListener('mouseleave', () => {
+    btn.addEventListener("mouseleave", () => {
       removePageSectionHighlight();
     });
   });
 
   // Theme preset handlers — apply preset variables
-  const presetButtons = drawer.querySelectorAll('.theme-preset-btn');
-  presetButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const indexStr = btn.getAttribute('data-preset-index');
+  const presetButtons = drawer.querySelectorAll(".theme-preset-btn");
+  presetButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const indexStr = btn.getAttribute("data-preset-index");
       if (indexStr == null) return;
       const preset = themePresets[parseInt(indexStr, 10)];
       if (!preset) return;
 
       // Clear all existing inline overrides first
-      const allVarInputs = drawer.querySelectorAll<HTMLInputElement | HTMLSelectElement>('[data-var]');
-      allVarInputs.forEach(input => {
-        const cssVar = input.getAttribute('data-var');
+      const allVarInputs = drawer.querySelectorAll<HTMLInputElement | HTMLSelectElement>(
+        "[data-var]"
+      );
+      allVarInputs.forEach((input) => {
+        const cssVar = input.getAttribute("data-var");
         if (cssVar) root.style.removeProperty(cssVar);
       });
-      root.style.removeProperty('--default-font-family');
-      root.style.removeProperty('--default-mono-font-family');
+      root.style.removeProperty("--default-font-family");
+      root.style.removeProperty("--default-mono-font-family");
 
       // Apply preset variables
       applyTheme(preset.variables);
@@ -567,22 +612,24 @@ function openThemeEditorDrawer(): void {
       initControlsFromComputed(drawer);
 
       // Visual feedback — highlight the active preset button
-      presetButtons.forEach(b => b.classList.remove('ring-2', 'ring-primary-500', 'bg-primary-50'));
-      btn.classList.add('ring-2', 'ring-primary-500', 'bg-primary-50');
+      presetButtons.forEach((b) =>
+        b.classList.remove("ring-2", "ring-primary-500", "bg-primary-50")
+      );
+      btn.classList.add("ring-2", "ring-primary-500", "bg-primary-50");
     });
   });
 
   // Per-section reset — remove only that section's CSS variable overrides
-  const resetSectionButtons = drawer.querySelectorAll('.theme-reset-section');
-  resetSectionButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const sectionId = btn.getAttribute('data-section');
+  const resetSectionButtons = drawer.querySelectorAll(".theme-reset-section");
+  resetSectionButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const sectionId = btn.getAttribute("data-section");
       if (!sectionId) return;
-      const sectionDef = sectionEditors.find(s => s.id === sectionId);
+      const sectionDef = sectionEditors.find((s) => s.id === sectionId);
       if (!sectionDef) return;
 
       // Remove inline overrides for this section's tokens
-      sectionDef.tokens.forEach(token => {
+      sectionDef.tokens.forEach((token) => {
         root.style.removeProperty(token.var);
       });
 
@@ -598,8 +645,8 @@ function openThemeEditorDrawer(): void {
   // Helper: collect all current overrides and persist to localStorage
   const autoSave = (container: HTMLElement): void => {
     const varNames: string[] = [];
-    container.querySelectorAll<HTMLInputElement | HTMLSelectElement>('[data-var]').forEach(el => {
-      const v = el.getAttribute('data-var');
+    container.querySelectorAll<HTMLInputElement | HTMLSelectElement>("[data-var]").forEach((el) => {
+      const v = el.getAttribute("data-var");
       if (v) varNames.push(v);
     });
     saveTheme(collectOverrides(varNames));
@@ -607,10 +654,10 @@ function openThemeEditorDrawer(): void {
 
   // Color inputs → live update CSS variables
   const colorInputs = drawer.querySelectorAll('input[type="color"]');
-  colorInputs.forEach(input => {
-    input.addEventListener('input', (e) => {
+  colorInputs.forEach((input) => {
+    input.addEventListener("input", (e) => {
       const target = e.target as HTMLInputElement;
-      const cssVar = target.getAttribute('data-var');
+      const cssVar = target.getAttribute("data-var");
       if (cssVar) root.style.setProperty(cssVar, target.value);
       const valSpan = document.getElementById(`${target.id}-val`);
       if (valSpan) valSpan.textContent = target.value;
@@ -620,35 +667,36 @@ function openThemeEditorDrawer(): void {
 
   // Range inputs → live update CSS variables
   const rangeInputs = drawer.querySelectorAll('input[type="range"]');
-  rangeInputs.forEach(input => {
-    input.addEventListener('input', (e) => {
+  rangeInputs.forEach((input) => {
+    input.addEventListener("input", (e) => {
       const target = e.target as HTMLInputElement;
-      const cssVar = target.getAttribute('data-var');
-      const unit = target.getAttribute('data-unit') || '';
+      const cssVar = target.getAttribute("data-var");
+      const unit = target.getAttribute("data-unit") || "";
       const value = `${target.value}${unit}`;
       if (cssVar) root.style.setProperty(cssVar, value);
       const valSpan = document.getElementById(`${target.id}-val`);
       if (valSpan) valSpan.textContent = value;
-      target.setAttribute('aria-valuenow', target.value);
-      target.setAttribute('aria-valuetext', value);
+      target.setAttribute("aria-valuenow", target.value);
+      target.setAttribute("aria-valuetext", value);
       autoSave(drawer);
     });
   });
 
   // Font selects → live update CSS variables + load Google Fonts
-  const fontSelects = drawer.querySelectorAll('select[data-var]');
-  fontSelects.forEach(select => {
-    select.addEventListener('change', (e) => {
+  const fontSelects = drawer.querySelectorAll("select[data-var]");
+  fontSelects.forEach((select) => {
+    select.addEventListener("change", (e) => {
       const target = e.target as HTMLSelectElement;
-      const cssVar = target.getAttribute('data-var');
+      const cssVar = target.getAttribute("data-var");
       if (cssVar) {
         root.style.setProperty(cssVar, target.value);
-        if (cssVar === '--font-sans') root.style.setProperty('--default-font-family', target.value);
-        if (cssVar === '--font-mono') root.style.setProperty('--default-mono-font-family', target.value);
+        if (cssVar === "--font-sans") root.style.setProperty("--default-font-family", target.value);
+        if (cssVar === "--font-mono")
+          root.style.setProperty("--default-mono-font-family", target.value);
       }
       const preview = document.getElementById(`${target.id}-preview`);
       if (preview) preview.style.fontFamily = target.value;
-      const googleParam = target.options[target.selectedIndex]?.getAttribute('data-google');
+      const googleParam = target.options[target.selectedIndex]?.getAttribute("data-google");
       if (googleParam) loadGoogleFont(googleParam);
       autoSave(drawer);
     });
@@ -656,125 +704,138 @@ function openThemeEditorDrawer(): void {
 
   // Text inputs → live update CSS variables
   const textInputs = drawer.querySelectorAll<HTMLInputElement>('input[type="text"][data-var]');
-  textInputs.forEach(input => {
-    input.addEventListener('input', (e) => {
+  textInputs.forEach((input) => {
+    input.addEventListener("input", (e) => {
       const target = e.target as HTMLInputElement;
-      const cssVar = target.getAttribute('data-var');
+      const cssVar = target.getAttribute("data-var");
       if (cssVar) root.style.setProperty(cssVar, target.value);
       autoSave(drawer);
     });
   });
 
   // Reset All → remove all inline overrides, clear storage, and re-init controls
-  const resetAllBtn = document.getElementById('theme-reset-all-btn');
-  resetAllBtn?.addEventListener('click', () => {
-    const allVarInputs = drawer.querySelectorAll<HTMLInputElement | HTMLSelectElement>('[data-var]');
-    allVarInputs.forEach(input => {
-      const cssVar = input.getAttribute('data-var');
+  const resetAllBtn = document.getElementById("theme-reset-all-btn");
+  resetAllBtn?.addEventListener("click", () => {
+    const allVarInputs = drawer.querySelectorAll<HTMLInputElement | HTMLSelectElement>(
+      "[data-var]"
+    );
+    allVarInputs.forEach((input) => {
+      const cssVar = input.getAttribute("data-var");
       if (cssVar) root.style.removeProperty(cssVar);
     });
-    root.style.removeProperty('--default-font-family');
-    root.style.removeProperty('--default-mono-font-family');
+    root.style.removeProperty("--default-font-family");
+    root.style.removeProperty("--default-mono-font-family");
     clearTheme();
     initControlsFromComputed(drawer);
 
     // Remove active preset highlight
-    presetButtons.forEach(b => b.classList.remove('ring-2', 'ring-primary-500', 'bg-primary-50'));
+    presetButtons.forEach((b) => b.classList.remove("ring-2", "ring-primary-500", "bg-primary-50"));
   });
 
   // Save to style.css → POST to Vite dev server /__save-css endpoint
   // This permanently writes CSS variable changes to src/style.css
   // Vite HMR then propagates updates to ALL pages using that CSS
-  const saveCssBtn = document.getElementById('theme-save-css-btn');
-  const saveCssText = document.getElementById('theme-save-css-text');
-  saveCssBtn?.addEventListener('click', async () => {
+  const saveCssBtn = document.getElementById("theme-save-css-btn");
+  const saveCssText = document.getElementById("theme-save-css-text");
+  saveCssBtn?.addEventListener("click", async () => {
     const updates: Record<string, string> = {};
-    const allVarInputs = drawer.querySelectorAll<HTMLInputElement | HTMLSelectElement>('[data-var]');
-    allVarInputs.forEach(input => {
-      const cssVar = input.getAttribute('data-var');
+    const allVarInputs = drawer.querySelectorAll<HTMLInputElement | HTMLSelectElement>(
+      "[data-var]"
+    );
+    allVarInputs.forEach((input) => {
+      const cssVar = input.getAttribute("data-var");
       if (!cssVar) return;
       const inlineVal = root.style.getPropertyValue(cssVar).trim();
       if (inlineVal) updates[cssVar] = inlineVal;
     });
 
     if (Object.keys(updates).length === 0) {
-      if (saveCssText) saveCssText.textContent = 'No changes';
-      setTimeout(() => { if (saveCssText) saveCssText.textContent = 'Save to style.css'; }, 1500);
+      if (saveCssText) saveCssText.textContent = "No changes";
+      setTimeout(() => {
+        if (saveCssText) saveCssText.textContent = "Save to style.css";
+      }, 1500);
       return;
     }
 
     // Remove derived vars that shouldn't be saved
-    delete updates['--default-font-family'];
-    delete updates['--default-mono-font-family'];
+    delete updates["--default-font-family"];
+    delete updates["--default-mono-font-family"];
 
     // Build Google Font @import if font changed
-    if (updates['--font-sans'] || updates['--font-mono']) {
+    if (updates["--font-sans"] || updates["--font-mono"]) {
       const fontUrls: string[] = [];
-      for (const varName of ['--font-sans', '--font-mono'] as const) {
+      for (const varName of ["--font-sans", "--font-mono"] as const) {
         if (!updates[varName]) continue;
         // Font tokens live in themeTokenGroups (global tokens), not sectionEditors
         for (const group of themeTokenGroups) {
           for (const token of group.tokens) {
             if (token.var === varName && token.options) {
-              const opt = token.options.find(o => o.value === updates[varName]);
+              const opt = token.options.find((o) => o.value === updates[varName]);
               if (opt?.google) fontUrls.push(`family=${opt.google}`);
             }
           }
         }
       }
       if (fontUrls.length > 0) {
-        updates['__google_font_imports__'] = `@import url('https://fonts.googleapis.com/css2?${fontUrls.join('&')}&display=swap');`;
+        updates["__google_font_imports__"] =
+          `@import url('https://fonts.googleapis.com/css2?${fontUrls.join("&")}&display=swap');`;
       }
     }
 
-    if (saveCssBtn) saveCssBtn.style.opacity = '0.6';
-    if (saveCssText) saveCssText.textContent = 'Saving...';
+    if (saveCssBtn) saveCssBtn.style.opacity = "0.6";
+    if (saveCssText) saveCssText.textContent = "Saving...";
 
     try {
-      const res = await fetch('/__save-css', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/__save-css", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updates),
       });
-      const data = await res.json() as { ok?: boolean };
+      const data = (await res.json()) as { ok?: boolean };
       if (data.ok) {
         // Clear inline overrides — the file is now the source of truth
-        allVarInputs.forEach(input => {
-          const cssVar = input.getAttribute('data-var');
+        allVarInputs.forEach((input) => {
+          const cssVar = input.getAttribute("data-var");
           if (cssVar && updates[cssVar]) root.style.removeProperty(cssVar);
         });
         clearTheme(); // Clear localStorage too
-        if (saveCssText) saveCssText.textContent = 'Saved!';
+        if (saveCssText) saveCssText.textContent = "Saved!";
         setTimeout(() => {
-          if (saveCssText) saveCssText.textContent = 'Save to style.css';
+          if (saveCssText) saveCssText.textContent = "Save to style.css";
           initControlsFromComputed(drawer);
         }, 1500);
       } else {
-        if (saveCssText) saveCssText.textContent = 'Error!';
-        setTimeout(() => { if (saveCssText) saveCssText.textContent = 'Save to style.css'; }, 2000);
+        if (saveCssText) saveCssText.textContent = "Error!";
+        setTimeout(() => {
+          if (saveCssText) saveCssText.textContent = "Save to style.css";
+        }, 2000);
       }
     } catch {
-      if (saveCssText) saveCssText.textContent = 'Dev server only';
-      setTimeout(() => { if (saveCssText) saveCssText.textContent = 'Save to style.css'; }, 2000);
+      if (saveCssText) saveCssText.textContent = "Dev server only";
+      setTimeout(() => {
+        if (saveCssText) saveCssText.textContent = "Save to style.css";
+      }, 2000);
     }
-    if (saveCssBtn) saveCssBtn.style.opacity = '1';
+    if (saveCssBtn) saveCssBtn.style.opacity = "1";
   });
 
   // Export Theme → download as CSS file
-  const exportBtn = document.getElementById('theme-export-btn');
-  exportBtn?.addEventListener('click', () => {
+  const exportBtn = document.getElementById("theme-export-btn");
+  exportBtn?.addEventListener("click", () => {
     const overrides: string[] = [];
-    const allVarInputs = drawer.querySelectorAll<HTMLInputElement | HTMLSelectElement>('[data-var]');
-    allVarInputs.forEach(input => {
-      const cssVar = input.getAttribute('data-var');
+    const allVarInputs = drawer.querySelectorAll<HTMLInputElement | HTMLSelectElement>(
+      "[data-var]"
+    );
+    allVarInputs.forEach((input) => {
+      const cssVar = input.getAttribute("data-var");
       if (!cssVar) return;
       const val = getComputedStyle(root).getPropertyValue(cssVar).trim();
       if (val) overrides.push(`  ${cssVar}: ${val};`);
     });
-    const css = `@theme {\n${overrides.join('\n')}\n}`;
-    const blob = new Blob([css], { type: 'text/css' });
+    const css = `@theme {\n${overrides.join("\n")}\n}`;
+    const blob = new Blob([css], { type: "text/css" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
     a.download = `tradehub-theme-${new Date().toISOString().slice(0, 10)}.css`;
     a.click();
@@ -789,11 +850,11 @@ function openThemeEditorDrawer(): void {
  * Loads a Google Font dynamically by injecting a <link> tag
  */
 function loadGoogleFont(googleParam: string): void {
-  const linkId = `gfont-${googleParam.replace(/[^a-zA-Z0-9]/g, '-')}`;
+  const linkId = `gfont-${googleParam.replace(/[^a-zA-Z0-9]/g, "-")}`;
   if (document.getElementById(linkId)) return; // already loaded
-  const link = document.createElement('link');
+  const link = document.createElement("link");
   link.id = linkId;
-  link.rel = 'stylesheet';
+  link.rel = "stylesheet";
   link.href = `https://fonts.googleapis.com/css2?family=${googleParam}&display=swap`;
   document.head.appendChild(link);
 }
@@ -806,11 +867,11 @@ function initControlsFromComputed(drawer: HTMLElement): void {
   const computed = getComputedStyle(root);
 
   // Sync color inputs
-  drawer.querySelectorAll<HTMLInputElement>('input[type="color"]').forEach(input => {
-    const cssVar = input.getAttribute('data-var');
+  drawer.querySelectorAll<HTMLInputElement>('input[type="color"]').forEach((input) => {
+    const cssVar = input.getAttribute("data-var");
     if (!cssVar) return;
     const val = computed.getPropertyValue(cssVar).trim();
-    if (val && val.startsWith('#')) {
+    if (val && val.startsWith("#")) {
       input.value = val;
       const valSpan = document.getElementById(`${input.id}-val`);
       if (valSpan) valSpan.textContent = val;
@@ -818,32 +879,32 @@ function initControlsFromComputed(drawer: HTMLElement): void {
   });
 
   // Sync range inputs
-  drawer.querySelectorAll<HTMLInputElement>('input[type="range"]').forEach(input => {
-    const cssVar = input.getAttribute('data-var');
+  drawer.querySelectorAll<HTMLInputElement>('input[type="range"]').forEach((input) => {
+    const cssVar = input.getAttribute("data-var");
     if (!cssVar) return;
     const val = computed.getPropertyValue(cssVar).trim();
     if (val) {
       const num = parseFloat(val);
       if (!isNaN(num)) {
         input.value = String(num);
-        const unit = input.getAttribute('data-unit') || '';
+        const unit = input.getAttribute("data-unit") || "";
         const display = `${num}${unit}`;
         const valSpan = document.getElementById(`${input.id}-val`);
         if (valSpan) valSpan.textContent = display;
-        input.setAttribute('aria-valuenow', String(num));
-        input.setAttribute('aria-valuetext', display);
+        input.setAttribute("aria-valuenow", String(num));
+        input.setAttribute("aria-valuetext", display);
       }
     }
   });
 
   // Sync font selects
-  drawer.querySelectorAll<HTMLSelectElement>('select[data-var]').forEach(select => {
-    const cssVar = select.getAttribute('data-var');
+  drawer.querySelectorAll<HTMLSelectElement>("select[data-var]").forEach((select) => {
+    const cssVar = select.getAttribute("data-var");
     if (!cssVar) return;
     const val = computed.getPropertyValue(cssVar).trim();
     if (val) {
       for (const opt of Array.from(select.options)) {
-        if (val.includes(opt.value.split(',')[0].replace(/['"]/g, '').trim())) {
+        if (val.includes(opt.value.split(",")[0].replace(/['"]/g, "").trim())) {
           select.value = opt.value;
           break;
         }
@@ -854,8 +915,8 @@ function initControlsFromComputed(drawer: HTMLElement): void {
   });
 
   // Sync text inputs
-  drawer.querySelectorAll<HTMLInputElement>('input[type="text"][data-var]').forEach(input => {
-    const cssVar = input.getAttribute('data-var');
+  drawer.querySelectorAll<HTMLInputElement>('input[type="text"][data-var]').forEach((input) => {
+    const cssVar = input.getAttribute("data-var");
     if (!cssVar) return;
     const val = computed.getPropertyValue(cssVar).trim();
     if (val) input.value = val;
@@ -870,14 +931,15 @@ function highlightPageSection(sectionId: string | null): void {
 
   // Map section IDs to actual page element selectors
   const sectionSelectors: Record<string, string> = {
-    'section-header': '#header, header',
-    'section-subheader': '#subheader, .subheader',
-    'section-search': '#search-area, .search-area',
-    'section-gradient': '#header, header', // Gradient is part of header
-    'section-mega': '#mega-menu, .mega-menu',
-    'section-hero': '#hero, .hero-section',
-    'section-productgrid': '[data-theme-section="productgrid"], [aria-label="Recommended Products"]',
-    'section-footer': '#footer, footer',
+    "section-header": "#header, header",
+    "section-subheader": "#subheader, .subheader",
+    "section-search": "#search-area, .search-area",
+    "section-gradient": "#header, header", // Gradient is part of header
+    "section-mega": "#mega-menu, .mega-menu",
+    "section-hero": "#hero, .hero-section",
+    "section-productgrid":
+      '[data-theme-section="productgrid"], [aria-label="Recommended Products"]',
+    "section-footer": "#footer, footer",
   };
 
   const selector = sectionSelectors[sectionId];
@@ -887,8 +949,8 @@ function highlightPageSection(sectionId: string | null): void {
   if (!element) return;
 
   // Add highlight outline with smooth transition
-  const highlightStyle = document.createElement('style');
-  highlightStyle.id = 'theme-panel-highlight-style';
+  const highlightStyle = document.createElement("style");
+  highlightStyle.id = "theme-panel-highlight-style";
   highlightStyle.textContent = `
     .theme-panel-highlight {
       outline: 3px solid #3b82f6 !important;
@@ -908,20 +970,20 @@ function highlightPageSection(sectionId: string | null): void {
   `;
 
   // Remove existing highlight style if present
-  const existingStyle = document.getElementById('theme-panel-highlight-style');
+  const existingStyle = document.getElementById("theme-panel-highlight-style");
   if (!existingStyle) {
     document.head.appendChild(highlightStyle);
   }
 
-  element.classList.add('theme-panel-highlight');
+  element.classList.add("theme-panel-highlight");
 }
 
 /**
  * Removes the highlight from page sections
  */
 function removePageSectionHighlight(): void {
-  const highlightedElements = document.querySelectorAll('.theme-panel-highlight');
-  highlightedElements.forEach(el => {
-    el.classList.remove('theme-panel-highlight');
+  const highlightedElements = document.querySelectorAll(".theme-panel-highlight");
+  highlightedElements.forEach((el) => {
+    el.classList.remove("theme-panel-highlight");
   });
 }

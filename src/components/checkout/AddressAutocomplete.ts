@@ -8,12 +8,13 @@
  * Form fill logic handled by fillSavedAddress() method on shippingForm.
  */
 
-import { savedAddress, pageContent } from '../../data/mockCheckout';
+import { savedAddress, pageContent } from "../../data/mockCheckout";
 
 export function AddressAutocomplete(): string {
-  const truncatedAddress = savedAddress.fullAddress.length > 50
-    ? savedAddress.fullAddress.substring(0, 50) + '…'
-    : savedAddress.fullAddress;
+  const truncatedAddress =
+    savedAddress.fullAddress.length > 50
+      ? savedAddress.fullAddress.substring(0, 50) + "…"
+      : savedAddress.fullAddress;
 
   return `
     <div

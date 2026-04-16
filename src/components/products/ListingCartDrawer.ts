@@ -1,6 +1,6 @@
-import { getListingDetail } from '../../services/listingService';
-import type { ProductDetail } from '../../types/product';
-import type { ProductListingCard } from '../../types/productListing';
+import { getListingDetail } from "../../services/listingService";
+import type { ProductDetail } from "../../types/product";
+import type { ProductListingCard } from "../../types/productListing";
 import {
   SharedCartDrawer,
   initSharedCartDrawer,
@@ -9,7 +9,7 @@ import {
   type CartDrawerItemModel,
   type CartDrawerColorModel,
   type CartDrawerShippingOption,
-} from '../cart/overlay/SharedCartDrawer';
+} from "../cart/overlay/SharedCartDrawer";
 
 /* ── Mapping helpers (mirrors CartDrawer.ts logic) ── */
 
@@ -18,27 +18,27 @@ function toShippingOptions(product: ProductDetail): CartDrawerShippingOption[] {
     id: `ship-${index + 1}`,
     method: option.method,
     estimatedDays: option.estimatedDays,
-    cost: Number(option.cost.replace(/[^0-9.]/g, '')) || 0,
+    cost: Number(option.cost.replace(/[^0-9.]/g, "")) || 0,
     costText: option.cost,
   }));
 }
 
 function toColors(product: ProductDetail): CartDrawerColorModel[] {
-  const colorVariants = product.variants.filter((v) => v.type === 'color');
+  const colorVariants = product.variants.filter((v) => v.type === "color");
   if (colorVariants.length === 0) return [];
   return colorVariants.flatMap((variant, groupIdx) =>
     variant.options.map((option, i) => ({
       id: option.id || `color-${groupIdx}-${i + 1}`,
       label: option.label,
       colorHex: option.value,
-      imageKind: 'jewelry' as const,
+      imageKind: "jewelry" as const,
       imageUrl: option.thumbnail || product.images[0]?.src,
     }))
   );
 }
 
 function toDrawerItem(product: ProductDetail): CartDrawerItemModel {
-  const colorVariant = product.variants.find((v) => v.type === 'color');
+  const colorVariant = product.variants.find((v) => v.type === "color");
   return {
     id: product.id,
     title: product.title,
@@ -46,8 +46,8 @@ function toDrawerItem(product: ProductDetail): CartDrawerItemModel {
     unit: product.unit,
     moq: product.moq,
     sellInMoqMultiples: !!product.sellInMoqMultiples,
-    imageKind: 'jewelry',
-    currency: product.baseCurrency || 'USD',
+    imageKind: "jewelry",
+    currency: product.baseCurrency || "USD",
     samplePrice: product.baseSamplePrice ?? product.samplePrice,
     priceTiers: product.priceTiers.map((tier) => ({
       minQty: tier.minQty,
@@ -58,7 +58,7 @@ function toDrawerItem(product: ProductDetail): CartDrawerItemModel {
     colors: toColors(product),
     colorAxisLabel: colorVariant?.label,
     sizeGroups: product.variants
-      .filter((v) => v.type === 'size')
+      .filter((v) => v.type === "size")
       .map((v) => ({
         groupLabel: v.label,
         options: v.options.map((o, i) => ({
@@ -69,7 +69,7 @@ function toDrawerItem(product: ProductDetail): CartDrawerItemModel {
       }))
       .filter((g) => g.options.length > 0),
     selectableGroups: product.variants
-      .filter((v) => v.type === 'material')
+      .filter((v) => v.type === "material")
       .map((v) => ({
         groupLabel: v.label,
         axisName: v.label,
@@ -86,11 +86,11 @@ function toDrawerItem(product: ProductDetail): CartDrawerItemModel {
 
 /* ── Lazy-load handler ── */
 
-async function handleItemMissing(id: string, mode: 'cart' | 'sample'): Promise<void> {
+async function handleItemMissing(id: string, mode: "cart" | "sample"): Promise<void> {
   const btn = document.querySelector<HTMLElement>(
     `[data-add-to-cart="${id}"], [data-order-sample="${id}"]`
   );
-  if (btn) btn.classList.add('loading');
+  if (btn) btn.classList.add("loading");
 
   try {
     const product = await getListingDetail(id);
@@ -98,9 +98,9 @@ async function handleItemMissing(id: string, mode: 'cart' | 'sample'): Promise<v
     initSharedCartDrawer([item]);
     openSharedCartDrawer(item.id, mode);
   } catch (err) {
-    console.error('[ListingCartDrawer] Failed to load product detail:', err);
+    console.error("[ListingCartDrawer] Failed to load product detail:", err);
   } finally {
-    if (btn) btn.classList.remove('loading');
+    if (btn) btn.classList.remove("loading");
   }
 }
 

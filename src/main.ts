@@ -1,21 +1,30 @@
-import './style.css'
-import { initFlowbite } from 'flowbite'
-import { applyTheme, loadTheme } from './utils/themeStorage'
+import "./style.css";
+import { initFlowbite } from "flowbite";
+import { applyTheme, loadTheme } from "./utils/themeStorage";
 
 // Site geneli tema — HEAD inline script'i (vite.config.ts → themeBootstrapPlugin)
 // cache'ten uygulayıp arka planda fetch ediyor. Burada sadece yerel geliştirici
 // drawer'ının override'larını remote'un üzerine tekrar uyguluyoruz ki dev
 // deneyimi bozulmasın.
 (() => {
-  const localDev = loadTheme()
-  if (Object.keys(localDev).length) applyTheme(localDev)
-})()
+  const localDev = loadTheme();
+  if (Object.keys(localDev).length) applyTheme(localDev);
+})();
 
 // i18n
-import { initLanguageSelector } from './components/header/TopBar'
+import { initLanguageSelector } from "./components/header/TopBar";
 
 // Header components
-import { TopBar, MobileSearchTabs, initMobileDrawer, SubHeader, initStickyHeaderSearch, MegaMenu, initMegaMenu, initHeaderCart } from './components/header'
+import {
+  TopBar,
+  MobileSearchTabs,
+  initMobileDrawer,
+  SubHeader,
+  initStickyHeaderSearch,
+  MegaMenu,
+  initMegaMenu,
+  initHeaderCart,
+} from "./components/header";
 
 // Hero components
 import {
@@ -35,22 +44,22 @@ import {
   initTailoredSelections,
   ProductGrid,
   initProductGrid,
-} from './components/hero'
+} from "./components/hero";
 
 // Footer components
-import { FooterLinks } from './components/footer'
+import { FooterLinks } from "./components/footer";
 
 // Floating components
-import { FloatingPanel } from './components/floating'
+import { FloatingPanel } from "./components/floating";
 
 // Alpine.js
-import { startAlpine } from './alpine'
+import { startAlpine } from "./alpine";
 
 // Utilities
-import { initAnimatedPlaceholder } from './utils/animatedPlaceholder'
+import { initAnimatedPlaceholder } from "./utils/animatedPlaceholder";
 
-const appEl = document.querySelector<HTMLDivElement>('#app')!;
-appEl.classList.add('relative');
+const appEl = document.querySelector<HTMLDivElement>("#app")!;
+appEl.classList.add("relative");
 appEl.innerHTML = `
   <!-- Sticky Header (global, stays sticky across full page) -->
   <div id="sticky-header" class="sticky top-0 z-(--z-header)" style="background-color:var(--header-scroll-bg);border-bottom:1px solid var(--header-scroll-border)">
@@ -59,7 +68,7 @@ appEl.innerHTML = `
   </div>
 
   <!-- Mobile Search Tabs (Products | Manufacturers) — non-sticky -->
-  ${MobileSearchTabs('products', { hideWorldwide: true })}
+  ${MobileSearchTabs("products", { hideWorldwide: true })}
 
   <!-- Mobile Category Bar (iSTOC-style, mobile/tablet only) -->
   ${MobileCategoryBar()}
@@ -107,7 +116,7 @@ appEl.innerHTML = `
   <!-- Floating Panel -->
   ${FloatingPanel()}
 
-`
+`;
 
 // Initialize custom component behaviors FIRST (before Flowbite can interfere)
 initMegaMenu();
@@ -133,4 +142,4 @@ initProductGrid();
 initMobileDrawer();
 initHeaderCart();
 initLanguageSelector();
-initAnimatedPlaceholder('#topbar-compact-search-input');
+initAnimatedPlaceholder("#topbar-compact-search-input");

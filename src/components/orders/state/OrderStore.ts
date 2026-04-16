@@ -4,13 +4,13 @@
  * localStorage kullanılmaz — eski mock veri sayfa yüklenirken temizlenir.
  */
 
-import type { Order, OrderStatus, OrderStatusColor } from '../../../types/order';
-import { callMethod } from '../../../utils/api';
+import type { Order, OrderStatus, OrderStatusColor } from "../../../types/order";
+import { callMethod } from "../../../utils/api";
 
 // Eski mock verinin tüm kalıntılarını temizle
-localStorage.removeItem('tradehub_orders');
-localStorage.removeItem('tradehub_orders_seeded');
-localStorage.removeItem('tradehub_orders_api_migrated');
+localStorage.removeItem("tradehub_orders");
+localStorage.removeItem("tradehub_orders_seeded");
+localStorage.removeItem("tradehub_orders_api_migrated");
 
 interface ApiOrderItem {
   product_name: string;
@@ -58,59 +58,59 @@ interface ApiOrder {
 
 function apiOrderToOrder(apiOrder: ApiOrder): Order {
   const dateStr = apiOrder.order_date
-    ? new Date(apiOrder.order_date).toLocaleDateString('en-US', {
-        month: 'short',
-        day: '2-digit',
-        year: 'numeric',
-      }) + ', PST'
-    : '';
+    ? new Date(apiOrder.order_date).toLocaleDateString("en-US", {
+        month: "short",
+        day: "2-digit",
+        year: "numeric",
+      }) + ", PST"
+    : "";
 
   return {
     id: apiOrder.name,
     orderNumber: apiOrder.order_number,
     orderDate: dateStr,
     total: String(apiOrder.grand_total || 0),
-    currency: apiOrder.currency || 'USD',
-    seller: apiOrder.seller_name || '',
-    status: (apiOrder.status || 'Waiting for payment') as OrderStatus,
-    statusColor: (apiOrder.status_color || 'text-amber-600') as OrderStatusColor,
-    statusDescription: apiOrder.status_description || '',
+    currency: apiOrder.currency || "USD",
+    seller: apiOrder.seller_name || "",
+    status: (apiOrder.status || "Waiting for payment") as OrderStatus,
+    statusColor: (apiOrder.status_color || "text-amber-600") as OrderStatusColor,
+    statusDescription: apiOrder.status_description || "",
     products: (apiOrder.items || []).map((item) => ({
       name: item.product_name,
-      variation: item.variation || '',
+      variation: item.variation || "",
       unitPrice: String(item.unit_price || 0),
       quantity: item.quantity || 1,
       totalPrice: String(item.total_price || 0),
-      image: item.image || '',
+      image: item.image || "",
     })),
     shipping: {
-      trackingStatus: apiOrder.shipping_status || 'Pending',
-      address: apiOrder.shipping_address || '',
-      shipFrom: apiOrder.ship_from || '',
-      method: apiOrder.shipping_method || 'Standard',
-      incoterms: apiOrder.incoterms || 'DAP',
-      trackingNumber: apiOrder.tracking_number || '',
-      carrier: apiOrder.carrier || '',
+      trackingStatus: apiOrder.shipping_status || "Pending",
+      address: apiOrder.shipping_address || "",
+      shipFrom: apiOrder.ship_from || "",
+      method: apiOrder.shipping_method || "Standard",
+      incoterms: apiOrder.incoterms || "DAP",
+      trackingNumber: apiOrder.tracking_number || "",
+      carrier: apiOrder.carrier || "",
     },
     payment: {
-      status: apiOrder.payment_status || 'Unpaid',
-      hasRecord: apiOrder.payment_status === 'Paid' || apiOrder.payment_status === 'Refunded',
+      status: apiOrder.payment_status || "Unpaid",
+      hasRecord: apiOrder.payment_status === "Paid" || apiOrder.payment_status === "Refunded",
       subtotal: String(apiOrder.subtotal || 0),
       shippingFee: String(apiOrder.shipping_fee || 0),
       grandTotal: String(apiOrder.grand_total || 0),
     },
     supplier: {
-      name: apiOrder.supplier_name || apiOrder.seller_name || '',
-      contact: apiOrder.supplier_contact || 'Sales Team',
-      phone: apiOrder.supplier_phone || '',
-      email: apiOrder.supplier_email || '',
+      name: apiOrder.supplier_name || apiOrder.seller_name || "",
+      contact: apiOrder.supplier_contact || "Sales Team",
+      phone: apiOrder.supplier_phone || "",
+      email: apiOrder.supplier_email || "",
     },
-    paymentMethod: apiOrder.payment_method || '',
+    paymentMethod: apiOrder.payment_method || "",
     createdAt: apiOrder.order_date ? new Date(apiOrder.order_date).getTime() : Date.now(),
     remittanceAmount: apiOrder.remittance_amount || 0,
-    receiptUrl: apiOrder.receipt_url || '',
-    refundStatus: apiOrder.refund_status || '',
-    refundReason: apiOrder.refund_reason || '',
+    receiptUrl: apiOrder.receipt_url || "",
+    refundStatus: apiOrder.refund_status || "",
+    refundReason: apiOrder.refund_reason || "",
     refundAmount: apiOrder.refund_amount || 0,
   };
 }
@@ -135,17 +135,14 @@ export class OrderStore {
         success: boolean;
         orders: ApiOrder[];
         total: number;
-      }>(
-        'tradehub_core.api.order.get_my_orders',
-        { page_size: 100 },
-      );
+      }>("tradehub_core.api.order.get_my_orders", { page_size: 100 });
 
       if (result?.success && Array.isArray(result.orders)) {
         this.orders = result.orders.map(apiOrderToOrder);
         this.loaded = true;
       }
     } catch (err) {
-      console.warn('[OrderStore] API fetch failed:', err);
+      console.warn("[OrderStore] API fetch failed:", err);
       // API başarısız → boş liste (mock data yok artık)
       this.orders = [];
     } finally {
@@ -174,15 +171,15 @@ export class OrderStore {
   async cancelOrder(orderNumber: string, reason: string): Promise<boolean> {
     try {
       await callMethod<{ success: boolean }>(
-        'tradehub_core.api.order.cancel_order',
+        "tradehub_core.api.order.cancel_order",
         { order_number: orderNumber, reason },
-        true,
+        true
       );
       // Local state'i güncelle
-      this.updateOrderStatus(orderNumber, 'Cancelled', 'text-red-600', 'Order cancelled by buyer.');
+      this.updateOrderStatus(orderNumber, "Cancelled", "text-red-600", "Order cancelled by buyer.");
       return true;
     } catch (err) {
-      console.error('[OrderStore] cancel_order failed:', err);
+      console.error("[OrderStore] cancel_order failed:", err);
       return false;
     }
   }
@@ -191,7 +188,7 @@ export class OrderStore {
     orderNumber: string,
     status: OrderStatus,
     statusColor: OrderStatusColor,
-    statusDescription: string,
+    statusDescription: string
   ): void {
     const order = this.getOrderByNumber(orderNumber);
     if (!order) return;
@@ -203,7 +200,9 @@ export class OrderStore {
 
   subscribe(listener: () => void): () => void {
     this.listeners.add(listener);
-    return () => { this.listeners.delete(listener); };
+    return () => {
+      this.listeners.delete(listener);
+    };
   }
 
   private notify(): void {

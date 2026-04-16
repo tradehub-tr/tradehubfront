@@ -39,7 +39,7 @@ jobs:
           commit_message: "style: auto-fix lint [skip ci]"
           commit_user_name: "github-actions[bot]"
           commit_user_email: "41898282+github-actions[bot]@users.noreply.github.com"
-          file_pattern: "src/**/*.ts src/**/*.js src/**/*.json src/**/*.css"
+          file_pattern: "src/**/*.ts src/**/*.css"
 
       - name: Fail if lint errors remain
         run: npm run lint

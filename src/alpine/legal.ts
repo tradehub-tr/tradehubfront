@@ -1,15 +1,20 @@
-import Alpine from 'alpinejs'
-import { acceptAllCookies, rejectAllCookies, onConsentUpdate, hasConsentBeenGiven } from '../utils/trackingManager'
+import Alpine from "alpinejs";
+import {
+  acceptAllCookies,
+  rejectAllCookies,
+  onConsentUpdate,
+  hasConsentBeenGiven,
+} from "../utils/trackingManager";
 
 // ─── Legal TOC scrollspy ───────────────────────────────────────────────
-Alpine.data('legalToc', () => ({
-  activeSection: '',
+Alpine.data("legalToc", () => ({
+  activeSection: "",
   tocOpen: false,
   _observer: null as IntersectionObserver | null,
 
   init() {
     this.$nextTick(() => {
-      const sections = document.querySelectorAll('section[id]');
+      const sections = document.querySelectorAll("section[id]");
       this._observer = new IntersectionObserver(
         (entries) => {
           for (const entry of entries) {
@@ -18,7 +23,7 @@ Alpine.data('legalToc', () => ({
             }
           }
         },
-        { rootMargin: '-80px 0px -60% 0px' }
+        { rootMargin: "-80px 0px -60% 0px" }
       );
       sections.forEach((s) => this._observer!.observe(s));
       // Set initial from hash
@@ -37,8 +42,8 @@ Alpine.data('legalToc', () => ({
   scrollToSection(id: string) {
     const el = document.getElementById(id);
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-      history.replaceState(null, '', `#${id}`);
+      el.scrollIntoView({ behavior: "smooth" });
+      history.replaceState(null, "", `#${id}`);
     }
   },
 
@@ -48,7 +53,7 @@ Alpine.data('legalToc', () => ({
 }));
 
 // ─── Cookie Consent ────────────────────────────────────────────────────
-Alpine.data('cookieConsent', () => ({
+Alpine.data("cookieConsent", () => ({
   categories: {
     necessary: true,
     functional: true,
@@ -61,35 +66,37 @@ Alpine.data('cookieConsent', () => ({
   },
 
   toggleCategory(cat: string) {
-    if (cat === 'necessary') return;
+    if (cat === "necessary") return;
     (this.categories as any)[cat] = !(this.categories as any)[cat];
   },
 
   savePreferences() {
-    localStorage.setItem('istoc_cookie_prefs', JSON.stringify(this.categories));
+    localStorage.setItem("istoc_cookie_prefs", JSON.stringify(this.categories));
     // Trigger tracking scripts based on new preferences
     onConsentUpdate();
     // Show brief confirmation
-    const el = document.getElementById('cookie-save-toast');
+    const el = document.getElementById("cookie-save-toast");
     if (el) {
-      el.classList.remove('hidden');
-      setTimeout(() => el.classList.add('hidden'), 2000);
+      el.classList.remove("hidden");
+      setTimeout(() => el.classList.add("hidden"), 2000);
     }
   },
 
   loadPreferences() {
-    const saved = localStorage.getItem('istoc_cookie_prefs');
+    const saved = localStorage.getItem("istoc_cookie_prefs");
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
         this.categories = { ...this.categories, ...parsed, necessary: true };
-      } catch { /* ignore */ }
+      } catch {
+        /* ignore */
+      }
     }
   },
 }));
 
 // ─── Cookie Banner (global) ────────────────────────────────────────────
-Alpine.data('cookieBanner', () => ({
+Alpine.data("cookieBanner", () => ({
   visible: false,
   showDetails: false,
   categories: {
@@ -115,16 +122,19 @@ Alpine.data('cookieBanner', () => ({
   },
 
   saveCustom() {
-    localStorage.setItem('istoc_cookie_prefs', JSON.stringify({
-      ...this.categories,
-      necessary: true,
-    }));
+    localStorage.setItem(
+      "istoc_cookie_prefs",
+      JSON.stringify({
+        ...this.categories,
+        necessary: true,
+      })
+    );
     onConsentUpdate();
     this.visible = false;
   },
 }));
 
-Alpine.data('aboutPage', () => ({
+Alpine.data("aboutPage", () => ({
   counters: { users: 0, sellers: 0, countries: 0, categories: 0 },
   targets: { users: 250000, sellers: 12000, countries: 45, categories: 180 },
   animated: false,

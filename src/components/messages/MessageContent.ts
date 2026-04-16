@@ -4,7 +4,7 @@
  * On mobile (max-md): replaces the list panels when a conversation is active.
  */
 
-import { t } from '../../i18n';
+import { t } from "../../i18n";
 
 const TRADEHUB_CHAT_AVATAR = `<svg class="w-full h-full" viewBox="0 0 40 40" fill="none">
   <circle cx="20" cy="20" r="20" fill="#FFF2E8"/>
@@ -34,9 +34,9 @@ export function MessageContent(): string {
           </svg>
         </div>
         <p class="text-sm text-(--color-text-body,#333333) leading-relaxed">
-          <span data-i18n="messages.emptyStateText">${t('messages.emptyStateText')}</span>
+          <span data-i18n="messages.emptyStateText">${t("messages.emptyStateText")}</span>
         </p>
-        <a href="/help" class="inline-block px-6 py-2 border border-(--color-border-medium,#d1d5db) rounded-full text-sm text-(--color-text-body,#333333) no-underline transition-[border-color,background] duration-150 hover:border-(--color-text-placeholder) hover:bg-(--color-surface-muted,#fafafa)"><span data-i18n="common.learnMore">${t('common.learnMore')}</span></a>
+        <a href="/help" class="inline-block px-6 py-2 border border-(--color-border-medium,#d1d5db) rounded-full text-sm text-(--color-text-body,#333333) no-underline transition-[border-color,background] duration-150 hover:border-(--color-text-placeholder) hover:bg-(--color-surface-muted,#fafafa)"><span data-i18n="common.learnMore">${t("common.learnMore")}</span></a>
       </div>
     </div>
 
@@ -78,14 +78,14 @@ export function MessageContent(): string {
         <!-- Actions -->
         <div class="flex items-center gap-1 flex-shrink-0">
           <button class="flex items-center justify-center w-8 h-8 border-none bg-transparent text-(--color-text-placeholder,#999999) cursor-pointer rounded-full hover:bg-(--color-surface-muted,#fafafa) hover:text-(--color-text-body,#333333) transition-colors"
-                  aria-label="${t('common.search')}">
+                  aria-label="${t("common.search")}">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <circle cx="11" cy="11" r="8"/>
               <path stroke-linecap="round" d="m21 21-4.35-4.35"/>
             </svg>
           </button>
           <button class="flex items-center justify-center w-8 h-8 border-none bg-transparent text-(--color-text-placeholder,#999999) cursor-pointer rounded-full hover:bg-(--color-surface-muted,#fafafa) hover:text-(--color-text-body,#333333) transition-colors"
-                  aria-label="${t('common.more')}">
+                  aria-label="${t("common.more")}">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/>
             </svg>
@@ -146,7 +146,7 @@ export function MessageContent(): string {
           <!-- Attachment button -->
           <button type="button"
                   class="flex items-center justify-center w-9 h-9 border-none bg-transparent text-(--color-text-placeholder,#999999) cursor-pointer rounded-full hover:bg-(--color-surface-muted,#fafafa) hover:text-(--color-text-body,#333333) transition-colors flex-shrink-0"
-                  aria-label="${t('messages.attachFile')}">
+                  aria-label="${t("messages.attachFile")}">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13"/>
             </svg>
@@ -158,7 +158,7 @@ export function MessageContent(): string {
                       @keydown.enter.prevent="if (!$event.shiftKey) sendMessage()"
                       rows="1"
                       class="th-input resize-none max-h-24 overflow-y-auto leading-snug"
-                      placeholder="${t('messages.typePlaceholder')}"
+                      placeholder="${t("messages.typePlaceholder")}"
                       style="field-sizing: content;"></textarea>
           </div>
 
@@ -167,7 +167,7 @@ export function MessageContent(): string {
                   class="flex items-center justify-center w-9 h-9 rounded-full border-none cursor-pointer transition-all duration-150 flex-shrink-0"
                   :class="newMessage.trim() ? 'bg-(--color-cta-primary,#cc9900) text-(--color-surface,#ffffff) hover:opacity-90' : 'bg-(--color-surface-muted,#fafafa) text-(--color-text-placeholder,#999999) cursor-not-allowed'"
                   :disabled="!newMessage.trim()"
-                  aria-label="${t('messages.send')}">
+                  aria-label="${t("messages.send")}">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/>
             </svg>
@@ -176,7 +176,7 @@ export function MessageContent(): string {
 
         <!-- Tip text -->
         <p class="text-[11px] text-(--color-text-placeholder,#999999) mt-1.5 text-center max-sm:hidden">
-          ${t('messages.sendTip')}
+          ${t("messages.sendTip")}
         </p>
       </div>
     </div>

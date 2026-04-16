@@ -4,12 +4,10 @@
  * navigation links (each triggers a different mega menu view), and utility links
  */
 
-import { t } from '../../i18n';
+import { t } from "../../i18n";
 
 /** Right-side utility links (non-mega-trigger) */
-const utilityLinks = [
-  { labelKey: 'subheader.sellOnIstoc', href: '/pages/seller/sell.html' },
-];
+const utilityLinks = [{ labelKey: "subheader.sellOnIstoc", href: "/pages/seller/sell.html" }];
 
 /**
  * Generates the "All Categories" mega menu trigger
@@ -27,7 +25,7 @@ function renderCategoriesTrigger(): string {
       <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
       </svg>
-      <span data-i18n="subheader.allCategories">${t('subheader.allCategories')}</span>
+      <span data-i18n="subheader.allCategories">${t("subheader.allCategories")}</span>
     </button>
   `;
 }
@@ -43,14 +41,14 @@ function renderNavigationLinks(): string {
         type="button"
         data-mega-target="featured"
       >
-        <span data-i18n="subheader.featuredSelections">${t('subheader.featuredSelections')}</span>
+        <span data-i18n="subheader.featuredSelections">${t("subheader.featuredSelections")}</span>
       </button>
       <button
         class="mega-trigger subheader-link th-subheader-link relative flex items-center gap-1.5 px-2 xl:px-3 py-2.5 rounded-md text-sm whitespace-nowrap dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all"
         type="button"
         data-mega-target="protections"
       >
-        <span data-i18n="subheader.orderProtections">${t('subheader.orderProtections')}</span>
+        <span data-i18n="subheader.orderProtections">${t("subheader.orderProtections")}</span>
       </button>
     </div>
   `;
@@ -60,26 +58,29 @@ function renderNavigationLinks(): string {
  * Generates the right-side utility links
  */
 function renderUtilityLinks(): string {
-  const helpHref = '/pages/help/help-center.html';
+  const helpHref = "/pages/help/help-center.html";
   const helpActive = window.location.pathname === helpHref;
   return `
     <div class="hidden xl:flex items-center gap-0.5">
       <a
         href="${helpHref}"
-        class="subheader-link th-subheader-link relative px-2 xl:px-3 py-2.5 rounded-md text-sm whitespace-nowrap dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all${helpActive ? ' active' : ''}"
+        class="subheader-link th-subheader-link relative px-2 xl:px-3 py-2.5 rounded-md text-sm whitespace-nowrap dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all${helpActive ? " active" : ""}"
       >
-        <span data-i18n="subheader.helpCenter">${t('subheader.helpCenter')}</span>
+        <span data-i18n="subheader.helpCenter">${t("subheader.helpCenter")}</span>
       </a>
-      ${utilityLinks.map(link => {
-        const isActive = window.location.pathname === link.href;
-        return `
+      ${utilityLinks
+        .map((link) => {
+          const isActive = window.location.pathname === link.href;
+          return `
         <a
           href="${link.href}"
-          class="subheader-link th-subheader-link relative px-2 xl:px-3 py-2.5 rounded-md text-sm whitespace-nowrap dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all${isActive ? ' active' : ''}"
+          class="subheader-link th-subheader-link relative px-2 xl:px-3 py-2.5 rounded-md text-sm whitespace-nowrap dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all${isActive ? " active" : ""}"
         >
           <span data-i18n="${link.labelKey}">${t(link.labelKey)}</span>
         </a>
-      `;}).join('')}
+      `;
+        })
+        .join("")}
     </div>
   `;
 }

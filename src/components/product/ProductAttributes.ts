@@ -3,8 +3,8 @@
  * Renders product specs as a grid (first 6) + list (remaining).
  */
 
-import { getCurrentProduct } from '../../alpine/product';
-import { t } from '../../i18n';
+import { getCurrentProduct } from "../../alpine/product";
+import { t } from "../../i18n";
 
 export function ProductAttributes(): string {
   const mockProduct = getCurrentProduct();
@@ -20,7 +20,7 @@ export function ProductAttributes(): string {
         <span class="text-xs truncate" style="color: var(--pd-spec-key-color, #6b7280);">${spec.key}</span>
       </div>`
     )
-    .join('');
+    .join("");
 
   const listRows =
     listSpecs.length > 0
@@ -33,13 +33,13 @@ export function ProductAttributes(): string {
               <span class="font-medium min-w-0 break-words" style="color: var(--pd-spec-value-color, #111827);">${spec.value}</span>
             </div>`
             )
-            .join('')}
+            .join("")}
         </div>`
-      : '';
+      : "";
 
   return `
     <div id="pd-attributes-card" class="hidden flex-1 min-w-0 overflow-y-auto rounded-lg p-5" style="background: var(--pd-spec-header-bg, #f9fafb); border: 1px solid var(--pd-spec-border, #e5e5e5);">
-      <h3 class="text-lg font-semibold mb-4" style="color: var(--color-text-primary);">${t('product.attributes')}</h3>
+      <h3 class="text-lg font-semibold mb-4" style="color: var(--color-text-primary);">${t("product.attributes")}</h3>
       <div class="grid grid-cols-1 xl:grid-cols-2 rounded-md overflow-hidden" style="border: 1px solid var(--pd-spec-border, #e5e5e5); background: var(--color-surface, #ffffff);">
         ${gridCells}
       </div>

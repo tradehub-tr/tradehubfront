@@ -7,7 +7,7 @@
  * Alpine.data('orderProtectionModal') is registered in src/alpine.ts.
  */
 
-import type { ModalSection, PaymentIcon } from '../../types/checkout';
+import type { ModalSection, PaymentIcon } from "../../types/checkout";
 
 export interface OrderProtectionModalProps {
   sections: ModalSection[];
@@ -25,7 +25,7 @@ function renderIcon(iconType: string): string {
     clock: `<svg class="w-7 h-7 text-[#22c55e] min-w-[28px]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.828a1 1 0 101.415-1.414L11 9.586V6z" clip-rule="evenodd"/></svg>`,
     lock: `<svg class="w-7 h-7 text-[#22c55e] min-w-[28px]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>`,
   };
-  return icons[iconType] || '';
+  return icons[iconType] || "";
 }
 
 function renderPaymentIcon(icon: PaymentIcon): string {
@@ -42,27 +42,38 @@ function renderPaymentIcon(icon: PaymentIcon): string {
   `;
 }
 
-function renderInfoBox(section: ModalSection, bullets: { dotColor: string; title: string; description: string }[]): string {
+function renderInfoBox(
+  section: ModalSection,
+  bullets: { dotColor: string; title: string; description: string }[]
+): string {
   return `
     <div class="checkout-modal__info-box bg-[#f3f4f6] rounded-md p-4 px-5 mb-6">
       <div class="flex items-center gap-2 mb-3">
         ${renderIcon(section.iconType)}
         <h3 class="text-[15px] font-semibold text-[#111827]">${section.title}</h3>
       </div>
-      ${bullets.map(b => `
+      ${bullets
+        .map(
+          (b) => `
         <div class="flex items-start gap-3 mt-3">
           <span class="mt-1.5 min-w-[8px] w-2 h-2 rounded-full inline-block" style="background-color:${b.dotColor}"></span>
           <p class="text-sm text-[#6b7280]">
             <strong class="text-[#111827]">${b.title}</strong> ${b.description}
           </p>
         </div>
-      `).join('')}
+      `
+        )
+        .join("")}
     </div>
   `;
 }
 
-function renderSection(section: ModalSection, paymentIcons: PaymentIcon[], isLast: boolean): string {
-  const borderClass = isLast ? '' : 'border-b border-[#e5e5e5]';
+function renderSection(
+  section: ModalSection,
+  paymentIcons: PaymentIcon[],
+  isLast: boolean
+): string {
+  const borderClass = isLast ? "" : "border-b border-[#e5e5e5]";
   return `
     <div class="checkout-modal__section py-6 ${borderClass}">
       <div class="flex items-start gap-3">
@@ -70,14 +81,22 @@ function renderSection(section: ModalSection, paymentIcons: PaymentIcon[], isLas
         <div class="flex-1">
           <h3 class="text-lg font-bold text-[#111827] mb-2">${section.title}</h3>
           <p class="text-sm text-[#374151] leading-relaxed">${section.description}</p>
-          ${section.id === 'secure-payments' ? `
+          ${
+            section.id === "secure-payments"
+              ? `
             <div class="flex flex-wrap gap-2 my-4">
-              ${paymentIcons.map(i => renderPaymentIcon(i)).join('')}
+              ${paymentIcons.map((i) => renderPaymentIcon(i)).join("")}
             </div>
-          ` : ''}
-          ${section.learnMoreText ? `
-            <a href="${section.learnMoreUrl || '#'}" class="text-[13px] text-[#374151] underline hover:text-[#111827] transition-colors">${section.learnMoreText}</a>
-          ` : ''}
+          `
+              : ""
+          }
+          ${
+            section.learnMoreText
+              ? `
+            <a href="${section.learnMoreUrl || "#"}" class="text-[13px] text-[#374151] underline hover:text-[#111827] transition-colors">${section.learnMoreText}</a>
+          `
+              : ""
+          }
         </div>
       </div>
     </div>
@@ -88,10 +107,10 @@ export function OrderProtectionModal({
   sections,
   paymentIcons,
   infoBoxBullets,
-  title = 'iSTOC.com order protection',
+  title = "iSTOC.com order protection",
 }: OrderProtectionModalProps): string {
-  const infoSection = sections.find(s => s.id === 'info-box');
-  const contentSections = sections.filter(s => s.id !== 'info-box');
+  const infoSection = sections.find((s) => s.id === "info-box");
+  const contentSections = sections.filter((s) => s.id !== "info-box");
 
   return `
     <div
@@ -142,10 +161,10 @@ export function OrderProtectionModal({
         </div>
 
         <!-- Info Box -->
-        ${infoSection ? renderInfoBox(infoSection, infoBoxBullets) : ''}
+        ${infoSection ? renderInfoBox(infoSection, infoBoxBullets) : ""}
 
         <!-- Sections -->
-        ${contentSections.map((s, i) => renderSection(s, paymentIcons, i === contentSections.length - 1)).join('')}
+        ${contentSections.map((s, i) => renderSection(s, paymentIcons, i === contentSections.length - 1)).join("")}
       </div>
     </div>
   `;
@@ -160,8 +179,10 @@ export function OrderProtectionModal({
  * the custom event that the Alpine component listens for.
  */
 export function initOrderProtectionModal(): void {
-  const triggerBtn = document.querySelector('[data-modal-target="order-protection-modal"]') as HTMLElement | null;
-  triggerBtn?.addEventListener('click', (e) => {
+  const triggerBtn = document.querySelector(
+    '[data-modal-target="order-protection-modal"]'
+  ) as HTMLElement | null;
+  triggerBtn?.addEventListener("click", (e) => {
     e.preventDefault();
     showOrderProtectionModal();
   });
@@ -172,5 +193,5 @@ export function initOrderProtectionModal(): void {
  * Dispatches a custom event that the Alpine orderProtectionModal component listens for.
  */
 export function showOrderProtectionModal(): void {
-  window.dispatchEvent(new CustomEvent('order-protection-modal-show'));
+  window.dispatchEvent(new CustomEvent("order-protection-modal-show"));
 }

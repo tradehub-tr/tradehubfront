@@ -8,23 +8,23 @@
  * - Internally renders FooterGroup (payment badges) and FooterPolicy (bottom bar)
  */
 
-import type { FooterColumn, SocialLink } from '../../types/navigation';
-import { t } from '../../i18n';
-import { FooterGroup } from './FooterGroup';
-import { FooterPolicy } from './FooterPolicy';
+import type { FooterColumn, SocialLink } from "../../types/navigation";
+import { t } from "../../i18n";
+import { FooterGroup } from "./FooterGroup";
+import { FooterPolicy } from "./FooterPolicy";
 
 /**
  * Get base URL for assets (handles GitHub Pages subdirectory)
  */
 const getBaseUrl = (): string => {
-  const viteBase = typeof import.meta !== 'undefined' ? import.meta.env?.BASE_URL : undefined;
-  if (viteBase && viteBase !== '/') {
+  const viteBase = typeof import.meta !== "undefined" ? import.meta.env?.BASE_URL : undefined;
+  if (viteBase && viteBase !== "/") {
     return viteBase;
   }
-  if (window.location.pathname.startsWith('/tradehub/')) {
-    return '/tradehub/';
+  if (window.location.pathname.startsWith("/tradehub/")) {
+    return "/tradehub/";
   }
-  return '/';
+  return "/";
 };
 
 // Keep getBaseUrl available for potential future use
@@ -41,52 +41,52 @@ interface FooterColumnI18n {
 
 const footerColumnsI18n: FooterColumnI18n[] = [
   {
-    titleKey: 'footer.getSupport',
+    titleKey: "footer.getSupport",
     links: [
-      { labelKey: 'footer.helpCenter', href: '/pages/help/help-center.html' },
-      { labelKey: 'footer.liveChat', href: '/pages/help/contact.html' },
-      { labelKey: 'footer.checkOrder', href: '/pages/dashboard/orders.html' },
-      { labelKey: 'footer.refunds', href: '/pages/legal/returns.html' },
-      { labelKey: 'footer.reportAbuse', href: '/pages/help/help-ticket-new.html' },
+      { labelKey: "footer.helpCenter", href: "/pages/help/help-center.html" },
+      { labelKey: "footer.liveChat", href: "/pages/help/contact.html" },
+      { labelKey: "footer.checkOrder", href: "/pages/dashboard/orders.html" },
+      { labelKey: "footer.refunds", href: "/pages/legal/returns.html" },
+      { labelKey: "footer.reportAbuse", href: "/pages/help/help-ticket-new.html" },
     ],
   },
   {
-    titleKey: 'footer.paymentsProtections',
+    titleKey: "footer.paymentsProtections",
     links: [
-      { labelKey: 'footer.safePayments', href: '/pages/info/payments.html' },
-      { labelKey: 'footer.moneyBack', href: '/pages/info/refund-policy.html' },
-      { labelKey: 'footer.onTimeShipping', href: '/pages/info/shipping-protection.html' },
-      { labelKey: 'footer.afterSales', href: '/pages/info/after-sales.html' },
-      { labelKey: 'footer.productMonitoring', href: '/pages/info/monitoring.html' },
+      { labelKey: "footer.safePayments", href: "/pages/info/payments.html" },
+      { labelKey: "footer.moneyBack", href: "/pages/info/refund-policy.html" },
+      { labelKey: "footer.onTimeShipping", href: "/pages/info/shipping-protection.html" },
+      { labelKey: "footer.afterSales", href: "/pages/info/after-sales.html" },
+      { labelKey: "footer.productMonitoring", href: "/pages/info/monitoring.html" },
     ],
   },
   {
-    titleKey: 'footer.sourceOnIstoc',
+    titleKey: "footer.sourceOnIstoc",
     links: [
-      { labelKey: 'footer.rfq', href: '/pages/dashboard/rfq.html' },
+      { labelKey: "footer.rfq", href: "/pages/dashboard/rfq.html" },
       // { labelKey: 'footer.membership', href: '/membership' },    // TODO: Sayfa henüz hazır değil
       // { labelKey: 'footer.salesTax', href: '/tax' },             // TODO: Sayfa henüz hazır değil
       // { labelKey: 'footer.istocReads', href: '/blog' },          // TODO: Sayfa henüz hazır değil
     ],
   },
   {
-    titleKey: 'footer.sellOnIstoc',
+    titleKey: "footer.sellOnIstoc",
     links: [
-      { labelKey: 'footer.startSelling', href: '/pages/seller/sell.html' },
-      { labelKey: 'footer.sellerCentral', href: '/panel/' },
-      { labelKey: 'footer.verifiedSupplier', href: '/pages/seller/verification.html' },
-      { labelKey: 'footer.partnerships', href: '/pages/info/partnerships.html' },
+      { labelKey: "footer.startSelling", href: "/pages/seller/sell.html" },
+      { labelKey: "footer.sellerCentral", href: "/panel/" },
+      { labelKey: "footer.verifiedSupplier", href: "/pages/seller/verification.html" },
+      { labelKey: "footer.partnerships", href: "/pages/info/partnerships.html" },
       // TODO: Mobil uygulama hazır olduğunda aktif edilecek
       // { labelKey: 'footer.downloadApp', href: '/seller/app' },
     ],
   },
   {
-    titleKey: 'footer.getToKnow',
+    titleKey: "footer.getToKnow",
     links: [
-      { labelKey: 'footer.aboutIstoc', href: '/pages/legal/about.html' },
-      { labelKey: 'footer.corporateResponsibility', href: '/pages/info/csr.html' },
-      { labelKey: 'footer.newsCenter', href: '/pages/info/news.html' },
-      { labelKey: 'footer.careers', href: '/pages/info/careers.html' },
+      { labelKey: "footer.aboutIstoc", href: "/pages/legal/about.html" },
+      { labelKey: "footer.corporateResponsibility", href: "/pages/info/csr.html" },
+      { labelKey: "footer.newsCenter", href: "/pages/info/news.html" },
+      { labelKey: "footer.careers", href: "/pages/info/careers.html" },
     ],
   },
 ];
@@ -95,9 +95,9 @@ const footerColumnsI18n: FooterColumnI18n[] = [
  * Build footerColumns from i18n config at render time
  */
 function getFooterColumns(): FooterColumn[] {
-  return footerColumnsI18n.map(col => ({
+  return footerColumnsI18n.map((col) => ({
     title: t(col.titleKey),
-    links: col.links.map(link => ({
+    links: col.links.map((link) => ({
       label: t(link.labelKey),
       href: link.href,
     })),
@@ -108,11 +108,36 @@ function getFooterColumns(): FooterColumn[] {
  * Social media links
  */
 const socialLinks: SocialLink[] = [
-  { platform: 'facebook', href: 'https://www.facebook.com/istoccom', icon: 'facebook', ariaLabel: 'Follow us on Facebook' },
-  { platform: 'instagram', href: 'https://www.instagram.com/istoc_com', icon: 'instagram', ariaLabel: 'Follow us on Instagram' },
-  { platform: 'twitter', href: 'https://x.com/istoc_com', icon: 'twitter', ariaLabel: 'Follow us on X (Twitter)' },
-  { platform: 'linkedin', href: 'https://www.linkedin.com/company/istoc-com', icon: 'linkedin', ariaLabel: 'Connect with us on LinkedIn' },
-  { platform: 'youtube', href: 'https://youtube.com/@istoccom', icon: 'youtube', ariaLabel: 'Subscribe to our YouTube channel' },
+  {
+    platform: "facebook",
+    href: "https://www.facebook.com/istoccom",
+    icon: "facebook",
+    ariaLabel: "Follow us on Facebook",
+  },
+  {
+    platform: "instagram",
+    href: "https://www.instagram.com/istoc_com",
+    icon: "instagram",
+    ariaLabel: "Follow us on Instagram",
+  },
+  {
+    platform: "twitter",
+    href: "https://x.com/istoc_com",
+    icon: "twitter",
+    ariaLabel: "Follow us on X (Twitter)",
+  },
+  {
+    platform: "linkedin",
+    href: "https://www.linkedin.com/company/istoc-com",
+    icon: "linkedin",
+    ariaLabel: "Connect with us on LinkedIn",
+  },
+  {
+    platform: "youtube",
+    href: "https://youtube.com/@istoccom",
+    icon: "youtube",
+    ariaLabel: "Subscribe to our YouTube channel",
+  },
 ];
 
 /**
@@ -136,7 +161,7 @@ function getSocialIcon(platform: string): string {
       <path fill-rule="evenodd" d="M19.812 5.418c.861.23 1.538.907 1.768 1.768C21.998 8.746 22 12 22 12s0 3.255-.418 4.814a2.504 2.504 0 0 1-1.768 1.768c-1.56.419-7.814.419-7.814.419s-6.255 0-7.814-.419a2.505 2.505 0 0 1-1.768-1.768C2 15.255 2 12 2 12s0-3.255.417-4.814a2.507 2.507 0 0 1 1.768-1.768C5.744 5 11.998 5 11.998 5s6.255 0 7.814.418ZM15.194 12 10 15V9l5.194 3Z" clip-rule="evenodd" />
     </svg>`,
   };
-  return icons[platform] || '';
+  return icons[platform] || "";
 }
 
 /**
@@ -145,7 +170,9 @@ function getSocialIcon(platform: string): string {
 function renderSocialIcons(): string {
   return `
     <div class="flex items-center gap-2 flex-wrap mt-3">
-      ${socialLinks.map(link => `
+      ${socialLinks
+        .map(
+          (link) => `
         <a
           href="${link.href}"
           target="_blank"
@@ -155,7 +182,9 @@ function renderSocialIcons(): string {
         >
           ${getSocialIcon(link.platform)}
         </a>
-      `).join('')}
+      `
+        )
+        .join("")}
     </div>
   `;
 }
@@ -171,14 +200,18 @@ function renderColumn(column: FooterColumnI18n): string {
         style="color: var(--footer-heading-color);"
       ><span data-i18n="${column.titleKey}">${t(column.titleKey)}</span></h3>
       <ul class="space-y-2.5">
-        ${column.links.map(link => `
+        ${column.links
+          .map(
+            (link) => `
           <li>
             <a
               href="${link.href}"
               class="th-footer-link text-[13px] leading-relaxed transition-colors duration-200 block truncate"
             ><span data-i18n="${link.labelKey}">${t(link.labelKey)}</span></a>
           </li>
-        `).join('')}
+        `
+          )
+          .join("")}
       </ul>
     </div>
   `;
@@ -195,21 +228,25 @@ function renderLastColumn(column: FooterColumnI18n): string {
         style="color: var(--footer-heading-color);"
       ><span data-i18n="${column.titleKey}">${t(column.titleKey)}</span></h3>
       <ul class="space-y-2.5">
-        ${column.links.map(link => `
+        ${column.links
+          .map(
+            (link) => `
           <li>
             <a
               href="${link.href}"
               class="th-footer-link text-[13px] leading-relaxed transition-colors duration-200 block truncate"
             ><span data-i18n="${link.labelKey}">${t(link.labelKey)}</span></a>
           </li>
-        `).join('')}
+        `
+          )
+          .join("")}
       </ul>
 
       <!-- Stay Connected -->
       <h3
         class="text-[13px] font-bold uppercase tracking-wide mt-6 mb-1"
         style="color: var(--footer-heading-color);"
-      ><span data-i18n="footer.stayConnected">${t('footer.stayConnected')}</span></h3>
+      ><span data-i18n="footer.stayConnected">${t("footer.stayConnected")}</span></h3>
       ${renderSocialIcons()}
     </div>
   `;
@@ -237,7 +274,7 @@ export function FooterLinks(): string {
     >
       <div class="container-boxed py-6 sm:py-10 md:py-14 px-3 sm:px-4">
         <div class="grid grid-cols-1 min-[360px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 md:gap-6">
-          ${regularColumns.map(col => renderColumn(col)).join('')}
+          ${regularColumns.map((col) => renderColumn(col)).join("")}
           ${renderLastColumn(lastColumn)}
         </div>
       </div>

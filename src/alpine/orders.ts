@@ -1,35 +1,35 @@
-import Alpine from 'alpinejs'
-import { t } from '../i18n'
-import { callMethod } from '../utils/api'
-import { orderStore } from '../components/orders/state/OrderStore'
-import { getOrderTabs, getOrderFilters } from '../components/buyer-dashboard/ordersData'
+import Alpine from "alpinejs";
+import { t } from "../i18n";
+import { callMethod } from "../utils/api";
+import { orderStore } from "../components/orders/state/OrderStore";
+import { getOrderTabs, getOrderFilters } from "../components/buyer-dashboard/ordersData";
 
 export const ORDER_STATUS_MAP: Record<string, string[]> = {
   all: [],
-  unpaid: ['Waiting for payment'],
-  confirming: ['Confirming'],
-  preparing: ['Confirming'],
-  delivering: ['Delivering'],
-  'refunds-aftersales': ['Cancelled'],
-  'completed-review': ['Completed'],
-  completed: ['Completed'],
-  cancelled: ['Cancelled'],
-  closed: ['Cancelled'],
+  unpaid: ["Waiting for payment"],
+  confirming: ["Confirming"],
+  preparing: ["Confirming"],
+  delivering: ["Delivering"],
+  "refunds-aftersales": ["Cancelled"],
+  "completed-review": ["Completed"],
+  completed: ["Completed"],
+  cancelled: ["Cancelled"],
+  closed: ["Cancelled"],
 };
 
-Alpine.data('ordersListComponent', () => ({
-  activeTab: 'all',
-  searchQuery: '',
-  dateFilter: 'all',
-  dateFrom: '',
-  dateTo: '',
+Alpine.data("ordersListComponent", () => ({
+  activeTab: "all",
+  searchQuery: "",
+  dateFilter: "all",
+  dateFrom: "",
+  dateTo: "",
   dateOpen: false,
   timeOpen: false,
   selectedOrder: null as any,
   copiedNumber: false,
   orders: [] as any[],
   loading: true,
-  error: '',
+  error: "",
 
   async init() {
     orderStore.subscribe(() => {
@@ -43,7 +43,7 @@ Alpine.data('ordersListComponent', () => ({
     this.loading = false;
 
     // URL'de ?order=XXX varsa o siparişi otomatik aç (bildirim tıklama akışı)
-    const urlOrder = new URLSearchParams(window.location.search).get('order');
+    const urlOrder = new URLSearchParams(window.location.search).get("order");
     if (urlOrder) {
       const match = this.orders.find((o: any) => o.orderNumber === urlOrder);
       if (match) this.selectedOrder = match;
@@ -54,26 +54,32 @@ Alpine.data('ordersListComponent', () => ({
     return this.orders.filter((o: any) => {
       // Status filter
       const allowedStatuses = ORDER_STATUS_MAP[this.activeTab];
-      const matchStatus = !allowedStatuses || allowedStatuses.length === 0 || allowedStatuses.includes(o.status);
+      const matchStatus =
+        !allowedStatuses || allowedStatuses.length === 0 || allowedStatuses.includes(o.status);
 
       // Search filter
       const q = this.searchQuery.toLowerCase();
-      const matchSearch = !q || o.orderNumber.toLowerCase().includes(q) || o.seller.toLowerCase().includes(q) || o.products.some((p: any) => p.name.toLowerCase().includes(q));
+      const matchSearch =
+        !q ||
+        o.orderNumber.toLowerCase().includes(q) ||
+        o.seller.toLowerCase().includes(q) ||
+        o.products.some((p: any) => p.name.toLowerCase().includes(q));
 
       // Date filter
       let matchDate = true;
-      if (this.dateFilter !== 'all' && o.createdAt) {
+      if (this.dateFilter !== "all" && o.createdAt) {
         const orderTime = o.createdAt;
         const now = Date.now();
-        if (this.dateFilter === '7d') {
+        if (this.dateFilter === "7d") {
           matchDate = now - orderTime <= 7 * 24 * 60 * 60 * 1000;
-        } else if (this.dateFilter === '30d') {
+        } else if (this.dateFilter === "30d") {
           matchDate = now - orderTime <= 30 * 24 * 60 * 60 * 1000;
-        } else if (this.dateFilter === '90d') {
+        } else if (this.dateFilter === "90d") {
           matchDate = now - orderTime <= 90 * 24 * 60 * 60 * 1000;
-        } else if (this.dateFilter === 'custom') {
+        } else if (this.dateFilter === "custom") {
           if (this.dateFrom) matchDate = orderTime >= new Date(this.dateFrom).getTime();
-          if (this.dateTo && matchDate) matchDate = orderTime <= new Date(this.dateTo).getTime() + 24 * 60 * 60 * 1000;
+          if (this.dateTo && matchDate)
+            matchDate = orderTime <= new Date(this.dateTo).getTime() + 24 * 60 * 60 * 1000;
         }
       }
 
@@ -98,17 +104,17 @@ Alpine.data('ordersListComponent', () => ({
   },
 
   get dateFilterLabel() {
-    if (this.dateFilter === 'custom') return t('orders.customDate');
-    if (this.dateFilter === '7d') return t('orders.last7Days');
-    if (this.dateFilter === '30d') return t('orders.last30Days');
-    if (this.dateFilter === '90d') return t('orders.last90Days');
-    return t('orders.orderDate');
+    if (this.dateFilter === "custom") return t("orders.customDate");
+    if (this.dateFilter === "7d") return t("orders.last7Days");
+    if (this.dateFilter === "30d") return t("orders.last30Days");
+    if (this.dateFilter === "90d") return t("orders.last90Days");
+    return t("orders.orderDate");
   },
 
   get timeRangeLabel(): string {
     const fmt = (iso: string) => {
-      if (!iso) return '';
-      const [y, m, d] = iso.split('-');
+      if (!iso) return "";
+      const [y, m, d] = iso.split("-");
       return `${d}.${m}.${y}`;
     };
     const from = fmt(this.dateFrom);
@@ -116,27 +122,27 @@ Alpine.data('ordersListComponent', () => ({
     if (from && to) return `${from} - ${to}`;
     if (from) return `${from} →`;
     if (to) return `← ${to}`;
-    return t('orders.selectDateRange');
+    return t("orders.selectDateRange");
   },
 
   setDateFilter(val: string) {
     this.dateFilter = val;
-    if (val !== 'custom') {
-      this.dateFrom = '';
-      this.dateTo = '';
+    if (val !== "custom") {
+      this.dateFrom = "";
+      this.dateTo = "";
     }
   },
 
   clearTimeRange() {
-    this.dateFrom = '';
-    this.dateTo = '';
-    this.dateFilter = 'all';
+    this.dateFrom = "";
+    this.dateTo = "";
+    this.dateFilter = "all";
     this.timeOpen = false;
   },
 
   applyTimeRange() {
     if (this.dateFrom || this.dateTo) {
-      this.dateFilter = 'custom';
+      this.dateFilter = "custom";
       this.timeOpen = false;
     }
   },
@@ -145,7 +151,9 @@ Alpine.data('ordersListComponent', () => ({
     if (!this.selectedOrder) return;
     navigator.clipboard.writeText((this.selectedOrder as any).orderNumber);
     this.copiedNumber = true;
-    setTimeout(() => { this.copiedNumber = false; }, 2000);
+    setTimeout(() => {
+      this.copiedNumber = false;
+    }, 2000);
   },
 
   // Modal states
@@ -157,20 +165,26 @@ Alpine.data('ordersListComponent', () => ({
   showCancelOrder: false,
   showRefundModal: false,
   showContract: false,
-  paymentHistoryTab: 'records',
-  cancelReason: '',
+  paymentHistoryTab: "records",
+  cancelReason: "",
   cancellingOrder: null as any,
 
   // Kargo hizmet türü — dinamik
-  shippingMethods: [] as { id: string; method: string; estimatedDays: string; baseCost: number; currency: string }[],
+  shippingMethods: [] as {
+    id: string;
+    method: string;
+    estimatedDays: string;
+    baseCost: number;
+    currency: string;
+  }[],
   shippingMethodsLoading: false,
-  selectedShippingMethod: '',
+  selectedShippingMethod: "",
 
   // Refund form
-  refundForm: { reason: '', amount: '' },
+  refundForm: { reason: "", amount: "" },
   submittingRefund: false,
   refundSuccess: false,
-  refundError: '',
+  refundError: "",
   refundBlocked: false,
 
   // Payment history data (API-driven)
@@ -181,15 +195,15 @@ Alpine.data('ordersListComponent', () => ({
 
   openModal(name: string) {
     (this as any)[name] = true;
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
 
     // Ödeme geçmişi modal'ı açılırken API'den veri çek
-    if (name === 'showPaymentHistory' && this.selectedOrder) {
+    if (name === "showPaymentHistory" && this.selectedOrder) {
       this.fetchPaymentRecords((this.selectedOrder as any).orderNumber);
     }
 
     // Kargo değişiklik modal'ı açılırken kargo hizmet türlerini backend'den çek
-    if (name === 'showModifyShipping') {
+    if (name === "showModifyShipping") {
       this.fetchShippingMethods();
     }
   },
@@ -198,16 +212,24 @@ Alpine.data('ordersListComponent', () => ({
     this.shippingMethodsLoading = true;
     this.shippingMethods = [];
     try {
-      const result = await callMethod<{ data: { id: string; method: string; estimatedDays: string; baseCost: number; currency: string }[] }>(
-        'tradehub_core.api.listing.get_shipping_methods',
-      );
+      const result = await callMethod<{
+        data: {
+          id: string;
+          method: string;
+          estimatedDays: string;
+          baseCost: number;
+          currency: string;
+        }[];
+      }>("tradehub_core.api.listing.get_shipping_methods");
       this.shippingMethods = result?.data ?? [];
       // Mevcut siparişin kargo yöntemini seç, yoksa ilki
-      const currentMethod = (this.selectedOrder as any)?.shipping?.method ?? '';
-      const match = this.shippingMethods.find((m) => m.method === currentMethod || m.id === currentMethod);
-      this.selectedShippingMethod = match ? match.id : (this.shippingMethods[0]?.id ?? '');
+      const currentMethod = (this.selectedOrder as any)?.shipping?.method ?? "";
+      const match = this.shippingMethods.find(
+        (m) => m.method === currentMethod || m.id === currentMethod
+      );
+      this.selectedShippingMethod = match ? match.id : (this.shippingMethods[0]?.id ?? "");
     } catch (err) {
-      console.warn('[Orders] Kargo yöntemleri alınamadı:', err);
+      console.warn("[Orders] Kargo yöntemleri alınamadı:", err);
     } finally {
       this.shippingMethodsLoading = false;
     }
@@ -225,10 +247,7 @@ Alpine.data('ordersListComponent', () => ({
         payments: any[];
         refunds: any[];
         wire_transfers: any[];
-      }>(
-        'tradehub_core.api.order.get_payment_records',
-        { order_number: orderNumber },
-      );
+      }>("tradehub_core.api.order.get_payment_records", { order_number: orderNumber });
 
       if (result?.success) {
         this.paymentRecords = result.payments || [];
@@ -236,7 +255,7 @@ Alpine.data('ordersListComponent', () => ({
         this.wireRecords = result.wire_transfers || [];
       }
     } catch (err) {
-      console.warn('[Orders] Payment records fetch failed:', err);
+      console.warn("[Orders] Payment records fetch failed:", err);
     } finally {
       this.paymentLoading = false;
     }
@@ -244,7 +263,7 @@ Alpine.data('ordersListComponent', () => ({
 
   closeModal(name: string) {
     (this as any)[name] = false;
-    document.body.style.overflow = '';
+    document.body.style.overflow = "";
   },
 
   async confirmCancelOrder() {
@@ -253,9 +272,9 @@ Alpine.data('ordersListComponent', () => ({
 
     await orderStore.cancelOrder(order.orderNumber, this.cancelReason);
 
-    this.cancelReason = '';
+    this.cancelReason = "";
     this.cancellingOrder = null;
-    this.closeModal('showCancelOrder');
+    this.closeModal("showCancelOrder");
     if (this.selectedOrder && (this.selectedOrder as any).orderNumber === order.orderNumber) {
       this.selectedOrder = null;
     }
@@ -263,123 +282,136 @@ Alpine.data('ordersListComponent', () => ({
 
   getStepIndex(order: any) {
     if (!order) return -1;
-    if (order.status === 'Cancelled') return -2;
+    if (order.status === "Cancelled") return -2;
     // Receipt yüklendi ama satıcı henüz onaylamadı → Ödeme adımı aktif (index 1)
-    if (order.status === 'Waiting for payment') return order.receiptUrl ? 1 : 0;
+    if (order.status === "Waiting for payment") return order.receiptUrl ? 1 : 0;
     // Satıcı onayladı → Hazırlanıyor/Kargo adımı aktif (index 2)
-    if (order.status === 'Confirming') return 2;
-    if (order.status === 'Delivering') return 3;
-    if (order.status === 'Completed') return 4;
+    if (order.status === "Confirming") return 2;
+    if (order.status === "Delivering") return 3;
+    if (order.status === "Completed") return 4;
     return 0;
   },
 
   getStatusLabel(order: any): string {
-    if (!order) return '';
+    if (!order) return "";
     // İade durumu ana statüden önce gelir
-    if (order.refundStatus === 'Pending') return 'İade İnceleniyor';
-    if (order.refundStatus === 'Approved') return 'İade Onaylandı';
-    if (order.refundStatus === 'Rejected') return 'İade Reddedildi';
+    if (order.refundStatus === "Pending") return "İade İnceleniyor";
+    if (order.refundStatus === "Approved") return "İade Onaylandı";
+    if (order.refundStatus === "Rejected") return "İade Reddedildi";
     // Normal akış
-    if (order.status === 'Waiting for payment') {
-      return order.receiptUrl ? 'Ödeme Onaylanıyor' : 'Ödeme Bekleniyor';
+    if (order.status === "Waiting for payment") {
+      return order.receiptUrl ? "Ödeme Onaylanıyor" : "Ödeme Bekleniyor";
     }
     const labels: Record<string, string> = {
-      'Confirming': 'Hazırlanıyor',
-      'Delivering': 'Kargoda',
-      'Completed': 'Tamamlandı',
-      'Cancelled': 'İptal Edildi',
+      Confirming: "Hazırlanıyor",
+      Delivering: "Kargoda",
+      Completed: "Tamamlandı",
+      Cancelled: "İptal Edildi",
     };
-    return labels[order.status] || order.status || 'Bilinmeyen Durum';
+    return labels[order.status] || order.status || "Bilinmeyen Durum";
   },
 
   getStatusDescription(order: any): string {
-    if (!order) return '';
+    if (!order) return "";
     // İade durumu açıklamaları
-    if (order.refundStatus === 'Pending') {
-      return 'İade talebiniz satıcı tarafından inceleniyor. En kısa sürede geri dönüş yapılacaktır.';
+    if (order.refundStatus === "Pending") {
+      return "İade talebiniz satıcı tarafından inceleniyor. En kısa sürede geri dönüş yapılacaktır.";
     }
-    if (order.refundStatus === 'Approved') {
-      const amt = order.refundAmount ? `${order.currency} ${Number(order.refundAmount).toLocaleString('tr-TR', { minimumFractionDigits: 2 })} tutarındaki` : '';
+    if (order.refundStatus === "Approved") {
+      const amt = order.refundAmount
+        ? `${order.currency} ${Number(order.refundAmount).toLocaleString("tr-TR", { minimumFractionDigits: 2 })} tutarındaki`
+        : "";
       return `${amt} iade talebiniz onaylandı. Ödeme bilgilerinizi kontrol edin.`;
     }
-    if (order.refundStatus === 'Rejected') {
-      return 'Satıcı iade talebinizi reddetti. Detaylar için satıcıyla iletişime geçin.';
+    if (order.refundStatus === "Rejected") {
+      return "Satıcı iade talebinizi reddetti. Detaylar için satıcıyla iletişime geçin.";
     }
     // Normal akış açıklamaları
-    if (order.status === 'Waiting for payment') {
+    if (order.status === "Waiting for payment") {
       return order.receiptUrl
-        ? 'Havale dekontu inceleniyor. Satıcı ödemenizi onayladıktan sonra sipariş hazırlanmaya başlayacak.'
-        : 'Ödemenizi tamamlamak için havale makbuzunu gönderin.';
+        ? "Havale dekontu inceleniyor. Satıcı ödemenizi onayladıktan sonra sipariş hazırlanmaya başlayacak."
+        : "Ödemenizi tamamlamak için havale makbuzunu gönderin.";
     }
-    return order.statusDescription || '';
+    return order.statusDescription || "";
   },
 
   getStatusColor(order: any): string {
-    if (!order) return 'text-gray-500';
+    if (!order) return "text-gray-500";
     // İade renkleri
-    if (order.refundStatus === 'Pending') return 'text-orange-600';
-    if (order.refundStatus === 'Approved') return 'text-purple-600';
-    if (order.refundStatus === 'Rejected') return 'text-red-600';
+    if (order.refundStatus === "Pending") return "text-orange-600";
+    if (order.refundStatus === "Approved") return "text-purple-600";
+    if (order.refundStatus === "Rejected") return "text-red-600";
     // Normal akış
-    if (order.status === 'Waiting for payment') {
-      return order.receiptUrl ? 'text-blue-600' : 'text-amber-600';
+    if (order.status === "Waiting for payment") {
+      return order.receiptUrl ? "text-blue-600" : "text-amber-600";
     }
-    return order.statusColor || 'text-gray-500';
+    return order.statusColor || "text-gray-500";
   },
 
   hasActiveRefund(order: any): boolean {
-    return order && ['Pending', 'Approved', 'Rejected'].includes(order.refundStatus);
+    return order && ["Pending", "Approved", "Rejected"].includes(order.refundStatus);
   },
 
   // İade adım barı index'i: 0=talep edildi, 1=inceleniyor, 2=sonuçlandı
   getRefundStepIndex(order: any): number {
     if (!order) return 0;
-    if (order.refundStatus === 'Pending') return 1;
-    if (order.refundStatus === 'Approved' || order.refundStatus === 'Rejected') return 2;
+    if (order.refundStatus === "Pending") return 1;
+    if (order.refundStatus === "Approved" || order.refundStatus === "Rejected") return 2;
     return 0;
   },
 
   getRefundStepColor(order: any): string {
-    if (order?.refundStatus === 'Rejected') return 'bg-red-500';
-    if (order?.refundStatus === 'Approved') return 'bg-emerald-500';
-    return 'bg-orange-500';
+    if (order?.refundStatus === "Rejected") return "bg-red-500";
+    if (order?.refundStatus === "Approved") return "bg-emerald-500";
+    return "bg-orange-500";
   },
 
   isCancelled(order: any) {
-    return order?.status === 'Cancelled';
+    return order?.status === "Cancelled";
   },
 
   isActionable(order: any) {
-    return order && order.status !== 'Cancelled' && order.status !== 'Completed';
+    return order && order.status !== "Cancelled" && order.status !== "Completed";
   },
 
   canPay(order: any) {
-    return order && order.status === 'Waiting for payment' && !order.receiptUrl;
+    return order && order.status === "Waiting for payment" && !order.receiptUrl;
   },
 
   hasReceipt(order: any) {
     return order && !!order.receiptUrl;
   },
 
-  openRemittanceModal(orderNumber: string, orderTotal?: number, orderCurrency?: string, paymentMethod?: string) {
-    document.dispatchEvent(new CustomEvent('remittance:open', { detail: { orderNumber, orderTotal, orderCurrency, paymentMethod } }));
+  openRemittanceModal(
+    orderNumber: string,
+    orderTotal?: number,
+    orderCurrency?: string,
+    paymentMethod?: string
+  ) {
+    document.dispatchEvent(
+      new CustomEvent("remittance:open", {
+        detail: { orderNumber, orderTotal, orderCurrency, paymentMethod },
+      })
+    );
   },
 
   async downloadInvoice(order: any) {
     if (!order) return;
     try {
       const res = await callMethod<{ html: string; filename: string }>(
-        'tradehub_core.api.order.download_invoice',
-        { order_number: order.orderNumber },
+        "tradehub_core.api.order.download_invoice",
+        { order_number: order.orderNumber }
       );
       if (res?.html) {
-        const blob = new Blob([res.html], { type: 'text/html' });
+        const blob = new Blob([res.html], { type: "text/html" });
         const url = URL.createObjectURL(blob);
-        const w = window.open(url, '_blank');
-        if (w) { setTimeout(() => URL.revokeObjectURL(url), 10000); }
+        const w = window.open(url, "_blank");
+        if (w) {
+          setTimeout(() => URL.revokeObjectURL(url), 10000);
+        }
       }
     } catch (err: any) {
-      console.warn('[Orders] Invoice download failed:', err);
+      console.warn("[Orders] Invoice download failed:", err);
     }
   },
 
@@ -388,50 +420,52 @@ Alpine.data('ordersListComponent', () => ({
     // Kargoya verilmemiş veya teslim edilmemişse iade yapılamaz
     if (!this.canRefund(order)) {
       this.refundBlocked = true;
-      this.refundError = 'İade talebi yalnızca kargoya verilmiş veya teslim edilmiş siparişler için açılabilir.';
+      this.refundError =
+        "İade talebi yalnızca kargoya verilmiş veya teslim edilmiş siparişler için açılabilir.";
       this.refundSuccess = false;
       this.showRefundModal = true;
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
       return;
     }
     // Bekleyen veya onaylanmış iade varsa yeni talep açılamaz
-    if (['Pending', 'Approved'].includes(order.refundStatus)) {
+    if (["Pending", "Approved"].includes(order.refundStatus)) {
       this.refundBlocked = true;
-      this.refundError = order.refundStatus === 'Approved'
-        ? 'Bu sipariş için iade talebiniz zaten onaylanmıştır.'
-        : 'Bu sipariş için bekleyen bir iade talebiniz zaten bulunmaktadır.';
+      this.refundError =
+        order.refundStatus === "Approved"
+          ? "Bu sipariş için iade talebiniz zaten onaylanmıştır."
+          : "Bu sipariş için bekleyen bir iade talebiniz zaten bulunmaktadır.";
       this.refundSuccess = false;
       this.showRefundModal = true;
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
       return;
     }
     const grandTotal = order.total || 0;
-    this.refundForm = { reason: '', amount: String(grandTotal) };
+    this.refundForm = { reason: "", amount: String(grandTotal) };
     this.refundBlocked = false;
     this.refundSuccess = false;
-    this.refundError = '';
+    this.refundError = "";
     this.showRefundModal = true;
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
   },
 
   async submitRefundRequest() {
     const order = this.selectedOrder as any;
     if (!order || !this.refundForm.reason.trim()) return;
     this.submittingRefund = true;
-    this.refundError = '';
+    this.refundError = "";
     try {
       await callMethod<{ success: boolean }>(
-        'tradehub_core.api.order.submit_refund_request',
+        "tradehub_core.api.order.submit_refund_request",
         {
           order_number: order.orderNumber,
           reason: this.refundForm.reason,
           amount: this.refundForm.amount,
         },
-        true,
+        true
       );
       this.refundSuccess = true;
     } catch (err: any) {
-      this.refundError = err?.message || 'Bir hata oluştu.';
+      this.refundError = err?.message || "Bir hata oluştu.";
     } finally {
       this.submittingRefund = false;
     }
@@ -440,23 +474,23 @@ Alpine.data('ordersListComponent', () => ({
   // Kargoya verilmiş veya teslim edilmişse iade edilebilir
   canRefund(order: any): boolean {
     if (!order) return false;
-    if (!['Delivering', 'Completed'].includes(order.status)) return false;
+    if (!["Delivering", "Completed"].includes(order.status)) return false;
     // Zaten aktif iade varsa tekrar açılamaz
-    if (['Pending', 'Approved'].includes(order.refundStatus)) return false;
+    if (["Pending", "Approved"].includes(order.refundStatus)) return false;
     return true;
   },
 
   // Kargoya verilmemiş veya teslim edilmemişse iptal edilebilir
   canCancel(order: any): boolean {
     if (!order) return false;
-    if (['Cancelled', 'Completed', 'Delivering'].includes(order.status)) return false;
+    if (["Cancelled", "Completed", "Delivering"].includes(order.status)) return false;
     // İade süreci aktifse iptal edilemez
-    if (['Pending', 'Approved'].includes(order.refundStatus)) return false;
+    if (["Pending", "Approved"].includes(order.refundStatus)) return false;
     return true;
-  }
+  },
 }));
 
-Alpine.data('ordersSection', () => ({
+Alpine.data("ordersSection", () => ({
   activeTabId: getOrderTabs()[0].id,
   selectedFilterId: getOrderFilters()[0].id as string | null,
   dropdownOpen: false,
@@ -475,9 +509,9 @@ Alpine.data('ordersSection', () => ({
 
   get filteredOrders() {
     const tabStatusMap: Record<string, string[]> = {
-      delivery: ['Delivering', 'Confirming', 'Waiting for payment'],
-      refunds: ['Cancelled'],
-      completed: ['Completed'],
+      delivery: ["Delivering", "Confirming", "Waiting for payment"],
+      refunds: ["Cancelled"],
+      completed: ["Completed"],
     };
     const allowed = tabStatusMap[this.activeTabId];
     if (!allowed || allowed.length === 0) return this.orders;
@@ -504,26 +538,28 @@ Alpine.data('ordersSection', () => ({
   },
 }));
 
-Alpine.data('refundsComponent', () => ({
+Alpine.data("refundsComponent", () => ({
   refunds: [] as any[],
   loading: true,
 
   async init() {
     try {
       const res = await callMethod<{ success: boolean; refunds: any[] }>(
-        'tradehub_core.api.order.get_my_refunds',
+        "tradehub_core.api.order.get_my_refunds"
       );
       this.refunds = res?.refunds || [];
     } catch (err) {
-      console.warn('[Refunds] fetch failed:', err);
+      console.warn("[Refunds] fetch failed:", err);
     } finally {
       this.loading = false;
     }
   },
 
   statusClass(status: string) {
-    if (status === 'Approved' || status === 'Onaylandı') return 'bg-green-50 text-green-700 border border-green-200';
-    if (status === 'Rejected' || status === 'Reddedildi') return 'bg-red-50 text-red-700 border border-red-200';
-    return 'bg-amber-50 text-amber-700 border border-amber-200';
+    if (status === "Approved" || status === "Onaylandı")
+      return "bg-green-50 text-green-700 border border-green-200";
+    if (status === "Rejected" || status === "Reddedildi")
+      return "bg-red-50 text-red-700 border border-red-200";
+    return "bg-amber-50 text-amber-700 border border-amber-200";
   },
 }));

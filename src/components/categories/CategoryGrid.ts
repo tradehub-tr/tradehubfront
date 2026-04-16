@@ -4,8 +4,8 @@
  * and a "Tümünü gör" (See all) link item.
  */
 
-import type { CategorySection as CategorySectionType } from '../../data/categories';
-import { t } from '../../i18n';
+import type { CategorySection as CategorySectionType } from "../../data/categories";
+import { t } from "../../i18n";
 
 /** Render a single category item as circular thumbnail + label */
 function CategoryItem(cat: { name: string; href: string; image: string }): string {
@@ -37,17 +37,21 @@ function SeeAllItem(sectionTitle: string, slug?: string): string {
         </svg>
       </div>
       <span class="text-sm font-medium text-gray-500 group-hover:text-(--primary) transition-colors duration-200 leading-tight">
-        ${t('categoryPage.seeAll')}
+        ${t("categoryPage.seeAll")}
       </span>
     </a>
   `;
 }
 
 /** Render a full category section: title + grid of circular thumbnails */
-export function CategorySection(section: CategorySectionType, isLast: boolean, index: number): string {
-  const items = section.categories.map(cat => CategoryItem(cat)).join('');
+export function CategorySection(
+  section: CategorySectionType,
+  isLast: boolean,
+  index: number
+): string {
+  const items = section.categories.map((cat) => CategoryItem(cat)).join("");
   const seeAll = SeeAllItem(section.title, section.slug);
-  const borderClass = isLast ? '' : 'border-b border-gray-200';
+  const borderClass = isLast ? "" : "border-b border-gray-200";
 
   return `
     <section id="cat-section-${index}" class="py-6 lg:py-8 ${borderClass} scroll-mt-28">
@@ -64,5 +68,5 @@ export function CategorySection(section: CategorySectionType, isLast: boolean, i
 export function renderCategoryPage(sections: CategorySectionType[]): string {
   return sections
     .map((section, i) => CategorySection(section, i === sections.length - 1, i))
-    .join('');
+    .join("");
 }

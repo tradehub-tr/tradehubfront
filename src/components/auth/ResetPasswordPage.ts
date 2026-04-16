@@ -7,12 +7,12 @@
  * Layout follows ForgotPasswordPage pattern (header + centered card).
  */
 
-import { getBaseUrl } from './AuthLayout';
-import { t } from '../../i18n';
+import { getBaseUrl } from "./AuthLayout";
+import { t } from "../../i18n";
 
 /* ── Types ──────────────────────────────────────────── */
 
-export type ResetPasswordStep = 'form' | 'success' | 'error';
+export type ResetPasswordStep = "form" | "success" | "error";
 
 /* ── Layout (reuses ForgotPasswordPage pattern) ────── */
 
@@ -26,8 +26,8 @@ function ResetPasswordHeader(): string {
         </a>
         <div class="relative">
           <select class="th-input th-input-sm w-auto cursor-pointer">
-            <option>${t('common.turkish')}</option>
-            <option>${t('common.english')}</option>
+            <option>${t("common.turkish")}</option>
+            <option>${t("common.english")}</option>
           </select>
           <svg class="w-3.5 h-3.5 absolute right-1.5 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7"/></svg>
         </div>
@@ -51,13 +51,13 @@ function ResetPasswordCard(content: string): string {
 function StepForm(): string {
   return `
     <div x-show="step === 'form'">
-      <h1 class="text-2xl font-bold text-gray-900 text-center mb-3" data-i18n="auth.reset.title">${t('auth.reset.title')}</h1>
-      <p class="text-sm text-gray-500 text-center mb-8" data-i18n="auth.reset.subtitle">${t('auth.reset.subtitle')}</p>
+      <h1 class="text-2xl font-bold text-gray-900 text-center mb-3" data-i18n="auth.reset.title">${t("auth.reset.title")}</h1>
+      <p class="text-sm text-gray-500 text-center mb-8" data-i18n="auth.reset.subtitle">${t("auth.reset.subtitle")}</p>
 
       <form @submit.prevent="submitReset()" class="space-y-5">
         <!-- New Password -->
         <div class="relative">
-          <label for="rp-new-password" class="sr-only" data-i18n="auth.reset.newPassword">${t('auth.reset.newPassword')}</label>
+          <label for="rp-new-password" class="sr-only" data-i18n="auth.reset.newPassword">${t("auth.reset.newPassword")}</label>
           <input
             :type="showPassword ? 'text' : 'password'"
             id="rp-new-password"
@@ -65,7 +65,7 @@ function StepForm(): string {
             x-ref="newPassword"
             @input="onPasswordInput()"
             class="th-input th-input-lg pr-12"
-            placeholder="${t('auth.reset.newPassword')}" data-i18n-placeholder="auth.reset.newPassword"
+            placeholder="${t("auth.reset.newPassword")}" data-i18n-placeholder="auth.reset.newPassword"
             required
             autocomplete="new-password"
           />
@@ -73,7 +73,7 @@ function StepForm(): string {
             type="button"
             @click="showPassword = !showPassword"
             class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-            aria-label="${t('auth.forgot.showHidePassword')}" data-i18n-aria-label="auth.forgot.showHidePassword"
+            aria-label="${t("auth.forgot.showHidePassword")}" data-i18n-aria-label="auth.forgot.showHidePassword"
           >
             <svg x-show="!showPassword" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88"/>
@@ -87,10 +87,10 @@ function StepForm(): string {
 
         <!-- Password Requirements -->
         <ul class="space-y-1.5 text-sm text-gray-500 list-disc pl-5">
-          <li :style="reqStyle(reqMinLength)" data-i18n="auth.setup.minChars">${t('auth.setup.minChars')}</li>
-          <li :style="reqStyle(reqUppercase)" data-i18n="auth.setup.uppercase">${t('auth.setup.uppercase')}</li>
-          <li :style="reqStyle(reqLowercase)" data-i18n="auth.setup.lowercase">${t('auth.setup.lowercase')}</li>
-          <li :style="reqStyle(reqNumber)" data-i18n="auth.setup.number">${t('auth.setup.number')}</li>
+          <li :style="reqStyle(reqMinLength)" data-i18n="auth.setup.minChars">${t("auth.setup.minChars")}</li>
+          <li :style="reqStyle(reqUppercase)" data-i18n="auth.setup.uppercase">${t("auth.setup.uppercase")}</li>
+          <li :style="reqStyle(reqLowercase)" data-i18n="auth.setup.lowercase">${t("auth.setup.lowercase")}</li>
+          <li :style="reqStyle(reqNumber)" data-i18n="auth.setup.number">${t("auth.setup.number")}</li>
         </ul>
 
         <!-- Error message -->
@@ -103,10 +103,10 @@ function StepForm(): string {
           disabled
           class="w-full h-12 th-btn disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <span x-show="!loading" data-i18n="auth.reset.submit">${t('auth.reset.submit')}</span>
+          <span x-show="!loading" data-i18n="auth.reset.submit">${t("auth.reset.submit")}</span>
           <span x-show="loading" x-cloak class="inline-flex items-center gap-2">
             <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-            <span data-i18n="common.loading">${t('common.loading')}</span>
+            <span data-i18n="common.loading">${t("common.loading")}</span>
           </span>
         </button>
       </form>
@@ -126,13 +126,13 @@ function StepSuccess(): string {
             <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/>
           </svg>
         </div>
-        <h1 class="text-2xl font-bold text-gray-900 mb-3" data-i18n="auth.reset.successTitle">${t('auth.reset.successTitle')}</h1>
-        <p class="text-sm text-gray-500 mb-8" data-i18n="auth.reset.successDesc">${t('auth.reset.successDesc')}</p>
+        <h1 class="text-2xl font-bold text-gray-900 mb-3" data-i18n="auth.reset.successTitle">${t("auth.reset.successTitle")}</h1>
+        <p class="text-sm text-gray-500 mb-8" data-i18n="auth.reset.successDesc">${t("auth.reset.successDesc")}</p>
         <a
           href="${baseUrl}pages/auth/login.html"
           class="inline-block w-full h-12 leading-[3rem] text-center th-btn no-underline"
         >
-          <span data-i18n="auth.reset.goToLogin">${t('auth.reset.goToLogin')}</span>
+          <span data-i18n="auth.reset.goToLogin">${t("auth.reset.goToLogin")}</span>
         </a>
       </div>
     </div>
@@ -151,13 +151,13 @@ function StepError(): string {
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"/>
           </svg>
         </div>
-        <h1 class="text-2xl font-bold text-gray-900 mb-3" data-i18n="auth.reset.invalidLinkTitle">${t('auth.reset.invalidLinkTitle')}</h1>
-        <p class="text-sm text-gray-500 mb-8" x-text="error || '${t('auth.reset.invalidLinkDesc')}'"></p>
+        <h1 class="text-2xl font-bold text-gray-900 mb-3" data-i18n="auth.reset.invalidLinkTitle">${t("auth.reset.invalidLinkTitle")}</h1>
+        <p class="text-sm text-gray-500 mb-8" x-text="error || '${t("auth.reset.invalidLinkDesc")}'"></p>
         <a
           href="${baseUrl}pages/auth/forgot-password.html"
           class="inline-block w-full h-12 leading-[3rem] text-center th-btn no-underline"
         >
-          <span data-i18n="auth.reset.requestNewLink">${t('auth.reset.requestNewLink')}</span>
+          <span data-i18n="auth.reset.requestNewLink">${t("auth.reset.requestNewLink")}</span>
         </a>
       </div>
     </div>
@@ -181,4 +181,6 @@ export function ResetPasswordPage(): string {
 }
 
 /** @deprecated No-op — Alpine handles all interactivity */
-export function initResetPasswordPage(): void { /* no-op */ }
+export function initResetPasswordPage(): void {
+  /* no-op */
+}

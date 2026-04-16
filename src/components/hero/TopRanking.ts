@@ -10,13 +10,10 @@
  * (returns the 6 categories with the highest aggregate order_count).
  */
 
-import topBadgeUrl from '../../assets/images/top.avif';
-import { t } from '../../i18n';
-import {
-  getTopRankingCategories,
-  type TopRankingCategory,
-} from '../../services/listingService';
-import { initCurrency } from '../../services/currencyService';
+import topBadgeUrl from "../../assets/images/top.avif";
+import { t } from "../../i18n";
+import { getTopRankingCategories, type TopRankingCategory } from "../../services/listingService";
+import { initCurrency } from "../../services/currencyService";
 
 const SKELETON_COUNT = 6;
 
@@ -37,16 +34,16 @@ function renderSkeletonCard(): string {
 /** HTML-encode user-controlled strings before injecting into innerHTML. */
 function escapeHtml(str: string): string {
   return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 /* ── Category card ── */
 function renderCategoryCard(cat: TopRankingCategory): string {
-  const safeName = escapeHtml(cat.name || '');
+  const safeName = escapeHtml(cat.name || "");
   const href = `/pages/products.html?cat=${encodeURIComponent(cat.slug || cat.id)}&sort=orders`;
   const imgHtml = cat.image
     ? `<img src="${escapeHtml(cat.image)}" alt="${safeName}" loading="lazy"
@@ -64,7 +61,7 @@ function renderCategoryCard(cat: TopRankingCategory): string {
       class="group/rank relative flex-shrink-0 flex flex-col w-[156px] sm:w-[188px] rounded-md border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md no-underline"
       style="background: var(--topranking-card-bg, #ffffff); border-color: var(--topranking-card-border, #e5e7eb); padding: var(--space-card-padding, 12px);"
       aria-label="${safeName}"
-      data-cat-slug="${escapeHtml(cat.slug || '')}"
+      data-cat-slug="${escapeHtml(cat.slug || "")}"
     >
       <!-- Image area -->
       <div class="relative w-full aspect-square">
@@ -83,7 +80,7 @@ function renderCategoryCard(cat: TopRankingCategory): string {
            style="color: var(--topranking-name-color, #222222);"
            title="${safeName}">${safeName}</p>
         <p class="truncate w-full text-xs mt-0.5"
-           style="color: var(--topranking-subtitle-color, #6b7280);">${escapeHtml(t('topRanking.hotSelling'))}</p>
+           style="color: var(--topranking-subtitle-color, #6b7280);">${escapeHtml(t("topRanking.hotSelling"))}</p>
       </div>
     </a>
   `;
@@ -91,7 +88,10 @@ function renderCategoryCard(cat: TopRankingCategory): string {
 
 /** Render skeleton rows while API loads. */
 export function TopRanking(): string {
-  const skeletons = Array.from({ length: SKELETON_COUNT }, () => `<div role="listitem">${renderSkeletonCard()}</div>`).join('');
+  const skeletons = Array.from(
+    { length: SKELETON_COUNT },
+    () => `<div role="listitem">${renderSkeletonCard()}</div>`
+  ).join("");
 
   return `
     <section class="py-4 lg:py-6" aria-label="Top Ranking" style="margin-top: 28px;">
@@ -103,16 +103,16 @@ export function TopRanking(): string {
               <div>
                 <h2 class="text-[20px] sm:text-[22px] font-bold leading-tight"
                     style="color: var(--topranking-title-color, #111827);">
-                  <span data-i18n="topRanking.title">${t('topRanking.title')}</span>
+                  <span data-i18n="topRanking.title">${t("topRanking.title")}</span>
                 </h2>
                 <p class="mt-0.5 text-[13px]" style="color: var(--topranking-subtitle-color, #6b7280);">
-                  <span data-i18n="topRanking.subtitle">${t('topRanking.subtitle')}</span>
+                  <span data-i18n="topRanking.subtitle">${t("topRanking.subtitle")}</span>
                 </p>
               </div>
               <a href="/pages/top-ranking.html"
                  class="flex-shrink-0 text-[13px] font-semibold transition-colors duration-150 hover:underline no-underline"
                  style="color: var(--topranking-link-color, #111827);">
-                <span data-i18n="common.viewMore">${t('common.viewMore')}</span> &gt;
+                <span data-i18n="common.viewMore">${t("common.viewMore")}</span> &gt;
               </a>
             </div>
 
@@ -132,7 +132,7 @@ export function TopRanking(): string {
 
 /** Empty-state placeholder shown when the API returns nothing. */
 function renderEmptyState(): string {
-  const msg = escapeHtml(t('topRanking.empty'));
+  const msg = escapeHtml(t("topRanking.empty"));
   return `
     <div class="flex items-center justify-center py-12 w-full">
       <div class="text-center">
@@ -149,9 +149,9 @@ function renderEmptyState(): string {
 /** Fetch best-selling categories from API and replace skeletons. */
 export function initTopRanking(): void {
   initCurrency()
-    .then(() => getTopRankingCategories(SKELETON_COUNT, 'hot-selling'))
-    .then(categories => {
-      const container = document.getElementById('top-ranking-cards');
+    .then(() => getTopRankingCategories(SKELETON_COUNT, "hot-selling"))
+    .then((categories) => {
+      const container = document.getElementById("top-ranking-cards");
       if (!container) return;
 
       if (!categories.length) {
@@ -160,12 +160,12 @@ export function initTopRanking(): void {
       }
 
       container.innerHTML = categories
-        .map(c => `<div role="listitem">${renderCategoryCard(c)}</div>`)
-        .join('');
+        .map((c) => `<div role="listitem">${renderCategoryCard(c)}</div>`)
+        .join("");
     })
-    .catch(err => {
-      console.warn('[TopRanking] API load failed:', err);
-      const container = document.getElementById('top-ranking-cards');
+    .catch((err) => {
+      console.warn("[TopRanking] API load failed:", err);
+      const container = document.getElementById("top-ranking-cards");
       if (container) container.innerHTML = renderEmptyState();
     });
 }

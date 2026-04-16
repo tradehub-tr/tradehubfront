@@ -4,8 +4,8 @@
  * Layout: stacked on mobile, horizontal three-column on xl+
  */
 
-import type { NavLink } from '../../types/navigation';
-import { t } from '../../i18n';
+import type { NavLink } from "../../types/navigation";
+import { t } from "../../i18n";
 
 /**
  * Policy links configuration with i18n keys
@@ -16,14 +16,14 @@ interface PolicyLink {
 }
 
 const policyLinksDef: PolicyLink[] = [
-  { i18nKey: 'footer.legalNotice', href: '/pages/legal/notice.html' },
-  { i18nKey: 'footer.privacyPolicy', href: '/pages/legal/privacy.html' },
-  { i18nKey: 'footer.productListing', href: '/pages/legal/product-listing.html' },
-  { i18nKey: 'footer.termsOfUse', href: '/pages/legal/terms.html' },
-  { i18nKey: 'footer.cookiePolicy', href: '/pages/legal/cookies.html' },
-  { i18nKey: 'footer.returnPolicy', href: '/pages/legal/returns.html' },
-  { i18nKey: 'footer.intellectualProperty', href: '/pages/legal/ip.html' },
-  { i18nKey: 'footer.accessibility', href: '/pages/legal/accessibility.html' },
+  { i18nKey: "footer.legalNotice", href: "/pages/legal/notice.html" },
+  { i18nKey: "footer.privacyPolicy", href: "/pages/legal/privacy.html" },
+  { i18nKey: "footer.productListing", href: "/pages/legal/product-listing.html" },
+  { i18nKey: "footer.termsOfUse", href: "/pages/legal/terms.html" },
+  { i18nKey: "footer.cookiePolicy", href: "/pages/legal/cookies.html" },
+  { i18nKey: "footer.returnPolicy", href: "/pages/legal/returns.html" },
+  { i18nKey: "footer.intellectualProperty", href: "/pages/legal/ip.html" },
+  { i18nKey: "footer.accessibility", href: "/pages/legal/accessibility.html" },
 ];
 
 /**
@@ -37,14 +37,18 @@ export function FooterPolicy(): string {
         <div class="flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4">
           <!-- Policy Links -->
           <div class="flex flex-wrap items-center justify-center md:justify-start gap-x-3 sm:gap-x-4 gap-y-1.5 text-xs dark:text-gray-400" style="color:var(--footer-text-color)">
-            ${policyLinksDef.map(link => `
+            ${policyLinksDef
+              .map(
+                (link) => `
               <a href="${link.href}" class="th-footer-link dark:hover:text-gray-200 transition-colors duration-200" data-i18n="${link.i18nKey}">${t(link.i18nKey)}</a>
-            `).join('')}
+            `
+              )
+              .join("")}
           </div>
 
           <!-- Copyright -->
           <p class="text-xs dark:text-gray-500 text-center md:text-right whitespace-normal sm:whitespace-nowrap" style="color:var(--footer-text-color)" data-i18n="footer.copyright">
-            ${t('footer.copyright')}
+            ${t("footer.copyright")}
           </p>
         </div>
       </div>
@@ -56,7 +60,7 @@ export function FooterPolicy(): string {
  * Get policy links data for use by other components
  */
 export function getPolicyLinksData(): NavLink[] {
-  return policyLinksDef.map(link => ({
+  return policyLinksDef.map((link) => ({
     label: t(link.i18nKey),
     href: link.href,
   }));

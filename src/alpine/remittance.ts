@@ -1,46 +1,46 @@
-import Alpine from 'alpinejs'
-import { callMethod } from '../utils/api'
-import { getSelectedCurrencyInfo, convertPrice } from '../services/currencyService'
+import Alpine from "alpinejs";
+import { callMethod } from "../utils/api";
+import { getSelectedCurrencyInfo, convertPrice } from "../services/currencyService";
 
-Alpine.data('remittanceComponent', () => ({
-  step: 'iban' as 'iban' | 'upload' | 'form' | 'submitting' | 'success',
+Alpine.data("remittanceComponent", () => ({
+  step: "iban" as "iban" | "upload" | "form" | "submitting" | "success",
   dragging: false,
 
   // Order & seller bank info
-  orderNumber: '',
+  orderNumber: "",
   orderTotal: 0 as number,
-  orderCurrency: 'TRY' as string,
-  paymentMethod: '' as string,
-  sellerIban: '',
-  sellerBankName: '',
-  sellerAccountHolder: '',
-  sellerName: '',
+  orderCurrency: "TRY" as string,
+  paymentMethod: "" as string,
+  sellerIban: "",
+  sellerBankName: "",
+  sellerAccountHolder: "",
+  sellerName: "",
   loadingBank: false,
 
   // File state
   file: null as File | null,
-  fileName: '',
-  fileSize: '',
-  filePreviewUrl: '' as string,
-  fileType: '' as string,
+  fileName: "",
+  fileSize: "",
+  filePreviewUrl: "" as string,
+  fileType: "" as string,
 
   // Form data
   form: {
-    remittanceDate: '',
-    currency: 'USD',
-    amount: '',
-    bankName: '',
-    senderName: '',
+    remittanceDate: "",
+    currency: "USD",
+    amount: "",
+    bankName: "",
+    senderName: "",
   },
 
   // Validation
   errors: {} as Record<string, string>,
   submitted: false,
-  apiError: '',
+  apiError: "",
 
   // Computed
   get isCheckPayment(): boolean {
-    return this.paymentMethod === 'check_promissory';
+    return this.paymentMethod === "check_promissory";
   },
 
   get isFormValid(): boolean {
@@ -54,16 +54,19 @@ Alpine.data('remittanceComponent', () => ({
 
   init() {
     // Listen for open event dispatched by "Ödeme Yap" button
-    document.addEventListener('remittance:open', async (e: Event) => {
+    document.addEventListener("remittance:open", async (e: Event) => {
       const detail = (e as CustomEvent).detail || {};
-      const orderNumber = detail.orderNumber || '';
-      const orderTotal = typeof detail.orderTotal === 'number' ? detail.orderTotal : parseFloat(detail.orderTotal || '0');
-      const orderCurrency = detail.orderCurrency || 'TRY';
+      const orderNumber = detail.orderNumber || "";
+      const orderTotal =
+        typeof detail.orderTotal === "number"
+          ? detail.orderTotal
+          : parseFloat(detail.orderTotal || "0");
+      const orderCurrency = detail.orderCurrency || "TRY";
 
       this.orderNumber = orderNumber;
       this.orderTotal = orderTotal;
       this.orderCurrency = orderCurrency;
-      this.paymentMethod = detail.paymentMethod || '';
+      this.paymentMethod = detail.paymentMethod || "";
       this.reset(false); // reset state without closing modal
 
       // Bugünün tarihi ve sipariş tutarını otomatik doldur
@@ -71,21 +74,21 @@ Alpine.data('remittanceComponent', () => ({
       this.form.remittanceDate = today;
       if (orderTotal > 0) {
         const displayCurrency = getSelectedCurrencyInfo();
-        const convertedAmount = convertPrice(orderTotal, orderCurrency || 'USD');
+        const convertedAmount = convertPrice(orderTotal, orderCurrency || "USD");
         this.form.currency = displayCurrency.code;
         this.form.amount = convertedAmount.toFixed(2);
       }
 
       // Open modal
-      const modal = document.getElementById('remittance-modal');
+      const modal = document.getElementById("remittance-modal");
       if (modal) {
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
       }
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
 
       // Fetch seller bank info then show IBAN step
-      this.step = 'iban';
+      this.step = "iban";
       if (orderNumber) {
         await this.fetchSellerBankInfo(orderNumber);
       }
@@ -100,16 +103,16 @@ Alpine.data('remittanceComponent', () => ({
         bank_name: string;
         account_holder: string;
         seller_name: string;
-      }>('tradehub_core.api.order.get_seller_bank_info', { order_number: orderNumber });
-      this.sellerIban = res.iban || '';
-      this.sellerBankName = res.bank_name || '';
-      this.sellerAccountHolder = res.account_holder || '';
-      this.sellerName = res.seller_name || '';
+      }>("tradehub_core.api.order.get_seller_bank_info", { order_number: orderNumber });
+      this.sellerIban = res.iban || "";
+      this.sellerBankName = res.bank_name || "";
+      this.sellerAccountHolder = res.account_holder || "";
+      this.sellerName = res.seller_name || "";
     } catch {
-      this.sellerIban = '';
-      this.sellerBankName = '';
-      this.sellerAccountHolder = '';
-      this.sellerName = '';
+      this.sellerIban = "";
+      this.sellerBankName = "";
+      this.sellerAccountHolder = "";
+      this.sellerName = "";
     } finally {
       this.loadingBank = false;
     }
@@ -120,55 +123,57 @@ Alpine.data('remittanceComponent', () => ({
     if (!files.length) return;
     const file = files[0];
     const maxSize = 20 * 1024 * 1024; // 20MB
-    const allowed = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
+    const allowed = ["image/jpeg", "image/png", "image/gif", "application/pdf"];
 
     if (!allowed.includes(file.type)) {
-      this.errors = { file: 'Desteklenmeyen dosya formatı' };
+      this.errors = { file: "Desteklenmeyen dosya formatı" };
       return;
     }
     if (file.size > maxSize) {
-      this.errors = { file: 'Dosya boyutu 20MB\'ı aşıyor' };
+      this.errors = { file: "Dosya boyutu 20MB'ı aşıyor" };
       return;
     }
 
     this.file = file;
     this.fileName = file.name;
-    this.fileSize = (file.size / (1024 * 1024)).toFixed(1) + ' MB';
+    this.fileSize = (file.size / (1024 * 1024)).toFixed(1) + " MB";
     this.fileType = file.type;
     this.errors = {};
 
-    if (file.type.startsWith('image/')) {
+    if (file.type.startsWith("image/")) {
       const reader = new FileReader();
-      reader.onload = (e) => { this.filePreviewUrl = e.target?.result as string; };
+      reader.onload = (e) => {
+        this.filePreviewUrl = e.target?.result as string;
+      };
       reader.readAsDataURL(file);
     } else {
-      this.filePreviewUrl = '';
+      this.filePreviewUrl = "";
     }
   },
 
   removeFile() {
     this.file = null;
-    this.fileName = '';
-    this.fileSize = '';
-    this.filePreviewUrl = '';
-    this.fileType = '';
-    this.step = 'upload';
+    this.fileName = "";
+    this.fileSize = "";
+    this.filePreviewUrl = "";
+    this.fileType = "";
+    this.step = "upload";
   },
 
   goToUpload() {
-    this.step = 'upload';
+    this.step = "upload";
   },
 
   goToForm() {
     if (!this.file) return;
-    this.step = 'form';
+    this.step = "form";
   },
 
   // Validation
   validateField(field: string) {
     const val = (this.form as any)[field];
     if (!val || !String(val).trim()) {
-      this.errors[field] = 'required';
+      this.errors[field] = "required";
     } else {
       delete this.errors[field];
     }
@@ -176,30 +181,30 @@ Alpine.data('remittanceComponent', () => ({
 
   validateAll(): boolean {
     this.errors = {};
-    const required = ['bankName', 'senderName'];
-    required.forEach(f => this.validateField(f));
+    const required = ["bankName", "senderName"];
+    required.forEach((f) => this.validateField(f));
     return Object.keys(this.errors).length === 0;
   },
 
   // Upload receipt file via custom endpoint (base64) and return file URL
   async uploadReceiptFile(orderNumber: string): Promise<string> {
-    if (!this.file) return '';
+    if (!this.file) return "";
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = async (e) => {
         try {
-          const base64 = (e.target?.result as string).split(',')[1]; // strip data:...;base64,
+          const base64 = (e.target?.result as string).split(",")[1]; // strip data:...;base64,
           const res = await callMethod<{ file_url: string }>(
-            'tradehub_core.api.order.upload_receipt',
+            "tradehub_core.api.order.upload_receipt",
             { order_number: orderNumber, file_name: this.file!.name, file_data: base64 },
-            true,
+            true
           );
-          resolve(res.file_url || '');
+          resolve(res.file_url || "");
         } catch (err) {
           reject(err);
         }
       };
-      reader.onerror = () => reject(new Error('Dosya okunamadı'));
+      reader.onerror = () => reject(new Error("Dosya okunamadı"));
       reader.readAsDataURL(this.file!);
     });
   },
@@ -207,16 +212,16 @@ Alpine.data('remittanceComponent', () => ({
   // Submit — API integration
   async submitRemittance() {
     this.submitted = true;
-    this.apiError = '';
+    this.apiError = "";
     if (!this.validateAll()) return;
 
-    this.step = 'submitting';
+    this.step = "submitting";
 
     try {
       const receiptUrl = await this.uploadReceiptFile(this.orderNumber);
 
       await callMethod<{ success: boolean }>(
-        'tradehub_core.api.order.submit_remittance',
+        "tradehub_core.api.order.submit_remittance",
         {
           order_number: this.orderNumber,
           remittance_date: this.form.remittanceDate,
@@ -226,10 +231,10 @@ Alpine.data('remittanceComponent', () => ({
           sender_name: this.form.senderName,
           receipt_url: receiptUrl,
         },
-        true,
+        true
       );
 
-      this.step = 'success';
+      this.step = "success";
 
       // Redirect to thank you page after short delay
       setTimeout(() => {
@@ -237,45 +242,45 @@ Alpine.data('remittanceComponent', () => ({
         window.location.href = `/pages/order/order-success.html?status=success&count=1&orderNumbers=${encodeURIComponent(this.orderNumber)}`;
       }, 1500);
     } catch (err: any) {
-      this.apiError = err?.message || 'Bir hata oluştu. Lütfen tekrar deneyin.';
-      this.step = 'form';
+      this.apiError = err?.message || "Bir hata oluştu. Lütfen tekrar deneyin.";
+      this.step = "form";
     }
   },
 
   // Reset state (optionally close modal)
   reset(closeModal = true) {
-    this.step = 'iban';
+    this.step = "iban";
     this.file = null;
-    this.fileName = '';
-    this.fileSize = '';
-    this.filePreviewUrl = '';
-    this.fileType = '';
-    this.form = { remittanceDate: '', currency: 'USD', amount: '', bankName: '', senderName: '' };
+    this.fileName = "";
+    this.fileSize = "";
+    this.filePreviewUrl = "";
+    this.fileType = "";
+    this.form = { remittanceDate: "", currency: "USD", amount: "", bankName: "", senderName: "" };
     this.errors = {};
     this.submitted = false;
     this.dragging = false;
-    this.apiError = '';
+    this.apiError = "";
 
     if (closeModal) {
-      this.orderNumber = '';
+      this.orderNumber = "";
       this.orderTotal = 0;
-      this.orderCurrency = 'TRY';
-      this.paymentMethod = '';
-      this.sellerIban = '';
-      this.sellerBankName = '';
-      this.sellerAccountHolder = '';
-      this.sellerName = '';
-      const modal = document.getElementById('remittance-modal');
+      this.orderCurrency = "TRY";
+      this.paymentMethod = "";
+      this.sellerIban = "";
+      this.sellerBankName = "";
+      this.sellerAccountHolder = "";
+      this.sellerName = "";
+      const modal = document.getElementById("remittance-modal");
       if (modal) {
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
       }
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     }
   },
 
   clearForm() {
-    this.form = { remittanceDate: '', currency: 'USD', amount: '', bankName: '', senderName: '' };
+    this.form = { remittanceDate: "", currency: "USD", amount: "", bankName: "", senderName: "" };
     this.errors = {};
   },
 }));

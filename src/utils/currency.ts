@@ -7,8 +7,8 @@
  * covers the very first page-load before any API call has completed.
  */
 
-const CURRENCY_STORAGE_KEY = 'tradehub-currency';
-const META_CACHE_KEY = 'tradehub_currency_meta';
+const CURRENCY_STORAGE_KEY = "tradehub-currency";
+const META_CACHE_KEY = "tradehub_currency_meta";
 
 export interface CurrencyInfo {
   code: string;
@@ -16,9 +16,9 @@ export interface CurrencyInfo {
 }
 
 const FALLBACK_CURRENCIES: Record<string, CurrencyInfo> = {
-  TRY: { code: 'TRY', symbol: '₺' },
-  USD: { code: 'USD', symbol: '$' },
-  EUR: { code: 'EUR', symbol: '€' },
+  TRY: { code: "TRY", symbol: "₺" },
+  USD: { code: "USD", symbol: "$" },
+  EUR: { code: "EUR", symbol: "€" },
 };
 
 function getCurrencyMap(): Record<string, CurrencyInfo> {
@@ -42,9 +42,9 @@ function getCurrencyMap(): Record<string, CurrencyInfo> {
 
 /** Get the currently selected currency info */
 export function getSelectedCurrency(): CurrencyInfo {
-  const code = localStorage.getItem(CURRENCY_STORAGE_KEY) || 'USD';
+  const code = localStorage.getItem(CURRENCY_STORAGE_KEY) || "USD";
   const map = getCurrencyMap();
-  return map[code] || map.USD || { code: 'USD', symbol: '$' };
+  return map[code] || map.USD || { code: "USD", symbol: "$" };
 }
 
 /** Get just the symbol */
@@ -78,20 +78,20 @@ export function formatStartingPrice(price: string): string {
   const rangeMatch = price.match(/[$€₺£¥]?([\d.,]+)\s*-\s*[$€₺£¥]?([\d.,]+)/);
   if (rangeMatch) {
     const parseNum = (s: string): number => {
-      if (code === 'TRY') {
-        return parseFloat(s.replace(/\./g, '').replace(',', '.'));
+      if (code === "TRY") {
+        return parseFloat(s.replace(/\./g, "").replace(",", "."));
       }
-      return parseFloat(s.replace(/,/g, ''));
+      return parseFloat(s.replace(/,/g, ""));
     };
     const a = parseNum(rangeMatch[1]);
     const b = parseNum(rangeMatch[2]);
     if (!isNaN(a) && !isNaN(b)) {
       const startingPrice = Math.max(a, b);
-      if (code === 'TRY') {
-        const formatted = startingPrice.toFixed(2).replace('.', ',').replace(/,00$/, '');
+      if (code === "TRY") {
+        const formatted = startingPrice.toFixed(2).replace(".", ",").replace(/,00$/, "");
         return `${symbol}${formatted}`;
       }
-      return `${symbol}${startingPrice.toFixed(2).replace(/\.00$/, '')}`;
+      return `${symbol}${startingPrice.toFixed(2).replace(/\.00$/, "")}`;
     }
   }
   return formatPrice(price);

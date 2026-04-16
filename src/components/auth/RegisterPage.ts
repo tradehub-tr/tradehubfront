@@ -11,28 +11,28 @@
  * retain their own init logic, called from the Alpine component in alpine.ts.
  */
 
-import { AccountTypeSelector, type AccountType } from './AccountTypeSelector';
-import { type EmailVerificationState } from './EmailVerification';
-import { type AccountSetupFormData } from './AccountSetupForm';
-import { getBaseUrl } from './AuthLayout';
-import { t } from '../../i18n';
+import { AccountTypeSelector, type AccountType } from "./AccountTypeSelector";
+import { type EmailVerificationState } from "./EmailVerification";
+import { type AccountSetupFormData } from "./AccountSetupForm";
+import { getBaseUrl } from "./AuthLayout";
+import { t } from "../../i18n";
 
 /* ── Helpers ────────────────────────────────────────── */
 
 /** HTML-encode user input to prevent XSS when inserted via innerHTML */
 export function escapeHtml(str: string): string {
   return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 /* ── Types ──────────────────────────────────────────── */
 
 /** Registration flow steps */
-export type RegisterStep = 'account-type' | 'email' | 'otp' | 'setup' | 'supplier-setup';
+export type RegisterStep = "account-type" | "email" | "otp" | "setup" | "supplier-setup";
 
 export interface RegisterPageOptions {
   /** Initial step (defaults to 'account-type') */
@@ -77,26 +77,26 @@ export interface RegisterPageState {
  * @param initialStep - Starting step (defaults to 'account-type')
  * @returns HTML string for the register page
  */
-export function RegisterPage(initialStep: RegisterStep = 'account-type'): string {
+export function RegisterPage(initialStep: RegisterStep = "account-type"): string {
   const baseUrl = getBaseUrl();
 
   return `
     <div id="register-page" class="w-full" x-data="registerPage" data-initial-step="${initialStep}">
       <!-- Step 1: Account Type Selection -->
       <div id="register-step-account-type" class="register-step"
-        x-show="currentStep === 'account-type'"${initialStep !== 'account-type' ? ' x-cloak' : ''}>
+        x-show="currentStep === 'account-type'"${initialStep !== "account-type" ? " x-cloak" : ""}>
         <!-- Header -->
         <div class="mb-6 text-center lg:text-left">
           <h1 class="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white mb-2" data-i18n="auth.register.title">
-            ${t('auth.register.title')}
+            ${t("auth.register.title")}
           </h1>
           <p class="text-sm text-gray-500 dark:text-gray-400" data-i18n="auth.register.selectType">
-            ${t('auth.register.selectType')}
+            ${t("auth.register.selectType")}
           </p>
         </div>
 
         <!-- Account Type Selector (child component) -->
-        ${AccountTypeSelector('buyer')}
+        ${AccountTypeSelector("buyer")}
 
         <!-- Continue Button -->
         <button
@@ -105,28 +105,28 @@ export function RegisterPage(initialStep: RegisterStep = 'account-type'): string
           @click="goToStep('email')"
           class="th-btn w-full py-3 text-base font-semibold transition-all mt-6"
         >
-          <span data-i18n="auth.register.continue">${t('auth.register.continue')}</span>
+          <span data-i18n="auth.register.continue">${t("auth.register.continue")}</span>
         </button>
 
         <!-- Login Link -->
         <div class="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-          <span data-i18n="auth.register.alreadyHave">${t('auth.register.alreadyHave')}</span>
+          <span data-i18n="auth.register.alreadyHave">${t("auth.register.alreadyHave")}</span>
           <a href="${baseUrl}pages/auth/login.html" id="register-login-link" class="ml-1 font-medium text-gray-900 dark:text-white hover:underline">
-            <span data-i18n="auth.register.signIn">${t('auth.register.signIn')}</span>
+            <span data-i18n="auth.register.signIn">${t("auth.register.signIn")}</span>
           </a>
         </div>
       </div>
 
       <!-- Step 2: Email Input -->
       <div id="register-step-email" class="register-step"
-        x-show="currentStep === 'email'"${initialStep !== 'email' ? ' x-cloak' : ''}>
+        x-show="currentStep === 'email'"${initialStep !== "email" ? " x-cloak" : ""}>
         <!-- Header -->
         <div class="mb-6 text-center lg:text-left">
           <h1 class="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white mb-2" data-i18n="auth.register.emailTitle">
-            ${t('auth.register.emailTitle')}
+            ${t("auth.register.emailTitle")}
           </h1>
           <p class="text-sm text-gray-500 dark:text-gray-400" data-i18n="auth.register.emailDesc">
-            ${t('auth.register.emailDesc')}
+            ${t("auth.register.emailDesc")}
           </p>
         </div>
 
@@ -134,31 +134,31 @@ export function RegisterPage(initialStep: RegisterStep = 'account-type'): string
         <form id="register-email-form" @submit.prevent="submitEmail()" class="space-y-4" novalidate>
           <div class="auth-form-field relative">
             <label for="register-email-input" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" data-i18n="auth.register.emailLabel">
-              ${t('auth.register.emailLabel')}
+              ${t("auth.register.emailLabel")}
             </label>
             <input
               type="email"
               id="register-email-input"
               name="email"
               x-ref="emailInput"
-              placeholder="${t('auth.register.emailPlaceholder')}" data-i18n-placeholder="auth.register.emailPlaceholder"
+              placeholder="${t("auth.register.emailPlaceholder")}" data-i18n-placeholder="auth.register.emailPlaceholder"
               autocomplete="email"
               @input="validateEmail()"
               class="th-input th-input-lg"
               required
             />
             <p id="register-email-error" x-show="emailError" x-cloak class="mt-1 text-sm text-red-500" data-i18n="auth.register.emailError">
-              ${t('auth.register.emailError')}
+              ${t("auth.register.emailError")}
             </p>
             <p x-show="emailExistsError && accountType !== 'supplier'" x-cloak class="mt-1 text-sm text-red-500">
-              ${t('auth.register.emailExistsError')}
+              ${t("auth.register.emailExistsError")}
             </p>
             <p x-show="emailExistsError && accountType === 'supplier'" x-cloak class="mt-1 text-sm text-orange-600">
-              ${t('auth.register.emailExistsSupplier')}
-              <a href="/pages/auth/login.html" class="underline font-medium">${t('auth.register.loginLink')}</a>
+              ${t("auth.register.emailExistsSupplier")}
+              <a href="/pages/auth/login.html" class="underline font-medium">${t("auth.register.loginLink")}</a>
             </p>
             <p x-show="emailDisabledError" x-cloak class="mt-1 text-sm text-red-500">
-              ${t('auth.register.emailDisabledError')}
+              ${t("auth.register.emailDisabledError")}
             </p>
           </div>
 
@@ -170,7 +170,7 @@ export function RegisterPage(initialStep: RegisterStep = 'account-type'): string
             disabled
             class="th-btn w-full py-3 text-base font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <span data-i18n="auth.register.sendCode">${t('auth.register.sendCode')}</span>
+            <span data-i18n="auth.register.sendCode">${t("auth.register.sendCode")}</span>
           </button>
         </form>
 
@@ -182,7 +182,7 @@ export function RegisterPage(initialStep: RegisterStep = 'account-type'): string
             @click="goToStep('account-type')"
             class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:underline transition-colors"
           >
-            <span data-i18n="auth.register.backToType">${t('auth.register.backToType')}</span>
+            <span data-i18n="auth.register.backToType">${t("auth.register.backToType")}</span>
           </button>
         </div>
       </div>
@@ -214,19 +214,19 @@ export function RegisterPage(initialStep: RegisterStep = 'account-type'): string
  * events dispatched by the Alpine component.
  */
 export function initRegisterPage(options: RegisterPageOptions = {}): void {
-  const registerPage = document.getElementById('register-page');
+  const registerPage = document.getElementById("register-page");
   if (!registerPage) return;
 
   // Wire onComplete callback to register-complete custom event
   if (options.onComplete) {
-    registerPage.addEventListener('register-complete', ((e: CustomEvent) => {
+    registerPage.addEventListener("register-complete", ((e: CustomEvent) => {
       options.onComplete!(e.detail as RegisterPageData);
     }) as EventListener);
   }
 
   // Wire onStepChange callback to register-step-change custom event
   if (options.onStepChange) {
-    registerPage.addEventListener('register-step-change', ((e: CustomEvent) => {
+    registerPage.addEventListener("register-step-change", ((e: CustomEvent) => {
       options.onStepChange!(e.detail.step as RegisterStep);
     }) as EventListener);
   }
@@ -236,7 +236,7 @@ export function initRegisterPage(options: RegisterPageOptions = {}): void {
  * Get the current registration step
  */
 export function getCurrentStep(): RegisterStep | null {
-  const registerPage = document.getElementById('register-page');
+  const registerPage = document.getElementById("register-page");
   if (!registerPage) return null;
 
   // Read from Alpine component reactive state
@@ -252,11 +252,17 @@ export function getCurrentStep(): RegisterStep | null {
  * Navigate to a specific step programmatically.
  * Dispatches a custom event that the Alpine component listens for.
  */
-export function navigateToStep(step: RegisterStep, _state?: RegisterPageState, _options?: RegisterPageOptions): void {
-  const registerPage = document.getElementById('register-page');
+export function navigateToStep(
+  step: RegisterStep,
+  _state?: RegisterPageState,
+  _options?: RegisterPageOptions
+): void {
+  const registerPage = document.getElementById("register-page");
   if (!registerPage) return;
 
-  registerPage.dispatchEvent(new CustomEvent('register-navigate', {
-    detail: { step }
-  }));
+  registerPage.dispatchEvent(
+    new CustomEvent("register-navigate", {
+      detail: { step },
+    })
+  );
 }

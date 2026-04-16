@@ -1,19 +1,16 @@
-import Alpine from 'alpinejs'
-import {
-  countries as checkoutCountries,
-  districtsByProvince,
-} from '../data/mockCheckout'
-import type { SavedAddress } from '../types/checkout'
-import { getUser, isLoggedIn } from '../utils/auth'
-import { formatCurrency } from '../services/currencyService'
-import { t } from '../i18n'
+import Alpine from "alpinejs";
+import { countries as checkoutCountries, districtsByProvince } from "../data/mockCheckout";
+import type { SavedAddress } from "../types/checkout";
+import { getUser, isLoggedIn } from "../utils/auth";
+import { formatCurrency } from "../services/currencyService";
+import { t } from "../i18n";
 import {
   fetchAddresses,
   saveAddressApi,
   deleteAddressApi,
   setDefaultAddressApi,
   type BuyerAddressData,
-} from '../services/cartService'
+} from "../services/cartService";
 
 interface CheckoutDeliveryMethod {
   id: string;
@@ -41,14 +38,14 @@ function parseCheckoutDeliveryOrders(raw: string | undefined): CheckoutDeliveryO
   }
 }
 
-const CHECKOUT_SUPPLIER_NOTES_KEY = 'tradehub_checkout_supplier_notes';
+const CHECKOUT_SUPPLIER_NOTES_KEY = "tradehub_checkout_supplier_notes";
 
 function getCheckoutOwnerKey(): string {
   const user = getUser();
   if (isLoggedIn() && user?.email) {
     return `user:${user.email.toLowerCase()}`;
   }
-  return 'guest';
+  return "guest";
 }
 
 function readCheckoutSupplierNotesStorage(): CheckoutSupplierNotesStorage {
@@ -65,13 +62,13 @@ function writeCheckoutSupplierNotesStorage(storage: CheckoutSupplierNotesStorage
   localStorage.setItem(CHECKOUT_SUPPLIER_NOTES_KEY, JSON.stringify(storage));
 }
 
-Alpine.data('checkoutItemsDelivery', () => ({
+Alpine.data("checkoutItemsDelivery", () => ({
   deliveryOrders: [] as CheckoutDeliveryOrderGroup[],
   selectedMethodByOrderId: {} as Record<string, string>,
   supplierNotesByOrderId: {} as Record<string, string>,
   isNoteModalOpen: false,
-  activeNoteOrderId: '',
-  noteDraft: '',
+  activeNoteOrderId: "",
+  noteDraft: "",
 
   init() {
     const root = this.$el as HTMLElement;
@@ -102,7 +99,10 @@ Alpine.data('checkoutItemsDelivery', () => ({
     const validOrderIds = new Set(this.deliveryOrders.map((order) => order.orderId));
 
     this.supplierNotesByOrderId = Object.fromEntries(
-      Object.entries(ownerNotes).filter(([orderId, note]) => validOrderIds.has(orderId) && typeof note === 'string' && note.trim().length > 0),
+      Object.entries(ownerNotes).filter(
+        ([orderId, note]) =>
+          validOrderIds.has(orderId) && typeof note === "string" && note.trim().length > 0
+      )
     );
   },
 
@@ -120,8 +120,8 @@ Alpine.data('checkoutItemsDelivery', () => ({
 
   closeNoteModal() {
     this.isNoteModalOpen = false;
-    this.activeNoteOrderId = '';
-    this.noteDraft = '';
+    this.activeNoteOrderId = "";
+    this.noteDraft = "";
   },
 
   saveNote() {
@@ -147,15 +147,16 @@ Alpine.data('checkoutItemsDelivery', () => ({
   },
 
   getOrderNote(orderId: string): string {
-    return this.supplierNotesByOrderId[orderId] ?? '';
+    return this.supplierNotesByOrderId[orderId] ?? "";
   },
 
   getSelectedShippingFeeTotal(): number {
     const total = this.deliveryOrders.reduce((sum, order) => {
       const selectedMethodId = this.selectedMethodByOrderId[order.orderId];
-      const selectedMethod = order.methods.find((method) => method.id === selectedMethodId)
-        ?? order.methods.find((method) => method.isDefault)
-        ?? order.methods[0];
+      const selectedMethod =
+        order.methods.find((method) => method.id === selectedMethodId) ??
+        order.methods.find((method) => method.isDefault) ??
+        order.methods[0];
 
       return sum + (selectedMethod?.shippingFee ?? 0);
     }, 0);
@@ -164,151 +165,207 @@ Alpine.data('checkoutItemsDelivery', () => ({
   },
 
   emitShippingFeeUpdate() {
-    window.dispatchEvent(new CustomEvent('checkout:shipping-updated', {
-      detail: {
-        shippingFee: this.getSelectedShippingFeeTotal(),
-        selectedMethodByOrderId: { ...this.selectedMethodByOrderId },
-      },
-    }));
+    window.dispatchEvent(
+      new CustomEvent("checkout:shipping-updated", {
+        detail: {
+          shippingFee: this.getSelectedShippingFeeTotal(),
+          selectedMethodByOrderId: { ...this.selectedMethodByOrderId },
+        },
+      })
+    );
   },
 
   emitNotesUpdate() {
-    window.dispatchEvent(new CustomEvent('checkout:notes-updated', {
-      detail: { notesByOrderId: { ...this.supplierNotesByOrderId } },
-    }));
+    window.dispatchEvent(
+      new CustomEvent("checkout:notes-updated", {
+        detail: { notesByOrderId: { ...this.supplierNotesByOrderId } },
+      })
+    );
   },
 }));
 
-Alpine.data('checkoutOrderSummary', (props?: { itemSubtotal?: number; discount?: number; initialShippingFee?: number; currency?: string }) => ({
-  itemSubtotal: Number(props?.itemSubtotal ?? 0),
-  discount: Number(props?.discount ?? 0),
-  shippingFee: Number(props?.initialShippingFee ?? 0),
-  currency: props?.currency ?? 'USD',
+Alpine.data(
+  "checkoutOrderSummary",
+  (props?: {
+    itemSubtotal?: number;
+    discount?: number;
+    initialShippingFee?: number;
+    currency?: string;
+  }) => ({
+    itemSubtotal: Number(props?.itemSubtotal ?? 0),
+    discount: Number(props?.discount ?? 0),
+    shippingFee: Number(props?.initialShippingFee ?? 0),
+    currency: props?.currency ?? "USD",
 
-  // Coupon state
-  couponCode: '',
-  couponError: '',
-  couponApplying: false,
-  couponApplied: null as { code: string; type: string; value: number; description: string } | null,
-  couponDiscount: 0,
+    // Coupon state
+    couponCode: "",
+    couponError: "",
+    couponApplying: false,
+    couponApplied: null as {
+      code: string;
+      type: string;
+      value: number;
+      description: string;
+    } | null,
+    couponDiscount: 0,
 
-  init() {
-    window.addEventListener('checkout:shipping-updated', (event: Event) => {
-      const detail = (event as CustomEvent<{ shippingFee?: number }>).detail;
-      const nextShippingFee = detail?.shippingFee;
-      if (typeof nextShippingFee === 'number' && Number.isFinite(nextShippingFee)) {
-        this.shippingFee = Number(nextShippingFee.toFixed(2));
-        this.recalcCouponDiscount();
+    init() {
+      window.addEventListener("checkout:shipping-updated", (event: Event) => {
+        const detail = (event as CustomEvent<{ shippingFee?: number }>).detail;
+        const nextShippingFee = detail?.shippingFee;
+        if (typeof nextShippingFee === "number" && Number.isFinite(nextShippingFee)) {
+          this.shippingFee = Number(nextShippingFee.toFixed(2));
+          this.recalcCouponDiscount();
+        }
+      });
+    },
+
+    async applyCoupon() {
+      const code = this.couponCode.trim().toUpperCase();
+      if (!code) {
+        this.couponError = t("checkout.couponRequired");
+        return;
       }
-    });
-  },
+      if (this.couponApplying) return;
 
-  async applyCoupon() {
-    const code = this.couponCode.trim().toUpperCase();
-    if (!code) { this.couponError = t('checkout.couponRequired'); return; }
-    if (this.couponApplying) return;
+      this.couponApplying = true;
+      this.couponError = "";
 
-    this.couponApplying = true;
-    this.couponError = '';
+      try {
+        const validateFn = (window as unknown as Record<string, unknown>).__validateCoupon as
+          | ((
+              code: string,
+              total: number
+            ) => Promise<{
+              code: string;
+              type: string;
+              value: number;
+              minOrder: number;
+              description: string;
+            }>)
+          | undefined;
 
-    try {
-      const validateFn = (window as unknown as Record<string, unknown>).__validateCoupon as
-        ((code: string, total: number) => Promise<{ code: string; type: string; value: number; minOrder: number; description: string }>) | undefined;
+        // Min sipariş kontrolü kargo hariç ürün toplamı üzerinden yapılır
+        const productTotal = this.itemSubtotal - this.discount;
 
-      // Min sipariş kontrolü kargo hariç ürün toplamı üzerinden yapılır
-      const productTotal = this.itemSubtotal - this.discount;
+        if (validateFn) {
+          const coupon = await validateFn(code, productTotal);
+          this.couponApplied = {
+            code: coupon.code,
+            type: coupon.type,
+            value: coupon.value,
+            description: coupon.description,
+          };
+          this.couponError = "";
+          this.recalcCouponDiscount();
 
-      if (validateFn) {
-        const coupon = await validateFn(code, productTotal);
-        this.couponApplied = { code: coupon.code, type: coupon.type, value: coupon.value, description: coupon.description };
-        this.couponError = '';
-        this.recalcCouponDiscount();
-
-        window.dispatchEvent(new CustomEvent('checkout:coupon-updated', {
-          detail: { coupon: this.couponApplied, couponDiscount: this.couponDiscount },
-        }));
-      } else {
-        this.couponError = t('checkout.couponServiceUnavailable');
+          window.dispatchEvent(
+            new CustomEvent("checkout:coupon-updated", {
+              detail: { coupon: this.couponApplied, couponDiscount: this.couponDiscount },
+            })
+          );
+        } else {
+          this.couponError = t("checkout.couponServiceUnavailable");
+        }
+      } catch (e: unknown) {
+        const msg = (e as { message?: string })?.message || "Geçersiz kupon kodu";
+        this.couponError = msg;
+      } finally {
+        this.couponApplying = false;
       }
-    } catch (e: unknown) {
-      const msg = (e as { message?: string })?.message || 'Geçersiz kupon kodu';
-      this.couponError = msg;
-    } finally {
-      this.couponApplying = false;
-    }
-  },
+    },
 
-  removeCoupon() {
-    this.couponApplied = null;
-    this.couponDiscount = 0;
-    this.couponCode = '';
-    this.couponError = '';
+    removeCoupon() {
+      this.couponApplied = null;
+      this.couponDiscount = 0;
+      this.couponCode = "";
+      this.couponError = "";
 
-    window.dispatchEvent(new CustomEvent('checkout:coupon-updated', {
-      detail: { coupon: null, couponDiscount: 0 },
-    }));
-  },
+      window.dispatchEvent(
+        new CustomEvent("checkout:coupon-updated", {
+          detail: { coupon: null, couponDiscount: 0 },
+        })
+      );
+    },
 
-  recalcCouponDiscount() {
-    if (!this.couponApplied) { this.couponDiscount = 0; return; }
-    // Kargo ücreti indirim hesabına dahil edilmez — sadece ürün toplamı üzerinden indirim
-    const productSubtotal = this.itemSubtotal - this.discount;
-    if (this.couponApplied.type === 'percent') {
-      this.couponDiscount = Number((productSubtotal * this.couponApplied.value / 100).toFixed(2));
-    } else if (this.couponApplied.type === 'fixed') {
-      this.couponDiscount = Math.min(this.couponApplied.value, productSubtotal);
-    } else if (this.couponApplied.type === 'shipping') {
-      this.couponDiscount = this.shippingFee;
-    }
-  },
+    recalcCouponDiscount() {
+      if (!this.couponApplied) {
+        this.couponDiscount = 0;
+        return;
+      }
+      // Kargo ücreti indirim hesabına dahil edilmez — sadece ürün toplamı üzerinden indirim
+      const productSubtotal = this.itemSubtotal - this.discount;
+      if (this.couponApplied.type === "percent") {
+        this.couponDiscount = Number(
+          ((productSubtotal * this.couponApplied.value) / 100).toFixed(2)
+        );
+      } else if (this.couponApplied.type === "fixed") {
+        this.couponDiscount = Math.min(this.couponApplied.value, productSubtotal);
+      } else if (this.couponApplied.type === "shipping") {
+        this.couponDiscount = this.shippingFee;
+      }
+    },
 
-  get total(): number {
-    return Number((this.itemSubtotal + this.shippingFee - this.discount - this.couponDiscount).toFixed(2));
-  },
+    get total(): number {
+      return Number(
+        (this.itemSubtotal + this.shippingFee - this.discount - this.couponDiscount).toFixed(2)
+      );
+    },
 
-  formatMoney(value: number): string {
-    return formatCurrency(value, this.currency);
-  },
-}));
+    formatMoney(value: number): string {
+      return formatCurrency(value, this.currency);
+    },
+  })
+);
 
 // ── Checkout Review Modal ──
 
-Alpine.data('checkoutReviewModal', () => ({
+Alpine.data("checkoutReviewModal", () => ({
   open: false,
-  shippingAddress: '',
-  paymentMethod: '',
-  orders: [] as Array<{ orderId: string; orderLabel: string; sellerName: string; products: Array<{ id: string; title: string; image: string; skuLines: Array<{ id: string; variantText: string; unitPrice: number; quantity: number }> }> }>,
-  summary: { itemSubtotal: '0.00', shippingFee: '0.00', couponDiscount: '0.00', total: '0.00' },
+  shippingAddress: "",
+  paymentMethod: "",
+  orders: [] as Array<{
+    orderId: string;
+    orderLabel: string;
+    sellerName: string;
+    products: Array<{
+      id: string;
+      title: string;
+      image: string;
+      skuLines: Array<{ id: string; variantText: string; unitPrice: number; quantity: number }>;
+    }>;
+  }>,
+  summary: { itemSubtotal: "0.00", shippingFee: "0.00", couponDiscount: "0.00", total: "0.00" },
 
   init() {
-    window.addEventListener('checkout:open-review', ((event: CustomEvent) => {
+    window.addEventListener("checkout:open-review", ((event: CustomEvent) => {
       const d = event.detail;
-      this.shippingAddress = d.shippingAddress || '';
-      this.paymentMethod = d.paymentMethod || '';
+      this.shippingAddress = d.shippingAddress || "";
+      this.paymentMethod = d.paymentMethod || "";
       this.orders = d.orders || [];
       this.summary = d.summary || this.summary;
       this.open = true;
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     }) as EventListener);
   },
 
   confirmOrder() {
     this.open = false;
-    document.body.style.overflow = '';
-    window.dispatchEvent(new CustomEvent('checkout:confirm-order'));
+    document.body.style.overflow = "";
+    window.dispatchEvent(new CustomEvent("checkout:confirm-order"));
   },
 
   // Clean up on close
-  '$watch': {
+  $watch: {
     open(val: boolean) {
-      if (!val) document.body.style.overflow = '';
+      if (!val) document.body.style.overflow = "";
     },
   },
 }));
 
 // ── Checkout Accordion (PaymentMethodSection, ItemsDeliverySection) ──
 
-Alpine.data('checkoutAccordion', (props?: { initialExpanded?: boolean }) => ({
+Alpine.data("checkoutAccordion", (props?: { initialExpanded?: boolean }) => ({
   expanded: props?.initialExpanded ?? false,
 
   toggle() {
@@ -322,21 +379,21 @@ Alpine.data('checkoutAccordion', (props?: { initialExpanded?: boolean }) => ({
       // Collapse: set explicit height first, then animate to 0
       content.style.height = `${content.scrollHeight}px`;
       void content.offsetHeight; // force reflow
-      content.style.height = '0';
-      content.style.overflow = 'hidden';
+      content.style.height = "0";
+      content.style.overflow = "hidden";
       this.expanded = false;
     } else {
       // Expand: animate from 0 to scrollHeight
       content.style.height = `${content.scrollHeight}px`;
-      content.style.overflow = 'hidden';
+      content.style.overflow = "hidden";
       this.expanded = true;
 
       const onEnd = () => {
-        content.style.height = '';
-        content.style.overflow = '';
-        content.removeEventListener('transitionend', onEnd);
+        content.style.height = "";
+        content.style.overflow = "";
+        content.removeEventListener("transitionend", onEnd);
       };
-      content.addEventListener('transitionend', onEnd);
+      content.addEventListener("transitionend", onEnd);
     }
   },
 }));
@@ -364,8 +421,9 @@ interface CheckoutAddAddressForm {
   isDefaultAddress: boolean;
 }
 
-const ADDRESS_BOOK_KEY = 'tradehub_address_book';
-const defaultShippingCountry = checkoutCountries.find(c => c.code === 'TR') ?? checkoutCountries[0];
+const ADDRESS_BOOK_KEY = "tradehub_address_book";
+const defaultShippingCountry =
+  checkoutCountries.find((c) => c.code === "TR") ?? checkoutCountries[0];
 
 // BuyerAddress — cartService'ten re-export (döngüsel import yok)
 type BuyerAddress = BuyerAddressData;
@@ -380,11 +438,11 @@ function generateAddressId(): string {
 
 function splitFullName(fullName: string): { firstName: string; lastName: string } {
   const parts = fullName.trim().split(/\s+/).filter(Boolean);
-  if (parts.length === 0) return { firstName: '', lastName: '' };
-  if (parts.length === 1) return { firstName: parts[0], lastName: '' };
+  if (parts.length === 0) return { firstName: "", lastName: "" };
+  if (parts.length === 1) return { firstName: parts[0], lastName: "" };
   return {
     firstName: parts[0],
-    lastName: parts.slice(1).join(' '),
+    lastName: parts.slice(1).join(" "),
   };
 }
 
@@ -392,7 +450,7 @@ function splitFullName(fullName: string): { firstName: string; lastName: string 
 
 function readAddressBook(): BuyerAddressBookStorage {
   try {
-    return JSON.parse(localStorage.getItem(ADDRESS_BOOK_KEY) || '{}') as BuyerAddressBookStorage;
+    return JSON.parse(localStorage.getItem(ADDRESS_BOOK_KEY) || "{}") as BuyerAddressBookStorage;
   } catch {
     return {};
   }
@@ -406,23 +464,30 @@ function writeAddressBook(storage: BuyerAddressBookStorage): void {
 // Artık field isimleri aynı — sadece isDefault / is_default ve firstName/lastName dönüşümü gerekiyor
 function buyerAddressToCheckout(addr: BuyerAddress): CheckoutStoredAddress {
   const parts = addr.contact_name.trim().split(/\s+/);
-  const fullAddr = [addr.street, addr.apartment, addr.city, addr.state, addr.country === 'TR' ? 'Turkey/Turkiye' : addr.country]
-    .filter(Boolean).join(', ');
+  const fullAddr = [
+    addr.street,
+    addr.apartment,
+    addr.city,
+    addr.state,
+    addr.country === "TR" ? "Turkey/Turkiye" : addr.country,
+  ]
+    .filter(Boolean)
+    .join(", ");
   return {
     id: addr.id,
     isDefault: addr.is_default,
-    label: addr.title || 'Adres',
-    country: addr.country || 'TR',
-    countryName: addr.country === 'TR' ? 'Turkey/Turkiye' : addr.country,
-    firstName: parts[0] ?? '',
-    lastName: parts.slice(1).join(' '),
-    phonePrefix: addr.phone_prefix || '+90',
+    label: addr.title || "Adres",
+    country: addr.country || "TR",
+    countryName: addr.country === "TR" ? "Turkey/Turkiye" : addr.country,
+    firstName: parts[0] ?? "",
+    lastName: parts.slice(1).join(" "),
+    phonePrefix: addr.phone_prefix || "+90",
     phone: addr.phone,
     street: addr.street,
-    apartment: addr.apartment || '',
+    apartment: addr.apartment || "",
     state: addr.state,
     city: addr.city,
-    postalCode: addr.postal_code || '',
+    postalCode: addr.postal_code || "",
     fullAddress: fullAddr,
   };
 }
@@ -431,85 +496,89 @@ function buyerAddressToCheckout(addr: BuyerAddress): CheckoutStoredAddress {
 function checkoutToBuyerAddress(addr: CheckoutStoredAddress): BuyerAddress {
   return {
     id: addr.id,
-    title: addr.label || 'Shipping Address',
+    title: addr.label || "Shipping Address",
     contact_name: `${addr.firstName} ${addr.lastName}`.trim(),
-    company: addr.company ?? '',
-    phone_prefix: addr.phonePrefix || '+90',
+    company: addr.company ?? "",
+    phone_prefix: addr.phonePrefix || "+90",
     phone: addr.phone,
-    country: addr.country || 'TR',
+    country: addr.country || "TR",
     state: addr.state,
     city: addr.city,
     street: addr.street,
-    apartment: addr.apartment || '',
-    postal_code: addr.postalCode || '',
-    note: addr.note ?? '',
+    apartment: addr.apartment || "",
+    postal_code: addr.postalCode || "",
+    note: addr.note ?? "",
     is_default: addr.isDefault,
   };
 }
-
 
 function getCountryByCode(code: string) {
   return checkoutCountries.find((country) => country.code === code) ?? defaultShippingCountry;
 }
 
-function formatAddressLine(address: Pick<SavedAddress, 'street' | 'city' | 'state' | 'postalCode' | 'countryName'>): string {
+function formatAddressLine(
+  address: Pick<SavedAddress, "street" | "city" | "state" | "postalCode" | "countryName">
+): string {
   return [address.street, address.city, address.state, address.postalCode, address.countryName]
     .filter(Boolean)
-    .join(', ');
+    .join(", ");
 }
 
 function normalizeProvinceName(value: string): string {
   return value
-    .toLocaleLowerCase('tr-TR')
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replaceAll('ı', 'i')
-    .replace(/\s+/g, ' ')
+    .toLocaleLowerCase("tr-TR")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replaceAll("ı", "i")
+    .replace(/\s+/g, " ")
     .trim();
 }
 
 const DISTRICTS_BY_PROVINCE_NORMALIZED = Object.fromEntries(
-  Object.entries(districtsByProvince).map(([province, districts]) => [normalizeProvinceName(province), districts]),
+  Object.entries(districtsByProvince).map(([province, districts]) => [
+    normalizeProvinceName(province),
+    districts,
+  ])
 ) as Record<string, string[]>;
 
-const FALLBACK_CITY_OPTIONS = ['Merkez', 'Cumhuriyet', 'Yeni Mahalle', 'Sanayi'];
+const FALLBACK_CITY_OPTIONS = ["Merkez", "Cumhuriyet", "Yeni Mahalle", "Sanayi"];
 
-Alpine.data('shippingForm', () => ({
+Alpine.data("shippingForm", () => ({
   countryOpen: false,
   stateOpen: false,
   cityOpen: false,
 
   countryDisplay: `${defaultShippingCountry.flag} ${defaultShippingCountry.name}`,
-  stateDisplay: '',
-  cityDisplay: '',
+  stateDisplay: "",
+  cityDisplay: "",
   cityOptions: [] as string[],
   phonePrefix: defaultShippingCountry.phonePrefix,
   errors: {} as Record<string, boolean>,
 
   showAddressForm: true,
   savedAddresses: [] as CheckoutStoredAddress[],
-  selectedAddressId: '',
-  pendingAddressId: '',
-  selectedAddressName: '',
-  selectedAddressPhone: '',
-  selectedAddressLine: '',
+  selectedAddressId: "",
+  pendingAddressId: "",
+  selectedAddressName: "",
+  selectedAddressPhone: "",
+  selectedAddressLine: "",
 
   isAddressSelectorOpen: false,
   isAddAddressModalOpen: false,
   isEditingAddress: false,
-  editingAddressId: '',
+  editingAddressId: "",
   addAddressForm: {
     country: defaultShippingCountry.code,
-    fullName: '',
+    fullName: "",
     phonePrefix: defaultShippingCountry.phonePrefix,
-    phone: '',
-    company: '',
-    street: '',
-    apartment: '',
-    state: '',
-    city: '',
-    postalCode: '',
-    note: '',
+    phone: "",
+    company: "",
+    street: "",
+    apartment: "",
+    state: "",
+    city: "",
+    postalCode: "",
+    note: "",
     isDefaultAddress: false,
   } as CheckoutAddAddressForm,
   addFormErrors: {} as Record<string, boolean>,
@@ -525,7 +594,7 @@ Alpine.data('shippingForm', () => ({
     if (isLoggedIn() && user?.email) {
       return `user:${user.email.toLowerCase()}`;
     }
-    return 'guest';
+    return "guest";
   },
 
   async loadAddressesForCurrentUser() {
@@ -548,15 +617,16 @@ Alpine.data('shippingForm', () => ({
 
     if (this.savedAddresses.length === 0) {
       this.showAddressForm = true;
-      this.selectedAddressId = '';
-      this.pendingAddressId = '';
-      this.selectedAddressName = '';
-      this.selectedAddressPhone = '';
-      this.selectedAddressLine = '';
+      this.selectedAddressId = "";
+      this.pendingAddressId = "";
+      this.selectedAddressName = "";
+      this.selectedAddressPhone = "";
+      this.selectedAddressLine = "";
       return;
     }
 
-    const defaultAddress = this.savedAddresses.find((address) => address.isDefault) ?? this.savedAddresses[0];
+    const defaultAddress =
+      this.savedAddresses.find((address) => address.isDefault) ?? this.savedAddresses[0];
     this.applySelectedAddress(defaultAddress.id);
     this.showAddressForm = false;
   },
@@ -584,11 +654,11 @@ Alpine.data('shippingForm', () => ({
     this.updateCityDropdown(address.state);
     this.cityDisplay = address.city;
 
-    setInput('first-name', `${address.firstName} ${address.lastName}`.trim());
-    setInput('phone', address.phone);
-    setInput('street-address', address.street);
-    setInput('apartment', address.apartment);
-    setInput('postal-code', address.postalCode);
+    setInput("first-name", `${address.firstName} ${address.lastName}`.trim());
+    setInput("phone", address.phone);
+    setInput("street-address", address.street);
+    setInput("apartment", address.apartment);
+    setInput("postal-code", address.postalCode);
 
     this.errors.country = false;
     this.errors.firstName = false;
@@ -605,10 +675,9 @@ Alpine.data('shippingForm', () => ({
 
     this.selectedAddressId = address.id;
     this.pendingAddressId = address.id;
-    this.selectedAddressName = [
-      `${address.firstName} ${address.lastName}`.trim(),
-      address.company,
-    ].filter(Boolean).join(' / ');
+    this.selectedAddressName = [`${address.firstName} ${address.lastName}`.trim(), address.company]
+      .filter(Boolean)
+      .join(" / ");
     this.selectedAddressPhone = `${address.phonePrefix} ${address.phone}`.trim();
     this.selectedAddressLine = address.fullAddress || formatAddressLine(address);
     this.fillMainFormFromAddress(address);
@@ -628,7 +697,8 @@ Alpine.data('shippingForm', () => ({
   },
 
   confirmSelectedAddress() {
-    const address = this.savedAddresses.find((row) => row.id === this.pendingAddressId) ?? this.savedAddresses[0];
+    const address =
+      this.savedAddresses.find((row) => row.id === this.pendingAddressId) ?? this.savedAddresses[0];
     if (!address) return;
 
     this.applySelectedAddress(address.id);
@@ -639,21 +709,21 @@ Alpine.data('shippingForm', () => ({
   resetAddAddressForm() {
     this.addAddressForm = {
       country: defaultShippingCountry.code,
-      fullName: '',
+      fullName: "",
       phonePrefix: defaultShippingCountry.phonePrefix,
-      phone: '',
-      company: '',
-      street: '',
-      apartment: '',
-      state: '',
-      city: '',
-      postalCode: '',
-      note: '',
+      phone: "",
+      company: "",
+      street: "",
+      apartment: "",
+      state: "",
+      city: "",
+      postalCode: "",
+      note: "",
       isDefaultAddress: false,
     };
     this.addFormErrors = {};
     this.isEditingAddress = false;
-    this.editingAddressId = '';
+    this.editingAddressId = "";
   },
 
   openAddAddressModal() {
@@ -683,13 +753,13 @@ Alpine.data('shippingForm', () => ({
       fullName: `${address.firstName} ${address.lastName}`.trim(),
       phonePrefix: address.phonePrefix,
       phone: address.phone,
-      company: address.company ?? '',
+      company: address.company ?? "",
       street: address.street,
       apartment: address.apartment,
       state: address.state,
       city: address.city,
       postalCode: address.postalCode,
-      note: address.note ?? '',
+      note: address.note ?? "",
       isDefaultAddress: address.isDefault,
     };
     this.addFormErrors = {};
@@ -699,18 +769,22 @@ Alpine.data('shippingForm', () => ({
 
   async deleteAddress(addressId: string) {
     if (isLoggedIn()) {
-      try { await deleteAddressApi(addressId); } catch { /* UI state zaten güncellenecek */ }
+      try {
+        await deleteAddressApi(addressId);
+      } catch {
+        /* UI state zaten güncellenecek */
+      }
     }
 
     this.savedAddresses = this.savedAddresses.filter((address) => address.id !== addressId);
 
     if (this.savedAddresses.length === 0) {
       this._persistGuestAddresses();
-      this.selectedAddressId = '';
-      this.pendingAddressId = '';
-      this.selectedAddressName = '';
-      this.selectedAddressPhone = '';
-      this.selectedAddressLine = '';
+      this.selectedAddressId = "";
+      this.pendingAddressId = "";
+      this.selectedAddressName = "";
+      this.selectedAddressPhone = "";
+      this.selectedAddressLine = "";
       this.showAddressForm = true;
       this.isAddressSelectorOpen = false;
       return;
@@ -720,9 +794,10 @@ Alpine.data('shippingForm', () => ({
       this.savedAddresses[0].isDefault = true;
     }
 
-    const nextAddress = this.savedAddresses.find((address) => address.id === this.selectedAddressId)
-      ?? this.savedAddresses.find((address) => address.isDefault)
-      ?? this.savedAddresses[0];
+    const nextAddress =
+      this.savedAddresses.find((address) => address.id === this.selectedAddressId) ??
+      this.savedAddresses.find((address) => address.isDefault) ??
+      this.savedAddresses[0];
 
     this._persistGuestAddresses();
     this.applySelectedAddress(nextAddress.id);
@@ -730,7 +805,11 @@ Alpine.data('shippingForm', () => ({
 
   async setDefaultAddress(addressId: string) {
     if (isLoggedIn()) {
-      try { await setDefaultAddressApi(addressId); } catch { /* sessiz hata */ }
+      try {
+        await setDefaultAddressApi(addressId);
+      } catch {
+        /* sessiz hata */
+      }
     }
     this.savedAddresses = this.savedAddresses.map((address) => ({
       ...address,
@@ -741,20 +820,20 @@ Alpine.data('shippingForm', () => ({
 
   validateAddAddressForm(): boolean {
     const requiredFields: Array<keyof CheckoutAddAddressForm> = [
-      'country',
-      'fullName',
-      'phone',
-      'street',
-      'state',
-      'city',
-      'postalCode',
+      "country",
+      "fullName",
+      "phone",
+      "street",
+      "state",
+      "city",
+      "postalCode",
     ];
 
     this.addFormErrors = {};
     let hasErrors = false;
 
     for (const field of requiredFields) {
-      const value = String(this.addAddressForm[field] ?? '').trim();
+      const value = String(this.addAddressForm[field] ?? "").trim();
       const invalid = !value;
       this.addFormErrors[field] = invalid;
       if (invalid) hasErrors = true;
@@ -767,7 +846,7 @@ Alpine.data('shippingForm', () => ({
     const country = getCountryByCode(this.addAddressForm.country);
     const nameParts = splitFullName(this.addAddressForm.fullName);
     const baseAddress: SavedAddress = {
-      label: 'Shipping address',
+      label: "Shipping address",
       fullAddress: formatAddressLine({
         street: this.addAddressForm.street.trim(),
         city: this.addAddressForm.city.trim(),
@@ -824,12 +903,14 @@ Alpine.data('shippingForm', () => ({
         }));
 
         this.applySelectedAddress(savedAsCheckout.id);
-      } catch { /* API hatası — devam et */ }
+      } catch {
+        /* API hatası — devam et */
+      }
     } else {
       if (this.isEditingAddress && this.editingAddressId) {
-        this.savedAddresses = this.savedAddresses.map((address) => (
+        this.savedAddresses = this.savedAddresses.map((address) =>
           address.id === this.editingAddressId ? candidate : address
-        ));
+        );
       } else {
         this.savedAddresses = [candidate, ...this.savedAddresses];
       }
@@ -853,18 +934,19 @@ Alpine.data('shippingForm', () => ({
   },
 
   toggleDropdown(name: string) {
-    const keys = ['country', 'state', 'city'];
+    const keys = ["country", "state", "city"];
     keys.forEach((key) => {
       if (key !== name) {
-        const otherProp = `${key}Open` as 'countryOpen' | 'stateOpen' | 'cityOpen';
+        const otherProp = `${key}Open` as "countryOpen" | "stateOpen" | "cityOpen";
         this[otherProp] = false;
       }
     });
-    const prop = `${name}Open` as 'countryOpen' | 'stateOpen' | 'cityOpen';
-    if (name === 'city') {
-      const stateFromDom = ((this.$el as HTMLElement)
-        .querySelector('[data-dropdown="state-dropdown"] [data-display]')?.textContent ?? '')
-        .trim();
+    const prop = `${name}Open` as "countryOpen" | "stateOpen" | "cityOpen";
+    if (name === "city") {
+      const stateFromDom = (
+        (this.$el as HTMLElement).querySelector('[data-dropdown="state-dropdown"] [data-display]')
+          ?.textContent ?? ""
+      ).trim();
       const effectiveState = this.stateDisplay.trim() || stateFromDom;
       this.updateCityDropdown(effectiveState);
     }
@@ -872,14 +954,16 @@ Alpine.data('shippingForm', () => ({
   },
 
   selectCountryItem(event: Event) {
-    const item = (event.target as HTMLElement).closest('li') as HTMLElement | null;
+    const item = (event.target as HTMLElement).closest("li") as HTMLElement | null;
     if (!item) return;
 
-    const list = item.closest('[data-list]');
-    list?.querySelectorAll('li').forEach((node) => node.classList.remove('bg-blue-50', 'text-blue-800'));
-    item.classList.add('bg-blue-50', 'text-blue-800');
+    const list = item.closest("[data-list]");
+    list
+      ?.querySelectorAll("li")
+      .forEach((node) => node.classList.remove("bg-blue-50", "text-blue-800"));
+    item.classList.add("bg-blue-50", "text-blue-800");
 
-    this.countryDisplay = `${item.dataset.flag || ''} ${item.dataset.name || ''}`;
+    this.countryDisplay = `${item.dataset.flag || ""} ${item.dataset.name || ""}`;
     if (item.dataset.prefix) this.phonePrefix = item.dataset.prefix;
 
     this.countryOpen = false;
@@ -887,14 +971,16 @@ Alpine.data('shippingForm', () => ({
   },
 
   selectStateItem(event: Event) {
-    const item = (event.target as HTMLElement).closest('li') as HTMLElement | null;
+    const item = (event.target as HTMLElement).closest("li") as HTMLElement | null;
     if (!item) return;
 
-    const list = item.closest('[data-list]');
-    list?.querySelectorAll('li').forEach((node) => node.classList.remove('bg-blue-50', 'text-blue-800'));
-    item.classList.add('bg-blue-50', 'text-blue-800');
+    const list = item.closest("[data-list]");
+    list
+      ?.querySelectorAll("li")
+      .forEach((node) => node.classList.remove("bg-blue-50", "text-blue-800"));
+    item.classList.add("bg-blue-50", "text-blue-800");
 
-    const stateValue = (item.dataset.value || item.textContent || '').trim();
+    const stateValue = (item.dataset.value || item.textContent || "").trim();
     this.stateDisplay = stateValue;
     this.stateOpen = false;
     this.errors.state = false;
@@ -902,22 +988,24 @@ Alpine.data('shippingForm', () => ({
   },
 
   selectCityItem(event: Event) {
-    const item = (event.target as HTMLElement).closest('li') as HTMLElement | null;
+    const item = (event.target as HTMLElement).closest("li") as HTMLElement | null;
     if (!item) return;
-    if (item.dataset.disabled === 'true') return;
+    if (item.dataset.disabled === "true") return;
 
-    const list = item.closest('[data-list]');
-    list?.querySelectorAll('li').forEach((node) => node.classList.remove('bg-blue-50', 'text-blue-800'));
-    item.classList.add('bg-blue-50', 'text-blue-800');
+    const list = item.closest("[data-list]");
+    list
+      ?.querySelectorAll("li")
+      .forEach((node) => node.classList.remove("bg-blue-50", "text-blue-800"));
+    item.classList.add("bg-blue-50", "text-blue-800");
 
-    this.cityDisplay = item.dataset.value || item.textContent?.trim() || '';
+    this.cityDisplay = item.dataset.value || item.textContent?.trim() || "";
     this.cityOpen = false;
     this.errors.city = false;
   },
 
   updateCityDropdown(stateName: string) {
     const normalizedState = normalizeProvinceName(stateName);
-    this.cityDisplay = '';
+    this.cityDisplay = "";
 
     if (!normalizedState) {
       this.cityOptions = [];
@@ -932,23 +1020,33 @@ Alpine.data('shippingForm', () => ({
   },
 
   async handleSubmit() {
-    const requiredFields = ['country', 'firstName', 'phone', 'streetAddress', 'state', 'city', 'postalCode'];
-    requiredFields.forEach(field => { this.errors[field] = false; });
+    const requiredFields = [
+      "country",
+      "firstName",
+      "phone",
+      "streetAddress",
+      "state",
+      "city",
+      "postalCode",
+    ];
+    requiredFields.forEach((field) => {
+      this.errors[field] = false;
+    });
 
     const el = this.$el as HTMLElement;
     const idMap: Record<string, string> = {
-      firstName: 'first-name',
-      phone: 'phone',
-      streetAddress: 'street-address',
-      postalCode: 'postal-code',
+      firstName: "first-name",
+      phone: "phone",
+      streetAddress: "street-address",
+      postalCode: "postal-code",
     };
 
     const getValue = (field: string): string => {
-      if (field === 'country') return this.countryDisplay;
-      if (field === 'state') return this.stateDisplay;
-      if (field === 'city') return this.cityDisplay;
+      if (field === "country") return this.countryDisplay;
+      if (field === "state") return this.stateDisplay;
+      if (field === "city") return this.cityDisplay;
       const id = idMap[field];
-      return id ? (el.querySelector<HTMLInputElement>(`#${id}`))?.value?.trim() ?? '' : '';
+      return id ? (el.querySelector<HTMLInputElement>(`#${id}`)?.value?.trim() ?? "") : "";
     };
 
     let hasErrors = false;
@@ -965,24 +1063,28 @@ Alpine.data('shippingForm', () => ({
     }
 
     if (hasErrors && firstErrorField) {
-      firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      firstErrorField.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
 
-    const countryMatch = checkoutCountries.find((country) => this.countryDisplay.includes(country.name));
+    const countryMatch = checkoutCountries.find((country) =>
+      this.countryDisplay.includes(country.name)
+    );
     const country = countryMatch ?? defaultShippingCountry;
-    const fullName = getValue('firstName');
+    const fullName = getValue("firstName");
     const nameParts = splitFullName(fullName);
-    const street = getValue('streetAddress');
+    const street = getValue("streetAddress");
     const state = this.stateDisplay;
     const city = this.cityDisplay;
-    const postalCode = getValue('postalCode');
-    const apartment = (el.querySelector<HTMLInputElement>('#apartment'))?.value?.trim() ?? '';
+    const postalCode = getValue("postalCode");
+    const apartment = el.querySelector<HTMLInputElement>("#apartment")?.value?.trim() ?? "";
 
     const candidate: CheckoutStoredAddress = {
       id: generateAddressId(),
-      isDefault: (el.querySelector<HTMLInputElement>('#default-address'))?.checked ?? this.savedAddresses.length === 0,
-      label: 'Shipping address',
+      isDefault:
+        el.querySelector<HTMLInputElement>("#default-address")?.checked ??
+        this.savedAddresses.length === 0,
+      label: "Shipping address",
       fullAddress: formatAddressLine({
         street,
         city,
@@ -994,7 +1096,7 @@ Alpine.data('shippingForm', () => ({
       countryName: country.name,
       firstName: nameParts.firstName,
       lastName: nameParts.lastName,
-      phone: getValue('phone'),
+      phone: getValue("phone"),
       phonePrefix: this.phonePrefix,
       street,
       apartment,
@@ -1013,7 +1115,9 @@ Alpine.data('shippingForm', () => ({
 
     if (isLoggedIn()) {
       try {
-        const { address: saved, default_id } = await saveAddressApi(checkoutToBuyerAddress(candidate));
+        const { address: saved, default_id } = await saveAddressApi(
+          checkoutToBuyerAddress(candidate)
+        );
         const savedCheckout = buyerAddressToCheckout(saved);
         // Temp ID yerine gerçek backend ID ile güncelle
         this.savedAddresses = this.savedAddresses.map((a) =>
@@ -1037,5 +1141,4 @@ Alpine.data('shippingForm', () => ({
     this.isAddressSelectorOpen = false;
     this.isAddAddressModalOpen = false;
   },
-
 }));

@@ -4,8 +4,8 @@
  * Fetches categories dynamically from API, saves user preferences to backend.
  */
 
-import { t } from '../../i18n';
-import { api } from '../../utils/api';
+import { t } from "../../i18n";
+import { api } from "../../utils/api";
 
 export interface EmailCategory {
   id: string;
@@ -27,7 +27,7 @@ export interface EmailItem {
 async function fetchEmailPreferences(): Promise<EmailCategory[] | null> {
   try {
     const res = await api<{ message: { categories: EmailCategory[] } }>(
-      '/method/tradehub_core.api.v1.email_preferences.get_email_preferences'
+      "/method/tradehub_core.api.v1.email_preferences.get_email_preferences"
     );
     return res.message?.categories ?? [];
   } catch {
@@ -37,11 +37,11 @@ async function fetchEmailPreferences(): Promise<EmailCategory[] | null> {
 
 async function savePrefsToAPI(
   toggles: Record<string, boolean>,
-  checks: Record<string, boolean>,
+  checks: Record<string, boolean>
 ): Promise<void> {
   try {
-    await api('/method/tradehub_core.api.v1.email_preferences.save_email_preferences', {
-      method: 'POST',
+    await api("/method/tradehub_core.api.v1.email_preferences.save_email_preferences", {
+      method: "POST",
       body: JSON.stringify({ preferences: { toggles, checks } }),
     });
   } catch {
@@ -55,7 +55,7 @@ function renderEmailItem(item: EmailItem): string {
   return `
     <div class="email-pref__item flex items-start gap-3 py-4 px-6 border-b border-(--color-border-light,#f0f0f0) last:border-b-0 max-md:px-4 max-md:py-3 max-sm:px-3">
       <label class="email-pref__checkbox relative inline-flex items-center justify-center w-5 h-5 flex-shrink-0 mt-0.5 cursor-pointer">
-        <input type="checkbox" data-email-check="${item.id}" ${item.checked ? 'checked' : ''} class="opacity-0 w-0 h-0 absolute" />
+        <input type="checkbox" data-email-check="${item.id}" ${item.checked ? "checked" : ""} class="opacity-0 w-0 h-0 absolute" />
         <span class="email-pref__checkmark w-[18px] h-[18px] border-2 border-gray-300 rounded bg-white transition-all flex items-center justify-center"></span>
       </label>
       <div class="flex-1 min-w-0">
@@ -75,12 +75,12 @@ function renderCategory(cat: EmailCategory): string {
           <p class="text-[13px] max-sm:text-xs m-0" style="color:var(--color-text-secondary)">${cat.description}</p>
         </div>
         <label class="relative inline-flex w-12 h-[26px] flex-shrink-0 cursor-pointer">
-          <input type="checkbox" data-cat-toggle="${cat.id}" ${cat.enabled ? 'checked' : ''} class="opacity-0 w-0 h-0 absolute" />
+          <input type="checkbox" data-cat-toggle="${cat.id}" ${cat.enabled ? "checked" : ""} class="opacity-0 w-0 h-0 absolute" />
           <span class="email-pref__toggle-slider absolute inset-0 rounded-[13px] transition-colors"></span>
         </label>
       </div>
       <div class="border border-border-default border-t-0 rounded-b-lg">
-        ${cat.items.map(renderEmailItem).join('')}
+        ${cat.items.map(renderEmailItem).join("")}
       </div>
     </div>
   `;
@@ -89,15 +89,15 @@ function renderCategory(cat: EmailCategory): string {
 function renderContent(categories: EmailCategory[]): string {
   return `
     <div class="bg-white rounded-lg p-8 max-md:p-5 max-sm:p-3.5">
-      <p class="text-[13px] max-sm:text-xs mb-2 m-0" style="color:var(--color-text-secondary)">${t('settings.emailServices')}</p>
-      <h2 class="text-2xl max-sm:text-xl font-bold mb-2 m-0" style="color:var(--color-text-primary)">${t('settings.emailPreferences')}</h2>
-      <p class="text-sm max-sm:text-[13px] mb-4 m-0" style="color:var(--color-text-tertiary)">${t('settings.emailPreferencesDesc')}</p>
-      <p class="text-sm max-sm:text-[13px] mb-6 m-0" style="color:var(--color-text-primary)">${t('settings.emailPreferencesFor')} <strong x-text="userEmail || '...'" class="font-semibold"></strong></p>
+      <p class="text-[13px] max-sm:text-xs mb-2 m-0" style="color:var(--color-text-secondary)">${t("settings.emailServices")}</p>
+      <h2 class="text-2xl max-sm:text-xl font-bold mb-2 m-0" style="color:var(--color-text-primary)">${t("settings.emailPreferences")}</h2>
+      <p class="text-sm max-sm:text-[13px] mb-4 m-0" style="color:var(--color-text-tertiary)">${t("settings.emailPreferencesDesc")}</p>
+      <p class="text-sm max-sm:text-[13px] mb-6 m-0" style="color:var(--color-text-primary)">${t("settings.emailPreferencesFor")} <strong x-text="userEmail || '...'" class="font-semibold"></strong></p>
       <div class="flex flex-col gap-5 max-sm:gap-4">
-        ${categories.map(renderCategory).join('')}
+        ${categories.map(renderCategory).join("")}
       </div>
       <div class="mt-5">
-        <a href="#" id="email-prefs-unsubscribe-all" class="text-[13px] no-underline hover:underline" style="color:var(--color-primary-500, #cc9900)">${t('settings.unsubscribeAll')}</a>
+        <a href="#" id="email-prefs-unsubscribe-all" class="text-[13px] no-underline hover:underline" style="color:var(--color-primary-500, #cc9900)">${t("settings.unsubscribeAll")}</a>
       </div>
     </div>
   `;
@@ -106,7 +106,7 @@ function renderContent(categories: EmailCategory[]): string {
 function renderLoading(): string {
   return `
     <div class="bg-white rounded-lg p-8 max-md:p-5 max-sm:p-3.5 flex items-center justify-center min-h-[200px]">
-      <span class="text-sm" style="color:var(--color-text-secondary)">${t('common.loading')}</span>
+      <span class="text-sm" style="color:var(--color-text-secondary)">${t("common.loading")}</span>
     </div>
   `;
 }
@@ -135,7 +135,7 @@ export function SettingsEmailPreferences(): string {
 }
 
 export function initSettingsEmailPreferences(): void {
-  const root = document.getElementById('email-prefs-root')!;
+  const root = document.getElementById("email-prefs-root")!;
   if (!root) return;
 
   let saveTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -143,24 +143,24 @@ export function initSettingsEmailPreferences(): void {
   // ── Helpers ──
 
   function isAnyChecked(): boolean {
-    return Array.from(root.querySelectorAll<HTMLInputElement>('[data-email-check]')).some(cb => cb.checked);
+    return Array.from(root.querySelectorAll<HTMLInputElement>("[data-email-check]")).some(
+      (cb) => cb.checked
+    );
   }
 
   function syncToggleWithCheckboxes(category: Element): void {
-    const toggle = category.querySelector<HTMLInputElement>('[data-cat-toggle]');
+    const toggle = category.querySelector<HTMLInputElement>("[data-cat-toggle]");
     if (!toggle) return;
     const anyChecked = Array.from(
-      category.querySelectorAll<HTMLInputElement>('[data-email-check]')
-    ).some(cb => cb.checked);
+      category.querySelectorAll<HTMLInputElement>("[data-email-check]")
+    ).some((cb) => cb.checked);
     toggle.checked = anyChecked;
   }
 
   function updateUnsubscribeLabel(): void {
-    const btn = document.getElementById('email-prefs-unsubscribe-all');
+    const btn = document.getElementById("email-prefs-unsubscribe-all");
     if (!btn) return;
-    btn.textContent = isAnyChecked()
-      ? t('settings.unsubscribeAll')
-      : t('settings.resubscribeAll');
+    btn.textContent = isAnyChecked() ? t("settings.unsubscribeAll") : t("settings.resubscribeAll");
   }
 
   function onPrefsChanged(): void {
@@ -169,10 +169,10 @@ export function initSettingsEmailPreferences(): void {
     saveTimeout = setTimeout(() => {
       const toggles: Record<string, boolean> = {};
       const checks: Record<string, boolean> = {};
-      root.querySelectorAll<HTMLInputElement>('[data-cat-toggle]').forEach(el => {
+      root.querySelectorAll<HTMLInputElement>("[data-cat-toggle]").forEach((el) => {
         toggles[el.dataset.catToggle!] = el.checked;
       });
-      root.querySelectorAll<HTMLInputElement>('[data-email-check]').forEach(el => {
+      root.querySelectorAll<HTMLInputElement>("[data-email-check]").forEach((el) => {
         checks[el.dataset.emailCheck!] = el.checked;
       });
       savePrefsToAPI(toggles, checks);
@@ -182,11 +182,11 @@ export function initSettingsEmailPreferences(): void {
   // ── Events ──
 
   function bindEvents(): void {
-    root.querySelectorAll<HTMLInputElement>('[data-cat-toggle]').forEach(toggle => {
-      toggle.addEventListener('change', () => {
-        const category = toggle.closest('.email-pref__category');
+    root.querySelectorAll<HTMLInputElement>("[data-cat-toggle]").forEach((toggle) => {
+      toggle.addEventListener("change", () => {
+        const category = toggle.closest(".email-pref__category");
         if (category) {
-          category.querySelectorAll<HTMLInputElement>('[data-email-check]').forEach(cb => {
+          category.querySelectorAll<HTMLInputElement>("[data-email-check]").forEach((cb) => {
             cb.checked = toggle.checked;
           });
         }
@@ -194,21 +194,25 @@ export function initSettingsEmailPreferences(): void {
       });
     });
 
-    root.querySelectorAll<HTMLInputElement>('[data-email-check]').forEach(cb => {
-      cb.addEventListener('change', () => {
-        const category = cb.closest('.email-pref__category');
+    root.querySelectorAll<HTMLInputElement>("[data-email-check]").forEach((cb) => {
+      cb.addEventListener("change", () => {
+        const category = cb.closest(".email-pref__category");
         if (category) syncToggleWithCheckboxes(category);
         onPrefsChanged();
       });
     });
 
-    const unsubBtn = document.getElementById('email-prefs-unsubscribe-all');
+    const unsubBtn = document.getElementById("email-prefs-unsubscribe-all");
     if (unsubBtn) {
-      unsubBtn.addEventListener('click', (e) => {
+      unsubBtn.addEventListener("click", (e) => {
         e.preventDefault();
         const newState = !isAnyChecked();
-        root.querySelectorAll<HTMLInputElement>('[data-cat-toggle]').forEach(el => { el.checked = newState; });
-        root.querySelectorAll<HTMLInputElement>('[data-email-check]').forEach(el => { el.checked = newState; });
+        root.querySelectorAll<HTMLInputElement>("[data-cat-toggle]").forEach((el) => {
+          el.checked = newState;
+        });
+        root.querySelectorAll<HTMLInputElement>("[data-email-check]").forEach((el) => {
+          el.checked = newState;
+        });
         onPrefsChanged();
       });
     }
@@ -223,7 +227,7 @@ export function initSettingsEmailPreferences(): void {
     // null = API hatası, [] = henüz kategori yok
     if (categories === null) {
       root.innerHTML = renderError();
-      document.getElementById('email-prefs-retry')?.addEventListener('click', loadAndRender);
+      document.getElementById("email-prefs-retry")?.addEventListener("click", loadAndRender);
       return;
     }
 
@@ -233,7 +237,7 @@ export function initSettingsEmailPreferences(): void {
     }
 
     root.innerHTML = renderContent(categories);
-    root.querySelectorAll('.email-pref__category').forEach(cat => syncToggleWithCheckboxes(cat));
+    root.querySelectorAll(".email-pref__category").forEach((cat) => syncToggleWithCheckboxes(cat));
     bindEvents();
     updateUnsubscribeLabel();
   }

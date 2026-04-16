@@ -4,12 +4,12 @@
  * Checkbox and QuantityInput children have their own Alpine scopes.
  */
 
-import type { CartSku } from '../../../types/cart';
-import { Checkbox } from '../atoms/Checkbox';
-import { PriceDisplay } from '../atoms/PriceDisplay';
-import { QuantityInput } from '../atoms/QuantityInput';
-import { formatPrice } from '../../../services/currencyService';
-import trashIcon from '../../../assets/images/trash.png';
+import type { CartSku } from "../../../types/cart";
+import { Checkbox } from "../atoms/Checkbox";
+import { PriceDisplay } from "../atoms/PriceDisplay";
+import { QuantityInput } from "../atoms/QuantityInput";
+import { formatPrice } from "../../../services/currencyService";
+import trashIcon from "../../../assets/images/trash.png";
 
 export interface SkuRowProps {
   sku: CartSku;
@@ -18,10 +18,10 @@ export interface SkuRowProps {
 
 function escapeHtml(value: string): string {
   return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
 
 export function SkuRow({ sku, productHref }: SkuRowProps): string {
@@ -32,12 +32,12 @@ export function SkuRow({ sku, productHref }: SkuRowProps): string {
     : imgContent;
 
   return `
-    <article class="sc-c-sku-container-new rounded-md grid grid-cols-[auto_92px_minmax(0,1fr)] gap-3 items-start p-3 max-sm:p-2 max-sm:grid-cols-[auto_72px_minmax(0,1fr)] max-sm:gap-2 transition-colors${unavailable ? ' opacity-60 bg-surface-muted' : ''}" data-sku-id="${escapeHtml(sku.id)}" x-data>
+    <article class="sc-c-sku-container-new rounded-md grid grid-cols-[auto_92px_minmax(0,1fr)] gap-3 items-start p-3 max-sm:p-2 max-sm:grid-cols-[auto_72px_minmax(0,1fr)] max-sm:gap-2 transition-colors${unavailable ? " opacity-60 bg-surface-muted" : ""}" data-sku-id="${escapeHtml(sku.id)}" x-data>
       <div class="pt-9 max-sm:pt-7">
-        ${Checkbox({ id: `sku-checkbox-${sku.id}`, checked: sku.selected, onChange: unavailable ? '' : `sku-select-${sku.id}`, disabled: unavailable })}
+        ${Checkbox({ id: `sku-checkbox-${sku.id}`, checked: sku.selected, onChange: unavailable ? "" : `sku-select-${sku.id}`, disabled: unavailable })}
       </div>
 
-      <div class="w-[92px] h-[92px] max-sm:w-[72px] max-sm:h-[72px] rounded-lg border border-border-default overflow-hidden bg-surface-muted${unavailable ? ' grayscale' : ''}">
+      <div class="w-[92px] h-[92px] max-sm:w-[72px] max-sm:h-[72px] rounded-lg border border-border-default overflow-hidden bg-surface-muted${unavailable ? " grayscale" : ""}">
         ${imgWrapper}
       </div>
 
@@ -45,10 +45,14 @@ export function SkuRow({ sku, productHref }: SkuRowProps): string {
         <div class="flex items-start justify-between gap-2">
           <div class="flex flex-col gap-1 min-w-0">
             <span class="text-sm text-text-body truncate">${escapeHtml(sku.variantText)}</span>
-            ${unavailable ? `<span class="inline-flex items-center gap-1 text-xs font-medium text-red-600 bg-red-50 border border-red-200 rounded px-2 py-0.5 w-fit">
+            ${
+              unavailable
+                ? `<span class="inline-flex items-center gap-1 text-xs font-medium text-red-600 bg-red-50 border border-red-200 rounded px-2 py-0.5 w-fit">
               <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>
               Bu ürün artık satışta değil
-            </span>` : ''}
+            </span>`
+                : ""
+            }
           </div>
 
           <div class="relative group">
@@ -63,11 +67,13 @@ export function SkuRow({ sku, productHref }: SkuRowProps): string {
         </div>
 
         <div class="mt-3 flex items-end justify-between gap-3 flex-wrap">
-          ${PriceDisplay({ amount: sku.unitPrice, fromCurrency: sku.baseCurrency || 'USD', unit: `/${sku.unit}` })}
-          <div class="flex flex-col items-end ${unavailable ? 'pointer-events-none opacity-50' : ''}">
-            ${QuantityInput({ id: `sku-qty-${sku.id}`, value: sku.quantity, min: sku.minQty || 1, max: sku.maxQty, step: sku.sellInMoqMultiples ? (sku.minQty || 1) : 1 })}
-            ${!unavailable ? `<span class="sc-c-sku-line-total mt-1 text-[12px] font-semibold text-[#555]">${formatPrice(sku.unitPrice * sku.quantity, sku.baseCurrency || 'USD')}</span>` : ''}
-            ${!unavailable ? `<div class="sc-c-sku-moq-warning mt-2 text-right text-[14px] leading-[20px] text-[#dc2626] hidden">
+          ${PriceDisplay({ amount: sku.unitPrice, fromCurrency: sku.baseCurrency || "USD", unit: `/${sku.unit}` })}
+          <div class="flex flex-col items-end ${unavailable ? "pointer-events-none opacity-50" : ""}">
+            ${QuantityInput({ id: `sku-qty-${sku.id}`, value: sku.quantity, min: sku.minQty || 1, max: sku.maxQty, step: sku.sellInMoqMultiples ? sku.minQty || 1 : 1 })}
+            ${!unavailable ? `<span class="sc-c-sku-line-total mt-1 text-[12px] font-semibold text-[#555]">${formatPrice(sku.unitPrice * sku.quantity, sku.baseCurrency || "USD")}</span>` : ""}
+            ${
+              !unavailable
+                ? `<div class="sc-c-sku-moq-warning mt-2 text-right text-[14px] leading-[20px] text-[#dc2626] hidden">
               <span class="sc-c-sku-moq-missing">0</span> more required to check out
               <button
                 type="button"
@@ -76,7 +82,9 @@ export function SkuRow({ sku, productHref }: SkuRowProps): string {
               >
                 Add all
               </button>
-            </div>` : ''}
+            </div>`
+                : ""
+            }
           </div>
         </div>
       </div>

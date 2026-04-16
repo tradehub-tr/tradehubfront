@@ -3,11 +3,11 @@
  * Flowbite-based tabbed content: Description, Reviews, Company, FAQ.
  */
 
-import { AttributesTabContent } from './AttributesTabContent';
-import { ProductReviews } from './ProductReviews';
-import { CompanyProfile } from './CompanyProfile';
-import { ProductDescription } from './ProductDescription';
-import { t } from '../../i18n';
+import { AttributesTabContent } from "./AttributesTabContent";
+import { ProductReviews } from "./ProductReviews";
+import { CompanyProfile } from "./CompanyProfile";
+import { ProductDescription } from "./ProductDescription";
+import { t } from "../../i18n";
 
 interface TabConfig {
   id: string;
@@ -17,10 +17,30 @@ interface TabConfig {
 }
 
 const tabs: TabConfig[] = [
-  { id: 'attributes', label: t('product.attributes'), i18nKey: 'product.attributes', content: AttributesTabContent },
-  { id: 'reviews', label: t('product.reviews'), i18nKey: 'product.reviews', content: ProductReviews },
-  { id: 'company', label: t('product.supplier'), i18nKey: 'product.supplier', content: CompanyProfile },
-  { id: 'description', label: t('product.description'), i18nKey: 'product.description', content: ProductDescription },
+  {
+    id: "attributes",
+    label: t("product.attributes"),
+    i18nKey: "product.attributes",
+    content: AttributesTabContent,
+  },
+  {
+    id: "reviews",
+    label: t("product.reviews"),
+    i18nKey: "product.reviews",
+    content: ProductReviews,
+  },
+  {
+    id: "company",
+    label: t("product.supplier"),
+    i18nKey: "product.supplier",
+    content: CompanyProfile,
+  },
+  {
+    id: "description",
+    label: t("product.description"),
+    i18nKey: "product.description",
+    content: ProductDescription,
+  },
 ];
 
 export function ProductTabs(): string {
@@ -33,7 +53,9 @@ export function ProductTabs(): string {
         style="border-bottom: 2px solid var(--pd-spec-border, #e5e5e5);"
         role="tablist"
       >
-        ${tabs.map((tab) => `
+        ${tabs
+          .map(
+            (tab) => `
           <button
             type="button"
             id="tab-btn-${tab.id}"
@@ -50,22 +72,28 @@ export function ProductTabs(): string {
               :style="activeTab === '${tab.id}' ? 'background: var(--pd-tab-active-border, #cc9900)' : 'background: transparent'"
             ></span>
           </button>
-        `).join('')}
+        `
+          )
+          .join("")}
       </div>
 
       <!-- Tab Content Panels -->
-      ${tabs.map((tab, i) => `
+      ${tabs
+        .map(
+          (tab, i) => `
         <div
           id="tab-content-${tab.id}"
           class="product-tab-panel pt-6"
           role="tabpanel"
           aria-labelledby="tab-btn-${tab.id}"
           x-show="activeTab === '${tab.id}'"
-          ${i !== 0 ? 'x-cloak' : ''}
+          ${i !== 0 ? "x-cloak" : ""}
         >
           ${tab.content()}
         </div>
-      `).join('')}
+      `
+        )
+        .join("")}
     </section>
   `;
 }
@@ -75,24 +103,24 @@ export function initProductTabs(): void {
   // Only the IntersectionObserver sticky logic remains as vanilla JS
 
   // Sticky tab bar on scroll
-  const tabNav = document.getElementById('product-tabs-nav');
-  const tabSection = document.getElementById('product-tabs-section');
+  const tabNav = document.getElementById("product-tabs-nav");
+  const tabSection = document.getElementById("product-tabs-section");
   if (tabNav && tabSection) {
-    const header = document.getElementById('sticky-header');
+    const header = document.getElementById("sticky-header");
     const headerHeight = header ? header.offsetHeight : 0;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) {
-          tabNav.style.position = 'sticky';
+          tabNav.style.position = "sticky";
           tabNav.style.top = `${headerHeight}px`;
-          tabNav.style.zIndex = '20';
-          tabNav.style.background = 'var(--pd-bg, #ffffff)';
+          tabNav.style.zIndex = "20";
+          tabNav.style.background = "var(--pd-bg, #ffffff)";
         } else {
-          tabNav.style.position = '';
-          tabNav.style.top = '';
-          tabNav.style.zIndex = '';
-          tabNav.style.background = '';
+          tabNav.style.position = "";
+          tabNav.style.top = "";
+          tabNav.style.zIndex = "";
+          tabNav.style.background = "";
         }
       },
       { rootMargin: `-${headerHeight}px 0px 0px 0px`, threshold: 1 }

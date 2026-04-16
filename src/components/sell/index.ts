@@ -1,2 +1,2 @@
-export { SellPageLayout } from './SellPageLayout';
-export { PricingPageLayout } from './PricingPageLayout';
+export { SellPageLayout } from "./SellPageLayout";
+export { PricingPageLayout } from "./PricingPageLayout";

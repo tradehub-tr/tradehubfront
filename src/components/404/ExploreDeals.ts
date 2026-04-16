@@ -4,12 +4,12 @@
  * Falls back to empty state if API is unavailable.
  */
 
-import Swiper from 'swiper';
-import { Navigation } from 'swiper/modules';
-import 'swiper/swiper-bundle.css';
-import { searchListings } from '../../services/listingService';
-import { initCurrency } from '../../services/currencyService';
-import type { ProductListingCard } from '../../types/productListing';
+import Swiper from "swiper";
+import { Navigation } from "swiper/modules";
+import "swiper/swiper-bundle.css";
+import { searchListings } from "../../services/listingService";
+import { initCurrency } from "../../services/currencyService";
+import type { ProductListingCard } from "../../types/productListing";
 
 /* ── Types ── */
 
@@ -55,7 +55,7 @@ function renderProductCard(p: ExploreProduct): string {
   return `
     <div class="swiper-slide">
       <a href="${p.href}" class="group/card relative flex flex-col min-w-0" aria-label="${p.name}">
-        ${p.badge ? `<span class="absolute top-2 left-2 z-10 inline-flex items-center rounded-sm text-[10px] font-bold leading-none px-1.5 py-0.5 text-white" style="background-color:#DE0505">${p.badge}</span>` : ''}
+        ${p.badge ? `<span class="absolute top-2 left-2 z-10 inline-flex items-center rounded-sm text-[10px] font-bold leading-none px-1.5 py-0.5 text-white" style="background-color:#DE0505">${p.badge}</span>` : ""}
         <div class="aspect-square w-full mb-2 flex-shrink-0">
           ${renderProductImage(p)}
         </div>
@@ -84,8 +84,8 @@ function mapToExploreProduct(p: ProductListingCard): ExploreProduct {
     name: p.name,
     href: p.href || `/pages/product-detail.html?id=${p.id}`,
     price: p.price,
-    moq: p.moq || '1 adet',
-    imageSrc: p.imageSrc || '',
+    moq: p.moq || "1 adet",
+    imageSrc: p.imageSrc || "",
     badge: p.sellingPoint || undefined,
   };
 }
@@ -94,14 +94,12 @@ function groupByCategory(products: ProductListingCard[]): ExploreCategory[] {
   const allProducts = products.map(mapToExploreProduct);
 
   // "Tümünü Gör" tab always first with all products
-  const categories: ExploreCategory[] = [
-    { label: 'Tümünü Gör', products: allProducts },
-  ];
+  const categories: ExploreCategory[] = [{ label: "Tümünü Gör", products: allProducts }];
 
   // Group remaining by category (first category string from each product)
   const grouped = new Map<string, ExploreProduct[]>();
   for (const p of products) {
-    const catName = p.category || '';
+    const catName = p.category || "";
     if (!catName) continue;
     if (!grouped.has(catName)) grouped.set(catName, []);
     grouped.get(catName)!.push(mapToExploreProduct(p));
@@ -151,7 +149,7 @@ export function ExploreDeals(): string {
 export function initExploreDeals(): void {
   initCurrency()
     .then(() => searchListings({ is_featured: true, page_size: 20 }))
-    .then(result => {
+    .then((result) => {
       if (result.products.length === 0) {
         showEmptyState();
         return;
@@ -163,14 +161,14 @@ export function initExploreDeals(): void {
       const swipers = initSwipers(categories);
       initTabSwitching(swipers);
     })
-    .catch(err => {
-      console.warn('[ExploreDeals] API load failed:', err);
+    .catch((err) => {
+      console.warn("[ExploreDeals] API load failed:", err);
       showEmptyState();
     });
 }
 
 function showEmptyState(): void {
-  const panels = document.getElementById('explore-panels');
+  const panels = document.getElementById("explore-panels");
   if (!panels) return;
   panels.innerHTML = `
     <div class="flex items-center justify-center py-12">
@@ -185,34 +183,42 @@ function showEmptyState(): void {
 }
 
 function renderTabs(categories: ExploreCategory[]): void {
-  const tabsContainer = document.getElementById('explore-tabs');
+  const tabsContainer = document.getElementById("explore-tabs");
   if (!tabsContainer) return;
 
-  tabsContainer.innerHTML = categories.map((cat, i) => `
+  tabsContainer.innerHTML = categories
+    .map(
+      (cat, i) => `
     <button
       type="button"
-      class="explore-tab whitespace-nowrap px-1 pb-2 text-sm font-medium transition-colors duration-150 border-b-2 ${i === 0 ? 'text-primary-600 border-primary-500' : 'text-secondary-500 border-transparent hover:text-secondary-700'}"
+      class="explore-tab whitespace-nowrap px-1 pb-2 text-sm font-medium transition-colors duration-150 border-b-2 ${i === 0 ? "text-primary-600 border-primary-500" : "text-secondary-500 border-transparent hover:text-secondary-700"}"
       data-tab-index="${i}"
     >${cat.label}</button>
-  `).join('');
+  `
+    )
+    .join("");
 }
 
 function renderPanels(categories: ExploreCategory[]): void {
-  const panelsContainer = document.getElementById('explore-panels');
+  const panelsContainer = document.getElementById("explore-panels");
   if (!panelsContainer) return;
 
-  panelsContainer.innerHTML = categories.map((cat, i) => `
-    <div class="explore-panel ${i === 0 ? '' : 'hidden'}" data-panel-index="${i}">
+  panelsContainer.innerHTML = categories
+    .map(
+      (cat, i) => `
+    <div class="explore-panel ${i === 0 ? "" : "hidden"}" data-panel-index="${i}">
       <div class="group/explore relative">
         <div class="swiper explore-swiper-${i} overflow-hidden" aria-label="${cat.label} ürünleri">
           <div class="swiper-wrapper">
-            ${cat.products.map(p => renderProductCard(p)).join('')}
+            ${cat.products.map((p) => renderProductCard(p)).join("")}
           </div>
         </div>
         ${renderNavArrows(i)}
       </div>
     </div>
-  `).join('');
+  `
+    )
+    .join("");
 }
 
 function initSwipers(categories: ExploreCategory[]): Swiper[] {
@@ -247,24 +253,24 @@ function initSwipers(categories: ExploreCategory[]): Swiper[] {
 }
 
 function initTabSwitching(swipers: Swiper[]): void {
-  const tabs = document.querySelectorAll<HTMLButtonElement>('.explore-tab');
-  const panels = document.querySelectorAll<HTMLElement>('.explore-panel');
+  const tabs = document.querySelectorAll<HTMLButtonElement>(".explore-tab");
+  const panels = document.querySelectorAll<HTMLElement>(".explore-panel");
 
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
       const idx = tab.dataset.tabIndex;
       if (!idx) return;
 
-      tabs.forEach(t => {
-        t.classList.remove('text-primary-600', 'border-primary-500');
-        t.classList.add('text-secondary-500', 'border-transparent');
+      tabs.forEach((t) => {
+        t.classList.remove("text-primary-600", "border-primary-500");
+        t.classList.add("text-secondary-500", "border-transparent");
       });
-      tab.classList.remove('text-secondary-500', 'border-transparent');
-      tab.classList.add('text-primary-600', 'border-primary-500');
+      tab.classList.remove("text-secondary-500", "border-transparent");
+      tab.classList.add("text-primary-600", "border-primary-500");
 
-      panels.forEach(p => p.classList.add('hidden'));
+      panels.forEach((p) => p.classList.add("hidden"));
       const target = document.querySelector<HTMLElement>(`[data-panel-index="${idx}"]`);
-      target?.classList.remove('hidden');
+      target?.classList.remove("hidden");
 
       const swiperIdx = parseInt(idx, 10);
       if (swipers[swiperIdx]) {

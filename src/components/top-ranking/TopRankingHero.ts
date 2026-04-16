@@ -9,8 +9,8 @@
  * - TopRankingStickyMobileHeader() — fixed header that appears when hero scrolls out
  */
 
-import { t } from '../../i18n';
-import { TopRankingFilters } from './TopRankingFilters';
+import { t } from "../../i18n";
+import { TopRankingFilters } from "./TopRankingFilters";
 
 /**
  * Mobile-only compact header for Top Ranking page
@@ -21,13 +21,13 @@ export function TopRankingMobileHeader(): string {
     <div class="lg:hidden bg-white">
       <!-- Nav row: back + title + search -->
       <div class="flex items-center justify-between px-4 pt-3 pb-3">
-        <a href="javascript:history.back()" class="text-gray-800 p-1 -ml-1" aria-label="${t('common.goBack')}" data-i18n-aria-label="common.goBack">
+        <a href="javascript:history.back()" class="text-gray-800 p-1 -ml-1" aria-label="${t("common.goBack")}" data-i18n-aria-label="common.goBack">
           <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/>
           </svg>
         </a>
-        <h1 class="text-base font-bold text-[#222]" data-i18n="topRankingPage.heroTitle">${t('topRankingPage.heroTitle')}</h1>
-        <button type="button" class="text-gray-800 p-1 -mr-1" aria-label="${t('common.search')}" data-i18n-aria-label="common.search">
+        <h1 class="text-base font-bold text-[#222]" data-i18n="topRankingPage.heroTitle">${t("topRankingPage.heroTitle")}</h1>
+        <button type="button" class="text-gray-800 p-1 -mr-1" aria-label="${t("common.search")}" data-i18n-aria-label="common.search">
           <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>
           </svg>
@@ -49,14 +49,14 @@ export function TopRankingStickyMobileHeader(): string {
     >
       <div class="flex items-center gap-2.5 px-3 py-2">
         <!-- Back arrow -->
-        <a href="javascript:history.back()" class="text-gray-800 flex-shrink-0" aria-label="${t('common.goBack')}" data-i18n-aria-label="common.goBack">
+        <a href="javascript:history.back()" class="text-gray-800 flex-shrink-0" aria-label="${t("common.goBack")}" data-i18n-aria-label="common.goBack">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/>
           </svg>
         </a>
 
         <!-- Title -->
-        <span class="text-sm font-bold text-gray-900 flex-shrink-0 whitespace-nowrap" data-i18n="topRankingPage.heroTitle">${t('topRankingPage.heroTitle')}</span>
+        <span class="text-sm font-bold text-gray-900 flex-shrink-0 whitespace-nowrap" data-i18n="topRankingPage.heroTitle">${t("topRankingPage.heroTitle")}</span>
 
         <!-- Search input -->
         <form action="/pages/products.html" method="GET" class="flex-1 min-w-0">
@@ -68,7 +68,7 @@ export function TopRankingStickyMobileHeader(): string {
               type="text"
               name="q"
               class="flex-1 bg-transparent text-sm text-gray-700 border-0 outline-none p-0 min-w-0"
-              placeholder="${t('search.placeholder')}"
+              placeholder="${t("search.placeholder")}"
               data-i18n-placeholder="search.placeholder"
               autocomplete="off"
             />
@@ -89,11 +89,11 @@ export function TopRankingHero(): string {
           <h1
             class="text-3xl sm:text-[40px] md:text-[44px] font-bold leading-tight text-secondary-800"
             data-i18n="topRankingPage.heroTitle"
-          >${t('topRankingPage.heroTitle')}</h1>
+          >${t("topRankingPage.heroTitle")}</h1>
           <p
             class="mt-1 text-sm sm:text-base font-medium text-secondary-500"
             data-i18n="topRankingPage.heroSubtitle"
-          >${t('topRankingPage.heroSubtitle')}</p>
+          >${t("topRankingPage.heroSubtitle")}</p>
         </div>
 
         <div class="flex justify-center">

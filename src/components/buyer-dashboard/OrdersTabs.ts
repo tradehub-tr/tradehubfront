@@ -6,8 +6,8 @@
  * @click.outside on wrapper to close dropdown.
  */
 
-import type { OrdersTabItem, OrdersFilterItem } from '../../types/buyerDashboard';
-import { t } from '../../i18n';
+import type { OrdersTabItem, OrdersFilterItem } from "../../types/buyerDashboard";
+import { t } from "../../i18n";
 
 export interface OrdersTabsProps {
   tabs: OrdersTabItem[];
@@ -29,12 +29,19 @@ function checkSvg(): string {
   </svg>`;
 }
 
-export function OrdersTabs({ tabs, filters, activeTabId, selectedFilterId, dropdownOpen }: OrdersTabsProps): string {
-  const tabsHtml = tabs.map((tab) => {
-    const isActive = tab.id === activeTabId;
-    const activeClass = isActive ? 'orders__tab--active' : '';
+export function OrdersTabs({
+  tabs,
+  filters,
+  activeTabId,
+  selectedFilterId,
+  dropdownOpen,
+}: OrdersTabsProps): string {
+  const tabsHtml = tabs
+    .map((tab) => {
+      const isActive = tab.id === activeTabId;
+      const activeClass = isActive ? "orders__tab--active" : "";
 
-    return `
+      return `
       <button
         class="orders__tab ${activeClass} inline-flex items-center gap-1 px-3.5 py-1.5 rounded-(--radius-tab) border-none text-[13px] font-medium cursor-pointer whitespace-nowrap transition-all max-md:snap-start max-md:shrink-0"
         :class="{ 'orders__tab--active': activeTabId === '${tab.id}' }"
@@ -45,18 +52,20 @@ export function OrdersTabs({ tabs, filters, activeTabId, selectedFilterId, dropd
         aria-label="${tab.label}"
       >
         <span>${tab.label}</span>
-        ${tab.hasDropdown ? chevronSvg() : ''}
+        ${tab.hasDropdown ? chevronSvg() : ""}
       </button>
     `;
-  }).join('');
+    })
+    .join("");
 
-  const filtersHtml = filters.map((filter) => {
-    const isSelected = filter.id === selectedFilterId;
-    const selectedClass = isSelected ? 'orders__dropdown-item--selected' : '';
-    // x-cloak on non-initially-selected check SVGs prevents flash before Alpine
-    const cloakAttr = isSelected ? '' : 'x-cloak';
+  const filtersHtml = filters
+    .map((filter) => {
+      const isSelected = filter.id === selectedFilterId;
+      const selectedClass = isSelected ? "orders__dropdown-item--selected" : "";
+      // x-cloak on non-initially-selected check SVGs prevents flash before Alpine
+      const cloakAttr = isSelected ? "" : "x-cloak";
 
-    return `
+      return `
       <button
         class="orders__dropdown-item ${selectedClass} flex items-center justify-between w-full py-2 px-3.5 border-none bg-transparent text-[13px] text-(--color-text-body,#333333) cursor-pointer transition-colors text-left"
         :class="{ 'orders__dropdown-item--selected': selectedFilterId === '${filter.id}' }"
@@ -69,16 +78,17 @@ export function OrdersTabs({ tabs, filters, activeTabId, selectedFilterId, dropd
         </span>
       </button>
     `;
-  }).join('');
+    })
+    .join("");
 
-  const dropdownVisibility = dropdownOpen ? 'orders__dropdown--open' : '';
+  const dropdownVisibility = dropdownOpen ? "orders__dropdown--open" : "";
 
   return `
     <div class="orders__tabs-wrapper relative px-5 max-sm:px-3" @click.outside="dropdownOpen = false">
-      <div class="orders__tabs flex gap-2 flex-wrap max-sm:flex-nowrap max-sm:overflow-x-auto max-sm:scrollbar-none max-md:px-3 max-md:snap-x max-md:snap-mandatory" role="tablist" aria-label="${t('ordersTabs.ariaOrderFilters')}">
+      <div class="orders__tabs flex gap-2 flex-wrap max-sm:flex-nowrap max-sm:overflow-x-auto max-sm:scrollbar-none max-md:px-3 max-md:snap-x max-md:snap-mandatory" role="tablist" aria-label="${t("ordersTabs.ariaOrderFilters")}">
         ${tabsHtml}
       </div>
-      <div class="orders__dropdown ${dropdownVisibility}" :class="{ 'orders__dropdown--open': dropdownOpen }" role="menu" aria-label="${t('ordersTabs.ariaOrderStatusFilter')}">
+      <div class="orders__dropdown ${dropdownVisibility}" :class="{ 'orders__dropdown--open': dropdownOpen }" role="menu" aria-label="${t("ordersTabs.ariaOrderStatusFilter")}">
         ${filtersHtml}
       </div>
     </div>

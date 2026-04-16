@@ -5,7 +5,7 @@
  * Alpine.js drives accordion state.
  */
 
-import { t } from '../../i18n';
+import { t } from "../../i18n";
 
 export function FAQDetailLayout(): string {
   return `
@@ -20,9 +20,9 @@ export function FAQDetailLayout(): string {
       <div class="bg-white border-b border-gray-200 py-4">
         <div class="max-w-[900px] mx-auto px-4">
           <nav class="flex items-center gap-2 text-sm text-gray-500">
-            <a href="help-center.html" class="hover:text-primary-500 transition-colors">${t('faqDetail.home')}</a>
+            <a href="help-center.html" class="hover:text-primary-500 transition-colors">${t("faqDetail.home")}</a>
             <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6"/></svg>
-            <a href="faq.html" class="hover:text-primary-500 transition-colors">${t('faqDetail.faq')}</a>
+            <a href="faq.html" class="hover:text-primary-500 transition-colors">${t("faqDetail.faq")}</a>
             <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6"/></svg>
             <span class="text-gray-400" x-text="categoryLabel"></span>
             <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6"/></svg>
@@ -53,7 +53,7 @@ export function FAQDetailLayout(): string {
           <!-- Back to FAQ -->
           <a href="faq.html" class="mt-4 flex items-center gap-2 text-sm text-primary-500 hover:text-primary-700 transition-colors px-1">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/></svg>
-            <span>${t('faqDetail.backToFaq')}</span>
+            <span>${t("faqDetail.backToFaq")}</span>
           </a>
         </aside>
 
@@ -63,7 +63,7 @@ export function FAQDetailLayout(): string {
           <!-- Mobile back button -->
           <a href="faq.html" class="lg:hidden flex items-center gap-2 text-sm text-primary-500 hover:text-primary-700 transition-colors mb-4">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/></svg>
-            <span>${t('faqDetail.backToFaq')}</span>
+            <span>${t("faqDetail.backToFaq")}</span>
           </a>
 
           <!-- Title & description -->
@@ -125,9 +125,9 @@ export function FAQDetailLayout(): string {
               <svg class="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"/>
               </svg>
-              <p class="text-gray-500 text-sm">${t('faqDetail.noContent')}</p>
+              <p class="text-gray-500 text-sm">${t("faqDetail.noContent")}</p>
               <a href="faq.html" class="inline-flex items-center gap-1 text-sm text-primary-500 hover:underline mt-3">
-                <span>${t('faqDetail.backToFaq')}</span>
+                <span>${t("faqDetail.backToFaq")}</span>
               </a>
             </div>
           </template>
@@ -135,30 +135,30 @@ export function FAQDetailLayout(): string {
           <!-- Helpful section -->
           <div x-show="faqItems.length > 0" class="bg-white rounded-md shadow-sm border border-gray-100 p-5 mt-4">
             <div class="flex items-center justify-between">
-              <p class="text-sm text-gray-600">${t('faqDetail.wasHelpful')}</p>
+              <p class="text-sm text-gray-600">${t("faqDetail.wasHelpful")}</p>
               <div class="flex items-center gap-2">
                 <button
                   @click="helpful = 'yes'"
                   class="px-4 py-1.5 text-sm rounded-full border transition-all"
                   :class="helpful === 'yes' ? 'bg-green-50 border-green-300 text-green-700' : 'border-gray-200 text-gray-500 hover:border-green-300 hover:text-green-600'"
                 >
-                  <span class="mr-1">&uarr;</span> ${t('faqDetail.yes')}
+                  <span class="mr-1">&uarr;</span> ${t("faqDetail.yes")}
                 </button>
                 <button
                   @click="helpful = 'no'"
                   class="px-4 py-1.5 text-sm rounded-full border transition-all"
                   :class="helpful === 'no' ? 'bg-red-50 border-red-300 text-red-700' : 'border-gray-200 text-gray-500 hover:border-red-300 hover:text-red-600'"
                 >
-                  <span class="mr-1">&darr;</span> ${t('faqDetail.no')}
+                  <span class="mr-1">&darr;</span> ${t("faqDetail.no")}
                 </button>
               </div>
             </div>
-            <p x-show="helpful" x-transition class="text-xs text-gray-400 mt-2">${t('faqDetail.thankYou')}</p>
+            <p x-show="helpful" x-transition class="text-xs text-gray-400 mt-2">${t("faqDetail.thankYou")}</p>
           </div>
 
           <!-- Related topics -->
           <div x-show="relatedTopics.length > 0" class="bg-white rounded-md shadow-sm border border-gray-100 p-5 mt-4">
-            <h3 class="text-sm font-bold text-gray-800 mb-3">${t('faqDetail.relatedTopics')}</h3>
+            <h3 class="text-sm font-bold text-gray-800 mb-3">${t("faqDetail.relatedTopics")}</h3>
             <div class="flex flex-wrap gap-2">
               <template x-for="rel in relatedTopics" :key="rel.key">
                 <a
@@ -176,7 +176,7 @@ export function FAQDetailLayout(): string {
       <!-- Footer -->
       <div class="bg-white border-t border-gray-100 mt-8 py-5">
         <div class="max-w-[900px] mx-auto px-4 text-center">
-          <p class="text-[11px] text-gray-400">${t('helpCenter.faqFooterCopyright')}</p>
+          <p class="text-[11px] text-gray-400">${t("helpCenter.faqFooterCopyright")}</p>
         </div>
       </div>
 

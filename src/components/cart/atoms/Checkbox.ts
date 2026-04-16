@@ -12,15 +12,21 @@ export interface CheckboxProps {
   disabled?: boolean;
 }
 
-export function Checkbox({ id, checked, indeterminate = false, onChange, disabled = false }: CheckboxProps): string {
-  const checkedAttr = checked ? 'checked' : '';
-  const indeterminateAttr = indeterminate ? 'data-indeterminate="true"' : '';
-  const onChangeAttr = onChange ? `data-onchange="${onChange}"` : '';
-  const disabledAttr = disabled ? 'disabled' : '';
-  const disabledCursor = disabled ? 'cursor-not-allowed opacity-50' : '';
+export function Checkbox({
+  id,
+  checked,
+  indeterminate = false,
+  onChange,
+  disabled = false,
+}: CheckboxProps): string {
+  const checkedAttr = checked ? "checked" : "";
+  const indeterminateAttr = indeterminate ? 'data-indeterminate="true"' : "";
+  const onChangeAttr = onChange ? `data-onchange="${onChange}"` : "";
+  const disabledAttr = disabled ? "disabled" : "";
+  const disabledCursor = disabled ? "cursor-not-allowed opacity-50" : "";
 
-  const checkVisible = checked ? 'block' : 'hidden';
-  const dashVisible = indeterminate && !checked ? 'block' : 'hidden';
+  const checkVisible = checked ? "block" : "hidden";
+  const dashVisible = indeterminate && !checked ? "block" : "hidden";
 
   return `
     <label class="next-checkbox-wrapper inline-flex items-center cursor-pointer select-none ${disabledCursor}" for="${id}"

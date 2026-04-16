@@ -1,5 +1,5 @@
-import { t } from '../../i18n';
-import { formatPrice } from '../../utils/currency';
+import { t } from "../../i18n";
+import { formatPrice } from "../../utils/currency";
 /**
  * ProductListingGrid Component
  * iSTOC-style product listing grid for products page.
@@ -7,7 +7,7 @@ import { formatPrice } from '../../utils/currency';
  * Uses CSS transitions for smooth 500ms zoom animation.
  */
 
-import type { ProductListingCard, ViewMode } from '../../types/productListing';
+import type { ProductListingCard, ViewMode } from "../../types/productListing";
 // Mock data import removed — grid is now API-driven
 
 // Placeholder images removed — all images come from API now
@@ -52,18 +52,22 @@ function renderImageSlider(card: ProductListingCard): string {
   // ──────────────────────────────────────────────────────────────
 
   // Build image list from available source
-  const realImageSrc = card.imageSrc || '';
+  const realImageSrc = card.imageSrc || "";
   const imageList: string[] = realImageSrc ? [realImageSrc] : [];
   const hasMultiple = imageList.length > 1;
 
   let slidesHtml: string;
 
   if (imageList.length > 0) {
-    slidesHtml = imageList.map((src, i) => `
+    slidesHtml = imageList
+      .map(
+        (src, i) => `
       <div class="w-full h-full flex-shrink-0">
-        <img src="${src}" alt="${card.name}${i > 0 ? ` - ${i + 1}` : ''}" class="w-full h-full object-cover" ${i > 0 ? 'loading="lazy"' : ''} />
+        <img src="${src}" alt="${card.name}${i > 0 ? ` - ${i + 1}` : ""}" class="w-full h-full object-cover" ${i > 0 ? 'loading="lazy"' : ""} />
       </div>
-    `).join('');
+    `
+      )
+      .join("");
   } else {
     // No image — show placeholder
     slidesHtml = `
@@ -75,7 +79,8 @@ function renderImageSlider(card: ProductListingCard): string {
     `;
   }
 
-  const arrowsHtml = hasMultiple ? `
+  const arrowsHtml = hasMultiple
+    ? `
     <!-- Prev arrow -->
     <button type="button"
       class="product-slider-prev absolute left-1.5 top-1/2 -translate-y-1/2 z-10 w-7 h-7 flex items-center justify-center rounded-full bg-white/80 shadow-sm opacity-0 group-hover/img:opacity-100 transition-opacity hover:bg-white cursor-pointer"
@@ -94,13 +99,16 @@ function renderImageSlider(card: ProductListingCard): string {
         <path d="M9 5l7 7-7 7"/>
       </svg>
     </button>
-  ` : '';
+  `
+    : "";
 
-  const dotsHtml = hasMultiple ? `
+  const dotsHtml = hasMultiple
+    ? `
     <div class="absolute bottom-2 left-1/2 -translate-x-1/2 z-10 flex gap-1 opacity-0 group-hover/img:opacity-100 transition-opacity">
-      ${imageList.map((_, i) => `<div class="w-1.5 h-1.5 rounded-full ${i === 0 ? 'bg-white' : 'bg-white/50'}" data-slider-dot="${card.id}" data-dot-index="${i}"></div>`).join('')}
+      ${imageList.map((_, i) => `<div class="w-1.5 h-1.5 rounded-full ${i === 0 ? "bg-white" : "bg-white/50"}" data-slider-dot="${card.id}" data-dot-index="${i}"></div>`).join("")}
     </div>
-  ` : '';
+  `
+    : "";
 
   return `
     <div class="relative aspect-square w-full flex-shrink-0 overflow-hidden group/img">
@@ -114,12 +122,12 @@ function renderImageSlider(card: ProductListingCard): string {
       ${arrowsHtml}
       ${dotsHtml}
 
-      <!-- ${t('products.addToCompare')} checkbox (visible on hover) -->
+      <!-- ${t("products.addToCompare")} checkbox (visible on hover) -->
       <label class="absolute top-2 right-2 z-10 flex items-center gap-1.5 px-2 py-1 rounded bg-white/90 shadow-sm text-[11px] text-gray-700 cursor-pointer opacity-0 group-hover/img:opacity-100 transition-opacity"
              onclick="event.preventDefault(); event.stopPropagation();">
         <input type="checkbox" class="w-3.5 h-3.5 rounded border-gray-300 text-orange-500 focus:ring-orange-400"
                data-compare-id="${card.id}" onclick="event.stopPropagation();" />
-        ${t('products.addToCompare')}
+        ${t("products.addToCompare")}
       </label>
 
       <!-- Camera icon (bottom-left) - DISABLED -->
@@ -132,14 +140,14 @@ function renderImageSlider(card: ProductListingCard): string {
  */
 function countryFlag(code?: string): string {
   const flags: Record<string, string> = {
-    CN: '\u{1F1E8}\u{1F1F3}',
-    TR: '\u{1F1F9}\u{1F1F7}',
-    IN: '\u{1F1EE}\u{1F1F3}',
-    BD: '\u{1F1E7}\u{1F1E9}',
-    VN: '\u{1F1FB}\u{1F1F3}',
-    DE: '\u{1F1E9}\u{1F1EA}',
+    CN: "\u{1F1E8}\u{1F1F3}",
+    TR: "\u{1F1F9}\u{1F1F7}",
+    IN: "\u{1F1EE}\u{1F1F3}",
+    BD: "\u{1F1E7}\u{1F1E9}",
+    VN: "\u{1F1FB}\u{1F1F3}",
+    DE: "\u{1F1E9}\u{1F1EA}",
   };
-  return code ? (flags[code] || '') : '';
+  return code ? flags[code] || "" : "";
 }
 
 /**
@@ -165,55 +173,62 @@ function starIcon(): string {
  */
 function renderProductListingCard(card: ProductListingCard): string {
   // Selling point badge
-  const sellingPointText = card.sellingPoint || card.promo || '';
+  const sellingPointText = card.sellingPoint || card.promo || "";
   const sellingPointHtml = sellingPointText
     ? `<div class="flex items-center gap-1 h-4 mt-1 text-xs text-[rgb(34,137,31)]">
         ${checkIcon()}
         <span>${sellingPointText}</span>
       </div>`
-    : '';
+    : "";
 
   // MOQ
   const moqHtml = card.moq
-    ? `<div class="text-sm font-normal leading-[18px] text-gray-900">${t('products.minOrder', { moq: card.moq })}</div>`
-    : '';
-
+    ? `<div class="text-sm font-normal leading-[18px] text-gray-900">${t("products.minOrder", { moq: card.moq })}</div>`
+    : "";
 
   // Supplier name
   const supplierNameHtml = card.supplierName
     ? `<a class="block text-xs font-normal text-[#767676] no-underline whitespace-nowrap overflow-hidden text-ellipsis mb-0.5">${card.supplierName}</a>`
-    : '';
+    : "";
 
   // Brand chip — small badge with brand name (logo if available)
   const brandHtml = card.brandName
     ? `<a class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded border border-gray-200 bg-gray-50 text-[10px] font-medium text-gray-700 hover:bg-gray-100 no-underline max-w-full"
-          href="${card.brandSlug ? `/pages/brand.html?slug=${card.brandSlug}` : '#'}"
+          href="${card.brandSlug ? `/pages/brand.html?slug=${card.brandSlug}` : "#"}"
           title="${card.brandName}">
-        ${card.brandLogo ? `<img src="${card.brandLogo}" alt="${card.brandName}" class="w-3 h-3 object-contain" />` : ''}
+        ${card.brandLogo ? `<img src="${card.brandLogo}" alt="${card.brandName}" class="w-3 h-3 object-contain" />` : ""}
         <span class="whitespace-nowrap overflow-hidden text-ellipsis">${card.brandName}</span>
       </a>`
-    : '';
+    : "";
 
   // Supplier info: year, country, rating
   const yearCountryParts: string[] = [];
-  if (card.supplierYears) yearCountryParts.push(`<span>${t('products.yearLabel', { count: String(card.supplierYears) })}</span>`);
-  if (card.supplierCountry) yearCountryParts.push(`${countryFlag(card.supplierCountry)} <span>${card.supplierCountry}</span>`);
+  if (card.supplierYears)
+    yearCountryParts.push(
+      `<span>${t("products.yearLabel", { count: String(card.supplierYears) })}</span>`
+    );
+  if (card.supplierCountry)
+    yearCountryParts.push(
+      `${countryFlag(card.supplierCountry)} <span>${card.supplierCountry}</span>`
+    );
 
-  const yearCountryHtml = yearCountryParts.length > 0
-    ? `<a class="text-xs font-normal text-black no-underline">${yearCountryParts.join(' ')}</a>`
-    : '';
+  const yearCountryHtml =
+    yearCountryParts.length > 0
+      ? `<a class="text-xs font-normal text-black no-underline">${yearCountryParts.join(" ")}</a>`
+      : "";
 
   const ratingHtml = card.rating
-    ? `<span class="text-xs font-normal text-gray-900 leading-4"><span>${card.rating}</span>/5.0${card.reviewCount ? ` <span>(${card.reviewCount.toLocaleString()})</span>` : ''}</span>`
-    : '';
+    ? `<span class="text-xs font-normal text-gray-900 leading-4"><span>${card.rating}</span>/5.0${card.reviewCount ? ` <span>(${card.reviewCount.toLocaleString()})</span>` : ""}</span>`
+    : "";
 
   const supplierInfoParts = [yearCountryHtml, ratingHtml].filter(Boolean);
-  const supplierContentHtml = (card.supplierYears || card.supplierCountry || card.rating)
-    ? `<div class="flex items-center gap-1 text-xs font-normal leading-4 text-black mt-0.5">
+  const supplierContentHtml =
+    card.supplierYears || card.supplierCountry || card.rating
+      ? `<div class="flex items-center gap-1 text-xs font-normal leading-4 text-black mt-0.5">
         ${starIcon()}
-        ${supplierInfoParts.join('')}
+        ${supplierInfoParts.join("")}
       </div>`
-    : '';
+      : "";
 
   return `
     <div class="fy26-product-card-wrapper flex flex-col justify-between w-full rounded-md overflow-hidden bg-white pb-2 border-0">
@@ -226,7 +241,7 @@ function renderProductListingCard(card: ProductListingCard): string {
       <div class="fy26-product-card-content flex-1 flex flex-col">
         <!-- Title area -->
         <div class="px-1">
-          ${brandHtml ? `<div class="mb-1">${brandHtml}</div>` : ''}
+          ${brandHtml ? `<div class="mb-1">${brandHtml}</div>` : ""}
           <h2 class="searchx-product-e-title text-sm font-normal leading-[18px] h-[54px] text-[#333] overflow-hidden text-ellipsis line-clamp-3 m-0">
             <a href="${card.href}" target="_blank" class="text-inherit no-underline hover:text-primary-500"><span>${card.name}</span></a>
           </h2>
@@ -252,11 +267,11 @@ function renderProductListingCard(card: ProductListingCard): string {
       <div class="action-area-layout flex gap-2 px-1 items-center">
         <button type="button" class="searchx-product-e-abutton th-btn-outline flex-1 flex items-center justify-center h-9 text-xs sm:text-sm font-medium cursor-pointer whitespace-nowrap"
                 data-add-to-cart="${card.id}">
-          ${t('products.addToCart')}
+          ${t("products.addToCart")}
         </button>
         <button type="button" class="searchx-product-e-abutton th-btn-outline flex-1 flex items-center justify-center h-9 text-xs sm:text-sm font-medium cursor-pointer whitespace-nowrap"
                 onclick="event.preventDefault(); event.stopPropagation();">
-          ${t('products.chat')}
+          ${t("products.chat")}
         </button>
       </div>
     </div>
@@ -283,9 +298,9 @@ function renderNoResults(): string {
           </svg>
         </div>
       </div>
-      <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">${t('products.noResults')}</h3>
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">${t("products.noResults")}</h3>
       <p class="text-sm text-gray-500 dark:text-gray-400 max-w-sm mb-6">
-        ${t('products.noResultsDesc')}
+        ${t("products.noResultsDesc")}
       </p>
       <button
         type="button"
@@ -295,14 +310,14 @@ function renderNoResults(): string {
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182" />
         </svg>
-        ${t('products.clearFilters')}
+        ${t("products.clearFilters")}
       </button>
     </div>
   `;
 }
 
 /** No-op — ProductListingGrid uses CSS grid, no JS initialization needed. */
-export function initProductListingGrid(): void { }
+export function initProductListingGrid(): void {}
 
 /**
  * Navigate a product slider to the given index using translateX.
@@ -317,7 +332,7 @@ function navigateSlider(sliderId: string, direction: number): void {
 
   // Parse current index from transform
   const currentTransform = slider.style.transform;
-  const currentIndex = Math.abs(parseInt(currentTransform.match(/-?(\d+)/)?.[1] || '0')) / 100;
+  const currentIndex = Math.abs(parseInt(currentTransform.match(/-?(\d+)/)?.[1] || "0")) / 100;
 
   let newIndex = currentIndex + direction;
   if (newIndex < 0) newIndex = totalSlides - 1;
@@ -329,11 +344,11 @@ function navigateSlider(sliderId: string, direction: number): void {
   const dots = document.querySelectorAll<HTMLElement>(`[data-slider-dot="${sliderId}"]`);
   dots.forEach((dot, i) => {
     if (i === newIndex) {
-      dot.classList.remove('bg-white/50');
-      dot.classList.add('bg-white');
+      dot.classList.remove("bg-white/50");
+      dot.classList.add("bg-white");
     } else {
-      dot.classList.remove('bg-white');
-      dot.classList.add('bg-white/50');
+      dot.classList.remove("bg-white");
+      dot.classList.add("bg-white/50");
     }
   });
 }
@@ -354,11 +369,11 @@ function navigateSliderTo(sliderId: string, targetIndex: number): void {
   const dots = document.querySelectorAll<HTMLElement>(`[data-slider-dot="${sliderId}"]`);
   dots.forEach((dot, i) => {
     if (i === targetIndex) {
-      dot.classList.remove('bg-white/50');
-      dot.classList.add('bg-white');
+      dot.classList.remove("bg-white/50");
+      dot.classList.add("bg-white");
     } else {
-      dot.classList.remove('bg-white');
-      dot.classList.add('bg-white/50');
+      dot.classList.remove("bg-white");
+      dot.classList.add("bg-white/50");
     }
   });
 }
@@ -375,19 +390,19 @@ export function initProductSliders(): void {
 
   // Arrow buttons use inline onclick (stopPropagation to prevent <a> navigate)
   // and dispatch custom 'slider-nav' event that bubbles to document
-  document.addEventListener('slider-nav', ((e: CustomEvent) => {
+  document.addEventListener("slider-nav", ((e: CustomEvent) => {
     const { id, dir } = e.detail || {};
-    if (id && typeof dir === 'number') navigateSlider(id, dir);
+    if (id && typeof dir === "number") navigateSlider(id, dir);
   }) as EventListener);
 
   // Dot clicks
-  document.addEventListener('click', (e: MouseEvent) => {
-    const dotEl = (e.target as HTMLElement).closest<HTMLElement>('[data-dot-index]');
+  document.addEventListener("click", (e: MouseEvent) => {
+    const dotEl = (e.target as HTMLElement).closest<HTMLElement>("[data-dot-index]");
     if (dotEl) {
       e.preventDefault();
       e.stopPropagation();
-      const sliderId = dotEl.getAttribute('data-slider-dot');
-      const dotIndex = parseInt(dotEl.getAttribute('data-dot-index') ?? '0', 10);
+      const sliderId = dotEl.getAttribute("data-slider-dot");
+      const dotIndex = parseInt(dotEl.getAttribute("data-dot-index") ?? "0", 10);
       if (sliderId) navigateSliderTo(sliderId, dotIndex);
     }
   });
@@ -413,12 +428,12 @@ export function initProductSliders(): void {
 export function ProductListingGrid(products: ProductListingCard[] = []): string {
   if (products.length === 0) {
     return `
-      <section aria-label="${t('products.productList')}" class="flex-1">
+      <section aria-label="${t("products.productList")}" class="flex-1">
         <div
           class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 product-grid"
           style="gap: var(--product-grid-gap, 12px);"
           role="list"
-          aria-label="${t('products.productListLabel')}"
+          aria-label="${t("products.productListLabel")}"
         >
           ${renderNoResults()}
         </div>
@@ -427,14 +442,14 @@ export function ProductListingGrid(products: ProductListingCard[] = []): string 
   }
 
   return `
-    <section aria-label="${t('products.productList')}" class="flex-1">
+    <section aria-label="${t("products.productList")}" class="flex-1">
       <div
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 product-grid"
         style="gap: var(--product-grid-gap, 12px);"
         role="list"
-        aria-label="${t('products.productListLabel')}"
+        aria-label="${t("products.productListLabel")}"
       >
-        ${products.map(card => `<div role="listitem" class="flex">${renderProductListingCard(card)}</div>`).join('')}
+        ${products.map((card) => `<div role="listitem" class="flex">${renderProductListingCard(card)}</div>`).join("")}
       </div>
     </section>
   `;
@@ -445,26 +460,26 @@ export function ProductListingGrid(products: ProductListingCard[] = []): string 
  * Called by the filter engine when filters/sort change.
  */
 export function rerenderProductGrid(products: ProductListingCard[]): void {
-  const grid = document.querySelector<HTMLElement>('.product-grid');
+  const grid = document.querySelector<HTMLElement>(".product-grid");
   if (!grid) return;
 
   // Preserve the current view mode
-  const isListView = grid.classList.contains('product-list-mode');
+  const isListView = grid.classList.contains("product-list-mode");
 
   if (products.length === 0) {
     grid.innerHTML = renderNoResults();
   } else {
     grid.innerHTML = products
-      .map(card => `<div role="listitem" class="flex">${renderProductListingCard(card)}</div>`)
-      .join('');
+      .map((card) => `<div role="listitem" class="flex">${renderProductListingCard(card)}</div>`)
+      .join("");
   }
 
   // Re-apply list view classes if it was in list mode
   if (isListView) {
-    setGridViewMode('list');
+    setGridViewMode("list");
   } else {
     // Ensure all grid classes are correct just in case
-    setGridViewMode('grid');
+    setGridViewMode("grid");
   }
 }
 
@@ -477,9 +492,9 @@ export { renderProductListingCard, renderNoResults };
  * Toggle grid between 'grid' and 'list' view modes using Tailwind classes.
  */
 export function setGridViewMode(mode: ViewMode): void {
-  const grid = document.querySelector<HTMLElement>('.product-grid');
+  const grid = document.querySelector<HTMLElement>(".product-grid");
   if (!grid) return;
 
   // Single class controls entire list layout via CSS (see style.css)
-  grid.classList.toggle('product-list-mode', mode === 'list');
+  grid.classList.toggle("product-list-mode", mode === "list");
 }

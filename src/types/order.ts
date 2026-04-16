@@ -4,18 +4,18 @@
  */
 
 export type OrderStatus =
-  | 'Waiting for payment'
-  | 'Confirming'
-  | 'Delivering'
-  | 'Completed'
-  | 'Cancelled';
+  | "Waiting for payment"
+  | "Confirming"
+  | "Delivering"
+  | "Completed"
+  | "Cancelled";
 
 export type OrderStatusColor =
-  | 'text-amber-600'
-  | 'text-blue-600'
-  | 'text-green-600'
-  | 'text-gray-500'
-  | 'text-red-600';
+  | "text-amber-600"
+  | "text-blue-600"
+  | "text-green-600"
+  | "text-gray-500"
+  | "text-red-600";
 
 export interface OrderProduct {
   name: string;

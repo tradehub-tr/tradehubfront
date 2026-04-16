@@ -8,17 +8,19 @@
  * dinlemesi veya global swap fn'i üzerinden).
  */
 
-import { getCurrentProduct } from '../../alpine/product';
+import { getCurrentProduct } from "../../alpine/product";
 
-const VIDEO_CONTAINER_ID = 'product-video-section';
+const VIDEO_CONTAINER_ID = "product-video-section";
 
 /** YouTube / Vimeo URL'lerini embed URL'ine çevirir, direkt video dosyası URL'lerini olduğu gibi bırakır. */
 export function toVideoEmbedHtml(rawUrl: string): string {
-  const url = (rawUrl || '').trim();
-  if (!url) return '';
+  const url = (rawUrl || "").trim();
+  if (!url) return "";
 
   // YouTube: watch?v=ID, youtu.be/ID, embed/ID
-  const yt = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+  const yt = url.match(
+    /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/
+  );
   if (yt) {
     return `<iframe src="https://www.youtube.com/embed/${yt[1]}" class="absolute inset-0 w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
   }
@@ -30,7 +32,7 @@ export function toVideoEmbedHtml(rawUrl: string): string {
   }
 
   // Direkt embed URL
-  if (url.includes('/embed/') || url.includes('player.vimeo.com')) {
+  if (url.includes("/embed/") || url.includes("player.vimeo.com")) {
     return `<iframe src="${url}" class="absolute inset-0 w-full h-full" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
   }
 
@@ -44,7 +46,7 @@ export function toVideoEmbedHtml(rawUrl: string): string {
 }
 
 function renderVideoPlayer(videoUrl: string, label: string): string {
-  if (!videoUrl) return '';
+  if (!videoUrl) return "";
   return `
     <div class="flex items-center justify-between mb-3">
       <h3 class="text-base md:text-lg font-bold text-gray-900">${label}</h3>
@@ -57,7 +59,7 @@ function renderVideoPlayer(videoUrl: string, label: string): string {
 
 export function ProductVideoSection(): string {
   const p = getCurrentProduct() as any;
-  const listingVideo = (p.videoUrl || '') as string;
+  const listingVideo = (p.videoUrl || "") as string;
   // Varyant videoları ileride geldiğinde data-attribute'lara yerleşir; şimdilik sadece listing.
   const initialVideo = listingVideo;
   const hidden = !initialVideo;
@@ -65,8 +67,8 @@ export function ProductVideoSection(): string {
   return `
     <section id="${VIDEO_CONTAINER_ID}"
       data-listing-video="${listingVideo}"
-      class="${hidden ? 'hidden ' : ''}mt-4 p-4 rounded-lg border border-gray-200 bg-white">
-      ${renderVideoPlayer(initialVideo, 'Tanıtım Videosu')}
+      class="${hidden ? "hidden " : ""}mt-4 p-4 rounded-lg border border-gray-200 bg-white">
+      ${renderVideoPlayer(initialVideo, "Tanıtım Videosu")}
     </section>
   `;
 }
@@ -78,25 +80,25 @@ export function ProductVideoSection(): string {
 export function setProductVideo(variantVideoUrl: string): void {
   const el = document.getElementById(VIDEO_CONTAINER_ID);
   if (!el) return;
-  const listingVideo = el.getAttribute('data-listing-video') || '';
+  const listingVideo = el.getAttribute("data-listing-video") || "";
   const nextUrl = variantVideoUrl || listingVideo;
 
   if (!nextUrl) {
-    el.classList.add('hidden');
-    el.innerHTML = '';
+    el.classList.add("hidden");
+    el.innerHTML = "";
     return;
   }
-  el.classList.remove('hidden');
+  el.classList.remove("hidden");
   el.innerHTML = renderVideoPlayer(
     nextUrl,
-    variantVideoUrl ? 'Varyant Videosu' : 'Tanıtım Videosu',
+    variantVideoUrl ? "Varyant Videosu" : "Tanıtım Videosu"
   );
 }
 
 export function initProductVideoSection(): void {
   // Varyant seçiminde custom event dinle
-  document.addEventListener('product-variant-change', ((e: CustomEvent) => {
-    const videoUrl: string = e.detail?.videoUrl || '';
+  document.addEventListener("product-variant-change", ((e: CustomEvent) => {
+    const videoUrl: string = e.detail?.videoUrl || "";
     setProductVideo(videoUrl);
   }) as EventListener);
 }

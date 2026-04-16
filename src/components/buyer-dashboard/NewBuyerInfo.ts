@@ -4,9 +4,9 @@
  * Slider fetches banners dynamically from API — hidden if no banners exist.
  */
 
-import type { UserProfile } from '../../types/buyerDashboard';
-import { UserInfoCard } from './UserInfoCard';
-import { OperationSlider } from './OperationSlider';
+import type { UserProfile } from "../../types/buyerDashboard";
+import { UserInfoCard } from "./UserInfoCard";
+import { OperationSlider } from "./OperationSlider";
 
 export interface NewBuyerInfoProps {
   user: UserProfile;

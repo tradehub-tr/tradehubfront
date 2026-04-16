@@ -5,5 +5,4 @@
  * This file retains a no-op export for backward compatibility with page entry files.
  */
 
- 
 export function initStickyHeaderSearch(): void {}

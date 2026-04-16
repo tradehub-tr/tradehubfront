@@ -50,7 +50,9 @@ export function InfoPageLayout({ title, subtitle, icon, sections }: InfoPageLayo
     <section class="py-10 sm:py-16 bg-gray-50">
       <div class="max-w-[900px] mx-auto px-4 sm:px-6">
         <div class="space-y-6">
-          ${sections.map((section, index) => `
+          ${sections
+            .map(
+              (section, index) => `
             <article class="bg-white rounded-md border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden">
               <div class="flex items-start gap-4 p-6 sm:p-8">
                 <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-orange-50 flex items-center justify-center text-orange-600 font-bold text-sm mt-0.5">
@@ -64,7 +66,9 @@ export function InfoPageLayout({ title, subtitle, icon, sections }: InfoPageLayo
                 </div>
               </div>
             </article>
-          `).join('')}
+          `
+            )
+            .join("")}
         </div>
 
         <!-- Bottom CTA -->

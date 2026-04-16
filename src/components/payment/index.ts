@@ -1,1 +1,1 @@
-export { PaymentLayout, initPaymentLayout } from './PaymentLayout';
+export { PaymentLayout, initPaymentLayout } from "./PaymentLayout";

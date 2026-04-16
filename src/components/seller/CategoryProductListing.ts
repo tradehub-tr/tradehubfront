@@ -3,19 +3,19 @@
  * Full-width category banner + 4-column detailed product cards with badges
  * BEM Block: category-listing
  */
-import type { ProductCategory, DetailedProduct } from '../../types/seller/types';
-import { formatPriceRange } from '../../services/currencyService';
-import { t } from '../../i18n';
+import type { ProductCategory, DetailedProduct } from "../../types/seller/types";
+import { formatPriceRange } from "../../services/currencyService";
+import { t } from "../../i18n";
 
 function getBadgeClasses(type: string): string {
-  const base = 'inline-flex items-center gap-0.5 text-[11px] rounded-sm px-1.5 py-0.5';
+  const base = "inline-flex items-center gap-0.5 text-[11px] rounded-sm px-1.5 py-0.5";
   const map: Record<string, string> = {
-    'main-product': 'bg-[#f3f4f6] text-[#374151] dark:bg-gray-700 dark:text-gray-300',
-    'fsc-certified': 'bg-[#f0fdf4] text-[#166534] dark:bg-emerald-900 dark:text-emerald-300',
-    'certified': 'bg-[#f0fdf4] text-[#166534] dark:bg-emerald-900 dark:text-emerald-300',
-    'custom': 'bg-[#eff6ff] text-[#1e40af] dark:bg-blue-900 dark:text-blue-300',
+    "main-product": "bg-[#f3f4f6] text-[#374151] dark:bg-gray-700 dark:text-gray-300",
+    "fsc-certified": "bg-[#f0fdf4] text-[#166534] dark:bg-emerald-900 dark:text-emerald-300",
+    certified: "bg-[#f0fdf4] text-[#166534] dark:bg-emerald-900 dark:text-emerald-300",
+    custom: "bg-[#eff6ff] text-[#1e40af] dark:bg-blue-900 dark:text-blue-300",
   };
-  return `${base} ${map[type] || 'bg-[#f3f4f6] text-[#374151] dark:bg-gray-700 dark:text-gray-300'}`;
+  return `${base} ${map[type] || "bg-[#f3f4f6] text-[#374151] dark:bg-gray-700 dark:text-gray-300"}`;
 }
 
 function formatSoldCount(count: number): string {
@@ -32,39 +32,47 @@ function renderProductCard(product: DetailedProduct): string {
       <div class="category-listing__image relative w-full h-[200px] lg:h-[180px] md:h-[160px] flex items-center justify-center mb-3">
         <img src="${product.image}" alt="${product.name}" class="max-h-full max-w-full object-contain group-hover:scale-[1.02] transition-transform" loading="lazy"
              onerror="this.parentElement.style.background='#f3f4f6'" />
-        ${product.hasVideo ? `
+        ${
+          product.hasVideo
+            ? `
           <button class="category-listing__play-btn absolute inset-0 m-auto w-10 h-10 rounded-full bg-black/50 hover:bg-black/70 focus:ring-2 focus:ring-white focus:ring-offset-2 active:bg-black/80 flex items-center justify-center transition-colors"
-                  aria-label="${t('seller.sf.playProductVideo')}">
+                  aria-label="${t("seller.sf.playProductVideo")}">
             <svg class="w-4 h-4 text-white ml-0.5" fill="currentColor" viewBox="0 0 20 20">
               <path d="M6.5 5.5v9l7-4.5-7-4.5z" />
             </svg>
           </button>
-        ` : ''}
+        `
+            : ""
+        }
       </div>
 
       <!-- Badges -->
-      ${product.badges.length ? `
+      ${
+        product.badges.length
+          ? `
         <div class="category-listing__badges flex flex-wrap gap-1 mb-2">
-          ${product.badges.map(b => `<span class="${getBadgeClasses(b.type)}">${b.label}</span>`).join('')}
+          ${product.badges.map((b) => `<span class="${getBadgeClasses(b.type)}">${b.label}</span>`).join("")}
         </div>
-      ` : ''}
+      `
+          : ""
+      }
 
       <!-- Name -->
       <p class="category-listing__name text-[14px] text-[#222222] dark:text-gray-50 font-normal leading-snug line-clamp-2 mb-2">${product.name}</p>
 
       <!-- Price -->
       <p class="category-listing__price text-[16px] text-[#111827] dark:text-gray-50 font-bold">
-        ${formatPriceRange(product.priceMin, product.priceMax, 'USD')}
+        ${formatPriceRange(product.priceMin, product.priceMax, "USD")}
       </p>
 
       <!-- MOQ -->
       <p class="category-listing__moq text-[13px] text-[#6b7280] dark:text-gray-400 mt-1">
-        ${t('seller.sf.minOrder')} ${product.moq} ${product.moqUnit}
+        ${t("seller.sf.minOrder")} ${product.moq} ${product.moqUnit}
       </p>
 
       <!-- Sold -->
       <p class="category-listing__sold text-[12px] text-[#9ca3af] dark:text-gray-500 mt-0.5">
-        ${formatSoldCount(product.soldCount)} ${t('seller.sf.sold')}
+        ${formatSoldCount(product.soldCount)} ${t("seller.sf.sold")}
       </p>
     </a>
   `;
@@ -88,19 +96,19 @@ function renderCategory(category: ProductCategory): string {
 
       <!-- Product Grid (Shared Border System) -->
       <div class="category-listing__grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 border-t border-l border-(--card-border-color) dark:border-gray-700">
-        ${category.products.map(p => renderProductCard(p)).join('')}
+        ${category.products.map((p) => renderProductCard(p)).join("")}
       </div>
     </section>
   `;
 }
 
 export function CategoryProductListing(categories: ProductCategory[]): string {
-  if (!categories || !categories.length) return '';
+  if (!categories || !categories.length) return "";
 
   return `
-    <div id="category-listings" aria-label="${t('seller.sf.categoryProductListings')}">
+    <div id="category-listings" aria-label="${t("seller.sf.categoryProductListings")}">
       <div class="max-w-(--container-lg) mx-auto px-[clamp(0.75rem,0.5rem+1vw,1.5rem)] lg:px-6 xl:px-8">
-        ${categories.map(cat => renderCategory(cat)).join('')}
+        ${categories.map((cat) => renderCategory(cat)).join("")}
       </div>
     </div>
   `;

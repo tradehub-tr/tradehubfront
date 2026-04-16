@@ -2,10 +2,10 @@
  * ProductGrid Component
  * Themeable product card grid with Tailwind layout + CSS variable theming.
  */
-import { t } from '../../i18n';
-import { formatPrice } from '../../utils/currency';
-import { searchListings } from '../../services/listingService';
-import { initCurrency } from '../../services/currencyService';
+import { t } from "../../i18n";
+import { formatPrice } from "../../utils/currency";
+import { searchListings } from "../../services/listingService";
+import { initCurrency } from "../../services/currencyService";
 
 interface ProductCard {
   name: string;
@@ -13,7 +13,7 @@ interface ProductCard {
   price: string;
   discountPercent?: number;
   moqCount: number;
-  moqUnit: 'pcs' | 'kg';
+  moqUnit: "pcs" | "kg";
   soldCount: string;
   imageSrc: string;
   supplierYearCount?: number;
@@ -33,16 +33,16 @@ const productCardSeed: ProductCard[] = [];
 // }
 
 function renderProductCard(card: ProductCard, index: number): string {
-  const safeName = card.name.replace(/"/g, '&quot;');
-  const unitLabel = card.moqUnit === 'kg' ? t('productGrid.kg') : t('productGrid.pcs');
+  const safeName = card.name.replace(/"/g, "&quot;");
+  const unitLabel = card.moqUnit === "kg" ? t("productGrid.kg") : t("productGrid.pcs");
   const moqText = `${card.moqCount} ${unitLabel}`;
-  const soldText = '';
+  const soldText = "";
   const discountText = card.discountPercent
-    ? t('productGrid.discount', { percent: card.discountPercent })
-    : '';
+    ? t("productGrid.discount", { percent: card.discountPercent })
+    : "";
   const supplierYearsText = card.supplierYearCount
-    ? `${card.supplierYearCount} ${t('productGrid.yr')}`
-    : '';
+    ? `${card.supplierYearCount} ${t("productGrid.yr")}`
+    : "";
 
   // ──────────────────────────────────────────────────────────────
   // DISABLED: "Find similar" (visual search) button
@@ -101,19 +101,19 @@ function renderProductCard(card: ProductCard, index: number): string {
             <!-- Price + discount -->
             <div class="flex flex-wrap items-center gap-1 min-h-[26px] overflow-hidden">
               <div class="product-card__price overflow-hidden">${formatPrice(card.price)}</div>
-              ${discountText ? `<div class="product-card__discount">${discountText}</div>` : ''}
+              ${discountText ? `<div class="product-card__discount">${discountText}</div>` : ""}
             </div>
 
             <!-- MOQ + sold -->
             <div class="product-card__moq-line overflow-hidden h-[18px] leading-[18px]">
               <div class="product-card__moq inline mr-1"><bdi>${moqText}</bdi></div>
-              ${soldText ? `<span class="product-card__stats" title="${soldText}">${soldText}</span>` : ''}
+              ${soldText ? `<span class="product-card__stats" title="${soldText}">${soldText}</span>` : ""}
             </div>
 
             <!-- Supplier info -->
             <div class="product-card__supplier flex items-center min-h-[18px] pt-0.5 leading-4">
-              ${supplierYearsText ? `<span class="product-card__supplier-text block overflow-hidden text-ellipsis">${supplierYearsText}</span>` : ''}
-              ${card.supplierCountry ? `<span class="product-card__supplier-text block overflow-hidden text-ellipsis">${card.supplierCountry}</span>` : ''}
+              ${supplierYearsText ? `<span class="product-card__supplier-text block overflow-hidden text-ellipsis">${supplierYearsText}</span>` : ""}
+              ${card.supplierCountry ? `<span class="product-card__supplier-text block overflow-hidden text-ellipsis">${card.supplierCountry}</span>` : ""}
             </div>
           </div>
         </div>
@@ -124,32 +124,37 @@ function renderProductCard(card: ProductCard, index: number): string {
 
 /** Load real products from API and re-render the grid. */
 export function initProductGrid(): void {
-  initCurrency().then(() => searchListings({ page_size: 12 })).then(result => {
-    if (result.products.length > 0) {
-      // Hide empty state
-      const emptyState = document.getElementById('product-grid-empty');
-      if (emptyState) emptyState.style.display = 'none';
+  initCurrency()
+    .then(() => searchListings({ page_size: 12 }))
+    .then((result) => {
+      if (result.products.length > 0) {
+        // Hide empty state
+        const emptyState = document.getElementById("product-grid-empty");
+        if (emptyState) emptyState.style.display = "none";
 
-      const grid = document.getElementById('home-product-grid');
-      if (grid) {
-        grid.innerHTML = result.products.map((p, i) => {
-          const card: ProductCard = {
-            name: p.name,
-            href: p.href || `/pages/product-detail.html?id=${p.id}`,
-            price: p.price,
-            discountPercent: p.discount ? parseInt(p.discount) : undefined,
-            moqCount: parseInt(p.moq) || 1,
-            moqUnit: 'pcs',
-            soldCount: p.stats?.replace(/[^\d.]/g, '') || '0',
-            imageSrc: p.imageSrc || '',
-            supplierYearCount: p.supplierYears,
-            supplierCountry: p.supplierCountry,
-          };
-          return renderProductCard(card, i);
-        }).join('');
+        const grid = document.getElementById("home-product-grid");
+        if (grid) {
+          grid.innerHTML = result.products
+            .map((p, i) => {
+              const card: ProductCard = {
+                name: p.name,
+                href: p.href || `/pages/product-detail.html?id=${p.id}`,
+                price: p.price,
+                discountPercent: p.discount ? parseInt(p.discount) : undefined,
+                moqCount: parseInt(p.moq) || 1,
+                moqUnit: "pcs",
+                soldCount: p.stats?.replace(/[^\d.]/g, "") || "0",
+                imageSrc: p.imageSrc || "",
+                supplierYearCount: p.supplierYears,
+                supplierCountry: p.supplierCountry,
+              };
+              return renderProductCard(card, i);
+            })
+            .join("");
+        }
       }
-    }
-  }).catch(err => console.warn('[ProductGrid] API load failed:', err));
+    })
+    .catch((err) => console.warn("[ProductGrid] API load failed:", err));
 }
 
 export function ProductGrid(): string {
@@ -161,7 +166,10 @@ export function ProductGrid(): string {
     >
       <div class="container-wide">
         <div id="home-product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 product-grid home-product-grid" style="gap: var(--product-grid-gap, 8px);" role="list" aria-label="Product listings">
-          ${productCardSeed.length > 0 ? productCardSeed.map((card, index) => renderProductCard(card, index)).join('') : `
+          ${
+            productCardSeed.length > 0
+              ? productCardSeed.map((card, index) => renderProductCard(card, index)).join("")
+              : `
           <div id="product-grid-empty" class="col-span-full flex items-center justify-center py-12">
             <div class="text-center">
               <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -170,7 +178,8 @@ export function ProductGrid(): string {
               <p class="text-sm text-gray-400">Yak\u0131nda yeni \u00fcr\u00fcnler eklenecek</p>
             </div>
           </div>
-          `}
+          `
+          }
         </div>
       </div>
     </section>

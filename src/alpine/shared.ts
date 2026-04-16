@@ -1,24 +1,34 @@
-import Alpine from 'alpinejs'
+import Alpine from "alpinejs";
 
-Alpine.data('floatingPanel', () => ({
+Alpine.data("floatingPanel", () => ({
   showScrollTop: false,
   chatOpen: false,
   lensOpen: false,
   isSeller: false,
-  sellerPanelUrl: (import.meta.env as Record<string, string>).VITE_SELLER_PANEL_URL || 'http://localhost:8082/',
+  sellerPanelUrl:
+    (import.meta.env as Record<string, string>).VITE_SELLER_PANEL_URL || "http://localhost:8082/",
 
   async init() {
     this.showScrollTop = window.scrollY > 300;
-    window.addEventListener('scroll', () => {
-      this.showScrollTop = window.scrollY > 300;
-    }, { passive: true });
+    window.addEventListener(
+      "scroll",
+      () => {
+        this.showScrollTop = window.scrollY > 300;
+      },
+      { passive: true }
+    );
 
     try {
-      const res = await fetch(((window as any).API_BASE || '/api') + '/method/tradehub_core.api.v1.auth.get_session_user', {
-        credentials: 'include',
-      });
+      const res = await fetch(
+        ((window as any).API_BASE || "/api") + "/method/tradehub_core.api.v1.auth.get_session_user",
+        {
+          credentials: "include",
+        }
+      );
       if (res.ok) {
-        const data = await res.json() as { message?: { logged_in?: boolean; user?: { has_seller_profile?: boolean } } };
+        const data = (await res.json()) as {
+          message?: { logged_in?: boolean; user?: { has_seller_profile?: boolean } };
+        };
         if (data.message?.logged_in && data.message?.user?.has_seller_profile) {
           this.isSeller = true;
         }
@@ -29,32 +39,36 @@ Alpine.data('floatingPanel', () => ({
   },
 
   scrollToTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   },
 }));
 
-Alpine.data('stickyHeaderSearch', () => ({
+Alpine.data("stickyHeaderSearch", () => ({
   expanded: false,
 
   init() {
-    this.$watch('expanded', (isExpanded: boolean) => {
+    this.$watch("expanded", (isExpanded: boolean) => {
       const el = this.$el as HTMLElement;
-      el.querySelectorAll<HTMLElement>('[data-compact-expanded-interactive]').forEach((interEl) => {
+      el.querySelectorAll<HTMLElement>("[data-compact-expanded-interactive]").forEach((interEl) => {
         if (isExpanded) {
-          interEl.removeAttribute('tabindex');
+          interEl.removeAttribute("tabindex");
         } else {
-          interEl.setAttribute('tabindex', '-1');
+          interEl.setAttribute("tabindex", "-1");
         }
       });
     });
 
-    window.addEventListener('resize', () => {
-      if (this.expanded) {
-        this.syncDropdownOffset();
-      }
-    }, { passive: true });
+    window.addEventListener(
+      "resize",
+      () => {
+        if (this.expanded) {
+          this.syncDropdownOffset();
+        }
+      },
+      { passive: true }
+    );
 
-    document.addEventListener('istoc:close-search', () => {
+    document.addEventListener("istoc:close-search", () => {
       this.close();
       const input = (this.$refs as Record<string, HTMLInputElement>).searchInput;
       if (input && document.activeElement === input) {
@@ -90,10 +104,10 @@ Alpine.data('stickyHeaderSearch', () => ({
   },
 }));
 
-Alpine.data('checkbox', () => ({
+Alpine.data("checkbox", () => ({
   checked: false,
   indeterminate: false,
-  inputId: '',
+  inputId: "",
   handlerId: null as string | null,
 
   init() {
@@ -104,7 +118,7 @@ Alpine.data('checkbox', () => ({
     this.checked = input.checked;
     this.handlerId = input.dataset.onchange || null;
 
-    if (input.dataset.indeterminate === 'true') {
+    if (input.dataset.indeterminate === "true") {
       this.indeterminate = true;
     }
   },
@@ -117,7 +131,7 @@ Alpine.data('checkbox', () => ({
     this.indeterminate = false;
 
     if (this.handlerId) {
-      this.$dispatch('checkbox-change', {
+      this.$dispatch("checkbox-change", {
         id: this.inputId,
         checked: this.checked,
         handlerId: this.handlerId,
@@ -126,38 +140,41 @@ Alpine.data('checkbox', () => ({
   },
 }));
 
-Alpine.data('quantityInput', (props: { value: number; min: number; max: number; step: number; id: string }) => ({
-  value: props.value,
-  min: props.min,
-  // max=0 gelirse (stok takipli ama stok girilmemiş) sınırsız say; backend zaten stok kontrolü yapıyor
-  max: props.max > 0 ? props.max : 999999,
-  step: props.step,
-  id: props.id,
+Alpine.data(
+  "quantityInput",
+  (props: { value: number; min: number; max: number; step: number; id: string }) => ({
+    value: props.value,
+    min: props.min,
+    // max=0 gelirse (stok takipli ama stok girilmemiş) sınırsız say; backend zaten stok kontrolü yapıyor
+    max: props.max > 0 ? props.max : 999999,
+    step: props.step,
+    id: props.id,
 
-  decrement() {
-    const current = this.value || this.min;
-    const target = current - this.step;
-    const snapped = this.step > 1 ? Math.floor(target / this.step) * this.step : target;
-    this.value = Math.min(Math.max(snapped, this.min), this.max);
-    this.$dispatch('quantity-change', { id: this.id, value: this.value });
-  },
+    decrement() {
+      const current = this.value || this.min;
+      const target = current - this.step;
+      const snapped = this.step > 1 ? Math.floor(target / this.step) * this.step : target;
+      this.value = Math.min(Math.max(snapped, this.min), this.max);
+      this.$dispatch("quantity-change", { id: this.id, value: this.value });
+    },
 
-  increment() {
-    const current = this.value || this.min;
-    const target = current + this.step;
-    const snapped = this.step > 1 ? Math.ceil(target / this.step) * this.step : target;
-    this.value = Math.min(Math.max(snapped, this.min), this.max);
-    this.$dispatch('quantity-change', { id: this.id, value: this.value });
-  },
+    increment() {
+      const current = this.value || this.min;
+      const target = current + this.step;
+      const snapped = this.step > 1 ? Math.ceil(target / this.step) * this.step : target;
+      this.value = Math.min(Math.max(snapped, this.min), this.max);
+      this.$dispatch("quantity-change", { id: this.id, value: this.value });
+    },
 
-  clampAndDispatch() {
-    const input = (this.$refs as Record<string, HTMLInputElement>).input;
-    const raw = Number(input.value);
-    let next = Number.isNaN(raw) ? this.min : raw;
-    if (this.step > 1 && next > 0 && next % this.step !== 0) {
-      next = Math.ceil(next / this.step) * this.step;
-    }
-    this.value = Math.min(Math.max(next, this.min), this.max);
-    this.$dispatch('quantity-change', { id: this.id, value: this.value });
-  },
-}));
+    clampAndDispatch() {
+      const input = (this.$refs as Record<string, HTMLInputElement>).input;
+      const raw = Number(input.value);
+      let next = Number.isNaN(raw) ? this.min : raw;
+      if (this.step > 1 && next > 0 && next % this.step !== 0) {
+        next = Math.ceil(next / this.step) * this.step;
+      }
+      this.value = Math.min(Math.max(next, this.min), this.max);
+      this.$dispatch("quantity-change", { id: this.id, value: this.value });
+    },
+  })
+);

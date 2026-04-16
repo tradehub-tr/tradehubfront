@@ -3,7 +3,7 @@
  * Center panel: header with filter dropdown + reactive conversation list.
  */
 
-import { t } from '../../i18n';
+import { t } from "../../i18n";
 
 /* TradeHub logo SVG for platform messages */
 const TRADEHUB_AVATAR = `<svg class="w-full h-full" viewBox="0 0 40 40" fill="none">
@@ -18,7 +18,7 @@ export function MessageList(): string {
       <!-- Header -->
       <div class="flex items-center justify-between px-5 pt-4 pb-3 max-sm:px-3 border-b border-(--color-border-light,#f0f0f0)">
         <div class="flex items-center gap-2">
-          <h3 class="text-base font-bold text-(--color-text-heading,#111827)" x-text="activeCategory === 'all' ? '${t('common.all')}' : '${t('messages.unread')}'"></h3>
+          <h3 class="text-base font-bold text-(--color-text-heading,#111827)" x-text="activeCategory === 'all' ? '${t("common.all")}' : '${t("messages.unread")}'"></h3>
           <span class="text-xs text-(--color-text-placeholder,#999999) bg-(--color-surface-muted,#fafafa) px-1.5 py-0.5 rounded-full" x-text="getFilteredConversations().length"></span>
         </div>
 
@@ -27,7 +27,7 @@ export function MessageList(): string {
           <button @click="toggleFilter()"
                   class="flex items-center justify-center w-7 h-7 border-none bg-transparent cursor-pointer rounded transition-colors duration-150"
                   :class="filterType !== 'all' ? 'text-(--color-cta-primary,#cc9900)' : 'text-(--color-text-placeholder,#999999) hover:text-(--color-text-body,#333333)'"
-                  aria-label="${t('messages.filter')}">
+                  aria-label="${t("messages.filter")}">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
             </svg>
@@ -47,19 +47,19 @@ export function MessageList(): string {
                     class="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-left border-none bg-transparent cursor-pointer hover:bg-(--color-surface-muted,#fafafa) transition-colors"
                     :class="filterType === 'all' ? 'text-(--color-cta-primary,#cc9900) font-semibold' : 'text-(--color-text-body,#333333)'">
               <svg class="w-3.5 h-3.5" :class="filterType === 'all' ? 'opacity-100' : 'opacity-0'" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-              ${t('common.all')}
+              ${t("common.all")}
             </button>
             <button @click="setFilter('unread')"
                     class="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-left border-none bg-transparent cursor-pointer hover:bg-(--color-surface-muted,#fafafa) transition-colors"
                     :class="filterType === 'unread' ? 'text-(--color-cta-primary,#cc9900) font-semibold' : 'text-(--color-text-body,#333333)'">
               <svg class="w-3.5 h-3.5" :class="filterType === 'unread' ? 'opacity-100' : 'opacity-0'" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-              ${t('messages.unread')}
+              ${t("messages.unread")}
             </button>
             <button @click="setFilter('read')"
                     class="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-left border-none bg-transparent cursor-pointer hover:bg-(--color-surface-muted,#fafafa) transition-colors"
                     :class="filterType === 'read' ? 'text-(--color-cta-primary,#cc9900) font-semibold' : 'text-(--color-text-body,#333333)'">
               <svg class="w-3.5 h-3.5" :class="filterType === 'read' ? 'opacity-100' : 'opacity-0'" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-              ${t('messages.read')}
+              ${t("messages.read")}
             </button>
           </div>
         </div>
@@ -71,7 +71,7 @@ export function MessageList(): string {
            class="flex items-center gap-2 px-5 max-sm:px-3 py-2 border-b border-(--color-border-light,#f0f0f0) bg-(--color-surface-muted,#fafafa)">
         <template x-if="filterType !== 'all'">
           <span class="inline-flex items-center gap-1 text-xs bg-(--color-cta-primary,#cc9900)/10 text-(--color-cta-primary,#cc9900) px-2 py-0.5 rounded-full">
-            <span x-text="filterType === 'unread' ? '${t('messages.unread')}' : '${t('messages.read')}'"></span>
+            <span x-text="filterType === 'unread' ? '${t("messages.unread")}' : '${t("messages.read")}'"></span>
             <button @click="setFilter('all')" class="border-none bg-transparent cursor-pointer text-(--color-cta-primary,#cc9900) p-0 leading-none">&times;</button>
           </span>
         </template>
@@ -118,10 +118,10 @@ export function MessageList(): string {
           <svg class="w-12 h-12 text-gray-300 mb-3" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
           </svg>
-          <p class="text-sm text-(--color-text-placeholder,#999999)" data-i18n="messages.noResults">${t('messages.noResults')}</p>
+          <p class="text-sm text-(--color-text-placeholder,#999999)" data-i18n="messages.noResults">${t("messages.noResults")}</p>
           <button @click="searchQuery = ''; filterType = 'all'"
                   class="mt-2 text-xs text-(--color-cta-primary,#cc9900) border-none bg-transparent cursor-pointer hover:underline">
-            <span data-i18n="messages.clearFilters">${t('messages.clearFilters')}</span>
+            <span data-i18n="messages.clearFilters">${t("messages.clearFilters")}</span>
           </button>
         </div>
       </div>

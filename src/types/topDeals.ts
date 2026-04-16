@@ -1,4 +1,4 @@
-import type { ProductImageKind } from './productListing';
+import type { ProductImageKind } from "./productListing";
 
 export interface TopDealsProduct {
   id: string;
@@ -9,7 +9,7 @@ export interface TopDealsProduct {
   imageKind: ProductImageKind;
   imageSrc?: string;
   moq: string;
-  dealBadge?: 'match' | 'top-pick';
+  dealBadge?: "match" | "top-pick";
   discountPercent?: number;
   discountLabel?: string;
   soldCount?: string;

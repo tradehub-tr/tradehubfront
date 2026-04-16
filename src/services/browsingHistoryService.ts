@@ -3,7 +3,7 @@
  * Stores recently viewed products in LocalStorage (max 5, FIFO).
  */
 
-const STORAGE_KEY = 'istoc_browsing_history';
+const STORAGE_KEY = "istoc_browsing_history";
 const MAX_ITEMS = 5;
 
 export interface BrowsingHistoryItem {
@@ -18,11 +18,11 @@ export interface BrowsingHistoryItem {
   timestamp: number;
 }
 
-export function saveToBrowsingHistory(item: Omit<BrowsingHistoryItem, 'timestamp'>): void {
+export function saveToBrowsingHistory(item: Omit<BrowsingHistoryItem, "timestamp">): void {
   const history = getBrowsingHistory();
 
   // Remove duplicate if already exists
-  const filtered = history.filter(h => h.id !== item.id);
+  const filtered = history.filter((h) => h.id !== item.id);
 
   // Add to front
   filtered.unshift({ ...item, timestamp: Date.now() });

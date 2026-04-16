@@ -4,19 +4,26 @@
  */
 
 // TopBar component - main navigation with logo, auth, cart, locale selectors
-export { TopBar, MobileSearchTabs, initMobileDrawer, initHeaderCart, initLanguageSelector, initAuthState } from './TopBar';
+export {
+  TopBar,
+  MobileSearchTabs,
+  initMobileDrawer,
+  initHeaderCart,
+  initLanguageSelector,
+  initAuthState,
+} from "./TopBar";
 
 // SubHeader component - secondary navigation with categories trigger, nav links
-export { SubHeader } from './SubHeader';
+export { SubHeader } from "./SubHeader";
 
 // StickyHeaderSearch — compact search expand/collapse behavior
-export { initStickyHeaderSearch } from './StickyHeaderSearch';
+export { initStickyHeaderSearch } from "./StickyHeaderSearch";
 
 // MegaMenu component - full-width category dropdown
-export { MegaMenu, initMegaMenu, getCategoryIcon, getIconByName } from './MegaMenu';
+export { MegaMenu, initMegaMenu, getCategoryIcon, getIconByName } from "./MegaMenu";
 /** @deprecated Kullanmayın. categoryService.getCategories() kullanın. */
-export { megaCategories } from './MegaMenu';
-export type { MegaMenuCategory } from './MegaMenu';
+export { megaCategories } from "./MegaMenu";
+export type { MegaMenuCategory } from "./MegaMenu";
 
 // PromoBanner component - top promotional banner (iSTOC-style)
-export { PromoBanner, initPromoBanner } from './PromoBanner';
+export { PromoBanner, initPromoBanner } from "./PromoBanner";

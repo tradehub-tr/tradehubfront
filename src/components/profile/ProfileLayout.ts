@@ -3,7 +3,7 @@
  * Profile page with cover image, profile card, and info sections.
  */
 
-import { t } from '../../i18n';
+import { t } from "../../i18n";
 
 // ── SVG Icons ────────────────────────────────────────────────────
 
@@ -31,46 +31,46 @@ interface InfoSection {
 
 function getContactInfo(): InfoSection {
   return {
-    title: t('profile.contactInfo'),
+    title: t("profile.contactInfo"),
     fields: [
-      { label: t('profile.email'), value: 'met***@gmail.com', isVerified: true },
-      { label: t('profile.altEmail'), value: t('profile.none') },
-      { label: t('profile.socialLinks'), value: t('profile.none') },
-      { label: t('profile.fax'), value: t('profile.none') },
-      { label: t('profile.phone'), value: t('profile.none') },
-      { label: t('profile.mobile'), value: t('profile.none') },
+      { label: t("profile.email"), value: "met***@gmail.com", isVerified: true },
+      { label: t("profile.altEmail"), value: t("profile.none") },
+      { label: t("profile.socialLinks"), value: t("profile.none") },
+      { label: t("profile.fax"), value: t("profile.none") },
+      { label: t("profile.phone"), value: t("profile.none") },
+      { label: t("profile.mobile"), value: t("profile.none") },
     ],
   };
 }
 
 function getCompanyInfo(): InfoSection {
   return {
-    title: t('profile.companyInfo'),
+    title: t("profile.companyInfo"),
     fields: [
-      { label: t('profile.companyName'), value: 'Metin K.' },
-      { label: t('profile.foundedYear'), value: t('profile.none') },
-      { label: t('profile.officialWebsite'), value: t('profile.none') },
-      { label: t('profile.businessType'), value: t('profile.none') },
-      { label: t('profile.totalEmployees'), value: t('profile.none') },
-      { label: t('profile.taxInfo'), value: t('profile.view'), isLink: true },
-      { label: t('profile.salesPlatforms'), value: t('profile.none') },
-      { label: t('profile.mainProducts'), value: t('profile.none') },
-      { label: t('profile.registeredAddress'), value: 'TR' },
-      { label: t('profile.operationalAddress'), value: t('profile.none') },
-      { label: t('profile.aboutUs'), value: t('profile.none') },
+      { label: t("profile.companyName"), value: "Metin K." },
+      { label: t("profile.foundedYear"), value: t("profile.none") },
+      { label: t("profile.officialWebsite"), value: t("profile.none") },
+      { label: t("profile.businessType"), value: t("profile.none") },
+      { label: t("profile.totalEmployees"), value: t("profile.none") },
+      { label: t("profile.taxInfo"), value: t("profile.view"), isLink: true },
+      { label: t("profile.salesPlatforms"), value: t("profile.none") },
+      { label: t("profile.mainProducts"), value: t("profile.none") },
+      { label: t("profile.registeredAddress"), value: "TR" },
+      { label: t("profile.operationalAddress"), value: t("profile.none") },
+      { label: t("profile.aboutUs"), value: t("profile.none") },
     ],
   };
 }
 
 function getSourcingInfo(): InfoSection {
   return {
-    title: t('profile.sourcingInfo'),
+    title: t("profile.sourcingInfo"),
     fields: [
-      { label: t('profile.annualPurchaseVolume'), value: t('profile.none') },
-      { label: t('profile.primarySourcingPurpose'), value: t('profile.none') },
-      { label: t('profile.avgSourcingFrequency'), value: t('profile.none') },
-      { label: t('profile.preferredSupplierLocation'), value: t('profile.none') },
-      { label: t('profile.preferredIndustries'), value: t('profile.none') },
+      { label: t("profile.annualPurchaseVolume"), value: t("profile.none") },
+      { label: t("profile.primarySourcingPurpose"), value: t("profile.none") },
+      { label: t("profile.avgSourcingFrequency"), value: t("profile.none") },
+      { label: t("profile.preferredSupplierLocation"), value: t("profile.none") },
+      { label: t("profile.preferredIndustries"), value: t("profile.none") },
     ],
   };
 }
@@ -78,11 +78,11 @@ function getSourcingInfo(): InfoSection {
 // ── Renderers ────────────────────────────────────────────────────
 
 function renderInfoField(field: InfoField): string {
-  const isEmpty = field.value === t('profile.none');
+  const isEmpty = field.value === t("profile.none");
 
   let valueHtml = field.value;
   if (field.isVerified) {
-    valueHtml = `${field.value} <span class="inline-flex items-center gap-[3px] text-xs font-medium text-green-500">${ICONS.verified} ${t('profile.verified')}</span>`;
+    valueHtml = `${field.value} <span class="inline-flex items-center gap-[3px] text-xs font-medium text-green-500">${ICONS.verified} ${t("profile.verified")}</span>`;
   }
   if (field.isLink && !isEmpty) {
     valueHtml = `<a href="#" class="text-blue-600 no-underline font-medium hover:underline">${field.value}</a>`;
@@ -90,7 +90,7 @@ function renderInfoField(field: InfoField): string {
 
   return `
     <div class="text-[13px] py-1.5" style="color:var(--color-text-tertiary)">${field.label}</div>
-    <div class="text-[13px] py-1.5 flex items-center gap-1.5" style="color:${isEmpty ? 'var(--color-text-tertiary)' : 'var(--color-text-primary)'}">${valueHtml}</div>
+    <div class="text-[13px] py-1.5 flex items-center gap-1.5" style="color:${isEmpty ? "var(--color-text-tertiary)" : "var(--color-text-primary)"}">${valueHtml}</div>
   `;
 }
 
@@ -101,12 +101,12 @@ function renderInfoSection(section: InfoSection): string {
         <h3 class="text-base font-bold m-0" style="color:var(--color-text-primary)">${section.title}</h3>
         <a href="#" class="inline-flex items-center gap-1 text-[13px] text-blue-600 no-underline font-medium transition-colors hover:text-blue-700">
           ${ICONS.edit}
-          <span>${t('profile.edit')}</span>
+          <span>${t("profile.edit")}</span>
         </a>
       </div>
       <div class="h-px bg-gray-200 my-4"></div>
       <div class="grid grid-cols-2 gap-x-8 gap-y-3 max-md:grid-cols-1 max-md:gap-y-1">
-        ${section.fields.map(renderInfoField).join('')}
+        ${section.fields.map(renderInfoField).join("")}
       </div>
     </div>
   `;
@@ -117,7 +117,7 @@ function renderCover(): string {
     <div class="w-full h-[180px] rounded-t-lg overflow-hidden bg-gray-200 max-md:h-[120px]">
       <img
         src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=360&fit=crop&crop=center"
-        alt="${t('profile.coverPhoto')}"
+        alt="${t("profile.coverPhoto")}"
         class="w-full h-full object-cover"
       />
     </div>
@@ -134,7 +134,7 @@ function renderProfileCard(): string {
         <div class="flex flex-col gap-1 min-w-0">
           <div class="flex items-center gap-2">
             <h1 class="text-xl font-bold m-0 max-sm:text-[17px]" style="color:var(--color-text-primary)">Metin K.</h1>
-            <a href="#" class="inline-flex items-center justify-center w-7 h-7 rounded transition-all hover:bg-surface-raised" style="color:var(--color-text-tertiary)" title="${t('profile.copyProfileLink')}">${ICONS.link}</a>
+            <a href="#" class="inline-flex items-center justify-center w-7 h-7 rounded transition-all hover:bg-surface-raised" style="color:var(--color-text-tertiary)" title="${t("profile.copyProfileLink")}">${ICONS.link}</a>
           </div>
           <div class="flex items-center gap-1.5 text-[13px]" style="color:var(--color-text-secondary)">
             <span class="inline-flex items-center">${ICONS.flag}</span>
@@ -143,14 +143,14 @@ function renderProfileCard(): string {
           <div class="text-[13px]" style="color:var(--color-text-secondary)">at Metin K.</div>
           <div class="flex items-center gap-2 text-[13px] flex-wrap mt-1 max-sm:flex-col max-sm:items-start max-sm:gap-1" style="color:var(--color-text-secondary)">
             <span class="inline-flex items-center gap-1">
-              ${t('profile.email')} met***@gmail.com
-              <span class="inline-flex items-center gap-[3px] text-xs font-medium text-green-500">${ICONS.verified} ${t('profile.verified')}</span>
+              ${t("profile.email")} met***@gmail.com
+              <span class="inline-flex items-center gap-[3px] text-xs font-medium text-green-500">${ICONS.verified} ${t("profile.verified")}</span>
             </span>
             <span class="max-sm:hidden" style="color:var(--color-border-default)">|</span>
-            <span>${t('profile.joinedYear', { year: '2026' })}</span>
+            <span>${t("profile.joinedYear", { year: "2026" })}</span>
           </div>
           <div class="flex items-center gap-2 text-[13px] mt-1">
-            <span style="color:var(--color-text-tertiary)">${t('profile.mainProductsLabel')}</span>
+            <span style="color:var(--color-text-tertiary)">${t("profile.mainProductsLabel")}</span>
             <span style="color:var(--color-text-secondary)">—</span>
           </div>
         </div>
@@ -158,11 +158,11 @@ function renderProfileCard(): string {
       <div class="flex items-center gap-3 flex-shrink-0 max-md:w-full">
         <a href="#" class="inline-flex items-center gap-1.5 py-2 px-4 rounded-md text-[13px] font-medium no-underline transition-all whitespace-nowrap bg-surface-raised hover:bg-gray-200 max-md:flex-1 max-md:justify-center" style="color:var(--color-text-primary)">
           ${ICONS.eye}
-          <span>${t('profile.whatOthersSee')}</span>
+          <span>${t("profile.whatOthersSee")}</span>
         </a>
         <a href="#" class="inline-flex items-center gap-1.5 py-2 px-4 rounded-md text-[13px] font-medium no-underline transition-all whitespace-nowrap text-white hover:bg-gray-800 max-md:flex-1 max-md:justify-center" style="background:var(--color-text-primary)">
           ${ICONS.edit}
-          <span>${t('profile.edit')}</span>
+          <span>${t("profile.edit")}</span>
         </a>
       </div>
     </div>
@@ -181,18 +181,28 @@ interface FormField {
 
 function getAccountFields(): FormField[] {
   return [
-    { label: t('profile.accountNumber'), value: 'tr29243492599miuy', name: 'accountId', readonly: true },
-    { label: t('profile.fullName'), value: 'Metin K.', name: 'fullName' },
-    { label: t('profile.gender'), value: '', name: 'gender' },
-    { label: t('profile.emailAddress'), value: 'met***@gmail.com', name: 'email', isVerified: true },
-    { label: t('profile.altEmailAddress'), value: '', name: 'altEmail' },
-    { label: t('profile.contactAddress'), value: 'Turkey', name: 'address' },
-    { label: t('profile.postalCode'), value: '', name: 'postalCode' },
-    { label: t('profile.tel'), value: '--', name: 'phone' },
-    { label: t('profile.fax'), value: '', name: 'fax' },
-    { label: t('profile.mobile'), value: '', name: 'mobile' },
-    { label: t('profile.department'), value: '', name: 'department' },
-    { label: t('profile.occupation'), value: '', name: 'occupation' },
+    {
+      label: t("profile.accountNumber"),
+      value: "tr29243492599miuy",
+      name: "accountId",
+      readonly: true,
+    },
+    { label: t("profile.fullName"), value: "Metin K.", name: "fullName" },
+    { label: t("profile.gender"), value: "", name: "gender" },
+    {
+      label: t("profile.emailAddress"),
+      value: "met***@gmail.com",
+      name: "email",
+      isVerified: true,
+    },
+    { label: t("profile.altEmailAddress"), value: "", name: "altEmail" },
+    { label: t("profile.contactAddress"), value: "Turkey", name: "address" },
+    { label: t("profile.postalCode"), value: "", name: "postalCode" },
+    { label: t("profile.tel"), value: "--", name: "phone" },
+    { label: t("profile.fax"), value: "", name: "fax" },
+    { label: t("profile.mobile"), value: "", name: "mobile" },
+    { label: t("profile.department"), value: "", name: "department" },
+    { label: t("profile.occupation"), value: "", name: "occupation" },
   ];
 }
 
@@ -202,10 +212,10 @@ function renderFormField(field: FormField): string {
   if (field.isVerified) {
     valueHtml = `
       <span style="color:var(--color-text-primary)">${field.value}</span>
-      <span class="inline-flex items-center gap-[3px] text-xs italic" style="color:var(--color-primary-500)">${ICONS.verified} ${t('profile.emailVerified')}</span>
+      <span class="inline-flex items-center gap-[3px] text-xs italic" style="color:var(--color-primary-500)">${ICONS.verified} ${t("profile.emailVerified")}</span>
     `;
   } else {
-    valueHtml = `<span style="color:var(--color-text-primary)">${field.value || ''}</span>`;
+    valueHtml = `<span style="color:var(--color-text-primary)">${field.value || ""}</span>`;
   }
 
   return `
@@ -220,15 +230,15 @@ function renderAccountEditForm(): string {
   return `
     <div class="bg-white rounded-lg p-8 max-md:p-5">
       <div class="flex items-center justify-between">
-        <h2 class="text-lg font-semibold m-0" style="color:var(--color-text-primary)">${t('profile.editAccountInfo')}</h2>
-        <a href="#" class="text-[13px] text-blue-600 no-underline font-medium hover:underline">${t('profile.closeAccount')}</a>
+        <h2 class="text-lg font-semibold m-0" style="color:var(--color-text-primary)">${t("profile.editAccountInfo")}</h2>
+        <a href="#" class="text-[13px] text-blue-600 no-underline font-medium hover:underline">${t("profile.closeAccount")}</a>
       </div>
       <div class="h-px bg-gray-200 mt-5 mb-6"></div>
       <div class="flex flex-col">
-        ${getAccountFields().map(renderFormField).join('')}
+        ${getAccountFields().map(renderFormField).join("")}
       </div>
       <div class="mt-6 py-4 bg-[#eff1f7] rounded-md flex justify-center">
-        <button class="py-1.5 px-7 rounded border-[1.5px] border-primary-600 bg-white text-sm font-medium cursor-pointer transition-all hover:bg-amber-50 hover:border-amber-700" style="color:var(--color-text-primary)" type="button">${t('profile.edit')}</button>
+        <button class="py-1.5 px-7 rounded border-[1.5px] border-primary-600 bg-white text-sm font-medium cursor-pointer transition-all hover:bg-amber-50 hover:border-amber-700" style="color:var(--color-text-primary)" type="button">${t("profile.edit")}</button>
       </div>
     </div>
   `;

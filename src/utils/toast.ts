@@ -3,7 +3,7 @@
  * iSTOC design system uyumlu bildirim toast'ları
  */
 
-export type ToastType = 'success' | 'error' | 'warning' | 'info';
+export type ToastType = "success" | "error" | "warning" | "info";
 
 interface ToastOptions {
   message: string;
@@ -13,7 +13,7 @@ interface ToastOptions {
   link?: { text: string; href: string };
 }
 
-const TOAST_CONTAINER_ID = 'toast-container';
+const TOAST_CONTAINER_ID = "toast-container";
 
 const ICONS: Record<ToastType, string> = {
   success: `<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`,
@@ -24,32 +24,33 @@ const ICONS: Record<ToastType, string> = {
 
 /** Accent bar + icon renkleri */
 const COLORS: Record<ToastType, { bar: string; icon: string; iconBg: string }> = {
-  success: { bar: '#16a34a', icon: '#16a34a', iconBg: 'rgba(22,163,74,0.1)' },
-  error:   { bar: '#dc2626', icon: '#dc2626', iconBg: 'rgba(220,38,38,0.1)' },
-  warning: { bar: '#cc9900', icon: '#cc9900', iconBg: 'rgba(204,153,0,0.1)' },
-  info:    { bar: '#2563eb', icon: '#2563eb', iconBg: 'rgba(37,99,235,0.1)' },
+  success: { bar: "#16a34a", icon: "#16a34a", iconBg: "rgba(22,163,74,0.1)" },
+  error: { bar: "#dc2626", icon: "#dc2626", iconBg: "rgba(220,38,38,0.1)" },
+  warning: { bar: "#cc9900", icon: "#cc9900", iconBg: "rgba(204,153,0,0.1)" },
+  info: { bar: "#2563eb", icon: "#2563eb", iconBg: "rgba(37,99,235,0.1)" },
 };
 
 function getOrCreateContainer(): HTMLElement {
   let container = document.getElementById(TOAST_CONTAINER_ID);
   if (!container) {
-    container = document.createElement('div');
+    container = document.createElement("div");
     container.id = TOAST_CONTAINER_ID;
-    container.className = 'fixed top-4 right-4 z-(--z-toast) flex flex-col gap-2.5 pointer-events-none';
-    container.style.maxWidth = '360px';
-    container.style.width = '100%';
+    container.className =
+      "fixed top-4 right-4 z-(--z-toast) flex flex-col gap-2.5 pointer-events-none";
+    container.style.maxWidth = "360px";
+    container.style.width = "100%";
     document.body.appendChild(container);
   }
   return container;
 }
 
 export function showToast(options: ToastOptions): void {
-  const { message, type = 'info', duration = 3500, link } = options;
+  const { message, type = "info", duration = 3500, link } = options;
   const colors = COLORS[type];
   const container = getOrCreateContainer();
 
-  const toast = document.createElement('div');
-  toast.className = 'pointer-events-auto';
+  const toast = document.createElement("div");
+  toast.className = "pointer-events-auto";
   toast.style.cssText = `
     display: flex;
     align-items: center;
@@ -68,7 +69,7 @@ export function showToast(options: ToastOptions): void {
 
   const linkHtml = link
     ? `<a href="${link.href}" style="display:inline-block;margin-top:4px;font-size:12px;font-weight:600;color:${colors.bar};text-decoration:none;">${link.text} &rarr;</a>`
-    : '';
+    : "";
 
   toast.innerHTML = `
     <div style="flex-shrink:0;width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:${colors.iconBg};color:${colors.icon};margin-top:1px">
@@ -85,9 +86,9 @@ export function showToast(options: ToastOptions): void {
   `;
 
   // Progress bar animasyonu için style ekle (bir kez)
-  if (!document.getElementById('toast-progress-style')) {
-    const style = document.createElement('style');
-    style.id = 'toast-progress-style';
+  if (!document.getElementById("toast-progress-style")) {
+    const style = document.createElement("style");
+    style.id = "toast-progress-style";
     style.textContent = `@keyframes toast-progress{from{transform:scaleX(1)}to{transform:scaleX(0)}}`;
     document.head.appendChild(style);
   }
@@ -95,15 +96,19 @@ export function showToast(options: ToastOptions): void {
   container.appendChild(toast);
 
   // Close button
-  const closeBtn = toast.querySelector('button');
-  closeBtn?.addEventListener('click', () => dismissToast(toast));
-  closeBtn?.addEventListener('mouseenter', () => { closeBtn.style.color = '#374151'; });
-  closeBtn?.addEventListener('mouseleave', () => { closeBtn.style.color = '#9ca3af'; });
+  const closeBtn = toast.querySelector("button");
+  closeBtn?.addEventListener("click", () => dismissToast(toast));
+  closeBtn?.addEventListener("mouseenter", () => {
+    closeBtn.style.color = "#374151";
+  });
+  closeBtn?.addEventListener("mouseleave", () => {
+    closeBtn.style.color = "#9ca3af";
+  });
 
   // Animate in
   requestAnimationFrame(() => {
-    toast.style.transform = 'translateX(0)';
-    toast.style.opacity = '1';
+    toast.style.transform = "translateX(0)";
+    toast.style.opacity = "1";
   });
 
   // Auto dismiss
@@ -113,8 +118,8 @@ export function showToast(options: ToastOptions): void {
 }
 
 function dismissToast(toast: HTMLElement): void {
-  toast.style.transform = 'translateX(110%)';
-  toast.style.opacity = '0';
+  toast.style.transform = "translateX(110%)";
+  toast.style.opacity = "0";
   setTimeout(() => toast.remove(), 300);
 }
 

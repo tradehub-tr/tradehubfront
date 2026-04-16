@@ -1,12 +1,12 @@
-import Alpine from 'alpinejs'
-import { t } from '../i18n'
+import Alpine from "alpinejs";
+import { t } from "../i18n";
 import {
   filterAndSortReviews,
   renderReviewCard,
   bindHelpfulButtons,
   SORT_LABELS,
-} from '../components/product/ProductReviews'
-import type { ReviewFilterState, SortMode } from '../components/product/ProductReviews'
+} from "../components/product/ProductReviews";
+import type { ReviewFilterState, SortMode } from "../components/product/ProductReviews";
 import {
   renderGalleryMedia,
   defaultVisual,
@@ -15,8 +15,8 @@ import {
   THUMB_GAP,
   LIGHTBOX_THUMB_SIZE,
   LIGHTBOX_THUMB_GAP,
-} from '../components/product/ProductImageGallery'
-import { toVideoEmbedHtml } from '../components/product/ProductVideoSection'
+} from "../components/product/ProductImageGallery";
+import { toVideoEmbedHtml } from "../components/product/ProductVideoSection";
 
 function renderInlineVideo(url: string): string {
   return `
@@ -25,21 +25,51 @@ function renderInlineVideo(url: string): string {
         ${toVideoEmbedHtml(url)}
       </div>
     </div>
-  `
+  `;
 }
-import { getListingDetail } from '../services/listingService'
-import type { ProductDetail } from '../types/product'
+import { getListingDetail } from "../services/listingService";
+import type { ProductDetail } from "../types/product";
 
 // Empty default product — no mock data
 const emptyProduct: ProductDetail = {
-  id: '', title: '', category: [], images: [], priceTiers: [],
-  moq: 0, unit: '', leadTime: '', shipping: [], variants: [],
-  specs: [], packagingSpecs: [], description: '', packaging: '',
-  rating: 0, reviewCount: 0, orderCount: '0', reviews: [],
-  baseCurrency: 'USD',
-  supplier: { id: '', name: '', verified: false, yearsInBusiness: 0, responseTime: '', responseRate: '', onTimeDelivery: '', mainProducts: [], employees: '', annualRevenue: '', certifications: [] },
-  faq: [], leadTimeRanges: [], customizationOptions: [],
-  reviewCategoryRatings: [], storeReviewCount: 0, reviewMentionTags: [],
+  id: "",
+  title: "",
+  category: [],
+  images: [],
+  priceTiers: [],
+  moq: 0,
+  unit: "",
+  leadTime: "",
+  shipping: [],
+  variants: [],
+  specs: [],
+  packagingSpecs: [],
+  description: "",
+  packaging: "",
+  rating: 0,
+  reviewCount: 0,
+  orderCount: "0",
+  reviews: [],
+  baseCurrency: "USD",
+  supplier: {
+    id: "",
+    name: "",
+    verified: false,
+    yearsInBusiness: 0,
+    responseTime: "",
+    responseRate: "",
+    onTimeDelivery: "",
+    mainProducts: [],
+    employees: "",
+    annualRevenue: "",
+    certifications: [],
+  },
+  faq: [],
+  leadTimeRanges: [],
+  customizationOptions: [],
+  reviewCategoryRatings: [],
+  storeReviewCount: 0,
+  reviewMentionTags: [],
 };
 
 let currentProduct: ProductDetail = emptyProduct;
@@ -55,68 +85,70 @@ export async function loadProduct(listingId: string): Promise<ProductDetail> {
     const product = await getListingDetail(listingId);
     currentProduct = product;
     // Dispatch event for components that need to re-render
-    document.dispatchEvent(new CustomEvent('product-loaded', { detail: product }));
+    document.dispatchEvent(new CustomEvent("product-loaded", { detail: product }));
     return product;
   } catch (err) {
-    console.warn('Failed to load product from API, using mock data:', err);
+    console.warn("Failed to load product from API, using mock data:", err);
     return currentProduct;
   }
 }
 
-Alpine.data('loginModal', () => ({
+Alpine.data("loginModal", () => ({
   open: false,
 
   show() {
     this.open = true;
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
   },
 
   close() {
     this.open = false;
     // Only restore body scroll if no other modal is open underneath
     // ReviewsModal now uses Alpine x-data with :data-open="open" instead of rv-modal-hidden class
-    const reviewsModal = document.getElementById('rv-reviews-modal');
-    const reviewsOpen = reviewsModal?.dataset.open === 'true';
+    const reviewsModal = document.getElementById("rv-reviews-modal");
+    const reviewsOpen = reviewsModal?.dataset.open === "true";
     if (!reviewsOpen) {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     }
   },
 }));
 
-Alpine.data('reviewsModal', () => ({
+Alpine.data("reviewsModal", () => ({
   open: false,
-  filterType: 'all' as 'all' | 'photo',
-  ratingFilter: 'all' as 'all' | number,
+  filterType: "all" as "all" | "photo",
+  ratingFilter: "all" as "all" | number,
   mentionFilter: null as string | null,
-  sortBy: 'relevant' as SortMode,
+  sortBy: "relevant" as SortMode,
   ratingOpen: false,
   sortOpen: false,
 
   show() {
     this.open = true;
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
   },
 
   close() {
     this.open = false;
-    document.body.style.overflow = '';
+    document.body.style.overflow = "";
   },
 
   ratingLabel(): string {
-    return this.ratingFilter === 'all' ? t('reviews.rating') : t('reviews.stars', { count: this.ratingFilter });
+    return this.ratingFilter === "all"
+      ? t("reviews.rating")
+      : t("reviews.stars", { count: this.ratingFilter });
   },
 
   sortLabel(): string {
     return SORT_LABELS[this.sortBy as SortMode];
   },
 
-  setFilter(type: 'all' | 'photo') {
+  setFilter(type: "all" | "photo") {
     this.filterType = type;
     this.renderReviews();
   },
 
   setRating(rating: string) {
-    this.ratingFilter = rating === 'all' ? 'all' : parseInt(rating, 10);
+    this.ratingFilter = rating === "all" ? "all" : parseInt(rating, 10);
     this.ratingOpen = false;
     this.renderReviews();
   },
@@ -143,8 +175,8 @@ Alpine.data('reviewsModal', () => ({
     if (!container) return;
 
     const state: ReviewFilterState = {
-      filterType: this.filterType as 'all' | 'photo',
-      ratingFilter: this.ratingFilter as 'all' | number,
+      filterType: this.filterType as "all" | "photo",
+      ratingFilter: this.ratingFilter as "all" | number,
       mentionFilter: this.mentionFilter as string | null,
       sortBy: this.sortBy as SortMode,
     };
@@ -154,11 +186,13 @@ Alpine.data('reviewsModal', () => ({
     if (filtered.length === 0) {
       container.innerHTML = `
         <div style="text-align: center; padding: 40px 0; color: var(--pd-rating-text-color, #6b7280); font-size: 14px;">
-          ${t('reviews.noReviews')}
+          ${t("reviews.noReviews")}
         </div>
       `;
     } else {
-      container.innerHTML = filtered.map((r: Parameters<typeof renderReviewCard>[0]) => renderReviewCard(r, true)).join('');
+      container.innerHTML = filtered
+        .map((r: Parameters<typeof renderReviewCard>[0]) => renderReviewCard(r, true))
+        .join("");
     }
     bindHelpfulButtons(container);
   },
@@ -172,7 +206,7 @@ Alpine.data('reviewsModal', () => ({
   },
 }));
 
-Alpine.data('orderProtectionModal', () => ({
+Alpine.data("orderProtectionModal", () => ({
   open: false,
   triggerEl: null as HTMLElement | null,
 
@@ -180,7 +214,7 @@ Alpine.data('orderProtectionModal', () => ({
     // Save the element that triggered the modal for focus restoration
     this.triggerEl = document.activeElement as HTMLElement | null;
     this.open = true;
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
     // Auto-focus close button after Alpine renders the modal
     setTimeout(() => {
       const closeBtn = (this.$refs as Record<string, HTMLElement>).closeBtn;
@@ -190,14 +224,14 @@ Alpine.data('orderProtectionModal', () => ({
 
   close() {
     this.open = false;
-    document.body.style.overflow = '';
+    document.body.style.overflow = "";
     // Restore focus to the element that opened the modal
     this.triggerEl?.focus();
     this.triggerEl = null;
   },
 
   trapFocus(e: KeyboardEvent) {
-    if (e.key !== 'Tab') return;
+    if (e.key !== "Tab") return;
     const el = this.$el as HTMLElement;
     const focusable = el.querySelectorAll<HTMLElement>(
       'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
@@ -215,7 +249,7 @@ Alpine.data('orderProtectionModal', () => ({
   },
 }));
 
-Alpine.data('imageGallery', () => ({
+Alpine.data("imageGallery", () => ({
   currentIndex: 0,
   lightboxIndex: 0,
   isLightboxOpen: false,
@@ -226,15 +260,15 @@ Alpine.data('imageGallery', () => ({
   attrsIndex: currentProduct.images.length,
 
   init() {
-    this.supportsHoverZoom = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    this.supportsHoverZoom = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
     // Listen for mobile swipe navigation custom event
-    document.addEventListener('gallery-go-to', ((e: CustomEvent) => {
+    document.addEventListener("gallery-go-to", ((e: CustomEvent) => {
       this.goToSlide(e.detail.index);
     }) as EventListener);
 
     // Listen for variant change — swap gallery images entirely
-    document.addEventListener('product-variant-change', ((e: CustomEvent) => {
+    document.addEventListener("product-variant-change", ((e: CustomEvent) => {
       const images = e.detail?.images as string[] | undefined;
       const videoUrl = e.detail?.videoUrl as string | undefined;
       const isDefault = e.detail?.isDefault as boolean | undefined;
@@ -267,16 +301,16 @@ Alpine.data('imageGallery', () => ({
       alt: `Variant image ${i + 1}`,
       isVideo: isVideoFile(src),
     }));
-    if (videoUrl && !newImages.some(im => im.src === videoUrl)) {
+    if (videoUrl && !newImages.some((im) => im.src === videoUrl)) {
       newImages.push({
-        id: 'variant-video',
+        id: "variant-video",
         src: videoUrl,
-        alt: 'Variant video',
+        alt: "Variant video",
         isVideo: true,
       });
     }
     currentProduct.images.length = 0;
-    currentProduct.images.push(...newImages as any);
+    currentProduct.images.push(...(newImages as any));
 
     const totalCount = newImages.length;
     this.imageCount = totalCount;
@@ -286,12 +320,17 @@ Alpine.data('imageGallery', () => ({
     // Re-render thumbnail strips + main image
     const thumbList = (this.$refs as Record<string, HTMLElement>).thumbList;
     if (thumbList) {
-      thumbList.querySelectorAll<HTMLElement>('.gallery-thumb:not(.gallery-thumb-attrs)').forEach(el => el.remove());
-      const attrThumb = thumbList.querySelector('.gallery-thumb-attrs');
+      thumbList
+        .querySelectorAll<HTMLElement>(".gallery-thumb:not(.gallery-thumb-attrs)")
+        .forEach((el) => el.remove());
+      const attrThumb = thumbList.querySelector(".gallery-thumb-attrs");
       newImages.forEach((img, i) => {
-        const thumb = document.createElement('div');
-        thumb.className = 'gallery-thumb' + (img.isVideo ? ' gallery-thumb-video relative' : '') + (i === 0 ? ' active' : '');
-        thumb.setAttribute('data-index', String(i));
+        const thumb = document.createElement("div");
+        thumb.className =
+          "gallery-thumb" +
+          (img.isVideo ? " gallery-thumb-video relative" : "") +
+          (i === 0 ? " active" : "");
+        thumb.setAttribute("data-index", String(i));
         if (img.isVideo) {
           thumb.innerHTML = `
             <div class="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
@@ -302,8 +341,8 @@ Alpine.data('imageGallery', () => ({
         } else {
           thumb.innerHTML = `<img src="${img.src}" alt="${img.alt}" class="gallery-media-asset gallery-media-asset--thumb" loading="lazy" />`;
         }
-        thumb.addEventListener('click', () => this.goToSlide(i));
-        thumb.addEventListener('mouseenter', () => this.goToSlide(i));
+        thumb.addEventListener("click", () => this.goToSlide(i));
+        thumb.addEventListener("mouseenter", () => this.goToSlide(i));
         if (attrThumb) thumbList.insertBefore(thumb, attrThumb);
         else thumbList.appendChild(thumb);
       });
@@ -312,25 +351,27 @@ Alpine.data('imageGallery', () => ({
     // Lightbox thumbs (include video)
     const lbThumbList = (this.$refs as Record<string, HTMLElement>).lightboxThumbList;
     if (lbThumbList) {
-      lbThumbList.innerHTML = newImages.map((img, i) => {
-        if (img.isVideo) {
-          return `
-            <button type="button" class="gallery-lightbox-thumb relative ${i === 0 ? 'active' : ''}" data-index="${i}">
+      lbThumbList.innerHTML = newImages
+        .map((img, i) => {
+          if (img.isVideo) {
+            return `
+            <button type="button" class="gallery-lightbox-thumb relative ${i === 0 ? "active" : ""}" data-index="${i}">
               <div class="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
                 <svg width="22" height="22" fill="#fff" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
               </div>
               <span class="absolute bottom-0.5 right-0.5 bg-black/80 text-white text-[9px] font-bold px-1 rounded">VIDEO</span>
             </button>
           `;
-        }
-        return `
-          <button type="button" class="gallery-lightbox-thumb ${i === 0 ? 'active' : ''}" data-index="${i}">
+          }
+          return `
+          <button type="button" class="gallery-lightbox-thumb ${i === 0 ? "active" : ""}" data-index="${i}">
             <img src="${img.src}" alt="${img.alt}" class="gallery-media-asset gallery-media-asset--thumb" loading="lazy" />
           </button>
         `;
-      }).join('');
-      lbThumbList.querySelectorAll<HTMLElement>('.gallery-lightbox-thumb').forEach((el, i) => {
-        el.addEventListener('click', () => this.selectLightboxThumb(i));
+        })
+        .join("");
+      lbThumbList.querySelectorAll<HTMLElement>(".gallery-lightbox-thumb").forEach((el, i) => {
+        el.addEventListener("click", () => this.selectLightboxThumb(i));
       });
     }
 
@@ -358,7 +399,7 @@ Alpine.data('imageGallery', () => ({
     const listingVideo = originals.find((img: any) => img.isVideo);
     this.swapGalleryImages(
       urls.filter((u: string) => !originals.find((im: any) => im.src === u && im.isVideo)),
-      listingVideo?.src || undefined,
+      listingVideo?.src || undefined
     );
   },
 
@@ -375,14 +416,14 @@ Alpine.data('imageGallery', () => ({
   resetZoom() {
     const media = this.getMainMedia();
     if (!media) return;
-    media.style.transformOrigin = '50% 50%';
-    media.style.transform = 'scale(1)';
+    media.style.transformOrigin = "50% 50%";
+    media.style.transform = "scale(1)";
     this.isZooming = false;
   },
 
   handleZoomMove(event: PointerEvent) {
     if (!this.supportsHoverZoom) return;
-    if (event.pointerType && event.pointerType !== 'mouse') return;
+    if (event.pointerType && event.pointerType !== "mouse") return;
 
     const mainImage = (this.$refs as Record<string, HTMLElement>).mainImage;
     const media = this.getMainMedia();
@@ -411,9 +452,9 @@ Alpine.data('imageGallery', () => ({
     const thumbHeight = activeThumb.offsetHeight;
 
     if (thumbTop < listTop) {
-      thumbList.scrollTo({ top: thumbTop, behavior: 'smooth' });
+      thumbList.scrollTo({ top: thumbTop, behavior: "smooth" });
     } else if (thumbTop + thumbHeight > listTop + listHeight) {
-      thumbList.scrollTo({ top: thumbTop + thumbHeight - listHeight, behavior: 'smooth' });
+      thumbList.scrollTo({ top: thumbTop + thumbHeight - listHeight, behavior: "smooth" });
     }
   },
 
@@ -423,13 +464,15 @@ Alpine.data('imageGallery', () => ({
     this.currentIndex = index;
 
     // Dispatch event for mobile gallery sync
-    document.dispatchEvent(new CustomEvent('gallery-slide-change', { detail: { index: this.currentIndex } }));
+    document.dispatchEvent(
+      new CustomEvent("gallery-slide-change", { detail: { index: this.currentIndex } })
+    );
 
     const isAttrs = index === this.attrsIndex;
 
     // Toggle attributes card visibility (ProductAttributes renders its own HTML with id)
-    const attrCard = document.getElementById('pd-attributes-card');
-    attrCard?.classList.toggle('hidden', !isAttrs);
+    const attrCard = document.getElementById("pd-attributes-card");
+    attrCard?.classList.toggle("hidden", !isAttrs);
 
     // Update main image content when showing a photo/video slide
     if (!isAttrs) {
@@ -444,7 +487,7 @@ Alpine.data('imageGallery', () => ({
             image?.src,
             image?.alt ?? `Product view ${index + 1}`,
             defaultVisual,
-            'large',
+            "large"
           );
           this.resetZoom();
         }
@@ -458,8 +501,10 @@ Alpine.data('imageGallery', () => ({
   syncLightboxThumbInView(index: number) {
     const lightboxThumbList = (this.$refs as Record<string, HTMLElement>).lightboxThumbList;
     if (!lightboxThumbList) return;
-    const activeThumb = lightboxThumbList.querySelector<HTMLElement>(`.gallery-lightbox-thumb[data-index="${index}"]`);
-    activeThumb?.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });
+    const activeThumb = lightboxThumbList.querySelector<HTMLElement>(
+      `.gallery-lightbox-thumb[data-index="${index}"]`
+    );
+    activeThumb?.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });
   },
 
   setLightboxSlide(index: number) {
@@ -479,7 +524,7 @@ Alpine.data('imageGallery', () => ({
           image?.src,
           image?.alt ?? `Product view ${index + 1}`,
           defaultVisual,
-          'large',
+          "large"
         );
       }
     }
@@ -491,12 +536,12 @@ Alpine.data('imageGallery', () => ({
     if (this.imageCount === 0) return;
     this.setLightboxSlide(index);
     this.isLightboxOpen = true;
-    document.body.classList.add('gallery-lightbox-open');
+    document.body.classList.add("gallery-lightbox-open");
   },
 
   closeLightbox() {
     this.isLightboxOpen = false;
-    document.body.classList.remove('gallery-lightbox-open');
+    document.body.classList.remove("gallery-lightbox-open");
   },
 
   lightboxPrev() {
@@ -518,13 +563,13 @@ Alpine.data('imageGallery', () => ({
     const thumbList = (this.$refs as Record<string, HTMLElement>).thumbList;
     if (!thumbList) return;
     const scrollAmount = THUMB_SIZE + THUMB_GAP;
-    thumbList.scrollBy({ top: direction * scrollAmount, behavior: 'smooth' });
+    thumbList.scrollBy({ top: direction * scrollAmount, behavior: "smooth" });
   },
 
   scrollLightboxThumbs(direction: number) {
     const lightboxThumbList = (this.$refs as Record<string, HTMLElement>).lightboxThumbList;
     if (!lightboxThumbList) return;
     const scrollAmount = LIGHTBOX_THUMB_SIZE + LIGHTBOX_THUMB_GAP;
-    lightboxThumbList.scrollBy({ top: direction * scrollAmount, behavior: 'smooth' });
+    lightboxThumbList.scrollBy({ top: direction * scrollAmount, behavior: "smooth" });
   },
 }));

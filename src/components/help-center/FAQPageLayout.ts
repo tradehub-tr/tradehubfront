@@ -4,7 +4,7 @@
  * Alpine.js drives sidebar selection & search filtering
  */
 
-import { t } from '../../i18n';
+import { t } from "../../i18n";
 
 export function FAQPageLayout(): string {
   return `
@@ -67,11 +67,11 @@ export function FAQPageLayout(): string {
         <div class="flex-1 min-w-0">
 
           <!-- Category heading -->
-          <p class="text-[15px] font-semibold text-gray-700 mb-4" x-text="activeCategoryLabel + (searchQuery ? ' — &quot;' + searchQuery + '&quot; ${t('helpCenter.faqSearchResults')}' : '')"></p>
+          <p class="text-[15px] font-semibold text-gray-700 mb-4" x-text="activeCategoryLabel + (searchQuery ? ' — &quot;' + searchQuery + '&quot; ${t("helpCenter.faqSearchResults")}' : '')"></p>
 
           <!-- No results -->
           <template x-if="visibleCategories.length === 0">
-            <p class="text-sm text-gray-500 bg-white rounded p-6 shadow-sm">${t('helpCenter.faqNoResults')}</p>
+            <p class="text-sm text-gray-500 bg-white rounded p-6 shadow-sm">${t("helpCenter.faqNoResults")}</p>
           </template>
 
           <!-- 2-column category grid -->
@@ -106,19 +106,19 @@ export function FAQPageLayout(): string {
       <div class="bg-white border-t border-gray-100 mt-8 py-5">
         <div class="max-w-[1100px] mx-auto px-4 text-center">
           <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-[12px] text-gray-500 mb-2">
-            <a href="#" class="hover:text-primary-500 transition-colors">${t('helpCenter.faqFooterProductPolicy')}</a>
+            <a href="#" class="hover:text-primary-500 transition-colors">${t("helpCenter.faqFooterProductPolicy")}</a>
             <span class="text-gray-200">–</span>
-            <a href="#" class="hover:text-primary-500 transition-colors">${t('helpCenter.faqFooterIpProtection')}</a>
+            <a href="#" class="hover:text-primary-500 transition-colors">${t("helpCenter.faqFooterIpProtection")}</a>
             <span class="text-gray-200">–</span>
-            <a href="#" class="hover:text-primary-500 transition-colors">${t('helpCenter.faqFooterPrivacy')}</a>
+            <a href="#" class="hover:text-primary-500 transition-colors">${t("helpCenter.faqFooterPrivacy")}</a>
             <span class="text-gray-200">–</span>
-            <a href="#" class="hover:text-primary-500 transition-colors">${t('helpCenter.faqFooterTerms')}</a>
+            <a href="#" class="hover:text-primary-500 transition-colors">${t("helpCenter.faqFooterTerms")}</a>
             <span class="text-gray-200">–</span>
-            <a href="#" class="hover:text-primary-500 transition-colors">${t('helpCenter.faqFooterUserInfo')}</a>
+            <a href="#" class="hover:text-primary-500 transition-colors">${t("helpCenter.faqFooterUserInfo")}</a>
             <span class="text-gray-200">–</span>
-            <a href="#" class="hover:text-primary-500 transition-colors">${t('helpCenter.faqFooterContact')}</a>
+            <a href="#" class="hover:text-primary-500 transition-colors">${t("helpCenter.faqFooterContact")}</a>
           </div>
-          <p class="text-[11px] text-gray-400">${t('helpCenter.faqFooterCopyright')}</p>
+          <p class="text-[11px] text-gray-400">${t("helpCenter.faqFooterCopyright")}</p>
         </div>
       </div>
 

@@ -4,25 +4,30 @@
  * Tüm CRUD operasyonları burada, DOM "source of truth" olmaktan çıkıyor.
  */
 
-import type { CartSupplier, CartProduct, CartSku, CartSummaryData } from '../../../types/cart';
-import { getSelectedCurrencyInfo, convertPrice } from '../../../services/currencyService';
-import { getCurrencySymbol } from '../../../utils/currency';
-import { isLoggedIn } from '../../../utils/auth';
+import type { CartSupplier, CartProduct, CartSku, CartSummaryData } from "../../../types/cart";
+import { getSelectedCurrencyInfo, convertPrice } from "../../../services/currencyService";
+import { getCurrencySymbol } from "../../../utils/currency";
+import { isLoggedIn } from "../../../utils/auth";
 
 export class CartStore {
-  private static STORAGE_KEY = 'tradehub_cart';
+  private static STORAGE_KEY = "tradehub_cart";
 
   private suppliers: CartSupplier[] = [];
   private shippingFee = 0;
   private discount = 0;
   private couponDiscount = 0;
-  private couponCode = '';
+  private couponCode = "";
   private currency = getCurrencySymbol();
   private listeners = new Set<() => void>();
 
   // ──────────────── INIT ────────────────
 
-  init(suppliers: CartSupplier[], shippingFee = 0, currency = getCurrencySymbol(), discount = 0): void {
+  init(
+    suppliers: CartSupplier[],
+    shippingFee = 0,
+    currency = getCurrencySymbol(),
+    discount = 0
+  ): void {
     this.suppliers = structuredClone(suppliers);
     this.shippingFee = shippingFee;
     this.discount = discount;
@@ -73,9 +78,11 @@ export class CartStore {
           shippingFee: this.shippingFee,
           discount: this.discount,
           currency: this.currency,
-        }),
+        })
       );
-    } catch { /* quota exceeded — sessizce geç */ }
+    } catch {
+      /* quota exceeded — sessizce geç */
+    }
   }
 
   // ──────────────── READ ────────────────
@@ -96,7 +103,9 @@ export class CartStore {
     return undefined;
   }
 
-  getSku(skuId: string): { supplier: CartSupplier; product: CartProduct; sku: CartSku } | undefined {
+  getSku(
+    skuId: string
+  ): { supplier: CartSupplier; product: CartProduct; sku: CartSku } | undefined {
     for (const supplier of this.suppliers) {
       for (const product of supplier.products) {
         const sku = product.skus.find((s) => s.id === skuId);
@@ -177,7 +186,7 @@ export class CartStore {
           if (sku.selected && sku.isAvailable !== false) {
             selectedCount++;
             // Fiyatı baz para biriminden seçili para birimine çevir
-            const converted = convertPrice(sku.unitPrice, sku.baseCurrency || 'USD');
+            const converted = convertPrice(sku.unitPrice, sku.baseCurrency || "USD");
             productSubtotal += converted * sku.quantity;
             items.push({ image: sku.skuImage, quantity: sku.quantity });
           }
@@ -185,8 +194,8 @@ export class CartStore {
       }
     }
 
-    const convertedShipping = convertPrice(this.shippingFee, 'USD');
-    const convertedDiscount = convertPrice(this.discount, 'USD');
+    const convertedShipping = convertPrice(this.shippingFee, "USD");
+    const convertedDiscount = convertPrice(this.discount, "USD");
 
     return {
       selectedCount,
@@ -209,7 +218,7 @@ export class CartStore {
 
   clearCoupon(): void {
     this.couponDiscount = 0;
-    this.couponCode = '';
+    this.couponCode = "";
     this.notify();
   }
 
@@ -348,7 +357,7 @@ export class CartStore {
     const found = this.getProduct(productId);
     if (!found) return;
     // Toggle between ♡ and ♥
-    found.product.favoriteIcon = found.product.favoriteIcon === '♥' ? '♡' : '♥';
+    found.product.favoriteIcon = found.product.favoriteIcon === "♥" ? "♡" : "♥";
     this.notify();
   }
 
@@ -406,7 +415,9 @@ export class CartStore {
 
   subscribe(listener: () => void): () => void {
     this.listeners.add(listener);
-    return () => { this.listeners.delete(listener); };
+    return () => {
+      this.listeners.delete(listener);
+    };
   }
 
   private notify(): void {

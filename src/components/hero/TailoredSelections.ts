@@ -4,13 +4,13 @@
  * Each card has a title, views subtitle, two product images side by side, and prices.
  */
 
-import Swiper from 'swiper';
-import { Navigation } from 'swiper/modules';
-import 'swiper/swiper-bundle.css';
-import { t } from '../../i18n';
-import { formatPrice } from '../../utils/currency';
-import { getTailoredSelections } from '../../services/listingService';
-import { initCurrency } from '../../services/currencyService';
+import Swiper from "swiper";
+import { Navigation } from "swiper/modules";
+import "swiper/swiper-bundle.css";
+import { t } from "../../i18n";
+import { formatPrice } from "../../utils/currency";
+import { getTailoredSelections } from "../../services/listingService";
+import { initCurrency } from "../../services/currencyService";
 
 interface CollectionProduct {
   name: string;
@@ -44,23 +44,24 @@ function renderProductImage(product: CollectionProduct): string {
 }
 
 function formatViews(n: number | string): string {
-  const num = typeof n === 'number' ? n : parseInt(String(n), 10) || 0;
-  if (num >= 1000000) return `${(num / 1000000).toFixed(1).replace(/\.0$/, '')}M+`;
-  if (num >= 1000) return `${(num / 1000).toFixed(1).replace(/\.0$/, '')}K+`;
+  const num = typeof n === "number" ? n : parseInt(String(n), 10) || 0;
+  if (num >= 1000000) return `${(num / 1000000).toFixed(1).replace(/\.0$/, "")}M+`;
+  if (num >= 1000) return `${(num / 1000).toFixed(1).replace(/\.0$/, "")}K+`;
   return String(num);
 }
 
 function renderCollectionSlide(collection: TailoredCollection): string {
   const [product1, product2] = collection.products;
   // Kategori adı: API'den gelen `title` öncelikli, yoksa i18n key
-  const titleLabel = collection.title || t(collection.titleKey) || '';
+  const titleLabel = collection.title || t(collection.titleKey) || "";
   // Views count: 0 ise satırı hiç render etme
   const rawCount = collection.viewsCount;
-  const countNum = typeof rawCount === 'number' ? rawCount : parseInt(String(rawCount), 10) || 0;
+  const countNum = typeof rawCount === "number" ? rawCount : parseInt(String(rawCount), 10) || 0;
   const formattedCount = formatViews(countNum);
-  const viewsHtml = countNum > 0
-    ? `<p class="truncate" style="color: var(--tailored-views-color, #767676); font-size: var(--text-product-meta, 16px); margin: 0 0 12px;"><span data-i18n="tailored.views" data-i18n-options='${JSON.stringify({ count: formattedCount })}'>${t('tailored.views', { count: formattedCount })}</span></p>`
-    : '<div style="margin: 0 0 12px;"></div>';
+  const viewsHtml =
+    countNum > 0
+      ? `<p class="truncate" style="color: var(--tailored-views-color, #767676); font-size: var(--text-product-meta, 16px); margin: 0 0 12px;"><span data-i18n="tailored.views" data-i18n-options='${JSON.stringify({ count: formattedCount })}'>${t("tailored.views", { count: formattedCount })}</span></p>`
+      : '<div style="margin: 0 0 12px;"></div>';
   return `
     <div class="swiper-slide tailored-slide">
       <a
@@ -105,15 +106,15 @@ function renderCollectionSlide(collection: TailoredCollection): string {
 }
 
 export function initTailoredSelections(): void {
-  const el = document.querySelector<HTMLElement>('.tailored-swiper');
+  const el = document.querySelector<HTMLElement>(".tailored-swiper");
   if (!el) return;
 
   new Swiper(el, {
     modules: [Navigation],
     spaceBetween: 8,
     navigation: {
-      nextEl: '.tailored-next',
-      prevEl: '.tailored-prev',
+      nextEl: ".tailored-next",
+      prevEl: ".tailored-prev",
     },
     breakpoints: {
       0: {
@@ -138,43 +139,46 @@ export function initTailoredSelections(): void {
   // Load tailored recommendations — 9 grup kartı, kategori başına 2 ürün.
   // Giriş yapmış kullanıcıda aktiviteye göre kişiselleştirilir, aksi halde
   // global top kategoriler (cold-start) döner.
-  initCurrency().then(() => getTailoredSelections(9)).then(result => {
-    if (!result.groups || result.groups.length === 0) return;
+  initCurrency()
+    .then(() => getTailoredSelections(9))
+    .then((result) => {
+      if (!result.groups || result.groups.length === 0) return;
 
-    const collections: TailoredCollection[] = result.groups
-      .filter(g => g.products && g.products.length >= 1)
-      .map(g => {
-        // En az 1 ürün varsa slot'ları doldur (2 ürün gerekli render için)
-        const p1 = g.products[0];
-        const p2 = g.products[1] || g.products[0];
-        return {
-          title: g.name,
-          titleKey: '',
-          views: '',
-          viewsCount: g.viewsCount || 0,
-          href: `/pages/tailored-selections.html?category=${encodeURIComponent(g.slug)}`,
-          products: [
-            { name: p1.name, price: p1.price, imageSrc: p1.imageSrc || '' },
-            { name: p2.name, price: p2.price, imageSrc: p2.imageSrc || '' },
-          ] as [CollectionProduct, CollectionProduct],
-        };
-      });
+      const collections: TailoredCollection[] = result.groups
+        .filter((g) => g.products && g.products.length >= 1)
+        .map((g) => {
+          // En az 1 ürün varsa slot'ları doldur (2 ürün gerekli render için)
+          const p1 = g.products[0];
+          const p2 = g.products[1] || g.products[0];
+          return {
+            title: g.name,
+            titleKey: "",
+            views: "",
+            viewsCount: g.viewsCount || 0,
+            href: `/pages/tailored-selections.html?category=${encodeURIComponent(g.slug)}`,
+            products: [
+              { name: p1.name, price: p1.price, imageSrc: p1.imageSrc || "" },
+              { name: p2.name, price: p2.price, imageSrc: p2.imageSrc || "" },
+            ] as [CollectionProduct, CollectionProduct],
+          };
+        });
 
-    if (collections.length === 0) return;
+      if (collections.length === 0) return;
 
-    // Hide empty state
-    const emptyState = document.getElementById('tailored-empty');
-    if (emptyState) emptyState.style.display = 'none';
+      // Hide empty state
+      const emptyState = document.getElementById("tailored-empty");
+      if (emptyState) emptyState.style.display = "none";
 
-    const wrapper = document.querySelector('#tailored-swiper .swiper-wrapper');
-    if (wrapper) {
-      wrapper.innerHTML = collections.map(c => renderCollectionSlide(c)).join('');
-      const swiperEl = document.querySelector('#tailored-swiper') as HTMLElement;
-      if (swiperEl && (swiperEl as any).swiper) {
-        (swiperEl as any).swiper.update();
+      const wrapper = document.querySelector("#tailored-swiper .swiper-wrapper");
+      if (wrapper) {
+        wrapper.innerHTML = collections.map((c) => renderCollectionSlide(c)).join("");
+        const swiperEl = document.querySelector("#tailored-swiper") as HTMLElement;
+        if (swiperEl && (swiperEl as any).swiper) {
+          (swiperEl as any).swiper.update();
+        }
       }
-    }
-  }).catch(err => console.warn('[TailoredSelections] API load failed:', err));
+    })
+    .catch((err) => console.warn("[TailoredSelections] API load failed:", err));
 }
 
 export function TailoredSelections(): string {
@@ -188,23 +192,25 @@ export function TailoredSelections(): string {
               <h2
                 class="text-[20px] sm:text-[22px] font-bold leading-tight"
                 style="color: var(--tailored-title-color, #111827);"
-              ><span data-i18n="tailored.title">${t('tailored.title')}</span></h2>
+              ><span data-i18n="tailored.title">${t("tailored.title")}</span></h2>
             </div>
             <a
               href="/pages/tailored-selections.html"
               class="flex-shrink-0 text-[13px] font-semibold transition-colors duration-150 hover:underline"
               style="color: var(--tailored-link-color, #111827);"
-            ><span data-i18n="common.viewMore">${t('common.viewMore')}</span> &gt;</a>
+            ><span data-i18n="common.viewMore">${t("common.viewMore")}</span> &gt;</a>
           </div>
 
           <!-- Swiper slider -->
           <div class="group/tailored relative">
             <div id="tailored-swiper" class="swiper tailored-swiper overflow-hidden" aria-label="Tailored selection collections">
               <div class="swiper-wrapper">
-                ${tailoredCollections.length > 0 ? tailoredCollections.map(c => renderCollectionSlide(c)).join('') : ''}
+                ${tailoredCollections.length > 0 ? tailoredCollections.map((c) => renderCollectionSlide(c)).join("") : ""}
               </div>
             </div>
-            ${tailoredCollections.length === 0 ? `
+            ${
+              tailoredCollections.length === 0
+                ? `
             <div id="tailored-empty" class="flex items-center justify-center py-12">
               <div class="text-center">
                 <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -213,7 +219,9 @@ export function TailoredSelections(): string {
                 <p class="text-sm text-gray-400">Yak\u0131nda yeni \u00fcr\u00fcnler eklenecek</p>
               </div>
             </div>
-            ` : ''}
+            `
+                : ""
+            }
 
             <!-- Navigation arrows -->
             <button

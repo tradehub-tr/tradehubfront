@@ -1,4 +1,4 @@
-import DOMPurify from 'dompurify';
+import DOMPurify from "dompurify";
 
 /**
  * Sanitize HTML string to prevent XSS.
@@ -6,8 +6,23 @@ import DOMPurify from 'dompurify';
  */
 export function sanitizeHtml(dirty: string): string {
   return DOMPurify.sanitize(dirty, {
-    ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a', 'br', 'span', 'p', 'ul', 'ol', 'li', 'small', 'sub', 'sup'],
-    ALLOWED_ATTR: ['href', 'target', 'rel', 'class', 'style'],
+    ALLOWED_TAGS: [
+      "b",
+      "i",
+      "em",
+      "strong",
+      "a",
+      "br",
+      "span",
+      "p",
+      "ul",
+      "ol",
+      "li",
+      "small",
+      "sub",
+      "sup",
+    ],
+    ALLOWED_ATTR: ["href", "target", "rel", "class", "style"],
   });
 }
 

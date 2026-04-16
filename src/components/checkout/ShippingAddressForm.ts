@@ -4,8 +4,8 @@
  * Interactivity is handled by Alpine.js x-data="shippingForm" (see alpine.ts).
  */
 
-import type { Country, Province } from '../../types/checkout';
-import { countries, turkishProvinces, pageContent } from '../../data/mockCheckout';
+import type { Country, Province } from "../../types/checkout";
+import { countries, turkishProvinces, pageContent } from "../../data/mockCheckout";
 
 export interface ShippingAddressFormProps {
   countries?: Country[];
@@ -14,7 +14,15 @@ export interface ShippingAddressFormProps {
 
 const ChevronDown = `<svg class="w-4 h-4 shrink-0 transition-transform" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/></svg>`;
 
-function floatField(id: string, name: string, label: string, required: boolean, type = 'text', helperText?: string, helperAction?: string): string {
+function floatField(
+  id: string,
+  name: string,
+  label: string,
+  required: boolean,
+  type = "text",
+  helperText?: string,
+  helperAction?: string
+): string {
   return `
     <div class="relative mb-4 group checkout-field-container" data-field="${name}" x-bind:data-error="errors.${name}">
       <input
@@ -24,18 +32,18 @@ function floatField(id: string, name: string, label: string, required: boolean, 
         name="${name}"
         autocomplete="off"
         placeholder=" "
-        ${required ? 'required' : ''}
+        ${required ? "required" : ""}
         @input="clearError('${name}')"
       />
       <label
-        class="absolute left-3 top-1/2 -translate-y-1/2 text-[14px] text-[#767676] transition-all duration-200 ease-in-out pointer-events-none peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#767676] peer-focus:top-[12px] peer-focus:-translate-y-1/2 peer-focus:text-[12px] peer-focus:text-[var(--color-primary-500)] peer-focus:bg-transparent group-data-[error=true]:text-[var(--color-error-500)] ${type !== 'tel' ? `peer-[:not(:placeholder-shown)]:top-[12px] peer-[:not(:placeholder-shown)]:-translate-y-1/2 peer-[:not(:placeholder-shown)]:text-[12px]` : ''}"
+        class="absolute left-3 top-1/2 -translate-y-1/2 text-[14px] text-[#767676] transition-all duration-200 ease-in-out pointer-events-none peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#767676] peer-focus:top-[12px] peer-focus:-translate-y-1/2 peer-focus:text-[12px] peer-focus:text-[var(--color-primary-500)] peer-focus:bg-transparent group-data-[error=true]:text-[var(--color-error-500)] ${type !== "tel" ? `peer-[:not(:placeholder-shown)]:top-[12px] peer-[:not(:placeholder-shown)]:-translate-y-1/2 peer-[:not(:placeholder-shown)]:text-[12px]` : ""}"
         for="${id}"
       >
-        ${label}${required ? ' <span class="text-[var(--color-error-500)]">*</span>' : ''}
+        ${label}${required ? ' <span class="text-[var(--color-error-500)]">*</span>' : ""}
       </label>
       <div class="hidden text-[12px] text-[var(--color-error-500)] mt-1 group-data-[error=true]:block">${pageContent.requiredFieldError}</div>
-      ${helperText ? `<p class="text-[14px] text-[#767676] mt-2">${helperText}</p>` : ''}
-      ${helperAction ? helperAction : ''}
+      ${helperText ? `<p class="text-[14px] text-[#767676] mt-2">${helperText}</p>` : ""}
+      ${helperAction ? helperAction : ""}
     </div>
   `;
 }
@@ -50,12 +58,12 @@ function dropdownField(
 ): string {
   const containerAlpine = alpine
     ? ` x-bind:data-open="${alpine.openProp}" x-bind:data-error="errors.${name}" @click.outside="${alpine.openProp} = false"`
-    : '';
+    : "";
   const triggerAlpine = alpine
     ? `@click.prevent="toggleDropdown('${name}')" x-bind:aria-expanded="${alpine.openProp}"`
     : 'aria-expanded="false"';
-  const displayAlpine = alpine?.displayProp ? ` x-text="${alpine.displayProp}"` : '';
-  const listAlpine = alpine ? ` @click="${alpine.selectFn}"` : '';
+  const displayAlpine = alpine?.displayProp ? ` x-text="${alpine.displayProp}"` : "";
+  const listAlpine = alpine ? ` @click="${alpine.selectFn}"` : "";
 
   return `
     <div class="relative mb-4 group checkout-dropdown-container" data-field="${name}" data-dropdown="${id}"${containerAlpine}>
@@ -72,13 +80,13 @@ function dropdownField(
       <label class="absolute left-3 top-[12px] -translate-y-1/2 text-[12px] text-[#767676] transition-all duration-200 ease-in-out pointer-events-none group-data-[error=true]:text-[var(--color-error-500)] dropdown-label">
         ${label} <span class="text-[var(--color-error-500)]">*</span>
       </label>
-      <ul class="absolute top-full left-0 right-0 z-50 max-h-[260px] overflow-y-auto bg-[var(--color-surface)] border border-[var(--color-border-default)] rounded-lg shadow-lg mt-1 hidden group-data-[open=true]:block" role="listbox" data-list${listAlpine}>${items || ''}</ul>
+      <ul class="absolute top-full left-0 right-0 z-50 max-h-[260px] overflow-y-auto bg-[var(--color-surface)] border border-[var(--color-border-default)] rounded-lg shadow-lg mt-1 hidden group-data-[open=true]:block" role="listbox" data-list${listAlpine}>${items || ""}</ul>
       <div class="hidden text-[12px] text-[var(--color-error-500)] mt-1 group-data-[error=true]:block">${pageContent.requiredFieldError}</div>
     </div>
   `;
 }
 
-const defaultCountry = countries.find(c => c.code === 'TR') ?? countries[0];
+const defaultCountry = countries.find((c) => c.code === "TR") ?? countries[0];
 
 function renderAddressSelectorModal(): string {
   return `
@@ -287,15 +295,21 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
   const ctrs = props.countries ?? countries;
   const provinces = props.provinces ?? turkishProvinces;
 
-  const countryItems = ctrs.map(c =>
-    `<li class="px-3 py-2 text-[14px] text-[var(--color-text-primary)] cursor-pointer hover:bg-blue-100 hover:text-blue-800 transition-colors flex items-center gap-2 ${c.code === defaultCountry.code ? 'bg-blue-50 text-blue-800' : ''}" role="option" data-value="${c.code}" data-flag="${c.flag}" data-name="${c.name}" data-prefix="${c.phonePrefix}">${c.flag} ${c.name}</li>`
-  ).join('');
+  const countryItems = ctrs
+    .map(
+      (c) =>
+        `<li class="px-3 py-2 text-[14px] text-[var(--color-text-primary)] cursor-pointer hover:bg-blue-100 hover:text-blue-800 transition-colors flex items-center gap-2 ${c.code === defaultCountry.code ? "bg-blue-50 text-blue-800" : ""}" role="option" data-value="${c.code}" data-flag="${c.flag}" data-name="${c.name}" data-prefix="${c.phonePrefix}">${c.flag} ${c.name}</li>`
+    )
+    .join("");
 
-  const countryOptions = ctrs.map((c) => `<option value="${c.code}">${c.name}</option>`).join('');
+  const countryOptions = ctrs.map((c) => `<option value="${c.code}">${c.name}</option>`).join("");
 
-  const provinceItems = provinces.map(p =>
-    `<li class="px-3 py-2 text-[14px] text-[var(--color-text-primary)] cursor-pointer hover:bg-[#f5f5f5] transition-colors" role="option" data-value="${p.name}">${p.name}</li>`
-  ).join('');
+  const provinceItems = provinces
+    .map(
+      (p) =>
+        `<li class="px-3 py-2 text-[14px] text-[var(--color-text-primary)] cursor-pointer hover:bg-[#f5f5f5] transition-colors" role="option" data-value="${p.name}">${p.name}</li>`
+    )
+    .join("");
 
   return `
     <section class="checkout-section mb-4" id="shipping-address-section" x-data="shippingForm">
@@ -331,15 +345,19 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
             </div>
 
             ${dropdownField(
-              'country-dropdown',
-              'country',
-              'Country / region',
+              "country-dropdown",
+              "country",
+              "Country / region",
               `${defaultCountry.flag} ${defaultCountry.name}`,
               countryItems,
-              { openProp: 'countryOpen', selectFn: 'selectCountryItem($event)', displayProp: 'countryDisplay' }
+              {
+                openProp: "countryOpen",
+                selectFn: "selectCountryItem($event)",
+                displayProp: "countryDisplay",
+              }
             )}
 
-            ${floatField('first-name', 'firstName', 'First name and Last name', true)}
+            ${floatField("first-name", "firstName", "First name and Last name", true)}
 
             <div class="relative mb-4 group checkout-field-container flex gap-2" data-field="phone" x-bind:data-error="errors.phone">
               <div class="flex items-center justify-center w-[70px] h-[48px] rounded-lg border border-[var(--color-border-default)] bg-transparent text-[14px] text-[var(--color-text-primary)] shrink-0">
@@ -366,20 +384,17 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
             </div>
             <div class="h-[30px]"></div>
 
-            ${floatField('street-address', 'streetAddress', pageContent.streetAddressLabel, true, 'text')}
+            ${floatField("street-address", "streetAddress", pageContent.streetAddressLabel, true, "text")}
 
-            ${floatField('apartment', 'apartment', pageContent.apartmentLabel, false)}
+            ${floatField("apartment", "apartment", pageContent.apartmentLabel, false)}
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
               <div class="relative">
-                ${dropdownField(
-                  'state-dropdown',
-                  'state',
-                  'State / province',
-                  '',
-                  provinceItems,
-                  { openProp: 'stateOpen', selectFn: 'selectStateItem($event)', displayProp: 'stateDisplay' }
-                )}
+                ${dropdownField("state-dropdown", "state", "State / province", "", provinceItems, {
+                  openProp: "stateOpen",
+                  selectFn: "selectStateItem($event)",
+                  displayProp: "stateDisplay",
+                })}
               </div>
 
               <div class="relative mb-4 group checkout-dropdown-container" data-field="city" data-dropdown="city-dropdown" x-bind:data-open="cityOpen" x-bind:data-error="errors.city" @click.outside="cityOpen = false">
@@ -408,7 +423,7 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
                 <div class="hidden text-[12px] text-[var(--color-error-500)] mt-1 group-data-[error=true]:block">${pageContent.requiredFieldError}</div>
               </div>
 
-              ${floatField('postal-code', 'postalCode', 'Postal code', true, 'text')}
+              ${floatField("postal-code", "postalCode", "Postal code", true, "text")}
             </div>
 
             <div class="flex items-center gap-2 mt-2 mb-4">

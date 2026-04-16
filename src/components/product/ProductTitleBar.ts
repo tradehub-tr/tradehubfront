@@ -4,8 +4,8 @@
  * Contains: product title (h1), rating/review/order line, supplier company bar.
  */
 
-import { getCurrentProduct } from '../../alpine/product';
-import { t } from '../../i18n';
+import { getCurrentProduct } from "../../alpine/product";
+import { t } from "../../i18n";
 
 function starIcon(filled: boolean): string {
   return filled
@@ -18,25 +18,29 @@ function renderStars(rating: number): string {
   for (let i = 1; i <= 5; i++) {
     stars.push(starIcon(i <= Math.round(rating)));
   }
-  return stars.join('');
+  return stars.join("");
 }
 
 export function ProductTitleBar(): string {
   const mockProduct = getCurrentProduct();
   const p = mockProduct;
   const s = p.supplier;
-  const brand = (p as any).brandInfo as { code: string; name: string; slug: string; logo?: string } | null | undefined;
+  const brand = (p as any).brandInfo as
+    | { code: string; name: string; slug: string; logo?: string }
+    | null
+    | undefined;
 
-  const brandRowHtml = brand && brand.name
-    ? `<a href="/pages/brand.html?slug=${encodeURIComponent(brand.slug)}"
+  const brandRowHtml =
+    brand && brand.name
+      ? `<a href="/pages/brand.html?slug=${encodeURIComponent(brand.slug)}"
           class="inline-flex items-center gap-1.5 px-2 py-1 mb-2 rounded-md border border-gray-200 bg-white hover:bg-gray-50 text-[12px] font-medium no-underline"
           style="color: var(--pd-title-color, #222222);"
           title="${brand.name}">
-        ${brand.logo ? `<img src="${brand.logo}" alt="${brand.name}" class="w-4 h-4 object-contain" />` : ''}
-        <span>${t('product.brandLabel', { defaultValue: 'Marka' })}:</span>
+        ${brand.logo ? `<img src="${brand.logo}" alt="${brand.name}" class="w-4 h-4 object-contain" />` : ""}
+        <span>${t("product.brandLabel", { defaultValue: "Marka" })}:</span>
         <strong>${brand.name}</strong>
       </a>`
-    : '';
+      : "";
 
   return `
     <div id="pd-title-bar" class="mb-5">
@@ -50,9 +54,9 @@ export function ProductTitleBar(): string {
           ${renderStars(p.rating)}
         </div>
         <span class="font-semibold" style="color: var(--pd-title-color, #222222);">${p.rating}</span>
-        <span style="color: var(--pd-rating-text-color, #6b7280);">${t('product.reviewsLabel', { count: String(p.reviewCount) })}</span>
+        <span style="color: var(--pd-rating-text-color, #6b7280);">${t("product.reviewsLabel", { count: String(p.reviewCount) })}</span>
         <span style="color: var(--pd-rating-text-color, #d1d5db);">·</span>
-        <span style="color: var(--pd-rating-text-color, #6b7280);">${t('product.ordersLabel', { count: String(p.orderCount) })}</span>
+        <span style="color: var(--pd-rating-text-color, #6b7280);">${t("product.ordersLabel", { count: String(p.orderCount) })}</span>
       </div>
 
       <!-- Supplier Company Bar -->
@@ -68,7 +72,7 @@ export function ProductTitleBar(): string {
           <span class="truncate">Verified Multispecialty Supplier</span>
         </span>
         <span class="shrink-0" style="color: #d1d5db;">·</span>
-        <span class="shrink-0">${t('product.yearsLabel', { count: String(s.yearsInBusiness) })}</span>
+        <span class="shrink-0">${t("product.yearsLabel", { count: String(s.yearsInBusiness) })}</span>
         <span class="shrink-0" style="color: #d1d5db;">·</span>
         <span class="shrink-0">🇹🇷 TR</span>
       </div>

@@ -32,7 +32,7 @@ export interface SkuMatrixEntry {
 }
 
 export interface ProductVariant {
-  type: 'color' | 'size' | 'material';
+  type: "color" | "size" | "material";
   label: string;
   options: VariantOption[];
   skuMatrix?: SkuMatrixEntry[];
