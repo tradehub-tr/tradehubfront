@@ -9,7 +9,7 @@
 
 /* ── Types ──────────────────────────────────────────── */
 
-import { t } from '../../i18n';
+import { t } from "../../i18n";
 
 export interface AuthLayoutOptions {
   /** Page title for mobile header */
@@ -28,15 +28,15 @@ export interface AuthLayoutOptions {
 export const getBaseUrl = (): string => {
   // Vite replaces import.meta.env.BASE_URL at build time.
   // If it's set to a subdirectory (not just "/"), use it directly.
-  const viteBase = typeof import.meta !== 'undefined' ? import.meta.env?.BASE_URL : undefined;
-  if (viteBase && viteBase !== '/') {
+  const viteBase = typeof import.meta !== "undefined" ? import.meta.env?.BASE_URL : undefined;
+  if (viteBase && viteBase !== "/") {
     return viteBase;
   }
   // Runtime fallback: detect GitHub Pages subdirectory from URL
-  if (typeof window !== 'undefined' && window.location.pathname.startsWith('/tradehub/')) {
-    return '/tradehub/';
+  if (typeof window !== "undefined" && window.location.pathname.startsWith("/tradehub/")) {
+    return "/tradehub/";
   }
-  return '/';
+  return "/";
 };
 
 /* ── Sub-component Renders ───────────────────────────── */
@@ -45,24 +45,28 @@ export const getBaseUrl = (): string => {
  * Renders the mobile header bar with optional back button and title
  */
 function renderMobileHeader(options: AuthLayoutOptions = {}): string {
-  const { title = t('auth.mobileHeaderTitle'), showBackButton = true } = options;
+  const { title = t("auth.mobileHeaderTitle"), showBackButton = true } = options;
   const baseUrl = getBaseUrl();
 
   return `
     <header class="lg:hidden fixed top-0 left-0 right-0 z-50 flex items-center h-14 px-4 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-      ${showBackButton ? `
+      ${
+        showBackButton
+          ? `
         <button
           type="button"
           id="auth-mobile-back"
           class="flex items-center justify-center w-10 h-10 -ml-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-          aria-label="${t('auth.mobileBackLabel')}"
+          aria-label="${t("auth.mobileBackLabel")}"
         >
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/>
           </svg>
         </button>
-      ` : ''}
-      <span class="flex-1 text-center text-sm font-medium text-gray-900 dark:text-white truncate ${showBackButton ? 'pr-10' : ''}">${title}</span>
+      `
+          : ""
+      }
+      <span class="flex-1 text-center text-sm font-medium text-gray-900 dark:text-white truncate ${showBackButton ? "pr-10" : ""}">${title}</span>
       <a href="${baseUrl}" class="absolute right-4 top-1/2 -translate-y-1/2" aria-label="iSTOC Ana Sayfa">
         <img src="${baseUrl}images/istoc-logo.png" alt="iSTOC" class="h-6" />
       </a>
@@ -170,7 +174,6 @@ function renderPromoBanner(): string {
   `;
 }
 
-
 /* ── Main Component ──────────────────────────────────────── */
 
 /**
@@ -226,7 +229,6 @@ export function AuthLayout(content: string, options: AuthLayoutOptions = {}): st
   `;
 }
 
-
 /* ── Init Logic ──────────────────────────────────────── */
 
 /**
@@ -234,10 +236,10 @@ export function AuthLayout(content: string, options: AuthLayoutOptions = {}): st
  * Sets up mobile back button handler
  */
 export function initAuthLayout(options: AuthLayoutOptions = {}): void {
-  const backBtn = document.getElementById('auth-mobile-back');
+  const backBtn = document.getElementById("auth-mobile-back");
 
   if (backBtn) {
-    backBtn.addEventListener('click', () => {
+    backBtn.addEventListener("click", () => {
       if (options.onBackClick) {
         options.onBackClick();
       } else {

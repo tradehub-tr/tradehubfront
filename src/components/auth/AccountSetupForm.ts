@@ -5,8 +5,12 @@
  * Used after email verification in the registration flow.
  */
 
-import { t } from '../../i18n';
-import { validatePassword, isPasswordValid, type PasswordValidation } from '../../utils/password-validation';
+import { t } from "../../i18n";
+import {
+  validatePassword,
+  isPasswordValid,
+  type PasswordValidation,
+} from "../../utils/password-validation";
 
 // Re-export for backward compatibility
 export { validatePassword, isPasswordValid };
@@ -60,33 +64,33 @@ export interface AccountSetupFormState {
 
 /** Country code + flag pairs (name is resolved via i18n at render time) */
 const countryEntries: { code: string; flag: string }[] = [
-  { code: 'TR', flag: '🇹🇷' },
-  { code: 'US', flag: '🇺🇸' },
-  { code: 'DE', flag: '🇩🇪' },
-  { code: 'GB', flag: '🇬🇧' },
-  { code: 'FR', flag: '🇫🇷' },
-  { code: 'IT', flag: '🇮🇹' },
-  { code: 'ES', flag: '🇪🇸' },
-  { code: 'NL', flag: '🇳🇱' },
-  { code: 'BE', flag: '🇧🇪' },
-  { code: 'AT', flag: '🇦🇹' },
-  { code: 'CH', flag: '🇨🇭' },
-  { code: 'PL', flag: '🇵🇱' },
-  { code: 'SE', flag: '🇸🇪' },
-  { code: 'NO', flag: '🇳🇴' },
-  { code: 'DK', flag: '🇩🇰' },
-  { code: 'FI', flag: '🇫🇮' },
-  { code: 'RU', flag: '🇷🇺' },
-  { code: 'CN', flag: '🇨🇳' },
-  { code: 'JP', flag: '🇯🇵' },
-  { code: 'KR', flag: '🇰🇷' },
-  { code: 'IN', flag: '🇮🇳' },
-  { code: 'AE', flag: '🇦🇪' },
-  { code: 'SA', flag: '🇸🇦' },
-  { code: 'AU', flag: '🇦🇺' },
-  { code: 'CA', flag: '🇨🇦' },
-  { code: 'BR', flag: '🇧🇷' },
-  { code: 'MX', flag: '🇲🇽' },
+  { code: "TR", flag: "🇹🇷" },
+  { code: "US", flag: "🇺🇸" },
+  { code: "DE", flag: "🇩🇪" },
+  { code: "GB", flag: "🇬🇧" },
+  { code: "FR", flag: "🇫🇷" },
+  { code: "IT", flag: "🇮🇹" },
+  { code: "ES", flag: "🇪🇸" },
+  { code: "NL", flag: "🇳🇱" },
+  { code: "BE", flag: "🇧🇪" },
+  { code: "AT", flag: "🇦🇹" },
+  { code: "CH", flag: "🇨🇭" },
+  { code: "PL", flag: "🇵🇱" },
+  { code: "SE", flag: "🇸🇪" },
+  { code: "NO", flag: "🇳🇴" },
+  { code: "DK", flag: "🇩🇰" },
+  { code: "FI", flag: "🇫🇮" },
+  { code: "RU", flag: "🇷🇺" },
+  { code: "CN", flag: "🇨🇳" },
+  { code: "JP", flag: "🇯🇵" },
+  { code: "KR", flag: "🇰🇷" },
+  { code: "IN", flag: "🇮🇳" },
+  { code: "AE", flag: "🇦🇪" },
+  { code: "SA", flag: "🇸🇦" },
+  { code: "AU", flag: "🇦🇺" },
+  { code: "CA", flag: "🇨🇦" },
+  { code: "BR", flag: "🇧🇷" },
+  { code: "MX", flag: "🇲🇽" },
 ];
 
 /** Build country options with i18n-resolved names (call at render time for correct locale) */
@@ -117,18 +121,19 @@ export const countryOptions: CountryOption[] = countryEntries.map(({ code, flag 
  * @param defaultCountry - Default selected country code (e.g., 'TR')
  * @returns HTML string for the account setup form
  */
-export function AccountSetupForm(defaultCountry: string = 'TR'): string {
-  const selectedCountry = countryOptions.find(c => c.code === defaultCountry) || countryOptions[0];
+export function AccountSetupForm(defaultCountry: string = "TR"): string {
+  const selectedCountry =
+    countryOptions.find((c) => c.code === defaultCountry) || countryOptions[0];
 
   return `
     <div id="account-setup-form" class="w-full">
       <!-- Header -->
       <div class="mb-6 text-center lg:text-left">
         <h1 class="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white mb-2">
-          ${t('auth.setupTitle')}
+          ${t("auth.setupTitle")}
         </h1>
         <p class="text-sm text-gray-500 dark:text-gray-400">
-          ${t('auth.setupSubtitle')}
+          ${t("auth.setupSubtitle")}
         </p>
       </div>
 
@@ -136,7 +141,7 @@ export function AccountSetupForm(defaultCountry: string = 'TR'): string {
         <!-- Country/Region Dropdown -->
         <div class="auth-form-field relative">
           <label for="country-select" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" data-i18n="auth.setup.countryRegion">
-            ${t('auth.setup.countryRegion')}
+            ${t("auth.setup.countryRegion")}
           </label>
           <div class="relative">
             <button
@@ -162,7 +167,7 @@ export function AccountSetupForm(defaultCountry: string = 'TR'): string {
               id="country-dropdown"
               class="absolute z-50 hidden w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg max-h-60 overflow-y-auto"
               role="listbox"
-              aria-label="${t('auth.setup.selectCountry')}" data-i18n-aria-label="auth.setup.selectCountry"
+              aria-label="${t("auth.setup.selectCountry")}" data-i18n-aria-label="auth.setup.selectCountry"
             >
               ${renderCountryOptions(selectedCountry.code)}
             </div>
@@ -174,13 +179,13 @@ export function AccountSetupForm(defaultCountry: string = 'TR'): string {
           <!-- First Name -->
           <div class="auth-form-field relative">
             <label for="first-name-input" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" data-i18n="auth.setup.firstName">
-              ${t('auth.setup.firstName')}
+              ${t("auth.setup.firstName")}
             </label>
             <input
               type="text"
               id="first-name-input"
               name="firstName"
-              placeholder="${t('auth.setup.firstNamePlaceholder')}" data-i18n-placeholder="auth.setup.firstNamePlaceholder"
+              placeholder="${t("auth.setup.firstNamePlaceholder")}" data-i18n-placeholder="auth.setup.firstNamePlaceholder"
               autocomplete="given-name"
               class="th-input th-input-lg"
               required
@@ -190,13 +195,13 @@ export function AccountSetupForm(defaultCountry: string = 'TR'): string {
           <!-- Last Name -->
           <div class="auth-form-field relative">
             <label for="last-name-input" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" data-i18n="auth.setup.lastName">
-              ${t('auth.setup.lastName')}
+              ${t("auth.setup.lastName")}
             </label>
             <input
               type="text"
               id="last-name-input"
               name="lastName"
-              placeholder="${t('auth.setup.lastNamePlaceholder')}" data-i18n-placeholder="auth.setup.lastNamePlaceholder"
+              placeholder="${t("auth.setup.lastNamePlaceholder")}" data-i18n-placeholder="auth.setup.lastNamePlaceholder"
               autocomplete="family-name"
               class="th-input th-input-lg"
               required
@@ -207,7 +212,7 @@ export function AccountSetupForm(defaultCountry: string = 'TR'): string {
         <!-- Phone Field -->
         <div class="auth-form-field relative">
           <label for="phone-input" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-            ${t('auth.setup.phone') || 'Telefon'}
+            ${t("auth.setup.phone") || "Telefon"}
           </label>
           <input
             type="tel"
@@ -223,14 +228,14 @@ export function AccountSetupForm(defaultCountry: string = 'TR'): string {
         <!-- Password Field -->
         <div class="auth-form-field relative">
           <label for="password-input" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" data-i18n="auth.setup.password">
-            ${t('auth.setup.password')}
+            ${t("auth.setup.password")}
           </label>
           <div class="relative">
             <input
               type="password"
               id="password-input"
               name="password"
-              placeholder="${t('auth.setup.passwordPlaceholder')}" data-i18n-placeholder="auth.setup.passwordPlaceholder"
+              placeholder="${t("auth.setup.passwordPlaceholder")}" data-i18n-placeholder="auth.setup.passwordPlaceholder"
               autocomplete="new-password"
               class="th-input th-input-lg pr-12"
               required
@@ -239,7 +244,7 @@ export function AccountSetupForm(defaultCountry: string = 'TR'): string {
               type="button"
               id="password-toggle-btn"
               class="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-              aria-label="${t('auth.forgot.showHidePassword')}" data-i18n-aria-label="auth.forgot.showHidePassword"
+              aria-label="${t("auth.forgot.showHidePassword")}" data-i18n-aria-label="auth.forgot.showHidePassword"
             >
               <!-- Eye icon (show) -->
               <svg id="password-eye-show" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -259,25 +264,25 @@ export function AccountSetupForm(defaultCountry: string = 'TR'): string {
               <svg class="auth-password-req-icon shrink-0 w-2 h-2 transition-all" viewBox="0 0 16 16" fill="currentColor">
                 <circle cx="8" cy="8" r="3"/>
               </svg>
-              <span data-i18n="auth.setup.minChars">${t('auth.setup.minChars')}</span>
+              <span data-i18n="auth.setup.minChars">${t("auth.setup.minChars")}</span>
             </div>
             <div class="auth-password-req-item flex items-center gap-2 text-[13px] transition-colors" data-requirement="hasUppercase">
               <svg class="auth-password-req-icon shrink-0 w-2 h-2 transition-all" viewBox="0 0 16 16" fill="currentColor">
                 <circle cx="8" cy="8" r="3"/>
               </svg>
-              <span data-i18n="auth.setup.uppercase">${t('auth.setup.uppercase')}</span>
+              <span data-i18n="auth.setup.uppercase">${t("auth.setup.uppercase")}</span>
             </div>
             <div class="auth-password-req-item flex items-center gap-2 text-[13px] transition-colors" data-requirement="hasLowercase">
               <svg class="auth-password-req-icon shrink-0 w-2 h-2 transition-all" viewBox="0 0 16 16" fill="currentColor">
                 <circle cx="8" cy="8" r="3"/>
               </svg>
-              <span data-i18n="auth.setup.lowercase">${t('auth.setup.lowercase')}</span>
+              <span data-i18n="auth.setup.lowercase">${t("auth.setup.lowercase")}</span>
             </div>
             <div class="auth-password-req-item flex items-center gap-2 text-[13px] transition-colors" data-requirement="hasNumber">
               <svg class="auth-password-req-icon shrink-0 w-2 h-2 transition-all" viewBox="0 0 16 16" fill="currentColor">
                 <circle cx="8" cy="8" r="3"/>
               </svg>
-              <span data-i18n="auth.setup.number">${t('auth.setup.number')}</span>
+              <span data-i18n="auth.setup.number">${t("auth.setup.number")}</span>
             </div>
           </div>
         </div>
@@ -293,8 +298,8 @@ export function AccountSetupForm(defaultCountry: string = 'TR'): string {
             required
           />
           <label for="terms-checkbox" class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-            <a href="/pages/legal/terms.html" class="text-orange-600 dark:text-orange-400 hover:underline" data-i18n="auth.setup.termsOfUse">${t('auth.setup.termsOfUse')}</a> ${t('auth.and')}
-            <a href="/pages/legal/privacy.html" class="text-orange-600 dark:text-orange-400 hover:underline" data-i18n="auth.setup.privacyPolicy">${t('auth.setup.privacyPolicy')}</a><span data-i18n="auth.setup.agreeTerms">${t('auth.setup.agreeTerms')}</span>
+            <a href="/pages/legal/terms.html" class="text-orange-600 dark:text-orange-400 hover:underline" data-i18n="auth.setup.termsOfUse">${t("auth.setup.termsOfUse")}</a> ${t("auth.and")}
+            <a href="/pages/legal/privacy.html" class="text-orange-600 dark:text-orange-400 hover:underline" data-i18n="auth.setup.privacyPolicy">${t("auth.setup.privacyPolicy")}</a><span data-i18n="auth.setup.agreeTerms">${t("auth.setup.agreeTerms")}</span>
           </label>
         </div>
 
@@ -305,15 +310,15 @@ export function AccountSetupForm(defaultCountry: string = 'TR'): string {
           class="th-btn w-full py-3 text-base font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-6"
           disabled
         >
-          <span data-i18n="auth.setup.createAccount">${t('auth.setup.createAccount')}</span>
+          <span data-i18n="auth.setup.createAccount">${t("auth.setup.createAccount")}</span>
         </button>
       </form>
 
       <!-- Login Link -->
       <div class="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-        <span data-i18n="auth.register.alreadyHave">${t('auth.register.alreadyHave')}</span>
+        <span data-i18n="auth.register.alreadyHave">${t("auth.register.alreadyHave")}</span>
         <a href="/pages/auth/login.html" class="ml-1 font-medium text-orange-600 dark:text-orange-400 hover:underline">
-          <span data-i18n="auth.register.signIn">${t('auth.register.signIn')}</span>
+          <span data-i18n="auth.register.signIn">${t("auth.register.signIn")}</span>
         </a>
       </div>
     </div>
@@ -324,25 +329,33 @@ export function AccountSetupForm(defaultCountry: string = 'TR'): string {
  * Renders the country dropdown options
  */
 function renderCountryOptions(selectedCode: string): string {
-  return countryOptions.map(country => `
+  return countryOptions
+    .map(
+      (country) => `
     <button
       type="button"
-      class="flex items-center gap-2 w-full px-4 py-2.5 text-left text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${country.code === selectedCode ? 'bg-orange-50 dark:bg-orange-900/20' : ''}"
+      class="flex items-center gap-2 w-full px-4 py-2.5 text-left text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${country.code === selectedCode ? "bg-orange-50 dark:bg-orange-900/20" : ""}"
       data-country-code="${country.code}"
       data-country-name="${country.name}"
       data-country-flag="${country.flag}"
       role="option"
-      aria-selected="${country.code === selectedCode ? 'true' : 'false'}"
+      aria-selected="${country.code === selectedCode ? "true" : "false"}"
     >
       <span class="text-lg">${country.flag}</span>
       <span>${country.name}</span>
-      ${country.code === selectedCode ? `
+      ${
+        country.code === selectedCode
+          ? `
         <svg class="w-4 h-4 ml-auto text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
         </svg>
-      ` : ''}
+      `
+          : ""
+      }
     </button>
-  `).join('');
+  `
+    )
+    .join("");
 }
 
 /* ── Helper Functions ────────────────────────────────── */
@@ -351,7 +364,7 @@ function renderCountryOptions(selectedCode: string): string {
  * Get a country by its code
  */
 export function getCountryByCode(code: string): CountryOption | undefined {
-  return countryOptions.find(c => c.code === code);
+  return countryOptions.find((c) => c.code === code);
 }
 
 /* ── Init Logic ──────────────────────────────────────── */
@@ -361,16 +374,16 @@ export function getCountryByCode(code: string): CountryOption | undefined {
  * Sets up form validation, password requirements, and country dropdown
  */
 export function initAccountSetupForm(options: AccountSetupFormOptions = {}): AccountSetupFormState {
-  const { defaultCountry = 'TR', onSubmit, onCountryChange } = options;
+  const { defaultCountry = "TR", onSubmit, onCountryChange } = options;
 
   // Initialize state
   const state: AccountSetupFormState = {
     data: {
       country: getCountryByCode(defaultCountry) || countryOptions[0],
-      firstName: '',
-      lastName: '',
-      phone: '',
-      password: '',
+      firstName: "",
+      lastName: "",
+      phone: "",
+      password: "",
     },
     passwordRequirements: {
       minLength: false,
@@ -381,43 +394,43 @@ export function initAccountSetupForm(options: AccountSetupFormOptions = {}): Acc
     isValid: false,
   };
 
-  const container = document.getElementById('account-setup-form');
+  const container = document.getElementById("account-setup-form");
   if (!container) return state;
 
   // Get form elements
-  const form = document.getElementById('account-setup-form-element') as HTMLFormElement | null;
-  const countryBtn = document.getElementById('country-select-btn');
-  const countryDropdown = document.getElementById('country-dropdown');
-  const countryInput = document.getElementById('country-input') as HTMLInputElement | null;
-  const countryDisplay = document.getElementById('country-selected-display');
-  const dropdownIcon = document.getElementById('country-dropdown-icon');
-  const firstNameInput = document.getElementById('first-name-input') as HTMLInputElement | null;
-  const lastNameInput = document.getElementById('last-name-input') as HTMLInputElement | null;
-  const passwordInput = document.getElementById('password-input') as HTMLInputElement | null;
-  const passwordToggleBtn = document.getElementById('password-toggle-btn');
-  const passwordEyeShow = document.getElementById('password-eye-show');
-  const passwordEyeHide = document.getElementById('password-eye-hide');
-  const termsCheckbox = document.getElementById('terms-checkbox') as HTMLInputElement | null;
-  const submitBtn = document.getElementById('account-setup-submit-btn') as HTMLButtonElement | null;
-  const requirementsContainer = document.getElementById('password-requirements');
+  const form = document.getElementById("account-setup-form-element") as HTMLFormElement | null;
+  const countryBtn = document.getElementById("country-select-btn");
+  const countryDropdown = document.getElementById("country-dropdown");
+  const countryInput = document.getElementById("country-input") as HTMLInputElement | null;
+  const countryDisplay = document.getElementById("country-selected-display");
+  const dropdownIcon = document.getElementById("country-dropdown-icon");
+  const firstNameInput = document.getElementById("first-name-input") as HTMLInputElement | null;
+  const lastNameInput = document.getElementById("last-name-input") as HTMLInputElement | null;
+  const passwordInput = document.getElementById("password-input") as HTMLInputElement | null;
+  const passwordToggleBtn = document.getElementById("password-toggle-btn");
+  const passwordEyeShow = document.getElementById("password-eye-show");
+  const passwordEyeHide = document.getElementById("password-eye-hide");
+  const termsCheckbox = document.getElementById("terms-checkbox") as HTMLInputElement | null;
+  const submitBtn = document.getElementById("account-setup-submit-btn") as HTMLButtonElement | null;
+  const requirementsContainer = document.getElementById("password-requirements");
 
   // Country dropdown handlers
   if (countryBtn && countryDropdown) {
     // Toggle dropdown
-    countryBtn.addEventListener('click', () => {
-      const isOpen = !countryDropdown.classList.contains('hidden');
+    countryBtn.addEventListener("click", () => {
+      const isOpen = !countryDropdown.classList.contains("hidden");
       toggleCountryDropdown(!isOpen);
     });
 
     // Handle country selection
-    countryDropdown.addEventListener('click', (e) => {
+    countryDropdown.addEventListener("click", (e) => {
       const target = e.target as HTMLElement;
-      const button = target.closest('[data-country-code]') as HTMLElement | null;
+      const button = target.closest("[data-country-code]") as HTMLElement | null;
 
       if (button) {
-        const code = button.getAttribute('data-country-code') || '';
-        const name = button.getAttribute('data-country-name') || '';
-        const flag = button.getAttribute('data-country-flag') || '';
+        const code = button.getAttribute("data-country-code") || "";
+        const name = button.getAttribute("data-country-name") || "";
+        const flag = button.getAttribute("data-country-flag") || "";
 
         state.data.country = { code, name, flag };
 
@@ -451,7 +464,7 @@ export function initAccountSetupForm(options: AccountSetupFormOptions = {}): Acc
     });
 
     // Close dropdown on outside click
-    document.addEventListener('click', (e) => {
+    document.addEventListener("click", (e) => {
       const target = e.target as HTMLElement;
       if (!countryBtn.contains(target) && !countryDropdown.contains(target)) {
         toggleCountryDropdown(false);
@@ -459,8 +472,8 @@ export function initAccountSetupForm(options: AccountSetupFormOptions = {}): Acc
     });
 
     // Close dropdown on escape
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && !countryDropdown.classList.contains('hidden')) {
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !countryDropdown.classList.contains("hidden")) {
         toggleCountryDropdown(false);
         countryBtn.focus();
       }
@@ -471,52 +484,54 @@ export function initAccountSetupForm(options: AccountSetupFormOptions = {}): Acc
     if (!countryDropdown || !countryBtn || !dropdownIcon) return;
 
     if (open) {
-      countryDropdown.classList.remove('hidden');
-      countryBtn.setAttribute('aria-expanded', 'true');
-      dropdownIcon.classList.add('rotate-180');
+      countryDropdown.classList.remove("hidden");
+      countryBtn.setAttribute("aria-expanded", "true");
+      dropdownIcon.classList.add("rotate-180");
     } else {
-      countryDropdown.classList.add('hidden');
-      countryBtn.setAttribute('aria-expanded', 'false');
-      dropdownIcon.classList.remove('rotate-180');
+      countryDropdown.classList.add("hidden");
+      countryBtn.setAttribute("aria-expanded", "false");
+      dropdownIcon.classList.remove("rotate-180");
     }
   }
 
   // Name input handlers
   if (firstNameInput) {
-    firstNameInput.addEventListener('input', () => {
+    firstNameInput.addEventListener("input", () => {
       state.data.firstName = firstNameInput.value.trim();
       updateFormValidity();
     });
   }
 
   if (lastNameInput) {
-    lastNameInput.addEventListener('input', () => {
+    lastNameInput.addEventListener("input", () => {
       state.data.lastName = lastNameInput.value.trim();
       updateFormValidity();
     });
   }
 
   // Phone input handler
-  const phoneInput = document.getElementById('phone-input') as HTMLInputElement | null;
-  const phoneError = document.getElementById('phone-error');
+  const phoneInput = document.getElementById("phone-input") as HTMLInputElement | null;
+  const phoneError = document.getElementById("phone-error");
 
   if (phoneInput) {
-    phoneInput.addEventListener('input', () => {
+    phoneInput.addEventListener("input", () => {
       state.data.phone = phoneInput.value.trim();
       // Validate only if user has typed something
       if (state.data.phone) {
-        const cleaned = state.data.phone.replace(/[\s\-()]/g, '');
+        const cleaned = state.data.phone.replace(/[\s\-()]/g, "");
         const isValid = /^(\+90|0)?5\d{9}$/.test(cleaned);
         if (phoneError) {
           if (!isValid) {
-            phoneError.textContent = t('auth.supplierSetup.invalidPhone') || 'Geçerli bir telefon numarası girin (05XX XXX XX XX)';
-            phoneError.classList.remove('hidden');
+            phoneError.textContent =
+              t("auth.supplierSetup.invalidPhone") ||
+              "Geçerli bir telefon numarası girin (05XX XXX XX XX)";
+            phoneError.classList.remove("hidden");
           } else {
-            phoneError.classList.add('hidden');
+            phoneError.classList.add("hidden");
           }
         }
       } else if (phoneError) {
-        phoneError.classList.add('hidden');
+        phoneError.classList.add("hidden");
       }
       updateFormValidity();
     });
@@ -524,7 +539,7 @@ export function initAccountSetupForm(options: AccountSetupFormOptions = {}): Acc
 
   // Password input handler
   if (passwordInput) {
-    passwordInput.addEventListener('input', () => {
+    passwordInput.addEventListener("input", () => {
       state.data.password = passwordInput.value;
       state.passwordRequirements = validatePassword(passwordInput.value);
       updatePasswordRequirementsUI();
@@ -534,24 +549,24 @@ export function initAccountSetupForm(options: AccountSetupFormOptions = {}): Acc
 
   // Password toggle visibility
   if (passwordToggleBtn && passwordInput && passwordEyeShow && passwordEyeHide) {
-    passwordToggleBtn.addEventListener('click', () => {
-      const isPassword = passwordInput.type === 'password';
-      passwordInput.type = isPassword ? 'text' : 'password';
-      passwordEyeShow.classList.toggle('hidden', !isPassword);
-      passwordEyeHide.classList.toggle('hidden', isPassword);
+    passwordToggleBtn.addEventListener("click", () => {
+      const isPassword = passwordInput.type === "password";
+      passwordInput.type = isPassword ? "text" : "password";
+      passwordEyeShow.classList.toggle("hidden", !isPassword);
+      passwordEyeHide.classList.toggle("hidden", isPassword);
     });
   }
 
   // Terms checkbox handler
   if (termsCheckbox) {
-    termsCheckbox.addEventListener('change', () => {
+    termsCheckbox.addEventListener("change", () => {
       updateFormValidity();
     });
   }
 
   // Form submission
   if (form) {
-    form.addEventListener('submit', (e) => {
+    form.addEventListener("submit", (e) => {
       e.preventDefault();
 
       if (state.isValid && onSubmit) {
@@ -569,9 +584,9 @@ export function initAccountSetupForm(options: AccountSetupFormOptions = {}): Acc
     Object.entries(requirements).forEach(([key, isValid]) => {
       const item = requirementsContainer.querySelector(`[data-requirement="${key}"]`);
       if (item) {
-        item.classList.remove('valid', 'invalid');
+        item.classList.remove("valid", "invalid");
         if (state.data.password.length > 0) {
-          item.classList.add(isValid ? 'valid' : 'invalid');
+          item.classList.add(isValid ? "valid" : "invalid");
         }
       }
     });
@@ -585,9 +600,11 @@ export function initAccountSetupForm(options: AccountSetupFormOptions = {}): Acc
     const hasCountry = state.data.country !== null;
     const hasAcceptedTerms = termsCheckbox?.checked ?? false;
     // Phone is optional but if entered must be valid
-    const phoneOk = !state.data.phone || /^(\+90|0)?5\d{9}$/.test(state.data.phone.replace(/[\s\-()]/g, ''));
+    const phoneOk =
+      !state.data.phone || /^(\+90|0)?5\d{9}$/.test(state.data.phone.replace(/[\s\-()]/g, ""));
 
-    state.isValid = hasValidPassword && hasFirstName && hasLastName && hasCountry && hasAcceptedTerms && phoneOk;
+    state.isValid =
+      hasValidPassword && hasFirstName && hasLastName && hasCountry && hasAcceptedTerms && phoneOk;
 
     if (submitBtn) {
       submitBtn.disabled = !state.isValid;
@@ -601,24 +618,24 @@ export function initAccountSetupForm(options: AccountSetupFormOptions = {}): Acc
  * Get current form data
  */
 export function getAccountSetupFormData(): AccountSetupFormData | null {
-  const container = document.getElementById('account-setup-form');
+  const container = document.getElementById("account-setup-form");
   if (!container) return null;
 
-  const countryInput = document.getElementById('country-input') as HTMLInputElement | null;
-  const firstNameInput = document.getElementById('first-name-input') as HTMLInputElement | null;
-  const lastNameInput = document.getElementById('last-name-input') as HTMLInputElement | null;
-  const phoneInput = document.getElementById('phone-input') as HTMLInputElement | null;
-  const passwordInput = document.getElementById('password-input') as HTMLInputElement | null;
+  const countryInput = document.getElementById("country-input") as HTMLInputElement | null;
+  const firstNameInput = document.getElementById("first-name-input") as HTMLInputElement | null;
+  const lastNameInput = document.getElementById("last-name-input") as HTMLInputElement | null;
+  const phoneInput = document.getElementById("phone-input") as HTMLInputElement | null;
+  const passwordInput = document.getElementById("password-input") as HTMLInputElement | null;
 
-  const countryCode = countryInput?.value || 'TR';
+  const countryCode = countryInput?.value || "TR";
   const country = getCountryByCode(countryCode) || countryOptions[0];
 
   return {
     country,
-    firstName: firstNameInput?.value.trim() || '',
-    lastName: lastNameInput?.value.trim() || '',
-    phone: phoneInput?.value.trim() || '',
-    password: passwordInput?.value || '',
+    firstName: firstNameInput?.value.trim() || "",
+    lastName: lastNameInput?.value.trim() || "",
+    phone: phoneInput?.value.trim() || "",
+    password: passwordInput?.value || "",
   };
 }
 
@@ -626,21 +643,21 @@ export function getAccountSetupFormData(): AccountSetupFormData | null {
  * Reset the form to initial state
  */
 export function resetAccountSetupForm(): void {
-  const form = document.getElementById('account-setup-form-element') as HTMLFormElement | null;
+  const form = document.getElementById("account-setup-form-element") as HTMLFormElement | null;
   if (form) {
     form.reset();
   }
 
   // Reset password requirements UI
-  const requirementsContainer = document.getElementById('password-requirements');
+  const requirementsContainer = document.getElementById("password-requirements");
   if (requirementsContainer) {
-    requirementsContainer.querySelectorAll('.auth-password-req-item').forEach(item => {
-      item.classList.remove('valid', 'invalid');
+    requirementsContainer.querySelectorAll(".auth-password-req-item").forEach((item) => {
+      item.classList.remove("valid", "invalid");
     });
   }
 
   // Reset submit button
-  const submitBtn = document.getElementById('account-setup-submit-btn') as HTMLButtonElement | null;
+  const submitBtn = document.getElementById("account-setup-submit-btn") as HTMLButtonElement | null;
   if (submitBtn) {
     submitBtn.disabled = true;
   }
@@ -653,13 +670,13 @@ export function setFieldError(fieldId: string, errorMessage?: string): void {
   const field = document.getElementById(fieldId);
   if (!field) return;
 
-  field.classList.add('border-red-500', 'focus:border-red-500');
-  field.classList.remove('border-gray-200', 'focus:border-orange-500');
+  field.classList.add("border-red-500", "focus:border-red-500");
+  field.classList.remove("border-gray-200", "focus:border-orange-500");
 
   // Add error message if provided
   if (errorMessage) {
-    const errorEl = document.createElement('p');
-    errorEl.className = 'mt-1 text-sm text-red-500';
+    const errorEl = document.createElement("p");
+    errorEl.className = "mt-1 text-sm text-red-500";
     errorEl.id = `${fieldId}-error`;
     errorEl.textContent = errorMessage;
 
@@ -679,8 +696,8 @@ export function clearFieldError(fieldId: string): void {
   const field = document.getElementById(fieldId);
   if (!field) return;
 
-  field.classList.remove('border-red-500', 'focus:border-red-500');
-  field.classList.add('border-gray-200', 'focus:border-orange-500');
+  field.classList.remove("border-red-500", "focus:border-red-500");
+  field.classList.add("border-gray-200", "focus:border-orange-500");
 
   const errorEl = document.getElementById(`${fieldId}-error`);
   if (errorEl) {

@@ -2,7 +2,7 @@
  * PriceDisplay Atom
  */
 
-import { formatPrice as csFormatPrice } from '../../../services/currencyService';
+import { formatPrice as csFormatPrice } from "../../../services/currencyService";
 
 export interface PriceDisplayProps {
   amount: number;
@@ -16,13 +16,13 @@ export interface PriceDisplayProps {
 
 export function PriceDisplay({
   amount,
-  fromCurrency = 'USD',
+  fromCurrency = "USD",
   bold: _bold = false,
   unit,
   emphasize: _emphasize = false,
 }: PriceDisplayProps): string {
   const price = csFormatPrice(amount, fromCurrency);
-  let unitHtml = '';
+  let unitHtml = "";
   if (unit) {
     unitHtml = `
       <span class="inline-flex items-center text-[12px] text-[#666] ml-[2px] font-normal">

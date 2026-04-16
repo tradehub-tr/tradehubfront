@@ -5,7 +5,7 @@
  * Calls tradehub_core.api.v1.identity.change_password endpoint.
  */
 
-import { t } from '../../i18n';
+import { t } from "../../i18n";
 
 const ICONS = {
   checkActive: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" fill="#22c55e"/><path d="M6 10l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
@@ -14,15 +14,15 @@ const ICONS = {
 export function SettingsChangePassword(): string {
   return `
     <div class="bg-white rounded-lg p-8 max-md:p-5 max-sm:px-4 max-sm:py-4" x-data="settingsChangePassword">
-      <h2 class="text-xl max-sm:text-base font-bold mb-7 max-sm:mb-4 m-0" style="color:var(--color-text-primary)">${t('settings.changePasswordNav')}</h2>
+      <h2 class="text-xl max-sm:text-base font-bold mb-7 max-sm:mb-4 m-0" style="color:var(--color-text-primary)">${t("settings.changePasswordNav")}</h2>
 
       <!-- Step 1: Password Form -->
       <div x-show="step === 1">
         <div class="max-w-[640px] mx-auto">
           <div class="mb-4 max-sm:mb-3">
-            <label class="block text-[13px] max-sm:text-xs font-medium mb-1.5" style="color:var(--color-text-secondary)">${t('settings.currentPassword')}</label>
+            <label class="block text-[13px] max-sm:text-xs font-medium mb-1.5" style="color:var(--color-text-secondary)">${t("settings.currentPassword")}</label>
             <div class="relative max-w-[360px] max-sm:max-w-full">
-              <input :type="showCurrent ? 'text' : 'password'" class="th-input th-input-md pr-11" x-ref="pwCurrent" autocomplete="off" placeholder="${t('settings.currentPassword')}" />
+              <input :type="showCurrent ? 'text' : 'password'" class="th-input th-input-md pr-11" x-ref="pwCurrent" autocomplete="off" placeholder="${t("settings.currentPassword")}" />
               <button type="button" @click="showCurrent = !showCurrent" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors" tabindex="-1">
                 <svg x-show="!showCurrent" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88"/></svg>
                 <svg x-show="showCurrent" x-cloak class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>
@@ -30,9 +30,9 @@ export function SettingsChangePassword(): string {
             </div>
           </div>
           <div class="mb-4 max-sm:mb-3">
-            <label class="block text-[13px] max-sm:text-xs font-medium mb-1.5" style="color:var(--color-text-secondary)">${t('settings.newPassword')}</label>
+            <label class="block text-[13px] max-sm:text-xs font-medium mb-1.5" style="color:var(--color-text-secondary)">${t("settings.newPassword")}</label>
             <div class="relative max-w-[360px] max-sm:max-w-full">
-              <input :type="showNew ? 'text' : 'password'" class="th-input th-input-md pr-11" x-ref="pwNew" autocomplete="new-password" placeholder="${t('settings.passwordMinChars')}" />
+              <input :type="showNew ? 'text' : 'password'" class="th-input th-input-md pr-11" x-ref="pwNew" autocomplete="new-password" placeholder="${t("settings.passwordMinChars")}" />
               <button type="button" @click="showNew = !showNew" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors" tabindex="-1">
                 <svg x-show="!showNew" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88"/></svg>
                 <svg x-show="showNew" x-cloak class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>
@@ -40,9 +40,9 @@ export function SettingsChangePassword(): string {
             </div>
           </div>
           <div class="mb-4 max-sm:mb-3">
-            <label class="block text-[13px] max-sm:text-xs font-medium mb-1.5" style="color:var(--color-text-secondary)">${t('settings.newPasswordConfirm')}</label>
+            <label class="block text-[13px] max-sm:text-xs font-medium mb-1.5" style="color:var(--color-text-secondary)">${t("settings.newPasswordConfirm")}</label>
             <div class="relative max-w-[360px] max-sm:max-w-full">
-              <input :type="showConfirm ? 'text' : 'password'" class="th-input th-input-md pr-11" x-ref="pwConfirm" autocomplete="new-password" placeholder="${t('settings.reenterPassword')}" />
+              <input :type="showConfirm ? 'text' : 'password'" class="th-input th-input-md pr-11" x-ref="pwConfirm" autocomplete="new-password" placeholder="${t("settings.reenterPassword")}" />
               <button type="button" @click="showConfirm = !showConfirm" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors" tabindex="-1">
                 <svg x-show="!showConfirm" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88"/></svg>
                 <svg x-show="showConfirm" x-cloak class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>
@@ -51,10 +51,10 @@ export function SettingsChangePassword(): string {
           </div>
           <p class="text-[13px] text-red-500 mb-3" x-show="error" x-text="error" x-cloak></p>
           <button class="th-btn max-sm:w-full disabled:opacity-50" type="button" @click="savePassword()" :disabled="loading">
-            <span x-show="!loading">${t('settings.privacySave')}</span>
+            <span x-show="!loading">${t("settings.privacySave")}</span>
             <span x-show="loading" x-cloak class="inline-flex items-center gap-2">
               <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-              ${t('common.loading')}
+              ${t("common.loading")}
             </span>
           </button>
         </div>
@@ -64,9 +64,9 @@ export function SettingsChangePassword(): string {
       <div x-show="step === 2" x-cloak>
         <div class="max-w-[640px] mx-auto text-center py-4 max-sm:py-2">
           <div class="mb-4">${ICONS.checkActive}</div>
-          <h3 class="text-lg max-sm:text-base font-bold mb-2 m-0" style="color:var(--color-text-primary)">${t('settings.passwordChangedSuccess')}</h3>
-          <p class="text-sm max-sm:text-[13px] mb-6 max-sm:mb-4 m-0" style="color:var(--color-text-secondary)">${t('settings.loginWithNewPassword')}</p>
-          <a href="#" class="th-btn no-underline inline-flex max-sm:w-full max-sm:justify-center">${t('settings.backToSettings')}</a>
+          <h3 class="text-lg max-sm:text-base font-bold mb-2 m-0" style="color:var(--color-text-primary)">${t("settings.passwordChangedSuccess")}</h3>
+          <p class="text-sm max-sm:text-[13px] mb-6 max-sm:mb-4 m-0" style="color:var(--color-text-secondary)">${t("settings.loginWithNewPassword")}</p>
+          <a href="#" class="th-btn no-underline inline-flex max-sm:w-full max-sm:justify-center">${t("settings.backToSettings")}</a>
         </div>
       </div>
     </div>
@@ -74,4 +74,6 @@ export function SettingsChangePassword(): string {
 }
 
 /** @deprecated No-op — Alpine handles all interactivity */
-export function initSettingsChangePassword(): void { /* no-op */ }
+export function initSettingsChangePassword(): void {
+  /* no-op */
+}

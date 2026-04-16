@@ -4,10 +4,10 @@
  * Used within AuthLayout for both desktop and mobile views.
  */
 
-import { getBaseUrl } from './AuthLayout';
-import { login, getSessionUser, getRedirectUrl } from '../../utils/auth';
-import { showToast } from '../../utils/toast';
-import { t } from '../../i18n';
+import { getBaseUrl } from "./AuthLayout";
+import { login, getSessionUser, getRedirectUrl } from "../../utils/auth";
+import { showToast } from "../../utils/toast";
+import { t } from "../../i18n";
 
 /* ── Types ──────────────────────────────────────────── */
 
@@ -25,19 +25,19 @@ export function LoginPage(): string {
     <div id="login-page" class="w-full">
       <!-- Header Area -->
       <div class="mb-8">
-        <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2" data-i18n="auth.login.title">${t('auth.login.title')}</h1>
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2" data-i18n="auth.login.title">${t("auth.login.title")}</h1>
       </div>
 
       <!-- Email verified success banner -->
       <div id="login-verified-success" class="hidden mb-4 p-3 rounded-lg bg-green-50 border border-green-200 flex items-center gap-2">
         <svg class="w-5 h-5 text-green-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg>
-        <span class="text-sm text-green-700">${t('auth.login.emailVerified')}</span>
+        <span class="text-sm text-green-700">${t("auth.login.emailVerified")}</span>
       </div>
 
       <!-- Email verification failed banner -->
       <div id="login-verified-fail" class="hidden mb-4 p-3 rounded-lg bg-red-50 border border-red-200 flex items-center gap-2">
         <svg class="w-5 h-5 text-red-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"/></svg>
-        <span class="text-sm text-red-700">${t('auth.login.emailVerificationFailed')}</span>
+        <span class="text-sm text-red-700">${t("auth.login.emailVerificationFailed")}</span>
       </div>
 
       <!-- Error message -->
@@ -48,26 +48,26 @@ export function LoginPage(): string {
 
         <!-- Email Input -->
         <div>
-          <label for="email" class="sr-only" data-i18n="auth.login.email">${t('auth.login.email')}</label>
+          <label for="email" class="sr-only" data-i18n="auth.login.email">${t("auth.login.email")}</label>
           <input
             type="email"
             id="email"
             name="email"
             class="th-input th-input-lg"
-            placeholder="${t('auth.login.email')}" data-i18n-placeholder="auth.login.email"
+            placeholder="${t("auth.login.email")}" data-i18n-placeholder="auth.login.email"
             required
           >
         </div>
 
         <!-- Password Input -->
         <div class="relative">
-          <label for="password" class="sr-only" data-i18n="auth.login.password">${t('auth.login.password')}</label>
+          <label for="password" class="sr-only" data-i18n="auth.login.password">${t("auth.login.password")}</label>
           <input
             type="password"
             id="password"
             name="password"
             class="th-input th-input-lg"
-            placeholder="${t('auth.login.password')}" data-i18n-placeholder="auth.login.password"
+            placeholder="${t("auth.login.password")}" data-i18n-placeholder="auth.login.password"
             required
           >
           <button
@@ -88,7 +88,7 @@ export function LoginPage(): string {
         <!-- Forgot Password -->
         <div class="text-right">
           <a href="${baseUrl}pages/auth/forgot-password.html" class="text-sm font-medium text-gray-900 dark:text-gray-300 hover:underline">
-            <span data-i18n="auth.login.forgotPassword">${t('auth.login.forgotPassword')}</span>
+            <span data-i18n="auth.login.forgotPassword">${t("auth.login.forgotPassword")}</span>
           </a>
         </div>
 
@@ -98,10 +98,10 @@ export function LoginPage(): string {
           id="login-submit-btn"
           class="w-full h-12 th-btn disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <span id="login-submit-text" data-i18n="auth.login.continue">${t('auth.login.continue')}</span>
+          <span id="login-submit-text" data-i18n="auth.login.continue">${t("auth.login.continue")}</span>
           <span id="login-submit-loading" class="hidden items-center gap-2">
             <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-            <span data-i18n="common.loading">${t('common.loading')}</span>
+            <span data-i18n="common.loading">${t("common.loading")}</span>
           </span>
         </button>
 
@@ -111,13 +111,13 @@ export function LoginPage(): string {
       <!-- Create Account Link -->
       <div class="mt-8 text-center">
         <p class="text-sm text-gray-600 dark:text-gray-400">
-          <span data-i18n="auth.login.newUser">${t('auth.login.newUser')}</span>
+          <span data-i18n="auth.login.newUser">${t("auth.login.newUser")}</span>
           <a
             href="${baseUrl}pages/auth/register.html"
             id="login-create-account-link"
             class="font-medium text-gray-900 dark:text-white hover:underline ml-1"
           >
-            <span data-i18n="auth.login.createAccount">${t('auth.login.createAccount')}</span>
+            <span data-i18n="auth.login.createAccount">${t("auth.login.createAccount")}</span>
           </a>
         </p>
       </div>
@@ -133,62 +133,65 @@ export function LoginPage(): string {
  * Sets up form submission with real Frappe API calls
  */
 export function initLoginPage(options: LoginPageOptions = {}): void {
-  const loginPage = document.getElementById('login-page');
+  const loginPage = document.getElementById("login-page");
   if (!loginPage) return;
 
   // Handle 'Create account' link
-  const createAccountLink = document.getElementById('login-create-account-link');
+  const createAccountLink = document.getElementById("login-create-account-link");
   if (createAccountLink && options.onCreateAccount) {
-    createAccountLink.addEventListener('click', (e) => {
+    createAccountLink.addEventListener("click", (e) => {
       e.preventDefault();
       options.onCreateAccount!();
     });
   }
 
   // Email verification banners
-  const verifiedParam = new URLSearchParams(window.location.search).get('verified');
-  if (verifiedParam === '1') {
-    document.getElementById('login-verified-success')?.classList.remove('hidden');
-  } else if (verifiedParam === '0') {
-    document.getElementById('login-verified-fail')?.classList.remove('hidden');
+  const verifiedParam = new URLSearchParams(window.location.search).get("verified");
+  if (verifiedParam === "1") {
+    document.getElementById("login-verified-success")?.classList.remove("hidden");
+  } else if (verifiedParam === "0") {
+    document.getElementById("login-verified-fail")?.classList.remove("hidden");
   }
 
   // Password toggle
-  const passwordInput = document.getElementById('password') as HTMLInputElement | null;
-  const toggleBtn = document.getElementById('login-password-toggle');
-  const eyeShow = document.getElementById('login-eye-show');
-  const eyeHide = document.getElementById('login-eye-hide');
+  const passwordInput = document.getElementById("password") as HTMLInputElement | null;
+  const toggleBtn = document.getElementById("login-password-toggle");
+  const eyeShow = document.getElementById("login-eye-show");
+  const eyeHide = document.getElementById("login-eye-hide");
 
   if (toggleBtn && passwordInput && eyeShow && eyeHide) {
-    toggleBtn.addEventListener('click', () => {
-      const isPassword = passwordInput.type === 'password';
-      passwordInput.type = isPassword ? 'text' : 'password';
-      eyeShow.classList.toggle('hidden', !isPassword);
-      eyeHide.classList.toggle('hidden', isPassword);
+    toggleBtn.addEventListener("click", () => {
+      const isPassword = passwordInput.type === "password";
+      passwordInput.type = isPassword ? "text" : "password";
+      eyeShow.classList.toggle("hidden", !isPassword);
+      eyeHide.classList.toggle("hidden", isPassword);
     });
   }
 
   // Form submission
-  const loginForm = document.getElementById('login-form') as HTMLFormElement;
-  const submitBtn = document.getElementById('login-submit-btn') as HTMLButtonElement | null;
-  const submitText = document.getElementById('login-submit-text');
-  const submitLoading = document.getElementById('login-submit-loading');
-  const errorMsg = document.getElementById('login-error');
+  const loginForm = document.getElementById("login-form") as HTMLFormElement;
+  const submitBtn = document.getElementById("login-submit-btn") as HTMLButtonElement | null;
+  const submitText = document.getElementById("login-submit-text");
+  const submitLoading = document.getElementById("login-submit-loading");
+  const errorMsg = document.getElementById("login-error");
 
   if (loginForm) {
-    loginForm.addEventListener('submit', async (e) => {
+    loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const email = (document.getElementById('email') as HTMLInputElement)?.value;
-      const password = (document.getElementById('password') as HTMLInputElement)?.value;
+      const email = (document.getElementById("email") as HTMLInputElement)?.value;
+      const password = (document.getElementById("password") as HTMLInputElement)?.value;
 
       if (!email || !password) return;
 
       // Show loading
       if (submitBtn) submitBtn.disabled = true;
-      if (submitText) submitText.classList.add('hidden');
-      if (submitLoading) { submitLoading.classList.remove('hidden'); submitLoading.classList.add('inline-flex'); }
-      if (errorMsg) errorMsg.classList.add('hidden');
+      if (submitText) submitText.classList.add("hidden");
+      if (submitLoading) {
+        submitLoading.classList.remove("hidden");
+        submitLoading.classList.add("inline-flex");
+      }
+      if (errorMsg) errorMsg.classList.add("hidden");
 
       try {
         await login(email, password);
@@ -196,7 +199,7 @@ export function initLoginPage(options: LoginPageOptions = {}): void {
 
         if (user) {
           // ?redirect= parametresi varsa ve aynı origin'deyse oraya git
-          const redirectParam = new URLSearchParams(window.location.search).get('redirect');
+          const redirectParam = new URLSearchParams(window.location.search).get("redirect");
           if (redirectParam) {
             try {
               const redirectUrl = new URL(redirectParam);
@@ -215,17 +218,20 @@ export function initLoginPage(options: LoginPageOptions = {}): void {
           window.location.href = getBaseUrl();
         }
       } catch (err) {
-        if (err instanceof Error && err.message === '2FA_REQUIRED') {
-          showToast({ message: t('auth.login.2faRequired'), type: 'info' });
+        if (err instanceof Error && err.message === "2FA_REQUIRED") {
+          showToast({ message: t("auth.login.2faRequired"), type: "info" });
         } else if (errorMsg) {
-          errorMsg.textContent = t('auth.login.invalidCredentials');
-          errorMsg.classList.remove('hidden');
+          errorMsg.textContent = t("auth.login.invalidCredentials");
+          errorMsg.classList.remove("hidden");
         }
       } finally {
         // Hide loading
         if (submitBtn) submitBtn.disabled = false;
-        if (submitText) submitText.classList.remove('hidden');
-        if (submitLoading) { submitLoading.classList.add('hidden'); submitLoading.classList.remove('inline-flex'); }
+        if (submitText) submitText.classList.remove("hidden");
+        if (submitLoading) {
+          submitLoading.classList.add("hidden");
+          submitLoading.classList.remove("inline-flex");
+        }
       }
     });
   }

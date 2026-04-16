@@ -3,7 +3,7 @@
  * Seller-based order list and delivery option selection.
  */
 
-import { getCurrencyCode } from '../../utils/currency';
+import { getCurrencyCode } from "../../utils/currency";
 
 export interface CheckoutDeliveryMethod {
   id: string;
@@ -44,22 +44,25 @@ export interface ItemsDeliverySectionProps {
 
 function escapeHtmlAttribute(value: string): string {
   return value
-    .replaceAll('&', '&amp;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#39;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;');
+    .replaceAll("&", "&amp;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
 }
 
 function escapeJsSingleQuoted(value: string): string {
-  return value.replaceAll('\\', '\\\\').replaceAll("'", "\\'");
+  return value.replaceAll("\\", "\\\\").replaceAll("'", "\\'");
 }
 
 function formatUsd(value: number): string {
   return `${getCurrencyCode()} ${value.toFixed(2)}`;
 }
 
-function renderMethodOption(order: CheckoutDeliveryOrderGroup, method: CheckoutDeliveryMethod): string {
+function renderMethodOption(
+  order: CheckoutDeliveryOrderGroup,
+  method: CheckoutDeliveryMethod
+): string {
   const safeOrderId = escapeJsSingleQuoted(order.orderId);
   const safeMethodId = escapeJsSingleQuoted(method.id);
   return `
@@ -102,7 +105,7 @@ function renderSkuLine(sku: CheckoutDeliverySkuLine): string {
 }
 
 function renderProductCard(product: CheckoutDeliveryProductCard): string {
-  const skuRows = product.skuLines.map(renderSkuLine).join('');
+  const skuRows = product.skuLines.map(renderSkuLine).join("");
   return `
     <div class="mt-4">
       <div class="flex items-start gap-4">
@@ -153,8 +156,8 @@ function renderOrderSupplierNote(order: CheckoutDeliveryOrderGroup): string {
 }
 
 function renderOrder(order: CheckoutDeliveryOrderGroup): string {
-  const methodRows = order.methods.map((method) => renderMethodOption(order, method)).join('');
-  const productCards = order.products.map(renderProductCard).join('');
+  const methodRows = order.methods.map((method) => renderMethodOption(order, method)).join("");
+  const productCards = order.products.map(renderProductCard).join("");
   const noteBlock = renderOrderSupplierNote(order);
 
   return `
@@ -231,14 +234,13 @@ function renderSupplierNoteModal(): string {
   `;
 }
 
-export function ItemsDeliverySection({
-  orders = [],
-}: ItemsDeliverySectionProps = {}): string {
+export function ItemsDeliverySection({ orders = [] }: ItemsDeliverySectionProps = {}): string {
   const encodedOrders = escapeHtmlAttribute(JSON.stringify(orders));
 
-  const ordersHtml = orders.length > 0
-    ? orders.map(renderOrder).join('')
-    : `<p class="text-[#6b7280] text-base p-6">Item and delivery details will appear here.</p>`;
+  const ordersHtml =
+    orders.length > 0
+      ? orders.map(renderOrder).join("")
+      : `<p class="text-[#6b7280] text-base p-6">Item and delivery details will appear here.</p>`;
 
   return `
     <section

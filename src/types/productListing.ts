@@ -8,14 +8,14 @@
  * Reused from ProductGrid.ts pattern
  */
 export type ProductImageKind =
-  | 'jewelry'
-  | 'electronics'
-  | 'label'
-  | 'crafts'
-  | 'accessory'
-  | 'clothing'
-  | 'tools'
-  | 'packaging';
+  | "jewelry"
+  | "electronics"
+  | "label"
+  | "crafts"
+  | "accessory"
+  | "clothing"
+  | "tools"
+  | "packaging";
 
 /**
  * Product card for listing grid
@@ -148,12 +148,12 @@ export interface CategoryItem {
  * Filter section types
  */
 export type FilterSectionType =
-  | 'checkbox'
-  | 'radio'
-  | 'price-range'
-  | 'min-order'
-  | 'category'
-  | 'searchable-checkbox';
+  | "checkbox"
+  | "radio"
+  | "price-range"
+  | "min-order"
+  | "category"
+  | "searchable-checkbox";
 
 /**
  * Base filter section interface
@@ -170,7 +170,7 @@ export interface BaseFilterSection {
  * Checkbox filter section (Trade Assurance, Supplier features, Product features)
  */
 export interface CheckboxFilterSection extends BaseFilterSection {
-  type: 'checkbox';
+  type: "checkbox";
   options: FilterOption[];
 }
 
@@ -178,7 +178,7 @@ export interface CheckboxFilterSection extends BaseFilterSection {
  * Radio filter section (Store reviews)
  */
 export interface RadioFilterSection extends BaseFilterSection {
-  type: 'radio';
+  type: "radio";
   options: StoreReviewFilter[];
 }
 
@@ -186,7 +186,7 @@ export interface RadioFilterSection extends BaseFilterSection {
  * Price range filter section
  */
 export interface PriceRangeFilterSection extends BaseFilterSection {
-  type: 'price-range';
+  type: "price-range";
   filter: PriceRangeFilter;
 }
 
@@ -194,7 +194,7 @@ export interface PriceRangeFilterSection extends BaseFilterSection {
  * Min order filter section
  */
 export interface MinOrderFilterSection extends BaseFilterSection {
-  type: 'min-order';
+  type: "min-order";
   filter: MinOrderFilter;
 }
 
@@ -202,7 +202,7 @@ export interface MinOrderFilterSection extends BaseFilterSection {
  * Category filter section with hierarchical items
  */
 export interface CategoryFilterSection extends BaseFilterSection {
-  type: 'category';
+  type: "category";
   items: CategoryItem[];
   showMore?: boolean;
   maxVisible?: number;
@@ -212,7 +212,7 @@ export interface CategoryFilterSection extends BaseFilterSection {
  * Searchable checkbox filter section (Supplier country, Certifications)
  */
 export interface SearchableCheckboxFilterSection extends BaseFilterSection {
-  type: 'searchable-checkbox';
+  type: "searchable-checkbox";
   options: FilterOption[];
   searchPlaceholder?: string;
   searchQuery?: string;
@@ -264,7 +264,7 @@ export interface ProductListingState {
  */
 export interface ListingPriceTier {
   minQty: number;
-  maxQty: number | null;  // null = unlimited
+  maxQty: number | null; // null = unlimited
   price: number;
   originalPrice?: number;
 }
@@ -282,7 +282,7 @@ export interface ListingColorVariant {
 /**
  * View mode for product grid
  */
-export type ViewMode = 'grid' | 'list';
+export type ViewMode = "grid" | "list";
 
 /**
  * Grid configuration

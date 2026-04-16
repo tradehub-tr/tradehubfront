@@ -4,11 +4,11 @@
  * Each card shows an icon, label, and description with visual selection state.
  */
 
-import { t } from '../../i18n';
+import { t } from "../../i18n";
 
 /* ── Types ──────────────────────────────────────────── */
 
-export type AccountType = 'buyer' | 'supplier';
+export type AccountType = "buyer" | "supplier";
 
 export interface AccountTypeSelectorOptions {
   /** Container element ID for event binding */
@@ -28,15 +28,15 @@ export interface AccountTypeSelectorOptions {
  * @param defaultType - Initially selected account type (defaults to 'buyer')
  * @returns HTML string for the account type selector
  */
-export function AccountTypeSelector(defaultType: AccountType = 'buyer'): string {
+export function AccountTypeSelector(defaultType: AccountType = "buyer"): string {
   return `
     <div id="account-type-selector" class="auth-account-type-grid flex flex-col gap-3">
       <!-- Buyer Card -->
       <button
         type="button"
-        class="auth-account-type-card flex items-center gap-3.5 w-full py-4 px-[18px] rounded-md text-left relative cursor-pointer transition-all${defaultType === 'buyer' ? ' selected' : ''}"
+        class="auth-account-type-card flex items-center gap-3.5 w-full py-4 px-[18px] rounded-md text-left relative cursor-pointer transition-all${defaultType === "buyer" ? " selected" : ""}"
         data-account-type="buyer"
-        aria-pressed="${defaultType === 'buyer' ? 'true' : 'false'}"
+        aria-pressed="${defaultType === "buyer" ? "true" : "false"}"
         role="radio"
       >
         <div class="auth-account-type-icon shrink-0 order-1 w-9 h-9 transition-colors">
@@ -45,17 +45,17 @@ export function AccountTypeSelector(defaultType: AccountType = 'buyer'): string 
           </svg>
         </div>
         <div class="auth-account-type-content flex flex-col gap-0.5 flex-1 min-w-0">
-          <span class="auth-account-type-label text-[15px] font-semibold leading-tight">${t('auth.buyer')}</span>
-          <span class="auth-account-type-desc text-[13px] leading-snug">${t('auth.buyerDesc')}</span>
+          <span class="auth-account-type-label text-[15px] font-semibold leading-tight">${t("auth.buyer")}</span>
+          <span class="auth-account-type-desc text-[13px] leading-snug">${t("auth.buyerDesc")}</span>
         </div>
       </button>
 
       <!-- Supplier Card -->
       <button
         type="button"
-        class="auth-account-type-card flex items-center gap-3.5 w-full py-4 px-[18px] rounded-md text-left relative cursor-pointer transition-all${defaultType === 'supplier' ? ' selected' : ''}"
+        class="auth-account-type-card flex items-center gap-3.5 w-full py-4 px-[18px] rounded-md text-left relative cursor-pointer transition-all${defaultType === "supplier" ? " selected" : ""}"
         data-account-type="supplier"
-        aria-pressed="${defaultType === 'supplier' ? 'true' : 'false'}"
+        aria-pressed="${defaultType === "supplier" ? "true" : "false"}"
         role="radio"
       >
         <div class="auth-account-type-icon shrink-0 order-1 w-9 h-9 transition-colors">
@@ -64,8 +64,8 @@ export function AccountTypeSelector(defaultType: AccountType = 'buyer'): string 
           </svg>
         </div>
         <div class="auth-account-type-content flex flex-col gap-0.5 flex-1 min-w-0">
-          <span class="auth-account-type-label text-[15px] font-semibold leading-tight">${t('auth.supplier')}</span>
-          <span class="auth-account-type-desc text-[13px] leading-snug">${t('auth.supplierDesc')}</span>
+          <span class="auth-account-type-label text-[15px] font-semibold leading-tight">${t("auth.supplier")}</span>
+          <span class="auth-account-type-desc text-[13px] leading-snug">${t("auth.supplierDesc")}</span>
         </div>
       </button>
     </div>
@@ -79,47 +79,47 @@ export function AccountTypeSelector(defaultType: AccountType = 'buyer'): string 
  * Uses event delegation for efficient event handling.
  */
 export function initAccountTypeSelector(options: AccountTypeSelectorOptions = {}): void {
-  const { containerId, defaultType = 'buyer', onTypeSelect } = options;
+  const { containerId, defaultType = "buyer", onTypeSelect } = options;
 
   // Find container - either by ID or use default selector ID
   const container = containerId
     ? document.getElementById(containerId)
-    : document.getElementById('account-type-selector');
+    : document.getElementById("account-type-selector");
 
   if (!container) return;
 
   // Set initial selection if defaultType is specified
   if (defaultType) {
     const defaultCard = container.querySelector(`[data-account-type="${defaultType}"]`);
-    if (defaultCard && !defaultCard.classList.contains('selected')) {
+    if (defaultCard && !defaultCard.classList.contains("selected")) {
       // Clear existing selections
-      container.querySelectorAll('.auth-account-type-card').forEach((card) => {
-        card.classList.remove('selected');
-        card.setAttribute('aria-pressed', 'false');
+      container.querySelectorAll(".auth-account-type-card").forEach((card) => {
+        card.classList.remove("selected");
+        card.setAttribute("aria-pressed", "false");
       });
       // Set default selection
-      defaultCard.classList.add('selected');
-      defaultCard.setAttribute('aria-pressed', 'true');
+      defaultCard.classList.add("selected");
+      defaultCard.setAttribute("aria-pressed", "true");
     }
   }
 
   // Use event delegation for card clicks
-  container.addEventListener('click', (e) => {
+  container.addEventListener("click", (e) => {
     const target = e.target as HTMLElement;
-    const card = target.closest('[data-account-type]') as HTMLElement | null;
+    const card = target.closest("[data-account-type]") as HTMLElement | null;
 
     if (card) {
-      const type = card.getAttribute('data-account-type') as AccountType;
+      const type = card.getAttribute("data-account-type") as AccountType;
 
       // Clear previous selection
-      container.querySelectorAll('.auth-account-type-card').forEach((c) => {
-        c.classList.remove('selected');
-        c.setAttribute('aria-pressed', 'false');
+      container.querySelectorAll(".auth-account-type-card").forEach((c) => {
+        c.classList.remove("selected");
+        c.setAttribute("aria-pressed", "false");
       });
 
       // Set new selection
-      card.classList.add('selected');
-      card.setAttribute('aria-pressed', 'true');
+      card.classList.add("selected");
+      card.setAttribute("aria-pressed", "true");
 
       // Callback
       if (type && onTypeSelect) {
@@ -127,9 +127,9 @@ export function initAccountTypeSelector(options: AccountTypeSelectorOptions = {}
       }
 
       // Dispatch custom event for external listeners
-      const event = new CustomEvent('account-type-change', {
+      const event = new CustomEvent("account-type-change", {
         bubbles: true,
-        detail: { type }
+        detail: { type },
       });
       container.dispatchEvent(event);
     }
@@ -142,13 +142,13 @@ export function initAccountTypeSelector(options: AccountTypeSelectorOptions = {}
 export function getSelectedAccountType(containerId?: string): AccountType | null {
   const container = containerId
     ? document.getElementById(containerId)
-    : document.getElementById('account-type-selector');
+    : document.getElementById("account-type-selector");
 
   if (!container) return null;
 
-  const selected = container.querySelector('.auth-account-type-card.selected');
+  const selected = container.querySelector(".auth-account-type-card.selected");
   if (selected) {
-    return selected.getAttribute('data-account-type') as AccountType;
+    return selected.getAttribute("data-account-type") as AccountType;
   }
 
   return null;

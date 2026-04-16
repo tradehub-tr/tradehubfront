@@ -27,7 +27,7 @@ export function FooterGroup(): string {
             </span>
             <!-- American Express -->
             <span class="inline-flex items-center px-3 py-1.5 rounded-md bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600">
-              <img src="${new URL('../../assets/images/amex.svg', import.meta.url).href}" alt="American Express" width="36" height="22" />
+              <img src="${new URL("../../assets/images/amex.svg", import.meta.url).href}" alt="American Express" width="36" height="22" />
             </span>
           </div>
         </div>

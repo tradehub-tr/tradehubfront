@@ -3,7 +3,7 @@
  * Horizontal breadcrumb navigation for product detail page.
  */
 
-import { getCurrentProduct } from '../../alpine/product';
+import { getCurrentProduct } from "../../alpine/product";
 
 export function Breadcrumb(): string {
   const mockProduct = getCurrentProduct();
@@ -24,7 +24,7 @@ export function Breadcrumb(): string {
   return `
     <nav aria-label="Breadcrumb" class="py-3">
       <ol class="flex items-center gap-2 flex-wrap">
-        ${crumbs.map(c => `<li class="flex items-center gap-2">${c}</li>`).join('')}
+        ${crumbs.map((c) => `<li class="flex items-center gap-2">${c}</li>`).join("")}
       </ol>
     </nav>
   `;

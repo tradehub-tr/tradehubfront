@@ -4,7 +4,7 @@
  * Alpine component: quantityInput (registered in alpine.ts)
  */
 
-import { t } from '../../../i18n';
+import { t } from "../../../i18n";
 
 export interface QuantityInputProps {
   id: string;
@@ -21,12 +21,12 @@ export function QuantityInput({
   max = 9999,
   step = 1,
 }: QuantityInputProps): string {
-  const minusDisabled = value <= min ? 'disabled' : '';
-  const plusDisabled = value >= max ? 'disabled' : '';
+  const minusDisabled = value <= min ? "disabled" : "";
+  const plusDisabled = value >= max ? "disabled" : "";
 
   return `
     <div class="th-quantity number-picker" x-data="quantityInput({ value: ${value}, min: ${min}, max: ${max}, step: ${step}, id: '${id}' })">
-      <button type="button" class="th-quantity__button number-picker-button number-picker-minus" @click="decrement()" :disabled="value <= min" ${minusDisabled} aria-label="${t('cart.quantityDecrease')}">
+      <button type="button" class="th-quantity__button number-picker-button number-picker-minus" @click="decrement()" :disabled="value <= min" ${minusDisabled} aria-label="${t("cart.quantityDecrease")}">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M5 12h14" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -42,9 +42,9 @@ export function QuantityInput({
         min="${min}"
         max="${max}"
         step="${step}"
-        aria-label="${t('cart.quantityLabel')}"
+        aria-label="${t("cart.quantityLabel")}"
       />
-      <button type="button" class="th-quantity__button number-picker-button number-picker-plus" @click="increment()" :disabled="value >= max" ${plusDisabled} aria-label="${t('cart.quantityIncrease')}">
+      <button type="button" class="th-quantity__button number-picker-button number-picker-plus" @click="increment()" :disabled="value >= max" ${plusDisabled} aria-label="${t("cart.quantityIncrease")}">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M12 5v14M5 12h14" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>

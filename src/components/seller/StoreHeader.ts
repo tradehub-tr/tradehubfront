@@ -2,7 +2,7 @@
  * C1: Store Profile Header — iSTOC-style pixel-perfect layout
  * Two sections: Company Header (gray) + Stats & Media Card (white)
  */
-import { t } from '../../i18n';
+import { t } from "../../i18n";
 
 export function StoreHeader(): string {
   /* Reusable SVG: blue filled circle with white checkmark */
@@ -22,7 +22,7 @@ export function StoreHeader(): string {
     </svg>`;
 
   return `
-    <section id="store-header" class="store-header" aria-label="${t('seller.sf.storeProfileHeader')}">
+    <section id="store-header" class="store-header" aria-label="${t("seller.sf.storeProfileHeader")}">
 
       <!-- ========== LOADING SKELETON ========== -->
       <div x-show="loading" class="bg-white">
@@ -61,13 +61,13 @@ export function StoreHeader(): string {
                class="inline-flex items-center gap-2 text-[14px] font-normal text-text-heading hover:text-(--btn-bg) transition-colors whitespace-nowrap"
                style="padding: 5px 5px 5px 25px;">
               ${storeIcon}
-              ${t('seller.sf.viewStore')}
+              ${t("seller.sf.viewStore")}
             </a>
             <button
               class="bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white text-[14px] font-semibold rounded-[var(--radius-button)] transition-colors whitespace-nowrap"
               style="width: 180px; height: 40px; padding: 0px 12px;"
               @click="setTab('contact')">
-              ${t('seller.sf.contactNow')}
+              ${t("seller.sf.contactNow")}
             </button>
           </div>
 
@@ -91,13 +91,13 @@ export function StoreHeader(): string {
             </template>
             <template x-if="seller?.staff_count">
               <span>
-                <span x-text="seller.staff_count"></span> ${t('seller.sf.employees').replace('{{count}} ', '')}
+                <span x-text="seller.staff_count"></span> ${t("seller.sf.employees").replace("{{count}} ", "")}
                 <span class="mx-1">&middot;</span>
               </span>
             </template>
             <template x-if="seller?.short_description || seller?.main_markets">
               <span>
-                <span class="font-semibold text-[#333]">${t('seller.sf.mainProducts')}:</span>
+                <span class="font-semibold text-[#333]">${t("seller.sf.mainProducts")}:</span>
                 <span x-text="seller.short_description || seller.main_markets || '\u2014'"></span>
               </span>
             </template>
@@ -118,7 +118,7 @@ export function StoreHeader(): string {
             <!-- Manufacturer type -->
             <template x-if="seller?.business_type">
               <span class="inline-flex items-center gap-1.5 text-sm text-[#333]">
-                <span class="font-medium" x-text="seller.business_type_display || '${t('seller.sf.manufacturer')}'"></span>
+                <span class="font-medium" x-text="seller.business_type_display || '${t("seller.sf.manufacturer")}'"></span>
                 ${infoIcon}
               </span>
             </template>
@@ -140,12 +140,12 @@ export function StoreHeader(): string {
               <a :href="'/pages/seller/seller-shop.html?seller=' + (seller?.seller_code || '')"
                  class="w-full inline-flex items-center justify-center gap-1.5 py-2.5 border-(length:--btn-outline-border-width) border-(--btn-outline-border-color) rounded-[var(--radius-button)] bg-(--btn-outline-bg) text-[13px] font-medium text-(--btn-outline-text) hover:bg-(--btn-outline-hover-bg) hover:text-(--btn-outline-hover-text) transition-colors">
                 ${storeIcon}
-                ${t('seller.sf.viewStore')}
+                ${t("seller.sf.viewStore")}
               </a>
               <button
                 class="w-full py-2.5 bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white text-[13px] font-semibold rounded-[var(--radius-button)] transition-colors"
                 @click="setTab('contact')">
-                ${t('seller.sf.contactNow')}
+                ${t("seller.sf.contactNow")}
               </button>
             </div>
 
@@ -162,12 +162,12 @@ export function StoreHeader(): string {
                       x-text="seller?.rating ? seller.rating.toFixed(1) : '\u2014'"></span>
                 <span class="text-[16px] sm:text-[20px] text-[#999] font-normal">/5</span>
                 <div class="ml-3 flex flex-col">
-                  <span class="text-[13px] sm:text-[14px] font-bold text-[#222]">${t('seller.sf.satisfactory')}</span>
+                  <span class="text-[13px] sm:text-[14px] font-bold text-[#222]">${t("seller.sf.satisfactory")}</span>
                   <template x-if="seller?.review_count">
                     <a href="#reviews"
                        @click.prevent="setTab('reviews')"
                        class="text-[12px] sm:text-[13px] text-[#cc9900] hover:underline leading-snug"
-                       x-text="seller.review_count + ' ${t('seller.sf.reviews')}'"></a>
+                       x-text="seller.review_count + ' ${t("seller.sf.reviews")}'"></a>
                   </template>
                 </div>
               </div>
@@ -175,18 +175,18 @@ export function StoreHeader(): string {
               <!-- 3-column stats row -->
               <div class="grid grid-cols-3 gap-3 sm:gap-6 mb-6">
                 <div class="flex flex-col gap-1.5">
-                  <span class="text-[11px] sm:text-[13px] text-[#999] leading-snug">${t('seller.sf.avgResponseTime')}</span>
+                  <span class="text-[11px] sm:text-[13px] text-[#999] leading-snug">${t("seller.sf.avgResponseTime")}</span>
                   <span class="text-[18px] sm:text-[24px] font-bold text-[#222] leading-none"
                         x-text="seller?.response_time ? ('\u2264' + seller.response_time) : '\u2014'"></span>
                 </div>
                 <div class="flex flex-col gap-1.5">
-                  <span class="text-[11px] sm:text-[13px] text-[#999] leading-snug">${t('seller.sf.onTimeDeliveryRate')}</span>
+                  <span class="text-[11px] sm:text-[13px] text-[#999] leading-snug">${t("seller.sf.onTimeDeliveryRate")}</span>
                   <span class="text-[18px] sm:text-[24px] font-bold text-[#222] leading-none"
                         x-text="seller?.on_time_delivery ? (seller.on_time_delivery + '%') : '\u2014'"></span>
                 </div>
                 <div class="flex flex-col gap-1.5">
                   <span class="text-[11px] sm:text-[13px] text-[#999] leading-snug"
-                        x-text="seller?.total_orders ? (seller.total_orders + ' ${t('seller.sf.orders')}') : '${t('seller.sf.orders')}'"></span>
+                        x-text="seller?.total_orders ? (seller.total_orders + ' ${t("seller.sf.orders")}') : '${t("seller.sf.orders")}'"></span>
                   <span class="text-[18px] sm:text-[24px] font-bold text-[#222] leading-none"
                         x-text="seller?.annual_revenue || '\u2014'"></span>
                 </div>
@@ -212,7 +212,7 @@ export function StoreHeader(): string {
                       <a href="#"
                          class="inline-flex items-center gap-1 text-[13px] text-[#cc9900] hover:underline font-medium mt-1"
                          @click.prevent>
-                        <span x-text="'${t('seller.sf.viewAllCapabilities').replace('({{count}})', '')}(' + items.length + ')'"></span>
+                        <span x-text="'${t("seller.sf.viewAllCapabilities").replace("({{count}})", "")}(' + items.length + ')'"></span>
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
                         </svg>
@@ -233,7 +233,7 @@ export function StoreHeader(): string {
                    currentTime: '00:00',
                    duration: '00:00',
                    thumbs: [
-                     { id: 0, label: '${t('seller.sf.generalOverview')}', count: 9, type: 'video',
+                     { id: 0, label: '${t("seller.sf.generalOverview")}', count: 9, type: 'video',
                        src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
                        poster: 'https://picsum.photos/seed/factory1/800/500' },
                      { id: 1, label: '360\u00b0 g\u00f6r\u00fcn\u00fcm', count: 0, type: 'image',
@@ -342,7 +342,7 @@ export function StoreHeader(): string {
                 <!-- "Verified" overlay top-left -->
                 <div class="absolute inset-x-0 top-0 h-14 bg-gradient-to-b from-black/40 to-transparent pointer-events-none"></div>
                 <span class="absolute top-3 left-4 text-white text-[18px] italic font-light tracking-wide drop-shadow-lg pointer-events-none">
-                  ${t('seller.sf.verified')}
+                  ${t("seller.sf.verified")}
                 </span>
 
                 <!-- Video Controls Bar (video only) -->

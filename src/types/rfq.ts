@@ -32,28 +32,28 @@ export interface RFQFormData {
 }
 
 export type AllowedFileExtension =
-  | '.jpg'
-  | '.jpeg'
-  | '.png'
-  | '.gif'
-  | '.pdf'
-  | '.doc'
-  | '.docx'
-  | '.xls'
-  | '.xlsx';
+  | ".jpg"
+  | ".jpeg"
+  | ".png"
+  | ".gif"
+  | ".pdf"
+  | ".doc"
+  | ".docx"
+  | ".xls"
+  | ".xlsx";
 
 export const FILE_UPLOAD_CONFIG = {
   maxFiles: 6,
   allowedExtensions: [
-    '.jpg',
-    '.jpeg',
-    '.png',
-    '.gif',
-    '.pdf',
-    '.doc',
-    '.docx',
-    '.xls',
-    '.xlsx',
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".gif",
+    ".pdf",
+    ".doc",
+    ".docx",
+    ".xls",
+    ".xlsx",
   ] as AllowedFileExtension[],
-  allowedFormatsDisplay: 'JPG, PNG, GIF, PDF, DOC, XLS',
+  allowedFormatsDisplay: "JPG, PNG, GIF, PDF, DOC, XLS",
 } as const;

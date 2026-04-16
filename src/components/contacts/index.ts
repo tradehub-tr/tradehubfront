@@ -1,1 +1,1 @@
-export { ContactsLayout, initContactsLayout } from './ContactsLayout';
+export { ContactsLayout, initContactsLayout } from "./ContactsLayout";

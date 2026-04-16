@@ -3,9 +3,9 @@
  * "Siparişlerim" page — 2-panel: left nav + right dynamic content.
  * Supports hash-based sub-pages: #all-orders, #refunds, #reviews, #coupons, #tax-info
  */
-import { getBaseUrl } from '../../utils/url';
-import { getCurrencyCode, getCurrencySymbol } from '../../utils/currency';
-import { t } from '../../i18n';
+import { getBaseUrl } from "../../utils/url";
+import { getCurrencyCode, getCurrencySymbol } from "../../utils/currency";
+import { t } from "../../i18n";
 
 interface OrdersNavItem {
   id: string;
@@ -14,10 +14,10 @@ interface OrdersNavItem {
 
 function getNavItems(): OrdersNavItem[] {
   return [
-    { id: 'all-orders', label: t('orders.allOrders') },
-    { id: 'refunds', label: t('orders.refundsTab') },
-    { id: 'reviews', label: t('orders.reviews') },
-    { id: 'coupons', label: t('orders.coupons') },
+    { id: "all-orders", label: t("orders.allOrders") },
+    { id: "refunds", label: t("orders.refundsTab") },
+    { id: "reviews", label: t("orders.reviews") },
+    { id: "coupons", label: t("orders.coupons") },
   ];
 }
 
@@ -39,14 +39,14 @@ const EMPTY_RECEIPT_ICON = `
 
 function getOrderStatusTabs() {
   return [
-    { id: 'all', label: t('common.all') },
-    { id: 'confirming', label: t('orders.confirming') },
-    { id: 'unpaid', label: t('orders.unpaid') },
-    { id: 'preparing', label: t('orders.preparingShipment') },
-    { id: 'delivering', label: t('orders.delivering') },
-    { id: 'refunds-aftersales', label: t('orders.refundsAfterSales') },
-    { id: 'completed-review', label: t('orders.completedReview') },
-    { id: 'closed', label: t('orders.closed') },
+    { id: "all", label: t("common.all") },
+    { id: "confirming", label: t("orders.confirming") },
+    { id: "unpaid", label: t("orders.unpaid") },
+    { id: "preparing", label: t("orders.preparingShipment") },
+    { id: "delivering", label: t("orders.delivering") },
+    { id: "refunds-aftersales", label: t("orders.refundsAfterSales") },
+    { id: "completed-review", label: t("orders.completedReview") },
+    { id: "closed", label: t("orders.closed") },
   ];
 }
 
@@ -56,11 +56,11 @@ function renderAllOrders(): string {
       <template x-if="!selectedOrder"><div>
       <!-- Header -->
       <div class="flex items-center justify-between gap-2 px-5 max-sm:px-3 pt-6 max-[480px]:pt-4 pb-5 max-[480px]:pb-3 border-b border-gray-100">
-        <h1 class="text-[22px] max-sm:text-lg max-[480px]:text-base font-bold text-gray-900" data-i18n="orders.yourOrders">${t('orders.yourOrders')}</h1>
+        <h1 class="text-[22px] max-sm:text-lg max-[480px]:text-base font-bold text-gray-900" data-i18n="orders.yourOrders">${t("orders.yourOrders")}</h1>
         <template x-if="filteredOrders.some((o) => o.status === 'Waiting for payment')">
           <button @click="openRemittanceModal(filteredOrders.find((o) => o.status === 'Waiting for payment')?.orderNumber || '', filteredOrders.find((o) => o.status === 'Waiting for payment')?.total, filteredOrders.find((o) => o.status === 'Waiting for payment')?.currency, filteredOrders.find((o) => o.status === 'Waiting for payment')?.paymentMethod)"
             class="th-btn-outline px-5 max-sm:px-3 max-[480px]:px-2.5 py-2 text-sm max-sm:text-xs whitespace-nowrap">
-            ${t('orders.submitRemittanceProof')}
+            ${t("orders.submitRemittanceProof")}
           </button>
         </template>
       </div>
@@ -74,7 +74,9 @@ function renderAllOrders(): string {
         <!-- Scrollable tab container -->
         <div class="overflow-x-auto scrollbar-hide" id="order-tabs-scroll">
           <div class="flex px-7 max-sm:px-3 min-w-max">
-            ${getOrderStatusTabs().map(tab => `
+            ${getOrderStatusTabs()
+              .map(
+                (tab) => `
               <button
                 @click="activeTab = '${tab.id}'"
                 :class="activeTab === '${tab.id}'
@@ -84,7 +86,9 @@ function renderAllOrders(): string {
               >
                 ${tab.label}<template x-if="tabCount('${tab.id}') > 0"><span class="text-gray-400 ml-0.5" x-text="'(' + tabCount('${tab.id}') + ')'"></span></template>
               </button>
-            `).join('')}
+            `
+              )
+              .join("")}
           </div>
         </div>
         <!-- Right fade + arrow -->
@@ -104,7 +108,7 @@ function renderAllOrders(): string {
             type="text"
             x-model.debounce.300ms="searchQuery"
             @keydown.escape="searchQuery = ''"
-            placeholder="${t('orders.searchPlaceholder')}"
+            placeholder="${t("orders.searchPlaceholder")}"
             class="th-input th-input-sm pl-9 pr-8"
             :class="searchQuery.trim() ? 'border-amber-400! ring-1! ring-amber-200!' : ''"
           />
@@ -146,28 +150,28 @@ function renderAllOrders(): string {
               class="flex items-center justify-between w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 cursor-pointer bg-transparent border-none transition-colors"
               :class="dateFilter === 'all' ? 'text-amber-700 font-medium' : 'text-gray-700'"
             >
-              ${t('orders.allDates')}
+              ${t("orders.allDates")}
               <svg x-show="dateFilter === 'all'" class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
             </button>
             <button @click="setDateFilter('7d')"
               class="flex items-center justify-between w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 cursor-pointer bg-transparent border-none transition-colors"
               :class="dateFilter === '7d' ? 'text-amber-700 font-medium' : 'text-gray-700'"
             >
-              ${t('orders.last7Days')}
+              ${t("orders.last7Days")}
               <svg x-show="dateFilter === '7d'" class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
             </button>
             <button @click="setDateFilter('30d')"
               class="flex items-center justify-between w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 cursor-pointer bg-transparent border-none transition-colors"
               :class="dateFilter === '30d' ? 'text-amber-700 font-medium' : 'text-gray-700'"
             >
-              ${t('orders.last30Days')}
+              ${t("orders.last30Days")}
               <svg x-show="dateFilter === '30d'" class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
             </button>
             <button @click="setDateFilter('90d')"
               class="flex items-center justify-between w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 cursor-pointer bg-transparent border-none transition-colors"
               :class="dateFilter === '90d' ? 'text-amber-700 font-medium' : 'text-gray-700'"
             >
-              ${t('orders.last90Days')}
+              ${t("orders.last90Days")}
               <svg x-show="dateFilter === '90d'" class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
             </button>
           </div>
@@ -198,16 +202,16 @@ function renderAllOrders(): string {
             x-transition:leave-end="opacity-0 translate-y-1"
             class="absolute top-full right-0 max-sm:left-0 max-sm:right-auto mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 p-4 min-w-[280px]"
           >
-            <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">${t('orders.selectDateRange')}</p>
+            <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">${t("orders.selectDateRange")}</p>
             <div class="flex items-center gap-2 mb-3">
               <div class="flex-1">
-                <label class="block text-xs text-gray-500 mb-1">${t('orders.startDate')}</label>
+                <label class="block text-xs text-gray-500 mb-1">${t("orders.startDate")}</label>
                 <input type="date" x-model="dateFrom"
                   class="th-input th-input-sm" />
               </div>
               <span class="text-gray-300 mt-4">—</span>
               <div class="flex-1">
-                <label class="block text-xs text-gray-500 mb-1">${t('orders.endDate')}</label>
+                <label class="block text-xs text-gray-500 mb-1">${t("orders.endDate")}</label>
                 <input type="date" x-model="dateTo"
                   class="th-input th-input-sm" />
               </div>
@@ -215,13 +219,13 @@ function renderAllOrders(): string {
             <div class="flex items-center justify-end gap-2">
               <button @click="clearTimeRange()"
                 class="px-3 py-1.5 text-xs text-gray-500 bg-transparent border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                ${t('common.clear')}
+                ${t("common.clear")}
               </button>
               <button @click="applyTimeRange()"
                 class="px-3 py-1.5 text-xs text-white bg-gray-900 border border-gray-900 rounded-lg cursor-pointer hover:bg-gray-800 transition-colors"
                 :class="!(dateFrom || dateTo) ? 'opacity-40 cursor-not-allowed' : ''"
                 :disabled="!(dateFrom || dateTo)">
-                ${t('common.apply')}
+                ${t("common.apply")}
               </button>
             </div>
           </div>
@@ -232,7 +236,7 @@ function renderAllOrders(): string {
           <button @click="searchQuery = ''; dateFilter = 'all'; dateFrom = ''; dateTo = ''; activeTab = 'all'"
             class="flex items-center gap-1 h-8 px-3 text-xs text-red-600 bg-red-50 border border-red-200 rounded-full cursor-pointer hover:bg-red-100 transition-colors whitespace-nowrap">
             <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
-            ${t('orders.clearAllFilters')}
+            ${t("orders.clearAllFilters")}
           </button>
         </template>
       </div>
@@ -245,8 +249,8 @@ function renderAllOrders(): string {
             <path d="M12 2C8.14 2 5 5.14 5 9v5l-2 2v1h18v-1l-2-2V9c0-3.86-3.14-7-7-7zm0 20c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2z"/>
           </svg>
           <div class="text-[13px] text-gray-700 leading-relaxed">
-            <p class="mb-1"><strong>1.</strong> ${t('orders.bannerRemittance')} <a href="#" class="text-blue-600 hover:underline">${t('orders.bannerHowTo')}</a></p>
-            <p><strong>2.</strong> ${t('orders.bannerHolidayDelay')}</p>
+            <p class="mb-1"><strong>1.</strong> ${t("orders.bannerRemittance")} <a href="#" class="text-blue-600 hover:underline">${t("orders.bannerHowTo")}</a></p>
+            <p><strong>2.</strong> ${t("orders.bannerHolidayDelay")}</p>
           </div>
         </div>
       </div>
@@ -255,9 +259,9 @@ function renderAllOrders(): string {
       <template x-if="searchQuery.trim() || dateFilter !== 'all'">
         <div class="px-7 max-sm:px-3 pb-3">
           <p class="text-sm text-gray-500">
-            <span x-text="filteredOrders.length"></span> ${t('orders.resultsFound')}
+            <span x-text="filteredOrders.length"></span> ${t("orders.resultsFound")}
             <template x-if="searchQuery.trim()">
-              <span> &mdash; &quot;<strong class="text-gray-700" x-text="searchQuery.trim()"></strong>&quot; ${t('orders.searchFor')}</span>
+              <span> &mdash; &quot;<strong class="text-gray-700" x-text="searchQuery.trim()"></strong>&quot; ${t("orders.searchFor")}</span>
             </template>
             <template x-if="dateFilter !== 'all' && dateFilter !== 'custom'">
               <span> &mdash; <span x-text="dateFilterLabel"></span></span>
@@ -273,7 +277,7 @@ function renderAllOrders(): string {
       <template x-if="loading">
         <div class="flex flex-col items-center justify-center gap-3 py-16 text-center">
           <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-600"></div>
-          <p class="text-sm text-gray-500">${t('orders.loadingOrders') || 'Siparişler yükleniyor...'}</p>
+          <p class="text-sm text-gray-500">${t("orders.loadingOrders") || "Siparişler yükleniyor..."}</p>
         </div>
       </template>
 
@@ -284,19 +288,19 @@ function renderAllOrders(): string {
             ${EMPTY_RECEIPT_ICON}
             <template x-if="searchQuery.trim() || dateFilter !== 'all'">
               <div class="flex flex-col items-center gap-2">
-                <h3 class="text-base font-bold text-gray-900">${t('orders.noOrdersFound')}</h3>
-                <p class="text-sm text-gray-500 max-w-[400px]">${t('orders.tryDifferentKeywords')}</p>
+                <h3 class="text-base font-bold text-gray-900">${t("orders.noOrdersFound")}</h3>
+                <p class="text-sm text-gray-500 max-w-[400px]">${t("orders.tryDifferentKeywords")}</p>
                 <button @click="searchQuery = ''; dateFilter = 'all'; dateFrom = ''; dateTo = ''; activeTab = 'all'"
                   class="inline-block px-6 py-2 text-sm text-amber-700 border border-amber-300 rounded-full no-underline mt-2 transition-colors hover:bg-amber-50 cursor-pointer bg-transparent">
-                  ${t('orders.clearFilters')}
+                  ${t("orders.clearFilters")}
                 </button>
               </div>
             </template>
             <template x-if="!searchQuery.trim() && dateFilter === 'all'">
               <div class="flex flex-col items-center gap-2">
-                <h3 class="text-base font-bold text-gray-900">${t('orders.noOrdersYet')}</h3>
-                <p class="text-sm text-gray-500 max-w-[400px]">${t('orders.startSourcingDesc')}</p>
-                <a href="/" class="th-btn-outline mt-2">${t('orders.startSourcing')}</a>
+                <h3 class="text-base font-bold text-gray-900">${t("orders.noOrdersYet")}</h3>
+                <p class="text-sm text-gray-500 max-w-[400px]">${t("orders.startSourcingDesc")}</p>
+                <a href="/" class="th-btn-outline mt-2">${t("orders.startSourcing")}</a>
               </div>
             </template>
           </div>
@@ -317,13 +321,13 @@ function renderAllOrders(): string {
                   <span class="text-gray-300">|</span>
                   <span x-text="order.orderDate" class="max-sm:hidden"></span>
                   <span class="text-gray-300 max-sm:hidden">|</span>
-                  <span class="max-[380px]:hidden">${t('orders.supplierLabel')}: <strong class="text-gray-700" x-text="order.seller"></strong></span>
+                  <span class="max-[380px]:hidden">${t("orders.supplierLabel")}: <strong class="text-gray-700" x-text="order.seller"></strong></span>
                 </div>
                 <!-- Right: Status + Cancel + Total -->
                 <div class="flex items-center gap-2 max-[480px]:gap-1.5">
                   <template x-if="canCancel(order)">
                     <button @click="cancellingOrder = order; openModal('showCancelOrder')" class="text-gray-400 hover:text-red-500 bg-transparent border-none cursor-pointer transition-colors text-xs whitespace-nowrap">
-                      ${t('orders.cancelOrderBtn')}
+                      ${t("orders.cancelOrderBtn")}
                     </button>
                   </template>
                   <span class="text-gray-300" x-show="canCancel(order)">|</span>
@@ -369,16 +373,16 @@ function renderAllOrders(): string {
               <!-- Link -->
               <a :href="'${getBaseUrl()}pages/dashboard/messages.html?seller=' + encodeURIComponent(order.seller)" class="text-gray-500 hover:text-blue-600 flex items-center gap-1.5 transition-colors whitespace-nowrap text-[13px] max-[480px]:text-xs">
                 <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-                ${t('orders.contactSupplier')}
+                ${t("orders.contactSupplier")}
               </a>
               <!-- Buttons -->
               <div class="flex items-center gap-2.5 max-[480px]:w-full">
                 <button @click="viewDetail(order)" class="th-btn-outline h-9 px-5 max-[480px]:px-3 max-[480px]:flex-1 text-[13px] max-[480px]:text-xs cursor-pointer font-medium whitespace-nowrap">
-                  ${t('orders.viewDetails')}
+                  ${t("orders.viewDetails")}
                 </button>
                 <template x-if="canPay(order)">
                   <button @click="openRemittanceModal(order.orderNumber, order.total, order.currency, order.paymentMethod)" class="th-btn h-9 px-5 max-[480px]:px-3 max-[480px]:flex-1 text-[13px] max-[480px]:text-xs whitespace-nowrap">
-                    ${t('orders.makePayment')}
+                    ${t("orders.makePayment")}
                   </button>
                 </template>
                 <template x-if="hasReceipt(order)">
@@ -395,7 +399,7 @@ function renderAllOrders(): string {
 
       <!-- Pagination -->
       <div x-show="filteredOrders.length > 0" class="flex items-center justify-end gap-3 px-7 max-sm:px-3 pb-6">
-        <span class="text-sm text-gray-500" x-text="filteredOrders.length + ' ${t('orders.ordersCount')}'"></span>
+        <span class="text-sm text-gray-500" x-text="filteredOrders.length + ' ${t("orders.ordersCount")}'"></span>
         <div class="flex items-center gap-1.5">
           <button class="flex items-center justify-center w-8 h-8 border border-gray-300 rounded bg-white text-gray-400 cursor-not-allowed" disabled>
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M15 19l-7-7 7-7"/></svg>
@@ -417,7 +421,7 @@ function renderAllOrders(): string {
         <div class="px-7 max-sm:px-3 pt-5 pb-2">
           <button @click="backToList()" class="flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900 bg-transparent border-none cursor-pointer transition-colors p-0">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M15 19l-7-7 7-7"/></svg>
-            ${t('orders.backToOrders')}
+            ${t("orders.backToOrders")}
           </button>
         </div>
 
@@ -425,16 +429,16 @@ function renderAllOrders(): string {
         <div class="px-7 max-sm:px-3 pt-2 pb-5 border-b border-gray-100">
           <!-- Breadcrumb -->
           <nav class="flex items-center gap-1.5 text-xs text-gray-400 mb-4">
-            <a href="/" class="hover:text-gray-600 transition-colors">${t('common.home')}</a>
+            <a href="/" class="hover:text-gray-600 transition-colors">${t("common.home")}</a>
             <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M9 5l7 7-7 7"/></svg>
-            <a href="/pages/dashboard/orders.html" class="hover:text-gray-600 transition-colors">${t('orders.orderManagement')}</a>
+            <a href="/pages/dashboard/orders.html" class="hover:text-gray-600 transition-colors">${t("orders.orderManagement")}</a>
             <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M9 5l7 7-7 7"/></svg>
-            <span class="text-gray-600">${t('orders.orderDetails')}</span>
+            <span class="text-gray-600">${t("orders.orderDetails")}</span>
           </nav>
 
           <div class="flex items-start justify-between gap-4 max-sm:flex-col max-sm:gap-3">
             <div>
-              <h1 class="text-[22px] max-sm:text-lg font-bold text-gray-900 mb-2">${t('orders.orderDetails')}</h1>
+              <h1 class="text-[22px] max-sm:text-lg font-bold text-gray-900 mb-2">${t("orders.orderDetails")}</h1>
               <div class="flex items-center gap-3 flex-wrap max-sm:gap-2">
                 <div class="flex items-center gap-1.5">
                   <svg class="w-4 h-4 text-amber-500 shrink-0" viewBox="0 0 20 20" fill="currentColor">
@@ -444,10 +448,10 @@ function renderAllOrders(): string {
                 </div>
                 <button @click="copyOrderNumber()" class="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 bg-transparent border-none cursor-pointer transition-colors p-0">
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-                  <span x-text="copiedNumber ? '${t('orders.copied')}' : '${t('orders.copy')}'"></span>
+                  <span x-text="copiedNumber ? '${t("orders.copied")}' : '${t("orders.copy")}'"></span>
                 </button>
                 <span class="text-gray-300 max-sm:hidden">|</span>
-                <span class="text-sm text-gray-500" x-text="'${t('orders.orderDateLabel')} ' + selectedOrder.orderDate"></span>
+                <span class="text-sm text-gray-500" x-text="'${t("orders.orderDateLabel")} ' + selectedOrder.orderDate"></span>
               </div>
             </div>
           </div>
@@ -459,7 +463,7 @@ function renderAllOrders(): string {
           <template x-if="isCancelled(selectedOrder)">
             <div class="flex items-center justify-center gap-2 py-3 px-4 bg-red-50 border border-red-200 rounded-lg max-w-2xl mx-auto">
               <svg class="w-5 h-5 text-red-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M18.364 5.636l-12.728 12.728M5.636 5.636l12.728 12.728"/></svg>
-              <span class="text-sm font-medium text-red-700">${t('orders.orderCancelled') || 'Bu sipariş iptal edilmiştir'}</span>
+              <span class="text-sm font-medium text-red-700">${t("orders.orderCancelled") || "Bu sipariş iptal edilmiştir"}</span>
             </div>
           </template>
           <!-- İade stepper (iade talebi varsa) -->
@@ -499,35 +503,35 @@ function renderAllOrders(): string {
               <div class="flex flex-col items-center gap-1.5 relative z-10">
                 <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
                      :class="getStepIndex(selectedOrder) >= 0 ? 'bg-(--btn-bg) text-white' : 'bg-gray-200 text-gray-500'">1</div>
-                <span class="text-xs max-sm:text-[10px] text-gray-600 whitespace-nowrap">${t('orders.stepOrder')}</span>
+                <span class="text-xs max-sm:text-[10px] text-gray-600 whitespace-nowrap">${t("orders.stepOrder")}</span>
               </div>
               <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3" :class="getStepIndex(selectedOrder) >= 1 ? 'bg-(--btn-bg)' : 'bg-gray-200'"></div>
               <!-- Step 2: Ödeme -->
               <div class="flex flex-col items-center gap-1.5 relative z-10">
                 <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
                      :class="getStepIndex(selectedOrder) >= 1 ? 'bg-(--btn-bg) text-white' : 'bg-gray-200 text-gray-500'">2</div>
-                <span class="text-xs max-sm:text-[10px] text-gray-600 whitespace-nowrap">${t('orders.stepPayment')}</span>
+                <span class="text-xs max-sm:text-[10px] text-gray-600 whitespace-nowrap">${t("orders.stepPayment")}</span>
               </div>
               <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3" :class="getStepIndex(selectedOrder) >= 2 ? 'bg-(--btn-bg)' : 'bg-gray-200'"></div>
               <!-- Step 3: Hazırlanıyor -->
               <div class="flex flex-col items-center gap-1.5 relative z-10">
                 <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
                      :class="getStepIndex(selectedOrder) >= 2 ? 'bg-(--btn-bg) text-white' : 'bg-gray-200 text-gray-500'">3</div>
-                <span class="text-xs max-sm:text-[10px] text-gray-600 whitespace-nowrap">${t('orders.stepShipping')}</span>
+                <span class="text-xs max-sm:text-[10px] text-gray-600 whitespace-nowrap">${t("orders.stepShipping")}</span>
               </div>
               <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3" :class="getStepIndex(selectedOrder) >= 3 ? 'bg-(--btn-bg)' : 'bg-gray-200'"></div>
               <!-- Step 4: Kargoda -->
               <div class="flex flex-col items-center gap-1.5 relative z-10">
                 <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
                      :class="getStepIndex(selectedOrder) >= 3 ? 'bg-(--btn-bg) text-white' : 'bg-gray-200 text-gray-500'">4</div>
-                <span class="text-xs max-sm:text-[10px] text-gray-600 whitespace-nowrap">${t('orders.stepDelivery')}</span>
+                <span class="text-xs max-sm:text-[10px] text-gray-600 whitespace-nowrap">${t("orders.stepDelivery")}</span>
               </div>
               <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3" :class="getStepIndex(selectedOrder) >= 4 ? 'bg-(--btn-bg)' : 'bg-gray-200'"></div>
               <!-- Step 5: Teslim Edildi -->
               <div class="flex flex-col items-center gap-1.5 relative z-10">
                 <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
                      :class="getStepIndex(selectedOrder) >= 4 ? 'bg-(--btn-bg) text-white' : 'bg-gray-200 text-gray-500'">5</div>
-                <span class="text-xs max-sm:text-[10px] text-gray-600 whitespace-nowrap">${t('orders.stepReview')}</span>
+                <span class="text-xs max-sm:text-[10px] text-gray-600 whitespace-nowrap">${t("orders.stepReview")}</span>
               </div>
             </div>
           </template>
@@ -544,7 +548,7 @@ function renderAllOrders(): string {
           <div class="flex items-center gap-3 mt-4 flex-wrap" x-show="isActionable(selectedOrder)">
             <template x-if="canPay(selectedOrder)">
               <button @click="openRemittanceModal(selectedOrder.orderNumber, selectedOrder.total, selectedOrder.currency, selectedOrder.paymentMethod)" class="th-btn">
-                ${t('orders.makePayment')}
+                ${t("orders.makePayment")}
               </button>
             </template>
             <template x-if="hasReceipt(selectedOrder)">
@@ -554,11 +558,11 @@ function renderAllOrders(): string {
               </a>
             </template>
             <button @click="openModal('showModifyShipping')" class="th-btn-outline">
-              ${t('orders.modifyShippingDetails')}
+              ${t("orders.modifyShippingDetails")}
             </button>
             <template x-if="canCancel(selectedOrder)">
               <button @click="openModal('showCancelOrder')" class="th-btn-outline">
-                ${t('orders.cancelOrderBtn')}
+                ${t("orders.cancelOrderBtn")}
               </button>
             </template>
           </div>
@@ -570,12 +574,12 @@ function renderAllOrders(): string {
             <svg class="w-5 h-5 text-gray-500 shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
               <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
             </svg>
-            <h2 class="text-base font-bold text-gray-900">${t('orders.productDetails')}</h2>
+            <h2 class="text-base font-bold text-gray-900">${t("orders.productDetails")}</h2>
           </div>
           <div class="flex items-center gap-2 mb-4 text-sm">
-            <span class="text-gray-500">${t('orders.seller')}:</span>
+            <span class="text-gray-500">${t("orders.seller")}:</span>
             <span class="font-medium text-gray-800" x-text="selectedOrder.seller"></span>
-            <a href="#" class="text-blue-600 hover:underline text-sm">${t('orders.chatNow')}</a>
+            <a href="#" class="text-blue-600 hover:underline text-sm">${t("orders.chatNow")}</a>
           </div>
 
           <!-- Products Table -->
@@ -583,11 +587,11 @@ function renderAllOrders(): string {
             <table class="w-full min-w-[560px] border-collapse">
               <thead>
                 <tr class="border-b border-gray-200">
-                  <th class="text-left text-xs font-semibold text-gray-500 uppercase tracking-wide pb-3 pr-4">${t('orders.productName')}</th>
-                  <th class="text-left text-xs font-semibold text-gray-500 uppercase tracking-wide pb-3 pr-4">${t('orders.specifications')}</th>
-                  <th class="text-right text-xs font-semibold text-gray-500 uppercase tracking-wide pb-3 pr-4">${t('orders.unitPrice')}</th>
-                  <th class="text-center text-xs font-semibold text-gray-500 uppercase tracking-wide pb-3 pr-4">${t('orders.quantity')}</th>
-                  <th class="text-right text-xs font-semibold text-gray-500 uppercase tracking-wide pb-3">${t('orders.total')}</th>
+                  <th class="text-left text-xs font-semibold text-gray-500 uppercase tracking-wide pb-3 pr-4">${t("orders.productName")}</th>
+                  <th class="text-left text-xs font-semibold text-gray-500 uppercase tracking-wide pb-3 pr-4">${t("orders.specifications")}</th>
+                  <th class="text-right text-xs font-semibold text-gray-500 uppercase tracking-wide pb-3 pr-4">${t("orders.unitPrice")}</th>
+                  <th class="text-center text-xs font-semibold text-gray-500 uppercase tracking-wide pb-3 pr-4">${t("orders.quantity")}</th>
+                  <th class="text-right text-xs font-semibold text-gray-500 uppercase tracking-wide pb-3">${t("orders.total")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -613,8 +617,8 @@ function renderAllOrders(): string {
 
           <!-- Summary Row -->
           <div class="flex items-center justify-between mt-4 pt-3 border-t border-gray-200">
-            <span class="text-sm text-gray-500">${t('orders.productQuantity')}: <strong class="text-gray-800" x-text="selectedOrder.products.reduce((s, p) => s + p.quantity, 0)"></strong></span>
-            <span class="text-sm text-gray-500">${t('orders.totalPrice')}: <strong class="text-gray-900" x-text="'${getCurrencyCode()} ' + selectedOrder.products.reduce((s, p) => { const v = parseFloat(String(p.totalPrice).replace(/,/g, '')); return s + (isNaN(v) ? 0 : v); }, 0).toLocaleString('en-US', {minimumFractionDigits:2})"></strong></span>
+            <span class="text-sm text-gray-500">${t("orders.productQuantity")}: <strong class="text-gray-800" x-text="selectedOrder.products.reduce((s, p) => s + p.quantity, 0)"></strong></span>
+            <span class="text-sm text-gray-500">${t("orders.totalPrice")}: <strong class="text-gray-900" x-text="'${getCurrencyCode()} ' + selectedOrder.products.reduce((s, p) => { const v = parseFloat(String(p.totalPrice).replace(/,/g, '')); return s + (isNaN(v) ? 0 : v); }, 0).toLocaleString('en-US', {minimumFractionDigits:2})"></strong></span>
           </div>
         </div>
 
@@ -625,28 +629,28 @@ function renderAllOrders(): string {
               <svg class="w-5 h-5 text-gray-500 shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                 <path d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/>
               </svg>
-              <h2 class="text-base font-bold text-gray-900">${t('orders.shippingDetails')}</h2>
+              <h2 class="text-base font-bold text-gray-900">${t("orders.shippingDetails")}</h2>
             </div>
             <div class="flex items-center gap-3">
               <span class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full"
                     :class="selectedOrder.shipping.trackingStatus === 'Kargo yolda' ? 'bg-blue-50 text-blue-700' : 'bg-amber-50 text-amber-700'"
                     x-text="selectedOrder.shipping.trackingStatus"></span>
-              <button @click="openModal('showTrackPackage')" class="text-sm text-blue-600 hover:underline whitespace-nowrap bg-transparent border-none cursor-pointer p-0">${t('orders.trackShipments')} &gt;</button>
-              <button @click="openModal('showModifyShipping')" class="text-sm text-blue-600 hover:underline whitespace-nowrap bg-transparent border-none cursor-pointer p-0">${t('orders.modifyShippingDetails')}</button>
+              <button @click="openModal('showTrackPackage')" class="text-sm text-blue-600 hover:underline whitespace-nowrap bg-transparent border-none cursor-pointer p-0">${t("orders.trackShipments")} &gt;</button>
+              <button @click="openModal('showModifyShipping')" class="text-sm text-blue-600 hover:underline whitespace-nowrap bg-transparent border-none cursor-pointer p-0">${t("orders.modifyShippingDetails")}</button>
             </div>
           </div>
 
           <div class="grid grid-cols-4 max-sm:grid-cols-1 gap-4 max-sm:gap-3">
             <div>
-              <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t('orders.deliveryAddress')}</p>
+              <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t("orders.deliveryAddress")}</p>
               <p class="text-sm text-gray-700 leading-relaxed" x-text="selectedOrder.shipping.address"></p>
             </div>
             <div>
-              <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t('orders.shipFromCountry')}</p>
+              <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t("orders.shipFromCountry")}</p>
               <p class="text-sm text-gray-700" x-text="selectedOrder.shipping.shipFrom"></p>
             </div>
             <div>
-              <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t('orders.shippingMethod')}</p>
+              <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t("orders.shippingMethod")}</p>
               <p class="text-sm text-gray-700 whitespace-pre-line" x-text="selectedOrder.shipping.method"></p>
             </div>
             <div>
@@ -663,11 +667,11 @@ function renderAllOrders(): string {
               <svg class="w-5 h-5 text-gray-500 shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                 <rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/>
               </svg>
-              <h2 class="text-base font-bold text-gray-900">${t('orders.paymentDetails')}</h2>
+              <h2 class="text-base font-bold text-gray-900">${t("orders.paymentDetails")}</h2>
             </div>
             <div class="flex items-center gap-2">
               <button @click="openModal('showPaymentHistory')" class="px-4 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-full cursor-pointer hover:bg-blue-100 transition-colors">
-                ${t('orders.paymentHistoryTitle')}
+                ${t("orders.paymentHistoryTitle")}
               </button>
               <div class="relative" x-data="{ moreOpen: false }">
                 <button @click="moreOpen = !moreOpen" class="flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 bg-transparent border border-gray-200 rounded-full cursor-pointer transition-colors">
@@ -676,12 +680,12 @@ function renderAllOrders(): string {
                 <div x-show="moreOpen" @click.outside="moreOpen = false" x-transition class="absolute right-0 top-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 py-1 min-w-[160px]">
                   <button @click="downloadInvoice(selectedOrder); moreOpen = false" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 bg-transparent border-none cursor-pointer flex items-center gap-2">
                     <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                    ${t('orders.downloadInvoice')}
+                    ${t("orders.downloadInvoice")}
                   </button>
                   <template x-if="canRefund(selectedOrder)">
                     <button @click="openRefundModal(selectedOrder); moreOpen = false" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 bg-transparent border-none cursor-pointer flex items-center gap-2">
                       <svg class="w-3.5 h-3.5 text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
-                      ${t('orders.requestRefund')}
+                      ${t("orders.requestRefund")}
                     </button>
                   </template>
                 </div>
@@ -710,11 +714,11 @@ function renderAllOrders(): string {
               <template x-if="selectedOrder.payment.hasRecord">
                 <a href="#" class="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:underline">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                  ${t('orders.viewPaymentHistory')}
+                  ${t("orders.viewPaymentHistory")}
                 </a>
               </template>
               <template x-if="!selectedOrder.payment.hasRecord">
-                <p class="text-sm text-gray-400">${t('orders.noPaymentRecord')}</p>
+                <p class="text-sm text-gray-400">${t("orders.noPaymentRecord")}</p>
               </template>
             </div>
 
@@ -722,23 +726,23 @@ function renderAllOrders(): string {
             <div class="bg-gray-50 rounded-lg p-4 max-sm:p-3">
               <div class="space-y-2.5">
                 <div class="flex items-center justify-between text-sm">
-                  <span class="text-gray-500">${t('orders.subtotal')}</span>
+                  <span class="text-gray-500">${t("orders.subtotal")}</span>
                   <span class="text-gray-800">${getCurrencyCode()} <span x-text="selectedOrder.payment.subtotal"></span></span>
                 </div>
                 <div class="flex items-center justify-between text-sm">
-                  <span class="text-gray-500">${t('orders.shippingFee')}</span>
+                  <span class="text-gray-500">${t("orders.shippingFee")}</span>
                   <span class="text-gray-800">${getCurrencyCode()} <span x-text="selectedOrder.payment.shippingFee"></span></span>
                 </div>
                 <div class="border-t border-gray-200 pt-2.5 flex items-center justify-between text-sm">
-                  <span class="text-gray-500">${t('orders.subtotal')}</span>
+                  <span class="text-gray-500">${t("orders.subtotal")}</span>
                   <span class="text-gray-800">${getCurrencyCode()} <span x-text="selectedOrder.payment.grandTotal"></span></span>
                 </div>
                 <div class="flex items-center justify-between text-base font-bold">
-                  <span class="text-gray-900">${t('orders.grandTotal')}*</span>
+                  <span class="text-gray-900">${t("orders.grandTotal")}*</span>
                   <span class="text-gray-900">${getCurrencyCode()} <span x-text="selectedOrder.payment.grandTotal"></span></span>
                 </div>
               </div>
-              <p class="text-[11px] text-gray-400 mt-3 leading-relaxed">${t('orders.totalDisclaimer')}</p>
+              <p class="text-[11px] text-gray-400 mt-3 leading-relaxed">${t("orders.totalDisclaimer")}</p>
             </div>
           </div>
         </div>
@@ -749,42 +753,42 @@ function renderAllOrders(): string {
             <svg class="w-5 h-5 text-gray-500 shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
               <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
             </svg>
-            <h2 class="text-base font-bold text-gray-900">${t('orders.supplierDetails')}</h2>
+            <h2 class="text-base font-bold text-gray-900">${t("orders.supplierDetails")}</h2>
           </div>
 
           <div class="grid grid-cols-4 max-sm:grid-cols-2 max-[380px]:grid-cols-1 gap-4 max-sm:gap-3 mb-4">
             <div>
-              <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t('orders.supplier')}</p>
+              <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t("orders.supplier")}</p>
               <p class="text-sm font-medium text-gray-800" x-text="selectedOrder.supplier.name"></p>
             </div>
             <div>
-              <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t('orders.contactName')}</p>
+              <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t("orders.contactName")}</p>
               <p class="text-sm text-gray-700" x-text="selectedOrder.supplier.contact"></p>
             </div>
             <div>
-              <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t('orders.phone')}</p>
+              <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t("orders.phone")}</p>
               <p class="text-sm text-gray-700" x-text="selectedOrder.supplier.phone"></p>
             </div>
             <div>
-              <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t('orders.email')}</p>
+              <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t("orders.email")}</p>
               <p class="text-sm text-gray-700 break-all" x-text="selectedOrder.supplier.email"></p>
             </div>
           </div>
 
           <div class="flex items-center gap-4 max-sm:gap-3">
-            <a href="#" class="text-sm text-blue-600 hover:underline">${t('orders.visitStore')}</a>
+            <a href="#" class="text-sm text-blue-600 hover:underline">${t("orders.visitStore")}</a>
             <span class="text-gray-300">|</span>
-            <a href="#" class="text-sm text-blue-600 hover:underline">${t('orders.chatNow')}</a>
+            <a href="#" class="text-sm text-blue-600 hover:underline">${t("orders.chatNow")}</a>
           </div>
         </div>
 
         <!-- Section 10: Action Buttons -->
         <div class="px-7 max-sm:px-3 py-5 flex items-center gap-3 flex-wrap">
           <button @click="openModal('showOperationHistory')" class="th-btn-outline whitespace-nowrap">
-            ${t('orders.operationHistory')}
+            ${t("orders.operationHistory")}
           </button>
           <button @click="openModal('showContract')" class="whitespace-nowrap px-4 py-2 text-sm font-medium text-gray-500 bg-gray-100 border border-gray-300 rounded-full hover:bg-gray-200 cursor-pointer transition-colors">
-            ${t('orders.viewContract')}
+            ${t("orders.viewContract")}
           </button>
         </div>
 
@@ -799,7 +803,7 @@ function renderAllOrders(): string {
           <div class="relative bg-white rounded-md shadow-2xl w-full max-w-lg max-h-[80vh] overflow-hidden" @click.stop>
             <!-- Header -->
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-              <h3 class="text-lg font-bold text-gray-900">${t('orders.operationHistory')}</h3>
+              <h3 class="text-lg font-bold text-gray-900">${t("orders.operationHistory")}</h3>
               <button @click="closeModal('showOperationHistory')" class="flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 bg-transparent border-none cursor-pointer rounded-full hover:bg-gray-100 transition-colors">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
               </button>
@@ -810,16 +814,16 @@ function renderAllOrders(): string {
                 <!-- Step 1: Order submitted (always) -->
                 <div class="relative">
                   <div class="absolute -left-[25px] top-1 w-3 h-3 bg-(--btn-bg) rounded-full border-2 border-white"></div>
-                  <p class="text-sm font-medium text-gray-900">${t('orders.orderSubmitted')}</p>
+                  <p class="text-sm font-medium text-gray-900">${t("orders.orderSubmitted")}</p>
                   <p class="text-xs text-gray-500 mt-0.5" x-text="selectedOrder.orderDate"></p>
-                  <p class="text-xs text-gray-400 mt-1" x-text="'${t('orders.orderPrefix')} ' + selectedOrder.orderNumber"></p>
+                  <p class="text-xs text-gray-400 mt-1" x-text="'${t("orders.orderPrefix")} ' + selectedOrder.orderNumber"></p>
                 </div>
 
                 <!-- Cancelled -->
                 <template x-if="selectedOrder.status === 'Cancelled'">
                   <div class="relative">
                     <div class="absolute -left-[25px] top-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></div>
-                    <p class="text-sm font-medium text-red-600">${t('orders.orderCancelled')}</p>
+                    <p class="text-sm font-medium text-red-600">${t("orders.orderCancelled")}</p>
                     <p class="text-xs text-gray-400 mt-1" x-text="selectedOrder.statusDescription"></p>
                   </div>
                 </template>
@@ -832,32 +836,32 @@ function renderAllOrders(): string {
                       <div class="absolute -left-[25px] top-1 w-3 h-3 rounded-full border-2 border-white"
                            :class="getStepIndex(selectedOrder) >= 1 ? 'bg-(--btn-bg)' : 'bg-gray-300'"></div>
                       <p class="text-sm font-medium" :class="getStepIndex(selectedOrder) >= 1 ? 'text-gray-900' : 'text-gray-400'"
-                         x-text="getStepIndex(selectedOrder) === 0 ? '${t('orders.awaitingPayment')}' : '${t('orders.orderConfirming')}'"></p>
+                         x-text="getStepIndex(selectedOrder) === 0 ? '${t("orders.awaitingPayment")}' : '${t("orders.orderConfirming")}'"></p>
                       <p class="text-xs text-gray-400 mt-1"
-                         x-text="getStepIndex(selectedOrder) === 0 ? '${t('orders.waitingPaymentMessage')}' : '${t('orders.orderConfirmingMessage')}'"></p>
+                         x-text="getStepIndex(selectedOrder) === 0 ? '${t("orders.waitingPaymentMessage")}' : '${t("orders.orderConfirmingMessage")}'"></p>
                     </div>
                     <!-- Step 3: Preparing -->
                     <template x-if="getStepIndex(selectedOrder) >= 2">
                       <div class="relative">
                         <div class="absolute -left-[25px] top-1 w-3 h-3 bg-(--btn-bg) rounded-full border-2 border-white"></div>
-                        <p class="text-sm font-medium text-gray-900">${t('orders.orderPreparing')}</p>
-                        <p class="text-xs text-gray-400 mt-1">${t('orders.orderPreparingMessage')}</p>
+                        <p class="text-sm font-medium text-gray-900">${t("orders.orderPreparing")}</p>
+                        <p class="text-xs text-gray-400 mt-1">${t("orders.orderPreparingMessage")}</p>
                       </div>
                     </template>
                     <!-- Step 4: Delivering -->
                     <template x-if="getStepIndex(selectedOrder) >= 3">
                       <div class="relative">
                         <div class="absolute -left-[25px] top-1 w-3 h-3 bg-(--btn-bg) rounded-full border-2 border-white"></div>
-                        <p class="text-sm font-medium text-gray-900">${t('orders.orderDelivering')}</p>
-                        <p class="text-xs text-gray-400 mt-1">${t('orders.orderDeliveringMessage')}</p>
+                        <p class="text-sm font-medium text-gray-900">${t("orders.orderDelivering")}</p>
+                        <p class="text-xs text-gray-400 mt-1">${t("orders.orderDeliveringMessage")}</p>
                       </div>
                     </template>
                     <!-- Step 5: Completed -->
                     <template x-if="getStepIndex(selectedOrder) >= 4">
                       <div class="relative">
                         <div class="absolute -left-[25px] top-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
-                        <p class="text-sm font-medium text-green-700">${t('orders.orderCompleted')}</p>
-                        <p class="text-xs text-gray-400 mt-1">${t('orders.orderCompletedMessage')}</p>
+                        <p class="text-sm font-medium text-green-700">${t("orders.orderCompleted")}</p>
+                        <p class="text-xs text-gray-400 mt-1">${t("orders.orderCompletedMessage")}</p>
                       </div>
                     </template>
                     <!-- Refund: Pending -->
@@ -893,7 +897,7 @@ function renderAllOrders(): string {
             <!-- Footer -->
             <div class="px-6 py-4 border-t border-gray-100 flex justify-end">
               <button @click="closeModal('showOperationHistory')" class="th-btn-outline px-5 py-2 text-sm font-medium cursor-pointer">
-                ${t('common.close')}
+                ${t("common.close")}
               </button>
             </div>
           </div>
@@ -907,7 +911,7 @@ function renderAllOrders(): string {
           <div class="relative bg-white rounded-md shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden" @click.stop>
             <!-- Header -->
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-              <h3 class="text-lg font-bold text-gray-900">${t('orders.chooseAService')}</h3>
+              <h3 class="text-lg font-bold text-gray-900">${t("orders.chooseAService")}</h3>
               <button @click="closeModal('showAddServices')" class="flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 bg-transparent border-none cursor-pointer rounded-full hover:bg-gray-100 transition-colors">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
               </button>
@@ -920,13 +924,13 @@ function renderAllOrders(): string {
                   <div class="flex-1">
                     <div class="flex items-center gap-2 mb-2">
                       <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                      <h4 class="text-base font-bold text-gray-900">${t('orders.productionMonitoring')}</h4>
+                      <h4 class="text-base font-bold text-gray-900">${t("orders.productionMonitoring")}</h4>
                     </div>
-                    <p class="text-sm text-gray-600 mb-2">${t('orders.productionMonitoringDesc')}</p>
-                    <p class="text-xs text-gray-500">${t('orders.startingFrom')} <strong class="text-amber-600">${getCurrencyCode()} 48.00</strong></p>
+                    <p class="text-sm text-gray-600 mb-2">${t("orders.productionMonitoringDesc")}</p>
+                    <p class="text-xs text-gray-500">${t("orders.startingFrom")} <strong class="text-amber-600">${getCurrencyCode()} 48.00</strong></p>
                   </div>
                   <button class="th-btn whitespace-nowrap shrink-0">
-                    ${t('orders.selectService')}
+                    ${t("orders.selectService")}
                   </button>
                 </div>
               </div>
@@ -936,13 +940,13 @@ function renderAllOrders(): string {
                   <div class="flex-1">
                     <div class="flex items-center gap-2 mb-2">
                       <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
-                      <h4 class="text-base font-bold text-gray-900">${t('orders.preShipmentInspection')}</h4>
+                      <h4 class="text-base font-bold text-gray-900">${t("orders.preShipmentInspection")}</h4>
                     </div>
-                    <p class="text-sm text-gray-600 mb-2">${t('orders.preShipmentInspectionDesc')}</p>
-                    <p class="text-xs text-gray-500">${t('orders.startingFrom')} <strong class="text-amber-600">${getCurrencyCode()} 88.00</strong></p>
+                    <p class="text-sm text-gray-600 mb-2">${t("orders.preShipmentInspectionDesc")}</p>
+                    <p class="text-xs text-gray-500">${t("orders.startingFrom")} <strong class="text-amber-600">${getCurrencyCode()} 88.00</strong></p>
                   </div>
                   <button class="th-btn whitespace-nowrap shrink-0">
-                    ${t('orders.selectService')}
+                    ${t("orders.selectService")}
                   </button>
                 </div>
               </div>
@@ -950,7 +954,7 @@ function renderAllOrders(): string {
             <!-- Footer -->
             <div class="px-6 py-4 border-t border-gray-100 flex justify-end">
               <button @click="closeModal('showAddServices')" class="th-btn-outline px-5 py-2 text-sm font-medium cursor-pointer">
-                ${t('common.cancel')}
+                ${t("common.cancel")}
               </button>
             </div>
           </div>
@@ -964,7 +968,7 @@ function renderAllOrders(): string {
           <div class="relative bg-white rounded-md shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden" @click.stop>
             <!-- Header -->
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-              <h3 class="text-lg font-bold text-gray-900">${t('orders.paymentHistoryTitle')}</h3>
+              <h3 class="text-lg font-bold text-gray-900">${t("orders.paymentHistoryTitle")}</h3>
               <button @click="closeModal('showPaymentHistory')" class="flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 bg-transparent border-none cursor-pointer rounded-full hover:bg-gray-100 transition-colors">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
               </button>
@@ -975,17 +979,17 @@ function renderAllOrders(): string {
                 <button @click="paymentHistoryTab = 'records'"
                   :class="paymentHistoryTab === 'records' ? 'text-gray-900 border-b-2 border-gray-900 font-medium' : 'text-gray-500 border-b-2 border-transparent hover:text-gray-700'"
                   class="py-3 px-4 text-sm bg-transparent cursor-pointer transition-colors border-none">
-                  ${t('orders.paymentRecords')}
+                  ${t("orders.paymentRecords")}
                 </button>
                 <button @click="paymentHistoryTab = 'refunds'"
                   :class="paymentHistoryTab === 'refunds' ? 'text-gray-900 border-b-2 border-gray-900 font-medium' : 'text-gray-500 border-b-2 border-transparent hover:text-gray-700'"
                   class="py-3 px-4 text-sm bg-transparent cursor-pointer transition-colors border-none">
-                  ${t('orders.refunds')}
+                  ${t("orders.refunds")}
                 </button>
                 <button @click="paymentHistoryTab = 'wire'"
                   :class="paymentHistoryTab === 'wire' ? 'text-gray-900 border-b-2 border-gray-900 font-medium' : 'text-gray-500 border-b-2 border-transparent hover:text-gray-700'"
                   class="py-3 px-4 text-sm bg-transparent cursor-pointer transition-colors border-none">
-                  ${t('orders.wireTransferTracking')}
+                  ${t("orders.wireTransferTracking")}
                 </button>
               </div>
             </div>
@@ -1004,16 +1008,16 @@ function renderAllOrders(): string {
                   <table class="w-full text-sm">
                     <thead>
                       <tr class="border-b border-gray-200">
-                        <th class="text-left text-xs font-semibold text-gray-500 uppercase pb-3 pr-4">${t('orders.date')}</th>
-                        <th class="text-left text-xs font-semibold text-gray-500 uppercase pb-3 pr-4">${t('orders.method')}</th>
-                        <th class="text-right text-xs font-semibold text-gray-500 uppercase pb-3 pr-4">${t('orders.amount')}</th>
-                        <th class="text-right text-xs font-semibold text-gray-500 uppercase pb-3">${t('orders.status')}</th>
+                        <th class="text-left text-xs font-semibold text-gray-500 uppercase pb-3 pr-4">${t("orders.date")}</th>
+                        <th class="text-left text-xs font-semibold text-gray-500 uppercase pb-3 pr-4">${t("orders.method")}</th>
+                        <th class="text-right text-xs font-semibold text-gray-500 uppercase pb-3 pr-4">${t("orders.amount")}</th>
+                        <th class="text-right text-xs font-semibold text-gray-500 uppercase pb-3">${t("orders.status")}</th>
                       </tr>
                     </thead>
                     <tbody>
                       <template x-if="paymentRecords.length === 0">
                         <tr>
-                          <td colspan="4" class="py-12 text-center text-gray-400 text-sm">${t('orders.noPaymentRecords')}</td>
+                          <td colspan="4" class="py-12 text-center text-gray-400 text-sm">${t("orders.noPaymentRecords")}</td>
                         </tr>
                       </template>
                       <template x-for="rec in paymentRecords" :key="rec.name">
@@ -1036,16 +1040,16 @@ function renderAllOrders(): string {
                   <table class="w-full text-sm">
                     <thead>
                       <tr class="border-b border-gray-200">
-                        <th class="text-left text-xs font-semibold text-gray-500 uppercase pb-3 pr-4">${t('orders.date')}</th>
-                        <th class="text-left text-xs font-semibold text-gray-500 uppercase pb-3 pr-4">${t('orders.reason')}</th>
-                        <th class="text-right text-xs font-semibold text-gray-500 uppercase pb-3 pr-4">${t('orders.amount')}</th>
-                        <th class="text-right text-xs font-semibold text-gray-500 uppercase pb-3">${t('orders.status')}</th>
+                        <th class="text-left text-xs font-semibold text-gray-500 uppercase pb-3 pr-4">${t("orders.date")}</th>
+                        <th class="text-left text-xs font-semibold text-gray-500 uppercase pb-3 pr-4">${t("orders.reason")}</th>
+                        <th class="text-right text-xs font-semibold text-gray-500 uppercase pb-3 pr-4">${t("orders.amount")}</th>
+                        <th class="text-right text-xs font-semibold text-gray-500 uppercase pb-3">${t("orders.status")}</th>
                       </tr>
                     </thead>
                     <tbody>
                       <template x-if="refundRecords.length === 0">
                         <tr>
-                          <td colspan="4" class="py-12 text-center text-gray-400 text-sm">${t('orders.noRefundRecords')}</td>
+                          <td colspan="4" class="py-12 text-center text-gray-400 text-sm">${t("orders.noRefundRecords")}</td>
                         </tr>
                       </template>
                       <template x-for="rec in refundRecords" :key="rec.name">
@@ -1066,7 +1070,7 @@ function renderAllOrders(): string {
                 <!-- Wire transfer tab -->
                 <div x-show="paymentHistoryTab === 'wire'">
                   <template x-if="wireRecords.length === 0">
-                    <p class="py-12 text-center text-gray-400 text-sm">${t('orders.noWireTransferRecords')}</p>
+                    <p class="py-12 text-center text-gray-400 text-sm">${t("orders.noWireTransferRecords")}</p>
                   </template>
                   <template x-for="rec in wireRecords" :key="rec.name">
                     <div class="border border-gray-100 rounded-md p-5 mb-3 space-y-3">
@@ -1106,7 +1110,7 @@ function renderAllOrders(): string {
             <!-- Footer -->
             <div class="px-6 py-4 border-t border-gray-100 flex justify-end">
               <button @click="closeModal('showPaymentHistory')" class="th-btn-outline px-5 py-2 text-sm font-medium cursor-pointer">
-                ${t('common.close')}
+                ${t("common.close")}
               </button>
             </div>
           </div>
@@ -1196,7 +1200,7 @@ function renderAllOrders(): string {
           <div class="relative bg-white rounded-md shadow-2xl w-full max-w-lg max-h-[80vh] overflow-hidden" @click.stop>
             <!-- Header -->
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-              <h3 class="text-lg font-bold text-gray-900">${t('orders.trackPackage')}</h3>
+              <h3 class="text-lg font-bold text-gray-900">${t("orders.trackPackage")}</h3>
               <button @click="closeModal('showTrackPackage')" class="flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 bg-transparent border-none cursor-pointer rounded-full hover:bg-gray-100 transition-colors">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
               </button>
@@ -1206,37 +1210,37 @@ function renderAllOrders(): string {
               <!-- Shipment info -->
               <div class="grid grid-cols-2 gap-4">
                 <div>
-                  <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t('orders.shipTime')}</p>
-                  <p class="text-sm text-gray-700">${t('orders.pending')}</p>
+                  <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t("orders.shipTime")}</p>
+                  <p class="text-sm text-gray-700">${t("orders.pending")}</p>
                 </div>
                 <div>
-                  <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t('orders.shippingMethod')}</p>
+                  <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t("orders.shippingMethod")}</p>
                   <p class="text-sm text-gray-700" x-text="selectedOrder.shipping.method"></p>
                 </div>
                 <div>
-                  <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t('orders.estimatedDelivery')}</p>
-                  <p class="text-sm text-gray-700">${t('orders.toBeConfirmed')}</p>
+                  <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t("orders.estimatedDelivery")}</p>
+                  <p class="text-sm text-gray-700">${t("orders.toBeConfirmed")}</p>
                 </div>
                 <div>
-                  <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t('orders.trackingNumber')}</p>
-                  <p class="text-sm text-gray-400">${t('orders.notAvailableYet')}</p>
+                  <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t("orders.trackingNumber")}</p>
+                  <p class="text-sm text-gray-400">${t("orders.notAvailableYet")}</p>
                 </div>
               </div>
               <!-- Timeline -->
               <div class="border-t border-gray-100 pt-4">
-                <h4 class="text-sm font-bold text-gray-900 mb-3">${t('orders.trackingUpdates')}</h4>
+                <h4 class="text-sm font-bold text-gray-900 mb-3">${t("orders.trackingUpdates")}</h4>
                 <div class="flex flex-col items-center justify-center py-8 text-center">
                   <svg class="w-10 h-10 text-gray-300 mb-2" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                     <path d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/>
                   </svg>
-                  <p class="text-sm text-gray-400">${t('orders.noTrackingUpdates')}</p>
+                  <p class="text-sm text-gray-400">${t("orders.noTrackingUpdates")}</p>
                 </div>
               </div>
             </div>
             <!-- Footer -->
             <div class="px-6 py-4 border-t border-gray-100 flex justify-end">
               <button @click="closeModal('showTrackPackage')" class="th-btn-outline px-5 py-2 text-sm font-medium cursor-pointer">
-                ${t('common.close')}
+                ${t("common.close")}
               </button>
             </div>
           </div>
@@ -1250,7 +1254,7 @@ function renderAllOrders(): string {
           <div class="relative bg-white rounded-md shadow-2xl w-full max-w-lg max-h-[85vh] overflow-hidden" @click.stop>
             <!-- Header -->
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-              <h3 class="text-lg font-bold text-gray-900">${t('orders.modifyShippingDetails')}</h3>
+              <h3 class="text-lg font-bold text-gray-900">${t("orders.modifyShippingDetails")}</h3>
               <button @click="closeModal('showModifyShipping')" class="flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 bg-transparent border-none cursor-pointer rounded-full hover:bg-gray-100 transition-colors">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
               </button>
@@ -1259,13 +1263,13 @@ function renderAllOrders(): string {
             <div class="px-6 py-5 overflow-y-auto max-h-[60vh] space-y-4">
               <!-- Address -->
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1.5">${t('orders.shippingAddress')}</label>
-                <textarea class="th-input h-20 resize-none" x-model="selectedOrder.shipping.address" placeholder="${t('orders.enterShippingAddress')}"></textarea>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">${t("orders.shippingAddress")}</label>
+                <textarea class="th-input h-20 resize-none" x-model="selectedOrder.shipping.address" placeholder="${t("orders.enterShippingAddress")}"></textarea>
               </div>
               <!-- Country -->
               <div class="grid grid-cols-2 gap-4">
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1.5">${t('orders.shipFrom')}</label>
+                  <label class="block text-sm font-medium text-gray-700 mb-1.5">${t("orders.shipFrom")}</label>
                   <input type="text" class="th-input th-input-md" :value="selectedOrder.shipping.shipFrom" disabled />
                 </div>
                 <div>
@@ -1275,10 +1279,10 @@ function renderAllOrders(): string {
               </div>
               <!-- Service line -->
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1.5">${t('orders.shippingServiceLine')}</label>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">${t("orders.shippingServiceLine")}</label>
                 <template x-if="shippingMethodsLoading">
                   <div class="w-full h-10 px-3 flex items-center text-sm border border-gray-200 rounded-lg bg-gray-50 text-gray-400">
-                    ${t('common.loading') || 'Yükleniyor...'}
+                    ${t("common.loading") || "Yükleniyor..."}
                   </div>
                 </template>
                 <template x-if="!shippingMethodsLoading">
@@ -1287,7 +1291,7 @@ function renderAllOrders(): string {
                     class="th-input th-input-md cursor-pointer"
                   >
                     <template x-if="shippingMethods.length === 0">
-                      <option value="">${t('orders.noShippingMethods') || 'Kargo yöntemi bulunamadı'}</option>
+                      <option value="">${t("orders.noShippingMethods") || "Kargo yöntemi bulunamadı"}</option>
                     </template>
                     <template x-for="method in shippingMethods" :key="method.id">
                       <option :value="method.id" x-text="method.estimatedDays ? method.method + ' (' + method.estimatedDays + ')' : method.method"></option>
@@ -1301,17 +1305,17 @@ function renderAllOrders(): string {
                   <svg class="w-4 h-4 text-amber-500 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 11H9v-2h2v2zm0-4H9V5h2v4z"/>
                   </svg>
-                  <p class="text-xs text-gray-600">${t('orders.shippingModificationNote')}</p>
+                  <p class="text-xs text-gray-600">${t("orders.shippingModificationNote")}</p>
                 </div>
               </div>
             </div>
             <!-- Footer -->
             <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-end gap-3">
               <button @click="closeModal('showModifyShipping')" class="th-btn-outline">
-                ${t('common.cancel')}
+                ${t("common.cancel")}
               </button>
               <button @click="closeModal('showModifyShipping')" class="th-btn">
-                ${t('orders.submitChanges')}
+                ${t("orders.submitChanges")}
               </button>
             </div>
           </div>
@@ -1329,51 +1333,51 @@ function renderAllOrders(): string {
           <div class="relative bg-white rounded-md shadow-2xl w-full max-w-md max-h-[85vh] overflow-hidden" @click.stop>
             <!-- Header -->
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-              <h3 class="text-lg font-bold text-gray-900">${t('orders.cancelOrderTitle')}</h3>
+              <h3 class="text-lg font-bold text-gray-900">${t("orders.cancelOrderTitle")}</h3>
               <button @click="cancelReason = ''; cancellingOrder = null; closeModal('showCancelOrder')" class="flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 bg-transparent border-none cursor-pointer rounded-full hover:bg-gray-100 transition-colors">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
               </button>
             </div>
             <!-- Body -->
             <div class="px-6 py-5 overflow-y-auto max-h-[60vh]">
-              <p class="text-sm text-gray-700 mb-1">${t('orders.cancelReasonQuestion')}</p>
-              <p class="text-sm text-gray-500 mb-5">${t('orders.cancelReasonSubtext')}</p>
+              <p class="text-sm text-gray-700 mb-1">${t("orders.cancelReasonQuestion")}</p>
+              <p class="text-sm text-gray-500 mb-5">${t("orders.cancelReasonSubtext")}</p>
               <div class="space-y-3">
                 <label class="flex items-center gap-3 cursor-pointer group">
                   <input type="radio" name="cancelReason" value="shipping_fee" x-model="cancelReason" class="w-4 h-4 cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" />
-                  <span class="text-sm text-gray-700 group-hover:text-gray-900">${t('orders.cancelShippingFee')}</span>
+                  <span class="text-sm text-gray-700 group-hover:text-gray-900">${t("orders.cancelShippingFee")}</span>
                 </label>
                 <label class="flex items-center gap-3 cursor-pointer group">
                   <input type="radio" name="cancelReason" value="no_stock" x-model="cancelReason" class="w-4 h-4 cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" />
-                  <span class="text-sm text-gray-700 group-hover:text-gray-900">${t('orders.cancelNoStock')}</span>
+                  <span class="text-sm text-gray-700 group-hover:text-gray-900">${t("orders.cancelNoStock")}</span>
                 </label>
                 <label class="flex items-center gap-3 cursor-pointer group">
                   <input type="radio" name="cancelReason" value="not_paid_30" x-model="cancelReason" class="w-4 h-4 cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" />
-                  <span class="text-sm text-gray-700 group-hover:text-gray-900">${t('orders.cancelNotPaid30Days')}</span>
+                  <span class="text-sm text-gray-700 group-hover:text-gray-900">${t("orders.cancelNotPaid30Days")}</span>
                 </label>
                 <label class="flex items-center gap-3 cursor-pointer group">
                   <input type="radio" name="cancelReason" value="shipping_method" x-model="cancelReason" class="w-4 h-4 cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" />
-                  <span class="text-sm text-gray-700 group-hover:text-gray-900">${t('orders.cancelShippingMethod')}</span>
+                  <span class="text-sm text-gray-700 group-hover:text-gray-900">${t("orders.cancelShippingMethod")}</span>
                 </label>
                 <label class="flex items-center gap-3 cursor-pointer group">
                   <input type="radio" name="cancelReason" value="shipping_time" x-model="cancelReason" class="w-4 h-4 cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" />
-                  <span class="text-sm text-gray-700 group-hover:text-gray-900">${t('orders.cancelShippingTime')}</span>
+                  <span class="text-sm text-gray-700 group-hover:text-gray-900">${t("orders.cancelShippingTime")}</span>
                 </label>
                 <label class="flex items-center gap-3 cursor-pointer group">
                   <input type="radio" name="cancelReason" value="no_longer_needed" x-model="cancelReason" class="w-4 h-4 cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" />
-                  <span class="text-sm text-gray-700 group-hover:text-gray-900">${t('orders.cancelNoLongerNeeded')}</span>
+                  <span class="text-sm text-gray-700 group-hover:text-gray-900">${t("orders.cancelNoLongerNeeded")}</span>
                 </label>
                 <label class="flex items-center gap-3 cursor-pointer group">
                   <input type="radio" name="cancelReason" value="wrong_info" x-model="cancelReason" class="w-4 h-4 cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" />
-                  <span class="text-sm text-gray-700 group-hover:text-gray-900">${t('orders.cancelWrongOrder')}</span>
+                  <span class="text-sm text-gray-700 group-hover:text-gray-900">${t("orders.cancelWrongOrder")}</span>
                 </label>
                 <label class="flex items-center gap-3 cursor-pointer group">
                   <input type="radio" name="cancelReason" value="price_increased" x-model="cancelReason" class="w-4 h-4 cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" />
-                  <span class="text-sm text-gray-700 group-hover:text-gray-900">${t('orders.cancelPriceIncreased')}</span>
+                  <span class="text-sm text-gray-700 group-hover:text-gray-900">${t("orders.cancelPriceIncreased")}</span>
                 </label>
                 <label class="flex items-center gap-3 cursor-pointer group">
                   <input type="radio" name="cancelReason" value="others" x-model="cancelReason" class="w-4 h-4 cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" />
-                  <span class="text-sm text-gray-700 group-hover:text-gray-900">${t('orders.cancelOther')}</span>
+                  <span class="text-sm text-gray-700 group-hover:text-gray-900">${t("orders.cancelOther")}</span>
                 </label>
               </div>
             </div>
@@ -1383,10 +1387,10 @@ function renderAllOrders(): string {
                 :class="cancelReason ? 'th-btn' : 'bg-gray-200 text-gray-400 border-gray-200 cursor-not-allowed '"
                 :disabled="!cancelReason"
                 class="px-6 py-2 text-sm font-medium rounded-full cursor-pointer transition-colors border">
-                ${t('orders.confirmCancel')}
+                ${t("orders.confirmCancel")}
               </button>
               <button @click="cancelReason = ''; cancellingOrder = null; closeModal('showCancelOrder')" class="th-btn-outline">
-                ${t('common.cancel')}
+                ${t("common.cancel")}
               </button>
             </div>
           </div>
@@ -1406,7 +1410,7 @@ function renderAllOrders(): string {
           <!-- Modal Header -->
           <div class="flex items-center justify-between px-6 pt-5 pb-4 border-b border-gray-100 sticky top-0 bg-white z-10 rounded-t-md">
             <div class="flex items-center gap-3">
-              <h3 class="text-lg font-bold text-gray-900" x-text="isCheckPayment ? 'Evrak Gönder' : '${t('orders.submitRemittanceProof')}'"></h3>
+              <h3 class="text-lg font-bold text-gray-900" x-text="isCheckPayment ? 'Evrak Gönder' : '${t("orders.submitRemittanceProof")}'"></h3>
               <!-- Step indicator (3 steps) -->
               <div class="flex items-center gap-1.5" x-show="step !== 'success'">
                 <span class="w-2 h-2 rounded-full transition-colors" :class="step === 'iban' ? 'bg-(--btn-bg)' : 'bg-gray-300'"></span>
@@ -1414,7 +1418,7 @@ function renderAllOrders(): string {
                 <span class="w-2 h-2 rounded-full transition-colors" :class="step === 'form' || step === 'submitting' ? 'bg-(--btn-bg)' : 'bg-gray-300'"></span>
               </div>
             </div>
-            <button @click="reset()" class="os-modal__close bg-transparent border-none cursor-pointer p-1.5 rounded-lg flex items-center justify-center transition-colors hover:bg-gray-100" aria-label="${t('common.close')}">
+            <button @click="reset()" class="os-modal__close bg-transparent border-none cursor-pointer p-1.5 rounded-lg flex items-center justify-center transition-colors hover:bg-gray-100" aria-label="${t("common.close")}">
               <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M12 4L4 12M4 4l8 8" stroke="#666" stroke-width="1.5" stroke-linecap="round"/></svg>
             </button>
           </div>
@@ -1516,7 +1520,7 @@ function renderAllOrders(): string {
                       <svg class="w-12 h-12 text-gray-300 mx-auto mb-2" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24">
                         <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                       </svg>
-                      <p class="text-[11px] text-gray-400">${t('orders.remitPreview')}</p>
+                      <p class="text-[11px] text-gray-400">${t("orders.remitPreview")}</p>
                     </div>
                   </template>
                   <!-- Image preview -->
@@ -1541,13 +1545,13 @@ function renderAllOrders(): string {
                 <div class="flex-1 text-left max-md:text-center">
                   <p class="text-sm text-gray-600 mb-1">
                     <span class="text-amber-600 font-semibold">*</span>
-                    ${t('orders.remitUploadHint')}
+                    ${t("orders.remitUploadHint")}
                   </p>
                   <div class="text-[13px] text-gray-500 space-y-0.5 mb-4">
-                    <p><strong class="text-gray-700">${t('orders.remitDocClear')}</strong></p>
-                    <p>${t('orders.remitFileSize')}: 20 MB</p>
-                    <p>${t('orders.remitFormats')}: JPG, JPEG, PNG, GIF, PDF</p>
-                    <p>${t('orders.remitManualLink')} <a href="#" class="text-blue-600 hover:underline">${t('orders.remitEnterManually')}</a></p>
+                    <p><strong class="text-gray-700">${t("orders.remitDocClear")}</strong></p>
+                    <p>${t("orders.remitFileSize")}: 20 MB</p>
+                    <p>${t("orders.remitFormats")}: JPG, JPEG, PNG, GIF, PDF</p>
+                    <p>${t("orders.remitManualLink")} <a href="#" class="text-blue-600 hover:underline">${t("orders.remitEnterManually")}</a></p>
                   </div>
 
                   <!-- File info badge when uploaded -->
@@ -1561,7 +1565,7 @@ function renderAllOrders(): string {
 
                   <label class="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-medium text-white bg-(--color-cta-primary) rounded-full cursor-pointer transition-colors hover:bg-(--color-cta-primary-hover)">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-                    <span x-text="hasFile ? '${t('orders.remitChangeFile')}' : '${t('orders.remitUploadFile')}'"></span>
+                    <span x-text="hasFile ? '${t("orders.remitChangeFile")}' : '${t("orders.remitUploadFile")}'"></span>
                     <input type="file" accept=".jpg,.jpeg,.png,.gif,.pdf" class="hidden"
                            @change="handleFiles($event.target.files)" />
                   </label>
@@ -1574,7 +1578,7 @@ function renderAllOrders(): string {
               <button @click="goToForm()"
                 class="px-6 py-2.5 text-sm font-medium text-white bg-(--color-cta-primary) rounded-lg cursor-pointer transition-all hover:bg-(--color-cta-primary-hover)"
                 :class="!hasFile ? 'opacity-40 cursor-not-allowed! scale-[0.98]' : 'hover:shadow-md'">
-                ${t('orders.remitContinue')}
+                ${t("orders.remitContinue")}
                 <svg class="w-4 h-4 inline ml-1 -mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M9 5l7 7-7 7"/></svg>
               </button>
             </div>
@@ -1585,7 +1589,7 @@ function renderAllOrders(): string {
             <!-- Success Banner -->
             <div class="flex items-center gap-2 px-4 py-2.5 mb-5 bg-green-50 border border-green-200 rounded-lg text-sm text-green-700">
               <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-              ${t('orders.remitUploadSuccess')}
+              ${t("orders.remitUploadSuccess")}
             </div>
 
             <div class="flex gap-6 max-md:flex-col">
@@ -1603,17 +1607,17 @@ function renderAllOrders(): string {
                   </template>
                 </div>
                 <button @click="removeFile()" class="w-full text-center text-xs text-gray-400 hover:text-red-500 bg-transparent border-none cursor-pointer transition-colors">
-                  ${t('orders.remitChangeFile')}
+                  ${t("orders.remitChangeFile")}
                 </button>
               </div>
 
               <!-- Right: Form -->
               <div class="flex-1 min-w-0">
                 <div class="flex items-center justify-between mb-4">
-                  <p class="text-sm text-gray-600">${t('orders.remitFormHint')}</p>
+                  <p class="text-sm text-gray-600">${t("orders.remitFormHint")}</p>
                   <button @click="clearForm()" class="text-xs text-gray-400 hover:text-gray-600 bg-transparent border-none cursor-pointer flex items-center gap-1 transition-colors">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                    ${t('orders.remitClearAll')}
+                    ${t("orders.remitClearAll")}
                   </button>
                 </div>
 
@@ -1622,7 +1626,7 @@ function renderAllOrders(): string {
                   <!-- Remittance Date (read-only — sipariş tarihinden otomatik) -->
                   <div>
                     <label class="block text-sm text-gray-700 mb-1.5">
-                      ${t('orders.remitDate')}
+                      ${t("orders.remitDate")}
                     </label>
                     <input type="date" x-model="form.remittanceDate"
                       readonly
@@ -1632,7 +1636,7 @@ function renderAllOrders(): string {
                   <!-- Amount (read-only — sipariş tutarından otomatik) -->
                   <div>
                     <label class="block text-sm text-gray-700 mb-1.5">
-                      ${t('orders.remitAmount')}
+                      ${t("orders.remitAmount")}
                     </label>
                     <div class="flex gap-2">
                       <div class="h-10 px-3 text-sm border border-gray-200 rounded-lg bg-gray-50 text-gray-700 flex items-center w-[100px] font-medium" x-text="form.currency"></div>
@@ -1645,33 +1649,33 @@ function renderAllOrders(): string {
                   <!-- Bank Name -->
                   <div>
                     <label class="block text-sm text-gray-700 mb-1.5">
-                      <span class="text-red-500">*</span> ${t('orders.remitBankName')}
+                      <span class="text-red-500">*</span> ${t("orders.remitBankName")}
                     </label>
                     <input type="text" x-model="form.bankName"
                       @blur="submitted && validateField('bankName')"
                       :class="errors.bankName ? 'border-red-400! ring-1! ring-red-200!' : ''"
-                      placeholder="${t('orders.remitPlaceholderEnter')}"
+                      placeholder="${t("orders.remitPlaceholderEnter")}"
                       class="w-full h-10 px-3 text-sm border border-gray-300 rounded-lg outline-none bg-white text-gray-700 transition-colors focus:border-amber-400 focus:ring-1 focus:ring-amber-200" />
-                    <p x-show="errors.bankName" class="text-xs text-red-500 mt-1">${t('common.required')}</p>
+                    <p x-show="errors.bankName" class="text-xs text-red-500 mt-1">${t("common.required")}</p>
                   </div>
 
                   <!-- Sender Name -->
                   <div>
                     <label class="block text-sm text-gray-700 mb-1.5">
-                      <span class="text-red-500">*</span> ${t('orders.remitSenderName')}
+                      <span class="text-red-500">*</span> ${t("orders.remitSenderName")}
                     </label>
                     <input type="text" x-model="form.senderName"
                       @blur="submitted && validateField('senderName')"
                       :class="errors.senderName ? 'border-red-400! ring-1! ring-red-200!' : ''"
-                      placeholder="${t('orders.remitPlaceholderEnter')}"
+                      placeholder="${t("orders.remitPlaceholderEnter")}"
                       class="w-full h-10 px-3 text-sm border border-gray-300 rounded-lg outline-none bg-white text-gray-700 transition-colors focus:border-amber-400 focus:ring-1 focus:ring-amber-200" />
-                    <p x-show="errors.senderName" class="text-xs text-red-500 mt-1">${t('common.required')}</p>
+                    <p x-show="errors.senderName" class="text-xs text-red-500 mt-1">${t("common.required")}</p>
                   </div>
 
                   <!-- Smart Prediction Note -->
                   <div class="flex items-start gap-2 px-3 py-2.5 bg-amber-50 border border-amber-200 rounded-lg text-[13px] text-amber-700 leading-relaxed">
                     <svg class="w-4 h-4 shrink-0 mt-0.5 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"/></svg>
-                    ${t('orders.remitSmartPrediction')}
+                    ${t("orders.remitSmartPrediction")}
                   </div>
                 </div>
 
@@ -1680,13 +1684,13 @@ function renderAllOrders(): string {
                   <button @click="step = 'upload'"
                     class="px-4 py-2.5 text-sm text-gray-600 bg-transparent border border-gray-300 rounded-lg cursor-pointer font-medium transition-colors hover:bg-gray-50">
                     <svg class="w-4 h-4 inline mr-1 -mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M15 19l-7-7 7-7"/></svg>
-                    ${t('common.back')}
+                    ${t("common.back")}
                   </button>
                   <button @click="submitRemittance()"
                     class="inline-flex items-center gap-2 px-8 py-2.5 text-sm font-medium text-white bg-(--color-cta-primary) rounded-lg cursor-pointer transition-all hover:bg-(--color-cta-primary-hover) hover:shadow-md"
                     :class="!isFormValid ? 'opacity-60' : ''">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                    ${t('orders.remitCheckStatus')}
+                    ${t("orders.remitCheckStatus")}
                   </button>
                 </div>
               </div>
@@ -1698,8 +1702,8 @@ function renderAllOrders(): string {
             <div class="inline-flex items-center justify-center w-16 h-16 mb-4">
               <svg class="w-12 h-12 text-amber-500 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
             </div>
-            <h4 class="text-lg font-bold text-gray-900 mb-2">${t('orders.remitSubmitting')}</h4>
-            <p class="text-sm text-gray-500">${t('orders.remitPleaseWait')}</p>
+            <h4 class="text-lg font-bold text-gray-900 mb-2">${t("orders.remitSubmitting")}</h4>
+            <p class="text-sm text-gray-500">${t("orders.remitPleaseWait")}</p>
           </div>
 
           <!-- ═══ STEP: Success ═══ -->
@@ -1707,10 +1711,10 @@ function renderAllOrders(): string {
             <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
               <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
             </div>
-            <h4 class="text-lg font-bold text-gray-900 mb-2">${t('orders.remitSuccessTitle')}</h4>
-            <p class="text-sm text-gray-500 mb-6 max-w-[360px] mx-auto">${t('orders.remitSuccessDesc')}</p>
+            <h4 class="text-lg font-bold text-gray-900 mb-2">${t("orders.remitSuccessTitle")}</h4>
+            <p class="text-sm text-gray-500 mb-6 max-w-[360px] mx-auto">${t("orders.remitSuccessDesc")}</p>
             <button @click="reset()" class="os-modal__close px-6 py-2.5 text-sm font-medium text-white bg-(--color-cta-primary) rounded-lg cursor-pointer transition-colors hover:bg-(--color-cta-primary-hover)">
-              ${t('common.close')}
+              ${t("common.close")}
             </button>
           </div>
         </div>
@@ -1724,7 +1728,7 @@ function renderRefunds(): string {
   return `
     <div x-data="refundsComponent()" x-cloak>
     <div class="flex items-center justify-between px-7 max-sm:px-3 pt-6 pb-5 border-b border-(--color-border-light,#f0f0f0)">
-      <h1 class="text-[22px] font-bold text-(--color-text-heading,#111827)">${t('orders.refundsTab')}</h1>
+      <h1 class="text-[22px] font-bold text-(--color-text-heading,#111827)">${t("orders.refundsTab")}</h1>
     </div>
     <!-- Tab: Para İadeleri (dynamic) -->
     <div class="os-tab-content os-tab-content--active" data-content="refund-returns">
@@ -1738,7 +1742,7 @@ function renderRefunds(): string {
       <template x-if="!loading && refunds.length === 0">
         <div class="flex flex-col items-center justify-center gap-3 px-10 max-sm:px-4 py-20 text-center">
           ${EMPTY_RECEIPT_ICON}
-          <p class="text-sm text-(--color-text-muted,#666)">${t('orders.noAfterSalesRequest')}</p>
+          <p class="text-sm text-(--color-text-muted,#666)">${t("orders.noAfterSalesRequest")}</p>
         </div>
       </template>
       <!-- Refund list -->
@@ -1783,23 +1787,23 @@ function renderRefunds(): string {
 function renderReviews(): string {
   return `
     <div class="flex items-center justify-between flex-wrap gap-2 px-7 max-sm:px-3 max-[380px]:px-3 pt-6 pb-5 border-b border-(--color-border-light,#f0f0f0)">
-      <h1 class="text-[22px] max-sm:text-lg font-bold text-(--color-text-heading,#111827)">${t('orders.myReviews')}</h1>
+      <h1 class="text-[22px] max-sm:text-lg font-bold text-(--color-text-heading,#111827)">${t("orders.myReviews")}</h1>
       <div class="flex items-center gap-1 shrink-0">
-        <span class="text-[13px] text-(--color-text-muted,#666)">${t('orders.scoringRules')}</span>
+        <span class="text-[13px] text-(--color-text-muted,#666)">${t("orders.scoringRules")}</span>
         <svg class="w-4 h-4 shrink-0" fill="none" stroke="#999" stroke-width="1.5" viewBox="0 0 24 24">
           <circle cx="12" cy="12" r="10"/><path stroke-linecap="round" d="M12 16v-4m0-4h.01"/>
         </svg>
       </div>
     </div>
     <div class="os-tabs flex border-b overflow-x-auto scrollbar-hide border-(--color-border-default,#e5e5e5) px-7 max-sm:px-3" data-tabgroup="reviews">
-      <button class="os-tabs__tab os-tabs__tab--active os-tabs__tab--orange py-3 px-4 text-sm bg-transparent border-none border-b-2 border-b-transparent cursor-pointer whitespace-nowrap transition-colors" data-tab="review-pending">${t('orders.pendingReviews')} (0)</button>
-      <button class="os-tabs__tab py-3 px-4 text-sm bg-transparent border-none border-b-2 border-b-transparent cursor-pointer whitespace-nowrap transition-colors text-(--color-text-muted,#666)" data-tab="review-done">${t('orders.reviewed')} (0)</button>
+      <button class="os-tabs__tab os-tabs__tab--active os-tabs__tab--orange py-3 px-4 text-sm bg-transparent border-none border-b-2 border-b-transparent cursor-pointer whitespace-nowrap transition-colors" data-tab="review-pending">${t("orders.pendingReviews")} (0)</button>
+      <button class="os-tabs__tab py-3 px-4 text-sm bg-transparent border-none border-b-2 border-b-transparent cursor-pointer whitespace-nowrap transition-colors text-(--color-text-muted,#666)" data-tab="review-done">${t("orders.reviewed")} (0)</button>
     </div>
 
     <div class="flex justify-end px-7 max-sm:px-3 py-3">
       <div class="flex border border-(--color-border-medium,#d1d5db) rounded overflow-hidden w-full max-w-[320px] max-sm:max-w-full">
-        <input type="text" placeholder="${t('orders.reviewSearchPlaceholder')}" class="th-input th-input-sm th-input-borderless flex-1 min-w-0" />
-        <button class="flex items-center justify-center w-8 h-8 shrink-0 border-none border-l border-l-(--color-border-medium,#d1d5db) bg-(--color-surface-muted,#fafafa) text-(--color-text-muted,#666) cursor-pointer hover:bg-(--color-border-light) hover:text-(--color-text-heading,#111827)" aria-label="${t('common.search')}">
+        <input type="text" placeholder="${t("orders.reviewSearchPlaceholder")}" class="th-input th-input-sm th-input-borderless flex-1 min-w-0" />
+        <button class="flex items-center justify-center w-8 h-8 shrink-0 border-none border-l border-l-(--color-border-medium,#d1d5db) bg-(--color-surface-muted,#fafafa) text-(--color-text-muted,#666) cursor-pointer hover:bg-(--color-border-light) hover:text-(--color-text-heading,#111827)" aria-label="${t("common.search")}">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/>
           </svg>
@@ -1816,14 +1820,14 @@ function renderReviews(): string {
           <circle cx="72" cy="38" r="8" fill="#FBBF24"/>
           <rect x="66" y="48" width="12" height="20" rx="3" fill="#1E3A5F"/>
         </svg>
-        <p class="text-sm text-(--color-text-muted,#666)">${t('orders.noPendingReviews')}</p>
+        <p class="text-sm text-(--color-text-muted,#666)">${t("orders.noPendingReviews")}</p>
       </div>
     </div>
 
     <div class="os-tab-content" data-content="review-done">
       <div class="flex flex-col items-center justify-center gap-3 px-10 max-sm:px-4 py-20 text-center">
         ${EMPTY_RECEIPT_ICON}
-        <p class="text-sm text-(--color-text-muted,#666)">${t('orders.noReviewsFound')}</p>
+        <p class="text-sm text-(--color-text-muted,#666)">${t("orders.noReviewsFound")}</p>
       </div>
     </div>
   `;
@@ -1833,14 +1837,14 @@ function renderCoupons(): string {
   return `
     <div x-data="couponsPageComponent()">
       <div class="flex items-center justify-between px-7 max-sm:px-3 pt-6 pb-5 border-b border-(--color-border-light,#f0f0f0)">
-        <h1 class="text-[22px] font-bold text-(--color-text-heading,#111827)">${t('orders.coupons')}</h1>
+        <h1 class="text-[22px] font-bold text-(--color-text-heading,#111827)">${t("orders.coupons")}</h1>
       </div>
 
       <!-- Tab: Kuponlar -->
       <div>
         <!-- Pill filters -->
         <div class="os-pill-filters flex gap-2 px-7 max-sm:px-3 py-4">
-          <template x-for="pill in [{id:'available',label:'${t('orders.available')}'},{id:'used',label:'${t('orders.used')}'},{id:'expired',label:'${t('orders.expired')}'}]" :key="pill.id">
+          <template x-for="pill in [{id:'available',label:'${t("orders.available")}'},{id:'used',label:'${t("orders.used")}'},{id:'expired',label:'${t("orders.expired")}'}]" :key="pill.id">
             <button @click="setPill(pill.id)" class="os-pill px-4 py-1.5 text-[13px] bg-(--color-surface,#fff) border border-(--color-border-medium,#d1d5db) rounded-[20px] cursor-pointer transition-all text-(--color-text-muted,#666)"
               :class="activePill === pill.id ? 'os-pill--active' : ''"
               x-text="pill.label"></button>
@@ -1849,7 +1853,7 @@ function renderCoupons(): string {
 
         <!-- Empty state -->
         <div x-show="filteredCoupons.length === 0" class="flex flex-col items-center justify-center gap-3 px-10 max-sm:px-4 py-[60px] text-center">
-          <p class="text-sm text-(--color-text-muted,#666)">${t('orders.noCoupons')}</p>
+          <p class="text-sm text-(--color-text-muted,#666)">${t("orders.noCoupons")}</p>
         </div>
 
         <!-- Coupon cards -->
@@ -1871,15 +1875,15 @@ function renderCoupons(): string {
                   </div>
                   <p class="text-sm text-(--color-text-body,#333) mb-1" x-text="coupon.description"></p>
                   <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-(--color-text-muted,#666)">
-                    <span x-show="coupon.minOrder > 0" x-text="'${t('orders.minOrder')}: $' + coupon.minOrder"></span>
-                    <span x-text="'${t('orders.expiryDate')}: ' + formatDate(coupon.expiresAt)"></span>
-                    <span x-show="coupon.usedAt" x-text="'${t('orders.usedOn')}: ' + formatDate(coupon.usedAt || '')"></span>
+                    <span x-show="coupon.minOrder > 0" x-text="'${t("orders.minOrder")}: $' + coupon.minOrder"></span>
+                    <span x-text="'${t("orders.expiryDate")}: ' + formatDate(coupon.expiresAt)"></span>
+                    <span x-show="coupon.usedAt" x-text="'${t("orders.usedOn")}: ' + formatDate(coupon.usedAt || '')"></span>
                   </div>
                 </div>
                 <!-- Value display -->
                 <div class="flex-shrink-0 text-right">
                   <span class="text-lg font-bold" :class="coupon.status === 'available' ? 'text-(--color-text-heading,#111827)' : 'text-(--color-text-muted,#666)'"
-                    x-text="coupon.type === 'shipping' ? '${t('orders.free')}' : (coupon.type === 'percent' ? '%' + coupon.value : '${getCurrencySymbol()}' + coupon.value)"></span>
+                    x-text="coupon.type === 'shipping' ? '${t("orders.free")}' : (coupon.type === 'percent' ? '%' + coupon.value : '${getCurrencySymbol()}' + coupon.value)"></span>
                 </div>
               </div>
             </div>
@@ -1895,28 +1899,30 @@ function renderCoupons(): string {
    SECTION MAP
    ──────────────────────────────────────── */
 const SECTIONS: Record<string, () => string> = {
-  'all-orders': renderAllOrders,
-  'refunds': renderRefunds,
-  'reviews': renderReviews,
-  'coupons': renderCoupons,
+  "all-orders": renderAllOrders,
+  refunds: renderRefunds,
+  reviews: renderReviews,
+  coupons: renderCoupons,
 };
 
 /* ────────────────────────────────────────
    MAIN LAYOUT
    ──────────────────────────────────────── */
 function getActiveSection(): string {
-  const hash = window.location.hash.replace('#', '');
-  return SECTIONS[hash] ? hash : 'all-orders';
+  const hash = window.location.hash.replace("#", "");
+  return SECTIONS[hash] ? hash : "all-orders";
 }
 
 function renderNav(activeId: string): string {
-  return getNavItems().map(item => {
-    const isActive = item.id === activeId;
-    const activeClasses = isActive
-      ? 'orders-page__nav-link--active text-gray-900 border-b-2 border-gray-900 font-semibold'
-      : 'text-gray-500 border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300';
-    return `<button type="button" class="orders-page__nav-link py-3 px-4 max-sm:px-3 text-sm max-sm:text-[13px] whitespace-nowrap transition-colors shrink-0 bg-transparent border-none cursor-pointer ${activeClasses}" data-nav="${item.id}">${item.label}</button>`;
-  }).join('');
+  return getNavItems()
+    .map((item) => {
+      const isActive = item.id === activeId;
+      const activeClasses = isActive
+        ? "orders-page__nav-link--active text-gray-900 border-b-2 border-gray-900 font-semibold"
+        : "text-gray-500 border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300";
+      return `<button type="button" class="orders-page__nav-link py-3 px-4 max-sm:px-3 text-sm max-sm:text-[13px] whitespace-nowrap transition-colors shrink-0 bg-transparent border-none cursor-pointer ${activeClasses}" data-nav="${item.id}">${item.label}</button>`;
+    })
+    .join("");
 }
 
 export function OrdersPageLayout(): string {
@@ -1940,7 +1946,7 @@ export function OrdersPageLayout(): string {
    INIT
    ──────────────────────────────────────── */
 export function initOrdersPageLayout(): void {
-  const contentEl = document.getElementById('orders-content');
+  const contentEl = document.getElementById("orders-content");
   if (!contentEl) return;
 
   function navigate(): void {
@@ -1949,14 +1955,14 @@ export function initOrdersPageLayout(): void {
     contentEl!.innerHTML = renderFn();
 
     // Update nav active state
-    document.querySelectorAll<HTMLAnchorElement>('.orders-page__nav-link').forEach(link => {
+    document.querySelectorAll<HTMLAnchorElement>(".orders-page__nav-link").forEach((link) => {
       const isActive = link.dataset.nav === activeId;
-      link.classList.toggle('orders-page__nav-link--active', isActive);
-      link.classList.toggle('font-semibold', isActive);
-      link.classList.toggle('text-gray-900', isActive);
-      link.classList.toggle('border-gray-900', isActive);
-      link.classList.toggle('text-gray-500', !isActive);
-      link.classList.toggle('border-transparent', !isActive);
+      link.classList.toggle("orders-page__nav-link--active", isActive);
+      link.classList.toggle("font-semibold", isActive);
+      link.classList.toggle("text-gray-900", isActive);
+      link.classList.toggle("border-gray-900", isActive);
+      link.classList.toggle("text-gray-500", !isActive);
+      link.classList.toggle("border-transparent", !isActive);
     });
 
     // Init inner tabs
@@ -1967,12 +1973,12 @@ export function initOrdersPageLayout(): void {
   }
 
   // Hash change listener
-  window.addEventListener('hashchange', navigate);
+  window.addEventListener("hashchange", navigate);
 
   // Nav link clicks
-  document.querySelectorAll<HTMLButtonElement>('.orders-page__nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-      const id = link.dataset.nav ?? 'all-orders';
+  document.querySelectorAll<HTMLButtonElement>(".orders-page__nav-link").forEach((link) => {
+    link.addEventListener("click", () => {
+      const id = link.dataset.nav ?? "all-orders";
       window.location.hash = id;
     });
   });
@@ -1985,22 +1991,22 @@ export function initOrdersPageLayout(): void {
 }
 
 function initInnerTabs(): void {
-  document.querySelectorAll<HTMLElement>('.os-tabs').forEach(tabGroup => {
-    const tabs = tabGroup.querySelectorAll<HTMLButtonElement>('.os-tabs__tab');
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
+  document.querySelectorAll<HTMLElement>(".os-tabs").forEach((tabGroup) => {
+    const tabs = tabGroup.querySelectorAll<HTMLButtonElement>(".os-tabs__tab");
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
         const targetId = tab.dataset.tab;
         if (!targetId) return;
 
         // Toggle active tab
-        tabs.forEach(t => t.classList.remove('os-tabs__tab--active'));
-        tab.classList.add('os-tabs__tab--active');
+        tabs.forEach((t) => t.classList.remove("os-tabs__tab--active"));
+        tab.classList.add("os-tabs__tab--active");
 
         // Toggle content panels within same parent
         const parent = tabGroup.parentElement;
         if (!parent) return;
-        parent.querySelectorAll<HTMLElement>('.os-tab-content').forEach(panel => {
-          panel.classList.toggle('os-tab-content--active', panel.dataset.content === targetId);
+        parent.querySelectorAll<HTMLElement>(".os-tab-content").forEach((panel) => {
+          panel.classList.toggle("os-tab-content--active", panel.dataset.content === targetId);
         });
       });
     });
@@ -2008,12 +2014,12 @@ function initInnerTabs(): void {
 }
 
 function initPillFilters(): void {
-  document.querySelectorAll<HTMLElement>('.os-pill-filters').forEach(group => {
-    const pills = group.querySelectorAll<HTMLButtonElement>('.os-pill');
-    pills.forEach(pill => {
-      pill.addEventListener('click', () => {
-        pills.forEach(p => p.classList.remove('os-pill--active'));
-        pill.classList.add('os-pill--active');
+  document.querySelectorAll<HTMLElement>(".os-pill-filters").forEach((group) => {
+    const pills = group.querySelectorAll<HTMLButtonElement>(".os-pill");
+    pills.forEach((pill) => {
+      pill.addEventListener("click", () => {
+        pills.forEach((p) => p.classList.remove("os-pill--active"));
+        pill.classList.add("os-pill--active");
       });
     });
   });
@@ -2022,41 +2028,41 @@ function initPillFilters(): void {
 function openModal(id: string): void {
   const modal = document.getElementById(id);
   if (!modal) return;
-  modal.classList.remove('hidden');
-  modal.classList.add('flex');
-  document.body.style.overflow = 'hidden';
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+  document.body.style.overflow = "hidden";
 }
 
 function closeModal(modal: HTMLElement): void {
-  modal.classList.add('hidden');
-  modal.classList.remove('flex');
-  document.body.style.overflow = '';
+  modal.classList.add("hidden");
+  modal.classList.remove("flex");
+  document.body.style.overflow = "";
 }
 
 function initTaxModals(): void {
   // Open modal on button click
-  document.querySelectorAll<HTMLButtonElement>('[data-modal]').forEach(btn => {
-    btn.addEventListener('click', () => {
+  document.querySelectorAll<HTMLButtonElement>("[data-modal]").forEach((btn) => {
+    btn.addEventListener("click", () => {
       const modalId = btn.dataset.modal;
       if (modalId) openModal(modalId);
     });
   });
 
   // Close modal on overlay click, close button, or cancel button
-  document.querySelectorAll<HTMLElement>('.os-modal').forEach(modal => {
-    const overlay = modal.querySelector<HTMLElement>('.os-modal__overlay');
-    const closeBtn = modal.querySelector<HTMLButtonElement>('.os-modal__close');
-    const cancelBtn = modal.querySelector<HTMLButtonElement>('.os-modal__btn--cancel');
+  document.querySelectorAll<HTMLElement>(".os-modal").forEach((modal) => {
+    const overlay = modal.querySelector<HTMLElement>(".os-modal__overlay");
+    const closeBtn = modal.querySelector<HTMLButtonElement>(".os-modal__close");
+    const cancelBtn = modal.querySelector<HTMLButtonElement>(".os-modal__btn--cancel");
 
-    overlay?.addEventListener('click', () => closeModal(modal));
-    closeBtn?.addEventListener('click', () => closeModal(modal));
-    cancelBtn?.addEventListener('click', () => closeModal(modal));
+    overlay?.addEventListener("click", () => closeModal(modal));
+    closeBtn?.addEventListener("click", () => closeModal(modal));
+    cancelBtn?.addEventListener("click", () => closeModal(modal));
   });
 
   // Close modal on Escape key
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      const openModalEl = document.querySelector<HTMLElement>('.os-modal:not(.hidden)');
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      const openModalEl = document.querySelector<HTMLElement>(".os-modal:not(.hidden)");
       if (openModalEl) closeModal(openModalEl);
     }
   });
@@ -2066,9 +2072,9 @@ function initTaxModals(): void {
    ORDER TABS HORIZONTAL SCROLL
    ──────────────────────────────────────── */
 function initOrderTabsScroll(): void {
-  const scrollEl = document.getElementById('order-tabs-scroll');
-  const leftBtn = document.getElementById('order-tabs-left');
-  const rightBtn = document.getElementById('order-tabs-right');
+  const scrollEl = document.getElementById("order-tabs-scroll");
+  const leftBtn = document.getElementById("order-tabs-left");
+  const rightBtn = document.getElementById("order-tabs-right");
   if (!scrollEl || !leftBtn || !rightBtn) return;
 
   const SCROLL_STEP = 150;
@@ -2078,62 +2084,66 @@ function initOrderTabsScroll(): void {
     const canScrollLeft = scrollLeft > 2;
     const canScrollRight = scrollLeft < scrollWidth - clientWidth - 2;
 
-    leftBtn!.style.display = canScrollLeft ? 'flex' : 'none';
-    rightBtn!.style.display = canScrollRight ? 'flex' : 'none';
+    leftBtn!.style.display = canScrollLeft ? "flex" : "none";
+    rightBtn!.style.display = canScrollRight ? "flex" : "none";
   }
 
-  leftBtn.addEventListener('click', () => {
-    scrollEl.scrollBy({ left: -SCROLL_STEP, behavior: 'smooth' });
+  leftBtn.addEventListener("click", () => {
+    scrollEl.scrollBy({ left: -SCROLL_STEP, behavior: "smooth" });
   });
 
-  rightBtn.addEventListener('click', () => {
-    scrollEl.scrollBy({ left: SCROLL_STEP, behavior: 'smooth' });
+  rightBtn.addEventListener("click", () => {
+    scrollEl.scrollBy({ left: SCROLL_STEP, behavior: "smooth" });
   });
 
-  scrollEl.addEventListener('scroll', updateArrows, { passive: true });
-  window.addEventListener('resize', updateArrows);
+  scrollEl.addEventListener("scroll", updateArrows, { passive: true });
+  window.addEventListener("resize", updateArrows);
 
   // Mouse wheel horizontal scroll support
-  scrollEl.addEventListener('wheel', (e) => {
-    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-      const { scrollLeft, scrollWidth, clientWidth } = scrollEl;
-      const canScroll = scrollWidth > clientWidth;
-      if (!canScroll) return;
+  scrollEl.addEventListener(
+    "wheel",
+    (e) => {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        const { scrollLeft, scrollWidth, clientWidth } = scrollEl;
+        const canScroll = scrollWidth > clientWidth;
+        if (!canScroll) return;
 
-      // Prevent vertical scroll only when tabs can scroll
-      const atStart = scrollLeft <= 0 && e.deltaY < 0;
-      const atEnd = scrollLeft >= scrollWidth - clientWidth && e.deltaY > 0;
-      if (!atStart && !atEnd) {
-        e.preventDefault();
-        scrollEl.scrollLeft += e.deltaY;
+        // Prevent vertical scroll only when tabs can scroll
+        const atStart = scrollLeft <= 0 && e.deltaY < 0;
+        const atEnd = scrollLeft >= scrollWidth - clientWidth && e.deltaY > 0;
+        if (!atStart && !atEnd) {
+          e.preventDefault();
+          scrollEl.scrollLeft += e.deltaY;
+        }
       }
-    }
-  }, { passive: false });
+    },
+    { passive: false }
+  );
 
   // Drag to scroll
   let isDragging = false;
   let startX = 0;
   let scrollStart = 0;
 
-  scrollEl.addEventListener('mousedown', (e) => {
+  scrollEl.addEventListener("mousedown", (e) => {
     isDragging = true;
     startX = e.pageX;
     scrollStart = scrollEl.scrollLeft;
-    scrollEl.style.cursor = 'grabbing';
-    scrollEl.style.userSelect = 'none';
+    scrollEl.style.cursor = "grabbing";
+    scrollEl.style.userSelect = "none";
   });
 
-  document.addEventListener('mousemove', (e) => {
+  document.addEventListener("mousemove", (e) => {
     if (!isDragging) return;
     const dx = e.pageX - startX;
     scrollEl.scrollLeft = scrollStart - dx;
   });
 
-  document.addEventListener('mouseup', () => {
+  document.addEventListener("mouseup", () => {
     if (!isDragging) return;
     isDragging = false;
-    scrollEl.style.cursor = '';
-    scrollEl.style.userSelect = '';
+    scrollEl.style.cursor = "";
+    scrollEl.style.userSelect = "";
   });
 
   // Initial check

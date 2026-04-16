@@ -235,5 +235,5 @@ export function TicketDetailLayout(): string {
       .b-badge-agent    { background: rgb(226 232 240); color: rgb(51 65 85); }
       .b-content { font-size: 0.875rem; color: rgb(55 65 81); }
     </style>
-  `
+  `;
 }

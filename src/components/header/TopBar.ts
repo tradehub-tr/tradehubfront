@@ -5,55 +5,66 @@
  * Each icon/selector has a Flowbite popover panel
  */
 
-import type { LocaleOption, CurrencyOption } from '../../types/navigation';
-import { onCategoriesLoaded } from '../../services/categoryService';
-import type { ApiCategory } from '../../services/categoryService';
-import { cartStore } from '../cart/state/CartStore';
-import { isLoggedIn, getUser, getSessionUser, waitForAuth, logout } from '../../utils/auth';
-import { getSellerStoreUrl } from '../../utils/seller';
+import type { LocaleOption, CurrencyOption } from "../../types/navigation";
+import { onCategoriesLoaded } from "../../services/categoryService";
+import type { ApiCategory } from "../../services/categoryService";
+import { cartStore } from "../cart/state/CartStore";
+import { isLoggedIn, getUser, getSessionUser, waitForAuth, logout } from "../../utils/auth";
+import { getSellerStoreUrl } from "../../utils/seller";
 // DISABLED: import { mockConversations } from '../../data/mockMessages';
-import { t, getCurrentLang, updatePageTranslations } from '../../i18n';
-import type { SupportedLang } from '../../i18n';
-import { getSelectedCurrency, setSelectedCurrency, getCurrencySymbol } from '../../utils/currency';
-import { formatCurrency, formatPrice, getSelectedCurrency as csGetSelectedCurrency } from '../../services/currencyService';
-import { getSearchSuggestions } from '../../services/listingService';
-import { apiRemoveCartItem, fetchCart } from '../../services/cartService';
+import { t, getCurrentLang, updatePageTranslations } from "../../i18n";
+import type { SupportedLang } from "../../i18n";
+import { getSelectedCurrency, setSelectedCurrency, getCurrencySymbol } from "../../utils/currency";
+import {
+  formatCurrency,
+  formatPrice,
+  getSelectedCurrency as csGetSelectedCurrency,
+} from "../../services/currencyService";
+import { getSearchSuggestions } from "../../services/listingService";
+import { apiRemoveCartItem, fetchCart } from "../../services/cartService";
 
 /** Default country options for the delivery selector */
 const countryOptions: LocaleOption[] = [
-  { code: 'TR', name: 'Türkiye', flag: '🇹🇷' },
-  { code: 'US', name: 'United States', flag: '🇺🇸' },
-  { code: 'DE', name: 'Germany', flag: '🇩🇪' },
-  { code: 'GB', name: 'United Kingdom', flag: '🇬🇧' },
-  { code: 'FR', name: 'France', flag: '🇫🇷' },
+  { code: "TR", name: "Türkiye", flag: "🇹🇷" },
+  { code: "US", name: "United States", flag: "🇺🇸" },
+  { code: "DE", name: "Germany", flag: "🇩🇪" },
+  { code: "GB", name: "United Kingdom", flag: "🇬🇧" },
+  { code: "FR", name: "France", flag: "🇫🇷" },
 ];
 
 /** Default language options */
 const languageOptions: LocaleOption[] = [
-  { code: 'TR', name: 'Türkçe', flag: '🇹🇷' },
-  { code: 'EN', name: 'English', flag: '🇬🇧' },
+  { code: "TR", name: "Türkçe", flag: "🇹🇷" },
+  { code: "EN", name: "English", flag: "🇬🇧" },
 ];
 
 /** Currency options — loaded from localStorage cache (populated by currencyService) */
 function getCurrencyOptions(): CurrencyOption[] {
   try {
-    const raw = localStorage.getItem('tradehub_currency_meta');
+    const raw = localStorage.getItem("tradehub_currency_meta");
     if (raw) {
-      const list = JSON.parse(raw) as Array<{ code: string; symbol: string; name: string; nameTr: string }>;
+      const list = JSON.parse(raw) as Array<{
+        code: string;
+        symbol: string;
+        name: string;
+        nameTr: string;
+      }>;
       if (list.length > 0) {
         const lang = getCurrentLang();
-        return list.map(c => ({
+        return list.map((c) => ({
           code: c.code,
           symbol: c.symbol,
-          name: lang === 'tr' ? (c.nameTr || c.name) : c.name,
+          name: lang === "tr" ? c.nameTr || c.name : c.name,
         }));
       }
     }
-  } catch { /* fall through to defaults */ }
+  } catch {
+    /* fall through to defaults */
+  }
   return [
-    { code: 'TRY', symbol: '₺', name: t('header.currencyTRY') },
-    { code: 'USD', symbol: '$', name: t('header.currencyUSD') },
-    { code: 'EUR', symbol: '€', name: t('header.currencyEUR') },
+    { code: "TRY", symbol: "₺", name: t("header.currencyTRY") },
+    { code: "USD", symbol: "$", name: t("header.currencyUSD") },
+    { code: "EUR", symbol: "€", name: t("header.currencyEUR") },
   ];
 }
 
@@ -63,15 +74,15 @@ function getCurrencyOptions(): CurrencyOption[] {
 const getBaseUrl = (): string => {
   // Vite replaces import.meta.env.BASE_URL at build time.
   // If it's set to a subdirectory (not just "/"), use it directly.
-  const viteBase = typeof import.meta !== 'undefined' ? import.meta.env?.BASE_URL : undefined;
-  if (viteBase && viteBase !== '/') {
+  const viteBase = typeof import.meta !== "undefined" ? import.meta.env?.BASE_URL : undefined;
+  if (viteBase && viteBase !== "/") {
     return viteBase;
   }
   // Runtime fallback: detect GitHub Pages subdirectory from URL
-  if (window.location.pathname.startsWith('/tradehub/')) {
-    return '/tradehub/';
+  if (window.location.pathname.startsWith("/tradehub/")) {
+    return "/tradehub/";
   }
-  return '/';
+  return "/";
 };
 
 /**
@@ -104,7 +115,7 @@ function renderCompactLogo(): string {
  */
 function renderUserButton(): string {
   const user = getUser();
-  const displayName = user?.full_name ?? t('topbar.defaultUser');
+  const displayName = user?.full_name ?? t("topbar.defaultUser");
   return `
     <div class="relative">
       <button
@@ -112,7 +123,7 @@ function renderUserButton(): string {
         data-dropdown-toggle="user-dropdown-menu"
         data-dropdown-placement="bottom-end"
         class="th-header-icon inline-flex items-center justify-center w-7 h-7 rounded-full hover:bg-gray-200 transition-colors cursor-pointer shrink-0"
-        aria-label="${t('header.myAccount')}" data-i18n-aria-label="header.myAccount"
+        aria-label="${t("header.myAccount")}" data-i18n-aria-label="header.myAccount"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/>
@@ -125,19 +136,19 @@ function renderUserButton(): string {
         class="z-50 hidden bg-white rounded-lg shadow-lg border border-gray-200 w-[220px] py-2"
       >
         <div class="px-4 py-2 border-b border-gray-100">
-          <p class="text-[14px] font-semibold text-[#222]"><span data-i18n="header.hello" data-i18n-options='{"name":"${displayName}"}'>${t('header.hello', { name: displayName })}</span></p>
+          <p class="text-[14px] font-semibold text-[#222]"><span data-i18n="header.hello" data-i18n-options='{"name":"${displayName}"}'>${t("header.hello", { name: displayName })}</span></p>
         </div>
         <ul class="py-1">
-          <li><a href="/pages/dashboard/buyer-dashboard.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myDashboard">${t('header.myDashboard')}</span></a></li>
-          ${user?.has_seller_profile ? `<li><a href="${getSellerStoreUrl(user!)}" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myStore">${t('header.myStore')}</span></a></li>` : ''}
-          <li><a href="/pages/dashboard/orders.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myOrders">${t('header.myOrders')}</span></a></li>
-          <li><a href="/pages/dashboard/messages.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myMessages">${t('header.myMessages')}</span></a></li>
-          <li><a href="/pages/dashboard/inquiries.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myRfq">${t('header.myRfq')}</span></a></li>
-          <li><a href="/pages/dashboard/favorites.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myFavorites">${t('header.myFavorites')}</span></a></li>
-          <li><a href="/pages/dashboard/settings.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.accountSettings">${t('header.accountSettings')}</span></a></li>
+          <li><a href="/pages/dashboard/buyer-dashboard.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myDashboard">${t("header.myDashboard")}</span></a></li>
+          ${user?.has_seller_profile ? `<li><a href="${getSellerStoreUrl(user!)}" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myStore">${t("header.myStore")}</span></a></li>` : ""}
+          <li><a href="/pages/dashboard/orders.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myOrders">${t("header.myOrders")}</span></a></li>
+          <li><a href="/pages/dashboard/messages.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myMessages">${t("header.myMessages")}</span></a></li>
+          <li><a href="/pages/dashboard/inquiries.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myRfq">${t("header.myRfq")}</span></a></li>
+          <li><a href="/pages/dashboard/favorites.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myFavorites">${t("header.myFavorites")}</span></a></li>
+          <li><a href="/pages/dashboard/settings.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.accountSettings">${t("header.accountSettings")}</span></a></li>
         </ul>
         <div class="border-t border-gray-100 pt-1">
-          <button id="logout-btn" class="w-full text-left block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors cursor-pointer"><span data-i18n="header.logout">${t('header.logout')}</span></button>
+          <button id="logout-btn" class="w-full text-left block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors cursor-pointer"><span data-i18n="header.logout">${t("header.logout")}</span></button>
         </div>
       </div>
     </div>
@@ -175,7 +186,7 @@ function renderCompactStickySearch(): string {
               name="q"
               type="text"
               tabindex="-1"
-              placeholder="${t('header.searchPlaceholder')}" data-i18n-placeholder="header.searchPlaceholder"
+              placeholder="${t("header.searchPlaceholder")}" data-i18n-placeholder="header.searchPlaceholder"
               autocomplete="off"
               aria-label="Search products from sticky header"
               aria-expanded="false"
@@ -200,7 +211,7 @@ function renderCompactStickySearch(): string {
               <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
               <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Z" />
             </svg>
-            <span id="topbar-compact-image-search-label" x-show="expanded" x-transition.opacity.duration.300ms x-cloak data-i18n="header.imageSearch">${t('header.imageSearch')}</span>
+            <span id="topbar-compact-image-search-label" x-show="expanded" x-transition.opacity.duration.300ms x-cloak data-i18n="header.imageSearch">${t("header.imageSearch")}</span>
           </a>
           -->
 
@@ -211,11 +222,11 @@ function renderCompactStickySearch(): string {
             class="th-btn th-btn-gradient inline-flex items-center justify-center gap-1.5 font-semibold transition-all duration-300 ease-in-out shrink-0"
             :class="expanded ? 'px-6 py-2 text-base absolute right-4 bottom-2' : 'px-5 h-[32px] text-[13px] rounded-full ml-1'"
           >
-            <span x-show="!expanded" data-i18n="common.search">${t('common.search')}</span>
+            <span x-show="!expanded" data-i18n="common.search">${t("common.search")}</span>
             <svg x-show="expanded" class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35m1.6-5.15a6.75 6.75 0 1 1-13.5 0 6.75 6.75 0 0 1 13.5 0Z" />
             </svg>
-            <span x-show="expanded" data-i18n="common.search">${t('common.search')}</span>
+            <span x-show="expanded" data-i18n="common.search">${t("common.search")}</span>
           </button>
         </div>
 
@@ -238,14 +249,14 @@ function renderCompactStickySearch(): string {
         class="absolute left-0 right-0 top-[110px] z-(--z-modal) rounded-md border border-gray-200 bg-white px-5 py-4 shadow-xl dark:border-gray-700 dark:bg-gray-800"
       >
         <div class="flex items-center justify-between gap-4">
-          <h3 class="text-lg font-bold text-gray-900 dark:text-white"><span data-i18n="header.recommendedForYou">${t('header.recommendedForYou')}</span></h3>
+          <h3 class="text-lg font-bold text-gray-900 dark:text-white"><span data-i18n="header.recommendedForYou">${t("header.recommendedForYou")}</span></h3>
           <button
             type="button"
             tabindex="-1"
             data-compact-expanded-interactive="true"
             class="text-sm font-medium text-gray-500 underline decoration-gray-300 underline-offset-2 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
           >
-            <span data-i18n="common.refresh">${t('common.refresh')}</span>
+            <span data-i18n="common.refresh">${t("common.refresh")}</span>
           </button>
         </div>
 
@@ -255,7 +266,7 @@ function renderCompactStickySearch(): string {
         <!-- DISABLED: Deep Search Row — ileride geliştirilecek
         <p class="text-sm font-semibold text-primary-600 dark:text-primary-400">
           <span class="mr-1" aria-hidden="true">&#10022;</span>
-          <span data-i18n="header.deepSearch">${t('header.deepSearch')}</span>
+          <span data-i18n="header.deepSearch">${t("header.deepSearch")}</span>
         </p>
         -->
         <div class="mt-4 flex items-center justify-end">
@@ -265,7 +276,7 @@ function renderCompactStickySearch(): string {
             data-compact-expanded-interactive="true"
             class="text-sm text-gray-500 underline decoration-gray-300 underline-offset-2 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
           >
-            <span data-i18n="header.termsOfUse">${t('header.termsOfUse')}</span>
+            <span data-i18n="header.termsOfUse">${t("header.termsOfUse")}</span>
           </a>
         </div>
 
@@ -289,7 +300,7 @@ function renderCountrySelector(): string {
       type="button"
       aria-label="Select delivery country"
     >
-      <span class="text-xs text-gray-500 dark:text-gray-400" data-i18n="header.deliverTo">${t('header.deliverTo')}</span>
+      <span class="text-xs text-gray-500 dark:text-gray-400" data-i18n="header.deliverTo">${t("header.deliverTo")}</span>
       <span class="text-sm font-medium">${defaultCountry.flag} ${defaultCountry.code}</span>
     </button>
 
@@ -298,36 +309,40 @@ function renderCountrySelector(): string {
       class="absolute z-50 invisible inline-block w-80 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 transition-opacity duration-300 dark:bg-gray-800 dark:border-gray-700"
     >
       <div class="p-5">
-        <h3 class="text-base font-bold text-gray-900 dark:text-white mb-1"><span data-i18n="header.specifyLocation">${t('header.specifyLocation')}</span></h3>
-        <p class="text-sm text-gray-500 dark:text-gray-400 mb-4"><span data-i18n="header.shippingVary">${t('header.shippingVary')}</span></p>
+        <h3 class="text-base font-bold text-gray-900 dark:text-white mb-1"><span data-i18n="header.specifyLocation">${t("header.specifyLocation")}</span></h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-4"><span data-i18n="header.shippingVary">${t("header.shippingVary")}</span></p>
 
         <!-- Add Address Button -->
         <a href="/pages/dashboard/addresses.html" class="th-btn w-full px-4 py-2.5 text-sm font-medium transition-colors mb-4 inline-block text-center">
-          <span data-i18n="header.addAddress">${t('header.addAddress')}</span>
+          <span data-i18n="header.addAddress">${t("header.addAddress")}</span>
         </a>
 
         <!-- DISABLED: Ülke/posta kodu seçimi — ileride geliştirilecek
         <div class="flex items-center gap-3 mb-4">
           <div class="flex-1 border-t border-gray-200 dark:border-gray-600"></div>
-          <span class="text-sm text-gray-400" data-i18n="common.or">${t('common.or')}</span>
+          <span class="text-sm text-gray-400" data-i18n="common.or">${t("common.or")}</span>
           <div class="flex-1 border-t border-gray-200 dark:border-gray-600"></div>
         </div>
         <div class="mb-3">
           <select class="th-input th-input-md cursor-pointer">
-            ${countryOptions.map(country => `
+            ${countryOptions
+              .map(
+                (country) => `
               <option value="${country.code}">${country.flag} ${country.name}</option>
-            `).join('')}
+            `
+              )
+              .join("")}
           </select>
         </div>
         <div class="mb-4">
           <input
             type="text"
-            placeholder="${t('header.enterZip')}" data-i18n-placeholder="header.enterZip"
+            placeholder="${t("header.enterZip")}" data-i18n-placeholder="header.enterZip"
             class="th-input th-input-md"
           />
         </div>
         <button type="button" class="th-btn w-full px-4 py-2.5 text-sm font-medium transition-colors">
-          <span data-i18n="common.save">${t('common.save')}</span>
+          <span data-i18n="common.save">${t("common.save")}</span>
         </button>
         -->
       </div>
@@ -350,7 +365,7 @@ function renderLanguageCurrencySelector(): string {
       <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5a17.92 17.92 0 0 1-8.716-4.247m0 0A8.959 8.959 0 0 1 3 12c0-1.177.227-2.302.637-3.332" />
       </svg>
-      <span class="font-medium truncate" data-i18n="header.englishUsd" id="lang-currency-label">${t('header.englishUsd')}</span>
+      <span class="font-medium truncate" data-i18n="header.englishUsd" id="lang-currency-label">${t("header.englishUsd")}</span>
     </button>
 
     <!-- Language & Currency Popover -->
@@ -358,32 +373,40 @@ function renderLanguageCurrencySelector(): string {
       class="absolute z-50 invisible inline-block w-96 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 transition-opacity duration-300 dark:bg-gray-800 dark:border-gray-700"
     >
       <div class="p-5">
-        <h3 class="text-base font-bold text-gray-900 dark:text-white mb-1"><span data-i18n="header.langCurrency">${t('header.langCurrency')}</span></h3>
-        <p class="text-sm text-gray-500 dark:text-gray-400 mb-5"><span data-i18n="header.langCurrencyDesc">${t('header.langCurrencyDesc')}</span></p>
+        <h3 class="text-base font-bold text-gray-900 dark:text-white mb-1"><span data-i18n="header.langCurrency">${t("header.langCurrency")}</span></h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-5"><span data-i18n="header.langCurrencyDesc">${t("header.langCurrencyDesc")}</span></p>
 
         <!-- Language Select -->
         <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2" data-i18n="header.language">${t('header.language')}</label>
+          <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2" data-i18n="header.language">${t("header.language")}</label>
           <select id="lang-select" class="th-input th-input-md cursor-pointer">
-            ${languageOptions.map(lang => `
+            ${languageOptions
+              .map(
+                (lang) => `
               <option value="${lang.code}">${lang.name}</option>
-            `).join('')}
+            `
+              )
+              .join("")}
           </select>
         </div>
 
         <!-- Currency Select -->
         <div class="mb-5">
-          <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2" data-i18n="header.currency">${t('header.currency')}</label>
+          <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2" data-i18n="header.currency">${t("header.currency")}</label>
           <select id="currency-select" class="th-input th-input-md cursor-pointer">
-            ${getCurrencyOptions().map(currency => `
+            ${getCurrencyOptions()
+              .map(
+                (currency) => `
               <option value="${currency.code}">${currency.code} - ${currency.name}</option>
-            `).join('')}
+            `
+              )
+              .join("")}
           </select>
         </div>
 
         <!-- Save Button -->
         <button type="button" class="th-btn w-full px-4 py-2.5 text-sm font-medium transition-colors">
-          <span data-i18n="common.save">${t('common.save')}</span>
+          <span data-i18n="common.save">${t("common.save")}</span>
         </button>
       </div>
     </div>
@@ -417,7 +440,7 @@ function renderMessagesButton_DISABLED(): string {
 }
 */
 function renderMessagesButton(): string {
-  return '';
+  return "";
 }
 
 /**
@@ -442,14 +465,14 @@ function renderOrdersButton(): string {
       class="absolute z-50 invisible inline-block w-96 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 transition-opacity duration-300 dark:bg-gray-800 dark:border-gray-700"
     >
       <div class="p-5">
-        <h3 class="text-base font-bold text-gray-900 dark:text-white mb-4"><span data-i18n="header.orders">${t('header.orders')}</span></h3>
+        <h3 class="text-base font-bold text-gray-900 dark:text-white mb-4"><span data-i18n="header.orders">${t("header.orders")}</span></h3>
 
         <!-- Trade Assurance Header -->
         <div class="flex items-center gap-2 mb-2">
-          <img src="${new URL('../../assets/images/tas_logo.png', import.meta.url).href}" alt="${t('mega.tradeAssuranceTitle')}" class="w-8 h-8 object-contain" />
-          <span class="text-lg font-bold text-gray-900 dark:text-white">${t('mega.tradeAssuranceTitle')}</span>
+          <img src="${new URL("../../assets/images/tas_logo.png", import.meta.url).href}" alt="${t("mega.tradeAssuranceTitle")}" class="w-8 h-8 object-contain" />
+          <span class="text-lg font-bold text-gray-900 dark:text-white">${t("mega.tradeAssuranceTitle")}</span>
         </div>
-        <p class="text-sm text-gray-500 dark:text-gray-400 mb-5"><span data-i18n="header.tradeAssuranceDesc">${t('header.tradeAssuranceDesc')}</span></p>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-5"><span data-i18n="header.tradeAssuranceDesc">${t("header.tradeAssuranceDesc")}</span></p>
 
         <!-- Features List -->
         <div class="space-y-4 mb-5">
@@ -459,7 +482,7 @@ function renderOrdersButton(): string {
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
               </svg>
             </span>
-            <span class="text-sm text-gray-700 dark:text-gray-300" data-i18n="header.safePayments">${t('header.safePayments')}</span>
+            <span class="text-sm text-gray-700 dark:text-gray-300" data-i18n="header.safePayments">${t("header.safePayments")}</span>
           </div>
           <div class="flex items-center gap-3">
             <span class="flex items-center justify-center w-8 h-8 rounded-full bg-yellow-50">
@@ -467,7 +490,7 @@ function renderOrdersButton(): string {
                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
               </svg>
             </span>
-            <span class="text-sm text-gray-700 dark:text-gray-300" data-i18n="header.moneyBack">${t('header.moneyBack')}</span>
+            <span class="text-sm text-gray-700 dark:text-gray-300" data-i18n="header.moneyBack">${t("header.moneyBack")}</span>
           </div>
           <div class="flex items-center gap-3">
             <span class="flex items-center justify-center w-8 h-8 rounded-full bg-yellow-50">
@@ -475,7 +498,7 @@ function renderOrdersButton(): string {
                 <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.029-.504 1.029-1.125a3.75 3.75 0 0 0-3.75-3.75H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
               </svg>
             </span>
-            <span class="text-sm text-gray-700 dark:text-gray-300" data-i18n="header.shippingLogistics">${t('header.shippingLogistics')}</span>
+            <span class="text-sm text-gray-700 dark:text-gray-300" data-i18n="header.shippingLogistics">${t("header.shippingLogistics")}</span>
           </div>
           <div class="flex items-center gap-3">
             <span class="flex items-center justify-center w-8 h-8 rounded-full bg-yellow-50">
@@ -483,13 +506,13 @@ function renderOrdersButton(): string {
                 <path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008Z" />
               </svg>
             </span>
-            <span class="text-sm text-gray-700 dark:text-gray-300" data-i18n="header.afterSales">${t('header.afterSales')}</span>
+            <span class="text-sm text-gray-700 dark:text-gray-300" data-i18n="header.afterSales">${t("header.afterSales")}</span>
           </div>
         </div>
 
         <!-- Learn More Link -->
         <a href="/pages/trade-assurance" class="text-sm font-medium text-gray-900 hover:text-primary-600 dark:text-white dark:hover:text-primary-400 underline transition-colors">
-          <span data-i18n="common.learnMore">${t('common.learnMore')}</span>
+          <span data-i18n="common.learnMore">${t("common.learnMore")}</span>
         </a>
       </div>
     </div>
@@ -501,7 +524,7 @@ function renderOrdersButton(): string {
  */
 function renderCartButton(itemCount: number = 0): string {
   const showBadge = itemCount > 0;
-  const badgeText = itemCount > 99 ? '99+' : String(itemCount);
+  const badgeText = itemCount > 99 ? "99+" : String(itemCount);
   const baseUrl = getBaseUrl();
 
   return `
@@ -511,12 +534,12 @@ function renderCartButton(itemCount: number = 0): string {
       data-popover-placement="bottom"
       class="th-header-icon relative flex items-center justify-center p-1.5 sm:p-2 rounded-full hover:bg-surface-raised transition-colors cursor-pointer shrink-0"
       type="button"
-      aria-label="Shopping cart${showBadge ? `, ${itemCount} items` : ''}"
+      aria-label="Shopping cart${showBadge ? `, ${itemCount} items` : ""}"
     >
       <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
       </svg>
-      <span id="header-cart-badge" class="th-badge absolute -top-1 -right-1 flex items-center justify-center min-w-5 h-5 px-1 text-xs font-bold${showBadge ? '' : ' hidden'}" style="background:var(--btn-bg);color:var(--btn-text)">
+      <span id="header-cart-badge" class="th-badge absolute -top-1 -right-1 flex items-center justify-center min-w-5 h-5 px-1 text-xs font-bold${showBadge ? "" : " hidden"}" style="background:var(--btn-bg);color:var(--btn-text)">
         ${badgeText}
       </span>
     </button>
@@ -528,10 +551,10 @@ function renderCartButton(itemCount: number = 0): string {
       <!-- Header -->
       <div class="flex items-center justify-between px-5 pt-4 pb-3 border-b border-gray-100">
         <div class="flex items-center gap-2">
-          <h3 class="text-[15px] font-bold text-gray-900"><span data-i18n="header.myCart">${t('header.myCart')}</span></h3>
+          <h3 class="text-[15px] font-bold text-gray-900"><span data-i18n="header.myCart">${t("header.myCart")}</span></h3>
           <span id="header-cart-count-chip" class="hidden text-[11px] font-bold px-2 py-0.5 rounded-full" style="background:var(--btn-bg,#d97706);color:#fff"></span>
         </div>
-        <a href="${baseUrl}pages/cart.html" class="text-xs font-semibold text-[--btn-bg] hover:underline" style="color:var(--btn-bg,#d97706)"><span data-i18n="common.viewAll">${t('common.viewAll')}</span> &rarr;</a>
+        <a href="${baseUrl}pages/cart.html" class="text-xs font-semibold text-[--btn-bg] hover:underline" style="color:var(--btn-bg,#d97706)"><span data-i18n="common.viewAll">${t("common.viewAll")}</span> &rarr;</a>
       </div>
 
       <div class="px-5 py-4" id="header-cart-body">
@@ -542,8 +565,8 @@ function renderCartButton(itemCount: number = 0): string {
               <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/>
             </svg>
           </div>
-          <p class="text-sm font-semibold text-gray-700 mb-1"><span data-i18n="header.cartEmpty">${t('header.cartEmpty')}</span></p>
-          <p class="text-xs text-gray-400"><span data-i18n="header.cartEmptyDesc">${t('header.cartEmptyDesc')}</span></p>
+          <p class="text-sm font-semibold text-gray-700 mb-1"><span data-i18n="header.cartEmpty">${t("header.cartEmpty")}</span></p>
+          <p class="text-xs text-gray-400"><span data-i18n="header.cartEmptyDesc">${t("header.cartEmptyDesc")}</span></p>
         </div>
 
         <!-- Cart Items (hidden initially) -->
@@ -551,14 +574,14 @@ function renderCartButton(itemCount: number = 0): string {
 
         <!-- Subtotal (hidden initially) -->
         <div id="header-cart-subtotal" style="display:none" class="flex items-center justify-between pt-3 mt-3 border-t border-gray-100">
-          <span class="text-sm text-gray-500" data-i18n="header.cartSubtotal">${t('header.cartSubtotal')}</span>
+          <span class="text-sm text-gray-500" data-i18n="header.cartSubtotal">${t("header.cartSubtotal")}</span>
           <span id="header-cart-subtotal-price" class="text-lg font-bold" style="color:var(--btn-bg,#d97706)">$0.00</span>
         </div>
 
         <!-- Go to Cart Button -->
         <a href="${baseUrl}pages/cart.html" class="th-btn th-btn-gradient inline-flex items-center justify-center w-full mt-4 h-11 px-4 text-sm font-bold text-center transition-all hover:opacity-90 hover:shadow-md gap-2">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138A60.114 60.114 0 0 0 3.375 5.272M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/></svg>
-          <span data-i18n="header.goToCart">${t('header.goToCart')}</span>
+          <span data-i18n="header.goToCart">${t("header.goToCart")}</span>
         </a>
       </div>
     </div>
@@ -583,7 +606,7 @@ function renderAuthButtons(): string {
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/>
         </svg>
-        <span class="hidden sm:inline" data-i18n="header.signIn">${t('header.signIn')}</span>
+        <span class="hidden sm:inline" data-i18n="header.signIn">${t("header.signIn")}</span>
       </button>
 
       <!-- Auth Dropdown Menu -->
@@ -593,18 +616,18 @@ function renderAuthButtons(): string {
       >
         <!-- Sign in CTA -->
         <div class="px-5 pb-3">
-          <p class="text-[15px] font-semibold text-[#222] mb-3"><span data-i18n="header.signBackIn">${t('header.signBackIn')}</span></p>
+          <p class="text-[15px] font-semibold text-[#222] mb-3"><span data-i18n="header.signBackIn">${t("header.signBackIn")}</span></p>
           <a
             href="${baseUrl}pages/auth/login.html"
             class="block w-full text-center th-btn"
           >
-            <span data-i18n="header.signIn">${t('header.signIn')}</span>
+            <span data-i18n="header.signIn">${t("header.signIn")}</span>
           </a>
         </div>
 
         <!-- Social Login -->
         <div class="px-5 pb-3 text-center">
-          <p class="text-[12px] text-gray-500 mb-2"><span data-i18n="header.continueWith">${t('header.continueWith')}</span></p>
+          <p class="text-[12px] text-gray-500 mb-2"><span data-i18n="header.continueWith">${t("header.continueWith")}</span></p>
           <div class="flex items-center justify-center gap-4">
             <a href="#" class="w-10 h-10 rounded-full bg-[#1877F2] flex items-center justify-center text-white hover:opacity-90 transition-opacity">
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
@@ -618,8 +641,8 @@ function renderAuthButtons(): string {
           </div>
           <p class="text-[11px] text-gray-400 mt-2 leading-tight">
             By signing in via social media, I agree to the
-            <a href="#" class="underline"><span data-i18n="header.freeAgreement">${t('header.freeAgreement')}</span></a> and
-            <a href="#" class="underline"><span data-i18n="header.privacyPolicy">${t('header.privacyPolicy')}</span></a>.
+            <a href="#" class="underline"><span data-i18n="header.freeAgreement">${t("header.freeAgreement")}</span></a> and
+            <a href="#" class="underline"><span data-i18n="header.privacyPolicy">${t("header.privacyPolicy")}</span></a>.
           </p>
         </div>
       </div>
@@ -672,11 +695,11 @@ function renderMobileDrawer(): string {
             </div>
             <div>
               <div class="flex items-center gap-1 text-sm">
-                <a href="${baseUrl}pages/auth/login.html" class="font-medium text-primary-600 hover:underline dark:text-primary-400"><span data-i18n="header.signIn">${t('header.signIn')}</span></a>
+                <a href="${baseUrl}pages/auth/login.html" class="font-medium text-primary-600 hover:underline dark:text-primary-400"><span data-i18n="header.signIn">${t("header.signIn")}</span></a>
                 <span class="text-gray-400 dark:text-gray-500">|</span>
-                <a href="${baseUrl}pages/auth/register.html" class="font-medium text-primary-600 hover:underline dark:text-primary-400"><span data-i18n="header.joinFree">${t('header.joinFree')}</span></a>
+                <a href="${baseUrl}pages/auth/register.html" class="font-medium text-primary-600 hover:underline dark:text-primary-400"><span data-i18n="header.joinFree">${t("header.joinFree")}</span></a>
               </div>
-              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"><span data-i18n="header.startShopping">${t('header.startShopping')}</span></p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"><span data-i18n="header.startShopping">${t("header.startShopping")}</span></p>
             </div>
           </div>
 
@@ -687,21 +710,21 @@ function renderMobileDrawer(): string {
               type="button"
               class="flex items-center justify-between w-full py-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              <span data-i18n="header.myAccount">${t('header.myAccount')}</span>
+              <span data-i18n="header.myAccount">${t("header.myAccount")}</span>
               <svg id="drawer-account-icon" class="w-5 h-5 text-gray-400 dark:text-gray-500 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
               </svg>
             </button>
             <div id="drawer-account-panel" class="hidden pb-2 space-y-1">
               <a href="/buyer/messages" class="flex items-center gap-3 px-3 py-2.5 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
-                <span data-i18n="header.messages">${t('header.messages')}</span>
+                <span data-i18n="header.messages">${t("header.messages")}</span>
                 <span class="th-badge ml-auto flex items-center justify-center min-w-5 h-5 px-1 text-[10px] font-bold" style="background:var(--color-error-500);color:#fff">1</span>
               </a>
               <a href="/buyer/orders" class="flex items-center gap-3 px-3 py-2.5 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
-                <span data-i18n="header.orders">${t('header.orders')}</span>
+                <span data-i18n="header.orders">${t("header.orders")}</span>
               </a>
               <a href="${baseUrl}pages/cart.html" class="flex items-center gap-3 px-3 py-2.5 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
-                <span data-i18n="header.shoppingCart">${t('header.shoppingCart')}</span>
+                <span data-i18n="header.shoppingCart">${t("header.shoppingCart")}</span>
                 <span class="th-badge ml-auto flex items-center justify-center min-w-5 h-5 px-1 text-[10px] font-bold" style="background:var(--btn-bg);color:var(--btn-text)">3</span>
               </a>
             </div>
@@ -718,30 +741,30 @@ function renderMobileDrawer(): string {
             >
               <div class="flex-1 min-w-0">
                 <div class="flex items-center gap-2">
-                  <span class="text-sm font-bold text-gray-900 dark:text-white" data-i18n="drawer.categories">${t('drawer.categories')}</span>
+                  <span class="text-sm font-bold text-gray-900 dark:text-white" data-i18n="drawer.categories">${t("drawer.categories")}</span>
                   <span class="th-badge inline-flex items-center px-2 py-0.5 text-[10px] font-bold" style="background:var(--btn-bg);color:var(--btn-text)">ALL</span>
                 </div>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"><span data-i18n="drawer.browseCategories">${t('drawer.browseCategories')}</span></p>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"><span data-i18n="drawer.browseCategories">${t("drawer.browseCategories")}</span></p>
               </div>
               <svg class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
             </button>
 
             <!-- Campaigns -->
             <a href="/campaigns" class="block px-3 py-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-              <span class="text-sm font-bold text-gray-900 dark:text-white" data-i18n="drawer.campaigns">${t('drawer.campaigns')}</span>
-              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"><span data-i18n="drawer.campaignsDesc">${t('drawer.campaignsDesc')}</span></p>
+              <span class="text-sm font-bold text-gray-900 dark:text-white" data-i18n="drawer.campaigns">${t("drawer.campaigns")}</span>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"><span data-i18n="drawer.campaignsDesc">${t("drawer.campaignsDesc")}</span></p>
             </a>
 
             <!-- Brands -->
             <a href="/brands" class="block px-3 py-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-              <span class="text-sm font-bold text-gray-900 dark:text-white" data-i18n="drawer.brands">${t('drawer.brands')}</span>
-              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"><span data-i18n="drawer.brandsDesc">${t('drawer.brandsDesc')}</span></p>
+              <span class="text-sm font-bold text-gray-900 dark:text-white" data-i18n="drawer.brands">${t("drawer.brands")}</span>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"><span data-i18n="drawer.brandsDesc">${t("drawer.brandsDesc")}</span></p>
             </a>
 
             <!-- Sellers -->
             <a href="/sellers" class="block px-3 py-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-              <span class="text-sm font-bold text-gray-900 dark:text-white" data-i18n="drawer.sellers">${t('drawer.sellers')}</span>
-              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"><span data-i18n="drawer.sellersDesc">${t('drawer.sellersDesc')}</span></p>
+              <span class="text-sm font-bold text-gray-900 dark:text-white" data-i18n="drawer.sellers">${t("drawer.sellers")}</span>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"><span data-i18n="drawer.sellersDesc">${t("drawer.sellersDesc")}</span></p>
             </a>
 
             <!-- iSTOC B2B Marketplace -->
@@ -750,8 +773,8 @@ function renderMobileDrawer(): string {
                 <span class="text-sm font-bold text-gray-700 dark:text-gray-200">iS</span>
               </div>
               <div class="flex-1 min-w-0">
-                <span class="text-sm font-bold text-gray-900 dark:text-white" data-i18n="drawer.b2bMarketplace">${t('drawer.b2bMarketplace')}</span>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"><span data-i18n="drawer.b2bDesc">${t('drawer.b2bDesc')}</span></p>
+                <span class="text-sm font-bold text-gray-900 dark:text-white" data-i18n="drawer.b2bMarketplace">${t("drawer.b2bMarketplace")}</span>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"><span data-i18n="drawer.b2bDesc">${t("drawer.b2bDesc")}</span></p>
               </div>
               <svg class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
             </a>
@@ -761,29 +784,41 @@ function renderMobileDrawer(): string {
           <div class="mx-4 mt-3 space-y-3">
             <!-- Language pills -->
             <div class="flex flex-wrap gap-2">
-              ${languageOptions.map((lang, i) => `
-                <button type="button" data-lang-pill="${lang.code}" class="px-3 py-1.5 text-xs font-medium rounded-full border transition-colors ${i === 0 ? 'border-primary-500 text-primary-600 bg-primary-50 dark:border-primary-400 dark:text-primary-400 dark:bg-primary-900/20' : 'border-gray-300 text-gray-600 dark:border-gray-600 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500'}">
+              ${languageOptions
+                .map(
+                  (lang, i) => `
+                <button type="button" data-lang-pill="${lang.code}" class="px-3 py-1.5 text-xs font-medium rounded-full border transition-colors ${i === 0 ? "border-primary-500 text-primary-600 bg-primary-50 dark:border-primary-400 dark:text-primary-400 dark:bg-primary-900/20" : "border-gray-300 text-gray-600 dark:border-gray-600 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500"}">
                   ${lang.code}
                 </button>
-              `).join('')}
+              `
+                )
+                .join("")}
             </div>
             <!-- Currency pills -->
             <div class="flex flex-wrap gap-2">
-              ${getCurrencyOptions().map((currency, i) => `
-                <button type="button" class="px-3 py-1.5 text-xs font-medium rounded-full border transition-colors ${i === 0 ? 'border-primary-500 text-primary-600 bg-primary-50 dark:border-primary-400 dark:text-primary-400 dark:bg-primary-900/20' : 'border-gray-300 text-gray-600 dark:border-gray-600 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500'}">
-                  ${currency.code === 'TRY' ? 'TL' : currency.symbol}
+              ${getCurrencyOptions()
+                .map(
+                  (currency, i) => `
+                <button type="button" class="px-3 py-1.5 text-xs font-medium rounded-full border transition-colors ${i === 0 ? "border-primary-500 text-primary-600 bg-primary-50 dark:border-primary-400 dark:text-primary-400 dark:bg-primary-900/20" : "border-gray-300 text-gray-600 dark:border-gray-600 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500"}">
+                  ${currency.code === "TRY" ? "TL" : currency.symbol}
                 </button>
-              `).join('')}
+              `
+                )
+                .join("")}
             </div>
           </div>
 
           <!-- Deliver to -->
           <div class="mx-4 mt-4 mb-6">
-            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1" data-i18n="header.deliverTo">${t('header.deliverTo')}</label>
+            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1" data-i18n="header.deliverTo">${t("header.deliverTo")}</label>
             <select class="th-input th-input-sm cursor-pointer">
-              ${countryOptions.map(country => `
+              ${countryOptions
+                .map(
+                  (country) => `
                 <option value="${country.code}">${country.flag} ${country.name}</option>
-              `).join('')}
+              `
+                )
+                .join("")}
             </select>
           </div>
 
@@ -796,7 +831,7 @@ function renderMobileDrawer(): string {
           <div class="flex items-center justify-between px-4 pt-4 pb-2">
             <button id="drawer-categories-back" type="button" class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
               <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"/></svg>
-              <span data-i18n="common.back">${t('common.back')}</span>
+              <span data-i18n="common.back">${t("common.back")}</span>
             </button>
             <button
               type="button"
@@ -811,18 +846,21 @@ function renderMobileDrawer(): string {
 
           <!-- Category Header Bar -->
           <div class="flex items-center gap-2 px-4 py-3 bg-gray-50 dark:bg-gray-700">
-            <span class="text-lg font-bold text-gray-900 dark:text-white" data-i18n="drawer.categories">${t('drawer.categories')}</span>
+            <span class="text-lg font-bold text-gray-900 dark:text-white" data-i18n="drawer.categories">${t("drawer.categories")}</span>
             <span class="th-badge inline-flex items-center px-2 py-0.5 text-[10px] font-bold" style="background:var(--btn-bg);color:var(--btn-text)">ALL</span>
           </div>
 
           <!-- Category List (skeleton, replaced after API) -->
           <div id="drawer-category-list" class="divide-y divide-gray-100 dark:divide-gray-700">
-            ${Array.from({ length: 8 }, () => `
+            ${Array.from(
+              { length: 8 },
+              () => `
               <div class="flex items-center justify-between w-full px-4 py-3 animate-pulse">
                 <div class="h-3.5 rounded bg-gray-200 dark:bg-gray-700 w-32"></div>
                 <div class="w-5 h-5 rounded bg-gray-200 dark:bg-gray-700"></div>
               </div>
-            `).join('')}
+            `
+            ).join("")}
           </div>
 
         </div>
@@ -834,7 +872,7 @@ function renderMobileDrawer(): string {
           <div class="flex items-center justify-between px-4 pt-4 pb-2">
             <button id="drawer-subcategory-back" type="button" class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
               <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"/></svg>
-              <span data-i18n="drawer.categories">${t('drawer.categories')}</span>
+              <span data-i18n="drawer.categories">${t("drawer.categories")}</span>
             </button>
             <button
               type="button"
@@ -850,7 +888,7 @@ function renderMobileDrawer(): string {
           <!-- Subcategory Header -->
           <div class="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-700">
             <span id="drawer-subcategory-title" class="text-lg font-bold text-gray-900 dark:text-white"></span>
-            <a id="drawer-subcategory-link" href="#" class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-400"><span data-i18n="common.detail">${t('common.detail')}</span></a>
+            <a id="drawer-subcategory-link" href="#" class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-400"><span data-i18n="common.detail">${t("common.detail")}</span></a>
           </div>
 
           <!-- Subcategory List -->
@@ -871,21 +909,32 @@ function renderMobileDrawer(): string {
  */
 export function initMobileDrawer(): void {
   // Move drawer to body so it escapes all stacking contexts (sticky-header, TopBar z-30)
-  const drawerEl = document.getElementById('mobile-menu-drawer');
+  const drawerEl = document.getElementById("mobile-menu-drawer");
   if (drawerEl) document.body.appendChild(drawerEl);
 
   // TopBar mobile search tabs switching
-  const topbarTabs = document.querySelectorAll<HTMLButtonElement>('.topbar-search-tab');
-  const mobileSearchType = document.getElementById('mobile-search-type') as HTMLInputElement | null;
-  const mobileSearchInput = document.querySelector<HTMLInputElement>('#mobile-search-form input[name="q"]');
-  const TB_ACT = ['font-semibold', 'text-gray-900', 'dark:text-white', 'after:bg-gray-900', 'after:dark:bg-white'];
-  const TB_INACT = ['font-normal', 'text-gray-400', 'dark:text-gray-500', 'after:bg-transparent'];
-  topbarTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      topbarTabs.forEach(t => { t.classList.remove(...TB_ACT); t.classList.add(...TB_INACT); });
+  const topbarTabs = document.querySelectorAll<HTMLButtonElement>(".topbar-search-tab");
+  const mobileSearchType = document.getElementById("mobile-search-type") as HTMLInputElement | null;
+  const mobileSearchInput = document.querySelector<HTMLInputElement>(
+    '#mobile-search-form input[name="q"]'
+  );
+  const TB_ACT = [
+    "font-semibold",
+    "text-gray-900",
+    "dark:text-white",
+    "after:bg-gray-900",
+    "after:dark:bg-white",
+  ];
+  const TB_INACT = ["font-normal", "text-gray-400", "dark:text-gray-500", "after:bg-transparent"];
+  topbarTabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      topbarTabs.forEach((t) => {
+        t.classList.remove(...TB_ACT);
+        t.classList.add(...TB_INACT);
+      });
       tab.classList.remove(...TB_INACT);
       tab.classList.add(...TB_ACT);
-      const tabValue = tab.getAttribute('data-search-tab') || 'products';
+      const tabValue = tab.getAttribute("data-search-tab") || "products";
       if (mobileSearchType) {
         mobileSearchType.value = tabValue;
       }
@@ -896,53 +945,57 @@ export function initMobileDrawer(): void {
   });
 
   // Account toggle
-  const accountToggle = document.getElementById('drawer-account-toggle');
-  const accountPanel = document.getElementById('drawer-account-panel');
-  const accountIcon = document.getElementById('drawer-account-icon');
+  const accountToggle = document.getElementById("drawer-account-toggle");
+  const accountPanel = document.getElementById("drawer-account-panel");
+  const accountIcon = document.getElementById("drawer-account-icon");
   if (accountToggle && accountPanel && accountIcon) {
-    accountToggle.addEventListener('click', () => {
-      accountPanel.classList.toggle('hidden');
-      const path = accountIcon.querySelector('path');
+    accountToggle.addEventListener("click", () => {
+      accountPanel.classList.toggle("hidden");
+      const path = accountIcon.querySelector("path");
       if (path) {
-        const isOpen = !accountPanel.classList.contains('hidden');
-        path.setAttribute('d', isOpen ? 'M5 12h14' : 'M12 4.5v15m7.5-7.5h-15');
+        const isOpen = !accountPanel.classList.contains("hidden");
+        path.setAttribute("d", isOpen ? "M5 12h14" : "M12 4.5v15m7.5-7.5h-15");
       }
     });
   }
 
-  const panelMain = document.getElementById('drawer-panel-main');
-  const panelCategories = document.getElementById('drawer-panel-categories');
-  const panelSubcategory = document.getElementById('drawer-panel-subcategory');
+  const panelMain = document.getElementById("drawer-panel-main");
+  const panelCategories = document.getElementById("drawer-panel-categories");
+  const panelSubcategory = document.getElementById("drawer-panel-subcategory");
 
   // Open categories panel
-  const openCategories = document.getElementById('drawer-open-categories');
+  const openCategories = document.getElementById("drawer-open-categories");
   if (openCategories && panelMain && panelCategories) {
-    openCategories.addEventListener('click', () => {
-      panelMain.classList.add('-translate-x-full');
-      panelCategories.classList.remove('translate-x-full');
+    openCategories.addEventListener("click", () => {
+      panelMain.classList.add("-translate-x-full");
+      panelCategories.classList.remove("translate-x-full");
     });
   }
 
   // Back from categories
-  const categoriesBack = document.getElementById('drawer-categories-back');
+  const categoriesBack = document.getElementById("drawer-categories-back");
   if (categoriesBack && panelMain && panelCategories) {
-    categoriesBack.addEventListener('click', () => {
-      panelMain.classList.remove('-translate-x-full');
-      panelCategories.classList.add('translate-x-full');
+    categoriesBack.addEventListener("click", () => {
+      panelMain.classList.remove("-translate-x-full");
+      panelCategories.classList.add("translate-x-full");
     });
   }
 
   // Open subcategory panel — bağlanır, kategori verileri API'den gelince güncellenir
-  const subcategoryTitle = document.getElementById('drawer-subcategory-title');
-  const subcategoryLink = document.getElementById('drawer-subcategory-link') as HTMLAnchorElement | null;
-  const subcategoryList = document.getElementById('drawer-subcategory-list');
+  const subcategoryTitle = document.getElementById("drawer-subcategory-title");
+  const subcategoryLink = document.getElementById(
+    "drawer-subcategory-link"
+  ) as HTMLAnchorElement | null;
+  const subcategoryList = document.getElementById("drawer-subcategory-list");
 
   function bindDrawerCategoryButtons(cats: ApiCategory[]): void {
-    const categoryList = document.getElementById('drawer-category-list');
+    const categoryList = document.getElementById("drawer-category-list");
     if (!categoryList) return;
 
     // Kategori listesini yeniden render et
-    categoryList.innerHTML = cats.map(cat => `
+    categoryList.innerHTML = cats
+      .map(
+        (cat) => `
       <button
         type="button"
         data-drawer-cat-id="${cat.id}"
@@ -951,23 +1004,36 @@ export function initMobileDrawer(): void {
         <span>${cat.name}</span>
         <svg class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
       </button>
-    `).join('');
+    `
+      )
+      .join("");
 
     // Tıklama eventlerini bağla
-    categoryList.querySelectorAll<HTMLButtonElement>('[data-drawer-cat-id]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const catId = btn.getAttribute('data-drawer-cat-id');
-        const cat = cats.find(c => c.id === catId);
-        if (!cat || !panelCategories || !panelSubcategory || !subcategoryTitle || !subcategoryLink || !subcategoryList) return;
+    categoryList.querySelectorAll<HTMLButtonElement>("[data-drawer-cat-id]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const catId = btn.getAttribute("data-drawer-cat-id");
+        const cat = cats.find((c) => c.id === catId);
+        if (
+          !cat ||
+          !panelCategories ||
+          !panelSubcategory ||
+          !subcategoryTitle ||
+          !subcategoryLink ||
+          !subcategoryList
+        )
+          return;
 
         subcategoryTitle.textContent = cat.name;
         subcategoryLink.href = `/pages/products.html?cat=${cat.slug}`;
-        subcategoryList.innerHTML = cat.children.map(
-          ch => `<a href="/pages/products.html?cat=${ch.slug}" class="block px-4 py-3 text-sm text-gray-900 hover:bg-gray-50 dark:text-white dark:hover:bg-gray-700 transition-colors">${ch.name}</a>`
-        ).join('');
+        subcategoryList.innerHTML = cat.children
+          .map(
+            (ch) =>
+              `<a href="/pages/products.html?cat=${ch.slug}" class="block px-4 py-3 text-sm text-gray-900 hover:bg-gray-50 dark:text-white dark:hover:bg-gray-700 transition-colors">${ch.name}</a>`
+          )
+          .join("");
 
-        panelCategories.classList.add('-translate-x-full');
-        panelSubcategory.classList.remove('translate-x-full');
+        panelCategories.classList.add("-translate-x-full");
+        panelSubcategory.classList.remove("translate-x-full");
       });
     });
   }
@@ -976,33 +1042,33 @@ export function initMobileDrawer(): void {
   onCategoriesLoaded(bindDrawerCategoryButtons);
 
   // Back from subcategory
-  const subcategoryBack = document.getElementById('drawer-subcategory-back');
+  const subcategoryBack = document.getElementById("drawer-subcategory-back");
   if (subcategoryBack && panelCategories && panelSubcategory) {
-    subcategoryBack.addEventListener('click', () => {
-      panelCategories.classList.remove('-translate-x-full');
-      panelSubcategory.classList.add('translate-x-full');
+    subcategoryBack.addEventListener("click", () => {
+      panelCategories.classList.remove("-translate-x-full");
+      panelSubcategory.classList.add("translate-x-full");
     });
   }
 
   // Reset panels when drawer is closed
-  const drawer = document.getElementById('mobile-menu-drawer');
+  const drawer = document.getElementById("mobile-menu-drawer");
   if (drawer && panelMain && panelCategories && panelSubcategory) {
     const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
-        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-          if (drawer.classList.contains('-translate-x-full')) {
+        if (mutation.type === "attributes" && mutation.attributeName === "class") {
+          if (drawer.classList.contains("-translate-x-full")) {
             setTimeout(() => {
-              panelMain.classList.remove('-translate-x-full');
-              panelCategories.classList.remove('-translate-x-full');
-              panelCategories.classList.add('translate-x-full');
-              panelSubcategory.classList.remove('-translate-x-full');
-              panelSubcategory.classList.add('translate-x-full');
+              panelMain.classList.remove("-translate-x-full");
+              panelCategories.classList.remove("-translate-x-full");
+              panelCategories.classList.add("translate-x-full");
+              panelSubcategory.classList.remove("-translate-x-full");
+              panelSubcategory.classList.add("translate-x-full");
             }, 300);
           }
         }
       }
     });
-    observer.observe(drawer, { attributes: true, attributeFilter: ['class'] });
+    observer.observe(drawer, { attributes: true, attributeFilter: ["class"] });
   }
 }
 
@@ -1010,17 +1076,24 @@ export function initMobileDrawer(): void {
  * Mobile Search Tabs (Products | Manufacturers | Worldwide)
  * Rendered outside the sticky header as a separate non-sticky section.
  */
-export function MobileSearchTabs(activeTab: 'products' | 'manufacturers' | 'country' = 'products', options?: { hideWorldwide?: boolean }): string {
-  const activeClass = "topbar-search-tab relative py-2 text-[13px] font-semibold text-gray-900 dark:text-white whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-gray-900 after:dark:bg-white after:rounded-full";
-  const inactiveClass = "topbar-search-tab relative py-2 text-[13px] font-normal text-gray-400 dark:text-gray-500 whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-transparent after:rounded-full";
+export function MobileSearchTabs(
+  activeTab: "products" | "manufacturers" | "country" = "products",
+  options?: { hideWorldwide?: boolean }
+): string {
+  const activeClass =
+    "topbar-search-tab relative py-2 text-[13px] font-semibold text-gray-900 dark:text-white whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-gray-900 after:dark:bg-white after:rounded-full";
+  const inactiveClass =
+    "topbar-search-tab relative py-2 text-[13px] font-normal text-gray-400 dark:text-gray-500 whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-transparent after:rounded-full";
 
-  const worldwideTab = options?.hideWorldwide ? '' : `
-      <a href="#" class="${activeTab === 'country' ? activeClass : inactiveClass}" data-search-tab="country"><span data-i18n="search.worldwide">${t('search.worldwide')}</span></a>`;
+  const worldwideTab = options?.hideWorldwide
+    ? ""
+    : `
+      <a href="#" class="${activeTab === "country" ? activeClass : inactiveClass}" data-search-tab="country"><span data-i18n="search.worldwide">${t("search.worldwide")}</span></a>`;
 
   return `
     <div class="lg:hidden flex items-center gap-3 sm:gap-6 px-2 sm:px-4 border-b border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-900 overflow-x-auto no-scrollbar scroll-smooth">
-      <a href="/" class="${activeTab === 'products' ? activeClass : inactiveClass}" data-search-tab="products"><span data-i18n="search.products">${t('search.products')}</span></a>
-      <a href="/pages/manufacturers.html" class="${activeTab === 'manufacturers' ? activeClass : inactiveClass}" data-search-tab="manufacturers"><span data-i18n="search.manufacturers">${t('search.manufacturers')}</span></a>${worldwideTab}
+      <a href="/" class="${activeTab === "products" ? activeClass : inactiveClass}" data-search-tab="products"><span data-i18n="search.products">${t("search.products")}</span></a>
+      <a href="/pages/manufacturers.html" class="${activeTab === "manufacturers" ? activeClass : inactiveClass}" data-search-tab="manufacturers"><span data-i18n="search.manufacturers">${t("search.manufacturers")}</span></a>${worldwideTab}
     </div>
   `;
 }
@@ -1056,7 +1129,7 @@ export function TopBar(props?: TopBarProps): string {
             </div>
 
             <!-- "Hesabım" label like iSTOC's "iSTOC'um" -->
-            <span class="text-[#666] text-[13px] font-normal border-l border-gray-300 pl-2 sm:pl-3 truncate" data-i18n="header.myAccount">${t('header.myAccount')}</span>
+            <span class="text-[#666] text-[13px] font-normal border-l border-gray-300 pl-2 sm:pl-3 truncate" data-i18n="header.myAccount">${t("header.myAccount")}</span>
 
             <!-- Spacer -->
             <div class="flex-1"></div>
@@ -1076,7 +1149,7 @@ export function TopBar(props?: TopBarProps): string {
               <!-- Sell on iSTOC link -->
               <a href="/pages/seller/sell.html" class="hidden lg:inline-flex items-center text-[13px] text-[#333] hover:text-[#000] transition-opacity whitespace-nowrap">
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z"/></svg>
-                <span data-i18n="footer.startSelling">${t('footer.startSelling')}</span>
+                <span data-i18n="footer.startSelling">${t("footer.startSelling")}</span>
               </a>
 
               <!-- Messages Button -->
@@ -1120,10 +1193,12 @@ export function TopBar(props?: TopBarProps): string {
   }
 
   /* ──── Full Header (default — with search + tabs) ──── */
-  const pathname = typeof window !== 'undefined' ? window.location.pathname.toLowerCase() : '';
-  const isManufacturersPage = pathname.includes('manufacturers');
-  const desktopActiveTabClass = "topbar-search-tab relative py-1 text-[13px] font-semibold text-gray-900 dark:text-white whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-gray-900 after:dark:bg-white after:rounded-full";
-  const desktopInactiveTabClass = "topbar-search-tab relative py-1 text-[13px] font-normal text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-transparent after:rounded-full";
+  const pathname = typeof window !== "undefined" ? window.location.pathname.toLowerCase() : "";
+  const isManufacturersPage = pathname.includes("manufacturers");
+  const desktopActiveTabClass =
+    "topbar-search-tab relative py-1 text-[13px] font-semibold text-gray-900 dark:text-white whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-gray-900 after:dark:bg-white after:rounded-full";
+  const desktopInactiveTabClass =
+    "topbar-search-tab relative py-1 text-[13px] font-normal text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-transparent after:rounded-full";
 
   return `
     <div class="relative z-30 dark:bg-gray-900" style="background-color:var(--header-bg);border-bottom:1px solid var(--header-border-color)">
@@ -1221,8 +1296,8 @@ export function TopBar(props?: TopBarProps): string {
 
         <!-- Row 2: Search Tabs (Desktop Only) -->
         <div class="hidden lg:flex items-center gap-6 pb-2 -mt-1">
-          <a href="/" class="${isManufacturersPage ? desktopInactiveTabClass : desktopActiveTabClass}" data-search-tab="products"><span data-i18n="search.products">${t('search.products')}</span></a>
-          <a href="/pages/manufacturers.html" class="${isManufacturersPage ? desktopActiveTabClass : desktopInactiveTabClass}" data-search-tab="manufacturers"><span data-i18n="search.manufacturers">${t('search.manufacturers')}</span></a>
+          <a href="/" class="${isManufacturersPage ? desktopInactiveTabClass : desktopActiveTabClass}" data-search-tab="products"><span data-i18n="search.products">${t("search.products")}</span></a>
+          <a href="/pages/manufacturers.html" class="${isManufacturersPage ? desktopActiveTabClass : desktopInactiveTabClass}" data-search-tab="manufacturers"><span data-i18n="search.manufacturers">${t("search.manufacturers")}</span></a>
         </div>
       </div>
 
@@ -1251,38 +1326,38 @@ export function initHeaderCart(): void {
     const count = cartStore.getTotalSkuCount();
     const summary = cartStore.getSummary();
 
-    const badge = document.getElementById('header-cart-badge');
+    const badge = document.getElementById("header-cart-badge");
     if (badge) {
-      badge.textContent = count > 99 ? '99+' : String(count);
-      if (count > 0) badge.classList.remove('hidden');
-      else badge.classList.add('hidden');
+      badge.textContent = count > 99 ? "99+" : String(count);
+      if (count > 0) badge.classList.remove("hidden");
+      else badge.classList.add("hidden");
     }
 
     // Update count chip in popover header
-    const countChip = document.getElementById('header-cart-count-chip');
+    const countChip = document.getElementById("header-cart-count-chip");
     if (countChip) {
       if (count > 0) {
-        countChip.textContent = `${count} ${t('common.items')}`;
-        countChip.classList.remove('hidden');
+        countChip.textContent = `${count} ${t("common.items")}`;
+        countChip.classList.remove("hidden");
       } else {
-        countChip.classList.add('hidden');
+        countChip.classList.add("hidden");
       }
     }
 
-    const emptyState = document.getElementById('header-cart-empty');
-    const itemsContainer = document.getElementById('header-cart-items');
-    const subtotalContainer = document.getElementById('header-cart-subtotal');
-    const subtotalPrice = document.getElementById('header-cart-subtotal-price');
+    const emptyState = document.getElementById("header-cart-empty");
+    const itemsContainer = document.getElementById("header-cart-items");
+    const subtotalContainer = document.getElementById("header-cart-subtotal");
+    const subtotalPrice = document.getElementById("header-cart-subtotal-price");
 
     if (count === 0) {
-      if (emptyState) emptyState.style.display = 'flex';
-      if (itemsContainer) itemsContainer.classList.add('hidden');
-      if (subtotalContainer) subtotalContainer.style.display = 'none';
+      if (emptyState) emptyState.style.display = "flex";
+      if (itemsContainer) itemsContainer.classList.add("hidden");
+      if (subtotalContainer) subtotalContainer.style.display = "none";
       return;
     }
 
-    if (emptyState) emptyState.style.display = 'none';
-    if (subtotalContainer) subtotalContainer.style.display = 'flex';
+    if (emptyState) emptyState.style.display = "none";
+    if (subtotalContainer) subtotalContainer.style.display = "flex";
     if (subtotalPrice) {
       const gTotal = summary.subtotal || 0;
       subtotalPrice.textContent = formatCurrency(gTotal, csGetSelectedCurrency());
@@ -1311,29 +1386,29 @@ export function initHeaderCart(): void {
                 ${thumbHtml}
                 <div class="flex-1 min-w-0">
                   <p class="text-[12px] font-medium text-gray-800 leading-tight line-clamp-2 mb-1">${product.title}</p>
-                  <p class="text-[11px] text-gray-400">${sku.variantText || ''}</p>
+                  <p class="text-[11px] text-gray-400">${sku.variantText || ""}</p>
                 </div>
                 <div class="flex flex-col items-end gap-1 flex-shrink-0">
-                  <button type="button" data-delete-sku="${sku.id}" class="opacity-0 group-hover:opacity-100 transition-opacity w-5 h-5 flex items-center justify-center rounded-full hover:bg-red-50 text-gray-300 hover:text-red-400" aria-label="${t('cart.removeProduct')}">
+                  <button type="button" data-delete-sku="${sku.id}" class="opacity-0 group-hover:opacity-100 transition-opacity w-5 h-5 flex items-center justify-center rounded-full hover:bg-red-50 text-gray-300 hover:text-red-400" aria-label="${t("cart.removeProduct")}">
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                   </button>
-                  <span class="text-[13px] font-bold text-gray-900">${formatPrice(sku.unitPrice, sku.baseCurrency || 'USD')}</span>
+                  <span class="text-[13px] font-bold text-gray-900">${formatPrice(sku.unitPrice, sku.baseCurrency || "USD")}</span>
                   <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">x${sku.quantity}</span>
                 </div>
               </div>`;
           }
         }
       }
-      html += '</div>';
+      html += "</div>";
 
       itemsContainer.innerHTML = html;
-      itemsContainer.classList.remove('hidden');
+      itemsContainer.classList.remove("hidden");
     }
   };
 
   // Sepeti yükle: oturum açıksa API'den (kullanıcıya özel), misafirse localStorage'dan
   (async () => {
-    const sessionUser = getUser() ?? await getSessionUser();
+    const sessionUser = getUser() ?? (await getSessionUser());
     if (sessionUser) {
       try {
         const apiCart = await fetchCart();
@@ -1352,10 +1427,10 @@ export function initHeaderCart(): void {
   cartStore.subscribe(renderFromStore);
 
   // Mini cart item silme — event delegation (innerHTML her yenilendiği için)
-  const cartBodyEl = document.getElementById('header-cart-body');
+  const cartBodyEl = document.getElementById("header-cart-body");
   if (cartBodyEl) {
-    cartBodyEl.addEventListener('click', (e) => {
-      const btn = (e.target as HTMLElement).closest<HTMLElement>('[data-delete-sku]');
+    cartBodyEl.addEventListener("click", (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLElement>("[data-delete-sku]");
       if (!btn) return;
       const skuId = btn.dataset.deleteSku;
       if (!skuId) return;
@@ -1367,39 +1442,47 @@ export function initHeaderCart(): void {
     });
   }
 
-  document.addEventListener('cart-add', ((e: CustomEvent) => {
+  document.addEventListener("cart-add", ((e: CustomEvent) => {
     // If we're relying on legacy data injection, we can manually parse e.detail here
     // But ideal path is making components add to cartStore directly.
     // For now, let's keep it simple: just render what store has.
     // In our case cartStore might not be updated for other pages unless updated there.
     // Let me fall back to custom logic if store is empty but event fires:
     if (cartStore.getTotalSkuCount() === 0) {
-      const { quantity, grandTotal, groupedItems, productTitle, supplierName, unitPrice, colorItems } = e.detail;
+      const {
+        quantity,
+        grandTotal,
+        groupedItems,
+        productTitle,
+        supplierName,
+        unitPrice,
+        colorItems,
+      } = e.detail;
       const count = quantity || 0;
 
-      const badge = document.getElementById('header-cart-badge');
+      const badge = document.getElementById("header-cart-badge");
       if (badge) {
-        badge.textContent = count > 99 ? '99+' : String(count);
-        if (count > 0) badge.classList.remove('hidden');
+        badge.textContent = count > 99 ? "99+" : String(count);
+        if (count > 0) badge.classList.remove("hidden");
       }
 
-      const emptyState = document.getElementById('header-cart-empty');
-      if (emptyState) emptyState.style.display = 'none';
+      const emptyState = document.getElementById("header-cart-empty");
+      if (emptyState) emptyState.style.display = "none";
 
-      const itemsContainer = document.getElementById('header-cart-items');
+      const itemsContainer = document.getElementById("header-cart-items");
       if (itemsContainer) {
-        let html = '';
+        let html = "";
         if (groupedItems && groupedItems.length > 0) {
           html += '<div class="max-h-[340px] overflow-y-auto pr-1 space-y-3">';
           for (const group of groupedItems) {
             html += `
               <div class="rounded-md border border-border-light bg-surface px-3 py-2">
-                <p class="text-xs font-semibold text-text-tertiary mb-1 truncate">${group.supplierName || 'Supplier'}</p>
+                <p class="text-xs font-semibold text-text-tertiary mb-1 truncate">${group.supplierName || "Supplier"}</p>
                 <p class="text-[13px] font-medium text-text-heading mb-2 leading-tight overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]">${group.productTitle}</p>`;
             for (const item of group.items) {
               html += `
                 <div class="flex items-center gap-3 py-1.5 border-b border-border-light last:border-0">
-                  <div class="w-10 h-10 rounded-md flex-shrink-0" style="background:${item.colorValue || '#e5e7eb'}"></div>
+                  <div class="w-10 h-10 rounded-md flex-shrink-0" style="background:${item.colorValue || "#e5e7eb"}"></div>
                   <div class="flex-1 min-w-0">
                     <p class="text-[11px] text-text-tertiary truncate">${item.label}</p>
                     <div class="flex items-center justify-between mt-0.5">
@@ -1409,9 +1492,9 @@ export function initHeaderCart(): void {
                   </div>
                 </div>`;
             }
-            html += '</div>';
+            html += "</div>";
           }
-          html += '</div>';
+          html += "</div>";
         } else {
           html += `<p class="text-xs text-text-tertiary mb-1 truncate">${supplierName}</p>`;
           html += `<p class="text-sm text-text-heading mb-2 leading-tight overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]">${productTitle}</p>`;
@@ -1421,9 +1504,9 @@ export function initHeaderCart(): void {
             for (const ci of items) {
               const thumbHtml = ci.colorThumb
                 ? `<img src="${ci.colorThumb}" alt="${ci.colorLabel}" class="w-12 h-12 rounded-md object-cover border border-border-default flex-shrink-0">`
-                : `<div class="w-12 h-12 rounded-md flex-shrink-0 border border-border-default" style="background:${ci.colorValue || 'var(--color-surface-muted,#e5e7eb)'}"></div>`;
+                : `<div class="w-12 h-12 rounded-md flex-shrink-0 border border-border-default" style="background:${ci.colorValue || "var(--color-surface-muted,#e5e7eb)"}"></div>`;
               for (const vi of ci.variants) {
-                const desc = [vi.label, ci.colorLabel].filter(Boolean).join(', ');
+                const desc = [vi.label, ci.colorLabel].filter(Boolean).join(", ");
                 html += `
                   <div class="flex items-center gap-3 py-2 border-b border-border-light last:border-0">
                     ${thumbHtml}
@@ -1449,16 +1532,17 @@ export function initHeaderCart(): void {
                 </div>
               </div>`;
           }
-          html += '</div>';
+          html += "</div>";
         }
         itemsContainer.innerHTML = html;
-        itemsContainer.classList.remove('hidden');
+        itemsContainer.classList.remove("hidden");
       }
 
-      const subtotalContainer = document.getElementById('header-cart-subtotal');
-      const subtotalPrice = document.getElementById('header-cart-subtotal-price');
-      if (subtotalContainer) subtotalContainer.style.display = 'flex';
-      if (subtotalPrice) subtotalPrice.textContent = `${getCurrencySymbol()}${grandTotal.toFixed(2)}`;
+      const subtotalContainer = document.getElementById("header-cart-subtotal");
+      const subtotalPrice = document.getElementById("header-cart-subtotal-price");
+      if (subtotalContainer) subtotalContainer.style.display = "flex";
+      if (subtotalPrice)
+        subtotalPrice.textContent = `${getCurrencySymbol()}${grandTotal.toFixed(2)}`;
     } else {
       renderFromStore();
     }
@@ -1466,12 +1550,12 @@ export function initHeaderCart(): void {
 }
 
 // Auto-init: logout handler via event delegation (works on any page that imports this module)
-document.addEventListener('click', async (e) => {
+document.addEventListener("click", async (e) => {
   const target = e.target as HTMLElement;
-  if (target.id === 'logout-btn' || target.closest('#logout-btn')) {
+  if (target.id === "logout-btn" || target.closest("#logout-btn")) {
     e.preventDefault();
     await logout();
-    window.location.replace('/pages/auth/login.html');
+    window.location.replace("/pages/auth/login.html");
   }
 });
 
@@ -1492,19 +1576,21 @@ export async function initAuthState(): Promise<void> {
   const domChanged = wasLoggedIn !== isNowLoggedIn;
 
   if (domChanged) {
-    const authAreas = document.querySelectorAll<HTMLElement>('[data-auth-area]');
-    authAreas.forEach(container => {
+    const authAreas = document.querySelectorAll<HTMLElement>("[data-auth-area]");
+    authAreas.forEach((container) => {
       container.innerHTML = user ? renderUserButton() : renderAuthButtons();
     });
   }
 
   // Update mobile drawer profile
   if (isNowLoggedIn && user) {
-    const mobileProfile = document.getElementById('mobile-drawer-profile');
+    const mobileProfile = document.getElementById("mobile-drawer-profile");
     if (mobileProfile) {
-      const initials = (user.full_name || user.email || 'U').charAt(0).toUpperCase();
-      const escapedName = (user.full_name || user.email).replace(/</g, '&lt;').replace(/>/g, '&gt;');
-      const escapedEmail = user.email.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      const initials = (user.full_name || user.email || "U").charAt(0).toUpperCase();
+      const escapedName = (user.full_name || user.email)
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+      const escapedEmail = user.email.replace(/</g, "&lt;").replace(/>/g, "&gt;");
       mobileProfile.innerHTML = `
         <div class="w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-900 flex items-center justify-center flex-shrink-0">
           <span class="text-sm font-bold text-orange-600 dark:text-orange-300">${initials}</span>
@@ -1520,7 +1606,7 @@ export async function initAuthState(): Promise<void> {
   // DOM değiştiyse Flowbite dropdown'larını yeniden başlat
   if (domChanged) {
     try {
-      const { initDropdowns } = await import('flowbite');
+      const { initDropdowns } = await import("flowbite");
       initDropdowns();
     } catch {
       // Flowbite not available, skip
@@ -1539,13 +1625,13 @@ export function initLanguageSelector(): void {
   // Run initial translation update for all data-i18n elements
   updatePageTranslations();
 
-  const langSelect = document.getElementById('lang-select') as HTMLSelectElement | null;
-  const currencySelect = document.getElementById('currency-select') as HTMLSelectElement | null;
-  const langMap: Record<string, SupportedLang> = { TR: 'tr', EN: 'en', DE: 'en' };
+  const langSelect = document.getElementById("lang-select") as HTMLSelectElement | null;
+  const currencySelect = document.getElementById("currency-select") as HTMLSelectElement | null;
+  const langMap: Record<string, SupportedLang> = { TR: "tr", EN: "en", DE: "en" };
 
   if (langSelect) {
     const currentLang = getCurrentLang();
-    langSelect.value = currentLang === 'tr' ? 'TR' : 'EN';
+    langSelect.value = currentLang === "tr" ? "TR" : "EN";
   }
 
   if (currencySelect) {
@@ -1553,13 +1639,13 @@ export function initLanguageSelector(): void {
   }
 
   // Desktop popover "Save" button — applies language + currency, then refreshes
-  const popover = document.getElementById('popover-language-currency');
-  const saveBtn = popover?.querySelector<HTMLButtonElement>('.th-btn');
+  const popover = document.getElementById("popover-language-currency");
+  const saveBtn = popover?.querySelector<HTMLButtonElement>(".th-btn");
   if (saveBtn) {
-    saveBtn.addEventListener('click', () => {
-      const selectedLangCode = langSelect?.value || (getCurrentLang() === 'tr' ? 'TR' : 'EN');
-      const lang = langMap[selectedLangCode] || 'en';
-      localStorage.setItem('i18nextLng', lang);
+    saveBtn.addEventListener("click", () => {
+      const selectedLangCode = langSelect?.value || (getCurrentLang() === "tr" ? "TR" : "EN");
+      const lang = langMap[selectedLangCode] || "en";
+      localStorage.setItem("i18nextLng", lang);
 
       if (currencySelect) {
         setSelectedCurrency(currencySelect.value);
@@ -1570,11 +1656,11 @@ export function initLanguageSelector(): void {
   }
 
   // Mobile language pills — save + refresh on click
-  document.querySelectorAll<HTMLButtonElement>('[data-lang-pill]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const val = btn.getAttribute('data-lang-pill');
-      const lang = langMap[val || ''] || 'en';
-      localStorage.setItem('i18nextLng', lang);
+  document.querySelectorAll<HTMLButtonElement>("[data-lang-pill]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const val = btn.getAttribute("data-lang-pill");
+      const lang = langMap[val || ""] || "en";
+      localStorage.setItem("i18nextLng", lang);
       window.location.reload();
     });
   });
@@ -1588,8 +1674,8 @@ export function initLanguageSelector(): void {
  * Populates recommendation list (large text) and chip buttons.
  */
 function initCompactSearchSuggestions(): void {
-  const recoList = document.getElementById('topbar-compact-reco-list');
-  const chipsContainer = document.getElementById('topbar-compact-chips');
+  const recoList = document.getElementById("topbar-compact-reco-list");
+  const chipsContainer = document.getElementById("topbar-compact-chips");
   if (!recoList && !chipsContainer) return;
 
   const loadSuggestions = async (): Promise<void> => {
@@ -1599,34 +1685,51 @@ function initCompactSearchSuggestions(): void {
       // Populate large-text suggestion list (first 3 suggestions) — click navigates to search
       if (recoList) {
         const items = data.suggestions.slice(0, 3);
-        recoList.innerHTML = items.map((item: any) => `
-          <button type="button" tabindex="-1" data-compact-expanded-interactive="true" data-suggestion-text="${item.text.replace(/"/g, '&quot;')}" class="compact-suggestion-btn block w-full text-left text-[22px] font-normal leading-tight text-gray-900 transition-colors hover:text-primary-600 dark:text-white dark:hover:text-primary-400 truncate">${item.text}</button>
-        `).join('');
+        recoList.innerHTML = items
+          .map(
+            (item: any) => `
+          <button type="button" tabindex="-1" data-compact-expanded-interactive="true" data-suggestion-text="${item.text.replace(/"/g, "&quot;")}" class="compact-suggestion-btn block w-full text-left text-[22px] font-normal leading-tight text-gray-900 transition-colors hover:text-primary-600 dark:text-white dark:hover:text-primary-400 truncate">${item.text}</button>
+        `
+          )
+          .join("");
       }
 
       // Populate chip buttons (categories or fallback) — click navigates to category or search
       if (chipsContainer) {
         const chipItems = data.chips.length > 0 ? data.chips : data.suggestions.slice(3, 6);
-        chipsContainer.innerHTML = chipItems.map((item: any) => {
-          const href = item.type === 'category' && item.slug
-            ? '/pages/products.html?cat=' + encodeURIComponent(item.slug)
-            : '/pages/products.html?q=' + encodeURIComponent(item.text);
-          return '<button type="button" tabindex="-1" data-compact-expanded-interactive="true" data-chip-href="' + href + '" data-chip-text="' + item.text.replace(/"/g, '&quot;') + '" data-chip-slug="' + (item.slug || '').replace(/"/g, '&quot;') + '" class="compact-chip-btn inline-flex items-center gap-1.5 rounded-md border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 min-w-0 overflow-hidden"><span class="text-primary-500 shrink-0">&#10022;</span><span class="truncate">' + item.text + '</span></button>';
-        }).join('');
+        chipsContainer.innerHTML = chipItems
+          .map((item: any) => {
+            const href =
+              item.type === "category" && item.slug
+                ? "/pages/products.html?cat=" + encodeURIComponent(item.slug)
+                : "/pages/products.html?q=" + encodeURIComponent(item.text);
+            return (
+              '<button type="button" tabindex="-1" data-compact-expanded-interactive="true" data-chip-href="' +
+              href +
+              '" data-chip-text="' +
+              item.text.replace(/"/g, "&quot;") +
+              '" data-chip-slug="' +
+              (item.slug || "").replace(/"/g, "&quot;") +
+              '" class="compact-chip-btn inline-flex items-center gap-1.5 rounded-md border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 min-w-0 overflow-hidden"><span class="text-primary-500 shrink-0">&#10022;</span><span class="truncate">' +
+              item.text +
+              "</span></button>"
+            );
+          })
+          .join("");
       }
 
       // Bind click handlers for suggestions (logging handled by products.ts)
-      recoList?.querySelectorAll<HTMLButtonElement>('.compact-suggestion-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const text = btn.getAttribute('data-suggestion-text') || '';
-          window.location.href = '/pages/products.html?q=' + encodeURIComponent(text);
+      recoList?.querySelectorAll<HTMLButtonElement>(".compact-suggestion-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const text = btn.getAttribute("data-suggestion-text") || "";
+          window.location.href = "/pages/products.html?q=" + encodeURIComponent(text);
         });
       });
 
       // Bind click handlers for chips (logging handled by products.ts)
-      chipsContainer?.querySelectorAll<HTMLButtonElement>('.compact-chip-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const href = btn.getAttribute('data-chip-href') || '';
+      chipsContainer?.querySelectorAll<HTMLButtonElement>(".compact-chip-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const href = btn.getAttribute("data-chip-href") || "";
           window.location.href = href;
         });
       });
@@ -1638,9 +1741,9 @@ function initCompactSearchSuggestions(): void {
   loadSuggestions();
 
   // Wire up "Refresh" button to reload suggestions
-  const refreshBtn = recoList?.parentElement?.querySelector('button');
+  const refreshBtn = recoList?.parentElement?.querySelector("button");
   if (refreshBtn) {
-    refreshBtn.addEventListener('click', (e) => {
+    refreshBtn.addEventListener("click", (e) => {
       e.preventDefault();
       loadSuggestions();
     });
@@ -1652,10 +1755,12 @@ function initCompactSearchSuggestions(): void {
 // Eğer sayfa sync olarak initHeaderCart() çağırdıysa (_headerCartInitialized=true)
 // auto-init atlanır. Async (.then() içinde) çağıran veya hiç çağırmayan sayfalar
 // için auto-init devreye girer.
-if (document.readyState === 'complete') {
-  setTimeout(() => { if (!_headerCartInitialized) initHeaderCart(); }, 0);
+if (document.readyState === "complete") {
+  setTimeout(() => {
+    if (!_headerCartInitialized) initHeaderCart();
+  }, 0);
 } else {
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener("DOMContentLoaded", () => {
     if (!_headerCartInitialized) initHeaderCart();
   });
 }

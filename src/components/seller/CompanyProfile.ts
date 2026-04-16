@@ -1,4 +1,4 @@
-import { t } from '../../i18n';
+import { t } from "../../i18n";
 // Currency formatting via window.csFormatPrice / window.csFormatPriceRange (set by currencyService)
 
 // ─── Shared Types ──────────────────────────────────────────────
@@ -63,7 +63,7 @@ function MainProductsCarousel(): string {
     >
       <!-- Header -->
       <div class="flex items-center justify-between mb-4">
-        <h3 class="text-[18px] font-bold text-gray-900 uppercase">${t('seller.sf.mainProducts')}</h3>
+        <h3 class="text-[18px] font-bold text-gray-900 uppercase">${t("seller.sf.mainProducts")}</h3>
         <div class="flex items-center gap-2">
           <button class="main-products-prev w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 transition-colors" aria-label="Previous">
             <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
@@ -83,7 +83,7 @@ function MainProductsCarousel(): string {
 
       <!-- Empty -->
       <div x-show="!loading && products.length === 0" class="text-gray-400 text-[14px] py-8 text-center">
-        ${t('seller.sf.noProducts')}
+        ${t("seller.sf.noProducts")}
       </div>
 
       <!-- Swiper Carousel -->
@@ -141,11 +141,11 @@ function OverviewTab(): string {
 
         <!-- Profile Header -->
         <div class="flex items-center justify-between flex-wrap gap-3 pb-6 mb-6 border-b border-gray-100">
-          <h3 class="text-[18px] font-bold text-gray-900">${t('seller.sf.profile')}</h3>
+          <h3 class="text-[18px] font-bold text-gray-900">${t("seller.sf.profile")}</h3>
           <div class="flex items-center gap-4">
             <a href="#" class="text-[13px] text-blue-600 hover:underline flex items-center gap-1">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-              ${t('seller.sf.downloadReport')}
+              ${t("seller.sf.downloadReport")}
             </a>
             <span x-show="seller?.verified || seller?.is_verified" class="inline-flex items-baseline gap-1 text-[13px] font-semibold">
               <img src="/src/assets/images/verifiedminilogo.png" alt="Verified" class="h-[16px] w-auto self-baseline" />
@@ -157,30 +157,30 @@ function OverviewTab(): string {
 
         <!-- Genel Bakış -->
         <div class="pb-6 mb-6 border-b border-gray-100">
-          <h4 class="text-[16px] font-bold text-gray-900 mb-5">${t('seller.sf.generalOverview')}</h4>
+          <h4 class="text-[16px] font-bold text-gray-900 mb-5">${t("seller.sf.generalOverview")}</h4>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 text-[14px]">
             <div class="flex justify-between py-2 border-b border-gray-50">
-              <span class="text-gray-500">${t('seller.sf.registrationDate')}</span>
+              <span class="text-gray-500">${t("seller.sf.registrationDate")}</span>
               <span class="text-gray-900 font-medium" x-text="seller?.founded_year || '\u2014'"></span>
             </div>
             <div class="flex justify-between py-2 border-b border-gray-50">
-              <span class="text-gray-500">${t('seller.sf.floorArea')}</span>
+              <span class="text-gray-500">${t("seller.sf.floorArea")}</span>
               <span class="text-gray-900 font-medium" x-text="seller?.factory_size ? seller.factory_size + ' m\u00B2' : '\u2014'"></span>
             </div>
             <div class="flex justify-between py-2 border-b border-gray-50">
-              <span class="text-gray-500">${t('seller.sf.businessType')}</span>
+              <span class="text-gray-500">${t("seller.sf.businessType")}</span>
               <span class="text-gray-900 font-medium" x-text="seller?.business_type || '\u2014'"></span>
             </div>
             <div class="flex justify-between py-2 border-b border-gray-50">
-              <span class="text-gray-500">${t('seller.sf.employees')}</span>
+              <span class="text-gray-500">${t("seller.sf.employees")}</span>
               <span class="text-gray-900 font-medium" x-text="seller?.staff_count || '\u2014'"></span>
             </div>
             <div class="flex justify-between py-2 border-b border-gray-50">
-              <span class="text-gray-500">${t('seller.sf.annualRevenue')}</span>
+              <span class="text-gray-500">${t("seller.sf.annualRevenue")}</span>
               <span class="text-gray-900 font-medium" x-text="seller?.annual_revenue || '\u2014'"></span>
             </div>
             <div class="flex justify-between py-2 border-b border-gray-50">
-              <span class="text-gray-500">${t('seller.sf.mainMarkets')}</span>
+              <span class="text-gray-500">${t("seller.sf.mainMarkets")}</span>
               <span class="text-gray-900 font-medium" x-text="seller?.main_markets || '\u2014'"></span>
             </div>
           </div>
@@ -188,7 +188,7 @@ function OverviewTab(): string {
 
         <!-- Sertifikalar -->
         <div class="pb-6 mb-6 border-b border-gray-100">
-          <h4 class="text-[16px] font-bold text-gray-900 mb-5">${t('seller.sf.certificates')}</h4>
+          <h4 class="text-[16px] font-bold text-gray-900 mb-5">${t("seller.sf.certificates")}</h4>
           <div x-show="certList.length > 0" class="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <template x-for="(cert, idx) in certList" :key="idx">
               <div class="bg-white border border-gray-200 rounded-md p-4 flex flex-col items-center text-center hover:shadow-sm transition-shadow">
@@ -200,28 +200,28 @@ function OverviewTab(): string {
             </template>
           </div>
           <div x-show="certList.length === 0" class="text-gray-400 text-[14px] py-4 text-center">
-            ${t('seller.sf.noCertificates')}
+            ${t("seller.sf.noCertificates")}
           </div>
         </div>
 
         <!-- Üretim Özellikleri -->
         <div class="pb-6 mb-6 border-b border-gray-100">
-          <h4 class="text-[16px] font-bold text-gray-900 mb-5">${t('seller.sf.qualityControlSection')}</h4>
+          <h4 class="text-[16px] font-bold text-gray-900 mb-5">${t("seller.sf.qualityControlSection")}</h4>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 text-[14px]">
             <div class="flex justify-between py-2 border-b border-gray-50">
-              <span class="text-gray-500">${t('seller.sf.businessType')}</span>
+              <span class="text-gray-500">${t("seller.sf.businessType")}</span>
               <span class="text-gray-900 font-medium" x-text="seller?.business_type || '\u2014'"></span>
             </div>
             <div class="flex justify-between py-2 border-b border-gray-50">
-              <span class="text-gray-500">${t('seller.sf.allProductionLines')}</span>
+              <span class="text-gray-500">${t("seller.sf.allProductionLines")}</span>
               <span class="text-gray-900 font-medium" x-text="seller?.production_lines || '\u2014'"></span>
             </div>
             <div class="flex justify-between py-2 border-b border-gray-50">
-              <span class="text-gray-500">${t('seller.sf.floorArea')}</span>
+              <span class="text-gray-500">${t("seller.sf.floorArea")}</span>
               <span class="text-gray-900 font-medium" x-text="seller?.factory_size ? seller.factory_size + ' m\u00B2' : '\u2014'"></span>
             </div>
             <div class="flex justify-between py-2 border-b border-gray-50">
-              <span class="text-gray-500">${t('seller.sf.employees')}</span>
+              <span class="text-gray-500">${t("seller.sf.employees")}</span>
               <span class="text-gray-900 font-medium" x-text="seller?.staff_count || '\u2014'"></span>
             </div>
           </div>
@@ -229,14 +229,14 @@ function OverviewTab(): string {
 
         <!-- Kalite Kontrol -->
         <div>
-          <h4 class="text-[16px] font-bold text-gray-900 mb-5">${t('seller.sf.qualityControl')}</h4>
+          <h4 class="text-[16px] font-bold text-gray-900 mb-5">${t("seller.sf.qualityControl")}</h4>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 text-[14px]">
             <div class="flex justify-between py-2 border-b border-gray-50">
-              <span class="text-gray-500">${t('seller.sf.rawMaterialSupport')}</span>
+              <span class="text-gray-500">${t("seller.sf.rawMaterialSupport")}</span>
               <span class="text-gray-900 font-medium" x-text="seller?.raw_material_traceability || '\u2014'"></span>
             </div>
             <div class="flex justify-between py-2 border-b border-gray-50">
-              <span class="text-gray-500">${t('seller.sf.inspectionMethod')}</span>
+              <span class="text-gray-500">${t("seller.sf.inspectionMethod")}</span>
               <span class="text-gray-900 font-medium" x-text="seller?.inspection_method || '\u2014'"></span>
             </div>
           </div>
@@ -247,7 +247,7 @@ function OverviewTab(): string {
       <!-- Hizmet (Service) Card -->
       <section class="bg-white rounded-md border border-gray-200 p-6 mb-6">
         <div class="flex items-center justify-between flex-wrap gap-3 pb-6 mb-6 border-b border-gray-100">
-          <h3 class="text-[18px] font-bold text-gray-900">${t('seller.sf.serviceTab')}</h3>
+          <h3 class="text-[18px] font-bold text-gray-900">${t("seller.sf.serviceTab")}</h3>
           <span x-show="seller?.verified || seller?.is_verified" class="inline-flex items-baseline gap-1 text-[13px] font-semibold">
             <img src="/src/assets/images/verifiedminilogo.png" alt="Verified" class="h-[16px] w-auto self-baseline" />
             <img src="/src/assets/images/istoc-logo.png" alt="iSTOC" class="h-[10px] w-auto self-baseline" />
@@ -258,7 +258,7 @@ function OverviewTab(): string {
         <!-- Customization services -->
         <div class="flex items-center gap-2 mb-4 text-[14px] text-gray-700">
           <svg class="w-5 h-5 text-gray-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"/></svg>
-          <span class="font-medium">${t('seller.sf.customizationServices')}</span>
+          <span class="font-medium">${t("seller.sf.customizationServices")}</span>
         </div>
 
         <div class="flex flex-col sm:flex-row gap-4"
@@ -279,19 +279,19 @@ function OverviewTab(): string {
         >
           <!-- Info card -->
           <div class="bg-gray-50 rounded-md p-5 sm:w-[260px] shrink-0">
-            <h4 class="text-[16px] font-bold text-gray-900 mb-3">${t('seller.sf.lowMoqCustomization')}</h4>
+            <h4 class="text-[16px] font-bold text-gray-900 mb-3">${t("seller.sf.lowMoqCustomization")}</h4>
             <ul class="text-[13px] text-gray-600 space-y-1.5">
               <li class="flex items-center gap-1.5">
                 <span class="w-1 h-1 bg-gray-400 rounded-full shrink-0"></span>
-                <span x-text="(navCategories?.length || 2) + '${t('seller.sf.categoriesAvailable')}'"></span>
+                <span x-text="(navCategories?.length || 2) + '${t("seller.sf.categoriesAvailable")}'"></span>
               </li>
               <li class="flex items-center gap-1.5">
                 <span class="w-1 h-1 bg-gray-400 rounded-full shrink-0"></span>
-                <span x-text="(seller?.total_orders || 269) + '${t('seller.sf.productsAvailable')}'"></span>
+                <span x-text="(seller?.total_orders || 269) + '${t("seller.sf.productsAvailable")}'"></span>
               </li>
             </ul>
             <button @click="setTab('products')" class="mt-4 text-[13px] border border-gray-300 rounded-full px-4 py-1.5 text-gray-700 hover:bg-gray-100 transition-colors">
-              ${t('seller.sf.viewMore')}
+              ${t("seller.sf.viewMore")}
             </button>
           </div>
 
@@ -314,7 +314,7 @@ function OverviewTab(): string {
       <!-- Şirket Değerlendirmeleri (Company Reviews) Card -->
       <section class="bg-white rounded-md border border-gray-200 p-6 mb-6">
         <h3 class="text-[18px] font-bold text-gray-900 mb-6">
-          ${t('seller.sf.companyReviews')}
+          ${t("seller.sf.companyReviews")}
           <span class="text-gray-500 font-normal" x-text="'(' + (seller?.review_count || 0) + ')'"></span>
         </h3>
 
@@ -324,22 +324,22 @@ function OverviewTab(): string {
           <div class="shrink-0">
             <span class="text-[48px] font-bold text-gray-900 leading-none" x-text="seller?.rating ? seller.rating.toFixed(1) : '\u2014'"></span>
             <span class="text-[18px] text-gray-400">/5</span>
-            <div class="text-[14px] font-medium text-gray-700 mt-1">${t('seller.sf.satisfactory')}</div>
+            <div class="text-[14px] font-medium text-gray-700 mt-1">${t("seller.sf.satisfactory")}</div>
           </div>
           <!-- Rating bars -->
           <div class="flex-1 flex flex-col gap-3">
             <div class="flex items-center gap-3">
-              <span class="text-[13px] text-gray-600 w-[160px] shrink-0">${t('seller.sf.supplierService')}</span>
+              <span class="text-[13px] text-gray-600 w-[160px] shrink-0">${t("seller.sf.supplierService")}</span>
               <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-(--btn-bg) rounded-full" :style="'width:' + ((seller?.rating || 0) / 5 * 100) + '%'"></div></div>
               <span class="text-[13px] font-medium text-gray-900 w-8 text-right" x-text="seller?.rating ? seller.rating.toFixed(1) : '\u2014'"></span>
             </div>
             <div class="flex items-center gap-3">
-              <span class="text-[13px] text-gray-600 w-[160px] shrink-0">${t('seller.sf.onTimeDeliveryRate')}</span>
+              <span class="text-[13px] text-gray-600 w-[160px] shrink-0">${t("seller.sf.onTimeDeliveryRate")}</span>
               <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-(--btn-bg) rounded-full" :style="'width:' + (seller?.on_time_delivery || 0) + '%'"></div></div>
               <span class="text-[13px] font-medium text-gray-900 w-8 text-right" x-text="seller?.on_time_delivery ? (seller.on_time_delivery / 20).toFixed(1) : '\u2014'"></span>
             </div>
             <div class="flex items-center gap-3">
-              <span class="text-[13px] text-gray-600 w-[160px] shrink-0">${t('seller.sf.productQuality')}</span>
+              <span class="text-[13px] text-gray-600 w-[160px] shrink-0">${t("seller.sf.productQuality")}</span>
               <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-(--btn-bg) rounded-full" :style="'width:' + ((seller?.rating || 0) / 5 * 100) + '%'"></div></div>
               <span class="text-[13px] font-medium text-gray-900 w-8 text-right" x-text="seller?.rating ? (seller.rating - 0.1).toFixed(1) : '\u2014'"></span>
             </div>
@@ -348,13 +348,13 @@ function OverviewTab(): string {
 
         <!-- Reviews list placeholder -->
         <div class="text-gray-400 text-[14px] py-4 text-center">
-          ${t('seller.sf.noReviewsYet')}
+          ${t("seller.sf.noReviewsYet")}
         </div>
 
         <!-- View all reviews button -->
         <div class="text-center mt-4">
           <button @click="setTab('reviews')" class="text-[14px] border border-gray-300 rounded-full px-6 py-2 text-gray-700 hover:bg-gray-50 transition-colors font-medium">
-            ${t('seller.sf.viewAllReviews')}
+            ${t("seller.sf.viewAllReviews")}
           </button>
         </div>
       </section>
@@ -379,7 +379,7 @@ function OverviewTab(): string {
         }"
       >
         <div class="flex items-center justify-between mb-6">
-          <h3 class="text-[18px] font-bold text-gray-900">${t('seller.sf.productsTab')}</h3>
+          <h3 class="text-[18px] font-bold text-gray-900">${t("seller.sf.productsTab")}</h3>
         </div>
 
         <!-- Loading -->
@@ -414,7 +414,7 @@ function OverviewTab(): string {
 
         <!-- Empty -->
         <div x-show="!loading && overviewProducts.length === 0" class="text-gray-400 text-[14px] py-8 text-center">
-          ${t('seller.sf.noProducts')}
+          ${t("seller.sf.noProducts")}
         </div>
       </section>
 
@@ -468,9 +468,9 @@ function ReviewsTab(): string {
         setHover(n) { this.form.hoverRating = n; },
         showToast(msg, type) { this.toast = { show: true, message: msg, type: type || 'success' }; setTimeout(() => { this.toast.show = false; }, 3000); },
         async submitReview() {
-          if (!this.form.rating) { this.form.error = '${t('seller.sf.ratingRequired')}'; return; }
+          if (!this.form.rating) { this.form.error = '${t("seller.sf.ratingRequired")}'; return; }
           const comment = (this.form.comment || '').trim();
-          if (!comment) { this.form.error = '${t('seller.sf.commentRequired')}'; return; }
+          if (!comment) { this.form.error = '${t("seller.sf.commentRequired")}'; return; }
           this.form.submitting = true; this.form.error = '';
           try {
             const apiBase = (window.API_BASE || '/api');
@@ -483,17 +483,17 @@ function ReviewsTab(): string {
             });
             const data = await res.json();
             if (!res.ok || data.exc) {
-              let msg = '${t('seller.sf.reviewError')}';
+              let msg = '${t("seller.sf.reviewError")}';
               try { const sm = JSON.parse(data._server_messages || '[]'); if (sm.length) { const first = JSON.parse(sm[0]); msg = first.message || msg; } } catch(_) {}
               throw new Error(msg);
             }
             this.form.rating = 0; this.form.comment = ''; this.form.hoverRating = 0;
-            this.showToast('${t('seller.sf.reviewSubmitted')}', 'success');
+            this.showToast('${t("seller.sf.reviewSubmitted")}', 'success');
             const reviewRes = await fetch(apiBase + '/method/tradehub_core.api.seller.get_reviews?seller_code=' + this.sellerCode + '&page_size=10', {credentials:'omit'}).then(r=>r.json());
             this.reviews = reviewRes.message?.reviews || [];
             this.total = reviewRes.message?.total || 0;
           } catch(e) {
-            this.form.error = (e && e.message) ? e.message : '${t('seller.sf.reviewError')}';
+            this.form.error = (e && e.message) ? e.message : '${t("seller.sf.reviewError")}';
           } finally {
             this.form.submitting = false;
           }
@@ -512,7 +512,7 @@ function ReviewsTab(): string {
 
         <template x-if="!loading">
           <div>
-            <h3 class="text-[18px] font-bold text-gray-900 mb-8">${t('seller.sf.companyReviews')} (<span x-text="total"></span>)</h3>
+            <h3 class="text-[18px] font-bold text-gray-900 mb-8">${t("seller.sf.companyReviews")} (<span x-text="total"></span>)</h3>
 
             <!-- Rating Summary -->
             <div class="flex flex-col md:flex-row gap-10 mb-10 pb-10 border-b border-gray-100">
@@ -522,14 +522,14 @@ function ReviewsTab(): string {
                   <span x-text="seller?.rating ? Number(seller.rating).toFixed(1) : '\u2014'"></span>
                   <span class="text-[16px] text-gray-500 font-normal">/5</span>
                 </div>
-                <div class="text-[14px] text-amber-600 font-semibold mt-1">${t('seller.sf.satisfied')}</div>
+                <div class="text-[14px] text-amber-600 font-semibold mt-1">${t("seller.sf.satisfied")}</div>
               </div>
 
               <!-- Progress Bars -->
               <div class="flex-1 max-w-md space-y-3">
                 <!-- Supplier Service -->
                 <div class="flex items-center gap-3">
-                  <span class="text-[13px] text-gray-600 w-40 shrink-0">${t('seller.sf.supplierService')}</span>
+                  <span class="text-[13px] text-gray-600 w-40 shrink-0">${t("seller.sf.supplierService")}</span>
                   <div class="flex-1 bg-gray-100 rounded-full h-2.5 overflow-hidden">
                     <div class="h-full bg-(--btn-bg) rounded-full transition-all duration-500" :style="'width:' + ratingPct(seller?.rating)"></div>
                   </div>
@@ -537,7 +537,7 @@ function ReviewsTab(): string {
                 </div>
                 <!-- On-Time Shipment -->
                 <div class="flex items-center gap-3">
-                  <span class="text-[13px] text-gray-600 w-40 shrink-0">${t('seller.sf.onTimeShipment')}</span>
+                  <span class="text-[13px] text-gray-600 w-40 shrink-0">${t("seller.sf.onTimeShipment")}</span>
                   <div class="flex-1 bg-gray-100 rounded-full h-2.5 overflow-hidden">
                     <div class="h-full bg-(--btn-bg) rounded-full transition-all duration-500" :style="'width:' + ratingPct(seller?.rating)"></div>
                   </div>
@@ -545,7 +545,7 @@ function ReviewsTab(): string {
                 </div>
                 <!-- Product Quality -->
                 <div class="flex items-center gap-3">
-                  <span class="text-[13px] text-gray-600 w-40 shrink-0">${t('seller.sf.productQuality')}</span>
+                  <span class="text-[13px] text-gray-600 w-40 shrink-0">${t("seller.sf.productQuality")}</span>
                   <div class="flex-1 bg-gray-100 rounded-full h-2.5 overflow-hidden">
                     <div class="h-full bg-(--btn-bg) rounded-full transition-all duration-500" :style="'width:' + ratingPct(seller?.rating)"></div>
                   </div>
@@ -557,9 +557,9 @@ function ReviewsTab(): string {
             <!-- ── Review Form / Login Prompt ── -->
             <div class="mb-10 pb-10 border-b border-gray-100">
               <div x-show="isAuthenticated">
-                <h4 class="text-[16px] font-bold text-gray-900 mb-4">${t('seller.sf.writeReview')}</h4>
+                <h4 class="text-[16px] font-bold text-gray-900 mb-4">${t("seller.sf.writeReview")}</h4>
                 <div class="flex items-center gap-2 mb-4">
-                  <span class="text-[13px] text-gray-600 mr-2">${t('seller.sf.yourRating')}:</span>
+                  <span class="text-[13px] text-gray-600 mr-2">${t("seller.sf.yourRating")}:</span>
                   <template x-for="i in 5" :key="i">
                     <button type="button"
                       @click="setRating(i)"
@@ -576,7 +576,7 @@ function ReviewsTab(): string {
                 <textarea
                   x-model="form.comment"
                   rows="3"
-                  :placeholder="'${t('seller.sf.yourComment')}'"
+                  :placeholder="'${t("seller.sf.yourComment")}'"
                   class="w-full border border-gray-300 rounded-md p-3 text-[14px] text-gray-700 focus:outline-none focus:border-gray-500 resize-none"
                   :disabled="form.submitting"></textarea>
                 <div x-show="form.error" class="text-red-600 text-[13px] mt-2" x-text="form.error"></div>
@@ -585,14 +585,14 @@ function ReviewsTab(): string {
                     @click="submitReview"
                     :disabled="form.submitting"
                     class="px-6 py-2.5 rounded-full text-[14px] font-medium bg-(--btn-bg) text-white hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed">
-                    <span x-show="!form.submitting">${t('seller.sf.submitReview')}</span>
-                    <span x-show="form.submitting">${t('seller.sf.submittingReview')}</span>
+                    <span x-show="!form.submitting">${t("seller.sf.submitReview")}</span>
+                    <span x-show="form.submitting">${t("seller.sf.submittingReview")}</span>
                   </button>
                 </div>
               </div>
               <div x-show="!isAuthenticated" class="text-center py-4 text-[14px] text-gray-500">
-                ${t('seller.sf.loginToReview')}
-                <a href="/pages/auth/login.html" class="text-blue-600 hover:underline font-medium">${t('seller.sf.loginLink')}</a>.
+                ${t("seller.sf.loginToReview")}
+                <a href="/pages/auth/login.html" class="text-blue-600 hover:underline font-medium">${t("seller.sf.loginLink")}</a>.
               </div>
             </div>
 
@@ -606,7 +606,7 @@ function ReviewsTab(): string {
               <svg class="w-12 h-12 mx-auto mb-3 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
               </svg>
-              <p class="text-[14px]">${t('seller.sf.noReviews')}</p>
+              <p class="text-[14px]">${t("seller.sf.noReviews")}</p>
             </div>
 
             <!-- Reviews List -->
@@ -661,7 +661,7 @@ function ReviewsTab(): string {
 
             <div x-show="reviews.length > 0" class="mt-8 text-center">
               <button class="px-6 py-2.5 border border-gray-300 rounded-full text-[14px] font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors">
-                ${t('seller.sf.browseAllReviews')}
+                ${t("seller.sf.browseAllReviews")}
               </button>
             </div>
           </div>
@@ -722,13 +722,13 @@ function ProductsTab(): string {
       <div class="bg-white rounded-md border border-gray-200 mb-4">
         <div class="flex overflow-x-auto no-scrollbar px-4 gap-1">
           <button @click="setCategory('all')" :class="prodCat === 'all' ? 'text-amber-700 border-b-2 border-amber-500 font-semibold' : 'text-gray-600 hover:text-gray-900'" class="whitespace-nowrap px-4 py-3 text-[13px] transition-colors shrink-0">
-            ${t('seller.sf.all')}
+            ${t("seller.sf.all")}
           </button>
           <button @click="setCategory('featured')" :class="prodCat === 'featured' ? 'text-amber-700 border-b-2 border-amber-500 font-semibold' : 'text-gray-600 hover:text-gray-900'" class="whitespace-nowrap px-4 py-3 text-[13px] transition-colors shrink-0">
-            ${t('seller.sf.topSelling')}
+            ${t("seller.sf.topSelling")}
           </button>
           <button @click="setCategory('discount')" :class="prodCat === 'discount' ? 'text-amber-700 border-b-2 border-amber-500 font-semibold' : 'text-gray-600 hover:text-gray-900'" class="whitespace-nowrap px-4 py-3 text-[13px] transition-colors shrink-0">
-            ${t('seller.sf.superDiscount')}
+            ${t("seller.sf.superDiscount")}
           </button>
           <template x-for="cat in categories" :key="cat.name">
             <button @click="setCategory(String(cat.name))" :class="String(prodCat) === String(cat.name) ? 'text-amber-700 border-b-2 border-amber-500 font-semibold' : 'text-gray-600 hover:text-gray-900'" class="whitespace-nowrap px-4 py-3 text-[13px] transition-colors shrink-0" x-text="cat.category_name"></button>
@@ -748,7 +748,7 @@ function ProductsTab(): string {
         <!-- Empty -->
         <div x-show="!loading && filteredProducts().length === 0" class="text-center py-16 text-gray-400">
           <svg class="w-12 h-12 mx-auto mb-3 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="m3 9 4-4 4 4 4-6 6 6"/></svg>
-          <p class="text-[14px]">${t('seller.sf.noProducts')}</p>
+          <p class="text-[14px]">${t("seller.sf.noProducts")}</p>
         </div>
 
         <!-- Products -->
@@ -780,9 +780,9 @@ function ProductsTab(): string {
                   <div class="product-card__title line-clamp-2 text-[13px] leading-snug text-gray-800" x-text="p.product_name"></div>
                   <div class="product-card__price font-semibold text-[14px] text-gray-900" x-text="formatPrice(p)"></div>
                   <div class="flex items-center gap-1.5 text-[11px] text-gray-500">
-                    <span x-show="p.moq" x-text="'${t('seller.sf.minOrder')} ' + p.moq + ' ' + (p.moq_unit || 'Adet')"></span>
+                    <span x-show="p.moq" x-text="'${t("seller.sf.minOrder")} ' + p.moq + ' ' + (p.moq_unit || 'Adet')"></span>
                     <span x-show="p.moq && p.sold_count" class="text-gray-300">&middot;</span>
-                    <span x-show="p.sold_count" x-text="p.sold_count + ' ${t('seller.sf.sold')}'"></span>
+                    <span x-show="p.sold_count" x-text="p.sold_count + ' ${t("seller.sf.sold")}'"></span>
                   </div>
                 </div>
               </a>
@@ -881,7 +881,7 @@ function VideosTab(): string {
           <svg class="w-14 h-14 mx-auto mb-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
           </svg>
-          <p class="text-[14px]">${t('seller.sf.noVideos')}</p>
+          <p class="text-[14px]">${t("seller.sf.noVideos")}</p>
         </div>
 
         <!-- Video Grid -->
@@ -915,7 +915,7 @@ function VideosTab(): string {
           <!-- View More -->
           <div x-show="videos.length > visibleCount" class="text-center mt-6">
             <button @click="visibleCount += 12" class="px-6 py-2.5 border border-gray-300 rounded-full text-[14px] font-medium text-gray-700 hover:bg-gray-50 transition-colors">
-              ${t('seller.sf.viewMore')}
+              ${t("seller.sf.viewMore")}
             </button>
           </div>
         </div>
@@ -960,7 +960,7 @@ function ContactSidebar(): string {
       <div class="bg-white rounded-md border border-gray-200 shadow-sm" style="padding: 24px 20px 20px;">
 
         <!-- Header Title -->
-        <h3 class="text-[17px] font-bold text-gray-900 mb-5">${t('seller.sf.contactSupplierTitle')}</h3>
+        <h3 class="text-[17px] font-bold text-gray-900 mb-5">${t("seller.sf.contactSupplierTitle")}</h3>
 
         <!-- Seller Logo & Name -->
         <div class="flex items-center gap-3 mb-5">
@@ -976,10 +976,10 @@ function ContactSidebar(): string {
         <!-- CTA Buttons -->
         <div class="flex flex-col gap-3 mb-5">
           <button @click="setTab('contact')" class="w-full bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white font-semibold py-3 px-4 rounded-[var(--radius-button)] transition-colors text-[14px] shadow-sm company-profile__contact-btn">
-            ${t('seller.sf.contactNow')}
+            ${t("seller.sf.contactNow")}
           </button>
           <button @click="setTab('contact')" class="th-btn-outline w-full text-gray-900 font-medium py-3 px-4 text-[14px] company-profile__inquiry-btn">
-            ${t('seller.sf.sendInquiry')}
+            ${t("seller.sf.sendInquiry")}
           </button>
         </div>
 
@@ -987,7 +987,7 @@ function ContactSidebar(): string {
         <div class="border-t border-gray-100 pt-4">
           <a :href="'/pages/seller-storefront.html?seller=' + (seller?.slug || '')" class="flex items-center justify-center gap-2 text-[13px] text-blue-600 hover:text-blue-700 font-medium transition-colors">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z"/></svg>
-            ${t('seller.sf.visitStore')}
+            ${t("seller.sf.visitStore")}
           </a>
         </div>
 
@@ -997,10 +997,10 @@ function ContactSidebar(): string {
     <!-- Mobile Contact Bar (shown on small screens) -->
     <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 z-50 flex gap-3 shadow-lg">
       <button @click="setTab('contact')" class="flex-1 bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white font-semibold py-2.5 px-4 rounded-[var(--radius-button)] transition-colors text-[14px]">
-        ${t('seller.sf.contactNow')}
+        ${t("seller.sf.contactNow")}
       </button>
       <button @click="setTab('contact')" class="th-btn-outline flex-1 text-gray-900 font-medium py-2.5 px-4 text-[14px]">
-        ${t('seller.sf.sendInquiry')}
+        ${t("seller.sf.sendInquiry")}
       </button>
     </div>
   `;
@@ -1066,7 +1066,7 @@ function ContactTab(): string {
           <div class="max-w-lg mx-auto">
             <!-- Title -->
             <h2 class="text-[18px] font-bold text-gray-900 text-center mb-6">
-              ${t('seller.sf.sendMessageToSupplier')}
+              ${t("seller.sf.sendMessageToSupplier")}
             </h2>
 
             <!-- Seller contact info -->
@@ -1087,7 +1087,7 @@ function ContactTab(): string {
 
             <!-- Recipient -->
             <div class="flex items-center gap-2 mb-4">
-              <span class="text-[14px] text-gray-500">${t('seller.sf.to')}</span>
+              <span class="text-[14px] text-gray-500">${t("seller.sf.to")}</span>
               <span class="text-[14px] text-gray-900 font-semibold" x-text="seller?.seller_name || '\u2014'"></span>
             </div>
 
@@ -1102,14 +1102,14 @@ function ContactTab(): string {
             <!-- Message Area -->
             <div x-show="!msgSent" class="mb-4">
               <label class="text-[14px] text-gray-500 mb-1 block" for="contact-textarea">
-                <span class="text-red-500">*</span> ${t('seller.sf.message')}
+                <span class="text-red-500">*</span> ${t("seller.sf.message")}
               </label>
               <div class="relative">
                 <textarea
                   id="contact-textarea"
                   x-model="msgText"
                   class="th-input min-h-[120px] resize-y"
-                  placeholder="${t('seller.sf.enterInquiryDetails')}"
+                  placeholder="${t("seller.sf.enterInquiryDetails")}"
                   maxlength="8000"
                   aria-required="true"
                   rows="5"
@@ -1121,7 +1121,7 @@ function ContactTab(): string {
             <!-- Send Button -->
             <div x-show="!msgSent" class="flex justify-center mb-4">
               <button @click="sendMsg()" :disabled="sending || !msgText || msgText.trim().length < 10" class="bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white font-semibold py-2.5 px-8 rounded-full transition-colors text-[14px] disabled:opacity-50 disabled:cursor-not-allowed">
-                <span x-show="!sending">${t('seller.sf.send')}</span>
+                <span x-show="!sending">${t("seller.sf.send")}</span>
                 <span x-show="sending">Gonderiliyor...</span>
               </button>
             </div>
@@ -1131,7 +1131,7 @@ function ContactTab(): string {
               <input type="checkbox" id="business-card" x-model="shareCard"
                      class="w-4 h-4 text-amber-500 border-gray-300 rounded focus:ring-amber-500" />
               <label for="business-card" class="text-[13px] text-gray-500">
-                ${t('seller.sf.agreeBusinessCard')}
+                ${t("seller.sf.agreeBusinessCard")}
               </label>
             </div>
           </div>
@@ -1145,7 +1145,7 @@ function ContactTab(): string {
 // ─── Main Wrapper ──────────────────────────────────────────────
 export function CompanyProfileComponent(): string {
   return `
-    <section class="company-profile bg-[#f5f5f5] pt-5 pb-8 min-h-screen" aria-label="${t('seller.sf.sellerProfile')}">
+    <section class="company-profile bg-[#f5f5f5] pt-5 pb-8 min-h-screen" aria-label="${t("seller.sf.sellerProfile")}">
       <div class="max-w-[1200px] mx-auto px-4 lg:px-8">
 
         <div class="flex flex-col lg:flex-row gap-5">
@@ -1165,19 +1165,19 @@ export function CompanyProfileComponent(): string {
               <div class="flex items-center gap-6 sm:gap-10 overflow-x-auto scrollbar-hide">
                 <button @click="setTab('overview')"
                   :class="activeTab === 'overview' ? 'text-[#222] border-b-[3px] border-[#222] font-bold' : 'text-gray-500 border-b-[3px] border-transparent font-medium hover:text-gray-900'"
-                  class="py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t('seller.sf.myAccount')}</button>
+                  class="py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t("seller.sf.myAccount")}</button>
                 <button @click="setTab('service')"
                   :class="activeTab === 'service' ? 'text-[#222] border-b-[3px] border-[#222] font-bold' : 'text-gray-500 border-b-[3px] border-transparent font-medium hover:text-gray-900'"
-                  class="py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t('seller.sf.serviceTab')}</button>
+                  class="py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t("seller.sf.serviceTab")}</button>
                 <button @click="setTab('reviews')"
                   :class="activeTab === 'reviews' ? 'text-[#222] border-b-[3px] border-[#222] font-bold' : 'text-gray-500 border-b-[3px] border-transparent font-medium hover:text-gray-900'"
-                  class="py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t('seller.sf.reviewsTab')}</button>
+                  class="py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t("seller.sf.reviewsTab")}</button>
                 <button @click="setTab('products')"
                   :class="activeTab === 'products' ? 'text-[#222] border-b-[3px] border-[#222] font-bold' : 'text-gray-500 border-b-[3px] border-transparent font-medium hover:text-gray-900'"
-                  class="py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t('seller.sf.productsTab')}</button>
+                  class="py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t("seller.sf.productsTab")}</button>
                 <button @click="setTab('videos')"
                   :class="activeTab === 'videos' ? 'text-[#222] border-b-[3px] border-[#222] font-bold' : 'text-gray-500 border-b-[3px] border-transparent font-medium hover:text-gray-900'"
-                  class="py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t('seller.sf.videoTips')}</button>
+                  class="py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t("seller.sf.videoTips")}</button>
               </div>
             </div>
 

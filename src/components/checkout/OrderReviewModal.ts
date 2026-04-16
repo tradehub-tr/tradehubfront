@@ -6,7 +6,7 @@
  * Reactivity handled by Alpine.js via x-data="checkoutReviewModal".
  */
 
-import { getCurrencyCode } from '../../utils/currency';
+import { getCurrencyCode } from "../../utils/currency";
 
 export function OrderReviewModal(): string {
   return `

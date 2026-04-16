@@ -43,7 +43,6 @@
   background-color: #f9fafb !important;
 }
 
-
 /* ═══════════════════════════════════════════════════════════
    C3: Hero Banner — Swiper Dot Pagination
    ═══════════════════════════════════════════════════════════ */
@@ -136,7 +135,6 @@
 }
 
 @keyframes badge-pulse {
-
   0%,
   100% {
     opacity: 1;
@@ -258,8 +256,6 @@
   color: #111827;
   border-bottom-color: #111827;
 }
-
-
 
 .company-profile__contact-btn:focus-visible,
 .company-profile__inquiry-btn:focus-visible {

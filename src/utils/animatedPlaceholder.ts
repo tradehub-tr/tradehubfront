@@ -4,21 +4,21 @@
  * for the TR TradeHub B2B Marketplace platform
  */
 
-import type { PlaceholderConfig } from '../types/navigation';
+import type { PlaceholderConfig } from "../types/navigation";
 
 /**
  * Default configuration for the animated placeholder
  */
 const DEFAULT_CONFIG: Required<PlaceholderConfig> = {
   keywords: [
-    'Tekstil ve Konfeksiyon',
-    'Makine ve Ekipman',
-    'Elektronik ve Yazılım',
-    'Gıda ve İçecek',
-    'İnşaat Malzemeleri',
-    'Otomotiv Parçaları',
-    'Kimyasal Ürünler',
-    'Sağlık Ekipmanları',
+    "Tekstil ve Konfeksiyon",
+    "Makine ve Ekipman",
+    "Elektronik ve Yazılım",
+    "Gıda ve İçecek",
+    "İnşaat Malzemeleri",
+    "Otomotiv Parçaları",
+    "Kimyasal Ürünler",
+    "Sağlık Ekipmanları",
   ],
   interval: 3000,
 };
@@ -100,11 +100,11 @@ export function getAnimatedPlaceholderStyles(): string {
  * Only injects once even if called multiple times
  */
 export function injectAnimatedPlaceholderStyles(): void {
-  const styleId = 'animated-placeholder-styles';
+  const styleId = "animated-placeholder-styles";
 
   // Check if styles already exist
-  if (typeof document !== 'undefined' && !document.getElementById(styleId)) {
-    const styleElement = document.createElement('style');
+  if (typeof document !== "undefined" && !document.getElementById(styleId)) {
+    const styleElement = document.createElement("style");
     styleElement.id = styleId;
     styleElement.textContent = getAnimatedPlaceholderStyles();
     document.head.appendChild(styleElement);
@@ -115,10 +115,10 @@ export function injectAnimatedPlaceholderStyles(): void {
  * Creates the placeholder element that will be animated
  */
 function createPlaceholderElement(keyword: string): HTMLSpanElement {
-  const element = document.createElement('span');
-  element.className = 'animated-placeholder fade-in';
+  const element = document.createElement("span");
+  element.className = "animated-placeholder fade-in";
   element.textContent = keyword;
-  element.setAttribute('aria-hidden', 'true');
+  element.setAttribute("aria-hidden", "true");
   return element;
 }
 
@@ -130,13 +130,13 @@ function rotateKeyword(keywords: string[]): void {
 
   // Don't rotate if user has typed something
   if (state.inputElement.value.length > 0) {
-    state.placeholderElement.classList.add('hidden');
+    state.placeholderElement.classList.add("hidden");
     return;
   }
 
   // Fade out
-  state.placeholderElement.classList.remove('fade-in');
-  state.placeholderElement.classList.add('fade-out');
+  state.placeholderElement.classList.remove("fade-in");
+  state.placeholderElement.classList.add("fade-out");
 
   // After fade out, change text and fade in
   setTimeout(() => {
@@ -146,8 +146,8 @@ function rotateKeyword(keywords: string[]): void {
     state.placeholderElement.textContent = keywords[state.currentIndex];
 
     // Fade in
-    state.placeholderElement.classList.remove('fade-out');
-    state.placeholderElement.classList.add('fade-in');
+    state.placeholderElement.classList.remove("fade-out");
+    state.placeholderElement.classList.add("fade-in");
   }, 300); // Match the CSS transition duration
 }
 
@@ -161,11 +161,11 @@ function handleInput(event: Event): void {
 
   if (input.value.length > 0) {
     // Hide placeholder when user types
-    state.placeholderElement.classList.add('hidden');
+    state.placeholderElement.classList.add("hidden");
   } else {
     // Show placeholder when input is empty
-    state.placeholderElement.classList.remove('hidden');
-    state.placeholderElement.classList.add('fade-in');
+    state.placeholderElement.classList.remove("hidden");
+    state.placeholderElement.classList.add("fade-in");
   }
 }
 
@@ -220,12 +220,12 @@ export function initAnimatedPlaceholder(
     injectAnimatedPlaceholderStyles();
 
     // Add class to hide native placeholder
-    inputElement.classList.add('search-input-animated');
+    inputElement.classList.add("search-input-animated");
 
     // Ensure parent is positioned relatively
     const parent = inputElement.parentElement;
     if (parent) {
-      parent.classList.add('animated-placeholder-container');
+      parent.classList.add("animated-placeholder-container");
     }
 
     // Create and append placeholder element
@@ -236,7 +236,7 @@ export function initAnimatedPlaceholder(
     }
 
     // Add input event listener
-    inputElement.addEventListener('input', handleInput);
+    inputElement.addEventListener("input", handleInput);
 
     // Start rotation
     state.isAnimating = true;
@@ -246,9 +246,9 @@ export function initAnimatedPlaceholder(
   };
 
   // Initialize when DOM is ready
-  if (typeof document !== 'undefined') {
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initialize);
+  if (typeof document !== "undefined") {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initialize);
     } else {
       // DOM is already ready
       initialize();
@@ -271,8 +271,8 @@ export function stopAnimatedPlaceholder(): void {
 
   // Remove event listener
   if (state.inputElement) {
-    state.inputElement.removeEventListener('input', handleInput);
-    state.inputElement.classList.remove('search-input-animated');
+    state.inputElement.removeEventListener("input", handleInput);
+    state.inputElement.classList.remove("search-input-animated");
   }
 
   // Remove placeholder element

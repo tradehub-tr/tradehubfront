@@ -7,9 +7,9 @@
  * top-deals.ts owns `products`, `loading`, `hasMore` and `loadMore()`.
  */
 
-import { t } from '../../i18n';
-import { formatPrice } from '../../utils/currency';
-import type { TopDealsProduct } from '../../types/topDeals';
+import { t } from "../../i18n";
+import { formatPrice } from "../../utils/currency";
+import type { TopDealsProduct } from "../../types/topDeals";
 
 /* ── Renderers ───────────────────────────────────────────────────────── */
 
@@ -42,23 +42,28 @@ function moqCount(moq: string | undefined): number {
 }
 
 function moqLabel(moq: string | undefined): string {
-  return t('common.moq', { count: moqCount(moq), unit: t('common.moqUnit') });
+  return t("common.moq", { count: moqCount(moq), unit: t("common.moqUnit") });
 }
 
 /** Single product card used by both All and per-category tabs. */
 export function renderTopDealsFlatCard(product: TopDealsProduct): string {
-  const hasDiscount = product.originalPrice && product.discountPercent && product.discountPercent > 0;
+  const hasDiscount =
+    product.originalPrice && product.discountPercent && product.discountPercent > 0;
   return `
     <a href="${product.href}" class="pc-topdeals group/product flex flex-col hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 relative">
       <div class="relative aspect-square w-full overflow-hidden rounded-md bg-surface-raised mb-2">
-        ${renderProductImage(product.imageSrc || '', product.name)}
-        ${hasDiscount ? `
+        ${renderProductImage(product.imageSrc || "", product.name)}
+        ${
+          hasDiscount
+            ? `
           <span class="absolute top-1.5 left-1.5 inline-flex items-center bg-red-500 text-white text-[11px] font-bold px-1.5 py-0.5 rounded">%${product.discountPercent}</span>
-        ` : ''}
+        `
+            : ""
+        }
       </div>
       <div class="flex items-baseline gap-1.5 flex-wrap">
         <span class="text-sm font-semibold text-text-primary">${formatPrice(product.price)}</span>
-        ${hasDiscount ? `<span class="text-xs text-gray-400 line-through">${product.originalPrice}</span>` : ''}
+        ${hasDiscount ? `<span class="text-xs text-gray-400 line-through">${product.originalPrice}</span>` : ""}
       </div>
       <p class="text-xs text-text-secondary mt-1 line-clamp-2 min-h-[2.4em]">${product.name}</p>
       <p class="text-xs text-text-tertiary mt-0.5 truncate">${moqLabel(product.moq)}</p>
@@ -85,7 +90,7 @@ export function TopDealsGrid(): string {
       <!-- Initial load skeleton -->
       <template x-if="loading && products.length === 0">
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 lg:gap-4">
-          ${Array.from({ length: 12 }).map(renderSkeletonCard).join('')}
+          ${Array.from({ length: 12 }).map(renderSkeletonCard).join("")}
         </div>
       </template>
 
@@ -103,7 +108,7 @@ export function TopDealsGrid(): string {
           </div>
           <!-- Empty state -->
           <div class="flex items-center justify-center py-12" x-show="products.length === 0 && !loading">
-            <p class="text-sm text-gray-400" data-i18n="topDealsPage.noResults">${t('topDealsPage.noResults')}</p>
+            <p class="text-sm text-gray-400" data-i18n="topDealsPage.noResults">${t("topDealsPage.noResults")}</p>
           </div>
         </div>
       </template>
@@ -120,7 +125,7 @@ export function TopDealsGrid(): string {
           class="th-btn-outline px-8 py-2.5 text-sm font-semibold"
           @click="loadMore()"
           data-i18n="topDealsPage.loadMore"
-        >${t('topDealsPage.loadMore')}</button>
+        >${t("topDealsPage.loadMore")}</button>
       </div>
     </section>
   `;
@@ -149,9 +154,7 @@ export interface TopDealsGroup {
 }
 
 export function renderTopDealsGroupCard(group: TopDealsGroup): string {
-  const productsHtml = group.products
-    .map(p => renderTopDealsFlatCard(p))
-    .join('');
+  const productsHtml = group.products.map((p) => renderTopDealsFlatCard(p)).join("");
   return `
     <div class="bg-surface border border-border-default rounded-md p-4">
       <h3 class="text-sm font-bold text-text-primary mb-3 truncate" title="${group.name}">${group.name}</h3>

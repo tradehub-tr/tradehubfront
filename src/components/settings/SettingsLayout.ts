@@ -6,15 +6,15 @@
  *   #profilim, #vergi, #bagli-hesaplar, #eposta, #sifre, #eposta-degistir, #telefon
  */
 
-import { t } from '../../i18n';
-import { SettingsAccountEdit, initSettingsAccountEdit } from './SettingsAccountEdit';
-import { SettingsTaxInfo, initSettingsTaxInfo } from './SettingsTaxInfo';
-import { SettingsEmailPreferences, initSettingsEmailPreferences } from './SettingsEmailPreferences';
-import { SettingsChangePassword, initSettingsChangePassword } from './SettingsChangePassword';
-import { SettingsChangeEmail, initSettingsChangeEmail } from './SettingsChangeEmail';
-import { SettingsChangePhone, initSettingsChangePhone } from './SettingsChangePhone';
-import { SettingsDeleteAccount, initSettingsDeleteAccount } from './SettingsDeleteAccount';
-import { SettingsMyAccount, initSettingsMyAccount } from './SettingsMyAccount';
+import { t } from "../../i18n";
+import { SettingsAccountEdit, initSettingsAccountEdit } from "./SettingsAccountEdit";
+import { SettingsTaxInfo, initSettingsTaxInfo } from "./SettingsTaxInfo";
+import { SettingsEmailPreferences, initSettingsEmailPreferences } from "./SettingsEmailPreferences";
+import { SettingsChangePassword, initSettingsChangePassword } from "./SettingsChangePassword";
+import { SettingsChangeEmail, initSettingsChangeEmail } from "./SettingsChangeEmail";
+import { SettingsChangePhone, initSettingsChangePhone } from "./SettingsChangePhone";
+import { SettingsDeleteAccount, initSettingsDeleteAccount } from "./SettingsDeleteAccount";
+import { SettingsMyAccount, initSettingsMyAccount } from "./SettingsMyAccount";
 
 // ── SVG Icons ────────────────────────────────────────────────────
 
@@ -44,7 +44,7 @@ function renderSettingsItem(item: SettingsItem): string {
     ? `<span class="flex items-center">${item.rightIcon}</span>`
     : item.rightText
       ? `<span class="text-[13px]" style="color:var(--color-text-tertiary)">${item.rightText}</span>`
-      : '';
+      : "";
 
   return `
     <a href="${item.href}" class="flex items-center justify-between py-3 no-underline transition-colors rounded -mx-2 px-2 hover:bg-(--color-surface-muted,#fafafa) group">
@@ -74,7 +74,7 @@ function renderSettingsCard(card: SettingsCard): string {
       </div>
       <div class="h-px bg-gray-200 my-4 max-sm:my-3"></div>
       <div class="flex flex-col">
-        ${card.items.map(renderSettingsItem).join('')}
+        ${card.items.map(renderSettingsItem).join("")}
       </div>
     </div>
   `;
@@ -96,7 +96,7 @@ function renderProfileHeader(): string {
               <span class="text-[32px] max-sm:text-[26px] font-bold text-white lowercase leading-none" x-text="userInitial || '?'"></span>
             </template>
           </div>
-          <button type="button" @click="triggerPhotoUpload()" :disabled="uploadingPhoto" class="absolute -bottom-0.5 -left-0.5 w-7 h-7 max-sm:w-6 max-sm:h-6 rounded-full bg-white border border-border-default flex items-center justify-center cursor-pointer transition-all hover:bg-surface-raised disabled:opacity-60 disabled:cursor-wait" style="color:var(--color-text-secondary)" :title="uploadingPhoto ? '${t('common.loading')}' : '${t('settings.changePhoto')}'">
+          <button type="button" @click="triggerPhotoUpload()" :disabled="uploadingPhoto" class="absolute -bottom-0.5 -left-0.5 w-7 h-7 max-sm:w-6 max-sm:h-6 rounded-full bg-white border border-border-default flex items-center justify-center cursor-pointer transition-all hover:bg-surface-raised disabled:opacity-60 disabled:cursor-wait" style="color:var(--color-text-secondary)" :title="uploadingPhoto ? '${t("common.loading")}' : '${t("settings.changePhoto")}'">
             ${ICONS.camera}
           </button>
         </div>
@@ -106,14 +106,14 @@ function renderProfileHeader(): string {
             <p class="text-[11px] m-0 -mt-0.5" style="color:#dc2626" x-text="photoError"></p>
           </template>
           <div class="flex items-center gap-2 text-[13px] max-sm:text-xs flex-wrap">
-            <span class="min-w-[110px] max-sm:min-w-0 flex-shrink-0" style="color:var(--color-text-tertiary)">${t('settings.emailLayoutLabel')}</span>
+            <span class="min-w-[110px] max-sm:min-w-0 flex-shrink-0" style="color:var(--color-text-tertiary)">${t("settings.emailLayoutLabel")}</span>
             <span class="font-mono truncate" style="color:var(--color-text-primary)" x-text="userEmail || '...'"></span>
-            <button type="button" @click="gotoChangeEmail()" class="inline-flex items-center justify-center w-6 h-6 border-none bg-none rounded cursor-pointer transition-all hover:bg-surface-raised flex-shrink-0" style="color:var(--color-text-tertiary)" title="${t('settings.changeEmailNav')}">${ICONS.edit}</button>
+            <button type="button" @click="gotoChangeEmail()" class="inline-flex items-center justify-center w-6 h-6 border-none bg-none rounded cursor-pointer transition-all hover:bg-surface-raised flex-shrink-0" style="color:var(--color-text-tertiary)" title="${t("settings.changeEmailNav")}">${ICONS.edit}</button>
           </div>
           <div class="flex items-center gap-2 text-[13px] max-sm:text-xs flex-wrap">
-            <span class="min-w-[110px] max-sm:min-w-0 flex-shrink-0" style="color:var(--color-text-tertiary)">${t('settings.membershipNumber')}</span>
+            <span class="min-w-[110px] max-sm:min-w-0 flex-shrink-0" style="color:var(--color-text-tertiary)">${t("settings.membershipNumber")}</span>
             <span class="font-mono truncate" style="color:var(--color-text-primary)" x-text="memberId || '...'"></span>
-            <button type="button" x-ref="copyBtn" @click="copyMemberId()" class="inline-flex items-center justify-center w-6 h-6 border-none bg-none rounded cursor-pointer transition-all hover:bg-surface-raised flex-shrink-0" :style="copied ? 'color:#16a34a' : 'color:var(--color-text-tertiary)'" :title="copied ? '${t('orders.copied')}' : '${t('settings.copyTooltip')}'">
+            <button type="button" x-ref="copyBtn" @click="copyMemberId()" class="inline-flex items-center justify-center w-6 h-6 border-none bg-none rounded cursor-pointer transition-all hover:bg-surface-raised flex-shrink-0" :style="copied ? 'color:#16a34a' : 'color:var(--color-text-tertiary)'" :title="copied ? '${t("orders.copied")}' : '${t("settings.copyTooltip")}'">
               <template x-if="!copied">${ICONS.copy}</template>
               <template x-if="copied"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7.5l2.5 2.5L11 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></template>
             </button>
@@ -121,8 +121,8 @@ function renderProfileHeader(): string {
         </div>
       </div>
       <div class="flex items-center gap-4 flex-shrink-0 max-lg:w-full">
-        <a href="#profilim" class="th-btn no-underline whitespace-nowrap max-lg:flex-1 max-lg:text-center">${t('settings.editProfile')}</a>
-        <button @click="handleLogout()" class="inline-flex items-center justify-center px-6 max-sm:px-3 h-10 rounded-full text-sm max-sm:text-[13px] font-semibold no-underline transition-all whitespace-nowrap bg-none hover:underline max-lg:flex-1 max-lg:text-center cursor-pointer border-none" style="color:var(--color-text-primary)">${t('settings.signOut')}</button>
+        <a href="#profilim" class="th-btn no-underline whitespace-nowrap max-lg:flex-1 max-lg:text-center">${t("settings.editProfile")}</a>
+        <button @click="handleLogout()" class="inline-flex items-center justify-center px-6 max-sm:px-3 h-10 rounded-full text-sm max-sm:text-[13px] font-semibold no-underline transition-all whitespace-nowrap bg-none hover:underline max-lg:flex-1 max-lg:text-center cursor-pointer border-none" style="color:var(--color-text-primary)">${t("settings.signOut")}</button>
       </div>
     </div>
   `;
@@ -133,11 +133,11 @@ function renderProfileHeader(): string {
 function getAccountInfoCard(): SettingsCard {
   return {
     icon: ICONS.accountInfo,
-    title: t('settings.accountInfoCardTitle'),
+    title: t("settings.accountInfoCardTitle"),
     items: [
-      { label: t('settings.myProfile'), href: '#profilim' },
-      { label: t('settings.myAccountNav') || t('settings.myMembership'), href: '#hesabim' },
-      { label: t('settings.taxInfoNav'), href: '#vergi' },
+      { label: t("settings.myProfile"), href: "#profilim" },
+      { label: t("settings.myAccountNav") || t("settings.myMembership"), href: "#hesabim" },
+      { label: t("settings.taxInfoNav"), href: "#vergi" },
     ],
   };
 }
@@ -145,12 +145,12 @@ function getAccountInfoCard(): SettingsCard {
 function getSecurityCard(): SettingsCard {
   return {
     icon: ICONS.security,
-    title: t('settings.accountSecurityTitle'),
+    title: t("settings.accountSecurityTitle"),
     items: [
-      { label: t('settings.changePasswordNav'), href: '#sifre' },
-      { label: t('settings.changeEmailNav'), href: '#eposta-degistir' },
-      { label: t('settings.changePhoneNav'), href: '#telefon' },
-      { label: t('settings.deleteAccountNav'), href: '#hesabi-sil' },
+      { label: t("settings.changePasswordNav"), href: "#sifre" },
+      { label: t("settings.changeEmailNav"), href: "#eposta-degistir" },
+      { label: t("settings.changePhoneNav"), href: "#telefon" },
+      { label: t("settings.deleteAccountNav"), href: "#hesabi-sil" },
     ],
   };
 }
@@ -158,10 +158,8 @@ function getSecurityCard(): SettingsCard {
 function getPreferencesCard(): SettingsCard {
   return {
     icon: ICONS.preferences,
-    title: t('settings.preferencesCardTitle'),
-    items: [
-      { label: t('settings.emailPreferencesNav'), href: '#eposta' },
-    ],
+    title: t("settings.preferencesCardTitle"),
+    items: [{ label: t("settings.emailPreferencesNav"), href: "#eposta" }],
   };
 }
 
@@ -171,7 +169,7 @@ function renderBackHeader(): string {
   return `
     <a href="#" class="inline-flex items-center gap-1.5 text-[13px] text-blue-600 no-underline font-medium mb-4 transition-colors hover:text-blue-700">
       ${ICONS.back}
-      <span>${t('settings.backToAccountSettings')}</span>
+      <span>${t("settings.backToAccountSettings")}</span>
     </a>
   `;
 }
@@ -197,26 +195,35 @@ function renderDefaultView(): string {
 
 function getSectionMap(): Record<string, { title: string; render: () => string }> {
   return {
-    '#profilim': { title: t('settings.myProfile'), render: () => SettingsAccountEdit() },
-    '#hesabim': { title: t('settings.myAccountNav') || 'Hesabım', render: () => SettingsMyAccount() },
-    '#vergi': { title: t('settings.taxInfoNav'), render: () => SettingsTaxInfo() },
-    '#eposta': { title: t('settings.emailPreferencesNav'), render: () => SettingsEmailPreferences() },
-    '#sifre': { title: t('settings.changePasswordNav'), render: () => SettingsChangePassword() },
-    '#eposta-degistir': { title: t('settings.changeEmailNav'), render: () => SettingsChangeEmail() },
-    '#telefon': { title: t('settings.changePhoneNav'), render: () => SettingsChangePhone() },
-    '#hesabi-sil': { title: t('settings.deleteAccountNav'), render: () => SettingsDeleteAccount() },
+    "#profilim": { title: t("settings.myProfile"), render: () => SettingsAccountEdit() },
+    "#hesabim": {
+      title: t("settings.myAccountNav") || "Hesabım",
+      render: () => SettingsMyAccount(),
+    },
+    "#vergi": { title: t("settings.taxInfoNav"), render: () => SettingsTaxInfo() },
+    "#eposta": {
+      title: t("settings.emailPreferencesNav"),
+      render: () => SettingsEmailPreferences(),
+    },
+    "#sifre": { title: t("settings.changePasswordNav"), render: () => SettingsChangePassword() },
+    "#eposta-degistir": {
+      title: t("settings.changeEmailNav"),
+      render: () => SettingsChangeEmail(),
+    },
+    "#telefon": { title: t("settings.changePhoneNav"), render: () => SettingsChangePhone() },
+    "#hesabi-sil": { title: t("settings.deleteAccountNav"), render: () => SettingsDeleteAccount() },
   };
 }
 
 const INIT_MAP: Record<string, () => void> = {
-  '#profilim': initSettingsAccountEdit,
-  '#hesabim': initSettingsMyAccount,
-  '#vergi': initSettingsTaxInfo,
-  '#eposta': initSettingsEmailPreferences,
-  '#sifre': initSettingsChangePassword,
-  '#eposta-degistir': initSettingsChangeEmail,
-  '#telefon': initSettingsChangePhone,
-  '#hesabi-sil': initSettingsDeleteAccount,
+  "#profilim": initSettingsAccountEdit,
+  "#hesabim": initSettingsMyAccount,
+  "#vergi": initSettingsTaxInfo,
+  "#eposta": initSettingsEmailPreferences,
+  "#sifre": initSettingsChangePassword,
+  "#eposta-degistir": initSettingsChangeEmail,
+  "#telefon": initSettingsChangePhone,
+  "#hesabi-sil": initSettingsDeleteAccount,
 };
 
 // ── Main Layout ──────────────────────────────────────────────────
@@ -224,7 +231,9 @@ const INIT_MAP: Record<string, () => void> = {
 export function SettingsLayout(): string {
   const sectionMap = getSectionMap();
   const sectionEntries = Object.entries(sectionMap);
-  const validHashes = Object.keys(sectionMap).map(s => `'${s}'`).join(',');
+  const validHashes = Object.keys(sectionMap)
+    .map((s) => `'${s}'`)
+    .join(",");
   const currentHash = window.location.hash;
   const hasSubSection = Object.keys(sectionMap).includes(currentHash);
 
@@ -233,16 +242,20 @@ export function SettingsLayout(): string {
       x-data="settingsLayout"
       @hashchange.window="currentSection = window.location.hash">
 
-      <div x-show="![${validHashes}].includes(currentSection)"${hasSubSection ? ' x-cloak' : ''}>
+      <div x-show="![${validHashes}].includes(currentSection)"${hasSubSection ? " x-cloak" : ""}>
         ${renderDefaultView()}
       </div>
 
-      ${sectionEntries.map(([hash, section]) => `
-        <div x-show="currentSection === '${hash}'"${currentHash !== hash ? ' x-cloak' : ''}>
+      ${sectionEntries
+        .map(
+          ([hash, section]) => `
+        <div x-show="currentSection === '${hash}'"${currentHash !== hash ? " x-cloak" : ""}>
           ${renderBackHeader()}
           ${section.render()}
         </div>
-      `).join('')}
+      `
+        )
+        .join("")}
     </div>
   `;
 }
@@ -266,5 +279,5 @@ export function initSettingsLayout(): void {
   };
 
   initCurrent();
-  window.addEventListener('hashchange', initCurrent);
+  window.addEventListener("hashchange", initCurrent);
 }

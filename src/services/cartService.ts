@@ -3,8 +3,8 @@
  * `tradehub_core.api.cart.*` endpoint'lerini çağırır.
  */
 
-import { callMethod } from '../utils/api';
-import type { CartSupplier } from '../types/cart';
+import { callMethod } from "../utils/api";
+import type { CartSupplier } from "../types/cart";
 
 export interface CartResponse {
   suppliers: CartSupplier[];
@@ -20,7 +20,7 @@ export interface CartItemInput {
 
 /** Oturumdaki kullanıcının sepetini getirir. */
 export async function fetchCart(): Promise<CartResponse> {
-  return callMethod<CartResponse>('tradehub_core.api.cart.get_cart');
+  return callMethod<CartResponse>("tradehub_core.api.cart.get_cart");
 }
 
 // ── Write ─────────────────────────────────────────────────────────────────────
@@ -35,14 +35,16 @@ export async function apiAddToCart(
   extraAxes?: Record<string, string>
 ): Promise<CartResponse> {
   return callMethod<CartResponse>(
-    'tradehub_core.api.cart.add_to_cart',
+    "tradehub_core.api.cart.add_to_cart",
     {
       listing,
       quantity,
       ...(listingVariant ? { listing_variant: listingVariant } : {}),
       ...(variantLabel ? { variant_label: variantLabel } : {}),
       ...(colorVariant ? { color_variant: colorVariant } : {}),
-      ...(extraAxes && Object.keys(extraAxes).length > 0 ? { extra_axes: JSON.stringify(extraAxes) } : {}),
+      ...(extraAxes && Object.keys(extraAxes).length > 0
+        ? { extra_axes: JSON.stringify(extraAxes) }
+        : {}),
     },
     true
   );
@@ -56,7 +58,7 @@ export async function apiCheckStock(
   variantLabel?: string
 ): Promise<void> {
   await callMethod<{ ok: boolean }>(
-    'tradehub_core.api.cart.check_stock',
+    "tradehub_core.api.cart.check_stock",
     {
       listing,
       quantity,
@@ -68,9 +70,12 @@ export async function apiCheckStock(
 }
 
 /** Sepet öğesinin miktarını günceller. */
-export async function apiUpdateCartItem(cartItem: string, quantity: number): Promise<{ success: boolean }> {
+export async function apiUpdateCartItem(
+  cartItem: string,
+  quantity: number
+): Promise<{ success: boolean }> {
   return callMethod<{ success: boolean }>(
-    'tradehub_core.api.cart.update_cart_item',
+    "tradehub_core.api.cart.update_cart_item",
     { cart_item: cartItem, quantity },
     true
   );
@@ -79,7 +84,7 @@ export async function apiUpdateCartItem(cartItem: string, quantity: number): Pro
 /** Sepetten tek bir öğeyi siler. */
 export async function apiRemoveCartItem(cartItem: string): Promise<{ success: boolean }> {
   return callMethod<{ success: boolean }>(
-    'tradehub_core.api.cart.remove_cart_item',
+    "tradehub_core.api.cart.remove_cart_item",
     { cart_item: cartItem },
     true
   );
@@ -87,11 +92,7 @@ export async function apiRemoveCartItem(cartItem: string): Promise<{ success: bo
 
 /** Sepetteki tüm öğeleri temizler. */
 export async function apiClearCart(): Promise<{ success: boolean }> {
-  return callMethod<{ success: boolean }>(
-    'tradehub_core.api.cart.clear_cart',
-    {},
-    true
-  );
+  return callMethod<{ success: boolean }>("tradehub_core.api.cart.clear_cart", {}, true);
 }
 
 /**
@@ -100,7 +101,7 @@ export async function apiClearCart(): Promise<{ success: boolean }> {
  */
 export async function apiMergeGuestCart(items: CartItemInput[]): Promise<CartResponse> {
   return callMethod<CartResponse>(
-    'tradehub_core.api.cart.merge_guest_cart',
+    "tradehub_core.api.cart.merge_guest_cart",
     { items: JSON.stringify(items) },
     true
   );
@@ -137,10 +138,10 @@ export interface CouponResult {
 
 /** Kupon kodunu doğrular. */
 export async function apiValidateCoupon(code: string, orderTotal: number): Promise<CouponResult> {
-  return callMethod<CouponResult>(
-    'tradehub_core.api.cart.validate_coupon',
-    { code, order_total: orderTotal }
-  );
+  return callMethod<CouponResult>("tradehub_core.api.cart.validate_coupon", {
+    code,
+    order_total: orderTotal,
+  });
 }
 
 export interface BackendOrderItem {
@@ -166,8 +167,10 @@ export interface BackendOrderItem {
 }
 
 /** Oturumdaki kullanıcının siparişlerini backend'den getirir. */
-export async function apiGetOrders(page = 1): Promise<{ orders: BackendOrderItem[]; total: number }> {
-  return callMethod('tradehub_core.api.cart.get_orders', { page });
+export async function apiGetOrders(
+  page = 1
+): Promise<{ orders: BackendOrderItem[]; total: number }> {
+  return callMethod("tradehub_core.api.cart.get_orders", { page });
 }
 
 export interface ListingShippingMethod {
@@ -181,9 +184,11 @@ export interface ListingShippingMethod {
 }
 
 /** Belirtilen listing için satıcının tanımladığı kargo yöntemlerini getirir. */
-export async function fetchShippingMethodsForListing(listingId: string): Promise<ListingShippingMethod[]> {
+export async function fetchShippingMethodsForListing(
+  listingId: string
+): Promise<ListingShippingMethod[]> {
   const result = await callMethod<{ data: ListingShippingMethod[] }>(
-    'tradehub_core.api.listing.get_shipping_methods',
+    "tradehub_core.api.listing.get_shipping_methods",
     { listing_id: listingId }
   );
   return result?.data ?? [];
@@ -193,25 +198,25 @@ export async function fetchShippingMethodsForListing(listingId: string): Promise
 
 /** Birleşik adres tipi — DocType ile birebir eşleşir. */
 export interface BuyerAddressData {
-  id: string
-  title: string
-  contact_name: string
-  company: string
-  phone_prefix: string
-  phone: string
-  country: string
-  state: string       // İl / Province
-  city: string        // İlçe / District
-  street: string      // Açık adres satırı
-  apartment: string   // Daire / Bina (opsiyonel)
-  postal_code: string
-  note: string
-  is_default: boolean
+  id: string;
+  title: string;
+  contact_name: string;
+  company: string;
+  phone_prefix: string;
+  phone: string;
+  country: string;
+  state: string; // İl / Province
+  city: string; // İlçe / District
+  street: string; // Açık adres satırı
+  apartment: string; // Daire / Bina (opsiyonel)
+  postal_code: string;
+  note: string;
+  is_default: boolean;
 }
 
 /** Kullanıcının tüm adreslerini çeker. */
 export async function fetchAddresses(): Promise<BuyerAddressData[]> {
-  return callMethod<BuyerAddressData[]>('tradehub_core.api.buyer.get_addresses');
+  return callMethod<BuyerAddressData[]>("tradehub_core.api.buyer.get_addresses");
 }
 
 /**
@@ -227,30 +232,30 @@ export interface SaveAddressResult {
 
 /** Adres oluşturur veya günceller. `id` varsa güncelleme, yoksa yeni kayıt. */
 export async function saveAddressApi(
-  address: Omit<BuyerAddressData, 'id'> & { id?: string }
+  address: Omit<BuyerAddressData, "id"> & { id?: string }
 ): Promise<SaveAddressResult> {
   return callMethod<SaveAddressResult>(
-    'tradehub_core.api.buyer.save_address',
+    "tradehub_core.api.buyer.save_address",
     { address_json: JSON.stringify(address) },
-    true,
+    true
   );
 }
 
 /** Bir adresi siler. */
 export async function deleteAddressApi(addressId: string): Promise<void> {
   await callMethod<{ success: boolean }>(
-    'tradehub_core.api.buyer.delete_address',
+    "tradehub_core.api.buyer.delete_address",
     { address_id: addressId },
-    true,
+    true
   );
 }
 
 /** Bir adresi varsayılan yapar. */
 export async function setDefaultAddressApi(addressId: string): Promise<void> {
   await callMethod<{ success: boolean }>(
-    'tradehub_core.api.buyer.set_default_address',
+    "tradehub_core.api.buyer.set_default_address",
     { address_id: addressId },
-    true,
+    true
   );
 }
 
@@ -265,7 +270,7 @@ export async function apiCreateOrder(
   couponDiscount?: number
 ): Promise<{ orders: unknown[] }> {
   return callMethod<{ orders: unknown[] }>(
-    'tradehub_core.api.cart.create_order',
+    "tradehub_core.api.cart.create_order",
     {
       orders_json: JSON.stringify(orders),
       shipping_address: shippingAddress,

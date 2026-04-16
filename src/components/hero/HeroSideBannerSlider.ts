@@ -3,10 +3,10 @@
  * Right-side single-image style promotional slider for hero area.
  */
 
-import Swiper from 'swiper';
-import { Autoplay, Navigation, Pagination } from 'swiper/modules';
-import 'swiper/swiper-bundle.css';
-import { t } from '../../i18n';
+import Swiper from "swiper";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
+import "swiper/swiper-bundle.css";
+import { t } from "../../i18n";
 
 interface HeroSideBannerSlide {
   labelKey: string;
@@ -19,36 +19,36 @@ interface HeroSideBannerSlide {
 
 const sideBannerSlides: HeroSideBannerSlide[] = [
   {
-    labelKey: 'heroBanner.newSuppliers',
-    titleKey: 'heroBanner.newSuppliersDesc',
-    descriptionKey: 'heroBanner.newSuppliersText',
-    ctaKey: 'heroBanner.seeMore',
-    href: '/pages/manufacturers.html',
-    background: 'linear-gradient(135deg, #8cc9f7 0%, #6aa8de 45%, #74b8e9 100%)',
+    labelKey: "heroBanner.newSuppliers",
+    titleKey: "heroBanner.newSuppliersDesc",
+    descriptionKey: "heroBanner.newSuppliersText",
+    ctaKey: "heroBanner.seeMore",
+    href: "/pages/manufacturers.html",
+    background: "linear-gradient(135deg, #8cc9f7 0%, #6aa8de 45%, #74b8e9 100%)",
   },
   {
-    labelKey: 'heroBanner.trendAlert',
-    titleKey: 'heroBanner.topPicked',
-    descriptionKey: 'heroBanner.topPickedText',
-    ctaKey: 'heroBanner.exploreNow',
-    href: '/pages/top-ranking.html',
-    background: 'linear-gradient(135deg, #87d4b4 0%, #56b08b 42%, #69be9a 100%)',
+    labelKey: "heroBanner.trendAlert",
+    titleKey: "heroBanner.topPicked",
+    descriptionKey: "heroBanner.topPickedText",
+    ctaKey: "heroBanner.exploreNow",
+    href: "/pages/top-ranking.html",
+    background: "linear-gradient(135deg, #87d4b4 0%, #56b08b 42%, #69be9a 100%)",
   },
   {
-    labelKey: 'heroBanner.fastCustomization',
-    titleKey: 'heroBanner.privateLabelDesc',
-    descriptionKey: 'heroBanner.privateLabelText',
-    ctaKey: 'heroBanner.startRequest',
-    href: '/pages/dashboard/rfq-form.html',
-    background: 'linear-gradient(135deg, #9faef8 0%, #778be8 45%, #8598ef 100%)',
+    labelKey: "heroBanner.fastCustomization",
+    titleKey: "heroBanner.privateLabelDesc",
+    descriptionKey: "heroBanner.privateLabelText",
+    ctaKey: "heroBanner.startRequest",
+    href: "/pages/dashboard/rfq-form.html",
+    background: "linear-gradient(135deg, #9faef8 0%, #778be8 45%, #8598ef 100%)",
   },
   {
-    labelKey: 'heroBanner.rfqSpotlight',
-    titleKey: 'heroBanner.rfqDesc',
-    descriptionKey: 'heroBanner.rfqText',
-    ctaKey: 'heroBanner.createRfq',
-    href: '/pages/dashboard/rfq.html',
-    background: 'linear-gradient(135deg, #f8b58a 0%, #f28e63 44%, #f3a075 100%)',
+    labelKey: "heroBanner.rfqSpotlight",
+    titleKey: "heroBanner.rfqDesc",
+    descriptionKey: "heroBanner.rfqText",
+    ctaKey: "heroBanner.createRfq",
+    href: "/pages/dashboard/rfq.html",
+    background: "linear-gradient(135deg, #f8b58a 0%, #f28e63 44%, #f3a075 100%)",
   },
 ];
 
@@ -83,7 +83,7 @@ export function HeroSideBannerSlider(): string {
     <div class="group/hero-side relative hero-side-slider h-full [&_.hero-side-bullet]:h-2.5 [&_.hero-side-bullet]:w-2.5 [&_.hero-side-bullet]:rounded-full [&_.hero-side-bullet]:bg-slate-500/75 [&_.hero-side-bullet]:opacity-100 [&_.hero-side-bullet]:transition-all [&_.hero-side-bullet-active]:w-6 [&_.hero-side-bullet-active]:bg-white">
       <div class="swiper hero-side-swiper relative h-full rounded-md">
         <div class="swiper-wrapper">
-          ${sideBannerSlides.map(renderSlide).join('')}
+          ${sideBannerSlides.map(renderSlide).join("")}
         </div>
         <div class="hero-side-pagination absolute inset-x-0 bottom-4 z-20 mx-auto flex w-fit items-center justify-center gap-1.5"></div>
       </div>
@@ -112,38 +112,38 @@ export function HeroSideBannerSlider(): string {
 }
 
 export function initHeroSideBannerSlider(): void {
-  const sliderElement = document.querySelector<HTMLElement>('.hero-side-swiper');
-  const rootElement = document.querySelector<HTMLElement>('.hero-side-slider');
+  const sliderElement = document.querySelector<HTMLElement>(".hero-side-swiper");
+  const rootElement = document.querySelector<HTMLElement>(".hero-side-slider");
   if (!sliderElement) return;
 
-  const prevButton = rootElement?.querySelector<HTMLButtonElement>('.hero-side-prev');
-  const nextButton = rootElement?.querySelector<HTMLButtonElement>('.hero-side-next');
-  const paginationElement = rootElement?.querySelector<HTMLElement>('.hero-side-pagination');
+  const prevButton = rootElement?.querySelector<HTMLButtonElement>(".hero-side-prev");
+  const nextButton = rootElement?.querySelector<HTMLButtonElement>(".hero-side-next");
+  const paginationElement = rootElement?.querySelector<HTMLElement>(".hero-side-pagination");
   const stopPeek = (): void => {
-    rootElement?.classList.remove('hero-side-peek-prev', 'hero-side-peek-next');
+    rootElement?.classList.remove("hero-side-peek-prev", "hero-side-peek-next");
   };
 
   const startPrevPeek = (): void => {
-    rootElement?.classList.remove('hero-side-peek-next');
-    rootElement?.classList.add('hero-side-peek-prev');
+    rootElement?.classList.remove("hero-side-peek-next");
+    rootElement?.classList.add("hero-side-peek-prev");
   };
 
   const startNextPeek = (): void => {
-    rootElement?.classList.remove('hero-side-peek-prev');
-    rootElement?.classList.add('hero-side-peek-next');
+    rootElement?.classList.remove("hero-side-peek-prev");
+    rootElement?.classList.add("hero-side-peek-next");
   };
 
-  prevButton?.addEventListener('mouseenter', startPrevPeek);
-  prevButton?.addEventListener('mouseleave', stopPeek);
-  prevButton?.addEventListener('focus', startPrevPeek);
-  prevButton?.addEventListener('blur', stopPeek);
-  prevButton?.addEventListener('click', stopPeek);
-  nextButton?.addEventListener('mouseenter', startNextPeek);
-  nextButton?.addEventListener('mouseleave', stopPeek);
-  nextButton?.addEventListener('focus', startNextPeek);
-  nextButton?.addEventListener('blur', stopPeek);
-  nextButton?.addEventListener('click', stopPeek);
-  rootElement?.addEventListener('mouseleave', stopPeek);
+  prevButton?.addEventListener("mouseenter", startPrevPeek);
+  prevButton?.addEventListener("mouseleave", stopPeek);
+  prevButton?.addEventListener("focus", startPrevPeek);
+  prevButton?.addEventListener("blur", stopPeek);
+  prevButton?.addEventListener("click", stopPeek);
+  nextButton?.addEventListener("mouseenter", startNextPeek);
+  nextButton?.addEventListener("mouseleave", stopPeek);
+  nextButton?.addEventListener("focus", startNextPeek);
+  nextButton?.addEventListener("blur", stopPeek);
+  nextButton?.addEventListener("click", stopPeek);
+  rootElement?.addEventListener("mouseleave", stopPeek);
 
   const swiper = new Swiper(sliderElement, {
     modules: [Autoplay, Navigation, Pagination],
@@ -162,11 +162,12 @@ export function initHeroSideBannerSlider(): void {
     pagination: {
       el: paginationElement,
       clickable: true,
-      bulletClass: 'hero-side-bullet',
-      bulletActiveClass: 'hero-side-bullet-active',
-      renderBullet: (_index, className) => `<button type="button" class="${className}" aria-label="Go to banner slide"></button>`,
+      bulletClass: "hero-side-bullet",
+      bulletActiveClass: "hero-side-bullet-active",
+      renderBullet: (_index, className) =>
+        `<button type="button" class="${className}" aria-label="Go to banner slide"></button>`,
     },
   });
 
-  swiper.on('slideChangeTransitionStart', stopPeek);
+  swiper.on("slideChangeTransitionStart", stopPeek);
 }

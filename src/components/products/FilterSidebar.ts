@@ -1,5 +1,5 @@
-import { getCurrencySymbol } from '../../utils/currency';
-import { t } from '../../i18n';
+import { getCurrencySymbol } from "../../utils/currency";
+import { t } from "../../i18n";
 
 /**
  * FilterSidebar Component (iSTOC-style Filter Panel)
@@ -26,7 +26,7 @@ import type {
   SearchableCheckboxFilterSection,
   FilterOption,
   StoreReviewFilter,
-} from '../../types/productListing';
+} from "../../types/productListing";
 
 /**
  * SVG Icons for filter UI elements
@@ -65,71 +65,81 @@ const icons = {
 function buildDefaultFilterSections(): FilterSection[] {
   return [
     {
-      id: 'trade-assurance',
-      title: t('products.filterTradeAssurance'),
-      type: 'checkbox',
+      id: "trade-assurance",
+      title: t("products.filterTradeAssurance"),
+      type: "checkbox",
       collapsible: false,
       options: [
         {
-          id: 'trade-assurance-enabled',
-          label: t('products.filterTradeAssurance'),
-          value: 'trade-assurance',
+          id: "trade-assurance-enabled",
+          label: t("products.filterTradeAssurance"),
+          value: "trade-assurance",
           checked: false,
         },
       ],
     } as CheckboxFilterSection,
     {
-      id: 'supplier-features',
-      title: t('products.filterSupplierFeatures'),
-      type: 'checkbox',
+      id: "supplier-features",
+      title: t("products.filterSupplierFeatures"),
+      type: "checkbox",
       collapsible: true,
       collapsed: false,
       options: [
         {
-          id: 'verified-supplier',
-          label: t('products.filterVerifiedSupplier'),
-          value: 'verified',
+          id: "verified-supplier",
+          label: t("products.filterVerifiedSupplier"),
+          value: "verified",
           checked: false,
         },
         {
-          id: 'verified-pro',
-          label: t('products.filterVerifiedPro'),
-          value: 'verified-pro',
+          id: "verified-pro",
+          label: t("products.filterVerifiedPro"),
+          value: "verified-pro",
           checked: false,
         },
       ],
     } as CheckboxFilterSection,
     {
-      id: 'store-reviews',
-      title: t('products.filterStoreReviews'),
-      type: 'radio',
+      id: "store-reviews",
+      title: t("products.filterStoreReviews"),
+      type: "radio",
       collapsible: true,
       collapsed: false,
       options: [
-        { id: 'review-4', label: `4.0 ${t('products.filterAndUp')}`, minRating: 4.0, selected: false },
-        { id: 'review-4.5', label: `4.5 ${t('products.filterAndUp')}`, minRating: 4.5, selected: false },
-        { id: 'review-5', label: '5.0', minRating: 5.0, selected: false },
+        {
+          id: "review-4",
+          label: `4.0 ${t("products.filterAndUp")}`,
+          minRating: 4.0,
+          selected: false,
+        },
+        {
+          id: "review-4.5",
+          label: `4.5 ${t("products.filterAndUp")}`,
+          minRating: 4.5,
+          selected: false,
+        },
+        { id: "review-5", label: "5.0", minRating: 5.0, selected: false },
       ],
     } as RadioFilterSection,
     {
-      id: 'product-features',
-      title: t('products.filterProductFeatures'),
-      type: 'checkbox',
+      id: "product-features",
+      title: t("products.filterProductFeatures"),
+      type: "checkbox",
       collapsible: true,
       collapsed: false,
       options: [
         {
-          id: 'paid-samples',
-          label: t('products.filterPaidSamples'),
-          value: 'paid-samples',
+          id: "paid-samples",
+          label: t("products.filterPaidSamples"),
+          value: "paid-samples",
           checked: false,
         },
       ],
     } as CheckboxFilterSection,
     {
-      id: 'categories',
-      title: t('products.filterCategories'),
-      type: 'category',
+      id: "categories",
+      title: t("products.filterCategories"),
+      type: "category",
       collapsible: true,
       collapsed: false,
       items: [],
@@ -137,9 +147,9 @@ function buildDefaultFilterSections(): FilterSection[] {
       maxVisible: 5,
     } as CategoryFilterSection,
     {
-      id: 'price',
-      title: t('products.filterPrice'),
-      type: 'price-range',
+      id: "price",
+      title: t("products.filterPrice"),
+      type: "price-range",
       collapsible: true,
       collapsed: false,
       filter: {
@@ -149,50 +159,50 @@ function buildDefaultFilterSections(): FilterSection[] {
       },
     } as PriceRangeFilterSection,
     {
-      id: 'min-order',
-      title: t('products.filterMinOrder'),
-      type: 'min-order',
+      id: "min-order",
+      title: t("products.filterMinOrder"),
+      type: "min-order",
       collapsible: true,
       collapsed: false,
       filter: {
         value: undefined,
-        unit: t('products.filterPieces'),
+        unit: t("products.filterPieces"),
       },
     } as MinOrderFilterSection,
     {
-      id: 'brands',
-      title: t('products.filterBrand', { defaultValue: 'Marka' }),
-      type: 'searchable-checkbox',
+      id: "brands",
+      title: t("products.filterBrand", { defaultValue: "Marka" }),
+      type: "searchable-checkbox",
       collapsible: true,
       collapsed: false,
-      searchPlaceholder: t('products.filterSearchBrand', { defaultValue: 'Marka ara...' }),
+      searchPlaceholder: t("products.filterSearchBrand", { defaultValue: "Marka ara..." }),
       options: [],
     } as SearchableCheckboxFilterSection,
     {
-      id: 'supplier-country',
-      title: t('products.filterSupplierCountry'),
-      type: 'searchable-checkbox',
+      id: "supplier-country",
+      title: t("products.filterSupplierCountry"),
+      type: "searchable-checkbox",
       collapsible: true,
       collapsed: false,
-      searchPlaceholder: t('products.filterSearchCountry'),
+      searchPlaceholder: t("products.filterSearchCountry"),
       options: [],
     } as SearchableCheckboxFilterSection,
     {
-      id: 'mgmt-certifications',
-      title: t('products.filterMgmtCertifications'),
-      type: 'searchable-checkbox',
+      id: "mgmt-certifications",
+      title: t("products.filterMgmtCertifications"),
+      type: "searchable-checkbox",
       collapsible: true,
       collapsed: false,
-      searchPlaceholder: t('products.filterSearch'),
+      searchPlaceholder: t("products.filterSearch"),
       options: [],
     } as SearchableCheckboxFilterSection,
     {
-      id: 'product-certifications',
-      title: t('products.filterProductCertifications'),
-      type: 'searchable-checkbox',
+      id: "product-certifications",
+      title: t("products.filterProductCertifications"),
+      type: "searchable-checkbox",
       collapsible: true,
       collapsed: false,
-      searchPlaceholder: t('products.filterSearch'),
+      searchPlaceholder: t("products.filterSearch"),
       options: [],
     } as SearchableCheckboxFilterSection,
   ];
@@ -201,8 +211,8 @@ function buildDefaultFilterSections(): FilterSection[] {
 /**
  * Renders a checkbox input
  */
-function renderCheckbox(option: FilterOption, sectionId: string, idPrefix = ''): string {
-  const checkboxId = `filter-${idPrefix ? idPrefix + '-' : ''}${sectionId}-${option.id}`;
+function renderCheckbox(option: FilterOption, sectionId: string, idPrefix = ""): string {
+  const checkboxId = `filter-${idPrefix ? idPrefix + "-" : ""}${sectionId}-${option.id}`;
   return `
     <label
       for="${checkboxId}"
@@ -214,7 +224,7 @@ function renderCheckbox(option: FilterOption, sectionId: string, idPrefix = ''):
           id="${checkboxId}"
           name="${sectionId}"
           value="${option.value}"
-          ${option.checked ? 'checked' : ''}
+          ${option.checked ? "checked" : ""}
           class="peer sr-only"
           data-filter-section="${sectionId}"
           data-filter-value="${option.value}"
@@ -234,12 +244,16 @@ function renderCheckbox(option: FilterOption, sectionId: string, idPrefix = ''):
         class="text-[13px] leading-tight group-hover:text-primary-600 transition-colors duration-150"
         style="color: var(--filter-text-color, #374151);"
       >${option.label}</span>
-      ${option.count !== undefined ? `
+      ${
+        option.count !== undefined
+          ? `
         <span
           class="text-[11px] ml-auto"
           style="color: var(--filter-count-color, #9ca3af);"
         >(${option.count.toLocaleString()})</span>
-      ` : ''}
+      `
+          : ""
+      }
     </label>
   `;
 }
@@ -247,8 +261,8 @@ function renderCheckbox(option: FilterOption, sectionId: string, idPrefix = ''):
 /**
  * Renders a radio button for store reviews
  */
-function renderRadioOption(option: StoreReviewFilter, sectionId: string, idPrefix = ''): string {
-  const radioId = `filter-${idPrefix ? idPrefix + '-' : ''}${sectionId}-${option.id}`;
+function renderRadioOption(option: StoreReviewFilter, sectionId: string, idPrefix = ""): string {
+  const radioId = `filter-${idPrefix ? idPrefix + "-" : ""}${sectionId}-${option.id}`;
   const stars = Math.floor(option.minRating);
   const hasHalf = option.minRating % 1 !== 0;
 
@@ -271,7 +285,7 @@ function renderRadioOption(option: StoreReviewFilter, sectionId: string, idPrefi
           id="${radioId}"
           name="${sectionId}"
           value="${option.minRating}"
-          ${option.selected ? 'checked' : ''}
+          ${option.selected ? "checked" : ""}
           class="peer sr-only"
           data-filter-section="${sectionId}"
           data-filter-value="${option.minRating}"
@@ -284,8 +298,8 @@ function renderRadioOption(option: StoreReviewFilter, sectionId: string, idPrefi
         <div class="w-2 h-2 rounded-full bg-primary-500 opacity-0 peer-checked:opacity-100 transition-opacity duration-150"></div>
       </div>
       <div class="flex items-center gap-1" style="color: var(--color-primary-500);">
-        ${Array.from({ length: stars }, () => icons.star).join('')}
-        ${hasHalf ? icons.starEmpty : ''}
+        ${Array.from({ length: stars }, () => icons.star).join("")}
+        ${hasHalf ? icons.starEmpty : ""}
       </div>
       <span
         class="text-[13px] leading-tight group-hover:text-primary-600 transition-colors duration-150"
@@ -305,7 +319,7 @@ function renderPriceRange(section: PriceRangeFilterSection): string {
     <div class="flex items-center gap-1.5 mt-2">
       <input
         type="number"
-        placeholder="${t('products.filterMin')}"
+        placeholder="${t("products.filterMin")}"
         min="0"
         class="th-input th-input-sm flex-1 min-w-0 w-0 px-2 text-[13px]"
         style="border-color: var(--filter-input-border, #d1d5db); color: var(--filter-text-color, #374151);"
@@ -316,7 +330,7 @@ function renderPriceRange(section: PriceRangeFilterSection): string {
       <span class="text-gray-400 text-[13px] shrink-0">-</span>
       <input
         type="number"
-        placeholder="${t('products.filterMax')}"
+        placeholder="${t("products.filterMax")}"
         min="0"
         class="th-input th-input-sm flex-1 min-w-0 w-0 px-2 text-[13px]"
         style="border-color: var(--filter-input-border, #d1d5db); color: var(--filter-text-color, #374151);"
@@ -327,7 +341,7 @@ function renderPriceRange(section: PriceRangeFilterSection): string {
       <button
         type="button"
         class="shrink-0 w-8 h-8 flex items-center justify-center rounded bg-primary-500 hover:bg-primary-600 text-white text-base font-semibold leading-none border border-primary-500 hover:border-primary-600 transition-colors cursor-pointer"
-        aria-label="${t('products.filterApply')}"
+        aria-label="${t("products.filterApply")}"
         data-filter-section="${section.id}"
         data-filter-action="apply"
         @click="applySection('${section.id}')"
@@ -344,7 +358,7 @@ function renderMinOrder(section: MinOrderFilterSection): string {
     <div class="flex items-center gap-1.5 mt-2">
       <input
         type="number"
-        placeholder="${t('products.filterQuantity')}"
+        placeholder="${t("products.filterQuantity")}"
         min="1"
         class="th-input th-input-sm flex-1 min-w-0 w-0 px-2 text-[13px]"
         style="border-color: var(--filter-input-border, #d1d5db); color: var(--filter-text-color, #374151);"
@@ -359,7 +373,7 @@ function renderMinOrder(section: MinOrderFilterSection): string {
       <button
         type="button"
         class="shrink-0 w-8 h-8 flex items-center justify-center rounded bg-primary-500 hover:bg-primary-600 text-white text-base font-semibold leading-none border border-primary-500 hover:border-primary-600 transition-colors cursor-pointer"
-        aria-label="${t('products.filterApply')}"
+        aria-label="${t("products.filterApply")}"
         data-filter-section="${section.id}"
         data-filter-action="apply"
         @click="applySection('${section.id}')"
@@ -371,13 +385,14 @@ function renderMinOrder(section: MinOrderFilterSection): string {
 /**
  * Renders a searchable checkbox section
  */
-function renderSearchableCheckbox(section: SearchableCheckboxFilterSection, idPrefix = ''): string {
-  const isCertSection = section.id === 'mgmt-certifications' || section.id === 'product-certifications';
-  const isCountrySection = section.id === 'supplier-country';
+function renderSearchableCheckbox(section: SearchableCheckboxFilterSection, idPrefix = ""): string {
+  const isCertSection =
+    section.id === "mgmt-certifications" || section.id === "product-certifications";
+  const isCountrySection = section.id === "supplier-country";
   const isDynamic = (isCountrySection || isCertSection) && section.options.length === 0;
 
   return `
-    <div class="space-y-2" ${isCountrySection ? `data-filter-prefix="${idPrefix}"` : ''}>
+    <div class="space-y-2" ${isCountrySection ? `data-filter-prefix="${idPrefix}"` : ""}>
       <!-- Search input -->
       <div class="relative mt-2">
         <div class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none" style="color: var(--filter-search-icon, #9ca3af);">
@@ -385,7 +400,7 @@ function renderSearchableCheckbox(section: SearchableCheckboxFilterSection, idPr
         </div>
         <input
           type="text"
-          placeholder="${section.searchPlaceholder || 'Search...'}"
+          placeholder="${section.searchPlaceholder || "Search..."}"
           class="th-input th-input-sm pl-8"
           style="border-color: var(--filter-input-border, #d1d5db); color: var(--filter-text-color, #374151);"
           data-filter-section="${section.id}"
@@ -394,18 +409,25 @@ function renderSearchableCheckbox(section: SearchableCheckboxFilterSection, idPr
         />
       </div>
       <!-- Options list -->
-      <div class="space-y-0.5 max-h-[180px] overflow-y-auto" ${isDynamic ? `data-filter-dynamic="${isCountrySection ? 'countries' : section.id}"` : ''}>
-        ${isDynamic ? `
+      <div class="space-y-0.5 max-h-[180px] overflow-y-auto" ${isDynamic ? `data-filter-dynamic="${isCountrySection ? "countries" : section.id}"` : ""}>
+        ${
+          isDynamic
+            ? `
           <div class="animate-pulse space-y-2">
             <div class="h-4 bg-gray-200 rounded w-3/4"></div>
             <div class="h-4 bg-gray-200 rounded w-1/2"></div>
           </div>
-        ` : section.options.map(opt => isCertSection
-          ? renderCertCheckbox(opt, section.id, idPrefix)
-          : renderCheckbox(opt, section.id, idPrefix)
-        ).join('')}
+        `
+            : section.options
+                .map((opt) =>
+                  isCertSection
+                    ? renderCertCheckbox(opt, section.id, idPrefix)
+                    : renderCheckbox(opt, section.id, idPrefix)
+                )
+                .join("")
+        }
       </div>
-      ${isCertSection ? renderCertDisclaimer() : ''}
+      ${isCertSection ? renderCertDisclaimer() : ""}
     </div>
   `;
 }
@@ -413,8 +435,8 @@ function renderSearchableCheckbox(section: SearchableCheckboxFilterSection, idPr
 /**
  * Renders a certification checkbox with badge icon
  */
-function renderCertCheckbox(option: FilterOption, sectionId: string, idPrefix = ''): string {
-  const checkboxId = `filter-${idPrefix ? idPrefix + '-' : ''}${sectionId}-${option.id}`;
+function renderCertCheckbox(option: FilterOption, sectionId: string, idPrefix = ""): string {
+  const checkboxId = `filter-${idPrefix ? idPrefix + "-" : ""}${sectionId}-${option.id}`;
   return `
     <label
       for="${checkboxId}"
@@ -426,7 +448,7 @@ function renderCertCheckbox(option: FilterOption, sectionId: string, idPrefix = 
           id="${checkboxId}"
           name="${sectionId}"
           value="${option.value}"
-          ${option.checked ? 'checked' : ''}
+          ${option.checked ? "checked" : ""}
           class="peer sr-only"
           data-filter-section="${sectionId}"
           data-filter-value="${option.value}"
@@ -458,12 +480,12 @@ function renderCertDisclaimer(): string {
   return `
     <div class="mt-2 pt-2 border-t" style="border-color: var(--filter-divider-color, #e5e7eb);">
       <p class="text-[10px] leading-relaxed" style="color: var(--filter-count-color, #9ca3af);">
-        ${t('products.filterCertDisclaimer')}
+        ${t("products.filterCertDisclaimer")}
       </p>
       <a
         href="#"
         class="inline-block mt-1 text-[12px] font-medium text-gray-700 hover:text-primary-600 hover:underline transition-colors dark:text-gray-300"
-      >${t('products.filterLearnMore')}</a>
+      >${t("products.filterLearnMore")}</a>
     </div>
   `;
 }
@@ -477,23 +499,27 @@ function renderSectionHeader(section: FilterSection): string {
 
   return `
     <div
-      class="flex items-center justify-between py-2 ${isCollapsible ? 'cursor-pointer group' : ''}"
-      ${isCollapsible ? `@click="toggleSection('${section.id}')"` : ''}
+      class="flex items-center justify-between py-2 ${isCollapsible ? "cursor-pointer group" : ""}"
+      ${isCollapsible ? `@click="toggleSection('${section.id}')"` : ""}
     >
       <h3
         class="text-[13px] font-semibold uppercase tracking-wide"
         style="color: var(--filter-heading-color, #111827);"
       >${section.title}</h3>
-      ${isCollapsible ? `
+      ${
+        isCollapsible
+          ? `
         <span
-          class="transition-transform duration-200 ${isCollapsed ? '' : 'rotate-180'}"
+          class="transition-transform duration-200 ${isCollapsed ? "" : "rotate-180"}"
           :class="{ 'rotate-180': !collapsed['${section.id}'] }"
           style="color: var(--filter-chevron-color, #6b7280);"
           data-filter-chevron="${section.id}"
         >
           ${icons.chevronDown}
         </span>
-      ` : ''}
+      `
+          : ""
+      }
     </div>
   `;
 }
@@ -501,25 +527,25 @@ function renderSectionHeader(section: FilterSection): string {
 /**
  * Renders the content of a filter section based on its type
  */
-function renderSectionContent(section: FilterSection, idPrefix = ''): string {
+function renderSectionContent(section: FilterSection, idPrefix = ""): string {
   switch (section.type) {
-    case 'checkbox': {
+    case "checkbox": {
       const checkboxSection = section as CheckboxFilterSection;
       return `
         <div class="space-y-0.5">
-          ${checkboxSection.options.map(opt => renderCheckbox(opt, section.id, idPrefix)).join('')}
+          ${checkboxSection.options.map((opt) => renderCheckbox(opt, section.id, idPrefix)).join("")}
         </div>
       `;
     }
-    case 'radio': {
+    case "radio": {
       const radioSection = section as RadioFilterSection;
       return `
         <div class="space-y-0.5">
-          ${radioSection.options.map(opt => renderRadioOption(opt, section.id, idPrefix)).join('')}
+          ${radioSection.options.map((opt) => renderRadioOption(opt, section.id, idPrefix)).join("")}
         </div>
       `;
     }
-    case 'category': {
+    case "category": {
       return `
         <div data-filter-dynamic="categories">
           <div class="animate-pulse space-y-2">
@@ -530,21 +556,21 @@ function renderSectionContent(section: FilterSection, idPrefix = ''): string {
         </div>
       `;
     }
-    case 'price-range':
+    case "price-range":
       return renderPriceRange(section as PriceRangeFilterSection);
-    case 'min-order':
+    case "min-order":
       return renderMinOrder(section as MinOrderFilterSection);
-    case 'searchable-checkbox':
+    case "searchable-checkbox":
       return renderSearchableCheckbox(section as SearchableCheckboxFilterSection, idPrefix);
     default:
-      return '';
+      return "";
   }
 }
 
 /**
  * Renders a complete filter section
  */
-function renderFilterSection(section: FilterSection, idPrefix = ''): string {
+function renderFilterSection(section: FilterSection, idPrefix = ""): string {
   const isCollapsed = section.collapsed === true;
 
   return `
@@ -555,7 +581,7 @@ function renderFilterSection(section: FilterSection, idPrefix = ''): string {
     >
       ${renderSectionHeader(section)}
       <div
-        class="overflow-hidden transition-all duration-200 ${isCollapsed ? 'max-h-0 opacity-0' : 'max-h-[500px] opacity-100'}"
+        class="overflow-hidden transition-all duration-200 ${isCollapsed ? "max-h-0 opacity-0" : "max-h-[500px] opacity-100"}"
         :class="collapsed['${section.id}'] ? 'max-h-0 opacity-0' : 'max-h-[500px] opacity-100'"
         data-filter-content="${section.id}"
       >
@@ -568,8 +594,8 @@ function renderFilterSection(section: FilterSection, idPrefix = ''): string {
 /**
  * Renders the Trade Assurance section with shield icon
  */
-function renderTradeAssuranceSection(idPrefix = ''): string {
-  const taId = `filter-${idPrefix ? idPrefix + '-' : ''}trade-assurance`;
+function renderTradeAssuranceSection(idPrefix = ""): string {
+  const taId = `filter-${idPrefix ? idPrefix + "-" : ""}trade-assurance`;
   return `
     <div
       class="border-b py-3"
@@ -614,29 +640,30 @@ function renderTradeAssuranceSection(idPrefix = ''): string {
  * FilterSidebar Component
  * Renders the complete filter sidebar with all filter sections
  */
-export function FilterSidebar(sections?: FilterSection[], idPrefix = ''): string {
+export function FilterSidebar(sections?: FilterSection[], idPrefix = ""): string {
   const filterSections = sections || buildDefaultFilterSections();
 
   // Separate Trade Assurance from other sections
-  const tradeAssurance = filterSections.find(s => s.id === 'trade-assurance');
-  const otherSections = filterSections.filter(s => s.id !== 'trade-assurance');
+  const tradeAssurance = filterSections.find((s) => s.id === "trade-assurance");
+  const otherSections = filterSections.filter((s) => s.id !== "trade-assurance");
 
   // Build initial collapsed state for Alpine (sections with collapsed: true)
   const collapsedEntries = otherSections
-    .filter(s => s.collapsible !== false && s.collapsed === true)
-    .map(s => `'${s.id}': true`);
-  const xDataArg = collapsedEntries.length > 0
-    ? `filterSidebar({${collapsedEntries.join(', ')}})`
-    : 'filterSidebar';
+    .filter((s) => s.collapsible !== false && s.collapsed === true)
+    .map((s) => `'${s.id}': true`);
+  const xDataArg =
+    collapsedEntries.length > 0
+      ? `filterSidebar({${collapsedEntries.join(", ")}})`
+      : "filterSidebar";
 
-  const isMobile = idPrefix === 'mobile';
+  const isMobile = idPrefix === "mobile";
 
   return `
     <aside
       class="w-full lg:w-60 xl:w-64 flex-shrink-0 rounded-md border flex flex-col"
       aria-label="Product filters"
       x-data="${xDataArg}"
-      data-filter-prefix-root="${idPrefix || 'desktop'}"
+      data-filter-prefix-root="${idPrefix || "desktop"}"
       style="background: var(--filter-bg, #ffffff); border-color: var(--filter-border-color, #e5e7eb);"
     >
       <!-- Header: title + inline Clear link -->
@@ -644,28 +671,28 @@ export function FilterSidebar(sections?: FilterSection[], idPrefix = ''): string
         <h2
           class="text-[15px] font-bold"
           style="color: var(--filter-heading-color, #111827);"
-        >${t('products.filters')}</h2>
+        >${t("products.filters")}</h2>
         <button
           type="button"
           class="text-[12px] font-medium transition-colors hover:underline"
           style="color: var(--filter-count-color, #6b7280);"
           data-filter-action="clear-all"
           @click="clearAllFilters()"
-        >${t('products.filterClearAll')}</button>
+        >${t("products.filterClearAll")}</button>
       </div>
 
       <!-- Filter sections (natural flow, no internal scroll) -->
       <div class="px-4 pb-2" data-filter-sections-container>
         <!-- Trade Assurance (special section with icon) -->
-        ${tradeAssurance ? renderTradeAssuranceSection(idPrefix) : ''}
+        ${tradeAssurance ? renderTradeAssuranceSection(idPrefix) : ""}
 
         <!-- Other filter sections -->
-        ${otherSections.map(section => renderFilterSection(section, idPrefix)).join('')}
+        ${otherSections.map((section) => renderFilterSection(section, idPrefix)).join("")}
       </div>
 
       <!-- Sahibinden-style: sticks to viewport bottom while sidebar is visible -->
       <div
-        class="${isMobile ? '' : 'lg:sticky lg:bottom-0 z-10'} px-4 py-3 border-t"
+        class="${isMobile ? "" : "lg:sticky lg:bottom-0 z-10"} px-4 py-3 border-t"
         style="background: var(--filter-bg, #ffffff); border-color: var(--filter-divider-color, #e5e7eb);"
       >
         <button
@@ -673,7 +700,7 @@ export function FilterSidebar(sections?: FilterSection[], idPrefix = ''): string
           class="w-full py-2.5 rounded-md bg-primary-500 hover:bg-primary-600 text-white text-sm font-semibold border border-primary-500 hover:border-primary-600 transition-colors cursor-pointer"
           data-filter-action="apply-all"
           @click="applyFilters()"
-        >${t('products.filterApply')}</button>
+        >${t("products.filterApply")}</button>
       </div>
     </aside>
   `;
@@ -685,15 +712,21 @@ export function FilterSidebar(sections?: FilterSection[], idPrefix = ''): string
  */
 export function initFilterSidebar(query?: string, category?: string): void {
   // Load dynamic facets from API
-  import('../../services/listingService').then(({ getFilterFacets }) => {
-    getFilterFacets(query, category).then(facets => {
-      // Update category sections
-      document.querySelectorAll<HTMLElement>('[data-filter-dynamic="categories"]').forEach(container => {
-        if (facets.categories.length === 0) {
-          container.innerHTML = `<p class="text-xs" style="color:#9ca3af">${t('products.noResults')}</p>`;
-          return;
-        }
-        container.innerHTML = facets.categories.map(cat => `
+  import("../../services/listingService")
+    .then(({ getFilterFacets }) => {
+      getFilterFacets(query, category)
+        .then((facets) => {
+          // Update category sections
+          document
+            .querySelectorAll<HTMLElement>('[data-filter-dynamic="categories"]')
+            .forEach((container) => {
+              if (facets.categories.length === 0) {
+                container.innerHTML = `<p class="text-xs" style="color:#9ca3af">${t("products.noResults")}</p>`;
+                return;
+              }
+              container.innerHTML = facets.categories
+                .map(
+                  (cat) => `
           <button
             type="button"
             class="flex items-center justify-between w-full py-1.5 text-[13px] hover:text-primary-600 transition-colors cursor-pointer"
@@ -703,21 +736,30 @@ export function initFilterSidebar(query?: string, category?: string): void {
             <span class="truncate">${cat.name}</span>
             <span class="text-[11px] ml-2 flex-shrink-0" style="color:#9ca3af">(${cat.count})</span>
           </button>
-        `).join('');
-      });
+        `
+                )
+                .join("");
+            });
 
-      // Update country sections
-      document.querySelectorAll<HTMLElement>('[data-filter-dynamic="countries"]').forEach(container => {
-        if (facets.countries.length === 0) {
-          container.innerHTML = '';
-          return;
-        }
-        const idPrefix = container.closest('[data-filter-prefix]')?.getAttribute('data-filter-prefix') || '';
-        container.innerHTML = facets.countries.map(c => {
-          const code = (c as any).code || c.value;
-          const translatedName = t(`countries.${code}`) !== `countries.${code}` ? t(`countries.${code}`) : c.label;
-          const checkboxId = `filter-${idPrefix ? idPrefix + '-' : ''}supplier-country-country-${c.value.toLowerCase()}`;
-          return `
+          // Update country sections
+          document
+            .querySelectorAll<HTMLElement>('[data-filter-dynamic="countries"]')
+            .forEach((container) => {
+              if (facets.countries.length === 0) {
+                container.innerHTML = "";
+                return;
+              }
+              const idPrefix =
+                container.closest("[data-filter-prefix]")?.getAttribute("data-filter-prefix") || "";
+              container.innerHTML = facets.countries
+                .map((c) => {
+                  const code = (c as any).code || c.value;
+                  const translatedName =
+                    t(`countries.${code}`) !== `countries.${code}`
+                      ? t(`countries.${code}`)
+                      : c.label;
+                  const checkboxId = `filter-${idPrefix ? idPrefix + "-" : ""}supplier-country-country-${c.value.toLowerCase()}`;
+                  return `
             <label for="${checkboxId}" class="flex items-center gap-2 cursor-pointer group py-1 filter-searchable-item">
               <div class="relative flex items-center justify-center w-4 h-4">
                 <input type="checkbox" id="${checkboxId}" name="supplier-country" value="${c.value}"
@@ -735,21 +777,28 @@ export function initFilterSidebar(query?: string, category?: string): void {
               <span class="text-[11px] ml-auto" style="color: var(--filter-count-color, #9ca3af);">(${c.count})</span>
             </label>
           `;
-        }).join('');
-      });
+                })
+                .join("");
+            });
 
-      // Update brand sections
-      document.querySelectorAll<HTMLElement>('[data-filter-dynamic="brands"]').forEach(container => {
-        const brands = (facets as any).brands || [];
-        if (brands.length === 0) {
-          container.innerHTML = `<p class="text-xs" style="color:#9ca3af">${t('products.noResults')}</p>`;
-          return;
-        }
-        const idPrefix = container.closest('[data-filter-prefix]')?.getAttribute('data-filter-prefix') || '';
-        container.innerHTML = brands.map((b: any) => {
-          const checkboxId = `filter-${idPrefix ? idPrefix + '-' : ''}brands-brand-${String(b.value).toLowerCase().replace(/\s+/g, '-')}`;
-          const logoHtml = b.logo ? `<img src="${b.logo}" alt="${b.label}" class="w-4 h-4 object-contain mr-1" />` : '';
-          return `
+          // Update brand sections
+          document
+            .querySelectorAll<HTMLElement>('[data-filter-dynamic="brands"]')
+            .forEach((container) => {
+              const brands = (facets as any).brands || [];
+              if (brands.length === 0) {
+                container.innerHTML = `<p class="text-xs" style="color:#9ca3af">${t("products.noResults")}</p>`;
+                return;
+              }
+              const idPrefix =
+                container.closest("[data-filter-prefix]")?.getAttribute("data-filter-prefix") || "";
+              container.innerHTML = brands
+                .map((b: any) => {
+                  const checkboxId = `filter-${idPrefix ? idPrefix + "-" : ""}brands-brand-${String(b.value).toLowerCase().replace(/\s+/g, "-")}`;
+                  const logoHtml = b.logo
+                    ? `<img src="${b.logo}" alt="${b.label}" class="w-4 h-4 object-contain mr-1" />`
+                    : "";
+                  return `
             <label for="${checkboxId}" class="flex items-center gap-2 cursor-pointer group py-1 filter-searchable-item">
               <div class="relative flex items-center justify-center w-4 h-4">
                 <input type="checkbox" id="${checkboxId}" name="brands" value="${b.value}"
@@ -768,28 +817,36 @@ export function initFilterSidebar(query?: string, category?: string): void {
               <span class="text-[11px] ml-auto" style="color: var(--filter-count-color, #9ca3af);">(${b.count})</span>
             </label>
           `;
-        }).join('');
-      });
+                })
+                .join("");
+            });
 
-      // Render dynamic attribute facets (Renk, Beden, Malzeme, ...)
-      const attributes = (facets as any).attributes || [];
-      if (attributes.length > 0) {
-        document.querySelectorAll<HTMLElement>('[data-filter-sections-container]').forEach(container => {
-          // Remove any previously-injected attribute facets to avoid dupes on re-render
-          container.querySelectorAll('[data-dynamic-attr-section]').forEach(el => el.remove());
-          const root = container.closest<HTMLElement>('[data-filter-prefix-root]');
-          const idPrefix = root && root.getAttribute('data-filter-prefix-root') !== 'desktop'
-            ? root.getAttribute('data-filter-prefix-root') || ''
-            : '';
+          // Render dynamic attribute facets (Renk, Beden, Malzeme, ...)
+          const attributes = (facets as any).attributes || [];
+          if (attributes.length > 0) {
+            document
+              .querySelectorAll<HTMLElement>("[data-filter-sections-container]")
+              .forEach((container) => {
+                // Remove any previously-injected attribute facets to avoid dupes on re-render
+                container
+                  .querySelectorAll("[data-dynamic-attr-section]")
+                  .forEach((el) => el.remove());
+                const root = container.closest<HTMLElement>("[data-filter-prefix-root]");
+                const idPrefix =
+                  root && root.getAttribute("data-filter-prefix-root") !== "desktop"
+                    ? root.getAttribute("data-filter-prefix-root") || ""
+                    : "";
 
-          const sectionsHtml = attributes.map((attr: any) => {
-            const sectionId = `attr-${attr.code.toLowerCase()}`;
-            const optionsHtml = (attr.options || []).map((opt: any) => {
-              const checkboxId = `filter-${idPrefix ? idPrefix + '-' : ''}${sectionId}-${String(opt.value).toLowerCase().replace(/\s+/g, '-')}`;
-              const colorSwatch = opt.color
-                ? `<span class="inline-block w-3.5 h-3.5 rounded-full border border-gray-300 flex-shrink-0" style="background:${opt.color};"></span>`
-                : '';
-              return `
+                const sectionsHtml = attributes
+                  .map((attr: any) => {
+                    const sectionId = `attr-${attr.code.toLowerCase()}`;
+                    const optionsHtml = (attr.options || [])
+                      .map((opt: any) => {
+                        const checkboxId = `filter-${idPrefix ? idPrefix + "-" : ""}${sectionId}-${String(opt.value).toLowerCase().replace(/\s+/g, "-")}`;
+                        const colorSwatch = opt.color
+                          ? `<span class="inline-block w-3.5 h-3.5 rounded-full border border-gray-300 flex-shrink-0" style="background:${opt.color};"></span>`
+                          : "";
+                        return `
                 <label for="${checkboxId}" class="flex items-center gap-2 cursor-pointer group py-1 filter-searchable-item">
                   <div class="relative flex items-center justify-center w-4 h-4 flex-shrink-0">
                     <input type="checkbox" id="${checkboxId}" name="${sectionId}" value="${opt.value}"
@@ -809,8 +866,9 @@ export function initFilterSidebar(query?: string, category?: string): void {
                   <span class="text-[11px] ml-auto flex-shrink-0" style="color: var(--filter-count-color, #9ca3af);">(${opt.count})</span>
                 </label>
               `;
-            }).join('');
-            return `
+                      })
+                      .join("");
+                    return `
               <div class="py-3 border-t" data-dynamic-attr-section="${attr.code}"
                 style="border-color: var(--filter-divider-color, #e5e7eb);">
                 <button type="button"
@@ -826,28 +884,34 @@ export function initFilterSidebar(query?: string, category?: string): void {
                 </div>
               </div>
             `;
-          }).join('');
+                  })
+                  .join("");
 
-          // Insert attribute sections at end of filter sections container
-          container.insertAdjacentHTML('beforeend', sectionsHtml);
-        });
-      }
-
-      // Update certification sections (management + product)
-      const certSections = [
-        { key: 'mgmt-certifications', data: facets.managementCertifications || [] },
-        { key: 'product-certifications', data: facets.productCertifications || [] },
-      ];
-      for (const { key, data } of certSections) {
-        document.querySelectorAll<HTMLElement>(`[data-filter-dynamic="${key}"]`).forEach(container => {
-          if (data.length === 0) {
-            container.innerHTML = '';
-            return;
+                // Insert attribute sections at end of filter sections container
+                container.insertAdjacentHTML("beforeend", sectionsHtml);
+              });
           }
-          const idPrefix = container.closest('[data-filter-prefix]')?.getAttribute('data-filter-prefix') || '';
-          container.innerHTML = data.map((c: any) => {
-            const checkboxId = `filter-${idPrefix ? idPrefix + '-' : ''}${key}-cert-${c.value.toLowerCase().replace(/\s+/g, '-')}`;
-            return `
+
+          // Update certification sections (management + product)
+          const certSections = [
+            { key: "mgmt-certifications", data: facets.managementCertifications || [] },
+            { key: "product-certifications", data: facets.productCertifications || [] },
+          ];
+          for (const { key, data } of certSections) {
+            document
+              .querySelectorAll<HTMLElement>(`[data-filter-dynamic="${key}"]`)
+              .forEach((container) => {
+                if (data.length === 0) {
+                  container.innerHTML = "";
+                  return;
+                }
+                const idPrefix =
+                  container.closest("[data-filter-prefix]")?.getAttribute("data-filter-prefix") ||
+                  "";
+                container.innerHTML = data
+                  .map((c: any) => {
+                    const checkboxId = `filter-${idPrefix ? idPrefix + "-" : ""}${key}-cert-${c.value.toLowerCase().replace(/\s+/g, "-")}`;
+                    return `
               <label for="${checkboxId}" class="flex items-center gap-2 cursor-pointer group py-1 filter-searchable-item">
                 <div class="relative flex items-center justify-center w-4 h-4">
                   <input type="checkbox" id="${checkboxId}" name="${key}" value="${c.value}"
@@ -865,22 +929,25 @@ export function initFilterSidebar(query?: string, category?: string): void {
                 <span class="text-[11px] ml-auto" style="color: var(--filter-count-color, #9ca3af);">(${c.count})</span>
               </label>
             `;
-          }).join('');
+                  })
+                  .join("");
+              });
+          }
+        })
+        .catch((err) => {
+          console.warn("[FilterSidebar] getFilterFacets failed:", err);
+          // Replace skeleton with "no results" so user knows the load finished
+          document.querySelectorAll<HTMLElement>("[data-filter-dynamic]").forEach((container) => {
+            container.innerHTML = `<p class="text-xs" style="color:#9ca3af">${t("products.noResults")}</p>`;
+          });
         });
-      }
-    }).catch((err) => {
-      console.warn('[FilterSidebar] getFilterFacets failed:', err);
-      // Replace skeleton with "no results" so user knows the load finished
-      document.querySelectorAll<HTMLElement>('[data-filter-dynamic]').forEach(container => {
-        container.innerHTML = `<p class="text-xs" style="color:#9ca3af">${t('products.noResults')}</p>`;
+    })
+    .catch((err) => {
+      console.warn("[FilterSidebar] listingService import failed:", err);
+      document.querySelectorAll<HTMLElement>("[data-filter-dynamic]").forEach((container) => {
+        container.innerHTML = `<p class="text-xs" style="color:#9ca3af">${t("products.noResults")}</p>`;
       });
     });
-  }).catch((err) => {
-    console.warn('[FilterSidebar] listingService import failed:', err);
-    document.querySelectorAll<HTMLElement>('[data-filter-dynamic]').forEach(container => {
-      container.innerHTML = `<p class="text-xs" style="color:#9ca3af">${t('products.noResults')}</p>`;
-    });
-  });
 }
 
 /**

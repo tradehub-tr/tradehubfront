@@ -4,13 +4,13 @@
  * Loads products dynamically from API.
  */
 
-import Swiper from 'swiper';
-import { Autoplay, Navigation, Pagination } from 'swiper/modules';
-import 'swiper/swiper-bundle.css';
-import { t } from '../../i18n';
-import { searchListings } from '../../services/listingService';
-import { initCurrency } from '../../services/currencyService';
-import { formatStartingPrice } from '../../utils/currency';
+import Swiper from "swiper";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
+import "swiper/swiper-bundle.css";
+import { t } from "../../i18n";
+import { searchListings } from "../../services/listingService";
+import { initCurrency } from "../../services/currencyService";
+import { formatStartingPrice } from "../../utils/currency";
 
 interface RecommendationCard {
   title: string;
@@ -43,7 +43,7 @@ function renderCardImage(card: RecommendationCard): string {
 }
 
 function renderCard(card: RecommendationCard): string {
-  const safeName = card.title.replace(/"/g, '&quot;');
+  const safeName = card.title.replace(/"/g, "&quot;");
 
   return `
     <div class="swiper-slide recommendation-slide h-full xl:!w-[240px]">
@@ -56,7 +56,7 @@ function renderCard(card: RecommendationCard): string {
       >
         <div class="mb-2">
           <h3 class="text-[14px] sm:text-[16px] font-bold leading-tight truncate dark:text-white" style="color:var(--hero-title-color)">${card.title}</h3>
-          ${card.price ? `<p class="mt-0.5 truncate text-[12px] sm:text-[13px] font-semibold leading-tight text-red-500">${formatStartingPrice(card.price)}</p>` : ''}
+          ${card.price ? `<p class="mt-0.5 truncate text-[12px] sm:text-[13px] font-semibold leading-tight text-red-500">${formatStartingPrice(card.price)}</p>` : ""}
         </div>
         <div class="min-h-0 flex-1">
           ${renderCardImage(card)}
@@ -69,7 +69,7 @@ function renderCard(card: RecommendationCard): string {
 export function RecommendationSlider(): string {
   return `
     <div class="group/recommendation relative recommendation-slider-wrapper h-[200px] sm:h-[260px] xl:h-[300px] px-2 sm:px-4 xl:px-0">
-      <div class="swiper recommendation-swiper h-full" aria-label="${t('recommendation.frequentlySearched')}">
+      <div class="swiper recommendation-swiper h-full" aria-label="${t("recommendation.frequentlySearched")}">
         <div class="swiper-wrapper h-full" id="recommendation-slides">
           <!-- Populated from API -->
         </div>
@@ -101,7 +101,7 @@ export function RecommendationSlider(): string {
 let swiperInstance: Swiper | null = null;
 
 function initSwiper(): void {
-  const sliderElement = document.querySelector<HTMLElement>('.recommendation-swiper');
+  const sliderElement = document.querySelector<HTMLElement>(".recommendation-swiper");
   if (!sliderElement) return;
 
   if (swiperInstance) {
@@ -121,11 +121,11 @@ function initSwiper(): void {
       pauseOnMouseEnter: true,
     },
     navigation: {
-      nextEl: '.rec-swiper-next',
-      prevEl: '.rec-swiper-prev',
+      nextEl: ".rec-swiper-next",
+      prevEl: ".rec-swiper-prev",
     },
     pagination: {
-      el: '.reco-pagination',
+      el: ".reco-pagination",
       clickable: true,
       dynamicBullets: true,
     },
@@ -140,22 +140,25 @@ function initSwiper(): void {
 
 export function initRecommendationSlider(): void {
   // Load products from API
-  initCurrency().then(() => searchListings({ page_size: 9 })).then(result => {
-    const container = document.getElementById('recommendation-slides');
-    if (!container) return;
+  initCurrency()
+    .then(() => searchListings({ page_size: 9 }))
+    .then((result) => {
+      const container = document.getElementById("recommendation-slides");
+      if (!container) return;
 
-    if (result.products.length === 0) return;
+      if (result.products.length === 0) return;
 
-    const cards: RecommendationCard[] = result.products.map(p => ({
-      title: p.name,
-      href: p.href || `/pages/product-detail.html?id=${p.id}`,
-      imageSrc: p.imageSrc || '',
-      price: p.price,
-    }));
+      const cards: RecommendationCard[] = result.products.map((p) => ({
+        title: p.name,
+        href: p.href || `/pages/product-detail.html?id=${p.id}`,
+        imageSrc: p.imageSrc || "",
+        price: p.price,
+      }));
 
-    container.innerHTML = cards.map(card => renderCard(card)).join('');
-    initSwiper();
-  }).catch(err => {
-    console.warn('[RecommendationSlider] API load failed:', err);
-  });
+      container.innerHTML = cards.map((card) => renderCard(card)).join("");
+      initSwiper();
+    })
+    .catch((err) => {
+      console.warn("[RecommendationSlider] API load failed:", err);
+    });
 }

@@ -4,7 +4,7 @@
  */
 
 // FloatingPanel component - fixed right-bottom panel with chat, lens, scroll-to-top buttons
-export { FloatingPanel, initFloatingPanel } from './FloatingPanel';
+export { FloatingPanel, initFloatingPanel } from "./FloatingPanel";
 
 // BottomNav component - mobile-only fixed bottom navigation bar
-export { BottomNav, initBottomNav } from './BottomNav';
+export { BottomNav, initBottomNav } from "./BottomNav";

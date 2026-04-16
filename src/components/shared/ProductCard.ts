@@ -3,8 +3,8 @@
  * Anchor element with lazy-loaded image, price range, and min order text.
  */
 
-import type { ProductCardProps } from '../../types/buyerDashboard';
-import { formatPrice } from '../../utils/currency';
+import type { ProductCardProps } from "../../types/buyerDashboard";
+import { formatPrice } from "../../utils/currency";
 
 export function ProductCard({ image, price, currency, minOrder, href }: ProductCardProps): string {
   return `

@@ -3,9 +3,15 @@
  * Colored card with title, subtitle, and image.
  */
 
-import type { PromotionBannerProps } from '../../types/buyerDashboard';
+import type { PromotionBannerProps } from "../../types/buyerDashboard";
 
-export function PromotionBanner({ title, subtitle, image, bgColor, href }: PromotionBannerProps): string {
+export function PromotionBanner({
+  title,
+  subtitle,
+  image,
+  bgColor,
+  href,
+}: PromotionBannerProps): string {
   return `
     <a href="${href}" class="block rounded-lg overflow-hidden hover:shadow-sm transition-shadow" style="background-color: ${bgColor}">
       <div class="flex items-center justify-between p-3 xs:p-4">

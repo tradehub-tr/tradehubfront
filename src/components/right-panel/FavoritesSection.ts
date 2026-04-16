@@ -3,10 +3,10 @@
  * Right panel section showing favorites empty state with package+heart icon.
  */
 
-import { SectionCard } from '../shared/SectionCard';
-import { SectionHeader } from '../shared/SectionHeader';
-import { EmptyState } from '../shared/EmptyState';
-import { getFavoritesConfig, getFavoritesEmptyState } from './rightPanelData';
+import { SectionCard } from "../shared/SectionCard";
+import { SectionHeader } from "../shared/SectionHeader";
+import { EmptyState } from "../shared/EmptyState";
+import { getFavoritesConfig, getFavoritesEmptyState } from "./rightPanelData";
 
 export function FavoritesSection(): string {
   const favoritesConfig = getFavoritesConfig();
@@ -20,7 +20,7 @@ export function FavoritesSection(): string {
         text: favoritesEmptyState.text,
         linkText: favoritesEmptyState.linkText,
         linkHref: favoritesEmptyState.linkHref,
-        linkColor: '#E67A00',
+        linkColor: "#E67A00",
       })}
     `,
   });

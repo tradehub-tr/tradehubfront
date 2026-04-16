@@ -10,7 +10,7 @@
  * Alpine.data('floatingPanel') is registered in src/alpine.ts.
  */
 
-import { CookieBanner } from '../legal/CookieBanner';
+import { CookieBanner } from "../legal/CookieBanner";
 
 /**
  * Generates the messages sidebar item.
@@ -203,7 +203,6 @@ function renderChatDrawer(): string {
   `;
 }
 
-
 /**
  * FloatingPanel Component
  * Renders iSTOC-style sidebar toolbar at the right edge of the viewport.
@@ -232,14 +231,14 @@ export function FloatingPanel(): string {
         aria-label="Quick actions panel"
       >
         <!-- Görsel Arama (Lens) geçici olarak devre dışı -->
-        <!-- Lens Popup: ${/* renderLensPopup() — disabled */ ''} -->
+        <!-- Lens Popup: ${/* renderLensPopup() — disabled */ ""} -->
 
         <!-- Sidebar butonları -->
         <div class="inline-flex flex-col gap-2 bg-white rounded-l-[8px] shadow-[0_2px_6px_2px_rgba(0,0,0,0.12)] p-2">
           <!-- DISABLED: Mesajlarım — ileride geliştirilecek -->
-          <!-- ${/* renderMessagesItem() */ ''} -->
+          <!-- ${/* renderMessagesItem() */ ""} -->
 
-          <!-- Görsel Arama: ${/* renderLensItem() — disabled */ ''} -->
+          <!-- Görsel Arama: ${/* renderLensItem() — disabled */ ""} -->
 
           <!-- En üste çık (shown on scroll > 300px via x-show) -->
           ${renderScrollTopItem()}
@@ -247,7 +246,7 @@ export function FloatingPanel(): string {
       </div>
 
       <!-- DISABLED: Chat Support Drawer — ileride geliştirilecek -->
-      <!-- ${/* renderChatDrawer() */ ''} -->
+      <!-- ${/* renderChatDrawer() */ ""} -->
 
     </div>
 

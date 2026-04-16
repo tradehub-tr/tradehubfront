@@ -1,13 +1,13 @@
-import type { ProductImageKind } from '../../../types/productListing';
-import { cartStore } from '../state/CartStore';
-import type { CartSupplier, CartProduct, CartSku } from '../../../types/cart';
-import { t } from '../../../i18n';
-import { getCurrencySymbol } from '../../../utils/currency';
-import { formatCurrency, getSelectedCurrency } from '../../../services/currencyService';
-import { isLoggedIn } from '../../../utils/auth';
-import { apiCheckStock, apiAddToCart, fetchCart } from '../../../services/cartService';
-import { getCurrencySymbol as _getCurrencySymbolForCart } from '../../../utils/currency';
-import { showCartError } from '../page/CartPage';
+import type { ProductImageKind } from "../../../types/productListing";
+import { cartStore } from "../state/CartStore";
+import type { CartSupplier, CartProduct, CartSku } from "../../../types/cart";
+import { t } from "../../../i18n";
+import { getCurrencySymbol } from "../../../utils/currency";
+import { formatCurrency, getSelectedCurrency } from "../../../services/currencyService";
+import { isLoggedIn } from "../../../utils/auth";
+import { apiCheckStock, apiAddToCart, fetchCart } from "../../../services/cartService";
+import { getCurrencySymbol as _getCurrencySymbolForCart } from "../../../utils/currency";
+import { showCartError } from "../page/CartPage";
 
 export interface CartDrawerTierModel {
   minQty: number;
@@ -90,7 +90,7 @@ export interface CartDrawerItemModel {
 // ─── State ────────────────────────────────────────────────────────────────────
 
 interface DrawerState {
-  mode: 'cart' | 'sample';
+  mode: "cart" | "sample";
   item: CartDrawerItemModel | null;
   selectedShippingIndex: number;
   /** Chip-selected color ID. '' when no colors. */
@@ -120,21 +120,53 @@ interface ProductVisual {
 }
 
 const productVisuals: Record<ProductImageKind, ProductVisual> = {
-  jewelry: { background: 'linear-gradient(180deg, #fef9e7 0%, #fdf0c3 100%)', stroke: '#8a6800', icon: '<path d="M12 2l2.5 5.5L20 9l-4 4 1 5.5L12 16l-5 2.5 1-5.5-4-4 5.5-1.5Z" /><circle cx="12" cy="10" r="2" />' },
-  electronics: { background: 'linear-gradient(180deg, #eef2ff 0%, #dbeafe 100%)', stroke: '#4f5fb3', icon: '<rect x="3" y="4" width="18" height="12" rx="2" /><path d="M7 20h10M12 16v4" /><circle cx="12" cy="10" r="2" />' },
-  label: { background: 'linear-gradient(180deg, #f0fdf4 0%, #dcfce7 100%)', stroke: '#2d8a5e', icon: '<rect x="4" y="6" width="16" height="12" rx="1" /><path d="M8 10h8M8 13h5" /><circle cx="17" cy="6" r="1.5" />' },
-  crafts: { background: 'linear-gradient(180deg, #fdf4ff 0%, #fae8ff 100%)', stroke: '#7e22ce', icon: '<path d="M12 2C8.5 2 6 4.5 6 7c0 3 6 8 6 8s6-5 6-8c0-2.5-2.5-5-6-5Z" /><path d="M8 18h8M9 21h6" />' },
-  accessory: { background: 'linear-gradient(180deg, #fff7ed 0%, #ffedd5 100%)', stroke: '#b45309', icon: '<rect x="4" y="10" width="16" height="10" rx="2" /><path d="M8 10V6a4 4 0 0 1 8 0v4" /><path d="M4 14h16" />' },
-  clothing: { background: 'linear-gradient(180deg, #fdf2f8 0%, #fce7f3 100%)', stroke: '#a3456e', icon: '<path d="M8 3h8l2 6v12H6V9l2-6Z" /><path d="M12 3v8M8 3 6 9M16 3l2 6" />' },
-  tools: { background: 'linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 100%)', stroke: '#475569', icon: '<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76Z" />' },
-  packaging: { background: 'linear-gradient(180deg, #fef3c7 0%, #fde68a 100%)', stroke: '#92700c', icon: '<path d="M21 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v3" /><path d="M3 8h18v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8Z" /><path d="M10 12h4" />' },
+  jewelry: {
+    background: "linear-gradient(180deg, #fef9e7 0%, #fdf0c3 100%)",
+    stroke: "#8a6800",
+    icon: '<path d="M12 2l2.5 5.5L20 9l-4 4 1 5.5L12 16l-5 2.5 1-5.5-4-4 5.5-1.5Z" /><circle cx="12" cy="10" r="2" />',
+  },
+  electronics: {
+    background: "linear-gradient(180deg, #eef2ff 0%, #dbeafe 100%)",
+    stroke: "#4f5fb3",
+    icon: '<rect x="3" y="4" width="18" height="12" rx="2" /><path d="M7 20h10M12 16v4" /><circle cx="12" cy="10" r="2" />',
+  },
+  label: {
+    background: "linear-gradient(180deg, #f0fdf4 0%, #dcfce7 100%)",
+    stroke: "#2d8a5e",
+    icon: '<rect x="4" y="6" width="16" height="12" rx="1" /><path d="M8 10h8M8 13h5" /><circle cx="17" cy="6" r="1.5" />',
+  },
+  crafts: {
+    background: "linear-gradient(180deg, #fdf4ff 0%, #fae8ff 100%)",
+    stroke: "#7e22ce",
+    icon: '<path d="M12 2C8.5 2 6 4.5 6 7c0 3 6 8 6 8s6-5 6-8c0-2.5-2.5-5-6-5Z" /><path d="M8 18h8M9 21h6" />',
+  },
+  accessory: {
+    background: "linear-gradient(180deg, #fff7ed 0%, #ffedd5 100%)",
+    stroke: "#b45309",
+    icon: '<rect x="4" y="10" width="16" height="10" rx="2" /><path d="M8 10V6a4 4 0 0 1 8 0v4" /><path d="M4 14h16" />',
+  },
+  clothing: {
+    background: "linear-gradient(180deg, #fdf2f8 0%, #fce7f3 100%)",
+    stroke: "#a3456e",
+    icon: '<path d="M8 3h8l2 6v12H6V9l2-6Z" /><path d="M12 3v8M8 3 6 9M16 3l2 6" />',
+  },
+  tools: {
+    background: "linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 100%)",
+    stroke: "#475569",
+    icon: '<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76Z" />',
+  },
+  packaging: {
+    background: "linear-gradient(180deg, #fef3c7 0%, #fde68a 100%)",
+    stroke: "#92700c",
+    icon: '<path d="M21 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v3" /><path d="M3 8h18v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8Z" /><path d="M10 12h4" />',
+  },
 };
 
 const state: DrawerState = {
-  mode: 'cart',
+  mode: "cart",
   item: null,
   selectedShippingIndex: 0,
-  selectedColorId: '',
+  selectedColorId: "",
   selectedSelectables: new Map(),
   sizeQuantities: new Map(),
   noVariantQty: 0,
@@ -147,17 +179,17 @@ const cartMemory = new Map<string, CartMemoryItem>();
 let initialized = false;
 let shippingInitialized = false;
 let productsById = new Map<string, CartDrawerItemModel>();
-let onItemMissing: ((id: string, mode: 'cart' | 'sample') => Promise<void>) | null = null;
+let onItemMissing: ((id: string, mode: "cart" | "sample") => Promise<void>) | null = null;
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function escapeHtml(value: string): string {
   return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 function hasSizeGroups(): boolean {
@@ -210,7 +242,7 @@ function getSizeStock(sizeLabel: string): number {
 function getBasePrice(tierPrice: number): number {
   if (!state.item) return tierPrice;
   const color = state.item.colors.find((c) => c.id === state.selectedColorId);
-  return (color?.rawPrice != null && color.rawPrice > 0) ? color.rawPrice : tierPrice;
+  return color?.rawPrice != null && color.rawPrice > 0 ? color.rawPrice : tierPrice;
 }
 
 function getTotalQty(): number {
@@ -245,9 +277,10 @@ function getTotals(): {
   const totalQty = getTotalQty();
   const tierIndex = getActiveTierIndex(totalQty);
   const activeTier = state.item?.priceTiers[tierIndex];
-  const tierPrice = state.mode === 'sample'
-    ? (state.item?.samplePrice ?? 30)
-    : (activeTier?.rawPrice ?? activeTier?.price ?? 0);
+  const tierPrice =
+    state.mode === "sample"
+      ? (state.item?.samplePrice ?? 30)
+      : (activeTier?.rawPrice ?? activeTier?.price ?? 0);
   const activePrice = getBasePrice(tierPrice);
 
   let itemSubtotal = 0;
@@ -256,7 +289,7 @@ function getTotals(): {
       for (const opt of group.options) {
         const qty = state.sizeQuantities.get(opt.id) ?? 0;
         if (qty === 0) continue;
-        const unitPrice = (opt.rawPrice != null && opt.rawPrice > 0) ? opt.rawPrice : activePrice;
+        const unitPrice = opt.rawPrice != null && opt.rawPrice > 0 ? opt.rawPrice : activePrice;
         itemSubtotal += unitPrice * qty;
       }
     }
@@ -274,7 +307,15 @@ function getTotals(): {
     variationCount = totalQty > 0 ? 1 : 0;
   }
 
-  return { totalQty, activePrice, tierIndex, itemSubtotal, shippingCost, grandTotal, variationCount };
+  return {
+    totalQty,
+    activePrice,
+    tierIndex,
+    itemSubtotal,
+    shippingCost,
+    grandTotal,
+    variationCount,
+  };
 }
 
 // ─── DOM helpers ──────────────────────────────────────────────────────────────
@@ -286,10 +327,10 @@ function getDrawerElements(): {
   footer: HTMLElement | null;
 } {
   return {
-    overlay: document.getElementById('shared-cart-overlay'),
-    drawer: document.getElementById('shared-cart-drawer'),
-    body: document.getElementById('shared-cart-body'),
-    footer: document.getElementById('shared-cart-footer'),
+    overlay: document.getElementById("shared-cart-overlay"),
+    drawer: document.getElementById("shared-cart-drawer"),
+    body: document.getElementById("shared-cart-body"),
+    footer: document.getElementById("shared-cart-footer"),
   };
 }
 
@@ -298,37 +339,37 @@ function applyDrawerTransform(open: boolean): void {
   if (!overlay || !drawer) return;
 
   const mobile = window.innerWidth < 1280;
-  const closedTransform = mobile ? 'translateY(100%)' : 'translateX(100%)';
-  const openTransform = 'translateX(0) translateY(0)';
+  const closedTransform = mobile ? "translateY(100%)" : "translateX(100%)";
+  const openTransform = "translateX(0) translateY(0)";
 
   drawer.style.transform = open ? openTransform : closedTransform;
 
   if (open) {
-    overlay.classList.remove('opacity-0', 'pointer-events-none');
-    document.body.style.overflow = 'hidden';
+    overlay.classList.remove("opacity-0", "pointer-events-none");
+    document.body.style.overflow = "hidden";
   } else {
-    overlay.classList.add('opacity-0', 'pointer-events-none');
-    document.body.style.overflow = '';
+    overlay.classList.add("opacity-0", "pointer-events-none");
+    document.body.style.overflow = "";
   }
 
   setPreviewVisible(open && !mobile);
 }
 
 function setPreviewVisible(visible: boolean): void {
-  const preview = document.getElementById('shared-cart-preview');
+  const preview = document.getElementById("shared-cart-preview");
   if (!preview) return;
   if (visible) {
-    preview.classList.remove('hidden');
-    preview.classList.add('flex');
+    preview.classList.remove("hidden");
+    preview.classList.add("flex");
   } else {
-    preview.classList.remove('flex');
-    preview.classList.add('hidden');
+    preview.classList.remove("flex");
+    preview.classList.add("hidden");
   }
 }
 
 function updatePreview(): void {
-  const image = document.getElementById('shared-cart-preview-image');
-  const label = document.getElementById('shared-cart-preview-label');
+  const image = document.getElementById("shared-cart-preview-image");
+  const label = document.getElementById("shared-cart-preview-label");
   if (!image || !label || !state.item) return;
 
   const color = state.item.colors[state.previewColorIndex];
@@ -343,17 +384,18 @@ function updatePreview(): void {
 }
 
 function showSampleMaxToast(): void {
-  const existing = document.getElementById('sample-max-toast');
+  const existing = document.getElementById("sample-max-toast");
   if (existing) return;
 
-  const toast = document.createElement('div');
-  toast.id = 'sample-max-toast';
-  toast.className = 'fixed bottom-24 left-1/2 -translate-x-1/2 z-[9999] flex items-start gap-3 bg-[#1a1a1a] text-white text-sm rounded-md px-5 py-4 shadow-xl max-w-xs w-max pointer-events-none';
+  const toast = document.createElement("div");
+  toast.id = "sample-max-toast";
+  toast.className =
+    "fixed bottom-24 left-1/2 -translate-x-1/2 z-[9999] flex items-start gap-3 bg-[#1a1a1a] text-white text-sm rounded-md px-5 py-4 shadow-xl max-w-xs w-max pointer-events-none";
   toast.innerHTML = `
     <svg class="shrink-0 mt-0.5" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e05c25" stroke-width="2">
       <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
     </svg>
-    <span>${t('cart.sampleMaxQty')}</span>
+    <span>${t("cart.sampleMaxQty")}</span>
   `;
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 2800);
@@ -362,24 +404,26 @@ function showSampleMaxToast(): void {
 // ─── Render ───────────────────────────────────────────────────────────────────
 
 function renderPriceSectionHtml(totals: ReturnType<typeof getTotals>): string {
-  if (!state.item) return '';
-  if (state.mode === 'sample') {
+  if (!state.item) return "";
+  if (state.mode === "sample") {
     return `
       <div class="mb-5 pb-5 border-b border-border-default">
-        <p class="text-sm text-text-secondary mb-1">${t('cart.sampleMaxNote')}</p>
-        <p class="text-[22px] font-bold text-text-heading">${formatCurrency(state.item.samplePrice ?? 30, getSelectedCurrency())} <span class="text-base font-normal text-text-tertiary">${t('cart.perUnit')}</span></p>
+        <p class="text-sm text-text-secondary mb-1">${t("cart.sampleMaxNote")}</p>
+        <p class="text-[22px] font-bold text-text-heading">${formatCurrency(state.item.samplePrice ?? 30, getSelectedCurrency())} <span class="text-base font-normal text-text-tertiary">${t("cart.perUnit")}</span></p>
       </div>
     `;
   }
   return `
     <div class="grid grid-cols-3 gap-6 pb-5 mb-5 border-b border-border-default">
-      ${state.item.priceTiers.map((tier, index) => {
-    const activeClass = index === totals.tierIndex ? 'text-error-500' : 'text-text-heading';
-    return `<div class="cart-tier-item" data-tier-index="${index}">
+      ${state.item.priceTiers
+        .map((tier, index) => {
+          const activeClass = index === totals.tierIndex ? "text-error-500" : "text-text-heading";
+          return `<div class="cart-tier-item" data-tier-index="${index}">
           <p class="text-sm text-text-tertiary">${formatTierLabel(tier, state.item!.unit)}</p>
           <p class="mt-1 text-[22px] font-bold ${activeClass}">${formatCurrency(tier.rawPrice ?? tier.price, state.item?.currency || getSelectedCurrency())}</p>
         </div>`;
-  }).join('')}
+        })
+        .join("")}
     </div>
   `;
 }
@@ -423,20 +467,20 @@ function isSelectableAvailable(axisName: string, optionLabel: string): boolean {
 function renderColorChip(color: CartDrawerColorModel, isSelected: boolean): string {
   const available = isColorAvailable(color.label);
   const selectedStyle = isSelected
-    ? 'border-text-heading bg-surface ring-1 ring-text-heading'
+    ? "border-text-heading bg-surface ring-1 ring-text-heading"
     : available
-      ? 'border-border-default bg-surface hover:border-text-secondary'
-      : 'border-border-default bg-surface opacity-40 line-through cursor-not-allowed';
+      ? "border-border-default bg-surface hover:border-text-secondary"
+      : "border-border-default bg-surface opacity-40 line-through cursor-not-allowed";
 
   const thumb = color.imageUrl
-    ? `<img src="${color.imageUrl}" alt="${escapeHtml(color.label)}" class="w-7 h-7 rounded-full object-cover shrink-0${!available ? ' grayscale' : ''}" loading="lazy" />`
-    : `<span class="w-5 h-5 rounded-full shrink-0 border border-border-default" style="background:${color.colorHex || '#e5e5e5'};${!available ? 'opacity:0.4;' : ''}"></span>`;
+    ? `<img src="${color.imageUrl}" alt="${escapeHtml(color.label)}" class="w-7 h-7 rounded-full object-cover shrink-0${!available ? " grayscale" : ""}" loading="lazy" />`
+    : `<span class="w-5 h-5 rounded-full shrink-0 border border-border-default" style="background:${color.colorHex || "#e5e5e5"};${!available ? "opacity:0.4;" : ""}"></span>`;
 
   return `
     <button type="button"
       data-color-chip="${escapeHtml(color.id)}"
       class="inline-flex items-center gap-1.5 px-2 py-1.5 rounded-lg border transition-all text-text-heading ${selectedStyle}"
-      ${!available ? 'disabled' : ''}
+      ${!available ? "disabled" : ""}
       title="${!available ? `${color.label} — tükendi` : color.label}">
       ${thumb}
       <span class="text-xs font-medium max-w-[72px] truncate">${escapeHtml(color.label)}</span>
@@ -445,19 +489,23 @@ function renderColorChip(color: CartDrawerColorModel, isSelected: boolean): stri
 }
 
 /** Renders a selectable chip (for extra axes like Material). */
-function renderSelectableChip(axisName: string, option: CartDrawerSelectableOption, isSelected: boolean): string {
+function renderSelectableChip(
+  axisName: string,
+  option: CartDrawerSelectableOption,
+  isSelected: boolean
+): string {
   const available = isSelectableAvailable(axisName, option.label);
   const selectedStyle = isSelected
-    ? 'border-text-heading bg-surface ring-1 ring-text-heading'
+    ? "border-text-heading bg-surface ring-1 ring-text-heading"
     : available
-      ? 'border-border-default bg-surface hover:border-text-secondary'
-      : 'border-border-default bg-surface opacity-40 line-through cursor-not-allowed';
+      ? "border-border-default bg-surface hover:border-text-secondary"
+      : "border-border-default bg-surface opacity-40 line-through cursor-not-allowed";
   return `
     <button type="button"
       data-selectable-chip="${escapeHtml(axisName)}"
       data-selectable-value="${escapeHtml(option.label)}"
       class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border transition-all text-text-heading ${selectedStyle}"
-      ${!available ? 'disabled' : ''}
+      ${!available ? "disabled" : ""}
       title="${!available ? `${option.label} — tükendi` : option.label}">
       <span class="text-xs font-medium">${escapeHtml(option.label)}</span>
     </button>
@@ -465,7 +513,7 @@ function renderSelectableChip(axisName: string, option: CartDrawerSelectableOpti
 }
 
 /** Renders a qty stepper pill (reused for sizes and no-variant). */
-function renderQtyStepper(id: string, qty: number, dataAttr = 'data-qty-size'): string {
+function renderQtyStepper(id: string, qty: number, dataAttr = "data-qty-size"): string {
   return `
     <div class="inline-flex items-center border border-border-default rounded-full overflow-hidden shrink-0">
       <button type="button" data-qty-action="minus" ${dataAttr}="${escapeHtml(id)}"
@@ -488,79 +536,86 @@ function renderDrawerBody(): void {
   const priceSection = renderPriceSectionHtml(totals);
 
   // ── Color chips section ──
-  let colorSection = '';
+  let colorSection = "";
   if (item.colors.length > 0) {
     const selectedColor = item.colors.find((c) => c.id === state.selectedColorId);
     const colorLabel = selectedColor
-      ? `${t('cart.colorLabel')}: <span class="font-normal text-text-secondary">${escapeHtml(selectedColor.label)}</span>`
-      : t('cart.colorLabel');
+      ? `${t("cart.colorLabel")}: <span class="font-normal text-text-secondary">${escapeHtml(selectedColor.label)}</span>`
+      : t("cart.colorLabel");
 
     colorSection = `
       <div class="mb-5">
         <h5 class="text-sm font-semibold text-text-heading mb-2">${colorLabel}</h5>
         <div class="flex flex-wrap gap-2">
-          ${item.colors.map((color) => renderColorChip(color, color.id === state.selectedColorId)).join('')}
+          ${item.colors.map((color) => renderColorChip(color, color.id === state.selectedColorId)).join("")}
         </div>
       </div>
     `;
   }
 
   // ── Selectable groups (e.g. Malzeme — chip selection like color) ──
-  let selectableSection = '';
+  let selectableSection = "";
   if (item.selectableGroups && item.selectableGroups.length > 0) {
-    selectableSection = item.selectableGroups.map((group) => {
-      const selectedVal = state.selectedSelectables.get(group.axisName) || '';
-      const groupLabelHtml = selectedVal
-        ? `${escapeHtml(group.groupLabel)}: <span class="font-normal text-text-secondary">${escapeHtml(selectedVal)}</span>`
-        : escapeHtml(group.groupLabel);
-      return `
+    selectableSection = item.selectableGroups
+      .map((group) => {
+        const selectedVal = state.selectedSelectables.get(group.axisName) || "";
+        const groupLabelHtml = selectedVal
+          ? `${escapeHtml(group.groupLabel)}: <span class="font-normal text-text-secondary">${escapeHtml(selectedVal)}</span>`
+          : escapeHtml(group.groupLabel);
+        return `
         <div class="mb-5">
           <h5 class="text-sm font-semibold text-text-heading mb-2">${groupLabelHtml}</h5>
           <div class="flex flex-wrap gap-2">
-            ${group.options.map((opt) => renderSelectableChip(group.axisName, opt, opt.label === selectedVal)).join('')}
+            ${group.options.map((opt) => renderSelectableChip(group.axisName, opt, opt.label === selectedVal)).join("")}
           </div>
         </div>
       `;
-    }).join('');
+      })
+      .join("");
   }
 
   // ── Size rows section (leaf variant with qty steppers) ──
-  let sizeSection = '';
+  let sizeSection = "";
   if (item.sizeGroups.length > 0) {
-    sizeSection = item.sizeGroups.map((group) => {
-      const rows = group.options.map((opt) => {
-        const qty = state.sizeQuantities.get(opt.id) ?? 0;
-        const hasQty = qty > 0;
-        const displayPrice = (opt.rawPrice != null && opt.rawPrice > 0) ? opt.rawPrice : totals.activePrice;
-        const available = isSizeAvailable(opt.label);
-        const stock = getSizeStock(opt.label);
-        const stockLabel = !available
-          ? `<span class="text-xs font-medium text-red-500 whitespace-nowrap">${t('cart.outOfStock')}</span>`
-          : stock > 0 && stock <= 10
-            ? `<span class="text-xs font-medium text-amber-500 whitespace-nowrap">${t('cart.lowStock', { count: stock })}</span>`
-            : '';
-        return `
-          <div class="flex items-center gap-3 py-2.5 border-b border-border-default last:border-b-0${!available ? ' opacity-50' : ''}">
+    sizeSection = item.sizeGroups
+      .map((group) => {
+        const rows = group.options
+          .map((opt) => {
+            const qty = state.sizeQuantities.get(opt.id) ?? 0;
+            const hasQty = qty > 0;
+            const displayPrice =
+              opt.rawPrice != null && opt.rawPrice > 0 ? opt.rawPrice : totals.activePrice;
+            const available = isSizeAvailable(opt.label);
+            const stock = getSizeStock(opt.label);
+            const stockLabel = !available
+              ? `<span class="text-xs font-medium text-red-500 whitespace-nowrap">${t("cart.outOfStock")}</span>`
+              : stock > 0 && stock <= 10
+                ? `<span class="text-xs font-medium text-amber-500 whitespace-nowrap">${t("cart.lowStock", { count: stock })}</span>`
+                : "";
+            return `
+          <div class="flex items-center gap-3 py-2.5 border-b border-border-default last:border-b-0${!available ? " opacity-50" : ""}">
             <span class="flex-1 text-sm font-medium text-text-heading">${escapeHtml(opt.label)} ${stockLabel}</span>
-            <span class="text-sm font-semibold ${hasQty ? 'text-cta-primary' : 'text-text-tertiary'} whitespace-nowrap shrink-0">
+            <span class="text-sm font-semibold ${hasQty ? "text-cta-primary" : "text-text-tertiary"} whitespace-nowrap shrink-0">
               ${formatCurrency(displayPrice, itemCurrency)}
             </span>
-            ${available ? renderQtyStepper(opt.id, qty) : `<span class="inline-flex items-center justify-center w-[124px] h-9 text-xs text-red-400 font-medium">${t('cart.outOfStock')}</span>`}
+            ${available ? renderQtyStepper(opt.id, qty) : `<span class="inline-flex items-center justify-center w-[124px] h-9 text-xs text-red-400 font-medium">${t("cart.outOfStock")}</span>`}
           </div>
         `;
-      }).join('');
+          })
+          .join("");
 
-      return `
+        return `
         <div class="mb-4">
           <h5 class="text-sm font-semibold text-text-heading mb-1">${escapeHtml(group.groupLabel)}</h5>
           <div>${rows}</div>
         </div>
       `;
-    }).join('');
+      })
+      .join("");
   } else {
     // No size groups → single qty row (colors-only or no-variant)
     const qty = state.noVariantQty;
-    const singleId = '__no_variant__';
+    const singleId = "__no_variant__";
     sizeSection = `
       <div class="mb-5">
         <div class="flex items-center gap-3 py-2.5 border-b border-border-default">
@@ -599,11 +654,11 @@ function renderDrawerBody(): void {
             <circle cx="17.5" cy="18.5" r="1.75"/>
           </svg>
         </span>
-        <h5 class="text-[15px] font-bold text-text-heading leading-tight">${t('cart.shipping')}</h5>
+        <h5 class="text-[15px] font-bold text-text-heading leading-tight">${t("cart.shipping")}</h5>
       </div>
 
       <p class="px-4 pb-3 text-[13px] leading-snug text-text-secondary">
-        ${t('cart.shippingNegotiate')}
+        ${t("cart.shippingNegotiate")}
       </p>
 
       <div class="mx-4 border-t border-dashed border-border-default"></div>
@@ -613,7 +668,7 @@ function renderDrawerBody(): void {
         data-shipping-change
         class="group w-full flex items-center justify-between gap-3 px-4 py-2.5 transition-colors hover:bg-surface-muted focus:outline-none focus-visible:bg-surface-muted"
       >
-        <span class="text-[13px] font-semibold text-cta-primary">${t('cart.changeShippingLong')}</span>
+        <span class="text-[13px] font-semibold text-cta-primary">${t("cart.changeShippingLong")}</span>
         <span
           class="shrink-0 w-6 h-6 rounded-full inline-flex items-center justify-center transition-transform duration-200 group-hover:translate-x-0.5"
           style="background: var(--color-primary-500, #cc9900); color: #ffffff;"
@@ -641,24 +696,24 @@ function renderDrawerFooter(): void {
     ? `
       <div class="mb-4">
         <button type="button" id="shared-cart-footer-toggle" class="w-full flex items-center justify-center gap-1 text-sm font-semibold text-text-heading border-b border-border-default pb-3 mb-3">
-          ${t('cart.price')}
+          ${t("cart.price")}
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m18 15-6-6-6 6"/></svg>
         </button>
 
         <div class="space-y-2 text-sm text-text-secondary">
           <div class="flex items-center justify-between">
-            <span>${t('cart.productTotal')} (${t('cart.variationItems', { variation: String(totals.variationCount), items: String(totals.totalQty) })})</span>
+            <span>${t("cart.productTotal")} (${t("cart.variationItems", { variation: String(totals.variationCount), items: String(totals.totalQty) })})</span>
             <strong class="text-text-heading">${formatCurrency(totals.itemSubtotal, itemCurrency)}</strong>
           </div>
           <div class="flex items-center justify-between">
-            <span>${t('cart.shippingTotal')}</span>
+            <span>${t("cart.shippingTotal")}</span>
             <span>${escapeHtml(state.item.shippingOptions[state.selectedShippingIndex]?.costText ?? formatCurrency(0, itemCurrency))}</span>
           </div>
           <div class="flex items-center justify-between border-t border-border-default pt-3 mt-3">
-            <strong class="text-text-heading">${t('cart.subtotal')}</strong>
+            <strong class="text-text-heading">${t("cart.subtotal")}</strong>
             <div class="text-right">
               <strong class="text-base text-cta-primary">${formatCurrency(totals.grandTotal, itemCurrency)}</strong>
-              <p class="text-xs text-text-tertiary">(${formatCurrency(perPiece, itemCurrency)}${t('cart.perUnit')})</p>
+              <p class="text-xs text-text-tertiary">(${formatCurrency(perPiece, itemCurrency)}${t("cart.perUnit")})</p>
             </div>
           </div>
         </div>
@@ -666,10 +721,10 @@ function renderDrawerFooter(): void {
     `
     : `
       <button type="button" id="shared-cart-footer-toggle" class="w-full flex items-center justify-between mb-4">
-        <strong class="text-base text-text-heading">${t('cart.subtotal')}</strong>
+        <strong class="text-base text-text-heading">${t("cart.subtotal")}</strong>
         <span class="flex items-center gap-1.5">
           <strong class="text-[17px] text-cta-primary">${formatCurrency(totals.grandTotal, itemCurrency)}</strong>
-          <span class="text-xs text-text-tertiary">(${formatCurrency(perPiece, itemCurrency)}${t('cart.perUnit')})</span>
+          <span class="text-xs text-text-tertiary">(${formatCurrency(perPiece, itemCurrency)}${t("cart.perUnit")})</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-text-tertiary"><path d="m6 9 6 6 6-6"/></svg>
         </span>
       </button>
@@ -677,7 +732,7 @@ function renderDrawerFooter(): void {
 
   footer.innerHTML = `
     ${details}
-    <button type="button" id="shared-cart-confirm" class="w-full th-btn-dark h-12 text-lg">${state.mode === 'sample' ? t('cart.orderSample') : t('cart.addToCartBtn')}</button>
+    <button type="button" id="shared-cart-confirm" class="w-full th-btn-dark h-12 text-lg">${state.mode === "sample" ? t("cart.orderSample") : t("cart.addToCartBtn")}</button>
   `;
 }
 
@@ -690,21 +745,22 @@ function rerenderDrawer(): void {
 // ─── Shipping modal ───────────────────────────────────────────────────────────
 
 function updateShippingModal(quantityOverride?: number): void {
-  const qtyEl = document.getElementById('shared-cart-shipping-qty');
-  const optionsEl = document.getElementById('shared-cart-shipping-options');
+  const qtyEl = document.getElementById("shared-cart-shipping-qty");
+  const optionsEl = document.getElementById("shared-cart-shipping-options");
   if (!qtyEl || !optionsEl || !state.item) return;
 
   const totals = getTotals();
   const qty = quantityOverride ?? Math.max(totals.totalQty, state.item.moq);
   qtyEl.textContent = `${qty} ${state.item.unit}`;
 
-  optionsEl.innerHTML = state.item.shippingOptions.map((option, index) => {
-    const active = index === state.selectedShippingIndex;
-    return `
-      <label class="flex items-center justify-between rounded-md border px-4 py-3 cursor-pointer transition-colors ${active ? 'border-primary-500 bg-primary-50' : 'border-border-default bg-surface-muted hover:bg-surface'}" data-shipping-option-index="${index}">
+  optionsEl.innerHTML = state.item.shippingOptions
+    .map((option, index) => {
+      const active = index === state.selectedShippingIndex;
+      return `
+      <label class="flex items-center justify-between rounded-md border px-4 py-3 cursor-pointer transition-colors ${active ? "border-primary-500 bg-primary-50" : "border-border-default bg-surface-muted hover:bg-surface"}" data-shipping-option-index="${index}">
         <span class="flex items-center gap-3">
-          <span class="w-7 h-7 rounded-full border inline-flex items-center justify-center ${active ? 'border-primary-500 bg-primary-500 text-white' : 'border-border-medium text-transparent'}">
-            ${active ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 13 4 4L19 7"/></svg>' : ''}
+          <span class="w-7 h-7 rounded-full border inline-flex items-center justify-center ${active ? "border-primary-500 bg-primary-500 text-white" : "border-border-medium text-transparent"}">
+            ${active ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 13 4 4L19 7"/></svg>' : ""}
           </span>
           <span>
             <strong class="block text-base text-text-heading">${escapeHtml(option.method)}</strong>
@@ -714,20 +770,21 @@ function updateShippingModal(quantityOverride?: number): void {
         <strong class="text-base text-text-heading">${escapeHtml(option.costText)}</strong>
       </label>
     `;
-  }).join('');
+    })
+    .join("");
 }
 
 function setShippingModalOpen(open: boolean): void {
-  const modal = document.getElementById('shared-cart-shipping-modal');
-  const sheet = document.getElementById('shared-cart-shipping-sheet');
+  const modal = document.getElementById("shared-cart-shipping-modal");
+  const sheet = document.getElementById("shared-cart-shipping-sheet");
   if (!modal || !sheet) return;
 
   if (open) {
-    modal.classList.remove('opacity-0', 'pointer-events-none');
-    sheet.classList.remove('translate-y-4');
+    modal.classList.remove("opacity-0", "pointer-events-none");
+    sheet.classList.remove("translate-y-4");
   } else {
-    modal.classList.add('opacity-0', 'pointer-events-none');
-    sheet.classList.add('translate-y-4');
+    modal.classList.add("opacity-0", "pointer-events-none");
+    sheet.classList.add("translate-y-4");
   }
 }
 
@@ -738,11 +795,14 @@ function buildGroupedItemsForEvent(): Array<{
   productTitle: string;
   items: Array<{ label: string; unitPrice: number; qty: number; colorValue: string }>;
 }> {
-  const groups = new Map<string, {
-    supplierName: string;
-    productTitle: string;
-    items: Array<{ label: string; unitPrice: number; qty: number; colorValue: string }>;
-  }>();
+  const groups = new Map<
+    string,
+    {
+      supplierName: string;
+      productTitle: string;
+      items: Array<{ label: string; unitPrice: number; qty: number; colorValue: string }>;
+    }
+  >();
 
   cartMemory.forEach((memory) => {
     const totalQty = hasSizesInMemory(memory)
@@ -752,8 +812,9 @@ function buildGroupedItemsForEvent(): Array<{
     if (totalQty <= 0) return;
 
     const tierIndex = getActiveTierIndex(totalQty);
-    const unitPrice = memory.item.priceTiers[tierIndex]?.price ?? memory.item.priceTiers[0]?.price ?? 0;
-    const supplierKey = memory.item.supplierName || 'Supplier';
+    const unitPrice =
+      memory.item.priceTiers[tierIndex]?.price ?? memory.item.priceTiers[0]?.price ?? 0;
+    const supplierKey = memory.item.supplierName || "Supplier";
 
     if (!groups.has(supplierKey)) {
       groups.set(supplierKey, {
@@ -775,27 +836,34 @@ function buildGroupedItemsForEvent(): Array<{
 }
 
 function hasSizesInMemory(memory: CartMemoryItem): boolean {
-  return (memory.item.sizeGroups.length > 0);
+  return memory.item.sizeGroups.length > 0;
 }
 
 function toSlug(name: string): string {
-  return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
 }
 
-function buildVariantText(item: CartDrawerItemModel, sizeLabel: string, sizeOptionLabel: string): string {
+function buildVariantText(
+  item: CartDrawerItemModel,
+  sizeLabel: string,
+  sizeOptionLabel: string
+): string {
   const selectedColor = item.colors.find((c) => c.id === state.selectedColorId);
-  const colorAxisName = item.colorAxisLabel || t('cart.colorLabel');
+  const colorAxisName = item.colorAxisLabel || t("cart.colorLabel");
   const parts: string[] = [];
   if (selectedColor) parts.push(`${colorAxisName}: ${selectedColor.label}`);
   for (const [axName, axVal] of state.selectedSelectables) {
     if (axVal) parts.push(`${axName}: ${axVal}`);
   }
   if (sizeLabel && sizeOptionLabel) parts.push(`${sizeLabel}: ${sizeOptionLabel}`);
-  return parts.join(' | ');
+  return parts.join(" | ");
 }
 
 function syncToCartStore(item: CartDrawerItemModel, unitPrice: number): void {
-  const supplierId = toSlug(item.supplierName || 'unknown-supplier');
+  const supplierId = toSlug(item.supplierName || "unknown-supplier");
 
   if (!cartStore.getSupplier(supplierId)) {
     const supplier: CartSupplier = {
@@ -815,9 +883,9 @@ function syncToCartStore(item: CartDrawerItemModel, unitPrice: number): void {
       title: item.title,
       href: `/pages/product-detail.html?id=${productId}`,
       tags: [],
-      moqLabel: `${t('product.minOrderLabel')}: ${item.moq} ${item.unit}`,
-      favoriteIcon: '♡',
-      deleteIcon: '🗑',
+      moqLabel: `${t("product.minOrderLabel")}: ${item.moq} ${item.unit}`,
+      favoriteIcon: "♡",
+      deleteIcon: "🗑",
       skus: [],
       selected: true,
     };
@@ -825,7 +893,7 @@ function syncToCartStore(item: CartDrawerItemModel, unitPrice: number): void {
   }
 
   const selectedColor = item.colors.find((c) => c.id === state.selectedColorId);
-  const skuImage = selectedColor?.imageUrl || 'https://placehold.co/120x120/f5f5f5/999?text=SKU';
+  const skuImage = selectedColor?.imageUrl || "https://placehold.co/120x120/f5f5f5/999?text=SKU";
 
   if (hasSizeGroups()) {
     // One SKU per size option that has qty > 0
@@ -834,8 +902,8 @@ function syncToCartStore(item: CartDrawerItemModel, unitPrice: number): void {
         const qty = state.sizeQuantities.get(opt.id) ?? 0;
         if (qty <= 0) continue;
 
-        const skuId = `${item.id}-${state.selectedColorId || 'no-color'}-${opt.id}`;
-        const effectivePrice = (opt.rawPrice != null && opt.rawPrice > 0) ? opt.rawPrice : unitPrice;
+        const skuId = `${item.id}-${state.selectedColorId || "no-color"}-${opt.id}`;
+        const effectivePrice = opt.rawPrice != null && opt.rawPrice > 0 ? opt.rawPrice : unitPrice;
         const variantText = buildVariantText(item, group.groupLabel, opt.label);
         const existing = cartStore.getSku(skuId);
 
@@ -867,16 +935,16 @@ function syncToCartStore(item: CartDrawerItemModel, unitPrice: number): void {
     const qty = state.noVariantQty;
     if (qty <= 0) return;
 
-    const colorId = state.selectedColorId || '__no_variant__';
+    const colorId = state.selectedColorId || "__no_variant__";
     const isFallback = !state.selectedColorId;
     const skuId = `${item.id}-${colorId}`;
-    const colorAxisName = item.colorAxisLabel || t('cart.colorLabel');
+    const colorAxisName = item.colorAxisLabel || t("cart.colorLabel");
     const variantParts: string[] = [];
     if (selectedColor) variantParts.push(`${colorAxisName}: ${selectedColor.label}`);
     for (const [axName, axVal] of state.selectedSelectables) {
       if (axVal) variantParts.push(`${axName}: ${axVal}`);
     }
-    const variantText = variantParts.join(' | ');
+    const variantText = variantParts.join(" | ");
     const existing = cartStore.getSku(skuId);
 
     if (existing) {
@@ -912,7 +980,7 @@ async function dispatchCartAdd(): Promise<boolean> {
   if (isLoggedIn()) {
     // Stock check — build variant_label for per-variant stock validation
     try {
-      const stockColorAxisName = state.item.colorAxisLabel || t('cart.colorLabel');
+      const stockColorAxisName = state.item.colorAxisLabel || t("cart.colorLabel");
       const stockSelectedColor = state.item.colors.find((c) => c.id === state.selectedColorId);
 
       if (hasSizeGroups()) {
@@ -921,28 +989,30 @@ async function dispatchCartAdd(): Promise<boolean> {
             const qty = state.sizeQuantities.get(opt.id) ?? 0;
             if (qty <= 0) continue;
             const labelParts: string[] = [];
-            if (stockSelectedColor) labelParts.push(`${stockColorAxisName}: ${stockSelectedColor.label}`);
+            if (stockSelectedColor)
+              labelParts.push(`${stockColorAxisName}: ${stockSelectedColor.label}`);
             for (const [axName, axVal] of state.selectedSelectables) {
               if (axVal) labelParts.push(`${axName}: ${axVal}`);
             }
             labelParts.push(`${group.groupLabel}: ${opt.label}`);
-            const stockLabel = labelParts.join(' | ');
+            const stockLabel = labelParts.join(" | ");
             await apiCheckStock(state.item.id, qty, opt.id, stockLabel);
           }
         }
       } else {
         const colorId = state.selectedColorId || undefined;
         const labelParts: string[] = [];
-        if (stockSelectedColor) labelParts.push(`${stockColorAxisName}: ${stockSelectedColor.label}`);
+        if (stockSelectedColor)
+          labelParts.push(`${stockColorAxisName}: ${stockSelectedColor.label}`);
         for (const [axName, axVal] of state.selectedSelectables) {
           if (axVal) labelParts.push(`${axName}: ${axVal}`);
         }
-        const stockLabel = labelParts.length > 0 ? labelParts.join(' | ') : undefined;
+        const stockLabel = labelParts.length > 0 ? labelParts.join(" | ") : undefined;
         await apiCheckStock(state.item.id, state.noVariantQty, colorId, stockLabel);
       }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
-      showCartError(msg || t('cart.stockError'));
+      showCartError(msg || t("cart.stockError"));
       return false;
     }
 
@@ -957,7 +1027,7 @@ async function dispatchCartAdd(): Promise<boolean> {
         if (axVal) extraAxes[axName] = axVal;
       }
       const hasExtra = Object.keys(extraAxes).length > 0;
-      const colorAxisName = state.item.colorAxisLabel || t('cart.colorLabel');
+      const colorAxisName = state.item.colorAxisLabel || t("cart.colorLabel");
 
       if (hasSizeGroups()) {
         for (const group of state.item.sizeGroups) {
@@ -970,8 +1040,15 @@ async function dispatchCartAdd(): Promise<boolean> {
               if (axVal) labelParts.push(`${axName}: ${axVal}`);
             }
             labelParts.push(`${group.groupLabel}: ${opt.label}`);
-            const variantLabel = labelParts.join(' | ');
-            lastResponse = await apiAddToCart(state.item.id, qty, opt.id, variantLabel, state.selectedColorId || undefined, hasExtra ? extraAxes : undefined);
+            const variantLabel = labelParts.join(" | ");
+            lastResponse = await apiAddToCart(
+              state.item.id,
+              qty,
+              opt.id,
+              variantLabel,
+              state.selectedColorId || undefined,
+              hasExtra ? extraAxes : undefined
+            );
           }
         }
       } else {
@@ -982,8 +1059,15 @@ async function dispatchCartAdd(): Promise<boolean> {
         for (const [axName, axVal] of state.selectedSelectables) {
           if (axVal) labelParts.push(`${axName}: ${axVal}`);
         }
-        const variantLabel = labelParts.length > 0 ? labelParts.join(' | ') : undefined;
-        lastResponse = await apiAddToCart(state.item.id, state.noVariantQty, isFallback ? undefined : colorId, variantLabel, colorId, hasExtra ? extraAxes : undefined);
+        const variantLabel = labelParts.length > 0 ? labelParts.join(" | ") : undefined;
+        lastResponse = await apiAddToCart(
+          state.item.id,
+          state.noVariantQty,
+          isFallback ? undefined : colorId,
+          variantLabel,
+          colorId,
+          hasExtra ? extraAxes : undefined
+        );
       }
 
       if (lastResponse) {
@@ -996,7 +1080,7 @@ async function dispatchCartAdd(): Promise<boolean> {
       }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
-      showCartError(msg || t('cart.stockError'));
+      showCartError(msg || t("cart.stockError"));
       return false;
     }
   }
@@ -1009,14 +1093,15 @@ async function dispatchCartAdd(): Promise<boolean> {
   // variant combinations of the same product don't overwrite each other
   const memoryKey = [
     state.item.id,
-    state.selectedColorId || '',
+    state.selectedColorId || "",
     ...Array.from(state.selectedSelectables.entries()).map(([k, v]) => `${k}=${v}`),
-  ].join('|||');
+  ].join("|||");
   const existing = cartMemory.get(memoryKey);
   if (existing) {
     if (hasSizeGroups()) {
       state.sizeQuantities.forEach((qty, sizeId) => {
-        if (qty > 0) existing.sizeQuantities.set(sizeId, (existing.sizeQuantities.get(sizeId) ?? 0) + qty);
+        if (qty > 0)
+          existing.sizeQuantities.set(sizeId, (existing.sizeQuantities.get(sizeId) ?? 0) + qty);
       });
     } else {
       existing.noVariantQty += state.noVariantQty;
@@ -1032,27 +1117,40 @@ async function dispatchCartAdd(): Promise<boolean> {
   }
 
   const groupedItems = buildGroupedItemsForEvent();
-  const quantity = groupedItems.reduce((sum, group) => sum + group.items.reduce((acc, item) => acc + item.qty, 0), 0);
-  const grandTotal = groupedItems.reduce((sum, group) => sum + group.items.reduce((acc, item) => acc + (item.qty * item.unitPrice), 0), 0);
+  const quantity = groupedItems.reduce(
+    (sum, group) => sum + group.items.reduce((acc, item) => acc + item.qty, 0),
+    0
+  );
+  const grandTotal = groupedItems.reduce(
+    (sum, group) => sum + group.items.reduce((acc, item) => acc + item.qty * item.unitPrice, 0),
+    0
+  );
 
-  document.dispatchEvent(new CustomEvent('cart-add', {
-    detail: {
-      productTitle: state.item.title,
-      supplierName: state.item.supplierName,
-      unitPrice: totals.activePrice,
-      quantity,
-      itemTotal: totals.itemSubtotal,
-      grandTotal,
-      groupedItems,
-    },
-  }));
+  document.dispatchEvent(
+    new CustomEvent("cart-add", {
+      detail: {
+        productTitle: state.item.title,
+        supplierName: state.item.supplierName,
+        unitPrice: totals.activePrice,
+        quantity,
+        itemTotal: totals.itemSubtotal,
+        grandTotal,
+        groupedItems,
+      },
+    })
+  );
 
   return true;
 }
 
 // ─── Open drawer ──────────────────────────────────────────────────────────────
 
-function openDrawer(itemId?: string, mode: 'cart' | 'sample' = 'cart', preselectedColor?: string, preselectedSize?: string): void {
+function openDrawer(
+  itemId?: string,
+  mode: "cart" | "sample" = "cart",
+  preselectedColor?: string,
+  preselectedSize?: string
+): void {
   const item = itemId ? productsById.get(itemId) : Array.from(productsById.values())[0];
   if (!item) return;
 
@@ -1070,7 +1168,7 @@ function openDrawer(itemId?: string, mode: 'cart' | 'sample' = 'cart', preselect
     );
   }
   if (preselectedIndex < 0) preselectedIndex = 0;
-  state.selectedColorId = item.colors[preselectedIndex]?.id ?? '';
+  state.selectedColorId = item.colors[preselectedIndex]?.id ?? "";
   state.previewColorIndex = Math.max(0, preselectedIndex);
 
   // Initialize selectable groups — select first option of each
@@ -1084,16 +1182,19 @@ function openDrawer(itemId?: string, mode: 'cart' | 'sample' = 'cart', preselect
   }
 
   // Sample mode → user picks one size manually (all start 0); cart mode → seed first/selected size with MOQ
-  const initialQty = mode === 'sample' ? 1 : Math.max(1, item.moq || 1);
+  const initialQty = mode === "sample" ? 1 : Math.max(1, item.moq || 1);
   let targetSizeId: string | undefined;
-  if (mode !== 'sample') {
+  if (mode !== "sample") {
     if (preselectedSize) {
       const sizeNeedle = preselectedSize.toLowerCase();
       for (const group of item.sizeGroups) {
         const match = group.options.find(
           (o) => o.id === preselectedSize || o.label.toLowerCase() === sizeNeedle
         );
-        if (match) { targetSizeId = match.id; break; }
+        if (match) {
+          targetSizeId = match.id;
+          break;
+        }
       }
     }
     if (!targetSizeId) targetSizeId = item.sizeGroups[0]?.options[0]?.id;
@@ -1105,11 +1206,12 @@ function openDrawer(itemId?: string, mode: 'cart' | 'sample' = 'cart', preselect
   );
 
   // No-variant qty: sample → 1, cart → MOQ
-  state.noVariantQty = (item.sizeGroups.length === 0) ? initialQty : 0;
+  state.noVariantQty = item.sizeGroups.length === 0 ? initialQty : 0;
 
-  const heading = document.getElementById('shared-cart-heading');
+  const heading = document.getElementById("shared-cart-heading");
   if (heading) {
-    heading.textContent = mode === 'sample' ? t('cart.sampleVariations') : t('cart.selectVariation');
+    heading.textContent =
+      mode === "sample" ? t("cart.sampleVariations") : t("cart.selectVariation");
   }
 
   rerenderDrawer();
@@ -1122,48 +1224,50 @@ function bindShippingEvents(): void {
   if (shippingInitialized) return;
   shippingInitialized = true;
 
-  const modal = document.getElementById('shared-cart-shipping-modal');
-  const closeBtn = document.getElementById('shared-cart-shipping-close');
-  const options = document.getElementById('shared-cart-shipping-options');
-  const applyBtn = document.getElementById('shared-cart-shipping-apply');
+  const modal = document.getElementById("shared-cart-shipping-modal");
+  const closeBtn = document.getElementById("shared-cart-shipping-close");
+  const options = document.getElementById("shared-cart-shipping-options");
+  const applyBtn = document.getElementById("shared-cart-shipping-apply");
   if (!modal || !closeBtn || !options || !applyBtn) return;
 
-  closeBtn.addEventListener('click', () => setShippingModalOpen(false));
+  closeBtn.addEventListener("click", () => setShippingModalOpen(false));
 
-  modal.addEventListener('click', (event) => {
+  modal.addEventListener("click", (event) => {
     if (event.target === modal) setShippingModalOpen(false);
   });
 
-  options.addEventListener('click', (event) => {
-    const row = (event.target as HTMLElement).closest<HTMLElement>('[data-shipping-option-index]');
+  options.addEventListener("click", (event) => {
+    const row = (event.target as HTMLElement).closest<HTMLElement>("[data-shipping-option-index]");
     if (!row) return;
     const idx = Number(row.dataset.shippingOptionIndex ?? 0);
     state.selectedShippingIndex = Number.isNaN(idx) ? 0 : idx;
     updateShippingModal();
   });
 
-  applyBtn.addEventListener('click', () => {
+  applyBtn.addEventListener("click", () => {
     if (!state.item) return;
 
     const selected = state.item.shippingOptions[state.selectedShippingIndex];
     if (selected) {
-      document.dispatchEvent(new CustomEvent('shipping-change', {
-        detail: {
-          index: state.selectedShippingIndex,
-          method: selected.method,
-          estimatedDays: selected.estimatedDays,
-          costStr: selected.costText,
-          cost: selected.cost,
-        },
-      }));
+      document.dispatchEvent(
+        new CustomEvent("shipping-change", {
+          detail: {
+            index: state.selectedShippingIndex,
+            method: selected.method,
+            estimatedDays: selected.estimatedDays,
+            costStr: selected.costText,
+            cost: selected.cost,
+          },
+        })
+      );
     }
 
     setShippingModalOpen(false);
     renderDrawerFooter();
   });
 
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && !modal.classList.contains('opacity-0')) {
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !modal.classList.contains("opacity-0")) {
       setShippingModalOpen(false);
     }
   });
@@ -1185,7 +1289,7 @@ export function SharedCartDrawer(): string {
 
       <aside id="shared-cart-drawer" class="fixed right-0 top-0 h-full w-full sm:w-[500px] lg:w-[600px] max-w-full bg-surface shadow-[-8px_0_30px_rgba(0,0,0,0.18)] xl:rounded-l-md xl:border-l xl:border-border-default flex flex-col transition-transform duration-300">
         <div class="flex items-center justify-between px-6 py-4 border-b border-border-default shrink-0 max-md:px-4 max-md:py-3">
-          <h3 id="shared-cart-heading" class="text-lg font-bold text-text-heading">${t('cart.selectVariation')}</h3>
+          <h3 id="shared-cart-heading" class="text-lg font-bold text-text-heading">${t("cart.selectVariation")}</h3>
           <button type="button" id="shared-cart-close" class="w-8 h-8 rounded-full text-secondary-400 hover:text-secondary-900 hover:bg-surface-raised transition-colors">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18 18 6M6 6l12 12"/></svg>
           </button>
@@ -1203,16 +1307,16 @@ export function SharedShippingModal(): string {
     <div id="shared-cart-shipping-modal" class="fixed inset-0 z-[210] bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300">
       <div id="shared-cart-shipping-sheet" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[45%] w-[min(92vw,760px)] bg-surface rounded-md border border-border-default shadow-2xl p-6 translate-y-4 transition-transform duration-300 max-md:w-full max-md:max-w-full max-md:rounded-t-md max-md:rounded-b-none max-md:top-auto max-md:bottom-0 max-md:-translate-x-1/2 max-md:-translate-y-0 max-md:p-4">
         <div class="flex items-center justify-between">
-          <h4 class="text-xl font-bold text-text-heading">${t('cart.selectShipping')}</h4>
+          <h4 class="text-xl font-bold text-text-heading">${t("cart.selectShipping")}</h4>
           <button type="button" id="shared-cart-shipping-close" class="w-8 h-8 rounded-full text-secondary-400 hover:text-secondary-900 hover:bg-surface-raised transition-colors">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18 18 6M6 6l12 12"/></svg>
           </button>
         </div>
 
-        <p class="mt-4 text-base text-text-secondary">${t('cart.shippingTo')}: <strong>${t('countries.TR')}</strong> · ${t('cart.shippingQty')}: <span id="shared-cart-shipping-qty">1 ${state.item?.unit ?? 'pc'}</span></p>
+        <p class="mt-4 text-base text-text-secondary">${t("cart.shippingTo")}: <strong>${t("countries.TR")}</strong> · ${t("cart.shippingQty")}: <span id="shared-cart-shipping-qty">1 ${state.item?.unit ?? "pc"}</span></p>
         <div id="shared-cart-shipping-options" class="mt-5 space-y-3 max-h-[46vh] overflow-y-auto"></div>
 
-        <button type="button" id="shared-cart-shipping-apply" class="mt-6 w-full th-btn-dark h-12">${t('common.apply')}</button>
+        <button type="button" id="shared-cart-shipping-apply" class="mt-6 w-full th-btn-dark h-12">${t("common.apply")}</button>
       </div>
     </div>
   `;
@@ -1231,57 +1335,57 @@ export function initSharedCartDrawer(items: CartDrawerItemModel[]): void {
   if (initialized) return;
   initialized = true;
 
-  const closeBtn = document.getElementById('shared-cart-close');
-  const previewPrev = document.getElementById('shared-cart-preview-prev');
-  const previewNext = document.getElementById('shared-cart-preview-next');
+  const closeBtn = document.getElementById("shared-cart-close");
+  const previewPrev = document.getElementById("shared-cart-preview-prev");
+  const previewNext = document.getElementById("shared-cart-preview-next");
 
   applyDrawerTransform(false);
 
-  closeBtn?.addEventListener('click', () => applyDrawerTransform(false));
+  closeBtn?.addEventListener("click", () => applyDrawerTransform(false));
 
-  overlay.addEventListener('click', (event) => {
+  overlay.addEventListener("click", (event) => {
     if (event.target === overlay) applyDrawerTransform(false);
   });
 
   // Global triggers (data-add-to-cart / data-order-sample)
-  document.addEventListener('click', (event) => {
+  document.addEventListener("click", (event) => {
     const target = event.target as HTMLElement;
 
-    const cartTrigger = target.closest<HTMLElement>('[data-add-to-cart]');
+    const cartTrigger = target.closest<HTMLElement>("[data-add-to-cart]");
     if (cartTrigger) {
       const id = cartTrigger.dataset.addToCart;
       if (id && productsById.has(id)) {
         event.preventDefault();
-        openDrawer(id, 'cart');
+        openDrawer(id, "cart");
       } else if (id && onItemMissing) {
         event.preventDefault();
-        onItemMissing(id, 'cart');
+        onItemMissing(id, "cart");
       }
       return;
     }
 
-    const sampleTrigger = target.closest<HTMLElement>('[data-order-sample]');
+    const sampleTrigger = target.closest<HTMLElement>("[data-order-sample]");
     if (sampleTrigger) {
       const id = sampleTrigger.dataset.orderSample;
       if (id && productsById.has(id)) {
         event.preventDefault();
-        openDrawer(id, 'sample');
+        openDrawer(id, "sample");
       } else if (id && onItemMissing) {
         event.preventDefault();
-        onItemMissing(id, 'sample');
+        onItemMissing(id, "sample");
       }
       return;
     }
   });
 
   // Body click events
-  body.addEventListener('click', (event) => {
+  body.addEventListener("click", (event) => {
     const target = event.target as HTMLElement;
 
     // Color chip selection
-    const colorChip = target.closest<HTMLElement>('[data-color-chip]');
+    const colorChip = target.closest<HTMLElement>("[data-color-chip]");
     if (colorChip && state.item) {
-      const colorId = colorChip.dataset.colorChip ?? '';
+      const colorId = colorChip.dataset.colorChip ?? "";
       const colorIndex = state.item.colors.findIndex((c) => c.id === colorId);
       state.selectedColorId = colorId;
       if (colorIndex >= 0) {
@@ -1302,10 +1406,10 @@ export function initSharedCartDrawer(items: CartDrawerItemModel[]): void {
     }
 
     // Selectable chip selection (e.g. Malzeme)
-    const selectableChip = target.closest<HTMLElement>('[data-selectable-chip]');
+    const selectableChip = target.closest<HTMLElement>("[data-selectable-chip]");
     if (selectableChip && state.item) {
-      const axisName = selectableChip.dataset.selectableChip ?? '';
-      const value = selectableChip.dataset.selectableValue ?? '';
+      const axisName = selectableChip.dataset.selectableChip ?? "";
+      const value = selectableChip.dataset.selectableValue ?? "";
       state.selectedSelectables.set(axisName, value);
       // Reset quantities for sizes that are now unavailable
       if (state.item.skuMatrix && state.item.skuMatrix.length > 0) {
@@ -1322,23 +1426,24 @@ export function initSharedCartDrawer(items: CartDrawerItemModel[]): void {
     }
 
     // Size / no-variant qty buttons
-    const qtyBtn = target.closest<HTMLElement>('[data-qty-action]');
+    const qtyBtn = target.closest<HTMLElement>("[data-qty-action]");
     if (qtyBtn) {
       const action = qtyBtn.dataset.qtyAction;
-      const sizeId = qtyBtn.dataset.qtySize ?? '';
-      const isNoVariant = sizeId === '__no_variant__';
+      const sizeId = qtyBtn.dataset.qtySize ?? "";
+      const isNoVariant = sizeId === "__no_variant__";
 
-      const current = isNoVariant
-        ? state.noVariantQty
-        : (state.sizeQuantities.get(sizeId) ?? 0);
+      const current = isNoVariant ? state.noVariantQty : (state.sizeQuantities.get(sizeId) ?? 0);
 
       const moq = Math.max(1, state.item?.moq || 1);
-      const step = (state.mode !== 'sample' && state.item?.sellInMoqMultiples) ? moq : 1;
+      const step = state.mode !== "sample" && state.item?.sellInMoqMultiples ? moq : 1;
 
-      if (action === 'plus') {
-        if (state.mode === 'sample') {
+      if (action === "plus") {
+        if (state.mode === "sample") {
           const totalQty = getTotalQty();
-          if (totalQty >= 1) { showSampleMaxToast(); return; }
+          if (totalQty >= 1) {
+            showSampleMaxToast();
+            return;
+          }
         }
         // Enforce stock limit for the size
         const next = current + step;
@@ -1347,7 +1452,7 @@ export function initSharedCartDrawer(items: CartDrawerItemModel[]): void {
           if (sizeLabel) {
             const stock = getSizeStock(sizeLabel);
             if (stock >= 0 && next > stock) {
-              showCartError(t('cart.stockError'));
+              showCartError(t("cart.stockError"));
               return;
             }
           }
@@ -1356,8 +1461,8 @@ export function initSharedCartDrawer(items: CartDrawerItemModel[]): void {
         else state.sizeQuantities.set(sizeId, next);
       }
 
-      if (action === 'minus') {
-        if (state.mode === 'sample') {
+      if (action === "minus") {
+        if (state.mode === "sample") {
           const next = Math.max(0, current - 1);
           if (isNoVariant) state.noVariantQty = next;
           else state.sizeQuantities.set(sizeId, next);
@@ -1378,23 +1483,23 @@ export function initSharedCartDrawer(items: CartDrawerItemModel[]): void {
       return;
     }
 
-    if (target.closest('[data-shipping-change]')) {
+    if (target.closest("[data-shipping-change]")) {
       openSharedShippingModal();
     }
   });
 
   // Body change events (qty inputs)
-  body.addEventListener('change', (event) => {
-    const input = (event.target as HTMLElement).closest<HTMLInputElement>('[data-qty-input-size]');
+  body.addEventListener("change", (event) => {
+    const input = (event.target as HTMLElement).closest<HTMLInputElement>("[data-qty-input-size]");
     if (!input) return;
 
-    const sizeId = input.dataset.qtyInputSize ?? '';
-    const isNoVariant = sizeId === '__no_variant__';
+    const sizeId = input.dataset.qtyInputSize ?? "";
+    const isNoVariant = sizeId === "__no_variant__";
     let nextValue = Number(input.value);
     if (Number.isNaN(nextValue) || nextValue < 0) nextValue = 0;
 
     const moq = Math.max(1, state.item?.moq || 1);
-    if (state.mode !== 'sample') {
+    if (state.mode !== "sample") {
       if (isNoVariant) {
         nextValue = Math.max(moq, nextValue);
       } else {
@@ -1415,19 +1520,19 @@ export function initSharedCartDrawer(items: CartDrawerItemModel[]): void {
           const stock = getSizeStock(sizeLabel);
           if (stock >= 0 && nextValue > stock) {
             nextValue = stock;
-            showCartError(t('cart.stockError'));
+            showCartError(t("cart.stockError"));
           }
         }
       }
       input.value = String(nextValue);
     }
 
-    if (state.mode === 'sample') {
+    if (state.mode === "sample") {
       const othersTotal = isNoVariant
         ? 0
         : Array.from(state.sizeQuantities.entries())
-          .filter(([id]) => id !== sizeId)
-          .reduce((a, [, b]) => a + b, 0);
+            .filter(([id]) => id !== sizeId)
+            .reduce((a, [, b]) => a + b, 0);
       if (othersTotal + nextValue > 1) {
         nextValue = Math.max(0, 1 - othersTotal);
         input.value = String(nextValue);
@@ -1444,35 +1549,36 @@ export function initSharedCartDrawer(items: CartDrawerItemModel[]): void {
   });
 
   // Footer events
-  footer.addEventListener('click', (event) => {
+  footer.addEventListener("click", (event) => {
     const target = event.target as HTMLElement;
 
-    if (target.closest('#shared-cart-footer-toggle')) {
+    if (target.closest("#shared-cart-footer-toggle")) {
       state.footerExpanded = !state.footerExpanded;
       renderDrawerFooter();
       return;
     }
 
-    if (target.closest('#shared-cart-confirm')) {
+    if (target.closest("#shared-cart-confirm")) {
       const totals = getTotals();
       if (totals.totalQty <= 0) {
-        const confirmBtn = document.getElementById('shared-cart-confirm');
+        const confirmBtn = document.getElementById("shared-cart-confirm");
         if (!confirmBtn) return;
 
         const originalText = confirmBtn.textContent;
-        confirmBtn.textContent = t('cart.pleaseSelectQty');
-        confirmBtn.classList.add('bg-error-500');
+        confirmBtn.textContent = t("cart.pleaseSelectQty");
+        confirmBtn.classList.add("bg-error-500");
 
         setTimeout(() => {
           confirmBtn.textContent = originalText;
-          confirmBtn.classList.remove('bg-error-500');
+          confirmBtn.classList.remove("bg-error-500");
         }, 1400);
         return;
       }
 
-      if (state.mode === 'sample') {
+      if (state.mode === "sample") {
         applyDrawerTransform(false);
-        const base = (typeof import.meta !== 'undefined' ? import.meta.env?.BASE_URL : undefined) || '/';
+        const base =
+          (typeof import.meta !== "undefined" ? import.meta.env?.BASE_URL : undefined) || "/";
         window.location.href = `${base}pages/order/checkout.html`;
       } else {
         dispatchCartAdd().then((success) => {
@@ -1483,28 +1589,29 @@ export function initSharedCartDrawer(items: CartDrawerItemModel[]): void {
   });
 
   // Preview navigation
-  previewPrev?.addEventListener('click', () => {
+  previewPrev?.addEventListener("click", () => {
     if (!state.item || state.item.colors.length === 0) return;
-    state.previewColorIndex = (state.previewColorIndex - 1 + state.item.colors.length) % state.item.colors.length;
+    state.previewColorIndex =
+      (state.previewColorIndex - 1 + state.item.colors.length) % state.item.colors.length;
     state.selectedColorId = state.item.colors[state.previewColorIndex]?.id ?? state.selectedColorId;
     updatePreview();
   });
 
-  previewNext?.addEventListener('click', () => {
+  previewNext?.addEventListener("click", () => {
     if (!state.item || state.item.colors.length === 0) return;
     state.previewColorIndex = (state.previewColorIndex + 1) % state.item.colors.length;
     state.selectedColorId = state.item.colors[state.previewColorIndex]?.id ?? state.selectedColorId;
     updatePreview();
   });
 
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && !overlay.classList.contains('opacity-0')) {
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !overlay.classList.contains("opacity-0")) {
       applyDrawerTransform(false);
     }
   });
 
-  window.addEventListener('resize', () => {
-    if (!overlay.classList.contains('opacity-0')) {
+  window.addEventListener("resize", () => {
+    if (!overlay.classList.contains("opacity-0")) {
       applyDrawerTransform(true);
     }
   });
@@ -1512,11 +1619,18 @@ export function initSharedCartDrawer(items: CartDrawerItemModel[]): void {
 
 // ─── Public API ───────────────────────────────────────────────────────────────
 
-export function openSharedCartDrawer(itemId?: string, mode: 'cart' | 'sample' = 'cart', preselectedColor?: string, preselectedSize?: string): void {
+export function openSharedCartDrawer(
+  itemId?: string,
+  mode: "cart" | "sample" = "cart",
+  preselectedColor?: string,
+  preselectedSize?: string
+): void {
   openDrawer(itemId, mode, preselectedColor, preselectedSize);
 }
 
-export function setOnItemMissing(cb: ((id: string, mode: 'cart' | 'sample') => Promise<void>) | null): void {
+export function setOnItemMissing(
+  cb: ((id: string, mode: "cart" | "sample") => Promise<void>) | null
+): void {
   onItemMissing = cb;
 }
 
@@ -1536,7 +1650,7 @@ export function openSharedShippingModal(quantity?: number): void {
     state.selectedShippingIndex = 0;
     state.previewColorIndex = 0;
     state.footerExpanded = false;
-    state.selectedColorId = fallback.colors[0]?.id ?? '';
+    state.selectedColorId = fallback.colors[0]?.id ?? "";
     const fallbackMoq = Math.max(1, fallback.moq || 1);
     const fallbackFirstId = fallback.sizeGroups[0]?.options[0]?.id;
     state.sizeQuantities = new Map(

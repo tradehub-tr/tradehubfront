@@ -6,7 +6,7 @@
  * Categories loaded dynamically from API via loadCategories()
  */
 
-import { t } from '../../i18n';
+import { t } from "../../i18n";
 
 export function TopRankingFilters(): string {
   return `
@@ -19,7 +19,7 @@ export function TopRankingFilters(): string {
           @click="openCategoryDropdown()"
         >
           <svg class="w-3 h-3 sm:w-4 sm:h-4 text-secondary-500 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
-          <span class="mr-[3px] sm:mr-0" x-text="selectedCategoryLabel">${t('topRankingPage.allCategories')}</span>
+          <span class="mr-[3px] sm:mr-0" x-text="selectedCategoryLabel">${t("topRankingPage.allCategories")}</span>
           <svg class="w-3 h-3 sm:w-4 sm:h-4 text-secondary-400 transition-transform flex-shrink-0" :class="categoryDropdownOpen && 'rotate-180'" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
         </button>
 
@@ -37,7 +37,7 @@ export function TopRankingFilters(): string {
               class="flex items-center w-full px-4 py-2.5 text-sm font-medium text-text-secondary hover:bg-surface-raised rounded-lg transition-colors text-left"
               @click="selectedMainCategory = null; pendingSubCategory = null; applyCategoryFilter()"
             >
-              <span data-i18n="topRankingPage.allCategories">${t('topRankingPage.allCategories')}</span>
+              <span data-i18n="topRankingPage.allCategories">${t("topRankingPage.allCategories")}</span>
             </button>
             <div class="my-1 border-t border-border-default"></div>
             <div class="space-y-0.5">
@@ -89,13 +89,13 @@ export function TopRankingFilters(): string {
                   class="th-btn-outline flex-1 px-4 py-2 text-sm font-medium"
                   @click="goBackToLevel1()"
                   data-i18n="topRankingPage.back"
-                >${t('topRankingPage.back')}</button>
+                >${t("topRankingPage.back")}</button>
                 <button
                   type="button"
                   class="th-btn flex-1 px-4 py-2 text-sm font-medium"
                   @click="applyCategoryFilter()"
                   data-i18n="topRankingPage.apply"
-                >${t('topRankingPage.apply')}</button>
+                >${t("topRankingPage.apply")}</button>
               </div>
             </div>
           </template>
@@ -148,7 +148,7 @@ export function TopRankingFilters(): string {
                 class="flex-1 text-[15px]"
                 :class="!selectedMainCategory ? 'font-semibold text-gray-900' : 'text-gray-600'"
                 data-i18n="topRankingPage.allCategories"
-              >${t('topRankingPage.allCategories')}</span>
+              >${t("topRankingPage.allCategories")}</span>
               <span
                 class="flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors"
                 :class="!selectedMainCategory ? 'border-gray-900 bg-gray-900' : 'border-gray-300 bg-transparent'"
@@ -229,13 +229,13 @@ export function TopRankingFilters(): string {
                   class="th-btn-outline flex-1 py-3 text-sm font-semibold"
                   @click="goBackToLevel1()"
                   data-i18n="topRankingPage.back"
-                >${t('topRankingPage.back')}</button>
+                >${t("topRankingPage.back")}</button>
                 <button
                   type="button"
                   class="th-btn flex-1 py-3 text-sm font-semibold"
                   @click="applyCategoryFilter(); showCategorySheet = false"
                   data-i18n="topRankingPage.apply"
-                >${t('topRankingPage.apply')}</button>
+                >${t("topRankingPage.apply")}</button>
               </div>
             </div>
           </template>

@@ -24,8 +24,8 @@ export interface CartSku {
   baseUnitPrice: number;
   basePriceAddon: number;
   baseCurrency: string;
-  listingVariant?: string;  // Frappe Listing Variant adı (merge için)
-  isAvailable?: boolean;    // false ise listing silinmiş/pasif, snapshot gösteriliyor
+  listingVariant?: string; // Frappe Listing Variant adı (merge için)
+  isAvailable?: boolean; // false ise listing silinmiş/pasif, snapshot gösteriliyor
 }
 
 export interface CartShippingMethod {
@@ -49,7 +49,7 @@ export interface CartProduct {
 }
 
 export interface CartProductTag {
-  type: 'DELIVERY_GUARANTEE' | 'PROMOTION';
+  type: "DELIVERY_GUARANTEE" | "PROMOTION";
   text: string;
   color: string;
   bgColor: string;
@@ -62,7 +62,7 @@ export interface CartSupplier {
   selected: boolean;
   products: CartProduct[];
   paymentMethods?: PaymentMethod[];
-  shippingFee?: number;  // Satıcı bazlı kargo ücreti (checkout'ta seçilince CartStore'a set edilir)
+  shippingFee?: number; // Satıcı bazlı kargo ücreti (checkout'ta seçilince CartStore'a set edilir)
 }
 
 export interface CartSummaryData {

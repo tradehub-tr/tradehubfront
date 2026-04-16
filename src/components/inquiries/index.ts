@@ -1,1 +1,1 @@
-export { InquiriesLayout, initInquiriesLayout } from './InquiriesLayout';
+export { InquiriesLayout, initInquiriesLayout } from "./InquiriesLayout";

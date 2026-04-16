@@ -5,7 +5,7 @@
  * Uses Alpine x-data from parent ordersSection for reactive data.
  */
 
-import { t } from '../../i18n';
+import { t } from "../../i18n";
 
 function documentIconSvg(): string {
   return `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -18,7 +18,7 @@ function documentIconSvg(): string {
 
 export function OrdersContent(): string {
   return `
-    <div class="orders__content mx-[clamp(0.75rem,0.5rem+1vw,1.25rem)] mb-[clamp(0.75rem,0.5rem+1vw,1.25rem)] mt-3 rounded-(--radius-card) min-h-[140px] sm:min-h-[180px]" role="tabpanel" aria-label="${t('dashboard.ariaOrderContent')}">
+    <div class="orders__content mx-[clamp(0.75rem,0.5rem+1vw,1.25rem)] mb-[clamp(0.75rem,0.5rem+1vw,1.25rem)] mt-3 rounded-(--radius-card) min-h-[140px] sm:min-h-[180px]" role="tabpanel" aria-label="${t("dashboard.ariaOrderContent")}">
 
       <!-- Loading -->
       <template x-if="loading">
@@ -36,9 +36,9 @@ export function OrdersContent(): string {
             <div class="text-(--color-orders-empty-icon)" aria-hidden="true">
               ${documentIconSvg()}
             </div>
-            <p class="text-sm text-(--color-orders-empty-text) m-0">${t('dashboard.noOrders')}</p>
+            <p class="text-sm text-(--color-orders-empty-text) m-0">${t("dashboard.noOrders")}</p>
             <a href="/pages/dashboard/orders.html" class="orders__empty-btn inline-block py-2 px-6 rounded-(--radius-btn) bg-(--color-orders-empty-btn-bg) text-(--color-orders-empty-btn-text) border border-(--color-orders-empty-btn-border) text-[13px] font-semibold no-underline transition-all hover:bg-(--color-surface-raised,#f5f5f5)" role="button">
-              ${t('dashboard.startSourcing')}
+              ${t("dashboard.startSourcing")}
             </a>
           </div>
         </div>

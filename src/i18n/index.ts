@@ -1,13 +1,13 @@
-import i18next from 'i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
-import en from './locales/en';
-import tr from './locales/tr';
-import { sanitizeHtml } from '../utils/sanitize';
+import i18next from "i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
+import en from "./locales/en";
+import tr from "./locales/tr";
+import { sanitizeHtml } from "../utils/sanitize";
 
-export const SUPPORTED_LANGS = ['en', 'tr'] as const;
+export const SUPPORTED_LANGS = ["en", "tr"] as const;
 export type SupportedLang = (typeof SUPPORTED_LANGS)[number];
 
-const LANG_STORAGE_KEY = 'i18nextLng';
+const LANG_STORAGE_KEY = "i18nextLng";
 
 // Merge namespace-level objects (mockProduct, dropshipping, sellerMock)
 // into the translation namespace so t('mockProduct.title') works correctly.
@@ -20,13 +20,13 @@ function mergeIntoTranslation(resource: any): any {
 // Initialize i18next
 i18next.use(LanguageDetector).init({
   resources: { en: mergeIntoTranslation(en), tr: mergeIntoTranslation(tr) },
-  fallbackLng: 'en',
-  defaultNS: 'translation',
+  fallbackLng: "en",
+  defaultNS: "translation",
   interpolation: { escapeValue: false },
   initImmediate: false,
   detection: {
-    order: ['localStorage', 'navigator'],
-    caches: ['localStorage'],
+    order: ["localStorage", "navigator"],
+    caches: ["localStorage"],
     lookupLocalStorage: LANG_STORAGE_KEY,
   },
 });
@@ -44,7 +44,7 @@ export function t(key: string, options?: Record<string, unknown>): string {
  */
 export function getCurrentLang(): SupportedLang {
   const lang = i18next.language?.substring(0, 2) as SupportedLang;
-  return SUPPORTED_LANGS.includes(lang) ? lang : 'en';
+  return SUPPORTED_LANGS.includes(lang) ? lang : "en";
 }
 
 /**
@@ -54,7 +54,7 @@ export async function changeLanguage(lang: SupportedLang): Promise<void> {
   await i18next.changeLanguage(lang);
   document.documentElement.lang = lang;
   updatePageTranslations();
-  window.dispatchEvent(new CustomEvent('languageChanged', { detail: { lang } }));
+  window.dispatchEvent(new CustomEvent("languageChanged", { detail: { lang } }));
 }
 
 /**
@@ -69,38 +69,38 @@ export async function changeLanguage(lang: SupportedLang): Promise<void> {
  */
 export function updatePageTranslations(): void {
   // Text content
-  document.querySelectorAll<HTMLElement>('[data-i18n]').forEach((el) => {
-    const key = el.getAttribute('data-i18n');
+  document.querySelectorAll<HTMLElement>("[data-i18n]").forEach((el) => {
+    const key = el.getAttribute("data-i18n");
     if (!key) return;
     const opts = parseI18nOptions(el);
     el.textContent = i18next.t(key, opts) as string;
   });
 
   // Placeholders
-  document.querySelectorAll<HTMLElement>('[data-i18n-placeholder]').forEach((el) => {
-    const key = el.getAttribute('data-i18n-placeholder');
+  document.querySelectorAll<HTMLElement>("[data-i18n-placeholder]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-placeholder");
     if (!key) return;
     const opts = parseI18nOptions(el);
     (el as HTMLInputElement).placeholder = i18next.t(key, opts) as string;
   });
 
   // Aria labels
-  document.querySelectorAll<HTMLElement>('[data-i18n-aria-label]').forEach((el) => {
-    const key = el.getAttribute('data-i18n-aria-label');
+  document.querySelectorAll<HTMLElement>("[data-i18n-aria-label]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-aria-label");
     if (!key) return;
-    el.setAttribute('aria-label', i18next.t(key) as string);
+    el.setAttribute("aria-label", i18next.t(key) as string);
   });
 
   // Titles
-  document.querySelectorAll<HTMLElement>('[data-i18n-title]').forEach((el) => {
-    const key = el.getAttribute('data-i18n-title');
+  document.querySelectorAll<HTMLElement>("[data-i18n-title]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-title");
     if (!key) return;
-    el.setAttribute('title', i18next.t(key) as string);
+    el.setAttribute("title", i18next.t(key) as string);
   });
 
   // HTML content
-  document.querySelectorAll<HTMLElement>('[data-i18n-html]').forEach((el) => {
-    const key = el.getAttribute('data-i18n-html');
+  document.querySelectorAll<HTMLElement>("[data-i18n-html]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-html");
     if (!key) return;
     const opts = parseI18nOptions(el);
     el.innerHTML = sanitizeHtml(i18next.t(key, opts) as string);
@@ -108,7 +108,7 @@ export function updatePageTranslations(): void {
 }
 
 function parseI18nOptions(el: HTMLElement): Record<string, unknown> | undefined {
-  const raw = el.getAttribute('data-i18n-options');
+  const raw = el.getAttribute("data-i18n-options");
   if (!raw) return undefined;
   try {
     return JSON.parse(raw);

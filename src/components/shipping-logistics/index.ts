@@ -1,1 +1,1 @@
-export { ShippingLogisticsPage, initShippingLogisticsPage } from './ShippingLogisticsPage'
+export { ShippingLogisticsPage, initShippingLogisticsPage } from "./ShippingLogisticsPage";

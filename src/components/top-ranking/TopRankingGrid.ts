@@ -11,19 +11,19 @@
  * Both modes share a single load-more button and a single empty state.
  */
 
-import { t } from '../../i18n';
-import { formatPrice } from '../../utils/currency';
-import type { RankingCategoryGroup, RankedProduct } from '../../types/topRanking';
+import { t } from "../../i18n";
+import { formatPrice } from "../../utils/currency";
+import type { RankingCategoryGroup, RankedProduct } from "../../types/topRanking";
 
 /** HTML-encode dynamic strings before injecting into innerHTML. */
 function escapeHtml(str: string): string {
-  if (!str) return '';
+  if (!str) return "";
   return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 /** Parse numeric MOQ out of legacy backend format ("532 Nos" → 532). */
@@ -34,7 +34,7 @@ function moqCount(moq: string | undefined): number {
 }
 
 function moqLabel(moq: string | undefined): string {
-  return t('common.moq', { count: moqCount(moq), unit: t('common.moqUnit') });
+  return t("common.moq", { count: moqCount(moq), unit: t("common.moqUnit") });
 }
 
 /** Build the URL for a category's "Daha fazla yükle" detail page. */
@@ -50,19 +50,20 @@ export function renderRankingGroupCard(group: RankingCategoryGroup): string {
   const safeName = escapeHtml(group.name);
   const headerHref = categoryHref(group);
 
-  const productsHtml = group.products.map(product => {
-    // Rank badge colors using theme semantic colors
-    let badgeClass = '';
-    if (product.rank === 1) badgeClass = 'bg-success-500';
-    else if (product.rank === 2) badgeClass = 'bg-info-500';
-    else badgeClass = 'bg-warning-500';
+  const productsHtml = group.products
+    .map((product) => {
+      // Rank badge colors using theme semantic colors
+      let badgeClass = "";
+      if (product.rank === 1) badgeClass = "bg-success-500";
+      else if (product.rank === 2) badgeClass = "bg-info-500";
+      else badgeClass = "bg-warning-500";
 
-    const safeProductName = escapeHtml(product.name);
-    const safeMoq = escapeHtml(product.moq);
-    const safeImg = escapeHtml(product.imageSrc || '');
-    const safeHref = escapeHtml(product.href || '#');
+      const safeProductName = escapeHtml(product.name);
+      const safeMoq = escapeHtml(product.moq);
+      const safeImg = escapeHtml(product.imageSrc || "");
+      const safeHref = escapeHtml(product.href || "#");
 
-    return `
+      return `
       <a href="${safeHref}" class="relative z-10 min-w-0 group/product" aria-label="${safeProductName}">
         <div class="relative aspect-square w-full overflow-hidden rounded-md bg-surface-raised">
           <img
@@ -82,7 +83,8 @@ export function renderRankingGroupCard(group: RankingCategoryGroup): string {
         </div>
       </a>
     `;
-  }).join('');
+    })
+    .join("");
 
   // Stretched-link pattern: the header anchor's ::before pseudo element
   // covers the entire card via `before:absolute before:inset-0`, so clicking
@@ -111,8 +113,8 @@ export function renderRankingGroupCard(group: RankingCategoryGroup): string {
 export function renderRankingFlatCard(product: RankedProduct): string {
   const safeProductName = escapeHtml(product.name);
   const safeMoq = escapeHtml(product.moq);
-  const safeImg = escapeHtml(product.imageSrc || '');
-  const safeHref = escapeHtml(product.href || '#');
+  const safeImg = escapeHtml(product.imageSrc || "");
+  const safeHref = escapeHtml(product.href || "#");
 
   return `
     <a href="${safeHref}" class="pc-topranking group/product flex flex-col hover:-translate-y-0.5 hover:shadow-md transition-all duration-200" aria-label="${safeProductName}">
@@ -219,7 +221,7 @@ export function TopRankingGrid(): string {
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
               d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
           </svg>
-          <p class="text-sm text-gray-400" data-i18n="topRankingPage.empty">${t('topRankingPage.empty')}</p>
+          <p class="text-sm text-gray-400" data-i18n="topRankingPage.empty">${t("topRankingPage.empty")}</p>
         </div>
       </div>
 
@@ -232,8 +234,8 @@ export function TopRankingGrid(): string {
           :disabled="loading"
           data-i18n="topRankingPage.loadMore"
         >
-          <span x-show="!loading" data-i18n="topRankingPage.loadMore">${t('topRankingPage.loadMore')}</span>
-          <span x-show="loading" data-i18n="topRankingPage.loading">${t('topRankingPage.loading')}</span>
+          <span x-show="!loading" data-i18n="topRankingPage.loadMore">${t("topRankingPage.loadMore")}</span>
+          <span x-show="loading" data-i18n="topRankingPage.loading">${t("topRankingPage.loading")}</span>
         </button>
       </div>
     </section>

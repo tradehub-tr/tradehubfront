@@ -5,10 +5,10 @@
  * Kategoriler API'den dinamik olarak yüklenir (categoryService).
  */
 
-import { onCategoriesLoaded } from '../../services/categoryService';
-import type { ApiCategory } from '../../services/categoryService';
-import { getCategoryIcon, getIconByName } from '../header';
-import { t } from '../../i18n';
+import { onCategoriesLoaded } from "../../services/categoryService";
+import type { ApiCategory } from "../../services/categoryService";
+import { getCategoryIcon, getIconByName } from "../header";
+import { t } from "../../i18n";
 
 /* ──── Subcategory item renderer ──── */
 
@@ -28,25 +28,31 @@ function renderSubcategoryItem(name: string, slug: string): string {
 /* ──── Skeleton helpers ──── */
 
 function renderBrowseListSkeleton(): string {
-  return Array.from({ length: 8 }, () => `
+  return Array.from(
+    { length: 8 },
+    () => `
     <li>
       <div class="flex items-center gap-3.5 w-full animate-pulse" style="padding:var(--catpopup-sidebar-padding-y) var(--catpopup-sidebar-padding-x)">
         <div class="w-5 h-5 rounded bg-gray-200 dark:bg-gray-700 flex-shrink-0"></div>
         <div class="h-3.5 rounded bg-gray-200 dark:bg-gray-700 flex-1"></div>
       </div>
     </li>
-  `).join('');
+  `
+  ).join("");
 }
 
 function renderPopupSidebarSkeleton(): string {
-  return Array.from({ length: 8 }, () => `
+  return Array.from(
+    { length: 8 },
+    () => `
     <li class="flex-shrink-0 lg:flex-shrink">
       <div class="flex items-center gap-2 lg:gap-3 px-3 lg:px-4 py-2 lg:py-2.5 animate-pulse">
         <div class="w-5 h-5 rounded bg-gray-200 dark:bg-gray-700 flex-shrink-0"></div>
         <div class="h-3 rounded bg-gray-200 dark:bg-gray-700 w-24"></div>
       </div>
     </li>
-  `).join('');
+  `
+  ).join("");
 }
 
 /* ──── Popup modal ──── */
@@ -67,9 +73,9 @@ function renderCategoryPopup(): string {
 
         <!-- Header -->
         <div id="cat-popup-header" class="flex items-center justify-between px-4 lg:px-6 py-3 lg:py-4 border-b flex-shrink-0 select-none" style="border-color:var(--catpopup-border)">
-          <h2 id="cat-popup-title" class="text-lg font-bold" style="color:var(--catpopup-heading)"><span data-i18n="categoryBrowse.title">${t('categoryBrowse.title')}</span></h2>
+          <h2 id="cat-popup-title" class="text-lg font-bold" style="color:var(--catpopup-heading)"><span data-i18n="categoryBrowse.title">${t("categoryBrowse.title")}</span></h2>
           <div class="flex items-center gap-4">
-            <a href="/featured" class="text-sm hidden lg:inline transition-colors duration-150 hover:text-(--catpopup-link-hover)" style="color:var(--catpopup-link)"><span data-i18n="categoryBrowse.browseDesc">${t('categoryBrowse.browseDesc')}</span></a>
+            <a href="/featured" class="text-sm hidden lg:inline transition-colors duration-150 hover:text-(--catpopup-link-hover)" style="color:var(--catpopup-link)"><span data-i18n="categoryBrowse.browseDesc">${t("categoryBrowse.browseDesc")}</span></a>
             <button id="cat-popup-close" class="p-1.5 transition-colors" style="color:var(--catpopup-close-color)" aria-label="Close">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 18 6M6 6l12 12"/>
@@ -111,7 +117,7 @@ export function CategoryBrowse(): string {
             id="category-browse-view-all"
             class="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1 px-3 py-1.5 text-sm font-medium rounded-full shadow-md border opacity-0 group-hover/panel:opacity-100 transition-opacity cursor-pointer" style="color:var(--catpopup-text);background-color:var(--catpopup-bg);border-color:var(--catpopup-border)"
           >
-            <span data-i18n="categoryBrowse.viewAll">${t('categoryBrowse.viewAll')}</span>
+            <span data-i18n="categoryBrowse.viewAll">${t("categoryBrowse.viewAll")}</span>
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
             </svg>
@@ -126,80 +132,82 @@ export function CategoryBrowse(): string {
 /* ──── Init: click handlers, sidebar navigation, close ──── */
 
 export function initCategoryBrowse(): void {
-  const overlay = document.getElementById('cat-popup-overlay');
-  const panel = document.getElementById('cat-popup-panel');
-  const closeBtn = document.getElementById('cat-popup-close');
-  const title = document.getElementById('cat-popup-title');
-  const viewAllBtn = document.getElementById('category-browse-view-all');
+  const overlay = document.getElementById("cat-popup-overlay");
+  const panel = document.getElementById("cat-popup-panel");
+  const closeBtn = document.getElementById("cat-popup-close");
+  const title = document.getElementById("cat-popup-title");
+  const viewAllBtn = document.getElementById("category-browse-view-all");
 
   if (!overlay || !panel || !closeBtn || !title) return;
 
-  const ACT = ['th-catpopup-sidebar-item--active'];
+  const ACT = ["th-catpopup-sidebar-item--active"];
   const INACT: string[] = [];
 
   function openPopup(categoryId: string): void {
-    overlay!.style.opacity = '1';
-    overlay!.style.pointerEvents = 'auto';
-    panel!.style.opacity = '1';
-    panel!.style.pointerEvents = 'auto';
-    document.body.style.overflow = 'hidden';
+    overlay!.style.opacity = "1";
+    overlay!.style.pointerEvents = "auto";
+    panel!.style.opacity = "1";
+    panel!.style.pointerEvents = "auto";
+    document.body.style.overflow = "hidden";
     showCategory(categoryId);
   }
 
   function closePopup(): void {
-    overlay!.style.opacity = '0';
-    overlay!.style.pointerEvents = 'none';
-    panel!.style.opacity = '0';
-    panel!.style.pointerEvents = 'none';
-    document.body.style.overflow = '';
+    overlay!.style.opacity = "0";
+    overlay!.style.pointerEvents = "none";
+    panel!.style.opacity = "0";
+    panel!.style.pointerEvents = "none";
+    document.body.style.overflow = "";
   }
 
   let _cats: ApiCategory[] = [];
 
   function showCategory(categoryId: string): void {
-    const cat = _cats.find(c => c.id === categoryId);
+    const cat = _cats.find((c) => c.id === categoryId);
     if (cat) {
-      const titleSpan = title!.querySelector('span');
+      const titleSpan = title!.querySelector("span");
       if (titleSpan) titleSpan.textContent = cat.name;
     }
 
-    const sidebarBtns = document.querySelectorAll<HTMLButtonElement>('.cat-popup-btn');
-    sidebarBtns.forEach(btn => {
+    const sidebarBtns = document.querySelectorAll<HTMLButtonElement>(".cat-popup-btn");
+    sidebarBtns.forEach((btn) => {
       btn.classList.remove(...ACT);
       btn.classList.add(...INACT);
     });
-    const activeBtn = document.querySelector<HTMLButtonElement>(`.cat-popup-btn[data-category="${categoryId}"]`);
+    const activeBtn = document.querySelector<HTMLButtonElement>(
+      `.cat-popup-btn[data-category="${categoryId}"]`
+    );
     if (activeBtn) {
       activeBtn.classList.remove(...INACT);
       activeBtn.classList.add(...ACT);
     }
 
-    const sections = document.querySelectorAll<HTMLElement>('.cat-popup-section');
-    sections.forEach(sec => {
-      sec.classList.toggle('hidden', sec.getAttribute('data-popup-section') !== categoryId);
+    const sections = document.querySelectorAll<HTMLElement>(".cat-popup-section");
+    sections.forEach((sec) => {
+      sec.classList.toggle("hidden", sec.getAttribute("data-popup-section") !== categoryId);
     });
   }
 
   if (viewAllBtn) {
-    viewAllBtn.addEventListener('click', () => {
+    viewAllBtn.addEventListener("click", () => {
       if (_cats.length > 0) openPopup(_cats[0].id);
     });
   }
 
   // Close handlers
-  closeBtn.addEventListener('click', closePopup);
-  overlay.addEventListener('click', closePopup);
-  panel.addEventListener('click', (e) => {
-    if (!(e.target as HTMLElement).closest('#cat-popup-sheet')) closePopup();
+  closeBtn.addEventListener("click", closePopup);
+  overlay.addEventListener("click", closePopup);
+  panel.addEventListener("click", (e) => {
+    if (!(e.target as HTMLElement).closest("#cat-popup-sheet")) closePopup();
   });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closePopup();
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closePopup();
   });
 
   // ── Drag-down to close (mouse + touch) ──
-  const sheet = document.getElementById('cat-popup-sheet');
-  const dragHandle = document.getElementById('cat-popup-drag-handle');
-  const popupHeader = document.getElementById('cat-popup-header');
+  const sheet = document.getElementById("cat-popup-sheet");
+  const dragHandle = document.getElementById("cat-popup-drag-handle");
+  const popupHeader = document.getElementById("cat-popup-header");
   if (sheet) {
     let startY = 0;
     let deltaY = 0;
@@ -211,9 +219,9 @@ export function initCategoryBrowse(): void {
       deltaY = 0;
       dragging = true;
       didDrag = false;
-      sheet!.style.transition = 'none';
-      document.body.style.userSelect = 'none';
-      document.body.style.webkitUserSelect = 'none';
+      sheet!.style.transition = "none";
+      document.body.style.userSelect = "none";
+      document.body.style.webkitUserSelect = "none";
     }
 
     function updateDrag(y: number) {
@@ -229,63 +237,78 @@ export function initCategoryBrowse(): void {
     function finishDrag() {
       if (!dragging) return;
       dragging = false;
-      document.body.style.userSelect = '';
-      document.body.style.webkitUserSelect = '';
-      sheet!.style.transition = 'transform 0.25s cubic-bezier(.2,.9,.3,1)';
-      overlay!.style.transition = 'opacity 0.25s ease';
+      document.body.style.userSelect = "";
+      document.body.style.webkitUserSelect = "";
+      sheet!.style.transition = "transform 0.25s cubic-bezier(.2,.9,.3,1)";
+      overlay!.style.transition = "opacity 0.25s ease";
 
       if (deltaY > 80) {
         sheet!.style.transform = `translateY(100%)`;
-        overlay!.style.opacity = '0';
+        overlay!.style.opacity = "0";
         setTimeout(() => {
           closePopup();
-          sheet!.style.transform = '';
-          sheet!.style.transition = '';
+          sheet!.style.transform = "";
+          sheet!.style.transition = "";
         }, 250);
       } else {
-        sheet!.style.transform = '';
-        overlay!.style.opacity = '1';
+        sheet!.style.transform = "";
+        overlay!.style.opacity = "1";
       }
     }
 
-    closeBtn.addEventListener('click', (e) => {
-      if (didDrag) { e.stopImmediatePropagation(); didDrag = false; }
-    }, true);
+    closeBtn.addEventListener(
+      "click",
+      (e) => {
+        if (didDrag) {
+          e.stopImmediatePropagation();
+          didDrag = false;
+        }
+      },
+      true
+    );
 
-    [dragHandle, popupHeader].forEach(el => {
+    [dragHandle, popupHeader].forEach((el) => {
       if (!el) return;
-      el.addEventListener('mousedown', (e: MouseEvent) => {
-        if ((e.target as HTMLElement).closest('#cat-popup-close')) return;
+      el.addEventListener("mousedown", (e: MouseEvent) => {
+        if ((e.target as HTMLElement).closest("#cat-popup-close")) return;
         e.preventDefault();
         beginDrag(e.clientY);
       });
     });
 
-    document.addEventListener('mousemove', (e: MouseEvent) => {
+    document.addEventListener("mousemove", (e: MouseEvent) => {
       if (!dragging) return;
       e.preventDefault();
       updateDrag(e.clientY);
     });
 
-    document.addEventListener('mouseup', () => {
+    document.addEventListener("mouseup", () => {
       if (dragging) finishDrag();
     });
 
-    [dragHandle, popupHeader].forEach(el => {
+    [dragHandle, popupHeader].forEach((el) => {
       if (!el) return;
-      el.addEventListener('touchstart', (e: TouchEvent) => {
-        if ((e.target as HTMLElement).closest('#cat-popup-close')) return;
-        beginDrag(e.touches[0].clientY);
-      }, { passive: true });
+      el.addEventListener(
+        "touchstart",
+        (e: TouchEvent) => {
+          if ((e.target as HTMLElement).closest("#cat-popup-close")) return;
+          beginDrag(e.touches[0].clientY);
+        },
+        { passive: true }
+      );
     });
 
-    document.addEventListener('touchmove', (e: TouchEvent) => {
-      if (!dragging) return;
-      e.preventDefault();
-      updateDrag(e.touches[0].clientY);
-    }, { passive: false });
+    document.addEventListener(
+      "touchmove",
+      (e: TouchEvent) => {
+        if (!dragging) return;
+        e.preventDefault();
+        updateDrag(e.touches[0].clientY);
+      },
+      { passive: false }
+    );
 
-    document.addEventListener('touchend', () => {
+    document.addEventListener("touchend", () => {
       if (dragging) finishDrag();
     });
   }
@@ -296,9 +319,11 @@ export function initCategoryBrowse(): void {
     _cats = cats;
 
     // Populate browse list (left sidebar on home page)
-    const browseList = document.getElementById('category-browse-list');
+    const browseList = document.getElementById("category-browse-list");
     if (browseList) {
-      browseList.innerHTML = cats.map(cat => `
+      browseList.innerHTML = cats
+        .map(
+          (cat) => `
         <li>
           <button
             type="button"
@@ -307,9 +332,12 @@ export function initCategoryBrowse(): void {
             data-category-id="${cat.id}"
           >
             <span class="flex-shrink-0 transition-colors" style="color:var(--catpopup-icon)">
-              ${cat.image
-                ? `<img src="${cat.image}" alt="${cat.name}" class="w-5 h-5 rounded-full object-cover" loading="lazy" />`
-                : (cat.icon_class ? getCategoryIcon(cat.icon_class) : getIconByName(cat.name))
+              ${
+                cat.image
+                  ? `<img src="${cat.image}" alt="${cat.name}" class="w-5 h-5 rounded-full object-cover" loading="lazy" />`
+                  : cat.icon_class
+                    ? getCategoryIcon(cat.icon_class)
+                    : getIconByName(cat.name)
               }
             </span>
             <span class="flex-1">${cat.name}</span>
@@ -318,25 +346,29 @@ export function initCategoryBrowse(): void {
             </svg>
           </button>
         </li>
-      `).join('');
+      `
+        )
+        .join("");
 
       // Bind browse item clicks
-      browseList.querySelectorAll<HTMLButtonElement>('.category-browse-item').forEach(item => {
-        item.addEventListener('click', () => {
-          const id = item.getAttribute('data-category-id');
+      browseList.querySelectorAll<HTMLButtonElement>(".category-browse-item").forEach((item) => {
+        item.addEventListener("click", () => {
+          const id = item.getAttribute("data-category-id");
           if (id) openPopup(id);
         });
       });
     }
 
     // Populate popup sidebar
-    const sidebarList = document.getElementById('cat-popup-sidebar-list');
+    const sidebarList = document.getElementById("cat-popup-sidebar-list");
     if (sidebarList) {
-      sidebarList.innerHTML = cats.map((cat, index) => `
+      sidebarList.innerHTML = cats
+        .map(
+          (cat, index) => `
         <li class="flex-shrink-0 lg:flex-shrink">
           <button
             type="button"
-            class="cat-popup-btn th-catpopup-sidebar-item flex items-center gap-2 lg:gap-3 w-full px-3 lg:px-4 py-2 lg:py-2.5 text-sm text-left border-l-2 border-l-transparent transition-colors duration-150 whitespace-nowrap lg:whitespace-normal hover:bg-(--catpopup-sidebar-active-bg) hover:text-(--catpopup-heading) ${index === 0 ? 'th-catpopup-sidebar-item--active' : ''}"
+            class="cat-popup-btn th-catpopup-sidebar-item flex items-center gap-2 lg:gap-3 w-full px-3 lg:px-4 py-2 lg:py-2.5 text-sm text-left border-l-2 border-l-transparent transition-colors duration-150 whitespace-nowrap lg:whitespace-normal hover:bg-(--catpopup-sidebar-active-bg) hover:text-(--catpopup-heading) ${index === 0 ? "th-catpopup-sidebar-item--active" : ""}"
             style="color:var(--catpopup-text)"
             data-category="${cat.id}"
           >
@@ -347,24 +379,28 @@ export function initCategoryBrowse(): void {
             <svg class="w-4 h-4 flex-shrink-0 hidden lg:block" style="color:var(--catpopup-icon)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/></svg>
           </button>
         </li>
-      `).join('');
+      `
+        )
+        .join("");
 
       // Bind sidebar button clicks
-      sidebarList.querySelectorAll<HTMLButtonElement>('.cat-popup-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-category');
+      sidebarList.querySelectorAll<HTMLButtonElement>(".cat-popup-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-category");
           if (id) showCategory(id);
         });
       });
     }
 
     // Populate popup content (subcategory grids)
-    const content = document.getElementById('cat-popup-content');
+    const content = document.getElementById("cat-popup-content");
     if (content) {
-      content.innerHTML = cats.map((cat, index) => `
-        <div class="cat-popup-section ${index !== 0 ? 'hidden' : ''}" data-popup-section="${cat.id}">
+      content.innerHTML = cats
+        .map(
+          (cat, index) => `
+        <div class="cat-popup-section ${index !== 0 ? "hidden" : ""}" data-popup-section="${cat.id}">
           <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-y-5 gap-x-4 lg:gap-y-8 lg:gap-x-6">
-            ${cat.children.map(ch => renderSubcategoryItem(ch.name, ch.slug)).join('')}
+            ${cat.children.map((ch) => renderSubcategoryItem(ch.name, ch.slug)).join("")}
             <!-- View all item -->
             <a href="/pages/products.html?cat=${cat.slug}" class="flex flex-col items-center gap-2 group/product">
               <div class="w-20 h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 rounded-full border-2 border-dashed flex items-center justify-center transition-all" style="background-color:var(--catpopup-sidebar-bg);border-color:var(--catpopup-border)">
@@ -372,11 +408,13 @@ export function initCategoryBrowse(): void {
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"/>
                 </svg>
               </div>
-              <span class="text-xs lg:text-sm text-center leading-tight transition-colors duration-150" style="color:var(--catpopup-text)" data-i18n="categoryBrowse.viewAll">${t('categoryBrowse.viewAll')}</span>
+              <span class="text-xs lg:text-sm text-center leading-tight transition-colors duration-150" style="color:var(--catpopup-text)" data-i18n="categoryBrowse.viewAll">${t("categoryBrowse.viewAll")}</span>
             </a>
           </div>
         </div>
-      `).join('');
+      `
+        )
+        .join("");
     }
   });
 }

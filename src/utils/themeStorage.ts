@@ -7,9 +7,9 @@
  *      Remote tema, HEAD inline script tarafından ilk paint'ten önce uygulanır.
  */
 
-const STORAGE_KEY = 'tradehub-theme-overrides';
-const REMOTE_CACHE_KEY = 'tradehub-theme-remote';
-const REMOTE_ENDPOINT = '/api/method/tradehub_core.api.theme.get_public_theme';
+const STORAGE_KEY = "tradehub-theme-overrides";
+const REMOTE_CACHE_KEY = "tradehub-theme-remote";
+const REMOTE_ENDPOINT = "/api/method/tradehub_core.api.theme.get_public_theme";
 
 /**
  * Load saved theme overrides from localStorage
@@ -81,8 +81,8 @@ export function collectOverrides(varNames: string[]): Record<string, string> {
 export async function fetchRemoteTheme(): Promise<Record<string, string>> {
   try {
     const res = await fetch(REMOTE_ENDPOINT, {
-      credentials: 'same-origin',
-      headers: { Accept: 'application/json' },
+      credentials: "same-origin",
+      headers: { Accept: "application/json" },
     });
     if (!res.ok) return {};
     const data = await res.json();
@@ -90,7 +90,7 @@ export async function fetchRemoteTheme(): Promise<Record<string, string>> {
     // Sadece -- ile başlayan key'leri kabul et (güvenlik)
     const clean: Record<string, string> = {};
     for (const [k, v] of Object.entries(overrides)) {
-      if (typeof k === 'string' && k.startsWith('--') && typeof v === 'string') {
+      if (typeof k === "string" && k.startsWith("--") && typeof v === "string") {
         clean[k] = v;
       }
     }
@@ -113,7 +113,7 @@ export function loadRemoteThemeCache(): Record<string, string> {
     const raw = localStorage.getItem(REMOTE_CACHE_KEY);
     if (!raw) return {};
     const parsed = JSON.parse(raw);
-    return (parsed && typeof parsed === 'object') ? parsed : {};
+    return parsed && typeof parsed === "object" ? parsed : {};
   } catch {
     return {};
   }

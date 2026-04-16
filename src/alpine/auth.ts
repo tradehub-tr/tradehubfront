@@ -1,30 +1,24 @@
-import Alpine from 'alpinejs'
-import { t } from '../i18n'
-import { showToast } from '../utils/toast'
+import Alpine from "alpinejs";
+import { t } from "../i18n";
+import { showToast } from "../utils/toast";
 import {
   initAccountTypeSelector,
   getSelectedAccountType,
   type AccountType,
-} from '../components/auth/AccountTypeSelector'
+} from "../components/auth/AccountTypeSelector";
 import {
   EmailVerification,
   initEmailVerification,
   cleanupEmailVerification,
   type EmailVerificationState,
-} from '../components/auth/EmailVerification'
+} from "../components/auth/EmailVerification";
 import {
   AccountSetupForm,
   initAccountSetupForm,
   type AccountSetupFormData,
-} from '../components/auth/AccountSetupForm'
-import {
-  escapeHtml,
-  type RegisterStep,
-} from '../components/auth/RegisterPage'
-import {
-  maskEmail,
-  type ForgotPasswordStep,
-} from '../components/auth/ForgotPasswordPage'
+} from "../components/auth/AccountSetupForm";
+import { escapeHtml, type RegisterStep } from "../components/auth/RegisterPage";
+import { maskEmail, type ForgotPasswordStep } from "../components/auth/ForgotPasswordPage";
 import {
   checkEmailExists,
   sendRegistrationOtp,
@@ -36,71 +30,92 @@ import {
   forgotPassword,
   resetPassword,
   registerSupplier,
-} from '../utils/auth'
+} from "../utils/auth";
 import {
   SupplierSetupForm,
   initSupplierSetupForm,
   type SupplierSetupFormData,
-} from '../components/auth/SupplierSetupForm'
+} from "../components/auth/SupplierSetupForm";
 
 const COUNTRY_CODE_MAP: Record<string, string> = {
-  TR: 'Turkey', US: 'United States', DE: 'Germany', GB: 'United Kingdom',
-  FR: 'France', IT: 'Italy', ES: 'Spain', NL: 'Netherlands', BE: 'Belgium',
-  AT: 'Austria', CH: 'Switzerland', PL: 'Poland', SE: 'Sweden', NO: 'Norway',
-  DK: 'Denmark', FI: 'Finland', RU: 'Russia', CN: 'China', JP: 'Japan',
-  KR: 'South Korea', IN: 'India', AE: 'United Arab Emirates', SA: 'Saudi Arabia',
-  AU: 'Australia', CA: 'Canada', BR: 'Brazil', MX: 'Mexico',
-}
+  TR: "Turkey",
+  US: "United States",
+  DE: "Germany",
+  GB: "United Kingdom",
+  FR: "France",
+  IT: "Italy",
+  ES: "Spain",
+  NL: "Netherlands",
+  BE: "Belgium",
+  AT: "Austria",
+  CH: "Switzerland",
+  PL: "Poland",
+  SE: "Sweden",
+  NO: "Norway",
+  DK: "Denmark",
+  FI: "Finland",
+  RU: "Russia",
+  CN: "China",
+  JP: "Japan",
+  KR: "South Korea",
+  IN: "India",
+  AE: "United Arab Emirates",
+  SA: "Saudi Arabia",
+  AU: "Australia",
+  CA: "Canada",
+  BR: "Brazil",
+  MX: "Mexico",
+};
 function countryCodeToEnglish(code?: string): string {
-  return (code && COUNTRY_CODE_MAP[code]) || 'Turkey'
+  return (code && COUNTRY_CODE_MAP[code]) || "Turkey";
 }
-import { validatePassword, isPasswordValid } from '../utils/password-validation'
+import { validatePassword, isPasswordValid } from "../utils/password-validation";
 
 /* ── Register Page ──────────────────────────────────── */
 
-Alpine.data('registerPage', () => ({
-  currentStep: 'account-type' as RegisterStep,
-  accountType: 'buyer' as AccountType | null,
-  email: '',
+Alpine.data("registerPage", () => ({
+  currentStep: "account-type" as RegisterStep,
+  accountType: "buyer" as AccountType | null,
+  email: "",
   emailValid: false,
   emailError: false,
   emailExistsError: false,
   emailDisabledError: false,
   loading: false,
   otpState: null as EmailVerificationState | null,
-  registration_token: '',
-  seller_application: '',
+  registration_token: "",
+  seller_application: "",
   _setupData: {} as Record<string, string>,
 
   init() {
     // Read initial step from data attribute if provided
     const initialStep = (this.$el as HTMLElement).dataset.initialStep as RegisterStep | undefined;
-    if (initialStep && initialStep !== 'account-type') {
+    if (initialStep && initialStep !== "account-type") {
       this.currentStep = initialStep;
     }
 
     // Check URL for ?type=supplier to pre-select supplier
-    const urlType = new URLSearchParams(window.location.search).get('type');
-    const defaultType: AccountType = urlType === 'supplier' ? 'supplier' : 'buyer';
+    const urlType = new URLSearchParams(window.location.search).get("type");
+    const defaultType: AccountType = urlType === "supplier" ? "supplier" : "buyer";
 
     // Initialize account type selector (child component delegation)
     initAccountTypeSelector({
       defaultType,
       onTypeSelect: (type: AccountType) => {
         this.accountType = type;
-      }
+      },
     });
     this.accountType = getSelectedAccountType() || defaultType;
 
     // Listen for programmatic navigation via navigateToStep()
-    (this.$el as HTMLElement).addEventListener('register-navigate', ((e: CustomEvent) => {
+    (this.$el as HTMLElement).addEventListener("register-navigate", ((e: CustomEvent) => {
       this.goToStep(e.detail.step as RegisterStep);
     }) as EventListener);
   },
 
   validateEmail() {
     const input = (this.$refs as Record<string, HTMLInputElement>).emailInput;
-    const value = input?.value.trim() || '';
+    const value = input?.value.trim() || "";
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     this.emailValid = emailRegex.test(value);
     if (this.emailValid) {
@@ -114,7 +129,7 @@ Alpine.data('registerPage', () => ({
     if (this.loading) return; // Prevent double submit
 
     const input = (this.$refs as Record<string, HTMLInputElement>).emailInput;
-    const value = input?.value.trim() || '';
+    const value = input?.value.trim() || "";
 
     if (!this.emailValid) {
       this.emailError = true;
@@ -143,13 +158,13 @@ Alpine.data('registerPage', () => ({
       await sendRegistrationOtp(value);
 
       // 3. Navigate to OTP step
-      this.goToStep('otp');
+      this.goToStep("otp");
     } catch (err) {
-      const msg = err instanceof Error ? err.message : '';
-      if (msg === 'RATE_LIMIT') {
-        showToast({ message: t('common.rateLimitError'), type: 'error' });
+      const msg = err instanceof Error ? err.message : "";
+      if (msg === "RATE_LIMIT") {
+        showToast({ message: t("common.rateLimitError"), type: "error" });
       } else {
-        showToast({ message: msg || t('common.error'), type: 'error' });
+        showToast({ message: msg || t("common.error"), type: "error" });
       }
     } finally {
       this.loading = false;
@@ -158,7 +173,7 @@ Alpine.data('registerPage', () => ({
 
   goToStep(step: RegisterStep) {
     // Cleanup OTP state when leaving OTP step
-    if (this.currentStep === 'otp' && this.otpState) {
+    if (this.currentStep === "otp" && this.otpState) {
       cleanupEmailVerification(this.otpState);
       this.otpState = null;
     }
@@ -166,16 +181,16 @@ Alpine.data('registerPage', () => ({
     this.currentStep = step;
 
     // Notify external listeners via custom event
-    this.$dispatch('register-step-change', { step });
+    this.$dispatch("register-step-change", { step });
 
     this.$nextTick(() => {
       switch (step) {
-        case 'email': {
+        case "email": {
           const input = (this.$refs as Record<string, HTMLInputElement>).emailInput;
           input?.focus();
           break;
         }
-        case 'otp': {
+        case "otp": {
           // Dynamically render OTP content (child component needs fresh DOM each time)
           const container = (this.$refs as Record<string, HTMLElement>).otpContainer;
           if (container) {
@@ -187,35 +202,35 @@ Alpine.data('registerPage', () => ({
               // Verify OTP against backend and get registration_token
               const result = await verifyRegistrationOtp(this.email, otp);
               this.registration_token = result.registration_token;
-              this.goToStep('setup');
+              this.goToStep("setup");
             },
             onResend: async () => {
               try {
                 await sendRegistrationOtp(this.email);
-                showToast({ message: t('auth.otpResent'), type: 'success' });
+                showToast({ message: t("auth.otpResent"), type: "success" });
               } catch (err) {
-                const msg = err instanceof Error ? err.message : t('common.error');
-                showToast({ message: msg, type: 'error' });
+                const msg = err instanceof Error ? err.message : t("common.error");
+                showToast({ message: msg, type: "error" });
               }
             },
             onBack: () => {
-              this.goToStep('email');
-            }
+              this.goToStep("email");
+            },
           });
           break;
         }
-        case 'setup': {
+        case "setup": {
           // Dynamically render setup form (child component needs fresh DOM each time)
           const container = (this.$refs as Record<string, HTMLElement>).setupContainer;
           if (container) {
-            container.innerHTML = AccountSetupForm('TR');
+            container.innerHTML = AccountSetupForm("TR");
           }
           initAccountSetupForm({
-            defaultCountry: 'TR',
+            defaultCountry: "TR",
             onSubmit: async (formData: AccountSetupFormData) => {
               if (!this.accountType) return;
 
-              if (this.accountType === 'supplier') {
+              if (this.accountType === "supplier") {
                 // Supplier: do NOT create account yet — store data and go to form
                 this._setupData = {
                   email: this.email,
@@ -224,7 +239,7 @@ Alpine.data('registerPage', () => ({
                   last_name: formData.lastName,
                   registration_token: this.registration_token,
                 };
-                this.goToStep('supplier-setup');
+                this.goToStep("supplier-setup");
                 return;
               }
 
@@ -235,9 +250,9 @@ Alpine.data('registerPage', () => ({
                   password: formData.password,
                   first_name: formData.firstName,
                   last_name: formData.lastName,
-                  account_type: 'buyer',
-                  phone: formData.phone || '',
-                  country: countryCodeToEnglish(formData.country?.code) || 'Turkey',
+                  account_type: "buyer",
+                  phone: formData.phone || "",
+                  country: countryCodeToEnglish(formData.country?.code) || "Turkey",
                   accept_terms: true,
                   accept_kvkk: true,
                   registration_token: this.registration_token,
@@ -245,16 +260,16 @@ Alpine.data('registerPage', () => ({
 
                 await login(this.email, formData.password);
                 const user = await getSessionUser();
-                window.location.href = user ? getRedirectUrl(user) : '/';
+                window.location.href = user ? getRedirectUrl(user) : "/";
               } catch (err) {
-                const msg = err instanceof Error ? err.message : t('common.error');
-                showToast({ message: msg, type: 'error' });
+                const msg = err instanceof Error ? err.message : t("common.error");
+                showToast({ message: msg, type: "error" });
               }
-            }
+            },
           });
           break;
         }
-        case 'supplier-setup': {
+        case "supplier-setup": {
           const container = (this.$refs as Record<string, HTMLElement>).supplierSetupContainer;
           if (container) {
             container.innerHTML = SupplierSetupForm();
@@ -265,7 +280,7 @@ Alpine.data('registerPage', () => ({
                 // Register supplier atomically — account + application in one call
                 await registerSupplier({
                   ...this._setupData,
-                  account_type: 'supplier',
+                  account_type: "supplier",
                   phone: formData.contact_phone,
                   accept_terms: true,
                   accept_kvkk: true,
@@ -274,17 +289,17 @@ Alpine.data('registerPage', () => ({
 
                 // Auto-login and redirect
                 await login(this._setupData.email, this._setupData.password);
-                window.location.href = '/pages/seller/application-pending.html';
+                window.location.href = "/pages/seller/application-pending.html";
               } catch (err) {
-                const msg = err instanceof Error ? err.message : t('common.error');
-                showToast({ message: msg, type: 'error' });
-                const btn = document.getElementById('ss-next-btn') as HTMLButtonElement | null;
+                const msg = err instanceof Error ? err.message : t("common.error");
+                showToast({ message: msg, type: "error" });
+                const btn = document.getElementById("ss-next-btn") as HTMLButtonElement | null;
                 if (btn) {
                   btn.disabled = false;
-                  btn.textContent = t('auth.supplierSetup.submit');
+                  btn.textContent = t("auth.supplierSetup.submit");
                 }
               }
-            }
+            },
           });
           break;
         }
@@ -295,9 +310,9 @@ Alpine.data('registerPage', () => ({
 
 /* ── Forgot Password Page ───────────────────────────── */
 
-Alpine.data('forgotPasswordPage', () => ({
-  step: 'find-account' as ForgotPasswordStep,
-  email: '',
+Alpine.data("forgotPasswordPage", () => ({
+  step: "find-account" as ForgotPasswordStep,
+  email: "",
   loading: false,
 
   get maskedEmail(): string {
@@ -313,10 +328,10 @@ Alpine.data('forgotPasswordPage', () => ({
     try {
       // Always returns success (email enumeration protection)
       await forgotPassword(trimmed);
-      this.step = 'link-sent';
+      this.step = "link-sent";
     } catch (err) {
-      const msg = err instanceof Error ? err.message : t('common.error');
-      showToast({ message: msg, type: 'error' });
+      const msg = err instanceof Error ? err.message : t("common.error");
+      showToast({ message: msg, type: "error" });
     } finally {
       this.loading = false;
     }
@@ -328,10 +343,10 @@ Alpine.data('forgotPasswordPage', () => ({
 
     try {
       await forgotPassword(this.email.trim());
-      showToast({ message: t('auth.forgot.linkResent'), type: 'success' });
+      showToast({ message: t("auth.forgot.linkResent"), type: "success" });
     } catch (err) {
-      const msg = err instanceof Error ? err.message : t('common.error');
-      showToast({ message: msg, type: 'error' });
+      const msg = err instanceof Error ? err.message : t("common.error");
+      showToast({ message: msg, type: "error" });
     } finally {
       this.loading = false;
     }
@@ -340,13 +355,13 @@ Alpine.data('forgotPasswordPage', () => ({
 
 /* ── Reset Password Page ────────────────────────────── */
 
-Alpine.data('resetPasswordPage', () => ({
-  step: 'form' as 'form' | 'success' | 'error',
-  key: '',
+Alpine.data("resetPasswordPage", () => ({
+  step: "form" as "form" | "success" | "error",
+  key: "",
   showPassword: false,
   passwordValid: false,
   loading: false,
-  error: '',
+  error: "",
   reqMinLength: null as boolean | null,
   reqUppercase: null as boolean | null,
   reqLowercase: null as boolean | null,
@@ -355,16 +370,16 @@ Alpine.data('resetPasswordPage', () => ({
   init() {
     // Read key from URL
     const params = new URLSearchParams(window.location.search);
-    this.key = params.get('key') || '';
+    this.key = params.get("key") || "";
 
     if (!this.key) {
-      this.error = t('auth.reset.invalidLinkDesc');
-      this.step = 'error';
+      this.error = t("auth.reset.invalidLinkDesc");
+      this.step = "error";
     }
   },
 
   onPasswordInput() {
-    const pw = (this.$refs as Record<string, HTMLInputElement>).newPassword?.value || '';
+    const pw = (this.$refs as Record<string, HTMLInputElement>).newPassword?.value || "";
     const touched = pw.length > 0;
     const v = validatePassword(pw);
 
@@ -377,24 +392,24 @@ Alpine.data('resetPasswordPage', () => ({
   },
 
   reqStyle(valid: boolean | null): string {
-    if (valid === null) return '';
-    return valid ? 'color: #16a34a' : 'color: #dc2626';
+    if (valid === null) return "";
+    return valid ? "color: #16a34a" : "color: #dc2626";
   },
 
   async submitReset() {
     if (!this.passwordValid || this.loading) return;
 
-    const pw = (this.$refs as Record<string, HTMLInputElement>).newPassword?.value || '';
+    const pw = (this.$refs as Record<string, HTMLInputElement>).newPassword?.value || "";
     this.loading = true;
-    this.error = '';
+    this.error = "";
 
     try {
       await resetPassword(this.key, pw);
-      this.step = 'success';
+      this.step = "success";
     } catch (err) {
-      const msg = err instanceof Error ? err.message : t('auth.reset.genericError');
+      const msg = err instanceof Error ? err.message : t("auth.reset.genericError");
       this.error = msg;
-      this.step = 'error';
+      this.step = "error";
     } finally {
       this.loading = false;
     }

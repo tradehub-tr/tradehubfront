@@ -7,11 +7,13 @@
  * Categories are fetched dynamically from the API on init.
  */
 
-import { t } from '../../i18n';
+import { t } from "../../i18n";
 
 /** Build a single tab button HTML — uses manual styling, no Alpine :class */
 function buildTabHtml(id: string, label: string, isActive = false): string {
-  const activeClass = isActive ? '!border-[#222] !text-[#222] font-semibold' : 'text-[#666] hover:text-[#222]';
+  const activeClass = isActive
+    ? "!border-[#222] !text-[#222] font-semibold"
+    : "text-[#666] hover:text-[#222]";
   return `
     <button
       type="button"
@@ -48,8 +50,8 @@ function buildSheetItemHtml(id: string, label: string): string {
 
 export function TopDealsCategoryTabs(): string {
   // Only render the "Tumu" (All) tab statically (active by default); rest loaded from API
-  const defaultTabHtml = buildTabHtml('all', t('topDealsPage.tabAll'), true);
-  const defaultSheetHtml = buildSheetItemHtml('all', t('topDealsPage.tabAll'));
+  const defaultTabHtml = buildTabHtml("all", t("topDealsPage.tabAll"), true);
+  const defaultSheetHtml = buildSheetItemHtml("all", t("topDealsPage.tabAll"));
 
   return `
     <div class="relative flex items-center" x-ref="tabsContainer">
@@ -142,20 +144,20 @@ export function initCategoryTabs(): void {
   setTimeout(() => {
     const scrollEl = document.querySelector<HTMLElement>('[x-ref="tabsScroll"]');
     if (scrollEl) {
-      scrollEl.dispatchEvent(new Event('scroll'));
+      scrollEl.dispatchEvent(new Event("scroll"));
     }
   }, 100);
 
   // Wire "Tümü" tab click handler (statically rendered)
   const allTab = document.querySelector<HTMLElement>('.top-deals-tab[data-cat-slug="all"]');
   if (allTab) {
-    allTab.addEventListener('click', () => {
+    allTab.addEventListener("click", () => {
       const mainEl = document.querySelector<HTMLElement>('[x-data="topDealsPage"]');
       if (mainEl && (mainEl as any)._x_dataStack) {
         const data = (mainEl as any)._x_dataStack[0];
-        if (data) data.setCategory('all');
+        if (data) data.setCategory("all");
       }
-      updateTabStyles('all');
+      updateTabStyles("all");
     });
   }
 
@@ -165,28 +167,29 @@ export function initCategoryTabs(): void {
 
 async function loadCategoryTabs(): Promise<void> {
   try {
-    const { getCategories } = await import('../../services/listingService');
+    const { getCategories } = await import("../../services/listingService");
     const categories = await getCategories();
 
-    const tabsContainer = document.getElementById('td-tabs-scroll');
-    const sheetContainer = document.getElementById('td-sheet-categories');
+    const tabsContainer = document.getElementById("td-tabs-scroll");
+    const sheetContainer = document.getElementById("td-sheet-categories");
     if (!tabsContainer || !categories || categories.length === 0) return;
 
     // Get Alpine data for wiring click handlers
     const mainEl = document.querySelector<HTMLElement>('[x-data="topDealsPage"]');
 
     for (const cat of categories) {
-      const slug = (cat as any).slug || (cat as any).name || '';
+      const slug = (cat as any).slug || (cat as any).name || "";
       const name = (cat as any).name || slug;
       if (!slug) continue;
 
       // --- Desktop/tablet tab ---
-      const tabBtn = document.createElement('button');
-      tabBtn.type = 'button';
-      tabBtn.className = 'top-deals-tab flex-shrink-0 whitespace-nowrap px-4 py-3 text-sm transition-colors border-b-[3px] border-transparent text-[#666] hover:text-[#222]';
+      const tabBtn = document.createElement("button");
+      tabBtn.type = "button";
+      tabBtn.className =
+        "top-deals-tab flex-shrink-0 whitespace-nowrap px-4 py-3 text-sm transition-colors border-b-[3px] border-transparent text-[#666] hover:text-[#222]";
       tabBtn.textContent = name;
       tabBtn.dataset.catSlug = slug;
-      tabBtn.addEventListener('click', () => {
+      tabBtn.addEventListener("click", () => {
         if (mainEl && (mainEl as any)._x_dataStack) {
           const data = (mainEl as any)._x_dataStack[0];
           if (data) data.setCategory(slug);
@@ -198,9 +201,10 @@ async function loadCategoryTabs(): Promise<void> {
 
       // --- Mobile sheet item ---
       if (sheetContainer) {
-        const sheetBtn = document.createElement('button');
-        sheetBtn.type = 'button';
-        sheetBtn.className = 'flex items-center w-full px-5 py-4 text-left transition-colors border-b border-gray-50 active:bg-gray-50';
+        const sheetBtn = document.createElement("button");
+        sheetBtn.type = "button";
+        sheetBtn.className =
+          "flex items-center w-full px-5 py-4 text-left transition-colors border-b border-gray-50 active:bg-gray-50";
         sheetBtn.dataset.catSlug = slug;
         sheetBtn.innerHTML = `
           <span class="flex-1 text-[15px] text-gray-600">${name}</span>
@@ -208,7 +212,7 @@ async function loadCategoryTabs(): Promise<void> {
             <span class="w-2 h-2 rounded-full transition-colors bg-transparent"></span>
           </span>
         `;
-        sheetBtn.addEventListener('click', () => {
+        sheetBtn.addEventListener("click", () => {
           if (mainEl && (mainEl as any)._x_dataStack) {
             const data = (mainEl as any)._x_dataStack[0];
             if (data) {
@@ -224,26 +228,27 @@ async function loadCategoryTabs(): Promise<void> {
 
     // Update scroll state after tabs are added
     const scrollEl = document.querySelector<HTMLElement>('[x-ref="tabsScroll"]');
-    if (scrollEl) scrollEl.dispatchEvent(new Event('scroll'));
+    if (scrollEl) scrollEl.dispatchEvent(new Event("scroll"));
   } catch (err) {
-    console.warn('[TopDealsCategoryTabs] Failed to load categories:', err);
+    console.warn("[TopDealsCategoryTabs] Failed to load categories:", err);
   }
 }
 
 /** Update active/inactive styles on all tabs */
 function updateTabStyles(activeSlug: string): void {
   // Desktop tabs
-  const tabsContainer = document.getElementById('td-tabs-scroll');
+  const tabsContainer = document.getElementById("td-tabs-scroll");
   if (tabsContainer) {
-    tabsContainer.querySelectorAll('.top-deals-tab').forEach(btn => {
+    tabsContainer.querySelectorAll(".top-deals-tab").forEach((btn) => {
       const el = btn as HTMLElement;
-      const slug = el.dataset.catSlug || (el.textContent?.trim() === t('topDealsPage.tabAll') ? 'all' : '');
+      const slug =
+        el.dataset.catSlug || (el.textContent?.trim() === t("topDealsPage.tabAll") ? "all" : "");
       if (slug === activeSlug) {
-        el.classList.add('!border-[#222]', '!text-[#222]', 'font-semibold');
-        el.classList.remove('text-[#666]');
+        el.classList.add("!border-[#222]", "!text-[#222]", "font-semibold");
+        el.classList.remove("text-[#666]");
       } else {
-        el.classList.remove('!border-[#222]', '!text-[#222]', 'font-semibold');
-        el.classList.add('text-[#666]');
+        el.classList.remove("!border-[#222]", "!text-[#222]", "font-semibold");
+        el.classList.add("text-[#666]");
       }
     });
   }

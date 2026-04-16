@@ -4,7 +4,7 @@
  * Wrapped in getter functions so t() is called at render time.
  */
 
-import { t } from '../../i18n';
+import { t } from "../../i18n";
 
 export interface RightPanelSectionConfig {
   id: string;
@@ -32,32 +32,32 @@ const favoritesEmptyIcon = `
 
 export function getFavoritesConfig(): RightPanelSectionConfig {
   return {
-    id: 'favorites',
-    title: t('dashboard.favorites'),
+    id: "favorites",
+    title: t("dashboard.favorites"),
   };
 }
 
 export function getFavoritesEmptyState(): FavoritesEmptyConfig {
   return {
     icon: favoritesEmptyIcon,
-    text: t('dashboard.noFavorites'),
-    linkText: t('dashboard.explore'),
-    linkHref: '/products',
+    text: t("dashboard.noFavorites"),
+    linkText: t("dashboard.explore"),
+    linkHref: "/products",
   };
 }
 
 export function getBrowsingHistoryConfig(): RightPanelSectionConfig {
   return {
-    id: 'browsing-history',
-    title: t('dashboard.browsingHistoryTitle'),
-    actionText: t('dashboard.viewAllHistory'),
-    actionHref: '/pages/dashboard/favorites.html#browsing-history',
+    id: "browsing-history",
+    title: t("dashboard.browsingHistoryTitle"),
+    actionText: t("dashboard.viewAllHistory"),
+    actionHref: "/pages/dashboard/favorites.html#browsing-history",
   };
 }
 
 export function getPromotionConfig(): RightPanelSectionConfig {
   return {
-    id: 'promotions',
-    title: t('dashboard.promotionTitle'),
+    id: "promotions",
+    title: t("dashboard.promotionTitle"),
   };
 }

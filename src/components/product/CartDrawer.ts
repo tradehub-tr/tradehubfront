@@ -1,5 +1,5 @@
-import { getCurrentProduct } from '../../alpine/product';
-import type { ProductDetail } from '../../types/product';
+import { getCurrentProduct } from "../../alpine/product";
+import type { ProductDetail } from "../../types/product";
 import {
   SharedCartDrawer,
   SharedShippingModal,
@@ -13,7 +13,7 @@ import {
   type CartDrawerItemModel,
   type CartDrawerShippingOption,
   type CartDrawerTierModel,
-} from '../cart/overlay/SharedCartDrawer';
+} from "../cart/overlay/SharedCartDrawer";
 
 export interface CartDrawerTier {
   minQty: number;
@@ -32,7 +32,7 @@ let currentContext: CartDrawerContext | null = null;
 
 function toShippingOptions(product: ProductDetail): CartDrawerShippingOption[] {
   return product.shipping.map((option, index) => {
-    const numeric = Number(option.cost.replace(/[^0-9.]/g, '')) || 0;
+    const numeric = Number(option.cost.replace(/[^0-9.]/g, "")) || 0;
     return {
       id: `ship-${index + 1}`,
       method: option.method,
@@ -45,7 +45,7 @@ function toShippingOptions(product: ProductDetail): CartDrawerShippingOption[] {
 
 function toColors(product: ProductDetail): CartDrawerColorModel[] {
   // Filter ALL color variant groups and flatten options (backend may return multiple groups for same attribute)
-  const colorVariants = product.variants.filter((v) => v.type === 'color');
+  const colorVariants = product.variants.filter((v) => v.type === "color");
   if (colorVariants.length === 0) return [];
 
   return colorVariants.flatMap((variant, groupIdx) =>
@@ -53,7 +53,7 @@ function toColors(product: ProductDetail): CartDrawerColorModel[] {
       id: option.id || `color-${groupIdx}-${i + 1}`,
       label: option.label,
       colorHex: option.value,
-      imageKind: 'jewelry' as const,
+      imageKind: "jewelry" as const,
       imageUrl: option.thumbnail || product.images[0]?.src,
       rawPrice: option.rawPrice ?? undefined,
     }))
@@ -62,7 +62,7 @@ function toColors(product: ProductDetail): CartDrawerColorModel[] {
 
 function toSizeGroups(product: ProductDetail): CartDrawerSizeGroup[] {
   return product.variants
-    .filter((v) => v.type === 'size')
+    .filter((v) => v.type === "size")
     .map((v) => ({
       groupLabel: v.label,
       options: v.options.map((o, i) => ({
@@ -76,7 +76,7 @@ function toSizeGroups(product: ProductDetail): CartDrawerSizeGroup[] {
 
 function toSelectableGroups(product: ProductDetail): CartDrawerSelectableGroup[] {
   return product.variants
-    .filter((v) => v.type === 'material')
+    .filter((v) => v.type === "material")
     .map((v) => ({
       groupLabel: v.label,
       axisName: v.label,
@@ -88,18 +88,31 @@ function toSelectableGroups(product: ProductDetail): CartDrawerSelectableGroup[]
     .filter((g) => g.options.length > 0);
 }
 
-function toSkuMatrix(product: ProductDetail): CartDrawerItemModel['skuMatrix'] {
-  const colorVariant = product.variants.find((v) => v.type === 'color');
+function toSkuMatrix(product: ProductDetail): CartDrawerItemModel["skuMatrix"] {
+  const colorVariant = product.variants.find((v) => v.type === "color");
   if (!colorVariant?.skuMatrix) return undefined;
   return colorVariant.skuMatrix;
 }
 
-function toDrawerItem(product: ProductDetail, context?: CartDrawerContext | null): CartDrawerItemModel {
+function toDrawerItem(
+  product: ProductDetail,
+  context?: CartDrawerContext | null
+): CartDrawerItemModel {
   const unit = context?.unit || product.unit;
   const moq = context?.moq && context.moq > 0 ? context.moq : product.moq;
-  const tiers: CartDrawerTierModel[] = (context?.priceTiers && context.priceTiers.length > 0)
-    ? context.priceTiers.map((tier) => ({ minQty: tier.minQty, maxQty: tier.maxQty, price: tier.price }))
-    : product.priceTiers.map((tier) => ({ minQty: tier.minQty, maxQty: tier.maxQty, price: tier.price, rawPrice: tier.basePrice }));
+  const tiers: CartDrawerTierModel[] =
+    context?.priceTiers && context.priceTiers.length > 0
+      ? context.priceTiers.map((tier) => ({
+          minQty: tier.minQty,
+          maxQty: tier.maxQty,
+          price: tier.price,
+        }))
+      : product.priceTiers.map((tier) => ({
+          minQty: tier.minQty,
+          maxQty: tier.maxQty,
+          price: tier.price,
+          rawPrice: tier.basePrice,
+        }));
 
   return {
     id: product.id,
@@ -108,12 +121,12 @@ function toDrawerItem(product: ProductDetail, context?: CartDrawerContext | null
     unit,
     moq,
     sellInMoqMultiples: !!product.sellInMoqMultiples,
-    imageKind: 'jewelry',
-    currency: product.baseCurrency || 'USD',
+    imageKind: "jewelry",
+    currency: product.baseCurrency || "USD",
     priceTiers: tiers,
     samplePrice: product.baseSamplePrice ?? product.samplePrice,
     colors: toColors(product),
-    colorAxisLabel: product.variants.find((v) => v.type === 'color')?.label,
+    colorAxisLabel: product.variants.find((v) => v.type === "color")?.label,
     sizeGroups: toSizeGroups(product),
     selectableGroups: toSelectableGroups(product),
     shippingOptions: toShippingOptions(product),
@@ -132,7 +145,7 @@ export function setCartDrawerContext(context: CartDrawerContext | null): void {
 export function openCartDrawer(preselectedColor?: string, preselectedSize?: string): void {
   const item = buildActiveItem();
   initSharedCartDrawer([item]);
-  openSharedCartDrawer(item.id, 'cart', preselectedColor, preselectedSize);
+  openSharedCartDrawer(item.id, "cart", preselectedColor, preselectedSize);
 }
 
 export function CartDrawer(): string {

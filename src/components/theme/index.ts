@@ -1,4 +1,4 @@
 /**
  * Theme components barrel export
  */
-export { ThemeEditorPanel, initThemeEditorPanel } from './ThemeEditorPanel';
+export { ThemeEditorPanel, initThemeEditorPanel } from "./ThemeEditorPanel";

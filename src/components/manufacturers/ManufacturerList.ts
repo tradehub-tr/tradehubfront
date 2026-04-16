@@ -1,4 +1,4 @@
-import { t } from '../../i18n';
+import { t } from "../../i18n";
 
 export function ManufacturerList(): string {
   return `
@@ -65,7 +65,7 @@ export function ManufacturerList(): string {
                       <template x-if="seller.verified">
                         <span class="flex items-center gap-1">
                           <svg class="w-4 h-4 text-[#1a66ff]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                          <span class="text-[#1a66ff] font-bold">${t('mfr.list.verified')}</span>
+                          <span class="text-[#1a66ff] font-bold">${t("mfr.list.verified")}</span>
                         </span>
                       </template>
                       <template x-if="seller.city">
@@ -79,7 +79,7 @@ export function ManufacturerList(): string {
                 </div>
 
                 <div class="flex items-center gap-2 xl:gap-3 shrink-0">
-                  <button type="button" class="text-gray-400 hover:text-red-500 transition-colors" aria-label="${t('mfr.list.addToFavorites')}">
+                  <button type="button" class="text-gray-400 hover:text-red-500 transition-colors" aria-label="${t("mfr.list.addToFavorites")}">
                     <svg class="w-[22px] h-[22px]" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                     </svg>
@@ -87,7 +87,7 @@ export function ManufacturerList(): string {
                   <a
                     :href="'/pages/seller/seller-storefront.html?seller=' + seller.seller_code"
                     class="h-9 xl:h-10 px-3 xl:px-4 border border-[#222] rounded-full text-[12px] xl:text-[14px] font-bold text-[#222] bg-white hover:bg-gray-50 transition-colors whitespace-nowrap inline-flex items-center"
-                  >${t('mfr.list.contactUs')}</a>
+                  >${t("mfr.list.contactUs")}</a>
                 </div>
               </div>
 
@@ -95,7 +95,7 @@ export function ManufacturerList(): string {
               <div class="flex gap-4 items-stretch">
                 <!-- Left: Stats -->
                 <div class="w-[200px] xl:w-[244px] shrink-0 pr-3">
-                  <h4 class="text-[13px] xl:text-[14px] font-normal text-[#222] mb-1">${t('mfr.list.rankingsAndReviews')}</h4>
+                  <h4 class="text-[13px] xl:text-[14px] font-normal text-[#222] mb-1">${t("mfr.list.rankingsAndReviews")}</h4>
                   <div class="mb-4 text-[13px] xl:text-[14px]">
                     <strong class="text-[#222]" x-text="seller.rating ? seller.rating.toFixed(1) : '—'"></strong>
                     <span class="text-[#222]">/5</span>

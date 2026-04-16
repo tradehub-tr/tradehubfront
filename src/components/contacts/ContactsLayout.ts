@@ -4,7 +4,7 @@
  * iSTOC-style with search, sort dropdown, and empty states.
  */
 
-import { t } from '../../i18n';
+import { t } from "../../i18n";
 
 export function ContactsLayout(): string {
   return `
@@ -16,8 +16,8 @@ export function ContactsLayout(): string {
           <path stroke-linecap="round" d="M12 16v-4m0-4h.01"/>
         </svg>
         <span class="text-[13px] text-(--color-text-body,#333333)">
-          ${t('contacts.helpBanner')}
-          <a href="#feedback" class="text-[#2563EB] no-underline ml-1 hover:underline">${t('contacts.clickHere')}</a>
+          ${t("contacts.helpBanner")}
+          <a href="#feedback" class="text-[#2563EB] no-underline ml-1 hover:underline">${t("contacts.clickHere")}</a>
         </span>
       </div>
 
@@ -28,7 +28,7 @@ export function ContactsLayout(): string {
           <!-- Header -->
           <div class="mb-3">
             <button class="inline-flex items-center gap-1.5 text-sm font-normal text-(--color-text-heading,#111827) bg-transparent border-none cursor-pointer p-0 hover:text-(--color-cta-primary,#333333)">
-              ${t('contacts.allContacts')}
+              ${t("contacts.allContacts")}
               <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
               </svg>
@@ -37,8 +37,8 @@ export function ContactsLayout(): string {
 
           <!-- Search -->
           <div class="flex items-center border border-(--color-border-medium,#d1d5db) rounded mb-3 overflow-hidden">
-            <input type="text" class="th-input th-input-sm th-input-borderless flex-1" placeholder="${t('contacts.searchPlaceholder')}" />
-            <button class="flex items-center justify-center w-8 h-8 border-none border-l border-l-(--color-border-medium,#d1d5db) bg-(--color-surface-muted,#fafafa) text-(--color-text-muted,#666666) cursor-pointer hover:bg-(--color-border-light) hover:text-(--color-text-heading,#111827)" aria-label="${t('inquiries.searchPlaceholder')}">
+            <input type="text" class="th-input th-input-sm th-input-borderless flex-1" placeholder="${t("contacts.searchPlaceholder")}" />
+            <button class="flex items-center justify-center w-8 h-8 border-none border-l border-l-(--color-border-medium,#d1d5db) bg-(--color-surface-muted,#fafafa) text-(--color-text-muted,#666666) cursor-pointer hover:bg-(--color-border-light) hover:text-(--color-text-heading,#111827)" aria-label="${t("inquiries.searchPlaceholder")}">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="8"/>
                 <path stroke-linecap="round" d="m21 21-4.35-4.35"/>
@@ -49,7 +49,7 @@ export function ContactsLayout(): string {
           <!-- Sort -->
           <div class="mb-6">
             <button class="inline-flex items-center gap-1 text-[13px] text-(--color-text-muted,#666666) bg-transparent border-none cursor-pointer p-0 hover:text-(--color-text-heading,#111827)">
-              ${t('contacts.sortByTime')}
+              ${t("contacts.sortByTime")}
               <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
               </svg>
@@ -62,7 +62,7 @@ export function ContactsLayout(): string {
               <circle cx="12" cy="12" r="10"/>
               <path stroke-linecap="round" d="M12 16v-4m0-4h.01"/>
             </svg>
-            <span class="text-[13px] text-(--color-text-placeholder,#999999)">${t('contacts.noResults')}</span>
+            <span class="text-[13px] text-(--color-text-placeholder,#999999)">${t("contacts.noResults")}</span>
           </div>
         </aside>
 
@@ -96,11 +96,11 @@ export function ContactsLayout(): string {
                 <ellipse cx="100" cy="110" rx="50" ry="6" fill="#E8EDF3" opacity="0.5"/>
               </svg>
             </div>
-            <p class="text-sm text-(--color-text-muted,#666666) max-w-[260px]">${t('contacts.notFoundMsg')}</p>
+            <p class="text-sm text-(--color-text-muted,#666666) max-w-[260px]">${t("contacts.notFoundMsg")}</p>
           </div>
 
           <!-- Top-right compose button -->
-          <button class="absolute top-4 right-4 flex items-center justify-center w-10 h-10 border-none bg-(--color-border-light) rounded-md text-(--color-text-muted,#666666) cursor-pointer transition-[background,color] duration-150 hover:bg-[#e5e7eb] hover:text-(--color-text-heading,#111827)" aria-label="${t('contacts.newMessage')}">
+          <button class="absolute top-4 right-4 flex items-center justify-center w-10 h-10 border-none bg-(--color-border-light) rounded-md text-(--color-text-muted,#666666) cursor-pointer transition-[background,color] duration-150 hover:bg-[#e5e7eb] hover:text-(--color-text-heading,#111827)" aria-label="${t("contacts.newMessage")}">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
             </svg>
@@ -113,10 +113,10 @@ export function ContactsLayout(): string {
 
 export function initContactsLayout(): void {
   /* Banner dismiss (optional) */
-  const banner = document.getElementById('contacts-banner');
+  const banner = document.getElementById("contacts-banner");
   if (banner) {
-    banner.addEventListener('click', (e) => {
-      if ((e.target as HTMLElement).closest('a')) return;
+    banner.addEventListener("click", (e) => {
+      if ((e.target as HTMLElement).closest("a")) return;
     });
   }
 }

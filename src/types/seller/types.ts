@@ -8,8 +8,8 @@ export interface SellerProfile {
   name: string;
   slug: string;
   logo: string;
-  verificationType: 'Verified' | 'Verified PRO';
-  verificationBadgeType: 'standard' | 'pro';
+  verificationType: "Verified" | "Verified PRO";
+  verificationBadgeType: "standard" | "pro";
   yearsOnPlatform: number;
   location: string;
   mainCategories: string[];
@@ -48,7 +48,7 @@ export interface StoreNavData {
     label: string;
     href: string;
     isActive: boolean;
-    dropdownType?: 'products' | 'company';
+    dropdownType?: "products" | "company";
   }>;
   productCategories: NavCategory[];
   companyProfileLinks: Array<{
@@ -67,8 +67,8 @@ export interface HeroSlide {
   subtitle?: string;
   ctaText?: string;
   ctaLink?: string;
-  textPosition?: 'left' | 'center' | 'right';
-  textColor?: 'white' | 'dark';
+  textPosition?: "left" | "center" | "right";
+  textColor?: "white" | "dark";
 }
 
 export interface HeroBannerData {
@@ -217,7 +217,7 @@ export interface FloatingActionButton {
   icon: string;
   bgColor: string;
   hoverColor: string;
-  action: 'scroll-to-contact' | 'open-chat';
+  action: "scroll-to-contact" | "open-chat";
   ariaLabel: string;
 }
 
@@ -244,5 +244,24 @@ export interface SellerStorefrontData {
   contactForm: ContactFormData;
   floatingActions: FloatingActionsData;
 }
-export interface SellerReview { id: string; reviewerName: string; country: string; countryFlag: string; date: string; comment: string; productName: string; productImage: string; productPrice: string; } 
-export interface SellerPerformanceStats { rating: number; reviewCount: number; responseTime: string; onTimeDeliveryRate: string; transactions: number; supplierServiceScore: number; onTimeShipmentScore: number; productQualityScore: number; }
+export interface SellerReview {
+  id: string;
+  reviewerName: string;
+  country: string;
+  countryFlag: string;
+  date: string;
+  comment: string;
+  productName: string;
+  productImage: string;
+  productPrice: string;
+}
+export interface SellerPerformanceStats {
+  rating: number;
+  reviewCount: number;
+  responseTime: string;
+  onTimeDeliveryRate: string;
+  transactions: number;
+  supplierServiceScore: number;
+  onTimeShipmentScore: number;
+  productQualityScore: number;
+}

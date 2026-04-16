@@ -3,7 +3,7 @@
  * Left panel: search bar, "Gelen Kutusu" heading, category tabs with real filtering.
  */
 
-import { t } from '../../i18n';
+import { t } from "../../i18n";
 
 export function InboxPanel(): string {
   return `
@@ -18,22 +18,22 @@ export function InboxPanel(): string {
         <input type="text"
                x-model.debounce.300ms="searchQuery"
                class="th-input th-input-sm pl-9"
-               placeholder="${t('common.search')}" />
+               placeholder="${t("common.search")}" />
         <!-- Clear -->
         <button x-show="searchQuery.length > 0"
                 x-transition
                 @click="searchQuery = ''"
                 class="absolute right-7 max-sm:right-6 top-1/2 -translate-y-1/2 mt-0.5 w-5 h-5 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300 text-gray-500 cursor-pointer border-none"
-                aria-label="${t('common.clear')}">
+                aria-label="${t("common.clear")}">
           <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
 
       <!-- Heading -->
-      <h2 class="text-[15px] font-bold text-(--color-text-heading,#111827) px-4 max-sm:px-3 pb-3" data-i18n="messages.inbox">${t('messages.inbox')}</h2>
+      <h2 class="text-[15px] font-bold text-(--color-text-heading,#111827) px-4 max-sm:px-3 pb-3" data-i18n="messages.inbox">${t("messages.inbox")}</h2>
 
       <!-- Category Tabs -->
-      <nav class="flex flex-col max-2xl:flex-row max-2xl:overflow-x-auto gap-0.5 px-2" aria-label="${t('messages.categories')}">
+      <nav class="flex flex-col max-2xl:flex-row max-2xl:overflow-x-auto gap-0.5 px-2" aria-label="${t("messages.categories")}">
         <template x-for="cat in categories" :key="cat.id">
           <button @click="setCategory(cat.id)"
                   class="flex items-center gap-2 px-3 py-2 border-none bg-transparent rounded-md text-[13px] text-(--color-text-muted,#666666) cursor-pointer transition-[background,color] duration-150 hover:bg-(--color-surface-raised,#f5f5f5) max-2xl:flex-shrink-0 max-2xl:whitespace-nowrap"
@@ -62,7 +62,7 @@ export function InboxPanel(): string {
       <!-- Bottom toolbar (desktop only) -->
       <div class="mt-auto flex items-center gap-2 px-4 py-3 border-t border-(--color-border-light,#f0f0f0) max-2xl:hidden">
         <span class="text-xs text-(--color-text-placeholder,#999999)">
-          <span x-text="getFilteredConversations().length"></span> <span data-i18n="messages.conversations">${t('messages.conversations')}</span>
+          <span x-text="getFilteredConversations().length"></span> <span data-i18n="messages.conversations">${t("messages.conversations")}</span>
         </span>
       </div>
     </aside>

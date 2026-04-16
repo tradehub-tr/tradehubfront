@@ -11,21 +11,21 @@
  * Sort option selection and view mode toggle via @click + $dispatch.
  */
 
-import type { SearchHeaderInfo, SortOption, ViewMode } from '../../types/productListing';
-import { t } from '../../i18n';
+import type { SearchHeaderInfo, SortOption, ViewMode } from "../../types/productListing";
+import { t } from "../../i18n";
 
 /**
  * Default sort options for product listing
  */
 function getDefaultSortOptions(): SortOption[] {
   return [
-    { id: 'best-match', label: t('products.sortBestMatch'), value: 'best-match' },
-    { id: 'orders', label: t('products.sortOrders'), value: 'orders' },
-    { id: 'newest', label: t('products.sortNewest'), value: 'newest' },
-    { id: 'price-asc', label: t('products.sortPriceLowHigh'), value: 'price-asc' },
-    { id: 'price-desc', label: t('products.sortPriceHighLow'), value: 'price-desc' },
-    { id: 'min-order', label: t('products.sortMinOrder'), value: 'min-order' },
-    { id: 'supplier-rating', label: t('products.sortSupplierRating'), value: 'supplier-rating' },
+    { id: "best-match", label: t("products.sortBestMatch"), value: "best-match" },
+    { id: "orders", label: t("products.sortOrders"), value: "orders" },
+    { id: "newest", label: t("products.sortNewest"), value: "newest" },
+    { id: "price-asc", label: t("products.sortPriceLowHigh"), value: "price-asc" },
+    { id: "price-desc", label: t("products.sortPriceHighLow"), value: "price-desc" },
+    { id: "min-order", label: t("products.sortMinOrder"), value: "min-order" },
+    { id: "supplier-rating", label: t("products.sortSupplierRating"), value: "supplier-rating" },
   ];
 }
 
@@ -33,20 +33,20 @@ function getDefaultSortOptions(): SortOption[] {
  * Default search header info for initial render
  */
 const defaultSearchHeaderInfo: SearchHeaderInfo = {
-  keyword: '',
+  keyword: "",
   totalProducts: 0,
   currentPage: 1,
   totalPages: 1,
   freeShippingAvailable: false,
   sortOptions: getDefaultSortOptions(),
-  selectedSort: 'best-match',
+  selectedSort: "best-match",
 };
 
 /**
  * Formats large numbers with commas (e.g., 48562 -> "48,562")
  */
 function formatNumber(num: number): string {
-  return num.toLocaleString('en-US');
+  return num.toLocaleString("en-US");
 }
 
 /**
@@ -59,7 +59,7 @@ function renderFreeShippingBanner(): string {
         <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.029-.504 1.029-1.125a3.75 3.75 0 0 0-3.75-3.75H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
       </svg>
       <span class="text-sm font-medium text-green-700 dark:text-green-300">
-        ${t('products.freeShippingAvailable')}
+        ${t("products.freeShippingAvailable")}
       </span>
     </div>
   `;
@@ -77,7 +77,7 @@ function renderFreeShippingBanner(): string {
  * - x-text on sort label for reactive label update
  */
 function renderSortingDropdown(options: SortOption[], selectedValue: string): string {
-  const selectedOption = options.find(opt => opt.value === selectedValue) || options[0];
+  const selectedOption = options.find((opt) => opt.value === selectedValue) || options[0];
 
   return `
     <div class="relative">
@@ -89,7 +89,7 @@ function renderSortingDropdown(options: SortOption[], selectedValue: string): st
         aria-haspopup="listbox"
         :aria-expanded="sortOpen"
       >
-        <span class="hidden sm:inline">${t('products.sortByLabel')}</span>
+        <span class="hidden sm:inline">${t("products.sortByLabel")}</span>
         <span x-text="sortLabel" class="font-semibold truncate max-w-[100px] sm:max-w-none">${selectedOption.label}</span>
         <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
@@ -107,10 +107,11 @@ function renderSortingDropdown(options: SortOption[], selectedValue: string): st
         aria-labelledby="search-header-sort-btn"
       >
         <ul class="py-2">
-          ${options.map(option => {
-            // Escape single quotes in label for Alpine expression safety
-            const safeLabel = option.label.replace(/'/g, "\\'");
-            return `
+          ${options
+            .map((option) => {
+              // Escape single quotes in label for Alpine expression safety
+              const safeLabel = option.label.replace(/'/g, "\\'");
+              return `
             <li>
               <button
                 type="button"
@@ -138,7 +139,9 @@ function renderSortingDropdown(options: SortOption[], selectedValue: string): st
                 </svg>
               </button>
             </li>
-          `}).join('')}
+          `;
+            })
+            .join("")}
         </ul>
       </div>
     </div>
@@ -152,7 +155,7 @@ function renderSortingDropdown(options: SortOption[], selectedValue: string): st
  * - :class for reactive active/inactive state styling
  * - :aria-pressed for reactive accessibility state
  */
-function renderViewModeToggle(_currentMode: ViewMode = 'grid'): string {
+function renderViewModeToggle(_currentMode: ViewMode = "grid"): string {
   return `
     <div class="flex items-center border border-gray-300 rounded-md overflow-hidden dark:border-gray-600">
       <button
@@ -219,11 +222,11 @@ function renderMobileFilterToggle(): string {
  */
 export function SearchHeader(
   infoOverrides: Partial<SearchHeaderInfo> = {},
-  viewMode: ViewMode = 'grid'
+  viewMode: ViewMode = "grid"
 ): string {
   const info = { ...defaultSearchHeaderInfo, ...infoOverrides };
   const { keyword, totalProducts, freeShippingAvailable, sortOptions, selectedSort } = info;
-  const selectedOption = sortOptions.find(opt => opt.value === selectedSort) || sortOptions[0];
+  const selectedOption = sortOptions.find((opt) => opt.value === selectedSort) || sortOptions[0];
   const safeLabel = selectedOption.label.replace(/'/g, "\\'");
 
   return `
@@ -233,30 +236,38 @@ export function SearchHeader(
         <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
           <!-- Search results count -->
           <h1 class="text-base sm:text-xl font-bold text-gray-900 dark:text-white min-w-0 break-words">
-            <span id="search-header-count">${t('products.showingResults', { count: formatNumber(totalProducts) })}</span>
-            <span id="search-header-keyword-wrapper" ${keyword ? '' : 'style="display:none"'}>
+            <span id="search-header-count">${t("products.showingResults", { count: formatNumber(totalProducts) })}</span>
+            <span id="search-header-keyword-wrapper" ${keyword ? "" : 'style="display:none"'}>
               <span class="font-normal text-gray-600 dark:text-gray-400">
-                ${t('products.resultsFor')}
+                ${t("products.resultsFor")}
               </span>
-              <span id="search-header-keyword" class="text-primary-600 dark:text-primary-400">"${keyword || ''}"</span>
+              <span id="search-header-keyword" class="text-primary-600 dark:text-primary-400">"${keyword || ""}"</span>
             </span>
           </h1>
 
           <!-- Free shipping banner (desktop: inline, mobile: below) -->
-          ${freeShippingAvailable ? `
+          ${
+            freeShippingAvailable
+              ? `
             <div class="hidden sm:block">
               ${renderFreeShippingBanner()}
             </div>
-          ` : ''}
+          `
+              : ""
+          }
         </div>
       </div>
 
       <!-- Mobile free shipping banner -->
-      ${freeShippingAvailable ? `
+      ${
+        freeShippingAvailable
+          ? `
         <div class="sm:hidden mb-4">
           ${renderFreeShippingBanner()}
         </div>
-      ` : ''}
+      `
+          : ""
+      }
 
       <!-- Controls row: mobile filter toggle, sorting, view toggle -->
       <div class="flex items-center justify-between gap-3 flex-wrap">
@@ -297,21 +308,21 @@ export function initSearchHeader(): void {
  * @param info - New search header information
  */
 export function updateSearchHeader(info: Partial<SearchHeaderInfo>): void {
-  const countEl = document.getElementById('search-header-count');
+  const countEl = document.getElementById("search-header-count");
 
   if (countEl && info.totalProducts !== undefined) {
-    countEl.textContent = t('products.showingResults', { count: formatNumber(info.totalProducts) });
+    countEl.textContent = t("products.showingResults", { count: formatNumber(info.totalProducts) });
   }
 
   if (info.keyword !== undefined) {
-    const wrapperEl = document.getElementById('search-header-keyword-wrapper');
-    const keywordEl = document.getElementById('search-header-keyword');
+    const wrapperEl = document.getElementById("search-header-keyword-wrapper");
+    const keywordEl = document.getElementById("search-header-keyword");
     if (wrapperEl && keywordEl) {
       if (info.keyword) {
         keywordEl.textContent = `"${info.keyword}"`;
-        wrapperEl.style.display = '';
+        wrapperEl.style.display = "";
       } else {
-        wrapperEl.style.display = 'none';
+        wrapperEl.style.display = "none";
       }
     }
   }

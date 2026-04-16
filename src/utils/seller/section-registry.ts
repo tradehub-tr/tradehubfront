@@ -24,18 +24,18 @@ interface HeroSlide {
   subtitle?: string;
   ctaText?: string;
   ctaLink?: string;
-  textPosition?: 'left' | 'center' | 'right';
-  textColor?: 'white' | 'dark';
+  textPosition?: "left" | "center" | "right";
+  textColor?: "white" | "dark";
 }
 
 function escapeHtml(s: any): string {
-  if (s == null) return '';
+  if (s == null) return "";
   return String(s)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 function escapeAttr(s: any): string {
@@ -44,20 +44,26 @@ function escapeAttr(s: any): string {
 
 function renderSlideOverlay(slide: HeroSlide): string {
   const hasContent = slide.title || slide.subtitle || slide.ctaText;
-  if (!hasContent) return '';
-  const justifyMap: Record<string, string> = { left: 'justify-start text-left', center: 'justify-center text-center', right: 'justify-end text-right' };
-  const justify = justifyMap[slide.textPosition || 'left'] || justifyMap.left;
-  const isWhite = (slide.textColor || 'white') === 'white';
-  const textColor = isWhite ? 'text-white' : 'text-gray-900';
-  const titleShadow = isWhite ? 'drop-shadow-lg' : '';
-  const overlayBg = isWhite ? 'bg-gradient-to-r from-black/40 via-black/20 to-transparent' : 'bg-gradient-to-r from-white/40 via-white/20 to-transparent';
+  if (!hasContent) return "";
+  const justifyMap: Record<string, string> = {
+    left: "justify-start text-left",
+    center: "justify-center text-center",
+    right: "justify-end text-right",
+  };
+  const justify = justifyMap[slide.textPosition || "left"] || justifyMap.left;
+  const isWhite = (slide.textColor || "white") === "white";
+  const textColor = isWhite ? "text-white" : "text-gray-900";
+  const titleShadow = isWhite ? "drop-shadow-lg" : "";
+  const overlayBg = isWhite
+    ? "bg-gradient-to-r from-black/40 via-black/20 to-transparent"
+    : "bg-gradient-to-r from-white/40 via-white/20 to-transparent";
   return `
     <div class="absolute inset-0 flex items-center ${justify} ${overlayBg}">
       <div class="max-w-[1200px] mx-auto px-6 md:px-12 w-full ${textColor}">
         <div class="max-w-[600px] inline-block">
-          ${slide.title ? `<h2 class="text-2xl md:text-4xl lg:text-5xl font-bold mb-2 ${titleShadow}">${escapeHtml(slide.title)}</h2>` : ''}
-          ${slide.subtitle ? `<p class="text-sm md:text-lg lg:text-xl mb-4 ${titleShadow}">${escapeHtml(slide.subtitle)}</p>` : ''}
-          ${slide.ctaText ? `<a href="${escapeAttr(slide.ctaLink || '#')}" class="inline-block px-5 md:px-7 py-2 md:py-3 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-md transition-colors text-sm md:text-base">${escapeHtml(slide.ctaText)}</a>` : ''}
+          ${slide.title ? `<h2 class="text-2xl md:text-4xl lg:text-5xl font-bold mb-2 ${titleShadow}">${escapeHtml(slide.title)}</h2>` : ""}
+          ${slide.subtitle ? `<p class="text-sm md:text-lg lg:text-xl mb-4 ${titleShadow}">${escapeHtml(slide.subtitle)}</p>` : ""}
+          ${slide.ctaText ? `<a href="${escapeAttr(slide.ctaLink || "#")}" class="inline-block px-5 md:px-7 py-2 md:py-3 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-md transition-colors text-sm md:text-base">${escapeHtml(slide.ctaText)}</a>` : ""}
         </div>
       </div>
     </div>
@@ -65,65 +71,90 @@ function renderSlideOverlay(slide: HeroSlide): string {
 }
 
 function resolveImageUrl(url: string | undefined): string {
-  if (!url) return '';
-  if (/^(https?:)?\/\//i.test(url) || url.startsWith('data:')) return url;
+  if (!url) return "";
+  if (/^(https?:)?\/\//i.test(url) || url.startsWith("data:")) return url;
   // Relative path (/files/...) → Frappe backend base URL ekle
-  const base = (import.meta as any).env?.VITE_API_BASE || '';
+  const base = (import.meta as any).env?.VITE_API_BASE || "";
   // url zaten "/" ile basliyorsa iki kez / olmasin
-  if (base && url.startsWith('/')) return base.replace(/\/$/, '') + url;
+  if (base && url.startsWith("/")) return base.replace(/\/$/, "") + url;
   return url;
 }
 
 function renderSlideImage(slide: HeroSlide, isStatic: boolean): string {
-  const heightCls = 'w-full h-[180px] sm:h-[220px] md:h-[320px] lg:h-[400px] object-cover';
+  const heightCls = "w-full h-[180px] sm:h-[220px] md:h-[320px] lg:h-[400px] object-cover";
   const fallback = `this.style.display='none'; this.parentElement.style.background='linear-gradient(135deg, #1f1f1f, #cc9900)'; this.parentElement.style.minHeight='300px';`;
-  const wrapper = isStatic ? 'block relative' : 'block relative w-full h-full';
+  const wrapper = isStatic ? "block relative" : "block relative w-full h-full";
   // CTA varsa link sarmalayalim, ama overlay icindeki CTA da link; cakismayi onlemek icin sadece overlay yoksa whole image link
   const hasOverlay = !!(slide.title || slide.subtitle || slide.ctaText);
-  const link = !hasOverlay && slide.ctaLink ? slide.ctaLink : '';
+  const link = !hasOverlay && slide.ctaLink ? slide.ctaLink : "";
   const resolvedSrc = resolveImageUrl(slide.image);
-  const innerImg = `<img src="${escapeAttr(resolvedSrc)}" alt="${escapeAttr(slide.title || 'Banner')}" class="${heightCls}" onerror="${fallback}" />${renderSlideOverlay(slide)}`;
+  const innerImg = `<img src="${escapeAttr(resolvedSrc)}" alt="${escapeAttr(slide.title || "Banner")}" class="${heightCls}" onerror="${fallback}" />${renderSlideOverlay(slide)}`;
   return link
     ? `<a href="${escapeAttr(link)}" class="${wrapper}">${innerImg}</a>`
     : `<div class="${wrapper}">${innerImg}</div>`;
 }
 
 function renderHeroBanner(settings: Record<string, any>): string {
-  const mode = (settings?.mode === 'static') ? 'static' : 'slider';
+  const mode = settings?.mode === "static" ? "static" : "slider";
   const autoplay = settings?.autoplay !== false;
   const delay = Number(settings?.delay) || 5000;
-  const bgColor = settings?.bgColor || '';
-  const bgStyle = bgColor ? `style="background-color: ${escapeAttr(bgColor)};"` : '';
+  const bgColor = settings?.bgColor || "";
+  const bgStyle = bgColor ? `style="background-color: ${escapeAttr(bgColor)};"` : "";
 
   // DEBUG: settings'in tam halini logla
-  console.log('[Hero Banner RENDER]', {
+  console.log("[Hero Banner RENDER]", {
     mode,
     autoplay,
     delay,
     slidesInSettings: settings?.slides,
     slidesType: typeof settings?.slides,
     slidesIsArray: Array.isArray(settings?.slides),
-    slidesLength: Array.isArray(settings?.slides) ? settings.slides.length : 'N/A',
+    slidesLength: Array.isArray(settings?.slides) ? settings.slides.length : "N/A",
     fullSettings: settings,
   });
 
-  const rawSlides: HeroSlide[] = Array.isArray(settings?.slides) && settings.slides.length > 0
-    ? settings.slides
-    : [
-        { id: 'placeholder-1', image: 'https://picsum.photos/seed/hero1/1200/400', title: '', subtitle: '', ctaText: '', ctaLink: '' },
-        { id: 'placeholder-2', image: 'https://picsum.photos/seed/hero2/1200/400', title: '', subtitle: '', ctaText: '', ctaLink: '' },
-        { id: 'placeholder-3', image: 'https://picsum.photos/seed/hero3/1200/400', title: '', subtitle: '', ctaText: '', ctaLink: '' },
-      ];
+  const rawSlides: HeroSlide[] =
+    Array.isArray(settings?.slides) && settings.slides.length > 0
+      ? settings.slides
+      : [
+          {
+            id: "placeholder-1",
+            image: "https://picsum.photos/seed/hero1/1200/400",
+            title: "",
+            subtitle: "",
+            ctaText: "",
+            ctaLink: "",
+          },
+          {
+            id: "placeholder-2",
+            image: "https://picsum.photos/seed/hero2/1200/400",
+            title: "",
+            subtitle: "",
+            ctaText: "",
+            ctaLink: "",
+          },
+          {
+            id: "placeholder-3",
+            image: "https://picsum.photos/seed/hero3/1200/400",
+            title: "",
+            subtitle: "",
+            ctaText: "",
+            ctaLink: "",
+          },
+        ];
 
-  console.log('[Hero Banner RENDER] rawSlides:', rawSlides.map((s, i) => ({
-    index: i,
-    hasImage: !!s?.image,
-    image: s?.image,
-    title: s?.title,
-  })));
+  console.log(
+    "[Hero Banner RENDER] rawSlides:",
+    rawSlides.map((s, i) => ({
+      index: i,
+      hasImage: !!s?.image,
+      image: s?.image,
+      title: s?.title,
+    }))
+  );
 
   // STATIC: ilk slayt, swiper yok
-  if (mode === 'static') {
+  if (mode === "static") {
     const first = rawSlides[0];
     return `
       <section class="storefront-section" data-section="hero_banner" data-hero-mode="static">
@@ -139,31 +170,39 @@ function renderHeroBanner(settings: Record<string, any>): string {
   // SLIDER: Swiper kullan — sadece gercek gorseli olan slaytlari al
   const validSlides = rawSlides.filter((s) => s && s.image);
   const slidesToRender = validSlides.length > 0 ? validSlides : rawSlides;
-  const slidesHtml = slidesToRender.map((slide) => `
+  const slidesHtml = slidesToRender
+    .map(
+      (slide) => `
     <div class="swiper-slide relative">
       ${renderSlideImage(slide, false)}
     </div>
-  `).join('');
+  `
+    )
+    .join("");
 
   // Coklu slayt varsa navigation oklari goster (swiper container ICINDE)
   const showNav = slidesToRender.length > 1;
-  const navHtml = showNav ? `
+  const navHtml = showNav
+    ? `
     <button type="button" class="store-hero__prev absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center transition-colors backdrop-blur-sm cursor-pointer" aria-label="Onceki">
       <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
     </button>
     <button type="button" class="store-hero__next absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center transition-colors backdrop-blur-sm cursor-pointer" aria-label="Sonraki">
       <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
     </button>
-  ` : '';
+  `
+    : "";
 
   // Eger kullanici slider sectiyse ama 0-1 valid slayt varsa konsola uyari (debug)
-  if (typeof console !== 'undefined' && validSlides.length < 2) {
-    console.info(`[Hero Banner] Slider modu aktif ama gecerli slayt sayisi: ${validSlides.length} (toplam: ${rawSlides.length}). Slider gecisi icin en az 2 gorselli slayt gerekir.`);
+  if (typeof console !== "undefined" && validSlides.length < 2) {
+    console.info(
+      `[Hero Banner] Slider modu aktif ama gecerli slayt sayisi: ${validSlides.length} (toplam: ${rawSlides.length}). Slider gecisi icin en az 2 gorselli slayt gerekir.`
+    );
   }
 
   return `
     <section class="storefront-section" data-section="hero_banner" data-hero-mode="slider"
-             data-hero-autoplay="${autoplay ? '1' : '0'}" data-hero-delay="${delay}"
+             data-hero-autoplay="${autoplay ? "1" : "0"}" data-hero-delay="${delay}"
              data-hero-slides="${slidesToRender.length}">
       <div class="store-hero" ${bgStyle}>
         <div class="store-hero__swiper swiper w-full relative overflow-hidden" style="min-height: 180px;">
@@ -253,7 +292,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
 
   category_listing: (settings) => {
     const showSort = settings.showSort !== false;
-    const viewModes = settings.viewModes || ['grid', 'list'];
+    const viewModes = settings.viewModes || ["grid", "list"];
     return `
       <section class="storefront-section" data-section="category_listing" id="shop-products">
         <div class="max-w-[1200px] mx-auto px-4 lg:px-8 py-6">
@@ -299,7 +338,9 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                   <!-- Toolbar: sort + view toggle -->
                   <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
                     <div class="flex items-center gap-2">
-                      ${showSort ? `
+                      ${
+                        showSort
+                          ? `
                       <div class="relative" x-data="{ sortOpen: false }">
                         <button @click="sortOpen = !sortOpen" class="th-btn-outline flex items-center gap-1.5 text-[13px] px-4 py-1.5">
                           <span x-text="sortBy === 'default' ? 'Yeni' : sortBy === 'price_asc' ? 'Fiyat: Dusuk' : sortBy === 'price_desc' ? 'Fiyat: Yuksek' : sortBy === 'best_selling' ? 'Cok Satan' : 'En Yeni'">Yeni</span>
@@ -312,9 +353,13 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                           <button @click="sortBy = 'price_asc'; sortProducts(); sortOpen = false" class="block w-full text-left px-4 py-2 text-[13px] hover:bg-gray-50" :class="sortBy === 'price_asc' ? 'text-blue-600 font-medium' : 'text-gray-600'">Fiyat: Dusukten Yuksege</button>
                           <button @click="sortBy = 'price_desc'; sortProducts(); sortOpen = false" class="block w-full text-left px-4 py-2 text-[13px] hover:bg-gray-50" :class="sortBy === 'price_desc' ? 'text-blue-600 font-medium' : 'text-gray-600'">Fiyat: Yuksekten Dusuge</button>
                         </div>
-                      </div>` : ''}
+                      </div>`
+                          : ""
+                      }
                     </div>
-                    ${viewModes.length > 1 ? `
+                    ${
+                      viewModes.length > 1
+                        ? `
                     <div class="flex items-center gap-1">
                       <button @click="viewMode = 'list'" class="p-1.5 rounded" :class="viewMode === 'list' ? 'text-gray-800' : 'text-gray-400 hover:text-gray-600'">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
@@ -322,7 +367,9 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                       <button @click="viewMode = 'grid'" class="p-1.5 rounded" :class="viewMode === 'grid' ? 'text-gray-800' : 'text-gray-400 hover:text-gray-600'">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 16 16"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
                       </button>
-                    </div>` : ''}
+                    </div>`
+                        : ""
+                    }
                   </div>
 
                   <!-- Grid View -->
@@ -617,22 +664,22 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
  * Applies per-section background color from settings.
  */
 export function renderDynamicSections(layout: LayoutConfig): string {
-  if (!layout?.sections?.length) return '';
+  if (!layout?.sections?.length) return "";
 
   return layout.sections
     .filter((s) => s.enabled)
     .sort((a, b) => a.order - b.order)
     .map((section) => {
       const renderer = SECTION_RENDERERS[section.type];
-      if (!renderer) return '';
+      if (!renderer) return "";
 
       const bgStyle = section.settings?.bgColor
         ? `background-color: ${section.settings.bgColor}`
-        : '';
+        : "";
 
       return `<div class="storefront-dynamic-section" data-section-type="${section.type}" style="${bgStyle}">${renderer(section.settings || {})}</div>`;
     })
-    .join('');
+    .join("");
 }
 
 /** Direct access to individual section renderers for page-based views */
@@ -640,14 +687,14 @@ export const SECTION_RENDERERS_REF = SECTION_RENDERERS;
 
 /** List of all available section types with metadata for the admin editor */
 export const SECTION_TYPES = [
-  { type: 'hero_banner', label: 'Hero Banner', icon: 'fas fa-images' },
-  { type: 'category_grid', label: 'Kategori Grid', icon: 'fas fa-th-large' },
-  { type: 'hot_products', label: 'Populer Urunler', icon: 'fas fa-fire' },
-  { type: 'category_listing', label: 'Urun Listeleme', icon: 'fas fa-list' },
-  { type: 'company_info', label: 'Sirket Bilgisi', icon: 'fas fa-building' },
-  { type: 'certificates', label: 'Sertifikalar', icon: 'fas fa-certificate' },
-  { type: 'why_choose_us', label: 'Neden Biz', icon: 'fas fa-star' },
-  { type: 'gallery', label: 'Galeri', icon: 'fas fa-photo-video' },
-  { type: 'company_introduction', label: 'Sirket Tanitimi', icon: 'fas fa-info-circle' },
-  { type: 'contact_form', label: 'Iletisim Formu', icon: 'fas fa-envelope' },
+  { type: "hero_banner", label: "Hero Banner", icon: "fas fa-images" },
+  { type: "category_grid", label: "Kategori Grid", icon: "fas fa-th-large" },
+  { type: "hot_products", label: "Populer Urunler", icon: "fas fa-fire" },
+  { type: "category_listing", label: "Urun Listeleme", icon: "fas fa-list" },
+  { type: "company_info", label: "Sirket Bilgisi", icon: "fas fa-building" },
+  { type: "certificates", label: "Sertifikalar", icon: "fas fa-certificate" },
+  { type: "why_choose_us", label: "Neden Biz", icon: "fas fa-star" },
+  { type: "gallery", label: "Galeri", icon: "fas fa-photo-video" },
+  { type: "company_introduction", label: "Sirket Tanitimi", icon: "fas fa-info-circle" },
+  { type: "contact_form", label: "Iletisim Formu", icon: "fas fa-envelope" },
 ];

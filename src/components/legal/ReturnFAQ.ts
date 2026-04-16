@@ -3,17 +3,17 @@
  * FAQ accordion for return policy page
  */
 
-import { t } from '../../i18n';
+import { t } from "../../i18n";
 
 function getFaqItems() {
   return [
-    { q: t('returnFaq.q1'), a: t('returnFaq.a1') },
-    { q: t('returnFaq.q2'), a: t('returnFaq.a2') },
-    { q: t('returnFaq.q3'), a: t('returnFaq.a3') },
-    { q: t('returnFaq.q4'), a: t('returnFaq.a4') },
-    { q: t('returnFaq.q5'), a: t('returnFaq.a5') },
-    { q: t('returnFaq.q6'), a: t('returnFaq.a6') },
-    { q: t('returnFaq.q7'), a: t('returnFaq.a7') },
+    { q: t("returnFaq.q1"), a: t("returnFaq.a1") },
+    { q: t("returnFaq.q2"), a: t("returnFaq.a2") },
+    { q: t("returnFaq.q3"), a: t("returnFaq.a3") },
+    { q: t("returnFaq.q4"), a: t("returnFaq.a4") },
+    { q: t("returnFaq.q5"), a: t("returnFaq.a5") },
+    { q: t("returnFaq.q6"), a: t("returnFaq.a6") },
+    { q: t("returnFaq.q7"), a: t("returnFaq.a7") },
   ];
 }
 
@@ -21,9 +21,10 @@ export function ReturnFAQ(): string {
   const FAQ_ITEMS = getFaqItems();
   return `
     <div class="mt-10" x-data="{ openFaq: null }">
-      <h3 class="text-lg font-semibold text-gray-900 mb-4">${t('returnFaq.title')}</h3>
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">${t("returnFaq.title")}</h3>
       <div class="space-y-2">
-        ${FAQ_ITEMS.map((item, i) => `
+        ${FAQ_ITEMS.map(
+          (item, i) => `
           <div class="border border-gray-200 rounded-lg overflow-hidden">
             <button
               @click="openFaq = openFaq === ${i} ? null : ${i}"
@@ -36,7 +37,8 @@ export function ReturnFAQ(): string {
               <p class="px-4 pb-4 text-sm text-gray-600 leading-relaxed">${item.a}</p>
             </div>
           </div>
-        `).join('')}
+        `
+        ).join("")}
       </div>
     </div>
   `;

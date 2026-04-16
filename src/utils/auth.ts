@@ -3,9 +3,9 @@
  * All auth-related API calls go through the api() wrapper from utils/api.ts.
  */
 
-import { api, frappeLogout, clearCsrfCache } from './api';
+import { api, frappeLogout, clearCsrfCache } from "./api";
 
-const FRAPPE_BASE = import.meta.env.VITE_FRAPPE_BASE || '';
+const FRAPPE_BASE = import.meta.env.VITE_FRAPPE_BASE || "";
 
 /* ── Types ──────────────────────────────────────────── */
 
@@ -136,16 +136,16 @@ export function invalidateAuthCache(): void {
 
 /** Login with email and password via Frappe */
 export async function login(email: string, password: string): Promise<LoginResponse> {
-  const BASE_URL = import.meta.env.VITE_API_URL || '/api';
+  const BASE_URL = import.meta.env.VITE_API_URL || "/api";
   const res = await fetch(`${BASE_URL}/method/login`, {
-    method: 'POST',
-    credentials: 'include',
-    headers: { 'Content-Type': 'application/json' },
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ usr: email, pwd: password }),
   });
 
   if (!res.ok) {
-    throw new Error('INVALID_CREDENTIALS');
+    throw new Error("INVALID_CREDENTIALS");
   }
 
   // Login sonrası CSRF token rotasyonu — eski cache'i temizle ki
@@ -153,15 +153,15 @@ export async function login(email: string, password: string): Promise<LoginRespo
   clearCsrfCache();
   invalidateAuthCache();
 
-  const data = await res.json() as LoginResponse;
+  const data = (await res.json()) as LoginResponse;
 
   if (data.requires_2fa) {
-    if (import.meta.env.DEV) console.warn('[Auth] 2FA gerekli — henüz implement edilmedi');
-    throw new Error('2FA_REQUIRED');
+    if (import.meta.env.DEV) console.warn("[Auth] 2FA gerekli — henüz implement edilmedi");
+    throw new Error("2FA_REQUIRED");
   }
 
   if (data.requires_consent_renewal) {
-    console.warn('[Auth] Consent yenileme gerekli', data);
+    console.warn("[Auth] Consent yenileme gerekli", data);
   }
 
   return data;
@@ -176,7 +176,7 @@ export async function logout(): Promise<void> {
   }
   invalidateAuthCache();
   // Per-user store'ları (favoriler vb.) sıfırlamak için event yay
-  window.dispatchEvent(new CustomEvent('auth-logout'));
+  window.dispatchEvent(new CustomEvent("auth-logout"));
 }
 
 /* ── Session ────────────────────────────────────────── */
@@ -185,7 +185,7 @@ export async function logout(): Promise<void> {
 export async function getSessionUser(): Promise<AuthUser | null> {
   try {
     const res = await api<{ message: SessionResponse }>(
-      '/method/tradehub_core.api.v1.auth.get_session_user'
+      "/method/tradehub_core.api.v1.auth.get_session_user"
     );
     if (res.message?.logged_in && res.message.user) {
       _cachedUser = res.message.user;
@@ -208,17 +208,19 @@ export function getRedirectUrl(user: AuthUser): string {
     return `${FRAPPE_BASE}/app`;
   }
   // All users (buyers and sellers) go to storefront home after login
-  return '/';
+  return "/";
 }
 
 /* ── Registration ───────────────────────────────────── */
 
 /** Check if email is already registered. Returns { exists, disabled }. */
-export async function checkEmailExists(email: string): Promise<{ exists: boolean; disabled: boolean }> {
+export async function checkEmailExists(
+  email: string
+): Promise<{ exists: boolean; disabled: boolean }> {
   const res = await api<{ message: CheckEmailResponse }>(
-    '/method/tradehub_core.api.v1.auth.check_email_exists',
+    "/method/tradehub_core.api.v1.auth.check_email_exists",
     {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify({ email }),
     }
   );
@@ -231,9 +233,9 @@ export async function checkEmailExists(email: string): Promise<{ exists: boolean
 /** Send registration OTP to email */
 export async function sendRegistrationOtp(email: string): Promise<OtpSendResponse> {
   const res = await api<{ message: OtpSendResponse }>(
-    '/method/tradehub_core.api.v1.identity.send_registration_otp',
+    "/method/tradehub_core.api.v1.identity.send_registration_otp",
     {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify({ email }),
     }
   );
@@ -246,9 +248,9 @@ export async function verifyRegistrationOtp(
   code: string
 ): Promise<OtpVerifyResponse> {
   const res = await api<{ message: OtpVerifyResponse }>(
-    '/method/tradehub_core.api.v1.identity.verify_registration_otp',
+    "/method/tradehub_core.api.v1.identity.verify_registration_otp",
     {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify({ email, code }),
     }
   );
@@ -261,7 +263,7 @@ export async function register(params: {
   password: string;
   first_name: string;
   last_name: string;
-  account_type: 'buyer' | 'supplier';
+  account_type: "buyer" | "supplier";
   phone?: string;
   country: string;
   accept_terms: boolean;
@@ -269,9 +271,9 @@ export async function register(params: {
   registration_token: string;
 }): Promise<RegisterResponse> {
   const res = await api<{ message: RegisterResponse }>(
-    '/method/tradehub_core.api.v1.identity.register_user',
+    "/method/tradehub_core.api.v1.identity.register_user",
     {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify(params),
     }
   );
@@ -283,9 +285,9 @@ export async function register(params: {
 /** Request password reset email */
 export async function forgotPassword(email: string): Promise<SimpleResponse> {
   const res = await api<{ message: SimpleResponse }>(
-    '/method/tradehub_core.api.v1.identity.forgot_password',
+    "/method/tradehub_core.api.v1.identity.forgot_password",
     {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify({ email }),
     }
   );
@@ -306,9 +308,9 @@ export async function completeRegistrationApplication(
   params: Record<string, unknown>
 ): Promise<CompleteApplicationResponse> {
   const res = await api<{ message: CompleteApplicationResponse }>(
-    '/method/tradehub_core.api.v1.identity.complete_registration_application',
+    "/method/tradehub_core.api.v1.identity.complete_registration_application",
     {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify(params),
     }
   );
@@ -318,9 +320,9 @@ export async function completeRegistrationApplication(
 /** Create/get seller application for an existing buyer (become seller flow) */
 export async function becomeSeller(): Promise<CompleteApplicationResponse> {
   const res = await api<{ message: CompleteApplicationResponse }>(
-    '/method/tradehub_core.api.v1.identity.become_seller',
+    "/method/tradehub_core.api.v1.identity.become_seller",
     {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify({}),
     }
   );
@@ -332,9 +334,9 @@ export async function registerSupplier(
   params: Record<string, unknown>
 ): Promise<CompleteApplicationResponse> {
   const res = await api<{ message: CompleteApplicationResponse }>(
-    '/method/tradehub_core.api.v1.identity.register_supplier',
+    "/method/tradehub_core.api.v1.identity.register_supplier",
     {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify(params),
     }
   );
@@ -344,14 +346,11 @@ export async function registerSupplier(
 /* ── Password Reset ─────────────────────────────────── */
 
 /** Reset password with key from email link */
-export async function resetPassword(
-  key: string,
-  new_password: string
-): Promise<SimpleResponse> {
+export async function resetPassword(key: string, new_password: string): Promise<SimpleResponse> {
   const res = await api<{ message: SimpleResponse }>(
-    '/method/tradehub_core.api.v1.identity.reset_password',
+    "/method/tradehub_core.api.v1.identity.reset_password",
     {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify({ key, new_password }),
     }
   );
@@ -361,8 +360,8 @@ export async function resetPassword(
 /** Resend email verification link for the current user */
 export async function resendVerificationEmail(): Promise<SimpleResponse> {
   const res = await api<{ message: SimpleResponse }>(
-    '/method/tradehub_core.api.v1.identity.resend_verification_email',
-    { method: 'POST' },
+    "/method/tradehub_core.api.v1.identity.resend_verification_email",
+    { method: "POST" }
   );
   return res.message;
 }
@@ -377,6 +376,6 @@ export async function resendVerificationEmail(): Promise<SimpleResponse> {
  *   if (user.is_seller) { ... }
  */
 export async function getCurrentUser(): Promise<FrappeCurrentUser> {
-  const { callMethod } = await import('./api');
-  return callMethod<FrappeCurrentUser>('tradehub_core.api.auth.get_current_user');
+  const { callMethod } = await import("./api");
+  return callMethod<FrappeCurrentUser>("tradehub_core.api.auth.get_current_user");
 }

@@ -1,1 +1,1 @@
-export { SubscriptionLayout, initSubscriptionLayout } from './SubscriptionLayout';
+export { SubscriptionLayout, initSubscriptionLayout } from "./SubscriptionLayout";

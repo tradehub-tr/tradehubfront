@@ -1,6 +1,5 @@
-import { t } from '../../i18n';
-import { getBrowsingHistory } from '../../services/browsingHistoryService';
-
+import { t } from "../../i18n";
+import { getBrowsingHistory } from "../../services/browsingHistoryService";
 
 export function ManufacturersHero(): string {
   return `
@@ -24,8 +23,6 @@ export function ManufacturersHero(): string {
 }
 
 const ALL_CATEGORIES_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>`;
-
-
 
 function renderSourceByCategory(): string {
   return `
@@ -53,7 +50,7 @@ function renderSourceByCategory(): string {
     >
       <div class="p-4 flex flex-col h-full" style="background-color: var(--mfr-sidebar-bg, #ffffff); border-radius: var(--mfr-hero-card-radius, 6px); box-shadow: var(--mfr-hero-card-shadow, 0 0 12px rgba(0,0,0,0.05))">
         <h3 class="text-lg font-bold mb-3" style="color: var(--mfr-sidebar-heading-color, #111827)">
-          ${t('mfr.sourceByCategory')}
+          ${t("mfr.sourceByCategory")}
         </h3>
 
         <ul class="flex-1 flex flex-col overflow-hidden">
@@ -117,7 +114,7 @@ function renderSourceByCategory(): string {
                   ${ALL_CATEGORIES_ICON}
                 </span>
                 <span class="text-sm font-semibold truncate" style="color: var(--mfr-sidebar-heading-color, #111827)">
-                  ${t('mfr.allCategories')}
+                  ${t("mfr.allCategories")}
                 </span>
               </div>
               <svg class="w-4 h-4 flex-shrink-0 ml-2" style="color: var(--mfr-sidebar-chevron-color, #d1d5db)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -171,19 +168,19 @@ function renderMiddleColumn(): string {
     >
       <!-- Card A: Get samples -->
       <div class="h-[192px] mb-4 p-4" style="background-color: var(--mfr-hero-card-bg, #ffffff); border-radius: var(--mfr-hero-card-radius, 6px); box-shadow: var(--mfr-hero-card-shadow, 0 0 12px rgba(0,0,0,0.05))">
-        <h3 class="text-lg font-bold leading-6 mb-2.5" style="color: var(--mfr-sample-heading-color, #222222)">${t('mfr.getSamples')}</h3>
+        <h3 class="text-lg font-bold leading-6 mb-2.5" style="color: var(--mfr-sample-heading-color, #222222)">${t("mfr.getSamples")}</h3>
         <div class="flex flex-wrap justify-between">
-          ${sampleCard('popular', t('mfr.popularProducts'))}
-          ${sampleCard('newArrival', t('mfr.newArrivals'))}
+          ${sampleCard("popular", t("mfr.popularProducts"))}
+          ${sampleCard("newArrival", t("mfr.newArrivals"))}
         </div>
       </div>
 
       <!-- Card B: Get samples (2) -->
       <div class="h-[192px] p-4" style="background-color: var(--mfr-hero-card-bg, #ffffff); border-radius: var(--mfr-hero-card-radius, 6px); box-shadow: var(--mfr-hero-card-shadow, 0 0 12px rgba(0,0,0,0.05))">
-        <h3 class="text-lg font-bold leading-6 mb-2.5" style="color: var(--mfr-sample-heading-color, #222222)">${t('mfr.getSamples')}</h3>
+        <h3 class="text-lg font-bold leading-6 mb-2.5" style="color: var(--mfr-sample-heading-color, #222222)">${t("mfr.getSamples")}</h3>
         <div class="flex flex-wrap justify-between">
-          ${sampleCard('bestSeller', t('mfr.bestSellers'))}
-          ${sampleCard('featured', t('mfr.campaigns'))}
+          ${sampleCard("bestSeller", t("mfr.bestSellers"))}
+          ${sampleCard("featured", t("mfr.campaigns"))}
         </div>
       </div>
     </div>
@@ -204,7 +201,7 @@ function renderTopRankingColumn(): string {
         }
       }"
     >
-      <h3 class="text-lg font-bold leading-6 mb-4" style="color: var(--mfr-ranking-heading-color, #222222)">${t('mfr.topRankedMfrs')}</h3>
+      <h3 class="text-lg font-bold leading-6 mb-4" style="color: var(--mfr-ranking-heading-color, #222222)">${t("mfr.topRankedMfrs")}</h3>
       <div class="products flex flex-wrap justify-between">
         <!-- Loading skeleton -->
         <template x-if="sellers.length === 0">
@@ -240,12 +237,17 @@ function renderProfileColumn(): string {
   const history = getBrowsingHistory();
   const thumbs = history.slice(0, 4);
 
-  const historyHtml = thumbs.length > 0
-    ? thumbs.map(h => `
-        <a href="${h.href}" class="aspect-square rounded-md overflow-hidden group" title="${h.title || ''}">
-          <img src="${h.image}" alt="${h.title || ''}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
-        </a>`).join('')
-    : `<p class="text-xs text-gray-400 col-span-4">${t('mfr.noHistory')}</p>`;
+  const historyHtml =
+    thumbs.length > 0
+      ? thumbs
+          .map(
+            (h) => `
+        <a href="${h.href}" class="aspect-square rounded-md overflow-hidden group" title="${h.title || ""}">
+          <img src="${h.image}" alt="${h.title || ""}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+        </a>`
+          )
+          .join("")
+      : `<p class="text-xs text-gray-400 col-span-4">${t("mfr.noHistory")}</p>`;
 
   return `
     <div class="flex-1 h-[400px] overflow-hidden flex flex-col" style="border-radius: var(--mfr-hero-card-radius, 6px)">
@@ -275,13 +277,13 @@ function renderProfileColumn(): string {
           <div>
             <template x-if="loggedIn">
               <div>
-                <span class="text-xs" style="color: var(--mfr-profile-text-color, #222222)">${t('mfr.welcome')}</span>
+                <span class="text-xs" style="color: var(--mfr-profile-text-color, #222222)">${t("mfr.welcome")}</span>
                 <p class="text-base font-bold leading-6" style="color: var(--mfr-profile-text-color, #222222)" x-text="userName"></p>
               </div>
             </template>
             <template x-if="!loggedIn">
               <div>
-                <span class="text-xs" style="color: var(--mfr-profile-text-color, #222222)">${t('mfr.welcome')}</span>
+                <span class="text-xs" style="color: var(--mfr-profile-text-color, #222222)">${t("mfr.welcome")}</span>
                 <p class="text-base font-bold leading-6" style="color: var(--mfr-profile-text-color, #222222)">Guest</p>
               </div>
             </template>
@@ -309,23 +311,23 @@ function renderProfileColumn(): string {
         <!-- Logged-out: sign in / register buttons -->
         <template x-if="!loggedIn">
           <div class="flex justify-between mt-6 mb-4">
-            <a href="/pages/auth/login.html" class="w-[calc(50%-4px)] flex items-center justify-center rounded-full h-10 text-xs font-bold transition-colors" style="background-color: var(--mfr-profile-btn-bg, #cc9900); color: var(--mfr-profile-btn-text, #ffffff)">${t('auth.login.submit')}</a>
-            <a href="/pages/auth/register.html" class="w-[calc(50%-4px)] flex items-center justify-center rounded-full h-10 text-xs font-bold transition-colors" style="background-color: var(--mfr-profile-btn-bg, #cc9900); color: var(--mfr-profile-btn-text, #ffffff)">${t('auth.register.freeSignUp')}</a>
+            <a href="/pages/auth/login.html" class="w-[calc(50%-4px)] flex items-center justify-center rounded-full h-10 text-xs font-bold transition-colors" style="background-color: var(--mfr-profile-btn-bg, #cc9900); color: var(--mfr-profile-btn-text, #ffffff)">${t("auth.login.submit")}</a>
+            <a href="/pages/auth/register.html" class="w-[calc(50%-4px)] flex items-center justify-center rounded-full h-10 text-xs font-bold transition-colors" style="background-color: var(--mfr-profile-btn-bg, #cc9900); color: var(--mfr-profile-btn-text, #ffffff)">${t("auth.register.freeSignUp")}</a>
           </div>
         </template>
 
         <!-- Browsing history from localStorage -->
         <div class="mt-auto">
-          <p class="block text-base font-bold mb-2 leading-6" style="color: var(--mfr-profile-text-color, #222222)">${t('mfr.yourSearchHistory')}</p>
+          <p class="block text-base font-bold mb-2 leading-6" style="color: var(--mfr-profile-text-color, #222222)">${t("mfr.yourSearchHistory")}</p>
           <div class="grid grid-cols-4 gap-2">${historyHtml}</div>
         </div>
       </div>
 
       <!-- Bottom card: RFQ -->
       <div class="flex-1 py-3 px-4 flex flex-col items-center justify-center text-center" style="background-color: var(--mfr-hero-card-bg, #ffffff); border-radius: var(--mfr-hero-card-radius, 6px); box-shadow: var(--mfr-hero-card-shadow, 0 0 12px rgba(0,0,0,0.05))">
-        <p class="text-xs font-semibold mb-4" style="color: var(--mfr-profile-rfq-text, #222222)">${t('mfr.oneRequestMultipleQuotes')}</p>
+        <p class="text-xs font-semibold mb-4" style="color: var(--mfr-profile-rfq-text, #222222)">${t("mfr.oneRequestMultipleQuotes")}</p>
         <a href="/pages/dashboard/rfq.html" class="hover-expand-center w-full h-10 flex items-center justify-center border rounded-full text-xs font-bold transition-colors" style="background-color: var(--mfr-hero-card-bg, #ffffff); border-color: var(--mfr-profile-rfq-border, #222222); color: var(--mfr-profile-rfq-text, #222222)">
-          ${t('mfr.rfqTitle')}
+          ${t("mfr.rfqTitle")}
         </a>
       </div>
 
@@ -334,24 +336,20 @@ function renderProfileColumn(): string {
 }
 
 export function initCategoryFlyout(): void {
-  const sidebar = document.querySelector<HTMLElement>('[data-category-sidebar]');
+  const sidebar = document.querySelector<HTMLElement>("[data-category-sidebar]");
   if (!sidebar) return;
 
-  const categoryItems = Array.from(
-    sidebar.querySelectorAll<HTMLElement>('[data-category-id]')
-  );
-  const flyoutPanels = Array.from(
-    sidebar.querySelectorAll<HTMLElement>('[data-flyout-id]')
-  );
+  const categoryItems = Array.from(sidebar.querySelectorAll<HTMLElement>("[data-category-id]"));
+  const flyoutPanels = Array.from(sidebar.querySelectorAll<HTMLElement>("[data-flyout-id]"));
 
   let hideTimeout: ReturnType<typeof setTimeout> | null = null;
   let activeFlyoutId: string | null = null;
 
   // -- helpers --
 
-  const ACTIVE_FLYOUT = ['opacity-100', 'pointer-events-auto', 'translate-x-0'];
-  const INACTIVE_FLYOUT = ['opacity-0', 'pointer-events-none', 'translate-x-2'];
-  const ACTIVE_LI = ['bg-gray-50', 'dark:bg-gray-700/50'];
+  const ACTIVE_FLYOUT = ["opacity-100", "pointer-events-auto", "translate-x-0"];
+  const INACTIVE_FLYOUT = ["opacity-0", "pointer-events-none", "translate-x-2"];
+  const ACTIVE_LI = ["bg-gray-50", "dark:bg-gray-700/50"];
 
   function clearHideTimeout(): void {
     if (hideTimeout !== null) {
@@ -361,16 +359,16 @@ export function initCategoryFlyout(): void {
   }
 
   function deactivateAll(): void {
-    flyoutPanels.forEach(panel => {
+    flyoutPanels.forEach((panel) => {
       panel.classList.remove(...ACTIVE_FLYOUT);
       panel.classList.add(...INACTIVE_FLYOUT);
     });
-    categoryItems.forEach(li => li.classList.remove(...ACTIVE_LI));
+    categoryItems.forEach((li) => li.classList.remove(...ACTIVE_LI));
     activeFlyoutId = null;
   }
 
   function activateFlyout(categoryId: string): void {
-    flyoutPanels.forEach(panel => {
+    flyoutPanels.forEach((panel) => {
       if (panel.dataset.flyoutId === categoryId) {
         panel.classList.remove(...INACTIVE_FLYOUT);
         panel.classList.add(...ACTIVE_FLYOUT);
@@ -379,7 +377,7 @@ export function initCategoryFlyout(): void {
         panel.classList.add(...INACTIVE_FLYOUT);
       }
     });
-    categoryItems.forEach(li => {
+    categoryItems.forEach((li) => {
       if (li.dataset.categoryId === categoryId) {
         li.classList.add(...ACTIVE_LI);
       } else {
@@ -397,32 +395,36 @@ export function initCategoryFlyout(): void {
 
   // -- category items: event delegation on sidebar --
 
-  sidebar.addEventListener('mouseenter', (e: MouseEvent) => {
-    const li = (e.target as HTMLElement).closest<HTMLElement>('[data-category-id]');
-    if (!li) return;
+  sidebar.addEventListener(
+    "mouseenter",
+    (e: MouseEvent) => {
+      const li = (e.target as HTMLElement).closest<HTMLElement>("[data-category-id]");
+      if (!li) return;
 
-    clearHideTimeout();
-    const categoryId = li.dataset.categoryId ?? '';
+      clearHideTimeout();
+      const categoryId = li.dataset.categoryId ?? "";
 
-    const hasFlyout = flyoutPanels.some(p => p.dataset.flyoutId === categoryId);
-    if (hasFlyout && categoryId !== activeFlyoutId) {
-      activateFlyout(categoryId);
-    }
-  }, true);
+      const hasFlyout = flyoutPanels.some((p) => p.dataset.flyoutId === categoryId);
+      if (hasFlyout && categoryId !== activeFlyoutId) {
+        activateFlyout(categoryId);
+      }
+    },
+    true
+  );
 
   // -- sidebar container: schedule hide when mouse fully leaves --
 
-  sidebar.addEventListener('mouseleave', () => {
+  sidebar.addEventListener("mouseleave", () => {
     scheduleHide();
   });
 
   // -- flyout panels: cancel hide while hovering, reschedule on leave --
 
-  flyoutPanels.forEach(panel => {
-    panel.addEventListener('mouseenter', () => {
+  flyoutPanels.forEach((panel) => {
+    panel.addEventListener("mouseenter", () => {
       clearHideTimeout();
     });
-    panel.addEventListener('mouseleave', () => {
+    panel.addEventListener("mouseleave", () => {
       hideTimeout = setTimeout(() => {
         deactivateAll();
       }, 100);
@@ -431,9 +433,9 @@ export function initCategoryFlyout(): void {
 
   // -- "All categories" click --
 
-  const allCategoriesLink = sidebar.querySelector<HTMLAnchorElement>('[data-all-categories]');
-  allCategoriesLink?.addEventListener('click', (e: MouseEvent) => {
+  const allCategoriesLink = sidebar.querySelector<HTMLAnchorElement>("[data-all-categories]");
+  allCategoriesLink?.addEventListener("click", (e: MouseEvent) => {
     e.preventDefault();
-    window.location.href = '/categories';
+    window.location.href = "/categories";
   });
 }

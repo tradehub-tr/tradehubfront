@@ -6,9 +6,9 @@
  * Kategoriler API'den dinamik olarak yüklenir (categoryService).
  */
 
-import { onCategoriesLoaded } from '../../services/categoryService';
-import type { ApiCategory } from '../../services/categoryService';
-import { t } from '../../i18n';
+import { onCategoriesLoaded } from "../../services/categoryService";
+import type { ApiCategory } from "../../services/categoryService";
+import { t } from "../../i18n";
 
 /* ──── Subcategory thumbnail renderer ──── */
 
@@ -41,12 +41,12 @@ function renderBottomSheet(): string {
             <div class="w-9 h-1 rounded-full bg-gray-300 dark:bg-gray-600"></div>
           </div>
           <div class="flex items-center px-5 border-b border-gray-100 dark:border-gray-700/50">
-            <span class="text-[15px] font-bold text-gray-900 dark:text-white" data-i18n="categoryBrowse.title">${t('categoryBrowse.title')}</span>
+            <span class="text-[15px] font-bold text-gray-900 dark:text-white" data-i18n="categoryBrowse.title">${t("categoryBrowse.title")}</span>
             <button
               type="button"
               id="mcb-sheet-close"
               class="ml-auto p-1.5 -mr-1.5 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
-              aria-label="${t('common.close')}" data-i18n-aria-label="common.close"
+              aria-label="${t("common.close")}" data-i18n-aria-label="common.close"
             >
               <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
@@ -57,11 +57,14 @@ function renderBottomSheet(): string {
 
         <!-- Category List (skeleton, replaced after API) -->
         <div id="mcb-sheet-list" class="overflow-y-auto flex-1 pb-6">
-          ${Array.from({ length: 6 }, () => `
+          ${Array.from(
+            { length: 6 },
+            () => `
             <div class="flex items-center w-full px-5 py-4 border-b border-gray-50 dark:border-gray-700/50 animate-pulse">
               <div class="h-4 rounded bg-gray-200 dark:bg-gray-700 flex-1"></div>
             </div>
-          `).join('')}
+          `
+          ).join("")}
         </div>
       </div>
     </div>
@@ -76,11 +79,14 @@ export function MobileCategoryBar(): string {
       <!-- Row 1: Category Tabs (skeleton, replaced after API) -->
       <div class="relative">
         <div id="mcb-tabs" class="flex overflow-x-auto scrollbar-hide gap-0.5 pr-10">
-          ${Array.from({ length: 6 }, (_, i) => `
+          ${Array.from(
+            { length: 6 },
+            (_, i) => `
             <div class="flex-shrink-0 px-3 py-2 animate-pulse">
-              <div class="h-3 rounded bg-gray-200 dark:bg-gray-700 ${i === 0 ? 'w-24' : 'w-16'}"></div>
+              <div class="h-3 rounded bg-gray-200 dark:bg-gray-700 ${i === 0 ? "w-24" : "w-16"}"></div>
             </div>
-          `).join('')}
+          `
+          ).join("")}
         </div>
         <!-- Dropdown button with gradient fade -->
         <div class="absolute right-0 top-0 bottom-0 flex items-center pointer-events-none">
@@ -90,7 +96,7 @@ export function MobileCategoryBar(): string {
           type="button"
           id="mcb-dropdown-btn"
           class="absolute right-0 top-0 bottom-0 w-9 flex items-center justify-center text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800"
-          aria-label="${t('mobileCategory.allCategories')}" data-i18n-aria-label="mobileCategory.allCategories"
+          aria-label="${t("mobileCategory.allCategories")}" data-i18n-aria-label="mobileCategory.allCategories"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/>
@@ -100,12 +106,15 @@ export function MobileCategoryBar(): string {
 
       <!-- Row 2: Subcategory Items (skeleton, replaced after API) -->
       <div id="mcb-products" class="flex overflow-x-auto scrollbar-hide gap-2 sm:gap-3 px-2 sm:px-3 py-2.5">
-        ${Array.from({ length: 6 }, () => `
+        ${Array.from(
+          { length: 6 },
+          () => `
           <div class="flex-shrink-0 flex flex-col items-center gap-1 w-[52px] sm:w-[60px] animate-pulse">
             <div class="w-[52px] h-[52px] sm:w-[60px] sm:h-[60px] rounded-md bg-gray-200 dark:bg-gray-700"></div>
             <div class="h-2.5 w-10 rounded bg-gray-200 dark:bg-gray-700"></div>
           </div>
-        `).join('')}
+        `
+        ).join("")}
       </div>
     </div>
 
@@ -116,119 +125,139 @@ export function MobileCategoryBar(): string {
 /* ──── Init ──── */
 
 export function initMobileCategoryBar(): void {
-  const tabsContainer = document.getElementById('mcb-tabs');
-  const productsContainer = document.getElementById('mcb-products');
-  const dropdownBtn = document.getElementById('mcb-dropdown-btn');
-  const sheetOverlay = document.getElementById('mcb-sheet-overlay');
-  const sheetPanel = document.getElementById('mcb-sheet-panel');
-  const sheetClose = document.getElementById('mcb-sheet-close');
-  const sheetList = document.getElementById('mcb-sheet-list');
+  const tabsContainer = document.getElementById("mcb-tabs");
+  const productsContainer = document.getElementById("mcb-products");
+  const dropdownBtn = document.getElementById("mcb-dropdown-btn");
+  const sheetOverlay = document.getElementById("mcb-sheet-overlay");
+  const sheetPanel = document.getElementById("mcb-sheet-panel");
+  const sheetClose = document.getElementById("mcb-sheet-close");
+  const sheetList = document.getElementById("mcb-sheet-list");
 
   if (!productsContainer || !tabsContainer) return;
 
-  const TAB_ACT = ['font-bold', 'text-gray-900', 'dark:text-white', 'border-gray-900', 'dark:border-white'];
-  const TAB_INACT = ['text-gray-500', 'dark:text-gray-400', 'font-normal', 'border-transparent'];
+  const TAB_ACT = [
+    "font-bold",
+    "text-gray-900",
+    "dark:text-white",
+    "border-gray-900",
+    "dark:border-white",
+  ];
+  const TAB_INACT = ["text-gray-500", "dark:text-gray-400", "font-normal", "border-transparent"];
 
   let _cats: ApiCategory[] = [];
 
   function selectCategory(catId: string): void {
     // Update tab bar
-    tabsContainer!.querySelectorAll<HTMLButtonElement>('.mcb-tab').forEach(t => {
+    tabsContainer!.querySelectorAll<HTMLButtonElement>(".mcb-tab").forEach((t) => {
       t.classList.remove(...TAB_ACT);
       t.classList.add(...TAB_INACT);
     });
-    const activeTab = tabsContainer!.querySelector<HTMLButtonElement>(`.mcb-tab[data-mcb-cat="${catId}"]`);
+    const activeTab = tabsContainer!.querySelector<HTMLButtonElement>(
+      `.mcb-tab[data-mcb-cat="${catId}"]`
+    );
     if (activeTab) {
       activeTab.classList.remove(...TAB_INACT);
       activeTab.classList.add(...TAB_ACT);
-      activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      activeTab.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
     }
 
     // Update bottom sheet selected state
-    sheetList?.querySelectorAll<HTMLButtonElement>('.mcb-sheet-item').forEach(item => {
-      const id = item.getAttribute('data-mcb-sheet-cat');
-      const label = item.querySelector('span:first-child');
-      const radio = item.querySelector('.mcb-sheet-radio') as HTMLElement | null;
-      const radioDot = radio?.querySelector('span') as HTMLElement | null;
+    sheetList?.querySelectorAll<HTMLButtonElement>(".mcb-sheet-item").forEach((item) => {
+      const id = item.getAttribute("data-mcb-sheet-cat");
+      const label = item.querySelector("span:first-child");
+      const radio = item.querySelector(".mcb-sheet-radio") as HTMLElement | null;
+      const radioDot = radio?.querySelector("span") as HTMLElement | null;
       if (!label) return;
 
       if (id === catId) {
-        label.className = 'flex-1 text-[15px] font-semibold text-gray-900 dark:text-white';
-        if (radio) radio.className = 'mcb-sheet-radio flex-shrink-0 w-5 h-5 rounded-full border-2 border-primary-500 bg-primary-500 flex items-center justify-center transition-colors';
-        if (radioDot) radioDot.className = 'w-2 h-2 rounded-full bg-white transition-colors';
+        label.className = "flex-1 text-[15px] font-semibold text-gray-900 dark:text-white";
+        if (radio)
+          radio.className =
+            "mcb-sheet-radio flex-shrink-0 w-5 h-5 rounded-full border-2 border-primary-500 bg-primary-500 flex items-center justify-center transition-colors";
+        if (radioDot) radioDot.className = "w-2 h-2 rounded-full bg-white transition-colors";
       } else {
-        label.className = 'flex-1 text-[15px] text-gray-800 dark:text-gray-300';
-        if (radio) radio.className = 'mcb-sheet-radio flex-shrink-0 w-5 h-5 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-transparent flex items-center justify-center transition-colors';
-        if (radioDot) radioDot.className = 'w-2 h-2 rounded-full bg-transparent transition-colors';
+        label.className = "flex-1 text-[15px] text-gray-800 dark:text-gray-300";
+        if (radio)
+          radio.className =
+            "mcb-sheet-radio flex-shrink-0 w-5 h-5 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-transparent flex items-center justify-center transition-colors";
+        if (radioDot) radioDot.className = "w-2 h-2 rounded-full bg-transparent transition-colors";
       }
     });
 
     // Update subcategories row
-    const cat = _cats.find(c => c.id === catId);
+    const cat = _cats.find((c) => c.id === catId);
     if (cat && productsContainer) {
       productsContainer.innerHTML = cat.children
         .slice(0, 10)
-        .map(ch => renderMobileSubcategory(ch.name, ch.slug))
-        .join('');
+        .map((ch) => renderMobileSubcategory(ch.name, ch.slug))
+        .join("");
     }
   }
 
   /* ── Bottom sheet open/close ── */
   function openSheet(): void {
     if (!sheetOverlay || !sheetPanel) return;
-    sheetOverlay.style.opacity = '1';
-    sheetOverlay.style.pointerEvents = 'auto';
-    sheetPanel.style.transform = 'translateY(0)';
-    document.body.style.overflow = 'hidden';
+    sheetOverlay.style.opacity = "1";
+    sheetOverlay.style.pointerEvents = "auto";
+    sheetPanel.style.transform = "translateY(0)";
+    document.body.style.overflow = "hidden";
   }
 
   function closeSheet(): void {
     if (!sheetOverlay || !sheetPanel) return;
-    sheetOverlay.style.opacity = '0';
-    sheetOverlay.style.pointerEvents = 'none';
-    sheetPanel.style.transform = 'translateY(100%)';
-    document.body.style.overflow = '';
+    sheetOverlay.style.opacity = "0";
+    sheetOverlay.style.pointerEvents = "none";
+    sheetPanel.style.transform = "translateY(100%)";
+    document.body.style.overflow = "";
   }
 
-  if (dropdownBtn) dropdownBtn.addEventListener('click', openSheet);
-  if (sheetClose) sheetClose.addEventListener('click', closeSheet);
-  if (sheetOverlay) sheetOverlay.addEventListener('click', closeSheet);
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeSheet();
+  if (dropdownBtn) dropdownBtn.addEventListener("click", openSheet);
+  if (sheetClose) sheetClose.addEventListener("click", closeSheet);
+  if (sheetOverlay) sheetOverlay.addEventListener("click", closeSheet);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeSheet();
   });
 
   // Swipe-down-to-dismiss gesture on the bottom sheet
   if (sheetPanel) {
-    const headerArea = document.getElementById('mcb-sheet-drag-handle');
+    const headerArea = document.getElementById("mcb-sheet-drag-handle");
     const dragTarget = headerArea || sheetPanel;
     let startY = 0;
     let currentY = 0;
     let dragging = false;
 
-    dragTarget.addEventListener('touchstart', (e: TouchEvent) => {
-      startY = e.touches[0].clientY;
-      currentY = startY;
-      dragging = true;
-      sheetPanel!.style.transition = 'none';
-    }, { passive: true });
+    dragTarget.addEventListener(
+      "touchstart",
+      (e: TouchEvent) => {
+        startY = e.touches[0].clientY;
+        currentY = startY;
+        dragging = true;
+        sheetPanel!.style.transition = "none";
+      },
+      { passive: true }
+    );
 
-    dragTarget.addEventListener('touchmove', (e: TouchEvent) => {
-      if (!dragging) return;
-      currentY = e.touches[0].clientY;
-      const deltaY = currentY - startY;
-      if (deltaY > 0) sheetPanel!.style.transform = `translateY(${deltaY}px)`;
-    }, { passive: true });
+    dragTarget.addEventListener(
+      "touchmove",
+      (e: TouchEvent) => {
+        if (!dragging) return;
+        currentY = e.touches[0].clientY;
+        const deltaY = currentY - startY;
+        if (deltaY > 0) sheetPanel!.style.transform = `translateY(${deltaY}px)`;
+      },
+      { passive: true }
+    );
 
-    dragTarget.addEventListener('touchend', () => {
+    dragTarget.addEventListener("touchend", () => {
       if (!dragging) return;
       dragging = false;
-      sheetPanel!.style.transition = '';
+      sheetPanel!.style.transition = "";
       const deltaY = currentY - startY;
       const sheetHeight = sheetPanel!.offsetHeight;
       if (deltaY > sheetHeight * 0.3) {
         closeSheet();
       } else {
-        sheetPanel!.style.transform = 'translateY(0)';
+        sheetPanel!.style.transform = "translateY(0)";
       }
     });
   }
@@ -239,45 +268,53 @@ export function initMobileCategoryBar(): void {
     _cats = cats;
 
     // Render tab bar
-    tabsContainer.innerHTML = cats.map((cat, i) => `
+    tabsContainer.innerHTML = cats
+      .map(
+        (cat, i) => `
       <button
         type="button"
         class="mcb-tab flex-shrink-0 px-3 py-2 text-xs whitespace-nowrap transition-colors ${
           i === 0
-            ? 'font-bold text-gray-900 dark:text-white border-b-2 border-gray-900 dark:border-white'
-            : 'text-gray-500 dark:text-gray-400 font-normal border-b-2 border-transparent'
+            ? "font-bold text-gray-900 dark:text-white border-b-2 border-gray-900 dark:border-white"
+            : "text-gray-500 dark:text-gray-400 font-normal border-b-2 border-transparent"
         }"
         data-mcb-cat="${cat.id}"
       >${cat.name}</button>
-    `).join('');
+    `
+      )
+      .join("");
 
     // Bind tab clicks
-    tabsContainer.querySelectorAll<HTMLButtonElement>('.mcb-tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        const catId = tab.getAttribute('data-mcb-cat');
+    tabsContainer.querySelectorAll<HTMLButtonElement>(".mcb-tab").forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const catId = tab.getAttribute("data-mcb-cat");
         if (catId) selectCategory(catId);
       });
     });
 
     // Render bottom sheet list
     if (sheetList) {
-      sheetList.innerHTML = cats.map((cat, i) => `
+      sheetList.innerHTML = cats
+        .map(
+          (cat, i) => `
         <button
           type="button"
           class="mcb-sheet-item flex items-center w-full px-5 py-4 text-left transition-colors border-b border-gray-50 dark:border-gray-700/50"
           data-mcb-sheet-cat="${cat.id}"
         >
-          <span class="flex-1 text-[15px] ${i === 0 ? 'font-semibold text-gray-900 dark:text-white' : 'text-gray-800 dark:text-gray-300'}">${cat.name}</span>
-          <span class="mcb-sheet-radio flex-shrink-0 w-5 h-5 rounded-full border-2 ${i === 0 ? 'border-primary-500 bg-primary-500' : 'border-gray-300 dark:border-gray-600 bg-transparent'} flex items-center justify-center transition-colors">
-            <span class="w-2 h-2 rounded-full ${i === 0 ? 'bg-white' : 'bg-transparent'} transition-colors"></span>
+          <span class="flex-1 text-[15px] ${i === 0 ? "font-semibold text-gray-900 dark:text-white" : "text-gray-800 dark:text-gray-300"}">${cat.name}</span>
+          <span class="mcb-sheet-radio flex-shrink-0 w-5 h-5 rounded-full border-2 ${i === 0 ? "border-primary-500 bg-primary-500" : "border-gray-300 dark:border-gray-600 bg-transparent"} flex items-center justify-center transition-colors">
+            <span class="w-2 h-2 rounded-full ${i === 0 ? "bg-white" : "bg-transparent"} transition-colors"></span>
           </span>
         </button>
-      `).join('');
+      `
+        )
+        .join("");
 
       // Bind sheet item clicks
-      sheetList.querySelectorAll<HTMLButtonElement>('.mcb-sheet-item').forEach(item => {
-        item.addEventListener('click', () => {
-          const catId = item.getAttribute('data-mcb-sheet-cat');
+      sheetList.querySelectorAll<HTMLButtonElement>(".mcb-sheet-item").forEach((item) => {
+        item.addEventListener("click", () => {
+          const catId = item.getAttribute("data-mcb-sheet-cat");
           if (catId) {
             selectCategory(catId);
             closeSheet();
@@ -290,8 +327,8 @@ export function initMobileCategoryBar(): void {
     if (cats[0]) {
       productsContainer.innerHTML = cats[0].children
         .slice(0, 10)
-        .map(ch => renderMobileSubcategory(ch.name, ch.slug))
-        .join('');
+        .map((ch) => renderMobileSubcategory(ch.name, ch.slug))
+        .join("");
     }
   });
 }

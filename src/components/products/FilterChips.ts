@@ -5,8 +5,8 @@
  * Uses Alpine.js @click on remove buttons within x-data="filterChips" scope.
  */
 
-import type { FilterState } from './filterEngine';
-import { getCurrencySymbol } from '../../utils/currency';
+import type { FilterState } from "./filterEngine";
+import { getCurrencySymbol } from "../../utils/currency";
 
 /**
  * Create a single chip HTML
@@ -41,17 +41,19 @@ function makeChip(label: string, section: string, value: string): string {
 export function renderFilterChips(state: FilterState): string {
   const chips: string[] = [];
 
-  if (state.verified) chips.push(makeChip('Verified Supplier', 'supplier-features', 'verified'));
-  if (state.verifiedPro) chips.push(makeChip('Verified PRO', 'supplier-features', 'verified-pro'));
-  if (state.minRating !== null) chips.push(makeChip(`${state.minRating}\u2605 & up`, 'store-reviews', String(state.minRating)));
+  if (state.verified) chips.push(makeChip("Verified Supplier", "supplier-features", "verified"));
+  if (state.verifiedPro) chips.push(makeChip("Verified PRO", "supplier-features", "verified-pro"));
+  if (state.minRating !== null)
+    chips.push(makeChip(`${state.minRating}\u2605 & up`, "store-reviews", String(state.minRating)));
   if (state.priceMin !== null || state.priceMax !== null) {
-    const label = `${getCurrencySymbol()}${state.priceMin ?? '0'} \u2013 ${getCurrencySymbol()}${state.priceMax ?? '\u221E'}`;
-    chips.push(makeChip(label, 'price', 'range'));
+    const label = `${getCurrencySymbol()}${state.priceMin ?? "0"} \u2013 ${getCurrencySymbol()}${state.priceMax ?? "\u221E"}`;
+    chips.push(makeChip(label, "price", "range"));
   }
-  if (state.minOrder !== null) chips.push(makeChip(`MOQ \u2264 ${state.minOrder}`, 'min-order', String(state.minOrder)));
-  state.supplierCountries.forEach(c => chips.push(makeChip(c, 'supplier-country', c)));
+  if (state.minOrder !== null)
+    chips.push(makeChip(`MOQ \u2264 ${state.minOrder}`, "min-order", String(state.minOrder)));
+  state.supplierCountries.forEach((c) => chips.push(makeChip(c, "supplier-country", c)));
 
-  return chips.join('');
+  return chips.join("");
 }
 
 /**
@@ -60,7 +62,7 @@ export function renderFilterChips(state: FilterState): string {
  * Alpine's MutationObserver processes new @click directives on innerHTML change.
  */
 export function updateFilterChips(state: FilterState): void {
-  const container = document.getElementById('active-filter-chips');
+  const container = document.getElementById("active-filter-chips");
   if (!container) return;
   container.innerHTML = renderFilterChips(state);
 }

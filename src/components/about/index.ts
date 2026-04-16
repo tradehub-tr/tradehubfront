@@ -1,1 +1,1 @@
-export { AboutPageLayout } from './AboutPageLayout';
+export { AboutPageLayout } from "./AboutPageLayout";

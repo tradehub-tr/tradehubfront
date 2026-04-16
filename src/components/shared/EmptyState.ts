@@ -4,16 +4,23 @@
  * Link color is configurable (defaults to orange #E67A00).
  */
 
-import type { EmptyStateProps } from '../../types/buyerDashboard';
+import type { EmptyStateProps } from "../../types/buyerDashboard";
 
 export interface EmptyStateFullProps extends EmptyStateProps {
   linkColor?: string;
 }
 
-export function EmptyState({ icon, text, linkText, linkHref, linkColor = '#E67A00' }: EmptyStateFullProps): string {
-  const linkHtml = linkText && linkHref
-    ? `<a href="${linkHref}" class="text-[13px] mt-2 hover:underline" style="color: ${linkColor}">${linkText}</a>`
-    : '';
+export function EmptyState({
+  icon,
+  text,
+  linkText,
+  linkHref,
+  linkColor = "#E67A00",
+}: EmptyStateFullProps): string {
+  const linkHtml =
+    linkText && linkHref
+      ? `<a href="${linkHref}" class="text-[13px] mt-2 hover:underline" style="color: ${linkColor}">${linkText}</a>`
+      : "";
 
   return `
     <div class="flex flex-col items-center justify-center py-6 xs:py-8 px-4">

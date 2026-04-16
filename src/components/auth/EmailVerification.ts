@@ -5,7 +5,7 @@
  * Used in registration flow after email submission.
  */
 
-import { t } from '../../i18n';
+import { t } from "../../i18n";
 
 /* ── Types ──────────────────────────────────────────── */
 
@@ -43,7 +43,7 @@ export interface EmailVerificationState {
  * Renders the email verification component with 6-digit OTP input
  * @param email - The email address being verified
  */
-export function EmailVerification(email: string = ''): string {
+export function EmailVerification(email: string = ""): string {
   const maskedEmail = maskEmail(email);
 
   return `
@@ -51,10 +51,10 @@ export function EmailVerification(email: string = ''): string {
       <!-- Header -->
       <div class="mb-6 text-center lg:text-left">
         <h1 class="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white mb-2">
-          ${t('auth.verifyEmail')}
+          ${t("auth.verifyEmail")}
         </h1>
         <p class="text-sm text-gray-500 dark:text-gray-400">
-          <span id="verification-email-display">${maskedEmail || t('auth.otpSentFallback')}</span> ${t('auth.otpSentTo')}
+          <span id="verification-email-display">${maskedEmail || t("auth.otpSentFallback")}</span> ${t("auth.otpSentTo")}
         </p>
       </div>
 
@@ -66,21 +66,21 @@ export function EmailVerification(email: string = ''): string {
 
         <!-- Error message (hidden by default) -->
         <p id="otp-error" class="mt-3 text-sm text-red-600 dark:text-red-400 text-center lg:text-left hidden">
-          ${t('auth.otpInvalidCode')}
+          ${t("auth.otpInvalidCode")}
         </p>
       </div>
 
       <!-- Resend Section -->
       <div class="mb-6 text-center lg:text-left">
         <p class="text-sm text-gray-500 dark:text-gray-400">
-          ${t('auth.otpDidntReceive')}
+          ${t("auth.otpDidntReceive")}
           <button
             type="button"
             id="otp-resend-btn"
             class="ml-1 font-medium text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300 hover:underline transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:no-underline"
             disabled
           >
-            <span id="otp-resend-text">${t('auth.otpResend')}</span>
+            <span id="otp-resend-text">${t("auth.otpResend")}</span>
             <span id="otp-countdown" class="text-gray-400 dark:text-gray-500">(60s)</span>
           </button>
         </p>
@@ -93,7 +93,7 @@ export function EmailVerification(email: string = ''): string {
         class="th-btn w-full py-3 text-base font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         disabled
       >
-        ${t('auth.otpVerifyAndContinue')}
+        ${t("auth.otpVerifyAndContinue")}
       </button>
 
       <!-- Back/Change Email Link -->
@@ -103,7 +103,7 @@ export function EmailVerification(email: string = ''): string {
           id="otp-back-btn"
           class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:underline transition-colors"
         >
-          ${t('auth.otpChangeEmail')}
+          ${t("auth.otpChangeEmail")}
         </button>
       </div>
     </div>
@@ -138,7 +138,7 @@ function renderOTPInputs(): string {
     `);
   }
 
-  return inputs.join('');
+  return inputs.join("");
 }
 
 /* ── Helper Functions ────────────────────────────────── */
@@ -147,9 +147,9 @@ function renderOTPInputs(): string {
  * Mask email address for display (e.g., "t***@example.com")
  */
 function maskEmail(email: string): string {
-  if (!email || !email.includes('@')) return email;
+  if (!email || !email.includes("@")) return email;
 
-  const [local, domain] = email.split('@');
+  const [local, domain] = email.split("@");
   if (local.length <= 2) {
     return `${local[0]}***@${domain}`;
   }
@@ -162,51 +162,47 @@ function maskEmail(email: string): string {
  * Initialize EmailVerification interactivity
  * Sets up OTP input handlers, countdown timer, and button states
  */
-export function initEmailVerification(options: EmailVerificationOptions = {}): EmailVerificationState {
-  const {
-    onComplete,
-    onVerify,
-    onResend,
-    onBack,
-    resendCountdown = 60
-  } = options;
+export function initEmailVerification(
+  options: EmailVerificationOptions = {}
+): EmailVerificationState {
+  const { onComplete, onVerify, onResend, onBack, resendCountdown = 60 } = options;
 
   // Initialize state
   const state: EmailVerificationState = {
-    otp: ['', '', '', '', '', ''],
+    otp: ["", "", "", "", "", ""],
     canResend: false,
     countdownSeconds: resendCountdown,
-    countdownInterval: null
+    countdownInterval: null,
   };
 
-  const container = document.getElementById('email-verification');
+  const container = document.getElementById("email-verification");
   if (!container) return state;
 
   // Get all OTP inputs
-  const otpInputs = container.querySelectorAll<HTMLInputElement>('[data-otp-index]');
-  const continueBtn = document.getElementById('otp-continue-btn') as HTMLButtonElement | null;
-  const resendBtn = document.getElementById('otp-resend-btn') as HTMLButtonElement | null;
-  const backBtn = document.getElementById('otp-back-btn') as HTMLButtonElement | null;
-  const countdownSpan = document.getElementById('otp-countdown');
-  const errorMsg = document.getElementById('otp-error');
+  const otpInputs = container.querySelectorAll<HTMLInputElement>("[data-otp-index]");
+  const continueBtn = document.getElementById("otp-continue-btn") as HTMLButtonElement | null;
+  const resendBtn = document.getElementById("otp-resend-btn") as HTMLButtonElement | null;
+  const backBtn = document.getElementById("otp-back-btn") as HTMLButtonElement | null;
+  const countdownSpan = document.getElementById("otp-countdown");
+  const errorMsg = document.getElementById("otp-error");
 
   // Helper to handle OTP submission (sync onComplete + async onVerify)
   let verifying = false;
 
   function setInputsDisabled(disabled: boolean): void {
-    otpInputs.forEach(inp => { inp.disabled = disabled; });
+    otpInputs.forEach((inp) => {
+      inp.disabled = disabled;
+    });
     if (continueBtn) {
       continueBtn.disabled = disabled;
-      continueBtn.textContent = disabled
-        ? t('auth.otpVerifying')
-        : t('auth.otpVerifyAndContinue');
+      continueBtn.textContent = disabled ? t("auth.otpVerifying") : t("auth.otpVerifyAndContinue");
     }
   }
 
   async function handleOTPSubmit(): Promise<void> {
     if (!isOTPComplete(state) || verifying) return;
 
-    const otp = state.otp.join('');
+    const otp = state.otp.join("");
 
     // Fire sync callback if provided
     if (onComplete && !onVerify) {
@@ -225,14 +221,13 @@ export function initEmailVerification(options: EmailVerificationOptions = {}): E
         // Success — caller (alpine/auth.ts) handles navigation
       } catch (err) {
         // Verification failed — show error, clear inputs
-        const rawMsg = err instanceof Error ? err.message : '';
+        const rawMsg = err instanceof Error ? err.message : "";
         // Rate limit (429) mesajını backend'den al, diğerlerinde frontend i18n kullan
-        const displayMsg = rawMsg === 'RATE_LIMIT'
-          ? t('auth.otpTooManyAttempts')
-          : t('auth.otpInvalidCode');
+        const displayMsg =
+          rawMsg === "RATE_LIMIT" ? t("auth.otpTooManyAttempts") : t("auth.otpInvalidCode");
         showOTPError(displayMsg);
         clearOTPInputs();
-        state.otp = ['', '', '', '', '', ''];
+        state.otp = ["", "", "", "", "", ""];
         updateContinueButton(state, continueBtn);
       } finally {
         verifying = false;
@@ -244,9 +239,9 @@ export function initEmailVerification(options: EmailVerificationOptions = {}): E
   // Setup OTP input handlers
   otpInputs.forEach((input, index) => {
     // Handle input
-    input.addEventListener('input', (e) => {
+    input.addEventListener("input", (e) => {
       const target = e.target as HTMLInputElement;
-      const value = target.value.replace(/\D/g, ''); // Only digits
+      const value = target.value.replace(/\D/g, ""); // Only digits
 
       if (value.length === 1) {
         state.otp[index] = value;
@@ -258,8 +253,8 @@ export function initEmailVerification(options: EmailVerificationOptions = {}): E
           nextInput?.focus();
         }
       } else if (value.length === 0) {
-        state.otp[index] = '';
-        target.value = '';
+        state.otp[index] = "";
+        target.value = "";
       }
 
       // Hide error on input
@@ -275,18 +270,18 @@ export function initEmailVerification(options: EmailVerificationOptions = {}): E
     });
 
     // Handle paste (support pasting full 6-digit code)
-    input.addEventListener('paste', (e) => {
+    input.addEventListener("paste", (e) => {
       e.preventDefault();
-      const pastedData = e.clipboardData?.getData('text') || '';
-      const digits = pastedData.replace(/\D/g, '').slice(0, 6);
+      const pastedData = e.clipboardData?.getData("text") || "";
+      const digits = pastedData.replace(/\D/g, "").slice(0, 6);
 
       if (digits.length > 0) {
         // Fill all inputs with pasted digits
         for (let i = 0; i < 6; i++) {
-          state.otp[i] = digits[i] || '';
+          state.otp[i] = digits[i] || "";
           const otpInput = otpInputs[i];
           if (otpInput) {
-            otpInput.value = digits[i] || '';
+            otpInput.value = digits[i] || "";
           }
         }
 
@@ -308,39 +303,39 @@ export function initEmailVerification(options: EmailVerificationOptions = {}): E
     });
 
     // Handle backspace - move to previous input
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Backspace' && !input.value && index > 0) {
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Backspace" && !input.value && index > 0) {
         const prevInput = otpInputs[index - 1];
         prevInput?.focus();
       }
 
       // Handle arrow keys for navigation
-      if (e.key === 'ArrowLeft' && index > 0) {
+      if (e.key === "ArrowLeft" && index > 0) {
         e.preventDefault();
         otpInputs[index - 1]?.focus();
       }
-      if (e.key === 'ArrowRight' && index < 5) {
+      if (e.key === "ArrowRight" && index < 5) {
         e.preventDefault();
         otpInputs[index + 1]?.focus();
       }
     });
 
     // Select all on focus
-    input.addEventListener('focus', () => {
+    input.addEventListener("focus", () => {
       input.select();
     });
   });
 
   // Continue button handler
   if (continueBtn) {
-    continueBtn.addEventListener('click', () => {
+    continueBtn.addEventListener("click", () => {
       handleOTPSubmit();
     });
   }
 
   // Resend button handler
   if (resendBtn) {
-    resendBtn.addEventListener('click', () => {
+    resendBtn.addEventListener("click", () => {
       if (state.canResend && onResend) {
         onResend();
         // Reset countdown
@@ -351,7 +346,7 @@ export function initEmailVerification(options: EmailVerificationOptions = {}): E
 
   // Back button handler
   if (backBtn && onBack) {
-    backBtn.addEventListener('click', () => {
+    backBtn.addEventListener("click", () => {
       onBack();
     });
   }
@@ -416,9 +411,9 @@ function updateCountdownUI(
 
   if (countdownSpan) {
     if (state.canResend) {
-      countdownSpan.classList.add('hidden');
+      countdownSpan.classList.add("hidden");
     } else {
-      countdownSpan.classList.remove('hidden');
+      countdownSpan.classList.remove("hidden");
       countdownSpan.textContent = `(${state.countdownSeconds}s)`;
     }
   }
@@ -428,7 +423,7 @@ function updateCountdownUI(
  * Check if all OTP digits are entered
  */
 function isOTPComplete(state: EmailVerificationState): boolean {
-  return state.otp.every(digit => digit !== '');
+  return state.otp.every((digit) => digit !== "");
 }
 
 /**
@@ -448,7 +443,7 @@ function updateContinueButton(
  */
 function hideError(errorMsg: HTMLElement | null): void {
   if (errorMsg) {
-    errorMsg.classList.add('hidden');
+    errorMsg.classList.add("hidden");
   }
 }
 
@@ -456,12 +451,12 @@ function hideError(errorMsg: HTMLElement | null): void {
  * Show error message
  */
 export function showOTPError(message?: string): void {
-  const errorMsg = document.getElementById('otp-error');
+  const errorMsg = document.getElementById("otp-error");
   if (errorMsg) {
     if (message) {
       errorMsg.textContent = message;
     }
-    errorMsg.classList.remove('hidden');
+    errorMsg.classList.remove("hidden");
   }
 }
 
@@ -469,12 +464,12 @@ export function showOTPError(message?: string): void {
  * Clear all OTP inputs
  */
 export function clearOTPInputs(): void {
-  const container = document.getElementById('email-verification');
+  const container = document.getElementById("email-verification");
   if (!container) return;
 
-  const otpInputs = container.querySelectorAll<HTMLInputElement>('[data-otp-index]');
-  otpInputs.forEach(input => {
-    input.value = '';
+  const otpInputs = container.querySelectorAll<HTMLInputElement>("[data-otp-index]");
+  otpInputs.forEach((input) => {
+    input.value = "";
   });
 
   // Focus first input
@@ -486,18 +481,20 @@ export function clearOTPInputs(): void {
  * Get the current OTP value
  */
 export function getOTPValue(): string {
-  const container = document.getElementById('email-verification');
-  if (!container) return '';
+  const container = document.getElementById("email-verification");
+  if (!container) return "";
 
-  const otpInputs = container.querySelectorAll<HTMLInputElement>('[data-otp-index]');
-  return Array.from(otpInputs).map(input => input.value).join('');
+  const otpInputs = container.querySelectorAll<HTMLInputElement>("[data-otp-index]");
+  return Array.from(otpInputs)
+    .map((input) => input.value)
+    .join("");
 }
 
 /**
  * Update the displayed email address
  */
 export function updateVerificationEmail(email: string): void {
-  const emailDisplay = document.getElementById('verification-email-display');
+  const emailDisplay = document.getElementById("verification-email-display");
   if (emailDisplay) {
     emailDisplay.textContent = maskEmail(email);
   }

@@ -6,10 +6,10 @@
  * discount first).
  */
 
-import { t } from '../../i18n';
-import { formatStartingPrice } from '../../utils/currency';
-import { searchListings } from '../../services/listingService';
-import { initCurrency } from '../../services/currencyService';
+import { t } from "../../i18n";
+import { formatStartingPrice } from "../../utils/currency";
+import { searchListings } from "../../services/listingService";
+import { initCurrency } from "../../services/currencyService";
 
 interface TopDealCard {
   name: string;
@@ -64,15 +64,16 @@ function renderDealImage(card: TopDealCard): string {
 
 function renderDealCard(card: TopDealCard): string {
   const moqI18nOptions = JSON.stringify({ count: card.moqCount, unit: t(card.moqUnitKey) });
-  const moqText = t('topDeals.moq', { count: card.moqCount, unit: t(card.moqUnitKey) });
+  const moqText = t("topDeals.moq", { count: card.moqCount, unit: t(card.moqUnitKey) });
 
   // Discount badge — top-left of image, only when we have a positive percent.
-  const discountBadge = card.discountPercent && card.discountPercent > 0
-    ? `<span
+  const discountBadge =
+    card.discountPercent && card.discountPercent > 0
+      ? `<span
          class="absolute top-2 left-2 z-10 inline-flex items-center rounded-sm font-bold leading-none text-white"
          style="background-color: var(--topdeals-badge-bg, #DE0505); padding: 3px 5px; font-size: 10px;"
        >%${card.discountPercent}</span>`
-    : '';
+      : "";
 
   // Strikethrough original price — only when present and different from current.
   const originalPriceLabel = card.originalPrice
@@ -80,7 +81,7 @@ function renderDealCard(card: TopDealCard): string {
          class="line-through shrink-0"
          style="color: var(--topdeals-original-price-color, #9ca3af); font-size: 11px;"
        >${card.originalPrice}</span>`
-    : '';
+    : "";
 
   return `
     <a
@@ -141,44 +142,45 @@ function renderSkeletonCard(): string {
 }
 
 export function initTopDeals(): void {
-  const grid = document.getElementById('top-deals-grid');
+  const grid = document.getElementById("top-deals-grid");
   if (!grid) return;
 
   // Render skeletons while loading so layout doesn't jump
-  grid.innerHTML = Array.from({ length: FIXED_GRID_COUNT }).map(renderSkeletonCard).join('');
+  grid.innerHTML = Array.from({ length: FIXED_GRID_COUNT }).map(renderSkeletonCard).join("");
 
   initCurrency()
-    .then(() => searchListings({ is_deal: true, page_size: FIXED_GRID_COUNT, sort_by: 'discount' }))
-    .then(result => {
-      const empty = document.getElementById('top-deals-empty');
+    .then(() => searchListings({ is_deal: true, page_size: FIXED_GRID_COUNT, sort_by: "discount" }))
+    .then((result) => {
+      const empty = document.getElementById("top-deals-empty");
       if (result.products.length === 0) {
-        grid.innerHTML = '';
-        if (empty) empty.style.display = '';
+        grid.innerHTML = "";
+        if (empty) empty.style.display = "";
         return;
       }
-      if (empty) empty.style.display = 'none';
+      if (empty) empty.style.display = "none";
 
-      const cards: TopDealCard[] = result.products.slice(0, FIXED_GRID_COUNT).map(p => ({
+      const cards: TopDealCard[] = result.products.slice(0, FIXED_GRID_COUNT).map((p) => ({
         name: p.name,
         href: p.href || `/pages/product-detail.html?id=${p.id}`,
         price: p.price,
         startingPrice: formatStartingPrice(p.price),
         // p.originalPrice is already currency-formatted by mapListingCard
         originalPrice: p.originalPrice || undefined,
-        discountPercent: p.discountPercentage && p.discountPercentage > 0
-          ? Math.round(p.discountPercentage)
-          : undefined,
-        imageSrc: p.imageSrc || '',
+        discountPercent:
+          p.discountPercentage && p.discountPercentage > 0
+            ? Math.round(p.discountPercentage)
+            : undefined,
+        imageSrc: p.imageSrc || "",
         moqCount: parseInt(p.moq) || 1,
-        moqUnitKey: 'topDeals.pieces',
+        moqUnitKey: "topDeals.pieces",
       }));
-      grid.innerHTML = cards.map(renderDealCard).join('');
+      grid.innerHTML = cards.map(renderDealCard).join("");
     })
-    .catch(err => {
-      console.warn('[TopDeals] API load failed:', err);
-      grid.innerHTML = '';
-      const empty = document.getElementById('top-deals-empty');
-      if (empty) empty.style.display = '';
+    .catch((err) => {
+      console.warn("[TopDeals] API load failed:", err);
+      grid.innerHTML = "";
+      const empty = document.getElementById("top-deals-empty");
+      if (empty) empty.style.display = "";
     });
 }
 
@@ -193,17 +195,17 @@ export function TopDeals(): string {
               <h2
                 class="text-[20px] sm:text-[22px] font-bold leading-tight"
                 style="color: var(--topdeals-title-color, #111827);"
-              ><span data-i18n="topDeals.title">${t('topDeals.title')}</span></h2>
+              ><span data-i18n="topDeals.title">${t("topDeals.title")}</span></h2>
               <p
                 class="mt-0.5 text-[13px]"
                 style="color: var(--topdeals-subtitle-color, #6b7280);"
-              ><span data-i18n="topDeals.subtitle">${t('topDeals.subtitle')}</span></p>
+              ><span data-i18n="topDeals.subtitle">${t("topDeals.subtitle")}</span></p>
             </div>
             <a
               href="/pages/top-deals.html"
               class="flex-shrink-0 text-[13px] font-semibold transition-colors duration-150 hover:underline"
               style="color: var(--topdeals-link-color, #111827);"
-            ><span data-i18n="common.viewMore">${t('common.viewMore')}</span> &gt;</a>
+            ><span data-i18n="common.viewMore">${t("common.viewMore")}</span> &gt;</a>
           </div>
 
           <!-- Fixed 6-product grid -->
@@ -219,7 +221,7 @@ export function TopDeals(): string {
               <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
               </svg>
-              <p class="text-sm text-gray-400" data-i18n="topDeals.empty">${t('topDeals.empty')}</p>
+              <p class="text-sm text-gray-400" data-i18n="topDeals.empty">${t("topDeals.empty")}</p>
             </div>
           </div>
         </div>
