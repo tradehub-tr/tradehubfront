@@ -9,6 +9,7 @@ import {
   openSharedShippingModal,
   type CartDrawerColorModel,
   type CartDrawerSizeGroup,
+  type CartDrawerSelectableGroup,
   type CartDrawerItemModel,
   type CartDrawerShippingOption,
   type CartDrawerTierModel,
@@ -61,7 +62,7 @@ function toColors(product: ProductDetail): CartDrawerColorModel[] {
 
 function toSizeGroups(product: ProductDetail): CartDrawerSizeGroup[] {
   return product.variants
-    .filter((v) => v.type !== 'color')
+    .filter((v) => v.type === 'size')
     .map((v) => ({
       groupLabel: v.label,
       options: v.options.map((o, i) => ({
@@ -71,6 +72,26 @@ function toSizeGroups(product: ProductDetail): CartDrawerSizeGroup[] {
       })),
     }))
     .filter((g) => g.options.length > 0);
+}
+
+function toSelectableGroups(product: ProductDetail): CartDrawerSelectableGroup[] {
+  return product.variants
+    .filter((v) => v.type === 'material')
+    .map((v) => ({
+      groupLabel: v.label,
+      axisName: v.label,
+      options: v.options.map((o, i) => ({
+        id: o.id || `${v.label}-${i}`,
+        label: o.label,
+      })),
+    }))
+    .filter((g) => g.options.length > 0);
+}
+
+function toSkuMatrix(product: ProductDetail): CartDrawerItemModel['skuMatrix'] {
+  const colorVariant = product.variants.find((v) => v.type === 'color');
+  if (!colorVariant?.skuMatrix) return undefined;
+  return colorVariant.skuMatrix;
 }
 
 function toDrawerItem(product: ProductDetail, context?: CartDrawerContext | null): CartDrawerItemModel {
@@ -92,8 +113,11 @@ function toDrawerItem(product: ProductDetail, context?: CartDrawerContext | null
     priceTiers: tiers,
     samplePrice: product.baseSamplePrice ?? product.samplePrice,
     colors: toColors(product),
+    colorAxisLabel: product.variants.find((v) => v.type === 'color')?.label,
     sizeGroups: toSizeGroups(product),
+    selectableGroups: toSelectableGroups(product),
     shippingOptions: toShippingOptions(product),
+    skuMatrix: toSkuMatrix(product),
   };
 }
 
