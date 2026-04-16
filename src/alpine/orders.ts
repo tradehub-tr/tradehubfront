@@ -25,7 +25,7 @@ Alpine.data('ordersListComponent', () => ({
   dateTo: '',
   dateOpen: false,
   timeOpen: false,
-  selectedOrder: null,
+  selectedOrder: null as any,
   copiedNumber: false,
   orders: [] as any[],
   loading: true,
@@ -41,6 +41,13 @@ Alpine.data('ordersListComponent', () => ({
     await orderStore.load();
     this.orders = orderStore.getOrders();
     this.loading = false;
+
+    // URL'de ?order=XXX varsa o siparişi otomatik aç (bildirim tıklama akışı)
+    const urlOrder = new URLSearchParams(window.location.search).get('order');
+    if (urlOrder) {
+      const match = this.orders.find((o: any) => o.orderNumber === urlOrder);
+      if (match) this.selectedOrder = match;
+    }
   },
 
   get filteredOrders() {
@@ -149,6 +156,7 @@ Alpine.data('ordersListComponent', () => ({
   showAddServices: false,
   showCancelOrder: false,
   showRefundModal: false,
+  showContract: false,
   paymentHistoryTab: 'records',
   cancelReason: '',
   cancellingOrder: null as any,

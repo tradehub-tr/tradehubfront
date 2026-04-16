@@ -811,6 +811,7 @@ const tr = {
       refundsAfterSales: 'Para İadesi ve Satış Sonrası Hizmetler',
       myReviews: 'Değerlendirmelerim',
       couponsCredits: 'Kupon ve Kredilerim',
+      coupons: 'Kuponlar',
       taxInfo: 'Vergi Bilgilerim',
       payment: 'Ödeme',
       paymentManagement: 'Ödeme Yönetimi',

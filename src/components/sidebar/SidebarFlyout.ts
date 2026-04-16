@@ -38,8 +38,7 @@ const submenuI18nKeys: Record<string, string> = {
   '/pages/dashboard/orders.html': 'dashboard.allOrders',
   '/pages/dashboard/orders.html#refunds': 'dashboard.refundsAfterSales',
   '/pages/dashboard/orders.html#reviews': 'dashboard.myReviews',
-  '/pages/dashboard/orders.html#coupons': 'dashboard.couponsCredits',
-  '/pages/dashboard/orders.html#tax-info': 'dashboard.taxInfo',
+  '/pages/dashboard/orders.html#coupons': 'dashboard.coupons',
   // Payment
   '/pages/dashboard/payment.html#payment-management': 'dashboard.paymentManagement',
   '/pages/dashboard/payment.html#transactions': 'dashboard.transactions',
@@ -126,7 +125,7 @@ export function renderSidebarFlyout({ item }: SidebarFlyoutProps): string {
 
   return `
     <div
-      class="sidebar-flyout fixed z-50 w-[196px] bg-gray-100 dark:bg-gray-800 pt-5 px-5 pb-5 overflow-y-auto rounded-r-lg"
+      class="sidebar-flyout fixed z-50 w-[196px] bg-[#F5F5F5] dark:bg-gray-800 pt-5 px-5 pb-5 overflow-y-auto rounded-r-lg"
       data-sidebar-flyout="${item.id}"
       role="menu"
       aria-label="${item.label} submenu"

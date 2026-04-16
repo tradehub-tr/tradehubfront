@@ -54,8 +54,7 @@ export function getSidebarSections(): SidebarSection[] {
             { label: t('dashboard.allOrders'), href: '/pages/dashboard/orders.html' },
             { label: t('dashboard.refundsAfterSales'), href: '/pages/dashboard/orders.html#refunds' },
             { label: t('dashboard.myReviews'), href: '/pages/dashboard/orders.html#reviews' },
-            { label: t('dashboard.couponsCredits'), href: '/pages/dashboard/orders.html#coupons' },
-            { label: t('dashboard.taxInfo'), href: '/pages/dashboard/orders.html#tax-info' },
+            { label: t('dashboard.coupons'), href: '/pages/dashboard/orders.html#coupons' },
           ],
         },
         {

@@ -60,19 +60,28 @@ export async function api<T>(
   options: RequestInit = {}
 ): Promise<T> {
   const method = (options.method || 'GET').toUpperCase()
-  const csrf = ['POST', 'PUT', 'DELETE', 'PATCH'].includes(method)
-    ? ((await fetchCsrfToken()) ?? 'None')
-    : 'None'
+  const needsCsrf = ['POST', 'PUT', 'DELETE', 'PATCH'].includes(method)
 
-  const res = await fetch(`${BASE_URL}${endpoint}`, {
-    ...options,
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Frappe-CSRF-Token': csrf,
-      ...options.headers,
-    },
-  })
+  const doFetch = async (csrf: string) =>
+    fetch(`${BASE_URL}${endpoint}`, {
+      ...options,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Frappe-CSRF-Token': csrf,
+        ...options.headers,
+      },
+    })
+
+  let csrf = needsCsrf ? ((await fetchCsrfToken()) ?? 'None') : 'None'
+  let res = await doFetch(csrf)
+
+  // Stale CSRF retry: 403'te cache'i temizle, yeni token ile 1 kez yeniden dene
+  if (res.status === 403 && needsCsrf) {
+    clearCsrfCache()
+    csrf = (await fetchCsrfToken()) ?? 'None'
+    res = await doFetch(csrf)
+  }
 
   if (res.status === 401 || res.status === 403) {
     // Pre-auth endpoint'lerde (kayıt, OTP, şifre sıfırlama) login'e yönlendirme
@@ -119,32 +128,40 @@ export async function callMethod<T = unknown>(
   post = false
 ): Promise<T> {
   const url = `${BASE_URL}/method/${method}`
-  const csrf = post ? ((await fetchCsrfToken()) ?? 'None') : 'None'
 
-  const headers: HeadersInit = {
-    'Content-Type': 'application/json',
-    'X-Frappe-CSRF-Token': csrf,
-  }
-
-  let res: Response
-  if (post) {
-    res = await fetch(url, {
-      method: 'POST',
-      credentials: 'include',
-      headers,
-      body: JSON.stringify(params),
-    })
-  } else {
+  const doFetch = async (csrf: string): Promise<Response> => {
+    const headers: HeadersInit = {
+      'Content-Type': 'application/json',
+      'X-Frappe-CSRF-Token': csrf,
+    }
+    if (post) {
+      return fetch(url, {
+        method: 'POST',
+        credentials: 'include',
+        headers,
+        body: JSON.stringify(params),
+      })
+    }
     const qs = new URLSearchParams(
       Object.fromEntries(
         Object.entries(params).map(([k, v]) => [k, String(v)])
       )
     ).toString()
-    res = await fetch(qs ? `${url}?${qs}` : url, {
+    return fetch(qs ? `${url}?${qs}` : url, {
       method: 'GET',
       credentials: 'include',
       headers,
     })
+  }
+
+  let csrf = post ? ((await fetchCsrfToken()) ?? 'None') : 'None'
+  let res = await doFetch(csrf)
+
+  // Stale CSRF retry: 403'te cache'i temizle, yeni token ile 1 kez yeniden dene
+  if (res.status === 403 && post) {
+    clearCsrfCache()
+    csrf = (await fetchCsrfToken()) ?? 'None'
+    res = await doFetch(csrf)
   }
 
   if (res.status === 403) {

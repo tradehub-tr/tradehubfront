@@ -3,7 +3,7 @@
  * All auth-related API calls go through the api() wrapper from utils/api.ts.
  */
 
-import { api, frappeLogout } from './api';
+import { api, frappeLogout, clearCsrfCache } from './api';
 
 const FRAPPE_BASE = import.meta.env.VITE_FRAPPE_BASE || '';
 
@@ -147,6 +147,11 @@ export async function login(email: string, password: string): Promise<LoginRespo
   if (!res.ok) {
     throw new Error('INVALID_CREDENTIALS');
   }
+
+  // Login sonrası CSRF token rotasyonu — eski cache'i temizle ki
+  // ilk POST isteği stale token ile 403 patlamasın
+  clearCsrfCache();
+  invalidateAuthCache();
 
   const data = await res.json() as LoginResponse;
 
