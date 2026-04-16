@@ -693,14 +693,16 @@ function mapListingDetail(raw: any): ProductDetail {
   }))
 
   // Map variants
-  const variants: ProductVariant[] = (raw.variants || []).map((v: any) => {
+  const variants: ProductVariant[] = (raw.variants || []).map((v: any, vIndex: number) => {
     const nameLower = (v.name || '').toLowerCase()
     let type: 'color' | 'size' | 'material' = 'material'
     if (nameLower.includes('renk') || nameLower.includes('color') || nameLower.includes('colour')) {
       type = 'color'
     } else if (nameLower.includes('beden') || nameLower.includes('boyut') || nameLower.includes('size') || nameLower.includes('uzunlu')) {
       type = 'size'
-    } else if (v.type === 'image') {
+    } else if (v.type === 'image' && vIndex === 0) {
+      // Only treat as 'color' if it's the first variant group (primary axis)
+      // Other image axes (e.g. Material with photos) stay as 'material'
       type = 'color'
     }
     return {
@@ -720,7 +722,9 @@ function mapListingDetail(raw: any): ProductDetail {
         videoUrl: o.videoUrl || undefined,
         title: o.title || undefined,
         sku: o.sku || undefined,
+        isDefault: !!o.isDefault,
       })),
+      skuMatrix: Array.isArray(v.skuMatrix) ? v.skuMatrix : undefined,
     }
   })
 

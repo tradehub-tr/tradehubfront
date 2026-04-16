@@ -243,13 +243,26 @@ async function renderProductPage() {
   // Favorites
   initFavorites(product);
 
+  // ── Original images + title (for "back to default" fallback) ──
+  const originalTitle = product.title || '';
+  // Store original listing images on window for Alpine gallery to access
+  (window as any).__originalListingImages = product.images.map((img: any) => ({
+    ...img,
+  }));
+
   // Variant change → swap document.title + page H1
+  // SKIP title change if the selected variant is the default (listing title stays)
   document.addEventListener('product-variant-change', ((e: CustomEvent) => {
     const title = e.detail?.title as string | undefined;
-    if (title && title.trim()) {
+    const isDefault = e.detail?.isDefault as boolean | undefined;
+    if (!isDefault && title && title.trim()) {
       const h1 = document.getElementById('pd-product-title');
       if (h1) h1.textContent = title;
       document.title = `${title} - iSTOC`;
+    } else if (isDefault) {
+      const h1 = document.getElementById('pd-product-title');
+      if (h1) h1.textContent = originalTitle;
+      document.title = `${originalTitle} - iSTOC`;
     }
   }) as EventListener);
 
@@ -261,6 +274,18 @@ async function renderProductPage() {
         `.variant-option[data-variant-id="${preselectVariant}"]`
       );
       if (btn) btn.click();
+    });
+  } else {
+    // No URL variant — auto-select default variants (is_default=1)
+    // Use a special attribute to prevent drawer from opening on auto-selection
+    requestAnimationFrame(() => {
+      document.querySelectorAll<HTMLButtonElement>(
+        '.variant-option[data-is-default="1"]:not([disabled])'
+      ).forEach(btn => {
+        btn.setAttribute('data-auto-select', '1');
+        btn.click();
+        btn.removeAttribute('data-auto-select');
+      });
     });
   }
 

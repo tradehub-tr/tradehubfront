@@ -31,7 +31,8 @@ export async function apiAddToCart(
   quantity: number,
   listingVariant?: string,
   variantLabel?: string,
-  colorVariant?: string
+  colorVariant?: string,
+  extraAxes?: Record<string, string>
 ): Promise<CartResponse> {
   return callMethod<CartResponse>(
     'tradehub_core.api.cart.add_to_cart',
@@ -41,6 +42,7 @@ export async function apiAddToCart(
       ...(listingVariant ? { listing_variant: listingVariant } : {}),
       ...(variantLabel ? { variant_label: variantLabel } : {}),
       ...(colorVariant ? { color_variant: colorVariant } : {}),
+      ...(extraAxes && Object.keys(extraAxes).length > 0 ? { extra_axes: JSON.stringify(extraAxes) } : {}),
     },
     true
   );
@@ -50,11 +52,17 @@ export async function apiAddToCart(
 export async function apiCheckStock(
   listing: string,
   quantity: number,
-  listingVariant?: string
+  listingVariant?: string,
+  variantLabel?: string
 ): Promise<void> {
   await callMethod<{ ok: boolean }>(
     'tradehub_core.api.cart.check_stock',
-    { listing, quantity, ...(listingVariant ? { listing_variant: listingVariant } : {}) },
+    {
+      listing,
+      quantity,
+      ...(listingVariant ? { listing_variant: listingVariant } : {}),
+      ...(variantLabel ? { variant_label: variantLabel } : {}),
+    },
     true
   );
 }

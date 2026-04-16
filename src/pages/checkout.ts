@@ -525,16 +525,18 @@ window.addEventListener('checkout:confirm-order', () => {
       shipping_method: selectedMethod?.etaLabel ?? '',
       currency: getSelectedCurrencyInfo().code,
       buyer_note: currentSupplierNotes[deliveryOrder.orderId] || '',
-      products: deliveryOrder.products.map((p) => ({
-        listing: p.id,
-        listing_title: p.title,
-        listing_variant: p.skuLines[0]?.listingVariant ?? null,
-        variation: p.skuLines.map((s) => s.variantText).filter(Boolean).join(', '),
-        unit_price: p.skuLines[0]?.unitPrice ?? 0,
-        quantity: p.skuLines.reduce((sum, s) => sum + s.quantity, 0),
-        total_price: p.skuLines.reduce((sum, s) => sum + s.unitPrice * s.quantity, 0),
-        image: p.image,
-      })),
+      products: deliveryOrder.products.flatMap((p) =>
+        p.skuLines.filter((s) => s.quantity > 0).map((s) => ({
+          listing: p.id,
+          listing_title: p.title,
+          listing_variant: s.listingVariant ?? null,
+          variation: s.variantText || '',
+          unit_price: s.unitPrice,
+          quantity: s.quantity,
+          total_price: s.unitPrice * s.quantity,
+          image: p.image,
+        }))
+      ),
     };
   });
 
