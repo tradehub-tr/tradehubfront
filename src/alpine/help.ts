@@ -882,9 +882,10 @@ Alpine.data("ticketForm", () => ({
       if (this.description.length < 20)
         this.errors.description = t("ticketForm.descriptionMinLength");
       if (this.requiresOrder && !this.orderRef.trim()) {
-        this.errors.orderRef = this.orders.length === 0
-          ? "Uygun siparişiniz yok. Lütfen başka bir kategori seçin."
-          : "Bu kategori için sipariş seçimi zorunludur.";
+        this.errors.orderRef =
+          this.orders.length === 0
+            ? "Uygun siparişiniz yok. Lütfen başka bir kategori seçin."
+            : "Bu kategori için sipariş seçimi zorunludur.";
       }
     }
     return Object.keys(this.errors).length === 0;
@@ -914,7 +915,8 @@ Alpine.data("ticketForm", () => ({
       if (this.subCategory) description = `Alt kategori: ${this.subCategory}\n\n${description}`;
       // Platform kategorilerinde orderRef gonderilmez (backend yoksayar ama temiz kalsin)
       const effectiveOrderRef = this.requiresOrder ? this.orderRef.trim() : "";
-      if (effectiveOrderRef) description = `${description}\n\nSipariş referansı: ${effectiveOrderRef}`;
+      if (effectiveOrderRef)
+        description = `${description}\n\nSipariş referansı: ${effectiveOrderRef}`;
 
       // ticket_type backend'te Link(HD Ticket Type) — biz form kategorilerini
       // subject ve description icine yazdigimiz icin alani bos birakiyoruz.

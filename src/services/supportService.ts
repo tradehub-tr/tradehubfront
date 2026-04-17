@@ -194,24 +194,20 @@ export async function uploadTicketAttachment(
   form.append("file", file, file.name);
   form.append("ticket", ticketName);
 
-  const res = await fetch(
-    `${BASE_URL}/method/tradehub_core.api.public.upload_ticket_attachment`,
-    {
-      method: "POST",
-      credentials: "include",
-      headers: { "X-Frappe-CSRF-Token": csrf },
-      body: form,
-    }
-  );
+  const res = await fetch(`${BASE_URL}/method/tradehub_core.api.public.upload_ticket_attachment`, {
+    method: "POST",
+    credentials: "include",
+    headers: { "X-Frappe-CSRF-Token": csrf },
+    body: form,
+  });
 
   if (!res.ok) {
     const text = await res.text();
     try {
       const parsed = JSON.parse(text);
-      const msg =
-        parsed?._server_messages
-          ? JSON.parse(parsed._server_messages)?.[0] || parsed?.exception || text
-          : parsed?.exception || text;
+      const msg = parsed?._server_messages
+        ? JSON.parse(parsed._server_messages)?.[0] || parsed?.exception || text
+        : parsed?.exception || text;
       throw new Error(typeof msg === "string" ? msg : "Dosya yüklenemedi");
     } catch {
       throw new Error(`Dosya yüklenemedi (HTTP ${res.status})`);
@@ -223,13 +219,10 @@ export async function uploadTicketAttachment(
 }
 
 /** Ticket'a bagli tum dosyalari listele. */
-export async function listTicketAttachments(
-  ticketName: string
-): Promise<TicketAttachment[]> {
+export async function listTicketAttachments(ticketName: string): Promise<TicketAttachment[]> {
   const list = await callMethod<TicketAttachment[]>(
     "tradehub_core.api.public.list_ticket_attachments",
     { ticket: ticketName }
   );
   return Array.isArray(list) ? list : [];
 }
-
