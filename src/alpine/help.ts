@@ -10,10 +10,13 @@ import {
   getTicketCommunications,
   replyTicket,
   updateTicketStatus,
+  uploadTicketAttachment,
+  listTicketAttachments,
   type TicketSummary,
   type TicketDetail,
   type OrderForTicket,
   type StatusCounts,
+  type TicketAttachment,
 } from "../services/supportService";
 import { createLead } from "../services/leadService";
 
@@ -782,7 +785,7 @@ Alpine.data("ticketForm", () => ({
   subject: "",
   description: "",
   orderRef: "",
-  files: [] as { name: string; size: number }[],
+  files: [] as { name: string; size: number; file: File }[],
   errors: {} as Record<string, string>,
   submitted: false,
   orders: [] as OrderForTicket[],
@@ -836,6 +839,20 @@ Alpine.data("ticketForm", () => ({
     return cat ? cat.subs : [];
   },
 
+  // Satici team'ine yonlendirilecek kategoriler — sipariş zorunlu.
+  _sellerCats: ["siparis", "kargo", "urun"] as string[],
+
+  get requiresOrder(): boolean {
+    return this._sellerCats.includes(this.category);
+  },
+
+  get routingHint(): string {
+    if (!this.category) return "";
+    return this.requiresOrder
+      ? "Bu talep, seçtiğiniz siparişin satıcısına iletilecek."
+      : "Bu talep Platform Destek ekibine iletilecek.";
+  },
+
   get charCount(): number {
     return this.description.length;
   },
@@ -846,7 +863,7 @@ Alpine.data("ticketForm", () => ({
     for (let i = 0; i < fileList.length && this.files.length < maxFiles; i++) {
       const f = fileList[i];
       if (f.size <= maxSize) {
-        this.files.push({ name: f.name, size: f.size });
+        this.files.push({ name: f.name, size: f.size, file: f });
       }
     }
   },
@@ -864,6 +881,12 @@ Alpine.data("ticketForm", () => ({
       if (!this.description.trim()) this.errors.description = t("ticketForm.descriptionRequired");
       if (this.description.length < 20)
         this.errors.description = t("ticketForm.descriptionMinLength");
+      if (this.requiresOrder && !this.orderRef.trim()) {
+        this.errors.orderRef =
+          this.orders.length === 0
+            ? "Uygun siparişiniz yok. Lütfen başka bir kategori seçin."
+            : "Bu kategori için sipariş seçimi zorunludur.";
+      }
     }
     return Object.keys(this.errors).length === 0;
   },
@@ -890,16 +913,38 @@ Alpine.data("ticketForm", () => ({
 
       let description = this.description.trim();
       if (this.subCategory) description = `Alt kategori: ${this.subCategory}\n\n${description}`;
-      if (this.orderRef) description = `${description}\n\nSipariş referansı: ${this.orderRef}`;
+      // Platform kategorilerinde orderRef gonderilmez (backend yoksayar ama temiz kalsin)
+      const effectiveOrderRef = this.requiresOrder ? this.orderRef.trim() : "";
+      if (effectiveOrderRef)
+        description = `${description}\n\nSipariş referansı: ${effectiveOrderRef}`;
 
       // ticket_type backend'te Link(HD Ticket Type) — biz form kategorilerini
       // subject ve description icine yazdigimiz icin alani bos birakiyoruz.
-      await createTicket({
+      const created = await createTicket({
         subject: compositeSubject,
         description,
         priority: "Medium",
-        order_ref: this.orderRef.trim() || undefined,
+        order_ref: effectiveOrderRef || undefined,
+        category: this.category || undefined,
       });
+
+      // Dosyalari ayrica upload et — ticket olusturulduktan sonra.
+      // Hata olsa bile ticket kaybolmaz; kullaniciya uyari gosteriyoruz.
+      if (created?.name && this.files.length > 0) {
+        const failed: string[] = [];
+        for (const item of this.files) {
+          try {
+            await uploadTicketAttachment(created.name, item.file);
+          } catch (err: any) {
+            failed.push(item.name);
+            console.warn("Attachment upload failed:", item.name, err);
+          }
+        }
+        if (failed.length > 0) {
+          this.errors.submit = `Ticket oluşturuldu fakat bazı dosyalar yüklenemedi: ${failed.join(", ")}`;
+        }
+      }
+
       this.submitted = true;
       setTimeout(() => {
         window.location.href = `${getBaseUrl()}pages/help/help-tickets.html`;
@@ -1152,6 +1197,7 @@ Alpine.data("ticketDetail", () => ({
     text: string;
     date: string;
   }>,
+  attachments: [] as TicketAttachment[],
   loading: true,
   errorMsg: "",
   replyText: "",
@@ -1173,10 +1219,12 @@ Alpine.data("ticketDetail", () => ({
     this.loading = true;
     this.errorMsg = "";
     try {
-      const [tk, comms] = await Promise.all([
+      const [tk, comms, atts] = await Promise.all([
         getTicket(this.ticketId),
         getTicketCommunications(this.ticketId),
+        listTicketAttachments(this.ticketId).catch(() => []),
       ]);
+      this.attachments = atts;
       this.ticket = tk;
       this.messages = comms.map((c) => ({
         id: c.name,
@@ -1242,5 +1290,22 @@ Alpine.data("ticketDetail", () => ({
   },
   priorityChipCls(p: string): string {
     return _priorityChipDirectCls(p);
+  },
+
+  fmtFileSize(bytes: number): string {
+    if (!bytes) return "0 KB";
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / 1024 / 1024).toFixed(2)} MB`;
+  },
+
+  fileIcon(fileName: string): string {
+    const ext = (fileName || "").toLowerCase().split(".").pop() || "";
+    if (["jpg", "jpeg", "png", "gif", "webp", "svg"].includes(ext)) return "image";
+    if (ext === "pdf") return "pdf";
+    if (["doc", "docx"].includes(ext)) return "doc";
+    if (["xls", "xlsx", "csv"].includes(ext)) return "sheet";
+    if (["zip", "rar", "7z"].includes(ext)) return "archive";
+    return "file";
   },
 }));

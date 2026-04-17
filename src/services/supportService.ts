@@ -10,7 +10,9 @@
  * musteri icin listeyi otomatik raised_by = current_user olarak filtreler.
  */
 
-import { callMethod, api } from "../utils/api";
+import { callMethod, api, fetchCsrfToken } from "../utils/api";
+
+const BASE_URL = import.meta.env.VITE_API_URL || "/api";
 
 // ── Tipler ──────────────────────────────────────────────────────────────
 
@@ -21,8 +23,10 @@ export interface CreateTicketInput {
   phone?: string;
   priority?: "" | "Low" | "Medium" | "High" | "Urgent";
   ticket_type?: string;
-  /** Sipariş referansı — varsa ticket o siparişin satıcı team'ine düşer. */
+  /** Sipariş referansı — satıcı kategorilerinde zorunlu, satıcı team'ine yönlendirir. */
   order_ref?: string;
+  /** Kategori key'i: siparis/kargo/urun → satıcı, odeme/hesap/diger → Platform Support. */
+  category?: string;
 }
 
 export interface CreateTicketResponse {
@@ -131,11 +135,13 @@ export interface OrderForTicket {
 }
 
 /** Login'li musterinin siparisleri — ticket formunda dropdown icin.
- * Guest'te veya buyer profili yoksa bos dondurur (catch edilir). */
+ * Guest'te veya buyer profili yoksa bos dondurur (catch edilir).
+ * exclude_self_seller=1: satici kendi sattigi siparisleri listede gormez. */
 export async function listMyOrdersForTicket(): Promise<OrderForTicket[]> {
   try {
     const payload = await callMethod<{ orders: any[] }>("tradehub_core.api.order.get_my_orders", {
       page_size: 100,
+      exclude_self_seller: 1,
     });
     const orders = payload?.orders || [];
     return orders.map((o: any) => ({
@@ -163,4 +169,60 @@ export async function updateTicketStatus(
     method: "PUT",
     body: JSON.stringify({ status }),
   });
+}
+
+// ── Attachment API ─────────────────────────────────────────────────────────
+
+export interface TicketAttachment {
+  name: string;
+  file_name: string;
+  file_url: string;
+  file_size: number;
+  creation: string;
+  owner: string;
+  is_private: 0 | 1;
+}
+
+/** Ticket'a dosya ekler (multipart form data).
+ * Max 10MB, max 5 dosya/ticket — backend tarafinda zorlanir. */
+export async function uploadTicketAttachment(
+  ticketName: string,
+  file: File
+): Promise<TicketAttachment> {
+  const csrf = (await fetchCsrfToken()) ?? "None";
+  const form = new FormData();
+  form.append("file", file, file.name);
+  form.append("ticket", ticketName);
+
+  const res = await fetch(`${BASE_URL}/method/tradehub_core.api.public.upload_ticket_attachment`, {
+    method: "POST",
+    credentials: "include",
+    headers: { "X-Frappe-CSRF-Token": csrf },
+    body: form,
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    try {
+      const parsed = JSON.parse(text);
+      const msg = parsed?._server_messages
+        ? JSON.parse(parsed._server_messages)?.[0] || parsed?.exception || text
+        : parsed?.exception || text;
+      throw new Error(typeof msg === "string" ? msg : "Dosya yüklenemedi");
+    } catch {
+      throw new Error(`Dosya yüklenemedi (HTTP ${res.status})`);
+    }
+  }
+
+  const payload = await res.json();
+  return payload.message as TicketAttachment;
+}
+
+/** Ticket'a bagli tum dosyalari listele. */
+export async function listTicketAttachments(ticketName: string): Promise<TicketAttachment[]> {
+  const list = await callMethod<TicketAttachment[]>(
+    "tradehub_core.api.public.list_ticket_attachments",
+    { ticket: ticketName }
+  );
+  return Array.isArray(list) ? list : [];
 }

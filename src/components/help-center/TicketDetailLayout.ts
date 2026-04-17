@@ -109,6 +109,32 @@ export function TicketDetailLayout(): string {
                 </article>
               </template>
 
+              <!-- Ekler (attachments) -->
+              <template x-if="attachments.length > 0">
+                <div class="bg-white border border-gray-200 rounded-xl p-4">
+                  <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">
+                    Ekler (<span x-text="attachments.length"></span>)
+                  </h3>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <template x-for="f in attachments" :key="f.name">
+                      <a :href="f.file_url" target="_blank" rel="noopener"
+                        class="flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-200 hover:border-primary-300 hover:bg-primary-50/40 transition-colors text-sm group">
+                        <svg class="w-5 h-5 text-gray-400 shrink-0 group-hover:text-primary-500" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25l-6.75-6.75a3 3 0 114.243-4.243l7.065 7.066a5 5 0 11-7.07 7.07L5.636 12.9"/>
+                        </svg>
+                        <div class="flex-1 min-w-0">
+                          <p class="truncate font-medium text-gray-700" x-text="f.file_name"></p>
+                          <p class="text-xs text-gray-400" x-text="fmtFileSize(f.file_size)"></p>
+                        </div>
+                        <svg class="w-4 h-4 text-gray-300 group-hover:text-primary-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6-6m6 6l-6 6"/>
+                        </svg>
+                      </a>
+                    </template>
+                  </div>
+                </div>
+              </template>
+
               <!-- Kapalı uyarısı -->
               <template x-if="ticket.status === 'Closed'">
                 <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 text-center text-xs text-gray-500">
