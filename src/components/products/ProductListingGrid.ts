@@ -269,10 +269,6 @@ function renderProductListingCard(card: ProductListingCard): string {
                 data-add-to-cart="${card.id}">
           ${t("products.addToCart")}
         </button>
-        <button type="button" class="searchx-product-e-abutton th-btn-outline flex-1 flex items-center justify-center h-9 text-xs sm:text-sm font-medium cursor-pointer whitespace-nowrap"
-                onclick="event.preventDefault(); event.stopPropagation();">
-          ${t("products.chat")}
-        </button>
       </div>
     </div>
   `;

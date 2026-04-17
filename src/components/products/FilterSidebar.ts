@@ -495,11 +495,10 @@ function renderCertDisclaimer(): string {
  */
 function renderSectionHeader(section: FilterSection): string {
   const isCollapsible = section.collapsible !== false;
-  const isCollapsed = section.collapsed === true;
 
   return `
     <div
-      class="flex items-center justify-between py-2 ${isCollapsible ? "cursor-pointer group" : ""}"
+      class="flex items-center justify-between py-0.5 ${isCollapsible ? "cursor-pointer group" : ""}"
       ${isCollapsible ? `@click="toggleSection('${section.id}')"` : ""}
     >
       <h3
@@ -510,7 +509,7 @@ function renderSectionHeader(section: FilterSection): string {
         isCollapsible
           ? `
         <span
-          class="transition-transform duration-200 ${isCollapsed ? "" : "rotate-180"}"
+          class="transition-transform duration-200"
           :class="{ 'rotate-180': !collapsed['${section.id}'] }"
           style="color: var(--filter-chevron-color, #6b7280);"
           data-filter-chevron="${section.id}"
@@ -571,18 +570,16 @@ function renderSectionContent(section: FilterSection, idPrefix = ""): string {
  * Renders a complete filter section
  */
 function renderFilterSection(section: FilterSection, idPrefix = ""): string {
-  const isCollapsed = section.collapsed === true;
-
   return `
     <div
-      class="border-b py-3"
+      class="border-b py-2.5"
       style="border-color: var(--filter-divider-color, #e5e7eb);"
       data-filter-section-wrapper="${section.id}"
     >
       ${renderSectionHeader(section)}
       <div
-        class="overflow-hidden transition-all duration-200 ${isCollapsed ? "max-h-0 opacity-0" : "max-h-[500px] opacity-100"}"
-        :class="collapsed['${section.id}'] ? 'max-h-0 opacity-0' : 'max-h-[500px] opacity-100'"
+        class="overflow-hidden transition-all duration-200"
+        :class="{ 'max-h-0 opacity-0': collapsed['${section.id}'], 'max-h-[500px] opacity-100': !collapsed['${section.id}'] }"
         data-filter-content="${section.id}"
       >
         ${renderSectionContent(section, idPrefix)}
@@ -647,10 +644,11 @@ export function FilterSidebar(sections?: FilterSection[], idPrefix = ""): string
   const tradeAssurance = filterSections.find((s) => s.id === "trade-assurance");
   const otherSections = filterSections.filter((s) => s.id !== "trade-assurance");
 
-  // Build initial collapsed state for Alpine (sections with collapsed: true)
+  // Build initial collapsed state for Alpine — include ALL collapsible section IDs
+  // so Vue reactivity tracks them as dependencies of :class bindings.
   const collapsedEntries = otherSections
-    .filter((s) => s.collapsible !== false && s.collapsed === true)
-    .map((s) => `'${s.id}': true`);
+    .filter((s) => s.collapsible !== false)
+    .map((s) => `'${s.id}': ${s.collapsed === true}`);
   const xDataArg =
     collapsedEntries.length > 0
       ? `filterSidebar({${collapsedEntries.join(", ")}})`

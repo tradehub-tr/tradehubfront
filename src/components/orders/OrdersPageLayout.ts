@@ -776,9 +776,7 @@ function renderAllOrders(): string {
           </div>
 
           <div class="flex items-center gap-4 max-sm:gap-3">
-            <a href="#" class="text-sm text-blue-600 hover:underline">${t("orders.visitStore")}</a>
-            <span class="text-gray-300">|</span>
-            <a href="#" class="text-sm text-blue-600 hover:underline">${t("orders.chatNow")}</a>
+            <a :href="selectedOrder.supplier.code ? '/pages/seller/seller-shop.html?seller=' + encodeURIComponent(selectedOrder.supplier.code) : '#'" class="text-sm text-blue-600 hover:underline">${t("orders.visitStore")}</a>
           </div>
         </div>
 
@@ -786,9 +784,6 @@ function renderAllOrders(): string {
         <div class="px-7 max-sm:px-3 py-5 flex items-center gap-3 flex-wrap">
           <button @click="openModal('showOperationHistory')" class="th-btn-outline whitespace-nowrap">
             ${t("orders.operationHistory")}
-          </button>
-          <button @click="openModal('showContract')" class="whitespace-nowrap px-4 py-2 text-sm font-medium text-gray-500 bg-gray-100 border border-gray-300 rounded-full hover:bg-gray-200 cursor-pointer transition-colors">
-            ${t("orders.viewContract")}
           </button>
         </div>
 
@@ -1384,9 +1379,8 @@ function renderAllOrders(): string {
             <!-- Footer -->
             <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-end gap-3">
               <button @click="confirmCancelOrder()"
-                :class="cancelReason ? 'th-btn' : 'bg-gray-200 text-gray-400 border-gray-200 cursor-not-allowed '"
-                :disabled="!cancelReason"
-                class="px-6 py-2 text-sm font-medium rounded-full cursor-pointer transition-colors border">
+                :class="cancelReason ? 'th-btn' : 'th-btn opacity-50 cursor-not-allowed'"
+                :disabled="!cancelReason">
                 ${t("orders.confirmCancel")}
               </button>
               <button @click="cancelReason = ''; cancellingOrder = null; closeModal('showCancelOrder')" class="th-btn-outline">

@@ -115,35 +115,54 @@ export function TicketForm(): string {
                 </div>
               </div>
 
-              <!-- Step 2 devami: Sipariş Referansı + Ozet -->
+              <!-- Step 2 devami: Routing + Sipariş Referansı + Ozet -->
               <div x-show="currentStep === 2" class="mt-4 space-y-4">
-                <!-- Sipariş Referansı (opsiyonel) -->
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">${t("helpCenter.orderRefLabel")}</label>
+                <!-- Routing hint -->
+                <div x-show="routingHint"
+                  class="flex items-start gap-2 px-3 py-2.5 rounded-lg text-xs"
+                  :class="requiresOrder ? 'bg-primary-50 text-primary-700' : 'bg-blue-50 text-blue-700'">
+                  <svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  <span x-text="routingHint"></span>
+                </div>
 
-                  <!-- Login'li musteri + siparis varsa dropdown -->
-                  <template x-if="!loadingOrders && orders.length > 0">
-                    <select x-model="orderRef" class="th-input th-input-md">
-                      <option value="">— Sipariş seçme (genel soru) —</option>
+                <!-- Sipariş Referansı — sadece satici kategorileri + siparis listesi varsa -->
+                <template x-if="requiresOrder && !loadingOrders && orders.length > 0">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                      ${t("helpCenter.orderRefLabel")} <span class="text-red-500">*</span>
+                    </label>
+                    <select x-model="orderRef" class="th-input th-input-md"
+                      :class="{ 'is-error': errors.orderRef }">
+                      <option value="">— Sipariş seçiniz —</option>
                       <template x-for="o in orders" :key="o.order_number">
                         <option :value="o.order_number"
                           x-text="o.order_number + ' · ' + (o.seller_name || '') + (o.order_date ? ' · ' + o.order_date : '')">
                         </option>
                       </template>
                     </select>
-                  </template>
+                    <p x-show="errors.orderRef" x-text="errors.orderRef" class="text-xs text-red-500 mt-1"></p>
+                    <p x-show="!errors.orderRef" class="text-xs text-gray-400 mt-1">
+                      Talep seçtiğiniz siparişin satıcısına iletilir.
+                    </p>
+                  </div>
+                </template>
 
-                  <!-- Siparisi olmayan / guest kullanici: manuel giris -->
-                  <template x-if="!loadingOrders && orders.length === 0">
-                    <input type="text" x-model="orderRef" class="th-input th-input-md" placeholder="ORD-XXXX">
-                  </template>
+                <!-- Loading -->
+                <template x-if="requiresOrder && loadingOrders">
+                  <div class="text-xs text-gray-400 py-2">Siparişler yükleniyor...</div>
+                </template>
 
-                  <template x-if="loadingOrders">
-                    <div class="text-xs text-gray-400 py-2">Siparişler yükleniyor...</div>
-                  </template>
-
-                  <p class="text-xs text-gray-400 mt-1">Bir sipariş ile ilgili ise seçin — talep doğrudan satıcıya iletilir. Platform destek ekibi de görür.</p>
-                </div>
+                <!-- Siparişi olmayan / satici kategorisi ama uygun siparis yok -->
+                <template x-if="requiresOrder && !loadingOrders && orders.length === 0">
+                  <div class="flex items-start gap-2 px-3 py-2.5 rounded-lg bg-amber-50 text-amber-800 text-xs">
+                    <svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+                    <span>
+                      Bu kategori için uygun bir siparişiniz bulunamadı.
+                      Genel sorularınız için kategoriyi <strong>Diğer</strong>,
+                      ödeme ile ilgili sorunlar için <strong>Ödeme</strong> olarak seçin.
+                    </span>
+                  </div>
+                </template>
 
                 <!-- Ozet -->
                 <div class="bg-gray-50 rounded-lg p-4 text-sm space-y-2">

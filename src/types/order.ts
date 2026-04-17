@@ -46,6 +46,7 @@ export interface OrderPayment {
 
 export interface OrderSupplier {
   name: string;
+  code: string;
   contact: string;
   phone: string;
   email: string;

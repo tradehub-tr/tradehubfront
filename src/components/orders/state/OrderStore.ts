@@ -37,6 +37,7 @@ interface ApiOrder {
   subtotal: number;
   shipping_fee: number;
   supplier_name: string;
+  supplier_code: string;
   supplier_contact: string;
   supplier_phone: string;
   supplier_email: string;
@@ -101,6 +102,7 @@ function apiOrderToOrder(apiOrder: ApiOrder): Order {
     },
     supplier: {
       name: apiOrder.supplier_name || apiOrder.seller_name || "",
+      code: apiOrder.supplier_code || "",
       contact: apiOrder.supplier_contact || "Sales Team",
       phone: apiOrder.supplier_phone || "",
       email: apiOrder.supplier_email || "",
