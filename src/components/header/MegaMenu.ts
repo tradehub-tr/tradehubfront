@@ -173,7 +173,7 @@ function renderCategoriesView(): string {
     <div data-mega-view="categories" class="hidden">
       <div class="flex flex-col lg:flex-row">
         <!-- Sidebar -->
-        <div class="w-full lg:w-72 xl:w-80 lg:flex-shrink-0 border-b lg:border-b-0 lg:border-r dark:border-gray-700 overflow-y-auto overflow-x-hidden dark:bg-gray-900" style="background-color:var(--mega-sidebar-bg);border-color:var(--mega-border-color);-webkit-overflow-scrolling:touch" id="mega-sidebar">
+        <div class="w-full lg:w-72 xl:w-80 lg:flex-shrink-0 border-b lg:border-b-0 lg:border-r dark:border-gray-700 overflow-y-auto overflow-x-hidden dark:bg-gray-900" style="background-color:var(--mega-sidebar-bg);border-color:var(--mega-border-color);max-height:min(520px, 60vh);-webkit-overflow-scrolling:touch" id="mega-sidebar">
           <ul class="py-1">
             <li class="px-4 py-6 text-center" id="mega-sidebar-loading">
               <svg class="w-5 h-5 animate-spin text-gray-300 mx-auto" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
@@ -760,7 +760,9 @@ export function initMegaMenu(): void {
         const borderStyle = isViewAll
           ? "border-2 border-dashed;border-color:var(--mega-border-color)"
           : "";
-        const href = isViewAll ? "/pages/categories" : `/pages/products.html?cat=${slug}`;
+        const href = isViewAll
+          ? `/pages/categories.html?cat=${encodeURIComponent(slug)}`
+          : `/pages/products.html?cat=${slug}`;
         return `
           <a href="${href}" class="flex flex-col items-center gap-1.5 sm:gap-2 group/product min-h-[44px]">
             <div class="relative w-14 h-14 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full flex items-center justify-center overflow-hidden group-hover/product:ring-2 transition-all" style="background:var(--product-card-bg, var(--card-bg));--tw-ring-color:var(--nav-hover-color);${borderStyle}">
@@ -798,7 +800,7 @@ export function initMegaMenu(): void {
         <div class="mega-cat-section mb-8" id="mega-section-${cat.id}">
           <div class="flex items-center gap-4 mb-5 lg:mb-6">
             <h3 class="text-base lg:text-lg font-bold dark:text-white" style="color:var(--mega-text-color)">${cat.name}</h3>
-            <a href="/pages/categories" class="text-sm font-medium" style="color:var(--mega-accent-color)">Tümünü Gör</a>
+            <a href="/pages/categories.html?cat=${encodeURIComponent(cat.slug)}" class="text-sm font-medium" style="color:var(--mega-accent-color)">Tümünü Gör</a>
           </div>
           <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-y-4 gap-x-2 sm:gap-y-5 sm:gap-x-4 lg:gap-y-8 lg:gap-x-6">
             ${cat.children.map((ch) => renderDynCatCard(ch.name, ch.slug, ch.image)).join("")}

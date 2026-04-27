@@ -32,7 +32,9 @@ type ActivePage =
   | "notice"
   | "product-listing"
   | "ip"
-  | "accessibility";
+  | "accessibility"
+  | "distance-sales"
+  | "kvkk";
 
 interface HelpCenterHeaderOptions {
   activePage?: ActivePage;

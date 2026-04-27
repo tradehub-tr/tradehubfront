@@ -543,8 +543,21 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
           <div class="flex flex-col lg:flex-row gap-6">
 
             <!-- SOL: Iletisim Bilgileri -->
-            <div class="flex-1 bg-white rounded-md border border-gray-200 p-6 lg:p-8">
+            <div class="flex-1 bg-white rounded-md border border-gray-200 p-6 lg:p-8 relative">
               <h3 class="text-[20px] font-bold text-gray-900 mb-6">Iletisim Bilgileri</h3>
+
+              <!-- Guest uyari banneri -->
+              <div x-show="!isLoggedIn" @click="requireLogin()"
+                   class="mb-5 flex items-center gap-3 p-3 rounded-md border border-amber-200 bg-amber-50 cursor-pointer hover:bg-amber-100 transition-colors">
+                <svg class="w-5 h-5 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                <div class="flex-1">
+                  <p class="text-[13px] font-semibold text-amber-900">Iletisim bilgilerini goruntulemek icin giris yapin</p>
+                  <p class="text-[12px] text-amber-700">Yildizli alana tiklayarak giris yapabilirsiniz</p>
+                </div>
+                <button type="button" class="text-[12px] font-semibold text-white bg-amber-600 hover:bg-amber-700 px-3 py-1.5 rounded-md shrink-0">
+                  Giris Yap
+                </button>
+              </div>
 
               <!-- Kisi Bilgisi -->
               <div class="flex items-center gap-4 mb-6 pb-6 border-b border-gray-100">
@@ -565,11 +578,21 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                   <svg class="w-5 h-5 text-gray-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
                   <div>
                     <p class="text-[12px] text-gray-400 mb-0.5">Telefon:</p>
-                    <a x-show="seller?.address?.phone || seller?.phone"
-                       :href="'tel:' + (seller?.address?.phone || seller?.phone)"
-                       class="text-[14px] text-blue-600 hover:underline"
-                       x-text="((seller?.address?.phone_prefix || '') + ' ' + (seller?.address?.phone || seller?.phone || '')).trim()"></a>
-                    <span x-show="!(seller?.address?.phone || seller?.phone)" class="text-[13px] text-gray-500">-</span>
+                    <template x-if="isLoggedIn">
+                      <template x-if="seller?.address?.phone || seller?.phone">
+                        <a :href="'tel:' + (seller?.address?.phone || seller?.phone)"
+                           class="text-[14px] text-blue-600 hover:underline"
+                           x-text="((seller?.address?.phone_prefix || '') + ' ' + (seller?.address?.phone || seller?.phone || '')).trim()"></a>
+                      </template>
+                    </template>
+                    <template x-if="isLoggedIn && !(seller?.address?.phone || seller?.phone)">
+                      <span class="text-[13px] text-gray-500">-</span>
+                    </template>
+                    <button x-show="!isLoggedIn" type="button" @click="requireLogin()"
+                      class="text-[14px] text-gray-400 tracking-widest cursor-pointer hover:text-blue-600 select-none"
+                      title="Giris yapin">
+                      +•• ••• ••• •• ••
+                    </button>
                   </div>
                 </div>
 
@@ -578,8 +601,19 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                   <svg class="w-5 h-5 text-gray-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
                   <div>
                     <p class="text-[12px] text-gray-400 mb-0.5">E-posta:</p>
-                    <a x-show="seller?.email" :href="'mailto:' + seller?.email" class="text-[14px] text-blue-600 hover:underline break-all" x-text="seller?.email"></a>
-                    <span x-show="!seller?.email" class="text-[13px] text-gray-500">-</span>
+                    <template x-if="isLoggedIn">
+                      <template x-if="seller?.email">
+                        <a :href="'mailto:' + seller?.email" class="text-[14px] text-blue-600 hover:underline break-all" x-text="seller?.email"></a>
+                      </template>
+                    </template>
+                    <template x-if="isLoggedIn && !seller?.email">
+                      <span class="text-[13px] text-gray-500">-</span>
+                    </template>
+                    <button x-show="!isLoggedIn" type="button" @click="requireLogin()"
+                      class="text-[14px] text-gray-400 tracking-widest cursor-pointer hover:text-blue-600 select-none"
+                      title="Giris yapin">
+                      •••••••••@•••••.•••
+                    </button>
                   </div>
                 </div>
 
@@ -588,8 +622,19 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                   <svg class="w-5 h-5 text-gray-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418"/></svg>
                   <div>
                     <p class="text-[12px] text-gray-400 mb-0.5">Sirket internet sitesi:</p>
-                    <a x-show="seller?.website" :href="seller?.website" target="_blank" class="text-[14px] text-blue-600 hover:underline" x-text="seller?.website"></a>
-                    <span x-show="!seller?.website" class="text-[13px] text-gray-500">-</span>
+                    <template x-if="isLoggedIn">
+                      <template x-if="seller?.website">
+                        <a :href="seller?.website" target="_blank" class="text-[14px] text-blue-600 hover:underline" x-text="seller?.website"></a>
+                      </template>
+                    </template>
+                    <template x-if="isLoggedIn && !seller?.website">
+                      <span class="text-[13px] text-gray-500">-</span>
+                    </template>
+                    <button x-show="!isLoggedIn" type="button" @click="requireLogin()"
+                      class="text-[14px] text-gray-400 tracking-widest cursor-pointer hover:text-blue-600 select-none"
+                      title="Giris yapin">
+                      https://•••••••••.•••
+                    </button>
                   </div>
                 </div>
 
@@ -598,7 +643,12 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                   <svg class="w-5 h-5 text-gray-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21"/></svg>
                   <div>
                     <p class="text-[12px] text-gray-400 mb-0.5">Firma:</p>
-                    <p class="text-[14px] text-gray-800" x-text="seller?.address?.company || seller?.company_name || seller?.seller_name || '-'"></p>
+                    <p x-show="isLoggedIn" class="text-[14px] text-gray-800" x-text="seller?.address?.company || seller?.company_name || seller?.seller_name || '-'"></p>
+                    <button x-show="!isLoggedIn" type="button" @click="requireLogin()"
+                      class="text-[14px] text-gray-400 tracking-widest cursor-pointer hover:text-blue-600 select-none text-left"
+                      title="Giris yapin">
+                      ••••••••• •••• •••. ••••
+                    </button>
                   </div>
                 </div>
               </div>
@@ -609,15 +659,25 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                   <svg class="w-5 h-5 text-gray-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
                   <div class="flex-1">
                     <p class="text-[12px] text-gray-400 mb-1">Adres:</p>
-                    <p class="text-[14px] text-gray-800 leading-relaxed">
-                      <span x-text="seller?.address?.street || ''"></span><template x-if="seller?.address?.apartment"><span>, <span x-text="seller.address.apartment"></span></span></template>
-                    </p>
-                    <p class="text-[13px] text-gray-600 mt-1">
-                      <template x-if="seller?.address?.city"><span><span x-text="seller.address.city"></span> / </span></template>
-                      <span x-text="seller?.address?.state || ''"></span>
-                      <template x-if="seller?.address?.postal_code"><span> · <span x-text="seller.address.postal_code"></span></span></template>
-                      <template x-if="seller?.address?.country"><span> · <span x-text="seller.address.country"></span></span></template>
-                    </p>
+                    <template x-if="isLoggedIn">
+                      <div>
+                        <p class="text-[14px] text-gray-800 leading-relaxed">
+                          <span x-text="seller?.address?.street || ''"></span><template x-if="seller?.address?.apartment"><span>, <span x-text="seller.address.apartment"></span></span></template>
+                        </p>
+                        <p class="text-[13px] text-gray-600 mt-1">
+                          <template x-if="seller?.address?.city"><span><span x-text="seller.address.city"></span> / </span></template>
+                          <span x-text="seller?.address?.state || ''"></span>
+                          <template x-if="seller?.address?.postal_code"><span> · <span x-text="seller.address.postal_code"></span></span></template>
+                          <template x-if="seller?.address?.country"><span> · <span x-text="seller.address.country"></span></span></template>
+                        </p>
+                      </div>
+                    </template>
+                    <button x-show="!isLoggedIn" type="button" @click="requireLogin()"
+                      class="block text-left cursor-pointer hover:text-blue-600 group"
+                      title="Giris yapin">
+                      <p class="text-[14px] text-gray-400 tracking-widest group-hover:text-blue-600">•••••••••• ••• •• •••• •••••••• •• •••••••</p>
+                      <p class="text-[13px] text-gray-400 tracking-widest mt-1 group-hover:text-blue-600">••••••••• / ••••••••• · •••••• · ••••••</p>
+                    </button>
                   </div>
                 </div>
               </div>

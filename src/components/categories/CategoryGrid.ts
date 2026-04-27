@@ -52,9 +52,10 @@ export function CategorySection(
   const items = section.categories.map((cat) => CategoryItem(cat)).join("");
   const seeAll = SeeAllItem(section.title, section.slug);
   const borderClass = isLast ? "" : "border-b border-gray-200";
+  const slugAttr = section.slug ? ` data-slug="${section.slug}"` : "";
 
   return `
-    <section id="cat-section-${index}" class="py-6 lg:py-8 ${borderClass} scroll-mt-28">
+    <section id="cat-section-${index}"${slugAttr} class="py-6 lg:py-8 ${borderClass} scroll-mt-28">
       <h2 class="text-base sm:text-xl lg:text-2xl font-bold text-gray-900 mb-3 sm:mb-5 lg:mb-6">${section.title}</h2>
       <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-x-2 sm:gap-x-4 lg:gap-x-6 xl:gap-x-8 gap-y-4 sm:gap-y-6 lg:gap-y-8 justify-items-center">
         ${items}

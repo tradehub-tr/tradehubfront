@@ -3,6 +3,8 @@
  * Fetches layout config + seller data, manages product filtering/sorting.
  */
 import Alpine from "alpinejs";
+import { isLoggedIn, waitForAuth } from "../utils/auth";
+import { showLoginModal } from "../components/product/LoginModal";
 
 const API_BASE = (window as any).API_BASE || "/api";
 
@@ -208,9 +210,23 @@ Alpine.data("sellerShop", () => ({
   activePage: "home" as string, // 'home' | 'products' | 'profile' | 'contacts'
   inquiryMessage: "",
   showInquiryModal: false,
+  isLoggedIn: false as boolean,
 
   async init() {
     this.sellerCode = new URLSearchParams(window.location.search).get("seller") || "";
+
+    // Auth: contact bilgileri login kullanıcıya gösterilir
+    waitForAuth()
+      .then(() => {
+        this.isLoggedIn = isLoggedIn();
+      })
+      .catch(() => {
+        this.isLoggedIn = false;
+      });
+    // Login modal kapandıktan sonra tekrar kontrol (başarılı giriş senaryosu)
+    window.addEventListener("login-success", () => {
+      this.isLoggedIn = isLoggedIn();
+    });
 
     // sellerCode varsa API'den cek, yoksa veya basarisizsa mock data kullan
     if (this.sellerCode) {
@@ -357,6 +373,12 @@ Alpine.data("sellerShop", () => ({
       return (window as any).csFormatPriceRange(min, max, cur);
     if ((window as any).csFormatPrice) return (window as any).csFormatPrice(min, cur);
     return `₺${min.toFixed(2)}`;
+  },
+
+  requireLogin() {
+    if (this.isLoggedIn) return true;
+    showLoginModal();
+    return false;
   },
 
   async submitShopInquiry() {

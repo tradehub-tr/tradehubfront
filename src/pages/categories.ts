@@ -113,6 +113,22 @@ initLanguageSelector();
 initAnimatedPlaceholder('#topbar-compact-search-input');
 initCategoryFilters();
 
+/**
+ * Scroll to the section matching a slug (from ?cat= or #cat=<slug>).
+ * Called after sections are rendered so data-slug attributes are present.
+ */
+function scrollToSlugSection(slug: string): void {
+  if (!slug) return;
+  const target = document.querySelector<HTMLElement>(
+    `#cat-grid-container section[data-slug="${CSS.escape(slug)}"]`
+  );
+  if (!target) return;
+  // Defer to next frame so layout/fonts settle before measuring offsets.
+  requestAnimationFrame(() => {
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+}
+
 // Fetch categories from the same API as MegaMenu and render dynamically
 (async () => {
   try {
@@ -125,6 +141,10 @@ initCategoryFilters();
     if (gridEl) gridEl.innerHTML = renderCategoryPage(sections);
 
     initCategoryFilters();
+
+    // Deep-link: /pages/categories.html?cat=<slug> → scroll to that section
+    const slug = new URLSearchParams(window.location.search).get('cat');
+    if (slug) scrollToSlugSection(slug);
   } catch (err) {
     console.error('Kategori verisi alınamadı:', err);
     const gridEl = document.getElementById('cat-grid-container');

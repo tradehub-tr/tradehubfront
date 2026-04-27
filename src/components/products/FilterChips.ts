@@ -41,10 +41,6 @@ function makeChip(label: string, section: string, value: string): string {
 export function renderFilterChips(state: FilterState): string {
   const chips: string[] = [];
 
-  if (state.verified) chips.push(makeChip("Verified Supplier", "supplier-features", "verified"));
-  if (state.verifiedPro) chips.push(makeChip("Verified PRO", "supplier-features", "verified-pro"));
-  if (state.minRating !== null)
-    chips.push(makeChip(`${state.minRating}\u2605 & up`, "store-reviews", String(state.minRating)));
   if (state.priceMin !== null || state.priceMax !== null) {
     const label = `${getCurrencySymbol()}${state.priceMin ?? "0"} \u2013 ${getCurrencySymbol()}${state.priceMax ?? "\u221E"}`;
     chips.push(makeChip(label, "price", "range"));

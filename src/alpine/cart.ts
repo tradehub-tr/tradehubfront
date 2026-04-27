@@ -328,15 +328,17 @@ Alpine.data("cartPage", () => ({
 
   handleCheckoutGlobal() {
     const suppliers = cartStore.getSuppliers();
-    const selectedSuppliers = suppliers.filter((s) =>
+    const hasSelected = suppliers.some((s) =>
       s.products.some((p) => p.skus.some((sku) => sku.selected))
     );
 
-    if (selectedSuppliers.length === 0) return;
+    if (!hasSelected) return;
 
-    // Seçili satıcı ID'lerini URL'e geçir
-    const ids = selectedSuppliers.map((s) => s.id).join(",");
-    window.location.href = `${getBaseUrl()}pages/order/checkout.html?suppliers=${encodeURIComponent(ids)}`;
+    // Global (platform) checkout: URL'e suppliers parametresi eklenmez.
+    // Kullanıcı teknik olarak iSTOC'a ödeme yapar; platform daha sonra
+    // satıcılarla settlement yapar. Checkout sağ panelinde "Ödeme yapılacak"
+    // alanında iSTOC TradeHub platform kartı gösterilir.
+    window.location.href = `${getBaseUrl()}pages/order/checkout.html`;
   },
 
   handleCheckoutSupplier(event: CustomEvent) {

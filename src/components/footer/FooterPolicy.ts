@@ -22,6 +22,8 @@ const policyLinksDef: PolicyLink[] = [
   { i18nKey: "footer.termsOfUse", href: "/pages/legal/terms.html" },
   { i18nKey: "footer.cookiePolicy", href: "/pages/legal/cookies.html" },
   { i18nKey: "footer.returnPolicy", href: "/pages/legal/returns.html" },
+  { i18nKey: "footer.distanceSales", href: "/pages/legal/distance-sales.html" },
+  { i18nKey: "footer.kvkk", href: "/pages/legal/kvkk.html" },
   { i18nKey: "footer.intellectualProperty", href: "/pages/legal/ip.html" },
   { i18nKey: "footer.accessibility", href: "/pages/legal/accessibility.html" },
 ];

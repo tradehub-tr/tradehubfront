@@ -2,29 +2,10 @@ import type { OrderSummary as OrderSummaryData, OrderSummaryThumbnail } from "..
 import { t } from "../../i18n";
 import { formatCurrency, getSelectedCurrency } from "../../services/currencyService";
 
-export interface ProtectionSummaryItem {
-  icon: string;
-  key?: "secure" | "dispatch" | "refund";
-  title: string;
-  description: string;
-}
-
 export interface OrderSummaryProps {
   data: OrderSummaryData;
-  protectionItems: ProtectionSummaryItem[];
-  tradeAssuranceText: string;
-}
-
-// Custom Green SVG Icons that match the screenshot aesthetics
-const secureIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="text-[#008a00] shrink-0 mt-[2px]"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-const truckIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="text-[#008a00] shrink-0 mt-[2px]"><rect x="1" y="3" width="15" height="13" stroke="currentColor" stroke-width="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8" stroke="currentColor" stroke-width="2"/><circle cx="5.5" cy="18.5" r="2.5" stroke="currentColor" stroke-width="2"/><circle cx="18.5" cy="18.5" r="2.5" stroke="currentColor" stroke-width="2"/></svg>`;
-const refundIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="text-[#008a00] shrink-0 mt-[2px]"><rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M2 10h20" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="15" r="2" stroke="currentColor" stroke-width="2"/></svg>`;
-
-function getIconForItem(item: ProtectionSummaryItem): string {
-  if (item.key === "secure") return secureIcon;
-  if (item.key === "dispatch") return truckIcon;
-  if (item.key === "refund") return refundIcon;
-  return `<span class="text-[16px]">${item.title.charAt(0)}</span>`; // Fallback
+  /** Ödeme yapılacak satıcı(lar); sağ panelin altında gösterilir. */
+  payeeSuppliers?: { id: string; name: string }[];
 }
 
 function renderThumbnailGrid(thumbnails: OrderSummaryThumbnail[], itemCount: number): string {
@@ -49,8 +30,7 @@ function renderThumbnailGrid(thumbnails: OrderSummaryThumbnail[], itemCount: num
 
 export function OrderSummary({
   data,
-  protectionItems,
-  tradeAssuranceText,
+  payeeSuppliers = [],
 }: OrderSummaryProps): string {
   const cur = getSelectedCurrency();
   const fmt = (v: number) => formatCurrency(v, cur);
@@ -60,20 +40,52 @@ export function OrderSummary({
   const totalStr = fmt(data.total);
   const implicitDiscount = Number((data.itemSubtotal + data.shipping - data.total).toFixed(2));
 
-  // The protection items rendering
-  const protectionRows = protectionItems
+  // Ödeme yapılacak satıcı(lar) bloğu — her satıcı kartı, mağaza sayfasına link verir.
+  const validSuppliers = payeeSuppliers.filter((s) => s.name && s.id);
+  const payeeRows = validSuppliers
     .map(
-      (item) => `
-    <li class="flex items-start gap-2 mb-3">
-      ${getIconForItem(item)}
-      <div class="flex flex-col">
-        <span class="text-[14px] font-bold text-[#222222] leading-5">${item.title}</span>
-        <span class="text-[14px] text-[#444444] leading-5 mt-[2px]">${item.description}</span>
+      (s) => `
+    <a
+      href="/pages/seller/seller-shop.html?seller=${encodeURIComponent(s.id)}"
+      class="group flex items-center gap-3 p-3 bg-[#f9fafb] border border-[#e5e5e5] rounded-md hover:border-[var(--color-primary-500)] hover:bg-white transition-colors no-underline"
+      title="${s.name} mağazasına git"
+    >
+      <div class="w-10 h-10 rounded-md bg-white border border-[#e5e5e5] flex items-center justify-center shrink-0 group-hover:border-[var(--color-primary-500)] transition-colors">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" class="text-[#555] group-hover:text-[var(--color-primary-500)] transition-colors">
+          <path d="M3 9l1.5-5h15L21 9" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          <path d="M3 9v10a1 1 0 001 1h16a1 1 0 001-1V9" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          <path d="M9 20v-6h6v6" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        </svg>
       </div>
-    </li>
+      <span class="flex-1 text-[15px] font-semibold text-[#222222] group-hover:text-[var(--color-primary-500)] transition-colors">${s.name}</span>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" class="text-[#999] group-hover:text-[var(--color-primary-500)] shrink-0 transition-colors">
+        <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
   `
     )
     .join("");
+
+  // Tek satıcı → satıcı kartı/kartları. Çok satıcı (global) → iSTOC platform kartı.
+  // Logo küçük (h-4 = 16px) + "Güvenceli Ödeme" mini rozet trust signal olarak.
+  const platformPayeeBlock = `
+    <div class="mt-5 pt-5 border-t border-[#e5e5e5]">
+      <div class="text-[12px] text-[#767676] mb-2.5 font-medium">${t("checkout.payeeLabel")}</div>
+      <div class="p-3.5 bg-[#f0fdf4] border border-[#bbf7d0] rounded-md">
+        <img src="/images/istoc-logo.png" alt="iSTOC" class="h-4 w-auto mb-2" />
+        <p class="text-[12px] text-[#6b7280] leading-relaxed">Ödeme güvenli olarak platforma yapılır; sipariş satıcılara iSTOC güvencesi ile yönlendirilir.</p>
+      </div>
+    </div>`;
+
+  const payeeBlock = validSuppliers.length
+    ? `
+    <div class="mt-5 pt-5 border-t border-[#e5e5e5]">
+      <div class="text-[12px] text-[#767676] mb-2.5 font-medium">${t("checkout.payeeLabel")}</div>
+      <div class="flex flex-col gap-2">
+        ${payeeRows}
+      </div>
+    </div>`
+    : platformPayeeBlock;
 
   return `
     <div
@@ -115,7 +127,7 @@ export function OrderSummary({
             <button
               type="button"
               @click="applyCoupon()"
-              class="h-[38px] px-4 text-[14px] font-semibold bg-[#f5f5f5] border border-[#d1d5db] rounded-lg hover:bg-[#e8e8e8] transition-colors cursor-pointer"
+              class="th-btn-outline h-[var(--input-height-md)] shrink-0"
             ><span data-i18n="common.apply">${t("common.apply")}</span></button>
           </div>
         </template>
@@ -152,30 +164,39 @@ export function OrderSummary({
         <span x-text="formatMoney(total)">${totalStr}</span>
       </div>
 
-      <!-- Place Order Button -->
-      <button type="button" class="w-full mt-[20px] mb-[12px] flex items-center justify-center th-btn-dark leading-none" id="summary-place-order-btn">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="mr-2 shrink-0"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span data-i18n="checkout.placeOrder">${t("checkout.placeOrder")}</span>
-      </button>
+      <!-- Yasal onay: MSY md. 5 gereği açık, serbest, pre-checked olmayan onay. -->
+      <div x-data="{ consented: false }" class="mt-[20px] mb-[20px]">
+        <label class="flex items-start gap-2 cursor-pointer mb-3 select-none">
+          <input
+            type="checkbox"
+            x-model="consented"
+            class="sr-only"
+          />
+          <span class="th-checkbox relative mt-0.5" :class="{ 'is-checked': consented }">
+            <svg class="absolute inset-0 m-auto" x-show="consented" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m5 13 4 4L19 7"/>
+            </svg>
+          </span>
+          <span class="text-[12px] leading-snug text-[#555]">
+            <a href="/pages/legal/distance-sales.html" target="_blank" rel="noopener" class="text-primary-600 underline hover:text-primary-700">Ön Bilgilendirme Formunu ve Mesafeli Satış Sözleşmesini</a>
+            okudum, kabul ediyorum.
+          </span>
+        </label>
 
-      <!-- Terms & Privacy -->
-      <p class="text-[12px] leading-snug text-[#767676] mb-[20px]" data-i18n-html="checkout.orderTerms">${t("checkout.orderTerms")}</p>
-
-      <!-- Order Protection Link -->
-      <button type="button" class="flex items-center justify-between w-full mb-3 cursor-pointer bg-transparent text-left hover:opacity-80 transition-opacity" data-modal-target="order-protection-modal" data-modal-toggle="order-protection-modal">
-        <span class="text-[16px] font-bold text-[#222222]">iSTOC.com order protection</span>
-        <svg class="w-[18px] h-[18px] text-[#222222] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-      </button>
-
-      <!-- Protection Summary Items -->
-      <ul class="list-none p-0 m-0 flex flex-col mt-2">
-        ${protectionRows}
-      </ul>
-
-      <!-- Trade Assurance Footer -->
-      <div class="mt-2 text-[12px] leading-snug text-[#767676]">
-        ${tradeAssuranceText}
+        <!-- Place Order Button (onay yoksa disabled; ikon kaldırıldı — sade buton) -->
+        <button
+          type="button"
+          id="summary-place-order-btn"
+          :disabled="!consented"
+          :class="consented ? 'th-btn-dark' : 'bg-gray-300 text-gray-500 cursor-not-allowed'"
+          class="w-full flex items-center justify-center leading-none h-11 rounded-md font-semibold transition-colors"
+        >
+          <span data-i18n="checkout.placeOrder">${t("checkout.placeOrder")}</span>
+        </button>
       </div>
+
+      <!-- Ödeme yapılacak satıcı -->
+      ${payeeBlock}
     </div>
   `;
 }

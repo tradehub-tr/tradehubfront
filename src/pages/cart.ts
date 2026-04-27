@@ -9,8 +9,10 @@ import { initStickyHeights } from '../utils/stickyHeights'
 import { initCurrency, getSelectedCurrencyInfo } from '../services/currencyService'
 
 // Header components (reuse from main page)
-import { TopBar, initMobileDrawer, SubHeader, MegaMenu, initMegaMenu, initHeaderCart } from '../components/header'
-import { initLanguageSelector } from '../components/header/TopBar'
+import { initHeaderCart } from '../components/header'
+
+// Minimal checkout-style header (logo + profil)
+import { CheckoutMinimalHeader, initCheckoutMinimalHeader } from '../components/checkout'
 
 // Shared components
 import { Breadcrumb } from '../components/shared/Breadcrumb'
@@ -29,38 +31,28 @@ import { CartPage, initCartPage } from '../components/cart/page/CartPage'
 import { cartStore } from '../components/cart/state/CartStore'
 import { fetchCart, apiMergeGuestCart } from '../services/cartService'
 import { getSessionUser } from '../utils/auth'
-import { getMockAssuranceItems } from '../data/mockCart'
-
-const assuranceItems = getMockAssuranceItems();
 
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.classList.add('relative');
 
 function renderPage(suppliers: ReturnType<typeof cartStore.getSuppliers>, summary: ReturnType<typeof cartStore.getSummary>) {
   appEl.innerHTML = `
-    <!-- Header -->
-    <div id="sticky-header" class="relative bg-white border-b border-[#e5e5e5] w-full z-40">
-      <div class="relative z-50 bg-white">
-        ${TopBar()}
-        ${SubHeader()}
-      </div>
-    </div>
-
-    ${MegaMenu()}
+    <!-- Minimal Header (logo + profilim) -->
+    ${CheckoutMinimalHeader()}
 
     <!-- Main Content -->
     <main class="min-h-screen bg-surface relative z-10 pt-4 flex flex-col">
-      <div class="container-boxed">
+      <div class="max-w-[1680px] mx-auto px-4 w-full">
         ${Breadcrumb([{ label: 'Sepetim' }])}
       </div>
 
       <!-- Client-side Cart Container -->
-      ${CartPage({ suppliers, summary, assuranceItems })}
+      ${CartPage({ suppliers, summary })}
     </main>
 
     <!-- Footer -->
     <footer class="relative z-10 mt-12 border-t border-border-default pt-12 pb-8 bg-white">
-      <div class="container-boxed">
+      <div class="max-w-[1680px] mx-auto px-4 w-full">
         ${FooterLinks()}
       </div>
     </footer>
@@ -69,11 +61,9 @@ function renderPage(suppliers: ReturnType<typeof cartStore.getSuppliers>, summar
     ${FloatingPanel()}
   `;
 
-  initMegaMenu();
   initFlowbite();
-  initMobileDrawer();
-  initLanguageSelector();
   initStickyHeights();
+  initCheckoutMinimalHeader();
 
   initCurrency().then(() => {
     initCartPage();
@@ -113,7 +103,7 @@ function renderCartSkeleton(): void {
 
     <!-- Cart skeleton -->
     <main class="min-h-screen bg-surface relative z-10 pt-4 flex flex-col">
-      <div class="max-w-[1640px] mx-auto px-(--space-page-x) py-4 sm:py-6 w-full">
+      <div class="max-w-[1680px] mx-auto px-4 py-4 sm:py-6 w-full">
 
         <!-- Title -->
         <div class="h-8 ${pulse} w-36 mb-5"></div>

@@ -555,7 +555,8 @@ Alpine.data("shippingForm", () => ({
   phonePrefix: defaultShippingCountry.phonePrefix,
   errors: {} as Record<string, boolean>,
 
-  showAddressForm: true,
+  // Form varsayılan olarak KAPALI başlar; trigger ile (modal) açılır.
+  showAddressForm: false,
   savedAddresses: [] as CheckoutStoredAddress[],
   selectedAddressId: "",
   pendingAddressId: "",
@@ -616,7 +617,9 @@ Alpine.data("shippingForm", () => ({
     this.savedAddresses = buyerAddresses.map(buyerAddressToCheckout);
 
     if (this.savedAddresses.length === 0) {
-      this.showAddressForm = true;
+      // Kayıtlı adres yoksa modal OTOMATİK açılmaz — kullanıcı
+      // "+ Adres Ekle" trigger'ına tıklayarak manuel açar.
+      this.showAddressForm = false;
       this.selectedAddressId = "";
       this.pendingAddressId = "";
       this.selectedAddressName = "";
@@ -785,7 +788,8 @@ Alpine.data("shippingForm", () => ({
       this.selectedAddressName = "";
       this.selectedAddressPhone = "";
       this.selectedAddressLine = "";
-      this.showAddressForm = true;
+      // Son adresi silince modal'ı otomatik açma — trigger ile manuel açılır.
+      this.showAddressForm = false;
       this.isAddressSelectorOpen = false;
       return;
     }

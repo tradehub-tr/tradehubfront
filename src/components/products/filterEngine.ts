@@ -12,9 +12,6 @@ import { searchListings, type ListingSearchParams } from "../../services/listing
 /* ── Types ── */
 
 export interface FilterState {
-  verified: boolean;
-  verifiedPro: boolean;
-  minRating: number | null;
   priceMin: number | null;
   priceMax: number | null;
   minOrder: number | null;
@@ -78,9 +75,6 @@ export interface FilterEngine {
 
 function createDefaultState(): FilterState {
   return {
-    verified: false,
-    verifiedPro: false,
-    minRating: null,
     priceMin: null,
     priceMax: null,
     minOrder: null,
@@ -121,16 +115,6 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
     // Sort
     params.sort_by = SORT_MAP[currentSort] || "relevance";
 
-    // Verified supplier (both verified and verified-pro map to verified_supplier)
-    if (state.verified || state.verifiedPro) {
-      params.verified_supplier = true;
-    }
-
-    // Rating
-    if (state.minRating !== null) {
-      params.min_rating = state.minRating;
-    }
-
     // Price range
     if (state.priceMin !== null) params.min_price = state.priceMin;
     if (state.priceMax !== null) params.max_price = state.priceMax;
@@ -139,22 +123,6 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
     // Send first selected country (backend can be extended for multi later)
     if (state.supplierCountries.length > 0) {
       params.country = state.supplierCountries[0];
-    }
-
-    // Trade Assurance → free_shipping backend filter
-    const freeShipEl = document.querySelector<HTMLInputElement>(
-      '[data-filter-section="trade-assurance"]'
-    );
-    if (freeShipEl?.checked) {
-      params.free_shipping = true;
-    }
-
-    // Paid Samples
-    const paidSamplesEl = document.querySelector<HTMLInputElement>(
-      '[data-filter-section="product-features"][data-filter-value="paid-samples"]'
-    );
-    if (paidSamplesEl?.checked) {
-      (params as any).paid_samples = true;
     }
 
     // Management certifications
@@ -231,10 +199,6 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
 
     // Preserve base params (q, cat/category)
     // Update filter params
-    if (state.verified || state.verifiedPro) p.set("verified", "1");
-    else p.delete("verified");
-    if (state.minRating !== null) p.set("min_rating", String(state.minRating));
-    else p.delete("min_rating");
     if (state.priceMin !== null) p.set("min_price", String(state.priceMin));
     else p.delete("min_price");
     if (state.priceMax !== null) p.set("max_price", String(state.priceMax));
@@ -264,9 +228,6 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
   function readFromUrl(): void {
     const p = new URLSearchParams(window.location.search);
 
-    if (p.get("verified") === "1") state.verified = true;
-    const minRating = p.get("min_rating");
-    if (minRating) state.minRating = parseFloat(minRating);
     const minPrice = p.get("min_price");
     if (minPrice) state.priceMin = parseFloat(minPrice);
     const maxPrice = p.get("max_price");
@@ -289,31 +250,6 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
 
   /** Restore sidebar DOM elements from current filter state */
   function restoreSidebarFromState(): void {
-    // Verified supplier
-    if (state.verified) {
-      document
-        .querySelectorAll<HTMLInputElement>(
-          '[data-filter-section="supplier-features"][data-filter-value="verified"]'
-        )
-        .forEach((el) => (el.checked = true));
-    }
-    if (state.verifiedPro) {
-      document
-        .querySelectorAll<HTMLInputElement>(
-          '[data-filter-section="supplier-features"][data-filter-value="verified-pro"]'
-        )
-        .forEach((el) => (el.checked = true));
-    }
-
-    // Store reviews radio
-    if (state.minRating !== null) {
-      document
-        .querySelectorAll<HTMLInputElement>(
-          `[data-filter-section="store-reviews"][value="${state.minRating}"]`
-        )
-        .forEach((el) => (el.checked = true));
-    }
-
     // Price inputs
     if (state.priceMin !== null) {
       document
@@ -415,15 +351,6 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
       const value = target.dataset.filterValue ?? target.value;
 
       switch (section) {
-        case "supplier-features":
-          if (value === "verified") state.verified = target.checked;
-          if (value === "verified-pro") state.verifiedPro = target.checked;
-          break;
-
-        case "store-reviews":
-          state.minRating = target.checked ? parseFloat(value) : null;
-          break;
-
         case "supplier-country":
           if (target.checked) {
             if (!state.supplierCountries.includes(value)) {
@@ -440,11 +367,6 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
           } else {
             state.brands = state.brands.filter((b) => b !== value);
           }
-          break;
-
-        case "trade-assurance":
-        case "product-features":
-          // These trigger a fetch too
           break;
 
         default:
@@ -542,22 +464,6 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
         '[data-filter-section="min-order"][data-filter-type="value"]'
       );
       state.minOrder = moqInput?.value ? parseInt(moqInput.value, 10) : null;
-
-      // Store reviews radio — read from DOM since Alpine handleRadioClick may toggle
-      const checkedRadio = document.querySelector<HTMLInputElement>(
-        '[data-filter-section="store-reviews"]:checked'
-      );
-      state.minRating = checkedRadio ? parseFloat(checkedRadio.value) : null;
-
-      // Supplier features checkboxes
-      const verifiedEl = document.querySelector<HTMLInputElement>(
-        '[data-filter-section="supplier-features"][data-filter-value="verified"]'
-      );
-      const verifiedProEl = document.querySelector<HTMLInputElement>(
-        '[data-filter-section="supplier-features"][data-filter-value="verified-pro"]'
-      );
-      state.verified = verifiedEl?.checked ?? false;
-      state.verifiedPro = verifiedProEl?.checked ?? false;
 
       // Supplier countries
       const countryCheckboxes = document.querySelectorAll<HTMLInputElement>(
