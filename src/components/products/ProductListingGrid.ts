@@ -231,25 +231,25 @@ function renderProductListingCard(card: ProductListingCard): string {
       : "";
 
   return `
-    <div class="fy26-product-card-wrapper flex flex-col justify-between w-full rounded-md overflow-hidden bg-white pb-2 border-0">
-      <!-- Image area -->
-      <a href="${card.href}" class="searchx-img-area relative mb-2 block">
+    <div class="fy26-product-card-wrapper flex flex-col justify-between w-full rounded-md overflow-hidden bg-white pb-3 border-0">
+      <!-- Image area (full-bleed, kart padding'inin dışında) -->
+      <a href="${card.href}" class="searchx-img-area relative mb-3 block">
         ${renderImageSlider(card)}
       </a>
 
       <!-- Content area -->
       <div class="fy26-product-card-content flex-1 flex flex-col">
         <!-- Title area -->
-        <div class="px-1">
-          ${brandHtml ? `<div class="mb-1">${brandHtml}</div>` : ""}
-          <h2 class="searchx-product-e-title text-sm font-normal leading-[18px] h-[54px] text-[#333] overflow-hidden text-ellipsis line-clamp-3 m-0">
+        <div class="px-3">
+          ${brandHtml ? `<div class="mb-1.5">${brandHtml}</div>` : ""}
+          <h2 class="searchx-product-e-title text-sm font-normal leading-[20px] min-h-[40px] text-[#333] overflow-hidden text-ellipsis line-clamp-2 m-0">
             <a href="${card.href}" target="_blank" class="text-inherit no-underline hover:text-primary-500"><span>${card.name}</span></a>
           </h2>
           ${sellingPointHtml}
         </div>
 
         <!-- Price area -->
-        <div class="px-1 mt-1">
+        <div class="px-3 mt-2">
           <div class="fy26-price text-xl font-semibold leading-[26px] text-gray-900">${formatPrice(card.price)}</div>
           <div class="fy26-moq-stats flex gap-1.5 flex-wrap mt-0.5">
             ${moqHtml}
@@ -257,15 +257,15 @@ function renderProductListingCard(card: ProductListingCard): string {
         </div>
 
         <!-- Supplier area -->
-        <div class="px-1 mt-2">
+        <div class="px-3 mt-2">
           ${supplierNameHtml}
           ${supplierContentHtml}
         </div>
       </div>
 
       <!-- Action buttons -->
-      <div class="action-area-layout flex gap-2 px-1 items-center">
-        <button type="button" class="searchx-product-e-abutton th-btn-outline flex-1 flex items-center justify-center h-9 text-xs sm:text-sm font-medium cursor-pointer whitespace-nowrap"
+      <div class="action-area-layout flex gap-2 px-3 mt-3 items-center">
+        <button type="button" class="searchx-product-e-abutton th-btn flex-1 flex items-center justify-center h-9 text-xs sm:text-sm font-medium cursor-pointer whitespace-nowrap"
                 data-add-to-cart="${card.id}">
           ${t("products.addToCart")}
         </button>

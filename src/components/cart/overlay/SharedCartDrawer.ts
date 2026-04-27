@@ -756,6 +756,7 @@ function updateShippingModal(quantityOverride?: number): void {
   optionsEl.innerHTML = state.item.shippingOptions
     .map((option, index) => {
       const active = index === state.selectedShippingIndex;
+      const deliveryText = formatDeliveryEstimate(option.estimatedDays);
       return `
       <label class="flex items-center justify-between rounded-md border px-4 py-3 cursor-pointer transition-colors ${active ? "border-primary-500 bg-primary-50" : "border-border-default bg-surface-muted hover:bg-surface"}" data-shipping-option-index="${index}">
         <span class="flex items-center gap-3">
@@ -764,7 +765,7 @@ function updateShippingModal(quantityOverride?: number): void {
           </span>
           <span>
             <strong class="block text-base text-text-heading">${escapeHtml(option.method)}</strong>
-            <span class="text-sm text-text-secondary">${escapeHtml(option.estimatedDays)}</span>
+            <span class="text-sm text-text-secondary">${escapeHtml(deliveryText)}</span>
           </span>
         </span>
         <strong class="text-base text-text-heading">${escapeHtml(option.costText)}</strong>
@@ -772,6 +773,12 @@ function updateShippingModal(quantityOverride?: number): void {
     `;
     })
     .join("");
+}
+
+function formatDeliveryEstimate(estimatedDays: string): string {
+  const trimmed = (estimatedDays ?? "").trim();
+  if (!trimmed) return t("cart.deliveryDiscussWithSeller");
+  return t("cart.deliveryInDays", { days: trimmed });
 }
 
 function setShippingModalOpen(open: boolean): void {
@@ -1171,13 +1178,21 @@ function openDrawer(
   state.selectedColorId = item.colors[preselectedIndex]?.id ?? "";
   state.previewColorIndex = Math.max(0, preselectedIndex);
 
-  // Initialize selectable groups — select first option of each
+  // Initialize selectable groups — prefer preselectedSize match (e.g. detail
+  // page passes the active 2nd-axis value like "64GB"), otherwise first option.
   state.selectedSelectables = new Map();
   if (item.selectableGroups) {
+    const sizeNeedle = preselectedSize?.toLowerCase();
     for (const group of item.selectableGroups) {
-      if (group.options.length > 0) {
-        state.selectedSelectables.set(group.axisName, group.options[0].label);
+      if (group.options.length === 0) continue;
+      let chosenLabel = group.options[0].label;
+      if (sizeNeedle) {
+        const match = group.options.find(
+          (o) => o.id === preselectedSize || o.label.toLowerCase() === sizeNeedle
+        );
+        if (match) chosenLabel = match.label;
       }
+      state.selectedSelectables.set(group.axisName, chosenLabel);
     }
   }
 
@@ -1290,7 +1305,7 @@ export function SharedCartDrawer(): string {
       <aside id="shared-cart-drawer" class="fixed right-0 top-0 h-full w-full sm:w-[500px] lg:w-[600px] max-w-full bg-surface shadow-[-8px_0_30px_rgba(0,0,0,0.18)] xl:rounded-l-md xl:border-l xl:border-border-default flex flex-col transition-transform duration-300">
         <div class="flex items-center justify-between px-6 py-4 border-b border-border-default shrink-0 max-md:px-4 max-md:py-3">
           <h3 id="shared-cart-heading" class="text-lg font-bold text-text-heading">${t("cart.selectVariation")}</h3>
-          <button type="button" id="shared-cart-close" class="w-8 h-8 rounded-full text-secondary-400 hover:text-secondary-900 hover:bg-surface-raised transition-colors">
+          <button type="button" id="shared-cart-close" class="w-8 h-8 rounded-full text-secondary-400 hover:text-secondary-900 hover:bg-surface-raised transition-colors inline-flex items-center justify-center">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18 18 6M6 6l12 12"/></svg>
           </button>
         </div>
@@ -1308,7 +1323,7 @@ export function SharedShippingModal(): string {
       <div id="shared-cart-shipping-sheet" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[45%] w-[min(92vw,760px)] bg-surface rounded-md border border-border-default shadow-2xl p-6 translate-y-4 transition-transform duration-300 max-md:w-full max-md:max-w-full max-md:rounded-t-md max-md:rounded-b-none max-md:top-auto max-md:bottom-0 max-md:-translate-x-1/2 max-md:-translate-y-0 max-md:p-4">
         <div class="flex items-center justify-between">
           <h4 class="text-xl font-bold text-text-heading">${t("cart.selectShipping")}</h4>
-          <button type="button" id="shared-cart-shipping-close" class="w-8 h-8 rounded-full text-secondary-400 hover:text-secondary-900 hover:bg-surface-raised transition-colors">
+          <button type="button" id="shared-cart-shipping-close" class="w-8 h-8 rounded-full text-secondary-400 hover:text-secondary-900 hover:bg-surface-raised transition-colors inline-flex items-center justify-center">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18 18 6M6 6l12 12"/></svg>
           </button>
         </div>

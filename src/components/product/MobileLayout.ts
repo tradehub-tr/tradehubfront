@@ -171,7 +171,7 @@ export function MobileProductLayout(): string {
 
   const badgesSection = `
     <div id="pdm-badges" class="flex gap-2 pt-3 px-4 max-[374px]:pt-2.5 max-[374px]:px-3 bg-surface">
-      <span class="pdm-badge-dark inline-flex items-center text-[11px] font-semibold px-2.5 py-1 rounded bg-[#222] text-white leading-[1.4]">${t("product.readyToShip")}</span>
+      <span data-ready-badge="mobile" class="pdm-badge-dark inline-flex items-center text-[11px] font-semibold px-2.5 py-1 rounded bg-[#222] text-white leading-[1.4]">${t("product.readyToShip")}</span>
       <span class="pdm-badge-orange inline-flex items-center text-[11px] font-semibold px-2.5 py-1 rounded border border-cta-primary text-cta-primary bg-transparent leading-[1.4]">${t("product.customizable")}</span>
     </div>
   `;

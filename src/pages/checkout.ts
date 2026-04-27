@@ -14,8 +14,8 @@ import type { ListingShippingMethod } from '../services/cartService'
 import { showToast } from '../utils/toast'
 
 // Header components (reuse from main page)
-import { TopBar, initMobileDrawer, SubHeader, initStickyHeaderSearch, MegaMenu, initMegaMenu, initHeaderCart } from '../components/header'
-import { initLanguageSelector } from '../components/header/TopBar'
+// Checkout akışında distraction'ı azaltmak için minimal header kullanıyoruz
+// (TopBar/SubHeader/MegaMenu KALDIRILDI — Amazon/Shopify checkout pattern'i).
 
 // Shared components
 import { Breadcrumb } from '../components/shared/Breadcrumb'
@@ -30,8 +30,8 @@ import { FloatingPanel } from '../components/floating'
 import { startAlpine } from '../alpine'
 
 // Checkout components
-import { CheckoutHeader, CheckoutLayout, ShippingAddressForm, OrderSummary, PaymentMethodSection, ItemsDeliverySection, OrderProtectionModal, OrderReviewModal } from '../components/checkout'
-import { protectionSummaryItems, tradeAssuranceText, modalSections, paymentIcons, infoBoxBullets } from '../data/mockCheckout'
+import { CheckoutHeader, CheckoutLayout, CheckoutMinimalHeader, initCheckoutMinimalHeader, ShippingAddressForm, OrderSummary, PaymentMethodSection, ItemsDeliverySection, OrderProtectionModal, OrderReviewModal } from '../components/checkout'
+import { modalSections, paymentIcons, infoBoxBullets } from '../data/mockCheckout'
 import { cartStore } from '../components/cart/state/CartStore'
 import { initCurrency, getSelectedCurrencyInfo, convertPrice } from '../services/currencyService'
 import type { OrderSummary as OrderSummaryData } from '../types/checkout'
@@ -656,28 +656,36 @@ currentCheckoutOrderSummary = isSampleMode ? {
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.classList.add('relative');
 appEl.innerHTML = `
-  <!-- Header (Not Sticky for Checkout Page) -->
-  <div id="sticky-header" class="relative bg-white border-b border-[#e5e5e5] w-full">
-    ${TopBar()}
-    ${SubHeader()}
-  </div>
-
-  ${MegaMenu()}
+  <!-- Minimal Checkout Header (logo + profilim) -->
+  ${CheckoutMinimalHeader()}
 
   <!-- Main Content -->
   <main>
-    <div class="container-boxed">
+    <div class="max-w-[1680px] mx-auto px-4">
       ${Breadcrumb([{ label: t('cart.title'), href: '/pages/cart.html' }, { label: t('checkout.paymentMethod') }])}
     </div>
     ${CheckoutLayout({
   leftContent: `
         ${CheckoutHeader()}
         ${ShippingAddressForm()}
-        ${PaymentMethodSection({ suppliers: cartStore.getSuppliers().filter(s => s.products.some(p => p.skus.some(sku => sku.selected))), isSupplierCheckout: supplierFilter.length > 0 })}
+        ${PaymentMethodSection({ suppliers: cartStore.getSuppliers().filter(s => s.products.some(p => p.skus.some(sku => sku.selected))), isSupplierCheckout: supplierFilter.length > 0, initialExpanded: true })}
         ${ItemsDeliverySection({ orders: checkoutDeliveryOrders })}
       `,
   rightContent: `
-        ${OrderSummary({ data: currentCheckoutOrderSummary!, protectionItems: protectionSummaryItems, tradeAssuranceText })}
+        ${OrderSummary({
+  data: currentCheckoutOrderSummary!,
+  // Tek-satıcı checkout ise (sepetteki satıcı bazlı "Ödeme yap" butonu) o satıcının
+  // kartı gösterilir. Çok-satıcı global checkout ise payeeSuppliers boş kalır ve
+  // OrderSummary fallback olarak platform (iSTOC) kartını gösterir — kullanıcı
+  // teknik olarak iSTOC'a ödeme yapar, iSTOC satıcılara pay eder.
+  payeeSuppliers: supplierFilter.length > 0
+    ? cartStore
+        .getSuppliers()
+        .filter((s) => supplierFilter.includes(s.id))
+        .filter((s) => s.products.some((p) => p.skus.some((sku) => sku.selected)))
+        .map((s) => ({ id: s.id, name: s.name }))
+    : [],
+})}
       `
 })}
   </main>
@@ -698,14 +706,10 @@ appEl.innerHTML = `
 `;
 
 // Initialize behaviors
-initMegaMenu();
-initFlowbite();
+initFlowbite(); // Profil dropdown Flowbite data-dropdown-toggle ile çalışır
 startAlpine();
-initStickyHeaderSearch();
-initMobileDrawer();
-initLanguageSelector();
-initHeaderCart();
 initStickyHeights();
+initCheckoutMinimalHeader(); // Logout button click handler
 
 // Place Order → open review modal
 const placeOrderBtn = document.getElementById('summary-place-order-btn');

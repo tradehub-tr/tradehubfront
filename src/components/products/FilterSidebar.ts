@@ -19,13 +19,11 @@ import { t } from "../../i18n";
 import type {
   FilterSection,
   CheckboxFilterSection,
-  RadioFilterSection,
   PriceRangeFilterSection,
   MinOrderFilterSection,
   CategoryFilterSection,
   SearchableCheckboxFilterSection,
   FilterOption,
-  StoreReviewFilter,
 } from "../../types/productListing";
 
 /**
@@ -45,15 +43,6 @@ const icons = {
   check: `<svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
   </svg>`,
-  shield: `<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-  </svg>`,
-  star: `<svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
-    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-  </svg>`,
-  starEmpty: `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-  </svg>`,
   certBadge: `<svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor" style="color: #6b7280;">
     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
   </svg>`,
@@ -64,78 +53,6 @@ const icons = {
  */
 function buildDefaultFilterSections(): FilterSection[] {
   return [
-    {
-      id: "trade-assurance",
-      title: t("products.filterTradeAssurance"),
-      type: "checkbox",
-      collapsible: false,
-      options: [
-        {
-          id: "trade-assurance-enabled",
-          label: t("products.filterTradeAssurance"),
-          value: "trade-assurance",
-          checked: false,
-        },
-      ],
-    } as CheckboxFilterSection,
-    {
-      id: "supplier-features",
-      title: t("products.filterSupplierFeatures"),
-      type: "checkbox",
-      collapsible: true,
-      collapsed: false,
-      options: [
-        {
-          id: "verified-supplier",
-          label: t("products.filterVerifiedSupplier"),
-          value: "verified",
-          checked: false,
-        },
-        {
-          id: "verified-pro",
-          label: t("products.filterVerifiedPro"),
-          value: "verified-pro",
-          checked: false,
-        },
-      ],
-    } as CheckboxFilterSection,
-    {
-      id: "store-reviews",
-      title: t("products.filterStoreReviews"),
-      type: "radio",
-      collapsible: true,
-      collapsed: false,
-      options: [
-        {
-          id: "review-4",
-          label: `4.0 ${t("products.filterAndUp")}`,
-          minRating: 4.0,
-          selected: false,
-        },
-        {
-          id: "review-4.5",
-          label: `4.5 ${t("products.filterAndUp")}`,
-          minRating: 4.5,
-          selected: false,
-        },
-        { id: "review-5", label: "5.0", minRating: 5.0, selected: false },
-      ],
-    } as RadioFilterSection,
-    {
-      id: "product-features",
-      title: t("products.filterProductFeatures"),
-      type: "checkbox",
-      collapsible: true,
-      collapsed: false,
-      options: [
-        {
-          id: "paid-samples",
-          label: t("products.filterPaidSamples"),
-          value: "paid-samples",
-          checked: false,
-        },
-      ],
-    } as CheckboxFilterSection,
     {
       id: "categories",
       title: t("products.filterCategories"),
@@ -258,57 +175,6 @@ function renderCheckbox(option: FilterOption, sectionId: string, idPrefix = ""):
   `;
 }
 
-/**
- * Renders a radio button for store reviews
- */
-function renderRadioOption(option: StoreReviewFilter, sectionId: string, idPrefix = ""): string {
-  const radioId = `filter-${idPrefix ? idPrefix + "-" : ""}${sectionId}-${option.id}`;
-  const stars = Math.floor(option.minRating);
-  const hasHalf = option.minRating % 1 !== 0;
-
-  return `
-    <label
-      for="${radioId}"
-      class="flex items-center gap-2 cursor-pointer group py-1"
-      @click.prevent="
-        const radio = document.getElementById('${radioId}');
-        if (radio) {
-          if (radio.checked) { radio.checked = false; }
-          else { document.querySelectorAll('input[name=${sectionId}]').forEach(r => r.checked = false); radio.checked = true; }
-          $dispatch('filter-change');
-        }
-      "
-    >
-      <div class="relative flex items-center justify-center w-4 h-4">
-        <input
-          type="radio"
-          id="${radioId}"
-          name="${sectionId}"
-          value="${option.minRating}"
-          ${option.selected ? "checked" : ""}
-          class="peer sr-only"
-          data-filter-section="${sectionId}"
-          data-filter-value="${option.minRating}"
-        />
-        <div
-          class="absolute inset-0 border rounded-full transition-colors duration-150
-                 peer-checked:border-primary-500"
-          style="border-color: var(--filter-checkbox-border, #d1d5db);"
-        ></div>
-        <div class="w-2 h-2 rounded-full bg-primary-500 opacity-0 peer-checked:opacity-100 transition-opacity duration-150"></div>
-      </div>
-      <div class="flex items-center gap-1" style="color: var(--color-primary-500);">
-        ${Array.from({ length: stars }, () => icons.star).join("")}
-        ${hasHalf ? icons.starEmpty : ""}
-      </div>
-      <span
-        class="text-[13px] leading-tight group-hover:text-primary-600 transition-colors duration-150"
-        style="color: var(--filter-text-color, #374151);"
-      >${option.label}</span>
-    </label>
-  `;
-}
-
 /* renderCategoryItem removed — categories now rendered dynamically via initFilterSidebar */
 
 /**
@@ -389,12 +255,19 @@ function renderSearchableCheckbox(section: SearchableCheckboxFilterSection, idPr
   const isCertSection =
     section.id === "mgmt-certifications" || section.id === "product-certifications";
   const isCountrySection = section.id === "supplier-country";
-  const isDynamic = (isCountrySection || isCertSection) && section.options.length === 0;
+  const isBrandSection = section.id === "brands";
+  const isDynamic =
+    (isCountrySection || isCertSection || isBrandSection) && section.options.length === 0;
+  const dynamicKey = isCountrySection ? "countries" : section.id;
+
+  // Search kutusu: dinamik bölümlerde başta gizli (loader, item>5 ise gösterir);
+  // statik bölümlerde doğrudan items.length>5 şartına göre karar verilir.
+  const hideSearchInitially = isDynamic || section.options.length <= 5;
 
   return `
     <div class="space-y-2" ${isCountrySection ? `data-filter-prefix="${idPrefix}"` : ""}>
-      <!-- Search input -->
-      <div class="relative mt-2">
+      <!-- Search input (5+ öğe varsa görünür) -->
+      <div class="relative mt-2${hideSearchInitially ? " hidden" : ""}" data-filter-search-wrapper="${section.id}">
         <div class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none" style="color: var(--filter-search-icon, #9ca3af);">
           ${icons.search}
         </div>
@@ -409,7 +282,7 @@ function renderSearchableCheckbox(section: SearchableCheckboxFilterSection, idPr
         />
       </div>
       <!-- Options list -->
-      <div class="space-y-0.5 max-h-[180px] overflow-y-auto" ${isDynamic ? `data-filter-dynamic="${isCountrySection ? "countries" : section.id}"` : ""}>
+      <div class="space-y-0.5 max-h-[180px] overflow-y-auto" ${isDynamic ? `data-filter-dynamic="${dynamicKey}"` : ""}>
         ${
           isDynamic
             ? `
@@ -430,6 +303,16 @@ function renderSearchableCheckbox(section: SearchableCheckboxFilterSection, idPr
       ${isCertSection ? renderCertDisclaimer() : ""}
     </div>
   `;
+}
+
+/**
+ * Dinamik facet loader'lar yüklediği öğe sayısına göre search kutusunu göster/gizle.
+ * 5'ten fazla öğe varsa kutu görünür olur; aksi halde gizli kalır.
+ */
+function toggleSearchForSection(sectionId: string, itemCount: number): void {
+  document
+    .querySelectorAll<HTMLElement>(`[data-filter-search-wrapper="${sectionId}"]`)
+    .forEach((el) => el.classList.toggle("hidden", itemCount <= 5));
 }
 
 /**
@@ -536,14 +419,6 @@ function renderSectionContent(section: FilterSection, idPrefix = ""): string {
         </div>
       `;
     }
-    case "radio": {
-      const radioSection = section as RadioFilterSection;
-      return `
-        <div class="space-y-0.5">
-          ${radioSection.options.map((opt) => renderRadioOption(opt, section.id, idPrefix)).join("")}
-        </div>
-      `;
-    }
     case "category": {
       return `
         <div data-filter-dynamic="categories">
@@ -589,64 +464,15 @@ function renderFilterSection(section: FilterSection, idPrefix = ""): string {
 }
 
 /**
- * Renders the Trade Assurance section with shield icon
- */
-function renderTradeAssuranceSection(idPrefix = ""): string {
-  const taId = `filter-${idPrefix ? idPrefix + "-" : ""}trade-assurance`;
-  return `
-    <div
-      class="border-b py-3"
-      style="border-color: var(--filter-divider-color, #e5e7eb);"
-    >
-      <label
-        for="${taId}"
-        class="flex items-center gap-2 cursor-pointer group"
-      >
-        <div class="relative flex items-center justify-center w-4 h-4">
-          <input
-            type="checkbox"
-            id="${taId}"
-            name="trade-assurance"
-            value="trade-assurance"
-            class="peer sr-only"
-            data-filter-section="trade-assurance"
-            data-filter-value="enabled"
-            @change="$dispatch('filter-change')"
-          />
-          <div
-            class="absolute inset-0 border rounded transition-colors duration-150
-                   peer-checked:bg-primary-500 peer-checked:border-primary-500
-                   peer-focus:ring-2 peer-focus:ring-primary-200"
-            style="border-color: var(--filter-checkbox-border, #d1d5db);"
-          ></div>
-          <span class="relative z-10 text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-150">
-            ${icons.check}
-          </span>
-        </div>
-        <span class="text-primary-500">${icons.shield}</span>
-        <span
-          class="text-[13px] font-semibold group-hover:text-primary-600 transition-colors duration-150"
-          style="color: var(--filter-heading-color, #111827);"
-        >Trade Assurance</span>
-      </label>
-    </div>
-  `;
-}
-
-/**
  * FilterSidebar Component
  * Renders the complete filter sidebar with all filter sections
  */
 export function FilterSidebar(sections?: FilterSection[], idPrefix = ""): string {
   const filterSections = sections || buildDefaultFilterSections();
 
-  // Separate Trade Assurance from other sections
-  const tradeAssurance = filterSections.find((s) => s.id === "trade-assurance");
-  const otherSections = filterSections.filter((s) => s.id !== "trade-assurance");
-
   // Build initial collapsed state for Alpine — include ALL collapsible section IDs
   // so Vue reactivity tracks them as dependencies of :class bindings.
-  const collapsedEntries = otherSections
+  const collapsedEntries = filterSections
     .filter((s) => s.collapsible !== false)
     .map((s) => `'${s.id}': ${s.collapsed === true}`);
   const xDataArg =
@@ -681,11 +507,7 @@ export function FilterSidebar(sections?: FilterSection[], idPrefix = ""): string
 
       <!-- Filter sections (natural flow, no internal scroll) -->
       <div class="px-4 pb-2" data-filter-sections-container>
-        <!-- Trade Assurance (special section with icon) -->
-        ${tradeAssurance ? renderTradeAssuranceSection(idPrefix) : ""}
-
-        <!-- Other filter sections -->
-        ${otherSections.map((section) => renderFilterSection(section, idPrefix)).join("")}
+        ${filterSections.map((section) => renderFilterSection(section, idPrefix)).join("")}
       </div>
 
       <!-- Sahibinden-style: sticks to viewport bottom while sidebar is visible -->
@@ -740,6 +562,7 @@ export function initFilterSidebar(query?: string, category?: string): void {
             });
 
           // Update country sections
+          toggleSearchForSection("supplier-country", facets.countries.length);
           document
             .querySelectorAll<HTMLElement>('[data-filter-dynamic="countries"]')
             .forEach((container) => {
@@ -780,10 +603,12 @@ export function initFilterSidebar(query?: string, category?: string): void {
             });
 
           // Update brand sections
+          const brandsForToggle = (facets as any).brands || [];
+          toggleSearchForSection("brands", brandsForToggle.length);
           document
             .querySelectorAll<HTMLElement>('[data-filter-dynamic="brands"]')
             .forEach((container) => {
-              const brands = (facets as any).brands || [];
+              const brands = brandsForToggle;
               if (brands.length === 0) {
                 container.innerHTML = `<p class="text-xs" style="color:#9ca3af">${t("products.noResults")}</p>`;
                 return;
@@ -896,6 +721,7 @@ export function initFilterSidebar(query?: string, category?: string): void {
             { key: "product-certifications", data: facets.productCertifications || [] },
           ];
           for (const { key, data } of certSections) {
+            toggleSearchForSection(key, data.length);
             document
               .querySelectorAll<HTMLElement>(`[data-filter-dynamic="${key}"]`)
               .forEach((container) => {
@@ -938,6 +764,9 @@ export function initFilterSidebar(query?: string, category?: string): void {
           document.querySelectorAll<HTMLElement>("[data-filter-dynamic]").forEach((container) => {
             container.innerHTML = `<p class="text-xs" style="color:#9ca3af">${t("products.noResults")}</p>`;
           });
+          ["supplier-country", "brands", "mgmt-certifications", "product-certifications"].forEach(
+            (id) => toggleSearchForSection(id, 0)
+          );
         });
     })
     .catch((err) => {
@@ -945,6 +774,9 @@ export function initFilterSidebar(query?: string, category?: string): void {
       document.querySelectorAll<HTMLElement>("[data-filter-dynamic]").forEach((container) => {
         container.innerHTML = `<p class="text-xs" style="color:#9ca3af">${t("products.noResults")}</p>`;
       });
+      ["supplier-country", "brands", "mgmt-certifications", "product-certifications"].forEach(
+        (id) => toggleSearchForSection(id, 0)
+      );
     });
 }
 

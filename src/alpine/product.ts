@@ -95,20 +95,57 @@ export async function loadProduct(listingId: string): Promise<ProductDetail> {
 
 Alpine.data("loginModal", () => ({
   open: false,
+  email: "",
+  password: "",
+  showPassword: false,
+  loading: false,
+  errorMsg: "",
 
   show() {
     this.open = true;
+    this.errorMsg = "";
     document.body.style.overflow = "hidden";
   },
 
   close() {
     this.open = false;
+    this.errorMsg = "";
     // Only restore body scroll if no other modal is open underneath
     // ReviewsModal now uses Alpine x-data with :data-open="open" instead of rv-modal-hidden class
     const reviewsModal = document.getElementById("rv-reviews-modal");
     const reviewsOpen = reviewsModal?.dataset.open === "true";
     if (!reviewsOpen) {
       document.body.style.overflow = "";
+    }
+  },
+
+  async submit() {
+    if (this.loading) return;
+    this.errorMsg = "";
+    const email = (this.email || "").trim();
+    const password = this.password || "";
+    if (!email || !password) {
+      this.errorMsg = t("auth.login.invalidCredentials");
+      return;
+    }
+    this.loading = true;
+    try {
+      const { login, invalidateAuthCache, waitForAuth } = await import("../utils/auth");
+      await login(email, password);
+      invalidateAuthCache();
+      await waitForAuth();
+      window.dispatchEvent(new CustomEvent("login-success"));
+      this.email = "";
+      this.password = "";
+      this.close();
+    } catch (err) {
+      if (err instanceof Error && err.message === "2FA_REQUIRED") {
+        this.errorMsg = t("auth.login.2faRequired");
+      } else {
+        this.errorMsg = t("auth.login.invalidCredentials");
+      }
+    } finally {
+      this.loading = false;
     }
   },
 }));

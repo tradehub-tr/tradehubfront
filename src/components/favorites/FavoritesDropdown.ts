@@ -61,8 +61,9 @@ export function openFavoritesDropdown(anchorBtn: HTMLElement, product: ProductDa
   const dropdown = document.createElement("div");
   dropdown.id = "fav-dropdown";
   dropdown.className =
-    "fixed z-[9999] w-[280px] bg-white rounded-md shadow-[0_8px_30px_rgba(0,0,0,0.16)] border border-gray-100 " +
+    "fav-dropdown-panel fixed z-[9999] w-[280px] bg-white shadow-[0_8px_30px_rgba(0,0,0,0.16)] border border-gray-100 " +
     "opacity-0 scale-95 pointer-events-none transition-all duration-150 origin-top";
+  dropdown.style.borderRadius = "var(--radius-card, 8px)";
 
   dropdown.innerHTML = buildDropdownContent(isFav, itemListIds, lists);
 
@@ -115,11 +116,11 @@ function buildDropdownContent(
       const checked = itemListIds.includes(list.id);
       return `
       <label class="flex items-center gap-3 px-4 py-2.5 cursor-pointer hover:bg-gray-50 transition-colors" data-list-id="${list.id}">
-        <input type="checkbox" class="fav-list-checkbox w-[18px] h-[18px] cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" ${checked ? "checked" : ""} data-list-id="${list.id}" />
+        <input type="checkbox" class="fav-list-checkbox sr-only peer" ${checked ? "checked" : ""} data-list-id="${list.id}" />
+        ${renderCheckboxVisual(checked)}
         <div class="flex-1 min-w-0">
           <span class="block text-sm text-gray-700 truncate">${escapeHtml(list.name)}</span>
         </div>
-        ${checked ? '<svg class="w-4 h-4 text-[#F60] shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>' : ""}
       </label>
     `;
     })
@@ -137,7 +138,8 @@ function buildDropdownContent(
     <!-- Default favorites -->
     <div class="border-b border-gray-100">
       <label class="flex items-center gap-3 px-4 py-2.5 cursor-pointer hover:bg-gray-50 transition-colors" data-list-id="${DEFAULT_LIST_ID}">
-        <input type="checkbox" class="fav-list-checkbox w-[18px] h-[18px] cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" ${defaultChecked ? "checked" : ""} data-list-id="${DEFAULT_LIST_ID}" />
+        <input type="checkbox" class="fav-list-checkbox sr-only peer" ${defaultChecked ? "checked" : ""} data-list-id="${DEFAULT_LIST_ID}" />
+        ${renderCheckboxVisual(defaultChecked)}
         <div class="flex items-center gap-2 flex-1 min-w-0">
           <svg class="w-5 h-5 text-red-500 shrink-0" fill="${defaultChecked ? "#ef4444" : "none"}" stroke="#ef4444" stroke-width="2" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
           <span class="text-sm font-medium text-gray-700">${t("favorites.defaultList")}</span>
@@ -158,10 +160,10 @@ function buildDropdownContent(
       </button>
 
       <!-- Inline create form (hidden by default) -->
-      <div class="hidden px-4 pb-3" id="fav-inline-create">
+      <div class="hidden px-4 pt-3 pb-3" id="fav-inline-create">
         <div class="flex gap-2">
           <input type="text" id="fav-inline-input" maxlength="25" placeholder="${t("favorites.enterName")}" class="th-input th-input-md flex-1" />
-          <button type="button" id="fav-inline-save" class="px-3 py-2 text-sm font-medium text-white bg-[#F60] rounded-lg hover:bg-[#e55a00] transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+          <button type="button" id="fav-inline-save" class="th-btn th-btn-sm disabled:opacity-50 disabled:cursor-not-allowed" disabled>
             ${t("common.save")}
           </button>
         </div>
@@ -228,6 +230,7 @@ function wireDropdownEvents(
   // Checkbox toggles
   dropdown.querySelectorAll<HTMLInputElement>(".fav-list-checkbox").forEach((checkbox) => {
     checkbox.addEventListener("change", () => {
+      syncCheckboxVisual(checkbox);
       const listId = checkbox.dataset.listId!;
       const added = toggleItemInList(product, listId);
 
@@ -340,16 +343,17 @@ function saveNewList(
       "flex items-center gap-3 px-4 py-2.5 cursor-pointer hover:bg-gray-50 transition-colors";
     newLabel.dataset.listId = list.id;
     newLabel.innerHTML = `
-      <input type="checkbox" class="fav-list-checkbox w-[18px] h-[18px] cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" checked data-list-id="${list.id}" />
+      <input type="checkbox" class="fav-list-checkbox sr-only peer" checked data-list-id="${list.id}" />
+      ${renderCheckboxVisual(true)}
       <div class="flex-1 min-w-0">
         <span class="block text-sm text-gray-700 truncate">${escapeHtml(list.name)}</span>
       </div>
-      <svg class="w-4 h-4 text-[#F60] shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
     `;
 
     // Wire checkbox
     const checkbox = newLabel.querySelector("input") as HTMLInputElement;
     checkbox.addEventListener("change", () => {
+      syncCheckboxVisual(checkbox);
       const added = toggleItemInList(product, list.id);
       if (added) {
         showToast({
@@ -370,17 +374,33 @@ function refreshDropdownCheckboxes(dropdown: HTMLElement, productId: string): vo
   const currentListIds = getItemListIds(productId);
   dropdown.querySelectorAll<HTMLInputElement>(".fav-list-checkbox").forEach((cb) => {
     const listId = cb.dataset.listId!;
-    cb.checked = currentListIds.includes(listId);
+    const isChecked = currentListIds.includes(listId);
+    cb.checked = isChecked;
+    syncCheckboxVisual(cb);
   });
 
-  // Update default heart icon fill
+  // Update default heart icon fill (kept separate from panel tokens — semantic red)
   const defaultLabel = dropdown.querySelector(`[data-list-id="${DEFAULT_LIST_ID}"]`);
   if (defaultLabel) {
-    const heartSvg = defaultLabel.querySelector("svg");
+    const heartSvg = defaultLabel.querySelector(
+      'svg:not(.fav-checkbox-tick)'
+    ) as SVGElement | null;
     if (heartSvg) {
       heartSvg.setAttribute("fill", currentListIds.includes(DEFAULT_LIST_ID) ? "#ef4444" : "none");
     }
   }
+}
+
+/**
+ * Sync the sibling `.th-checkbox` visual (and its tick) with the input's state.
+ * The visual is the immediate next sibling of the sr-only input.
+ */
+function syncCheckboxVisual(input: HTMLInputElement): void {
+  const visual = input.nextElementSibling as HTMLElement | null;
+  if (!visual || !visual.classList.contains("fav-checkbox-visual")) return;
+  visual.classList.toggle("is-checked", input.checked);
+  const tick = visual.querySelector(".fav-checkbox-tick") as HTMLElement | null;
+  if (tick) tick.style.display = input.checked ? "block" : "none";
 }
 
 /**
@@ -401,6 +421,22 @@ export function updateFavoriteButtons(productId: string): void {
       btn.style.color = "";
     }
   });
+}
+
+/**
+ * Render the panel-bound checkbox visual (sibling of a hidden sr-only input).
+ * Uses `.th-checkbox` class so all sizing/radius/colors come from theme tokens
+ * (--checkbox-size, --checkbox-radius, --checkbox-bg, --checkbox-border-*,
+ * --checkbox-checked-bg, --checkbox-checked-border, --checkbox-checked-icon).
+ */
+function renderCheckboxVisual(checked: boolean): string {
+  return `
+    <span class="fav-checkbox-visual th-checkbox${checked ? " is-checked" : ""}" aria-hidden="true">
+      <svg class="fav-checkbox-tick" style="display:${checked ? "block" : "none"};width:70%;height:70%" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7" />
+      </svg>
+    </span>
+  `;
 }
 
 function escapeHtml(str: string): string {

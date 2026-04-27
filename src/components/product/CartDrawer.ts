@@ -91,6 +91,21 @@ function toSelectableGroups(product: ProductDetail): CartDrawerSelectableGroup[]
 function toSkuMatrix(product: ProductDetail): CartDrawerItemModel["skuMatrix"] {
   const colorVariant = product.variants.find((v) => v.type === "color");
   if (!colorVariant?.skuMatrix) return undefined;
+
+  // The modal's selectable-availability check looks up the 2nd variant in
+  // row.extraAxes[<label>], but the backend stores it as row.axis2 when the
+  // group isn't tagged "size". Mirror axis2 into extraAxes so both lookups hit.
+  const secondVariant = product.variants[1];
+  if (secondVariant && secondVariant.type !== "size" && secondVariant.label) {
+    const axis2Name = secondVariant.label;
+    return colorVariant.skuMatrix.map((row: any) => ({
+      ...row,
+      extraAxes: {
+        ...(row.extraAxes || {}),
+        [axis2Name]: row.axis2,
+      },
+    }));
+  }
   return colorVariant.skuMatrix;
 }
 

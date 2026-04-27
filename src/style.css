@@ -3204,6 +3204,11 @@ body.gallery-lightbox-open {
   color: #16a34a;
   background: #f0fdf4;
 }
+#pd-ready-badge.is-out-of-stock {
+  border-color: #dc2626;
+  color: #dc2626;
+  background: #fef2f2;
+}
 
 /* Price Tiers — clean horizontal layout */
 #pd-price-tiers {
@@ -3377,17 +3382,6 @@ body.gallery-lightbox-open {
 
 #pd-add-to-cart {
   flex: 1.4;
-}
-
-#pd-chat-now {
-  --btn-outline-border-color: var(--color-border-default, #d1d5db);
-  --btn-outline-text: var(--color-text-body, #374151);
-  --btn-outline-bg: transparent;
-}
-
-#pd-chat-now:hover {
-  --btn-outline-bg: var(--color-surface-hover, #f9fafb);
-  filter: none;
 }
 
 .pd-sticky #pd-cta-buttons {

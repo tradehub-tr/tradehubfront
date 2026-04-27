@@ -4,7 +4,7 @@
  * CartStore sync, and thumbnail slider. Registered in alpine.ts.
  */
 
-import type { CartSupplier, CartSummaryData, AssuranceItem } from "../../../types/cart";
+import type { CartSupplier, CartSummaryData } from "../../../types/cart";
 import { t } from "../../../i18n";
 import { CartHeader } from "../organisms/CartHeader";
 import { BatchSelectBar } from "../molecules/BatchSelectBar";
@@ -16,13 +16,12 @@ import { getCurrencySymbol } from "../../../utils/currency";
 export interface CartPageProps {
   suppliers: CartSupplier[];
   summary: CartSummaryData;
-  assuranceItems?: AssuranceItem[];
 }
 
-export function CartPage({ suppliers, summary, assuranceItems }: CartPageProps): string {
+export function CartPage({ suppliers, summary }: CartPageProps): string {
   if (suppliers.length === 0) {
     return `
-      <div class="sc-cart-page max-w-[1640px] mx-auto px-(--space-page-x) py-4 sm:py-6">
+      <div class="sc-cart-page max-w-[1680px] mx-auto px-4 py-4 sm:py-6">
         <div class="flex flex-col items-center justify-center py-20 text-center">
           <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" class="text-text-tertiary mb-6">
             <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
@@ -55,7 +54,7 @@ export function CartPage({ suppliers, summary, assuranceItems }: CartPageProps):
   );
 
   return `
-    <div class="sc-cart-page flex flex-col flex-1 w-full max-w-[1640px] mx-auto px-(--space-page-x) py-4 sm:py-6"
+    <div class="sc-cart-page flex flex-col flex-1 w-full max-w-[1680px] mx-auto px-4 py-4 sm:py-6"
       x-data="cartPage"
       @batch-select-toggle="handleBatchSelectToggle($event)"
       @supplier-select="handleSupplierSelect($event)"
@@ -78,7 +77,7 @@ export function CartPage({ suppliers, summary, assuranceItems }: CartPageProps):
         </section>
 
         <section class="w-full xl:w-[425px] xl:sticky xl:top-6 self-start z-10">
-          ${CartSummary(summary, assuranceItems)}
+          ${CartSummary(summary)}
         </section>
       </div>
     </div>

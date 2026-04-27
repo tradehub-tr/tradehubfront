@@ -222,10 +222,6 @@ export function ProductInfo(): string {
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
             ${t("product.addToCart")}
           </button>
-          <button type="button" id="pd-chat-now" class="th-btn-outline">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            ${t("product.startChat")}
-          </button>
         </div>
       </div>
     </div>
@@ -268,6 +264,43 @@ function getSelectedAxes(): Map<string, string> {
 }
 
 /**
+ * Update the "Ready to Ship" badge based on whether the currently selected
+ * variant combination has stock. Falls back to "ready" when the product has
+ * no skuMatrix (single-variant or unmatrixed products).
+ */
+function updateReadyBadge(skuMatrix: any[], variants: any[]): void {
+  const desktopBadge = document.getElementById("pd-ready-badge");
+  const mobileBadge = document.querySelector<HTMLElement>('[data-ready-badge="mobile"]');
+  if (!desktopBadge && !mobileBadge) return;
+
+  let inStock = true;
+
+  if (skuMatrix.length > 0) {
+    const selectedAxes = getSelectedAxes();
+    inStock = skuMatrix.some((sku: any) => {
+      if (!sku.available) return false;
+      for (const [axLabel, axValue] of selectedAxes) {
+        const axKey = getSkuAxisKey(variants, axLabel);
+        if (getSkuValueForAxis(sku, axKey) !== axValue) return false;
+      }
+      return true;
+    });
+  }
+
+  const readyText = t("product.readyToShip");
+  const outText = t("cart.outOfStock");
+
+  if (desktopBadge) {
+    desktopBadge.textContent = inStock ? readyText : outText;
+    desktopBadge.classList.toggle("is-out-of-stock", !inStock);
+  }
+  if (mobileBadge) {
+    mobileBadge.textContent = inStock ? readyText : outText;
+    mobileBadge.style.background = inStock ? "" : "#dc2626";
+  }
+}
+
+/**
  * Cross-disable: when a variant axis value is selected, disable options in
  * OTHER axes that have no available SKU for this combination.
  * Supports N axes (Color, Size, Material, etc.).
@@ -284,6 +317,11 @@ function crossDisableVariants(_selectedAxisLabel: string, _selectedValue: string
       break;
     }
   }
+
+  // Always sync the "ready to ship" badge to the current selection,
+  // even when there is no skuMatrix (the helper handles that fallback).
+  updateReadyBadge(skuMatrix, variants);
+
   if (skuMatrix.length === 0) return;
 
   // Collect currently selected values from all variant groups

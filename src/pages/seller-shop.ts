@@ -14,6 +14,7 @@ import { initCurrency } from '../services/currencyService';
 // Components
 import { TopBar } from '../components/header';
 import { initLanguageSelector } from '../components/header/TopBar';
+import { LoginModal } from '../components/product/LoginModal';
 
 // Alpine store
 import '../alpine/sellerShop';
@@ -368,6 +369,9 @@ async function renderPage() {
       </div>
 
     </main>
+
+    <!-- Login modal (contact bilgileri için) -->
+    ${LoginModal()}
   `;
 
   // Initialize
