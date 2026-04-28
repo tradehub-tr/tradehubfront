@@ -204,6 +204,7 @@ Alpine.data("sellerShop", () => ({
   products: [] as any[],
   filteredProducts: [] as any[],
   activeCategory: "",
+  activeCategoryType: "" as string, // "" | "seller" | "platform"
   activeCategoryName: "",
   sortBy: "default",
   viewMode: "grid",
@@ -326,18 +327,27 @@ Alpine.data("sellerShop", () => ({
     return section?.settings?.title || SECTION_LABELS[type] || "";
   },
 
-  filterByCategory(categoryName: string) {
-    if (this.activeCategory === categoryName) {
+  filterByCategory(categoryName: string, categoryType: string = "seller") {
+    if (this.activeCategory === categoryName && this.activeCategoryType === categoryType) {
       this.activeCategory = "";
+      this.activeCategoryType = "";
       this.activeCategoryName = "";
       this.filteredProducts = [...this.products];
     } else {
       this.activeCategory = categoryName;
-      const cat = this.categories.find((c: any) => c.name === categoryName) as any;
+      this.activeCategoryType = categoryType;
+      const cat = this.categories.find(
+        (c: any) => c.name === categoryName && (c.type || "seller") === categoryType
+      ) as any;
       this.activeCategoryName = cat?.category_name || categoryName;
-      this.filteredProducts = this.products.filter(
-        (p: any) => p.category === categoryName || p.category_name === categoryName
-      );
+      this.filteredProducts = this.products.filter((p: any) => {
+        if (categoryType === "platform") {
+          return (
+            p.product_category === categoryName || p.product_category_name === categoryName
+          );
+        }
+        return p.category === categoryName || p.category_name === categoryName;
+      });
     }
   },
 

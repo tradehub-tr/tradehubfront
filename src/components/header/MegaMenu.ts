@@ -283,10 +283,6 @@ interface BuyerCentralColumn {
 
 const buyerCentralColumns: BuyerCentralColumn[] = [
   {
-    titleKey: "mega.getStarted",
-    links: [{ labelKey: "mega.whatIsIstoc", href: "/pages/legal/about.html" }],
-  },
-  {
     titleKey: "mega.whyIstoc",
     links: [
       { labelKey: "mega.howSourcingWorks", href: "/how-sourcing-works" },

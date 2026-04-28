@@ -44,7 +44,6 @@ const footerColumnsI18n: FooterColumnI18n[] = [
     titleKey: "footer.getSupport",
     links: [
       { labelKey: "footer.helpCenter", href: "/pages/help/help-center.html" },
-      { labelKey: "footer.liveChat", href: "/pages/help/contact.html" },
       { labelKey: "footer.checkOrder", href: "/pages/dashboard/orders.html" },
       { labelKey: "footer.refunds", href: "/pages/legal/returns.html" },
       { labelKey: "footer.reportAbuse", href: "/pages/help/help-ticket-new.html" },
@@ -83,7 +82,6 @@ const footerColumnsI18n: FooterColumnI18n[] = [
   {
     titleKey: "footer.getToKnow",
     links: [
-      { labelKey: "footer.aboutIstoc", href: "/pages/legal/about.html" },
       { labelKey: "footer.corporateResponsibility", href: "/pages/info/csr.html" },
       { labelKey: "footer.newsCenter", href: "/pages/info/news.html" },
       { labelKey: "footer.careers", href: "/pages/info/careers.html" },

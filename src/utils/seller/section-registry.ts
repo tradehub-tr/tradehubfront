@@ -233,9 +233,9 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
             <div>
               <h3 class="text-[18px] font-bold text-gray-900 mb-4 uppercase" x-text="sectionTitle('category_grid')"></h3>
               <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                <template x-for="cat in categories" :key="cat.name">
+                <template x-for="cat in categories" :key="(cat.type || 'seller') + '-' + cat.name">
                   <a :href="'#category-' + cat.name"
-                     @click.prevent="filterByCategory(cat.name)"
+                     @click.prevent="filterByCategory(cat.name, cat.type || 'seller')"
                      class="relative rounded-md overflow-hidden bg-gray-100 aspect-[4/3] group">
                     <img x-show="cat.image" :src="cat.image" :alt="cat.category_name || cat.name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-3">
@@ -314,13 +314,18 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
               <div class="border-t border-gray-200 pt-4">
                 <h4 class="text-[14px] font-bold text-gray-900 mb-3 px-1">Urun Kategorileri</h4>
                 <div class="space-y-0.5">
-                  <template x-for="cat in categories" :key="cat.name">
-                    <a href="#" @click.prevent="filterByCategory(cat.name)"
+                  <template x-for="cat in categories" :key="(cat.type || 'seller') + '-' + cat.name">
+                    <a href="#" @click.prevent="filterByCategory(cat.name, cat.type || 'seller')"
                        class="flex items-center justify-between px-3 py-2 rounded-md text-[13px] transition-colors"
-                       :class="activeCategory === cat.name ? 'font-semibold text-white' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'"
-                       :style="activeCategory === cat.name ? 'background-color: var(--store-nav-bg)' : ''"
+                       :class="(activeCategory === cat.name && activeCategoryType === (cat.type || 'seller')) ? 'font-semibold text-white' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'"
+                       :style="(activeCategory === cat.name && activeCategoryType === (cat.type || 'seller')) ? 'background-color: var(--store-nav-bg)' : ''"
                        >
-                      <span x-text="cat.category_name || cat.name"></span>
+                      <span class="flex items-center gap-1.5 min-w-0">
+                        <span class="truncate" x-text="cat.category_name || cat.name"></span>
+                        <span x-show="cat.type === 'platform'"
+                              class="shrink-0 text-[10px] font-medium uppercase tracking-wide px-1.5 py-0.5 rounded bg-gray-100 text-gray-500"
+                              title="Platform kategorisi">Platform</span>
+                      </span>
                       <svg class="w-3.5 h-3.5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                     </a>
                   </template>

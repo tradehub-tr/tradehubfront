@@ -488,6 +488,14 @@ Alpine.data("ordersListComponent", () => ({
     if (["Pending", "Approved"].includes(order.refundStatus)) return false;
     return true;
   },
+
+  // Sipariş kargoya verilmediyse kargo bilgileri değiştirilebilir
+  canModifyShipping(order: any): boolean {
+    if (!order) return false;
+    if (["Delivering", "Completed", "Cancelled"].includes(order.status)) return false;
+    if (["Pending", "Approved"].includes(order.refundStatus)) return false;
+    return true;
+  },
 }));
 
 Alpine.data("ordersSection", () => ({

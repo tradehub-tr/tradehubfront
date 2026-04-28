@@ -1098,11 +1098,11 @@ export function TopBar(props?: TopBarProps): string {
   const compact = props?.compact ?? false;
 
   if (compact) {
-    /* ──── Compact Dashboard Header (iSTOC-style ~40px) ──── */
+    /* ──── Compact Dashboard Header (iSTOC-style ~52px) ──── */
     return `
       <div class="relative z-30" style="background:#F5F5F5">
         <div class="container-boxed">
-          <div class="flex items-center h-10 gap-2 sm:gap-4">
+          <div class="flex items-center h-[52px] sm:h-14 gap-2 sm:gap-4">
             <!-- Logo (smaller, white for gradient bg) -->
             <div class="flex-shrink-0">
               ${renderCompactLogo()}
@@ -1175,6 +1175,19 @@ export function TopBar(props?: TopBarProps): string {
   /* ──── Full Header (default — with search + tabs) ──── */
   const pathname = typeof window !== "undefined" ? window.location.pathname.toLowerCase() : "";
   const isManufacturersPage = pathname.includes("manufacturers");
+  const isProductsPage = /\/products(\.html)?$/.test(pathname);
+  const showSearchTabs = isProductsPage || isManufacturersPage;
+
+  // Mevcut sayfanın arama bağlamını (q + cat slug / category id) sekmeler arası taşı.
+  const currentParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : new URLSearchParams();
+  const ctxQuery = currentParams.get("q") || "";
+  const ctxCatSlug = currentParams.get("cat") || "";
+  const ctxCategoryId = currentParams.get("category") || "";
+  const ctxQS = new URLSearchParams();
+  if (ctxQuery) ctxQS.set("q", ctxQuery);
+  if (ctxCatSlug) ctxQS.set("cat", ctxCatSlug);
+  else if (ctxCategoryId) ctxQS.set("category", ctxCategoryId);
+  const ctxSuffix = ctxQS.toString() ? `?${ctxQS.toString()}` : "";
   const desktopActiveTabClass =
     "topbar-search-tab relative py-1 text-[13px] font-semibold text-gray-900 dark:text-white whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-gray-900 after:dark:bg-white after:rounded-full";
   const desktopInactiveTabClass =
@@ -1274,11 +1287,13 @@ export function TopBar(props?: TopBarProps): string {
           </div>
         </div>
 
-        <!-- Row 2: Search Tabs (Desktop Only) -->
+        <!-- Row 2: Search Tabs (Desktop Only — products & manufacturers sayfalarında) -->
+        ${showSearchTabs ? `
         <div class="hidden lg:flex items-center gap-6 pb-2 -mt-1">
-          <a href="/" class="${isManufacturersPage ? desktopInactiveTabClass : desktopActiveTabClass}" data-search-tab="products"><span data-i18n="search.products">${t("search.products")}</span></a>
-          <a href="/pages/manufacturers.html" class="${isManufacturersPage ? desktopActiveTabClass : desktopInactiveTabClass}" data-search-tab="manufacturers"><span data-i18n="search.manufacturers">${t("search.manufacturers")}</span></a>
+          <a href="/pages/products.html${ctxSuffix}" class="${isManufacturersPage ? desktopInactiveTabClass : desktopActiveTabClass}" data-search-tab="products"><span data-i18n="search.products">${t("search.products")}</span></a>
+          <a href="/pages/manufacturers.html${ctxSuffix}" class="${isManufacturersPage ? desktopActiveTabClass : desktopInactiveTabClass}" data-search-tab="manufacturers"><span data-i18n="search.manufacturers">${t("search.manufacturers")}</span></a>
         </div>
+        ` : ''}
       </div>
 
       ${renderMobileDrawer()}
