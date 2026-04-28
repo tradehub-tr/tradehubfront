@@ -342,9 +342,7 @@ Alpine.data("sellerShop", () => ({
       this.activeCategoryName = cat?.category_name || categoryName;
       this.filteredProducts = this.products.filter((p: any) => {
         if (categoryType === "platform") {
-          return (
-            p.product_category === categoryName || p.product_category_name === categoryName
-          );
+          return p.product_category === categoryName || p.product_category_name === categoryName;
         }
         return p.category === categoryName || p.category_name === categoryName;
       });

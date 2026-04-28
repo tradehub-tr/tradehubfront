@@ -1179,7 +1179,10 @@ export function TopBar(props?: TopBarProps): string {
   const showSearchTabs = isProductsPage || isManufacturersPage;
 
   // Mevcut sayfanın arama bağlamını (q + cat slug / category id) sekmeler arası taşı.
-  const currentParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : new URLSearchParams();
+  const currentParams =
+    typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search)
+      : new URLSearchParams();
   const ctxQuery = currentParams.get("q") || "";
   const ctxCatSlug = currentParams.get("cat") || "";
   const ctxCategoryId = currentParams.get("category") || "";
@@ -1288,12 +1291,16 @@ export function TopBar(props?: TopBarProps): string {
         </div>
 
         <!-- Row 2: Search Tabs (Desktop Only — products & manufacturers sayfalarında) -->
-        ${showSearchTabs ? `
+        ${
+          showSearchTabs
+            ? `
         <div class="hidden lg:flex items-center gap-6 pb-2 -mt-1">
           <a href="/pages/products.html${ctxSuffix}" class="${isManufacturersPage ? desktopInactiveTabClass : desktopActiveTabClass}" data-search-tab="products"><span data-i18n="search.products">${t("search.products")}</span></a>
           <a href="/pages/manufacturers.html${ctxSuffix}" class="${isManufacturersPage ? desktopActiveTabClass : desktopInactiveTabClass}" data-search-tab="manufacturers"><span data-i18n="search.manufacturers">${t("search.manufacturers")}</span></a>
         </div>
-        ` : ''}
+        `
+            : ""
+        }
       </div>
 
       ${renderMobileDrawer()}

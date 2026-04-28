@@ -382,9 +382,7 @@ function refreshDropdownCheckboxes(dropdown: HTMLElement, productId: string): vo
   // Update default heart icon fill (kept separate from panel tokens — semantic red)
   const defaultLabel = dropdown.querySelector(`[data-list-id="${DEFAULT_LIST_ID}"]`);
   if (defaultLabel) {
-    const heartSvg = defaultLabel.querySelector(
-      'svg:not(.fav-checkbox-tick)'
-    ) as SVGElement | null;
+    const heartSvg = defaultLabel.querySelector("svg:not(.fav-checkbox-tick)") as SVGElement | null;
     if (heartSvg) {
       heartSvg.setAttribute("fill", currentListIds.includes(DEFAULT_LIST_ID) ? "#ef4444" : "none");
     }

@@ -1,8 +1,5 @@
 import { t } from "../../i18n";
-import {
-  isSellerFavorited,
-  getFavoriteSellers,
-} from "../../stores/sellerFavorites";
+import { isSellerFavorited, getFavoriteSellers } from "../../stores/sellerFavorites";
 import { openSellerFavoritesDropdown } from "../favorites/SellerFavoritesDropdown";
 
 export function ManufacturerList(): string {

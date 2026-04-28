@@ -9,11 +9,7 @@
  */
 
 import { t } from "../../i18n";
-import {
-  getLists,
-  createList,
-  type FavoriteList,
-} from "../../stores/favorites";
+import { getLists, createList, type FavoriteList } from "../../stores/favorites";
 import {
   getSellerListIds,
   isSellerFavorited,
@@ -255,7 +251,14 @@ function wireDropdownEvents(dropdown: HTMLElement, seller: SellerData): void {
 
   const trySave = () => {
     if (inlineInput.value.trim()) {
-      saveNewList(dropdown, seller, inlineInput, inlineSave, createBtn as HTMLElement, inlineCreate);
+      saveNewList(
+        dropdown,
+        seller,
+        inlineInput,
+        inlineSave,
+        createBtn as HTMLElement,
+        inlineCreate
+      );
     }
   };
 
@@ -337,9 +340,7 @@ function refreshDropdownCheckboxes(dropdown: HTMLElement, sellerCode: string): v
 
   const defaultLabel = dropdown.querySelector(`[data-list-id="${DEFAULT_LIST_ID}"]`);
   if (defaultLabel) {
-    const heartSvg = defaultLabel.querySelector(
-      "svg:not(.fav-checkbox-tick)"
-    ) as SVGElement | null;
+    const heartSvg = defaultLabel.querySelector("svg:not(.fav-checkbox-tick)") as SVGElement | null;
     if (heartSvg) {
       heartSvg.setAttribute("fill", currentListIds.includes(DEFAULT_LIST_ID) ? "#ef4444" : "none");
     }
