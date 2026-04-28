@@ -28,10 +28,7 @@ function renderThumbnailGrid(thumbnails: OrderSummaryThumbnail[], itemCount: num
     </div>`;
 }
 
-export function OrderSummary({
-  data,
-  payeeSuppliers = [],
-}: OrderSummaryProps): string {
+export function OrderSummary({ data, payeeSuppliers = [] }: OrderSummaryProps): string {
   const cur = getSelectedCurrency();
   const fmt = (v: number) => formatCurrency(v, cur);
 

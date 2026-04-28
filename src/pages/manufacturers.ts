@@ -3,7 +3,7 @@ import { initFlowbite } from 'flowbite'
 import { t } from '../i18n'
 
 // Header components
-import { TopBar, MobileSearchTabs, initMobileDrawer, initStickyHeaderSearch, MegaMenu, initMegaMenu, PromoBanner, initPromoBanner } from '../components/header'
+import { TopBar, MobileSearchTabs, initMobileDrawer, initStickyHeaderSearch, MegaMenu, initMegaMenu } from '../components/header'
 import { initLanguageSelector } from '../components/header/TopBar'
 
 // Shared components
@@ -23,7 +23,7 @@ import { initAnimatedPlaceholder } from '../utils/animatedPlaceholder'
 import { initCurrency } from '../services/currencyService'
 
 // Manufacturers specific components
-import { ManufacturersLayout, initHorizontalCategoryBar, initCategoryFlyout, initFactorySliders } from '../components/manufacturers'
+import { ManufacturersLayout, initHorizontalCategoryBar, initCategoryFlyout, initFactorySliders, initManufacturerFilters } from '../components/manufacturers'
 import { getCategoryIcon, getIconByName } from '../components/header/MegaMenu';
 (window as any).__getCatIcon = (iconClass: string, name: string) =>
   iconClass ? getCategoryIcon(iconClass) : getIconByName(name);
@@ -32,9 +32,6 @@ const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.classList.add('relative');
 
 appEl.innerHTML = `
-  <!-- Promo Banner -->
-  ${PromoBanner()}
-
   <!-- Sticky Header (global, stays sticky across full page) -->
   <div id="sticky-header" class="sticky top-0 z-(--z-header) transition-colors duration-200" style="background-color:var(--header-scroll-bg);border-bottom:1px solid var(--header-scroll-border)">
     ${TopBar()}
@@ -63,14 +60,16 @@ appEl.innerHTML = `
   ${FloatingPanel()}
 `
 
-// Initialize promo banner
-initPromoBanner();
-
 // Initialize custom component behaviors FIRST (before Flowbite can interfere)
 initMegaMenu();
 
 // Initialize Flowbite for other interactive components
 initFlowbite();
+
+// Alpine data() ve global helper kayıtları startAlpine'den ÖNCE
+// — alpine:init bir kez tetiklenir, x-data anında değerlendirilir
+initManufacturerFilters();
+initFactorySliders(); // window.__getSellerFavs / __toggleSellerFav helper'larını yayar
 
 // Initialize Alpine.js (FloatingPanel is now Alpine-driven)
 initCurrency();
@@ -85,4 +84,3 @@ initAnimatedPlaceholder('#topbar-compact-search-input');
 // Initialize Manufacturers specific behaviors if any
 initHorizontalCategoryBar();
 initCategoryFlyout();
-initFactorySliders(); // async — satıcıları API'den çeker

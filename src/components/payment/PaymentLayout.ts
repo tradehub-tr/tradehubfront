@@ -96,7 +96,7 @@ function renderPaymentManagement(): string {
     <!-- Kayıtlı kartlar -->
     <div class="mb-8">
       <h2 class="text-base font-semibold text-text-primary mb-4">${t("payment.savedCardsTitle")}</h2>
-      <div class="flex gap-4 max-sm:gap-3 overflow-x-auto pb-3 scrollbar-hide">
+      <div class="flex gap-4 max-sm:gap-3 overflow-x-auto pb-3 [&::-webkit-scrollbar]:h-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-black/20 hover:[&::-webkit-scrollbar-thumb]:bg-black/35 [&::-webkit-scrollbar-thumb]:rounded-full [scrollbar-width:thin] [scrollbar-color:rgba(0,0,0,0.2)_transparent]">
         ${savedCardsHtml}
         ${addCardTile}
       </div>

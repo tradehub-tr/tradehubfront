@@ -20,6 +20,12 @@ import {
   removeFromFavorites,
   type FavoriteItem,
 } from "../../stores/favorites";
+import {
+  getFavoriteSellers,
+  removeSellerFromAll,
+  pruneSellerListId,
+  type FavoriteSellerItem,
+} from "../../stores/sellerFavorites";
 
 const DEFAULT_LIST_ID = "default";
 
@@ -31,7 +37,23 @@ const FAVORITES_EMPTY_SVG = `<img src="${favEmptySvg}" alt="${t("favorites.noFav
 /* ────────────────────────────────────────
    Current active filter state
    ──────────────────────────────────────── */
-let activeListFilter: string = "all"; // 'all', 'default', or a custom list id
+let activeListFilter: string = "all"; // ürün sekmesi: 'all', 'default', list id
+let activeSupplierListFilter: string = "all"; // tedarikçiler sekmesi (paralel)
+
+/* ────────────────────────────────────────
+   SELLER HELPERS
+   ──────────────────────────────────────── */
+function getSellersByList(listId: string): FavoriteSellerItem[] {
+  return getFavoriteSellers().filter((s) => s.listIds.includes(listId));
+}
+
+function getSellerListCount(listId: string): number {
+  return getSellersByList(listId).length;
+}
+
+function getSellerTotalCount(): number {
+  return getFavoriteSellers().length;
+}
 
 /* ────────────────────────────────────────
    SECTION RENDERERS
@@ -47,17 +69,26 @@ function renderEmptyState(): string {
   `;
 }
 
-function renderSidebarLists(): string {
+/**
+ * Sidebar liste paneli — `kind`'e göre ürün veya tedarikçi sayılarını
+ * gösterir. Aynı liste havuzu paylaşılır; sayılar bağlama göre değişir.
+ */
+function renderSidebarLists(kind: "products" | "suppliers" = "products"): string {
   const lists = getLists();
-  const totalCount = getTotalCount();
-  const defaultCount = getListItemCount(DEFAULT_LIST_ID);
+  const isSeller = kind === "suppliers";
+  const totalCount = isSeller ? getSellerTotalCount() : getTotalCount();
+  const defaultCount = isSeller
+    ? getSellerListCount(DEFAULT_LIST_ID)
+    : getListItemCount(DEFAULT_LIST_ID);
+  const activeFilter = isSeller ? activeSupplierListFilter : activeListFilter;
+  const filterAttr = isSeller ? "data-filter-supplier-list" : "data-filter-list";
 
   const customListItems = lists
     .map((list) => {
-      const count = getListItemCount(list.id);
-      const isActive = activeListFilter === list.id;
+      const count = isSeller ? getSellerListCount(list.id) : getListItemCount(list.id);
+      const isActive = activeFilter === list.id;
       return `
-      <div class="fav-products__list-item group relative ${isActive ? "fav-products__list-item--active bg-surface-raised" : ""} p-2.5 px-3 rounded-md cursor-pointer transition-[background] duration-150 hover:bg-surface-raised" data-filter-list="${list.id}">
+      <div class="fav-products__list-item group relative ${isActive ? "fav-products__list-item--active bg-surface-raised" : ""} p-2.5 px-3 rounded-md cursor-pointer transition-[background] duration-150 hover:bg-surface-raised" ${filterAttr}="${list.id}">
         <span class="block text-sm font-semibold text-text-primary">${escapeHtml(list.name)}</span>
         <span class="block text-xs text-text-tertiary mt-0.5">${t("favorites.itemCount", { count })}</span>
         <button type="button" class="fav-delete-list-btn absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded hover:bg-red-50 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all" data-delete-list="${list.id}" title="${t("favorites.deleteList")}">
@@ -69,11 +100,11 @@ function renderSidebarLists(): string {
     .join("");
 
   return `
-    <div class="fav-products__list-item ${activeListFilter === "all" ? "fav-products__list-item--active bg-surface-raised" : ""} p-2.5 px-3 rounded-md cursor-pointer transition-[background] duration-150 hover:bg-surface-raised" data-filter-list="all">
+    <div class="fav-products__list-item ${activeFilter === "all" ? "fav-products__list-item--active bg-surface-raised" : ""} p-2.5 px-3 rounded-md cursor-pointer transition-[background] duration-150 hover:bg-surface-raised" ${filterAttr}="all">
       <span class="block text-sm font-semibold text-text-primary">${t("favorites.listAll")}</span>
       <span class="block text-xs text-text-tertiary mt-0.5">${t("favorites.itemCount", { count: totalCount })}</span>
     </div>
-    <div class="fav-products__list-item ${activeListFilter === "default" ? "fav-products__list-item--active bg-surface-raised" : ""} p-2.5 px-3 rounded-md cursor-pointer transition-[background] duration-150 hover:bg-surface-raised" data-filter-list="default">
+    <div class="fav-products__list-item ${activeFilter === "default" ? "fav-products__list-item--active bg-surface-raised" : ""} p-2.5 px-3 rounded-md cursor-pointer transition-[background] duration-150 hover:bg-surface-raised" ${filterAttr}="default">
       <div class="flex items-center gap-1.5">
         <svg class="w-3.5 h-3.5 text-red-500 shrink-0" fill="#ef4444" stroke="#ef4444" stroke-width="1" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
         <span class="block text-sm font-semibold text-text-primary">${t("favorites.defaultList")}</span>
@@ -81,6 +112,108 @@ function renderSidebarLists(): string {
       <span class="block text-xs text-text-tertiary mt-0.5">${t("favorites.itemCount", { count: defaultCount })}</span>
     </div>
     ${customListItems}
+  `;
+}
+
+/**
+ * Tedarikçi kartı — Alibaba "Sık kullanılanlar > Tedarikçiler" satır
+ * görünümü. Logo + isim + doğrulama + lokasyon + sağda eylem
+ * butonları.
+ */
+function renderSupplierCards(items: FavoriteSellerItem[]): string {
+  if (items.length === 0) return renderEmptyState();
+
+  const cards = items
+    .map((s) => {
+      const profileHref = `/pages/seller/seller-storefront.html?seller=${encodeURIComponent(s.code)}`;
+      const initials = (s.name || "?")
+        .split(" ")
+        .map((w) => w[0])
+        .filter(Boolean)
+        .slice(0, 2)
+        .join("")
+        .toUpperCase();
+      const ratingTxt = s.rating ? s.rating.toFixed(1) : "—";
+      const reviews = s.reviewCount ?? 0;
+      return `
+    <div class="relative bg-white rounded-lg border border-[#eee] hover:border-[#F60] hover:shadow-[0_8px_18px_rgba(0,0,0,0.08)] transition-all p-5 max-sm:p-4 group" data-fav-seller-id="${s.code}">
+      <button type="button" class="fav-remove-seller absolute top-3 right-3 w-8 h-8 rounded-full bg-[#f4f4f4] flex items-center justify-center cursor-pointer hover:bg-red-100 z-10 transition-colors opacity-0 group-hover:opacity-100" data-remove-seller="${s.code}" title="${t("favorites.removeFromAll")}">
+        <svg class="w-[16px] h-[16px]" fill="none" stroke="#ef4444" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+      <div class="flex max-md:flex-col gap-4 max-md:gap-3 items-start">
+        <!-- Logo / cover -->
+        <div class="w-[64px] h-[64px] rounded-md border border-gray-100 overflow-hidden shrink-0 bg-gray-50 flex items-center justify-center text-[#1a66ff] font-bold text-base">
+          ${
+            s.logo
+              ? `<img src="${s.logo}" alt="${escapeHtml(s.name)}" class="w-full h-full object-contain p-1" />`
+              : `<span>${escapeHtml(initials)}</span>`
+          }
+        </div>
+        <!-- Info -->
+        <div class="flex-1 min-w-0 pr-12 max-md:pr-0">
+          <a href="${profileHref}" class="text-[15px] font-bold text-[#222] hover:text-[#1a66ff] transition-colors line-clamp-1">${escapeHtml(s.name)}</a>
+          <div class="flex flex-wrap items-center gap-1.5 mt-1 text-[12px] text-[#555]">
+            <span class="inline-flex items-center gap-1 text-[#1a66ff] font-semibold">
+              <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              ${t("mfr.list.verified")}
+            </span>
+            ${s.city ? `<span class="text-gray-300">·</span><span>${escapeHtml(s.city)}</span>` : ""}
+            ${s.country ? `<span class="text-gray-300">·</span><span>${escapeHtml(s.country)}</span>` : ""}
+          </div>
+          <div class="flex items-center gap-3 mt-2 text-[12px] text-[#666]">
+            <span class="inline-flex items-center gap-1">
+              <svg class="w-3.5 h-3.5 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+              <strong class="text-[#222]">${ratingTxt}</strong>/5
+              <span class="text-gray-400">(${reviews})</span>
+            </span>
+          </div>
+          ${
+            s.listIds.length > 0
+              ? `<div class="mt-2 flex flex-wrap gap-1">
+                  ${s.listIds
+                    .filter((id) => id !== DEFAULT_LIST_ID)
+                    .map((id) => {
+                      const list = getLists().find((l) => l.id === id);
+                      return list
+                        ? `<span class="inline-flex items-center px-2 py-0.5 text-[10px] rounded-full bg-gray-100 text-gray-600">${escapeHtml(list.name)}</span>`
+                        : "";
+                    })
+                    .join("")}
+                </div>`
+              : ""
+          }
+        </div>
+        <!-- Cover thumb -->
+        ${
+          s.cover
+            ? `<div class="w-[140px] h-[100px] max-md:w-full max-md:h-[120px] rounded-md overflow-hidden bg-gray-50 shrink-0 max-lg:hidden">
+                <img src="${s.cover}" alt="" class="w-full h-full object-cover" />
+              </div>`
+            : ""
+        }
+        <!-- Actions -->
+        <div class="flex flex-col gap-2 shrink-0 max-md:w-full max-md:flex-row">
+          <a href="${profileHref}" class="th-btn h-9 px-4 text-[13px] font-semibold whitespace-nowrap inline-flex items-center justify-center max-md:flex-1">
+            ${t("mfr.list.viewProfile", { defaultValue: "Profili görüntüle" })}
+          </a>
+          <a href="/pages/dashboard/messages.html?seller=${encodeURIComponent(s.code)}" class="th-btn-outline h-9 px-4 text-[13px] font-semibold whitespace-nowrap inline-flex items-center justify-center max-md:flex-1">
+            ${t("mfr.list.contactUs")}
+          </a>
+        </div>
+      </div>
+    </div>
+  `;
+    })
+    .join("");
+
+  return `
+    <div class="px-7 pt-5 pb-7 max-sm:px-3">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-[18px] font-bold text-text-primary">${t("favorites.suppliers")}</h2>
+        <span class="text-[13px] text-text-tertiary">${t("favorites.itemCount", { count: items.length })}</span>
+      </div>
+      <div class="flex flex-col gap-3">${cards}</div>
+    </div>
   `;
 }
 
@@ -152,8 +285,8 @@ function renderFavorites(): string {
     </div>
 
     <div class="fav-tabs flex px-7 max-sm:px-3 border-b border-border-default mt-4" data-tabgroup="fav">
-      <button class="fav-tabs__tab fav-tabs__tab--active py-3 px-5 text-sm font-medium text-text-secondary bg-transparent border-none border-b-3 border-transparent cursor-pointer transition-[color,border-color] duration-150 -mb-px hover:text-text-primary" data-tab="fav-products">${t("favorites.products")}</button>
-      <button class="fav-tabs__tab py-3 px-5 text-sm font-medium text-text-secondary bg-transparent border-none border-b-3 border-transparent cursor-pointer transition-[color,border-color] duration-150 -mb-px hover:text-text-primary" data-tab="fav-suppliers">${t("favorites.suppliers")}</button>
+      <button class="fav-tabs__tab fav-tabs__tab--active py-3 px-5 text-sm font-medium text-text-secondary bg-transparent border-0 border-b-2 border-solid border-transparent cursor-pointer transition-[color,border-color] duration-150 -mb-px hover:text-text-primary" data-tab="fav-products">${t("favorites.products")}</button>
+      <button class="fav-tabs__tab py-3 px-5 text-sm font-medium text-text-secondary bg-transparent border-0 border-b-2 border-solid border-transparent cursor-pointer transition-[color,border-color] duration-150 -mb-px hover:text-text-primary" data-tab="fav-suppliers">${t("favorites.suppliers")}</button>
     </div>
 
     <!-- Tab: Products -->
@@ -175,7 +308,18 @@ function renderFavorites(): string {
 
     <!-- Tab: Suppliers -->
     <div class="fav-tab-content" data-content="fav-suppliers">
-      ${renderEmptyState()}
+      <div class="fav-products flex min-h-[400px] max-md:flex-col">
+        <aside class="fav-products__sidebar w-60 shrink-0 py-5 px-6 border-r border-[#f0f0f0] max-md:w-full max-md:border-r-0 max-md:border-b max-md:border-[#f0f0f0]">
+          <h3 class="text-base font-bold text-text-primary mb-2.5">${t("favorites.myList")}</h3>
+          <a href="#" class="text-sm text-text-primary font-semibold underline underline-offset-2 hover:text-(--color-cta-primary)" data-action="create-list">${t("favorites.createList")}</a>
+          <div class="mt-4 flex flex-col gap-0.5" id="fav-supplier-list-sidebar">
+            ${renderSidebarLists("suppliers")}
+          </div>
+        </aside>
+        <div class="flex-1 min-w-0" id="fav-suppliers-container">
+          ${renderEmptyState()}
+        </div>
+      </div>
     </div>
 
     <!-- Modal: New list -->
@@ -287,8 +431,11 @@ export function initFavoritesLayout(): void {
     initFavTabs();
     initFavListModal();
     loadFavoritesData();
+    loadSuppliersData();
     initListFiltering();
+    initSupplierListFiltering();
     initRemoveButtons();
+    initRemoveSupplierButtons();
     initDeleteListButtons();
   }
 
@@ -298,13 +445,19 @@ export function initFavoritesLayout(): void {
   window.addEventListener("favorites-changed", () => {
     refreshFavoritesView();
   });
+  window.addEventListener("seller-favorites-changed", () => {
+    refreshSuppliersView();
+  });
 
   // Init for initial render
   initFavTabs();
   initFavListModal();
   loadFavoritesData();
+  loadSuppliersData();
   initListFiltering();
+  initSupplierListFiltering();
   initRemoveButtons();
+  initRemoveSupplierButtons();
   initDeleteListButtons();
 }
 
@@ -312,7 +465,7 @@ function refreshFavoritesView(): void {
   // Refresh sidebar counts
   const sidebar = document.getElementById("fav-list-sidebar");
   if (sidebar) {
-    sidebar.innerHTML = renderSidebarLists();
+    sidebar.innerHTML = renderSidebarLists("products");
     initListFiltering();
     initDeleteListButtons();
   }
@@ -322,11 +475,29 @@ function refreshFavoritesView(): void {
   initRemoveButtons();
 }
 
+function refreshSuppliersView(): void {
+  const sidebar = document.getElementById("fav-supplier-list-sidebar");
+  if (sidebar) {
+    sidebar.innerHTML = renderSidebarLists("suppliers");
+    initSupplierListFiltering();
+    initDeleteListButtons();
+  }
+  loadSuppliersData();
+  initRemoveSupplierButtons();
+}
+
 function getFilteredItems(): FavoriteItem[] {
   if (activeListFilter === "all") {
     return getItems();
   }
   return getItemsByList(activeListFilter);
+}
+
+function getFilteredSellerItems(): FavoriteSellerItem[] {
+  if (activeSupplierListFilter === "all") {
+    return getFavoriteSellers();
+  }
+  return getSellersByList(activeSupplierListFilter);
 }
 
 function loadFavoritesData(): void {
@@ -338,6 +509,14 @@ function loadFavoritesData(): void {
   initRemoveButtons();
 }
 
+function loadSuppliersData(): void {
+  const container = document.getElementById("fav-suppliers-container");
+  if (!container) return;
+  const items = getFilteredSellerItems();
+  container.innerHTML = renderSupplierCards(items);
+  initRemoveSupplierButtons();
+}
+
 function initListFiltering(): void {
   document.querySelectorAll<HTMLElement>("[data-filter-list]").forEach((item) => {
     item.addEventListener("click", (e) => {
@@ -347,14 +526,56 @@ function initListFiltering(): void {
       const listId = item.dataset.filterList!;
       activeListFilter = listId;
 
-      // Update sidebar active state
-      document.querySelectorAll<HTMLElement>(".fav-products__list-item").forEach((i) => {
+      // Update sidebar active state — sadece ürün sekmesinin sidebar'ı
+      const sidebar = document.getElementById("fav-list-sidebar");
+      sidebar?.querySelectorAll<HTMLElement>(".fav-products__list-item").forEach((i) => {
         i.classList.remove("fav-products__list-item--active", "bg-surface-raised");
       });
       item.classList.add("fav-products__list-item--active", "bg-surface-raised");
 
       // Reload products
       loadFavoritesData();
+    });
+  });
+}
+
+function initSupplierListFiltering(): void {
+  document.querySelectorAll<HTMLElement>("[data-filter-supplier-list]").forEach((item) => {
+    item.addEventListener("click", (e) => {
+      if ((e.target as HTMLElement).closest(".fav-delete-list-btn")) return;
+      const listId = item.dataset.filterSupplierList!;
+      activeSupplierListFilter = listId;
+
+      const sidebar = document.getElementById("fav-supplier-list-sidebar");
+      sidebar?.querySelectorAll<HTMLElement>(".fav-products__list-item").forEach((i) => {
+        i.classList.remove("fav-products__list-item--active", "bg-surface-raised");
+      });
+      item.classList.add("fav-products__list-item--active", "bg-surface-raised");
+
+      loadSuppliersData();
+    });
+  });
+}
+
+function initRemoveSupplierButtons(): void {
+  document.querySelectorAll<HTMLButtonElement>(".fav-remove-seller").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const code = btn.dataset.removeSeller!;
+      removeSellerFromAll(code);
+
+      const card = btn.closest("[data-fav-seller-id]") as HTMLElement;
+      if (card) {
+        card.style.transition = "all 300ms ease-out";
+        card.style.opacity = "0";
+        card.style.transform = "scale(0.96)";
+        setTimeout(() => refreshSuppliersView(), 300);
+      } else {
+        refreshSuppliersView();
+      }
+
+      showToast({ message: t("favorites.removedFromList"), type: "info" });
     });
   });
 }
@@ -391,13 +612,13 @@ function initDeleteListButtons(): void {
       const listId = btn.dataset.deleteList!;
 
       deleteList(listId);
+      pruneSellerListId(listId); // tedarikçi item'larından da listId'yi çıkar
 
-      // Reset filter to 'all' if current filter was deleted
-      if (activeListFilter === listId) {
-        activeListFilter = "all";
-      }
+      if (activeListFilter === listId) activeListFilter = "all";
+      if (activeSupplierListFilter === listId) activeSupplierListFilter = "all";
 
       refreshFavoritesView();
+      refreshSuppliersView();
       showToast({ message: t("favorites.removedFromList"), type: "info" });
     });
   });
@@ -420,6 +641,7 @@ function initFavTabs(): void {
         });
         // Activate clicked tab
         tab.classList.add("fav-tabs__tab--active");
+        tab.style.color = "#222";
         tab.style.fontWeight = "600";
         tab.style.borderBottomColor = "#222";
 
@@ -436,6 +658,7 @@ function initFavTabs(): void {
     // Set initial active tab style
     const activeTab = tabGroup.querySelector<HTMLButtonElement>(".fav-tabs__tab--active");
     if (activeTab) {
+      activeTab.style.color = "#222";
       activeTab.style.fontWeight = "600";
       activeTab.style.borderBottomColor = "#222";
     }

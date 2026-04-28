@@ -22,7 +22,6 @@ const getBaseUrl = (): string => {
 type ActivePage =
   | "home"
   | "faq"
-  | "contact"
   | "ticket-new"
   | "tickets"
   | "terms"
@@ -43,7 +42,6 @@ interface HelpCenterHeaderOptions {
 const NAV_LINKS: { id: ActivePage; label: string; href: string; authOnly?: boolean }[] = [
   { id: "home", label: t("helpCenter.navHome"), href: "/pages/help/help-center.html" },
   { id: "faq", label: t("helpCenter.navFaq"), href: "/pages/help/faq.html" },
-  { id: "contact", label: t("helpCenter.navContact"), href: "/pages/help/contact.html" },
   {
     id: "ticket-new",
     label: t("helpCenter.navNewTicket"),

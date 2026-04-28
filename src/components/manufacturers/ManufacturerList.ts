@@ -1,4 +1,6 @@
 import { t } from "../../i18n";
+import { isSellerFavorited, getFavoriteSellers } from "../../stores/sellerFavorites";
+import { openSellerFavoritesDropdown } from "../favorites/SellerFavoritesDropdown";
 
 export function ManufacturerList(): string {
   return `
@@ -6,23 +8,84 @@ export function ManufacturerList(): string {
       x-data="{
         sellers: [],
         loading: true,
+        searchedKeyword: '',
         _cv: 0,
-        async init() {
-          document.addEventListener('currency-changed', () => { this._cv++; });
+        favCodes: new Set(window.__getSellerFavs ? window.__getSellerFavs() : []),
+        isFav(code) { return this.favCodes.has(code); },
+        openFavMenu(ev, seller) {
+          if (window.__openSellerFavMenu) {
+            window.__openSellerFavMenu(ev.currentTarget, seller);
+          }
+        },
+        async fetchSellers() {
+          this.loading = true;
           const apiBase = window.API_BASE || '/api';
-          const res = await fetch(
-            apiBase + '/method/tradehub_core.api.seller.get_sellers?page_size=20',
-            { credentials: 'omit' }
-          ).then(r => r.json());
-          this.sellers = res.message?.sellers || [];
+          const params = new URLSearchParams(window.location.search);
+          const apiParams = new URLSearchParams({ page_size: '20' });
+          const q = (params.get('q') || '').trim();
+          const catSlug = (params.get('cat') || '').trim();
+          const catId = (params.get('category') || '').trim();
+          if (q) apiParams.set('keyword', q);
+          if (catSlug) apiParams.set('category', catSlug);
+          else if (catId) apiParams.set('category', catId);
+          this.searchedKeyword = q || catSlug || catId || '';
+          try {
+            const res = await fetch(
+              apiBase + '/method/tradehub_core.api.seller.get_sellers?' + apiParams.toString(),
+              { credentials: 'omit' }
+            ).then(r => r.json());
+            this.sellers = res.message?.sellers || [];
+          } catch (e) {
+            this.sellers = [];
+          }
           this.loading = false;
+        },
+        init() {
+          document.addEventListener('currency-changed', () => { this._cv++; });
+          document.addEventListener('manufacturer-filters-changed', () => { this.fetchSellers(); });
+          window.addEventListener('seller-favorites-changed', () => {
+            this.favCodes = new Set(window.__getSellerFavs ? window.__getSellerFavs() : []);
+          });
+          this.fetchSellers();
         }
       }"
     >
-      <!-- Loading skeletons -->
-      <div x-show="loading" class="flex flex-col gap-2 mb-2">
-        <template x-for="i in 3" :key="i">
-          <div class="bg-white rounded-lg p-5 mb-3 animate-pulse h-56"></div>
+      <!-- Loading state — Alibaba tarzı arama süreci paneli + iskelet kartlar -->
+      <div x-show="loading" class="flex flex-col gap-3">
+        <template x-if="searchedKeyword">
+          <div class="bg-orange-50 border border-orange-100 rounded-lg p-4 mb-1">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="text-orange-600 font-semibold text-[14px]">Arama süreci</span>
+              <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>
+            </div>
+            <div class="flex items-start gap-2 text-[13px] text-gray-700 mb-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-orange-400 mt-1.5 shrink-0 animate-pulse"></span>
+              <div class="flex-1">
+                <span>İhtiyacınıza uygun sonuçlar aranıyor</span>
+                <div class="mt-1 inline-flex items-center gap-1 text-orange-600 text-[12px] bg-white border border-orange-200 rounded px-2 py-0.5">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                  <span x-text="searchedKeyword"></span>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-start gap-2 text-[13px] text-gray-700">
+              <span class="w-1.5 h-1.5 rounded-full bg-orange-300 mt-1.5 shrink-0 animate-pulse"></span>
+              <span>İşletme analizlerine göre tedarikçiler seçiliyor</span>
+            </div>
+          </div>
+        </template>
+        <template x-for="i in 4" :key="i">
+          <div class="bg-orange-50/50 border border-orange-100/60 rounded-lg p-5 animate-pulse">
+            <div class="h-4 w-1/3 bg-orange-100 rounded mb-3"></div>
+            <div class="flex gap-3">
+              <div class="h-24 w-24 bg-orange-100/80 rounded"></div>
+              <div class="flex-1 space-y-2">
+                <div class="h-3 bg-orange-100/80 rounded w-3/4"></div>
+                <div class="h-3 bg-orange-100/80 rounded w-1/2"></div>
+                <div class="h-3 bg-orange-100/60 rounded w-2/3"></div>
+              </div>
+            </div>
+          </div>
         </template>
       </div>
 
@@ -79,7 +142,15 @@ export function ManufacturerList(): string {
                 </div>
 
                 <div class="flex items-center gap-2 xl:gap-3 shrink-0">
-                  <button type="button" class="text-gray-400 hover:text-red-500 transition-colors" aria-label="${t("mfr.list.addToFavorites")}">
+                  <button
+                    type="button"
+                    data-seller-favorite-btn
+                    @click.prevent.stop="openFavMenu($event, seller)"
+                    :class="isFav(seller.seller_code) ? 'text-red-500' : 'text-gray-400 hover:text-red-500'"
+                    class="transition-colors cursor-pointer bg-transparent border-none p-0"
+                    :aria-pressed="isFav(seller.seller_code)"
+                    aria-label="${t("mfr.list.addToFavorites")}"
+                  >
                     <svg class="w-[22px] h-[22px]" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                     </svg>
@@ -209,4 +280,24 @@ export function ManufacturerList(): string {
 }
 
 // Kept for backwards-compat export — no-op since cards are now Alpine-rendered
-export function initFactorySliders(): void {}
+export function initFactorySliders(): void {
+  if (typeof window === "undefined") return;
+  const w = window as any;
+  // Alpine inline x-data'dan çağrılabilir global helper'lar
+  w.__getSellerFavs = (): string[] => getFavoriteSellers().map((s) => s.code);
+  w.__isSellerFav = (code: string): boolean => isSellerFavorited(code);
+  w.__openSellerFavMenu = (anchor: HTMLElement, seller: any): void => {
+    const code = seller?.seller_code || seller?.code;
+    if (!code) return;
+    openSellerFavoritesDropdown(anchor, {
+      code,
+      name: seller.seller_name || seller.name || "",
+      city: seller.city,
+      country: seller.country,
+      logo: seller.logo,
+      cover: seller.cover_image || seller.banner_image,
+      rating: seller.rating,
+      reviewCount: seller.review_count,
+    });
+  };
+}

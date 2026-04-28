@@ -27,7 +27,7 @@ appEl.innerHTML = `
   </div>
 
   <div class="bg-[#F5F5F5] min-h-screen">
-    <div class="max-w-[1425px] mx-auto px-4 max-sm:px-1 flex gap-1 md:gap-[14px]">
+    <div class="container-boxed flex gap-1 md:gap-[14px]">
       <div class="w-[52px] md:w-[72px] xl:w-[260px] flex-shrink-0 pt-4">
         ${renderSidebar()}
       </div>

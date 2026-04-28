@@ -162,8 +162,6 @@ const tr = {
       afterSales: "Satış sonrası korumalar",
       tradeAssuranceTitle: "Ticari Güvence Sistemi",
       tradeAssuranceSubtitle: "Ödemeden teslimata kadar koruma",
-      getStarted: "Başlangıç",
-      whatIsIstoc: "iSTOC nedir",
       whyIstoc: "Neden iSTOC",
       howSourcing: "Tedarik nasıl çalışır",
       membershipProgram: "Üyelik programı",
@@ -205,7 +203,6 @@ const tr = {
     footer: {
       getSupport: "Destek alın",
       helpCenter: "Yardım Merkezi",
-      liveChat: "Canlı sohbet",
       checkOrder: "Sipariş durumunu kontrol edin",
       refunds: "İadeler",
       reportAbuse: "Kötüye kullanım bildirin",
@@ -227,7 +224,6 @@ const tr = {
       partnerships: "Ortaklıklar",
       downloadApp: "Tedarikçiler için uygulamayı indirin",
       getToKnow: "Bizi tanıyın",
-      aboutIstoc: "iSTOC.com Hakkında",
       corporateResponsibility: "Kurumsal sorumluluk",
       newsCenter: "Haber merkezi",
       careers: "Kariyer",
@@ -3038,6 +3034,7 @@ const tr = {
         next: "Sonraki",
         addToFavorites: "Favorilere ekle",
         odmService: "ODM hizmeti olanağı",
+        viewProfile: "Profili görüntüle",
       },
 
       noHistory: "Henüz gezinti geçmişi yok. Ürünleri burada görmek için göz atın.",
@@ -3427,7 +3424,6 @@ const tr = {
       // ── HelpCenterHeader ──
       navHome: "Ana Sayfa",
       navFaq: "SSS",
-      navContact: "Bize Ulaşın",
       navNewTicket: "Talep Oluştur",
       navMyTickets: "Taleplerim",
       headerTitle: "Alıcı Yardım Merkezi",
@@ -6329,15 +6325,6 @@ const tr = {
     subWasteManagement: "Atık Yönetimi",
     subWaterPurification: "Su Arıtma",
     subAirFiltration: "Hava Filtreleme",
-  },
-
-  // ============================================================
-  // PROMO BANNER
-  // ============================================================
-  promo: {
-    campaignName: "Bahar Koleksiyonu",
-    campaignMessage: "Seçili kategorilerde %50'ye varan indirim -- sinirsiz sure!",
-    exploreNow: "Simdi kesfet",
   },
 
   /* ── Seller Application Status Page ────────────────── */

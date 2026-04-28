@@ -310,11 +310,11 @@ function renderAllOrders(): string {
           <div class="border border-gray-200 rounded-lg overflow-hidden bg-white">
 
             <!-- ── Card Header ── -->
-            <div class="px-5 max-sm:px-3 py-3 bg-[#FAFAFA] border-b border-gray-200">
-              <div class="flex items-center justify-between gap-3 max-[480px]:gap-2 flex-wrap">
+            <div class="px-5 max-sm:px-3 py-4 max-sm:py-3 bg-[#FAFAFA] border-b border-gray-200">
+              <div class="flex items-center justify-between gap-4 max-[480px]:gap-2 flex-wrap min-h-[36px]">
                 <!-- Left: Order info -->
-                <div class="flex items-center gap-2 text-[13px] max-[480px]:text-xs text-gray-500 flex-wrap max-sm:gap-1.5">
-                  <span class="inline-flex items-center gap-1 font-semibold text-gray-800">
+                <div class="flex items-center gap-2.5 text-sm max-[480px]:text-xs text-gray-500 flex-wrap max-sm:gap-1.5 leading-6">
+                  <span class="inline-flex items-center gap-1.5 font-semibold text-gray-800">
                     <svg class="w-4 h-4 text-amber-500" viewBox="0 0 20 20" fill="currentColor"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
                     <span x-text="order.orderNumber"></span>
                   </span>
@@ -324,14 +324,14 @@ function renderAllOrders(): string {
                   <span class="max-[380px]:hidden">${t("orders.supplierLabel")}: <strong class="text-gray-700" x-text="order.seller"></strong></span>
                 </div>
                 <!-- Right: Status + Cancel + Total -->
-                <div class="flex items-center gap-2 max-[480px]:gap-1.5">
+                <div class="flex items-center gap-3 max-[480px]:gap-1.5">
                   <template x-if="canCancel(order)">
-                    <button @click="cancellingOrder = order; openModal('showCancelOrder')" class="text-gray-400 hover:text-red-500 bg-transparent border-none cursor-pointer transition-colors text-xs whitespace-nowrap">
+                    <button @click="cancellingOrder = order; openModal('showCancelOrder')" class="text-gray-400 hover:text-red-500 bg-transparent border-none cursor-pointer transition-colors text-[13px] whitespace-nowrap">
                       ${t("orders.cancelOrderBtn")}
                     </button>
                   </template>
                   <span class="text-gray-300" x-show="canCancel(order)">|</span>
-                  <span class="inline-flex items-center px-2.5 py-0.5 max-[480px]:px-1.5 rounded text-[11px] max-[480px]:text-[10px] font-bold uppercase tracking-wide"
+                  <span class="inline-flex items-center h-7 px-3 max-[480px]:h-6 max-[480px]:px-2 rounded-md text-[11px] max-[480px]:text-[10px] font-bold uppercase tracking-wide"
                         :class="order.refundStatus === 'Pending'  ? 'bg-orange-100 text-orange-700'
                               : order.refundStatus === 'Approved' ? 'bg-purple-100 text-purple-700'
                               : order.refundStatus === 'Rejected' ? 'bg-red-100 text-red-700'
@@ -341,7 +341,7 @@ function renderAllOrders(): string {
                               : order.statusColor === 'text-red-600' ? 'bg-red-100 text-red-700'
                               : 'bg-gray-100 text-gray-700'"
                         x-text="getStatusLabel(order)"></span>
-                  <span class="text-[15px] max-[480px]:text-[13px] font-bold text-gray-900" x-text="order.currency + ' ' + order.total"></span>
+                  <span class="text-base max-[480px]:text-[13px] font-bold text-gray-900" x-text="order.currency + ' ' + order.total"></span>
                 </div>
               </div>
             </div>
@@ -557,9 +557,11 @@ function renderAllOrders(): string {
                 Dekontu görüntüle
               </a>
             </template>
-            <button @click="openModal('showModifyShipping')" class="th-btn-outline">
-              ${t("orders.modifyShippingDetails")}
-            </button>
+            <template x-if="canModifyShipping(selectedOrder)">
+              <button @click="openModal('showModifyShipping')" class="th-btn-outline">
+                ${t("orders.modifyShippingDetails")}
+              </button>
+            </template>
             <template x-if="canCancel(selectedOrder)">
               <button @click="openModal('showCancelOrder')" class="th-btn-outline">
                 ${t("orders.cancelOrderBtn")}
@@ -636,7 +638,9 @@ function renderAllOrders(): string {
                     :class="selectedOrder.shipping.trackingStatus === 'Kargo yolda' ? 'bg-blue-50 text-blue-700' : 'bg-amber-50 text-amber-700'"
                     x-text="selectedOrder.shipping.trackingStatus"></span>
               <button @click="openModal('showTrackPackage')" class="text-sm text-blue-600 hover:underline whitespace-nowrap bg-transparent border-none cursor-pointer p-0">${t("orders.trackShipments")} &gt;</button>
-              <button @click="openModal('showModifyShipping')" class="text-sm text-blue-600 hover:underline whitespace-nowrap bg-transparent border-none cursor-pointer p-0">${t("orders.modifyShippingDetails")}</button>
+              <template x-if="canModifyShipping(selectedOrder)">
+                <button @click="openModal('showModifyShipping')" class="text-sm text-blue-600 hover:underline whitespace-nowrap bg-transparent border-none cursor-pointer p-0">${t("orders.modifyShippingDetails")}</button>
+              </template>
             </div>
           </div>
 

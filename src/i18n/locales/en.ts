@@ -162,8 +162,6 @@ const en = {
       afterSales: "After-sales protections",
       tradeAssuranceTitle: "Trade Assurance System",
       tradeAssuranceSubtitle: "Enjoy protection from payment to delivery",
-      getStarted: "Get started",
-      whatIsIstoc: "What is iSTOC",
       whyIstoc: "Why iSTOC",
       howSourcing: "How sourcing works",
       membershipProgram: "Membership program",
@@ -205,7 +203,6 @@ const en = {
     footer: {
       getSupport: "Get support",
       helpCenter: "Help Center",
-      liveChat: "Live chat",
       checkOrder: "Check order status",
       refunds: "Refunds",
       reportAbuse: "Report abuse",
@@ -227,7 +224,6 @@ const en = {
       partnerships: "Partnerships",
       downloadApp: "Download the app for suppliers",
       getToKnow: "Get to know us",
-      aboutIstoc: "About iSTOC.com",
       corporateResponsibility: "Corporate responsibility",
       newsCenter: "News center",
       careers: "Careers",
@@ -3324,7 +3320,6 @@ const en = {
       // ── HelpCenterHeader ──
       navHome: "Home",
       navFaq: "FAQ",
-      navContact: "Contact Us",
       navNewTicket: "Create Ticket",
       navMyTickets: "My Tickets",
       headerTitle: "Help Center for Buyer",
@@ -6239,15 +6234,6 @@ const en = {
     subWasteManagement: "Waste Management",
     subWaterPurification: "Water Purification",
     subAirFiltration: "Air Filtration",
-  },
-
-  // ============================================================
-  // PROMO BANNER
-  // ============================================================
-  promo: {
-    campaignName: "Spring Collection",
-    campaignMessage: "Up to 50% off on selected categories — limited time offer!",
-    exploreNow: "Explore now",
   },
 
   /* ── Seller Application Status Page ────────────────── */

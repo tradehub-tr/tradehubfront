@@ -9,7 +9,7 @@ import { initFlowbite } from 'flowbite'
 import { t } from '../i18n'
 
 // Header components (reuse from main page)
-import { TopBar, initMobileDrawer, MegaMenu, initMegaMenu, initHeaderCart, PromoBanner, initPromoBanner } from '../components/header'
+import { TopBar, initMobileDrawer, MegaMenu, initMegaMenu, initHeaderCart } from '../components/header'
 import { initLanguageSelector } from '../components/header/TopBar'
 
 // Shared components
@@ -109,9 +109,6 @@ const productsBreadcrumb = (() => {
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.classList.add('relative');
 appEl.innerHTML = `
-  <!-- Promo Banner -->
-  ${PromoBanner()}
-
   <!-- Sticky Header -->
   <div id="sticky-header" class="sticky top-0 z-(--z-header)" style="background-color:var(--header-scroll-bg);border-bottom:1px solid var(--header-scroll-border)">
     ${TopBar()}
@@ -196,9 +193,6 @@ appEl.innerHTML = `
   ${ListingCartDrawer()}
   ${ShippingModal()}
 `;
-
-// Initialize promo banner dismiss behavior
-initPromoBanner();
 
 // Initialize custom component behaviors FIRST (before Flowbite can interfere)
 initMegaMenu();
@@ -362,28 +356,35 @@ function renderPagination(page: number, totalPages: number, hasNext: boolean, ha
     startPage = Math.max(1, endPage - maxVisible + 1);
   }
 
-  // Previous button
-  pages.push(`<button data-page="${page - 1}" ${!hasPrev ? 'disabled' : ''} class="px-3 py-2 text-sm rounded-md ${hasPrev ? 'hover:bg-gray-100 text-gray-700 cursor-pointer' : 'text-gray-300 cursor-not-allowed'}">←</button>`);
+  const baseBtn = 'inline-flex items-center justify-center w-9 h-9 text-sm rounded-md border transition-colors duration-150 select-none';
+  const idleBtn = `${baseBtn} border-gray-200 bg-white text-gray-700 hover:bg-gray-50 hover:border-gray-300 cursor-pointer`;
+  const activeBtn = `${baseBtn} border-primary-500 bg-primary-500 text-white font-semibold cursor-default shadow-sm`;
+  const disabledBtn = `${baseBtn} border-gray-100 bg-white text-gray-300 cursor-not-allowed`;
+
+  pages.push(`<button data-page="${page - 1}" ${!hasPrev ? 'disabled' : ''} aria-label="Önceki sayfa" class="${hasPrev ? idleBtn : disabledBtn}">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M9 3L5 7l4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>`);
 
   if (startPage > 1) {
-    pages.push(`<button data-page="1" class="px-3 py-2 text-sm rounded-md hover:bg-gray-100 text-gray-700 cursor-pointer">1</button>`);
-    if (startPage > 2) pages.push(`<span class="px-2 py-2 text-gray-400">…</span>`);
+    pages.push(`<button data-page="1" class="${idleBtn}">1</button>`);
+    if (startPage > 2) pages.push(`<span class="inline-flex items-center justify-center w-9 h-9 text-gray-400 select-none">…</span>`);
   }
 
   for (let i = startPage; i <= endPage; i++) {
     const isActive = i === page;
-    pages.push(`<button data-page="${i}" class="px-3 py-2 text-sm rounded-md ${isActive ? 'bg-primary text-white font-medium' : 'hover:bg-gray-100 text-gray-700 cursor-pointer'}">${i}</button>`);
+    pages.push(`<button data-page="${i}" ${isActive ? 'aria-current="page"' : ''} class="${isActive ? activeBtn : idleBtn}">${i}</button>`);
   }
 
   if (endPage < totalPages) {
-    if (endPage < totalPages - 1) pages.push(`<span class="px-2 py-2 text-gray-400">…</span>`);
-    pages.push(`<button data-page="${totalPages}" class="px-3 py-2 text-sm rounded-md hover:bg-gray-100 text-gray-700 cursor-pointer">${totalPages}</button>`);
+    if (endPage < totalPages - 1) pages.push(`<span class="inline-flex items-center justify-center w-9 h-9 text-gray-400 select-none">…</span>`);
+    pages.push(`<button data-page="${totalPages}" class="${idleBtn}">${totalPages}</button>`);
   }
 
-  // Next button
-  pages.push(`<button data-page="${page + 1}" ${!hasNext ? 'disabled' : ''} class="px-3 py-2 text-sm rounded-md ${hasNext ? 'hover:bg-gray-100 text-gray-700 cursor-pointer' : 'text-gray-300 cursor-not-allowed'}">→</button>`);
+  pages.push(`<button data-page="${page + 1}" ${!hasNext ? 'disabled' : ''} aria-label="Sonraki sayfa" class="${hasNext ? idleBtn : disabledBtn}">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>`);
 
-  return `<div class="flex items-center justify-center gap-1 mt-6">${pages.join('')}</div>`;
+  return `<nav aria-label="Sayfalama" class="flex items-center justify-center gap-1.5 mt-6">${pages.join('')}</nav>`;
 }
 
 // Pagination click handler

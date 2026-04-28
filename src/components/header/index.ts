@@ -24,6 +24,3 @@ export { MegaMenu, initMegaMenu, getCategoryIcon, getIconByName } from "./MegaMe
 /** @deprecated Kullanmayın. categoryService.getCategories() kullanın. */
 export { megaCategories } from "./MegaMenu";
 export type { MegaMenuCategory } from "./MegaMenu";
-
-// PromoBanner component - top promotional banner (iSTOC-style)
-export { PromoBanner, initPromoBanner } from "./PromoBanner";
