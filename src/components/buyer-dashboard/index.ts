@@ -15,6 +15,7 @@ export type { OrdersTabsProps } from "./OrdersTabs";
 export { OrdersContent } from "./OrdersContent";
 export { UserInfoCard } from "./UserInfoCard";
 export type { UserInfoCardProps } from "./UserInfoCard";
+export { SupportTicketsCard, initSupportTicketsCard } from "./SupportTicketsCard";
 
 // Data
 export { getOrderTabs, getOrderFilters } from "./ordersData";

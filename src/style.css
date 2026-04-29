@@ -493,77 +493,16 @@
      9. PAGE SECTION TOKENS
      ========================================================== */
 
-  /* --- Header / TopBar --- */
-  --header-bg: var(--color-surface);
-  --header-scroll-bg: var(--color-surface);
-  --header-scroll-border: var(--color-border-default);
-  --header-height: 64px;
-  --header-border-color: transparent;
-  --header-text-color: #374151;
-  --header-icon-color: #374151;
-  --header-icon-hover-color: var(--color-primary-500);
-
-  /* --- SubHeader --- */
-  --subheader-bg: var(--color-surface);
-  --subheader-text-color: #000000;
-  --subheader-hover-color: #a3a3a3;
-  --subheader-hover-bg: rgba(255, 255, 255, 0.8);
-  --subheader-active-color: #000000;
-  --subheader-border-color: transparent;
-
-  /* --- Header Gradient --- */
-  --header-gradient-1: #fff7ed;
-  --header-gradient-2: #f6f4e8;
-  --header-gradient-3: #fff1f2;
-  --header-gradient-4: #fbfaf0;
-  --header-gradient-5: #fff7ed;
-
-  /* --- Search Area --- */
-  --search-bg: transparent;
+  /* --- Search Area (sadece buton/input ve aktif chip/tab tokenları) --- */
   --search-tab-color: #6b7280;
   --search-tab-active-color: var(--color-primary-500);
   --search-input-border-color: var(--color-primary-500);
-  --search-box-bg: var(--color-surface);
   --search-input-text: var(--color-text-heading);
-  --search-image-link-color: #6b7280;
-  --search-dropdown-bg: var(--color-surface);
-  --search-dropdown-border: #fcd34d;
-  --search-dropdown-text: #374151;
-  --search-dropdown-muted: #9ca3af;
   --search-chip-bg: #f9fafb;
   --search-chip-text: #4b5563;
   --search-chip-border: #e5e7eb;
   --search-chip-hover-bg: #f3f4f6;
   --search-chip-accent: #fbbf24;
-  --search-welcome-bg: #f8f8f8;
-  --search-welcome-text: var(--color-text-heading);
-
-  /* --- MegaMenu --- */
-  --mega-bg: var(--color-surface);
-  --mega-sidebar-bg: #f9fafb;
-  --mega-sidebar-hover-bg: var(--color-surface);
-  --mega-sidebar-active-bg: var(--color-surface);
-  --mega-border-color: #e5e7eb;
-  --mega-text-color: var(--color-text-primary);
-  --mega-heading-color: var(--color-text-primary);
-  --mega-body-text: #6b7280;
-  --mega-link-color: #000000;
-  --mega-link-hover-color: var(--color-primary-600);
-  --mega-icon-color: #6b7280;
-  --mega-icon-bg: #f3f4f6;
-  --mega-accent-color: var(--color-primary-600);
-  --mega-accent-bg: #fcd34d;
-  --mega-card-hover-border: #fcd34d;
-  --mega-sidebar-active-border: #e1b533;
-  --mega-font-size: 0.8125rem;
-  --mega-font-weight: 400;
-
-  /* --- Hero --- */
-  --hero-bg: var(--color-surface);
-  --hero-card-bg: var(--color-surface);
-  --hero-card-border-color: var(--color-border-default);
-  --hero-card-radius: 16px;
-  --hero-title-color: var(--color-text-heading);
 
   /* --- Manufacturers Hero Section --- */
   --mfr-hero-card-bg: var(--color-surface);
@@ -828,51 +767,8 @@
 }
 
 /* ============================================================
-   HEADER GRADIENT (warm pastel – shown by default, removed on scroll)
-   ============================================================ */
-
-.header-gradient {
-  background-image: none;
-
-  @variant xl {
-    background-image: linear-gradient(
-      135deg,
-      var(--header-gradient-1) 0%,
-      var(--header-gradient-2) 25%,
-      var(--header-gradient-3) 50%,
-      var(--header-gradient-4) 75%,
-      var(--header-gradient-5) 100%
-    );
-    background-size: 300% 300%;
-    animation: searchGradientShift 12s ease infinite;
-  }
-}
-
-/* ============================================================
    KEYFRAMES
    ============================================================ */
-
-@keyframes searchGradientShift {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  25% {
-    background-position: 50% 100%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-
-  75% {
-    background-position: 50% 0%;
-  }
-
-  100% {
-    background-position: 0% 50%;
-  }
-}
 
 @keyframes fade-in {
   from {
@@ -1426,19 +1322,19 @@
     color: var(--nav-hover-color);
   }
 
-  /* --- Header Icon (theme-variable driven hover) --- */
+  /* --- Header Icon (statik renk, admin tarafından yönetilmez) --- */
   .th-header-icon {
-    color: var(--header-icon-color);
+    color: #374151;
     transition: color 0.15s ease;
   }
 
   .th-header-icon:hover {
-    color: var(--header-icon-hover-color);
+    color: var(--color-primary-500);
   }
 
-  /* --- SubHeader Link (theme-variable driven hover) --- */
+  /* --- SubHeader Link (statik renk, admin tarafından yönetilmez) --- */
   .th-subheader-link {
-    color: var(--subheader-text-color);
+    color: #000000;
     font-size: var(--nav-font-size);
     font-weight: var(--nav-font-weight);
     transition:
@@ -1447,8 +1343,8 @@
   }
 
   .th-subheader-link:hover {
-    color: var(--subheader-hover-color);
-    background-color: var(--subheader-hover-bg);
+    color: #a3a3a3;
+    background-color: rgba(255, 255, 255, 0.8);
   }
 
   /* --- Footer Link (theme-variable driven hover) --- */
@@ -1492,67 +1388,22 @@
     color: var(--search-tab-active-color);
   }
 
-  /* --- Mega Menu sidebar item --- */
+  /* --- Mega Menu sidebar item (statik) --- */
   .th-mega-sidebar-item {
-    color: var(--mega-text-color);
-    font-size: var(--mega-font-size);
+    color: var(--color-text-primary);
+    font-size: 0.8125rem;
   }
 
   .th-mega-sidebar-item:hover {
-    background-color: var(--mega-sidebar-hover-bg);
-    color: var(--mega-text-color);
+    background-color: #ffffff;
+    color: var(--color-text-primary);
   }
 
   .th-mega-sidebar-item--active {
-    background-color: var(--mega-sidebar-active-bg);
-    color: var(--mega-text-color);
+    background-color: #ffffff;
+    color: var(--color-text-primary);
     font-weight: 500;
-    border-left: 2px solid var(--mega-sidebar-active-border);
-  }
-
-  /* --- Mega Menu content elements --- */
-  .th-mega-heading {
-    color: var(--mega-heading-color);
-    font-size: var(--mega-font-size);
-    font-weight: 700;
-  }
-
-  .th-mega-body-text {
-    color: var(--mega-body-text);
-    font-size: var(--mega-font-size);
-  }
-
-  .th-mega-link {
-    color: var(--mega-link-color);
-    font-size: var(--mega-font-size);
-    font-weight: var(--mega-font-weight);
-    transition: color 0.15s ease;
-  }
-
-  .th-mega-link:hover {
-    color: var(--mega-link-hover-color);
-  }
-
-  .th-mega-icon {
-    color: var(--mega-icon-color);
-    transition: color 0.15s ease;
-  }
-
-  .th-mega-icon-circle {
-    background-color: var(--mega-icon-bg);
-    transition: background-color 0.15s ease;
-  }
-
-  .th-mega-accent-icon {
-    color: var(--mega-accent-color);
-  }
-
-  .th-mega-accent-bg {
-    background-color: var(--mega-accent-bg);
-  }
-
-  .th-mega-card:hover {
-    border-color: var(--mega-card-hover-border);
+    border-left: 2px solid #e1b533;
   }
 
   /* --- Category Popup sidebar item (active state — JS-toggled) --- */

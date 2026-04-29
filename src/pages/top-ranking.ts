@@ -380,7 +380,7 @@ const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.classList.add('relative');
 appEl.innerHTML = `
   <!-- Header (desktop only — mobile uses compact hero header) -->
-  <div id="sticky-header" class="hidden lg:block z-[30]" style="background-color:var(--header-scroll-bg);border-bottom:1px solid var(--header-scroll-border)">
+  <div id="sticky-header" class="hidden lg:block z-[30] border-b border-gray-200 bg-white">
     ${TopBar()}
     ${SubHeader()}
   </div>

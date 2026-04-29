@@ -1197,7 +1197,7 @@ export function TopBar(props?: TopBarProps): string {
     "topbar-search-tab relative py-1 text-[13px] font-normal text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-transparent after:rounded-full";
 
   return `
-    <div class="relative z-30 dark:bg-gray-900" style="background-color:var(--header-bg);border-bottom:1px solid var(--header-border-color)">
+    <div class="relative z-30 border-b border-transparent bg-white dark:bg-gray-900">
       <div class="container-boxed">
         <!-- Row 1: Logo + Search (mobile) + Icons -->
         <div class="flex items-center h-14 sm:h-16 gap-1 sm:gap-2 lg:gap-0">

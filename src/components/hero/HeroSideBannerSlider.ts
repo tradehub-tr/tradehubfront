@@ -55,7 +55,7 @@ const sideBannerSlides: HeroSideBannerSlide[] = [
 function renderSlide(slide: HeroSideBannerSlide): string {
   return `
     <div class="swiper-slide">
-      <a href="${slide.href}" class="th-card hero-side-slide-link group relative block h-[300px] overflow-hidden transition-transform duration-200 ease-out dark:border-gray-700" style="padding:0;border-color:var(--hero-card-border-color);border-radius:var(--hero-card-radius)">
+      <a href="${slide.href}" class="hero-side-slide-link group relative block h-[300px] overflow-hidden rounded-2xl shadow-sm transition-transform duration-200 ease-out">
         <div class="absolute inset-0" style="background: ${slide.background};"></div>
         <div class="absolute -right-8 -top-8 w-32 h-32 rounded-full bg-white/25 blur-2xl"></div>
         <div class="absolute -left-10 bottom-2 w-36 h-36 rounded-full bg-white/20 blur-3xl"></div>

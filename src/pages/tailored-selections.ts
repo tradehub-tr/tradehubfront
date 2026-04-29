@@ -115,7 +115,7 @@ appEl.innerHTML = `
   </div>
 
   <!-- Desktop Header (visible at xl:1280px+) -->
-  <div id="sticky-header" class="sticky top-0 z-[30] hidden xl:block" style="background-color:var(--header-scroll-bg);border-bottom:1px solid var(--header-scroll-border)">
+  <div id="sticky-header" class="sticky top-0 z-[30] hidden xl:block border-b border-gray-200 bg-white">
     ${TopBar()}
     ${SubHeader()}
   </div>

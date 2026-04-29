@@ -16,8 +16,7 @@ function renderCategoriesTrigger(): string {
   return `
     <button
       id="mega-menu-trigger"
-      class="mega-trigger subheader-link th-subheader-link relative flex items-center gap-1.5 sm:gap-2   py-2 sm:py-2.5 rounded-md text-sm sm:text-base dark:text-primary-400 dark:hover:text-primary-300 dark:hover:bg-gray-800/60 transition-all"
-      style="color:var(--subheader-active-color)"
+      class="mega-trigger subheader-link th-subheader-link relative flex items-center gap-1.5 rounded-md py-2 text-sm text-black transition-all sm:gap-2 sm:py-2.5 sm:text-base dark:text-primary-400 dark:hover:bg-gray-800/60 dark:hover:text-primary-300"
       type="button"
       aria-expanded="false"
       data-mega-target="categories"
@@ -90,7 +89,7 @@ function renderUtilityLinks(): string {
  */
 export function SubHeader(): string {
   return `
-    <nav class="hidden lg:block dark:bg-gray-900 dark:border-gray-700" style="background-color:var(--subheader-bg);border-bottom:1px solid var(--subheader-border-color)" aria-label="Secondary navigation">
+    <nav class="hidden border-b border-transparent bg-white lg:block dark:border-gray-700 dark:bg-gray-900" aria-label="Secondary navigation">
       <div class="container-boxed px-3 sm:px-4 lg:px-6">
         <div class="flex items-center justify-between min-w-0">
           <!-- Left Side: Categories Trigger + Navigation Links -->

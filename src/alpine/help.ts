@@ -1048,6 +1048,11 @@ Alpine.data("ticketsList", () => ({
   statusCounts: { all: 0, Open: 0, Replied: 0, Resolved: 0, Closed: 0 } as StatusCounts,
 
   async init() {
+    // URL'den ?tab= varsa onu seçili getir (dashboard kartından gelinen akış)
+    const urlTab = new URLSearchParams(window.location.search).get("tab");
+    if (urlTab && ["all", "open", "pending", "closed"].includes(urlTab)) {
+      this.activeTab = urlTab as any;
+    }
     await Promise.all([this.reload(), this.loadCounts()]);
   },
 

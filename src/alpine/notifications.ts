@@ -15,7 +15,7 @@ const TYPE_MAP: Record<string, { type: ToastType; prefix: string }> = {
   listing: { type: "info", prefix: "Ürün" },
   stock: { type: "warning", prefix: "Stok" },
   review: { type: "info", prefix: "Değerlendirme" },
-  dispute: { type: "error", prefix: "Uyarı" },
+  dispute: { type: "info", prefix: "Destek" },
   system: { type: "info", prefix: "Sistem" },
   promo: { type: "success", prefix: "Kampanya" },
 };

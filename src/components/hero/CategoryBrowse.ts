@@ -106,7 +106,7 @@ function renderCategoryPopup(): string {
 
 export function CategoryBrowse(): string {
   return `
-        <div class="th-card relative h-[300px] w-full flex-shrink-0 overflow-hidden group/panel xl:w-[300px] dark:bg-gray-800 dark:border-gray-700" style="background-color:var(--hero-card-bg);border-color:var(--hero-card-border-color);border-radius:var(--hero-card-radius)">
+        <div class="group/panel relative h-[300px] w-full flex-shrink-0 overflow-hidden rounded-2xl border border-gray-200 bg-white p-2 shadow-sm xl:w-[300px] dark:border-gray-700 dark:bg-gray-800">
           <!-- Category List (loading skeleton, replaced after API) -->
           <ul id="category-browse-list" class="h-full overflow-y-auto pb-12">
             ${renderBrowseListSkeleton()}

@@ -173,7 +173,7 @@ function renderCategoriesView(): string {
     <div data-mega-view="categories" class="hidden">
       <div class="flex flex-col lg:flex-row">
         <!-- Sidebar -->
-        <div class="w-full lg:w-72 xl:w-80 lg:flex-shrink-0 border-b lg:border-b-0 lg:border-r dark:border-gray-700 overflow-y-auto overflow-x-hidden dark:bg-gray-900" style="background-color:var(--mega-sidebar-bg);border-color:var(--mega-border-color);max-height:min(520px, 60vh);-webkit-overflow-scrolling:touch" id="mega-sidebar">
+        <div class="w-full overflow-y-auto overflow-x-hidden border-b border-gray-200 bg-gray-50 lg:w-72 lg:flex-shrink-0 lg:border-b-0 lg:border-r xl:w-80 dark:border-gray-700 dark:bg-gray-900" style="max-height:min(520px, 60vh);-webkit-overflow-scrolling:touch" id="mega-sidebar">
           <ul class="py-1">
             <li class="px-4 py-6 text-center" id="mega-sidebar-loading">
               <svg class="w-5 h-5 animate-spin text-gray-300 mx-auto" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
@@ -200,11 +200,11 @@ function renderFeaturedView(): string {
         ${featureCards
           .map(
             (card) => `
-          <a href="${card.href}" class="th-card th-mega-card flex flex-col items-center justify-center gap-3 hover:shadow-md transition-all group">
-            <span class="transition-colors" style="color:var(--mega-icon-color)">
+          <a href="${card.href}" class="group flex flex-col items-center justify-center gap-3 rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition-all hover:border-amber-300 hover:shadow-md">
+            <span class="text-gray-500 transition-colors">
               ${card.icon}
             </span>
-            <span class="text-sm font-semibold transition-colors" style="color:var(--mega-heading-color)" data-i18n="${card.titleKey}">${t(card.titleKey)}</span>
+            <span class="text-sm font-semibold text-gray-900 transition-colors" data-i18n="${card.titleKey}">${t(card.titleKey)}</span>
           </a>
         `
           )
@@ -244,9 +244,9 @@ function renderProtectionsView(): string {
         <div class="w-full md:w-2/5 md:flex-shrink-0">
           <div class="flex items-center gap-3 mb-4">
             <img src="${new URL("../../assets/images/tas_logo.png", import.meta.url).href}" alt="Ticari Güvence Sistemi" class="w-10 h-10 object-contain" />
-            <h3 class="text-lg font-bold" style="color:var(--mega-heading-color)" data-i18n="mega.tradeAssuranceTitle">${t("mega.tradeAssuranceTitle")}</h3>
+            <h3 class="text-lg font-bold text-gray-900" data-i18n="mega.tradeAssuranceTitle">${t("mega.tradeAssuranceTitle")}</h3>
           </div>
-          <p class="text-xl font-semibold leading-snug mb-6" style="color:var(--mega-heading-color)" data-i18n="mega.tradeAssuranceSubtitle">${t("mega.tradeAssuranceSubtitle")}</p>
+          <p class="mb-6 text-xl font-semibold leading-snug text-gray-900" data-i18n="mega.tradeAssuranceSubtitle">${t("mega.tradeAssuranceSubtitle")}</p>
           <a href="/pages/info/trade-assurance-detail.html" class="th-btn inline-block px-6 py-2.5 transition-colors" data-i18n="common.learnMore">
             ${t("common.learnMore")}
           </a>
@@ -256,12 +256,12 @@ function renderProtectionsView(): string {
           ${protectionCards
             .map(
               (card) => `
-            <a href="${card.href}" class="th-card th-mega-card flex items-center gap-4 hover:shadow-md transition-all group">
-              <span class="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-full" style="background-color:var(--mega-accent-bg)">
-                <span style="color:var(--mega-accent-color)">${card.icon}</span>
+            <a href="${card.href}" class="group flex items-center gap-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition-all hover:border-amber-300 hover:shadow-md">
+              <span class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-amber-300">
+                <span class="text-primary-600">${card.icon}</span>
               </span>
-              <span class="flex-1 text-sm font-semibold transition-colors" style="color:var(--mega-heading-color)" data-i18n="${card.titleKey}">${t(card.titleKey)}</span>
-              <svg class="w-5 h-5 transition-colors flex-shrink-0" style="color:var(--mega-icon-color)" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/></svg>
+              <span class="flex-1 text-sm font-semibold text-gray-900 transition-colors" data-i18n="${card.titleKey}">${t(card.titleKey)}</span>
+              <svg class="h-5 w-5 flex-shrink-0 text-gray-500 transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/></svg>
             </a>
           `
             )
@@ -326,13 +326,13 @@ function renderBuyerCentralView(): string {
           .map(
             (col) => `
           <div>
-            <h4 class="text-sm font-bold mb-4" style="color:var(--mega-heading-color)" data-i18n="${col.titleKey}">${t(col.titleKey)}</h4>
+            <h4 class="mb-4 text-sm font-bold text-gray-900" data-i18n="${col.titleKey}">${t(col.titleKey)}</h4>
             <ul class="space-y-3">
               ${col.links
                 .map(
                   (link) => `
                 <li>
-                  <a href="${link.href}" class="th-mega-link text-sm" data-i18n="${link.labelKey}">
+                  <a href="${link.href}" class="text-sm text-black transition-colors hover:text-primary-600" data-i18n="${link.labelKey}">
                     ${t(link.labelKey)}
                   </a>
                 </li>
@@ -359,38 +359,38 @@ function renderHelpCenterView(): string {
       <div class="flex flex-col md:flex-row gap-6 md:gap-8">
         <!-- Left: Two cards -->
         <div class="flex gap-6 flex-1">
-          <a href="/help/buyers" class="flex-1 flex flex-col items-center justify-center gap-4 border border-dashed rounded-md p-8 transition-all group" style="border-color:var(--mega-border-color)">
-            <span class="flex items-center justify-center w-14 h-14 rounded-full transition-colors" style="background-color:var(--mega-icon-bg)">
-              <svg class="w-7 h-7 transition-colors" style="color:var(--mega-icon-color)" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <a href="/help/buyers" class="group flex flex-1 flex-col items-center justify-center gap-4 rounded-md border border-dashed border-gray-200 p-8 transition-all">
+            <span class="flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 transition-colors">
+              <svg class="h-7 w-7 text-gray-500 transition-colors" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/>
               </svg>
             </span>
-            <span class="text-sm font-semibold transition-colors" style="color:var(--mega-heading-color)" data-i18n="mega.forBuyers">${t("mega.forBuyers")}</span>
+            <span class="text-sm font-semibold text-gray-900 transition-colors" data-i18n="mega.forBuyers">${t("mega.forBuyers")}</span>
           </a>
-          <a href="/help/suppliers" class="flex-1 flex flex-col items-center justify-center gap-4 border border-dashed rounded-md p-8 transition-all group" style="border-color:var(--mega-border-color)">
-            <span class="flex items-center justify-center w-14 h-14 rounded-full transition-colors" style="background-color:var(--mega-icon-bg)">
-              <svg class="w-7 h-7 transition-colors" style="color:var(--mega-icon-color)" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <a href="/help/suppliers" class="group flex flex-1 flex-col items-center justify-center gap-4 rounded-md border border-dashed border-gray-200 p-8 transition-all">
+            <span class="flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 transition-colors">
+              <svg class="h-7 w-7 text-gray-500 transition-colors" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z"/>
               </svg>
             </span>
-            <span class="text-sm font-semibold transition-colors" style="color:var(--mega-heading-color)" data-i18n="mega.forSuppliers">${t("mega.forSuppliers")}</span>
+            <span class="text-sm font-semibold text-gray-900 transition-colors" data-i18n="mega.forSuppliers">${t("mega.forSuppliers")}</span>
           </a>
         </div>
         <!-- Right: Links -->
         <div class="w-full md:w-56 flex flex-col justify-center">
           <ul class="space-y-4">
             <li>
-              <a href="/help/dispute" class="th-mega-link text-sm" data-i18n="mega.openDispute">
+              <a href="/help/dispute" class="text-sm text-black transition-colors hover:text-primary-600" data-i18n="mega.openDispute">
                 ${t("mega.openDispute")}
               </a>
             </li>
             <li>
-              <a href="/help/ipr" class="th-mega-link text-sm" data-i18n="mega.reportIpr">
+              <a href="/help/ipr" class="text-sm text-black transition-colors hover:text-primary-600" data-i18n="mega.reportIpr">
                 ${t("mega.reportIpr")}
               </a>
             </li>
             <li>
-              <a href="/help/abuse" class="th-mega-link text-sm" data-i18n="mega.reportAbuse">
+              <a href="/help/abuse" class="text-sm text-black transition-colors hover:text-primary-600" data-i18n="mega.reportAbuse">
                 ${t("mega.reportAbuse")}
               </a>
             </li>
@@ -411,8 +411,8 @@ function renderAppExtensionView(): string {
       <div class="flex flex-col md:flex-row">
         <!-- Left: Get the app -->
         <div class="flex-1 md:pr-10">
-          <h4 class="text-lg font-bold mb-2" style="color:var(--mega-heading-color)" data-i18n="mega.getApp">${t("mega.getApp")}</h4>
-          <p class="text-sm mb-5 max-w-sm" style="color:var(--mega-body-text)" data-i18n="mega.appDesc">${t("mega.appDesc")}</p>
+          <h4 class="mb-2 text-lg font-bold text-gray-900" data-i18n="mega.getApp">${t("mega.getApp")}</h4>
+          <p class="mb-5 max-w-sm text-sm text-gray-500" data-i18n="mega.appDesc">${t("mega.appDesc")}</p>
           <div class="flex items-center gap-5">
             <!-- App badges -->
             <div class="flex flex-col gap-2.5">
@@ -432,8 +432,8 @@ function renderAppExtensionView(): string {
               </a>
             </div>
             <!-- QR Code placeholder -->
-            <div class="w-24 h-24 rounded-md border flex items-center justify-center" style="background-color:var(--mega-icon-bg);border-color:var(--mega-border-color)">
-              <svg class="w-10 h-10" style="color:var(--mega-icon-color)" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24">
+            <div class="flex h-24 w-24 items-center justify-center rounded-md border border-gray-200 bg-gray-100">
+              <svg class="h-10 w-10 text-gray-500" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z"/>
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 6.75h.75v.75h-.75v-.75ZM6.75 16.5h.75v.75h-.75v-.75ZM16.5 6.75h.75v.75h-.75v-.75ZM13.5 13.5h.75v.75h-.75v-.75ZM13.5 19.5h.75v.75h-.75v-.75ZM19.5 13.5h.75v.75h-.75v-.75ZM19.5 19.5h.75v.75h-.75v-.75ZM16.5 16.5h.75v.75h-.75v-.75Z"/>
               </svg>
@@ -441,11 +441,11 @@ function renderAppExtensionView(): string {
           </div>
         </div>
         <!-- Right: Discover Lens -->
-        <div class="flex-1 pt-6 md:pt-0 md:pl-10 border-t md:border-t-0 md:border-l" style="border-color:var(--mega-border-color)">
-          <h4 class="text-lg font-bold mb-2" style="color:var(--mega-heading-color)" data-i18n="mega.discoverLens">${t("mega.discoverLens")}</h4>
-          <p class="text-sm mb-5 max-w-md" style="color:var(--mega-body-text)" data-i18n="mega.lensDesc">${t("mega.lensDesc")}</p>
+        <div class="flex-1 border-t border-gray-200 pt-6 md:border-t-0 md:border-l md:pt-0 md:pl-10">
+          <h4 class="mb-2 text-lg font-bold text-gray-900" data-i18n="mega.discoverLens">${t("mega.discoverLens")}</h4>
+          <p class="mb-5 max-w-md text-sm text-gray-500" data-i18n="mega.lensDesc">${t("mega.lensDesc")}</p>
           <div class="flex flex-col items-start gap-3">
-            <a href="/lens" class="th-mega-link text-sm underline underline-offset-2" data-i18n="common.learnMore">
+            <a href="/lens" class="text-sm text-black underline underline-offset-2 transition-colors hover:text-primary-600" data-i18n="common.learnMore">
               ${t("common.learnMore")}
             </a>
             <a href="/lens/chrome" class="th-btn inline-flex items-center gap-2 px-6 py-2.5 transition-colors">
@@ -469,8 +469,8 @@ export function MegaMenu(): string {
       style="position:fixed;left:0;right:0;bottom:0;z-index:var(--z-backdrop);background:rgba(0,0,0,0.5);opacity:0;pointer-events:none;transition:opacity 0.2s ease;"
     ></div>
     <div id="istoc-mega-panel"
-      style="position:fixed;left:0;width:100%;z-index:var(--z-modal);opacity:0;pointer-events:none;transform:translateY(-8px);transition:opacity 0.2s ease, transform 0.2s ease;max-height:100vh;background-color:var(--mega-bg);border-color:var(--mega-border-color)"
-      class="border-b dark:bg-gray-800 dark:border-gray-700 max-h-[85vh] sm:max-h-[100vh] lg:!max-h-[80vh] overflow-y-auto overscroll-contain"
+      style="position:fixed;left:0;width:100%;z-index:var(--z-modal);opacity:0;pointer-events:none;transform:translateY(-8px);transition:opacity 0.2s ease, transform 0.2s ease;max-height:100vh"
+      class="max-h-[85vh] overflow-y-auto overscroll-contain border-b border-gray-200 bg-white sm:max-h-[100vh] lg:!max-h-[80vh] dark:border-gray-700 dark:bg-gray-800"
     >
       <div class="container-boxed">
         ${renderCategoriesView()}
@@ -578,8 +578,8 @@ export function initMegaMenu(): void {
       const go = document.getElementById("gradient-overlay");
       if (sh) {
         if (go) go.style.display = "none";
-        sh.style.backgroundColor = "var(--header-scroll-bg)";
-        sh.style.borderBottom = `1px solid var(--header-scroll-border)`;
+        sh.style.backgroundColor = "#ffffff";
+        sh.style.borderBottom = "1px solid #e5e5e5";
       }
     }
 
@@ -739,7 +739,6 @@ export function initMegaMenu(): void {
       const megaContent = document.getElementById("mega-content");
       if (!sidebarUl || !megaContent) return;
 
-      const placeholderSvg = `<svg class="w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 text-gray-300 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75Z"/></svg>`;
       const viewAllSvg = `<svg class="w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"/></svg>`;
 
       function renderDynCatCard(
@@ -748,14 +747,13 @@ export function initMegaMenu(): void {
         image?: string,
         isViewAll = false
       ): string {
+        const iconFallback = `<span class="text-gray-500 dark:text-gray-300 [&>svg]:w-8 [&>svg]:h-8 sm:[&>svg]:w-10 sm:[&>svg]:h-10 lg:[&>svg]:w-12 lg:[&>svg]:h-12">${getIconByName(name)}</span>`;
         const inner = isViewAll
           ? viewAllSvg
           : image
-            ? `<img src="${image}" alt="${name}" class="w-full h-full object-cover" loading="lazy" />`
-            : placeholderSvg;
-        const borderStyle = isViewAll
-          ? "border-2 border-dashed;border-color:var(--mega-border-color)"
-          : "";
+            ? `<img src="${image}" alt="${name}" class="w-full h-full object-cover" loading="lazy" onerror="this.outerHTML=this.dataset.fallback" data-fallback='${iconFallback.replace(/'/g, "&apos;")}' />`
+            : iconFallback;
+        const borderStyle = isViewAll ? "border:2px dashed #e5e7eb;" : "";
         const href = isViewAll
           ? `/pages/categories.html?cat=${encodeURIComponent(slug)}`
           : `/pages/products.html?cat=${slug}`;
@@ -764,7 +762,7 @@ export function initMegaMenu(): void {
             <div class="relative w-14 h-14 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full flex items-center justify-center overflow-hidden group-hover/product:ring-2 transition-all" style="background:var(--product-card-bg, var(--card-bg));--tw-ring-color:var(--nav-hover-color);${borderStyle}">
               ${inner}
             </div>
-            <span class="th-nav-link text-center leading-tight transition-colors max-w-[4rem] sm:max-w-[5rem] lg:max-w-[6rem]" style="font-size:var(--mega-font-size)">${name}</span>
+            <span class="th-nav-link max-w-[4rem] text-center text-[13px] leading-tight transition-colors sm:max-w-[5rem] lg:max-w-[6rem]">${name}</span>
           </a>`;
       }
 
@@ -795,8 +793,8 @@ export function initMegaMenu(): void {
           (cat) => `
         <div class="mega-cat-section mb-8" id="mega-section-${cat.id}">
           <div class="flex items-center gap-4 mb-5 lg:mb-6">
-            <h3 class="text-base lg:text-lg font-bold dark:text-white" style="color:var(--mega-text-color)">${cat.name}</h3>
-            <a href="/pages/categories.html?cat=${encodeURIComponent(cat.slug)}" class="text-sm font-medium" style="color:var(--mega-accent-color)">Tümünü Gör</a>
+            <h3 class="text-base font-bold text-gray-900 lg:text-lg dark:text-white">${cat.name}</h3>
+            <a href="/pages/categories.html?cat=${encodeURIComponent(cat.slug)}" class="text-sm font-medium text-primary-600 transition-colors hover:text-primary-700">Tümünü Gör</a>
           </div>
           <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-y-4 gap-x-2 sm:gap-y-5 sm:gap-x-4 lg:gap-y-8 lg:gap-x-6">
             ${cat.children.map((ch) => renderDynCatCard(ch.name, ch.slug, ch.image)).join("")}

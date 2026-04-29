@@ -5,7 +5,7 @@
  * responsive breakpoint at 1024px, and 200ms width transition.
  */
 
-import { getSidebarSections, getDiscoverItem } from "./sidebarData";
+import { getSidebarSections } from "./sidebarData";
 import { renderSidebarMenuItem } from "./SidebarMenuItem";
 import { renderSidebarFlyout } from "./SidebarFlyout";
 import type { SidebarSection } from "../../types/buyerDashboard";
@@ -73,18 +73,9 @@ function renderSection(section: SidebarSection, expanded: boolean): string {
  */
 export function renderSidebar(expanded = true): string {
   const sidebarSections = getSidebarSections();
-  const discoverItem = getDiscoverItem();
 
   const sections = sidebarSections.map((s) => renderSection(s, expanded)).join("");
   const widthClass = expanded ? "w-[52px] md:w-[72px] xl:w-[260px]" : "w-[52px] md:w-[72px]";
-
-  const discoverLink = `
-    <div class="sidebar__discover border-t border-gray-200 dark:border-gray-700 mt-auto pt-2 pb-3">
-      <div class="sidebar__item-wrapper relative" data-sidebar-wrapper="${discoverItem.id}">
-        ${renderSidebarMenuItem({ item: discoverItem, expanded })}
-      </div>
-    </div>
-  `;
 
   return `
     <aside
@@ -101,7 +92,6 @@ export function renderSidebar(expanded = true): string {
       <div class="sidebar__menu flex-1 py-3">
         ${sections}
       </div>
-      ${discoverLink}
     </aside>
   `;
 }
