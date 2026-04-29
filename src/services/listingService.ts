@@ -1004,7 +1004,7 @@ function mapListingDetail(raw: any): ProductDetail {
   // Map supplier
   const supplier: SupplierInfo = raw.supplier
     ? {
-        id: raw.supplier.name || "",
+        id: raw.supplier.sellerCode || raw.supplier.name || "",
         name: raw.supplier.display_name || raw.supplier.name || "",
         verified: raw.supplier.verified || false,
         yearsInBusiness: raw.supplier.yearsInBusiness || 0,

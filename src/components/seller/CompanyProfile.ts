@@ -439,19 +439,18 @@ function ReviewsTab(): string {
         async init() {
           if (!this.sellerCode) { this.loading = false; return; }
           const apiBase = (window.API_BASE || '/api');
-          try {
-            const [sellerRes, reviewRes, sessionRes] = await Promise.all([
-              fetch(apiBase + '/method/tradehub_core.api.seller.get_seller?slug=' + this.sellerCode, {credentials:'omit'}).then(r=>r.json()),
-              fetch(apiBase + '/method/tradehub_core.api.seller.get_reviews?seller_code=' + this.sellerCode + '&page_size=10', {credentials:'omit'}).then(r=>r.json()),
-              fetch(apiBase + '/method/tradehub_core.api.v1.auth.get_session_user', {credentials:'include'}).then(r=>r.json()).catch(() => ({ message: { logged_in: false } }))
-            ]);
-            this.seller = sellerRes.message || null;
-            this.reviews = reviewRes.message?.reviews || [];
-            this.total = reviewRes.message?.total || 0;
-            const sess = sessionRes?.message || {};
-            this.isAuthenticated = !!sess.logged_in;
-            this.csrfToken = sess.csrf_token || '';
-          } catch(e) { console.error('Reviews fetch error', e); }
+          const safeFetch = (url, opts) => fetch(url, opts).then(r => r.ok ? r.json() : null).catch(() => null);
+          const [sellerRes, reviewRes, sessionRes] = await Promise.all([
+            safeFetch(apiBase + '/method/tradehub_core.api.seller.get_seller?slug=' + this.sellerCode, {credentials:'omit'}),
+            safeFetch(apiBase + '/method/tradehub_core.api.seller.get_reviews?seller_code=' + this.sellerCode + '&page_size=10', {credentials:'omit'}),
+            safeFetch(apiBase + '/method/tradehub_core.api.v1.auth.get_session_user', {credentials:'include'})
+          ]);
+          this.seller = sellerRes?.message || null;
+          this.reviews = reviewRes?.message?.reviews || [];
+          this.total = reviewRes?.message?.total || 0;
+          const sess = sessionRes?.message || {};
+          this.isAuthenticated = !!sess.logged_in;
+          this.csrfToken = sess.csrf_token || '';
           this.loading = false;
         },
         formatDate(d) {
