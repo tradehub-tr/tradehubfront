@@ -1,6 +1,8 @@
 import Alpine from "alpinejs";
-import { t } from "../i18n";
+import { t, changeLanguage, getCurrentLang } from "../i18n";
 import { showToast } from "../utils/toast";
+import { RateLimitError } from "../utils/api";
+import { readRegisterCooldown } from "../components/auth/EmailVerification";
 import {
   initAccountTypeSelector,
   getSelectedAccountType,
@@ -111,6 +113,17 @@ Alpine.data("registerPage", () => ({
     (this.$el as HTMLElement).addEventListener("register-navigate", ((e: CustomEvent) => {
       this.goToStep(e.detail.step as RegisterStep);
     }) as EventListener);
+
+    // Cooldown rehydrate — sayfa yenilendiğinde aktif bir rate-limit
+    // cooldown'u localStorage'da bulursak doğrudan OTP step'ine atla ki
+    // kullanıcı kayıt formunun başına atılmasın. EmailVerification
+    // component init'i kendi rehydrateCooldown'u ile sayacı çizer.
+    const persistedCooldown = readRegisterCooldown();
+    if (persistedCooldown && persistedCooldown.email) {
+      this.email = persistedCooldown.email;
+      // goToStep'i nextTick ile çağır ki Alpine ilk render'ı tamamlasın.
+      this.$nextTick(() => this.goToStep("otp"));
+    }
   },
 
   validateEmail() {
@@ -163,6 +176,8 @@ Alpine.data("registerPage", () => ({
       const msg = err instanceof Error ? err.message : "";
       if (msg === "RATE_LIMIT") {
         showToast({ message: t("common.rateLimitError"), type: "error" });
+      } else if (msg.includes("Disposable email")) {
+        showToast({ message: t("auth.disposableEmailNotAllowed"), type: "error" });
       } else {
         showToast({ message: msg || t("common.error"), type: "error" });
       }
@@ -209,6 +224,9 @@ Alpine.data("registerPage", () => ({
                 await sendRegistrationOtp(this.email);
                 showToast({ message: t("auth.otpResent"), type: "success" });
               } catch (err) {
+                // Rate-limit hatasını re-throw — EmailVerification component
+                // bunu yakalayıp cooldown UI'sını çizecek (toast vermek yerine).
+                if (err instanceof RateLimitError) throw err;
                 const msg = err instanceof Error ? err.message : t("common.error");
                 showToast({ message: msg, type: "error" });
               }
@@ -291,7 +309,14 @@ Alpine.data("registerPage", () => ({
                 await login(this._setupData.email, this._setupData.password);
                 window.location.href = "/pages/seller/application-pending.html";
               } catch (err) {
-                const msg = err instanceof Error ? err.message : t("common.error");
+                const raw = err instanceof Error ? err.message : "";
+                let msg = raw || t("common.error");
+                if (
+                  raw.includes("Identity document upload is required") ||
+                  raw.includes("Kimlik belgesi yüklemek zorunludur")
+                ) {
+                  msg = t("auth.supplierSetup.identityDocumentRequired");
+                }
                 showToast({ message: msg, type: "error" });
                 const btn = document.getElementById("ss-next-btn") as HTMLButtonElement | null;
                 if (btn) {
@@ -323,6 +348,11 @@ Alpine.data("forgotPasswordPage", () => ({
     const trimmed = this.email.trim();
     if (!trimmed) return;
 
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+      showToast({ message: t("auth.forgot.invalidEmail"), type: "error" });
+      return;
+    }
+
     this.loading = true;
 
     try {
@@ -330,8 +360,16 @@ Alpine.data("forgotPasswordPage", () => ({
       await forgotPassword(trimmed);
       this.step = "link-sent";
     } catch (err) {
-      const msg = err instanceof Error ? err.message : t("common.error");
-      showToast({ message: msg, type: "error" });
+      const msg = err instanceof Error ? err.message : "";
+      if (msg === "RATE_LIMIT") {
+        showToast({ message: t("common.rateLimitError"), type: "error" });
+      } else if (msg.includes("Disposable email")) {
+        showToast({ message: t("auth.disposableEmailNotAllowed"), type: "error" });
+      } else if (msg.includes("domain could not be reached")) {
+        showToast({ message: t("auth.domainNotReachable"), type: "error" });
+      } else {
+        showToast({ message: msg || t("common.error"), type: "error" });
+      }
     } finally {
       this.loading = false;
     }
@@ -345,8 +383,16 @@ Alpine.data("forgotPasswordPage", () => ({
       await forgotPassword(this.email.trim());
       showToast({ message: t("auth.forgot.linkResent"), type: "success" });
     } catch (err) {
-      const msg = err instanceof Error ? err.message : t("common.error");
-      showToast({ message: msg, type: "error" });
+      const msg = err instanceof Error ? err.message : "";
+      if (msg === "RATE_LIMIT") {
+        showToast({ message: t("common.rateLimitError"), type: "error" });
+      } else if (msg.includes("Disposable email")) {
+        showToast({ message: t("auth.disposableEmailNotAllowed"), type: "error" });
+      } else if (msg.includes("domain could not be reached")) {
+        showToast({ message: t("auth.domainNotReachable"), type: "error" });
+      } else {
+        showToast({ message: msg || t("common.error"), type: "error" });
+      }
     } finally {
       this.loading = false;
     }
@@ -407,11 +453,51 @@ Alpine.data("resetPasswordPage", () => ({
       await resetPassword(this.key, pw);
       this.step = "success";
     } catch (err) {
-      const msg = err instanceof Error ? err.message : t("auth.reset.genericError");
-      this.error = msg;
-      this.step = "error";
+      const msg = err instanceof Error ? err.message : "";
+      const lower = msg.toLowerCase();
+      if (lower.includes("already in use") || lower.includes("zaten kullanılıyor")) {
+        // Recoverable — keep user on the form so they can try a different password
+        this.error = t("auth.reset.passwordAlreadyInUse");
+      } else if (
+        lower.includes("invalid") ||
+        lower.includes("expired") ||
+        lower.includes("geçersiz") ||
+        lower.includes("süresi dolmuş")
+      ) {
+        // Bad/expired key — user must request a new link
+        this.error = t("auth.reset.invalidLinkDesc");
+        this.step = "error";
+      } else if (
+        lower.includes("password must") ||
+        lower.includes("parola en az") ||
+        lower.includes("şifre")
+      ) {
+        // Frappe password policy error — show as inline error on the form
+        this.error = msg;
+      } else {
+        this.error = t("auth.reset.genericError");
+        this.step = "error";
+      }
     } finally {
       this.loading = false;
     }
+  },
+}));
+
+/* ── Auth Lang Switcher ─────────────────────────────── */
+
+Alpine.data("authLangSwitcher", () => ({
+  lang: getCurrentLang() as string,
+
+  init() {
+    this.lang = getCurrentLang();
+  },
+
+  async setLang(newLang: string) {
+    if (newLang !== "tr" && newLang !== "en") return;
+    // NB: do NOT short-circuit on `newLang === this.lang` — x-model already
+    // updated `this.lang` synchronously before this handler runs, so the
+    // values are always equal here. Always run changeLanguage().
+    await changeLanguage(newLang);
   },
 }));

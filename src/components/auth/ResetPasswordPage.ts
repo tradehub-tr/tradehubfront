@@ -24,12 +24,15 @@ function ResetPasswordHeader(): string {
         <a href="${baseUrl}" aria-label="iSTOC Ana Sayfa">
           <img src="${baseUrl}images/istoc-logo.png" alt="iSTOC" class="h-7" />
         </a>
-        <div class="relative">
-          <select class="th-input th-input-sm w-auto cursor-pointer">
-            <option>${t("common.turkish")}</option>
-            <option>${t("common.english")}</option>
+        <div x-data="authLangSwitcher" x-init="init()">
+          <select
+            class="th-input th-input-sm w-auto cursor-pointer"
+            x-model="lang"
+            @change="setLang($event.target.value)"
+          >
+            <option value="tr" data-i18n="common.turkish">${t("common.turkish")}</option>
+            <option value="en" data-i18n="common.english">${t("common.english")}</option>
           </select>
-          <svg class="w-3.5 h-3.5 absolute right-1.5 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7"/></svg>
         </div>
       </div>
     </header>
@@ -130,7 +133,7 @@ function StepSuccess(): string {
         <p class="text-sm text-gray-500 mb-8" data-i18n="auth.reset.successDesc">${t("auth.reset.successDesc")}</p>
         <a
           href="${baseUrl}pages/auth/login.html"
-          class="inline-block w-full h-12 leading-[3rem] text-center th-btn no-underline"
+          class="flex w-full h-12 th-btn no-underline"
         >
           <span data-i18n="auth.reset.goToLogin">${t("auth.reset.goToLogin")}</span>
         </a>
@@ -155,7 +158,7 @@ function StepError(): string {
         <p class="text-sm text-gray-500 mb-8" x-text="error || '${t("auth.reset.invalidLinkDesc")}'"></p>
         <a
           href="${baseUrl}pages/auth/forgot-password.html"
-          class="inline-block w-full h-12 leading-[3rem] text-center th-btn no-underline"
+          class="flex w-full h-12 th-btn no-underline"
         >
           <span data-i18n="auth.reset.requestNewLink">${t("auth.reset.requestNewLink")}</span>
         </a>

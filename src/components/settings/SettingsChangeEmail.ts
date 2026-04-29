@@ -1,8 +1,10 @@
 /**
  * SettingsChangeEmail Component
- * Email change form — verifies password, validates duplicate, then updates email via backend API.
+ * Üç adımlı email değişimi:
+ *   1. Yeni adres + parola → request_email_change (OTP yeni adrese gider)
+ *   2. OTP gir → confirm_email_change (User rename + verified=1)
+ *   3. Başarılı → tekrar login
  * Uses Alpine.js x-data="settingsChangeEmail" for form state.
- * Calls tradehub_core.api.v1.identity.change_email endpoint.
  */
 
 import { t } from "../../i18n";
@@ -45,8 +47,8 @@ export function SettingsChangeEmail(): string {
 
           <p class="text-[13px] text-red-500 mb-3" x-show="error" x-text="error" x-cloak></p>
 
-          <button class="th-btn max-sm:w-full disabled:opacity-50" type="button" @click="saveEmail()" :disabled="loading">
-            <span x-show="!loading">${t("settings.privacySave")}</span>
+          <button class="th-btn max-sm:w-full disabled:opacity-50" type="button" @click="requestEmailChange()" :disabled="loading">
+            <span x-show="!loading">${t("settings.sendVerificationCode") || "Doğrulama kodu gönder"}</span>
             <span x-show="loading" x-cloak class="inline-flex items-center gap-2">
               <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
               ${t("common.loading")}
@@ -55,8 +57,113 @@ export function SettingsChangeEmail(): string {
         </div>
       </div>
 
-      <!-- Step 2: Success -->
+      <!-- Step 2: OTP Verification -->
       <div x-show="step === 2" x-cloak>
+        <div class="max-w-[640px] mx-auto">
+          <p class="text-sm max-sm:text-[13px] mb-4 m-0" style="color:var(--color-text-secondary)">
+            ${t("settings.otpSentToNewEmail") || "Yeni e-posta adresinize 6 haneli bir doğrulama kodu gönderdik:"}
+            <strong x-text="pendingNewEmail" style="color:var(--color-text-primary)"></strong>
+          </p>
+
+          <div class="mb-4 max-sm:mb-3">
+            <label class="block text-[13px] max-sm:text-xs font-medium mb-1.5" style="color:var(--color-text-secondary)">${t("settings.verificationCode") || "Doğrulama kodu"}</label>
+            <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="6"
+              class="th-input th-input-md max-w-[200px] max-sm:max-w-full text-center tracking-widest font-mono disabled:opacity-50 disabled:cursor-not-allowed"
+              :disabled="otpAttemptsRemaining === 0 || cooldownSeconds > 0"
+              x-ref="emailOtp" autocomplete="one-time-code" placeholder="000000" />
+          </div>
+
+          <!-- Staged OTP feedback -->
+          <!-- Aşama 1 (sessiz): generic 'kod hatalı' tek satırı, attemptsRemaining null veya >2 iken görünür -->
+          <p class="text-[13px] text-red-500 mb-3"
+             x-show="error && (otpAttemptsRemaining === null || otpAttemptsRemaining > 2)"
+             x-text="error" x-cloak></p>
+
+          <!-- Aşama 2 (bilgilendirme): hata satırı üstte, meter+counter altta -->
+          <div class="mb-3 space-y-2" x-show="otpAttemptsRemaining === 2" x-cloak>
+            <p class="text-[13px] text-red-600 m-0">${t("settings.wrongOtp") || "Doğrulama kodu hatalı."}</p>
+            <div class="flex items-center gap-2">
+              <span class="inline-flex items-center gap-[3px]" aria-hidden="true">
+                <span class="inline-block w-[26px] h-1 rounded-sm bg-amber-500"></span>
+                <span class="inline-block w-[26px] h-1 rounded-sm bg-amber-500"></span>
+                <span class="inline-block w-[26px] h-1 rounded-sm bg-gray-200"></span>
+                <span class="inline-block w-[26px] h-1 rounded-sm bg-gray-200"></span>
+                <span class="inline-block w-[26px] h-1 rounded-sm bg-gray-200"></span>
+              </span>
+              <span class="text-xs font-semibold tabular-nums" style="color:var(--color-text-secondary)">${t("auth.otpAttemptsRemaining") || "Kalan deneme"} · 2/5</span>
+            </div>
+          </div>
+
+          <!-- Aşama 3 (kritik): warning kutusu, son hak -->
+          <div class="mb-3 rounded-lg border border-amber-300 bg-amber-50 p-4 flex gap-3 items-start"
+               x-show="otpAttemptsRemaining === 1" x-cloak>
+            <svg class="w-5 h-5 text-amber-700 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 10.4 18H1.6L12 3z"/><path d="M12 9v5"/><path d="M12 18h.01"/></svg>
+            <div class="flex-1 min-w-0">
+              <div class="text-sm font-semibold text-amber-800">${t("auth.otpLastAttemptTitle") || "Son deneme hakkınız"}</div>
+              <div class="text-[13px] text-amber-700 mt-1 leading-relaxed">${t("auth.otpLastAttemptBody") || "Hatalı bir giriş daha bu kodu sıfırlayacak ve yeni kod talep etmeniz gerekecek."}</div>
+              <div class="flex flex-wrap items-center gap-3 mt-2.5">
+                <span class="inline-flex items-center gap-[3px]" aria-hidden="true">
+                  <span class="inline-block w-[26px] h-1 rounded-sm bg-red-500"></span>
+                  <span class="inline-block w-[26px] h-1 rounded-sm bg-gray-200"></span>
+                  <span class="inline-block w-[26px] h-1 rounded-sm bg-gray-200"></span>
+                  <span class="inline-block w-[26px] h-1 rounded-sm bg-gray-200"></span>
+                  <span class="inline-block w-[26px] h-1 rounded-sm bg-gray-200"></span>
+                </span>
+                <span class="text-xs font-semibold text-red-700 tabular-nums">${t("auth.otpAttemptsRemaining") || "Kalan deneme"} · 1/5</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cooldown (Frappe @rate_limit 429): ne kadar süre bekletiyoruz? -->
+          <div class="mb-3 rounded-lg border border-red-300 bg-red-50 p-4 flex gap-3 items-start"
+               x-show="cooldownSeconds > 0" x-cloak>
+            <svg class="w-5 h-5 text-red-700 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            <div class="flex-1 min-w-0">
+              <div class="text-sm font-semibold text-red-800">${t("auth.otpCooldownTitle") || "Çok fazla istek"}</div>
+              <div class="text-[13px] text-red-700 mt-1 leading-relaxed">${t("auth.otpCooldownBody") || "Hesabınızın korunması için kısa bir bekleme süresi başlatıldı."}</div>
+              <div class="text-[13px] font-semibold text-red-800 mt-2 tabular-nums"
+                   x-text="cooldownLabel()"></div>
+            </div>
+          </div>
+
+          <!-- Aşama 4 (lockout): kullanıcıyı step 1'e atmıyoruz; alert + Resend butonu öne çıkıyor -->
+          <div class="mb-3 rounded-lg border border-red-300 bg-red-50 p-4 flex gap-3 items-start"
+               x-show="otpAttemptsRemaining === 0 && cooldownSeconds === 0" x-cloak>
+            <svg class="w-5 h-5 text-red-700 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <div class="flex-1 min-w-0">
+              <div class="text-sm font-semibold text-red-800">${t("auth.otpLockoutTitle") || "Çok fazla hatalı deneme"}</div>
+              <div class="text-[13px] text-red-700 mt-1 leading-relaxed">${t("auth.otpLockoutBody") || "Bu doğrulama kodu artık geçerli değil. Yeni bir kod talep ederek yeniden deneyin."}</div>
+            </div>
+          </div>
+
+          <div class="flex gap-3 max-sm:flex-col">
+            <button class="th-btn max-sm:w-full disabled:opacity-50" type="button" @click="confirmEmailChange()" :disabled="loading || otpAttemptsRemaining === 0 || cooldownSeconds > 0">
+              <span x-show="!loading">${t("settings.confirmChange") || "Değişikliği onayla"}</span>
+              <span x-show="loading" x-cloak class="inline-flex items-center gap-2">
+                <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                ${t("common.loading")}
+              </span>
+            </button>
+            <button class="th-btn-outline max-sm:w-full disabled:opacity-50" type="button" @click="resendOtp()" :disabled="loading || cooldownSeconds > 0">
+              ${t("settings.resendCode") || "Kodu yeniden gönder"}
+            </button>
+          </div>
+
+          <!-- Geri linki: yanlış e-posta yazıldığında step 1'e dönüp düzeltme imkânı -->
+          <div class="mt-4 max-sm:mt-3">
+            <button type="button"
+              class="text-sm hover:underline transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              style="color:var(--color-text-secondary)"
+              @click="changeEmailAddress()"
+              :disabled="loading">
+              ${t("auth.otpChangeEmail") || "← E-posta adresini değiştir"}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Success -->
+      <div x-show="step === 3" x-cloak>
         <div class="max-w-[640px] mx-auto text-center py-4 max-sm:py-2">
           <div class="mb-4">${ICONS.checkActive}</div>
           <h3 class="text-lg max-sm:text-base font-bold mb-2 m-0" style="color:var(--color-text-primary)">${t("settings.emailUpdated")}</h3>

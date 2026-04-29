@@ -5,7 +5,11 @@
  */
 
 import { t } from "../../i18n";
-import { getCsrfToken } from "../../utils/api";
+import {
+  getCsrfToken,
+  checkEmailNotVerifiedResponse,
+  isEmailNotVerifiedError,
+} from "../../utils/api";
 import { showToast } from "../../utils/toast";
 
 // ── Types (matching API response) ────────────────────────────────────────────
@@ -412,14 +416,16 @@ function showQuoteSubmitModal(rfq: SellerRFQItem, onSuccess: () => void): void {
           }),
         }
       );
+      await checkEmailNotVerifiedResponse(res);
       if (!res.ok) throw new Error();
       showToast({ message: t("inquiries.quoteSentSuccess"), type: "success" });
       modal.remove();
       onSuccess();
-    } catch {
-      showToast({ message: t("inquiries.quoteSentError"), type: "error" });
+    } catch (err) {
       submitBtn.disabled = false;
       submitBtn.textContent = t("inquiries.sendQuote");
+      if (isEmailNotVerifiedError(err)) return; // toast api.ts'te
+      showToast({ message: t("inquiries.quoteSentError"), type: "error" });
     }
   });
 }
@@ -756,15 +762,17 @@ export function initInquiriesLayout(): void {
                 body: JSON.stringify({ rfq_id: id }),
               }
             );
+            await checkEmailNotVerifiedResponse(res);
             if (!res.ok) throw new Error();
             showToast({ message: t("rfq.closeSuccess"), type: "success" });
             loadRfqs();
             // Reload panel to reflect new status
             openRfqDetailPanel(rfqId);
-          } catch {
-            showToast({ message: t("rfq.closeError"), type: "error" });
+          } catch (err) {
             closeBtn.disabled = false;
             closeBtn.textContent = t("rfq.closeRfq");
+            if (isEmailNotVerifiedError(err)) return;
+            showToast({ message: t("rfq.closeError"), type: "error" });
           }
         });
       }
@@ -819,15 +827,17 @@ export function initInquiriesLayout(): void {
                   body: JSON.stringify({ rfq_id: rfqId, additional_details: text }),
                 }
               );
+              await checkEmailNotVerifiedResponse(res);
               if (!res.ok) throw new Error();
               showToast({ message: t("rfq.detailsAddedSuccess"), type: "success" });
               modal.remove();
               // Reload panel to reflect disabled button
               openRfqDetailPanel(rfqId);
-            } catch {
-              showToast({ message: t("rfq.detailsAddedError"), type: "error" });
+            } catch (err) {
               submitBtn.disabled = false;
               submitBtn.textContent = t("rfq.submit");
+              if (isEmailNotVerifiedError(err)) return;
+              showToast({ message: t("rfq.detailsAddedError"), type: "error" });
             }
           });
         });

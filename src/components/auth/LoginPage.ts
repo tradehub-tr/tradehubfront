@@ -221,7 +221,11 @@ export function initLoginPage(options: LoginPageOptions = {}): void {
         if (err instanceof Error && err.message === "2FA_REQUIRED") {
           showToast({ message: t("auth.login.2faRequired"), type: "info" });
         } else if (errorMsg) {
-          errorMsg.textContent = t("auth.login.invalidCredentials");
+          const msg = err instanceof Error ? err.message : "";
+          errorMsg.textContent =
+            msg === "ACCOUNT_DISABLED"
+              ? t("auth.login.accountDisabled")
+              : t("auth.login.invalidCredentials");
           errorMsg.classList.remove("hidden");
         }
       } finally {

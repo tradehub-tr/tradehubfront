@@ -242,6 +242,12 @@ Alpine.data("remittanceComponent", () => ({
         window.location.href = `/pages/order/order-success.html?status=success&count=1&orderNumbers=${encodeURIComponent(this.orderNumber)}`;
       }, 1500);
     } catch (err: any) {
+      const { isEmailNotVerifiedError } = await import("../utils/api");
+      if (isEmailNotVerifiedError(err)) {
+        this.apiError = "";
+        this.step = "form";
+        return; // toast api.ts'te zaten gösterildi
+      }
       this.apiError = err?.message || "Bir hata oluştu. Lütfen tekrar deneyin.";
       this.step = "form";
     }

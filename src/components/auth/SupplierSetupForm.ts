@@ -387,6 +387,7 @@ export function initSupplierSetupForm(options: SupplierSetupFormOptions = {}): v
           !!idType.value &&
           !!tcknVal &&
           tcknOk &&
+          !!uploadedFileUrl &&
           termsCheck.checked &&
           privacyCheck.checked &&
           kvkkCheck.checked &&

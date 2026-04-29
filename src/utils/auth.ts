@@ -145,6 +145,25 @@ export async function login(email: string, password: string): Promise<LoginRespo
   });
 
   if (!res.ok) {
+    // Try to detect Frappe's "User <user> is disabled" message so the UI can
+    // show a meaningful copy instead of generic "wrong credentials".
+    try {
+      const body = (await res.clone().json()) as {
+        message?: string;
+        _server_messages?: string;
+        exception?: string;
+      };
+      const haystack = [body.message, body._server_messages, body.exception]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+      if (haystack.includes("disabled")) {
+        throw new Error("ACCOUNT_DISABLED");
+      }
+    } catch (e) {
+      if (e instanceof Error && e.message === "ACCOUNT_DISABLED") throw e;
+      // Body unparseable — fall through to generic error
+    }
     throw new Error("INVALID_CREDENTIALS");
   }
 

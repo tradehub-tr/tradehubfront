@@ -45,7 +45,7 @@ function StatusDraft(): string {
       <p class="text-sm text-gray-500 text-center mb-8" data-i18n="sellerApplication.draft.desc">${t("sellerApplication.draft.desc")}</p>
       <a
         href="/pages/seller/supplier-setup.html"
-        class="block w-full h-12 leading-[3rem] text-center th-btn no-underline"
+        class="flex w-full h-12 th-btn no-underline"
       >
         <span data-i18n="sellerApplication.draft.cta">${t("sellerApplication.draft.cta")}</span>
       </a>
@@ -101,7 +101,7 @@ function StatusRejected(): string {
       <p class="text-sm text-gray-500 text-center mb-8" data-i18n="sellerApplication.rejected.desc">${t("sellerApplication.rejected.desc")}</p>
       <a
         href="mailto:destek@istoc.com"
-        class="block w-full h-12 leading-[3rem] text-center th-btn no-underline mb-3"
+        class="flex w-full h-12 th-btn no-underline mb-3"
       >
         <span data-i18n="sellerApplication.rejected.cta">${t("sellerApplication.rejected.cta")}</span>
       </a>

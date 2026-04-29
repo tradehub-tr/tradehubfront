@@ -8,8 +8,7 @@ import { initFlowbite } from 'flowbite'
 import { startAlpine } from '../alpine'
 import { t } from '../i18n'
 import { requireAuth } from '../utils/auth-guard'
-import { getSessionUser, resendVerificationEmail } from '../utils/auth'
-import { showToast } from '../utils/toast'
+import { getSessionUser } from '../utils/auth'
 
 // Block page until auth is confirmed
 await requireAuth();
@@ -35,7 +34,10 @@ import { renderSidebar } from '../components/sidebar'
 
 function renderMainContent(): string {
   const defaultUser = { avatar: '', username: '', profileHref: '/profile' };
-  return BuyerDashboardLayout({ data: { user: defaultUser, stats: [], notifications: [], browsingHistory: [], promotions: [] } });
+  return BuyerDashboardLayout({
+    data: { user: defaultUser, stats: [], notifications: [], browsingHistory: [], promotions: [] },
+    emailVerified,
+  });
 }
 
 function getBreadcrumbItems(): { label: string; href?: string }[] {
@@ -92,17 +94,6 @@ initLanguageSelector();
 initBuyerDashboardLayout();
 startAlpine();
 
-// Handle verify-email link click in slider
-if (!emailVerified) {
-  document.addEventListener('click', async (e) => {
-    const link = (e.target as HTMLElement).closest('a[href="#verify-email"]');
-    if (!link) return;
-    e.preventDefault();
-    try {
-      await resendVerificationEmail();
-      showToast({ message: t('dashboard.verificationEmailSent'), type: 'success' });
-    } catch {
-      showToast({ message: t('dashboard.verificationEmailFailed'), type: 'error' });
-    }
-  });
-}
+// Email doğrulama akışı artık global EmailVerificationBanner tarafından
+// yönetiliyor (TopBar içinde mount edilir, tüm sayfalarda çalışır). Buradaki
+// dashboard-spesifik handler kaldırıldı.
