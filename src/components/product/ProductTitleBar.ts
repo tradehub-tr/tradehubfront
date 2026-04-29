@@ -65,7 +65,7 @@ export function ProductTitleBar(): string {
         <svg class="shrink-0" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" style="color: var(--pd-supplier-verified-color, #cc9900);">
           <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd"/>
         </svg>
-        <a href="/pages/seller/seller-storefront.html?id=${encodeURIComponent(s.id)}" class="text-[13px] font-medium hover:underline truncate max-w-[200px]" style="color: var(--pd-breadcrumb-link-color, #cc9900);">${s.name}</a>
+        <a href="/pages/seller/seller-storefront.html?seller=${encodeURIComponent(s.id)}" class="text-[13px] font-medium hover:underline truncate max-w-[200px]" style="color: var(--pd-breadcrumb-link-color, #cc9900);">${s.name}</a>
         <span class="shrink-0" style="color: #d1d5db;">·</span>
         <span class="shrink-0 inline-flex items-center gap-0.5">
           <svg class="inline-block shrink-0" width="14" height="14" viewBox="0 0 20 20" fill="currentColor" style="color: #16a34a;"><path fill-rule="evenodd" d="M16.403 12.652a3 3 0 000-5.304 3 3 0 00-3.75-3.751 3 3 0 00-5.305 0 3 3 0 00-3.751 3.75 3 3 0 000 5.305 3 3 0 003.75 3.751 3 3 0 005.305 0 3 3 0 003.751-3.75zm-2.546-4.46a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.06l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
