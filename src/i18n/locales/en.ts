@@ -258,6 +258,7 @@ const en = {
         qrLogin: "Sign in with QR code",
         submit: "Sign In",
         invalidCredentials: "Incorrect email or password",
+        accountDisabled: "Your account is deactivated. Please contact iSTOC customer support to reactivate it.",
         "2faRequired": "Two-factor authentication required",
         emailVerified: "Your email has been verified successfully. You can now log in.",
         emailVerificationFailed: "Verification link is invalid or has expired.",
@@ -286,8 +287,9 @@ const en = {
       },
       forgot: {
         findAccount: "Find your account",
-        findAccountDesc: "Enter the email or member ID associated with your account",
-        usernameOrEmail: "Username or Email Address",
+        findAccountDesc: "Enter the email address associated with your account",
+        usernameOrEmail: "Your email address",
+        invalidEmail: "Please enter a valid email address.",
         continue: "Continue",
         contactSupport: "Contact customer service",
         verifyIdentity: "Verify your identity",
@@ -326,6 +328,7 @@ const en = {
         invalidLinkDesc: "Invalid or expired password reset link.",
         requestNewLink: "Request a new link",
         genericError: "An error occurred while resetting your password. Please try again.",
+        passwordAlreadyInUse: "This password is already in use. Please choose a different one.",
       },
       setup: {
         countryRegion: "Country / Region",
@@ -360,12 +363,30 @@ const en = {
       verifyEmail: "Verify your email",
       otpSentTo: "Enter the 6-digit code sent to",
       otpSentFallback: "your email address",
-      otpInvalidCode: "Invalid verification code. Please try again.",
+      otpInvalidCode: "Verification code is incorrect. Please re-enter it.",
+      otpVerifying: "Verifying…",
+      otpTooManyAttempts: "Too many attempts. Please wait a moment and try again.",
+      otpCooldownTitle: "Too many requests",
+      otpCooldownBody: "A short cooldown has been applied to keep your account safe.",
+      otpRetryIn: "You can try again in {{time}}",
+      otpAttemptsRemaining: "Attempts remaining",
+      otpLastAttemptTitle: "Last attempt remaining",
+      otpLastAttemptBody:
+        "One more wrong entry will reset this code and you will need to request a new one.",
+      otpLockoutTitle: "Too many wrong attempts",
+      otpLockoutBody:
+        "This verification code is no longer valid. Request a new code to try again.",
       otpResent: "Verification code has been resent.",
       otpDidntReceive: "Didn't receive the code?",
       otpResend: "Resend",
       otpVerifyAndContinue: "Verify and Continue",
-      otpChangeEmail: "Change email address",
+      otpChangeEmail: "← Change email address",
+      disposableEmailNotAllowed:
+        "Disposable email addresses are not allowed. Please use a permanent email.",
+      domainNotReachable:
+        "The email domain could not be reached. Please check your email address.",
+      emailNotVerifiedAction:
+        "You need to verify your email address to perform this action.",
       // ── AccountTypeSelector ──
       buyer: "Buyer",
       buyerDesc: "I want to buy products",
@@ -421,6 +442,7 @@ const en = {
         idDocument: "Identity Document",
         uploadHint: "Upload a PDF, JPG, or PNG file (max 5MB)",
         uploadFailed: "Upload failed. Please try again.",
+        identityDocumentRequired: "Identity document upload is required.",
         invalidPhone: "Enter a valid Turkish phone number (05XX XXX XX XX)",
         invalidVKN: "Invalid Tax ID Number (10 digits)",
         invalidTCKN: "Invalid ID Number (11 digits)",
@@ -519,6 +541,44 @@ const en = {
     // CHECKOUT
     // ============================================================
     checkout: {
+      // Order review modal
+      reviewOrderTitle: "Review your order",
+      shippingAddressLabel: "Shipping address",
+      notProvided: "Not provided",
+      notSelected: "Not selected",
+      paymentMethodLabel: "Payment method",
+      orderItemsLabel: "Order items",
+      shippingFeeLabel: "Shipping fee",
+      couponDiscountLabel: "Coupon discount",
+      totalLabel: "Total",
+      backToCheckoutBtn: "Back to checkout",
+      confirmOrderBtn: "Confirm order",
+      closeModalAria: "Close modal",
+      // Shipping address modal
+      selectShippingAddress: "Select shipping address",
+      addAnAddress: "+ Add an address",
+      setAsDefault: "Set as default",
+      cancelBtn: "Cancel",
+      shipToThisAddress: "Ship to this address",
+      editAddressTitle: "Edit address",
+      addAddressTitle: "Add address",
+      adresInfoSecure: "Your information is encrypted and secure",
+      countryRegion: "Country / region",
+      fullName: "First name and Last name",
+      requiredShort: "Required",
+      phoneNumberLabel: "Phone number",
+      streetAddress: "Street address or P.O. box",
+      apartmentDetails: "Apartment, suite, unit, building, floor (optional)",
+      stateProvince: "State / province",
+      cityLabel: "City",
+      postalCode: "Postal code",
+      companyNameOptional: "Company name (optional)",
+      deliveryNoteOptional: "Delivery note (optional)",
+      deliveryNotePlaceholder: "e.g. Leave at the door",
+      setAsDefaultShipping: "Set as default shipping address",
+      submitBtn: "Submit",
+      selectStateFirst: "First select state / province",
+      phoneHelp: "Used only for delivery updates",
       paymentMethod: "Payment method",
       paymentMethodsAfterAddress: "Payment methods will appear after entering shipping address.",
       creditDebitCard: "Credit or Debit Card",
@@ -919,6 +979,10 @@ const en = {
       notifVerifyEmailLink: "Send verification email",
       verificationEmailSent: "Verification email sent. Please check your inbox.",
       verificationEmailFailed: "Could not send verification email. Please try again later.",
+      emailAlreadyVerified: "This email address is already verified.",
+      enterVerificationCode:
+        "Enter the 6-digit code sent to your email:",
+      emailVerifiedSuccess: "Your email address has been verified.",
       notifVerifyTaxStatus: "Validate your account for tax-exempt status",
       notifVerifyBusiness: "Verify business info",
       notifPersonalizeExperience: "Personalize your TradeHub.com experience",
@@ -3331,6 +3395,7 @@ const en = {
     settings: {
       passwordMinLength: "Password must be at least 8 characters.",
       passwordsMismatch: "Passwords do not match.",
+      passwordSameAsCurrent: "Your new password cannot be the same as your current password.",
       currentPassword: "Current Password",
       currentPasswordRequired: "Please enter your current password.",
       currentPasswordWrong: "Current password is incorrect.",
@@ -3456,10 +3521,19 @@ const en = {
         "Your email address has been changed successfully. Please log in again with your new email.",
       newEmailSaved: "Your new email address has been saved.",
       backToSettings: "Back to account settings",
+      // ── Email change OTP verification (Phase 2) ──────────────────
+      otpSentToNewEmail:
+        "We sent a 6-digit verification code to your new email:",
+      verificationCode: "Verification code",
+      confirmChange: "Confirm change",
+      wrongOtp: "Wrong verification code.",
+      tooManyAttempts: "Too many wrong attempts. Please request a new code.",
+      otpExpired: "Verification code expired. Please try again.",
+      invalidOtpFormat: "Please enter the 6-digit code.",
 
       // ── SettingsChangePhone ──────────────────────────────────────
       changePhone: "Change phone number",
-      changePhoneDesc: "Enter your new phone number. We will send an SMS for verification.",
+      changePhoneDesc: "Update the phone number linked to your account.",
       countryCode: "Country Code",
       phoneNumber: "Phone Number",
       sendVerificationCode: "Send verification code",
@@ -3473,6 +3547,8 @@ const en = {
       newPhoneLabel: "New Phone Number",
       passwordRequiredForSecurity: "Enter your current password for security.",
       phoneChangeFailed: "Failed to change phone number.",
+      phoneSameAsCurrent: "Your new phone number must be different from your current phone number.",
+      phoneInvalidFormat: "Please enter a valid Turkish phone number.",
 
       // ── SettingsChangePassword ───────────────────────────────────
       identityVerification: "Identity verification",
@@ -3529,9 +3605,11 @@ const en = {
       confirmDeleteCheck:
         "I understand and confirm that my account and all my data will be permanently deleted.",
       deleteMyAccount: "Delete my account",
-      accountDeleted: "Your account has been deleted",
+      accountDeleted: "Your account has been deactivated",
       accountDeletedDesc:
-        "Your account has been successfully deleted. You can reactivate your account by logging in within 30 days.",
+        "Your account has been deactivated. To reactivate it, please contact iSTOC customer support.",
+      accountDeactivatedContactAdmin:
+        "Your account is deactivated. Please contact iSTOC customer support to reactivate it.",
       goToLogin: "Go to login page",
       confirmDeleteRequired: "Please check the confirmation box.",
       deleteAccountFailed: "Failed to delete account. Please try again.",
@@ -3973,11 +4051,11 @@ const en = {
       accountCancelReactivate_items: [
         {
           q: "How do I cancel my account?",
-          a: 'You can use the "Close Account" option from Account Settings > Account Management. Before cancellation, all open orders and disputes must be resolved. Account closure can be reversed within <strong>30 days</strong>.',
+          a: 'You can use the "Close Account" option from Account Settings > Account Management. Before cancellation, all open orders and disputes must be resolved. After closure, reactivation can only be performed by <strong>iSTOC customer support</strong>.',
         },
         {
           q: "Can I reactivate my account?",
-          a: "Yes, within 30 days of closing your account, you can reactivate it by logging in with your registered email address. After 30 days, the account is permanently deleted and data cannot be recovered.",
+          a: "After closing your account, you cannot reactivate it on your own by logging in. To reactivate your account, you must submit a request to iSTOC customer support; once your request is reviewed, your account can be reopened.",
         },
         {
           q: "What happens if I cancel my Gold/Verified membership?",

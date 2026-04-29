@@ -106,7 +106,12 @@ Alpine.data("sellPage", () => ({
 
       this.submitted = true;
     } catch (e) {
-      this.submitError = (e as Error).message || t("sellerForm.submitError") || "Bir hata oluştu";
+      const { isEmailNotVerifiedError } = await import("../utils/api");
+      if (isEmailNotVerifiedError(e)) {
+        this.submitError = ""; // toast api.ts'te gösterildi
+      } else {
+        this.submitError = (e as Error).message || t("sellerForm.submitError") || "Bir hata oluştu";
+      }
     } finally {
       this.submitting = false;
     }

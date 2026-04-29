@@ -7,6 +7,7 @@
  */
 
 import { getCurrencyCode } from "../../utils/currency";
+import { t } from "../../i18n";
 
 export function OrderReviewModal(): string {
   return `
@@ -42,12 +43,12 @@ export function OrderReviewModal(): string {
       >
         <!-- Header -->
         <div class="flex items-center justify-between px-6 py-4 border-b border-[#e5e5e5] sticky top-0 bg-white z-10 rounded-t-md">
-          <h2 id="review-modal-title" class="text-[20px] font-bold text-[#222222]">Review your order</h2>
+          <h2 id="review-modal-title" class="text-[20px] font-bold text-[#222222]">${t("checkout.reviewOrderTitle")}</h2>
           <button
             type="button"
             @click="open = false"
             class="text-[#6b7280] hover:text-[#111827] transition-colors cursor-pointer p-1"
-            aria-label="Close modal"
+            aria-label="${t("checkout.closeModalAria")}"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/>
@@ -62,25 +63,25 @@ export function OrderReviewModal(): string {
           <div>
             <h3 class="text-[14px] font-bold text-[#222222] mb-2 flex items-center gap-2">
               <svg class="w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Shipping address
+              ${t("checkout.shippingAddressLabel")}
             </h3>
-            <p class="text-[14px] text-[#444444] bg-[#f9fafb] rounded-lg px-3 py-2" x-text="shippingAddress || 'Not provided'"></p>
+            <p class="text-[14px] text-[#444444] bg-[#f9fafb] rounded-lg px-3 py-2" x-text="shippingAddress || '${t("checkout.notProvided")}'"></p>
           </div>
 
           <!-- Payment Method -->
           <div>
             <h3 class="text-[14px] font-bold text-[#222222] mb-2 flex items-center gap-2">
               <svg class="w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2" /><path d="M2 10h20" /></svg>
-              Payment method
+              ${t("checkout.paymentMethodLabel")}
             </h3>
-            <p class="text-[14px] text-[#444444] bg-[#f9fafb] rounded-lg px-3 py-2" x-text="paymentMethod || 'Not selected'"></p>
+            <p class="text-[14px] text-[#444444] bg-[#f9fafb] rounded-lg px-3 py-2" x-text="paymentMethod || '${t("checkout.notSelected")}'"></p>
           </div>
 
           <!-- Order Items -->
           <div>
             <h3 class="text-[14px] font-bold text-[#222222] mb-2 flex items-center gap-2">
               <svg class="w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Order items
+              ${t("checkout.orderItemsLabel")}
             </h3>
             <template x-for="order in orders" :key="order.orderId">
               <div class="mb-3 border border-[#e5e5e5] rounded-lg overflow-hidden">
@@ -109,21 +110,21 @@ export function OrderReviewModal(): string {
           <!-- Price Summary -->
           <div class="border-t border-[#e5e5e5] pt-4">
             <div class="flex justify-between text-[14px] text-[#222222] py-1">
-              <span>Item subtotal</span>
+              <span>${t("checkout.itemSubtotal")}</span>
               <span x-text="'${getCurrencyCode()} ' + summary.itemSubtotal"></span>
             </div>
             <div class="flex justify-between text-[14px] text-[#222222] py-1">
-              <span>Shipping fee</span>
+              <span>${t("checkout.shippingFeeLabel")}</span>
               <span x-text="'${getCurrencyCode()} ' + summary.shippingFee"></span>
             </div>
             <template x-if="summary.couponDiscount && parseFloat(summary.couponDiscount) > 0">
               <div class="flex justify-between text-[14px] text-[#16a34a] py-1">
-                <span>Coupon discount</span>
+                <span>${t("checkout.couponDiscountLabel")}</span>
                 <span x-text="'- ${getCurrencyCode()} ' + summary.couponDiscount"></span>
               </div>
             </template>
             <div class="flex justify-between text-[18px] font-bold text-[#222222] pt-2 mt-1 border-t border-[#e5e5e5]">
-              <span>Total</span>
+              <span>${t("checkout.totalLabel")}</span>
               <span x-text="'${getCurrencyCode()} ' + summary.total"></span>
             </div>
           </div>
@@ -135,7 +136,7 @@ export function OrderReviewModal(): string {
             type="button"
             @click="open = false"
             class="flex-1 th-btn-outline"
-          >Back to checkout</button>
+          >${t("checkout.backToCheckoutBtn")}</button>
           <button
             type="button"
             id="review-confirm-btn"
@@ -143,7 +144,7 @@ export function OrderReviewModal(): string {
             class="flex-1 flex items-center justify-center th-btn-dark"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" class="mr-2 shrink-0"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Confirm order
+            ${t("checkout.confirmOrderBtn")}
           </button>
         </div>
       </div>

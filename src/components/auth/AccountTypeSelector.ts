@@ -26,16 +26,27 @@ export interface AccountTypeSelectorOptions {
  * Renders radio card selection for Buyer/Supplier account types
  *
  * @param defaultType - Initially selected account type (defaults to 'buyer')
+ * @param lockedTo - If set, the OTHER card is disabled (greyed out, not
+ *   clickable). Used by the "iSTOC'ta Sat" entry point so a guest who has
+ *   chosen to become a supplier cannot accidentally land on a buyer account.
  * @returns HTML string for the account type selector
  */
-export function AccountTypeSelector(defaultType: AccountType = "buyer"): string {
+export function AccountTypeSelector(
+  defaultType: AccountType = "buyer",
+  lockedTo?: AccountType,
+): string {
+  const buyerLocked = lockedTo === "supplier";
+  const supplierLocked = lockedTo === "buyer";
+  const lockedClasses = " opacity-50 cursor-not-allowed pointer-events-none";
+
   return `
     <div id="account-type-selector" class="auth-account-type-grid flex flex-col gap-3">
       <!-- Buyer Card -->
       <button
         type="button"
-        class="auth-account-type-card flex items-center gap-3.5 w-full py-4 px-[18px] rounded-md text-left relative cursor-pointer transition-all${defaultType === "buyer" ? " selected" : ""}"
+        class="auth-account-type-card flex items-center gap-3.5 w-full py-4 px-[18px] rounded-md text-left relative cursor-pointer transition-all${defaultType === "buyer" ? " selected" : ""}${buyerLocked ? lockedClasses : ""}"
         data-account-type="buyer"
+        ${buyerLocked ? "data-locked=\"true\" aria-disabled=\"true\" disabled tabindex=\"-1\"" : ""}
         aria-pressed="${defaultType === "buyer" ? "true" : "false"}"
         role="radio"
       >
@@ -53,8 +64,9 @@ export function AccountTypeSelector(defaultType: AccountType = "buyer"): string 
       <!-- Supplier Card -->
       <button
         type="button"
-        class="auth-account-type-card flex items-center gap-3.5 w-full py-4 px-[18px] rounded-md text-left relative cursor-pointer transition-all${defaultType === "supplier" ? " selected" : ""}"
+        class="auth-account-type-card flex items-center gap-3.5 w-full py-4 px-[18px] rounded-md text-left relative cursor-pointer transition-all${defaultType === "supplier" ? " selected" : ""}${supplierLocked ? lockedClasses : ""}"
         data-account-type="supplier"
+        ${supplierLocked ? "data-locked=\"true\" aria-disabled=\"true\" disabled tabindex=\"-1\"" : ""}
         aria-pressed="${defaultType === "supplier" ? "true" : "false"}"
         role="radio"
       >
@@ -109,6 +121,13 @@ export function initAccountTypeSelector(options: AccountTypeSelectorOptions = {}
     const card = target.closest("[data-account-type]") as HTMLElement | null;
 
     if (card) {
+      // Locked cards (e.g. Buyer when arriving via "Sell on iSTOC") must not
+      // change the selection. CSS pointer-events:none already blocks pointer
+      // input but we keep this guard so keyboard / programmatic clicks are
+      // also no-ops.
+      if (card.getAttribute("data-locked") === "true") {
+        return;
+      }
       const type = card.getAttribute("data-account-type") as AccountType;
 
       // Clear previous selection

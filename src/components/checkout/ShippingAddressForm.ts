@@ -6,6 +6,7 @@
 
 import type { Country, Province } from "../../types/checkout";
 import { countries, turkishProvinces, pageContent } from "../../data/mockCheckout";
+import { t } from "../../i18n";
 
 export interface ShippingAddressFormProps {
   countries?: Country[];
@@ -98,7 +99,7 @@ function renderAddressSelectorModal(): string {
     >
       <div class="w-full max-w-[840px] max-h-[88vh] overflow-hidden rounded-md bg-white shadow-xl">
         <div class="flex items-center justify-between px-4 py-4 sm:px-6 sm:py-5 border-b border-[#e5e7eb]">
-          <h3 class="text-lg sm:text-xl xl:text-[32px] font-bold text-[#111827] leading-tight">Select shipping address</h3>
+          <h3 class="text-lg sm:text-xl xl:text-[32px] font-bold text-[#111827] leading-tight">${t("checkout.selectShippingAddress")}</h3>
           <button type="button" class="text-[#111827] hover:opacity-70" @click="closeAddressSelector()">
             <svg class="w-6 h-6 sm:w-8 sm:h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
@@ -110,7 +111,7 @@ function renderAddressSelectorModal(): string {
             class="h-10 sm:h-12 rounded-full border border-[#111827] px-4 sm:px-6 text-sm sm:text-[16px] font-semibold text-[#111827] hover:bg-[#f9fafb]"
             @click="openAddAddressModal()"
           >
-            + Add an address
+            ${t("checkout.addAnAddress")}
           </button>
 
           <div class="mt-4 sm:mt-5 border-t border-[#e5e7eb] pt-4 sm:pt-5 space-y-3 sm:space-y-4">
@@ -138,7 +139,7 @@ function renderAddressSelectorModal(): string {
                           x-show="!address.isDefault"
                           @click="setDefaultAddress(address.id)"
                         >
-                          Set as default
+                          ${t("checkout.setAsDefault")}
                         </button>
                       </div>
                       <div class="flex items-center gap-1.5 sm:gap-2">
@@ -163,14 +164,14 @@ function renderAddressSelectorModal(): string {
             class="min-w-0 w-full sm:min-w-[200px] sm:w-auto th-btn-outline"
             @click="closeAddressSelector()"
           >
-            Cancel
+            ${t("checkout.cancelBtn")}
           </button>
           <button
             type="button"
             class="min-w-0 w-full sm:min-w-[200px] sm:w-auto th-btn"
             @click="confirmSelectedAddress()"
           >
-            Ship to this address
+            ${t("checkout.shipToThisAddress")}
           </button>
         </div>
       </div>
@@ -189,8 +190,8 @@ function renderAddAddressModal(countryOptions: string): string {
       <div class="w-full max-w-[980px] max-h-[92vh] overflow-hidden rounded-md bg-white shadow-xl">
         <div class="flex items-center justify-between border-b border-[#e5e7eb] px-6 py-5">
           <div>
-            <h3 class="text-xl sm:text-2xl xl:text-[32px] font-bold text-[#111827]" x-text="isEditingAddress ? 'Edit address' : 'Add address'">Add address</h3>
-            <p class="mt-1 text-[14px] text-[#198f35]">Your information is encrypted and secure</p>
+            <h3 class="text-xl sm:text-2xl xl:text-[32px] font-bold text-[#111827]" x-text="isEditingAddress ? '${t("checkout.editAddressTitle")}' : '${t("checkout.addAddressTitle")}'">${t("checkout.addAddressTitle")}</h3>
+            <p class="mt-1 text-[14px] text-[#198f35]">${t("checkout.adresInfoSecure")}</p>
           </div>
           <button type="button" class="text-[#111827] hover:opacity-70" @click="closeAddAddressModal()">
             <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -200,7 +201,7 @@ function renderAddAddressModal(countryOptions: string): string {
         <div class="px-6 py-5 overflow-y-auto max-h-[62vh]">
           <div class="grid grid-cols-1 gap-4">
             <div>
-              <label class="block text-[14px] text-[#6b7280] mb-1">Country / region *</label>
+              <label class="block text-[14px] text-[#6b7280] mb-1">${t("checkout.countryRegion")} *</label>
               <select class="th-input th-input-lg" x-model="addAddressForm.country" @change="syncAddAddressCountry()">
                 ${countryOptions}
               </select>
@@ -208,64 +209,64 @@ function renderAddAddressModal(countryOptions: string): string {
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-[14px] text-[#6b7280] mb-1">First name and Last name *</label>
+                <label class="block text-[14px] text-[#6b7280] mb-1">${t("checkout.fullName")} *</label>
                 <input class="th-input th-input-lg" type="text" x-model="addAddressForm.fullName" />
-                <p class="mt-1 text-[12px] text-[#dc2626]" x-show="addFormErrors.fullName">Required</p>
+                <p class="mt-1 text-[12px] text-[#dc2626]" x-show="addFormErrors.fullName">${t("checkout.requiredShort")}</p>
               </div>
               <div>
-                <label class="block text-[14px] text-[#6b7280] mb-1">Phone number *</label>
+                <label class="block text-[14px] text-[#6b7280] mb-1">${t("checkout.phoneNumberLabel")} *</label>
                 <div class="flex gap-2">
                   <div class="w-[84px] h-12 rounded-lg border border-[#d1d5db] flex items-center justify-center text-[14px] text-[#111827]" x-text="addAddressForm.phonePrefix"></div>
                   <input class="th-input th-input-lg flex-1" type="tel" x-model="addAddressForm.phone" />
                 </div>
-                <p class="mt-1 text-[12px] text-[#dc2626]" x-show="addFormErrors.phone">Required</p>
+                <p class="mt-1 text-[12px] text-[#dc2626]" x-show="addFormErrors.phone">${t("checkout.requiredShort")}</p>
               </div>
             </div>
 
             <div>
-              <label class="block text-[14px] text-[#6b7280] mb-1">Street address or P.O. box *</label>
+              <label class="block text-[14px] text-[#6b7280] mb-1">${t("checkout.streetAddress")} *</label>
               <div class="relative">
                 <input class="th-input th-input-lg" type="text" x-model="addAddressForm.street" />
               </div>
-              <p class="mt-1 text-[12px] text-[#dc2626]" x-show="addFormErrors.street">Required</p>
+              <p class="mt-1 text-[12px] text-[#dc2626]" x-show="addFormErrors.street">${t("checkout.requiredShort")}</p>
             </div>
 
             <div>
-              <label class="block text-[14px] text-[#6b7280] mb-1">Apartment, suite, unit, building, floor (optional)</label>
+              <label class="block text-[14px] text-[#6b7280] mb-1">${t("checkout.apartmentDetails")}</label>
               <input class="th-input th-input-lg" type="text" x-model="addAddressForm.apartment" />
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label class="block text-[14px] text-[#6b7280] mb-1">State / province *</label>
+                <label class="block text-[14px] text-[#6b7280] mb-1">${t("checkout.stateProvince")} *</label>
                 <input class="th-input th-input-lg" type="text" x-model="addAddressForm.state" />
-                <p class="mt-1 text-[12px] text-[#dc2626]" x-show="addFormErrors.state">Required</p>
+                <p class="mt-1 text-[12px] text-[#dc2626]" x-show="addFormErrors.state">${t("checkout.requiredShort")}</p>
               </div>
               <div>
-                <label class="block text-[14px] text-[#6b7280] mb-1">City *</label>
+                <label class="block text-[14px] text-[#6b7280] mb-1">${t("checkout.cityLabel")} *</label>
                 <input class="th-input th-input-lg" type="text" x-model="addAddressForm.city" />
-                <p class="mt-1 text-[12px] text-[#dc2626]" x-show="addFormErrors.city">Required</p>
+                <p class="mt-1 text-[12px] text-[#dc2626]" x-show="addFormErrors.city">${t("checkout.requiredShort")}</p>
               </div>
               <div>
-                <label class="block text-[14px] text-[#6b7280] mb-1">Postal code *</label>
+                <label class="block text-[14px] text-[#6b7280] mb-1">${t("checkout.postalCode")} *</label>
                 <input class="th-input th-input-lg" type="text" x-model="addAddressForm.postalCode" />
-                <p class="mt-1 text-[12px] text-[#dc2626]" x-show="addFormErrors.postalCode">Required</p>
+                <p class="mt-1 text-[12px] text-[#dc2626]" x-show="addFormErrors.postalCode">${t("checkout.requiredShort")}</p>
               </div>
             </div>
 
             <div>
-              <label class="block text-[14px] text-[#6b7280] mb-1">Company name (optional)</label>
+              <label class="block text-[14px] text-[#6b7280] mb-1">${t("checkout.companyNameOptional")}</label>
               <input class="th-input th-input-lg" type="text" x-model="addAddressForm.company" />
             </div>
 
             <div>
-              <label class="block text-[14px] text-[#6b7280] mb-1">Delivery note (optional)</label>
-              <input class="th-input th-input-lg" type="text" placeholder="e.g. Leave at the door" x-model="addAddressForm.note" />
+              <label class="block text-[14px] text-[#6b7280] mb-1">${t("checkout.deliveryNoteOptional")}</label>
+              <input class="th-input th-input-lg" type="text" placeholder="${t("checkout.deliveryNotePlaceholder")}" x-model="addAddressForm.note" />
             </div>
 
             <label class="inline-flex items-center gap-2 text-[14px] text-[#374151]">
               <input type="checkbox" class="h-4 w-4 flex-shrink-0" style="accent-color: var(--checkbox-checked-bg);" x-model="addAddressForm.isDefaultAddress" />
-              <span>Set as default shipping address</span>
+              <span>${t("checkout.setAsDefaultShipping")}</span>
             </label>
           </div>
         </div>
@@ -276,14 +277,14 @@ function renderAddAddressModal(countryOptions: string): string {
             class="min-w-0 w-full sm:min-w-[200px] sm:w-auto th-btn-outline"
             @click="closeAddAddressModal()"
           >
-            Cancel
+            ${t("checkout.cancelBtn")}
           </button>
           <button
             type="button"
             class="min-w-0 w-full sm:min-w-[200px] sm:w-auto th-btn"
             @click="submitAddAddress()"
           >
-            Submit
+            ${t("checkout.submitBtn")}
           </button>
         </div>
       </div>
@@ -404,13 +405,13 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
           <div class="flex flex-col gap-0">
             <div class="flex items-center gap-2 mb-4 text-[#008a00] text-[14px] font-medium">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" class="shrink-0"><path d="M18 10v-3.5A6.5 6.5 0 105 6.5V10H4v12h16V10h-2zm-2 0H8v-3.5a4.5 4.5 0 119 0V10zm-3 5.5v3h-2v-3h2z" fill="currentColor"/></svg>
-              <span>Your information is encrypted and secure</span>
+              <span>${t("checkout.adresInfoSecure")}</span>
             </div>
 
             ${dropdownField(
               "country-dropdown",
               "country",
-              "Country / region",
+              t("checkout.countryRegion"),
               `${defaultCountry.flag} ${defaultCountry.name}`,
               countryItems,
               {
@@ -420,7 +421,7 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
               }
             )}
 
-            ${floatField("first-name", "firstName", "First name and Last name", true)}
+            ${floatField("first-name", "firstName", t("checkout.fullName"), true)}
 
             <!-- Phone: +90 prefix ile numara tek container içinde (Evil Martians / Shopify pattern). -->
             <div class="mb-3 group" data-field="phone" x-bind:data-error="errors.phone">
@@ -448,7 +449,7 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
                   </label>
                 </div>
               </div>
-              <p class="text-[12px] text-[#767676] mt-1.5 ml-1">Yalnızca teslimat güncellemeleri için kullanılır</p>
+              <p class="text-[12px] text-[#767676] mt-1.5 ml-1">${t("checkout.phoneHelp")}</p>
             </div>
 
             ${floatField("street-address", "streetAddress", pageContent.streetAddressLabel, true, "text")}
@@ -457,7 +458,7 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
               <div class="relative">
-                ${dropdownField("state-dropdown", "state", "State / province", "", provinceItems, {
+                ${dropdownField("state-dropdown", "state", t("checkout.stateProvince"), "", provinceItems, {
                   openProp: "stateOpen",
                   selectFn: "selectStateItem($event)",
                   displayProp: "stateDisplay",
@@ -477,20 +478,20 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
                   <span class="pb-[6px]">${ChevronDown}</span>
                 </button>
                 <label class="absolute left-3 top-[12px] -translate-y-1/2 text-[12px] text-[#767676] transition-all duration-200 ease-in-out pointer-events-none group-data-[error=true]:text-[var(--color-error-500)] dropdown-label">
-                  City <span class="text-[var(--color-error-500)]">*</span>
+                  ${t("checkout.cityLabel")} <span class="text-[var(--color-error-500)]">*</span>
                 </label>
                 <ul class="absolute top-full left-0 right-0 z-50 max-h-[260px] overflow-y-auto bg-[var(--color-surface)] border border-[var(--color-border-default)] rounded-md shadow-lg mt-1 hidden group-data-[open=true]:block" role="listbox" data-list @click="selectCityItem($event)">
                   <template x-for="city in cityOptions" :key="city">
                     <li class="px-3 py-2 text-[14px] text-[var(--color-text-primary)] cursor-pointer hover:bg-[#f5f5f5] transition-colors" role="option" :data-value="city" x-text="city"></li>
                   </template>
                   <li x-show="cityOptions.length === 0" class="px-3 py-2 text-[13px] text-[#9ca3af] cursor-not-allowed" role="option" data-disabled="true">
-                    Once state / province secin
+                    ${t("checkout.selectStateFirst")}
                   </li>
                 </ul>
                 <div class="hidden text-[12px] text-[var(--color-error-500)] mt-1 group-data-[error=true]:block">${pageContent.requiredFieldError}</div>
               </div>
 
-              ${floatField("postal-code", "postalCode", "Postal code", true, "text")}
+              ${floatField("postal-code", "postalCode", t("checkout.postalCode"), true, "text")}
             </div>
 
             <div class="flex items-center gap-2 mt-2 mb-4">
@@ -510,7 +511,7 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
               id="continue-payment-btn"
               class="th-btn w-full mt-2"
             >
-              Kaydet ve Devam Et
+              ${t("checkout.saveAndContinue")}
             </button>
           </div>
         </form>

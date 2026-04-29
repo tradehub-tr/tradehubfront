@@ -141,6 +141,8 @@ Alpine.data("loginModal", () => ({
     } catch (err) {
       if (err instanceof Error && err.message === "2FA_REQUIRED") {
         this.errorMsg = t("auth.login.2faRequired");
+      } else if (err instanceof Error && err.message === "ACCOUNT_DISABLED") {
+        this.errorMsg = t("auth.login.accountDisabled");
       } else {
         this.errorMsg = t("auth.login.invalidCredentials");
       }

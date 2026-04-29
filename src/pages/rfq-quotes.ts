@@ -7,7 +7,7 @@ import { t } from '../i18n'
 import { initFlowbite } from 'flowbite'
 import { startAlpine } from '../alpine'
 import { requireAuth } from '../utils/auth-guard'
-import { getCsrfToken } from '../utils/api'
+import { getCsrfToken, checkEmailNotVerifiedResponse, isEmailNotVerifiedError } from '../utils/api'
 import { showToast } from '../utils/toast'
 
 import { TopBar, SubHeader, initMobileDrawer, initStickyHeaderSearch, MegaMenu, initMegaMenu } from '../components/header'
@@ -223,13 +223,15 @@ loadQuotes().then(() => {
           headers: { 'Content-Type': 'application/json', 'X-Frappe-CSRF-Token': getCsrfToken() },
           body: JSON.stringify({ quote_id: quoteId }),
         });
+        await checkEmailNotVerifiedResponse(res);
         if (!res.ok) throw new Error();
         showToast({ message: t('rfq.quoteAccepted'), type: 'success' });
         setTimeout(() => window.location.reload(), 800);
-      } catch {
-        showToast({ message: t('rfq.quoteAcceptError'), type: 'error' });
+      } catch (err) {
         btn.disabled = false;
         btn.textContent = t('rfq.accept');
+        if (isEmailNotVerifiedError(err)) return; // toast api.ts'te
+        showToast({ message: t('rfq.quoteAcceptError'), type: 'error' });
       }
     });
   });
@@ -288,13 +290,15 @@ loadQuotes().then(() => {
           headers: { 'Content-Type': 'application/json', 'X-Frappe-CSRF-Token': getCsrfToken() },
           body: JSON.stringify({ rfq_id: rfqId }),
         });
+        await checkEmailNotVerifiedResponse(res);
         if (!res.ok) throw new Error();
         showToast({ message: t('rfq.closeSuccess'), type: 'success' });
         setTimeout(() => window.location.reload(), 800);
-      } catch {
-        showToast({ message: t('rfq.closeError'), type: 'error' });
+      } catch (err) {
         closeBtn.disabled = false;
         closeBtn.textContent = t('rfq.closeRfq');
+        if (isEmailNotVerifiedError(err)) return;
+        showToast({ message: t('rfq.closeError'), type: 'error' });
       }
     });
   }

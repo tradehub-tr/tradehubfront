@@ -258,6 +258,7 @@ const tr = {
         qrLogin: "QR kod ile giriş yap",
         submit: "Giriş Yap",
         invalidCredentials: "E-posta veya şifre hatalı",
+        accountDisabled: "Hesabınız pasif. Yeniden etkinleştirmek için iSTOC müşteri hizmetlerine başvurun.",
         "2faRequired": "İki faktörlü doğrulama gerekli",
         emailVerified: "E-posta adresiniz başarıyla doğrulandı. Giriş yapabilirsiniz.",
         emailVerificationFailed: "Doğrulama bağlantısı geçersiz veya süresi dolmuş.",
@@ -286,8 +287,9 @@ const tr = {
       },
       forgot: {
         findAccount: "Hesabınızı bulun",
-        findAccountDesc: "Hesabınızla ilişkili e-postayı veya üye kimliğini girin",
-        usernameOrEmail: "Kullanıcı Adı veya E-posta Adresi",
+        findAccountDesc: "Hesabınızla ilişkili e-posta adresini girin",
+        usernameOrEmail: "E-posta adresiniz",
+        invalidEmail: "Geçerli bir e-posta adresi girin.",
         continue: "Devam",
         contactSupport: "Müşteri hizmetleriyle iletişime geçin",
         verifyIdentity: "Kimliğinizi doğrulayın",
@@ -324,6 +326,7 @@ const tr = {
         invalidLinkDesc: "Geçersiz veya süresi dolmuş şifre sıfırlama linki.",
         requestNewLink: "Yeni link talep et",
         genericError: "Şifre sıfırlanırken bir hata oluştu. Lütfen tekrar deneyin.",
+        passwordAlreadyInUse: "Bu şifre zaten kullanılıyor. Lütfen farklı bir şifre seçin.",
       },
       setup: {
         countryRegion: "Ülke / Bölge",
@@ -358,12 +361,30 @@ const tr = {
       verifyEmail: "E-postanızı doğrulayın",
       otpSentTo: "gönderilen 6 haneli kodu girin",
       otpSentFallback: "E-posta adresinize",
-      otpInvalidCode: "Geçersiz doğrulama kodu. Lütfen tekrar deneyin.",
+      otpInvalidCode: "Doğrulama kodu hatalı. Lütfen tekrar girin.",
+      otpVerifying: "Doğrulanıyor…",
+      otpTooManyAttempts: "Çok fazla deneme. Lütfen biraz bekleyip tekrar deneyin.",
+      otpCooldownTitle: "Çok fazla istek",
+      otpCooldownBody: "Hesabınızın korunması için kısa bir bekleme süresi başlatıldı.",
+      otpRetryIn: "{{time}} sonra tekrar deneyebilirsiniz",
+      otpAttemptsRemaining: "Kalan deneme",
+      otpLastAttemptTitle: "Son deneme hakkınız",
+      otpLastAttemptBody:
+        "Hatalı bir giriş daha bu kodu sıfırlayacak ve yeni kod talep etmeniz gerekecek.",
+      otpLockoutTitle: "Çok fazla hatalı deneme",
+      otpLockoutBody:
+        "Bu doğrulama kodu artık geçerli değil. Yeni bir kod talep ederek yeniden deneyin.",
       otpResent: "Doğrulama kodu tekrar gönderildi.",
       otpDidntReceive: "Kod almadınız mı?",
       otpResend: "Tekrar gönder",
       otpVerifyAndContinue: "Doğrula ve Devam Et",
       otpChangeEmail: "\u2190 E-posta adresini değiştir",
+      disposableEmailNotAllowed:
+        "Geçici/atılabilir e-posta adresleri kabul edilmiyor. Lütfen kalıcı bir adres kullanın.",
+      domainNotReachable:
+        "E-posta domain'i bulunamadı. Lütfen adresinizi kontrol edin.",
+      emailNotVerifiedAction:
+        "Bu işlem için e-posta adresinizi doğrulamanız gerekiyor.",
       // ── AccountTypeSelector ──
       buyer: "Alıcı",
       buyerDesc: "Ürün satın almak istiyorum",
@@ -419,6 +440,7 @@ const tr = {
         idDocument: "Kimlik Belgesi",
         uploadHint: "PDF, JPG veya PNG dosyası yükleyin (maks. 5MB)",
         uploadFailed: "Yükleme başarısız. Tekrar deneyin.",
+        identityDocumentRequired: "Kimlik belgesi yüklemek zorunludur.",
         invalidPhone: "Geçerli bir Türk telefon numarası girin (05XX XXX XX XX)",
         invalidVKN: "Geçersiz Vergi Kimlik Numarası (10 haneli)",
         invalidTCKN: "Geçersiz TC Kimlik Numarası (11 haneli)",
@@ -517,6 +539,44 @@ const tr = {
     // CHECKOUT
     // ============================================================
     checkout: {
+      // Order review modal
+      reviewOrderTitle: "Siparişinizi gözden geçirin",
+      shippingAddressLabel: "Teslimat adresi",
+      notProvided: "Belirtilmedi",
+      notSelected: "Seçilmedi",
+      paymentMethodLabel: "Ödeme yöntemi",
+      orderItemsLabel: "Sipariş kalemleri",
+      shippingFeeLabel: "Kargo ücreti",
+      couponDiscountLabel: "Kupon indirimi",
+      totalLabel: "Toplam",
+      backToCheckoutBtn: "Ödemeye geri dön",
+      confirmOrderBtn: "Siparişi onayla",
+      closeModalAria: "Modalı kapat",
+      // Shipping address modal
+      selectShippingAddress: "Teslimat adresi seç",
+      addAnAddress: "+ Adres ekle",
+      setAsDefault: "Varsayılan yap",
+      cancelBtn: "İptal",
+      shipToThisAddress: "Bu adrese gönder",
+      editAddressTitle: "Adres düzenle",
+      addAddressTitle: "Adres ekle",
+      adresInfoSecure: "Bilgileriniz şifreli ve güvenli",
+      countryRegion: "Ülke / bölge",
+      fullName: "Ad ve Soyad",
+      requiredShort: "Zorunlu",
+      phoneNumberLabel: "Telefon numarası",
+      streetAddress: "Açık adres veya P.O. kutusu",
+      apartmentDetails: "Daire, kat, bina, blok (opsiyonel)",
+      stateProvince: "İl / bölge",
+      cityLabel: "İlçe",
+      postalCode: "Posta kodu",
+      companyNameOptional: "Firma adı (opsiyonel)",
+      deliveryNoteOptional: "Teslimat notu (opsiyonel)",
+      deliveryNotePlaceholder: "Örn. Kapı önüne bırakın",
+      setAsDefaultShipping: "Varsayılan teslimat adresi yap",
+      submitBtn: "Gönder",
+      selectStateFirst: "Önce il / bölge seçin",
+      phoneHelp: "Yalnızca teslimat güncellemeleri için kullanılır",
       paymentMethod: "Ödeme yöntemi",
       paymentMethodsAfterAddress:
         "Ödeme yöntemleri teslimat adresi girildikten sonra görünecektir.",
@@ -921,6 +981,10 @@ const tr = {
       verificationEmailSent: "Doğrulama e-postası gönderildi. Lütfen gelen kutunuzu kontrol edin.",
       verificationEmailFailed:
         "Doğrulama e-postası gönderilemedi. Lütfen daha sonra tekrar deneyin.",
+      emailAlreadyVerified: "Bu e-posta adresi zaten doğrulanmış.",
+      enterVerificationCode:
+        "E-postanıza gönderilen 6 haneli kodu girin:",
+      emailVerifiedSuccess: "E-posta adresiniz doğrulandı.",
       notifVerifyTaxStatus: "Vergiden muaf statüsü için hesabınızı doğrulatın",
       notifVerifyBusiness: "İş bilgilerini doğrulayın",
       notifPersonalizeExperience: "TradeHub.com deneyiminizi kişiselleştirin",
@@ -3435,6 +3499,7 @@ const tr = {
     settings: {
       passwordMinLength: "Parola en az 8 karakter olmalıdır.",
       passwordsMismatch: "Parolalar eşleşmiyor.",
+      passwordSameAsCurrent: "Yeni parolanız mevcut parolanızla aynı olamaz.",
       currentPassword: "Mevcut Şifre",
       currentPasswordRequired: "Lütfen mevcut şifrenizi girin.",
       currentPasswordWrong: "Mevcut şifre yanlış.",
@@ -3560,10 +3625,20 @@ const tr = {
         "E-posta adresiniz başarıyla değiştirildi. Lütfen yeni e-posta adresinizle tekrar giriş yapın.",
       newEmailSaved: "Yeni e-posta adresiniz kaydedildi.",
       backToSettings: "Hesap ayarlarına dön",
+      // ── E-posta değişimi OTP doğrulama (Faz 2) ──────────────────
+      otpSentToNewEmail:
+        "Yeni e-posta adresinize 6 haneli bir doğrulama kodu gönderdik:",
+      verificationCode: "Doğrulama kodu",
+      confirmChange: "Değişikliği onayla",
+      wrongOtp: "Doğrulama kodu hatalı.",
+      tooManyAttempts:
+        "Çok fazla hatalı deneme. Lütfen yeni kod isteyin.",
+      otpExpired: "Doğrulama kodu süresi doldu. Tekrar deneyin.",
+      invalidOtpFormat: "Lütfen 6 haneli kodu girin.",
 
       // ── SettingsChangePhone ──────────────────────────────────────
       changePhone: "Telefon numarasını değiştir",
-      changePhoneDesc: "Yeni telefon numaranızı girin. Doğrulama için SMS göndereceğiz.",
+      changePhoneDesc: "Hesabınıza kayıtlı telefon numaranızı güncelleyin.",
       countryCode: "Ülke Kodu",
       phoneNumber: "Telefon Numarası",
       sendVerificationCode: "Doğrulama kodu gönder",
@@ -3577,6 +3652,8 @@ const tr = {
       newPhoneLabel: "Yeni Telefon Numarası",
       passwordRequiredForSecurity: "Güvenlik için mevcut şifrenizi girin.",
       phoneChangeFailed: "Telefon numarası değiştirilemedi.",
+      phoneSameAsCurrent: "Yeni telefon numaranız mevcut telefon numaranızdan farklı olmalı.",
+      phoneInvalidFormat: "Geçerli bir Türk telefon numarası giriniz.",
 
       // ── SettingsChangePassword ───────────────────────────────────
       identityVerification: "Kimlik doğrulama",
@@ -3633,9 +3710,11 @@ const tr = {
       confirmDeleteCheck:
         "Hesabımın ve tüm verilerimin kalıcı olarak silineceğini anlıyorum ve onaylıyorum.",
       deleteMyAccount: "Hesabımı sil",
-      accountDeleted: "Hesabınız silindi",
+      accountDeleted: "Hesabınız pasif edildi",
       accountDeletedDesc:
-        "Hesabınız başarıyla silindi. 30 gün içinde giriş yaparak hesabınızı tekrar aktif edebilirsiniz.",
+        "Hesabınız pasif edildi. Yeniden etkinleştirmek için iSTOC müşteri hizmetlerine başvurmanız gerekir.",
+      accountDeactivatedContactAdmin:
+        "Hesabınız pasif. Yeniden etkinleştirmek için iSTOC müşteri hizmetlerine başvurun.",
       goToLogin: "Giriş sayfasına git",
       confirmDeleteRequired: "Lütfen onay kutusunu işaretleyin.",
       deleteAccountFailed: "Hesap silinemedi. Lütfen tekrar deneyin.",
@@ -4079,11 +4158,11 @@ const tr = {
       accountCancelReactivate_items: [
         {
           q: "Hesabımı nasıl iptal ederim?",
-          a: 'Hesap Ayarları > Hesap Yönetimi bölümünden "Hesabı Kapat" seçeneğini kullanabilirsiniz. İptal işlemi öncesinde açık siparişlerinizin ve anlaşmazlıklarınızın çözülmüş olması gerekir. Hesap kapatma işlemi <strong>30 gün</strong> içinde geri alınabilir.',
+          a: 'Hesap Ayarları > Hesap Yönetimi bölümünden "Hesabı Kapat" seçeneğini kullanabilirsiniz. İptal işlemi öncesinde açık siparişlerinizin ve anlaşmazlıklarınızın çözülmüş olması gerekir. Hesap kapatma sonrasında yeniden etkinleştirme yalnızca <strong>iSTOC müşteri hizmetleri</strong> tarafından yapılır.',
         },
         {
           q: "Hesabımı yeniden etkinleştirebilir miyim?",
-          a: "Evet, hesabınızı kapattıktan sonraki 30 gün içinde kayıtlı e-posta adresinizle giriş yaparak hesabınızı yeniden etkinleştirebilirsiniz. 30 gün sonrasında hesap kalıcı olarak silinir ve veriler kurtarılamaz.",
+          a: "Hesabınızı kapattıktan sonra kendi başınıza giriş yaparak yeniden etkinleştiremezsiniz. Yeniden etkinleştirme talebi için iSTOC müşteri hizmetlerine başvurmanız gerekir; talebiniz incelendikten sonra hesabınız tekrar açılabilir.",
         },
         {
           q: "Gold/Verified üyeliğimi iptal edersem ne olur?",

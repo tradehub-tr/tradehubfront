@@ -586,8 +586,10 @@ window.addEventListener('checkout:confirm-order', () => {
 
       redirectAfterOrder(orderNumbers);
     })
-    .catch((err: unknown) => {
+    .catch(async (err: unknown) => {
       setConfirmLoading(false);
+      const { isEmailNotVerifiedError } = await import('../utils/api');
+      if (isEmailNotVerifiedError(err)) return; // toast api.ts'te zaten gösterildi
       const msg = (err as { message?: string })?.message || t('checkout.orderCreateError') || 'Sipariş oluşturulamadı. Lütfen tekrar deneyin.';
       showToast({ message: msg, type: 'error', duration: 5000 });
     });

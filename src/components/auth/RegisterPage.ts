@@ -80,6 +80,14 @@ export interface RegisterPageState {
 export function RegisterPage(initialStep: RegisterStep = "account-type"): string {
   const baseUrl = getBaseUrl();
 
+  // Read ?type=supplier|buyer from the URL so the rendered HTML already shows
+  // the correct preselection (no flicker before Alpine runs) and so the buyer
+  // card can be locked when the visitor came in via "iSTOC'ta Sat".
+  const urlType = new URLSearchParams(window.location.search).get("type");
+  const defaultAccountType: AccountType = urlType === "supplier" ? "supplier" : "buyer";
+  const lockedAccountType: AccountType | undefined =
+    urlType === "supplier" ? "supplier" : undefined;
+
   return `
     <div id="register-page" class="w-full" x-data="registerPage" data-initial-step="${initialStep}">
       <!-- Step 1: Account Type Selection -->
@@ -96,7 +104,7 @@ export function RegisterPage(initialStep: RegisterStep = "account-type"): string
         </div>
 
         <!-- Account Type Selector (child component) -->
-        ${AccountTypeSelector("buyer")}
+        ${AccountTypeSelector(defaultAccountType, lockedAccountType)}
 
         <!-- Continue Button -->
         <button

@@ -19,7 +19,7 @@ import { FooterLinks } from '../components/footer'
 import { UOM_OPTIONS } from '../data/inquiries-mock-data' // fallback
 import aiGifUrl from '../assets/images/O1CN01c52zHR1b2SGRtmBlT_!!6000000003407-1-tps-300-300.gif'
 import { FILE_UPLOAD_CONFIG } from '../types/rfq'
-import { getCsrfToken } from '../utils/api'
+import { getCsrfToken, checkEmailNotVerifiedResponse, isEmailNotVerifiedError } from '../utils/api'
 import { getListingDetail } from '../services/listingService'
 
 await requireAuth();
@@ -431,6 +431,10 @@ form.addEventListener('submit', (e) => {
         ai_enabled: 0,
       }),
     });
+    // EMAIL_NOT_VERIFIED gating'ini early-throw ile yakala (api wrapper'la
+    // aynı davranış). Toast api tarafında gösterilir, raw exception caller'a
+    // ulaşmaz.
+    await checkEmailNotVerifiedResponse(res);
     const data = await res.json();
     if (!data.message?.success) {
       throw new Error(data.exception || 'RFQ oluşturulamadı');
@@ -470,8 +474,9 @@ form.addEventListener('submit', (e) => {
       window.location.href = '/pages/dashboard/rfq-success.html';
     })
     .catch((err) => {
-      showToast({ message: err.message || 'Sunucu hatası', type: 'error' });
       submitBtn.disabled = false;
       submitBtn.textContent = t('rfq.postRequest');
+      if (isEmailNotVerifiedError(err)) return; // toast api.ts'te gösterildi
+      showToast({ message: err.message || 'Sunucu hatası', type: 'error' });
     });
 });
