@@ -1,3 +1,28 @@
+## [v1.1.4-rc.26] - 2026-04-29 RC
+
+Bu surum rc.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(tailored): "Size Özel Seçimler" landing bloğu ve detay sayfası API'ye bağlandı. (@aliiball)
+- feat(tailored): Detay sayfası hero carousel'i API'ye bağla + SPA davranışı yapıldı. (@aliiball)
+- feat(product-detail): İlgili Ürünler 4-tab section'ı (Benzer/İkame/Tamamlayıcı/Aksesuar) (@aliiball)
+- feat(help-center): destek talep sistemi gerçek API'ya bağlandı (@ahmeetseker)
+- feat(help-center): talep oluşturma/listeleme login zorunlu (@ahmeetseker)
+- feat(currency): Para birimi dropdown ve kur verileri dinamik hale getirildi. (@aliiball)
+- feat(help-center): ticket kategori secimi + dosya ek yukleme + satici cikar catismasi onlemi (@ahmeetseker)
+- feat(legal,checkout): Mesafeli Satış + KVKK sayfaları ve MSY md.5 onay akışı (@ahmeetseker)
+- feat(favorites,manufacturers): tedarikçi favorileri + Alibaba tarzı arama akışı (@ahmeetseker)
+- feat(settings,checkout): Three-step email change UI, EMAIL_NOT_VERIFIED handling, cart i18n (@aliiball)
+
+### Duzeltildi
+- fix(tailored-hero): Coverflow+loop atlamalarını rewind ile çözüldü. (@aliiball)
+- fix: implement CSRF token rotation retry logic and clear cache on login to prevent 403 errors (@ahmeetseker)
+- fix(auth,orders): stale CSRF retry, legacy URL yönlendirmesi ve sipariş sayfası sadeleştirmesi (@ahmeetseker)
+
+### Degistirildi
+- refactor(theme,header): legacy section token'larını kaldır + destek bildirim akışı (@ahmeetseker)
+
+---
 ## [v1.1.4-rc.25] - 2026-04-29 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
