@@ -342,7 +342,8 @@ Alpine.data("settingsChangeEmail", () => ({
       } else if (msg.includes("Wrong verification code") || msg.includes("Wrong code")) {
         this.error = t("settings.wrongOtp") || "Doğrulama kodu hatalı.";
       } else if (msg.includes("Too many wrong attempts")) {
-        this.error = t("settings.tooManyAttempts") || "Çok fazla hatalı deneme. Lütfen yeni kod isteyin.";
+        this.error =
+          t("settings.tooManyAttempts") || "Çok fazla hatalı deneme. Lütfen yeni kod isteyin.";
         this.step = 1;
         clearPendingState(); // OTP geçersiz oldu, baştan başla
       } else if (msg.includes("No pending email change")) {
@@ -405,7 +406,7 @@ Alpine.data("settingsChangeEmail", () => ({
     try {
       localStorage.setItem(
         "otp_cooldown_settings_email",
-        String(Date.now() + retryAfterSec * 1000),
+        String(Date.now() + retryAfterSec * 1000)
       );
     } catch {
       /* ignore */
@@ -510,10 +511,7 @@ Alpine.data("settingsChangePassword", () => ({
       const msg = err instanceof Error ? err.message : "";
       if (msg === "RATE_LIMIT") {
         this.error = t("common.rateLimitError");
-      } else if (
-        msg.includes("same as your current") ||
-        msg.includes("aynı olamaz")
-      ) {
+      } else if (msg.includes("same as your current") || msg.includes("aynı olamaz")) {
         this.error = t("settings.passwordSameAsCurrent");
       } else if (
         msg.includes("Incorrect") ||
@@ -577,7 +575,9 @@ Alpine.data("settingsChangePhone", () => ({
     const newNorm = normalize(newPhone);
     const curNorm = normalize(this.currentPhone);
     if (newNorm && curNorm && newNorm === curNorm) {
-      this.error = t("settings.phoneSameAsCurrent") || "Yeni telefon numaranız mevcut telefon numaranızdan farklı olmalı.";
+      this.error =
+        t("settings.phoneSameAsCurrent") ||
+        "Yeni telefon numaranız mevcut telefon numaranızdan farklı olmalı.";
       return;
     }
 

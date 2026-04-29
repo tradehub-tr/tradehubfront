@@ -243,7 +243,16 @@ export function initEmailVerification(
           state.attemptsRemaining = err.attemptsRemaining;
           renderFeedback(state, feedbackEl, resendBtn, countdownSpan);
         } else if (err instanceof RateLimitError) {
-          startCooldown(state, err.retryAfter, email, feedbackEl, otpInputs, continueBtn, resendBtn, countdownSpan);
+          startCooldown(
+            state,
+            err.retryAfter,
+            email,
+            feedbackEl,
+            otpInputs,
+            continueBtn,
+            resendBtn,
+            countdownSpan
+          );
         } else {
           renderInlineMessage(feedbackEl, t("auth.otpInvalidCode"));
         }
@@ -375,7 +384,9 @@ export function initEmailVerification(
         state.attemptsRemaining = null;
         state.otp = ["", "", "", "", "", ""];
         clearOTPInputs();
-        otpInputs.forEach((inp) => { inp.disabled = false; });
+        otpInputs.forEach((inp) => {
+          inp.disabled = false;
+        });
         clearFeedback(feedbackEl);
         updateContinueButton(state, continueBtn);
         // Reset countdown
@@ -384,7 +395,16 @@ export function initEmailVerification(
         // ``onResend`` re-throws RateLimitError specifically so we can paint
         // the countdown UX. Generic errors are already toasted upstream.
         if (err instanceof RateLimitError) {
-          startCooldown(state, err.retryAfter, email, feedbackEl, otpInputs, continueBtn, resendBtn, countdownSpan);
+          startCooldown(
+            state,
+            err.retryAfter,
+            email,
+            feedbackEl,
+            otpInputs,
+            continueBtn,
+            resendBtn,
+            countdownSpan
+          );
         }
       }
     });
@@ -511,10 +531,7 @@ function renderInlineMessage(el: HTMLElement | null, msg: string): void {
 /** 5-segment thin meter — mockup ile aynı genişlik/renk tonu. */
 function meterMarkup(remaining: number, fill: "warning" | "error"): string {
   const total = OTP_TOTAL_ATTEMPTS;
-  const filledClass =
-    fill === "warning"
-      ? "bg-amber-500"
-      : "bg-red-500";
+  const filledClass = fill === "warning" ? "bg-amber-500" : "bg-red-500";
   let segments = "";
   for (let i = 0; i < total; i++) {
     const on = i < remaining;
@@ -551,7 +568,7 @@ function renderFeedback(
   state: EmailVerificationState,
   el: HTMLElement | null,
   resendBtn: HTMLButtonElement | null,
-  countdownSpan: HTMLElement | null,
+  countdownSpan: HTMLElement | null
 ): void {
   if (!el) return;
   const remaining = state.attemptsRemaining;
@@ -666,10 +683,7 @@ export function readRegisterCooldown(): RegisterCooldownState | null {
 
 function writeRegisterCooldown(email: string, until: number): void {
   try {
-    localStorage.setItem(
-      REGISTER_COOLDOWN_STORAGE_KEY,
-      JSON.stringify({ email, until }),
-    );
+    localStorage.setItem(REGISTER_COOLDOWN_STORAGE_KEY, JSON.stringify({ email, until }));
   } catch {
     /* localStorage unavailable — fall through to in-memory only */
   }
@@ -714,7 +728,7 @@ function startCooldown(
   otpInputs: NodeListOf<HTMLInputElement>,
   continueBtn: HTMLButtonElement | null,
   resendBtn: HTMLButtonElement | null,
-  countdownSpan: HTMLElement | null,
+  countdownSpan: HTMLElement | null
 ): void {
   // Persist {email, until} so a reload picks up where we left off — and so
   // the register page Alpine component can reroute back into the OTP step.
@@ -744,7 +758,9 @@ function startCooldown(
         state.cooldownInterval = null;
       }
       if (feedbackEl) feedbackEl.innerHTML = "";
-      otpInputs.forEach((inp) => { inp.disabled = false; });
+      otpInputs.forEach((inp) => {
+        inp.disabled = false;
+      });
       if (continueBtn) continueBtn.disabled = false;
       if (resendBtn) resendBtn.disabled = false;
       state.canResend = true;
@@ -755,7 +771,9 @@ function startCooldown(
   };
 
   // Lock the form for the duration of the cooldown.
-  otpInputs.forEach((inp) => { inp.disabled = true; });
+  otpInputs.forEach((inp) => {
+    inp.disabled = true;
+  });
   if (continueBtn) continueBtn.disabled = true;
   if (resendBtn) resendBtn.disabled = true;
   state.canResend = false;
@@ -773,7 +791,7 @@ function rehydrateCooldown(
   otpInputs: NodeListOf<HTMLInputElement>,
   continueBtn: HTMLButtonElement | null,
   resendBtn: HTMLButtonElement | null,
-  countdownSpan: HTMLElement | null,
+  countdownSpan: HTMLElement | null
 ): void {
   const persisted = readRegisterCooldown();
   if (!persisted) return;
@@ -782,7 +800,16 @@ function rehydrateCooldown(
   if (email && persisted.email && persisted.email !== email) return;
   const left = Math.ceil((persisted.until - Date.now()) / 1000);
   if (left <= 0) return;
-  startCooldown(state, left, persisted.email || email, feedbackEl, otpInputs, continueBtn, resendBtn, countdownSpan);
+  startCooldown(
+    state,
+    left,
+    persisted.email || email,
+    feedbackEl,
+    otpInputs,
+    continueBtn,
+    resendBtn,
+    countdownSpan
+  );
 }
 
 /**

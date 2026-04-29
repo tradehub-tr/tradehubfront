@@ -458,11 +458,18 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
               <div class="relative">
-                ${dropdownField("state-dropdown", "state", t("checkout.stateProvince"), "", provinceItems, {
-                  openProp: "stateOpen",
-                  selectFn: "selectStateItem($event)",
-                  displayProp: "stateDisplay",
-                })}
+                ${dropdownField(
+                  "state-dropdown",
+                  "state",
+                  t("checkout.stateProvince"),
+                  "",
+                  provinceItems,
+                  {
+                    openProp: "stateOpen",
+                    selectFn: "selectStateItem($event)",
+                    displayProp: "stateDisplay",
+                  }
+                )}
               </div>
 
               <div class="relative mb-3 group checkout-dropdown-container" data-field="city" data-dropdown="city-dropdown" x-bind:data-open="cityOpen" x-bind:data-error="errors.city" @click.outside="cityOpen = false">

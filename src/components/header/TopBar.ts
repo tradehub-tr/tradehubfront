@@ -1766,4 +1766,3 @@ if (document.readyState === "complete") {
     if (!_headerCartInitialized) initHeaderCart();
   });
 }
-

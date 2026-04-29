@@ -258,7 +258,8 @@ const tr = {
         qrLogin: "QR kod ile giriş yap",
         submit: "Giriş Yap",
         invalidCredentials: "E-posta veya şifre hatalı",
-        accountDisabled: "Hesabınız pasif. Yeniden etkinleştirmek için iSTOC müşteri hizmetlerine başvurun.",
+        accountDisabled:
+          "Hesabınız pasif. Yeniden etkinleştirmek için iSTOC müşteri hizmetlerine başvurun.",
         "2faRequired": "İki faktörlü doğrulama gerekli",
         emailVerified: "E-posta adresiniz başarıyla doğrulandı. Giriş yapabilirsiniz.",
         emailVerificationFailed: "Doğrulama bağlantısı geçersiz veya süresi dolmuş.",
@@ -381,10 +382,8 @@ const tr = {
       otpChangeEmail: "\u2190 E-posta adresini değiştir",
       disposableEmailNotAllowed:
         "Geçici/atılabilir e-posta adresleri kabul edilmiyor. Lütfen kalıcı bir adres kullanın.",
-      domainNotReachable:
-        "E-posta domain'i bulunamadı. Lütfen adresinizi kontrol edin.",
-      emailNotVerifiedAction:
-        "Bu işlem için e-posta adresinizi doğrulamanız gerekiyor.",
+      domainNotReachable: "E-posta domain'i bulunamadı. Lütfen adresinizi kontrol edin.",
+      emailNotVerifiedAction: "Bu işlem için e-posta adresinizi doğrulamanız gerekiyor.",
       // ── AccountTypeSelector ──
       buyer: "Alıcı",
       buyerDesc: "Ürün satın almak istiyorum",
@@ -982,8 +981,7 @@ const tr = {
       verificationEmailFailed:
         "Doğrulama e-postası gönderilemedi. Lütfen daha sonra tekrar deneyin.",
       emailAlreadyVerified: "Bu e-posta adresi zaten doğrulanmış.",
-      enterVerificationCode:
-        "E-postanıza gönderilen 6 haneli kodu girin:",
+      enterVerificationCode: "E-postanıza gönderilen 6 haneli kodu girin:",
       emailVerifiedSuccess: "E-posta adresiniz doğrulandı.",
       notifVerifyTaxStatus: "Vergiden muaf statüsü için hesabınızı doğrulatın",
       notifVerifyBusiness: "İş bilgilerini doğrulayın",
@@ -3626,13 +3624,11 @@ const tr = {
       newEmailSaved: "Yeni e-posta adresiniz kaydedildi.",
       backToSettings: "Hesap ayarlarına dön",
       // ── E-posta değişimi OTP doğrulama (Faz 2) ──────────────────
-      otpSentToNewEmail:
-        "Yeni e-posta adresinize 6 haneli bir doğrulama kodu gönderdik:",
+      otpSentToNewEmail: "Yeni e-posta adresinize 6 haneli bir doğrulama kodu gönderdik:",
       verificationCode: "Doğrulama kodu",
       confirmChange: "Değişikliği onayla",
       wrongOtp: "Doğrulama kodu hatalı.",
-      tooManyAttempts:
-        "Çok fazla hatalı deneme. Lütfen yeni kod isteyin.",
+      tooManyAttempts: "Çok fazla hatalı deneme. Lütfen yeni kod isteyin.",
       otpExpired: "Doğrulama kodu süresi doldu. Tekrar deneyin.",
       invalidOtpFormat: "Lütfen 6 haneli kodu girin.",
 

@@ -467,7 +467,11 @@ Alpine.data("resetPasswordPage", () => ({
         // Bad/expired key — user must request a new link
         this.error = t("auth.reset.invalidLinkDesc");
         this.step = "error";
-      } else if (lower.includes("password must") || lower.includes("parola en az") || lower.includes("şifre")) {
+      } else if (
+        lower.includes("password must") ||
+        lower.includes("parola en az") ||
+        lower.includes("şifre")
+      ) {
         // Frappe password policy error — show as inline error on the form
         this.error = msg;
       } else {

@@ -33,7 +33,7 @@ export interface AccountTypeSelectorOptions {
  */
 export function AccountTypeSelector(
   defaultType: AccountType = "buyer",
-  lockedTo?: AccountType,
+  lockedTo?: AccountType
 ): string {
   const buyerLocked = lockedTo === "supplier";
   const supplierLocked = lockedTo === "buyer";
@@ -46,7 +46,7 @@ export function AccountTypeSelector(
         type="button"
         class="auth-account-type-card flex items-center gap-3.5 w-full py-4 px-[18px] rounded-md text-left relative cursor-pointer transition-all${defaultType === "buyer" ? " selected" : ""}${buyerLocked ? lockedClasses : ""}"
         data-account-type="buyer"
-        ${buyerLocked ? "data-locked=\"true\" aria-disabled=\"true\" disabled tabindex=\"-1\"" : ""}
+        ${buyerLocked ? 'data-locked="true" aria-disabled="true" disabled tabindex="-1"' : ""}
         aria-pressed="${defaultType === "buyer" ? "true" : "false"}"
         role="radio"
       >
@@ -66,7 +66,7 @@ export function AccountTypeSelector(
         type="button"
         class="auth-account-type-card flex items-center gap-3.5 w-full py-4 px-[18px] rounded-md text-left relative cursor-pointer transition-all${defaultType === "supplier" ? " selected" : ""}${supplierLocked ? lockedClasses : ""}"
         data-account-type="supplier"
-        ${supplierLocked ? "data-locked=\"true\" aria-disabled=\"true\" disabled tabindex=\"-1\"" : ""}
+        ${supplierLocked ? 'data-locked="true" aria-disabled="true" disabled tabindex="-1"' : ""}
         aria-pressed="${defaultType === "supplier" ? "true" : "false"}"
         role="radio"
       >

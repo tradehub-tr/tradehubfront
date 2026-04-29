@@ -5,7 +5,11 @@
  */
 
 import { t } from "../../i18n";
-import { getCsrfToken, checkEmailNotVerifiedResponse, isEmailNotVerifiedError } from "../../utils/api";
+import {
+  getCsrfToken,
+  checkEmailNotVerifiedResponse,
+  isEmailNotVerifiedError,
+} from "../../utils/api";
 import { showToast } from "../../utils/toast";
 
 // ── Types (matching API response) ────────────────────────────────────────────

@@ -174,10 +174,7 @@ async function notifyEmailNotVerified(): Promise<void> {
   if (now - _lastEmailNotVerifiedToast < 3000) return;
   _lastEmailNotVerifiedToast = now;
   try {
-    const [{ showToast }, { t }] = await Promise.all([
-      import("./toast"),
-      import("../i18n"),
-    ]);
+    const [{ showToast }, { t }] = await Promise.all([import("./toast"), import("../i18n")]);
     showToast({
       message: t("auth.emailNotVerifiedAction"),
       type: "error",

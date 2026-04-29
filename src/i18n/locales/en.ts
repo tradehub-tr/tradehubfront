@@ -258,7 +258,8 @@ const en = {
         qrLogin: "Sign in with QR code",
         submit: "Sign In",
         invalidCredentials: "Incorrect email or password",
-        accountDisabled: "Your account is deactivated. Please contact iSTOC customer support to reactivate it.",
+        accountDisabled:
+          "Your account is deactivated. Please contact iSTOC customer support to reactivate it.",
         "2faRequired": "Two-factor authentication required",
         emailVerified: "Your email has been verified successfully. You can now log in.",
         emailVerificationFailed: "Verification link is invalid or has expired.",
@@ -374,8 +375,7 @@ const en = {
       otpLastAttemptBody:
         "One more wrong entry will reset this code and you will need to request a new one.",
       otpLockoutTitle: "Too many wrong attempts",
-      otpLockoutBody:
-        "This verification code is no longer valid. Request a new code to try again.",
+      otpLockoutBody: "This verification code is no longer valid. Request a new code to try again.",
       otpResent: "Verification code has been resent.",
       otpDidntReceive: "Didn't receive the code?",
       otpResend: "Resend",
@@ -383,10 +383,8 @@ const en = {
       otpChangeEmail: "← Change email address",
       disposableEmailNotAllowed:
         "Disposable email addresses are not allowed. Please use a permanent email.",
-      domainNotReachable:
-        "The email domain could not be reached. Please check your email address.",
-      emailNotVerifiedAction:
-        "You need to verify your email address to perform this action.",
+      domainNotReachable: "The email domain could not be reached. Please check your email address.",
+      emailNotVerifiedAction: "You need to verify your email address to perform this action.",
       // ── AccountTypeSelector ──
       buyer: "Buyer",
       buyerDesc: "I want to buy products",
@@ -980,8 +978,7 @@ const en = {
       verificationEmailSent: "Verification email sent. Please check your inbox.",
       verificationEmailFailed: "Could not send verification email. Please try again later.",
       emailAlreadyVerified: "This email address is already verified.",
-      enterVerificationCode:
-        "Enter the 6-digit code sent to your email:",
+      enterVerificationCode: "Enter the 6-digit code sent to your email:",
       emailVerifiedSuccess: "Your email address has been verified.",
       notifVerifyTaxStatus: "Validate your account for tax-exempt status",
       notifVerifyBusiness: "Verify business info",
@@ -3522,8 +3519,7 @@ const en = {
       newEmailSaved: "Your new email address has been saved.",
       backToSettings: "Back to account settings",
       // ── Email change OTP verification (Phase 2) ──────────────────
-      otpSentToNewEmail:
-        "We sent a 6-digit verification code to your new email:",
+      otpSentToNewEmail: "We sent a 6-digit verification code to your new email:",
       verificationCode: "Verification code",
       confirmChange: "Confirm change",
       wrongOtp: "Wrong verification code.",
