@@ -8,6 +8,7 @@ import type { BuyerDashboardData } from "../../types/buyerDashboard";
 import { t } from "../../i18n";
 import { NewBuyerInfo } from "./NewBuyerInfo";
 import { OrdersSection, initOrdersSection } from "./OrdersSection";
+import { SupportTicketsCard, initSupportTicketsCard } from "./SupportTicketsCard";
 import { FavoritesSection } from "../right-panel/FavoritesSection";
 import { BrowsingHistorySection } from "../right-panel/BrowsingHistorySection";
 // import { PromotionSection, initPromotionSection } from '../right-panel/PromotionSection';
@@ -45,6 +46,7 @@ export function BuyerDashboardLayout({
 
           <!-- Right Panel -->
           <div class="w-[380px] max-xl:w-[300px] max-lg:w-full flex-shrink-0 flex flex-col gap-[clamp(0.5rem,0.4rem+0.4vw,0.875rem)]">
+            ${SupportTicketsCard()}
             ${FavoritesSection()}
             ${BrowsingHistorySection(
               getBrowsingHistory().map((h) => ({
@@ -69,5 +71,6 @@ export function BuyerDashboardLayout({
  */
 export function initBuyerDashboardLayout(): void {
   initOrdersSection();
+  void initSupportTicketsCard();
   // initPromotionSection();
 }

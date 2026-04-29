@@ -10,6 +10,9 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - feat(help-center): talep oluşturma/listeleme login zorunlu (@ahmeetseker)
 - feat(currency): Para birimi dropdown ve kur verileri dinamik hale getirildi. (@aliiball)
 - feat(help-center): ticket kategori secimi + dosya ek yukleme + satici cikar catismasi onlemi (@ahmeetseker)
+- feat(notifications): destek talebi (dispute) bildirimleri "Destek" kategorisinde info toast olarak gosterilir (@ahmeetseker)
+- feat(buyer-dashboard): right panel'e Destek Taleplerim kartı (açık + yanıt bekleyen sayıları + yeni talep CTA) (@ahmeetseker)
+- feat(help-tickets): URL ?tab= parametresi ile dashboard kartından doğrudan açık/yanıt bekleyen tab'ına yönlendirme (@ahmeetseker)
 
 ### Duzeltildi
 - fix(tailored-hero): Coverflow+loop atlamalarını rewind ile çözüldü. (@aliiball)

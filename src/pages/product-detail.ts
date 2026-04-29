@@ -67,7 +67,7 @@ appEl.classList.add('relative');
 
 // Show loading state immediately
 appEl.innerHTML = `
-  <div id="sticky-header" class="sticky top-0 z-(--z-header)" style="background-color:var(--header-scroll-bg);border-bottom:1px solid var(--header-scroll-border)">
+  <div id="sticky-header" class="sticky top-0 z-(--z-header) border-b border-gray-200 bg-white">
     ${TopBar()}
     ${SubHeader()}
   </div>
@@ -125,7 +125,7 @@ async function renderProductPage() {
   // If no product loaded (no ID or API failed), show empty state
   if (!product.id) {
     appEl.innerHTML = `
-      <div id="sticky-header" class="sticky top-0 z-(--z-header)" style="background-color:var(--header-scroll-bg);border-bottom:1px solid var(--header-scroll-border)">
+      <div id="sticky-header" class="sticky top-0 z-(--z-header) border-b border-gray-200 bg-white">
         ${TopBar()}
         ${SubHeader()}
       </div>
@@ -163,7 +163,7 @@ async function renderProductPage() {
   // Render full product page
   appEl.innerHTML = `
     <!-- Sticky Header -->
-    <div id="sticky-header" class="sticky top-0 z-(--z-header)" style="background-color:var(--header-scroll-bg);border-bottom:1px solid var(--header-scroll-border)">
+    <div id="sticky-header" class="sticky top-0 z-(--z-header) border-b border-gray-200 bg-white">
       ${TopBar()}
       ${SubHeader()}
     </div>

@@ -23,7 +23,7 @@ await requireAuth();
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.classList.add('relative');
 appEl.innerHTML = `
-  <div id="sticky-header" class="sticky top-0 z-(--z-header)" style="background-color:var(--header-scroll-bg)">
+  <div id="sticky-header" class="sticky top-0 z-(--z-header) bg-white">
     ${TopBar({ compact: true })}
   </div>
 

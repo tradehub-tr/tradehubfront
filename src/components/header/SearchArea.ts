@@ -84,7 +84,7 @@ function renderDesktopSearchBar(): string {
       <form id="search-form" action="/pages/products.html" method="GET" role="search">
         <div class="relative">
           <!-- Search Box -->
-          <div id="search-box" class="flex items-center h-[42px] px-1.5 sm:px-2.5" style="background-color:var(--search-box-bg);border: 2px solid var(--search-input-border-color);border-radius: var(--radius-input)">
+          <div id="search-box" class="flex h-[42px] items-center border-2 bg-white px-1.5 sm:px-2.5" style="border-color:var(--search-input-border-color);border-radius:var(--radius-input)">
             <!-- Text Input -->
             <input
               type="text"
@@ -123,7 +123,7 @@ function renderDesktopSearchBar(): string {
           </div>
 
           <!-- Search Dropdown (shown on input focus) -->
-          <div id="search-dropdown" class="hidden absolute left-0 right-0 z-10 rounded-md px-3 sm:px-5 py-2.5 sm:py-3 shadow-lg mt-2" style="background-color:var(--search-dropdown-bg);border:1px solid var(--search-dropdown-border)">
+          <div id="search-dropdown" class="absolute left-0 right-0 z-10 mt-2 hidden rounded-md border border-amber-300 bg-white px-3 py-2.5 shadow-lg sm:px-5 sm:py-3">
             <!-- DISABLED: Deep Search Row — ileride geliştirilecek
             <div class="flex items-center gap-2 text-sm" style="color:var(--search-dropdown-text)">
               <span class="w-2 h-2 rounded-full inline-block flex-shrink-0" style="background-color:var(--search-chip-accent)"></span>
@@ -131,7 +131,7 @@ function renderDesktopSearchBar(): string {
             </div>
             -->
             <div class="flex items-center justify-end mb-2.5">
-              <a href="/pages/legal/terms.html" class="text-xs whitespace-nowrap transition-colors" style="color:var(--search-dropdown-muted)" data-i18n="header.termsOfUse">${t("header.termsOfUse")}</a>
+              <a href="/pages/legal/terms.html" class="whitespace-nowrap text-xs text-gray-400 transition-colors" data-i18n="header.termsOfUse">${t("header.termsOfUse")}</a>
             </div>
             <!-- Suggestion Chips (dynamically loaded) -->
             <div id="search-chips-container" class="flex items-center gap-2 flex-wrap">
@@ -148,10 +148,10 @@ function renderDesktopSearchBar(): string {
  */
 function renderWelcomeRow(): string {
   return `
-    <div class="hidden md:flex items-center justify-between mt-2 mb-4 sm:mb-7 py-2 sm:py-3 overflow-x-auto" style="background-color:var(--search-welcome-bg); border-bottom:1.5px solid var(--search-welcome-bg); min-height:48px;">
+    <div class="mt-2 mb-4 hidden min-h-12 items-center justify-between overflow-x-auto bg-gray-50 py-2 sm:mb-7 sm:py-3 md:flex">
       <div class="container-boxed flex items-center justify-between w-full gap-4">
         <!-- Welcome Text -->
-        <h2 class="hidden sm:block text-lg font-bold whitespace-nowrap" style="color:var(--search-welcome-text)">
+        <h2 class="hidden whitespace-nowrap text-lg font-bold text-gray-900 sm:block">
           <span data-i18n="search.welcomeIstoc">${t("search.welcomeIstoc")}</span>
         </h2>
 
@@ -207,7 +207,7 @@ function renderWelcomeRow(): string {
  */
 export function SearchArea(): string {
   return `
-    <section id="hero-search-area" class="relative pt-2 sm:pt-3 md:pt-5 pb-0 dark:bg-gray-900" style="background-color:var(--search-bg)" aria-label="Search area">
+    <section id="hero-search-area" class="relative bg-transparent pt-2 pb-0 sm:pt-3 md:pt-5 dark:bg-gray-900" aria-label="Search area">
       <div class="container-boxed">
         <!-- Desktop Search Tabs (above search bar) -->
         ${renderSearchTabs()}

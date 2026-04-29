@@ -46,17 +46,16 @@ function renderCard(card: RecommendationCard): string {
   const safeName = card.title.replace(/"/g, "&quot;");
 
   return `
-    <div class="swiper-slide recommendation-slide h-full xl:!w-[240px]">
+    <div class="swiper-slide recommendation-slide h-full xl:!w-[260px]">
       <a
         href="${card.href}"
         aria-label="${safeName}"
         title="${safeName}"
-        class="th-card group/card mx-auto flex h-full w-full flex-col transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-1 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-primary-400"
-        style="background-color:var(--hero-card-bg);border-color:var(--hero-card-border-color);border-radius:var(--hero-card-radius)"
+        class="group/card mx-auto flex h-full w-full flex-col rounded-2xl border border-gray-200 bg-white p-2 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-1 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-primary-400"
       >
         <div class="mb-2">
-          <h3 class="text-[14px] sm:text-[16px] font-bold leading-tight truncate dark:text-white" style="color:var(--hero-title-color)">${card.title}</h3>
-          ${card.price ? `<p class="mt-0.5 truncate text-[12px] sm:text-[13px] font-semibold leading-tight text-red-500">${formatStartingPrice(card.price)}</p>` : ""}
+          <h3 class="truncate text-sm font-bold leading-tight text-gray-900 sm:text-base dark:text-white">${card.title}</h3>
+          ${card.price ? `<p class="mt-0.5 truncate text-xs font-semibold leading-tight text-red-500 sm:text-[13px]">${formatStartingPrice(card.price)}</p>` : ""}
         </div>
         <div class="min-h-0 flex-1">
           ${renderCardImage(card)}
@@ -133,7 +132,7 @@ function initSwiper(): void {
       0: { slidesPerView: 1, spaceBetween: 12 },
       640: { slidesPerView: 1, spaceBetween: 16 },
       960: { slidesPerView: 2, spaceBetween: 20 },
-      1280: { slidesPerView: 3, spaceBetween: 20 },
+      1280: { slidesPerView: "auto", spaceBetween: 16 },
     },
   });
 }
