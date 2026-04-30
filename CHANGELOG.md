@@ -1,3 +1,8 @@
+## [v1.1.5-beta.2] - 2026-04-30 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+---
 ## [v1.1.5-beta.1] - 2026-04-30 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
