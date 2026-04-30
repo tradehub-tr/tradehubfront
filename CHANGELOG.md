@@ -1,3 +1,8 @@
+## [v1.1.5-rc.2] - 2026-04-30 RC
+
+Bu surum rc.istoc.com'da onay asamasindadir.
+
+---
 ## [v1.1.5-beta.2] - 2026-04-30 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
