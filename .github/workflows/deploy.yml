@@ -10,12 +10,14 @@ permissions:
   id-token: write
 
 jobs:
-  # ── 1. Sunucuya deploy (sadece main) ──────────────────
-  deploy-server:
+  # ── 1. Beta sunucuya deploy (sadece main) ────────────
+  # main → beta.istoc.com (otomatik)
+  # rc.istoc.com ve istoc.com için Jenkins pipeline'ları kullanılır.
+  deploy-beta:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to server via SSH
+      - name: Deploy to BETA server via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: 152.53.147.222
@@ -24,13 +26,13 @@ jobs:
           port: 5055
           script: |
             set -e
-            cd /opt/tradehub/storefront
+            cd /opt/tradehub-beta/storefront
             git reset --hard origin/main
             git pull origin main
-            cd /opt/tradehub
-            docker compose build --no-cache storefront
-            docker compose up -d --force-recreate storefront
-            echo "✅ Storefront deploy tamamlandı"
+            cd /opt/tradehub-beta
+            docker compose build --no-cache storefront-beta
+            docker compose up -d --force-recreate storefront-beta
+            echo "✅ Storefront BETA deploy tamamlandı → https://beta.istoc.com"
 
   # ── 2. GitHub Pages deploy (ahmet, ali, bora) ──────────
   deploy-pages:
@@ -55,8 +57,8 @@ jobs:
       - name: Build for GitHub Pages
         run: npx vite build
         env:
-          VITE_API_URL: https://rc.istoc.com/api
-          VITE_MEDIA_BASE: https://rc.istoc.com
+          VITE_API_URL: https://beta.istoc.com/api
+          VITE_MEDIA_BASE: https://beta.istoc.com
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

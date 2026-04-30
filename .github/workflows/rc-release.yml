@@ -1,9 +1,10 @@
 name: RC Release
 
+# Bu workflow Jenkins'in BETA→RC pipeline'ı tarafından tetiklenir.
+# Tag formatı: vX.Y.Z-rc.N
+# Jenkins çağrısı: gh workflow run rc-release.yml --ref main
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -55,7 +56,7 @@ jobs:
           fi
 
           ENTRY="## [${RC_VERSION}] - ${DATE} RC\n\n"
-          ENTRY+="Bu surum rc.istoc.com'da test asamasindadir.\n\n"
+          ENTRY+="Bu surum rc.istoc.com'da onay asamasindadir.\n\n"
 
           if [ -n "$FEATS" ]; then ENTRY+="### Eklendi\n${FEATS}\n\n"; fi
           if [ -n "$FIXES" ]; then ENTRY+="### Duzeltildi\n${FIXES}\n\n"; fi
