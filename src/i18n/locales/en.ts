@@ -860,6 +860,7 @@ const en = {
       views: "views",
       addToCart: "Add to cart",
       chat: "Chat",
+      outOfStock: "Out of stock",
       minOrder: "Minimum order: {{moq}}",
       noResults: "No results found",
       noResultsDesc:

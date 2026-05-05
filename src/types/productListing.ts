@@ -60,6 +60,10 @@ export interface ProductListingCard {
   brandLogo?: string;
   /** Raw brand code (e.g. "NIKE") */
   brand?: string;
+  /** When true, card renders a "Stokta yok" badge and add-to-cart is disabled. */
+  outOfStock?: boolean;
+  /** Raw listing status from backend (e.g. "Active", "Out of Stock"). */
+  status?: string;
 }
 
 /**

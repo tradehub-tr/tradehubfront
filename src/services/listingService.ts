@@ -890,6 +890,8 @@ function mapListingCard(raw: any): ProductListingCard {
     brandName: raw.brandName || undefined,
     brandSlug: raw.brandSlug || undefined,
     brandLogo: raw.brandLogo || undefined,
+    outOfStock: !!raw.outOfStock,
+    status: raw.status || undefined,
   };
 }
 
@@ -1103,6 +1105,10 @@ function mapListingDetail(raw: any): ProductDetail {
     productFamilyName: raw.productFamilyName || undefined,
     attributeSetName: raw.attributeSetName || undefined,
     videoUrl: raw.videoUrl || undefined,
+    outOfStock: !!raw.outOfStock,
+    status: raw.status || undefined,
+    inStock: raw.inStock !== undefined ? !!raw.inStock : undefined,
+    stockQty: typeof raw.stockQty === "number" ? raw.stockQty : undefined,
   };
 }
 

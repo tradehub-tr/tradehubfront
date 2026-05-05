@@ -186,4 +186,12 @@ export interface ProductDetail {
   reviewCategoryRatings: ReviewCategoryRating[];
   storeReviewCount: number;
   reviewMentionTags: ReviewMentionTag[];
+  /** When true, the listing is in "Out of Stock" status — show badge, disable add-to-cart. */
+  outOfStock?: boolean;
+  /** Raw listing status (e.g. "Active", "Out of Stock"). */
+  status?: string;
+  /** True when the listing has stock available (false when outOfStock or stock=0). */
+  inStock?: boolean;
+  /** Listing-level total stock quantity, after status overrides. */
+  stockQty?: number;
 }

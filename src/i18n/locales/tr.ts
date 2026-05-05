@@ -861,6 +861,7 @@ const tr = {
       views: "görüntülenme",
       addToCart: "Sepete ekle",
       chat: "Sohbet et",
+      outOfStock: "Stokta yok",
       minOrder: "Minimum sipariş: {{moq}}",
       noResults: "Sonuç bulunamadı",
       noResultsDesc:
