@@ -230,10 +230,29 @@ function renderProductListingCard(card: ProductListingCard): string {
       </div>`
       : "";
 
+  const isOOS = !!card.outOfStock;
+  const oosBadgeHtml = isOOS
+    ? `<div class="absolute top-2 left-2 z-20 px-2 py-1 rounded-md bg-red-600 text-white text-[11px] font-semibold shadow-sm pointer-events-none">${t("products.outOfStock")}</div>`
+    : "";
+  const oosOverlayHtml = isOOS
+    ? `<div class="absolute inset-0 z-10 bg-white/40 pointer-events-none"></div>`
+    : "";
+  const addToCartBtnHtml = isOOS
+    ? `<button type="button" class="searchx-product-e-abutton flex-1 flex items-center justify-center h-9 text-xs sm:text-sm font-medium whitespace-nowrap rounded-md bg-gray-200 text-gray-500 cursor-not-allowed"
+              disabled aria-disabled="true">
+        ${t("products.outOfStock")}
+      </button>`
+    : `<button type="button" class="searchx-product-e-abutton th-btn flex-1 flex items-center justify-center h-9 text-xs sm:text-sm font-medium cursor-pointer whitespace-nowrap"
+              data-add-to-cart="${card.id}">
+        ${t("products.addToCart")}
+      </button>`;
+
   return `
     <div class="fy26-product-card-wrapper flex flex-col justify-between w-full rounded-md overflow-hidden bg-white pb-3 border-0">
       <!-- Image area (full-bleed, kart padding'inin dışında) -->
       <a href="${card.href}" class="searchx-img-area relative mb-3 block">
+        ${oosBadgeHtml}
+        ${oosOverlayHtml}
         ${renderImageSlider(card)}
       </a>
 
@@ -254,6 +273,7 @@ function renderProductListingCard(card: ProductListingCard): string {
           <div class="fy26-moq-stats flex gap-1.5 flex-wrap mt-0.5">
             ${moqHtml}
           </div>
+          ${isOOS ? `<div class="mt-1 text-xs font-medium text-red-600">${t("products.outOfStock")}</div>` : ""}
         </div>
 
         <!-- Supplier area -->
@@ -265,10 +285,7 @@ function renderProductListingCard(card: ProductListingCard): string {
 
       <!-- Action buttons -->
       <div class="action-area-layout flex gap-2 px-3 mt-3 items-center">
-        <button type="button" class="searchx-product-e-abutton th-btn flex-1 flex items-center justify-center h-9 text-xs sm:text-sm font-medium cursor-pointer whitespace-nowrap"
-                data-add-to-cart="${card.id}">
-          ${t("products.addToCart")}
-        </button>
+        ${addToCartBtnHtml}
       </div>
     </div>
   `;

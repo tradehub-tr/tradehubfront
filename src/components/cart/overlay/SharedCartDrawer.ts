@@ -238,6 +238,33 @@ function getSizeStock(sizeLabel: string): number {
   return match ? match.stock : 0;
 }
 
+/**
+ * Get the unit price for a specific (selected color + size + selectables) combination.
+ * Looks up skuMatrix first; falls back to size-level rawPrice, then to fallbackPrice (tier/color price).
+ */
+function getSkuPriceForSize(
+  sizeLabel: string,
+  optRawPrice: number | undefined,
+  fallbackPrice: number
+): number {
+  const skuMatrix = state.item?.skuMatrix;
+  if (skuMatrix && skuMatrix.length > 0) {
+    const selectedColor = state.item?.colors.find((c) => c.id === state.selectedColorId);
+    if (selectedColor) {
+      const match = skuMatrix.find((row) => {
+        if (row.axis1 !== selectedColor.label || row.axis2 !== sizeLabel) return false;
+        for (const [axName, axVal] of state.selectedSelectables) {
+          if ((row.extraAxes || {})[axName] !== axVal) return false;
+        }
+        return true;
+      });
+      if (match && match.price != null && match.price > 0) return match.price;
+    }
+  }
+  if (optRawPrice != null && optRawPrice > 0) return optRawPrice;
+  return fallbackPrice;
+}
+
 /** Returns the base unit price accounting for selected color's rawPrice. */
 function getBasePrice(tierPrice: number): number {
   if (!state.item) return tierPrice;
@@ -289,7 +316,7 @@ function getTotals(): {
       for (const opt of group.options) {
         const qty = state.sizeQuantities.get(opt.id) ?? 0;
         if (qty === 0) continue;
-        const unitPrice = opt.rawPrice != null && opt.rawPrice > 0 ? opt.rawPrice : activePrice;
+        const unitPrice = getSkuPriceForSize(opt.label, opt.rawPrice, activePrice);
         itemSubtotal += unitPrice * qty;
       }
     }
@@ -583,8 +610,7 @@ function renderDrawerBody(): void {
           .map((opt) => {
             const qty = state.sizeQuantities.get(opt.id) ?? 0;
             const hasQty = qty > 0;
-            const displayPrice =
-              opt.rawPrice != null && opt.rawPrice > 0 ? opt.rawPrice : totals.activePrice;
+            const displayPrice = getSkuPriceForSize(opt.label, opt.rawPrice, totals.activePrice);
             const available = isSizeAvailable(opt.label);
             const stock = getSizeStock(opt.label);
             const stockLabel = !available
@@ -910,7 +936,7 @@ function syncToCartStore(item: CartDrawerItemModel, unitPrice: number): void {
         if (qty <= 0) continue;
 
         const skuId = `${item.id}-${state.selectedColorId || "no-color"}-${opt.id}`;
-        const effectivePrice = opt.rawPrice != null && opt.rawPrice > 0 ? opt.rawPrice : unitPrice;
+        const effectivePrice = getSkuPriceForSize(opt.label, opt.rawPrice, unitPrice);
         const variantText = buildVariantText(item, group.groupLabel, opt.label);
         const existing = cartStore.getSku(skuId);
 

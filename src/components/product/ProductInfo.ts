@@ -273,9 +273,13 @@ function updateReadyBadge(skuMatrix: any[], variants: any[]): void {
   const mobileBadge = document.querySelector<HTMLElement>('[data-ready-badge="mobile"]');
   if (!desktopBadge && !mobileBadge) return;
 
-  let inStock = true;
+  // Listing-level "Out of Stock" status overrides everything: even if some
+  // SKU rows would otherwise look available, the seller has explicitly flagged
+  // this listing as unavailable, so the badge should reflect that.
+  const product = getCurrentProduct() as any;
+  let inStock = !product?.outOfStock;
 
-  if (skuMatrix.length > 0) {
+  if (inStock && skuMatrix.length > 0) {
     const selectedAxes = getSelectedAxes();
     inStock = skuMatrix.some((sku: any) => {
       if (!sku.available) return false;
