@@ -130,7 +130,7 @@ function buildDropdownContent(
     <!-- Header -->
     <div class="flex items-center justify-between px-4 pt-3.5 pb-2">
       <h3 class="text-sm font-semibold text-gray-900">${t("favorites.saveToList")}</h3>
-      <button type="button" class="fav-dropdown-close p-1 rounded-lg hover:bg-gray-100 transition-colors" aria-label="${t("common.close")}">
+      <button type="button" class="fav-dropdown-close th-no-press p-1 rounded-lg hover:bg-gray-100 transition-colors" aria-label="${t("common.close")}">
         <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
     </div>
@@ -154,7 +154,7 @@ function buildDropdownContent(
 
     <!-- Create new list -->
     <div class="border-t border-gray-100" id="fav-dropdown-footer">
-      <button type="button" class="fav-create-list-btn flex items-center gap-2.5 w-full px-4 py-3 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors">
+      <button type="button" class="fav-create-list-btn th-no-press flex items-center gap-2.5 w-full px-4 py-3 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
         <span>${t("favorites.newList")}</span>
       </button>
@@ -175,7 +175,7 @@ function buildDropdownContent(
         ? `
     <!-- Remove from all -->
     <div class="border-t border-gray-100">
-      <button type="button" class="fav-remove-all-btn flex items-center gap-2.5 w-full px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors rounded-b-md">
+      <button type="button" class="fav-remove-all-btn th-no-press flex items-center gap-2.5 w-full px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors rounded-b-md">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
         <span>${t("favorites.removeFromAll")}</span>
       </button>

@@ -29,10 +29,10 @@ function renderSubcategoryItem(name: string, slug: string): string {
 
 function renderBrowseListSkeleton(): string {
   return Array.from(
-    { length: 8 },
+    { length: 6 },
     () => `
     <li>
-      <div class="flex items-center gap-3.5 w-full animate-pulse" style="padding:var(--catpopup-sidebar-padding-y) var(--catpopup-sidebar-padding-x)">
+      <div class="flex items-center w-full animate-pulse" style="min-height:44px;padding:6px 16px;gap:12px">
         <div class="w-5 h-5 rounded bg-gray-200 dark:bg-gray-700 flex-shrink-0"></div>
         <div class="h-3.5 rounded bg-gray-200 dark:bg-gray-700 flex-1"></div>
       </div>
@@ -106,19 +106,29 @@ function renderCategoryPopup(): string {
 
 export function CategoryBrowse(): string {
   return `
-        <div class="group/panel relative h-[300px] w-full flex-shrink-0 overflow-hidden rounded-2xl border border-gray-200 bg-white p-2 shadow-sm xl:w-[300px] dark:border-gray-700 dark:bg-gray-800">
+        <div class="left-panel group/panel relative h-[304px] w-full flex-shrink-0 overflow-hidden rounded-md xl:w-[300px] dark:border-gray-700 dark:bg-gray-800" style="background-color:#F8F8F8;border:1px solid #EAEAEA">
+          <!-- Header (Sizin için kategoriler) -->
+          <div class="flex items-center w-full select-none" style="padding:10px 16px 8px 16px;gap:12px">
+            <svg class="w-5 h-5 flex-shrink-0" style="color:#222222" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"/>
+            </svg>
+            <h3 class="flex-1 truncate" style="color:#222222;font-size:15px;font-weight:600;font-family:var(--font-sans);line-height:1.3" data-i18n="categoryBrowse.headerForYou">${t("categoryBrowse.headerForYou")}</h3>
+            <svg class="w-4 h-4 flex-shrink-0" style="color:#999999" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
+            </svg>
+          </div>
           <!-- Category List (loading skeleton, replaced after API) -->
-          <ul id="category-browse-list" class="h-full overflow-y-auto pb-12">
+          <ul id="category-browse-list" class="overflow-y-auto" style="height:calc(100% - 44px)">
             ${renderBrowseListSkeleton()}
           </ul>
-          <!-- View All: floating over categories, visible on hover -->
+          <!-- View All: floating pill button at bottom (visible on hover) -->
           <button
             type="button"
             id="category-browse-view-all"
-            class="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1 px-3 py-1.5 text-sm font-medium rounded-full shadow-md border opacity-0 group-hover/panel:opacity-100 transition-opacity cursor-pointer" style="color:var(--catpopup-text);background-color:var(--catpopup-bg);border-color:var(--catpopup-border)"
+            class="th-no-press absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1 px-3 py-1 text-xs font-medium rounded-full border bg-white cursor-pointer opacity-0 group-hover/panel:opacity-100 transition-opacity whitespace-nowrap" style="color:#222222;border-color:#E5E5E5;font-family:var(--font-sans);line-height:1.2"
           >
             <span data-i18n="categoryBrowse.viewAll">${t("categoryBrowse.viewAll")}</span>
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
             </svg>
           </button>
@@ -327,21 +337,15 @@ export function initCategoryBrowse(): void {
         <li>
           <button
             type="button"
-            class="category-browse-item flex items-center gap-3.5 w-full transition-colors duration-150 group text-left hover:bg-(--catpopup-sidebar-hover-bg) hover:text-(--catpopup-heading) dark:text-gray-300 dark:hover:bg-gray-700/60 dark:hover:text-white"
-            style="color:var(--catpopup-text);font-size:var(--catpopup-sidebar-font-size);font-weight:var(--catpopup-sidebar-font-weight);padding:var(--catpopup-sidebar-padding-y) var(--catpopup-sidebar-padding-x)"
+            class="category-browse-item level1-cate-unit th-no-press flex items-center w-full text-left transition-colors duration-150 group bg-transparent hover:bg-white dark:text-gray-300 dark:hover:bg-gray-700/60 dark:hover:text-white"
+            style="min-height:44px;padding:6px 16px;gap:12px"
             data-category-id="${cat.id}"
           >
-            <span class="flex-shrink-0 transition-colors" style="color:var(--catpopup-icon)">
-              ${
-                cat.image
-                  ? `<img src="${cat.image}" alt="${cat.name}" class="w-5 h-5 rounded-full object-cover" loading="lazy" />`
-                  : cat.icon_class
-                    ? getCategoryIcon(cat.icon_class)
-                    : getIconByName(cat.name)
-              }
+            <span class="flex-shrink-0 inline-flex items-center justify-center [&>svg]:w-5 [&>svg]:h-5" style="color:#222222">
+              ${cat.icon_class ? getCategoryIcon(cat.icon_class) : getIconByName(cat.name)}
             </span>
-            <span class="flex-1">${cat.name}</span>
-            <svg class="w-4 h-4 flex-shrink-0 transition-colors" style="color:var(--catpopup-icon)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <span class="title flex-1 truncate" style="color:#222222;font-size:15px;font-weight:600;font-family:var(--font-sans);line-height:1.3">${cat.name}</span>
+            <svg class="w-4 h-4 flex-shrink-0" style="color:#999999" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
             </svg>
           </button>
@@ -368,7 +372,7 @@ export function initCategoryBrowse(): void {
         <li class="flex-shrink-0 lg:flex-shrink">
           <button
             type="button"
-            class="cat-popup-btn th-catpopup-sidebar-item flex items-center gap-2 lg:gap-3 w-full px-3 lg:px-4 py-2 lg:py-2.5 text-sm text-left border-l-2 border-l-transparent transition-colors duration-150 whitespace-nowrap lg:whitespace-normal hover:bg-(--catpopup-sidebar-active-bg) hover:text-(--catpopup-heading) ${index === 0 ? "th-catpopup-sidebar-item--active" : ""}"
+            class="cat-popup-btn th-catpopup-sidebar-item th-no-press flex items-center gap-2 lg:gap-3 w-full px-3 lg:px-4 py-2 lg:py-2.5 text-sm text-left border-l-2 border-l-transparent transition-colors duration-150 whitespace-nowrap lg:whitespace-normal hover:bg-(--catpopup-sidebar-active-bg) hover:text-(--catpopup-heading) ${index === 0 ? "th-catpopup-sidebar-item--active" : ""}"
             style="color:var(--catpopup-text)"
             data-category="${cat.id}"
           >

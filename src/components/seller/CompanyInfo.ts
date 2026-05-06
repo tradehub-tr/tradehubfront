@@ -5,6 +5,7 @@
  */
 import type { CompanyInfo as CompanyInfoData, SellerProfile } from "../../types/seller/types";
 import { t } from "../../i18n";
+import { btn } from "../../utils/ui/button";
 
 function renderVariantA(data: CompanyInfoData, seller: SellerProfile): string {
   return `
@@ -108,12 +109,12 @@ function renderVariantB(data: CompanyInfoData, seller: SellerProfile): string {
               </div>
             </div>
             <!-- Navigation Arrows -->
-            <button class="company-info__prev absolute left-2 top-1/2 -translate-y-1/2 bg-[#e5e5e5] hover:bg-[#d1d5db] dark:bg-gray-700 dark:hover:bg-gray-600 w-8 h-12 rounded-sm flex items-center justify-center z-10 transition-colors border-none cursor-pointer" aria-label="${t("seller.sf.previous")}">
+            <button class="${btn({ variant: "ghost", iconOnly: true })} company-info__prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-12 z-10" aria-label="${t("seller.sf.previous")}">
               <svg class="w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
               </svg>
             </button>
-            <button class="company-info__next absolute right-2 top-1/2 -translate-y-1/2 bg-[#e5e5e5] hover:bg-[#d1d5db] dark:bg-gray-700 dark:hover:bg-gray-600 w-8 h-12 rounded-sm flex items-center justify-center z-10 transition-colors border-none cursor-pointer" aria-label="${t("seller.sf.nextSlide")}">
+            <button class="${btn({ variant: "ghost", iconOnly: true })} company-info__next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-12 z-10" aria-label="${t("seller.sf.nextSlide")}">
               <svg class="w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
               </svg>

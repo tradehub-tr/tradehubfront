@@ -9,6 +9,7 @@ import { Checkbox } from "../atoms/Checkbox";
 import { PriceDisplay } from "../atoms/PriceDisplay";
 import { QuantityInput } from "../atoms/QuantityInput";
 import { formatPrice } from "../../../services/currencyService";
+import { t } from "../../../i18n";
 import trashIcon from "../../../assets/images/trash.png";
 
 export interface SkuRowProps {
@@ -44,7 +45,22 @@ export function SkuRow({ sku, productHref }: SkuRowProps): string {
       <div class="min-w-0">
         <div class="flex items-start justify-between gap-2">
           <div class="flex flex-col gap-1 min-w-0">
-            <span class="text-sm text-text-body truncate">${escapeHtml(sku.variantText)}</span>
+            <div class="flex items-center gap-2 flex-wrap">
+              ${
+                sku.isSample
+                  ? `<span class="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-800 bg-amber-100 border border-amber-200 rounded-full px-2 py-0.5 w-fit">
+                <svg class="w-3 h-3 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+                ${t("cart.sampleBadge")}
+              </span>`
+                  : ""
+              }
+              <span class="text-sm text-text-body truncate">${escapeHtml(sku.variantText)}</span>
+            </div>
+            ${
+              sku.isSample
+                ? `<span class="text-[11px] text-text-tertiary">${t("cart.sampleNote")}</span>`
+                : ""
+            }
             ${
               unavailable
                 ? `<span class="inline-flex items-center gap-1 text-xs font-medium text-red-600 bg-red-50 border border-red-200 rounded px-2 py-0.5 w-fit">

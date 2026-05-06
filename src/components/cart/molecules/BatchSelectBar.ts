@@ -6,6 +6,7 @@
 
 import { Checkbox } from "../atoms/Checkbox";
 import { t } from "../../../i18n";
+import { btn } from "../../../utils/ui/button";
 
 export interface BatchSelectBarProps {
   totalCount: number;
@@ -23,7 +24,7 @@ export function BatchSelectBar({ totalCount, selectedCount }: BatchSelectBarProp
         <p class="text-base text-text-heading truncate">${t("cart.selectAll")} <span class="sc-c-batch-count text-text-tertiary">(${totalCount})</span></p>
       </div>
 
-      <button type="button" class="sc-c-batch-delete-btn flex items-center gap-1.5 text-sm text-text-tertiary hover:text-error-500 disabled:opacity-40 disabled:cursor-not-allowed shrink-0" ${selectedCount === 0 ? "disabled" : ""} @click="$dispatch('batch-delete')">
+      <button type="button" class="${btn({ variant: "danger-ghost" })} sc-c-batch-delete-btn shrink-0" ${selectedCount === 0 ? "disabled" : ""} @click="$dispatch('batch-delete')">
         <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="3 6 5 6 21 6"/>
           <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>

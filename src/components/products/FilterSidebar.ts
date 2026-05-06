@@ -549,7 +549,7 @@ export function initFilterSidebar(query?: string, category?: string): void {
                   (cat) => `
           <button
             type="button"
-            class="flex items-center justify-between w-full py-1.5 text-[13px] hover:text-primary-600 transition-colors cursor-pointer"
+            class="th-no-press flex items-center justify-between w-full py-1.5 text-[13px] hover:text-primary-600 transition-colors cursor-pointer"
             style="color: var(--filter-text-color, #374151);"
             onclick="window.location.href='/pages/products.html?cat=${cat.slug}'"
           >

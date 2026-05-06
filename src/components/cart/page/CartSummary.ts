@@ -92,10 +92,21 @@ export function CartSummary(data: CartSummaryData): string {
       </div>`
       }
 
-      <button type="button" class="sc-summary-checkout-btn flex items-center justify-center w-full mt-4 th-btn-dark h-12 text-center" @click="$dispatch('checkout-global')">
+      <button type="button" class="sc-summary-checkout-btn flex items-center justify-center gap-2 w-full mt-4 th-btn-success h-12 text-center" @click="$dispatch('checkout-global')">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3 4 6v6c0 4.5 3.2 8.5 8 9 4.8-.5 8-4.5 8-9V6l-8-3Z" />
+          <path d="m9 12 2 2 4-4" />
+        </svg>
         <span data-i18n="cart.checkout">${t("cart.checkout")}</span>
       </button>
       <p class="sc-summary-checkout-warning mt-2 text-[13px] leading-[18px] text-[#dc2626] hidden"></p>
+
+      <div class="mt-5 pt-5 border-t border-[#e5e5e5]">
+        <div class="p-3.5 bg-[#f0fdf4] border border-[#bbf7d0] rounded-md">
+          <img src="/images/istoc-logo.png" alt="iSTOC" class="h-4 w-auto mb-2" />
+          <p class="text-[12px] text-[#6b7280] leading-relaxed">Ödeme güvenli olarak platforma yapılır; sipariş satıcılara iSTOC güvencesi ile yönlendirilir.</p>
+        </div>
+      </div>
     </div>
   `;
 }

@@ -531,6 +531,29 @@ Alpine.data("cartPage", () => ({
         }
       }
     });
+
+    // Ürün accordion başlığında gösterilen toplam etiketini de güncelle.
+    el.querySelectorAll<HTMLElement>(".sc-c-spu-container-new").forEach((spuEl) => {
+      const productId = spuEl.dataset.productId;
+      if (!productId) return;
+
+      const found = cartStore.getProduct(productId);
+      if (!found) return;
+      const product = found.product;
+
+      let pSubtotal = 0;
+      product.skus.forEach((sku) => {
+        if (sku.selected) {
+          const converted = convertPrice(sku.unitPrice, sku.baseCurrency || "USD");
+          pSubtotal += converted * sku.quantity;
+        }
+      });
+
+      const totalEl = spuEl.querySelector<HTMLElement>(".sc-c-spu-total");
+      if (totalEl) {
+        totalEl.textContent = pSubtotal > 0 ? formatCurrency(pSubtotal, getSelectedCurrency()) : "";
+      }
+    });
   },
 
   syncBatchBar() {

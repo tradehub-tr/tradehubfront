@@ -18,6 +18,7 @@ import { getSelectedCurrency, setSelectedCurrency, getCurrencySymbol } from "../
 import {
   formatCurrency,
   formatPrice,
+  convertPrice,
   getSelectedCurrency as csGetSelectedCurrency,
 } from "../../services/currencyService";
 import { getSearchSuggestions } from "../../services/listingService";
@@ -174,8 +175,9 @@ function renderCompactStickySearch(): string {
         aria-expanded="false"
         :aria-expanded="expanded ? 'true' : 'false'"
         aria-controls="topbar-compact-dropdown"
-        class="absolute left-0 right-0 top-[7px] z-[50] w-full border border-gray-300 bg-white shadow-sm transition-all duration-300 ease-in-out overflow-hidden dark:border-gray-600 dark:bg-gray-800"
-        :class="expanded ? 'rounded-md shadow-md h-[100px] pt-1.5' : 'rounded-full h-[42px]'"
+        style="height: 42px; border-radius: 9999px; will-change: height, border-radius, box-shadow; transform: translateZ(0);"
+        class="absolute left-0 right-0 top-[7px] z-[50] w-full border border-gray-300 bg-white shadow-sm overflow-hidden dark:border-gray-600 dark:bg-gray-800"
+        :class="expanded ? 'shadow-xl pt-1.5' : ''"
       >
         <div id="topbar-compact-primary-row" class="flex items-center gap-1.5 transition-all duration-300 ease-in-out shrink-0" :class="expanded ? 'px-3 h-[40px] w-full' : 'px-1.5 h-[40px]'">
           <div class="relative min-w-0 flex-1 h-full">
@@ -236,17 +238,11 @@ function renderCompactStickySearch(): string {
       <div
         id="topbar-compact-dropdown"
         x-ref="dropdown"
-        x-show="expanded"
-        x-transition:enter="transition ease-out duration-300 transform origin-top"
-        x-transition:enter-start="opacity-0 scale-y-95 -translate-y-2"
-        x-transition:enter-end="opacity-100 scale-y-100 translate-y-0"
-        x-transition:leave="transition ease-in duration-200 transform origin-top"
-        x-transition:leave-start="opacity-100 scale-y-100 translate-y-0"
-        x-transition:leave-end="opacity-0 scale-y-95 -translate-y-2"
-        x-cloak
         aria-hidden="true"
         :aria-hidden="expanded ? 'false' : 'true'"
-        class="absolute left-0 right-0 top-[110px] z-(--z-modal) rounded-md border border-gray-200 bg-white px-5 py-4 shadow-xl dark:border-gray-700 dark:bg-gray-800"
+        :style="{ pointerEvents: expanded ? 'auto' : 'none' }"
+        style="opacity: 0; transform: translateY(-8px) scale(0.97); transform-origin: top center; will-change: transform, opacity; backface-visibility: hidden;"
+        class="absolute left-0 right-0 top-[110px] z-(--z-modal) rounded-2xl border border-gray-200 bg-white px-5 py-4 dark:border-gray-700 dark:bg-gray-800"
       >
         <div class="flex items-center justify-between gap-4">
           <h3 class="text-lg font-bold text-gray-900 dark:text-white"><span data-i18n="header.recommendedForYou">${t("header.recommendedForYou")}</span></h3>
@@ -465,8 +461,6 @@ function renderOrdersButton(): string {
       class="absolute z-50 invisible inline-block w-96 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 transition-opacity duration-300 dark:bg-gray-800 dark:border-gray-700"
     >
       <div class="p-5">
-        <h3 class="text-base font-bold text-gray-900 dark:text-white mb-4"><span data-i18n="header.orders">${t("header.orders")}</span></h3>
-
         <!-- Trade Assurance Header -->
         <div class="flex items-center gap-2 mb-2">
           <img src="${new URL("../../assets/images/tas_logo.png", import.meta.url).href}" alt="${t("mega.tradeAssuranceTitle")}" class="w-8 h-8 object-contain" />
@@ -1319,6 +1313,152 @@ export function TopBar(props?: TopBarProps): string {
  */
 let _headerCartInitialized = false;
 
+function renderCartModalContent(modal: HTMLElement, supplierId: string): boolean {
+  const supplier = cartStore.getSupplier(supplierId);
+  const skuCount = supplier ? supplier.products.reduce((s, p) => s + p.skus.length, 0) : 0;
+  if (!supplier || skuCount === 0) return false;
+
+  const countEl = modal.querySelector<HTMLElement>("[data-cart-modal-count]");
+  const bodyEl = modal.querySelector<HTMLElement>("[data-cart-modal-body]");
+  const subtotalEl = modal.querySelector<HTMLElement>("[data-cart-modal-subtotal]");
+
+  if (countEl) countEl.textContent = `${skuCount} ${t("common.items")}`;
+
+  if (subtotalEl) {
+    const supplierSubtotal = supplier.products.reduce(
+      (sum, p) =>
+        sum +
+        p.skus.reduce(
+          (s, sku) => s + convertPrice(sku.unitPrice, sku.baseCurrency || "USD") * sku.quantity,
+          0
+        ),
+      0
+    );
+    subtotalEl.textContent = formatCurrency(supplierSubtotal, csGetSelectedCurrency());
+  }
+
+  if (bodyEl) {
+    let html = `
+      <div class="flex items-center gap-2 mb-2">
+        <span class="inline-block w-1.5 h-4 rounded-sm" style="background:var(--btn-bg,#d97706)"></span>
+        <p class="text-[13px] font-semibold text-gray-900">${supplier.name} <span class="text-gray-400 font-normal">(${skuCount})</span></p>
+      </div>
+      <div class="divide-y divide-gray-100">`;
+
+    for (const product of supplier.products) {
+      for (const sku of product.skus) {
+        const sampleBadge = sku.isSample
+          ? `<span class="inline-flex items-center text-[9px] font-semibold px-1 py-0.5 rounded-full bg-amber-100 text-amber-800 mr-1 align-middle">${t("cart.sampleBadge")}</span>`
+          : "";
+        const thumb = sku.skuImage
+          ? `<img src="${sku.skuImage}" alt="${product.title}" class="w-11 h-11 rounded-md object-cover border border-gray-100 shadow-sm">`
+          : `<div class="w-11 h-11 rounded-md bg-gray-100 border border-gray-100"></div>`;
+        html += `
+          <div class="flex items-center gap-2.5 py-2.5 group">
+            <div class="relative w-11 h-11 flex-shrink-0">
+              ${thumb}
+              <span class="absolute -bottom-1 -right-1 min-w-[18px] h-[16px] px-1 inline-flex items-center justify-center text-[9px] font-bold text-white bg-gray-900 rounded leading-none">${sku.quantity}</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-[12px] font-medium text-gray-800 leading-snug line-clamp-2">${sampleBadge}${product.title}</p>
+              ${sku.variantText ? `<p class="text-[10px] text-gray-500 truncate mt-0.5">${sku.variantText}</p>` : ""}
+            </div>
+            <span class="text-[12px] font-bold text-gray-900 flex-shrink-0 whitespace-nowrap">${formatPrice(sku.unitPrice, sku.baseCurrency || "USD")}</span>
+            <button type="button" data-delete-sku="${sku.id}" class="w-5 h-5 inline-flex items-center justify-center rounded-full text-gray-300 hover:text-red-500 hover:bg-red-50 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity flex-shrink-0" aria-label="${t("cart.removeProduct")}">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>`;
+      }
+    }
+    html += `</div>`;
+    bodyEl.innerHTML = html;
+  }
+  return true;
+}
+
+function ensureCartSupplierModal(): HTMLElement {
+  const existing = document.getElementById("cart-supplier-modal");
+  if (existing) return existing;
+
+  const modal = document.createElement("div");
+  modal.id = "cart-supplier-modal";
+  modal.setAttribute("role", "dialog");
+  modal.setAttribute("aria-modal", "true");
+  modal.setAttribute("aria-hidden", "true");
+  modal.className = "hidden fixed inset-0 z-[80] flex items-center justify-center bg-black/40 px-3";
+  modal.innerHTML = `
+    <div class="bg-white rounded-md shadow-xl w-full overflow-hidden max-w-[360px] sm:max-w-[420px] md:max-w-[480px] lg:max-w-[560px] xl:max-w-[640px]" data-cart-modal-content>
+      <div class="flex items-center justify-between gap-2 px-4 py-3 border-b border-gray-100">
+        <h3 class="text-[14px] font-bold text-gray-900 truncate">
+          ${t("cart.orderSummary")} <span class="mx-0.5 text-gray-400">—</span>
+          <span data-cart-modal-count style="color:var(--btn-bg,#d97706)"></span>
+        </h3>
+        <button type="button" data-cart-modal-close class="w-7 h-7 inline-flex items-center justify-center rounded-md text-gray-400 hover:text-gray-700 hover:bg-gray-100 flex-shrink-0" aria-label="${t("common.close")}">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="px-4 py-3 max-h-[60vh] overflow-y-auto" data-cart-modal-body></div>
+      <div class="flex items-center justify-between gap-2 px-4 py-3 border-t border-gray-100 bg-gray-50">
+        <span class="text-[13px] font-semibold text-gray-700">${t("header.cartSubtotal")}</span>
+        <span class="text-[15px] font-bold" style="color:var(--btn-bg,#d97706)" data-cart-modal-subtotal></span>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+
+  const close = () => {
+    modal.classList.add("hidden");
+    modal.setAttribute("aria-hidden", "true");
+    delete modal.dataset.activeSupplierId;
+  };
+
+  modal.addEventListener("click", (e) => {
+    const target = e.target as HTMLElement;
+
+    // Modal içinde SKU silme
+    const delSkuBtn = target.closest<HTMLElement>("[data-delete-sku]");
+    if (delSkuBtn) {
+      e.stopPropagation();
+      e.preventDefault();
+      const skuId = delSkuBtn.dataset.deleteSku;
+      if (!skuId) return;
+      cartStore.deleteSku(skuId);
+      if (isLoggedIn()) {
+        apiRemoveCartItem(skuId).catch(() => {});
+      }
+      // cartStore.subscribe aşağıda re-render veya close yapacak
+      return;
+    }
+
+    if (target === modal || target.closest("[data-cart-modal-close]")) {
+      close();
+    }
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+      close();
+    }
+  });
+
+  // Modal açıkken sepet değişikliklerinde otomatik yenile / boşaldıysa kapat
+  cartStore.subscribe(() => {
+    if (modal.classList.contains("hidden")) return;
+    const supplierId = modal.dataset.activeSupplierId;
+    if (!supplierId) return;
+    const ok = renderCartModalContent(modal, supplierId);
+    if (!ok) close();
+  });
+
+  return modal;
+}
+
+function openCartSupplierModal(supplierId: string): void {
+  const modal = ensureCartSupplierModal();
+  modal.dataset.activeSupplierId = supplierId;
+  if (!renderCartModalContent(modal, supplierId)) return;
+  modal.classList.remove("hidden");
+  modal.setAttribute("aria-hidden", "false");
+}
+
 export function initHeaderCart(): void {
   _headerCartInitialized = true; // auto-init'e "zaten çağrıldı" sinyali ver
 
@@ -1366,40 +1506,73 @@ export function initHeaderCart(): void {
     }
 
     if (itemsContainer) {
-      let html = '<div class="max-h-[320px] overflow-y-auto -mx-1 px-1 space-y-1 scrollbar-thin">';
+      const selectedCurrency = csGetSelectedCurrency();
+      const storeIconSvg = `<svg class="w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016 2.993 2.993 0 0 0 2.25-1.016 3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72"/></svg>`;
+      const placeholderThumbSvg = `<svg class="w-4 h-4 text-gray-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Z"/></svg>`;
+      const MAX_THUMBS = 4;
+
+      let html =
+        '<div class="max-h-[360px] overflow-y-auto -mx-1 px-1 divide-y divide-gray-100 scrollbar-thin">';
+
       for (const supplier of suppliers) {
-        // Supplier header
+        const allSkus = supplier.products.flatMap((p) =>
+          p.skus.map((sku) => ({ sku, product: p }))
+        );
+        const supplierItemCount = allSkus.reduce((sum, { sku }) => sum + sku.quantity, 0);
+        const supplierSubtotal = allSkus.reduce(
+          (sum, { sku }) =>
+            sum + convertPrice(sku.unitPrice, sku.baseCurrency || "USD") * sku.quantity,
+          0
+        );
+        const visibleThumbs = allSkus.slice(0, MAX_THUMBS);
+        const remainingThumbs = Math.max(0, allSkus.length - MAX_THUMBS);
+
+        const thumbsHtml = visibleThumbs
+          .map(({ sku }) => {
+            const img = sku.skuImage
+              ? `<img src="${sku.skuImage}" alt="sku" class="w-10 h-10 rounded-md object-cover border border-gray-100 shadow-sm">`
+              : `<div class="w-10 h-10 rounded-md bg-gray-100 border border-gray-100 flex items-center justify-center">${placeholderThumbSvg}</div>`;
+            return `
+              <div class="relative w-10 h-10 flex-shrink-0 group">
+                ${img}
+                <button type="button" data-delete-sku="${sku.id}" class="absolute top-0.5 right-0.5 w-[14px] h-[14px] inline-flex items-center justify-center rounded-full bg-white/95 shadow text-gray-700 hover:text-red-500 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity" aria-label="${t("cart.removeProduct")}">
+                  <svg class="w-2 h-2" fill="none" stroke="currentColor" stroke-width="3.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+                <span class="absolute -bottom-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 inline-flex items-center justify-center text-[10px] font-bold text-white bg-gray-900 rounded leading-none">${sku.quantity}</span>
+              </div>`;
+          })
+          .join("");
+        const remainingHtml =
+          remainingThumbs > 0
+            ? `<span class="inline-flex items-center justify-center w-10 h-10 rounded-md bg-gray-100 text-[11px] font-semibold text-gray-500 flex-shrink-0">+${remainingThumbs}</span>`
+            : "";
+
         html += `
-          <div class="flex items-center gap-2 pt-1 pb-0.5">
-            <div class="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
-              <svg class="w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016 2.993 2.993 0 0 0 2.25-1.016 3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72"/></svg>
-            </div>
-            <p class="text-[11px] font-semibold text-gray-400 uppercase tracking-wide truncate">${supplier.name}</p>
-          </div>`;
-
-        for (const product of supplier.products) {
-          for (const sku of product.skus) {
-            const thumbHtml = sku.skuImage
-              ? `<img src="${sku.skuImage}" alt="sku" class="w-[52px] h-[52px] rounded-md object-cover border border-gray-100 flex-shrink-0 shadow-sm">`
-              : `<div class="w-[52px] h-[52px] rounded-md flex-shrink-0 bg-gray-100 border border-gray-100 flex items-center justify-center"><svg class="w-5 h-5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Z"/></svg></div>`;
-
-            html += `
-              <div class="flex items-center gap-3 py-2.5 px-1 rounded-md hover:bg-gray-50 transition-colors group">
-                ${thumbHtml}
-                <div class="flex-1 min-w-0">
-                  <p class="text-[12px] font-medium text-gray-800 leading-tight line-clamp-2 mb-1">${product.title}</p>
-                  <p class="text-[11px] text-gray-400">${sku.variantText || ""}</p>
+          <div data-supplier-id="${supplier.id}" class="py-1">
+            <div data-supplier-open role="button" tabindex="0" class="w-full text-left px-1 py-2 rounded-md hover:bg-gray-50 transition-colors cursor-pointer">
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <div class="flex items-center gap-2 min-w-0">
+                  <div class="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">${storeIconSvg}</div>
+                  <p class="text-[11px] font-semibold text-gray-500 uppercase tracking-wide truncate">${supplier.name}</p>
                 </div>
-                <div class="flex flex-col items-end gap-1 flex-shrink-0">
-                  <button type="button" data-delete-sku="${sku.id}" class="opacity-0 group-hover:opacity-100 transition-opacity w-5 h-5 flex items-center justify-center rounded-full hover:bg-red-50 text-gray-300 hover:text-red-400" aria-label="${t("cart.removeProduct")}">
+                <div class="flex items-center gap-1.5 flex-shrink-0">
+                  <span class="text-[11px] font-semibold hover:underline" style="color:var(--btn-bg,#d97706)">${t("common.viewAll")}</span>
+                  <button type="button" data-delete-supplier="${supplier.id}" class="w-5 h-5 inline-flex items-center justify-center rounded-full text-gray-300 hover:text-red-500 hover:bg-red-50 transition-colors" aria-label="${t("cart.removeProduct")}">
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                   </button>
-                  <span class="text-[13px] font-bold text-gray-900">${formatPrice(sku.unitPrice, sku.baseCurrency || "USD")}</span>
-                  <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">x${sku.quantity}</span>
                 </div>
-              </div>`;
-          }
-        }
+              </div>
+              <div class="flex items-end justify-between gap-3">
+                <div class="flex items-center gap-2 min-w-0 overflow-hidden">
+                  ${thumbsHtml}${remainingHtml}
+                </div>
+                <div class="flex flex-col items-end flex-shrink-0">
+                  <span class="text-[10px] text-gray-500">${supplierItemCount} ${t("common.items")}</span>
+                  <span class="text-[13px] font-bold text-gray-900">${formatCurrency(supplierSubtotal, selectedCurrency)}</span>
+                </div>
+              </div>
+            </div>
+          </div>`;
       }
       html += "</div>";
 
@@ -1428,126 +1601,60 @@ export function initHeaderCart(): void {
   renderFromStore();
   cartStore.subscribe(renderFromStore);
 
-  // Mini cart item silme — event delegation (innerHTML her yenilendiği için)
+  // Mini cart item silme + supplier modal — event delegation (innerHTML her yenilendiği için)
   const cartBodyEl = document.getElementById("header-cart-body");
   if (cartBodyEl) {
     cartBodyEl.addEventListener("click", (e) => {
-      const btn = (e.target as HTMLElement).closest<HTMLElement>("[data-delete-sku]");
-      if (!btn) return;
-      const skuId = btn.dataset.deleteSku;
-      if (!skuId) return;
-      e.stopPropagation();
-      cartStore.deleteSku(skuId);
-      if (isLoggedIn()) {
-        apiRemoveCartItem(skuId).catch(() => {});
+      const target = e.target as HTMLElement;
+
+      // Tek SKU silme (thumbnail X butonu)
+      const delSkuBtn = target.closest<HTMLElement>("[data-delete-sku]");
+      if (delSkuBtn) {
+        e.stopPropagation();
+        e.preventDefault();
+        const skuId = delSkuBtn.dataset.deleteSku;
+        if (!skuId) return;
+        cartStore.deleteSku(skuId);
+        if (isLoggedIn()) {
+          apiRemoveCartItem(skuId).catch(() => {});
+        }
+        return;
       }
+
+      // Tüm supplier ürünlerini silme (komple silme X butonu)
+      const delSupBtn = target.closest<HTMLElement>("[data-delete-supplier]");
+      if (delSupBtn) {
+        e.stopPropagation();
+        e.preventDefault();
+        const supplierId = delSupBtn.dataset.deleteSupplier;
+        if (!supplierId) return;
+        const supplier = cartStore.getSupplier(supplierId);
+        if (!supplier) return;
+        const skuIds = supplier.products.flatMap((p) => p.skus.map((s) => s.id));
+        for (const id of skuIds) {
+          cartStore.deleteSku(id);
+          if (isLoggedIn()) {
+            apiRemoveCartItem(id).catch(() => {});
+          }
+        }
+        return;
+      }
+
+      // Supplier compact satırına tıklayınca detay modalı aç
+      const openBtn = target.closest<HTMLElement>("[data-supplier-open]");
+      if (openBtn) {
+        const block = openBtn.closest<HTMLElement>("[data-supplier-id]");
+        const supplierId = block?.dataset.supplierId;
+        if (!supplierId) return;
+        openCartSupplierModal(supplierId);
+        return;
+      }
+      return;
     });
   }
 
-  document.addEventListener("cart-add", ((e: CustomEvent) => {
-    // If we're relying on legacy data injection, we can manually parse e.detail here
-    // But ideal path is making components add to cartStore directly.
-    // For now, let's keep it simple: just render what store has.
-    // In our case cartStore might not be updated for other pages unless updated there.
-    // Let me fall back to custom logic if store is empty but event fires:
-    if (cartStore.getTotalSkuCount() === 0) {
-      const {
-        quantity,
-        grandTotal,
-        groupedItems,
-        productTitle,
-        supplierName,
-        unitPrice,
-        colorItems,
-      } = e.detail;
-      const count = quantity || 0;
-
-      const badge = document.getElementById("header-cart-badge");
-      if (badge) {
-        badge.textContent = count > 99 ? "99+" : String(count);
-        if (count > 0) badge.classList.remove("hidden");
-      }
-
-      const emptyState = document.getElementById("header-cart-empty");
-      if (emptyState) emptyState.style.display = "none";
-
-      const itemsContainer = document.getElementById("header-cart-items");
-      if (itemsContainer) {
-        let html = "";
-        if (groupedItems && groupedItems.length > 0) {
-          html += '<div class="max-h-[340px] overflow-y-auto pr-1 space-y-3">';
-          for (const group of groupedItems) {
-            html += `
-              <div class="rounded-md border border-border-light bg-surface px-3 py-2">
-                <p class="text-xs font-semibold text-text-tertiary mb-1 truncate">${group.supplierName || "Supplier"}</p>
-                <p class="text-[13px] font-medium text-text-heading mb-2 leading-tight overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]">${group.productTitle}</p>`;
-            for (const item of group.items) {
-              html += `
-                <div class="flex items-center gap-3 py-1.5 border-b border-border-light last:border-0">
-                  <div class="w-10 h-10 rounded-md flex-shrink-0" style="background:${item.colorValue || "#e5e7eb"}"></div>
-                  <div class="flex-1 min-w-0">
-                    <p class="text-[11px] text-text-tertiary truncate">${item.label}</p>
-                    <div class="flex items-center justify-between mt-0.5">
-                      <span class="text-[13px] font-semibold text-text-heading">${getCurrencySymbol()}${item.unitPrice.toFixed(2)}</span>
-                      <span class="text-xs text-text-tertiary">x ${item.qty}</span>
-                    </div>
-                  </div>
-                </div>`;
-            }
-            html += "</div>";
-          }
-          html += "</div>";
-        } else {
-          html += `<p class="text-xs text-text-tertiary mb-1 truncate">${supplierName}</p>`;
-          html += `<p class="text-sm text-text-heading mb-2 leading-tight overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]">${productTitle}</p>`;
-          html += '<div class="max-h-56 overflow-y-auto pr-1">';
-          const items = colorItems && colorItems.length > 0 ? colorItems : null;
-          if (items) {
-            for (const ci of items) {
-              const thumbHtml = ci.colorThumb
-                ? `<img src="${ci.colorThumb}" alt="${ci.colorLabel}" class="w-12 h-12 rounded-md object-cover border border-border-default flex-shrink-0">`
-                : `<div class="w-12 h-12 rounded-md flex-shrink-0 border border-border-default" style="background:${ci.colorValue || "var(--color-surface-muted,#e5e7eb)"}"></div>`;
-              for (const vi of ci.variants) {
-                const desc = [vi.label, ci.colorLabel].filter(Boolean).join(", ");
-                html += `
-                  <div class="flex items-center gap-3 py-2 border-b border-border-light last:border-0">
-                    ${thumbHtml}
-                    <div class="flex-1 min-w-0">
-                      <p class="text-xs text-text-tertiary">${desc}</p>
-                      <div class="flex items-center justify-between mt-0.5">
-                        <span class="text-sm font-semibold text-text-heading">${getCurrencySymbol()}${unitPrice.toFixed(2)}</span>
-                        <span class="text-xs text-text-tertiary">x ${vi.qty}</span>
-                      </div>
-                    </div>
-                  </div>`;
-              }
-            }
-          } else {
-            html += `
-              <div class="flex items-center gap-3 py-2">
-                <div class="w-12 h-12 rounded-md flex-shrink-0 bg-surface-muted border border-border-default"></div>
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center justify-between mt-0.5">
-                    <span class="text-sm font-semibold text-text-heading">${getCurrencySymbol()}${unitPrice.toFixed(2)}</span>
-                    <span class="text-xs text-text-tertiary">x ${quantity}</span>
-                  </div>
-                </div>
-              </div>`;
-          }
-          html += "</div>";
-        }
-        itemsContainer.innerHTML = html;
-        itemsContainer.classList.remove("hidden");
-      }
-
-      const subtotalContainer = document.getElementById("header-cart-subtotal");
-      const subtotalPrice = document.getElementById("header-cart-subtotal-price");
-      if (subtotalContainer) subtotalContainer.style.display = "flex";
-      if (subtotalPrice)
-        subtotalPrice.textContent = `${getCurrencySymbol()}${grandTotal.toFixed(2)}`;
-    } else {
-      renderFromStore();
-    }
+  document.addEventListener("cart-add", (() => {
+    renderFromStore();
   }) as EventListener);
 }
 
@@ -1690,7 +1797,7 @@ function initCompactSearchSuggestions(): void {
         recoList.innerHTML = items
           .map(
             (item: any) => `
-          <button type="button" tabindex="-1" data-compact-expanded-interactive="true" data-suggestion-text="${item.text.replace(/"/g, "&quot;")}" class="compact-suggestion-btn block w-full text-left text-[22px] font-normal leading-tight text-gray-900 transition-colors hover:text-primary-600 dark:text-white dark:hover:text-primary-400 truncate">${item.text}</button>
+          <button type="button" tabindex="-1" data-compact-expanded-interactive="true" data-suggestion-text="${item.text.replace(/"/g, "&quot;")}" class="compact-suggestion-btn th-no-press block w-full text-left text-[22px] font-normal leading-tight text-gray-900 dark:text-white truncate cursor-pointer no-underline hover:no-underline focus:no-underline transition-opacity hover:opacity-60">${item.text}</button>
         `
           )
           .join("");
@@ -1712,7 +1819,7 @@ function initCompactSearchSuggestions(): void {
               item.text.replace(/"/g, "&quot;") +
               '" data-chip-slug="' +
               (item.slug || "").replace(/"/g, "&quot;") +
-              '" class="compact-chip-btn inline-flex items-center gap-1.5 rounded-md border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 min-w-0 overflow-hidden"><span class="text-primary-500 shrink-0">&#10022;</span><span class="truncate">' +
+              '" class="compact-chip-btn th-no-press inline-flex items-center gap-1.5 rounded-md border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 min-w-0 overflow-hidden"><span class="text-primary-500 shrink-0">&#10022;</span><span class="truncate">' +
               item.text +
               "</span></button>"
             );

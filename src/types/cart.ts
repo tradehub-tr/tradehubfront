@@ -26,6 +26,7 @@ export interface CartSku {
   baseCurrency: string;
   listingVariant?: string; // Frappe Listing Variant adı (merge için)
   isAvailable?: boolean; // false ise listing silinmiş/pasif, snapshot gösteriliyor
+  isSample?: boolean; // true ise numune satırı — toptan ile aynı üründe ayrı satır olarak görünür
 }
 
 export interface CartShippingMethod {

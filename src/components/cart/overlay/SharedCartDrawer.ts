@@ -238,36 +238,12 @@ function getSizeStock(sizeLabel: string): number {
   return match ? match.stock : 0;
 }
 
-/**
- * Get the unit price for a specific (selected color + size + selectables) combination.
- * Looks up skuMatrix first; falls back to size-level rawPrice, then to fallbackPrice (tier/color price).
- */
-function getSkuPriceForSize(
-  sizeLabel: string,
-  optRawPrice: number | undefined,
-  fallbackPrice: number
-): number {
-  const skuMatrix = state.item?.skuMatrix;
-  if (skuMatrix && skuMatrix.length > 0) {
-    const selectedColor = state.item?.colors.find((c) => c.id === state.selectedColorId);
-    if (selectedColor) {
-      const match = skuMatrix.find((row) => {
-        if (row.axis1 !== selectedColor.label || row.axis2 !== sizeLabel) return false;
-        for (const [axName, axVal] of state.selectedSelectables) {
-          if ((row.extraAxes || {})[axName] !== axVal) return false;
-        }
-        return true;
-      });
-      if (match && match.price != null && match.price > 0) return match.price;
-    }
-  }
-  if (optRawPrice != null && optRawPrice > 0) return optRawPrice;
-  return fallbackPrice;
-}
-
-/** Returns the base unit price accounting for selected color's rawPrice. */
+/** Returns the base unit price accounting for selected color's rawPrice.
+ *  Sample mode: color-specific rawPrice (toptan) override edilmez — listing.sample_price
+ *  her renk için aynıdır, varyant fiyatı uygulanmaz. */
 function getBasePrice(tierPrice: number): number {
   if (!state.item) return tierPrice;
+  if (state.mode === "sample") return tierPrice;
   const color = state.item.colors.find((c) => c.id === state.selectedColorId);
   return color?.rawPrice != null && color.rawPrice > 0 ? color.rawPrice : tierPrice;
 }
@@ -311,12 +287,15 @@ function getTotals(): {
   const activePrice = getBasePrice(tierPrice);
 
   let itemSubtotal = 0;
+  const isSampleMode = state.mode === "sample";
   if (hasSizeGroups() && state.item) {
     for (const group of state.item.sizeGroups) {
       for (const opt of group.options) {
         const qty = state.sizeQuantities.get(opt.id) ?? 0;
         if (qty === 0) continue;
-        const unitPrice = getSkuPriceForSize(opt.label, opt.rawPrice, activePrice);
+        // Numune mode'unda beden-özel rawPrice (toptan) uygulanmaz; sample_price sabit kalır.
+        const unitPrice =
+          !isSampleMode && opt.rawPrice != null && opt.rawPrice > 0 ? opt.rawPrice : activePrice;
         itemSubtotal += unitPrice * qty;
       }
     }
@@ -443,14 +422,14 @@ function renderPriceSectionHtml(totals: ReturnType<typeof getTotals>): string {
   return `
     <div class="grid grid-cols-3 gap-6 pb-5 mb-5 border-b border-border-default">
       ${state.item.priceTiers
-        .map((tier, index) => {
-          const activeClass = index === totals.tierIndex ? "text-error-500" : "text-text-heading";
-          return `<div class="cart-tier-item" data-tier-index="${index}">
+      .map((tier, index) => {
+        const activeClass = index === totals.tierIndex ? "text-error-500" : "text-text-heading";
+        return `<div class="cart-tier-item" data-tier-index="${index}">
           <p class="text-sm text-text-tertiary">${formatTierLabel(tier, state.item!.unit)}</p>
           <p class="mt-1 text-[22px] font-bold ${activeClass}">${formatCurrency(tier.rawPrice ?? tier.price, state.item?.currency || getSelectedCurrency())}</p>
         </div>`;
-        })
-        .join("")}
+      })
+      .join("")}
     </div>
   `;
 }
@@ -610,7 +589,11 @@ function renderDrawerBody(): void {
           .map((opt) => {
             const qty = state.sizeQuantities.get(opt.id) ?? 0;
             const hasQty = qty > 0;
-            const displayPrice = getSkuPriceForSize(opt.label, opt.rawPrice, totals.activePrice);
+            // Numune mode'unda beden-özel rawPrice (toptan) override'ı uygulanmaz.
+            const displayPrice =
+              state.mode !== "sample" && opt.rawPrice != null && opt.rawPrice > 0
+                ? opt.rawPrice
+                : totals.activePrice;
             const available = isSizeAvailable(opt.label);
             const stock = getSizeStock(opt.label);
             const stockLabel = !available
@@ -897,6 +880,11 @@ function buildVariantText(
 
 function syncToCartStore(item: CartDrawerItemModel, unitPrice: number): void {
   const supplierId = toSlug(item.supplierName || "unknown-supplier");
+  const isSampleMode = state.mode === "sample";
+  // Numune satırı kendi miktar/fiyat kuralına sahip olduğundan SKU id'sine "sample" eki koyup
+  // toptan satırından ayrı bir kayıt olarak tut (mini sepet ve sepet sayfası bu sayede iki ayrı satır gösterir).
+  const sampleIdSuffix = isSampleMode ? "-sample" : "";
+  const samplePrice = isSampleMode ? (item.samplePrice ?? unitPrice) : unitPrice;
 
   if (!cartStore.getSupplier(supplierId)) {
     const supplier: CartSupplier = {
@@ -935,13 +923,20 @@ function syncToCartStore(item: CartDrawerItemModel, unitPrice: number): void {
         const qty = state.sizeQuantities.get(opt.id) ?? 0;
         if (qty <= 0) continue;
 
-        const skuId = `${item.id}-${state.selectedColorId || "no-color"}-${opt.id}`;
-        const effectivePrice = getSkuPriceForSize(opt.label, opt.rawPrice, unitPrice);
+        const skuId = `${item.id}-${state.selectedColorId || "no-color"}-${opt.id}${sampleIdSuffix}`;
+        const effectivePrice = isSampleMode
+          ? samplePrice
+          : opt.rawPrice != null && opt.rawPrice > 0
+            ? opt.rawPrice
+            : unitPrice;
         const variantText = buildVariantText(item, group.groupLabel, opt.label);
         const existing = cartStore.getSku(skuId);
 
         if (existing) {
-          cartStore.updateSkuQuantity(skuId, existing.sku.quantity + qty);
+          if (!isSampleMode) {
+            cartStore.updateSkuQuantity(skuId, existing.sku.quantity + qty);
+          }
+          // Numune satırı zaten varsa miktar artırma (max 1).
         } else {
           const sku: CartSku = {
             id: skuId,
@@ -951,13 +946,14 @@ function syncToCartStore(item: CartDrawerItemModel, unitPrice: number): void {
             currency: getCurrencySymbol(),
             unit: item.unit,
             quantity: qty,
-            minQty: item.moq,
-            maxQty: 9999,
+            minQty: isSampleMode ? 1 : item.moq,
+            maxQty: isSampleMode ? 1 : 9999,
             selected: true,
             baseUnitPrice: effectivePrice,
             basePriceAddon: 0,
             baseCurrency: getSelectedCurrency(),
             listingVariant: opt.id,
+            isSample: isSampleMode || undefined,
           };
           cartStore.addSku(productId, sku);
         }
@@ -970,7 +966,7 @@ function syncToCartStore(item: CartDrawerItemModel, unitPrice: number): void {
 
     const colorId = state.selectedColorId || "__no_variant__";
     const isFallback = !state.selectedColorId;
-    const skuId = `${item.id}-${colorId}`;
+    const skuId = `${item.id}-${colorId}${sampleIdSuffix}`;
     const colorAxisName = item.colorAxisLabel || t("cart.colorLabel");
     const variantParts: string[] = [];
     if (selectedColor) variantParts.push(`${colorAxisName}: ${selectedColor.label}`);
@@ -981,23 +977,26 @@ function syncToCartStore(item: CartDrawerItemModel, unitPrice: number): void {
     const existing = cartStore.getSku(skuId);
 
     if (existing) {
-      cartStore.updateSkuQuantity(skuId, existing.sku.quantity + qty);
+      if (!isSampleMode) {
+        cartStore.updateSkuQuantity(skuId, existing.sku.quantity + qty);
+      }
     } else {
       const sku: CartSku = {
         id: skuId,
         skuImage,
         variantText,
-        unitPrice,
+        unitPrice: isSampleMode ? samplePrice : unitPrice,
         currency: getCurrencySymbol(),
         unit: item.unit,
         quantity: qty,
-        minQty: item.moq,
-        maxQty: 9999,
+        minQty: isSampleMode ? 1 : item.moq,
+        maxQty: isSampleMode ? 1 : 9999,
         selected: true,
-        baseUnitPrice: unitPrice,
+        baseUnitPrice: isSampleMode ? samplePrice : unitPrice,
         basePriceAddon: 0,
         baseCurrency: getSelectedCurrency(),
         ...(isFallback ? {} : { listingVariant: colorId }),
+        isSample: isSampleMode || undefined,
       };
       cartStore.addSku(productId, sku);
     }
@@ -1009,6 +1008,8 @@ async function dispatchCartAdd(): Promise<boolean> {
 
   const totals = getTotals();
   if (totals.totalQty <= 0) return false;
+
+  const isSampleMode = state.mode === "sample";
 
   if (isLoggedIn()) {
     // Stock check — build variant_label for per-variant stock validation
@@ -1029,7 +1030,7 @@ async function dispatchCartAdd(): Promise<boolean> {
             }
             labelParts.push(`${group.groupLabel}: ${opt.label}`);
             const stockLabel = labelParts.join(" | ");
-            await apiCheckStock(state.item.id, qty, opt.id, stockLabel);
+            await apiCheckStock(state.item.id, qty, opt.id, stockLabel, isSampleMode);
           }
         }
       } else {
@@ -1041,7 +1042,7 @@ async function dispatchCartAdd(): Promise<boolean> {
           if (axVal) labelParts.push(`${axName}: ${axVal}`);
         }
         const stockLabel = labelParts.length > 0 ? labelParts.join(" | ") : undefined;
-        await apiCheckStock(state.item.id, state.noVariantQty, colorId, stockLabel);
+        await apiCheckStock(state.item.id, state.noVariantQty, colorId, stockLabel, isSampleMode);
       }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
@@ -1080,7 +1081,8 @@ async function dispatchCartAdd(): Promise<boolean> {
               opt.id,
               variantLabel,
               state.selectedColorId || undefined,
-              hasExtra ? extraAxes : undefined
+              hasExtra ? extraAxes : undefined,
+              isSampleMode
             );
           }
         }
@@ -1099,7 +1101,8 @@ async function dispatchCartAdd(): Promise<boolean> {
           isFallback ? undefined : colorId,
           variantLabel,
           colorId,
-          hasExtra ? extraAxes : undefined
+          hasExtra ? extraAxes : undefined,
+          isSampleMode
         );
       }
 
@@ -1572,8 +1575,8 @@ export function initSharedCartDrawer(items: CartDrawerItemModel[]): void {
       const othersTotal = isNoVariant
         ? 0
         : Array.from(state.sizeQuantities.entries())
-            .filter(([id]) => id !== sizeId)
-            .reduce((a, [, b]) => a + b, 0);
+          .filter(([id]) => id !== sizeId)
+          .reduce((a, [, b]) => a + b, 0);
       if (othersTotal + nextValue > 1) {
         nextValue = Math.max(0, 1 - othersTotal);
         input.value = String(nextValue);
@@ -1616,16 +1619,13 @@ export function initSharedCartDrawer(items: CartDrawerItemModel[]): void {
         return;
       }
 
-      if (state.mode === "sample") {
+      // Numune onayı da sepete-ekleme akışına girer (toptan ile aynı sepete farklı satır).
+      // Backend is_sample=1 ile snapshot fiyatını sample_price olarak yazar; aynı listing için
+      // ikinci numune girişimini reddeder. Onay sonrası her iki mode da sadece drawer kapanır.
+      dispatchCartAdd().then((success) => {
+        if (!success) return;
         applyDrawerTransform(false);
-        const base =
-          (typeof import.meta !== "undefined" ? import.meta.env?.BASE_URL : undefined) || "/";
-        window.location.href = `${base}pages/order/checkout.html`;
-      } else {
-        dispatchCartAdd().then((success) => {
-          if (success) applyDrawerTransform(false);
-        });
-      }
+      });
     }
   });
 

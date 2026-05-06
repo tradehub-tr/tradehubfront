@@ -1,4 +1,5 @@
 import Alpine from "alpinejs";
+import { animate } from "motion";
 
 Alpine.data("floatingPanel", () => ({
   showScrollTop: false,
@@ -43,6 +44,11 @@ Alpine.data("floatingPanel", () => ({
   },
 }));
 
+/**
+ * Sticky header search — Motion One ile akıcı (60fps) açılış/kapanış.
+ * iOS / macOS native his için spring physics + GPU-accelerated transform.
+ * Web Animations API üzerine kurulu olduğu için JS thread'i bloklamaz.
+ */
 Alpine.data("stickyHeaderSearch", () => ({
   expanded: false,
 
@@ -56,6 +62,8 @@ Alpine.data("stickyHeaderSearch", () => ({
           interEl.setAttribute("tabindex", "-1");
         }
       });
+
+      this.runAnimation(isExpanded);
     });
 
     window.addEventListener(
@@ -75,6 +83,65 @@ Alpine.data("stickyHeaderSearch", () => ({
         input.blur();
       }
     });
+  },
+
+  /**
+   * Form shell + dropdown — yumuşak, bounce'siz duration-based animation.
+   * Material standart "ease-in-out" curve (0.4, 0, 0.2, 1) → akıcı, sakin
+   * büyüme; spring overshoot/wobble yok, just-an-easy flow.
+   */
+  runAnimation(isExpanded: boolean) {
+    const refs = this.$refs as Record<string, HTMLElement | undefined>;
+    const form = refs.searchForm;
+    const dropdown = refs.dropdown;
+
+    const easeInOut: [number, number, number, number] = [0.4, 0, 0.2, 1];
+
+    if (isExpanded) {
+      if (form) {
+        animate(
+          form,
+          {
+            height: ["42px", "100px"],
+            borderRadius: ["9999px", "16px"],
+          },
+          { duration: 0.34, ease: easeInOut }
+        );
+      }
+      if (dropdown) {
+        animate(
+          dropdown,
+          {
+            opacity: [0, 1],
+            y: [-4, 0],
+            scale: [0.99, 1],
+          },
+          { duration: 0.3, ease: easeInOut, delay: 0.06 }
+        );
+      }
+    } else {
+      if (form) {
+        animate(
+          form,
+          {
+            height: ["100px", "42px"],
+            borderRadius: ["16px", "9999px"],
+          },
+          { duration: 0.28, ease: easeInOut }
+        );
+      }
+      if (dropdown) {
+        animate(
+          dropdown,
+          {
+            opacity: [1, 0],
+            y: [0, -2],
+            scale: [1, 0.99],
+          },
+          { duration: 0.18, ease: easeInOut }
+        );
+      }
+    }
   },
 
   open() {

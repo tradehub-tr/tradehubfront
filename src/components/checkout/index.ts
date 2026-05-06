@@ -13,6 +13,8 @@ export { OrderSummary } from "./OrderSummary";
 export type { OrderSummaryProps } from "./OrderSummary";
 export { PaymentMethodSection, initAccordionSections } from "./PaymentMethodSection";
 export type { PaymentMethodSectionProps } from "./PaymentMethodSection";
+export { BillingInfoSection } from "./BillingInfoSection";
+export type { BillingInfoSectionProps } from "./BillingInfoSection";
 export { ItemsDeliverySection } from "./ItemsDeliverySection";
 export type {
   ItemsDeliverySectionProps,

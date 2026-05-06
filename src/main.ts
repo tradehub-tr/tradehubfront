@@ -62,7 +62,7 @@ const appEl = document.querySelector<HTMLDivElement>("#app")!;
 appEl.classList.add("relative");
 appEl.innerHTML = `
   <!-- Sticky Header (global, stays sticky across full page) -->
-  <div id="sticky-header" class="sticky top-0 z-(--z-header) border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900">
+  <div id="sticky-header" class="sticky top-0 z-(--z-header) bg-white dark:bg-gray-900">
     ${TopBar()}
     ${SubHeader()}
   </div>

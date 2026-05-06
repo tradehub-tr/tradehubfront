@@ -95,33 +95,33 @@ function renderPromoBanner(): string {
             <svg class="w-4 h-4 text-yellow-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <span class="text-white text-sm font-semibold tracking-wide">TradeHub B2B</span>
+            <span class="text-white text-sm font-semibold tracking-wide">iSTOC B2B</span>
           </div>
         </div>
 
         <!-- Headline -->
         <h1 class="text-3xl lg:text-4xl font-bold leading-tight text-white mb-3">
-          Global B2B<br/>Sourcing Platform
+          Türkiye'den Dünyaya<br/>B2B Ticaret
         </h1>
         <p class="text-sm text-orange-100/80 leading-relaxed mb-8">
-          Order protection, verified suppliers<br/>and great savings — all in one place.
+          Güvenli ödeme, doğrulanmış satıcılar ve şeffaf<br/>komisyon ile yeni nesil B2B pazaryeri.
         </p>
 
-        <!-- Stats row -->
+        <!-- Feature highlights row -->
         <div class="flex justify-center items-center gap-0 mb-10 rounded-md bg-white/10 border border-white/15 overflow-hidden">
           <div class="flex-1 py-4 px-2 text-center">
-            <div class="text-xl font-bold text-white">200K+</div>
-            <div class="text-xs text-orange-100/70 mt-0.5">Suppliers</div>
+            <div class="text-base font-bold text-white">Güvenli</div>
+            <div class="text-xs text-orange-100/70 mt-0.5">Ödeme Koruması</div>
           </div>
           <div class="w-px h-10 bg-white/20"></div>
           <div class="flex-1 py-4 px-2 text-center">
-            <div class="text-xl font-bold text-white">50M+</div>
-            <div class="text-xs text-orange-100/70 mt-0.5">Products</div>
+            <div class="text-base font-bold text-white">Doğrulanmış</div>
+            <div class="text-xs text-orange-100/70 mt-0.5">Satıcı Sistemi</div>
           </div>
           <div class="w-px h-10 bg-white/20"></div>
           <div class="flex-1 py-4 px-2 text-center">
-            <div class="text-xl font-bold text-white">190+</div>
-            <div class="text-xs text-orange-100/70 mt-0.5">Countries</div>
+            <div class="text-base font-bold text-white">Şeffaf</div>
+            <div class="text-xs text-orange-100/70 mt-0.5">Komisyon Yapısı</div>
           </div>
         </div>
 
@@ -143,20 +143,20 @@ function renderPromoBanner(): string {
               </svg>
             </div>
 
-            <!-- Badge: Verified -->
+            <!-- Badge: Doğrulanmış -->
             <div class="absolute -left-16 top-6 flex items-center gap-1.5 bg-white/15 border border-white/20 backdrop-blur-sm rounded-lg px-2.5 py-1.5 shadow-lg">
               <svg class="w-3.5 h-3.5 text-green-300 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
-              <span class="text-white text-xs font-medium whitespace-nowrap">Verified</span>
+              <span class="text-white text-xs font-medium whitespace-nowrap">Doğrulanmış</span>
             </div>
 
-            <!-- Badge: Fast -->
+            <!-- Badge: Hızlı Kargo -->
             <div class="absolute -right-16 bottom-6 flex items-center gap-1.5 bg-white/15 border border-white/20 backdrop-blur-sm rounded-lg px-2.5 py-1.5 shadow-lg">
               <svg class="w-3.5 h-3.5 text-yellow-300 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
-              <span class="text-white text-xs font-medium whitespace-nowrap">Fast Ship</span>
+              <span class="text-white text-xs font-medium whitespace-nowrap">Hızlı Kargo</span>
             </div>
           </div>
         </div>
@@ -166,7 +166,7 @@ function renderPromoBanner(): string {
           <svg class="w-3.5 h-3.5 shrink-0 text-orange-100/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
           </svg>
-          <span>SSL Encrypted · Trade Assurance · 24/7 Support</span>
+          <span>SSL Şifreleme · Güvenli Ödeme · Türkiye Merkezli</span>
         </div>
 
       </div>
@@ -210,8 +210,8 @@ export function AuthLayout(content: string, options: AuthLayoutOptions = {}): st
             <div class="lg:hidden">
               <div class="h-14"></div>
               <div class="px-6 pt-6 pb-8 text-white text-center">
-                <h2 class="text-xl font-bold mb-1">Global B2B sourcing</h2>
-                <p class="text-sm opacity-80">Order protection and great savings</p>
+                <h2 class="text-xl font-bold mb-1">Türkiye'den Dünyaya B2B</h2>
+                <p class="text-sm opacity-80">Güvenli ödeme ve şeffaf ticaret</p>
               </div>
             </div>
 

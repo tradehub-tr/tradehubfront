@@ -2,9 +2,9 @@
  * Kargo ve Lojistik Hizmetleri Landing Page
  */
 import kargoImg from "../../assets/images/kargo.avif";
-import taLogoUrl from "../../assets/images/ta-logo.svg";
 import logisticsPattern from "../../assets/images/svgviewer-output.svg";
 import { TradeAssuranceFooterCards } from "../shared/TradeAssuranceFooterCards";
+import { TradeAssuranceBadge } from "../shared/TradeAssuranceBadge";
 
 /* ════════════════════════════════════════════════════
    ICONS (inline SVG)
@@ -51,9 +51,7 @@ function heroSection(): string {
     <section class="relative w-full min-h-[400px] flex items-center" style="background-image: url('${kargoImg}'); background-size: cover; background-position: center;">
       <div class="absolute inset-0 bg-black/60"></div>
       <div class="relative z-10 container-boxed w-full py-16 sm:py-20">
-        <div class="inline-flex items-center px-5 py-2.5 rounded-full bg-white/15 backdrop-blur-sm mb-6">
-          <img src="${taLogoUrl}" alt="Ticari Güvence" class="h-7 sm:h-8" />
-        </div>
+        ${TradeAssuranceBadge({ className: "mb-6" })}
         <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 max-w-2xl leading-tight">
           Kargo ve lojistik hizmetleri
         </h1>

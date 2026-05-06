@@ -4,6 +4,7 @@
  */
 
 import { t } from "../../i18n";
+import { btn } from "../../utils/ui/button";
 
 // ── SVG Icons ────────────────────────────────────────────────────
 
@@ -160,7 +161,7 @@ function renderProfileCard(): string {
           ${ICONS.eye}
           <span>${t("profile.whatOthersSee")}</span>
         </a>
-        <a href="#" class="inline-flex items-center gap-1.5 py-2 px-4 rounded-md text-[13px] font-medium no-underline transition-all whitespace-nowrap text-white hover:bg-gray-800 max-md:flex-1 max-md:justify-center" style="background:var(--color-text-primary)">
+        <a href="#" class="${btn({ variant: "dark", size: "sm" })} no-underline whitespace-nowrap max-md:flex-1 max-md:justify-center">
           ${ICONS.edit}
           <span>${t("profile.edit")}</span>
         </a>
@@ -238,7 +239,7 @@ function renderAccountEditForm(): string {
         ${getAccountFields().map(renderFormField).join("")}
       </div>
       <div class="mt-6 py-4 bg-[#eff1f7] rounded-md flex justify-center">
-        <button class="py-1.5 px-7 rounded border-[1.5px] border-primary-600 bg-white text-sm font-medium cursor-pointer transition-all hover:bg-amber-50 hover:border-amber-700" style="color:var(--color-text-primary)" type="button">${t("profile.edit")}</button>
+        <button class="${btn({ variant: "outline" })}" type="button">${t("profile.edit")}</button>
       </div>
     </div>
   `;

@@ -1,7 +1,7 @@
 /* ============================================================
-   GOOGLE FONTS — Roboto Variable
+   GOOGLE FONTS — Inter (Alibaba'nın B2B Sans'ına yakın modern alternatif)
    ============================================================ */
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap");
 
 @import "tailwindcss";
 @plugin "flowbite/plugin";
@@ -23,16 +23,16 @@
      1. COLOR SYSTEM
      ========================================================== */
 
-  /* --- Primary: Altın / Amber (#cc9900) --- */
-  --color-primary-50: #fef9e7;
-  --color-primary-100: #fdf0c3;
-  --color-primary-200: #fbe08a;
-  --color-primary-300: #f6c94d;
-  --color-primary-400: #e6b212;
-  --color-primary-500: #cc9900;
-  --color-primary-600: #b38600;
-  --color-primary-700: #8a6800;
-  --color-primary-800: #6b5100;
+  /* --- Primary: iSTOC Sarısı (#f5b800) — sistem default brand rengi --- */
+  --color-primary-50: #fff8e1;
+  --color-primary-100: #ffefb3;
+  --color-primary-200: #ffe57a;
+  --color-primary-300: #ffd23d;
+  --color-primary-400: #ffc41a;
+  --color-primary-500: #f5b800;
+  --color-primary-600: #d39c00;
+  --color-primary-700: #a87c00;
+  --color-primary-800: #7a5a00;
   --color-primary-900: #4d3a00;
   --color-primary-950: #2e2200;
 
@@ -107,7 +107,9 @@
      ========================================================== */
 
   /* --- Font Family --- */
-  --font-sans: "Roboto", ui-sans-serif, system-ui, sans-serif;
+  --font-sans:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, ui-sans-serif,
+    system-ui, sans-serif;
   --font-mono: ui-monospace, "Cascadia Code", "Fira Code", monospace;
 
   /* --- Font Size Scale --- */
@@ -373,24 +375,24 @@
      8. COMPONENT TOKENS
      ========================================================== */
 
-  /* --- Button --- */
-  --btn-bg: #cc9900;
-  --btn-text: var(--color-surface);
-  --btn-border-width: 0px;
-  --btn-border-color: var(--color-primary-500);
+  /* --- Button — Primary token'ına bağlı --- */
+  --btn-bg: var(--color-primary-500);
+  --btn-text: #1a1a1a;
+  --btn-border-width: 1px;
+  --btn-border-color: var(--color-primary-600);
   --btn-font-size: 0.875rem;
   --btn-font-weight: 600;
-  --btn-shadow: none;
+  --btn-shadow: 0 1px 0 var(--color-primary-600), inset 0 1px 0 rgba(255, 255, 255, 0.3);
   --btn-hover-bg: var(--color-primary-600);
-  --btn-hover-text: var(--color-surface);
+  --btn-hover-text: #1a1a1a;
 
   /* --- Button Outline Variant --- */
-  --btn-outline-bg: var(--color-surface);
-  --btn-outline-text: var(--color-primary-500);
-  --btn-outline-border-width: 2px;
+  --btn-outline-bg: transparent;
+  --btn-outline-text: var(--color-primary-600);
+  --btn-outline-border-width: 1.5px;
   --btn-outline-border-color: var(--color-primary-500);
-  --btn-outline-hover-bg: rgba(204, 153, 0, 0.08);
-  --btn-outline-hover-text: var(--color-primary-500);
+  --btn-outline-hover-bg: var(--color-primary-50);
+  --btn-outline-hover-text: var(--color-primary-600);
 
   /* --- Auth Pages (Login, Register, Forgot Password) --- */
   --auth-accent: var(--color-primary-500);
@@ -999,6 +1001,36 @@
     cursor: not-allowed;
   }
 
+  /* Yeşil "güvenli ödeme" butonu — iSTOC güvence kartıyla görsel uyum için. */
+  .th-btn-success {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    background: #16a34a;
+    color: #ffffff;
+    border: 1px solid #16a34a;
+    border-radius: var(--radius-button);
+    padding: var(--spacing-button-y) var(--spacing-button-x);
+    font-size: var(--btn-font-size);
+    font-weight: var(--btn-font-weight);
+    box-shadow: var(--btn-shadow);
+    cursor: pointer;
+    line-height: 1.25;
+    transition: all 0.15s ease;
+  }
+
+  .th-btn-success:hover {
+    background: #15803d;
+    border-color: #15803d;
+    color: #ffffff;
+  }
+
+  .th-btn-success:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
   /* --- Gradient Button Modifier ---
        `.th-btn` veya `.th-btn-dark` ile birlikte kullanılır. Doğrudan
        --btn-bg ve --btn-hover-bg'yi gradient'in iki ucu olarak kullanır —
@@ -1018,6 +1050,132 @@
   .th-btn-gradient:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+
+  /* --- Ghost Button — şeffaf, hover'da hafif vurgu.
+       Sepetteki "Sipariş onayına geç →" gibi sade text+ok CTA'lar için. */
+  .th-btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    background: transparent;
+    color: var(--btn-bg);
+    border: 0;
+    border-radius: var(--radius-button);
+    padding: var(--spacing-button-y) var(--spacing-button-x);
+    font-size: var(--btn-font-size);
+    font-weight: var(--btn-font-weight);
+    cursor: pointer;
+    line-height: 1.25;
+    transition: all 0.15s ease;
+  }
+
+  .th-btn-ghost:hover {
+    background: color-mix(in srgb, var(--btn-bg) 10%, transparent);
+    color: var(--btn-hover-bg, var(--btn-bg));
+  }
+
+  .th-btn-ghost:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* --- Link Button — sadece text, hover'da underline.
+       Inline aksiyonlar için ("Daha fazla", "Şifremi unuttum"). */
+  .th-btn-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: transparent;
+    color: var(--btn-bg);
+    border: 0;
+    padding: 0;
+    font-size: var(--btn-font-size);
+    font-weight: var(--btn-font-weight);
+    cursor: pointer;
+    text-underline-offset: 3px;
+    transition: color 0.15s ease;
+  }
+
+  .th-btn-link:hover {
+    color: var(--btn-hover-bg, var(--btn-bg));
+    text-decoration: underline;
+  }
+
+  .th-btn-link:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    text-decoration: none;
+  }
+
+  /* --- Danger Button — yıkıcı aksiyonlar (Sil, Reddet).
+       --color-error-500 paletten gelir; admin panelden değiştirilebilir. */
+  .th-btn-danger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    background: var(--color-error-500, #dc2626);
+    color: var(--color-text-inverse, #ffffff);
+    border: var(--btn-border-width) solid var(--color-error-500, #dc2626);
+    border-radius: var(--radius-button);
+    padding: var(--spacing-button-y) var(--spacing-button-x);
+    font-size: var(--btn-font-size);
+    font-weight: var(--btn-font-weight);
+    box-shadow: var(--btn-shadow);
+    cursor: pointer;
+    line-height: 1.25;
+    transition: all 0.15s ease;
+  }
+
+  .th-btn-danger:hover {
+    background: var(--color-error-700, #b91c1c);
+    border-color: var(--color-error-700, #b91c1c);
+  }
+
+  .th-btn-danger:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* --- Danger Ghost Button — destructive aksiyon, ama text-only.
+       Sepet "Seçilenleri sil", liste satırlarındaki sil ikonu için. */
+  .th-btn-danger-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    background: transparent;
+    color: var(--color-text-tertiary, #6b7280);
+    border: 0;
+    padding: calc(var(--spacing-button-y) * 0.5) calc(var(--spacing-button-x) * 0.5);
+    font-size: var(--btn-font-size);
+    font-weight: 500;
+    cursor: pointer;
+    line-height: 1.25;
+    transition: color 0.15s ease;
+  }
+
+  .th-btn-danger-ghost:hover {
+    color: var(--color-error-500, #dc2626);
+  }
+
+  .th-btn-danger-ghost:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  /* --- Block modifier — full-width.
+       .th-btn .th-btn-block ile birlikte, sepet/checkout mobil CTA'larında. */
+  .th-btn-block {
+    width: 100%;
+  }
+
+  /* --- Icon-only modifier — sadece ikon, kare ya da daire.
+       .th-btn .th-btn-icon ile; padding eşitlenir, içerik ortalanır. */
+  .th-btn-icon {
+    padding: var(--spacing-button-y);
+    aspect-ratio: 1 / 1;
   }
 
   .auth-input-focus:focus {
@@ -1325,11 +1483,30 @@
   /* --- Header Icon (statik renk, admin tarafından yönetilmez) --- */
   .th-header-icon {
     color: #374151;
-    transition: color 0.15s ease;
+    border-radius: 8px;
+    background-color: transparent;
+    transition:
+      color 0.18s ease,
+      background-color 0.18s ease,
+      transform 0.12s ease,
+      box-shadow 0.18s ease;
   }
 
   .th-header-icon:hover {
     color: var(--color-primary-500);
+    background-color: rgba(245, 184, 0, 0.1);
+    box-shadow:
+      inset 2px 2px 4px rgba(0, 0, 0, 0.1),
+      inset -1px -1px 2px rgba(255, 255, 255, 0.6);
+  }
+
+  .th-header-icon:active {
+    background-color: rgba(245, 184, 0, 0.18);
+    box-shadow:
+      inset 3px 3px 6px rgba(0, 0, 0, 0.18),
+      inset -1px -1px 2px rgba(255, 255, 255, 0.4);
+    transform: scale(0.98);
+    transition-duration: 0.06s;
   }
 
   /* --- SubHeader Link (statik renk, admin tarafından yönetilmez) --- */
@@ -1450,7 +1627,7 @@
     left: 50%;
     width: 0;
     height: 2px;
-    background-color: var(--color-primary-500);
+    background-color: var(--color-text-primary);
     transition:
       width 0.25s ease,
       left 0.25s ease;
@@ -4408,6 +4585,300 @@ input:checked + .email-pref__toggle-slider::before {
 
 .fav-tab-content--active {
   display: block;
+}
+
+/* ============================================================
+   STOREFRONT BUTTON UNIFIED LOOK
+   Tüm storefront butonları (.th-btn ailesi) tek bir görsel
+   sisteme bağlanır: iSTOC sarı (#f5b800), koyu metin, hafif 3D
+   inset highlight + alt darker shadow. Image #36 referans.
+   Admin panel theme-token'larını override eder; yeniden tek
+   görsel kimlik için sabit renkler.
+   #search-submit-button hariç (header arama butonu pill kalır).
+   ============================================================ */
+.th-btn:not(#search-submit-button):not(#topbar-compact-search-submit),
+.th-btn-dark:not(#search-submit-button):not(#topbar-compact-search-submit),
+.th-btn-gradient:not(#search-submit-button):not(#topbar-compact-search-submit) {
+  background: #f5b800 !important;
+  background-image: none !important;
+  color: #1a1a1a !important;
+  border: 1px solid #d39c00 !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  box-shadow:
+    0 1px 0 #d39c00,
+    inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+  transition: all 0.15s ease;
+}
+/* Search butonları için ayrı: aynı sarı 3D look + tam pill.
+   İki ayrı id var — hero (SearchArea) ve compact sticky (TopBar). */
+button#search-submit-button,
+button#topbar-compact-search-submit,
+button#search-submit-button.th-btn,
+button#topbar-compact-search-submit.th-btn,
+button#search-submit-button.th-btn-gradient,
+button#topbar-compact-search-submit.th-btn-gradient {
+  background: #f5b800 !important;
+  background-image: none !important;
+  color: #1a1a1a !important;
+  border: 1px solid #d39c00 !important;
+  border-radius: 9999px !important;
+  font-weight: 600 !important;
+  box-shadow:
+    0 1px 0 #d39c00,
+    inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+  transition:
+    background-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.12s ease !important;
+}
+
+button#search-submit-button:hover:not(:disabled),
+button#topbar-compact-search-submit:hover:not(:disabled),
+button#search-submit-button.th-btn:hover:not(:disabled),
+button#topbar-compact-search-submit.th-btn:hover:not(:disabled),
+button#search-submit-button.th-btn-gradient:hover:not(:disabled),
+button#topbar-compact-search-submit.th-btn-gradient:hover:not(:disabled) {
+  background: #e8ad00 !important;
+  box-shadow:
+    inset 2px 2px 5px rgba(0, 0, 0, 0.22),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.25) !important;
+}
+
+button#search-submit-button:active:not(:disabled),
+button#topbar-compact-search-submit:active:not(:disabled),
+button#search-submit-button.th-btn:active:not(:disabled),
+button#topbar-compact-search-submit.th-btn:active:not(:disabled),
+button#search-submit-button.th-btn-gradient:active:not(:disabled),
+button#topbar-compact-search-submit.th-btn-gradient:active:not(:disabled) {
+  background: #d8a000 !important;
+  transform: scale(0.97);
+  box-shadow:
+    inset 3px 3px 8px rgba(0, 0, 0, 0.32),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.18) !important;
+  transition-duration: 0.06s !important;
+}
+.th-btn:not(#search-submit-button):not(#topbar-compact-search-submit):hover:not(:disabled),
+.th-btn-dark:not(#search-submit-button):not(#topbar-compact-search-submit):hover:not(:disabled),
+.th-btn-gradient:not(#search-submit-button):not(#topbar-compact-search-submit):hover:not(
+    :disabled
+  ) {
+  background: #e8ad00 !important;
+  background-image: none !important;
+  color: #1a1a1a !important;
+  filter: none !important;
+  box-shadow:
+    inset 2px 2px 5px rgba(0, 0, 0, 0.2),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.25) !important;
+}
+.th-btn:not(#search-submit-button):not(#topbar-compact-search-submit):active:not(:disabled),
+.th-btn-dark:not(#search-submit-button):not(#topbar-compact-search-submit):active:not(:disabled),
+.th-btn-gradient:not(#search-submit-button):not(#topbar-compact-search-submit):active:not(
+    :disabled
+  ) {
+  background: #d8a000 !important;
+  box-shadow:
+    inset 3px 3px 7px rgba(0, 0, 0, 0.3),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.18) !important;
+  transform: scale(0.98);
+  transition-duration: 0.06s;
+}
+
+/* Outline varyantı — sarı kenar + saydam zemin + sarı metin */
+.th-btn-outline {
+  background: transparent !important;
+  background-image: none !important;
+  color: #d39c00 !important;
+  border: 1.5px solid #f5b800 !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  box-shadow: none !important;
+  transition: all 0.15s ease;
+}
+.th-btn-outline:hover:not(:disabled) {
+  background: #fff8e1 !important;
+  color: #d39c00 !important;
+  border-color: #d39c00 !important;
+  box-shadow:
+    inset 2px 2px 4px rgba(0, 0, 0, 0.08),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.5) !important;
+}
+.th-btn-outline:active:not(:disabled) {
+  background: #ffefb5 !important;
+  box-shadow:
+    inset 3px 3px 6px rgba(0, 0, 0, 0.14),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.4) !important;
+  transform: scale(0.98);
+  transition: all 0.06s ease;
+}
+
+/* Disabled state (tüm varyantlar) */
+.th-btn:disabled,
+.th-btn-dark:disabled,
+.th-btn-gradient:disabled,
+.th-btn-outline:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: none !important;
+  transform: none;
+}
+
+/* (Header arama butonu pill stili yukarıdaki birleşik kuralda) */
+
+/* ── Storefront bileşenlerinde Tailwind v4 CSS-var kısayolları (bg-(--btn-bg))
+   kullanan butonları da aynı sarı 3D look'a hizala. StoreHeader, ContactForm,
+   CompanyProfile gibi seller bileşenleri --btn-bg/--btn-outline-* tüketiyor;
+   bunlar admin panel theme tarafından beslenir. Burada hard-coded sarı zorla. */
+.bg-\(--btn-bg\) {
+  background: #f5b800 !important;
+  background-image: none !important;
+  color: #1a1a1a !important;
+  border: 1px solid #d39c00 !important;
+  border-radius: 8px !important;
+  box-shadow:
+    0 1px 0 #d39c00,
+    inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+}
+.bg-\(--btn-bg\).text-white,
+.bg-\(--btn-bg\) .text-white {
+  color: #1a1a1a !important;
+}
+.bg-\(--btn-bg\):hover,
+.hover\:bg-\(--btn-hover-bg\):hover {
+  background: #e8ad00 !important;
+  background-image: none !important;
+  color: #1a1a1a !important;
+  box-shadow:
+    inset 2px 2px 5px rgba(0, 0, 0, 0.2),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.25) !important;
+}
+.bg-\(--btn-bg\):active {
+  background: #d8a000 !important;
+  box-shadow:
+    inset 3px 3px 7px rgba(0, 0, 0, 0.3),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.18) !important;
+  transform: scale(0.98);
+  transition: all 0.06s ease;
+}
+
+/* Outline (border-(--btn-outline-border-color), bg-(--btn-outline-bg)) */
+.bg-\(--btn-outline-bg\) {
+  background: transparent !important;
+  color: #d39c00 !important;
+  border: 1.5px solid #f5b800 !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+}
+.bg-\(--btn-outline-bg\):hover,
+.hover\:bg-\(--btn-outline-hover-bg\):hover {
+  background: #fff8e1 !important;
+  color: #d39c00 !important;
+  border-color: #d39c00 !important;
+  box-shadow:
+    inset 2px 2px 4px rgba(0, 0, 0, 0.08),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.5) !important;
+}
+.bg-\(--btn-outline-bg\):active {
+  background: #ffefb5 !important;
+  box-shadow:
+    inset 3px 3px 6px rgba(0, 0, 0, 0.14),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.4) !important;
+  transform: scale(0.98);
+  transition: all 0.06s ease;
+}
+
+/* ============================================================
+   GLOBAL BUTTON PRESS EFFECT — system-wide baseline
+   Tüm interaktif öğelere içe gömülü "inner shadow" hover ve
+   daha derin active press efekti verir. Yukarıdaki .th-btn,
+   .th-header-icon, search-submit-button, filter apply ve
+   .bg-(--btn-bg) gibi spesifik kurallar bu baseline'ı override
+   eder; bu kural yalnızca özel hover/active stili olmayan
+   butonlara baseline davranış sağlar.
+   - Excludes: links (<a>) — yalnızca <button>, role=button,
+     input[type=submit/button] hedef alınır.
+   - Excludes: çok küçük transparan icon butonlar bile içe
+     basılma hissini kazanır; rahatsız ederse spesifik override
+     eklenmelidir.
+   ============================================================ */
+button:not(:disabled),
+input[type="submit"]:not(:disabled),
+input[type="button"]:not(:disabled),
+input[type="reset"]:not(:disabled),
+[role="button"]:not([aria-disabled="true"]) {
+  transition:
+    background-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.12s ease,
+    color 0.18s ease,
+    border-color 0.18s ease;
+}
+
+button:not(:disabled):not([role="tab"]):not(.mega-trigger):not(.th-subheader-link):not(
+    .search-tab-btn
+  ):not(.th-search-tab):not(.mega-cat-btn):not(.th-mega-sidebar-item):not(.th-no-press):hover,
+input[type="submit"]:not(:disabled):not(.th-no-press):hover,
+input[type="button"]:not(:disabled):not(.th-no-press):hover,
+input[type="reset"]:not(:disabled):not(.th-no-press):hover,
+[role="button"]:not([aria-disabled="true"]):not(.th-no-press):hover {
+  box-shadow:
+    inset 2px 2px 5px rgba(0, 0, 0, 0.1),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.3);
+}
+
+button:not(:disabled):not([role="tab"]):not(.mega-trigger):not(.th-subheader-link):not(
+    .search-tab-btn
+  ):not(.th-search-tab):not(.mega-cat-btn):not(.th-mega-sidebar-item):not(.th-no-press):active,
+input[type="submit"]:not(:disabled):not(.th-no-press):active,
+input[type="button"]:not(:disabled):not(.th-no-press):active,
+input[type="reset"]:not(:disabled):not(.th-no-press):active,
+[role="button"]:not([aria-disabled="true"]):not(.th-no-press):active {
+  box-shadow:
+    inset 3px 3px 7px rgba(0, 0, 0, 0.18),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.2);
+  transform: scale(0.98);
+  transition-duration: 0.06s;
+}
+
+/* Opt-out: bazı butonlar (örn. tab seçici, accordion toggler,
+   close-X, dropdown caret, paginator nokta vb.) press efektini
+   istemeyebilir. .th-no-press class'ı eklenirse efekt kapanır. */
+button.th-no-press:not(:disabled):hover,
+button.th-no-press:not(:disabled):active,
+[role="button"].th-no-press:hover,
+[role="button"].th-no-press:active {
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* FilterSidebar'daki küçük "›" Apply butonları (FİYAT/MİN. SİPARİŞ vb.) */
+button[data-filter-action="apply"],
+button[data-filter-action="apply-all"] {
+  background: #f5b800 !important;
+  color: #1a1a1a !important;
+  border: 1px solid #d39c00 !important;
+  border-radius: 8px !important;
+  box-shadow:
+    0 1px 0 #d39c00,
+    inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+}
+button[data-filter-action="apply"]:hover,
+button[data-filter-action="apply-all"]:hover {
+  background: #e8ad00 !important;
+  border-color: #d39c00 !important;
+  box-shadow:
+    inset 2px 2px 5px rgba(0, 0, 0, 0.2),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.25) !important;
+}
+button[data-filter-action="apply"]:active,
+button[data-filter-action="apply-all"]:active {
+  background: #d8a000 !important;
+  border-color: #d39c00 !important;
+  box-shadow:
+    inset 3px 3px 7px rgba(0, 0, 0, 0.3),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.18) !important;
+  transform: scale(0.97);
+  transition: all 0.06s ease;
 }
 
 @keyframes favModalIn {
