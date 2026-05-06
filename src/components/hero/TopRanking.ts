@@ -44,7 +44,7 @@ function escapeHtml(str: string): string {
 /* ── Category card ── */
 function renderCategoryCard(cat: TopRankingCategory): string {
   const safeName = escapeHtml(cat.name || "");
-  const href = `/pages/products.html?cat=${encodeURIComponent(cat.slug || cat.id)}&sort=orders`;
+  const href = `/pages/top-ranking-category.html?cat=${encodeURIComponent(cat.slug || cat.id)}&sort=hot-selling&page=1`;
   const imgHtml = cat.image
     ? `<img src="${escapeHtml(cat.image)}" alt="${safeName}" loading="lazy"
             class="w-full h-full object-cover transition-transform duration-300 group-hover/rank:scale-110" />`
