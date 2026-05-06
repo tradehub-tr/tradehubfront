@@ -71,17 +71,17 @@ export function renderRankedCategoryCard(product: RankedProduct, rank: number): 
   const ratingCount = product.ratingCount || 0;
   const ratingHtml = rating > 0
     ? `
-      <div class="flex items-center gap-1.5 mt-1">
-        <span class="text-warning-500 text-xs leading-none" aria-hidden="true">${renderStars(rating)}</span>
-        <span class="text-xs text-text-secondary">${rating.toFixed(1)}</span>
-        ${ratingCount > 0 ? `<span class="text-xs text-text-tertiary">${t("topRankingCategoryPage.ratingCount", { count: ratingCount })}</span>` : ""}
+      <div class="flex items-center gap-1.5 mt-1.5">
+        <span class="text-warning-500 text-[13px] leading-none" aria-hidden="true">${renderStars(rating)}</span>
+        <span class="text-[13px] text-text-secondary">${rating.toFixed(1)}</span>
+        ${ratingCount > 0 ? `<span class="text-[13px] text-text-tertiary">${t("topRankingCategoryPage.ratingCount", { count: ratingCount })}</span>` : ""}
       </div>
     `
     : "";
 
   return `
-    <a href="${safeHref}" class="group/product flex flex-col bg-surface border border-border-default rounded-md p-2 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200" aria-label="${safeName}">
-      <div class="relative aspect-square w-full overflow-hidden rounded-md bg-surface-raised mb-2">
+    <a href="${safeHref}" class="group/product flex flex-col bg-surface border border-border-default rounded-md p-2.5 hover:-translate-y-0.5 hover:shadow-md hover:border-primary-300 transition-all duration-200" aria-label="${safeName}">
+      <div class="relative aspect-[4/3] w-full overflow-hidden rounded-md bg-surface-raised mb-2">
         <img
           src="${safeImg}"
           alt="${safeName}"
@@ -89,11 +89,11 @@ export function renderRankedCategoryCard(product: RankedProduct, rank: number): 
           class="w-full h-full object-cover transition-transform duration-300 group-hover/product:scale-105"
         />
         <span
-          class="absolute top-1.5 left-1.5 w-7 h-7 sm:w-9 sm:h-9 flex items-center justify-center rounded-md text-xs sm:text-sm font-bold text-white shadow-sm ${badgeClass}"
+          class="absolute top-2 left-2 w-8 h-8 flex items-center justify-center rounded-md text-xs font-bold text-white shadow-sm ${badgeClass}"
           aria-label="Rank ${rank}"
         >#${rank}</span>
       </div>
-      <p class="text-sm font-medium text-text-primary line-clamp-2 min-h-[2.5em]">${safeName}</p>
+      <p class="text-sm font-medium text-text-primary line-clamp-2 leading-snug">${safeName}</p>
       ${ratingHtml}
       <p class="text-base font-bold text-text-primary mt-1">${formatPrice(product.price)}</p>
       <p class="text-xs text-text-tertiary mt-0.5 truncate">${escapeHtml(moqLabel(safeMoq))}</p>
@@ -103,8 +103,8 @@ export function renderRankedCategoryCard(product: RankedProduct, rank: number): 
 
 function renderSkeletonCard(): string {
   return `
-    <div class="bg-surface border border-border-default rounded-md p-2 animate-pulse">
-      <div class="aspect-square w-full rounded-md bg-gray-200 mb-2"></div>
+    <div class="bg-surface border border-border-default rounded-md p-2.5 animate-pulse">
+      <div class="aspect-[4/3] w-full rounded-md bg-gray-200 mb-2"></div>
       <div class="h-4 w-3/4 rounded bg-gray-200"></div>
       <div class="h-3 w-1/2 rounded bg-gray-200 mt-2"></div>
       <div class="h-4 w-1/3 rounded bg-gray-200 mt-2"></div>
@@ -116,7 +116,7 @@ export function TopRankingCategoryGrid(): string {
   return `
     <section class="mt-4" aria-label="Top ranking products">
       <div
-        class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 lg:gap-4"
+        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3"
         role="list"
         aria-label="Ranking products"
       >
