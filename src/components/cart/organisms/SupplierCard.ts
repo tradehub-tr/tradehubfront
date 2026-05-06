@@ -8,6 +8,7 @@ import type { CartSupplier } from "../../../types/cart";
 import { Checkbox } from "../atoms/Checkbox";
 import { ProductItem } from "../molecules/ProductItem";
 import { t } from "../../../i18n";
+import { btn } from "../../../utils/ui/button";
 
 export interface SupplierCardProps {
   supplier: CartSupplier;
@@ -54,8 +55,7 @@ export function SupplierCard({ supplier, isSingleSupplier = true }: SupplierCard
         </div>
         <div class="flex items-center gap-3 text-sm font-bold text-text-primary whitespace-nowrap sc-c-supplier-total max-md:flex-col max-md:items-stretch max-md:gap-1.5 shrink-0">
           <span class="sc-c-supplier-total-text max-sm:text-xs" x-show="!expanded" ${isOpen ? "x-cloak" : ""}></span>
-          <button type="button" class="sc-c-supplier-checkout-btn px-4 py-1.5 rounded-[var(--radius-button,8px)] text-sm font-semibold transition-colors hover:brightness-95 max-md:py-2 max-md:text-center"
-                  style="background-color: var(--btn-bg, #FF6600); color: var(--btn-text, #ffffff); border: var(--btn-border-width, 0) solid var(--btn-border-color, transparent); box-shadow: var(--btn-shadow, none);"
+          <button type="button" class="${btn({ variant: "primary", size: "sm" })} sc-c-supplier-checkout-btn max-md:text-center"
                   @click.stop="$dispatch('checkout-supplier', { supplierId: '${escapeHtml(supplier.id)}' })">
             ${t("cart.payThisSupplier")}
           </button>

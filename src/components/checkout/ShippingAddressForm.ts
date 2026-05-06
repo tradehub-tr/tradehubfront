@@ -313,57 +313,71 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
     .join("");
 
   return `
-    <section class="checkout-section mb-4" id="shipping-address-section" x-data="shippingForm">
-      <div class="flex items-center gap-3 py-4 px-4 sm:py-5 sm:px-6">
-        <!-- Map pin ikonu — diğer section başlıklarıyla (ödeme, items) tutarlı. -->
-        <svg class="checkout-section__icon w-6 h-6 min-w-[24px] text-[#6b7280] shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
-          <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
-        </svg>
-        <h2 class="checkout-section__title text-lg font-bold text-[#111827] flex-1 text-left">${pageContent.shippingAddressTitle}</h2>
-        <!-- Zorunlu alan rozeti: form doldurulmadıysa kırmızı 'Zorunlu' -->
+    <section class="checkout-section" id="shipping-address-section" x-data="shippingForm">
+      <div class="checkout-section__header flex items-center gap-3">
+        <!-- Map pin ikonu — referans tasarımdaki 32×32 icon-box ile tutarlı. -->
+        <span class="checkout-section__icon inline-flex items-center justify-center">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+          </svg>
+        </span>
+        <h2 class="checkout-section__title flex-1 text-left">${t("checkout.shippingAddressLabel")}</h2>
+        <!-- Hazır rozeti: adres seçili -->
+        <span
+          x-cloak
+          x-show="selectedAddressId && !showAddressForm"
+          class="co-pill co-pill-ok"
+        >
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          Hazır
+        </span>
+        <!-- Zorunlu alan rozeti -->
         <span
           x-cloak
           x-show="!selectedAddressId && !showAddressForm"
-          class="ml-auto inline-flex items-center gap-1 text-[12px] font-semibold text-[#dc2626] bg-[#fef2f2] border border-[#fecaca] px-2 py-0.5 rounded-full"
+          class="co-pill co-pill-warn"
         >
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+          <span class="co-pill-dot"></span>
           Zorunlu
         </span>
+        <!-- Düzenle (adres seçili iken header'da link) -->
+        <button
+          x-cloak
+          x-show="selectedAddressId && !showAddressForm"
+          type="button"
+          class="co-link-btn"
+          @click="showAddressForm = true"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Düzenle
+        </button>
       </div>
 
-      <div class="checkout-section__content px-3 sm:px-4 xl:px-5 pb-5">
+      <div class="checkout-section__content">
         <!-- SEÇİLİ ADRES KARTI -->
         <div
-          class="rounded-md border border-[#e5e7eb] bg-white p-4"
+          class="co-addr-block"
           x-cloak
           x-show="selectedAddressId && !showAddressForm"
         >
-          <div class="flex items-center justify-between gap-4">
-            <div>
-              <p class="text-[14px] font-semibold text-[#111827]">Teslimat Adresi</p>
-              <p class="mt-2 text-[15px] font-semibold text-[#111827]" x-text="selectedAddressName"></p>
-              <p class="mt-1 text-[15px] text-[#374151]" x-text="selectedAddressPhone"></p>
-              <p class="mt-1 text-[15px] text-[#374151]" x-text="selectedAddressLine"></p>
-            </div>
-            <button type="button" class="text-[14px] font-semibold underline text-[#111827] hover:opacity-70" @click="showAddressForm = true">
-              Düzenle
-            </button>
-          </div>
+          <div class="co-addr-name" x-text="selectedAddressName"></div>
+          <div class="co-addr-line" x-text="selectedAddressLine"></div>
+          <div class="co-addr-line muted" x-text="selectedAddressPhone"></div>
         </div>
 
-        <!-- ADRES EKLE TETİKLEYİCİSİ (hem kayıtlı adres yoksa hem form kapalıysa) -->
+        <!-- ADRES EKLE TETİKLEYİCİSİ -->
         <button
           x-cloak
           x-show="!selectedAddressId && !showAddressForm"
           type="button"
           @click="showAddressForm = true"
-          class="w-full flex items-center justify-center gap-2 py-5 rounded-lg border-2 border-dashed border-[#d1d5db] bg-[#f9fafb] hover:border-[var(--color-primary-500)] hover:bg-white text-[15px] font-semibold text-[#374151] hover:text-[var(--color-primary-500)] transition-colors"
+          class="co-add-row"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 5v14M5 12h14"/>
           </svg>
-          Adres Ekle
+          <span>Adres Ekle</span>
         </button>
 
         <!-- MODAL OVERLAY: dış wrapper scroll eder, iç modal overflow-visible —

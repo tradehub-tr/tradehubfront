@@ -9,8 +9,8 @@ import { FooterLinks } from '../components/footer'
 import { FloatingPanel } from '../components/floating'
 import { startAlpine } from '../alpine'
 import { TradeAssuranceFooterCards } from '../components/shared/TradeAssuranceFooterCards'
+import { TradeAssuranceBadge } from '../components/shared/TradeAssuranceBadge'
 import guvenliOdemelerImg from '../assets/images/güvenliödemeler.avif'
-import taLogoUrl from '../assets/images/ta-logo.svg'
 
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.classList.add('relative');
@@ -29,9 +29,7 @@ appEl.innerHTML = `
       <div class="absolute inset-0 bg-gradient-to-r from-black/50 via-black/30 to-transparent"></div>
       <div class="relative container-boxed px-3 sm:px-4 lg:px-6 flex flex-col justify-center" style="min-height:320px">
         <div class="max-w-[550px] py-12 sm:py-16 lg:py-20">
-          <div class="inline-flex items-center px-5 py-2.5 rounded-full bg-white/15 backdrop-blur-sm mb-2">
-            <img src="${taLogoUrl}" alt="Ticari Güvence" class="h-7 sm:h-8" />
-          </div>
+          ${TradeAssuranceBadge({ className: 'mb-3' })}
           <h1 class="text-3xl sm:text-4xl lg:text-[42px] font-bold text-white leading-tight mb-4">
             Güvenli ve esnek ödeme yöntemleri
           </h1>

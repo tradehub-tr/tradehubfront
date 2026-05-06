@@ -285,8 +285,8 @@ function renderFavorites(): string {
     </div>
 
     <div class="fav-tabs flex px-7 max-sm:px-3 border-b border-border-default mt-4" data-tabgroup="fav">
-      <button class="fav-tabs__tab fav-tabs__tab--active py-3 px-5 text-sm font-medium text-text-secondary bg-transparent border-0 border-b-2 border-solid border-transparent cursor-pointer transition-[color,border-color] duration-150 -mb-px hover:text-text-primary" data-tab="fav-products">${t("favorites.products")}</button>
-      <button class="fav-tabs__tab py-3 px-5 text-sm font-medium text-text-secondary bg-transparent border-0 border-b-2 border-solid border-transparent cursor-pointer transition-[color,border-color] duration-150 -mb-px hover:text-text-primary" data-tab="fav-suppliers">${t("favorites.suppliers")}</button>
+      <button class="fav-tabs__tab fav-tabs__tab--active th-no-press py-3 px-5 text-sm font-medium text-text-secondary bg-transparent border-0 border-b-2 border-solid border-transparent cursor-pointer transition-[color,border-color] duration-150 -mb-px hover:text-text-primary" data-tab="fav-products">${t("favorites.products")}</button>
+      <button class="fav-tabs__tab th-no-press py-3 px-5 text-sm font-medium text-text-secondary bg-transparent border-0 border-b-2 border-solid border-transparent cursor-pointer transition-[color,border-color] duration-150 -mb-px hover:text-text-primary" data-tab="fav-suppliers">${t("favorites.suppliers")}</button>
     </div>
 
     <!-- Tab: Products -->

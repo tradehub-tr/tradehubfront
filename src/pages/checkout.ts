@@ -4,12 +4,13 @@
  */
 
 import '../style.css'
+import '../styles/checkout-design.css'
 import { initFlowbite } from 'flowbite'
-import { t } from '../i18n'
+import { t, getCurrentLang } from '../i18n'
 import { getBaseUrl } from '../utils/url'
 
 import { isLoggedIn } from '../utils/auth'
-import { apiCreateOrder, apiValidateCoupon, fetchShippingMethodsForListing, fetchCart } from '../services/cartService'
+import { apiCreateOrder, apiValidateCoupon, fetchShippingMethodsForListing, fetchCart, type BillingInfoPayload } from '../services/cartService'
 import type { ListingShippingMethod } from '../services/cartService'
 import { showToast } from '../utils/toast'
 
@@ -30,7 +31,7 @@ import { FloatingPanel } from '../components/floating'
 import { startAlpine } from '../alpine'
 
 // Checkout components
-import { CheckoutHeader, CheckoutLayout, CheckoutMinimalHeader, initCheckoutMinimalHeader, ShippingAddressForm, OrderSummary, PaymentMethodSection, ItemsDeliverySection, OrderProtectionModal, OrderReviewModal } from '../components/checkout'
+import { CheckoutHeader, CheckoutLayout, CheckoutMinimalHeader, initCheckoutMinimalHeader, ShippingAddressForm, OrderSummary, PaymentMethodSection, ItemsDeliverySection, BillingInfoSection, OrderProtectionModal, OrderReviewModal } from '../components/checkout'
 import { modalSections, paymentIcons, infoBoxBullets } from '../data/mockCheckout'
 import { cartStore } from '../components/cart/state/CartStore'
 import { initCurrency, getSelectedCurrencyInfo, convertPrice } from '../services/currencyService'
@@ -80,10 +81,9 @@ if (cartStore.hasSelectedSkuMoqViolation()) {
   window.location.replace('/pages/cart.html');
 }
 
-const cartSummary = cartStore.getSummary();
-
 function formatMonthDay(date: Date): string {
-  return date.toLocaleDateString('en-US', { month: 'short', day: '2-digit' });
+  const locale = getCurrentLang() === 'tr' ? 'tr-TR' : 'en-US';
+  return date.toLocaleDateString(locale, { month: 'short', day: '2-digit' });
 }
 
 function addDays(base: Date, days: number): Date {
@@ -104,6 +104,7 @@ function buildProductCard(product: CartProduct): { card: CheckoutDeliveryOrderGr
     unitPrice: convertPrice(sku.unitPrice, sku.baseCurrency || 'USD'),
     quantity: sku.quantity,
     listingVariant: sku.listingVariant,
+    isSample: sku.isSample,
   }));
 
   const subtotal = selectedSkus.reduce((sum, sku) => sum + (convertPrice(sku.unitPrice, sku.baseCurrency || 'USD') * sku.quantity), 0);
@@ -165,7 +166,10 @@ async function enrichMissingShippingMethods(): Promise<void> {
         if (m.minDays && m.maxDays) {
           const start = addDays(now, m.minDays);
           const end = addDays(now, m.maxDays);
-          etaLabel = `${m.method} – Estimated delivery by ${formatMonthDay(start)}-${formatMonthDay(end)}`;
+          etaLabel = `${m.method} – ${t('checkout.estimatedDeliveryRange', {
+            start: formatMonthDay(start),
+            end: formatMonthDay(end),
+          })}`;
         } else {
           etaLabel = m.method;
         }
@@ -198,7 +202,10 @@ function buildSampleDeliveryOrders(): CheckoutDeliveryOrderGroup[] {
       isDefault: i === 0,
     })) ?? [{
       id: 'sample-method-default',
-      etaLabel: `Estimated delivery by ${formatMonthDay(addDays(now, 10))}-${formatMonthDay(addDays(now, 20))}`,
+      etaLabel: t('checkout.estimatedDeliveryRange', {
+        start: formatMonthDay(addDays(now, 10)),
+        end: formatMonthDay(addDays(now, 20)),
+      }),
       shippingFee: 5,
       isDefault: true,
     }],
@@ -240,39 +247,9 @@ function buildDeliveryOrders(): CheckoutDeliveryOrderGroup[] {
 
   if (selectedSuppliers.length === 0) return [];
 
-  const subtotalTotal = selectedSuppliers.reduce((sum, row) => sum + row.subtotal, 0);
-  const now = new Date();
-
   return selectedSuppliers.map((row, index) => {
-    // Backend'den çekilen gerçek kargo yöntemlerini kullan; yoksa fallback
-    const fetchedMethods = supplierShippingMethods[row.supplier.id];
-    let methods: CheckoutDeliveryMethod[];
-
-    if (fetchedMethods && fetchedMethods.length > 0) {
-      methods = fetchedMethods;
-    } else {
-      // Fallback: listing'de kargo tanımlanmamışsa hesaplanmış tahmini değerler
-      const shippingShare = subtotalTotal > 0 ? (cartSummary.shippingFee * row.subtotal) / subtotalTotal : 0;
-      const method1Fee = Number(Math.max(5, shippingShare).toFixed(2));
-      const method2Fee = Number(Math.max(method1Fee + 5, shippingShare * 1.35).toFixed(2));
-      const start1 = addDays(now, 10 + (index * 2));
-      const end1 = addDays(now, 24 + (index * 2));
-      const start2 = addDays(now, 14 + (index * 2));
-      const end2 = addDays(now, 24 + (index * 2));
-      methods = [
-        {
-          id: `method-${row.supplier.id}-1`,
-          etaLabel: `Estimated delivery by ${formatMonthDay(start1)}-${formatMonthDay(end1)}`,
-          shippingFee: method1Fee,
-          isDefault: true,
-        },
-        {
-          id: `method-${row.supplier.id}-2`,
-          etaLabel: `Estimated delivery by ${formatMonthDay(start2)}-${formatMonthDay(end2)}`,
-          shippingFee: method2Fee,
-        },
-      ];
-    }
+    // Yalnızca backend'den çekilen gerçek kargo yöntemlerini kullan; yoksa boş bırak.
+    const methods: CheckoutDeliveryMethod[] = supplierShippingMethods[row.supplier.id] ?? [];
 
     return {
       orderId: `order-${index + 1}`,
@@ -473,10 +450,16 @@ function gatherReviewData() {
   const couponDiscount = currentCouponDiscount;
   const total = Number((itemSubtotal + shippingFee - implicitDiscount - couponDiscount).toFixed(2));
 
+  // Billing — Alpine billingForm'dan window üzerinden çekilir
+  const billingInfo = (
+    (window as unknown as { __getBillingInfo?: () => BillingInfoPayload | null }).__getBillingInfo?.()
+  ) ?? null;
+
   return {
     shippingAddress,
     paymentMethod: paymentLabel,
     orders: checkoutDeliveryOrders,
+    billingInfo,
     summary: {
       itemSubtotal: itemSubtotal.toFixed(2),
       shippingFee: shippingFee.toFixed(2),
@@ -572,7 +555,7 @@ window.addEventListener('checkout:confirm-order', () => {
 
   setConfirmLoading(true);
 
-  apiCreateOrder(backendOrders, shippingAddress, paymentMethod, couponCode, couponDiscount)
+  apiCreateOrder(backendOrders, shippingAddress, paymentMethod, couponCode, couponDiscount, reviewData.billingInfo)
     .then((result) => {
       // Backend'den dönen gerçek sipariş numaralarını kullan
       type BackendResult = { order_number?: string; order_name?: string };
@@ -664,13 +647,23 @@ appEl.innerHTML = `
   <!-- Main Content -->
   <main>
     <div class="max-w-[1680px] mx-auto px-4">
-      ${Breadcrumb([{ label: t('cart.title'), href: '/pages/cart.html' }, { label: t('checkout.paymentMethod') }])}
+      ${Breadcrumb([{ label: t('cart.title'), href: '/pages/cart.html' }, { label: t('checkout.pageTitle') }])}
     </div>
     ${CheckoutLayout({
   leftContent: `
-        ${CheckoutHeader()}
+        ${CheckoutHeader({
+          supplierCount: checkoutDeliveryOrders.length,
+          itemCount: currentCheckoutOrderSummary?.itemCount ?? 0,
+        })}
         ${ShippingAddressForm()}
-        ${PaymentMethodSection({ suppliers: cartStore.getSuppliers().filter(s => s.products.some(p => p.skus.some(sku => sku.selected))), isSupplierCheckout: supplierFilter.length > 0, initialExpanded: true })}
+        ${BillingInfoSection({ initialExpanded: true })}
+        ${PaymentMethodSection({
+          suppliers: cartStore.getSuppliers()
+            .filter(s => supplierFilter.length === 0 || supplierFilter.includes(s.id))
+            .filter(s => s.products.some(p => p.skus.some(sku => sku.selected))),
+          isSupplierCheckout: supplierFilter.length > 0,
+          initialExpanded: true,
+        })}
         ${ItemsDeliverySection({ orders: checkoutDeliveryOrders })}
       `,
   rightContent: `
@@ -732,6 +725,15 @@ if (placeOrderBtn) {
           return;
         }
       }
+    }
+
+    // Validate billing info — fatura tipi seçildiyse alanların doğruluğu
+    const validateBilling = (window as unknown as { __validateBilling?: () => boolean }).__validateBilling;
+    if (validateBilling && !validateBilling()) {
+      const billingSection = document.getElementById('checkout-billing');
+      billingSection?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      showToast({ message: t('checkout.billingValidationError'), type: 'error', duration: 4000 });
+      return;
     }
 
     const reviewData = gatherReviewData();

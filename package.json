@@ -32,6 +32,8 @@
     "flowbite": "^4.0.1",
     "i18next": "^25.8.14",
     "i18next-browser-languagedetector": "^8.2.1",
+    "lucide-static": "^1.14.0",
+    "motion": "^12.38.0",
     "swiper": "^12.1.0",
     "tailwindcss": "^4.1.18"
   }

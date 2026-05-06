@@ -12,15 +12,15 @@ export interface CheckoutLayoutProps {
 
 export function CheckoutLayout({ leftContent, rightContent }: CheckoutLayoutProps): string {
   return `
-    <div class="sc-checkout-page max-w-[1680px] mx-auto px-4 py-6">
-      <div class="flex flex-col xl:flex-row gap-5 items-start w-full relative">
+    <div class="sc-checkout-page max-w-[1680px] mx-auto px-4 py-4 sm:py-5">
+      <div class="flex flex-col xl:flex-row gap-4 xl:gap-5 items-start w-full relative">
         <!-- Left Column (Form Area) -->
-        <div class="w-full xl:flex-[0_0_60%] xl:min-w-0 flex flex-col gap-4">
+        <div class="w-full xl:flex-[0_0_60%] xl:min-w-0 flex flex-col gap-3">
           ${leftContent}
         </div>
 
         <!-- Right Column (Sticky Summary) -->
-        <div class="w-full xl:flex-[0_0_35%] flex-shrink-0 xl:sticky xl:top-[24px] self-start z-10">
+        <div class="w-full xl:flex-[0_0_35%] flex-shrink-0 xl:sticky xl:top-[20px] self-start z-10">
           ${rightContent}
         </div>
       </div>

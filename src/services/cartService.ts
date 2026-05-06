@@ -32,7 +32,8 @@ export async function apiAddToCart(
   listingVariant?: string,
   variantLabel?: string,
   colorVariant?: string,
-  extraAxes?: Record<string, string>
+  extraAxes?: Record<string, string>,
+  isSample?: boolean
 ): Promise<CartResponse> {
   return callMethod<CartResponse>(
     "tradehub_core.api.cart.add_to_cart",
@@ -45,6 +46,7 @@ export async function apiAddToCart(
       ...(extraAxes && Object.keys(extraAxes).length > 0
         ? { extra_axes: JSON.stringify(extraAxes) }
         : {}),
+      ...(isSample ? { is_sample: 1 } : {}),
     },
     true
   );
@@ -55,7 +57,8 @@ export async function apiCheckStock(
   listing: string,
   quantity: number,
   listingVariant?: string,
-  variantLabel?: string
+  variantLabel?: string,
+  isSample?: boolean
 ): Promise<void> {
   await callMethod<{ ok: boolean }>(
     "tradehub_core.api.cart.check_stock",
@@ -64,6 +67,7 @@ export async function apiCheckStock(
       quantity,
       ...(listingVariant ? { listing_variant: listingVariant } : {}),
       ...(variantLabel ? { variant_label: variantLabel } : {}),
+      ...(isSample ? { is_sample: 1 } : {}),
     },
     true
   );
@@ -261,13 +265,29 @@ export async function setDefaultAddressApi(addressId: string): Promise<void> {
 
 // ── Orders ────────────────────────────────────────────────────────────────────
 
+/** Backend'e gönderilecek fatura bilgisi (opsiyonel). */
+export interface BillingInfoPayload {
+  type: "Bireysel" | "Şirket";
+  company_name: string;
+  tax_office: string;
+  tax_number: string;
+  tcn: string;
+  e_invoice: boolean;
+  same_as_shipping: boolean;
+  address: string;
+  city: string;
+  district: string;
+  postal_code: string;
+}
+
 /** Ödeme onayı sonrası siparişleri backend'e kaydeder. */
 export async function apiCreateOrder(
   orders: BackendOrder[],
   shippingAddress: string,
   paymentMethod: string,
   couponCode?: string,
-  couponDiscount?: number
+  couponDiscount?: number,
+  billingInfo?: BillingInfoPayload | null
 ): Promise<{ orders: unknown[] }> {
   return callMethod<{ orders: unknown[] }>(
     "tradehub_core.api.cart.create_order",
@@ -277,6 +297,7 @@ export async function apiCreateOrder(
       payment_method: paymentMethod,
       coupon_code: couponCode || null,
       coupon_discount: couponDiscount || 0,
+      billing_info_json: billingInfo ? JSON.stringify(billingInfo) : null,
     },
     true
   );

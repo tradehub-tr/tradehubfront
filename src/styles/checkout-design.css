@@ -1,0 +1,1032 @@
+/* ====================================================
+   iSTOC Checkout — Sipariş Onayı tasarım sistemi
+   Kaynak: /checkout/styles.css referansı
+   Notlar:
+     - OrderSummary'a (sağ panel: .checkout-sidebar) DOKUNULMAZ.
+     - Mevcut Tailwind sınıflarıyla birlikte çalışır; bu dosya
+       checkout sayfası kapsamında (sc-checkout-page) override yapar.
+     - Brand: iSTOC sarı #f5b800 (referans). Mevcut sitenin turuncu
+       --color-primary token'ı ÜZERİNE override yazmak yerine,
+       checkout sayfası kapsamında yeni token'lar kullanırız.
+   ==================================================== */
+
+/* Checkout sayfası gövdesi — referansta tüm zemin gri. Mevcut sayfayı
+   sc-checkout-page selector'ü ile tespit edip body/main'i gri tonla. */
+body:has(.sc-checkout-page),
+body:has(.sc-checkout-page) main {
+  background: #f7f7f5 !important;
+}
+
+.sc-checkout-page {
+  /* Brand */
+  --co-brand: #f5b800;
+  --co-brand-700: #d39c00;
+  --co-brand-50: #fff8e1;
+
+  /* Neutrals */
+  --co-bg: #f7f7f5;
+  --co-surface: #ffffff;
+  --co-surface-2: #fafaf8;
+  --co-border: #e8e6e0;
+  --co-border-strong: #d5d2c9;
+  --co-text: #1a1a1a;
+  --co-text-2: #4a4a48;
+  --co-muted: #8a877f;
+
+  /* Semantic */
+  --co-ok: #1f7a4d;
+  --co-ok-bg: #e8f5ed;
+  --co-warn: #b54708;
+  --co-warn-bg: #fff4e5;
+  --co-danger: #b42318;
+
+  /* Radii / shadow */
+  --co-r-sm: 8px;
+  --co-r: 12px;
+  --co-r-lg: 16px;
+  --co-shadow-sm: 0 1px 2px rgba(20, 20, 18, 0.04);
+  --co-shadow: 0 2px 6px rgba(20, 20, 18, 0.06), 0 1px 2px rgba(20, 20, 18, 0.04);
+
+  background: var(--co-bg);
+}
+
+/* ─────────── Sayfa başlığı ─────────── */
+.co-page-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 32px;
+  margin-bottom: 18px;
+  padding-top: 6px;
+}
+.co-page-head-l {
+  flex: 1;
+  min-width: 0;
+}
+.co-page-title {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--co-text);
+  margin: 0;
+}
+.co-page-sub {
+  color: var(--co-muted);
+  margin: 6px 0 0;
+  max-width: 56ch;
+  font-size: 13.5px;
+}
+
+/* ─────────── Section card ─────────── */
+.sc-checkout-page .checkout-section {
+  background: var(--co-surface);
+  border: 1px solid var(--co-border);
+  border-radius: var(--co-r-lg);
+  box-shadow: var(--co-shadow-sm);
+  overflow: hidden;
+}
+.sc-checkout-page .checkout-section + .checkout-section {
+  /* CheckoutLayout zaten flex gap kullanıyor; üstteki border'ı sıfırla */
+  border-top: 1px solid var(--co-border);
+}
+/* Bileşenlerin orjinal "border-t border-[#e5e5e5]" sınıfını nötrle */
+.sc-checkout-page .checkout-section.border-t {
+  border-top: 1px solid var(--co-border) !important;
+}
+
+/* Header */
+.sc-checkout-page .checkout-section__header,
+.sc-checkout-page .checkout-section > .flex.items-center.gap-3 {
+  padding: 18px 22px !important;
+  gap: 12px;
+}
+.sc-checkout-page .checkout-section__title {
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  color: var(--co-text) !important;
+  letter-spacing: -0.005em;
+}
+.sc-checkout-page .checkout-section__icon {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  border-radius: 10px;
+  background: var(--co-surface-2);
+  color: var(--co-text-2) !important;
+  padding: 7px;
+}
+
+/* Body padding override */
+.sc-checkout-page .checkout-section__content {
+  padding: 0 22px 22px;
+}
+.sc-checkout-page .checkout-section__content > .px-4,
+.sc-checkout-page .checkout-section__content > div.px-4 {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Accordion kapalı (collapsed) iken content padding'i de sıfırla.
+   Aksi halde height:0 + padding-bottom:22px boş 22px alt boşluk kalır
+   ve iç metin (co-pay-sub) overflow ile tam gizlenmediğinde sızar. */
+.sc-checkout-page .checkout-section--collapsed .checkout-section__content {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* ─────────── Pills ─────────── */
+.co-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 500;
+  background: var(--co-surface-2);
+  color: var(--co-text-2);
+  border: 1px solid var(--co-border);
+  white-space: nowrap;
+}
+.co-pill-warn {
+  background: var(--co-warn-bg);
+  color: var(--co-warn);
+  border-color: transparent;
+}
+.co-pill-warn .co-pill-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--co-warn);
+  display: inline-block;
+}
+.co-pill-ok {
+  background: var(--co-ok-bg);
+  color: var(--co-ok);
+  border-color: transparent;
+}
+.co-pill-amber {
+  background: var(--co-brand-50);
+  color: var(--co-brand-700);
+  border-color: transparent;
+  font-weight: 600;
+}
+.co-pill-amber-soft {
+  background: var(--co-brand-50);
+  color: var(--co-brand-700);
+  border-color: transparent;
+}
+.co-pill-ghost {
+  background: transparent;
+}
+
+/* "Zorunlu" rozetini (kırmızı eski stil) override et — turuncu/amber ton */
+.sc-checkout-page #shipping-address-section span[x-show="!selectedAddressId && !showAddressForm"] {
+  background: var(--co-warn-bg) !important;
+  color: var(--co-warn) !important;
+  border-color: transparent !important;
+  font-weight: 500 !important;
+}
+
+/* ─────────── Link & ghost butonlar ─────────── */
+.sc-checkout-page .co-link-btn {
+  background: transparent;
+  border: 0;
+  padding: 4px 8px;
+  color: var(--co-text-2);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+}
+.sc-checkout-page .co-link-btn:hover {
+  color: var(--co-text);
+  background: var(--co-surface-2);
+}
+
+/* ─────────── Adres bölümü ─────────── */
+.sc-checkout-page .co-add-row {
+  margin: 0;
+  padding: 14px;
+  border: 1.5px dashed var(--co-border-strong);
+  border-radius: var(--co-r);
+  background: var(--co-surface-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  color: var(--co-text-2);
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.sc-checkout-page .co-add-row:hover {
+  border-color: var(--co-brand);
+  color: var(--co-text);
+  background: var(--co-brand-50);
+}
+
+.sc-checkout-page .co-addr-block {
+  padding: 14px 16px;
+  background: var(--co-surface-2);
+  border-radius: var(--co-r);
+  border: 1px solid var(--co-border);
+}
+.sc-checkout-page .co-addr-name {
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--co-text);
+}
+.sc-checkout-page .co-addr-line {
+  font-size: 13px;
+  color: var(--co-text-2);
+}
+.sc-checkout-page .co-addr-line.muted {
+  color: var(--co-muted);
+}
+
+/* ─────────── Ödeme yöntemi ─────────── */
+.sc-checkout-page .co-pay-sub {
+  font-size: 12px;
+  color: var(--co-muted);
+  padding: 0 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+.sc-checkout-page .co-pay-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sc-checkout-page .co-pay-row {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--co-border);
+  border-radius: var(--co-r);
+  background: var(--co-surface);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.sc-checkout-page .co-pay-row:hover {
+  border-color: var(--co-border-strong);
+}
+.sc-checkout-page .co-pay-row.is-selected,
+.sc-checkout-page .co-pay-row[data-selected="true"] {
+  border-color: var(--co-brand);
+  background: var(--co-brand-50);
+  box-shadow: 0 0 0 3px rgba(245, 184, 0, 0.12);
+}
+.sc-checkout-page .co-pay-row input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.sc-checkout-page .co-radio {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 1.5px solid var(--co-border-strong);
+  background: var(--co-surface);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+  transition: all 0.15s;
+}
+.sc-checkout-page .co-radio span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: transparent;
+  transition: all 0.15s;
+}
+.sc-checkout-page .co-pay-row.is-selected .co-radio,
+.sc-checkout-page .co-pay-row[data-selected="true"] .co-radio {
+  border-color: var(--co-brand-700);
+}
+.sc-checkout-page .co-pay-row.is-selected .co-radio span,
+.sc-checkout-page .co-pay-row[data-selected="true"] .co-radio span {
+  background: var(--co-brand-700);
+}
+.sc-checkout-page .co-pay-content {
+  flex: 1;
+  min-width: 0;
+}
+.sc-checkout-page .co-pay-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+.sc-checkout-page .co-pay-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--co-text);
+}
+.sc-checkout-page .co-pay-desc {
+  font-size: 12.5px;
+  color: var(--co-muted);
+}
+
+/* ─────────── Fatura — toggle kartlar ─────────── */
+.sc-checkout-page .co-billing-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.sc-checkout-page .co-billing-toggle-card {
+  background: var(--co-surface);
+  border: 1px solid var(--co-border);
+  border-radius: var(--co-r);
+  padding: 14px 16px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: all 0.15s;
+  cursor: pointer;
+}
+.sc-checkout-page .co-billing-toggle-card:hover {
+  border-color: var(--co-border-strong);
+}
+.sc-checkout-page .co-billing-toggle-card[aria-selected="true"],
+.sc-checkout-page .co-billing-toggle-card.is-active {
+  background: var(--co-brand-50);
+  border-color: var(--co-brand);
+  box-shadow: 0 0 0 3px rgba(245, 184, 0, 0.12);
+}
+.sc-checkout-page .co-bt-title {
+  font-weight: 600;
+  font-size: 13.5px;
+  color: var(--co-text);
+}
+.sc-checkout-page .co-bt-sub {
+  font-size: 12px;
+  color: var(--co-muted);
+}
+
+.sc-checkout-page .co-billing-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.sc-checkout-page .co-billing-fields .co-field-full {
+  grid-column: 1 / -1;
+}
+@media (max-width: 720px) {
+  .sc-checkout-page .co-billing-toggle,
+  .sc-checkout-page .co-billing-fields {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sc-checkout-page .co-billing-addr-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  background: var(--co-surface-2);
+  border: 1px solid var(--co-border);
+  border-radius: var(--co-r);
+  font-size: 13px;
+  color: var(--co-text-2);
+}
+.sc-checkout-page .co-billing-addr-pill svg {
+  color: var(--co-muted);
+  flex-shrink: 0;
+}
+
+/* Field — referans field input ve label */
+.sc-checkout-page .co-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.sc-checkout-page .co-field label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--co-text-2);
+}
+.sc-checkout-page .co-field .co-req {
+  color: var(--co-danger);
+  margin-left: 2px;
+}
+.sc-checkout-page .co-field input,
+.sc-checkout-page .co-field select,
+.sc-checkout-page .co-field textarea {
+  padding: 10px 12px;
+  background: var(--co-surface);
+  border: 1px solid var(--co-border-strong);
+  border-radius: 8px;
+  font-size: 13.5px;
+  outline: none;
+  transition:
+    border 0.15s,
+    box-shadow 0.15s;
+  color: var(--co-text);
+}
+.sc-checkout-page .co-field input:focus,
+.sc-checkout-page .co-field select:focus,
+.sc-checkout-page .co-field textarea:focus {
+  border-color: var(--co-brand-700);
+  box-shadow: 0 0 0 3px rgba(245, 184, 0, 0.15);
+}
+
+/* ─────────── Tedarikçi & Ürün ─────────── */
+.sc-checkout-page .co-suppliers {
+  display: flex;
+  flex-direction: column;
+}
+.sc-checkout-page .co-supplier {
+  border-top: 1px solid var(--co-border);
+}
+.sc-checkout-page .co-supplier:first-child {
+  border-top: 0;
+}
+
+.sc-checkout-page .co-supplier-head {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  padding: 16px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+.sc-checkout-page .co-supplier-head:hover {
+  background: var(--co-surface-2);
+}
+.sc-checkout-page .co-supplier.is-open .co-supplier-head {
+  background: var(--co-surface-2);
+}
+
+.sc-checkout-page .co-supplier-head-l {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+.sc-checkout-page .co-supplier-head-l > svg:first-child {
+  color: var(--co-muted);
+  flex-shrink: 0;
+}
+.sc-checkout-page .co-supplier-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--co-text);
+}
+.sc-checkout-page .co-supplier-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--co-brand-700);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+.sc-checkout-page .co-supplier-head-r {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sc-checkout-page .co-supplier-total {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--co-text);
+}
+.sc-checkout-page .co-chev {
+  color: var(--co-muted);
+  transition: transform 0.2s;
+  display: inline-flex;
+}
+.sc-checkout-page .co-chev.rot {
+  transform: rotate(180deg);
+}
+
+.sc-checkout-page .co-supplier-body {
+  padding: 0 22px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* shipping row */
+.sc-checkout-page .co-ship-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  gap: 12px;
+  border: 1.5px solid var(--co-text);
+  border-radius: var(--co-r);
+  background: var(--co-surface);
+}
+.sc-checkout-page .co-ship-l {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.sc-checkout-page .co-ship-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--co-surface-2);
+  color: var(--co-text-2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.sc-checkout-page .co-ship-title {
+  font-weight: 600;
+  font-size: 13.5px;
+  color: var(--co-text);
+}
+.sc-checkout-page .co-ship-meta {
+  font-size: 12.5px;
+  color: var(--co-muted);
+  margin-top: 2px;
+}
+.sc-checkout-page .co-ship-meta strong {
+  color: var(--co-text);
+  font-weight: 600;
+}
+
+/* products */
+.sc-checkout-page .co-products {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.sc-checkout-page .co-product {
+  border: 1px solid var(--co-border);
+  border-radius: var(--co-r);
+  overflow: hidden;
+  background: var(--co-surface);
+}
+.sc-checkout-page .co-product-head {
+  padding: 14px 16px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--co-border);
+  background: var(--co-surface);
+}
+.sc-checkout-page .co-product-thumb {
+  flex-shrink: 0;
+}
+.sc-checkout-page .co-product-thumb img {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  object-fit: cover;
+  display: block;
+  background: var(--co-surface-2);
+}
+.sc-checkout-page .co-product-info {
+  flex: 1;
+  min-width: 0;
+}
+.sc-checkout-page .co-product-name {
+  font-weight: 600;
+  font-size: 13.5px;
+  line-height: 1.4;
+  margin-bottom: 6px;
+  color: var(--co-text);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.sc-checkout-page .co-product-meta {
+  font-size: 12.5px;
+  color: var(--co-muted);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+.sc-checkout-page .co-product-meta strong {
+  color: var(--co-text);
+  font-weight: 600;
+}
+.sc-checkout-page .co-dot {
+  display: inline-block;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--co-border-strong);
+  margin: 0 6px;
+  vertical-align: middle;
+}
+
+/* variants */
+.sc-checkout-page .co-variants {
+  display: flex;
+  flex-direction: column;
+}
+.sc-checkout-page .co-variant-row {
+  display: grid;
+  grid-template-columns: 40px 1fr auto auto;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 16px;
+  background: var(--co-surface-2);
+  border-bottom: 1px solid var(--co-border);
+}
+.sc-checkout-page .co-variant-row:last-child {
+  border-bottom: 0;
+}
+.sc-checkout-page .co-variant-thumb img {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  object-fit: cover;
+  display: block;
+}
+.sc-checkout-page .co-variant-meta {
+  min-width: 0;
+}
+.sc-checkout-page .co-variant-line {
+  font-size: 13px;
+  color: var(--co-text);
+}
+.sc-checkout-page .co-variant-line .co-sep {
+  color: var(--co-border-strong);
+  margin: 0 4px;
+}
+.sc-checkout-page .co-variant-unit {
+  font-size: 12px;
+  color: var(--co-muted);
+  margin-top: 2px;
+}
+.sc-checkout-page .co-variant-qty {
+  font-size: 13px;
+  color: var(--co-muted);
+  font-variant-numeric: tabular-nums;
+}
+.sc-checkout-page .co-variant-total {
+  font-size: 13.5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--co-text);
+}
+@media (max-width: 720px) {
+  .sc-checkout-page .co-variant-row {
+    grid-template-columns: 40px 1fr auto;
+  }
+  .sc-checkout-page .co-variant-qty {
+    display: none;
+  }
+}
+
+/* supplier foot — note ekleme */
+.sc-checkout-page .co-supplier-foot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding-top: 4px;
+}
+.sc-checkout-page .co-link-ul {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--co-border-strong);
+}
+.sc-checkout-page .co-note-preview {
+  font-size: 12px;
+  color: var(--co-muted);
+  padding: 4px 10px;
+  background: var(--co-surface-2);
+  border-radius: 6px;
+  max-width: 360px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Footer trust strip — alt küçük güven satırı */
+.sc-checkout-page .co-footer-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 18px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+.sc-checkout-page .co-trust-mini {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--co-muted);
+}
+.sc-checkout-page .co-trust-mini svg {
+  color: var(--co-text-2);
+}
+
+/* ─────────── ItemsDelivery — referans yapıya yaklaştırma ─────────── */
+/* checkout-section__content'in default 0 22px 22px padding'i tedarikçi
+   accordion'larında yan boşluk yaratmaması için sıfırla; alt sipariş
+   blokları kendi 22px padding'ini taşıyor. */
+.sc-checkout-page #checkout-items .checkout-section__content {
+  padding: 0;
+}
+
+/* `space-y-5` Tailwind sınıfı kardeşler arasına 20px margin ekliyordu
+   (hem margin-top hem margin-bottom — shorthand calc ile). Ben her
+   tedarikçiye iç padding verdiğim için bu margin asimetri yaratıyor.
+   Tüm doğrudan çocukların üst+alt margin'ini sıfırla. */
+.sc-checkout-page #checkout-items .checkout-section__content > * {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* Her tedarikçi bloğu — yan padding kaldırıldı, button kartı baştan
+   sona hover edebilsin. Üst-alt boşluk button içinde. */
+.sc-checkout-page #checkout-items .pt-5.border-t {
+  padding: 0 !important;
+  border-top: 1px solid var(--co-border) !important;
+  margin-top: 0 !important;
+}
+/* İlk tedarikçi border'sız — Tailwind'in :first-child davranışını
+   taklit et (yalnızca first-child'da uygula). */
+.sc-checkout-page #checkout-items .first\:border-t-0:first-child {
+  border-top: 0 !important;
+}
+.sc-checkout-page #checkout-items .pt-5.first\:pt-0:first-child {
+  padding-top: 0 !important;
+}
+
+/* Tedarikçi accordion başlığı — tam genişlik button, hover'da gri zemin */
+.sc-checkout-page #checkout-items .pt-5.border-t > button {
+  margin: 0 !important;
+  padding: 14px 22px !important;
+  border-radius: 0;
+  transition: background-color 0.15s;
+}
+.sc-checkout-page #checkout-items .pt-5.border-t > button:hover {
+  background: var(--co-surface-2) !important;
+  opacity: 1 !important;
+}
+
+/* Açık tedarikçi gövdesi — yan padding + üst/alt nefes alanı.
+   Button kendi padding'i ile bittikten sonra gövde başlasın. */
+.sc-checkout-page #checkout-items .pt-5.border-t > div[x-show="expanded"],
+.sc-checkout-page #checkout-items .pt-5.border-t > div.transition-all {
+  padding: 4px 22px 18px !important;
+}
+
+/* Satıcı adı (h3.text-[20px]) — referans 14-15px font-semibold */
+.sc-checkout-page #checkout-items h3.text-\[20px\] {
+  font-size: 14.5px !important;
+  font-weight: 600 !important;
+  color: var(--co-text) !important;
+  letter-spacing: -0.005em;
+}
+/* Tedarikçi sağ tarafındaki fiyat etiketi (kapalı iken) */
+.sc-checkout-page #checkout-items span.text-\[15px\].sm\:text-\[17px\].font-bold,
+.sc-checkout-page #checkout-items span.text-\[15px\],
+.sc-checkout-page #checkout-items span.sm\:text-\[17px\] {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: var(--co-text) !important;
+}
+/* Üst chevron'u küçült */
+.sc-checkout-page #checkout-items button svg.w-5.h-5 {
+  width: 16px !important;
+  height: 16px !important;
+  color: var(--co-muted) !important;
+}
+
+/* Section header'da seçili özet etiketi (Ödeme yöntemi: Banka Havalesi vs.)
+   accordion kapalıyken görünür, açılınca x-show="!expanded" ile gizlenir. */
+.sc-checkout-page .co-section-summary {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--co-text-2);
+  background: var(--co-surface-2);
+  border: 1px solid var(--co-border);
+  border-radius: 999px;
+  padding: 3px 10px;
+  white-space: nowrap;
+  letter-spacing: 0.005em;
+}
+
+/* Tedarikçi adı sağında "N ürün" mini etiketi */
+.sc-checkout-page #checkout-items .co-supplier-count {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--co-text-2);
+  background: var(--co-surface-2);
+  border: 1px solid var(--co-border);
+  border-radius: 999px;
+  padding: 2px 8px;
+  letter-spacing: 0.01em;
+}
+/* Sol tedarikçi (mağaza) ikonunu küçült ve hizala */
+.sc-checkout-page #checkout-items button svg.w-6.h-6 {
+  width: 16px !important;
+  height: 16px !important;
+  color: var(--co-muted) !important;
+}
+
+/* Açık tedarikçi gövdesi: ürün başlık alanı font'ları */
+.sc-checkout-page #checkout-items h4.text-\[18px\] {
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  color: var(--co-text) !important;
+}
+.sc-checkout-page #checkout-items p.text-\[15px\] {
+  font-size: 12.5px !important;
+  color: var(--co-muted) !important;
+  margin-top: 4px !important;
+}
+.sc-checkout-page #checkout-items p.text-\[13px\].sm\:text-\[14px\],
+.sc-checkout-page #checkout-items p.text-\[13px\],
+.sc-checkout-page #checkout-items p.sm\:text-\[14px\] {
+  font-size: 12.5px !important;
+  color: var(--co-muted) !important;
+}
+.sc-checkout-page #checkout-items img.sm\:w-24 {
+  width: 56px !important;
+  height: 56px !important;
+}
+.sc-checkout-page #checkout-items img.w-16 {
+  width: 56px !important;
+  height: 56px !important;
+}
+
+/* Ürün kartı (renderProductCard) — accordion başlığı: tıklanabilir, hover gri */
+.sc-checkout-page #checkout-items .co-product-card {
+  border: 1px solid var(--co-border);
+  border-radius: var(--co-r);
+  background: var(--co-surface);
+  overflow: hidden;
+  margin-top: 10px !important;
+}
+.sc-checkout-page #checkout-items .co-product-card .co-product-head {
+  padding: 10px 12px;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  align-items: center !important;
+  gap: 12px !important;
+}
+.sc-checkout-page #checkout-items .co-product-card .co-product-head:hover {
+  background: var(--co-surface-2);
+  opacity: 1 !important;
+}
+/* Ürün görselini kompaktla: 56×56 (mobil + masaüstü aynı) */
+.sc-checkout-page #checkout-items .co-product-card .co-product-head img {
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 6px !important;
+}
+/* Ürün başlığı — kompakt: 13.5px, leading-snug */
+.sc-checkout-page #checkout-items .co-product-card .co-product-head h4 {
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  line-height: 1.35 !important;
+  color: var(--co-text) !important;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sc-checkout-page #checkout-items .co-product-card .co-product-head p {
+  font-size: 11.5px !important;
+  margin-top: 2px !important;
+  color: var(--co-muted) !important;
+  line-height: 1.4 !important;
+}
+.sc-checkout-page #checkout-items .co-product-card .co-product-total {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--co-text);
+  font-variant-numeric: tabular-nums;
+}
+.sc-checkout-page #checkout-items .co-product-card .co-product-chev {
+  color: var(--co-muted);
+  width: 14px !important;
+  height: 14px !important;
+}
+/* Açık gövde — varyant satırlarını ürün kartı içine yapıştır */
+.sc-checkout-page #checkout-items .co-product-card > [x-show="open"] > div {
+  padding: 0 12px 12px;
+}
+.sc-checkout-page #checkout-items .co-product-card > [x-show="open"] > button {
+  margin: 0 12px 12px;
+}
+
+/* SKU satırları — açık gri zemin + 13px metinler */
+.sc-checkout-page #checkout-items .bg-\[\#f3f4f6\] {
+  background: var(--co-surface-2) !important;
+  border: 1px solid var(--co-border) !important;
+  border-radius: var(--co-r) !important;
+  padding: 10px 14px !important;
+}
+.sc-checkout-page #checkout-items .bg-\[\#f3f4f6\] .text-\[16px\],
+.sc-checkout-page #checkout-items .bg-\[\#f3f4f6\] p.text-sm,
+.sc-checkout-page #checkout-items .bg-\[\#f3f4f6\] .sm\:text-\[16px\] {
+  font-size: 13px !important;
+  color: var(--co-text) !important;
+}
+.sc-checkout-page #checkout-items .bg-\[\#f3f4f6\] .text-\[17px\],
+.sc-checkout-page #checkout-items .bg-\[\#f3f4f6\] .sm\:text-\[17px\] {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: var(--co-text) !important;
+}
+.sc-checkout-page #checkout-items .bg-\[\#f3f4f6\] img {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 6px !important;
+}
+
+/* Kargo "değiştir" satırı — siyah/beyaz çerçeveli görünüm */
+.sc-checkout-page #checkout-items .border-\[\#111827\].bg-white {
+  border-color: var(--co-text) !important;
+  border-width: 1.5px !important;
+  border-radius: var(--co-r) !important;
+}
+.sc-checkout-page #checkout-items .border-\[\#111827\].bg-white .text-\[16px\],
+.sc-checkout-page #checkout-items .border-\[\#111827\].bg-white .sm\:text-\[16px\] {
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+}
+.sc-checkout-page #checkout-items .border-\[\#111827\].bg-white .text-\[13px\],
+.sc-checkout-page #checkout-items .border-\[\#111827\].bg-white .sm\:text-\[13px\] {
+  font-size: 12.5px !important;
+  color: var(--co-muted) !important;
+}
+
+/* "Tedarikçiye not ekle" linki — referans co-link-ul */
+.sc-checkout-page #checkout-items .text-\[18px\].underline,
+.sc-checkout-page #checkout-items button.text-\[18px\].underline {
+  font-size: 13px !important;
+  color: var(--co-text-2) !important;
+  text-decoration-color: var(--co-border-strong) !important;
+  text-underline-offset: 3px !important;
+}
+.sc-checkout-page #checkout-items p.text-\[18px\] {
+  font-size: 13px !important;
+  color: var(--co-text-2) !important;
+}
+
+/* ─────────── Modal stilleri (paylaşımlı) ─────────── */
+.sc-checkout-page .co-modal-secure {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--co-ok-bg);
+  color: var(--co-ok);
+  font-size: 12.5px;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+/* ─────────── Üst (minimal) header - referans alt çubuk hissi ─────────── */
+/* Mevcut CheckoutMinimalHeader tasarımı korunur (sadece logo + profil),
+   ekstra subbar/breadcrumb mevcut sayfa yapısında üstte görünüyor. */
+
+/* ─────────── Responsive ─────────── */
+@media (max-width: 720px) {
+  .sc-checkout-page .checkout-section__header,
+  .sc-checkout-page .checkout-section > .flex.items-center.gap-3 {
+    padding: 14px 16px !important;
+  }
+  .sc-checkout-page .checkout-section__content {
+    padding: 0 16px 16px;
+  }
+  .sc-checkout-page .co-supplier-head {
+    padding: 14px 16px;
+  }
+  .sc-checkout-page .co-supplier-body {
+    padding: 0 16px 16px;
+  }
+  .sc-checkout-page .co-page-title {
+    font-size: 22px;
+  }
+}

@@ -3,6 +3,7 @@ import { countries as checkoutCountries, districtsByProvince } from "../data/moc
 import type { SavedAddress } from "../types/checkout";
 import { getUser, isLoggedIn } from "../utils/auth";
 import { formatCurrency } from "../services/currencyService";
+import { getCurrencyCode } from "../utils/currency";
 import { t } from "../i18n";
 import {
   fetchAddresses,
@@ -69,6 +70,9 @@ Alpine.data("checkoutItemsDelivery", () => ({
   isNoteModalOpen: false,
   activeNoteOrderId: "",
   noteDraft: "",
+  isShippingModalOpen: false,
+  activeShippingOrderId: "",
+  shippingDraft: "",
 
   init() {
     const root = this.$el as HTMLElement;
@@ -91,6 +95,56 @@ Alpine.data("checkoutItemsDelivery", () => ({
 
   isMethodSelected(orderId: string, methodId: string): boolean {
     return this.selectedMethodByOrderId[orderId] === methodId;
+  },
+
+  getSelectedMethod(orderId: string): CheckoutDeliveryMethod | null {
+    const order = this.deliveryOrders.find((o) => o.orderId === orderId);
+    if (!order) return null;
+    const id = this.selectedMethodByOrderId[orderId];
+    return (
+      order.methods.find((m) => m.id === id) ??
+      order.methods.find((m) => m.isDefault) ??
+      order.methods[0] ??
+      null
+    );
+  },
+
+  getActiveShippingMethods(): CheckoutDeliveryMethod[] {
+    if (!this.activeShippingOrderId) return [];
+    const order = this.deliveryOrders.find((o) => o.orderId === this.activeShippingOrderId);
+    return order?.methods ?? [];
+  },
+
+  formatShippingFee(value: number): string {
+    const safe = Number.isFinite(value) ? value : 0;
+    return `${getCurrencyCode()} ${safe.toFixed(2)}`;
+  },
+
+  openShippingModal(orderId: string) {
+    const order = this.deliveryOrders.find((o) => o.orderId === orderId);
+    if (!order || order.methods.length <= 1) return;
+    this.activeShippingOrderId = orderId;
+    this.shippingDraft =
+      this.selectedMethodByOrderId[orderId] ??
+      order.methods.find((m) => m.isDefault)?.id ??
+      order.methods[0]?.id ??
+      "";
+    this.isShippingModalOpen = true;
+  },
+
+  closeShippingModal() {
+    this.isShippingModalOpen = false;
+    this.activeShippingOrderId = "";
+    this.shippingDraft = "";
+  },
+
+  confirmShipping() {
+    if (!this.activeShippingOrderId || !this.shippingDraft) {
+      this.closeShippingModal();
+      return;
+    }
+    this.selectMethod(this.activeShippingOrderId, this.shippingDraft);
+    this.closeShippingModal();
   },
 
   loadSupplierNotes() {
@@ -395,6 +449,205 @@ Alpine.data("checkoutAccordion", (props?: { initialExpanded?: boolean }) => ({
       };
       content.addEventListener("transitionend", onEnd);
     }
+  },
+}));
+
+// ── Billing Info Form ───────────────────────────────────────────────
+
+const BILLING_STORAGE_KEY = "tradehub_checkout_billing";
+
+interface BillingFormState {
+  type: "" | "Bireysel" | "Şirket";
+  tcn: string;
+  companyName: string;
+  taxOffice: string;
+  taxNumber: string;
+  eInvoice: boolean;
+  sameAsShipping: boolean;
+  address: string;
+  city: string;
+  district: string;
+  postalCode: string;
+}
+
+function defaultBillingState(): BillingFormState {
+  return {
+    type: "",
+    tcn: "",
+    companyName: "",
+    taxOffice: "",
+    taxNumber: "",
+    eInvoice: false,
+    sameAsShipping: true,
+    address: "",
+    city: "",
+    district: "",
+    postalCode: "",
+  };
+}
+
+Alpine.data("billingForm", () => ({
+  expanded: false,
+  ...defaultBillingState(),
+  errors: {} as Record<string, string>,
+
+  init(initialExpanded = false) {
+    this.expanded = initialExpanded;
+    try {
+      const raw = localStorage.getItem(BILLING_STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw) as Partial<BillingFormState>;
+        Object.assign(this, parsed);
+      }
+    } catch {
+      /* ignore */
+    }
+
+    // Pencere'ye snapshot al — checkout.ts gatherReviewData kullanır
+    const win = window as unknown as Record<string, unknown>;
+    win.__getBillingInfo = () => this.toBackend();
+    win.__validateBilling = () => this.validateAll();
+
+    this.$watch("type", () => this.persist());
+    this.$watch("tcn", () => this.persist());
+    this.$watch("companyName", () => this.persist());
+    this.$watch("taxOffice", () => this.persist());
+    this.$watch("taxNumber", () => this.persist());
+    this.$watch("eInvoice", () => this.persist());
+    this.$watch("sameAsShipping", () => this.persist());
+    this.$watch("address", () => this.persist());
+    this.$watch("city", () => this.persist());
+    this.$watch("district", () => this.persist());
+    this.$watch("postalCode", () => this.persist());
+  },
+
+  get isComplete() {
+    if (!this.type) return false;
+    if (this.type === "Bireysel") {
+      if (!/^\d{11}$/.test(this.tcn)) return false;
+    } else if (this.type === "Şirket") {
+      if (!this.companyName.trim() || !this.taxOffice.trim()) return false;
+      if (!/^\d{10}$/.test(this.taxNumber)) return false;
+    }
+    if (!this.sameAsShipping) {
+      if (
+        !this.address.trim() ||
+        !this.city.trim() ||
+        !this.district.trim() ||
+        !this.postalCode.trim()
+      )
+        return false;
+    }
+    return true;
+  },
+
+  get summaryText(): string {
+    if (!this.type) return t("checkout.billingSummaryEmpty");
+    if (this.type === "Bireysel") return t("checkout.billingSummaryIndividual");
+    if (this.companyName.trim()) {
+      return t("checkout.billingSummaryCompanyNamed", { name: this.companyName.trim() });
+    }
+    return t("checkout.billingSummaryCompanyEmpty");
+  },
+
+  toggle() {
+    this.expanded = !this.expanded;
+  },
+
+  setType(value: "Bireysel" | "Şirket") {
+    this.type = value;
+    this.errors = {};
+  },
+
+  clearError(field: string) {
+    if (this.errors[field]) {
+      const next = { ...this.errors };
+      delete next[field];
+      this.errors = next;
+    }
+  },
+
+  validateField(field: keyof BillingFormState) {
+    const value = String(this[field] ?? "").trim();
+    const next = { ...this.errors };
+    if (field === "tcn") {
+      if (!/^\d{11}$/.test(value)) next.tcn = t("checkout.billingTcnError");
+      else delete next.tcn;
+    } else if (field === "taxNumber") {
+      if (!/^\d{10}$/.test(value)) next.taxNumber = t("checkout.billingTaxNumberError");
+      else delete next.taxNumber;
+    } else if (!value) {
+      next[field] = t("checkout.requiredField");
+    } else {
+      delete next[field];
+    }
+    this.errors = next;
+  },
+
+  validateAll(): boolean {
+    const errors: Record<string, string> = {};
+    if (!this.type) {
+      // Fatura opsiyonel — boşsa geçerli kabul et
+      this.errors = {};
+      return true;
+    }
+    if (this.type === "Bireysel") {
+      if (!/^\d{11}$/.test(this.tcn)) errors.tcn = t("checkout.billingTcnError");
+    } else {
+      if (!this.companyName.trim()) errors.companyName = t("checkout.requiredField");
+      if (!this.taxOffice.trim()) errors.taxOffice = t("checkout.requiredField");
+      if (!/^\d{10}$/.test(this.taxNumber)) errors.taxNumber = t("checkout.billingTaxNumberError");
+    }
+    if (!this.sameAsShipping) {
+      if (!this.address.trim()) errors.address = t("checkout.requiredField");
+      if (!this.city.trim()) errors.city = t("checkout.requiredField");
+      if (!this.district.trim()) errors.district = t("checkout.requiredField");
+      if (!this.postalCode.trim()) errors.postalCode = t("checkout.requiredField");
+    }
+    this.errors = errors;
+    if (Object.keys(errors).length > 0) {
+      this.expanded = true;
+      return false;
+    }
+    return true;
+  },
+
+  persist() {
+    try {
+      const snapshot: BillingFormState = {
+        type: this.type,
+        tcn: this.tcn,
+        companyName: this.companyName,
+        taxOffice: this.taxOffice,
+        taxNumber: this.taxNumber,
+        eInvoice: this.eInvoice,
+        sameAsShipping: this.sameAsShipping,
+        address: this.address,
+        city: this.city,
+        district: this.district,
+        postalCode: this.postalCode,
+      };
+      localStorage.setItem(BILLING_STORAGE_KEY, JSON.stringify(snapshot));
+    } catch {
+      /* ignore quota */
+    }
+  },
+
+  toBackend() {
+    if (!this.type) return null;
+    return {
+      type: this.type,
+      company_name: this.companyName.trim(),
+      tax_office: this.taxOffice.trim(),
+      tax_number: this.taxNumber.trim(),
+      tcn: this.tcn.trim(),
+      e_invoice: this.eInvoice,
+      same_as_shipping: this.sameAsShipping,
+      address: this.address.trim(),
+      city: this.city.trim(),
+      district: this.district.trim(),
+      postal_code: this.postalCode.trim(),
+    };
   },
 }));
 

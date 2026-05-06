@@ -2,6 +2,8 @@
  * Section Registry — Maps section types to their renderer components
  * Used by seller-shop page to dynamically render storefront sections
  */
+import { btn } from "../ui/button";
+
 export interface SectionConfig {
   type: string;
   order: number;
@@ -63,7 +65,7 @@ function renderSlideOverlay(slide: HeroSlide): string {
         <div class="max-w-[600px] inline-block">
           ${slide.title ? `<h2 class="text-2xl md:text-4xl lg:text-5xl font-bold mb-2 ${titleShadow}">${escapeHtml(slide.title)}</h2>` : ""}
           ${slide.subtitle ? `<p class="text-sm md:text-lg lg:text-xl mb-4 ${titleShadow}">${escapeHtml(slide.subtitle)}</p>` : ""}
-          ${slide.ctaText ? `<a href="${escapeAttr(slide.ctaLink || "#")}" class="inline-block px-5 md:px-7 py-2 md:py-3 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-md transition-colors text-sm md:text-base">${escapeHtml(slide.ctaText)}</a>` : ""}
+          ${slide.ctaText ? `<a href="${escapeAttr(slide.ctaLink || "#")}" class="${btn({ variant: "primary", size: "lg" })} inline-block">${escapeHtml(slide.ctaText)}</a>` : ""}
         </div>
       </div>
     </div>
@@ -559,7 +561,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                   <p class="text-[13px] font-semibold text-amber-900">Iletisim bilgilerini goruntulemek icin giris yapin</p>
                   <p class="text-[12px] text-amber-700">Yildizli alana tiklayarak giris yapabilirsiniz</p>
                 </div>
-                <button type="button" class="text-[12px] font-semibold text-white bg-amber-600 hover:bg-amber-700 px-3 py-1.5 rounded-md shrink-0">
+                <button type="button" class="${btn({ variant: "primary", size: "sm" })} shrink-0">
                   Giris Yap
                 </button>
               </div>

@@ -9,8 +9,8 @@ import { FooterLinks } from '../components/footer'
 import { FloatingPanel } from '../components/floating'
 import { startAlpine } from '../alpine'
 import { TradeAssuranceFooterCards } from '../components/shared/TradeAssuranceFooterCards'
+import { TradeAssuranceBadge } from '../components/shared/TradeAssuranceBadge'
 import heroImage from '../assets/images/paraiadepolitikası.avif'
-import taLogoUrl from '../assets/images/ta-logo.svg'
 
 /* ───────────────────────── SVG Icons ───────────────────────── */
 
@@ -51,9 +51,7 @@ function HeroSection(): string {
       <div class="absolute inset-0 bg-gradient-to-r from-[#1C0C05]/90 via-[#1C0C05]/70 to-transparent"></div>
       <div class="relative z-10 h-full container-boxed flex items-center">
         <div class="max-w-xl">
-          <div class="inline-flex items-center px-5 py-2.5 rounded-full bg-white/15 backdrop-blur-sm mb-6">
-            <img src="${taLogoUrl}" alt="Ticari Güvence" class="h-7 sm:h-8" />
-          </div>
+          ${TradeAssuranceBadge({ className: 'mb-6' })}
           <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
             Para İade Garantisi
           </h1>

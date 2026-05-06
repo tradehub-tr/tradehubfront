@@ -1,6 +1,7 @@
 import type { OrderSummary as OrderSummaryData, OrderSummaryThumbnail } from "../../types/checkout";
 import { t } from "../../i18n";
 import { formatCurrency, getSelectedCurrency } from "../../services/currencyService";
+import { btn } from "../../utils/ui/button";
 
 export interface OrderSummaryProps {
   data: OrderSummaryData;
@@ -67,7 +68,6 @@ export function OrderSummary({ data, payeeSuppliers = [] }: OrderSummaryProps): 
   // Logo küçük (h-4 = 16px) + "Güvenceli Ödeme" mini rozet trust signal olarak.
   const platformPayeeBlock = `
     <div class="mt-5 pt-5 border-t border-[#e5e5e5]">
-      <div class="text-[12px] text-[#767676] mb-2.5 font-medium">${t("checkout.payeeLabel")}</div>
       <div class="p-3.5 bg-[#f0fdf4] border border-[#bbf7d0] rounded-md">
         <img src="/images/istoc-logo.png" alt="iSTOC" class="h-4 w-auto mb-2" />
         <p class="text-[12px] text-[#6b7280] leading-relaxed">Ödeme güvenli olarak platforma yapılır; sipariş satıcılara iSTOC güvencesi ile yönlendirilir.</p>
@@ -77,7 +77,6 @@ export function OrderSummary({ data, payeeSuppliers = [] }: OrderSummaryProps): 
   const payeeBlock = validSuppliers.length
     ? `
     <div class="mt-5 pt-5 border-t border-[#e5e5e5]">
-      <div class="text-[12px] text-[#767676] mb-2.5 font-medium">${t("checkout.payeeLabel")}</div>
       <div class="flex flex-col gap-2">
         ${payeeRows}
       </div>
@@ -180,14 +179,17 @@ export function OrderSummary({ data, payeeSuppliers = [] }: OrderSummaryProps): 
           </span>
         </label>
 
-        <!-- Place Order Button (onay yoksa disabled; ikon kaldırıldı — sade buton) -->
+        <!-- Place Order Button (onay yoksa disabled; güvenli ödeme rozeti olarak kilit ikonu) -->
         <button
           type="button"
           id="summary-place-order-btn"
           :disabled="!consented"
-          :class="consented ? 'th-btn-dark' : 'bg-gray-300 text-gray-500 cursor-not-allowed'"
-          class="w-full flex items-center justify-center leading-none h-11 rounded-md font-semibold transition-colors"
+          class="${btn({ variant: "success", block: true })} h-11"
         >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3 4 6v6c0 4.5 3.2 8.5 8 9 4.8-.5 8-4.5 8-9V6l-8-3Z" />
+            <path d="m9 12 2 2 4-4" />
+          </svg>
           <span data-i18n="checkout.placeOrder">${t("checkout.placeOrder")}</span>
         </button>
       </div>
