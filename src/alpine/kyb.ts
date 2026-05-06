@@ -105,9 +105,7 @@ Alpine.data("kybPage", () => ({
     return DOCUMENT_KEYS.every((k) => (this.formData[k] || "").trim().length > 0);
   },
   get hasDocumentChanges(): boolean {
-    return DOCUMENT_KEYS.some(
-      (k) => (this.formData[k] || "") !== (this.initialDocs[k] || "")
-    );
+    return DOCUMENT_KEYS.some((k) => (this.formData[k] || "") !== (this.initialDocs[k] || ""));
   },
   get canSubmit(): boolean {
     if (this.submitting) return false;
@@ -124,9 +122,7 @@ Alpine.data("kybPage", () => ({
   get actionBarHint(): string {
     if (!this.allDocumentsUploaded) return t("kyb.hintMissingDocs");
     if (this.kybData.status === "Rejected" || this.kybData.status === "Expired") {
-      return this.hasDocumentChanges
-        ? t("kyb.hintReadyResubmit")
-        : t("kyb.hintNeedDocChange");
+      return this.hasDocumentChanges ? t("kyb.hintReadyResubmit") : t("kyb.hintNeedDocChange");
     }
     return t("kyb.hintReady");
   },

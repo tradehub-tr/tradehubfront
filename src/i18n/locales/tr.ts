@@ -164,7 +164,8 @@ const tr = {
       discoverProducersDesc: "Doğrulanmış 4.200+ üretici, fabrika fiyatlarıyla seninle.",
       findSupplier: "Tedarikçi Bul",
       featuredHeroTitle: "Bu hafta öne çıkanlar",
-      featuredHeroSub: "Tedarikçilerin en çok tercih ettiği ürünler, sana özel öneriler ve sınırlı süreli fırsatlar — tek bir yerde.",
+      featuredHeroSub:
+        "Tedarikçilerin en çok tercih ettiği ürünler, sana özel öneriler ve sınırlı süreli fırsatlar — tek bir yerde.",
       productCountSuffix: "ürün",
       dropshippingCenter: "Stoksuz satış merkezi",
       sampleCenter: "Numune merkezi",
@@ -6533,13 +6534,15 @@ const tr = {
 
     // Empty state
     notStartedTitle: "Henüz KYB Başvurusu Yapılmadı",
-    notStartedDesc: "Satışa başlamak için kimliğinizi ve şirket belgelerinizi doğrulayın. Süreç birkaç dakika sürer.",
+    notStartedDesc:
+      "Satışa başlamak için kimliğinizi ve şirket belgelerinizi doğrulayın. Süreç birkaç dakika sürer.",
     applyNow: "Şimdi Başvur",
 
     // Status uyarıları
     rejectedTitle: "Başvurunuz Reddedildi",
     rejectionReason: "Gerekçe",
-    rejectedHint: "Belgeleri güncelleyip 'Yeniden Gönder' butonuna basın. Status otomatik olarak Beklemede'ye dönecek.",
+    rejectedHint:
+      "Belgeleri güncelleyip 'Yeniden Gönder' butonuna basın. Status otomatik olarak Beklemede'ye dönecek.",
     expiredTitle: "Belgelerin Süresi Doldu",
     expiredHint: "Belgeleri yenileyin ve yeniden gönderin.",
     pendingTitle: "Başvurunuz Beklemede",

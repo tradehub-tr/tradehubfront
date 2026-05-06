@@ -30,10 +30,7 @@ const KYB_HREF = "/pages/dashboard/kyb.html";
  * KYB status kullanıcı objesinden okunur (get_session_user response'u).
  * Eğer bağlama kullanıcı objesinde kyb_status yoksa "henüz başvurulmadı" kabul edilir.
  */
-export function KybStatusWidget(
-  user: AuthUser | null,
-  kybInfo?: KybStatusInfo
-): string {
+export function KybStatusWidget(user: AuthUser | null, kybInfo?: KybStatusInfo): string {
   if (!user) return "";
 
   const isSeller = Boolean(user.is_seller);

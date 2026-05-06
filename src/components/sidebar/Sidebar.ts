@@ -31,7 +31,8 @@ const sectionTitleI18nKeys: Record<string, string> = {
 function getSectionI18nKey(section: SidebarSection): string | undefined {
   if (!section.title) return undefined;
   const firstItemId = section.items[0]?.id;
-  if (firstItemId === "messages" || firstItemId === "inquiries") return sectionTitleI18nKeys.onlineTrading;
+  if (firstItemId === "messages" || firstItemId === "inquiries")
+    return sectionTitleI18nKeys.onlineTrading;
   if (firstItemId === "subscription") return sectionTitleI18nKeys.valueAddedServices;
   if (firstItemId === "settings") return sectionTitleI18nKeys.settings;
   return undefined;

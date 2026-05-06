@@ -164,7 +164,8 @@ const en = {
       discoverProducersDesc: "4,200+ verified producers, factory prices for you.",
       findSupplier: "Find a supplier",
       featuredHeroTitle: "This week's highlights",
-      featuredHeroSub: "Top picks from suppliers, recommendations made for you, and limited-time deals — all in one place.",
+      featuredHeroSub:
+        "Top picks from suppliers, recommendations made for you, and limited-time deals — all in one place.",
       productCountSuffix: "products",
       dropshippingCenter: "Dropshipping center",
       sampleCenter: "Sample center",
@@ -6440,12 +6441,14 @@ const en = {
     statusExpired: "Expired",
 
     notStartedTitle: "KYB Verification Not Started",
-    notStartedDesc: "Verify your identity and company documents to start selling. The process takes a few minutes.",
+    notStartedDesc:
+      "Verify your identity and company documents to start selling. The process takes a few minutes.",
     applyNow: "Apply Now",
 
     rejectedTitle: "Your Application Was Rejected",
     rejectionReason: "Reason",
-    rejectedHint: "Update the documents and click 'Resubmit'. Status will automatically return to Pending.",
+    rejectedHint:
+      "Update the documents and click 'Resubmit'. Status will automatically return to Pending.",
     expiredTitle: "Documents Have Expired",
     expiredHint: "Renew your documents and resubmit.",
     pendingTitle: "Your Application Is Pending",
