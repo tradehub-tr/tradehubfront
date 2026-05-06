@@ -1,3 +1,12 @@
+## [v1.1.7-beta.3] - 2026-05-06 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat: cart + checkout redesign, fatura bilgisi bölümü, header & megamenü revizyonu (@ahmeetseker)
+- feat(kyb,dashboard): Storefront KYB sayfası + buyer dashboard widget + sidebar requireSeller; mesajlar/iletişim CTA'ları gizlendi (@aliiball)
+
+---
 ## [v1.1.7-beta.2] - 2026-05-06 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
