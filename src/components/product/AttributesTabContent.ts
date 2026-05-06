@@ -68,7 +68,7 @@ export function AttributesTabContent(): string {
 
       <!-- Lead Time — collapsible -->
       <div class="mt-8" style="border-top: 1px solid var(--pd-spec-border, #e5e5e5);">
-        <button type="button" class="pd-section-collapsible flex items-center justify-between w-full py-4 border-0 bg-transparent text-lg font-bold cursor-pointer" id="pd-leadtime-toggle" style="color: var(--pd-title-color, #111827);">
+        <button type="button" class="pd-section-collapsible th-no-press flex items-center justify-between w-full py-4 border-0 bg-transparent text-lg font-bold cursor-pointer" id="pd-leadtime-toggle" style="color: var(--pd-title-color, #111827);">
           <span>${t("product.leadTime")}</span>
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>

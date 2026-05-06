@@ -9,16 +9,19 @@ import { onCategoriesLoaded } from "../../services/categoryService";
 import type { ApiCategory } from "../../services/categoryService";
 import { getCategoryIcon, getIconByName } from "../header";
 import { t } from "../../i18n";
+import { getRecentCategories } from "../../utils/recentCategories";
 
 /* ──── Subcategory item renderer ──── */
 
-function renderSubcategoryItem(name: string, slug: string): string {
+function renderSubcategoryItem(name: string, slug: string, image?: string): string {
+  const placeholderSvg = `<svg class="w-8 h-8 lg:w-10 lg:h-10" style="color:var(--catpopup-icon)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75Z"/></svg>`;
+  const inner = image
+    ? `<img src="${image}" alt="${name}" class="w-full h-full object-cover" loading="lazy" onerror="this.outerHTML=this.dataset.fallback" data-fallback='${placeholderSvg.replace(/'/g, "&apos;")}' />`
+    : placeholderSvg;
   return `
     <a href="/pages/products.html?cat=${slug}" class="flex flex-col items-center gap-2 group/product">
       <div class="relative w-20 h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 rounded-full flex items-center justify-center overflow-hidden group-hover/product:ring-2 transition-all" style="background-color:var(--catpopup-product-bg);--tw-ring-color:var(--catpopup-sidebar-active-border)">
-        <svg class="w-8 h-8 lg:w-10 lg:h-10" style="color:var(--catpopup-icon)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75Z"/>
-        </svg>
+        ${inner}
       </div>
       <span class="text-xs lg:text-sm text-center leading-tight transition-colors duration-150 max-w-[80px] lg:max-w-[100px] xl:max-w-[120px]" style="color:var(--catpopup-text)">${name}</span>
     </a>
@@ -107,18 +110,8 @@ function renderCategoryPopup(): string {
 export function CategoryBrowse(): string {
   return `
         <div class="left-panel group/panel relative h-[304px] w-full flex-shrink-0 overflow-hidden rounded-md xl:w-[300px] dark:border-gray-700 dark:bg-gray-800" style="background-color:#F8F8F8;border:1px solid #EAEAEA">
-          <!-- Header (Sizin için kategoriler) -->
-          <div class="flex items-center w-full select-none" style="padding:10px 16px 8px 16px;gap:12px">
-            <svg class="w-5 h-5 flex-shrink-0" style="color:#222222" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"/>
-            </svg>
-            <h3 class="flex-1 truncate" style="color:#222222;font-size:15px;font-weight:600;font-family:var(--font-sans);line-height:1.3" data-i18n="categoryBrowse.headerForYou">${t("categoryBrowse.headerForYou")}</h3>
-            <svg class="w-4 h-4 flex-shrink-0" style="color:#999999" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
-            </svg>
-          </div>
           <!-- Category List (loading skeleton, replaced after API) -->
-          <ul id="category-browse-list" class="overflow-y-auto" style="height:calc(100% - 44px)">
+          <ul id="category-browse-list" class="overflow-y-auto h-full">
             ${renderBrowseListSkeleton()}
           </ul>
           <!-- View All: floating pill button at bottom (visible on hover) -->
@@ -173,10 +166,13 @@ export function initCategoryBrowse(): void {
   let _cats: ApiCategory[] = [];
 
   function showCategory(categoryId: string): void {
-    const cat = _cats.find((c) => c.id === categoryId);
-    if (cat) {
-      const titleSpan = title!.querySelector("span");
-      if (titleSpan) titleSpan.textContent = cat.name;
+    const titleSpan = title!.querySelector("span");
+    if (categoryId === "for-you") {
+      if (titleSpan) titleSpan.textContent = t("categoryBrowse.headerForYou");
+      refreshForYouSection();
+    } else {
+      const cat = _cats.find((c) => c.id === categoryId);
+      if (cat && titleSpan) titleSpan.textContent = cat.name;
     }
 
     const sidebarBtns = document.querySelectorAll<HTMLButtonElement>(".cat-popup-btn");
@@ -198,9 +194,45 @@ export function initCategoryBrowse(): void {
     });
   }
 
+  /**
+   * "Sizin için kategoriler" section'ını günceller.
+   * Önce localStorage'daki son ziyaretler (recentCategories), kalan boşluğu
+   * tüm kategorilerin children'larından cold-start fallback ile doldurur.
+   * Slug bazlı dedupe.
+   */
+  function refreshForYouSection(): void {
+    const section = document.getElementById("cat-popup-section-for-you");
+    if (!section) return;
+    const grid = section.querySelector<HTMLElement>("div.grid");
+    if (!grid) return;
+
+    const TARGET = 24;
+    const recent = getRecentCategories(TARGET);
+    const seen = new Set<string>();
+    const items: { name: string; slug: string; image?: string }[] = [];
+
+    for (const r of recent) {
+      if (!r.slug || seen.has(r.slug)) continue;
+      seen.add(r.slug);
+      items.push({ name: r.name, slug: r.slug, image: r.image });
+    }
+
+    if (items.length < TARGET) {
+      const fallback = _cats.flatMap((c) => c.children);
+      for (const ch of fallback) {
+        if (items.length >= TARGET) break;
+        if (!ch.slug || seen.has(ch.slug)) continue;
+        seen.add(ch.slug);
+        items.push({ name: ch.name, slug: ch.slug, image: ch.image });
+      }
+    }
+
+    grid.innerHTML = items.map((it) => renderSubcategoryItem(it.name, it.slug, it.image)).join("");
+  }
+
   if (viewAllBtn) {
     viewAllBtn.addEventListener("click", () => {
-      if (_cats.length > 0) openPopup(_cats[0].id);
+      if (_cats.length > 0) openPopup("for-you");
     });
   }
 
@@ -331,9 +363,28 @@ export function initCategoryBrowse(): void {
     // Populate browse list (left sidebar on home page)
     const browseList = document.getElementById("category-browse-list");
     if (browseList) {
-      browseList.innerHTML = cats
-        .map(
-          (cat) => `
+      const forYouStarSvg = `<svg class="w-5 h-5" style="color:#222222" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"/></svg>`;
+      const forYouItem = `
+        <li>
+          <button
+            type="button"
+            class="category-browse-item level1-cate-unit th-no-press flex items-center w-full text-left transition-colors duration-150 group bg-transparent hover:bg-white dark:text-gray-300 dark:hover:bg-gray-700/60 dark:hover:text-white"
+            style="min-height:44px;padding:6px 16px;gap:12px"
+            data-category-id="for-you"
+          >
+            <span class="flex-shrink-0 inline-flex items-center justify-center [&>svg]:w-5 [&>svg]:h-5" style="color:#222222">${forYouStarSvg}</span>
+            <span class="title flex-1 truncate" style="color:#222222;font-size:15px;font-weight:600;font-family:var(--font-sans);line-height:1.3">${t("categoryBrowse.headerForYou")}</span>
+            <svg class="w-4 h-4 flex-shrink-0" style="color:#999999" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
+            </svg>
+          </button>
+        </li>
+      `;
+      browseList.innerHTML =
+        forYouItem +
+        cats
+          .map(
+            (cat) => `
         <li>
           <button
             type="button"
@@ -351,8 +402,8 @@ export function initCategoryBrowse(): void {
           </button>
         </li>
       `
-        )
-        .join("");
+          )
+          .join("");
 
       // Bind browse item clicks
       browseList.querySelectorAll<HTMLButtonElement>(".category-browse-item").forEach((item) => {
@@ -366,13 +417,31 @@ export function initCategoryBrowse(): void {
     // Populate popup sidebar
     const sidebarList = document.getElementById("cat-popup-sidebar-list");
     if (sidebarList) {
-      sidebarList.innerHTML = cats
-        .map(
-          (cat, index) => `
+      const forYouItem = `
         <li class="flex-shrink-0 lg:flex-shrink">
           <button
             type="button"
-            class="cat-popup-btn th-catpopup-sidebar-item th-no-press flex items-center gap-2 lg:gap-3 w-full px-3 lg:px-4 py-2 lg:py-2.5 text-sm text-left border-l-2 border-l-transparent transition-colors duration-150 whitespace-nowrap lg:whitespace-normal hover:bg-(--catpopup-sidebar-active-bg) hover:text-(--catpopup-heading) ${index === 0 ? "th-catpopup-sidebar-item--active" : ""}"
+            class="cat-popup-btn th-catpopup-sidebar-item th-no-press flex items-center gap-2 lg:gap-3 w-full px-3 lg:px-4 py-2 lg:py-2.5 text-sm text-left border-l-2 border-l-transparent transition-colors duration-150 whitespace-nowrap lg:whitespace-normal hover:bg-(--catpopup-sidebar-active-bg) hover:text-(--catpopup-heading) th-catpopup-sidebar-item--active"
+            style="color:var(--catpopup-text)"
+            data-category="for-you"
+          >
+            <span class="flex-shrink-0" style="color:var(--catpopup-icon)">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"/></svg>
+            </span>
+            <span class="flex-1 truncate">${t("categoryBrowse.headerForYou")}</span>
+            <svg class="w-4 h-4 flex-shrink-0 hidden lg:block" style="color:var(--catpopup-icon)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/></svg>
+          </button>
+        </li>
+      `;
+      sidebarList.innerHTML =
+        forYouItem +
+        cats
+          .map(
+            (cat) => `
+        <li class="flex-shrink-0 lg:flex-shrink">
+          <button
+            type="button"
+            class="cat-popup-btn th-catpopup-sidebar-item th-no-press flex items-center gap-2 lg:gap-3 w-full px-3 lg:px-4 py-2 lg:py-2.5 text-sm text-left border-l-2 border-l-transparent transition-colors duration-150 whitespace-nowrap lg:whitespace-normal hover:bg-(--catpopup-sidebar-active-bg) hover:text-(--catpopup-heading)"
             style="color:var(--catpopup-text)"
             data-category="${cat.id}"
           >
@@ -384,8 +453,8 @@ export function initCategoryBrowse(): void {
           </button>
         </li>
       `
-        )
-        .join("");
+          )
+          .join("");
 
       // Bind sidebar button clicks
       sidebarList.querySelectorAll<HTMLButtonElement>(".cat-popup-btn").forEach((btn) => {
@@ -399,12 +468,22 @@ export function initCategoryBrowse(): void {
     // Populate popup content (subcategory grids)
     const content = document.getElementById("cat-popup-content");
     if (content) {
-      content.innerHTML = cats
-        .map(
-          (cat, index) => `
-        <div class="cat-popup-section ${index !== 0 ? "hidden" : ""}" data-popup-section="${cat.id}">
+      const forYouChildren = cats.flatMap((c) => c.children).slice(0, 24);
+      const forYouSection = `
+        <div id="cat-popup-section-for-you" class="cat-popup-section" data-popup-section="for-you">
           <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-y-5 gap-x-4 lg:gap-y-8 lg:gap-x-6">
-            ${cat.children.map((ch) => renderSubcategoryItem(ch.name, ch.slug)).join("")}
+            ${forYouChildren.map((ch) => renderSubcategoryItem(ch.name, ch.slug, ch.image)).join("")}
+          </div>
+        </div>
+      `;
+      content.innerHTML =
+        forYouSection +
+        cats
+          .map(
+            (cat) => `
+        <div class="cat-popup-section hidden" data-popup-section="${cat.id}">
+          <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-y-5 gap-x-4 lg:gap-y-8 lg:gap-x-6">
+            ${cat.children.map((ch) => renderSubcategoryItem(ch.name, ch.slug, ch.image)).join("")}
             <!-- View all item -->
             <a href="/pages/products.html?cat=${cat.slug}" class="flex flex-col items-center gap-2 group/product">
               <div class="w-20 h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 rounded-full border-2 border-dashed flex items-center justify-center transition-all" style="background-color:var(--catpopup-sidebar-bg);border-color:var(--catpopup-border)">
@@ -417,8 +496,8 @@ export function initCategoryBrowse(): void {
           </div>
         </div>
       `
-        )
-        .join("");
+          )
+          .join("");
     }
   });
 }

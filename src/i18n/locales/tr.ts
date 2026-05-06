@@ -163,7 +163,8 @@ const tr = {
       discoverProducersDesc: "Doğrulanmış 4.200+ üretici, fabrika fiyatlarıyla seninle.",
       findSupplier: "Tedarikçi Bul",
       featuredHeroTitle: "Bu hafta öne çıkanlar",
-      featuredHeroSub: "Tedarikçilerin en çok tercih ettiği ürünler, sana özel öneriler ve sınırlı süreli fırsatlar — tek bir yerde.",
+      featuredHeroSub:
+        "Tedarikçilerin en çok tercih ettiği ürünler, sana özel öneriler ve sınırlı süreli fırsatlar — tek bir yerde.",
       productCountSuffix: "ürün",
       dropshippingCenter: "Stoksuz satış merkezi",
       sampleCenter: "Numune merkezi",

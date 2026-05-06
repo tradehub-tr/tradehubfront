@@ -163,7 +163,8 @@ const en = {
       discoverProducersDesc: "4,200+ verified producers, factory prices for you.",
       findSupplier: "Find a supplier",
       featuredHeroTitle: "This week's highlights",
-      featuredHeroSub: "Top picks from suppliers, recommendations made for you, and limited-time deals — all in one place.",
+      featuredHeroSub:
+        "Top picks from suppliers, recommendations made for you, and limited-time deals — all in one place.",
       productCountSuffix: "products",
       dropshippingCenter: "Dropshipping center",
       sampleCenter: "Sample center",

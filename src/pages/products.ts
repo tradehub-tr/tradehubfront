@@ -48,6 +48,7 @@ import { findCategoryBySlug, findCategoryById, onCategoriesLoaded } from '../ser
 
 // Utilities
 import { initAnimatedPlaceholder } from '../utils/animatedPlaceholder'
+import { pushRecentCategory } from '../utils/recentCategories'
 
 /* ── Helpers ── */
 
@@ -75,6 +76,20 @@ if (categoryParam || queryParam) {
     credentials: 'include',
     body: JSON.stringify({ query: categoryParam || queryParam, category: categoryParam || '' }),
   }).catch(() => {});
+}
+
+// "Sizin için kategoriler" panelinin beslediği localStorage geçmişi.
+// Kategoriler yüklendikten sonra slug/ID match ile name+image alıp push ediyoruz;
+// bulunamazsa slug'ı name olarak fallback kullanıp yine push ediyoruz (boş bırakma).
+if (categoryParam) {
+  onCategoriesLoaded(() => {
+    const cat = findCategoryBySlug(categoryParam) || findCategoryById(categoryParam);
+    if (cat) {
+      pushRecentCategory({ slug: cat.slug, name: cat.name, image: cat.image });
+    } else {
+      pushRecentCategory({ slug: categoryParam, name: categoryParam });
+    }
+  });
 }
 
 /**

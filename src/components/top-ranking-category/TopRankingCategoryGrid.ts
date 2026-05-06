@@ -49,11 +49,7 @@ function renderStars(rating: number): string {
   const full = Math.floor(rating);
   const half = rating - full >= 0.5 ? 1 : 0;
   const empty = 5 - full - half;
-  return (
-    "★".repeat(full) +
-    (half ? "☆" : "") +
-    "☆".repeat(empty)
-  );
+  return "★".repeat(full) + (half ? "☆" : "") + "☆".repeat(empty);
 }
 
 /**
@@ -69,15 +65,16 @@ export function renderRankedCategoryCard(product: RankedProduct, rank: number): 
 
   const rating = product.averageRating || 0;
   const ratingCount = product.ratingCount || 0;
-  const ratingHtml = rating > 0
-    ? `
+  const ratingHtml =
+    rating > 0
+      ? `
       <div class="flex items-center gap-1.5 mt-1.5">
         <span class="text-warning-500 text-[13px] leading-none" aria-hidden="true">${renderStars(rating)}</span>
         <span class="text-[13px] text-text-secondary">${rating.toFixed(1)}</span>
         ${ratingCount > 0 ? `<span class="text-[13px] text-text-tertiary">${t("topRankingCategoryPage.ratingCount", { count: ratingCount })}</span>` : ""}
       </div>
     `
-    : "";
+      : "";
 
   return `
     <a href="${safeHref}" class="group/product flex flex-col bg-surface border border-border-default rounded-md p-2.5 hover:-translate-y-0.5 hover:shadow-md hover:border-primary-300 transition-all duration-200" aria-label="${safeName}">

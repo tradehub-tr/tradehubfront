@@ -422,14 +422,14 @@ function renderPriceSectionHtml(totals: ReturnType<typeof getTotals>): string {
   return `
     <div class="grid grid-cols-3 gap-6 pb-5 mb-5 border-b border-border-default">
       ${state.item.priceTiers
-      .map((tier, index) => {
-        const activeClass = index === totals.tierIndex ? "text-error-500" : "text-text-heading";
-        return `<div class="cart-tier-item" data-tier-index="${index}">
+        .map((tier, index) => {
+          const activeClass = index === totals.tierIndex ? "text-error-500" : "text-text-heading";
+          return `<div class="cart-tier-item" data-tier-index="${index}">
           <p class="text-sm text-text-tertiary">${formatTierLabel(tier, state.item!.unit)}</p>
           <p class="mt-1 text-[22px] font-bold ${activeClass}">${formatCurrency(tier.rawPrice ?? tier.price, state.item?.currency || getSelectedCurrency())}</p>
         </div>`;
-      })
-      .join("")}
+        })
+        .join("")}
     </div>
   `;
 }
@@ -675,7 +675,7 @@ function renderDrawerBody(): void {
       <button
         type="button"
         data-shipping-change
-        class="group w-full flex items-center justify-between gap-3 px-4 py-2.5 transition-colors hover:bg-surface-muted focus:outline-none focus-visible:bg-surface-muted"
+        class="group th-no-press w-full flex items-center justify-between gap-3 px-4 py-2.5 transition-colors hover:bg-surface-muted focus:outline-none focus-visible:bg-surface-muted"
       >
         <span class="text-[13px] font-semibold text-cta-primary">${t("cart.changeShippingLong")}</span>
         <span
@@ -704,7 +704,7 @@ function renderDrawerFooter(): void {
   const details = state.footerExpanded
     ? `
       <div class="mb-4">
-        <button type="button" id="shared-cart-footer-toggle" class="w-full flex items-center justify-center gap-1 text-sm font-semibold text-text-heading border-b border-border-default pb-3 mb-3">
+        <button type="button" id="shared-cart-footer-toggle" class="th-no-press w-full flex items-center justify-center gap-1 text-sm font-semibold text-text-heading border-b border-border-default pb-3 mb-3">
           ${t("cart.price")}
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m18 15-6-6-6 6"/></svg>
         </button>
@@ -729,7 +729,7 @@ function renderDrawerFooter(): void {
       </div>
     `
     : `
-      <button type="button" id="shared-cart-footer-toggle" class="w-full flex items-center justify-between mb-4">
+      <button type="button" id="shared-cart-footer-toggle" class="th-no-press w-full flex items-center justify-between mb-4">
         <strong class="text-base text-text-heading">${t("cart.subtotal")}</strong>
         <span class="flex items-center gap-1.5">
           <strong class="text-[17px] text-cta-primary">${formatCurrency(totals.grandTotal, itemCurrency)}</strong>
@@ -1575,8 +1575,8 @@ export function initSharedCartDrawer(items: CartDrawerItemModel[]): void {
       const othersTotal = isNoVariant
         ? 0
         : Array.from(state.sizeQuantities.entries())
-          .filter(([id]) => id !== sizeId)
-          .reduce((a, [, b]) => a + b, 0);
+            .filter(([id]) => id !== sizeId)
+            .reduce((a, [, b]) => a + b, 0);
       if (othersTotal + nextValue > 1) {
         nextValue = Math.max(0, 1 - othersTotal);
         input.value = String(nextValue);
