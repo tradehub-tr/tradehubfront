@@ -5989,6 +5989,23 @@ const en = {
   },
 
   // ============================================================
+  // TOP RANKING CATEGORY PAGE
+  // ============================================================
+  topRankingCategoryPage: {
+    heroTitlePrefix: "Best Sellers — ",
+    heroSubtitlePrefix: "{{count}} products · ",
+    heroSubtitleSuffix: "Discover trends with data-driven rankings",
+    breadcrumb: "Best Sellers",
+    empty: "No ranking data for this category yet.",
+    paginationPrevious: "Previous",
+    paginationNext: "Next",
+    pageLabel: "Page {{page}}",
+    ratingCount: "({{count}})",
+    missingCategory: "No category specified",
+    goHome: "Back to Home",
+  },
+
+  // ============================================================
   // TOP RANKING PAGE
   // ============================================================
   topRankingPage: {
