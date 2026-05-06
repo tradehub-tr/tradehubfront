@@ -422,14 +422,14 @@ function renderPriceSectionHtml(totals: ReturnType<typeof getTotals>): string {
   return `
     <div class="grid grid-cols-3 gap-6 pb-5 mb-5 border-b border-border-default">
       ${state.item.priceTiers
-      .map((tier, index) => {
-        const activeClass = index === totals.tierIndex ? "text-error-500" : "text-text-heading";
-        return `<div class="cart-tier-item" data-tier-index="${index}">
+        .map((tier, index) => {
+          const activeClass = index === totals.tierIndex ? "text-error-500" : "text-text-heading";
+          return `<div class="cart-tier-item" data-tier-index="${index}">
           <p class="text-sm text-text-tertiary">${formatTierLabel(tier, state.item!.unit)}</p>
           <p class="mt-1 text-[22px] font-bold ${activeClass}">${formatCurrency(tier.rawPrice ?? tier.price, state.item?.currency || getSelectedCurrency())}</p>
         </div>`;
-      })
-      .join("")}
+        })
+        .join("")}
     </div>
   `;
 }
@@ -1575,8 +1575,8 @@ export function initSharedCartDrawer(items: CartDrawerItemModel[]): void {
       const othersTotal = isNoVariant
         ? 0
         : Array.from(state.sizeQuantities.entries())
-          .filter(([id]) => id !== sizeId)
-          .reduce((a, [, b]) => a + b, 0);
+            .filter(([id]) => id !== sizeId)
+            .reduce((a, [, b]) => a + b, 0);
       if (othersTotal + nextValue > 1) {
         nextValue = Math.max(0, 1 - othersTotal);
         input.value = String(nextValue);

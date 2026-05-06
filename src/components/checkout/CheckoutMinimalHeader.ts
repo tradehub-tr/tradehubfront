@@ -54,7 +54,8 @@ function renderUserSection(): string {
           <li><a href="/pages/dashboard/buyer-dashboard.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors">${t("header.myDashboard")}</a></li>
           ${user?.has_seller_profile ? `<li><a href="${getSellerStoreUrl(user!)}" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors">${t("header.myStore")}</a></li>` : ""}
           <li><a href="/pages/dashboard/orders.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors">${t("header.myOrders")}</a></li>
-          <li><a href="/pages/dashboard/messages.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors">${t("header.myMessages")}</a></li>
+          <!-- DISABLED: Mesajlarım — ileride geliştirilecek (backend chat altyapısı yok). Tek satırlık <li> aynen geri açılır. -->
+          <!-- <li><a href="/pages/dashboard/messages.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors">${t("header.myMessages")}</a></li> -->
           <li><a href="/pages/dashboard/inquiries.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors">${t("header.myRfq")}</a></li>
           <li><a href="/pages/dashboard/favorites.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors">${t("header.myFavorites")}</a></li>
           <li><a href="/pages/dashboard/settings.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors">${t("header.accountSettings")}</a></li>

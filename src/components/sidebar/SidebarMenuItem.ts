@@ -22,6 +22,7 @@ import { sidebarIcons, type SidebarIconKey } from "./sidebarIcons";
 const itemI18nKeys: Record<string, string> = {
   dashboard: "dashboard.myDashboard",
   messages: "dashboard.myMessages",
+  inquiries: "dashboard.rfqInquiries",
   orders: "dashboard.myOrders",
   payment: "dashboard.payment",
   saved: "dashboard.savedHistory",

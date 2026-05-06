@@ -32,8 +32,26 @@ async function init() {
   }
 
   // Create Seller Application if not exists (Draft)
-  const result = await becomeSeller();
-  const sellerApplication = result.seller_application;
+  let sellerApplication: string;
+  try {
+    const result = await becomeSeller();
+    if (!result.seller_application) {
+      throw new Error(t('auth.supplierSetup.startError'));
+    }
+    sellerApplication = result.seller_application;
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : t('common.error');
+    appEl.innerHTML = `
+      <div class="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+        <div class="bg-white rounded-md shadow-sm p-8 max-w-md w-full text-center">
+          <h2 class="text-lg font-semibold text-gray-900 mb-2">${t('auth.supplierSetup.startError')}</h2>
+          <p class="text-sm text-gray-600 mb-4">${msg}</p>
+          <button onclick="window.location.reload()" class="th-btn">${t('common.retry')}</button>
+        </div>
+      </div>
+    `;
+    return;
+  }
 
   // Render page with form
   appEl.innerHTML = `

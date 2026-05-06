@@ -196,9 +196,10 @@ function renderSupplierCards(items: FavoriteSellerItem[]): string {
           <a href="${profileHref}" class="th-btn h-9 px-4 text-[13px] font-semibold whitespace-nowrap inline-flex items-center justify-center max-md:flex-1">
             ${t("mfr.list.viewProfile", { defaultValue: "Profili görüntüle" })}
           </a>
-          <a href="/pages/dashboard/messages.html?seller=${encodeURIComponent(s.code)}" class="th-btn-outline h-9 px-4 text-[13px] font-semibold whitespace-nowrap inline-flex items-center justify-center max-md:flex-1">
+          <!-- DISABLED: "Bu satıcıyla iletişime geç" butonu — messages.html altyapısı yok, ileride geri açılacak. -->
+          <!-- <a href="/pages/dashboard/messages.html?seller=${encodeURIComponent(s.code)}" class="th-btn-outline h-9 px-4 text-[13px] font-semibold whitespace-nowrap inline-flex items-center justify-center max-md:flex-1">
             ${t("mfr.list.contactUs")}
-          </a>
+          </a> -->
         </div>
       </div>
     </div>

@@ -38,6 +38,7 @@ const en = {
       english: "English",
       loadMore: "Load more",
       error: "An error occurred.",
+      retry: "Try Again",
       rateLimitError: "Too many requests. Please try again in a few minutes.",
       moq: "MOQ: {{count}} {{unit}}",
       moqUnit: "pieces",
@@ -163,7 +164,8 @@ const en = {
       discoverProducersDesc: "4,200+ verified producers, factory prices for you.",
       findSupplier: "Find a supplier",
       featuredHeroTitle: "This week's highlights",
-      featuredHeroSub: "Top picks from suppliers, recommendations made for you, and limited-time deals — all in one place.",
+      featuredHeroSub:
+        "Top picks from suppliers, recommendations made for you, and limited-time deals — all in one place.",
       productCountSuffix: "products",
       dropshippingCenter: "Dropshipping center",
       sampleCenter: "Sample center",
@@ -473,6 +475,7 @@ const en = {
         back: "Back",
         next: "Continue",
         submit: "Submit Application",
+        startError: "Could not start application",
       },
     },
 
@@ -959,6 +962,7 @@ const en = {
     // ============================================================
     dashboard: {
       myDashboard: "My Dashboard",
+      kybVerification: "Document Verification",
       onlineTrading: "Online Trading",
       myMessages: "My Messages",
       supplierMessages: "Supplier Messages",
@@ -3751,6 +3755,7 @@ const en = {
       saving: "Saving...",
       saveFailed: "Failed to save changes.",
       nameRequired: "First name and last name are required.",
+      businessNameRequired: "Business Name is required.",
       phoneLabel: "Phone",
       selectCountry: "Select country",
       sellerTypeLabel: "Seller Type",
@@ -3815,6 +3820,9 @@ const en = {
 
       // ── SettingsLayout ───────────────────────────────────────────
       changePhoto: "Change photo",
+      photoInvalidType: "Invalid file type. Upload JPG, PNG, WEBP or GIF.",
+      photoTooLarge: "File must be smaller than 5 MB.",
+      photoUploadFailed: "Photo upload failed. Please try again.",
       emailLayoutLabel: "Email",
       membershipNumber: "Membership number",
       copyTooltip: "Copy",
@@ -6418,6 +6426,86 @@ const en = {
     },
     backToHome: "Back to Home",
     logout: "Sign Out",
+  },
+
+  kyb: {
+    title: "Document Verification",
+    subtitle: "Verify your seller identity and company documents",
+    loading: "Loading...",
+
+    statusNone: "Not Started",
+    statusPending: "Pending",
+    statusUnderReview: "Under Review",
+    statusVerified: "Verified",
+    statusRejected: "Rejected",
+    statusExpired: "Expired",
+
+    notStartedTitle: "KYB Verification Not Started",
+    notStartedDesc:
+      "Verify your identity and company documents to start selling. The process takes a few minutes.",
+    applyNow: "Apply Now",
+
+    rejectedTitle: "Your Application Was Rejected",
+    rejectionReason: "Reason",
+    rejectedHint:
+      "Update the documents and click 'Resubmit'. Status will automatically return to Pending.",
+    expiredTitle: "Documents Have Expired",
+    expiredHint: "Renew your documents and resubmit.",
+    pendingTitle: "Your Application Is Pending",
+    pendingHint: "Documents submitted, awaiting admin review.",
+    underReviewTitle: "Your Application Is Under Review",
+    underReviewHint: "Admin is reviewing your application in detail. Result will be ready soon.",
+    verifiedTitle: "Account Verified",
+    verifiedHint: "All seller features are unlocked. Happy selling!",
+
+    companyInfoTitle: "Company Information",
+    companyTitle: "Company Title",
+    companyTitlePlaceholder: "e.g. Acme Trading Inc.",
+    authorizedPerson: "Authorized Person",
+    tradeRegistryNumber: "Trade Registry No",
+    documentExpiryDate: "Document Expiry Date",
+
+    documentsTitle: "Documents",
+    documentsHint: "PDF, JPG, JPEG, PNG, WEBP, DOCX · Max 10 MB · All documents required",
+    docIdentity: "Identity Document",
+    docSignatureCirculars: "Signature Circulars",
+    docTradeRegistryGazette: "Trade Registry Gazette",
+    docActivityCertificate: "Activity Certificate",
+    docTaxCertificate: "Tax Certificate",
+    docBankAccount: "Bank Account Document",
+    selectFile: "Select File",
+    uploading: "Uploading...",
+    replace: "Replace",
+    preview: "Preview",
+
+    submit: "Submit",
+    resubmit: "Resubmit",
+    submitting: "Submitting...",
+    hintMissingDocs: "Upload all required documents.",
+    hintReady: "All documents ready, you can submit.",
+    hintResubmit: "Update documents and resubmit.",
+    hintReadyResubmit: "Documents updated, you can resubmit.",
+    hintNeedDocChange: "To trigger re-review, you must replace at least one document.",
+
+    toastSaved: "Documents saved.",
+    toastResubmitted: "Resubmitted, admin notified for review.",
+    errInvalidType: "Invalid file type. Upload PDF, JPG, JPEG, PNG, WEBP or DOCX.",
+    errTooLarge: "File must be smaller than 10 MB.",
+    errUploadFailed: "File upload failed.",
+    errSubmitFailed: "Submission failed.",
+    errRateLimit: "Too fast. Please wait 1 minute and try again.",
+
+    widgetNotStartedTitle: "KYB Verification Required",
+    widgetNotStartedDesc: "Verify your identity to start selling",
+    widgetApplyNow: "Apply Now",
+    widgetRejectedTitle: "KYB Rejected — Update Documents",
+    widgetFixDocuments: "Fix Documents",
+    widgetExpiredTitle: "KYB Expired",
+    widgetRenew: "Renew",
+    widgetPendingMsg: "Your KYB application is awaiting admin review.",
+    widgetUnderReviewMsg: "Your KYB application is being reviewed.",
+    widgetView: "View",
+    viewDetails: "View details",
   },
 };
 
