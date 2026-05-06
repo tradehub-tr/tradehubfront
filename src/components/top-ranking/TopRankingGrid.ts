@@ -36,11 +36,8 @@ function moqLabel(moq: string | undefined): string {
 
 /** Build the URL for a category's "Daha fazla yükle" detail page. */
 function categoryHref(group: RankingCategoryGroup): string {
-  // /pages/products.html?cat=<slug> — must be the URL-friendly slug, not
-  // the Product Category's UUID-shaped `name`, otherwise the listing
-  // endpoint can't resolve the category and shows "0 ürün".
   const slug = group.slug || group.categoryId || group.id;
-  return `/pages/products.html?cat=${encodeURIComponent(slug)}&sort=orders`;
+  return `/pages/top-ranking-category.html?cat=${encodeURIComponent(slug)}&sort=hot-selling&page=1`;
 }
 
 export function renderRankingGroupCard(group: RankingCategoryGroup): string {

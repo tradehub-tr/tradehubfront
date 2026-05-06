@@ -45,15 +45,11 @@ export function TopRankingCategoryTabs(): string {
 
         <!-- Dynamic category tabs from API -->
         <template x-for="cat in apiCategories" :key="'tab-' + cat.slug">
-          <button
-            type="button"
-            class="top-ranking-tab flex-shrink-0 whitespace-nowrap px-[10px] sm:px-4 py-2 sm:py-3 text-[11px] sm:text-sm transition-colors border-b-[3px] border-transparent"
-            :class="activeTab === cat.slug
-              ? '!border-secondary-800 !text-text-primary font-semibold'
-              : 'text-text-tertiary hover:text-text-primary'"
-            @click="setTab(cat.slug)"
+          <a
+            :href="'/pages/top-ranking-category.html?cat=' + encodeURIComponent(cat.slug) + '&sort=' + activeSort + '&page=1'"
+            class="top-ranking-tab flex-shrink-0 whitespace-nowrap px-[10px] sm:px-4 py-2 sm:py-3 text-[11px] sm:text-sm transition-colors border-b-[3px] border-transparent text-text-tertiary hover:text-text-primary"
             x-text="cat.name"
-          ></button>
+          ></a>
         </template>
       </div>
 
@@ -133,26 +129,15 @@ export function TopRankingCategoryTabs(): string {
           </button>
           <!-- Dynamic category items -->
           <template x-for="cat in apiCategories" :key="'sheet-' + cat.slug">
-            <button
-              type="button"
+            <a
+              :href="'/pages/top-ranking-category.html?cat=' + encodeURIComponent(cat.slug) + '&sort=' + activeSort + '&page=1'"
               class="flex items-center w-full px-5 py-4 text-left transition-colors border-b border-gray-50 active:bg-gray-50"
-              @click="setTab(cat.slug); showTabSheet = false"
             >
-              <span
-                class="flex-1 text-[15px]"
-                :class="activeTab === cat.slug ? 'font-semibold text-gray-900' : 'text-gray-600'"
-                x-text="cat.name"
-              ></span>
-              <span
-                class="flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors"
-                :class="activeTab === cat.slug ? 'border-gray-900 bg-gray-900' : 'border-gray-300 bg-transparent'"
-              >
-                <span
-                  class="w-2 h-2 rounded-full transition-colors"
-                  :class="activeTab === cat.slug ? 'bg-white' : 'bg-transparent'"
-                ></span>
+              <span class="flex-1 text-[15px] text-gray-600" x-text="cat.name"></span>
+              <span class="flex-shrink-0 w-5 h-5 rounded-full border-2 border-gray-300 flex items-center justify-center transition-colors">
+                <span class="w-2 h-2 rounded-full bg-transparent transition-colors"></span>
               </span>
-            </button>
+            </a>
           </template>
         </div>
       </div>
