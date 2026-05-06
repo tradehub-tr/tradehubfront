@@ -1,3 +1,11 @@
+## [v1.1.7-beta.2] - 2026-05-06 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat: cart + checkout redesign, fatura bilgisi bölümü, header & megamenü revizyonu (@ahmeetseker)
+
+---
 ## [v1.1.7-beta.1] - 2026-05-05 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
