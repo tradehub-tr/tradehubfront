@@ -5,7 +5,12 @@ export interface RankedProduct {
   price: string;
   imageSrc: string;
   moq: string;
-  rank: 1 | 2 | 3;
+  /** 1..100 — rank rozetinde gösterilen sıra. Grouped modda 1|2|3, flat/category sayfada 1..100. */
+  rank: number;
+  /** 0..5 — backend `mapListingCard` `rating` alanından kopyalanır. Yoksa undefined. */
+  averageRating?: number;
+  /** Backend `mapListingCard` `reviewCount` alanından. Yoksa undefined. */
+  ratingCount?: number;
 }
 
 export interface RankingCategoryGroup {
