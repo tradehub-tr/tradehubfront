@@ -370,11 +370,13 @@ function renderAllOrders(): string {
 
             <!-- ── Action Bar ── -->
             <div class="flex flex-wrap items-center justify-between gap-3 max-[480px]:gap-2 px-5 max-sm:px-3 py-3 border-t border-gray-200 bg-[#FAFAFA]">
-              <!-- Link -->
-              <a :href="'${getBaseUrl()}pages/dashboard/messages.html?seller=' + encodeURIComponent(order.seller)" class="text-gray-500 hover:text-blue-600 flex items-center gap-1.5 transition-colors whitespace-nowrap text-[13px] max-[480px]:text-xs">
+              <!-- DISABLED: "Satıcıyla iletişim" linki — messages.html altyapısı yok, ileride geri açılacak. -->
+              <!-- <a :href="'${getBaseUrl()}pages/dashboard/messages.html?seller=' + encodeURIComponent(order.seller)" class="text-gray-500 hover:text-blue-600 flex items-center gap-1.5 transition-colors whitespace-nowrap text-[13px] max-[480px]:text-xs">
                 <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
                 ${t("orders.contactSupplier")}
-              </a>
+              </a> -->
+              <span></span><!-- spacer: action bar justify-between'ı korumak için -->
+
               <!-- Buttons -->
               <div class="flex items-center gap-2.5 max-[480px]:w-full">
                 <button @click="viewDetail(order)" class="th-btn-outline h-9 px-5 max-[480px]:px-3 max-[480px]:flex-1 text-[13px] max-[480px]:text-xs cursor-pointer font-medium whitespace-nowrap">

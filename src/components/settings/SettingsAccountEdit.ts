@@ -513,6 +513,14 @@ export function initSettingsAccountEdit(): void {
           showCardMessage(cardId, t("settings.nameRequired") || "Soyad gerekli", "error");
           return;
         }
+        if (data.business_name !== undefined && !data.business_name?.trim()) {
+          showCardMessage(
+            cardId,
+            t("settings.businessNameRequired") || "İşletme Adı zorunludur.",
+            "error"
+          );
+          return;
+        }
         if (data.phone?.trim() && !validatePhone(data.phone)) {
           showCardMessage(cardId, t("settings.invalidPhone") || "Geçersiz telefon", "error");
           return;

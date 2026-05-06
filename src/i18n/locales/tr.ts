@@ -38,6 +38,7 @@ const tr = {
       english: "English",
       loadMore: "Daha fazla yükle",
       error: "Bir hata oluştu.",
+      retry: "Tekrar Dene",
       rateLimitError: "Çok fazla istek gönderildi. Lütfen birkaç dakika sonra tekrar deneyin.",
       moq: "MSA: {{count}} {{unit}}",
       moqUnit: "adet",
@@ -472,6 +473,7 @@ const tr = {
         back: "Geri",
         next: "Devam Et",
         submit: "Başvuruyu Gönder",
+        startError: "Başvuru Başlatılamadı",
       },
     },
 
@@ -959,6 +961,7 @@ const tr = {
     // ============================================================
     dashboard: {
       myDashboard: "Kontrol Panelim",
+      kybVerification: "Belge Doğrulama",
       onlineTrading: "Çevrimiçi Ticaret",
       myMessages: "Mesajlarım",
       supplierMessages: "Tedarikçi Mesajlarım",
@@ -3855,6 +3858,7 @@ const tr = {
       saving: "Kaydediliyor...",
       saveFailed: "Kaydetme başarısız oldu.",
       nameRequired: "Ad ve Soyad zorunludur.",
+      businessNameRequired: "İşletme Adı zorunludur.",
       phoneLabel: "Telefon",
       selectCountry: "Ülke seçiniz",
       // Seller profile labels
@@ -3920,6 +3924,9 @@ const tr = {
 
       // ── SettingsLayout ───────────────────────────────────────────
       changePhoto: "Fotoğraf değiştir",
+      photoInvalidType: "Geçersiz dosya türü. JPG, PNG, WEBP veya GIF yükleyin.",
+      photoTooLarge: "Dosya 5 MB'dan küçük olmalı.",
+      photoUploadFailed: "Fotoğraf yüklenemedi. Lütfen tekrar deneyin.",
       emailLayoutLabel: "E-posta",
       membershipNumber: "Üyelik numarası",
       copyTooltip: "Kopyala",
@@ -6509,6 +6516,92 @@ const tr = {
     },
     backToHome: "Ana Sayfaya Dön",
     logout: "Çıkış Yap",
+  },
+
+  kyb: {
+    title: "Belge Doğrulama",
+    subtitle: "Satıcı kimliğinizi ve şirket belgelerinizi doğrulayın",
+    loading: "Yükleniyor...",
+
+    // Status etiketleri
+    statusNone: "Henüz Başvurulmadı",
+    statusPending: "Beklemede",
+    statusUnderReview: "İnceleniyor",
+    statusVerified: "Doğrulandı",
+    statusRejected: "Reddedildi",
+    statusExpired: "Süresi Doldu",
+
+    // Empty state
+    notStartedTitle: "Henüz KYB Başvurusu Yapılmadı",
+    notStartedDesc: "Satışa başlamak için kimliğinizi ve şirket belgelerinizi doğrulayın. Süreç birkaç dakika sürer.",
+    applyNow: "Şimdi Başvur",
+
+    // Status uyarıları
+    rejectedTitle: "Başvurunuz Reddedildi",
+    rejectionReason: "Gerekçe",
+    rejectedHint: "Belgeleri güncelleyip 'Yeniden Gönder' butonuna basın. Status otomatik olarak Beklemede'ye dönecek.",
+    expiredTitle: "Belgelerin Süresi Doldu",
+    expiredHint: "Belgeleri yenileyin ve yeniden gönderin.",
+    pendingTitle: "Başvurunuz Beklemede",
+    pendingHint: "Belgeleriniz gönderildi, admin incelemesi bekliyor.",
+    underReviewTitle: "Başvurunuz İnceleniyor",
+    underReviewHint: "Admin başvurunuzu detaylı inceliyor. Sonuç çok yakında.",
+    verifiedTitle: "Hesabınız Doğrulandı",
+    verifiedHint: "Tüm satıcı özellikleri açık. İyi satışlar!",
+
+    // Şirket bilgileri kartı
+    companyInfoTitle: "Şirket Bilgileri",
+    companyTitle: "Şirket Ünvanı",
+    companyTitlePlaceholder: "Örn: Ali Tic. Ltd. Şti.",
+    authorizedPerson: "Yetkili Kişi",
+    tradeRegistryNumber: "Ticaret Sicil No",
+    documentExpiryDate: "Belge Son Kullanım Tarihi",
+
+    // Belgeler
+    documentsTitle: "Belgeler",
+    documentsHint: "PDF, JPG, JPEG, PNG, WEBP, DOCX · Maks 10 MB · Tüm belgeler zorunlu",
+    docIdentity: "Kimlik Belgesi",
+    docSignatureCirculars: "İmza Sirküleri",
+    docTradeRegistryGazette: "Ticaret Sicil Gazetesi",
+    docActivityCertificate: "Faaliyet Belgesi",
+    docTaxCertificate: "Vergi Levhası",
+    docBankAccount: "Banka Hesap Belgesi",
+    selectFile: "Dosya Seç",
+    uploading: "Yükleniyor...",
+    replace: "Değiştir",
+    preview: "Önizle",
+
+    // Action bar
+    submit: "Gönder",
+    resubmit: "Yeniden Gönder",
+    submitting: "Gönderiliyor...",
+    hintMissingDocs: "Tüm zorunlu belgeleri yükleyin.",
+    hintReady: "Tüm belgeler hazır, gönderebilirsiniz.",
+    hintResubmit: "Belgeleri güncelleyip yeniden gönderin.",
+    hintReadyResubmit: "Belgeler güncellendi, yeniden gönderebilirsiniz.",
+    hintNeedDocChange: "Yeniden inceleme için en az bir belgeyi 'Değiştir' ile güncellemelisiniz.",
+
+    // Toasts / hatalar
+    toastSaved: "Belgeler kaydedildi.",
+    toastResubmitted: "Yeniden gönderildi, admin incelemeye alındı.",
+    errInvalidType: "Geçersiz dosya türü. PDF, JPG, JPEG, PNG, WEBP veya DOCX yükleyin.",
+    errTooLarge: "Dosya 10 MB'dan küçük olmalı.",
+    errUploadFailed: "Dosya yüklenemedi.",
+    errSubmitFailed: "Gönderim başarısız.",
+    errRateLimit: "Çok hızlı gönderim. Lütfen 1 dakika bekleyip tekrar deneyin.",
+
+    // Buyer Dashboard widget
+    widgetNotStartedTitle: "KYB Doğrulaması Bekliyor",
+    widgetNotStartedDesc: "Satışa başlamak için kimliğinizi doğrulayın",
+    widgetApplyNow: "Şimdi Başvur",
+    widgetRejectedTitle: "KYB Reddedildi — Belgeleri Güncelleyin",
+    widgetFixDocuments: "Belgeleri Düzelt",
+    widgetExpiredTitle: "KYB Süresi Doldu",
+    widgetRenew: "Yenile",
+    widgetPendingMsg: "KYB başvurunuz admin incelemesi bekliyor.",
+    widgetUnderReviewMsg: "KYB başvurunuz inceleniyor.",
+    widgetView: "Görüntüle",
+    viewDetails: "Detayları gör",
   },
 };
 

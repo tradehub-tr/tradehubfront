@@ -15,6 +15,10 @@ export interface SidebarMenuItem {
   badge?: string;
   active?: boolean;
   submenu?: SidebarSubmenuItem[];
+  /** Sadece satıcı (veya başvurusu beklemede olan) kullanıcılarda görünür */
+  requireSeller?: boolean;
+  /** Status badge için renkli nokta (yeşil/sarı/kırmızı/turuncu) */
+  badgeColor?: "green" | "yellow" | "red" | "orange";
 }
 
 export interface SidebarSubmenuItem {

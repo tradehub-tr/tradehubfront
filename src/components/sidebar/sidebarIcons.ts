@@ -31,6 +31,11 @@ export const sidebarIcons = {
   chevronRight: `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>`,
+
+  "shield-check": `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 2l9 4v6c0 5-3.5 9-9 10C6.5 21 3 17 3 12V6l9-4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+    <polyline points="9 12 11 14 15 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`,
 } as const;
 
 export type SidebarIconKey = keyof typeof sidebarIcons;

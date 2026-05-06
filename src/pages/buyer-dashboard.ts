@@ -31,13 +31,34 @@ import { FloatingPanel, initFloatingPanel } from '../components/floating'
 // Buyer Dashboard components
 import { BuyerDashboardLayout, initBuyerDashboardLayout } from '../components/buyer-dashboard'
 import { renderSidebar } from '../components/sidebar'
+import { KybStatusWidget } from '../components/kyb/KybStatusWidget'
+import { api } from '../utils/api'
+
+// KYB status: only fetch for sellers / pending applicants (silent fail)
+let kybInfo: { status?: string; rejection_reason?: string | null } | undefined;
+if (sessionUser && (sessionUser.is_seller || sessionUser.pending_seller_application)) {
+  try {
+    const res = await api<{
+      message: { exists: boolean; status?: string; rejection_reason?: string | null };
+    }>("/method/tradehub_core.api.v1.kyb.get_kyb_status");
+    if (res.message?.exists) {
+      kybInfo = { status: res.message.status, rejection_reason: res.message.rejection_reason };
+    } else {
+      kybInfo = { status: "" };
+    }
+  } catch {
+    /* ignore */
+  }
+}
 
 function renderMainContent(): string {
   const defaultUser = { avatar: '', username: '', profileHref: '/profile' };
-  return BuyerDashboardLayout({
+  const widget = KybStatusWidget(sessionUser, kybInfo);
+  const dashboard = BuyerDashboardLayout({
     data: { user: defaultUser, stats: [], notifications: [], browsingHistory: [], promotions: [] },
     emailVerified,
   });
+  return widget + dashboard;
 }
 
 function getBreadcrumbItems(): { label: string; href?: string }[] {

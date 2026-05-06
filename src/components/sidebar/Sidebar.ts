@@ -8,7 +8,8 @@
 import { getSidebarSections } from "./sidebarData";
 import { renderSidebarMenuItem } from "./SidebarMenuItem";
 import { renderSidebarFlyout } from "./SidebarFlyout";
-import type { SidebarSection } from "../../types/buyerDashboard";
+import type { SidebarSection, SidebarMenuItem } from "../../types/buyerDashboard";
+import { getUser } from "../../utils/auth";
 
 /* ════════════════════════════════════════════════════
    RENDER
@@ -30,7 +31,7 @@ const sectionTitleI18nKeys: Record<string, string> = {
 function getSectionI18nKey(section: SidebarSection): string | undefined {
   if (!section.title) return undefined;
   const firstItemId = section.items[0]?.id;
-  if (firstItemId === "messages") return sectionTitleI18nKeys.onlineTrading;
+  if (firstItemId === "messages" || firstItemId === "inquiries") return sectionTitleI18nKeys.onlineTrading;
   if (firstItemId === "subscription") return sectionTitleI18nKeys.valueAddedServices;
   if (firstItemId === "settings") return sectionTitleI18nKeys.settings;
   return undefined;
@@ -39,6 +40,18 @@ function getSectionI18nKey(section: SidebarSection): string | undefined {
 /**
  * Renders a single sidebar section with optional title and items.
  */
+/**
+ * Item kullanıcının rolüne göre görünür mü?
+ * - requireSeller flag'i varsa sadece is_seller veya pending_seller_application
+ *   olan kullanıcılarda render edilir.
+ */
+function isItemVisible(item: SidebarMenuItem): boolean {
+  if (!item.requireSeller) return true;
+  const user = getUser();
+  if (!user) return false;
+  return Boolean(user.is_seller || user.pending_seller_application);
+}
+
 function renderSection(section: SidebarSection, expanded: boolean): string {
   let title = "";
   if (section.title && expanded) {
@@ -47,7 +60,10 @@ function renderSection(section: SidebarSection, expanded: boolean): string {
     title = `<h3 class="sidebar__section-title hidden px-7 pt-5 pb-2 text-xs font-normal uppercase tracking-wider text-gray-400 dark:text-gray-500 xl:block"${i18nAttr}>${section.title}</h3>`;
   }
 
-  const items = section.items
+  const visibleItems = section.items.filter(isItemVisible);
+  if (visibleItems.length === 0) return "";
+
+  const items = visibleItems
     .map((item) => {
       const menuItem = renderSidebarMenuItem({ item, expanded });
       const flyout = item.submenu?.length ? renderSidebarFlyout({ item }) : "";

@@ -24,6 +24,7 @@ import "./seller";
 import "./sellerShop";
 import "./addresses";
 import "./notifications";
+import "./kyb";
 
 // Augment Window interface for Alpine global access (debugging)
 declare global {
