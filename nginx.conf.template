@@ -32,11 +32,11 @@ server {
         proxy_hide_header Access-Control-Allow-Methods;
         proxy_hide_header Access-Control-Allow-Headers;
 
-        proxy_pass https://rcistoc.cronbi.com/api/;
-        proxy_cookie_domain rcistoc.cronbi.com rc.istoc.com;
+        proxy_pass https://${BACKEND_DOMAIN}/api/;
+        proxy_cookie_domain ${BACKEND_DOMAIN} ${FRONTEND_DOMAIN};
         proxy_cookie_flags ~ SameSite=None Secure;
         proxy_ssl_server_name on;
-        proxy_set_header Host rcistoc.cronbi.com;
+        proxy_set_header Host ${BACKEND_DOMAIN};
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
@@ -45,9 +45,9 @@ server {
 
     # Private files — Frappe permission-checked download (identity docs etc.)
     location /private/files/ {
-        proxy_pass https://rcistoc.cronbi.com/private/files/;
+        proxy_pass https://${BACKEND_DOMAIN}/private/files/;
         proxy_ssl_server_name on;
-        proxy_set_header Host rcistoc.cronbi.com;
+        proxy_set_header Host ${BACKEND_DOMAIN};
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
@@ -55,9 +55,9 @@ server {
 
     # Public files (product images etc.)
     location /files/ {
-        proxy_pass https://rcistoc.cronbi.com/files/;
+        proxy_pass https://${BACKEND_DOMAIN}/files/;
         proxy_ssl_server_name on;
-        proxy_set_header Host rcistoc.cronbi.com;
+        proxy_set_header Host ${BACKEND_DOMAIN};
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
@@ -71,19 +71,19 @@ server {
         try_files $uri @frappe_assets;
     }
     location @frappe_assets {
-        proxy_pass https://rcistoc.cronbi.com;
+        proxy_pass https://${BACKEND_DOMAIN};
         proxy_ssl_server_name on;
-        proxy_set_header Host rcistoc.cronbi.com;
+        proxy_set_header Host ${BACKEND_DOMAIN};
     }
 
     # Socket.IO WebSocket proxy
     location /socket.io/ {
-        proxy_pass https://rcistoc.cronbi.com/socket.io/;
+        proxy_pass https://${BACKEND_DOMAIN}/socket.io/;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
         proxy_ssl_server_name on;
-        proxy_set_header Host rcistoc.cronbi.com;
+        proxy_set_header Host ${BACKEND_DOMAIN};
     }
 
     # Frontend statik dosyalar
