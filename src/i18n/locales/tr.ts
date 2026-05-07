@@ -589,6 +589,7 @@ const tr = {
       adresInfoSecure: "Bilgileriniz şifreli ve güvenli",
       countryRegion: "Ülke / bölge",
       fullName: "Ad ve Soyad",
+      companyName: "Şirket Adı",
       requiredShort: "Zorunlu",
       phoneNumberLabel: "Telefon numarası",
       streetAddress: "Açık adres veya P.O. kutusu",

@@ -245,9 +245,17 @@ export async function saveAddressApi(
   );
 }
 
-/** Bir adresi siler. */
-export async function deleteAddressApi(addressId: string): Promise<void> {
-  await callMethod<{ success: boolean }>(
+/**
+ * Bir adresi siler.
+ * Backend silme sonrası `_ensure_one_default` invariant'ını tutarlı tutmak için
+ * yeni default'u (`default_id`) döndürür — silinen default ise başka bir adres
+ * default yapılır, çoklu-default broken state'i temizlenir. Caller bu değeri
+ * kullanarak listedeki `is_default` flag'larını backend ile senkronlamalı.
+ */
+export async function deleteAddressApi(
+  addressId: string
+): Promise<{ success: boolean; default_id: string }> {
+  return callMethod<{ success: boolean; default_id: string }>(
     "tradehub_core.api.buyer.delete_address",
     { address_id: addressId },
     true

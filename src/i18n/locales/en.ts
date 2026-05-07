@@ -590,6 +590,7 @@ const en = {
       adresInfoSecure: "Your information is encrypted and secure",
       countryRegion: "Country / region",
       fullName: "First name and Last name",
+      companyName: "Company Name",
       requiredShort: "Required",
       phoneNumberLabel: "Phone number",
       streetAddress: "Street address or P.O. box",
