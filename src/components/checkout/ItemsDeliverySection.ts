@@ -4,6 +4,7 @@
  */
 
 import { getCurrencyCode } from "../../utils/currency";
+import { formatCurrency } from "../../services/currencyService";
 import { t } from "../../i18n";
 
 export interface CheckoutDeliveryMethod {
@@ -58,7 +59,7 @@ function escapeJsSingleQuoted(value: string): string {
 }
 
 function formatUsd(value: number): string {
-  return `${getCurrencyCode()} ${value.toFixed(2)}`;
+  return formatCurrency(value, getCurrencyCode());
 }
 
 function renderShippingSummary(order: CheckoutDeliveryOrderGroup): string {
