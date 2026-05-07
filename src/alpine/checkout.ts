@@ -118,7 +118,7 @@ Alpine.data("checkoutItemsDelivery", () => ({
 
   formatShippingFee(value: number): string {
     const safe = Number.isFinite(value) ? value : 0;
-    return `${getCurrencyCode()} ${safe.toFixed(2)}`;
+    return formatCurrency(safe, getCurrencyCode());
   },
 
   openShippingModal(orderId: string) {
