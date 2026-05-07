@@ -423,6 +423,8 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
 
             ${floatField("first-name", "firstName", t("checkout.fullName"), true)}
 
+            ${floatField("company", "company", t("checkout.companyName"), true)}
+
             <!-- Phone: +90 prefix ile numara tek container içinde (Evil Martians / Shopify pattern). -->
             <div class="mb-3 group" data-field="phone" x-bind:data-error="errors.phone">
               <div class="relative flex items-stretch h-[48px] rounded-md border border-[var(--color-border-default)] bg-[var(--color-surface)] transition-colors focus-within:border-[var(--color-primary-500)] group-data-[error=true]:border-[var(--color-error-500)]">

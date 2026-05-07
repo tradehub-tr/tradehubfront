@@ -373,15 +373,29 @@ Alpine.data("addressesManager", () => ({
 
   async deleteAddress() {
     try {
+      let backendDefaultId: string | null = null;
       if (isLoggedIn()) {
-        await deleteAddressApi(this.deletingId);
+        const res = await deleteAddressApi(this.deletingId);
+        backendDefaultId = res.default_id || "";
       }
-      const wasDefault = this.addresses.find((a) => a.id === this.deletingId)?.is_default ?? false;
       this.addresses = this.addresses.filter((a) => a.id !== this.deletingId);
-      if (wasDefault && this.addresses.length > 0) {
-        this.addresses[0].is_default = true;
+
+      if (isLoggedIn() && backendDefaultId !== null) {
+        // Backend'in döndürdüğü default_id ile listeyi senkronize et;
+        // _ensure_one_default "en eski adresi default yap" stratejisini
+        // burada yansıtırız (frontend kendi sıralamasıyla farklı düşünmesin).
+        this.addresses = this.addresses.map((a) => ({
+          ...a,
+          is_default: a.id === backendDefaultId,
+        }));
+      } else {
+        // Guest: silinen default ise listenin ilkini default yap (geri uyumlu)
+        const wasDefault = this.addresses.length > 0 && !this.addresses.some((a) => a.is_default);
+        if (wasDefault) {
+          this.addresses[0].is_default = true;
+        }
+        guestWrite(this.addresses);
       }
-      if (!isLoggedIn()) guestWrite(this.addresses);
       this.isDeleteConfirmOpen = false;
       this.deletingId = "";
       this.deletingTitle = "";
