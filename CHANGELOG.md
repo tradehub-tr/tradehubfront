@@ -1,3 +1,29 @@
+## [v1.1.7-beta.7] - 2026-05-07 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat: cart + checkout redesign, fatura bilgisi bölümü, header & megamenü revizyonu (@ahmeetseker)
+- feat(top-ranking-category): add Pagination component (@ahmeetseker)
+- feat(top-ranking-category): add Grid component with rank badges and ratings (@ahmeetseker)
+- feat(top-ranking-category): add Hero component reusing TopRankingFilters (@ahmeetseker)
+- feat(top-ranking-category): add barrel export (@ahmeetseker)
+- feat(top-ranking-category): add HTML entry (@ahmeetseker)
+- feat(top-ranking-category): add page entry with Alpine data and assembly (@ahmeetseker)
+- feat(homepage): link top-ranking cards to dedicated category page (@ahmeetseker)
+- feat(products): remove inactive Karşılaştır checkbox from product cards (@ahmeetseker)
+- feat(top-ranking): redirect category tabs and card headers to dedicated page (@ahmeetseker)
+- feat: add spam category filtering, implement recent category tracking, and apply global touch-suppression utility classes (@ahmeetseker)
+- feat(kyb,dashboard): Storefront KYB sayfası + buyer dashboard widget + sidebar requireSeller; mesajlar/iletişim CTA'ları gizlendi (@aliiball)
+
+### Duzeltildi
+- fix(nginx): parametrize backend domain via envsubst template (@ahmeetseker)
+
+### Degistirildi
+- refactor(top-ranking): remove flat mode (replaced by dedicated category page) (@ahmeetseker)
+- refactor: standardize currency formatting by replacing manual string interpolation with formatCurrency utility (@ahmeetseker)
+
+---
 ## [v1.1.7-beta.6] - 2026-05-07 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
