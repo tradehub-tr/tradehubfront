@@ -256,8 +256,8 @@ export function ProductImageGallery(): string {
 
     <!-- Photos / Attributes tabs -->
     <div id="pd-gallery-tabs" class="inline-flex gap-0.5 mt-3 rounded-full p-[3px]" style="background: var(--color-border-light);">
-      <button type="button" class="gallery-view-tab" :class="{ 'active': currentIndex !== attrsIndex }" @click="goToSlide(0)">${t("product.photosTab")}</button>
-      <button type="button" class="gallery-view-tab" :class="{ 'active': currentIndex === attrsIndex }" @click="goToSlide(attrsIndex)">${t("product.attributesTab")}</button>
+      <button type="button" class="gallery-view-tab th-no-press" :class="{ 'active': currentIndex !== attrsIndex }" @click="goToSlide(0)">${t("product.photosTab")}</button>
+      <button type="button" class="gallery-view-tab th-no-press" :class="{ 'active': currentIndex === attrsIndex }" @click="goToSlide(attrsIndex)">${t("product.attributesTab")}</button>
     </div>
 
     <div id="gallery-lightbox" x-show="isLightboxOpen" x-cloak :aria-hidden="(!isLightboxOpen).toString()" @click.self="closeLightbox()" class="max-[960px]:!p-[72px_12px_12px]"

@@ -122,14 +122,6 @@ function renderImageSlider(card: ProductListingCard): string {
       ${arrowsHtml}
       ${dotsHtml}
 
-      <!-- ${t("products.addToCompare")} checkbox (visible on hover) -->
-      <label class="absolute top-2 right-2 z-10 flex items-center gap-1.5 px-2 py-1 rounded bg-white/90 shadow-sm text-[11px] text-gray-700 cursor-pointer opacity-0 group-hover/img:opacity-100 transition-opacity"
-             onclick="event.preventDefault(); event.stopPropagation();">
-        <input type="checkbox" class="w-3.5 h-3.5 rounded border-gray-300 text-orange-500 focus:ring-orange-400"
-               data-compare-id="${card.id}" onclick="event.stopPropagation();" />
-        ${t("products.addToCompare")}
-      </label>
-
       <!-- Camera icon (bottom-left) - DISABLED -->
     </div>
   `;

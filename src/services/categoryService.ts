@@ -27,6 +27,51 @@ let _promise: Promise<ApiCategory[]> | null = null;
 const _listeners: Array<(cats: ApiCategory[]) => void> = [];
 
 /**
+ * Test/spam kategorilerini ayıklar. Backend cleanup yapılana kadar geçici filtre.
+ * Eşleşen örüntüler: "test", "test-x", "test_x" + bilinen spam isimler +
+ * 6 ya da daha kısa, salt küçük harfli ASCII'den oluşan ve sesli/sessiz
+ * dağılımı bozuk klavye spam'i (örn. "dasdas", "adsf", "asdfsa").
+ */
+function isSpamCategoryName(name: string): boolean {
+  const n = (name || "").trim().toLowerCase();
+  if (!n) return true;
+  if (/^test([-_ ].*)?$/.test(n)) return true;
+  if (
+    [
+      "dasdas",
+      "adsf",
+      "asd",
+      "asdfsa",
+      "ressfd",
+      "adas",
+      "asdf",
+      "qwe",
+      "qwer",
+      "qwerty",
+      "zxc",
+      "zxcv",
+    ].includes(n)
+  )
+    return true;
+  // 1-6 harfli, sadece [a-z], boşluksuz: muhtemelen klavye spam'i
+  if (/^[a-z]{1,6}$/.test(n)) {
+    const vowels = (n.match(/[aeiouıöü]/g) || []).length;
+    const ratio = vowels / n.length;
+    if (ratio < 0.25 || ratio > 0.75) return true;
+  }
+  return false;
+}
+
+function filterSpam(cats: ApiCategory[]): ApiCategory[] {
+  return cats
+    .filter((c) => !isSpamCategoryName(c.name))
+    .map((c) => ({
+      ...c,
+      children: (c.children || []).filter((ch) => !isSpamCategoryName(ch.name)),
+    }));
+}
+
+/**
  * Kategorileri API'den çeker ve önbelleğe alır.
  * Birden fazla çağrıda tek fetch yapılır (deduplication).
  */
@@ -36,7 +81,8 @@ export function loadCategories(): Promise<ApiCategory[]> {
 
   _promise = callMethod<ApiCategory[]>("tradehub_core.api.category.get_mega_menu")
     .then((data) => {
-      const cats: ApiCategory[] = Array.isArray(data) ? data : [];
+      const raw: ApiCategory[] = Array.isArray(data) ? data : [];
+      const cats = filterSpam(raw);
       _cache = cats;
       _promise = null;
       const toNotify = _listeners.splice(0);

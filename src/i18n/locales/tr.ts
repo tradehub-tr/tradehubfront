@@ -6087,6 +6087,23 @@ const tr = {
   },
 
   // ============================================================
+  // TOP RANKING CATEGORY PAGE
+  // ============================================================
+  topRankingCategoryPage: {
+    heroTitlePrefix: "En Çok Satanlar — ",
+    heroSubtitlePrefix: "{{count}} ürün · ",
+    heroSubtitleSuffix: "Veri odaklı sıralamalarla trendleri keşfedin",
+    breadcrumb: "En Çok Satanlar",
+    empty: "Bu kategoride henüz sıralama oluşmadı.",
+    paginationPrevious: "Önceki",
+    paginationNext: "Sonraki",
+    pageLabel: "Sayfa {{page}}",
+    ratingCount: "({{count}})",
+    missingCategory: "Kategori belirtilmedi",
+    goHome: "Ana Sayfa'ya Dön",
+  },
+
+  // ============================================================
   // TOP RANKING PAGE
   // ============================================================
   topRankingPage: {

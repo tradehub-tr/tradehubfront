@@ -1164,19 +1164,19 @@ export function CompanyProfileComponent(): string {
               <div class="flex items-center gap-6 sm:gap-10 overflow-x-auto scrollbar-hide">
                 <button @click="setTab('overview')"
                   :class="activeTab === 'overview' ? 'text-[#222] border-b-[3px] border-[#222] font-bold' : 'text-gray-500 border-b-[3px] border-transparent font-medium hover:text-gray-900'"
-                  class="py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t("seller.sf.myAccount")}</button>
+                  class="th-no-press py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t("seller.sf.myAccount")}</button>
                 <button @click="setTab('service')"
                   :class="activeTab === 'service' ? 'text-[#222] border-b-[3px] border-[#222] font-bold' : 'text-gray-500 border-b-[3px] border-transparent font-medium hover:text-gray-900'"
-                  class="py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t("seller.sf.serviceTab")}</button>
+                  class="th-no-press py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t("seller.sf.serviceTab")}</button>
                 <button @click="setTab('reviews')"
                   :class="activeTab === 'reviews' ? 'text-[#222] border-b-[3px] border-[#222] font-bold' : 'text-gray-500 border-b-[3px] border-transparent font-medium hover:text-gray-900'"
-                  class="py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t("seller.sf.reviewsTab")}</button>
+                  class="th-no-press py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t("seller.sf.reviewsTab")}</button>
                 <button @click="setTab('products')"
                   :class="activeTab === 'products' ? 'text-[#222] border-b-[3px] border-[#222] font-bold' : 'text-gray-500 border-b-[3px] border-transparent font-medium hover:text-gray-900'"
-                  class="py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t("seller.sf.productsTab")}</button>
+                  class="th-no-press py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t("seller.sf.productsTab")}</button>
                 <button @click="setTab('videos')"
                   :class="activeTab === 'videos' ? 'text-[#222] border-b-[3px] border-[#222] font-bold' : 'text-gray-500 border-b-[3px] border-transparent font-medium hover:text-gray-900'"
-                  class="py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t("seller.sf.videoTips")}</button>
+                  class="th-no-press py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t("seller.sf.videoTips")}</button>
               </div>
             </div>
 
