@@ -7,6 +7,7 @@
 
 import type { FilterState } from "./filterEngine";
 import { getCurrencySymbol } from "../../utils/currency";
+import { t } from "../../i18n";
 
 /**
  * Create a single chip HTML
@@ -45,9 +46,19 @@ export function renderFilterChips(state: FilterState): string {
     const label = `${getCurrencySymbol()}${state.priceMin ?? "0"} \u2013 ${getCurrencySymbol()}${state.priceMax ?? "\u221E"}`;
     chips.push(makeChip(label, "price", "range"));
   }
-  if (state.minOrder !== null)
-    chips.push(makeChip(`MOQ \u2264 ${state.minOrder}`, "min-order", String(state.minOrder)));
+  if (state.minOrder !== null) {
+    chips.push(
+      makeChip(
+        t("products.filterChipMinOrder", { count: state.minOrder }),
+        "min-order",
+        String(state.minOrder)
+      )
+    );
+  }
   state.supplierCountries.forEach((c) => chips.push(makeChip(c, "supplier-country", c)));
+  if (state.verifiedSupplier) {
+    chips.push(makeChip(t("products.filterChipVerifiedSupplier"), "verified-supplier", "1"));
+  }
 
   return chips.join("");
 }

@@ -42,6 +42,22 @@ const tr = {
       rateLimitError: "Çok fazla istek gönderildi. Lütfen birkaç dakika sonra tekrar deneyin.",
       moq: "MSA: {{count}} {{unit}}",
       moqUnit: "adet",
+      sellerNotVerified: "Doğrulanmamış Satıcı",
+      sellerNotVerifiedShort: "Doğrulanmamış",
+      addToCartDisabledKyb: "Bu satıcı henüz doğrulanmadığı için ürün sepete eklenemez",
+      kybGateBannerTitle: "Bu satıcı henüz doğrulanmadı",
+      kybGateBannerBody:
+        "Satıcı doğrulandığında bu ürünü satın alabileceksiniz. Şimdilik favorilere ekleyebilir veya satıcıyla iletişime geçebilirsiniz.",
+      kybGateFavoriteHint:
+        "Bu üründen haberdar olmak için favorilere ekleyin — satıcı doğrulandığında bildirilecek.",
+      cartHasUnverifiedItems:
+        "Sepetinizde doğrulanmamış satıcının ürünü var. Ödemeye geçmek için bu ürünleri çıkarın.",
+      cartItemUnverifiedSeller: "Doğrulanmamış satıcı, sipariş veremezsiniz",
+      cartCheckoutBlockedKyb: "Doğrulanmamış satıcının ürünü sepette",
+      checkoutBlockedKybTitle: "Sipariş Oluşturulamadı",
+      checkoutBlockedKybBody:
+        "Sepetinizdeki ürünlerden biri doğrulanmamış bir satıcıya ait. Lütfen sepete dönüp ilgili ürünü çıkarın.",
+      checkoutBackToCart: "Sepete Dön",
     },
 
     // ============================================================
@@ -864,7 +880,8 @@ const tr = {
       share: "Paylaş",
       companyProfile: "Şirket Profili",
       otherProducts: "Diğer Ürünler",
-      verifiedSupplier: "Doğrulanmış Tedarikçi",
+      verifiedSupplier: "Onaylanmış Satıcı",
+      verifiedWithIstoc: "iSTOC ile Onaylanmış",
       safePayments: "Güvenli ödemeler",
       returnPolicy: "İade politikası",
       option: "Seçenek",
@@ -895,8 +912,11 @@ const tr = {
       filters: "Filtreler",
       filterTradeAssurance: "Ticaret Güvencesi",
       filterSupplierFeatures: "Tedarikçi Özellikleri",
-      filterVerifiedSupplier: "Doğrulanmış Tedarikçi",
-      filterVerifiedPro: "Doğrulanmış PRO Tedarikçi",
+      filterSupplierTypes: "Tedarikçi Türleri",
+      filterVerifiedSupplier: "Onaylanmış Satıcı",
+      filterChipMinOrder: "MSA ≤ {{count}}",
+      filterChipVerifiedSupplier: "Onaylanmış Satıcı",
+      filterVerifiedPro: "Onaylanmış PRO Satıcı",
       filterStoreReviews: "Mağaza Değerlendirmeleri",
       filterAndUp: "ve üzeri",
       filterProductFeatures: "Ürün Özellikleri",
@@ -2364,7 +2384,8 @@ const tr = {
         learnMore: "Daha fazla bilgi",
         // CompanyInfo extras
         companyTitle: "ŞİRKET",
-        verifiedSupplier: "Doğrulanmış Tedarikçi",
+        verifiedSupplier: "Onaylanmış Satıcı",
+        verifiedWithIstoc: "iSTOC ile Onaylanmış",
         // HotProducts extras
         hotProductsTitle: "POPÜLER ÜRÜNLER",
         buyNow: "Şimdi Satın Al",
@@ -2395,7 +2416,14 @@ const tr = {
         floorArea: "Zemin alanı",
         businessType: "İş türü",
         annualRevenue: "Yıllık gelir",
-        qualityControlSection: "Kalite Kontrol",
+        qualityControlSection: "Üretim Özellikleri",
+        qualityControl: "Kalite Kontrol Detayları",
+        employeesLabel: "Çalışan Sayısı",
+        bizManufacturer: "Üretici",
+        bizDistributor: "Distribütör",
+        bizWholesaler: "Toptancı",
+        bizRetailer: "Perakendeci",
+        bizTradingCompany: "Ticaret Şirketi",
         rawMaterialSupport: "Ham maddelerin Ürün Destek izlenebilirliği",
         inspectionMethod: "Ürün denetim yöntemi",
         qcInspectors: "QA/QC müfettişleri",
@@ -2950,7 +2978,7 @@ const tr = {
       rfqTitle: "Fiyat Teklifi Talebi (RFQ)",
       history: "Geçmiş",
       viewMore: "Daha fazlası",
-      verifiedManufacturers: "Onaylanmış üreticiler",
+      verifiedManufacturers: "Onaylanmış Satıcılar",
 
       // Main categories
       cat: {
@@ -3159,7 +3187,7 @@ const tr = {
 
       // Manufacturer list
       list: {
-        verified: "Doğrulanmış",
+        verified: "Onaylanmış",
         years: "{{count}} yıl",
         staff: "{{count}} personel",
         area: "{{size}} m\u00B2",

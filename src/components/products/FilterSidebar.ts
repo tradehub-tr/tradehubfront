@@ -105,6 +105,20 @@ function buildDefaultFilterSections(): FilterSection[] {
       options: [],
     } as SearchableCheckboxFilterSection,
     {
+      // YENİ: Tedarikçi Türleri — KYB Verified satıcılar için filter (Alibaba modeli).
+      // Backend listing.get_listings'de verified_supplier=1 parametresi User.role.Verified Seller filtresine bağlanır.
+      id: "verified-supplier",
+      title: t("products.filterSupplierTypes"),
+      type: "searchable-checkbox",
+      collapsible: true,
+      collapsed: false,
+      searchPlaceholder: "",
+      options: [
+        // count alanını verme — backend dinamik facet'a bağlanana kadar "(0)" gösterilmesin
+        { id: "verified", value: "1", label: t("products.filterVerifiedSupplier") },
+      ],
+    } as SearchableCheckboxFilterSection,
+    {
       id: "mgmt-certifications",
       title: t("products.filterMgmtCertifications"),
       type: "searchable-checkbox",

@@ -42,6 +42,7 @@ export interface ListingSearchParams {
   category?: string;
   min_price?: number;
   max_price?: number;
+  min_order?: number;
   supplier?: string;
   sort_by?: string;
   sort_order?: string;
@@ -84,6 +85,7 @@ export async function searchListings(params: ListingSearchParams): Promise<Listi
   if (params.category) queryParams.set("category", params.category);
   if (params.min_price !== undefined) queryParams.set("min_price", String(params.min_price));
   if (params.max_price !== undefined) queryParams.set("max_price", String(params.max_price));
+  if (params.min_order !== undefined) queryParams.set("min_order", String(params.min_order));
   if (params.supplier) queryParams.set("supplier", params.supplier);
   if (params.sort_by) queryParams.set("sort_by", params.sort_by);
   if (params.sort_order) queryParams.set("sort_order", params.sort_order);
@@ -1003,12 +1005,15 @@ function mapListingDetail(raw: any): ProductDetail {
     baseCurrency: s.currency || baseCur,
   }));
 
-  // Map supplier
+  // Map supplier — verified == kybVerified (eski is_verified field'ı silindi)
+  const supplierVerified = raw.supplier?.kybVerified ?? raw.supplier?.verified ?? false;
   const supplier: SupplierInfo = raw.supplier
     ? {
         id: raw.supplier.sellerCode || raw.supplier.name || "",
         name: raw.supplier.display_name || raw.supplier.name || "",
-        verified: raw.supplier.verified || false,
+        verified: supplierVerified,
+        kybVerified: supplierVerified,
+        country: raw.supplier.country || "",
         yearsInBusiness: raw.supplier.yearsInBusiness || 0,
         responseTime: raw.supplier.responseTime || "",
         responseRate: raw.supplier.responseRate ? `${raw.supplier.responseRate}%` : "",
@@ -1022,6 +1027,7 @@ function mapListingDetail(raw: any): ProductDetail {
         id: "",
         name: "",
         verified: false,
+        country: "",
         yearsInBusiness: 0,
         responseTime: "",
         responseRate: "",
@@ -1078,6 +1084,7 @@ function mapListingDetail(raw: any): ProductDetail {
     baseSamplePrice: raw.samplePrice || undefined,
     baseCurrency: baseCur,
     supplier,
+    sellerKybVerified: raw.sellerKybVerified ?? supplier.kybVerified ?? false,
     faq: [],
     leadTimeRanges: (raw.leadTimeRanges || []).map((r: any) => ({
       quantityRange: r.quantityRange || "",

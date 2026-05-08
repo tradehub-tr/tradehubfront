@@ -3393,6 +3393,53 @@ body.gallery-lightbox-open {
   background: var(--color-surface, #ffffff);
 }
 
+/* KYB Gate UI — Doğrulanmamış satıcı bildirimi */
+.pd-kyb-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 16px 20px 0;
+  padding: 12px 14px;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 8px;
+}
+.pd-kyb-banner-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.pd-kyb-banner-text {
+  font-size: 12px;
+  line-height: 1.5;
+  color: #9a3412;
+}
+.pd-kyb-banner-title {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.pd-kyb-banner-body {
+  color: #9a3412;
+}
+.pd-add-to-cart--disabled {
+  opacity: 0.5;
+  cursor: not-allowed !important;
+  pointer-events: none;
+}
+.pd-kyb-hint {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 8px 20px 0;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #6b7280;
+}
+.pd-kyb-hint-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #9ca3af;
+}
+
 #pd-cta-buttons button {
   flex: 1;
   min-width: 0;

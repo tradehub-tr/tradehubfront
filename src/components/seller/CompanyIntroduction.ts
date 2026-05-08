@@ -39,25 +39,24 @@ export function CompanyIntroduction(
             ${t("seller.sf.companyIntroTitle")}
           </h2>
 
-          <!-- Verification Line -->
+          <!-- Verification Line — sadece KYB Verified satıcılarda render edilir -->
+          ${
+            seller.verified
+              ? `
           <div class="company-intro__verification flex items-center justify-center flex-wrap gap-3 mb-8">
             <span class="text-[13px] text-[#6b7280] dark:text-gray-400">${t("seller.sf.verificationType")}</span>
-            <span class="inline-flex items-center gap-1 bg-[#eff6ff] dark:bg-blue-900 text-[#1e40af] dark:text-blue-300 text-[13px] font-medium px-2.5 py-1 rounded-sm">
+            <span class="inline-flex items-center gap-1 bg-[#ecfdf5] dark:bg-green-900 text-[#065f46] dark:text-green-300 text-[13px] font-medium px-2.5 py-1 rounded-sm">
               <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none">
                 <circle cx="8" cy="8" r="7" fill="currentColor" opacity="0.2"/>
                 <path d="M5.5 8.5l2 2 4-4" stroke="currentColor" stroke-width="1.5" fill="none"/>
               </svg>
-              ${seller.verificationType}
+              ${t("seller.sf.verifiedSupplier")}
             </span>
             <span class="text-[13px] text-[#374151] dark:text-gray-300">${t("seller.sf.supplierAssessment")}</span>
-            ${
-              seller.verificationBadgeType === "pro"
-                ? `
-              <span class="inline-flex items-center bg-(--store-accent) text-white text-[11px] font-semibold px-2 py-0.5 rounded-sm uppercase">PRO</span>
-            `
-                : ""
-            }
           </div>
+          `
+              : ""
+          }
 
           <!-- 3×2 Info Grid -->
           <div class="company-intro__grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8">
@@ -73,18 +72,7 @@ export function CompanyIntroduction(
                 <div class="flex flex-col">
                   <span class="text-[13px] text-[var(--color-primary-500)] font-medium uppercase">${cell.label}</span>
                   <span class="text-[14px] text-[#374151] dark:text-gray-300 font-medium mt-0.5">${cell.value}</span>
-                  ${
-                    cell.verified
-                      ? `
-                    <span class="flex items-center gap-1 text-[11px] text-[var(--color-primary-500)] mt-0.5">
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                      </svg>
-                      ${t("seller.sf.verified")}
-                    </span>
-                  `
-                      : ""
-                  }
+                  ${/* Cell-level verified rozetleri kaldırıldı (4-B=Y) — üst Verification Line zaten Onaylanmış Satıcı rozetini gösteriyor */ ""}
                 </div>
               </div>
             `

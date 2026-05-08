@@ -216,13 +216,47 @@ export function ProductInfo(): string {
           </div>
         </div>
 
+        ${
+          mockProduct.sellerKybVerified === false
+            ? `
+        <!-- KYB Gate Uyarı Banner — Sepete Ekle butonunun ÜSTÜNDE, flex container DIŞINDA -->
+        <div class="pd-kyb-banner" role="alert">
+          <svg class="pd-kyb-banner-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c2410c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <div class="pd-kyb-banner-text">
+            <div class="pd-kyb-banner-title">${t("common.kybGateBannerTitle")}</div>
+            <div class="pd-kyb-banner-body">${t("common.kybGateBannerBody")}</div>
+          </div>
+        </div>
+        `
+            : ""
+        }
+
         <!-- CTA Buttons -->
         <div id="pd-cta-buttons">
-          <button type="button" id="pd-add-to-cart" data-add-to-cart="${mockProduct.id}" class="th-btn-dark">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-            ${t("product.addToCart")}
-          </button>
+          ${
+            mockProduct.sellerKybVerified === false
+              ? `
+            <button type="button" id="pd-add-to-cart" disabled aria-disabled="true" class="th-btn-dark pd-add-to-cart--disabled" title="${t("common.addToCartDisabledKyb")}">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              ${t("product.addToCart")}
+            </button>
+          `
+              : `
+            <button type="button" id="pd-add-to-cart" data-add-to-cart="${mockProduct.id}" class="th-btn-dark">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+              ${t("product.addToCart")}
+            </button>
+          `
+          }
         </div>
+        ${
+          mockProduct.sellerKybVerified === false
+            ? `<p class="pd-kyb-hint">
+                 <svg class="pd-kyb-hint-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
+                 <span>${t("common.kybGateFavoriteHint")}</span>
+               </p>`
+            : ""
+        }
       </div>
     </div>
   `;

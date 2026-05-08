@@ -51,10 +51,12 @@ const emptyProduct: ProductDetail = {
   orderCount: "0",
   reviews: [],
   baseCurrency: "USD",
+  sellerKybVerified: false,
   supplier: {
     id: "",
     name: "",
     verified: false,
+    country: "",
     yearsInBusiness: 0,
     responseTime: "",
     responseRate: "",

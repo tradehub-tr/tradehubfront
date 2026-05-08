@@ -8,8 +8,12 @@ export interface SellerProfile {
   name: string;
   slug: string;
   logo: string;
-  verificationType: "Verified" | "Verified PRO";
-  verificationBadgeType: "standard" | "pro";
+  /** @deprecated KYB Verified rolüne geçildi. Eski tier ismi (Multispecialty/PRO) kaldırıldı. Mock data uyumluluğu için optional. */
+  verificationType?: "Verified" | "Verified PRO";
+  /** @deprecated PRO tier mantığı kaldırıldı. */
+  verificationBadgeType?: "standard" | "pro";
+  /** KYB Verified rolüne sahip mi (User.role.Verified Seller) — backend'den gelir. */
+  verified?: boolean;
   yearsOnPlatform: number;
   location: string;
   mainCategories: string[];
