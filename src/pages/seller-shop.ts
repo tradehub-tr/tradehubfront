@@ -10,6 +10,7 @@ import { initFlowbite } from 'flowbite';
 import 'swiper/swiper-bundle.css';
 import { startAlpine } from '../alpine';
 import { initCurrency } from '../services/currencyService';
+import { t } from '../i18n';
 
 // Components
 import { TopBar } from '../components/header';
@@ -131,7 +132,10 @@ async function renderPage() {
                     <!-- Badges row -->
                     <div class="flex flex-wrap items-center gap-2 mb-2">
                       <template x-if="seller?.verified">
-                        <img src="/src/assets/images/verifiedminilogo.png" alt="Verified" class="h-[14px] w-auto" />
+                        <span class="inline-flex items-center gap-1 text-green-700 dark:text-green-400 text-[13px] font-semibold">
+                          <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                          <span>${t("seller.sf.verifiedSupplier")}</span>
+                        </span>
                       </template>
                       <template x-if="seller?.business_type">
                         <span class="text-[13px] text-[#666]" x-text="seller.business_type"></span>
@@ -162,9 +166,10 @@ async function renderPage() {
 
                   <!-- CTA Buttons (sag taraf) -->
                   <div class="hidden sm:flex flex-col gap-2 shrink-0">
-                    <div x-show="seller?.verified" class="flex items-baseline gap-1 mb-1 justify-end">
-                      <img src="/src/assets/images/verifiedminilogo.png" alt="Verified" class="h-[16px] w-auto self-baseline" />
-                      <img src="/src/assets/images/istoc-logo.png" alt="iSTOC" class="h-[10px] w-auto self-baseline" style="vertical-align: baseline;" />
+                    <div x-show="seller?.verified" class="flex items-baseline gap-1 mb-1 justify-end text-green-700 dark:text-green-400">
+                      <svg class="w-4 h-4 self-center" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                      <span class="text-[12px] font-semibold">${t("seller.sf.verifiedSupplier")}</span>
+                      <img src="/images/istoc-logo.png" alt="iSTOC" class="h-[10px] w-auto self-baseline ml-1" />
                       <span class="text-[10px] text-[#999] font-medium">ile</span>
                     </div>
                     <button

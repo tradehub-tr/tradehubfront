@@ -15,13 +15,19 @@ function renderVariantA(data: CompanyInfoData, seller: SellerProfile): string {
           ${t("seller.sf.companyTitle")}
         </h2>
 
-        <!-- Verified Banner -->
-        <div class="company-info__verified-banner flex items-center gap-4 bg-gradient-to-r from-primary-600 to-[#dc2626] text-white px-6 py-3 rounded-t-(--radius-md) text-[13px]">
+        <!-- Verified Banner — sadece KYB Verified satıcılarda render edilir -->
+        ${
+          seller.verified
+            ? `
+        <div class="company-info__verified-banner flex items-center gap-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-3 rounded-t-(--radius-md) text-[13px]">
           <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
           </svg>
           <span><strong>${t("seller.sf.verifiedSupplier")}</strong> — ${seller.name}</span>
         </div>
+        `
+            : ""
+        }
 
         <!-- Content Grid: 55% / 45% -->
         <div class="company-info__content grid grid-cols-1 lg:grid-cols-[55%_45%] gap-4 lg:gap-6 mt-0">
@@ -70,6 +76,8 @@ function renderVariantA(data: CompanyInfoData, seller: SellerProfile): string {
   `;
 }
 
+// @ts-expect-error — Variant B PRO tier için saklanıyor, premium tier ileride yeniden bağlanır
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function renderVariantB(data: CompanyInfoData, seller: SellerProfile): string {
   return `
     <section id="company-info" class="company-info company-info__variant-b py-12 bg-[#f5f0e8] dark:bg-gray-800" aria-label="${t("seller.sf.companyInfoLabel")}">
@@ -149,8 +157,8 @@ function renderVariantB(data: CompanyInfoData, seller: SellerProfile): string {
 }
 
 export function CompanyInfoComponent(data: CompanyInfoData, seller: SellerProfile): string {
-  if (seller.verificationBadgeType === "pro") {
-    return renderVariantB(data, seller);
-  }
+  // PRO tier mantığı kaldırıldı (eski verification_type sistemi silindi).
+  // Premium tier ileride yeni Premium Subscription doctype ile gelirse Variant B
+  // burada yeniden devreye alınır (memory: project_premium_tier_future).
   return renderVariantA(data, seller);
 }

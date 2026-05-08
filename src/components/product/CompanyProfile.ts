@@ -28,7 +28,7 @@ export function CompanyProfile(): string {
                 : ""
             }
           </div>
-          <p class="text-[13px] mt-1" style="color: var(--pd-rating-text-color, #6b7280);">Verified Multispecialty Supplier &middot; ${t("product.servingYears", { count: String(s.yearsInBusiness) })} &middot; \u{1F1F9}\u{1F1F7} TR</p>
+          <p class="text-[13px] mt-1" style="color: var(--pd-rating-text-color, #6b7280);">${s.verified ? `${t("product.verifiedSupplier")} &middot; ` : ""}${t("product.servingYears", { count: String(s.yearsInBusiness) })} &middot; \u{1F1F9}\u{1F1F7} TR</p>
         </div>
         <button type="button" class="px-6 py-2.5 rounded-[20px] border text-sm font-semibold whitespace-nowrap cursor-pointer transition-colors hover:bg-(--pd-spec-header-bg,#f9fafb) max-[374px]:px-4 max-[374px]:py-2 max-[374px]:text-[13px] max-[374px]:w-full max-[374px]:text-center" style="border-color: var(--pd-title-color, #111827); background: var(--color-surface, #ffffff); color: var(--pd-title-color, #111827);">${t("product.contactUs")}</button>
       </div>

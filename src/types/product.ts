@@ -111,7 +111,16 @@ export interface ReviewMentionTag {
 export interface SupplierInfo {
   id: string;
   name: string;
+  /**
+   * KYB Verified rolü temsili. verified === kybVerified — eski is_verified
+   * field'ı silindi, tek doğruluk kaynağı User.role.Verified Seller.
+   * False olduğunda storefront'ta "Sepete Ekle" disabled + uyarı banner'ı.
+   */
   verified: boolean;
+  /** @deprecated verified ile aynı, geriye uyumluluk için. */
+  kybVerified?: boolean;
+  /** Backend'den gelen ülke ismi ("Turkey", "China", vs.) — flag/kod hesabında kullanılır. */
+  country?: string;
   yearsInBusiness: number;
   responseTime: string;
   responseRate: string;
@@ -151,6 +160,13 @@ export interface ProductDetail {
   title: string;
   category: string[];
   productCategoryId?: string;
+  /**
+   * KYB doğrulanmış satıcı flag'i (üst-seviye, supplier objesinden bağımsız).
+   * Backend supplier load başarısız olsa bile bu flag güvenilirdir. False olduğunda
+   * storefront uyarı banner'ı + Sepete Ekle disabled gösterilir. Yalnızca para
+   * gate'idir; listing'in storefront'ta görünür olması (Active) bağımsız.
+   */
+  sellerKybVerified?: boolean;
   images: ProductImage[];
   priceTiers: PriceTier[];
   priceMin?: number;

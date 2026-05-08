@@ -147,9 +147,10 @@ function OverviewTab(): string {
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
               ${t("seller.sf.downloadReport")}
             </a>
-            <span x-show="seller?.verified || seller?.is_verified" class="inline-flex items-baseline gap-1 text-[13px] font-semibold">
-              <img src="/src/assets/images/verifiedminilogo.png" alt="Verified" class="h-[16px] w-auto self-baseline" />
-              <img src="/src/assets/images/istoc-logo.png" alt="iSTOC" class="h-[10px] w-auto self-baseline" />
+            <span x-show="seller?.verified" class="inline-flex items-baseline gap-1 text-[13px] font-semibold text-green-700 dark:text-green-400">
+              <svg class="w-4 h-4 self-center" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              <span>${t("seller.sf.verifiedSupplier")}</span>
+              <img src="/images/istoc-logo.png" alt="iSTOC" class="h-[10px] w-auto self-baseline ml-1" />
               <span class="text-[10px] text-[#999] font-medium">ile</span>
             </span>
           </div>
@@ -169,10 +170,10 @@ function OverviewTab(): string {
             </div>
             <div class="flex justify-between py-2 border-b border-gray-50">
               <span class="text-gray-500">${t("seller.sf.businessType")}</span>
-              <span class="text-gray-900 font-medium" x-text="seller?.business_type || '\u2014'"></span>
+              <span class="text-gray-900 font-medium" x-text="localizeBizType(seller?.business_type)"></span>
             </div>
             <div class="flex justify-between py-2 border-b border-gray-50">
-              <span class="text-gray-500">${t("seller.sf.employees")}</span>
+              <span class="text-gray-500">${t("seller.sf.employeesLabel")}</span>
               <span class="text-gray-900 font-medium" x-text="seller?.staff_count || '\u2014'"></span>
             </div>
             <div class="flex justify-between py-2 border-b border-gray-50">
@@ -210,7 +211,7 @@ function OverviewTab(): string {
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 text-[14px]">
             <div class="flex justify-between py-2 border-b border-gray-50">
               <span class="text-gray-500">${t("seller.sf.businessType")}</span>
-              <span class="text-gray-900 font-medium" x-text="seller?.business_type || '\u2014'"></span>
+              <span class="text-gray-900 font-medium" x-text="localizeBizType(seller?.business_type)"></span>
             </div>
             <div class="flex justify-between py-2 border-b border-gray-50">
               <span class="text-gray-500">${t("seller.sf.allProductionLines")}</span>
@@ -221,7 +222,7 @@ function OverviewTab(): string {
               <span class="text-gray-900 font-medium" x-text="seller?.factory_size ? seller.factory_size + ' m\u00B2' : '\u2014'"></span>
             </div>
             <div class="flex justify-between py-2 border-b border-gray-50">
-              <span class="text-gray-500">${t("seller.sf.employees")}</span>
+              <span class="text-gray-500">${t("seller.sf.employeesLabel")}</span>
               <span class="text-gray-900 font-medium" x-text="seller?.staff_count || '\u2014'"></span>
             </div>
           </div>
@@ -248,9 +249,10 @@ function OverviewTab(): string {
       <section class="bg-white rounded-md border border-gray-200 p-6 mb-6">
         <div class="flex items-center justify-between flex-wrap gap-3 pb-6 mb-6 border-b border-gray-100">
           <h3 class="text-[18px] font-bold text-gray-900">${t("seller.sf.serviceTab")}</h3>
-          <span x-show="seller?.verified || seller?.is_verified" class="inline-flex items-baseline gap-1 text-[13px] font-semibold">
-            <img src="/src/assets/images/verifiedminilogo.png" alt="Verified" class="h-[16px] w-auto self-baseline" />
-            <img src="/src/assets/images/istoc-logo.png" alt="iSTOC" class="h-[10px] w-auto self-baseline" />
+          <span x-show="seller?.verified" class="inline-flex items-baseline gap-1 text-[13px] font-semibold text-green-700 dark:text-green-400">
+            <svg class="w-4 h-4 self-center" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            <span>${t("seller.sf.verifiedSupplier")}</span>
+            <img src="/images/istoc-logo.png" alt="iSTOC" class="h-[10px] w-auto self-baseline ml-1" />
             <span class="text-[10px] text-[#999] font-medium">ile</span>
           </span>
         </div>

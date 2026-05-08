@@ -8,9 +8,12 @@ import { t } from "../../i18n";
 
 function verifiedBadge(): string {
   return `
-    <svg class="h-5 w-5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor" style="color: var(--pd-supplier-verified-color, #cc9900);">
-      <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd"/>
-    </svg>
+    <span class="inline-flex items-center gap-1 text-green-700 dark:text-green-400 text-xs font-semibold flex-shrink-0">
+      <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+      </svg>
+      ${t("product.verifiedSupplier")}
+    </span>
   `;
 }
 

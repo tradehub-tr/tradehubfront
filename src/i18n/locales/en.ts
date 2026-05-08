@@ -42,6 +42,22 @@ const en = {
       rateLimitError: "Too many requests. Please try again in a few minutes.",
       moq: "MOQ: {{count}} {{unit}}",
       moqUnit: "pieces",
+      sellerNotVerified: "Unverified Seller",
+      sellerNotVerifiedShort: "Unverified",
+      addToCartDisabledKyb: "This seller is not verified yet, the product cannot be added to cart",
+      kybGateBannerTitle: "This seller is not verified yet",
+      kybGateBannerBody:
+        "Once the seller is verified you will be able to purchase this product. For now you can add it to favorites or contact the seller.",
+      kybGateFavoriteHint:
+        "To get notified about this product add it to favorites — you'll be informed when the seller is verified.",
+      cartHasUnverifiedItems:
+        "Your cart contains products from an unverified seller. Remove them to proceed to checkout.",
+      cartItemUnverifiedSeller: "Unverified seller, cannot place order",
+      cartCheckoutBlockedKyb: "Unverified seller's product in cart",
+      checkoutBlockedKybTitle: "Order could not be placed",
+      checkoutBlockedKybBody:
+        "One of the products in your cart belongs to an unverified seller. Please go back to your cart and remove the affected item.",
+      checkoutBackToCart: "Back to Cart",
     },
 
     // ============================================================
@@ -865,6 +881,7 @@ const en = {
       companyProfile: "Company Profile",
       otherProducts: "Other Products",
       verifiedSupplier: "Verified Supplier",
+      verifiedWithIstoc: "Verified with iSTOC",
       safePayments: "Safe payments",
       returnPolicy: "Return policy",
       option: "Option",
@@ -895,7 +912,10 @@ const en = {
       filters: "Filters",
       filterTradeAssurance: "Trade Assurance",
       filterSupplierFeatures: "Supplier Features",
+      filterSupplierTypes: "Supplier Types",
       filterVerifiedSupplier: "Verified Supplier",
+      filterChipMinOrder: "MOQ ≤ {{count}}",
+      filterChipVerifiedSupplier: "Verified Supplier",
       filterVerifiedPro: "Verified PRO Supplier",
       filterStoreReviews: "Store Reviews",
       filterAndUp: "& up",
@@ -2368,6 +2388,7 @@ const en = {
         // CompanyInfo extras
         companyTitle: "COMPANY",
         verifiedSupplier: "Verified Supplier",
+        verifiedWithIstoc: "Verified with iSTOC",
         // HotProducts extras
         hotProductsTitle: "HOT PRODUCTS",
         buyNow: "Buy Now",
@@ -2398,7 +2419,14 @@ const en = {
         floorArea: "Floor area",
         businessType: "Business type",
         annualRevenue: "Annual revenue",
-        qualityControlSection: "Quality Control",
+        qualityControlSection: "Production Features",
+        qualityControl: "Quality Control Details",
+        employeesLabel: "Number of Employees",
+        bizManufacturer: "Manufacturer",
+        bizDistributor: "Distributor",
+        bizWholesaler: "Wholesaler",
+        bizRetailer: "Retailer",
+        bizTradingCompany: "Trading Company",
         rawMaterialSupport: "Raw material traceability support",
         inspectionMethod: "Inspection method",
         qcInspectors: "QA/QC inspectors",

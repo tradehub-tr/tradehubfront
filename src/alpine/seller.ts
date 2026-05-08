@@ -1,5 +1,5 @@
 import Alpine from "alpinejs";
-import { t } from "../i18n";
+import { t, t as tI18n } from "../i18n";
 import { getBaseUrl } from "../components/auth/AuthLayout";
 import { callMethod } from "../utils/api";
 import { getSessionUser, logout } from "../utils/auth";
@@ -149,6 +149,22 @@ Alpine.data("sellerStorefront", () => ({
   seller: null as Record<string, any> | null,
   navCategories: [] as Record<string, any>[],
   loading: true,
+
+  /** Backend'den dönen `business_type` enum değerini lokalize metne çevirir.
+   *  Örnek: "Manufacturer" → "Üretici" (TR) / "Manufacturer" (EN). Tanımlı olmayan
+   *  değerleri olduğu gibi döndürür (geriye uyumluluk). */
+  localizeBizType(type: string | undefined | null): string {
+    if (!type) return "—";
+    const tFn = tI18n;
+    const map: Record<string, string> = {
+      Manufacturer: tFn("seller.sf.bizManufacturer"),
+      Distributor: tFn("seller.sf.bizDistributor"),
+      Wholesaler: tFn("seller.sf.bizWholesaler"),
+      Retailer: tFn("seller.sf.bizRetailer"),
+      "Trading Company": tFn("seller.sf.bizTradingCompany"),
+    };
+    return map[type] || type;
+  },
 
   async init() {
     const code = new URLSearchParams(window.location.search).get("seller");
