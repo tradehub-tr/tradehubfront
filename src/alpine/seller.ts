@@ -208,6 +208,30 @@ Alpine.data("sellerStorefront", () => ({
     return [(this.seller as any)?.city, (this.seller as any)?.country].filter(Boolean).join(", ");
   },
 
+  /**
+   * Storefront medya gallery icin tab listesi.
+   * Inner x-data scope'undan `this.mediaGroups` ile erisilebilir (Alpine
+   * scope inheritance — reactivity outer scope'taki `seller`'a baglanir,
+   * `$root` proxy'sinden daha guvenilir).
+   * Bos kategoriler (count=0) atilir; UI sadece dolu tab'lari gosterir.
+   */
+  get mediaGroups() {
+    const groups = ((this.seller as any)?.media_groups || []) as Array<{
+      key: string;
+      label: string;
+      count: number;
+      items: Array<{ media_type: string; src: string; poster: string; caption: string }>;
+    }>;
+    return groups
+      .filter((g) => g.count > 0)
+      .map((g, i) => ({
+        id: i,
+        label: g.label,
+        count: g.count,
+        items: g.items || [],
+      }));
+  },
+
   setTab(tab: string) {
     this.activeTab = tab;
     // Scroll to tab content area (below sticky tab bar)

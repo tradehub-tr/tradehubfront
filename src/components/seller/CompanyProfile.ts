@@ -1167,9 +1167,6 @@ export function CompanyProfileComponent(): string {
                 <button @click="setTab('overview')"
                   :class="activeTab === 'overview' ? 'text-[#222] border-b-[3px] border-[#222] font-bold' : 'text-gray-500 border-b-[3px] border-transparent font-medium hover:text-gray-900'"
                   class="th-no-press py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t("seller.sf.myAccount")}</button>
-                <button @click="setTab('service')"
-                  :class="activeTab === 'service' ? 'text-[#222] border-b-[3px] border-[#222] font-bold' : 'text-gray-500 border-b-[3px] border-transparent font-medium hover:text-gray-900'"
-                  class="th-no-press py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t("seller.sf.serviceTab")}</button>
                 <button @click="setTab('reviews')"
                   :class="activeTab === 'reviews' ? 'text-[#222] border-b-[3px] border-[#222] font-bold' : 'text-gray-500 border-b-[3px] border-transparent font-medium hover:text-gray-900'"
                   class="th-no-press py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t("seller.sf.reviewsTab")}</button>

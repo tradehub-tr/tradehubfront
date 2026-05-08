@@ -230,19 +230,20 @@ export function StoreHeader(): string {
                    progress: 0,
                    currentTime: '00:00',
                    duration: '00:00',
-                   thumbs: [
-                     { id: 0, label: '${t("seller.sf.generalOverview")}', count: 9, type: 'video',
-                       src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
-                       poster: 'https://picsum.photos/seed/factory1/800/500' },
-                     { id: 1, label: '360\u00b0 g\u00f6r\u00fcn\u00fcm', count: 0, type: 'image',
-                       src: 'https://picsum.photos/seed/factory2/800/500' },
-                     { id: 2, label: '\u00dcretim', count: 14, type: 'image',
-                       src: 'https://picsum.photos/seed/factory3/800/500' },
-                     { id: 3, label: 'Kalite kontrol', count: 0, type: 'image',
-                       src: 'https://picsum.photos/seed/factory4/800/500' },
-                   ],
-                   get current() { return this.thumbs[this.activeThumb] || this.thumbs[0]; },
-                   get isVideo() { return this.current.type === 'video'; },
+                   activeItem: 0,
+                   /**
+                    * thumbs: outer sellerStorefront scope-undaki mediaGroups
+                    * computed-una Alpine scope inheritance ile erisir. Outer-da
+                    * mediaGroups getter-i seller.media_groups-a bagimli;
+                    * boylece backend yanit gelince inner UI otomatik update olur.
+                    */
+                   get thumbs() { return this.mediaGroups || []; },
+                   get currentTab() { return this.thumbs[this.activeThumb] || null; },
+                   get current() {
+                     if (!this.currentTab) return null;
+                     return this.currentTab.items[this.activeItem] || this.currentTab.items[0] || null;
+                   },
+                   get isVideo() { return !!(this.current && this.current.media_type === 'video'); },
                    formatTime(s) {
                      const m = Math.floor(s / 60);
                      const sec = Math.floor(s % 60);
@@ -251,6 +252,14 @@ export function StoreHeader(): string {
                    selectThumb(idx) {
                      this.pauseVideo();
                      this.activeThumb = idx;
+                     this.activeItem = 0;
+                     this.playing = false;
+                     this.progress = 0;
+                     this.currentTime = '00:00';
+                   },
+                   selectItem(idx) {
+                     this.pauseVideo();
+                     this.activeItem = idx;
                      this.playing = false;
                      this.progress = 0;
                      this.currentTime = '00:00';
@@ -310,10 +319,10 @@ export function StoreHeader(): string {
               <div class="relative w-full rounded-sm overflow-hidden bg-gray-900 aspect-video">
 
                 <!-- VIDEO -->
-                <template x-if="isVideo">
+                <template x-if="current && isVideo">
                   <video x-ref="headerVideo"
                          :src="current.src"
-                         :poster="current.poster"
+                         :poster="current.poster || ''"
                          class="w-full h-full object-cover"
                          @timeupdate="updateProgress()"
                          @loadedmetadata="duration = formatTime($refs.headerVideo.duration)"
@@ -323,8 +332,8 @@ export function StoreHeader(): string {
                 </template>
 
                 <!-- IMAGE -->
-                <template x-if="!isVideo">
-                  <img :src="current.src" :alt="current.label" class="w-full h-full object-cover" />
+                <template x-if="current && !isVideo">
+                  <img :src="current.src" :alt="(currentTab && currentTab.label) || ''" class="w-full h-full object-cover" />
                 </template>
 
                 <!-- Center Play Button (video only, when paused) -->
@@ -379,42 +388,62 @@ export function StoreHeader(): string {
                 </template>
               </div>
 
-              <!-- ══ THUMBNAIL ROW ══ -->
-              <div class="mt-3 flex items-center gap-1" x-init="$nextTick(() => updateScrollArrows())">
-                <!-- Left arrow -->
-                <button x-show="canScrollLeft" x-transition.opacity @click="scrollLeft()"
-                        class="th-btn-outline shrink-0 w-9 h-9 flex items-center justify-center shadow">
-                  <svg class="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
-                </button>
+              <!-- ══ TAB SEGMENT ROW — sadece 2+ kategori varsa ══ -->
+              <div x-show="thumbs.length > 1" class="mt-3 flex items-center gap-1.5 flex-wrap">
+                <template x-for="(thumb, idx) in thumbs" :key="thumb.id">
+                  <button type="button" @click="selectThumb(idx)"
+                          class="px-3 py-1.5 rounded-full text-[12px] font-medium transition-colors border"
+                          :class="activeThumb === idx
+                            ? 'bg-gray-900 text-white border-gray-900'
+                            : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'">
+                    <span x-text="thumb.label"></span>
+                    <span x-show="thumb.count > 1"
+                          class="ml-1 text-[11px] opacity-70"
+                          x-text="'(' + thumb.count + ')'"></span>
+                  </button>
+                </template>
+              </div>
 
-                <!-- Thumbs -->
-                <div class="flex-1 overflow-x-auto overflow-y-visible scrollbar-hide py-1 -my-1" style="scroll-behavior:smooth;" x-ref="thumbScroll" @scroll="updateScrollArrows()">
-                  <div class="flex gap-2">
-                    <template x-for="(thumb, idx) in thumbs" :key="thumb.id">
-                      <div @click="selectThumb(idx)"
-                           class="relative cursor-pointer transition-all rounded-sm shrink-0 overflow-visible"
-                           :class="activeThumb === idx ? 'ring-2 ring-gray-800 ring-offset-1' : 'hover:opacity-80'"
-                           style="width: 117px; min-width: 100px; max-width: 120px;"
-                           >
-                        <div class="relative w-full overflow-hidden rounded-sm" style="aspect-ratio:117/50;">
-                          <img :src="thumb.type === 'video' ? (thumb.poster || thumb.src) : thumb.src"
-                               :alt="thumb.label"
-                               class="w-full h-full object-cover" />
-                          <div class="absolute inset-0 bg-black/40 flex items-end p-2">
-                            <span class="text-white text-[11px] leading-tight font-semibold truncate"
-                                  x-text="thumb.count ? thumb.label + '(' + thumb.count + ')' : thumb.label"></span>
-                          </div>
+              <!-- ══ ITEM THUMBNAIL GRID — secili tab'da 2+ medya varsa ══ -->
+              <div x-show="currentTab && currentTab.items.length > 1"
+                   class="mt-3 grid gap-2"
+                   :style="'grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));'">
+                <template x-for="(item, iIdx) in (currentTab ? currentTab.items : [])" :key="iIdx">
+                  <button type="button" @click="selectItem(iIdx)"
+                          class="relative aspect-[4/3] rounded-md overflow-hidden bg-gray-100 transition-all border"
+                          :class="activeItem === iIdx
+                            ? 'border-gray-900 shadow-md'
+                            : 'border-transparent opacity-80 hover:opacity-100 hover:border-gray-300'">
+                    <!-- IMAGE item -->
+                    <template x-if="item.media_type !== 'video'">
+                      <img :src="item.src"
+                           :alt="item.caption || ''"
+                           class="w-full h-full object-cover" />
+                    </template>
+
+                    <!-- VIDEO item: poster varsa <img>, yoksa MP4'ten ilk frame'i
+                         <video preload="metadata"> ile cek (browser native) -->
+                    <template x-if="item.media_type === 'video' && item.poster">
+                      <img :src="item.poster"
+                           :alt="item.caption || ''"
+                           class="w-full h-full object-cover" />
+                    </template>
+                    <template x-if="item.media_type === 'video' && !item.poster">
+                      <video :src="item.src + '#t=0.5'"
+                             muted playsinline preload="metadata"
+                             class="w-full h-full object-cover pointer-events-none"></video>
+                    </template>
+
+                    <!-- video icon overlay -->
+                    <template x-if="item.media_type === 'video'">
+                      <div class="absolute inset-0 flex items-center justify-center bg-black/25 pointer-events-none">
+                        <div class="w-7 h-7 rounded-full bg-black/60 flex items-center justify-center">
+                          <svg class="w-3.5 h-3.5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                         </div>
                       </div>
                     </template>
-                  </div>
-                </div>
-
-                <!-- Right arrow -->
-                <button x-show="canScrollRight" x-transition.opacity @click="scrollRight()"
-                        class="th-btn-outline shrink-0 w-9 h-9 flex items-center justify-center shadow">
-                  <svg class="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-                </button>
+                  </button>
+                </template>
               </div>
             </div>
 
