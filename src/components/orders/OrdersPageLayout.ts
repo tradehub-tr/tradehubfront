@@ -669,43 +669,84 @@ function renderAllOrders(): string {
           </template>
         </div>
 
-        <!-- Section 5: Kargo detayları -->
-        <div class="px-7 max-sm:px-3 py-5 border-b border-gray-100">
-          <div class="flex items-center justify-between gap-3 mb-4 flex-wrap">
-            <div class="flex items-center gap-2">
-              <svg class="w-5 h-5 text-gray-500 shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <!-- Section 5-7: Detay tab container (Kargo / Ödeme / Tedarikçi) -->
+        <div class="px-7 max-sm:px-3 pt-5">
+          <!-- Boxed tab bar -->
+          <div class="flex items-end gap-0">
+            <button
+              @click="activeDetailTab = 'shipping'"
+              :class="activeDetailTab === 'shipping' ? 'bg-white border-l border-r border-t border-gray-200 text-gray-900 font-semibold -mb-px z-10 relative' : 'bg-transparent text-gray-500 hover:text-gray-700 border-b border-gray-200'"
+              class="px-4 py-2.5 max-sm:px-3 max-sm:py-2 text-sm max-sm:text-xs rounded-t-md cursor-pointer flex items-center gap-2 transition-colors"
+              role="tab"
+              :aria-selected="activeDetailTab === 'shipping'"
+              aria-controls="panel-shipping">
+              <svg class="w-4 h-4 max-sm:w-3.5 max-sm:h-3.5" :class="activeDetailTab === 'shipping' ? 'text-[var(--btn-bg,#cc9900)]' : 'text-gray-400'" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
                 <path d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/>
               </svg>
-              <h2 class="text-base font-bold text-gray-900">${t("orders.shippingDetails")}</h2>
-            </div>
-            <div class="flex items-center gap-3">
-              <span class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full"
-                    :class="selectedOrder.shipping.trackingStatus === 'Kargo yolda' ? 'bg-blue-50 text-blue-700' : 'bg-amber-50 text-amber-700'"
-                    x-text="selectedOrder.shipping.trackingStatus"></span>
-              <button @click="openModal('showTrackPackage')" class="text-sm text-blue-600 hover:underline whitespace-nowrap bg-transparent border-none cursor-pointer p-0">${t("orders.trackShipments")} &gt;</button>
-              <template x-if="canModifyShipping(selectedOrder)">
-                <button @click="openModal('showModifyShipping')" class="text-sm text-blue-600 hover:underline whitespace-nowrap bg-transparent border-none cursor-pointer p-0">${t("orders.modifyShippingDetails")}</button>
-              </template>
-            </div>
+              <span>${t("orders.tabShipping")}</span>
+            </button>
+            <button
+              @click="activeDetailTab = 'payment'"
+              :class="activeDetailTab === 'payment' ? 'bg-white border-l border-r border-t border-gray-200 text-gray-900 font-semibold -mb-px z-10 relative' : 'bg-transparent text-gray-500 hover:text-gray-700 border-b border-gray-200'"
+              class="px-4 py-2.5 max-sm:px-3 max-sm:py-2 text-sm max-sm:text-xs rounded-t-md cursor-pointer flex items-center gap-2 transition-colors"
+              role="tab"
+              :aria-selected="activeDetailTab === 'payment'"
+              aria-controls="panel-payment">
+              <svg class="w-4 h-4 max-sm:w-3.5 max-sm:h-3.5" :class="activeDetailTab === 'payment' ? 'text-[var(--btn-bg,#cc9900)]' : 'text-gray-400'" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/>
+              </svg>
+              <span>${t("orders.tabPayment")}</span>
+            </button>
+            <button
+              @click="activeDetailTab = 'supplier'"
+              :class="activeDetailTab === 'supplier' ? 'bg-white border-l border-r border-t border-gray-200 text-gray-900 font-semibold -mb-px z-10 relative' : 'bg-transparent text-gray-500 hover:text-gray-700 border-b border-gray-200'"
+              class="px-4 py-2.5 max-sm:px-3 max-sm:py-2 text-sm max-sm:text-xs rounded-t-md cursor-pointer flex items-center gap-2 transition-colors"
+              role="tab"
+              :aria-selected="activeDetailTab === 'supplier'"
+              aria-controls="panel-supplier">
+              <svg class="w-4 h-4 max-sm:w-3.5 max-sm:h-3.5" :class="activeDetailTab === 'supplier' ? 'text-[var(--btn-bg,#cc9900)]' : 'text-gray-400'" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+              </svg>
+              <span>${t("orders.tabSupplier")}</span>
+            </button>
+            <div class="flex-1 border-b border-gray-200"></div>
           </div>
 
-          <div class="grid grid-cols-4 max-sm:grid-cols-1 gap-4 max-sm:gap-3">
-            <div>
-              <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t("orders.deliveryAddress")}</p>
-              <p class="text-sm text-gray-700 leading-relaxed" x-text="selectedOrder.shipping.address"></p>
+          <!-- Tab panels (border-l/r/b ile aktif tab'a bağlı) -->
+          <div class="bg-white border-l border-r border-b border-gray-200 rounded-b-md p-5 max-sm:p-4">
+            <!-- Kargo paneli -->
+            <div x-show="activeDetailTab === 'shipping'" x-transition.opacity id="panel-shipping" role="tabpanel" aria-labelledby="tab-shipping">
+              <div class="flex items-center justify-end gap-3 mb-4 flex-wrap">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full"
+                      :class="selectedOrder.shipping.trackingStatus === 'Kargo yolda' ? 'bg-blue-50 text-blue-700' : 'bg-amber-50 text-amber-700'"
+                      x-text="selectedOrder.shipping.trackingStatus"></span>
+                <button @click="openModal('showTrackPackage')" class="text-sm text-blue-600 hover:underline whitespace-nowrap bg-transparent border-none cursor-pointer p-0">${t("orders.trackShipments")} &gt;</button>
+                <template x-if="canModifyShipping(selectedOrder)">
+                  <button @click="openModal('showModifyShipping')" class="text-sm text-blue-600 hover:underline whitespace-nowrap bg-transparent border-none cursor-pointer p-0">${t("orders.modifyShippingDetails")}</button>
+                </template>
+              </div>
+              <div class="grid grid-cols-4 max-sm:grid-cols-1 gap-4 max-sm:gap-3">
+                <div>
+                  <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t("orders.deliveryAddress")}</p>
+                  <p class="text-sm text-gray-700 leading-relaxed" x-text="selectedOrder.shipping.address"></p>
+                </div>
+                <div>
+                  <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t("orders.shipFromCountry")}</p>
+                  <p class="text-sm text-gray-700" x-text="selectedOrder.shipping.shipFrom"></p>
+                </div>
+                <div>
+                  <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t("orders.shippingMethod")}</p>
+                  <p class="text-sm text-gray-700 whitespace-pre-line" x-text="selectedOrder.shipping.method"></p>
+                </div>
+                <div>
+                  <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">Incoterms</p>
+                  <p class="text-sm text-gray-700" x-text="selectedOrder.shipping.incoterms"></p>
+                </div>
+              </div>
             </div>
-            <div>
-              <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t("orders.shipFromCountry")}</p>
-              <p class="text-sm text-gray-700" x-text="selectedOrder.shipping.shipFrom"></p>
-            </div>
-            <div>
-              <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t("orders.shippingMethod")}</p>
-              <p class="text-sm text-gray-700 whitespace-pre-line" x-text="selectedOrder.shipping.method"></p>
-            </div>
-            <div>
-              <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">Incoterms</p>
-              <p class="text-sm text-gray-700" x-text="selectedOrder.shipping.incoterms"></p>
-            </div>
+
+            <!-- Ödeme paneli — Task 4'te eklenecek -->
+            <!-- Tedarikçi paneli — Task 5'te eklenecek -->
           </div>
         </div>
 
