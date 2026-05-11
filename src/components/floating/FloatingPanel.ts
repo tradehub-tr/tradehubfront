@@ -225,8 +225,22 @@ export function FloatingPanel(): string {
       x-effect="document.body.style.overflow = chatOpen ? 'hidden' : ''"
     >
       <!-- Floating Sidebar Toolbar (iSTOC style) -->
+      <!--
+        x-show wrapper'da: şu an panel sadece "En üste çık" butonu içerdiği için
+        scroll <= 300px iken tüm kart (boş beyaz "nokta") gizleniyor.
+        Diğer butonlar (Mesajlarım / Görsel Arama) tekrar aktif edilirse
+        bu x-show kaldırılıp her item kendi koşuluyla gizlenmeli.
+      -->
       <div
         id="floating-panel"
+        x-show="showScrollTop"
+        x-cloak
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0 scale-95"
+        x-transition:enter-end="opacity-100 scale-100"
+        x-transition:leave="transition ease-in duration-150"
+        x-transition:leave-start="opacity-100 scale-100"
+        x-transition:leave-end="opacity-0 scale-95"
         class="group fixed bottom-16 md:bottom-15 right-0 z-35"
         aria-label="Quick actions panel"
       >
