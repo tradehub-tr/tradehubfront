@@ -672,9 +672,11 @@ function renderAllOrders(): string {
         <!-- Section 5-7: Detay tab container (Kargo / Ödeme / Tedarikçi) -->
         <div class="px-7 max-sm:px-3 pt-5">
           <!-- Boxed tab bar -->
-          <div class="flex items-end gap-0">
+          <div class="flex items-end gap-0" role="tablist" aria-label="Sipariş detay bölümleri">
             <button
               @click="activeDetailTab = 'shipping'"
+              @keydown.right.prevent="activeDetailTab = 'payment'; document.getElementById('tab-payment')?.focus()"
+              @keydown.left.prevent="activeDetailTab = 'supplier'; document.getElementById('tab-supplier')?.focus()"
               :class="activeDetailTab === 'shipping' ? 'bg-white border-l border-r border-t border-gray-200 text-gray-900 font-semibold -mb-px z-10 relative' : 'bg-transparent text-gray-500 hover:text-gray-700 border-b border-gray-200'"
               class="px-4 py-2.5 max-sm:px-3 max-sm:py-2 text-sm max-sm:text-xs rounded-t-md cursor-pointer flex items-center gap-2 transition-colors"
               role="tab"
@@ -688,6 +690,8 @@ function renderAllOrders(): string {
             </button>
             <button
               @click="activeDetailTab = 'payment'"
+              @keydown.right.prevent="activeDetailTab = 'supplier'; document.getElementById('tab-supplier')?.focus()"
+              @keydown.left.prevent="activeDetailTab = 'shipping'; document.getElementById('tab-shipping')?.focus()"
               :class="activeDetailTab === 'payment' ? 'bg-white border-l border-r border-t border-gray-200 text-gray-900 font-semibold -mb-px z-10 relative' : 'bg-transparent text-gray-500 hover:text-gray-700 border-b border-gray-200'"
               class="px-4 py-2.5 max-sm:px-3 max-sm:py-2 text-sm max-sm:text-xs rounded-t-md cursor-pointer flex items-center gap-2 transition-colors"
               role="tab"
@@ -701,6 +705,8 @@ function renderAllOrders(): string {
             </button>
             <button
               @click="activeDetailTab = 'supplier'"
+              @keydown.right.prevent="activeDetailTab = 'shipping'; document.getElementById('tab-shipping')?.focus()"
+              @keydown.left.prevent="activeDetailTab = 'payment'; document.getElementById('tab-payment')?.focus()"
               :class="activeDetailTab === 'supplier' ? 'bg-white border-l border-r border-t border-gray-200 text-gray-900 font-semibold -mb-px z-10 relative' : 'bg-transparent text-gray-500 hover:text-gray-700 border-b border-gray-200'"
               class="px-4 py-2.5 max-sm:px-3 max-sm:py-2 text-sm max-sm:text-xs rounded-t-md cursor-pointer flex items-center gap-2 transition-colors"
               role="tab"
