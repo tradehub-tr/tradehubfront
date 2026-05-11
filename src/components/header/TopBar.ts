@@ -23,6 +23,7 @@ import {
 } from "../../services/currencyService";
 import { getSearchSuggestions } from "../../services/listingService";
 import { apiRemoveCartItem, fetchCart } from "../../services/cartService";
+import { HeaderNotice, getCachedNoticeData } from "./HeaderNotice";
 
 /** Default country options for the delivery selector */
 const countryOptions: LocaleOption[] = [
@@ -1087,14 +1088,19 @@ export function MobileSearchTabs(
 export interface TopBarProps {
   /** Compact mode for dashboard pages — no search, no tabs, shorter height */
   compact?: boolean;
+  /** Sepet / checkout / ödeme / sipariş sayfalarında notice bandını gizle */
+  hideNotice?: boolean;
 }
 
 export function TopBar(props?: TopBarProps): string {
   const compact = props?.compact ?? false;
+  const hideNotice = props?.hideNotice ?? false;
+  const noticeHtml = hideNotice ? "" : HeaderNotice(getCachedNoticeData());
 
   if (compact) {
     /* ──── Compact Dashboard Header (iSTOC-style ~52px) ──── */
     return `
+      ${noticeHtml}
       <div class="relative z-30" style="background:#F5F5F5">
         <div class="container-boxed">
           <div class="flex items-center h-[52px] sm:h-14 gap-2 sm:gap-4">
@@ -1192,6 +1198,7 @@ export function TopBar(props?: TopBarProps): string {
     "topbar-search-tab relative py-1 text-[13px] font-normal text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-transparent after:rounded-full";
 
   return `
+    ${noticeHtml}
     <div class="relative z-30 border-b border-transparent bg-white dark:bg-gray-900">
       <div class="container-boxed">
         <!-- Row 1: Logo + Search (mobile) + Icons -->

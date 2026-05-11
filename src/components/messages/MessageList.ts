@@ -72,13 +72,13 @@ export function MessageList(): string {
         <template x-if="filterType !== 'all'">
           <span class="inline-flex items-center gap-1 text-xs bg-(--color-cta-primary,#cc9900)/10 text-(--color-cta-primary,#cc9900) px-2 py-0.5 rounded-full">
             <span x-text="filterType === 'unread' ? '${t("messages.unread")}' : '${t("messages.read")}'"></span>
-            <button @click="setFilter('all')" class="border-none bg-transparent cursor-pointer text-(--color-cta-primary,#cc9900) p-0 leading-none">&times;</button>
+            <button @click="setFilter('all')" class="th-no-press border-none bg-transparent cursor-pointer text-(--color-cta-primary,#cc9900) p-0 leading-none">&times;</button>
           </span>
         </template>
         <template x-if="searchQuery.length > 0">
           <span class="inline-flex items-center gap-1 text-xs bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full">
             "<span x-text="searchQuery"></span>"
-            <button @click="searchQuery = ''" class="border-none bg-transparent cursor-pointer text-blue-600 p-0 leading-none">&times;</button>
+            <button @click="searchQuery = ''" class="th-no-press border-none bg-transparent cursor-pointer text-blue-600 p-0 leading-none">&times;</button>
           </span>
         </template>
       </div>

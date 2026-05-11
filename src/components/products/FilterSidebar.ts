@@ -516,7 +516,7 @@ export function FilterSidebar(sections?: FilterSection[], idPrefix = ""): string
         >${t("products.filters")}</h2>
         <button
           type="button"
-          class="text-[12px] font-medium transition-colors hover:underline"
+          class="th-no-press text-[12px] font-medium transition-colors hover:underline"
           style="color: var(--filter-count-color, #6b7280);"
           data-filter-action="clear-all"
           @click="clearAllFilters()"

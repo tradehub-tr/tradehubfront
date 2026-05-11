@@ -17,6 +17,14 @@ export const ORDER_STATUS_MAP: Record<string, string[]> = {
   closed: ["Cancelled"],
 };
 
+function parsePrice(v: any): number {
+  const num = parseFloat(String(v).replace(/,/g, ""));
+  return isNaN(num) ? 0 : num;
+}
+
+// Order detail panel — closed state shows first N products before CTA
+const PRODUCT_PREVIEW_COUNT = 5;
+
 Alpine.data("ordersListComponent", () => ({
   activeTab: "all",
   searchQuery: "",
@@ -31,6 +39,14 @@ Alpine.data("ordersListComponent", () => ({
   loading: true,
   error: "",
 
+  // Order detail panel — Section 4 (Ürünler) state
+  showAllProducts: false,
+  productSearch: "",
+  productSort: "default" as "default" | "name-asc" | "name-desc" | "price-asc" | "price-desc",
+
+  // Order detail panel — Tab state (Kargo/Ödeme/Tedarikçi)
+  activeDetailTab: "shipping" as "shipping" | "payment" | "supplier",
+
   async init() {
     orderStore.subscribe(() => {
       this.orders = orderStore.getOrders();
@@ -41,6 +57,14 @@ Alpine.data("ordersListComponent", () => ({
     await orderStore.load();
     this.orders = orderStore.getOrders();
     this.loading = false;
+
+    // selectedOrder değişince detay panel state'ini sıfırla
+    this.$watch("selectedOrder", () => {
+      this.showAllProducts = false;
+      this.productSearch = "";
+      this.productSort = "default";
+      this.activeDetailTab = "shipping";
+    });
 
     // URL'de ?order=XXX varsa o siparişi otomatik aç (bildirim tıklama akışı)
     const urlOrder = new URLSearchParams(window.location.search).get("order");
@@ -85,6 +109,62 @@ Alpine.data("ordersListComponent", () => ({
 
       return matchStatus && matchSearch && matchDate;
     });
+  },
+
+  get filteredProducts() {
+    if (!this.selectedOrder) return [] as any[];
+    const products = (this.selectedOrder as any).products as any[];
+    const q = this.productSearch.trim().toLowerCase();
+    const filtered = q
+      ? products.filter((p: any) => String(p.name).toLowerCase().includes(q))
+      : products.slice();
+
+    if (this.productSort === "name-asc") {
+      filtered.sort((a: any, b: any) => String(a.name).localeCompare(String(b.name), "tr"));
+    } else if (this.productSort === "name-desc") {
+      filtered.sort((a: any, b: any) => String(b.name).localeCompare(String(a.name), "tr"));
+    } else if (this.productSort === "price-asc") {
+      filtered.sort((a: any, b: any) => parsePrice(a.totalPrice) - parsePrice(b.totalPrice));
+    } else if (this.productSort === "price-desc") {
+      filtered.sort((a: any, b: any) => parsePrice(b.totalPrice) - parsePrice(a.totalPrice));
+    }
+    return filtered;
+  },
+
+  get selectedOrderTotal(): string {
+    if (!this.selectedOrder) return "";
+    const total = (this.selectedOrder as any).products.reduce(
+      (s: number, p: any) => s + parsePrice(p.totalPrice),
+      0
+    );
+    return total.toLocaleString("en-US", { minimumFractionDigits: 2 });
+  },
+
+  get selectedOrderQty(): number {
+    if (!this.selectedOrder) return 0;
+    return (this.selectedOrder as any).products.reduce(
+      (s: number, p: any) => s + (p.quantity ?? 0),
+      0
+    );
+  },
+
+  get productSortLabel(): string {
+    const key =
+      "orders.sort" +
+      (this.productSort === "name-asc"
+        ? "NameAsc"
+        : this.productSort === "name-desc"
+          ? "NameDesc"
+          : this.productSort === "price-asc"
+            ? "PriceAsc"
+            : this.productSort === "price-desc"
+              ? "PriceDesc"
+              : "Default");
+    return t(key);
+  },
+
+  get productPreviewCount(): number {
+    return PRODUCT_PREVIEW_COUNT;
   },
 
   tabCount(tabId: string) {
@@ -495,6 +575,13 @@ Alpine.data("ordersListComponent", () => ({
     if (["Delivering", "Completed", "Cancelled"].includes(order.status)) return false;
     if (["Pending", "Approved"].includes(order.refundStatus)) return false;
     return true;
+  },
+
+  totalQty(order: any): number {
+    return ((order?.products ?? []) as Array<{ quantity?: number }>).reduce(
+      (s, p) => s + (p.quantity ?? 0),
+      0
+    );
   },
 }));
 

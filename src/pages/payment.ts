@@ -21,7 +21,7 @@ appEl.classList.add('relative');
 appEl.innerHTML = `
   <!-- Compact Dashboard Header -->
   <div id="sticky-header" class="sticky top-0 z-(--z-header) bg-white">
-    ${TopBar({ compact: true })}
+    ${TopBar({ compact: true, hideNotice: true })}
   </div>
 
   <!-- Page body: Sidebar + Payment -->

@@ -4844,9 +4844,26 @@ button#topbar-compact-search-submit.th-btn-gradient:active:not(:disabled) {
    butonlara baseline davranış sağlar.
    - Excludes: links (<a>) — yalnızca <button>, role=button,
      input[type=submit/button] hedef alınır.
-   - Excludes: çok küçük transparan icon butonlar bile içe
-     basılma hissini kazanır; rahatsız ederse spesifik override
-     eklenmelidir.
+   - Excludes: tab benzeri butonlar — sınıf adında "-tab",
+     "__tab" veya "tab-" geçen tüm butonlar (ör. .pdm-section-tab,
+     .orders__tab, .product-tab-btn) ve [role="tab"] olanlar press
+     efektinden muaftır. Tab'lar tipik olarak transparan zeminli
+     olduğundan inner shadow görsel olarak rahatsız ediyor.
+   - Excludes: .th-btn-link ve .th-btn-ghost — bunlar tasarımı
+     gereği salt-metin / transparan, press efektine uygun değil.
+   - Excludes (toplu patternler): [class*="-dropdown-trigger"],
+     [class*="-dropdown-item"], [class*="-collapsible"],
+     [class*="store-nav__item"], [class*="-nav-link"],
+     [class*="__nav-link"], [class*="-toggle__"] — dropdown,
+     accordion, store nav, segmented control gibi tab benzeri
+     bileşenleri otomatik kapsar.
+   - Excludes: [class*="hover:underline"] — Tailwind utility ile
+     yazılmış salt-metin / link tarzı butonların tamamı (cancel,
+     "Daha fazla", "Tekrar dene", inline aksiyon linkleri vb.).
+   - Salt-metin / link tarzı butonların yukarıdaki patternlerden
+     hiçbirine uymadığı durumda (örn. menü içi sort item,
+     hover:underline taşımayan inline buton) .th-no-press class'ı
+     eklenerek opt-out yapılır.
    ============================================================ */
 button:not(:disabled),
 input[type="submit"]:not(:disabled),
@@ -4861,25 +4878,61 @@ input[type="reset"]:not(:disabled),
     border-color 0.18s ease;
 }
 
-button:not(:disabled):not([role="tab"]):not(.mega-trigger):not(.th-subheader-link):not(
+button:not(:disabled):not([role="tab"]):not([class*="-tab"]):not([class*="__tab"]):not(
+    [class*="tab-"]
+  ):not([class*="-dropdown-trigger"]):not([class*="-dropdown-item"]):not(
+    [class*="-collapsible"]
+  ):not([class*="store-nav__item"]):not([class*="-nav-link"]):not([class*="__nav-link"]):not(
+    [class*="-toggle__"]
+  ):not([class*="hover:underline"]):not([class*="-close"]):not([class*="__close"]):not(
+    [class*="-nav-btn"]
+  ):not([class*="__prev"]):not([class*="__next"]):not([class*="-prev-"]):not(
+    [class*="-next-"]
+  ):not([class*="-remove-file"]):not([aria-label*="close" i]):not([aria-label*="kapat" i]):not(
+    [aria-label*="sil" i]
+  ):not([aria-label*="kaldır" i]):not([aria-label*="remove" i]):not([data-delete-sku]):not(
+    [data-delete-supplier]
+  ):not(.th-btn-link):not(.th-btn-ghost):not(.mega-trigger):not(.th-subheader-link):not(
     .search-tab-btn
   ):not(.th-search-tab):not(.mega-cat-btn):not(.th-mega-sidebar-item):not(.th-no-press):hover,
 input[type="submit"]:not(:disabled):not(.th-no-press):hover,
 input[type="button"]:not(:disabled):not(.th-no-press):hover,
 input[type="reset"]:not(:disabled):not(.th-no-press):hover,
-[role="button"]:not([aria-disabled="true"]):not(.th-no-press):hover {
+[role="button"]:not([aria-disabled="true"]):not([data-supplier-open]):not(
+    [aria-label*="close" i]
+  ):not([aria-label*="kapat" i]):not([aria-label*="sil" i]):not([aria-label*="kaldır" i]):not(
+    [aria-label*="remove" i]
+  ):not(.th-no-press):hover {
   box-shadow:
     inset 2px 2px 5px rgba(0, 0, 0, 0.1),
     inset -1px -1px 2px rgba(255, 255, 255, 0.3);
 }
 
-button:not(:disabled):not([role="tab"]):not(.mega-trigger):not(.th-subheader-link):not(
+button:not(:disabled):not([role="tab"]):not([class*="-tab"]):not([class*="__tab"]):not(
+    [class*="tab-"]
+  ):not([class*="-dropdown-trigger"]):not([class*="-dropdown-item"]):not(
+    [class*="-collapsible"]
+  ):not([class*="store-nav__item"]):not([class*="-nav-link"]):not([class*="__nav-link"]):not(
+    [class*="-toggle__"]
+  ):not([class*="hover:underline"]):not([class*="-close"]):not([class*="__close"]):not(
+    [class*="-nav-btn"]
+  ):not([class*="__prev"]):not([class*="__next"]):not([class*="-prev-"]):not(
+    [class*="-next-"]
+  ):not([class*="-remove-file"]):not([aria-label*="close" i]):not([aria-label*="kapat" i]):not(
+    [aria-label*="sil" i]
+  ):not([aria-label*="kaldır" i]):not([aria-label*="remove" i]):not([data-delete-sku]):not(
+    [data-delete-supplier]
+  ):not(.th-btn-link):not(.th-btn-ghost):not(.mega-trigger):not(.th-subheader-link):not(
     .search-tab-btn
   ):not(.th-search-tab):not(.mega-cat-btn):not(.th-mega-sidebar-item):not(.th-no-press):active,
 input[type="submit"]:not(:disabled):not(.th-no-press):active,
 input[type="button"]:not(:disabled):not(.th-no-press):active,
 input[type="reset"]:not(:disabled):not(.th-no-press):active,
-[role="button"]:not([aria-disabled="true"]):not(.th-no-press):active {
+[role="button"]:not([aria-disabled="true"]):not([data-supplier-open]):not(
+    [aria-label*="close" i]
+  ):not([aria-label*="kapat" i]):not([aria-label*="sil" i]):not([aria-label*="kaldır" i]):not(
+    [aria-label*="remove" i]
+  ):not(.th-no-press):active {
   box-shadow:
     inset 3px 3px 7px rgba(0, 0, 0, 0.18),
     inset -1px -1px 2px rgba(255, 255, 255, 0.2);
@@ -5047,6 +5100,37 @@ button[data-filter-action="apply-all"]:active {
   to {
     transform: rotate(360deg);
   }
+}
+
+@keyframes notice-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Header Notice slide mode: vertical fade/slide rotation (JS-driven) */
+.header-notice-slide-root {
+  position: relative;
+  height: 36px;
+  overflow: hidden;
+}
+.header-notice-slide-item {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: translateY(100%);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.header-notice-slide-item.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+.header-notice-slide-item.exiting {
+  opacity: 0;
+  transform: translateY(-100%);
 }
 
 /* ============================================================

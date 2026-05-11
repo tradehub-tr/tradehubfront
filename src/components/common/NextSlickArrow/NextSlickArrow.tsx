@@ -11,7 +11,7 @@ import './NextSlickArrow.css';
 const NextSlickArrow: React.FC = () => {
     return (
         <button
-            className="next-slick-arrow next-slick-next inner medium hoz"
+            className="next-slick-arrow next-slick-next inner medium hoz th-no-press"
             role="button"
             aria-label="Next"
             type="button"

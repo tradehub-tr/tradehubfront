@@ -5,6 +5,7 @@ import { initTracking } from "../utils/trackingManager";
 
 // Import all Alpine.data() module registrations (side-effect imports)
 import "./orders";
+import "./orderItemsDrawer";
 import "./remittance";
 import "./coupons";
 import "./product";

@@ -13,6 +13,7 @@ import { applyTheme, loadTheme } from "./utils/themeStorage";
 
 // i18n
 import { initLanguageSelector } from "./components/header/TopBar";
+import { initHeaderNotice } from "./components/header/HeaderNotice";
 
 // Header components
 import {
@@ -142,4 +143,6 @@ initProductGrid();
 initMobileDrawer();
 initHeaderCart();
 initLanguageSelector();
+// Header notice'ı arka planda taze veriyle güncelle (cache zaten gösterildi)
+void initHeaderNotice();
 initAnimatedPlaceholder("#topbar-compact-search-input");

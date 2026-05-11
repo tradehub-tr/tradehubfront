@@ -99,7 +99,7 @@ export function ReviewsModal(): string {
             ${p.reviewMentionTags
               .map(
                 (tag) => `
-              <button type="button" class="rv-mention-tag" :class="{ active: mentionFilter === '${tag.label}' }" @click="toggleMention('${tag.label}')">${tag.label} (${tag.count})</button>
+              <button type="button" class="rv-mention-tag th-no-press" :class="{ active: mentionFilter === '${tag.label}' }" @click="toggleMention('${tag.label}')">${tag.label} (${tag.count})</button>
             `
               )
               .join("")}

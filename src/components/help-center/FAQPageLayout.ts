@@ -11,33 +11,64 @@ export function FAQPageLayout(): string {
     <div
       id="faq-root"
       x-data="faqPage()"
-      x-init="init()"
       class="min-h-screen bg-[#F5F5F5]"
     >
 
-      <!-- ── Slim search bar under header ── -->
+      <!-- ── Search bar under header ── -->
       <div class="bg-white border-b border-gray-200 py-5">
         <div class="max-w-[900px] mx-auto px-4">
-          <form @submit.prevent="doSearch()" class="flex items-center bg-white rounded border border-gray-300 shadow-sm overflow-hidden max-w-[560px] mx-auto">
+          <form
+            @submit.prevent="doSearch()"
+            class="flex items-center h-12 bg-white rounded-lg shadow-sm ring-1 ring-gray-200 max-w-[600px] mx-auto transition-shadow focus-within:ring-2 focus-within:ring-primary-500"
+          >
+            <!-- Leading search icon (decorative) -->
+            <span class="pl-4 pr-2 text-gray-400 flex items-center shrink-0" aria-hidden="true">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35m1.6-5.15a6.75 6.75 0 1 1-13.5 0 6.75 6.75 0 0 1 13.5 0Z"/>
+              </svg>
+            </span>
+
             <input
               id="faq-search-input"
               x-model="searchQuery"
               type="text"
-              placeholder="Enter question or keyword. Example: Payment"
-              class="flex-1 px-3  text-sm border-0 text-gray-700 outline-none placeholder-gray-400 bg-transparent"
+              placeholder="${t("helpCenter.faqSearchPlaceholder")}"
+              aria-label="${t("helpCenter.faqSearchAriaLabel")}"
+              class="flex-1 min-w-0 px-2 text-sm text-gray-700 outline-none border-none focus:outline-none focus-visible:outline-none placeholder-gray-400 bg-transparent"
             />
+
+            <!-- Clear (X) button — only when query exists -->
+            <button
+              type="button"
+              x-show="searchQuery"
+              x-cloak
+              @click="clearSearch()"
+              aria-label="${t("helpCenter.faqClearSearch")}"
+              class="px-2 text-gray-400 hover:text-gray-600 transition-colors shrink-0 flex items-center justify-center h-full"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+              </svg>
+            </button>
+
             <button
               type="submit"
               id="faq-search-btn"
-              class="px-4 py-3.5 text-white transition-all hover:opacity-90 shrink-0"
-              style="background:var(--color-primary-500)"
+              class="th-btn th-btn-sm th-btn-gradient mr-1.5 shrink-0"
             >
-              <!-- magnifier icon -->
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35m1.6-5.15a6.75 6.75 0 1 1-13.5 0 6.75 6.75 0 0 1 13.5 0Z"/>
+              ${t("helpCenter.faqSearchSubmit")}
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 5l7 7-7 7"/>
               </svg>
             </button>
           </form>
+
+          <!-- Result counter chip — only when searching -->
+          <div x-show="searchQuery.trim()" x-cloak class="max-w-[600px] mx-auto mt-3 text-center">
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--color-primary-50,#fff8e1)] text-[var(--color-primary-700,#a87c00)] text-xs">
+              <span x-text="resultsLabel"></span>
+            </span>
+          </div>
         </div>
       </div>
 
@@ -51,9 +82,8 @@ export function FAQPageLayout(): string {
               @click="selectCategory(cat.id)"
               class="w-full flex items-center justify-between px-4 py-2.5 text-sm text-left transition-colors"
               :class="activeCategory === cat.id
-                ? 'font-bold text-white'
+                ? 'font-bold text-white bg-[var(--color-primary-500,#f5b800)] border-b border-transparent'
                 : 'text-gray-700 bg-white hover:bg-gray-50 border-b border-gray-100'"
-              :style="activeCategory === cat.id ? 'background:var(--color-primary-500);border:none;' : ''"
             >
               <span x-text="cat.label"></span>
               <svg class="w-3.5 h-3.5 opacity-60 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
@@ -79,7 +109,7 @@ export function FAQPageLayout(): string {
             <template x-for="(cat, ci) in visibleCategories" :key="cat.id">
               <div class="bg-white rounded border border-gray-200 p-4 hover:shadow-sm transition-shadow">
                 <!-- Category title -->
-                <h3 class="text-[14px] font-bold text-gray-800 mb-2" x-text="cat.label"></h3>
+                <h3 class="text-[14px] font-bold text-gray-800 mb-2" x-html="highlight(cat.label)"></h3>
                 <hr class="border-gray-100 mb-2" />
                 <!-- Sub-links -->
                 <div class="flex flex-wrap gap-x-2 gap-y-1">
@@ -88,8 +118,8 @@ export function FAQPageLayout(): string {
                       <a
                         :href="'faq-detail.html?cat=' + cat.id + '&sub=' + (sub.key || '')"
                         class="text-[12px] transition-colors"
-                        :class="sub.highlight ? 'text-primary-500 hover:text-primary-700' : 'text-gray-600 hover:text-primary-500'"
-                        x-text="sub.label"
+                        :class="sub.highlight ? 'text-[var(--color-primary-500,#f5b800)] hover:text-[var(--color-primary-700,#a87c00)]' : 'text-gray-600 hover:text-[var(--color-primary-500,#f5b800)]'"
+                        x-html="highlight(sub.label)"
                       ></a>
                       <span x-show="si < cat.subs.length - 1" class="text-gray-300 mx-1.5 text-[11px]">|</span>
                     </span>
