@@ -475,7 +475,7 @@ function renderAllOrders(): string {
               <div class="flex flex-col items-center gap-1.5 relative z-10">
                 <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
                      :class="getRefundStepIndex(selectedOrder) >= 0 ? getRefundStepColor(selectedOrder) + ' text-white' : 'bg-gray-200 text-gray-500'">1</div>
-                <span class="text-xs max-sm:text-[10px] text-gray-600 whitespace-nowrap">İade Talebi</span>
+                <span class="text-xs max-sm:text-[9px] text-gray-600 text-center max-sm:whitespace-normal max-sm:leading-tight max-sm:max-w-[52px]">İade Talebi</span>
               </div>
               <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3"
                    :class="getRefundStepIndex(selectedOrder) >= 1 ? getRefundStepColor(selectedOrder) : 'bg-gray-200'"></div>
@@ -483,7 +483,7 @@ function renderAllOrders(): string {
               <div class="flex flex-col items-center gap-1.5 relative z-10">
                 <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
                      :class="getRefundStepIndex(selectedOrder) >= 1 ? getRefundStepColor(selectedOrder) + ' text-white' : 'bg-gray-200 text-gray-500'">2</div>
-                <span class="text-xs max-sm:text-[10px] text-gray-600 whitespace-nowrap">İnceleniyor</span>
+                <span class="text-xs max-sm:text-[9px] text-gray-600 text-center max-sm:whitespace-normal max-sm:leading-tight max-sm:max-w-[52px]">İnceleniyor</span>
               </div>
               <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3"
                    :class="getRefundStepIndex(selectedOrder) >= 2 ? getRefundStepColor(selectedOrder) : 'bg-gray-200'"></div>
@@ -491,7 +491,7 @@ function renderAllOrders(): string {
               <div class="flex flex-col items-center gap-1.5 relative z-10">
                 <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
                      :class="getRefundStepIndex(selectedOrder) >= 2 ? getRefundStepColor(selectedOrder) + ' text-white' : 'bg-gray-200 text-gray-500'">3</div>
-                <span class="text-xs max-sm:text-[10px] whitespace-nowrap"
+                <span class="text-xs max-sm:text-[9px] text-center max-sm:whitespace-normal max-sm:leading-tight max-sm:max-w-[52px]"
                       :class="selectedOrder.refundStatus === 'Rejected' ? 'text-red-500' : selectedOrder.refundStatus === 'Approved' ? 'text-orange-600 font-medium' : 'text-gray-600'">
                   <span x-text="selectedOrder.refundStatus === 'Rejected' ? 'İade Reddedildi' : 'İade Onaylandı'"></span>
                 </span>
@@ -505,35 +505,35 @@ function renderAllOrders(): string {
               <div class="flex flex-col items-center gap-1.5 relative z-10">
                 <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
                      :class="getStepIndex(selectedOrder) >= 0 ? 'bg-(--btn-bg) text-white' : 'bg-gray-200 text-gray-500'">1</div>
-                <span class="text-xs max-sm:text-[10px] text-gray-600 whitespace-nowrap">${t("orders.stepOrder")}</span>
+                <span class="text-xs max-sm:text-[9px] text-gray-600 text-center max-sm:whitespace-normal max-sm:leading-tight max-sm:max-w-[52px]">${t("orders.stepOrder")}</span>
               </div>
               <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3" :class="getStepIndex(selectedOrder) >= 1 ? 'bg-(--btn-bg)' : 'bg-gray-200'"></div>
               <!-- Step 2: Ödeme -->
               <div class="flex flex-col items-center gap-1.5 relative z-10">
                 <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
                      :class="getStepIndex(selectedOrder) >= 1 ? 'bg-(--btn-bg) text-white' : 'bg-gray-200 text-gray-500'">2</div>
-                <span class="text-xs max-sm:text-[10px] text-gray-600 whitespace-nowrap">${t("orders.stepPayment")}</span>
+                <span class="text-xs max-sm:text-[9px] text-gray-600 text-center max-sm:whitespace-normal max-sm:leading-tight max-sm:max-w-[52px]">${t("orders.stepPayment")}</span>
               </div>
               <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3" :class="getStepIndex(selectedOrder) >= 2 ? 'bg-(--btn-bg)' : 'bg-gray-200'"></div>
               <!-- Step 3: Hazırlanıyor -->
               <div class="flex flex-col items-center gap-1.5 relative z-10">
                 <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
                      :class="getStepIndex(selectedOrder) >= 2 ? 'bg-(--btn-bg) text-white' : 'bg-gray-200 text-gray-500'">3</div>
-                <span class="text-xs max-sm:text-[10px] text-gray-600 whitespace-nowrap">${t("orders.stepShipping")}</span>
+                <span class="text-xs max-sm:text-[9px] text-gray-600 text-center max-sm:whitespace-normal max-sm:leading-tight max-sm:max-w-[52px]">${t("orders.stepShipping")}</span>
               </div>
               <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3" :class="getStepIndex(selectedOrder) >= 3 ? 'bg-(--btn-bg)' : 'bg-gray-200'"></div>
               <!-- Step 4: Kargoda -->
               <div class="flex flex-col items-center gap-1.5 relative z-10">
                 <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
                      :class="getStepIndex(selectedOrder) >= 3 ? 'bg-(--btn-bg) text-white' : 'bg-gray-200 text-gray-500'">4</div>
-                <span class="text-xs max-sm:text-[10px] text-gray-600 whitespace-nowrap">${t("orders.stepDelivery")}</span>
+                <span class="text-xs max-sm:text-[9px] text-gray-600 text-center max-sm:whitespace-normal max-sm:leading-tight max-sm:max-w-[52px]">${t("orders.stepDelivery")}</span>
               </div>
               <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3" :class="getStepIndex(selectedOrder) >= 4 ? 'bg-(--btn-bg)' : 'bg-gray-200'"></div>
               <!-- Step 5: Teslim Edildi -->
               <div class="flex flex-col items-center gap-1.5 relative z-10">
                 <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
                      :class="getStepIndex(selectedOrder) >= 4 ? 'bg-(--btn-bg) text-white' : 'bg-gray-200 text-gray-500'">5</div>
-                <span class="text-xs max-sm:text-[10px] text-gray-600 whitespace-nowrap">${t("orders.stepReview")}</span>
+                <span class="text-xs max-sm:text-[9px] text-gray-600 text-center max-sm:whitespace-normal max-sm:leading-tight max-sm:max-w-[52px]">${t("orders.stepReview")}</span>
               </div>
             </div>
           </template>
