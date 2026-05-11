@@ -79,6 +79,30 @@ export interface FilterEngine {
 
 /* ── Helpers ── */
 
+/**
+ * Locale-aware ondalık sayı parse — TR kullanıcı virgül (1,5), EN kullanıcı nokta (1.5)
+ * yazabilir. parseFloat virgülü görmezden gelir → veri kaybı. Bu helper iki ayracı da
+ * destekler: önce virgülü noktaya çevirir, sonra parseFloat eder.
+ */
+function parseLocaleFloat(value: string | null | undefined): number | null {
+  if (!value) return null;
+  const normalized = value.toString().trim().replace(",", ".");
+  if (!normalized) return null;
+  const num = parseFloat(normalized);
+  return Number.isFinite(num) ? num : null;
+}
+
+/**
+ * Defansif parseInt — tam sayı (sipariş adet vb.). NaN/Infinity → null,
+ * negatif/0 → null (kullanıcı UX: "0 adet" anlamsız), ondalık → truncate.
+ */
+function parsePositiveInt(value: string | null | undefined): number | null {
+  if (!value) return null;
+  const num = parseInt(value.toString(), 10);
+  if (!Number.isFinite(num) || num <= 0) return null;
+  return num;
+}
+
 function createDefaultState(): FilterState {
   return {
     priceMin: null,
@@ -134,10 +158,10 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
     // Onaylanmış Satıcı filter (KYB Verified)
     if (state.verifiedSupplier) (params as any).verified_supplier = 1;
 
-    // Supplier countries — backend accepts single country for now
-    // Send first selected country (backend can be extended for multi later)
+    // Supplier countries — multi-select: backend comma-separated string'i parse edip
+    // ["in", list] filter'ına çevirir (Admin Seller Profile.country alanı üzerinde).
     if (state.supplierCountries.length > 0) {
-      params.country = state.supplierCountries[0];
+      params.country = state.supplierCountries.join(",");
     }
 
     // Management certifications (state-bazlı; URL ile senkron)
@@ -242,11 +266,11 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
     const p = new URLSearchParams(window.location.search);
 
     const minPrice = p.get("min_price");
-    if (minPrice) state.priceMin = parseFloat(minPrice);
+    if (minPrice) state.priceMin = parseLocaleFloat(minPrice);
     const maxPrice = p.get("max_price");
-    if (maxPrice) state.priceMax = parseFloat(maxPrice);
+    if (maxPrice) state.priceMax = parseLocaleFloat(maxPrice);
     const minOrder = p.get("min_order");
-    if (minOrder) state.minOrder = parseInt(minOrder, 10);
+    if (minOrder) state.minOrder = parsePositiveInt(minOrder);
     const verifiedSupplier = p.get("verified_supplier");
     state.verifiedSupplier = verifiedSupplier === "1";
     const country = p.get("country");
@@ -442,6 +466,27 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
           }
           break;
 
+        case "mgmt-certifications":
+          if (target.checked) {
+            if (!state.mgmtCertifications.includes(value)) state.mgmtCertifications.push(value);
+          } else {
+            state.mgmtCertifications = state.mgmtCertifications.filter((c) => c !== value);
+          }
+          break;
+
+        case "product-certifications":
+          if (target.checked) {
+            if (!state.productCertifications.includes(value))
+              state.productCertifications.push(value);
+          } else {
+            state.productCertifications = state.productCertifications.filter((c) => c !== value);
+          }
+          break;
+
+        case "verified-supplier":
+          state.verifiedSupplier = target.checked;
+          break;
+
         default:
           // Dynamic attribute facets — data-filter-section starts with "attr-"
           if (section.startsWith("attr-")) {
@@ -479,8 +524,8 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
         const maxInput = document.querySelector<HTMLInputElement>(
           '[data-filter-section="price"][data-filter-type="max"]'
         );
-        state.priceMin = minInput?.value ? parseFloat(minInput.value) : null;
-        state.priceMax = maxInput?.value ? parseFloat(maxInput.value) : null;
+        state.priceMin = parseLocaleFloat(minInput?.value);
+        state.priceMax = parseLocaleFloat(maxInput?.value);
         filterChanged();
       }
 
@@ -488,7 +533,7 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
         const valueInput = document.querySelector<HTMLInputElement>(
           '[data-filter-section="min-order"][data-filter-type="value"]'
         );
-        state.minOrder = valueInput?.value ? parseInt(valueInput.value, 10) : null;
+        state.minOrder = parsePositiveInt(valueInput?.value);
         filterChanged();
       }
     },
@@ -529,14 +574,14 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
       const priceMax = document.querySelector<HTMLInputElement>(
         '[data-filter-section="price"][data-filter-type="max"]'
       );
-      state.priceMin = priceMin?.value ? parseFloat(priceMin.value) : null;
-      state.priceMax = priceMax?.value ? parseFloat(priceMax.value) : null;
+      state.priceMin = parseLocaleFloat(priceMin?.value);
+      state.priceMax = parseLocaleFloat(priceMax?.value);
 
       // Min order input
       const moqInput = document.querySelector<HTMLInputElement>(
         '[data-filter-section="min-order"][data-filter-type="value"]'
       );
-      state.minOrder = moqInput?.value ? parseInt(moqInput.value, 10) : null;
+      state.minOrder = parsePositiveInt(moqInput?.value);
 
       // Supplier countries
       const countryCheckboxes = document.querySelectorAll<HTMLInputElement>(

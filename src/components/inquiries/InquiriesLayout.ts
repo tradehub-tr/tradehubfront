@@ -11,6 +11,14 @@ import {
   isEmailNotVerifiedError,
 } from "../../utils/api";
 import { showToast } from "../../utils/toast";
+import {
+  type RfqAttachment,
+  fetchRfqAttachments,
+  renderAttachmentModal,
+  renderAttachmentsCompact,
+  setupAttachmentInteractions,
+} from "../rfq/attachments";
+import { initCurrency, getExchangeRate } from "../../services/currencyService";
 
 // ── Types (matching API response) ────────────────────────────────────────────
 
@@ -33,6 +41,7 @@ interface RFQItem {
   quantity: number;
   unit: string;
   quote_count: number;
+  attachment_count: number;
   creation: string;
   modified: string;
   quotation_from: string;
@@ -177,7 +186,14 @@ function renderRfqList(rfqs: RFQItem[]): string {
             <span>ID: ${rfq.name}</span>
           </div>
           <p class="mt-1 text-sm font-medium text-gray-800">${rfq.product_name}</p>
-          <p class="text-xs text-gray-500">${rfq.quantity} ${rfq.unit}</p>
+          <p class="text-xs text-gray-500 flex items-center gap-2">
+            <span>${rfq.quantity} ${rfq.unit}</span>
+            ${
+              rfq.attachment_count > 0
+                ? `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 text-[11px] font-semibold" title="${t("rfq.attachmentsTitle")}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3"><path d="m21 12-9.5 9.5a4 4 0 0 1-5.66 0 4 4 0 0 1 0-5.66l9.19-9.19a3 3 0 0 1 4.24 4.24L10.6 19.86a2 2 0 1 1-2.83-2.83l8.49-8.49"/></svg>${rfq.attachment_count}</span>`
+                : ""
+            }
+          </p>
         </div>
         <div class="flex items-center gap-3 mt-2 sm:mt-0">
           ${
@@ -229,8 +245,10 @@ function renderSellerRfqList(rfqs: SellerRFQItem[]): string {
     </div>`;
   }
   return `
-    <div class="hidden sm:grid grid-cols-[1fr_auto_auto] items-center px-5 py-2.5 border-b border-gray-100 text-xs font-medium text-gray-400 uppercase tracking-wide">
-      <span>${t("inquiries.rfqDetail")}</span><span>${t("inquiries.quotesCount")}</span><span>${t("inquiries.action")}</span>
+    <div class="hidden sm:grid grid-cols-[1fr_auto_auto] items-center gap-x-4 px-5 py-2.5 border-b border-gray-100 text-xs font-medium text-gray-400 uppercase tracking-wide">
+      <span>${t("inquiries.rfqDetail")}</span>
+      <span class="px-4">${t("inquiries.quotesCount")}</span>
+      <span>${t("inquiries.action")}</span>
     </div>
     ${rfqs
       .map(
@@ -324,10 +342,14 @@ function showQuoteSubmitModal(rfq: SellerRFQItem, onSuccess: () => void): void {
   const modal = document.createElement("div");
   modal.className = "fixed inset-0 z-50 flex items-center justify-center bg-black/40";
   modal.innerHTML = `
-    <div class="bg-white rounded-lg p-6 w-full max-w-lg mx-4 shadow-xl max-h-[90vh] overflow-y-auto">
+    <div class="bg-white rounded-lg p-6 w-full max-w-2xl mx-4 shadow-xl max-h-[90vh] overflow-y-auto">
       <h3 class="text-base font-semibold mb-1">${t("inquiries.submitQuoteFor")}</h3>
       <p class="text-sm text-gray-500 mb-4">${rfq.product_name} — ${rfq.quantity} ${rfq.unit}</p>
       ${rfq.description ? `<p class="text-xs text-gray-400 mb-4 line-clamp-3">${rfq.description}</p>` : ""}
+
+      <!-- Attachment grid (filled async after modal mounts) -->
+      <div id="quote-attachments-slot" class="mb-4"></div>
+
       <div class="space-y-4">
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">${t("inquiries.selectProduct")}</label>
@@ -350,6 +372,7 @@ function showQuoteSubmitModal(rfq: SellerRFQItem, onSuccess: () => void): void {
             <option value="USD">USD</option>
             <option value="EUR">EUR</option>
           </select>
+          <p id="quote-rate-hint" class="mt-1 text-[11px] text-gray-500 hidden"></p>
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">${t("inquiries.deliveryDaysLabel")}</label>
@@ -366,6 +389,20 @@ function showQuoteSubmitModal(rfq: SellerRFQItem, onSuccess: () => void): void {
       </div>
     </div>`;
   document.body.appendChild(modal);
+
+  // Lightbox modal (sibling of quote modal in body — uses scope key for isolation)
+  const lightboxHost = document.createElement("div");
+  lightboxHost.innerHTML = renderAttachmentModal("seller-quote");
+  document.body.appendChild(lightboxHost.firstElementChild!);
+  let teardownAttachments: (() => void) | null = null;
+
+  // Async-load RFQ attachments — permission-gated by RFQ.has_permission
+  const attachmentsSlot = modal.querySelector<HTMLElement>("#quote-attachments-slot");
+  fetchRfqAttachments(rfq.name).then((atts: RfqAttachment[]) => {
+    if (!attachmentsSlot || !atts.length) return;
+    attachmentsSlot.innerHTML = renderAttachmentsCompact(atts, "seller-quote");
+    teardownAttachments = setupAttachmentInteractions(modal, atts, "seller-quote");
+  });
 
   // Load seller's listings into dropdown
   const listingSelect = document.getElementById("quote-listing") as HTMLSelectElement;
@@ -384,13 +421,122 @@ function showQuoteSubmitModal(rfq: SellerRFQItem, onSuccess: () => void): void {
     })
     .catch(() => {});
 
-  document.getElementById("quote-cancel-btn")?.addEventListener("click", () => modal.remove());
+  // Auto-calculate total price from unit price × quantity.
+  // Total stays in sync until the user manually edits it (e.g. to add VAT/discount).
+  // Clearing the total resets the lock so auto-calc resumes.
+  const unitInput = document.getElementById("quote-price-per-unit") as HTMLInputElement;
+  const totalInput = document.getElementById("quote-total-price") as HTMLInputElement;
+  let totalManuallyEdited = false;
+  const recalcTotal = () => {
+    if (totalManuallyEdited) return;
+    const unit = Number(unitInput.value);
+    if (!unit || unit <= 0) {
+      totalInput.value = "";
+      return;
+    }
+    totalInput.value = (unit * rfq.quantity).toFixed(2);
+  };
+  unitInput.addEventListener("input", recalcTotal);
+  totalInput.addEventListener("input", () => {
+    if (totalInput.value === "" || Number(totalInput.value) === 0) {
+      totalManuallyEdited = false;
+      recalcTotal();
+    } else {
+      totalManuallyEdited = true;
+    }
+  });
+
+  // ── Currency switch → FX conversion (TCMB rates via currencyService) ──
+  // Unit + (manuel ise) total yeni para birimine çevrilir. Manuel düzenleme
+  // oranı korunur. Kur cache localStorage'da — anında yanıt verir.
+  const currencySelect = document.getElementById("quote-currency") as HTMLSelectElement;
+  const rateHint = document.getElementById("quote-rate-hint") as HTMLParagraphElement;
+  const trRateFmt = new Intl.NumberFormat("tr-TR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 4,
+  });
+
+  function updateRateHint() {
+    const current = currencySelect.value;
+    if (current === "TRY") {
+      rateHint.classList.add("hidden");
+      rateHint.textContent = "";
+      return;
+    }
+    const rate = getExchangeRate(current, "TRY");
+    if (!rate || rate === 1) {
+      rateHint.classList.add("hidden");
+      return;
+    }
+    rateHint.textContent = `${t("inquiries.rateLabel")}: 1 ${current} = ${trRateFmt.format(rate)} TRY (TCMB)`;
+    rateHint.classList.remove("hidden");
+  }
+
+  let prevCurrency = currencySelect.value;
+
+  // Idempotent — sayfa başında init edilmiş olabilir; cache hit'te eş zamanlı yanıt.
+  initCurrency()
+    .catch(() => {})
+    .finally(() => {
+      // Refresh prevCurrency in case the user changed it before rates loaded
+      prevCurrency = currencySelect.value;
+      updateRateHint();
+    });
+
+  currencySelect.addEventListener("change", () => {
+    const newCurrency = currencySelect.value;
+    if (newCurrency === prevCurrency) return;
+
+    const rate = getExchangeRate(prevCurrency, newCurrency);
+
+    // Guard: rate=1 ile farklı para birimi → kur bulunamadı, revert et
+    if (rate === 1 && prevCurrency !== newCurrency) {
+      showToast({
+        message: t("inquiries.rateUnavailable", {
+          from: prevCurrency,
+          to: newCurrency,
+        }),
+        type: "warning",
+      });
+      currencySelect.value = prevCurrency;
+      return;
+    }
+
+    const oldUnit = Number(unitInput.value);
+    if (oldUnit > 0) {
+      unitInput.value = (oldUnit * rate).toFixed(2);
+    }
+
+    if (totalManuallyEdited) {
+      const oldTotal = Number(totalInput.value);
+      if (oldTotal > 0) {
+        totalInput.value = (oldTotal * rate).toFixed(2);
+      }
+    } else {
+      recalcTotal();
+    }
+
+    prevCurrency = newCurrency;
+    updateRateHint();
+  });
+
+  function cleanupQuoteModal() {
+    teardownAttachments?.();
+    document.getElementById("rfq-attach-modal-seller-quote")?.remove();
+    modal.remove();
+  }
+
+  document.getElementById("quote-cancel-btn")?.addEventListener("click", cleanupQuoteModal);
   document.getElementById("quote-submit-btn")?.addEventListener("click", async () => {
-    const pricePerUnit = (document.getElementById("quote-price-per-unit") as HTMLInputElement)
-      .value;
+    const pricePerUnit = unitInput.value;
     if (!pricePerUnit || Number(pricePerUnit) <= 0) {
       showToast({ message: t("inquiries.priceRequired"), type: "warning" });
       return;
+    }
+    // Safety net: if total is still empty at submit (e.g. listener failed), derive it.
+    let totalPriceValue = Number(totalInput.value);
+    if (!totalPriceValue || totalPriceValue <= 0) {
+      totalPriceValue = Number(pricePerUnit) * rfq.quantity;
     }
     const submitBtn = document.getElementById("quote-submit-btn") as HTMLButtonElement;
     submitBtn.disabled = true;
@@ -405,8 +551,7 @@ function showQuoteSubmitModal(rfq: SellerRFQItem, onSuccess: () => void): void {
           body: JSON.stringify({
             rfq_id: rfq.name,
             price_per_unit: Number(pricePerUnit),
-            total_price:
-              Number((document.getElementById("quote-total-price") as HTMLInputElement).value) || 0,
+            total_price: totalPriceValue,
             currency: (document.getElementById("quote-currency") as HTMLSelectElement).value,
             lead_time_days:
               Number((document.getElementById("quote-lead-time") as HTMLInputElement).value) || 0,
@@ -419,7 +564,7 @@ function showQuoteSubmitModal(rfq: SellerRFQItem, onSuccess: () => void): void {
       await checkEmailNotVerifiedResponse(res);
       if (!res.ok) throw new Error();
       showToast({ message: t("inquiries.quoteSentSuccess"), type: "success" });
-      modal.remove();
+      cleanupQuoteModal();
       onSuccess();
     } catch (err) {
       submitBtn.disabled = false;
@@ -478,7 +623,6 @@ function renderRfqDetailPanel(rfqData: any): string {
                   </div>
                   <p class="text-sm">${q.total_price ? `${q.currency} ${q.total_price}` : "Price on request"} ${q.lead_time_days ? `| ${q.lead_time_days} days` : ""}</p>
                   <div class="flex gap-3 mt-2 text-xs">
-                    <a href="#" class="text-amber-600 hover:underline">${t("rfq.chatNow")}</a>
                     <a href="/pages/dashboard/rfq-quotes.html?rfq=${rfq.name}" class="text-blue-600 hover:underline">${t("rfq.viewDetail")}</a>
                   </div>
                 </div>

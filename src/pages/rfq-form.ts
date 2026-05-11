@@ -5,9 +5,7 @@
  */
 
 import '../style.css'
-import { t, getCurrentLang } from '../i18n'
-import trLocale from '../i18n/locales/tr'
-import enLocale from '../i18n/locales/en'
+import { t } from '../i18n'
 import { showToast } from '../utils/toast'
 import { initFlowbite } from 'flowbite'
 import { startAlpine } from '../alpine'
@@ -16,9 +14,8 @@ import { requireAuth } from '../utils/auth-guard'
 import { TopBar, SubHeader, initMobileDrawer, initStickyHeaderSearch, MegaMenu, initMegaMenu } from '../components/header'
 import { initLanguageSelector } from '../components/header/TopBar'
 import { FooterLinks } from '../components/footer'
-import { UOM_OPTIONS } from '../data/inquiries-mock-data' // fallback
-import aiGifUrl from '../assets/images/O1CN01c52zHR1b2SGRtmBlT_!!6000000003407-1-tps-300-300.gif'
-import { FILE_UPLOAD_CONFIG } from '../types/rfq'
+import { getFileBadge, getFilePreviewUrl, revokeFilePreview, openFilePreviewLightbox } from '../components/rfq/attachments'
+import { renderDropzone, bindDropzone } from '../components/rfq/dropzone'
 import { getCsrfToken, checkEmailNotVerifiedResponse, isEmailNotVerifiedError } from '../utils/api'
 import { getListingDetail } from '../services/listingService'
 
@@ -76,31 +73,21 @@ appEl.innerHTML = `
               <div>
                 <label class="block text-sm font-semibold text-gray-800 mb-2"><span class="text-red-500 mr-0.5">*</span>${t('rfq.detailedRequirements')}</label>
                 <div class="border border-gray-200 rounded-lg overflow-hidden">
-                  <div class="px-3 py-2 border-b border-gray-100">
-                    <span class="inline-flex items-center gap-1.5 text-sm text-blue-600">
-                      <img src="${aiGifUrl}" alt="AI" class="h-5 w-5 shrink-0 object-contain" />
-                      ${t('rfq.writeWithAi')}
-                    </span>
-                  </div>
                   <textarea id="rfq-requirements" rows="14" placeholder="${t('rfq.detailedReqPlaceholder')}" class="w-full px-3 py-3 text-sm text-gray-800 placeholder:text-gray-400 border-none outline-none resize-none focus:ring-0">${prefillDetails}</textarea>
                 </div>
               </div>
-              <!-- File Upload (inside outer card) -->
+              <!-- File Upload — Dropzone (inside outer card) -->
               <div>
-                <div id="rfq-upload-area" class="inline-flex flex-col items-center gap-1.5 px-8 py-5 border border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-amber-400 transition-colors text-center">
-                  <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
-                  <span class="text-xs text-gray-400 leading-tight">${t('rfq.uploadHint')}</span>
-                </div>
-                <input type="file" id="rfq-file-input" class="hidden" multiple accept="image/jpeg,image/png,image/gif,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
-                <div id="rfq-file-list" class="mt-2 space-y-1"></div>
+                ${renderDropzone({ id: 'rfq-upload-area', inputId: 'rfq-file-input' })}
+                <div id="rfq-file-list" class="mt-3 space-y-2"></div>
               </div>
               <!-- Sourcing Quantity (inside outer card) -->
               <div>
                 <label class="block text-sm font-semibold text-gray-800 mb-2"><span class="text-red-500 mr-0.5">*</span>${t('rfq.sourcingQuantity')}</label>
                 <div class="flex gap-3 max-sm:flex-col">
                   <input type="number" id="rfq-quantity" min="1" placeholder="${t('rfq.quantityPlaceholder')}" class="flex-1 min-w-0 h-10 px-3 text-sm border border-gray-300 rounded-lg bg-white text-gray-800 placeholder:text-gray-400 outline-none focus:border-gray-800 transition-colors" />
-                  <select id="rfq-unit" class="w-44 max-sm:w-full min-w-0 h-10 px-3 text-sm border border-gray-300 rounded-lg bg-white text-gray-800 outline-none focus:border-gray-800 cursor-pointer transition-colors">
-                    ${UOM_OPTIONS.map(u => `<option value="${u}" ${u === 'pieces' ? 'selected' : ''}>${u}</option>`).join('')}
+                  <select id="rfq-unit" disabled class="w-44 max-sm:w-full min-w-0 h-10 px-3 text-sm border border-gray-300 rounded-lg bg-white text-gray-800 outline-none focus:border-gray-800 cursor-pointer transition-colors disabled:opacity-60 disabled:cursor-wait">
+                    <option value="">${t('rfq.unitLoading')}</option>
                   </select>
                 </div>
               </div>
@@ -156,27 +143,35 @@ initMobileDrawer();
 initLanguageSelector();
 startAlpine();
 
-// ── Load UOM from backend with i18n labels ──
-const PRIORITY_UOMS = ['Nos','Unit','Box','Pair','Kg','Gram','Metre','Meter','Set','Ton','Tonne','Bag','Roll','Pack','Dozen','Litre','Pallet','Carton','Bundle','Sheet','Ream','Piece'];
+// ── Load UOM from backend ──
+// UOM kayıtları Türkçeleştirildiği için (bkz. tradehub_core/patches/localize_uom_tr.py)
+// çeviri katmanı yok, name doğrudan kullanılır.
+type UomOption = { name: string };
+
+const PRIORITY_UOMS = ['Adet', 'Birim', 'Kutu', 'Çift', 'Kg', 'Gram', 'Metre', 'Set', 'Ton', 'Litre'];
 
 const unitSelect = document.getElementById('rfq-unit') as HTMLSelectElement;
 fetch(((window as any).API_BASE || '/api') + '/method/tradehub_core.api.rfq.get_uom_list', { credentials: 'include' })
   .then(r => r.json())
   .then(d => {
-    const uoms: string[] = d.message || [];
-    if (uoms.length) {
-      const locale = getCurrentLang() === 'tr' ? trLocale : enLocale;
-      const uomTranslations = ((locale as any).translation?.rfq?.uom || {}) as Record<string, string>;
-      const priority = PRIORITY_UOMS.filter(u => uoms.includes(u));
-      const rest = uoms.filter(u => !PRIORITY_UOMS.includes(u));
-      const sorted = [...priority, ...rest];
-      unitSelect.innerHTML = sorted.map(u => {
-        const label = uomTranslations[u] || u;
-        return `<option value="${u}" ${u === 'Nos' ? 'selected' : ''}>${label}</option>`;
-      }).join('');
+    const uoms: UomOption[] = d.message || [];
+    if (!uoms.length) {
+      unitSelect.innerHTML = `<option value="">${t('rfq.unitLoadFailed')}</option>`;
+      return;
     }
+    const byName = new Map(uoms.map(u => [u.name, u]));
+    const priority = PRIORITY_UOMS.map(n => byName.get(n)).filter((u): u is UomOption => !!u);
+    const prioritySet = new Set(priority.map(u => u.name));
+    const rest = uoms.filter(u => !prioritySet.has(u.name));
+    const sorted = [...priority, ...rest];
+    unitSelect.innerHTML = sorted.map(u =>
+      `<option value="${u.name}" ${u.name === 'Adet' ? 'selected' : ''}>${u.name}</option>`
+    ).join('');
+    unitSelect.disabled = false;
   })
-  .catch(() => { /* fallback: static options already in HTML */ });
+  .catch(() => {
+    unitSelect.innerHTML = `<option value="">${t('rfq.unitLoadFailed')}</option>`;
+  });
 
 // ── Category autocomplete ──
 const productNameInput = document.getElementById('rfq-product-name') as HTMLInputElement;
@@ -205,6 +200,14 @@ productNameInput.addEventListener('input', () => {
           btn.dataset.path = c.path;
           btn.textContent = c.path;
           btn.addEventListener('click', () => {
+            const current = productNameInput.value.trim();
+            const catName = (c.category_name || '') as string;
+            // Akıllı doldurma: input boş veya kategori adının prefix'i ise tam ada genişlet
+            if (catName && (!current || catName.toLowerCase().startsWith(current.toLowerCase()))) {
+              productNameInput.value = catName + ' ';
+              productNameInput.focus();
+              productNameInput.setSelectionRange(productNameInput.value.length, productNameInput.value.length);
+            }
             categoryHidden.value = c.name || '';
             categoryLink.textContent = c.path || '';
             categoryResult.classList.remove('hidden');
@@ -227,66 +230,54 @@ document.addEventListener('click', (e) => {
   }
 });
 
-// ── File upload ──
-const uploadArea = document.getElementById('rfq-upload-area')!;
-const fileInput = document.getElementById('rfq-file-input') as HTMLInputElement;
+// ── File upload — Dropzone ──
 const fileList = document.getElementById('rfq-file-list')!;
 const selectedFiles: File[] = [];
 
-uploadArea.addEventListener('click', () => fileInput.click());
-
-function isAllowedFile(file: File): boolean {
-  const ext = ('.' + file.name.split('.').pop()!.toLowerCase());
-  if (!FILE_UPLOAD_CONFIG.allowedExtensions.includes(ext as any)) {
-    showToast({ message: t('rfq.unsupportedFormat', { fileName: file.name }), type: 'error' });
-    return false;
-  }
-  return true;
-}
-
-function addFiles(files: FileList | File[]) {
-  for (const f of Array.from(files)) {
-    if (selectedFiles.length >= FILE_UPLOAD_CONFIG.maxFiles) {
-      showToast({ message: t('rfq.maxFilesAlert'), type: 'warning' });
-      break;
-    }
-    if (!isAllowedFile(f)) continue;
-    selectedFiles.push(f);
-  }
+function addFiles(files: File[]) {
+  selectedFiles.push(...files);
   renderFileList();
 }
 
-fileInput.addEventListener('change', () => {
-  if (!fileInput.files) return;
-  addFiles(fileInput.files);
-  fileInput.value = '';
-});
-
-// Drag-and-drop on upload area
-uploadArea.addEventListener('dragover', (e) => {
-  e.preventDefault();
-  uploadArea.classList.add('border-amber-400', 'bg-amber-50');
-});
-uploadArea.addEventListener('dragleave', () => {
-  uploadArea.classList.remove('border-amber-400', 'bg-amber-50');
-});
-uploadArea.addEventListener('drop', (e) => {
-  e.preventDefault();
-  uploadArea.classList.remove('border-amber-400', 'bg-amber-50');
-  if (e.dataTransfer?.files) addFiles(e.dataTransfer.files);
-});
+bindDropzone(
+  { id: 'rfq-upload-area', inputId: 'rfq-file-input' },
+  {
+    getCurrentFiles: () => selectedFiles,
+    onAdd: addFiles,
+  },
+);
 
 function renderFileList() {
-  fileList.innerHTML = selectedFiles.map((f, i) => `
-    <div class="flex items-center gap-2 text-sm text-gray-600">
-      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
-      <span class="truncate max-w-xs">${f.name}</span>
-      <button type="button" data-remove="${i}" class="rfq-remove-file text-red-400 hover:text-red-600 ml-1">&times;</button>
-    </div>
-  `).join('');
+  fileList.innerHTML = selectedFiles.map((f, i) => {
+    const isImage = f.type?.startsWith('image/');
+    const badge = getFileBadge(f.name);
+    const previewUrl = isImage ? getFilePreviewUrl(f) : '';
+    const thumb = isImage
+      ? `<img src="${previewUrl}" alt="" class="rfq-thumb-preview w-12 h-12 object-cover rounded cursor-zoom-in border border-gray-200" data-file-idx="${i}" />`
+      : `<div class="w-12 h-12 rounded ${badge.cls} text-white text-[10px] font-bold flex items-center justify-center shrink-0">${badge.label}</div>`;
+    return `
+      <div class="flex items-center gap-3 p-2 bg-white border border-gray-200 rounded">
+        ${thumb}
+        <span class="flex-1 text-sm text-gray-700 truncate" title="${f.name}">${f.name}</span>
+        <button type="button" data-remove="${i}" class="rfq-remove-file text-red-400 hover:text-red-600 px-2 text-lg leading-none">&times;</button>
+      </div>
+    `;
+  }).join('');
+
+  fileList.querySelectorAll<HTMLImageElement>('.rfq-thumb-preview').forEach(img => {
+    img.addEventListener('click', () => {
+      const idx = Number(img.dataset.fileIdx);
+      const file = selectedFiles[idx];
+      if (file) openFilePreviewLightbox(file, 'rfq-form-preview');
+    });
+  });
+
   fileList.querySelectorAll('.rfq-remove-file').forEach(btn => {
     btn.addEventListener('click', () => {
-      selectedFiles.splice(Number((btn as HTMLElement).dataset.remove), 1);
+      const idx = Number((btn as HTMLElement).dataset.remove);
+      const file = selectedFiles[idx];
+      if (file) revokeFilePreview(file);
+      selectedFiles.splice(idx, 1);
       renderFileList();
     });
   });
@@ -312,7 +303,8 @@ if (params.get('hasFiles') === '1') {
         const req = store.get(key);
         req.onsuccess = () => resolve(req.result);
       });
-      if (file && file instanceof File && isAllowedFile(file)) {
+      if (file && file instanceof File) {
+        // Already validated in Step 1 — accept as-is
         selectedFiles.push(file);
       }
     }
@@ -396,12 +388,24 @@ form.addEventListener('submit', (e) => {
     showToast({ message: t('rfq.productName') + ' gerekli', type: 'warning' });
     return;
   }
+  if (productName.length < 2) {
+    showToast({ message: t('rfq.productNameTooShort'), type: 'warning' });
+    return;
+  }
+  if (!categoryHidden?.value) {
+    showToast({ message: t('rfq.categoryRequired'), type: 'warning' });
+    return;
+  }
   if (!requirements) {
     showToast({ message: t('rfq.detailedRequirements') + ' gerekli', type: 'warning' });
     return;
   }
   if (!quantity || Number(quantity) <= 0) {
     showToast({ message: t('rfq.sourcingQuantity') + ' gerekli', type: 'warning' });
+    return;
+  }
+  if (!unit) {
+    showToast({ message: t('rfq.unitNotReady'), type: 'warning' });
     return;
   }
 
@@ -441,28 +445,20 @@ form.addEventListener('submit', (e) => {
     }
     const rfqId = data.message.rfq_id;
 
-    // 2. Upload files and attach to RFQ child table
+    // 2. Upload files as private RFQ attachments. Frappe records the
+    //    parent link (attached_to_doctype=RFQ) automatically — no separate
+    //    child-table call needed. Access is gated by RFQ.has_permission.
     for (const file of selectedFiles) {
       const fd = new FormData();
       fd.append('file', file);
       fd.append('doctype', 'RFQ');
       fd.append('docname', rfqId);
-      fd.append('is_private', '0');
-      const uploadRes = await fetch(((window as any).API_BASE || '/api') + '/method/upload_file', {
+      fd.append('is_private', '1');
+      await fetch(((window as any).API_BASE || '/api') + '/method/upload_file', {
         method: 'POST',
         credentials: 'include',
         body: fd,
       });
-      const uploadData = await uploadRes.json();
-      const fileUrl = uploadData?.message?.file_url;
-      if (fileUrl) {
-        await fetch(((window as any).API_BASE || '/api') + '/method/tradehub_core.api.rfq.add_rfq_attachment', {
-          method: 'POST',
-          credentials: 'include',
-          headers: { 'Content-Type': 'application/json', 'X-Frappe-CSRF-Token': getCsrfToken() },
-          body: JSON.stringify({ rfq_id: rfqId, file_url: fileUrl, file_name: file.name }),
-        });
-      }
     }
 
     return rfqId;
