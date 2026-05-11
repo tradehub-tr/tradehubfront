@@ -5049,6 +5049,15 @@ button[data-filter-action="apply-all"]:active {
   }
 }
 
+@keyframes notice-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 /* ============================================================
    CHECKOUT PAGE — Float-label, Dropdown, Accordion, Modal
    ============================================================ */
