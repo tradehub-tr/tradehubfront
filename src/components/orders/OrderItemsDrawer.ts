@@ -68,13 +68,10 @@ export function OrderItemsDrawer(): string {
               aria-label="${t("orders.searchInProducts")}"
               class="flex-1 h-9 px-3 text-xs rounded-md border border-gray-200 bg-gray-50 focus:bg-white focus:border-gray-400 focus:outline-none focus:ring-0 transition-colors" />
             <div class="relative shrink-0">
-              <svg class="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3 4h13M3 8h9M3 12h5m4 4l4 4 4-4m-4-12v16"/>
-              </svg>
               <select
                 x-model="sort"
                 aria-label="${t("orders.sortLabel")}"
-                class="h-9 pl-7 pr-7 text-xs rounded-md border border-gray-200 bg-white focus:border-gray-400 focus:outline-none focus:ring-0 transition-colors cursor-pointer appearance-none">
+                class="h-9 pl-3 pr-7 text-xs rounded-md border border-gray-200 bg-white focus:border-gray-400 focus:outline-none focus:ring-0 transition-colors cursor-pointer appearance-none">
                 <option value="added">${t("orders.sortAdded")}</option>
                 <option value="price_asc">${t("orders.sortPriceAsc")}</option>
                 <option value="price_desc">${t("orders.sortPriceDesc")}</option>
