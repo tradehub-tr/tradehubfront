@@ -549,6 +549,61 @@ Alpine.data("faqPage", () => ({
       this.activeCategory = "all";
     }
   },
+
+  escapeHtml(s: string): string {
+    return s.replace(/[&<>"']/g, (ch) => {
+      const map: Record<string, string> = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+      };
+      return map[ch] as string;
+    });
+  },
+
+  escapeRegex(s: string): string {
+    return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  },
+
+  highlight(text: string): string {
+    const q = this.searchQuery.trim();
+    const escaped = this.escapeHtml(text);
+    if (!q) return escaped;
+    const re = new RegExp(`(${this.escapeRegex(q)})`, "gi");
+    return escaped.replace(
+      re,
+      '<mark class="bg-[var(--color-primary-100,#ffefb3)] text-[var(--color-primary-700,#a87c00)] rounded-sm px-0.5">$1</mark>',
+    );
+  },
+
+  clearSearch() {
+    this.searchQuery = "";
+    const root = this.$root as HTMLElement | undefined;
+    const input = root?.querySelector<HTMLInputElement>("#faq-search-input");
+    input?.focus();
+  },
+
+  get matchedSubCount(): number {
+    const q = this.searchQuery.trim().toLowerCase();
+    if (!q) return 0;
+    return (this.visibleCategories as any[]).reduce((sum: number, c: any) => {
+      return (
+        sum +
+        (c.subs as any[]).filter((s: any) =>
+          (s.label as string).toLowerCase().includes(q),
+        ).length
+      );
+    }, 0);
+  },
+
+  get resultsLabel(): string {
+    return t("helpCenter.faqResultsFound", {
+      cats: (this.visibleCategories as any[]).length,
+      subs: this.matchedSubCount,
+    });
+  },
 }));
 
 // ─── FAQ Detail Page ──────────────────────────────────────────────────
