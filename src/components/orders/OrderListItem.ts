@@ -41,7 +41,7 @@ export function OrderListItem(): string {
               <span class="text-gray-500 font-medium max-sm:hidden">${t("orders.supplier")}:</span>
               <span class="font-semibold text-gray-800 truncate max-sm:hidden" x-text="order.seller"></span>
             </div>
-            <div class="text-xs text-gray-500 mt-0.5 flex flex-wrap gap-1.5 items-center">
+            <div class="text-xs text-gray-500 mt-1 flex flex-wrap gap-x-1.5 gap-y-0.5 items-center">
               <span class="sm:hidden">${t("orders.supplier")}:</span>
               <span class="font-semibold text-gray-700 sm:hidden truncate" x-text="order.seller"></span>
               <template x-if="order.status === 'Waiting for payment'">
@@ -54,24 +54,22 @@ export function OrderListItem(): string {
                   </button>
                 </span>
               </template>
+              <span class="text-gray-300">·</span>
+              <span><span x-text="totalQty(order)"></span> ${t("orders.productsUnit")} · <span x-text="(order.products || []).length"></span> ${t("orders.lines")}</span>
             </div>
           </div>
 
-          <!-- Totals (right-aligned, prominent) -->
-          <div class="text-right shrink-0">
-            <span class="inline-block px-2 py-0.5 rounded text-[9px] font-extrabold uppercase tracking-wider mb-0.5"
+          <!-- Totals (right-aligned, 2 rows = matches left meta height) -->
+          <div class="text-right shrink-0 flex flex-col items-end justify-between gap-1">
+            <span class="inline-block px-2 py-0.5 rounded text-[9px] font-extrabold uppercase tracking-wider"
               :class="order.statusColor === 'text-amber-600' ? 'bg-amber-100 text-amber-700'
                     : order.statusColor === 'text-green-600' ? 'bg-emerald-100 text-emerald-700'
                     : order.statusColor === 'text-blue-600' ? 'bg-blue-100 text-blue-700'
                     : order.statusColor === 'text-red-600' ? 'bg-red-100 text-red-700'
                     : 'bg-gray-100 text-gray-700'"
               x-text="getStatusLabel(order)"></span>
-            <div class="text-[17px] sm:text-[20px] lg:text-[24px] font-extrabold text-gray-900 leading-none">
-              <span class="text-[11px] text-gray-500 font-semibold mr-0.5" x-text="order.currency"></span><span x-text="order.total"></span>
-            </div>
-            <div class="text-[11px] text-gray-500 mt-0.5">
-              <span x-text="totalQty(order)"></span> ${t("orders.productsUnit")} ·
-              <span x-text="(order.products || []).length"></span> ${t("orders.lines")}
+            <div class="text-[16px] sm:text-[18px] lg:text-[20px] font-extrabold text-gray-900 leading-none">
+              <span class="text-[10px] text-gray-500 font-semibold mr-0.5" x-text="order.currency"></span><span x-text="order.total"></span>
             </div>
           </div>
         </div>
