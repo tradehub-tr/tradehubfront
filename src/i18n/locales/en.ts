@@ -3472,6 +3472,10 @@ const en = {
       // ── FAQPageLayout ──
       faqSearchResults: "results",
       faqNoResults: "No results found. Try a different search term.",
+      faqSearchPlaceholder: "Enter question or keyword. Example: Payment",
+      faqSearchAriaLabel: "Search frequently asked questions",
+      faqClearSearch: "Clear search",
+      faqResultsFound: "{{cats}} categories, {{subs}} questions found",
       faqFooterProductPolicy: "Product Listing Policy",
       faqFooterIpProtection: "Intellectual Property Protection",
       faqFooterPrivacy: "Privacy Policy",
