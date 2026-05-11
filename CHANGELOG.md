@@ -1,3 +1,48 @@
+## [v1.1.8-beta.3] - 2026-05-11 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(floating-panel): x-show ve x-transition ekleyerek görünürlüğü iyileştirdi (@ahmeetseker)
+- feat(faq): faqPage Alpine data'ya search helper'ları eklendi (@ahmeetseker)
+- feat(orders): detay panel için tab/ürün state'i ekle (@ahmeetseker)
+- feat(faq): search bar yeniden tasarlandı (@ahmeetseker)
+- feat(faq): eşleşme vurgusu + sidebar inline style refactor (@ahmeetseker)
+- feat(orders): ürünler kartını ilk-5 + scroll'lu hibrit yapıya çevir (@ahmeetseker)
+- feat(header-notice): add storefront service with localStorage cache (@ahmeetseker)
+- feat(header-notice): add HeaderNotice marquee component (@ahmeetseker)
+- feat(orders): boxed tab container + Kargo paneli + i18n tab etiketleri (@ahmeetseker)
+- feat(orders): Ödeme detaylarını tab paneline taşı (@ahmeetseker)
+- feat(header-notice): integrate notice render into TopBar (@ahmeetseker)
+- feat(orders): Tedarikçi detaylarını tab paneline taşı (@ahmeetseker)
+- feat(header-notice): call initHeaderNotice in main bootstrap (@ahmeetseker)
+- feat(header-notice): suppress notice on payment/payments/orders pages (@ahmeetseker)
+- feat(help-center): "Bize Ulaşın" 4'lü kart bloğu kaldırıldı (@ahmeetseker)
+- feat(header-notice): remove icon rendering from storefront marquee (@ahmeetseker)
+- feat(header-notice): add slide display mode and per-notice background color (@ahmeetseker)
+- feat(orders): replace per-order item list with thumbnail strip + drawer (@ahmeetseker)
+
+### Duzeltildi
+- fix(faq): focus-within koyu drop-shadow kaldırıldı (@ahmeetseker)
+- fix(faq): siyah çizgi sorunu — border yerine ring, input focus-visible suppress (@ahmeetseker)
+- fix(orders): stepper label'larını 320px'te wrap edilebilir yap (@ahmeetseker)
+- fix(orders): a11y polish on items drawer (focus on open, aria-labels) (@ahmeetseker)
+- fix(orders): correct remittance event name and add aria-haspopup on drawer triggers (@ahmeetseker)
+- fix(orders): card spacing, remove link underline, drawer sort UX (@ahmeetseker)
+- fix(orders): symmetric card header (B layout) (@ahmeetseker)
+- fix(orders): remove confusing left sort icon in drawer (keep only chevron) (@ahmeetseker)
+- fix(orders): prevent hover/active layout shift on link-style buttons (@ahmeetseker)
+- fix(orders): remove all hover state changes on link-style buttons (@ahmeetseker)
+- fix(orders): use native select arrow only (remove custom chevron — fixes double arrow) (@ahmeetseker)
+- fix(orders): override global :focus-visible outline on link-style buttons (@ahmeetseker)
+
+### Degistirildi
+- refactor(orders): parsePrice'ı module scope'a taşı (@ahmeetseker)
+- refactor(orders): ürünler kartı için helpers + i18n çekimi (@ahmeetseker)
+- refactor(faq): submit butonu projenin th-btn standardına geçti (@ahmeetseker)
+- refactor(orders): extract order card into OrderListItem component (@ahmeetseker)
+
+---
 ## [v1.1.8-beta.2] - 2026-05-11 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
