@@ -44,9 +44,7 @@ function noticeContent(n: HeaderNoticeItem): string {
   const message =
     lang === "en" && n.message_en && n.message_en.trim() ? n.message_en : n.message_tr;
   const linkText =
-    lang === "en" && n.link_text_en && n.link_text_en.trim()
-      ? n.link_text_en
-      : n.link_text_tr;
+    lang === "en" && n.link_text_en && n.link_text_en.trim() ? n.link_text_en : n.link_text_tr;
   const linkHtml =
     linkText && n.link_href
       ? `<a href="${escapeAttr(sanitizeHref(n.link_href))}" class="ml-2 underline text-[#ffb800] hover:text-white">${escapeText(linkText)}</a>`
@@ -55,7 +53,7 @@ function noticeContent(n: HeaderNoticeItem): string {
 }
 
 export function HeaderNotice(
-  data: HeaderNoticeData = { display_mode: "marquee", notices: [] },
+  data: HeaderNoticeData = { display_mode: "marquee", notices: [] }
 ): string {
   const notices = data.notices;
   if (!notices.length) {
@@ -98,7 +96,7 @@ export function HeaderNotice(
               </div>
             </div>
           </div>
-        `,
+        `
       )
       .join("");
     return `

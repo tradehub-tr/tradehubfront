@@ -70,8 +70,7 @@ Alpine.data("orderItemsDrawer", () => ({
     if (q) {
       items = items.filter(
         (p) =>
-          p.name.toLowerCase().includes(q) ||
-          (p.variation && p.variation.toLowerCase().includes(q))
+          p.name.toLowerCase().includes(q) || (p.variation && p.variation.toLowerCase().includes(q))
       );
     }
     switch (this.sort) {
@@ -94,10 +93,7 @@ Alpine.data("orderItemsDrawer", () => ({
   get totals() {
     if (!this.currentOrder) return { count: 0, lines: 0, vat: 0, grand: 0 };
     const lines = this.currentOrder.products.length;
-    const count = this.currentOrder.products.reduce(
-      (s, p) => s + (p.quantity || 0),
-      0
-    );
+    const count = this.currentOrder.products.reduce((s, p) => s + (p.quantity || 0), 0);
     const grand = parsePrice(this.currentOrder.total);
     // TR VAT 20% — backend doesn't expose VAT as a separate field
     const vat = grand - grand / 1.2;

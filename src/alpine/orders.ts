@@ -578,8 +578,10 @@ Alpine.data("ordersListComponent", () => ({
   },
 
   totalQty(order: any): number {
-    return ((order?.products ?? []) as Array<{ quantity?: number }>)
-      .reduce((s, p) => s + (p.quantity ?? 0), 0);
+    return ((order?.products ?? []) as Array<{ quantity?: number }>).reduce(
+      (s, p) => s + (p.quantity ?? 0),
+      0
+    );
   },
 }));
 
