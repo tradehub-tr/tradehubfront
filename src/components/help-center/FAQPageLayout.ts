@@ -19,7 +19,7 @@ export function FAQPageLayout(): string {
         <div class="max-w-[900px] mx-auto px-4">
           <form
             @submit.prevent="doSearch()"
-            class="flex items-center h-12 bg-white rounded-lg border border-gray-300 shadow-sm max-w-[600px] mx-auto transition-all focus-within:border-[var(--color-primary-500,#f5b800)] focus-within:ring-2 focus-within:ring-[var(--color-primary-500,#f5b800)]/20 focus-within:shadow-md"
+            class="flex items-center h-12 bg-white rounded-lg border border-gray-300 shadow-sm max-w-[600px] mx-auto transition-colors focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/20"
           >
             <!-- Leading search icon (decorative) -->
             <span class="pl-4 pr-2 text-gray-400 flex items-center shrink-0" aria-hidden="true">
