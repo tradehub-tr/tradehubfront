@@ -12,8 +12,6 @@ import {
   type HeaderNoticeItem,
 } from "../../services/headerNoticeService";
 
-const VALID_ICONS = new Set(["🎉", "⚡", "📦", "ℹ️", "🚚", "🔥", "⭐"]);
-
 function escapeText(s: string): string {
   return s
     .replace(/&/g, "&amp;")
@@ -29,7 +27,11 @@ function escapeAttr(s: string): string {
 
 function sanitizeHref(url: string): string {
   const trimmed = url.trim().toLowerCase();
-  if (trimmed.startsWith("javascript:") || trimmed.startsWith("data:") || trimmed.startsWith("vbscript:")) {
+  if (
+    trimmed.startsWith("javascript:") ||
+    trimmed.startsWith("data:") ||
+    trimmed.startsWith("vbscript:")
+  ) {
     return "#";
   }
   return url;
@@ -42,15 +44,15 @@ function renderItems(items: HeaderNoticeItem[]): string {
       const message =
         lang === "en" && n.message_en && n.message_en.trim() ? n.message_en : n.message_tr;
       const linkText =
-        lang === "en" && n.link_text_en && n.link_text_en.trim() ? n.link_text_en : n.link_text_tr;
-      const icon = n.icon && VALID_ICONS.has(n.icon) ? n.icon : "";
+        lang === "en" && n.link_text_en && n.link_text_en.trim()
+          ? n.link_text_en
+          : n.link_text_tr;
       const linkHtml =
         linkText && n.link_href
           ? `<a href="${escapeAttr(sanitizeHref(n.link_href))}" class="ml-2 underline text-[#ffb800] hover:text-white">${escapeText(linkText)}</a>`
           : "";
       return `
         <span class="inline-flex items-center gap-2">
-          ${icon ? `<span aria-hidden="true">${icon}</span>` : ""}
           <span>${escapeText(message)}</span>
           ${linkHtml}
         </span>
