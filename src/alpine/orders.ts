@@ -17,6 +17,11 @@ export const ORDER_STATUS_MAP: Record<string, string[]> = {
   closed: ["Cancelled"],
 };
 
+function parsePrice(v: any): number {
+  const num = parseFloat(String(v).replace(/,/g, ""));
+  return isNaN(num) ? 0 : num;
+}
+
 Alpine.data("ordersListComponent", () => ({
   activeTab: "all",
   searchQuery: "",
@@ -110,11 +115,6 @@ Alpine.data("ordersListComponent", () => ({
     const filtered = q
       ? products.filter((p: any) => String(p.name).toLowerCase().includes(q))
       : products.slice();
-
-    const parsePrice = (v: any): number => {
-      const num = parseFloat(String(v).replace(/,/g, ""));
-      return isNaN(num) ? 0 : num;
-    };
 
     if (this.productSort === "name-asc") {
       filtered.sort((a: any, b: any) => String(a.name).localeCompare(String(b.name), "tr"));
