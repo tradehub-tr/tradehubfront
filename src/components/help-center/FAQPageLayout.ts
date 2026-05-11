@@ -11,33 +11,63 @@ export function FAQPageLayout(): string {
     <div
       id="faq-root"
       x-data="faqPage()"
-      x-init="init()"
       class="min-h-screen bg-[#F5F5F5]"
     >
 
-      <!-- ── Slim search bar under header ── -->
+      <!-- ── Search bar under header ── -->
       <div class="bg-white border-b border-gray-200 py-5">
         <div class="max-w-[900px] mx-auto px-4">
-          <form @submit.prevent="doSearch()" class="flex items-center bg-white rounded border border-gray-300 shadow-sm overflow-hidden max-w-[560px] mx-auto">
+          <form
+            @submit.prevent="doSearch()"
+            class="flex items-center h-12 bg-white rounded-lg border border-gray-300 shadow-sm overflow-hidden max-w-[600px] mx-auto transition-all focus-within:border-[var(--color-primary-500,#f5b800)] focus-within:ring-2 focus-within:ring-[var(--color-primary-500,#f5b800)]/20 focus-within:shadow-md"
+          >
+            <!-- Leading search icon (decorative) -->
+            <span class="pl-4 pr-2 text-gray-400 flex items-center shrink-0" aria-hidden="true">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35m1.6-5.15a6.75 6.75 0 1 1-13.5 0 6.75 6.75 0 0 1 13.5 0Z"/>
+              </svg>
+            </span>
+
             <input
               id="faq-search-input"
               x-model="searchQuery"
               type="text"
-              placeholder="Enter question or keyword. Example: Payment"
-              class="flex-1 px-3  text-sm border-0 text-gray-700 outline-none placeholder-gray-400 bg-transparent"
+              placeholder="${t("helpCenter.faqSearchPlaceholder")}"
+              aria-label="${t("helpCenter.faqSearchAriaLabel")}"
+              class="flex-1 min-w-0 px-2 text-sm text-gray-700 outline-none placeholder-gray-400 bg-transparent"
             />
+
+            <!-- Clear (X) button — only when query exists -->
+            <button
+              type="button"
+              x-show="searchQuery"
+              x-cloak
+              @click="clearSearch()"
+              aria-label="${t("helpCenter.faqClearSearch")}"
+              class="px-2 text-gray-400 hover:text-gray-600 transition-colors shrink-0 flex items-center justify-center h-full"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+              </svg>
+            </button>
+
             <button
               type="submit"
               id="faq-search-btn"
-              class="px-4 py-3.5 text-white transition-all hover:opacity-90 shrink-0"
-              style="background:var(--color-primary-500)"
+              class="w-12 h-full bg-[var(--color-primary-500,#f5b800)] hover:bg-[var(--color-primary-600,#d39c00)] text-white transition-colors shrink-0 flex items-center justify-center"
             >
-              <!-- magnifier icon -->
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35m1.6-5.15a6.75 6.75 0 1 1-13.5 0 6.75 6.75 0 0 1 13.5 0Z"/>
               </svg>
             </button>
           </form>
+
+          <!-- Result counter chip — only when searching -->
+          <div x-show="searchQuery.trim()" x-cloak class="max-w-[600px] mx-auto mt-3 text-center">
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--color-primary-50,#fff8e1)] text-[var(--color-primary-700,#a87c00)] text-xs">
+              <span x-text="resultsLabel"></span>
+            </span>
+          </div>
         </div>
       </div>
 
