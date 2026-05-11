@@ -3589,6 +3589,7 @@ const tr = {
       faqNoResults: "Sonuç bulunamadı. Farklı bir arama terimi deneyin.",
       faqSearchPlaceholder: "Soru veya anahtar kelime girin. Örn: Ödeme",
       faqSearchAriaLabel: "Sıkça sorulan sorularda ara",
+      faqSearchSubmit: "Ara",
       faqClearSearch: "Aramayı temizle",
       faqResultsFound: "{{cats}} kategori, {{subs}} soru bulundu",
       faqFooterProductPolicy: "Ürün Listeleme Politikası",

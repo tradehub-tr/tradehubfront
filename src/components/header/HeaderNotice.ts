@@ -27,6 +27,14 @@ function escapeAttr(s: string): string {
   return escapeText(s);
 }
 
+function sanitizeHref(url: string): string {
+  const trimmed = url.trim().toLowerCase();
+  if (trimmed.startsWith("javascript:") || trimmed.startsWith("data:") || trimmed.startsWith("vbscript:")) {
+    return "#";
+  }
+  return url;
+}
+
 function renderItems(items: HeaderNoticeItem[]): string {
   const lang = getCurrentLang();
   return items
@@ -34,13 +42,11 @@ function renderItems(items: HeaderNoticeItem[]): string {
       const message =
         lang === "en" && n.message_en && n.message_en.trim() ? n.message_en : n.message_tr;
       const linkText =
-        lang === "en" && n.link_text_en && n.link_text_en.trim()
-          ? n.link_text_en
-          : n.link_text_tr;
+        lang === "en" && n.link_text_en && n.link_text_en.trim() ? n.link_text_en : n.link_text_tr;
       const icon = n.icon && VALID_ICONS.has(n.icon) ? n.icon : "";
       const linkHtml =
         linkText && n.link_href
-          ? `<a href="${escapeAttr(n.link_href)}" class="ml-2 underline text-[#ffb800] hover:text-white">${escapeText(linkText)}</a>`
+          ? `<a href="${escapeAttr(sanitizeHref(n.link_href))}" class="ml-2 underline text-[#ffb800] hover:text-white">${escapeText(linkText)}</a>`
           : "";
       return `
         <span class="inline-flex items-center gap-2">

@@ -19,7 +19,7 @@ export function FAQPageLayout(): string {
         <div class="max-w-[900px] mx-auto px-4">
           <form
             @submit.prevent="doSearch()"
-            class="flex items-center h-12 bg-white rounded-lg border border-gray-300 shadow-sm overflow-hidden max-w-[600px] mx-auto transition-all focus-within:border-[var(--color-primary-500,#f5b800)] focus-within:ring-2 focus-within:ring-[var(--color-primary-500,#f5b800)]/20 focus-within:shadow-md"
+            class="flex items-center h-12 bg-white rounded-lg border border-gray-300 shadow-sm max-w-[600px] mx-auto transition-all focus-within:border-[var(--color-primary-500,#f5b800)] focus-within:ring-2 focus-within:ring-[var(--color-primary-500,#f5b800)]/20 focus-within:shadow-md"
           >
             <!-- Leading search icon (decorative) -->
             <span class="pl-4 pr-2 text-gray-400 flex items-center shrink-0" aria-hidden="true">
@@ -54,10 +54,11 @@ export function FAQPageLayout(): string {
             <button
               type="submit"
               id="faq-search-btn"
-              class="w-12 h-full bg-[var(--color-primary-500,#f5b800)] hover:bg-[var(--color-primary-600,#d39c00)] text-white transition-colors shrink-0 flex items-center justify-center"
+              class="th-btn th-btn-sm th-btn-gradient mr-1.5 shrink-0"
             >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35m1.6-5.15a6.75 6.75 0 1 1-13.5 0 6.75 6.75 0 0 1 13.5 0Z"/>
+              ${t("helpCenter.faqSearchSubmit")}
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 5l7 7-7 7"/>
               </svg>
             </button>
           </form>
