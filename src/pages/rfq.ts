@@ -5,7 +5,6 @@
 
 import '../style.css'
 import { t } from '../i18n'
-import { showToast } from '../utils/toast'
 import { initFlowbite } from 'flowbite'
 import Swiper from 'swiper'
 import { Autoplay, Pagination, EffectFade } from 'swiper/modules'
@@ -23,9 +22,6 @@ import { FooterLinks } from '../components/footer'
 // Shared components
 import { Breadcrumb } from '../components/shared/Breadcrumb'
 
-// Icons
-import aiIconUrl from '../assets/images/O1CN01WQ8Lqg1SIdpcL5OHE_!!6000000002224-55-tps-16-16.svg'
-
 // Utilities
 import { initAnimatedPlaceholder } from '../utils/animatedPlaceholder'
 
@@ -40,6 +36,8 @@ const testimonials = getTestimonials();
 // Types
 import type { ProductListingCard } from '../types/productListing'
 import { FILE_UPLOAD_CONFIG } from '../types/rfq'
+import { getFileBadge, getFilePreviewUrl, revokeFilePreview, openFilePreviewLightbox } from '../components/rfq/attachments'
+import { renderDropzone, bindDropzone } from '../components/rfq/dropzone'
 import { requireAuth } from '../utils/auth-guard'
 
 await requireAuth();
@@ -131,37 +129,22 @@ appEl.innerHTML = `
         <div class="mx-auto w-full max-w-[1200px] rounded-md border border-border-default bg-white p-4 shadow-md sm:p-6 lg:p-7">
           <h2 class="mb-4 text-lg font-bold text-text-heading sm:mb-5 sm:text-xl" data-i18n="rfq.writeDetails">${t('rfq.writeDetails')}</h2>
           <form id="rfq-form-element" class="w-full" novalidate>
-            <div id="rfq-textarea-container" class="min-h-[136px] overflow-hidden rounded-lg border border-[#e5e5e5] bg-[#f8f8f8] p-3 transition-colors duration-200 hover:border-primary-500 sm:p-4">
-              
-              <!-- File Upload Button inside textbox area (iSTOC style) -->
-              <div class="mb-3">
-                <button
-                  type="button"
-                  id="rfq-upload-btn"
-                  class="th-btn-outline inline-flex min-h-[44px] items-center justify-center px-3 py-2 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 sm:min-h-0 sm:py-1.5"
-                  data-tooltip-target="upload-tooltip"
-                  data-tooltip-placement="top"
-                >
-                  <svg class="w-4 h-4 mr-1.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                  </svg>
-                  <span data-i18n="rfq.uploadFile">${t('rfq.uploadFile')}</span>
-                </button>
-                <input
-                  type="file"
-                  id="rfq-file-input"
-                  class="hidden"
-                  multiple
-                  accept="image/jpeg,image/png,image/gif,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                />
-                <div id="rfq-file-list" class="mt-2 space-y-1"></div>
-              </div>
+            <!-- Dropzone — file upload area -->
+            <div>
+              ${renderDropzone({ id: 'rfq-upload-area', inputId: 'rfq-file-input' })}
+              <div id="rfq-file-list" class="mt-3 space-y-2"></div>
+            </div>
 
+            <!-- Message / details textarea — visually distinct from the dropzone -->
+            <div class="mt-5">
+              <label for="rfq-details" class="block text-sm font-semibold text-gray-800 mb-2">
+                ${t('rfq.messageLabel')}
+              </label>
               <textarea
                 id="rfq-details"
-                class="min-h-[72px] w-full resize-none border-none bg-transparent p-0 text-sm text-text-heading placeholder:text-[#999999] outline-none focus:ring-0"
+                rows="4"
+                class="w-full min-h-[110px] resize-none rounded-lg border border-gray-300 bg-white p-3 text-sm text-gray-800 placeholder:text-gray-400 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200 transition-colors"
                 placeholder="${t('rfq.textareaPlaceholder')}"
-                rows="3"
               ></textarea>
             </div>
               
@@ -174,14 +157,6 @@ appEl.innerHTML = `
                   <div class="tooltip-arrow" data-popper-arrow></div>
                 </div>
 
-                <label class="inline-flex cursor-pointer items-center gap-2">
-                  <input type="checkbox" id="rfq-ai-toggle" class="h-4 w-4 rounded border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-500" checked />
-                  <div class="flex flex-wrap items-center text-xs text-[#666666] sm:text-sm">
-                    <img src="${aiIconUrl}" alt="AI" class="mr-1 h-4 w-4 shrink-0 object-contain" />
-                    <span data-i18n="rfq.aiCreateRfq">${t('rfq.aiCreateRfq')}</span>
-                    <svg class="w-3.5 h-3.5 ml-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                  </div>
-                </label>
               </div>
 
               <a href="/pages/dashboard/rfq-form.html" id="rfq-write-details-btn" class="th-btn w-full text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 sm:min-w-[260px] sm:w-auto">
@@ -307,73 +282,58 @@ initCurrency().then(() => Promise.all([
   if (customGrid) customGrid.innerHTML = '';
 });
 
-// --- File Upload Handling ---
-const uploadBtn = document.getElementById('rfq-upload-btn') as HTMLButtonElement;
-const fileInput = document.getElementById('rfq-file-input') as HTMLInputElement;
+// --- File Upload Handling (dropzone-driven) ---
 const rfqFileList = document.getElementById('rfq-file-list')!;
 const rfqSelectedFiles: File[] = [];
 
-uploadBtn.addEventListener('click', () => {
-  fileInput.click();
-});
-
-function isAllowedFileRfq(file: File): boolean {
-  const ext = ('.' + file.name.split('.').pop()!.toLowerCase());
-  if (!FILE_UPLOAD_CONFIG.allowedExtensions.includes(ext as any)) {
-    showToast({ message: t('rfq.unsupportedFormat', { fileName: file.name }), type: 'error' });
-    return false;
-  }
-  return true;
-}
-
-function addFilesRfq(files: FileList | File[]) {
-  for (const f of Array.from(files)) {
-    if (rfqSelectedFiles.length >= FILE_UPLOAD_CONFIG.maxFiles) {
-      showToast({ message: t('rfq.maxFilesAlert'), type: 'warning' });
-      break;
-    }
-    if (!isAllowedFileRfq(f)) continue;
-    rfqSelectedFiles.push(f);
-  }
+function addFilesRfq(files: File[]) {
+  rfqSelectedFiles.push(...files);
   renderRfqFileList();
 }
 
 function renderRfqFileList() {
-  rfqFileList.innerHTML = rfqSelectedFiles.map((f, i) => `
-    <div class="flex items-center gap-2 text-sm text-gray-600">
-      <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
-      <span class="truncate max-w-xs">${f.name}</span>
-      <button type="button" data-remove="${i}" class="rfq-remove-file text-red-400 hover:text-red-600 ml-1">&times;</button>
-    </div>
-  `).join('');
+  rfqFileList.innerHTML = rfqSelectedFiles.map((f, i) => {
+    const isImage = f.type?.startsWith('image/');
+    const badge = getFileBadge(f.name);
+    const previewUrl = isImage ? getFilePreviewUrl(f) : '';
+    const thumb = isImage
+      ? `<img src="${previewUrl}" alt="" class="rfq-thumb-preview w-12 h-12 object-cover rounded cursor-zoom-in border border-gray-200 shrink-0" data-file-idx="${i}" />`
+      : `<div class="w-12 h-12 rounded ${badge.cls} text-white text-[10px] font-bold flex items-center justify-center shrink-0">${badge.label}</div>`;
+    return `
+      <div class="flex items-center gap-3 p-2 bg-white border border-gray-200 rounded">
+        ${thumb}
+        <span class="flex-1 text-sm text-gray-700 truncate" title="${f.name}">${f.name}</span>
+        <button type="button" data-remove="${i}" class="rfq-remove-file text-red-400 hover:text-red-600 px-2 text-lg leading-none">&times;</button>
+      </div>
+    `;
+  }).join('');
+
+  rfqFileList.querySelectorAll<HTMLImageElement>('.rfq-thumb-preview').forEach(img => {
+    img.addEventListener('click', () => {
+      const idx = Number(img.dataset.fileIdx);
+      const file = rfqSelectedFiles[idx];
+      if (file) openFilePreviewLightbox(file, 'rfq-step1-preview');
+    });
+  });
+
   rfqFileList.querySelectorAll('.rfq-remove-file').forEach(btn => {
     btn.addEventListener('click', () => {
-      rfqSelectedFiles.splice(Number((btn as HTMLElement).dataset.remove), 1);
+      const idx = Number((btn as HTMLElement).dataset.remove);
+      const file = rfqSelectedFiles[idx];
+      if (file) revokeFilePreview(file);
+      rfqSelectedFiles.splice(idx, 1);
       renderRfqFileList();
     });
   });
 }
 
-fileInput.addEventListener('change', () => {
-  if (fileInput.files) addFilesRfq(fileInput.files);
-  fileInput.value = '';
-});
-
-// Drag-and-drop on upload button
-uploadBtn.addEventListener('dragover', (e) => {
-  e.preventDefault();
-  uploadBtn.classList.add('border-primary-500', 'bg-primary-50');
-});
-
-uploadBtn.addEventListener('dragleave', () => {
-  uploadBtn.classList.remove('border-primary-500', 'bg-primary-50');
-});
-
-uploadBtn.addEventListener('drop', (e) => {
-  e.preventDefault();
-  uploadBtn.classList.remove('border-primary-500', 'bg-primary-50');
-  if (e.dataTransfer?.files) addFilesRfq(e.dataTransfer.files);
-});
+bindDropzone(
+  { id: 'rfq-upload-area', inputId: 'rfq-file-input' },
+  {
+    getCurrentFiles: () => rfqSelectedFiles,
+    onAdd: addFilesRfq,
+  },
+);
 
 // --- IndexedDB helpers for transferring files between pages ---
 function openFilesDB(): Promise<IDBDatabase> {
