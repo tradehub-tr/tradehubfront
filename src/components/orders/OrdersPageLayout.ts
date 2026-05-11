@@ -822,40 +822,30 @@ function renderAllOrders(): string {
                 </div>
               </div>
             </div>
-            <!-- Tedarikçi paneli — Task 5'te eklenecek -->
-          </div>
-        </div>
-
-        <!-- Section 7: Tedarikçi detayları -->
-        <div class="px-7 max-sm:px-3 py-5 border-b border-gray-100">
-          <div class="flex items-center gap-2 mb-4">
-            <svg class="w-5 h-5 text-gray-500 shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-              <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-            </svg>
-            <h2 class="text-base font-bold text-gray-900">${t("orders.supplierDetails")}</h2>
-          </div>
-
-          <div class="grid grid-cols-4 max-sm:grid-cols-2 max-[380px]:grid-cols-1 gap-4 max-sm:gap-3 mb-4">
-            <div>
-              <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t("orders.supplier")}</p>
-              <p class="text-sm font-medium text-gray-800" x-text="selectedOrder.supplier.name"></p>
+            <!-- Tedarikçi paneli -->
+            <div x-show="activeDetailTab === 'supplier'" x-transition.opacity id="panel-supplier" role="tabpanel" aria-labelledby="tab-supplier">
+              <div class="grid grid-cols-4 max-sm:grid-cols-2 max-[380px]:grid-cols-1 gap-4 max-sm:gap-3 mb-4">
+                <div>
+                  <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t("orders.supplier")}</p>
+                  <p class="text-sm font-medium text-gray-800" x-text="selectedOrder.supplier.name"></p>
+                </div>
+                <div>
+                  <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t("orders.contactName")}</p>
+                  <p class="text-sm text-gray-700" x-text="selectedOrder.supplier.contact"></p>
+                </div>
+                <div>
+                  <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t("orders.phone")}</p>
+                  <p class="text-sm text-gray-700" x-text="selectedOrder.supplier.phone"></p>
+                </div>
+                <div>
+                  <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t("orders.email")}</p>
+                  <p class="text-sm text-gray-700 break-all" x-text="selectedOrder.supplier.email"></p>
+                </div>
+              </div>
+              <div class="flex items-center gap-4 max-sm:gap-3">
+                <a :href="selectedOrder.supplier.code ? '/pages/seller/seller-shop.html?seller=' + encodeURIComponent(selectedOrder.supplier.code) : '#'" class="text-sm text-blue-600 hover:underline">${t("orders.visitStore")}</a>
+              </div>
             </div>
-            <div>
-              <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t("orders.contactName")}</p>
-              <p class="text-sm text-gray-700" x-text="selectedOrder.supplier.contact"></p>
-            </div>
-            <div>
-              <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t("orders.phone")}</p>
-              <p class="text-sm text-gray-700" x-text="selectedOrder.supplier.phone"></p>
-            </div>
-            <div>
-              <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">${t("orders.email")}</p>
-              <p class="text-sm text-gray-700 break-all" x-text="selectedOrder.supplier.email"></p>
-            </div>
-          </div>
-
-          <div class="flex items-center gap-4 max-sm:gap-3">
-            <a :href="selectedOrder.supplier.code ? '/pages/seller/seller-shop.html?seller=' + encodeURIComponent(selectedOrder.supplier.code) : '#'" class="text-sm text-blue-600 hover:underline">${t("orders.visitStore")}</a>
           </div>
         </div>
 
