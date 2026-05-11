@@ -27,6 +27,7 @@ export function OrderItemsDrawer(): string {
 
       <!-- Drawer Panel -->
       <aside
+        id="order-items-drawer"
         x-show="open"
         x-transition:enter="transition ease-out duration-200"
         x-transition:enter-start="translate-x-full"
@@ -132,7 +133,7 @@ export function OrderItemsDrawer(): string {
           <template x-if="canPay()">
             <button
               type="button"
-              @click="$dispatch('open-remittance', { order: currentOrder }); close();"
+              @click="document.dispatchEvent(new CustomEvent('remittance:open', { detail: { orderNumber: currentOrder.orderNumber, orderTotal: currentOrder.total, orderCurrency: currentOrder.currency, paymentMethod: currentOrder.paymentMethod } })); close();"
               class="th-btn w-full h-10 mt-3 text-[13px] font-semibold">
               ${t("orders.makePayment")}
             </button>

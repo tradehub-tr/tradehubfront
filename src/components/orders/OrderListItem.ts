@@ -84,6 +84,8 @@ export function OrderListItem(): string {
             <span>${t("orders.orderContents")}</span>
             <button type="button"
               @click="$dispatch('open-order-items', order)"
+              aria-haspopup="dialog"
+              aria-controls="order-items-drawer"
               class="text-text-link font-bold text-xs inline-flex items-center gap-1 cursor-pointer bg-transparent border-0 p-0 hover:underline">
               ${t("orders.viewAll")} (<span x-text="(order.products || []).length"></span>)
               <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
@@ -104,6 +106,8 @@ export function OrderListItem(): string {
             <template x-if="(order.products || []).length > ${STRIP_VISIBLE_THUMBS}">
               <button type="button"
                 @click="$dispatch('open-order-items', order)"
+                aria-haspopup="dialog"
+                aria-controls="order-items-drawer"
                 class="w-[46px] h-[46px] sm:w-[52px] sm:h-[52px] lg:w-[58px] lg:h-[58px] rounded-md shrink-0 bg-gradient-to-br from-amber-50 to-amber-100 border border-amber-300 text-amber-800 font-extrabold text-xs flex items-center justify-center cursor-pointer hover:from-amber-100 hover:to-amber-200 transition-colors">
                 +<span x-text="(order.products || []).length - ${STRIP_VISIBLE_THUMBS}"></span>
               </button>
