@@ -678,6 +678,7 @@ function renderAllOrders(): string {
               :class="activeDetailTab === 'shipping' ? 'bg-white border-l border-r border-t border-gray-200 text-gray-900 font-semibold -mb-px z-10 relative' : 'bg-transparent text-gray-500 hover:text-gray-700 border-b border-gray-200'"
               class="px-4 py-2.5 max-sm:px-3 max-sm:py-2 text-sm max-sm:text-xs rounded-t-md cursor-pointer flex items-center gap-2 transition-colors"
               role="tab"
+              id="tab-shipping"
               :aria-selected="activeDetailTab === 'shipping'"
               aria-controls="panel-shipping">
               <svg class="w-4 h-4 max-sm:w-3.5 max-sm:h-3.5" :class="activeDetailTab === 'shipping' ? 'text-[var(--btn-bg,#cc9900)]' : 'text-gray-400'" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
@@ -690,6 +691,7 @@ function renderAllOrders(): string {
               :class="activeDetailTab === 'payment' ? 'bg-white border-l border-r border-t border-gray-200 text-gray-900 font-semibold -mb-px z-10 relative' : 'bg-transparent text-gray-500 hover:text-gray-700 border-b border-gray-200'"
               class="px-4 py-2.5 max-sm:px-3 max-sm:py-2 text-sm max-sm:text-xs rounded-t-md cursor-pointer flex items-center gap-2 transition-colors"
               role="tab"
+              id="tab-payment"
               :aria-selected="activeDetailTab === 'payment'"
               aria-controls="panel-payment">
               <svg class="w-4 h-4 max-sm:w-3.5 max-sm:h-3.5" :class="activeDetailTab === 'payment' ? 'text-[var(--btn-bg,#cc9900)]' : 'text-gray-400'" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
@@ -702,6 +704,7 @@ function renderAllOrders(): string {
               :class="activeDetailTab === 'supplier' ? 'bg-white border-l border-r border-t border-gray-200 text-gray-900 font-semibold -mb-px z-10 relative' : 'bg-transparent text-gray-500 hover:text-gray-700 border-b border-gray-200'"
               class="px-4 py-2.5 max-sm:px-3 max-sm:py-2 text-sm max-sm:text-xs rounded-t-md cursor-pointer flex items-center gap-2 transition-colors"
               role="tab"
+              id="tab-supplier"
               :aria-selected="activeDetailTab === 'supplier'"
               aria-controls="panel-supplier">
               <svg class="w-4 h-4 max-sm:w-3.5 max-sm:h-3.5" :class="activeDetailTab === 'supplier' ? 'text-[var(--btn-bg,#cc9900)]' : 'text-gray-400'" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
