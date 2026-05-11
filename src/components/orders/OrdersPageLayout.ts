@@ -748,95 +748,81 @@ function renderAllOrders(): string {
               </div>
             </div>
 
-            <!-- Ödeme paneli — Task 4'te eklenecek -->
-            <!-- Tedarikçi paneli — Task 5'te eklenecek -->
-          </div>
-        </div>
-
-        <!-- Section 6: Ödeme detayları -->
-        <div class="px-7 max-sm:px-3 py-5 border-b border-gray-100">
-          <div class="flex items-center justify-between gap-3 mb-4 flex-wrap">
-            <div class="flex items-center gap-2">
-              <svg class="w-5 h-5 text-gray-500 shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                <rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/>
-              </svg>
-              <h2 class="text-base font-bold text-gray-900">${t("orders.paymentDetails")}</h2>
-            </div>
-            <div class="flex items-center gap-2">
-              <button @click="openModal('showPaymentHistory')" class="px-4 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-full cursor-pointer hover:bg-blue-100 transition-colors">
-                ${t("orders.paymentHistoryTitle")}
-              </button>
-              <div class="relative" x-data="{ moreOpen: false }">
-                <button @click="moreOpen = !moreOpen" class="flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 bg-transparent border border-gray-200 rounded-full cursor-pointer transition-colors">
-                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><circle cx="4" cy="10" r="2"/><circle cx="10" cy="10" r="2"/><circle cx="16" cy="10" r="2"/></svg>
+            <!-- Ödeme paneli -->
+            <div x-show="activeDetailTab === 'payment'" x-transition.opacity id="panel-payment" role="tabpanel" aria-labelledby="tab-payment">
+              <div class="flex items-center justify-end gap-2 mb-4 flex-wrap">
+                <button @click="openModal('showPaymentHistory')" class="px-4 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-full cursor-pointer hover:bg-blue-100 transition-colors">
+                  ${t("orders.paymentHistoryTitle")}
                 </button>
-                <div x-show="moreOpen" @click.outside="moreOpen = false" x-transition class="absolute right-0 top-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 py-1 min-w-[160px]">
-                  <button @click="downloadInvoice(selectedOrder); moreOpen = false" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 bg-transparent border-none cursor-pointer flex items-center gap-2">
-                    <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                    ${t("orders.downloadInvoice")}
+                <div class="relative" x-data="{ moreOpen: false }">
+                  <button @click="moreOpen = !moreOpen" class="flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 bg-transparent border border-gray-200 rounded-full cursor-pointer transition-colors">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><circle cx="4" cy="10" r="2"/><circle cx="10" cy="10" r="2"/><circle cx="16" cy="10" r="2"/></svg>
                   </button>
-                  <template x-if="canRefund(selectedOrder)">
-                    <button @click="openRefundModal(selectedOrder); moreOpen = false" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 bg-transparent border-none cursor-pointer flex items-center gap-2">
-                      <svg class="w-3.5 h-3.5 text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
-                      ${t("orders.requestRefund")}
+                  <div x-show="moreOpen" @click.outside="moreOpen = false" x-transition class="absolute right-0 top-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 py-1 min-w-[160px]">
+                    <button @click="downloadInvoice(selectedOrder); moreOpen = false" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 bg-transparent border-none cursor-pointer flex items-center gap-2">
+                      <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                      ${t("orders.downloadInvoice")}
                     </button>
+                    <template x-if="canRefund(selectedOrder)">
+                      <button @click="openRefundModal(selectedOrder); moreOpen = false" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 bg-transparent border-none cursor-pointer flex items-center gap-2">
+                        <svg class="w-3.5 h-3.5 text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
+                        ${t("orders.requestRefund")}
+                      </button>
+                    </template>
+                  </div>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 max-sm:grid-cols-1 gap-6 max-sm:gap-4">
+                <div>
+                  <div class="flex items-center gap-2 mb-3">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full"
+                        :class="selectedOrder.payment.status === 'Paid' ? 'bg-green-50 text-green-700' :
+                                selectedOrder.payment.status === 'Processing' ? 'bg-blue-50 text-blue-700' :
+                                selectedOrder.payment.status === 'Refunded' ? 'bg-purple-50 text-purple-700' :
+                                'bg-amber-50 text-amber-700'">
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                           x-show="selectedOrder.payment.status === 'Paid'"><path stroke-linecap="round" d="M5 13l4 4L19 7"/></svg>
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                           x-show="selectedOrder.payment.status === 'Refunded'"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                           x-show="selectedOrder.payment.status !== 'Paid' && selectedOrder.payment.status !== 'Refunded'"><path stroke-linecap="round" d="M12 8v4m0 4h.01"/><circle cx="12" cy="12" r="10"/></svg>
+                      <span x-text="selectedOrder.payment.status === 'Paid' ? 'Ödendi' : selectedOrder.payment.status === 'Refunded' ? 'İade Edildi' : selectedOrder.payment.status === 'Unpaid' ? 'Ödenmedi' : selectedOrder.payment.status"></span>
+                    </span>
+                  </div>
+                  <template x-if="selectedOrder.payment.hasRecord">
+                    <a href="#" class="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:underline">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                      ${t("orders.viewPaymentHistory")}
+                    </a>
+                  </template>
+                  <template x-if="!selectedOrder.payment.hasRecord">
+                    <p class="text-sm text-gray-400">${t("orders.noPaymentRecord")}</p>
                   </template>
                 </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-2 max-sm:grid-cols-1 gap-6 max-sm:gap-4">
-            <!-- Left: Payment status -->
-            <div>
-              <div class="flex items-center gap-2 mb-3">
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full"
-                    :class="selectedOrder.payment.status === 'Paid' ? 'bg-green-50 text-green-700' :
-                            selectedOrder.payment.status === 'Processing' ? 'bg-blue-50 text-blue-700' :
-                            selectedOrder.payment.status === 'Refunded' ? 'bg-purple-50 text-purple-700' :
-                            'bg-amber-50 text-amber-700'">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
-                       x-show="selectedOrder.payment.status === 'Paid'"><path stroke-linecap="round" d="M5 13l4 4L19 7"/></svg>
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
-                       x-show="selectedOrder.payment.status === 'Refunded'"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
-                       x-show="selectedOrder.payment.status !== 'Paid' && selectedOrder.payment.status !== 'Refunded'"><path stroke-linecap="round" d="M12 8v4m0 4h.01"/><circle cx="12" cy="12" r="10"/></svg>
-                  <span x-text="selectedOrder.payment.status === 'Paid' ? 'Ödendi' : selectedOrder.payment.status === 'Refunded' ? 'İade Edildi' : selectedOrder.payment.status === 'Unpaid' ? 'Ödenmedi' : selectedOrder.payment.status"></span>
-                </span>
-              </div>
-              <template x-if="selectedOrder.payment.hasRecord">
-                <a href="#" class="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:underline">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                  ${t("orders.viewPaymentHistory")}
-                </a>
-              </template>
-              <template x-if="!selectedOrder.payment.hasRecord">
-                <p class="text-sm text-gray-400">${t("orders.noPaymentRecord")}</p>
-              </template>
-            </div>
-
-            <!-- Right: Summary table -->
-            <div class="bg-gray-50 rounded-lg p-4 max-sm:p-3">
-              <div class="space-y-2.5">
-                <div class="flex items-center justify-between text-sm">
-                  <span class="text-gray-500">${t("orders.subtotal")}</span>
-                  <span class="text-gray-800">${getCurrencyCode()} <span x-text="selectedOrder.payment.subtotal"></span></span>
-                </div>
-                <div class="flex items-center justify-between text-sm">
-                  <span class="text-gray-500">${t("orders.shippingFee")}</span>
-                  <span class="text-gray-800">${getCurrencyCode()} <span x-text="selectedOrder.payment.shippingFee"></span></span>
-                </div>
-                <div class="border-t border-gray-200 pt-2.5 flex items-center justify-between text-sm">
-                  <span class="text-gray-500">${t("orders.subtotal")}</span>
-                  <span class="text-gray-800">${getCurrencyCode()} <span x-text="selectedOrder.payment.grandTotal"></span></span>
-                </div>
-                <div class="flex items-center justify-between text-base font-bold">
-                  <span class="text-gray-900">${t("orders.grandTotal")}*</span>
-                  <span class="text-gray-900">${getCurrencyCode()} <span x-text="selectedOrder.payment.grandTotal"></span></span>
+                <div class="bg-gray-50 rounded-lg p-4 max-sm:p-3">
+                  <div class="space-y-2.5">
+                    <div class="flex items-center justify-between text-sm">
+                      <span class="text-gray-500">${t("orders.subtotal")}</span>
+                      <span class="text-gray-800">${getCurrencyCode()} <span x-text="selectedOrder.payment.subtotal"></span></span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                      <span class="text-gray-500">${t("orders.shippingFee")}</span>
+                      <span class="text-gray-800">${getCurrencyCode()} <span x-text="selectedOrder.payment.shippingFee"></span></span>
+                    </div>
+                    <div class="border-t border-gray-200 pt-2.5 flex items-center justify-between text-sm">
+                      <span class="text-gray-500">${t("orders.subtotal")}</span>
+                      <span class="text-gray-800">${getCurrencyCode()} <span x-text="selectedOrder.payment.grandTotal"></span></span>
+                    </div>
+                    <div class="flex items-center justify-between text-base font-bold">
+                      <span class="text-gray-900">${t("orders.grandTotal")}*</span>
+                      <span class="text-gray-900">${getCurrencyCode()} <span x-text="selectedOrder.payment.grandTotal"></span></span>
+                    </div>
+                  </div>
+                  <p class="text-[11px] text-gray-400 mt-3 leading-relaxed">${t("orders.totalDisclaimer")}</p>
                 </div>
               </div>
-              <p class="text-[11px] text-gray-400 mt-3 leading-relaxed">${t("orders.totalDisclaimer")}</p>
             </div>
+            <!-- Tedarikçi paneli — Task 5'te eklenecek -->
           </div>
         </div>
 
