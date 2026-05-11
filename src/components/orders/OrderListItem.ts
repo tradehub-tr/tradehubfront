@@ -1,104 +1,147 @@
 /**
- * OrderListItem — Tek sipariş kartının HTML render fonksiyonu.
+ * OrderListItem — Sipariş kartının yatay strip + drawer trigger versiyonu (D yaklaşımı).
  *
- * Bu HTML, `ordersListComponent` Alpine scope'u içinde
- * <template x-for="order in filteredOrders"> içine basılır.
- * Yani Alpine direktifleri (x-text, x-show, @click) burada string olarak yer alır;
- * gerçek evaluation Alpine tarafından runtime'da yapılır.
+ * Yapı:
+ *   ┌─────────────────────────────────────────────┐
+ *   │ [★ ORD-XX · tarih · tedarikçi]   [STATUS]   │
+ *   │                                  [TOPLAM]   │
+ *   │                                  [N ürün]   │
+ *   ├─────────────────────────────────────────────┤
+ *   │ Sipariş içeriği          Tümünü gör (N) →   │
+ *   │ [▢×10][▢×20][▢×20][▢×5][▢+45]              │
+ *   ├─────────────────────────────────────────────┤
+ *   │ Ara toplam — TRY 15.429,40   [Det][Öde]    │
+ *   └─────────────────────────────────────────────┘
+ *
+ * Toplam fiyat 3 yerde: kart başlık sağ üst, footer-sol, drawer footer (drawer ayrı).
+ *
+ * Tıklama → drawer açılır: $dispatch('open-order-items', order)
+ * Tüketici Alpine scope: ordersListComponent — bu kart <template x-for="order in filteredOrders"> içine basılır.
  */
 import { t } from "../../i18n";
-import { getBaseUrl } from "../../utils/url";
+
+// Strip'te görünür thumbnail sayısı. Kalanlar "+N daha" rozeti gizler ve yatay scroll ile erişilir.
+const STRIP_VISIBLE_THUMBS = 4;
 
 export function OrderListItem(): string {
   return /* html */ `
-          <div class="border border-gray-200 rounded-lg overflow-hidden bg-white">
+    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden mb-3">
 
-            <!-- ── Card Header ── -->
-            <div class="px-5 max-sm:px-3 py-4 max-sm:py-3 bg-[#FAFAFA] border-b border-gray-200">
-              <div class="flex items-center justify-between gap-4 max-[480px]:gap-2 flex-wrap min-h-[36px]">
-                <!-- Left: Order info -->
-                <div class="flex items-center gap-2.5 text-sm max-[480px]:text-xs text-gray-500 flex-wrap max-sm:gap-1.5 leading-6">
-                  <span class="inline-flex items-center gap-1.5 font-semibold text-gray-800">
-                    <svg class="w-4 h-4 text-amber-500" viewBox="0 0 20 20" fill="currentColor"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                    <span x-text="order.orderNumber"></span>
-                  </span>
-                  <span class="text-gray-300">|</span>
-                  <span x-text="order.orderDate" class="max-sm:hidden"></span>
-                  <span class="text-gray-300 max-sm:hidden">|</span>
-                  <span class="max-[380px]:hidden">${t("orders.supplierLabel")}: <strong class="text-gray-700" x-text="order.seller"></strong></span>
-                </div>
-                <!-- Right: Status + Cancel + Total -->
-                <div class="flex items-center gap-3 max-[480px]:gap-1.5">
-                  <template x-if="canCancel(order)">
-                    <button @click="cancellingOrder = order; openModal('showCancelOrder')" class="th-no-press text-gray-400 hover:text-red-500 bg-transparent border-none cursor-pointer transition-colors text-[13px] whitespace-nowrap">
-                      ${t("orders.cancelOrderBtn")}
-                    </button>
-                  </template>
-                  <span class="text-gray-300" x-show="canCancel(order)">|</span>
-                  <span class="inline-flex items-center h-7 px-3 max-[480px]:h-6 max-[480px]:px-2 rounded-md text-[11px] max-[480px]:text-[10px] font-bold uppercase tracking-wide"
-                        :class="order.refundStatus === 'Pending'  ? 'bg-orange-100 text-orange-700'
-                              : order.refundStatus === 'Approved' ? 'bg-purple-100 text-purple-700'
-                              : order.refundStatus === 'Rejected' ? 'bg-red-100 text-red-700'
-                              : order.statusColor === 'text-amber-600' ? 'bg-amber-100 text-amber-700'
-                              : order.statusColor === 'text-green-600' ? 'bg-green-100 text-green-700'
-                              : order.statusColor === 'text-blue-600' ? 'bg-blue-100 text-blue-700'
-                              : order.statusColor === 'text-red-600' ? 'bg-red-100 text-red-700'
-                              : 'bg-gray-100 text-gray-700'"
-                        x-text="getStatusLabel(order)"></span>
-                  <span class="text-base max-[480px]:text-[13px] font-bold text-gray-900" x-text="order.currency + ' ' + order.total"></span>
-                </div>
-              </div>
+      <!-- ─── Header ─── -->
+      <div class="px-4 sm:px-5 py-4 border-b border-gray-100">
+        <div class="flex justify-between items-start gap-3 flex-wrap">
+          <!-- Meta -->
+          <div class="min-w-0 flex-1">
+            <div class="text-[13px] font-bold text-gray-900 flex items-center gap-1.5 flex-wrap">
+              <span class="text-text-link">★</span>
+              <span x-text="order.orderNumber"></span>
+              <span class="text-gray-300">·</span>
+              <span class="font-medium text-gray-500" x-text="order.orderDate"></span>
+              <span class="text-gray-300 max-sm:hidden">·</span>
+              <span class="text-gray-500 font-medium max-sm:hidden">${t("orders.supplier")}:</span>
+              <span class="font-semibold text-gray-800 truncate max-sm:hidden" x-text="order.seller"></span>
             </div>
-
-            <!-- ── Product Rows ── -->
-            <div class="divide-y divide-gray-100">
-              <template x-for="product in order.products" :key="product.name">
-                <div class="flex items-center gap-4 max-sm:gap-3 px-5 max-sm:px-3 py-3.5">
-                  <!-- Image -->
-                  <div class="w-[60px] h-[60px] max-sm:w-12 max-sm:h-12 rounded-md border border-gray-100 overflow-hidden shrink-0 bg-gray-50">
-                    <img :src="product.image" :alt="product.name" class="w-full h-full object-cover" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\\'flex items-center justify-center w-full h-full text-gray-300\\'><svg class=\\'w-6 h-6\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'1.5\\' viewBox=\\'0 0 24 24\\'><rect x=\\'3\\' y=\\'3\\' width=\\'18\\' height=\\'18\\' rx=\\'2\\'/><circle cx=\\'8.5\\' cy=\\'8.5\\' r=\\'1.5\\'/><path d=\\'M21 15l-5-5L5 21\\'/></svg></div>'" />
-                  </div>
-                  <!-- Name + Specs -->
-                  <div class="flex-1 min-w-0">
-                    <a href="#" class="text-sm text-gray-800 hover:text-blue-600 transition-colors line-clamp-1 leading-snug" x-text="product.name"></a>
-                    <p class="text-xs text-gray-400 mt-1 truncate" x-text="product.variation"></p>
-                  </div>
-                  <!-- Price & Qty -->
-                  <div class="text-right shrink-0 max-sm:hidden">
-                    <p class="text-sm font-medium text-gray-800" x-text="order.currency + ' ' + product.unitPrice"></p>
-                    <p class="text-xs text-gray-400 mt-0.5" x-text="'x' + product.quantity"></p>
-                  </div>
-                </div>
+            <div class="text-xs text-gray-500 mt-1 flex flex-wrap gap-1.5 items-center">
+              <span class="sm:hidden">${t("orders.supplier")}:</span>
+              <span class="font-semibold text-gray-700 sm:hidden truncate" x-text="order.seller"></span>
+              <template x-if="order.status === 'Waiting for payment'">
+                <span class="inline-flex items-center gap-1.5">
+                  <span class="text-gray-300 sm:hidden">·</span>
+                  <button type="button"
+                    @click="cancelOrder(order)"
+                    class="underline text-gray-500 hover:text-red-600 bg-transparent border-0 cursor-pointer p-0 text-xs">
+                    ${t("orders.cancelOrder")}
+                  </button>
+                </span>
               </template>
             </div>
+          </div>
 
-            <!-- ── Action Bar ── -->
-            <div class="flex flex-wrap items-center justify-between gap-3 max-[480px]:gap-2 px-5 max-sm:px-3 py-3 border-t border-gray-200 bg-[#FAFAFA]">
-              <!-- DISABLED: "Satıcıyla iletişim" linki — messages.html altyapısı yok, ileride geri açılacak. -->
-              <!-- <a :href="'${getBaseUrl()}pages/dashboard/messages.html?seller=' + encodeURIComponent(order.seller)" class="text-gray-500 hover:text-blue-600 flex items-center gap-1.5 transition-colors whitespace-nowrap text-[13px] max-[480px]:text-xs">
-                <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-                ${t("orders.contactSupplier")}
-              </a> -->
-              <span></span><!-- spacer: action bar justify-between'ı korumak için -->
-
-              <!-- Buttons -->
-              <div class="flex items-center gap-2.5 max-[480px]:w-full">
-                <button @click="viewDetail(order)" class="th-btn-outline h-9 px-5 max-[480px]:px-3 max-[480px]:flex-1 text-[13px] max-[480px]:text-xs cursor-pointer font-medium whitespace-nowrap">
-                  ${t("orders.viewDetails")}
-                </button>
-                <template x-if="canPay(order)">
-                  <button @click="openRemittanceModal(order.orderNumber, order.total, order.currency, order.paymentMethod)" class="th-btn h-9 px-5 max-[480px]:px-3 max-[480px]:flex-1 text-[13px] max-[480px]:text-xs whitespace-nowrap">
-                    ${t("orders.makePayment")}
-                  </button>
-                </template>
-                <template x-if="hasReceipt(order)">
-                  <a :href="order.receiptUrl" target="_blank" class="th-btn-outline h-9 px-5 max-[480px]:px-3 max-[480px]:flex-1 text-[13px] max-[480px]:text-xs font-medium text-emerald-700 bg-emerald-50 border-emerald-200 whitespace-nowrap hover:bg-emerald-100">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                    Dekontu görüntüle
-                  </a>
-                </template>
-              </div>
+          <!-- Totals (right-aligned, prominent) -->
+          <div class="text-right shrink-0">
+            <span class="inline-block px-2 py-0.5 rounded text-[9px] font-extrabold uppercase tracking-wider mb-1"
+              :class="order.statusColor === 'text-amber-600' ? 'bg-amber-100 text-amber-700'
+                    : order.statusColor === 'text-green-600' ? 'bg-emerald-100 text-emerald-700'
+                    : order.statusColor === 'text-blue-600' ? 'bg-blue-100 text-blue-700'
+                    : order.statusColor === 'text-red-600' ? 'bg-red-100 text-red-700'
+                    : 'bg-gray-100 text-gray-700'"
+              x-text="getStatusLabel(order)"></span>
+            <div class="text-[17px] sm:text-[20px] lg:text-[24px] font-extrabold text-gray-900 leading-none">
+              <span class="text-[11px] text-gray-500 font-semibold mr-0.5" x-text="order.currency"></span><span x-text="order.total"></span>
+            </div>
+            <div class="text-[11px] text-gray-500 mt-1">
+              <span x-text="totalQty(order)"></span> ${t("orders.productsUnit")} ·
+              <span x-text="(order.products || []).length"></span> ${t("orders.lines")}
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- ─── Thumbnail Strip ─── -->
+      <template x-if="(order.products || []).length > 0">
+        <div class="px-4 sm:px-5 py-3 bg-gradient-to-b from-gray-50 to-white">
+          <div class="flex justify-between items-center mb-2 text-[11px] text-gray-500">
+            <span>${t("orders.orderContents")}</span>
+            <button type="button"
+              @click="$dispatch('open-order-items', order)"
+              class="text-text-link font-bold text-xs inline-flex items-center gap-1 cursor-pointer bg-transparent border-0 p-0 hover:underline">
+              ${t("orders.viewAll")} (<span x-text="(order.products || []).length"></span>)
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" d="M9 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+          <div class="flex gap-2 overflow-x-auto pb-1">
+            <template x-for="(product, idx) in (order.products || []).slice(0, ${STRIP_VISIBLE_THUMBS})" :key="product.name + idx">
+              <div class="w-[46px] h-[46px] sm:w-[52px] sm:h-[52px] lg:w-[58px] lg:h-[58px] rounded-md border border-gray-200 shrink-0 relative overflow-hidden bg-gray-50">
+                <img :src="product.image" :alt="product.name" class="w-full h-full object-cover"
+                  onerror="this.style.display='none'" />
+                <span class="absolute bottom-0.5 right-0.5 bg-gray-900/85 text-white text-[9px] font-extrabold px-1 py-px rounded">
+                  ×<span x-text="product.quantity"></span>
+                </span>
+              </div>
+            </template>
+            <template x-if="(order.products || []).length > ${STRIP_VISIBLE_THUMBS}">
+              <button type="button"
+                @click="$dispatch('open-order-items', order)"
+                class="w-[46px] h-[46px] sm:w-[52px] sm:h-[52px] lg:w-[58px] lg:h-[58px] rounded-md shrink-0 bg-gradient-to-br from-amber-50 to-amber-100 border border-amber-300 text-amber-800 font-extrabold text-xs flex items-center justify-center cursor-pointer hover:from-amber-100 hover:to-amber-200 transition-colors">
+                +<span x-text="(order.products || []).length - ${STRIP_VISIBLE_THUMBS}"></span>
+              </button>
+            </template>
+          </div>
+        </div>
+      </template>
+
+      <!-- ─── Footer / Action Bar ─── -->
+      <div class="flex flex-wrap items-center justify-between gap-3 px-4 sm:px-5 py-3 border-t border-gray-200 bg-[var(--color-surface-muted,#fafafa)]">
+        <div class="text-[11px] text-gray-500" aria-hidden="true">
+          ${t("orders.subtotalVatIncluded")} — <strong class="text-gray-900 font-extrabold text-[13px]"><span x-text="order.currency"></span> <span x-text="order.total"></span></strong>
+        </div>
+        <div class="flex items-center gap-2 max-[480px]:w-full">
+          <button type="button"
+            @click="viewDetail(order)"
+            class="th-btn-outline h-8 px-4 max-[480px]:flex-1 text-xs font-semibold whitespace-nowrap">
+            ${t("orders.viewDetails")}
+          </button>
+          <template x-if="canPay(order)">
+            <button type="button"
+              @click="openRemittanceModal(order.orderNumber, order.total, order.currency, order.paymentMethod)"
+              class="th-btn h-8 px-4 max-[480px]:flex-1 text-xs font-semibold whitespace-nowrap">
+              ${t("orders.makePayment")}
+            </button>
+          </template>
+          <template x-if="hasReceipt(order)">
+            <a :href="order.receiptUrl" target="_blank"
+              class="th-btn-outline h-8 px-4 max-[480px]:flex-1 text-xs font-semibold whitespace-nowrap text-emerald-700 bg-emerald-50 border-emerald-200 hover:bg-emerald-100 inline-flex items-center gap-1">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+              </svg>
+              ${t("orders.viewReceipt")}
+            </a>
+          </template>
+        </div>
+      </div>
+    </div>
   `;
 }

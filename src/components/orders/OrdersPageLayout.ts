@@ -6,6 +6,7 @@
 import { getCurrencyCode, getCurrencySymbol } from "../../utils/currency";
 import { t } from "../../i18n";
 import { OrderListItem } from "./OrderListItem";
+import { OrderItemsDrawer } from "./OrderItemsDrawer";
 
 interface OrdersNavItem {
   id: string;
@@ -53,6 +54,7 @@ function getOrderStatusTabs() {
 function renderAllOrders(): string {
   return `
     <div x-data="ordersListComponent()" x-cloak>
+      ${OrderItemsDrawer()}
       <template x-if="!selectedOrder"><div>
       <!-- Header -->
       <div class="flex items-center justify-between gap-2 px-5 max-sm:px-3 pt-6 max-[480px]:pt-4 pb-5 max-[480px]:pb-3 border-b border-gray-100">

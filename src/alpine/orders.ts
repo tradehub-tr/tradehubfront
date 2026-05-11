@@ -576,6 +576,11 @@ Alpine.data("ordersListComponent", () => ({
     if (["Pending", "Approved"].includes(order.refundStatus)) return false;
     return true;
   },
+
+  totalQty(order: any): number {
+    return ((order?.products ?? []) as Array<{ quantity?: number }>)
+      .reduce((s, p) => s + (p.quantity ?? 0), 0);
+  },
 }));
 
 Alpine.data("ordersSection", () => ({
