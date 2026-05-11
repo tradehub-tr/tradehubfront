@@ -14,6 +14,24 @@ import { TopBar, SubHeader, initMobileDrawer, initStickyHeaderSearch, MegaMenu, 
 import { initLanguageSelector } from '../components/header/TopBar'
 import { FooterLinks } from '../components/footer'
 
+function formatCurrency(amount: number | string | null | undefined, currencyCode: string | null | undefined): string {
+  const num = typeof amount === 'number' ? amount : parseFloat(String(amount ?? ''));
+  if (!isFinite(num)) return '-';
+  const code = (currencyCode || 'TRY').toUpperCase();
+  try {
+    return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: code }).format(num);
+  } catch {
+    return `${code} ${num}`;
+  }
+}
+
+import {
+  type RfqAttachment,
+  renderAttachmentsSection,
+  renderAttachmentModal,
+  setupAttachmentInteractions,
+} from '../components/rfq/attachments';
+
 await requireAuth();
 
 const params = new URLSearchParams(window.location.search);
@@ -48,11 +66,13 @@ async function loadQuotes() {
   const d = await res.json();
   const rfq = d.message?.rfq;
   const quotes = d.message?.quotes || [];
+  const attachments: RfqAttachment[] = (rfq?.attachments || []) as RfqAttachment[];
 
   if (!rfq) { window.location.href = '/pages/dashboard/inquiries.html'; return; }
 
   const mainEl = document.querySelector('main')!;
   mainEl.innerHTML = `
+    ${renderAttachmentModal('buyer-detail')}
     <div class="container-boxed py-8">
       <!-- RFQ Header -->
       <div class="bg-white border border-gray-200 rounded-lg p-6 mb-6 flex max-md:flex-col gap-6 items-start justify-between">
@@ -73,6 +93,8 @@ async function loadQuotes() {
         </div>
       </div>
 
+      ${renderAttachmentsSection(attachments, 'buyer-detail')}
+
       ${quotes.length ? `
         <!-- Comparison Table -->
         <h2 class="text-base font-bold text-gray-800 mb-4">${t('rfq.allQuotationsComparison')} (${quotes.length})</h2>
@@ -89,13 +111,6 @@ async function loadQuotes() {
                     </button>
                     <p class="text-sm font-medium text-gray-800">${q.seller_name}</p>
                     <p class="text-xs text-gray-400">${q.seller_company}</p>
-                    <div class="flex flex-col items-center gap-1.5 mt-3">
-                      <a href="#" class="inline-flex items-center px-5 py-1.5 rounded-full border border-amber-500 text-amber-600 text-xs font-medium hover:bg-amber-50">${t('rfq.chatNow')}</a>
-                      <a href="#" class="inline-flex items-center gap-1 text-xs text-amber-600 hover:underline">
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
-                        ${t('rfq.addNotes')}
-                      </a>
-                    </div>
                   </th>
                 `).join('')}
               </tr>
@@ -135,7 +150,12 @@ async function loadQuotes() {
               <tr class="border-b border-gray-100">
                 <td class="p-3 text-sm text-gray-500">${t('rfq.unitPrice')}</td>
                 ${quotes.map((q: any) => `
-                  <td class="p-3 text-center text-sm font-semibold border-l border-gray-100">${q.total_price ? `${q.currency} ${q.price_per_unit}` : t('rfq.priceOnRequest')}</td>
+                  <td class="p-3 text-center border-l border-gray-100">
+                    ${q.total_price ? `
+                      <div class="text-xl font-bold text-gray-800 leading-tight tabular-nums">${formatCurrency(q.price_per_unit, q.currency)}</div>
+                      ${rfq.unit ? `<div class="text-xs text-gray-400 mt-0.5">/${rfq.unit}</div>` : ''}
+                    ` : `<span class="text-sm italic text-gray-500">${t('rfq.priceOnRequest')}</span>`}
+                  </td>
                 `).join('')}
               </tr>
               <!-- Lead Time -->
@@ -207,6 +227,8 @@ async function loadQuotes() {
       </div>
     </div>
   `;
+
+  setupAttachmentInteractions(document, attachments, 'buyer-detail');
 }
 
 loadQuotes().then(() => {

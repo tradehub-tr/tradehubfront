@@ -130,11 +130,23 @@ function OverviewTab(): string {
     <div class="company-profile__tab-content" x-show="activeTab === 'overview'" x-transition.opacity.duration.300ms id="tab-overview">
 
       <!-- Single white card for entire profile (iSTOC-style) -->
+      <!-- v4: seller.verified_certifications (sadece Verified) tercih edilir; geriye uyumluluk için certifications string fallback -->
       <section class="bg-white rounded-md border border-gray-200 p-6 mb-6"
         x-data="{
           get certList() {
+            if (Array.isArray(this.seller?.verified_certifications) && this.seller.verified_certifications.length) {
+              return this.seller.verified_certifications.map(c => ({
+                name: c.certification_name || c.certification_type,
+                document: c.document || '',
+                expiry_date: c.expiry_date || null,
+                category: c.category || null,
+              }));
+            }
             if (!this.seller?.certifications) return [];
-            return this.seller.certifications.split(',').map(c => c.trim()).filter(Boolean);
+            const raw = this.seller.certifications;
+            const arr = (typeof raw === 'string') ? raw.split(',') : Array.isArray(raw) ? raw : [];
+            return arr.map(c => typeof c === 'string' ? ({ name: c.trim(), document: '', expiry_date: null }) : c)
+              .filter(c => c.name);
           }
         }"
       >
@@ -192,12 +204,23 @@ function OverviewTab(): string {
           <h4 class="text-[16px] font-bold text-gray-900 mb-5">${t("seller.sf.certificates")}</h4>
           <div x-show="certList.length > 0" class="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <template x-for="(cert, idx) in certList" :key="idx">
-              <div class="bg-white border border-gray-200 rounded-md p-4 flex flex-col items-center text-center hover:shadow-sm transition-shadow">
-                <div class="w-full aspect-[3/4] bg-gray-50 rounded flex items-center justify-center mb-3">
+              <a
+                :href="cert.document || '#'"
+                :target="cert.document ? '_blank' : '_self'"
+                @click="if (!cert.document) $event.preventDefault();"
+                :class="cert.document ? 'cursor-pointer hover:shadow-md hover:border-emerald-300' : 'cursor-default'"
+                class="bg-white border border-gray-200 rounded-md p-4 flex flex-col items-center text-center transition-all no-underline"
+              >
+                <div class="w-full aspect-[3/4] bg-gray-50 rounded flex items-center justify-center mb-3 relative">
                   <svg class="w-16 h-16 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                  <span x-show="cert.document" class="absolute bottom-2 right-2 inline-flex items-center gap-1 text-emerald-600 text-xs font-semibold bg-white/90 px-1.5 py-0.5 rounded">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    PDF
+                  </span>
                 </div>
-                <span class="text-[13px] font-bold text-gray-900" x-text="cert"></span>
-              </div>
+                <span class="text-[13px] font-bold text-gray-900" x-text="cert.name"></span>
+                <span x-show="cert.expiry_date" class="text-[11px] text-gray-500 mt-1" x-text="'Geçerli: ' + cert.expiry_date"></span>
+              </a>
             </template>
           </div>
           <div x-show="certList.length === 0" class="text-gray-400 text-[14px] py-4 text-center">

@@ -12,7 +12,7 @@
  */
 
 import type { SearchHeaderInfo, SortOption, ViewMode } from "../../types/productListing";
-import { t } from "../../i18n";
+import { t, getCurrentLang } from "../../i18n";
 
 /**
  * Default sort options for product listing
@@ -43,10 +43,14 @@ const defaultSearchHeaderInfo: SearchHeaderInfo = {
 };
 
 /**
- * Formats large numbers with commas (e.g., 48562 -> "48,562")
+ * Formats large numbers with locale-aware thousand separators.
+ * TR: 1.234.567 (nokta ayraç)
+ * EN: 1,234,567 (virgül ayraç)
  */
 function formatNumber(num: number): string {
-  return num.toLocaleString("en-US");
+  const lang = getCurrentLang();
+  const locale = lang === "tr" ? "tr-TR" : "en-US";
+  return num.toLocaleString(locale);
 }
 
 /**
