@@ -81,9 +81,8 @@ export function FAQPageLayout(): string {
               @click="selectCategory(cat.id)"
               class="w-full flex items-center justify-between px-4 py-2.5 text-sm text-left transition-colors"
               :class="activeCategory === cat.id
-                ? 'font-bold text-white'
+                ? 'font-bold text-white bg-[var(--color-primary-500,#f5b800)] border-b border-transparent'
                 : 'text-gray-700 bg-white hover:bg-gray-50 border-b border-gray-100'"
-              :style="activeCategory === cat.id ? 'background:var(--color-primary-500);border:none;' : ''"
             >
               <span x-text="cat.label"></span>
               <svg class="w-3.5 h-3.5 opacity-60 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
@@ -109,7 +108,7 @@ export function FAQPageLayout(): string {
             <template x-for="(cat, ci) in visibleCategories" :key="cat.id">
               <div class="bg-white rounded border border-gray-200 p-4 hover:shadow-sm transition-shadow">
                 <!-- Category title -->
-                <h3 class="text-[14px] font-bold text-gray-800 mb-2" x-text="cat.label"></h3>
+                <h3 class="text-[14px] font-bold text-gray-800 mb-2" x-html="highlight(cat.label)"></h3>
                 <hr class="border-gray-100 mb-2" />
                 <!-- Sub-links -->
                 <div class="flex flex-wrap gap-x-2 gap-y-1">
@@ -118,8 +117,8 @@ export function FAQPageLayout(): string {
                       <a
                         :href="'faq-detail.html?cat=' + cat.id + '&sub=' + (sub.key || '')"
                         class="text-[12px] transition-colors"
-                        :class="sub.highlight ? 'text-primary-500 hover:text-primary-700' : 'text-gray-600 hover:text-primary-500'"
-                        x-text="sub.label"
+                        :class="sub.highlight ? 'text-[var(--color-primary-500,#f5b800)] hover:text-[var(--color-primary-700,#a87c00)]' : 'text-gray-600 hover:text-[var(--color-primary-500,#f5b800)]'"
+                        x-html="highlight(sub.label)"
                       ></a>
                       <span x-show="si < cat.subs.length - 1" class="text-gray-300 mx-1.5 text-[11px]">|</span>
                     </span>
