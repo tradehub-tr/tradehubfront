@@ -1,3 +1,11 @@
+## [v1.1.8-beta.1] - 2026-05-11 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(floating-panel): x-show ve x-transition ekleyerek görünürlüğü iyileştirdi (@ahmeetseker)
+
+---
 ## [v1.1.8] - 2026-05-08 PROD
 
 Bu surum istoc.com'da yayindadir.
