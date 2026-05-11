@@ -1,220 +1,55 @@
-## [Belgelenmemis Ozellikler — Gelistirme Sureci Ozeti] - 2026-05-08
+## [v1.1.8] - 2026-05-08 PROD
 
-Bu bolum, gelistirme surecinde koda eklenmis ancak onceki surum changelog'larinda
-yer almayan ya da tek satir kuru bir feat/fix mesaji olarak gecistirilmis ozellikleri
-detayli sekilde listeler. Her madde; etkilenen sayfa/komponent, ne yaptigi ve teknik
-kapsami ile birlikte yazilmistir. Surum bolumlerine dokunulmamistir; bu bolum kod
-incelemesi ile cikartilmis bir tamamlama notudur (PR #80, #82, #83 ve PR #77'in detay
-dokumantasyonu burada toplanmistir).
+Bu surum istoc.com'da yayindadir.
 
-### Eklendi (Belgelenmemis)
+### Eklendi
+- feat: cart + checkout redesign, fatura bilgisi bölümü, header & megamenü revizyonu (@ahmeetseker)
+- feat(top-ranking-category): add Pagination component (@ahmeetseker)
+- feat(top-ranking-category): add Grid component with rank badges and ratings (@ahmeetseker)
+- feat(top-ranking-category): add Hero component reusing TopRankingFilters (@ahmeetseker)
+- feat(top-ranking-category): add barrel export (@ahmeetseker)
+- feat(top-ranking-category): add HTML entry (@ahmeetseker)
+- feat(top-ranking-category): add page entry with Alpine data and assembly (@ahmeetseker)
+- feat(homepage): link top-ranking cards to dedicated category page (@ahmeetseker)
+- feat(products): remove inactive Karşılaştır checkbox from product cards (@ahmeetseker)
+- feat(top-ranking): redirect category tabs and card headers to dedicated page (@ahmeetseker)
+- feat: add spam category filtering, implement recent category tracking, and apply global touch-suppression utility classes (@ahmeetseker)
+- feat(kyb,dashboard): Storefront KYB sayfası + buyer dashboard widget + sidebar requireSeller; mesajlar/iletişim CTA'ları gizlendi (@aliiball)
+- feat(seller-trust): "Onaylanmış Satıcı" rozetini KYB Verified ile birleştir + 3-katmanlı sipariş gate (@aliiball)
 
-- feat(seller-trust): "Onaylanmis Satici" rozeti KYB Verified akisina baglandi ve uretim
-  capacity'sine gore 3 katmanli sipariş gate kuruldu (Visitor/Buyer/Verified) — `FilterSidebar`'da
-  yeni "Tedarikci Turleri > Onaylanmis Satici" checkbox'i, `filterEngine`'de `min_order` +
-  `verifiedSupplier` + sertifika filtreleri URL <-> state <-> checkbox uc yonlu senkron;
-  `ProductInfo`/`ProductTitleBar`'da hardcoded "Verified Multispecialty Supplier" metinleri
-  silinerek `seller.is_verified` + `kyb_status` ortak hesaplamasiyla degistirildi;
-  `business_type` icin `country.ts`'e localize fonksiyon eklendi, "MOQ" kisaltmasi
-  Turkce arayuzde "MSA"ya cevrildi; bayrak ikonu artik `seller.country` koduna gore
-  dinamik. Etkilenen 12+ komponent: ProductTitleBar, CompanyProfile, MobileLayout,
-  CompanyInfo, CompanyIntroduction, StoreHeader, seller-shop, ManufacturerList,
-  FavoritesLayout, TailoredProductGrid, SupplierCard, HorizontalCategoryBar. (@aliiball, PR #82)
+### Duzeltildi
+- fix(nginx): parametrize backend domain via envsubst template (@ahmeetseker)
 
-- feat(seller): Backend `media_groups` storefront entegrasyonu — `alpine/seller.ts`
-  icine `mediaGroups` computed property eklendi (kullaniciya gosterilmeyecek bos
-  kategoriler kirpilir, Alpine scope inheritance sayesinde inner `x-data` bloklari
-  da erisebilir); `StoreHeader`'da hardcoded `picsum` thumbnail'leri silindi, yerine
-  backend'den gelen kategori segmentleri tab + thumbnail grid olarak basildi
-  (2+ kategori varsa tab gorunur, 2+ medya varsa grid acilir); video icin poster
-  yoksa `<video #t=0.5>` + `preload=metadata` fallback ile ilk frame'den thumbnail
-  uretilir; `CompanyProfile`'dan kullanilmayan "service" tab'i kaldirildi. (@bora, PR #83)
+### Degistirildi
+- refactor(top-ranking): remove flat mode (replaced by dedicated category page) (@ahmeetseker)
+- refactor: standardize currency formatting by replacing manual string interpolation with formatCurrency utility (@ahmeetseker)
 
-- feat(top-ranking-category): Yeni `pages/top-ranking-category.html` adanmis kategori
-  Top 100 sayfasi — tek bir kategori icin sira rozetleri (1-50/51-100), urun rating'i
-  ve klasik sayfalama gosterir; URL parametreleri `?cat=&sort=&page=` uzerinden state
-  saklanir, `searchListings(category, sort_by, page_size=50)` ile besleniyor; sira
-  numarasi `(page - 1) * 50 + index + 1` formuluyle hesaplanir; `top-ranking-category/`
-  altinda Hero (mevcut `TopRankingFilters`'i yeniden kullanir), Grid (rank badge'leri
-  + yildiz gosterimi), Pagination, barrel export ve HTML/JS entry; Alpine module
-  `init()` icinde fetch + URL pushState yonetimi. Homepage `top-ranking` kart
-  basliklari ve kategori tab'lari artik bu adanmis sayfaya yonleniyor; `top-ranking`'in
-  eski "flat mode"u kaldirildi. (@ahmeetseker, PR #78)
+---
+## [v1.1.7-rc.1] - 2026-05-08 RC
 
-- feat(checkout): `BillingInfoSection` — fatura bilgisi yeni bir checkout bolumu olarak
-  eklendi. Acikken: Bireysel/Sirket toggle'i, VKN/TCKN otomatik secimi, "Teslimat adresi
-  ile ayni" checkbox'i, e-fatura mukellefi mi soru pill'i, sehir/ilce/adres alanlari;
-  kapaliyken tek satir summary metni gosterir. Alpine modulu `billingForm`
-  (`alpine/checkout.ts`, +253 satir) form state, validation, mukellef sorgusu ve
-  adres senkronizasyonunu yonetir. `cartService.placeOrder` payload'una billing
-  alanlari eklendi. (@ahmeetseker, PR #77)
+Bu surum rc.istoc.com'da onay asamasindadir.
 
-- feat(checkout): `OrderProtectionModal` ve `OrderReviewModal` componentleri eklendi
-  (alici siparis koruma akisi ve son onay ekrani); `PaymentMethodSection` 3D Secure
-  toggle ve kart radyolarini Tailwind utility class'lariyla yeniden yazildi. (@ahmeetseker, PR #77)
+### Eklendi
+- feat: cart + checkout redesign, fatura bilgisi bölümü, header & megamenü revizyonu (@ahmeetseker)
+- feat(top-ranking-category): add Pagination component (@ahmeetseker)
+- feat(top-ranking-category): add Grid component with rank badges and ratings (@ahmeetseker)
+- feat(top-ranking-category): add Hero component reusing TopRankingFilters (@ahmeetseker)
+- feat(top-ranking-category): add barrel export (@ahmeetseker)
+- feat(top-ranking-category): add HTML entry (@ahmeetseker)
+- feat(top-ranking-category): add page entry with Alpine data and assembly (@ahmeetseker)
+- feat(homepage): link top-ranking cards to dedicated category page (@ahmeetseker)
+- feat(products): remove inactive Karşılaştır checkbox from product cards (@ahmeetseker)
+- feat(top-ranking): redirect category tabs and card headers to dedicated page (@ahmeetseker)
+- feat: add spam category filtering, implement recent category tracking, and apply global touch-suppression utility classes (@ahmeetseker)
+- feat(kyb,dashboard): Storefront KYB sayfası + buyer dashboard widget + sidebar requireSeller; mesajlar/iletişim CTA'ları gizlendi (@aliiball)
+- feat(seller-trust): "Onaylanmış Satıcı" rozetini KYB Verified ile birleştir + 3-katmanlı sipariş gate (@aliiball)
 
-- feat(cart): Atomic Design klasor yapisina gore yeniden organize edildi
-  (`cart/atoms/`, `cart/molecules/`, `cart/organisms/`, `cart/overlay/`, `cart/page/`,
-  `cart/state/`); `Checkbox`, `PriceDisplay`, `QuantityInput` atoms; `BatchSelectBar`,
-  `ProductItem`, `SkuRow` molecules; `BuffTaskArrow`, `CartHeader`, `SupplierCard`
-  organisms; `SharedCartDrawer` overlay; `CartPage`, `CartSummary` page; `CartStore`
-  state singleton. Sepet artik DOM source-of-truth degil; `CartStore` localStorage
-  + listener pattern ile tek noktadan yonetir. (@ahmeetseker, PR #77)
+### Duzeltildi
+- fix(nginx): parametrize backend domain via envsubst template (@ahmeetseker)
 
-- feat(cart): SKU matrisinden birim fiyat hesaplama — `getSkuPriceForSize` ile sepet
-  drawer'inda renk + beden + ek ozellik kombinasyonuna gore `skuMatrix`'ten birim
-  fiyat aranir; uygun SKU yoksa beden seviyesindeki `rawPrice`'a, o da yoksa aktif
-  fiyata duser. (@bora, PR #76)
-
-- feat(products): "Stokta yok" rozeti — urun listesi kartlarinda gri overlay + devre
-  disi sepete ekle butonu; urun detay sayfasinda "Hazir" badge'i listing seviyesindeki
-  `outOfStock` bayragina saygi gosterir; `ProductDetail`/`ProductListingCard` tiplerine
-  `outOfStock`, `status`, `inStock`, `stockQty` alanlari eklendi; `listingService`
-  mapping'lerine baglandi; TR/EN locale'lara `products.outOfStock` string'i. (@bora, PR #76)
-
-- feat(notifications): Toast spam onleyici akis — `alpine/notifications.ts` ilk poll'da
-  toast atmaz, sadece `server_time`'i kaydeder (sayfa acilisinda birikmis bildirimleri
-  bos veriye yansitmamak icin); ardisik 5 hata sonrasi `permanent stop` yerine 5dk
-  recovery backoff devreye giriyor; `isSafeActionUrl` ile yalnizca relative `/...`
-  veya `https://` baslayan URL'lere yonlendirme yapiliyor; dispute toast turu
-  `info` -> `warning` olarak hizalandi; `?mark_as_read=1` parametresi backend'den
-  kaldirildi (drawer kontrollu okuma). (@bora, PR #83)
-
-- feat(buyer-dashboard): KYB Status Widget — `KybStatusWidget` buyer dashboard'a
-  gomulu kart olarak eklendi; yalniz `is_seller=true` veya `pending_seller_application`
-  kullanicilarinda render edilir, diger kullanicilar icin silent fail; status'a gore
-  shield-check / alert icon + Verified/Pending/Rejected/Expired badge ve "Yeniden
-  Gonder" CTA gosterir. (@aliiball, PR #79)
-
-- feat(kyb): Storefront `pages/dashboard/kyb.html` ve `KybLayout` componenti — 6
-  belge yukleme akisi (kimlik, imza sirkuleri, ticaret sicil gazetesi, faaliyet
-  belgesi, vergi levhasi, banka hesap belgesi); Reject/Expired durumlarda "Yeniden
-  Gonder" akisi, status badge'leri, hata mesajlari; `alpine/kyb.ts` Alpine state
-  modulu form yonetimi ve dosya validasyonu icin; sidebar `SidebarMenuItem`'a
-  `requireSeller` flag'i eklendi, `Sidebar.isItemVisible` filtresi KYB item'inin
-  sadece satici/basvuru bekleyenlerde gorunmesini sagliyor; `dashboard.kybVerification`
-  + `kyb.*` paneli i18n key'leri (TR/EN, ~20+ string). (@aliiball, PR #79)
-
-- feat(buyer-dashboard): `SupportTicketsCard` — buyer dashboard sag panelde Destek
-  Taleplerim karti; acik talep sayisi + yanit bekleyen talep sayisi + yeni talep
-  CTA; URL `?tab=` parametresi ile dashboard kartindan dogrudan acik/yanit-bekleyen
-  tab'ina yonlendirme. (@ahmeetseker, v1.1.4-rc.22 onceden eklendi ama detayi yok)
-
-- feat(home): "Sizin icin kategoriler" personalization sinyali — yeni `recentCategories`
-  utility (`src/utils/recentCategories.ts`) localStorage tabanli son ziyaret edilen
-  kategori listesi tutar; FIFO, max 12 kayit, anonim ve giris yapmis kullanicilar
-  icin ayni kaynak; her kategori sayfasi acildiginda otomatik kayit; homepage'de
-  oneri panelinin besleyicisi olarak kullanilir. (@ahmeetseker, PR #78)
-
-- feat(category): Spam/test kategori filtreleme — `categoryService` icine `isSpamCategory`
-  filtre fonksiyonu eklendi; "test", "test-x", "test_x" prefix'i, bilinen spam isimler,
-  1-6 harfli klavye spam'i (orn. "dasdas", "adsf", "asdfsa") regex ile ayiklanir;
-  backend cleanup yapilana kadar gecici filtre olarak isaretli. (@ahmeetseker, PR #78)
-
-- feat(ux): Global `touch-suppression` utility class'lari — mobil cihazlarda
-  ghost-tap ve scroll sirasinda istemsiz `:hover` state'lerini bastirmak icin
-  `@media (hover: hover)` query'leriyle conditional pseudo state'ler `style.css`'e
-  eklendi; `CategoryBrowse`, `CartHeader`, `ProductImageGallery`, `AttributesTabContent`
-  gibi yogun temas alan komponentlere uygulandi. (@ahmeetseker, PR #78)
-
-- feat(shared): `TradeAssuranceBadge` componenti — odeme/checkout/cart bolumlerinde
-  tekrar kullanilan TAS rozeti (icon + i18n metin); `payments`, `refund-policy`,
-  `ShippingLogisticsPage`, `AfterSalesPage` sayfalarinda inline tekrar yerine ortak
-  parca olarak kullanilir. (@ahmeetseker, PR #77)
-
-- feat(icons): `lucideIcons.ts` modulu — `lucide-static`'tan ham SVG dosyalarini
-  `?raw` import ile aliyor, kategori isimlerini tanimlayici ikonlara esliyor;
-  tree-shake edilebilir (kullanilmayan ikon final bundle'a girmez); kategori
-  klavyesinde kullaniliyor. (@ahmeetseker, PR #77)
-
-- feat(ui): `utils/ui/button.ts` — ortak buton class helper'i; `btn({ variant, size })`
-  call'i ile `style.css` `.th-btn-*` ailesine baglanan class string'i doner;
-  variant: primary/outline/dark/success, size: sm/md/lg; admin panel "Tradehub Theme
-  Settings" buton CSS variable'lari (`--btn-bg`, `--radius-button`, `--spacing-button-x/y`)
-  ile entegre. (@ahmeetseker, PR #77)
-
-- feat(header): TopBar'in tamami yeniden yazildi (+415 satir) — sticky scroll davranisi,
-  arama bar genisleme animasyonu, mobil drawer entegrasyonu, kategori popover, dil/para
-  birimi/sepet ikonlari yeni Lucide ikonlariyla; mega menu (`MegaMenu.ts` +312 satir)
-  re-layout edildi: 3 sutunlu kategori grid'i, hover delay'i, klavye navigasyonu.
-  (@ahmeetseker, PR #77)
-
-- feat(types): `cart.is_sample` alani eklendi (numune satirlari); `cartService`
-  numune satiri payload'i + fatura payload'i destekleri; `RankedProduct` tipi
-  `rank: number` ve rating alanlariyla genisletildi. (@ahmeetseker, PR #77 / PR #78)
-
-### Duzeltildi (Belgelenmemis)
-
-- fix(checkout-address): "Adres akisinda 9 bug" toplu duzeltmesi — Duzenle butonu
-  artik update yapiyor (onceden her zaman yeni kayit aciyordu); `buyerAddressToCheckout`
-  mapping'i artik `company` ve `note` alanlarini kaybetmiyor; `fillMainFormFromAddress`
-  Sirket Adi input'unu da dolduruyor; `submitAddAddress` validation'ina company +
-  telefon format kontrolu eklendi (`validatePhone` + `normalizePhone`); `setDefaultAddress`
-  silent error swallow yerine alert + local state geri alma; `delete_address` artik
-  backend'in dondugu `default_id`'yi kullaniyor (frontend `_ensure_one_default`
-  invariant drift onlendi); telefon normalize tutarsizligi giderildi (checkout artik
-  `normalizePhone`'dan gecmis veriyi gonderiyor); 2 paralel `handleSubmit` /
-  `submitAddAddress` save akisi (~150 satir tekrar) `_persistAddress(candidate, isEdit, prev)`
-  ortak helper'inda birlestirildi (optimistic insert/replace + canonical replace +
-  rollback); `ShippingAddressForm.ts` modal'ina zorunlu "Sirket Adi" alani eklendi;
-  `cartService.deleteAddressApi` return type `{success, default_id}`; TR/EN locale'lara
-  `checkout.companyName` eklendi. (@bora, PR #80)
-
-- fix(seller-link): Storefront linki query parametre adi `?id=` -> `?seller=`
-  olarak duzeltildi (backend'in bekledigi parametre adi ile hizalama, link tiklayinca
-  404 sorunu giderildi); `listingService.mapListingDetail` icin `supplier.id`
-  oncelikli olarak `sellerCode`'u kullanir hale getirildi; `CompanyProfile`'in
-  `ReviewsTab`'i `Promise.all` + `try/catch` yerine `safeFetch` wrapper kullaniyor —
-  endpoint'lerden biri 401/500 dondugunde digerleri kaybolmuyor, her biri bagimsiz
-  null'a dusuyor. (@bora, v1.1.4-rc.27)
-
-- fix(nginx): `nginx.conf` icindeki hardcoded `rcistoc.cronbi.com` beta deploy'larinda
-  API trafigini yanlis backend'e yonlendiriyordu (VITE build arg'leri sadece client
-  JS'i etkiliyordu, nginx `proxy_pass`'i degil). `nginx.conf` -> `nginx.conf.template`
-  olarak yeniden yazildi; `${BACKEND_DOMAIN}` ve `${FRONTEND_DOMAIN}` placeholder'lari
-  envsubst ile container baslatilirken doldurulur; `NGINX_ENVSUBST_FILTER` ile sadece
-  bu iki degisken substitute edilir (nginx'in kendi `$remote_addr`/`$http_origin`
-  korunur); default ENV `rcistoc/rc.istoc.com` kalir, beta compose iki ENV'i
-  override eder. (@ahmeetseker, PR #81)
-
-- fix(top-ranking-category): Mobil cihazlarda kart layout'u sikistirildi, responsive
-  grid breakpoint'leri pürüzsüzlestirildi (gap, padding ve column count yeniden
-  ayarlandi). (@ahmeetseker, polish commit e9383bc)
-
-### Degistirildi (Belgelenmemis)
-
-- refactor(currency): Sayfalardaki manuel string interpolasyonu (`"₺" + price.toFixed(2)`
-  vb.) standart `formatCurrency(value)` utility cagrilariyla degistirildi; baslangic
-  `alpine/checkout.ts` ve `ItemsDeliverySection.ts` icin yapildi, sonraki PR'larda
-  digerlerine genisletilecek. (@ahmeetseker, PR #81)
-
-- refactor(top-ranking): Eski "flat mode" kaldirildi — `top-ranking` sayfasi artik
-  category secince adanmis `top-ranking-category` sayfasina yonleniyor; eski tum-100
-  flat liste mode'u silindi (kod azaltma + tek kaynak veri akisi). (@ahmeetseker, PR #78)
-
-- refactor(products): Inactive "Karsilastir" checkbox'i urun kartlarindan kaldirildi
-  (backend karsilastirma feature yok, UI yanlis beklenti yaratiyordu). (@ahmeetseker, PR #78)
-
-- refactor(filters): UI'dan kaldirilan filtre bolumleri (backend implementasyonu yok):
-  Trade Assurance, Verified Supplier, Store Reviews, Paid Samples — `FilterSidebar`
-  ve `filterEngine` icindeki bu bolumler temizlendi; ileride backend hazirlandiginda
-  geri eklenmek uzere git history'sinde mevcut. (@aliiball, PR #82 + onceki PR'lar)
-
-- refactor(messaging): Mesaj/iletisim CTA'lari frontend'den gizlendi (backend chat
-  altyapisi olmadigindan): `TopBar` ve `CheckoutMinimalHeader` user-menu'sundeki
-  "Mesajlarim" `<li>`'leri yorum satirina alindi; `FavoritesLayout` supplier card
-  "Iletisime gec" + Orders "Saticiyla iletisim" linkleri devre disi; `Sidebar`
-  messages parent + alt menu yorum, yerine standalone "RFQ Talepleri" item'i.
-  Backend hazirlandiginda blok aynen geri acilacak. (@aliiball, PR #79)
-
-### Notlar
-
-- **Eksik footer sayfalari:** Footer'da yer alan bazi linklerin henuz adanmis sayfasi
-  olmayabilir; mobil uygulama indirme bolumunde de placeholder kullaniliyor. Backend
-  ve icerik hazirligi tamamlandiginda sayfalar acilacak.
-- **Yorum satiri / hidden CTA'lar:** Mesajlasma, "Iletisime gec", canli destek gibi
-  CTA'lar HTML'de yorum satirina alinarak korundu; backend chat servisi devreye
-  girince yorum satirlari kaldirilacak.
+### Degistirildi
+- refactor(top-ranking): remove flat mode (replaced by dedicated category page) (@ahmeetseker)
+- refactor: standardize currency formatting by replacing manual string interpolation with formatCurrency utility (@ahmeetseker)
 
 ---
 ## [v1.1.7-beta.9] - 2026-05-08 BETA
