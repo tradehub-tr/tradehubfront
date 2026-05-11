@@ -63,11 +63,11 @@ function renderPaymentManagement(): string {
         </div>
         <!-- Edit + Sil buttons -->
         <div class="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button class="w-5 h-5 rounded-full flex items-center justify-center text-white bg-white/20 hover:bg-white/40 border-none cursor-pointer transition-colors"
+          <button class="th-no-press w-5 h-5 rounded-full flex items-center justify-center text-white bg-white/20 hover:bg-white/40 border-none cursor-pointer transition-colors"
                   onclick="if(window.editSavedCard) window.editSavedCard('${c.id}')" title="${t("payment.editCardBtn")}">
             <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M8.5 1.5l2 2L4 10H2v-2l6.5-6.5z" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
-          <button class="w-5 h-5 rounded-full flex items-center justify-center text-white bg-red-500/70 hover:bg-red-500 border-none cursor-pointer text-[10px] font-bold transition-colors"
+          <button class="th-no-press w-5 h-5 rounded-full flex items-center justify-center text-white bg-red-500/70 hover:bg-red-500 border-none cursor-pointer text-[10px] font-bold transition-colors"
                   onclick="this.closest('[data-card-id]').remove(); if(window.removeSavedCard) window.removeSavedCard('${c.id}')" title="${t("payment.deleteBtn")}">
             &times;
           </button>
@@ -106,8 +106,8 @@ function renderPaymentManagement(): string {
     <div class="mb-8" x-data="paymentManagement">
       <h2 class="text-base font-semibold text-text-primary mb-4">${t("payment.transactionsTitle")}</h2>
       <div class="flex border-b border-border-default overflow-x-auto overflow-y-hidden">
-        <button @click="activeTab = 'payments'" :class="activeTab === 'payments' ? '!text-text-primary !font-semibold !border-b-[#222]' : ''" class="py-3 px-5 max-sm:py-2.5 max-sm:px-3 text-[13px] max-sm:text-xs font-medium text-text-secondary bg-transparent border-none border-b-2 border-transparent cursor-pointer transition-[color,border-color] duration-150 -mb-px whitespace-nowrap hover:text-text-primary">${t("payment.paymentsTab")}</button>
-        <button @click="activeTab = 'refunds'" :class="activeTab === 'refunds' ? '!text-text-primary !font-semibold !border-b-[#222]' : ''" class="py-3 px-5 max-sm:py-2.5 max-sm:px-3 text-[13px] max-sm:text-xs font-medium text-text-secondary bg-transparent border-none border-b-2 border-transparent cursor-pointer transition-[color,border-color] duration-150 -mb-px whitespace-nowrap hover:text-text-primary">${t("payment.refundsTab")}</button>
+        <button @click="activeTab = 'payments'" :class="activeTab === 'payments' ? '!text-text-primary !font-semibold !border-b-[#222]' : ''" class="th-no-press py-3 px-5 max-sm:py-2.5 max-sm:px-3 text-[13px] max-sm:text-xs font-medium text-text-secondary bg-transparent border-none border-b-2 border-transparent cursor-pointer transition-[color,border-color] duration-150 -mb-px whitespace-nowrap hover:text-text-primary">${t("payment.paymentsTab")}</button>
+        <button @click="activeTab = 'refunds'" :class="activeTab === 'refunds' ? '!text-text-primary !font-semibold !border-b-[#222]' : ''" class="th-no-press py-3 px-5 max-sm:py-2.5 max-sm:px-3 text-[13px] max-sm:text-xs font-medium text-text-secondary bg-transparent border-none border-b-2 border-transparent cursor-pointer transition-[color,border-color] duration-150 -mb-px whitespace-nowrap hover:text-text-primary">${t("payment.refundsTab")}</button>
       </div>
 
       <!-- Loading -->
@@ -366,8 +366,8 @@ function renderTransactions(): string {
 
     <!-- Tabs -->
     <div class="flex border-b border-border-default overflow-x-auto overflow-y-hidden">
-      <button @click="setTab('payment')" :class="activeTab === 'payment' ? '!text-text-primary !font-semibold !border-b-[#222]' : ''" class="py-3 px-5 max-sm:py-2.5 max-sm:px-3 text-[13px] max-sm:text-xs font-medium text-text-secondary bg-transparent border-none border-b-2 border-transparent cursor-pointer transition-[color,border-color] duration-150 -mb-px whitespace-nowrap hover:text-text-primary">${t("payment.paymentTab")}</button>
-      <button @click="setTab('refund')" :class="activeTab === 'refund' ? '!text-text-primary !font-semibold !border-b-[#222]' : ''" class="py-3 px-5 max-sm:py-2.5 max-sm:px-3 text-[13px] max-sm:text-xs font-medium text-text-secondary bg-transparent border-none border-b-2 border-transparent cursor-pointer transition-[color,border-color] duration-150 -mb-px whitespace-nowrap hover:text-text-primary">${t("payment.refundTab")}</button>
+      <button @click="setTab('payment')" :class="activeTab === 'payment' ? '!text-text-primary !font-semibold !border-b-[#222]' : ''" class="th-no-press py-3 px-5 max-sm:py-2.5 max-sm:px-3 text-[13px] max-sm:text-xs font-medium text-text-secondary bg-transparent border-none border-b-2 border-transparent cursor-pointer transition-[color,border-color] duration-150 -mb-px whitespace-nowrap hover:text-text-primary">${t("payment.paymentTab")}</button>
+      <button @click="setTab('refund')" :class="activeTab === 'refund' ? '!text-text-primary !font-semibold !border-b-[#222]' : ''" class="th-no-press py-3 px-5 max-sm:py-2.5 max-sm:px-3 text-[13px] max-sm:text-xs font-medium text-text-secondary bg-transparent border-none border-b-2 border-transparent cursor-pointer transition-[color,border-color] duration-150 -mb-px whitespace-nowrap hover:text-text-primary">${t("payment.refundTab")}</button>
     </div>
 
     <!-- Status pills -->

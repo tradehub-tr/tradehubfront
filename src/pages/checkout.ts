@@ -411,8 +411,12 @@ function gatherReviewData() {
   const shippingSection = document.getElementById('shipping-address-section');
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const shippingAlpine = shippingSection && ((shippingSection as any)._x_dataStack as Record<string, unknown>[] | undefined)?.[0] as any;
+  // shippingAddressId — backend'e gönderilecek `Addresses` DocType kayıt adı (ör: ADDR-0001).
+  // shippingAddress — review modal ve local Order objesinde gösterilecek insanca okunur string.
+  let shippingAddressId = '';
   let shippingAddress = '';
-  if (shippingAlpine?.selectedAddressLine) {
+  if (shippingAlpine?.selectedAddressId) {
+    shippingAddressId = String(shippingAlpine.selectedAddressId);
     const name = shippingAlpine.selectedAddressName ?? '';
     const phone = shippingAlpine.selectedAddressPhone ?? '';
     const line = shippingAlpine.selectedAddressLine ?? '';
@@ -457,6 +461,7 @@ function gatherReviewData() {
 
   return {
     shippingAddress,
+    shippingAddressId,
     paymentMethod: paymentLabel,
     orders: checkoutDeliveryOrders,
     billingInfo,
@@ -490,6 +495,7 @@ window.addEventListener('checkout:confirm-order', () => {
 
   const reviewData = gatherReviewData();
   const shippingAddress = reviewData.shippingAddress;
+  const shippingAddressId = reviewData.shippingAddressId;
 
   // Kupon bilgisi — modül düzeyinde event'ten takip edilir
   const couponCode = currentCouponApplied?.code ?? '';
@@ -553,9 +559,22 @@ window.addEventListener('checkout:confirm-order', () => {
     return;
   }
 
+  // Backend `Addresses` DocType kayıt adını (ADDR-XXXX) bekliyor — display string'i değil.
+  // Kayıtlı bir adres seçilmediyse (manuel form girişi yapıldı ama Kaydet'e basılmadıysa)
+  // ID boş kalır ve backend "Geçersiz teslimat adresi" hatası verir. Kullanıcıya net mesaj
+  // gösterip backend çağrısını engelliyoruz.
+  if (!shippingAddressId) {
+    showToast({
+      message: t('checkout.selectSavedAddress') || 'Lütfen kayıtlı bir teslimat adresi seçin veya yeni adresinizi kaydedin.',
+      type: 'error',
+      duration: 5000,
+    });
+    return;
+  }
+
   setConfirmLoading(true);
 
-  apiCreateOrder(backendOrders, shippingAddress, paymentMethod, couponCode, couponDiscount, reviewData.billingInfo)
+  apiCreateOrder(backendOrders, shippingAddressId, paymentMethod, couponCode, couponDiscount, reviewData.billingInfo)
     .then((result) => {
       // Backend'den dönen gerçek sipariş numaralarını kullan
       type BackendResult = { order_number?: string; order_name?: string };

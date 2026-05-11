@@ -396,7 +396,7 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
             @click.self="showAddressForm = false"
           >
             <div
-              class="bg-white w-full sm:max-w-3xl sm:rounded-2xl shadow-2xl overflow-hidden"
+              class="bg-white w-full sm:max-w-3xl sm:rounded-2xl shadow-2xl overflow-visible"
               @click.stop
               x-transition:enter="transition ease-out duration-200"
               x-transition:enter-start="opacity-0 translate-y-4"

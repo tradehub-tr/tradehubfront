@@ -34,7 +34,7 @@ export function FAQPageLayout(): string {
               type="text"
               placeholder="${t("helpCenter.faqSearchPlaceholder")}"
               aria-label="${t("helpCenter.faqSearchAriaLabel")}"
-              class="flex-1 min-w-0 px-2 text-sm text-gray-700 outline-none focus:outline-none focus-visible:outline-none placeholder-gray-400 bg-transparent"
+              class="flex-1 min-w-0 px-2 text-sm text-gray-700 outline-none border-none focus:outline-none focus-visible:outline-none placeholder-gray-400 bg-transparent"
             />
 
             <!-- Clear (X) button — only when query exists -->

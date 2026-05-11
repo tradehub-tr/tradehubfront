@@ -175,8 +175,8 @@ async function renderProductPage() {
       <!-- DESKTOP LAYOUT -->
       <div id="pd-desktop-layout" class="hidden xl:block">
         <section style="background: var(--pd-bg, #ffffff);">
-          <div class="container-boxed">
-            <div id="pd-hero-grid" class="flex flex-col gap-5 pt-3 xl:grid xl:grid-cols-[1fr_340px] xl:gap-5 xl:items-start 2xl:grid-cols-[1fr_380px] 2xl:gap-6 3xl:grid-cols-[1fr_407px] 3xl:gap-7">
+          <div class="mx-auto w-full max-w-[1600px] px-4 2xl:px-8">
+            <div id="pd-hero-grid" class="flex flex-col gap-5 pt-3 xl:grid xl:grid-cols-[1fr_340px] xl:gap-12 xl:items-start 2xl:grid-cols-[1fr_380px] 2xl:gap-16 3xl:grid-cols-[1fr_407px] 3xl:gap-20">
               <div id="pd-hero-left" class="w-full min-w-0">
                 ${Breadcrumb(pdCrumbs)}
                 ${ProductTitleBar()}
