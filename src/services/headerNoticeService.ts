@@ -4,8 +4,10 @@
  * - Stale-while-revalidate: TTL aşılsa da cache döner, arka planda yeni veri çekilir
  */
 
-const CACHE_KEY = "tradehub-header-notices-v1";
+const CACHE_KEY = "tradehub-header-notices-v2"; // bumped: schema change (display_mode + background_color)
 const CACHE_TTL_MS = 60_000;
+
+export type HeaderNoticeDisplayMode = "single" | "slide" | "marquee";
 
 export interface HeaderNoticeItem {
   name: string;
@@ -15,40 +17,53 @@ export interface HeaderNoticeItem {
   link_text_en?: string;
   link_href?: string;
   icon: string;
+  background_color?: string;
   sort_order: number;
+}
+
+export interface HeaderNoticeData {
+  display_mode: HeaderNoticeDisplayMode;
+  notices: HeaderNoticeItem[];
 }
 
 interface CacheShape {
   ts: number;
-  data: HeaderNoticeItem[];
+  data: HeaderNoticeData;
 }
 
-export function getCachedNotices(): HeaderNoticeItem[] {
+const EMPTY: HeaderNoticeData = { display_mode: "marquee", notices: [] };
+
+export function getCachedNoticeData(): HeaderNoticeData {
   try {
     const raw = localStorage.getItem(CACHE_KEY);
-    if (!raw) return [];
+    if (!raw) return EMPTY;
     const parsed = JSON.parse(raw) as CacheShape;
-    if (!parsed || !Array.isArray(parsed.data)) return [];
+    if (!parsed || !Array.isArray(parsed.data?.notices)) return EMPTY;
     return parsed.data;
   } catch {
-    return [];
+    return EMPTY;
   }
 }
 
-export async function fetchActiveNotices(): Promise<HeaderNoticeItem[]> {
+export async function fetchActiveNoticeData(): Promise<HeaderNoticeData> {
   try {
     const res = await fetch("/api/method/tradehub_core.api.header_notice.get_active_notices", {
       credentials: "include",
     });
-    if (!res.ok) return getCachedNotices();
-    const json = (await res.json()) as { message?: { notices?: HeaderNoticeItem[] } };
-    const list = json?.message?.notices ?? [];
-    const payload: CacheShape = { ts: Date.now(), data: list };
+    if (!res.ok) return getCachedNoticeData();
+    const json = (await res.json()) as {
+      message?: { display_mode?: HeaderNoticeDisplayMode; notices?: HeaderNoticeItem[] };
+    };
+    const data: HeaderNoticeData = {
+      display_mode: json?.message?.display_mode ?? "marquee",
+      notices: json?.message?.notices ?? [],
+    };
+    const payload: CacheShape = { ts: Date.now(), data };
     localStorage.setItem(CACHE_KEY, JSON.stringify(payload));
-    return list;
+    return data;
   } catch (err) {
     console.warn("[HeaderNotice] fetch failed", err);
-    return getCachedNotices();
+    return getCachedNoticeData();
   }
 }
 
@@ -61,4 +76,12 @@ export function isCacheFresh(): boolean {
   } catch {
     return false;
   }
+}
+
+// Backward-compat helpers (some pages may still call the old name)
+export function getCachedNotices(): HeaderNoticeItem[] {
+  return getCachedNoticeData().notices;
+}
+export async function fetchActiveNotices(): Promise<HeaderNoticeItem[]> {
+  return (await fetchActiveNoticeData()).notices;
 }

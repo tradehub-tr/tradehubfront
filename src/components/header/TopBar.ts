@@ -23,7 +23,7 @@ import {
 } from "../../services/currencyService";
 import { getSearchSuggestions } from "../../services/listingService";
 import { apiRemoveCartItem, fetchCart } from "../../services/cartService";
-import { HeaderNotice, getCachedNotices } from "./HeaderNotice";
+import { HeaderNotice, getCachedNoticeData } from "./HeaderNotice";
 
 /** Default country options for the delivery selector */
 const countryOptions: LocaleOption[] = [
@@ -1095,7 +1095,7 @@ export interface TopBarProps {
 export function TopBar(props?: TopBarProps): string {
   const compact = props?.compact ?? false;
   const hideNotice = props?.hideNotice ?? false;
-  const noticeHtml = hideNotice ? "" : HeaderNotice(getCachedNotices());
+  const noticeHtml = hideNotice ? "" : HeaderNotice(getCachedNoticeData());
 
   if (compact) {
     /* ──── Compact Dashboard Header (iSTOC-style ~52px) ──── */
