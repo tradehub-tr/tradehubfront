@@ -22,6 +22,9 @@ function parsePrice(v: any): number {
   return isNaN(num) ? 0 : num;
 }
 
+// Order detail panel — closed state shows first N products before CTA
+const PRODUCT_PREVIEW_COUNT = 5;
+
 Alpine.data("ordersListComponent", () => ({
   activeTab: "all",
   searchQuery: "",
@@ -126,6 +129,42 @@ Alpine.data("ordersListComponent", () => ({
       filtered.sort((a: any, b: any) => parsePrice(b.totalPrice) - parsePrice(a.totalPrice));
     }
     return filtered;
+  },
+
+  get selectedOrderTotal(): string {
+    if (!this.selectedOrder) return "";
+    const total = (this.selectedOrder as any).products.reduce(
+      (s: number, p: any) => s + parsePrice(p.totalPrice),
+      0
+    );
+    return total.toLocaleString("en-US", { minimumFractionDigits: 2 });
+  },
+
+  get selectedOrderQty(): number {
+    if (!this.selectedOrder) return 0;
+    return (this.selectedOrder as any).products.reduce(
+      (s: number, p: any) => s + (p.quantity ?? 0),
+      0
+    );
+  },
+
+  get productSortLabel(): string {
+    const key =
+      "orders.sort" +
+      (this.productSort === "name-asc"
+        ? "NameAsc"
+        : this.productSort === "name-desc"
+          ? "NameDesc"
+          : this.productSort === "price-asc"
+            ? "PriceAsc"
+            : this.productSort === "price-desc"
+              ? "PriceDesc"
+              : "Default");
+    return t(key);
+  },
+
+  get productPreviewCount(): number {
+    return PRODUCT_PREVIEW_COUNT;
   },
 
   tabCount(tabId: string) {

@@ -582,7 +582,7 @@ function renderAllOrders(): string {
               </svg>
               <h2 class="text-base font-bold text-gray-900">
                 <span x-text="selectedOrder.products.length"></span> ${t("orders.productName")} ·
-                ${getCurrencyCode()} <span x-text="selectedOrder.products.reduce((s, p) => { const v = parseFloat(String(p.totalPrice).replace(/,/g, '')); return s + (isNaN(v) ? 0 : v); }, 0).toLocaleString('en-US', {minimumFractionDigits: 2})"></span>
+                ${getCurrencyCode()} <span x-text="selectedOrderTotal"></span>
               </h2>
             </div>
             <div class="flex items-center gap-2 text-sm">
@@ -608,15 +608,15 @@ function renderAllOrders(): string {
             <div class="relative" x-data="{ sortOpen: false }">
               <button @click="sortOpen = !sortOpen" class="flex items-center gap-1.5 px-3 py-2 text-sm border border-gray-200 rounded-md bg-white text-gray-700 hover:bg-gray-50 whitespace-nowrap cursor-pointer">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h13M3 12h9m-9 6h5"/></svg>
-                <span x-text="productSort === 'default' ? 'Varsayılan' : productSort === 'name-asc' ? 'İsim A→Z' : productSort === 'name-desc' ? 'İsim Z→A' : productSort === 'price-asc' ? 'Fiyat ↑' : 'Fiyat ↓'"></span>
+                <span x-text="productSortLabel"></span>
                 <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M5 8l5 5 5-5H5z"/></svg>
               </button>
               <div x-show="sortOpen" @click.outside="sortOpen = false" x-transition class="absolute right-0 top-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-10 py-1 min-w-[160px]">
-                <button @click="productSort = 'default'; sortOpen = false" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 bg-transparent border-none cursor-pointer">Varsayılan</button>
-                <button @click="productSort = 'name-asc'; sortOpen = false" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 bg-transparent border-none cursor-pointer">İsim A→Z</button>
-                <button @click="productSort = 'name-desc'; sortOpen = false" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 bg-transparent border-none cursor-pointer">İsim Z→A</button>
-                <button @click="productSort = 'price-asc'; sortOpen = false" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 bg-transparent border-none cursor-pointer">Fiyat ↑</button>
-                <button @click="productSort = 'price-desc'; sortOpen = false" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 bg-transparent border-none cursor-pointer">Fiyat ↓</button>
+                <button @click="productSort = 'default'; sortOpen = false" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 bg-transparent border-none cursor-pointer">${t("orders.sortDefault")}</button>
+                <button @click="productSort = 'name-asc'; sortOpen = false" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 bg-transparent border-none cursor-pointer">${t("orders.sortNameAsc")}</button>
+                <button @click="productSort = 'name-desc'; sortOpen = false" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 bg-transparent border-none cursor-pointer">${t("orders.sortNameDesc")}</button>
+                <button @click="productSort = 'price-asc'; sortOpen = false" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 bg-transparent border-none cursor-pointer">${t("orders.sortPriceAsc")}</button>
+                <button @click="productSort = 'price-desc'; sortOpen = false" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 bg-transparent border-none cursor-pointer">${t("orders.sortPriceDesc")}</button>
               </div>
             </div>
           </div>
@@ -624,7 +624,7 @@ function renderAllOrders(): string {
           <!-- Product list: closed = first 5, open = scroll container -->
           <div
             :class="showAllProducts ? 'max-h-[340px] overflow-y-auto pr-1 relative' : ''">
-            <template x-for="(product, idx) in (showAllProducts ? filteredProducts : selectedOrder.products.slice(0, 5))" :key="product.name + idx">
+            <template x-for="(product, idx) in (showAllProducts ? filteredProducts : selectedOrder.products.slice(0, productPreviewCount))" :key="product.name + idx">
               <div class="flex items-center gap-3 py-2.5 border-b border-gray-100 last:border-b-0">
                 <div class="w-10 h-10 max-sm:w-8 max-sm:h-8 rounded border border-gray-200 overflow-hidden shrink-0 bg-gray-50">
                   <img :src="product.image" :alt="product.name" class="w-full h-full object-cover" />
@@ -639,32 +639,32 @@ function renderAllOrders(): string {
 
             <!-- Open + boş arama -->
             <template x-if="showAllProducts && filteredProducts.length === 0">
-              <p class="text-sm text-gray-400 text-center py-6">Aramayla eşleşen ürün bulunamadı</p>
+              <p class="text-sm text-gray-400 text-center py-6">${t("orders.noProductsFound")}</p>
             </template>
 
             <!-- Scroll fade indicator (open + scrollable) -->
-            <div x-show="showAllProducts && filteredProducts.length > 5" class="sticky bottom-0 h-5 bg-gradient-to-t from-white to-transparent pointer-events-none -mt-5"></div>
+            <div x-show="showAllProducts && filteredProducts.length > productPreviewCount" class="sticky bottom-0 h-5 bg-gradient-to-t from-white to-transparent pointer-events-none -mt-5"></div>
           </div>
 
           <!-- CTA + summary row (closed) -->
-          <template x-if="!showAllProducts && selectedOrder.products.length > 5">
+          <template x-if="!showAllProducts && selectedOrder.products.length > productPreviewCount">
             <button @click="showAllProducts = true" class="w-full mt-3 py-2.5 text-sm font-medium text-blue-600 bg-gray-50 border border-gray-200 rounded-md hover:bg-gray-100 cursor-pointer transition-colors">
-              ↓ <span x-text="selectedOrder.products.length - 5"></span> ürün daha — tümünü göster
+              ↓ <span x-text="selectedOrder.products.length - productPreviewCount"></span> ${t("orders.showMoreProducts")}
             </button>
           </template>
 
           <!-- Open CTA (collapse) -->
           <template x-if="showAllProducts">
             <button @click="showAllProducts = false; productSearch = ''; productSort = 'default'" class="w-full mt-3 py-2 text-sm text-gray-600 hover:text-gray-900 bg-transparent border-none cursor-pointer">
-              ↑ Daralt
+              ↑ ${t("orders.collapse")}
             </button>
           </template>
 
           <!-- Summary row (closed only) -->
           <template x-if="!showAllProducts">
             <div class="flex items-center justify-between mt-4 pt-3 border-t border-gray-200">
-              <span class="text-sm text-gray-500">${t("orders.productQuantity")}: <strong class="text-gray-800" x-text="selectedOrder.products.reduce((s, p) => s + p.quantity, 0)"></strong></span>
-              <span class="text-sm text-gray-500">${t("orders.totalPrice")}: <strong class="text-gray-900" x-text="'${getCurrencyCode()} ' + selectedOrder.products.reduce((s, p) => { const v = parseFloat(String(p.totalPrice).replace(/,/g, '')); return s + (isNaN(v) ? 0 : v); }, 0).toLocaleString('en-US', {minimumFractionDigits:2})"></strong></span>
+              <span class="text-sm text-gray-500">${t("orders.productQuantity")}: <strong class="text-gray-800" x-text="selectedOrderQty"></strong></span>
+              <span class="text-sm text-gray-500">${t("orders.totalPrice")}: <strong class="text-gray-900" x-text="'${getCurrencyCode()} ' + selectedOrderTotal"></strong></span>
             </div>
           </template>
         </div>
