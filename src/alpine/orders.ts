@@ -31,6 +31,14 @@ Alpine.data("ordersListComponent", () => ({
   loading: true,
   error: "",
 
+  // Order detail panel — Section 4 (Ürünler) state
+  showAllProducts: false,
+  productSearch: "",
+  productSort: "default" as "default" | "name-asc" | "name-desc" | "price-asc" | "price-desc",
+
+  // Order detail panel — Tab state (Kargo/Ödeme/Tedarikçi)
+  activeDetailTab: "shipping" as "shipping" | "payment" | "supplier",
+
   async init() {
     orderStore.subscribe(() => {
       this.orders = orderStore.getOrders();
@@ -41,6 +49,14 @@ Alpine.data("ordersListComponent", () => ({
     await orderStore.load();
     this.orders = orderStore.getOrders();
     this.loading = false;
+
+    // selectedOrder değişince detay panel state'ini sıfırla
+    this.$watch("selectedOrder", () => {
+      this.showAllProducts = false;
+      this.productSearch = "";
+      this.productSort = "default";
+      this.activeDetailTab = "shipping";
+    });
 
     // URL'de ?order=XXX varsa o siparişi otomatik aç (bildirim tıklama akışı)
     const urlOrder = new URLSearchParams(window.location.search).get("order");
@@ -85,6 +101,31 @@ Alpine.data("ordersListComponent", () => ({
 
       return matchStatus && matchSearch && matchDate;
     });
+  },
+
+  get filteredProducts() {
+    if (!this.selectedOrder) return [] as any[];
+    const products = (this.selectedOrder as any).products as any[];
+    const q = this.productSearch.trim().toLowerCase();
+    const filtered = q
+      ? products.filter((p: any) => String(p.name).toLowerCase().includes(q))
+      : products.slice();
+
+    const parsePrice = (v: any): number => {
+      const num = parseFloat(String(v).replace(/,/g, ""));
+      return isNaN(num) ? 0 : num;
+    };
+
+    if (this.productSort === "name-asc") {
+      filtered.sort((a: any, b: any) => String(a.name).localeCompare(String(b.name), "tr"));
+    } else if (this.productSort === "name-desc") {
+      filtered.sort((a: any, b: any) => String(b.name).localeCompare(String(a.name), "tr"));
+    } else if (this.productSort === "price-asc") {
+      filtered.sort((a: any, b: any) => parsePrice(a.totalPrice) - parsePrice(b.totalPrice));
+    } else if (this.productSort === "price-desc") {
+      filtered.sort((a: any, b: any) => parsePrice(b.totalPrice) - parsePrice(a.totalPrice));
+    }
+    return filtered;
   },
 
   tabCount(tabId: string) {
