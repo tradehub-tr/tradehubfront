@@ -49,7 +49,7 @@ export function OrderListItem(): string {
                   <span class="text-gray-300 sm:hidden">·</span>
                   <button type="button"
                     @click="cancelOrder(order)"
-                    class="text-gray-500 hover:text-gray-700 bg-transparent border-0 cursor-pointer p-0 text-xs appearance-none focus:outline-none">
+                    class="text-gray-500 bg-transparent border-0 cursor-pointer p-0 text-xs appearance-none outline-none">
                     ${t("orders.cancelOrder")}
                   </button>
                 </span>
@@ -84,7 +84,7 @@ export function OrderListItem(): string {
               @click="$dispatch('open-order-items', order)"
               aria-haspopup="dialog"
               aria-controls="order-items-drawer"
-              class="text-text-link font-bold text-xs inline-flex items-center gap-1 cursor-pointer bg-transparent border-0 p-0 hover:opacity-75 transition-opacity appearance-none focus:outline-none">
+              class="text-text-link font-bold text-xs inline-flex items-center gap-1 cursor-pointer bg-transparent border-0 p-0 appearance-none outline-none">
               ${t("orders.viewAll")} (<span x-text="(order.products || []).length"></span>)
               <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" d="M9 5l7 7-7 7"/>
@@ -106,7 +106,7 @@ export function OrderListItem(): string {
                 @click="$dispatch('open-order-items', order)"
                 aria-haspopup="dialog"
                 aria-controls="order-items-drawer"
-                class="w-[46px] h-[46px] sm:w-[52px] sm:h-[52px] lg:w-[58px] lg:h-[58px] rounded-md shrink-0 bg-gradient-to-br from-amber-50 to-amber-100 border border-amber-300 text-amber-800 font-extrabold text-xs flex items-center justify-center cursor-pointer hover:from-amber-100 hover:to-amber-200 transition-colors appearance-none focus:outline-none">
+                class="w-[46px] h-[46px] sm:w-[52px] sm:h-[52px] lg:w-[58px] lg:h-[58px] rounded-md shrink-0 bg-gradient-to-br from-amber-50 to-amber-100 border border-amber-300 text-amber-800 font-extrabold text-xs flex items-center justify-center cursor-pointer appearance-none outline-none">
                 +<span x-text="(order.products || []).length - ${STRIP_VISIBLE_THUMBS}"></span>
               </button>
             </template>
