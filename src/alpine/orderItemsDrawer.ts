@@ -49,6 +49,13 @@ Alpine.data("orderItemsDrawer", () => ({
     this.sort = "added";
     this.open = true;
     document.body.style.overflow = "hidden";
+    // After the drawer renders, focus the close button (keyboard users get a clear entry point)
+    requestAnimationFrame(() => {
+      const closeBtn = document.querySelector<HTMLElement>(
+        '[role="dialog"][aria-labelledby="order-items-drawer-title"] button[aria-label]'
+      );
+      closeBtn?.focus();
+    });
   },
 
   close() {

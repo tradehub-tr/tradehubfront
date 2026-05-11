@@ -1369,6 +1369,7 @@ const tr = {
       lines: "kalem",
       searchInProducts: "Üründe ara…",
       sortAdded: "Sırala: Eklenme",
+      sortLabel: "Ürünleri sırala",
       sortQty: "Miktar",
       noProductsMatch: "Eşleşen ürün yok",
       productCount: "Ürün sayısı",

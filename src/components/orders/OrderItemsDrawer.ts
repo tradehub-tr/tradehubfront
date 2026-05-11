@@ -64,9 +64,11 @@ export function OrderItemsDrawer(): string {
               type="text"
               x-model="search"
               placeholder="${t("orders.searchInProducts")}"
+              aria-label="${t("orders.searchInProducts")}"
               class="flex-1 h-9 px-3 text-xs rounded-md border border-gray-300 bg-gray-50 focus:bg-white focus:border-[#cc9900] focus:outline-none transition-colors" />
             <select
               x-model="sort"
+              aria-label="${t("orders.sortLabel")}"
               class="h-9 px-2 text-xs rounded-md border border-gray-300 bg-white focus:border-[#cc9900] focus:outline-none">
               <option value="added">${t("orders.sortAdded")}</option>
               <option value="price_asc">${t("orders.sortPriceAsc")}</option>

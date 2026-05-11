@@ -1374,6 +1374,7 @@ const en = {
       lines: "items",
       searchInProducts: "Search in products…",
       sortAdded: "Sort: Added",
+      sortLabel: "Sort products",
       sortQty: "Quantity",
       noProductsMatch: "No products match",
       productCount: "Product count",
