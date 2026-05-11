@@ -19,7 +19,7 @@ export function FAQPageLayout(): string {
         <div class="max-w-[900px] mx-auto px-4">
           <form
             @submit.prevent="doSearch()"
-            class="flex items-center h-12 bg-white rounded-lg border border-gray-300 shadow-sm max-w-[600px] mx-auto transition-colors focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/20"
+            class="flex items-center h-12 bg-white rounded-lg shadow-sm ring-1 ring-gray-200 max-w-[600px] mx-auto transition-shadow focus-within:ring-2 focus-within:ring-primary-500"
           >
             <!-- Leading search icon (decorative) -->
             <span class="pl-4 pr-2 text-gray-400 flex items-center shrink-0" aria-hidden="true">
@@ -34,7 +34,7 @@ export function FAQPageLayout(): string {
               type="text"
               placeholder="${t("helpCenter.faqSearchPlaceholder")}"
               aria-label="${t("helpCenter.faqSearchAriaLabel")}"
-              class="flex-1 min-w-0 px-2 text-sm text-gray-700 outline-none placeholder-gray-400 bg-transparent"
+              class="flex-1 min-w-0 px-2 text-sm text-gray-700 outline-none focus:outline-none focus-visible:outline-none placeholder-gray-400 bg-transparent"
             />
 
             <!-- Clear (X) button — only when query exists -->
