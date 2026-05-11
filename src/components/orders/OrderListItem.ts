@@ -25,10 +25,10 @@ const STRIP_VISIBLE_THUMBS = 4;
 
 export function OrderListItem(): string {
   return /* html */ `
-    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden mb-3">
+    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden mb-2">
 
       <!-- ─── Header ─── -->
-      <div class="px-4 sm:px-5 py-4 border-b border-gray-100">
+      <div class="px-4 sm:px-5 py-3 border-b border-gray-100">
         <div class="flex justify-between items-start gap-3 flex-wrap">
           <!-- Meta -->
           <div class="min-w-0 flex-1">
@@ -41,7 +41,7 @@ export function OrderListItem(): string {
               <span class="text-gray-500 font-medium max-sm:hidden">${t("orders.supplier")}:</span>
               <span class="font-semibold text-gray-800 truncate max-sm:hidden" x-text="order.seller"></span>
             </div>
-            <div class="text-xs text-gray-500 mt-1 flex flex-wrap gap-1.5 items-center">
+            <div class="text-xs text-gray-500 mt-0.5 flex flex-wrap gap-1.5 items-center">
               <span class="sm:hidden">${t("orders.supplier")}:</span>
               <span class="font-semibold text-gray-700 sm:hidden truncate" x-text="order.seller"></span>
               <template x-if="order.status === 'Waiting for payment'">
@@ -49,7 +49,7 @@ export function OrderListItem(): string {
                   <span class="text-gray-300 sm:hidden">·</span>
                   <button type="button"
                     @click="cancelOrder(order)"
-                    class="underline text-gray-500 hover:text-red-600 bg-transparent border-0 cursor-pointer p-0 text-xs">
+                    class="text-gray-500 hover:text-gray-700 bg-transparent border-0 cursor-pointer p-0 text-xs">
                     ${t("orders.cancelOrder")}
                   </button>
                 </span>
@@ -59,7 +59,7 @@ export function OrderListItem(): string {
 
           <!-- Totals (right-aligned, prominent) -->
           <div class="text-right shrink-0">
-            <span class="inline-block px-2 py-0.5 rounded text-[9px] font-extrabold uppercase tracking-wider mb-1"
+            <span class="inline-block px-2 py-0.5 rounded text-[9px] font-extrabold uppercase tracking-wider mb-0.5"
               :class="order.statusColor === 'text-amber-600' ? 'bg-amber-100 text-amber-700'
                     : order.statusColor === 'text-green-600' ? 'bg-emerald-100 text-emerald-700'
                     : order.statusColor === 'text-blue-600' ? 'bg-blue-100 text-blue-700'
@@ -69,7 +69,7 @@ export function OrderListItem(): string {
             <div class="text-[17px] sm:text-[20px] lg:text-[24px] font-extrabold text-gray-900 leading-none">
               <span class="text-[11px] text-gray-500 font-semibold mr-0.5" x-text="order.currency"></span><span x-text="order.total"></span>
             </div>
-            <div class="text-[11px] text-gray-500 mt-1">
+            <div class="text-[11px] text-gray-500 mt-0.5">
               <span x-text="totalQty(order)"></span> ${t("orders.productsUnit")} ·
               <span x-text="(order.products || []).length"></span> ${t("orders.lines")}
             </div>
@@ -79,14 +79,14 @@ export function OrderListItem(): string {
 
       <!-- ─── Thumbnail Strip ─── -->
       <template x-if="(order.products || []).length > 0">
-        <div class="px-4 sm:px-5 py-3 bg-gradient-to-b from-gray-50 to-white">
-          <div class="flex justify-between items-center mb-2 text-[11px] text-gray-500">
+        <div class="px-4 sm:px-5 py-2.5 bg-gradient-to-b from-gray-50 to-white">
+          <div class="flex justify-between items-center mb-1.5 text-[11px] text-gray-500">
             <span>${t("orders.orderContents")}</span>
             <button type="button"
               @click="$dispatch('open-order-items', order)"
               aria-haspopup="dialog"
               aria-controls="order-items-drawer"
-              class="text-text-link font-bold text-xs inline-flex items-center gap-1 cursor-pointer bg-transparent border-0 p-0 hover:underline">
+              class="text-text-link font-bold text-xs inline-flex items-center gap-1 cursor-pointer bg-transparent border-0 p-0 hover:opacity-75 transition-opacity">
               ${t("orders.viewAll")} (<span x-text="(order.products || []).length"></span>)
               <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" d="M9 5l7 7-7 7"/>
@@ -117,7 +117,7 @@ export function OrderListItem(): string {
       </template>
 
       <!-- ─── Footer / Action Bar ─── -->
-      <div class="flex flex-wrap items-center justify-between gap-3 px-4 sm:px-5 py-3 border-t border-gray-200 bg-[var(--color-surface-muted,#fafafa)]">
+      <div class="flex flex-wrap items-center justify-between gap-3 px-4 sm:px-5 py-2.5 border-t border-gray-200 bg-[var(--color-surface-muted,#fafafa)]">
         <div class="text-[11px] text-gray-500" aria-hidden="true">
           ${t("orders.subtotalVatIncluded")} — <strong class="text-gray-900 font-extrabold text-[13px]"><span x-text="order.currency"></span> <span x-text="order.total"></span></strong>
         </div>

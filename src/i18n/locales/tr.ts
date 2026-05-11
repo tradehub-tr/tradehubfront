@@ -1368,7 +1368,7 @@ const tr = {
       // OrderItemsDrawer
       lines: "kalem",
       searchInProducts: "Üründe ara…",
-      sortAdded: "Sırala: Eklenme",
+      sortAdded: "Eklenme",
       sortLabel: "Ürünleri sırala",
       sortQty: "Miktar",
       noProductsMatch: "Eşleşen ürün yok",

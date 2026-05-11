@@ -1373,7 +1373,7 @@ const en = {
       // OrderItemsDrawer
       lines: "items",
       searchInProducts: "Search in products…",
-      sortAdded: "Sort: Added",
+      sortAdded: "Added",
       sortLabel: "Sort products",
       sortQty: "Quantity",
       noProductsMatch: "No products match",
