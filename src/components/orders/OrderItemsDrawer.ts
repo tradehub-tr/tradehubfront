@@ -51,7 +51,7 @@ export function OrderItemsDrawer(): string {
             <button
               type="button"
               @click="close()"
-              class="w-7 h-7 rounded-md bg-gray-100 hover:bg-gray-200 text-gray-600 flex items-center justify-center transition-colors border-0 cursor-pointer appearance-none focus:outline-none"
+              class="w-7 h-7 rounded-md bg-gray-100 hover:bg-gray-200 text-gray-600 flex items-center justify-center transition-colors border-0 cursor-pointer appearance-none outline-none focus:outline-none focus-visible:outline-none"
               aria-label="${t("common.close")}">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/>
