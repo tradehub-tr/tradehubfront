@@ -2,6 +2,7 @@ import { getLucideIcon } from "../../icons/lucideIcons";
 import { t } from "../../../i18n";
 
 export function BusinessCardForm(): string {
+  // TODO(batch-8): swap to bottom-sheet variant on ≤md (mobile width)
   const closeIcon = getLucideIcon("x", "w-3.5 h-3.5");
   return /* html */ `
     <div data-submenu-panel

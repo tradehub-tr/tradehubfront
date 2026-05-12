@@ -2,6 +2,7 @@ import { getLucideIcon } from "../../icons/lucideIcons";
 import { t } from "../../../i18n";
 
 export function ContextMenu(): string {
+  // z-40: sits above any future composer overlay (other sub-popups use z-30)
   const pinIcon = getLucideIcon("pin", "w-4 h-4");
   const banIcon = getLucideIcon("ban", "w-4 h-4");
   const trashIcon = getLucideIcon("trash-2", "w-4 h-4");

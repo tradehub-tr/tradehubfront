@@ -14,6 +14,7 @@ const EMOJIS = [
 ];
 
 export function EmojiPicker(): string {
+  // TODO(batch-8): swap to bottom-sheet variant on ≤md (mobile width)
   const grid = EMOJIS.map(
     (e) =>
       `<button type="button"

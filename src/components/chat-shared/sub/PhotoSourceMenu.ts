@@ -2,6 +2,7 @@ import { getLucideIcon } from "../../icons/lucideIcons";
 import { t } from "../../../i18n";
 
 export function PhotoSourceMenu(): string {
+  // TODO(batch-8): swap to bottom-sheet variant on ≤md (mobile width)
   const imageIcon = getLucideIcon("image", "w-4 h-4");
   const cloudIcon = getLucideIcon("cloud", "w-4 h-4");
   return /* html */ `

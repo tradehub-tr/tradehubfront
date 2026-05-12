@@ -2,6 +2,7 @@ import { getLucideIcon } from "../../icons/lucideIcons";
 import { t } from "../../../i18n";
 
 export function CallMenu(): string {
+  // TODO(batch-8): swap to bottom-sheet variant on ≤md (mobile width)
   const videoIcon = getLucideIcon("video", "w-4 h-4");
   const phoneIcon = getLucideIcon("phone", "w-4 h-4");
   const calendarIcon = getLucideIcon("calendar", "w-4 h-4");
