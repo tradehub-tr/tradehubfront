@@ -117,6 +117,24 @@ export function renderReviewCard(review: ProductReview, showProductThumb = false
       `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-semibold ${cls}">${label}</span>`
     );
   }
+  // Reviewer reputation tier — Top/Trusted/Verified (B2B güven göstergesi)
+  if (review.reviewerTier) {
+    const tierLabels: Record<string, string> = {
+      Top: "⭐ Üst Düzey Değerlendirici",
+      Trusted: "🛡 Güvenilir Değerlendirici",
+      Verified: "✓ Doğrulanmış Değerlendirici",
+    };
+    const tierClasses: Record<string, string> = {
+      Top: "bg-purple-100 text-purple-700",
+      Trusted: "bg-indigo-100 text-indigo-700",
+      Verified: "bg-emerald-100 text-emerald-700",
+    };
+    const cls = tierClasses[review.reviewerTier] || "bg-gray-100 text-gray-700";
+    const label = tierLabels[review.reviewerTier] || review.reviewerTier;
+    badges.push(
+      `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-semibold ${cls}">${label}</span>`
+    );
+  }
 
   const supplierReplyHtml = review.supplierReply
     ? `<div class="rv-supplier-reply bg-[var(--pd-spec-header-bg,#f9fafb)] rounded-md px-3.5 py-3 mb-3">

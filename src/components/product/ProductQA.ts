@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-// @ts-nocheck -- Alpine.js modül tipleri tam değil; runtime davranış doğrulanmış
+// @ts-nocheck
 /**
  * ProductQA — Soru/Cevap bölümü.
  *
