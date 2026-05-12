@@ -1,3 +1,15 @@
+/**
+ * Chat transport surface (frontend stub).
+ *
+ * - v1 stubs are write-only fire-and-forget; they return Promise<void> for
+ *   mutations (block/mute/pin/delete/markRead). The Alpine store mutates its
+ *   in-memory model directly. The backend integration may evolve these to
+ *   return Promise<Conversation> — note the signature change in the migration.
+ * - `writeBuffer` is session-scoped; messages persist across popup open/close
+ *   but reset on page reload. This is intentional for the frontend-only phase.
+ * - `nowHHMM()` uses the local wall-clock; the backend will provide canonical
+ *   server-side timestamps.
+ */
 // TODO(backend): Frontend stub — replace bodies with real API calls when the
 // chat backend is provided. Interfaces here are the contract; do not change
 // signatures without updating Alpine.store and component consumers.
