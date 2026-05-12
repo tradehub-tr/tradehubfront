@@ -22,9 +22,14 @@ export function BusinessCardForm(): string {
         <div>${t("chat.businessCard.emailLabel")}: <span class="text-[var(--color-text-tertiary,#a3a3a3)]">${t("chat.businessCard.placeholderEmail")}</span></div>
         <div class="mt-2 text-[10px] text-[var(--color-text-tertiary,#a3a3a3)]">${t("chat.businessCard.verifiedBy")}</div>
       </div>
+      <!-- TODO(backend): wire Edit/Send to identity API (sendBusinessCard) -->
       <div class="mt-3 flex justify-end gap-2">
-        <button type="button" class="appearance-none rounded-full border border-[var(--color-border-default,#e5e5e5)] bg-white px-3 py-1.5 text-[11px] cursor-pointer hover:border-[var(--color-text-secondary,#525252)] focus:outline-none">${t("chat.subMenu.cardEdit")}</button>
-        <button type="button" class="appearance-none rounded-full border-0 bg-[var(--color-orange-500,#ea580c)] px-3 py-1.5 text-[11px] font-semibold text-white cursor-pointer hover:bg-[var(--color-orange-600,#c2410c)] focus:outline-none">${t("chat.subMenu.cardSend")}</button>
+        <button type="button"
+                @click.stop="$store.chatPopup.closeSubMenu()"
+                class="appearance-none rounded-full border border-[var(--color-border-default,#e5e5e5)] bg-white px-3 py-1.5 text-[11px] cursor-pointer hover:border-[var(--color-text-secondary,#525252)] focus:outline-none">${t("chat.subMenu.cardEdit")}</button>
+        <button type="button"
+                @click.stop="$store.chatPopup.closeSubMenu()"
+                class="appearance-none rounded-full border-0 bg-[var(--color-orange-500,#ea580c)] px-3 py-1.5 text-[11px] font-semibold text-white cursor-pointer hover:bg-[var(--color-orange-600,#c2410c)] focus:outline-none">${t("chat.subMenu.cardSend")}</button>
       </div>
     </div>
   `;
