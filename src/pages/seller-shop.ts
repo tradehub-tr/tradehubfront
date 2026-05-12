@@ -14,6 +14,7 @@ import { t } from '../i18n';
 
 // Components
 import { TopBar } from '../components/header';
+import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar';
 import { LoginModal } from '../components/product/LoginModal';
 
@@ -383,6 +384,8 @@ async function renderPage() {
   initFlowbite();
   initLanguageSelector();
   initCurrency();
+  mountChatPopup();
+  initChatTriggers();
   startAlpine();
 
   // Init Swipers after Alpine is ready

@@ -4,6 +4,7 @@ import { t } from '../i18n'
 
 // Header components
 import { TopBar, MobileSearchTabs, initMobileDrawer, initStickyHeaderSearch, MegaMenu, initMegaMenu } from '../components/header'
+import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar'
 
 // Shared components
@@ -73,6 +74,8 @@ initFactorySliders(); // window.__getSellerFavs / __toggleSellerFav helper'ları
 
 // Initialize Alpine.js (FloatingPanel is now Alpine-driven)
 initCurrency();
+mountChatPopup();
+initChatTriggers();
 startAlpine();
 
 // Initialize remaining custom behaviors

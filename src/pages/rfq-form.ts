@@ -12,6 +12,7 @@ import { startAlpine } from '../alpine'
 import { requireAuth } from '../utils/auth-guard'
 
 import { TopBar, SubHeader, initMobileDrawer, initStickyHeaderSearch, MegaMenu, initMegaMenu } from '../components/header'
+import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar'
 import { FooterLinks } from '../components/footer'
 import { getFileBadge, getFilePreviewUrl, revokeFilePreview, openFilePreviewLightbox } from '../components/rfq/attachments'
@@ -141,6 +142,8 @@ initFlowbite();
 initStickyHeaderSearch();
 initMobileDrawer();
 initLanguageSelector();
+mountChatPopup();
+initChatTriggers();
 startAlpine();
 
 // ── Load UOM from backend ──

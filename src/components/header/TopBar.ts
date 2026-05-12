@@ -144,8 +144,17 @@ function renderUserButton(): string {
           <li><a href="/pages/dashboard/buyer-dashboard.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myDashboard">${t("header.myDashboard")}</span></a></li>
           ${user?.has_seller_profile ? `<li><a href="${getSellerStoreUrl(user!)}" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myStore">${t("header.myStore")}</span></a></li>` : ""}
           <li><a href="/pages/dashboard/orders.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myOrders">${t("header.myOrders")}</span></a></li>
-          <!-- DISABLED: Mesajlarım — ileride geliştirilecek (backend chat altyapısı yok). Tek satırlık <li> aynen geri açılır. -->
-          <!-- <li><a href="/pages/dashboard/messages.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myMessages">${t("header.myMessages")}</span></a></li> -->
+          <li>
+            <a href="javascript:void(0)"
+               data-chat-trigger
+               class="flex items-center justify-between gap-2 px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors">
+              <span data-i18n="header.myMessages">${t("header.myMessages")}</span>
+              <template x-if="$store.chatPopup && $store.chatPopup.totalUnread > 0">
+                <span class="inline-flex items-center justify-center rounded-full bg-[var(--color-error-500,#ef4444)] px-1.5 py-0.5 text-[10px] font-bold text-white"
+                      x-text="$store.chatPopup.totalUnread"></span>
+              </template>
+            </a>
+          </li>
           <li><a href="/pages/dashboard/inquiries.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myRfq">${t("header.myRfq")}</span></a></li>
           <li><a href="/pages/dashboard/favorites.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myFavorites">${t("header.myFavorites")}</span></a></li>
           <li><a href="/pages/dashboard/settings.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.accountSettings">${t("header.accountSettings")}</span></a></li>

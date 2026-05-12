@@ -10,6 +10,7 @@ import { t } from '../i18n'
 
 // Header components (reuse from main page)
 import { TopBar, initMobileDrawer, MegaMenu, initMegaMenu, initHeaderCart } from '../components/header'
+import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar'
 
 // Shared components
@@ -216,6 +217,8 @@ initMegaMenu();
 initFlowbite();
 
 // Start Alpine.js (must be after innerHTML and Flowbite)
+mountChatPopup();
+initChatTriggers();
 startAlpine();
 
 // Initialize header behaviors (non-Alpine: cart store load, mobile drawer DOM move)

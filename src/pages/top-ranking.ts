@@ -11,6 +11,7 @@ import { t } from '../i18n'
 
 // Header components
 import { TopBar, initMobileDrawer, SubHeader, MegaMenu, initMegaMenu, initHeaderCart } from '../components/header'
+import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar'
 
 // Shared components
@@ -310,6 +311,8 @@ appEl.innerHTML = `
 // Initialize
 initMegaMenu();
 initFlowbite();
+mountChatPopup();
+initChatTriggers();
 startAlpine();
 initHeaderCart();
 initMobileDrawer();

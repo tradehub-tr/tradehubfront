@@ -5,6 +5,7 @@
 import '../style.css'
 import { initFlowbite } from 'flowbite'
 import { TopBar, SubHeader, MegaMenu, initMegaMenu, initStickyHeaderSearch, initMobileDrawer } from '../components/header'
+import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar'
 import { FooterLinks } from '../components/footer'
 import { FloatingPanel } from '../components/floating'
@@ -348,6 +349,8 @@ appEl.innerHTML = `
 
 initMegaMenu()
 initFlowbite()
+mountChatPopup();
+initChatTriggers();
 startAlpine()
 initStickyHeaderSearch()
 initMobileDrawer()
