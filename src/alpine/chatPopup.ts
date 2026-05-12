@@ -205,22 +205,24 @@ Alpine.store("chatPopup", chatStore);
 
 // Alpine.data wrapper — root popup component; binds global handlers
 Alpine.data("chatPopupRoot", () => ({
+  _onOpen: null as ((ev: Event) => void) | null,
+  _onKey: null as ((ev: KeyboardEvent) => void) | null,
+
   init() {
     const root = this.$root as HTMLElement;
     const store = Alpine.store("chatPopup") as ChatStore;
 
-    // Global event for non-Alpine callers (e.g., product page button)
-    window.addEventListener("chat-popup:open", (ev: Event) => {
+    this._onOpen = (ev: Event) => {
       const detail = (ev as CustomEvent).detail ?? {};
       void store.open(detail);
-    });
-
-    // Esc closes
-    document.addEventListener("keydown", (ev) => {
+    };
+    this._onKey = (ev: KeyboardEvent) => {
       if (ev.key === "Escape" && store.isOpen) store.close();
-    });
+    };
 
-    // Outside-click closes sub-menus
+    window.addEventListener("chat-popup:open", this._onOpen);
+    document.addEventListener("keydown", this._onKey);
+
     root.addEventListener("click", (ev) => {
       const target = ev.target as HTMLElement;
       if (target.closest("[data-submenu-trigger]") || target.closest("[data-submenu-panel]")) {
@@ -228,5 +230,10 @@ Alpine.data("chatPopupRoot", () => ({
       }
       if (store.openSubMenu) store.closeSubMenu();
     });
+  },
+
+  destroy() {
+    if (this._onOpen) window.removeEventListener("chat-popup:open", this._onOpen);
+    if (this._onKey) document.removeEventListener("keydown", this._onKey);
   },
 }));
