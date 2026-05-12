@@ -40,7 +40,7 @@ export function initChatTriggers(): void {
               }
             : undefined,
         },
-      }),
+      })
     );
   });
 

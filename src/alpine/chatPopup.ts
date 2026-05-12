@@ -31,7 +31,11 @@ interface ChatStore {
   readonly totalUnread: number;
   readonly activeConversation: Conversation | null;
 
-  open(opts?: { conversationId?: string; sellerId?: string; pinnedProduct?: PinnedProduct }): Promise<void>;
+  open(opts?: {
+    conversationId?: string;
+    sellerId?: string;
+    pinnedProduct?: PinnedProduct;
+  }): Promise<void>;
   close(): void;
   toggleExpanded(): void;
   toggleInbox(): void;

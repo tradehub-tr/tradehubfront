@@ -53,7 +53,7 @@ export async function getMessages(conversationId: string): Promise<Message[]> {
 export async function sendTextMessage(
   conversationId: string,
   text: string,
-  _pinnedProduct?: PinnedProduct,
+  _pinnedProduct?: PinnedProduct
 ): Promise<Message> {
   const msg: Message = {
     id: `m-local-${Date.now()}`,

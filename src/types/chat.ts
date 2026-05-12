@@ -80,7 +80,15 @@ export interface Message {
   pending?: boolean;
 }
 
-export type SubMenuKey = "emoji" | "photo" | "file" | "call" | "card" | "location" | "translate" | "context";
+export type SubMenuKey =
+  | "emoji"
+  | "photo"
+  | "file"
+  | "call"
+  | "card"
+  | "location"
+  | "translate"
+  | "context";
 
 export interface QuickAction {
   id: string;

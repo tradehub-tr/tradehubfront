@@ -6615,7 +6615,8 @@ const en = {
     online: "Online",
     securityBanner:
       "To benefit from order protections, always keep your chat and transactions on iSTOC.",
-    endToEndEncrypted: "This conversation is end-to-end encrypted. Only you and the seller can see it.",
+    endToEndEncrypted:
+      "This conversation is end-to-end encrypted. Only you and the seller can see it.",
     typingIndicator: "{{name}} is typing",
     send: "Send",
     placeholderInput: "Please type your message here",
