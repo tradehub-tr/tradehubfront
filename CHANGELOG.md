@@ -1,3 +1,63 @@
+## [v1.1.8-beta.5] - 2026-05-12 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(alpine): add chatPopup global store + chatPopupRoot data wrapper (@ahmeetseker)
+- feat(chat): AttachmentToolbar with 7 sub-menu triggers (@ahmeetseker)
+- feat(chat): BusinessCardForm sub-popup (@ahmeetseker)
+- feat(chat): CallMenu sub-popup with video/voice/schedule (@ahmeetseker)
+- feat(chat): ChatBubble — text/image/file/system variants (@ahmeetseker)
+- feat(chat): ChatComposer with pinned product, toolbar, input and orange Gönder (@ahmeetseker)
+- feat(chat): ChatHeader with optional back/expand/close buttons (@ahmeetseker)
+- feat(chat): ChatMessages list with date labels and error state (@ahmeetseker)
+- feat(chat): ContextMenu sub-popup with pin/block/delete/mute (@ahmeetseker)
+- feat(chat): EmojiPicker sub-popup with 70 popular emojis (@ahmeetseker)
+- feat(chat): OrderCard embedded order summary (@ahmeetseker)
+- feat(chat): PhotoSourceMenu sub-popup (@ahmeetseker)
+- feat(chat): PinnedProduct composer context strip (@ahmeetseker)
+- feat(chat): QuickActionChips quick-action row (@ahmeetseker)
+- feat(chat): SecurityBanner component (@ahmeetseker)
+- feat(chat): add error/sending state and try-catch around service calls (@ahmeetseker)
+- feat(chat): barrel export for chat-shared module (@ahmeetseker)
+- feat(chat-popup): ChatPopup root container with overlay, expand mode and mobile tabs (@ahmeetseker)
+- feat(chat-popup): InboxPanel — conversation list with tag labels and unread badge (@ahmeetseker)
+- feat(chat-popup): MobileTabs (Sohbet / Mesajlar) for sm screens (@ahmeetseker)
+- feat(chat-popup): barrel export (@ahmeetseker)
+- feat(data): seed mock conversations and messages (@ahmeetseker)
+- feat(i18n): add chat namespace keys (@ahmeetseker)
+- feat(i18n): add chat.{emptyThread,orderCard,aria,toolbar,pending} keys (@ahmeetseker)
+- feat(icons): add chat-popup lucide icons (@ahmeetseker)
+- feat(product): add Sohbet et button in 50/50 grid with Sepete Ekle (@ahmeetseker)
+- feat(product): wire Sohbet et click to chat-popup:open event with pinned product (@ahmeetseker)
+- feat(product-detail): mount ChatPopup so it can be opened from this page (@ahmeetseker)
+- feat(services): add chat service stub with mock-data promises (@ahmeetseker)
+- feat(theme): add orange palette tokens for chat composer (@ahmeetseker)
+- feat(types): define chat conversation/message interfaces (@ahmeetseker)
+- feat(utils): ref-counted scrollLock; use it in chat popup open/close (@ahmeetseker)
+
+### Duzeltildi
+- fix(chat): BusinessCardForm Edit/Send buttons close submenu (stub) (@ahmeetseker)
+- fix(chat): BusinessCardForm uses i18n placeholders (no leaked identity) (@ahmeetseker)
+- fix(chat): CallMenu renders activeConversation avatar when present (@ahmeetseker)
+- fix(chat): Shift+Enter must insert newline (move .prevent inside conditional) (@ahmeetseker)
+- fix(chat): add aria-label to composer textarea (@ahmeetseker)
+- fix(chat): clean up window/document listeners in chatPopupRoot destroy() (@ahmeetseker)
+- fix(chat): flatten body-type dispatch, right-align order cards, lucide file icon, i18n labels (@ahmeetseker)
+- fix(chat): i18n aria-labels and toolbar button labels (@ahmeetseker)
+- fix(chat): resolve conversation by sellerId via chatService (no more first-conv fallback) (@ahmeetseker)
+- fix(chat-popup): make chat section relative so ContextMenu anchors correctly (@ahmeetseker)
+- fix(chat-popup): mark inbox avatar img as decorative (alt="") (@ahmeetseker)
+- fix(product): use existing .th-btn-outline for Sohbet et (theme parity) (@ahmeetseker)
+
+### Degistirildi
+- refactor(chat): drop dead || "" fallback in appendDraft (@ahmeetseker)
+- refactor(chat): promote Tab type to types/chat.ts as ChatTab (@ahmeetseker)
+- refactor(chat): split localTime into localTimeHHMM primitive (i18n boundary) (@ahmeetseker)
+- refactor(chat-popup): drop dead 'pinned: ""' entry from tag lookup (@ahmeetseker)
+- refactor(chat-popup): lift click handler to initChatTriggers() shared module (@ahmeetseker)
+
+---
 ## [v1.1.8-beta.3] - 2026-05-11 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
