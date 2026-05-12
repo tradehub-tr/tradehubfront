@@ -24,6 +24,8 @@ interface ChatStore {
   openSubMenu: SubMenuKey | null;
   draft: string;
   loading: boolean;
+  error: string | null;
+  sending: boolean;
 
   readonly totalUnread: number;
   readonly activeConversation: Conversation | null;
@@ -58,6 +60,8 @@ const chatStore: ChatStore = {
   openSubMenu: null,
   draft: "",
   loading: false,
+  error: null,
+  sending: false,
 
   get totalUnread() {
     return this.conversations.reduce((sum, c) => sum + (c.unread || 0), 0);
@@ -71,18 +75,24 @@ const chatStore: ChatStore = {
   async open(opts) {
     this.isOpen = true;
     this.pinnedProduct = opts?.pinnedProduct ?? null;
+    this.error = null;
+    acquireScrollLock();
 
     if (this.conversations.length === 0) {
       this.loading = true;
-      this.conversations = await listConversations();
-      this.loading = false;
+      try {
+        this.conversations = await listConversations();
+      } catch (err) {
+        this.error = err instanceof Error ? err.message : "Konuşmalar yüklenemedi";
+      } finally {
+        this.loading = false;
+      }
     }
 
     const targetId = opts?.conversationId ?? this.conversations[0]?.id ?? null;
     if (targetId) {
       await this.setActiveConversation(targetId);
     }
-    acquireScrollLock();
   },
 
   close() {
@@ -114,11 +124,16 @@ const chatStore: ChatStore = {
 
   async setActiveConversation(id) {
     this.activeConversationId = id;
-    this.activeMessages = await getMessages(id);
     this.activeTab = "chat";
-    await markConversationRead(id);
-    const conv = this.conversations.find((c) => c.id === id);
-    if (conv) conv.unread = 0;
+    this.error = null;
+    try {
+      this.activeMessages = await getMessages(id);
+      await markConversationRead(id);
+      const conv = this.conversations.find((c) => c.id === id);
+      if (conv) conv.unread = 0;
+    } catch (err) {
+      this.error = err instanceof Error ? err.message : "Mesajlar yüklenemedi";
+    }
   },
 
   removePinnedProduct() {
@@ -134,12 +149,21 @@ const chatStore: ChatStore = {
   },
 
   async sendMessage() {
+    if (this.sending) return;
     const text = this.draft.trim();
     if (!text || !this.activeConversationId) return;
     const pp = this.pinnedProduct ?? undefined;
-    const msg = await sendTextMessage(this.activeConversationId, text, pp);
-    this.activeMessages = [...this.activeMessages, msg];
-    this.draft = "";
+    this.sending = true;
+    this.error = null;
+    try {
+      const msg = await sendTextMessage(this.activeConversationId, text, pp);
+      this.activeMessages = [...this.activeMessages, msg];
+      this.draft = "";
+    } catch (err) {
+      this.error = err instanceof Error ? err.message : "Mesaj gönderilemedi";
+    } finally {
+      this.sending = false;
+    }
   },
 
   async blockActive() {
