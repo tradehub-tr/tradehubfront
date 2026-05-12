@@ -10,7 +10,7 @@ import { t } from "../../i18n";
 export function ChatComposer(): string {
   const expandIcon = getLucideIcon("maximize-2", "w-4 h-4");
   return /* html */ `
-    <div class="relative flex flex-col gap-2.5 border-t border-[var(--color-border-light,#f0f0f0)] bg-white px-4 pt-3 pb-3.5 flex-shrink-0">
+    <div class="relative flex flex-col gap-1.5 border-t border-[var(--color-border-light,#f0f0f0)] bg-white px-4 pt-2 pb-3 flex-shrink-0">
       ${PinnedProduct()}
       ${AttachmentToolbar()}
 

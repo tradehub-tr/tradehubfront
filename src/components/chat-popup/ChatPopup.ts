@@ -1,7 +1,6 @@
 import {
   ChatHeader,
   ChatMessages,
-  SecurityBanner,
   QuickActionChips,
   ChatComposer,
   ContextMenu,
@@ -17,14 +16,18 @@ export function ChatPopup(): string {
     <div x-data="chatPopupRoot"
          x-cloak
          x-show="$store.chatPopup.isOpen"
-         x-transition.opacity
-         class="fixed inset-0 z-[100] flex items-stretch justify-center bg-black/40 md:items-center md:p-4"
-         @click.self="$store.chatPopup.close()">
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 translate-y-4"
+         x-transition:enter-end="opacity-100 translate-y-0"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100 translate-y-0"
+         x-transition:leave-end="opacity-0 translate-y-4"
+         class="fixed inset-0 z-[100] flex md:inset-auto md:bottom-0 md:right-4">
 
-      <div class="relative flex w-full flex-col overflow-hidden bg-white md:rounded-xl md:shadow-2xl"
+      <div class="relative flex h-full w-full flex-col overflow-hidden bg-white md:rounded-t-xl md:shadow-2xl"
            :class="$store.chatPopup.isExpanded
-             ? 'md:h-[90vh] md:w-[90vw] md:max-w-[1200px]'
-             : 'md:h-[640px] md:max-h-[85vh] md:w-[960px] md:max-w-[92vw]'">
+             ? 'md:h-[92vh] md:max-h-[calc(100vh-1rem)] md:w-[1200px] md:max-w-[calc(100vw-2rem)]'
+             : 'md:h-[620px] md:max-h-[calc(100vh-1rem)] md:w-[920px] md:max-w-[calc(100vw-2rem)]'">
 
         ${MobileTabs()}
 
@@ -34,13 +37,12 @@ export function ChatPopup(): string {
                    :class="$store.chatPopup.activeTab === 'inbox' ? 'hidden md:flex' : 'flex'">
             ${ChatHeader({ showBackButton: true })}
             ${ContextMenu()}
-            ${SecurityBanner()}
             ${ChatMessages()}
             ${QuickActionChips()}
             ${ChatComposer()}
           </section>
 
-          <div class="flex-1 md:flex-initial"
+          <div class="flex min-h-0 flex-1 md:flex-initial"
                :class="$store.chatPopup.activeTab === 'chat' ? 'hidden md:flex' : 'flex'">
             ${InboxPanel()}
           </div>

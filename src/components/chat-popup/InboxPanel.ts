@@ -25,7 +25,7 @@ export function InboxPanel(): string {
   const tagRfq = t("chat.tag.rfq");
 
   return /* html */ `
-    <aside class="flex w-full flex-col bg-[var(--color-surface-muted,#fafafa)] md:w-[300px] md:border-l md:border-[var(--color-border-light,#f0f0f0)]">
+    <aside class="flex h-full min-h-0 w-full flex-col bg-[var(--color-surface-muted,#fafafa)] md:w-[300px] md:border-l md:border-[var(--color-border-light,#f0f0f0)]">
       <!-- Header -->
       <div class="flex items-center gap-2 border-b border-[var(--color-border-light,#f0f0f0)] bg-white px-4 py-3">
         <span class="text-[var(--color-text-secondary,#525252)]">${messageIcon}</span>
@@ -33,14 +33,32 @@ export function InboxPanel(): string {
         <span class="ml-1 size-1.5 rounded-full bg-[var(--color-success-500,#22c55e)]"></span>
         <div class="ml-auto flex items-center gap-2 text-[var(--color-text-tertiary,#a3a3a3)]">
           <button type="button"
-                  class="appearance-none border-0 bg-transparent p-1 cursor-pointer rounded hover:bg-[var(--color-surface-raised,#f5f5f5)] focus:outline-none"
+                  @click="$store.chatPopup.toggleSearch()"
+                  :class="$store.chatPopup.searchOpen
+                    ? 'text-[var(--color-text-primary,#0a0a0a)] bg-[var(--color-surface-raised,#f5f5f5)]'
+                    : 'hover:bg-[var(--color-surface-raised,#f5f5f5)]'"
+                  class="appearance-none border-0 bg-transparent p-1 cursor-pointer rounded focus:outline-none transition-colors"
                   aria-label="${t("chat.search")}">${searchIcon}</button>
         </div>
       </div>
 
+      <!-- Search input (collapsible) -->
+      <div x-show="$store.chatPopup.searchOpen"
+           x-transition.opacity
+           x-cloak
+           class="border-b border-[var(--color-border-light,#f0f0f0)] bg-white px-3 py-2">
+        <input type="search"
+               x-model.debounce.150ms="$store.chatPopup.searchQuery"
+               x-effect="if ($store.chatPopup.searchOpen) $nextTick(() => $el.focus())"
+               @keydown.escape.stop="$store.chatPopup.toggleSearch()"
+               placeholder="${t("chat.search")}"
+               aria-label="${t("chat.search")}"
+               class="w-full appearance-none rounded-md border border-[var(--color-border-light,#f0f0f0)] bg-[var(--color-surface-muted,#fafafa)] px-3 py-1.5 text-[12px] text-[var(--color-text-primary,#0a0a0a)] placeholder:text-[var(--color-text-tertiary,#a3a3a3)] focus:outline-none focus:border-[var(--color-primary-500,#f5b800)]" />
+      </div>
+
       <!-- List -->
       <div class="flex-1 overflow-y-auto">
-        <template x-for="conv in $store.chatPopup.conversations" :key="conv.id">
+        <template x-for="conv in $store.chatPopup.filteredConversations" :key="conv.id">
           <button type="button"
                   @click="$store.chatPopup.setActiveConversation(conv.id)"
                   class="flex w-full items-start gap-2.5 border-0 border-b border-[var(--color-border-light,#f0f0f0)] bg-transparent px-3.5 py-3 text-left cursor-pointer transition-colors focus:outline-none"
@@ -79,9 +97,9 @@ export function InboxPanel(): string {
           </button>
         </template>
 
-        <template x-if="$store.chatPopup.conversations.length === 0 && !$store.chatPopup.loading">
+        <template x-if="$store.chatPopup.filteredConversations.length === 0 && !$store.chatPopup.loading">
           <div class="grid place-items-center py-12 text-[12px] text-[var(--color-text-tertiary,#a3a3a3)]">
-            ${t("chat.emptyInbox")}
+            <span x-text="$store.chatPopup.searchQuery.trim() ? '${t("chat.search")} — ${t("chat.emptyInbox")}' : '${t("chat.emptyInbox")}'"></span>
           </div>
         </template>
       </div>

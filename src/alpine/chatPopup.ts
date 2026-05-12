@@ -27,9 +27,12 @@ interface ChatStore {
   loading: boolean;
   error: string | null;
   sending: boolean;
+  searchOpen: boolean;
+  searchQuery: string;
 
   readonly totalUnread: number;
   readonly activeConversation: Conversation | null;
+  readonly filteredConversations: Conversation[];
 
   open(opts?: {
     conversationId?: string;
@@ -42,6 +45,8 @@ interface ChatStore {
   setActiveTab(tab: ChatTab): void;
   toggleSubMenu(name: SubMenuKey): void;
   closeSubMenu(): void;
+  toggleSearch(): void;
+  setSearchQuery(q: string): void;
   setActiveConversation(id: string): Promise<void>;
   removePinnedProduct(): void;
   appendDraft(text: string): void;
@@ -67,6 +72,8 @@ const chatStore: ChatStore = {
   loading: false,
   error: null,
   sending: false,
+  searchOpen: false,
+  searchQuery: "",
 
   get totalUnread() {
     return this.conversations.reduce((sum, c) => sum + (c.unread || 0), 0);
@@ -75,6 +82,18 @@ const chatStore: ChatStore = {
   get activeConversation() {
     if (!this.activeConversationId) return null;
     return this.conversations.find((c) => c.id === this.activeConversationId) ?? null;
+  },
+
+  get filteredConversations() {
+    const q = this.searchQuery.trim().toLocaleLowerCase("tr-TR");
+    if (!q) return this.conversations;
+    return this.conversations.filter((c) => {
+      const haystack = [c.name, c.company, c.lastMessage]
+        .filter(Boolean)
+        .join(" ")
+        .toLocaleLowerCase("tr-TR");
+      return haystack.includes(q);
+    });
   },
 
   async open(opts) {
@@ -139,6 +158,15 @@ const chatStore: ChatStore = {
 
   closeSubMenu() {
     this.openSubMenu = null;
+  },
+
+  toggleSearch() {
+    this.searchOpen = !this.searchOpen;
+    if (!this.searchOpen) this.searchQuery = "";
+  },
+
+  setSearchQuery(q) {
+    this.searchQuery = q;
   },
 
   async setActiveConversation(id) {

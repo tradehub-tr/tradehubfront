@@ -6644,7 +6644,7 @@ const tr = {
       country: "Ülke",
       emailLabel: "E-posta",
       placeholderEmail: "ornek@firma.com",
-      verifiedBy: "iSTOC tarafından doğrulanmış: E-posta",
+      verifiedBy: "iSTOC tarafından doğrulanan hesaplar:",
     },
     tabs: {
       chat: "Sohbet",

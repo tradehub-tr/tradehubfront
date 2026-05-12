@@ -34,27 +34,16 @@ export function getSidebarSections(): SidebarSection[] {
     {
       title: t("dashboard.onlineTrading"),
       items: [
-        /*
-         * DISABLED: Mesajlarım (messages.html) ve Kişilerim (contacts.html) — ileride geliştirilecek.
-         * Backend (chat/contact altyapısı) tamamlandığında aşağıdaki blok aynen geri açılır
-         * ve buradaki standalone "inquiries" item'ı kaldırılır. Bkz. memory: feedback_disabled_messages_contacts.md
-         */
-        // {
-        //   id: "messages",
-        //   label: t("dashboard.myMessages"),
-        //   icon: "messages",
-        //   href: "/pages/dashboard/messages.html",
-        //   submenu: [
-        //     { label: t("dashboard.supplierMessages"), href: "/pages/dashboard/messages.html" },
-        //     { label: t("dashboard.rfqInquiries"), href: "/pages/dashboard/inquiries.html" },
-        //     { label: t("dashboard.myContacts"), href: "/pages/dashboard/contacts.html" },
-        //   ],
-        // },
         {
-          id: "inquiries",
-          label: t("dashboard.rfqInquiries"),
+          id: "messages",
+          label: t("dashboard.myMessages"),
           icon: "messages",
-          href: "/pages/dashboard/inquiries.html",
+          href: "/pages/dashboard/messages.html",
+          submenu: [
+            { label: t("dashboard.supplierMessages"), href: "/pages/dashboard/messages.html" },
+            { label: t("dashboard.rfqInquiries"), href: "/pages/dashboard/inquiries.html" },
+            { label: t("dashboard.myContacts"), href: "/pages/dashboard/contacts.html" },
+          ],
         },
         {
           id: "orders",

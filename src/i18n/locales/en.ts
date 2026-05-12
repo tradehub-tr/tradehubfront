@@ -6650,7 +6650,7 @@ const en = {
       country: "Country",
       emailLabel: "Email",
       placeholderEmail: "example@company.com",
-      verifiedBy: "Verified by iSTOC: Email",
+      verifiedBy: "Verified accounts by iSTOC:",
     },
     tabs: {
       chat: "Chat",
