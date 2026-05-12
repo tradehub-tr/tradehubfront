@@ -45,7 +45,7 @@ export function InboxPanel(): string {
                     : 'hover:bg-[var(--color-surface-muted,#fafafa)]'">
             <div class="size-9 shrink-0 rounded-full bg-[var(--color-primary-100,#ffefb3)] overflow-hidden">
               <template x-if="conv.avatar">
-                <img :src="conv.avatar" :alt="conv.name" class="size-full object-cover" />
+                <img :src="conv.avatar" alt="" class="size-full object-cover" />
               </template>
             </div>
             <div class="min-w-0 flex-1">
