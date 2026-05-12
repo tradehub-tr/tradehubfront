@@ -27,7 +27,7 @@ export function ChatComposer(): string {
 
         <textarea
           x-model="$store.chatPopup.draft"
-          @keydown.enter.prevent="if (!$event.shiftKey) { $store.chatPopup.sendMessage() }"
+          @keydown.enter="if (!$event.shiftKey) { $event.preventDefault(); $store.chatPopup.sendMessage(); }"
           rows="2"
           placeholder="${t("chat.placeholderInput")}"
           class="flex-1 resize-none border-0 bg-transparent text-[13px] leading-snug text-[var(--color-text-primary,#0a0a0a)] placeholder:text-[var(--color-text-tertiary,#a3a3a3)] focus:outline-none pr-8"></textarea>
