@@ -4886,15 +4886,15 @@ button:not(:disabled):not([role="tab"]):not([class*="-tab"]):not([class*="__tab"
     [class*="-toggle__"]
   ):not([class*="hover:underline"]):not([class*="-close"]):not([class*="__close"]):not(
     [class*="-nav-btn"]
-  ):not([class*="__prev"]):not([class*="__next"]):not([class*="-prev-"]):not(
-    [class*="-next-"]
-  ):not([class*="-remove-file"]):not([aria-label*="close" i]):not([aria-label*="kapat" i]):not(
-    [aria-label*="sil" i]
-  ):not([aria-label*="kaldır" i]):not([aria-label*="remove" i]):not([data-delete-sku]):not(
-    [data-delete-supplier]
-  ):not(.th-btn-link):not(.th-btn-ghost):not(.mega-trigger):not(.th-subheader-link):not(
-    .search-tab-btn
-  ):not(.th-search-tab):not(.mega-cat-btn):not(.th-mega-sidebar-item):not(.th-no-press):hover,
+  ):not([class*="__prev"]):not([class*="__next"]):not([class*="-prev-"]):not([class*="-next-"]):not(
+    [class*="-remove-file"]
+  ):not([aria-label*="close" i]):not([aria-label*="kapat" i]):not([aria-label*="sil" i]):not(
+    [aria-label*="kaldır" i]
+  ):not([aria-label*="remove" i]):not([data-delete-sku]):not([data-delete-supplier]):not(
+    .th-btn-link
+  ):not(.th-btn-ghost):not(.mega-trigger):not(.th-subheader-link):not(.search-tab-btn):not(
+    .th-search-tab
+  ):not(.mega-cat-btn):not(.th-mega-sidebar-item):not(.th-no-press):hover,
 input[type="submit"]:not(:disabled):not(.th-no-press):hover,
 input[type="button"]:not(:disabled):not(.th-no-press):hover,
 input[type="reset"]:not(:disabled):not(.th-no-press):hover,
@@ -4916,15 +4916,15 @@ button:not(:disabled):not([role="tab"]):not([class*="-tab"]):not([class*="__tab"
     [class*="-toggle__"]
   ):not([class*="hover:underline"]):not([class*="-close"]):not([class*="__close"]):not(
     [class*="-nav-btn"]
-  ):not([class*="__prev"]):not([class*="__next"]):not([class*="-prev-"]):not(
-    [class*="-next-"]
-  ):not([class*="-remove-file"]):not([aria-label*="close" i]):not([aria-label*="kapat" i]):not(
-    [aria-label*="sil" i]
-  ):not([aria-label*="kaldır" i]):not([aria-label*="remove" i]):not([data-delete-sku]):not(
-    [data-delete-supplier]
-  ):not(.th-btn-link):not(.th-btn-ghost):not(.mega-trigger):not(.th-subheader-link):not(
-    .search-tab-btn
-  ):not(.th-search-tab):not(.mega-cat-btn):not(.th-mega-sidebar-item):not(.th-no-press):active,
+  ):not([class*="__prev"]):not([class*="__next"]):not([class*="-prev-"]):not([class*="-next-"]):not(
+    [class*="-remove-file"]
+  ):not([aria-label*="close" i]):not([aria-label*="kapat" i]):not([aria-label*="sil" i]):not(
+    [aria-label*="kaldır" i]
+  ):not([aria-label*="remove" i]):not([data-delete-sku]):not([data-delete-supplier]):not(
+    .th-btn-link
+  ):not(.th-btn-ghost):not(.mega-trigger):not(.th-subheader-link):not(.search-tab-btn):not(
+    .th-search-tab
+  ):not(.mega-cat-btn):not(.th-mega-sidebar-item):not(.th-no-press):active,
 input[type="submit"]:not(:disabled):not(.th-no-press):active,
 input[type="button"]:not(:disabled):not(.th-no-press):active,
 input[type="reset"]:not(:disabled):not(.th-no-press):active,
@@ -5122,7 +5122,9 @@ button[data-filter-action="apply-all"]:active {
   inset: 0;
   opacity: 0;
   transform: translateY(100%);
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
 }
 .header-notice-slide-item.active {
   opacity: 1;

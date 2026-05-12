@@ -7,15 +7,19 @@
  */
 
 const FRAPPE_BASE =
-  (import.meta as unknown as { env?: { VITE_FRAPPE_URL?: string } }).env
-    ?.VITE_FRAPPE_URL || "http://localhost:8000";
+  (import.meta as unknown as { env?: { VITE_FRAPPE_URL?: string } }).env?.VITE_FRAPPE_URL ||
+  "http://localhost:8000";
 
 type FrappeResponse<T> = { message: T };
 
-async function call<T>(method: string, params: Record<string, unknown> = {}, opts: {
-  method?: "GET" | "POST";
-  withCSRF?: boolean;
-} = {}): Promise<T> {
+async function call<T>(
+  method: string,
+  params: Record<string, unknown> = {},
+  opts: {
+    method?: "GET" | "POST";
+    withCSRF?: boolean;
+  } = {}
+): Promise<T> {
   const httpMethod = opts.method ?? "GET";
   const url = new URL(`${FRAPPE_BASE}/api/method/${method}`);
   let body: string | undefined;
@@ -138,12 +142,15 @@ export interface QAItem {
 // API surface
 // ─────────────────────────────────────────────────────────────────────────────
 export const reviewsApi = {
-  getPage(listing: string, opts: {
-    page?: number;
-    pageSize?: number;
-    sortBy?: "recent" | "high" | "low" | "helpful";
-    onlyVerified?: boolean;
-  } = {}): Promise<StorefrontPage> {
+  getPage(
+    listing: string,
+    opts: {
+      page?: number;
+      pageSize?: number;
+      sortBy?: "recent" | "high" | "low" | "helpful";
+      onlyVerified?: boolean;
+    } = {}
+  ): Promise<StorefrontPage> {
     return call<StorefrontPage>("tradehub_core.api.storefront_api.get_storefront_review_page", {
       listing,
       page: opts.page ?? 1,
@@ -170,42 +177,59 @@ export const reviewsApi = {
     return call(
       "tradehub_core.api.storefront_api.submit_review",
       payload as unknown as Record<string, unknown>,
-      { method: "POST", withCSRF: true },
+      { method: "POST", withCSRF: true }
     );
   },
 
   submitQuestion(listing: string, question: string) {
-    return call("tradehub_core.api.storefront_api.submit_question",
-      { listing, question }, { method: "POST", withCSRF: true });
+    return call(
+      "tradehub_core.api.storefront_api.submit_question",
+      { listing, question },
+      { method: "POST", withCSRF: true }
+    );
   },
 
   submitAnswer(question: string, answer: string) {
-    return call("tradehub_core.api.storefront_api.submit_answer",
-      { question, answer }, { method: "POST", withCSRF: true });
+    return call(
+      "tradehub_core.api.storefront_api.submit_answer",
+      { question, answer },
+      { method: "POST", withCSRF: true }
+    );
   },
 
   voteHelpful(review: string, vote: "helpful" | "not_helpful") {
-    return call("tradehub_core.api.storefront_api.vote_helpful",
-      { review, vote }, { method: "POST", withCSRF: true });
+    return call(
+      "tradehub_core.api.storefront_api.vote_helpful",
+      { review, vote },
+      { method: "POST", withCSRF: true }
+    );
   },
 
   translateReview(review: string, targetLang = "tr") {
-    return call("tradehub_core.api.storefront_api.translate_review",
-      { review, target_lang: targetLang });
+    return call("tradehub_core.api.storefront_api.translate_review", {
+      review,
+      target_lang: targetLang,
+    });
   },
 
   reportAbuse(review: string, reason: string, note?: string) {
-    return call("tradehub_core.api.storefront_api.report_abuse",
-      { review, reason, note }, { method: "POST", withCSRF: true });
+    return call(
+      "tradehub_core.api.storefront_api.report_abuse",
+      { review, reason, note },
+      { method: "POST", withCSRF: true }
+    );
   },
 
   getCategoryTemplate(listing: string) {
-    return call<{ template: string | null; questions: Array<{
-      key: string; label: string; field_type: string; required: boolean;
-    }> }>(
-      "tradehub_core.api.storefront_api.get_category_template",
-      { listing },
-    );
+    return call<{
+      template: string | null;
+      questions: Array<{
+        key: string;
+        label: string;
+        field_type: string;
+        required: boolean;
+      }>;
+    }>("tradehub_core.api.storefront_api.get_category_template", { listing });
   },
 
   getMyReviews(page = 1) {

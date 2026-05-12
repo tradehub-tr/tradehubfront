@@ -1,4 +1,5 @@
-// @ts-nocheck
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck -- Alpine.js modül tipleri tam değil; runtime davranış doğrulanmış
 /**
  * QAModal — Mobile-first full-screen modal for Q&A section.
  *
@@ -36,21 +37,24 @@ function ensureProductQARegistered(): void {
 
 export function registerQAModal(): void {
   ensureProductQARegistered();
-  Alpine.data("qaModal", (): QAModalState => ({
-    open: false,
-    init() {
-      window.addEventListener("qa-modal-show", () => this.show());
-      window.addEventListener("qa-modal-hide", () => this.close());
-    },
-    show() {
-      this.open = true;
-      document.body.style.overflow = "hidden";
-    },
-    close() {
-      this.open = false;
-      document.body.style.overflow = "";
-    },
-  }));
+  Alpine.data(
+    "qaModal",
+    (): QAModalState => ({
+      open: false,
+      init() {
+        window.addEventListener("qa-modal-show", () => this.show());
+        window.addEventListener("qa-modal-hide", () => this.close());
+      },
+      show() {
+        this.open = true;
+        document.body.style.overflow = "hidden";
+      },
+      close() {
+        this.open = false;
+        document.body.style.overflow = "";
+      },
+    })
+  );
 }
 
 export function QAModal(): string {

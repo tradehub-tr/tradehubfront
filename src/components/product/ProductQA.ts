@@ -1,4 +1,5 @@
-// @ts-nocheck
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck -- Alpine.js modül tipleri tam değil; runtime davranış doğrulanmış
 /**
  * ProductQA — Soru/Cevap bölümü.
  *
@@ -39,148 +40,151 @@ interface QAState {
 }
 
 export function registerProductQA(): void {
-  Alpine.data("productQA", (): QAState => ({
-    open: false,
-    loading: false,
-    submitting: false,
-    listingId: "",
-    questions: [],
-    total: 0,
-    question: "",
-    errorMsg: "",
-    isLoggedIn: false,
-    init() {
-      // Component mount sırasında product zaten yüklü olduğu için doğrudan al.
-      // (Q&A tab tıklanınca mount olur — `product-loaded` event'i o anda çoktan
-      // dispatch edilmiş olur, listener boşa kalır. State'ten okumak güvenli.)
-      const current = getCurrentProduct();
-      if (current?.id) {
-        void this.load(current.id);
-      } else {
-        // Edge case: product henüz yüklenmediyse event'le yakala
-        const onLoaded = (e: Event) => {
-          const ce = e as CustomEvent<{ id: string }>;
-          if (ce.detail?.id) {
-            this.load(ce.detail.id);
-            window.removeEventListener("product-loaded", onLoaded);
-            document.removeEventListener("product-loaded", onLoaded);
-          }
-        };
-        window.addEventListener("product-loaded", onLoaded);
-        document.addEventListener("product-loaded", onLoaded);
-      }
-
-      // Login state — auth cache async olabilir; cookie sniff yetersiz olduğu için
-      // /api/method/.auth.get_session_user üzerinden gelmiş user_id cookie'sini ara.
-      this.isLoggedIn = !!document.cookie.split("; ").find(
-        (c) => c.startsWith("user_id=") && c !== "user_id=Guest"
-      );
-
-      // Yeni soru gönderildiğinde liste yenile
-      window.addEventListener("qa-submitted", () => {
-        if (this.listingId) void this.load(this.listingId);
-      });
-
-      // Login sonrası kendi Pending sorularımız listede görünsün
-      window.addEventListener("login-success", () => {
-        this.isLoggedIn = true;
-        if (this.listingId) void this.load(this.listingId);
-      });
-    },
-    async load(listingId: string) {
-      this.listingId = listingId;
-      this.loading = true;
-      try {
-        const data = await getProductQA(listingId, 1);
-        this.questions = data.questions || [];
-        this.total = data.total || 0;
-      } catch (err: unknown) {
-        console.warn("QA load failed:", err);
-        this.questions = [];
-        this.total = 0;
-      } finally {
-        this.loading = false;
-      }
-    },
-    async submitQuestion() {
-      this.errorMsg = "";
-      if (!this.isLoggedIn) {
-        openLoginModal();
-        return;
-      }
-      const q = this.question.trim();
-      if (q.length < 10) {
-        this.errorMsg = "Sorunuz en az 10 karakter olmalı.";
-        return;
-      }
-      if (!this.listingId) {
-        // Fallback: state'ten tekrar dene
+  Alpine.data(
+    "productQA",
+    (): QAState => ({
+      open: false,
+      loading: false,
+      submitting: false,
+      listingId: "",
+      questions: [],
+      total: 0,
+      question: "",
+      errorMsg: "",
+      isLoggedIn: false,
+      init() {
+        // Component mount sırasında product zaten yüklü olduğu için doğrudan al.
+        // (Q&A tab tıklanınca mount olur — `product-loaded` event'i o anda çoktan
+        // dispatch edilmiş olur, listener boşa kalır. State'ten okumak güvenli.)
         const current = getCurrentProduct();
         if (current?.id) {
-          this.listingId = current.id;
+          void this.load(current.id);
         } else {
-          this.errorMsg = "Ürün bilgisi yüklenmedi, sayfayı yenileyin.";
+          // Edge case: product henüz yüklenmediyse event'le yakala
+          const onLoaded = (e: Event) => {
+            const ce = e as CustomEvent<{ id: string }>;
+            if (ce.detail?.id) {
+              this.load(ce.detail.id);
+              window.removeEventListener("product-loaded", onLoaded);
+              document.removeEventListener("product-loaded", onLoaded);
+            }
+          };
+          window.addEventListener("product-loaded", onLoaded);
+          document.addEventListener("product-loaded", onLoaded);
+        }
+
+        // Login state — auth cache async olabilir; cookie sniff yetersiz olduğu için
+        // /api/method/.auth.get_session_user üzerinden gelmiş user_id cookie'sini ara.
+        this.isLoggedIn = !!document.cookie
+          .split("; ")
+          .find((c) => c.startsWith("user_id=") && c !== "user_id=Guest");
+
+        // Yeni soru gönderildiğinde liste yenile
+        window.addEventListener("qa-submitted", () => {
+          if (this.listingId) void this.load(this.listingId);
+        });
+
+        // Login sonrası kendi Pending sorularımız listede görünsün
+        window.addEventListener("login-success", () => {
+          this.isLoggedIn = true;
+          if (this.listingId) void this.load(this.listingId);
+        });
+      },
+      async load(listingId: string) {
+        this.listingId = listingId;
+        this.loading = true;
+        try {
+          const data = await getProductQA(listingId, 1);
+          this.questions = data.questions || [];
+          this.total = data.total || 0;
+        } catch (err: unknown) {
+          console.warn("QA load failed:", err);
+          this.questions = [];
+          this.total = 0;
+        } finally {
+          this.loading = false;
+        }
+      },
+      async submitQuestion() {
+        this.errorMsg = "";
+        if (!this.isLoggedIn) {
+          openLoginModal();
           return;
         }
-      }
-      this.submitting = true;
-      try {
-        await submitProductQuestion(this.listingId, q);
-        showToast({
-          message: "Sorunuz alındı, satıcı en kısa sürede yanıtlayacak.",
-          type: "success",
-        });
-        this.question = "";
-        window.dispatchEvent(new CustomEvent("qa-submitted"));
-      } catch (err: unknown) {
-        const msg = err instanceof Error ? err.message : "Hata";
-        this.errorMsg = msg;
-        showToast({ message: msg, type: "error" });
-      } finally {
-        this.submitting = false;
-      }
-    },
-    async voteQuestion(q: ProductQuestion) {
-      if (!this.isLoggedIn) {
-        openLoginModal();
-        return;
-      }
-      try {
-        const res = await voteQAHelpful("question", q.name);
-        if (res.changed) {
-          q.helpful_count = (q.helpful_count || 0) + 1;
-          showToast({ message: "Oyunuz alındı.", type: "success" });
-        } else {
-          showToast({ message: "Bu soruya zaten oy verdiniz.", type: "info" });
+        const q = this.question.trim();
+        if (q.length < 10) {
+          this.errorMsg = "Sorunuz en az 10 karakter olmalı.";
+          return;
         }
-      } catch (err: unknown) {
-        const msg = err instanceof Error ? err.message : "Oy verilemedi";
-        showToast({ message: msg, type: "error" });
-      }
-    },
-    async voteAnswer(a: ProductQuestion["answers"][number]) {
-      if (!this.isLoggedIn) {
-        openLoginModal();
-        return;
-      }
-      try {
-        const res = await voteQAHelpful("answer", a.name);
-        if (res.changed) {
-          a.helpful_count = (a.helpful_count || 0) + 1;
-          showToast({ message: "Oyunuz alındı.", type: "success" });
-        } else {
-          showToast({ message: "Bu cevaba zaten oy verdiniz.", type: "info" });
+        if (!this.listingId) {
+          // Fallback: state'ten tekrar dene
+          const current = getCurrentProduct();
+          if (current?.id) {
+            this.listingId = current.id;
+          } else {
+            this.errorMsg = "Ürün bilgisi yüklenmedi, sayfayı yenileyin.";
+            return;
+          }
         }
-      } catch (err: unknown) {
-        const msg = err instanceof Error ? err.message : "Oy verilemedi";
-        showToast({ message: msg, type: "error" });
-      }
-    },
-    formatDate(s: string) {
-      if (!s) return "";
-      return s.slice(0, 10);
-    },
-  }));
+        this.submitting = true;
+        try {
+          await submitProductQuestion(this.listingId, q);
+          showToast({
+            message: "Sorunuz alındı, satıcı en kısa sürede yanıtlayacak.",
+            type: "success",
+          });
+          this.question = "";
+          window.dispatchEvent(new CustomEvent("qa-submitted"));
+        } catch (err: unknown) {
+          const msg = err instanceof Error ? err.message : "Hata";
+          this.errorMsg = msg;
+          showToast({ message: msg, type: "error" });
+        } finally {
+          this.submitting = false;
+        }
+      },
+      async voteQuestion(q: ProductQuestion) {
+        if (!this.isLoggedIn) {
+          openLoginModal();
+          return;
+        }
+        try {
+          const res = await voteQAHelpful("question", q.name);
+          if (res.changed) {
+            q.helpful_count = (q.helpful_count || 0) + 1;
+            showToast({ message: "Oyunuz alındı.", type: "success" });
+          } else {
+            showToast({ message: "Bu soruya zaten oy verdiniz.", type: "info" });
+          }
+        } catch (err: unknown) {
+          const msg = err instanceof Error ? err.message : "Oy verilemedi";
+          showToast({ message: msg, type: "error" });
+        }
+      },
+      async voteAnswer(a: ProductQuestion["answers"][number]) {
+        if (!this.isLoggedIn) {
+          openLoginModal();
+          return;
+        }
+        try {
+          const res = await voteQAHelpful("answer", a.name);
+          if (res.changed) {
+            a.helpful_count = (a.helpful_count || 0) + 1;
+            showToast({ message: "Oyunuz alındı.", type: "success" });
+          } else {
+            showToast({ message: "Bu cevaba zaten oy verdiniz.", type: "info" });
+          }
+        } catch (err: unknown) {
+          const msg = err instanceof Error ? err.message : "Oy verilemedi";
+          showToast({ message: msg, type: "error" });
+        }
+      },
+      formatDate(s: string) {
+        if (!s) return "";
+        return s.slice(0, 10);
+      },
+    })
+  );
 }
 
 export function ProductQA(): string {

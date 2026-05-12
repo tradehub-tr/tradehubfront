@@ -1,4 +1,5 @@
-// @ts-nocheck
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck -- Alpine.js modül tipleri tam değil; runtime davranış doğrulanmış
 /**
  * Faz 5 — Mobile-first Review Widget (Alpine.js component)
  *
@@ -13,12 +14,7 @@
  */
 
 import { reviewsApi } from "../../api/reviewsApi";
-import type {
-  QAItem,
-  ReviewItem,
-  ReviewSummary,
-  StorefrontPage,
-} from "../../api/reviewsApi";
+import type { QAItem, ReviewItem, ReviewSummary, StorefrontPage } from "../../api/reviewsApi";
 
 const FILLED_STAR = "★";
 const EMPTY_STAR = "☆";

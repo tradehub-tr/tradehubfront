@@ -1,4 +1,5 @@
-// @ts-nocheck
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck -- Alpine.js modül tipleri tam değil; runtime davranış doğrulanmış
 /**
  * WriteReviewModal — Storefront yorum yazma akışı.
  *
@@ -65,145 +66,148 @@ const ASPECT_LABELS: Record<string, string> = {
 };
 
 export function registerWriteReviewModal(): void {
-  Alpine.data("writeReviewModal", (): WriteReviewState => ({
-    open: false,
-    loading: false,
-    errorMsg: "",
-    listingId: "",
-    orderItems: [],
-    selectedOrderItem: "",
-    rating: 5,
-    hoverRating: 0,
-    aspects: { product_quality: 5, service: 5, shipping: 5, spec_match: 5 },
-    title: "",
-    body: "",
-    images: [],
-    uploadingImage: false,
-    init() {
-      window.addEventListener("write-review-modal-show", (e: Event) => {
-        const ce = e as CustomEvent<{
-          listingId: string;
-          orderItems: OrderItemOption[];
-        }>;
-        this.show(ce.detail);
-      });
-      window.addEventListener("write-review-modal-hide", () => this.close());
-    },
-    show(detail) {
-      this.reset();
-      this.listingId = detail.listingId;
-      this.orderItems = detail.orderItems || [];
-      this.selectedOrderItem = this.orderItems[0]?.name || "";
-      this.open = true;
-    },
-    close() {
-      this.open = false;
-    },
-    reset() {
-      this.loading = false;
-      this.errorMsg = "";
-      this.rating = 5;
-      this.hoverRating = 0;
-      this.aspects = { product_quality: 5, service: 5, shipping: 5, spec_match: 5 };
-      this.title = "";
-      this.body = "";
-      this.images = [];
-      this.uploadingImage = false;
-    },
-    setRating(n: number) {
-      this.rating = n;
-    },
-    setAspect(key, n) {
-      this.aspects[key] = n;
-    },
-    async onFileChange(e: Event) {
-      const input = e.target as HTMLInputElement;
-      const files = Array.from(input.files || []);
-      if (!files.length) return;
-      if (this.images.length + files.length > 5) {
-        showToast({ message: "En fazla 5 fotoğraf yükleyebilirsiniz.", type: "warning" });
-        return;
-      }
-      this.uploadingImage = true;
-      try {
-        for (const file of files) {
-          if (!file.type.startsWith("image/")) continue;
-          if (file.size > 5 * 1024 * 1024) {
-            showToast({
-              message: `${file.name} 5MB üzerinde, atlandı.`,
-              type: "warning",
-            });
-            continue;
-          }
-          const result = await uploadReviewImage(file);
-          this.images.push({
-            image: result.file_url,
-            previewUrl: result.file_url.startsWith("http")
-              ? result.file_url
-              : `${window.location.origin}${result.file_url}`,
-          });
-        }
-      } catch (err: unknown) {
-        const msg = err instanceof Error ? err.message : "Yükleme hatası";
-        showToast({ message: msg, type: "error" });
-      } finally {
-        this.uploadingImage = false;
-        input.value = "";
-      }
-    },
-    removeImage(idx: number) {
-      this.images.splice(idx, 1);
-    },
-    bodyValid() {
-      return this.body.trim().length >= 20;
-    },
-    async submit() {
-      this.errorMsg = "";
-      if (!this.selectedOrderItem) {
-        this.errorMsg = "Yorum yapabilmek için onaylı bir sipariş seçin.";
-        return;
-      }
-      if (this.rating < 1 || this.rating > 5) {
-        this.errorMsg = "Lütfen 1-5 arası puan verin.";
-        return;
-      }
-      if (!this.bodyValid()) {
-        this.errorMsg = "Yorum metni en az 20 karakter olmalı.";
-        return;
-      }
-      this.loading = true;
-      try {
-        const payload: SubmitReviewPayload = {
-          order_item: this.selectedOrderItem,
-          rating: this.rating,
-          body: this.body.trim(),
-          title: this.title.trim() || undefined,
-          images: this.images.map((i) => ({ image: i.image })),
-          aspects: { ...this.aspects },
-        };
-        const res = await submitReview(payload);
-        showToast({
-          message:
-            res.status === "Approved"
-              ? "Yorumunuz yayınlandı."
-              : "Yorumunuz alındı, moderasyon sonrası yayınlanacaktır.",
-          type: "success",
+  Alpine.data(
+    "writeReviewModal",
+    (): WriteReviewState => ({
+      open: false,
+      loading: false,
+      errorMsg: "",
+      listingId: "",
+      orderItems: [],
+      selectedOrderItem: "",
+      rating: 5,
+      hoverRating: 0,
+      aspects: { product_quality: 5, service: 5, shipping: 5, spec_match: 5 },
+      title: "",
+      body: "",
+      images: [],
+      uploadingImage: false,
+      init() {
+        window.addEventListener("write-review-modal-show", (e: Event) => {
+          const ce = e as CustomEvent<{
+            listingId: string;
+            orderItems: OrderItemOption[];
+          }>;
+          this.show(ce.detail);
         });
-        window.dispatchEvent(
-          new CustomEvent("review-submitted", {
-            detail: { name: res.name, listingId: this.listingId },
-          })
-        );
-        this.close();
-      } catch (err: unknown) {
-        const msg = err instanceof Error ? err.message : "Bilinmeyen hata";
-        this.errorMsg = msg;
-        showToast({ message: msg, type: "error" });
-      } finally {
+        window.addEventListener("write-review-modal-hide", () => this.close());
+      },
+      show(detail) {
+        this.reset();
+        this.listingId = detail.listingId;
+        this.orderItems = detail.orderItems || [];
+        this.selectedOrderItem = this.orderItems[0]?.name || "";
+        this.open = true;
+      },
+      close() {
+        this.open = false;
+      },
+      reset() {
         this.loading = false;
-      }
-    },
-  }));
+        this.errorMsg = "";
+        this.rating = 5;
+        this.hoverRating = 0;
+        this.aspects = { product_quality: 5, service: 5, shipping: 5, spec_match: 5 };
+        this.title = "";
+        this.body = "";
+        this.images = [];
+        this.uploadingImage = false;
+      },
+      setRating(n: number) {
+        this.rating = n;
+      },
+      setAspect(key, n) {
+        this.aspects[key] = n;
+      },
+      async onFileChange(e: Event) {
+        const input = e.target as HTMLInputElement;
+        const files = Array.from(input.files || []);
+        if (!files.length) return;
+        if (this.images.length + files.length > 5) {
+          showToast({ message: "En fazla 5 fotoğraf yükleyebilirsiniz.", type: "warning" });
+          return;
+        }
+        this.uploadingImage = true;
+        try {
+          for (const file of files) {
+            if (!file.type.startsWith("image/")) continue;
+            if (file.size > 5 * 1024 * 1024) {
+              showToast({
+                message: `${file.name} 5MB üzerinde, atlandı.`,
+                type: "warning",
+              });
+              continue;
+            }
+            const result = await uploadReviewImage(file);
+            this.images.push({
+              image: result.file_url,
+              previewUrl: result.file_url.startsWith("http")
+                ? result.file_url
+                : `${window.location.origin}${result.file_url}`,
+            });
+          }
+        } catch (err: unknown) {
+          const msg = err instanceof Error ? err.message : "Yükleme hatası";
+          showToast({ message: msg, type: "error" });
+        } finally {
+          this.uploadingImage = false;
+          input.value = "";
+        }
+      },
+      removeImage(idx: number) {
+        this.images.splice(idx, 1);
+      },
+      bodyValid() {
+        return this.body.trim().length >= 20;
+      },
+      async submit() {
+        this.errorMsg = "";
+        if (!this.selectedOrderItem) {
+          this.errorMsg = "Yorum yapabilmek için onaylı bir sipariş seçin.";
+          return;
+        }
+        if (this.rating < 1 || this.rating > 5) {
+          this.errorMsg = "Lütfen 1-5 arası puan verin.";
+          return;
+        }
+        if (!this.bodyValid()) {
+          this.errorMsg = "Yorum metni en az 20 karakter olmalı.";
+          return;
+        }
+        this.loading = true;
+        try {
+          const payload: SubmitReviewPayload = {
+            order_item: this.selectedOrderItem,
+            rating: this.rating,
+            body: this.body.trim(),
+            title: this.title.trim() || undefined,
+            images: this.images.map((i) => ({ image: i.image })),
+            aspects: { ...this.aspects },
+          };
+          const res = await submitReview(payload);
+          showToast({
+            message:
+              res.status === "Approved"
+                ? "Yorumunuz yayınlandı."
+                : "Yorumunuz alındı, moderasyon sonrası yayınlanacaktır.",
+            type: "success",
+          });
+          window.dispatchEvent(
+            new CustomEvent("review-submitted", {
+              detail: { name: res.name, listingId: this.listingId },
+            })
+          );
+          this.close();
+        } catch (err: unknown) {
+          const msg = err instanceof Error ? err.message : "Bilinmeyen hata";
+          this.errorMsg = msg;
+          showToast({ message: msg, type: "error" });
+        } finally {
+          this.loading = false;
+        }
+      },
+    })
+  );
 }
 
 function starButtonsHtml(

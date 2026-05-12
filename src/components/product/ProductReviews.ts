@@ -392,9 +392,7 @@ let eligibilityCache: EligibilityState = {
 /** Hem desktop hem mobile "Yorum Yaz" butonlarını yakala (ID'ler ayrı). */
 function getWriteReviewButtons(): HTMLButtonElement[] {
   return Array.from(
-    document.querySelectorAll<HTMLButtonElement>(
-      "#rv-write-review-btn, #pdm-write-review-btn"
-    )
+    document.querySelectorAll<HTMLButtonElement>("#rv-write-review-btn, #pdm-write-review-btn")
   );
 }
 
@@ -412,8 +410,7 @@ function attachWriteReviewButton(listingId: string): void {
     }
     if (!eligibilityCache.can_review) {
       showToast({
-        message:
-          "Bu ürünü yorumlayabilmek için onaylı/teslim alınmış bir siparişiniz olmalı.",
+        message: "Bu ürünü yorumlayabilmek için onaylı/teslim alınmış bir siparişiniz olmalı.",
         type: "warning",
       });
       return;
@@ -528,13 +525,12 @@ export function bindHelpfulButtons(container: HTMLElement): void {
       }
       const reviewId = btn.dataset.reviewId || "";
       if (!reviewId) return;
-      const voteType =
-        (btn.dataset.vote as "helpful" | "not_helpful") || "helpful";
+      const voteType = (btn.dataset.vote as "helpful" | "not_helpful") || "helpful";
 
       // Aynı review'a ait helpful + not_helpful butonlarını birlikte kilitle
       // (mutex: ikisine birden basılamasın; backend tek vote tutuyor zaten).
       const siblings = container.querySelectorAll<HTMLButtonElement>(
-        `.rv-helpful-btn[data-review-id="${CSS.escape(reviewId)}"]`,
+        `.rv-helpful-btn[data-review-id="${CSS.escape(reviewId)}"]`
       );
       siblings.forEach((b) => {
         b.disabled = true;
@@ -889,8 +885,7 @@ export function initReviews(): void {
         reviews: ce.detail.reviews || [],
         reviewCount: ce.detail.summary?.review_count ?? 0,
         storeReviewCount: ce.detail.total ?? 0,
-        rating:
-          ce.detail.summary?.weighted_rating || ce.detail.summary?.average_rating || 0,
+        rating: ce.detail.summary?.weighted_rating || ce.detail.summary?.average_rating || 0,
       });
     });
     // Abuse report sonrası ek bir aksiyon yok (sessizce kaydedildi toast'ı gösteriliyor)
@@ -991,9 +986,7 @@ function applyReviewsToPanels(payload: {
     }
 
     // Fotoğraflı filter pill — "Fotoğraflı (N)"
-    const photoPill = storePanel.querySelector<HTMLButtonElement>(
-      '[data-rv-filter="photo"]'
-    );
+    const photoPill = storePanel.querySelector<HTMLButtonElement>('[data-rv-filter="photo"]');
     if (photoPill) {
       photoPill.textContent = t("product.withPhotos", { count: String(photoCount) });
     }
@@ -1017,9 +1010,7 @@ function applyReviewsToPanels(payload: {
         count: String(payload.storeReviewCount),
       });
     }
-    const modalPhotoPill = modal.querySelector<HTMLButtonElement>(
-      "#rv-modal-photo-filter"
-    );
+    const modalPhotoPill = modal.querySelector<HTMLButtonElement>("#rv-modal-photo-filter");
     if (modalPhotoPill) {
       modalPhotoPill.textContent = t("product.withPhotos", {
         count: String(photoCount),
