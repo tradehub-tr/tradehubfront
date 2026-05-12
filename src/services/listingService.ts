@@ -362,10 +362,10 @@ export async function voteQAHelpful(
   targetType: "question" | "answer",
   targetId: string | number
 ): Promise<{ success: boolean; changed: boolean }> {
-  return callMethodPost(
-    "tradehub_core.api.storefront_api.vote_qa_helpful",
-    { target_type: targetType, target_id: String(targetId) }
-  );
+  return callMethodPost("tradehub_core.api.storefront_api.vote_qa_helpful", {
+    target_type: targetType,
+    target_id: String(targetId),
+  });
 }
 
 /**
@@ -376,10 +376,11 @@ export async function reportReviewAbuse(
   reason: string,
   note?: string
 ): Promise<{ success: boolean }> {
-  return callMethodPost(
-    "tradehub_core.api.storefront_api.report_abuse",
-    { review: reviewName, reason, note: note || "" }
-  );
+  return callMethodPost("tradehub_core.api.storefront_api.report_abuse", {
+    review: reviewName,
+    reason,
+    note: note || "",
+  });
 }
 
 /**
@@ -389,10 +390,10 @@ export async function submitProductQuestion(
   listingId: string,
   question: string
 ): Promise<{ success: boolean; name: string }> {
-  return callMethodPost(
-    "tradehub_core.api.storefront_api.submit_question",
-    { listing: listingId, question }
-  );
+  return callMethodPost("tradehub_core.api.storefront_api.submit_question", {
+    listing: listingId,
+    question,
+  });
 }
 
 /**
