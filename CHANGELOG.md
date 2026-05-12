@@ -43,6 +43,7 @@ Bu surum beta.istoc.com'da test asamasindadir.
 - refactor(orders): extract order card into OrderListItem component (@ahmeetseker)
 
 ---
+
 ## [v1.1.8-beta.2] - 2026-05-11 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
@@ -51,6 +52,7 @@ Bu surum beta.istoc.com'da test asamasindadir.
 - feat(floating-panel): x-show ve x-transition ekleyerek görünürlüğü iyileştirdi (@ahmeetseker)
 
 ---
+
 ## [v1.1.8-beta.1] - 2026-05-11 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
@@ -59,6 +61,7 @@ Bu surum beta.istoc.com'da test asamasindadir.
 - feat(floating-panel): x-show ve x-transition ekleyerek görünürlüğü iyileştirdi (@ahmeetseker)
 
 ---
+
 ## [v1.1.8] - 2026-05-08 PROD
 
 Bu surum istoc.com'da yayindadir.
@@ -86,6 +89,7 @@ Bu surum istoc.com'da yayindadir.
 - refactor: standardize currency formatting by replacing manual string interpolation with formatCurrency utility (@ahmeetseker)
 
 ---
+
 ## [v1.1.7-rc.1] - 2026-05-08 RC
 
 Bu surum rc.istoc.com'da onay asamasindadir.
@@ -113,6 +117,7 @@ Bu surum rc.istoc.com'da onay asamasindadir.
 - refactor: standardize currency formatting by replacing manual string interpolation with formatCurrency utility (@ahmeetseker)
 
 ---
+
 ## [v1.1.7-beta.9] - 2026-05-08 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
@@ -140,6 +145,7 @@ Bu surum beta.istoc.com'da test asamasindadir.
 - refactor: standardize currency formatting by replacing manual string interpolation with formatCurrency utility (@ahmeetseker)
 
 ---
+
 ## [v1.1.7-beta.8] - 2026-05-08 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
@@ -167,6 +173,7 @@ Bu surum beta.istoc.com'da test asamasindadir.
 - refactor: standardize currency formatting by replacing manual string interpolation with formatCurrency utility (@ahmeetseker)
 
 ---
+
 ## [v1.1.7-beta.7] - 2026-05-07 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
@@ -193,6 +200,7 @@ Bu surum beta.istoc.com'da test asamasindadir.
 - refactor: standardize currency formatting by replacing manual string interpolation with formatCurrency utility (@ahmeetseker)
 
 ---
+
 ## [v1.1.7-beta.6] - 2026-05-07 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
@@ -218,6 +226,7 @@ Bu surum beta.istoc.com'da test asamasindadir.
 - refactor(top-ranking): remove flat mode (replaced by dedicated category page) (@ahmeetseker)
 
 ---
+
 ## [v1.1.7-beta.5] - 2026-05-07 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
@@ -240,6 +249,7 @@ Bu surum beta.istoc.com'da test asamasindadir.
 - refactor(top-ranking): remove flat mode (replaced by dedicated category page) (@ahmeetseker)
 
 ---
+
 ## [v1.1.7-beta.4] - 2026-05-07 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
@@ -262,6 +272,7 @@ Bu surum beta.istoc.com'da test asamasindadir.
 - refactor(top-ranking): remove flat mode (replaced by dedicated category page) (@ahmeetseker)
 
 ---
+
 ## [v1.1.7-beta.3] - 2026-05-06 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
@@ -271,6 +282,7 @@ Bu surum beta.istoc.com'da test asamasindadir.
 - feat(kyb,dashboard): Storefront KYB sayfası + buyer dashboard widget + sidebar requireSeller; mesajlar/iletişim CTA'ları gizlendi (@aliiball)
 
 ---
+
 ## [v1.1.7-beta.2] - 2026-05-06 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
@@ -279,51 +291,7 @@ Bu surum beta.istoc.com'da test asamasindadir.
 - feat: cart + checkout redesign, fatura bilgisi bölümü, header & megamenü revizyonu (@ahmeetseker)
 
 ---
-## [v1.1.7-beta.1] - 2026-05-05 BETA
 
-Bu surum beta.istoc.com'da test asamasindadir.
-
----
-## [v1.1.7] - 2026-04-30 PROD
-
-Bu surum istoc.com'da yayindadir.
-
----
-## [v1.1.6-rc.1] - 2026-04-30 RC
-
-Bu surum rc.istoc.com'da onay asamasindadir.
-
----
-## [v1.1.6-beta.1] - 2026-04-30 BETA
-
-Bu surum beta.istoc.com'da test asamasindadir.
-
----
-## [v1.1.6] - 2026-04-30 PROD
-
-Bu surum istoc.com'da yayindadir.
-
----
-## [v1.1.5-rc.2] - 2026-04-30 RC
-
-Bu surum rc.istoc.com'da onay asamasindadir.
-
----
-## [v1.1.5-beta.2] - 2026-04-30 BETA
-
-Bu surum beta.istoc.com'da test asamasindadir.
-
----
-## [v1.1.5-beta.1] - 2026-04-30 BETA
-
-Bu surum beta.istoc.com'da test asamasindadir.
-
----
-## [v1.1.5-rc.1] - 2026-04-29 RC
-
-Bu surum rc.istoc.com'da test asamasindadir.
-
----
 ## [v1.1.5] - 2026-04-29 PROD
 
 Bu surum istoc.com'da yayindadir.
@@ -349,6 +317,7 @@ Bu surum istoc.com'da yayindadir.
 - refactor(theme,header): legacy section token'larını kaldır + destek bildirim akışı (@ahmeetseker)
 
 ---
+
 ## [v1.1.4-rc.27] - 2026-04-29 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -374,6 +343,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - refactor(theme,header): legacy section token'larını kaldır + destek bildirim akışı (@ahmeetseker)
 
 ---
+
 ## [v1.1.4-rc.26] - 2026-04-29 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -399,6 +369,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - refactor(theme,header): legacy section token'larını kaldır + destek bildirim akışı (@ahmeetseker)
 
 ---
+
 ## [v1.1.4-rc.25] - 2026-04-29 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -423,6 +394,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - refactor(theme,header): legacy section token'larını kaldır + destek bildirim akışı (@ahmeetseker)
 
 ---
+
 ## [v1.1.4-rc.24] - 2026-04-28 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -444,6 +416,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix(auth,orders): stale CSRF retry, legacy URL yönlendirmesi ve sipariş sayfası sadeleştirmesi (@ahmeetseker)
 
 ---
+
 ## [v1.1.4-rc.23] - 2026-04-27 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -464,6 +437,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix(auth,orders): stale CSRF retry, legacy URL yönlendirmesi ve sipariş sayfası sadeleştirmesi (@ahmeetseker)
 
 ---
+
 ## [v1.1.4-rc.22] - 2026-04-21 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -486,6 +460,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix(auth,orders): stale CSRF retry, legacy URL yönlendirmesi ve sipariş sayfası sadeleştirmesi (@ahmeetseker)
 
 ---
+
 ## [v1.1.4-rc.21] - 2026-04-17 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -505,6 +480,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix(auth,orders): stale CSRF retry, legacy URL yönlendirmesi ve sipariş sayfası sadeleştirmesi (@ahmeetseker)
 
 ---
+
 ## [v1.1.4-rc.20] - 2026-04-16 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -523,6 +499,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix(auth,orders): stale CSRF retry, legacy URL yönlendirmesi ve sipariş sayfası sadeleştirmesi (@ahmeetseker)
 
 ---
+
 ## [v1.1.4-rc.19] - 2026-04-16 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -541,6 +518,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix(auth,orders): stale CSRF retry, legacy URL yönlendirmesi ve sipariş sayfası sadeleştirmesi (@ahmeetseker)
 
 ---
+
 ## [v1.1.4-rc.18] - 2026-04-16 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -559,6 +537,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix(auth,orders): stale CSRF retry, legacy URL yönlendirmesi ve sipariş sayfası sadeleştirmesi (@ahmeetseker)
 
 ---
+
 ## [v1.1.4-rc.17] - 2026-04-16 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -576,6 +555,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix: implement CSRF token rotation retry logic and clear cache on login to prevent 403 errors (@ahmeetseker)
 
 ---
+
 ## [v1.1.4-rc.16] - 2026-04-16 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -593,6 +573,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix: implement CSRF token rotation retry logic and clear cache on login to prevent 403 errors (@ahmeetseker)
 
 ---
+
 ## [v1.1.4-rc.15] - 2026-04-16 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -609,6 +590,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix: implement CSRF token rotation retry logic and clear cache on login to prevent 403 errors (@ahmeetseker)
 
 ---
+
 ## [v1.1.4-rc.14] - 2026-04-15 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -624,6 +606,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix: implement CSRF token rotation retry logic and clear cache on login to prevent 403 errors (@ahmeetseker)
 
 ---
+
 ## [v1.1.4-rc.13] - 2026-04-15 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -639,6 +622,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix: implement CSRF token rotation retry logic and clear cache on login to prevent 403 errors (@ahmeetseker)
 
 ---
+
 ## [v1.1.4-rc.12] - 2026-04-15 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -654,6 +638,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix: implement CSRF token rotation retry logic and clear cache on login to prevent 403 errors (@ahmeetseker)
 
 ---
+
 ## [v1.1.4-rc.11] - 2026-04-14 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -668,6 +653,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix(tailored-hero): Coverflow+loop atlamalarını rewind ile çözüldü. (@aliiball)
 
 ---
+
 ## [v1.1.4-rc.10] - 2026-04-14 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -681,6 +667,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix(tailored-hero): Coverflow+loop atlamalarını rewind ile çözüldü. (@aliiball)
 
 ---
+
 ## [v1.1.4-rc.9] - 2026-04-14 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -694,6 +681,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix(tailored-hero): Coverflow+loop atlamalarını rewind ile çözüldü. (@aliiball)
 
 ---
+
 ## [v1.1.4-rc.8] - 2026-04-14 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -707,6 +695,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix(tailored-hero): Coverflow+loop atlamalarını rewind ile çözüldü. (@aliiball)
 
 ---
+
 ## [v1.1.4-rc.7] - 2026-04-13 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -719,6 +708,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix(tailored-hero): Coverflow+loop atlamalarını rewind ile çözüldü. (@aliiball)
 
 ---
+
 ## [v1.1.4-rc.6] - 2026-04-13 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -728,6 +718,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - feat(tailored): Detay sayfası hero carousel'i API'ye bağla + SPA davranışı yapıldı. (@aliiball)
 
 ---
+
 ## [v1.1.4-rc.5] - 2026-04-13 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -737,6 +728,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - feat(tailored): Detay sayfası hero carousel'i API'ye bağla + SPA davranışı yapıldı. (@aliiball)
 
 ---
+
 ## [v1.1.4-rc.4] - 2026-04-13 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -745,6 +737,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - feat(tailored): "Size Özel Seçimler" landing bloğu ve detay sayfası API'ye bağlandı. (@aliiball)
 
 ---
+
 ## [v1.1.4-rc.3] - 2026-04-13 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -753,6 +746,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - feat(tailored): "Size Özel Seçimler" landing bloğu ve detay sayfası API'ye bağlandı. (@aliiball)
 
 ---
+
 ## [v1.1.4-rc.2] - 2026-04-13 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -761,11 +755,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - feat(tailored): "Size Özel Seçimler" landing bloğu ve detay sayfası API'ye bağlandı. (@aliiball)
 
 ---
-## [v1.1.4-rc.1] - 2026-04-13 RC
 
-Bu surum rc.istoc.com'da test asamasindadir.
-
----
 ## [v1.1.4] - 2026-04-13 PROD
 
 Bu surum istoc.com'da yayindadir.
@@ -817,6 +807,7 @@ Bu surum istoc.com'da yayindadir.
 - refactor: make API base URL configurable via window.API_BASE across all fetch requests (@ahmeetseker)
 
 ---
+
 ## [v1.1.3-rc.26] - 2026-04-13 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -870,6 +861,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - refactor: Input, checkbox ve quantity bileşenlerini tema token sistemine taşı (v4)   style.css'e input/form field (hover, focus, disabled, error state),    checkbox/radio ve quantity stepper CSS değişkenleri eklendi  - 55+ bileşendeki inline Tailwind input sınıfları th-input / th-input-sm/md/lg                                                       tema sınıflarıyla değiştirildi                                                      - Hardcoded renk fallback'leri (--color-text-heading, --color-text-muted vb.) (@TurksabYonetim)
 
 ---
+
 ## [v1.1.3-rc.25] - 2026-04-10 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -922,6 +914,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - refactor: Input, checkbox ve quantity bileşenlerini tema token sistemine taşı (v4)   style.css'e input/form field (hover, focus, disabled, error state),    checkbox/radio ve quantity stepper CSS değişkenleri eklendi  - 55+ bileşendeki inline Tailwind input sınıfları th-input / th-input-sm/md/lg                                                       tema sınıflarıyla değiştirildi                                                      - Hardcoded renk fallback'leri (--color-text-heading, --color-text-muted vb.) (@TurksabYonetim)
 
 ---
+
 ## [v1.1.3-rc.24] - 2026-04-10 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -973,6 +966,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - refactor: Input, checkbox ve quantity bileşenlerini tema token sistemine taşı (v4)   style.css'e input/form field (hover, focus, disabled, error state),    checkbox/radio ve quantity stepper CSS değişkenleri eklendi  - 55+ bileşendeki inline Tailwind input sınıfları th-input / th-input-sm/md/lg                                                       tema sınıflarıyla değiştirildi                                                      - Hardcoded renk fallback'leri (--color-text-heading, --color-text-muted vb.) (@TurksabYonetim)
 
 ---
+
 ## [v1.1.3-rc.23] - 2026-04-10 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1024,6 +1018,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - refactor: Input, checkbox ve quantity bileşenlerini tema token sistemine taşı (v4)   style.css'e input/form field (hover, focus, disabled, error state),    checkbox/radio ve quantity stepper CSS değişkenleri eklendi  - 55+ bileşendeki inline Tailwind input sınıfları th-input / th-input-sm/md/lg                                                       tema sınıflarıyla değiştirildi                                                      - Hardcoded renk fallback'leri (--color-text-heading, --color-text-muted vb.) (@TurksabYonetim)
 
 ---
+
 ## [v1.1.3-rc.22] - 2026-04-10 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1075,6 +1070,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - refactor: Input, checkbox ve quantity bileşenlerini tema token sistemine taşı (v4)   style.css'e input/form field (hover, focus, disabled, error state),    checkbox/radio ve quantity stepper CSS değişkenleri eklendi  - 55+ bileşendeki inline Tailwind input sınıfları th-input / th-input-sm/md/lg                                                       tema sınıflarıyla değiştirildi                                                      - Hardcoded renk fallback'leri (--color-text-heading, --color-text-muted vb.) (@TurksabYonetim)
 
 ---
+
 ## [v1.1.3-rc.21] - 2026-04-10 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1125,6 +1121,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - refactor: Input, checkbox ve quantity bileşenlerini tema token sistemine taşı (v4)   style.css'e input/form field (hover, focus, disabled, error state),    checkbox/radio ve quantity stepper CSS değişkenleri eklendi  - 55+ bileşendeki inline Tailwind input sınıfları th-input / th-input-sm/md/lg                                                       tema sınıflarıyla değiştirildi                                                      - Hardcoded renk fallback'leri (--color-text-heading, --color-text-muted vb.) (@TurksabYonetim)
 
 ---
+
 ## [v1.1.3-rc.20] - 2026-04-10 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1175,6 +1172,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - refactor: Input, checkbox ve quantity bileşenlerini tema token sistemine taşı (v4)   style.css'e input/form field (hover, focus, disabled, error state),    checkbox/radio ve quantity stepper CSS değişkenleri eklendi  - 55+ bileşendeki inline Tailwind input sınıfları th-input / th-input-sm/md/lg                                                       tema sınıflarıyla değiştirildi                                                      - Hardcoded renk fallback'leri (--color-text-heading, --color-text-muted vb.) (@TurksabYonetim)
 
 ---
+
 ## [v1.1.3-rc.19] - 2026-04-10 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1224,6 +1222,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - refactor: Input, checkbox ve quantity bileşenlerini tema token sistemine taşı (v4)   style.css'e input/form field (hover, focus, disabled, error state),    checkbox/radio ve quantity stepper CSS değişkenleri eklendi  - 55+ bileşendeki inline Tailwind input sınıfları th-input / th-input-sm/md/lg                                                       tema sınıflarıyla değiştirildi                                                      - Hardcoded renk fallback'leri (--color-text-heading, --color-text-muted vb.) (@TurksabYonetim)
 
 ---
+
 ## [v1.1.3-rc.18] - 2026-04-10 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1273,6 +1272,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - refactor: Input, checkbox ve quantity bileşenlerini tema token sistemine taşı (v4)   style.css'e input/form field (hover, focus, disabled, error state),    checkbox/radio ve quantity stepper CSS değişkenleri eklendi  - 55+ bileşendeki inline Tailwind input sınıfları th-input / th-input-sm/md/lg                                                       tema sınıflarıyla değiştirildi                                                      - Hardcoded renk fallback'leri (--color-text-heading, --color-text-muted vb.) (@TurksabYonetim)
 
 ---
+
 ## [v1.1.3-rc.17] - 2026-04-09 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1321,6 +1321,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - refactor: "Trade Assurance" ifadesini "Ticari Güvence" olarak yeniden adlandır ve uygulama genelinde footer kart düzenini güncelle (@TurksabYonetim)
 
 ---
+
 ## [v1.1.3-rc.16] - 2026-04-09 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1366,6 +1367,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - refactor: Buton stilleri global tema sınıflarıyla bileşenler genelinde standartlaştırıldı (@TurksabYonetim)
 
 ---
+
 ## [v1.1.3-rc.13] - 2026-04-09 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1384,6 +1386,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - refactor: Buton stilleri global tema sınıflarıyla bileşenler genelinde standartlaştırıldı (@TurksabYonetim)
 
 ---
+
 ## [v1.1.3-rc.12] - 2026-04-08 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1401,6 +1404,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - refactor: Ürün bileşenlerindeki (ProductCard, ProductList, SearchBar vb.) (@TurksabYonetim)
 
 ---
+
 ## [v1.1.3-rc.11] - 2026-04-08 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1418,6 +1422,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - refactor: Ürün bileşenlerindeki (ProductCard, ProductList, SearchBar vb.) (@TurksabYonetim)
 
 ---
+
 ## [v1.1.3-rc.10] - 2026-04-08 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1434,6 +1439,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - refactor: Ürün bileşenlerindeki (ProductCard, ProductList, SearchBar vb.) (@TurksabYonetim)
 
 ---
+
 ## [v1.1.3-rc.9] - 2026-04-08 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1447,6 +1453,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix: products.ts merge conflict çözüldü (filter engine yaklaşımı korundu) (@TurksabYonetim)
 
 ---
+
 ## [v1.1.3-rc.8] - 2026-04-08 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1457,6 +1464,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - feat(Search): Sidebar filtre sertifika bölümleri yönetim/ürün olarak ayrıldı (@TurksabYonetim)
 
 ---
+
 ## [v1.1.3-rc.7] - 2026-04-08 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1467,6 +1475,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - feat(Search): Sidebar filtre sertifika bölümleri yönetim/ürün olarak ayrıldı (@TurksabYonetim)
 
 ---
+
 ## [v1.1.3-rc.6] - 2026-04-08 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1476,6 +1485,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - feat(Search): Ürün listeleme sayfası filtre sidebar'ı, arama ve sayfalama implementasyonu yapıldı (@TurksabYonetim)
 
 ---
+
 ## [v1.1.3-rc.5] - 2026-04-08 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1484,6 +1494,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - feat: alıcı adres defteri ve backend API entegrasyonu (@TurksabYonetim)
 
 ---
+
 ## [v1.1.3-rc.4] - 2026-04-07 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1492,6 +1503,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - feat: alıcı adres defteri ve backend API entegrasyonu (@TurksabYonetim)
 
 ---
+
 ## [v1.1.3-rc.3] - 2026-04-07 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1500,6 +1512,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - feat: alıcı adres defteri ve backend API entegrasyonu (@TurksabYonetim)
 
 ---
+
 ## [v1.1.3-rc.2] - 2026-04-07 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1508,11 +1521,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - feat: alıcı adres defteri ve backend API entegrasyonu (@TurksabYonetim)
 
 ---
-## [v1.1.3-rc.1] - 2026-04-06 RC
 
-Bu surum rc.istoc.com'da test asamasindadir.
-
----
 ## [v1.1.3] - 2026-04-06 PROD
 
 Bu surum istoc.com'da yayindadir.
@@ -1539,6 +1548,7 @@ Bu surum istoc.com'da yayindadir.
 - refactor: make API base URL configurable via window.API_BASE across all fetch requests (@ahmeetseker)
 
 ---
+
 ## [v1.1.2-rc.10] - 2026-04-06 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1565,6 +1575,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - refactor: make API base URL configurable via window.API_BASE across all fetch requests (@TurksabYonetim)
 
 ---
+
 ## [v1.1.2-rc.9] - 2026-04-06 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1590,6 +1601,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - refactor: make API base URL configurable via window.API_BASE across all fetch requests (@TurksabYonetim)
 
 ---
+
 ## [v1.1.2-rc.8] - 2026-04-06 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1614,6 +1626,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - refactor: make API base URL configurable via window.API_BASE across all fetch requests (@TurksabYonetim)
 
 ---
+
 ## [v1.1.2-rc.7] - 2026-04-06 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1635,6 +1648,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix: correct typo in deployment workflow name (@TurksabYonetim)
 
 ---
+
 ## [v1.1.2-rc.6] - 2026-04-06 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1655,6 +1669,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix: correct typo in deployment workflow name (@TurksabYonetim)
 
 ---
+
 ## [v1.1.2-rc.5] - 2026-04-06 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1674,6 +1689,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix(RFQ): Kategori ön doldurmasını düzeltmek için "productCategoryId" değeri mapper aracılığıyla aktarıldı (@TurksabYonetim)
 
 ---
+
 ## [v1.1.2-rc.4] - 2026-04-06 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1692,6 +1708,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix(RFQ): RFQ formunun önceden doldurulması için ad yerine kategori UUID'si kullanıldı (@aliiball)
 
 ---
+
 ## [v1.1.2-rc.3] - 2026-04-06 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1709,6 +1726,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix: update auth-guard redirects to use dynamic base URL (@TurksabYonetim)
 
 ---
+
 ## [v1.1.2-rc.2] - 2026-04-06 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1724,11 +1742,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix: update auth-guard redirects to use dynamic base URL (@TurksabYonetim)
 
 ---
-## [v1.1.2-rc.1] - 2026-04-06 RC
 
-Bu surum rc.istoc.com'da test asamasindadir.
-
----
 ## [v1.1.2] - 2026-04-06 PROD
 
 Bu surum istoc.com'da yayindadir.
@@ -1737,6 +1751,7 @@ Bu surum istoc.com'da yayindadir.
 - feat: export getCsrfToken function to retrieve current token or default value (@ahmeetseker)
 
 ---
+
 ## [v1.1.1-rc.2] - 2026-04-06 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1745,21 +1760,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - feat: export getCsrfToken function to retrieve current token or default value (@TurksabYonetim)
 
 ---
-## [v1.1.1-rc.1] - 2026-04-06 RC
 
-Bu surum rc.istoc.com'da test asamasindadir.
-
----
-## [v1.1.1] - 2026-04-06 PROD
-
-Bu surum istoc.com'da yayindadir.
-
----
-## [v1.1.0-rc.1] - 2026-04-04 RC
-
-Bu surum rc.istoc.com'da test asamasindadir.
-
----
 ## [v1.1.0] - 2026-04-04 PROD
 
 Bu surum istoc.com'da yayindadir.
@@ -1780,6 +1781,7 @@ Bu surum istoc.com'da yayindadir.
 - fix: Dockerfile ARG'leri local Docker için relative URL yapıldı. (@aliiball)
 
 ---
+
 ## [v1.0.1-rc.11] - 2026-04-03 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1800,6 +1802,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix(ci): release changelog'da yanlış kullanıcı etiketlenmesini düzelt (@TurksabYonetim)
 
 ---
+
 ## [v1.0.1-rc.10] - 2026-04-03 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1818,6 +1821,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix(ci): release changelog'da yanlış kullanıcı etiketlenmesini düzelt (@TurksabYonetim)
 
 ---
+
 ## [v1.0.1-rc.9] - 2026-04-03 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1835,6 +1839,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix(ci): release changelog'da yanlış kullanıcı etiketlenmesini düzelt (@TurksabYonetim)
 
 ---
+
 ## [v1.0.1-rc.8] - 2026-04-03 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1852,6 +1857,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix(ci): release changelog'da yanlış kullanıcı etiketlenmesini düzelt (@TurksabYonetim)
 
 ---
+
 ## [v1.0.1-rc.7] - 2026-04-03 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1868,6 +1874,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix(ci): release changelog'da yanlış kullanıcı etiketlenmesini düzelt (@TurksabYonetim)
 
 ---
+
 ## [v1.0.1-rc.6] - 2026-04-03 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1883,6 +1890,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix(ci): release changelog'da yanlış kullanıcı etiketlenmesini düzelt (@TurksabYonetim)
 
 ---
+
 ## [v1.0.1-rc.5] - 2026-04-02 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1896,6 +1904,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - fix(ci): release changelog'da yanlış kullanıcı etiketlenmesini düzelt (@TurksabYonetim)
 
 ---
+
 ## [v1.0.1-rc.4] - 2026-04-01 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1905,6 +1914,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - feat:HelpCenterHeader'a dil seçici bileşenini ekleyin ve yardım merkezi sayfalarına entegre edin. (@ahmeetseker)
 
 ---
+
 ## [v1.0.1-rc.3] - 2026-04-01 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1913,21 +1923,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - feat:HelpCenterHeader'a dil seçici bileşenini ekleyin ve yardım merkezi sayfalarına entegre edin. (@ahmeetseker)
 
 ---
-## [v1.0.1-rc.2] - 2026-04-01 RC
 
-Bu surum rc.istoc.com'da test asamasindadir.
-
----
-## [v1.0.1-rc.1] - 2026-04-01 RC
-
-Bu surum rc.istoc.com'da test asamasindadir.
-
----
-## [v1.0.1] - 2026-04-01 PROD
-
-Bu surum istoc.com'da yayindadir.
-
----
 ## [v1.0.1-rc.5] - 2026-04-01 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1937,6 +1933,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - feat(tracking): çerez onay yönetimi için CookieBanner ve TrackingManager eklendi (@ahmeetseker)
 
 ---
+
 ## [v1.0.1-rc.4] - 2026-04-01 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1946,6 +1943,7 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - feat(tracking): çerez onay yönetimi için CookieBanner ve TrackingManager eklendi (@ahmeetseker)
 
 ---
+
 ## [v1.0.1-rc.3] - 2026-04-01 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
@@ -1955,62 +1953,12 @@ Bu surum rc.istoc.com'da test asamasindadir.
 - feat(tracking): çerez onay yönetimi için CookieBanner ve TrackingManager eklendi (@ahmeetseker)
 
 ---
+
 ## [v1.0.1-rc.2] - 2026-04-01 RC
 
 Bu surum rc.istoc.com'da test asamasindadir.
 
 ### Eklendi
 - feat(tracking): çerez onay yönetimi için CookieBanner ve TrackingManager eklendi (@ahmeetseker)
-
----
-## [v1.0.1-rc.1] - 2026-04-01 RC
-
-Bu surum rc.istoc.com'da test asamasindadir.
-
----
-## [v1.0.1] - 2026-04-01 PROD
-
-Bu surum istoc.com'da yayindadir.
-
----
-## [v2.0.0-rc.1] - 2026-03-31 RC
-
-Bu surum rc.istoc.com'da test asamasindadir.
-
----
-## [v2.0.0] - 2026-03-31 PROD
-
-Bu surum istoc.com'da yayindadir.
-
----
-## [v1.0.1-rc.1] - 2026-03-31 RC
-
-Bu surum rc.istoc.com'da test asamasindadir.
-
----
-## [v1.0.1] - 2026-03-31 PROD
-
-Bu surum istoc.com'da yayindadir.
-
----
-## [v1.0.0-rc.3] - 2026-03-31 RC
-
-Bu surum rc.istoc.com'da test asamasindadir.
-
----
-## [v1.0.0-rc.2] - 2026-03-31 RC
-
-Bu surum rc.istoc.com'da test asamasindadir.
-
----
-## [v1.0.0-rc.1] - 2026-03-31 RC
-
-Bu surum rc.istoc.com'da test asamasindadir.
-
----
-# tradehubfront Changelog
-
-Tüm önemli değişiklikler bu dosyada belgelenir.
-Format: [SemVer](https://semver.org/) standardına göre.
 
 ---
