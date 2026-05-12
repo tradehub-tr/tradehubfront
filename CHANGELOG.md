@@ -1,3 +1,53 @@
+## [v1.1.8-beta.9] - 2026-05-12 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(reviews): Sprint 1 — review/Q&A storefront entegrasyonu + 4 fix (@boraydeger32)
+- Yorum Yaz modal: form + foto + kategori şablon cevapları (@boraydeger32)
+- Şikayet Et modal: sebep dropdown + not (@boraydeger32)
+- Q&A bottom-sheet: mobile-first soru/cevap görüntüleme (@boraydeger32)
+- Reviewer tier rozeti (Top / Trusted / Verified) trust signal (@boraydeger32)
+- Onay Bekliyor amber rozeti yorum sahibine (@boraydeger32)
+- 24h içinde Düzenle butonu (max 1 edit, sonrası reddedilir) (@boraydeger32)
+- Faydalı değil 👎 + Helpful/Not-helpful mutex pattern (@boraydeger32)
+- Mobile pdm-* kısayol butonları (Yorum Yaz / Görüntüle / Soru-Cevap) (@boraydeger32)
+- Bottom-sheet pattern: items-end sm:items-center (@boraydeger32)
+- Mobile-first responsive header butonları (@boraydeger32)
+- 374px altı küçültülmüş yazı (@boraydeger32)
+- src/api/reviewsApi.ts (@boraydeger32)
+- src/components/product/ProductQA.ts (@boraydeger32)
+- src/components/product/QAModal.ts (@boraydeger32)
+- src/components/product/WriteReviewModal.ts (@boraydeger32)
+- src/components/product/ReportAbuseModal.ts (@boraydeger32)
+- src/components/reviews/ReviewWidget.ts (@boraydeger32)
+- src/styles/reviews-v5.css (@boraydeger32)
+- feat(reviews): review/Q&A storefront entegrasyonu + 4 kritik fix (@boraydeger32)
+- Backend API entegrasyonu (mock→real): eligibility, submit, vote, update, abuse, Q&A — yeni listingService methodları (@boraydeger32)
+- Custom modal'lar: Yorum Yaz, Şikayet Et, Q&A bottom-sheet (@boraydeger32)
+- Reviewer tier rozeti (Top/Trusted/Verified) — Newcomer gizli (@boraydeger32)
+- Onay Bekliyor rozeti — sadece sahibine görünür (isOwnPending) (@boraydeger32)
+- Düzenle butonu — 24h penceresinde, max 1 edit (@boraydeger32)
+- Faydalı değil  + Helpful/Not-helpful mutex (kardeş butonlar kilitlenir) (@boraydeger32)
+- Mobile layout: Yorum Yaz / Tüm yorumları / Soru-Cevap kısayolları (@boraydeger32)
+- reviews-v5.css tasarım sistemi (@boraydeger32)
+- Lint: @ts-nocheck pragma'larına eslint-disable + açıklama (rule bypass) (@boraydeger32)
+- feat(chat-popup): mesaj kutusu arama + sağ-alt floating pencere; ürün gridine Sohbet et butonu; favori widget'i ürün kartlarıyla (@ahmeetseker)
+- feat(chat-popup): mesaj kutusunda kişi / şirket / son mesaj üzerinden anlık arama (@ahmeetseker)
+- feat(chat-popup): sohbet penceresi artık ekranın sağ-altında açılıyor, arka plan karartılmıyor — site üzerinde gezerken (@ahmeetseker)
+- feat(products): ürün listesi kartlarına "Sohbet et" butonu eklendi — Sepete Ekle ile yan yana, satıcıya doğrudan mesaj (@ahmeetseker)
+- feat(dashboard): favori ürünler kutusu artık boş ekran yerine gerçek ürün kartlarını yatay kaydırmalı gösteriyor (3 ürün + "Tümünü (@ahmeetseker)
+- feat(dashboard): yan menüde "Mesajlarım" alt menüsü yeniden açıldı (Tedarikçi Mesajları / Tekliflerim / Kişilerim) (@ahmeetseker)
+- refactor(chat): kartvizit penceresinin tasarımı yenilendi — ayrık başlık/alt bar, ülke bayrağı, daha sade kullanıcı bilgisi (@ahmeetseker)
+- refactor(chat): araç çubuğunda kullanılmayan butonlar temizlendi (konum, çeviri, buluttan fotoğraf) (@ahmeetseker)
+- refactor(style): global buton hover/press efekti sadeleştirildi — gereksiz transform/box-shadow kaldırıldı, sayfa geneli daha (@ahmeetseker)
+- chore(i18n): kartvizit "iSTOC tarafından doğrulanan hesaplar" etiketi güncellendi (@ahmeetseker)
+
+### Duzeltildi
+- fix(chat-popup): mountChatPopup'u barrel export'a ekle (@ahmeetseker)
+- fix(release-workflows): commit body bullet'larini CHANGELOG'a dahil et (@ahmeetseker)
+
+---
 ## [v1.1.8-beta.8] - 2026-05-12 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
