@@ -1,3 +1,20 @@
+## [v1.1.8-beta.7] - 2026-05-12 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(reviews): review/Q&A storefront entegrasyonu + 4 kritik fix (@boraydeger32)
+- feat(reviews): Sprint 1 — review/Q&A storefront entegrasyonu + 4 fix (@boraydeger32)
+
+---
+## [v1.1.8-beta.6] - 2026-05-12 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(chat-popup): Sohbet Et özelliği — alıcı ile satıcı doğrudan iletişim (@ahmeetseker)
+
+---
 ## [v1.1.8-beta.5] - 2026-05-12 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
