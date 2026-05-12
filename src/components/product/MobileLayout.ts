@@ -14,6 +14,8 @@ import type { ProductVariant } from "../../types/product";
 import { openShippingModal, openCartDrawer } from "./CartDrawer";
 import { openLoginModal } from "./LoginModal";
 import { renderStars } from "./ProductReviews";
+import { showReviewsModal } from "./ReviewsModal";
+import { showQAModal } from "./QAModal";
 import { RelatedProducts } from "./RelatedProducts";
 
 // Product loaded lazily — getCurrentProduct() called inside functions
@@ -212,9 +214,42 @@ export function MobileProductLayout(): string {
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
         </button>
       </div>
-      <div id="pdm-reviews-row" class="flex items-center gap-1.5 px-4 pb-3 text-[13px] max-[374px]:text-xs text-text-muted cursor-pointer">
-        <span class="pdm-stars flex gap-0.5 text-[#f5a623]">${renderStars(p.rating)}</span>
-        <span>${t("product.reviewsLabel", { count: String(p.reviewCount) })}</span>
+      <div class="flex items-center justify-between gap-2 px-4 pb-2">
+        <div id="pdm-reviews-row" class="flex items-center gap-1.5 text-[13px] max-[374px]:text-xs text-text-muted cursor-pointer">
+          <span class="pdm-stars flex gap-0.5 text-[#f5a623]">${renderStars(p.rating)}</span>
+          <span>${t("product.reviewsLabel", { count: String(p.reviewCount) })}</span>
+        </div>
+        <button
+          type="button"
+          id="pdm-write-review-btn"
+          class="th-btn-dark h-9 px-3 rounded-full text-[12px] font-semibold inline-flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+          disabled
+          title="Bu ürünü yorumlayabilmek için doğrulanmış bir siparişiniz olmalı"
+        >
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487a2.032 2.032 0 112.872 2.872L7.5 21.613H4v-3.5L16.862 4.487z"/></svg>
+          Yorum Yaz
+        </button>
+      </div>
+      <!-- İkincil linkler: Tüm yorumlar + Soru & Cevap (mobile-first, sade) -->
+      <div class="flex items-center gap-4 px-4 pb-1">
+        <button
+          type="button"
+          id="pdm-view-reviews-btn"
+          class="py-2 text-[12px] text-primary font-medium inline-flex items-center gap-1 cursor-pointer hover:underline"
+          aria-label="Tüm yorumları görüntüle"
+        >
+          Tüm yorumları görüntüle
+          <span aria-hidden="true">→</span>
+        </button>
+        <button
+          type="button"
+          id="pdm-view-qa-btn"
+          class="py-2 text-[12px] text-primary font-medium inline-flex items-center gap-1 cursor-pointer hover:underline"
+          aria-label="Soru ve cevaplar"
+        >
+          Soru &amp; Cevap
+          <span aria-hidden="true">→</span>
+        </button>
       </div>
     </div>
   `;
@@ -375,6 +410,7 @@ export function initMobileLayout(): void {
   initSheetTriggers();
   initBottomBar();
   initVariantSelection();
+  initReviewsRow();
 }
 
 /* ── Gallery: scroll-snap carousel ───────────────────── */
@@ -537,6 +573,20 @@ function initSheetTriggers(): void {
 
 function initBottomBar(): void {
   document.getElementById("pdm-bar-order")?.addEventListener("click", openLoginModal);
+}
+
+/* ── Reviews row — tıkla yorumlar modal'ını aç ──────── */
+
+function initReviewsRow(): void {
+  // Yıldız + "N yorum" satırı VE "Tüm yorumları görüntüle" CTA tıklanınca
+  // tam ekran ReviewsModal'ı aç. Mobile-first: kullanıcı yorumlara açıkça
+  // erişebilmeli — yıldız satırı pasif görsel değil, asıl CTA aşağıdaki buton.
+  const openReviews = () => showReviewsModal();
+  document.getElementById("pdm-reviews-row")?.addEventListener("click", openReviews);
+  document.getElementById("pdm-view-reviews-btn")?.addEventListener("click", openReviews);
+
+  // Soru & Cevap linki — full-screen Q&A modal'ı aç
+  document.getElementById("pdm-view-qa-btn")?.addEventListener("click", () => showQAModal());
 }
 
 /* ── Sticky section tabs — scroll-to + active tracking ── */

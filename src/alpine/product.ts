@@ -27,7 +27,7 @@ function renderInlineVideo(url: string): string {
     </div>
   `;
 }
-import { getListingDetail } from "../services/listingService";
+import { getListingDetail, getProductReviews } from "../services/listingService";
 import type { ProductDetail } from "../types/product";
 
 // Empty default product — no mock data
@@ -88,12 +88,46 @@ export async function loadProduct(listingId: string): Promise<ProductDetail> {
     currentProduct = product;
     // Dispatch event for components that need to re-render
     document.dispatchEvent(new CustomEvent("product-loaded", { detail: product }));
+    // Yorumları arka planda yükle
+    void loadProductReviews(listingId);
+    window.dispatchEvent(new CustomEvent("product-loaded", { detail: product }));
     return product;
   } catch (err) {
     console.warn("Failed to load product from API, using mock data:", err);
     return currentProduct;
   }
 }
+
+/**
+ * Storefront backend'inden yorumları çek ve mevcut product state'ini güncelle.
+ * `product-reviews-loaded` event'i yayar.
+ */
+export async function loadProductReviews(listingId: string): Promise<void> {
+  try {
+    const data = await getProductReviews(listingId, { pageSize: 50 });
+    currentProduct.reviews = data.reviews;
+    currentProduct.reviewCount = data.summary.review_count;
+    currentProduct.rating = data.summary.weighted_rating || data.summary.average_rating || 0;
+    currentProduct.storeReviewCount = data.total;
+    document.dispatchEvent(
+      new CustomEvent("product-reviews-loaded", {
+        detail: { reviews: data.reviews, summary: data.summary, total: data.total },
+      })
+    );
+  } catch (err) {
+    console.warn("Yorumlar yüklenemedi:", err);
+  }
+}
+
+// Faz 6 — Yeni storefront review modallarını kaydet (write review, abuse, Q&A)
+import { registerWriteReviewModal } from "../components/product/WriteReviewModal";
+import { registerReportAbuseModal } from "../components/product/ReportAbuseModal";
+import { registerQAModal } from "../components/product/QAModal";
+import { registerProductQA } from "../components/product/ProductQA";
+registerWriteReviewModal();
+registerReportAbuseModal();
+registerQAModal();
+registerProductQA();
 
 Alpine.data("loginModal", () => ({
   open: false,
