@@ -9,6 +9,7 @@ import { t } from '../i18n'
 
 // Header components
 import { TopBar, initMobileDrawer, SubHeader, initStickyHeaderSearch, MegaMenu, initMegaMenu, initHeaderCart } from '../components/header'
+import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar'
 
 // Footer components
@@ -105,6 +106,8 @@ appEl.innerHTML = `
 // Initialize custom component behaviors
 initMegaMenu();
 initFlowbite();
+mountChatPopup();
+initChatTriggers();
 startAlpine();
 initStickyHeaderSearch();
 initHeaderCart();

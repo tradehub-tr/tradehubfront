@@ -12,6 +12,7 @@ import { initCurrency, getSelectedCurrencyInfo } from '../services/currencyServi
 // Header components (reuse from main page)
 import { initHeaderCart } from '../components/header'
 
+import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 // Minimal checkout-style header (logo + profil)
 import { CheckoutMinimalHeader, initCheckoutMinimalHeader } from '../components/checkout'
 
@@ -71,6 +72,8 @@ function renderPage(suppliers: ReturnType<typeof cartStore.getSuppliers>, summar
     initHeaderCart();
   });
 
+  mountChatPopup();
+  initChatTriggers();
   startAlpine();
 }
 

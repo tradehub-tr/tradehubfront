@@ -17,6 +17,7 @@ import {
   initMegaMenu,
   initHeaderCart,
 } from '../components/header'
+import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar'
 import { FooterLinks } from '../components/footer'
 import { FloatingPanel } from '../components/floating'
@@ -386,6 +387,8 @@ async function main() {
   initMegaMenu()
   initHeaderCart()
   initLanguageSelector()
+  mountChatPopup();
+  initChatTriggers();
   startAlpine()
 }
 

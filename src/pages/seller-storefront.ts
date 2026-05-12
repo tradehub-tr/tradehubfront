@@ -11,6 +11,7 @@ import { initCurrency } from '../services/currencyService';
 
 // Components
 import { TopBar } from '../components/header';
+import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar'
 import { StoreHeader } from '../components/seller';
 import { CompanyProfileComponent } from '../components/seller/CompanyProfile';
@@ -43,4 +44,6 @@ initSellerStorefront();
 initCurrency();
 
 // Start Alpine.js (must be called AFTER innerHTML is set)
+mountChatPopup();
+initChatTriggers();
 startAlpine();

@@ -17,6 +17,7 @@ const emailVerified = sessionUser?.email_verified ?? true;
 
 // Header components (simplified for dashboard — no search bar / mega menu)
 import { TopBar, initMobileDrawer, initHeaderCart } from '../components/header'
+import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar'
 
 // Shared components
@@ -113,6 +114,8 @@ initMobileDrawer();
 initLanguageSelector();
 
 initBuyerDashboardLayout();
+mountChatPopup();
+initChatTriggers();
 startAlpine();
 
 // Email doğrulama akışı artık global EmailVerificationBanner tarafından

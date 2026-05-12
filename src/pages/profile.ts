@@ -7,6 +7,7 @@ import '../style.css'
 import { initFlowbite } from 'flowbite'
 
 import { TopBar, initMobileDrawer, initHeaderCart } from '../components/header'
+import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar'
 import { Breadcrumb } from '../components/shared/Breadcrumb'
 import { FooterLinks } from '../components/footer'
@@ -55,6 +56,8 @@ appEl.innerHTML = `
 `;
 
 initFlowbite();
+mountChatPopup();
+initChatTriggers();
 startAlpine();
 initHeaderCart();
 initMobileDrawer();

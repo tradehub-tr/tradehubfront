@@ -7,6 +7,7 @@ import '../style.css';
 import { initFlowbite } from 'flowbite';
 import { startAlpine } from '../alpine';
 import { TopBar } from '../components/header';
+import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar';
 
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
@@ -901,4 +902,6 @@ appEl.innerHTML = `
 
 initFlowbite();
 initLanguageSelector();
+mountChatPopup();
+initChatTriggers();
 startAlpine();

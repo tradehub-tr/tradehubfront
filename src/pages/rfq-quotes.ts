@@ -11,6 +11,7 @@ import { getCsrfToken, checkEmailNotVerifiedResponse, isEmailNotVerifiedError } 
 import { showToast } from '../utils/toast'
 
 import { TopBar, SubHeader, initMobileDrawer, initStickyHeaderSearch, MegaMenu, initMegaMenu } from '../components/header'
+import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar'
 import { FooterLinks } from '../components/footer'
 
@@ -56,7 +57,7 @@ appEl.innerHTML = `
   <footer>${FooterLinks()}</footer>
 `;
 
-initMegaMenu(); initFlowbite(); initStickyHeaderSearch(); initMobileDrawer(); initLanguageSelector(); startAlpine();
+initMegaMenu(); initFlowbite(); initStickyHeaderSearch(); initMobileDrawer(); initLanguageSelector(); mountChatPopup(); initChatTriggers(); startAlpine();
 
 // Fetch RFQ detail + quotes
 async function loadQuotes() {

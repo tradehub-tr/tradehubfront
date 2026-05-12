@@ -10,6 +10,7 @@ import { startAlpine } from '../alpine'
 import { requireAuth } from '../utils/auth-guard'
 
 import { TopBar, initMobileDrawer, initHeaderCart } from '../components/header'
+import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar'
 import { Breadcrumb } from '../components/shared/Breadcrumb'
 import { FooterLinks } from '../components/footer'
@@ -64,4 +65,6 @@ initSidebar();
 initSettingsLayout();
 
 // Start Alpine AFTER innerHTML is set so it can find all x-data directives in the DOM
+mountChatPopup();
+initChatTriggers();
 startAlpine();

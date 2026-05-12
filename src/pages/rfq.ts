@@ -16,6 +16,7 @@ import rfqVideoUrl from '../assets/images/rfqvidehero.mp4'
 
 // Header & Footer components
 import { TopBar, MobileSearchTabs, initMobileDrawer, SubHeader, initStickyHeaderSearch, MegaMenu, initMegaMenu } from '../components/header'
+import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar'
 import { FooterLinks } from '../components/footer'
 
@@ -236,6 +237,8 @@ initLanguageSelector();
 initAnimatedPlaceholder('#topbar-compact-search-input');
 
 // Start Alpine.js (must be called AFTER innerHTML is set)
+mountChatPopup();
+initChatTriggers();
 startAlpine();
 
 // --- Initialize Swiper Testimonial Carousel ---
