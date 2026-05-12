@@ -10,6 +10,9 @@ import { InboxPanel } from "./InboxPanel";
 import { MobileTabs } from "./MobileTabs";
 
 export function ChatPopup(): string {
+  // TODO(batch-8): add role="dialog" aria-modal="true" aria-labelledby="chat-popup-title"
+  //                 + focus management (move focus on open, restore on close).
+  //                 Existing modals (cart drawer, etc.) also lack this; address holistically.
   return /* html */ `
     <div x-data="chatPopupRoot"
          x-cloak
