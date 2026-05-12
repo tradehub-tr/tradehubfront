@@ -12,7 +12,13 @@ export function CallMenu(): string {
          x-cloak
          class="absolute bottom-[150px] left-32 z-30 w-[240px] rounded-lg border border-[var(--color-border-default,#e5e5e5)] bg-white shadow-lg overflow-hidden">
       <div class="flex items-center gap-2 border-b border-[var(--color-border-light,#f0f0f0)] px-3 py-2.5">
-        <div class="size-8 shrink-0 rounded-full bg-[var(--color-primary-100,#ffefb3)]"></div>
+        <div class="size-8 shrink-0 rounded-full bg-[var(--color-primary-100,#ffefb3)] overflow-hidden">
+          <template x-if="$store.chatPopup.activeConversation?.avatar">
+            <img :src="$store.chatPopup.activeConversation.avatar"
+                 :alt="$store.chatPopup.activeConversation.name"
+                 class="size-full object-cover" />
+          </template>
+        </div>
         <div>
           <div class="text-[12px] font-semibold" x-text="$store.chatPopup.activeConversation?.name || ''"></div>
           <div class="text-[10px] text-[var(--color-text-tertiary,#a3a3a3)]"
