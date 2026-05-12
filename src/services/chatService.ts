@@ -41,6 +41,11 @@ export async function listConversations(): Promise<Conversation[]> {
   return delay(MOCK_CONVERSATIONS.slice());
 }
 
+export async function findConversationBySellerId(sellerId: string): Promise<Conversation | null> {
+  const conv = MOCK_CONVERSATIONS.find((c) => c.sellerId === sellerId);
+  return delay(conv ?? null);
+}
+
 export async function getMessages(conversationId: string): Promise<Message[]> {
   return delay(readAll(conversationId));
 }

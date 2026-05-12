@@ -3,6 +3,7 @@ import type { Conversation, Message } from "../types/chat";
 export const MOCK_CONVERSATIONS: Conversation[] = [
   {
     id: "conv-juan",
+    sellerId: "sup-juan-001",
     name: "Juan Wang",
     company: "Guangzhou Yuanfuyuan Leather Co., Ltd.",
     localTimeHHMM: "16:42",
@@ -14,6 +15,7 @@ export const MOCK_CONVERSATIONS: Conversation[] = [
   },
   {
     id: "conv-angelna",
+    sellerId: "sup-angelna-002",
     name: "angelna Zeng",
     company: "Shenzhen Hxstar Technology Co.",
     localTimeHHMM: "15:54",
@@ -24,6 +26,7 @@ export const MOCK_CONVERSATIONS: Conversation[] = [
   },
   {
     id: "conv-corrine",
+    sellerId: "sup-corrine-003",
     name: "Corrine Wang",
     company: "Yiwu Yingzi Leather Co., Ltd.",
     localTimeHHMM: "17:20",
@@ -34,6 +37,7 @@ export const MOCK_CONVERSATIONS: Conversation[] = [
   },
   {
     id: "conv-yunyang",
+    sellerId: "sup-yunyang-004",
     name: "YUNYANG ZHANG",
     company: "JOTA KA & EUROPE 2016 SL",
     localTimeHHMM: "10:19",
@@ -44,6 +48,7 @@ export const MOCK_CONVERSATIONS: Conversation[] = [
   },
   {
     id: "conv-robert",
+    sellerId: "sup-robert-005",
     name: "Robert Song",
     company: "Ningbo Happiness Stationery",
     localTimeHHMM: "14:00",
@@ -54,6 +59,7 @@ export const MOCK_CONVERSATIONS: Conversation[] = [
   },
   {
     id: "conv-leo",
+    sellerId: "sup-leo-006",
     name: "Leo",
     company: "Dg Excelpro Rubber Co., Ltd.",
     localTimeHHMM: "14:00",

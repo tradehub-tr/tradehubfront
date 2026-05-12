@@ -9,6 +9,7 @@ import {
   deleteConversation,
   muteConversation,
   pinConversation,
+  findConversationBySellerId,
 } from "../services/chatService";
 import { acquireScrollLock, releaseScrollLock } from "../utils/scrollLock";
 
@@ -30,7 +31,7 @@ interface ChatStore {
   readonly totalUnread: number;
   readonly activeConversation: Conversation | null;
 
-  open(opts?: { conversationId?: string; pinnedProduct?: PinnedProduct }): Promise<void>;
+  open(opts?: { conversationId?: string; sellerId?: string; pinnedProduct?: PinnedProduct }): Promise<void>;
   close(): void;
   toggleExpanded(): void;
   toggleInbox(): void;
@@ -89,7 +90,21 @@ const chatStore: ChatStore = {
       }
     }
 
-    const targetId = opts?.conversationId ?? this.conversations[0]?.id ?? null;
+    let targetId = opts?.conversationId ?? null;
+
+    if (!targetId && opts?.sellerId) {
+      try {
+        const match = await findConversationBySellerId(opts.sellerId);
+        if (match) targetId = match.id;
+      } catch (err) {
+        this.error = err instanceof Error ? err.message : "Satıcı konuşması bulunamadı";
+      }
+    }
+
+    if (!targetId) {
+      targetId = this.conversations[0]?.id ?? null;
+    }
+
     if (targetId) {
       await this.setActiveConversation(targetId);
     }

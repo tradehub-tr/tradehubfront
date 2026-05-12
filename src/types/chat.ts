@@ -5,6 +5,7 @@ export interface Conversation {
   name: string;
   company: string;
   avatar?: string;
+  sellerId?: string;
   localTimeHHMM: string;
   online?: boolean;
   lastMessage: string;
