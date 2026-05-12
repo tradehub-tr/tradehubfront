@@ -79,6 +79,12 @@
   --color-info-500: #3b82f6;
   --color-info-700: #1d4ed8;
 
+  /* --- Orange (Chat composer "Gönder" CTA — ayrışan ikinci eylem rengi) --- */
+  --color-orange-50: #fff7ed;
+  --color-orange-500: #ea580c;
+  --color-orange-600: #c2410c;
+  --color-orange-700: #9a3412;
+
   /* --- Surface Colors (Light / Dark) --- */
   --color-surface: #ffffff;
   --color-surface-muted: #fafafa;

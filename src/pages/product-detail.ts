@@ -18,6 +18,7 @@ import { saveToBrowsingHistory } from '../services/browsingHistoryService'
 
 // Floating components
 import { FloatingPanel } from '../components/floating'
+import { ChatPopup, initChatTriggers } from '../components/chat-popup'
 
 // Alpine.js
 import { startAlpine } from '../alpine'
@@ -205,6 +206,7 @@ async function renderProductPage() {
 
     <!-- Floating Panel -->
     ${FloatingPanel()}
+    ${ChatPopup()}
 
     <!-- Modals / Drawers -->
     ${ReviewsModal()}
@@ -288,6 +290,8 @@ async function renderProductPage() {
       });
     });
   }
+
+  initChatTriggers();
 
   // Start Alpine LAST
   startAlpine();

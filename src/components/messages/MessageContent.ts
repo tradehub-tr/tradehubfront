@@ -155,7 +155,7 @@ export function MessageContent(): string {
           <!-- Text input -->
           <div class="flex-1 relative">
             <textarea x-model="newMessage"
-                      @keydown.enter.prevent="if (!$event.shiftKey) sendMessage()"
+                      @keydown.enter="if (!$event.shiftKey) { $event.preventDefault(); sendMessage(); }"
                       rows="1"
                       class="th-input resize-none max-h-24 overflow-y-auto leading-snug"
                       placeholder="${t("messages.typePlaceholder")}"

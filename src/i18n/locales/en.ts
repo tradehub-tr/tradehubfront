@@ -6607,6 +6607,92 @@ const en = {
     widgetView: "View",
     viewDetails: "View details",
   },
+
+  /* ── Chat Popup ────────────────────────────────────── */
+  chat: {
+    popupTitle: "Messages",
+    headerLocalTime: "Local time",
+    online: "Online",
+    securityBanner:
+      "To benefit from order protections, always keep your chat and transactions on iSTOC.",
+    endToEndEncrypted:
+      "This conversation is end-to-end encrypted. Only you and the seller can see it.",
+    typingIndicator: "{{name}} is typing",
+    send: "Send",
+    placeholderInput: "Please type your message here",
+    minOrder: "Min. order",
+    product: "Product",
+    read: "Read",
+    quickActions: {
+      rateSeller: "Rate the supplier",
+      viewPaymentMethods: "View all payment methods",
+      fileComplaint: "File a complaint",
+      sendLogisticsRequest: "Send a logistics request",
+    },
+    context: {
+      pin: "Pin to top",
+      block: "Block",
+      delete: "Delete",
+      mute: "Mute",
+    },
+    subMenu: {
+      photoFromDevice: "Choose a photo from your device",
+      photoFromCloud: "Choose from cloud storage",
+      callVideo: "Video call",
+      callVoice: "Voice call",
+      callSchedule: "Schedule a call",
+      cardTitle: "Send business card",
+      cardSend: "Send",
+      cardEdit: "Edit",
+    },
+    businessCard: {
+      placeholderName: "Full name",
+      country: "Country",
+      emailLabel: "Email",
+      placeholderEmail: "example@company.com",
+      verifiedBy: "Verified by iSTOC: Email",
+    },
+    tabs: {
+      chat: "Chat",
+      inbox: "Messages",
+    },
+    emptyInbox: "You don't have any messages yet.",
+    search: "Search conversations",
+    tag: {
+      unread: "[Unread]",
+      order: "[Order]",
+      quote: "[Quote]",
+      rfq: "[RFQ]",
+    },
+    emptyThread: "No messages yet. Start with a greeting 👋",
+    orderCard: {
+      title: "Place Order",
+      status: "Order status",
+      total: "Total",
+      shippingDate: "Agreed shipping date",
+      address: "Shipping address",
+    },
+    aria: {
+      back: "Back",
+      more: "More",
+      expand: "Expand",
+      close: "Close",
+      remove: "Remove",
+    },
+    toolbar: {
+      emoji: "Emoji",
+      photo: "Photo",
+      file: "File",
+      call: "Call",
+      card: "Business card",
+      location: "Location",
+      translate: "Translate",
+    },
+    pending: "Sending",
+    chatWithSeller: "Chat with seller",
+    openChat: "My messages",
+    comingSoon: "This feature is coming soon.",
+  },
 };
 
 export default en;

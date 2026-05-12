@@ -61,6 +61,31 @@ import trophy from "lucide-static/icons/trophy.svg?raw";
 import diamond from "lucide-static/icons/diamond.svg?raw";
 import shoppingBag from "lucide-static/icons/shopping-bag.svg?raw";
 import chefHat from "lucide-static/icons/chef-hat.svg?raw";
+import smile from "lucide-static/icons/smile.svg?raw";
+import image from "lucide-static/icons/image.svg?raw";
+import paperclip from "lucide-static/icons/paperclip.svg?raw";
+import phone from "lucide-static/icons/phone.svg?raw";
+import contact from "lucide-static/icons/contact.svg?raw";
+import mapPin from "lucide-static/icons/map-pin.svg?raw";
+import languages from "lucide-static/icons/languages.svg?raw";
+import send from "lucide-static/icons/send.svg?raw";
+import x from "lucide-static/icons/x.svg?raw";
+import moreHorizontal from "lucide-static/icons/more-horizontal.svg?raw";
+import maximize2 from "lucide-static/icons/maximize-2.svg?raw";
+import minimize2 from "lucide-static/icons/minimize-2.svg?raw";
+import search from "lucide-static/icons/search.svg?raw";
+import ban from "lucide-static/icons/ban.svg?raw";
+import pin from "lucide-static/icons/pin.svg?raw";
+import trash2 from "lucide-static/icons/trash-2.svg?raw";
+import bellOff from "lucide-static/icons/bell-off.svg?raw";
+import messageCircle from "lucide-static/icons/message-circle.svg?raw";
+import shield from "lucide-static/icons/shield.svg?raw";
+import chevronLeft from "lucide-static/icons/chevron-left.svg?raw";
+import chevronDown from "lucide-static/icons/chevron-down.svg?raw";
+import fileText from "lucide-static/icons/file-text.svg?raw";
+import video from "lucide-static/icons/video.svg?raw";
+import calendar from "lucide-static/icons/calendar.svg?raw";
+import cloud from "lucide-static/icons/cloud.svg?raw";
 
 /** Kanonik ikon isim → ham SVG eşlemesi. */
 const ICONS: Record<string, string> = {
@@ -119,6 +144,31 @@ const ICONS: Record<string, string> = {
   diamond,
   "shopping-bag": shoppingBag,
   "chef-hat": chefHat,
+  smile,
+  image,
+  paperclip,
+  phone,
+  contact,
+  "map-pin": mapPin,
+  languages,
+  send,
+  x,
+  "more-horizontal": moreHorizontal,
+  "maximize-2": maximize2,
+  "minimize-2": minimize2,
+  search,
+  ban,
+  pin,
+  "trash-2": trash2,
+  "bell-off": bellOff,
+  "message-circle": messageCircle,
+  shield,
+  "chevron-left": chevronLeft,
+  "chevron-down": chevronDown,
+  "file-text": fileText,
+  video,
+  calendar,
+  cloud,
 };
 
 /**

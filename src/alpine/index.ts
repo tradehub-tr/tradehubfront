@@ -16,6 +16,7 @@ import "./settings";
 import "./payment";
 import "./dashboard";
 import "./messages";
+import "./chatPopup";
 import "./sidebar";
 import "./products-filter";
 import "./shared";
