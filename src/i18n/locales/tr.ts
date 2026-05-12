@@ -6639,6 +6639,13 @@ const tr = {
       cardSend: "Gönder",
       cardEdit: "Düzenle",
     },
+    businessCard: {
+      placeholderName: "Ad Soyad",
+      country: "Ülke",
+      emailLabel: "E-posta",
+      placeholderEmail: "ornek@firma.com",
+      verifiedBy: "iSTOC tarafından doğrulanmış: E-posta",
+    },
     tabs: {
       chat: "Sohbet",
       inbox: "Mesajlar",

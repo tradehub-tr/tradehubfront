@@ -6644,6 +6644,13 @@ const en = {
       cardSend: "Send",
       cardEdit: "Edit",
     },
+    businessCard: {
+      placeholderName: "Full name",
+      country: "Country",
+      emailLabel: "Email",
+      placeholderEmail: "example@company.com",
+      verifiedBy: "Verified by iSTOC: Email",
+    },
     tabs: {
       chat: "Chat",
       inbox: "Messages",

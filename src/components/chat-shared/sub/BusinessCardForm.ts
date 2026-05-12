@@ -16,10 +16,11 @@ export function BusinessCardForm(): string {
                 aria-label="${t("chat.aria.close")}">${closeIcon}</button>
       </div>
       <div class="space-y-1.5 text-[11px] text-[var(--color-text-secondary,#525252)]">
-        <div class="text-[13px] font-medium text-[var(--color-text-primary,#0a0a0a)]">ahmet seker</div>
-        <div>🇹🇷 TR</div>
-        <div>✉ ahmet.seker@turksab.com</div>
-        <div class="mt-2 text-[10px] text-[var(--color-text-tertiary,#a3a3a3)]">iSTOC · Email</div>
+        <!-- TODO(batch-6+): wire to current user profile (auth/me endpoint) -->
+        <div class="text-[13px] font-medium text-[var(--color-text-primary,#0a0a0a)]">${t("chat.businessCard.placeholderName")}</div>
+        <div>${t("chat.businessCard.country")}: TR</div>
+        <div>${t("chat.businessCard.emailLabel")}: <span class="text-[var(--color-text-tertiary,#a3a3a3)]">${t("chat.businessCard.placeholderEmail")}</span></div>
+        <div class="mt-2 text-[10px] text-[var(--color-text-tertiary,#a3a3a3)]">${t("chat.businessCard.verifiedBy")}</div>
       </div>
       <div class="mt-3 flex justify-end gap-2">
         <button type="button" class="appearance-none rounded-full border border-[var(--color-border-default,#e5e5e5)] bg-white px-3 py-1.5 text-[11px] cursor-pointer hover:border-[var(--color-text-secondary,#525252)] focus:outline-none">${t("chat.subMenu.cardEdit")}</button>
