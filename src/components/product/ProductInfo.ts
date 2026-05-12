@@ -231,8 +231,8 @@ export function ProductInfo(): string {
             : ""
         }
 
-        <!-- CTA Buttons -->
-        <div id="pd-cta-buttons">
+        <!-- CTA Buttons (Sepete Ekle + Sohbet et — 50/50 grid) -->
+        <div id="pd-cta-buttons" class="grid grid-cols-2 gap-3">
           ${
             mockProduct.sellerKybVerified === false
               ? `
@@ -248,6 +248,19 @@ export function ProductInfo(): string {
             </button>
           `
           }
+
+          <button type="button" id="pd-chat-with-seller"
+                  data-chat-trigger
+                  data-product-id="${mockProduct.id}"
+                  data-product-title="${(p.title || "").replace(/"/g, "&quot;")}"
+                  data-product-price="${(p.priceTiers[0] ? formatCurrency(p.priceTiers[0].price, getSelectedCurrency()) : "").replace(/"/g, "&quot;")}"
+                  data-product-thumb="${p.images?.[0]?.src || ""}"
+                  data-product-min-order="${p.moq ? String(p.moq) : "1"}"
+                  data-seller-id="${p.supplier?.id || ""}"
+                  class="appearance-none flex items-center justify-center gap-2 rounded-md border-2 border-[var(--color-primary-500,#f5b800)] bg-white px-4 py-2.5 text-[14px] font-semibold text-[var(--color-primary-700,#a87c00)] cursor-pointer hover:bg-[var(--color-primary-50,#fff8e1)] focus:outline-none transition-colors">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            ${t("chat.chatWithSeller")}
+          </button>
         </div>
         ${
           mockProduct.sellerKybVerified === false
