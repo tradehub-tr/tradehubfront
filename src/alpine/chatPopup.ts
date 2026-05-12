@@ -10,6 +10,7 @@ import {
   muteConversation,
   pinConversation,
 } from "../services/chatService";
+import { acquireScrollLock, releaseScrollLock } from "../utils/scrollLock";
 
 interface ChatStore {
   isOpen: boolean;
@@ -81,14 +82,14 @@ const chatStore: ChatStore = {
     if (targetId) {
       await this.setActiveConversation(targetId);
     }
-    document.body.style.overflow = "hidden";
+    acquireScrollLock();
   },
 
   close() {
     this.isOpen = false;
     this.isExpanded = false;
     this.openSubMenu = null;
-    document.body.style.overflow = "";
+    releaseScrollLock();
   },
 
   toggleExpanded() {
