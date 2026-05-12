@@ -46,6 +46,9 @@ import {
   initMobileLayout,
   CartDrawer,
   initCartDrawer,
+  WriteReviewModal,
+  ReportAbuseModal,
+  QAModal,
 } from '../components/product'
 // Product data
 import { getCurrentProduct, loadProduct } from '../alpine/product'
@@ -210,7 +213,10 @@ async function renderProductPage() {
 
     <!-- Modals / Drawers -->
     ${ReviewsModal()}
+    ${QAModal()}
     ${LoginModal()}
+    ${WriteReviewModal()}
+    ${ReportAbuseModal()}
     ${CartDrawer()}
     ${ShippingModal()}
 

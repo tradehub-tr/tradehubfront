@@ -8,6 +8,16 @@ import { getCurrentProduct } from "../../alpine/product";
 import { t } from "../../i18n";
 import type { ProductReview } from "../../types/product";
 import { openLoginModal } from "./LoginModal";
+import { isLoggedIn as isUserLoggedIn } from "../../utils/auth";
+import {
+  getReviewEligibility,
+  voteReviewHelpful,
+  getProductReviews,
+  updateOwnReview,
+} from "../../services/listingService";
+import { openWriteReviewModal } from "./WriteReviewModal";
+import { openReportAbuseModal } from "./ReportAbuseModal";
+import { showToast } from "../../utils/toast";
 
 /* ── Utility helpers ─────────────────────────────────── */
 
@@ -78,11 +88,34 @@ function satisfactionLabel(score: number): string {
 
 export function renderReviewCard(review: ProductReview, showProductThumb = false): string {
   const badges: string[] = [];
+  if (review.isOwnPending) {
+    badges.push(
+      `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-semibold bg-amber-100 text-amber-700">⏳ Onay bekliyor</span>`
+    );
+  }
   if (review.verified) {
     badges.push(`<span class="rv-badge rv-badge-verified">${t("product.verifiedPurchase")}</span>`);
   }
   if (review.repeatBuyer) {
     badges.push(`<span class="rv-badge rv-badge-repeat">${t("product.repeatBuyer")}</span>`);
+  }
+  // Reviewer reputation tier — Top/Trusted/Verified (B2B güven göstergesi)
+  if (review.reviewerTier) {
+    const tierLabels: Record<string, string> = {
+      Top: "⭐ Üst Düzey Değerlendirici",
+      Trusted: "🛡 Güvenilir Değerlendirici",
+      Verified: "✓ Doğrulanmış Değerlendirici",
+    };
+    const tierClasses: Record<string, string> = {
+      Top: "bg-purple-100 text-purple-700",
+      Trusted: "bg-indigo-100 text-indigo-700",
+      Verified: "bg-emerald-100 text-emerald-700",
+    };
+    const cls = tierClasses[review.reviewerTier] || "bg-gray-100 text-gray-700";
+    const label = tierLabels[review.reviewerTier] || review.reviewerTier;
+    badges.push(
+      `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-semibold ${cls}">${label}</span>`
+    );
   }
 
   const supplierReplyHtml = review.supplierReply
@@ -91,6 +124,25 @@ export function renderReviewCard(review: ProductReview, showProductThumb = false
         <div class="rv-supplier-reply-text">${review.supplierReply}</div>
       </div>`
     : "";
+
+  const imagesHtml =
+    Array.isArray(review.images) && review.images.length > 0
+      ? `<div class="flex gap-2 flex-wrap mt-3">
+          ${review.images
+            .map(
+              (src) => `
+            <button
+              type="button"
+              class="rv-image-thumb shrink-0 w-20 h-20 rounded-lg overflow-hidden border border-border-default/60 hover:border-primary-500 transition-colors cursor-zoom-in bg-secondary-50"
+              data-image-url="${src}"
+              aria-label="${t("product.productImage")}"
+            >
+              <img src="${src}" class="w-full h-full object-cover" loading="lazy" alt="" />
+            </button>`
+            )
+            .join("")}
+        </div>`
+      : "";
 
   const productThumbHtml =
     showProductThumb && review.productTitle
@@ -123,15 +175,41 @@ export function renderReviewCard(review: ProductReview, showProductThumb = false
         </div>
       </div>
       <div class="rv-card-comment max-[374px]:text-[13px] max-[374px]:leading-[1.5]">${review.comment}</div>
+      ${imagesHtml}
       ${supplierReplyHtml}
       ${productThumbHtml}
-      <button type="button" class="rv-hidden-reviews-link">${t("product.showHiddenReviews")}</button>
-      <button type="button" class="rv-helpful-btn" data-review-id="${review.id}">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
-        </svg>
-        ${t("product.helpful", { count: String(review.helpful) })}
-      </button>
+      <div class="flex items-center gap-2 flex-wrap">
+        <button type="button" class="rv-helpful-btn" data-review-id="${review.id}" data-vote="helpful">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
+          </svg>
+          ${t("product.helpful", { count: String(review.helpful) })}
+        </button>
+        <button
+          type="button"
+          class="rv-helpful-btn"
+          data-review-id="${review.id}"
+          data-vote="not_helpful"
+          title="Faydalı değildi"
+          aria-label="Faydalı değildi"
+        >
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="transform: rotate(180deg);">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
+          </svg>
+        </button>
+        ${
+          review.canEdit
+            ? `<button type="button" class="rv-edit-own-btn text-[12px] text-primary-600 hover:text-primary-700 transition-colors inline-flex items-center gap-1 ml-auto" data-review-id="${review.id}" title="Yorumumu düzenle (24 saat içinde)">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487a2.032 2.032 0 112.872 2.872L7.5 21.613H4v-3.5L16.862 4.487z"/></svg>
+                Düzenle
+              </button>`
+            : ""
+        }
+        <button type="button" class="rv-report-btn text-[12px] text-secondary-400 hover:text-red-600 transition-colors inline-flex items-center gap-1 ${review.canEdit ? "" : "ml-auto"}" data-review-id="${review.id}" title="Şikayet et">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 2H21l-3 6 3 6h-8.5l-1-2H5a2 2 0 00-2 2zm9-13.5V9"/></svg>
+          Şikayet
+        </button>
+      </div>
     </div>
   `;
 }
@@ -188,10 +266,23 @@ export function ProductReviews(): string {
 
   return `
     <div class="py-6 max-[374px]:py-4">
-      <!-- Sub-tabs -->
-      <div class="rv-sub-tabs flex border-b-2 border-border-default mb-6 max-[374px]:mb-4">
-        <button type="button" class="rv-sub-tab max-[374px]:text-[13px] max-[374px]:px-2 max-[374px]:py-2 active" data-rv-panel="rv-product-panel">${t("product.productReviewsTab", { count: String(p.reviewCount) })}</button>
-        <button type="button" class="rv-sub-tab max-[374px]:text-[13px] max-[374px]:px-2 max-[374px]:py-2" data-rv-panel="rv-store-panel">${t("product.storeReviewsTab", { count: String(p.storeReviewCount) })}</button>
+      <!-- Sub-tabs + Yorum Yaz CTA -->
+      <div class="flex items-center justify-between gap-3 border-b-2 border-border-default mb-6 max-[374px]:mb-4 flex-wrap">
+        <div class="rv-sub-tabs flex">
+          <button type="button" class="rv-sub-tab max-[374px]:text-[13px] max-[374px]:px-2 max-[374px]:py-2 active" data-rv-panel="rv-product-panel">${t("product.productReviewsTab", { count: String(p.reviewCount) })}</button>
+          <button type="button" class="rv-sub-tab max-[374px]:text-[13px] max-[374px]:px-2 max-[374px]:py-2" data-rv-panel="rv-store-panel">${t("product.storeReviewsTab", { count: String(p.storeReviewCount) })}</button>
+          <button type="button" class="rv-sub-tab max-[374px]:text-[13px] max-[374px]:px-2 max-[374px]:py-2" data-rv-panel="rv-qa-panel" id="rv-qa-tab-btn">Soru &amp; Cevap <span id="rv-qa-count">(0)</span></button>
+        </div>
+        <button
+          type="button"
+          id="rv-write-review-btn"
+          class="th-btn-dark h-9 px-4 rounded-md text-[13px] font-semibold inline-flex items-center gap-1.5 mb-[-2px] disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled
+          title="Bu ürünü yorumlayabilmek için doğrulanmış bir siparişiniz olmalı"
+        >
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487a2.032 2.032 0 112.872 2.872L7.5 21.613H4v-3.5L16.862 4.487z"/></svg>
+          <span>Yorum Yaz</span>
+        </button>
       </div>
 
       <!-- Product Reviews Panel -->
@@ -271,14 +362,101 @@ export function ProductReviews(): string {
         <!-- Show All Button -->
         <button type="button" class="rv-show-all-btn">${t("product.showAll")}</button>
       </div>
+
+      <!-- Q&A Panel (hidden by default) -->
+      <div id="rv-qa-panel" class="hidden"></div>
     </div>
   `;
 }
 
 /* ── Init logic ──────────────────────────────────────── */
 
-/** Auth flag — set to false to simulate logged-out user */
-const isLoggedIn = false;
+/** Eligibility state — yüklenince güncellenir */
+interface EligibilityState {
+  can_review: boolean;
+  order_items: Array<{
+    name: string;
+    order: string;
+    order_date: string | null;
+    quantity: number;
+  }>;
+  loaded: boolean;
+}
+
+let eligibilityCache: EligibilityState = {
+  can_review: false,
+  order_items: [],
+  loaded: false,
+};
+
+/** Hem desktop hem mobile "Yorum Yaz" butonlarını yakala (ID'ler ayrı). */
+function getWriteReviewButtons(): HTMLButtonElement[] {
+  return Array.from(
+    document.querySelectorAll<HTMLButtonElement>(
+      "#rv-write-review-btn, #pdm-write-review-btn"
+    )
+  );
+}
+
+function attachWriteReviewButton(listingId: string): void {
+  const btns = getWriteReviewButtons();
+  if (btns.length === 0) return;
+  const handler = () => {
+    if (!isUserLoggedIn()) {
+      openLoginModal();
+      return;
+    }
+    if (!eligibilityCache.loaded) {
+      showToast({ message: "Sipariş bilgisi yükleniyor…", type: "info" });
+      return;
+    }
+    if (!eligibilityCache.can_review) {
+      showToast({
+        message:
+          "Bu ürünü yorumlayabilmek için onaylı/teslim alınmış bir siparişiniz olmalı.",
+        type: "warning",
+      });
+      return;
+    }
+    openWriteReviewModal({
+      listingId,
+      orderItems: eligibilityCache.order_items,
+    });
+  };
+  btns.forEach((btn) => btn.addEventListener("click", handler));
+}
+
+async function loadEligibilityAndEnableBtn(listingId: string): Promise<void> {
+  const btns = getWriteReviewButtons();
+  if (!isUserLoggedIn()) {
+    btns.forEach((btn) => {
+      btn.disabled = false;
+      btn.title = "Yorum yapabilmek için giriş yapın";
+    });
+    return;
+  }
+  try {
+    const elig = await getReviewEligibility(listingId);
+    eligibilityCache = {
+      can_review: elig.can_review,
+      order_items: elig.order_items,
+      loaded: true,
+    };
+    const title = elig.can_review
+      ? "Bu ürünü değerlendir"
+      : elig.reason === "already_reviewed"
+        ? "Bu ürünü zaten yorumladınız"
+        : elig.reason === "own_listing"
+          ? "Kendi sattığınız ürünü yorumlayamazsınız"
+          : "Bu ürünü yorumlayabilmek için onaylı bir siparişiniz olmalı";
+    btns.forEach((btn) => {
+      btn.disabled = !elig.can_review;
+      btn.title = title;
+    });
+  } catch (err) {
+    console.warn("[reviews] Eligibility load failed:", err);
+  }
+}
 
 export type SortMode = "relevant" | "newest" | "highest" | "lowest";
 
@@ -342,28 +520,144 @@ export function filterAndSortReviews(state: ReviewFilterState): ProductReview[] 
 export function bindHelpfulButtons(container: HTMLElement): void {
   const btns = container.querySelectorAll<HTMLButtonElement>(".rv-helpful-btn");
   btns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      if (btn.classList.contains("voted")) return;
-
-      if (!isLoggedIn) {
+    btn.addEventListener("click", async () => {
+      if (btn.classList.contains("voted") || btn.disabled) return;
+      if (!isUserLoggedIn()) {
         openLoginModal();
         return;
       }
+      const reviewId = btn.dataset.reviewId || "";
+      if (!reviewId) return;
+      const voteType =
+        (btn.dataset.vote as "helpful" | "not_helpful") || "helpful";
 
-      btn.classList.add("voted");
-      const text = btn.textContent || "";
-      const match = text.match(/\((\d+)\)/);
-      if (match) {
-        const count = parseInt(match[1], 10) + 1;
-        btn.innerHTML = `
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
-          </svg>
-          ${t("product.helpful", { count: String(count) })}
-        `;
+      // Aynı review'a ait helpful + not_helpful butonlarını birlikte kilitle
+      // (mutex: ikisine birden basılamasın; backend tek vote tutuyor zaten).
+      const siblings = container.querySelectorAll<HTMLButtonElement>(
+        `.rv-helpful-btn[data-review-id="${CSS.escape(reviewId)}"]`,
+      );
+      siblings.forEach((b) => {
+        b.disabled = true;
+      });
+      try {
+        const res = await voteReviewHelpful(reviewId, voteType);
+        // Sadece bu butona "voted" stili ver, diğeri locked-out kalır.
+        btn.classList.add("voted");
+        if (voteType === "helpful") {
+          const count = res.helpful_count ?? 0;
+          btn.innerHTML = `
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
+            </svg>
+            ${t("product.helpful", { count: String(count) })}
+          `;
+        } else {
+          showToast({ message: "Geri bildiriminiz alındı.", type: "success" });
+        }
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : "Oy verilemedi";
+        showToast({ message: msg, type: "error" });
+        // Hata olduysa kardeşleri serbest bırak — kullanıcı yeniden deneyebilsin
+        siblings.forEach((b) => {
+          if (!b.classList.contains("voted")) b.disabled = false;
+        });
       }
     });
   });
+
+  // Şikayet butonları
+  const reportBtns = container.querySelectorAll<HTMLButtonElement>(".rv-report-btn");
+  reportBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      if (!isUserLoggedIn()) {
+        openLoginModal();
+        return;
+      }
+      const reviewId = btn.dataset.reviewId || "";
+      if (reviewId) openReportAbuseModal(reviewId);
+    });
+  });
+
+  // Image thumbnail → lightbox
+  const imageThumbs = container.querySelectorAll<HTMLButtonElement>(".rv-image-thumb");
+  imageThumbs.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const url = btn.dataset.imageUrl || "";
+      if (url) openImageLightbox(url);
+    });
+  });
+
+  // Edit own review — 24h içinde, prompt-based mini flow
+  const editBtns = container.querySelectorAll<HTMLButtonElement>(".rv-edit-own-btn");
+  editBtns.forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const reviewId = btn.dataset.reviewId || "";
+      if (!reviewId) return;
+      // Mevcut yorumun body'sini kart'tan oku (DOM lookup)
+      const card = btn.closest(".rv-card") as HTMLElement | null;
+      const commentEl = card?.querySelector(".rv-card-comment");
+      const oldBody = commentEl?.textContent?.trim() || "";
+      const newBody = window.prompt(
+        "Yorumunuzu düzenleyin (sadece bir kez, 24 saat içinde):",
+        oldBody
+      );
+      if (newBody == null || newBody.trim() === "" || newBody.trim() === oldBody) {
+        return; // İptal veya değişiklik yok
+      }
+      if (newBody.trim().length < 20) {
+        showToast({
+          message: "Yorum metni en az 20 karakter olmalı.",
+          type: "warning",
+        });
+        return;
+      }
+      btn.disabled = true;
+      try {
+        await updateOwnReview({ name: reviewId, body: newBody.trim() });
+        showToast({
+          message: "Yorumunuz güncellendi.",
+          type: "success",
+        });
+        // Listeyi yenile (reload event listener tetikler)
+        window.dispatchEvent(new CustomEvent("review-submitted"));
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : "Düzenleme başarısız";
+        showToast({ message: msg, type: "error" });
+        btn.disabled = false;
+      }
+    });
+  });
+}
+
+/** Basit fullscreen image lightbox — overlay click veya ESC ile kapanır */
+function openImageLightbox(url: string): void {
+  // Mevcut lightbox varsa önce kapat
+  document.getElementById("rv-image-lightbox")?.remove();
+
+  const overlay = document.createElement("div");
+  overlay.id = "rv-image-lightbox";
+  overlay.className =
+    "fixed inset-0 bg-black/85 z-[80] flex items-center justify-center p-4 cursor-zoom-out";
+  overlay.innerHTML = `
+    <button type="button" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors" aria-label="Kapat">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+    <img src="${url}" class="max-w-[95vw] max-h-[90vh] object-contain shadow-2xl rounded-lg" alt="" />
+  `;
+  const onEsc = (e: KeyboardEvent) => {
+    if (e.key === "Escape") close();
+  };
+  const close = () => {
+    // ESC dinleyicisini her zaman temizle — overlay click ile kapatılsa bile
+    // listener bellekte kalmasın (memory leak fix).
+    window.removeEventListener("keydown", onEsc);
+    overlay.remove();
+  };
+  overlay.addEventListener("click", close);
+  // İmajın kendisine tıklayınca kapatma
+  overlay.querySelector("img")?.addEventListener("click", (e) => e.stopPropagation());
+  window.addEventListener("keydown", onEsc);
+  document.body.appendChild(overlay);
 }
 
 /**
@@ -529,7 +823,11 @@ function initScopedReviewPanel(
 export function initReviews(): void {
   const productPanel = document.getElementById("rv-product-panel");
   const storePanel = document.getElementById("rv-store-panel");
+  const qaPanel = document.getElementById("rv-qa-panel");
   if (!productPanel) return;
+
+  const product = getCurrentProduct();
+  const listingId = product.id;
 
   // ── Sub-tab switching ──────────────────────────────
   const subTabs = document.querySelectorAll<HTMLButtonElement>(".rv-sub-tab");
@@ -539,23 +837,72 @@ export function initReviews(): void {
       tab.classList.add("active");
 
       const targetId = tab.dataset.rvPanel;
-      if (productPanel && storePanel) {
-        productPanel.classList.toggle("hidden", targetId !== "rv-product-panel");
-        storePanel.classList.toggle("hidden", targetId !== "rv-store-panel");
+      if (productPanel) productPanel.classList.toggle("hidden", targetId !== "rv-product-panel");
+      if (storePanel) storePanel.classList.toggle("hidden", targetId !== "rv-store-panel");
+      if (qaPanel) {
+        qaPanel.classList.toggle("hidden", targetId !== "rv-qa-panel");
+        if (targetId === "rv-qa-panel" && !qaPanel.dataset.loaded) {
+          // İlk açılışta Q&A panel mount edilir
+          void mountQAPanel(qaPanel, listingId);
+        }
       }
     });
   });
 
   // ── Init scoped panels ─────────────────────────────
-  // Product tab: uses data-rv-* attributes, no product thumbnails
   initScopedReviewPanel(productPanel, "rv-product", "rv", false);
-
-  // Store tab: uses data-rv-* attributes, shows product thumbnails on cards
   if (storePanel) {
     initScopedReviewPanel(storePanel, "rv-store", "rv", true);
   }
 
-  // Modal filter pipeline lives in initReviewsModal() (ReviewsModal.ts)
+  // ── Write Review button + eligibility ───────────────
+  if (listingId) {
+    attachWriteReviewButton(listingId);
+    void loadEligibilityAndEnableBtn(listingId);
+
+    // Kullanıcı modal'dan giriş yaptığında "Yorum Yaz" butonu disabled
+    // kalıyordu — sayfa refresh gerekiyordu. Event ile eligibility'yi
+    // yeniden çek ve butonu güncelle.
+    window.addEventListener("login-success", () => {
+      void loadEligibilityAndEnableBtn(listingId);
+      // Storefront listesi de yeniden yüklensin — kullanıcının kendi
+      // Pending yorumu varsa şimdi görünsün.
+      void reloadReviewsAndRerender(listingId);
+    });
+
+    // Yorum gönderildiğinde listeyi yenile
+    window.addEventListener("review-submitted", () => {
+      void reloadReviewsAndRerender(listingId);
+    });
+
+    // İlk render sırasında reviews boş array ile basıldı; loadProductReviews()
+    // backend'den verileri çekince bu event fire eder — panel'leri burada
+    // rebuild ediyoruz (gereksiz ikinci API çağrısı yapmadan).
+    document.addEventListener("product-reviews-loaded", (e: Event) => {
+      const ce = e as CustomEvent<{
+        reviews: ProductReview[];
+        summary: { review_count: number; weighted_rating?: number; average_rating?: number };
+        total: number;
+      }>;
+      if (!ce.detail) return;
+      applyReviewsToPanels({
+        reviews: ce.detail.reviews || [],
+        reviewCount: ce.detail.summary?.review_count ?? 0,
+        storeReviewCount: ce.detail.total ?? 0,
+        rating:
+          ce.detail.summary?.weighted_rating || ce.detail.summary?.average_rating || 0,
+      });
+    });
+    // Abuse report sonrası ek bir aksiyon yok (sessizce kaydedildi toast'ı gösteriliyor)
+  }
+
+  // ── Q&A count update ────────────────────────────────
+  if (listingId) {
+    void updateQACount(listingId);
+    window.addEventListener("qa-submitted", () => {
+      void updateQACount(listingId);
+    });
+  }
 
   // ── Click-outside to close all dropdowns ───────────
   document.addEventListener("click", () => {
@@ -566,4 +913,147 @@ export function initReviews(): void {
       .querySelectorAll(".rv-sort-dropdown.open")
       .forEach((el) => el.classList.remove("open"));
   });
+}
+
+async function mountQAPanel(panel: HTMLElement, _listingId: string): Promise<void> {
+  panel.dataset.loaded = "1";
+  const { ProductQA } = await import("./ProductQA");
+  panel.innerHTML = ProductQA();
+  // Alpine zaten startAlpine() ile global olarak başlatıldı; manuel yeniden başlatma
+  // gerekli değil çünkü Alpine, dinamik eklenen `x-data` node'larını otomatik tarar
+  // (yalnızca window.Alpine.initTree çağrısı ile garanti edilir).
+  const Alpine = (window as unknown as { Alpine?: { initTree(el: HTMLElement): void } }).Alpine;
+  if (Alpine) Alpine.initTree(panel);
+}
+
+async function updateQACount(listingId: string): Promise<void> {
+  try {
+    const { getProductQA: _get } = await import("../../services/listingService");
+    const data = await _get(listingId, 1);
+    const el = document.getElementById("rv-qa-count");
+    if (el) el.textContent = `(${data.total || 0})`;
+  } catch {
+    /* sessizce yut */
+  }
+}
+
+/** DOM-only güncelleme — panel'leri, rating özetlerini ve tab başlıklarını rebuild eder.
+ * API çağrısı yapmaz; veri zaten elde olduğunda kullanılır.
+ */
+function applyReviewsToPanels(payload: {
+  reviews: ProductReview[];
+  reviewCount: number;
+  storeReviewCount: number;
+  rating?: number;
+}): void {
+  const productPanel = document.getElementById("rv-product-panel");
+  const storePanel = document.getElementById("rv-store-panel");
+  const photoCount = payload.reviews.filter((r) => r.images && r.images.length > 0).length;
+
+  if (productPanel) {
+    const list = productPanel.querySelector<HTMLElement>("#rv-product-reviews-list");
+    if (list) {
+      list.innerHTML = payload.reviews.length
+        ? payload.reviews.map((r) => renderReviewCard(r, false)).join("")
+        : `<div style="text-align: center; padding: 40px 0; color: var(--pd-rating-text-color, #6b7280); font-size: 14px;">${t("product.noReviewsForFilter")}</div>`;
+      bindHelpfulButtons(list);
+    }
+  }
+  if (storePanel) {
+    const list = storePanel.querySelector<HTMLElement>("#rv-store-reviews-list");
+    if (list) {
+      list.innerHTML = payload.reviews.length
+        ? payload.reviews.map((r) => renderReviewCard(r, true)).join("")
+        : `<div style="text-align: center; padding: 40px 0; color: var(--pd-rating-text-color, #6b7280); font-size: 14px;">${t("product.noReviewsForFilter")}</div>`;
+      bindHelpfulButtons(list);
+    }
+
+    // Rating özet bloğu
+    const ratingNum = storePanel.querySelector<HTMLElement>(".rv-rating-number");
+    const ratingLabel = storePanel.querySelector<HTMLElement>(".rv-rating-label");
+    const ratingSubtitle = storePanel.querySelector<HTMLElement>(".rv-rating-subtitle");
+    const ratingStars = storePanel.querySelector<HTMLElement>(
+      ".rv-rating-summary .flex.items-center.gap-0\\.5"
+    );
+    if (payload.rating != null && ratingNum) {
+      ratingNum.textContent = String(payload.rating);
+    }
+    if (payload.rating != null && ratingLabel) {
+      ratingLabel.textContent = satisfactionLabel(payload.rating);
+    }
+    if (ratingSubtitle) {
+      ratingSubtitle.textContent = t("product.basedOnReviews", {
+        count: String(payload.storeReviewCount),
+      });
+    }
+    if (payload.rating != null && ratingStars) {
+      ratingStars.innerHTML = renderStars(payload.rating);
+    }
+
+    // Fotoğraflı filter pill — "Fotoğraflı (N)"
+    const photoPill = storePanel.querySelector<HTMLButtonElement>(
+      '[data-rv-filter="photo"]'
+    );
+    if (photoPill) {
+      photoPill.textContent = t("product.withPhotos", { count: String(photoCount) });
+    }
+  }
+  const tabs = document.querySelectorAll<HTMLButtonElement>(".rv-sub-tab");
+  if (tabs[0])
+    tabs[0].textContent = t("product.productReviewsTab", {
+      count: String(payload.reviewCount),
+    });
+  if (tabs[1])
+    tabs[1].textContent = t("product.storeReviewsTab", {
+      count: String(payload.storeReviewCount),
+    });
+
+  // "Tümünü Göster" modal'ı (ReviewsModal) — başlık, foto filter ve liste
+  const modal = document.getElementById("rv-reviews-modal");
+  if (modal) {
+    const modalTitle = modal.querySelector<HTMLElement>("#rv-modal-title");
+    if (modalTitle) {
+      modalTitle.textContent = t("product.storeReviewsTitle", {
+        count: String(payload.storeReviewCount),
+      });
+    }
+    const modalPhotoPill = modal.querySelector<HTMLButtonElement>(
+      "#rv-modal-photo-filter"
+    );
+    if (modalPhotoPill) {
+      modalPhotoPill.textContent = t("product.withPhotos", {
+        count: String(photoCount),
+      });
+    }
+    const modalList = modal.querySelector<HTMLElement>("#rv-modal-reviews-list");
+    if (modalList) {
+      modalList.innerHTML = payload.reviews.length
+        ? payload.reviews.map((r) => renderReviewCard(r, true)).join("")
+        : `<div style="text-align: center; padding: 40px 0; color: var(--pd-rating-text-color, #6b7280); font-size: 14px;">${t("product.noReviewsForFilter")}</div>`;
+      bindHelpfulButtons(modalList);
+    }
+  }
+}
+
+async function reloadReviewsAndRerender(listingId: string): Promise<void> {
+  try {
+    const data = await getProductReviews(listingId, { pageSize: 50 });
+    const product = getCurrentProduct();
+    product.reviews = data.reviews;
+    product.reviewCount = data.summary.review_count;
+    product.rating = data.summary.weighted_rating || data.summary.average_rating;
+    product.storeReviewCount = data.total;
+
+    applyReviewsToPanels({
+      reviews: data.reviews,
+      reviewCount: data.summary.review_count,
+      storeReviewCount: data.total,
+      rating: data.summary.weighted_rating || data.summary.average_rating,
+    });
+
+    // Eligibility yeniden çek (yorum yapıldığı için artık reviewed sayılır)
+    void loadEligibilityAndEnableBtn(listingId);
+  } catch (err) {
+    console.warn("[reviews] reload failed:", err);
+  }
 }

@@ -96,6 +96,16 @@ export interface ProductReview {
   productTitle?: string;
   productPrice?: string;
   productImage?: string;
+  /** Status="Pending" + kullanıcının kendi yorumu — sadece sahibine görünür */
+  isOwnPending?: boolean;
+  /** Reviewer reputation tier — Newcomer dışında ("Verified", "Trusted", "Top") */
+  reviewerTier?: string;
+  /** Bu yorum login user'a ait mi? (privacy: backend sadece sahibine bilgi verir) */
+  isMine?: boolean;
+  /** 24 saat + max 1 düzenleme penceresi içinde mi? (canEdit) */
+  canEdit?: boolean;
+  /** Yorum hangi statuste — login user kendi pending'ini görür */
+  status?: string;
 }
 
 export interface ReviewCategoryRating {
