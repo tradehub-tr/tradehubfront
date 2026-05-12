@@ -107,8 +107,7 @@ export async function loadProductReviews(listingId: string): Promise<void> {
     const data = await getProductReviews(listingId, { pageSize: 50 });
     currentProduct.reviews = data.reviews;
     currentProduct.reviewCount = data.summary.review_count;
-    currentProduct.rating =
-      data.summary.weighted_rating || data.summary.average_rating || 0;
+    currentProduct.rating = data.summary.weighted_rating || data.summary.average_rating || 0;
     currentProduct.storeReviewCount = data.total;
     document.dispatchEvent(
       new CustomEvent("product-reviews-loaded", {

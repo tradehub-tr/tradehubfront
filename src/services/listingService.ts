@@ -229,9 +229,7 @@ function backendReviewToProductReview(
     isMine: Boolean(r.is_mine),
     canEdit: Boolean(r.can_edit),
     status: r.status,
-    reviewerTier: r.reviewer?.tier && r.reviewer.tier !== "Newcomer"
-      ? r.reviewer.tier
-      : undefined,
+    reviewerTier: r.reviewer?.tier && r.reviewer.tier !== "Newcomer" ? r.reviewer.tier : undefined,
   };
 }
 
@@ -292,9 +290,7 @@ export interface ReviewEligibility {
   user_logged_in: boolean;
 }
 
-export async function getReviewEligibility(
-  listingId: string
-): Promise<ReviewEligibility> {
+export async function getReviewEligibility(listingId: string): Promise<ReviewEligibility> {
   const params = new URLSearchParams({ listing: listingId });
   const response = await callMethodGet<ReviewEligibility>(
     "tradehub_core.api.storefront_api.get_review_eligibility",
@@ -353,10 +349,10 @@ export async function voteReviewHelpful(
   reviewName: string,
   vote: "helpful" | "not_helpful"
 ): Promise<{ success: boolean; helpful_count: number; not_helpful_count: number }> {
-  return callMethodPost(
-    "tradehub_core.api.storefront_api.vote_helpful",
-    { review: reviewName, vote }
-  );
+  return callMethodPost("tradehub_core.api.storefront_api.vote_helpful", {
+    review: reviewName,
+    vote,
+  });
 }
 
 /**
@@ -366,10 +362,10 @@ export async function voteQAHelpful(
   targetType: "question" | "answer",
   targetId: string | number
 ): Promise<{ success: boolean; changed: boolean }> {
-  return callMethodPost(
-    "tradehub_core.api.storefront_api.vote_qa_helpful",
-    { target_type: targetType, target_id: String(targetId) }
-  );
+  return callMethodPost("tradehub_core.api.storefront_api.vote_qa_helpful", {
+    target_type: targetType,
+    target_id: String(targetId),
+  });
 }
 
 /**
@@ -380,10 +376,11 @@ export async function reportReviewAbuse(
   reason: string,
   note?: string
 ): Promise<{ success: boolean }> {
-  return callMethodPost(
-    "tradehub_core.api.storefront_api.report_abuse",
-    { review: reviewName, reason, note: note || "" }
-  );
+  return callMethodPost("tradehub_core.api.storefront_api.report_abuse", {
+    review: reviewName,
+    reason,
+    note: note || "",
+  });
 }
 
 /**
@@ -393,10 +390,10 @@ export async function submitProductQuestion(
   listingId: string,
   question: string
 ): Promise<{ success: boolean; name: string }> {
-  return callMethodPost(
-    "tradehub_core.api.storefront_api.submit_question",
-    { listing: listingId, question }
-  );
+  return callMethodPost("tradehub_core.api.storefront_api.submit_question", {
+    listing: listingId,
+    question,
+  });
 }
 
 /**
@@ -431,27 +428,22 @@ export async function getProductQA(
     listing: listingId,
     page: String(page),
   });
-  return callMethodGet(
-    "tradehub_core.api.storefront_api.get_qa_page",
-    params
-  );
+  return callMethodGet("tradehub_core.api.storefront_api.get_qa_page", params);
 }
 
 /**
  * Frappe standart upload_file endpoint'ine bir dosya yükler.
  * /api/method/upload_file (POST, multipart)
  */
-export async function uploadReviewImage(
-  file: File
-): Promise<{ file_url: string; name: string }> {
+export async function uploadReviewImage(file: File): Promise<{ file_url: string; name: string }> {
   const { fetchCsrfToken } = await import("../utils/api");
   const csrf = (await fetchCsrfToken()) ?? "None";
   const form = new FormData();
   form.append("file", file);
   form.append("is_private", "0");
   form.append("folder", "Home/Attachments");
-  const base = (import.meta as unknown as { env?: { VITE_API_URL?: string } }).env
-    ?.VITE_API_URL || "/api";
+  const base =
+    (import.meta as unknown as { env?: { VITE_API_URL?: string } }).env?.VITE_API_URL || "/api";
   const res = await fetch(`${base}/method/upload_file`, {
     method: "POST",
     credentials: "include",
@@ -469,12 +461,9 @@ export async function uploadReviewImage(
 }
 
 // Internal GET/POST helpers using fetch directly with credentials + CSRF
-async function callMethodGet<T>(
-  method: string,
-  params: URLSearchParams
-): Promise<T> {
-  const base = (import.meta as unknown as { env?: { VITE_API_URL?: string } }).env
-    ?.VITE_API_URL || "/api";
+async function callMethodGet<T>(method: string, params: URLSearchParams): Promise<T> {
+  const base =
+    (import.meta as unknown as { env?: { VITE_API_URL?: string } }).env?.VITE_API_URL || "/api";
   const res = await fetch(`${base}/method/${method}?${params.toString()}`, {
     credentials: "include",
     headers: { "X-Requested-With": "XMLHttpRequest" },
@@ -487,14 +476,11 @@ async function callMethodGet<T>(
   return data.message;
 }
 
-async function callMethodPost<T>(
-  method: string,
-  params: Record<string, unknown>
-): Promise<T> {
+async function callMethodPost<T>(method: string, params: Record<string, unknown>): Promise<T> {
   const { fetchCsrfToken } = await import("../utils/api");
   const csrf = (await fetchCsrfToken()) ?? "None";
-  const base = (import.meta as unknown as { env?: { VITE_API_URL?: string } }).env
-    ?.VITE_API_URL || "/api";
+  const base =
+    (import.meta as unknown as { env?: { VITE_API_URL?: string } }).env?.VITE_API_URL || "/api";
   const form = new URLSearchParams();
   for (const [k, v] of Object.entries(params)) {
     if (v == null) continue;

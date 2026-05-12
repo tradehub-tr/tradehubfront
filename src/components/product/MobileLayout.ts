@@ -583,14 +583,10 @@ function initReviewsRow(): void {
   // erişebilmeli — yıldız satırı pasif görsel değil, asıl CTA aşağıdaki buton.
   const openReviews = () => showReviewsModal();
   document.getElementById("pdm-reviews-row")?.addEventListener("click", openReviews);
-  document
-    .getElementById("pdm-view-reviews-btn")
-    ?.addEventListener("click", openReviews);
+  document.getElementById("pdm-view-reviews-btn")?.addEventListener("click", openReviews);
 
   // Soru & Cevap linki — full-screen Q&A modal'ı aç
-  document
-    .getElementById("pdm-view-qa-btn")
-    ?.addEventListener("click", () => showQAModal());
+  document.getElementById("pdm-view-qa-btn")?.addEventListener("click", () => showQAModal());
 }
 
 /* ── Sticky section tabs — scroll-to + active tracking ── */

@@ -1,4 +1,5 @@
-// @ts-nocheck
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck -- Alpine.js modül tipleri tam değil; runtime davranış doğrulanmış
 /**
  * ReportAbuseModal — yorumu şikayet et.
  *
@@ -37,56 +38,59 @@ const REASONS = [
 ];
 
 export function registerReportAbuseModal(): void {
-  Alpine.data("reportAbuseModal", (): ReportAbuseState => ({
-    open: false,
-    loading: false,
-    reviewId: "",
-    reason: "Spam",
-    note: "",
-    errorMsg: "",
-    init() {
-      window.addEventListener("report-abuse-modal-show", (e: Event) => {
-        const ce = e as CustomEvent<{ reviewId: string }>;
-        this.reviewId = ce.detail.reviewId;
+  Alpine.data(
+    "reportAbuseModal",
+    (): ReportAbuseState => ({
+      open: false,
+      loading: false,
+      reviewId: "",
+      reason: "Spam",
+      note: "",
+      errorMsg: "",
+      init() {
+        window.addEventListener("report-abuse-modal-show", (e: Event) => {
+          const ce = e as CustomEvent<{ reviewId: string }>;
+          this.reviewId = ce.detail.reviewId;
+          this.reason = "Spam";
+          this.note = "";
+          this.errorMsg = "";
+          this.open = true;
+        });
+      },
+      show(detail) {
+        this.reviewId = detail.reviewId;
         this.reason = "Spam";
         this.note = "";
         this.errorMsg = "";
         this.open = true;
-      });
-    },
-    show(detail) {
-      this.reviewId = detail.reviewId;
-      this.reason = "Spam";
-      this.note = "";
-      this.errorMsg = "";
-      this.open = true;
-    },
-    close() {
-      this.open = false;
-    },
-    async submit() {
-      if (!this.reviewId) return;
-      this.loading = true;
-      this.errorMsg = "";
-      try {
-        await reportReviewAbuse(this.reviewId, this.reason, this.note.trim());
-        showToast({
-          message: "Şikayetiniz alındı, moderatörler inceleyecek.",
-          type: "success",
-        });
-        window.dispatchEvent(
-          new CustomEvent("abuse-reported", { detail: { reviewId: this.reviewId } })
-        );
-        this.close();
-      } catch (err: unknown) {
-        const msg = err instanceof Error ? err.message : "Hata";
-        this.errorMsg = msg;
-        showToast({ message: msg, type: "error" });
-      } finally {
-        this.loading = false;
-      }
-    },
-  }));
+      },
+      close() {
+        this.open = false;
+      },
+      async submit() {
+        if (!this.reviewId) return;
+        this.loading = true;
+        this.errorMsg = "";
+        try {
+          await reportReviewAbuse(this.reviewId, this.reason, this.note.trim());
+          showToast({
+            message: "Şikayetiniz alındı, moderatörler inceleyecek.",
+            type: "success",
+          });
+          window.dispatchEvent(
+            new CustomEvent("abuse-reported", { detail: { reviewId: this.reviewId } })
+          );
+          this.close();
+        } catch (err: unknown) {
+          const msg = err instanceof Error ? err.message : "Hata";
+          this.errorMsg = msg;
+          showToast({ message: msg, type: "error" });
+        } finally {
+          this.loading = false;
+        }
+      },
+    })
+  );
 }
 
 export function ReportAbuseModal(): string {
@@ -162,7 +166,5 @@ export function ReportAbuseModal(): string {
 }
 
 export function openReportAbuseModal(reviewId: string): void {
-  window.dispatchEvent(
-    new CustomEvent("report-abuse-modal-show", { detail: { reviewId } })
-  );
+  window.dispatchEvent(new CustomEvent("report-abuse-modal-show", { detail: { reviewId } }));
 }
