@@ -21,7 +21,7 @@ export function ChatHeader(opts: ChatHeaderOptions = {}): string {
     <div class="flex items-center gap-2.5 border-b border-[var(--color-border-light,#f0f0f0)] bg-white px-4 py-3 flex-shrink-0 relative">
       ${
         showBack
-          ? `<button type="button" @click="$store.chatPopup.setActiveTab('inbox')" class="appearance-none border-0 bg-transparent p-1 cursor-pointer text-[var(--color-text-secondary,#525252)] hover:text-[var(--color-text-primary,#0a0a0a)] md:hidden focus:outline-none" aria-label="Geri">${backIcon}</button>`
+          ? `<button type="button" @click="$store.chatPopup.setActiveTab('inbox')" class="appearance-none border-0 bg-transparent p-1 cursor-pointer text-[var(--color-text-secondary,#525252)] hover:text-[var(--color-text-primary,#0a0a0a)] md:hidden focus:outline-none" aria-label="${t("chat.aria.back")}">${backIcon}</button>`
           : ""
       }
 
@@ -51,9 +51,9 @@ export function ChatHeader(opts: ChatHeaderOptions = {}): string {
                 data-submenu-trigger
                 @click.stop="$store.chatPopup.toggleSubMenu('context')"
                 class="appearance-none border-0 bg-transparent p-1.5 rounded cursor-pointer hover:text-[var(--color-text-primary,#0a0a0a)] hover:bg-[var(--color-surface-raised,#f5f5f5)] focus:outline-none"
-                aria-label="Daha fazla">${moreIcon}</button>
-        ${showExpand ? `<button type="button" @click="$store.chatPopup.toggleExpanded()" class="appearance-none border-0 bg-transparent p-1.5 rounded cursor-pointer hover:text-[var(--color-text-primary,#0a0a0a)] hover:bg-[var(--color-surface-raised,#f5f5f5)] focus:outline-none" aria-label="Büyüt">${expandIcon}</button>` : ""}
-        ${showClose ? `<button type="button" @click="$store.chatPopup.close()" class="appearance-none border-0 bg-transparent p-1.5 rounded cursor-pointer hover:text-[var(--color-text-primary,#0a0a0a)] hover:bg-[var(--color-surface-raised,#f5f5f5)] focus:outline-none" aria-label="Kapat">${closeIcon}</button>` : ""}
+                aria-label="${t("chat.aria.more")}">${moreIcon}</button>
+        ${showExpand ? `<button type="button" @click="$store.chatPopup.toggleExpanded()" class="appearance-none border-0 bg-transparent p-1.5 rounded cursor-pointer hover:text-[var(--color-text-primary,#0a0a0a)] hover:bg-[var(--color-surface-raised,#f5f5f5)] focus:outline-none" aria-label="${t("chat.aria.expand")}">${expandIcon}</button>` : ""}
+        ${showClose ? `<button type="button" @click="$store.chatPopup.close()" class="appearance-none border-0 bg-transparent p-1.5 rounded cursor-pointer hover:text-[var(--color-text-primary,#0a0a0a)] hover:bg-[var(--color-surface-raised,#f5f5f5)] focus:outline-none" aria-label="${t("chat.aria.close")}">${closeIcon}</button>` : ""}
       </div>
     </div>
   `;

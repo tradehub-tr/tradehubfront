@@ -22,7 +22,7 @@ export function PinnedProduct(): string {
         <button type="button"
                 @click="$store.chatPopup.removePinnedProduct()"
                 class="appearance-none border-0 bg-transparent p-1 cursor-pointer text-[var(--color-text-tertiary,#a3a3a3)] hover:text-[var(--color-text-primary,#0a0a0a)] focus:outline-none"
-                aria-label="Kaldır">
+                aria-label="${t("chat.aria.remove")}">
           ${closeIcon}
         </button>
       </div>
