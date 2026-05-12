@@ -60,9 +60,10 @@ export function InboxPanel(): string {
                   lookup object below (i18n keys already include brackets).
                   See module-level comment above for rationale.
                 -->
+                <!-- TODO(future): show pin icon when conv.pinned is true -->
                 <template x-for="tag in conv.tags" :key="tag">
                   <span class="font-semibold text-[var(--color-orange-500,#ea580c)]"
-                        x-text="({ unread: '${tagUnread}', order: '${tagOrder}', quote: '${tagQuote}', rfq: '${tagRfq}', pinned: '' })[tag] || ''"></span>
+                        x-text="({ unread: '${tagUnread}', order: '${tagOrder}', quote: '${tagQuote}', rfq: '${tagRfq}' })[tag] || ''"></span>
                 </template>
                 <span class="truncate text-[var(--color-text-secondary,#525252)]" x-text="conv.lastMessage"></span>
                 <template x-if="conv.unread > 0">
