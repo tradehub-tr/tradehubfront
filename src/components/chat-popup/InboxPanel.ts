@@ -10,6 +10,10 @@ import { t } from "../../i18n";
  * compile time and look them up via an inline object literal in x-text. The
  * tr/en values already include bracket wrapping (e.g. "[Okunmamış]"), so no
  * additional bracket concatenation is required.
+ *
+ * Note: tag labels are resolved at TS template-string compile time via t() — runtime
+ * Alpine i18next.changeLanguage() will NOT re-render the popup. A full unmount/remount
+ * is needed for language switching. (Consistent with the rest of the chat module.)
  */
 export function InboxPanel(): string {
   const searchIcon = getLucideIcon("search", "w-4 h-4");
