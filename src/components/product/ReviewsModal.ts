@@ -49,7 +49,7 @@ export function ReviewsModal(): string {
       >
         <!-- Fixed Header -->
         <div class="rv-modal-header flex justify-between items-center px-6 py-5 shrink-0 max-sm:!p-4">
-          <span class="rv-modal-title">${t("product.storeReviewsTitle", { count: String(p.storeReviewCount) })}</span>
+          <span class="rv-modal-title" id="rv-modal-title">${t("product.storeReviewsTitle", { count: String(p.storeReviewCount) })}</span>
           <button type="button" @click="close()" class="rv-modal-close" id="rv-modal-close">
             <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
@@ -62,7 +62,7 @@ export function ReviewsModal(): string {
           <!-- Filter Row -->
           <div class="rv-filter-row flex items-center gap-2 flex-wrap mb-4">
             <button type="button" class="rv-filter-pill" :class="{ active: filterType === 'all' }" @click="setFilter('all')">${t("product.allFilter")}</button>
-            <button type="button" class="rv-filter-pill" :class="{ active: filterType === 'photo' }" @click="setFilter('photo')">${t("product.withPhotos", { count: String(photoReviewCount) })}</button>
+            <button type="button" class="rv-filter-pill" id="rv-modal-photo-filter" :class="{ active: filterType === 'photo' }" @click="setFilter('photo')">${t("product.withPhotos", { count: String(photoReviewCount) })}</button>
 
             <!-- Rating Dropdown -->
             <div class="rv-rating-dropdown" id="rv-modal-rating-dropdown" :class="{ open: ratingOpen }" @click.outside="ratingOpen = false">

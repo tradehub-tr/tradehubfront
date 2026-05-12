@@ -202,7 +202,7 @@ async function renderPage() {
         </div>
 
         <!-- ═══ STORE NAV BAR (sayfa bazli gecis — mobilde toggle) ═══ -->
-        <div class="sticky top-0 z-30" style="background-color: #1f1f1f;" :style="layout.theme?.navBgColor ? 'background-color:' + layout.theme.navBgColor : ''"
+        <div class="sticky top-0 z-(--z-sticky)" style="background-color: #1f1f1f;" :style="layout.theme?.navBgColor ? 'background-color:' + layout.theme.navBgColor : ''"
              x-data="{ mobileNav: false, mobileSearch: false }">
           <div class="max-w-[1200px] mx-auto px-4 lg:px-8 flex items-center justify-between h-[42px]">
 

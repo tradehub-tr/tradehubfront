@@ -150,6 +150,394 @@ export async function getListingDetail(listingId: string): Promise<ProductDetail
   return mapListingDetail(response.message.data);
 }
 
+// ───────────────────────────────────────────────────────────────────────────
+// Faz 6 — Storefront Review API (backend tradehub_core.api.storefront_api)
+// Mock data yerine gerçek review verisi çekme.
+// ───────────────────────────────────────────────────────────────────────────
+interface BackendStorefrontReview {
+  name: string | number;
+  reviewer_display_name?: string;
+  rating: number;
+  title?: string | null;
+  body?: string;
+  status?: string;
+  is_own_pending?: boolean;
+  is_mine?: boolean;
+  can_edit?: boolean;
+  is_verified_purchase?: number | boolean;
+  is_kyb_verified?: number | boolean;
+  published_at?: string | null;
+  submitted_at?: string | null;
+  edited?: boolean;
+  helpful_count?: number;
+  not_helpful_count?: number;
+  video_url?: string | null;
+  images?: Array<{ image: string; caption?: string }>;
+  aspects?: {
+    product_quality?: number | null;
+    service?: number | null;
+    shipping?: number | null;
+    spec_match?: number | null;
+    documentation?: number | null;
+  };
+  reply?: { body: string; at?: string; within_hours?: number } | null;
+  reviewer?: { tier?: string; score?: number };
+}
+
+interface BackendStorefrontPage {
+  summary: {
+    average_rating: number;
+    weighted_rating?: number;
+    review_count: number;
+    rating_distribution?: Record<string, number>;
+    verified_purchase_count?: number;
+    kyb_verified_count?: number;
+    aspect_averages?: Record<string, number>;
+    trust_signals?: {
+      verified_purchase_pct?: number;
+      kyb_verified_pct?: number;
+      trusted_reviewer_pct?: number;
+      avg_review_age_days?: number;
+    };
+  };
+  reviews: BackendStorefrontReview[];
+  total: number;
+  page: number;
+  page_size: number;
+  qa_total: number;
+}
+
+function backendReviewToProductReview(
+  r: BackendStorefrontReview
+): import("../types/product").ProductReview {
+  const tags: string[] = [];
+  // Tier'i tags'tan kaldırdık — artık özel bir rozet (reviewerTier) ile
+  // renderReviewCard'da dedicated UI veriyoruz.
+  return {
+    id: String(r.name),
+    author: r.reviewer_display_name || "Anonim",
+    country: "TR",
+    rating: Number(r.rating || 0),
+    date: (r.published_at || r.submitted_at || "").slice(0, 10),
+    comment: r.body || r.title || "",
+    images: Array.isArray(r.images) ? r.images.map((x) => x.image) : [],
+    helpful: Number(r.helpful_count || 0),
+    tags,
+    verified: Boolean(r.is_verified_purchase),
+    supplierReply: r.reply?.body || undefined,
+    isOwnPending: Boolean(r.is_own_pending),
+    isMine: Boolean(r.is_mine),
+    canEdit: Boolean(r.can_edit),
+    status: r.status,
+    reviewerTier: r.reviewer?.tier && r.reviewer.tier !== "Newcomer"
+      ? r.reviewer.tier
+      : undefined,
+  };
+}
+
+/**
+ * Faz 6 — Storefront için bir ürünün tüm review verisini çek.
+ * Mevcut ProductReview[] formatına adapt ederek döner.
+ */
+export async function getProductReviews(
+  listingId: string,
+  opts: {
+    page?: number;
+    pageSize?: number;
+    sortBy?: "recent" | "high" | "low" | "helpful";
+    onlyVerified?: boolean;
+  } = {}
+): Promise<{
+  reviews: import("../types/product").ProductReview[];
+  summary: BackendStorefrontPage["summary"];
+  total: number;
+  qaTotal: number;
+}> {
+  const params = new URLSearchParams({
+    listing: listingId,
+    page: String(opts.page ?? 1),
+    page_size: String(opts.pageSize ?? 20),
+    sort_by: opts.sortBy ?? "recent",
+    only_verified: opts.onlyVerified ? "1" : "0",
+  });
+  // NOT: FrappeResponse<T> internal list-endpoint formatına göre `{ data, total }`
+  // sarmalar. Storefront API direkt obje döner; bu yüzden raw `{ message: T }`
+  // tipini elle veriyoruz.
+  const response = await api<{ message: BackendStorefrontPage }>(
+    `/method/tradehub_core.api.storefront_api.get_storefront_review_page?${params.toString()}`
+  );
+  const data = response.message;
+  return {
+    reviews: (data.reviews || []).map(backendReviewToProductReview),
+    summary: data.summary,
+    total: data.total || 0,
+    qaTotal: data.qa_total || 0,
+  };
+}
+
+/**
+ * Faz 6 — Listing-bazlı yorum yapma uygunluğu.
+ * Returns: can_review, order_items[], reason, user_logged_in
+ */
+export interface ReviewEligibility {
+  can_review: boolean;
+  order_items: Array<{
+    name: string;
+    order: string;
+    order_date: string | null;
+    quantity: number;
+  }>;
+  already_reviewed_count: number;
+  reason: string | null;
+  user_logged_in: boolean;
+}
+
+export async function getReviewEligibility(
+  listingId: string
+): Promise<ReviewEligibility> {
+  const params = new URLSearchParams({ listing: listingId });
+  const response = await callMethodGet<ReviewEligibility>(
+    "tradehub_core.api.storefront_api.get_review_eligibility",
+    params
+  );
+  return response;
+}
+
+/**
+ * Submit a new product review.
+ */
+export interface SubmitReviewPayload {
+  order_item: string;
+  rating: number;
+  body: string;
+  title?: string;
+  images?: Array<{ image: string; caption?: string }>;
+  video_url?: string;
+  aspects?: {
+    product_quality?: number;
+    service?: number;
+    shipping?: number;
+    spec_match?: number;
+    documentation?: number;
+  };
+}
+
+export async function submitReview(
+  payload: SubmitReviewPayload
+): Promise<{ success: boolean; name: string; status: string }> {
+  return callMethodPost(
+    "tradehub_core.api.storefront_api.submit_review",
+    payload as unknown as Record<string, unknown>
+  );
+}
+
+/**
+ * Kullanıcı kendi yorumunu 24 saat içinde düzenler (max 1 kez).
+ */
+export async function updateOwnReview(payload: {
+  name: string;
+  rating?: number;
+  title?: string;
+  body?: string;
+}): Promise<{ success: boolean; edit_count: number; status: string }> {
+  return callMethodPost(
+    "tradehub_core.api.storefront_api.update_review",
+    payload as unknown as Record<string, unknown>
+  );
+}
+
+/**
+ * Helpful / not helpful oy.
+ */
+export async function voteReviewHelpful(
+  reviewName: string,
+  vote: "helpful" | "not_helpful"
+): Promise<{ success: boolean; helpful_count: number; not_helpful_count: number }> {
+  return callMethodPost(
+    "tradehub_core.api.storefront_api.vote_helpful",
+    { review: reviewName, vote }
+  );
+}
+
+/**
+ * Q&A soru veya cevabına faydalı oy.
+ */
+export async function voteQAHelpful(
+  targetType: "question" | "answer",
+  targetId: string | number
+): Promise<{ success: boolean; changed: boolean }> {
+  return callMethodPost(
+    "tradehub_core.api.storefront_api.vote_qa_helpful",
+    { target_type: targetType, target_id: String(targetId) }
+  );
+}
+
+/**
+ * Bir yorumu şikayet et.
+ */
+export async function reportReviewAbuse(
+  reviewName: string,
+  reason: string,
+  note?: string
+): Promise<{ success: boolean }> {
+  return callMethodPost(
+    "tradehub_core.api.storefront_api.report_abuse",
+    { review: reviewName, reason, note: note || "" }
+  );
+}
+
+/**
+ * Q&A — soru sor.
+ */
+export async function submitProductQuestion(
+  listingId: string,
+  question: string
+): Promise<{ success: boolean; name: string }> {
+  return callMethodPost(
+    "tradehub_core.api.storefront_api.submit_question",
+    { listing: listingId, question }
+  );
+}
+
+/**
+ * Q&A — listele.
+ */
+export interface ProductQuestion {
+  name: string;
+  asker_display_name: string;
+  is_kyb_verified: number | boolean;
+  question: string;
+  answer_count: number;
+  helpful_count: number;
+  submitted_at: string;
+  status: string;
+  /** Login user'ın kendi Pending sorusu — sadece sahibine görünür */
+  is_own_pending?: boolean;
+  answers: Array<{
+    name: string;
+    responder_type: string;
+    is_seller_answer: boolean;
+    helpful_count: number;
+    submitted_at: string;
+    answer: string;
+  }>;
+}
+
+export async function getProductQA(
+  listingId: string,
+  page = 1
+): Promise<{ questions: ProductQuestion[]; total: number }> {
+  const params = new URLSearchParams({
+    listing: listingId,
+    page: String(page),
+  });
+  return callMethodGet(
+    "tradehub_core.api.storefront_api.get_qa_page",
+    params
+  );
+}
+
+/**
+ * Frappe standart upload_file endpoint'ine bir dosya yükler.
+ * /api/method/upload_file (POST, multipart)
+ */
+export async function uploadReviewImage(
+  file: File
+): Promise<{ file_url: string; name: string }> {
+  const { fetchCsrfToken } = await import("../utils/api");
+  const csrf = (await fetchCsrfToken()) ?? "None";
+  const form = new FormData();
+  form.append("file", file);
+  form.append("is_private", "0");
+  form.append("folder", "Home/Attachments");
+  const base = (import.meta as unknown as { env?: { VITE_API_URL?: string } }).env
+    ?.VITE_API_URL || "/api";
+  const res = await fetch(`${base}/method/upload_file`, {
+    method: "POST",
+    credentials: "include",
+    headers: { "X-Frappe-CSRF-Token": csrf },
+    body: form,
+  });
+  if (!res.ok) {
+    const txt = await res.text();
+    throw new Error(`Dosya yüklenemedi: ${txt || res.statusText}`);
+  }
+  const data = (await res.json()) as {
+    message: { file_url: string; name: string };
+  };
+  return data.message;
+}
+
+// Internal GET/POST helpers using fetch directly with credentials + CSRF
+async function callMethodGet<T>(
+  method: string,
+  params: URLSearchParams
+): Promise<T> {
+  const base = (import.meta as unknown as { env?: { VITE_API_URL?: string } }).env
+    ?.VITE_API_URL || "/api";
+  const res = await fetch(`${base}/method/${method}?${params.toString()}`, {
+    credentials: "include",
+    headers: { "X-Requested-With": "XMLHttpRequest" },
+  });
+  if (!res.ok) {
+    const txt = await res.text();
+    throw new Error(extractError(txt) || `HTTP ${res.status}`);
+  }
+  const data = (await res.json()) as { message: T };
+  return data.message;
+}
+
+async function callMethodPost<T>(
+  method: string,
+  params: Record<string, unknown>
+): Promise<T> {
+  const { fetchCsrfToken } = await import("../utils/api");
+  const csrf = (await fetchCsrfToken()) ?? "None";
+  const base = (import.meta as unknown as { env?: { VITE_API_URL?: string } }).env
+    ?.VITE_API_URL || "/api";
+  const form = new URLSearchParams();
+  for (const [k, v] of Object.entries(params)) {
+    if (v == null) continue;
+    form.set(k, typeof v === "object" ? JSON.stringify(v) : String(v));
+  }
+  const res = await fetch(`${base}/method/${method}`, {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      "X-Frappe-CSRF-Token": csrf,
+      "X-Requested-With": "XMLHttpRequest",
+    },
+    body: form.toString(),
+  });
+  if (!res.ok) {
+    const txt = await res.text();
+    throw new Error(extractError(txt) || `HTTP ${res.status}`);
+  }
+  const data = (await res.json()) as { message: T };
+  return data.message;
+}
+
+function extractError(raw: string): string {
+  try {
+    const body = JSON.parse(raw);
+    if (body._server_messages) {
+      const msgs = JSON.parse(body._server_messages);
+      const first = typeof msgs[0] === "string" ? JSON.parse(msgs[0]) : msgs[0];
+      if (first?.message) return first.message;
+    }
+    if (body.message) return String(body.message);
+    if (body.exc) {
+      // Frappe exception traceback; extract last line
+      const lines = String(body.exc).trim().split("\n").filter(Boolean);
+      return lines[lines.length - 1] || "Sunucu hatası";
+    }
+  } catch {
+    /* not JSON */
+  }
+  return "";
+}
+
 /**
  * Get related listings for a product
  */
