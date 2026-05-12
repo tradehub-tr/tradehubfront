@@ -141,7 +141,7 @@ const chatStore: ChatStore = {
   },
 
   appendDraft(text) {
-    this.draft = (this.draft || "") + text;
+    this.draft = this.draft + text;
   },
 
   setDraft(text) {
