@@ -27,7 +27,7 @@ export function ChatPopup(): string {
 
         <div class="relative flex flex-1 min-h-0 flex-col md:flex-row">
 
-          <section class="flex flex-1 min-w-0 flex-col bg-[var(--color-surface-muted,#fafafa)]"
+          <section class="relative flex flex-1 min-w-0 flex-col bg-[var(--color-surface-muted,#fafafa)]"
                    :class="$store.chatPopup.activeTab === 'inbox' ? 'hidden md:flex' : 'flex'">
             ${ChatHeader({ showBackButton: true })}
             ${ContextMenu()}
