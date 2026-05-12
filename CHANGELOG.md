@@ -1,3 +1,12 @@
+## [v1.1.8-beta.8] - 2026-05-12 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Duzeltildi
+- fix(changelog): beta.6 ve beta.7 release kayıtları manuel dolduruldu (@ahmeetseker)
+- fix(release-workflows): commit mesajındaki boşlukları temizlendi (@ahmeetseker)
+
+---
 ## [v1.1.8-beta.7] - 2026-05-12 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
