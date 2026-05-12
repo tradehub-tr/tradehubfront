@@ -18,7 +18,7 @@ import { saveToBrowsingHistory } from '../services/browsingHistoryService'
 
 // Floating components
 import { FloatingPanel } from '../components/floating'
-import { ChatPopup } from '../components/chat-popup'
+import { ChatPopup, initChatTriggers } from '../components/chat-popup'
 
 // Alpine.js
 import { startAlpine } from '../alpine'
@@ -290,6 +290,8 @@ async function renderProductPage() {
       });
     });
   }
+
+  initChatTriggers();
 
   // Start Alpine LAST
   startAlpine();

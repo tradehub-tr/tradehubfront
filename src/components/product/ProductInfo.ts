@@ -577,29 +577,4 @@ export function initProductInfo(): void {
     }
   }
 
-  // Delegated click handler for the "Sohbet et" button — opens the chat popup
-  // with the current product pinned. Idempotent: only one listener attached.
-  if (!(document as Document & { __pdChatHandlerAttached?: boolean }).__pdChatHandlerAttached) {
-    document.body.addEventListener("click", (ev) => {
-      const target = ev.target as HTMLElement | null;
-      const btn = target?.closest<HTMLElement>("[data-chat-trigger]");
-      if (!btn) return;
-      const ds = btn.dataset;
-      window.dispatchEvent(
-        new CustomEvent("chat-popup:open", {
-          detail: {
-            conversationId: ds.sellerId || undefined,
-            pinnedProduct: {
-              id: ds.productId ?? "",
-              title: ds.productTitle ?? "",
-              price: ds.productPrice ?? "",
-              minOrder: ds.productMinOrder ?? "1",
-              thumbnail: ds.productThumb ?? "",
-            },
-          },
-        })
-      );
-    });
-    (document as Document & { __pdChatHandlerAttached?: boolean }).__pdChatHandlerAttached = true;
-  }
 }
