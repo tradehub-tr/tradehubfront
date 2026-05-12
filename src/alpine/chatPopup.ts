@@ -1,5 +1,5 @@
 import Alpine from "alpinejs";
-import type { Conversation, Message, PinnedProduct, SubMenuKey } from "../types/chat";
+import type { ChatTab, Conversation, Message, PinnedProduct, SubMenuKey } from "../types/chat";
 import {
   listConversations,
   getMessages,
@@ -11,12 +11,10 @@ import {
   pinConversation,
 } from "../services/chatService";
 
-type Tab = "chat" | "inbox";
-
 interface ChatStore {
   isOpen: boolean;
   isExpanded: boolean;
-  activeTab: Tab;
+  activeTab: ChatTab;
   inboxVisible: boolean;
   conversations: Conversation[];
   activeConversationId: string | null;
@@ -33,7 +31,7 @@ interface ChatStore {
   close(): void;
   toggleExpanded(): void;
   toggleInbox(): void;
-  setActiveTab(tab: Tab): void;
+  setActiveTab(tab: ChatTab): void;
   toggleSubMenu(name: SubMenuKey): void;
   closeSubMenu(): void;
   setActiveConversation(id: string): Promise<void>;

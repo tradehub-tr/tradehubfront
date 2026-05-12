@@ -86,3 +86,5 @@ export interface QuickAction {
   label: string;
   handler: string;
 }
+
+export type ChatTab = "chat" | "inbox";
