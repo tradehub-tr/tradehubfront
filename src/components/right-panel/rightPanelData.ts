@@ -34,6 +34,8 @@ export function getFavoritesConfig(): RightPanelSectionConfig {
   return {
     id: "favorites",
     title: t("dashboard.favorites"),
+    actionText: t("dashboard.viewAllHistory"),
+    actionHref: "/pages/dashboard/favorites.html#favorites",
   };
 }
 

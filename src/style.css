@@ -4840,37 +4840,10 @@ button#topbar-compact-search-submit.th-btn-gradient:active:not(:disabled) {
   transition: all 0.06s ease;
 }
 
-/* ============================================================
-   GLOBAL BUTTON PRESS EFFECT — system-wide baseline
-   Tüm interaktif öğelere içe gömülü "inner shadow" hover ve
-   daha derin active press efekti verir. Yukarıdaki .th-btn,
-   .th-header-icon, search-submit-button, filter apply ve
-   .bg-(--btn-bg) gibi spesifik kurallar bu baseline'ı override
-   eder; bu kural yalnızca özel hover/active stili olmayan
-   butonlara baseline davranış sağlar.
-   - Excludes: links (<a>) — yalnızca <button>, role=button,
-     input[type=submit/button] hedef alınır.
-   - Excludes: tab benzeri butonlar — sınıf adında "-tab",
-     "__tab" veya "tab-" geçen tüm butonlar (ör. .pdm-section-tab,
-     .orders__tab, .product-tab-btn) ve [role="tab"] olanlar press
-     efektinden muaftır. Tab'lar tipik olarak transparan zeminli
-     olduğundan inner shadow görsel olarak rahatsız ediyor.
-   - Excludes: .th-btn-link ve .th-btn-ghost — bunlar tasarımı
-     gereği salt-metin / transparan, press efektine uygun değil.
-   - Excludes (toplu patternler): [class*="-dropdown-trigger"],
-     [class*="-dropdown-item"], [class*="-collapsible"],
-     [class*="store-nav__item"], [class*="-nav-link"],
-     [class*="__nav-link"], [class*="-toggle__"] — dropdown,
-     accordion, store nav, segmented control gibi tab benzeri
-     bileşenleri otomatik kapsar.
-   - Excludes: [class*="hover:underline"] — Tailwind utility ile
-     yazılmış salt-metin / link tarzı butonların tamamı (cancel,
-     "Daha fazla", "Tekrar dene", inline aksiyon linkleri vb.).
-   - Salt-metin / link tarzı butonların yukarıdaki patternlerden
-     hiçbirine uymadığı durumda (örn. menü içi sort item,
-     hover:underline taşımayan inline buton) .th-no-press class'ı
-     eklenerek opt-out yapılır.
-   ============================================================ */
+/* Global button transition baseline — yumuşak bg/color/border geçişi.
+   Hover/active görsel efekt vermez; her button class'ı kendi
+   hover state'ini (örn. .th-btn-outline:hover, .th-btn-dark:hover)
+   tanımlar. */
 button:not(:disabled),
 input[type="submit"]:not(:disabled),
 input[type="button"]:not(:disabled),
@@ -4878,8 +4851,6 @@ input[type="reset"]:not(:disabled),
 [role="button"]:not([aria-disabled="true"]) {
   transition:
     background-color 0.18s ease,
-    box-shadow 0.18s ease,
-    transform 0.12s ease,
     color 0.18s ease,
     border-color 0.18s ease;
 }

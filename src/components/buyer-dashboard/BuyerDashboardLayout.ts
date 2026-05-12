@@ -12,6 +12,7 @@ import { FavoritesSection } from "../right-panel/FavoritesSection";
 import { BrowsingHistorySection } from "../right-panel/BrowsingHistorySection";
 // import { PromotionSection, initPromotionSection } from '../right-panel/PromotionSection';
 import { getBrowsingHistory } from "../../services/browsingHistoryService";
+import { getItems as getFavoriteItems } from "../../stores/favorites";
 
 export interface BuyerDashboardLayoutProps {
   data: BuyerDashboardData;
@@ -41,7 +42,7 @@ export function BuyerDashboardLayout({
           <!-- Right Panel -->
           <div class="w-[380px] max-xl:w-[300px] max-lg:w-full flex-shrink-0 flex flex-col gap-[clamp(0.5rem,0.4rem+0.4vw,0.875rem)]">
             ${SupportTicketsCard()}
-            ${FavoritesSection()}
+            ${FavoritesSection(getFavoriteItems())}
             ${BrowsingHistorySection(
               getBrowsingHistory().map((h) => ({
                 id: h.id,

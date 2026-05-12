@@ -239,6 +239,21 @@ function renderProductListingCard(card: ProductListingCard): string {
         ${t("products.addToCart")}
       </button>`;
 
+  const escapeAttr = (s: string): string =>
+    s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+  const moqDigits = (card.moq?.match(/\d+/)?.[0] ?? "1");
+  const chatBtnHtml = `<button type="button"
+              data-chat-trigger
+              data-product-id="${escapeAttr(card.id)}"
+              data-product-title="${escapeAttr(card.name)}"
+              data-product-price="${escapeAttr(card.price)}"
+              data-product-thumb="${escapeAttr(card.imageSrc ?? "")}"
+              data-product-min-order="${escapeAttr(moqDigits)}"
+              class="th-btn-outline searchx-product-e-chatbutton flex-1 flex items-center justify-center h-9 text-xs sm:text-sm font-medium cursor-pointer whitespace-nowrap">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        ${t("chat.chatWithSeller")}
+      </button>`;
+
   return `
     <div class="fy26-product-card-wrapper flex flex-col justify-between w-full rounded-md overflow-hidden bg-white pb-3 border-0">
       <!-- Image area (full-bleed, kart padding'inin dışında) -->
@@ -278,6 +293,7 @@ function renderProductListingCard(card: ProductListingCard): string {
       <!-- Action buttons -->
       <div class="action-area-layout flex gap-2 px-3 mt-3 items-center">
         ${addToCartBtnHtml}
+        ${chatBtnHtml}
       </div>
     </div>
   `;
