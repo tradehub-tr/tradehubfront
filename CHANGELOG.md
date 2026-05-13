@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ## [v1.1.8-beta.12] - 2026-05-13 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
@@ -12,6 +13,8 @@ Bu surum beta.istoc.com'da test asamasindadir.
   - css-optimization-reports/refactor-progress.md fazlara göre güncellendi.
 
 ---
+=======
+>>>>>>> 50e9053 (chore: v1.1.8-beta.10 beta changelog guncellendi)
 ## [v1.1.8-beta.10] - 2026-05-13 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
