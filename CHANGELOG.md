@@ -62,8 +62,9 @@ Bu surum beta.istoc.com'da test asamasindadir.
 Bu surum beta.istoc.com'da test asamasindadir.
 
 ### Eklendi
-- feat(reviews): review/Q&A storefront entegrasyonu + 4 kritik fix (@boraydeger32)
-- feat(reviews): Sprint 1 — review/Q&A storefront entegrasyonu + 4 fix (@boraydeger32)
+- feat(reviews): 2 değişiklik (@boraydeger32)
+  - review/Q&A storefront entegrasyonu + 4 kritik fix
+  - Sprint 1 — review/Q&A storefront entegrasyonu + 4 fix
 
 ---
 ## [v1.1.8-beta.6] - 2026-05-12 BETA
@@ -80,32 +81,36 @@ Bu surum beta.istoc.com'da test asamasindadir.
 
 ### Eklendi
 - feat(alpine): add chatPopup global store + chatPopupRoot data wrapper (@ahmeetseker)
-- feat(chat): AttachmentToolbar with 7 sub-menu triggers (@ahmeetseker)
-- feat(chat): BusinessCardForm sub-popup (@ahmeetseker)
-- feat(chat): CallMenu sub-popup with video/voice/schedule (@ahmeetseker)
-- feat(chat): ChatBubble — text/image/file/system variants (@ahmeetseker)
-- feat(chat): ChatComposer with pinned product, toolbar, input and orange Gönder (@ahmeetseker)
-- feat(chat): ChatHeader with optional back/expand/close buttons (@ahmeetseker)
-- feat(chat): ChatMessages list with date labels and error state (@ahmeetseker)
-- feat(chat): ContextMenu sub-popup with pin/block/delete/mute (@ahmeetseker)
-- feat(chat): EmojiPicker sub-popup with 70 popular emojis (@ahmeetseker)
-- feat(chat): OrderCard embedded order summary (@ahmeetseker)
-- feat(chat): PhotoSourceMenu sub-popup (@ahmeetseker)
-- feat(chat): PinnedProduct composer context strip (@ahmeetseker)
-- feat(chat): QuickActionChips quick-action row (@ahmeetseker)
-- feat(chat): SecurityBanner component (@ahmeetseker)
-- feat(chat): add error/sending state and try-catch around service calls (@ahmeetseker)
-- feat(chat): barrel export for chat-shared module (@ahmeetseker)
-- feat(chat-popup): ChatPopup root container with overlay, expand mode and mobile tabs (@ahmeetseker)
-- feat(chat-popup): InboxPanel — conversation list with tag labels and unread badge (@ahmeetseker)
-- feat(chat-popup): MobileTabs (Sohbet / Mesajlar) for sm screens (@ahmeetseker)
-- feat(chat-popup): barrel export (@ahmeetseker)
+- feat(chat): 16 değişiklik (@ahmeetseker)
+  - AttachmentToolbar with 7 sub-menu triggers
+  - BusinessCardForm sub-popup
+  - CallMenu sub-popup with video/voice/schedule
+  - ChatBubble — text/image/file/system variants
+  - ChatComposer with pinned product, toolbar, input and orange Gönder
+  - ChatHeader with optional back/expand/close buttons
+  - ChatMessages list with date labels and error state
+  - ContextMenu sub-popup with pin/block/delete/mute
+  - EmojiPicker sub-popup with 70 popular emojis
+  - OrderCard embedded order summary
+  - PhotoSourceMenu sub-popup
+  - PinnedProduct composer context strip
+  - QuickActionChips quick-action row
+  - SecurityBanner component
+  - add error/sending state and try-catch around service calls
+  - barrel export for chat-shared module
+- feat(chat-popup): 4 değişiklik (@ahmeetseker)
+  - ChatPopup root container with overlay, expand mode and mobile tabs
+  - InboxPanel — conversation list with tag labels and unread badge
+  - MobileTabs (Sohbet / Mesajlar) for sm screens
+  - barrel export
 - feat(data): seed mock conversations and messages (@ahmeetseker)
-- feat(i18n): add chat namespace keys (@ahmeetseker)
-- feat(i18n): add chat.{emptyThread,orderCard,aria,toolbar,pending} keys (@ahmeetseker)
+- feat(i18n): 2 değişiklik (@ahmeetseker)
+  - add chat namespace keys
+  - add chat.{emptyThread,orderCard,aria,toolbar,pending} keys
 - feat(icons): add chat-popup lucide icons (@ahmeetseker)
-- feat(product): add Sohbet et button in 50/50 grid with Sepete Ekle (@ahmeetseker)
-- feat(product): wire Sohbet et click to chat-popup:open event with pinned product (@ahmeetseker)
+- feat(product): 2 değişiklik (@ahmeetseker)
+  - add Sohbet et button in 50/50 grid with Sepete Ekle
+  - wire Sohbet et click to chat-popup:open event with pinned product
 - feat(product-detail): mount ChatPopup so it can be opened from this page (@ahmeetseker)
 - feat(services): add chat service stub with mock-data promises (@ahmeetseker)
 - feat(theme): add orange palette tokens for chat composer (@ahmeetseker)
@@ -113,25 +118,29 @@ Bu surum beta.istoc.com'da test asamasindadir.
 - feat(utils): ref-counted scrollLock; use it in chat popup open/close (@ahmeetseker)
 
 ### Duzeltildi
-- fix(chat): BusinessCardForm Edit/Send buttons close submenu (stub) (@ahmeetseker)
-- fix(chat): BusinessCardForm uses i18n placeholders (no leaked identity) (@ahmeetseker)
-- fix(chat): CallMenu renders activeConversation avatar when present (@ahmeetseker)
-- fix(chat): Shift+Enter must insert newline (move .prevent inside conditional) (@ahmeetseker)
-- fix(chat): add aria-label to composer textarea (@ahmeetseker)
-- fix(chat): clean up window/document listeners in chatPopupRoot destroy() (@ahmeetseker)
-- fix(chat): flatten body-type dispatch, right-align order cards, lucide file icon, i18n labels (@ahmeetseker)
-- fix(chat): i18n aria-labels and toolbar button labels (@ahmeetseker)
-- fix(chat): resolve conversation by sellerId via chatService (no more first-conv fallback) (@ahmeetseker)
-- fix(chat-popup): make chat section relative so ContextMenu anchors correctly (@ahmeetseker)
-- fix(chat-popup): mark inbox avatar img as decorative (alt="") (@ahmeetseker)
+- fix(chat): 9 değişiklik (@ahmeetseker)
+  - BusinessCardForm Edit/Send buttons close submenu (stub)
+  - BusinessCardForm uses i18n placeholders (no leaked identity)
+  - CallMenu renders activeConversation avatar when present
+  - Shift+Enter must insert newline (move .prevent inside conditional)
+  - add aria-label to composer textarea
+  - clean up window/document listeners in chatPopupRoot destroy()
+  - flatten body-type dispatch, right-align order cards, lucide file icon, i18n labels
+  - i18n aria-labels and toolbar button labels
+  - resolve conversation by sellerId via chatService (no more first-conv fallback)
+- fix(chat-popup): 2 değişiklik (@ahmeetseker)
+  - make chat section relative so ContextMenu anchors correctly
+  - mark inbox avatar img as decorative (alt="")
 - fix(product): use existing .th-btn-outline for Sohbet et (theme parity) (@ahmeetseker)
 
 ### Degistirildi
-- refactor(chat): drop dead || "" fallback in appendDraft (@ahmeetseker)
-- refactor(chat): promote Tab type to types/chat.ts as ChatTab (@ahmeetseker)
-- refactor(chat): split localTime into localTimeHHMM primitive (i18n boundary) (@ahmeetseker)
-- refactor(chat-popup): drop dead 'pinned: ""' entry from tag lookup (@ahmeetseker)
-- refactor(chat-popup): lift click handler to initChatTriggers() shared module (@ahmeetseker)
+- refactor(chat): 3 değişiklik (@ahmeetseker)
+  - drop dead || "" fallback in appendDraft
+  - promote Tab type to types/chat.ts as ChatTab
+  - split localTime into localTimeHHMM primitive (i18n boundary)
+- refactor(chat-popup): 2 değişiklik (@ahmeetseker)
+  - drop dead 'pinned: ""' entry from tag lookup
+  - lift click handler to initChatTriggers() shared module
 
 ---
 ## [v1.1.8-beta.3] - 2026-05-11 BETA
@@ -139,43 +148,49 @@ Bu surum beta.istoc.com'da test asamasindadir.
 Bu surum beta.istoc.com'da test asamasindadir.
 
 ### Eklendi
-- feat(faq): faqPage Alpine data'ya search helper'ları eklendi (@ahmeetseker)
-- feat(orders): detay panel için tab/ürün state'i ekle (@ahmeetseker)
-- feat(faq): search bar yeniden tasarlandı (@ahmeetseker)
-- feat(faq): eşleşme vurgusu + sidebar inline style refactor (@ahmeetseker)
-- feat(orders): ürünler kartını ilk-5 + scroll'lu hibrit yapıya çevir (@ahmeetseker)
-- feat(header-notice): add storefront service with localStorage cache (@ahmeetseker)
-- feat(header-notice): add HeaderNotice marquee component (@ahmeetseker)
-- feat(orders): boxed tab container + Kargo paneli + i18n tab etiketleri (@ahmeetseker)
-- feat(orders): Ödeme detaylarını tab paneline taşı (@ahmeetseker)
-- feat(header-notice): integrate notice render into TopBar (@ahmeetseker)
-- feat(orders): Tedarikçi detaylarını tab paneline taşı (@ahmeetseker)
-- feat(header-notice): call initHeaderNotice in main bootstrap (@ahmeetseker)
-- feat(header-notice): suppress notice on payment/payments/orders pages (@ahmeetseker)
+- feat(faq): 3 değişiklik (@ahmeetseker)
+  - faqPage Alpine data'ya search helper'ları eklendi
+  - search bar yeniden tasarlandı
+  - eşleşme vurgusu + sidebar inline style refactor
+- feat(orders): 6 değişiklik (@ahmeetseker)
+  - detay panel için tab/ürün state'i ekle
+  - ürünler kartını ilk-5 + scroll'lu hibrit yapıya çevir
+  - boxed tab container + Kargo paneli + i18n tab etiketleri
+  - Ödeme detaylarını tab paneline taşı
+  - Tedarikçi detaylarını tab paneline taşı
+  - replace per-order item list with thumbnail strip + drawer
+- feat(header-notice): 7 değişiklik (@ahmeetseker)
+  - add storefront service with localStorage cache
+  - add HeaderNotice marquee component
+  - integrate notice render into TopBar
+  - call initHeaderNotice in main bootstrap
+  - suppress notice on payment/payments/orders pages
+  - remove icon rendering from storefront marquee
+  - add slide display mode and per-notice background color
 - feat(help-center): "Bize Ulaşın" 4'lü kart bloğu kaldırıldı (@ahmeetseker)
-- feat(header-notice): remove icon rendering from storefront marquee (@ahmeetseker)
-- feat(header-notice): add slide display mode and per-notice background color (@ahmeetseker)
-- feat(orders): replace per-order item list with thumbnail strip + drawer (@ahmeetseker)
 
 ### Duzeltildi
-- fix(faq): focus-within koyu drop-shadow kaldırıldı (@ahmeetseker)
-- fix(faq): siyah çizgi sorunu — border yerine ring, input focus-visible suppress (@ahmeetseker)
-- fix(orders): stepper label'larını 320px'te wrap edilebilir yap (@ahmeetseker)
-- fix(orders): a11y polish on items drawer (focus on open, aria-labels) (@ahmeetseker)
-- fix(orders): correct remittance event name and add aria-haspopup on drawer triggers (@ahmeetseker)
-- fix(orders): card spacing, remove link underline, drawer sort UX (@ahmeetseker)
-- fix(orders): symmetric card header (B layout) (@ahmeetseker)
-- fix(orders): remove confusing left sort icon in drawer (keep only chevron) (@ahmeetseker)
-- fix(orders): prevent hover/active layout shift on link-style buttons (@ahmeetseker)
-- fix(orders): remove all hover state changes on link-style buttons (@ahmeetseker)
-- fix(orders): use native select arrow only (remove custom chevron — fixes double arrow) (@ahmeetseker)
-- fix(orders): override global :focus-visible outline on link-style buttons (@ahmeetseker)
+- fix(faq): 2 değişiklik (@ahmeetseker)
+  - focus-within koyu drop-shadow kaldırıldı
+  - siyah çizgi sorunu — border yerine ring, input focus-visible suppress
+- fix(orders): 10 değişiklik (@ahmeetseker)
+  - stepper label'larını 320px'te wrap edilebilir yap
+  - a11y polish on items drawer (focus on open, aria-labels)
+  - correct remittance event name and add aria-haspopup on drawer triggers
+  - card spacing, remove link underline, drawer sort UX
+  - symmetric card header (B layout)
+  - remove confusing left sort icon in drawer (keep only chevron)
+  - prevent hover/active layout shift on link-style buttons
+  - remove all hover state changes on link-style buttons
+  - use native select arrow only (remove custom chevron — fixes double arrow)
+  - override global :focus-visible outline on link-style buttons
 
 ### Degistirildi
-- refactor(orders): parsePrice'ı module scope'a taşı (@ahmeetseker)
-- refactor(orders): ürünler kartı için helpers + i18n çekimi (@ahmeetseker)
+- refactor(orders): 3 değişiklik (@ahmeetseker)
+  - parsePrice'ı module scope'a taşı
+  - ürünler kartı için helpers + i18n çekimi
+  - extract order card into OrderListItem component
 - refactor(faq): submit butonu projenin th-btn standardına geçti (@ahmeetseker)
-- refactor(orders): extract order card into OrderListItem component (@ahmeetseker)
 
 ---
 
@@ -216,12 +231,13 @@ Bu surum beta.istoc.com'da test asamasindadir.
 Bu surum beta.istoc.com'da test asamasindadir.
 
 ### Eklendi
-- feat(top-ranking-category): add Pagination component (@ahmeetseker)
-- feat(top-ranking-category): add Grid component with rank badges and ratings (@ahmeetseker)
-- feat(top-ranking-category): add Hero component reusing TopRankingFilters (@ahmeetseker)
-- feat(top-ranking-category): add barrel export (@ahmeetseker)
-- feat(top-ranking-category): add HTML entry (@ahmeetseker)
-- feat(top-ranking-category): add page entry with Alpine data and assembly (@ahmeetseker)
+- feat(top-ranking-category): 6 değişiklik (@ahmeetseker)
+  - add Pagination component
+  - add Grid component with rank badges and ratings
+  - add Hero component reusing TopRankingFilters
+  - add barrel export
+  - add HTML entry
+  - add page entry with Alpine data and assembly
 - feat(homepage): link top-ranking cards to dedicated category page (@ahmeetseker)
 - feat(products): remove inactive Karşılaştır checkbox from product cards (@ahmeetseker)
 - feat(top-ranking): redirect category tabs and card headers to dedicated page (@ahmeetseker)
@@ -382,8 +398,9 @@ Bu surum istoc.com'da yayindadir.
 
 ### Eklendi
 - feat(storefront): UI düzeltmeleri, kişiselleştirilmiş öneriler ve dinamik sayfalar (@aliiball)
-- feat(Search): Sidebar filtre sertifika bölümleri yönetim/ürün olarak ayrıldı (@aliiball)
-- feat(Search): Ürün listeleme sayfası filtre sidebar'ı, arama ve sayfalama implementasyonu yapıldı (@aliiball)
+- feat(Search): 2 değişiklik (@aliiball)
+  - Sidebar filtre sertifika bölümleri yönetim/ürün olarak ayrıldı
+  - Ürün listeleme sayfası filtre sidebar'ı, arama ve sayfalama implementasyonu yapıldı
 - feat: alıcı adres defteri ve backend API entegrasyonu   - Adreslerim sayfası eklendi (dashboard/addresses.html): ekleme, düzenleme,     silme, varsayılan ayarlama; 10 adres limiti; il/ilçe kademeli dropdown   - Adres defteri checkout kargo adresi seçiciyle entegre edildi; iki sayfa     aynı tradehub_core.api.buyer storage'ını paylaşıyor   - Satıcıya özgü ödeme: ?suppliers= parametresi ürünleri, kalemleri ve     sipariş özetini yalnızca seçili satıcıya göre filtreliyor   - Oturum kalıcılığı düzeltildi (VITE_API_URL=/api Vite proxy üzerinden)   - Çıkış yapma düzeltildi (CSRF token alan frappeLogout kullanıldı)   - BuyerAddress tipi adresler ve checkout arasında birleştirildi; city/district/address_line karmaşası giderildi (artık state/city/street)   - Misafir adres migrasyonu: ilk girişte localStorage adresleri backend'e taşınıyor ve guest key temizleniyor (@boraydeger32)
 
 ### Duzeltildi
@@ -600,8 +617,9 @@ Bu surum rc.istoc.com'da test asamasindadir.
 Bu surum rc.istoc.com'da test asamasindadir.
 
 ### Eklendi
-- feat(RFQ): Sabit kodlanmış ürünler dinamik API çağrılarıyla değiştirildi. (@aliiball)
-- feat(RFQ): Ürün kartındaki liste bilgilerini kullanarak RFQ formu önceden otomatik doldurtuluyor (@aliiball)
+- feat(RFQ): 2 değişiklik (@aliiball)
+  - Sabit kodlanmış ürünler dinamik API çağrılarıyla değiştirildi.
+  - Ürün kartındaki liste bilgilerini kullanarak RFQ formu önceden otomatik doldurtuluyor
 
 ## [v1.1.2-rc.2] - 2026-04-06 RC
 

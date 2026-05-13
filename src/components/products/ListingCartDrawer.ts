@@ -86,11 +86,29 @@ function toDrawerItem(product: ProductDetail): CartDrawerItemModel {
 
 /* ── Lazy-load handler ── */
 
+const LOADING_CLASSES = [
+  "pointer-events-none",
+  "opacity-60",
+  "relative",
+  "after:content-['']",
+  "after:absolute",
+  "after:inset-0",
+  "after:m-auto",
+  "after:w-[18px]",
+  "after:h-[18px]",
+  "after:border-2",
+  "after:border-current",
+  "after:border-t-transparent",
+  "after:rounded-full",
+  "after:animate-spin",
+  "after:[animation-duration:0.6s]",
+];
+
 async function handleItemMissing(id: string, mode: "cart" | "sample"): Promise<void> {
   const btn = document.querySelector<HTMLElement>(
     `[data-add-to-cart="${id}"], [data-order-sample="${id}"]`
   );
-  if (btn) btn.classList.add("loading");
+  if (btn) btn.classList.add(...LOADING_CLASSES);
 
   try {
     const product = await getListingDetail(id);
@@ -100,7 +118,7 @@ async function handleItemMissing(id: string, mode: "cart" | "sample"): Promise<v
   } catch (err) {
     console.error("[ListingCartDrawer] Failed to load product detail:", err);
   } finally {
-    if (btn) btn.classList.remove("loading");
+    if (btn) btn.classList.remove(...LOADING_CLASSES);
   }
 }
 

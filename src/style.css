@@ -765,6 +765,7 @@
   --animate-fade-in: fade-in var(--duration-default) var(--ease-default);
   --animate-fade-out: fade-out var(--duration-default) var(--ease-default);
   --animate-slide-up: slide-up var(--duration-default) var(--ease-default);
+  --animate-notice-scroll: notice-scroll 22s linear infinite;
 
   /* --- CTA Semantic (Secondary / Dark) ---
        Eskiden secondary-600/700 (koyu gri) idi. Admin panelden tek yerden
@@ -933,6 +934,18 @@
   .th-btn:hover {
     background: var(--btn-hover-bg, var(--btn-bg));
     color: var(--btn-hover-text, var(--btn-text));
+    box-shadow:
+      inset 2px 2px 5px rgba(0, 0, 0, 0.2),
+      inset -1px -1px 2px rgba(255, 255, 255, 0.25);
+  }
+
+  .th-btn:active {
+    background: var(--btn-hover-bg, var(--btn-bg));
+    box-shadow:
+      inset 3px 3px 7px rgba(0, 0, 0, 0.3),
+      inset -1px -1px 2px rgba(255, 255, 255, 0.18);
+    transform: scale(0.98);
+    transition-duration: 0.06s;
   }
 
   .th-btn:disabled {
@@ -962,6 +975,23 @@
   .th-btn-outline:hover {
     background: var(--btn-outline-hover-bg, var(--btn-outline-bg));
     color: var(--btn-outline-hover-text, var(--btn-outline-text));
+    box-shadow:
+      inset 2px 2px 4px rgba(0, 0, 0, 0.08),
+      inset -1px -1px 2px rgba(255, 255, 255, 0.5);
+  }
+
+  .th-btn-outline:active {
+    background: var(--btn-outline-hover-bg, var(--btn-outline-bg));
+    box-shadow:
+      inset 3px 3px 6px rgba(0, 0, 0, 0.14),
+      inset -1px -1px 2px rgba(255, 255, 255, 0.4);
+    transform: scale(0.98);
+    transition-duration: 0.06s;
+  }
+
+  .th-btn-outline:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 
   /* --- Button Size Modifiers --- */
@@ -1000,6 +1030,18 @@
   .th-btn-dark:hover {
     background: var(--btn-hover-bg, var(--btn-bg));
     color: var(--btn-hover-text, var(--btn-text));
+    box-shadow:
+      inset 2px 2px 5px rgba(0, 0, 0, 0.2),
+      inset -1px -1px 2px rgba(255, 255, 255, 0.25);
+  }
+
+  .th-btn-dark:active {
+    background: var(--btn-hover-bg, var(--btn-bg));
+    box-shadow:
+      inset 3px 3px 7px rgba(0, 0, 0, 0.3),
+      inset -1px -1px 2px rgba(255, 255, 255, 0.18);
+    transform: scale(0.98);
+    transition-duration: 0.06s;
   }
 
   .th-btn-dark:disabled {
@@ -1033,27 +1075,6 @@
   }
 
   .th-btn-success:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  /* --- Gradient Button Modifier ---
-       `.th-btn` veya `.th-btn-dark` ile birlikte kullanılır. Doğrudan
-       --btn-bg ve --btn-hover-bg'yi gradient'in iki ucu olarak kullanır —
-       ayrı gradient token'ı YOK. Admin panelde Dolu Buton BG/Hover
-       değiştirilince gradient butonlar da otomatik senkron olur. */
-  .th-btn-gradient {
-    background: linear-gradient(135deg, var(--btn-bg), var(--btn-hover-bg));
-    color: var(--btn-text);
-    border: none;
-  }
-
-  .th-btn-gradient:hover {
-    background: linear-gradient(135deg, var(--btn-hover-bg), var(--btn-bg));
-    color: var(--btn-hover-text, var(--btn-text));
-  }
-
-  .th-btn-gradient:disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }
@@ -4640,206 +4661,6 @@ input:checked + .email-pref__toggle-slider::before {
   display: block;
 }
 
-/* ============================================================
-   STOREFRONT BUTTON UNIFIED LOOK
-   Tüm storefront butonları (.th-btn ailesi) tek bir görsel
-   sisteme bağlanır: iSTOC sarı (#f5b800), koyu metin, hafif 3D
-   inset highlight + alt darker shadow. Image #36 referans.
-   Admin panel theme-token'larını override eder; yeniden tek
-   görsel kimlik için sabit renkler.
-   #search-submit-button hariç (header arama butonu pill kalır).
-   ============================================================ */
-.th-btn:not(#search-submit-button):not(#topbar-compact-search-submit),
-.th-btn-dark:not(#search-submit-button):not(#topbar-compact-search-submit),
-.th-btn-gradient:not(#search-submit-button):not(#topbar-compact-search-submit) {
-  background: #f5b800 !important;
-  background-image: none !important;
-  color: #1a1a1a !important;
-  border: 1px solid #d39c00 !important;
-  border-radius: 8px !important;
-  font-weight: 600 !important;
-  box-shadow:
-    0 1px 0 #d39c00,
-    inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
-  transition: all 0.15s ease;
-}
-/* Search butonları için ayrı: aynı sarı 3D look + tam pill.
-   İki ayrı id var — hero (SearchArea) ve compact sticky (TopBar). */
-button#search-submit-button,
-button#topbar-compact-search-submit,
-button#search-submit-button.th-btn,
-button#topbar-compact-search-submit.th-btn,
-button#search-submit-button.th-btn-gradient,
-button#topbar-compact-search-submit.th-btn-gradient {
-  background: #f5b800 !important;
-  background-image: none !important;
-  color: #1a1a1a !important;
-  border: 1px solid #d39c00 !important;
-  border-radius: 9999px !important;
-  font-weight: 600 !important;
-  box-shadow:
-    0 1px 0 #d39c00,
-    inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
-  transition:
-    background-color 0.18s ease,
-    box-shadow 0.18s ease,
-    transform 0.12s ease !important;
-}
-
-button#search-submit-button:hover:not(:disabled),
-button#topbar-compact-search-submit:hover:not(:disabled),
-button#search-submit-button.th-btn:hover:not(:disabled),
-button#topbar-compact-search-submit.th-btn:hover:not(:disabled),
-button#search-submit-button.th-btn-gradient:hover:not(:disabled),
-button#topbar-compact-search-submit.th-btn-gradient:hover:not(:disabled) {
-  background: #e8ad00 !important;
-  box-shadow:
-    inset 2px 2px 5px rgba(0, 0, 0, 0.22),
-    inset -1px -1px 2px rgba(255, 255, 255, 0.25) !important;
-}
-
-button#search-submit-button:active:not(:disabled),
-button#topbar-compact-search-submit:active:not(:disabled),
-button#search-submit-button.th-btn:active:not(:disabled),
-button#topbar-compact-search-submit.th-btn:active:not(:disabled),
-button#search-submit-button.th-btn-gradient:active:not(:disabled),
-button#topbar-compact-search-submit.th-btn-gradient:active:not(:disabled) {
-  background: #d8a000 !important;
-  transform: scale(0.97);
-  box-shadow:
-    inset 3px 3px 8px rgba(0, 0, 0, 0.32),
-    inset -1px -1px 2px rgba(255, 255, 255, 0.18) !important;
-  transition-duration: 0.06s !important;
-}
-.th-btn:not(#search-submit-button):not(#topbar-compact-search-submit):hover:not(:disabled),
-.th-btn-dark:not(#search-submit-button):not(#topbar-compact-search-submit):hover:not(:disabled),
-.th-btn-gradient:not(#search-submit-button):not(#topbar-compact-search-submit):hover:not(
-    :disabled
-  ) {
-  background: #e8ad00 !important;
-  background-image: none !important;
-  color: #1a1a1a !important;
-  filter: none !important;
-  box-shadow:
-    inset 2px 2px 5px rgba(0, 0, 0, 0.2),
-    inset -1px -1px 2px rgba(255, 255, 255, 0.25) !important;
-}
-.th-btn:not(#search-submit-button):not(#topbar-compact-search-submit):active:not(:disabled),
-.th-btn-dark:not(#search-submit-button):not(#topbar-compact-search-submit):active:not(:disabled),
-.th-btn-gradient:not(#search-submit-button):not(#topbar-compact-search-submit):active:not(
-    :disabled
-  ) {
-  background: #d8a000 !important;
-  box-shadow:
-    inset 3px 3px 7px rgba(0, 0, 0, 0.3),
-    inset -1px -1px 2px rgba(255, 255, 255, 0.18) !important;
-  transform: scale(0.98);
-  transition-duration: 0.06s;
-}
-
-/* Outline varyantı — sarı kenar + saydam zemin + sarı metin */
-.th-btn-outline {
-  background: transparent !important;
-  background-image: none !important;
-  color: #d39c00 !important;
-  border: 1.5px solid #f5b800 !important;
-  border-radius: 8px !important;
-  font-weight: 600 !important;
-  box-shadow: none !important;
-  transition: all 0.15s ease;
-}
-.th-btn-outline:hover:not(:disabled) {
-  background: #fff8e1 !important;
-  color: #d39c00 !important;
-  border-color: #d39c00 !important;
-  box-shadow:
-    inset 2px 2px 4px rgba(0, 0, 0, 0.08),
-    inset -1px -1px 2px rgba(255, 255, 255, 0.5) !important;
-}
-.th-btn-outline:active:not(:disabled) {
-  background: #ffefb5 !important;
-  box-shadow:
-    inset 3px 3px 6px rgba(0, 0, 0, 0.14),
-    inset -1px -1px 2px rgba(255, 255, 255, 0.4) !important;
-  transform: scale(0.98);
-  transition: all 0.06s ease;
-}
-
-/* Disabled state (tüm varyantlar) */
-.th-btn:disabled,
-.th-btn-dark:disabled,
-.th-btn-gradient:disabled,
-.th-btn-outline:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  filter: none !important;
-  transform: none;
-}
-
-/* (Header arama butonu pill stili yukarıdaki birleşik kuralda) */
-
-/* ── Storefront bileşenlerinde Tailwind v4 CSS-var kısayolları (bg-(--btn-bg))
-   kullanan butonları da aynı sarı 3D look'a hizala. StoreHeader, ContactForm,
-   CompanyProfile gibi seller bileşenleri --btn-bg/--btn-outline-* tüketiyor;
-   bunlar admin panel theme tarafından beslenir. Burada hard-coded sarı zorla. */
-.bg-\(--btn-bg\) {
-  background: #f5b800 !important;
-  background-image: none !important;
-  color: #1a1a1a !important;
-  border: 1px solid #d39c00 !important;
-  border-radius: 8px !important;
-  box-shadow:
-    0 1px 0 #d39c00,
-    inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
-}
-.bg-\(--btn-bg\).text-white,
-.bg-\(--btn-bg\) .text-white {
-  color: #1a1a1a !important;
-}
-.bg-\(--btn-bg\):hover,
-.hover\:bg-\(--btn-hover-bg\):hover {
-  background: #e8ad00 !important;
-  background-image: none !important;
-  color: #1a1a1a !important;
-  box-shadow:
-    inset 2px 2px 5px rgba(0, 0, 0, 0.2),
-    inset -1px -1px 2px rgba(255, 255, 255, 0.25) !important;
-}
-.bg-\(--btn-bg\):active {
-  background: #d8a000 !important;
-  box-shadow:
-    inset 3px 3px 7px rgba(0, 0, 0, 0.3),
-    inset -1px -1px 2px rgba(255, 255, 255, 0.18) !important;
-  transform: scale(0.98);
-  transition: all 0.06s ease;
-}
-
-/* Outline (border-(--btn-outline-border-color), bg-(--btn-outline-bg)) */
-.bg-\(--btn-outline-bg\) {
-  background: transparent !important;
-  color: #d39c00 !important;
-  border: 1.5px solid #f5b800 !important;
-  border-radius: 8px !important;
-  box-shadow: none !important;
-}
-.bg-\(--btn-outline-bg\):hover,
-.hover\:bg-\(--btn-outline-hover-bg\):hover {
-  background: #fff8e1 !important;
-  color: #d39c00 !important;
-  border-color: #d39c00 !important;
-  box-shadow:
-    inset 2px 2px 4px rgba(0, 0, 0, 0.08),
-    inset -1px -1px 2px rgba(255, 255, 255, 0.5) !important;
-}
-.bg-\(--btn-outline-bg\):active {
-  background: #ffefb5 !important;
-  box-shadow:
-    inset 3px 3px 6px rgba(0, 0, 0, 0.14),
-    inset -1px -1px 2px rgba(255, 255, 255, 0.4) !important;
-  transform: scale(0.98);
-  transition: all 0.06s ease;
-}
-
 /* Global button transition baseline — yumuşak bg/color/border geçişi.
    Hover/active görsel efekt vermez; her button class'ı kendi
    hover state'ini (örn. .th-btn-outline:hover, .th-btn-dark:hover)
@@ -4970,13 +4791,6 @@ button[data-filter-action="apply-all"]:active {
   }
 }
 
-/* ─── Billing Toggle (JS toggle state) ─── */
-.sub-billing-toggle__btn--active {
-  background: var(--color-surface-raised, #f5f5f5) !important;
-  color: var(--color-text-heading, #111827) !important;
-  font-weight: 600 !important;
-}
-
 /* ╔══════════════════════════════════════════╗
    ║  PAYMENT PAGE                            ║
    ╚══════════════════════════════════════════╝ */
@@ -5048,37 +4862,6 @@ button[data-filter-action="apply-all"]:active {
   }
 }
 
-/* ============================================================
-   CART DRAWER — Loading state for lazy-loaded product buttons
-   ============================================================ */
-
-[data-add-to-cart].loading,
-[data-order-sample].loading {
-  pointer-events: none;
-  opacity: 0.6;
-  position: relative;
-}
-
-[data-add-to-cart].loading::after,
-[data-order-sample].loading::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  margin: auto;
-  width: 18px;
-  height: 18px;
-  border: 2px solid currentColor;
-  border-top-color: transparent;
-  border-radius: 50%;
-  animation: cart-btn-spin 0.6s linear infinite;
-}
-
-@keyframes cart-btn-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 @keyframes notice-scroll {
   from {
     transform: translateX(0);
@@ -5086,30 +4869,6 @@ button[data-filter-action="apply-all"]:active {
   to {
     transform: translateX(-50%);
   }
-}
-
-/* Header Notice slide mode: vertical fade/slide rotation (JS-driven) */
-.header-notice-slide-root {
-  position: relative;
-  height: 36px;
-  overflow: hidden;
-}
-.header-notice-slide-item {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transform: translateY(100%);
-  transition:
-    opacity 0.4s ease,
-    transform 0.4s ease;
-}
-.header-notice-slide-item.active {
-  opacity: 1;
-  transform: translateY(0);
-}
-.header-notice-slide-item.exiting {
-  opacity: 0;
-  transform: translateY(-100%);
 }
 
 /* ============================================================

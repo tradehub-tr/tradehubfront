@@ -1,3 +1,14 @@
+> ⚠ **BU PLAN 2026-05-13 İTİBARIYLA GEÇERSİZDİR.**
+>
+> Yerine geçen plan: `../docs/superpowers/plans/2026-05-13-css-aggressive-refactor-plan.md`
+> Spec: `../docs/superpowers/specs/2026-05-13-css-aggressive-refactor-design.md`
+>
+> Bu plan -%11 (~498 satır) konservatif bir hedef koyuyordu. Yeni plan
+> agresif: ~7300 → ~700 satır (-%90). İçerik arşiv olarak burada bırakılır,
+> uygulama referansı olarak **kullanılmaz**.
+
+---
+
 # style.css Optimizasyon — Uygulama Planı
 
 **Hedef dosya:** `/home/metin/Desktop/istoc cı-cd/tradehubfront/src/style.css` (4539 satır)

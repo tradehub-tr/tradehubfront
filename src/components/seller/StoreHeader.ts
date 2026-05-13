@@ -64,7 +64,7 @@ export function StoreHeader(): string {
               ${t("seller.sf.viewStore")}
             </a>
             <button
-              class="bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white text-[14px] font-semibold rounded-[var(--radius-button)] transition-colors whitespace-nowrap"
+              class="bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[14px] font-semibold border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150 whitespace-nowrap"
               style="width: 180px; height: 40px; padding: 0px 12px;"
               @click="setTab('contact')">
               ${t("seller.sf.contactNow")}
@@ -136,12 +136,12 @@ export function StoreHeader(): string {
             <!-- Mobile CTA buttons — stacked below header -->
             <div class="flex flex-col lg:hidden gap-2 px-4 py-3 sm:px-6">
               <a :href="'/pages/seller/seller-shop.html?seller=' + (seller?.seller_code || '')"
-                 class="w-full inline-flex items-center justify-center gap-1.5 py-2.5 border-(length:--btn-outline-border-width) border-(--btn-outline-border-color) rounded-[var(--radius-button)] bg-(--btn-outline-bg) text-[13px] font-medium text-(--btn-outline-text) hover:bg-(--btn-outline-hover-bg) hover:text-(--btn-outline-hover-text) transition-colors">
+                 class="w-full inline-flex items-center justify-center gap-1.5 py-2.5 border-(length:--btn-outline-border-width) border-(--btn-outline-border-color,#f5b800) rounded-[var(--radius-button,8px)] bg-(--btn-outline-bg,transparent) text-[13px] font-medium text-(--btn-outline-text,#d39c00) hover:bg-(--btn-outline-hover-bg,#fff8e1) hover:text-(--btn-outline-hover-text,#d39c00) hover:border-(--btn-outline-hover-text,#d39c00) hover:shadow-[inset_2px_2px_4px_rgba(0,0,0,0.08),inset_-1px_-1px_2px_rgba(255,255,255,0.5)] active:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.14),inset_-1px_-1px_2px_rgba(255,255,255,0.4)] active:scale-[0.98] transition-all duration-150">
                 ${storeIcon}
                 ${t("seller.sf.viewStore")}
               </a>
               <button
-                class="w-full py-2.5 bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white text-[13px] font-semibold rounded-[var(--radius-button)] transition-colors"
+                class="w-full py-2.5 bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[13px] font-semibold border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150"
                 @click="setTab('contact')">
                 ${t("seller.sf.contactNow")}
               </button>

@@ -232,8 +232,8 @@ function renderCompactStickySearch(): string {
             id="topbar-compact-search-submit"
             type="submit"
             tabindex="-1"
-            class="th-btn th-btn-gradient inline-flex items-center justify-center gap-1.5 font-semibold transition-all duration-300 ease-in-out shrink-0"
-            :class="expanded ? 'px-6 py-2 text-base absolute right-4 bottom-2' : 'px-5 h-[32px] text-[13px] rounded-full ml-1'"
+            class="th-btn inline-flex items-center justify-center gap-1.5 font-semibold transition-all duration-300 ease-in-out shrink-0 rounded-full"
+            :class="expanded ? 'px-6 py-2 text-base absolute right-4 bottom-2' : 'px-5 h-[32px] text-[13px] ml-1'"
           >
             <span x-show="!expanded" data-i18n="common.search">${t("common.search")}</span>
             <svg x-show="expanded" class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -584,7 +584,7 @@ function renderCartButton(itemCount: number = 0): string {
         </div>
 
         <!-- Go to Cart Button -->
-        <a href="${baseUrl}pages/cart.html" class="th-btn th-btn-gradient inline-flex items-center justify-center w-full mt-4 h-11 px-4 text-sm font-bold text-center transition-all hover:opacity-90 hover:shadow-md gap-2">
+        <a href="${baseUrl}pages/cart.html" class="th-btn inline-flex items-center justify-center w-full mt-4 h-11 px-4 text-sm font-bold text-center gap-2">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138A60.114 60.114 0 0 0 3.375 5.272M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/></svg>
           <span data-i18n="header.goToCart">${t("header.goToCart")}</span>
         </a>
@@ -1241,7 +1241,7 @@ export function TopBar(props?: TopBarProps): string {
                 -->
                 <button
                   type="submit"
-                  class="th-btn-gradient flex items-center justify-center h-9 sm:h-10 px-3 sm:px-4 rounded-r-md transition-colors cursor-pointer shrink-0"
+                  class="th-btn flex items-center justify-center h-9 sm:h-10 px-3 sm:px-4 rounded-r-md transition-colors cursor-pointer shrink-0"
                   aria-label="Search"
                 >
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">

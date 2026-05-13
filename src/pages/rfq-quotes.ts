@@ -124,7 +124,7 @@ async function loadQuotes() {
                   <td class="p-3 text-center text-sm border-l border-gray-100 align-top">
                     ${q.status === 'Submitted' ? `
                       <div class="flex justify-center gap-1.5">
-                        <button class="quote-accept-btn px-3 py-1 rounded-full bg-(--btn-bg) text-white text-xs font-medium hover:bg-(--btn-hover-bg)" data-quote="${q.name}">${t('rfq.accept')}</button>
+                        <button class="quote-accept-btn px-3 py-1 rounded-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-xs font-medium border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150" data-quote="${q.name}">${t('rfq.accept')}</button>
                         <button class="quote-reject-btn px-3 py-1 rounded-full border border-gray-300 text-gray-700 text-xs font-medium hover:bg-gray-50" data-quote="${q.name}">${t('rfq.reject')}</button>
                       </div>
                     ` : `<span class="text-xs font-medium ${q.status === 'Accepted' ? 'text-green-600' : q.status === 'Rejected' ? 'text-red-500' : 'text-gray-400'}">${q.status}</span>`}

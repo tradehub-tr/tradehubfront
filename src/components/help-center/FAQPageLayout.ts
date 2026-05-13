@@ -54,7 +54,7 @@ export function FAQPageLayout(): string {
             <button
               type="submit"
               id="faq-search-btn"
-              class="th-btn th-btn-sm th-btn-gradient mr-1.5 shrink-0"
+              class="th-btn th-btn-sm mr-1.5 shrink-0"
             >
               ${t("helpCenter.faqSearchSubmit")}
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
