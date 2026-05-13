@@ -326,7 +326,7 @@ function renderProfileColumn(): string {
       <!-- Bottom card: RFQ -->
       <div class="flex-1 py-3 px-4 flex flex-col items-center justify-center text-center" style="background-color: var(--mfr-hero-card-bg, #ffffff); border-radius: var(--mfr-hero-card-radius, 6px); box-shadow: var(--mfr-hero-card-shadow, 0 0 12px rgba(0,0,0,0.05))">
         <p class="text-xs font-semibold mb-4" style="color: var(--mfr-profile-rfq-text, #222222)">${t("mfr.oneRequestMultipleQuotes")}</p>
-        <a href="/pages/dashboard/rfq.html" class="hover-expand-center w-full h-10 flex items-center justify-center border rounded-full text-xs font-bold transition-colors" style="background-color: var(--mfr-hero-card-bg, #ffffff); border-color: var(--mfr-profile-rfq-border, #222222); color: var(--mfr-profile-rfq-text, #222222)">
+        <a href="/pages/dashboard/rfq.html" class="hover-expand-center relative overflow-hidden z-0 before:content-[''] before:absolute before:inset-0 before:bg-black/[0.08] before:scale-x-0 before:origin-center before:transition-transform before:duration-300 before:-z-10 before:rounded-[inherit] hover:before:scale-x-100 w-full h-10 flex items-center justify-center border rounded-full text-xs font-bold transition-colors" style="background-color: var(--mfr-hero-card-bg, #ffffff); border-color: var(--mfr-profile-rfq-border, #222222); color: var(--mfr-profile-rfq-text, #222222)">
           ${t("mfr.rfqTitle")}
         </a>
       </div>

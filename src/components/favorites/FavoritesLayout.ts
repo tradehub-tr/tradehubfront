@@ -291,7 +291,7 @@ function renderFavorites(): string {
     </div>
 
     <!-- Tab: Products -->
-    <div class="fav-tab-content fav-tab-content--active" data-content="fav-products">
+    <div class="fav-tab-content fav-tab-content--active hidden [&.fav-tab-content--active]:block" data-content="fav-products">
       <div class="fav-products flex min-h-[400px] max-md:flex-col">
         <aside class="fav-products__sidebar w-60 shrink-0 py-5 px-6 border-r border-[#f0f0f0] max-md:w-full max-md:border-r-0 max-md:border-b max-md:border-[#f0f0f0]">
           <h3 class="text-base font-bold text-text-primary mb-2.5">${t("favorites.myList")}</h3>
@@ -308,7 +308,7 @@ function renderFavorites(): string {
     </div>
 
     <!-- Tab: Suppliers -->
-    <div class="fav-tab-content" data-content="fav-suppliers">
+    <div class="fav-tab-content hidden [&.fav-tab-content--active]:block" data-content="fav-suppliers">
       <div class="fav-products flex min-h-[400px] max-md:flex-col">
         <aside class="fav-products__sidebar w-60 shrink-0 py-5 px-6 border-r border-[#f0f0f0] max-md:w-full max-md:border-r-0 max-md:border-b max-md:border-[#f0f0f0]">
           <h3 class="text-base font-bold text-text-primary mb-2.5">${t("favorites.myList")}</h3>
@@ -651,7 +651,6 @@ function initFavTabs(): void {
         parent.querySelectorAll<HTMLElement>(".fav-tab-content").forEach((panel) => {
           const isActive = panel.dataset.content === targetId;
           panel.classList.toggle("fav-tab-content--active", isActive);
-          panel.style.display = isActive ? "block" : "none";
         });
       });
     });

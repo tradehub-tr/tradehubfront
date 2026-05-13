@@ -15,7 +15,7 @@ import { t } from "../../i18n";
 export function FloatingActions(data: FloatingActionsData): string {
   return `
     <div id="floating-actions"
-         class="floating-actions fixed right-0 top-[40%] z-(--z-fixed) flex flex-col"
+         class="floating-actions fixed right-0 top-[40%] z-(--z-fixed) flex flex-col max-[480px]:bottom-0 max-[480px]:left-0 max-[480px]:right-0 max-[480px]:!top-auto max-[480px]:flex-row max-[480px]:z-[var(--z-fixed,40)]"
          aria-label="${t("seller.sf.quickAccessButtons")}"
          role="group">
       ${data.buttons
@@ -41,11 +41,11 @@ export function FloatingActions(data: FloatingActionsData): string {
               : btn.label;
 
           return `
-          <button class="floating-actions__btn floating-actions__btn--${btn.id} ${btn.bgColor} ${btn.hoverColor} text-white w-[56px] h-[80px] ${roundedClasses} flex flex-col items-center justify-center gap-1 transition-colors shadow-lg dark:shadow-xl cursor-pointer border-none focus:ring-2 focus:ring-white focus:ring-offset-2"
+          <button class="floating-actions__btn floating-actions__btn--${btn.id} ${btn.bgColor} ${btn.hoverColor} text-white w-[56px] h-[80px] ${roundedClasses} flex flex-col items-center justify-center gap-1 transition-colors shadow-lg dark:shadow-xl cursor-pointer border-none focus:ring-2 focus:ring-white focus:ring-offset-2 max-[768px]:min-[481px]:w-11 max-[768px]:min-[481px]:h-[60px] max-[480px]:w-1/2 max-[480px]:h-12 max-[480px]:rounded-none max-[480px]:flex-row max-[480px]:gap-2"
                   aria-label="${btn.ariaLabel}"
                   data-action="${btn.action}">
             ${btn.icon}
-            <span class="text-[9px] font-medium leading-tight text-center">${labelHtml}</span>
+            <span class="text-[9px] font-medium leading-tight text-center max-[768px]:min-[481px]:hidden max-[480px]:inline max-[480px]:text-[13px]">${labelHtml}</span>
           </button>
         `;
         })

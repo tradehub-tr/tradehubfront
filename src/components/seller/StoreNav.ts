@@ -18,7 +18,7 @@ export function StoreNav(data: StoreNavData): string {
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
             </svg>
           </button>
-          <div class="store-nav__dropdown store-nav__dropdown--products absolute top-full left-0 shadow-(--shadow-md) rounded-b-(--radius-md) min-w-[280px] max-h-[400px] overflow-y-auto z-(--z-dropdown)"
+          <div class="store-nav__dropdown store-nav__dropdown--products absolute top-full left-0 bg-[var(--store-nav-bg)] text-[var(--store-nav-text,#ffffff)] shadow-(--shadow-md) rounded-b-(--radius-md) min-w-[280px] max-h-[400px] overflow-y-auto z-(--z-dropdown)"
                x-show="open" x-transition.opacity.duration.200ms style="display: none;"
                role="menu"
                aria-label="${t("seller.sf.productCategories")}">
@@ -61,7 +61,7 @@ export function StoreNav(data: StoreNavData): string {
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
             </svg>
           </button>
-          <div class="store-nav__dropdown store-nav__dropdown--company absolute top-full left-0 shadow-(--shadow-md) rounded-b-(--radius-md) min-w-[200px] z-(--z-dropdown)"
+          <div class="store-nav__dropdown store-nav__dropdown--company absolute top-full left-0 bg-[var(--store-nav-bg)] text-[var(--store-nav-text,#ffffff)] shadow-(--shadow-md) rounded-b-(--radius-md) min-w-[200px] z-(--z-dropdown)"
                x-show="open" x-transition.opacity.duration.200ms style="display: none;"
                role="menu"
                aria-label="${t("seller.sf.companyProfileMenu")}">

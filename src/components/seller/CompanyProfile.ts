@@ -999,10 +999,10 @@ function ContactSidebar(): string {
 
         <!-- CTA Buttons -->
         <div class="flex flex-col gap-3 mb-5">
-          <button @click="setTab('contact')" class="w-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) font-semibold py-3 px-4 border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150 text-[14px] company-profile__contact-btn">
+          <button @click="setTab('contact')" class="w-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) font-semibold py-3 px-4 border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150 text-[14px] focus-visible:outline-2 focus-visible:outline-[var(--color-store-accent,#cc9900)] focus-visible:outline-offset-2 company-profile__contact-btn">
             ${t("seller.sf.contactNow")}
           </button>
-          <button @click="setTab('contact')" class="th-btn-outline w-full text-gray-900 font-medium py-3 px-4 text-[14px] company-profile__inquiry-btn">
+          <button @click="setTab('contact')" class="th-btn-outline w-full text-gray-900 font-medium py-3 px-4 text-[14px] focus-visible:outline-2 focus-visible:outline-[var(--color-store-accent,#cc9900)] focus-visible:outline-offset-2 company-profile__inquiry-btn">
             ${t("seller.sf.sendInquiry")}
           </button>
         </div>

@@ -4,7 +4,6 @@
  */
 
 import '../style.css'
-import '../styles/checkout-design.css'
 import { initFlowbite } from 'flowbite'
 import { t, getCurrentLang } from '../i18n'
 import { getBaseUrl } from '../utils/url'

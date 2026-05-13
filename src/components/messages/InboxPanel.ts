@@ -36,7 +36,10 @@ export function InboxPanel(): string {
       <nav class="flex flex-col max-2xl:flex-row max-2xl:overflow-x-auto gap-0.5 px-2" aria-label="${t("messages.categories")}">
         <template x-for="cat in categories" :key="cat.id">
           <button @click="setCategory(cat.id)"
-                  class="flex items-center gap-2 px-3 py-2 border-none bg-transparent rounded-md text-[13px] text-(--color-text-muted,#666666) cursor-pointer transition-[background,color] duration-150 hover:bg-(--color-surface-raised,#f5f5f5) max-2xl:flex-shrink-0 max-2xl:whitespace-nowrap"
+                  class="msg-inbox__cat flex items-center gap-2 px-3 py-2 border-none bg-transparent rounded-md text-[13px] text-(--color-text-muted,#666666) cursor-pointer transition-[background,color] duration-150 hover:bg-(--color-surface-raised,#f5f5f5) max-2xl:flex-shrink-0 max-2xl:whitespace-nowrap
+                         [&.msg-inbox__cat--active]:bg-[var(--color-border-light)]
+                         [&.msg-inbox__cat--active]:text-[var(--color-text-heading,#111827)]
+                         [&.msg-inbox__cat--active]:font-semibold"
                   :class="activeCategory === cat.id ? 'msg-inbox__cat--active' : ''"
             <!-- Chat icon -->
             <template x-if="cat.icon === 'chat'">

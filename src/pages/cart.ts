@@ -4,7 +4,6 @@
  */
 
 import '../style.css'
-import '../styles/cart-design.css'
 import { initFlowbite } from 'flowbite'
 import { initStickyHeights } from '../utils/stickyHeights'
 import { initCurrency, getSelectedCurrencyInfo } from '../services/currencyService'

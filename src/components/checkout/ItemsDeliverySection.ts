@@ -76,7 +76,7 @@ function renderShippingSummary(order: CheckoutDeliveryOrderGroup): string {
   const multiple = order.methods.length > 1;
 
   return `
-    <div class="flex items-center justify-between gap-3 rounded-md border border-[#111827] bg-white px-4 py-3">
+    <div class="flex items-center justify-between gap-3 rounded-xl border-[1.5px] border-[#1a1a1a] bg-white px-4 py-3">
       <div class="flex items-center gap-3 min-w-0 flex-1">
         <svg class="w-5 h-5 text-[#111827] shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
           <path d="M3 7h11v10H3zM14 10h4l3 3v4h-7z" stroke-linecap="round" stroke-linejoin="round" />
@@ -84,9 +84,9 @@ function renderShippingSummary(order: CheckoutDeliveryOrderGroup): string {
           <circle cx="17" cy="18" r="1.5" />
         </svg>
         <div class="min-w-0">
-          <p class="text-sm sm:text-[16px] font-semibold text-[#111827] truncate"
+          <p class="text-[13.5px] font-semibold text-[#111827] truncate"
              x-text="getSelectedMethod('${safeOrderId}')?.etaLabel || ''"></p>
-          <p class="text-xs sm:text-[13px] text-[#4b5563] mt-0.5">
+          <p class="text-[12.5px] text-[#8a877f] mt-0.5">
             ${t("checkout.shippingFee")}:
             <strong class="text-[#111827]" x-text="formatShippingFee(getSelectedMethod('${safeOrderId}')?.shippingFee ?? 0)"></strong>
           </p>
@@ -114,19 +114,19 @@ function renderSkuLine(sku: CheckoutDeliverySkuLine): string {
       </span>`
     : "";
   return `
-    <div class="grid grid-cols-[48px_1fr] sm:grid-cols-[56px_1fr_auto_auto] gap-2 sm:gap-4 items-center rounded-lg bg-[#f3f4f6] px-3 py-2 sm:px-4 sm:py-3">
-      <img src="${sku.image}" alt="" class="w-12 h-12 sm:w-14 sm:h-14 rounded object-cover border border-[#e5e7eb]" />
+    <div class="grid grid-cols-[40px_1fr] sm:grid-cols-[40px_1fr_auto_auto] gap-2 sm:gap-3 items-center rounded-xl bg-[#fafaf8] border border-[#e8e6e0] px-[14px] py-[10px]">
+      <img src="${sku.image}" alt="" class="w-10 h-10 rounded-[6px] object-cover border border-[#e5e7eb]" />
       <div>
         ${sampleBadge ? `<div class="mb-1">${sampleBadge}</div>` : ""}
-        <p class="text-sm sm:text-[16px] text-[#111827]">${sku.variantText}</p>
-        <p class="text-sm sm:text-[17px] font-semibold text-[#111827]">${formatUsd(sku.unitPrice)} <span class="font-normal text-[#4b5563]">/${t("checkout.pieceUnit")}</span></p>
-        <p class="flex gap-3 sm:hidden text-sm font-semibold text-[#111827] mt-1">
+        <p class="text-[13px] text-[#1a1a1a]">${sku.variantText}</p>
+        <p class="text-[13px] font-semibold text-[#1a1a1a]">${formatUsd(sku.unitPrice)} <span class="font-normal text-[#4b5563]">/${t("checkout.pieceUnit")}</span></p>
+        <p class="flex gap-3 sm:hidden text-[13px] font-semibold text-[#1a1a1a] mt-1">
           <span>x ${sku.quantity}</span>
           <span>${formatUsd(total)}</span>
         </p>
       </div>
-      <span class="hidden sm:inline text-[17px] font-semibold text-[#111827]">x ${sku.quantity}</span>
-      <span class="hidden sm:inline text-[17px] font-semibold text-[#111827]">${formatUsd(total)}</span>
+      <span class="hidden sm:inline text-[13px] font-semibold text-[#1a1a1a]">x ${sku.quantity}</span>
+      <span class="hidden sm:inline text-[13px] font-semibold text-[#1a1a1a]">${formatUsd(total)}</span>
     </div>
   `;
 }
@@ -162,18 +162,18 @@ function renderProductCard(
   ];
 
   return `
-    <div class="co-product-card mt-4" x-data="{ open: ${productOpen}, skuExpanded: false }">
+    <div class="co-product-card border border-[#e8e6e0] rounded-xl bg-white overflow-hidden mt-[10px]" x-data="{ open: ${productOpen}, skuExpanded: false }">
       <button
         type="button"
-        class="co-product-head w-full flex items-start gap-4 text-left cursor-pointer transition-colors"
+        class="co-product-head w-full flex items-center gap-3 px-3 py-[10px] text-left cursor-pointer transition-colors hover:bg-[#fafaf8]"
         @click="open = !open"
         :aria-expanded="open"
       >
-        <img src="${product.image}" alt="" class="w-16 h-16 sm:w-24 sm:h-24 rounded object-cover border border-[#e5e7eb] shrink-0" />
+        <img src="${product.image}" alt="" class="w-12 h-12 rounded-[6px] object-cover border border-[#e5e7eb] shrink-0" />
         <div class="flex-1 min-w-0">
-          <h4 class="text-[18px] leading-7 font-semibold text-[#111827]">${product.title}</h4>
-          <p class="text-[15px] text-[#6b7280] mt-1">${product.moqLabel}</p>
-          <p class="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[13px] sm:text-[14px] text-[#374151]">
+          <h4 class="text-[13.5px] leading-[1.35] font-semibold text-[#1a1a1a] truncate">${product.title}</h4>
+          <p class="text-[11.5px] text-[#8a877f] mt-0.5 leading-[1.4]">${product.moqLabel}</p>
+          <p class="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[12.5px] text-[#8a877f]">
             ${summaryParts
               .map(
                 (part, i) =>
@@ -182,9 +182,9 @@ function renderProductCard(
               .join("")}
           </p>
         </div>
-        <div class="co-product-end flex items-center gap-2 shrink-0 mt-1">
-          <span class="co-product-total whitespace-nowrap">${formatUsd(totalAmount)}</span>
-          <svg class="co-product-chev w-4 h-4 transition-transform duration-200"
+        <div class="co-product-end flex items-center gap-2 shrink-0">
+          <span class="co-product-total whitespace-nowrap text-[13.5px] font-semibold text-[#1a1a1a] tabular-nums">${formatUsd(totalAmount)}</span>
+          <svg class="co-product-chev w-3.5 h-3.5 text-[#8a877f] transition-transform duration-200"
             :class="{ 'rotate-180': open }"
             fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
@@ -192,7 +192,7 @@ function renderProductCard(
         </div>
       </button>
       <div x-show="open" x-collapse>
-        <div class="mt-3 space-y-2">
+        <div class="px-3 pb-3 space-y-2">
           ${visibleRows}
           ${
             hiddenRows
@@ -204,7 +204,7 @@ function renderProductCard(
           collapsible
             ? `<button
                 type="button"
-                class="mt-3 inline-flex items-center gap-1.5 text-[14px] sm:text-[15px] font-semibold text-[#111827] underline hover:opacity-70"
+                class="mx-3 mb-3 inline-flex items-center gap-1.5 text-[14px] sm:text-[15px] font-semibold text-[#111827] underline hover:opacity-70"
                 @click="skuExpanded = !skuExpanded"
                 :aria-expanded="skuExpanded"
               >
@@ -231,7 +231,7 @@ function renderOrderSupplierNote(order: CheckoutDeliveryOrderGroup): string {
       <template x-if="!hasOrderNote('${safeOrderId}')">
         <button
           type="button"
-          class="inline-block text-[18px] font-semibold underline text-[#111827] hover:opacity-70"
+          class="inline-block text-[13px] font-semibold underline text-[#4a4a48] decoration-[#d5d2c9] underline-offset-[3px] hover:opacity-70"
           @click="openNoteModal('${safeOrderId}')"
         >
           ${t("checkout.addNoteToSupplier")}
@@ -239,13 +239,13 @@ function renderOrderSupplierNote(order: CheckoutDeliveryOrderGroup): string {
       </template>
       <template x-if="hasOrderNote('${safeOrderId}')">
         <div>
-          <p class="text-[18px] text-[#111827]">
+          <p class="text-[13px] text-[#4a4a48]">
             ${t("checkout.noteToSupplierLabel")}
             <span class="font-medium" x-text="getOrderNote('${safeOrderId}')"></span>
           </p>
           <button
             type="button"
-            class="mt-2 inline-block text-[18px] font-semibold underline text-[#111827] hover:opacity-70"
+            class="mt-2 inline-block text-[13px] font-semibold underline text-[#4a4a48] decoration-[#d5d2c9] underline-offset-[3px] hover:opacity-70"
             @click="openNoteModal('${safeOrderId}')"
           >
             ${t("checkout.editNote")}
@@ -273,27 +273,27 @@ function renderOrder(order: CheckoutDeliveryOrderGroup, defaultExpanded: boolean
   );
 
   return `
-    <div class="pt-5 border-t border-[#e5e5e5] first:border-t-0 first:pt-0"
+    <div class="p-0 border-t border-[#e8e6e0] first:border-t-0 mt-0"
       x-data="{ expanded: ${defaultExpanded} }">
       <button type="button"
-        class="w-full flex items-center gap-3 mb-4 cursor-pointer hover:opacity-70 transition-opacity select-none text-left"
+        class="w-full flex items-center gap-3 m-0 px-[22px] py-[14px] rounded-none cursor-pointer hover:bg-[#fafaf8] transition-colors select-none text-left"
         @click="expanded = !expanded"
         :aria-expanded="expanded">
-        <svg class="w-6 h-6 text-[#6b7280] shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+        <svg class="w-4 h-4 text-[#8a877f] shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
           <path d="M4 7h16M4 7l2-3h12l2 3M4 7v12a2 2 0 002 2h12a2 2 0 002-2V7" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
-        <h3 class="text-[20px] font-bold text-[#111827] flex-1 truncate">${order.sellerName}</h3>
-        <span class="co-supplier-count whitespace-nowrap" x-show="!expanded">${totalQty} ürün</span>
-        <span class="text-[15px] sm:text-[17px] font-bold text-[#111827] whitespace-nowrap"
+        <h3 class="text-[14.5px] font-semibold text-[#1a1a1a] tracking-[-0.005em] flex-1 truncate">${order.sellerName}</h3>
+        <span class="co-supplier-count text-[11.5px] font-medium text-[#4a4a48] bg-[#fafaf8] border border-[#e8e6e0] rounded-full px-2 py-[2px] whitespace-nowrap tracking-[0.01em]" x-show="!expanded">${totalQty} ürün</span>
+        <span class="text-[14px] font-semibold text-[#1a1a1a] whitespace-nowrap"
           x-show="!expanded">${formatUsd(itemSubtotal)}</span>
-        <svg class="w-5 h-5 text-[#6b7280] transition-transform duration-300 shrink-0"
+        <svg class="w-4 h-4 text-[#8a877f] transition-transform duration-300 shrink-0"
           :class="{ 'rotate-180': expanded, 'rotate-0': !expanded }"
           fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </button>
 
-      <div class="transition-all duration-300" x-show="expanded">
+      <div class="transition-all duration-300 pt-1 px-[22px] pb-[18px]" x-show="expanded">
         ${shippingSummary}
 
         <div class="mt-4">
@@ -435,22 +435,22 @@ export function ItemsDeliverySection({ orders = [] }: ItemsDeliverySectionProps 
   return `
     <section
       id="checkout-items"
-      class="checkout-section"
+      class="checkout-section bg-white border border-[#e8e6e0] rounded-2xl shadow-[0_1px_2px_rgba(20,20,18,0.04)] overflow-hidden"
       x-data="checkoutItemsDelivery"
       data-delivery-orders="${encodedOrders}"
     >
-      <div class="checkout-section__header w-full flex items-center gap-3">
-        <span class="checkout-section__icon inline-flex items-center justify-center">
+      <div class="checkout-section__header w-full flex items-center gap-3 px-[22px] py-[18px] max-[720px]:px-4 max-[720px]:py-[14px]">
+        <span class="checkout-section__icon inline-flex items-center justify-center w-8 h-8 min-w-[32px] rounded-[10px] bg-[#fafaf8] text-[#4a4a48] p-[7px]">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
             <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M3.27 6.96 12 12.01l8.73-5.05" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M12 22.08V12" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </span>
-        <h2 class="checkout-section__title flex-1 text-left">${t("checkout.itemsAndDeliveryOptions")}</h2>
-        ${supplierCount > 0 ? `<span class="text-[12px] text-[var(--co-muted)]">${supplierCount} ${supplierCount === 1 ? "tedarikçi" : "tedarikçi"}</span>` : ""}
+        <h2 class="checkout-section__title flex-1 text-left text-[15px] font-semibold text-[#1a1a1a] tracking-[-0.005em]">${t("checkout.itemsAndDeliveryOptions")}</h2>
+        ${supplierCount > 0 ? `<span class="text-[12px] text-[#8a877f]">${supplierCount} ${supplierCount === 1 ? "tedarikçi" : "tedarikçi"}</span>` : ""}
       </div>
-      <div class="checkout-section__content space-y-5">
+      <div class="checkout-section__content p-0 max-[720px]:px-4 max-[720px]:pb-4">
         ${ordersHtml}
       </div>
       ${renderSupplierNoteModal()}

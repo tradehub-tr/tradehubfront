@@ -18,26 +18,26 @@ export function BillingInfoSection({
   return `
     <section
       id="checkout-billing"
-      class="checkout-section checkout-section--billing"
+      class="checkout-section checkout-section--billing bg-white border border-[#e8e6e0] rounded-2xl shadow-[0_1px_2px_rgba(20,20,18,0.04)] overflow-hidden"
       x-data="billingForm"
       x-init="init(${initialExpanded ? "true" : "false"})"
     >
       <!-- Card head -->
-      <div class="checkout-section__header flex items-center gap-3">
-        <span class="checkout-section__icon inline-flex items-center justify-center">
+      <div class="checkout-section__header flex items-center gap-3 px-[22px] py-[18px]">
+        <span class="checkout-section__icon inline-flex items-center justify-center w-8 h-8 min-w-[32px] rounded-[10px] bg-[#fafaf8] text-[#4a4a48] p-[7px]">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
             <path stroke-linecap="round" stroke-linejoin="round" d="M14 2v6h6"/>
           </svg>
         </span>
 
-        <h2 class="checkout-section__title flex-1 truncate" data-i18n="checkout.billingInfo">${t("checkout.billingInfo")}</h2>
+        <h2 class="checkout-section__title flex-1 truncate text-[15px] font-semibold text-[#1a1a1a] tracking-[-0.005em]" data-i18n="checkout.billingInfo">${t("checkout.billingInfo")}</h2>
 
         <!-- Tip rozeti (kapalı durumdayken bile görünür) -->
         <span
           x-show="type"
           x-cloak
-          class="co-pill co-pill-ghost"
+          class="co-pill co-pill-ghost inline-flex items-center gap-1 px-2 py-[3px] rounded-full text-[11.5px] font-medium bg-transparent text-[#4a4a48] border border-[#e8e6e0] whitespace-nowrap"
           x-text="type === 'Bireysel' ? '${t("checkout.billingIndividual")}' : '${t("checkout.billingCompany")}'"
         ></span>
 
@@ -45,16 +45,16 @@ export function BillingInfoSection({
         <span
           x-show="!isComplete && !expanded"
           x-cloak
-          class="co-pill co-pill-warn"
+          class="co-pill co-pill-warn inline-flex items-center gap-1 px-2 py-[3px] rounded-full text-[11.5px] font-medium bg-[#fff4e5] text-[#b54708] border-transparent border whitespace-nowrap"
         >
-          <span class="co-pill-dot"></span>
+          <span class="co-pill-dot w-[5px] h-[5px] rounded-full bg-[#b54708] inline-block"></span>
           <span data-i18n="checkout.billingMissing">${t("checkout.billingMissing")}</span>
         </span>
 
         <button
           type="button"
           @click="toggle()"
-          class="co-link-btn"
+          class="co-link-btn appearance-none bg-transparent border-0 px-2 py-1 text-[#4a4a48] inline-flex items-center gap-1 text-[13px] font-medium rounded-md cursor-pointer no-underline hover:text-[#1a1a1a] hover:bg-[#fafaf8] focus:outline-none"
         >
           <span x-show="!expanded" data-i18n="checkout.edit">${t("checkout.edit")}</span>
           <span x-show="expanded" x-cloak data-i18n="checkout.close">${t("checkout.close")}</span>
@@ -62,36 +62,36 @@ export function BillingInfoSection({
       </div>
 
       <!-- Kapalı durum: summary -->
-      <div x-show="!expanded" class="checkout-section__content -mt-2">
+      <div x-show="!expanded" class="checkout-section__content px-[22px] pb-[22px] -mt-2">
         <p class="text-[13px] text-[#6b7280]" x-text="summaryText"></p>
       </div>
 
       <!-- Açık durum: edit -->
-      <div x-show="expanded" x-cloak class="checkout-section__content flex flex-col gap-3.5">
+      <div x-show="expanded" x-cloak class="checkout-section__content px-[22px] pb-[22px] flex flex-col gap-3.5">
 
         <!-- Tip toggle: Bireysel / Şirket -->
-        <div class="co-billing-toggle" role="tablist">
+        <div class="co-billing-toggle grid grid-cols-2 max-[720px]:grid-cols-1 gap-[10px]" role="tablist">
           <button
             type="button"
             role="tab"
             :aria-selected="type === 'Bireysel'"
             @click="setType('Bireysel')"
-            class="co-billing-toggle-card"
-            :class="type === 'Bireysel' ? 'is-active' : ''"
+            class="co-billing-toggle-card bg-white border border-[#e8e6e0] rounded-xl p-[14px_16px] text-left flex flex-col gap-1 transition-all cursor-pointer hover:border-[#d5d2c9]"
+            :class="type === 'Bireysel' ? 'is-active bg-[#fff8e1] border-[#f5b800] shadow-[0_0_0_3px_rgba(245,184,0,0.12)]' : ''"
           >
-            <div class="co-bt-title" data-i18n="checkout.billingIndividual">${t("checkout.billingIndividual")}</div>
-            <div class="co-bt-sub" data-i18n="checkout.billingIndividualDesc">${t("checkout.billingIndividualDesc")}</div>
+            <div class="co-bt-title font-semibold text-[13.5px] text-[#1a1a1a]" data-i18n="checkout.billingIndividual">${t("checkout.billingIndividual")}</div>
+            <div class="co-bt-sub text-[12px] text-[#8a877f]" data-i18n="checkout.billingIndividualDesc">${t("checkout.billingIndividualDesc")}</div>
           </button>
           <button
             type="button"
             role="tab"
             :aria-selected="type === 'Şirket'"
             @click="setType('Şirket')"
-            class="co-billing-toggle-card"
-            :class="type === 'Şirket' ? 'is-active' : ''"
+            class="co-billing-toggle-card bg-white border border-[#e8e6e0] rounded-xl p-[14px_16px] text-left flex flex-col gap-1 transition-all cursor-pointer hover:border-[#d5d2c9]"
+            :class="type === 'Şirket' ? 'is-active bg-[#fff8e1] border-[#f5b800] shadow-[0_0_0_3px_rgba(245,184,0,0.12)]' : ''"
           >
-            <div class="co-bt-title" data-i18n="checkout.billingCompany">${t("checkout.billingCompany")}</div>
-            <div class="co-bt-sub" data-i18n="checkout.billingCompanyDesc">${t("checkout.billingCompanyDesc")}</div>
+            <div class="co-bt-title font-semibold text-[13.5px] text-[#1a1a1a]" data-i18n="checkout.billingCompany">${t("checkout.billingCompany")}</div>
+            <div class="co-bt-sub text-[12px] text-[#8a877f]" data-i18n="checkout.billingCompanyDesc">${t("checkout.billingCompanyDesc")}</div>
           </button>
         </div>
 
@@ -132,8 +132,8 @@ export function BillingInfoSection({
           </label>
 
           <!-- sameAsShipping: pill -->
-          <div x-show="sameAsShipping" x-cloak class="co-billing-addr-pill">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
+          <div x-show="sameAsShipping" x-cloak class="co-billing-addr-pill flex items-center gap-2 p-[12px_14px] bg-[#fafaf8] border border-[#e8e6e0] rounded-xl text-[13px] text-[#4a4a48]">
+            <svg class="w-4 h-4 text-[#8a877f] shrink-0" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
               <circle cx="12" cy="11" r="3" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>

@@ -55,8 +55,8 @@ function renderEmailItem(item: EmailItem): string {
   return `
     <div class="email-pref__item flex items-start gap-3 py-4 px-6 border-b border-(--color-border-light,#f0f0f0) last:border-b-0 max-md:px-4 max-md:py-3 max-sm:px-3">
       <label class="email-pref__checkbox relative inline-flex items-center justify-center w-5 h-5 flex-shrink-0 mt-0.5 cursor-pointer">
-        <input type="checkbox" data-email-check="${item.id}" ${item.checked ? "checked" : ""} class="opacity-0 w-0 h-0 absolute" />
-        <span class="email-pref__checkmark w-[18px] h-[18px] border-2 border-gray-300 rounded bg-white transition-all flex items-center justify-center"></span>
+        <input type="checkbox" data-email-check="${item.id}" ${item.checked ? "checked" : ""} class="peer opacity-0 w-0 h-0 absolute" />
+        <span class="email-pref__checkmark w-[18px] h-[18px] border-2 border-gray-300 rounded bg-white transition-all flex items-center justify-center peer-checked:bg-[var(--color-primary-500,#cc9900)] peer-checked:border-[var(--color-primary-500,#cc9900)] peer-checked:after:content-[''] peer-checked:after:w-[5px] peer-checked:after:h-[9px] peer-checked:after:border-solid peer-checked:after:border-[var(--color-text-inverse)] peer-checked:after:border-r-2 peer-checked:after:border-b-2 peer-checked:after:rotate-45 peer-checked:after:mb-0.5"></span>
       </label>
       <div class="flex-1 min-w-0">
         <h4 class="text-sm font-bold mb-1 m-0" style="color:var(--color-text-primary)">${item.title}</h4>
@@ -75,8 +75,8 @@ function renderCategory(cat: EmailCategory): string {
           <p class="text-[13px] max-sm:text-xs m-0" style="color:var(--color-text-secondary)">${cat.description}</p>
         </div>
         <label class="relative inline-flex w-12 h-[26px] flex-shrink-0 cursor-pointer">
-          <input type="checkbox" data-cat-toggle="${cat.id}" ${cat.enabled ? "checked" : ""} class="opacity-0 w-0 h-0 absolute" />
-          <span class="email-pref__toggle-slider absolute inset-0 rounded-[13px] transition-colors"></span>
+          <input type="checkbox" data-cat-toggle="${cat.id}" ${cat.enabled ? "checked" : ""} class="peer opacity-0 w-0 h-0 absolute" />
+          <span class="email-pref__toggle-slider absolute inset-0 rounded-[13px] bg-[var(--color-border-medium)] transition-colors duration-200 peer-checked:bg-[var(--toggle-active-bg,#cc9900)] before:content-[''] before:absolute before:w-5 before:h-5 before:left-[3px] before:top-[3px] before:bg-[var(--color-surface,#fff)] before:rounded-full before:transition-transform before:duration-200 before:shadow-[0_1px_3px_rgba(0,0,0,0.15)] peer-checked:before:translate-x-[22px]"></span>
         </label>
       </div>
       <div class="border border-border-default border-t-0 rounded-b-lg">

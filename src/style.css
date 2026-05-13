@@ -1,6 +1,4 @@
-/* ============================================================
-   GOOGLE FONTS — Inter (Alibaba'nın B2B Sans'ına yakın modern alternatif)
-   ============================================================ */
+/* === GOOGLE FONTS — Inter (Alibaba'nın B2B Sans'ına yakın modern alternatif) === */
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap");
 
 @import "tailwindcss";
@@ -15,13 +13,9 @@
   display: none !important;
 }
 
-/* ============================================================
-   @theme — DESIGN TOKENS
-   ============================================================ */
+/* === @theme — DESIGN TOKENS === */
 @theme {
-  /* ==========================================================
-     1. COLOR SYSTEM
-     ========================================================== */
+  /* === 1. COLOR SYSTEM === */
 
   /* --- Primary: iSTOC Sarısı (#f5b800) — sistem default brand rengi --- */
   --color-primary-50: #fff8e1;
@@ -83,7 +77,6 @@
   --color-orange-50: #fff7ed;
   --color-orange-500: #ea580c;
   --color-orange-600: #c2410c;
-  --color-orange-700: #9a3412;
 
   /* --- Surface Colors (Light / Dark) --- */
   --color-surface: #ffffff;
@@ -107,10 +100,7 @@
   --color-border-focus: #cc9900;
   --color-border-error: #ef4444;
 
-  /* ==========================================================
-     2. TYPOGRAPHY
-     WCAG AA+ — Çocuk & yaşlı erişilebilirliği
-     ========================================================== */
+  /* === 2. TYPOGRAPHY — WCAG AA+ — Çocuk & yaşlı erişilebilirliği === */
 
   /* --- Font Family --- */
   --font-sans:
@@ -170,10 +160,7 @@
   --font-weight-bold: 700;
   --font-weight-black: 900;
 
-  /* ==========================================================
-     3. SPACING & SIZING
-     Base unit: 8px
-     ========================================================== */
+  /* === 3. SPACING & SIZING — Base unit: 8px === */
 
   --spacing-0: 0px;
   --spacing-0_5: 2px;
@@ -251,24 +238,16 @@
   /* Tüm site için tek standart genişlik (1920px ekranda 40px kenar boşluğu) */
   --container-xl: 1840px;
   /* container-lg ile aynı — tek tip genişlik */
-  --container-full: 100%;
 
-  /* ==========================================================
-     4. BREAKPOINTS
-     ========================================================== */
+  /* === 4. BREAKPOINTS === */
 
   --breakpoint-xs: 320px;
   --breakpoint-sm: 480px;
   --breakpoint-md: 640px;
   --breakpoint-lg: 768px;
   --breakpoint-xl: 1024px;
-  --breakpoint-2xl: 1280px;
-  --breakpoint-3xl: 1536px;
-  --breakpoint-4xl: 1920px;
 
-  /* ==========================================================
-     5. BORDER & RADIUS
-     ========================================================== */
+  /* === 5. BORDER & RADIUS === */
 
   --radius-none: 0px;
   --radius-sm: 4px;
@@ -291,9 +270,7 @@
   --radius-tooltip: 4px;
   /* 4px */
 
-  /* ==========================================================
-     6. SHADOW & ELEVATION
-     ========================================================== */
+  /* === 6. SHADOW & ELEVATION === */
 
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.04), 0 1px 3px 0 rgba(0, 0, 0, 0.06);
 
@@ -305,9 +282,7 @@
 
   /* --- Semantic Shadow — moved to @theme inline below --- */
 
-  /* ==========================================================
-     7. MOTION & TRANSITIONS
-     ========================================================== */
+  /* === 7. MOTION & TRANSITIONS === */
 
   --duration-fast: 100ms;
   --duration-default: 200ms;
@@ -320,9 +295,7 @@
 
   /* --- animate tokens — moved to @theme inline below --- */
 
-  /* ==========================================================
-     10. Z-INDEX
-     ========================================================== */
+  /* === 10. Z-INDEX === */
 
   --z-behind: -1;
   --z-base: 0;
@@ -341,45 +314,29 @@
   --z-fixed: 40;
 }
 
-/* ============================================================
-   :root — COMPONENT TOKENS
-   ============================================================ */
+/* === :root — COMPONENT TOKENS === */
 :root {
-  /* ==========================================================
-     FLUID TYPOGRAPHY TOKENS (320px → 1280px)
-     ========================================================== */
-  --text-page-title: clamp(1.125rem, 1rem + 0.5vw, 1.5rem);
+  /* === FLUID TYPOGRAPHY TOKENS (320px → 1280px) === */
   /* 18px → 24px */
-  --text-product-title: clamp(0.8125rem, 0.75rem + 0.25vw, 0.9375rem);
   /* 13px → 15px */
   --text-product-price: clamp(0.9375rem, 0.875rem + 0.25vw, 1.25rem);
   /* 15px → 20px */
   --text-product-meta: clamp(0.6875rem, 0.65rem + 0.15vw, 0.8125rem);
   /* 11px → 13px */
-  --text-badge: clamp(0.625rem, 0.6rem + 0.1vw, 0.75rem);
   /* 10px → 12px */
-  --text-breadcrumb: clamp(0.6875rem, 0.65rem + 0.15vw, 0.8125rem);
   /* 11px → 13px */
-  --text-filter: clamp(0.75rem, 0.7rem + 0.2vw, 0.875rem);
   /* 12px → 14px */
-  --text-body: clamp(0.8125rem, 0.78rem + 0.15vw, 0.9375rem);
   /* 13px → 15px */
 
-  /* ==========================================================
-     FLUID SPACING TOKENS (320px → 1280px)
-     ========================================================== */
-  --space-page-x: clamp(0.75rem, 0.5rem + 1vw, 1.5rem);
+  /* === FLUID SPACING TOKENS (320px → 1280px) === */
   /* 12px → 24px */
   --space-card-padding: clamp(0.5rem, 0.4rem + 0.4vw, 1rem);
   /* 8px → 16px */
   --space-card-gap: clamp(0.5rem, 0.4rem + 0.4vw, 1rem);
   /* 8px → 16px */
-  --space-section-gap: clamp(1rem, 0.8rem + 0.8vw, 2rem);
   /* 16px → 32px */
 
-  /* ==========================================================
-     8. COMPONENT TOKENS
-     ========================================================== */
+  /* === 8. COMPONENT TOKENS === */
 
   /* --- Button — Primary token'ına bağlı --- */
   --btn-bg: var(--color-primary-500);
@@ -401,8 +358,6 @@
   --btn-outline-hover-text: var(--color-primary-600);
 
   /* --- Auth Pages (Login, Register, Forgot Password) --- */
-  --auth-accent: var(--color-primary-500);
-  --auth-input-focus: var(--color-primary-500);
   --auth-header-border: var(--color-primary-500);
 
   /* --- Card --- */
@@ -414,8 +369,6 @@
   --card-price-color: var(--color-text-heading);
   --card-price-size: 16px;
   --card-price-weight: 700;
-  --card-desc-color: #6b7280;
-  --card-desc-size: 12px;
   --card-moq-color: #6b7280;
   --card-moq-size: 11px;
   --card-badge-bg: var(--color-primary-50);
@@ -442,7 +395,6 @@
   --input-focus-border-color: var(--color-primary-500);
   --input-focus-ring-color: rgba(204, 153, 0, 0.12);
   --input-focus-ring-width: 2px;
-  --input-focus-ring-offset: 0px;
 
   /* Disabled state */
   --input-disabled-bg: var(--color-surface-muted);
@@ -497,9 +449,7 @@
   --nav-text-color: #000000;
   --nav-hover-color: var(--color-primary-600);
 
-  /* ==========================================================
-     9. PAGE SECTION TOKENS
-     ========================================================== */
+  /* === 9. PAGE SECTION TOKENS === */
 
   /* --- Search Area (sadece buton/input ve aktif chip/tab tokenları) --- */
   --search-tab-color: #6b7280;
@@ -531,7 +481,6 @@
   --mfr-ranking-heading-color: #222222;
   --mfr-ranking-label-color: var(--color-text-muted);
   --mfr-profile-text-color: #222222;
-  --mfr-profile-label-color: var(--color-text-muted);
   --mfr-profile-avatar-bg: #dddddd;
   --mfr-profile-btn-bg: var(--color-primary-500, #cc9900);
   --mfr-profile-btn-hover: var(--color-primary-700, #8a6800);
@@ -574,11 +523,6 @@
 
   /* --- Top Deals Page --- */
   --topdeals-page-hero-gradient: linear-gradient(135deg, #ff6b35 0%, #ee2737 50%, #c41442 100%);
-  --topdeals-page-tab-active-border: var(--color-text-heading);
-  --topdeals-page-tab-text: #6b7280;
-  --topdeals-page-pill-bg: #f3f4f6;
-  --topdeals-page-pill-active-bg: var(--color-surface);
-  --topdeals-page-pill-active-border: var(--color-text-heading);
 
   /* --- Top Ranking Section --- */
   --topranking-bg: #f5f5f5;
@@ -659,18 +603,11 @@
   --pd-breadcrumb-color: #6b7280;
   --pd-breadcrumb-link-color: var(--color-primary-500);
   --pd-title-color: var(--color-text-heading);
-  --pd-title-size: 1.5rem;
   --pd-rating-star-color: #f59e0b;
   --pd-rating-text-color: #6b7280;
   --pd-price-color: var(--color-text-heading);
-  --pd-price-size: 1.75rem;
   --pd-price-tier-bg: #f9fafb;
   --pd-price-tier-active-bg: var(--color-primary-50);
-  --pd-price-tier-active-border: var(--color-primary-500);
-  --pd-variant-border: var(--color-border-default);
-  --pd-variant-active-border: var(--color-primary-500);
-  --pd-variant-active-bg: var(--color-primary-50);
-  --pd-qty-input-border: var(--color-border-default);
   --pd-shipping-icon-color: #6b7280;
   --pd-trade-assurance-bg: #f0fdf4;
   --pd-trade-assurance-text: #15803d;
@@ -687,7 +624,6 @@
   --pd-supplier-card-bg: var(--color-surface);
   --pd-supplier-verified-color: var(--color-primary-500);
   --pd-faq-border: var(--color-border-default);
-  --pd-related-bg: #f8f8f8;
 
   /* --- Footer --- */
   --footer-bg: var(--color-surface);
@@ -697,9 +633,7 @@
   --footer-link-hover-color: var(--color-primary-500);
   --footer-border-color: #e5e7eb;
 
-  /* ==========================================================
-     9b. SEMANTIC CTA & NORMALIZATION TOKENS
-     ========================================================== */
+  /* === 9b. SEMANTIC CTA & NORMALIZATION TOKENS === */
 
   /* --- CTA Semantic — moved to @theme inline below --- */
 
@@ -714,46 +648,27 @@
   --color-border-medium: #d1d5db;
 
   /* --- CTA Button Token'ları --- */
-  --search-btn-bg: var(--color-cta-primary);
-  --search-btn-hover: var(--color-cta-primary-hover);
 
   /* --- Genel Aksiyon Token'ları --- */
   --toggle-active-bg: var(--color-cta-primary);
-  --modal-btn-primary-bg: var(--color-cta-primary);
-  --stepper-active-bg: var(--color-cta-primary);
 
-  /* ==========================================================
-     SELLER STOREFRONT — STORE-SPECIFIC TOKENS
-     ========================================================== */
+  /* === SELLER STOREFRONT — STORE-SPECIFIC TOKENS === */
 
-  --color-store-nav-bg: var(--color-primary-600);
-  --color-store-nav-text: var(--color-surface);
-  --color-store-nav-active-overlay: rgba(0, 0, 0, 0.15);
   --color-store-accent: var(--color-primary-500);
-  --color-store-accent-hover: var(--color-primary-600);
 
-  /* ==========================================================
-     RFQ PAGE — SPECIFIC TOKENS
-     ========================================================== */
+  /* === RFQ PAGE — SPECIFIC TOKENS === */
 
   /* --- Shadows --- */
-  --shadow-form: 0 10px 40px rgba(0, 0, 0, 0.12);
   --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.15);
 
   /* --- Colors --- */
-  --color-product-name: #222222;
-  --color-cta-text: var(--color-text-heading);
 
   /* --- Font Sizes --- */
-  --font-size-caption: 0.8125rem;
   /* 13px */
-  --font-size-hero-lg: 2rem;
   /* 32px */
 }
 
-/* ============================================================
-   @theme inline — tokens that reference var()
-   ============================================================ */
+/* === @theme inline — tokens that reference var() === */
 @theme inline {
   /* --- Semantic Shadow --- */
   --shadow-card: var(--shadow-sm);
@@ -775,9 +690,7 @@
   --color-cta-primary-hover: var(--btn-hover-bg);
 }
 
-/* ============================================================
-   KEYFRAMES
-   ============================================================ */
+/* === KEYFRAMES === */
 
 @keyframes fade-in {
   from {
@@ -828,47 +741,7 @@
   }
 }
 
-/* ============================================================
-   DARK MODE OVERRIDES — class-based via @variant dark
-   ============================================================ */
-
-@layer theme {
-  :root,
-  :host {
-    @variant dark {
-      --color-surface: #0f172a;
-      --color-surface-raised: #1e293b;
-      --color-surface-muted: #1a2332;
-      --color-surface-overlay: rgba(0, 0, 0, 0.7);
-      --color-surface-inverse: #f8fafc;
-
-      --color-text-heading: #f1f5f9;
-      --color-text-body: #cbd5e1;
-      --color-text-muted: #94a3b8;
-      --color-text-placeholder: #64748b;
-      --color-text-disabled: #475569;
-      --color-text-inverse: #0f172a;
-      --color-text-link: #e6b212;
-      --color-text-link-hover: #f6c94d;
-
-      --color-border-default: #334155;
-      --color-border-medium: #475569;
-      --color-border-light: #1e293b;
-      --color-border-strong: #64748b;
-      --color-border-focus: #e6b212;
-
-      --color-product-card-bg: #1e293b;
-      --color-product-card-border: #334155;
-      --color-product-price: #f1f5f9;
-      --color-header-bg: #0f172a;
-      --color-footer-bg: #0f172a;
-    }
-  }
-}
-
-/* ============================================================
-   UTILITY LAYERS
-   ============================================================ */
+/* === UTILITY LAYERS === */
 
 @layer base {
   html {
@@ -895,21 +768,20 @@
     outline-offset: 2px;
   }
 
-  /* --- Reduced Motion Desteği --- */
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-    }
+  /* Cart page: light gray surface background */
+  body:has(.sc-cart-page),
+  body:has(.sc-cart-page) main {
+    background: #f7f7f5;
+  }
+
+  /* Checkout page: light gray surface background */
+  body:has(.sc-checkout-page),
+  body:has(.sc-checkout-page) main {
+    background: #f7f7f5;
   }
 }
 
-/* ============================================================
-   COMPONENT CLASSES — CSS variable driven
-   ============================================================ */
+/* === COMPONENT CLASSES — CSS variable driven === */
 
 @layer components {
   /* --- Primary Button --- */
@@ -1205,23 +1077,6 @@
     aspect-ratio: 1 / 1;
   }
 
-  .auth-input-focus:focus {
-    --tw-ring-color: var(--auth-input-focus, #cc9900);
-    border-color: var(--auth-input-focus, #cc9900);
-    box-shadow: 0 0 0 1px var(--auth-input-focus, #cc9900);
-    outline: none;
-  }
-
-  .auth-otp-focus:focus {
-    border-color: var(--auth-input-focus, #cc9900);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--auth-input-focus, #cc9900) 20%, transparent);
-    outline: none;
-  }
-
-  .auth-link-hover:hover {
-    color: var(--auth-accent, #cc9900);
-  }
-
   /* --- Card --- */
   .th-card {
     background: var(--card-bg);
@@ -1230,11 +1085,6 @@
     padding: var(--spacing-card-padding);
     box-shadow: var(--shadow-card);
     transition: all 0.2s ease;
-  }
-
-  .th-card-title {
-    font-size: var(--card-title-size);
-    font-weight: var(--card-title-weight);
   }
 
   /* --- Product Card: varyant-başına bağımsız layout token'ları ---
@@ -1257,15 +1107,6 @@
     padding: var(--pc-topdeals-padding, 12px);
   }
 
-  /* Top Ranking kartı — top-ranking.html flat grid (group mode dokunulmaz) */
-  .pc-topranking {
-    background: var(--pc-topranking-bg, var(--color-surface));
-    border: var(--pc-topranking-border-width, 1px) solid
-      var(--pc-topranking-border-color, var(--color-border-default));
-    border-radius: var(--pc-topranking-radius, 6px);
-    padding: var(--pc-topranking-padding, 12px);
-  }
-
   /* RFQ arama sonucu kartı — rfq.ts renderProductCard */
   .rfq-search-card {
     background: var(--pc-rfq-bg, #ffffff);
@@ -1281,9 +1122,7 @@
     padding: var(--pc-featured-padding, 24px);
   }
 
-  /* =====================================================
-       INPUT — base + size variants + state variants (v4)
-       ===================================================== */
+  /* === INPUT — base + size variants + state variants (v4) === */
   .th-input {
     display: block;
     width: 100%;
@@ -1386,9 +1225,7 @@
     box-shadow: none;
   }
 
-  /* =====================================================
-       CHECKBOX — BEM, Alpine-compatible (v4)
-       ===================================================== */
+  /* === CHECKBOX — BEM, Alpine-compatible (v4) === */
   .th-checkbox {
     display: inline-flex;
     align-items: center;
@@ -1418,9 +1255,7 @@
     cursor: not-allowed;
   }
 
-  /* =====================================================
-       QUANTITY STEPPER (v4)
-       ===================================================== */
+  /* === QUANTITY STEPPER (v4) === */
   .th-quantity {
     display: inline-flex;
     align-items: center;
@@ -1619,9 +1454,7 @@
   }
 }
 
-/* ============================================================
-   GRID SYSTEM
-   ============================================================ */
+/* === GRID SYSTEM === */
 
 @layer utilities {
   .container-boxed,
@@ -1810,132 +1643,8 @@
     line-height: 18px;
   }
 
-  /* --- Fy26 Product Card — Layout now in Tailwind (ProductListingGrid.ts) --- */
-  /* searchx-*, fy26-*, price-area-center, action-area-layout migrated to Tailwind */
-
-  /* Responsive grid columns migrated to Tailwind classes in templates */
 }
 
-/* ── Product List View Mode ─────────────────────────────────── */
-/* Single class on .product-grid controls the entire list layout */
-
-/* List mode: single column grid */
-.product-grid.product-list-mode {
-  grid-template-columns: 1fr !important;
-  gap: 12px !important;
-}
-
-/* ≤479px: list mode falls back to vertical card (no horizontal override) */
-
-/* 480px–1199px: 2-column grid — image left, content+buttons right */
-@media (min-width: 480px) {
-  .product-grid.product-list-mode > [role="listitem"] .fy26-product-card-wrapper {
-    display: grid;
-    grid-template-columns: 200px 1fr;
-    grid-template-rows: 1fr auto;
-    gap: 0 16px;
-    padding: 12px;
-    border: 1px solid var(--product-card-border, #e5e7eb);
-    border-radius: 8px;
-    overflow: visible;
-  }
-
-  .product-grid.product-list-mode .searchx-img-area {
-    grid-row: 1 / -1;
-    grid-column: 1;
-    margin-bottom: 0;
-    width: 100%;
-  }
-
-  .product-grid.product-list-mode .fy26-product-card-content {
-    grid-column: 2;
-    grid-row: 1;
-    min-width: 0;
-  }
-
-  .product-grid.product-list-mode .fy26-product-card-content .px-1 {
-    padding-left: 0;
-    padding-right: 0;
-  }
-
-  .product-grid.product-list-mode .action-area-layout {
-    grid-column: 2;
-    grid-row: 2;
-    padding: 0;
-    margin-top: 8px;
-  }
-
-  .product-grid.product-list-mode .searchx-product-e-title {
-    height: auto !important;
-    -webkit-line-clamp: 2;
-    font-size: 1rem;
-    line-height: 22px;
-  }
-}
-
-/* ≥1200px: flex-row layout — image, content, buttons side by side */
-@media (min-width: 1200px) {
-  .product-grid.product-list-mode > [role="listitem"] .fy26-product-card-wrapper {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 16px;
-  }
-
-  .product-grid.product-list-mode .searchx-img-area {
-    width: 240px;
-    flex-shrink: 0;
-    margin-bottom: 0;
-  }
-
-  .product-grid.product-list-mode .fy26-product-card-content {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .product-grid.product-list-mode .action-area-layout {
-    flex-shrink: 0;
-    flex-direction: column;
-    align-items: stretch;
-    width: 140px;
-    margin-top: 0;
-  }
-
-  .product-grid.product-list-mode .action-area-layout .searchx-product-e-abutton {
-    flex: none;
-    width: 100%;
-  }
-}
-
-/* ── Product Card: compact fonts for tight grid (3-4 cols with sidebar) ── */
-
-/* 1024px–1599px: sidebar visible, 3-4 columns → cards ~220-300px wide */
-@media (min-width: 1024px) and (max-width: 1599px) {
-  .product-grid:not(.product-list-mode) .searchx-product-e-title {
-    font-size: 13px;
-    line-height: 17px;
-    height: 51px;
-    /* 3 lines × 17px */
-  }
-
-  .product-grid:not(.product-list-mode) .fy26-price {
-    font-size: 1rem;
-    line-height: 1.375rem;
-  }
-
-  .product-grid:not(.product-list-mode) .fy26-moq-stats,
-  .product-grid:not(.product-list-mode) .fy26-moq-stats .text-sm {
-    font-size: 12px;
-    line-height: 16px;
-  }
-
-  .product-grid:not(.product-list-mode) .searchx-product-e-abutton {
-    font-size: 12px;
-    padding-left: 8px;
-    padding-right: 8px;
-    height: 2rem;
-  }
-}
 
 .hero-side-slider .swiper-slide {
   transition: transform 200ms ease-out;
@@ -1964,2144 +1673,38 @@
   }
 }
 
-/* Factory card slider peek animation */
-.factory-slider.factory-peek-prev .swiper-slide-active,
-.factory-slider.factory-peek-prev .swiper-slide-prev {
-  transform: translateX(28px);
-}
-
-.factory-slider.factory-peek-next .swiper-slide-active,
-.factory-slider.factory-peek-next .swiper-slide-next {
-  transform: translateX(-28px);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .factory-slider .swiper-slide {
-    transition: none;
-  }
-
-  .factory-slider.factory-peek-prev .swiper-slide-active,
-  .factory-slider.factory-peek-prev .swiper-slide-prev,
-  .factory-slider.factory-peek-next .swiper-slide-active,
-  .factory-slider.factory-peek-next .swiper-slide-next {
-    transform: none;
-  }
-}
-
-/* ============================================================
-   PRODUCT DETAIL PAGE LAYOUT
-   ============================================================ */
-
-/* Sticky mode: activated by JS after scrolling past card */
-@variant xl {
-  #pd-hero-info.pd-sticky {
-    position: sticky;
-    top: 165px;
-    max-height: calc(100vh - 180px);
-    display: flex;
-    flex-direction: column;
-  }
-}
-
-/* Related Products — inside left column */
-.related-products-section {
-  margin-top: 24px;
-  padding: 20px;
-  border-radius: 8px;
-}
-
-.related-products-swiper .swiper-wrapper {
-  align-items: stretch;
-}
-
-.related-products-swiper .swiper-slide {
-  height: auto;
-}
-
-/* Related Products (tabs layout) — product detail */
-.rp-tab {
-  position: relative;
-}
-.rp-tab.rp-tab-active::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -1px;
-  height: 2px;
-  background: var(--pd-tab-active-border, #cc9900);
-}
-.rp-card {
-  text-decoration: none;
-  color: inherit;
-  background: var(--pc-related-bg, #ffffff);
-  border: var(--pc-related-border-width, 1px) solid var(--pc-related-border-color, #f3f4f6);
-  border-radius: var(--pc-related-radius, 8px);
-}
+/* === PRODUCT DETAIL PAGE LAYOUT === */
 
 /* Mobile sticky bottom bar visibility now controlled by Tailwind classes in product-detail.ts */
 
-/* ProductTabs — inside left column (no container-boxed) */
-#pd-hero-left #product-tabs-section {
-  margin-top: 24px;
-  padding-left: 0;
-  padding-right: 0;
-}
-
-/* Content area inside info card */
-#pd-info-scrollable {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-}
-
-/* When sticky: enable internal scroll with hidden scrollbar */
-.pd-sticky #pd-info-scrollable {
-  flex: 1;
-  overflow-y: auto;
-  min-height: 0;
-  scrollbar-width: none;
-}
-
-.pd-sticky #pd-info-scrollable::-webkit-scrollbar {
-  width: 0;
-}
-
-/* ============================================================
-   PRODUCT TITLE BAR — Above gallery, full-width (iSTOC-style)
-   ============================================================ */
-
-/* ProductTitleBar — migrated to Tailwind in ProductTitleBar.ts */
-
-/* ============================================================
-   PRODUCT IMAGE GALLERY — iSTOC-style
-   ============================================================ */
-
-/* Gallery container: thumbnail strip (left) + main image (right) */
-#product-gallery {
-  display: flex;
-  gap: 10px;
-  align-items: stretch;
-  aspect-ratio: 16 / 10;
-  width: 100%;
-  position: relative;
-  overflow: hidden;
-}
-
-/* Thumbnail strip — migrated to Tailwind in ProductImageGallery.ts */
-
-.pd-thumb-arrow:hover {
-  color: var(--color-text-body, #333333);
-  border-color: var(--color-border-medium, #d1d5db);
-}
-
-/* Individual thumbnail */
-.gallery-thumb {
-  width: 60px;
-  height: 60px;
-  border-radius: 6px;
-  overflow: hidden;
-  flex-shrink: 0;
-  border: 2px solid var(--color-border-default, var(--color-border-default, #e5e5e5));
-  cursor: pointer;
-  transition: border-color 0.15s;
-}
-
-.gallery-thumb.active {
-  border-color: var(--color-text-heading);
-}
-
-.gallery-thumb:hover:not(.active) {
-  border-color: var(--color-border-strong);
-}
-
-/* Main image area */
-#gallery-main-image {
-  flex: 1;
-  min-width: 0;
-  position: relative;
-  border-radius: 4px;
-  overflow: hidden;
-  background: var(--color-surface-raised, #f5f5f5);
-}
-
-#gallery-main-image.zoom-enabled {
-  cursor: zoom-in;
-}
-
-#gallery-main-image.zoom-enabled > [data-gallery-main-media="true"] {
-  transition: transform 0.18s ease-out;
-  transform-origin: 50% 50%;
-  will-change: transform;
-}
-
-#gallery-main-image.is-zooming > [data-gallery-main-media="true"] {
-  transition: transform 0.03s linear;
-}
-
-.gallery-media-asset {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  user-select: none;
-  pointer-events: none;
-}
-
-@media (hover: none), (pointer: coarse) {
-  #gallery-main-image.zoom-enabled {
-    cursor: default;
-  }
-}
-
-/* Prev/Next navigation arrows */
-.gallery-nav-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 5;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--color-surface, #ffffff);
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  cursor: pointer;
-  transition: box-shadow 0.15s;
-}
-
-.gallery-nav-btn:hover {
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
-}
-
-#gallery-prev {
-  left: 10px;
-}
-
-/* gallery-prev 2xl offset — when thumbnail strip is visible */
-@media (width >=1536px) {
-  #gallery-prev {
-    left: 88px;
-  }
-}
-
-#gallery-next {
-  right: 10px;
-}
-
-/* Action buttons — migrated to Tailwind in ProductImageGallery.ts */
-
-.gallery-action-btn:hover {
-  color: var(--color-text-body, #333333);
-}
-
-/* pd-gallery-tabs — migrated to Tailwind in ProductImageGallery.ts */
-
-#pd-hero-gallery {
-  text-align: center;
-}
-
-.gallery-view-tab {
-  padding: 6px 20px;
-  font-size: 13px;
-  font-weight: 500;
-  border-radius: 20px;
-  background: transparent;
-  color: var(--color-text-muted, #666666);
-  border: none;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.gallery-view-tab.active {
-  background: var(--color-surface, #ffffff);
-  color: var(--color-text-primary);
-  font-weight: 700;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
+/* === PRODUCT IMAGE GALLERY — iSTOC-style === */
 
 /* Full-screen gallery lightbox (image click) */
 body.gallery-lightbox-open {
   overflow: hidden;
 }
 
-#gallery-lightbox {
-  position: fixed;
-  inset: 0;
-  z-index: var(--z-spotlight, 90);
-  background: rgba(7, 10, 16, 0.84);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 90px 20px 20px;
-}
 
-#gallery-lightbox.hidden {
-  display: none;
-}
+/* === SUPPLIER TAB — "Know Your Supplier" redesign === */
 
-#gallery-lightbox-toolbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 72px;
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 18px;
-  background: transparent;
-}
-
-#gallery-lightbox-actions {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.gallery-lightbox-action-btn {
-  border: none;
-  background: transparent;
-  color: var(--color-text-inverse);
-  opacity: 0.94;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1;
-  cursor: pointer;
-  padding: 0;
-}
-
-.gallery-lightbox-action-btn:hover {
-  opacity: 1;
-}
-
-#gallery-lightbox-close {
-  width: 44px;
-  height: 44px;
-  border: none;
-  background: transparent;
-  color: var(--color-text-inverse);
-  opacity: 0.95;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  padding: 0;
-  transition: opacity 0.15s ease;
-}
-
-#gallery-lightbox-close:hover {
-  opacity: 1;
-}
-
-#gallery-lightbox-inner {
-  width: min(1150px, 100%);
-  height: min(82vh, 720px);
-  display: grid;
-  grid-template-columns: 90px minmax(0, 1fr);
-  gap: 16px;
-  align-items: center;
-}
-
-#gallery-lightbox-sidebar {
-  height: 100%;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-
-.gallery-lightbox-scroll {
-  width: 42px;
-  height: 34px;
-  border: none;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.94);
-  color: var(--color-text-heading, #111827);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-}
-
-.gallery-lightbox-scroll:hover {
-  background: var(--color-surface, #ffffff);
-}
-
-#gallery-lightbox-thumb-list {
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  scrollbar-width: none;
-  padding: 2px 0;
-}
-
-#gallery-lightbox-thumb-list::-webkit-scrollbar {
-  display: none;
-}
-
-.gallery-lightbox-thumb {
-  width: 76px;
-  height: 76px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.08);
-  padding: 0;
-  overflow: hidden;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition: border-color 0.15s ease;
-}
-
-.gallery-lightbox-thumb.active {
-  border-color: var(--color-surface);
-}
-
-#gallery-lightbox-stage {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  min-height: 0;
-  border-radius: 12px;
-  overflow: hidden;
-  background: rgba(0, 0, 0, 0.18);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#gallery-lightbox-count {
-  color: var(--color-text-inverse);
-  font-size: 16px;
-  font-weight: 500;
-  letter-spacing: normal;
-}
-
-#gallery-lightbox-image {
-  width: 100%;
-  height: 100%;
-}
-
-#gallery-lightbox-image > .gallery-media-asset {
-  object-fit: contain;
-}
-
-#gallery-lightbox-image > [data-gallery-main-media="true"] {
-  width: 100%;
-  height: 100%;
-}
-
-#gallery-lightbox-vertical-nav {
-  position: absolute;
-  right: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 2;
-  width: 44px;
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.94);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.gallery-lightbox-nav-btn {
-  width: 44px;
-  height: 44px;
-  border: none;
-  background: transparent;
-  color: var(--color-text-heading, #111827);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-}
-
-.gallery-lightbox-nav-btn + .gallery-lightbox-nav-btn {
-  border-top: 1px solid rgba(17, 24, 39, 0.12);
-}
-
-.gallery-lightbox-nav-btn:hover {
-  background: rgba(17, 24, 39, 0.06);
-}
-
-/* Gallery lightbox <=960px — migrated to Tailwind in ProductImageGallery.ts */
-
-/* Attributes card — replaces gallery when "Ozellikler" tab is active
-   Lives inside #product-gallery flex container, same position as #gallery-main-image */
-/* ProductAttributes — migrated to Tailwind in ProductAttributes.ts */
-
-.pd-attr-cell:nth-child(even) {
-  border-right: none;
-}
-
-.pd-attr-cell:nth-last-child(-n + 2) {
-  border-bottom: none;
-}
-
-.pd-attr-row:last-child {
-  border-bottom: none;
-}
-
-/* pd-section-heading — migrated to Tailwind in AttributesTabContent.ts */
-
-/* 4-column attributes table */
-.pd-attrs-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  border: 1px solid var(--pd-spec-border, #e5e5e5);
-  border-radius: 6px;
-  overflow: hidden;
-  font-size: 14px;
-}
-
-.pd-attrs-table td {
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--pd-spec-border, #e5e5e5);
-  vertical-align: top;
-}
-
-.pd-attrs-table tr:last-child td {
-  border-bottom: none;
-}
-
-.pd-attrs-key {
-  color: var(--pd-spec-key-color, #6b7280);
-  width: 25%;
-  background: var(--pd-spec-header-bg, #f9fafb);
-}
-
-.pd-attrs-val {
-  color: var(--pd-spec-value-color, #111827);
-  font-weight: 600;
-  width: 25%;
-}
-
-/* pd-section-collapsible layout — migrated to Tailwind in AttributesTabContent.ts */
-
-.pd-section-collapsible svg {
-  transition: transform 0.2s;
-}
-
-.pd-section-collapsible.open svg {
-  transform: rotate(180deg);
-}
-
-/* Lead time table header cells */
-.pd-attrs-table th {
-  padding: 12px 16px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--pd-spec-key-color, #6b7280);
-  background: var(--pd-spec-header-bg, #f9fafb);
-  border-bottom: 1px solid var(--pd-spec-border, #e5e5e5);
-  text-align: left;
-}
-
-/* Customization styles — migrated to Tailwind in AttributesTabContent.ts */
-
-/* ============================================================
-   REVIEWS REDESIGN — iSTOC-style reviews section
-   ============================================================ */
-
-/* Sub-tabs (Urun Yorumlari | Magaza Yorumlari) */
-/* Layout now in Tailwind: flex border-b-2 border-border-default mb-6 */
-.rv-sub-tabs {
-  gap: 0;
-}
-
-.rv-sub-tab {
-  padding: 10px 20px;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--pd-rating-text-color, #6b7280);
-  background: none;
-  border: none;
-  cursor: pointer;
-  position: relative;
-  white-space: nowrap;
-  transition: color 0.15s;
-}
-
-.rv-sub-tab.active {
-  color: var(--pd-title-color, #111827);
-  font-weight: 700;
-}
-
-.rv-sub-tab.active::after {
-  content: "";
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--pd-tab-active-border, #cc9900);
-}
-
-/* Layout now in Tailwind: flex gap-8 pb-6 mb-5 */
-.rv-rating-summary {
-  border-bottom: 1px solid var(--pd-spec-border, #e5e5e5);
-}
-
-/* Layout now in Tailwind: flex flex-col items-center justify-center min-w-[140px] */
-
-.rv-rating-number {
-  font-size: 48px;
-  font-weight: 800;
-  line-height: 1;
-  color: var(--pd-title-color, #111827);
-}
-
-.rv-rating-label {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--pd-review-star-color, #f59e0b);
-  margin-top: 4px;
-}
-
-.rv-rating-subtitle {
-  font-size: 12px;
-  color: var(--pd-rating-text-color, #6b7280);
-  margin-top: 6px;
-  text-align: center;
-}
-
-/* Layout now in Tailwind: flex-1 flex flex-col gap-2.5 justify-center */
-
-/* Layout now in Tailwind: flex items-center gap-2.5 */
-
-.rv-category-label {
-  font-size: 13px;
-  color: var(--pd-rating-text-color, #6b7280);
-  min-width: 140px;
-  flex-shrink: 0;
-}
-
-.rv-category-bar-track {
-  flex: 1;
-  height: 6px;
-  border-radius: 3px;
-  background: var(--pd-review-bar-bg, #e5e5e5);
-  overflow: hidden;
-}
-
-.rv-category-bar-fill {
-  height: 100%;
-  border-radius: 3px;
-  background: var(--pd-review-bar-fill, #f59e0b);
-  transition: width 0.3s ease;
-}
-
-.rv-category-score {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--pd-title-color, #111827);
-  min-width: 28px;
-  text-align: right;
-}
-
-/* Layout now in Tailwind: flex items-center gap-2 flex-wrap mb-4 */
-
-.rv-filter-pill {
-  padding: 6px 14px;
-  font-size: 12px;
-  font-weight: 500;
-  border-radius: 20px;
-  border: 1px solid var(--pd-spec-border, #e5e5e5);
-  background: var(--color-surface, #ffffff);
-  color: var(--pd-rating-text-color, #6b7280);
-  cursor: pointer;
-  transition: all 0.15s;
-  white-space: nowrap;
-}
-
-.rv-filter-pill.active {
-  border-color: var(--pd-tab-active-border, #cc9900);
-  color: var(--pd-tab-active-color, #cc9900);
-  background: var(--pd-price-tier-active-bg, #fef9e7);
-}
-
-.rv-filter-pill:hover:not(.active) {
-  border-color: var(--color-border-medium, #d1d5db);
-}
-
-/* Sort dropdown trigger */
-.rv-sort-btn {
-  margin-left: auto;
-  padding: 6px 14px;
-  font-size: 12px;
-  font-weight: 500;
-  border-radius: 20px;
-  border: 1px solid var(--pd-spec-border, #e5e5e5);
-  background: var(--color-surface, #ffffff);
-  color: var(--pd-rating-text-color, #6b7280);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-/* Layout now in Tailwind: flex gap-2 flex-wrap mb-5 */
-
-.rv-mention-tag {
-  padding: 4px 12px;
-  font-size: 12px;
-  border-radius: 4px;
-  background: var(--pd-spec-header-bg, #f9fafb);
-  color: var(--pd-rating-text-color, #6b7280);
-  border: 1px solid var(--pd-spec-border, #e5e5e5);
-}
-
-/* Review card redesigned */
-.rv-card {
-  padding: 20px 0;
-  border-bottom: 1px solid var(--pd-spec-border, #e5e5e5);
-}
-
-.rv-card:last-of-type {
-  border-bottom: none;
-}
-
-/* Layout now in Tailwind: flex items-start gap-3 mb-2.5 */
-
-.rv-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  font-weight: 700;
-  flex-shrink: 0;
-  color: var(--color-text-inverse);
-}
-
-/* Layout now in Tailwind: flex-1 min-w-0 */
-
-/* Layout now in Tailwind: flex items-center gap-2 flex-wrap */
-
-.rv-card-name {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--pd-title-color, #111827);
-}
-
-.rv-card-country {
-  font-size: 12px;
-  color: var(--pd-rating-text-color, #6b7280);
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.rv-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  padding: 2px 8px;
-  font-size: 11px;
-  font-weight: 600;
-  border-radius: 3px;
-}
-
-.rv-badge-verified {
-  background: #f0fdf4;
-  color: #15803d;
-}
-
-.rv-badge-repeat {
-  background: var(--color-primary-50, #fef9e7);
-  color: var(--color-cta-primary, #cc9900);
-}
-
-/* Layout now in Tailwind: flex items-center gap-2 mt-1 */
-
-.rv-card-date {
-  font-size: 12px;
-  color: var(--pd-rating-text-color, #6b7280);
-}
-
-.rv-card-comment {
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--pd-spec-value-color, #111827);
-  margin-bottom: 12px;
-}
-
-/* Supplier reply */
-.rv-supplier-reply {
-  background: var(--pd-spec-header-bg, #f9fafb);
-  border-radius: 6px;
-  padding: 12px 14px;
-  margin-bottom: 12px;
-}
-
-.rv-supplier-reply-label {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--pd-rating-text-color, #6b7280);
-  margin-bottom: 4px;
-}
-
-.rv-supplier-reply-text {
-  font-size: 13px;
-  color: var(--pd-spec-value-color, #111827);
-  line-height: 1.5;
-}
-
-/* Linked product card inside review */
-.rv-product-link {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px;
-  border: 1px solid var(--pd-spec-border, #e5e5e5);
-  border-radius: 6px;
-  margin-bottom: 12px;
-  text-decoration: none;
-}
-
-.rv-product-thumb {
-  width: 48px;
-  height: 48px;
-  border-radius: 4px;
-  background: var(--pd-spec-header-bg, #f9fafb);
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.rv-product-title {
-  font-size: 12px;
-  color: var(--pd-title-color, #111827);
-  line-height: 1.3;
-}
-
-.rv-product-price {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--pd-title-color, #111827);
-}
-
-/* Helpful button */
-.rv-helpful-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  color: var(--pd-rating-text-color, #6b7280);
-  background: none;
-  border: 1px solid var(--pd-spec-border, #e5e5e5);
-  border-radius: 4px;
-  padding: 4px 10px;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.rv-helpful-btn:hover {
-  border-color: var(--color-border-medium, #d1d5db);
-  color: var(--pd-title-color, #111827);
-}
-
-.rv-helpful-btn.voted {
-  border-color: var(--pd-tab-active-border, #cc9900);
-  color: var(--pd-tab-active-color, #cc9900);
-}
-
-/* "Tumunu Goster" button */
-.rv-show-all-btn {
-  display: block;
-  width: 100%;
-  padding: 12px;
-  margin-top: 20px;
-  font-size: 14px;
-  font-weight: 600;
-  text-align: center;
-  border: 1px solid var(--pd-spec-border, #e5e5e5);
-  border-radius: 8px;
-  background: var(--color-surface, #ffffff);
-  color: var(--pd-title-color, #111827);
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.rv-show-all-btn:hover {
-  border-color: var(--color-border-medium, #d1d5db);
-  background: var(--pd-spec-header-bg, #f9fafb);
-}
-
-/* Responsive: rating summary mobile — migrated to Tailwind in ProductReviews.ts */
-
-/* ============================================================
-   PHASE E — Review Filtering, Sorting, Modals
-   ============================================================ */
-
-/* ── 1. Rating Dropdown ─────────────────────────────── */
-
-.rv-rating-dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.rv-rating-dropdown-trigger {
-  padding: 6px 14px;
-  font-size: 12px;
-  font-weight: 500;
-  border-radius: 20px;
-  border: 1px solid var(--pd-spec-border, #e5e5e5);
-  background: var(--color-surface, #ffffff);
-  color: var(--pd-rating-text-color, #6b7280);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.15s;
-  white-space: nowrap;
-}
-
-.rv-rating-dropdown-trigger:hover {
-  border-color: var(--color-border-medium, #d1d5db);
-}
-
-.rv-rating-dropdown-trigger.active {
-  border-color: var(--pd-tab-active-border, #cc9900);
-  color: var(--pd-tab-active-color, #cc9900);
-  background: var(--pd-price-tier-active-bg, #fef9e7);
-}
-
-.rv-rating-dropdown-panel {
-  position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  min-width: 180px;
-  background: var(--color-surface, #ffffff);
-  border: 1px solid var(--pd-spec-border, #e5e5e5);
-  border-radius: 8px;
-  box-shadow: var(--shadow-dropdown);
-  z-index: 10;
-  display: none;
-  overflow: hidden;
-}
-
-.rv-rating-dropdown.open .rv-rating-dropdown-panel {
-  display: block;
-}
-
-.rv-rating-dropdown-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  font-size: 13px;
-  color: var(--pd-spec-value-color, #111827);
-  cursor: pointer;
-  transition: background 0.1s;
-  border: none;
-  background: none;
-  width: 100%;
-  text-align: left;
-}
-
-.rv-rating-dropdown-item:hover {
-  background: var(--pd-spec-header-bg, #f9fafb);
-}
-
-.rv-rating-dropdown-item.active {
-  color: var(--pd-tab-active-color, #cc9900);
-  font-weight: 600;
-}
-
-/* ── 2. Sort Dropdown ────────────────────────────────── */
-
-.rv-sort-dropdown {
-  position: relative;
-  display: inline-block;
-  margin-left: auto;
-}
-
-.rv-sort-dropdown-trigger {
-  padding: 6px 14px;
-  font-size: 12px;
-  font-weight: 500;
-  border-radius: 20px;
-  border: 1px solid var(--pd-spec-border, #e5e5e5);
-  background: var(--color-surface, #ffffff);
-  color: var(--pd-rating-text-color, #6b7280);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  transition: all 0.15s;
-  white-space: nowrap;
-}
-
-.rv-sort-dropdown-trigger:hover {
-  border-color: var(--color-border-medium, #d1d5db);
-}
-
-.rv-sort-dropdown-panel {
-  position: absolute;
-  top: calc(100% + 4px);
-  right: 0;
-  min-width: 160px;
-  background: var(--color-surface, #ffffff);
-  border: 1px solid var(--pd-spec-border, #e5e5e5);
-  border-radius: 8px;
-  box-shadow: var(--shadow-dropdown);
-  z-index: 10;
-  display: none;
-  overflow: hidden;
-}
-
-.rv-sort-dropdown.open .rv-sort-dropdown-panel {
-  display: block;
-}
-
-.rv-sort-dropdown-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  font-size: 13px;
-  color: var(--pd-spec-value-color, #111827);
-  cursor: pointer;
-  transition: background 0.1s;
-  border: none;
-  background: none;
-  width: 100%;
-  text-align: left;
-}
-
-.rv-sort-dropdown-item:hover {
-  background: var(--pd-spec-header-bg, #f9fafb);
-}
-
-.rv-sort-dropdown-item.active {
-  color: var(--pd-tab-active-color, #cc9900);
-  font-weight: 600;
-}
-
-/* ── 3. Active Mention Tags ──────────────────────────── */
-
-.rv-mention-tag {
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.rv-mention-tag:hover {
-  border-color: var(--color-border-medium, #d1d5db);
-}
-
-.rv-mention-tag.active {
-  border-color: var(--pd-tab-active-border, #cc9900);
-  color: var(--pd-tab-active-color, #cc9900);
-  background: var(--pd-price-tier-active-bg, #fef9e7);
-  font-weight: 600;
-}
-
-/* ── 4. Language Toggle Row ──────────────────────────── */
-
-/* Layout now in Tailwind: flex items-center gap-2 mt-2 */
-/* SVG sizing now in Tailwind: w-3.5 h-3.5 shrink-0 */
-
-.rv-lang-row svg {
-  color: var(--pd-rating-text-color, #6b7280);
-}
-
-.rv-lang-row span {
-  color: var(--pd-rating-text-color, #6b7280);
-}
-
-.rv-lang-row a {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--pd-rating-text-color, #6b7280);
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.rv-lang-row a:hover {
-  color: var(--pd-title-color, #111827);
-}
-
-/* ── 5. Reviews Modal ────────────────────────────────── */
-
-.rv-modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: var(--z-backdrop, 40);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.rv-modal {
-  background: var(--color-surface, #ffffff);
-  max-width: 800px;
-  width: 95%;
-  max-height: 85vh;
-  border-radius: var(--radius-modal, 16px);
-  box-shadow: var(--shadow-modal);
-  display: flex;
-  flex-direction: column;
-  z-index: var(--z-modal, 50);
-}
-
-/* Layout now in Tailwind: flex justify-between items-center px-6 py-5 shrink-0 */
-.rv-modal-header {
-  border-bottom: 1px solid var(--color-border-default, #e5e5e5);
-}
-
-.rv-modal-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--pd-title-color, #111827);
-}
-
-.rv-modal-close {
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  border: none;
-  background: none;
-  cursor: pointer;
-  color: var(--pd-rating-text-color, #6b7280);
-  transition: background 0.15s;
-}
-
-.rv-modal-close:hover {
-  background: var(--pd-spec-header-bg, #f9fafb);
-  color: var(--pd-title-color, #111827);
-}
-
-/* Layout now in Tailwind: overflow-y-auto px-6 pb-6 flex-1 */
-
-.rv-modal-hidden {
-  display: none !important;
-}
-
-/* ── 6. Login Modal ──────────────────────────────────── */
-/* Layout now in Tailwind — only pseudo-elements kept here */
-
-.rv-login-divider::before,
-.rv-login-divider::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: #e5e7eb;
-}
-
-/* ── 7. Product Thumbnail in Store Reviews ───────────── */
-
-/* Layout now in Tailwind: flex items-center gap-3 rounded-lg p-3 mt-3 */
-.rv-product-card {
-  background: var(--color-surface-raised, #f5f5f5);
-}
-
-/* Layout now in Tailwind: w-12 h-12 rounded object-cover shrink-0 */
-.rv-product-card-img {
-  background: var(--pd-spec-header-bg, #f9fafb);
-}
-
-/* Layout now in Tailwind: flex-1 min-w-0 */
-
-.rv-product-card-title {
-  font-size: 13px;
-  color: var(--color-text-body, #333333);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.rv-product-card-price {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--pd-title-color, #111827);
-  margin-top: 2px;
-}
-
-.rv-product-card-link {
-  font-size: 12px;
-  color: var(--color-text-body, #333333);
-  white-space: nowrap;
-  flex-shrink: 0;
-  text-decoration: none;
-}
-
-.rv-product-card-link:hover {
-  text-decoration: underline;
-}
-
-/* ── 8. Hidden Reviews Link ──────────────────────────── */
-
-.rv-hidden-reviews-link {
-  font-size: 13px;
-  color: var(--color-cta-primary, #cc9900);
-  cursor: pointer;
-  margin-top: 4px;
-  background: none;
-  border: none;
-  padding: 0;
-  text-decoration: none;
-}
-
-.rv-hidden-reviews-link:hover {
-  text-decoration: underline;
-}
-
-/* ── 9. Responsive — Phase E — migrated to Tailwind in ProductReviews.ts, ReviewsModal.ts, LoginModal.ts ── */
-
-/* ============================================================
-   SUPPLIER TAB — "Know Your Supplier" redesign
-   ============================================================ */
-
-/* Hero banner */
-/* sp-* classes migrated to Tailwind in CompanyProfile.ts */
-
-/* ============================================================
-   PRODUCT INFO CARD — iSTOC layout-stick style
-   ============================================================ */
-
-#product-info {
-  background: var(--color-surface, #ffffff);
-  display: flex;
-  flex-direction: column;
-  border: 1px solid var(--color-border-default, #e5e5e5);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.pd-sticky #product-info {
-  flex: 1;
-  min-height: 0;
-  max-height: 100%;
-  overflow: hidden;
-  box-shadow: 0 10px 28px -18px rgba(17, 24, 39, 0.35);
-}
-
-/* Card Tabs — "Ürün Fiyatları" / "Toplu Teklif" (iSTOC-style) */
-#pd-card-tabs {
-  display: flex;
-  margin: -20px -20px 0;
-  padding: 0;
-  background: var(--color-surface-raised, #f5f5f5);
-  border-bottom: 1px solid var(--color-border-default, #e5e5e5);
-}
-
-.pd-card-tab {
-  flex: 1;
-  padding: 14px 16px;
-  font-size: 15px;
-  font-weight: 600;
-  text-align: center;
-  background: transparent;
-  border: none;
-  border-top: 3px solid transparent;
-  cursor: pointer;
-  color: var(--color-text-muted, #666666);
-  position: relative;
-  transition:
-    background 0.15s,
-    color 0.15s;
-}
-
-.pd-card-tab:not(:first-child) {
-  border-left: 1px solid var(--color-border-default, #e5e5e5);
-}
-
-.pd-card-tab.active {
-  color: var(--color-text-primary);
-  font-weight: 700;
-  background: var(--color-surface, #ffffff);
-  border-top-color: var(--pd-tab-active-border, #cc9900);
-}
-
-/* Ready to Ship badge */
-#pd-ready-badge {
-  display: inline-flex;
-  align-items: center;
-  margin: 16px 0 12px;
-  padding: 3px 10px;
-  font-size: 11px;
-  font-weight: 600;
-  border: 1.5px solid #16a34a;
-  border-radius: 4px;
-  color: #16a34a;
-  background: #f0fdf4;
-}
-#pd-ready-badge.is-out-of-stock {
-  border-color: #dc2626;
-  color: #dc2626;
-  background: #fef2f2;
-}
-
-/* Price Tiers — clean horizontal layout */
-#pd-price-tiers {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px 16px;
-  background: none;
-  border-radius: 0;
-  overflow: visible;
-  margin-bottom: 16px;
-}
-
-.pd-price-tier {
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  cursor: default;
-  min-width: 0;
-}
-
-.pd-price-tier-price {
-  flex-wrap: wrap;
-}
-
-.pd-price-tier:not(:first-child) {
-  border-left: none;
-}
-
-.pd-price-tier.active {
-  background: none;
-}
-
-.pd-price-tier-qty {
-  font-size: 13px;
-  color: var(--color-text-muted, #666666);
-  margin-bottom: 4px;
-}
-
-.pd-price-tier-price {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--color-text-heading, #111827);
-  line-height: 1.2;
-}
-
-.pd-price-tier.active .pd-price-tier-price {
-  color: #cc0000;
-}
-
-/* #pd-sample-price and .pd-sample-left migrated to Tailwind in ProductInfo.ts */
-
-/* Numune Al butonu — admin panel --btn-outline-* token'larına bağlı. */
-.pd-sample-btn {
-  padding: 6px 20px;
-  font-size: 13px;
-  font-weight: 500;
-  border: var(--btn-outline-border-width) solid var(--btn-outline-border-color);
-  border-radius: var(--radius-button);
-  background: var(--btn-outline-bg);
-  color: var(--btn-outline-text);
-  cursor: pointer;
-  transition:
-    background 0.15s,
-    color 0.15s,
-    border-color 0.15s;
-}
-
-.pd-sample-btn:hover {
-  background: var(--btn-outline-hover-bg, var(--btn-outline-bg));
-  color: var(--btn-outline-hover-text, var(--btn-outline-text));
-}
-
-/* #pd-variations-section, .pd-section-header, .pd-select-now migrated to Tailwind in ProductInfo.ts */
-
-.pd-variant-label {
-  font-size: 14px;
-  color: var(--pd-title-color, #111827);
-  margin: 16px 0 12px;
-}
-
-.variant-group {
-  margin-bottom: 0;
-}
-
-.variant-group:last-child {
-  margin-bottom: 0;
-}
-
-/* Color variant thumbnails (iSTOC-style product images) */
-.pd-color-thumbs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 8px;
-}
-
-.pd-color-thumb {
-  width: 64px;
-  height: 64px;
-  padding: 0;
-  border: 2px solid var(--color-border-default, var(--color-border-default, #e5e5e5));
-  border-radius: 50%;
-  overflow: hidden;
-  cursor: pointer;
-  background: transparent;
-  transition: border-color 0.15s ease;
-}
-
-.pd-color-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.pd-color-thumb.active {
-  border-color: var(--pd-title-color, #111827);
-}
-
-.pd-color-thumb:hover:not(.active):not(.pd-color-thumb-disabled) {
-  border-color: #999;
-}
-
-.pd-color-thumb-disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-/* Variant pill buttons (iSTOC-style bordered pills) */
-.pd-variant-btn {
-  padding: 6px 16px;
-  border-radius: 16px;
-  font-size: 13px;
-  font-weight: 500;
-  border: 1px solid var(--color-border-medium, #d1d5db);
-  background: var(--color-surface, #ffffff);
-  color: var(--pd-title-color, #111827);
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.pd-variant-btn.active {
-  border-color: var(--pd-title-color, #111827);
-  font-weight: 600;
-}
-
-.pd-variant-btn:hover:not(.active):not(:disabled) {
-  border-color: #999;
-}
-
-/* .pd-info-section, .pd-section-title, .pd-verified-badge, .pd-customization-list,
-   .pd-shipping-card and children migrated to Tailwind in ProductInfo.ts */
-
-/* CTA Buttons — two-state positioning (iSTOC-style)
-   Non-sticky: normal flow with top+bottom dividers
-   Sticky: pinned at bottom of scrollable area */
-#pd-cta-buttons {
-  display: flex;
-  gap: 10px;
-  padding: 16px 20px;
-  border-top: 1px solid var(--color-border-default, #e5e5e5);
-  border-bottom: 1px solid var(--color-border-default, #e5e5e5);
-  background: var(--color-surface, #ffffff);
-}
-
-/* KYB Gate UI — Doğrulanmamış satıcı bildirimi */
-.pd-kyb-banner {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  margin: 16px 20px 0;
-  padding: 12px 14px;
-  background: #fff7ed;
-  border: 1px solid #fed7aa;
-  border-radius: 8px;
-}
-.pd-kyb-banner-icon {
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-.pd-kyb-banner-text {
-  font-size: 12px;
-  line-height: 1.5;
-  color: #9a3412;
-}
-.pd-kyb-banner-title {
-  font-weight: 600;
-  margin-bottom: 2px;
-}
-.pd-kyb-banner-body {
-  color: #9a3412;
-}
-.pd-add-to-cart--disabled {
-  opacity: 0.5;
-  cursor: not-allowed !important;
-  pointer-events: none;
-}
-.pd-kyb-hint {
-  display: flex;
-  align-items: flex-start;
-  gap: 6px;
-  margin: 8px 20px 0;
-  font-size: 11px;
-  line-height: 1.5;
-  color: #6b7280;
-}
-.pd-kyb-hint-icon {
-  flex-shrink: 0;
-  margin-top: 2px;
-  color: #9ca3af;
-}
-
-#pd-cta-buttons button {
-  flex: 1;
-  min-width: 0;
-  white-space: nowrap;
-}
-
-#pd-add-to-cart {
-  flex: 1.4;
-}
-
-.pd-sticky #pd-cta-buttons {
-  position: sticky;
-  bottom: -22px;
-  z-index: 2;
-  background: var(--color-surface, #ffffff);
-  border-bottom: none;
-  margin: 0 -20px -20px;
-  padding: 16px 20px 20px;
-  box-shadow: 0 -8px 18px -14px rgba(17, 24, 39, 0.35);
-}
-
-/* Trade Assurance section — keep #pd-trade-assurance and .pd-sticky ordering in CSS */
-#pd-trade-assurance {
-  padding: 20px 0 0;
-  border-top: 1px solid var(--color-border-light, #f0f0f0);
-  margin-top: 20px;
-  order: 1;
-}
-
-.pd-sticky #pd-trade-assurance {
-  order: 0;
-}
-
-/* .pd-ta-header, .pd-ta-item, .pd-ta-payment-icons, .pd-ta-badge migrated to Tailwind in ProductInfo.ts */
-
-/* Cart drawer + shipping modal styles are now fully rendered with Tailwind
-   in SharedCartDrawer.ts (no legacy CSS overrides kept here). */
-
-/* ============================================================
-   MOBILE PRODUCT DETAIL -- iSTOC-Style Layout
-   Layout via Tailwind classes in MobileLayout.ts.
-   Only transitions, states, pseudo-elements remain in CSS.
-   ============================================================ */
-
-/* #pd-mobile-layout / #pd-desktop-layout visibility now handled with Tailwind
-   classes directly in product-detail.ts. */
-
-/* -- Gallery -- scrollbar hiding & placeholder gradient -- */
-#pdm-gallery-track::-webkit-scrollbar {
-  display: none;
-}
-
-.pdm-gallery-placeholder {
-  background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
-}
-
-.pdm-gallery-action-btn {
-  transition: background 0.15s;
-}
-
-.pdm-gallery-action-btn:active {
-  background: rgba(255, 255, 255, 1);
-}
-
-/* -- Section tabs -- transitions & active state -- */
-.pdm-section-tab {
-  transition:
-    color 0.2s,
-    border-color 0.2s;
-}
-
-.pdm-section-tab-active {
-  color: var(--pd-tab-active-color, #cc9900);
-  font-weight: 600;
-  border-bottom-color: var(--pd-tab-active-border, #cc9900);
-}
-
-/* -- Sample btn -- transition & active -- */
-.pdm-sample-btn {
-  transition: background 0.15s;
-}
-
-.pdm-sample-btn:active {
-  background: var(--btn-outline-hover-bg, var(--color-surface-raised, #f5f5f5));
-}
-
-/* -- Reviews star SVG -- */
-#pdm-reviews-row .pdm-stars svg {
-  width: 14px;
-  height: 14px;
-}
-
-/* -- Collapsible sections -- transitions & states -- */
-.pdm-collapsible-header em {
-  font-style: normal;
-  font-weight: 400;
-  color: var(--color-text-placeholder, #999999);
-  margin-left: 4px;
-}
-
-.pdm-chevron {
-  transition: transform 0.2s ease;
-}
-
-.pdm-collapsible-open .pdm-chevron {
-  transform: rotate(180deg);
-}
-
-.pdm-collapsible-body.pdm-hidden {
-  display: none;
-}
-
-.pdm-color-thumb {
-  transition: border-color 0.15s;
-}
-
-.pdm-color-thumb.active {
-  border-color: var(--color-text-heading);
-}
-
-.pdm-color-thumb.pdm-disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.pdm-variant-pill {
-  transition: border-color 0.15s;
-}
-
-.pdm-variant-pill.active {
-  border-color: var(--color-text-heading);
-  font-weight: 600;
-}
-
-.pdm-variant-pill.pdm-disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-/* -- Shipping section background -- */
-.pdm-shipping-section {
-  background: #f0fdf4;
-}
-
-/* -- Supplier card -- transitions & states -- */
-.pdm-supplier-meta img {
-  width: 16px;
-  height: 12px;
-  border-radius: 1px;
-}
-
-.pdm-supplier-btn {
-  transition: background 0.15s;
-}
-
-.pdm-supplier-btn:active {
-  background: var(--btn-outline-hover-bg, var(--color-surface-raised, #f5f5f5));
-}
-
-.pdm-bottom-sheet {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  background: rgba(0, 0, 0, 0);
-  display: flex;
-  align-items: flex-end;
-  transition: background 0.25s;
-  pointer-events: none;
-}
-
-.pdm-bottom-sheet.pdm-hidden {
-  display: none;
-}
-
-.pdm-bottom-sheet.pdm-sheet-visible {
-  background: rgba(0, 0, 0, 0.5);
-  pointer-events: auto;
-}
-
-.pdm-sheet-inner {
-  width: 100%;
-  max-width: 100vw;
-  box-sizing: border-box;
-  background: var(--color-surface, #ffffff);
-  border-radius: 16px 16px 0 0;
-  max-height: 85vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  transform: translateY(100%);
-  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
-  -webkit-overflow-scrolling: touch;
-}
-
-.pdm-bottom-sheet.pdm-sheet-visible .pdm-sheet-inner {
-  transform: translateY(0);
-}
-
-.pdm-sheet-handle {
-  width: 40px;
-  height: 4px;
-  background: #e0e0e0;
-  border-radius: 2px;
-  margin: 12px auto 8px;
-}
-
-.pdm-sheet-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 4px 16px 16px;
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--color-text-heading, #111827);
-}
-
-.pdm-sheet-close {
-  width: 32px;
-  height: 32px;
-  border: none;
-  background: none;
-  cursor: pointer;
-  color: var(--color-text-muted, #666666);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-}
-
-.pdm-sheet-body {
-  padding: 0 16px 24px;
-}
+/* === MOBILE PRODUCT DETAIL — body class set by JS, must stay in CSS === */
 
 body.pdm-sheet-open {
   overflow: hidden;
 }
 
-/* Bottom sheet — Shipping detail */
-.pdm-shipping-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--color-border-light, #f0f0f0);
-  font-size: 14px;
-  color: var(--color-text-body, #333333);
-}
-
-.pdm-shipping-row:last-child {
-  border-bottom: none;
-}
-
-.pdm-shipping-row strong {
-  color: var(--color-text-heading, #111827);
-}
-
-.pdm-shipping-method-card {
-  padding: 14px;
-  border: 1px solid var(--color-border-default, #e5e5e5);
-  border-radius: 8px;
-  margin-top: 12px;
-  cursor: pointer;
-  transition: border-color 0.15s;
-}
-
-.pdm-shipping-method-card.active {
-  border-color: var(--color-cta-primary, #cc9900);
-}
-
-.pdm-shipping-method-name {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--color-text-heading, #111827);
-  margin-bottom: 8px;
-}
-
-.pdm-shipping-method-details {
-  display: flex;
-  justify-content: space-between;
-  font-size: 13px;
-  color: var(--color-text-muted, #666666);
-}
-
-.pdm-shipping-method-details strong {
-  color: var(--color-text-heading, #111827);
-  font-size: 15px;
-}
-
-/* Bottom sheet — Protections */
-.pdm-prot-section {
-  margin-bottom: 20px;
-}
-
-.pdm-prot-section h4 {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--color-text-heading, #111827);
-  margin: 0 0 6px;
-}
-
-.pdm-prot-section p {
-  font-size: 13px;
-  color: var(--color-text-muted, #666666);
-  margin: 0;
-  line-height: 1.5;
-}
-
-.pdm-payment-icons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
-}
-
-.pdm-payment-icon {
-  padding: 4px 8px;
-  border: 1px solid var(--color-border-default, #e5e5e5);
-  border-radius: 4px;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--color-text-body, #333333);
-  background: var(--color-surface-muted, #fafafa);
-}
-
-/* Bottom sheet — Key Attributes table */
-.pdm-attrs-table {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed;
-}
-
-.pdm-attrs-table tr {
-  border-bottom: 1px solid var(--color-border-light, #f0f0f0);
-}
-
-.pdm-attrs-table tr:last-child {
-  border-bottom: none;
-}
-
-.pdm-attrs-table td {
-  padding: 12px 0;
-  font-size: 14px;
-  vertical-align: top;
-  word-break: break-word;
-  overflow-wrap: break-word;
-}
-
-.pdm-attrs-table td:first-child {
-  color: var(--color-text-placeholder, #999999);
-  width: 38%;
-  padding-right: 10px;
-}
-
-.pdm-attrs-table td:last-child {
-  color: var(--color-text-heading, #111827);
-  font-weight: 500;
-}
-
-/* Bottom sheet — Customization table */
-.pdm-custom-table {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed;
-}
-
-.pdm-custom-table thead th {
-  font-size: 12px;
-  color: var(--color-text-placeholder, #999999);
-  font-weight: 500;
-  padding: 8px 4px 8px 0;
-  text-align: left;
-  border-bottom: 1px solid var(--color-border-default, #e5e5e5);
-  word-break: break-word;
-}
-
-.pdm-custom-table tbody td {
-  font-size: 14px;
-  color: var(--color-text-heading, #111827);
-  padding: 12px 4px 12px 0;
-  border-bottom: 1px solid var(--color-border-light, #f0f0f0);
-  word-break: break-word;
-  overflow-wrap: break-word;
-}
-
-/* -- Bottom bar -- transitions & active states -- */
-.pdm-bar-chat-btn:active {
-  background: var(--color-surface-raised, #f5f5f5);
-}
-
-.pdm-bar-cart-btn {
-  transition: background 0.15s;
-}
-
-.pdm-bar-cart-btn:active {
-  background: var(--btn-outline-hover-bg, var(--color-surface-raised, #f5f5f5));
-}
-
-.pdm-bar-order-btn {
-  transition: background 0.15s;
-}
-
-.pdm-bar-order-btn:active {
-  background: var(--btn-hover-bg, var(--btn-bg));
-}
-
-/* -- 375px overrides for elements not in modifiable TS files -- */
-/* Bottom bar 375px */
-#pd-mobile-bar {
-  @apply max-[374px]:gap-1 max-[374px]:px-2 max-[374px]:py-2 max-[374px]:pb-[calc(8px+env(safe-area-inset-bottom))] max-[374px]:max-w-[100vw] max-[374px]:box-border;
-}
-
-@media (max-width: 374px) {
-  #pd-mobile-bar {
-    grid-template-columns: 36px minmax(0, 1fr) minmax(0, 1fr);
-  }
-}
-
-.pdm-bar-chat-btn {
-  @apply max-[374px]:w-9 max-[374px]:h-9 max-[374px]:rounded-[18px];
-}
-
-.pdm-bar-chat-btn svg {
-  @apply max-[374px]:w-[18px] max-[374px]:h-[18px];
-}
-
-.pdm-bar-cart-btn,
-.pdm-bar-order-btn {
-  @apply max-[374px]:h-9 max-[374px]:text-[11px] max-[374px]:rounded-[18px] max-[374px]:px-2;
-}
-
-/* Sheet 375px */
-.pdm-sheet-header {
-  @apply max-[374px]:px-2.5 max-[374px]:py-1 max-[374px]:pb-2.5 max-[374px]:text-sm;
-}
-
-.pdm-sheet-body {
-  @apply max-[374px]:px-2.5 max-[374px]:pb-4;
-}
-
-/* Attrs table 375px */
-.pdm-attrs-table td {
-  @apply max-[374px]:text-xs max-[374px]:py-2.5;
-}
-
-.pdm-attrs-table td:first-child {
-  @apply max-[374px]:w-[35%] max-[374px]:pr-2;
-}
-
-/* Custom table 375px */
-.pdm-custom-table thead th {
-  @apply max-[374px]:text-[11px];
-}
-
-.pdm-custom-table tbody td {
-  @apply max-[374px]:text-xs max-[374px]:py-2.5 max-[374px]:px-1 max-[374px]:pl-0;
-}
-
-/* Protections 375px */
-.pdm-prot-section h4 {
-  @apply max-[374px]:text-[13px];
-}
-
-.pdm-prot-section p {
-  @apply max-[374px]:text-xs;
-}
-
-.pdm-payment-icon {
-  @apply max-[374px]:text-[10px] max-[374px]:px-1.5 max-[374px]:py-[3px];
-}
-
-/* Footer overflow 375px */
+/* Footer overflow 375px — global element selector, stays in CSS */
 footer {
   @apply max-[374px]:overflow-x-hidden;
 }
 
 /* Floating panel responsive hiding now handled via Tailwind classes (hidden lg:flex) */
 
-/* ═══════════════════════════════════════════════════════
-   Account Type Selector (Register Page)
-   ═══════════════════════════════════════════════════════ */
+/* === Auth Shared Styles (Login / Register pages) === */
 
-/* Layout now in Tailwind: flex flex-col gap-3 */
+/* === Password Requirements (AccountSetupForm) === */
 
-/* Layout now in Tailwind: flex items-center gap-3.5 w-full py-4 px-[18px] rounded-md text-left relative cursor-pointer transition-all */
-.auth-account-type-card {
-  border: 1.5px solid var(--color-border-default, #e5e5e5);
-  background: var(--color-surface, #ffffff);
-}
-
-/* Radio circle via pseudo-element */
-.auth-account-type-card::before {
-  content: "";
-  flex-shrink: 0;
-  width: 20px;
-  height: 20px;
-  border: 2px solid var(--color-border-medium, #d1d5db);
-  border-radius: 50%;
-  transition:
-    border-color 0.2s,
-    box-shadow 0.2s;
-}
-
-.auth-account-type-card:hover {
-  border-color: var(--color-border-medium, #d1d5db);
-  background-color: var(--color-surface-muted, #fafafa);
-}
-
-.auth-account-type-card:focus-visible {
-  outline: 2px solid var(--color-cta-primary, #cc9900);
-  outline-offset: 2px;
-}
-
-/* Selected state */
-.auth-account-type-card.selected {
-  border-color: #1f2937;
-  box-shadow: 0 0 0 1px #1f2937;
-}
-
-.auth-account-type-card.selected::before {
-  border-color: #1f2937;
-  box-shadow: inset 0 0 0 5px #1f2937;
-}
-
-.auth-account-type-card.selected:hover {
-  background-color: var(--color-surface, #ffffff);
-}
-
-/* Content takes remaining space, icon goes to end */
-/* Layout now in Tailwind: flex flex-col gap-0.5 flex-1 min-w-0 */
-
-/* Layout now in Tailwind: text-[15px] font-semibold leading-tight */
-.auth-account-type-label {
-  color: var(--color-text-heading, #111827);
-}
-
-/* Layout now in Tailwind: text-[13px] leading-snug */
-.auth-account-type-desc {
-  color: var(--color-text-muted, #666666);
-}
-
-/* Layout now in Tailwind: shrink-0 order-1 w-9 h-9 transition-colors */
-.auth-account-type-icon {
-  color: var(--color-text-placeholder, #999999);
-}
-
-.auth-account-type-icon svg {
-  width: 100%;
-  height: 100%;
-}
-
-.auth-account-type-card.selected .auth-account-type-icon {
-  color: #1f2937;
-}
-
-/* Dark mode via class (Tailwind dark mode) */
-.dark .auth-account-type-card {
-  background: #1f2937;
-  border-color: #374151;
-}
-
-.dark .auth-account-type-card::before {
-  border-color: #4b5563;
-}
-
-.dark .auth-account-type-card:hover {
-  border-color: #4b5563;
-  background-color: #263040;
-}
-
-.dark .auth-account-type-card.selected {
-  border-color: var(--color-border-default, var(--color-border-default, #e5e5e5));
-  box-shadow: 0 0 0 1px #e5e7eb;
-}
-
-.dark .auth-account-type-card.selected::before {
-  border-color: var(--color-border-default, var(--color-border-default, #e5e5e5));
-  box-shadow: inset 0 0 0 5px #e5e7eb;
-}
-
-.dark .auth-account-type-card.selected:hover {
-  background-color: #1f2937;
-}
-
-.dark .auth-account-type-label {
-  color: var(--color-surface-raised, #f5f5f5);
-}
-
-.dark .auth-account-type-desc {
-  color: var(--color-text-placeholder, #999999);
-}
-
-.dark .auth-account-type-icon {
-  color: var(--color-text-muted, #666666);
-}
-
-.dark .auth-account-type-card.selected .auth-account-type-icon {
-  color: #e5e7eb;
-}
-
-/* ═══════════════════════════════════════════════════════
-   Auth Shared Styles (Login / Register pages)
-   ═══════════════════════════════════════════════════════ */
-
-/* Layout now in Tailwind: w-full */
-
-/* Layout now in Tailwind: relative */
-
-/* ═══════════════════════════════════════════════════════
-   Password Requirements (AccountSetupForm)
-   ═══════════════════════════════════════════════════════ */
-
-/* Layout now in Tailwind: flex flex-col gap-1.5 */
-
-/* Layout now in Tailwind: flex items-center gap-2 text-[13px] transition-colors */
-.auth-password-req-item {
-  color: var(--color-text-placeholder, #999999);
-}
-
-.auth-password-req-item.valid {
-  color: #16a34a;
-}
-
-.auth-password-req-item.invalid {
-  color: #dc2626;
-}
-
-/* Layout now in Tailwind: shrink-0 w-2 h-2 transition-all */
-
-/* Valid state: hide bullet, show checkmark via pseudo-element on the item */
-.auth-password-req-item.valid .auth-password-req-icon {
-  opacity: 0;
-  width: 0;
-  height: 0;
-  overflow: hidden;
-}
-
+/* valid::before — SVG checkmark pseudo-element kept in CSS (data URL too long for arbitrary class) */
 .auth-password-req-item.valid::before {
   content: "";
   flex-shrink: 0;
@@ -4112,138 +1715,19 @@ footer {
   background-repeat: no-repeat;
 }
 
-/* Invalid state: red bullet */
-.auth-password-req-item.invalid .auth-password-req-icon {
-  color: #dc2626;
-}
 
-/* ── Dark mode (Tailwind class) ── */
-.dark .auth-password-req-item {
-  color: var(--color-text-muted, #666666);
-}
 
-.dark .auth-password-req-item.valid {
-  color: #22c55e;
-}
 
-.dark .auth-password-req-item.invalid {
-  color: #ef4444;
-}
-
-.dark .auth-password-req-item.valid::before {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%2322c55e'%3E%3Cpath d='M12.207 4.793a1 1 0 0 1 0 1.414l-5 5a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L6.5 9.086l4.293-4.293a1 1 0 0 1 1.414 0z'/%3E%3C/svg%3E");
-}
-
-.dark .auth-password-req-item.invalid .auth-password-req-icon {
-  color: #ef4444;
-}
-
-/* --- Center-expand hover effect --- */
-.hover-expand-center {
-  position: relative;
-  overflow: hidden;
-  z-index: 0;
-}
-
-.hover-expand-center::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.08);
-  transform: scaleX(0);
-  transform-origin: center;
-  transition: transform 0.3s ease;
-  z-index: -1;
-  border-radius: inherit;
-}
-
-.hover-expand-center:hover::before {
-  transform: scaleX(1);
-}
-
-/* --- Factory Tab Active Indicator --- */
-.factory-tab-active {
-  position: relative;
-  font-weight: 700;
-}
-
-.factory-tab-active::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 100px;
-  height: 3px;
-  background-color: var(--color-surface-inverse);
-  border-radius: 2px;
-}
-
-/* ==========================================================
-   CART — Pseudo-element styles (cannot be done with Tailwind)
-   ========================================================== */
-
-/* Checkbox checkmark (checked state) */
-.next-checkbox-wrapper.checked .next-checkbox-inner::after {
-  content: "";
-  display: block;
-  position: absolute;
-  top: 3px;
-  left: 8px;
-  width: 6px;
-  height: 11px;
-  border: solid var(--color-text-inverse);
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
-}
-
-/* Checkbox indeterminate dash */
-.next-checkbox-wrapper.indeterminate .next-checkbox-inner::after,
-.next-checkbox-wrapper
-  .next-checkbox:has(input[data-indeterminate="true"])
-  .next-checkbox-inner::after {
-  content: "";
-  display: block;
-  position: absolute;
-  top: 11px;
-  left: 5px;
-  width: 14px;
-  height: 0;
-  border: solid var(--color-text-inverse);
-  border-width: 0 0 2px 0;
-  transform: none;
-}
+/* === CART — Pseudo-element styles (cannot be done with Tailwind) === */
 
 /* Checkbox hover border */
 .next-checkbox-wrapper:hover .next-checkbox {
   border-color: var(--color-cta-primary, #cc9900);
 }
 
-/* Cart checkbox: seçili/indeterminate durumda altın sarısı */
-.next-checkbox-wrapper .next-checkbox.bg-text-primary {
-  background-color: var(--color-cta-primary, #cc9900) !important;
-  border-color: transparent !important;
-}
-
 /* Utility: cta-primary background (not in Tailwind config) */
 .bg-cta-primary {
   background-color: var(--color-cta-primary, #cc9900);
-}
-
-/* Icon pseudo-elements */
-.sc-c-spu-favorite-icon::before {
-  content: "\2661";
-}
-
-.sc-c-spu-delete-icon::before {
-  content: "\1F5D1";
-  font-size: 14px;
-}
-
-.sc-c-sku-delete-icon::before {
-  content: "\2715";
-  font-size: 14px;
 }
 
 /* Number picker: hide browser spin buttons */
@@ -4253,36 +1737,11 @@ footer {
   margin: 0;
 }
 
-/* ============================================================
-   BUYER DASHBOARD — CSS CUSTOM PROPERTIES
-   Dashboard-specific variables (OUTSIDE @theme)
-   ============================================================ */
+/* === BUYER DASHBOARD — CSS CUSTOM PROPERTIES — Dashboard-specific variables (OUTSIDE @theme) === */
 :root {
   /* --- Page Colors --- */
-  --color-page-bg: #f5f5f5;
-  --color-card-bg: #ffffff;
-  --color-card-border: #e8e8e8;
 
   /* --- Sidebar Colors --- */
-  --color-sidebar-bg: #ffffff;
-  --color-sidebar-text: #333333;
-  --color-sidebar-text-muted: #999999;
-  --color-sidebar-hover-bg: #f7f7f7;
-  --color-sidebar-active-bg: #f0fff0;
-  --color-sidebar-active-border: #00b96b;
-  --color-sidebar-active-text: #00b96b;
-  --color-sidebar-icon: #666666;
-  --color-sidebar-chevron: #cccccc;
-  --color-sidebar-divider: #f0f0f0;
-  --color-sidebar-badge-bg: #ff4d4f;
-  --color-sidebar-badge-text: #ffffff;
-  --color-sidebar-flyout-bg: #ffffff;
-  --color-sidebar-flyout-shadow: rgba(0, 0, 0, 0.12);
-  --color-sidebar-flyout-border: #e8e8e8;
-  --color-sidebar-flyout-link: #333333;
-  --color-sidebar-flyout-link-hover: #cc9900;
-  --color-sidebar-explore-bg: #fff8e6;
-  --color-sidebar-explore-text: #cc9900;
 
   /* --- Dropdown Colors --- */
   --color-dropdown-bg: #ffffff;
@@ -4292,11 +1751,6 @@ footer {
   --color-dropdown-check: #cc9900;
 
   /* --- Slider / Notification Colors --- */
-  --color-slider-bg: #f7f7f7;
-  --color-slider-dot-active: #333333;
-  --color-slider-dot-inactive: #d9d9d9;
-  --color-slider-arrow-bg: rgba(255, 255, 255, 0.9);
-  --color-slider-arrow-icon: #666666;
 
   /* --- Orders Colors --- */
   --color-orders-tab-active-bg: #333333;
@@ -4312,126 +1766,25 @@ footer {
   --color-orders-empty-btn-border: #cccccc;
 
   /* --- Right Panel Colors --- */
-  --color-rp-header-text: #333333;
-  --color-rp-action-text: #999999;
-  --color-rp-action-hover: #cc9900;
-  --color-rp-empty-icon: #cccccc;
-  --color-rp-empty-text: #999999;
-  --color-rp-empty-link: #cc9900;
-  --color-rp-product-price: #cc0000;
-  --color-rp-product-moq: #999999;
 
   /* --- New Buyer Info Colors --- */
-  --color-nbi-profile-link: #2080d0;
-  --color-nbi-support-bg: #e6f7e6;
-  --color-nbi-support-text: #00b96b;
-  --color-nbi-stat-label: #999999;
-  --color-nbi-stat-value: #333333;
-  --color-nbi-stat-divider: #e8e8e8;
 
   /* --- Dimensions --- */
-  --sidebar-expanded-width: 260px;
-  --sidebar-collapsed-width: 56px;
-  --right-panel-width: 380px;
-  --max-content-width: 1425px;
-  --dashboard-header-height: 56px;
-  --dashboard-avatar-size: 48px;
-  --dashboard-card-padding: 20px;
-  --dashboard-gap: 14px;
 
   /* --- Transitions --- */
-  --transition-speed: 0.25s;
   --transition-fast: 0.15s;
-  --transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
 
   /* --- Border Radius --- */
   --radius-card: 8px;
   --radius-tab: 20px;
   --radius-dropdown: 8px;
-  --radius-avatar: 50%;
   --radius-badge: 10px;
   --radius-btn: 20px;
 }
 
-/* ============================================================
-   BUYER DASHBOARD — LAYOUT
-   ============================================================ */
+/* === BUYER DASHBOARD — LAYOUT === */
 
-/* ── Other Services Layout ─────────────────────────────────────── */
-
-/* --- OtherServicesLayout: migrated to Tailwind in OtherServicesLayout.ts --- */
-
-/* ── Settings Page: migrated to Tailwind in SettingsLayout.ts ──── */
-
-/* --- Settings components: migrated to Tailwind in settings/*.ts --- */
-/* --- Profile page: migrated to Tailwind in profile/ProfileLayout.ts --- */
-
-/* Toggle switch (shared by ad-pref and email-pref) - needs pseudo-elements */
-.ad-pref__toggle-slider,
-.email-pref__toggle-slider {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--color-border-medium);
-  border-radius: 13px;
-  transition: background 0.2s;
-}
-
-.ad-pref__toggle-slider::before,
-.email-pref__toggle-slider::before {
-  content: "";
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  left: 3px;
-  top: 3px;
-  background: var(--color-surface, #ffffff);
-  border-radius: 50%;
-  transition: transform 0.2s;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-}
-
-input:checked + .ad-pref__toggle-slider,
-input:checked + .email-pref__toggle-slider {
-  background: var(--toggle-active-bg, #cc9900);
-}
-
-input:checked + .ad-pref__toggle-slider::before,
-input:checked + .email-pref__toggle-slider::before {
-  transform: translateX(22px);
-}
-
-/* Email checkbox custom styling - needs pseudo-elements */
-.email-pref__checkbox input:checked + .email-pref__checkmark {
-  background: var(--color-primary-500, #cc9900);
-  border-color: var(--color-primary-500, #cc9900);
-}
-
-.email-pref__checkbox input:checked + .email-pref__checkmark::after {
-  content: "";
-  width: 5px;
-  height: 9px;
-  border: solid var(--color-text-inverse);
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
-  margin-bottom: 2px;
-}
-
-/* ============================================================
-   BUYER DASHBOARD — NewBuyerInfo
-   ============================================================ */
-/* --- NewBuyerInfo: migrated to Tailwind in NewBuyerInfo.ts --- */
-/* --- UserInfoCard: migrated to Tailwind in UserInfoCard.ts --- */
-
-/* ============================================================
-   BUYER DASHBOARD — Operation Slider (Swiper integration)
-   Only keeping: nav arrows (absolute positioning + group-hover),
-   pagination bullets (swiper overrides)
-   ============================================================ */
-
-/* Navigation Arrows — now styled via Tailwind in OperationSlider.ts */
+/* === BUYER DASHBOARD — Operation Slider (Swiper integration) === */
 
 /* Pagination Bullets — swiper overrides */
 .operation-slider__pagination .swiper-pagination-bullet {
@@ -4450,177 +1803,9 @@ input:checked + .email-pref__toggle-slider::before {
   background: var(--color-text-body);
 }
 
-/* ============================================================
-   BUYER DASHBOARD — Orders Section (state-driven CSS only)
-   Layout migrated to Tailwind in OrdersSection.ts, OrdersTabs.ts, OrdersContent.ts
-   ============================================================ */
+/* === ORDERS PAGE — Siparişlerim === */
 
-/* --- Tab state colors (kept for JS classList.toggle) --- */
-.orders__tab {
-  background: var(--color-orders-tab-inactive-bg);
-  color: var(--color-orders-tab-inactive-text);
-}
-
-.orders__tab:hover {
-  background: var(--color-orders-tab-hover-bg);
-}
-
-.orders__tab--active {
-  background: var(--color-orders-tab-active-bg);
-  color: var(--color-orders-tab-active-text);
-}
-
-.orders__tab--active:hover {
-  background: var(--color-orders-tab-active-bg);
-}
-
-.orders__tab-chevron {
-  transition: transform var(--transition-fast);
-}
-
-.orders__tab--active .orders__tab-chevron {
-  transform: rotate(180deg);
-}
-
-/* --- Dropdown (absolute positioning + animation) --- */
-.orders__dropdown {
-  position: absolute;
-  top: calc(100% + 6px);
-  right: 20px;
-  z-index: 20;
-  min-width: 200px;
-  background: var(--color-dropdown-bg);
-  border: 1px solid var(--color-dropdown-border);
-  border-radius: var(--radius-dropdown);
-  box-shadow: 0 4px 12px var(--color-dropdown-shadow);
-  padding: 4px 0;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-4px);
-  transition:
-    opacity var(--transition-fast),
-    visibility var(--transition-fast),
-    transform var(--transition-fast);
-}
-
-.orders__dropdown--open {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-.orders__dropdown-item:hover {
-  background: var(--color-dropdown-hover-bg);
-}
-
-.orders__dropdown-item--selected {
-  font-weight: 600;
-}
-
-/* Responsive: Orders mobile scroll — migrated to Tailwind in OrdersTabs.ts */
-
-/* ============================================================
-   MESSAGES PAGE
-   ============================================================ */
-
-/* --- Messages: JS-toggled state classes --- */
-.msg-inbox__cat--active {
-  background: var(--color-border-light) !important;
-  color: var(--color-text-heading, #111827) !important;
-  font-weight: 600 !important;
-}
-
-.msg-list__item--active {
-  background: var(--color-surface-raised, #f5f5f5) !important;
-}
-
-/* Inquiries & Contacts pages — migrated to Tailwind utilities in components */
-
-/* ============================================================
-   ORDERS PAGE — Siparişlerim
-   ============================================================ */
-
-/* Orders page: tab content visibility + radio/checkbox pseudo-elements + accordion arrow (kept in CSS) */
-.os-tab-content {
-  display: none;
-}
-
-.os-tab-content--active {
-  display: block;
-}
-
-.os-tabs__tab--active {
-  color: var(--color-text-heading, #111827);
-  font-weight: 600;
-  border-bottom-color: var(--color-text-heading);
-}
-
-.os-tabs__tab--active.os-tabs__tab--orange {
-  color: var(--color-cta-primary, #cc9900);
-  border-bottom-color: var(--color-cta-primary, #cc9900);
-}
-
-.os-tabs__tab:hover {
-  color: var(--color-text-heading, #111827);
-}
-
-.os-pill--active {
-  color: var(--color-text-heading, #111827);
-  border-color: var(--color-text-heading);
-  font-weight: 500;
-}
-
-.os-pill:hover {
-  border-color: #999;
-}
-
-/* Radio checked state */
-.os-modal__radio input[type="radio"]:checked + .os-modal__radio-custom {
-  border-color: var(--color-cta-primary, #cc9900);
-}
-
-.os-modal__radio input[type="radio"]:checked + .os-modal__radio-custom::after {
-  content: "";
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--color-cta-primary, #cc9900);
-}
-
-/* Checkbox checked state */
-.os-modal__checkbox input[type="checkbox"]:checked + .os-modal__checkbox-custom {
-  background: var(--color-cta-primary, #cc9900);
-  border-color: var(--color-cta-primary, #cc9900);
-}
-
-.os-modal__checkbox input[type="checkbox"]:checked + .os-modal__checkbox-custom::after {
-  content: "";
-  position: absolute;
-  top: 1px;
-  left: 4px;
-  width: 5px;
-  height: 8px;
-  border: solid var(--color-text-inverse);
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
-}
-
-/* FAQ accordion arrow */
-.os-faq__accordion summary::after {
-  content: "▾";
-  font-size: 16px;
-  color: var(--color-text-placeholder, #999999);
-  transition: transform 200ms;
-}
-
-.os-faq__accordion[open] summary::after {
-  transform: rotate(180deg);
-}
-
-/* Modal animation */
+/* Modal animation — kept in CSS (complex @keyframes) */
 @keyframes osModalIn {
   from {
     opacity: 0;
@@ -4631,34 +1816,6 @@ input:checked + .email-pref__toggle-slider::before {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
-}
-
-/* Input placeholder */
-.os-modal__input::placeholder,
-.os-reviews-toolbar__input::placeholder {
-  color: var(--color-text-tertiary, #9ca3af);
-}
-
-/* Nav link active state (toggled via JS) */
-.orders-page__nav-link--active {
-  font-weight: 600;
-  color: var(--color-text-heading, #111827);
-  border-left-color: var(--color-text-heading);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-/* ╔══════════════════════════════════════════╗
-   ║  FAVORITES & BROWSING HISTORY PAGE       ║
-   ╚══════════════════════════════════════════╝ */
-
-/* ─── Favorites: tab content visibility + modal animation ─── */
-.fav-tab-content {
-  display: none;
-}
-
-.fav-tab-content--active {
-  display: block;
 }
 
 /* Global button transition baseline — yumuşak bg/color/border geçişi.
@@ -4791,9 +1948,7 @@ button[data-filter-action="apply-all"]:active {
   }
 }
 
-/* ╔══════════════════════════════════════════╗
-   ║  PAYMENT PAGE                            ║
-   ╚══════════════════════════════════════════╝ */
+/* === PAYMENT PAGE === */
 
 /* ─── Layout ─── */
 /* ─── Payment: minimal CSS kept for JS-toggled states & animation ─── */
@@ -4821,9 +1976,7 @@ button[data-filter-action="apply-all"]:active {
   }
 }
 
-/* ============================================================
-   PRINT STYLES
-   ============================================================ */
+/* === PRINT STYLES === */
 @media print {
   header,
   footer,
@@ -4871,8 +2024,104 @@ button[data-filter-action="apply-all"]:active {
   }
 }
 
-/* ============================================================
-   CHECKOUT PAGE — Float-label, Dropdown, Accordion, Modal
-   ============================================================ */
+/* === CHECKOUT PAGE — Float-label, Dropdown, Accordion, Modal === */
 
 /* ── Float-label Field ─────────────────────────────────────── */
+
+/* === SELLER STOREFRONT — Residual (3rd-party + JS-toggled) — Tailwind utility ile ifade edilemeyenler: — 1. JS-toggled .store-nav--scrolled + descendant cascade — 2. Swiper-injected bulletClass/bulletActiveClass — 3. ::-webkit-scrollbar pseudo-elements — 4. 3rd-party Swiper compound selectors — 5. Custom 480px breakpoint media query — 6. Dark mode Swiper overrides === */
+
+/* Store Nav — Scrolled State (JS-toggled, descendant cascade) */
+.store-nav--scrolled {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  background-color: #ffffff !important;
+}
+
+.store-nav--scrolled .store-nav__item {
+  color: #374151 !important;
+}
+
+.store-nav--scrolled .store-nav__item svg {
+  color: #6b7280 !important;
+}
+
+.store-nav--scrolled .store-nav__hamburger {
+  color: #374151 !important;
+}
+
+.store-nav--scrolled .store-nav__item--active {
+  background-color: #f3f4f6 !important;
+}
+
+.store-nav--scrolled .store-nav__item:not(.store-nav__item--active):hover {
+  background-color: #f9fafb !important;
+}
+
+/* Hero Banner — Swiper Dot Pagination (Swiper-injected) */
+.store-hero__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  padding: 0;
+  margin: 0 2px;
+  display: inline-block;
+  opacity: 1;
+}
+
+.store-hero__dot--active {
+  background: var(--color-store-accent, #cc9900);
+  transform: scale(1.2);
+}
+
+.store-hero__dot:hover:not(.store-hero__dot--active) {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+/* Company Info Variant B — Custom Scrollbar pseudo-elements */
+.company-info__scrollable-text {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db transparent;
+}
+
+.company-info__scrollable-text::-webkit-scrollbar {
+  width: 6px;
+}
+
+.company-info__scrollable-text::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.company-info__scrollable-text::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 3px;
+}
+
+.company-info__scrollable-text::-webkit-scrollbar-thumb:hover {
+  background-color: #9ca3af;
+}
+
+/* Certificates — Swiper compound selectors */
+.certificates__prev.swiper-button-disabled,
+.certificates__next.swiper-button-disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.certificates__dots .swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: #d1d5db;
+  opacity: 1;
+  transition: background-color 0.2s ease;
+}
+
+.certificates__dots .swiper-pagination-bullet-active {
+  background: var(--color-store-accent, #cc9900);
+}
+
+

@@ -230,11 +230,21 @@ function renderProductListingCard(card: ProductListingCard): string {
     ? `<div class="absolute inset-0 z-10 bg-white/40 pointer-events-none"></div>`
     : "";
   const addToCartBtnHtml = isOOS
-    ? `<button type="button" class="searchx-product-e-abutton flex-1 flex items-center justify-center h-9 text-xs sm:text-sm font-medium whitespace-nowrap rounded-md bg-gray-200 text-gray-500 cursor-not-allowed"
+    ? `<button type="button" class="searchx-product-e-abutton flex-1 flex items-center justify-center h-9 text-xs sm:text-sm font-medium whitespace-nowrap rounded-md bg-gray-200 text-gray-500 cursor-not-allowed
+              min-[1200px]:group-data-[list-mode=list]/grid:flex-none
+              min-[1200px]:group-data-[list-mode=list]/grid:w-full
+              lg:max-[1599px]:group-data-[list-mode=grid]/grid:text-xs
+              lg:max-[1599px]:group-data-[list-mode=grid]/grid:px-2
+              lg:max-[1599px]:group-data-[list-mode=grid]/grid:h-8"
               disabled aria-disabled="true">
         ${t("products.outOfStock")}
       </button>`
-    : `<button type="button" class="searchx-product-e-abutton th-btn flex-1 flex items-center justify-center h-9 text-xs sm:text-sm font-medium cursor-pointer whitespace-nowrap"
+    : `<button type="button" class="searchx-product-e-abutton th-btn flex-1 flex items-center justify-center h-9 text-xs sm:text-sm font-medium cursor-pointer whitespace-nowrap
+              min-[1200px]:group-data-[list-mode=list]/grid:flex-none
+              min-[1200px]:group-data-[list-mode=list]/grid:w-full
+              lg:max-[1599px]:group-data-[list-mode=grid]/grid:text-xs
+              lg:max-[1599px]:group-data-[list-mode=grid]/grid:px-2
+              lg:max-[1599px]:group-data-[list-mode=grid]/grid:h-8"
               data-add-to-cart="${card.id}">
         ${t("products.addToCart")}
       </button>`;
@@ -255,20 +265,50 @@ function renderProductListingCard(card: ProductListingCard): string {
       </button>`;
 
   return `
-    <div class="fy26-product-card-wrapper flex flex-col justify-between w-full rounded-md overflow-hidden bg-white pb-3 border-0">
+    <div class="fy26-product-card-wrapper flex flex-col justify-between w-full rounded-md overflow-hidden bg-white pb-3 border-0
+            min-[480px]:group-data-[list-mode=list]/grid:grid
+            min-[480px]:group-data-[list-mode=list]/grid:grid-cols-[200px_1fr]
+            min-[480px]:group-data-[list-mode=list]/grid:grid-rows-[1fr_auto]
+            min-[480px]:group-data-[list-mode=list]/grid:gap-x-4
+            min-[480px]:group-data-[list-mode=list]/grid:gap-y-0
+            min-[480px]:group-data-[list-mode=list]/grid:p-3
+            min-[480px]:group-data-[list-mode=list]/grid:border
+            min-[480px]:group-data-[list-mode=list]/grid:border-[var(--product-card-border,#e5e7eb)]
+            min-[480px]:group-data-[list-mode=list]/grid:rounded-lg
+            min-[480px]:group-data-[list-mode=list]/grid:overflow-visible
+            min-[1200px]:group-data-[list-mode=list]/grid:flex
+            min-[1200px]:group-data-[list-mode=list]/grid:flex-row
+            min-[1200px]:group-data-[list-mode=list]/grid:items-start
+            min-[1200px]:group-data-[list-mode=list]/grid:gap-4">
       <!-- Image area (full-bleed, kart padding'inin dışında) -->
-      <a href="${card.href}" class="searchx-img-area relative mb-3 block">
+      <a href="${card.href}" class="searchx-img-area relative mb-3 block
+            min-[480px]:group-data-[list-mode=list]/grid:row-[1/-1]
+            min-[480px]:group-data-[list-mode=list]/grid:col-start-1
+            min-[480px]:group-data-[list-mode=list]/grid:mb-0
+            min-[480px]:group-data-[list-mode=list]/grid:w-full
+            min-[1200px]:group-data-[list-mode=list]/grid:w-60
+            min-[1200px]:group-data-[list-mode=list]/grid:shrink-0">
         ${oosBadgeHtml}
         ${oosOverlayHtml}
         ${renderImageSlider(card)}
       </a>
 
       <!-- Content area -->
-      <div class="fy26-product-card-content flex-1 flex flex-col">
+      <div class="fy26-product-card-content flex-1 flex flex-col
+            min-[480px]:group-data-[list-mode=list]/grid:col-start-2
+            min-[480px]:group-data-[list-mode=list]/grid:row-start-1
+            min-[480px]:group-data-[list-mode=list]/grid:min-w-0
+            min-[1200px]:group-data-[list-mode=list]/grid:flex-1">
         <!-- Title area -->
         <div class="px-3">
           ${brandHtml ? `<div class="mb-1.5">${brandHtml}</div>` : ""}
-          <h2 class="searchx-product-e-title text-sm font-normal leading-[20px] min-h-[40px] text-[#333] overflow-hidden text-ellipsis line-clamp-2 m-0">
+          <h2 class="searchx-product-e-title text-sm font-normal leading-[20px] min-h-[40px] text-[#333] overflow-hidden text-ellipsis line-clamp-2 m-0
+            min-[480px]:group-data-[list-mode=list]/grid:!h-auto
+            min-[480px]:group-data-[list-mode=list]/grid:text-base
+            min-[480px]:group-data-[list-mode=list]/grid:leading-[22px]
+            lg:max-[1599px]:group-data-[list-mode=grid]/grid:text-[13px]
+            lg:max-[1599px]:group-data-[list-mode=grid]/grid:leading-[17px]
+            lg:max-[1599px]:group-data-[list-mode=grid]/grid:h-[51px]">
             <a href="${card.href}" target="_blank" class="text-inherit no-underline hover:text-primary-500"><span>${card.name}</span></a>
           </h2>
           ${sellingPointHtml}
@@ -276,8 +316,14 @@ function renderProductListingCard(card: ProductListingCard): string {
 
         <!-- Price area -->
         <div class="px-3 mt-2">
-          <div class="fy26-price text-xl font-semibold leading-[26px] text-gray-900">${formatPrice(card.price)}</div>
-          <div class="fy26-moq-stats flex gap-1.5 flex-wrap mt-0.5">
+          <div class="fy26-price text-xl font-semibold leading-[26px] text-gray-900
+            lg:max-[1599px]:group-data-[list-mode=grid]/grid:text-base
+            lg:max-[1599px]:group-data-[list-mode=grid]/grid:leading-[1.375rem]">${formatPrice(card.price)}</div>
+          <div class="fy26-moq-stats flex gap-1.5 flex-wrap mt-0.5
+            lg:max-[1599px]:group-data-[list-mode=grid]/grid:text-xs
+            lg:max-[1599px]:group-data-[list-mode=grid]/grid:leading-4
+            lg:max-[1599px]:group-data-[list-mode=grid]/grid:[&_.text-sm]:text-xs
+            lg:max-[1599px]:group-data-[list-mode=grid]/grid:[&_.text-sm]:leading-4">
             ${moqHtml}
           </div>
           ${isOOS ? `<div class="mt-1 text-xs font-medium text-red-600">${t("products.outOfStock")}</div>` : ""}
@@ -291,7 +337,16 @@ function renderProductListingCard(card: ProductListingCard): string {
       </div>
 
       <!-- Action buttons -->
-      <div class="action-area-layout flex gap-2 px-3 mt-3 items-center">
+      <div class="action-area-layout flex gap-2 px-3 mt-3 items-center
+            min-[480px]:group-data-[list-mode=list]/grid:col-start-2
+            min-[480px]:group-data-[list-mode=list]/grid:row-start-2
+            min-[480px]:group-data-[list-mode=list]/grid:p-0
+            min-[480px]:group-data-[list-mode=list]/grid:mt-2
+            min-[1200px]:group-data-[list-mode=list]/grid:flex-col
+            min-[1200px]:group-data-[list-mode=list]/grid:items-stretch
+            min-[1200px]:group-data-[list-mode=list]/grid:w-[140px]
+            min-[1200px]:group-data-[list-mode=list]/grid:mt-0
+            min-[1200px]:group-data-[list-mode=list]/grid:shrink-0">
         ${addToCartBtnHtml}
         ${chatBtnHtml}
       </div>
@@ -451,8 +506,9 @@ export function ProductListingGrid(products: ProductListingCard[] = []): string 
     return `
       <section aria-label="${t("products.productList")}" class="flex-1">
         <div
-          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 product-grid"
+          class="group/grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 data-[list-mode=list]:!grid-cols-1 data-[list-mode=list]:!gap-3 product-grid"
           style="gap: var(--product-grid-gap, 12px);"
+          data-list-mode="grid"
           role="list"
           aria-label="${t("products.productListLabel")}"
         >
@@ -465,8 +521,9 @@ export function ProductListingGrid(products: ProductListingCard[] = []): string 
   return `
     <section aria-label="${t("products.productList")}" class="flex-1">
       <div
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 product-grid"
+        class="group/grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 data-[list-mode=list]:!grid-cols-1 data-[list-mode=list]:!gap-3 product-grid"
         style="gap: var(--product-grid-gap, 12px);"
+        data-list-mode="grid"
         role="list"
         aria-label="${t("products.productListLabel")}"
       >
@@ -485,7 +542,7 @@ export function rerenderProductGrid(products: ProductListingCard[]): void {
   if (!grid) return;
 
   // Preserve the current view mode
-  const isListView = grid.classList.contains("product-list-mode");
+  const isListView = grid.dataset.listMode === "list";
 
   if (products.length === 0) {
     grid.innerHTML = renderNoResults();
@@ -516,6 +573,6 @@ export function setGridViewMode(mode: ViewMode): void {
   const grid = document.querySelector<HTMLElement>(".product-grid");
   if (!grid) return;
 
-  // Single class controls entire list layout via CSS (see style.css)
-  grid.classList.toggle("product-list-mode", mode === "list");
+  // data-list-mode attribute controls layout via Tailwind group-data variants
+  grid.dataset.listMode = mode === "list" ? "list" : "grid";
 }

@@ -1714,7 +1714,7 @@ function renderRefunds(): string {
       <h1 class="text-[22px] font-bold text-(--color-text-heading,#111827)">${t("orders.refundsTab")}</h1>
     </div>
     <!-- Tab: Para İadeleri (dynamic) -->
-    <div class="os-tab-content os-tab-content--active" data-content="refund-returns">
+    <div class="os-tab-content os-tab-content--active hidden [&.os-tab-content--active]:block" data-content="refund-returns">
       <!-- Loading -->
       <template x-if="loading">
         <div class="flex items-center justify-center py-16">
@@ -1779,8 +1779,20 @@ function renderReviews(): string {
       </div>
     </div>
     <div class="os-tabs flex border-b overflow-x-auto scrollbar-hide border-(--color-border-default,#e5e5e5) px-7 max-sm:px-3" data-tabgroup="reviews">
-      <button class="os-tabs__tab os-tabs__tab--active os-tabs__tab--orange py-3 px-4 text-sm bg-transparent border-none border-b-2 border-b-transparent cursor-pointer whitespace-nowrap transition-colors" data-tab="review-pending">${t("orders.pendingReviews")} (0)</button>
-      <button class="os-tabs__tab py-3 px-4 text-sm bg-transparent border-none border-b-2 border-b-transparent cursor-pointer whitespace-nowrap transition-colors text-(--color-text-muted,#666)" data-tab="review-done">${t("orders.reviewed")} (0)</button>
+      <button class="os-tabs__tab os-tabs__tab--active os-tabs__tab--orange py-3 px-4 text-sm bg-transparent border-none border-b-2 border-b-transparent cursor-pointer whitespace-nowrap transition-colors
+                     hover:text-[var(--color-text-heading,#111827)]
+                     [&.os-tabs__tab--active]:text-[var(--color-text-heading,#111827)]
+                     [&.os-tabs__tab--active]:font-semibold
+                     [&.os-tabs__tab--active]:border-b-[var(--color-text-heading)]
+                     [&.os-tabs__tab--active.os-tabs__tab--orange]:text-[var(--color-cta-primary,#cc9900)]
+                     [&.os-tabs__tab--active.os-tabs__tab--orange]:border-b-[var(--color-cta-primary,#cc9900)]" data-tab="review-pending">${t("orders.pendingReviews")} (0)</button>
+      <button class="os-tabs__tab py-3 px-4 text-sm bg-transparent border-none border-b-2 border-b-transparent cursor-pointer whitespace-nowrap transition-colors text-(--color-text-muted,#666)
+                     hover:text-[var(--color-text-heading,#111827)]
+                     [&.os-tabs__tab--active]:text-[var(--color-text-heading,#111827)]
+                     [&.os-tabs__tab--active]:font-semibold
+                     [&.os-tabs__tab--active]:border-b-[var(--color-text-heading)]
+                     [&.os-tabs__tab--active.os-tabs__tab--orange]:text-[var(--color-cta-primary,#cc9900)]
+                     [&.os-tabs__tab--active.os-tabs__tab--orange]:border-b-[var(--color-cta-primary,#cc9900)]" data-tab="review-done">${t("orders.reviewed")} (0)</button>
     </div>
 
     <div class="flex justify-end px-7 max-sm:px-3 py-3">
@@ -1794,7 +1806,7 @@ function renderReviews(): string {
       </div>
     </div>
 
-    <div class="os-tab-content os-tab-content--active" data-content="review-pending">
+    <div class="os-tab-content os-tab-content--active hidden [&.os-tab-content--active]:block" data-content="review-pending">
       <div class="flex flex-col items-center justify-center gap-3 px-10 max-sm:px-4 py-20 text-center">
         <svg width="100" height="80" viewBox="0 0 100 80" fill="none">
           <rect x="10" y="10" width="50" height="55" rx="4" fill="#FFECD2" stroke="#F7A84B" stroke-width="1"/>
@@ -1807,7 +1819,7 @@ function renderReviews(): string {
       </div>
     </div>
 
-    <div class="os-tab-content" data-content="review-done">
+    <div class="os-tab-content hidden [&.os-tab-content--active]:block" data-content="review-done">
       <div class="flex flex-col items-center justify-center gap-3 px-10 max-sm:px-4 py-20 text-center">
         ${EMPTY_RECEIPT_ICON}
         <p class="text-sm text-(--color-text-muted,#666)">${t("orders.noReviewsFound")}</p>
@@ -1828,7 +1840,11 @@ function renderCoupons(): string {
         <!-- Pill filters -->
         <div class="os-pill-filters flex gap-2 px-7 max-sm:px-3 py-4">
           <template x-for="pill in [{id:'available',label:'${t("orders.available")}'},{id:'used',label:'${t("orders.used")}'},{id:'expired',label:'${t("orders.expired")}'}]" :key="pill.id">
-            <button @click="setPill(pill.id)" class="os-pill px-4 py-1.5 text-[13px] bg-(--color-surface,#fff) border border-(--color-border-medium,#d1d5db) rounded-[20px] cursor-pointer transition-all text-(--color-text-muted,#666)"
+            <button @click="setPill(pill.id)" class="os-pill px-4 py-1.5 text-[13px] bg-(--color-surface,#fff) border border-(--color-border-medium,#d1d5db) rounded-[20px] cursor-pointer transition-all text-(--color-text-muted,#666)
+                           hover:border-[#999]
+                           [&.os-pill--active]:text-[var(--color-text-heading,#111827)]
+                           [&.os-pill--active]:border-[var(--color-text-heading)]
+                           [&.os-pill--active]:font-medium"
               :class="activePill === pill.id ? 'os-pill--active' : ''"
               x-text="pill.label"></button>
           </template>
@@ -1903,7 +1919,10 @@ function renderNav(activeId: string): string {
       const activeClasses = isActive
         ? "orders-page__nav-link--active text-gray-900 border-b-2 border-gray-900 font-semibold"
         : "text-gray-500 border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300";
-      return `<button type="button" class="orders-page__nav-link py-3 px-4 max-sm:px-3 text-sm max-sm:text-[13px] whitespace-nowrap transition-colors shrink-0 bg-transparent border-none cursor-pointer ${activeClasses}" data-nav="${item.id}">${item.label}</button>`;
+      return `<button type="button" class="orders-page__nav-link py-3 px-4 max-sm:px-3 text-sm max-sm:text-[13px] whitespace-nowrap transition-colors shrink-0 bg-transparent border-none cursor-pointer
+                     [&.orders-page__nav-link--active]:font-semibold
+                     [&.orders-page__nav-link--active]:text-[var(--color-text-heading,#111827)]
+                     [&.orders-page__nav-link--active]:border-b-[var(--color-text-heading)] ${activeClasses}" data-nav="${item.id}">${item.label}</button>`;
     })
     .join("");
 }

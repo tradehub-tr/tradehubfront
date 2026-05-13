@@ -313,21 +313,21 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
     .join("");
 
   return `
-    <section class="checkout-section" id="shipping-address-section" x-data="shippingForm">
-      <div class="checkout-section__header flex items-center gap-3">
+    <section class="checkout-section bg-white border border-[#e8e6e0] rounded-2xl shadow-[0_1px_2px_rgba(20,20,18,0.04)] overflow-hidden" id="shipping-address-section" x-data="shippingForm">
+      <div class="checkout-section__header flex items-center gap-3 px-[22px] py-[18px]">
         <!-- Map pin ikonu — referans tasarımdaki 32×32 icon-box ile tutarlı. -->
-        <span class="checkout-section__icon inline-flex items-center justify-center">
+        <span class="checkout-section__icon inline-flex items-center justify-center w-8 h-8 min-w-[32px] rounded-[10px] bg-[#fafaf8] text-[#4a4a48] p-[7px]">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
           </svg>
         </span>
-        <h2 class="checkout-section__title flex-1 text-left">${t("checkout.shippingAddressLabel")}</h2>
+        <h2 class="checkout-section__title flex-1 text-left text-[15px] font-semibold text-[#1a1a1a] tracking-[-0.005em]">${t("checkout.shippingAddressLabel")}</h2>
         <!-- Hazır rozeti: adres seçili -->
         <span
           x-cloak
           x-show="selectedAddressId && !showAddressForm"
-          class="co-pill co-pill-ok"
+          class="co-pill co-pill-ok inline-flex items-center gap-1 px-2 py-[3px] rounded-full text-[11.5px] font-medium bg-[#e8f5ed] text-[#1f7a4d] border-transparent border whitespace-nowrap"
         >
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
           Hazır
@@ -336,9 +336,9 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
         <span
           x-cloak
           x-show="!selectedAddressId && !showAddressForm"
-          class="co-pill co-pill-warn"
+          class="co-pill co-pill-warn inline-flex items-center gap-1 px-2 py-[3px] rounded-full text-[11.5px] font-medium bg-[#fff4e5] text-[#b54708] border-transparent border whitespace-nowrap"
         >
-          <span class="co-pill-dot"></span>
+          <span class="co-pill-dot w-[5px] h-[5px] rounded-full bg-[#b54708] inline-block"></span>
           Zorunlu
         </span>
         <!-- Düzenle (adres seçili iken header'da link) -->
@@ -346,7 +346,7 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
           x-cloak
           x-show="selectedAddressId && !showAddressForm"
           type="button"
-          class="co-link-btn"
+          class="co-link-btn appearance-none bg-transparent border-0 px-2 py-1 text-[#4a4a48] inline-flex items-center gap-1 text-[13px] font-medium rounded-md cursor-pointer no-underline hover:text-[#1a1a1a] hover:bg-[#fafaf8] focus:outline-none"
           @click="showAddressForm = true"
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
@@ -354,16 +354,16 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
         </button>
       </div>
 
-      <div class="checkout-section__content">
+      <div class="checkout-section__content px-[22px] pb-[22px]">
         <!-- SEÇİLİ ADRES KARTI -->
         <div
-          class="co-addr-block"
+          class="co-addr-block p-[14px_16px] bg-[#fafaf8] rounded-xl border border-[#e8e6e0]"
           x-cloak
           x-show="selectedAddressId && !showAddressForm"
         >
-          <div class="co-addr-name" x-text="selectedAddressName"></div>
-          <div class="co-addr-line" x-text="selectedAddressLine"></div>
-          <div class="co-addr-line muted" x-text="selectedAddressPhone"></div>
+          <div class="co-addr-name font-semibold mb-1 text-[#1a1a1a]" x-text="selectedAddressName"></div>
+          <div class="co-addr-line text-[13px] text-[#4a4a48]" x-text="selectedAddressLine"></div>
+          <div class="co-addr-line muted text-[13px] text-[#8a877f]" x-text="selectedAddressPhone"></div>
         </div>
 
         <!-- ADRES EKLE TETİKLEYİCİSİ -->
@@ -372,7 +372,7 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
           x-show="!selectedAddressId && !showAddressForm"
           type="button"
           @click="showAddressForm = true"
-          class="co-add-row"
+          class="co-add-row m-0 p-[14px] border-[1.5px] border-dashed border-[#d5d2c9] rounded-xl bg-[#fafaf8] flex items-center justify-center gap-2 w-full text-[#4a4a48] font-medium text-[14px] cursor-pointer transition-all hover:border-[#f5b800] hover:text-[#1a1a1a] hover:bg-[#fff8e1]"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 5v14M5 12h14"/>

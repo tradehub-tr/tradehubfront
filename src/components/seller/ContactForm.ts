@@ -48,7 +48,7 @@ export function ContactForm(data: ContactFormData): string {
 
           <!-- Send Button -->
           <div class="flex justify-center mb-4">
-            <button class="contact-form__send th-btn xs:w-full">
+            <button class="contact-form__send th-btn xs:w-full active:scale-[0.97]">
               ${t("seller.sf.send")}
             </button>
           </div>

@@ -3,7 +3,6 @@
  * All seller data is fetched dynamically from API via Alpine.js sellerStorefront store
  */
 import '../style.css';
-import '../styles/seller/seller-storefront.css';
 import { initFlowbite } from 'flowbite';
 import 'swiper/swiper-bundle.css';
 import { startAlpine } from '../alpine';

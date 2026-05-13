@@ -73,7 +73,7 @@ function renderCard(card: ProductListingCard): string {
 
   return `
     <a
-      class="rp-card flex flex-col h-full overflow-hidden border border-gray-200 rounded-md bg-white transition-shadow hover:shadow-md no-underline"
+      class="rp-card flex flex-col h-full overflow-hidden no-underline text-inherit transition-shadow hover:shadow-md bg-[var(--pc-related-bg,#fff)] border border-[var(--pc-related-border-color,#f3f4f6)] rounded-[var(--pc-related-radius,8px)]"
       href="${card.href}"
       aria-label="${safeName}"
     >
@@ -145,7 +145,7 @@ function renderTabButton(meta: TabMeta, count: number, active: boolean): string 
       role="tab"
       data-rp-tab="${meta.key}"
       aria-selected="${active ? "true" : "false"}"
-      class="rp-tab ${activeClass} relative py-3.5 px-1 text-sm whitespace-nowrap border-0 bg-transparent cursor-pointer hover:text-gray-900"
+      class="rp-tab ${activeClass} relative py-3.5 px-1 text-sm whitespace-nowrap border-0 bg-transparent cursor-pointer hover:text-gray-900 [&.rp-tab-active]:after:content-[''] [&.rp-tab-active]:after:absolute [&.rp-tab-active]:after:left-0 [&.rp-tab-active]:after:right-0 [&.rp-tab-active]:after:-bottom-px [&.rp-tab-active]:after:h-0.5 [&.rp-tab-active]:after:bg-[var(--pd-tab-active-border,#cc9900)]"
       style="${activeStyle}"
     >
       ${meta.label}

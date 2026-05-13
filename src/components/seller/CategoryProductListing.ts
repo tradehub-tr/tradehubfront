@@ -82,9 +82,9 @@ function renderCategory(category: ProductCategory): string {
   return `
     <section id="category-listing-${category.id}" class="category-listing mb-12">
       <!-- Banner -->
-      <div class="category-listing__banner relative w-full overflow-hidden">
+      <div class="category-listing__banner group relative w-full overflow-hidden">
         <img src="${category.bannerImage}" alt="${category.name}"
-             class="w-full h-[160px] sm:h-[160px] md:h-[200px] xl:h-[300px] object-cover" loading="lazy"
+             class="w-full h-[160px] sm:h-[160px] md:h-[200px] xl:h-[300px] object-cover transition-transform duration-300 group-hover:scale-[1.02]" loading="lazy"
              onerror="this.parentElement.style.background='linear-gradient(135deg,#1e3a5f,var(--color-primary-500))'" />
         <div class="absolute inset-0 flex items-center justify-center bg-black/10 dark:bg-black/20">
           <h3 class="text-[20px] sm:text-[22px] md:text-[28px] xl:text-[40px] font-black text-white uppercase tracking-tight drop-shadow-xl"
