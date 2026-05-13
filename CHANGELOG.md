@@ -1,3 +1,24 @@
+## [v1.1.8-beta.10] - 2026-05-13 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(changelog): değişiklikleri daha okunabilir hale getirildi (@ahmeetseker)
+- feat(reviews): dead code ve stil dosyalarını kaldırdı (@ahmeetseker)
+
+### Degistirildi
+- refactor(style): style.css ~700 satır baseline + th-btn 3D inset shadow (@ahmeetseker)
+  - style.css: `.th-btn`/`.th-btn-outline`/`.th-btn-dark` hover ve active'de inset 3D shadow + `scale-[0.98]` tıklama efekti
+  - style.css: `.th-btn-gradient` varyantı silindi → `utils/ui/button.ts` içinde `gradient` map'i `.th-btn`'e alias; SearchArea / TopBar / Cart Drawer kullanım yerleri güncellendi (inline `border-radius !important` temizliği dahil)
+  - style.css: 325 satırlık ölü gradient/utility bloğu kaldırıldı (5056 → 4878, hedef ~700)
+  - header-notice: slide-mode CSS sınıfları yerine `data-state=active|exiting` Tailwind pattern; `@theme` içine `--animate-notice-scroll` token taşındı
+  - inquiries / orders / help-center / seller / subscription: sarı pill CTA butonları için `bg-(--btn-bg,#f5b800)` + `--btn-shadow` token + hover/active inset shadow zinciri
+  - orders / subscription: link-tarzı butonlara `th-no-press` + `appearance-none focus:outline-none` — hover'da layout sıçraması yok
+  - release-workflows: commit body bullet'ları subject altında nested gösteriliyor (admin-panel / tradehub_core ile senkron)
+  - CLAUDE.md: yeni "0.0 İzin Kapısı — CSS dosyalarına yazma" bölümü; `style.css` baseline ~700 satır, `src/styles/*.css` yeni dosya yasağı, 5056 → 4878 → 700 yol haritası
+  - css-optimization-reports/UYGULAMA-PLANI.md: refactor adımları güncellendi
+
+---
 ## [v1.1.8-beta.9] - 2026-05-12 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
