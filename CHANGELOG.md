@@ -1,3 +1,17 @@
+## [v1.1.8-beta.12] - 2026-05-13 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Degistirildi
+- refactor(css): migrate page styles to Tailwind utilities, drop src/styles/ (@ahmeetseker)
+  - Migrate cart, checkout, seller-shop, seller-storefront ve product-detail sayfalarının custom CSS'lerini Tailwind v4 utility class'larına çevirdi. JS-toggled state'ler için `data-*` + `group-data-[...]/name:` variant pattern'i kullanıldı (parent class cascade pattern'i kaldırıldı).
+  - src/styles/ dizini tamamen silindi: * cart-design.css            (-364) * checkout-design.css        (-1032) * seller/seller-storefront.css (-291)
+  - src/style.css içindeki @media blokları, descendant selector cascade kuralları ve pseudo-element CSS'leri ilgili HTML/TS dosyalarına Tailwind utility olarak taşındı (-3239 değişiklik satırı).
+  - Component dosyalarında string template'lere doğrudan utility class zincirleri yazıldı (auth, cart, checkout, product, seller, settings, manufacturers, favorites, orders, messages, buyer-dashboard).
+  - CLAUDE.md güncellendi: @media → responsive variant, pseudo-element / nth-child / descendant / theme-var → utility eşleme tabloları, JS-toggled state → data-attribute + group variant kuralı.
+  - css-optimization-reports/refactor-progress.md fazlara göre güncellendi.
+
+---
 ## [v1.1.8-beta.10] - 2026-05-13 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
