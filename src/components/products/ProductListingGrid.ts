@@ -251,7 +251,7 @@ function renderProductListingCard(card: ProductListingCard): string {
 
   const escapeAttr = (s: string): string =>
     s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
-  const moqDigits = (card.moq?.match(/\d+/)?.[0] ?? "1");
+  const moqDigits = card.moq?.match(/\d+/)?.[0] ?? "1";
   const chatBtnHtml = `<button type="button"
               data-chat-trigger
               data-product-id="${escapeAttr(card.id)}"
