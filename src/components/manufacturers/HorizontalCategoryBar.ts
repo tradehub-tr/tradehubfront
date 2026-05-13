@@ -144,7 +144,7 @@ export async function initHorizontalCategoryBar(): Promise<void> {
   tabUl.innerHTML = tabCats
     .map(
       (cat, i) => `
-    <li class="whitespace-nowrap cursor-pointer px-5 h-[61px] leading-[61px] text-base transition-colors
+    <li class="whitespace-nowrap cursor-pointer px-5 h-[61px] leading-[61px] text-base transition-colors [&.factory-tab-active]:relative [&.factory-tab-active]:font-bold [&.factory-tab-active]:after:content-[''] [&.factory-tab-active]:after:absolute [&.factory-tab-active]:after:bottom-0 [&.factory-tab-active]:after:left-1/2 [&.factory-tab-active]:after:-translate-x-1/2 [&.factory-tab-active]:after:w-full [&.factory-tab-active]:after:max-w-[100px] [&.factory-tab-active]:after:h-[3px] [&.factory-tab-active]:after:bg-[var(--color-surface-inverse)] [&.factory-tab-active]:after:rounded-[2px]
                ${i === 0 ? "factory-tab-active font-bold text-[#222]" : "font-normal text-[#222] hover:text-[#666]"}"
         data-tab-index="${i}"
         data-tab-slug="${cat.slug}"

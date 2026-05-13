@@ -45,7 +45,7 @@ const tabs: TabConfig[] = [
 
 export function ProductTabs(): string {
   return `
-    <section id="product-tabs-section" x-data="{ activeTab: 'attributes' }" class="py-6 px-6" style="background: var(--pd-bg, #ffffff);">
+    <section id="product-tabs-section" x-data="{ activeTab: 'attributes' }" class="py-6 px-0 mt-6" style="background: var(--pd-bg, #ffffff);">
       <!-- Tab Navigation -->
       <div
         id="product-tabs-nav"

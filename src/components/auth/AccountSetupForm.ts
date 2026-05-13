@@ -260,7 +260,7 @@ export function AccountSetupForm(defaultCountry: string = "TR"): string {
 
           <!-- Password Requirements -->
           <div id="password-requirements" class="auth-password-requirements flex flex-col gap-1.5 mt-3">
-            <div class="auth-password-req-item flex items-center gap-2 text-[13px] transition-colors" data-requirement="minLength">
+            <div class="auth-password-req-item flex items-center gap-2 text-[13px] transition-colors text-[var(--color-text-placeholder,#999)] [&.valid]:text-[#16a34a] [&.invalid]:text-[#dc2626] [&.valid_.auth-password-req-icon]:opacity-0 [&.valid_.auth-password-req-icon]:w-0 [&.valid_.auth-password-req-icon]:h-0 [&.valid_.auth-password-req-icon]:overflow-hidden [&.invalid_.auth-password-req-icon]:text-[#dc2626]" data-requirement="minLength">
               <svg class="auth-password-req-icon shrink-0 w-2 h-2 transition-all" viewBox="0 0 16 16" fill="currentColor">
                 <circle cx="8" cy="8" r="3"/>
               </svg>

@@ -22,7 +22,7 @@ import { RelatedProducts } from "./RelatedProducts";
 
 /* ── Reusable SVG fragments ──────────────────────────── */
 
-const chevronSvg = `<svg class="pdm-chevron" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg>`;
+const chevronSvg = `<svg class="pdm-chevron transition-transform duration-200 ease-linear" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg>`;
 
 const closeSvg = `<svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 6l12 12M18 6l-12 12"/></svg>`;
 
@@ -51,12 +51,12 @@ function collapsibleSection(cfg: CollapsibleConfig): string {
   return `
     <div class="pdm-section-divider h-2 bg-surface-raised"></div>
     <div class="pdm-collapsible-section bg-surface${cfg.sectionClass ? " " + cfg.sectionClass : ""}" id="${cfg.id}">
-      <button type="button" class="pdm-collapsible-header w-full flex items-center justify-between px-4 py-3.5 max-[374px]:px-3 max-[374px]:py-3 border-none bg-none text-sm max-[374px]:text-[13px] font-semibold text-text-heading cursor-pointer text-left" ${headerAttr}>
+      <button type="button" class="pdm-collapsible-header w-full flex items-center justify-between px-4 py-3.5 max-[374px]:px-3 max-[374px]:py-3 border-none bg-none text-sm max-[374px]:text-[13px] font-semibold text-text-heading cursor-pointer text-left [&_em]:not-italic [&_em]:font-normal [&_em]:text-[var(--color-text-placeholder,#999)] [&_em]:ml-1 [&.pdm-collapsible-open_svg]:rotate-180" ${headerAttr}>
         <span>${cfg.title}</span>
         ${chevronSvg}
       </button>
       ${cfg.previewHtml ?? ""}
-      ${cfg.bodyHtml ? `<div class="pdm-collapsible-body pdm-hidden px-4 pb-3.5 max-[374px]:px-3 max-[374px]:pb-3" id="${cfg.id}-body">${cfg.bodyHtml}</div>` : ""}
+      ${cfg.bodyHtml ? `<div class="pdm-collapsible-body pdm-hidden [&.pdm-hidden]:hidden px-4 pb-3.5 max-[374px]:px-3 max-[374px]:pb-3" id="${cfg.id}-body">${cfg.bodyHtml}</div>` : ""}
     </div>
   `;
 }
@@ -64,14 +64,14 @@ function collapsibleSection(cfg: CollapsibleConfig): string {
 /** Renders a bottom sheet modal with handle, header, close button, and body. */
 function bottomSheet(id: string, title: string, bodyHtml: string): string {
   return `
-    <div id="${id}" class="pdm-bottom-sheet pdm-hidden" aria-hidden="true">
-      <div class="pdm-sheet-inner">
-        <div class="pdm-sheet-handle"></div>
-        <div class="pdm-sheet-header">
+    <div id="${id}" class="pdm-bottom-sheet pdm-hidden [&.pdm-hidden]:hidden fixed inset-0 z-[200] bg-black/0 flex items-end transition-[background] duration-[250ms] pointer-events-none [&.pdm-sheet-visible]:bg-black/50 [&.pdm-sheet-visible]:pointer-events-auto" aria-hidden="true">
+      <div class="pdm-sheet-inner w-full max-w-[100vw] box-border bg-[var(--color-surface,#fff)] rounded-t-[16px] max-h-[85vh] overflow-y-auto overflow-x-hidden translate-y-full transition-transform duration-[300ms] [cubic-bezier(0.32,0.72,0,1)] [-webkit-overflow-scrolling:touch] [.pdm-sheet-visible_&]:translate-y-0">
+        <div class="pdm-sheet-handle w-10 h-1 bg-[#e0e0e0] rounded-[2px] mx-auto mt-3 mb-2"></div>
+        <div class="pdm-sheet-header flex items-center justify-between px-4 pb-4 pt-1 text-base font-bold text-[var(--color-text-heading,#111827)] max-[374px]:px-2.5 max-[374px]:py-1 max-[374px]:pb-2.5 max-[374px]:text-sm">
           <span>${title}</span>
-          <button type="button" class="pdm-sheet-close" data-pdm-close="${id}" aria-label="Close">${closeSvg}</button>
+          <button type="button" class="pdm-sheet-close w-8 h-8 border-0 bg-none cursor-pointer text-[var(--color-text-muted,#666)] flex items-center justify-center p-0" data-pdm-close="${id}" aria-label="Close">${closeSvg}</button>
         </div>
-        <div class="pdm-sheet-body">${bodyHtml}</div>
+        <div class="pdm-sheet-body px-4 pb-6 max-[374px]:px-2.5 max-[374px]:pb-4">${bodyHtml}</div>
       </div>
     </div>
   `;
@@ -86,7 +86,7 @@ function renderVariantSection(variant: ProductVariant): string {
     const thumbs = variant.options
       .map(
         (opt) => `
-      <button type="button" class="pdm-color-thumb w-14 h-14 rounded-[6px] border-2 border-border-default overflow-hidden cursor-pointer p-0 bg-none${!opt.available ? " pdm-disabled" : ""}"
+      <button type="button" class="pdm-color-thumb w-14 h-14 rounded-[6px] border-2 border-border-default overflow-hidden cursor-pointer p-0 bg-none transition-[border-color] duration-150 [&.active]:border-[var(--color-text-heading)] [&.pdm-disabled]:opacity-40 [&.pdm-disabled]:cursor-not-allowed${!opt.available ? " pdm-disabled" : ""}"
         data-value="${opt.id}" data-label="${opt.label}" ${opt.price ? `data-variant-price="${opt.price}"` : ""} ${!opt.available ? "disabled" : ""}>
         ${
           opt.thumbnail
@@ -109,7 +109,7 @@ function renderVariantSection(variant: ProductVariant): string {
   const pills = variant.options
     .map(
       (opt) => `
-    <button type="button" class="pdm-variant-pill px-4 py-[7px] border border-border-medium rounded-md text-[13px] text-text-body bg-surface cursor-pointer${!opt.available ? " pdm-disabled" : ""}"
+    <button type="button" class="pdm-variant-pill px-4 py-[7px] border border-border-medium rounded-md text-[13px] text-text-body bg-surface cursor-pointer transition-[border-color] duration-150 [&.active]:border-[var(--color-text-heading)] [&.active]:font-semibold [&.pdm-disabled]:opacity-40 [&.pdm-disabled]:cursor-not-allowed${!opt.available ? " pdm-disabled" : ""}"
       data-value="${opt.id}" data-label="${opt.label}" ${opt.price ? `data-variant-price="${opt.price}"` : ""} ${!opt.available ? "disabled" : ""}>
       ${opt.label}
     </button>
@@ -135,7 +135,7 @@ export function MobileProductLayout(): string {
 
   const gallerySection = `
     <div id="pdm-gallery-wrap" class="relative w-full aspect-square overflow-hidden bg-surface-raised">
-      <div id="pdm-gallery-track" class="flex w-full h-full overflow-x-auto overflow-y-hidden [scroll-snap-type:x_mandatory] [-webkit-overflow-scrolling:touch] [scrollbar-width:none]">
+      <div id="pdm-gallery-track" class="flex w-full h-full overflow-x-auto overflow-y-hidden [scroll-snap-type:x_mandatory] [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         ${p.images
           .map(
             (img, i) => `
@@ -143,7 +143,7 @@ export function MobileProductLayout(): string {
             ${
               img.src
                 ? `<img class="w-full h-full object-contain select-none" src="${img.src}" alt="${img.alt}" draggable="false" loading="${i === 0 ? "eager" : "lazy"}">`
-                : `<div class="pdm-gallery-placeholder w-full h-full flex items-center justify-center">
+                : `<div class="pdm-gallery-placeholder w-full h-full flex items-center justify-center bg-gradient-to-b from-[#f8f9fa] to-[#e9ecef]">
                   <svg width="64" height="64" fill="none" stroke="#9ca3af" stroke-width="1.4" viewBox="0 0 24 24">
                     <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>
                   </svg>
@@ -156,7 +156,7 @@ export function MobileProductLayout(): string {
       </div>
       <!-- Action buttons -->
       <div id="pdm-gallery-actions" class="absolute top-3 right-3 flex flex-col gap-2 z-[6]">
-        <button type="button" data-favorite-btn class="pdm-gallery-action-btn w-9 h-9 rounded-full bg-white/85 border-none flex items-center justify-center text-text-muted cursor-pointer shadow-[0_1px_3px_rgba(0,0,0,0.12)]" aria-label="${t("product.addToFavorites")}">
+        <button type="button" data-favorite-btn class="pdm-gallery-action-btn w-9 h-9 rounded-full bg-white/85 border-none flex items-center justify-center text-text-muted cursor-pointer shadow-[0_1px_3px_rgba(0,0,0,0.12)] transition-[background] duration-150 active:bg-white" aria-label="${t("product.addToFavorites")}">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
         </button>
         <!-- Mobile product gallery gorsel arama (kamera) butonu — DISABLED -->
@@ -201,7 +201,7 @@ export function MobileProductLayout(): string {
     ? `
     <div id="pdm-sample-row" class="flex items-center justify-between px-4 py-2.5 max-[374px]:px-3 max-[374px]:py-2 bg-surface text-[13px] max-[374px]:text-xs text-text-body">
       <span>${t("product.samplePrice")}: <strong>${formatCurrency(p.samplePrice, getSelectedCurrency())}</strong></span>
-      <button type="button" data-order-sample="${p.id}" class="pdm-sample-btn th-btn-outline px-[18px] py-1.5 max-[374px]:px-3.5 max-[374px]:py-[5px] text-[13px] max-[374px]:text-xs font-medium cursor-pointer">${t("cart.orderSample")}</button>
+      <button type="button" data-order-sample="${p.id}" class="pdm-sample-btn th-btn-outline px-[18px] py-1.5 max-[374px]:px-3.5 max-[374px]:py-[5px] text-[13px] max-[374px]:text-xs font-medium cursor-pointer transition-[background] duration-150 active:bg-[var(--btn-outline-hover-bg,var(--color-surface-raised,#f5f5f5))]">${t("cart.orderSample")}</button>
     </div>
   `
     : "";
@@ -216,7 +216,7 @@ export function MobileProductLayout(): string {
       </div>
       <div class="flex items-center justify-between gap-2 px-4 pb-2">
         <div id="pdm-reviews-row" class="flex items-center gap-1.5 text-[13px] max-[374px]:text-xs text-text-muted cursor-pointer">
-          <span class="pdm-stars flex gap-0.5 text-[#f5a623]">${renderStars(p.rating)}</span>
+          <span class="pdm-stars flex gap-0.5 text-[#f5a623] [&_svg]:w-3.5 [&_svg]:h-3.5">${renderStars(p.rating)}</span>
           <span>${t("product.reviewsLabel", { count: String(p.reviewCount) })}</span>
         </div>
         <button
@@ -263,7 +263,7 @@ export function MobileProductLayout(): string {
   const shippingSection = collapsibleSection({
     id: "pdm-ship-section",
     title: t("product.shippingSection"),
-    sectionClass: "pdm-shipping-section",
+    sectionClass: "pdm-shipping-section bg-[#f0fdf4]",
     sheetId: "shipping-modal", // special: opens existing ShippingModal
     previewHtml: `
       <div id="pdm-ship-preview" class="px-4 pb-3.5 text-[13px] text-text-body leading-[1.6]">
@@ -332,8 +332,8 @@ export function MobileProductLayout(): string {
           .join("")}
       </div>
       <div class="pdm-supplier-btns grid grid-cols-2 gap-2">
-        <button type="button" class="pdm-supplier-btn th-btn-outline text-[13px] cursor-pointer text-center">${t("product.companyProfile")}</button>
-        <button type="button" class="pdm-supplier-btn th-btn-outline text-[13px] cursor-pointer text-center">${t("product.otherProducts")}</button>
+        <button type="button" class="pdm-supplier-btn th-btn-outline text-[13px] cursor-pointer text-center transition-[background] duration-150 active:bg-[var(--btn-outline-hover-bg,var(--color-surface-raised,#f5f5f5))]">${t("product.companyProfile")}</button>
+        <button type="button" class="pdm-supplier-btn th-btn-outline text-[13px] cursor-pointer text-center transition-[background] duration-150 active:bg-[var(--btn-outline-hover-bg,var(--color-surface-raised,#f5f5f5))]">${t("product.otherProducts")}</button>
       </div>
     </div>
   `;
@@ -345,8 +345,8 @@ export function MobileProductLayout(): string {
       "pdm-sheet-keyattrs",
       t("product.keyAttributes"),
       `
-      <table class="pdm-attrs-table">
-        ${p.specs.map((s) => `<tr><td>${s.key}</td><td>${s.value}</td></tr>`).join("")}
+      <table class="pdm-attrs-table w-full border-collapse table-fixed [&_tr]:border-b [&_tr]:border-[var(--color-border-light,#f0f0f0)] [&_tr:last-child]:border-b-0 [&_td]:py-3 [&_td]:text-sm [&_td]:align-top [&_td]:[word-break:break-word] [&_td]:[overflow-wrap:break-word]">
+        ${p.specs.map((s) => `<tr><td class="text-[var(--color-text-placeholder,#999)] w-[38%] pr-2.5 max-[374px]:text-xs max-[374px]:py-2.5 max-[374px]:w-[35%] max-[374px]:pr-2">${s.key}</td><td class="text-[var(--color-text-heading,#111827)] font-medium max-[374px]:text-xs max-[374px]:py-2.5">${s.value}</td></tr>`).join("")}
       </table>
     `
     ),
@@ -356,9 +356,9 @@ export function MobileProductLayout(): string {
 
   const sectionTabs = `
     <div id="pdm-section-tabs" class="flex items-center gap-0 bg-surface border-b border-border-default sticky top-0 z-30 p-0">
-      <button type="button" class="pdm-section-tab pdm-section-tab-active flex-1 py-3 max-[374px]:py-2.5 text-sm max-[374px]:text-[13px] font-normal text-text-muted bg-transparent border-none border-b-2 border-b-transparent cursor-pointer text-center whitespace-nowrap" data-pdm-tab="pdm-sec-overview">${t("product.overviewTab")}</button>
-      <button type="button" class="pdm-section-tab flex-1 py-3 max-[374px]:py-2.5 text-sm max-[374px]:text-[13px] font-normal text-text-muted bg-transparent border-none border-b-2 border-b-transparent cursor-pointer text-center whitespace-nowrap" data-pdm-tab="pdm-sec-details">${t("product.detailsTab")}</button>
-      <button type="button" class="pdm-section-tab flex-1 py-3 max-[374px]:py-2.5 text-sm max-[374px]:text-[13px] font-normal text-text-muted bg-transparent border-none border-b-2 border-b-transparent cursor-pointer text-center whitespace-nowrap" data-pdm-tab="pdm-sec-supplier">${t("product.recommendationsTab")}</button>
+      <button type="button" class="pdm-section-tab pdm-section-tab-active flex-1 py-3 max-[374px]:py-2.5 text-sm max-[374px]:text-[13px] font-normal text-text-muted bg-transparent border-none border-b-2 border-b-transparent cursor-pointer text-center whitespace-nowrap transition-[color,border-color] duration-200 [&.pdm-section-tab-active]:text-[var(--pd-tab-active-color,#cc9900)] [&.pdm-section-tab-active]:font-semibold [&.pdm-section-tab-active]:border-b-[var(--pd-tab-active-border,#cc9900)]" data-pdm-tab="pdm-sec-overview">${t("product.overviewTab")}</button>
+      <button type="button" class="pdm-section-tab flex-1 py-3 max-[374px]:py-2.5 text-sm max-[374px]:text-[13px] font-normal text-text-muted bg-transparent border-none border-b-2 border-b-transparent cursor-pointer text-center whitespace-nowrap transition-[color,border-color] duration-200 [&.pdm-section-tab-active]:text-[var(--pd-tab-active-color,#cc9900)] [&.pdm-section-tab-active]:font-semibold [&.pdm-section-tab-active]:border-b-[var(--pd-tab-active-border,#cc9900)]" data-pdm-tab="pdm-sec-details">${t("product.detailsTab")}</button>
+      <button type="button" class="pdm-section-tab flex-1 py-3 max-[374px]:py-2.5 text-sm max-[374px]:text-[13px] font-normal text-text-muted bg-transparent border-none border-b-2 border-b-transparent cursor-pointer text-center whitespace-nowrap transition-[color,border-color] duration-200 [&.pdm-section-tab-active]:text-[var(--pd-tab-active-color,#cc9900)] [&.pdm-section-tab-active]:font-semibold [&.pdm-section-tab-active]:border-b-[var(--pd-tab-active-border,#cc9900)]" data-pdm-tab="pdm-sec-supplier">${t("product.recommendationsTab")}</button>
     </div>
   `;
 

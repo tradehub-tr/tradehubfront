@@ -17,7 +17,7 @@ function renderPriceTiers(tiers: PriceTier[]): string {
   // so each locale controls its own abbreviation + unit (TR: "MSA: 1 adet",
   // EN: "MSQ: 1 piece").
   return `
-    <div id="pd-price-tiers">
+    <div id="pd-price-tiers" class="grid grid-cols-3 gap-x-4 gap-y-3 mb-4">
       ${tiers
         .map((tier, i) => {
           const qtyLabel = tier.maxQty
@@ -29,9 +29,9 @@ function renderPriceTiers(tiers: PriceTier[]): string {
             ? `<span class="pd-price-tier-original" style="text-decoration: line-through; color: var(--color-text-tertiary, #9ca3af); font-size: 12px; margin-right: 6px;">${formatCurrency(tier.originalPrice!, getSelectedCurrency())}</span>`
             : "";
           return `
-          <div class="pd-price-tier ${i === 0 ? "active" : ""}" data-tier-index="${i}">
-            <span class="pd-price-tier-qty">${qtyLabel}</span>
-            <span class="pd-price-tier-price shrink-0 flex items-baseline gap-1">${strikethrough}${formatCurrency(tier.price, getSelectedCurrency())}</span>
+          <div class="pd-price-tier flex flex-col p-0 cursor-default min-w-0 ${i === 0 ? "active" : ""}" data-tier-index="${i}">
+            <span class="pd-price-tier-qty text-[13px] text-[var(--color-text-muted,#666)] mb-1">${qtyLabel}</span>
+            <span class="pd-price-tier-price shrink-0 flex items-baseline gap-1 text-[22px] font-bold text-[var(--color-text-heading,#111827)] leading-[1.2] [.pd-price-tier.active_&]:text-[#cc0000]">${strikethrough}${formatCurrency(tier.price, getSelectedCurrency())}</span>
           </div>
         `;
         })
@@ -71,8 +71,8 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
   if (variant.type === "color") {
     return `
       <div class="variant-group" data-variant-type="${variant.type}" data-variant-label="${variant.label}">
-        <h4 class="pd-variant-label"><strong>${variant.label}:</strong> <span class="variant-selected-label">${selectedOpt.label}</span></h4>
-        <div class="pd-color-thumbs">
+        <h4 class="pd-variant-label text-sm text-[var(--pd-title-color,#111827)] my-4 mb-3"><strong>${variant.label}:</strong> <span class="variant-selected-label">${selectedOpt.label}</span></h4>
+        <div class="pd-color-thumbs flex flex-wrap gap-2 mt-2">
           ${variant.options
             .map((opt) => {
               const isDef = !!(opt as any).isDefault;
@@ -80,7 +80,7 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
               return `
             <button
               type="button"
-              class="variant-option pd-color-thumb ${isActive ? "active" : ""} ${opt.available ? "" : "pd-color-thumb-disabled"}"
+              class="variant-option pd-color-thumb w-16 h-16 p-0 border-2 border-[var(--color-border-default,#e5e5e5)] rounded-full overflow-hidden cursor-pointer bg-transparent transition-[border-color] duration-150 [&_img]:w-full [&_img]:h-full [&_img]:object-cover [&_img]:block [&.active]:border-[var(--pd-title-color,#111827)] [&:hover:not(.active):not(.pd-color-thumb-disabled)]:border-[#999] [&.pd-color-thumb-disabled]:opacity-40 [&.pd-color-thumb-disabled]:cursor-not-allowed ${isActive ? "active" : ""} ${opt.available ? "" : "pd-color-thumb-disabled"}"
               data-variant-id="${opt.id}"
               data-variant-label="${opt.label}"
               data-variant-image="${opt.thumbnail || ""}"
@@ -119,7 +119,7 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
 
   return `
     <div class="variant-group" data-variant-type="${variant.type}" data-variant-label="${variant.label}">
-      <h4 class="pd-variant-label"><strong>${variant.label}:</strong> <span class="variant-selected-label">${selectedOpt.label}</span></h4>
+      <h4 class="pd-variant-label text-sm text-[var(--pd-title-color,#111827)] my-4 mb-3"><strong>${variant.label}:</strong> <span class="variant-selected-label">${selectedOpt.label}</span></h4>
       <div class="flex flex-wrap gap-2 mt-2">
         ${variant.options
           .map((opt) => {
@@ -139,7 +139,7 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
             return `
           <button
             type="button"
-            class="variant-option pd-variant-btn ${isActive ? "active" : ""} ${isAvailable ? "" : "opacity-40 line-through cursor-not-allowed"}"
+            class="variant-option pd-variant-btn px-4 py-1.5 rounded-full text-[13px] font-medium border border-[var(--color-border-medium,#d1d5db)] bg-[var(--color-surface,#fff)] text-[var(--pd-title-color,#111827)] cursor-pointer transition-all duration-150 [&.active]:border-[var(--pd-title-color,#111827)] [&.active]:font-semibold [&:hover:not(.active):not(:disabled)]:border-[#999] ${isActive ? "active" : ""} ${isAvailable ? "" : "opacity-40 line-through cursor-not-allowed"}"
             data-variant-id="${opt.id}"
             data-variant-label="${opt.label}"
             data-variant-video="${(opt as any).videoUrl || ""}"
@@ -165,15 +165,15 @@ export function ProductInfo(): string {
   const p = mockProduct;
 
   return `
-    <div id="product-info">
-      <div id="pd-info-scrollable">
+    <div id="product-info" class="bg-[var(--color-surface,#fff)] flex flex-col border border-[var(--color-border-default,#e5e5e5)] rounded-lg overflow-hidden [.pd-sticky_&]:flex-1 [.pd-sticky_&]:min-h-0 [.pd-sticky_&]:max-h-full [.pd-sticky_&]:overflow-hidden [.pd-sticky_&]:shadow-[0_10px_28px_-18px_rgba(17,24,39,0.35)]">
+      <div id="pd-info-scrollable" class="p-5 flex flex-col scrollbar-hide [.pd-sticky_&]:flex-1 [.pd-sticky_&]:overflow-y-auto [.pd-sticky_&]:min-h-0">
         <!-- Wholesale Tab -->
-        <div id="pd-card-tabs">
-          <button type="button" class="pd-card-tab active">${t("product.wholesaleSales")}</button>
+        <div id="pd-card-tabs" class="flex -mx-5 mt-[-20px] p-0 bg-[var(--color-surface-raised,#f5f5f5)] border-b border-[var(--color-border-default,#e5e5e5)]">
+          <button type="button" class="pd-card-tab flex-1 px-4 py-3.5 text-[15px] font-semibold text-center bg-transparent border-0 border-t-[3px] border-t-transparent cursor-pointer text-[var(--color-text-muted,#666)] relative transition-[background,color] duration-150 [&:not(:first-child)]:border-l [&:not(:first-child)]:border-l-[var(--color-border-default,#e5e5e5)] [&.active]:text-[var(--color-text-primary)] [&.active]:font-bold [&.active]:bg-[var(--color-surface,#fff)] [&.active]:border-t-[var(--pd-tab-active-border,#cc9900)] active">${t("product.wholesaleSales")}</button>
         </div>
 
         <!-- Ready to Ship Badge -->
-        <span id="pd-ready-badge" class="th-badge">${t("product.readyToShip")}</span>
+        <span id="pd-ready-badge" class="th-badge inline-flex items-center my-4 mb-3 px-2.5 py-[3px] text-[11px] font-semibold border-[1.5px] border-[#16a34a] rounded text-[#16a34a] bg-[#f0fdf4] [&.is-out-of-stock]:border-[#dc2626] [&.is-out-of-stock]:text-[#dc2626] [&.is-out-of-stock]:bg-[#fef2f2]">${t("product.readyToShip")}</span>
 
         <!-- Price Tiers -->
         ${renderPriceTiers(p.priceTiers)}
@@ -187,7 +187,7 @@ export function ProductInfo(): string {
             <svg class="shrink-0" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
             <span class="truncate">${t("product.samplePrice")}: <strong class="shrink-0">${formatCurrency(p.samplePrice, getSelectedCurrency())}</strong></span>
           </div>
-          <button type="button" data-order-sample="${mockProduct.id}" class="pd-sample-btn shrink-0 cursor-pointer">${t("cart.orderSample")}</button>
+          <button type="button" data-order-sample="${mockProduct.id}" class="pd-sample-btn shrink-0 cursor-pointer px-5 py-1.5 text-[13px] font-medium border-[length:var(--btn-outline-border-width)] border-[var(--btn-outline-border-color)] rounded-[var(--radius-button)] bg-[var(--btn-outline-bg)] text-[var(--btn-outline-text)] transition-[background,color,border-color] duration-150 hover:bg-[var(--btn-outline-hover-bg,var(--btn-outline-bg))] hover:text-[var(--btn-outline-hover-text,var(--btn-outline-text))]">${t("cart.orderSample")}</button>
         </div>
         `
             : ""
@@ -220,11 +220,11 @@ export function ProductInfo(): string {
           mockProduct.sellerKybVerified === false
             ? `
         <!-- KYB Gate Uyarı Banner — Sepete Ekle butonunun ÜSTÜNDE, flex container DIŞINDA -->
-        <div class="pd-kyb-banner" role="alert">
-          <svg class="pd-kyb-banner-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c2410c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          <div class="pd-kyb-banner-text">
-            <div class="pd-kyb-banner-title">${t("common.kybGateBannerTitle")}</div>
-            <div class="pd-kyb-banner-body">${t("common.kybGateBannerBody")}</div>
+        <div class="pd-kyb-banner flex items-start gap-2.5 mx-5 mt-4 px-3.5 py-3 bg-[#fff7ed] border border-[#fed7aa] rounded-lg" role="alert">
+          <svg class="pd-kyb-banner-icon shrink-0 mt-0.5" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c2410c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <div class="pd-kyb-banner-text text-xs leading-[1.5] text-[#9a3412]">
+            <div class="pd-kyb-banner-title font-semibold mb-0.5">${t("common.kybGateBannerTitle")}</div>
+            <div class="pd-kyb-banner-body text-[#9a3412]">${t("common.kybGateBannerBody")}</div>
           </div>
         </div>
         `
@@ -232,11 +232,11 @@ export function ProductInfo(): string {
         }
 
         <!-- CTA Buttons (Sepete Ekle + Sohbet et — 50/50 grid) -->
-        <div id="pd-cta-buttons" class="grid grid-cols-2 gap-3">
+        <div id="pd-cta-buttons" class="grid grid-cols-2 gap-3 px-5 py-4 border-t border-b border-[var(--color-border-default,#e5e5e5)] bg-[var(--color-surface,#fff)] [.pd-sticky_&]:sticky [.pd-sticky_&]:-bottom-[22px] [.pd-sticky_&]:z-[2] [.pd-sticky_&]:bg-[var(--color-surface,#fff)] [.pd-sticky_&]:border-b-0 [.pd-sticky_&]:mx-[-20px] [.pd-sticky_&]:-mb-[20px] [.pd-sticky_&]:px-5 [.pd-sticky_&]:py-4 [.pd-sticky_&]:pb-5 [.pd-sticky_&]:shadow-[0_-8px_18px_-14px_rgba(17,24,39,0.35)]">
           ${
             mockProduct.sellerKybVerified === false
               ? `
-            <button type="button" id="pd-add-to-cart" disabled aria-disabled="true" class="th-btn-dark pd-add-to-cart--disabled" title="${t("common.addToCartDisabledKyb")}">
+            <button type="button" id="pd-add-to-cart" disabled aria-disabled="true" class="th-btn-dark opacity-50 !cursor-not-allowed pointer-events-none" title="${t("common.addToCartDisabledKyb")}">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
               ${t("product.addToCart")}
             </button>
@@ -264,8 +264,8 @@ export function ProductInfo(): string {
         </div>
         ${
           mockProduct.sellerKybVerified === false
-            ? `<p class="pd-kyb-hint">
-                 <svg class="pd-kyb-hint-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
+            ? `<p class="pd-kyb-hint flex items-start gap-1.5 mx-5 mt-2 text-[11px] leading-[1.5] text-[#6b7280]">
+                 <svg class="pd-kyb-hint-icon shrink-0 mt-0.5 text-[#9ca3af]" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
                  <span>${t("common.kybGateFavoriteHint")}</span>
                </p>`
             : ""

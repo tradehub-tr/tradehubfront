@@ -5,7 +5,6 @@
  * Dynamic: All sections between nav and footer, order/visibility from API
  */
 import '../style.css';
-import '../styles/seller/seller-storefront.css';
 import { initFlowbite } from 'flowbite';
 import 'swiper/swiper-bundle.css';
 import { startAlpine } from '../alpine';

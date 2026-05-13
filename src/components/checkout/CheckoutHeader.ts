@@ -39,10 +39,10 @@ export function CheckoutHeader({
   }
 
   return `
-    <header class="co-page-head">
-      <div class="co-page-head-l">
-        <h1 class="co-page-title">${heading}</h1>
-        ${sub ? `<p class="co-page-sub">${sub}</p>` : ""}
+    <header class="co-page-head flex items-start justify-between gap-8 mb-[18px] pt-1.5">
+      <div class="co-page-head-l flex-1 min-w-0">
+        <h1 class="co-page-title text-[28px] font-semibold leading-[1.15] tracking-[-0.02em] text-[#1a1a1a] m-0">${heading}</h1>
+        ${sub ? `<p class="co-page-sub text-[#8a877f] mt-1.5 max-w-[56ch] text-[13.5px]">${sub}</p>` : ""}
       </div>
     </header>
   `.trim();

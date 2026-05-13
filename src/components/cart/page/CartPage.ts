@@ -68,10 +68,10 @@ export function CartPage({ suppliers, summary }: CartPageProps): string {
       @checkout-supplier="handleCheckoutSupplier($event)"
       @checkout-global="handleCheckoutGlobal()">
       <div class="flex flex-col xl:flex-row gap-5 items-start flex-1">
-        <section class="w-full xl:min-w-0 xl:flex-1 space-y-4">
+        <section class="w-full xl:min-w-0 xl:flex-1 space-y-3">
           ${CartHeader()}
           ${BatchSelectBar({ totalCount: totalItems, selectedCount })}
-          <div class="sc-cart-supplier-list space-y-4">
+          <div class="sc-cart-supplier-list flex flex-col gap-3">
             ${suppliers.map((supplier) => SupplierCard({ supplier, isSingleSupplier: suppliers.length === 1 })).join("")}
           </div>
         </section>

@@ -184,13 +184,13 @@ async function renderProductPage() {
               <div id="pd-hero-left" class="w-full min-w-0">
                 ${Breadcrumb(pdCrumbs)}
                 ${ProductTitleBar()}
-                <div id="pd-hero-gallery" class="w-full">
+                <div id="pd-hero-gallery" class="w-full text-center">
                   ${ProductImageGallery()}
                 </div>
                 ${ProductTabs()}
                 ${RelatedProducts()}
               </div>
-              <div id="pd-hero-info" class="w-full xl:flex xl:flex-col">
+              <div id="pd-hero-info" class="w-full xl:flex xl:flex-col xl:[&.pd-sticky]:sticky xl:[&.pd-sticky]:top-[165px] xl:[&.pd-sticky]:max-h-[calc(100vh-180px)] xl:[&.pd-sticky]:flex xl:[&.pd-sticky]:flex-col">
                 ${ProductInfo()}
               </div>
             </div>
@@ -221,12 +221,12 @@ async function renderProductPage() {
     ${ShippingModal()}
 
     <!-- Mobile Sticky Bottom Bar -->
-    <div id="pd-mobile-bar" class="xl:hidden grid grid-cols-[48px_minmax(0,1fr)_minmax(0,1fr)] gap-2 px-4 py-2.5 pb-[calc(10px+env(safe-area-inset-bottom))] fixed bottom-0 left-0 right-0 z-100 bg-surface border-t border-border-default shadow-[0_-2px_10px_rgba(0,0,0,0.08)] overflow-hidden">
-      <button type="button" id="pdm-bar-chat" class="pdm-bar-chat-btn w-12 h-11 border border-border-medium rounded-[22px] bg-surface flex items-center justify-center cursor-pointer text-text-body p-0" aria-label="Sohbet">
-        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+    <div id="pd-mobile-bar" class="xl:hidden grid grid-cols-[48px_minmax(0,1fr)_minmax(0,1fr)] max-[374px]:grid-cols-[36px_minmax(0,1fr)_minmax(0,1fr)] gap-2 max-[374px]:gap-1 px-4 max-[374px]:px-2 py-2.5 max-[374px]:py-2 pb-[calc(10px+env(safe-area-inset-bottom))] max-[374px]:pb-[calc(8px+env(safe-area-inset-bottom))] max-[374px]:max-w-[100vw] max-[374px]:box-border fixed bottom-0 left-0 right-0 z-100 bg-surface border-t border-border-default shadow-[0_-2px_10px_rgba(0,0,0,0.08)] overflow-hidden">
+      <button type="button" id="pdm-bar-chat" class="pdm-bar-chat-btn w-12 max-[374px]:w-9 h-11 max-[374px]:h-9 border border-border-medium rounded-[22px] max-[374px]:rounded-[18px] bg-surface flex items-center justify-center cursor-pointer text-text-body p-0 active:bg-[var(--color-surface-raised,#f5f5f5)]" aria-label="Sohbet">
+        <svg class="max-[374px]:w-[18px] max-[374px]:h-[18px]" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
       </button>
-      <button type="button" id="pdm-bar-cart" data-add-to-cart="${product.id}" class="pdm-bar-cart-btn th-btn-outline h-11 text-sm font-semibold cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis min-w-0">${t('product.addToCart')}</button>
-      <button type="button" id="pdm-bar-order" class="pdm-bar-order-btn th-btn-dark h-11 whitespace-nowrap overflow-hidden text-ellipsis min-w-0">${t('product.startOrder')}</button>
+      <button type="button" id="pdm-bar-cart" data-add-to-cart="${product.id}" class="pdm-bar-cart-btn th-btn-outline h-11 max-[374px]:h-9 max-[374px]:text-[11px] max-[374px]:rounded-[18px] max-[374px]:px-2 text-sm font-semibold cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis min-w-0 transition-[background] duration-150 active:bg-[var(--btn-outline-hover-bg,var(--color-surface-raised,#f5f5f5))]">${t('product.addToCart')}</button>
+      <button type="button" id="pdm-bar-order" class="pdm-bar-order-btn th-btn-dark h-11 max-[374px]:h-9 max-[374px]:text-[11px] max-[374px]:rounded-[18px] max-[374px]:px-2 whitespace-nowrap overflow-hidden text-ellipsis min-w-0 transition-[background] duration-150 active:bg-[var(--btn-hover-bg,var(--btn-bg))]">${t('product.startOrder')}</button>
     </div>
   `;
 

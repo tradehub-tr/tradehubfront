@@ -85,7 +85,7 @@ export function SocialLoginButtons(options: { mode?: "full" | "icons" } = {}): s
       </button>
 
       <!-- Divider -->
-      <div class="rv-login-divider" data-i18n="auth.login.or">${t("auth.login.or")}</div>
+      <div class="rv-login-divider flex items-center gap-3 before:content-[''] before:flex-1 before:h-px before:bg-[#e5e7eb] after:content-[''] after:flex-1 after:h-px after:bg-[#e5e7eb]" data-i18n="auth.login.or">${t("auth.login.or")}</div>
 
       <!-- Email Button -->
       <button type="button" class="rv-login-btn" data-login-provider="email">

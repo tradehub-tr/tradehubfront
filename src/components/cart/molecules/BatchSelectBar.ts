@@ -18,13 +18,13 @@ export function BatchSelectBar({ totalCount, selectedCount }: BatchSelectBarProp
   const someSelected = selectedCount > 0 && selectedCount < totalCount;
 
   return `
-    <div class="sc-c-batch-select-bar flex items-center justify-between gap-3 px-5 py-4 rounded-md border border-border-default bg-surface max-md:px-3 max-md:py-3" x-data @checkbox-change="$dispatch('batch-select-toggle', { selectAll: $event.detail.checked })">
+    <div class="sc-c-batch-select-bar flex items-center justify-between gap-3 p-[12px_16px] rounded-2xl border border-[#e8e6e0] bg-white shadow-[0_1px_2px_rgba(20,20,18,0.04)]" x-data @checkbox-change="$dispatch('batch-select-toggle', { selectAll: $event.detail.checked })">
       <div class="flex items-center gap-3 min-w-0">
         ${Checkbox({ id: "batch-select-all", checked: allSelected, indeterminate: someSelected, onChange: "batch-select-all" })}
-        <p class="text-base text-text-heading truncate">${t("cart.selectAll")} <span class="sc-c-batch-count text-text-tertiary">(${totalCount})</span></p>
+        <p class="text-base text-text-heading truncate">${t("cart.selectAll")} <span class="sc-c-batch-count text-[#8a877f] ml-1">(${totalCount})</span></p>
       </div>
 
-      <button type="button" class="${btn({ variant: "danger-ghost" })} sc-c-batch-delete-btn shrink-0" ${selectedCount === 0 ? "disabled" : ""} @click="$dispatch('batch-delete')">
+      <button type="button" class="${btn({ variant: "danger-ghost" })} sc-c-batch-delete-btn text-[13px] font-medium shrink-0" ${selectedCount === 0 ? "disabled" : ""} @click="$dispatch('batch-delete')">
         <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="3 6 5 6 21 6"/>
           <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
