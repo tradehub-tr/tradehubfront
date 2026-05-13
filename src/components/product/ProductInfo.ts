@@ -576,5 +576,4 @@ export function initProductInfo(): void {
       );
     }
   }
-
 }
