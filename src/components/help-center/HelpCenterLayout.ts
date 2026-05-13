@@ -51,7 +51,7 @@ export function HelpCenterLayout(): string {
               <button
                 type="submit"
                 id="hc-search-btn"
-                class="th-btn th-btn-gradient px-5 py-3 text-sm font-semibold transition-all hover:opacity-90 shrink-0"
+                class="th-btn px-5 py-3 text-sm font-semibold shrink-0"
               >
                 <span data-i18n="help.searchBtn">${t("help.searchBtn")}</span>
               </button>

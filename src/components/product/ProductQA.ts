@@ -220,7 +220,7 @@ export function ProductQA(): string {
             type="button"
             @click="submitQuestion()"
             :disabled="submitting || question.trim().length < 10"
-            class="h-8 px-4 rounded-lg bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white text-[13px] font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            class="h-8 px-4 rounded-lg bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[13px] font-medium border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
             <svg x-show="submitting" class="animate-spin h-3.5 w-3.5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
             <span x-text="submitting ? 'Gönderiliyor' : 'Soruyu Gönder'"></span>

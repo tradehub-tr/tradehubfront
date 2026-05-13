@@ -736,7 +736,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                 <!-- CTA Butonlari -->
                 <div class="space-y-2.5">
                   <button
-                    class="w-full bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white text-[13px] font-semibold rounded-[var(--radius-button)] py-2.5 transition-colors"
+                    class="w-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[13px] font-semibold border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] py-2.5 shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150"
                     @click="showInquiryModal = true">
                     Simdi iletisime gecin
                   </button>

@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "ask": [
+      "Edit(src/style.css)",
+      "Write(src/style.css)",
+      "Edit(src/styles/**)",
+      "Write(src/styles/**)"
+    ]
+  }
+}

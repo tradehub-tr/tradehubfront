@@ -51,8 +51,8 @@ const VARIANT_CLASS: Record<ButtonVariant, string> = {
   "danger-ghost": "th-btn-danger-ghost",
   ghost: "th-btn-ghost",
   link: "th-btn-link",
-  // Gradient solid + modifier kombinasyonu olarak kullanılır
-  gradient: "th-btn th-btn-gradient",
+  // Eski gradient varyantı kaldırıldı — solid 3D `.th-btn`'e alias.
+  gradient: "th-btn",
 };
 
 const SIZE_CLASS: Record<ButtonSize, string> = {

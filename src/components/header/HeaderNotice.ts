@@ -81,13 +81,18 @@ export function HeaderNotice(
   }
 
   if (mode === "slide") {
-    // JS-driven vertical slide rotation (setupSlideRotation runs after DOM insertion)
+    const slideItemCls =
+      "absolute inset-0 opacity-0 translate-y-full " +
+      "transition-[opacity,transform] duration-[400ms] ease-[ease] " +
+      "data-[state=active]:opacity-100 data-[state=active]:translate-y-0 " +
+      "data-[state=exiting]:opacity-0 data-[state=exiting]:-translate-y-full";
     const items = notices
       .map(
         (n, i) => `
           <div
-            class="header-notice-slide-item${i === 0 ? " active" : ""}"
+            class="${slideItemCls}"
             data-slide-idx="${i}"
+            ${i === 0 ? 'data-state="active"' : ""}
             style="background:${escapeAttr(n.background_color || "#1a1a1a")}"
           >
             <div class="container-boxed">
@@ -104,7 +109,7 @@ export function HeaderNotice(
         data-header-notice-root
         data-notice-hash='${escapeAttr(hashAttr)}'
         data-slide-total="${notices.length}"
-        class="header-notice-slide-root text-white text-[12px] leading-none"
+        class="relative h-9 overflow-hidden text-white text-[12px] leading-none"
       >
         ${items}
       </div>
@@ -122,7 +127,7 @@ export function HeaderNotice(
     >
       <div class="container-boxed">
         <div class="relative h-9 flex items-center [mask-image:linear-gradient(90deg,transparent,#000_6%,#000_94%,transparent)]">
-          <div class="flex items-center gap-12 whitespace-nowrap [animation:notice-scroll_22s_linear_infinite] hover:[animation-play-state:paused]">
+          <div class="flex items-center gap-12 whitespace-nowrap animate-notice-scroll hover:[animation-play-state:paused]">
             ${renderItems(notices)}
             ${renderItems(notices)}
           </div>
@@ -133,24 +138,20 @@ export function HeaderNotice(
 }
 
 function setupSlideRotation(root: HTMLElement): void {
-  const items = Array.from(root.querySelectorAll<HTMLElement>(".header-notice-slide-item"));
+  const items = Array.from(root.querySelectorAll<HTMLElement>("[data-slide-idx]"));
   if (items.length <= 1) return;
   let current = 0;
   const id = window.setInterval(() => {
     const next = (current + 1) % items.length;
-    items[current].classList.remove("active");
-    items[current].classList.add("exiting");
-    items[next].classList.remove("exiting");
-    items[next].classList.add("active");
-    // After exit transition completes, reset non-current items for the next cycle
+    items[current].dataset.state = "exiting";
+    items[next].dataset.state = "active";
     window.setTimeout(() => {
       items.forEach((el, idx) => {
-        if (idx !== next) el.classList.remove("exiting", "active");
+        if (idx !== next) delete el.dataset.state;
       });
     }, 450);
     current = next;
   }, 5000);
-  // Store interval id so initHeaderNotice can clear it before replacing the DOM
   root.dataset.slideIntervalId = String(id);
 }
 

@@ -15,6 +15,28 @@ okuduğu tek kaynak belgedir. Kod yazmadan önce buradaki kurallara uy.
 Aşağıdaki üç madde, **her** kullanıcı görevinde sırayla yapılır.
 Atlamak yasak — atlanan adım hatalı/eski koda yol açıyor.
 
+### 0.0 İZİN KAPISI — CSS dosyalarına yazma
+
+`tradehubfront/.claude/settings.json` aşağıdaki yollar için izin sorması
+ayarlanmıştır:
+
+- `src/style.css`
+- `src/styles/**`
+
+Bu dosyalara Edit/Write yapılmak istendiğinde **Claude Code harness'ı
+kullanıcıdan izin ister**. Bu rastgele bir bariyer değil, refactor sonrası
+tutulan disiplinin teknik karşılığı.
+
+**İzin istemeden önce hazır olmanız gerekenler:**
+
+1. Hangi class'ı/değişkeni ekliyorsunuz, neden utility'e çevirilemiyor?
+2. Karar matrisinin 5 sorusundan (CLAUDE.md 0.1'de) hangisine "evet" cevap
+   bu satırı buraya koyuyor?
+3. Bu satır olmadan tasarım nasıl bozulur? (somut görsel/işlevsel etki)
+
+Bu üç sorunun **net cevabı yoksa izin istemeyin**, önce yine utility ile
+denemeyi düşünün.
+
 ### 0.1 Tailwind kontrolü (CSS yazacaksan)
 
 **Custom CSS yazmadan önce şu sorulara cevap ver:**
@@ -62,9 +84,15 @@ const cls = "px-3.5 py-1.5 text-xs font-medium rounded-full " +
             "whitespace-nowrap";
 ```
 
-> **Neden:** `src/style.css` şu an 5056 satır. Şişmesinin sebebi tam olarak
-> "utility ile yazılabilirdi ama CSS'e yazıldı" pattern'i. Yeni satır eklemeden
-> ÖNCE bu kontrolü yap.
+> **Neden:** `src/style.css` Mayıs 2026 refactor'undan sonra ~700 satıra
+> indirildi (önceden 5056 → 4878 → 700). İçinde sadece şunlar kaldı:
+> @import, @theme tokenları, :root değişkenleri, @keyframes, @layer base,
+> 3rd-party override. **Bu sınırı koruyun.** Yeni "compound class" eklemek
+> demek 5056 satıra geri dönüş yolu açmak demek.
+>
+> `src/styles/` dizini **tamamen silindi** — sayfa-spesifik CSS dosyası
+> açmayın. Sayfaya özel stil, ya utility ya da o sayfanın component
+> dosyasına yazılan kısa CSS-module (`*.module.css`) olur.
 
 ### 0.2 Alpine.js doc kontrolü (Alpine kodu yazacaksan)
 
@@ -202,13 +230,32 @@ CSS değişkeni içeren bir stil yazarken:
 - Tailwind utility ile arbitrary value: `class="bg-[var(--color-surface,#fff)]"`
 - Fallback **mutlaka** ver (`,#fff` kısmı) — uzak tema yüklenmeden önceki paint için
 
-### 4.4 `style.css` Şişme Yasağı
+### 4.4 CSS Dosyaları Şişme Yasağı
 
-`src/style.css` 5056 satırda. **Yeni satır eklemek için kanıt göster:**
+Mayıs 2026 refactor'undan sonra hedef baseline:
 
-- Eklemek istediğin kuralı utility class'larla ifade edemediğini açıkça belirt
-- 3rd-party override ise hangi kütüphaneyi/seçiciyi ezdiğini yorum satırı olarak yaz
-- Refactor sırasında satır **artmıyorsa** mutlaka azalmalı — bir kuralı silersin, ekleyeceğini eklersin
+| Dosya | Hedef satır | Maksimum tolerans |
+|-------|------------:|------------------:|
+| `src/style.css` | ~700 | 900 (üstü = uyarı) |
+| `src/styles/*.css` | 0 | 0 (yeni dosya yasak) |
+
+**Yeni satır eklemek için kanıt göster:**
+
+- Eklemek istediğin kuralı utility class'larla ifade edemediğini açıkça
+  belirt (CLAUDE.md 0.1'deki 5 soruluk karar matrisi)
+- 3rd-party override ise hangi kütüphaneyi/seçiciyi ezdiğini yorum satırı
+  olarak yaz
+- `:root` değişkeni ekliyorsan uzaktan tema sisteminde admin panelde
+  ayarlanan token mı kontrol et — değilse `@theme` token'ı tercih et
+- Refactor sırasında satır **artmıyorsa** mutlaka azalmalı
+
+**Yeni `src/styles/*.css` dosyası açmak yasak.** Sayfa-spesifik stil:
+
+- Utility class olarak HTML/TS içine yazılır (varsayılan)
+- Çok karmaşık bir layout için component-local CSS modülü
+  (`MyComponent.module.css`) açılır
+- Global olarak gereken bir token varsa `style.css`'in `@theme` bloğuna
+  eklenir
 
 ---
 
@@ -542,6 +589,13 @@ Yeni büyük bağımlılık eklenirse buraya da ekle.
 12. `vite.config.ts` plugin sırasını değiştirmek (`tailwindcss()` ilk olmalı)
 13. Yeni HTML entry eklediğinde `rollupOptions.input`'a manuel ekleme — `fast-glob` otomatik tarıyor, dosya `pages/` veya kök altında olmalı
 14. Build'te chunk olmaması gereken bir lib'i `manualChunks`'a eklemeden bırakmak (>50KB ise vendor-* yap)
+15. `src/styles/*.css` altında **yeni dosya açmak** (Mayıs 2026 refactor
+    sonrası bu dizin temizlendi; sayfa-spesifik CSS yazma)
+16. `src/style.css`'i 900 satırın üzerine çıkartmak — eklemek istediğin
+    satırı utility'leştirip eklemeyi düşün
+17. `.claude/settings.json` "ask" izin listesine takılan istek için
+    gerekçesiz "izin ver" istemek — Bölüm 0.0'daki 3 soruya cevabın hazır
+    olmadan izin sorma
 
 ---
 

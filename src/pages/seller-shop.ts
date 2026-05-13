@@ -174,7 +174,7 @@ async function renderPage() {
                       <span class="text-[10px] text-[#999] font-medium">ile</span>
                     </div>
                     <button
-                      class="bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white text-[12px] font-medium rounded-[var(--radius-button)] px-5 py-2 transition-all whitespace-nowrap hover:shadow-sm"
+                      class="bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[12px] font-medium border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] px-5 py-2 shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150 whitespace-nowrap"
                       @click="switchPage('contacts')">
                       Tedarikçiye Ulasin
                     </button>
@@ -190,7 +190,7 @@ async function renderPage() {
             <!-- Mobile CTA -->
             <div class="flex sm:hidden gap-2 mt-4">
               <button
-                class="flex-1 bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white text-[12px] font-medium rounded-[var(--radius-button)] py-2 transition-all"
+                class="flex-1 bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[12px] font-medium border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] py-2 shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150"
                 @click="switchPage('contacts')">
                 Tedarikçiye Ulasin
               </button>
@@ -330,7 +330,7 @@ async function renderPage() {
         <!-- ═══ FLOATING CONTACT BUTTONS (sag kenar) ═══ -->
         <div class="fixed right-0 top-1/2 -translate-y-1/2 z-40 flex flex-col gap-0.5">
           <button @click="switchPage('contacts')"
-                  class="w-[52px] h-[52px] bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white flex flex-col items-center justify-center rounded-l-md shadow-lg transition-colors">
+                  class="w-[52px] h-[52px] bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) flex flex-col items-center justify-center rounded-l-md border border-(--btn-border-color,#d39c00) shadow-lg hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150">
             <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
             <span class="text-[8px] font-bold leading-none">Contact</span>
             <span class="text-[8px] font-bold leading-none">Supplier</span>

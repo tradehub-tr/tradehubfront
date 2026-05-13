@@ -228,8 +228,8 @@ function renderPricingView(): string {
 
     <!-- Billing Toggle -->
     <div class="flex justify-center my-5 mb-7" id="sub-billing-toggle">
-      <button class="sub-billing-toggle__btn sub-billing-toggle__btn--active px-7 max-sm:px-4 py-2.5 max-sm:py-2 text-[14px] max-sm:text-[13px] bg-white border border-border-default cursor-pointer transition-all rounded-l-full border-r-0" data-billing="monthly">${t("subscription.monthly")}</button>
-      <button class="sub-billing-toggle__btn px-7 max-sm:px-4 py-2.5 max-sm:py-2 text-[14px] max-sm:text-[13px] text-gray-500 bg-white border border-border-default cursor-pointer transition-all rounded-r-full" data-billing="yearly">${t("subscription.yearly")} <span class="text-primary-500 font-semibold ml-1">${t("subscription.yearlySaving")}</span></button>
+      <button class="sub-billing-toggle__btn px-7 max-sm:px-4 py-2.5 max-sm:py-2 text-[14px] max-sm:text-[13px] bg-white text-gray-500 border border-border-default cursor-pointer transition-all rounded-l-full border-r-0 data-[state=active]:bg-[var(--color-surface-raised,#f5f5f5)] data-[state=active]:text-[var(--color-text-heading,#111827)] data-[state=active]:font-semibold" data-billing="monthly" data-state="active">${t("subscription.monthly")}</button>
+      <button class="sub-billing-toggle__btn px-7 max-sm:px-4 py-2.5 max-sm:py-2 text-[14px] max-sm:text-[13px] bg-white text-gray-500 border border-border-default cursor-pointer transition-all rounded-r-full data-[state=active]:bg-[var(--color-surface-raised,#f5f5f5)] data-[state=active]:text-[var(--color-text-heading,#111827)] data-[state=active]:font-semibold" data-billing="yearly">${t("subscription.yearly")} <span class="text-primary-500 font-semibold ml-1">${t("subscription.yearlySaving")}</span></button>
     </div>
 
     <!-- Pricing Cards -->
@@ -293,14 +293,8 @@ export function initSubscriptionLayout(): void {
     toggleBtns.forEach((btn) => {
       btn.addEventListener("click", () => {
         const isYearly = btn.dataset.billing === "yearly";
-        toggleBtns.forEach((b) => {
-          b.classList.remove("sub-billing-toggle__btn--active");
-          b.classList.remove("bg-gray-100", "text-gray-900", "font-semibold");
-          b.classList.add("text-gray-500");
-        });
-        btn.classList.add("sub-billing-toggle__btn--active");
-        btn.classList.remove("text-gray-500");
-        btn.classList.add("bg-gray-100", "text-gray-900", "font-semibold");
+        toggleBtns.forEach((b) => delete b.dataset.state);
+        btn.dataset.state = "active";
 
         // Re-render pricing cards
         const grid = document.getElementById("sub-pricing-grid");
