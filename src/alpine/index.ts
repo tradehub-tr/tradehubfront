@@ -2,6 +2,12 @@ import Alpine from "alpinejs";
 import { initLinkRewriter } from "../utils/url";
 import { initMediaRewriter } from "../utils/mediaUrl";
 import { initTracking } from "../utils/trackingManager";
+import { sanitizeHtml } from "../utils/sanitize";
+
+// Alpine magic: $safeHtml(value) → DOMPurify-sanitized output. Use this in
+// `x-html` bindings whenever the source is user-controlled (review body,
+// seller description, ticket body etc.). Never bind `x-html` to a raw value.
+Alpine.magic("safeHtml", () => (value: unknown) => sanitizeHtml(String(value ?? "")));
 
 // Import all Alpine.data() module registrations (side-effect imports)
 import "./orders";

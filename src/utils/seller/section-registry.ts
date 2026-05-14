@@ -566,7 +566,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
         <div class="max-w-[1200px] mx-auto px-4 lg:px-8 py-6">
           <div class="bg-white rounded-md border border-gray-200 p-6">
             <h3 class="text-[18px] font-bold text-gray-900 mb-4" x-text="sectionTitle('company_introduction')"></h3>
-            <div class="text-[14px] text-gray-600 leading-relaxed" x-html="seller?.description || seller?.short_description || ''"></div>
+            <div class="text-[14px] text-gray-600 leading-relaxed" x-html="$safeHtml(seller?.description || seller?.short_description || '')"></div>
           </div>
         </div>
       </section>

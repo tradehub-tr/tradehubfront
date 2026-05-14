@@ -218,7 +218,7 @@ function overallStarsHtml(size = 28): string {
       (n) => `
       <span
         class="relative inline-flex"
-        :style="'--star-fill:' + (100 - starFillPercent(${n})) + '%'"
+        :style="{ '--star-fill': (100 - starFillPercent(${n})) + '%' }"
         aria-hidden="true"
       >
         <svg width="${size}" height="${size}" viewBox="0 0 20 20" fill="currentColor" class="text-secondary-300"><path d="${STAR_PATH}"/></svg>

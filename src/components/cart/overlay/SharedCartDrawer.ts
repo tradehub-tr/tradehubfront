@@ -8,6 +8,7 @@ import { isLoggedIn } from "../../../utils/auth";
 import { apiCheckStock, apiAddToCart, fetchCart } from "../../../services/cartService";
 import { getCurrencySymbol as _getCurrencySymbolForCart } from "../../../utils/currency";
 import { showCartError } from "../page/CartPage";
+import { safeHexColor } from "../../../utils/sanitize";
 
 export interface CartDrawerTierModel {
   minQty: number;
@@ -382,9 +383,13 @@ function updatePreview(): void {
   if (!color) return;
 
   if (color.imageUrl) {
-    image.innerHTML = `<img src="${color.imageUrl}" alt="${escapeHtml(color.label)}" style="width:100%;height:100%;object-fit:cover;" />`;
+    // imageUrl backend listing varyant verisinden geliyor; quote breakout +
+    // event handler injection riski. URL'i escape edip src'ye yaz.
+    image.innerHTML = `<img src="${escapeHtml(color.imageUrl)}" alt="${escapeHtml(color.label)}" style="width:100%;height:100%;object-fit:cover;" />`;
   } else {
-    image.innerHTML = `<div style="width:100%;height:100%;background:${color.colorHex};"></div>`;
+    // colorHex satıcı kontrollü; CSS context injection (";background:url(...)")
+    // engellemek için hex pattern doğrulamasından geçir.
+    image.innerHTML = `<div style="width:100%;height:100%;background:${safeHexColor(color.colorHex)};"></div>`;
   }
   label.textContent = `color : ${color.label}`;
 }

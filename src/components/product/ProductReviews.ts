@@ -18,6 +18,7 @@ import {
 import { openWriteReviewModal } from "./WriteReviewModal";
 import { openReportAbuseModal } from "./ReportAbuseModal";
 import { showToast } from "../../utils/toast";
+import { escapeHtml, sanitizeHtml } from "../../utils/sanitize";
 
 /* ── Utility helpers ─────────────────────────────────── */
 
@@ -187,10 +188,13 @@ export function renderReviewCard(review: ProductReview, showProductThumb = false
     );
   }
 
+  // Backend "trust" yetersiz: satıcı/alıcı kontrollü tüm metin alanları XSS
+  // riski taşır. Reply zengin metin barındırabildiği için sanitizeHtml ile
+  // izinli tag whitelist'inden geçir; diğer kısa metinler düz escape.
   const supplierReplyHtml = review.supplierReply
     ? `<div class="rv-supplier-reply bg-[var(--pd-spec-header-bg,#f9fafb)] rounded-md px-3.5 py-3 mb-3">
         <div class="rv-supplier-reply-label text-[12px] font-semibold text-[var(--pd-rating-text-color,#6b7280)] mb-1">${t("product.supplierReply")}</div>
-        <div class="rv-supplier-reply-text text-[13px] text-[var(--pd-spec-value-color,#111827)] leading-[1.5]">${review.supplierReply}</div>
+        <div class="rv-supplier-reply-text text-[13px] text-[var(--pd-spec-value-color,#111827)] leading-[1.5]">${sanitizeHtml(review.supplierReply)}</div>
       </div>`
     : "";
 
@@ -203,10 +207,10 @@ export function renderReviewCard(review: ProductReview, showProductThumb = false
             <button
               type="button"
               class="rv-image-thumb shrink-0 w-20 h-20 rounded-lg overflow-hidden border border-border-default/60 hover:border-primary-500 transition-colors cursor-zoom-in bg-secondary-50"
-              data-image-url="${src}"
+              data-image-url="${escapeHtml(src)}"
               aria-label="${t("product.productImage")}"
             >
-              <img src="${src}" class="w-full h-full object-cover" loading="lazy" alt="" />
+              <img src="${escapeHtml(src)}" class="w-full h-full object-cover" loading="lazy" alt="" />
             </button>`
             )
             .join("")}
@@ -216,10 +220,10 @@ export function renderReviewCard(review: ProductReview, showProductThumb = false
   const productThumbHtml =
     showProductThumb && review.productTitle
       ? `<div class="rv-product-card flex items-center gap-3 rounded-lg p-3 mt-3 bg-[var(--color-surface-raised,#f5f5f5)]">
-        <img class="rv-product-card-img w-12 h-12 rounded object-cover shrink-0 bg-[var(--pd-spec-header-bg,#f9fafb)]" src="${review.productImage || ""}" alt="${t("product.productImage")}">
+        <img class="rv-product-card-img w-12 h-12 rounded object-cover shrink-0 bg-[var(--pd-spec-header-bg,#f9fafb)]" src="${escapeHtml(review.productImage || "")}" alt="${t("product.productImage")}">
         <div class="flex-1 min-w-0">
-          <span class="rv-product-card-title block text-[13px] text-[var(--color-text-body,#333333)] overflow-hidden text-ellipsis whitespace-nowrap">${review.productTitle}</span>
-          <span class="rv-product-card-price block text-[13px] font-semibold text-[var(--pd-title-color,#111827)] mt-0.5">${review.productPrice || ""}</span>
+          <span class="rv-product-card-title block text-[13px] text-[var(--color-text-body,#333333)] overflow-hidden text-ellipsis whitespace-nowrap">${escapeHtml(review.productTitle)}</span>
+          <span class="rv-product-card-price block text-[13px] font-semibold text-[var(--pd-title-color,#111827)] mt-0.5">${escapeHtml(review.productPrice || "")}</span>
         </div>
         <a class="rv-product-card-link text-[12px] text-[var(--color-text-body,#333333)] whitespace-nowrap shrink-0 no-underline hover:underline" href="javascript:void(0)">${t("product.viewProductDetails")} ›</a>
       </div>`
@@ -229,21 +233,21 @@ export function renderReviewCard(review: ProductReview, showProductThumb = false
     <div class="rv-card py-5 border-b border-[var(--pd-spec-border,#e5e5e5)] last-of-type:border-b-0 max-[374px]:px-3 max-[374px]:py-3">
       <div class="flex items-start gap-3 mb-2.5 max-[374px]:gap-2 max-[374px]:mb-2">
         <div class="rv-avatar w-9 h-9 rounded-full flex items-center justify-center text-[14px] font-bold shrink-0 text-[var(--color-text-inverse,#fff)] max-[374px]:w-8 max-[374px]:h-8 max-[374px]:text-xs" style="background: ${avatarColor(review.author)};">
-          ${review.author.charAt(0)}
+          ${escapeHtml(review.author.charAt(0))}
         </div>
         <div class="flex-1 min-w-0">
           <div class="flex items-center gap-2 flex-wrap max-[374px]:gap-1">
-            <span class="rv-card-name text-[13px] font-semibold text-[var(--pd-title-color,#111827)] max-[374px]:text-[13px]">${anonymizeName(review.author)}</span>
-            <span class="rv-card-country text-[12px] text-[var(--pd-rating-text-color,#6b7280)] flex items-center gap-1 max-[374px]:text-[11px]">${countryFlag(review.country)} ${review.countryName || review.country}</span>
+            <span class="rv-card-name text-[13px] font-semibold text-[var(--pd-title-color,#111827)] max-[374px]:text-[13px]">${escapeHtml(anonymizeName(review.author))}</span>
+            <span class="rv-card-country text-[12px] text-[var(--pd-rating-text-color,#6b7280)] flex items-center gap-1 max-[374px]:text-[11px]">${countryFlag(review.country)} ${escapeHtml(review.countryName || review.country)}</span>
             ${badges.join("")}
           </div>
           <div class="flex items-center gap-2 mt-1">
             <div class="flex items-center gap-0.5">${renderStars(displayRating(review), true)}</div>
-            <span class="rv-card-date text-[12px] text-[var(--pd-rating-text-color,#6b7280)]">${review.date}</span>
+            <span class="rv-card-date text-[12px] text-[var(--pd-rating-text-color,#6b7280)]">${escapeHtml(review.date)}</span>
           </div>
         </div>
       </div>
-      <div class="rv-card-comment text-[13px] leading-[1.6] text-[var(--pd-spec-value-color,#111827)] mb-3 max-[374px]:text-[13px] max-[374px]:leading-[1.5]">${review.comment}</div>
+      <div class="rv-card-comment text-[13px] leading-[1.6] text-[var(--pd-spec-value-color,#111827)] mb-3 max-[374px]:text-[13px] max-[374px]:leading-[1.5]">${escapeHtml(review.comment)}</div>
       ${imagesHtml}
       ${supplierReplyHtml}
       ${productThumbHtml}
@@ -707,7 +711,7 @@ function openImageLightbox(url: string): void {
     <button type="button" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors" aria-label="Kapat">
       <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
     </button>
-    <img src="${url}" class="max-w-[95vw] max-h-[90vh] object-contain shadow-2xl rounded-lg" alt="" />
+    <img src="${escapeHtml(url)}" class="max-w-[95vw] max-h-[90vh] object-contain shadow-2xl rounded-lg" alt="" />
   `;
   const onEsc = (e: KeyboardEvent) => {
     if (e.key === "Escape") close();
