@@ -99,10 +99,7 @@ Alpine.data("dashboardBanners", () => ({
         ? [{ type: "email-verify", email: this.userEmail }]
         : [];
 
-    this.banners = [
-      ...synthetic,
-      ...remote.map((b) => ({ type: "remote" as const, ...b })),
-    ];
+    this.banners = [...synthetic, ...remote.map((b) => ({ type: "remote" as const, ...b }))];
 
     if (this.banners.length > 0) {
       this.$nextTick(() => this.initSwiper());
