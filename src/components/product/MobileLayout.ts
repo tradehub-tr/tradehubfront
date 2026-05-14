@@ -217,6 +217,7 @@ export function MobileProductLayout(): string {
       <div class="flex items-center justify-between gap-2 px-4 pb-2">
         <div id="pdm-reviews-row" class="flex items-center gap-1.5 text-[13px] max-[374px]:text-xs text-text-muted cursor-pointer">
           <span class="pdm-stars flex gap-0.5 text-[#f5a623] [&_svg]:w-3.5 [&_svg]:h-3.5">${renderStars(p.rating)}</span>
+          <span class="pdm-stars flex gap-0.5 text-[#f5a623]">${renderStars(p.rating)}</span>
           <span>${t("product.reviewsLabel", { count: String(p.reviewCount) })}</span>
         </div>
         <button
