@@ -4,6 +4,7 @@ import {
   filterAndSortReviews,
   renderReviewCard,
   bindHelpfulButtons,
+  displayRating,
   SORT_LABELS,
 } from "../components/product/ProductReviews";
 import type { ReviewFilterState, SortMode } from "../components/product/ProductReviews";
@@ -106,8 +107,22 @@ export async function loadProductReviews(listingId: string): Promise<void> {
   try {
     const data = await getProductReviews(listingId, { pageSize: 50 });
     currentProduct.reviews = data.reviews;
+    // Yorum sayısı: backend summary'i sadece Approved sayar — bunu olduğu
+    // gibi kullan (pending dahil edilmez).
     currentProduct.reviewCount = data.summary.review_count;
-    currentProduct.rating = data.summary.weighted_rating || data.summary.average_rating || 0;
+    // Ortalama puan: backend `rating` field'ı Int olduğu için 3.5 → 4'e
+    // yuvarlanarak kaydedilir, gerçek değer kaybolur. Frontend'de Approved
+    // yorumların aspect ortalamasından (varsa) gerçek puanı yeniden
+    // hesaplıyoruz — böylece 3 + 4 + 3 + 4 = 14/4 = 3.5 olduğu gibi yansır.
+    const approvedReviews = data.reviews.filter((r) => r.status === "Approved");
+    const ratings = approvedReviews
+      .map((r) => displayRating(r))
+      .filter((v) => v > 0);
+    const computedAvg = ratings.length
+      ? ratings.reduce((s, v) => s + v, 0) / ratings.length
+      : 0;
+    currentProduct.rating =
+      computedAvg || data.summary.weighted_rating || data.summary.average_rating || 0;
     currentProduct.storeReviewCount = data.total;
     document.dispatchEvent(
       new CustomEvent("product-reviews-loaded", {

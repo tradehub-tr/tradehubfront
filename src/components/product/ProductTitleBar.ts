@@ -7,19 +7,60 @@
 import { getCurrentProduct } from "../../alpine/product";
 import { t } from "../../i18n";
 import { getCountryCode, getCountryFlag } from "../../utils/country";
+import { renderStars } from "./ProductReviews";
 
-function starIcon(filled: boolean): string {
-  return filled
-    ? `<svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" style="color: var(--pd-rating-star-color, #f59e0b);"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>`
-    : `<svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" style="color: #d1d5db;"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>`;
+function ratingLineHtml(): string {
+  const p = getCurrentProduct();
+  return `
+        <div class="flex items-center gap-1">
+          ${renderStars(p.rating)}
+        </div>
+        <span class="font-semibold text-[var(--pd-title-color,#222222)]">${p.rating ? Number(p.rating).toFixed(p.rating % 1 === 0 ? 0 : 1) : "0"}</span>
+        <button
+          type="button"
+          id="pd-review-count-link"
+          class="cursor-pointer hover:underline bg-transparent border-0 p-0 text-[13px] text-[var(--pd-rating-text-color,#6b7280)]"
+        >${t("product.reviewsLabel", { count: String(p.reviewCount) })}</button>
+        <span class="text-[var(--pd-rating-text-color,#d1d5db)]">·</span>
+        <span class="text-[var(--pd-rating-text-color,#6b7280)]">${t("product.ordersLabel", { count: String(p.orderCount) })}</span>
+  `;
 }
 
-function renderStars(rating: number): string {
-  const stars = [];
-  for (let i = 1; i <= 5; i++) {
-    stars.push(starIcon(i <= Math.round(rating)));
+/** "X yorum" tıklamasında Yorumlar tab'ını aç + bölümü scroll'a getir. */
+function scrollToReviewsTab(): void {
+  // Alpine'ın `Alpine.$data(el)` API'si ile #product-tabs-section üzerindeki
+  // activeTab state'ini "reviews"'a çek. Alpine yüklü değilse sessizce geç.
+  const section = document.getElementById("product-tabs-section");
+  if (!section) return;
+  const AlpineGlobal = (window as unknown as { Alpine?: { $data: (el: Element) => { activeTab?: string } } }).Alpine;
+  if (AlpineGlobal && typeof AlpineGlobal.$data === "function") {
+    const data = AlpineGlobal.$data(section);
+    if (data) data.activeTab = "reviews";
   }
-  return stars.join("");
+  section.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+/**
+ * Reviews backend'den geldiğinde başlık satırını (yıldız + puan + yorum/sipariş
+ * sayısı) yeniden render et. `loadProductReviews` summary'i frontend'de yeniden
+ * hesaplıyor; bu fonksiyon DOM'a o güncel değerleri basar.
+ */
+export function initProductTitleBar(): void {
+  const update = () => {
+    const el = document.getElementById("pd-rating-line");
+    if (el) el.innerHTML = ratingLineHtml();
+  };
+  document.addEventListener("product-reviews-loaded", update);
+  window.addEventListener("review-submitted", update);
+
+  // "X yorum" butonuna tek bir delegated click listener — innerHTML yenilense
+  // bile event delegation ile çalışmaya devam eder.
+  document.addEventListener("click", (e) => {
+    const target = e.target as HTMLElement | null;
+    if (target && target.closest("#pd-review-count-link")) {
+      scrollToReviewsTab();
+    }
+  });
 }
 
 export function ProductTitleBar(): string {
@@ -50,14 +91,8 @@ export function ProductTitleBar(): string {
       <h1 id="pd-product-title" class="text-lg font-bold leading-snug mb-1.5 line-clamp-2 break-words" style="color: var(--pd-title-color, #222222);">${p.title}</h1>
 
       <!-- Rating + Reviews + Orders -->
-      <div class="flex items-center gap-2 flex-wrap text-[13px] mb-3">
-        <div class="flex items-center gap-1">
-          ${renderStars(p.rating)}
-        </div>
-        <span class="font-semibold" style="color: var(--pd-title-color, #222222);">${p.rating}</span>
-        <span style="color: var(--pd-rating-text-color, #6b7280);">${t("product.reviewsLabel", { count: String(p.reviewCount) })}</span>
-        <span style="color: var(--pd-rating-text-color, #d1d5db);">·</span>
-        <span style="color: var(--pd-rating-text-color, #6b7280);">${t("product.ordersLabel", { count: String(p.orderCount) })}</span>
+      <div id="pd-rating-line" class="flex items-center gap-2 flex-wrap text-[13px] mb-3">
+        ${ratingLineHtml()}
       </div>
 
       <!-- Supplier Company Bar -->

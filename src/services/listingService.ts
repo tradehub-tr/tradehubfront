@@ -230,6 +230,7 @@ function backendReviewToProductReview(
     canEdit: Boolean(r.can_edit),
     status: r.status,
     reviewerTier: r.reviewer?.tier && r.reviewer.tier !== "Newcomer" ? r.reviewer.tier : undefined,
+    aspects: r.aspects ?? null,
   };
 }
 
