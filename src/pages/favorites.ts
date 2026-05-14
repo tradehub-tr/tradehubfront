@@ -13,6 +13,7 @@ import { FloatingPanel } from '../components/floating'
 import { startAlpine } from '../alpine'
 import { renderSidebar } from '../components/sidebar'
 import { FavoritesLayout, initFavoritesLayout } from '../components/favorites'
+import { ListingCartDrawer, initListingCartDrawer } from '../components/products/ListingCartDrawer'
 import { requireAuth } from '../utils/auth-guard'
 
 await requireAuth();
@@ -44,6 +45,9 @@ appEl.innerHTML = `
 
   <!-- Floating Panel -->
   ${FloatingPanel()}
+
+  <!-- Cart Drawer (data-add-to-cart global trigger için gerekli) -->
+  ${ListingCartDrawer()}
 `;
 
 initFlowbite();
@@ -54,3 +58,4 @@ initHeaderCart();
 initMobileDrawer();
 initLanguageSelector();
 initFavoritesLayout();
+initListingCartDrawer([]);

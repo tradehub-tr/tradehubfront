@@ -128,16 +128,27 @@ jobs:
           printf "${ENTRY}" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
+      - name: package.json versiyonunu senkronla
+        run: |
+          BETA_VERSION=${{ steps.version.outputs.beta_version }}
+          npm version "${BETA_VERSION#v}" --no-git-tag-version --allow-same-version
+
       - name: Commit ve tag
         run: |
           BETA_VERSION=${{ steps.version.outputs.beta_version }}
+          # Tag immutability — aynı tag tekrar atılmasın (kirli state guard)
+          if git rev-parse "${BETA_VERSION}" >/dev/null 2>&1; then
+            echo "HATA: Tag ${BETA_VERSION} zaten var" >&2
+            exit 1
+          fi
+          git add package.json package-lock.json 2>/dev/null || git add package.json
           if [ "${{ steps.changelog.outputs.skip_changelog }}" != "true" ]; then
             git add CHANGELOG.md
-            git commit -m "chore: ${BETA_VERSION} beta changelog guncellendi"
-            git push origin main
+            git commit -m "chore: ${BETA_VERSION} beta changelog + package.json"
           else
-            echo "CHANGELOG degismedi (promote-only) — sadece tag atiliyor"
+            git commit -m "chore: ${BETA_VERSION} package.json senkron (promote-only)"
           fi
+          git push origin main
           git tag ${BETA_VERSION}
           git push origin ${BETA_VERSION}
 

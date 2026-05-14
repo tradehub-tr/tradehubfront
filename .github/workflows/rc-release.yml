@@ -129,16 +129,26 @@ jobs:
           printf "${ENTRY}" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
+      - name: package.json versiyonunu senkronla
+        run: |
+          RC_VERSION=${{ steps.version.outputs.rc_version }}
+          npm version "${RC_VERSION#v}" --no-git-tag-version --allow-same-version
+
       - name: Commit ve tag
         run: |
           RC_VERSION=${{ steps.version.outputs.rc_version }}
+          if git rev-parse "${RC_VERSION}" >/dev/null 2>&1; then
+            echo "HATA: Tag ${RC_VERSION} zaten var" >&2
+            exit 1
+          fi
+          git add package.json package-lock.json 2>/dev/null || git add package.json
           if [ "${{ steps.changelog.outputs.skip_changelog }}" != "true" ]; then
             git add CHANGELOG.md
-            git commit -m "chore: ${RC_VERSION} RC changelog guncellendi"
-            git push origin main
+            git commit -m "chore: ${RC_VERSION} RC changelog + package.json"
           else
-            echo "CHANGELOG degismedi (promote-only) — sadece tag atiliyor"
+            git commit -m "chore: ${RC_VERSION} package.json senkron (promote-only)"
           fi
+          git push origin main
           git tag ${RC_VERSION}
           git push origin ${RC_VERSION}
 

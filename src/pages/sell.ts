@@ -20,11 +20,6 @@ if (window.location.hash === '#register-form') {
   window.location.replace('/pages/auth/register.html?type=supplier');
 }
 
-// Redirect #register-form hash to the actual register page
-if (window.location.hash === '#register-form') {
-  window.location.replace('/pages/auth/register.html?type=supplier');
-}
-
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.classList.add('relative');
 appEl.innerHTML = `
