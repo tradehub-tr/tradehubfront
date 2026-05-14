@@ -115,12 +115,8 @@ export async function loadProductReviews(listingId: string): Promise<void> {
     // yorumların aspect ortalamasından (varsa) gerçek puanı yeniden
     // hesaplıyoruz — böylece 3 + 4 + 3 + 4 = 14/4 = 3.5 olduğu gibi yansır.
     const approvedReviews = data.reviews.filter((r) => r.status === "Approved");
-    const ratings = approvedReviews
-      .map((r) => displayRating(r))
-      .filter((v) => v > 0);
-    const computedAvg = ratings.length
-      ? ratings.reduce((s, v) => s + v, 0) / ratings.length
-      : 0;
+    const ratings = approvedReviews.map((r) => displayRating(r)).filter((v) => v > 0);
+    const computedAvg = ratings.length ? ratings.reduce((s, v) => s + v, 0) / ratings.length : 0;
     currentProduct.rating =
       computedAvg || data.summary.weighted_rating || data.summary.average_rating || 0;
     currentProduct.storeReviewCount = data.total;
