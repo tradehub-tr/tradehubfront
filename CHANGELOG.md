@@ -1,3 +1,14 @@
+## [v1.1.8-beta.18] - 2026-05-14 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(dashboard,favorites,sell): e-posta doğrulama slide'ı, favori filtreleri ve satıcı landing düzenlemesi (@ahmeetseker)
+  - Dashboard: OperationSlider'a e-posta doğrulanmamış kullanıcılar için synthetic "email-verify" slide eklendi (resend + change link, i18n anahtarları en/tr).
+  - Favoriler: kategori/tedarikçi/stok/fiyat filtre menüsü, listing detail lazy enrichment, kart üstü stok pill'i ve doğrulanmış supplier satırı.
+  - Sell: 4 section'a ortak max-w-[1500px] inner sarmalayıcı; "Avrupa" → "dünya" metin güncellemesi.
+
+---
 ## [v1.1.8-beta.17] - 2026-05-14 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
