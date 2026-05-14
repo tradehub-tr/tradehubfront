@@ -1,3 +1,17 @@
+## [v1.1.8-beta.15] - 2026-05-14 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(reviews): aspect ortalamasından dinamik puan + partial-fill yıldız (@boraydeger32)
+  - WriteReviewModal: "Genel Puan" artık kullanıcı seçimi değil; 4 boyut puanının ortalaması olarak hesaplanan computed değer. Yıldızlar read-only ve clip-path tabanlı partial-fill destekler.
+  - ProductReviews: renderStars fractional rating alır (SVG layering + clip-path); displayRating() helper'ı backend Int rating yerine aspect ortalamasını kullanır. Yorum kartı, ReviewsModal ve ürün başlığı bu helper'a yönlendirildi.
+  - ProductTitleBar: ortalama Approved yorumların aspect ortalamasından yeniden hesaplanır (backend `rating` Int olduğu için 3.5 → 4 olarak kaybolur). "X yorum" tıklaması Yorumlar tab'ını açıp section'a scroll eder; rating satırı product-reviews-loaded event'iyle re-render.
+  - listingService: BackendStorefrontReview.aspects artık ProductReview'a map ediliyor; tip de güncellendi.
+  - WriteReviewModal'daki merge conflict (HEAD vs 7aafda0) çözüldü.
+  - Yeni eklenen tüm color/clip-path inline style'ları Tailwind utility arbitrary'lerine (theme-var + [clip-path:inset(...)] + CSS var atama pattern'i) çevrildi; yeni .css/<style> bloku yok.
+
+---
 ## [v1.1.8-beta.13] - 2026-05-14 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
