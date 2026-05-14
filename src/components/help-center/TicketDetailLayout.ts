@@ -87,7 +87,7 @@ export function TicketDetailLayout(): string {
                     <span class="b-badge b-badge-customer">Müşteri · İlk Talep</span>
                     <span class="b-meta" x-text="fmtDT(ticket.creation)"></span>
                   </header>
-                  <div class="b-content prose prose-sm max-w-none" x-html="ticket.description || '<p class=\\'text-gray-400\\'>Açıklama girilmedi</p>'"></div>
+                  <div class="b-content prose prose-sm max-w-none" x-html="$safeHtml(ticket.description || '<p class=\\'text-gray-400\\'>Açıklama girilmedi</p>')"></div>
                 </div>
               </article>
 
