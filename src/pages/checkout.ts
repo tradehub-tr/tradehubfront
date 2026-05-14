@@ -523,6 +523,9 @@ window.addEventListener('checkout:confirm-order', () => {
           quantity: s.quantity,
           total_price: s.unitPrice * s.quantity,
           image: p.image,
+          // Sample (numune) bayrağı sunucu recompute'unda sample_price'ı seçer.
+          // Olmaması durumunda selling_price ile faturalanır → overcharge.
+          is_sample: isSampleMode ? 1 : 0,
         }))
       ),
     };
