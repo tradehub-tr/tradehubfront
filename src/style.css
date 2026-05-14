@@ -1642,9 +1642,7 @@
     font-weight: 700;
     line-height: 18px;
   }
-
 }
-
 
 .hero-side-slider .swiper-slide {
   transition: transform 200ms ease-out;
@@ -1684,7 +1682,6 @@ body.gallery-lightbox-open {
   overflow: hidden;
 }
 
-
 /* === SUPPLIER TAB — "Know Your Supplier" redesign === */
 
 /* === MOBILE PRODUCT DETAIL — body class set by JS, must stay in CSS === */
@@ -1714,9 +1711,6 @@ footer {
   background-size: contain;
   background-repeat: no-repeat;
 }
-
-
-
 
 /* === CART — Pseudo-element styles (cannot be done with Tailwind) === */
 
@@ -2123,5 +2117,3 @@ button[data-filter-action="apply-all"]:active {
 .certificates__dots .swiper-pagination-bullet-active {
   background: var(--color-store-accent, #cc9900);
 }
-
-
