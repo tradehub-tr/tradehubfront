@@ -1,3 +1,39 @@
+## [v1.1.8-beta.13] - 2026-05-14 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(reviews): Sprint 1 — review/Q&A storefront entegrasyonu + 4 fix (@boraydeger32)
+  - Yorum Yaz modal: form + foto + kategori şablon cevapları
+  - Şikayet Et modal: sebep dropdown + not
+  - Q&A bottom-sheet: mobile-first soru/cevap görüntüleme
+  - Reviewer tier rozeti (Top / Trusted / Verified) trust signal
+  - Onay Bekliyor amber rozeti yorum sahibine
+  - 24h içinde Düzenle butonu (max 1 edit, sonrası reddedilir)
+  - Faydalı değil 👎 + Helpful/Not-helpful mutex pattern
+  - Mobile pdm-* kısayol butonları (Yorum Yaz / Görüntüle / Soru-Cevap)
+  - Bottom-sheet pattern: items-end sm:items-center
+  - Mobile-first responsive header butonları
+  - 374px altı küçültülmüş yazı
+  - src/api/reviewsApi.ts
+  - src/components/product/ProductQA.ts
+  - src/components/product/QAModal.ts
+  - src/components/product/WriteReviewModal.ts
+  - src/components/product/ReportAbuseModal.ts
+  - src/components/reviews/ReviewWidget.ts
+  - src/styles/reviews-v5.css
+- feat(reviews): review/Q&A storefront entegrasyonu + 4 kritik fix (@boraydeger32)
+  - Backend API entegrasyonu (mock→real): eligibility, submit, vote, update, abuse, Q&A — yeni listingService methodları
+  - Custom modal'lar: Yorum Yaz, Şikayet Et, Q&A bottom-sheet
+  - Reviewer tier rozeti (Top/Trusted/Verified) — Newcomer gizli
+  - Onay Bekliyor rozeti — sadece sahibine görünür (isOwnPending)
+  - Düzenle butonu — 24h penceresinde, max 1 edit
+  - Faydalı değil  + Helpful/Not-helpful mutex (kardeş butonlar kilitlenir)
+  - Mobile layout: Yorum Yaz / Tüm yorumları / Soru-Cevap kısayolları
+  - reviews-v5.css tasarım sistemi
+  - Lint: @ts-nocheck pragma'larına eslint-disable + açıklama (rule bypass)
+
+---
 ## [v1.1.8-beta.12] - 2026-05-13 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
