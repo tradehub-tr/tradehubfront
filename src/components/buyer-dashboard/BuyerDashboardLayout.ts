@@ -17,17 +17,14 @@ import { getItems as getFavoriteItems } from "../../stores/favorites";
 export interface BuyerDashboardLayoutProps {
   data: BuyerDashboardData;
   emailVerified?: boolean;
+  userEmail?: string;
 }
 
 export function BuyerDashboardLayout({
   data,
-  emailVerified: _emailVerified = true,
+  emailVerified = true,
+  userEmail = "",
 }: BuyerDashboardLayoutProps): string {
-  // Banner artık TopBar.ts içinde global olarak render ediliyor (her sayfada).
-  // Burada local banner kaldırıldı; emailVerified prop'u backwards compat
-  // amaçlı korunuyor ama kullanılmıyor.
-  void _emailVerified;
-
   return `
     <div class="sc-buyer-dashboard bg-[#F5F5F5]">
       <div class="max-w-[1425px] mx-auto px-[clamp(0.25rem,0.2rem+0.4vw,1rem)] py-4 max-sm:py-3">
@@ -35,7 +32,7 @@ export function BuyerDashboardLayout({
         <div class="flex gap-[clamp(0.5rem,0.4rem+0.4vw,0.875rem)] items-start max-lg:flex-col max-lg:items-stretch">
           <!-- Center Column -->
           <div class="flex-1 min-w-0 flex flex-col gap-[clamp(0.5rem,0.4rem+0.4vw,0.875rem)] max-lg:w-full">
-            ${NewBuyerInfo({ user: data.user })}
+            ${NewBuyerInfo({ user: data.user, emailVerified, userEmail })}
             ${OrdersSection()}
           </div>
 

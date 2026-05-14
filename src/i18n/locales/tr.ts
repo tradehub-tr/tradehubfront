@@ -1081,6 +1081,11 @@ const tr = {
       statsCoupons: "Kuponlar",
       notifVerifyEmail: "E-posta adresinizi doğrulayın",
       notifVerifyEmailLink: "Doğrulama e-postası gönder",
+      notifVerifyEmailTitle: "E-posta doğrulayın:",
+      notifVerifyEmailSentLabel: "Gönderildi:",
+      notifVerifyEmailChangeLink: "Değiştir",
+      notifVerifyEmailCta: "Doğrulama e-postası gönder",
+      notifVerifyEmailResend: "Tekrar gönder",
       verificationEmailSent: "Doğrulama e-postası gönderildi. Lütfen gelen kutunuzu kontrol edin.",
       verificationEmailFailed:
         "Doğrulama e-postası gönderilemedi. Lütfen daha sonra tekrar deneyin.",

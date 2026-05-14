@@ -58,6 +58,7 @@ function renderMainContent(): string {
   const dashboard = BuyerDashboardLayout({
     data: { user: defaultUser, stats: [], notifications: [], browsingHistory: [], promotions: [] },
     emailVerified,
+    userEmail: sessionUser?.email ?? '',
   });
   return widget + dashboard;
 }

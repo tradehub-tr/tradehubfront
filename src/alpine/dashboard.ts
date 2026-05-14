@@ -2,7 +2,7 @@ import Alpine from "alpinejs";
 import Swiper from "swiper";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/swiper-bundle.css";
-import { getSessionUser } from "../utils/auth";
+import { getSessionUser, resendVerificationEmail } from "../utils/auth";
 import { callMethod } from "../utils/api";
 import { t } from "../i18n";
 
@@ -59,11 +59,27 @@ Alpine.data("buyerUserInfo", () => ({
   },
 }));
 
+type Banner =
+  | { type: "email-verify"; email: string }
+  | { type: "remote"; title: string; link_text: string; link_href: string };
+
 Alpine.data("dashboardBanners", () => ({
-  banners: [] as { title: string; link_text: string; link_href: string }[],
+  banners: [] as Banner[],
+  emailVerified: true,
+  userEmail: "",
+  verificationSent: false,
+  sending: false,
+  errorMessage: "",
   swiperInstance: null as Swiper | null,
 
   async init() {
+    // 1. Config'i $root data-* attribute'larından oku (XSS-safe)
+    const root = this.$root as HTMLElement;
+    this.emailVerified = root.dataset.emailVerified === "true";
+    this.userEmail = root.dataset.userEmail ?? "";
+
+    // 2. Backend banner'larını çek
+    let remote: { title: string; link_text: string; link_href: string }[] = [];
     try {
       const result = await callMethod<{
         success: boolean;
@@ -71,15 +87,42 @@ Alpine.data("dashboardBanners", () => ({
       }>("tradehub_core.api.banner.get_active_banners");
 
       if (result?.success && Array.isArray(result.banners)) {
-        this.banners = result.banners;
+        remote = result.banners;
       }
     } catch (err) {
       console.warn("[DashboardBanners] API fetch failed:", err);
-      this.banners = [];
     }
+
+    // 3. E-posta doğrulanmamış + email mevcut → synthetic banner ilk sırada
+    const synthetic: Banner[] =
+      !this.emailVerified && this.userEmail
+        ? [{ type: "email-verify", email: this.userEmail }]
+        : [];
+
+    this.banners = [
+      ...synthetic,
+      ...remote.map((b) => ({ type: "remote" as const, ...b })),
+    ];
 
     if (this.banners.length > 0) {
       this.$nextTick(() => this.initSwiper());
+    }
+  },
+
+  async sendVerification() {
+    if (this.sending) return;
+    this.sending = true;
+    this.errorMessage = "";
+    try {
+      await resendVerificationEmail();
+      this.verificationSent = true;
+    } catch {
+      this.errorMessage = t("dashboard.verificationEmailFailed");
+      setTimeout(() => {
+        this.errorMessage = "";
+      }, 4000);
+    } finally {
+      this.sending = false;
     }
   },
 
