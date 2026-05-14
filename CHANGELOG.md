@@ -1,3 +1,11 @@
+## [v1.1.8-beta.19] - 2026-05-14 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Duzeltildi
+- fix(lint): no-unused-expressions FavoritesLayout filter sets (@boraydeger32)
+
+---
 ## [v1.1.8-beta.18] - 2026-05-14 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
