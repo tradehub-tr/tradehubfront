@@ -1,5 +1,5 @@
 /**
- * SellPageLayout — "Fabrikanı tüm Avrupa'ya aç" üretici landing'i
+ * SellPageLayout — "Fabrikanı tüm dünyaya aç" üretici landing'i
  *
  * Referans: docs/satıcıtablo/A _ Klasik split + checkout (2)/seller-sections.jsx + seller.css
  *
@@ -22,9 +22,10 @@
 import heroImg from "../../assets/images/liman.avif";
 
 const SELL_HREF = "/pages/auth/register.html?type=supplier";
-// Section sarmal: header/footer ile tek genişlik — `container-boxed` (max 1840px, page padding).
-// İç içe ekstra sınır YOK; her bölümün sol kenarı header'la birebir hizalı kalmalı.
+// Section sarmal: header/footer ile aynı dış genişlik — `container-boxed` (max 1840px).
+// Inner sınır: 1500px max, mx-auto. 4 section'da ortak ki içerikler simetrik / hizalı dursun.
 const WRAP_CLS = "container-boxed";
+const INNER_CLS = "max-w-[1500px] mx-auto";
 
 // ---------- SVG ikonları ----------
 const SVG_ARROW = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>`;
@@ -52,15 +53,15 @@ function HeroSection(): string {
   return /* html */ `
     <section class="bg-[#f7f7f5] pt-12 md:pt-16 pb-12 md:pb-16">
       <div class="${WRAP_CLS}">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 lg:items-stretch items-center">
-          <div class="lg:max-w-[640px] lg:ml-auto w-full">
+        <div class="${INNER_CLS} grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 lg:items-stretch items-center">
+          <div class="w-full">
             <span class="${EYEBROW_CLS}">Üretici platformu</span>
-            <h1 class="text-[36px] sm:text-[44px] lg:text-[56px] leading-[1.04] tracking-[-0.025em] font-semibold mt-[18px] mb-[18px] max-w-[12ch] text-[#1a1a1a]">
-              Fabrikanı tüm Avrupa'ya aç.
+            <h1 class="text-[36px] sm:text-[44px] lg:text-[56px] leading-[1.04] tracking-[-0.025em] font-semibold mt-[18px] mb-[18px] max-w-[14ch] text-[#1a1a1a]">
+              Fabrikanı tüm dünyaya aç.
             </h1>
-            <p class="text-base md:text-lg leading-[1.45] text-[#4a4a48] max-w-[38ch] mb-7">
-              iSTOC, Türkiye'deki üreticileri Avrupa'nın B2B alıcılarıyla aracısız buluşturur.
-              Listele, sat, kargola — komisyon dışında ücret yok.
+            <p class="text-base md:text-lg leading-[1.45] text-[#4a4a48] max-w-[42ch] mb-7">
+              iSTOC, Türkiye'deki üreticileri dünyanın dört bir yanındaki B2B alıcılarıyla aracısız buluşturur.
+              Listele, sat, kargola — komisyon yok.
             </p>
             <div class="flex flex-wrap gap-3 items-center">
               <a href="${SELL_HREF}" data-seller-cta class="th-btn th-btn-lg">
@@ -73,7 +74,7 @@ function HeroSection(): string {
             <div class="relative w-full aspect-[5/4] lg:aspect-auto lg:h-full lg:min-h-[360px] rounded-2xl overflow-hidden border border-[#e8e6e0] bg-[#f0ead8] shadow-[0_8px_24px_-12px_rgba(20,20,18,0.18),0_4px_8px_-4px_rgba(20,20,18,0.08)]">
               <img
                 src="${heroImg}"
-                alt="Türkiye'den Avrupa'ya ihracat: liman ve konteyner lojistiği"
+                alt="Türkiye'den dünyaya ihracat: liman ve konteyner lojistiği"
                 class="absolute inset-0 w-full h-full object-cover"
                 loading="eager"
                 fetchpriority="high"
@@ -426,6 +427,7 @@ function PricingSection(): string {
   return /* html */ `
     <section id="paketler" class="py-16 md:py-24 border-t border-[#e8e6e0] bg-[#f7f7f5]" x-data="{ yearly: true }">
       <div class="${WRAP_CLS}">
+        <div class="${INNER_CLS}">
         <div class="${SECTION_HEAD_CLS}">
           <span class="${EYEBROW_CLS}">Satıcı paketleri</span>
           <h2 class="${SECTION_H2_CLS}">Hangi ölçekteysen, o paketi seç.</h2>
@@ -464,6 +466,7 @@ function PricingSection(): string {
         </div>
 
         ${PricingMatrix()}
+        </div>
       </div>
     </section>
   `;
@@ -533,6 +536,7 @@ function ComparisonSection(): string {
   return /* html */ `
     <section id="karsilastirma" class="py-16 md:py-24 bg-[#fafaf8] border-t border-b border-[#e8e6e0]">
       <div class="${WRAP_CLS}">
+        <div class="${INNER_CLS}">
         <div class="${SECTION_HEAD_CLS}">
           <span class="${EYEBROW_CLS}">Karşılaştırma</span>
           <h2 class="${SECTION_H2_CLS}">Diğer pazaryerlerine göre iSTOC.</h2>
@@ -587,6 +591,7 @@ function ComparisonSection(): string {
             Başvuruyu başlat ${SVG_ARROW}
           </a>
         </div>
+        </div>
       </div>
     </section>
   `;
@@ -599,6 +604,7 @@ function FinalCtaSection(): string {
   return /* html */ `
     <section class="pt-16 md:pt-20 pb-20 md:pb-24 bg-[#f7f7f5] text-center">
       <div class="${WRAP_CLS}">
+        <div class="${INNER_CLS}">
         <h2 class="text-[34px] sm:text-[38px] md:text-[42px] tracking-[-0.025em] leading-[1.1] font-semibold max-w-[22ch] mx-auto mb-3.5 text-[#1a1a1a]">
           Başvuru 4 dakikada biter.
         </h2>
@@ -613,6 +619,7 @@ function FinalCtaSection(): string {
           <a href="#karsilastirma" class="th-btn-outline th-btn-lg">Önce konuşalım</a>
         </div>
         <div class="mt-3.5 text-xs text-[#8a877f]">Başvuru ücretsiz. İptal koşulu yok.</div>
+        </div>
       </div>
     </section>
   `;

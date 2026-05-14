@@ -26,6 +26,88 @@ import {
   pruneSellerListId,
   type FavoriteSellerItem,
 } from "../../stores/sellerFavorites";
+import { getListingDetail } from "../../services/listingService";
+
+/* ────────────────────────────────────────
+   Favori enrichment (listing detail'den çekilen ek meta)
+   Filtreleme + stok pill + supplier satırı için
+   ──────────────────────────────────────── */
+interface FavEnrichment {
+  category?: string;
+  supplier?: { name: string; verified: boolean; country?: string };
+  stockQty?: number;
+  inStock?: boolean;
+}
+const enrichmentMap: Map<string, FavEnrichment> = new Map();
+let enrichmentLoading = false;
+let enrichmentLoadedFor: string = ""; // son enrichment hangi item set'i için yüklendi
+
+async function loadEnrichments(items: FavoriteItem[]): Promise<void> {
+  if (enrichmentLoading) return;
+  const fingerprint = items.map((i) => i.id).sort().join(",");
+  if (fingerprint === enrichmentLoadedFor) return;
+  enrichmentLoading = true;
+  try {
+    const results = await Promise.allSettled(items.map((it) => getListingDetail(it.id)));
+    results.forEach((res, idx) => {
+      if (res.status === "fulfilled") {
+        const d = res.value;
+        enrichmentMap.set(items[idx].id, {
+          category: d.category?.[0],
+          supplier: d.supplier
+            ? {
+                name: d.supplier.name,
+                verified: Boolean(d.supplier.verified),
+                country: d.supplier.country,
+              }
+            : undefined,
+          stockQty: d.stockQty,
+          inStock: d.inStock ?? !d.outOfStock,
+        });
+      }
+    });
+    enrichmentLoadedFor = fingerprint;
+  } finally {
+    enrichmentLoading = false;
+  }
+}
+
+function getStockState(en: FavEnrichment | undefined): "in" | "low" | "out" | "unknown" {
+  if (!en) return "unknown";
+  if (en.inStock === false || en.stockQty === 0) return "out";
+  if (typeof en.stockQty === "number" && en.stockQty > 0 && en.stockQty < 50) return "low";
+  if (en.inStock === true || (en.stockQty ?? 0) > 0) return "in";
+  return "unknown";
+}
+
+function getStockLabel(en: FavEnrichment | undefined): string {
+  const state = getStockState(en);
+  if (state === "out") return t("favorites.stockOut", { defaultValue: "Tükendi" });
+  if (state === "low" && typeof en?.stockQty === "number")
+    return t("favorites.stockN", { defaultValue: "{{n}} stok", n: en.stockQty });
+  if (state === "in" && typeof en?.stockQty === "number")
+    return t("favorites.stockN", { defaultValue: "{{n}} stok", n: en.stockQty });
+  if (state === "in") return t("favorites.stockIn", { defaultValue: "Stokta" });
+  return "";
+}
+
+function getEnrichedCategoryCounts(items: FavoriteItem[]): Map<string, number> {
+  const m = new Map<string, number>();
+  items.forEach((p) => {
+    const c = enrichmentMap.get(p.id)?.category;
+    if (c) m.set(c, (m.get(c) || 0) + 1);
+  });
+  return m;
+}
+
+function getEnrichedSupplierCounts(items: FavoriteItem[]): Map<string, number> {
+  const m = new Map<string, number>();
+  items.forEach((p) => {
+    const s = enrichmentMap.get(p.id)?.supplier?.name;
+    if (s) m.set(s, (m.get(s) || 0) + 1);
+  });
+  return m;
+}
 
 const DEFAULT_LIST_ID = "default";
 const RECENT_ID = "recent";
@@ -73,6 +155,48 @@ const PAGE_SIZE = 24;
 
 function resetPagination(): void {
   currentPage = 1;
+}
+
+/* ────────────────────────────────────────
+   Detaylı filtre state'i
+   ──────────────────────────────────────── */
+interface FilterState {
+  categories: string[];
+  suppliers: string[];
+  stock: Array<"in" | "low" | "out">;
+  minPrice: string;
+  maxPrice: string;
+}
+const activeFilters: FilterState = {
+  categories: [],
+  suppliers: [],
+  stock: [],
+  minPrice: "",
+  maxPrice: "",
+};
+
+function activeFilterCount(): number {
+  return (
+    activeFilters.categories.length +
+    activeFilters.suppliers.length +
+    activeFilters.stock.length +
+    (activeFilters.minPrice ? 1 : 0) +
+    (activeFilters.maxPrice ? 1 : 0)
+  );
+}
+
+function clearAllFilters(): void {
+  activeFilters.categories = [];
+  activeFilters.suppliers = [];
+  activeFilters.stock = [];
+  activeFilters.minPrice = "";
+  activeFilters.maxPrice = "";
+}
+
+function parsePriceFromRange(range: string): number {
+  // priceRange "€56.49 - €120.00" veya "₺214.67" gibi olabilir
+  const m = range.match(/[\d]+([.,][\d]+)?/);
+  return m ? parseFloat(m[0].replace(",", ".")) : NaN;
 }
 
 /* ────────────────────────────────────────
@@ -295,6 +419,91 @@ function renderSupplierCards(items: FavoriteSellerItem[]): string {
   `;
 }
 
+function renderFilterButton(): string {
+  const items = getItems();
+  const catCounts = getEnrichedCategoryCounts(items);
+  const supCounts = getEnrichedSupplierCounts(items);
+  const badge = activeFilterCount();
+
+  const stockOpts: Array<{ v: "in" | "low" | "out"; l: string }> = [
+    { v: "in", l: t("favorites.stockInOpt", { defaultValue: "Stokta var" }) },
+    { v: "low", l: t("favorites.stockLowOpt", { defaultValue: "Az kaldı" }) },
+    { v: "out", l: t("favorites.stockOutOpt", { defaultValue: "Tükendi" }) },
+  ];
+
+  const checkbox = (
+    group: "cat" | "sup" | "stock",
+    val: string,
+    label: string,
+    count?: number,
+    checked?: boolean
+  ): string => `
+    <label class="flex items-center gap-2 px-2 py-1.5 rounded-md cursor-pointer hover:bg-surface-raised transition-colors">
+      <input type="checkbox" data-fav-filter-group="${group}" data-fav-filter-val="${escapeHtml(val)}" ${checked ? "checked" : ""}
+             class="w-3.5 h-3.5 rounded border-border-strong text-[var(--color-cta-primary,#F5B800)] focus:ring-1 focus:ring-[var(--color-cta-primary,#F5B800)] focus:ring-offset-0 cursor-pointer" />
+      <span class="flex-1 min-w-0 text-[12.5px] text-text-primary truncate">${escapeHtml(label)}</span>
+      ${typeof count === "number" ? `<span class="text-[11px] text-text-tertiary tabular-nums">${count}</span>` : ""}
+    </label>
+  `;
+
+  const catRows = Array.from(catCounts.entries())
+    .map(([cat, c]) => checkbox("cat", cat, cat, c, activeFilters.categories.includes(cat)))
+    .join("");
+  const supRows = Array.from(supCounts.entries())
+    .map(([s, c]) => checkbox("sup", s, s, c, activeFilters.suppliers.includes(s)))
+    .join("");
+  const stockRows = stockOpts
+    .map((o) => checkbox("stock", o.v, o.l, undefined, activeFilters.stock.includes(o.v)))
+    .join("");
+
+  return `
+    <div class="relative" data-fav-filter-wrap>
+      <button type="button" data-fav-filter-toggle
+              class="relative inline-flex items-center gap-1.5 h-8 bg-white border border-border-default text-[12.5px] font-medium text-text-secondary px-2.5 rounded-md cursor-pointer transition-colors hover:border-text-secondary hover:text-text-primary appearance-none focus:outline-none focus-visible:border-[var(--color-cta-primary,#F5B800)] ${badge ? "border-[var(--color-cta-primary,#F5B800)] text-text-primary" : ""}">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M6 12h12M10 18h4"/></svg>
+        ${t("favorites.filter", { defaultValue: "Filtrele" })}
+        ${badge ? `<span class="inline-flex items-center justify-center min-w-[16px] h-4 px-1 text-[10px] font-bold rounded-full bg-[var(--color-cta-primary,#F5B800)] text-white tabular-nums">${badge}</span>` : ""}
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div data-fav-filter-menu class="hidden absolute top-[calc(100%+6px)] right-0 z-30 w-[300px] max-h-[480px] overflow-y-auto bg-white border border-border-default rounded-xl shadow-[0_24px_60px_-12px_rgba(20,20,18,0.18),0_8px_20px_-6px_rgba(20,20,18,0.08)] p-2">
+        ${
+          catRows
+            ? `<div class="mb-1.5">
+                <div class="text-[10.5px] uppercase tracking-[0.1em] font-semibold text-text-tertiary px-2 py-1">${t("favorites.filterCategory", { defaultValue: "Kategori" })}</div>
+                ${catRows}
+              </div>`
+            : ""
+        }
+        ${
+          supRows
+            ? `<div class="mb-1.5 border-t border-border-default pt-1.5">
+                <div class="text-[10.5px] uppercase tracking-[0.1em] font-semibold text-text-tertiary px-2 py-1">${t("favorites.filterSupplier", { defaultValue: "Tedarikçi" })}</div>
+                ${supRows}
+              </div>`
+            : ""
+        }
+        <div class="mb-1.5 border-t border-border-default pt-1.5">
+          <div class="text-[10.5px] uppercase tracking-[0.1em] font-semibold text-text-tertiary px-2 py-1">${t("favorites.filterStock", { defaultValue: "Stok durumu" })}</div>
+          ${stockRows}
+        </div>
+        <div class="border-t border-border-default pt-1.5">
+          <div class="text-[10.5px] uppercase tracking-[0.1em] font-semibold text-text-tertiary px-2 py-1">${t("favorites.filterPriceRange", { defaultValue: "Fiyat aralığı" })}</div>
+          <div class="flex items-center gap-2 px-2 py-1.5">
+            <input type="number" data-fav-filter-min value="${escapeHtml(activeFilters.minPrice)}" placeholder="Min"
+                   class="flex-1 min-w-0 h-7 px-2 text-[12px] bg-white border border-border-default rounded-md focus:border-[var(--color-cta-primary,#F5B800)] focus:outline-none appearance-none" />
+            <input type="number" data-fav-filter-max value="${escapeHtml(activeFilters.maxPrice)}" placeholder="Max"
+                   class="flex-1 min-w-0 h-7 px-2 text-[12px] bg-white border border-border-default rounded-md focus:border-[var(--color-cta-primary,#F5B800)] focus:outline-none appearance-none" />
+          </div>
+        </div>
+        <div class="flex items-center justify-between gap-2 mt-2 pt-2 border-t border-border-default px-1">
+          <button type="button" data-fav-filter-reset class="th-btn-outline h-7 px-3 text-[12px] font-semibold inline-flex items-center justify-center appearance-none focus:outline-none">${t("favorites.filterReset", { defaultValue: "Sıfırla" })}</button>
+          <button type="button" data-fav-filter-apply class="th-btn h-7 px-4 text-[12px] font-semibold inline-flex items-center justify-center appearance-none focus:outline-none">${t("favorites.filterApply", { defaultValue: "Uygula" })}</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 function getActiveListName(): string {
   if (activeListFilter === "all") return t("favorites.listAll");
   if (activeListFilter === DEFAULT_LIST_ID) return t("favorites.defaultList");
@@ -339,6 +548,8 @@ function renderToolbar(count: number): string {
         }
       </label>
 
+      ${renderFilterButton()}
+
       <div class="relative" data-fav-sort-wrap>
         <button type="button" data-fav-sort-toggle
                 class="inline-flex items-center gap-1.5 h-8 bg-white border border-border-default text-[12.5px] font-medium text-text-secondary px-2.5 rounded-md cursor-pointer transition-colors hover:border-text-secondary hover:text-text-primary appearance-none focus:outline-none focus-visible:border-[var(--color-cta-primary,#F5B800)]">
@@ -367,9 +578,44 @@ function renderToolbar(count: number): string {
   `;
 }
 
+function renderStockPill(en: FavEnrichment | undefined): string {
+  const state = getStockState(en);
+  if (state === "unknown") return "";
+  const label = getStockLabel(en);
+  if (!label) return "";
+  const cls =
+    state === "out"
+      ? "bg-neutral-800/85 text-white [&_.dot]:bg-red-400"
+      : state === "low"
+        ? "bg-neutral-800/85 text-white [&_.dot]:bg-amber-400"
+        : "bg-neutral-800/85 text-white [&_.dot]:bg-emerald-400";
+  return `
+    <span class="absolute bottom-1.5 left-1.5 inline-flex items-center gap-1 px-2 py-0.5 text-[10.5px] font-medium rounded-full ${cls}">
+      <span class="dot inline-block w-1.5 h-1.5 rounded-full"></span>
+      ${escapeHtml(label)}
+    </span>
+  `;
+}
+
+function renderSupplierLine(en: FavEnrichment | undefined): string {
+  if (!en?.supplier) return "";
+  const sup = en.supplier;
+  return `
+    <div class="text-[11px] text-text-tertiary inline-flex items-center gap-1 truncate">
+      <span class="truncate">${escapeHtml(sup.name)}</span>
+      ${
+        sup.verified
+          ? `<span class="text-[var(--color-cta-primary,#F5B800)] shrink-0" title="Doğrulanmış"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></span>`
+          : ""
+      }
+    </div>
+  `;
+}
+
 function renderProductCardGrid(p: FavoriteItem): string {
   const detailHref = `/pages/product-detail.html?id=${encodeURIComponent(p.id)}`;
   const lists = getLists();
+  const enrichment = enrichmentMap.get(p.id);
   const tagChips = p.listIds
     .filter((id) => id !== DEFAULT_LIST_ID)
     .map((id) => lists.find((l) => l.id === id))
@@ -386,6 +632,7 @@ function renderProductCardGrid(p: FavoriteItem): string {
         <img src="${p.image}" alt="${escapeHtml(p.title)}"
              class="w-full h-full object-cover mix-blend-multiply transition-transform duration-300 ease-out group-hover:scale-[1.03]"
              loading="lazy" />
+        ${renderStockPill(enrichment)}
       </a>
       <button type="button"
               class="fav-remove-item absolute top-1.5 right-1.5 w-8 h-8 inline-flex items-center justify-center rounded-full bg-white shadow-[0_1px_3px_rgba(20,20,18,0.12)] text-[#ef4444] cursor-pointer p-0 border-0 transition-transform duration-150 hover:scale-110 active:scale-95 appearance-none focus:outline-none focus-visible:border focus-visible:border-[var(--color-cta-primary,#F5B800)]"
@@ -395,6 +642,7 @@ function renderProductCardGrid(p: FavoriteItem): string {
         <svg width="17" height="17" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" stroke-width="1.5"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
       </button>
       <div class="flex flex-1 flex-col p-2 max-sm:p-1.5">
+        ${renderSupplierLine(enrichment)}
         <a href="${detailHref}" class="no-underline text-inherit">
           <h4 class="text-[11.5px] leading-[1.3] text-text-primary font-normal line-clamp-2 m-0 min-h-[30px] group-hover:text-[var(--color-cta-primary,#F5B800)] transition-colors">${escapeHtml(p.title)}</h4>
         </a>
@@ -511,9 +759,44 @@ function renderPagination(total: number, page: number): string {
 }
 
 function renderProductCards(items: FavoriteItem[]): string {
-  // Apply search + sort
+  // Apply search + filters + sort
   const q = searchQuery.trim().toLowerCase();
   let visible = q ? items.filter((p) => p.title.toLowerCase().includes(q)) : items;
+
+  // Filter: kategori
+  if (activeFilters.categories.length) {
+    visible = visible.filter((p) => {
+      const cat = enrichmentMap.get(p.id)?.category;
+      return cat ? activeFilters.categories.includes(cat) : false;
+    });
+  }
+  // Filter: tedarikçi
+  if (activeFilters.suppliers.length) {
+    visible = visible.filter((p) => {
+      const sup = enrichmentMap.get(p.id)?.supplier?.name;
+      return sup ? activeFilters.suppliers.includes(sup) : false;
+    });
+  }
+  // Filter: stok durumu
+  if (activeFilters.stock.length) {
+    visible = visible.filter((p) => {
+      const s = getStockState(enrichmentMap.get(p.id));
+      return s !== "unknown" && activeFilters.stock.includes(s);
+    });
+  }
+  // Filter: fiyat aralığı
+  const min = activeFilters.minPrice ? parseFloat(activeFilters.minPrice) : NaN;
+  const max = activeFilters.maxPrice ? parseFloat(activeFilters.maxPrice) : NaN;
+  if (!Number.isNaN(min) || !Number.isNaN(max)) {
+    visible = visible.filter((p) => {
+      const v = parsePriceFromRange(p.priceRange);
+      if (Number.isNaN(v)) return false;
+      if (!Number.isNaN(min) && v < min) return false;
+      if (!Number.isNaN(max) && v > max) return false;
+      return true;
+    });
+  }
+
   visible = applySort(visible, sortId);
 
   const total = visible.length;
@@ -818,6 +1101,23 @@ function loadFavoritesData(): void {
   container.innerHTML = renderProductCards(items);
   initRemoveButtons();
   initToolbar();
+  initFilterMenu();
+
+  // Lazy enrichment: ilk render'dan sonra fetch et, bittiğinde re-render
+  if (items.length > 0) {
+    const fingerprint = items.map((i) => i.id).sort().join(",");
+    if (fingerprint !== enrichmentLoadedFor && !enrichmentLoading) {
+      void loadEnrichments(items).then(() => {
+        const c = document.getElementById("fav-products-container");
+        if (c) {
+          c.innerHTML = renderProductCards(getFilteredItems());
+          initRemoveButtons();
+          initToolbar();
+          initFilterMenu();
+        }
+      });
+    }
+  }
 }
 
 let _favSortOutsideWired = false;
@@ -831,6 +1131,75 @@ function wireSortOutsideClickOnce(): void {
     const sortMenu = sortWrap.querySelector<HTMLElement>("[data-fav-sort-menu]");
     sortMenu?.classList.add("hidden");
   });
+}
+
+let _favFilterOutsideWired = false;
+function wireFilterOutsideClickOnce(): void {
+  if (_favFilterOutsideWired) return;
+  _favFilterOutsideWired = true;
+  document.addEventListener("mousedown", (e) => {
+    const wrap = document.querySelector<HTMLElement>("[data-fav-filter-wrap]");
+    if (!wrap) return;
+    if (wrap.contains(e.target as Node)) return;
+    const menu = wrap.querySelector<HTMLElement>("[data-fav-filter-menu]");
+    menu?.classList.add("hidden");
+  });
+}
+
+function initFilterMenu(): void {
+  const wrap = document.querySelector<HTMLElement>("[data-fav-filter-wrap]");
+  if (!wrap) return;
+
+  const toggle = wrap.querySelector<HTMLButtonElement>("[data-fav-filter-toggle]");
+  const menu = wrap.querySelector<HTMLElement>("[data-fav-filter-menu]");
+  toggle?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    menu?.classList.toggle("hidden");
+  });
+
+  wrap.querySelectorAll<HTMLInputElement>("[data-fav-filter-group]").forEach((cb) => {
+    cb.addEventListener("change", () => {
+      const group = cb.dataset.favFilterGroup;
+      const val = cb.dataset.favFilterVal || "";
+      if (group === "cat") {
+        const set = new Set(activeFilters.categories);
+        cb.checked ? set.add(val) : set.delete(val);
+        activeFilters.categories = Array.from(set);
+      } else if (group === "sup") {
+        const set = new Set(activeFilters.suppliers);
+        cb.checked ? set.add(val) : set.delete(val);
+        activeFilters.suppliers = Array.from(set);
+      } else if (group === "stock") {
+        const v = val as "in" | "low" | "out";
+        const set = new Set(activeFilters.stock);
+        cb.checked ? set.add(v) : set.delete(v);
+        activeFilters.stock = Array.from(set) as Array<"in" | "low" | "out">;
+      }
+    });
+  });
+
+  const minInput = wrap.querySelector<HTMLInputElement>("[data-fav-filter-min]");
+  const maxInput = wrap.querySelector<HTMLInputElement>("[data-fav-filter-max]");
+  minInput?.addEventListener("input", () => {
+    activeFilters.minPrice = minInput.value;
+  });
+  maxInput?.addEventListener("input", () => {
+    activeFilters.maxPrice = maxInput.value;
+  });
+
+  wrap.querySelector<HTMLButtonElement>("[data-fav-filter-reset]")?.addEventListener("click", () => {
+    clearAllFilters();
+    resetPagination();
+    menu?.classList.add("hidden");
+    loadFavoritesData();
+  });
+  wrap.querySelector<HTMLButtonElement>("[data-fav-filter-apply]")?.addEventListener("click", () => {
+    resetPagination();
+    menu?.classList.add("hidden");
+    loadFavoritesData();
+  });
+
+  wireFilterOutsideClickOnce();
 }
 
 function initToolbar(): void {
