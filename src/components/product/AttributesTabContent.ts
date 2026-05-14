@@ -7,8 +7,10 @@ import { getCurrentProduct } from "../../alpine/product";
 import { t } from "../../i18n";
 // Product loaded lazily via getCurrentProduct() inside functions
 
-const KEY_CLS = "pd-attrs-key text-[var(--pd-spec-key-color,#6b7280)] w-1/4 bg-[var(--pd-spec-header-bg,#f9fafb)] px-4 py-3 border-b border-[var(--pd-spec-border,#e5e5e5)] align-top";
-const VAL_CLS = "pd-attrs-val text-[var(--pd-spec-value-color,#111827)] font-semibold w-1/4 px-4 py-3 border-b border-[var(--pd-spec-border,#e5e5e5)] align-top";
+const KEY_CLS =
+  "pd-attrs-key text-[var(--pd-spec-key-color,#6b7280)] w-1/4 bg-[var(--pd-spec-header-bg,#f9fafb)] px-4 py-3 border-b border-[var(--pd-spec-border,#e5e5e5)] align-top";
+const VAL_CLS =
+  "pd-attrs-val text-[var(--pd-spec-value-color,#111827)] font-semibold w-1/4 px-4 py-3 border-b border-[var(--pd-spec-border,#e5e5e5)] align-top";
 
 function buildTableRows(specs: { key: string; value: string }[]): string {
   const rows: string[] = [];

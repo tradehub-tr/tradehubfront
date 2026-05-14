@@ -94,10 +94,14 @@ export function renderReviewCard(review: ProductReview, showProductThumb = false
     );
   }
   if (review.verified) {
-    badges.push(`<span class="rv-badge inline-flex items-center gap-[3px] px-2 py-0.5 text-[11px] font-semibold rounded-[3px] bg-[#f0fdf4] text-[#15803d]">${t("product.verifiedPurchase")}</span>`);
+    badges.push(
+      `<span class="rv-badge inline-flex items-center gap-[3px] px-2 py-0.5 text-[11px] font-semibold rounded-[3px] bg-[#f0fdf4] text-[#15803d]">${t("product.verifiedPurchase")}</span>`
+    );
   }
   if (review.repeatBuyer) {
-    badges.push(`<span class="rv-badge inline-flex items-center gap-[3px] px-2 py-0.5 text-[11px] font-semibold rounded-[3px] bg-[var(--color-primary-50,#fef9e7)] text-[var(--color-cta-primary,#cc9900)]">${t("product.repeatBuyer")}</span>`);
+    badges.push(
+      `<span class="rv-badge inline-flex items-center gap-[3px] px-2 py-0.5 text-[11px] font-semibold rounded-[3px] bg-[var(--color-primary-50,#fef9e7)] text-[var(--color-cta-primary,#cc9900)]">${t("product.repeatBuyer")}</span>`
+    );
   }
   // Reviewer reputation tier — Top/Trusted/Verified (B2B güven göstergesi)
   if (review.reviewerTier) {
