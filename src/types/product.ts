@@ -106,6 +106,15 @@ export interface ProductReview {
   canEdit?: boolean;
   /** Yorum hangi statuste — login user kendi pending'ini görür */
   status?: string;
+  /** Boyut bazlı puanlar (1-5). Yorum kartındaki yıldız partial-fill için
+   *  bunlardan hesaplanan ortalama kullanılır (backend rating Int olduğu için). */
+  aspects?: {
+    product_quality?: number | null;
+    service?: number | null;
+    shipping?: number | null;
+    spec_match?: number | null;
+    documentation?: number | null;
+  } | null;
 }
 
 export interface ReviewCategoryRating {
