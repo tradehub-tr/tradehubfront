@@ -29,6 +29,7 @@ import { Breadcrumb } from '../components/shared/Breadcrumb'
 // Product detail components
 import {
   ProductTitleBar,
+  initProductTitleBar,
   ProductImageGallery,
   ProductInfo,
   initProductInfo,
@@ -240,6 +241,7 @@ async function renderProductPage() {
 
   // Product-specific inits
   initCartDrawer();
+  initProductTitleBar();
   initProductInfo();
   initProductTabs();
   initAttributesTab();

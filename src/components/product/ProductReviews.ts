@@ -21,15 +21,62 @@ import { showToast } from "../../utils/toast";
 
 /* ── Utility helpers ─────────────────────────────────── */
 
-function starIcon(filled: boolean, small = false): string {
+const STAR_PATH =
+  "M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z";
+
+function starIconPartial(fillPercent: number, small = false): string {
   const size = small ? "h-3.5 w-3.5" : "h-4 w-4";
-  return filled
-    ? `<svg class="${size}" viewBox="0 0 20 20" fill="currentColor" style="color: var(--pd-review-star-color, #f59e0b);"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>`
-    : `<svg class="${size}" viewBox="0 0 20 20" fill="currentColor" style="color: #d1d5db;"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>`;
+  const pct = Math.max(0, Math.min(100, fillPercent));
+  if (pct === 0) {
+    return `<svg class="${size} text-[#d1d5db]" viewBox="0 0 20 20" fill="currentColor"><path d="${STAR_PATH}"/></svg>`;
+  }
+  if (pct === 100) {
+    return `<svg class="${size} text-[var(--pd-review-star-color,#f59e0b)]" viewBox="0 0 20 20" fill="currentColor"><path d="${STAR_PATH}"/></svg>`;
+  }
+  // Dinamik clip-path: kırpılacak sağ tarafı CSS variable ile geçir,
+  // utility ise [clip-path:inset(0_var(--star-fill)_0_0)] olarak yazılır.
+  return (
+    `<span class="relative inline-flex" style="--star-fill:${100 - pct}%">` +
+    `<svg class="${size} text-[#d1d5db]" viewBox="0 0 20 20" fill="currentColor"><path d="${STAR_PATH}"/></svg>` +
+    `<svg class="${size} absolute inset-0 pointer-events-none text-[var(--pd-review-star-color,#f59e0b)] [clip-path:inset(0_var(--star-fill)_0_0)]" viewBox="0 0 20 20" fill="currentColor"><path d="${STAR_PATH}"/></svg>` +
+    `</span>`
+  );
 }
 
 export function renderStars(rating: number, small = false): string {
-  return Array.from({ length: 5 }, (_, i) => starIcon(i < Math.round(rating), small)).join("");
+  return Array.from({ length: 5 }, (_, i) => {
+    const fill = Math.max(0, Math.min(1, rating - i)) * 100;
+    return starIconPartial(fill, small);
+  }).join("");
+}
+
+interface ReviewLike {
+  rating: number;
+  aspects?: {
+    product_quality?: number | null;
+    service?: number | null;
+    shipping?: number | null;
+    spec_match?: number | null;
+    documentation?: number | null;
+  } | null;
+}
+
+/**
+ * Yorum kartı için gösterilecek puanı, aspect ortalamasından (varsa) hesaplar.
+ * Backend `rating` Int olduğu için 3.5 → 4 olarak saklanır; gerçek ortalamayı
+ * detay puanlarından yeniden üretiyoruz ki kısmi yıldız doğru render edilsin.
+ */
+export function displayRating(r: ReviewLike): number {
+  const a = r.aspects;
+  if (a) {
+    const vals = [a.product_quality, a.service, a.shipping, a.spec_match].filter(
+      (v): v is number => typeof v === "number" && v > 0
+    );
+    if (vals.length > 0) {
+      return vals.reduce((s, v) => s + v, 0) / vals.length;
+    }
+  }
+  return r.rating;
 }
 
 function countryFlag(country: string): string {
@@ -191,7 +238,7 @@ export function renderReviewCard(review: ProductReview, showProductThumb = false
             ${badges.join("")}
           </div>
           <div class="flex items-center gap-2 mt-1">
-            <div class="flex items-center gap-0.5">${renderStars(review.rating, true)}</div>
+            <div class="flex items-center gap-0.5">${renderStars(displayRating(review), true)}</div>
             <span class="rv-card-date text-[12px] text-[var(--pd-rating-text-color,#6b7280)]">${review.date}</span>
           </div>
         </div>
@@ -903,11 +950,22 @@ export function initReviews(): void {
         total: number;
       }>;
       if (!ce.detail) return;
+      // Yorum sayısı: backend summary'den (Approved-only).
+      // Ortalama puan: backend rating Int olduğu için 3.5 → 4 yuvarlanır;
+      // gerçek değeri Approved yorumların aspect ortalamasından hesapla.
+      const reviews = ce.detail.reviews || [];
+      const approvedReviews = reviews.filter((r) => r.status === "Approved");
+      const ratings = approvedReviews.map((r) => displayRating(r)).filter((v) => v > 0);
+      const computedAvg = ratings.length ? ratings.reduce((s, v) => s + v, 0) / ratings.length : 0;
       applyReviewsToPanels({
-        reviews: ce.detail.reviews || [],
+        reviews,
         reviewCount: ce.detail.summary?.review_count ?? 0,
         storeReviewCount: ce.detail.total ?? 0,
-        rating: ce.detail.summary?.weighted_rating || ce.detail.summary?.average_rating || 0,
+        rating:
+          computedAvg ||
+          ce.detail.summary?.weighted_rating ||
+          ce.detail.summary?.average_rating ||
+          0,
       });
     });
     // Abuse report sonrası ek bir aksiyon yok (sessizce kaydedildi toast'ı gösteriliyor)

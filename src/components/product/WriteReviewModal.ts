@@ -34,8 +34,7 @@ interface WriteReviewState {
   listingId: string;
   orderItems: OrderItemOption[];
   selectedOrderItem: string;
-  rating: number;
-  hoverRating: number;
+  readonly rating: number;
   aspects: {
     product_quality: number;
     service: number;
@@ -50,8 +49,8 @@ interface WriteReviewState {
   show(detail: { listingId: string; orderItems: OrderItemOption[] }): void;
   close(): void;
   reset(): void;
-  setRating(n: number): void;
   setAspect(key: keyof WriteReviewState["aspects"], n: number): void;
+  starFillPercent(n: number): number;
   onFileChange(e: Event): Promise<void>;
   removeImage(idx: number): void;
   bodyValid(): boolean;
@@ -75,13 +74,15 @@ export function registerWriteReviewModal(): void {
       listingId: "",
       orderItems: [],
       selectedOrderItem: "",
-      rating: 5,
-      hoverRating: 0,
       aspects: { product_quality: 5, service: 5, shipping: 5, spec_match: 5 },
       title: "",
       body: "",
       images: [],
       uploadingImage: false,
+      get rating(): number {
+        const a = this.aspects;
+        return (a.product_quality + a.service + a.shipping + a.spec_match) / 4;
+      },
       init() {
         window.addEventListener("write-review-modal-show", (e: Event) => {
           const ce = e as CustomEvent<{
@@ -105,19 +106,17 @@ export function registerWriteReviewModal(): void {
       reset() {
         this.loading = false;
         this.errorMsg = "";
-        this.rating = 5;
-        this.hoverRating = 0;
         this.aspects = { product_quality: 5, service: 5, shipping: 5, spec_match: 5 };
         this.title = "";
         this.body = "";
         this.images = [];
         this.uploadingImage = false;
       },
-      setRating(n: number) {
-        this.rating = n;
-      },
       setAspect(key, n) {
         this.aspects[key] = n;
+      },
+      starFillPercent(n: number): number {
+        return Math.max(0, Math.min(1, this.rating - (n - 1))) * 100;
       },
       async onFileChange(e: Event) {
         const input = e.target as HTMLInputElement;
@@ -178,7 +177,7 @@ export function registerWriteReviewModal(): void {
         try {
           const payload: SubmitReviewPayload = {
             order_item: this.selectedOrderItem,
-            rating: this.rating,
+            rating: Math.round(this.rating),
             body: this.body.trim(),
             title: this.title.trim() || undefined,
             images: this.images.map((i) => ({ image: i.image })),
@@ -210,25 +209,24 @@ export function registerWriteReviewModal(): void {
   );
 }
 
-function starButtonsHtml(
-  bind = "rating",
-  hoverBind = "hoverRating",
-  setMethod = "setRating",
-  size = 28
-): string {
+const STAR_PATH =
+  "M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z";
+
+function overallStarsHtml(size = 28): string {
   return Array.from({ length: 5 }, (_, i) => i + 1)
     .map(
       (n) => `
-      <button
-        type="button"
-        @click="${setMethod}(${n})"
-        @mouseenter="${hoverBind} = ${n}"
-        @mouseleave="${hoverBind} = 0"
-        :class="(${hoverBind} || ${bind}) >= ${n} ? 'text-amber-400' : 'text-secondary-300'"
-        class="transition-colors hover:scale-110 focus:outline-none"
+      <span
+        class="relative inline-flex"
+        :style="'--star-fill:' + (100 - starFillPercent(${n})) + '%'"
+        aria-hidden="true"
       >
-        <svg width="${size}" height="${size}" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-      </button>`
+        <svg width="${size}" height="${size}" viewBox="0 0 20 20" fill="currentColor" class="text-secondary-300"><path d="${STAR_PATH}"/></svg>
+        <svg
+          width="${size}" height="${size}" viewBox="0 0 20 20" fill="currentColor"
+          class="text-amber-400 absolute inset-0 pointer-events-none [clip-path:inset(0_var(--star-fill)_0_0)]"
+        ><path d="${STAR_PATH}"/></svg>
+      </span>`
     )
     .join("");
 }
@@ -306,11 +304,14 @@ export function WriteReviewModal(): string {
             </select>
           </div>
 
-          <!-- Overall rating -->
+          <!-- Overall rating (read-only: aşağıdaki detaylı puanların ortalaması) -->
           <div>
             <label class="block text-[12px] font-medium text-secondary-700 mb-2">Genel Puan</label>
-            <div class="flex items-center gap-1">${starButtonsHtml()}</div>
-            <span class="text-[11px] text-secondary-400 mt-1 block" x-text="rating + ' / 5'"></span>
+            <div class="flex items-center gap-1" role="img" :aria-label="rating.toFixed(2) + ' / 5'">${overallStarsHtml()}</div>
+            <span class="text-[11px] text-secondary-400 mt-1 block">
+              <span x-text="rating.toFixed(rating % 1 === 0 ? 0 : 2) + ' / 5'"></span>
+              <span class="ml-1">— detaylı puanların ortalaması</span>
+            </span>
           </div>
 
           <!-- Aspect ratings -->
@@ -392,11 +393,7 @@ export function WriteReviewModal(): string {
             <button
               type="submit"
               :disabled="loading || uploadingImage || !bodyValid()"
-<<<<<<< HEAD
               class="h-10 px-5 rounded-lg bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-sm font-semibold border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150 flex items-center gap-2"
-=======
-              class="h-10 px-5 rounded-lg bg-(--btn-bg) hover:bg-(--btn-hover-bg) text-white text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
->>>>>>> 7aafda0 (  feat(reviews): Sprint 1 — review/Q&A storefront entegrasyonu + 4 fix)
             >
               <svg x-show="loading" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
               <span x-text="loading ? 'Gönderiliyor' : 'Yorumu Gönder'"></span>
