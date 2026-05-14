@@ -35,10 +35,12 @@ function starIconPartial(fillPercent: number, small = false): string {
   }
   // Dinamik clip-path: kırpılacak sağ tarafı CSS variable ile geçir,
   // utility ise [clip-path:inset(0_var(--star-fill)_0_0)] olarak yazılır.
-  return `<span class="relative inline-flex" style="--star-fill:${100 - pct}%">`
-    + `<svg class="${size} text-[#d1d5db]" viewBox="0 0 20 20" fill="currentColor"><path d="${STAR_PATH}"/></svg>`
-    + `<svg class="${size} absolute inset-0 pointer-events-none text-[var(--pd-review-star-color,#f59e0b)] [clip-path:inset(0_var(--star-fill)_0_0)]" viewBox="0 0 20 20" fill="currentColor"><path d="${STAR_PATH}"/></svg>`
-    + `</span>`;
+  return (
+    `<span class="relative inline-flex" style="--star-fill:${100 - pct}%">` +
+    `<svg class="${size} text-[#d1d5db]" viewBox="0 0 20 20" fill="currentColor"><path d="${STAR_PATH}"/></svg>` +
+    `<svg class="${size} absolute inset-0 pointer-events-none text-[var(--pd-review-star-color,#f59e0b)] [clip-path:inset(0_var(--star-fill)_0_0)]" viewBox="0 0 20 20" fill="currentColor"><path d="${STAR_PATH}"/></svg>` +
+    `</span>`
+  );
 }
 
 export function renderStars(rating: number, small = false): string {
@@ -953,12 +955,8 @@ export function initReviews(): void {
       // gerçek değeri Approved yorumların aspect ortalamasından hesapla.
       const reviews = ce.detail.reviews || [];
       const approvedReviews = reviews.filter((r) => r.status === "Approved");
-      const ratings = approvedReviews
-        .map((r) => displayRating(r))
-        .filter((v) => v > 0);
-      const computedAvg = ratings.length
-        ? ratings.reduce((s, v) => s + v, 0) / ratings.length
-        : 0;
+      const ratings = approvedReviews.map((r) => displayRating(r)).filter((v) => v > 0);
+      const computedAvg = ratings.length ? ratings.reduce((s, v) => s + v, 0) / ratings.length : 0;
       applyReviewsToPanels({
         reviews,
         reviewCount: ce.detail.summary?.review_count ?? 0,

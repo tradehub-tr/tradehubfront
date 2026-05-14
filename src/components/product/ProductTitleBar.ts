@@ -32,7 +32,9 @@ function scrollToReviewsTab(): void {
   // activeTab state'ini "reviews"'a çek. Alpine yüklü değilse sessizce geç.
   const section = document.getElementById("product-tabs-section");
   if (!section) return;
-  const AlpineGlobal = (window as unknown as { Alpine?: { $data: (el: Element) => { activeTab?: string } } }).Alpine;
+  const AlpineGlobal = (
+    window as unknown as { Alpine?: { $data: (el: Element) => { activeTab?: string } } }
+  ).Alpine;
   if (AlpineGlobal && typeof AlpineGlobal.$data === "function") {
     const data = AlpineGlobal.$data(section);
     if (data) data.activeTab = "reviews";
