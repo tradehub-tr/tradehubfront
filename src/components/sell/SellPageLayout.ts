@@ -39,7 +39,8 @@ const EYEBROW_CLS =
   "before:content-[''] before:inline-block before:w-[18px] before:h-px before:bg-[#d39c00]";
 
 const SECTION_HEAD_CLS = "flex flex-col gap-3.5 mb-12 max-w-[56ch]";
-const SECTION_H2_CLS = "text-4xl md:text-[44px] lg:text-5xl leading-[1.05] tracking-[-0.025em] font-semibold text-[#1a1a1a] m-0";
+const SECTION_H2_CLS =
+  "text-4xl md:text-[44px] lg:text-5xl leading-[1.05] tracking-[-0.025em] font-semibold text-[#1a1a1a] m-0";
 const SECTION_P_CLS = "text-base md:text-[17px] text-[#4a4a48] leading-[1.45] m-0";
 
 // CTA'lar sistemin `th-btn` / `th-btn-outline` class'larını kullanır — remote theme
@@ -215,9 +216,7 @@ function PricingCard(t: Tier): string {
   const amountCls = isFeat ? "text-white" : "text-[#1a1a1a]";
   const perCls = isFeat ? "text-white/65" : "text-[#8a877f]";
   const metaCls = isFeat ? "text-white/65" : "text-[#8a877f]";
-  const stripCls = isFeat
-    ? "bg-white/[0.06] border-white/10"
-    : "bg-[#fafaf8] border-[#e8e6e0]";
+  const stripCls = isFeat ? "bg-white/[0.06] border-white/10" : "bg-[#fafaf8] border-[#e8e6e0]";
   const stripL = isFeat ? "text-white/55" : "text-[#8a877f]";
   const stripV = isFeat ? "text-white" : "text-[#1a1a1a]";
   // Featured kart koyu zemin → th-btn (sarı dolgu kontrast yaratır)
@@ -228,9 +227,7 @@ function PricingCard(t: Tier): string {
   const featHeadCls = isFeat ? "text-white/55" : "text-[#8a877f]";
   const featLiCls = isFeat ? "text-white/85" : "text-[#4a4a48]";
   const checkCls = isFeat ? "text-[#f5b800]" : "text-[#1f7a4d]";
-  const xCls = isFeat
-    ? "text-white/35"
-    : "text-[#d5d2c9]";
+  const xCls = isFeat ? "text-white/35" : "text-[#d5d2c9]";
   const noLineCls = isFeat
     ? "text-white/40 line-through decoration-white/30"
     : "text-[#8a877f] line-through decoration-[#d5d2c9]";
@@ -272,7 +269,7 @@ function PricingCard(t: Tier): string {
             <div class="text-[10px] uppercase tracking-[0.06em] ${stripL}">${s.l}</div>
             <div class="text-sm font-semibold tabular-nums mt-0.5 ${stripV}">${s.v}</div>
           </div>
-        `,
+        `
           )
           .join("")}
       </div>
@@ -291,7 +288,7 @@ function PricingCard(t: Tier): string {
             <span class="shrink-0 mt-0.5 ${f.ok ? checkCls : xCls}">${f.ok ? SVG_CHECK : SVG_X}</span>
             <span>${f.t}</span>
           </li>
-        `,
+        `
           )
           .join("")}
       </ul>
@@ -312,7 +309,11 @@ const MATRIX_SECTIONS: MatrixSection[] = [
   {
     title: "Komisyon & limitler",
     rows: [
-      { f: "Satış komisyonu", help: "Tamamlanan siparişler üzerinden", v: [txt("%8"), txt("%6"), txt("%4"), txt("Özel")] },
+      {
+        f: "Satış komisyonu",
+        help: "Tamamlanan siparişler üzerinden",
+        v: [txt("%8"), txt("%6"), txt("%4"), txt("Özel")],
+      },
       { f: "Aktif ürün limiti", v: [txt("50"), txt("500"), txt("2.000"), txt("Sınırsız")] },
       { f: "Numune satışı", v: [yes, yes, yes, yes] },
       { f: "Toplu yükleme (CSV)", v: [yes, yes, yes, yes] },
@@ -331,7 +332,10 @@ const MATRIX_SECTIONS: MatrixSection[] = [
   {
     title: "Destek & operasyon",
     rows: [
-      { f: "Destek", v: [txt("Email"), txt("Öncelikli"), txt("Hesap yön."), txt("7/24 dedicated")] },
+      {
+        f: "Destek",
+        v: [txt("Email"), txt("Öncelikli"), txt("Hesap yön."), txt("7/24 dedicated")],
+      },
       { f: "Ekip kullanıcısı", v: [txt("1"), txt("3"), txt("10"), txt("Sınırsız")] },
       { f: "Reklam kredisi / ay", v: [txt("—"), txt("€100"), txt("€300"), txt("Özel")] },
       { f: "KDV iadesi danışmanlığı", v: [yes, yes, yes, yes] },
@@ -342,7 +346,11 @@ const MATRIX_SECTIONS: MatrixSection[] = [
   {
     title: "Kurumsal",
     rows: [
-      { f: "API erişimi", help: "Sipariş, stok, fiyat eşitleme", v: [no, txt("Limitli"), txt("Tam"), txt("Özel SLA")] },
+      {
+        f: "API erişimi",
+        help: "Sipariş, stok, fiyat eşitleme",
+        v: [no, txt("Limitli"), txt("Tam"), txt("Özel SLA")],
+      },
       { f: "ERP / muhasebe entegrasyonu", v: [no, no, txt("Beta"), yes] },
       { f: "Özel ödeme koşulları", v: [no, no, no, yes] },
       { f: "Alt domain (markaniz.istoc.com)", v: [no, no, no, yes] },
@@ -380,7 +388,7 @@ function PricingMatrix(): string {
             <div class="text-[15px] font-semibold ${c.featured ? "text-[#d39c00]" : "text-[#1a1a1a]"}">${c.n}</div>
             <div class="text-xs text-[#8a877f] mt-0.5 tabular-nums">${c.p}</div>
           </div>
-        `,
+        `
           )
           .join("")}
       </div>
@@ -409,15 +417,15 @@ function PricingMatrix(): string {
                 }">
                   ${renderMatrixCell(c)}
                 </div>
-              `,
+              `
                 )
                 .join("")}
             </div>
-          `,
+          `
             )
             .join("")}
         </div>
-      `,
+      `
       ).join("")}
     </div>
   `;
@@ -523,7 +531,8 @@ const COMPARE_ROWS: CompareRow[] = [
 function renderCompareCell(c: CompareCell): string {
   if (typeof c === "string") return c;
   const labelHtml = c.label ? `<span class="text-[#8a877f] text-[12.5px]">${c.label}</span>` : "";
-  if (c.v === "yes") return `<span class="inline-flex items-center justify-center text-[#1f7a4d]">${SVG_CHECK_MD}</span>`;
+  if (c.v === "yes")
+    return `<span class="inline-flex items-center justify-center text-[#1f7a4d]">${SVG_CHECK_MD}</span>`;
   if (c.v === "no")
     return `<span class="inline-flex items-center gap-1.5"><span class="text-[#b42318]/55">${SVG_X}</span>${labelHtml}</span>`;
   return `<span class="inline-flex items-center gap-1.5"><span class="text-[#b54708]">${SVG_DASH}</span>${labelHtml}</span>`;
