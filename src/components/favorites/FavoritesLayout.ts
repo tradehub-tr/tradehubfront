@@ -44,7 +44,10 @@ let enrichmentLoadedFor: string = ""; // son enrichment hangi item set'i için y
 
 async function loadEnrichments(items: FavoriteItem[]): Promise<void> {
   if (enrichmentLoading) return;
-  const fingerprint = items.map((i) => i.id).sort().join(",");
+  const fingerprint = items
+    .map((i) => i.id)
+    .sort()
+    .join(",");
   if (fingerprint === enrichmentLoadedFor) return;
   enrichmentLoading = true;
   try {
@@ -309,9 +312,7 @@ function renderSidebarLists(kind: "products" | "suppliers" = "products"): string
     })
     .join("");
 
-  const divider = customRows
-    ? `<div class="my-2 mx-3 h-px bg-border-default"></div>`
-    : "";
+  const divider = customRows ? `<div class="my-2 mx-3 h-px bg-border-default"></div>` : "";
 
   return `${systemRows}${divider}${customRows}`;
 }
@@ -810,12 +811,14 @@ function renderProductCards(items: FavoriteItem[]): string {
     return `
       <div class="px-5 pt-5 pb-7 max-sm:px-2.5">
         ${toolbar}
-        ${searchQuery
-          ? `<div class="flex flex-col items-center text-center py-15 px-5">
+        ${
+          searchQuery
+            ? `<div class="flex flex-col items-center text-center py-15 px-5">
               <h3 class="text-base font-bold text-text-primary mb-2.5">${t("favorites.noSearchResults", { defaultValue: "Sonuç bulunamadı" })}</h3>
               <p class="text-sm text-text-tertiary max-w-[380px]">${t("favorites.noSearchResultsDesc", { defaultValue: "Aramayı temizleyip tekrar deneyebilirsin." })}</p>
             </div>`
-          : renderEmptyState()}
+            : renderEmptyState()
+        }
       </div>
     `;
   }
@@ -1105,7 +1108,10 @@ function loadFavoritesData(): void {
 
   // Lazy enrichment: ilk render'dan sonra fetch et, bittiğinde re-render
   if (items.length > 0) {
-    const fingerprint = items.map((i) => i.id).sort().join(",");
+    const fingerprint = items
+      .map((i) => i.id)
+      .sort()
+      .join(",");
     if (fingerprint !== enrichmentLoadedFor && !enrichmentLoading) {
       void loadEnrichments(items).then(() => {
         const c = document.getElementById("fav-products-container");
@@ -1163,16 +1169,19 @@ function initFilterMenu(): void {
       const val = cb.dataset.favFilterVal || "";
       if (group === "cat") {
         const set = new Set(activeFilters.categories);
-        cb.checked ? set.add(val) : set.delete(val);
+        if (cb.checked) set.add(val);
+        else set.delete(val);
         activeFilters.categories = Array.from(set);
       } else if (group === "sup") {
         const set = new Set(activeFilters.suppliers);
-        cb.checked ? set.add(val) : set.delete(val);
+        if (cb.checked) set.add(val);
+        else set.delete(val);
         activeFilters.suppliers = Array.from(set);
       } else if (group === "stock") {
         const v = val as "in" | "low" | "out";
         const set = new Set(activeFilters.stock);
-        cb.checked ? set.add(v) : set.delete(v);
+        if (cb.checked) set.add(v);
+        else set.delete(v);
         activeFilters.stock = Array.from(set) as Array<"in" | "low" | "out">;
       }
     });
@@ -1187,17 +1196,21 @@ function initFilterMenu(): void {
     activeFilters.maxPrice = maxInput.value;
   });
 
-  wrap.querySelector<HTMLButtonElement>("[data-fav-filter-reset]")?.addEventListener("click", () => {
-    clearAllFilters();
-    resetPagination();
-    menu?.classList.add("hidden");
-    loadFavoritesData();
-  });
-  wrap.querySelector<HTMLButtonElement>("[data-fav-filter-apply]")?.addEventListener("click", () => {
-    resetPagination();
-    menu?.classList.add("hidden");
-    loadFavoritesData();
-  });
+  wrap
+    .querySelector<HTMLButtonElement>("[data-fav-filter-reset]")
+    ?.addEventListener("click", () => {
+      clearAllFilters();
+      resetPagination();
+      menu?.classList.add("hidden");
+      loadFavoritesData();
+    });
+  wrap
+    .querySelector<HTMLButtonElement>("[data-fav-filter-apply]")
+    ?.addEventListener("click", () => {
+      resetPagination();
+      menu?.classList.add("hidden");
+      loadFavoritesData();
+    });
 
   wireFilterOutsideClickOnce();
 }
@@ -1216,11 +1229,13 @@ function initToolbar(): void {
     }
   });
 
-  document.querySelector<HTMLButtonElement>("[data-fav-search-clear]")?.addEventListener("click", () => {
-    searchQuery = "";
-    resetPagination();
-    loadFavoritesData();
-  });
+  document
+    .querySelector<HTMLButtonElement>("[data-fav-search-clear]")
+    ?.addEventListener("click", () => {
+      searchQuery = "";
+      resetPagination();
+      loadFavoritesData();
+    });
 
   const sortWrap = document.querySelector<HTMLElement>("[data-fav-sort-wrap]");
   const sortToggle = sortWrap?.querySelector<HTMLButtonElement>("[data-fav-sort-toggle]");
