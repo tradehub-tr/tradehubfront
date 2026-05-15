@@ -1,3 +1,14 @@
+## [v1.1.9-beta.1] - 2026-05-15 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(changelog): yeni storefront özellikleri eklendi ve belgeler güncellendi (@ahmeetseker)
+
+### Duzeltildi
+- fix(ci): son PROD tag'ini güncelleyerek CHANGELOG girişini düzeltildi (@ahmeetseker)
+
+---
 ## [v1.1.10-beta.1] - 2026-05-15 BETA
 
 > Geriye dönük belgeleme — daha önce CHANGELOG'a girmemiş storefront feature'larının kapsamı.
