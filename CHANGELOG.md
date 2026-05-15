@@ -1,3 +1,469 @@
+## [v1.1.10-beta.1] - 2026-05-15 BETA
+
+> Geriye dönük belgeleme — daha önce CHANGELOG'a girmemiş storefront feature'larının kapsamı.
+
+### Eklendi
+- feat(info-pages): Blog, News, Careers, Partnerships, CSR statik sayfaları + `src/components/info/` ortak InfoPageLayout (footer linkleri için) (@ahmeetseker)
+- feat(seller-dashboard): `src/pages/seller-dashboard.ts` — satıcı kontrol paneli (siparişler, mesajlar, performans widget'ları) (@ahmeetseker)
+- feat(seller-verification): `src/pages/seller-verification.ts` — satıcı doğrulama (KYC) çok adımlı form akışı (@ahmeetseker)
+- feat(subscription): `src/pages/subscription.ts` + `src/components/subscription/SubscriptionLayout.ts` — abonelik planları, fatura, plan yükseltme görünümü (@ahmeetseker)
+- feat(manufacturers): `src/pages/manufacturers.ts` + `src/components/manufacturers/` — üretici listeleme/keşif sayfası ve kartları (@ahmeetseker)
+- feat(help-center): `src/pages/help-ticket-new.ts` + 9 component dosyası — destek talebi oluşturma sayfası, kategori seçimi, ek dosya, form akışı (@ahmeetseker)
+- feat(help-center): `src/pages/help-ticket.ts` — destek talep detayı gerçek API'ya bağlandı; ticket görüntüleme, mesajlaşma, durum takibi (@ahmeetseker)
+- feat(payment): `src/pages/payment.ts`, `payment-processing.ts`, `payment-failed.ts` + `src/components/payment/` — ödeme sayfası, işleniyor ekranı, başarısız ödeme akışı (@ahmeetseker)
+- feat(addresses): `src/pages/addresses.ts` + `src/components/addresses/` — adres defteri CRUD (ekle/düzenle/sil/varsayılan) (@ahmeetseker)
+- feat(settings): `src/pages/settings.ts` — hesap ayarları (bildirim, gizlilik, dil tercihleri) (@ahmeetseker)
+- feat(profile): `src/pages/profile.ts` — kullanıcı profil sayfası (kişisel bilgiler, avatar, biyografi) (@ahmeetseker)
+- feat(categories): `src/pages/categories.ts` + `src/components/categories/` — tüm kategoriler keşif sayfası, hiyerarşik liste, kart görünümü (@ahmeetseker)
+- feat(tailored-selections): `src/pages/tailored-selections.ts` + section registry + landing block'ları — kullanıcıya özel ürün seçkileri sayfası (@ahmeetseker)
+- feat(rfq): `src/components/rfq/attachments.ts` + `dropzone.ts` — RFQ formu için dosya ekleme, sürükle-bırak yükleme component'leri (@aliiball)
+
+## [v1.1.9] - 2026-05-15 PROD
+
+Bu surum canliya alindi. v1.1.8 PROD'dan bu yana beta + RC asamasinda test edilen tum feat/fix dahildir.
+
+### Eklendi
+- feat(dashboard,favorites,sell): e-posta doğrulama slide'ı, favori filtreleri ve satıcı landing düzenlemesi (@ahmeetseker)
+  - Dashboard: OperationSlider'a e-posta doğrulanmamış kullanıcılar için synthetic "email-verify" slide eklendi (resend + change link, i18n anahtarları en/tr).
+  - Favoriler: kategori/tedarikçi/stok/fiyat filtre menüsü, listing detail lazy enrichment, kart üstü stok pill'i ve doğrulanmış supplier satırı.
+  - Sell: 4 section'a ortak max-w-[1500px] inner sarmalayıcı; "Avrupa" → "dünya" metin güncellemesi.
+- feat(reviews): aspect ortalamasından dinamik puan + partial-fill yıldız (@boraydeger32)
+  - WriteReviewModal: "Genel Puan" artık kullanıcı seçimi değil; 4 boyut puanının ortalaması olarak hesaplanan computed değer. Yıldızlar read-only ve clip-path tabanlı partial-fill destekler.
+  - ProductReviews: renderStars fractional rating alır (SVG layering + clip-path); displayRating() helper'ı backend Int rating yerine aspect ortalamasını kullanır. Yorum kartı, ReviewsModal ve ürün başlığı bu helper'a yönlendirildi.
+  - ProductTitleBar: ortalama Approved yorumların aspect ortalamasından yeniden hesaplanır (backend `rating` Int olduğu için 3.5 → 4 olarak kaybolur). "X yorum" tıklaması Yorumlar tab'ını açıp section'a scroll eder; rating satırı product-reviews-loaded event'iyle re-render.
+  - listingService: BackendStorefrontReview.aspects artık ProductReview'a map ediliyor; tip de güncellendi.
+  - WriteReviewModal'daki merge conflict (HEAD vs 7aafda0) çözüldü.
+  - Yeni eklenen tüm color/clip-path inline style'ları Tailwind utility arbitrary'lerine (theme-var + [clip-path:inset(...)] + CSS var atama pattern'i) çevrildi; yeni .css/<style> bloku yok.
+- feat(reviews): Sprint 1 — review/Q&A storefront entegrasyonu + 4 fix (@boraydeger32)
+  - Yorum Yaz modal: form + foto + kategori şablon cevapları
+  - Şikayet Et modal: sebep dropdown + not
+  - Q&A bottom-sheet: mobile-first soru/cevap görüntüleme
+  - Reviewer tier rozeti (Top / Trusted / Verified) trust signal
+  - Onay Bekliyor amber rozeti yorum sahibine
+  - 24h içinde Düzenle butonu (max 1 edit, sonrası reddedilir)
+  - Faydalı değil 👎 + Helpful/Not-helpful mutex pattern
+  - Mobile pdm-* kısayol butonları (Yorum Yaz / Görüntüle / Soru-Cevap)
+  - Bottom-sheet pattern: items-end sm:items-center
+  - Mobile-first responsive header butonları
+  - 374px altı küçültülmüş yazı
+  - src/api/reviewsApi.ts
+  - src/components/product/ProductQA.ts
+  - src/components/product/QAModal.ts
+  - src/components/product/WriteReviewModal.ts
+  - src/components/product/ReportAbuseModal.ts
+  - src/components/reviews/ReviewWidget.ts
+  - src/styles/reviews-v5.css
+- feat(reviews): review/Q&A storefront entegrasyonu + 4 kritik fix (@boraydeger32)
+  - Backend API entegrasyonu (mock→real): eligibility, submit, vote, update, abuse, Q&A — yeni listingService methodları
+  - Custom modal'lar: Yorum Yaz, Şikayet Et, Q&A bottom-sheet
+  - Reviewer tier rozeti (Top/Trusted/Verified) — Newcomer gizli
+  - Onay Bekliyor rozeti — sadece sahibine görünür (isOwnPending)
+  - Düzenle butonu — 24h penceresinde, max 1 edit
+  - Faydalı değil  + Helpful/Not-helpful mutex (kardeş butonlar kilitlenir)
+  - Mobile layout: Yorum Yaz / Tüm yorumları / Soru-Cevap kısayolları
+  - reviews-v5.css tasarım sistemi
+  - Lint: @ts-nocheck pragma'larına eslint-disable + açıklama (rule bypass)
+- feat(changelog): değişiklikleri daha okunabilir hale getirildi (@ahmeetseker)
+- feat(reviews): dead code ve stil dosyalarını kaldırdı (@ahmeetseker)
+- Yorum Yaz modal: form + foto + kategori şablon cevapları (@boraydeger32)
+- Şikayet Et modal: sebep dropdown + not (@boraydeger32)
+- Q&A bottom-sheet: mobile-first soru/cevap görüntüleme (@boraydeger32)
+- Reviewer tier rozeti (Top / Trusted / Verified) trust signal (@boraydeger32)
+- Onay Bekliyor amber rozeti yorum sahibine (@boraydeger32)
+- 24h içinde Düzenle butonu (max 1 edit, sonrası reddedilir) (@boraydeger32)
+- Faydalı değil 👎 + Helpful/Not-helpful mutex pattern (@boraydeger32)
+- Mobile pdm-* kısayol butonları (Yorum Yaz / Görüntüle / Soru-Cevap) (@boraydeger32)
+- Bottom-sheet pattern: items-end sm:items-center (@boraydeger32)
+- Mobile-first responsive header butonları (@boraydeger32)
+- 374px altı küçültülmüş yazı (@boraydeger32)
+- src/api/reviewsApi.ts (@boraydeger32)
+- src/components/product/ProductQA.ts (@boraydeger32)
+- src/components/product/QAModal.ts (@boraydeger32)
+- src/components/product/WriteReviewModal.ts (@boraydeger32)
+- src/components/product/ReportAbuseModal.ts (@boraydeger32)
+- src/components/reviews/ReviewWidget.ts (@boraydeger32)
+- src/styles/reviews-v5.css (@boraydeger32)
+- Backend API entegrasyonu (mock→real): eligibility, submit, vote, update, abuse, Q&A — yeni listingService methodları (@boraydeger32)
+- Custom modal'lar: Yorum Yaz, Şikayet Et, Q&A bottom-sheet (@boraydeger32)
+- Reviewer tier rozeti (Top/Trusted/Verified) — Newcomer gizli (@boraydeger32)
+- Onay Bekliyor rozeti — sadece sahibine görünür (isOwnPending) (@boraydeger32)
+- Düzenle butonu — 24h penceresinde, max 1 edit (@boraydeger32)
+- Faydalı değil  + Helpful/Not-helpful mutex (kardeş butonlar kilitlenir) (@boraydeger32)
+- Mobile layout: Yorum Yaz / Tüm yorumları / Soru-Cevap kısayolları (@boraydeger32)
+- reviews-v5.css tasarım sistemi (@boraydeger32)
+- Lint: @ts-nocheck pragma'larına eslint-disable + açıklama (rule bypass) (@boraydeger32)
+- feat(chat-popup): mesaj kutusu arama + sağ-alt floating pencere; ürün gridine Sohbet et butonu; favori widget'i ürün kartlarıyla (@ahmeetseker)
+- feat(chat-popup): mesaj kutusunda kişi / şirket / son mesaj üzerinden anlık arama (@ahmeetseker)
+- feat(chat-popup): sohbet penceresi artık ekranın sağ-altında açılıyor, arka plan karartılmıyor — site üzerinde gezerken (@ahmeetseker)
+- feat(products): ürün listesi kartlarına "Sohbet et" butonu eklendi — Sepete Ekle ile yan yana, satıcıya doğrudan mesaj (@ahmeetseker)
+- feat(dashboard): favori ürünler kutusu artık boş ekran yerine gerçek ürün kartlarını yatay kaydırmalı gösteriyor (3 ürün + "Tümünü (@ahmeetseker)
+- feat(dashboard): yan menüde "Mesajlarım" alt menüsü yeniden açıldı (Tedarikçi Mesajları / Tekliflerim / Kişilerim) (@ahmeetseker)
+- refactor(chat): kartvizit penceresinin tasarımı yenilendi — ayrık başlık/alt bar, ülke bayrağı, daha sade kullanıcı bilgisi (@ahmeetseker)
+- refactor(chat): araç çubuğunda kullanılmayan butonlar temizlendi (konum, çeviri, buluttan fotoğraf) (@ahmeetseker)
+- refactor(style): global buton hover/press efekti sadeleştirildi — gereksiz transform/box-shadow kaldırıldı, sayfa geneli daha (@ahmeetseker)
+- chore(i18n): kartvizit "iSTOC tarafından doğrulanan hesaplar" etiketi güncellendi (@ahmeetseker)
+- feat(reviews): 2 değişiklik (@boraydeger32)
+  - review/Q&A storefront entegrasyonu + 4 kritik fix
+  - Sprint 1 — review/Q&A storefront entegrasyonu + 4 fix
+- feat(chat-popup): Sohbet Et özelliği — alıcı ile satıcı doğrudan iletişim (@ahmeetseker)
+- feat(alpine): add chatPopup global store + chatPopupRoot data wrapper (@ahmeetseker)
+- feat(chat): 16 değişiklik (@ahmeetseker)
+  - AttachmentToolbar with 7 sub-menu triggers
+  - BusinessCardForm sub-popup
+  - CallMenu sub-popup with video/voice/schedule
+  - ChatBubble — text/image/file/system variants
+  - ChatComposer with pinned product, toolbar, input and orange Gönder
+  - ChatHeader with optional back/expand/close buttons
+  - ChatMessages list with date labels and error state
+  - ContextMenu sub-popup with pin/block/delete/mute
+  - EmojiPicker sub-popup with 70 popular emojis
+  - OrderCard embedded order summary
+  - PhotoSourceMenu sub-popup
+  - PinnedProduct composer context strip
+  - QuickActionChips quick-action row
+  - SecurityBanner component
+  - add error/sending state and try-catch around service calls
+  - barrel export for chat-shared module
+- feat(chat-popup): 4 değişiklik (@ahmeetseker)
+  - ChatPopup root container with overlay, expand mode and mobile tabs
+  - InboxPanel — conversation list with tag labels and unread badge
+  - MobileTabs (Sohbet / Mesajlar) for sm screens
+  - barrel export
+- feat(data): seed mock conversations and messages (@ahmeetseker)
+- feat(i18n): 2 değişiklik (@ahmeetseker)
+  - add chat namespace keys
+  - add chat.{emptyThread,orderCard,aria,toolbar,pending} keys
+- feat(icons): add chat-popup lucide icons (@ahmeetseker)
+- feat(product): 2 değişiklik (@ahmeetseker)
+  - add Sohbet et button in 50/50 grid with Sepete Ekle
+  - wire Sohbet et click to chat-popup:open event with pinned product
+- feat(product-detail): mount ChatPopup so it can be opened from this page (@ahmeetseker)
+- feat(services): add chat service stub with mock-data promises (@ahmeetseker)
+- feat(theme): add orange palette tokens for chat composer (@ahmeetseker)
+- feat(types): define chat conversation/message interfaces (@ahmeetseker)
+- feat(utils): ref-counted scrollLock; use it in chat popup open/close (@ahmeetseker)
+- feat(faq): 3 değişiklik (@ahmeetseker)
+  - faqPage Alpine data'ya search helper'ları eklendi
+  - search bar yeniden tasarlandı
+  - eşleşme vurgusu + sidebar inline style refactor
+- feat(orders): 6 değişiklik (@ahmeetseker)
+  - detay panel için tab/ürün state'i ekle
+  - ürünler kartını ilk-5 + scroll'lu hibrit yapıya çevir
+  - boxed tab container + Kargo paneli + i18n tab etiketleri
+  - Ödeme detaylarını tab paneline taşı
+  - Tedarikçi detaylarını tab paneline taşı
+  - replace per-order item list with thumbnail strip + drawer
+- feat(header-notice): 7 değişiklik (@ahmeetseker)
+  - add storefront service with localStorage cache
+  - add HeaderNotice marquee component
+  - integrate notice render into TopBar
+  - call initHeaderNotice in main bootstrap
+  - suppress notice on payment/payments/orders pages
+  - remove icon rendering from storefront marquee
+  - add slide display mode and per-notice background color
+- feat(help-center): "Bize Ulaşın" 4'lü kart bloğu kaldırıldı (@ahmeetseker)
+- feat(floating-panel): x-show ve x-transition ekleyerek görünürlüğü iyileştirdi (@ahmeetseker)
+
+### Duzeltildi
+- fix(lint): no-unused-expressions FavoritesLayout filter sets (@boraydeger32)
+- fix(security): storefront 4 XSS sink + sample order payload + yıldız reactive (@boraydeger32)
+  - utils/sanitize.ts: escapeHtml ve safeHexColor utility'leri eklendi. DOMPurify tabanlı sanitizeHtml zaten vardı; escapeHtml template literal innerHTML interpolation'ları için, safeHexColor CSS background değerini hex regex'iyle doğrular.
+  - alpine/index.ts: Alpine.magic("safeHtml") kayıt — `x-html` binding'lerinde `$safeHtml(value)` ile DOMPurify'a yönlendirir.
+  - utils/seller/section-registry.ts:569 seller.description artık `$safeHtml(...)` ile render. Kötü niyetli satıcının vitrinine yazdığı `<img src=x onerror=...>` payload'ı buyer oturumlarını hijack edebiliyordu.
+  - components/help-center/TicketDetailLayout.ts:90 ticket.description `$safeHtml`. Destek personeli her ticket açtığında stored XSS çalışıyordu.
+  - components/product/ProductReviews.ts review card içeriği (comment, anonymized author, date, country, productTitle/Price, image URL'ler, lightbox img src) escapeHtml ile, supplierReply zengin metin barındırdığı için sanitizeHtml ile sarıldı. Yorum yazan saldırgan tüm ürün sayfası ziyaretçilerinin oturumunu alabilirdi.
+  - components/cart/overlay/SharedCartDrawer.ts:385-392 color.imageUrl escapeHtml, color.colorHex safeHexColor ile doğrulanıyor. Eski `style="background:${color.colorHex}"` CSS context injection'a açıktı (";background:url(javascript:…)" gibi).
+  - pages/checkout.ts:516-527 order item payload her item için is_sample flag taşıyor (isSampleMode bayrağından). Backend _recompute_order_items_server_side bu flag'i listing.sample_price rotasına yönlendiriyor — aksi halde numune siparişler selling_price ile faturalandığı ~5× overcharge regresyonu vardı.
+  - components/product/WriteReviewModal.ts:218-225 partial-fill yıldız `:style="'--star-fill:'+…+'%'"` string concat yerine object form `:style="{ '--star-fill': … }"` kullanıyor — aspect değişikliği reactive update'i daha güvenilir tetikler.
+- fix(ci): release workflow printf format string bug (@boraydeger32)
+- fix(chat-popup): mountChatPopup'u barrel export'a ekle (@ahmeetseker)
+- fix(release-workflows): commit body bullet'larini CHANGELOG'a dahil et (@ahmeetseker)
+- fix(changelog): beta.6 ve beta.7 release kayıtları manuel dolduruldu (@ahmeetseker)
+- fix(release-workflows): commit mesajındaki boşlukları temizlendi (@ahmeetseker)
+- fix(chat): 9 değişiklik (@ahmeetseker)
+  - BusinessCardForm Edit/Send buttons close submenu (stub)
+  - BusinessCardForm uses i18n placeholders (no leaked identity)
+  - CallMenu renders activeConversation avatar when present
+  - Shift+Enter must insert newline (move .prevent inside conditional)
+  - add aria-label to composer textarea
+  - clean up window/document listeners in chatPopupRoot destroy()
+  - flatten body-type dispatch, right-align order cards, lucide file icon, i18n labels
+  - i18n aria-labels and toolbar button labels
+  - resolve conversation by sellerId via chatService (no more first-conv fallback)
+- fix(chat-popup): 2 değişiklik (@ahmeetseker)
+  - make chat section relative so ContextMenu anchors correctly
+  - mark inbox avatar img as decorative (alt="")
+- fix(product): use existing .th-btn-outline for Sohbet et (theme parity) (@ahmeetseker)
+- fix(faq): 2 değişiklik (@ahmeetseker)
+  - focus-within koyu drop-shadow kaldırıldı
+  - siyah çizgi sorunu — border yerine ring, input focus-visible suppress
+- fix(orders): 10 değişiklik (@ahmeetseker)
+  - stepper label'larını 320px'te wrap edilebilir yap
+  - a11y polish on items drawer (focus on open, aria-labels)
+  - correct remittance event name and add aria-haspopup on drawer triggers
+  - card spacing, remove link underline, drawer sort UX
+  - symmetric card header (B layout)
+  - remove confusing left sort icon in drawer (keep only chevron)
+  - prevent hover/active layout shift on link-style buttons
+  - remove all hover state changes on link-style buttons
+  - use native select arrow only (remove custom chevron — fixes double arrow)
+  - override global :focus-visible outline on link-style buttons
+
+### Degistirildi
+- refactor(css): migrate page styles to Tailwind utilities, drop src/styles/ (@ahmeetseker)
+  - Migrate cart, checkout, seller-shop, seller-storefront ve product-detail sayfalarının custom CSS'lerini Tailwind v4 utility class'larına çevirdi. JS-toggled state'ler için `data-*` + `group-data-[...]/name:` variant pattern'i kullanıldı (parent class cascade pattern'i kaldırıldı).
+  - src/styles/ dizini tamamen silindi: * cart-design.css            (-364) * checkout-design.css        (-1032) * seller/seller-storefront.css (-291)
+  - src/style.css içindeki @media blokları, descendant selector cascade kuralları ve pseudo-element CSS'leri ilgili HTML/TS dosyalarına Tailwind utility olarak taşındı (-3239 değişiklik satırı).
+  - Component dosyalarında string template'lere doğrudan utility class zincirleri yazıldı (auth, cart, checkout, product, seller, settings, manufacturers, favorites, orders, messages, buyer-dashboard).
+  - CLAUDE.md güncellendi: @media → responsive variant, pseudo-element / nth-child / descendant / theme-var → utility eşleme tabloları, JS-toggled state → data-attribute + group variant kuralı.
+  - css-optimization-reports/refactor-progress.md fazlara göre güncellendi.
+- refactor(style): style.css ~700 satır baseline + th-btn 3D inset shadow (@ahmeetseker)
+  - style.css: `.th-btn`/`.th-btn-outline`/`.th-btn-dark` hover ve active'de inset 3D shadow + `scale-[0.98]` tıklama efekti
+  - style.css: `.th-btn-gradient` varyantı silindi → `utils/ui/button.ts` içinde `gradient` map'i `.th-btn`'e alias; SearchArea / TopBar / Cart Drawer kullanım yerleri güncellendi (inline `border-radius !important` temizliği dahil)
+  - style.css: 325 satırlık ölü gradient/utility bloğu kaldırıldı (5056 → 4878, hedef ~700)
+  - header-notice: slide-mode CSS sınıfları yerine `data-state=active|exiting` Tailwind pattern; `@theme` içine `--animate-notice-scroll` token taşındı
+  - inquiries / orders / help-center / seller / subscription: sarı pill CTA butonları için `bg-(--btn-bg,#f5b800)` + `--btn-shadow` token + hover/active inset shadow zinciri
+  - orders / subscription: link-tarzı butonlara `th-no-press` + `appearance-none focus:outline-none` — hover'da layout sıçraması yok
+  - release-workflows: commit body bullet'ları subject altında nested gösteriliyor (admin-panel / tradehub_core ile senkron)
+  - CLAUDE.md: yeni "0.0 İzin Kapısı — CSS dosyalarına yazma" bölümü; `style.css` baseline ~700 satır, `src/styles/*.css` yeni dosya yasağı, 5056 → 4878 → 700 yol haritası
+  - css-optimization-reports/UYGULAMA-PLANI.md: refactor adımları güncellendi
+- refactor(chat): 3 değişiklik (@ahmeetseker)
+  - drop dead || "" fallback in appendDraft
+  - promote Tab type to types/chat.ts as ChatTab
+  - split localTime into localTimeHHMM primitive (i18n boundary)
+- refactor(chat-popup): 2 değişiklik (@ahmeetseker)
+  - drop dead 'pinned: ""' entry from tag lookup
+  - lift click handler to initChatTriggers() shared module
+- refactor(orders): 3 değişiklik (@ahmeetseker)
+  - parsePrice'ı module scope'a taşı
+  - ürünler kartı için helpers + i18n çekimi
+  - extract order card into OrderListItem component
+- refactor(faq): submit butonu projenin th-btn standardına geçti (@ahmeetseker)
+
+---
+## [v1.1.8-rc.1] - 2026-05-15 RC
+
+Bu surum onay asamasindadir. v1.1.8 PROD'dan bu yana beta tag'lerinde test edilen tum feat/fix bu RC entry'sinde toplanmistir.
+
+### Eklendi
+- feat(dashboard,favorites,sell): e-posta doğrulama slide'ı, favori filtreleri ve satıcı landing düzenlemesi (@ahmeetseker)
+  - Dashboard: OperationSlider'a e-posta doğrulanmamış kullanıcılar için synthetic "email-verify" slide eklendi (resend + change link, i18n anahtarları en/tr).
+  - Favoriler: kategori/tedarikçi/stok/fiyat filtre menüsü, listing detail lazy enrichment, kart üstü stok pill'i ve doğrulanmış supplier satırı.
+  - Sell: 4 section'a ortak max-w-[1500px] inner sarmalayıcı; "Avrupa" → "dünya" metin güncellemesi.
+- feat(reviews): aspect ortalamasından dinamik puan + partial-fill yıldız (@boraydeger32)
+  - WriteReviewModal: "Genel Puan" artık kullanıcı seçimi değil; 4 boyut puanının ortalaması olarak hesaplanan computed değer. Yıldızlar read-only ve clip-path tabanlı partial-fill destekler.
+  - ProductReviews: renderStars fractional rating alır (SVG layering + clip-path); displayRating() helper'ı backend Int rating yerine aspect ortalamasını kullanır. Yorum kartı, ReviewsModal ve ürün başlığı bu helper'a yönlendirildi.
+  - ProductTitleBar: ortalama Approved yorumların aspect ortalamasından yeniden hesaplanır (backend `rating` Int olduğu için 3.5 → 4 olarak kaybolur). "X yorum" tıklaması Yorumlar tab'ını açıp section'a scroll eder; rating satırı product-reviews-loaded event'iyle re-render.
+  - listingService: BackendStorefrontReview.aspects artık ProductReview'a map ediliyor; tip de güncellendi.
+  - WriteReviewModal'daki merge conflict (HEAD vs 7aafda0) çözüldü.
+  - Yeni eklenen tüm color/clip-path inline style'ları Tailwind utility arbitrary'lerine (theme-var + [clip-path:inset(...)] + CSS var atama pattern'i) çevrildi; yeni .css/<style> bloku yok.
+- feat(reviews): Sprint 1 — review/Q&A storefront entegrasyonu + 4 fix (@boraydeger32)
+  - Yorum Yaz modal: form + foto + kategori şablon cevapları
+  - Şikayet Et modal: sebep dropdown + not
+  - Q&A bottom-sheet: mobile-first soru/cevap görüntüleme
+  - Reviewer tier rozeti (Top / Trusted / Verified) trust signal
+  - Onay Bekliyor amber rozeti yorum sahibine
+  - 24h içinde Düzenle butonu (max 1 edit, sonrası reddedilir)
+  - Faydalı değil 👎 + Helpful/Not-helpful mutex pattern
+  - Mobile pdm-* kısayol butonları (Yorum Yaz / Görüntüle / Soru-Cevap)
+  - Bottom-sheet pattern: items-end sm:items-center
+  - Mobile-first responsive header butonları
+  - 374px altı küçültülmüş yazı
+  - src/api/reviewsApi.ts
+  - src/components/product/ProductQA.ts
+  - src/components/product/QAModal.ts
+  - src/components/product/WriteReviewModal.ts
+  - src/components/product/ReportAbuseModal.ts
+  - src/components/reviews/ReviewWidget.ts
+  - src/styles/reviews-v5.css
+- feat(reviews): review/Q&A storefront entegrasyonu + 4 kritik fix (@boraydeger32)
+  - Backend API entegrasyonu (mock→real): eligibility, submit, vote, update, abuse, Q&A — yeni listingService methodları
+  - Custom modal'lar: Yorum Yaz, Şikayet Et, Q&A bottom-sheet
+  - Reviewer tier rozeti (Top/Trusted/Verified) — Newcomer gizli
+  - Onay Bekliyor rozeti — sadece sahibine görünür (isOwnPending)
+  - Düzenle butonu — 24h penceresinde, max 1 edit
+  - Faydalı değil  + Helpful/Not-helpful mutex (kardeş butonlar kilitlenir)
+  - Mobile layout: Yorum Yaz / Tüm yorumları / Soru-Cevap kısayolları
+  - reviews-v5.css tasarım sistemi
+  - Lint: @ts-nocheck pragma'larına eslint-disable + açıklama (rule bypass)
+- feat(changelog): değişiklikleri daha okunabilir hale getirildi (@ahmeetseker)
+- feat(reviews): dead code ve stil dosyalarını kaldırdı (@ahmeetseker)
+- Yorum Yaz modal: form + foto + kategori şablon cevapları (@boraydeger32)
+- Şikayet Et modal: sebep dropdown + not (@boraydeger32)
+- Q&A bottom-sheet: mobile-first soru/cevap görüntüleme (@boraydeger32)
+- Reviewer tier rozeti (Top / Trusted / Verified) trust signal (@boraydeger32)
+- Onay Bekliyor amber rozeti yorum sahibine (@boraydeger32)
+- 24h içinde Düzenle butonu (max 1 edit, sonrası reddedilir) (@boraydeger32)
+- Faydalı değil 👎 + Helpful/Not-helpful mutex pattern (@boraydeger32)
+- Mobile pdm-* kısayol butonları (Yorum Yaz / Görüntüle / Soru-Cevap) (@boraydeger32)
+- Bottom-sheet pattern: items-end sm:items-center (@boraydeger32)
+- Mobile-first responsive header butonları (@boraydeger32)
+- 374px altı küçültülmüş yazı (@boraydeger32)
+- src/api/reviewsApi.ts (@boraydeger32)
+- src/components/product/ProductQA.ts (@boraydeger32)
+- src/components/product/QAModal.ts (@boraydeger32)
+- src/components/product/WriteReviewModal.ts (@boraydeger32)
+- src/components/product/ReportAbuseModal.ts (@boraydeger32)
+- src/components/reviews/ReviewWidget.ts (@boraydeger32)
+- src/styles/reviews-v5.css (@boraydeger32)
+- Backend API entegrasyonu (mock→real): eligibility, submit, vote, update, abuse, Q&A — yeni listingService methodları (@boraydeger32)
+- Custom modal'lar: Yorum Yaz, Şikayet Et, Q&A bottom-sheet (@boraydeger32)
+- Reviewer tier rozeti (Top/Trusted/Verified) — Newcomer gizli (@boraydeger32)
+- Onay Bekliyor rozeti — sadece sahibine görünür (isOwnPending) (@boraydeger32)
+- Düzenle butonu — 24h penceresinde, max 1 edit (@boraydeger32)
+- Faydalı değil  + Helpful/Not-helpful mutex (kardeş butonlar kilitlenir) (@boraydeger32)
+- Mobile layout: Yorum Yaz / Tüm yorumları / Soru-Cevap kısayolları (@boraydeger32)
+- reviews-v5.css tasarım sistemi (@boraydeger32)
+- Lint: @ts-nocheck pragma'larına eslint-disable + açıklama (rule bypass) (@boraydeger32)
+- feat(chat-popup): mesaj kutusu arama + sağ-alt floating pencere; ürün gridine Sohbet et butonu; favori widget'i ürün kartlarıyla (@ahmeetseker)
+- feat(chat-popup): mesaj kutusunda kişi / şirket / son mesaj üzerinden anlık arama (@ahmeetseker)
+- feat(chat-popup): sohbet penceresi artık ekranın sağ-altında açılıyor, arka plan karartılmıyor — site üzerinde gezerken (@ahmeetseker)
+- feat(products): ürün listesi kartlarına "Sohbet et" butonu eklendi — Sepete Ekle ile yan yana, satıcıya doğrudan mesaj (@ahmeetseker)
+- feat(dashboard): favori ürünler kutusu artık boş ekran yerine gerçek ürün kartlarını yatay kaydırmalı gösteriyor (3 ürün + "Tümünü (@ahmeetseker)
+- feat(dashboard): yan menüde "Mesajlarım" alt menüsü yeniden açıldı (Tedarikçi Mesajları / Tekliflerim / Kişilerim) (@ahmeetseker)
+- refactor(chat): kartvizit penceresinin tasarımı yenilendi — ayrık başlık/alt bar, ülke bayrağı, daha sade kullanıcı bilgisi (@ahmeetseker)
+- refactor(chat): araç çubuğunda kullanılmayan butonlar temizlendi (konum, çeviri, buluttan fotoğraf) (@ahmeetseker)
+- refactor(style): global buton hover/press efekti sadeleştirildi — gereksiz transform/box-shadow kaldırıldı, sayfa geneli daha (@ahmeetseker)
+- chore(i18n): kartvizit "iSTOC tarafından doğrulanan hesaplar" etiketi güncellendi (@ahmeetseker)
+- feat(reviews): 2 değişiklik (@boraydeger32)
+  - review/Q&A storefront entegrasyonu + 4 kritik fix
+  - Sprint 1 — review/Q&A storefront entegrasyonu + 4 fix
+- feat(chat-popup): Sohbet Et özelliği — alıcı ile satıcı doğrudan iletişim (@ahmeetseker)
+- feat(alpine): add chatPopup global store + chatPopupRoot data wrapper (@ahmeetseker)
+- feat(chat): 16 değişiklik (@ahmeetseker)
+  - AttachmentToolbar with 7 sub-menu triggers
+  - BusinessCardForm sub-popup
+  - CallMenu sub-popup with video/voice/schedule
+  - ChatBubble — text/image/file/system variants
+  - ChatComposer with pinned product, toolbar, input and orange Gönder
+  - ChatHeader with optional back/expand/close buttons
+  - ChatMessages list with date labels and error state
+  - ContextMenu sub-popup with pin/block/delete/mute
+  - EmojiPicker sub-popup with 70 popular emojis
+  - OrderCard embedded order summary
+  - PhotoSourceMenu sub-popup
+  - PinnedProduct composer context strip
+  - QuickActionChips quick-action row
+  - SecurityBanner component
+  - add error/sending state and try-catch around service calls
+  - barrel export for chat-shared module
+- feat(chat-popup): 4 değişiklik (@ahmeetseker)
+  - ChatPopup root container with overlay, expand mode and mobile tabs
+  - InboxPanel — conversation list with tag labels and unread badge
+  - MobileTabs (Sohbet / Mesajlar) for sm screens
+  - barrel export
+- feat(data): seed mock conversations and messages (@ahmeetseker)
+- feat(i18n): 2 değişiklik (@ahmeetseker)
+  - add chat namespace keys
+  - add chat.{emptyThread,orderCard,aria,toolbar,pending} keys
+- feat(icons): add chat-popup lucide icons (@ahmeetseker)
+- feat(product): 2 değişiklik (@ahmeetseker)
+  - add Sohbet et button in 50/50 grid with Sepete Ekle
+  - wire Sohbet et click to chat-popup:open event with pinned product
+- feat(product-detail): mount ChatPopup so it can be opened from this page (@ahmeetseker)
+- feat(services): add chat service stub with mock-data promises (@ahmeetseker)
+- feat(theme): add orange palette tokens for chat composer (@ahmeetseker)
+- feat(types): define chat conversation/message interfaces (@ahmeetseker)
+- feat(utils): ref-counted scrollLock; use it in chat popup open/close (@ahmeetseker)
+- feat(faq): 3 değişiklik (@ahmeetseker)
+  - faqPage Alpine data'ya search helper'ları eklendi
+  - search bar yeniden tasarlandı
+  - eşleşme vurgusu + sidebar inline style refactor
+- feat(orders): 6 değişiklik (@ahmeetseker)
+  - detay panel için tab/ürün state'i ekle
+  - ürünler kartını ilk-5 + scroll'lu hibrit yapıya çevir
+  - boxed tab container + Kargo paneli + i18n tab etiketleri
+  - Ödeme detaylarını tab paneline taşı
+  - Tedarikçi detaylarını tab paneline taşı
+  - replace per-order item list with thumbnail strip + drawer
+- feat(header-notice): 7 değişiklik (@ahmeetseker)
+  - add storefront service with localStorage cache
+  - add HeaderNotice marquee component
+  - integrate notice render into TopBar
+  - call initHeaderNotice in main bootstrap
+  - suppress notice on payment/payments/orders pages
+  - remove icon rendering from storefront marquee
+  - add slide display mode and per-notice background color
+- feat(help-center): "Bize Ulaşın" 4'lü kart bloğu kaldırıldı (@ahmeetseker)
+- feat(floating-panel): x-show ve x-transition ekleyerek görünürlüğü iyileştirdi (@ahmeetseker)
+
+### Duzeltildi
+- fix(lint): no-unused-expressions FavoritesLayout filter sets (@boraydeger32)
+- fix(security): storefront 4 XSS sink + sample order payload + yıldız reactive (@boraydeger32)
+  - utils/sanitize.ts: escapeHtml ve safeHexColor utility'leri eklendi. DOMPurify tabanlı sanitizeHtml zaten vardı; escapeHtml template literal innerHTML interpolation'ları için, safeHexColor CSS background değerini hex regex'iyle doğrular.
+  - alpine/index.ts: Alpine.magic("safeHtml") kayıt — `x-html` binding'lerinde `$safeHtml(value)` ile DOMPurify'a yönlendirir.
+  - utils/seller/section-registry.ts:569 seller.description artık `$safeHtml(...)` ile render. Kötü niyetli satıcının vitrinine yazdığı `<img src=x onerror=...>` payload'ı buyer oturumlarını hijack edebiliyordu.
+  - components/help-center/TicketDetailLayout.ts:90 ticket.description `$safeHtml`. Destek personeli her ticket açtığında stored XSS çalışıyordu.
+  - components/product/ProductReviews.ts review card içeriği (comment, anonymized author, date, country, productTitle/Price, image URL'ler, lightbox img src) escapeHtml ile, supplierReply zengin metin barındırdığı için sanitizeHtml ile sarıldı. Yorum yazan saldırgan tüm ürün sayfası ziyaretçilerinin oturumunu alabilirdi.
+  - components/cart/overlay/SharedCartDrawer.ts:385-392 color.imageUrl escapeHtml, color.colorHex safeHexColor ile doğrulanıyor. Eski `style="background:${color.colorHex}"` CSS context injection'a açıktı (";background:url(javascript:…)" gibi).
+  - pages/checkout.ts:516-527 order item payload her item için is_sample flag taşıyor (isSampleMode bayrağından). Backend _recompute_order_items_server_side bu flag'i listing.sample_price rotasına yönlendiriyor — aksi halde numune siparişler selling_price ile faturalandığı ~5× overcharge regresyonu vardı.
+  - components/product/WriteReviewModal.ts:218-225 partial-fill yıldız `:style="'--star-fill:'+…+'%'"` string concat yerine object form `:style="{ '--star-fill': … }"` kullanıyor — aspect değişikliği reactive update'i daha güvenilir tetikler.
+- fix(ci): release workflow printf format string bug (@boraydeger32)
+- fix(chat-popup): mountChatPopup'u barrel export'a ekle (@ahmeetseker)
+- fix(release-workflows): commit body bullet'larini CHANGELOG'a dahil et (@ahmeetseker)
+- fix(changelog): beta.6 ve beta.7 release kayıtları manuel dolduruldu (@ahmeetseker)
+- fix(release-workflows): commit mesajındaki boşlukları temizlendi (@ahmeetseker)
+- fix(chat): 9 değişiklik (@ahmeetseker)
+  - BusinessCardForm Edit/Send buttons close submenu (stub)
+  - BusinessCardForm uses i18n placeholders (no leaked identity)
+  - CallMenu renders activeConversation avatar when present
+  - Shift+Enter must insert newline (move .prevent inside conditional)
+  - add aria-label to composer textarea
+  - clean up window/document listeners in chatPopupRoot destroy()
+  - flatten body-type dispatch, right-align order cards, lucide file icon, i18n labels
+  - i18n aria-labels and toolbar button labels
+  - resolve conversation by sellerId via chatService (no more first-conv fallback)
+- fix(chat-popup): 2 değişiklik (@ahmeetseker)
+  - make chat section relative so ContextMenu anchors correctly
+  - mark inbox avatar img as decorative (alt="")
+- fix(product): use existing .th-btn-outline for Sohbet et (theme parity) (@ahmeetseker)
+- fix(faq): 2 değişiklik (@ahmeetseker)
+  - focus-within koyu drop-shadow kaldırıldı
+  - siyah çizgi sorunu — border yerine ring, input focus-visible suppress
+- fix(orders): 10 değişiklik (@ahmeetseker)
+  - stepper label'larını 320px'te wrap edilebilir yap
+  - a11y polish on items drawer (focus on open, aria-labels)
+  - correct remittance event name and add aria-haspopup on drawer triggers
+  - card spacing, remove link underline, drawer sort UX
+  - symmetric card header (B layout)
+  - remove confusing left sort icon in drawer (keep only chevron)
+  - prevent hover/active layout shift on link-style buttons
+  - remove all hover state changes on link-style buttons
+  - use native select arrow only (remove custom chevron — fixes double arrow)
+  - override global :focus-visible outline on link-style buttons
+
+### Degistirildi
+- refactor(css): migrate page styles to Tailwind utilities, drop src/styles/ (@ahmeetseker)
+  - Migrate cart, checkout, seller-shop, seller-storefront ve product-detail sayfalarının custom CSS'lerini Tailwind v4 utility class'larına çevirdi. JS-toggled state'ler için `data-*` + `group-data-[...]/name:` variant pattern'i kullanıldı (parent class cascade pattern'i kaldırıldı).
+  - src/styles/ dizini tamamen silindi: * cart-design.css            (-364) * checkout-design.css        (-1032) * seller/seller-storefront.css (-291)
+  - src/style.css içindeki @media blokları, descendant selector cascade kuralları ve pseudo-element CSS'leri ilgili HTML/TS dosyalarına Tailwind utility olarak taşındı (-3239 değişiklik satırı).
+  - Component dosyalarında string template'lere doğrudan utility class zincirleri yazıldı (auth, cart, checkout, product, seller, settings, manufacturers, favorites, orders, messages, buyer-dashboard).
+  - CLAUDE.md güncellendi: @media → responsive variant, pseudo-element / nth-child / descendant / theme-var → utility eşleme tabloları, JS-toggled state → data-attribute + group variant kuralı.
+  - css-optimization-reports/refactor-progress.md fazlara göre güncellendi.
+- refactor(style): style.css ~700 satır baseline + th-btn 3D inset shadow (@ahmeetseker)
+  - style.css: `.th-btn`/`.th-btn-outline`/`.th-btn-dark` hover ve active'de inset 3D shadow + `scale-[0.98]` tıklama efekti
+  - style.css: `.th-btn-gradient` varyantı silindi → `utils/ui/button.ts` içinde `gradient` map'i `.th-btn`'e alias; SearchArea / TopBar / Cart Drawer kullanım yerleri güncellendi (inline `border-radius !important` temizliği dahil)
+  - style.css: 325 satırlık ölü gradient/utility bloğu kaldırıldı (5056 → 4878, hedef ~700)
+  - header-notice: slide-mode CSS sınıfları yerine `data-state=active|exiting` Tailwind pattern; `@theme` içine `--animate-notice-scroll` token taşındı
+  - inquiries / orders / help-center / seller / subscription: sarı pill CTA butonları için `bg-(--btn-bg,#f5b800)` + `--btn-shadow` token + hover/active inset shadow zinciri
+  - orders / subscription: link-tarzı butonlara `th-no-press` + `appearance-none focus:outline-none` — hover'da layout sıçraması yok
+  - release-workflows: commit body bullet'ları subject altında nested gösteriliyor (admin-panel / tradehub_core ile senkron)
+  - CLAUDE.md: yeni "0.0 İzin Kapısı — CSS dosyalarına yazma" bölümü; `style.css` baseline ~700 satır, `src/styles/*.css` yeni dosya yasağı, 5056 → 4878 → 700 yol haritası
+  - css-optimization-reports/UYGULAMA-PLANI.md: refactor adımları güncellendi
+- refactor(chat): 3 değişiklik (@ahmeetseker)
+  - drop dead || "" fallback in appendDraft
+  - promote Tab type to types/chat.ts as ChatTab
+  - split localTime into localTimeHHMM primitive (i18n boundary)
+- refactor(chat-popup): 2 değişiklik (@ahmeetseker)
+  - drop dead 'pinned: ""' entry from tag lookup
+  - lift click handler to initChatTriggers() shared module
+- refactor(orders): 3 değişiklik (@ahmeetseker)
+  - parsePrice'ı module scope'a taşı
+  - ürünler kartı için helpers + i18n çekimi
+  - extract order card into OrderListItem component
+- refactor(faq): submit butonu projenin th-btn standardına geçti (@ahmeetseker)
+
+---
 ## [v1.1.8-beta.19] - 2026-05-14 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
