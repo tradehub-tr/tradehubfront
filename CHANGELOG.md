@@ -34,6 +34,11 @@ Bu surum canliya alindi. v1.1.8 PROD'dan bu yana beta + RC asamasinda test edile
   - listingService: BackendStorefrontReview.aspects artık ProductReview'a map ediliyor; tip de güncellendi.
   - WriteReviewModal'daki merge conflict (HEAD vs 7aafda0) çözüldü.
   - Yeni eklenen tüm color/clip-path inline style'ları Tailwind utility arbitrary'lerine (theme-var + [clip-path:inset(...)] + CSS var atama pattern'i) çevrildi; yeni .css/<style> bloku yok.
+## [v1.1.8-beta.20] - 2026-05-15 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
 - feat(reviews): Sprint 1 — review/Q&A storefront entegrasyonu + 4 fix (@boraydeger32)
   - Yorum Yaz modal: form + foto + kategori şablon cevapları
   - Şikayet Et modal: sebep dropdown + not
@@ -389,6 +394,8 @@ Bu surum onay asamasindadir. v1.1.8 PROD'dan bu yana beta tag'lerinde test edile
 
 ### Duzeltildi
 - fix(lint): no-unused-expressions FavoritesLayout filter sets (@boraydeger32)
+
+### Duzeltildi
 - fix(security): storefront 4 XSS sink + sample order payload + yıldız reactive (@boraydeger32)
   - utils/sanitize.ts: escapeHtml ve safeHexColor utility'leri eklendi. DOMPurify tabanlı sanitizeHtml zaten vardı; escapeHtml template literal innerHTML interpolation'ları için, safeHexColor CSS background değerini hex regex'iyle doğrular.
   - alpine/index.ts: Alpine.magic("safeHtml") kayıt — `x-html` binding'lerinde `$safeHtml(value)` ile DOMPurify'a yönlendirir.
@@ -462,6 +469,7 @@ Bu surum onay asamasindadir. v1.1.8 PROD'dan bu yana beta tag'lerinde test edile
   - ürünler kartı için helpers + i18n çekimi
   - extract order card into OrderListItem component
 - refactor(faq): submit butonu projenin th-btn standardına geçti (@ahmeetseker)
+- fix(lint): no-unused-expressions FavoritesLayout filter sets (@boraydeger32)
 
 ---
 ## [v1.1.8-beta.19] - 2026-05-14 BETA
