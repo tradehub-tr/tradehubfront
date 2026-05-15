@@ -1,3 +1,49 @@
+## [v1.1.8-beta.20] - 2026-05-15 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(reviews): Sprint 1 — review/Q&A storefront entegrasyonu + 4 fix (@boraydeger32)
+  - Yorum Yaz modal: form + foto + kategori şablon cevapları
+  - Şikayet Et modal: sebep dropdown + not
+  - Q&A bottom-sheet: mobile-first soru/cevap görüntüleme
+  - Reviewer tier rozeti (Top / Trusted / Verified) trust signal
+  - Onay Bekliyor amber rozeti yorum sahibine
+  - 24h içinde Düzenle butonu (max 1 edit, sonrası reddedilir)
+  - Faydalı değil 👎 + Helpful/Not-helpful mutex pattern
+  - Mobile pdm-* kısayol butonları (Yorum Yaz / Görüntüle / Soru-Cevap)
+  - Bottom-sheet pattern: items-end sm:items-center
+  - Mobile-first responsive header butonları
+  - 374px altı küçültülmüş yazı
+  - src/api/reviewsApi.ts
+  - src/components/product/ProductQA.ts
+  - src/components/product/QAModal.ts
+  - src/components/product/WriteReviewModal.ts
+  - src/components/product/ReportAbuseModal.ts
+  - src/components/reviews/ReviewWidget.ts
+  - src/styles/reviews-v5.css
+- feat(reviews): aspect ortalamasından dinamik puan + partial-fill yıldız (@boraydeger32)
+  - WriteReviewModal: "Genel Puan" artık kullanıcı seçimi değil; 4 boyut puanının ortalaması olarak hesaplanan computed değer. Yıldızlar read-only ve clip-path tabanlı partial-fill destekler.
+  - ProductReviews: renderStars fractional rating alır (SVG layering + clip-path); displayRating() helper'ı backend Int rating yerine aspect ortalamasını kullanır. Yorum kartı, ReviewsModal ve ürün başlığı bu helper'a yönlendirildi.
+  - ProductTitleBar: ortalama Approved yorumların aspect ortalamasından yeniden hesaplanır (backend `rating` Int olduğu için 3.5 → 4 olarak kaybolur). "X yorum" tıklaması Yorumlar tab'ını açıp section'a scroll eder; rating satırı product-reviews-loaded event'iyle re-render.
+  - listingService: BackendStorefrontReview.aspects artık ProductReview'a map ediliyor; tip de güncellendi.
+  - WriteReviewModal'daki merge conflict (HEAD vs 7aafda0) çözüldü.
+  - Yeni eklenen tüm color/clip-path inline style'ları Tailwind utility arbitrary'lerine (theme-var + [clip-path:inset(...)] + CSS var atama pattern'i) çevrildi; yeni .css/<style> bloku yok.
+
+### Duzeltildi
+- fix(security): storefront 4 XSS sink + sample order payload + yıldız reactive (@boraydeger32)
+  - utils/sanitize.ts: escapeHtml ve safeHexColor utility'leri eklendi. DOMPurify tabanlı sanitizeHtml zaten vardı; escapeHtml template literal innerHTML interpolation'ları için, safeHexColor CSS background değerini hex regex'iyle doğrular.
+  - alpine/index.ts: Alpine.magic("safeHtml") kayıt — `x-html` binding'lerinde `$safeHtml(value)` ile DOMPurify'a yönlendirir.
+  - utils/seller/section-registry.ts:569 seller.description artık `$safeHtml(...)` ile render. Kötü niyetli satıcının vitrinine yazdığı `<img src=x onerror=...>` payload'ı buyer oturumlarını hijack edebiliyordu.
+  - components/help-center/TicketDetailLayout.ts:90 ticket.description `$safeHtml`. Destek personeli her ticket açtığında stored XSS çalışıyordu.
+  - components/product/ProductReviews.ts review card içeriği (comment, anonymized author, date, country, productTitle/Price, image URL'ler, lightbox img src) escapeHtml ile, supplierReply zengin metin barındırdığı için sanitizeHtml ile sarıldı. Yorum yazan saldırgan tüm ürün sayfası ziyaretçilerinin oturumunu alabilirdi.
+  - components/cart/overlay/SharedCartDrawer.ts:385-392 color.imageUrl escapeHtml, color.colorHex safeHexColor ile doğrulanıyor. Eski `style="background:${color.colorHex}"` CSS context injection'a açıktı (";background:url(javascript:…)" gibi).
+  - pages/checkout.ts:516-527 order item payload her item için is_sample flag taşıyor (isSampleMode bayrağından). Backend _recompute_order_items_server_side bu flag'i listing.sample_price rotasına yönlendiriyor — aksi halde numune siparişler selling_price ile faturalandığı ~5× overcharge regresyonu vardı.
+  - components/product/WriteReviewModal.ts:218-225 partial-fill yıldız `:style="'--star-fill:'+…+'%'"` string concat yerine object form `:style="{ '--star-fill': … }"` kullanıyor — aspect değişikliği reactive update'i daha güvenilir tetikler.
+- fix(ci): release workflow printf format string bug (@boraydeger32)
+- fix(lint): no-unused-expressions FavoritesLayout filter sets (@boraydeger32)
+
+---
 ## [v1.1.8-beta.19] - 2026-05-14 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
