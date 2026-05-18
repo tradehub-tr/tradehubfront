@@ -1,10 +1,12 @@
 /**
- * KYB Page — Entry Point (Sprint 2.6)
+ * KYC Page — Entry Point (Sprint 2.6)
  *
- * Belge Doğrulama (KYB Verification) — Sprint 2.6:
- * - Alıcı kullanıcı geldiğinde redirect ETMEZ; sayfa içinde locked banner +
- *   "Satıcı başvurusu yapın" CTA gösterir.
- * - Seller (veya pending application sahibi) ise normal KybLayout render.
+ * Alıcı KYC doğrulama sayfası. Kurumsal (default) / Bireysel toggle ile
+ * dinamik form alanları. Boxed white card layout (Image #8 stili).
+ *
+ * - Login zorunlu (Guest erişemez)
+ * - Backend get_prefill_data → form ön doldurma (KYB'den de gelir)
+ * - Submit → /api/method/...kyc.submit_kyc_documents
  */
 
 import "../style.css";
@@ -13,7 +15,6 @@ import { t } from "../i18n";
 import { startAlpine } from "../alpine";
 import { requireAuth } from "../utils/auth-guard";
 import { getUser } from "../utils/auth";
-import { routeToSellerFlow } from "../utils/sellerRouter";
 
 import { TopBar, initMobileDrawer, initHeaderCart } from "../components/header";
 import { initLanguageSelector } from "../components/header/TopBar";
@@ -21,13 +22,13 @@ import { Breadcrumb } from "../components/shared/Breadcrumb";
 import { FooterLinks } from "../components/footer";
 import { FloatingPanel, initFloatingPanel } from "../components/floating";
 import { renderSidebar, initSidebar } from "../components/sidebar";
-import { KybLayout } from "../components/kyb/KybLayout";
+import { KycLayout, initKycLayout } from "../components/kyc/KycLayout";
+import { initLockedFeatureModal } from "../components/buyer-dashboard/LockedFeatureModal";
 
-// Sprint 2.6: Login zorunlu (requireAuth), Seller/Buyer ayrımı sayfa içinde.
 await requireAuth();
 
 const user = getUser();
-const kybLocked = Boolean(user?.kyb_locked);
+const kycLocked = Boolean(user?.kyc_locked);
 
 function renderLockedFeature(): string {
   return `
@@ -39,12 +40,12 @@ function renderLockedFeature(): string {
             <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
           </svg>
         </div>
-        <h2 class="text-xl font-semibold text-gray-900 mb-2">${t("lockedFeature.kybTitle")}</h2>
-        <p class="text-sm text-gray-600 mb-6">${t("lockedFeature.kybDesc")}</p>
+        <h2 class="text-xl font-semibold text-gray-900 mb-2">${t("lockedFeature.kycTitle")}</h2>
+        <p class="text-sm text-gray-600 mb-6">${t("lockedFeature.kycDesc")}</p>
         <div class="flex flex-col sm:flex-row gap-3 justify-center">
-          <button type="button" data-kyb-start-seller-flow
-             class="th-btn px-6 py-2.5 text-sm font-semibold">
-            ${t("lockedFeature.kybCta")}
+          <button id="kyc-start-flow"
+            class="th-btn px-6 py-2.5 text-sm font-semibold">
+            ${t("lockedFeature.kycCta")}
           </button>
           <a href="/pages/dashboard/buyer-dashboard.html"
              class="px-6 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md no-underline transition-colors">
@@ -73,12 +74,12 @@ appEl.innerHTML = `
         <div class="pt-4">
           ${Breadcrumb([
             { label: t("header.myAccount"), href: "/pages/dashboard/buyer-dashboard.html" },
-            { label: t("kyb.title") },
+            { label: "KYC Doğrulama" },
           ])}
         </div>
 
-        <main>
-          ${kybLocked ? renderLockedFeature() : KybLayout()}
+        <main class="pb-8">
+          ${kycLocked ? renderLockedFeature() : KycLayout()}
         </main>
 
         <footer>
@@ -97,13 +98,25 @@ initFloatingPanel();
 initMobileDrawer();
 initLanguageSelector();
 initSidebar();
+if (!kycLocked) {
+  initKycLayout();
+}
+initLockedFeatureModal();
 
-// KYB locked CTA — smart routing (sell.ts ile aynı logic)
-document.body.addEventListener("click", async (e) => {
-  const btn = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-kyb-start-seller-flow]");
-  if (!btn) return;
-  e.preventDefault();
-  await routeToSellerFlow();
+// "KYC Doldurmaya Başla" butonu — locked görünümden form'a geçiş için
+// kullanıcının User Profile.kyc_status'unu Locked'tan Pending'e açmak gerekir.
+// Sprint 2.6: bu trigger yeni endpoint ile yapılır. Şimdilik UX placeholder.
+document.getElementById("kyc-start-flow")?.addEventListener("click", async () => {
+  try {
+    await fetch("/api/method/tradehub_core.api.v1.kyc.unlock_for_self", {
+      method: "POST",
+      credentials: "include",
+      headers: { "X-Frappe-CSRF-Token": localStorage.getItem("_csrf_token") || "" },
+    });
+    window.location.reload();
+  } catch (e) {
+    console.warn("KYC unlock failed", e);
+  }
 });
 
 startAlpine();

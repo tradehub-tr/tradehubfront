@@ -8,6 +8,7 @@ import type { CartSummaryData } from "../../../types/cart";
 import { PriceDisplay } from "../atoms/PriceDisplay";
 import { t } from "../../../i18n";
 import { getSelectedCurrency } from "../../../services/currencyService";
+import { cartStore } from "../state/CartStore";
 
 function renderThumbnailGrid(items: CartSummaryData["items"]): string {
   if (items.length === 0) return "";
@@ -92,6 +93,22 @@ export function CartSummary(data: CartSummaryData): string {
       </div>`
       }
 
+      ${
+        cartStore.hasUnverifiedSeller()
+          ? `
+      <div class="mt-4 flex items-start gap-2 px-3 py-2.5 bg-amber-50 border border-amber-300 rounded-md text-amber-800" role="alert">
+        <svg class="shrink-0 mt-0.5" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div class="text-xs leading-[1.5] flex-1 min-w-0">${t("common.cartHasUnverifiedItems")}</div>
+      </div>
+      <button type="button" disabled aria-disabled="true" class="sc-summary-checkout-btn flex items-center justify-center gap-2 w-full mt-3 th-btn-success h-12 text-center opacity-50 !cursor-not-allowed pointer-events-none" title="${t("common.cartCheckoutBlockedKyb")}">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3 4 6v6c0 4.5 3.2 8.5 8 9 4.8-.5 8-4.5 8-9V6l-8-3Z" />
+          <path d="m9 12 2 2 4-4" />
+        </svg>
+        <span data-i18n="cart.checkout">${t("cart.checkout")}</span>
+      </button>
+      `
+          : `
       <button type="button" class="sc-summary-checkout-btn flex items-center justify-center gap-2 w-full mt-4 th-btn-success h-12 text-center" @click="$dispatch('checkout-global')">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M12 3 4 6v6c0 4.5 3.2 8.5 8 9 4.8-.5 8-4.5 8-9V6l-8-3Z" />
@@ -99,6 +116,8 @@ export function CartSummary(data: CartSummaryData): string {
         </svg>
         <span data-i18n="cart.checkout">${t("cart.checkout")}</span>
       </button>
+      `
+      }
       <p class="sc-summary-checkout-warning mt-2 text-[13px] leading-[18px] text-[#dc2626] hidden"></p>
 
       <div class="mt-5 pt-5 border-t border-[#e5e5e5]">

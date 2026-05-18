@@ -39,37 +39,16 @@ import {
   type SupplierSetupFormData,
 } from "../components/auth/SupplierSetupForm";
 
-const COUNTRY_CODE_MAP: Record<string, string> = {
-  TR: "Turkey",
-  US: "United States",
-  DE: "Germany",
-  GB: "United Kingdom",
-  FR: "France",
-  IT: "Italy",
-  ES: "Spain",
-  NL: "Netherlands",
-  BE: "Belgium",
-  AT: "Austria",
-  CH: "Switzerland",
-  PL: "Poland",
-  SE: "Sweden",
-  NO: "Norway",
-  DK: "Denmark",
-  FI: "Finland",
-  RU: "Russia",
-  CN: "China",
-  JP: "Japan",
-  KR: "South Korea",
-  IN: "India",
-  AE: "United Arab Emirates",
-  SA: "Saudi Arabia",
-  AU: "Australia",
-  CA: "Canada",
-  BR: "Brazil",
-  MX: "Mexico",
-};
+import { getCountryByCode } from "../data/countries";
+
+/**
+ * AccountSetupForm'dan gelen ISO-2 ülke kodunu backend'in beklediği İngilizce
+ * uzun ada çevirir (ör. "US" → "United States"). 250 ülkeli `data/countries.ts`
+ * ile senkron — bilinmeyen kod gelirse "Turkey"'e düşer (defensive default).
+ */
 function countryCodeToEnglish(code?: string): string {
-  return (code && COUNTRY_CODE_MAP[code]) || "Turkey";
+  if (!code) return "Turkey";
+  return getCountryByCode(code)?.nameEN || "Turkey";
 }
 import { validatePassword, isPasswordValid } from "../utils/password-validation";
 
@@ -256,6 +235,8 @@ Alpine.data("registerPage", () => ({
                   first_name: formData.firstName,
                   last_name: formData.lastName,
                   registration_token: this.registration_token,
+                  // Step 3'te seçilen ülkeyi sakla — SupplierSetupForm bunu okur
+                  country_code: formData.country?.code || "TR",
                 };
                 this.goToStep("supplier-setup");
                 return;
@@ -290,7 +271,7 @@ Alpine.data("registerPage", () => ({
         case "supplier-setup": {
           const container = (this.$refs as Record<string, HTMLElement>).supplierSetupContainer;
           if (container) {
-            container.innerHTML = SupplierSetupForm();
+            container.innerHTML = SupplierSetupForm(this._setupData.country_code || "TR");
           }
           initSupplierSetupForm({
             onSubmit: async (formData: SupplierSetupFormData) => {

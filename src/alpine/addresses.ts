@@ -109,6 +109,11 @@ function emptyForm(): AddressForm {
     postal_code: "",
     note: "",
     is_default: false,
+    // Sprint 1 (2026-05-15) — Adres Mimarisi:
+    purpose: "Delivery",
+    address_type: "Individual",
+    tax_no: "",
+    tax_office: "",
   };
 }
 
@@ -268,14 +273,11 @@ Alpine.data("addressesManager", () => ({
   /* ── Validate ──────────────────────────────────── */
 
   validate(): boolean {
-    const required: (keyof AddressForm)[] = [
-      "title",
-      "contact_name",
-      "company",
-      "phone",
-      "state",
-      "street",
-    ];
+    // Sprint 1 (2026-05-15) — company sadece Business için zorunlu.
+    const required: (keyof AddressForm)[] = ["title", "contact_name", "phone", "state", "street"];
+    if (this.form.address_type === "Business") {
+      required.push("company", "tax_no", "tax_office");
+    }
     let valid = true;
     this.errors = {};
     for (const field of required) {
@@ -291,6 +293,15 @@ Alpine.data("addressesManager", () => ({
           ? "Geçerli bir telefon numarası giriniz. (örn. 0212 555 00 00)"
           : "Geçerli bir telefon numarası giriniz (7-15 rakam).";
       valid = false;
+    }
+    // VKN/TCKN basit format kontrolü (Business)
+    const taxNoRaw = (this.form.tax_no || "").trim();
+    if (this.form.address_type === "Business" && taxNoRaw) {
+      const digits = taxNoRaw.replace(/\D/g, "");
+      if (digits.length !== 10 && digits.length !== 11) {
+        this.errors.tax_no = "VKN 10 hane veya TCKN 11 hane olmalı.";
+        valid = false;
+      }
     }
     return valid;
   },

@@ -64,6 +64,8 @@ export interface ProductListingCard {
   outOfStock?: boolean;
   /** Raw listing status from backend (e.g. "Active", "Out of Stock"). */
   status?: string;
+  /** Sprint 2.6: Satıcı KYB doğrulamadı → fiyat gizle + sepete ekle disable. */
+  sellerKybVerified?: boolean;
 }
 
 /**

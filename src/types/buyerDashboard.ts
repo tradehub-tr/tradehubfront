@@ -17,6 +17,12 @@ export interface SidebarMenuItem {
   submenu?: SidebarSubmenuItem[];
   /** Sadece satıcı (veya başvurusu beklemede olan) kullanıcılarda görünür */
   requireSeller?: boolean;
+  /**
+   * Sprint 2.6: Locked durumunda görünür ama gri/disabled.
+   * Tıklanırsa modal açılır. Kontrol fonksiyonu kullanıcının session
+   * state'ine bakıp locked/aktif kararı verir.
+   */
+  lockable?: "kyc" | "kyb";
   /** Status badge için renkli nokta (yeşil/sarı/kırmızı/turuncu) */
   badgeColor?: "green" | "yellow" | "red" | "orange";
 }
@@ -43,7 +49,12 @@ export interface SidebarState {
 // NewBuyerInfo
 // ========================================
 
-export interface UserProfile {
+/**
+ * Sprint 2 — Buyer Dashboard UI state (frontend-only).
+ * Frappe DocType "User Profile" ile karıştırılmamak için BuyerUserInfo olarak
+ * rename edildi. Asıl User Profile DocType tipi: src/types/userProfile.ts
+ */
+export interface BuyerUserInfo {
   avatar: string;
   username: string;
   profileHref: string;
@@ -65,7 +76,7 @@ export interface NotificationSlide {
 }
 
 export interface NewBuyerInfoProps {
-  user: UserProfile;
+  user: BuyerUserInfo;
   stats: UserStat[];
   notifications: NotificationSlide[];
 }
@@ -164,7 +175,7 @@ export interface PromotionBannerData {
 // ========================================
 
 export interface BuyerDashboardData {
-  user: UserProfile;
+  user: BuyerUserInfo;
   stats: UserStat[];
   notifications: NotificationSlide[];
   browsingHistory: BrowsingHistoryProduct[];

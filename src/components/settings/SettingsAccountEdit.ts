@@ -6,7 +6,8 @@
 
 import { t } from "../../i18n";
 import { api } from "../../utils/api";
-import { validatePhone } from "../../utils/tr-validation";
+import { validatePhoneForCountry } from "../../utils/tr-validation";
+import { resolveCountry, ALL_COUNTRIES } from "../../data/countries";
 
 const ICONS = {
   verified: `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" fill="#22c55e"/><path d="M4.5 7l2 2 3.5-3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
@@ -84,9 +85,9 @@ async function loadDocTypeSelectOptions(doctype: string): Promise<Record<string,
 
 let selectOptions: Record<string, string[]> = {};
 
-async function loadSelectOptionsForType(accountType: string): Promise<void> {
-  const doctype = accountType === "seller" ? "Seller Profile" : "Buyer Profile";
-  selectOptions = await loadDocTypeSelectOptions(doctype);
+async function loadSelectOptionsForType(_accountType: string): Promise<void> {
+  // Sprint 2 — Tek User Profile DocType (Buyer + Seller birleşik)
+  selectOptions = await loadDocTypeSelectOptions("User Profile");
 }
 
 // ── API ──────────────────────────────────────────────────────────
@@ -149,24 +150,22 @@ function renderSelectOpts(options: string[], selected: string): string {
     .join("");
 }
 
-let _countryList: string[] = [];
-
+// Ülke listesi `data/countries.ts`'den (250 ülke). Eski Frappe API çağrısı
+// kaldırıldı; fetch imzası geriye dönük uyumluluk için no-op olarak duruyor.
 async function fetchCountryList(): Promise<void> {
-  if (_countryList.length > 0) return;
-  try {
-    const res = await api<{ message: { name: string }[] }>(
-      '/method/frappe.client.get_list?doctype=Country&fields=["name"]&limit_page_length=0&order_by=name asc'
-    );
-    _countryList = (res.message || []).map((c: { name: string }) => c.name);
-  } catch {
-    _countryList = ["Turkey"];
-  }
+  // No-op (static data).
 }
 
 function countryOptions(selected: string): string {
-  return ["", ..._countryList]
-    .map((c) => `<option value="${c}" ${c === selected ? "selected" : ""}>${c || "---"}</option>`)
-    .join("");
+  // Display Türkçe ad, value İngilizce ad — backend "Turkey"/"United States"
+  // gibi İngilizce string saklar, resolveCountry her formatı eşleştirir.
+  const selectedRecord = selected ? resolveCountry(selected) : null;
+  const selectedEN = selectedRecord?.nameEN || "";
+  const opts = ALL_COUNTRIES.map(
+    (c) =>
+      `<option value="${c.nameEN}" ${c.nameEN === selectedEN ? "selected" : ""}>${c.nameTR}</option>`
+  ).join("");
+  return `<option value="">---</option>${opts}`;
 }
 
 // ── Profile Card Renderer ────────────────────────────────────────
@@ -230,7 +229,7 @@ function buyerBasicView(d: ProfileData): string {
     </div></div>
     ${viewRow(t("settings.emailAddressField") || "Email", maskEmail(d.email), verifiedBadge)}
     ${viewRow(t("settings.phoneLabel") || "Phone", d.phone)}
-    ${viewRow(t("settings.countryRegion") || "Country", d.country)}
+    ${viewRow(t("settings.countryRegion") || "Country", d.country ? resolveCountry(d.country).nameTR : "")}
   `;
 }
 
@@ -268,7 +267,8 @@ function buyerBusinessEdit(d: ProfileData): string {
     <div class="mb-4"><label class="${labelCls}" style="color:var(--color-text-secondary)">${t("settings.companyNameLabel")}</label>
     <input type="text" class="${inputCls}" data-field="company_name" value="${d.company_name || d.business_name || ""}" /></div>
     <div class="mb-4"><label class="${labelCls}" style="color:var(--color-text-secondary)">${t("settings.addressLabel") || "Address"}</label>
-    <input type="text" class="${inputCls}" data-field="address" value="${d.address || ""}" /></div>
+    <input type="text" class="${inputCls} opacity-60 cursor-not-allowed" data-field="address" value="${d.address || ""}" disabled />
+    <p class="text-xs text-gray-500 mt-1">${t("settings.addressDisabledHint")}</p></div>
     <div class="grid grid-cols-2 max-sm:grid-cols-1 gap-4 mb-4">
       <div><label class="${labelCls}" style="color:var(--color-text-secondary)">${t("settings.jobTitleLabel")}</label>
       <input type="text" class="${inputCls}" data-field="job_title" value="${d.job_title || ""}" /></div>
@@ -341,7 +341,7 @@ function sellerBasicView(d: ProfileData): string {
     </div></div>
     ${viewRow(t("settings.emailAddressField") || "Email", maskEmail(d.email))}
     ${viewRow(t("settings.phoneLabel") || "Phone", d.phone)}
-    ${viewRow(t("settings.countryRegion") || "Country", d.country)}
+    ${viewRow(t("settings.countryRegion") || "Country", d.country ? resolveCountry(d.country).nameTR : "")}
   `;
 }
 
@@ -360,10 +360,11 @@ function sellerBusinessEdit(d: ProfileData): string {
     <input type="text" class="${inputCls}" data-field="business_name" value="${d.business_name || ""}" /></div>
     <div class="grid grid-cols-2 max-sm:grid-cols-1 gap-4 mb-4">
       <div><label class="${labelCls}" style="color:var(--color-text-secondary)">${t("settings.addressLabel") || "Address"}</label>
-      <input type="text" class="${inputCls}" data-field="address" value="${d.address || ""}" /></div>
+      <input type="text" class="${inputCls} opacity-60 cursor-not-allowed" data-field="address" value="${d.address || ""}" disabled /></div>
       <div><label class="${labelCls}" style="color:var(--color-text-secondary)">${t("settings.cityLabel") || "City"}</label>
-      <input type="text" class="${inputCls}" data-field="city" value="${d.city || ""}" /></div>
+      <input type="text" class="${inputCls} opacity-60 cursor-not-allowed" data-field="city" value="${d.city || ""}" disabled /></div>
     </div>
+    <p class="text-xs text-gray-500 -mt-2 mb-4">${t("settings.addressDisabledHint")}</p>
     <div class="grid grid-cols-2 max-sm:grid-cols-1 gap-4 mb-4">
       <div><label class="${labelCls}" style="color:var(--color-text-secondary)">${t("settings.jobTitleLabel")}</label>
       <input type="text" class="${inputCls}" data-field="job_title" value="${d.job_title || ""}" /></div>
@@ -521,9 +522,12 @@ export function initSettingsAccountEdit(): void {
           );
           return;
         }
-        if (data.phone?.trim() && !validatePhone(data.phone)) {
-          showCardMessage(cardId, t("settings.invalidPhone") || "Geçersiz telefon", "error");
-          return;
+        if (data.phone?.trim()) {
+          const countryCode = data.country ? resolveCountry(data.country).code : "TR";
+          if (!validatePhoneForCountry(data.phone, countryCode)) {
+            showCardMessage(cardId, t("settings.invalidPhone") || "Geçersiz telefon", "error");
+            return;
+          }
         }
 
         btn.setAttribute("disabled", "true");

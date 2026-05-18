@@ -6,7 +6,8 @@
 
 import { t } from "../../i18n";
 import { api } from "../../utils/api";
-import { validatePhone } from "../../utils/tr-validation";
+import { validatePhoneForCountry } from "../../utils/tr-validation";
+import { resolveCountry, ALL_COUNTRIES } from "../../data/countries";
 
 // ── Data ─────────────────────────────────────────────────────────
 
@@ -35,24 +36,22 @@ const ICONS = {
   edit: `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M11.5 2.5l2 2L5.5 12.5H3.5v-2l8-8z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
 };
 
-let _countryList: string[] = [];
-
+// Ülke listesi `data/countries.ts`'den (250 ülke, TR adı + EN adı). Eski Frappe
+// API çağrısı kaldırıldı — single source of truth artık static data file.
 async function fetchCountryList(): Promise<void> {
-  if (_countryList.length > 0) return;
-  try {
-    const res = await api<{ message: { name: string }[] }>(
-      '/method/frappe.client.get_list?doctype=Country&fields=["name"]&limit_page_length=0&order_by=name asc'
-    );
-    _countryList = (res.message || []).map((c: { name: string }) => c.name);
-  } catch {
-    _countryList = ["Turkey"];
-  }
+  // No-op (static data); imza geriye dönük uyumluluk için korundu.
 }
 
 function countryOptions(selected: string): string {
-  return ["", ..._countryList]
-    .map((c) => `<option value="${c}" ${c === selected ? "selected" : ""}>${c || "---"}</option>`)
-    .join("");
+  // Backend `country` field'ı İngilizce ad olarak saklanıyor (örn. "Turkey").
+  // Display Türkçe ad, value İngilizce ad — selected eşleşmesi nameEN üzerinden.
+  const selectedRecord = selected ? resolveCountry(selected) : null;
+  const selectedEN = selectedRecord?.nameEN || "";
+  const opts = ALL_COUNTRIES.map(
+    (c) =>
+      `<option value="${c.nameEN}" ${c.nameEN === selectedEN ? "selected" : ""}>${c.nameTR}</option>`
+  ).join("");
+  return `<option value="">---</option>${opts}`;
 }
 
 function maskEmail(email: string): string {
@@ -105,7 +104,13 @@ function renderView(d: AccountData): string {
   const verifiedBadge = d.email_verified
     ? `<span class="inline-flex items-center gap-1 text-xs font-medium" style="color:#22c55e">${ICONS.verified} ${t("settings.emailVerifiedText") || "Verified"}</span>`
     : "";
-  const addressParts = [d.address, d.city, d.country, d.postal_code].filter(Boolean).join(", ");
+  // Backend'den gelen country (örn. "Turkey", "United States") TR locale'e göre
+  // localize edilir → "Türkiye", "Amerika Birleşik Devletleri". Eşleşme yoksa
+  // resolveCountry varsayılan olarak Türkiye'ye düşer.
+  const countryDisplay = d.country ? resolveCountry(d.country).nameTR : "";
+  const addressParts = [d.address, d.city, countryDisplay, d.postal_code]
+    .filter(Boolean)
+    .join(", ");
 
   return `
     <div class="flex flex-col">
@@ -142,12 +147,13 @@ function renderEdit(d: AccountData): string {
     </div>
     <div class="mb-5">
       <label class="${labelCls}" style="color:var(--color-text-secondary)">${t("settings.addressLabel") || "Adres"}</label>
-      <input type="text" class="${inputCls}" data-field="address" value="${d.address || ""}" placeholder="${t("settings.addressLabel") || "Sokak adresi"}" />
+      <input type="text" class="${inputCls} opacity-60 cursor-not-allowed" data-field="address" value="${d.address || ""}" placeholder="${t("settings.addressLabel") || "Sokak adresi"}" disabled />
+      <p class="text-xs text-gray-500 mt-1">${t("settings.addressDisabledHint")}</p>
     </div>
     <div class="grid grid-cols-3 max-sm:grid-cols-1 gap-4 mb-5">
       <div>
         <label class="${labelCls}" style="color:var(--color-text-secondary)">${t("settings.cityLabel") || "Şehir"}</label>
-        <input type="text" class="${inputCls}" data-field="city" value="${d.city || ""}" />
+        <input type="text" class="${inputCls} opacity-60 cursor-not-allowed" data-field="city" value="${d.city || ""}" disabled />
       </div>
       <div>
         <label class="${labelCls}" style="color:var(--color-text-secondary)">* ${t("settings.countryRegion") || "Ülke"}</label>
@@ -155,7 +161,7 @@ function renderEdit(d: AccountData): string {
       </div>
       <div>
         <label class="${labelCls}" style="color:var(--color-text-secondary)">${t("settings.postalCodeLabel") || "Posta Kodu"}</label>
-        <input type="text" class="${inputCls}" data-field="postal_code" value="${d.postal_code || ""}" />
+        <input type="text" class="${inputCls} opacity-60 cursor-not-allowed" data-field="postal_code" value="${d.postal_code || ""}" disabled />
       </div>
     </div>
     <div class="mb-5">
@@ -243,9 +249,14 @@ export function initSettingsMyAccount(): void {
         showMessage(t("settings.nameRequired") || "Ad ve soyad gerekli", "error");
         return;
       }
-      if (data.phone?.trim() && !validatePhone(data.phone)) {
-        showMessage(t("settings.invalidPhone") || "Geçersiz telefon", "error");
-        return;
+      // Telefon doğrulama, kullanıcının seçtiği ülkeye göre yapılır (form'daki
+      // ülke alanı backend country adı taşıyor — ISO koda resolve edilir).
+      if (data.phone?.trim()) {
+        const countryCode = data.country ? resolveCountry(data.country).code : "TR";
+        if (!validatePhoneForCountry(data.phone, countryCode)) {
+          showMessage(t("settings.invalidPhone") || "Geçersiz telefon", "error");
+          return;
+        }
       }
 
       const submitBtn = document.getElementById("ma-submit") as HTMLButtonElement;

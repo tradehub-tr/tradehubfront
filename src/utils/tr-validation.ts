@@ -39,6 +39,31 @@ export function validatePhone(value: string, prefix?: string): boolean {
   return INTL_PHONE_RE.test(digitsOnly);
 }
 
+/**
+ * ISO-2 ülke koduna göre telefon doğrulaması.
+ * - TR (veya kod yok): TR sabit+mobil regex (`^(\+90|0)?[2-5]\d{9}$`).
+ * - Diğer ülkeler: gevşek E.164 (7-15 hane, opsiyonel + öneki).
+ */
+export function validatePhoneForCountry(value: string, countryCode?: string): boolean {
+  const normalized = normalizePhone(value);
+  if (!normalized) return false;
+  if (!countryCode || countryCode.toUpperCase() === "TR") {
+    return PHONE_RE.test(normalized);
+  }
+  const digitsOnly = normalized.replace(/^\+?/, "");
+  return INTL_PHONE_RE.test(digitsOnly);
+}
+
+/**
+ * Ülkeye göre placeholder. TR için yerel format, diğerleri için E.164 jenerik.
+ */
+export function getPhonePlaceholderForCountry(countryCode?: string): string {
+  if (!countryCode || countryCode.toUpperCase() === "TR") {
+    return "05XX XXX XX XX";
+  }
+  return "+1 555 123 4567";
+}
+
 /* ── TCKN (TC Kimlik No — 11 digit, mod-10) ────────── */
 
 export function validateTCKN(value: string): boolean {
