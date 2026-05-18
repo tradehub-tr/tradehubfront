@@ -35,6 +35,29 @@ export function SupplierCard({ supplier, isSingleSupplier = true }: SupplierCard
   const supplierIndeterminate =
     selectedSupplierSkus > 0 && selectedSupplierSkus < totalSupplierSkus;
 
+  // Sprint 2.6: KYB doğrulanmamış satıcı → sepette uyarı + ödeme butonu disable.
+  const kybBlocked = supplier.sellerKybVerified === false;
+  const kybBannerHtml = kybBlocked
+    ? `
+      <div class="flex items-start gap-2 mx-4 my-2 px-3 py-2.5 bg-amber-50 border border-amber-300 rounded-md text-amber-800" role="alert">
+        <svg class="shrink-0 mt-0.5" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div class="text-xs leading-[1.5] flex-1 min-w-0">
+          <div class="font-semibold mb-0.5">${t("common.kybGateBannerTitle")}</div>
+          <div>${t("common.cartItemUnverifiedSeller")}</div>
+        </div>
+      </div>
+    `
+    : "";
+
+  const checkoutBtnHtml = kybBlocked
+    ? `<button type="button" disabled aria-disabled="true" class="${btn({ variant: "primary", size: "sm" })} sc-c-supplier-checkout-btn max-md:text-center opacity-50 !cursor-not-allowed pointer-events-none" title="${t("common.cartCheckoutBlockedKyb")}">
+            ${t("cart.payThisSupplier")}
+          </button>`
+    : `<button type="button" class="${btn({ variant: "primary", size: "sm" })} sc-c-supplier-checkout-btn max-md:text-center"
+                  @click.stop="$dispatch('checkout-supplier', { supplierId: '${escapeHtml(supplier.id)}' })">
+            ${t("cart.payThisSupplier")}
+          </button>`;
+
   return `
     <section class="sc-c-supplier-container rounded-2xl border border-[#e8e6e0] bg-white shadow-[0_1px_2px_rgba(20,20,18,0.04)] overflow-hidden"
       data-supplier-id="${escapeHtml(supplier.id)}"
@@ -56,12 +79,10 @@ export function SupplierCard({ supplier, isSingleSupplier = true }: SupplierCard
         </div>
         <div class="sc-c-supplier-total flex items-center gap-3 text-sm font-bold text-text-primary whitespace-nowrap max-md:flex-col max-md:items-stretch max-md:gap-1.5 shrink-0">
           <span class="sc-c-supplier-total-text text-[13px] font-medium text-[#4a4a48] whitespace-nowrap [&_strong]:text-[#1a1a1a] [&_strong]:font-bold [&_strong]:ml-1 [&_b]:text-[#1a1a1a] [&_b]:font-bold [&_b]:ml-1" x-show="!expanded" ${isOpen ? "x-cloak" : ""}></span>
-          <button type="button" class="${btn({ variant: "primary", size: "sm" })} sc-c-supplier-checkout-btn max-md:text-center"
-                  @click.stop="$dispatch('checkout-supplier', { supplierId: '${escapeHtml(supplier.id)}' })">
-            ${t("cart.payThisSupplier")}
-          </button>
+          ${checkoutBtnHtml}
         </div>
       </header>
+      ${kybBannerHtml}
       <div class="sc-c-supplier-content p-[4px_16px_12px] max-[720px]:p-[4px_14px_12px] transition-all duration-300"
         x-show="expanded" ${!isOpen ? "x-cloak" : ""}>${products}</div>
     </section>

@@ -216,6 +216,11 @@ export interface BuyerAddressData {
   postal_code: string;
   note: string;
   is_default: boolean;
+  // Sprint 1 (2026-05-15) — Adres Mimarisi:
+  purpose?: "Delivery" | "Pickup" | "Billing";
+  address_type?: "Individual" | "Business";
+  tax_no?: string;
+  tax_office?: string;
 }
 
 /** Kullanıcının tüm adreslerini çeker. */

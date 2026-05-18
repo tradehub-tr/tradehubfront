@@ -163,6 +163,16 @@ export class CartStore {
     return this.getSelectedSkuMoqViolations().length > 0;
   }
 
+  /**
+   * Sprint 2.6: Sepette KYB doğrulamadığı tespit edilen en az bir satıcı varsa
+   * true döner. Backend get_cart yanıtında alan yoksa undefined olur ve
+   * "doğrulanmış" kabul edilir (graceful fallback). Checkout butonu bu sinyale
+   * göre devre dışı bırakılır.
+   */
+  hasUnverifiedSeller(): boolean {
+    return this.suppliers.some((s) => s.sellerKybVerified === false);
+  }
+
   getAllSkus(): CartSku[] {
     const all: CartSku[] = [];
     for (const supplier of this.suppliers) {

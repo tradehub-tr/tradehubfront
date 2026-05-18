@@ -595,6 +595,9 @@ window.addEventListener('checkout:confirm-order', () => {
       const { isEmailNotVerifiedError } = await import('../utils/api');
       if (isEmailNotVerifiedError(err)) return; // toast api.ts'te zaten gösterildi
       const msg = (err as { message?: string })?.message || t('checkout.orderCreateError') || 'Sipariş oluşturulamadı. Lütfen tekrar deneyin.';
+      // Sprint 2.6 (revised): KYC gate hatası → modal aç, sepet korunur.
+      const { openKycRequiredModal } = await import('../components/checkout/KycRequiredModal');
+      if (openKycRequiredModal(msg)) return;
       showToast({ message: msg, type: 'error', duration: 5000 });
     });
 });
@@ -727,10 +730,45 @@ startAlpine();
 initStickyHeights();
 initCheckoutMinimalHeader(); // Logout button click handler
 
+// Sprint 2.6: Checkout sayfasında KYB doğrulanmamış satıcının ürünü varsa
+// "Ödeme Yap" butonu disable + üstte amber uyarı banner göster.
+const hasUnverifiedSeller = cartStore.getSuppliers()
+  .filter(s => supplierFilter.length === 0 || supplierFilter.includes(s.id))
+  .some(s => s.sellerKybVerified === false);
+
+if (hasUnverifiedSeller) {
+  const main = document.querySelector('main');
+  if (main) {
+    const banner = document.createElement('div');
+    banner.className = 'max-w-[1680px] mx-auto mt-4 px-4';
+    banner.innerHTML = `
+      <div class="flex items-start gap-3 px-4 py-3.5 bg-amber-50 border border-amber-300 rounded-lg text-amber-800" role="alert">
+        <svg class="shrink-0 mt-0.5" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div class="text-sm leading-[1.5] flex-1 min-w-0">
+          <div class="font-semibold mb-1">${t('common.checkoutBlockedKybTitle')}</div>
+          <div class="text-xs">${t('common.checkoutBlockedKybBody')}</div>
+        </div>
+        <a href="/pages/cart.html" class="shrink-0 inline-flex items-center px-3 py-1.5 text-xs font-semibold text-amber-900 bg-amber-100 hover:bg-amber-200 rounded border border-amber-300 no-underline transition-colors">${t('common.checkoutBackToCart')}</a>
+      </div>
+    `;
+    main.insertBefore(banner, main.firstChild);
+  }
+}
+
 // Place Order → open review modal
 const placeOrderBtn = document.getElementById('summary-place-order-btn');
 if (placeOrderBtn) {
+  if (hasUnverifiedSeller) {
+    (placeOrderBtn as HTMLButtonElement).disabled = true;
+    placeOrderBtn.setAttribute('aria-disabled', 'true');
+    placeOrderBtn.classList.add('opacity-50', '!cursor-not-allowed', 'pointer-events-none');
+    placeOrderBtn.setAttribute('title', t('common.cartCheckoutBlockedKyb'));
+  }
   placeOrderBtn.addEventListener('click', () => {
+    if (hasUnverifiedSeller) {
+      showToast({ message: t('common.cartCheckoutBlockedKyb'), type: 'error', duration: 5000 });
+      return;
+    }
     // Validate shipping address before opening review
     const shippingSection = document.getElementById('shipping-address-section');
     if (shippingSection) {

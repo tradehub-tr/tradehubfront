@@ -226,8 +226,17 @@ async function renderProductPage() {
       <button type="button" id="pdm-bar-chat" class="pdm-bar-chat-btn w-12 max-[374px]:w-9 h-11 max-[374px]:h-9 border border-border-medium rounded-[22px] max-[374px]:rounded-[18px] bg-surface flex items-center justify-center cursor-pointer text-text-body p-0 active:bg-[var(--color-surface-raised,#f5f5f5)]" aria-label="Sohbet">
         <svg class="max-[374px]:w-[18px] max-[374px]:h-[18px]" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
       </button>
+      ${
+        product.sellerKybVerified === false
+          ? `
+      <button type="button" id="pdm-bar-cart" disabled aria-disabled="true" class="pdm-bar-cart-btn th-btn-outline h-11 max-[374px]:h-9 max-[374px]:text-[11px] max-[374px]:rounded-[18px] max-[374px]:px-2 text-sm font-semibold opacity-50 !cursor-not-allowed pointer-events-none whitespace-nowrap overflow-hidden text-ellipsis min-w-0" title="${t('common.addToCartDisabledKyb')}">${t('product.addToCart')}</button>
+      <button type="button" id="pdm-bar-order" disabled aria-disabled="true" class="pdm-bar-order-btn th-btn-dark h-11 max-[374px]:h-9 max-[374px]:text-[11px] max-[374px]:rounded-[18px] max-[374px]:px-2 opacity-50 !cursor-not-allowed pointer-events-none whitespace-nowrap overflow-hidden text-ellipsis min-w-0" title="${t('common.addToCartDisabledKyb')}">${t('product.startOrder')}</button>
+          `
+          : `
       <button type="button" id="pdm-bar-cart" data-add-to-cart="${product.id}" class="pdm-bar-cart-btn th-btn-outline h-11 max-[374px]:h-9 max-[374px]:text-[11px] max-[374px]:rounded-[18px] max-[374px]:px-2 text-sm font-semibold cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis min-w-0 transition-[background] duration-150 active:bg-[var(--btn-outline-hover-bg,var(--color-surface-raised,#f5f5f5))]">${t('product.addToCart')}</button>
       <button type="button" id="pdm-bar-order" class="pdm-bar-order-btn th-btn-dark h-11 max-[374px]:h-9 max-[374px]:text-[11px] max-[374px]:rounded-[18px] max-[374px]:px-2 whitespace-nowrap overflow-hidden text-ellipsis min-w-0 transition-[background] duration-150 active:bg-[var(--btn-hover-bg,var(--btn-bg))]">${t('product.startOrder')}</button>
+          `
+      }
     </div>
   `;
 
