@@ -51,7 +51,6 @@ export {
   validatePassword,
   isPasswordValid,
   getCountryByCode,
-  countryOptions,
   type CountryOption,
   type AccountSetupFormOptions,
   type AccountSetupFormData,
