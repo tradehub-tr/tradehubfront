@@ -39,18 +39,30 @@ function getSectionI18nKey(section: SidebarSection): string | undefined {
 }
 
 /**
- * Renders a single sidebar section with optional title and items.
+ * Sprint 2.6: Item visibility + lockable state.
+ * - requireSeller (legacy): sadece is_seller veya pending_seller_application
+ * - lockable: "kyc" | "kyb" — her zaman görünür ama session state'e göre locked
+ *   olabilir. Locked item gri + cursor-not-allowed + tıklanırsa modal.
  */
-/**
- * Item kullanıcının rolüne göre görünür mü?
- * - requireSeller flag'i varsa sadece is_seller veya pending_seller_application
- *   olan kullanıcılarda render edilir.
- */
-function isItemVisible(item: SidebarMenuItem): boolean {
-  if (!item.requireSeller) return true;
+function getItemState(item: SidebarMenuItem): { visible: boolean; locked: boolean } {
   const user = getUser();
-  if (!user) return false;
-  return Boolean(user.is_seller || user.pending_seller_application);
+
+  // Legacy: requireSeller flag — sadece satıcı/başvuru sahibi görür
+  if (item.requireSeller) {
+    if (!user) return { visible: false, locked: false };
+    const isSeller = Boolean(user.is_seller || user.pending_seller_application);
+    return { visible: isSeller, locked: false };
+  }
+
+  // Sprint 2.6: lockable item — herkes görür, kilit session state'inden gelir
+  if (item.lockable === "kyc") {
+    return { visible: true, locked: Boolean(user?.kyc_locked) };
+  }
+  if (item.lockable === "kyb") {
+    return { visible: true, locked: Boolean(user?.kyb_locked) };
+  }
+
+  return { visible: true, locked: false };
 }
 
 function renderSection(section: SidebarSection, expanded: boolean): string {
@@ -61,12 +73,14 @@ function renderSection(section: SidebarSection, expanded: boolean): string {
     title = `<h3 class="sidebar__section-title hidden px-7 pt-5 pb-2 text-xs font-normal uppercase tracking-wider text-gray-400 dark:text-gray-500 xl:block"${i18nAttr}>${section.title}</h3>`;
   }
 
-  const visibleItems = section.items.filter(isItemVisible);
+  const visibleItems = section.items
+    .map((item) => ({ item, state: getItemState(item) }))
+    .filter(({ state }) => state.visible);
   if (visibleItems.length === 0) return "";
 
   const items = visibleItems
-    .map((item) => {
-      const menuItem = renderSidebarMenuItem({ item, expanded });
+    .map(({ item, state }) => {
+      const menuItem = renderSidebarMenuItem({ item, expanded, locked: state.locked });
       const flyout = item.submenu?.length ? renderSidebarFlyout({ item }) : "";
       return `
         <div class="sidebar__item-wrapper relative" data-sidebar-wrapper="${item.id}">
