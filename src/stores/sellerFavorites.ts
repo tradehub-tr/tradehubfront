@@ -56,10 +56,22 @@ function saveState(state: State): void {
   const raw = localStorage.getItem(oldKey);
   if (!raw) return;
   try {
-    const arr = JSON.parse(raw);
+    /** v1 storage shape — v2'ye migrate edilecek legacy kayıt */
+    interface LegacyFavoriteSeller {
+      code: string;
+      name?: string;
+      city?: string;
+      country?: string;
+      logo?: string;
+      cover?: string;
+      rating?: number;
+      reviewCount?: number;
+      addedAt?: number;
+    }
+    const arr = JSON.parse(raw) as LegacyFavoriteSeller[];
     if (!Array.isArray(arr)) return;
     const migrated: State = {
-      items: arr.map((s: any) => ({
+      items: arr.map((s) => ({
         code: s.code,
         name: s.name || "",
         city: s.city,

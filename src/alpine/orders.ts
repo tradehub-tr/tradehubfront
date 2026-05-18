@@ -3,6 +3,52 @@ import { t } from "../i18n";
 import { callMethod } from "../utils/api";
 import { orderStore } from "../components/orders/state/OrderStore";
 import { getOrderTabs, getOrderFilters } from "../components/buyer-dashboard/ordersData";
+import type { Order, OrderProduct } from "../types/order";
+
+// Backend get_payment_records API response satırları (snake_case alanlar)
+interface PaymentRecord {
+  name: string;
+  payment_date: string | null;
+  method: string;
+  amount: number;
+  currency: string;
+  status: string;
+}
+
+interface RefundRecord {
+  name: string;
+  payment_date: string | null;
+  reason: string;
+  amount: number;
+  currency: string;
+  status: string;
+}
+
+interface WireTransferRecord {
+  name: string;
+  payment_date: string | null;
+  reference: string;
+  amount: number;
+  currency: string;
+  status: string;
+  receipt_url: string;
+}
+
+// get_my_refunds API satırı (Order alanlarına ek refund detayları)
+interface RefundSummary {
+  order_number: string;
+  refund_status: string;
+  refund_reason?: string;
+  refund_amount?: number;
+  currency?: string;
+  refund_requested_at?: string | null;
+  [key: string]: unknown;
+}
+
+// Hata mesajı alanı olan callMethod exception'ı için yardımcı tip
+interface ApiError {
+  message?: string;
+}
 
 export const ORDER_STATUS_MAP: Record<string, string[]> = {
   all: [],
@@ -17,7 +63,7 @@ export const ORDER_STATUS_MAP: Record<string, string[]> = {
   closed: ["Cancelled"],
 };
 
-function parsePrice(v: any): number {
+function parsePrice(v: unknown): number {
   const num = parseFloat(String(v).replace(/,/g, ""));
   return isNaN(num) ? 0 : num;
 }
@@ -33,9 +79,9 @@ Alpine.data("ordersListComponent", () => ({
   dateTo: "",
   dateOpen: false,
   timeOpen: false,
-  selectedOrder: null as any,
+  selectedOrder: null as Order | null,
   copiedNumber: false,
-  orders: [] as any[],
+  orders: [] as Order[],
   loading: true,
   error: "",
 
@@ -69,13 +115,13 @@ Alpine.data("ordersListComponent", () => ({
     // URL'de ?order=XXX varsa o siparişi otomatik aç (bildirim tıklama akışı)
     const urlOrder = new URLSearchParams(window.location.search).get("order");
     if (urlOrder) {
-      const match = this.orders.find((o: any) => o.orderNumber === urlOrder);
+      const match = this.orders.find((o) => o.orderNumber === urlOrder);
       if (match) this.selectedOrder = match;
     }
   },
 
   get filteredOrders() {
-    return this.orders.filter((o: any) => {
+    return this.orders.filter((o) => {
       // Status filter
       const allowedStatuses = ORDER_STATUS_MAP[this.activeTab];
       const matchStatus =
@@ -87,7 +133,7 @@ Alpine.data("ordersListComponent", () => ({
         !q ||
         o.orderNumber.toLowerCase().includes(q) ||
         o.seller.toLowerCase().includes(q) ||
-        o.products.some((p: any) => p.name.toLowerCase().includes(q));
+        o.products.some((p) => p.name.toLowerCase().includes(q));
 
       // Date filter
       let matchDate = true;
@@ -111,30 +157,30 @@ Alpine.data("ordersListComponent", () => ({
     });
   },
 
-  get filteredProducts() {
-    if (!this.selectedOrder) return [] as any[];
-    const products = (this.selectedOrder as any).products as any[];
+  get filteredProducts(): OrderProduct[] {
+    if (!this.selectedOrder) return [];
+    const products = this.selectedOrder.products;
     const q = this.productSearch.trim().toLowerCase();
     const filtered = q
-      ? products.filter((p: any) => String(p.name).toLowerCase().includes(q))
+      ? products.filter((p) => String(p.name).toLowerCase().includes(q))
       : products.slice();
 
     if (this.productSort === "name-asc") {
-      filtered.sort((a: any, b: any) => String(a.name).localeCompare(String(b.name), "tr"));
+      filtered.sort((a, b) => String(a.name).localeCompare(String(b.name), "tr"));
     } else if (this.productSort === "name-desc") {
-      filtered.sort((a: any, b: any) => String(b.name).localeCompare(String(a.name), "tr"));
+      filtered.sort((a, b) => String(b.name).localeCompare(String(a.name), "tr"));
     } else if (this.productSort === "price-asc") {
-      filtered.sort((a: any, b: any) => parsePrice(a.totalPrice) - parsePrice(b.totalPrice));
+      filtered.sort((a, b) => parsePrice(a.totalPrice) - parsePrice(b.totalPrice));
     } else if (this.productSort === "price-desc") {
-      filtered.sort((a: any, b: any) => parsePrice(b.totalPrice) - parsePrice(a.totalPrice));
+      filtered.sort((a, b) => parsePrice(b.totalPrice) - parsePrice(a.totalPrice));
     }
     return filtered;
   },
 
   get selectedOrderTotal(): string {
     if (!this.selectedOrder) return "";
-    const total = (this.selectedOrder as any).products.reduce(
-      (s: number, p: any) => s + parsePrice(p.totalPrice),
+    const total = this.selectedOrder.products.reduce(
+      (s: number, p) => s + parsePrice(p.totalPrice),
       0
     );
     return total.toLocaleString("en-US", { minimumFractionDigits: 2 });
@@ -142,10 +188,7 @@ Alpine.data("ordersListComponent", () => ({
 
   get selectedOrderQty(): number {
     if (!this.selectedOrder) return 0;
-    return (this.selectedOrder as any).products.reduce(
-      (s: number, p: any) => s + (p.quantity ?? 0),
-      0
-    );
+    return this.selectedOrder.products.reduce((s: number, p) => s + (p.quantity ?? 0), 0);
   },
 
   get productSortLabel(): string {
@@ -170,10 +213,10 @@ Alpine.data("ordersListComponent", () => ({
   tabCount(tabId: string) {
     const allowedStatuses = ORDER_STATUS_MAP[tabId];
     if (!allowedStatuses || allowedStatuses.length === 0) return this.orders.length;
-    return this.orders.filter((o: any) => allowedStatuses.includes(o.status)).length;
+    return this.orders.filter((o) => allowedStatuses.includes(o.status)).length;
   },
 
-  viewDetail(order: any) {
+  viewDetail(order: Order) {
     this.selectedOrder = order;
     window.scrollTo({ top: 0 });
   },
@@ -229,7 +272,7 @@ Alpine.data("ordersListComponent", () => ({
 
   copyOrderNumber() {
     if (!this.selectedOrder) return;
-    navigator.clipboard.writeText((this.selectedOrder as any).orderNumber);
+    navigator.clipboard.writeText(this.selectedOrder.orderNumber);
     this.copiedNumber = true;
     setTimeout(() => {
       this.copiedNumber = false;
@@ -247,7 +290,7 @@ Alpine.data("ordersListComponent", () => ({
   showContract: false,
   paymentHistoryTab: "records",
   cancelReason: "",
-  cancellingOrder: null as any,
+  cancellingOrder: null as Order | null,
 
   // Kargo hizmet türü — dinamik
   shippingMethods: [] as {
@@ -268,18 +311,18 @@ Alpine.data("ordersListComponent", () => ({
   refundBlocked: false,
 
   // Payment history data (API-driven)
-  paymentRecords: [] as any[],
-  refundRecords: [] as any[],
-  wireRecords: [] as any[],
+  paymentRecords: [] as PaymentRecord[],
+  refundRecords: [] as RefundRecord[],
+  wireRecords: [] as WireTransferRecord[],
   paymentLoading: false,
 
   openModal(name: string) {
-    (this as any)[name] = true;
+    (this as unknown as Record<string, unknown>)[name] = true;
     document.body.style.overflow = "hidden";
 
     // Ödeme geçmişi modal'ı açılırken API'den veri çek
     if (name === "showPaymentHistory" && this.selectedOrder) {
-      this.fetchPaymentRecords((this.selectedOrder as any).orderNumber);
+      this.fetchPaymentRecords(this.selectedOrder.orderNumber);
     }
 
     // Kargo değişiklik modal'ı açılırken kargo hizmet türlerini backend'den çek
@@ -303,7 +346,7 @@ Alpine.data("ordersListComponent", () => ({
       }>("tradehub_core.api.listing.get_shipping_methods");
       this.shippingMethods = result?.data ?? [];
       // Mevcut siparişin kargo yöntemini seç, yoksa ilki
-      const currentMethod = (this.selectedOrder as any)?.shipping?.method ?? "";
+      const currentMethod = this.selectedOrder?.shipping?.method ?? "";
       const match = this.shippingMethods.find(
         (m) => m.method === currentMethod || m.id === currentMethod
       );
@@ -324,9 +367,9 @@ Alpine.data("ordersListComponent", () => ({
     try {
       const result = await callMethod<{
         success: boolean;
-        payments: any[];
-        refunds: any[];
-        wire_transfers: any[];
+        payments: PaymentRecord[];
+        refunds: RefundRecord[];
+        wire_transfers: WireTransferRecord[];
       }>("tradehub_core.api.order.get_payment_records", { order_number: orderNumber });
 
       if (result?.success) {
@@ -342,12 +385,12 @@ Alpine.data("ordersListComponent", () => ({
   },
 
   closeModal(name: string) {
-    (this as any)[name] = false;
+    (this as unknown as Record<string, unknown>)[name] = false;
     document.body.style.overflow = "";
   },
 
   async confirmCancelOrder() {
-    const order = (this.cancellingOrder || this.selectedOrder) as any;
+    const order = this.cancellingOrder || this.selectedOrder;
     if (!order || !this.cancelReason) return;
 
     await orderStore.cancelOrder(order.orderNumber, this.cancelReason);
@@ -355,12 +398,12 @@ Alpine.data("ordersListComponent", () => ({
     this.cancelReason = "";
     this.cancellingOrder = null;
     this.closeModal("showCancelOrder");
-    if (this.selectedOrder && (this.selectedOrder as any).orderNumber === order.orderNumber) {
+    if (this.selectedOrder && this.selectedOrder.orderNumber === order.orderNumber) {
       this.selectedOrder = null;
     }
   },
 
-  getStepIndex(order: any) {
+  getStepIndex(order: Order | null) {
     if (!order) return -1;
     if (order.status === "Cancelled") return -2;
     // Receipt yüklendi ama satıcı henüz onaylamadı → Ödeme adımı aktif (index 1)
@@ -372,7 +415,7 @@ Alpine.data("ordersListComponent", () => ({
     return 0;
   },
 
-  getStatusLabel(order: any): string {
+  getStatusLabel(order: Order | null): string {
     if (!order) return "";
     // İade durumu ana statüden önce gelir
     if (order.refundStatus === "Pending") return "İade İnceleniyor";
@@ -391,7 +434,7 @@ Alpine.data("ordersListComponent", () => ({
     return labels[order.status] || order.status || "Bilinmeyen Durum";
   },
 
-  getStatusDescription(order: any): string {
+  getStatusDescription(order: Order | null): string {
     if (!order) return "";
     // İade durumu açıklamaları
     if (order.refundStatus === "Pending") {
@@ -415,7 +458,7 @@ Alpine.data("ordersListComponent", () => ({
     return order.statusDescription || "";
   },
 
-  getStatusColor(order: any): string {
+  getStatusColor(order: Order | null): string {
     if (!order) return "text-gray-500";
     // İade renkleri
     if (order.refundStatus === "Pending") return "text-orange-600";
@@ -428,38 +471,38 @@ Alpine.data("ordersListComponent", () => ({
     return order.statusColor || "text-gray-500";
   },
 
-  hasActiveRefund(order: any): boolean {
-    return order && ["Pending", "Approved", "Rejected"].includes(order.refundStatus);
+  hasActiveRefund(order: Order | null): boolean {
+    return !!order && ["Pending", "Approved", "Rejected"].includes(order.refundStatus);
   },
 
   // İade adım barı index'i: 0=talep edildi, 1=inceleniyor, 2=sonuçlandı
-  getRefundStepIndex(order: any): number {
+  getRefundStepIndex(order: Order | null): number {
     if (!order) return 0;
     if (order.refundStatus === "Pending") return 1;
     if (order.refundStatus === "Approved" || order.refundStatus === "Rejected") return 2;
     return 0;
   },
 
-  getRefundStepColor(order: any): string {
+  getRefundStepColor(order: Order | null): string {
     if (order?.refundStatus === "Rejected") return "bg-red-500";
     if (order?.refundStatus === "Approved") return "bg-emerald-500";
     return "bg-orange-500";
   },
 
-  isCancelled(order: any) {
+  isCancelled(order: Order | null) {
     return order?.status === "Cancelled";
   },
 
-  isActionable(order: any) {
-    return order && order.status !== "Cancelled" && order.status !== "Completed";
+  isActionable(order: Order | null) {
+    return !!order && order.status !== "Cancelled" && order.status !== "Completed";
   },
 
-  canPay(order: any) {
-    return order && order.status === "Waiting for payment" && !order.receiptUrl;
+  canPay(order: Order | null) {
+    return !!order && order.status === "Waiting for payment" && !order.receiptUrl;
   },
 
-  hasReceipt(order: any) {
-    return order && !!order.receiptUrl;
+  hasReceipt(order: Order | null) {
+    return !!order && !!order.receiptUrl;
   },
 
   openRemittanceModal(
@@ -475,7 +518,7 @@ Alpine.data("ordersListComponent", () => ({
     );
   },
 
-  async downloadInvoice(order: any) {
+  async downloadInvoice(order: Order | null) {
     if (!order) return;
     try {
       const res = await callMethod<{ html: string; filename: string }>(
@@ -490,12 +533,12 @@ Alpine.data("ordersListComponent", () => ({
           setTimeout(() => URL.revokeObjectURL(url), 10000);
         }
       }
-    } catch (err: any) {
+    } catch (err) {
       console.warn("[Orders] Invoice download failed:", err);
     }
   },
 
-  openRefundModal(order: any) {
+  openRefundModal(order: Order | null) {
     if (!order) return;
     // Kargoya verilmemiş veya teslim edilmemişse iade yapılamaz
     if (!this.canRefund(order)) {
@@ -529,7 +572,7 @@ Alpine.data("ordersListComponent", () => ({
   },
 
   async submitRefundRequest() {
-    const order = this.selectedOrder as any;
+    const order = this.selectedOrder;
     if (!order || !this.refundForm.reason.trim()) return;
     this.submittingRefund = true;
     this.refundError = "";
@@ -544,15 +587,15 @@ Alpine.data("ordersListComponent", () => ({
         true
       );
       this.refundSuccess = true;
-    } catch (err: any) {
-      this.refundError = err?.message || "Bir hata oluştu.";
+    } catch (err) {
+      this.refundError = (err as ApiError)?.message || "Bir hata oluştu.";
     } finally {
       this.submittingRefund = false;
     }
   },
 
   // Kargoya verilmiş veya teslim edilmişse iade edilebilir
-  canRefund(order: any): boolean {
+  canRefund(order: Order | null): boolean {
     if (!order) return false;
     if (!["Delivering", "Completed"].includes(order.status)) return false;
     // Zaten aktif iade varsa tekrar açılamaz
@@ -561,7 +604,7 @@ Alpine.data("ordersListComponent", () => ({
   },
 
   // Kargoya verilmemiş veya teslim edilmemişse iptal edilebilir
-  canCancel(order: any): boolean {
+  canCancel(order: Order | null): boolean {
     if (!order) return false;
     if (["Cancelled", "Completed", "Delivering"].includes(order.status)) return false;
     // İade süreci aktifse iptal edilemez
@@ -570,18 +613,15 @@ Alpine.data("ordersListComponent", () => ({
   },
 
   // Sipariş kargoya verilmediyse kargo bilgileri değiştirilebilir
-  canModifyShipping(order: any): boolean {
+  canModifyShipping(order: Order | null): boolean {
     if (!order) return false;
     if (["Delivering", "Completed", "Cancelled"].includes(order.status)) return false;
     if (["Pending", "Approved"].includes(order.refundStatus)) return false;
     return true;
   },
 
-  totalQty(order: any): number {
-    return ((order?.products ?? []) as Array<{ quantity?: number }>).reduce(
-      (s, p) => s + (p.quantity ?? 0),
-      0
-    );
+  totalQty(order: Order | null): number {
+    return (order?.products ?? []).reduce((s: number, p) => s + (p.quantity ?? 0), 0);
   },
 }));
 
@@ -589,7 +629,7 @@ Alpine.data("ordersSection", () => ({
   activeTabId: getOrderTabs()[0].id,
   selectedFilterId: getOrderFilters()[0].id as string | null,
   dropdownOpen: false,
-  orders: [] as any[],
+  orders: [] as Order[],
   loading: true,
 
   async init() {
@@ -610,7 +650,7 @@ Alpine.data("ordersSection", () => ({
     };
     const allowed = tabStatusMap[this.activeTabId];
     if (!allowed || allowed.length === 0) return this.orders;
-    return this.orders.filter((o: any) => allowed.includes(o.status));
+    return this.orders.filter((o) => allowed.includes(o.status));
   },
 
   selectTab(tabId: string, hasDropdown: boolean) {
@@ -634,12 +674,12 @@ Alpine.data("ordersSection", () => ({
 }));
 
 Alpine.data("refundsComponent", () => ({
-  refunds: [] as any[],
+  refunds: [] as RefundSummary[],
   loading: true,
 
   async init() {
     try {
-      const res = await callMethod<{ success: boolean; refunds: any[] }>(
+      const res = await callMethod<{ success: boolean; refunds: RefundSummary[] }>(
         "tradehub_core.api.order.get_my_refunds"
       );
       this.refunds = res?.refunds || [];

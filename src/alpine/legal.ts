@@ -67,7 +67,9 @@ Alpine.data("cookieConsent", () => ({
 
   toggleCategory(cat: string) {
     if (cat === "necessary") return;
-    (this.categories as any)[cat] = !(this.categories as any)[cat];
+    // categories sabit dört key'li shape — string index için Record cast'i yeterli.
+    const cats = this.categories as Record<string, boolean>;
+    cats[cat] = !cats[cat];
   },
 
   savePreferences() {

@@ -33,6 +33,25 @@ import {
   setupAttachmentInteractions,
 } from '../components/rfq/attachments';
 
+/** Bir tedarikçi tarafından gönderilen teklif kaydı (RFQ detail API response item) */
+interface Quote {
+  name: string;
+  seller_name?: string;
+  seller_company?: string;
+  seller_country?: string;
+  seller_type?: string;
+  seller_year_established?: string | number;
+  seller_employee_count?: string | number;
+  listing_image?: string;
+  listing_title?: string;
+  total_price?: number;
+  price_per_unit?: number;
+  currency?: string;
+  lead_time_days?: number;
+  message?: string;
+  status?: string;
+}
+
 await requireAuth();
 
 const params = new URLSearchParams(window.location.search);
@@ -66,7 +85,7 @@ async function loadQuotes() {
   const res = await fetch(`/api/method/tradehub_core.api.rfq.get_rfq_detail?rfq_id=${rfqId}`, { credentials: 'include' });
   const d = await res.json();
   const rfq = d.message?.rfq;
-  const quotes = d.message?.quotes || [];
+  const quotes: Quote[] = d.message?.quotes || [];
   const attachments: RfqAttachment[] = (rfq?.attachments || []) as RfqAttachment[];
 
   if (!rfq) { window.location.href = '/pages/dashboard/inquiries.html'; return; }
@@ -105,7 +124,7 @@ async function loadQuotes() {
             <thead>
               <tr class="border-b border-gray-200">
                 <th class="p-3 text-left text-sm font-normal w-40"></th>
-                ${quotes.map((q: any) => `
+                ${quotes.map((q) => `
                   <th class="p-3 text-center min-w-[200px] border-l border-gray-100 relative pt-8">
                     <button class="quote-dismiss-btn absolute top-2 right-3 text-gray-300 hover:text-gray-500 transition-colors" data-quote="${q.name}">
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
@@ -120,7 +139,7 @@ async function loadQuotes() {
               <!-- Vendor Comparison Row -->
               <tr class="border-b border-gray-200">
                 <td class="p-3 text-sm text-amber-600 font-medium align-top">${t('rfq.vendorComparison')}</td>
-                ${quotes.map((q: any) => `
+                ${quotes.map((q) => `
                   <td class="p-3 text-center text-sm border-l border-gray-100 align-top">
                     ${q.status === 'Submitted' ? `
                       <div class="flex justify-center gap-1.5">
@@ -135,7 +154,7 @@ async function loadQuotes() {
               <!-- Product (Listing) Row -->
               <tr class="border-b border-gray-100">
                 <td class="p-3 text-sm text-gray-500">${t('rfq.product')}</td>
-                ${quotes.map((q: any) => `
+                ${quotes.map((q) => `
                   <td class="p-3 text-center border-l border-gray-100">
                     ${q.listing_image ? `<img src="${q.listing_image}" alt="" class="w-16 h-16 object-cover rounded mx-auto mb-1" />` : ''}
                     <p class="text-xs text-gray-700">${q.listing_title || '-'}</p>
@@ -150,7 +169,7 @@ async function loadQuotes() {
               <!-- Unit Price -->
               <tr class="border-b border-gray-100">
                 <td class="p-3 text-sm text-gray-500">${t('rfq.unitPrice')}</td>
-                ${quotes.map((q: any) => `
+                ${quotes.map((q) => `
                   <td class="p-3 text-center border-l border-gray-100">
                     ${q.total_price ? `
                       <div class="text-xl font-bold text-gray-800 leading-tight tabular-nums">${formatCurrency(q.price_per_unit, q.currency)}</div>
@@ -162,14 +181,14 @@ async function loadQuotes() {
               <!-- Lead Time -->
               <tr class="border-b border-gray-100">
                 <td class="p-3 text-sm text-gray-500">${t('rfq.leadTime')}</td>
-                ${quotes.map((q: any) => `
+                ${quotes.map((q) => `
                   <td class="p-3 text-center text-sm border-l border-gray-100">${q.lead_time_days ? `${q.lead_time_days} ${t('rfq.days')}` : '-'}</td>
                 `).join('')}
               </tr>
               <!-- Message -->
               <tr class="border-b border-gray-100">
                 <td class="p-3 text-sm text-gray-500">${t('rfq.messageLbl')}</td>
-                ${quotes.map((q: any) => `
+                ${quotes.map((q) => `
                   <td class="p-3 text-center text-sm border-l border-gray-100 text-gray-600">${q.message || '-'}</td>
                 `).join('')}
               </tr>
@@ -181,35 +200,35 @@ async function loadQuotes() {
               <!-- Company Name -->
               <tr class="border-b border-gray-100">
                 <td class="p-3 text-sm text-gray-500">${t('rfq.companyName')}</td>
-                ${quotes.map((q: any) => `
+                ${quotes.map((q) => `
                   <td class="p-3 text-center text-sm border-l border-gray-100 text-gray-700">${q.seller_company || '-'}</td>
                 `).join('')}
               </tr>
               <!-- Country -->
               <tr class="border-b border-gray-100">
                 <td class="p-3 text-sm text-gray-500">${t('rfq.country')}</td>
-                ${quotes.map((q: any) => `
+                ${quotes.map((q) => `
                   <td class="p-3 text-center text-sm border-l border-gray-100 text-gray-600">${q.seller_country || '-'}</td>
                 `).join('')}
               </tr>
               <!-- Business Type -->
               <tr class="border-b border-gray-100">
                 <td class="p-3 text-sm text-gray-500">${t('rfq.businessType')}</td>
-                ${quotes.map((q: any) => `
+                ${quotes.map((q) => `
                   <td class="p-3 text-center text-sm border-l border-gray-100 text-gray-600">${q.seller_type || '-'}</td>
                 `).join('')}
               </tr>
               <!-- Year Established -->
               <tr class="border-b border-gray-100">
                 <td class="p-3 text-sm text-gray-500">${t('rfq.yearEstablished')}</td>
-                ${quotes.map((q: any) => `
+                ${quotes.map((q) => `
                   <td class="p-3 text-center text-sm border-l border-gray-100 text-gray-600">${q.seller_year_established || '-'}</td>
                 `).join('')}
               </tr>
               <!-- Employee Count -->
               <tr class="border-b border-gray-100">
                 <td class="p-3 text-sm text-gray-500">${t('rfq.employeeCount')}</td>
-                ${quotes.map((q: any) => `
+                ${quotes.map((q) => `
                   <td class="p-3 text-center text-sm border-l border-gray-100 text-gray-600">${q.seller_employee_count || '-'}</td>
                 `).join('')}
               </tr>
@@ -241,7 +260,7 @@ loadQuotes().then(() => {
       btn.disabled = true;
       btn.textContent = '...';
       try {
-        const res = await fetch(((window as any).API_BASE || '/api') + '/method/tradehub_core.api.rfq.accept_quote', {
+        const res = await fetch((window.API_BASE || '/api') + '/method/tradehub_core.api.rfq.accept_quote', {
           method: 'POST', credentials: 'include',
           headers: { 'Content-Type': 'application/json', 'X-Frappe-CSRF-Token': getCsrfToken() },
           body: JSON.stringify({ quote_id: quoteId }),
@@ -265,7 +284,7 @@ loadQuotes().then(() => {
       btn.disabled = true;
       btn.textContent = '...';
       try {
-        const res = await fetch(((window as any).API_BASE || '/api') + '/method/tradehub_core.api.rfq.reject_quote', {
+        const res = await fetch((window.API_BASE || '/api') + '/method/tradehub_core.api.rfq.reject_quote', {
           method: 'POST', credentials: 'include',
           headers: { 'Content-Type': 'application/json', 'X-Frappe-CSRF-Token': getCsrfToken() },
           body: JSON.stringify({ quote_id: quoteId }),
@@ -308,7 +327,7 @@ loadQuotes().then(() => {
       closeBtn.disabled = true;
       closeBtn.textContent = '...';
       try {
-        const res = await fetch(((window as any).API_BASE || '/api') + '/method/tradehub_core.api.rfq.close_rfq', {
+        const res = await fetch((window.API_BASE || '/api') + '/method/tradehub_core.api.rfq.close_rfq', {
           method: 'POST', credentials: 'include',
           headers: { 'Content-Type': 'application/json', 'X-Frappe-CSRF-Token': getCsrfToken() },
           body: JSON.stringify({ rfq_id: rfqId }),

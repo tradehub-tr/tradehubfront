@@ -30,6 +30,14 @@ const TYPE_MAP: Record<string, { type: ToastType; prefix: string }> = {
   promo: { type: "success", prefix: "Kampanya" },
 };
 
+/** Backend'in döndürdüğü tek bir bildirim kaydı */
+interface NotificationItem {
+  type?: string;
+  action_url?: string;
+  title?: string;
+  message?: string;
+}
+
 const POLL_INTERVAL = 30_000; // 30 saniye
 const MAX_CONSECUTIVE_ERRORS = 5;
 const RECOVERY_BACKOFF_MS = 5 * 60_000; // 5 dk sonra error sayacı sifirlanir
@@ -139,12 +147,12 @@ Alpine.data("notificationPoller", () => ({
       }
 
       if (data && data.length > 0) {
-        [...data].reverse().forEach((notif: any) => {
-          const mapping = TYPE_MAP[notif.type] || TYPE_MAP.system;
+        [...(data as NotificationItem[])].reverse().forEach((notif) => {
+          const mapping = TYPE_MAP[notif.type || "system"] || TYPE_MAP.system;
           // action_url guvenli ise link goster; degilse sadece toast
           const safeUrl = isSafeActionUrl(notif.action_url) ? notif.action_url : undefined;
           queueToast({
-            message: notif.title || notif.message,
+            message: notif.title || notif.message || "Yeni bildirim",
             type: mapping.type,
             duration: 5000,
             link: safeUrl ? { text: "Görüntüle", href: safeUrl } : undefined,

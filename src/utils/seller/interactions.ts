@@ -75,16 +75,6 @@ function buildHeroSwiper(): Swiper | null {
 
   const section = el.closest<HTMLElement>('[data-section="hero_banner"]');
   const mode = section?.getAttribute("data-hero-mode") || "slider";
-  const dataSlideCount = section?.getAttribute("data-hero-slides");
-  console.log("[Hero Swiper BUILD]", {
-    mode,
-    autoplayAttr: section?.getAttribute("data-hero-autoplay"),
-    delayAttr: section?.getAttribute("data-hero-delay"),
-    dataSlideCount,
-    domSlideCount: el.querySelectorAll(".swiper-slide").length,
-    elWidth: el.offsetWidth,
-    elVisible: el.offsetWidth > 0 && el.offsetHeight > 0,
-  });
   if (mode !== "slider") return null;
 
   const autoplay = section?.getAttribute("data-hero-autoplay") === "1";
@@ -133,14 +123,6 @@ function buildHeroSwiper(): Swiper | null {
             prevEl: ".store-hero__prev",
           }
         : false,
-  });
-  console.log("[Hero Swiper READY]", {
-    slideCount,
-    enableLoop,
-    autoplayActive: autoplay && slideCount > 1,
-    delay,
-    swiperWidth: heroSwiperInstance?.width,
-    hasNavigation: slideCount > 1,
   });
   return heroSwiperInstance;
 }

@@ -20,8 +20,9 @@ export {
 // ListingCartDrawer - simplified cart drawer for products listing page
 export { ListingCartDrawer, initListingCartDrawer } from "./ListingCartDrawer";
 
-// SearchHeader component - search results header with sorting and view controls
-export { SearchHeader, initSearchHeader, updateSearchHeader } from "./SearchHeader";
+// SubHeader component - unified tabs + breadcrumb + results title + sort/view header
+export { SubHeader, updateSubHeader } from "./SubHeader";
+export type { SubHeaderProps } from "./SubHeader";
 
 // Filter engine - connects FilterSidebar UI to ProductListingGrid
 export { initFilterEngine } from "./filterEngine";

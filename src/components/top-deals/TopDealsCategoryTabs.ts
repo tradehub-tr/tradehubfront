@@ -9,6 +9,23 @@
 
 import { t } from "../../i18n";
 
+/** Alpine internal: x-data binding stack üzerinden component state'ine erişmek için */
+interface AlpineDataEl extends HTMLElement {
+  _x_dataStack?: Array<Record<string, unknown>>;
+}
+
+/** Alpine component state shape (topDealsPage scope) — sadece kullandığımız field'lar */
+interface TopDealsAlpineData {
+  setCategory(slug: string): void;
+  showCategorySheet?: boolean;
+}
+
+/** API'den dönen kategori objesi — slug ve name optional, biri varsa kullanılır */
+interface CategoryLike {
+  slug?: string;
+  name?: string;
+}
+
 /** Build a single tab button HTML — uses manual styling, no Alpine :class */
 function buildTabHtml(id: string, label: string, isActive = false): string {
   const activeClass = isActive
@@ -152,9 +169,9 @@ export function initCategoryTabs(): void {
   const allTab = document.querySelector<HTMLElement>('.top-deals-tab[data-cat-slug="all"]');
   if (allTab) {
     allTab.addEventListener("click", () => {
-      const mainEl = document.querySelector<HTMLElement>('[x-data="topDealsPage"]');
-      if (mainEl && (mainEl as any)._x_dataStack) {
-        const data = (mainEl as any)._x_dataStack[0];
+      const mainEl = document.querySelector<AlpineDataEl>('[x-data="topDealsPage"]');
+      if (mainEl && mainEl._x_dataStack) {
+        const data = mainEl._x_dataStack[0] as unknown as TopDealsAlpineData | undefined;
         if (data) data.setCategory("all");
       }
       updateTabStyles("all");
@@ -175,11 +192,11 @@ async function loadCategoryTabs(): Promise<void> {
     if (!tabsContainer || !categories || categories.length === 0) return;
 
     // Get Alpine data for wiring click handlers
-    const mainEl = document.querySelector<HTMLElement>('[x-data="topDealsPage"]');
+    const mainEl = document.querySelector<AlpineDataEl>('[x-data="topDealsPage"]');
 
-    for (const cat of categories) {
-      const slug = (cat as any).slug || (cat as any).name || "";
-      const name = (cat as any).name || slug;
+    for (const cat of categories as CategoryLike[]) {
+      const slug = cat.slug || cat.name || "";
+      const name = cat.name || slug;
       if (!slug) continue;
 
       // --- Desktop/tablet tab ---
@@ -190,8 +207,8 @@ async function loadCategoryTabs(): Promise<void> {
       tabBtn.textContent = name;
       tabBtn.dataset.catSlug = slug;
       tabBtn.addEventListener("click", () => {
-        if (mainEl && (mainEl as any)._x_dataStack) {
-          const data = (mainEl as any)._x_dataStack[0];
+        if (mainEl && mainEl._x_dataStack) {
+          const data = mainEl._x_dataStack[0] as unknown as TopDealsAlpineData | undefined;
           if (data) data.setCategory(slug);
         }
         // Update active styles
@@ -213,8 +230,8 @@ async function loadCategoryTabs(): Promise<void> {
           </span>
         `;
         sheetBtn.addEventListener("click", () => {
-          if (mainEl && (mainEl as any)._x_dataStack) {
-            const data = (mainEl as any)._x_dataStack[0];
+          if (mainEl && mainEl._x_dataStack) {
+            const data = mainEl._x_dataStack[0] as unknown as TopDealsAlpineData | undefined;
             if (data) {
               data.setCategory(slug);
               data.showCategorySheet = false;

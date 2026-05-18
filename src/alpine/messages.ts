@@ -1,10 +1,31 @@
 import Alpine from "alpinejs";
 import { t } from "../i18n";
 
+/** Mock mesajlaşma için tek bir mesaj */
+interface Message {
+  id: string;
+  sender: string;
+  text: string;
+  time: string;
+  isMe: boolean;
+}
+
+/** Mock mesajlaşma için konuşma kaydı */
+interface Conversation {
+  id: string;
+  avatar: string;
+  name: string;
+  company: string;
+  preview: string;
+  date: string;
+  unreadCount: number;
+  messages: Message[];
+}
+
 Alpine.data("messagesComponent", () => ({
   activeCategory: "all",
   searchQuery: "",
-  selectedConversation: null as any,
+  selectedConversation: null as Conversation | null,
   newMessage: "",
   filterOpen: false,
   filterType: "all",
@@ -17,7 +38,7 @@ Alpine.data("messagesComponent", () => ({
     ];
   },
 
-  conversations: [] as any[],
+  conversations: [] as Conversation[],
 
   _buildConversations() {
     return [
@@ -139,23 +160,23 @@ Alpine.data("messagesComponent", () => ({
   },
 
   getUnreadTotal(): number {
-    return this.conversations.reduce((sum: number, c: any) => sum + c.unreadCount, 0);
+    return this.conversations.reduce((sum: number, c) => sum + c.unreadCount, 0);
   },
 
-  getFilteredConversations(): any[] {
-    let list = [...this.conversations] as any[];
+  getFilteredConversations(): Conversation[] {
+    let list = [...this.conversations];
     if (this.activeCategory === "unread") {
-      list = list.filter((c: any) => c.unreadCount > 0);
+      list = list.filter((c) => c.unreadCount > 0);
     }
     if (this.filterType === "unread") {
-      list = list.filter((c: any) => c.unreadCount > 0);
+      list = list.filter((c) => c.unreadCount > 0);
     } else if (this.filterType === "read") {
-      list = list.filter((c: any) => c.unreadCount === 0);
+      list = list.filter((c) => c.unreadCount === 0);
     }
     if (this.searchQuery.trim()) {
       const q = this.searchQuery.toLowerCase();
       list = list.filter(
-        (c: any) =>
+        (c) =>
           c.name.toLowerCase().includes(q) ||
           c.company.toLowerCase().includes(q) ||
           c.preview.toLowerCase().includes(q)
@@ -170,10 +191,10 @@ Alpine.data("messagesComponent", () => ({
     this.filterOpen = false;
   },
 
-  selectConversation(conv: any) {
+  selectConversation(conv: Conversation) {
     this.selectedConversation = conv;
-    const found = this.conversations.find((c: any) => c.id === conv.id);
-    if (found) (found as any).unreadCount = 0;
+    const found = this.conversations.find((c) => c.id === conv.id);
+    if (found) found.unreadCount = 0;
     this.$nextTick(() => {
       const chatBody = document.getElementById("msg-chat-body");
       if (chatBody) chatBody.scrollTop = chatBody.scrollHeight;
@@ -189,18 +210,16 @@ Alpine.data("messagesComponent", () => ({
     if (!this.newMessage.trim() || !this.selectedConversation) return;
     const now = new Date();
     const timeStr = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
-    const msg = {
+    const msg: Message = {
       id: "m" + Date.now(),
       sender: "Me",
       text: this.newMessage.trim(),
       time: timeStr,
       isMe: true,
     };
-    (this.selectedConversation as any).messages.push(msg);
-    const found = this.conversations.find(
-      (c: any) => c.id === (this.selectedConversation as any).id
-    );
-    if (found) (found as any).preview = this.newMessage.trim();
+    this.selectedConversation.messages.push(msg);
+    const found = this.conversations.find((c) => c.id === this.selectedConversation!.id);
+    if (found) found.preview = this.newMessage.trim();
     this.newMessage = "";
     this.$nextTick(() => {
       const chatBody = document.getElementById("msg-chat-body");

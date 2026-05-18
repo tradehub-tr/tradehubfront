@@ -98,7 +98,7 @@ export function bindDropzone(opts: DropzoneOptions, handlers: DropzoneHandlers):
 
   function isAllowed(file: File): boolean {
     const ext = "." + (file.name.split(".").pop() || "").toLowerCase();
-    if (!FILE_UPLOAD_CONFIG.allowedExtensions.includes(ext as any)) {
+    if (!(FILE_UPLOAD_CONFIG.allowedExtensions as readonly string[]).includes(ext)) {
       showToast({ message: t("rfq.unsupportedFormat", { fileName: file.name }), type: "error" });
       return false;
     }

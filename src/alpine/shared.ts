@@ -21,7 +21,7 @@ Alpine.data("floatingPanel", () => ({
 
     try {
       const res = await fetch(
-        ((window as any).API_BASE || "/api") + "/method/tradehub_core.api.v1.auth.get_session_user",
+        (window.API_BASE || "/api") + "/method/tradehub_core.api.v1.auth.get_session_user",
         {
           credentials: "include",
         }

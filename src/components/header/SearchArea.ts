@@ -343,7 +343,7 @@ export function initSearchArea(): void {
             const chipItems = data.chips.length > 0 ? data.chips : data.suggestions.slice(0, 3);
             chipsContainer.innerHTML = chipItems
               .map(
-                (item: any) => `
+                (item) => `
               <button type="button" class="search-chip flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-full transition-colors max-w-[220px]" style="color:var(--search-chip-text);background-color:var(--search-chip-bg);border:1px solid var(--search-chip-border)" data-chip-type="${item.type || "product"}" data-chip-slug="${item.slug || ""}">
                 <span class="text-xs shrink-0" style="color:var(--search-chip-accent)">&#10022;</span>
                 <span class="truncate">${item.text}</span>

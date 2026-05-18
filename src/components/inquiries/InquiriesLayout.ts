@@ -78,6 +78,36 @@ interface MyQuoteItem {
   creation: string;
 }
 
+/** Satıcının quote ekleyebilmek için dropdown'a doldurulan listing */
+interface SellerListing {
+  name: string;
+  title?: string;
+}
+
+/** RFQ detail panel — get_rfq_detail endpoint'inden gelen quote */
+interface RfqQuote {
+  seller_name: string;
+  seller_company: string;
+  total_price?: number | string;
+  currency?: string;
+  lead_time_days?: number;
+}
+
+/** RFQ detail panel — get_rfq_detail endpoint'inden dönen veri */
+interface RfqDetailPayload {
+  rfq: {
+    name: string;
+    product_name: string;
+    status: string;
+    quantity: number;
+    unit: string;
+    category_name?: string;
+    additional_details?: string;
+    description?: string;
+  };
+  quotes?: RfqQuote[];
+}
+
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
 function avatarPlaceholder(name: string): string {
@@ -406,13 +436,13 @@ function showQuoteSubmitModal(rfq: SellerRFQItem, onSuccess: () => void): void {
 
   // Load seller's listings into dropdown
   const listingSelect = document.getElementById("quote-listing") as HTMLSelectElement;
-  fetch(((window as any).API_BASE || "/api") + "/method/tradehub_core.api.rfq.get_my_listings", {
+  fetch((window.API_BASE || "/api") + "/method/tradehub_core.api.rfq.get_my_listings", {
     credentials: "include",
   })
     .then((r) => r.json())
     .then((d) => {
-      const listings = d.message || [];
-      listings.forEach((l: any) => {
+      const listings: SellerListing[] = d.message || [];
+      listings.forEach((l) => {
         const opt = document.createElement("option");
         opt.value = l.name;
         opt.textContent = l.title || l.name;
@@ -543,7 +573,7 @@ function showQuoteSubmitModal(rfq: SellerRFQItem, onSuccess: () => void): void {
     submitBtn.textContent = "...";
     try {
       const res = await fetch(
-        ((window as any).API_BASE || "/api") + "/method/tradehub_core.api.rfq.submit_quote",
+        (window.API_BASE || "/api") + "/method/tradehub_core.api.rfq.submit_quote",
         {
           method: "POST",
           credentials: "include",
@@ -575,9 +605,9 @@ function showQuoteSubmitModal(rfq: SellerRFQItem, onSuccess: () => void): void {
   });
 }
 
-function renderRfqDetailPanel(rfqData: any): string {
+function renderRfqDetailPanel(rfqData: RfqDetailPayload): string {
   const rfq = rfqData.rfq;
-  const quotes = rfqData.quotes || [];
+  const quotes: RfqQuote[] = rfqData.quotes || [];
   return `
     <div class="border-l border-gray-200 bg-white h-full overflow-y-auto">
       <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100">
@@ -615,7 +645,7 @@ function renderRfqDetailPanel(rfqData: any): string {
             <div class="space-y-4">
               ${quotes
                 .map(
-                  (q: any) => `
+                  (q) => `
                 <div class="border border-gray-100 rounded-lg p-3">
                   <div class="flex items-center gap-2 mb-2">
                     ${avatarPlaceholder(q.seller_name)}
@@ -806,7 +836,7 @@ async function fetchRfqs(status = "all"): Promise<RFQItem[]> {
 async function fetchSellerRfqs(): Promise<SellerRFQItem[]> {
   try {
     const res = await fetch(
-      ((window as any).API_BASE || "/api") + "/method/tradehub_core.api.rfq.get_seller_rfqs",
+      (window.API_BASE || "/api") + "/method/tradehub_core.api.rfq.get_seller_rfqs",
       { credentials: "include" }
     );
     const d = await res.json();
@@ -819,7 +849,7 @@ async function fetchSellerRfqs(): Promise<SellerRFQItem[]> {
 async function fetchMyQuotes(): Promise<MyQuoteItem[]> {
   try {
     const res = await fetch(
-      ((window as any).API_BASE || "/api") + "/method/tradehub_core.api.rfq.get_my_quotes",
+      (window.API_BASE || "/api") + "/method/tradehub_core.api.rfq.get_my_quotes",
       { credentials: "include" }
     );
     const d = await res.json();
@@ -832,7 +862,7 @@ async function fetchMyQuotes(): Promise<MyQuoteItem[]> {
 async function checkIsSeller(): Promise<boolean> {
   try {
     const res = await fetch(
-      ((window as any).API_BASE || "/api") +
+      (window.API_BASE || "/api") +
         "/method/tradehub_core.api.rfq.get_seller_rfqs?limit_page_length=1",
       { credentials: "include" }
     );
@@ -895,7 +925,7 @@ export function initInquiriesLayout(): void {
           closeBtn.textContent = "...";
           try {
             const res = await fetch(
-              ((window as any).API_BASE || "/api") + "/method/tradehub_core.api.rfq.close_rfq",
+              (window.API_BASE || "/api") + "/method/tradehub_core.api.rfq.close_rfq",
               {
                 method: "POST",
                 credentials: "include",
@@ -959,8 +989,7 @@ export function initInquiriesLayout(): void {
             submitBtn.textContent = "...";
             try {
               const res = await fetch(
-                ((window as any).API_BASE || "/api") +
-                  "/method/tradehub_core.api.rfq.add_rfq_details",
+                (window.API_BASE || "/api") + "/method/tradehub_core.api.rfq.add_rfq_details",
                 {
                   method: "POST",
                   credentials: "include",
@@ -1189,7 +1218,7 @@ export function initInquiriesLayout(): void {
     }
     try {
       const res = await fetch(
-        ((window as any).API_BASE || "/api") + "/method/tradehub_core.api.rfq.trash_inquiry",
+        (window.API_BASE || "/api") + "/method/tradehub_core.api.rfq.trash_inquiry",
         {
           method: "POST",
           credentials: "include",

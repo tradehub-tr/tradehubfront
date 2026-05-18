@@ -4,6 +4,40 @@ import { getBaseUrl } from "../components/auth/AuthLayout";
 import { callMethod } from "../utils/api";
 import { getSessionUser, logout } from "../utils/auth";
 
+// ─── Seller Storefront tipleri ───────────────────────────────────────
+/** Media gallery item (video/image) */
+interface SellerMediaItem {
+  media_type: string;
+  src: string;
+  poster: string;
+  caption: string;
+}
+
+/** Media gallery grup tab'ı */
+interface SellerMediaGroup {
+  key: string;
+  label: string;
+  count: number;
+  items: SellerMediaItem[];
+}
+
+/** Backend get_seller API'nin döndürdüğü satıcı objesi (kullanılan field'lar) */
+interface SellerStorefrontData {
+  slug?: string;
+  seller_code?: string;
+  joined_at?: string;
+  city?: string;
+  country?: string;
+  media_groups?: SellerMediaGroup[];
+  // Alpine reactivity için diğer dinamik field'lar
+  [key: string]: unknown;
+}
+
+/** Nav kategorisi (seller_categories endpoint) */
+interface SellerNavCategory {
+  [key: string]: unknown;
+}
+
 // ─── Sell Page (registration form) ────────────────────────────────────
 Alpine.data("sellPage", () => ({
   currentStep: 1,
@@ -146,8 +180,8 @@ Alpine.data("sellPricing", () => ({
 Alpine.data("sellerStorefront", () => ({
   activeTab: "overview" as string,
   mobileMenuOpen: false,
-  seller: null as Record<string, any> | null,
-  navCategories: [] as Record<string, any>[],
+  seller: null as SellerStorefrontData | null,
+  navCategories: [] as SellerNavCategory[],
   loading: true,
 
   /** Backend'den dönen `business_type` enum değerini lokalize metne çevirir.
@@ -172,7 +206,7 @@ Alpine.data("sellerStorefront", () => ({
       this.loading = false;
       return;
     }
-    const apiBase = (window as any).API_BASE || "/api";
+    const apiBase = window.API_BASE || "/api";
     try {
       const [sellerRes, catRes] = await Promise.all([
         fetch(`${apiBase}/method/tradehub_core.api.seller.get_seller?slug=${code}`, {
@@ -200,12 +234,12 @@ Alpine.data("sellerStorefront", () => ({
 
   get sellerYears() {
     if (!this.seller?.joined_at) return "";
-    const years = new Date().getFullYear() - new Date((this.seller as any).joined_at).getFullYear();
+    const years = new Date().getFullYear() - new Date(this.seller.joined_at).getFullYear();
     return years > 0 ? `${years}yrs` : "";
   },
 
   get sellerLocation() {
-    return [(this.seller as any)?.city, (this.seller as any)?.country].filter(Boolean).join(", ");
+    return [this.seller?.city, this.seller?.country].filter(Boolean).join(", ");
   },
 
   /**
@@ -216,12 +250,7 @@ Alpine.data("sellerStorefront", () => ({
    * Bos kategoriler (count=0) atilir; UI sadece dolu tab'lari gosterir.
    */
   get mediaGroups() {
-    const groups = ((this.seller as any)?.media_groups || []) as Array<{
-      key: string;
-      label: string;
-      count: number;
-      items: Array<{ media_type: string; src: string; poster: string; caption: string }>;
-    }>;
+    const groups: SellerMediaGroup[] = this.seller?.media_groups || [];
     return groups
       .filter((g) => g.count > 0)
       .map((g, i) => ({
@@ -387,7 +416,7 @@ Alpine.data("sellerDashboard", () => ({
   async init() {
     try {
       const res = await fetch(
-        ((window as any).API_BASE || "/api") + "/method/tradehub_core.api.auth.get_current_user",
+        (window.API_BASE || "/api") + "/method/tradehub_core.api.auth.get_current_user",
         { credentials: "include" }
       );
       const data = (await res.json()) as {
@@ -409,7 +438,7 @@ Alpine.data("sellerDashboard", () => ({
 
       // Profil yükle
       const profileRes = await fetch(
-        ((window as any).API_BASE || "/api") + "/method/tradehub_core.api.seller.get_my_profile",
+        (window.API_BASE || "/api") + "/method/tradehub_core.api.seller.get_my_profile",
         {
           method: "POST",
           credentials: "include",

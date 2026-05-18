@@ -154,7 +154,7 @@ type UomOption = { name: string };
 const PRIORITY_UOMS = ['Adet', 'Birim', 'Kutu', 'Çift', 'Kg', 'Gram', 'Metre', 'Set', 'Ton', 'Litre'];
 
 const unitSelect = document.getElementById('rfq-unit') as HTMLSelectElement;
-fetch(((window as any).API_BASE || '/api') + '/method/tradehub_core.api.rfq.get_uom_list', { credentials: 'include' })
+fetch((window.API_BASE || '/api') + '/method/tradehub_core.api.rfq.get_uom_list', { credentials: 'include' })
   .then(r => r.json())
   .then(d => {
     const uoms: UomOption[] = d.message || [];
@@ -192,16 +192,23 @@ productNameInput.addEventListener('input', () => {
     try {
       const res = await fetch(`/api/method/tradehub_core.api.rfq.search_categories?query=${encodeURIComponent(q)}`, { credentials: 'include' });
       const d = await res.json();
-      const cats = d.message || [];
+      // search_categories endpoint dönüş tipi — sadece bu dosyada kullanılan
+      // alanları içerir.
+      interface RfqCategoryHit {
+        name?: string;
+        path?: string;
+        category_name?: string;
+      }
+      const cats: RfqCategoryHit[] = d.message || [];
       if (cats.length) {
         categoryDropdown.innerHTML = '';
-        cats.forEach((c: any) => {
+        cats.forEach((c) => {
           const btn = document.createElement('button');
           btn.type = 'button';
           btn.className = 'rfq-cat-option w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-amber-50 transition-colors';
-          btn.dataset.name = c.name;
-          btn.dataset.path = c.path;
-          btn.textContent = c.path;
+          btn.dataset.name = c.name ?? '';
+          btn.dataset.path = c.path ?? '';
+          btn.textContent = c.path ?? '';
           btn.addEventListener('click', () => {
             const current = productNameInput.value.trim();
             const catName = (c.category_name || '') as string;
@@ -335,7 +342,16 @@ if (prefillProductId) {
     if (catId) {
       categoryHidden.value = catId;
       const pathText = Array.isArray(product.category)
-        ? product.category.map((c: any) => typeof c === 'string' ? c : c.name || '').join(' >> ')
+        ? product.category
+            .map((c: unknown) => {
+              if (typeof c === 'string') return c;
+              if (c && typeof c === 'object' && 'name' in c) {
+                const n = (c as { name?: unknown }).name;
+                return typeof n === 'string' ? n : '';
+              }
+              return '';
+            })
+            .join(' >> ')
         : '';
       if (pathText) {
         categoryLink.textContent = pathText;
@@ -424,7 +440,7 @@ form.addEventListener('submit', (e) => {
 
   async function submitRfq() {
     // 1. Create RFQ
-    const res = await fetch(((window as any).API_BASE || '/api') + '/method/tradehub_core.api.rfq.create_rfq', {
+    const res = await fetch((window.API_BASE || '/api') + '/method/tradehub_core.api.rfq.create_rfq', {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json', 'X-Frappe-CSRF-Token': getCsrfToken() },
@@ -457,7 +473,7 @@ form.addEventListener('submit', (e) => {
       fd.append('doctype', 'RFQ');
       fd.append('docname', rfqId);
       fd.append('is_private', '1');
-      await fetch(((window as any).API_BASE || '/api') + '/method/upload_file', {
+      await fetch((window.API_BASE || '/api') + '/method/upload_file', {
         method: 'POST',
         credentials: 'include',
         body: fd,

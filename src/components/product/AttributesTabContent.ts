@@ -35,9 +35,7 @@ export function AttributesTabContent(): string {
 
   // Build grouped specs HTML when backend provided specGroups,
   // otherwise fall back to flat specs table.
-  const specGroups = (p as any).specGroups as
-    | Array<{ code: string; label: string; items: { label: string; value: string }[] }>
-    | undefined;
+  const specGroups = p.specGroups;
   const groupedHtml =
     specGroups && specGroups.length > 0
       ? specGroups

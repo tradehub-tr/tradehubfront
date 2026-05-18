@@ -224,7 +224,7 @@ function renderPriceRange(section: PriceRangeFilterSection): string {
       />
       <button
         type="button"
-        class="shrink-0 w-8 h-8 flex items-center justify-center rounded bg-primary-500 hover:bg-primary-600 text-white text-base font-semibold leading-none border border-primary-500 hover:border-primary-600 transition-colors cursor-pointer"
+        class="th-btn shrink-0 !w-8 !h-8 !p-0 leading-none text-base font-semibold"
         aria-label="${t("products.filterApply")}"
         data-filter-section="${section.id}"
         data-filter-action="apply"
@@ -256,7 +256,7 @@ function renderMinOrder(section: MinOrderFilterSection): string {
       >${section.filter.unit}</span>
       <button
         type="button"
-        class="shrink-0 w-8 h-8 flex items-center justify-center rounded bg-primary-500 hover:bg-primary-600 text-white text-base font-semibold leading-none border border-primary-500 hover:border-primary-600 transition-colors cursor-pointer"
+        class="th-btn shrink-0 !w-8 !h-8 !p-0 leading-none text-base font-semibold"
         aria-label="${t("products.filterApply")}"
         data-filter-section="${section.id}"
         data-filter-action="apply"
@@ -516,8 +516,7 @@ export function FilterSidebar(sections?: FilterSection[], idPrefix = ""): string
         >${t("products.filters")}</h2>
         <button
           type="button"
-          class="th-no-press text-[12px] font-medium transition-colors hover:underline"
-          style="color: var(--filter-count-color, #6b7280);"
+          class="th-btn-link !p-0 text-[12px] font-medium"
           data-filter-action="clear-all"
           @click="clearAllFilters()"
         >${t("products.filterClearAll")}</button>
@@ -535,7 +534,7 @@ export function FilterSidebar(sections?: FilterSection[], idPrefix = ""): string
       >
         <button
           type="button"
-          class="w-full py-2.5 rounded-md bg-primary-500 hover:bg-primary-600 text-white text-sm font-semibold border border-primary-500 hover:border-primary-600 transition-colors cursor-pointer"
+          class="th-btn w-full"
           data-filter-action="apply-all"
           @click="applyFilters()"
         >${t("products.filterApply")}</button>
@@ -592,7 +591,8 @@ export function initFilterSidebar(query?: string, category?: string): void {
                 container.closest("[data-filter-prefix]")?.getAttribute("data-filter-prefix") || "";
               container.innerHTML = facets.countries
                 .map((c) => {
-                  const code = (c as any).code || c.value;
+                  // Country facet item: backend `code` alanı varsa onu, yoksa value'yu i18n key olarak kullan
+                  const code = c.code || c.value;
                   const translatedName =
                     t(`countries.${code}`) !== `countries.${code}`
                       ? t(`countries.${code}`)
@@ -621,7 +621,8 @@ export function initFilterSidebar(query?: string, category?: string): void {
             });
 
           // Update brand sections
-          const brandsForToggle = (facets as any).brands || [];
+          // FilterFacets.brands zaten BrandFacet[] — `as any` gerekmiyor
+          const brandsForToggle = facets.brands || [];
           toggleSearchForSection("brands", brandsForToggle.length);
           document
             .querySelectorAll<HTMLElement>('[data-filter-dynamic="brands"]')
@@ -634,7 +635,7 @@ export function initFilterSidebar(query?: string, category?: string): void {
               const idPrefix =
                 container.closest("[data-filter-prefix]")?.getAttribute("data-filter-prefix") || "";
               container.innerHTML = brands
-                .map((b: any) => {
+                .map((b) => {
                   const checkboxId = `filter-${idPrefix ? idPrefix + "-" : ""}brands-brand-${String(b.value).toLowerCase().replace(/\s+/g, "-")}`;
                   const logoHtml = b.logo
                     ? `<img src="${b.logo}" alt="${b.label}" class="w-4 h-4 object-contain mr-1" />`
@@ -663,7 +664,8 @@ export function initFilterSidebar(query?: string, category?: string): void {
             });
 
           // Render dynamic attribute facets (Renk, Beden, Malzeme, ...)
-          const attributes = (facets as any).attributes || [];
+          // FilterFacets.attributes zaten AttributeFacet[] — `as any` gerekmiyor
+          const attributes = facets.attributes || [];
           if (attributes.length > 0) {
             document
               .querySelectorAll<HTMLElement>("[data-filter-sections-container]")
@@ -679,10 +681,10 @@ export function initFilterSidebar(query?: string, category?: string): void {
                     : "";
 
                 const sectionsHtml = attributes
-                  .map((attr: any) => {
+                  .map((attr) => {
                     const sectionId = `attr-${attr.code.toLowerCase()}`;
                     const optionsHtml = (attr.options || [])
-                      .map((opt: any) => {
+                      .map((opt) => {
                         const checkboxId = `filter-${idPrefix ? idPrefix + "-" : ""}${sectionId}-${String(opt.value).toLowerCase().replace(/\s+/g, "-")}`;
                         const colorSwatch = opt.color
                           ? `<span class="inline-block w-3.5 h-3.5 rounded-full border border-gray-300 flex-shrink-0" style="background:${opt.color};"></span>`
@@ -751,7 +753,7 @@ export function initFilterSidebar(query?: string, category?: string): void {
                   container.closest("[data-filter-prefix]")?.getAttribute("data-filter-prefix") ||
                   "";
                 container.innerHTML = data
-                  .map((c: any) => {
+                  .map((c) => {
                     const checkboxId = `filter-${idPrefix ? idPrefix + "-" : ""}${key}-cert-${c.value.toLowerCase().replace(/\s+/g, "-")}`;
                     return `
               <label for="${checkboxId}" class="flex items-center gap-2 cursor-pointer group py-1 filter-searchable-item">

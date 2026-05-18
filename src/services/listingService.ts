@@ -945,7 +945,7 @@ export async function getTopDealsGrouped(
         products: Record<string, unknown>[];
         total_in_category: number;
       }>
-    >
+    > & { message: { total_categories?: number } }
   >(`/method/tradehub_core.api.listing.get_top_deals_grouped?${qs}`);
   const msg = response.message;
   const groups: TopDealsCategoryGroup[] = (msg.data || []).map((g) => ({
@@ -959,7 +959,7 @@ export async function getTopDealsGrouped(
     groups,
     page: msg.page || 1,
     pageSize: msg.page_size || pageSize,
-    totalCategories: (msg as any).total_categories || 0,
+    totalCategories: msg.total_categories || 0,
     hasNext: msg.has_next || false,
   };
 }
@@ -1036,7 +1036,7 @@ export async function getTopRankingGrouped(
         categoryId: string;
         products: Record<string, unknown>[];
       }>
-    >
+    > & { message: { total_categories?: number } }
   >(`/method/tradehub_core.api.listing.get_top_ranking_grouped?${qs.toString()}`);
   const msg = response.message;
   const groups: TopRankingGroup[] = (msg.data || []).map((g) => ({
@@ -1050,7 +1050,7 @@ export async function getTopRankingGrouped(
     groups,
     page: msg.page || 1,
     pageSize: msg.page_size || pageSize,
-    totalCategories: (msg as any).total_categories || 0,
+    totalCategories: msg.total_categories || 0,
     hasNext: msg.has_next || false,
   };
 }
@@ -1136,6 +1136,8 @@ export async function getShippingMethods(listingId?: string) {
 export interface SearchSuggestion {
   text: string;
   type: "product" | "category";
+  /** Category slug (yalnız type=category için) */
+  slug?: string;
 }
 
 export interface SearchSuggestionsResult {
@@ -1160,7 +1162,7 @@ export async function getSearchSuggestions(): Promise<SearchSuggestionsResult> {
 // ── Price Range Helper ──
 
 function derivePriceRange(
-  raw: any,
+  raw: { sellingPrice?: number },
   priceTiers: PriceTier[],
   variants: ProductVariant[],
   baseCur: string

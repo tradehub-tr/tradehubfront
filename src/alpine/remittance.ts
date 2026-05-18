@@ -171,7 +171,8 @@ Alpine.data("remittanceComponent", () => ({
 
   // Validation
   validateField(field: string) {
-    const val = (this.form as any)[field];
+    // form sabit shape'li — index erişimi için Record cast'i yeterli.
+    const val = (this.form as Record<string, string>)[field];
     if (!val || !String(val).trim()) {
       this.errors[field] = "required";
     } else {
@@ -241,14 +242,16 @@ Alpine.data("remittanceComponent", () => ({
         this.reset(true);
         window.location.href = `/pages/order/order-success.html?status=success&count=1&orderNumbers=${encodeURIComponent(this.orderNumber)}`;
       }, 1500);
-    } catch (err: any) {
+    } catch (err) {
       const { isEmailNotVerifiedError } = await import("../utils/api");
       if (isEmailNotVerifiedError(err)) {
         this.apiError = "";
         this.step = "form";
         return; // toast api.ts'te zaten gösterildi
       }
-      this.apiError = err?.message || "Bir hata oluştu. Lütfen tekrar deneyin.";
+      // Error nesnesi `message` taşıyorsa kullan; aksi halde generic mesaj göster.
+      const msg = err instanceof Error ? err.message : "";
+      this.apiError = msg || "Bir hata oluştu. Lütfen tekrar deneyin.";
       this.step = "form";
     }
   },

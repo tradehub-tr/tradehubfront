@@ -4,19 +4,42 @@
  */
 import { btn } from "../ui/button";
 
+/** Storefront section ayarları — bölüm tipine göre farklı subset'ler kullanılır */
+export interface SectionSettings {
+  // hero_banner
+  mode?: string;
+  autoplay?: boolean;
+  delay?: number;
+  slides?: HeroSlide[];
+  // category_grid / category_listing / gallery
+  columns?: number;
+  showSort?: boolean;
+  viewModes?: string[];
+  lightbox?: boolean;
+  // hot_products
+  title?: string;
+  count?: number;
+  // certificates
+  layout?: string;
+  // Common
+  bgColor?: string;
+  // Bölüm tipine özgü ek anahtarlar için catch-all
+  [key: string]: unknown;
+}
+
 export interface SectionConfig {
   type: string;
   order: number;
   enabled: boolean;
-  settings?: Record<string, any>;
+  settings?: SectionSettings;
 }
 
 export interface LayoutConfig {
   sections: SectionConfig[];
-  theme?: Record<string, any>;
+  theme?: Record<string, unknown>;
 }
 
-type SectionRenderer = (settings: Record<string, any>) => string;
+type SectionRenderer = (settings: SectionSettings) => string;
 
 // ─── Hero Banner helpers ─────────────────────────────────────────────────────
 interface HeroSlide {
@@ -30,7 +53,7 @@ interface HeroSlide {
   textColor?: "white" | "dark";
 }
 
-function escapeHtml(s: any): string {
+function escapeHtml(s: unknown): string {
   if (s == null) return "";
   return String(s)
     .replace(/&/g, "&amp;")
@@ -40,7 +63,7 @@ function escapeHtml(s: any): string {
     .replace(/'/g, "&#39;");
 }
 
-function escapeAttr(s: any): string {
+function escapeAttr(s: unknown): string {
   return escapeHtml(s);
 }
 
@@ -76,7 +99,7 @@ function resolveImageUrl(url: string | undefined): string {
   if (!url) return "";
   if (/^(https?:)?\/\//i.test(url) || url.startsWith("data:")) return url;
   // Relative path (/files/...) → Frappe backend base URL ekle
-  const base = (import.meta as any).env?.VITE_API_BASE || "";
+  const base = import.meta.env?.VITE_API_BASE || "";
   // url zaten "/" ile basliyorsa iki kez / olmasin
   if (base && url.startsWith("/")) return base.replace(/\/$/, "") + url;
   return url;
@@ -96,24 +119,12 @@ function renderSlideImage(slide: HeroSlide, isStatic: boolean): string {
     : `<div class="${wrapper}">${innerImg}</div>`;
 }
 
-function renderHeroBanner(settings: Record<string, any>): string {
+function renderHeroBanner(settings: SectionSettings): string {
   const mode = settings?.mode === "static" ? "static" : "slider";
   const autoplay = settings?.autoplay !== false;
   const delay = Number(settings?.delay) || 5000;
   const bgColor = settings?.bgColor || "";
   const bgStyle = bgColor ? `style="background-color: ${escapeAttr(bgColor)};"` : "";
-
-  // DEBUG: settings'in tam halini logla
-  console.log("[Hero Banner RENDER]", {
-    mode,
-    autoplay,
-    delay,
-    slidesInSettings: settings?.slides,
-    slidesType: typeof settings?.slides,
-    slidesIsArray: Array.isArray(settings?.slides),
-    slidesLength: Array.isArray(settings?.slides) ? settings.slides.length : "N/A",
-    fullSettings: settings,
-  });
 
   const rawSlides: HeroSlide[] =
     Array.isArray(settings?.slides) && settings.slides.length > 0
@@ -144,16 +155,6 @@ function renderHeroBanner(settings: Record<string, any>): string {
             ctaLink: "",
           },
         ];
-
-  console.log(
-    "[Hero Banner RENDER] rawSlides:",
-    rawSlides.map((s, i) => ({
-      index: i,
-      hasImage: !!s?.image,
-      image: s?.image,
-      title: s?.title,
-    }))
-  );
 
   // STATIC: ilk slayt, swiper yok
   if (mode === "static") {
@@ -195,9 +196,9 @@ function renderHeroBanner(settings: Record<string, any>): string {
   `
     : "";
 
-  // Eger kullanici slider sectiyse ama 0-1 valid slayt varsa konsola uyari (debug)
-  if (typeof console !== "undefined" && validSlides.length < 2) {
-    console.info(
+  // Slider modu için en az 2 görselli slayt gerekir — eksikse uyarı
+  if (validSlides.length < 2) {
+    console.warn(
       `[Hero Banner] Slider modu aktif ama gecerli slayt sayisi: ${validSlides.length} (toplam: ${rawSlides.length}). Slider gecisi icin en az 2 gorselli slayt gerekir.`
     );
   }

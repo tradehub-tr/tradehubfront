@@ -99,7 +99,7 @@ export function ManufacturerFilterSidebar(): string {
       <button
         type="button"
         @click="apply()"
-        class="shrink-0 w-8 h-8 flex items-center justify-center rounded bg-primary-500 hover:bg-primary-600 text-white text-base font-semibold leading-none border border-primary-500 hover:border-primary-600 transition-colors cursor-pointer"
+        class="th-btn shrink-0 !w-8 !h-8 !p-0 leading-none text-base font-semibold"
         aria-label="${t("products.filterApply")}"
       >&rsaquo;</button>
     </div>
@@ -156,8 +156,7 @@ export function ManufacturerFilterSidebar(): string {
         <h2 class="text-[15px] font-bold" style="color: var(--filter-heading-color, #111827);">${t("products.filters")}</h2>
         <button
           type="button"
-          class="text-[12px] font-medium transition-colors hover:underline"
-          style="color: var(--filter-count-color, #6b7280);"
+          class="th-btn-link !p-0 text-[12px] font-medium"
           @click="clearAll()"
         >${t("products.filterClearAll")}</button>
       </div>
@@ -182,7 +181,7 @@ export function ManufacturerFilterSidebar(): string {
       >
         <button
           type="button"
-          class="w-full py-2.5 rounded-md bg-primary-500 hover:bg-primary-600 text-white text-sm font-semibold border border-primary-500 hover:border-primary-600 transition-colors cursor-pointer"
+          class="th-btn w-full"
           @click="apply()"
         >${t("products.filterApply")}</button>
       </div>
@@ -195,14 +194,13 @@ export function ManufacturerFilterSidebar(): string {
  */
 export function initManufacturerFilters(): void {
   if (typeof window === "undefined") return;
-  const w = window as any;
-  if (w.__mfrFiltersInited) return;
-  w.__mfrFiltersInited = true;
+  if (window.__mfrFiltersInited) return;
+  window.__mfrFiltersInited = true;
 
   const params = new URLSearchParams(window.location.search);
 
   document.addEventListener("alpine:init", () => {
-    const Alpine = (window as any).Alpine;
+    const Alpine = window.Alpine;
     if (!Alpine) return;
 
     Alpine.data("manufacturerFilters", () => ({
@@ -234,7 +232,9 @@ export function initManufacturerFilters(): void {
       apply() {
         const url = new URL(window.location.href);
         const p = url.searchParams;
-        const setOrDel = (k: string, v: any) => {
+        // URL query param yazıcısı — primitive veya string[] (countries gibi multi-select)
+        // değerleri kabul eder. Boş/null/[] → key silinir.
+        const setOrDel = (k: string, v: string | number | string[] | null | undefined) => {
           if (v === "" || v == null || (Array.isArray(v) && v.length === 0)) p.delete(k);
           else p.set(k, Array.isArray(v) ? v.join(",") : String(v));
         };

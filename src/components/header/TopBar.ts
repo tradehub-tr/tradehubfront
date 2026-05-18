@@ -1182,29 +1182,9 @@ export function TopBar(props?: TopBarProps): string {
     `;
   }
 
-  /* ──── Full Header (default — with search + tabs) ──── */
-  const pathname = typeof window !== "undefined" ? window.location.pathname.toLowerCase() : "";
-  const isManufacturersPage = pathname.includes("manufacturers");
-  const isProductsPage = /\/products(\.html)?$/.test(pathname);
-  const showSearchTabs = isProductsPage || isManufacturersPage;
-
-  // Mevcut sayfanın arama bağlamını (q + cat slug / category id) sekmeler arası taşı.
-  const currentParams =
-    typeof window !== "undefined"
-      ? new URLSearchParams(window.location.search)
-      : new URLSearchParams();
-  const ctxQuery = currentParams.get("q") || "";
-  const ctxCatSlug = currentParams.get("cat") || "";
-  const ctxCategoryId = currentParams.get("category") || "";
-  const ctxQS = new URLSearchParams();
-  if (ctxQuery) ctxQS.set("q", ctxQuery);
-  if (ctxCatSlug) ctxQS.set("cat", ctxCatSlug);
-  else if (ctxCategoryId) ctxQS.set("category", ctxCategoryId);
-  const ctxSuffix = ctxQS.toString() ? `?${ctxQS.toString()}` : "";
-  const desktopActiveTabClass =
-    "topbar-search-tab relative py-1 text-[13px] font-semibold text-gray-900 dark:text-white whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-gray-900 after:dark:bg-white after:rounded-full";
-  const desktopInactiveTabClass =
-    "topbar-search-tab relative py-1 text-[13px] font-normal text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-transparent after:rounded-full";
+  /* ──── Full Header (default — with search) ──── */
+  // Sekmeler (Ürünler/Üreticiler) artık SubHeader içindeki inline pill toggle ile sağlanıyor;
+  // TopBar'daki desktop ve mobile tab şeritleri products/manufacturers sayfalarında kaldırıldı.
 
   return `
     ${noticeHtml}
@@ -1300,18 +1280,6 @@ export function TopBar(props?: TopBarProps): string {
             </button>
           </div>
         </div>
-
-        <!-- Row 2: Search Tabs (Desktop Only — products & manufacturers sayfalarında) -->
-        ${
-          showSearchTabs
-            ? `
-        <div class="hidden lg:flex items-center gap-6 pb-2 -mt-1">
-          <a href="/pages/products.html${ctxSuffix}" class="${isManufacturersPage ? desktopInactiveTabClass : desktopActiveTabClass}" data-search-tab="products"><span data-i18n="search.products">${t("search.products")}</span></a>
-          <a href="/pages/manufacturers.html${ctxSuffix}" class="${isManufacturersPage ? desktopActiveTabClass : desktopInactiveTabClass}" data-search-tab="manufacturers"><span data-i18n="search.manufacturers">${t("search.manufacturers")}</span></a>
-        </div>
-        `
-            : ""
-        }
       </div>
 
       ${renderMobileDrawer()}
@@ -1813,7 +1781,7 @@ function initCompactSearchSuggestions(): void {
         const items = data.suggestions.slice(0, 3);
         recoList.innerHTML = items
           .map(
-            (item: any) => `
+            (item) => `
           <button type="button" tabindex="-1" data-compact-expanded-interactive="true" data-suggestion-text="${item.text.replace(/"/g, "&quot;")}" class="compact-suggestion-btn th-no-press block w-full text-left text-[22px] font-normal leading-tight text-gray-900 dark:text-white truncate cursor-pointer no-underline hover:no-underline focus:no-underline transition-opacity hover:opacity-60">${item.text}</button>
         `
           )
@@ -1824,7 +1792,7 @@ function initCompactSearchSuggestions(): void {
       if (chipsContainer) {
         const chipItems = data.chips.length > 0 ? data.chips : data.suggestions.slice(3, 6);
         chipsContainer.innerHTML = chipItems
-          .map((item: any) => {
+          .map((item) => {
             const href =
               item.type === "category" && item.slug
                 ? "/pages/products.html?cat=" + encodeURIComponent(item.slug)

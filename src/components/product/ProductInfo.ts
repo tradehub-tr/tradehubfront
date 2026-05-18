@@ -7,7 +7,7 @@
 import { getCurrentProduct } from "../../alpine/product";
 import { t } from "../../i18n";
 import { formatCurrency, getSelectedCurrency } from "../../services/currencyService";
-import type { PriceTier, ProductVariant } from "../../types/product";
+import type { PriceTier, ProductVariant, SkuMatrixEntry } from "../../types/product";
 import { openShippingModal, openCartDrawer } from "./CartDrawer";
 
 function renderPriceTiers(tiers: PriceTier[]): string {
@@ -46,26 +46,26 @@ function renderPriceTiers(tiers: PriceTier[]): string {
  * Returns true if no skuMatrix exists (fallback to global availability).
  */
 function isOptionAvailableForColor(
-  skuMatrix: any[] | undefined,
+  skuMatrix: SkuMatrixEntry[] | undefined,
   colorLabel: string,
   optionLabel: string,
   axisIndex: number, // 1 = axis2, 2+ = extra axis
   axisName?: string // required for extra axes
 ): boolean {
   if (!skuMatrix || skuMatrix.length === 0) return true;
-  const matches = skuMatrix.filter((row: any) => {
+  const matches = skuMatrix.filter((row) => {
     if (row.axis1 !== colorLabel) return false;
     if (axisIndex === 1) return row.axis2 === optionLabel;
     // Extra axis
     return (row.extraAxes || {})[axisName!] === optionLabel;
   });
   if (matches.length === 0) return false;
-  return matches.some((row: any) => row.available);
+  return matches.some((row) => row.available);
 }
 
 function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): string {
   // Default: isDefault flag; fallback: first available option
-  const defaultOpt = variant.options.find((o) => (o as any).isDefault && o.available);
+  const defaultOpt = variant.options.find((o) => o.isDefault && o.available);
   const selectedOpt = defaultOpt || variant.options.find((o) => o.available) || variant.options[0];
 
   if (variant.type === "color") {
@@ -75,7 +75,7 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
         <div class="pd-color-thumbs flex flex-wrap gap-2 mt-2">
           ${variant.options
             .map((opt) => {
-              const isDef = !!(opt as any).isDefault;
+              const isDef = !!opt.isDefault;
               const isActive = opt.id === selectedOpt.id;
               return `
             <button
@@ -84,9 +84,9 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
               data-variant-id="${opt.id}"
               data-variant-label="${opt.label}"
               data-variant-image="${opt.thumbnail || ""}"
-              data-variant-video="${(opt as any).videoUrl || ""}"
-              data-variant-title="${encodeURIComponent((opt as any).title || "")}"
-              data-variant-images="${encodeURIComponent(JSON.stringify((opt as any).images || []))}"
+              data-variant-video="${opt.videoUrl || ""}"
+              data-variant-title="${encodeURIComponent(opt.title || "")}"
+              data-variant-images="${encodeURIComponent(JSON.stringify(opt.images || []))}"
               data-variant-value="${opt.value}"
               data-is-default="${isDef ? "1" : "0"}"
               ${opt.price ? `data-variant-price="${opt.price}"` : ""}
@@ -108,7 +108,7 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
   const colorVariant = allVariants.find((v) => v.type === "color");
   const skuMatrix = colorVariant?.skuMatrix;
   const defaultColor =
-    colorVariant?.options.find((o) => (o as any).isDefault && o.available) ||
+    colorVariant?.options.find((o) => o.isDefault && o.available) ||
     colorVariant?.options.find((o) => o.available) ||
     colorVariant?.options[0];
   const defaultColorLabel = defaultColor?.label || "";
@@ -123,7 +123,7 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
       <div class="flex flex-wrap gap-2 mt-2">
         ${variant.options
           .map((opt) => {
-            const isDef = !!(opt as any).isDefault;
+            const isDef = !!opt.isDefault;
             const isActive = opt.id === selectedOpt.id;
             // Check availability for the default color (not just global availability)
             const availableForColor = defaultColorLabel
@@ -142,9 +142,9 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
             class="variant-option pd-variant-btn px-4 py-1.5 rounded-full text-[13px] font-medium border border-[var(--color-border-medium,#d1d5db)] bg-[var(--color-surface,#fff)] text-[var(--pd-title-color,#111827)] cursor-pointer transition-all duration-150 [&.active]:border-[var(--pd-title-color,#111827)] [&.active]:font-semibold [&:hover:not(.active):not(:disabled)]:border-[#999] ${isActive ? "active" : ""} ${isAvailable ? "" : "opacity-40 line-through cursor-not-allowed"}"
             data-variant-id="${opt.id}"
             data-variant-label="${opt.label}"
-            data-variant-video="${(opt as any).videoUrl || ""}"
-            data-variant-title="${encodeURIComponent((opt as any).title || "")}"
-            data-variant-images="${encodeURIComponent(JSON.stringify((opt as any).images || []))}"
+            data-variant-video="${opt.videoUrl || ""}"
+            data-variant-title="${encodeURIComponent(opt.title || "")}"
+            data-variant-images="${encodeURIComponent(JSON.stringify(opt.images || []))}"
             data-is-default="${isDef ? "1" : "0"}"
             ${opt.price ? `data-variant-price="${opt.price}"` : ""}
             ${isAvailable ? "" : "disabled"}
@@ -283,7 +283,7 @@ export function ProductInfo(): string {
  * axis1 name → "axis1", axis2 name → "axis2", extra axes → "extraAxes.{name}"
  */
 function getSkuAxisKey(
-  variants: any[],
+  variants: ProductVariant[],
   groupLabel: string
 ): { field: "axis1" | "axis2" | "extra"; extraName?: string } {
   if (variants[0]?.label === groupLabel) return { field: "axis1" };
@@ -291,7 +291,10 @@ function getSkuAxisKey(
   return { field: "extra", extraName: groupLabel };
 }
 
-function getSkuValueForAxis(sku: any, axisKey: ReturnType<typeof getSkuAxisKey>): string {
+function getSkuValueForAxis(
+  sku: SkuMatrixEntry,
+  axisKey: ReturnType<typeof getSkuAxisKey>
+): string {
   if (axisKey.field === "axis1") return sku.axis1 || "";
   if (axisKey.field === "axis2") return sku.axis2 || "";
   return (sku.extraAxes || {})[axisKey.extraName!] || "";
@@ -318,7 +321,7 @@ function getSelectedAxes(): Map<string, string> {
  * variant combination has stock. Falls back to "ready" when the product has
  * no skuMatrix (single-variant or unmatrixed products).
  */
-function updateReadyBadge(skuMatrix: any[], variants: any[]): void {
+function updateReadyBadge(skuMatrix: SkuMatrixEntry[], variants: ProductVariant[]): void {
   const desktopBadge = document.getElementById("pd-ready-badge");
   const mobileBadge = document.querySelector<HTMLElement>('[data-ready-badge="mobile"]');
   if (!desktopBadge && !mobileBadge) return;
@@ -326,12 +329,12 @@ function updateReadyBadge(skuMatrix: any[], variants: any[]): void {
   // Listing-level "Out of Stock" status overrides everything: even if some
   // SKU rows would otherwise look available, the seller has explicitly flagged
   // this listing as unavailable, so the badge should reflect that.
-  const product = getCurrentProduct() as any;
+  const product = getCurrentProduct();
   let inStock = !product?.outOfStock;
 
   if (inStock && skuMatrix.length > 0) {
     const selectedAxes = getSelectedAxes();
-    inStock = skuMatrix.some((sku: any) => {
+    inStock = skuMatrix.some((sku) => {
       if (!sku.available) return false;
       for (const [axLabel, axValue] of selectedAxes) {
         const axKey = getSkuAxisKey(variants, axLabel);
@@ -360,11 +363,11 @@ function updateReadyBadge(skuMatrix: any[], variants: any[]): void {
  * Supports N axes (Color, Size, Material, etc.).
  */
 function crossDisableVariants(_selectedAxisLabel: string, _selectedValue: string): void {
-  const product = getCurrentProduct() as any;
+  const product = getCurrentProduct();
   const variants = product.variants || [];
 
   // Find the skuMatrix (attached to the first group)
-  let skuMatrix: any[] = [];
+  let skuMatrix: SkuMatrixEntry[] = [];
   for (const v of variants) {
     if (v.skuMatrix) {
       skuMatrix = v.skuMatrix;

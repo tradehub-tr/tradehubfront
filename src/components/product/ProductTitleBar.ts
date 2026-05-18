@@ -69,10 +69,7 @@ export function ProductTitleBar(): string {
   const mockProduct = getCurrentProduct();
   const p = mockProduct;
   const s = p.supplier;
-  const brand = (p as any).brandInfo as
-    | { code: string; name: string; slug: string; logo?: string }
-    | null
-    | undefined;
+  const brand = p.brandInfo;
 
   const brandRowHtml =
     brand && brand.name

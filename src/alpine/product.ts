@@ -29,7 +29,7 @@ function renderInlineVideo(url: string): string {
   `;
 }
 import { getListingDetail, getProductReviews } from "../services/listingService";
-import type { ProductDetail } from "../types/product";
+import type { ProductDetail, ProductImage } from "../types/product";
 
 // Empty default product — no mock data
 const emptyProduct: ProductDetail = {
@@ -381,7 +381,7 @@ Alpine.data("imageGallery", () => ({
     };
 
     // Mutate currentProduct.images so downstream reads see new values.
-    const newImages: any[] = imageUrls.map((src, i) => ({
+    const newImages: ProductImage[] = imageUrls.map((src, i) => ({
       id: `variant-img-${i + 1}`,
       src,
       alt: `Variant image ${i + 1}`,
@@ -396,7 +396,7 @@ Alpine.data("imageGallery", () => ({
       });
     }
     currentProduct.images.length = 0;
-    currentProduct.images.push(...(newImages as any));
+    currentProduct.images.push(...newImages);
 
     const totalCount = newImages.length;
     this.imageCount = totalCount;
@@ -477,21 +477,21 @@ Alpine.data("imageGallery", () => ({
   },
 
   restoreOriginalImages() {
-    const originals = (window as any).__originalListingImages;
+    const originals = window.__originalListingImages;
     if (!originals || originals.length === 0) return;
-    const urls = originals.map((img: any) => img.src).filter(Boolean);
+    const urls = originals.map((img) => img.src).filter(Boolean);
     if (urls.length === 0) return;
     // Restore without adding variant video — use listing's own video if present
-    const listingVideo = originals.find((img: any) => img.isVideo);
+    const listingVideo = originals.find((img) => img.isVideo);
     this.swapGalleryImages(
-      urls.filter((u: string) => !originals.find((im: any) => im.src === u && im.isVideo)),
+      urls.filter((u) => !originals.find((im) => im.src === u && im.isVideo)),
       listingVideo?.src || undefined
     );
   },
 
   isVideoSlide(): boolean {
     const img = currentProduct.images[this.currentIndex];
-    return !!(img && (img as any).isVideo);
+    return !!(img && img.isVideo);
   },
 
   getMainMedia(): HTMLElement | null {
@@ -565,7 +565,7 @@ Alpine.data("imageGallery", () => ({
       const mainImage = (this.$refs as Record<string, HTMLElement>).mainImage;
       if (mainImage) {
         const image = currentProduct.images[index];
-        if (image && (image as any).isVideo) {
+        if (image && image.isVideo) {
           mainImage.innerHTML = renderInlineVideo(image.src);
           this.resetZoom();
         } else {
@@ -603,7 +603,7 @@ Alpine.data("imageGallery", () => ({
     const lightboxImage = (this.$refs as Record<string, HTMLElement>).lightboxImage;
     if (lightboxImage) {
       const image = currentProduct.images[index];
-      if (image && (image as any).isVideo) {
+      if (image && image.isVideo) {
         lightboxImage.innerHTML = renderInlineVideo(image.src);
       } else {
         lightboxImage.innerHTML = renderGalleryMedia(

@@ -28,7 +28,7 @@ import type { LayoutConfig } from '../utils/seller/section-registry';
 import { initAllSwipers } from '../utils/seller/interactions';
 
 // ─── Pre-fetch layout for SSR-like initial render ───────
-const API_BASE = (window as any).API_BASE || '/api';
+const API_BASE = window.API_BASE || '/api';
 const sellerCode = new URLSearchParams(window.location.search).get('seller') || '';
 
 function getDefaultLayout(): LayoutConfig {

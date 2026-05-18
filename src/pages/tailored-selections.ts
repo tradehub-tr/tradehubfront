@@ -177,7 +177,21 @@ let currentPage = 1;
 let hasNextPage = false;
 const PAGE_SIZE = 20;
 
-function toTailoredProduct(p: any): TailoredProduct {
+/** API'den gelen ham tailored product şekli */
+interface RawTailoredProduct {
+  id?: string;
+  name: string;
+  href?: string;
+  price: string;
+  originalPrice?: string;
+  discount?: string;
+  moq?: string;
+  imageSrc?: string;
+  stats?: string;
+  verified?: boolean;
+}
+
+function toTailoredProduct(p: RawTailoredProduct): TailoredProduct {
   return {
     id: p.id || '',
     name: p.name,
@@ -185,7 +199,7 @@ function toTailoredProduct(p: any): TailoredProduct {
     price: p.price,
     originalPrice: p.originalPrice || undefined,
     discountPercent: p.discount ? parseInt(p.discount) : undefined,
-    moqCount: parseInt(p.moq) || 1,
+    moqCount: parseInt(p.moq || '1') || 1,
     moqUnit: 'pcs',
     imageSrc: p.imageSrc || '',
     soldCount: p.stats?.replace(/[^\d.+K]/gi, '') || undefined,
