@@ -1,3 +1,23 @@
+## [v1.1.9-beta.3] - 2026-05-18 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Degistirildi
+- refactor(layout): products/manufacturers sayfaları unified SubHeader'a geçirildi (@ahmeetseker)
+  - SearchHeader → SubHeader: tabs + breadcrumb + sonuç başlığı + sort/view tek bileşende toplandı
+  - MegaMenu: kategori kart görseli yerine icon-only akış
+  - i18n: viewingLead, unitFound, unitFoundManufacturer, viewMode/Grid/List anahtarları eklendi
+  - ManufacturerFilterSidebar/List, FilterSidebar, TopBar SubHeader API'ye uyumlandı
+- refactor(lint): tradehubfront ESLint warning'leri sıfırlandı (@ahmeetseker)
+  - 304 @typescript-eslint/no-explicit-any → proper type tanımları
+  - Global window augmentation: src/types/global.d.ts oluşturuldu (API_BASE, Alpine, dataLayer, __getSellerFavs, __originalListingImages vb.)
+  - Mevcut interface'ler kullanıldı (ProductDetail.videoUrl/brandInfo/specGroups cast'leri kaldırıldı); yeni: NotificationItem, RawTailoredProduct, Quote, Message/Conversation, SectionSettings, SellerStorefrontData, AlpineDataEl vb.
+  - catch (e: any) → catch veya catch (e: unknown) + type guard
+  - Underscore-prefix discard pattern (_id, _tempId, _) için varsIgnorePattern + caughtErrorsIgnorePattern: '^_' eklendi
+  - Debug console.log silindi veya console.warn'a çevrildi
+  - alpine/seller.ts, alpine/orders.ts, alpine/help.ts dahil ~50 dosya temizlendi
+
+---
 ## [v1.1.9-beta.2] - 2026-05-18 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
