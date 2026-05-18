@@ -15,22 +15,23 @@ const ICONS = {
   refresh: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>`,
 };
 
-// Belge alanları (backend ile birebir field name)
-const DOCUMENT_FIELDS = [
-  { key: "identity_document", labelKey: "kyb.docIdentity" },
-  { key: "imza_sirkuleri", labelKey: "kyb.docSignatureCirculars" },
-  { key: "ticaret_sicil_gazetesi", labelKey: "kyb.docTradeRegistryGazette" },
-  { key: "faaliyet_belgesi", labelKey: "kyb.docActivityCertificate" },
-  { key: "vergi_levhasi", labelKey: "kyb.docTaxCertificate" },
-  { key: "bank_account_document", labelKey: "kyb.docBankAccount" },
+// Belge alanları (backend ile birebir field name). Sprint 2.6: faaliyet_belgesi opsiyonel.
+const DOCUMENT_FIELDS: Array<{ key: string; labelKey: string; required?: boolean }> = [
+  { key: "identity_document", labelKey: "kyb.docIdentity", required: true },
+  { key: "imza_sirkuleri", labelKey: "kyb.docSignatureCirculars", required: true },
+  { key: "ticaret_sicil_gazetesi", labelKey: "kyb.docTradeRegistryGazette", required: true },
+  { key: "faaliyet_belgesi", labelKey: "kyb.docActivityCertificate", required: false },
+  { key: "vergi_levhasi", labelKey: "kyb.docTaxCertificate", required: true },
+  { key: "bank_account_document", labelKey: "kyb.docBankAccount", required: true },
 ];
 
 // Belge thumbnail (PDF kart, image thumbnail veya boş upload)
-function renderDocumentCard(field: { key: string; labelKey: string }): string {
+function renderDocumentCard(field: { key: string; labelKey: string; required?: boolean }): string {
+  const requiredMark = field.required !== false ? '<span class="text-red-500">*</span>' : "";
   return `
     <div class="bg-white rounded-lg p-4 border border-gray-200" x-data="{ uploading: false }">
       <label class="block text-xs font-medium mb-2" style="color:var(--color-text-secondary)">
-        ${t(field.labelKey)} <span class="text-red-500">*</span>
+        ${t(field.labelKey)} ${requiredMark}
       </label>
 
       <template x-if="formData['${field.key}']">
@@ -51,7 +52,8 @@ function renderDocumentCard(field: { key: string; labelKey: string }): string {
           <div class="flex gap-2">
             <button type="button" @click="openPreview('${field.key}')"
                     class="text-xs px-3 py-1.5 rounded bg-violet-50 text-violet-700 hover:bg-violet-100 inline-flex items-center gap-1 flex-1 justify-center">
-              👁 ${t("kyb.preview")}
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              ${t("kyb.preview")}
             </button>
             <button type="button" @click="$refs.input_${field.key}.click()" :disabled="uploading"
                     class="text-xs px-3 py-1.5 rounded bg-gray-100 text-gray-700 hover:bg-gray-200">
@@ -165,7 +167,8 @@ function renderHeader(): string {
       <template x-if="kybData.exists">
         <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide"
               :class="statusBadgeClass">
-          <span x-text="statusBadgeIcon"></span>
+          <!-- x-html güvenli: statusBadgeIcon kaynağı sabit Lucide SVG string (kyb.ts), kullanıcı içeriği değil. Emoji yasağı (memory) için SVG'ye geçildi. -->
+          <span x-html="statusBadgeIcon"></span>
           <span x-text="statusBadgeLabel"></span>
         </span>
       </template>
@@ -183,7 +186,7 @@ function renderForm(): string {
     <template x-if="kybData.status === 'Verified'">${renderVerifiedInfo()}</template>
 
     <!-- Şirket bilgileri -->
-    <div class="bg-white rounded-xl p-6 border border-gray-200 mb-5">
+    <div class="bg-white rounded-2xl p-6 border border-gray-200 mb-4">
       <h2 class="text-base font-bold mb-4">${t("kyb.companyInfoTitle")}</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
@@ -204,15 +207,20 @@ function renderForm(): string {
                  :disabled="!isEditable" />
         </div>
         <div>
-          <label class="block text-xs font-medium mb-1.5" style="color:var(--color-text-secondary)">${t("kyb.documentExpiryDate")}</label>
-          <input type="date" class="th-input th-input-md" x-model="formData.document_expiry_date"
-                 :disabled="!isEditable" />
+          <label class="block text-xs font-medium mb-1.5" style="color:var(--color-text-secondary)">MERSİS Numarası</label>
+          <input type="text" class="th-input th-input-md" x-model="formData.mersis_no"
+                 :disabled="!isEditable" placeholder="16 hane" maxlength="16" pattern="\\d{16}" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium mb-1.5" style="color:var(--color-text-secondary)">KEP Adresi</label>
+          <input type="email" class="th-input th-input-md" x-model="formData.kep_address"
+                 :disabled="!isEditable" placeholder="ornek@hs01.kep.tr" />
         </div>
       </div>
     </div>
 
     <!-- Belgeler -->
-    <div class="bg-white rounded-xl p-6 border border-gray-200 mb-5">
+    <div class="bg-white rounded-2xl p-6 border border-gray-200 mb-4">
       <h2 class="text-base font-bold mb-1">${t("kyb.documentsTitle")}</h2>
       <p class="text-xs mb-4" style="color:var(--color-text-tertiary)">${t("kyb.documentsHint")}</p>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -227,7 +235,7 @@ function renderForm(): string {
       <button type="button" @click="resubmit()" :disabled="submitting || !canSubmit"
               class="th-btn px-6 inline-flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
         ${ICONS.refresh}
-        <span x-text="submitting ? '${t("kyb.submitting")}' : (kybData.status === 'Rejected' ? '${t("kyb.resubmit")}' : '${t("kyb.submit")}')"></span>
+        <span x-text="submitting ? '${t("kyb.submitting")}' : (kybData.status === 'Rejected' ? '${t("kyb.resubmit")}' : kybData.status === 'Verified' ? 'Bilgileri Güncelle' : '${t("kyb.submit")}')"></span>
       </button>
     </div>
   `;
