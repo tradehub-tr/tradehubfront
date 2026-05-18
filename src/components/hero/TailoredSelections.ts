@@ -172,9 +172,13 @@ export function initTailoredSelections(): void {
       const wrapper = document.querySelector("#tailored-swiper .swiper-wrapper");
       if (wrapper) {
         wrapper.innerHTML = collections.map((c) => renderCollectionSlide(c)).join("");
-        const swiperEl = document.querySelector("#tailored-swiper") as HTMLElement;
-        if (swiperEl && (swiperEl as any).swiper) {
-          (swiperEl as any).swiper.update();
+        // Swiper element-bound instance — `swiper-element`/init script tarafından
+        // DOM element üzerine `.swiper` property'si olarak eklenir. Resmi tip yok.
+        const swiperEl = document.querySelector(
+          "#tailored-swiper"
+        ) as (HTMLElement & { swiper?: { update: () => void } }) | null;
+        if (swiperEl?.swiper) {
+          swiperEl.swiper.update();
         }
       }
     })

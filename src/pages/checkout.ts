@@ -734,10 +734,21 @@ if (placeOrderBtn) {
     // Validate shipping address before opening review
     const shippingSection = document.getElementById('shipping-address-section');
     if (shippingSection) {
-      const alpineData = ((shippingSection as any)._x_dataStack as Record<string, unknown>[] | undefined)?.[0] as any;
+      // Alpine internal scope — shipping address Alpine bileşeninin runtime field'ları.
+      // Resmi tip yok; tüketilen prop'ları opsiyonel olarak tanımlıyoruz.
+      interface ShippingAlpineScope {
+        showAddressForm?: boolean;
+        selectedAddressId?: string | null;
+        errors?: Record<string, unknown>;
+        handleSubmit?: () => void;
+      }
+      const stack = (shippingSection as HTMLElement & {
+        _x_dataStack?: Record<string, unknown>[];
+      })._x_dataStack;
+      const alpineData = stack?.[0] as ShippingAlpineScope | undefined;
       if (alpineData) {
         if (alpineData.showAddressForm) {
-          alpineData.handleSubmit();
+          alpineData.handleSubmit?.();
           if (Object.values(alpineData.errors || {}).some(e => e)) {
             return;
           }

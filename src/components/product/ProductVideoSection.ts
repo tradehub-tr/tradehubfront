@@ -58,8 +58,8 @@ function renderVideoPlayer(videoUrl: string, label: string): string {
 }
 
 export function ProductVideoSection(): string {
-  const p = getCurrentProduct() as any;
-  const listingVideo = (p.videoUrl || "") as string;
+  const p = getCurrentProduct();
+  const listingVideo = p.videoUrl || "";
   // Varyant videoları ileride geldiğinde data-attribute'lara yerleşir; şimdilik sadece listing.
   const initialVideo = listingVideo;
   const hidden = !initialVideo;

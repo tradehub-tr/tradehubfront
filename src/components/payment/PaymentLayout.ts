@@ -662,8 +662,12 @@ function initPayModals(): void {
     const cardModalEl = document.getElementById("pay-card-modal");
     if (cardModalEl) {
       const alpineEl = cardModalEl.querySelector<HTMLElement>("[x-data]");
-      if (alpineEl && (alpineEl as any)._x_dataStack) {
-        const data = (alpineEl as any)._x_dataStack[0];
+      // Alpine internal API: x-data scope'unu element üzerinde `_x_dataStack` adlı
+      // dizide tutar. Resmi tip yok — minimal tip ile defansif eriş.
+      const stack = (alpineEl as (HTMLElement & { _x_dataStack?: Record<string, unknown>[] }) | null)
+        ?._x_dataStack;
+      if (alpineEl && stack) {
+        const data = stack[0] as Record<string, unknown> | undefined;
         if (data) {
           data.cardNumber = card.cardNumber;
           data.firstName = card.cardholderName;
@@ -743,8 +747,10 @@ function initPayModals(): void {
         if (cvvEl) cvvEl.value = "";
         // Reset Alpine state
         const alpineEl = cardModal.querySelector<HTMLElement>("[x-data]");
-        if (alpineEl && (alpineEl as any)._x_dataStack) {
-          const data = (alpineEl as any)._x_dataStack[0];
+        const stack = (alpineEl as (HTMLElement & { _x_dataStack?: Record<string, unknown>[] }) | null)
+          ?._x_dataStack;
+        if (alpineEl && stack) {
+          const data = stack[0] as Record<string, unknown> | undefined;
           if (data) {
             data.cardNumber = "";
             data.firstName = "";

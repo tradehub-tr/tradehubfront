@@ -59,8 +59,9 @@ interface BrandDetail {
 
 interface BrandDetailResponse {
   brand: BrandDetail
-  featured: any[]
-  listings: any[]
+  // Backend ham listing kayıtları — aşağıda `as ProductListingCard[]` ile cast'lenir.
+  featured: unknown[]
+  listings: unknown[]
   total: number
   page: number
   totalPages: number

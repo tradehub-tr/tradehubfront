@@ -20,6 +20,46 @@ import {
 } from "../services/supportService";
 import { createLead } from "../services/leadService";
 
+// Yardım merkezi arama indeksi içindeki tek bir FAQ kaydı
+interface SearchIndexEntry {
+  text: string;
+  cat: string;
+  sub: string;
+  answer: string;
+  qIndex: number;
+}
+
+// FAQ kategori kartı (helpCenter ve faqPage modüllerinde paylaşılıyor)
+interface FaqCategoryCard {
+  id: string;
+  label: string;
+  subs: { key: string; label: string; highlight?: boolean }[];
+}
+
+// Sidebar kategori listesi item'ı
+interface FaqCategoryItem {
+  id: string;
+  label: string;
+}
+
+// Ticket form kategorisi (kategori + alt-kategori listesi)
+interface TicketFormCategory {
+  id: string;
+  label: string;
+  subs: string[];
+}
+
+// Ticket listesi UI satırı (backend TicketSummary'den türetiliyor)
+interface TicketRow {
+  id: string;
+  status: "open" | "pending" | "closed";
+  priority: string;
+  createdDate: string;
+  subject: string;
+  category: string;
+  lastReplyLabel: string;
+}
+
 // HD Ticket status → UI tab mapping
 // Backend: Open, Replied, Resolved, Closed
 // UI tabs: all, open (Open), pending (Replied), closed (Resolved+Closed)
@@ -32,7 +72,7 @@ function statusToTab(s: string): "open" | "pending" | "closed" {
 Alpine.data("helpCenter", () => ({
   searchQuery: "",
   searchActive: false,
-  searchResults: [] as string[],
+  searchResults: [] as SearchIndexEntry[],
   activeTab: "account",
 
   get popularSearches() {
@@ -225,20 +265,22 @@ Alpine.data("helpCenter", () => ({
 
   // Build a flat searchable index of every FAQ Q&A across the whole help system.
   // Each entry: { text (q), cat, sub, answer, qIndex }
-  _searchIndex: null as any[] | null,
-  _buildSearchIndex() {
-    const index: any[] = [];
+  _searchIndex: null as SearchIndexEntry[] | null,
+  _buildSearchIndex(): SearchIndexEntry[] {
+    const index: SearchIndexEntry[] = [];
     for (const sub of Object.keys(this._subToCat)) {
       const cat = this._subToCat[sub];
-      const items = t(`faqDetail.${sub}_items` as any, { returnObjects: true });
+      const items = t(`faqDetail.${sub}_items`, { returnObjects: true }) as unknown;
       if (Array.isArray(items)) {
-        items.forEach((item: any, qIndex: number) => {
-          if (item && typeof item.q === "string") {
+        items.forEach((item: unknown, qIndex: number) => {
+          // i18n returnObjects sonucu unknown — q ve a alanlarını type guard ile doğrula
+          if (item && typeof item === "object" && "q" in item && typeof (item as { q: unknown }).q === "string") {
+            const it = item as { q: string; a?: unknown };
             index.push({
-              text: item.q,
+              text: it.q,
               cat,
               sub,
-              answer: typeof item.a === "string" ? item.a : "",
+              answer: typeof it.a === "string" ? it.a : "",
               qIndex,
             });
           }
@@ -263,7 +305,7 @@ Alpine.data("helpCenter", () => ({
     const stripHtml = (s: string) => s.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
 
     const scored = this._searchIndex
-      .map((item: any) => {
+      .map((item: SearchIndexEntry) => {
         const qText = item.text.toLocaleLowerCase("tr");
         const aText = stripHtml(item.answer || "").toLocaleLowerCase("tr");
 
@@ -283,10 +325,13 @@ Alpine.data("helpCenter", () => ({
         }
         return { item, score };
       })
-      .filter((r: any) => r.score > 0)
-      .sort((a: any, b: any) => b.score - a.score)
+      .filter((r: { item: SearchIndexEntry; score: number }) => r.score > 0)
+      .sort(
+        (a: { item: SearchIndexEntry; score: number }, b: { item: SearchIndexEntry; score: number }) =>
+          b.score - a.score
+      )
       .slice(0, 30)
-      .map((r: any) => r.item);
+      .map((r: { item: SearchIndexEntry; score: number }) => r.item);
 
     this.searchResults = scored;
   },
@@ -506,25 +551,27 @@ Alpine.data("faqPage", () => ({
   },
 
   get activeCategoryLabel(): string {
-    const cat = (this.categories as any[]).find((c: any) => c.id === this.activeCategory);
+    const cat = (this.categories as FaqCategoryItem[]).find(
+      (c: FaqCategoryItem) => c.id === this.activeCategory
+    );
     return cat ? cat.label : t("faq.allCategories");
   },
 
-  get visibleCategories(): any[] {
+  get visibleCategories(): FaqCategoryCard[] {
     const q = this.searchQuery.trim().toLowerCase();
-    let cards = this.allCategoryCards as any[];
+    let cards = this.allCategoryCards as FaqCategoryCard[];
 
     // Filter by sidebar selection
     if (this.activeCategory !== "all") {
-      cards = cards.filter((c: any) => c.id === this.activeCategory);
+      cards = cards.filter((c: FaqCategoryCard) => c.id === this.activeCategory);
     }
 
     // Filter by search query
     if (q) {
       cards = cards.filter(
-        (c: any) =>
+        (c: FaqCategoryCard) =>
           c.label.toLowerCase().includes(q) ||
-          c.subs.some((s: any) => s.label.toLowerCase().includes(q))
+          c.subs.some((s: { key: string; label: string }) => s.label.toLowerCase().includes(q))
       );
     }
 
@@ -534,7 +581,7 @@ Alpine.data("faqPage", () => ({
   init() {
     const params = new URLSearchParams(window.location.search);
     const cat = params.get("cat");
-    if (cat && this.categories.some((c: any) => c.id === cat)) {
+    if (cat && this.categories.some((c: FaqCategoryItem) => c.id === cat)) {
       this.activeCategory = cat;
     }
   },
@@ -588,17 +635,21 @@ Alpine.data("faqPage", () => ({
   get matchedSubCount(): number {
     const q = this.searchQuery.trim().toLowerCase();
     if (!q) return 0;
-    return (this.visibleCategories as any[]).reduce((sum: number, c: any) => {
-      return (
-        sum +
-        (c.subs as any[]).filter((s: any) => (s.label as string).toLowerCase().includes(q)).length
-      );
-    }, 0);
+    return (this.visibleCategories as FaqCategoryCard[]).reduce(
+      (sum: number, c: FaqCategoryCard) => {
+        return (
+          sum +
+          c.subs.filter((s: { key: string; label: string }) => s.label.toLowerCase().includes(q))
+            .length
+        );
+      },
+      0
+    );
   },
 
   get resultsLabel(): string {
     return t("helpCenter.faqResultsFound", {
-      cats: (this.visibleCategories as any[]).length,
+      cats: (this.visibleCategories as FaqCategoryCard[]).length,
       subs: this.matchedSubCount,
     });
   },
@@ -717,16 +768,17 @@ Alpine.data("faqDetail", () => ({
   },
 
   get subTitle(): string {
-    return t(`faqDetail.${this.subParam}_title` as any) || t(`faq.${this.subParam}` as any) || "";
+    return t(`faqDetail.${this.subParam}_title`) || t(`faq.${this.subParam}`) || "";
   },
 
   get subDescription(): string {
-    return t(`faqDetail.${this.subParam}_desc` as any) || "";
+    return t(`faqDetail.${this.subParam}_desc`) || "";
   },
 
   get faqItems(): { q: string; a: string }[] {
-    const items = t(`faqDetail.${this.subParam}_items` as any, { returnObjects: true });
-    if (Array.isArray(items)) return items;
+    // i18n returnObjects unknown döner — Array.isArray ile filtrele
+    const items = t(`faqDetail.${this.subParam}_items`, { returnObjects: true }) as unknown;
+    if (Array.isArray(items)) return items as { q: string; a: string }[];
     return [];
   },
 
@@ -734,7 +786,7 @@ Alpine.data("faqDetail", () => ({
     const subs = this.categorySubsMap[this.catParam] || [];
     return subs.map((key: string) => ({
       key,
-      label: t(`faq.${key}` as any) || key,
+      label: t(`faq.${key}`) || key,
     }));
   },
 
@@ -753,7 +805,7 @@ Alpine.data("faqDetail", () => ({
         topics.push({
           key: subs[0],
           cat: nc,
-          label: t(`faq.${subs[0]}` as any) || subs[0],
+          label: t(`faq.${subs[0]}`) || subs[0],
         });
       }
     }
@@ -812,8 +864,8 @@ Alpine.data("contactPage", () => ({
         source: "Website Contact Form",
       });
       this.formSubmitted = true;
-    } catch (e: any) {
-      this.errors.submit = e?.message || t("contactForm.submitError");
+    } catch (e: unknown) {
+      this.errors.submit = e instanceof Error ? e.message : t("contactForm.submitError");
     } finally {
       this.formSubmitting = false;
     }
@@ -888,7 +940,7 @@ Alpine.data("ticketForm", () => ({
   },
 
   get subCategories(): string[] {
-    const cat = this.categories.find((c: any) => c.id === this.category);
+    const cat = this.categories.find((c: TicketFormCategory) => c.id === this.category);
     return cat ? cat.subs : [];
   },
 
@@ -959,7 +1011,8 @@ Alpine.data("ticketForm", () => ({
     if (!this.validateStep(this.currentStep)) return;
     this.errors = {};
     try {
-      const subjectLabel = this.categories.find((c: any) => c.id === this.category)?.label || "";
+      const subjectLabel =
+        this.categories.find((c: TicketFormCategory) => c.id === this.category)?.label || "";
       const compositeSubject = subjectLabel
         ? `[${subjectLabel}] ${this.subject.trim()}`
         : this.subject.trim();
@@ -988,7 +1041,7 @@ Alpine.data("ticketForm", () => ({
         for (const item of this.files) {
           try {
             await uploadTicketAttachment(created.name, item.file);
-          } catch (err: any) {
+          } catch (err: unknown) {
             failed.push(item.name);
             console.warn("Attachment upload failed:", item.name, err);
           }
@@ -1002,10 +1055,11 @@ Alpine.data("ticketForm", () => ({
       setTimeout(() => {
         window.location.href = `${getBaseUrl()}pages/help/help-tickets.html`;
       }, 1500);
-    } catch (e: any) {
+    } catch (e: unknown) {
       // Login gerekli ise auth sayfasina redirect
-      if (e?.message === "Unauthorized") return;
-      this.errors.submit = e?.message || t("helpCenter.ticketSubmitError");
+      const msg = e instanceof Error ? e.message : "";
+      if (msg === "Unauthorized") return;
+      this.errors.submit = msg || t("helpCenter.ticketSubmitError");
     }
   },
 }));
@@ -1096,7 +1150,7 @@ Alpine.data("ticketsList", () => ({
   pageSize: 10,
   loading: false,
   errorMsg: "",
-  tickets: [] as any[],
+  tickets: [] as TicketRow[],
   total: 0,
   statusCounts: { all: 0, Open: 0, Replied: 0, Resolved: 0, Closed: 0 } as StatusCounts,
 
@@ -1104,7 +1158,7 @@ Alpine.data("ticketsList", () => ({
     // URL'den ?tab= varsa onu seçili getir (dashboard kartından gelinen akış)
     const urlTab = new URLSearchParams(window.location.search).get("tab");
     if (urlTab && ["all", "open", "pending", "closed"].includes(urlTab)) {
-      this.activeTab = urlTab as any;
+      this.activeTab = urlTab as "all" | "open" | "pending" | "closed";
     }
     await Promise.all([this.reload(), this.loadCounts()]);
   },
@@ -1117,16 +1171,16 @@ Alpine.data("ticketsList", () => ({
     }
   },
 
-  get filteredTickets(): any[] {
+  get filteredTickets(): TicketRow[] {
     const q = this.searchQuery.toLowerCase().trim();
     if (!q) return this.tickets;
     return this.tickets.filter(
-      (t: any) =>
+      (t: TicketRow) =>
         String(t.id).toLowerCase().includes(q) || (t.subject || "").toLowerCase().includes(q)
     );
   },
 
-  get paginatedTickets(): any[] {
+  get paginatedTickets(): TicketRow[] {
     return this.filteredTickets;
   },
 
@@ -1147,7 +1201,7 @@ Alpine.data("ticketsList", () => ({
 
   setTab(tab: string) {
     if (this.activeTab === tab) return;
-    this.activeTab = tab as any;
+    this.activeTab = tab as "all" | "open" | "pending" | "closed";
     this.currentPage = 1;
     this.reload();
   },
@@ -1234,9 +1288,10 @@ Alpine.data("ticketsList", () => ({
       this.total = res.total;
       // Sayilari her listede tazele
       this.loadCounts();
-    } catch (e: any) {
-      if (e?.message !== "Unauthorized") {
-        this.errorMsg = e?.message || "Talepler yüklenemedi";
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : "";
+      if (msg !== "Unauthorized") {
+        this.errorMsg = msg || "Talepler yüklenemedi";
       }
     } finally {
       this.loading = false;
@@ -1291,9 +1346,10 @@ Alpine.data("ticketDetail", () => ({
         text: (c.content || "").replace(/<[^>]+>/g, "").trim(),
         date: c.communication_date ? _fmtDT(c.communication_date) : "",
       }));
-    } catch (e: any) {
-      if (e?.message !== "Unauthorized") {
-        this.errorMsg = e?.message || "Talep yüklenemedi";
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : "";
+      if (msg !== "Unauthorized") {
+        this.errorMsg = msg || "Talep yüklenemedi";
       }
     } finally {
       this.loading = false;
@@ -1308,8 +1364,8 @@ Alpine.data("ticketDetail", () => ({
       await replyTicket(this.ticketId, this.replyText.trim());
       this.replyText = "";
       await this.loadAll();
-    } catch (e: any) {
-      this.sendError = e?.message || "Yanıt gönderilemedi";
+    } catch (e: unknown) {
+      this.sendError = e instanceof Error ? e.message : "Yanıt gönderilemedi";
     } finally {
       this.sending = false;
     }
@@ -1321,8 +1377,8 @@ Alpine.data("ticketDetail", () => ({
     try {
       await updateTicketStatus(this.ticketId, "Closed");
       await this.loadAll();
-    } catch (e: any) {
-      this.sendError = e?.message || "Talep kapatılamadı";
+    } catch (e: unknown) {
+      this.sendError = e instanceof Error ? e.message : "Talep kapatılamadı";
     } finally {
       this.closing = false;
     }

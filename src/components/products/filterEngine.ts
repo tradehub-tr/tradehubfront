@@ -153,10 +153,10 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
     if (state.priceMax !== null) params.max_price = state.priceMax;
 
     // Min order
-    if (state.minOrder !== null) (params as any).min_order = state.minOrder;
+    if (state.minOrder !== null) params.min_order = state.minOrder;
 
     // Onaylanmış Satıcı filter (KYB Verified)
-    if (state.verifiedSupplier) (params as any).verified_supplier = 1;
+    if (state.verifiedSupplier) params.verified_supplier = true;
 
     // Supplier countries — multi-select: backend comma-separated string'i parse edip
     // ["in", list] filter'ına çevirir (Admin Seller Profile.country alanı üzerinde).
@@ -166,12 +166,12 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
 
     // Management certifications (state-bazlı; URL ile senkron)
     if (state.mgmtCertifications.length > 0) {
-      (params as any).mgmt_certifications = state.mgmtCertifications.join(",");
+      params.mgmt_certifications = state.mgmtCertifications.join(",");
     }
 
     // Product certifications (state-bazlı; URL ile senkron)
     if (state.productCertifications.length > 0) {
-      (params as any).product_certifications = state.productCertifications.join(",");
+      params.product_certifications = state.productCertifications.join(",");
     }
 
     // Brand multi-select

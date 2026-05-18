@@ -357,8 +357,6 @@ initCurrency().then(() => {
 
   // Trigger initial load
   engine.refresh();
-
-  console.info('[products] Filter engine initialized');
 }).catch(err => {
   console.error('[products] Init failed:', err);
   showGridError();

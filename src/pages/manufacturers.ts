@@ -30,12 +30,12 @@ import { pushRecentCategory, getRecentCategories } from '../utils/recentCategori
 // Manufacturers specific components
 import { ManufacturersLayout, initHorizontalCategoryBar, initCategoryFlyout, initFactorySliders, initManufacturerFilters } from '../components/manufacturers'
 import { getCategoryIcon, getIconByName } from '../components/header/MegaMenu';
-(window as any).__getCatIcon = (iconClass: string, name: string) =>
+window.__getCatIcon = (iconClass: string, name: string) =>
   iconClass ? getCategoryIcon(iconClass) : getIconByName(name);
 
 // Sidebar kişiselleştirme sinyali — son ziyaret edilen kategori slug'ları (en yeni başta).
 // ManufacturersHero "Kategoriye göre tedarik edin" sidebar'ı bu listeyi başa alıp 6 ile sınırlar.
-(window as any).__getRecentCategorySlugs = (): string[] =>
+window.__getRecentCategorySlugs = (): string[] =>
   getRecentCategories(12).map((c) => c.slug);
 
 const appEl = document.querySelector<HTMLDivElement>('#app')!;

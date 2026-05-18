@@ -98,7 +98,7 @@ function toSkuMatrix(product: ProductDetail): CartDrawerItemModel["skuMatrix"] {
   const secondVariant = product.variants[1];
   if (secondVariant && secondVariant.type !== "size" && secondVariant.label) {
     const axis2Name = secondVariant.label;
-    return colorVariant.skuMatrix.map((row: any) => ({
+    return colorVariant.skuMatrix.map((row) => ({
       ...row,
       extraAxes: {
         ...(row.extraAxes || {}),

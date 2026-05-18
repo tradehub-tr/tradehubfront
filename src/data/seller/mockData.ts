@@ -891,7 +891,18 @@ export function getSellerData(): SellerStorefrontData {
 }
 
 // ─── C14: Seller Performance Stats & Reviews ──────────────────────────────
-export function getSellerStats(): any {
+export interface SellerStats {
+  rating: number;
+  reviewCount: number;
+  responseTime: string;
+  onTimeDeliveryRate: string;
+  transactions: number;
+  supplierServiceScore: number;
+  onTimeShipmentScore: number;
+  productQualityScore: number;
+}
+
+export function getSellerStats(): SellerStats {
   return {
     rating: 4.7,
     reviewCount: 87,
@@ -904,7 +915,19 @@ export function getSellerStats(): any {
   };
 }
 
-export function getSellerReviews(): any[] {
+export interface SellerReview {
+  id: string;
+  reviewerName: string;
+  country: string;
+  countryFlag: string;
+  date: string;
+  comment: string;
+  productName: string;
+  productImage: string;
+  productPrice: string;
+}
+
+export function getSellerReviews(): SellerReview[] {
   return [
     {
       id: "rev-1",

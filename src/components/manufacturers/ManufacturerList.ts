@@ -285,11 +285,10 @@ export function ManufacturerList(): string {
 // Kept for backwards-compat export — no-op since cards are now Alpine-rendered
 export function initFactorySliders(): void {
   if (typeof window === "undefined") return;
-  const w = window as any;
   // Alpine inline x-data'dan çağrılabilir global helper'lar
-  w.__getSellerFavs = (): string[] => getFavoriteSellers().map((s) => s.code);
-  w.__isSellerFav = (code: string): boolean => isSellerFavorited(code);
-  w.__openSellerFavMenu = (anchor: HTMLElement, seller: any): void => {
+  window.__getSellerFavs = (): string[] => getFavoriteSellers().map((s) => s.code);
+  window.__isSellerFav = (code: string): boolean => isSellerFavorited(code);
+  window.__openSellerFavMenu = (anchor: HTMLElement, seller: SellerCardSummary): void => {
     const code = seller?.seller_code || seller?.code;
     if (!code) return;
     openSellerFavoritesDropdown(anchor, {

@@ -138,14 +138,26 @@ export interface OrderForTicket {
  * Guest'te veya buyer profili yoksa bos dondurur (catch edilir).
  * exclude_self_seller=1: satici kendi sattigi siparisleri listede gormez. */
 export async function listMyOrdersForTicket(): Promise<OrderForTicket[]> {
+  /** API'den dönen ham order kaydı — sadece bu fonksiyonun ihtiyaç duyduğu alanlar. */
+  interface RawOrder {
+    order_number?: string;
+    name?: string;
+    seller_name?: string;
+    seller?: string;
+    order_date?: string;
+    status?: string;
+  }
   try {
-    const payload = await callMethod<{ orders: any[] }>("tradehub_core.api.order.get_my_orders", {
-      page_size: 100,
-      exclude_self_seller: 1,
-    });
+    const payload = await callMethod<{ orders: RawOrder[] }>(
+      "tradehub_core.api.order.get_my_orders",
+      {
+        page_size: 100,
+        exclude_self_seller: 1,
+      }
+    );
     const orders = payload?.orders || [];
-    return orders.map((o: any) => ({
-      order_number: o.order_number || o.name,
+    return orders.map((o) => ({
+      order_number: o.order_number || o.name || "",
       seller_name: o.seller_name || o.seller || "",
       order_date: o.order_date || "",
       status: o.status || "",

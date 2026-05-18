@@ -3,7 +3,7 @@ import { getBaseUrl } from "./url";
 const BASE_URL = import.meta.env.VITE_API_URL || "/api";
 
 // Alpine component'leri window.API_BASE üzerinden erişir
-(window as any).API_BASE = BASE_URL;
+window.API_BASE = BASE_URL;
 
 // ─── CSRF Token Cache ─────────────────────────────────────────────────────────
 // Frappe CSRF token cookie'de tutulmaz — session'da sunucu tarafında saklanır.

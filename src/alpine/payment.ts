@@ -5,6 +5,23 @@ import {
   fetchAllTransactions,
   exportTransactions,
 } from "../components/payment/state/PaymentStore";
+import type { PaymentTransaction } from "../types/payment";
+
+/** İşlem tabı tipleri — list filtreleri için */
+type TransactionTab = "payment" | "refund";
+
+/** API'ye giden filtre/sayfalama parametreleri */
+interface TransactionQueryParams {
+  transaction_type?: string;
+  status?: string;
+  date_from?: string;
+  date_to?: string;
+  amount_min?: string;
+  amount_max?: string;
+  currency?: string;
+  page?: number;
+  page_size?: number;
+}
 
 Alpine.data("interactiveCard", () => ({
   cardNumber: "",
@@ -69,8 +86,8 @@ Alpine.data("interactiveCard", () => ({
 }));
 
 Alpine.data("paymentManagement", () => ({
-  payments: [] as any[],
-  refunds: [] as any[],
+  payments: [] as PaymentTransaction[],
+  refunds: [] as PaymentTransaction[],
   loading: true,
   activeTab: "payments" as "payments" | "refunds",
 
@@ -106,9 +123,9 @@ Alpine.data("paymentManagement", () => ({
 }));
 
 Alpine.data("transactionList", () => ({
-  transactions: [] as any[],
+  transactions: [] as PaymentTransaction[],
   loading: true,
-  activeTab: "payment" as "payment" | "refund",
+  activeTab: "payment" as TransactionTab,
   activeStatus: "all" as string,
   filters: {
     dateFrom: "",
@@ -125,7 +142,7 @@ Alpine.data("transactionList", () => ({
   async loadTransactions() {
     this.loading = true;
     try {
-      const params: Record<string, any> = {
+      const params: TransactionQueryParams = {
         transaction_type: this.activeTab,
         page: this.pagination.page,
         page_size: this.pagination.pageSize,
@@ -147,7 +164,7 @@ Alpine.data("transactionList", () => ({
   },
 
   setTab(tab: string) {
-    this.activeTab = tab as any;
+    this.activeTab = tab as TransactionTab;
     this.pagination.page = 1;
     this.loadTransactions();
   },
@@ -167,7 +184,7 @@ Alpine.data("transactionList", () => ({
 
   async exportData() {
     try {
-      const params: Record<string, any> = { transaction_type: this.activeTab };
+      const params: TransactionQueryParams = { transaction_type: this.activeTab };
       if (this.activeStatus !== "all") params.status = this.activeStatus;
       if (this.filters.dateFrom) params.date_from = this.filters.dateFrom;
       if (this.filters.dateTo) params.date_to = this.filters.dateTo;

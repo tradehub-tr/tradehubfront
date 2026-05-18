@@ -79,8 +79,8 @@ function loadGTM(): void {
   if (loaded["gtm"]) return;
 
   // Initialize dataLayer
-  (window as any).dataLayer = (window as any).dataLayer || [];
-  (window as any).dataLayer.push({
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
     "gtm.start": new Date().getTime(),
     event: "gtm.js",
   });
@@ -245,6 +245,6 @@ export function rejectAllCookies(): void {
 
 // ── GTM dataLayer push helper ──────────────────────────────────────────
 export function pushToDataLayer(data: Record<string, unknown>): void {
-  (window as any).dataLayer = (window as any).dataLayer || [];
-  (window as any).dataLayer.push(data);
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push(data);
 }

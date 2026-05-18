@@ -50,20 +50,25 @@ function migrateOldData(): void {
   if (localStorage.getItem(STORAGE_KEY)) return;
 
   try {
-    const oldItems: any[] = JSON.parse(oldData);
+    // Eski format: API/legacy serialize'inden gelen serbest şekilli kayıtlar.
+    // `unknown` üzerinde defansif okuma yapıp güvenli bir FavoriteItem'e dönüştürüyoruz.
+    const oldItems: unknown = JSON.parse(oldData);
     if (!Array.isArray(oldItems)) return;
 
     const state: FavoritesState = {
       lists: [],
-      items: oldItems.map((item) => ({
-        id: item.id || crypto.randomUUID(),
-        image: item.image || "",
-        title: item.title || "",
-        priceRange: item.priceRange || "",
-        minOrder: item.minOrder || "",
-        listIds: [DEFAULT_LIST_ID],
-        addedAt: Date.now(),
-      })),
+      items: oldItems.map((item) => {
+        const it = (item ?? {}) as Record<string, unknown>;
+        return {
+          id: (typeof it.id === "string" && it.id) || crypto.randomUUID(),
+          image: typeof it.image === "string" ? it.image : "",
+          title: typeof it.title === "string" ? it.title : "",
+          priceRange: typeof it.priceRange === "string" ? it.priceRange : "",
+          minOrder: typeof it.minOrder === "string" ? it.minOrder : "",
+          listIds: [DEFAULT_LIST_ID],
+          addedAt: Date.now(),
+        };
+      }),
     };
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -292,7 +297,10 @@ async function fetchFromBackend(): Promise<FavoritesState | null> {
     const res = await callMethod<{ message: FavoritesState }>(
       "tradehub_core.api.favorites.get_my_favorites"
     );
-    const remote = (res as any)?.message ?? res;
+    // callMethod bazen direkt FavoritesState bazen {message: ...} wrap döndürebiliyor;
+    // her iki şekli de defansif olarak destekliyoruz.
+    const maybeWrapped = res as unknown as { message?: unknown };
+    const remote = (maybeWrapped?.message ?? res) as Partial<FavoritesState> | null;
     if (!remote || typeof remote !== "object") return null;
     return {
       lists: Array.isArray(remote.lists) ? remote.lists : [],
@@ -319,7 +327,8 @@ async function mergeLocalIntoBackend(): Promise<FavoritesState | null> {
       { state: JSON.stringify(local) },
       true
     );
-    const merged = (res as any)?.message ?? res;
+    const maybeWrapped = res as unknown as { message?: unknown };
+    const merged = (maybeWrapped?.message ?? res) as Partial<FavoritesState> | null;
     if (!merged || typeof merged !== "object") return null;
     return {
       lists: Array.isArray(merged.lists) ? merged.lists : [],

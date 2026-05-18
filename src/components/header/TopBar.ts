@@ -1781,7 +1781,7 @@ function initCompactSearchSuggestions(): void {
         const items = data.suggestions.slice(0, 3);
         recoList.innerHTML = items
           .map(
-            (item: any) => `
+            (item) => `
           <button type="button" tabindex="-1" data-compact-expanded-interactive="true" data-suggestion-text="${item.text.replace(/"/g, "&quot;")}" class="compact-suggestion-btn th-no-press block w-full text-left text-[22px] font-normal leading-tight text-gray-900 dark:text-white truncate cursor-pointer no-underline hover:no-underline focus:no-underline transition-opacity hover:opacity-60">${item.text}</button>
         `
           )
@@ -1792,7 +1792,7 @@ function initCompactSearchSuggestions(): void {
       if (chipsContainer) {
         const chipItems = data.chips.length > 0 ? data.chips : data.suggestions.slice(3, 6);
         chipsContainer.innerHTML = chipItems
-          .map((item: any) => {
+          .map((item) => {
             const href =
               item.type === "category" && item.slug
                 ? "/pages/products.html?cat=" + encodeURIComponent(item.slug)

@@ -256,7 +256,7 @@ async function renderProductPage() {
   // ── Original images + title (for "back to default" fallback) ──
   const originalTitle = product.title || '';
   // Store original listing images on window for Alpine gallery to access
-  (window as any).__originalListingImages = product.images.map((img: any) => ({
+  window.__originalListingImages = product.images.map((img) => ({
     ...img,
   }));
 
@@ -303,8 +303,6 @@ async function renderProductPage() {
 
   // Start Alpine LAST
   startAlpine();
-
-  console.info('[product-detail] Rendered product:', product.id, product.title);
 }
 
 // Execute render

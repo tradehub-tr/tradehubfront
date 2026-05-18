@@ -194,14 +194,13 @@ export function ManufacturerFilterSidebar(): string {
  */
 export function initManufacturerFilters(): void {
   if (typeof window === "undefined") return;
-  const w = window as any;
-  if (w.__mfrFiltersInited) return;
-  w.__mfrFiltersInited = true;
+  if (window.__mfrFiltersInited) return;
+  window.__mfrFiltersInited = true;
 
   const params = new URLSearchParams(window.location.search);
 
   document.addEventListener("alpine:init", () => {
-    const Alpine = (window as any).Alpine;
+    const Alpine = window.Alpine;
     if (!Alpine) return;
 
     Alpine.data("manufacturerFilters", () => ({
@@ -233,7 +232,9 @@ export function initManufacturerFilters(): void {
       apply() {
         const url = new URL(window.location.href);
         const p = url.searchParams;
-        const setOrDel = (k: string, v: any) => {
+        // URL query param yazıcısı — primitive veya string[] (countries gibi multi-select)
+        // değerleri kabul eder. Boş/null/[] → key silinir.
+        const setOrDel = (k: string, v: string | number | string[] | null | undefined) => {
           if (v === "" || v == null || (Array.isArray(v) && v.length === 0)) p.delete(k);
           else p.set(k, Array.isArray(v) ? v.join(",") : String(v));
         };

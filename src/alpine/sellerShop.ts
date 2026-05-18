@@ -6,7 +6,57 @@ import Alpine from "alpinejs";
 import { isLoggedIn, waitForAuth } from "../utils/auth";
 import { showLoginModal } from "../components/product/LoginModal";
 
-const API_BASE = (window as any).API_BASE || "/api";
+const API_BASE = window.API_BASE || "/api";
+
+// ─── Yerel tipler ────────────────────────────────────────
+// Alpine store içinde kullanılan dinamik veri şekilleri.
+// API response esnek olduğu için Record<string, unknown> tabanlı tutuluyor;
+// erişilen alanlar inline interface ile tipleniyor.
+
+/** Seller storefront layout bölümü (DocType: Seller Storefront Section). */
+interface StorefrontSection {
+  type: string;
+  order: number;
+  enabled: boolean;
+  settings: Record<string, unknown> & { title?: string };
+}
+
+/** Seller veya platform kategorisi (storefront sidebar/grid). */
+interface SellerShopCategory {
+  name: string;
+  category_name?: string;
+  image?: string;
+  /** "seller" veya "platform" — backend ayrımı. */
+  type?: string;
+}
+
+/** Storefront ürün kartı (hem mock hem API response). */
+interface SellerShopProduct {
+  name: string;
+  product_name?: string;
+  image?: string;
+  price_min?: string | number;
+  price_max?: string | number;
+  moq?: number;
+  moq_unit?: string;
+  category?: string;
+  category_name?: string;
+  product_category?: string;
+  product_category_name?: string;
+  sold_count?: number;
+  view_count?: number;
+  creation?: string;
+  currency?: string;
+}
+
+/** Layout theme — admin panelden gelen renkler. */
+interface StorefrontTheme {
+  primaryColor?: string;
+  accentColor?: string;
+  navBgColor?: string;
+  navTextColor?: string;
+  [key: string]: string | undefined;
+}
 
 // ─── Mock data for development / preview ─────────────────
 const MOCK_SELLER = {
@@ -195,14 +245,15 @@ Alpine.data("sellerShop", () => ({
   // State
   loading: true,
   sellerCode: "",
-  seller: null as Record<string, any> | null,
+  // Seller esnek bir backend response (snake_case key'ler); inline erişimler için Record kullanıyoruz.
+  seller: null as Record<string, unknown> | null,
   layout: { sections: DEFAULT_SECTIONS, theme: {} } as {
-    sections: any[];
-    theme: Record<string, any>;
+    sections: StorefrontSection[];
+    theme: StorefrontTheme;
   },
-  categories: [] as any[],
-  products: [] as any[],
-  filteredProducts: [] as any[],
+  categories: [] as SellerShopCategory[],
+  products: [] as SellerShopProduct[],
+  filteredProducts: [] as SellerShopProduct[],
   activeCategory: "",
   activeCategoryType: "" as string, // "" | "seller" | "platform"
   activeCategoryName: "",
@@ -323,7 +374,7 @@ Alpine.data("sellerShop", () => ({
   },
 
   sectionTitle(type: string): string {
-    const section = this.layout.sections.find((s: any) => s.type === type);
+    const section = this.layout.sections.find((s) => s.type === type);
     return section?.settings?.title || SECTION_LABELS[type] || "";
   },
 
@@ -337,10 +388,10 @@ Alpine.data("sellerShop", () => ({
       this.activeCategory = categoryName;
       this.activeCategoryType = categoryType;
       const cat = this.categories.find(
-        (c: any) => c.name === categoryName && (c.type || "seller") === categoryType
-      ) as any;
+        (c) => c.name === categoryName && (c.type || "seller") === categoryType
+      );
       this.activeCategoryName = cat?.category_name || categoryName;
-      this.filteredProducts = this.products.filter((p: any) => {
+      this.filteredProducts = this.products.filter((p) => {
         if (categoryType === "platform") {
           return p.product_category === categoryName || p.product_category_name === categoryName;
         }
@@ -350,36 +401,34 @@ Alpine.data("sellerShop", () => ({
   },
 
   sortProducts() {
+    // price_min/price_max API'den hem string hem number gelebiliyor — String()'le güvene al.
+    const toNum = (v: string | number | undefined): number => parseFloat(String(v ?? "0"));
     const sorted = [...this.filteredProducts];
     switch (this.sortBy) {
       case "price_asc":
-        sorted.sort(
-          (a: any, b: any) => parseFloat(a.price_min || "0") - parseFloat(b.price_min || "0")
-        );
+        sorted.sort((a, b) => toNum(a.price_min) - toNum(b.price_min));
         break;
       case "price_desc":
-        sorted.sort(
-          (a: any, b: any) => parseFloat(b.price_min || "0") - parseFloat(a.price_min || "0")
-        );
+        sorted.sort((a, b) => toNum(b.price_min) - toNum(a.price_min));
         break;
       case "newest":
-        sorted.sort((a: any, b: any) => (b.creation || "").localeCompare(a.creation || ""));
+        sorted.sort((a, b) => (b.creation || "").localeCompare(a.creation || ""));
         break;
       case "best_selling":
-        sorted.sort((a: any, b: any) => (b.sold_count || 0) - (a.sold_count || 0));
+        sorted.sort((a, b) => (b.sold_count || 0) - (a.sold_count || 0));
         break;
     }
     this.filteredProducts = sorted;
   },
 
-  formatPrice(p: any): string {
+  formatPrice(p: SellerShopProduct): string {
     if (!p.price_min) return "";
-    const min = parseFloat(p.price_min);
-    const max = p.price_max ? parseFloat(p.price_max) : 0;
-    const cur = (p as any).currency || "TRY";
-    if (max > min && (window as any).csFormatPriceRange)
-      return (window as any).csFormatPriceRange(min, max, cur);
-    if ((window as any).csFormatPrice) return (window as any).csFormatPrice(min, cur);
+    const min = parseFloat(String(p.price_min));
+    const max = p.price_max ? parseFloat(String(p.price_max)) : 0;
+    const cur = p.currency || "TRY";
+    if (max > min && window.csFormatPriceRange)
+      return window.csFormatPriceRange(min, max, cur);
+    if (window.csFormatPrice) return window.csFormatPrice(min, cur);
     return `₺${min.toFixed(2)}`;
   },
 

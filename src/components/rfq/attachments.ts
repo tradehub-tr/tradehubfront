@@ -374,7 +374,7 @@ export function revokeFilePreview(file: File): void {
 export async function fetchRfqAttachments(rfqId: string): Promise<RfqAttachment[]> {
   try {
     const res = await fetch(
-      `${(window as any).API_BASE || "/api"}/method/tradehub_core.api.rfq.get_rfq_attachments?rfq_id=${encodeURIComponent(rfqId)}`,
+      `${window.API_BASE || "/api"}/method/tradehub_core.api.rfq.get_rfq_attachments?rfq_id=${encodeURIComponent(rfqId)}`,
       { credentials: "include" }
     );
     const d = await res.json();

@@ -124,8 +124,8 @@ export async function initHorizontalCategoryBar(): Promise<void> {
   // ── Kategorileri API'den çek ──────────────────────────────────────────────
   let categories: ApiCategory[] = [];
   try {
-    const url = (window as any).API_BASE
-      ? `${(window as any).API_BASE}/method/tradehub_core.api.category.get_mega_menu`
+    const url = window.API_BASE
+      ? `${window.API_BASE}/method/tradehub_core.api.category.get_mega_menu`
       : "/api/method/tradehub_core.api.category.get_mega_menu";
     const res = await fetch(url, { credentials: "include" }).then((r) => r.json());
     categories = (res.message || []) as ApiCategory[];
