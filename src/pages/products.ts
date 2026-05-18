@@ -13,9 +13,6 @@ import { TopBar, initMobileDrawer, MegaMenu, initMegaMenu, initHeaderCart } from
 import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar'
 
-// Shared components
-import { Breadcrumb } from '../components/shared/Breadcrumb'
-
 // Footer components
 import { FooterLinks } from '../components/footer'
 
@@ -33,8 +30,8 @@ import {
   initProductSliders,
   ListingCartDrawer,
   initListingCartDrawer,
-  SearchHeader,
-  updateSearchHeader,
+  SubHeader,
+  updateSubHeader,
   rerenderProductGrid,
   initFilterEngine,
   updateFilterChips,
@@ -136,9 +133,15 @@ appEl.innerHTML = `
   <main>
     <section class="pt-6 pb-4 lg:pt-8 lg:pb-6" style="background: var(--products-bg, #f9fafb);">
       <div class="container-boxed">
-        ${Breadcrumb(productsBreadcrumb)}
-        <!-- Search Header (keyword, product count, sorting, view toggle) -->
-        ${SearchHeader({ keyword: initialKeyword, totalProducts: 0 })}
+        <!-- Sub Header: tabs (Ürünler/Üreticiler) + breadcrumb + results title + sort/view -->
+        ${SubHeader({
+          activeTab: 'products',
+          breadcrumb: productsBreadcrumb,
+          categoryParam: categoryParam ?? undefined,
+          queryParam: queryParam ?? undefined,
+          keyword: initialKeyword,
+          totalCount: 0,
+        })}
 
         <!-- Active Filter Chips -->
         <div id="active-filter-chips" x-data="filterChips" class="flex flex-wrap gap-2 mb-3 empty:hidden"></div>
@@ -230,7 +233,7 @@ initAnimatedPlaceholder('#topbar-compact-search-input');
 // Initialize product card image sliders (event delegation, not yet migrated)
 initProductSliders();
 
-// Listen for view-mode-change events from SearchHeader toggle buttons
+// Listen for view-mode-change events from SubHeader toggle buttons
 document.addEventListener('view-mode-change', (e: Event) => {
   setGridViewMode((e as CustomEvent).detail.mode);
 });
@@ -285,7 +288,7 @@ if (categoryParam) {
   onCategoriesLoaded(() => {
     const resolvedKeyword = resolveKeyword();
     if (resolvedKeyword && resolvedKeyword !== categoryParam) {
-      updateSearchHeader({ keyword: resolvedKeyword });
+      updateSubHeader({ keyword: resolvedKeyword });
       // Breadcrumb'u da güncelle
       const breadcrumbNav = document.querySelector('nav[aria-label="Breadcrumb"]');
       if (breadcrumbNav) {
@@ -318,8 +321,8 @@ initCurrency().then(() => {
     onUpdate: (products, total, page, totalPages, hasNext, hasPrev) => {
       rerenderProductGrid(products);
       const resolvedKeyword = resolveKeyword() || undefined;
-      updateSearchHeader({
-        totalProducts: total,
+      updateSubHeader({
+        totalCount: total,
         keyword: resolvedKeyword,
       });
       if (engine) updateFilterChips(engine.getState());

@@ -36,8 +36,26 @@ function renderSourceByCategory(): string {
           try {
             const url = (window.API_BASE || '/api') + '/method/tradehub_core.api.category.get_mega_menu';
             const res = await fetch(url, { credentials: 'include' }).then(r => r.json());
-            const data = res.message || [];
-            this.cats = data.map(c => ({
+            const apiCats = res.message || [];
+
+            // Subtle personalization: son ziyaret edilen kategorileri başa al,
+            // kalan slot'ları API sırasıyla doldur, en fazla 6 göster.
+            // Sidebar h-[400px] içine 6 kategori + 'Tüm kategoriler' sığar.
+            const recentSlugs = (window.__getRecentCategorySlugs && window.__getRecentCategorySlugs()) || [];
+            const bySlug = {};
+            for (const c of apiCats) if (c && c.slug) bySlug[c.slug] = c;
+            const seen = new Set();
+            const merged = [];
+            for (const slug of recentSlugs) {
+              const cat = bySlug[slug];
+              if (cat && !seen.has(slug)) { seen.add(slug); merged.push(cat); }
+            }
+            for (const cat of apiCats) {
+              if (merged.length >= 6) break;
+              if (cat && cat.slug && !seen.has(cat.slug)) { seen.add(cat.slug); merged.push(cat); }
+            }
+
+            this.cats = merged.slice(0, 6).map(c => ({
               ...c,
               iconSvg: window.__getCatIcon ? window.__getCatIcon(c.icon_class || '', c.name) : ''
             }));

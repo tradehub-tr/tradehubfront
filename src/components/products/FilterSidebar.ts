@@ -224,7 +224,7 @@ function renderPriceRange(section: PriceRangeFilterSection): string {
       />
       <button
         type="button"
-        class="shrink-0 w-8 h-8 flex items-center justify-center rounded bg-primary-500 hover:bg-primary-600 text-white text-base font-semibold leading-none border border-primary-500 hover:border-primary-600 transition-colors cursor-pointer"
+        class="th-btn shrink-0 !w-8 !h-8 !p-0 leading-none text-base font-semibold"
         aria-label="${t("products.filterApply")}"
         data-filter-section="${section.id}"
         data-filter-action="apply"
@@ -256,7 +256,7 @@ function renderMinOrder(section: MinOrderFilterSection): string {
       >${section.filter.unit}</span>
       <button
         type="button"
-        class="shrink-0 w-8 h-8 flex items-center justify-center rounded bg-primary-500 hover:bg-primary-600 text-white text-base font-semibold leading-none border border-primary-500 hover:border-primary-600 transition-colors cursor-pointer"
+        class="th-btn shrink-0 !w-8 !h-8 !p-0 leading-none text-base font-semibold"
         aria-label="${t("products.filterApply")}"
         data-filter-section="${section.id}"
         data-filter-action="apply"
@@ -516,8 +516,7 @@ export function FilterSidebar(sections?: FilterSection[], idPrefix = ""): string
         >${t("products.filters")}</h2>
         <button
           type="button"
-          class="th-no-press text-[12px] font-medium transition-colors hover:underline"
-          style="color: var(--filter-count-color, #6b7280);"
+          class="th-btn-link !p-0 text-[12px] font-medium"
           data-filter-action="clear-all"
           @click="clearAllFilters()"
         >${t("products.filterClearAll")}</button>
@@ -535,7 +534,7 @@ export function FilterSidebar(sections?: FilterSection[], idPrefix = ""): string
       >
         <button
           type="button"
-          class="w-full py-2.5 rounded-md bg-primary-500 hover:bg-primary-600 text-white text-sm font-semibold border border-primary-500 hover:border-primary-600 transition-colors cursor-pointer"
+          class="th-btn w-full"
           data-filter-action="apply-all"
           @click="applyFilters()"
         >${t("products.filterApply")}</button>

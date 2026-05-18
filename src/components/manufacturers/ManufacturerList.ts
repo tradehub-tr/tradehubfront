@@ -187,7 +187,10 @@ export function ManufacturerList(): string {
                     </div>
                   </template>
                   <template x-for="(p, i) in (seller.products || []).slice(0, 3)" :key="p.name">
-                    <div class="flex flex-col bg-white border border-gray-100 rounded-lg overflow-hidden w-[140px] xl:w-[180px] flex-shrink-0">
+                    <a
+                      :href="'/pages/product-detail.html?id=' + encodeURIComponent(p.name)"
+                      class="flex flex-col bg-white border border-gray-100 rounded-lg overflow-hidden w-[140px] xl:w-[180px] flex-shrink-0 no-underline text-inherit hover:border-gray-300 transition-colors"
+                    >
                       <div class="bg-gray-50 flex-1 overflow-hidden">
                         <img x-show="p.image" :src="p.image" :alt="p.product_name" class="w-full h-full object-cover" />
                         <div x-show="!p.image" class="w-full h-full flex items-center justify-center text-gray-200">
@@ -199,7 +202,7 @@ export function ManufacturerList(): string {
                         <p x-show="p.price_min" class="text-[12px] font-bold text-gray-900" x-text="(_cv, p.price_max && p.price_max > p.price_min ? window.csFormatPriceRange(parseFloat(p.price_min), parseFloat(p.price_max), p.currency || 'USD') : window.csFormatPrice(parseFloat(p.price_min), p.currency || 'USD'))"></p>
                         <p x-show="p.moq" class="text-[11px] text-gray-400 mt-0.5" x-text="p.moq + ' ' + (p.moq_unit || 'Adet')"></p>
                       </div>
-                    </div>
+                    </a>
                   </template>
                 </div>
 

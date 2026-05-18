@@ -819,11 +819,7 @@ export function initMegaMenu(): void {
             class="th-mega-sidebar-item mega-cat-btn flex items-center gap-2 sm:gap-3 w-full px-3 sm:px-4 py-3 sm:py-2.5 text-sm text-left transition-colors border-l-2 border-transparent ${index === 0 ? "th-mega-sidebar-item--active" : ""}"
             data-category="${cat.id}"
           >
-            ${
-              cat.image
-                ? `<img src="${cat.image}" alt="${cat.name}" class="w-5 h-5 rounded-full object-cover flex-shrink-0" loading="lazy" />`
-                : `<span class="flex-shrink-0 text-gray-400">${cat.icon_class ? getCategoryIcon(cat.icon_class) : getIconByName(cat.name)}</span>`
-            }
+            <span class="flex-shrink-0 inline-flex items-center justify-center [&>svg]:w-5 [&>svg]:h-5 text-gray-500 dark:text-gray-400">${cat.icon_class ? getCategoryIcon(cat.icon_class) : getIconByName(cat.name)}</span>
             <span class="flex-1 truncate">${cat.name}</span>
             <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/></svg>
           </a>
