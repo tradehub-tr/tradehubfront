@@ -6,7 +6,7 @@
 
 import type {
   BuyerDashboardData,
-  UserProfile,
+  BuyerUserInfo,
   UserStat,
   NotificationSlide,
   BrowsingHistoryProduct,
@@ -29,7 +29,7 @@ const PROMO_IMGS = [
   "https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=160&h=160&fit=crop", // shipping
 ];
 
-export const mockUserProfile: UserProfile = {
+export const mockUserProfile: BuyerUserInfo = {
   avatar:
     "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=96&h=96&fit=crop&crop=face",
   username: "Metin K.",

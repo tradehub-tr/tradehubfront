@@ -4,11 +4,11 @@
  * '24H Çevrimiçi destek' badge (top-right), 3-column stats grid with vertical dividers.
  */
 
-import type { UserProfile } from "../../types/buyerDashboard";
+import type { BuyerUserInfo } from "../../types/buyerDashboard";
 import { t } from "../../i18n";
 
 export interface UserInfoCardProps {
-  user: UserProfile;
+  user: BuyerUserInfo;
 }
 
 export function UserInfoCard(props: UserInfoCardProps): string {

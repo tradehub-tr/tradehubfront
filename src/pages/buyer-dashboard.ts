@@ -33,6 +33,7 @@ import { FloatingPanel, initFloatingPanel } from '../components/floating'
 import { BuyerDashboardLayout, initBuyerDashboardLayout } from '../components/buyer-dashboard'
 import { renderSidebar } from '../components/sidebar'
 import { KybStatusWidget } from '../components/kyb/KybStatusWidget'
+import { VerificationStatusBanner } from '../components/buyer-dashboard/VerificationStatusBanner'
 import { api } from '../utils/api'
 
 // KYB status: only fetch for sellers / pending applicants (silent fail)
@@ -54,13 +55,16 @@ if (sessionUser && (sessionUser.is_seller || sessionUser.pending_seller_applicat
 
 function renderMainContent(): string {
   const defaultUser = { avatar: '', username: '', profileHref: '/profile' };
+  // Sprint 2.6: Yeni VerificationStatusBanner (KYC + KYB state machine, 9 state).
+  // Eski KybStatusWidget yine korunur — Verified durumunda küçük badge gösterir.
+  const verificationBanner = VerificationStatusBanner(sessionUser);
   const widget = KybStatusWidget(sessionUser, kybInfo);
   const dashboard = BuyerDashboardLayout({
     data: { user: defaultUser, stats: [], notifications: [], browsingHistory: [], promotions: [] },
     emailVerified,
     userEmail: sessionUser?.email ?? '',
   });
-  return widget + dashboard;
+  return verificationBanner + widget + dashboard;
 }
 
 function getBreadcrumbItems(): { label: string; href?: string }[] {
@@ -117,6 +121,7 @@ initLanguageSelector();
 initBuyerDashboardLayout();
 mountChatPopup();
 initChatTriggers();
+import("../components/buyer-dashboard/LockedFeatureModal").then((m) => m.initLockedFeatureModal());
 startAlpine();
 
 // Email doğrulama akışı artık global EmailVerificationBanner tarafından
