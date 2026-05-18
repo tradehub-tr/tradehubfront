@@ -188,10 +188,7 @@ Alpine.data("ordersListComponent", () => ({
 
   get selectedOrderQty(): number {
     if (!this.selectedOrder) return 0;
-    return this.selectedOrder.products.reduce(
-      (s: number, p) => s + (p.quantity ?? 0),
-      0
-    );
+    return this.selectedOrder.products.reduce((s: number, p) => s + (p.quantity ?? 0), 0);
   },
 
   get productSortLabel(): string {
@@ -624,10 +621,7 @@ Alpine.data("ordersListComponent", () => ({
   },
 
   totalQty(order: Order | null): number {
-    return (order?.products ?? []).reduce(
-      (s: number, p) => s + (p.quantity ?? 0),
-      0
-    );
+    return (order?.products ?? []).reduce((s: number, p) => s + (p.quantity ?? 0), 0);
   },
 }));
 

@@ -288,7 +288,10 @@ function getSkuAxisKey(
   return { field: "extra", extraName: groupLabel };
 }
 
-function getSkuValueForAxis(sku: SkuMatrixEntry, axisKey: ReturnType<typeof getSkuAxisKey>): string {
+function getSkuValueForAxis(
+  sku: SkuMatrixEntry,
+  axisKey: ReturnType<typeof getSkuAxisKey>
+): string {
   if (axisKey.field === "axis1") return sku.axis1 || "";
   if (axisKey.field === "axis2") return sku.axis2 || "";
   return (sku.extraAxes || {})[axisKey.extraName!] || "";

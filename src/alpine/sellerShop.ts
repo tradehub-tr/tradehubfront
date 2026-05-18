@@ -426,8 +426,7 @@ Alpine.data("sellerShop", () => ({
     const min = parseFloat(String(p.price_min));
     const max = p.price_max ? parseFloat(String(p.price_max)) : 0;
     const cur = p.currency || "TRY";
-    if (max > min && window.csFormatPriceRange)
-      return window.csFormatPriceRange(min, max, cur);
+    if (max > min && window.csFormatPriceRange) return window.csFormatPriceRange(min, max, cur);
     if (window.csFormatPrice) return window.csFormatPrice(min, cur);
     return `₺${min.toFixed(2)}`;
   },

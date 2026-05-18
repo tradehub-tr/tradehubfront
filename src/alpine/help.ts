@@ -274,7 +274,12 @@ Alpine.data("helpCenter", () => ({
       if (Array.isArray(items)) {
         items.forEach((item: unknown, qIndex: number) => {
           // i18n returnObjects sonucu unknown — q ve a alanlarını type guard ile doğrula
-          if (item && typeof item === "object" && "q" in item && typeof (item as { q: unknown }).q === "string") {
+          if (
+            item &&
+            typeof item === "object" &&
+            "q" in item &&
+            typeof (item as { q: unknown }).q === "string"
+          ) {
             const it = item as { q: string; a?: unknown };
             index.push({
               text: it.q,
@@ -327,8 +332,10 @@ Alpine.data("helpCenter", () => ({
       })
       .filter((r: { item: SearchIndexEntry; score: number }) => r.score > 0)
       .sort(
-        (a: { item: SearchIndexEntry; score: number }, b: { item: SearchIndexEntry; score: number }) =>
-          b.score - a.score
+        (
+          a: { item: SearchIndexEntry; score: number },
+          b: { item: SearchIndexEntry; score: number }
+        ) => b.score - a.score
       )
       .slice(0, 30)
       .map((r: { item: SearchIndexEntry; score: number }) => r.item);

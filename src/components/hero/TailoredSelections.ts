@@ -174,9 +174,9 @@ export function initTailoredSelections(): void {
         wrapper.innerHTML = collections.map((c) => renderCollectionSlide(c)).join("");
         // Swiper element-bound instance — `swiper-element`/init script tarafından
         // DOM element üzerine `.swiper` property'si olarak eklenir. Resmi tip yok.
-        const swiperEl = document.querySelector(
-          "#tailored-swiper"
-        ) as (HTMLElement & { swiper?: { update: () => void } }) | null;
+        const swiperEl = document.querySelector("#tailored-swiper") as
+          | (HTMLElement & { swiper?: { update: () => void } })
+          | null;
         if (swiperEl?.swiper) {
           swiperEl.swiper.update();
         }

@@ -64,7 +64,7 @@ function formatNumber(num: number): string {
 function buildTabUrl(
   target: "products" | "manufacturers",
   categoryParam?: string,
-  queryParam?: string,
+  queryParam?: string
 ): string {
   const base = target === "products" ? "/pages/products.html" : "/pages/manufacturers.html";
   const params = new URLSearchParams();
@@ -82,17 +82,15 @@ function buildTabUrl(
 function renderInlineToggle(
   activeTab: "products" | "manufacturers",
   categoryParam?: string,
-  queryParam?: string,
+  queryParam?: string
 ): string {
   const productsUrl = buildTabUrl("products", categoryParam, queryParam);
   const manufacturersUrl = buildTabUrl("manufacturers", categoryParam);
 
   const basePill =
     "inline-flex items-center px-4 py-1.5 text-sm font-semibold rounded-full whitespace-nowrap transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary-500/50";
-  const activeCls =
-    `${basePill} bg-gray-900 text-white shadow-sm dark:bg-white dark:text-gray-900`;
-  const inactiveCls =
-    `${basePill} bg-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white`;
+  const activeCls = `${basePill} bg-gray-900 text-white shadow-sm dark:bg-white dark:text-gray-900`;
+  const inactiveCls = `${basePill} bg-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white`;
 
   return `
     <span
@@ -127,7 +125,7 @@ function renderTitle(
   activeTab: "products" | "manufacturers",
   categoryParam: string | undefined,
   queryParam: string | undefined,
-  keyword: string,
+  keyword: string
 ): string {
   return `
     <h1 class="text-base sm:text-xl font-medium text-gray-900 dark:text-white min-w-0 break-words leading-snug tracking-tight m-0 max-w-[72ch]">
@@ -218,7 +216,8 @@ function renderViewModeToggle(): string {
   const baseBtn =
     "w-8 h-8 inline-flex items-center justify-center rounded-full transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary-500/40";
   const activeCls = "bg-gray-900 text-white dark:bg-white dark:text-gray-900";
-  const inactiveCls = "bg-transparent text-gray-400 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-200";
+  const inactiveCls =
+    "bg-transparent text-gray-400 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-200";
 
   return `
     <div class="inline-flex items-center bg-white border border-gray-200 rounded-full p-[3px] dark:bg-gray-800 dark:border-gray-700" role="tablist" aria-label="${t("products.viewMode")}">
@@ -274,7 +273,8 @@ function renderMobileFilterToggle(): string {
  * Word swaps via the `activeTab` so the same Alpine update path covers both pages.
  */
 function renderMetaLine(activeTab: "products" | "manufacturers", count: number): string {
-  const unitKey = activeTab === "products" ? "products.unitFound" : "products.unitFoundManufacturer";
+  const unitKey =
+    activeTab === "products" ? "products.unitFound" : "products.unitFoundManufacturer";
   return `
     <div id="sub-header-meta" class="mt-3 text-sm text-gray-500 dark:text-gray-400">
       <strong id="sub-header-count" class="text-gray-900 dark:text-white font-bold tabular-nums mr-1">${formatNumber(count)}</strong><span id="sub-header-unit">${t(unitKey)}</span>
@@ -332,10 +332,7 @@ export function SubHeader(props: SubHeaderProps): string {
  * - `totalCount` updates the bold number in the meta line ("5 ürün bulundu").
  * - `keyword` updates the brand-colored phrase inside the title.
  */
-export function updateSubHeader(info: {
-  totalCount?: number;
-  keyword?: string;
-}): void {
+export function updateSubHeader(info: { totalCount?: number; keyword?: string }): void {
   if (info.totalCount !== undefined) {
     const countEl = document.getElementById("sub-header-count");
     if (countEl) countEl.textContent = formatNumber(info.totalCount);

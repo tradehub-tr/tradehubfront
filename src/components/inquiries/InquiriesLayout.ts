@@ -989,8 +989,7 @@ export function initInquiriesLayout(): void {
             submitBtn.textContent = "...";
             try {
               const res = await fetch(
-                (window.API_BASE || "/api") +
-                  "/method/tradehub_core.api.rfq.add_rfq_details",
+                (window.API_BASE || "/api") + "/method/tradehub_core.api.rfq.add_rfq_details",
                 {
                   method: "POST",
                   credentials: "include",
