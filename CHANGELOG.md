@@ -1,3 +1,59 @@
+## [v1.1.9-beta.2] - 2026-05-18 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(kyc): KYC sayfası + form + prefill API entegrasyonu eklendi (@aliiball)
+  - pages/dashboard/kyc.html + src/pages/kyc.ts entry
+  - src/components/kyc/KycLayout.ts: Kurumsal/Bireysel toggle + boxed layout (account_type register'dan KYC formuna taşındı)
+  - get_prefill_data ile User Profile + son KYC/KYB değerleri prefill
+  - src/types/userProfile.ts type tanımları
+- feat(verification-ui): banner + locked-feature + kyc-required modal eklendi (@aliiball)
+  - VerificationStatusBanner: KYC × KYB state machine ile 9 banner durumu
+  - LockedFeatureModal: sidebar locked item için "Alıcı/Satıcı olun" CTA
+  - KycRequiredModal: checkout'ta [KYC_<STATE>] prefix regex parse + state-bazlı modal (Locked/Pending/Rejected/Suspended → support ticket)
+  - utils/sellerRouter.ts: satıcı dashboard yönlendirme yardımcısı
+- feat(data): countries + country-subdivisions mock data eklendi (@aliiball)
+  - src/data/countries.ts: ülke listesi (ISO kodları + isimler)
+  - src/data/country-subdivisions.ts: ülke-il/eyalet eşlemesi
+- feat(i18n): KYC + verification + address purpose çevirileri eklendi (@aliiball)
+  - en.ts + tr.ts: settings.myAccountTitle, settings.addressDisabledHint, header.myStore ("Mağaza Sayfam" → "Mağazalarım"), kyc.* key'leri, verification banner state'leri, address purpose etiketleri
+
+### Duzeltildi
+- fix(settings): address/city/postal_code disabled + Vergi tab gizlendi (@aliiball)
+  - SettingsAccountEdit + SettingsMyAccount address/city/postal_code disabled + helper text (Frappe Address mimarisinde olduğu için)
+  - SettingsLayout 4 noktada Vergi tab yorum satırı (S3=C kararı)
+  - FavoritesLayout User Profile field uyumu + filter sets
+  - buyer-dashboard NewBuyerInfo + UserInfoCard + types + mock Sprint 2
+  - pages/buyer-dashboard VerificationStatusBanner entegrasyonu
+
+### Degistirildi
+- refactor(sidebar): KYC + KYB iki ayrı lockable item olarak ayrıldı (@aliiball)
+  - sidebarData + sidebarIcons: KYC ve KYB için iki ayrı giriş
+  - SidebarMenuItem: lockable mantığı (session state üzerinden)
+  - Sidebar.ts legacy requireSeller davranışı kaldırıldı
+- refactor(auth): SupplierSetupForm + AccountSetupForm User Profile API'sine taşındı (@aliiball)
+  - supplier-setup + account-setup register_supplier / register_user Sprint 2.6 davranışına uyarlandı
+  - account_type Bireysel/Şirket toggle KYC formuna taşındı (register'dan kaldırıldı)
+  - utils/auth.ts session capability flag'leri (kyc_required, kyb_required, kyc_locked, kyb_locked) eklendi
+  - pages/sell.ts + pages/supplier-setup.ts Sprint 2 akışına uyumlandı
+- refactor(addresses): Bireysel/Kurumsal toggle + tax_no/tax_office eklendi (@aliiball)
+  - AddressesLayout: address_type toggle (Individual/Business)
+  - tax_no + tax_office Business için conditional render
+  - utils/tr-validation.ts: VKN + TCKN checksum
+  - alpine/addresses.ts: purpose alanı + Sprint 1 Faz D uyumu
+- refactor(kyb): mersis_no + kep_address + rejection_category form alanları eklendi (@aliiball)
+  - KybLayout + alpine/kyb purpose/state machine güncellemeleri
+  - pages/kyb.ts mersis (16 hane) + kep (email format) doğrulamaları
+- refactor(cart): SupplierCard + CartStore + cartService Sprint 2 uyumu (@aliiball)
+  - SupplierCard supplierId → admin_seller_profile.name eşleme
+  - CartStore + CartSummary KYC gate state
+  - cartService [KYC_<STATE>] prefix mesajı parse
+  - checkout.ts KycRequiredModal entegrasyonu
+  - pages/product-detail + ProductInfo + MobileLayout + ProductListingGrid capability flag kontrolleri
+  - types/cart + types/productListing Sprint 2 alanları
+
+---
 ## [v1.1.9-beta.1] - 2026-05-15 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
