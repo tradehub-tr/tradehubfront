@@ -127,7 +127,7 @@ const en = {
       buyerCentral: "Buyer Central",
       helpCenter: "Help Center",
       appExtension: "App & Extension",
-      sellOnIstoc: "Sell on iSTOC",
+      sellOnIstoc: "Sell on istoc",
     },
 
     // ============================================================
@@ -139,7 +139,7 @@ const en = {
       manufacturers: "Manufacturers",
       worldwide: "Worldwide",
       placeholder: "Textile and Apparel",
-      welcomeIstoc: "Welcome to iSTOC",
+      welcomeIstoc: "Welcome to istoc",
       rfq: "Request for Quotation",
       topRanking: "Top Ranking",
       fastCustomization: "Fast Customization",
@@ -154,11 +154,11 @@ const en = {
       campaigns: "Campaigns",
       campaignsDesc: "Deals, discounts, campaigns",
       brands: "Brands",
-      brandsDesc: "Official registered brands on iSTOC",
+      brandsDesc: "Official registered brands on istoc",
       sellers: "Sellers",
-      sellersDesc: "Browse sellers on iSTOC marketplace",
-      b2bMarketplace: "iSTOC B2B Marketplace",
-      b2bDesc: "Learn how to sell on iSTOC",
+      sellersDesc: "Browse sellers on istoc marketplace",
+      b2bMarketplace: "istoc B2B Marketplace",
+      b2bDesc: "Learn how to sell on istoc",
     },
 
     // ============================================================
@@ -200,7 +200,7 @@ const en = {
       tradeAssuranceLead:
         "Continue trading on a reliable infrastructure that brings buyers and sellers together.",
       tradeAssuranceHowItWorks: "How does it work?",
-      whyIstoc: "Why iSTOC",
+      whyIstoc: "Why istoc",
       howSourcing: "How sourcing works",
       membershipProgram: "Membership program",
       tradeServices: "Trade services",
@@ -216,20 +216,20 @@ const en = {
       overview: "Overview",
       meetPeers: "Meet the peers",
       ecommerceAcademy: "Ecommerce Academy",
-      howToSource: "How to source on iSTOC",
+      howToSource: "How to source on istoc",
       forBuyers: "For buyers",
       forSuppliers: "For suppliers",
       openDispute: "Open a dispute",
       reportIpr: "Report IPR infringement",
       reportAbuse: "Report abuse",
-      getApp: "Get the iSTOC app",
+      getApp: "Get the istoc app",
       appDesc:
-        "Find products, communicate with suppliers, and manage and pay for your orders with the iSTOC app anytime, anywhere.",
+        "Find products, communicate with suppliers, and manage and pay for your orders with the istoc app anytime, anywhere.",
       downloadOn: "Download on the",
       appStore: "App Store",
       getItOn: "GET IT ON",
       googlePlay: "Google Play",
-      discoverLens: "Discover iSTOC Lens",
+      discoverLens: "Discover istoc Lens",
       lensDesc:
         "Use this image search extension to find and compare similar products with wholesale prices and customization options anywhere online.",
       addToChrome: "Add to Chrome",
@@ -250,12 +250,12 @@ const en = {
       onTimeShipping: "On-time shipping",
       afterSales: "After-sales protections",
       productMonitoring: "Product monitoring services",
-      sourceOnIstoc: "Source on iSTOC",
+      sourceOnIstoc: "Source on istoc",
       rfq: "Request for Quotation",
       membership: "Membership program",
       salesTax: "Sales tax and VAT",
-      istocReads: "iSTOC Reads",
-      sellOnIstoc: "Sell on iSTOC",
+      istocReads: "istoc Reads",
+      sellOnIstoc: "Sell on istoc",
       startSelling: "Start selling",
       sellerCentral: "Seller Central",
       verifiedSupplier: "Become a Verified Supplier",
@@ -266,7 +266,8 @@ const en = {
       newsCenter: "News center",
       careers: "Careers",
       stayConnected: "Stay Connected",
-      copyright: "© 2010-2026 iSTOC.com. All rights reserved.",
+      operatedBy: 'istoc (pronounced "aystock") is operated by Thoptan Ltd. (United Kingdom).',
+      copyright: "© 2026 Thoptan Ltd. All rights reserved.",
       legalNotice: "Legal Notice",
       privacyPolicy: "Privacy Policy",
       productListing: "Product Listing Policy",
@@ -291,13 +292,13 @@ const en = {
         forgotPassword: "Forgot password?",
         continue: "Continue",
         or: "OR",
-        newUser: "New to TradeHub?",
+        newUser: "New to istoc?",
         createAccount: "Create an account",
         qrLogin: "Sign in with QR code",
         submit: "Sign In",
         invalidCredentials: "Incorrect email or password",
         accountDisabled:
-          "Your account is deactivated. Please contact iSTOC customer support to reactivate it.",
+          "Your account is deactivated. Please contact istoc customer support to reactivate it.",
         "2faRequired": "Two-factor authentication required",
         emailVerified: "Your email has been verified successfully. You can now log in.",
         emailVerificationFailed: "Verification link is invalid or has expired.",
@@ -316,7 +317,7 @@ const en = {
         emailExistsError:
           "This email is already registered. Try signing in or resetting your password.",
         emailExistsSupplier:
-          'This email is already registered. To become a supplier, sign in and apply from the "Sell on iSTOC" page.',
+          'This email is already registered. To become a supplier, sign in and apply from the "Sell on istoc" page.',
         loginLink: "Sign in",
         emailDisabledError:
           "This account has been deleted. Please register with a different email address.",
@@ -518,7 +519,7 @@ const en = {
       subtotalExTax: "Subtotal (excl. tax)",
       youSaved: "{{amount}} saved on your order",
       checkout: "Checkout",
-      orderProtection: "iSTOC order protection",
+      orderProtection: "istoc order protection",
       securePayment: "Secure Payment",
       securePaymentDesc: "Every payment is safe and secure",
       easyReturns: "Easy Returns",
@@ -677,7 +678,7 @@ const en = {
       total: "Total",
       placeOrder: "Place order",
       payeeLabel: "Payee",
-      orderTerms: "By clicking the above, you agree to iSTOC's Terms of Use and Privacy Policy",
+      orderTerms: "By clicking the above, you agree to istoc's Terms of Use and Privacy Policy",
       securePayments: "Secure Payments",
       guaranteedDelivery: "Guaranteed Delivery",
       moneyBackProtection: "Money-back Protection",
@@ -804,7 +805,7 @@ const en = {
       shippingLabel: "Shipping",
       shippingCost: "Shipping: {{cost}} \u00b7 {{days}}",
       changeLabel: "Change",
-      orderProtectionTitle: "iSTOC Order Protection",
+      orderProtectionTitle: "istoc Order Protection",
       securePaymentTitle: "Secure Payment",
       securePaymentDesc: "Payments protected with every payment method",
       moneyBackTitle: "Money-back Protection",
@@ -879,7 +880,7 @@ const en = {
       continueFacebook: "Continue with Facebook",
       continueLinkedin: "Continue with LinkedIn",
       continueEmail: "Continue with email",
-      newToTradehub: "New to TradeHub?",
+      newToTradehub: "New to istoc?",
       createAccount: "Create an account",
       qrLogin: "Sign in with QR code",
       orDivider: "OR",
@@ -899,7 +900,7 @@ const en = {
       companyProfile: "Company Profile",
       otherProducts: "Other Products",
       verifiedSupplier: "Verified Supplier",
-      verifiedWithIstoc: "Verified with iSTOC",
+      verifiedWithIstoc: "Verified with istoc",
       safePayments: "Safe payments",
       returnPolicy: "Return policy",
       option: "Option",
@@ -953,7 +954,7 @@ const en = {
       filterSearch: "Search",
       filterClearAll: "Clear All Filters",
       filterCertDisclaimer:
-        "*Certification Disclaimer: Any assessment, certification, inspection and/or related examination related to any authenticity of certificates are provided or conducted by independent third parties with no involvement from iSTOC.",
+        "*Certification Disclaimer: Any assessment, certification, inspection and/or related examination related to any authenticity of certificates are provided or conducted by independent third parties with no involvement from istoc.",
       filterLearnMore: "Learn More",
       filterOk: "OK",
       filterApply: "Search",
@@ -1026,7 +1027,7 @@ const en = {
       transactions: "Transactions",
       bankAccounts: "Bank Accounts",
       wireTransfer: "Wire Transfer Tracking",
-      istocCard: "iSTOC Card",
+      istocCard: "istoc Card",
       payLater: "Pay Later for Business",
       savedHistory: "Saved & History",
       myFavorites: "My Favorites",
@@ -1051,7 +1052,7 @@ const en = {
       couponsLabel: "Coupons",
       validateTax: "Validate your account for tax-exempt status",
       verifyBusiness: "Verify business info",
-      personalizeExp: "Personalize your iSTOC experience",
+      personalizeExp: "Personalize your istoc experience",
       completeProfile: "Complete your profile",
       completeProfileDesc: "Fill out your company profile to get better offers from suppliers",
       completeNow: "Complete now",
@@ -1117,7 +1118,7 @@ const en = {
       emailVerifiedSuccess: "Your email address has been verified.",
       notifVerifyTaxStatus: "Validate your account for tax-exempt status",
       notifVerifyBusiness: "Verify business info",
-      notifPersonalizeExperience: "Personalize your TradeHub.com experience",
+      notifPersonalizeExperience: "Personalize your istoc.com experience",
       notifCompleteProfile: "Complete your profile",
       notifFillCompanyProfile: "Fill out your company profile to get better offers from suppliers",
       notifCompleteNow: "Complete now",
@@ -1142,7 +1143,7 @@ const en = {
       inbox: "Inbox",
       allMessages: "All Messages",
       feedbackBanner: "Share your communication experience with us.",
-      emptyStateText: "Enjoy a pleasant shopping experience by chatting and trading on TradeHub",
+      emptyStateText: "Enjoy a pleasant shopping experience by chatting and trading on istoc",
       typePlaceholder: "Type your message...",
       sendTip: "Press Enter to send \u00B7 Shift+Enter for new line",
       send: "Send",
@@ -1156,7 +1157,7 @@ const en = {
       noResults: "No results found",
       me: "Me",
       previewRfqReply: "[Price quote] Supplier replied to your RFQ",
-      previewWelcome: "New? TradeHub.com? Discover our advanced supplier services",
+      previewWelcome: "New? istoc.com? Discover our advanced supplier services",
       learnMore: "Learn more",
       // Chat messages
       conv1m1:
@@ -1175,7 +1176,7 @@ const en = {
       conv3m1: "Hello, would you like to get information about our textile products?",
       conv3m2: "Yes, can I get information about cotton fabric prices?",
       conv4m1:
-        "Welcome to TradeHub.com! Discover our advanced supplier services. Trade safely with Trade Assurance.",
+        "Welcome to istoc.com! Discover our advanced supplier services. Trade safely with Trade Assurance.",
     },
 
     // ============================================================
@@ -1474,7 +1475,7 @@ const en = {
       yourPaymentAmount: "Your payment amount",
       orderTermsNote:
         "Order terms are subject to the signed contract. Please review your order carefully.",
-      onlinePaymentProtected: "Online payment is protected by iSTOC TradeHub Trade Assurance.",
+      onlinePaymentProtected: "Online payment is protected by istoc Trade Assurance.",
       // FAQ
       whatIsSalesTax: "What is sales tax?",
       whatIsSalesTaxAnswer:
@@ -1531,7 +1532,7 @@ const en = {
     // HELP CENTER
     // ============================================================
     help: {
-      title: "iSTOC TradeHub — Help Center",
+      title: "istoc — Help Center",
       subtitle: "24/7 support and guides for buyers",
       searchPlaceholder: "Enter a question or keyword. Example: Payment",
       searchBtn: "Search",
@@ -1554,7 +1555,7 @@ const en = {
       termsOfUse: "Terms of Use",
       userInfoLaws: "User Information Laws",
       contactGuide: "Contact Guide",
-      copyright: "© 2024 iSTOC TradeHub — All rights reserved.",
+      copyright: "© 2024 istoc — All rights reserved.",
       viewMore: "View more",
       searchResultsFor: "Results for",
     },
@@ -1578,34 +1579,34 @@ const en = {
         breadcrumbLabel: "Terms of Use",
         section1Title: "1. Definitions",
         section1Content:
-          '<p><strong>"Platform"</strong> refers to the website and mobile application operated by iSTOC TradeHub.</p><p><strong>"User"</strong> refers to natural and legal persons who are members of the Platform or benefit from its services without membership.</p><p><strong>"Seller"</strong> refers to natural or legal persons offering products and services through the Platform.</p><p><strong>"Buyer"</strong> refers to Users who purchase products and services through the Platform.</p><p><strong>"Services"</strong> encompasses all B2B trade, payment, logistics and other services provided through the Platform.</p>',
+          '<p><strong>"Platform"</strong> refers to the website and mobile application operated by istoc.</p><p><strong>"User"</strong> refers to natural and legal persons who are members of the Platform or benefit from its services without membership.</p><p><strong>"Seller"</strong> refers to natural or legal persons offering products and services through the Platform.</p><p><strong>"Buyer"</strong> refers to Users who purchase products and services through the Platform.</p><p><strong>"Services"</strong> encompasses all B2B trade, payment, logistics and other services provided through the Platform.</p>',
         section2Title: "2. Scope and Acceptance",
         section2Content:
-          "<p>These Terms of Use apply to all Users who access and/or use the Platform. By using the Platform, you are deemed to have accepted these terms.</p><p>iSTOC reserves the right to update these terms without prior notice. Updates take effect as soon as they are published. Your continued use of the Platform means you accept the updated terms.</p>",
+          "<p>These Terms of Use apply to all Users who access and/or use the Platform. By using the Platform, you are deemed to have accepted these terms.</p><p>istoc reserves the right to update these terms without prior notice. Updates take effect as soon as they are published. Your continued use of the Platform means you accept the updated terms.</p>",
         section3Title: "3. Membership and Account",
         section3Content:
-          "<p>To become a member of the Platform, you must be at least 18 years old and have a valid email address. Representatives acting on behalf of legal entities must be authorized.</p><p>Users are responsible for the confidentiality and security of their account information. You are responsible for all transactions carried out through your account.</p><p>iSTOC has the right to suspend or terminate suspicious or non-compliant accounts without prior notice.</p>",
+          "<p>To become a member of the Platform, you must be at least 18 years old and have a valid email address. Representatives acting on behalf of legal entities must be authorized.</p><p>Users are responsible for the confidentiality and security of their account information. You are responsible for all transactions carried out through your account.</p><p>istoc has the right to suspend or terminate suspicious or non-compliant accounts without prior notice.</p>",
         section4Title: "4. Orders and Contracts",
         section4Content:
-          "<p>Orders placed through the Platform constitute a sales contract between the Buyer and the Seller. iSTOC is not a party to this contract; it only provides intermediary platform services.</p><p>Order confirmation is subject to successful payment completion and acceptance by the Seller. Sellers have the right to reject orders due to stock availability or other valid reasons.</p><p>Order details can be viewed through the confirmation email and the order tracking page on the Platform.</p>",
+          "<p>Orders placed through the Platform constitute a sales contract between the Buyer and the Seller. istoc is not a party to this contract; it only provides intermediary platform services.</p><p>Order confirmation is subject to successful payment completion and acceptance by the Seller. Sellers have the right to reject orders due to stock availability or other valid reasons.</p><p>Order details can be viewed through the confirmation email and the order tracking page on the Platform.</p>",
         section5Title: "5. Payment Terms",
         section5Content:
-          "<p>Payments can be made via credit card, debit card, bank transfer/wire and Platform balance. All payments are processed through secure infrastructure.</p><p>Prices include VAT unless otherwise stated. In B2B transactions, invoices are issued by the Seller.</p><p>iSTOC Secure Payment system holds the payment to the Seller pending until product delivery. This system is designed to protect Buyers.</p>",
+          "<p>Payments can be made via credit card, debit card, bank transfer/wire and Platform balance. All payments are processed through secure infrastructure.</p><p>Prices include VAT unless otherwise stated. In B2B transactions, invoices are issued by the Seller.</p><p>istoc Secure Payment system holds the payment to the Seller pending until product delivery. This system is designed to protect Buyers.</p>",
         section6Title: "6. Shipping and Delivery",
         section6Content:
           "<p>Estimated delivery times are indicated on the product page and are for informational purposes. Actual delivery times may vary depending on logistics conditions.</p><p>The shipping company is responsible for damages that may occur during the shipping process. It is recommended to inspect the package upon delivery.</p><p>For international shipments, customs duties and additional charges are the responsibility of the Buyer.</p>",
         section7Title: "7. Returns and Right of Withdrawal",
         section7Content:
-          '<p>Under consumer legislation, you can exercise your right of withdrawal within 14 days from the product delivery date. For detailed return conditions, please review our <a href="/pages/legal/returns.html" class="text-primary-500 hover:underline">Return Policy</a> page.</p><p>Return conditions for B2B sales are determined according to the agreement with the Seller.</p>',
+          '<p>Return and withdrawal rights are subject to the consumer/commercial legislation of the country where the seller is established and to the seller\'s own return policy. Each seller publishes the applicable return terms on the product page and in their store profile.</p><p>istoc acts as an intermediary service provider in the commercial relationship between buyer and seller and does not set return conditions on behalf of the parties. The Platform only provides the process infrastructure for forwarding return requests and resolving disputes. For the detailed process, please review our <a href="/pages/legal/returns.html" class="text-primary-500 hover:underline">Return Policy</a> page.</p>',
         section8Title: "8. Intellectual Property Rights",
         section8Content:
-          "<p>All content, design, logos, software and databases on the Platform are the intellectual property of iSTOC or its licensors.</p><p>Users may not copy, reproduce, distribute or use Platform content for commercial purposes. Responsibility for product images and descriptions uploaded by Sellers belongs to the respective Seller.</p>",
+          "<p>All content, design, logos, software and databases on the Platform are the intellectual property of Thoptan Ltd. (operator of the istoc brand) or its licensors.</p><p>Users may not copy, reproduce, distribute or use Platform content for commercial purposes. Responsibility for product images and descriptions uploaded by Sellers belongs to the respective Seller.</p>",
         section9Title: "9. Limitation of Liability",
         section9Content:
-          "<p>iSTOC acts as an intermediary in buy-sell transactions conducted through the Platform. Sellers are responsible for the quality, suitability and delivery of products.</p><p>The Platform cannot be held responsible for damages arising from technical malfunctions, interruptions or disruptions in third-party services.</p><p>iSTOC's total liability cannot exceed the service fee for the relevant transaction.</p>",
+          "<p>istoc acts as an intermediary in buy-sell transactions conducted through the Platform. Sellers are responsible for the quality, suitability and delivery of products.</p><p>The Platform cannot be held responsible for damages arising from technical malfunctions, interruptions or disruptions in third-party services.</p><p>istoc's total liability cannot exceed the service fee for the relevant transaction.</p>",
         section10Title: "10. Applicable Law and Disputes",
         section10Content:
-          "<p>These Terms of Use are subject to the laws of the Republic of Turkey.</p><p>Istanbul Courts and Enforcement Offices are authorized for disputes that may arise between the parties.</p><p>For disputes arising from consumer transactions, Consumer Arbitration Committees are authorized within the monetary limits announced by the Ministry of Trade.</p>",
+          "<p>These Terms of Use are governed by the laws of England and Wales.</p><p>Any disputes arising between the parties shall be exclusively referred to the London Court of International Arbitration (LCIA) seated in London; the language of arbitration shall be English.</p><p>istoc provides business-to-business (B2B) trade services only; consumer law provisions do not apply to use of the Platform.</p>",
       },
       privacy: {
         pageTitle: "Privacy Policy",
@@ -1613,7 +1614,7 @@ const en = {
         breadcrumbLabel: "Privacy Policy",
         section1Title: "1. Data Controller",
         section1Content:
-          "<p>The party acting as data controller in the processing of your personal data:</p><p><strong>iSTOC Teknoloji A.S.</strong><br>Address: Istanbul Trade Center, Floor 12, Maslak, Istanbul<br>Email: kvkk@istoc.com<br>Phone: +90 800 123 4567</p>",
+          "<p>The party acting as data controller in the processing of your personal data:</p><p><strong>Thoptan Ltd.</strong> (United Kingdom)<br>Operates the istoc brand.<br><strong>Email:</strong> kvkk@istoc.com</p>",
         section2Title: "2. Personal Data Collected",
         section2Content:
           '<p>The following personal data is collected in the scope of providing Platform services:</p><ul class="list-disc pl-5 space-y-1"><li><strong>Identity Information:</strong> Name, surname, national ID number (for sellers), tax number</li><li><strong>Contact Information:</strong> Email address, phone number, address</li><li><strong>Financial Information:</strong> Bank account details, credit card information (stored in masked form)</li><li><strong>Transaction Information:</strong> Order history, payment records, return requests</li><li><strong>Digital Traces:</strong> IP address, cookie data, device information, browser information</li><li><strong>Usage Data:</strong> Search history, page views, click data</li></ul>',
@@ -1628,13 +1629,13 @@ const en = {
           '<p>Your personal data may be shared with third parties only in the following cases:</p><ul class="list-disc pl-5 space-y-1"><li>With shipping companies for order delivery</li><li>With payment institutions for payment transactions</li><li>With authorized public institutions under legal obligations</li><li>With our service providers (hosting, analytics, customer support tools)</li></ul><p>Your data is never sold to third parties under any circumstances.</p>',
         section6Title: "6. International Data Transfer",
         section6Content:
-          "<p>Some of our service providers are located abroad. In this case, your data may be transferred to countries with adequate protection under Article 9 of the KVKK or to data controllers who have committed to providing adequate protection in writing.</p><p>Main countries where data transfer takes place: European Union countries, United States of America (with standard contractual clauses).</p>",
+          "<p>Since the data controller Thoptan Ltd. is established in the United Kingdom, personal data collected from users in Turkey is transferred to the United Kingdom for processing. This transfer is carried out based on the explicit consent of the data subject and/or the standard contractual clauses set by the Personal Data Protection Authority under KVKK Article 9.</p><p>Main countries where data transfer takes place: United Kingdom (operations centre), European Union countries, and United States of America (for service providers, under standard contractual clauses).</p>",
         section7Title: "7. Data Subject Rights",
         section7Content:
           '<p>Under Article 11 of the KVKK, you have the following rights:</p><ul class="list-disc pl-5 space-y-1"><li>Learning whether your personal data has been processed</li><li>Requesting information about the processing if it has been processed</li><li>Learning the purpose of processing and whether it is used in accordance with its purpose</li><li>Knowing the third parties to whom it has been transferred domestically or abroad</li><li>Requesting correction if it has been processed incompletely or incorrectly</li><li>Requesting deletion or destruction under Article 7 of the KVKK</li><li>Objecting to the emergence of a result against you through the analysis of processed data exclusively by automatic systems</li></ul>',
         section8Title: "8. Contact",
         section8Content:
-          "<p>You can submit your requests regarding your personal data through the following channels:</p><p><strong>Email:</strong> kvkk@istoc.com<br><strong>Post:</strong> iSTOC Teknoloji A.S., Istanbul Trade Center, Floor 12, Maslak, Istanbul<br><strong>KEP:</strong> istoc@hs01.kep.tr</p><p>Your applications will be evaluated and concluded within 30 days at the latest.</p>",
+          "<p>You can submit your requests regarding your personal data through the following channel:</p><p><strong>Email:</strong> kvkk@istoc.com</p><p>Your applications will be evaluated and concluded within 30 days at the latest.</p>",
       },
       cookies: {
         pageTitle: "Cookie Policy",
@@ -1665,7 +1666,7 @@ const en = {
         breadcrumbLabel: "Return Policy",
         section1Title: "1. General Conditions",
         section1Content:
-          "<p>You can return products purchased through iSTOC TradeHub within <strong>14 days</strong> from the delivery date. This right is recognized under the Consumer Protection Law No. 6502.</p><p>Products to be returned must be unused, in their original packaging and with all accessories.</p>",
+          "<p>istoc is a global B2B trade platform. The right to return and applicable return period are determined by <strong>the legislation of the country where the seller is established</strong> and by <strong>the seller's own return policy</strong>. Please review the return terms on the product page or in the seller's profile before placing an order.</p><p>This page describes the <strong>general process</strong> for submitting return requests and resolving disputes through the Platform; specific return periods, fees and applicable legislation vary by seller.</p>",
         section2Title: "2. Return Period",
         section2Content:
           "<p>The return period for standard products is <strong>14 calendar days</strong> from the delivery date.</p><p>This period is extended to <strong>30 days</strong> for damaged or defective products. Damaged product notification must be made with photos within the first 48 hours of delivery.</p><p>Return periods for B2B bulk orders are determined according to the contract with the seller.</p>",
@@ -1691,19 +1692,19 @@ const en = {
         breadcrumbLabel: "Legal Notice",
         section1Title: "1. Company Information",
         section1Content:
-          "<p><strong>Company Name:</strong> iSTOC Teknoloji Anonim Sirketi</p><p><strong>Headquarters:</strong> Istanbul Trade Center, Floor 12, Maslak, Sariyer, Istanbul</p><p><strong>Trade Registry Number:</strong> 123456</p><p><strong>MERSIS Number:</strong> 0123456789012345</p><p><strong>Tax Office / No:</strong> Maslak T.O. / 1234567890</p><p><strong>KEP Address:</strong> istoc@hs01.kep.tr</p><p><strong>Phone:</strong> +90 800 123 4567</p><p><strong>Email:</strong> info@istoc.com</p>",
+          "<p><strong>Operator (Legal Entity):</strong> Thoptan Ltd.</p><p><strong>Jurisdiction:</strong> England and Wales (United Kingdom)</p><p><strong>Brand:</strong> istoc (pronounced \"aystock\")</p><p><strong>Email:</strong> info@istoc.com</p><p class=\"text-sm text-gray-500 mt-2\"><em>Companies House registration number, registered address and Turkey representative information will be updated on this page as they become available.</em></p>",
         section2Title: "2. About the Platform",
         section2Content:
-          "<p>iSTOC TradeHub is an electronic commerce platform established to facilitate business-to-business (B2B) trade. The Platform operates as an intermediary service provider within the framework of the Law No. 6563 on the Regulation of Electronic Commerce and related legislation.</p><p>Responsibility for products and services offered on the Platform belongs to the respective sellers. iSTOC acts as an intermediary in the commercial relationship between seller and buyer.</p>",
+          "<p>istoc, operated by Thoptan Ltd. (United Kingdom), is a global electronic commerce platform established to facilitate business-to-business (B2B) trade. The Platform acts as an intermediary service provider in the commercial relationship between seller and buyer.</p><p>Responsibility for products and services offered on the Platform belongs to the respective sellers.</p>",
         section3Title: "3. Limitation of Liability",
         section3Content:
-          "<p>While every effort is made to ensure the accuracy and currency of information published on the Platform, it is for informational purposes only. iSTOC does not guarantee that this information is complete, accurate, or up-to-date.</p><p>iSTOC is not responsible for the content of third-party websites accessed through the Platform.</p><p>iSTOC cannot be held responsible for access interruptions due to technical malfunctions, maintenance work, or force majeure events.</p>",
+          "<p>While every effort is made to ensure the accuracy and currency of information published on the Platform, it is for informational purposes only. istoc does not guarantee that this information is complete, accurate, or up-to-date.</p><p>istoc is not responsible for the content of third-party websites accessed through the Platform.</p><p>istoc cannot be held responsible for access interruptions due to technical malfunctions, maintenance work, or force majeure events.</p>",
         section4Title: "4. Oversight and Complaints",
         section4Content:
-          '<p>Platform activities are subject to the supervision of the Republic of Turkey Ministry of Trade.</p><p>For consumer complaints:</p><ul class="list-disc pl-5 space-y-1"><li><strong>Consumer Arbitration Committees:</strong> You can apply to Consumer Arbitration Committees within the District Governorship or Governorship of your province of residence.</li><li><strong>Consumer Courts:</strong> Your right to apply to Consumer Courts for disputes exceeding arbitration committee limits is reserved.</li><li><strong>e-Government:</strong> You can file online complaints through turkiye.gov.tr.</li></ul>',
+          "<p>istoc is a business-to-business (B2B) platform, and consumer arbitration committees and consumer courts do not apply to the use of the Platform.</p><p>You can send your complaints and feedback regarding the use of the Platform to <strong>info@istoc.com</strong>. Your requests will be evaluated within 5 business days.</p>",
         section5Title: "5. Applicable Law",
         section5Content:
-          "<p>This legal notice and the use of the Platform are subject to the laws of the Republic of Turkey. Istanbul Courts and Enforcement Offices are authorized for all disputes.</p><p>This legal notice is for general informational purposes regarding the use of the Platform and does not constitute legal advice.</p>",
+          "<p>This legal notice and the use of the Platform are governed by the laws of England and Wales. Any disputes shall be exclusively referred to the London Court of International Arbitration (LCIA); the language of arbitration shall be English.</p><p>This legal notice is for general informational purposes regarding the use of the Platform and does not constitute legal advice.</p>",
       },
       productListing: {
         pageTitle: "Product Listing Policy",
@@ -1711,7 +1712,7 @@ const en = {
         breadcrumbLabel: "Product Listing Policy",
         section1Title: "1. General Principles",
         section1Content:
-          "<p>Product listing on the iSTOC TradeHub platform is subject to specific standards and rules. All sellers are deemed to have read and accepted this policy before listing their products.</p><p>Listed products must comply with the legislation of the Republic of Turkey, international trade rules, and Platform policies.</p>",
+          "<p>Product listing on the istoc platform is subject to specific standards and rules. All sellers are deemed to have read and accepted this policy before listing their products.</p><p>Listed products must comply with the legislation of the country where the seller is established, the local rules of the market in which the product is sold, international trade rules, and Platform policies.</p>",
         section2Title: "2. Product Information and Accuracy",
         section2Content:
           '<p>Sellers are obligated to provide the following information accurately and completely for their listed products:</p><ul class="list-disc pl-5 space-y-1"><li><strong>Product Title:</strong> Clear, understandable title that accurately describes the product</li><li><strong>Description:</strong> Detailed description including product features, material information, and use cases</li><li><strong>Images:</strong> High-quality, original photographs that accurately represent the product</li><li><strong>Pricing:</strong> Current price information with VAT included/excluded status clearly stated</li><li><strong>Stock Status:</strong> Real-time and accurate stock information</li><li><strong>Minimum Order:</strong> Minimum order quantity for B2B sales</li></ul>',
@@ -1720,10 +1721,10 @@ const en = {
           '<p>Listing of the following products on the Platform is strictly prohibited:</p><ul class="list-disc pl-5 space-y-1"><li>Illegal products and contraband goods</li><li>Counterfeit, fake, or pirated products</li><li>Weapons, ammunition, and explosive materials</li><li>Narcotic and psychotropic substances</li><li>Human organs and tissues</li><li>Products derived from endangered species</li><li>Products containing or suggesting child exploitation</li><li>Products/services aimed at selling personal data</li></ul><p>Products in certain categories (food, pharmaceuticals, medical devices, chemical substances, etc.) may require additional documents and certificates.</p>',
         section4Title: "4. Image and Content Standards",
         section4Content:
-          '<p>Product images and content must comply with the following standards:</p><ul class="list-disc pl-5 space-y-1"><li>Clear and well-lit images with minimum 800x800 pixel resolution</li><li>Images without watermarks, promotional text, or logos of other platforms</li><li>Descriptions without misleading or exaggerated claims</li><li>No disparaging statements about competitor products or brands</li><li>Descriptions without contact information (phone, email, website)</li></ul><p>iSTOC reserves the right to remove images and content that do not meet standards without prior notice.</p>',
+          '<p>Product images and content must comply with the following standards:</p><ul class="list-disc pl-5 space-y-1"><li>Clear and well-lit images with minimum 800x800 pixel resolution</li><li>Images without watermarks, promotional text, or logos of other platforms</li><li>Descriptions without misleading or exaggerated claims</li><li>No disparaging statements about competitor products or brands</li><li>Descriptions without contact information (phone, email, website)</li></ul><p>istoc reserves the right to remove images and content that do not meet standards without prior notice.</p>',
         section5Title: "5. Pricing Rules",
         section5Content:
-          '<p>Sellers are obligated to comply with the following pricing rules:</p><ul class="list-disc pl-5 space-y-1"><li>Prices must be realistic and in line with market conditions</li><li>Misleading discount and campaign practices are prohibited</li><li>Wholesale and retail prices must be clearly stated</li><li>Shipping costs and additional charges must be displayed transparently</li></ul><p>iSTOC has the right to suspend relevant listings when it detects pricing that is contrary to market conditions or manipulative.</p>',
+          '<p>Sellers are obligated to comply with the following pricing rules:</p><ul class="list-disc pl-5 space-y-1"><li>Prices must be realistic and in line with market conditions</li><li>Misleading discount and campaign practices are prohibited</li><li>Wholesale and retail prices must be clearly stated</li><li>Shipping costs and additional charges must be displayed transparently</li></ul><p>istoc has the right to suspend relevant listings when it detects pricing that is contrary to market conditions or manipulative.</p>',
         section6Title: "6. Violations and Sanctions",
         section6Content:
           '<p>The following sanctions may be applied in case of violation of this policy:</p><ul class="list-disc pl-5 space-y-1"><li><strong>Warning:</strong> Written warning for first violation</li><li><strong>Listing Removal:</strong> Removal of product listings that violate rules</li><li><strong>Account Suspension:</strong> Temporary suspension of account for repeated violations</li><li><strong>Account Closure:</strong> Permanent closure of account for severe or continuous violations</li></ul><p>Sellers have the right to appeal sanction decisions within 15 business days.</p>',
@@ -1734,10 +1735,10 @@ const en = {
         breadcrumbLabel: "Intellectual Property",
         section1Title: "1. Intellectual Property Protection Commitment",
         section1Content:
-          "<p>iSTOC TradeHub places the highest importance on respect for intellectual property rights. The Platform takes necessary measures to protect copyrights, trademarks, patents, and other intellectual property rights.</p><p>Platform users are obligated not to publish content or list products that infringe on the intellectual property rights of third parties.</p>",
-        section2Title: "2. iSTOC Intellectual Property Rights",
+          "<p>istoc places the highest importance on respect for intellectual property rights. The Platform takes necessary measures to protect copyrights, trademarks, patents, and other intellectual property rights.</p><p>Platform users are obligated not to publish content or list products that infringe on the intellectual property rights of third parties.</p>",
+        section2Title: "2. istoc Brand Intellectual Property Rights",
         section2Content:
-          '<p>All content and materials on the Platform, including but not limited to the following, are the intellectual property of iSTOC or its licensors:</p><ul class="list-disc pl-5 space-y-1"><li>The iSTOC name, logo, and all trademarks</li><li>Platform design, interface layout, and user experience</li><li>Software code, algorithms, and databases</li><li>Content, reports, and analyses generated by the Platform</li><li>Training materials and documentation</li></ul><p>Copying, reproducing, distributing, or using these materials for commercial purposes without the written permission of iSTOC is prohibited.</p>',
+          '<p>All content and materials on the Platform, including but not limited to the following, are the intellectual property of Thoptan Ltd. (operator of the istoc brand) or its licensors:</p><ul class="list-disc pl-5 space-y-1"><li>The istoc name, logo, and all trademarks</li><li>Platform design, interface layout, and user experience</li><li>Software code, algorithms, and databases</li><li>Content, reports, and analyses generated by the Platform</li><li>Training materials and documentation</li></ul><p>Copying, reproducing, distributing, or using these materials for commercial purposes without the written permission of Thoptan Ltd. is prohibited.</p>',
         section3Title: "3. Infringement Notification",
         section3Content:
           '<p>If you believe your intellectual property rights have been infringed, you can contact us with the following information:</p><ul class="list-disc pl-5 space-y-1"><li>Identity information of the rights holder or authorized representative</li><li>Description of the intellectual property right allegedly infringed</li><li>Location (URL) of the infringing content on the Platform</li><li>Documents supporting the infringement claim (registration certificate, license agreement, etc.)</li><li>Statement that the notification is made in good faith</li></ul><p><strong>Notification address:</strong> ipr@istoc.com</p>',
@@ -1749,7 +1750,7 @@ const en = {
           '<p>Sellers whose content has been removed have the right to file a counter-notification against the removal. Counter-notifications must include:</p><ul class="list-disc pl-5 space-y-1"><li>Seller\'s identity and contact information</li><li>Description of the removed content</li><li>Explanation and supporting documents as to why the content does not constitute infringement</li><li>Statement accepting legal responsibility in case of false notification</li></ul><p>Counter-notifications must be made within 10 business days of the removal.</p>',
         section6Title: "6. Repeat Infringements",
         section6Content:
-          '<p>iSTOC applies a zero tolerance policy against repeat intellectual property infringements:</p><ul class="list-disc pl-5 space-y-1"><li><strong>First infringement:</strong> Written warning and content removal</li><li><strong>Second infringement:</strong> 30-day account suspension</li><li><strong>Third infringement:</strong> Permanent account closure</li></ul><p>For intentional and organizational infringements, iSTOC reserves the right to permanently close the account and initiate legal proceedings even on the first infringement.</p>',
+          '<p>istoc applies a zero tolerance policy against repeat intellectual property infringements:</p><ul class="list-disc pl-5 space-y-1"><li><strong>First infringement:</strong> Written warning and content removal</li><li><strong>Second infringement:</strong> 30-day account suspension</li><li><strong>Third infringement:</strong> Permanent account closure</li></ul><p>For intentional and organizational infringements, istoc reserves the right to permanently close the account and initiate legal proceedings even on the first infringement.</p>',
       },
       accessibility: {
         pageTitle: "Accessibility",
@@ -1757,7 +1758,7 @@ const en = {
         breadcrumbLabel: "Accessibility",
         section1Title: "1. Our Accessibility Commitment",
         section1Content:
-          "<p>At iSTOC TradeHub, we are committed to ensuring our platform is accessible to all users, including people with disabilities. Digital accessibility is an integral part of our corporate responsibility.</p><p>Our platform is continuously being developed to comply with the Web Content Accessibility Guidelines (WCAG) 2.1 AA standard.</p>",
+          "<p>At istoc, we are committed to ensuring our platform is accessible to all users, including people with disabilities. Digital accessibility is an integral part of our corporate responsibility.</p><p>Our platform is continuously being developed to comply with the Web Content Accessibility Guidelines (WCAG) 2.1 AA standard.</p>",
         section2Title: "2. Accessibility Features",
         section2Content:
           '<p>We offer the following accessibility features on our platform:</p><ul class="list-disc pl-5 space-y-1"><li><strong>Keyboard Navigation:</strong> All Platform features are accessible using keyboard only</li><li><strong>Screen Reader Support:</strong> Our content is compatible with popular screen reader software</li><li><strong>Text Size Adjustment:</strong> Users can change text size through browser settings</li><li><strong>Color Contrast:</strong> Color contrast ratios meeting WCAG AA standards</li><li><strong>Alternative Text:</strong> Descriptive alternative text for images</li><li><strong>Form Labels:</strong> Clear and understandable labels for all form fields</li><li><strong>Focus Indicators:</strong> Visible focus indicators when navigating with keyboard</li></ul>',
@@ -1769,7 +1770,7 @@ const en = {
           '<p>Despite our continuous improvement efforts in accessibility, there may be limitations in some areas:</p><ul class="list-disc pl-5 space-y-1"><li>Some product images uploaded by sellers may not contain alternative text</li><li>Third-party integrations (payment pages, map services) are subject to their own accessibility standards</li><li>Some older PDF documents may not be fully accessible</li></ul><p>We are actively working to address these limitations.</p>',
         section5Title: "5. Feedback and Contact",
         section5Content:
-          "<p>Your feedback on accessibility is very valuable to us. If you experience accessibility issues on our platform or have suggestions, please contact us:</p><p><strong>Email:</strong> accessibility@istoc.com<br><strong>Phone:</strong> +90 800 123 4567 (Extension: 5)<br><strong>Post:</strong> iSTOC Teknoloji A.S., Accessibility Unit, Istanbul Trade Center, Floor 12, Maslak, Istanbul</p><p>Your feedback will be reviewed within 5 business days and you will receive a response.</p>",
+          "<p>Your feedback on accessibility is very valuable to us. If you experience accessibility issues on our platform or have suggestions, please contact us:</p><p><strong>Email:</strong> accessibility@istoc.com</p><p>Your feedback will be reviewed within 5 business days and you will receive a response.</p>",
         section6Title: "6. Continuous Improvement",
         section6Content:
           '<p>As part of our accessibility efforts:</p><ul class="list-disc pl-5 space-y-1"><li>We conduct regular accessibility audits</li><li>Our development team receives accessibility training</li><li>New features are published after passing accessibility tests</li><li>We conduct periodic evaluations with an advisory group of users with disabilities</li></ul><p>Our accessibility roadmap is continuously updated in line with user feedback and technological developments.</p>',
@@ -1794,7 +1795,7 @@ const en = {
     // DROPSHIPPING
     // ============================================================
     dropshipping: {
-      istocPicks: "iSTOC picks",
+      istocPicks: "istoc picks",
       hotSales: "Hot sales",
       brandedProducts: "Branded products",
       complianceReady: "Compliance Ready",
@@ -1919,7 +1920,7 @@ const en = {
     // CONTACTS
     // ============================================================
     contacts: {
-      helpBanner: "Help us improve TradeHub!",
+      helpBanner: "Help us improve istoc!",
       clickHere: "Click here",
       allContacts: "All contacts - 0",
       searchPlaceholder: "Search your supplier contacts",
@@ -1997,7 +1998,7 @@ const en = {
     // ============================================================
     logistics: {
       ordersBannerInfo:
-        "Notice: logistics marketplace orders have been upgraded to trade assurance orders. You can manage your trade assurance orders in the iSTOC> orders menu.",
+        "Notice: logistics marketplace orders have been upgraded to trade assurance orders. You can manage your trade assurance orders in the istoc> orders menu.",
       reviewsBannerInfo:
         "Notice: logistics marketplace orders will be upgraded to trade assurance orders starting approximately February 20.",
       manageOrders: "Manage logistics orders",
@@ -2055,7 +2056,7 @@ const en = {
       transactions: "Transactions",
       ttAccounts: "Wire transfer accounts",
       ttTracking: "Wire Transfer Tracking",
-      istocCard: "iSTOC.com Card",
+      istocCard: "istoc.com Card",
       payLater: "Pay Later for Business",
       paymentTitle: "Payment",
       paymentManagementTitle: "Payment management",
@@ -2105,7 +2106,7 @@ const en = {
       verifySupplierAccount: "Verify supplier's account",
       uploadWireReceipt: "Upload wire receipt",
       tooltipVerify:
-        "Verify whether the supplier's account is an official iSTOC.com bank account. Upload a wire receipt to verify that your payment is protected by iSTOC.com.",
+        "Verify whether the supplier's account is an official istoc.com bank account. Upload a wire receipt to verify that your payment is protected by istoc.com.",
       allTab: "All",
       pendingMatchTab: "Pending Supplier Match",
       matchedTab: "Full Match by Supplier",
@@ -2119,7 +2120,7 @@ const en = {
       verifyModalTitle: "Verify supplier's account",
       verifyWarning: "Always verify the supplier's bank account before making a payment",
       verifyDescription:
-        "When you receive a payment instruction from a supplier, verify that the account number belongs to the official iSTOC.com bank account before making a payment. This way you can benefit from order protection.",
+        "When you receive a payment instruction from a supplier, verify that the account number belongs to the official istoc.com bank account before making a payment. This way you can benefit from order protection.",
       supplierAccountPlaceholder: "Supplier's bank account number *",
       cancelBtn: "Cancel",
       verifyBtn: "Verify",
@@ -2129,7 +2130,7 @@ const en = {
       thWireAmount: "Wire Amount",
       thSendDate: "Send Date",
       noTrackingRecord: "No wire tracking record found",
-      istocCardTitle: "iSTOC.com Card",
+      istocCardTitle: "istoc.com Card",
       comingSoon: "This service will be available soon",
       payLaterTitle: "Pay Later for Business",
       uploadReceiptTitle: "Upload wire receipt",
@@ -2284,7 +2285,7 @@ const en = {
         'We sincerely apologize for any inconvenience and are grateful for your understanding as we work on providing better solutions. If you still need payment solution services, you can consider <strong class="text-gray-900 font-bold">Buy Now Pay Later</strong> or <strong class="text-gray-900 font-bold">Pay Later for Business</strong> payment options. Click <a href="/pages/dashboard/payment.html#pay-later" class="text-blue-600 underline underline-offset-2 font-medium hover:text-blue-700">here</a> to learn more.',
       ptParagraph3: "Thank you for your continued support!",
       ptRegards: "Best regards,",
-      ptTeam: "iSTOC.com Payment Terms Team",
+      ptTeam: "istoc.com Payment Terms Team",
       piTitle: "Product Inspection Service",
       piSubtitle: "Get your supplier products professionally inspected",
       piDearBuyers: "Dear buyers,",
@@ -2293,7 +2294,7 @@ const en = {
       piParagraph2:
         "For more information about the inspection service, you can contact our customer service.",
       piRegards: "Best regards,",
-      piTeam: "iSTOC.com Quality Inspection Team",
+      piTeam: "istoc.com Quality Inspection Team",
     },
 
     // ============================================================
@@ -2323,7 +2324,7 @@ const en = {
     // SELLER
     // ============================================================
     seller: {
-      sellOnIstoc: "Sell on iSTOC",
+      sellOnIstoc: "Sell on istoc",
       pricing: "Pricing",
       storefront: "Seller Storefront",
       sf: {
@@ -2448,7 +2449,7 @@ const en = {
         // CompanyInfo extras
         companyTitle: "COMPANY",
         verifiedSupplier: "Verified Supplier",
-        verifiedWithIstoc: "Verified with iSTOC",
+        verifiedWithIstoc: "Verified with istoc",
         // HotProducts extras
         hotProductsTitle: "HOT PRODUCTS",
         buyNow: "Buy Now",
@@ -2456,9 +2457,9 @@ const en = {
         minOrder: "Min. Order",
         sold: "sold",
 
-        // === NEW: Storefront Redesign (iSTOC-style) ===
+        // === NEW: Storefront Redesign (istoc-style) ===
         // Header stats
-        platformYears: "{{count}} years on iSTOC",
+        platformYears: "{{count}} years on istoc",
         employees: "{{count}} employees",
         totalOrders: "{{count}} orders",
         transactionVolume: "US ${{amount}}+",
@@ -2927,7 +2928,7 @@ const en = {
     // ============================================================
     topDeals: {
       title: "Top Deals",
-      subtitle: "Score the lowest prices on iSTOC",
+      subtitle: "Score the lowest prices on istoc",
       topPicks: "Top picks",
       moq: "MOQ: {{count}} {{unit}}",
       pieces: "pieces",
@@ -3273,7 +3274,7 @@ const en = {
       },
 
       noHistory: "No browsing history yet. Browse products to see them here.",
-      welcomeTitle: "Welcome to iSTOC.com",
+      welcomeTitle: "Welcome to istoc.com",
     },
 
     // ============================================================
@@ -3327,7 +3328,7 @@ const en = {
       step1Desc: "Write your detailed requirements in this form and post it as an RFQ",
       step2Title: "Get accurate quotes",
       step2Desc: "Receive quotations from matching suppliers via message or email",
-      step3Title: 'Compare quotes in "My iSTOC-RFQs"',
+      step3Title: 'Compare quotes in "My istoc-RFQs"',
       step3Desc: "Communicate with suppliers that meet your exact needs to finalize order details",
       manageRfq: "Manage RFQ",
       // RFQ Success page
@@ -3421,10 +3422,10 @@ const en = {
       sourcing: "Finding Sources",
       sourcingDesc: "Sourcing, Orders and Shipping",
       tradeAssurance: "Trade Assurance",
-      tradeAssuranceDesc: "Protect Your iSTOC Orders",
+      tradeAssuranceDesc: "Protect Your istoc Orders",
       downloadApp: "Download Mobile App",
-      downloadAppDesc: "iSTOC TradeHub App",
-      logistics: "iSTOC Logistics",
+      downloadAppDesc: "istoc App",
+      logistics: "istoc Logistics",
       logisticsDesc: "Smart logistics services",
       tabAccount: "My Account",
       tabSourcing: "Finding Sources",
@@ -3433,7 +3434,7 @@ const en = {
       tabAfterSales: "After-Sales",
       tabSelfService: "Self-Service",
       q_account_1: "What should I do if I forgot my password?",
-      q_account_2: "How can I create an account on iSTOC?",
+      q_account_2: "How can I create an account on istoc?",
       q_account_3: "Why am I not receiving the email verification code?",
       q_account_4: "Why am I not receiving the SMS verification code?",
       q_account_5: "Why was my account disabled?",
@@ -3441,8 +3442,8 @@ const en = {
       q_account_7: "How can I update my account information?",
       q_account_8: "What is two-factor authentication?",
       q_account_9: "How can I delete my account?",
-      q_sourcing_1: "How can I shop on iSTOC?",
-      q_sourcing_2: "How can I search for products on iSTOC?",
+      q_sourcing_1: "How can I shop on istoc?",
+      q_sourcing_2: "How can I search for products on istoc?",
       q_sourcing_3: "How can I add products to my favorites?",
       q_sourcing_4: "How can I find out about product price, MOQ, shipping costs?",
       q_sourcing_5: "How can I access the supplier contact information?",
@@ -3521,7 +3522,7 @@ const en = {
       startChat: "Start Chat",
       phone: "Phone",
       phoneCall: "Call",
-      phoneDescription: "+90 800 123 4567\nMon-Fri: 09:00-18:00",
+      phoneDescription: "Phone support is currently unavailable — please reach us via Email or Live Support.",
       emailContact: "Email",
       emailSend: "Send Email",
       chatbot: "Chatbot",
@@ -3542,11 +3543,11 @@ const en = {
       messageSentDesc:
         "We will get back to you as soon as possible. Our average response time is 24 hours.",
       sendNewMessage: "Send New Message",
-      addressInfo: "Address Information",
-      addressCompany: "iSTOC Technology Inc.",
-      addressLine1: "Istanbul Trade Center, Floor 12",
-      addressLine2: "Maslak, Sariyer, Istanbul 34398",
-      businessHours: "Monday - Friday: 09:00 - 18:00",
+      addressInfo: "Company Information",
+      addressCompany: "Thoptan Ltd.",
+      addressLine1: "United Kingdom",
+      addressLine2: "Registered address details will be updated soon.",
+      businessHours: "Monday - Friday: 09:00 - 18:00 (UTC)",
       mapArea: "Map Area",
       // ── FAQPageLayout ──
       faqSearchResults: "results",
@@ -3562,7 +3563,7 @@ const en = {
       faqFooterTerms: "Terms of Use",
       faqFooterUserInfo: "User Information Laws",
       faqFooterContact: "Contact Guide",
-      faqFooterCopyright: "© 2024 iSTOC TradeHub — All rights reserved.",
+      faqFooterCopyright: "© 2024 istoc — All rights reserved.",
       // ── TicketsListLayout ──
       myTickets: "My Support Tickets",
       newTicket: "New Ticket",
@@ -3684,7 +3685,7 @@ const en = {
       sectionContactInfo: "Contact information",
       sectionSpam: "Contact adding, blocking and spam status",
       sectionSourcingInfo: "Sourcing information",
-      sectionActivity: "Your activity on iSTOC.com",
+      sectionActivity: "Your activity on istoc.com",
       sectionIndustries: "Industries you are interested in",
       sectionTopKeywords: "Most searched keywords",
       sectionRecentKeywords: "Recently searched keywords and viewed products",
@@ -3801,9 +3802,9 @@ const en = {
       deleteMyAccount: "Delete my account",
       accountDeleted: "Your account has been deactivated",
       accountDeletedDesc:
-        "Your account has been deactivated. To reactivate it, please contact iSTOC customer support.",
+        "Your account has been deactivated. To reactivate it, please contact istoc customer support.",
       accountDeactivatedContactAdmin:
-        "Your account is deactivated. Please contact iSTOC customer support to reactivate it.",
+        "Your account is deactivated. Please contact istoc customer support to reactivate it.",
       goToLogin: "Go to login page",
       confirmDeleteRequired: "Please check the confirmation box.",
       deleteAccountFailed: "Failed to delete account. Please try again.",
@@ -3915,7 +3916,7 @@ const en = {
       resubscribeAll: "Resubscribe to all",
       allNotificationEmails: "All notification emails",
       notificationEmailsDesc:
-        "Emails that inform you about important account updates and events on iSTOC.com",
+        "Emails that inform you about important account updates and events on istoc.com",
       generalNotificationEmails: "General notification emails",
       generalNotificationEmailsDesc:
         "Emails triggered by your activities on the platform, including updates on your accounts, communications, orders, and shipments.",
@@ -3924,7 +3925,7 @@ const en = {
         "If there is any dispute you are a party to (whether initiated by you or not), we will inform you and keep you updated on its progress.",
       allMarketingEmails: "All marketing emails",
       marketingEmailsDesc:
-        "Emails containing promotional messages about products and services on iSTOC.com",
+        "Emails containing promotional messages about products and services on istoc.com",
       generalMarketingEmails: "General marketing emails",
       generalMarketingEmailsDesc:
         "Emails to inform you about opportunities, events, and service updates, including product discounts, special offers, events, and service offerings that may benefit your business.",
@@ -4041,54 +4042,48 @@ const en = {
       renameList: "Rename list",
     },
     about: {
-      heroTitle: "Turkey's Leading",
+      heroTitle: "Global",
       heroHighlight: "B2B Trade Platform",
-      heroSubtitle: "Connecting businesses and digitizing trade since 2010.",
+      heroSubtitle: "Bringing sellers and buyers from around the world together for secure, transparent B2B trade.",
       storyTitle: "Our Story",
       storyP1:
-        "iSTOC was founded in 2010 by a small team in Istanbul. Our goal was simple: to bring together manufacturers, wholesalers, and retailers across Turkey on a single digital platform.",
+        'istoc (pronounced "aystock") is a global B2B trade brand operated by Thoptan Ltd. (United Kingdom). Our goal is simple: to bring together manufacturers, wholesalers, and retailers from every corner of the world on a single digital platform.',
       storyP2:
-        "Over the years, we have helped thousands of businesses find reliable suppliers, expand into new markets, and digitize their trade processes. Today, with over 250,000 registered users and more than 12,000 active sellers, we are one of Turkey's largest B2B trade platforms.",
+        "Without geographic boundaries, we are building the infrastructure where our sellers and buyers can trade with confidence, speed, and transparency. With verified sellers, secure payments and a simple commission structure, we are on our way to becoming the next-generation B2B marketplace.",
       storyP3:
-        "We continue to shape the future of trade with our secure payment infrastructure, smart logistics solutions, and AI-powered product matching technology.",
+        "With our secure payment infrastructure and transparent commission structure, we are shaping the future of global B2B trade.",
       mission: "Our Mission",
       missionText:
         "To enable businesses of all sizes to trade with confidence, speed, and efficiency. To remove trade barriers using technology and contribute to the growth of businesses.",
       vision: "Our Vision",
       visionText:
-        "To be the most trusted and innovative B2B trade ecosystem in Turkey and the region. To define the future of trade with artificial intelligence and data analytics.",
-      statsTitle: "iSTOC in Numbers",
+        "To be the world's most trusted and innovative B2B trade ecosystem. To deliver a borderless, transparent and efficient global trade infrastructure.",
+      statsTitle: "istoc in Numbers",
       counterUsers: "Registered Users",
       counterSellers: "Active Sellers",
       counterCountries: "Countries",
       counterCategories: "Product Categories",
       timelineTitle: "Our Journey",
-      timeline2010Title: "Founded",
-      timeline2010Desc:
-        "iSTOC was founded with a team of 5 in Istanbul. 500 sellers joined the platform in the first year.",
-      timeline2013Title: "First 10,000 Users",
-      timeline2013Desc:
-        "Registered user count exceeded 10,000. The Secure Payment system was launched.",
-      timeline2016Title: "Mobile App",
-      timeline2016Desc:
-        "iOS and Android apps were released. Mobile trade volume increased by 300%.",
-      timeline2019Title: "International Expansion",
-      timeline2019Desc:
-        "Expanded to 15 new countries. Multi-language and multi-currency infrastructure was completed.",
-      timeline2022Title: "AI Integration",
-      timeline2022Desc: "AI-powered product matching and trend analysis features were added.",
-      timeline2024Title: "Logistics Network",
-      timeline2024Desc:
-        "Our own logistics network was established. Direct shipping to 45 countries was launched.",
-      timeline2026Title: "Today",
-      timeline2026Desc:
-        "Continuing to grow with 250,000+ users, 12,000+ sellers, and 180+ categories.",
+      timeline2010Title: "Coming soon",
+      timeline2010Desc: "Details will be shared soon.",
+      timeline2013Title: "Coming soon",
+      timeline2013Desc: "Details will be shared soon.",
+      timeline2016Title: "Coming soon",
+      timeline2016Desc: "Details will be shared soon.",
+      timeline2019Title: "Coming soon",
+      timeline2019Desc: "Details will be shared soon.",
+      timeline2022Title: "Coming soon",
+      timeline2022Desc: "Details will be shared soon.",
+      timeline2024Title: "Coming soon",
+      timeline2024Desc: "Details will be shared soon.",
+      timeline2026Title: "Coming soon",
+      timeline2026Desc: "Details will be shared soon.",
     },
     faq: {
       allCategories: "All categories",
-      intro: "iSTOC Introduction",
-      introDesc: "iSTOC Introduction",
-      introMembership: "iSTOC Membership",
+      intro: "istoc Introduction",
+      introDesc: "istoc Introduction",
+      introMembership: "istoc Membership",
       account: "Account Management",
       accountSettings: "Account Settings",
       accountCancelReactivate: "Cancel & Reactivate",
@@ -4126,7 +4121,7 @@ const en = {
       taxRefund: "Tax Refund",
       shipping: "Shipping",
       shippingShipping: "Shipping",
-      shippingLogistics: "iSTOC Logistics Services",
+      shippingLogistics: "istoc Logistics Services",
       shippingMaersk: "MSK Shipping Services (Maersk)",
       shippingImportFees: "Import Fees",
       receipt: "Order Receipt",
@@ -4145,7 +4140,7 @@ const en = {
       feedback: "Order Feedback",
       feedbackManagement: "Feedback Management",
       feedbackRules: "Feedback Rules",
-      security: "Security & iSTOC Rules",
+      security: "Security & istoc Rules",
       securityFraud: "Fraud/Fake Email",
       securityIpr: "IPR Complaint",
       others: "Others",
@@ -4158,16 +4153,16 @@ const en = {
       promotionsSuper: "Super Promotion",
       promotionsPayment: "Payment Promotions",
       promotionsOtherIssues: "Other Promotion Issues",
-      guaranteed: "iSTOC Guarantee",
+      guaranteed: "istoc Guarantee",
       guaranteedShipping: "Guaranteed Shipping",
       guaranteedAfterSales: "Guaranteed After-Sales",
       guaranteedPreSales: "Guaranteed Pre-Sales",
       guaranteedPlaceOrder: "Guaranteed Order Placement",
       guaranteedOverseasWarehouse: "Overseas Verified Warehouse",
-      appSettings: "iSTOC App Settings",
-      appSettingsLabel: "iSTOC App Settings",
+      appSettings: "istoc App Settings",
+      appSettingsLabel: "istoc App Settings",
       localization: "Language & Localization",
-      localizationSettings: "iSTOC Language Settings",
+      localizationSettings: "istoc Language Settings",
     },
     faqDetail: {
       // UI
@@ -4181,34 +4176,34 @@ const en = {
       noContent: "No content available for this topic yet.",
       relatedTopics: "Related Topics",
 
-      // ── iSTOC Introduction ──
-      introDesc_title: "iSTOC Introduction",
-      introDesc_desc: "Learn about the iSTOC platform and how it works.",
+      // ── istoc Introduction ──
+      introDesc_title: "istoc Introduction",
+      introDesc_desc: "Learn about the istoc platform and how it works.",
       introDesc_items: [
         {
-          q: "What is iSTOC?",
-          a: "iSTOC is a Turkey-based B2B (business-to-business) e-commerce platform. It connects manufacturers, wholesalers, and distributors with buyers to facilitate safe and efficient trade. The platform features millions of products across thousands of categories.",
+          q: "What is istoc?",
+          a: "istoc is a global B2B (business-to-business) e-commerce platform operated by Thoptan Ltd. (United Kingdom). It brings together manufacturers, wholesalers and distributors from all over the world with buyers to facilitate safe and efficient trade.",
         },
         {
-          q: "Who can use iSTOC?",
-          a: "iSTOC can be used by both individual entrepreneurs and corporate buyers and sellers. <strong>Buyers</strong> can source products at wholesale prices, while <strong>sellers</strong> can reach a wide audience of buyers. Registration on the platform is free.",
+          q: "Who can use istoc?",
+          a: "istoc can be used by both individual entrepreneurs and corporate buyers and sellers. <strong>Buyers</strong> can source products at wholesale prices, while <strong>sellers</strong> can reach a wide audience of buyers. Registration on the platform is free.",
         },
         {
-          q: "What makes iSTOC different from other platforms?",
-          a: "iSTOC stands out with its Trade Assurance program that protects both buyers and sellers. It features integrated logistics solutions, a secure payment system, and 24/7 customer support. Additionally, it offers AI-powered supplier matching and quality inspection services.",
+          q: "What makes istoc different from other platforms?",
+          a: "istoc stands out with its Trade Assurance program that protects both buyers and sellers. It features integrated logistics solutions, a secure payment system, and 24/7 customer support. Additionally, it offers AI-powered supplier matching and quality inspection services.",
         },
         {
-          q: "What product categories are available on iSTOC?",
+          q: "What product categories are available on istoc?",
           a: "The platform lists products in Textiles & Apparel, Electronics, Food & Beverages, Automotive, Machinery & Equipment, Construction & Building Materials, Cosmetics, Furniture, Agricultural products, and many more categories.",
         },
       ],
 
-      introMembership_title: "iSTOC Membership",
+      introMembership_title: "istoc Membership",
       introMembership_desc: "Learn about membership types, benefits, and upgrade options.",
       introMembership_items: [
         {
-          q: "What membership types are available on iSTOC?",
-          a: "iSTOC offers three membership tiers: <strong>Free Membership</strong> (basic features, limited listings), <strong>Gold Membership</strong> (priority listing, advanced analytics), and <strong>Verified Membership</strong> (verified badge, dedicated account manager, unlimited listings).",
+          q: "What membership types are available on istoc?",
+          a: "istoc offers three membership tiers: <strong>Free Membership</strong> (basic features, limited listings), <strong>Gold Membership</strong> (priority listing, advanced analytics), and <strong>Verified Membership</strong> (verified badge, dedicated account manager, unlimited listings).",
         },
         {
           q: "What can I do with a free membership?",
@@ -4251,11 +4246,11 @@ const en = {
       accountCancelReactivate_items: [
         {
           q: "How do I cancel my account?",
-          a: 'You can use the "Close Account" option from Account Settings > Account Management. Before cancellation, all open orders and disputes must be resolved. After closure, reactivation can only be performed by <strong>iSTOC customer support</strong>.',
+          a: 'You can use the "Close Account" option from Account Settings > Account Management. Before cancellation, all open orders and disputes must be resolved. After closure, reactivation can only be performed by <strong>istoc customer support</strong>.',
         },
         {
           q: "Can I reactivate my account?",
-          a: "After closing your account, you cannot reactivate it on your own by logging in. To reactivate your account, you must submit a request to iSTOC customer support; once your request is reviewed, your account can be reopened.",
+          a: "After closing your account, you cannot reactivate it on your own by logging in. To reactivate your account, you must submit a request to istoc customer support; once your request is reviewed, your account can be reopened.",
         },
         {
           q: "What happens if I cancel my Gold/Verified membership?",
@@ -4267,7 +4262,7 @@ const en = {
       accountLogin_desc: "Log in to your account and troubleshoot login issues.",
       accountLogin_items: [
         {
-          q: "How do I log in to iSTOC?",
+          q: "How do I log in to istoc?",
           a: 'Click the "Login" button on the homepage and enter your email address and password. You can also use quick login options with Google, Apple, or phone number.',
         },
         {
@@ -4285,10 +4280,10 @@ const en = {
       ],
 
       accountRegister_title: "Register",
-      accountRegister_desc: "Steps to create a new iSTOC account.",
+      accountRegister_desc: "Steps to create a new istoc account.",
       accountRegister_items: [
         {
-          q: "How do I register on iSTOC?",
+          q: "How do I register on istoc?",
           a: 'Click the "Sign Up" button on the homepage. Enter your email address, set a password, and accept the terms of use. After registration, you will need to verify your email.',
         },
         {
@@ -4302,10 +4297,10 @@ const en = {
       ],
 
       accountBecomeSeller_title: "Become a Seller",
-      accountBecomeSeller_desc: "Process and requirements for becoming a seller on iSTOC.",
+      accountBecomeSeller_desc: "Process and requirements for becoming a seller on istoc.",
       accountBecomeSeller_items: [
         {
-          q: "What do I need to become a seller on iSTOC?",
+          q: "What do I need to become a seller on istoc?",
           a: "To become a seller, you need a valid trade registry, tax certificate, and company contact information. After filling out the registration form, your documents will be reviewed and approved within <strong>1-3 business days</strong>.",
         },
         {
@@ -4314,7 +4309,7 @@ const en = {
         },
         {
           q: "What products can I sell?",
-          a: "You can sell any legal B2B products on iSTOC. The prohibited products list (weapons, drugs, counterfeit goods, etc.) is specified in the platform rules. Special categories like food and pharmaceuticals may require additional documentation.",
+          a: "You can sell any legal B2B products on istoc. The prohibited products list (weapons, drugs, counterfeit goods, etc.) is specified in the platform rules. Special categories like food and pharmaceuticals may require additional documentation.",
         },
         {
           q: "How long does the seller approval process take?",
@@ -4324,7 +4319,7 @@ const en = {
 
       // ── Sourcing ──
       sourcingSearch_title: "Search",
-      sourcingSearch_desc: "Product and supplier search methods on iSTOC.",
+      sourcingSearch_desc: "Product and supplier search methods on istoc.",
       sourcingSearch_items: [
         {
           q: "How do I search for products?",
@@ -4366,7 +4361,7 @@ const en = {
         },
         {
           q: "What is an HS code and how do I find it?",
-          a: "An HS (Harmonized System) code is a standard code used to classify products in international trade. On iSTOC, you can find your product's HS code on the product detail page or using the trade information tool.",
+          a: "An HS (Harmonized System) code is a standard code used to classify products in international trade. On istoc, you can find your product's HS code on the product detail page or using the trade information tool.",
         },
         {
           q: "How do I use the customs duty calculator?",
@@ -4379,7 +4374,7 @@ const en = {
       sourcingRecommender_items: [
         {
           q: "How does the recommender system work?",
-          a: "The iSTOC Recommender system uses AI algorithms to suggest suitable products and suppliers based on your search history, purchasing habits, and industry trends. The system provides more personalized recommendations the more you use it.",
+          a: "The istoc Recommender system uses AI algorithms to suggest suitable products and suppliers based on your search history, purchasing habits, and industry trends. The system provides more personalized recommendations the more you use it.",
         },
         {
           q: "How can I customize recommendations?",
@@ -4395,8 +4390,8 @@ const en = {
       sourcingAiApp_desc: "AI-powered trading tools and features.",
       sourcingAiApp_items: [
         {
-          q: "What does the iSTOC AI application do?",
-          a: "The iSTOC AI application offers AI-powered features including visual product search, automatic supplier matching, price analysis, market trend forecasting, and a smart chat assistant.",
+          q: "What does the istoc AI application do?",
+          a: "The istoc AI application offers AI-powered features including visual product search, automatic supplier matching, price analysis, market trend forecasting, and a smart chat assistant.",
         },
         {
           q: "How do I use the AI chat assistant?",
@@ -4413,7 +4408,7 @@ const en = {
       sourcingSourcing_items: [
         {
           q: "How does the wholesale sourcing process work?",
-          a: "The sourcing process on iSTOC consists of: product research, supplier evaluation, sample request, price negotiation, and placing an order. Platform tools guide you at each step.",
+          a: "The sourcing process on istoc consists of: product research, supplier evaluation, sample request, price negotiation, and placing an order. Platform tools guide you at each step.",
         },
         {
           q: "Should I send an RFQ (Request for Quotation)?",
@@ -4465,7 +4460,7 @@ const en = {
       negotiationOtherIssues_items: [
         {
           q: "I'm having language issues with a supplier, what should I do?",
-          a: "iSTOC's built-in translation feature automatically translates your messages. Enable the translation icon in the message input area to automatically translate your messages to the supplier's language.",
+          a: "istoc's built-in translation feature automatically translates your messages. Enable the translation icon in the message input area to automatically translate your messages to the supplier's language.",
         },
         {
           q: "How do I report a suspicious supplier?",
@@ -4479,11 +4474,11 @@ const en = {
 
       // ── Place Order ──
       placeOrderTradeAssurance_title: "Trade Assurance Introduction",
-      placeOrderTradeAssurance_desc: "Information about the iSTOC Trade Assurance program.",
+      placeOrderTradeAssurance_desc: "Information about the istoc Trade Assurance program.",
       placeOrderTradeAssurance_items: [
         {
           q: "What is Trade Assurance?",
-          a: "Trade Assurance is an iSTOC program that protects both buyers and sellers. It guarantees full or partial refund to the buyer if the ordered products are not delivered according to the contract terms.",
+          a: "Trade Assurance is an istoc program that protects both buyers and sellers. It guarantees full or partial refund to the buyer if the ordered products are not delivered according to the contract terms.",
         },
         {
           q: "What is covered under Trade Assurance?",
@@ -4491,7 +4486,7 @@ const en = {
         },
         {
           q: "Is Trade Assurance free?",
-          a: "Yes, basic Trade Assurance coverage is free for all iSTOC users. Gold and Verified memberships offer extended protection limits and priority mediation services.",
+          a: "Yes, basic Trade Assurance coverage is free for all istoc users. Gold and Verified memberships offer extended protection limits and priority mediation services.",
         },
       ],
 
@@ -4552,7 +4547,7 @@ const en = {
       paymentOrderPayment_items: [
         {
           q: "What payment methods can I use?",
-          a: "On iSTOC, you can pay with <strong>credit cards</strong>, <strong>debit cards</strong>, <strong>bank transfer/wire</strong>, <strong>online banking</strong>, and <strong>iSTOC Wallet</strong>. Some suppliers also accept LC (Letter of Credit) and T/T payments.",
+          a: "On istoc, you can pay with <strong>credit cards</strong>, <strong>debit cards</strong>, <strong>bank transfer/wire</strong>, <strong>online banking</strong>, and <strong>istoc Wallet</strong>. Some suppliers also accept LC (Letter of Credit) and T/T payments.",
         },
         {
           q: "How is payment security ensured?",
@@ -4585,8 +4580,8 @@ const en = {
       paymentFinancial_desc: "Financial services and trade financing.",
       paymentFinancial_items: [
         {
-          q: "What financial services does iSTOC offer?",
-          a: "iSTOC offers buyers trade financing, credit limits, and deferred payment options. These services are provided through partner financial institutions and available under eligible conditions.",
+          q: "What financial services does istoc offer?",
+          a: "istoc offers buyers trade financing, credit limits, and deferred payment options. These services are provided through partner financial institutions and available under eligible conditions.",
         },
         {
           q: "How do I apply for a credit limit?",
@@ -4611,7 +4606,7 @@ const en = {
         },
         {
           q: "How are exchange rates calculated?",
-          a: "Prices on iSTOC are displayed in Turkish Lira by default. For currency-based payments, the current exchange rate is applied by the bank at the time of payment. Amounts due to exchange rate differences are for informational purposes.",
+          a: "Prices on istoc are displayed in Turkish Lira by default. For currency-based payments, the current exchange rate is applied by the bank at the time of payment. Amounts due to exchange rate differences are for informational purposes.",
         },
       ],
 
@@ -4620,11 +4615,11 @@ const en = {
       paymentTypes_items: [
         {
           q: "What payment types are supported?",
-          a: "iSTOC supports Visa, Mastercard, American Express credit/debit cards, bank transfer/wire, online banking, iSTOC Wallet, and for international orders, LC (Letter of Credit) and T/T (Telegraphic Transfer).",
+          a: "istoc supports Visa, Mastercard, American Express credit/debit cards, bank transfer/wire, online banking, istoc Wallet, and for international orders, LC (Letter of Credit) and T/T (Telegraphic Transfer).",
         },
         {
-          q: "What is iSTOC Wallet?",
-          a: "iSTOC Wallet is an in-platform digital wallet system. You can load a balance and make fast, commission-free payments. Refunds are instantly reflected in your wallet. You can withdraw your wallet balance to your bank account at any time.",
+          q: "What is istoc Wallet?",
+          a: "istoc Wallet is an in-platform digital wallet system. You can load a balance and make fast, commission-free payments. Refunds are instantly reflected in your wallet. You can withdraw your wallet balance to your bank account at any time.",
         },
         {
           q: "How does LC (Letter of Credit) payment work?",
@@ -4651,11 +4646,11 @@ const en = {
       ],
 
       taxTypes_title: "Tax Types",
-      taxTypes_desc: "Types of taxes applied to iSTOC transactions.",
+      taxTypes_desc: "Types of taxes applied to istoc transactions.",
       taxTypes_items: [
         {
-          q: "What taxes are applied on iSTOC?",
-          a: "<strong>VAT (Value Added Tax)</strong> is applied on iSTOC transactions. For import transactions, <strong>customs duty</strong> may apply, and some product groups may have <strong>special consumption tax</strong>.",
+          q: "What taxes are applied on istoc?",
+          a: "<strong>VAT (Value Added Tax)</strong> is applied on istoc transactions. For import transactions, <strong>customs duty</strong> may apply, and some product groups may have <strong>special consumption tax</strong>.",
         },
         {
           q: "What are the VAT rates?",
@@ -4663,7 +4658,7 @@ const en = {
         },
         {
           q: "Can I get a VAT refund?",
-          a: "VAT refunds are available for export transactions. VAT refund processes are conducted through the tax office. iSTOC provides the necessary documents (invoices, customs declarations, etc.) digitally.",
+          a: "VAT refunds are available for export transactions. VAT refund processes are conducted through the tax office. istoc provides the necessary documents (invoices, customs declarations, etc.) digitally.",
         },
       ],
 
@@ -4723,15 +4718,15 @@ const en = {
       taxRefund_items: [
         {
           q: "How do I request a tax refund?",
-          a: 'For export transactions, you can download the required documents from the "My Documents" section and apply to your tax office. iSTOC provides documents such as customs declarations and invoices digitally.',
+          a: 'For export transactions, you can download the required documents from the "My Documents" section and apply to your tax office. istoc provides documents such as customs declarations and invoices digitally.',
         },
         {
           q: "How long does a tax refund take?",
-          a: "The tax refund process is conducted by the tax office and typically takes <strong>30-90 days</strong>. Document preparation on the iSTOC side is completed within 3-5 business days.",
+          a: "The tax refund process is conducted by the tax office and typically takes <strong>30-90 days</strong>. Document preparation on the istoc side is completed within 3-5 business days.",
         },
         {
           q: "What documents are required for a VAT refund?",
-          a: "<strong>Customs declaration</strong>, <strong>sales invoice</strong>, <strong>payment proof</strong>, and <strong>shipping document</strong> are required for a VAT refund. All documents can be obtained digitally through the iSTOC platform.",
+          a: "<strong>Customs declaration</strong>, <strong>sales invoice</strong>, <strong>payment proof</strong>, and <strong>shipping document</strong> are required for a VAT refund. All documents can be obtained digitally through the istoc platform.",
         },
       ],
 
@@ -4741,7 +4736,7 @@ const en = {
       shippingShipping_items: [
         {
           q: "What shipping options are available?",
-          a: "iSTOC offers <strong>standard shipping</strong>, <strong>express shipping</strong>, <strong>priority shipping</strong>, and <strong>sea freight</strong> delivery options. Options vary based on product size, weight, and delivery address.",
+          a: "istoc offers <strong>standard shipping</strong>, <strong>express shipping</strong>, <strong>priority shipping</strong>, and <strong>sea freight</strong> delivery options. Options vary based on product size, weight, and delivery address.",
         },
         {
           q: "How is the shipping fee calculated?",
@@ -4753,20 +4748,20 @@ const en = {
         },
       ],
 
-      shippingLogistics_title: "iSTOC Logistics Services",
-      shippingLogistics_desc: "iSTOC's integrated logistics solutions.",
+      shippingLogistics_title: "istoc Logistics Services",
+      shippingLogistics_desc: "istoc's integrated logistics solutions.",
       shippingLogistics_items: [
         {
-          q: "What is iSTOC Logistics?",
-          a: "iSTOC Logistics is the platform's own integrated shipping and logistics solution. It offers door-to-door delivery, warehousing, customs clearance, and last-mile delivery services under a single umbrella.",
+          q: "What is istoc Logistics?",
+          a: "istoc Logistics is the platform's own integrated shipping and logistics solution. It offers door-to-door delivery, warehousing, customs clearance, and last-mile delivery services under a single umbrella.",
         },
         {
-          q: "What are the advantages of iSTOC Logistics?",
+          q: "What are the advantages of istoc Logistics?",
           a: "It offers competitive pricing, end-to-end tracking, customs processing support, insurance coverage, and priority customer support. It also provides full integration with Trade Assurance.",
         },
         {
-          q: "Which countries does iSTOC Logistics deliver to?",
-          a: "iSTOC Logistics offers delivery services to <strong>45+ countries</strong>. You can view the countries and estimated delivery times during the ordering process.",
+          q: "Which countries does istoc Logistics deliver to?",
+          a: "istoc Logistics offers delivery services to <strong>45+ countries</strong>. You can view the countries and estimated delivery times during the ordering process.",
         },
       ],
 
@@ -4775,7 +4770,7 @@ const en = {
       shippingMaersk_items: [
         {
           q: "What is the Maersk shipping service?",
-          a: "Maersk is iSTOC's partner for ocean freight shipping. It offers container-based international cargo services. It's an economical option especially for high-volume and heavy loads.",
+          a: "Maersk is istoc's partner for ocean freight shipping. It offers container-based international cargo services. It's an economical option especially for high-volume and heavy loads.",
         },
         {
           q: "How long does Maersk shipping take?",
@@ -4783,7 +4778,7 @@ const en = {
         },
         {
           q: "How do I track Maersk shipments?",
-          a: "You can track your shipment in real-time through the iSTOC platform using your container number. Vessel position, estimated arrival date, and port information are displayed.",
+          a: "You can track your shipment in real-time through the istoc platform using your container number. Vessel position, estimated arrival date, and port information are displayed.",
         },
       ],
 
@@ -4796,7 +4791,7 @@ const en = {
         },
         {
           q: "Can I calculate import fees in advance?",
-          a: "Yes, you can use iSTOC's import fee calculator to see estimated costs in advance. Enter the product category, HS code, origin, and destination country to calculate.",
+          a: "Yes, you can use istoc's import fee calculator to see estimated costs in advance. Enter the product category, HS code, origin, and destination country to calculate.",
         },
         {
           q: "Are there products exempt from customs duty?",
@@ -4814,7 +4809,7 @@ const en = {
         },
         {
           q: "What should I check during delivery?",
-          a: "During delivery, check the <strong>package integrity</strong>, <strong>product quantity</strong>, and <strong>visual condition</strong>. If there are damaged or missing products, document it in the presence of the delivery person and report to iSTOC within 24 hours.",
+          a: "During delivery, check the <strong>package integrity</strong>, <strong>product quantity</strong>, and <strong>visual condition</strong>. If there are damaged or missing products, document it in the presence of the delivery person and report to istoc within 24 hours.",
         },
         {
           q: "Can I change my delivery address?",
@@ -4845,7 +4840,7 @@ const en = {
       inspectionServices_items: [
         {
           q: "What is the inspection service?",
-          a: "The iSTOC Inspection Service is a professional service where independent inspectors perform quality control of your products, verify compliance with production standards, and check order specifications on-site.",
+          a: "The istoc Inspection Service is a professional service where independent inspectors perform quality control of your products, verify compliance with production standards, and check order specifications on-site.",
         },
         {
           q: "What types of inspection are offered?",
@@ -4884,7 +4879,7 @@ const en = {
         },
         {
           q: "How long does the dispute process take?",
-          a: "The dispute process is typically resolved within <strong>7-15 business days</strong>. First, a settlement between the parties is sought. If no settlement is reached, the iSTOC mediation team steps in.",
+          a: "The dispute process is typically resolved within <strong>7-15 business days</strong>. First, a settlement between the parties is sought. If no settlement is reached, the istoc mediation team steps in.",
         },
         {
           q: "What happens to my payment during the dispute?",
@@ -4914,7 +4909,7 @@ const en = {
       afterSalesDisputeProcess_items: [
         {
           q: "How does the dispute resolution process work?",
-          a: "The process consists of: <strong>1)</strong> Filing the dispute, <strong>2)</strong> Supplier response (3 days), <strong>3)</strong> Negotiation between parties (5 days), <strong>4)</strong> iSTOC mediation (if needed), <strong>5)</strong> Decision and execution.",
+          a: "The process consists of: <strong>1)</strong> Filing the dispute, <strong>2)</strong> Supplier response (3 days), <strong>3)</strong> Negotiation between parties (5 days), <strong>4)</strong> istoc mediation (if needed), <strong>5)</strong> Decision and execution.",
         },
         {
           q: "Can I appeal the mediation decision?",
@@ -4935,7 +4930,7 @@ const en = {
         },
         {
           q: "Product arrived damaged, what should I do?",
-          a: "Document the damage at the time of delivery (photos/videos). Report on iSTOC within 24 hours. Damage compensation or re-shipment is provided under shipping insurance.",
+          a: "Document the damage at the time of delivery (photos/videos). Report on istoc within 24 hours. Damage compensation or re-shipment is provided under shipping insurance.",
         },
         {
           q: "Product quality doesn't meet expectations, what should I do?",
@@ -5012,17 +5007,17 @@ const en = {
         },
       ],
 
-      // ── Security & iSTOC Rules ──
+      // ── Security & istoc Rules ──
       securityFraud_title: "Fraud/Fake Email",
       securityFraud_desc: "Recognizing and reporting fraud and fake emails.",
       securityFraud_items: [
         {
           q: "How do I recognize a fraud attempt?",
-          a: "Watch out for messages requesting off-platform payments, offering unusually low prices, asking for personal information, and pressuring for urgent payment. iSTOC never requests payment outside the platform.",
+          a: "Watch out for messages requesting off-platform payments, offering unusually low prices, asking for personal information, and pressuring for urgent payment. istoc never requests payment outside the platform.",
         },
         {
           q: "I received a fake email, what should I do?",
-          a: "If you receive suspicious emails claiming to be from iSTOC, verify that the email address has the @istoc.com extension. Report fake emails by forwarding them to <strong>security@istoc.com</strong>. Do not click links in the email.",
+          a: "If you receive suspicious emails claiming to be from istoc, verify that the email address has the @istoc.com extension. Report fake emails by forwarding them to <strong>security@istoc.com</strong>. Do not click links in the email.",
         },
         {
           q: "My account has been compromised, what should I do?",
@@ -5057,7 +5052,7 @@ const en = {
         },
         {
           q: "What languages does customer service support?",
-          a: "iSTOC customer service provides support in Turkish and English. Translation support is available for other languages.",
+          a: "istoc customer service provides support in Turkish and English. Translation support is available for other languages.",
         },
         {
           q: "What is the response time for my support request?",
@@ -5083,15 +5078,15 @@ const en = {
       ],
 
       othersOfflineService_title: "Offline Service",
-      othersOfflineService_desc: "iSTOC physical service points.",
+      othersOfflineService_desc: "istoc physical service points.",
       othersOfflineService_items: [
         {
-          q: "Does iSTOC have physical offices?",
-          a: "Yes, iSTOC has offices in Istanbul, Ankara, and Izmir. Our offices provide face-to-face meetings, contract signing, and training services.",
+          q: "Does istoc have physical offices?",
+          a: "istoc is a fully digital B2B trade platform and currently does not operate physical customer service offices. All our services (membership, contracts, training, support) are provided through online channels.",
         },
         {
           q: "Do you participate in fairs and events?",
-          a: 'iSTOC participates in various industry fairs and trade events throughout the year. Upcoming events can be followed from the "Events" section on the homepage.',
+          a: 'istoc participates in various industry fairs and trade events throughout the year. Upcoming events can be followed from the "Events" section on the homepage.',
         },
         {
           q: "How do I book a face-to-face appointment?",
@@ -5101,15 +5096,15 @@ const en = {
 
       // ── Promotions & Shopping Guide ──
       promotionsShoppingGuide_title: "Shopping Guide",
-      promotionsShoppingGuide_desc: "Guide to effective shopping on iSTOC.",
+      promotionsShoppingGuide_desc: "Guide to effective shopping on istoc.",
       promotionsShoppingGuide_items: [
         {
-          q: "How should I make my first purchase on iSTOC?",
+          q: "How should I make my first purchase on istoc?",
           a: "First, search for the product you need, compare several suppliers, request samples, and place an order once satisfied. We recommend starting with small quantities for your first order.",
         },
         {
           q: "How do I find the best price?",
-          a: "Get quotes from multiple suppliers, send RFQs, and negotiate volume-based discounts. The iSTOC AI price analysis tool also helps you evaluate market value.",
+          a: "Get quotes from multiple suppliers, send RFQs, and negotiate volume-based discounts. The istoc AI price analysis tool also helps you evaluate market value.",
         },
         {
           q: "What are the tips for safe shopping?",
@@ -5156,7 +5151,7 @@ const en = {
       promotionsPayment_items: [
         {
           q: "Are there discounts for specific payment methods?",
-          a: "Yes, from time to time, special discounts are offered for certain bank cards, payments made with iSTOC Wallet, or bank transfers. Active payment promotions are shown on the payment page.",
+          a: "Yes, from time to time, special discounts are offered for certain bank cards, payments made with istoc Wallet, or bank transfers. Active payment promotions are shown on the payment page.",
         },
         {
           q: "Is there a first order discount?",
@@ -5185,21 +5180,21 @@ const en = {
         },
       ],
 
-      // ── iSTOC Guarantee ──
+      // ── istoc Guarantee ──
       guaranteedShipping_title: "Guaranteed Shipping",
-      guaranteedShipping_desc: "iSTOC shipping guarantee program.",
+      guaranteedShipping_desc: "istoc shipping guarantee program.",
       guaranteedShipping_items: [
         {
           q: "What is Guaranteed Shipping?",
-          a: "iSTOC Guaranteed Shipping guarantees that your order will be delivered within the specified time. In case of delay, the full or partial shipping fee is refunded.",
+          a: "istoc Guaranteed Shipping guarantees that your order will be delivered within the specified time. In case of delay, the full or partial shipping fee is refunded.",
         },
         {
           q: "How do I get compensation for shipping delays?",
-          a: "If delivery is made after the guaranteed time, compensation is automatically calculated and refunded to your iSTOC Wallet or original payment method.",
+          a: "If delivery is made after the guaranteed time, compensation is automatically calculated and refunded to your istoc Wallet or original payment method.",
         },
         {
           q: "Which shipping methods are guaranteed?",
-          a: "Shipping guarantee is valid for shipments made with iSTOC Logistics and contracted carriers. Guarantee coverage may differ for products shipped with the supplier's own shipping arrangement.",
+          a: "Shipping guarantee is valid for shipments made with istoc Logistics and contracted carriers. Guarantee coverage may differ for products shipped with the supplier's own shipping arrangement.",
         },
       ],
 
@@ -5208,7 +5203,7 @@ const en = {
       guaranteedAfterSales_items: [
         {
           q: "What is the Guaranteed After-Sales Service?",
-          a: "It is an additional protection program offered by iSTOC to buyers. It offers advantages such as accelerated mediation for product issues, priority customer support, and extended return periods.",
+          a: "It is an additional protection program offered by istoc to buyers. It offers advantages such as accelerated mediation for product issues, priority customer support, and extended return periods.",
         },
         {
           q: "How long is this guarantee valid?",
@@ -5246,7 +5241,7 @@ const en = {
         },
         {
           q: "Is there an additional fee for order assurance?",
-          a: "No, order protection under Trade Assurance is free. All iSTOC users automatically benefit from this protection.",
+          a: "No, order protection under Trade Assurance is free. All istoc users automatically benefit from this protection.",
         },
         {
           q: "What is the guaranteed order limit?",
@@ -5259,7 +5254,7 @@ const en = {
       guaranteedOverseasWarehouse_items: [
         {
           q: "What is an Overseas Verified Warehouse?",
-          a: "These are iSTOC's contracted and audited warehouse facilities abroad. Products shipped from these warehouses have undergone product quality and stock verification. They offer faster delivery and local return options.",
+          a: "These are istoc's contracted and audited warehouse facilities abroad. Products shipped from these warehouses have undergone product quality and stock verification. They offer faster delivery and local return options.",
         },
         {
           q: "Which countries have verified warehouses?",
@@ -5271,13 +5266,13 @@ const en = {
         },
       ],
 
-      // ── iSTOC App Settings ──
-      appSettingsLabel_title: "iSTOC App Settings",
+      // ── istoc App Settings ──
+      appSettingsLabel_title: "istoc App Settings",
       appSettingsLabel_desc: "Mobile app settings and configuration.",
       appSettingsLabel_items: [
         {
-          q: "Where can I download the iSTOC mobile app?",
-          a: "The iSTOC app can be downloaded for free from the <strong>App Store</strong> (iOS) and <strong>Google Play Store</strong> (Android). You can also download it by scanning the QR code on our homepage.",
+          q: "Where can I download the istoc mobile app?",
+          a: "The istoc app can be downloaded for free from the <strong>App Store</strong> (iOS) and <strong>Google Play Store</strong> (Android). You can also download it by scanning the QR code on our homepage.",
         },
         {
           q: "How do I configure app notifications?",
@@ -5294,7 +5289,7 @@ const en = {
       ],
 
       // ── Language & Localization ──
-      localizationSettings_title: "iSTOC Language Settings",
+      localizationSettings_title: "istoc Language Settings",
       localizationSettings_desc: "Platform language and regional settings.",
       localizationSettings_items: [
         {
@@ -5303,7 +5298,7 @@ const en = {
         },
         {
           q: "What languages are supported?",
-          a: "iSTOC currently supports <strong>Turkish</strong> and <strong>English</strong>. Additional language options will be added in the future.",
+          a: "istoc currently supports <strong>Turkish</strong> and <strong>English</strong>. Additional language options will be added in the future.",
         },
         {
           q: "How do I change the currency setting?",
@@ -5393,23 +5388,23 @@ const en = {
     // ============================================================
     sellPage: {
       // Hero
-      heroTitle: "Start Selling on Turkey's<br>B2B Marketplace!",
-      heroDesc: "Reach 250,000+ buyers, receive secure payments, grow your business.",
+      heroTitle: "Start Selling on the Global<br>B2B Marketplace!",
+      heroDesc: "Reach a wide audience of buyers, receive secure payments, grow your business.",
       heroCta: "Start for Free",
 
       // Benefits
-      benefitsTitle: "Why iSTOC?",
-      benefit1Title: "Millions of Buyers",
+      benefitsTitle: "Why istoc?",
+      benefit1Title: "Wide Buyer Base",
       benefit1Desc:
-        "Reach 250,000+ registered buyers directly. Increase your visibility in the B2B market.",
+        "Reach a wide audience of buyers directly on the global B2B marketplace. Increase your visibility.",
       benefit2Title: "Trade Assurance",
       benefit2Desc:
         "Every transaction is protected with the Secure Payment system. Buyer and seller protection program.",
-      benefit3Title: "Smart Logistics",
+      benefit3Title: "Logistics Integration",
       benefit3Desc:
-        "Integrated shipping solutions to 45 countries. Warehouse and fulfillment services.",
+        "Integrated processes with international shipping partners. Transparent tracking for cross-border deliveries.",
       benefit4Title: "Detailed Analytics",
-      benefit4Desc: "Sales, visitor, and conversion analytics. AI-powered trend recommendations.",
+      benefit4Desc: "Sales, visitor and conversion analytics. Data-driven insights for sales decisions.",
 
       // How it works
       howItWorksTitle: "How It Works?",
@@ -5462,20 +5457,18 @@ const en = {
 
       // Testimonials
       testimonialsTitle: "Success Stories",
-      testimonial1Name: "Ahmet Y.",
-      testimonial1Company: "AY Textile",
-      testimonial1Quote:
-        "Thanks to iSTOC, our international customer portfolio has tripled. The platform really works.",
-      testimonial1Metric: "300% export growth",
-      testimonial2Name: "Fatma K.",
-      testimonial2Company: "Kaya Electronics",
-      testimonial2Quote:
-        "The Secure Payment system gives our customers confidence. Our sales increase every month.",
-      testimonial2Metric: "500+ orders/month",
-      testimonial3Name: "Mehmet S.",
-      testimonial3Company: "MS Machinery",
-      testimonial3Quote: "Thanks to the analytics tools, I know which products to focus on.",
-      testimonial3Metric: "45% conversion increase",
+      testimonial1Name: "Coming soon",
+      testimonial1Company: "",
+      testimonial1Quote: "Customer success stories will be shared soon.",
+      testimonial1Metric: "",
+      testimonial2Name: "Coming soon",
+      testimonial2Company: "",
+      testimonial2Quote: "Customer success stories will be shared soon.",
+      testimonial2Metric: "",
+      testimonial3Name: "Coming soon",
+      testimonial3Company: "",
+      testimonial3Quote: "Customer success stories will be shared soon.",
+      testimonial3Metric: "",
 
       // Pricing CTA
       pricingCtaTitle: "Explore Pricing Plans",
@@ -5766,7 +5759,7 @@ const en = {
         custCard4Title: "Wrapping",
         custCard4Subtitle: "Professional wrapping",
         testimonial1Quote:
-          "Thanks to iSTOC TradeHub, our supplier sourcing process was cut in half. The quote system is especially fast and practical. We signed agreements with 12 new suppliers in 3 months.",
+          "Thanks to istoc, our supplier sourcing process was cut in half. The quote system is especially fast and practical. We signed agreements with 12 new suppliers in 3 months.",
         testimonial1Name: "Mehmet Kaya",
         testimonial1Title: "Procurement Manager",
         testimonial1Company: "Anadolu Tekstil Inc.",
@@ -5919,7 +5912,7 @@ const en = {
       "Our IP67-rated products are tested for water resistance. If any product shows water damage within the 2-year warranty period, we will replace it free of charge.",
     faq5Q: "What payment methods do you accept?",
     faq5A:
-      "We accept T/T (bank transfer), PayPal, iSTOC Trade Assurance, and L/C for orders over $10,000. A 30% deposit is required with the balance before shipping.",
+      "We accept T/T (bank transfer), PayPal, istoc Trade Assurance, and L/C for orders over $10,000. A 30% deposit is required with the balance before shipping.",
     faq6Q: "Can you provide certificates for the materials?",
     faq6A:
       "Yes, we can provide SGS test reports, ROHS compliance certificates, and nickel-free declarations. These can be sent digitally or as originals with your shipment.",
@@ -6087,7 +6080,7 @@ const en = {
   // ============================================================
   topDealsPage: {
     heroTitle: "Top Deals",
-    heroSubtitle: "Score the lowest prices on iSTOC",
+    heroSubtitle: "Score the lowest prices on istoc",
     promoShipping: "FREE shipping capped at $20",
     promoDays: "3 days",
     tabAll: "All",
@@ -6221,7 +6214,7 @@ const en = {
 
     // Collection chips
     collectionLabel: "Collection",
-    chipIstocPicks: "TradeHub Picks",
+    chipIstocPicks: "istoc Picks",
     chip48hShip: "48h Shipping",
     chipHotSale: "Hot Sale",
     chipBranded: "Branded",
@@ -6659,7 +6652,7 @@ const en = {
     headerLocalTime: "Local time",
     online: "Online",
     securityBanner:
-      "To benefit from order protections, always keep your chat and transactions on iSTOC.",
+      "To benefit from order protections, always keep your chat and transactions on istoc.",
     endToEndEncrypted:
       "This conversation is end-to-end encrypted. Only you and the seller can see it.",
     typingIndicator: "{{name}} is typing",
@@ -6695,7 +6688,7 @@ const en = {
       country: "Country",
       emailLabel: "Email",
       placeholderEmail: "example@company.com",
-      verifiedBy: "Verified accounts by iSTOC:",
+      verifiedBy: "Verified accounts by istoc:",
     },
     tabs: {
       chat: "Chat",

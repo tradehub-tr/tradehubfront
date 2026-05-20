@@ -138,7 +138,7 @@ Alpine.data("cookieBanner", () => ({
 
 Alpine.data("aboutPage", () => ({
   counters: { users: 0, sellers: 0, countries: 0, categories: 0 },
-  targets: { users: 250000, sellers: 12000, countries: 45, categories: 180 },
+  targets: { users: 50, sellers: 10, countries: 5, categories: 20 },
   animated: false,
 
   animateCounters() {
