@@ -8,7 +8,15 @@ import { initFlowbite } from 'flowbite'
 import { t } from '../i18n'
 
 // Auth components
-import { AuthLayout, initAuthLayout, RegisterPage, initRegisterPage, getBaseUrl } from '../components/auth'
+import {
+  AuthLayout,
+  initAuthLayout,
+  RegisterPage,
+  initRegisterPage,
+  getBaseUrl,
+  LegalConsentModal,
+  initLegalConsentModal,
+} from '../components/auth'
 import { startAlpine } from '../alpine'
 
 /* ── App Setup ───────────────────────────────────────── */
@@ -18,6 +26,9 @@ appEl.innerHTML = AuthLayout(RegisterPage(), {
   title: t('auth.register.title'),
   showBackButton: true,
 })
+
+// Legal consent popup'ını body sonuna ekle (sayfanın herhangi bir yerinden tetiklenebilsin).
+document.body.insertAdjacentHTML('beforeend', LegalConsentModal())
 
 /* ── Initialize Behaviors ─────────────────────────────── */
 
@@ -29,6 +40,9 @@ initAuthLayout()
 
 // Start Alpine.js (processes x-data, x-show, @click directives in the DOM)
 startAlpine()
+
+// Legal consent modal: close/accept/reject + outside-click + Esc handler'lar
+initLegalConsentModal()
 
 // Initialize register page interactivity (transitional bridge for callbacks)
 initRegisterPage({

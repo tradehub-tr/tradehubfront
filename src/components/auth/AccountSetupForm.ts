@@ -18,6 +18,7 @@ import {
   type Country,
 } from "../../data/countries";
 import { validatePhoneForCountry, getPhonePlaceholderForCountry } from "../../utils/tr-validation";
+import { openLegalConsentModal, type LegalConsentKind } from "./LegalConsentModal";
 
 // Re-export for backward compatibility
 export { validatePassword, isPasswordValid };
@@ -272,7 +273,7 @@ export function AccountSetupForm(defaultCountry: string = "TR"): string {
           </div>
         </div>
 
-        <!-- Terms Agreement -->
+        <!-- Terms Agreement — Kullanım Koşulları -->
         <div class="flex items-start gap-3 pt-2">
           <input
             type="checkbox"
@@ -282,9 +283,23 @@ export function AccountSetupForm(defaultCountry: string = "TR"): string {
             style="accent-color: var(--checkbox-checked-bg);"
             required
           />
-          <label for="terms-checkbox" class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-            <a href="/pages/legal/terms.html" class="text-orange-600 dark:text-orange-400 hover:underline" data-i18n="auth.setup.termsOfUse">${t("auth.setup.termsOfUse")}</a> ${t("auth.and")}
-            <a href="/pages/legal/privacy.html" class="text-orange-600 dark:text-orange-400 hover:underline" data-i18n="auth.setup.privacyPolicy">${t("auth.setup.privacyPolicy")}</a><span data-i18n="auth.setup.agreeTerms">${t("auth.setup.agreeTerms")}</span>
+          <label for="terms-checkbox" class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed cursor-pointer">
+            ${t("auth.setup.agreeBefore")}<button type="button" data-legal-trigger="terms" class="appearance-none bg-transparent border-0 p-0 font-medium text-orange-600 dark:text-orange-400 hover:underline focus:outline-none focus-visible:underline cursor-pointer">${t("auth.setup.termsOfUse")}</button>${t("auth.setup.agreeAfter")}
+          </label>
+        </div>
+
+        <!-- Terms Agreement — Gizlilik Politikası -->
+        <div class="flex items-start gap-3">
+          <input
+            type="checkbox"
+            id="privacy-checkbox"
+            name="privacy"
+            class="mt-1 w-4 h-4 flex-shrink-0"
+            style="accent-color: var(--checkbox-checked-bg);"
+            required
+          />
+          <label for="privacy-checkbox" class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed cursor-pointer">
+            ${t("auth.setup.agreeBefore")}<button type="button" data-legal-trigger="privacy" class="appearance-none bg-transparent border-0 p-0 font-medium text-orange-600 dark:text-orange-400 hover:underline focus:outline-none focus-visible:underline cursor-pointer">${t("auth.setup.privacyPolicy")}</button>${t("auth.setup.agreeAfter")}
           </label>
         </div>
 
@@ -406,6 +421,7 @@ export function initAccountSetupForm(options: AccountSetupFormOptions = {}): Acc
   const passwordEyeShow = document.getElementById("password-eye-show");
   const passwordEyeHide = document.getElementById("password-eye-hide");
   const termsCheckbox = document.getElementById("terms-checkbox") as HTMLInputElement | null;
+  const privacyCheckbox = document.getElementById("privacy-checkbox") as HTMLInputElement | null;
   const submitBtn = document.getElementById("account-setup-submit-btn") as HTMLButtonElement | null;
   const requirementsContainer = document.getElementById("password-requirements");
 
@@ -703,12 +719,24 @@ export function initAccountSetupForm(options: AccountSetupFormOptions = {}): Acc
     });
   }
 
-  // Terms checkbox handler
-  if (termsCheckbox) {
-    termsCheckbox.addEventListener("change", () => {
+  // Terms / Privacy checkbox handlers
+  termsCheckbox?.addEventListener("change", updateFormValidity);
+  privacyCheckbox?.addEventListener("change", updateFormValidity);
+
+  // Turuncu metne tıklayınca popup aç; sonucu ilgili checkbox'a yansıt.
+  container.addEventListener("click", async (e) => {
+    const trigger = (e.target as HTMLElement).closest<HTMLElement>("[data-legal-trigger]");
+    if (!trigger) return;
+    e.preventDefault();
+    const kind = trigger.dataset.legalTrigger as LegalConsentKind | undefined;
+    if (kind !== "terms" && kind !== "privacy") return;
+    const checkbox = kind === "terms" ? termsCheckbox : privacyCheckbox;
+    const accepted = await openLegalConsentModal(kind);
+    if (checkbox) {
+      checkbox.checked = accepted;
       updateFormValidity();
-    });
-  }
+    }
+  });
 
   // Form submission
   if (form) {
@@ -745,12 +773,19 @@ export function initAccountSetupForm(options: AccountSetupFormOptions = {}): Acc
     const hasLastName = state.data.lastName.length > 0;
     const hasCountry = state.data.country !== null;
     const hasAcceptedTerms = termsCheckbox?.checked ?? false;
+    const hasAcceptedPrivacy = privacyCheckbox?.checked ?? false;
     // Phone is optional but if entered must be valid (country-aware)
     const phoneOk =
       !state.data.phone || validatePhoneForCountry(state.data.phone, state.data.country?.code);
 
     state.isValid =
-      hasValidPassword && hasFirstName && hasLastName && hasCountry && hasAcceptedTerms && phoneOk;
+      hasValidPassword &&
+      hasFirstName &&
+      hasLastName &&
+      hasCountry &&
+      hasAcceptedTerms &&
+      hasAcceptedPrivacy &&
+      phoneOk;
 
     if (submitBtn) {
       submitBtn.disabled = !state.isValid;
