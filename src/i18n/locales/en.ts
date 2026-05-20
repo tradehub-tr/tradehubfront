@@ -389,8 +389,13 @@ const en = {
         number: "At least 1 number (0-9)",
         termsOfUse: "Terms of Use",
         privacyPolicy: "Privacy Policy",
-        agreeTerms: "I have read and agree to the",
+        agreeBefore: "I have read and agree to the ",
+        agreeAfter: ".",
         createAccount: "Create Account",
+      },
+      legalConsent: {
+        accept: "Accept",
+        reject: "Reject",
       },
       social: {
         google: "Continue with Google",

@@ -92,3 +92,11 @@ export {
   initResetPasswordPage,
   type ResetPasswordStep,
 } from "./ResetPasswordPage";
+
+// Legal Consent Modal (Kullanım Koşulları + Gizlilik Politikası popup)
+export {
+  LegalConsentModal,
+  initLegalConsentModal,
+  openLegalConsentModal,
+  type LegalConsentKind,
+} from "./LegalConsentModal";

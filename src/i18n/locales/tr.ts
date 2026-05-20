@@ -387,8 +387,13 @@ const tr = {
         number: "En az 1 rakam (0-9)",
         termsOfUse: "Kullanım Koşulları",
         privacyPolicy: "Gizlilik Politikası",
-        agreeTerms: "'nı okudum ve kabul ediyorum.",
+        agreeBefore: "",
+        agreeAfter: "'nı okudum ve kabul ediyorum.",
         createAccount: "Hesap Oluştur",
+      },
+      legalConsent: {
+        accept: "Kabul Et",
+        reject: "Reddet",
       },
       social: {
         google: "Google ile devam et",
