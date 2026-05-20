@@ -101,7 +101,7 @@ function renderPromoBanner(): string {
 
         <!-- Headline -->
         <h1 class="text-3xl lg:text-4xl font-bold leading-tight text-white mb-3">
-          Türkiye'den Dünyaya<br/>B2B Ticaret
+          Global B2B<br/>Ticaret Ağı
         </h1>
         <p class="text-sm text-orange-100/80 leading-relaxed mb-8">
           Güvenli ödeme, doğrulanmış satıcılar ve şeffaf<br/>komisyon ile yeni nesil B2B pazaryeri.
@@ -210,7 +210,7 @@ export function AuthLayout(content: string, options: AuthLayoutOptions = {}): st
             <div class="lg:hidden">
               <div class="h-14"></div>
               <div class="px-6 pt-6 pb-8 text-white text-center">
-                <h2 class="text-xl font-bold mb-1">Türkiye'den Dünyaya B2B</h2>
+                <h2 class="text-xl font-bold mb-1">Global B2B Ticaret Ağı</h2>
                 <p class="text-sm opacity-80">Güvenli ödeme ve şeffaf ticaret</p>
               </div>
             </div>
