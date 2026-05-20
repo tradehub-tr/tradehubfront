@@ -200,11 +200,11 @@ function renderFeaturedView(): string {
                 ${card.icon}
               </span>
               <div class="relative min-w-0">
-                <div class="text-[13px] font-bold text-gray-900 leading-tight tracking-[-0.005em] mb-0.5" data-i18n="${card.titleKey}">${t(card.titleKey)}</div>
-                <div class="text-[11.5px] text-gray-500 leading-snug line-clamp-2" data-i18n="${card.descKey}">${t(card.descKey)}</div>
+                <div class="text-sm font-bold text-gray-900 leading-tight tracking-[-0.005em] mb-1" data-i18n="${card.titleKey}">${t(card.titleKey)}</div>
+                <div class="text-xs text-gray-500 leading-snug line-clamp-2" data-i18n="${card.descKey}">${t(card.descKey)}</div>
               </div>
               <div class="relative flex items-center justify-between border-t border-dashed border-gray-200 pt-2.5 mt-1">
-                <span class="text-[11.5px] font-semibold text-amber-700 uppercase tracking-wider" data-i18n="${card.metaKey}"${card.metaSource ? ` data-meta-source="${card.metaSource}"` : ""}>${t(card.metaKey)}</span>
+                <span class="text-[11px] font-semibold text-amber-700 uppercase tracking-wider" data-i18n="${card.metaKey}"${card.metaSource ? ` data-meta-source="${card.metaSource}"` : ""}>${t(card.metaKey)}</span>
                 <span class="flex h-6 w-6 items-center justify-center rounded-full bg-gray-50 border border-gray-200 text-gray-500 transition-all group-hover:bg-amber-400 group-hover:text-gray-900 group-hover:border-amber-500 group-hover:translate-x-1">
                   ${arrowSvg}
                 </span>

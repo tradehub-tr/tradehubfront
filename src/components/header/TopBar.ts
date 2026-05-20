@@ -1298,6 +1298,16 @@ export function TopBar(props?: TopBarProps): string {
  */
 let _headerCartInitialized = false;
 
+// Backend bazı kurulumlarda eski href pattern'ini (`/pages/seller.html?id=`) döndürebiliyor;
+// canonical mağaza sayfası `/pages/seller/seller-shop.html?seller=` — normalize et.
+function normalizeSupplierHref(href: string): string {
+  if (!href) return "#";
+  return href.replace(
+    /^\/pages\/seller\.html\?id=/,
+    "/pages/seller/seller-shop.html?seller="
+  );
+}
+
 function renderCartModalContent(modal: HTMLElement, supplierId: string): boolean {
   const supplier = cartStore.getSupplier(supplierId);
   const skuCount = supplier ? supplier.products.reduce((s, p) => s + p.skus.length, 0) : 0;
@@ -1326,7 +1336,7 @@ function renderCartModalContent(modal: HTMLElement, supplierId: string): boolean
     let html = `
       <div class="flex items-center gap-2 mb-2">
         <span class="inline-block w-1.5 h-4 rounded-sm" style="background:var(--btn-bg,#d97706)"></span>
-        <p class="text-[13px] font-semibold text-gray-900">${supplier.name} <span class="text-gray-400 font-normal">(${skuCount})</span></p>
+        <p class="text-[13px] font-semibold text-gray-900"><a href="${normalizeSupplierHref(supplier.href)}" class="hover:text-[var(--btn-bg,#d97706)] hover:underline transition-colors focus:outline-none">${supplier.name}</a> <span class="text-gray-400 font-normal">(${skuCount})</span></p>
       </div>
       <div class="divide-y divide-gray-100">`;
 
@@ -1538,7 +1548,7 @@ export function initHeaderCart(): void {
               <div class="flex items-center justify-between gap-2 mb-2">
                 <div class="flex items-center gap-2 min-w-0">
                   <div class="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">${storeIconSvg}</div>
-                  <p class="text-[11px] font-semibold text-gray-500 uppercase tracking-wide truncate">${supplier.name}</p>
+                  <a href="${normalizeSupplierHref(supplier.href)}" data-supplier-link class="text-[11px] font-semibold text-gray-500 uppercase tracking-wide truncate hover:text-[var(--btn-bg,#d97706)] hover:underline transition-colors focus:outline-none" title="${supplier.name}">${supplier.name}</a>
                 </div>
                 <div class="flex items-center gap-1.5 flex-shrink-0">
                   <span class="text-[11px] font-semibold hover:underline" style="color:var(--btn-bg,#d97706)">${t("common.viewAll")}</span>
@@ -1622,6 +1632,11 @@ export function initHeaderCart(): void {
             apiRemoveCartItem(id).catch(() => {});
           }
         }
+        return;
+      }
+
+      // Mağaza adı linki: native navigation çalışsın, parent modal açılmasın
+      if (target.closest<HTMLElement>("[data-supplier-link]")) {
         return;
       }
 

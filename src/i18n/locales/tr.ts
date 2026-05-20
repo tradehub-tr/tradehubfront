@@ -727,8 +727,8 @@ const tr = {
     // PRODUCT
     // ============================================================
     product: {
-      moqSingle: "MSA: {{count}} adet",
-      moqRange: "MSA: {{min}} - {{max}} adet",
+      moqSingle: "{{count}} adet",
+      moqRange: "{{min}} - {{max}} adet",
       attributes: "Özellikler",
       reviews: "Yorumlar",
       supplier: "Tedarikçi",
@@ -950,7 +950,8 @@ const tr = {
       sortSupplierRating: "Tedarikçi Puanı",
       sortByLabel: "Sırala:",
       showingResults: "{{count}} ürün gösteriliyor",
-      resultsFor: "için küresel tedarikçilerden",
+      resultsForProducts: "kategorisinde",
+      resultsForManufacturers: "için küresel tedarikçiler",
       viewingLead: "Görüntüleniyor:",
       unitFound: "ürün bulundu",
       unitFoundManufacturer: "üretici bulundu",
@@ -3021,6 +3022,8 @@ const tr = {
       history: "Geçmiş",
       viewMore: "Daha fazlası",
       verifiedManufacturers: "Onaylanmış Satıcılar",
+      favoriteProducts: "Favori\nürünler",
+      favoriteSuppliers: "Favori\ntedarikçiler",
 
       // Main categories
       cat: {

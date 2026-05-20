@@ -950,7 +950,8 @@ const en = {
       sortSupplierRating: "Supplier Rating",
       sortByLabel: "Sort by:",
       showingResults: "Showing {{count}}",
-      resultsFor: "from global suppliers for",
+      resultsForProducts: "category",
+      resultsForManufacturers: "global suppliers",
       viewingLead: "Viewing:",
       unitFound: "products found",
       unitFoundManufacturer: "manufacturers found",
@@ -3022,6 +3023,8 @@ const en = {
       history: "History",
       viewMore: "View more",
       verifiedManufacturers: "Verified manufacturers",
+      favoriteProducts: "Favorite\nproducts",
+      favoriteSuppliers: "Favorite\nsuppliers",
 
       // Main categories
       cat: {

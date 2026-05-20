@@ -12,10 +12,9 @@ import { openShippingModal, openCartDrawer } from "./CartDrawer";
 
 function renderPriceTiers(tiers: PriceTier[]): string {
   // When a campaign is active the backend sets each tier's originalPrice
-  // (pre-discount). We show it as a strikethrough next to the deal price.
+  // (pre-discount). We show it stacked above the deal price.
   // The qty label is fully localised via product.moqSingle / product.moqRange
-  // so each locale controls its own abbreviation + unit (TR: "MSA: 1 adet",
-  // EN: "MSQ: 1 piece").
+  // so each locale controls its own unit (TR: "1 adet", EN: "1 piece").
   return `
     <div id="pd-price-tiers" class="grid grid-cols-3 gap-x-4 gap-y-3 mb-4">
       ${tiers
@@ -26,12 +25,13 @@ function renderPriceTiers(tiers: PriceTier[]): string {
           const hasDiscount =
             typeof tier.originalPrice === "number" && tier.originalPrice > tier.price;
           const strikethrough = hasDiscount
-            ? `<span class="pd-price-tier-original" style="text-decoration: line-through; color: var(--color-text-tertiary, #9ca3af); font-size: 12px; margin-right: 6px;">${formatCurrency(tier.originalPrice!, getSelectedCurrency())}</span>`
+            ? `<span class="pd-price-tier-original block line-through text-[13px] text-[var(--color-text-tertiary,#9ca3af)] leading-tight mb-0.5">${formatCurrency(tier.originalPrice!, getSelectedCurrency())}</span>`
             : "";
           return `
           <div class="pd-price-tier flex flex-col p-0 cursor-default min-w-0 ${i === 0 ? "active" : ""}" data-tier-index="${i}">
-            <span class="pd-price-tier-qty text-[13px] text-[var(--color-text-muted,#666)] mb-1">${qtyLabel}</span>
-            <span class="pd-price-tier-price shrink-0 flex items-baseline gap-1 text-[22px] font-bold text-[var(--color-text-heading,#111827)] leading-[1.2] [.pd-price-tier.active_&]:text-[#cc0000]">${strikethrough}${formatCurrency(tier.price, getSelectedCurrency())}</span>
+            <span class="pd-price-tier-qty text-[15px] text-[var(--color-text-muted,#666)] mb-1">${qtyLabel}</span>
+            ${strikethrough}
+            <span class="pd-price-tier-price shrink-0 text-[22px] font-bold text-[var(--color-text-heading,#111827)] leading-[1.2] [.pd-price-tier.active_&]:text-[#cc0000]">${formatCurrency(tier.price, getSelectedCurrency())}</span>
           </div>
         `;
         })

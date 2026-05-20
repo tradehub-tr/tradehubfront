@@ -192,13 +192,13 @@ export function ManufacturerList(): string {
                       class="flex flex-col bg-white border border-gray-100 rounded-lg overflow-hidden w-[140px] xl:w-[180px] flex-shrink-0 no-underline text-inherit hover:border-gray-300 transition-colors"
                     >
                       <div class="bg-gray-50 flex-1 overflow-hidden">
-                        <img x-show="p.image" :src="p.image" :alt="p.product_name" class="w-full h-full object-cover" />
+                        <img x-show="p.image" :src="p.image" :alt="p.product_name" class="block w-full h-full object-cover" />
                         <div x-show="!p.image" class="w-full h-full flex items-center justify-center text-gray-200">
                           <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
                         </div>
                       </div>
-                      <div class="p-2 flex-shrink-0">
-                        <p class="text-[12px] text-gray-800 font-medium leading-tight line-clamp-2 mb-1" x-text="p.product_name"></p>
+                      <div class="p-2 flex-shrink-0 h-[78px]">
+                        <p class="text-[12px] text-gray-800 font-medium leading-tight line-clamp-2 mb-1 min-h-[2lh]" x-text="p.product_name"></p>
                         <p x-show="p.price_min" class="text-[12px] font-bold text-gray-900" x-text="(_cv, p.price_max && p.price_max > p.price_min ? window.csFormatPriceRange(parseFloat(p.price_min), parseFloat(p.price_max), p.currency || 'USD') : window.csFormatPrice(parseFloat(p.price_min), p.currency || 'USD'))"></p>
                         <p x-show="p.moq" class="text-[11px] text-gray-400 mt-0.5" x-text="p.moq + ' ' + (p.moq_unit || 'Adet')"></p>
                       </div>

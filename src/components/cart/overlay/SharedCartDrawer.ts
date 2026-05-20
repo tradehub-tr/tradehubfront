@@ -895,7 +895,7 @@ function syncToCartStore(item: CartDrawerItemModel, unitPrice: number): void {
     const supplier: CartSupplier = {
       id: supplierId,
       name: item.supplierName,
-      href: `/pages/seller.html?id=${supplierId}`,
+      href: `/pages/seller/seller-shop.html?seller=${supplierId}`,
       selected: true,
       products: [],
     };

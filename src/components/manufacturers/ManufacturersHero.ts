@@ -1,5 +1,7 @@
 import { t } from "../../i18n";
 import { getBrowsingHistory } from "../../services/browsingHistoryService";
+import { getTotalCount as getFavoriteProductsCount } from "../../stores/favorites";
+import { getSellerFavoritesCount } from "../../stores/sellerFavorites";
 
 export function ManufacturersHero(): string {
   return `
@@ -254,14 +256,16 @@ function renderTopRankingColumn(): string {
 function renderProfileColumn(): string {
   const history = getBrowsingHistory();
   const thumbs = history.slice(0, 4);
+  const initialFavProducts = getFavoriteProductsCount();
+  const initialFavSellers = getSellerFavoritesCount();
 
   const historyHtml =
     thumbs.length > 0
       ? thumbs
           .map(
             (h) => `
-        <a href="${h.href}" class="aspect-square rounded-md overflow-hidden group" title="${h.title || ""}">
-          <img src="${h.image}" alt="${h.title || ""}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+        <a href="${h.href}" class="block w-full aspect-square rounded-md overflow-hidden group" title="${h.title || ""}">
+          <img src="${h.image}" alt="${h.title || ""}" class="block w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
         </a>`
           )
           .join("")
@@ -275,7 +279,15 @@ function renderProfileColumn(): string {
         x-data="{
           loggedIn: false,
           userName: 'Guest',
+          productCount: ${initialFavProducts},
+          sellerCount: ${initialFavSellers},
           async init() {
+            window.addEventListener('favorites-changed', (e) => {
+              this.productCount = e.detail?.items?.length ?? 0;
+            });
+            window.addEventListener('seller-favorites-changed', (e) => {
+              this.sellerCount = e.detail?.items?.length ?? 0;
+            });
             const api = (window.API_BASE || '/api') + '/method/tradehub_core.api.v1.auth.get_session_user';
             try {
               const res = await fetch(api, { credentials: 'include' }).then(r => r.json());
@@ -310,17 +322,17 @@ function renderProfileColumn(): string {
 
         <!-- Logged-in: favorites stats -->
         <template x-if="loggedIn">
-          <div class="flex items-center justify-center rounded-md p-3 mt-4 mb-4 bg-gray-50 border border-transparent">
+          <div class="flex items-center justify-center rounded-md p-2 mt-2 mb-2 bg-gray-50 border border-transparent">
             <div class="flex-1 text-center border-r border-gray-200">
               <div class="flex items-center justify-center gap-1.5">
-                <span class="text-xl font-bold">0</span>
-                <span class="text-xs text-left leading-tight text-gray-600">Favorite<br/>products</span>
+                <span class="text-lg font-bold" x-text="productCount">0</span>
+                <span class="text-xs text-left leading-tight text-gray-600 whitespace-pre-line">${t("mfr.favoriteProducts")}</span>
               </div>
             </div>
             <div class="flex-1 text-center">
               <div class="flex items-center justify-center gap-1.5 ml-2">
-                <span class="text-xl font-bold">0</span>
-                <span class="text-xs text-left leading-tight text-gray-600">Favorite<br/>suppliers</span>
+                <span class="text-lg font-bold" x-text="sellerCount">0</span>
+                <span class="text-xs text-left leading-tight text-gray-600 whitespace-pre-line">${t("mfr.favoriteSuppliers")}</span>
               </div>
             </div>
           </div>

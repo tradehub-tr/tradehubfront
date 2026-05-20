@@ -117,7 +117,9 @@ function renderInlineToggle(
 }
 
 /**
- * "Görüntüleniyor: [toggle] için küresel tedarikçilerden \"{keyword}\""
+ * Title reads naturally per active tab:
+ *  - products:      "Görüntüleniyor: [toggle] \"{keyword}\" kategorisinde"
+ *  - manufacturers: "Görüntüleniyor: [toggle] \"{keyword}\" için küresel tedarikçiler"
  * `keyword` is shown in the brand color; wrapper is hidden when empty so the title still reads
  * naturally on the landing case.
  */
@@ -127,13 +129,16 @@ function renderTitle(
   queryParam: string | undefined,
   keyword: string
 ): string {
+  const descriptorKey =
+    activeTab === "products" ? "products.resultsForProducts" : "products.resultsForManufacturers";
+
   return `
     <h1 class="text-base sm:text-xl font-medium text-gray-900 dark:text-white min-w-0 break-words leading-snug tracking-tight m-0 max-w-[72ch]">
       <span class="text-gray-900 dark:text-white" data-i18n="products.viewingLead">${t("products.viewingLead")}</span>
       ${renderInlineToggle(activeTab, categoryParam, queryParam)}
       <span id="sub-header-keyword-wrapper" ${keyword ? "" : 'style="display:none"'}>
-        <span class="font-normal text-gray-500 dark:text-gray-400">${t("products.resultsFor")}</span>
         <span id="sub-header-keyword" class="text-primary-600 dark:text-primary-400 font-bold">"${keyword || ""}"</span>
+        <span class="font-normal text-gray-500 dark:text-gray-400">${t(descriptorKey)}</span>
       </span>
     </h1>
   `;
