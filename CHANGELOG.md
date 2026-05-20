@@ -1,3 +1,16 @@
+## [v1.1.9-beta.5] - 2026-05-20 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(auth): yasal metin onay popup'ı ve ayrı checkbox'lar eklendi (@aliiball)
+  - Tek "Kullanım Koşulları ve Gizlilik Politikası" checkbox'ı iki ayrı onaya bölündü (terms-checkbox + privacy-checkbox)
+  - Turuncu metne tıklayınca tüm sözleşme içeriği popup içinde gösteriliyor (yeni LegalConsentModal component)
+  - Reddet/Kabul Et butonları metnin sonuna kadar okunmadan görünmüyor; her açılışta scroll baştan başlıyor ve buton durumu sıfırlanıyor
+  - Popup içeriği legalContent.ts'ten çekiliyor — terms/privacy sayfalarıyla aynı kaynak
+  - i18n: agreeTerms TR-suffix/EN-prefix çakışması agreeBefore + agreeAfter'a bölündü; auth.setup.legalConsent.{accept, reject} eklendi
+
+---
 ## [v1.1.9-beta.3] - 2026-05-18 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
