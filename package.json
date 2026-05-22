@@ -1,15 +1,7 @@
 {
   "name": "tradehub",
   "private": true,
-<<<<<<< HEAD
-<<<<<<< HEAD
   "version": "1.1.9-beta.10",
-=======
-  "version": "1.1.9-beta.7",
->>>>>>> 1903f94 (chore: v1.1.9-beta.7 beta changelog + package.json)
-=======
-  "version": "1.1.9-beta.8",
->>>>>>> c05cfd3 (chore: v1.1.9-beta.8 beta changelog + package.json)
   "type": "module",
   "scripts": {
     "dev": "vite",
