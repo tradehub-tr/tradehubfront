@@ -1,3 +1,17 @@
+## [v1.1.9-beta.7] - 2026-05-22 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(sell): pricing planları dinamik API + entitlement banner (@boraydeger32)
+  - sell sayfasındaki 4 hardcoded TIERS dizisi kaldırıldı, planlar artık tradehub_core.api.v1.public_pricing.get_pricing_plans endpoint'inden çekiliyor (Süper Admin Permission Console'dan yönetim).
+  - pricingService.ts: localStorage cache (5 dk) + stale-while-revalidate; cache key v2'ye yükseltildi (CTA label şema değişikliği için invalidate).
+  - sell.ts: cache fresh ise senkron paint, değilse fetch await; arka planda daima fetch + updated_at değişirse #paketler section'ı yerinde re-render (tüm DOM swap yerine — Alpine state korunur).
+  - SellPageLayout: CTA action map (signup, contact_sales, learn_more) ve feature icon glyph map (check, x, star, zap, info, default check) eklendi; currency symbol + fmtListings helper'ları.
+  - FAZ 1.7 — utils/entitlement.ts: snapshot client (sessionStorage 5dk cache), hasFeature/withinQuota/isVerifiedForCheckout helper'ları. Güvenlik sınırı değil — gerçek karar her korumalı eylemde backend'de.
+  - components/subscription/EntitlementBanner.ts: trial ending (< 3 gün) ve subscription past_due durumları için banner.
+
+---
 ## [v1.1.9-beta.6] - 2026-05-22 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
