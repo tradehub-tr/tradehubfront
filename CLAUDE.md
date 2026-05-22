@@ -14,6 +14,12 @@ Bu dosya kısa orkestrasyon kurallarını içerir. Detaylı kurallar `tradehubfr
 - **Deploy:** Docker + Nginx (`Dockerfile`, `nginx.conf.template`), beta → rc → prod akışı
 - **Default branch:** `main`
 
+> ⚠ **LOCAL dev'de HMR YOK** — Kök `docker-compose.yml`'deki `storefront` servisi Vite dev server değil, **nginx ile `./tradehubfront/dist`'i** servis ediyor (`tradehubfront/dist:/usr/share/nginx/html:ro`). Frontend'de yapılan her değişikliği görmek için zorunlu:
+> ```bash
+> cd tradehubfront && npm run build
+> ```
+> Sonra tarayıcıda **Ctrl+Shift+R** ile hard refresh. Bağımsız `npm run dev` Vite dev server'ı ayrı portta açar ama gateway proxy ile uyumlu değil.
+
 ## 2. Stack
 
 | Katman | Teknoloji | Sürüm | Not |

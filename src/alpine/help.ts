@@ -1,6 +1,13 @@
 import Alpine from "alpinejs";
+import {
+  MultiFileDropzoneController,
+  type DropzoneConfig,
+  type DropzoneTexts,
+} from "../lib/upload-ui";
 import { t } from "../i18n";
 import { getBaseUrl } from "../components/auth/AuthLayout";
+import { fetchCsrfToken } from "../utils/api";
+import { showToast } from "../utils/toast";
 import {
   createTicket,
   listMyTickets,
@@ -10,7 +17,6 @@ import {
   getTicketCommunications,
   replyTicket,
   updateTicketStatus,
-  uploadTicketAttachment,
   listTicketAttachments,
   type TicketSummary,
   type TicketDetail,
@@ -18,6 +24,33 @@ import {
   type StatusCounts,
   type TicketAttachment,
 } from "../services/supportService";
+
+const TICKET_DROPZONE_CONFIG: DropzoneConfig = {
+  maxFiles: 5,
+  maxFileSizeBytes: 10 * 1024 * 1024,
+  allowedExtensions: [
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".gif",
+    ".webp",
+    ".pdf",
+    ".doc",
+    ".docx",
+    ".xls",
+    ".xlsx",
+  ],
+  allowedFormatsDisplay: "JPG, PNG, GIF, WEBP, PDF, DOC, XLS",
+};
+
+function ticketDropzoneTexts(): DropzoneTexts {
+  return {
+    title: t("helpCenter.fileUploadText") || "Dosyaları buraya sürükle",
+    or: t("rfq.dropzoneOr") || "veya",
+    pickBtn: t("rfq.dropzonePickBtn") || "Bilgisayardan Seç",
+    dragRelease: t("rfq.dropzoneDragRelease") || "Bırakın",
+  };
+}
 import { createLead } from "../services/leadService";
 
 // Yardım merkezi arama indeksi içindeki tek bir FAQ kaydı
@@ -897,7 +930,8 @@ Alpine.data("ticketForm", () => ({
   subject: "",
   description: "",
   orderRef: "",
-  files: [] as { name: string; size: number; file: File }[],
+  // Dropzone controller — files & progress yönetimi tradehub-upload-ui'da
+  dropzoneController: null as MultiFileDropzoneController | null,
   errors: {} as Record<string, string>,
   submitted: false,
   orders: [] as OrderForTicket[],
@@ -909,6 +943,41 @@ Alpine.data("ticketForm", () => ({
     } finally {
       this.loadingOrders = false;
     }
+
+    // Dropzone container'larını DOM'a yerleştir + controller mount.
+    const wrap = document.getElementById("ticket-dropzone-wrap");
+    if (wrap) {
+      wrap.innerHTML = MultiFileDropzoneController.renderDropzoneHtml({
+        dropzoneId: "ticket-dropzone",
+        fileInputId: "ticket-file-input",
+        config: TICKET_DROPZONE_CONFIG,
+        texts: ticketDropzoneTexts(),
+      });
+    }
+    this.dropzoneController = new MultiFileDropzoneController({
+      dropzoneId: "ticket-dropzone",
+      fileInputId: "ticket-file-input",
+      fileListId: "ticket-file-list",
+      lightboxScope: "ticket-file",
+      scopePrefix: "ticket",
+      config: TICKET_DROPZONE_CONFIG,
+      texts: ticketDropzoneTexts(),
+      onValidationError: (kind, file) => {
+        if (kind === "unsupported" && file)
+          showToast({ message: `Desteklenmeyen format: ${file.name}`, type: "error" });
+        else if (kind === "tooLarge" && file)
+          showToast({ message: `Dosya çok büyük: ${file.name}`, type: "error" });
+        else if (kind === "duplicate" && file)
+          showToast({ message: `Zaten eklendi: ${file.name}`, type: "warning" });
+        else if (kind === "maxFiles")
+          showToast({ message: "En fazla 5 dosya ekleyebilirsiniz.", type: "warning" });
+      },
+    });
+    this.dropzoneController.mount();
+  },
+
+  get files(): File[] {
+    return this.dropzoneController?.files ?? [];
   },
 
   get categories() {
@@ -969,21 +1038,6 @@ Alpine.data("ticketForm", () => ({
     return this.description.length;
   },
 
-  addFiles(fileList: FileList) {
-    const maxFiles = 5;
-    const maxSize = 10 * 1024 * 1024;
-    for (let i = 0; i < fileList.length && this.files.length < maxFiles; i++) {
-      const f = fileList[i];
-      if (f.size <= maxSize) {
-        this.files.push({ name: f.name, size: f.size, file: f });
-      }
-    }
-  },
-
-  removeFile(index: number) {
-    this.files.splice(index, 1);
-  },
-
   validateStep(step: number): boolean {
     this.errors = {};
     if (step === 1) {
@@ -1042,19 +1096,20 @@ Alpine.data("ticketForm", () => ({
       });
 
       // Dosyalari ayrica upload et — ticket olusturulduktan sonra.
+      // tradehub-upload-ui paralel concurrency=2 + per-file/total progress + hybrid simulated.
       // Hata olsa bile ticket kaybolmaz; kullaniciya uyari gosteriyoruz.
-      if (created?.name && this.files.length > 0) {
-        const failed: string[] = [];
-        for (const item of this.files) {
-          try {
-            await uploadTicketAttachment(created.name, item.file);
-          } catch (err: unknown) {
-            failed.push(item.name);
-            console.warn("Attachment upload failed:", item.name, err);
-          }
-        }
-        if (failed.length > 0) {
-          this.errors.submit = `Ticket oluşturuldu fakat bazı dosyalar yüklenemedi: ${failed.join(", ")}`;
+      if (created?.name && this.dropzoneController && this.dropzoneController.files.length > 0) {
+        const csrf = (await fetchCsrfToken()) ?? "None";
+        const baseUrl = (window as unknown as { API_BASE?: string }).API_BASE || "/api";
+        const result = await this.dropzoneController.upload({
+          endpoint: `${baseUrl}/method/tradehub_core.api.public.upload_ticket_attachment`,
+          formDataFields: { ticket: created.name },
+          headers: { "X-Frappe-CSRF-Token": csrf },
+          concurrency: 2,
+        });
+        if (result.failed.length > 0) {
+          const failedNames = result.failed.map((f) => f.file.name).join(", ");
+          this.errors.submit = `Ticket oluşturuldu fakat bazı dosyalar yüklenemedi: ${failedNames}`;
         }
       }
 

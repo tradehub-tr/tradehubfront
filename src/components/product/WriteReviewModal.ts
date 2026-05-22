@@ -13,12 +13,24 @@
  */
 
 import Alpine from "alpinejs";
-import {
-  submitReview,
-  uploadReviewImage,
-  type SubmitReviewPayload,
-} from "../../services/listingService";
+import { MultiFileDropzoneController, type DropzoneConfig } from "../../lib/upload-ui";
+import { submitReview, type SubmitReviewPayload } from "../../services/listingService";
+import { fetchCsrfToken } from "../../utils/api";
 import { showToast } from "../../utils/toast";
+
+const REVIEW_DROPZONE_CONFIG: DropzoneConfig = {
+  maxFiles: 5,
+  maxFileSizeBytes: 5 * 1024 * 1024,
+  allowedExtensions: [".jpg", ".jpeg", ".png", ".gif", ".webp"],
+  allowedFormatsDisplay: "JPG, PNG, GIF, WEBP",
+};
+
+const REVIEW_DROPZONE_TEXTS = {
+  title: "Fotoğrafları sürükle",
+  or: "veya",
+  pickBtn: "Foto Ekle",
+  dragRelease: "Bırakın",
+};
 
 export interface OrderItemOption {
   name: string;
@@ -51,8 +63,6 @@ interface WriteReviewState {
   reset(): void;
   setAspect(key: keyof WriteReviewState["aspects"], n: number): void;
   starFillPercent(n: number): number;
-  onFileChange(e: Event): Promise<void>;
-  removeImage(idx: number): void;
   bodyValid(): boolean;
   submit(): Promise<void>;
 }
@@ -79,6 +89,7 @@ export function registerWriteReviewModal(): void {
       body: "",
       images: [],
       uploadingImage: false,
+      dropzoneController: null as MultiFileDropzoneController | null,
       get rating(): number {
         const a = this.aspects;
         return (a.product_quality + a.service + a.shipping + a.spec_match) / 4;
@@ -93,15 +104,78 @@ export function registerWriteReviewModal(): void {
         });
         window.addEventListener("write-review-modal-hide", () => this.close());
       },
-      show(detail) {
+      async show(detail) {
         this.reset();
         this.listingId = detail.listingId;
         this.orderItems = detail.orderItems || [];
         this.selectedOrderItem = this.orderItems[0]?.name || "";
         this.open = true;
+
+        // Modal görünür olduktan sonra dropzone'u mount et (DOM hazır olsun).
+        await new Promise((r) => requestAnimationFrame(r));
+        const wrap = document.getElementById("review-dropzone-wrap");
+        if (!wrap) return;
+        wrap.innerHTML = MultiFileDropzoneController.renderDropzoneHtml({
+          dropzoneId: "review-dropzone",
+          fileInputId: "review-file-input",
+          config: REVIEW_DROPZONE_CONFIG,
+          texts: REVIEW_DROPZONE_TEXTS,
+        });
+        const csrf = (await fetchCsrfToken()) ?? "None";
+        const baseUrl = (window as unknown as { API_BASE?: string }).API_BASE || "/api";
+        this.dropzoneController = new MultiFileDropzoneController({
+          dropzoneId: "review-dropzone",
+          fileInputId: "review-file-input",
+          fileListId: "review-file-list",
+          lightboxScope: "review-image",
+          scopePrefix: "review",
+          config: REVIEW_DROPZONE_CONFIG,
+          texts: REVIEW_DROPZONE_TEXTS,
+          autoUpload: true,
+          autoUploadConfig: {
+            endpoint: `${baseUrl}/method/upload_file`,
+            formDataFields: { is_private: "0", folder: "Home/Attachments" },
+            headers: { "X-Frappe-CSRF-Token": csrf },
+            concurrency: 2,
+          },
+          onFileUploaded: (file, responseText) => {
+            try {
+              const data = JSON.parse(responseText) as { message?: { file_url?: string } };
+              const fileUrl = data.message?.file_url;
+              if (!fileUrl) return;
+              this.images.push({
+                image: fileUrl,
+                previewUrl: fileUrl.startsWith("http")
+                  ? fileUrl
+                  : `${window.location.origin}${fileUrl}`,
+              });
+            } catch {
+              showToast({ message: `${file.name} yüklendi ama yanıt okunamadı.`, type: "warning" });
+            }
+          },
+          onUploadError: (file, error) => {
+            showToast({ message: `${file.name}: ${error}`, type: "error" });
+          },
+          onValidationError: (kind, file) => {
+            if (kind === "unsupported" && file)
+              showToast({ message: `Desteklenmeyen format: ${file.name}`, type: "error" });
+            else if (kind === "tooLarge" && file)
+              showToast({ message: `${file.name} 5MB üzerinde, atlandı.`, type: "warning" });
+            else if (kind === "maxFiles")
+              showToast({ message: "En fazla 5 fotoğraf yükleyebilirsiniz.", type: "warning" });
+          },
+        });
+        this.dropzoneController.mount();
       },
       close() {
         this.open = false;
+        // Controller cleanup — files & DOM event'leri serbest
+        this.dropzoneController?.destroy();
+        this.dropzoneController = null;
+        const wrap = document.getElementById("review-dropzone-wrap");
+        if (wrap) wrap.innerHTML = "";
+        const list = document.getElementById("review-file-list");
+        if (list) list.innerHTML = "";
       },
       reset() {
         this.loading = false;
@@ -117,44 +191,6 @@ export function registerWriteReviewModal(): void {
       },
       starFillPercent(n: number): number {
         return Math.max(0, Math.min(1, this.rating - (n - 1))) * 100;
-      },
-      async onFileChange(e: Event) {
-        const input = e.target as HTMLInputElement;
-        const files = Array.from(input.files || []);
-        if (!files.length) return;
-        if (this.images.length + files.length > 5) {
-          showToast({ message: "En fazla 5 fotoğraf yükleyebilirsiniz.", type: "warning" });
-          return;
-        }
-        this.uploadingImage = true;
-        try {
-          for (const file of files) {
-            if (!file.type.startsWith("image/")) continue;
-            if (file.size > 5 * 1024 * 1024) {
-              showToast({
-                message: `${file.name} 5MB üzerinde, atlandı.`,
-                type: "warning",
-              });
-              continue;
-            }
-            const result = await uploadReviewImage(file);
-            this.images.push({
-              image: result.file_url,
-              previewUrl: result.file_url.startsWith("http")
-                ? result.file_url
-                : `${window.location.origin}${result.file_url}`,
-            });
-          }
-        } catch (err: unknown) {
-          const msg = err instanceof Error ? err.message : "Yükleme hatası";
-          showToast({ message: msg, type: "error" });
-        } finally {
-          this.uploadingImage = false;
-          input.value = "";
-        }
-      },
-      removeImage(idx: number) {
-        this.images.splice(idx, 1);
       },
       bodyValid() {
         return this.body.trim().length >= 20;
@@ -353,31 +389,11 @@ export function WriteReviewModal(): string {
             </div>
           </div>
 
-          <!-- Image upload -->
+          <!-- Image upload (tradehub-upload-ui MultiFileDropzone — autoUpload mod) -->
           <div>
             <label class="block text-[12px] font-medium text-secondary-700 mb-1">Fotoğraflar <span class="text-secondary-400">(maks 5, her biri 5MB)</span></label>
-            <div class="flex flex-wrap gap-2">
-              <template x-for="(img, idx) in images" :key="idx">
-                <div class="relative w-20 h-20 rounded-lg overflow-hidden border border-border-default group">
-                  <img :src="img.previewUrl" class="w-full h-full object-cover" alt="">
-                  <button
-                    type="button"
-                    @click="removeImage(idx)"
-                    class="absolute top-1 right-1 w-5 h-5 bg-black/60 text-white rounded-full text-xs leading-none flex items-center justify-center hover:bg-black/80"
-                    aria-label="Sil"
-                  >×</button>
-                </div>
-              </template>
-              <label
-                x-show="images.length < 5"
-                class="w-20 h-20 rounded-lg border-2 border-dashed border-border-default flex flex-col items-center justify-center text-secondary-400 cursor-pointer hover:border-primary-500 hover:text-primary-500 transition-colors text-[10px]"
-              >
-                <svg x-show="!uploadingImage" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-7.5-9V15m0 0l-3-3m3 3l3-3M3 12V6.75A2.25 2.25 0 015.25 4.5h13.5A2.25 2.25 0 0121 6.75V12"/></svg>
-                <svg x-show="uploadingImage" class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-                <span class="mt-1" x-text="uploadingImage ? 'Yükleniyor' : 'Foto Ekle'"></span>
-                <input type="file" accept="image/*" multiple class="hidden" @change="onFileChange($event)">
-              </label>
-            </div>
+            <div id="review-dropzone-wrap"></div>
+            <div id="review-file-list"></div>
           </div>
 
           <!-- Error -->

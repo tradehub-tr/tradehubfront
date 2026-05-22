@@ -36,6 +36,7 @@ export type AllowedFileExtension =
   | ".jpeg"
   | ".png"
   | ".gif"
+  | ".webp"
   | ".pdf"
   | ".doc"
   | ".docx"
@@ -49,11 +50,12 @@ export const FILE_UPLOAD_CONFIG = {
     ".jpeg",
     ".png",
     ".gif",
+    ".webp",
     ".pdf",
     ".doc",
     ".docx",
     ".xls",
     ".xlsx",
   ] as AllowedFileExtension[],
-  allowedFormatsDisplay: "JPG, PNG, GIF, PDF, DOC, XLS",
+  allowedFormatsDisplay: "JPG, PNG, GIF, WEBP, PDF, DOC, XLS",
 } as const;
