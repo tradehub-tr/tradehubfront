@@ -12,12 +12,12 @@
  */
 
 export interface ListingUrlInput {
-	/** Listing.name (örn. "LST-00201"). slug yoksa fallback için kullanılır. */
-	id?: string;
-	/** Listing.slug (örn. "premium-kadin-canta-..."). */
-	slug?: string;
-	/** Backend zaten hazır URL döndürdüyse onu kullan. */
-	href?: string;
+  /** Listing.name (örn. "LST-00201"). slug yoksa fallback için kullanılır. */
+  id?: string;
+  /** Listing.slug (örn. "premium-kadin-canta-..."). */
+  slug?: string;
+  /** Backend zaten hazır URL döndürdüyse onu kullan. */
+  href?: string;
 }
 
 /**
@@ -26,13 +26,13 @@ export interface ListingUrlInput {
  * Öncelik: href > /urun/<slug> > /pages/product-detail.html?id=<id> (legacy fallback)
  */
 export function getListingUrl(
-	listing: ListingUrlInput | null | undefined,
-	lang: "tr" | "en" = "tr",
+  listing: ListingUrlInput | null | undefined,
+  lang: "tr" | "en" = "tr"
 ): string {
-	if (!listing) return "#";
-	if (listing.href) return listing.href;
-	const prefix = lang === "en" ? "/en" : "";
-	if (listing.slug) return `${prefix}/urun/${listing.slug}`;
-	if (listing.id) return `/pages/product-detail.html?id=${listing.id}`;
-	return "#";
+  if (!listing) return "#";
+  if (listing.href) return listing.href;
+  const prefix = lang === "en" ? "/en" : "";
+  if (listing.slug) return `${prefix}/urun/${listing.slug}`;
+  if (listing.id) return `/pages/product-detail.html?id=${listing.id}`;
+  return "#";
 }

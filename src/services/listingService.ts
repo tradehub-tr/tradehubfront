@@ -1113,9 +1113,7 @@ export async function getFilterFacets(
 ): Promise<FilterFacets> {
   // Geriye uyumlu imza: getFilterFacets(query, category) ya da getFilterFacets({...})
   const opts: Partial<ListingSearchParams> =
-    typeof arg1 === "string" || arg1 === undefined
-      ? { query: arg1, category }
-      : arg1;
+    typeof arg1 === "string" || arg1 === undefined ? { query: arg1, category } : arg1;
 
   const p = new URLSearchParams();
   if (opts.query) p.set("query", opts.query);

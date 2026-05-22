@@ -1381,10 +1381,7 @@ let _headerCartInitialized = false;
 // canonical mağaza sayfası `/pages/seller/seller-shop.html?seller=` — normalize et.
 function normalizeSupplierHref(href: string): string {
   if (!href) return "#";
-  return href.replace(
-    /^\/pages\/seller\.html\?id=/,
-    "/pages/seller/seller-shop.html?seller="
-  );
+  return href.replace(/^\/pages\/seller\.html\?id=/, "/pages/seller/seller-shop.html?seller=");
 }
 
 function renderCartModalContent(modal: HTMLElement, supplierId: string): boolean {

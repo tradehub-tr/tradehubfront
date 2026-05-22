@@ -822,19 +822,17 @@ export function getDefaultFilterSections(): FilterSection[] {
  */
 type FacetCountMap = Map<string, number>; // section + "|" + value → count
 
-function buildCountMap(facets: import("../../services/listingService").FilterFacets): FacetCountMap {
+function buildCountMap(
+  facets: import("../../services/listingService").FilterFacets
+): FacetCountMap {
   const map: FacetCountMap = new Map();
   const put = (section: string, value: string, count: number) =>
     map.set(`${section}|${value}`, count);
 
   facets.countries?.forEach((c) => put("supplier-country", c.value, c.count));
   facets.brands?.forEach((b) => put("brands", b.value, b.count));
-  facets.managementCertifications?.forEach((c) =>
-    put("mgmt-certifications", c.value, c.count)
-  );
-  facets.productCertifications?.forEach((c) =>
-    put("product-certifications", c.value, c.count)
-  );
+  facets.managementCertifications?.forEach((c) => put("mgmt-certifications", c.value, c.count));
+  facets.productCertifications?.forEach((c) => put("product-certifications", c.value, c.count));
   facets.attributes?.forEach((attr) => {
     const section = `attr-${attr.code.toLowerCase()}`;
     attr.options?.forEach((opt) => put(section, String(opt.value), opt.count));

@@ -7,23 +7,23 @@
  */
 
 export interface CategoryUrlInput {
-	/** Category.url_slug öncelikli */
-	url_slug?: string;
-	/** Geriye dönük: slug field'ı varsa */
-	slug?: string;
-	href?: string;
-	id?: string;
+  /** Category.url_slug öncelikli */
+  url_slug?: string;
+  /** Geriye dönük: slug field'ı varsa */
+  slug?: string;
+  href?: string;
+  id?: string;
 }
 
 export function getCategoryUrl(
-	category: CategoryUrlInput | null | undefined,
-	lang: "tr" | "en" = "tr",
+  category: CategoryUrlInput | null | undefined,
+  lang: "tr" | "en" = "tr"
 ): string {
-	if (!category) return "#";
-	if (category.href) return category.href;
-	const prefix = lang === "en" ? "/en" : "";
-	const slug = category.url_slug || category.slug;
-	if (slug) return `${prefix}/kategori/${slug}`;
-	if (category.id) return `/pages/categories.html?id=${category.id}`;
-	return "#";
+  if (!category) return "#";
+  if (category.href) return category.href;
+  const prefix = lang === "en" ? "/en" : "";
+  const slug = category.url_slug || category.slug;
+  if (slug) return `${prefix}/kategori/${slug}`;
+  if (category.id) return `/pages/categories.html?id=${category.id}`;
+  return "#";
 }

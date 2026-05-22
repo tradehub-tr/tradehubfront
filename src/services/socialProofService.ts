@@ -70,7 +70,7 @@ function isMockEnabled(): boolean {
 
 export async function fetchSocialProofSignals(
   listingId: string,
-  supplierId: string,
+  supplierId: string
 ): Promise<Signal[]> {
   if (!listingId) return [];
 

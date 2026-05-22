@@ -93,9 +93,7 @@ function labelFromDom(section: string, value: string): string {
   const labelEl = input?.closest("label");
   // <label> içinde label text taşıyan span — renderCheckbox/renderCertCheckbox'taki
   // `text-[13px]` class'lı span'i hedefliyoruz; bulamazsak fallback.
-  const textSpan = labelEl?.querySelector<HTMLSpanElement>(
-    'span[class*="text-\\[13px\\]"]'
-  );
+  const textSpan = labelEl?.querySelector<HTMLSpanElement>('span[class*="text-\\[13px\\]"]');
   return (textSpan?.textContent || input?.value || value).trim();
 }
 

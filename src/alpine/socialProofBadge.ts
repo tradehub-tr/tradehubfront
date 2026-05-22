@@ -10,7 +10,11 @@
 
 import Alpine from "alpinejs";
 
-import { fetchSocialProofSignals, type Signal, type SignalType } from "../services/socialProofService";
+import {
+  fetchSocialProofSignals,
+  type Signal,
+  type SignalType,
+} from "../services/socialProofService";
 import { formatCount } from "../utils/formatCount";
 import { getLucideIcon } from "../components/icons/lucideIcons";
 import { t } from "../i18n";

@@ -1679,7 +1679,7 @@ const en = {
         breadcrumbLabel: "Legal Notice",
         section1Title: "1. Company Information",
         section1Content:
-          "<p><strong>Operator (Legal Entity):</strong> Thoptan Ltd.</p><p><strong>Jurisdiction:</strong> England and Wales (United Kingdom)</p><p><strong>Brand:</strong> istoc (pronounced \"aystock\")</p><p><strong>Email:</strong> info@istoc.com</p><p class=\"text-sm text-gray-500 mt-2\"><em>Companies House registration number, registered address and Turkey representative information will be updated on this page as they become available.</em></p>",
+          '<p><strong>Operator (Legal Entity):</strong> Thoptan Ltd.</p><p><strong>Jurisdiction:</strong> England and Wales (United Kingdom)</p><p><strong>Brand:</strong> istoc (pronounced "aystock")</p><p><strong>Email:</strong> info@istoc.com</p><p class="text-sm text-gray-500 mt-2"><em>Companies House registration number, registered address and Turkey representative information will be updated on this page as they become available.</em></p>',
         section2Title: "2. About the Platform",
         section2Content:
           "<p>istoc, operated by Thoptan Ltd. (United Kingdom), is a global electronic commerce platform established to facilitate business-to-business (B2B) trade. The Platform acts as an intermediary service provider in the commercial relationship between seller and buyer.</p><p>Responsibility for products and services offered on the Platform belongs to the respective sellers.</p>",
@@ -3523,7 +3523,8 @@ const en = {
       startChat: "Start Chat",
       phone: "Phone",
       phoneCall: "Call",
-      phoneDescription: "Phone support is currently unavailable — please reach us via Email or Live Support.",
+      phoneDescription:
+        "Phone support is currently unavailable — please reach us via Email or Live Support.",
       emailContact: "Email",
       emailSend: "Send Email",
       chatbot: "Chatbot",
@@ -4043,7 +4044,8 @@ const en = {
     about: {
       heroTitle: "Global",
       heroHighlight: "B2B Trade Platform",
-      heroSubtitle: "Bringing sellers and buyers from around the world together for secure, transparent B2B trade.",
+      heroSubtitle:
+        "Bringing sellers and buyers from around the world together for secure, transparent B2B trade.",
       storyTitle: "Our Story",
       storyP1:
         'istoc (pronounced "aystock") is a global B2B trade brand operated by Thoptan Ltd. (United Kingdom). Our goal is simple: to bring together manufacturers, wholesalers, and retailers from every corner of the world on a single digital platform.',
@@ -5403,7 +5405,8 @@ const en = {
       benefit3Desc:
         "Integrated processes with international shipping partners. Transparent tracking for cross-border deliveries.",
       benefit4Title: "Detailed Analytics",
-      benefit4Desc: "Sales, visitor and conversion analytics. Data-driven insights for sales decisions.",
+      benefit4Desc:
+        "Sales, visitor and conversion analytics. Data-driven insights for sales decisions.",
 
       // How it works
       howItWorksTitle: "How It Works?",
