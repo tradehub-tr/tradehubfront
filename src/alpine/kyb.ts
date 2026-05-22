@@ -8,9 +8,11 @@
  */
 
 import Alpine from "alpinejs";
+import { SlotDropzoneController, type SlotDef } from "../lib/upload-ui";
 import { t } from "../i18n";
 import { api, RateLimitError } from "../utils/api";
 import { queueToast } from "../utils/toast";
+import { KYB_DOCUMENT_FIELDS } from "../components/kyb/KybLayout";
 
 interface KybData {
   exists: boolean;
@@ -130,6 +132,8 @@ Alpine.data("kybPage", () => ({
     return t("kyb.hintReady");
   },
 
+  slotController: null as SlotDropzoneController | null,
+
   async init() {
     this.loading = true;
     try {
@@ -161,6 +165,62 @@ Alpine.data("kybPage", () => ({
     } finally {
       this.loading = false;
     }
+
+    // SlotDropzone mount — Alpine reactive olmayan DOM'a render eder.
+    // kybData yüklendikten sonra (mevcut file URL'ler varsa preview etmek için)
+    await new Promise((r) => requestAnimationFrame(r));
+    const container = document.getElementById("kyb-document-slots");
+    if (!container) return;
+
+    const slots: SlotDef[] = KYB_DOCUMENT_FIELDS.map((f) => ({
+      id: f.key,
+      label: t(f.labelKey),
+      required: f.required !== false,
+      accept: ".pdf,.jpg,.jpeg,.png,.webp,.docx",
+      maxFileSizeBytes: 10 * 1024 * 1024,
+    }));
+
+    this.slotController = new SlotDropzoneController({
+      containerId: "kyb-document-slots",
+      slots,
+      autoUpload: true,
+      autoCustomUploader: async (slotId, file) => {
+        // KYB base64 + JSON akışı
+        try {
+          const filedata = await new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(String(reader.result || ""));
+            reader.onerror = () => reject(new Error("read_failed"));
+            reader.readAsDataURL(file);
+          });
+          const res = await api<{ message: { success: boolean; file_url: string } }>(
+            "/method/tradehub_core.api.v1.kyb.upload_kyb_document",
+            {
+              method: "POST",
+              body: JSON.stringify({ filename: file.name, filedata, field: slotId }),
+            }
+          );
+          return { success: true, fileUrl: res.message?.file_url || "" };
+        } catch (err) {
+          const msg = err instanceof Error ? err.message : t("kyb.errUploadFailed");
+          return { success: false, error: msg };
+        }
+      },
+      onSlotUploaded: (slotId, fileUrl) => {
+        this.formData[slotId] = fileUrl;
+      },
+      onSlotUploadError: (_slotId, error) => {
+        queueToast({ message: error || t("kyb.errUploadFailed"), type: "error", duration: 6000 });
+      },
+      onValidationError: (_slotId, _kind, file) => {
+        queueToast({
+          message: t("kyb.errTooLarge", { fileName: file.name }),
+          type: "error",
+          duration: 5000,
+        });
+      },
+    });
+    this.slotController.mount();
   },
 
   startApplication() {

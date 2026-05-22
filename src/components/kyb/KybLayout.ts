@@ -16,7 +16,7 @@ const ICONS = {
 };
 
 // Belge alanları (backend ile birebir field name). Sprint 2.6: faaliyet_belgesi opsiyonel.
-const DOCUMENT_FIELDS: Array<{ key: string; labelKey: string; required?: boolean }> = [
+export const KYB_DOCUMENT_FIELDS: Array<{ key: string; labelKey: string; required?: boolean }> = [
   { key: "identity_document", labelKey: "kyb.docIdentity", required: true },
   { key: "imza_sirkuleri", labelKey: "kyb.docSignatureCirculars", required: true },
   { key: "ticaret_sicil_gazetesi", labelKey: "kyb.docTradeRegistryGazette", required: true },
@@ -26,60 +26,6 @@ const DOCUMENT_FIELDS: Array<{ key: string; labelKey: string; required?: boolean
 ];
 
 // Belge thumbnail (PDF kart, image thumbnail veya boş upload)
-function renderDocumentCard(field: { key: string; labelKey: string; required?: boolean }): string {
-  const requiredMark = field.required !== false ? '<span class="text-red-500">*</span>' : "";
-  return `
-    <div class="bg-white rounded-lg p-4 border border-gray-200" x-data="{ uploading: false }">
-      <label class="block text-xs font-medium mb-2" style="color:var(--color-text-secondary)">
-        ${t(field.labelKey)} ${requiredMark}
-      </label>
-
-      <template x-if="formData['${field.key}']">
-        <div>
-          <!-- Resim ise thumbnail, PDF ise PDF kart -->
-          <div class="w-full h-32 rounded-lg border border-gray-200 mb-2 overflow-hidden bg-gray-50 flex items-center justify-center cursor-pointer hover:opacity-90"
-               @click="openPreview('${field.key}')">
-            <template x-if="isImage('${field.key}')">
-              <img :src="formData['${field.key}']" class="w-full h-full object-cover" alt="" />
-            </template>
-            <template x-if="!isImage('${field.key}')">
-              <div class="text-center px-3">
-                ${ICONS.pdf}
-                <div class="text-[10px] mt-1 truncate max-w-[180px] mx-auto" x-text="getFileName('${field.key}')"></div>
-              </div>
-            </template>
-          </div>
-          <div class="flex gap-2">
-            <button type="button" @click="openPreview('${field.key}')"
-                    class="text-xs px-3 py-1.5 rounded bg-violet-50 text-violet-700 hover:bg-violet-100 inline-flex items-center gap-1 flex-1 justify-center">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-              ${t("kyb.preview")}
-            </button>
-            <button type="button" @click="$refs.input_${field.key}.click()" :disabled="uploading"
-                    class="text-xs px-3 py-1.5 rounded bg-gray-100 text-gray-700 hover:bg-gray-200">
-              ${t("kyb.replace")}
-            </button>
-          </div>
-        </div>
-      </template>
-
-      <template x-if="!formData['${field.key}']">
-        <label @click="$refs.input_${field.key}.click()"
-               class="flex items-center justify-center gap-2 px-3 py-6 rounded-lg border-2 border-dashed border-gray-300 cursor-pointer hover:border-violet-400 hover:bg-violet-50 transition-colors text-xs"
-               :class="uploading ? 'opacity-60 pointer-events-none' : ''"
-               style="color:var(--color-text-tertiary)">
-          ${ICONS.paperclip}
-          <span x-text="uploading ? '${t("kyb.uploading")}' : '${t("kyb.selectFile")}'"></span>
-        </label>
-      </template>
-
-      <input type="file" class="hidden" x-ref="input_${field.key}"
-             accept=".pdf,.jpg,.jpeg,.png,.webp,.docx"
-             @change="uploadDocument('${field.key}', $event, () => uploading = false); uploading = true" />
-    </div>
-  `;
-}
-
 function renderEmptyState(): string {
   return `
     <div class="bg-white rounded-xl p-12 text-center border border-gray-200">
@@ -219,13 +165,11 @@ function renderForm(): string {
       </div>
     </div>
 
-    <!-- Belgeler -->
+    <!-- Belgeler (tradehub-upload-ui SlotDropzone — autoUpload + custom JSON base64) -->
     <div class="bg-white rounded-2xl p-6 border border-gray-200 mb-4">
       <h2 class="text-base font-bold mb-1">${t("kyb.documentsTitle")}</h2>
       <p class="text-xs mb-4" style="color:var(--color-text-tertiary)">${t("kyb.documentsHint")}</p>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        ${DOCUMENT_FIELDS.map(renderDocumentCard).join("")}
-      </div>
+      <div id="kyb-document-slots"></div>
     </div>
 
     <!-- Action bar -->

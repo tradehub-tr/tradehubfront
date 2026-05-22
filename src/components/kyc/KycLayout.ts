@@ -13,6 +13,7 @@
  */
 
 import { api } from "../../utils/api";
+import { SlotDropzoneController } from "../../lib/upload-ui";
 
 const FORM_ID = "kyc-form";
 const TOGGLE_ID = "kyc-account-type-toggle";
@@ -113,44 +114,12 @@ function renderCommonSection(): string {
 }
 
 function renderDocumentSection(): string {
-  // KYB pattern'i — resim thumbnail veya PDF kart preview.
+  // SlotDropzone (tradehub-upload-ui) — autoUpload, multipart Frappe upload_file.
   return `
 		<section class="bg-white rounded-2xl border border-gray-200 p-6 mb-4">
 			<h3 class="text-base font-semibold mb-1">Kimlik Belgesi</h3>
 			<p class="text-xs text-gray-500 mb-4">PDF, JPG, JPEG, PNG, WEBP, DOCX · Maks 10 MB · Zorunlu</p>
-			<div class="bg-white rounded-lg border border-gray-200 p-4" id="kyc-doc-card">
-				<input type="file" name="identity_document" id="kyc-identity-input" class="hidden" accept=".pdf,.jpg,.jpeg,.png,.webp,.docx" />
-
-				<!-- Önizleme (yüklü dosya varsa) -->
-				<div id="kyc-doc-preview" class="hidden">
-					<div class="w-full h-48 rounded-lg border border-gray-200 mb-3 overflow-hidden bg-gray-50 flex items-center justify-center">
-						<img id="kyc-doc-image" src="" alt="" class="w-full h-full object-contain hidden" />
-						<div id="kyc-doc-pdf" class="hidden text-center px-3">
-							<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="mx-auto text-gray-400">
-								<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-								<polyline points="14 2 14 8 20 8"/>
-							</svg>
-							<div class="text-xs mt-2 text-gray-700" id="kyc-doc-filename"></div>
-						</div>
-					</div>
-					<div class="flex gap-2">
-						<button type="button" id="kyc-doc-replace" class="text-xs px-3 py-1.5 rounded bg-gray-100 text-gray-700 hover:bg-gray-200 flex-1">
-							Değiştir
-						</button>
-					</div>
-				</div>
-
-				<!-- Boş upload alanı (henüz dosya yok) -->
-				<label for="kyc-identity-input" id="kyc-doc-empty"
-					class="block border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-amber-500 transition-colors">
-					<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="mx-auto text-gray-400 mb-2">
-						<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-						<polyline points="17 8 12 3 7 8"/>
-						<line x1="12" y1="3" x2="12" y2="15"/>
-					</svg>
-					<div class="text-sm text-gray-600">Dosya Seç veya sürükle bırak</div>
-				</label>
-			</div>
+			<div id="kyc-document-slots"></div>
 		</section>
 	`;
 }
@@ -303,30 +272,6 @@ function showDocumentPreview(url: string): void {
   }
 }
 
-function hideDocumentPreview(): void {
-  const empty = document.getElementById("kyc-doc-empty");
-  const preview = document.getElementById("kyc-doc-preview");
-  if (empty) empty.classList.remove("hidden");
-  if (preview) preview.classList.add("hidden");
-}
-
-async function uploadFile(file: File): Promise<string> {
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("is_private", "1");
-  const res = await fetch("/api/method/upload_file", {
-    method: "POST",
-    credentials: "include",
-    body: formData,
-    headers: { "X-Frappe-CSRF-Token": getCsrfToken() },
-  });
-  const json = await res.json();
-  if (!res.ok || !json.message?.file_url) {
-    throw new Error(json.message || `Upload failed: ${res.status}`);
-  }
-  return json.message.file_url as string;
-}
-
 function getCsrfToken(): string {
   return localStorage.getItem("_csrf_token") || "";
 }
@@ -347,24 +292,48 @@ function showMessage(text: string, tone: "success" | "error" | "info"): void {
 /** Yüklenmiş dosya URL'i — submit anında payload'a koyulur */
 let currentIdentityUrl = "";
 
+let kycSlotController: SlotDropzoneController | null = null;
+
+function mountKycSlotDropzone(): void {
+  if (kycSlotController) return; // tek mount
+  kycSlotController = new SlotDropzoneController({
+    containerId: "kyc-document-slots",
+    slots: [
+      {
+        id: "identity_document",
+        label: "Kimlik Belgesi",
+        required: true,
+        accept: ".pdf,.jpg,.jpeg,.png,.webp,.docx",
+        maxFileSizeBytes: 10 * 1024 * 1024,
+        hint: "PDF, JPG, PNG, WEBP, DOCX · maks. 10MB",
+      },
+    ],
+    autoUpload: true,
+    autoUploadConfig: {
+      endpoint: "/api/method/upload_file",
+      formDataPerSlot: () => ({ is_private: "1" }),
+      headers: { "X-Frappe-CSRF-Token": getCsrfToken() },
+    },
+    onSlotUploaded: (_slotId, fileUrl) => {
+      currentIdentityUrl = fileUrl;
+    },
+    onSlotUploadError: (_slotId, error) => {
+      showMessage(error || "Dosya yüklenemedi.", "error");
+    },
+    onValidationError: (_slotId, _kind, file) => {
+      showMessage(`${file.name} 10MB üzerinde.`, "error");
+    },
+  });
+  kycSlotController.mount();
+}
+
 async function handleSubmit(e: SubmitEvent): Promise<void> {
   e.preventDefault();
   const form = e.target as HTMLFormElement;
   const accountType = form.dataset.kycAccountType || "Individual";
-  const fileInput = form.querySelector<HTMLInputElement>('[name="identity_document"]');
-  const fileToUpload = fileInput?.files?.[0];
 
-  // Yeni dosya seçildiyse upload et; aksi takdirde mevcut URL'i kullan
-  let identityUrl = currentIdentityUrl;
-  if (fileToUpload) {
-    try {
-      identityUrl = await uploadFile(fileToUpload);
-      currentIdentityUrl = identityUrl;
-    } catch (err) {
-      showMessage((err as Error).message || "Dosya yüklenemedi.", "error");
-      return;
-    }
-  }
+  // Dosya zaten autoUpload ile yüklendi (SlotDropzone) — currentIdentityUrl set.
+  const identityUrl = currentIdentityUrl;
   if (!identityUrl) {
     showMessage("Kimlik belgesi zorunludur.", "error");
     return;
@@ -508,55 +477,8 @@ export function initKycLayout(): void {
     });
   }
 
-  // File input change → preview
-  const fileInput = form.querySelector<HTMLInputElement>('[name="identity_document"]');
-  if (fileInput) {
-    fileInput.addEventListener("change", () => {
-      const file = fileInput.files?.[0];
-      if (!file) {
-        hideDocumentPreview();
-        return;
-      }
-      // Local preview (FileReader URL) — gerçek upload submit anında
-      const reader = new FileReader();
-      reader.onload = (evt) => {
-        const url = String(evt.target?.result || "");
-        if (isImageUrl(file.name)) {
-          const img = document.getElementById("kyc-doc-image") as HTMLImageElement | null;
-          const pdf = document.getElementById("kyc-doc-pdf");
-          const empty = document.getElementById("kyc-doc-empty");
-          const preview = document.getElementById("kyc-doc-preview");
-          if (img && pdf && empty && preview) {
-            img.src = url;
-            img.classList.remove("hidden");
-            pdf.classList.add("hidden");
-            empty.classList.add("hidden");
-            preview.classList.remove("hidden");
-          }
-        } else {
-          const fname = document.getElementById("kyc-doc-filename");
-          if (fname) fname.textContent = file.name;
-          const empty = document.getElementById("kyc-doc-empty");
-          const preview = document.getElementById("kyc-doc-preview");
-          const img = document.getElementById("kyc-doc-image");
-          const pdf = document.getElementById("kyc-doc-pdf");
-          if (empty && preview && img && pdf) {
-            img.classList.add("hidden");
-            pdf.classList.remove("hidden");
-            empty.classList.add("hidden");
-            preview.classList.remove("hidden");
-          }
-        }
-      };
-      reader.readAsDataURL(file);
-    });
-  }
-
-  // "Değiştir" butonu — file input tetikle
-  const replaceBtn = document.getElementById("kyc-doc-replace");
-  if (replaceBtn) {
-    replaceBtn.addEventListener("click", () => fileInput?.click());
-  }
+  // SlotDropzone mount — autoUpload, multipart Frappe upload_file
+  mountKycSlotDropzone();
 
   form.addEventListener("submit", handleSubmit);
 

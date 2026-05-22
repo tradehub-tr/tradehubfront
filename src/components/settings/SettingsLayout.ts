@@ -89,13 +89,21 @@ function renderProfileHeader(): string {
       <div class="flex items-center gap-5 max-sm:flex-col max-sm:items-start min-w-0">
         <div class="relative flex-shrink-0">
           <input type="file" x-ref="photoInput" @change="uploadProfilePhoto($event)" accept="image/jpeg,image/png,image/webp,image/gif" class="hidden" />
-          <div class="w-[72px] h-[72px] max-sm:w-[60px] max-sm:h-[60px] rounded-full flex items-center justify-center border-3 border-primary-200 overflow-hidden" style="background:linear-gradient(135deg, var(--color-primary-400, #e6b212) 0%, var(--color-primary-500, #cc9900) 100%)">
+          <div class="relative w-[72px] h-[72px] max-sm:w-[60px] max-sm:h-[60px] rounded-full flex items-center justify-center border-3 border-primary-200 overflow-hidden" style="background:linear-gradient(135deg, var(--color-primary-400, #e6b212) 0%, var(--color-primary-500, #cc9900) 100%)">
             <template x-if="userImage">
               <img :src="userImage" alt="" class="w-full h-full object-cover" />
             </template>
             <template x-if="!userImage">
               <span class="text-[32px] max-sm:text-[26px] font-bold text-white lowercase leading-none" x-text="userInitial || '?'"></span>
             </template>
+
+            <!-- Dropzone-style progress bar overlay (upload sırasında) -->
+            <div x-show="uploadStatus === 'uploading'" class="absolute top-1/2 left-[15%] right-[15%] -translate-y-1/2 h-2.5 bg-black/75 border-2 border-black/80 rounded-full overflow-hidden z-10">
+              <div class="h-full bg-white rounded-full transition-all duration-300" :style="'width:' + Math.max(4, uploadProgress) + '%'"></div>
+            </div>
+
+            <!-- Success mark overlay (350ms hold sonrası) -->
+            <div x-show="uploadStatus === 'success'" x-transition.opacity class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 max-sm:w-7 max-sm:h-7 rounded-full bg-emerald-500/90 z-20 flex items-center justify-center text-white text-sm font-bold">✓</div>
           </div>
           <button type="button" @click="triggerPhotoUpload()" :disabled="uploadingPhoto" class="absolute -bottom-0.5 -left-0.5 w-7 h-7 max-sm:w-6 max-sm:h-6 rounded-full bg-white border border-border-default flex items-center justify-center cursor-pointer transition-all hover:bg-surface-raised disabled:opacity-60 disabled:cursor-wait" style="color:var(--color-text-secondary)" :title="uploadingPhoto ? '${t("common.loading")}' : '${t("settings.changePhoto")}'">
             ${ICONS.camera}

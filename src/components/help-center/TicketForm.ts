@@ -83,34 +83,11 @@ export function TicketForm(): string {
                     </div>
                   </div>
 
-                  <!-- File Upload -->
+                  <!-- File Upload (tradehub-upload-ui MultiFileDropzone) -->
                   <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">${t("helpCenter.fileUploadLabel")}</label>
-                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary-400 transition-colors">
-                      <input type="file" multiple @change="addFiles($event.target.files)" class="hidden" id="ticket-file-input">
-                      <label for="ticket-file-input" class="cursor-pointer">
-                        <svg class="w-8 h-8 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"/></svg>
-                        <p class="text-sm text-gray-500">${t("helpCenter.fileUploadText")}</p>
-                        <p class="text-xs text-gray-400 mt-1">${t("helpCenter.fileUploadHint")}</p>
-                      </label>
-                    </div>
-                    <!-- File list -->
-                    <template x-if="files.length > 0">
-                      <div class="mt-3 space-y-2">
-                        <template x-for="(file, index) in files" :key="index">
-                          <div class="flex items-center justify-between px-3 py-2 bg-gray-50 rounded-lg text-sm">
-                            <div class="flex items-center gap-2 min-w-0">
-                              <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
-                              <span class="truncate" x-text="file.name"></span>
-                              <span class="text-xs text-gray-400 shrink-0" x-text="(file.size / 1024 / 1024).toFixed(2) + ' MB'"></span>
-                            </div>
-                            <button @click="removeFile(index)" class="text-red-400 hover:text-red-600 shrink-0 ml-2 cursor-pointer">
-                              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-                            </button>
-                          </div>
-                        </template>
-                      </div>
-                    </template>
+                    <div id="ticket-dropzone-wrap"></div>
+                    <div id="ticket-file-list"></div>
                   </div>
                 </div>
               </div>

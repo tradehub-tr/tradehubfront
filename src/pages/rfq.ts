@@ -37,8 +37,9 @@ const testimonials = getTestimonials();
 // Types
 import type { ProductListingCard } from '../types/productListing'
 import { FILE_UPLOAD_CONFIG } from '../types/rfq'
-import { getFileBadge, getFilePreviewUrl, revokeFilePreview, openFilePreviewLightbox } from '../components/rfq/attachments'
 import { renderDropzone, bindDropzone } from '../components/rfq/dropzone'
+import { renderFileGrid, simulateStagingProgress } from '../components/rfq/file-list'
+import type { FileProgress } from '../components/rfq/uploader'
 import { requireAuth } from '../utils/auth-guard'
 
 await requireAuth();
@@ -288,45 +289,21 @@ initCurrency().then(() => Promise.all([
 // --- File Upload Handling (dropzone-driven) ---
 const rfqFileList = document.getElementById('rfq-file-list')!;
 const rfqSelectedFiles: File[] = [];
+const rfqFileProgress = new Map<File, FileProgress>();
 
 function addFilesRfq(files: File[]) {
   rfqSelectedFiles.push(...files);
   renderRfqFileList();
+  files.forEach((f) =>
+    simulateStagingProgress(rfqSelectedFiles, f, 'rfq-step1-preview', rfqFileProgress, renderRfqFileList),
+  );
 }
 
 function renderRfqFileList() {
-  rfqFileList.innerHTML = rfqSelectedFiles.map((f, i) => {
-    const isImage = f.type?.startsWith('image/');
-    const badge = getFileBadge(f.name);
-    const previewUrl = isImage ? getFilePreviewUrl(f) : '';
-    const thumb = isImage
-      ? `<img src="${previewUrl}" alt="" class="rfq-thumb-preview w-12 h-12 object-cover rounded cursor-zoom-in border border-gray-200 shrink-0" data-file-idx="${i}" />`
-      : `<div class="w-12 h-12 rounded ${badge.cls} text-white text-[10px] font-bold flex items-center justify-center shrink-0">${badge.label}</div>`;
-    return `
-      <div class="flex items-center gap-3 p-2 bg-white border border-gray-200 rounded">
-        ${thumb}
-        <span class="flex-1 text-sm text-gray-700 truncate" title="${f.name}">${f.name}</span>
-        <button type="button" data-remove="${i}" class="rfq-remove-file text-red-400 hover:text-red-600 px-2 text-lg leading-none">&times;</button>
-      </div>
-    `;
-  }).join('');
-
-  rfqFileList.querySelectorAll<HTMLImageElement>('.rfq-thumb-preview').forEach(img => {
-    img.addEventListener('click', () => {
-      const idx = Number(img.dataset.fileIdx);
-      const file = rfqSelectedFiles[idx];
-      if (file) openFilePreviewLightbox(file, 'rfq-step1-preview');
-    });
-  });
-
-  rfqFileList.querySelectorAll('.rfq-remove-file').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const idx = Number((btn as HTMLElement).dataset.remove);
-      const file = rfqSelectedFiles[idx];
-      if (file) revokeFilePreview(file);
-      rfqSelectedFiles.splice(idx, 1);
-      renderRfqFileList();
-    });
+  renderFileGrid(rfqFileList, {
+    files: rfqSelectedFiles,
+    progress: rfqFileProgress,
+    lightboxScope: 'rfq-step1-preview',
   });
 }
 

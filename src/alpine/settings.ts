@@ -10,6 +10,8 @@ Alpine.data("settingsLayout", () => ({
   userEmail: "",
   userInitial: "",
   userImage: "",
+  uploadStatus: "idle" as "idle" | "uploading" | "success",
+  uploadProgress: 0,
   memberId: "",
   copied: false,
   uploadingPhoto: false,
@@ -84,6 +86,20 @@ Alpine.data("settingsLayout", () => ({
     }
 
     this.uploadingPhoto = true;
+    // Package UX değerleriyle bar overlay — KYC/KYB/SlotDropzone ile aynı.
+    // Tick 100ms, +10-18%, cap %85, ilk tick immediate, success hold 350ms.
+    this.uploadStatus = "uploading";
+    this.uploadProgress = 0;
+    const tickPct = () => {
+      if (this.uploadStatus !== "uploading") return false;
+      this.uploadProgress = Math.min(this.uploadProgress + 10 + Math.random() * 8, 85);
+      return true;
+    };
+    tickPct();
+    const tickInterval = window.setInterval(() => {
+      if (!tickPct()) window.clearInterval(tickInterval);
+    }, 100);
+
     try {
       const filedata = await new Promise<string>((resolve, reject) => {
         const reader = new FileReader();
@@ -100,12 +116,25 @@ Alpine.data("settingsLayout", () => ({
         }
       );
 
+      // Success hold: bar %100'de 350ms tut, sonra ✓ mark görünür.
+      window.clearInterval(tickInterval);
+      this.uploadProgress = 100;
+      await new Promise((r) => window.setTimeout(r, 350));
+
       const nextUrl = res.message?.user_image || "";
       if (nextUrl) {
-        // Cache-bust so the browser fetches the new image even if URL is the same
         this.userImage = nextUrl + (nextUrl.includes("?") ? "&" : "?") + "t=" + Date.now();
       }
+      this.uploadStatus = "success";
+      // ✓ mark 1.5sn göster, sonra idle
+      window.setTimeout(() => {
+        this.uploadStatus = "idle";
+        this.uploadProgress = 0;
+      }, 1500);
     } catch (err) {
+      window.clearInterval(tickInterval);
+      this.uploadStatus = "idle";
+      this.uploadProgress = 0;
       const msg = err instanceof Error ? err.message : "";
       if (msg === "RATE_LIMIT") {
         this.photoError = t("common.rateLimitError");

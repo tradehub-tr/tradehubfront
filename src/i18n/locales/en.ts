@@ -3434,6 +3434,10 @@ const en = {
       dropzonePickBtn: "Choose from Computer",
       dropzoneMeta: "{{formats}} · max {{max}} files · each under {{size}}MB",
       duplicateFile: "Already added: {{fileName}}",
+      uploading: "Uploading files…",
+      uploadComplete: "All files uploaded.",
+      uploadPartialFail:
+        "{{count}} file(s) could not be uploaded. RFQ created; you can add the missing files later.",
     },
 
     // ============================================================
