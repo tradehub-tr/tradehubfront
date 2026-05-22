@@ -66,7 +66,7 @@ function buildTabUrl(
   categoryParam?: string,
   queryParam?: string
 ): string {
-  const base = target === "products" ? "/urunler" : "/markalar";
+  const base = target === "products" ? "/urunler" : "/ureticiler";
   const params = new URLSearchParams();
   if (categoryParam) params.set("cat", categoryParam);
   if (queryParam && target === "products") params.set("q", queryParam);

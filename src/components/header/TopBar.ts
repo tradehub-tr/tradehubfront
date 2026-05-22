@@ -1157,7 +1157,7 @@ export function MobileSearchTabs(
   return `
     <div class="lg:hidden flex items-center gap-3 sm:gap-6 px-2 sm:px-4 border-b border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-900 overflow-x-auto no-scrollbar scroll-smooth">
       <a href="/" class="${activeTab === "products" ? activeClass : inactiveClass}" data-search-tab="products"><span data-i18n="search.products">${t("search.products")}</span></a>
-      <a href="/markalar" class="${activeTab === "manufacturers" ? activeClass : inactiveClass}" data-search-tab="manufacturers"><span data-i18n="search.manufacturers">${t("search.manufacturers")}</span></a>${worldwideTab}
+      <a href="/ureticiler" class="${activeTab === "manufacturers" ? activeClass : inactiveClass}" data-search-tab="manufacturers"><span data-i18n="search.manufacturers">${t("search.manufacturers")}</span></a>${worldwideTab}
     </div>
   `;
 }

@@ -203,7 +203,7 @@ export function TopDeals(): string {
               ><span data-i18n="topDeals.subtitle">${t("topDeals.subtitle")}</span></p>
             </div>
             <a
-              href="/firsat"
+              href="/firsatlar"
               class="flex-shrink-0 text-[13px] font-semibold transition-colors duration-150 hover:underline"
               style="color: var(--topdeals-link-color, #111827);"
             ><span data-i18n="common.viewMore">${t("common.viewMore")}</span> &gt;</a>

@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 import { resolve } from 'path'
 import { readFileSync, writeFileSync, existsSync } from 'fs'
 import fg from 'fast-glob'
+import { getStaticPageHtmlMap } from './src/utils/staticPageUrl'
 
 /**
  * Her HTML giriş dosyasının <head>'ine FOUC önleme scripti enjekte eder.
@@ -72,6 +73,33 @@ function cssEditorPlugin(): Plugin {
                         res.end(JSON.stringify({ error: String(e) }));
                     }
                 });
+            });
+        },
+    };
+}
+
+/**
+ * Dev-only plugin: Türkçe statik path'leri (örn. /ureticiler) dist içindeki
+ * HTML dosyasına (pages/manufacturers.html) rewrite eder.
+ *
+ * Mapping kaynağı: src/utils/staticPageUrl.ts (STATIC_PAGE_HTML_MAP).
+ * Production'da aynı işlev nginx.conf.template `map $uri $static_page_html`
+ * bloğu ile sağlanır. Backend page_resolver (tradehub_core/seo) SEO meta
+ * inject etmek için varlığını korur.
+ */
+function staticPageRewritePlugin(): Plugin {
+    const htmlMap = getStaticPageHtmlMap();
+    return {
+        name: 'static-page-rewrite',
+        apply: 'serve',
+        configureServer(server) {
+            server.middlewares.use((req, _res, next) => {
+                if (!req.url) return next();
+                const [pathOnly, queryString] = req.url.split('?');
+                const htmlPath = htmlMap[pathOnly];
+                if (!htmlPath) return next();
+                req.url = queryString ? `${htmlPath}?${queryString}` : htmlPath;
+                next();
             });
         },
     };
@@ -166,6 +194,9 @@ export default defineConfig({
         tailwindcss(),
         themeBootstrapPlugin(),
         cssEditorPlugin(),
+        // notFoundFallbackPlugin'den ÖNCE çalışmalı: önce rewrite,
+        // eşleşmezse 404.html fallback.
+        staticPageRewritePlugin(),
         notFoundFallbackPlugin(),
         seoPlaceholderPlugin(),
     ],
