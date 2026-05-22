@@ -1,3 +1,27 @@
+## [v1.1.9-beta.6] - 2026-05-22 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Duzeltildi
+- fix(cart): sepet popup'larında mağaza adı linklendi ve canonical URL'ye normalize edildi (@ahmeetseker)
+  - SharedCartDrawer: store'a yeni supplier eklenirken href canonical /pages/seller/seller-shop.html?seller= pattern'iyle yazılıyor
+  - TopBar: header sepet özetinde eski /pages/seller.html?id= href'leri normalizeSupplierHref ile canonical pattern'e çevriliyor;
+  - ManufacturersHero: statik "0" yerine favorites/sellerFavorites store'larından canlı count; favorites-changed ve
+  - i18n: mfr.favoriteProducts / mfr.favoriteSuppliers key'leri eklendi (TR/EN), whitespace-pre-line ile iki satır render
+  - ManufacturerList: ürün kartlarında thumbnail block + body sabit yükseklik (h-[78px], min-h-[2lh]) ile kart yüksekliği eşitlendi refactor(product): fiyat tier'larında strikethrough üst satıra alındı, qty font büyüdü
+  - Pre-discount fiyat artık deal fiyatının yanında değil, üstünde block olarak gösteriliyor
+  - Tier qty etiketi 13px → 15px
+  - TR locale'inde "MSA:" prefix'i kaldırıldı; tier başlığı sade "1 adet" / "1 - 5 adet"
+  - SubHeader: products sekmesinde "...\"keyword\" kategorisinde", manufacturers sekmesinde "...\"keyword\" için küresel
+  - ProductListingGrid: chat butonuna list-mode'da tam genişlik ve <1599px grid'de küçük font/padding için container-query
+  - MegaMenu: featured kart tipografisi keyfi [11.5px]/[13px] yerine text-xs / text-sm'e standardize edildi
+  - fix(cart): sepet popup'larında eski /pages/seller.html?id= href'leri canonical /pages/seller/seller-shop.html?seller=
+  - feat(manufacturers): landing favori ürün/tedarikçi sayaçları favorites store'larından canlı, event listener ile güncelleniyor;
+  - refactor(product): fiyat tier'da strikethrough üst satıra taşındı, qty font 15px; TR "MSA:" prefix'i kaldırıldı
+  - refactor(listing): SubHeader başlığı products/manufacturers sekmesine göre dinamik; ProductListingGrid chat butonuna list-mode
+  - refactor(manufacturers): ürün kartlarında thumbnail block + body sabit yükseklik ile hizalama düzeltildi
+
+---
 ## [v1.1.9-beta.5] - 2026-05-20 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
