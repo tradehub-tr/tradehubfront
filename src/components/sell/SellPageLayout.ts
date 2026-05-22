@@ -20,8 +20,45 @@
  */
 
 import heroImg from "../../assets/images/liman.avif";
+import type { PricingPlan, PricingPlansResponse } from "../../services/pricingService";
 
 const SELL_HREF = "/pages/auth/register.html?type=supplier";
+
+// FAZ 4.1 — CTA aksiyonuna göre target URL
+function ctaHref(action: PricingPlan["cta_action"]): string {
+  switch (action) {
+    case "signup":
+    case "signup_billing":
+      return "/pages/auth/register.html?type=supplier";
+    case "contact_sales":
+      return "/pages/info/contact.html?topic=enterprise";
+    case "learn_more":
+      return "#paketler";
+    default:
+      return SELL_HREF;
+  }
+}
+
+// FAZ 4.1 — feature icon glyph map (backend "check"|"x"|"star"|"zap"|"info" → svg)
+const SVG_STAR = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 22l-6-4-6 4 1.5-8.5L2 9h7z"/></svg>`;
+const SVG_ZAP = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>`;
+const SVG_INFO = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>`;
+
+function featureIcon(icon: PricingPlan["features"][number]["icon"]): string {
+  switch (icon) {
+    case "x":
+      return SVG_X;
+    case "star":
+      return SVG_STAR;
+    case "zap":
+      return SVG_ZAP;
+    case "info":
+      return SVG_INFO;
+    case "check":
+    default:
+      return SVG_CHECK;
+  }
+}
 // Section sarmal: header/footer ile aynı dış genişlik — `container-boxed` (max 1840px).
 // Inner sınır: 1500px max, mx-auto. 4 section'da ortak ki içerikler simetrik / hizalı dursun.
 const WRAP_CLS = "container-boxed";
@@ -90,121 +127,48 @@ function HeroSection(): string {
 }
 
 // =====================================================
-// 2. PRICING — 4 paket + toggle + matrix
+// 2. PRICING — N paket (API'den dinamik) + toggle + matrix
 // =====================================================
-type Tier = {
-  id: string;
-  tag: string;
-  name: string;
-  sub: string;
-  priceY: number | null;
-  priceM: number | null;
-  featured?: boolean;
-  badge?: string;
-  strip: Array<{ l: string; v: string }>;
-  ctaLabel: string;
-  feat: Array<{ ok: boolean; t: string }>;
-};
+// FAZ 4.1 — Subscription Plan + Pricing Plan Feature DocType'larından gelir.
+// Backend: tradehub_core.api.v1.public_pricing.get_pricing_plans
+// Süper Admin Permission Console → Planlar → Düzenle ekranından yönetilir.
 
-const TIERS: Tier[] = [
-  {
-    id: "starter",
-    tag: "01 · Başlangıç",
-    name: "Starter",
-    sub: "Avrupa pazarına ilk adımını atan küçük üreticiler için.",
-    priceY: 399,
-    priceM: 39,
-    strip: [
-      { l: "Komisyon", v: "%8" },
-      { l: "Aktif ürün", v: "50" },
-    ],
-    ctaLabel: "Starter ile başla",
-    feat: [
-      { ok: true, t: "Doğrulanmış üretici rozeti" },
-      { ok: true, t: "Standart vitrin (TR + EN)" },
-      { ok: true, t: "Temel satış raporları" },
-      { ok: true, t: "Email destek" },
-      { ok: true, t: "Ödeme güvencesi dahil" },
-      { ok: false, t: "Öne çıkan listeleme" },
-      { ok: false, t: "Hesap yöneticisi" },
-    ],
-  },
-  {
-    id: "pro",
-    tag: "02 · Büyüyen",
-    name: "Professional",
-    sub: "Düzenli sipariş alan, büyümek isteyen üreticilerin ana paketi.",
-    priceY: 499,
-    priceM: 49,
-    featured: true,
-    badge: "En popüler",
-    strip: [
-      { l: "Komisyon", v: "%6" },
-      { l: "Aktif ürün", v: "500" },
-    ],
-    ctaLabel: "Professional seç",
-    feat: [
-      { ok: true, t: "Gümüş üretici rozeti" },
-      { ok: true, t: "Premium vitrin · özel banner" },
-      { ok: true, t: "4 dilli vitrin (TR · EN · DE · FR)" },
-      { ok: true, t: "Gelişmiş analitik + ihracat raporu" },
-      { ok: true, t: "Öncelikli destek · 8 saat içinde" },
-      { ok: true, t: "5 öne çıkan listeleme / ay" },
-      { ok: true, t: "Reklam kredisi €100 / ay" },
-      { ok: true, t: "3 ekip kullanıcısı" },
-    ],
-  },
-  {
-    id: "business",
-    tag: "03 · Ölçeklenen",
-    name: "Business",
-    sub: "Geniş katalog ve düzenli ihracat hacmi olan üreticiler.",
-    priceY: 599,
-    priceM: 59,
-    strip: [
-      { l: "Komisyon", v: "%4" },
-      { l: "Aktif ürün", v: "2.000" },
-    ],
-    ctaLabel: "Business ile başla",
-    feat: [
-      { ok: true, t: "Altın üretici rozeti + arama önceliği" },
-      { ok: true, t: "Premium+ vitrin · video & 360°" },
-      { ok: true, t: "6 dilli vitrin (+ IT · ES)" },
-      { ok: true, t: "Tam analitik + tahmin paneli" },
-      { ok: true, t: "Atanmış hesap yöneticisi" },
-      { ok: true, t: "20 öne çıkan listeleme / ay" },
-      { ok: true, t: "Reklam kredisi €300 / ay" },
-      { ok: true, t: "10 ekip kullanıcısı · Fuar daveti" },
-    ],
-  },
-  {
-    id: "ent",
-    tag: "04 · Kurumsal",
-    name: "Enterprise",
-    sub: "Çok tesisli üretici ve markalar için özel çözüm.",
-    priceY: null,
-    priceM: null,
-    strip: [
-      { l: "Komisyon", v: "Özel" },
-      { l: "Aktif ürün", v: "Sınırsız" },
-    ],
-    ctaLabel: "Satışla konuş",
-    feat: [
-      { ok: true, t: "Platinum rozet · anasayfa yerleşimi" },
-      { ok: true, t: "Tam özel vitrin · alt domain" },
-      { ok: true, t: "15+ dil · çeviri editorial dahil" },
-      { ok: true, t: "BI tabloları + özel rapor SLA" },
-      { ok: true, t: "7/24 dedicated ekip" },
-      { ok: true, t: "Sınırsız öne çıkan listeleme" },
-      { ok: true, t: "API erişimi + ERP entegrasyonu" },
-      { ok: true, t: "Sınırsız ekip · Özel ödeme koşulları" },
-    ],
-  },
-];
+// Sayı formatı: "1500" → "1.500", 0 → "Sınırsız"
+function fmtListings(n: number): string {
+  if (!n || n <= 0) return "Sınırsız";
+  return n.toLocaleString("tr-TR");
+}
 
-function PricingCard(t: Tier): string {
-  const isFeat = !!t.featured;
-  const hasPrice = t.priceY != null && t.priceM != null;
+// Para sembolü map'i
+function currencySymbol(c: string): string {
+  switch ((c || "EUR").toUpperCase()) {
+    case "EUR":
+      return "€";
+    case "USD":
+      return "$";
+    case "TRY":
+      return "₺";
+    case "GBP":
+      return "£";
+    default:
+      return c;
+  }
+}
+
+// "01 · Başlangıç" tag'i — display_order'a göre auto (FREE = 00 vs)
+function tierTag(plan: PricingPlan, idx: number): string {
+  const num = String(idx + 1).padStart(2, "0");
+  return `${num} · ${plan.badge_label || plan.plan_name}`;
+}
+
+function PricingCard(plan: PricingPlan, idx: number): string {
+  const isFeat = !!plan.highlighted;
+  const hasPrice = (plan.yearly_price ?? 0) > 0 || (plan.monthly_price ?? 0) > 0;
+  const sym = currencySymbol(plan.currency);
+  const priceY = plan.yearly_price || 0;
+  const priceM = plan.monthly_price || 0;
+  const tag = tierTag(plan, idx);
+  const badge = isFeat ? plan.badge_label || "En popüler" : null;
 
   const cardCls = isFeat
     ? "bg-[#1a1a1a] text-white border-[#1a1a1a] shadow-[0_10px_30px_-10px_rgba(213,156,0,0.35)]"
@@ -232,22 +196,32 @@ function PricingCard(t: Tier): string {
     ? "text-white/40 line-through decoration-white/30"
     : "text-[#8a877f] line-through decoration-[#d5d2c9]";
 
+  const stripRows = [
+    { l: "Komisyon", v: plan.commission_rate > 0 ? `%${plan.commission_rate}` : "Özel" },
+    { l: "Aktif ürün", v: fmtListings(plan.max_active_listings) },
+  ];
+
+  // CTA — seller-cta sadece signup akışları için; contact_sales kendi link'ine gitsin
+  const ctaTargetHref = ctaHref(plan.cta_action);
+  const isSellerSignup = plan.cta_action === "signup" || plan.cta_action === "signup_billing";
+  const ctaAttr = isSellerSignup ? "data-seller-cta" : "";
+
   return /* html */ `
     <div class="relative flex flex-col gap-3.5 rounded-2xl border p-[26px_22px_22px] transition-[border-color,box-shadow,transform] duration-150 ${cardCls}">
       ${
-        t.badge
-          ? `<span class="absolute -top-2.5 left-[22px] bg-[#f5b800] text-[#1a1a1a] text-[10.5px] font-bold uppercase tracking-[0.08em] px-2.5 py-1 rounded-full border border-[#d39c00]">${t.badge}</span>`
+        badge
+          ? `<span class="absolute -top-2.5 left-[22px] bg-[#f5b800] text-[#1a1a1a] text-[10.5px] font-bold uppercase tracking-[0.08em] px-2.5 py-1 rounded-full border border-[#d39c00]">${badge}</span>`
           : ""
       }
-      <span class="text-[11px] font-semibold uppercase tracking-[0.1em] ${tagCls}">${t.tag}</span>
-      <div class="text-[22px] font-semibold tracking-[-0.01em] -mt-1 ${nameCls}">${t.name}</div>
-      <div class="text-[13px] leading-[1.4] min-h-[36px] ${subCls}">${t.sub}</div>
+      <span class="text-[11px] font-semibold uppercase tracking-[0.1em] ${tagCls}">${tag}</span>
+      <div class="text-[22px] font-semibold tracking-[-0.01em] -mt-1 ${nameCls}">${plan.plan_name}</div>
+      <div class="text-[13px] leading-[1.4] min-h-[36px] ${subCls}">${plan.short_tagline || plan.description || ""}</div>
 
       <div class="flex items-baseline gap-1.5 mt-1.5">
         ${
           hasPrice
             ? `<span class="text-[42px] font-semibold tracking-[-0.03em] tabular-nums leading-none ${amountCls}">
-                €<span x-text="yearly ? '${t.priceY}' : '${t.priceM}'">${t.priceY}</span>
+                ${sym}<span x-text="yearly ? '${priceY}' : '${priceM}'">${priceY}</span>
               </span>
               <span class="text-[13px] ${perCls}">/ <span x-text="yearly ? 'yıl' : 'ay'">yıl</span></span>`
             : `<span class="text-[32px] font-semibold tracking-[-0.03em] leading-none ${amountCls}">Özel teklif</span>`
@@ -262,7 +236,7 @@ function PricingCard(t: Tier): string {
       </div>
 
       <div class="grid grid-cols-2 gap-2 p-3 rounded-[10px] border ${stripCls}">
-        ${t.strip
+        ${stripRows
           .map(
             (s) => `
           <div>
@@ -274,22 +248,27 @@ function PricingCard(t: Tier): string {
           .join("")}
       </div>
 
-      <a href="${SELL_HREF}" data-seller-cta class="${ctaCls} mt-0.5">
-        ${t.ctaLabel} ${SVG_ARROW}
+      <a href="${ctaTargetHref}" ${ctaAttr} class="${ctaCls} mt-0.5">
+        ${plan.cta_label || "Devam et"} ${SVG_ARROW}
       </a>
 
       <div class="h-px my-1 ${dividerCls}"></div>
       <div class="text-[11px] font-semibold uppercase tracking-[0.06em] ${featHeadCls}">Paket içeriği</div>
       <ul class="list-none p-0 m-0 flex flex-col gap-2 text-[13px] flex-1">
-        ${t.feat
-          .map(
-            (f) => `
-          <li class="flex items-start gap-2.5 leading-[1.4] ${f.ok ? featLiCls : noLineCls}">
-            <span class="shrink-0 mt-0.5 ${f.ok ? checkCls : xCls}">${f.ok ? SVG_CHECK : SVG_X}</span>
-            <span>${f.t}</span>
-          </li>
-        `
-          )
+        ${plan.features
+          .map((f) => {
+            const ok = !f.is_disabled;
+            const icon = ok ? featureIcon(f.icon) : SVG_X;
+            const iconCls = ok ? checkCls : xCls;
+            const liCls = ok ? featLiCls : noLineCls;
+            const tip = f.tooltip ? ` title="${f.tooltip.replace(/"/g, "&quot;")}"` : "";
+            return `
+              <li class="flex items-start gap-2.5 leading-[1.4] ${liCls}"${tip}>
+                <span class="shrink-0 mt-0.5 ${iconCls}">${icon}</span>
+                <span>${f.display_text}</span>
+              </li>
+            `;
+          })
           .join("")}
       </ul>
     </div>
@@ -298,35 +277,59 @@ function PricingCard(t: Tier): string {
 
 // ---------- Matrix (detaylı özellik tablosu) ----------
 type MatrixCell = { type: "yes" } | { type: "no" } | { type: "text"; v: string };
-type MatrixRow = { f: string; help?: string; v: [MatrixCell, MatrixCell, MatrixCell, MatrixCell] };
+type MatrixRow = {
+  f: string;
+  help?: string;
+  // Opsiyonel feature_key — varsa plan.features içinde aranır; bulunursa
+  // plan'daki display_text / is_disabled kullanılır, yoksa `v` fallback değeri.
+  feature_key?: string;
+  v: [MatrixCell, MatrixCell, MatrixCell, MatrixCell];
+};
 type MatrixSection = { title: string; rows: MatrixRow[] };
 
 const yes: MatrixCell = { type: "yes" };
 const no: MatrixCell = { type: "no" };
 const txt = (v: string): MatrixCell => ({ type: "text", v });
 
+// "Komisyon & limitler" başlığı altındaki ilk 2 satır (Satış komisyonu, Aktif
+// ürün limiti) plan kartlarındaki ile birebir uyuşmalı — bu yüzden plans'tan
+// türetiliyor (bkz. buildDynamicMatrixSections). Diğer satırlar plan modelinde
+// structured field değil (mesela "Numune satışı") — feature_key + fallback.
+const STATIC_COMMISSION_EXTRA_ROWS: MatrixRow[] = [
+  { f: "Numune satışı", feature_key: "sample_sales", v: [yes, yes, yes, yes] },
+  { f: "Toplu yükleme (CSV)", feature_key: "bulk_csv_upload", v: [yes, yes, yes, yes] },
+];
+
+// Matrix detay section'ları — her satır feature_key taşıyor. Backend'de bir
+// plan'ın Pricing Plan Feature child table'ında aynı feature_key varsa, o
+// plan için satır değeri override edilir. Yoksa fallback `v` array kullanılır.
 const MATRIX_SECTIONS: MatrixSection[] = [
-  {
-    title: "Komisyon & limitler",
-    rows: [
-      {
-        f: "Satış komisyonu",
-        help: "Tamamlanan siparişler üzerinden",
-        v: [txt("%8"), txt("%6"), txt("%4"), txt("Özel")],
-      },
-      { f: "Aktif ürün limiti", v: [txt("50"), txt("500"), txt("2.000"), txt("Sınırsız")] },
-      { f: "Numune satışı", v: [yes, yes, yes, yes] },
-      { f: "Toplu yükleme (CSV)", v: [yes, yes, yes, yes] },
-    ],
-  },
+  // NOTE: "Komisyon & limitler" section runtime'da `buildDynamicMatrixSections`
+  // tarafından plans verisiyle önek olarak eklenir; burada **listelenmez**.
   {
     title: "Vitrin & sergileme",
     rows: [
-      { f: "Üretici rozeti", v: [txt("Standart"), txt("Gümüş"), txt("Altın"), txt("Platinum")] },
-      { f: "Vitrin tipi", v: [txt("Standart"), txt("Premium"), txt("Premium+"), txt("Tam özel")] },
-      { f: "Çoklu dil", v: [txt("2 dil"), txt("4 dil"), txt("6 dil"), txt("15+ dil")] },
-      { f: "Video & 360° ürün medya", v: [no, no, yes, yes] },
-      { f: "Öne çıkan listeleme / ay", v: [txt("—"), txt("5"), txt("20"), txt("Sınırsız")] },
+      {
+        f: "Üretici rozeti",
+        feature_key: "manufacturer_badge",
+        v: [txt("Standart"), txt("Gümüş"), txt("Altın"), txt("Platinum")],
+      },
+      {
+        f: "Vitrin tipi",
+        feature_key: "storefront_tier",
+        v: [txt("Standart"), txt("Premium"), txt("Premium+"), txt("Tam özel")],
+      },
+      {
+        f: "Çoklu dil",
+        feature_key: "languages",
+        v: [txt("2 dil"), txt("4 dil"), txt("6 dil"), txt("15+ dil")],
+      },
+      { f: "Video & 360° ürün medya", feature_key: "rich_media", v: [no, no, yes, yes] },
+      {
+        f: "Öne çıkan listeleme / ay",
+        feature_key: "featured_listings",
+        v: [txt("—"), txt("5"), txt("20"), txt("Sınırsız")],
+      },
     ],
   },
   {
@@ -334,13 +337,22 @@ const MATRIX_SECTIONS: MatrixSection[] = [
     rows: [
       {
         f: "Destek",
+        feature_key: "support_tier",
         v: [txt("Email"), txt("Öncelikli"), txt("Hesap yön."), txt("7/24 dedicated")],
       },
-      { f: "Ekip kullanıcısı", v: [txt("1"), txt("3"), txt("10"), txt("Sınırsız")] },
-      { f: "Reklam kredisi / ay", v: [txt("—"), txt("€100"), txt("€300"), txt("Özel")] },
-      { f: "KDV iadesi danışmanlığı", v: [yes, yes, yes, yes] },
-      { f: "Sigortalı kargo dahil", v: [yes, yes, yes, yes] },
-      { f: "Fuar / etkinlik daveti", v: [no, no, yes, yes] },
+      {
+        f: "Ekip kullanıcısı",
+        feature_key: "team_seats",
+        v: [txt("1"), txt("3"), txt("10"), txt("Sınırsız")],
+      },
+      {
+        f: "Reklam kredisi / ay",
+        feature_key: "ad_credit_monthly",
+        v: [txt("—"), txt("€100"), txt("€300"), txt("Özel")],
+      },
+      { f: "KDV iadesi danışmanlığı", feature_key: "vat_refund_advisory", v: [yes, yes, yes, yes] },
+      { f: "Sigortalı kargo dahil", feature_key: "insured_shipping", v: [yes, yes, yes, yes] },
+      { f: "Fuar / etkinlik daveti", feature_key: "event_invitations", v: [no, no, yes, yes] },
     ],
   },
   {
@@ -349,14 +361,58 @@ const MATRIX_SECTIONS: MatrixSection[] = [
       {
         f: "API erişimi",
         help: "Sipariş, stok, fiyat eşitleme",
+        feature_key: "api_access",
         v: [no, txt("Limitli"), txt("Tam"), txt("Özel SLA")],
       },
-      { f: "ERP / muhasebe entegrasyonu", v: [no, no, txt("Beta"), yes] },
-      { f: "Özel ödeme koşulları", v: [no, no, no, yes] },
-      { f: "Alt domain (markaniz.istoc.com)", v: [no, no, no, yes] },
+      {
+        f: "ERP / muhasebe entegrasyonu",
+        feature_key: "erp_integration",
+        v: [no, no, txt("Beta"), yes],
+      },
+      { f: "Özel ödeme koşulları", feature_key: "custom_payment_terms", v: [no, no, no, yes] },
+      {
+        f: "Alt domain (markaniz.istoc.com)",
+        feature_key: "custom_subdomain",
+        v: [no, no, no, yes],
+      },
     ],
   },
 ];
+
+// feature_key bazlı resolution — plan.features'tan satırdaki kaynağı seçer.
+// Öncelik sırası: plan'da matching feature varsa kullan; aksi halde fallback.
+function resolveCellFromFeature(
+  row: MatrixRow,
+  plan: PricingPlan,
+  fallbackIndex: number
+): MatrixCell {
+  if (!row.feature_key) return row.v[fallbackIndex];
+
+  const f = plan.features.find((x) => x.feature_key === row.feature_key);
+  if (!f) return row.v[fallbackIndex];
+
+  if (f.is_disabled) return no;
+  // display_text yoksa veya boşsa, icon "check"e göre yes/no, diğeri text
+  const text = (f.display_text || "").trim();
+  if (!text) {
+    if (f.icon === "x") return no;
+    return yes;
+  }
+  return txt(text);
+}
+
+function resolveRowCells(
+  row: MatrixRow,
+  plans: PricingPlan[]
+): [MatrixCell, MatrixCell, MatrixCell, MatrixCell] {
+  const four = plans.slice(0, 4);
+  return four.map((p, i) => resolveCellFromFeature(row, p, i)) as [
+    MatrixCell,
+    MatrixCell,
+    MatrixCell,
+    MatrixCell,
+  ];
+}
 
 function renderMatrixCell(c: MatrixCell): string {
   if (c.type === "yes") return `<span class="inline-flex text-[#1f7a4d]">${SVG_CHECK_MD}</span>`;
@@ -364,15 +420,73 @@ function renderMatrixCell(c: MatrixCell): string {
   return c.v;
 }
 
+// Matrix tüm section'larını plans verisinden derive eder:
+//   1. "Komisyon & limitler" — commission_rate + max_active_listings doğrudan
+//      plan field'larından alınır (card değerleriyle birebir aynı kaynak).
+//   2. STATIC_COMMISSION_EXTRA + MATRIX_SECTIONS satırları — `feature_key`
+//      taşıyanlar için plan.features içinde override aranır; bulunmazsa
+//      hardcoded fallback değerleri kullanılır.
+function buildDynamicMatrixSections(plans: PricingPlan[]): MatrixSection[] {
+  const four = plans.slice(0, 4);
+  if (four.length < 4) return MATRIX_SECTIONS;
+
+  const commissionCells = four.map((p) =>
+    p.commission_rate > 0 ? txt(`%${p.commission_rate}`) : txt("Özel")
+  ) as [MatrixCell, MatrixCell, MatrixCell, MatrixCell];
+
+  const listingsCells = four.map((p) => txt(fmtListings(p.max_active_listings))) as [
+    MatrixCell,
+    MatrixCell,
+    MatrixCell,
+    MatrixCell,
+  ];
+
+  const dynamicCommissionSection: MatrixSection = {
+    title: "Komisyon & limitler",
+    rows: [
+      {
+        f: "Satış komisyonu",
+        help: "Tamamlanan siparişler üzerinden",
+        v: commissionCells,
+      },
+      { f: "Aktif ürün limiti", v: listingsCells },
+      // STATIC extra rows da feature_key resolve etsin (admin "sample_sales"
+      // feature_key'i bir plan'a is_disabled=1 ile koyarsa "no" olur).
+      ...STATIC_COMMISSION_EXTRA_ROWS.map((r) => ({
+        ...r,
+        v: resolveRowCells(r, plans),
+      })),
+    ],
+  };
+
+  const resolvedSections = MATRIX_SECTIONS.map((sec) => ({
+    title: sec.title,
+    rows: sec.rows.map((r) => ({
+      ...r,
+      v: resolveRowCells(r, plans),
+    })),
+  }));
+
+  return [dynamicCommissionSection, ...resolvedSections];
+}
+
 const MATRIX_GRID_CLS = "grid grid-cols-[1.6fr_repeat(4,1fr)] gap-3 items-center";
 
-function PricingMatrix(): string {
-  const cols = [
-    { n: "Starter", p: "€399 / yıl" },
-    { n: "Professional", p: "€499 / yıl", featured: true },
-    { n: "Business", p: "€599 / yıl" },
-    { n: "Enterprise", p: "Özel teklif" },
-  ];
+function PricingMatrix(plans: PricingPlan[]): string {
+  // Matrix sadece 4 sütun gösteriyor. Plan sayısı 4'ten azsa matrix'i gizle.
+  // 4'ten fazlaysa ilk 4'ünü göster (admin sıraya koyduğu plan'lardan ilk 4).
+  if (plans.length < 4) return "";
+  const sym = currencySymbol(plans[0]?.currency || "EUR");
+  const cols = plans.slice(0, 4).map((p) => ({
+    n: p.plan_name,
+    p:
+      (p.yearly_price || 0) > 0
+        ? `${sym}${p.yearly_price} / yıl`
+        : (p.monthly_price || 0) > 0
+          ? `${sym}${p.monthly_price} / ay`
+          : "Özel teklif",
+    featured: !!p.highlighted,
+  }));
 
   return /* html */ `
     <div class="mt-14 bg-white border border-[#e8e6e0] rounded-2xl overflow-hidden hidden lg:block">
@@ -393,8 +507,9 @@ function PricingMatrix(): string {
           .join("")}
       </div>
 
-      ${MATRIX_SECTIONS.map(
-        (sec) => `
+      ${buildDynamicMatrixSections(plans)
+        .map(
+          (sec) => `
         <div>
           <div class="px-6 pt-3.5 pb-2 bg-[#fafaf8] text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8a877f] border-b border-[#e8e6e0]">
             ${sec.title}
@@ -426,12 +541,51 @@ function PricingMatrix(): string {
             .join("")}
         </div>
       `
-      ).join("")}
+        )
+        .join("")}
     </div>
   `;
 }
 
-function PricingSection(): string {
+function PricingEmpty(): string {
+  return /* html */ `
+    <div class="rounded-2xl border border-[#e8e6e0] bg-white p-10 text-center text-[#4a4a48]">
+      <p class="m-0 mb-2 text-base font-medium text-[#1a1a1a]">Paketler şu anda yüklenemedi.</p>
+      <p class="m-0 text-sm">Bir kaç saniye sonra tekrar dener veya
+        <a href="${SELL_HREF}" data-seller-cta class="text-[#d39c00] font-medium underline">başvuruyu başlat</a>.
+      </p>
+    </div>
+  `;
+}
+
+// D4: Yıllık vs aylık indirimi gerçek fiyatlardan hesapla. En yüksek indirim
+// taşıyan plan'ı baz alıp "N ay bedava" badge'i üret. Hiçbir plan'da indirim
+// yoksa badge gizli (boş string döner).
+function _computeYearlyDiscountBadge(plans: PricingPlan[]): string {
+  let bestSavedMonths = 0;
+  for (const p of plans) {
+    const monthly = p.monthly_price || 0;
+    const yearly = p.yearly_price || 0;
+    if (monthly <= 0 || yearly <= 0) continue;
+    const savedAmount = monthly * 12 - yearly;
+    if (savedAmount <= 0) continue;
+    const savedMonths = Math.round(savedAmount / monthly);
+    if (savedMonths > bestSavedMonths) bestSavedMonths = savedMonths;
+  }
+  if (bestSavedMonths <= 0) return "";
+  return `${bestSavedMonths} ay bedava`;
+}
+
+function PricingSection(plans: PricingPlan[]): string {
+  const cards = plans.length
+    ? `<div class="grid grid-cols-1 md:grid-cols-2 ${plans.length >= 4 ? "lg:grid-cols-4" : plans.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"} gap-3.5 items-stretch">
+         ${plans.map((p, i) => PricingCard(p, i)).join("")}
+       </div>
+       ${PricingMatrix(plans)}`
+    : PricingEmpty();
+
+  const discountBadge = _computeYearlyDiscountBadge(plans);
+
   return /* html */ `
     <section id="paketler" class="py-16 md:py-24 border-t border-[#e8e6e0] bg-[#f7f7f5]" x-data="{ yearly: true }">
       <div class="${WRAP_CLS}">
@@ -455,7 +609,7 @@ function PricingSection(): string {
             class="appearance-none border-0 text-[12.5px] font-medium px-4 py-2 rounded-full focus:outline-none transition-colors duration-150"
           >
             Yıllık
-            <span class="text-[10px] bg-[#f5b800] text-[#1a1a1a] px-1.5 py-0.5 rounded-full font-bold ml-1.5 tracking-[0.04em]">2 ay bedava</span>
+            ${discountBadge ? `<span class="text-[10px] bg-[#f5b800] text-[#1a1a1a] px-1.5 py-0.5 rounded-full font-bold ml-1.5 tracking-[0.04em]">${discountBadge}</span>` : ""}
           </button>
           <button
             type="button"
@@ -469,11 +623,7 @@ function PricingSection(): string {
           </button>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5 items-stretch">
-          ${TIERS.map(PricingCard).join("")}
-        </div>
-
-        ${PricingMatrix()}
+        ${cards}
         </div>
       </div>
     </section>
@@ -637,10 +787,13 @@ function FinalCtaSection(): string {
 // =====================================================
 // EXPORT — Sayfa iskeleti (header/footer dışında)
 // =====================================================
-export function SellPageLayout(): string {
+// FAZ 4.1 — pricingData zorunlu: backend'den (veya cache'ten) gelir.
+// Plan listesi boşsa PricingSection kendi "yüklenemedi" mesajını gösterir.
+export function SellPageLayout(pricingData?: PricingPlansResponse): string {
+  const plans = pricingData?.plans ?? [];
   return `
     ${HeroSection()}
-    ${PricingSection()}
+    ${PricingSection(plans)}
     ${ComparisonSection()}
     ${FinalCtaSection()}
   `;
