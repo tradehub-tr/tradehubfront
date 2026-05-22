@@ -4,6 +4,9 @@
 @import "tailwindcss";
 @plugin "flowbite/plugin";
 @source "../node_modules/flowbite";
+/* upload-ui vendored at src/lib/upload-ui — Tailwind v4 auto-source scans src/ by default,
+   açıkça belirtmek explicit'lik için. */
+@source "./lib/upload-ui/**/*.{ts,js}";
 
 /* --- Dark Mode: class-based --- */
 @variant dark (&:where(.dark, .dark *));

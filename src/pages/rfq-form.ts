@@ -15,8 +15,9 @@ import { TopBar, SubHeader, initMobileDrawer, initStickyHeaderSearch, MegaMenu, 
 import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar'
 import { FooterLinks } from '../components/footer'
-import { getFileBadge, getFilePreviewUrl, revokeFilePreview, openFilePreviewLightbox } from '../components/rfq/attachments'
 import { renderDropzone, bindDropzone } from '../components/rfq/dropzone'
+import { uploadRfqAttachments, type FileProgress } from '../components/rfq/uploader'
+import { renderFileGrid, updateFileCardProgress, simulateStagingProgress } from '../components/rfq/file-list'
 import { getCsrfToken, checkEmailNotVerifiedResponse, isEmailNotVerifiedError } from '../utils/api'
 import { getListingDetail } from '../services/listingService'
 
@@ -80,6 +81,15 @@ appEl.innerHTML = `
               <!-- File Upload — Dropzone (inside outer card) -->
               <div>
                 ${renderDropzone({ id: 'rfq-upload-area', inputId: 'rfq-file-input' })}
+                <div id="rfq-total-progress" class="hidden mt-3 p-2 bg-white border border-gray-200 rounded">
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="text-xs font-medium text-gray-600" data-i18n="rfq.uploading">${t('rfq.uploading')}</span>
+                    <span id="rfq-total-progress-pct" class="text-xs font-mono text-gray-500">0%</span>
+                  </div>
+                  <div class="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                    <div id="rfq-total-progress-bar" class="h-full bg-amber-500 transition-all" style="width:0%"></div>
+                  </div>
+                </div>
                 <div id="rfq-file-list" class="mt-3 space-y-2"></div>
               </div>
               <!-- Sourcing Quantity (inside outer card) -->
@@ -243,10 +253,15 @@ document.addEventListener('click', (e) => {
 // ── File upload — Dropzone ──
 const fileList = document.getElementById('rfq-file-list')!;
 const selectedFiles: File[] = [];
+const fileProgress = new Map<File, FileProgress>();
+let isUploading = false;
 
 function addFiles(files: File[]) {
   selectedFiles.push(...files);
   renderFileList();
+  files.forEach((f) =>
+    simulateStagingProgress(selectedFiles, f, 'rfq-form-preview', fileProgress, renderFileList),
+  );
 }
 
 bindDropzone(
@@ -258,39 +273,27 @@ bindDropzone(
 );
 
 function renderFileList() {
-  fileList.innerHTML = selectedFiles.map((f, i) => {
-    const isImage = f.type?.startsWith('image/');
-    const badge = getFileBadge(f.name);
-    const previewUrl = isImage ? getFilePreviewUrl(f) : '';
-    const thumb = isImage
-      ? `<img src="${previewUrl}" alt="" class="rfq-thumb-preview w-12 h-12 object-cover rounded cursor-zoom-in border border-gray-200" data-file-idx="${i}" />`
-      : `<div class="w-12 h-12 rounded ${badge.cls} text-white text-[10px] font-bold flex items-center justify-center shrink-0">${badge.label}</div>`;
-    return `
-      <div class="flex items-center gap-3 p-2 bg-white border border-gray-200 rounded">
-        ${thumb}
-        <span class="flex-1 text-sm text-gray-700 truncate" title="${f.name}">${f.name}</span>
-        <button type="button" data-remove="${i}" class="rfq-remove-file text-red-400 hover:text-red-600 px-2 text-lg leading-none">&times;</button>
-      </div>
-    `;
-  }).join('');
-
-  fileList.querySelectorAll<HTMLImageElement>('.rfq-thumb-preview').forEach(img => {
-    img.addEventListener('click', () => {
-      const idx = Number(img.dataset.fileIdx);
-      const file = selectedFiles[idx];
-      if (file) openFilePreviewLightbox(file, 'rfq-form-preview');
-    });
+  renderFileGrid(fileList, {
+    files: selectedFiles,
+    progress: fileProgress,
+    isUploading,
+    lightboxScope: 'rfq-form-preview',
   });
+}
 
-  fileList.querySelectorAll('.rfq-remove-file').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const idx = Number((btn as HTMLElement).dataset.remove);
-      const file = selectedFiles[idx];
-      if (file) revokeFilePreview(file);
-      selectedFiles.splice(idx, 1);
-      renderFileList();
-    });
-  });
+function updateFileRowProgress(file: File, state: FileProgress) {
+  updateFileCardProgress(selectedFiles, file, state, 'rfq-form-preview', fileProgress);
+}
+
+function updateTotalProgress(loaded: number, total: number) {
+  const wrap = document.getElementById('rfq-total-progress');
+  const bar = document.getElementById('rfq-total-progress-bar');
+  const pct = document.getElementById('rfq-total-progress-pct');
+  if (!wrap || !bar || !pct) return;
+  wrap.classList.remove('hidden');
+  const p = total > 0 ? Math.round((loaded / total) * 100) : 0;
+  bar.style.width = (p < 2 ? 2 : p) + '%';
+  pct.textContent = p + '%';
 }
 
 // ── Load files from IndexedDB (transferred from rfq.html) ──
@@ -467,28 +470,56 @@ form.addEventListener('submit', (e) => {
     // 2. Upload files as private RFQ attachments. Frappe records the
     //    parent link (attached_to_doctype=RFQ) automatically — no separate
     //    child-table call needed. Access is gated by RFQ.has_permission.
-    for (const file of selectedFiles) {
-      const fd = new FormData();
-      fd.append('file', file);
-      fd.append('doctype', 'RFQ');
-      fd.append('docname', rfqId);
-      fd.append('is_private', '1');
-      await fetch((window.API_BASE || '/api') + '/method/upload_file', {
-        method: 'POST',
-        credentials: 'include',
-        body: fd,
+    //
+    // Paralel concurrency=2 worker pool; bytes-based per-file ve toplam
+    // progress UI'a yansıtılır. Bir dosya hata verirse diğerleri devam eder
+    // (kısmi başarı kabul); sonunda failed varsa toast ile bilgi verilir.
+    if (selectedFiles.length) {
+      isUploading = true;
+      // Optimistic state: tüm dosyalar için bar wrap'i hemen "uploading 0%" olarak
+      // göster. Bu olmadan re-render'da progress map boş → bar hidden basılır,
+      // ilk progress event'i gelene kadar görsel feedback yok.
+      selectedFiles.forEach((f) => {
+        fileProgress.set(f, { loaded: 0, total: f.size, status: 'uploading' });
       });
+      renderFileList(); // bar wrap'ler artık görünür (amber 6%)
+      updateTotalProgress(0, selectedFiles.reduce((s, f) => s + f.size, 0));
+      const { failed } = await uploadRfqAttachments({
+        files: selectedFiles,
+        rfqId,
+        concurrency: 2,
+        onFileProgress: updateFileRowProgress,
+        onTotalProgress: updateTotalProgress,
+      });
+      isUploading = false;
+      if (failed.length) {
+        showToast({
+          message: t('rfq.uploadPartialFail', { count: failed.length }),
+          type: 'warning',
+        });
+      }
     }
 
     return rfqId;
   }
 
+  // Yükleme sürerken sekmeyi kapatma engeli — orphan RFQ riskini azaltır.
+  function beforeUnloadGuard(e: BeforeUnloadEvent) {
+    if (!isUploading) return;
+    e.preventDefault();
+    e.returnValue = '';
+  }
+  window.addEventListener('beforeunload', beforeUnloadGuard);
+
   submitRfq()
     .then(() => {
+      window.removeEventListener('beforeunload', beforeUnloadGuard);
       sessionStorage.setItem('rfq_submitted', '1');
       window.location.href = '/pages/dashboard/rfq-success.html';
     })
     .catch((err) => {
+      window.removeEventListener('beforeunload', beforeUnloadGuard);
+      isUploading = false;
       submitBtn.disabled = false;
       submitBtn.textContent = t('rfq.postRequest');
       if (isEmailNotVerifiedError(err)) return; // toast api.ts'te gösterildi

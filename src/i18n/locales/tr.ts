@@ -3435,6 +3435,10 @@ const tr = {
       dropzonePickBtn: "Bilgisayardan Seçin",
       dropzoneMeta: "{{formats}} · maks. {{max}} dosya · her biri {{size}}MB'den az",
       duplicateFile: "Bu dosya zaten ekli: {{fileName}}",
+      uploading: "Dosyalar yükleniyor…",
+      uploadComplete: "Tüm dosyalar yüklendi.",
+      uploadPartialFail:
+        "{{count}} dosya yüklenemedi. RFQ oluşturuldu; eksik dosyaları sonra ekleyebilirsiniz.",
     },
 
     // ============================================================
