@@ -85,8 +85,8 @@ export function initLegalConsentModal(): void {
   // Action delegation (dismiss / reject / accept)
   modal.addEventListener("click", (e) => {
     const target = e.target as HTMLElement;
-    const action = target.closest<HTMLElement>("[data-legal-consent-action]")
-      ?.dataset.legalConsentAction;
+    const action = target.closest<HTMLElement>("[data-legal-consent-action]")?.dataset
+      .legalConsentAction;
     if (action === "accept") resolveAndClose(true);
     else if (action === "reject" || action === "dismiss") resolveAndClose(false);
   });

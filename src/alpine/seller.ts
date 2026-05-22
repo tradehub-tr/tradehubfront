@@ -213,8 +213,7 @@ Alpine.data("sellerStorefront", () => ({
     // erişimleri için).
     const pathMatch = window.location.pathname.match(/^\/magaza\/([^/]+)/);
     const code =
-      (pathMatch && pathMatch[1]) ||
-      new URLSearchParams(window.location.search).get("seller");
+      (pathMatch && pathMatch[1]) || new URLSearchParams(window.location.search).get("seller");
     this.sellerCode = code || "";
     if (!code) {
       this.loading = false;
