@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ## [v1.1.9-beta.10] - 2026-05-22 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
@@ -49,6 +50,8 @@ Bu surum beta.istoc.com'da test asamasindadir.
   - i18n: yeni upload string'leri (en/tr)
 
 ---
+=======
+>>>>>>> 1903f94 (chore: v1.1.9-beta.7 beta changelog + package.json)
 ## [v1.1.9-beta.7] - 2026-05-22 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
