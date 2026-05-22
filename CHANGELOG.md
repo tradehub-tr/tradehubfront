@@ -1,3 +1,17 @@
+## [v1.1.9-beta.8] - 2026-05-22 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Degistirildi
+- refactor(upload): RFQ ve KYB/KYC upload-ui kütüphanesine taşındı (@aliiball)
+  - src/lib/upload-ui/ paylaşımlı kütüphane (admin-panel ile aynı API)
+  - rfq/dropzone.ts upload-ui facade'ı üzerinden yeniden yazıldı
+  - rfq/file-list.ts ve rfq/uploader.ts ayrıldı
+  - KybLayout, KycLayout, SettingsLayout, TicketForm, WriteReviewModal yeni upload bileşenlerine bağlandı
+  - rfq-form.ts ve rfq.ts sayfa init'leri sadeleştirildi
+  - i18n: yeni upload string'leri (en/tr)
+
+---
 ## [v1.1.9-beta.7] - 2026-05-22 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
