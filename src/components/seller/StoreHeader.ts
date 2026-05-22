@@ -57,7 +57,7 @@ export function StoreHeader(): string {
 
           <!-- CTA Buttons: absolute top-right on desktop -->
           <div class="hidden lg:flex items-center gap-3 absolute top-6 right-10">
-            <a :href="'/magaza/' + (seller?.seller_code || '')"
+            <a :href="sellerCode ? '/magaza/' + sellerCode + '/dukkan' : '#'"
                class="inline-flex items-center gap-2 text-[14px] font-normal text-text-heading hover:text-(--btn-bg) transition-colors whitespace-nowrap"
                style="padding: 5px 5px 5px 25px;">
               ${storeIcon}
@@ -135,7 +135,7 @@ export function StoreHeader(): string {
 
             <!-- Mobile CTA buttons — stacked below header -->
             <div class="flex flex-col lg:hidden gap-2 px-4 py-3 sm:px-6">
-              <a :href="'/magaza/' + (seller?.seller_code || '')"
+              <a :href="sellerCode ? '/magaza/' + sellerCode + '/dukkan' : '#'"
                  class="w-full inline-flex items-center justify-center gap-1.5 py-2.5 border-(length:--btn-outline-border-width) border-(--btn-outline-border-color,#f5b800) rounded-[var(--radius-button,8px)] bg-(--btn-outline-bg,transparent) text-[13px] font-medium text-(--btn-outline-text,#d39c00) hover:bg-(--btn-outline-hover-bg,#fff8e1) hover:text-(--btn-outline-hover-text,#d39c00) hover:border-(--btn-outline-hover-text,#d39c00) hover:shadow-[inset_2px_2px_4px_rgba(0,0,0,0.08),inset_-1px_-1px_2px_rgba(255,255,255,0.5)] active:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.14),inset_-1px_-1px_2px_rgba(255,255,255,0.4)] active:scale-[0.98] transition-all duration-150">
                 ${storeIcon}
                 ${t("seller.sf.viewStore")}

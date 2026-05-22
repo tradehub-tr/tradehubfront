@@ -186,6 +186,9 @@ Alpine.data("sellerStorefront", () => ({
   seller: null as SellerStorefrontData | null,
   navCategories: [] as SellerNavCategory[],
   loading: true,
+  // URL'den okunan seller kodu — API başarısız olsa bile link template'lerinde
+  // kullanılabilir (Mağazayı ziyaret et butonu vb.).
+  sellerCode: "" as string,
 
   /** Backend'den dönen `business_type` enum değerini lokalize metne çevirir.
    *  Örnek: "Manufacturer" → "Üretici" (TR) / "Manufacturer" (EN). Tanımlı olmayan
@@ -204,7 +207,15 @@ Alpine.data("sellerStorefront", () => ({
   },
 
   async init() {
-    const code = new URLSearchParams(window.location.search).get("seller");
+    // Gateway nginx "internal rewrite" yaptığı için browser URL `/magaza/<code>`
+    // olarak kalır, `?seller=` query param browser'da görünmez. O yüzden
+    // path'tan parse + fallback olarak query (eski URL'ler veya direct dosya
+    // erişimleri için).
+    const pathMatch = window.location.pathname.match(/^\/magaza\/([^/]+)/);
+    const code =
+      (pathMatch && pathMatch[1]) ||
+      new URLSearchParams(window.location.search).get("seller");
+    this.sellerCode = code || "";
     if (!code) {
       this.loading = false;
       return;

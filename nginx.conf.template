@@ -1,3 +1,89 @@
+# Türkçe pretty URL → dist HTML mapping. staticPageUrl.ts STATIC_PAGE_HTML_MAP
+# ve tradehub_core/seo/static_pages_registry.py STATIC_PAGES ile **senkron**
+# tutulmalı. Yeni statik sayfa eklenirken üç dosya da güncellenir.
+map $uri $static_page_html {
+    default                              "";
+
+    /                                    /index.html;
+
+    /urunler                             /pages/products.html;
+    /kategoriler                         /pages/categories.html;
+    /ureticiler                          /pages/manufacturers.html;
+    /sepet                               /pages/cart.html;
+
+    /giris                               /pages/auth/login.html;
+    /kayit                               /pages/auth/register.html;
+    /sifremi-unuttum                     /pages/auth/forgot-password.html;
+    /sifre-sifirla                       /pages/auth/reset-password.html;
+
+    /yardim-merkezi                      /pages/help/help-center.html;
+    /sss                                 /pages/help/faq.html;
+    /sss/detay                           /pages/help/faq-detail.html;
+    /destek/yeni                         /pages/help/help-ticket-new.html;
+    /destek/taleplerim                   /pages/help/help-tickets.html;
+    /destek/talep                        /pages/help/help-ticket.html;
+
+    /satis-sonrasi                       /pages/info/after-sales.html;
+    /blog                                /pages/info/blog.html;
+    /kariyer                             /pages/info/careers.html;
+    /kurumsal-sorumluluk                 /pages/info/csr.html;
+    /uyelik                              /pages/info/membership.html;
+    /izleme                              /pages/info/monitoring.html;
+    /haberler                            /pages/info/news.html;
+    /ortakliklar                         /pages/info/partnerships.html;
+    /odeme-secenekleri                   /pages/info/payments.html;
+    /iade-politikasi                     /pages/info/refund-policy.html;
+    /kargo-lojistik                      /pages/info/shipping-logistics.html;
+    /kargo-koruma                        /pages/info/shipping-protection.html;
+    /vergi                               /pages/info/tax.html;
+    /ticaret-guvencesi/detay             /pages/info/trade-assurance-detail.html;
+
+    /erisilebilirlik                     /pages/legal/accessibility.html;
+    /cerezler                            /pages/legal/cookies.html;
+    /mesafeli-satis                      /pages/legal/distance-sales.html;
+    /fikri-mulkiyet                      /pages/legal/ip.html;
+    /kvkk                                /pages/legal/kvkk.html;
+    /yasal-uyari                         /pages/legal/notice.html;
+    /gizlilik                            /pages/legal/privacy.html;
+    /urun-listeleme-kurallari            /pages/legal/product-listing.html;
+    /iade-kosullari                      /pages/legal/returns.html;
+    /kullanim-kosullari                  /pages/legal/terms.html;
+
+    /hesabim                             /pages/dashboard/buyer-dashboard.html;
+    /hesabim/adresler                    /pages/dashboard/addresses.html;
+    /hesabim/kisiler                     /pages/dashboard/contacts.html;
+    /hesabim/favoriler                   /pages/dashboard/favorites.html;
+    /hesabim/sorularim                   /pages/dashboard/inquiries.html;
+    /hesabim/kyb                         /pages/dashboard/kyb.html;
+    /hesabim/mesajlar                    /pages/dashboard/messages.html;
+    /hesabim/siparisler                  /pages/dashboard/orders.html;
+    /hesabim/odeme                       /pages/dashboard/payment.html;
+    /hesabim/profil                      /pages/dashboard/profile.html;
+    /hesabim/rfq                         /pages/dashboard/rfq.html;
+    /hesabim/rfq/yeni                    /pages/dashboard/rfq-form.html;
+    /hesabim/rfq/teklifler               /pages/dashboard/rfq-quotes.html;
+    /hesabim/ayarlar                     /pages/dashboard/settings.html;
+
+    /odeme                               /pages/order/checkout.html;
+    /odeme/basarili                      /pages/order/order-success.html;
+    /odeme/basarisiz                     /pages/order/payment-failed.html;
+    /odeme/isleniyor                     /pages/order/payment-processing.html;
+
+    /satici-ol                           /pages/seller/sell.html;
+    /satici/fiyatlandirma                /pages/seller/sell-pricing.html;
+    /satici/dashboard                    /pages/seller/dashboard.html;
+    /satici/basvuru-bekleyen             /pages/seller/application-pending.html;
+    /satici/tedarikci-kurulum            /pages/seller/supplier-setup.html;
+    /satici/dogrulama                    /pages/seller/verification.html;
+    /satici/vitrin                       /pages/seller/seller-storefront.html;
+
+    /firsatlar                           /pages/top-deals.html;
+    /cok-satanlar                        /pages/top-ranking.html;
+    /cok-satanlar/kategori               /pages/top-ranking-category.html;
+    /size-ozel                           /pages/tailored-selections.html;
+    /ticaret-guvencesi                   /pages/trade-assurance.html;
+}
+
 server {
     listen 80;
     server_name _;

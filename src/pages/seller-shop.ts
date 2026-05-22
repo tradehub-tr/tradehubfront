@@ -29,7 +29,14 @@ import { initAllSwipers } from '../utils/seller/interactions';
 
 // ─── Pre-fetch layout for SSR-like initial render ───────
 const API_BASE = window.API_BASE || '/api';
-const sellerCode = new URLSearchParams(window.location.search).get('seller') || '';
+// Gateway nginx "internal rewrite" yaptığı için browser URL `/magaza/<code>/dukkan`
+// olarak kalır, `?seller=` query browser'da görünmez. Path'tan parse +
+// fallback olarak query (direct dosya erişimleri için).
+const _pathMatch = window.location.pathname.match(/^\/magaza\/([^/]+)/);
+const sellerCode =
+  (_pathMatch && _pathMatch[1]) ||
+  new URLSearchParams(window.location.search).get('seller') ||
+  '';
 
 function getDefaultLayout(): LayoutConfig {
   return {
@@ -177,7 +184,7 @@ async function renderPage() {
                       @click="switchPage('contacts')">
                       Tedarikçiye Ulasin
                     </button>
-                    <a :href="'/magaza/' + sellerCode"
+                    <a href="/magaza/${sellerCode}"
                        class="th-btn-outline text-[12px] font-medium text-[#555] px-5 py-2 text-center hover:text-[#333] whitespace-nowrap">
                       Profili Goruntule
                     </a>
@@ -193,7 +200,7 @@ async function renderPage() {
                 @click="switchPage('contacts')">
                 Tedarikçiye Ulasin
               </button>
-              <a :href="'/magaza/' + sellerCode"
+              <a href="/magaza/${sellerCode}"
                  class="th-btn-outline flex-1 text-[12px] font-medium text-[#555] py-2 text-center">
                 Profil
               </a>
@@ -261,7 +268,7 @@ async function renderPage() {
                   <a href="#" @click.prevent="switchPage('profile'); open = false"
                      class="block px-4 py-2 text-[13px] hover:bg-white/10 transition-colors"
                      style="color: var(--store-nav-text, #fff);">Sirket Profili</a>
-                  <a :href="'/magaza/' + sellerCode"
+                  <a href="/magaza/${sellerCode}"
                      class="block px-4 py-2 text-[13px] hover:bg-white/10 transition-colors"
                      style="color: var(--store-nav-text, #fff);">Detayli Profil</a>
                 </div>

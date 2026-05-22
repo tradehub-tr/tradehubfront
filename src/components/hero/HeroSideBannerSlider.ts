@@ -23,7 +23,7 @@ const sideBannerSlides: HeroSideBannerSlide[] = [
     titleKey: "heroBanner.newSuppliersDesc",
     descriptionKey: "heroBanner.newSuppliersText",
     ctaKey: "heroBanner.seeMore",
-    href: "/markalar",
+    href: "/ureticiler",
     background: "linear-gradient(135deg, #8cc9f7 0%, #6aa8de 45%, #74b8e9 100%)",
   },
   {

@@ -64,7 +64,7 @@ const featureCards: FeatureCard[] = [
     titleKey: "mega.topDeals",
     descKey: "mega.topDealsDesc",
     metaKey: "mega.topDealsMeta",
-    href: "/firsat",
+    href: "/firsatlar",
     icon: `<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L2 12V2h10l8.6 8.6a2 2 0 0 1 0 2.8z"/><circle cx="7" cy="7" r="1.6" fill="currentColor"/></svg>`,
   },
 ];
@@ -217,7 +217,7 @@ function renderFeaturedView(): string {
         </div>
 
         <!-- Producers banner -->
-        <a href="/markalar" class="group relative isolate block overflow-hidden rounded-xl bg-[#1a1a1a] shadow-[0_2px_6px_rgba(20,20,18,0.08)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(20,20,18,0.18)] min-h-[150px] lg:min-h-[180px] xl:min-h-[230px] 2xl:min-h-[280px]" aria-label="${t("mega.discoverProducers")}">
+        <a href="/ureticiler" class="group relative isolate block overflow-hidden rounded-xl bg-[#1a1a1a] shadow-[0_2px_6px_rgba(20,20,18,0.08)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(20,20,18,0.18)] min-h-[150px] lg:min-h-[180px] xl:min-h-[230px] 2xl:min-h-[280px]" aria-label="${t("mega.discoverProducers")}">
           <img src="${producerImg}" alt="" loading="lazy" decoding="async" class="absolute inset-0 z-0 block w-full h-full object-cover" />
           <div class="absolute inset-0 z-10" style="background:linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.85) 100%);"></div>
           <span class="absolute top-3 left-3 lg:top-3.5 lg:left-3.5 z-20 inline-block rounded-full bg-amber-400 px-2 py-0.5 text-[10px] lg:text-[10.5px] font-bold uppercase tracking-wider text-gray-900" data-i18n="mega.bannerTagNew">${t("mega.bannerTagNew")}</span>
