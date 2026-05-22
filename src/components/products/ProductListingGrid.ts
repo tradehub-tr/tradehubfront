@@ -1,5 +1,6 @@
 import { t } from "../../i18n";
 import { formatPrice } from "../../utils/currency";
+import { getBrandUrl } from "../../utils/brandUrl";
 /**
  * ProductListingGrid Component
  * iSTOC-style product listing grid for products page.
@@ -186,7 +187,7 @@ function renderProductListingCard(card: ProductListingCard): string {
   // Brand chip — small badge with brand name (logo if available)
   const brandHtml = card.brandName
     ? `<a class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded border border-gray-200 bg-gray-50 text-[10px] font-medium text-gray-700 hover:bg-gray-100 no-underline max-w-full"
-          href="${card.brandSlug ? `/pages/brand.html?slug=${card.brandSlug}` : "#"}"
+          href="${getBrandUrl({ slug: card.brandSlug })}"
           title="${card.brandName}">
         ${card.brandLogo ? `<img src="${card.brandLogo}" alt="${card.brandName}" class="w-3 h-3 object-contain" />` : ""}
         <span class="whitespace-nowrap overflow-hidden text-ellipsis">${card.brandName}</span>
@@ -276,7 +277,12 @@ function renderProductListingCard(card: ProductListingCard): string {
               data-product-price="${escapeAttr(card.price)}"
               data-product-thumb="${escapeAttr(card.imageSrc ?? "")}"
               data-product-min-order="${escapeAttr(moqDigits)}"
-              class="th-btn-outline searchx-product-e-chatbutton flex-1 flex items-center justify-center h-9 text-xs sm:text-sm font-medium cursor-pointer whitespace-nowrap">
+              class="th-btn-outline searchx-product-e-chatbutton flex-1 flex items-center justify-center h-9 text-xs sm:text-sm font-medium cursor-pointer whitespace-nowrap
+              min-[1200px]:group-data-[list-mode=list]/grid:flex-none
+              min-[1200px]:group-data-[list-mode=list]/grid:w-full
+              lg:max-[1599px]:group-data-[list-mode=grid]/grid:text-xs
+              lg:max-[1599px]:group-data-[list-mode=grid]/grid:px-2
+              lg:max-[1599px]:group-data-[list-mode=grid]/grid:h-8">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
         ${t("chat.chatWithSeller")}
       </button>`;

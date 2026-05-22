@@ -23,7 +23,7 @@ const sideBannerSlides: HeroSideBannerSlide[] = [
     titleKey: "heroBanner.newSuppliersDesc",
     descriptionKey: "heroBanner.newSuppliersText",
     ctaKey: "heroBanner.seeMore",
-    href: "/pages/manufacturers.html",
+    href: "/markalar",
     background: "linear-gradient(135deg, #8cc9f7 0%, #6aa8de 45%, #74b8e9 100%)",
   },
   {
@@ -31,7 +31,7 @@ const sideBannerSlides: HeroSideBannerSlide[] = [
     titleKey: "heroBanner.topPicked",
     descriptionKey: "heroBanner.topPickedText",
     ctaKey: "heroBanner.exploreNow",
-    href: "/pages/top-ranking.html",
+    href: "/cok-satanlar",
     background: "linear-gradient(135deg, #87d4b4 0%, #56b08b 42%, #69be9a 100%)",
   },
   {

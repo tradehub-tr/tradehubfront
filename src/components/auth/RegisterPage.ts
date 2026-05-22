@@ -163,7 +163,7 @@ export function RegisterPage(initialStep: RegisterStep = "account-type"): string
             </p>
             <p x-show="emailExistsError && accountType === 'supplier'" x-cloak class="mt-1 text-sm text-orange-600">
               ${t("auth.register.emailExistsSupplier")}
-              <a href="/pages/auth/login.html" class="underline font-medium">${t("auth.register.loginLink")}</a>
+              <a href="/giris" class="underline font-medium">${t("auth.register.loginLink")}</a>
             </p>
             <p x-show="emailDisabledError" x-cloak class="mt-1 text-sm text-red-500">
               ${t("auth.register.emailDisabledError")}

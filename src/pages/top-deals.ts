@@ -15,6 +15,7 @@ import '../style.css'
 import Alpine from 'alpinejs'
 import { initFlowbite } from 'flowbite'
 import { t } from '../i18n'
+import { getListingUrl } from '../utils/listingUrl'
 
 // Header components
 import { TopBar, initMobileDrawer, SubHeader, MegaMenu, initMegaMenu, initHeaderCart } from '../components/header'
@@ -72,7 +73,7 @@ function cardToTopDealsProduct(card: ProductListingCard): TopDealsProduct {
   return {
     id: card.id || '',
     name: card.name,
-    href: card.href || `/pages/product-detail.html?id=${card.id}`,
+    href: getListingUrl({ id: card.id, href: card.href }),
     price: card.price,
     originalPrice: card.originalPrice,
     imageKind: 'jewelry' as const,

@@ -37,7 +37,7 @@ appEl.innerHTML = `
         </svg>
         <h2 class="text-lg font-bold text-gray-900 mb-2">Giriş Gerekli</h2>
         <p class="text-gray-500 text-sm mb-4">Satıcı paneline erişmek için giriş yapmalısınız.</p>
-        <a href="/pages/auth/login.html" class="inline-block w-full py-2.5 bg-[var(--color-primary-500)] text-white rounded-lg font-semibold text-sm hover:bg-[var(--color-primary-600)] transition-colors">Giriş Yap</a>
+        <a href="/giris" class="inline-block w-full py-2.5 bg-[var(--color-primary-500)] text-white rounded-lg font-semibold text-sm hover:bg-[var(--color-primary-600)] transition-colors">Giriş Yap</a>
       </div>
     </div>
 
@@ -49,7 +49,7 @@ appEl.innerHTML = `
         </svg>
         <h2 class="text-lg font-bold text-gray-900 mb-2">Satıcı Değilsiniz</h2>
         <p class="text-gray-500 text-sm mb-4">Bu sayfaya erişmek için satıcı hesabınız olmalıdır.</p>
-        <a href="/pages/seller/sell.html" class="inline-block w-full py-2.5 bg-[var(--color-primary-500)] text-white rounded-lg font-semibold text-sm hover:bg-[var(--color-primary-600)] transition-colors">Satıcı Ol</a>
+        <a href="/satici-ol" class="inline-block w-full py-2.5 bg-[var(--color-primary-500)] text-white rounded-lg font-semibold text-sm hover:bg-[var(--color-primary-600)] transition-colors">Satıcı Ol</a>
       </div>
     </div>
 
@@ -72,7 +72,7 @@ appEl.innerHTML = `
             </div>
           </div>
         </div>
-        <a :href="'/pages/seller/seller-storefront.html?seller=' + profile.seller_code"
+        <a :href="'/magaza/' + profile.seller_code"
            target="_blank"
            class="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>

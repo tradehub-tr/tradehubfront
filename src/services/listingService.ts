@@ -4,6 +4,7 @@
  */
 
 import { api } from "../utils/api";
+import { getListingUrl } from "../utils/listingUrl";
 import {
   convertPrice,
   formatPrice,
@@ -1099,13 +1100,35 @@ export interface FilterFacets {
 }
 
 /**
- * Get filter facets (country + category counts) for sidebar
+ * Get filter facets (country + category + cert + brand + attribute counts) for sidebar.
+ *
+ * Aktif filtre parametreleri verildiğinde backend tüm filtreleri uygulayıp sayım döndürür
+ * (monotonic narrow — Trendyol/Hepsiburada pattern'i). Filtre eklendikçe diğer
+ * seçeneklerin count'ları azalır; backend henüz aktif filtreleri kabul etmiyorsa
+ * bu parametreler yok sayılır (geriye uyumlu).
  */
-export async function getFilterFacets(query?: string, category?: string): Promise<FilterFacets> {
-  const params = new URLSearchParams();
-  if (query) params.set("query", query);
-  if (category) params.set("category", category);
-  const qs = params.toString();
+export async function getFilterFacets(
+  arg1?: string | Partial<ListingSearchParams>,
+  category?: string
+): Promise<FilterFacets> {
+  // Geriye uyumlu imza: getFilterFacets(query, category) ya da getFilterFacets({...})
+  const opts: Partial<ListingSearchParams> =
+    typeof arg1 === "string" || arg1 === undefined ? { query: arg1, category } : arg1;
+
+  const p = new URLSearchParams();
+  if (opts.query) p.set("query", opts.query);
+  if (opts.category) p.set("category", opts.category);
+  if (opts.min_price !== undefined) p.set("min_price", String(opts.min_price));
+  if (opts.max_price !== undefined) p.set("max_price", String(opts.max_price));
+  if (opts.min_order !== undefined) p.set("min_order", String(opts.min_order));
+  if (opts.verified_supplier) p.set("verified_supplier", "1");
+  if (opts.country) p.set("country", opts.country);
+  if (opts.mgmt_certifications) p.set("mgmt_certifications", opts.mgmt_certifications);
+  if (opts.product_certifications) p.set("product_certifications", opts.product_certifications);
+  if (opts.brands) p.set("brands", opts.brands);
+  if (opts.attrs) p.set("attrs", opts.attrs);
+
+  const qs = p.toString();
   const response = await api<{ message: { data: FilterFacets } }>(
     `/method/tradehub_core.api.listing.get_filter_facets${qs ? "?" + qs : ""}`
   );
@@ -1241,7 +1264,7 @@ function mapListingCard(raw: any): ProductListingCard {
   return {
     id: raw.id || "",
     name: raw.name || "",
-    href: raw.href || `/pages/product-detail.html?id=${raw.id}`,
+    href: getListingUrl({ id: raw.id, slug: raw.slug, href: raw.href }),
     price: priceDisplay,
     moq: raw.moq || "1 adet",
     stats: "",
@@ -1434,6 +1457,8 @@ function mapListingDetail(raw: any): ProductDetail {
 
   return {
     id: raw.id,
+    slug: raw.slug || "",
+    seo: raw.seo || undefined,
     title: raw.title || "",
     category: raw.category || [],
     productCategoryId: raw.productCategoryId || "",

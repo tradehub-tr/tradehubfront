@@ -38,6 +38,7 @@ export {
   setCartDrawerContext,
 } from "./CartDrawer";
 export { MobileProductLayout, initMobileLayout } from "./MobileLayout";
+export { SocialProofBadge } from "./SocialProofBadge";
 export { WriteReviewModal, openWriteReviewModal } from "./WriteReviewModal";
 export { ReportAbuseModal, openReportAbuseModal } from "./ReportAbuseModal";
 export { QAModal, showQAModal, hideQAModal } from "./QAModal";

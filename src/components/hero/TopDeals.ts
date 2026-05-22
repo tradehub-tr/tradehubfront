@@ -10,6 +10,7 @@ import { t } from "../../i18n";
 import { formatStartingPrice } from "../../utils/currency";
 import { searchListings } from "../../services/listingService";
 import { initCurrency } from "../../services/currencyService";
+import { getListingUrl } from "../../utils/listingUrl";
 
 interface TopDealCard {
   name: string;
@@ -161,7 +162,7 @@ export function initTopDeals(): void {
 
       const cards: TopDealCard[] = result.products.slice(0, FIXED_GRID_COUNT).map((p) => ({
         name: p.name,
-        href: p.href || `/pages/product-detail.html?id=${p.id}`,
+        href: getListingUrl({ id: p.id, href: p.href }),
         price: p.price,
         startingPrice: formatStartingPrice(p.price),
         // p.originalPrice is already currency-formatted by mapListingCard
@@ -202,7 +203,7 @@ export function TopDeals(): string {
               ><span data-i18n="topDeals.subtitle">${t("topDeals.subtitle")}</span></p>
             </div>
             <a
-              href="/pages/top-deals.html"
+              href="/firsat"
               class="flex-shrink-0 text-[13px] font-semibold transition-colors duration-150 hover:underline"
               style="color: var(--topdeals-link-color, #111827);"
             ><span data-i18n="common.viewMore">${t("common.viewMore")}</span> &gt;</a>

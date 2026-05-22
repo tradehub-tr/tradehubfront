@@ -777,6 +777,10 @@ export function initFilterSidebar(query?: string, category?: string): void {
                   .join("");
               });
           }
+
+          // Tüm dinamik facet input'ları DOM'a girdi → filter engine restore'u tetikleyebilir.
+          // Eskiden setTimeout(1500ms) hack'i ile yapılıyordu; artık deterministik event.
+          document.dispatchEvent(new CustomEvent("filter-facets-loaded"));
         })
         .catch((err) => {
           console.warn("[FilterSidebar] getFilterFacets failed:", err);
@@ -805,4 +809,55 @@ export function initFilterSidebar(query?: string, category?: string): void {
  */
 export function getDefaultFilterSections(): FilterSection[] {
   return buildDefaultFilterSections();
+}
+
+/**
+ * Sidebar checkbox label'larındaki (xx) count rakamlarını yeni facet verileriyle güncelle.
+ * filterEngine, her sonuç fetch'inden sonra aktif filtrelerle yeni facet'leri çekip
+ * bu fonksiyonu çağırır → kullanıcı bir filtre seçince diğer seçeneklerin sayıları azalır.
+ *
+ * DOM yapısı: <label><input data-filter-section data-filter-value>...<span class="ml-auto">(N)</span></label>
+ * Bulunamayan opsiyonları gizlemez (UX: kullanıcı yine seçimini kaldırabilsin), sadece
+ * mevcut input'ların ml-auto count span'ını günceller.
+ */
+type FacetCountMap = Map<string, number>; // section + "|" + value → count
+
+function buildCountMap(
+  facets: import("../../services/listingService").FilterFacets
+): FacetCountMap {
+  const map: FacetCountMap = new Map();
+  const put = (section: string, value: string, count: number) =>
+    map.set(`${section}|${value}`, count);
+
+  facets.countries?.forEach((c) => put("supplier-country", c.value, c.count));
+  facets.brands?.forEach((b) => put("brands", b.value, b.count));
+  facets.managementCertifications?.forEach((c) => put("mgmt-certifications", c.value, c.count));
+  facets.productCertifications?.forEach((c) => put("product-certifications", c.value, c.count));
+  facets.attributes?.forEach((attr) => {
+    const section = `attr-${attr.code.toLowerCase()}`;
+    attr.options?.forEach((opt) => put(section, String(opt.value), opt.count));
+  });
+  return map;
+}
+
+export function updateFacetCounts(
+  facets: import("../../services/listingService").FilterFacets
+): void {
+  const counts = buildCountMap(facets);
+  // Tüm sidebar checkbox'larını gez (desktop + mobile sidebar her ikisi de DOM'da)
+  document
+    .querySelectorAll<HTMLInputElement>("input[data-filter-section][data-filter-value]")
+    .forEach((input) => {
+      const section = input.dataset.filterSection || "";
+      const value = input.dataset.filterValue || input.value;
+      const key = `${section}|${value}`;
+      if (!counts.has(key)) return;
+      const newCount = counts.get(key) as number;
+      const label = input.closest("label");
+      // Label'ın son span'ı count taşıyor (renderCheckbox: <span class="...ml-auto">({{count}})</span>)
+      const countSpan = label?.querySelector<HTMLSpanElement>("span.ml-auto");
+      if (countSpan) {
+        countSpan.textContent = `(${newCount.toLocaleString()})`;
+      }
+    });
 }

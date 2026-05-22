@@ -47,7 +47,7 @@ function breadcrumbSection(): string {
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
       <nav class="flex text-sm text-gray-500" aria-label="Breadcrumb">
         <ol class="flex items-center gap-1.5">
-          <li><a href="/pages/info/trade-assurance-detail.html" class="hover:text-[#FFC800] transition-colors">Ticari Güvence</a></li>
+          <li><a href="/ticaret-guvencesi/detay" class="hover:text-[#FFC800] transition-colors">Ticari Güvence</a></li>
           <li class="text-gray-400">&gt;</li>
           <li class="text-gray-900 font-medium">Satış sonrası destek</li>
         </ol>

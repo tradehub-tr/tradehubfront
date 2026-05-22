@@ -6,6 +6,7 @@ import { t } from "../../i18n";
 import { formatPrice } from "../../utils/currency";
 import { searchListings } from "../../services/listingService";
 import { initCurrency } from "../../services/currencyService";
+import { getListingUrl } from "../../utils/listingUrl";
 
 interface ProductCard {
   name: string;
@@ -75,10 +76,10 @@ function renderProductCard(card: ProductCard, index: number): string {
       aria-label="${safeName}"
     >
       <!-- Image area -->
-      <div class="product-card__image-area relative">
-        <div class="product-card__image-wrap relative w-full h-full min-w-0 min-h-0 overflow-hidden leading-[0]">
+      <div class="product-card__image-area relative aspect-square w-full overflow-hidden bg-[var(--product-image-bg,#f5f5f5)]">
+        <div class="product-card__image-wrap absolute inset-0 overflow-hidden leading-[0] flex items-center justify-center">
           <img
-            class="product-card__img block w-full max-w-full h-full object-cover origin-center"
+            class="product-card__img block w-full h-full object-contain origin-center"
             src="${card.imageSrc}"
             alt="${safeName}"
             loading="lazy"
@@ -138,7 +139,7 @@ export function initProductGrid(): void {
             .map((p, i) => {
               const card: ProductCard = {
                 name: p.name,
-                href: p.href || `/pages/product-detail.html?id=${p.id}`,
+                href: getListingUrl({ id: p.id, href: p.href }),
                 price: p.price,
                 discountPercent: p.discount ? parseInt(p.discount) : undefined,
                 moqCount: parseInt(p.moq) || 1,

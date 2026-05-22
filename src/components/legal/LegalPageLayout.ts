@@ -29,7 +29,7 @@ export function LegalPageLayout({
     <div class="bg-gray-50 min-h-screen">
       <div class="max-w-[1200px] mx-auto px-4 sm:px-6">
         ${Breadcrumb([
-          { label: t("legal.breadcrumbLegal"), href: "/pages/legal/terms.html" },
+          { label: t("legal.breadcrumbLegal"), href: "/kullanim-kosullari" },
           { label: breadcrumbLabel },
         ])}
       </div>

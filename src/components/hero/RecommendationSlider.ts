@@ -9,6 +9,7 @@ import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import "swiper/swiper-bundle.css";
 import { t } from "../../i18n";
 import { searchListings } from "../../services/listingService";
+import { getListingUrl } from "../../utils/listingUrl";
 import { initCurrency } from "../../services/currencyService";
 import { formatStartingPrice } from "../../utils/currency";
 
@@ -31,12 +32,12 @@ function renderCardImage(card: RecommendationCard): string {
     `;
   }
   return `
-    <div class="relative h-full w-full overflow-hidden rounded-md bg-gray-100" aria-hidden="true">
+    <div class="relative h-full w-full overflow-hidden rounded-md bg-gray-100 flex items-center justify-center" aria-hidden="true">
       <img
         src="${card.imageSrc}"
         alt="${card.title}"
         loading="lazy"
-        class="w-full h-full object-cover transition-transform duration-300 group-hover/card:scale-105 group-focus-visible/card:scale-105"
+        class="w-full h-full object-contain transition-transform duration-300 group-hover/card:scale-105 group-focus-visible/card:scale-105"
       />
     </div>
   `;
@@ -149,7 +150,7 @@ export function initRecommendationSlider(): void {
 
       const cards: RecommendationCard[] = result.products.map((p) => ({
         title: p.name,
-        href: p.href || `/pages/product-detail.html?id=${p.id}`,
+        href: getListingUrl({ id: p.id, href: p.href }),
         imageSrc: p.imageSrc || "",
         price: p.price,
       }));

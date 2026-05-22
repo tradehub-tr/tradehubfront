@@ -1,5 +1,7 @@
 import { t } from "../../i18n";
 import { getBrowsingHistory } from "../../services/browsingHistoryService";
+import { getTotalCount as getFavoriteProductsCount } from "../../stores/favorites";
+import { getSellerFavoritesCount } from "../../stores/sellerFavorites";
 
 export function ManufacturersHero(): string {
   return `
@@ -149,7 +151,7 @@ function renderSourceByCategory(): string {
 function sampleCard(dataVar: string, label: string): string {
   const SKELETON = `<div class="w-full h-full bg-gray-100 animate-pulse rounded"></div>`;
   return `
-    <a :href="${dataVar} ? '/pages/product-detail.html?id=' + ${dataVar}.name : '/pages/products.html'" class="block w-[calc(50%-5.5px)] group">
+    <a :href="${dataVar} ? '/urun/' + ${dataVar}.name : '/pages/products.html'" class="block w-[calc(50%-5.5px)] group">
       <div class="w-full h-[105px] overflow-hidden rounded flex items-center justify-center" style="background-color: var(--mfr-sample-img-bg, #f5f5f5)">
         <template x-if="${dataVar} && ${dataVar}.primary_image">
           <img :src="${dataVar}.primary_image" :alt="${dataVar}.title" class="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300" />
@@ -230,7 +232,7 @@ function renderTopRankingColumn(): string {
 
         <!-- Seller cards -->
         <template x-for="(seller, idx) in sellers.slice(0, 4)" :key="seller.seller_code">
-          <a :href="'/pages/seller/seller-storefront.html?seller=' + seller.seller_code"
+          <a :href="'/magaza/' + seller.seller_code"
              class="block w-[calc(50%-5.5px)] h-[156px] mb-4 group">
             <div class="w-full h-[116px] rounded overflow-hidden flex items-center justify-center bg-gray-50">
               <template x-if="seller.logo">
@@ -254,14 +256,16 @@ function renderTopRankingColumn(): string {
 function renderProfileColumn(): string {
   const history = getBrowsingHistory();
   const thumbs = history.slice(0, 4);
+  const initialFavProducts = getFavoriteProductsCount();
+  const initialFavSellers = getSellerFavoritesCount();
 
   const historyHtml =
     thumbs.length > 0
       ? thumbs
           .map(
             (h) => `
-        <a href="${h.href}" class="aspect-square rounded-md overflow-hidden group" title="${h.title || ""}">
-          <img src="${h.image}" alt="${h.title || ""}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+        <a href="${h.href}" class="block w-full h-14 rounded-md overflow-hidden group bg-gray-50 relative" title="${h.title || ""}">
+          <img src="${h.image}" alt="${h.title || ""}" class="absolute inset-0 w-full h-full object-contain group-hover:scale-110 transition-transform duration-300">
         </a>`
           )
           .join("")
@@ -275,7 +279,15 @@ function renderProfileColumn(): string {
         x-data="{
           loggedIn: false,
           userName: 'Guest',
+          productCount: ${initialFavProducts},
+          sellerCount: ${initialFavSellers},
           async init() {
+            window.addEventListener('favorites-changed', (e) => {
+              this.productCount = e.detail?.items?.length ?? 0;
+            });
+            window.addEventListener('seller-favorites-changed', (e) => {
+              this.sellerCount = e.detail?.items?.length ?? 0;
+            });
             const api = (window.API_BASE || '/api') + '/method/tradehub_core.api.v1.auth.get_session_user';
             try {
               const res = await fetch(api, { credentials: 'include' }).then(r => r.json());
@@ -310,17 +322,17 @@ function renderProfileColumn(): string {
 
         <!-- Logged-in: favorites stats -->
         <template x-if="loggedIn">
-          <div class="flex items-center justify-center rounded-md p-3 mt-4 mb-4 bg-gray-50 border border-transparent">
+          <div class="flex items-center justify-center rounded-md p-2 mt-2 mb-2 bg-gray-50 border border-transparent">
             <div class="flex-1 text-center border-r border-gray-200">
               <div class="flex items-center justify-center gap-1.5">
-                <span class="text-xl font-bold">0</span>
-                <span class="text-xs text-left leading-tight text-gray-600">Favorite<br/>products</span>
+                <span class="text-lg font-bold" x-text="productCount">0</span>
+                <span class="text-xs text-left leading-tight text-gray-600 whitespace-pre-line">${t("mfr.favoriteProducts")}</span>
               </div>
             </div>
             <div class="flex-1 text-center">
               <div class="flex items-center justify-center gap-1.5 ml-2">
-                <span class="text-xl font-bold">0</span>
-                <span class="text-xs text-left leading-tight text-gray-600">Favorite<br/>suppliers</span>
+                <span class="text-lg font-bold" x-text="sellerCount">0</span>
+                <span class="text-xs text-left leading-tight text-gray-600 whitespace-pre-line">${t("mfr.favoriteSuppliers")}</span>
               </div>
             </div>
           </div>
@@ -328,9 +340,9 @@ function renderProfileColumn(): string {
 
         <!-- Logged-out: sign in / register buttons -->
         <template x-if="!loggedIn">
-          <div class="flex justify-between mt-6 mb-4">
-            <a href="/pages/auth/login.html" class="w-[calc(50%-4px)] flex items-center justify-center rounded-full h-10 text-xs font-bold transition-colors" style="background-color: var(--mfr-profile-btn-bg, #cc9900); color: var(--mfr-profile-btn-text, #ffffff)">${t("auth.login.submit")}</a>
-            <a href="/pages/auth/register.html" class="w-[calc(50%-4px)] flex items-center justify-center rounded-full h-10 text-xs font-bold transition-colors" style="background-color: var(--mfr-profile-btn-bg, #cc9900); color: var(--mfr-profile-btn-text, #ffffff)">${t("auth.register.freeSignUp")}</a>
+          <div class="flex gap-2 mt-6 mb-4">
+            <a href="/giris" class="th-btn flex-1 h-10 text-xs font-bold no-underline">${t("auth.login.submit")}</a>
+            <a href="/kayit" class="th-btn-outline flex-1 h-10 text-xs font-bold no-underline">${t("auth.register.freeSignUp")}</a>
           </div>
         </template>
 

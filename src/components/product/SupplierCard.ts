@@ -5,6 +5,7 @@
 
 import { getCurrentProduct } from "../../alpine/product";
 import { t } from "../../i18n";
+import { getSellerUrl } from "../../utils/sellerUrl";
 
 function verifiedBadge(): string {
   return `
@@ -107,7 +108,7 @@ export function SupplierCard(): string {
           </svg>
           ${t("product.contactUs")}
         </button>
-        <a href="/pages/seller/seller-storefront.html?seller=${encodeURIComponent(s.id)}" class="text-center text-xs font-medium hover:underline" style="color: var(--pd-breadcrumb-link-color, #cc9900);">
+        <a href="${getSellerUrl({ id: s.id })}" class="text-center text-xs font-medium hover:underline" style="color: var(--pd-breadcrumb-link-color, #cc9900);">
           ${t("product.viewCompany")} →
         </a>
       </div>

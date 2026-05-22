@@ -15,6 +15,10 @@ import { FooterLinks } from '../components/footer'
 
 // Browsing history
 import { saveToBrowsingHistory } from '../services/browsingHistoryService'
+import { saveRecentProduct } from '../services/recentHistoryService'
+
+// Social proof — view tracking
+import { recordListingView } from '../services/socialProofService'
 
 // Floating components
 import { FloatingPanel } from '../components/floating'
@@ -59,13 +63,24 @@ import { initCurrency } from '../services/currencyService'
 import { initAnimatedPlaceholder } from '../utils/animatedPlaceholder'
 import { t } from '../i18n'
 import { isLoggedIn } from '../utils/auth'
+import { getListingUrl } from '../utils/listingUrl'
+import { applyServerSeo } from '../seo/setPageMeta'
 
 // Favorites
 import { openFavoritesDropdown, updateFavoriteButtons } from '../components/favorites/FavoritesDropdown'
 
-// Read listing ID from URL
-const urlParams = new URLSearchParams(window.location.search);
-const listingId = urlParams.get('id');
+// Read listing ID from URL — pretty URL (/urun/<slug>) öncelikli
+// Backend get_listing_detail hem listing.name hem listing_code hem slug ile
+// arama yapar (Faz 4d).
+function _resolveListingIdFromUrl(): string | null {
+  // Pretty URL: /urun/<slug>
+  const prettyMatch = window.location.pathname.match(/^\/(?:en\/)?urun\/([^/]+)/);
+  if (prettyMatch) return prettyMatch[1];
+  // Legacy URL: /pages/product-detail.html?id=<id>
+  const params = new URLSearchParams(window.location.search);
+  return params.get('id');
+}
+const listingId = _resolveListingIdFromUrl();
 
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.classList.add('relative');
@@ -108,6 +123,19 @@ async function renderProductPage() {
 
   const product = getCurrentProduct();
 
+  // Faz 4d: Legacy URL ile (?id=LST-XX) gelen kullanıcıyı pretty URL'e taşı.
+  // Backend page_resolver SEO meta'yı sadece /urun/<slug> rotasında inject
+  // ediyor; eski URL'i ziyaret edenler yine bu sayfayı görsün ama URL
+  // çubuğu canonical formata replace edilsin (back history kirletmeden).
+  if (product.id && product.slug) {
+    const slug = product.slug;
+    const currentPath = window.location.pathname;
+    if (currentPath !== `/urun/${slug}` && currentPath.includes('product-detail.html')) {
+      const newUrl = `/urun/${slug}${window.location.hash || ''}`;
+      window.history.replaceState({}, '', newUrl);
+    }
+  }
+
   // Save to browsing history
   if (product.id && product.images.length > 0) {
     const priceRange = product.priceMin && product.priceMax
@@ -119,11 +147,17 @@ async function renderProductPage() {
       id: product.id,
       image: product.images[0].src,
       title: product.title,
-      href: `/pages/product-detail.html?id=${product.id}`,
+      href: getListingUrl({ id: product.id }),
       price: product.priceMin ?? 0,
       currency: product.baseCurrency === 'USD' ? '$' : product.baseCurrency,
       minOrder: product.moq ? `Min. order: ${product.moq} ${product.unit || 'Pcs'}` : '',
       priceRange: priceRange ? `$${priceRange}` : '',
+    });
+    // Search dropdown "son gezdiklerin" listesi için
+    saveRecentProduct({
+      id: product.id,
+      name: product.title,
+      image: product.images[0]?.src,
     });
   }
 
@@ -141,7 +175,7 @@ async function renderProductPage() {
             <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
             <h2 class="text-xl font-semibold text-gray-600 mb-2">Ürün bulunamadı</h2>
             <p class="text-gray-400 mb-4">Aradığınız ürün mevcut değil veya kaldırılmış olabilir.</p>
-            <a href="/pages/products.html" class="text-primary hover:underline font-medium">Ürünlere gözat</a>
+            <a href="/urunler" class="text-primary hover:underline font-medium">Ürünlere gözat</a>
           </div>
         </div>
       </main>
@@ -162,8 +196,16 @@ async function renderProductPage() {
     ...(i < arr.length - 1 ? { href: `products.html?q=${encodeURIComponent(label)}` } : {}),
   }));
 
-  // Update page title
-  document.title = product.title || 'iSTOC';
+  // Faz 4d: admin'in girdiği SEO meta'larını (title, description, OG,
+  // canonical, hreflang, robots) DOM head'ine uygula. Backend zaten
+  // server-side render ediyor ama Vite client storefront'u yeniden
+  // render ettiğinden bu adım canonical formatı garanti eder.
+  if (product.seo) {
+    applyServerSeo(product.seo);
+  } else {
+    // Backend seo payload döndürmediyse en azından title'ı düzgün kur.
+    document.title = product.title || 'iSTOC';
+  }
 
   // Render full product page
   appEl.innerHTML = `
@@ -312,6 +354,11 @@ async function renderProductPage() {
 
   // Start Alpine LAST
   startAlpine();
+
+  // View tracking — idle'da fire-and-forget POST
+  if (product.id) {
+    recordListingView(product.id);
+  }
 }
 
 // Execute render

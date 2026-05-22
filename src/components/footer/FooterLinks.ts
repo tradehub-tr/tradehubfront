@@ -43,18 +43,18 @@ const footerColumnsI18n: FooterColumnI18n[] = [
   {
     titleKey: "footer.getSupport",
     links: [
-      { labelKey: "footer.helpCenter", href: "/pages/help/help-center.html" },
+      { labelKey: "footer.helpCenter", href: "/yardim-merkezi" },
       { labelKey: "footer.checkOrder", href: "/pages/dashboard/orders.html" },
-      { labelKey: "footer.refunds", href: "/pages/legal/returns.html" },
+      { labelKey: "footer.refunds", href: "/iade-kosullari" },
       { labelKey: "footer.reportAbuse", href: "/pages/help/help-ticket-new.html" },
     ],
   },
   {
     titleKey: "footer.paymentsProtections",
     links: [
-      { labelKey: "footer.safePayments", href: "/pages/info/payments.html" },
-      { labelKey: "footer.moneyBack", href: "/pages/info/refund-policy.html" },
-      { labelKey: "footer.onTimeShipping", href: "/pages/info/shipping-protection.html" },
+      { labelKey: "footer.safePayments", href: "/odeme-secenekleri" },
+      { labelKey: "footer.moneyBack", href: "/iade-politikasi" },
+      { labelKey: "footer.onTimeShipping", href: "/kargo-koruma" },
       { labelKey: "footer.afterSales", href: "/pages/info/after-sales.html" },
       { labelKey: "footer.productMonitoring", href: "/pages/info/monitoring.html" },
     ],
@@ -71,10 +71,10 @@ const footerColumnsI18n: FooterColumnI18n[] = [
   {
     titleKey: "footer.sellOnIstoc",
     links: [
-      { labelKey: "footer.startSelling", href: "/pages/seller/sell.html" },
+      { labelKey: "footer.startSelling", href: "/satici-ol" },
       { labelKey: "footer.sellerCentral", href: "/panel/" },
       { labelKey: "footer.verifiedSupplier", href: "/pages/seller/verification.html" },
-      { labelKey: "footer.partnerships", href: "/pages/info/partnerships.html" },
+      { labelKey: "footer.partnerships", href: "/ortakliklar" },
       // TODO: Mobil uygulama hazır olduğunda aktif edilecek
       // { labelKey: 'footer.downloadApp', href: '/seller/app' },
     ],
@@ -82,9 +82,9 @@ const footerColumnsI18n: FooterColumnI18n[] = [
   {
     titleKey: "footer.getToKnow",
     links: [
-      { labelKey: "footer.corporateResponsibility", href: "/pages/info/csr.html" },
-      { labelKey: "footer.newsCenter", href: "/pages/info/news.html" },
-      { labelKey: "footer.careers", href: "/pages/info/careers.html" },
+      { labelKey: "footer.corporateResponsibility", href: "/kurumsal-sorumluluk" },
+      { labelKey: "footer.newsCenter", href: "/haberler" },
+      { labelKey: "footer.careers", href: "/kariyer" },
     ],
   },
 ];

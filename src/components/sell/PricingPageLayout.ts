@@ -157,7 +157,7 @@ export function PricingPageLayout(): string {
                   )
                   .join("")}
               </ul>
-              <a href="/pages/seller/sell.html" class="block text-center ${plan.recommended ? "th-btn" : "th-btn-outline"}">
+              <a href="/satici-ol" class="block text-center ${plan.recommended ? "th-btn" : "th-btn-outline"}">
                 ${plan.isFree ? t("sellPage.pricing.ctaFree") : t("sellPage.pricing.ctaSelect")}
               </a>
             </div>
@@ -198,7 +198,7 @@ export function PricingPageLayout(): string {
 
         <!-- CTA -->
         <div class="text-center mt-14">
-          <a href="/pages/seller/sell.html" class="th-btn inline-block">${t("sellPage.pricing.ctaBottom")}</a>
+          <a href="/satici-ol" class="th-btn inline-block">${t("sellPage.pricing.ctaBottom")}</a>
         </div>
       </div>
     </div>

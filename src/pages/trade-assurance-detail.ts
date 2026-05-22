@@ -178,7 +178,7 @@ function WhatsCovered(): string {
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
           <!-- 1: Güvenli Ödeme -->
-          <a href="/pages/info/payments.html" class="block bg-white rounded-md p-6 pt-7 hover:shadow-lg transition-shadow">
+          <a href="/odeme-secenekleri" class="block bg-white rounded-md p-6 pt-7 hover:shadow-lg transition-shadow">
             <div class="w-12 h-12 rounded-full flex items-center justify-center mb-5" style="background:#FFF3C4">
               <svg class="w-6 h-6 text-amber-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
             </div>
@@ -187,7 +187,7 @@ function WhatsCovered(): string {
           </a>
 
           <!-- 2: Para İade Garantisi -->
-          <a href="/pages/info/refund-policy.html" class="block bg-white rounded-md p-6 pt-7 hover:shadow-lg transition-shadow">
+          <a href="/iade-politikasi" class="block bg-white rounded-md p-6 pt-7 hover:shadow-lg transition-shadow">
             <div class="w-12 h-12 rounded-full flex items-center justify-center mb-5" style="background:#FFF3C4">
               <svg class="w-6 h-6 text-amber-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             </div>
@@ -306,7 +306,7 @@ function ShippingSection(): string {
           Siparişiniz kargoya verildiğinde takip numarası ve kargo firması bilgisi otomatik olarak sipariş detaylarınıza eklenir. Kargoya verildiği andan teslim alınana kadar süreci platform üzerinden izleyebilirsiniz.
         </p>
         <div class="mb-10">
-          <a href="/pages/info/shipping-logistics.html" class="inline-flex items-center justify-center border-2 border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white font-semibold rounded-full px-6 py-3 text-sm sm:text-base transition-colors">
+          <a href="/kargo-lojistik" class="inline-flex items-center justify-center border-2 border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white font-semibold rounded-full px-6 py-3 text-sm sm:text-base transition-colors">
             Nasıl çalıştığını öğrenin
           </a>
         </div>

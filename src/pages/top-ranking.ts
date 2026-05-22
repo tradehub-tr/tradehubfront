@@ -8,6 +8,7 @@ import '../style.css'
 import Alpine from 'alpinejs'
 import { initFlowbite } from 'flowbite'
 import { t } from '../i18n'
+import { getListingUrl } from '../utils/listingUrl'
 
 // Header components
 import { TopBar, initMobileDrawer, SubHeader, MegaMenu, initMegaMenu, initHeaderCart } from '../components/header'
@@ -83,7 +84,7 @@ function toRankingGroup(g: TopRankingGroup): RankingCategoryGroup {
       id: p.id || `rp-${g.id}-${idx}`,
       name: p.name,
       // Link each ranked thumbnail directly to the product detail page.
-      href: p.href || `/pages/product-detail.html?id=${p.id}`,
+      href: getListingUrl({ id: p.id, href: p.href }),
       price: p.price,
       imageSrc: p.imageSrc || '',
       moq: p.moq || '1',

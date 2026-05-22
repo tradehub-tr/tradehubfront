@@ -7,6 +7,7 @@
 
 import '../style.css'
 import { t } from '../i18n'
+import { getSellerUrl } from '../utils/sellerUrl'
 
 import {
   TopBar,
@@ -25,6 +26,7 @@ import { startAlpine } from '../alpine'
 import { Breadcrumb } from '../components/shared/Breadcrumb'
 import { ProductListingGrid } from '../components/products/ProductListingGrid'
 import { callMethod } from '../utils/api'
+import { saveRecentBrand } from '../services/recentHistoryService'
 import type { ProductListingCard } from '../types/productListing'
 
 interface BrandOwnerInfo {
@@ -130,7 +132,7 @@ function renderHero(brand: BrandDetail): string {
     : ''
 
   const ownerHtml = brand.owner
-    ? `<a href="/pages/seller/seller-storefront.html?id=${encodeURIComponent(brand.owner.code)}"
+    ? `<a href="${getSellerUrl({ id: brand.owner.code })}"
            class="inline-flex items-center gap-2 mt-3 px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/20 backdrop-blur border border-white/20 text-xs no-underline"
            style="color:#fff">
          ${brand.owner.logo ? `<img src="${brand.owner.logo}" alt="${escapeHtml(brand.owner.name)}" class="w-4 h-4 object-contain rounded" />` : ''}
@@ -309,7 +311,7 @@ async function main() {
       <div class="min-h-screen flex items-center justify-center">
         <div class="text-center text-gray-500">
           <p class="text-lg">Marka bulunamadı</p>
-          <a href="/pages/products.html" class="text-primary-600 hover:underline mt-2 inline-block">Tüm ürünlere dön</a>
+          <a href="/urunler" class="text-primary-600 hover:underline mt-2 inline-block">Tüm ürünlere dön</a>
         </div>
       </div>
     `
@@ -328,7 +330,7 @@ async function main() {
       <div class="min-h-screen flex items-center justify-center">
         <div class="text-center text-gray-500">
           <p class="text-lg">Marka bulunamadı veya onaylanmamış</p>
-          <a href="/pages/products.html" class="text-primary-600 hover:underline mt-2 inline-block">Tüm ürünlere dön</a>
+          <a href="/urunler" class="text-primary-600 hover:underline mt-2 inline-block">Tüm ürünlere dön</a>
         </div>
       </div>
     `
@@ -340,6 +342,14 @@ async function main() {
   const listings = (listingsRaw || []) as ProductListingCard[]
 
   document.title = `${brand.name} - iSTOC TradeHub`
+
+  // Search dropdown "son gezdiklerin" listesi için
+  saveRecentBrand({
+    code: brand.code || slug,
+    name: brand.name,
+    slug: brand.slug || slug,
+    logo: brand.logo || undefined,
+  })
 
   const appEl = document.querySelector<HTMLDivElement>('#app')!
   appEl.innerHTML = `

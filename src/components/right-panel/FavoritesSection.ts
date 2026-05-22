@@ -5,6 +5,7 @@
  */
 
 import type { FavoriteItem } from "../../stores/favorites";
+import { getListingUrl } from "../../utils/listingUrl";
 import { SectionCard } from "../shared/SectionCard";
 import { SectionHeader } from "../shared/SectionHeader";
 import { EmptyState } from "../shared/EmptyState";
@@ -42,7 +43,7 @@ export function FavoritesSection(items: FavoriteItem[] = []): string {
         price: item.priceRange,
         currency: "",
         minOrder: item.minOrder,
-        href: `/pages/product-detail.html?id=${encodeURIComponent(item.id)}`,
+        href: getListingUrl({ id: item.id }),
       })
     )
     .join("");

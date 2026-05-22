@@ -143,6 +143,12 @@ const en = {
       rfq: "Request for Quotation",
       topRanking: "Top Ranking",
       fastCustomization: "Fast Customization",
+      groupProducts: "Products",
+      groupCategories: "Categories",
+      groupBrands: "Brands",
+      groupSellers: "Sellers",
+      noResults: "No results found",
+      seeAllResults: "see all results",
     },
 
     // ============================================================
@@ -972,8 +978,8 @@ const en = {
       sortMinOrder: "Min. Order",
       sortSupplierRating: "Supplier Rating",
       sortByLabel: "Sort by:",
-      showingResults: "Showing {{count}}",
-      resultsFor: "from global suppliers for",
+      resultsForProducts: "category",
+      resultsForManufacturers: "global suppliers",
       viewingLead: "Viewing:",
       unitFound: "products found",
       unitFoundManufacturer: "manufacturers found",
@@ -1602,7 +1608,7 @@ const en = {
           "<p>Estimated delivery times are indicated on the product page and are for informational purposes. Actual delivery times may vary depending on logistics conditions.</p><p>The shipping company is responsible for damages that may occur during the shipping process. It is recommended to inspect the package upon delivery.</p><p>For international shipments, customs duties and additional charges are the responsibility of the Buyer.</p>",
         section7Title: "7. Returns and Right of Withdrawal",
         section7Content:
-          '<p>Return and withdrawal rights are subject to the consumer/commercial legislation of the country where the seller is established and to the seller\'s own return policy. Each seller publishes the applicable return terms on the product page and in their store profile.</p><p>istoc acts as an intermediary service provider in the commercial relationship between buyer and seller and does not set return conditions on behalf of the parties. The Platform only provides the process infrastructure for forwarding return requests and resolving disputes. For the detailed process, please review our <a href="/pages/legal/returns.html" class="text-primary-500 hover:underline">Return Policy</a> page.</p>',
+          '<p>Return and withdrawal rights are subject to the consumer/commercial legislation of the country where the seller is established and to the seller\'s own return policy. Each seller publishes the applicable return terms on the product page and in their store profile.</p><p>istoc acts as an intermediary service provider in the commercial relationship between buyer and seller and does not set return conditions on behalf of the parties. The Platform only provides the process infrastructure for forwarding return requests and resolving disputes. For the detailed process, please review our <a href="/iade-kosullari" class="text-primary-500 hover:underline">Return Policy</a> page.</p>',
         section8Title: "8. Intellectual Property Rights",
         section8Content:
           "<p>All content, design, logos, software and databases on the Platform are the intellectual property of Thoptan Ltd. (operator of the istoc brand) or its licensors.</p><p>Users may not copy, reproduce, distribute or use Platform content for commercial purposes. Responsibility for product images and descriptions uploaded by Sellers belongs to the respective Seller.</p>",
@@ -1697,7 +1703,7 @@ const en = {
         breadcrumbLabel: "Legal Notice",
         section1Title: "1. Company Information",
         section1Content:
-          "<p><strong>Operator (Legal Entity):</strong> Thoptan Ltd.</p><p><strong>Jurisdiction:</strong> England and Wales (United Kingdom)</p><p><strong>Brand:</strong> istoc (pronounced \"aystock\")</p><p><strong>Email:</strong> info@istoc.com</p><p class=\"text-sm text-gray-500 mt-2\"><em>Companies House registration number, registered address and Turkey representative information will be updated on this page as they become available.</em></p>",
+          '<p><strong>Operator (Legal Entity):</strong> Thoptan Ltd.</p><p><strong>Jurisdiction:</strong> England and Wales (United Kingdom)</p><p><strong>Brand:</strong> istoc (pronounced "aystock")</p><p><strong>Email:</strong> info@istoc.com</p><p class="text-sm text-gray-500 mt-2"><em>Companies House registration number, registered address and Turkey representative information will be updated on this page as they become available.</em></p>',
         section2Title: "2. About the Platform",
         section2Content:
           "<p>istoc, operated by Thoptan Ltd. (United Kingdom), is a global electronic commerce platform established to facilitate business-to-business (B2B) trade. The Platform acts as an intermediary service provider in the commercial relationship between seller and buyer.</p><p>Responsibility for products and services offered on the Platform belongs to the respective sellers.</p>",
@@ -2176,7 +2182,7 @@ const en = {
       ariaLabel: "Cookie consent notification",
       title: "We Use Cookies",
       description:
-        'We use cookies to provide you with the best experience on our website. Learn more about our <a href="/pages/legal/cookies.html" class="underline text-primary-600 hover:text-primary-700">Cookie Policy</a>.',
+        'We use cookies to provide you with the best experience on our website. Learn more about our <a href="/cerezler" class="underline text-primary-600 hover:text-primary-700">Cookie Policy</a>.',
       rejectAll: "Reject All",
       managePreferences: "Manage Preferences",
       acceptAll: "Accept All",
@@ -3016,6 +3022,18 @@ const en = {
     },
 
     // ============================================================
+    // SOCIAL PROOF - PRODUCT CARD BADGES
+    // ============================================================
+    socialProof: {
+      sales: "{{value}} units sold in the last {{days}} days",
+      favorites: "{{value}} businesses favorited this",
+      cart_now: "{{value}} buyers have this in cart",
+      views_24h: "{{value}} views in the last 24 hours",
+      distinct_buyers: "{{value}} businesses purchased in the last {{days}} days",
+      seller_orders: "{{value}} completed orders from this seller",
+    },
+
+    // ============================================================
     // HERO - MOBILE CATEGORY BAR
     // ============================================================
     mobileCategory: {
@@ -3046,6 +3064,8 @@ const en = {
       history: "History",
       viewMore: "View more",
       verifiedManufacturers: "Verified manufacturers",
+      favoriteProducts: "Favorite\nproducts",
+      favoriteSuppliers: "Favorite\nsuppliers",
 
       // Main categories
       cat: {
@@ -3527,7 +3547,8 @@ const en = {
       startChat: "Start Chat",
       phone: "Phone",
       phoneCall: "Call",
-      phoneDescription: "Phone support is currently unavailable — please reach us via Email or Live Support.",
+      phoneDescription:
+        "Phone support is currently unavailable — please reach us via Email or Live Support.",
       emailContact: "Email",
       emailSend: "Send Email",
       chatbot: "Chatbot",
@@ -4049,7 +4070,8 @@ const en = {
     about: {
       heroTitle: "Global",
       heroHighlight: "B2B Trade Platform",
-      heroSubtitle: "Bringing sellers and buyers from around the world together for secure, transparent B2B trade.",
+      heroSubtitle:
+        "Bringing sellers and buyers from around the world together for secure, transparent B2B trade.",
       storyTitle: "Our Story",
       storyP1:
         'istoc (pronounced "aystock") is a global B2B trade brand operated by Thoptan Ltd. (United Kingdom). Our goal is simple: to bring together manufacturers, wholesalers, and retailers from every corner of the world on a single digital platform.',
@@ -5409,7 +5431,8 @@ const en = {
       benefit3Desc:
         "Integrated processes with international shipping partners. Transparent tracking for cross-border deliveries.",
       benefit4Title: "Detailed Analytics",
-      benefit4Desc: "Sales, visitor and conversion analytics. Data-driven insights for sales decisions.",
+      benefit4Desc:
+        "Sales, visitor and conversion analytics. Data-driven insights for sales decisions.",
 
       // How it works
       howItWorksTitle: "How It Works?",

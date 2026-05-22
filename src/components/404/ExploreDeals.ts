@@ -9,6 +9,7 @@ import { Navigation } from "swiper/modules";
 import "swiper/swiper-bundle.css";
 import { searchListings } from "../../services/listingService";
 import { initCurrency } from "../../services/currencyService";
+import { getListingUrl } from "../../utils/listingUrl";
 import type { ProductListingCard } from "../../types/productListing";
 
 /* ── Types ── */
@@ -82,7 +83,7 @@ function renderNavArrows(index: number): string {
 function mapToExploreProduct(p: ProductListingCard): ExploreProduct {
   return {
     name: p.name,
-    href: p.href || `/pages/product-detail.html?id=${p.id}`,
+    href: getListingUrl({ id: p.id, href: p.href }),
     price: p.price,
     moq: p.moq || "1 adet",
     imageSrc: p.imageSrc || "",

@@ -9,13 +9,13 @@ import { t } from "../../i18n";
 import { formatCurrency, getSelectedCurrency } from "../../services/currencyService";
 import type { PriceTier, ProductVariant, SkuMatrixEntry } from "../../types/product";
 import { openShippingModal, openCartDrawer } from "./CartDrawer";
+import { SocialProofBadge } from "./SocialProofBadge";
 
 function renderPriceTiers(tiers: PriceTier[]): string {
   // When a campaign is active the backend sets each tier's originalPrice
-  // (pre-discount). We show it as a strikethrough next to the deal price.
+  // (pre-discount). We show it stacked above the deal price.
   // The qty label is fully localised via product.moqSingle / product.moqRange
-  // so each locale controls its own abbreviation + unit (TR: "MSA: 1 adet",
-  // EN: "MSQ: 1 piece").
+  // so each locale controls its own unit (TR: "1 adet", EN: "1 piece").
   return `
     <div id="pd-price-tiers" class="grid grid-cols-3 gap-x-4 gap-y-3 mb-4">
       ${tiers
@@ -26,12 +26,13 @@ function renderPriceTiers(tiers: PriceTier[]): string {
           const hasDiscount =
             typeof tier.originalPrice === "number" && tier.originalPrice > tier.price;
           const strikethrough = hasDiscount
-            ? `<span class="pd-price-tier-original" style="text-decoration: line-through; color: var(--color-text-tertiary, #9ca3af); font-size: 12px; margin-right: 6px;">${formatCurrency(tier.originalPrice!, getSelectedCurrency())}</span>`
+            ? `<span class="pd-price-tier-original block line-through text-[13px] text-[var(--color-text-tertiary,#9ca3af)] leading-tight mb-0.5">${formatCurrency(tier.originalPrice!, getSelectedCurrency())}</span>`
             : "";
           return `
           <div class="pd-price-tier flex flex-col p-0 cursor-default min-w-0 ${i === 0 ? "active" : ""}" data-tier-index="${i}">
-            <span class="pd-price-tier-qty text-[13px] text-[var(--color-text-muted,#666)] mb-1">${qtyLabel}</span>
-            <span class="pd-price-tier-price shrink-0 flex items-baseline gap-1 text-[22px] font-bold text-[var(--color-text-heading,#111827)] leading-[1.2] [.pd-price-tier.active_&]:text-[#cc0000]">${strikethrough}${formatCurrency(tier.price, getSelectedCurrency())}</span>
+            <span class="pd-price-tier-qty text-[15px] text-[var(--color-text-muted,#666)] mb-1">${qtyLabel}</span>
+            ${strikethrough}
+            <span class="pd-price-tier-price shrink-0 text-[22px] font-bold text-[var(--color-text-heading,#111827)] leading-[1.2] [.pd-price-tier.active_&]:text-[#cc0000]">${formatCurrency(tier.price, getSelectedCurrency())}</span>
           </div>
         `;
         })
@@ -231,8 +232,26 @@ export function ProductInfo(): string {
           </div>
         </div>
 
-        <!-- Sprint 2.6: KYB Gate uyarısı fiyat yerine taşındı (yukarı bloğa).
-             Bu eski konumda artık banner yok — CTA butonları direkt görünür. -->
+        <!-- Social Proof Badge — fiyat/stok ile CTA arası -->
+        ${SocialProofBadge({
+          listingId: p.id,
+          supplierId: p.supplier?.id ?? "",
+        })}
+
+        ${
+          mockProduct.sellerKybVerified === false
+            ? `
+        <!-- KYB Gate Uyarı Banner — Sepete Ekle butonunun ÜSTÜNDE, flex container DIŞINDA -->
+        <div class="pd-kyb-banner flex items-start gap-2.5 mx-5 mt-4 px-3.5 py-3 bg-[#fff7ed] border border-[#fed7aa] rounded-lg" role="alert">
+          <svg class="pd-kyb-banner-icon shrink-0 mt-0.5" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c2410c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <div class="pd-kyb-banner-text text-xs leading-[1.5] text-[#9a3412]">
+            <div class="pd-kyb-banner-title font-semibold mb-0.5">${t("common.kybGateBannerTitle")}</div>
+            <div class="pd-kyb-banner-body text-[#9a3412]">${t("common.kybGateBannerBody")}</div>
+          </div>
+        </div>
+        `
+            : ""
+        }
 
         <!-- CTA Buttons (Sepete Ekle + Sohbet et — 50/50 grid) -->
         <div id="pd-cta-buttons" class="grid grid-cols-2 gap-3 px-5 py-4 border-t border-b border-[var(--color-border-default,#e5e5e5)] bg-[var(--color-surface,#fff)] [.pd-sticky_&]:sticky [.pd-sticky_&]:-bottom-[22px] [.pd-sticky_&]:z-[2] [.pd-sticky_&]:bg-[var(--color-surface,#fff)] [.pd-sticky_&]:border-b-0 [.pd-sticky_&]:mx-[-20px] [.pd-sticky_&]:-mb-[20px] [.pd-sticky_&]:px-5 [.pd-sticky_&]:py-4 [.pd-sticky_&]:pb-5 [.pd-sticky_&]:shadow-[0_-8px_18px_-14px_rgba(17,24,39,0.35)]">

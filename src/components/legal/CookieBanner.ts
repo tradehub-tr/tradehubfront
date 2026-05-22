@@ -49,7 +49,7 @@ export function CookieBanner(): string {
                 data-i18n="cookieBanner.rejectAll"
               >${t("cookieBanner.rejectAll")}</button>
               <a
-                href="/pages/legal/cookies.html"
+                href="/cerezler"
                 class="th-btn-outline px-4 py-2 text-sm font-medium cursor-pointer text-center whitespace-nowrap"
                 data-i18n="cookieBanner.managePreferences"
               >${t("cookieBanner.managePreferences")}</a>

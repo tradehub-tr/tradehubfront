@@ -47,6 +47,7 @@ import { findCategoryBySlug, findCategoryById, onCategoriesLoaded } from '../ser
 // Utilities
 import { initAnimatedPlaceholder } from '../utils/animatedPlaceholder'
 import { pushRecentCategory } from '../utils/recentCategories'
+import { saveRecentCategory } from '../services/recentHistoryService'
 
 /* ── Helpers ── */
 
@@ -84,8 +85,10 @@ if (categoryParam) {
     const cat = findCategoryBySlug(categoryParam) || findCategoryById(categoryParam);
     if (cat) {
       pushRecentCategory({ slug: cat.slug, name: cat.name, image: cat.image });
+      saveRecentCategory({ slug: cat.slug, name: cat.name });
     } else {
       pushRecentCategory({ slug: categoryParam, name: categoryParam });
+      saveRecentCategory({ slug: categoryParam, name: categoryParam });
     }
   });
 }
