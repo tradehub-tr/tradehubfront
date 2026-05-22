@@ -1,3 +1,17 @@
+## [v1.1.9-beta.9] - 2026-05-22 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(routing): Türkçe pretty URL'lere dist HTML mapping katmanı eklendi (@ahmeetseker)
+  - staticPageUrl.ts'e STATIC_PAGE_HTML_MAP ve getStaticPageHtmlPath() eklendi
+  - Vite dev plugin (staticPageRewritePlugin) /ureticiler gibi path'leri pages/manufacturers.html'e rewrite eder
+  - nginx.conf.template'e `map $uri $static_page_html` bloğu eklendi (prod aynı işi yapar)
+  - Slug'lar yenilendi: /markalar → /ureticiler, /firsat → /firsatlar (MegaMenu, TopBar, HeroSideBannerSlider, TopDeals, SubHeader)
+  - Seller storefront `/magaza/<code>` path'inden seller_code parse eder, nginx internal rewrite sonrası query görünmediği için fallback olarak
+  - StoreHeader/CompanyProfile "Mağazayı ziyaret et" linkleri sellerCode state'ine bağlandı
+
+---
 ## [v1.1.9-beta.8] - 2026-05-22 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
