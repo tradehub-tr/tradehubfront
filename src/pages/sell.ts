@@ -12,8 +12,7 @@ import { FloatingPanel } from '../components/floating'
 import { startAlpine } from '../alpine'
 import { SellPageLayout } from '../components/sell'
 import { t } from '../i18n'
-import { getUser, getSessionUser } from '../utils/auth'
-import { getSellerStoreUrl } from '../utils/seller'
+import { routeToSellerFlow } from '../utils/sellerRouter'
 
 // Redirect #register-form hash to the actual register page
 if (window.location.hash === '#register-form') {
@@ -49,26 +48,10 @@ initStickyHeaderSearch();
 initMobileDrawer();
 initLanguageSelector();
 
-// Seller CTA: handle based on login + seller status
+// Seller CTA: tüm satıcı yönlendirmeleri sellerRouter üzerinden tek noktada.
 document.addEventListener('click', async (e) => {
   const link = (e.target as HTMLElement).closest<HTMLAnchorElement>('[data-seller-cta]');
   if (!link) return;
-
   e.preventDefault();
-  const user = getUser() || await getSessionUser();
-
-  if (!user) {
-    // Not logged in → register as supplier
-    window.location.href = '/pages/auth/register.html?type=supplier';
-    return;
-  }
-
-  if (user.seller_application_status || user.has_seller_profile) {
-    // Already has seller application/profile → go to store page
-    window.location.href = getSellerStoreUrl(user);
-    return;
-  }
-
-  // Logged-in buyer without seller application → go to supplier setup form
-  window.location.href = '/pages/seller/supplier-setup.html';
+  await routeToSellerFlow();
 });

@@ -9,8 +9,8 @@
 import '../style.css'
 import { getBaseUrl } from '../components/auth/AuthLayout'
 import { getSessionUser, becomeSeller, completeRegistrationApplication } from '../utils/auth'
-import { SupplierSetupForm, initSupplierSetupForm } from '../components/auth/SupplierSetupForm'
-import type { SupplierSetupFormData } from '../components/auth/SupplierSetupForm'
+import { SupplierSetupForm, initSupplierSetupForm, applySupplierSetupPrefill } from '../components/auth/SupplierSetupForm'
+import type { SupplierSetupFormData, SupplierSetupPrefill } from '../components/auth/SupplierSetupForm'
 import { t } from '../i18n'
 import { startAlpine } from '../alpine'
 
@@ -25,20 +25,25 @@ async function init() {
     return;
   }
 
-  // Already has a completed application (not Draft) → go to pending page
+  // Sprint 2.6: Submitted/Under Review/Approved/Rejected — application-pending'e.
+  // (Draft için form'u prefill ile aç — kullanıcı kaldığı yerden devam etsin.)
   if (user.seller_application_status && user.seller_application_status !== 'Draft') {
     window.location.href = '/pages/seller/application-pending.html';
     return;
   }
 
-  // Create Seller Application if not exists (Draft)
+  // Create Seller Application if not exists (Draft) + Draft varsa prefill data döner
   let sellerApplication: string;
+  let prefillData: SupplierSetupPrefill | undefined;
   try {
     const result = await becomeSeller();
     if (!result.seller_application) {
       throw new Error(t('auth.supplierSetup.startError'));
     }
     sellerApplication = result.seller_application;
+    if (result.already_exists && result.data) {
+      prefillData = result.data as SupplierSetupPrefill;
+    }
   } catch (err) {
     const msg = err instanceof Error ? err.message : t('common.error');
     appEl.innerHTML = `
@@ -77,8 +82,16 @@ async function init() {
 
   startAlpine();
 
+  // Sprint 2.6: Mevcut Draft Application varsa form değerlerini prefill et,
+  // kullanıcının kaldığı step'i tahmin ederek init et.
+  let initialStep = 1;
+  if (prefillData) {
+    initialStep = applySupplierSetupPrefill(prefillData);
+  }
+
   // Initialize form with submit handler
   initSupplierSetupForm({
+    initialStep,
     onSubmit: async (formData: SupplierSetupFormData) => {
       try {
         await completeRegistrationApplication({

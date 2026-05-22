@@ -68,8 +68,10 @@ Alpine.data("kybPage", () => ({
 
   // Hesaplananlar — UI binding'leri (template'lerden çağrılır)
   get isEditable(): boolean {
-    // Verified ise kullanıcı dokunmaz; diğer durumlarda düzenleyebilir
-    return this.kybData.status !== "Verified";
+    // Sprint 2.6: Verified iken bile yeni eklenen opsiyonel alanlar (MERSİS, KEP)
+    // doldurulabilmeli. Sadece Suspended hesap askıda iken kilitli.
+    // Verified iken submit edilirse backend status'u korur.
+    return this.kybData.status !== "Suspended";
   },
   get statusBadgeClass(): string {
     const map: Record<string, string> = {
@@ -82,14 +84,15 @@ Alpine.data("kybPage", () => ({
     return map[this.kybData.status || ""] || "bg-gray-100 text-gray-800";
   },
   get statusBadgeIcon(): string {
+    // Lucide SVG — emoji yasağı (memory: feedback_no_emoji)
     const map: Record<string, string> = {
-      Verified: "✓",
-      Rejected: "✗",
-      "Under Review": "👁",
-      Pending: "⏳",
-      Expired: "⏱",
+      Verified: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+      Rejected: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
+      "Under Review": `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`,
+      Pending: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
+      Suspended: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
     };
-    return map[this.kybData.status || ""] || "—";
+    return map[this.kybData.status || ""] || "";
   },
   get statusBadgeLabel(): string {
     const map: Record<string, string> = {

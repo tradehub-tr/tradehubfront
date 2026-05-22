@@ -100,7 +100,7 @@ const tr = {
       privacyPolicy: "Gizlilik Politikası",
       hello: "Merhaba, {{name}}",
       myDashboard: "Kontrol Panelim",
-      myStore: "Mağaza Sayfam",
+      myStore: "Mağazalarım",
       myOrders: "Siparişlerim",
       myMessages: "Mesajlarım",
       myRfq: "Teklif Taleplerim (RFQ)",
@@ -322,7 +322,7 @@ const tr = {
         emailPlaceholder: "ornek@email.com",
         emailError: "Geçerli bir e-posta adresi girin",
         emailExistsError:
-          "Bu e-posta adresi zaten kayıtlı. Giriş yapmayı veya şifrenizi sıfırlamayı deneyin.",
+          "Bu e-posta adresi zaten kayıtlı. Giriş yapmayı veya parolanızı sıfırlamayı deneyin.",
         emailExistsSupplier:
           'Bu e-posta zaten kayıtlı. Tedarikçi olmak için giriş yapıp "istoc\'ta Sat" sayfasından başvurunuzu yapabilirsiniz.',
         loginLink: "Giriş yapın",
@@ -378,21 +378,29 @@ const tr = {
       setup: {
         countryRegion: "Ülke / Bölge",
         selectCountry: "Ülke seçin",
+        searchCountry: "Ülke ara...",
+        noCountryFound: "Eşleşen ülke bulunamadı",
+        invalidPhoneIntl: "Geçerli bir telefon numarası girin (7-15 hane)",
         firstName: "Ad",
         firstNamePlaceholder: "Adınız",
         lastName: "Soyad",
         lastNamePlaceholder: "Soyadınız",
         phone: "Telefon",
-        password: "Şifre",
-        passwordPlaceholder: "Şifrenizi oluşturun",
+        password: "Parola",
+        passwordPlaceholder: "Parolanızı oluşturun",
         minChars: "En az 8 karakter",
         uppercase: "En az 1 büyük harf (A-Z)",
         lowercase: "En az 1 küçük harf (a-z)",
         number: "En az 1 rakam (0-9)",
         termsOfUse: "Kullanım Koşulları",
         privacyPolicy: "Gizlilik Politikası",
-        agreeTerms: "'nı okudum ve kabul ediyorum.",
+        agreeBefore: "",
+        agreeAfter: "'nı okudum ve kabul ediyorum.",
         createAccount: "Hesap Oluştur",
+      },
+      legalConsent: {
+        accept: "Kabul Et",
+        reject: "Reddet",
       },
       social: {
         google: "Google ile devam et",
@@ -433,7 +441,7 @@ const tr = {
       // ── AccountTypeSelector ──
       buyer: "Alıcı",
       buyerDesc: "Ürün satın almak istiyorum",
-      supplier: "Tedarikçi",
+      supplier: "Satıcı",
       supplierDesc: "Ürün satmak istiyorum",
       // ── AuthLayout ──
       mobileHeaderTitle: "Giriş yap veya hesap oluştur",
@@ -455,8 +463,8 @@ const tr = {
         individual: "Bireysel",
         business: "Şirket",
         enterprise: "Kurumsal",
-        businessName: "İşletme Adı",
-        businessNamePh: "İşletmenizin adı",
+        businessName: "İşletme Ünvanı",
+        businessNamePh: "İşletmenizin ünvanı",
         contactPhone: "İletişim Telefonu",
         contactPhonePh: "+90 5XX XXX XX XX",
         taxIdType: "Vergi Kimlik Tipi",
@@ -464,13 +472,15 @@ const tr = {
         taxIdPh: "Vergi numaranız",
         taxOffice: "Vergi Dairesi",
         taxOfficePh: "Vergi daireniz",
-        address: "Adres",
+        address: "İşletme Adresi",
         addressPh: "Açık adresiniz",
         city: "Şehir",
         cityPh: "Şehriniz",
+        searchCity: "Şehir ara...",
+        noCityFound: "Eşleşen şehir bulunamadı",
         country: "Ülke",
-        bankName: "Banka Ünvanı",
-        bankNamePh: "Banka ünvanı",
+        bankName: "Banka Adı",
+        bankNamePh: "IBAN girince otomatik dolar",
         iban: "IBAN",
         ibanPh: "TR00 0000 0000 0000 0000 0000 00",
         accountHolder: "Hesap Sahibi",
@@ -489,6 +499,7 @@ const tr = {
         invalidPhone: "Geçerli bir Türk telefon numarası girin (05XX XXX XX XX)",
         invalidVKN: "Geçersiz Vergi Kimlik Numarası (10 haneli)",
         invalidTCKN: "Geçersiz TC Kimlik Numarası (11 haneli)",
+        invalidTaxId: "Vergi numarası 10-11 hane arası rakam olmalıdır",
         invalidIBAN: "Geçersiz IBAN numarası",
         termsAccept: "Kullanım Koşullarını okudum ve kabul ediyorum.",
         privacyAccept: "Gizlilik Politikasını okudum ve kabul ediyorum.",
@@ -581,6 +592,18 @@ const tr = {
       couponLoading: "Kontrol ediliyor...",
       couponInvalid: "Geçersiz kupon kodu",
       couponMinOrder: "Bu kupon için minimum sipariş tutarı karşılanmadı",
+      kycRequiredTitle: "KYC Doğrulama Gerekli",
+      kycLockedDesc:
+        "Ödeme yapabilmek için KYC kimlik doğrulamanızı tamamlamanız gerekir. Sepetiniz korunur; KYC onayından sonra siparişinizi tamamlayabilirsiniz.",
+      kycPendingDesc:
+        "KYC doğrulamanız incelenmeyi bekliyor. Onaylandıktan sonra siparişinizi tamamlayabilirsiniz. Sepetiniz korunur.",
+      kycRejectedDesc:
+        "KYC doğrulamanız reddedildi. Lütfen bilgi ve belgelerinizi güncelleyip yeniden gönderin. Sepetiniz korunur.",
+      kycSuspendedDesc:
+        "Hesabınız askıya alındı. Sepetiniz korunur; durumun açıklığa kavuşması için lütfen destek ile iletişime geçin.",
+      kycCta: "KYC Doldurmaya Başla",
+      kycCtaSupport: "Destek Talebi Aç",
+      kycCtaCancel: "Vazgeç",
     },
 
     // ============================================================
@@ -997,7 +1020,8 @@ const tr = {
     // ============================================================
     dashboard: {
       myDashboard: "Kontrol Panelim",
-      kybVerification: "Belge Doğrulama",
+      kycVerification: "KYC Doğrulama",
+      kybVerification: "KYB Doğrulama",
       onlineTrading: "Çevrimiçi Ticaret",
       myMessages: "Mesajlarım",
       supplierMessages: "Tedarikçi Mesajlarım",
@@ -3885,6 +3909,7 @@ const tr = {
       taxOfficeLabel: "Vergi Dairesi",
       addressLabel: "Adres",
       addressPlaceholder: "Açık adres",
+      addressDisabledHint: "Adres yönetimi yakında — yeni adres mimarisi ile gelecek.",
       cityLabel: "Şehir",
       cityPlaceholder: "Şehir",
       bankNameLabel: "Banka",
@@ -3950,6 +3975,7 @@ const tr = {
       myProfile: "Profilim",
       myMembership: "Üyelik hesabım",
       myAccountNav: "Hesabım",
+      myAccountTitle: "Hesabım",
       linkedAccountsNav: "Bağlı hesaplar",
       taxInfoNav: "Vergi bilgileri",
       accountSecurityTitle: "Hesap güvenliği",
@@ -6543,6 +6569,19 @@ const tr = {
     logout: "Çıkış Yap",
   },
 
+  lockedFeature: {
+    kybTitle: "KYB Doğrulama Kilitli",
+    kybDesc:
+      "KYB doğrulama sayfası satıcı hesapları için aktiftir. Satıcı olarak ürün satmak ve doğrulamanızı tamamlamak için önce Satıcı başvurusu yapmanız gerekir.",
+    kybCta: "Satıcı Başvurusu Yap",
+    kycTitle: "KYC Doğrulama Kilitli",
+    kycDesc:
+      "Hesabınız satıcı olarak kayıtlı. Alıcı olarak da alışveriş yapmak için KYC kimlik doğrulamanızı tamamlamanız gerekir. Süper admin onayından sonra ürün satın alma hakkı kazanırsınız.",
+    kycCta: "KYC Doldurmaya Başla",
+    close: "Kapat",
+    returnDashboard: "Kontrol Paneline Dön",
+  },
+
   kyb: {
     title: "Belge Doğrulama",
     subtitle: "Satıcı kimliğinizi ve şirket belgelerinizi doğrulayın",
@@ -6586,7 +6625,8 @@ const tr = {
 
     // Belgeler
     documentsTitle: "Belgeler",
-    documentsHint: "PDF, JPG, JPEG, PNG, WEBP, DOCX · Maks 10 MB · Tüm belgeler zorunlu",
+    documentsHint:
+      "PDF, JPG, JPEG, PNG, WEBP, DOCX · Maks 10 MB · Faaliyet Belgesi opsiyonel, diğerleri zorunlu",
     docIdentity: "Kimlik Belgesi",
     docSignatureCirculars: "İmza Sirküleri",
     docTradeRegistryGazette: "Ticaret Sicil Gazetesi",

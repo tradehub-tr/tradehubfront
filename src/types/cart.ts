@@ -64,6 +64,9 @@ export interface CartSupplier {
   products: CartProduct[];
   paymentMethods?: PaymentMethod[];
   shippingFee?: number; // Satıcı bazlı kargo ücreti (checkout'ta seçilince CartStore'a set edilir)
+  // Sprint 2.6: KYB onayı olmayan satıcı — sepet satırında uyarı, ödemeyi engelle.
+  // Backend get_cart yanıtında henüz yok; default undefined → "doğrulanmış" sayılır.
+  sellerKybVerified?: boolean;
 }
 
 export interface CartSummaryData {

@@ -1,3 +1,92 @@
+## [v1.1.9-beta.5] - 2026-05-20 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(auth): yasal metin onay popup'ı ve ayrı checkbox'lar eklendi (@aliiball)
+  - Tek "Kullanım Koşulları ve Gizlilik Politikası" checkbox'ı iki ayrı onaya bölündü (terms-checkbox + privacy-checkbox)
+  - Turuncu metne tıklayınca tüm sözleşme içeriği popup içinde gösteriliyor (yeni LegalConsentModal component)
+  - Reddet/Kabul Et butonları metnin sonuna kadar okunmadan görünmüyor; her açılışta scroll baştan başlıyor ve buton durumu sıfırlanıyor
+  - Popup içeriği legalContent.ts'ten çekiliyor — terms/privacy sayfalarıyla aynı kaynak
+  - i18n: agreeTerms TR-suffix/EN-prefix çakışması agreeBefore + agreeAfter'a bölündü; auth.setup.legalConsent.{accept, reject} eklendi
+
+---
+## [v1.1.9-beta.3] - 2026-05-18 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Degistirildi
+- refactor(layout): products/manufacturers sayfaları unified SubHeader'a geçirildi (@ahmeetseker)
+  - SearchHeader → SubHeader: tabs + breadcrumb + sonuç başlığı + sort/view tek bileşende toplandı
+  - MegaMenu: kategori kart görseli yerine icon-only akış
+  - i18n: viewingLead, unitFound, unitFoundManufacturer, viewMode/Grid/List anahtarları eklendi
+  - ManufacturerFilterSidebar/List, FilterSidebar, TopBar SubHeader API'ye uyumlandı
+- refactor(lint): tradehubfront ESLint warning'leri sıfırlandı (@ahmeetseker)
+  - 304 @typescript-eslint/no-explicit-any → proper type tanımları
+  - Global window augmentation: src/types/global.d.ts oluşturuldu (API_BASE, Alpine, dataLayer, __getSellerFavs, __originalListingImages vb.)
+  - Mevcut interface'ler kullanıldı (ProductDetail.videoUrl/brandInfo/specGroups cast'leri kaldırıldı); yeni: NotificationItem, RawTailoredProduct, Quote, Message/Conversation, SectionSettings, SellerStorefrontData, AlpineDataEl vb.
+  - catch (e: any) → catch veya catch (e: unknown) + type guard
+  - Underscore-prefix discard pattern (_id, _tempId, _) için varsIgnorePattern + caughtErrorsIgnorePattern: '^_' eklendi
+  - Debug console.log silindi veya console.warn'a çevrildi
+  - alpine/seller.ts, alpine/orders.ts, alpine/help.ts dahil ~50 dosya temizlendi
+
+---
+## [v1.1.9-beta.2] - 2026-05-18 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(kyc): KYC sayfası + form + prefill API entegrasyonu eklendi (@aliiball)
+  - pages/dashboard/kyc.html + src/pages/kyc.ts entry
+  - src/components/kyc/KycLayout.ts: Kurumsal/Bireysel toggle + boxed layout (account_type register'dan KYC formuna taşındı)
+  - get_prefill_data ile User Profile + son KYC/KYB değerleri prefill
+  - src/types/userProfile.ts type tanımları
+- feat(verification-ui): banner + locked-feature + kyc-required modal eklendi (@aliiball)
+  - VerificationStatusBanner: KYC × KYB state machine ile 9 banner durumu
+  - LockedFeatureModal: sidebar locked item için "Alıcı/Satıcı olun" CTA
+  - KycRequiredModal: checkout'ta [KYC_<STATE>] prefix regex parse + state-bazlı modal (Locked/Pending/Rejected/Suspended → support ticket)
+  - utils/sellerRouter.ts: satıcı dashboard yönlendirme yardımcısı
+- feat(data): countries + country-subdivisions mock data eklendi (@aliiball)
+  - src/data/countries.ts: ülke listesi (ISO kodları + isimler)
+  - src/data/country-subdivisions.ts: ülke-il/eyalet eşlemesi
+- feat(i18n): KYC + verification + address purpose çevirileri eklendi (@aliiball)
+  - en.ts + tr.ts: settings.myAccountTitle, settings.addressDisabledHint, header.myStore ("Mağaza Sayfam" → "Mağazalarım"), kyc.* key'leri, verification banner state'leri, address purpose etiketleri
+
+### Duzeltildi
+- fix(settings): address/city/postal_code disabled + Vergi tab gizlendi (@aliiball)
+  - SettingsAccountEdit + SettingsMyAccount address/city/postal_code disabled + helper text (Frappe Address mimarisinde olduğu için)
+  - SettingsLayout 4 noktada Vergi tab yorum satırı (S3=C kararı)
+  - FavoritesLayout User Profile field uyumu + filter sets
+  - buyer-dashboard NewBuyerInfo + UserInfoCard + types + mock Sprint 2
+  - pages/buyer-dashboard VerificationStatusBanner entegrasyonu
+
+### Degistirildi
+- refactor(sidebar): KYC + KYB iki ayrı lockable item olarak ayrıldı (@aliiball)
+  - sidebarData + sidebarIcons: KYC ve KYB için iki ayrı giriş
+  - SidebarMenuItem: lockable mantığı (session state üzerinden)
+  - Sidebar.ts legacy requireSeller davranışı kaldırıldı
+- refactor(auth): SupplierSetupForm + AccountSetupForm User Profile API'sine taşındı (@aliiball)
+  - supplier-setup + account-setup register_supplier / register_user Sprint 2.6 davranışına uyarlandı
+  - account_type Bireysel/Şirket toggle KYC formuna taşındı (register'dan kaldırıldı)
+  - utils/auth.ts session capability flag'leri (kyc_required, kyb_required, kyc_locked, kyb_locked) eklendi
+  - pages/sell.ts + pages/supplier-setup.ts Sprint 2 akışına uyumlandı
+- refactor(addresses): Bireysel/Kurumsal toggle + tax_no/tax_office eklendi (@aliiball)
+  - AddressesLayout: address_type toggle (Individual/Business)
+  - tax_no + tax_office Business için conditional render
+  - utils/tr-validation.ts: VKN + TCKN checksum
+  - alpine/addresses.ts: purpose alanı + Sprint 1 Faz D uyumu
+- refactor(kyb): mersis_no + kep_address + rejection_category form alanları eklendi (@aliiball)
+  - KybLayout + alpine/kyb purpose/state machine güncellemeleri
+  - pages/kyb.ts mersis (16 hane) + kep (email format) doğrulamaları
+- refactor(cart): SupplierCard + CartStore + cartService Sprint 2 uyumu (@aliiball)
+  - SupplierCard supplierId → admin_seller_profile.name eşleme
+  - CartStore + CartSummary KYC gate state
+  - cartService [KYC_<STATE>] prefix mesajı parse
+  - checkout.ts KycRequiredModal entegrasyonu
+  - pages/product-detail + ProductInfo + MobileLayout + ProductListingGrid capability flag kontrolleri
+  - types/cart + types/productListing Sprint 2 alanları
+
+---
 ## [v1.1.9-beta.1] - 2026-05-15 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.

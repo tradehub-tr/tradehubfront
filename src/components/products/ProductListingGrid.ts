@@ -224,12 +224,19 @@ function renderProductListingCard(card: ProductListingCard): string {
       : "";
 
   const isOOS = !!card.outOfStock;
+  // Sprint 2.6: KYB unverified seller — fiyatı gizle + sepete ekle disable + amber badge.
+  // OOS önceliği KYB'den yüksek (envanter bilgisi her zaman gösterilmeli).
+  const kybBlocked = card.sellerKybVerified === false;
   const oosBadgeHtml = isOOS
     ? `<div class="absolute top-2 left-2 z-20 px-2 py-1 rounded-md bg-red-600 text-white text-[11px] font-semibold shadow-sm pointer-events-none">${t("products.outOfStock")}</div>`
     : "";
   const oosOverlayHtml = isOOS
     ? `<div class="absolute inset-0 z-10 bg-white/40 pointer-events-none"></div>`
     : "";
+  const kybBadgeHtml =
+    kybBlocked && !isOOS
+      ? `<div class="absolute top-2 right-2 z-20 px-2 py-1 rounded-md bg-amber-50 border border-amber-300 text-amber-800 text-[10px] font-semibold shadow-sm pointer-events-none max-w-[60%] truncate" title="${t("common.kybGateBannerTitle")}">${t("common.kybGateBannerTitle")}</div>`
+      : "";
   const addToCartBtnHtml = isOOS
     ? `<button type="button" class="searchx-product-e-abutton flex-1 flex items-center justify-center h-9 text-xs sm:text-sm font-medium whitespace-nowrap rounded-md bg-gray-200 text-gray-500 cursor-not-allowed
               min-[1200px]:group-data-[list-mode=list]/grid:flex-none
@@ -240,7 +247,17 @@ function renderProductListingCard(card: ProductListingCard): string {
               disabled aria-disabled="true">
         ${t("products.outOfStock")}
       </button>`
-    : `<button type="button" class="searchx-product-e-abutton th-btn flex-1 flex items-center justify-center h-9 text-xs sm:text-sm font-medium cursor-pointer whitespace-nowrap
+    : kybBlocked
+      ? `<button type="button" class="searchx-product-e-abutton th-btn flex-1 flex items-center justify-center h-9 text-xs sm:text-sm font-medium whitespace-nowrap opacity-50 !cursor-not-allowed pointer-events-none
+              min-[1200px]:group-data-[list-mode=list]/grid:flex-none
+              min-[1200px]:group-data-[list-mode=list]/grid:w-full
+              lg:max-[1599px]:group-data-[list-mode=grid]/grid:text-xs
+              lg:max-[1599px]:group-data-[list-mode=grid]/grid:px-2
+              lg:max-[1599px]:group-data-[list-mode=grid]/grid:h-8"
+              disabled aria-disabled="true" title="${t("common.addToCartDisabledKyb")}">
+        ${t("products.addToCart")}
+      </button>`
+      : `<button type="button" class="searchx-product-e-abutton th-btn flex-1 flex items-center justify-center h-9 text-xs sm:text-sm font-medium cursor-pointer whitespace-nowrap
               min-[1200px]:group-data-[list-mode=list]/grid:flex-none
               min-[1200px]:group-data-[list-mode=list]/grid:w-full
               lg:max-[1599px]:group-data-[list-mode=grid]/grid:text-xs
@@ -295,6 +312,7 @@ function renderProductListingCard(card: ProductListingCard): string {
             min-[1200px]:group-data-[list-mode=list]/grid:w-60
             min-[1200px]:group-data-[list-mode=list]/grid:shrink-0">
         ${oosBadgeHtml}
+        ${kybBadgeHtml}
         ${oosOverlayHtml}
         ${renderImageSlider(card)}
       </a>
@@ -322,9 +340,13 @@ function renderProductListingCard(card: ProductListingCard): string {
 
         <!-- Price area -->
         <div class="px-3 mt-2">
-          <div class="fy26-price text-xl font-semibold leading-[26px] text-gray-900
+          ${
+            kybBlocked
+              ? `<div class="fy26-price text-sm font-medium leading-[20px] text-amber-800" title="${t("common.kybGateBannerTitle")}">${t("common.kybGateBannerTitle")}</div>`
+              : `<div class="fy26-price text-xl font-semibold leading-[26px] text-gray-900
             lg:max-[1599px]:group-data-[list-mode=grid]/grid:text-base
-            lg:max-[1599px]:group-data-[list-mode=grid]/grid:leading-[1.375rem]">${formatPrice(card.price)}</div>
+            lg:max-[1599px]:group-data-[list-mode=grid]/grid:leading-[1.375rem]">${formatPrice(card.price)}</div>`
+          }
           <div class="fy26-moq-stats flex gap-1.5 flex-wrap mt-0.5
             lg:max-[1599px]:group-data-[list-mode=grid]/grid:text-xs
             lg:max-[1599px]:group-data-[list-mode=grid]/grid:leading-4

@@ -179,7 +179,24 @@ export function MobileProductLayout(): string {
     </div>
   `;
 
-  const priceTiersSection = `
+  // Sprint 2.6: KYB Verified DEĞİL → fiyat tier'larını render etme,
+  // yerine sarı amber banner göster (mobil)
+  const kybBlocked = p.sellerKybVerified === false;
+  const kybBannerSection = kybBlocked
+    ? `
+    <div class="pdm-kyb-banner-large flex items-start gap-3 mx-4 mt-3 max-[374px]:mx-3 max-[374px]:mt-2.5 px-4 py-3.5 bg-amber-50 border border-amber-300 rounded-lg" role="alert">
+      <svg class="shrink-0 mt-0.5 text-amber-700" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <div class="text-sm leading-[1.5] text-amber-800 flex-1 min-w-0">
+        <div class="font-semibold mb-1">${t("common.kybGateBannerTitle")}</div>
+        <div class="text-xs">${t("common.kybGateBannerBody")}</div>
+      </div>
+    </div>
+  `
+    : "";
+
+  const priceTiersSection = kybBlocked
+    ? ""
+    : `
     <div id="pdm-price-tiers" class="grid grid-cols-3 bg-surface-raised rounded-lg mx-4 mt-3 py-3.5 max-[374px]:mx-3 max-[374px]:mt-2.5">
       ${p.priceTiers
         .map(
@@ -381,6 +398,7 @@ export function MobileProductLayout(): string {
       <!-- Overview section -->
       <div id="pdm-sec-overview">
         ${badgesSection}
+        ${kybBannerSection}
         ${priceTiersSection}
         ${socialProofSection}
         ${sampleSection}

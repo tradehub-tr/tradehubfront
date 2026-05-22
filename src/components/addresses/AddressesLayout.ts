@@ -128,6 +128,25 @@ function renderFormModal(): string {
         <div class="overflow-y-auto flex-1 px-6 py-5">
           <form @submit.prevent="saveAddress()" id="buyer-address-form" class="space-y-4">
 
+            <!-- Sprint 1 (2026-05-15): Adres Tipi Toggle — Bireysel / Kurumsal -->
+            <div>
+              <label class="block text-xs font-medium text-gray-700 mb-2">Adres Tipi</label>
+              <div class="grid grid-cols-2 gap-2">
+                <button type="button"
+                        @click="form.address_type = 'Individual'"
+                        :class="form.address_type === 'Individual' ? 'border-amber-500 bg-amber-50 text-amber-900' : 'border-gray-300 bg-white text-gray-700'"
+                        class="px-4 py-2 text-sm font-medium border rounded-md transition">
+                  Bireysel
+                </button>
+                <button type="button"
+                        @click="form.address_type = 'Business'"
+                        :class="form.address_type === 'Business' ? 'border-amber-500 bg-amber-50 text-amber-900' : 'border-gray-300 bg-white text-gray-700'"
+                        class="px-4 py-2 text-sm font-medium border rounded-md transition">
+                  Kurumsal
+                </button>
+              </div>
+            </div>
+
             <!-- Adres Başlığı -->
             <div>
               <label class="block text-xs font-medium text-gray-700 mb-1">
@@ -158,8 +177,8 @@ function renderFormModal(): string {
               <p x-show="errors.contact_name" x-text="errors.contact_name" class="text-red-500 text-xs mt-1"></p>
             </div>
 
-            <!-- Şirket Adı -->
-            <div>
+            <!-- Sprint 1 (2026-05-15): Şirket Adı + Vergi bilgileri — sadece Business için -->
+            <div x-show="form.address_type === 'Business'" x-transition>
               <label class="block text-xs font-medium text-gray-700 mb-1">
                 Şirket Adı <span class="text-red-500">*</span>
               </label>
@@ -171,6 +190,35 @@ function renderFormModal(): string {
                      :class="{ 'is-error': errors.company }"
                      @input="errors.company = ''" />
               <p x-show="errors.company" x-text="errors.company" class="text-red-500 text-xs mt-1"></p>
+            </div>
+
+            <div x-show="form.address_type === 'Business'" x-transition class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1">
+                  Vergi No (VKN/TCKN) <span class="text-red-500">*</span>
+                </label>
+                <input type="text"
+                       x-model="form.tax_no"
+                       placeholder="10 hane VKN veya 11 hane TCKN"
+                       maxlength="11"
+                       class="th-input th-input-md"
+                       :class="{ 'is-error': errors.tax_no }"
+                       @input="errors.tax_no = ''" />
+                <p x-show="errors.tax_no" x-text="errors.tax_no" class="text-red-500 text-xs mt-1"></p>
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1">
+                  Vergi Dairesi <span class="text-red-500">*</span>
+                </label>
+                <input type="text"
+                       x-model="form.tax_office"
+                       placeholder="örn. Beyoğlu V.D."
+                       maxlength="80"
+                       class="th-input th-input-md"
+                       :class="{ 'is-error': errors.tax_office }"
+                       @input="errors.tax_office = ''" />
+                <p x-show="errors.tax_office" x-text="errors.tax_office" class="text-red-500 text-xs mt-1"></p>
+              </div>
             </div>
 
             <!-- Telefon (TR sabit prefix +90) -->
@@ -360,7 +408,7 @@ export function AddressesLayout(): string {
 
       <!-- Page header -->
       <div class="flex items-center justify-between mb-4">
-        <h1 class="text-lg font-bold text-gray-900">Adreslerim</h1>
+        <h1 class="text-lg font-bold text-gray-900">Teslimat Adreslerim</h1>
         <button x-show="addresses.length > 0"
                 @click="openAdd()"
                 :disabled="addresses.length >= maxAddresses"

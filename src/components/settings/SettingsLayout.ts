@@ -8,7 +8,8 @@
 
 import { t } from "../../i18n";
 import { SettingsAccountEdit, initSettingsAccountEdit } from "./SettingsAccountEdit";
-import { SettingsTaxInfo, initSettingsTaxInfo } from "./SettingsTaxInfo";
+// Sprint 2.6'da gizlendi (S3=C kararı, 2026-05-15) — ileride backend entegrasyonu ile yeniden açılacak. Açmak için: bu satırları yorum dışına al ve SettingsTaxInfo'nun backend entegrasyonunu tamamla.
+// import { SettingsTaxInfo, initSettingsTaxInfo } from "./SettingsTaxInfo";
 import { SettingsEmailPreferences, initSettingsEmailPreferences } from "./SettingsEmailPreferences";
 import { SettingsChangePassword, initSettingsChangePassword } from "./SettingsChangePassword";
 import { SettingsChangeEmail, initSettingsChangeEmail } from "./SettingsChangeEmail";
@@ -137,7 +138,8 @@ function getAccountInfoCard(): SettingsCard {
     items: [
       { label: t("settings.myProfile"), href: "#profilim" },
       { label: t("settings.myAccountNav") || t("settings.myMembership"), href: "#hesabim" },
-      { label: t("settings.taxInfoNav"), href: "#vergi" },
+      // Sprint 2.6'da gizlendi (S3=C kararı, 2026-05-15) — ileride backend entegrasyonu ile yeniden açılacak. Açmak için: bu satırları yorum dışına al ve SettingsTaxInfo'nun backend entegrasyonunu tamamla.
+      // { label: t("settings.taxInfoNav"), href: "#vergi" },
     ],
   };
 }
@@ -200,7 +202,8 @@ function getSectionMap(): Record<string, { title: string; render: () => string }
       title: t("settings.myAccountNav") || "Hesabım",
       render: () => SettingsMyAccount(),
     },
-    "#vergi": { title: t("settings.taxInfoNav"), render: () => SettingsTaxInfo() },
+    // Sprint 2.6'da gizlendi (S3=C kararı, 2026-05-15) — ileride backend entegrasyonu ile yeniden açılacak. Açmak için: bu satırı yorum dışına al ve SettingsTaxInfo'nun backend entegrasyonunu tamamla.
+    // "#vergi": { title: t("settings.taxInfoNav"), render: () => SettingsTaxInfo() },
     "#eposta": {
       title: t("settings.emailPreferencesNav"),
       render: () => SettingsEmailPreferences(),
@@ -218,7 +221,8 @@ function getSectionMap(): Record<string, { title: string; render: () => string }
 const INIT_MAP: Record<string, () => void> = {
   "#profilim": initSettingsAccountEdit,
   "#hesabim": initSettingsMyAccount,
-  "#vergi": initSettingsTaxInfo,
+  // Sprint 2.6'da gizlendi (S3=C kararı, 2026-05-15) — ileride backend entegrasyonu ile yeniden açılacak. Açmak için: bu satırı yorum dışına al ve SettingsTaxInfo'nun backend entegrasyonunu tamamla.
+  // "#vergi": initSettingsTaxInfo,
   "#eposta": initSettingsEmailPreferences,
   "#sifre": initSettingsChangePassword,
   "#eposta-degistir": initSettingsChangeEmail,

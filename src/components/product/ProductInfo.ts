@@ -176,6 +176,19 @@ export function ProductInfo(): string {
         <!-- Ready to Ship Badge -->
         <span id="pd-ready-badge" class="th-badge inline-flex items-center my-4 mb-3 px-2.5 py-[3px] text-[11px] font-semibold border-[1.5px] border-[#16a34a] rounded text-[#16a34a] bg-[#f0fdf4] [&.is-out-of-stock]:border-[#dc2626] [&.is-out-of-stock]:text-[#dc2626] [&.is-out-of-stock]:bg-[#fef2f2]">${t("product.readyToShip")}</span>
 
+        ${
+          mockProduct.sellerKybVerified === false
+            ? `
+        <!-- Sprint 2.6: KYB Verified DEĞİL → fiyat yerine uyarı banner (büyük, vurgulu) -->
+        <div class="pd-kyb-banner-large flex items-start gap-3 mb-5 px-4 py-3.5 bg-[#fff7ed] border border-[#fed7aa] rounded-lg" role="alert">
+          <svg class="shrink-0 mt-0.5" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c2410c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <div class="text-sm leading-[1.5] text-[#9a3412] flex-1 min-w-0">
+            <div class="font-semibold mb-1">${t("common.kybGateBannerTitle")}</div>
+            <div class="text-xs">${t("common.kybGateBannerBody")}</div>
+          </div>
+        </div>
+        `
+            : `
         <!-- Price Tiers -->
         ${renderPriceTiers(p.priceTiers)}
 
@@ -192,6 +205,8 @@ export function ProductInfo(): string {
         </div>
         `
             : ""
+        }
+        `
         }
 
         <!-- Variations Header -->

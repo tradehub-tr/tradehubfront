@@ -100,7 +100,7 @@ const en = {
       privacyPolicy: "Privacy Policy",
       hello: "Hello, {{name}}",
       myDashboard: "My Dashboard",
-      myStore: "My Store",
+      myStore: "My Stores",
       myOrders: "My Orders",
       myMessages: "My Messages",
       myRfq: "My RFQ Requests",
@@ -379,6 +379,9 @@ const en = {
       setup: {
         countryRegion: "Country / Region",
         selectCountry: "Select country",
+        searchCountry: "Search country...",
+        noCountryFound: "No matching country found",
+        invalidPhoneIntl: "Enter a valid phone number (7-15 digits)",
         firstName: "First Name",
         firstNamePlaceholder: "Your first name",
         lastName: "Last Name",
@@ -392,8 +395,13 @@ const en = {
         number: "At least 1 number (0-9)",
         termsOfUse: "Terms of Use",
         privacyPolicy: "Privacy Policy",
-        agreeTerms: "I have read and agree to the",
+        agreeBefore: "I have read and agree to the ",
+        agreeAfter: ".",
         createAccount: "Create Account",
+      },
+      legalConsent: {
+        accept: "Accept",
+        reject: "Reject",
       },
       social: {
         google: "Continue with Google",
@@ -433,7 +441,7 @@ const en = {
       // ── AccountTypeSelector ──
       buyer: "Buyer",
       buyerDesc: "I want to buy products",
-      supplier: "Supplier",
+      supplier: "Seller",
       supplierDesc: "I want to sell products",
       // ── AuthLayout ──
       mobileHeaderTitle: "Sign in or create an account",
@@ -468,9 +476,11 @@ const en = {
         addressPh: "Your full address",
         city: "City",
         cityPh: "Your city",
+        searchCity: "Search city...",
+        noCityFound: "No matching city found",
         country: "Country",
-        bankName: "Bank Title",
-        bankNamePh: "Bank title",
+        bankName: "Bank Name",
+        bankNamePh: "Auto-filled from IBAN",
         iban: "IBAN",
         ibanPh: "TR00 0000 0000 0000 0000 0000 00",
         accountHolder: "Account Holder",
@@ -489,6 +499,7 @@ const en = {
         invalidPhone: "Enter a valid Turkish phone number (05XX XXX XX XX)",
         invalidVKN: "Invalid Tax ID Number (10 digits)",
         invalidTCKN: "Invalid ID Number (11 digits)",
+        invalidTaxId: "Tax ID must be 10-11 digits",
         invalidIBAN: "Invalid IBAN number",
         termsAccept: "I have read and accept the Terms of Service.",
         privacyAccept: "I have read and accept the Privacy Policy.",
@@ -581,6 +592,18 @@ const en = {
       couponLoading: "Checking...",
       couponInvalid: "Invalid coupon code",
       couponMinOrder: "Minimum order amount not met for this coupon",
+      kycRequiredTitle: "KYC Verification Required",
+      kycLockedDesc:
+        "You need to complete your KYC identity verification before paying. Your cart is preserved; you can complete your order after approval.",
+      kycPendingDesc:
+        "Your KYC verification is awaiting review. Once approved, you can complete your order. Your cart is preserved.",
+      kycRejectedDesc:
+        "Your KYC verification was rejected. Please update your information and resubmit. Your cart is preserved.",
+      kycSuspendedDesc:
+        "Your account has been suspended. Your cart is preserved; please contact support to resolve the issue.",
+      kycCta: "Start KYC Verification",
+      kycCtaSupport: "Open Support Ticket",
+      kycCtaCancel: "Cancel",
     },
 
     // ============================================================
@@ -996,7 +1019,8 @@ const en = {
     // ============================================================
     dashboard: {
       myDashboard: "My Dashboard",
-      kybVerification: "Document Verification",
+      kycVerification: "KYC Verification",
+      kybVerification: "KYB Verification",
       onlineTrading: "Online Trading",
       myMessages: "My Messages",
       supplierMessages: "Supplier Messages",
@@ -2369,7 +2393,7 @@ const en = {
         categoriesTab: "Categories",
         companyProfile: "Company Profile",
         contactTab: "Contact",
-        sellerProfile: "Seller Profile",
+        sellerProfile: "User Profile",
         // CompanyProfile - Product Card
         findSimilar: "Find similar products",
         unitPiece: "Piece",
@@ -3883,6 +3907,7 @@ const en = {
       taxOfficeLabel: "Tax Office",
       addressLabel: "Address",
       addressPlaceholder: "Street address",
+      addressDisabledHint: "Address management coming soon — new address architecture.",
       cityLabel: "City",
       cityPlaceholder: "City",
       bankNameLabel: "Bank",
@@ -3948,6 +3973,7 @@ const en = {
       myProfile: "My Profile",
       myMembership: "My membership account",
       myAccountNav: "My Account",
+      myAccountTitle: "My Account",
       linkedAccountsNav: "Linked accounts",
       taxInfoNav: "Tax information",
       accountSecurityTitle: "Account security",
@@ -6553,6 +6579,19 @@ const en = {
     },
     backToHome: "Back to Home",
     logout: "Sign Out",
+  },
+
+  lockedFeature: {
+    kybTitle: "KYB Verification Locked",
+    kybDesc:
+      "The KYB verification page is active for seller accounts. To sell as a seller and complete your verification, you must first submit a seller application.",
+    kybCta: "Apply as Seller",
+    kycTitle: "KYC Verification Locked",
+    kycDesc:
+      "Your account is registered as a seller. To also shop as a buyer, you must complete KYC identity verification. After super admin approval, you gain product purchase rights.",
+    kycCta: "Start KYC",
+    close: "Close",
+    returnDashboard: "Return to Dashboard",
   },
 
   kyb: {

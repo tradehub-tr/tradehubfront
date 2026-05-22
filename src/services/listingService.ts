@@ -1294,6 +1294,14 @@ function mapListingCard(raw: any): ProductListingCard {
     brandLogo: raw.brandLogo || undefined,
     outOfStock: !!raw.outOfStock,
     status: raw.status || undefined,
+    // Sprint 2.6: KYB doğrulamadıysa card-seviye gating için boolean'a normalize et.
+    // Backend henüz kart endpoint'inde göndermiyorsa undefined kalır → kartta gating yok.
+    sellerKybVerified:
+      typeof raw.sellerKybVerified === "boolean"
+        ? raw.sellerKybVerified
+        : typeof raw.supplier?.kybVerified === "boolean"
+          ? raw.supplier.kybVerified
+          : undefined,
   };
 }
 

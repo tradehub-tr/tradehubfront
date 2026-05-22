@@ -26,6 +26,16 @@ export interface AuthUser {
   rejected_seller_application?: boolean;
   seller_application_status?: string;
   seller_profile: string | null;
+  // Sprint 2.6 — KYC/KYB state flag'leri
+  account_type?: "Individual" | "Business";
+  can_buy?: boolean;
+  can_sell?: boolean;
+  kyc_status?: "Locked" | "Pending" | "Verified" | "Rejected" | "Suspended" | null;
+  kyb_status?: "Locked" | "Pending" | "Under Review" | "Verified" | "Rejected" | "Suspended" | null;
+  kyc_required?: boolean;
+  kyb_required?: boolean;
+  kyc_locked?: boolean;
+  kyb_locked?: boolean;
 }
 
 interface SessionResponse {
@@ -276,7 +286,9 @@ export async function verifyRegistrationOtp(
   return res.message;
 }
 
-/** Register a new user */
+/** Register a new user (Sprint 2.6 — Alıcı kayıt akışı).
+ * registration_type="Alici" backend register_user endpoint'ine gönderilir.
+ * Satıcı kaydı için register_supplier ayrı endpoint kullanır. */
 export async function register(params: {
   email: string;
   password: string;
@@ -289,11 +301,20 @@ export async function register(params: {
   accept_kvkk: boolean;
   registration_token: string;
 }): Promise<RegisterResponse> {
+  // Sprint 2.6: backend artık registration_type="Alici"|"Satici" bekliyor.
+  // account_type Bireysel/Şirket ayrımı KYC formunda set ediliyor — burada
+  // sadece "Individual" default gönderilir, KYC submit anında User Profile
+  // güncellenir.
+  const payload = {
+    ...params,
+    registration_type: params.account_type === "supplier" ? "Satici" : "Alici",
+    account_type: "Individual" as const,
+  };
   const res = await api<{ message: RegisterResponse }>(
     "/method/tradehub_core.api.v1.identity.register_user",
     {
       method: "POST",
-      body: JSON.stringify(params),
+      body: JSON.stringify(payload),
     }
   );
   return res.message;
@@ -315,11 +336,38 @@ export async function forgotPassword(email: string): Promise<SimpleResponse> {
 
 /* ── Supplier Application ──────────────────────────── */
 
+/** Sprint 2.6: become_seller mevcut Draft Application varsa field değerlerini döner */
+export interface SellerApplicationDraftData {
+  seller_type?: string;
+  business_name?: string;
+  contact_phone?: string;
+  tax_id_type?: string;
+  tax_id?: string;
+  tax_office?: string;
+  address_line_1?: string;
+  city?: string;
+  country?: string;
+  bank_name?: string;
+  iban?: string;
+  account_holder_name?: string;
+  identity_document_type?: string;
+  identity_document_number?: string;
+  identity_document_expiry?: string;
+  identity_document?: string;
+  terms_accepted?: number;
+  privacy_accepted?: number;
+  kvkk_accepted?: number;
+  commission_accepted?: number;
+  return_policy_accepted?: number;
+}
+
 interface CompleteApplicationResponse {
   success: boolean;
   application: string;
   seller_application?: string;
   seller_application_status?: string;
+  already_exists?: boolean;
+  data?: SellerApplicationDraftData;
 }
 
 /** Complete supplier registration application with all form data */

@@ -39,6 +39,8 @@ interface FavEnrichment {
   supplier?: { name: string; verified: boolean; country?: string };
   stockQty?: number;
   inStock?: boolean;
+  // Sprint 2.6: KYB doğrulanmamış satıcı favoride muted-text hint için
+  sellerKybVerified?: boolean;
 }
 const enrichmentMap: Map<string, FavEnrichment> = new Map();
 let enrichmentLoading = false;
@@ -68,6 +70,7 @@ async function loadEnrichments(items: FavoriteItem[]): Promise<void> {
             : undefined,
           stockQty: d.stockQty,
           inStock: d.inStock ?? !d.outOfStock,
+          sellerKybVerified: d.sellerKybVerified,
         });
       }
     });
@@ -652,12 +655,25 @@ function renderProductCardGrid(p: FavoriteItem): string {
         <div class="text-[13px] font-bold text-text-primary leading-none tracking-[-0.01em] tabular-nums mt-1">${formatPrice(p.priceRange)}</div>
         <p class="text-[10.5px] text-text-tertiary m-0 leading-[13px] mt-0.5 truncate">${escapeHtml(p.minOrder)}</p>
         <div class="flex flex-nowrap gap-1 mt-1 h-[15px] overflow-hidden">${tagChips}</div>
+        ${
+          enrichment?.sellerKybVerified === false
+            ? `<p class="text-[10px] text-text-tertiary leading-[1.4] mt-1 line-clamp-2">${t("common.kybGateFavoriteHint")}</p>`
+            : ""
+        }
         <div class="mt-auto pt-1.5">
-          <button type="button" data-add-to-cart="${p.id}"
+          ${
+            enrichment?.sellerKybVerified === false
+              ? `<button type="button" disabled aria-disabled="true"
+                  class="th-btn w-full h-7 px-2 text-[11px] font-semibold inline-flex items-center justify-center gap-1 appearance-none focus:outline-none opacity-50 !cursor-not-allowed pointer-events-none" title="${t("common.addToCartDisabledKyb")}">
+            <svg class="shrink-0" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h2l2.4 12.5a2 2 0 0 0 2 1.5h7.6a2 2 0 0 0 2-1.6L21 7H6"/></svg>
+            <span class="truncate">${t("favorites.addToCart", { defaultValue: "Sepete ekle" })}</span>
+          </button>`
+              : `<button type="button" data-add-to-cart="${p.id}"
                   class="th-btn w-full h-7 px-2 text-[11px] font-semibold inline-flex items-center justify-center gap-1 appearance-none focus:outline-none">
             <svg class="shrink-0" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h2l2.4 12.5a2 2 0 0 0 2 1.5h7.6a2 2 0 0 0 2-1.6L21 7H6"/></svg>
             <span class="truncate">${t("favorites.addToCart", { defaultValue: "Sepete ekle" })}</span>
-          </button>
+          </button>`
+          }
         </div>
       </div>
     </article>
@@ -667,6 +683,8 @@ function renderProductCardGrid(p: FavoriteItem): string {
 function renderProductRowList(p: FavoriteItem): string {
   const detailHref = getListingUrl({ id: p.id });
   const lists = getLists();
+  const enrichment = enrichmentMap.get(p.id);
+  const kybBlocked = enrichment?.sellerKybVerified === false;
   const tagChips = p.listIds
     .filter((id) => id !== DEFAULT_LIST_ID)
     .map((id) => lists.find((l) => l.id === id))
@@ -690,15 +708,28 @@ function renderProductRowList(p: FavoriteItem): string {
         </a>
         <p class="text-[11px] text-text-tertiary m-0">${escapeHtml(p.minOrder)}</p>
         ${tagChips ? `<div class="flex flex-wrap gap-1">${tagChips}</div>` : ""}
+        ${
+          kybBlocked
+            ? `<p class="text-[11px] text-text-tertiary leading-[1.4] m-0">${t("common.kybGateFavoriteHint")}</p>`
+            : ""
+        }
       </div>
       <div class="flex flex-col items-end gap-1.5 shrink-0 max-sm:flex-row max-sm:items-center max-sm:w-full max-sm:justify-between">
         <div class="text-[14px] font-bold text-text-primary tracking-[-0.01em] tabular-nums whitespace-nowrap">${formatPrice(p.priceRange)}</div>
         <div class="inline-flex items-center gap-1">
-          <button type="button" data-add-to-cart="${p.id}"
+          ${
+            kybBlocked
+              ? `<button type="button" disabled aria-disabled="true"
+                  class="th-btn h-7 px-2.5 text-[11.5px] font-semibold inline-flex items-center justify-center gap-1 appearance-none focus:outline-none opacity-50 !cursor-not-allowed pointer-events-none" title="${t("common.addToCartDisabledKyb")}">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h2l2.4 12.5a2 2 0 0 0 2 1.5h7.6a2 2 0 0 0 2-1.6L21 7H6"/></svg>
+            ${t("favorites.addToCart", { defaultValue: "Sepete ekle" })}
+          </button>`
+              : `<button type="button" data-add-to-cart="${p.id}"
                   class="th-btn h-7 px-2.5 text-[11.5px] font-semibold inline-flex items-center justify-center gap-1 appearance-none focus:outline-none">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h2l2.4 12.5a2 2 0 0 0 2 1.5h7.6a2 2 0 0 0 2-1.6L21 7H6"/></svg>
             ${t("favorites.addToCart", { defaultValue: "Sepete ekle" })}
-          </button>
+          </button>`
+          }
           <button type="button"
                   class="fav-remove-item w-7 h-7 inline-flex items-center justify-center rounded-md text-[#ef4444] cursor-pointer p-0 border border-border-default bg-white hover:border-[#ef4444] hover:bg-[#fff5f5] transition-colors appearance-none focus:outline-none"
                   data-remove-id="${p.id}"

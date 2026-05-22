@@ -11,6 +11,14 @@ import {
   isPasswordValid,
   type PasswordValidation,
 } from "../../utils/password-validation";
+import {
+  ALL_COUNTRIES,
+  getFlagEmoji,
+  getCountryByCode as getCountryRecord,
+  type Country,
+} from "../../data/countries";
+import { validatePhoneForCountry, getPhonePlaceholderForCountry } from "../../utils/tr-validation";
+import { openLegalConsentModal, type LegalConsentKind } from "./LegalConsentModal";
 
 // Re-export for backward compatibility
 export { validatePassword, isPasswordValid };
@@ -25,6 +33,15 @@ export interface CountryOption {
   name: string;
   /** Flag emoji */
   flag: string;
+}
+
+function toCountryOption(c: Country): CountryOption {
+  return { code: c.code, name: c.nameTR, flag: getFlagEmoji(c.code) };
+}
+
+function findCountryOption(code: string): CountryOption | null {
+  const c = getCountryRecord(code);
+  return c ? toCountryOption(c) : null;
 }
 
 export interface AccountSetupFormOptions {
@@ -60,58 +77,6 @@ export interface AccountSetupFormState {
   isValid: boolean;
 }
 
-/* ── Country Options ────────────────────────────────── */
-
-/** Country code + flag pairs (name is resolved via i18n at render time) */
-const countryEntries: { code: string; flag: string }[] = [
-  { code: "TR", flag: "🇹🇷" },
-  { code: "US", flag: "🇺🇸" },
-  { code: "DE", flag: "🇩🇪" },
-  { code: "GB", flag: "🇬🇧" },
-  { code: "FR", flag: "🇫🇷" },
-  { code: "IT", flag: "🇮🇹" },
-  { code: "ES", flag: "🇪🇸" },
-  { code: "NL", flag: "🇳🇱" },
-  { code: "BE", flag: "🇧🇪" },
-  { code: "AT", flag: "🇦🇹" },
-  { code: "CH", flag: "🇨🇭" },
-  { code: "PL", flag: "🇵🇱" },
-  { code: "SE", flag: "🇸🇪" },
-  { code: "NO", flag: "🇳🇴" },
-  { code: "DK", flag: "🇩🇰" },
-  { code: "FI", flag: "🇫🇮" },
-  { code: "RU", flag: "🇷🇺" },
-  { code: "CN", flag: "🇨🇳" },
-  { code: "JP", flag: "🇯🇵" },
-  { code: "KR", flag: "🇰🇷" },
-  { code: "IN", flag: "🇮🇳" },
-  { code: "AE", flag: "🇦🇪" },
-  { code: "SA", flag: "🇸🇦" },
-  { code: "AU", flag: "🇦🇺" },
-  { code: "CA", flag: "🇨🇦" },
-  { code: "BR", flag: "🇧🇷" },
-  { code: "MX", flag: "🇲🇽" },
-];
-
-/** Build country options with i18n-resolved names (call at render time for correct locale) */
-export function getCountryOptions(): CountryOption[] {
-  return countryEntries.map(({ code, flag }) => ({
-    code,
-    name: t(`countries.${code}`),
-    flag,
-  }));
-}
-
-/**
- * @deprecated Use getCountryOptions() instead. Kept for backward-compat;
- * evaluates once at import time so the name reflects the language active at that moment.
- */
-export const countryOptions: CountryOption[] = countryEntries.map(({ code, flag }) => ({
-  code,
-  name: t(`countries.${code}`),
-  flag,
-}));
-
 /* ── Component HTML ─────────────────────────────────── */
 
 /**
@@ -122,8 +87,7 @@ export const countryOptions: CountryOption[] = countryEntries.map(({ code, flag 
  * @returns HTML string for the account setup form
  */
 export function AccountSetupForm(defaultCountry: string = "TR"): string {
-  const selectedCountry =
-    countryOptions.find((c) => c.code === defaultCountry) || countryOptions[0];
+  const selectedCountry = findCountryOption(defaultCountry) || toCountryOption(ALL_COUNTRIES[0]);
 
   return `
     <div id="account-setup-form" class="w-full">
@@ -165,11 +129,33 @@ export function AccountSetupForm(defaultCountry: string = "TR"): string {
             <!-- Dropdown Panel -->
             <div
               id="country-dropdown"
-              class="absolute z-50 hidden w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg max-h-60 overflow-y-auto"
-              role="listbox"
-              aria-label="${t("auth.setup.selectCountry")}" data-i18n-aria-label="auth.setup.selectCountry"
+              class="absolute z-50 hidden w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg flex flex-col"
             >
-              ${renderCountryOptions(selectedCountry.code)}
+              <!-- Search input (sticky) -->
+              <div class="shrink-0 p-2 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+                <input
+                  type="text"
+                  id="country-search"
+                  class="th-input w-full px-3 py-2 text-sm"
+                  placeholder="${t("auth.setup.searchCountry")}" data-i18n-placeholder="auth.setup.searchCountry"
+                  autocomplete="off"
+                  aria-controls="country-options-list"
+                  aria-autocomplete="list"
+                />
+              </div>
+              <!-- Options list -->
+              <ul
+                id="country-options-list"
+                class="m-0 list-none max-h-60 overflow-y-auto py-1"
+                role="listbox"
+                aria-label="${t("auth.setup.selectCountry")}" data-i18n-aria-label="auth.setup.selectCountry"
+              >
+                ${renderCountryOptions(selectedCountry.code, -1)}
+              </ul>
+              <!-- No results message -->
+              <p id="country-no-results" class="hidden p-3 text-sm text-gray-500 dark:text-gray-400 text-center" data-i18n="auth.setup.noCountryFound">
+                ${t("auth.setup.noCountryFound")}
+              </p>
             </div>
           </div>
         </div>
@@ -218,7 +204,7 @@ export function AccountSetupForm(defaultCountry: string = "TR"): string {
             type="tel"
             id="phone-input"
             name="phone"
-            placeholder="05XX XXX XX XX"
+            placeholder="${getPhonePlaceholderForCountry(selectedCountry.code)}"
             autocomplete="tel"
             class="th-input th-input-lg"
           />
@@ -287,7 +273,7 @@ export function AccountSetupForm(defaultCountry: string = "TR"): string {
           </div>
         </div>
 
-        <!-- Terms Agreement -->
+        <!-- Terms Agreement — Kullanım Koşulları -->
         <div class="flex items-start gap-3 pt-2">
           <input
             type="checkbox"
@@ -297,9 +283,23 @@ export function AccountSetupForm(defaultCountry: string = "TR"): string {
             style="accent-color: var(--checkbox-checked-bg);"
             required
           />
-          <label for="terms-checkbox" class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-            <a href="/kullanim-kosullari" class="text-orange-600 dark:text-orange-400 hover:underline" data-i18n="auth.setup.termsOfUse">${t("auth.setup.termsOfUse")}</a> ${t("auth.and")}
-            <a href="/gizlilik" class="text-orange-600 dark:text-orange-400 hover:underline" data-i18n="auth.setup.privacyPolicy">${t("auth.setup.privacyPolicy")}</a><span data-i18n="auth.setup.agreeTerms">${t("auth.setup.agreeTerms")}</span>
+          <label for="terms-checkbox" class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed cursor-pointer">
+            ${t("auth.setup.agreeBefore")}<button type="button" data-legal-trigger="terms" class="appearance-none bg-transparent border-0 p-0 font-medium text-orange-600 dark:text-orange-400 hover:underline focus:outline-none focus-visible:underline cursor-pointer">${t("auth.setup.termsOfUse")}</button>${t("auth.setup.agreeAfter")}
+          </label>
+        </div>
+
+        <!-- Terms Agreement — Gizlilik Politikası -->
+        <div class="flex items-start gap-3">
+          <input
+            type="checkbox"
+            id="privacy-checkbox"
+            name="privacy"
+            class="mt-1 w-4 h-4 flex-shrink-0"
+            style="accent-color: var(--checkbox-checked-bg);"
+            required
+          />
+          <label for="privacy-checkbox" class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed cursor-pointer">
+            ${t("auth.setup.agreeBefore")}<button type="button" data-legal-trigger="privacy" class="appearance-none bg-transparent border-0 p-0 font-medium text-orange-600 dark:text-orange-400 hover:underline focus:outline-none focus-visible:underline cursor-pointer">${t("auth.setup.privacyPolicy")}</button>${t("auth.setup.agreeAfter")}
           </label>
         </div>
 
@@ -326,45 +326,55 @@ export function AccountSetupForm(defaultCountry: string = "TR"): string {
 }
 
 /**
- * Renders the country dropdown options
+ * Renders the country option list (li items inside the listbox).
+ * `list` defaults to ALL_COUNTRIES; when search filters the set we pass the
+ * filtered slice. `focusIndex` highlights the keyboard-active option.
  */
-function renderCountryOptions(selectedCode: string): string {
-  return countryOptions
-    .map(
-      (country) => `
-    <button
-      type="button"
-      class="flex items-center gap-2 w-full px-4 py-2.5 text-left text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${country.code === selectedCode ? "bg-orange-50 dark:bg-orange-900/20" : ""}"
-      data-country-code="${country.code}"
-      data-country-name="${country.name}"
-      data-country-flag="${country.flag}"
+function renderCountryOptions(
+  selectedCode: string,
+  focusIndex: number,
+  list: readonly Country[] = ALL_COUNTRIES
+): string {
+  return list
+    .map((country, i) => {
+      const isSelected = country.code === selectedCode;
+      const isFocused = i === focusIndex;
+      const flag = getFlagEmoji(country.code);
+      const stateCls = [
+        isFocused ? "bg-orange-50 dark:bg-orange-900/30" : "",
+        !isFocused && isSelected ? "bg-orange-50/60 dark:bg-orange-900/20" : "",
+        !isFocused ? "hover:bg-gray-50 dark:hover:bg-gray-700" : "",
+      ]
+        .filter(Boolean)
+        .join(" ");
+      return `
+    <li
       role="option"
-      aria-selected="${country.code === selectedCode ? "true" : "false"}"
+      id="country-opt-${country.code}"
+      data-country-code="${country.code}"
+      data-index="${i}"
+      aria-selected="${isSelected ? "true" : "false"}"
+      class="flex items-center gap-2 px-4 py-2.5 cursor-pointer text-gray-900 dark:text-white transition-colors ${stateCls}"
     >
-      <span class="text-lg">${country.flag}</span>
-      <span>${country.name}</span>
+      <span class="text-lg">${flag}</span>
+      <span class="flex-1">${country.nameTR}</span>
       ${
-        country.code === selectedCode
-          ? `
-        <svg class="w-4 h-4 ml-auto text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-        </svg>
-      `
+        isSelected
+          ? `<svg class="w-4 h-4 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`
           : ""
       }
-    </button>
-  `
-    )
+    </li>`;
+    })
     .join("");
 }
 
 /* ── Helper Functions ────────────────────────────────── */
 
 /**
- * Get a country by its code
+ * Get a country by its code (returns CountryOption shape used by form data).
  */
 export function getCountryByCode(code: string): CountryOption | undefined {
-  return countryOptions.find((c) => c.code === code);
+  return findCountryOption(code) || undefined;
 }
 
 /* ── Init Logic ──────────────────────────────────────── */
@@ -379,7 +389,7 @@ export function initAccountSetupForm(options: AccountSetupFormOptions = {}): Acc
   // Initialize state
   const state: AccountSetupFormState = {
     data: {
-      country: getCountryByCode(defaultCountry) || countryOptions[0],
+      country: getCountryByCode(defaultCountry) || toCountryOption(ALL_COUNTRIES[0]),
       firstName: "",
       lastName: "",
       phone: "",
@@ -411,87 +421,238 @@ export function initAccountSetupForm(options: AccountSetupFormOptions = {}): Acc
   const passwordEyeShow = document.getElementById("password-eye-show");
   const passwordEyeHide = document.getElementById("password-eye-hide");
   const termsCheckbox = document.getElementById("terms-checkbox") as HTMLInputElement | null;
+  const privacyCheckbox = document.getElementById("privacy-checkbox") as HTMLInputElement | null;
   const submitBtn = document.getElementById("account-setup-submit-btn") as HTMLButtonElement | null;
   const requirementsContainer = document.getElementById("password-requirements");
 
-  // Country dropdown handlers
+  // Country select2-style searchable dropdown
+  const countrySearch = document.getElementById("country-search") as HTMLInputElement | null;
+  const countryOptionsList = document.getElementById("country-options-list");
+  const countryNoResults = document.getElementById("country-no-results");
+
+  // Filter state — recreated each open
+  let filteredCountries: readonly Country[] = ALL_COUNTRIES;
+  let activeIndex: number = ALL_COUNTRIES.findIndex((c) => c.code === state.data.country!.code);
+  if (activeIndex < 0) activeIndex = 0;
+
+  function rerenderOptions(): void {
+    if (!countryOptionsList || !countryNoResults) return;
+    if (filteredCountries.length === 0) {
+      countryOptionsList.classList.add("hidden");
+      countryNoResults.classList.remove("hidden");
+      return;
+    }
+    countryOptionsList.classList.remove("hidden");
+    countryNoResults.classList.add("hidden");
+    countryOptionsList.innerHTML = renderCountryOptions(
+      state.data.country!.code,
+      activeIndex,
+      filteredCountries
+    );
+  }
+
+  function applyFilter(query: string): void {
+    const q = query.toLocaleLowerCase("tr").trim();
+    if (!q) {
+      filteredCountries = ALL_COUNTRIES;
+    } else {
+      filteredCountries = ALL_COUNTRIES.filter(
+        (c) =>
+          c.nameTR.toLocaleLowerCase("tr").includes(q) ||
+          c.nameEN.toLowerCase().includes(q) ||
+          c.code.toLowerCase().includes(q)
+      );
+    }
+    activeIndex = filteredCountries.length > 0 ? 0 : -1;
+    rerenderOptions();
+  }
+
+  function scrollActiveIntoView(): void {
+    if (!countryOptionsList || activeIndex < 0) return;
+    const el = countryOptionsList.querySelector<HTMLElement>(`[data-index="${activeIndex}"]`);
+    el?.scrollIntoView({ block: "nearest" });
+  }
+
+  function scrollSelectedIntoView(): void {
+    if (!countryOptionsList) return;
+    const el = countryOptionsList.querySelector<HTMLElement>('[aria-selected="true"]');
+    el?.scrollIntoView({ block: "center" });
+  }
+
+  function openCountryDropdown(): void {
+    if (!countryDropdown || !countryBtn || !dropdownIcon) return;
+    countryDropdown.classList.remove("hidden");
+    countryBtn.setAttribute("aria-expanded", "true");
+    dropdownIcon.classList.add("rotate-180");
+    if (countrySearch) {
+      countrySearch.value = "";
+      applyFilter("");
+      // sync activeIndex to current selection inside the (unfiltered) list
+      const idx = filteredCountries.findIndex((c) => c.code === state.data.country!.code);
+      activeIndex = idx >= 0 ? idx : 0;
+      rerenderOptions();
+      window.setTimeout(() => {
+        countrySearch.focus();
+        scrollSelectedIntoView();
+      }, 0);
+    }
+  }
+
+  function closeCountryDropdown(): void {
+    if (!countryDropdown || !countryBtn || !dropdownIcon) return;
+    countryDropdown.classList.add("hidden");
+    countryBtn.setAttribute("aria-expanded", "false");
+    dropdownIcon.classList.remove("rotate-180");
+  }
+
+  function selectCountry(code: string): void {
+    const c = getCountryRecord(code);
+    if (!c) return;
+    const opt = toCountryOption(c);
+    state.data.country = opt;
+
+    if (countryDisplay) {
+      countryDisplay.innerHTML = `
+        <span class="text-lg">${opt.flag}</span>
+        <span>${opt.name}</span>
+      `;
+    }
+    if (countryInput) {
+      countryInput.value = opt.code;
+    }
+
+    // Telefon placeholder ve hata mesajını yeni ülkeye göre senkronla.
+    if (phoneInput) {
+      phoneInput.placeholder = getPhonePlaceholderForCountry(opt.code);
+      // Mevcut girdi yeni ülke kuralına uymuyorsa hata mesajını yenile.
+      if (state.data.phone && phoneError) {
+        const isValid = validatePhoneForCountry(state.data.phone, opt.code);
+        if (!isValid) {
+          const isTR = opt.code.toUpperCase() === "TR";
+          phoneError.textContent = isTR
+            ? t("auth.supplierSetup.invalidPhone") ||
+              "Geçerli bir telefon numarası girin (05XX XXX XX XX)"
+            : t("auth.setup.invalidPhoneIntl") || "Geçerli bir telefon numarası girin";
+          phoneError.classList.remove("hidden");
+        } else {
+          phoneError.classList.add("hidden");
+        }
+      }
+    }
+
+    closeCountryDropdown();
+
+    if (onCountryChange) {
+      onCountryChange(opt);
+    }
+    updateFormValidity();
+  }
+
   if (countryBtn && countryDropdown) {
-    // Toggle dropdown
+    // Toggle dropdown on trigger button
     countryBtn.addEventListener("click", () => {
-      const isOpen = !countryDropdown.classList.contains("hidden");
-      toggleCountryDropdown(!isOpen);
-    });
-
-    // Handle country selection
-    countryDropdown.addEventListener("click", (e) => {
-      const target = e.target as HTMLElement;
-      const button = target.closest("[data-country-code]") as HTMLElement | null;
-
-      if (button) {
-        const code = button.getAttribute("data-country-code") || "";
-        const name = button.getAttribute("data-country-name") || "";
-        const flag = button.getAttribute("data-country-flag") || "";
-
-        state.data.country = { code, name, flag };
-
-        // Update display
-        if (countryDisplay) {
-          countryDisplay.innerHTML = `
-            <span class="text-lg">${flag}</span>
-            <span>${name}</span>
-          `;
-        }
-
-        // Update hidden input
-        if (countryInput) {
-          countryInput.value = code;
-        }
-
-        // Update dropdown options (highlight selected)
-        countryDropdown.innerHTML = renderCountryOptions(code);
-
-        // Close dropdown
-        toggleCountryDropdown(false);
-
-        // Callback
-        if (onCountryChange) {
-          onCountryChange(state.data.country);
-        }
-
-        // Re-validate form
-        updateFormValidity();
+      if (countryDropdown.classList.contains("hidden")) {
+        openCountryDropdown();
+      } else {
+        closeCountryDropdown();
       }
     });
 
-    // Close dropdown on outside click
+    // Click on an option selects it
+    countryOptionsList?.addEventListener("click", (e) => {
+      const target = e.target as HTMLElement;
+      const item = target.closest("[data-country-code]") as HTMLElement | null;
+      if (item) {
+        selectCountry(item.getAttribute("data-country-code") || "");
+      }
+    });
+
+    // Hover updates active index for visual continuity with keyboard nav
+    countryOptionsList?.addEventListener("mousemove", (e) => {
+      const target = e.target as HTMLElement;
+      const item = target.closest<HTMLElement>("[data-index]");
+      if (item) {
+        const idx = parseInt(item.getAttribute("data-index") || "-1", 10);
+        if (idx >= 0 && idx !== activeIndex) {
+          activeIndex = idx;
+          rerenderOptions();
+        }
+      }
+    });
+
+    // Search input filtering
+    countrySearch?.addEventListener("input", () => {
+      applyFilter(countrySearch.value);
+    });
+
+    // Keyboard navigation while search input has focus
+    countrySearch?.addEventListener("keydown", (e) => {
+      switch (e.key) {
+        case "ArrowDown":
+          e.preventDefault();
+          if (filteredCountries.length > 0) {
+            activeIndex = Math.min(activeIndex + 1, filteredCountries.length - 1);
+            rerenderOptions();
+            scrollActiveIntoView();
+          }
+          break;
+        case "ArrowUp":
+          e.preventDefault();
+          if (filteredCountries.length > 0) {
+            activeIndex = Math.max(activeIndex - 1, 0);
+            rerenderOptions();
+            scrollActiveIntoView();
+          }
+          break;
+        case "Home":
+          if (filteredCountries.length > 0) {
+            e.preventDefault();
+            activeIndex = 0;
+            rerenderOptions();
+            scrollActiveIntoView();
+          }
+          break;
+        case "End":
+          if (filteredCountries.length > 0) {
+            e.preventDefault();
+            activeIndex = filteredCountries.length - 1;
+            rerenderOptions();
+            scrollActiveIntoView();
+          }
+          break;
+        case "Enter":
+          e.preventDefault();
+          if (activeIndex >= 0 && filteredCountries[activeIndex]) {
+            selectCountry(filteredCountries[activeIndex].code);
+          }
+          break;
+        case "Escape":
+          e.preventDefault();
+          closeCountryDropdown();
+          countryBtn.focus();
+          break;
+        case "Tab":
+          // Allow native focus shift, but close the panel behind us
+          closeCountryDropdown();
+          break;
+      }
+    });
+
+    // Close on outside click
     document.addEventListener("click", (e) => {
       const target = e.target as HTMLElement;
       if (!countryBtn.contains(target) && !countryDropdown.contains(target)) {
-        toggleCountryDropdown(false);
+        closeCountryDropdown();
       }
     });
 
-    // Close dropdown on escape
+    // Esc anywhere closes
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && !countryDropdown.classList.contains("hidden")) {
-        toggleCountryDropdown(false);
+        closeCountryDropdown();
         countryBtn.focus();
       }
     });
-  }
-
-  function toggleCountryDropdown(open: boolean): void {
-    if (!countryDropdown || !countryBtn || !dropdownIcon) return;
-
-    if (open) {
-      countryDropdown.classList.remove("hidden");
-      countryBtn.setAttribute("aria-expanded", "true");
-      dropdownIcon.classList.add("rotate-180");
-    } else {
-      countryDropdown.classList.add("hidden");
-      countryBtn.setAttribute("aria-expanded", "false");
-      dropdownIcon.classList.remove("rotate-180");
-    }
   }
 
   // Name input handlers
@@ -518,13 +679,14 @@ export function initAccountSetupForm(options: AccountSetupFormOptions = {}): Acc
       state.data.phone = phoneInput.value.trim();
       // Validate only if user has typed something
       if (state.data.phone) {
-        const cleaned = state.data.phone.replace(/[\s\-()]/g, "");
-        const isValid = /^(\+90|0)?5\d{9}$/.test(cleaned);
+        const isValid = validatePhoneForCountry(state.data.phone, state.data.country?.code);
         if (phoneError) {
           if (!isValid) {
-            phoneError.textContent =
-              t("auth.supplierSetup.invalidPhone") ||
-              "Geçerli bir telefon numarası girin (05XX XXX XX XX)";
+            const isTR = (state.data.country?.code || "TR").toUpperCase() === "TR";
+            phoneError.textContent = isTR
+              ? t("auth.supplierSetup.invalidPhone") ||
+                "Geçerli bir telefon numarası girin (05XX XXX XX XX)"
+              : t("auth.setup.invalidPhoneIntl") || "Geçerli bir telefon numarası girin";
             phoneError.classList.remove("hidden");
           } else {
             phoneError.classList.add("hidden");
@@ -557,12 +719,24 @@ export function initAccountSetupForm(options: AccountSetupFormOptions = {}): Acc
     });
   }
 
-  // Terms checkbox handler
-  if (termsCheckbox) {
-    termsCheckbox.addEventListener("change", () => {
+  // Terms / Privacy checkbox handlers
+  termsCheckbox?.addEventListener("change", updateFormValidity);
+  privacyCheckbox?.addEventListener("change", updateFormValidity);
+
+  // Turuncu metne tıklayınca popup aç; sonucu ilgili checkbox'a yansıt.
+  container.addEventListener("click", async (e) => {
+    const trigger = (e.target as HTMLElement).closest<HTMLElement>("[data-legal-trigger]");
+    if (!trigger) return;
+    e.preventDefault();
+    const kind = trigger.dataset.legalTrigger as LegalConsentKind | undefined;
+    if (kind !== "terms" && kind !== "privacy") return;
+    const checkbox = kind === "terms" ? termsCheckbox : privacyCheckbox;
+    const accepted = await openLegalConsentModal(kind);
+    if (checkbox) {
+      checkbox.checked = accepted;
       updateFormValidity();
-    });
-  }
+    }
+  });
 
   // Form submission
   if (form) {
@@ -599,12 +773,19 @@ export function initAccountSetupForm(options: AccountSetupFormOptions = {}): Acc
     const hasLastName = state.data.lastName.length > 0;
     const hasCountry = state.data.country !== null;
     const hasAcceptedTerms = termsCheckbox?.checked ?? false;
-    // Phone is optional but if entered must be valid
+    const hasAcceptedPrivacy = privacyCheckbox?.checked ?? false;
+    // Phone is optional but if entered must be valid (country-aware)
     const phoneOk =
-      !state.data.phone || /^(\+90|0)?5\d{9}$/.test(state.data.phone.replace(/[\s\-()]/g, ""));
+      !state.data.phone || validatePhoneForCountry(state.data.phone, state.data.country?.code);
 
     state.isValid =
-      hasValidPassword && hasFirstName && hasLastName && hasCountry && hasAcceptedTerms && phoneOk;
+      hasValidPassword &&
+      hasFirstName &&
+      hasLastName &&
+      hasCountry &&
+      hasAcceptedTerms &&
+      hasAcceptedPrivacy &&
+      phoneOk;
 
     if (submitBtn) {
       submitBtn.disabled = !state.isValid;
@@ -628,7 +809,7 @@ export function getAccountSetupFormData(): AccountSetupFormData | null {
   const passwordInput = document.getElementById("password-input") as HTMLInputElement | null;
 
   const countryCode = countryInput?.value || "TR";
-  const country = getCountryByCode(countryCode) || countryOptions[0];
+  const country = getCountryByCode(countryCode) || toCountryOption(ALL_COUNTRIES[0]);
 
   return {
     country,
