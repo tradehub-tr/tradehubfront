@@ -243,7 +243,7 @@ function PricingCard(plan: PricingPlan, idx: number): string {
             <div class="text-[10px] uppercase tracking-[0.06em] ${stripL}">${s.l}</div>
             <div class="text-sm font-semibold tabular-nums mt-0.5 ${stripV}">${s.v}</div>
           </div>
-        `,
+        `
           )
           .join("")}
       </div>
@@ -296,8 +296,8 @@ const txt = (v: string): MatrixCell => ({ type: "text", v });
 // türetiliyor (bkz. buildDynamicMatrixSections). Diğer satırlar plan modelinde
 // structured field değil (mesela "Numune satışı") — feature_key + fallback.
 const STATIC_COMMISSION_EXTRA_ROWS: MatrixRow[] = [
-	{ f: "Numune satışı", feature_key: "sample_sales", v: [yes, yes, yes, yes] },
-	{ f: "Toplu yükleme (CSV)", feature_key: "bulk_csv_upload", v: [yes, yes, yes, yes] },
+  { f: "Numune satışı", feature_key: "sample_sales", v: [yes, yes, yes, yes] },
+  { f: "Toplu yükleme (CSV)", feature_key: "bulk_csv_upload", v: [yes, yes, yes, yes] },
 ];
 
 // Matrix detay section'ları — her satır feature_key taşıyor. Backend'de bir
@@ -309,19 +309,47 @@ const MATRIX_SECTIONS: MatrixSection[] = [
   {
     title: "Vitrin & sergileme",
     rows: [
-      { f: "Üretici rozeti", feature_key: "manufacturer_badge", v: [txt("Standart"), txt("Gümüş"), txt("Altın"), txt("Platinum")] },
-      { f: "Vitrin tipi", feature_key: "storefront_tier", v: [txt("Standart"), txt("Premium"), txt("Premium+"), txt("Tam özel")] },
-      { f: "Çoklu dil", feature_key: "languages", v: [txt("2 dil"), txt("4 dil"), txt("6 dil"), txt("15+ dil")] },
+      {
+        f: "Üretici rozeti",
+        feature_key: "manufacturer_badge",
+        v: [txt("Standart"), txt("Gümüş"), txt("Altın"), txt("Platinum")],
+      },
+      {
+        f: "Vitrin tipi",
+        feature_key: "storefront_tier",
+        v: [txt("Standart"), txt("Premium"), txt("Premium+"), txt("Tam özel")],
+      },
+      {
+        f: "Çoklu dil",
+        feature_key: "languages",
+        v: [txt("2 dil"), txt("4 dil"), txt("6 dil"), txt("15+ dil")],
+      },
       { f: "Video & 360° ürün medya", feature_key: "rich_media", v: [no, no, yes, yes] },
-      { f: "Öne çıkan listeleme / ay", feature_key: "featured_listings", v: [txt("—"), txt("5"), txt("20"), txt("Sınırsız")] },
+      {
+        f: "Öne çıkan listeleme / ay",
+        feature_key: "featured_listings",
+        v: [txt("—"), txt("5"), txt("20"), txt("Sınırsız")],
+      },
     ],
   },
   {
     title: "Destek & operasyon",
     rows: [
-      { f: "Destek", feature_key: "support_tier", v: [txt("Email"), txt("Öncelikli"), txt("Hesap yön."), txt("7/24 dedicated")] },
-      { f: "Ekip kullanıcısı", feature_key: "team_seats", v: [txt("1"), txt("3"), txt("10"), txt("Sınırsız")] },
-      { f: "Reklam kredisi / ay", feature_key: "ad_credit_monthly", v: [txt("—"), txt("€100"), txt("€300"), txt("Özel")] },
+      {
+        f: "Destek",
+        feature_key: "support_tier",
+        v: [txt("Email"), txt("Öncelikli"), txt("Hesap yön."), txt("7/24 dedicated")],
+      },
+      {
+        f: "Ekip kullanıcısı",
+        feature_key: "team_seats",
+        v: [txt("1"), txt("3"), txt("10"), txt("Sınırsız")],
+      },
+      {
+        f: "Reklam kredisi / ay",
+        feature_key: "ad_credit_monthly",
+        v: [txt("—"), txt("€100"), txt("€300"), txt("Özel")],
+      },
       { f: "KDV iadesi danışmanlığı", feature_key: "vat_refund_advisory", v: [yes, yes, yes, yes] },
       { f: "Sigortalı kargo dahil", feature_key: "insured_shipping", v: [yes, yes, yes, yes] },
       { f: "Fuar / etkinlik daveti", feature_key: "event_invitations", v: [no, no, yes, yes] },
@@ -330,10 +358,23 @@ const MATRIX_SECTIONS: MatrixSection[] = [
   {
     title: "Kurumsal",
     rows: [
-      { f: "API erişimi", help: "Sipariş, stok, fiyat eşitleme", feature_key: "api_access", v: [no, txt("Limitli"), txt("Tam"), txt("Özel SLA")] },
-      { f: "ERP / muhasebe entegrasyonu", feature_key: "erp_integration", v: [no, no, txt("Beta"), yes] },
+      {
+        f: "API erişimi",
+        help: "Sipariş, stok, fiyat eşitleme",
+        feature_key: "api_access",
+        v: [no, txt("Limitli"), txt("Tam"), txt("Özel SLA")],
+      },
+      {
+        f: "ERP / muhasebe entegrasyonu",
+        feature_key: "erp_integration",
+        v: [no, no, txt("Beta"), yes],
+      },
       { f: "Özel ödeme koşulları", feature_key: "custom_payment_terms", v: [no, no, no, yes] },
-      { f: "Alt domain (markaniz.istoc.com)", feature_key: "custom_subdomain", v: [no, no, no, yes] },
+      {
+        f: "Alt domain (markaniz.istoc.com)",
+        feature_key: "custom_subdomain",
+        v: [no, no, no, yes],
+      },
     ],
   },
 ];
@@ -343,7 +384,7 @@ const MATRIX_SECTIONS: MatrixSection[] = [
 function resolveCellFromFeature(
   row: MatrixRow,
   plan: PricingPlan,
-  fallbackIndex: number,
+  fallbackIndex: number
 ): MatrixCell {
   if (!row.feature_key) return row.v[fallbackIndex];
 
@@ -362,7 +403,7 @@ function resolveCellFromFeature(
 
 function resolveRowCells(
   row: MatrixRow,
-  plans: PricingPlan[],
+  plans: PricingPlan[]
 ): [MatrixCell, MatrixCell, MatrixCell, MatrixCell] {
   const four = plans.slice(0, 4);
   return four.map((p, i) => resolveCellFromFeature(row, p, i)) as [
@@ -386,47 +427,47 @@ function renderMatrixCell(c: MatrixCell): string {
 //      taşıyanlar için plan.features içinde override aranır; bulunmazsa
 //      hardcoded fallback değerleri kullanılır.
 function buildDynamicMatrixSections(plans: PricingPlan[]): MatrixSection[] {
-	const four = plans.slice(0, 4);
-	if (four.length < 4) return MATRIX_SECTIONS;
+  const four = plans.slice(0, 4);
+  if (four.length < 4) return MATRIX_SECTIONS;
 
-	const commissionCells = four.map((p) =>
-		p.commission_rate > 0 ? txt(`%${p.commission_rate}`) : txt("Özel"),
-	) as [MatrixCell, MatrixCell, MatrixCell, MatrixCell];
+  const commissionCells = four.map((p) =>
+    p.commission_rate > 0 ? txt(`%${p.commission_rate}`) : txt("Özel")
+  ) as [MatrixCell, MatrixCell, MatrixCell, MatrixCell];
 
-	const listingsCells = four.map((p) => txt(fmtListings(p.max_active_listings))) as [
-		MatrixCell,
-		MatrixCell,
-		MatrixCell,
-		MatrixCell,
-	];
+  const listingsCells = four.map((p) => txt(fmtListings(p.max_active_listings))) as [
+    MatrixCell,
+    MatrixCell,
+    MatrixCell,
+    MatrixCell,
+  ];
 
-	const dynamicCommissionSection: MatrixSection = {
-		title: "Komisyon & limitler",
-		rows: [
-			{
-				f: "Satış komisyonu",
-				help: "Tamamlanan siparişler üzerinden",
-				v: commissionCells,
-			},
-			{ f: "Aktif ürün limiti", v: listingsCells },
-			// STATIC extra rows da feature_key resolve etsin (admin "sample_sales"
-			// feature_key'i bir plan'a is_disabled=1 ile koyarsa "no" olur).
-			...STATIC_COMMISSION_EXTRA_ROWS.map((r) => ({
-				...r,
-				v: resolveRowCells(r, plans),
-			})),
-		],
-	};
+  const dynamicCommissionSection: MatrixSection = {
+    title: "Komisyon & limitler",
+    rows: [
+      {
+        f: "Satış komisyonu",
+        help: "Tamamlanan siparişler üzerinden",
+        v: commissionCells,
+      },
+      { f: "Aktif ürün limiti", v: listingsCells },
+      // STATIC extra rows da feature_key resolve etsin (admin "sample_sales"
+      // feature_key'i bir plan'a is_disabled=1 ile koyarsa "no" olur).
+      ...STATIC_COMMISSION_EXTRA_ROWS.map((r) => ({
+        ...r,
+        v: resolveRowCells(r, plans),
+      })),
+    ],
+  };
 
-	const resolvedSections = MATRIX_SECTIONS.map((sec) => ({
-		title: sec.title,
-		rows: sec.rows.map((r) => ({
-			...r,
-			v: resolveRowCells(r, plans),
-		})),
-	}));
+  const resolvedSections = MATRIX_SECTIONS.map((sec) => ({
+    title: sec.title,
+    rows: sec.rows.map((r) => ({
+      ...r,
+      v: resolveRowCells(r, plans),
+    })),
+  }));
 
-	return [dynamicCommissionSection, ...resolvedSections];
+  return [dynamicCommissionSection, ...resolvedSections];
 }
 
 const MATRIX_GRID_CLS = "grid grid-cols-[1.6fr_repeat(4,1fr)] gap-3 items-center";
@@ -466,8 +507,9 @@ function PricingMatrix(plans: PricingPlan[]): string {
           .join("")}
       </div>
 
-      ${buildDynamicMatrixSections(plans).map(
-        (sec) => `
+      ${buildDynamicMatrixSections(plans)
+        .map(
+          (sec) => `
         <div>
           <div class="px-6 pt-3.5 pb-2 bg-[#fafaf8] text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8a877f] border-b border-[#e8e6e0]">
             ${sec.title}
