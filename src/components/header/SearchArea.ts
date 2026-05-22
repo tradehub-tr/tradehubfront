@@ -81,7 +81,7 @@ function renderSearchTabs(): string {
 function renderDesktopSearchBar(): string {
   return `
     <div class="max-w-3xl mx-auto px-1 sm:px-0" id="search-wrapper">
-      <form id="search-form" action="/pages/products.html" method="GET" role="search">
+      <form id="search-form" action="/urunler" method="GET" role="search">
         <div class="relative">
           <!-- Search Box -->
           <div id="search-box" class="flex h-[42px] items-center border-2 bg-white px-1.5 sm:px-2.5" style="border-color:var(--search-input-border-color);border-radius:var(--radius-input)">
@@ -131,7 +131,7 @@ function renderDesktopSearchBar(): string {
             </div>
             -->
             <div class="flex items-center justify-end mb-2.5">
-              <a href="/pages/legal/terms.html" class="whitespace-nowrap text-xs text-gray-400 transition-colors" data-i18n="header.termsOfUse">${t("header.termsOfUse")}</a>
+              <a href="/kullanim-kosullari" class="whitespace-nowrap text-xs text-gray-400 transition-colors" data-i18n="header.termsOfUse">${t("header.termsOfUse")}</a>
             </div>
             <!-- Suggestion Chips (dynamically loaded) -->
             <div id="search-chips-container" class="flex items-center gap-2 flex-wrap">

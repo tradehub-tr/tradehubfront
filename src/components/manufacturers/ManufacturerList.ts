@@ -120,7 +120,7 @@ export function ManufacturerList(): string {
                   </div>
                   <div class="min-w-0 flex-1">
                     <a
-                      :href="'/pages/seller/seller-storefront.html?seller=' + seller.seller_code"
+                      :href="'/magaza/' + seller.seller_code"
                       class="text-[15px] xl:text-[16px] font-bold text-[#222] hover:text-[#1a66ff] transition-colors truncate max-w-[440px] block"
                       x-text="seller.seller_name"
                     ></a>
@@ -156,7 +156,7 @@ export function ManufacturerList(): string {
                     </svg>
                   </button>
                   <a
-                    :href="'/pages/seller/seller-storefront.html?seller=' + seller.seller_code"
+                    :href="'/magaza/' + seller.seller_code"
                     class="h-9 xl:h-10 px-3 xl:px-4 border border-[#222] rounded-full text-[12px] xl:text-[14px] font-bold text-[#222] bg-white hover:bg-gray-50 transition-colors whitespace-nowrap inline-flex items-center"
                   >${t("mfr.list.contactUs")}</a>
                 </div>
@@ -188,7 +188,7 @@ export function ManufacturerList(): string {
                   </template>
                   <template x-for="(p, i) in (seller.products || []).slice(0, 3)" :key="p.name">
                     <a
-                      :href="'/pages/product-detail.html?id=' + encodeURIComponent(p.name)"
+                      :href="'/urun/' + encodeURIComponent(p.name)"
                       class="flex flex-col bg-white border border-gray-100 rounded-lg overflow-hidden w-[140px] xl:w-[180px] flex-shrink-0 no-underline text-inherit hover:border-gray-300 transition-colors"
                     >
                       <div class="bg-gray-50 flex-1 overflow-hidden">
@@ -256,7 +256,7 @@ export function ManufacturerList(): string {
                   <svg x-show="!seller.logo" class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
                 </div>
                 <a
-                  :href="'/pages/seller/seller-storefront.html?seller=' + seller.seller_code"
+                  :href="'/magaza/' + seller.seller_code"
                   class="text-[14px] font-bold text-[#222] truncate flex-1"
                   x-text="seller.seller_name"
                 ></a>

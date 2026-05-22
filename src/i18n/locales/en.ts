@@ -143,6 +143,12 @@ const en = {
       rfq: "Request for Quotation",
       topRanking: "Top Ranking",
       fastCustomization: "Fast Customization",
+      groupProducts: "Products",
+      groupCategories: "Categories",
+      groupBrands: "Brands",
+      groupSellers: "Sellers",
+      noResults: "No results found",
+      seeAllResults: "see all results",
     },
 
     // ============================================================
@@ -949,7 +955,6 @@ const en = {
       sortMinOrder: "Min. Order",
       sortSupplierRating: "Supplier Rating",
       sortByLabel: "Sort by:",
-      showingResults: "Showing {{count}}",
       resultsForProducts: "category",
       resultsForManufacturers: "global suppliers",
       viewingLead: "Viewing:",
@@ -1579,7 +1584,7 @@ const en = {
           "<p>Estimated delivery times are indicated on the product page and are for informational purposes. Actual delivery times may vary depending on logistics conditions.</p><p>The shipping company is responsible for damages that may occur during the shipping process. It is recommended to inspect the package upon delivery.</p><p>For international shipments, customs duties and additional charges are the responsibility of the Buyer.</p>",
         section7Title: "7. Returns and Right of Withdrawal",
         section7Content:
-          '<p>Return and withdrawal rights are subject to the consumer/commercial legislation of the country where the seller is established and to the seller\'s own return policy. Each seller publishes the applicable return terms on the product page and in their store profile.</p><p>istoc acts as an intermediary service provider in the commercial relationship between buyer and seller and does not set return conditions on behalf of the parties. The Platform only provides the process infrastructure for forwarding return requests and resolving disputes. For the detailed process, please review our <a href="/pages/legal/returns.html" class="text-primary-500 hover:underline">Return Policy</a> page.</p>',
+          '<p>Return and withdrawal rights are subject to the consumer/commercial legislation of the country where the seller is established and to the seller\'s own return policy. Each seller publishes the applicable return terms on the product page and in their store profile.</p><p>istoc acts as an intermediary service provider in the commercial relationship between buyer and seller and does not set return conditions on behalf of the parties. The Platform only provides the process infrastructure for forwarding return requests and resolving disputes. For the detailed process, please review our <a href="/iade-kosullari" class="text-primary-500 hover:underline">Return Policy</a> page.</p>',
         section8Title: "8. Intellectual Property Rights",
         section8Content:
           "<p>All content, design, logos, software and databases on the Platform are the intellectual property of Thoptan Ltd. (operator of the istoc brand) or its licensors.</p><p>Users may not copy, reproduce, distribute or use Platform content for commercial purposes. Responsibility for product images and descriptions uploaded by Sellers belongs to the respective Seller.</p>",
@@ -2153,7 +2158,7 @@ const en = {
       ariaLabel: "Cookie consent notification",
       title: "We Use Cookies",
       description:
-        'We use cookies to provide you with the best experience on our website. Learn more about our <a href="/pages/legal/cookies.html" class="underline text-primary-600 hover:text-primary-700">Cookie Policy</a>.',
+        'We use cookies to provide you with the best experience on our website. Learn more about our <a href="/cerezler" class="underline text-primary-600 hover:text-primary-700">Cookie Policy</a>.',
       rejectAll: "Reject All",
       managePreferences: "Manage Preferences",
       acceptAll: "Accept All",
@@ -2990,6 +2995,18 @@ const en = {
       yr: "yr",
       yrs: "yrs",
       findSimilar: "Find similar products",
+    },
+
+    // ============================================================
+    // SOCIAL PROOF - PRODUCT CARD BADGES
+    // ============================================================
+    socialProof: {
+      sales: "{{value}} units sold in the last {{days}} days",
+      favorites: "{{value}} businesses favorited this",
+      cart_now: "{{value}} buyers have this in cart",
+      views_24h: "{{value}} views in the last 24 hours",
+      distinct_buyers: "{{value}} businesses purchased in the last {{days}} days",
+      seller_orders: "{{value}} completed orders from this seller",
     },
 
     // ============================================================

@@ -50,21 +50,21 @@ const featureCards: FeatureCard[] = [
     descKey: "mega.topRankingDesc",
     metaKey: "mega.topRankingMeta",
     metaSource: "best-seller-count",
-    href: "/pages/top-ranking.html",
+    href: "/cok-satanlar",
     icon: `<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>`,
   },
   {
     titleKey: "mega.tailoredSelections",
     descKey: "mega.tailoredSelectionsDesc",
     metaKey: "mega.tailoredSelectionsMeta",
-    href: "/pages/tailored-selections.html",
+    href: "/size-ozel",
     icon: `<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9L12 3z"/></svg>`,
   },
   {
     titleKey: "mega.topDeals",
     descKey: "mega.topDealsDesc",
     metaKey: "mega.topDealsMeta",
-    href: "/pages/top-deals.html",
+    href: "/firsat",
     icon: `<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L2 12V2h10l8.6 8.6a2 2 0 0 1 0 2.8z"/><circle cx="7" cy="7" r="1.6" fill="currentColor"/></svg>`,
   },
 ];
@@ -75,19 +75,19 @@ const protectionCards = [
   {
     titleKey: "mega.safePayments",
     descKey: "mega.safePaymentsDesc",
-    href: "/pages/info/payments.html",
+    href: "/odeme-secenekleri",
     icon: `<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"/></svg>`,
   },
   {
     titleKey: "mega.moneyBack",
     descKey: "mega.moneyBackDesc",
-    href: "/pages/info/refund-policy.html",
+    href: "/iade-politikasi",
     icon: `<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>`,
   },
   {
     titleKey: "mega.shippingLogistics",
     descKey: "mega.shippingLogisticsDesc",
-    href: "/pages/info/shipping-logistics.html",
+    href: "/kargo-lojistik",
     icon: `<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/></svg>`,
   },
   {
@@ -217,7 +217,7 @@ function renderFeaturedView(): string {
         </div>
 
         <!-- Producers banner -->
-        <a href="/pages/manufacturers.html" class="group relative isolate block overflow-hidden rounded-xl bg-[#1a1a1a] shadow-[0_2px_6px_rgba(20,20,18,0.08)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(20,20,18,0.18)] min-h-[150px] lg:min-h-[180px] xl:min-h-[230px] 2xl:min-h-[280px]" aria-label="${t("mega.discoverProducers")}">
+        <a href="/markalar" class="group relative isolate block overflow-hidden rounded-xl bg-[#1a1a1a] shadow-[0_2px_6px_rgba(20,20,18,0.08)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(20,20,18,0.18)] min-h-[150px] lg:min-h-[180px] xl:min-h-[230px] 2xl:min-h-[280px]" aria-label="${t("mega.discoverProducers")}">
           <img src="${producerImg}" alt="" loading="lazy" decoding="async" class="absolute inset-0 z-0 block w-full h-full object-cover" />
           <div class="absolute inset-0 z-10" style="background:linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.85) 100%);"></div>
           <span class="absolute top-3 left-3 lg:top-3.5 lg:left-3.5 z-20 inline-block rounded-full bg-amber-400 px-2 py-0.5 text-[10px] lg:text-[10.5px] font-bold uppercase tracking-wider text-gray-900" data-i18n="mega.bannerTagNew">${t("mega.bannerTagNew")}</span>
@@ -254,7 +254,7 @@ function renderProtectionsView(): string {
           <p class="text-sm text-gray-500 leading-relaxed mb-6" data-i18n="mega.tradeAssuranceLead">${t("mega.tradeAssuranceLead")}</p>
 
           <div class="flex items-center gap-4">
-            <a href="/pages/info/trade-assurance-detail.html" class="th-btn" data-i18n="common.learnMore">
+            <a href="/ticaret-guvencesi/detay" class="th-btn" data-i18n="common.learnMore">
               ${t("common.learnMore")}
             </a>
             <a href="/pages/info/trade-assurance-detail.html#how-it-works" class="inline-flex items-center gap-1 text-sm font-medium text-gray-900 hover:text-primary-600 transition-colors">
@@ -317,7 +317,7 @@ const buyerCentralColumns: BuyerCentralColumn[] = [
       { labelKey: "mega.successStories", href: "/success-stories" },
       { labelKey: "mega.blogs", href: "/blogs" },
       { labelKey: "mega.industryReports", href: "/reports" },
-      { labelKey: "mega.helpCenter", href: "/pages/help/help-center.html" },
+      { labelKey: "mega.helpCenter", href: "/yardim-merkezi" },
     ],
   },
   {
@@ -546,7 +546,7 @@ export function initMegaMenu(): void {
   protectionCards.forEach((c) => {
     pageToTarget[c.href] = "protections";
   });
-  pageToTarget["/pages/info/trade-assurance-detail.html"] = "protections";
+  pageToTarget["/ticaret-guvencesi/detay"] = "protections";
   buyerCentralColumns.forEach((col) => {
     col.links.forEach((l) => {
       pageToTarget[l.href] = "buyer-central";

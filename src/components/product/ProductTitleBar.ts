@@ -7,6 +7,8 @@
 import { getCurrentProduct } from "../../alpine/product";
 import { t } from "../../i18n";
 import { getCountryCode, getCountryFlag } from "../../utils/country";
+import { getBrandUrl } from "../../utils/brandUrl";
+import { getSellerUrl } from "../../utils/sellerUrl";
 import { renderStars } from "./ProductReviews";
 
 function ratingLineHtml(): string {
@@ -73,7 +75,7 @@ export function ProductTitleBar(): string {
 
   const brandRowHtml =
     brand && brand.name
-      ? `<a href="/pages/brand.html?slug=${encodeURIComponent(brand.slug)}"
+      ? `<a href="${getBrandUrl({ slug: brand.slug })}"
           class="inline-flex items-center gap-1.5 px-2 py-1 mb-2 rounded-md border border-gray-200 bg-white hover:bg-gray-50 text-[12px] font-medium no-underline"
           style="color: var(--pd-title-color, #222222);"
           title="${brand.name}">
@@ -96,7 +98,7 @@ export function ProductTitleBar(): string {
 
       <!-- Supplier Company Bar -->
       <div class="flex items-center gap-2 flex-wrap text-[13px] px-3 py-2 rounded-md min-w-0 overflow-hidden" style="background: var(--color-surface-raised, #f5f5f5); color: var(--pd-rating-text-color, #6b7280);">
-        <a href="/pages/seller/seller-storefront.html?seller=${encodeURIComponent(s.id)}" class="text-[13px] font-medium hover:underline truncate max-w-[200px]" style="color: var(--pd-breadcrumb-link-color, #cc9900);">${s.name}</a>
+        <a href="${getSellerUrl({ id: s.id })}" class="text-[13px] font-medium hover:underline truncate max-w-[200px]" style="color: var(--pd-breadcrumb-link-color, #cc9900);">${s.name}</a>
         ${
           s.verified
             ? `

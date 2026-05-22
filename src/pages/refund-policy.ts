@@ -69,7 +69,7 @@ function BreadcrumbSection(): string {
   return `
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
       <nav class="text-sm text-gray-500">
-        <a href="/pages/info/trade-assurance-detail.html" class="hover:text-gray-800 transition-colors">Ticari Güvence</a>
+        <a href="/ticaret-guvencesi/detay" class="hover:text-gray-800 transition-colors">Ticari Güvence</a>
         <span class="mx-2">&gt;</span>
         <span class="text-gray-800 font-medium">Para İade Garantisi</span>
       </nav>

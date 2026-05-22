@@ -1,5 +1,6 @@
 import { t } from "../../i18n";
 import { formatPrice } from "../../utils/currency";
+import { getBrandUrl } from "../../utils/brandUrl";
 /**
  * ProductListingGrid Component
  * iSTOC-style product listing grid for products page.
@@ -186,7 +187,7 @@ function renderProductListingCard(card: ProductListingCard): string {
   // Brand chip — small badge with brand name (logo if available)
   const brandHtml = card.brandName
     ? `<a class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded border border-gray-200 bg-gray-50 text-[10px] font-medium text-gray-700 hover:bg-gray-100 no-underline max-w-full"
-          href="${card.brandSlug ? `/pages/brand.html?slug=${card.brandSlug}` : "#"}"
+          href="${getBrandUrl({ slug: card.brandSlug })}"
           title="${card.brandName}">
         ${card.brandLogo ? `<img src="${card.brandLogo}" alt="${card.brandName}" class="w-3 h-3 object-contain" />` : ""}
         <span class="whitespace-nowrap overflow-hidden text-ellipsis">${card.brandName}</span>

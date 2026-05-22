@@ -55,12 +55,13 @@ export function renderGalleryMedia(
 ): string {
   if (src) {
     const safeAlt = escapeHtmlAttr(alt);
+    const fitClass = size === "large" ? "object-contain" : "object-cover";
     return `
       <img
         src="${src}"
         alt="${safeAlt}"
         data-gallery-main-media="true"
-        class="gallery-media-asset gallery-media-asset--${size} w-full h-full object-cover select-none pointer-events-none"
+        class="gallery-media-asset gallery-media-asset--${size} w-full h-full ${fitClass} select-none pointer-events-none"
         loading="${size === "thumb" ? "lazy" : "eager"}"
         decoding="${size === "thumb" ? "async" : "sync"}"
         draggable="false"

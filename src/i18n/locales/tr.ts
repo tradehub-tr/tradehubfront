@@ -143,6 +143,12 @@ const tr = {
       rfq: "Fiyat Teklifi Talebi",
       topRanking: "En Çok Satanlar",
       fastCustomization: "Hızlı Özelleştirme",
+      groupProducts: "Ürünler",
+      groupCategories: "Kategoriler",
+      groupBrands: "Markalar",
+      groupSellers: "Satıcılar",
+      noResults: "Sonuç bulunamadı",
+      seeAllResults: "tüm sonuçları gör",
     },
 
     // ============================================================
@@ -949,7 +955,6 @@ const tr = {
       sortMinOrder: "Min. Sipariş",
       sortSupplierRating: "Tedarikçi Puanı",
       sortByLabel: "Sırala:",
-      showingResults: "{{count}} ürün gösteriliyor",
       resultsForProducts: "kategorisinde",
       resultsForManufacturers: "için küresel tedarikçiler",
       viewingLead: "Görüntüleniyor:",
@@ -1573,7 +1578,7 @@ const tr = {
           "<p>Tahmini teslimat süreleri ürün sayfasında belirtilir ve bilgilendirme amaçlıdır. Gerçek teslimat süreleri lojistik koşullara bağlı olarak değişebilir.</p><p>Kargo sürecinde oluşabilecek hasarlardan kargo firması sorumludur. Teslimat sırasında paket kontrolü yapılması önerilir.</p><p>Uluslararası gönderilerde gümrük vergisi ve ek masraflar Alıcıya aittir.</p>",
         section7Title: "7. İade ve Cayma Hakkı",
         section7Content:
-          '<p>İade ve cayma hakkı, satıcının yerleşik olduğu ülkenin tüketici/ticaret mevzuatına ve satıcının kendi iade politikasına tabidir. Her satıcı, ürün sayfasında ve mağaza profilinde geçerli iade koşullarını ilan eder.</p><p>istoc; alıcı ve satıcı arasındaki ticari ilişkide aracı hizmet sağlayıcı konumundadır ve iade koşullarını taraflar yerine belirlemez. Platform yalnızca iade talebinin iletilmesi ve anlaşmazlıkların çözümü için süreç altyapısı sağlar. Detaylı süreç için <a href="/pages/legal/returns.html" class="text-primary-500 hover:underline">İade Politikası</a> sayfamızı inceleyiniz.</p>',
+          '<p>İade ve cayma hakkı, satıcının yerleşik olduğu ülkenin tüketici/ticaret mevzuatına ve satıcının kendi iade politikasına tabidir. Her satıcı, ürün sayfasında ve mağaza profilinde geçerli iade koşullarını ilan eder.</p><p>istoc; alıcı ve satıcı arasındaki ticari ilişkide aracı hizmet sağlayıcı konumundadır ve iade koşullarını taraflar yerine belirlemez. Platform yalnızca iade talebinin iletilmesi ve anlaşmazlıkların çözümü için süreç altyapısı sağlar. Detaylı süreç için <a href="/iade-kosullari" class="text-primary-500 hover:underline">İade Politikası</a> sayfamızı inceleyiniz.</p>',
         section8Title: "8. Fikri Mülkiyet Hakları",
         section8Content:
           "<p>Platform üzerindeki tüm içerik, tasarım, logo, yazılım ve veritabanları istoc markası adına Thoptan Ltd.'in veya lisans verenlerinin fikri mülkiyetindedir.</p><p>Kullanıcılar, Platform içeriğini kopyalayamaz, çoğaltamaz, dağıtamaz veya ticari amaçla kullanamaz. Satıcılar tarafından yüklenen ürün görselleri ve açıklamalarının sorumluluğu ilgili Satıcıya aittir.</p>",
@@ -2147,7 +2152,7 @@ const tr = {
       ariaLabel: "Çerez onay bildirimi",
       title: "Çerezleri Kullanıyoruz",
       description:
-        'Web sitemizde size en iyi deneyimi sunmak için çerezleri kullanıyoruz. <a href="/pages/legal/cookies.html" class="underline text-primary-600 hover:text-primary-700">Çerez Politikamız</a> hakkında daha fazla bilgi edinin.',
+        'Web sitemizde size en iyi deneyimi sunmak için çerezleri kullanıyoruz. <a href="/cerezler" class="underline text-primary-600 hover:text-primary-700">Çerez Politikamız</a> hakkında daha fazla bilgi edinin.',
       rejectAll: "Tümünü Reddet",
       managePreferences: "Tercihleri Yönet",
       acceptAll: "Tümünü Kabul Et",
@@ -2989,6 +2994,18 @@ const tr = {
       yr: "yıl",
       yrs: "yıl",
       findSimilar: "Benzer ürünleri bul",
+    },
+
+    // ============================================================
+    // SOCIAL PROOF - ÜRÜN KARTI ROZETLERİ
+    // ============================================================
+    socialProof: {
+      sales: "Son {{days}} günde {{value}} adet satıldı",
+      favorites: "{{value}} işletmenin favorisi",
+      cart_now: "{{value}} alıcının sepetinde",
+      views_24h: "Son 24 saatte {{value}} görüntülenme",
+      distinct_buyers: "Son {{days}} günde {{value}} işletme bu üründen aldı",
+      seller_orders: "Bu satıcıdan {{value}} tamamlanmış sipariş",
     },
 
     // ============================================================

@@ -5,6 +5,7 @@
 import Alpine from "alpinejs";
 import { isLoggedIn, waitForAuth } from "../utils/auth";
 import { showLoginModal } from "../components/product/LoginModal";
+import { saveRecentSeller } from "../services/recentHistoryService";
 
 const API_BASE = window.API_BASE || "/api";
 
@@ -330,6 +331,25 @@ Alpine.data("sellerShop", () => ({
 
     this.filteredProducts = [...this.products];
     this.applyTheme();
+
+    // Search dropdown "son gezdiklerin" — sadece URL'den gerçek seller geldiyse kaydet,
+    // mock fallback ("demo-seller") localStorage'ı kirletmesin.
+    const urlSellerCode = new URLSearchParams(window.location.search).get("seller");
+    if (urlSellerCode && this.seller) {
+      const s = this.seller as {
+        seller_code?: string;
+        seller_name?: string;
+        slug?: string;
+        logo?: string;
+      };
+      saveRecentSeller({
+        id: s.seller_code || urlSellerCode,
+        name: s.seller_name || urlSellerCode,
+        slug: s.slug || s.seller_code || urlSellerCode,
+        logo: s.logo || undefined,
+      });
+    }
+
     // URL hash'ten aktif sayfayı oku (#products, #profile, #contacts)
     const VALID_PAGES = new Set(["home", "products", "profile", "contacts"]);
     const hash = window.location.hash.replace("#", "");

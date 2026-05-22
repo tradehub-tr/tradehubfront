@@ -3,6 +3,7 @@ import { t, t as tI18n } from "../i18n";
 import { getBaseUrl } from "../components/auth/AuthLayout";
 import { callMethod } from "../utils/api";
 import { getSessionUser, logout } from "../utils/auth";
+import { saveRecentSeller } from "../services/recentHistoryService";
 
 // ─── Seller Storefront tipleri ───────────────────────────────────────
 /** Media gallery item (video/image) */
@@ -25,6 +26,8 @@ interface SellerMediaGroup {
 interface SellerStorefrontData {
   slug?: string;
   seller_code?: string;
+  seller_name?: string;
+  logo?: string;
   joined_at?: string;
   city?: string;
   country?: string;
@@ -227,6 +230,14 @@ Alpine.data("sellerStorefront", () => ({
     if (this.seller) {
       if (!this.seller.slug) this.seller.slug = code;
       if (!this.seller.seller_code) this.seller.seller_code = code;
+
+      // Search dropdown "son gezdiklerin" listesi için
+      saveRecentSeller({
+        id: this.seller.seller_code || code,
+        name: this.seller.seller_name || code,
+        slug: this.seller.slug || code,
+        logo: this.seller.logo || undefined,
+      });
     }
 
     this.loading = false;
@@ -838,7 +849,7 @@ Alpine.data("applicationPendingPage", () => ({
   async init() {
     const user = await getSessionUser();
     if (!user) {
-      window.location.replace("/pages/auth/login.html");
+      window.location.replace("/giris");
       return;
     }
 

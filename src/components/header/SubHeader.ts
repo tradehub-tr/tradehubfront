@@ -7,7 +7,7 @@
 import { t } from "../../i18n";
 
 /** Right-side utility links (non-mega-trigger) */
-const utilityLinks = [{ labelKey: "subheader.sellOnIstoc", href: "/pages/seller/sell.html" }];
+const utilityLinks = [{ labelKey: "subheader.sellOnIstoc", href: "/satici-ol" }];
 
 /**
  * Generates the "All Categories" mega menu trigger
@@ -57,7 +57,7 @@ function renderNavigationLinks(): string {
  * Generates the right-side utility links
  */
 function renderUtilityLinks(): string {
-  const helpHref = "/pages/help/help-center.html";
+  const helpHref = "/yardim-merkezi";
   const helpActive = window.location.pathname === helpHref;
   return `
     <div class="hidden xl:flex items-center gap-0.5">

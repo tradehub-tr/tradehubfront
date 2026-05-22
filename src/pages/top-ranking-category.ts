@@ -12,6 +12,7 @@ import "../style.css";
 import Alpine from "alpinejs";
 import { initFlowbite } from "flowbite";
 import { t } from "../i18n";
+import { getListingUrl } from "../utils/listingUrl";
 
 import {
   TopBar,
@@ -42,6 +43,7 @@ import { initCurrency } from "../services/currencyService";
 import { loadCategories, type ApiCategory } from "../services/categoryService";
 import type { RankedProduct } from "../types/topRanking";
 import { initAnimatedPlaceholder } from "../utils/animatedPlaceholder";
+import { saveRecentCategory } from "../services/recentHistoryService";
 
 const PAGE_SIZE = 50;
 const MAX_PAGES = 2;
@@ -129,11 +131,13 @@ Alpine.data("topRankingCategoryPage", () => ({
     for (const main of this.apiCategories) {
       if (main.slug === this.category) {
         this.categoryName = main.name;
+        saveRecentCategory({ slug: this.category, name: main.name });
         return;
       }
       const sub = main.children?.find((c) => c.slug === this.category);
       if (sub) {
         this.categoryName = sub.name;
+        saveRecentCategory({ slug: this.category, name: sub.name });
         return;
       }
     }
@@ -160,7 +164,7 @@ Alpine.data("topRankingCategoryPage", () => ({
       const incoming: RankedProduct[] = (result.products || []).map((p) => ({
         id: p.id || "",
         name: p.name || "",
-        href: p.href || `/pages/product-detail.html?id=${p.id}`,
+        href: getListingUrl({ id: p.id, href: p.href }),
         price: p.price || "",
         imageSrc: p.imageSrc || "",
         moq: p.moq || "1",
@@ -247,7 +251,7 @@ Alpine.data("topRankingCategoryPage", () => ({
     const finalCat = this.pendingSubCategory || mainCat;
     if (!finalCat) {
       // "Tümü" → ana top-ranking sayfasına git
-      window.location.href = "/pages/top-ranking.html";
+      window.location.href = "/cok-satanlar";
       return;
     }
     // Aynı kategori seçildiyse fetch yap (sayfa yenileme yerine)
@@ -276,7 +280,7 @@ Alpine.data("topRankingCategoryPage", () => ({
 const parsed = parseSearchParams();
 
 const breadcrumbItems = [
-  { label: t("topRankingCategoryPage.breadcrumb"), href: "/pages/top-ranking.html" },
+  { label: t("topRankingCategoryPage.breadcrumb"), href: "/cok-satanlar" },
   { label: parsed.cat || t("topRankingCategoryPage.missingCategory") },
 ];
 

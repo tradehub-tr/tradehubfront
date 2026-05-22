@@ -76,7 +76,7 @@ export function TopDealsStickyMobileHeader(): string {
         <span class="flex-shrink-0 bg-white/25 text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap" data-i18n="topDealsPage.heroTitle">${t("topDealsPage.heroTitle")}</span>
 
         <!-- Search input -->
-        <form action="/pages/products.html" method="GET" class="flex-1 min-w-0">
+        <form action="/urunler" method="GET" class="flex-1 min-w-0">
           <div class="flex items-center bg-white rounded-full px-3 py-1.5 gap-2">
             <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>

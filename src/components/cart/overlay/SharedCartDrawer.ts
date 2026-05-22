@@ -3,6 +3,8 @@ import { cartStore } from "../state/CartStore";
 import type { CartSupplier, CartProduct, CartSku } from "../../../types/cart";
 import { t } from "../../../i18n";
 import { getCurrencySymbol } from "../../../utils/currency";
+import { getListingUrl } from "../../../utils/listingUrl";
+import { getSellerUrl } from "../../../utils/sellerUrl";
 import { formatCurrency, getSelectedCurrency } from "../../../services/currencyService";
 import { isLoggedIn } from "../../../utils/auth";
 import { apiCheckStock, apiAddToCart, fetchCart } from "../../../services/cartService";
@@ -895,7 +897,7 @@ function syncToCartStore(item: CartDrawerItemModel, unitPrice: number): void {
     const supplier: CartSupplier = {
       id: supplierId,
       name: item.supplierName,
-      href: `/pages/seller/seller-shop.html?seller=${supplierId}`,
+      href: getSellerUrl({ id: supplierId }),
       selected: true,
       products: [],
     };
@@ -907,7 +909,7 @@ function syncToCartStore(item: CartDrawerItemModel, unitPrice: number): void {
     const product: CartProduct = {
       id: productId,
       title: item.title,
-      href: `/pages/product-detail.html?id=${productId}`,
+      href: getListingUrl({ id: productId }),
       tags: [],
       moqLabel: `${t("product.minOrderLabel")}: ${item.moq} ${item.unit}`,
       favoriteIcon: "♡",

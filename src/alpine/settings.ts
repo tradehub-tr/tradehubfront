@@ -37,7 +37,7 @@ Alpine.data("settingsLayout", () => ({
 
   async handleLogout() {
     await logout();
-    window.location.replace("/pages/auth/login.html");
+    window.location.replace("/giris");
   },
 
   copyMemberId() {
@@ -646,7 +646,7 @@ Alpine.data("settingsDeleteAccount", () => ({
       this.step = 3;
       await logout();
       setTimeout(() => {
-        window.location.href = "/pages/auth/login.html";
+        window.location.href = "/giris";
       }, 3000);
     } catch (err) {
       const msg = err instanceof Error ? err.message : "";

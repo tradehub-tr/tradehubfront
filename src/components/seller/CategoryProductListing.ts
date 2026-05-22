@@ -6,6 +6,7 @@
 import type { ProductCategory, DetailedProduct } from "../../types/seller/types";
 import { formatPriceRange } from "../../services/currencyService";
 import { t } from "../../i18n";
+import { getListingUrl } from "../../utils/listingUrl";
 
 function getBadgeClasses(type: string): string {
   const base = "inline-flex items-center gap-0.5 text-[11px] rounded-sm px-1.5 py-0.5";
@@ -25,7 +26,7 @@ function formatSoldCount(count: number): string {
 }
 
 function renderProductCard(product: DetailedProduct): string {
-  const detailUrl = `/pages/product-detail.html?id=${encodeURIComponent(product.id)}`;
+  const detailUrl = getListingUrl({ id: product.id });
   return `
     <a href="${detailUrl}" class="category-listing__card bg-white dark:bg-gray-800 border-r border-b border-(--card-border-color) dark:border-gray-700 p-4 lg:p-3 flex flex-col hover:shadow-lg dark:hover:shadow-xl transition-shadow duration-300 relative group cursor-pointer">
       <!-- Image -->

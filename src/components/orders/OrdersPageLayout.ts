@@ -763,7 +763,7 @@ function renderAllOrders(): string {
                 </div>
               </div>
               <div class="flex items-center gap-4 max-sm:gap-3">
-                <a :href="selectedOrder.supplier.code ? '/pages/seller/seller-shop.html?seller=' + encodeURIComponent(selectedOrder.supplier.code) : '#'" class="text-sm text-blue-600 hover:underline">${t("orders.visitStore")}</a>
+                <a :href="selectedOrder.supplier.code ? '/magaza/' + encodeURIComponent(selectedOrder.supplier.code) : '#'" class="text-sm text-blue-600 hover:underline">${t("orders.visitStore")}</a>
               </div>
             </div>
           </div>

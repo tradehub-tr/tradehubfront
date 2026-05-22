@@ -177,7 +177,7 @@ async function renderPage() {
                       @click="switchPage('contacts')">
                       Tedarikçiye Ulasin
                     </button>
-                    <a :href="'/pages/seller/seller-storefront.html?seller=' + sellerCode"
+                    <a :href="'/magaza/' + sellerCode"
                        class="th-btn-outline text-[12px] font-medium text-[#555] px-5 py-2 text-center hover:text-[#333] whitespace-nowrap">
                       Profili Goruntule
                     </a>
@@ -193,7 +193,7 @@ async function renderPage() {
                 @click="switchPage('contacts')">
                 Tedarikçiye Ulasin
               </button>
-              <a :href="'/pages/seller/seller-storefront.html?seller=' + sellerCode"
+              <a :href="'/magaza/' + sellerCode"
                  class="th-btn-outline flex-1 text-[12px] font-medium text-[#555] py-2 text-center">
                 Profil
               </a>
@@ -261,7 +261,7 @@ async function renderPage() {
                   <a href="#" @click.prevent="switchPage('profile'); open = false"
                      class="block px-4 py-2 text-[13px] hover:bg-white/10 transition-colors"
                      style="color: var(--store-nav-text, #fff);">Sirket Profili</a>
-                  <a :href="'/pages/seller/seller-storefront.html?seller=' + sellerCode"
+                  <a :href="'/magaza/' + sellerCode"
                      class="block px-4 py-2 text-[13px] hover:bg-white/10 transition-colors"
                      style="color: var(--store-nav-text, #fff);">Detayli Profil</a>
                 </div>

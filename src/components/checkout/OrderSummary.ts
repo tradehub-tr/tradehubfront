@@ -1,6 +1,7 @@
 import type { OrderSummary as OrderSummaryData, OrderSummaryThumbnail } from "../../types/checkout";
 import { t } from "../../i18n";
 import { formatCurrency, getSelectedCurrency } from "../../services/currencyService";
+import { getSellerUrl } from "../../utils/sellerUrl";
 import { btn } from "../../utils/ui/button";
 
 export interface OrderSummaryProps {
@@ -44,7 +45,7 @@ export function OrderSummary({ data, payeeSuppliers = [] }: OrderSummaryProps): 
     .map(
       (s) => `
     <a
-      href="/pages/seller/seller-shop.html?seller=${encodeURIComponent(s.id)}"
+      href="${getSellerUrl({ id: s.id })}"
       class="group flex items-center gap-3 p-3 bg-[#f9fafb] border border-[#e5e5e5] rounded-md hover:border-[var(--color-primary-500)] hover:bg-white transition-colors no-underline"
       title="${s.name} mağazasına git"
     >
@@ -174,7 +175,7 @@ export function OrderSummary({ data, payeeSuppliers = [] }: OrderSummaryProps): 
             </svg>
           </span>
           <span class="text-[12px] leading-snug text-[#555]">
-            <a href="/pages/legal/distance-sales.html" target="_blank" rel="noopener" class="text-primary-600 underline hover:text-primary-700">Ön Bilgilendirme Formunu ve Mesafeli Satış Sözleşmesini</a>
+            <a href="/mesafeli-satis" target="_blank" rel="noopener" class="text-primary-600 underline hover:text-primary-700">Ön Bilgilendirme Formunu ve Mesafeli Satış Sözleşmesini</a>
             okudum, kabul ediyorum.
           </span>
         </label>

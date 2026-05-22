@@ -109,7 +109,7 @@ export function TopRanking(): string {
                   <span data-i18n="topRanking.subtitle">${t("topRanking.subtitle")}</span>
                 </p>
               </div>
-              <a href="/pages/top-ranking.html"
+              <a href="/cok-satanlar"
                  class="flex-shrink-0 text-[13px] font-semibold transition-colors duration-150 hover:underline no-underline"
                  style="color: var(--topranking-link-color, #111827);">
                 <span data-i18n="common.viewMore">${t("common.viewMore")}</span> &gt;

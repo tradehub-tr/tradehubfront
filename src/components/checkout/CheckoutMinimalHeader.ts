@@ -15,7 +15,7 @@ function renderUserSection(): string {
   if (!isLoggedIn()) {
     return `
       <a
-        href="/pages/auth/login.html"
+        href="/giris"
         class="flex items-center gap-2 px-3 py-1.5 rounded-md text-[14px] text-[#333] hover:text-[var(--color-primary-500)] hover:bg-[#f9fafb] transition-colors no-underline"
       >
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="shrink-0">

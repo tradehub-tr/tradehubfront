@@ -176,6 +176,24 @@ export interface CustomizationOption {
 
 export interface ProductDetail {
   id: string;
+  /** Pretty URL slug (Faz 4 page_resolver için). Boşsa legacy fallback. */
+  slug?: string;
+  /** Backend SEO payload (admin'in girdiği meta'lar). Faz 4d. */
+  seo?: {
+    title?: string;
+    description?: string;
+    canonical?: string;
+    robots?: string;
+    og_type?: string;
+    og_title?: string;
+    og_description?: string;
+    og_image?: string;
+    og_url?: string;
+    site_name?: string;
+    twitter_handle?: string;
+    hreflang_links?: Array<{ hreflang: string; href: string }>;
+    lang?: string;
+  };
   title: string;
   category: string[];
   productCategoryId?: string;

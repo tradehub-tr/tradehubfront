@@ -40,8 +40,8 @@ interface HelpCenterHeaderOptions {
 }
 
 const NAV_LINKS: { id: ActivePage; label: string; href: string; authOnly?: boolean }[] = [
-  { id: "home", label: t("helpCenter.navHome"), href: "/pages/help/help-center.html" },
-  { id: "faq", label: t("helpCenter.navFaq"), href: "/pages/help/faq.html" },
+  { id: "home", label: t("helpCenter.navHome"), href: "/yardim-merkezi" },
+  { id: "faq", label: t("helpCenter.navFaq"), href: "/sss" },
   {
     id: "ticket-new",
     label: t("helpCenter.navNewTicket"),

@@ -16,16 +16,16 @@ interface PolicyLink {
 }
 
 const policyLinksDef: PolicyLink[] = [
-  { i18nKey: "footer.legalNotice", href: "/pages/legal/notice.html" },
-  { i18nKey: "footer.privacyPolicy", href: "/pages/legal/privacy.html" },
-  { i18nKey: "footer.productListing", href: "/pages/legal/product-listing.html" },
-  { i18nKey: "footer.termsOfUse", href: "/pages/legal/terms.html" },
-  { i18nKey: "footer.cookiePolicy", href: "/pages/legal/cookies.html" },
-  { i18nKey: "footer.returnPolicy", href: "/pages/legal/returns.html" },
-  { i18nKey: "footer.distanceSales", href: "/pages/legal/distance-sales.html" },
-  { i18nKey: "footer.kvkk", href: "/pages/legal/kvkk.html" },
-  { i18nKey: "footer.intellectualProperty", href: "/pages/legal/ip.html" },
-  { i18nKey: "footer.accessibility", href: "/pages/legal/accessibility.html" },
+  { i18nKey: "footer.legalNotice", href: "/yasal-uyari" },
+  { i18nKey: "footer.privacyPolicy", href: "/gizlilik" },
+  { i18nKey: "footer.productListing", href: "/urun-listeleme-kurallari" },
+  { i18nKey: "footer.termsOfUse", href: "/kullanim-kosullari" },
+  { i18nKey: "footer.cookiePolicy", href: "/cerezler" },
+  { i18nKey: "footer.returnPolicy", href: "/iade-kosullari" },
+  { i18nKey: "footer.distanceSales", href: "/mesafeli-satis" },
+  { i18nKey: "footer.kvkk", href: "/kvkk" },
+  { i18nKey: "footer.intellectualProperty", href: "/fikri-mulkiyet" },
+  { i18nKey: "footer.accessibility", href: "/erisilebilirlik" },
 ];
 
 /**

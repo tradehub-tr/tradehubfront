@@ -7,7 +7,12 @@
  */
 
 import type { ProductListingCard } from "../../types/productListing";
-import { searchListings, type ListingSearchParams } from "../../services/listingService";
+import {
+  searchListings,
+  getFilterFacets,
+  type ListingSearchParams,
+} from "../../services/listingService";
+import { updateFacetCounts } from "./FilterSidebar";
 
 /* ── Types ── */
 
@@ -210,6 +215,29 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
         result.hasNext,
         result.hasPrev
       );
+
+      // Aktif filtrelerle facet sayımlarını yeniden çek → sidebar'daki (xx) rakamları
+      // dinamik olarak azalsın. Backend henüz aktif filtreleri kabul etmiyorsa
+      // count'lar değişmez ama görsel sorun çıkmaz (graceful degradation).
+      //
+      // Pagination/sort parametreleri facet sayımını etkilemediği için onları geçme.
+      void getFilterFacets({
+        query: params.query,
+        category: params.category,
+        min_price: params.min_price,
+        max_price: params.max_price,
+        min_order: params.min_order,
+        verified_supplier: params.verified_supplier,
+        country: params.country,
+        mgmt_certifications: params.mgmt_certifications,
+        product_certifications: params.product_certifications,
+        brands: params.brands,
+        attrs: params.attrs,
+      })
+        .then((facets) => updateFacetCounts(facets))
+        .catch(() => {
+          /* facet refresh sessizce başarısız olabilir — UI bozulmasın */
+        });
     } catch (err) {
       if ((err as Error).name !== "AbortError") {
         onError?.(err);
@@ -318,101 +346,70 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
 
     // Onaylanmış Satıcı checkbox (URL'den geliyorsa işaretle)
     if (state.verifiedSupplier) {
-      const restoreVerified = () => {
-        document
-          .querySelectorAll<HTMLInputElement>(
-            '[data-filter-section="verified-supplier"][data-filter-value="1"]'
-          )
-          .forEach((el) => (el.checked = true));
-      };
-      restoreVerified();
-      setTimeout(restoreVerified, 1500);
+      document
+        .querySelectorAll<HTMLInputElement>(
+          '[data-filter-section="verified-supplier"][data-filter-value="1"]'
+        )
+        .forEach((el) => (el.checked = true));
     }
 
-    // Yönetim sertifikaları (dinamik element — gecikmeli yeniden dene)
-    if (state.mgmtCertifications.length > 0) {
-      const restoreMgmt = () => {
-        state.mgmtCertifications.forEach((cert) => {
-          document
-            .querySelectorAll<HTMLInputElement>(
-              `[data-filter-section="mgmt-certifications"][data-filter-value="${cert}"]`
-            )
-            .forEach((el) => (el.checked = true));
-        });
-      };
-      restoreMgmt();
-      setTimeout(restoreMgmt, 1500);
-    }
+    // Yönetim sertifikaları
+    state.mgmtCertifications.forEach((cert) => {
+      document
+        .querySelectorAll<HTMLInputElement>(
+          `[data-filter-section="mgmt-certifications"][data-filter-value="${cert}"]`
+        )
+        .forEach((el) => (el.checked = true));
+    });
 
     // Ürün sertifikaları
-    if (state.productCertifications.length > 0) {
-      const restoreProd = () => {
-        state.productCertifications.forEach((cert) => {
-          document
-            .querySelectorAll<HTMLInputElement>(
-              `[data-filter-section="product-certifications"][data-filter-value="${cert}"]`
-            )
-            .forEach((el) => (el.checked = true));
-        });
-      };
-      restoreProd();
-      setTimeout(restoreProd, 1500);
-    }
+    state.productCertifications.forEach((cert) => {
+      document
+        .querySelectorAll<HTMLInputElement>(
+          `[data-filter-section="product-certifications"][data-filter-value="${cert}"]`
+        )
+        .forEach((el) => (el.checked = true));
+    });
 
-    // Supplier countries — dynamic elements may not exist yet, retry after delay
-    if (state.supplierCountries.length > 0) {
-      const restoreCountries = () => {
-        state.supplierCountries.forEach((c) => {
-          document
-            .querySelectorAll<HTMLInputElement>(
-              `[data-filter-section="supplier-country"][data-filter-value="${c}"]`
-            )
-            .forEach((el) => (el.checked = true));
-        });
-      };
-      restoreCountries();
-      setTimeout(restoreCountries, 1500);
-    }
+    // Supplier countries
+    state.supplierCountries.forEach((c) => {
+      document
+        .querySelectorAll<HTMLInputElement>(
+          `[data-filter-section="supplier-country"][data-filter-value="${c}"]`
+        )
+        .forEach((el) => (el.checked = true));
+    });
 
-    // Brands (dynamic)
-    if (state.brands.length > 0) {
-      const restoreBrands = () => {
-        state.brands.forEach((b) => {
-          document
-            .querySelectorAll<HTMLInputElement>(
-              `[data-filter-section="brands"][data-filter-value="${b}"]`
-            )
-            .forEach((el) => (el.checked = true));
-        });
-      };
-      restoreBrands();
-      setTimeout(restoreBrands, 1500);
-    }
+    // Brands
+    state.brands.forEach((b) => {
+      document
+        .querySelectorAll<HTMLInputElement>(
+          `[data-filter-section="brands"][data-filter-value="${b}"]`
+        )
+        .forEach((el) => (el.checked = true));
+    });
 
     // Dynamic attributes
-    const attrEntries = Object.entries(state.attributes);
-    if (attrEntries.length > 0) {
-      const restoreAttrs = () => {
-        for (const [code, vals] of attrEntries) {
-          const section = `attr-${code.toLowerCase()}`;
-          vals.forEach((v) => {
-            document
-              .querySelectorAll<HTMLInputElement>(
-                `[data-filter-section="${section}"][data-filter-value="${v}"]`
-              )
-              .forEach((el) => (el.checked = true));
-          });
-        }
-      };
-      restoreAttrs();
-      setTimeout(restoreAttrs, 1500);
+    for (const [code, vals] of Object.entries(state.attributes)) {
+      const section = `attr-${code.toLowerCase()}`;
+      vals.forEach((v) => {
+        document
+          .querySelectorAll<HTMLInputElement>(
+            `[data-filter-section="${section}"][data-filter-value="${v}"]`
+          )
+          .forEach((el) => (el.checked = true));
+      });
     }
   }
 
   // Initialize state from URL
   readFromUrl();
-  // Restore sidebar DOM after a tick (elements need to be rendered first)
+  // İlk restore: statik input'lar (price, min-order, verified-supplier) için yeterli.
   requestAnimationFrame(() => restoreSidebarFromState());
+  // Dinamik facet'lar (country, brands, cert, attr) yüklendiğinde tekrar restore et —
+  // FilterSidebar bu event'i fetch tamamlandığında dispatch eder. setTimeout(1500ms) hack
+  // yerine deterministik sinyal.
+  document.addEventListener("filter-facets-loaded", () => restoreSidebarFromState(), { signal });
 
   /** Reset page to 1 and fetch */
   function filterChanged(): void {
@@ -563,11 +560,17 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
     { signal }
   );
 
-  /* ── Generic filter-change (re-read all non-checkbox state from DOM) ── */
+  /* ── filter-change: yalnızca text/number input'ları DOM'dan oku ──
+   * Checkbox / radio state'leri yukarıdaki `change` switch-case'inde delta-bazlı
+   * (push/filter) güncelleniyor. Bu listener sadece price ve min-order için
+   * gerekli — onlar kullanıcı OK butonuna bastığında değer commit ediyor.
+   *
+   * Eski sürümde checkbox state'leri burada `:checked` ile rebuild ediliyordu;
+   * desktop + mobile sidebar aynı value için iki match döndürüp chip duplikasyonu
+   * üretiyordu (BUG 1). Sade pattern dedup ihtiyacını ortadan kaldırır. */
   document.addEventListener(
     "filter-change",
     () => {
-      // Price inputs
       const priceMin = document.querySelector<HTMLInputElement>(
         '[data-filter-section="price"][data-filter-type="min"]'
       );
@@ -577,41 +580,10 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
       state.priceMin = parseLocaleFloat(priceMin?.value);
       state.priceMax = parseLocaleFloat(priceMax?.value);
 
-      // Min order input
       const moqInput = document.querySelector<HTMLInputElement>(
         '[data-filter-section="min-order"][data-filter-type="value"]'
       );
       state.minOrder = parsePositiveInt(moqInput?.value);
-
-      // Supplier countries
-      const countryCheckboxes = document.querySelectorAll<HTMLInputElement>(
-        '[data-filter-section="supplier-country"]:checked'
-      );
-      state.supplierCountries = Array.from(countryCheckboxes)
-        .map((cb) => cb.value || cb.dataset.filterValue || "")
-        .filter(Boolean);
-
-      // Onaylanmış Satıcı checkbox
-      const verifiedCb = document.querySelector<HTMLInputElement>(
-        '[data-filter-section="verified-supplier"]:checked'
-      );
-      state.verifiedSupplier = !!verifiedCb;
-
-      // Yönetim sertifikaları
-      const mgmtCertCbs = document.querySelectorAll<HTMLInputElement>(
-        '[data-filter-section="mgmt-certifications"]:checked'
-      );
-      state.mgmtCertifications = Array.from(mgmtCertCbs)
-        .map((cb) => cb.value || cb.dataset.filterValue || "")
-        .filter(Boolean);
-
-      // Ürün sertifikaları
-      const prodCertCbs = document.querySelectorAll<HTMLInputElement>(
-        '[data-filter-section="product-certifications"]:checked'
-      );
-      state.productCertifications = Array.from(prodCertCbs)
-        .map((cb) => cb.value || cb.dataset.filterValue || "")
-        .filter(Boolean);
 
       filterChanged();
     },

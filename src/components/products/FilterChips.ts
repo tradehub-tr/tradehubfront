@@ -55,12 +55,48 @@ export function renderFilterChips(state: FilterState): string {
       )
     );
   }
-  state.supplierCountries.forEach((c) => chips.push(makeChip(c, "supplier-country", c)));
+  state.supplierCountries.forEach((c) => {
+    // c = ISO ülke kodu (TR/US/...) ya da raw value. Locale'de karşılığı varsa onu göster,
+    // yoksa raw'ı koru — chip label'ı sidebar'daki ülke etiketiyle tutarlı olsun.
+    const key = `countries.${c}`;
+    const translated = t(key);
+    const label = translated !== key ? translated : c;
+    chips.push(makeChip(label, "supplier-country", c));
+  });
   if (state.verifiedSupplier) {
     chips.push(makeChip(t("products.filterChipVerifiedSupplier"), "verified-supplier", "1"));
   }
+  state.brands.forEach((v) => chips.push(makeChip(labelFromDom("brands", v), "brands", v)));
+  state.mgmtCertifications.forEach((v) =>
+    chips.push(makeChip(labelFromDom("mgmt-certifications", v), "mgmt-certifications", v))
+  );
+  state.productCertifications.forEach((v) =>
+    chips.push(makeChip(labelFromDom("product-certifications", v), "product-certifications", v))
+  );
+  // Dinamik attribute'ler: state.attributes = { COLOR: ["Kırmızı"], SIZE: ["M"] }
+  for (const [code, values] of Object.entries(state.attributes)) {
+    const section = `attr-${code.toLowerCase()}`;
+    values.forEach((v) => chips.push(makeChip(labelFromDom(section, v), section, v)));
+  }
 
   return chips.join("");
+}
+
+/**
+ * Sidebar'daki checkbox label'ını DOM'dan oku — chip için raw value yerine human-readable
+ * etiket göster (örn. "ISO9001" yerine "ISO 9001"). Bulamazsa value fallback.
+ */
+function labelFromDom(section: string, value: string): string {
+  const input = document.querySelector<HTMLInputElement>(
+    `input[data-filter-section="${CSS.escape(section)}"][data-filter-value="${CSS.escape(value)}"]`
+  );
+  const labelEl = input?.closest("label");
+  // <label> içinde label text taşıyan span — renderCheckbox/renderCertCheckbox'taki
+  // `text-[13px]` class'lı span'i hedefliyoruz; bulamazsak fallback.
+  const textSpan = labelEl?.querySelector<HTMLSpanElement>(
+    'span[class*="text-\\[13px\\]"]'
+  );
+  return (textSpan?.textContent || input?.value || value).trim();
 }
 
 /**

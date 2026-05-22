@@ -86,6 +86,12 @@ import fileText from "lucide-static/icons/file-text.svg?raw";
 import video from "lucide-static/icons/video.svg?raw";
 import calendar from "lucide-static/icons/calendar.svg?raw";
 import cloud from "lucide-static/icons/cloud.svg?raw";
+// Social-proof rozeti (sales / favorites / cart_now / views_24h / distinct_buyers / seller_orders)
+import zap from "lucide-static/icons/zap.svg?raw";
+import shoppingCart from "lucide-static/icons/shopping-cart.svg?raw";
+import eye from "lucide-static/icons/eye.svg?raw";
+import building2 from "lucide-static/icons/building-2.svg?raw";
+import shieldCheck from "lucide-static/icons/shield-check.svg?raw";
 
 /** Kanonik ikon isim → ham SVG eşlemesi. */
 const ICONS: Record<string, string> = {
@@ -169,6 +175,11 @@ const ICONS: Record<string, string> = {
   video,
   calendar,
   cloud,
+  zap,
+  "shopping-cart": shoppingCart,
+  eye,
+  "building-2": building2,
+  "shield-check": shieldCheck,
 };
 
 /**

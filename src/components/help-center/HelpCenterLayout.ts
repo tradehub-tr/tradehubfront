@@ -155,15 +155,15 @@ export function HelpCenterLayout(): string {
         <!-- ── Useful Links Strip ─────────────── -->
         <div class="bg-white rounded-md shadow-sm border border-gray-100 px-6 py-5">
           <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[12px] text-gray-500">
-            <a href="/pages/legal/product-listing.html" class="hover:text-primary-500 transition-colors" data-i18n="help.productListingPolicy">${t("help.productListingPolicy")}</a>
+            <a href="/urun-listeleme-kurallari" class="hover:text-primary-500 transition-colors" data-i18n="help.productListingPolicy">${t("help.productListingPolicy")}</a>
             <span class="text-gray-200">|</span>
-            <a href="/pages/legal/ip.html" class="hover:text-primary-500 transition-colors" data-i18n="help.ipProtection">${t("help.ipProtection")}</a>
+            <a href="/fikri-mulkiyet" class="hover:text-primary-500 transition-colors" data-i18n="help.ipProtection">${t("help.ipProtection")}</a>
             <span class="text-gray-200">|</span>
-            <a href="/pages/legal/privacy.html" class="hover:text-primary-500 transition-colors" data-i18n="help.privacyPolicy">${t("help.privacyPolicy")}</a>
+            <a href="/gizlilik" class="hover:text-primary-500 transition-colors" data-i18n="help.privacyPolicy">${t("help.privacyPolicy")}</a>
             <span class="text-gray-200">|</span>
-            <a href="/pages/legal/terms.html" class="hover:text-primary-500 transition-colors" data-i18n="help.termsOfUse">${t("help.termsOfUse")}</a>
+            <a href="/kullanim-kosullari" class="hover:text-primary-500 transition-colors" data-i18n="help.termsOfUse">${t("help.termsOfUse")}</a>
             <span class="text-gray-200">|</span>
-            <a href="/pages/legal/notice.html" class="hover:text-primary-500 transition-colors" data-i18n="help.userInfoLaws">${t("help.userInfoLaws")}</a>
+            <a href="/yasal-uyari" class="hover:text-primary-500 transition-colors" data-i18n="help.userInfoLaws">${t("help.userInfoLaws")}</a>
             <span class="text-gray-200">|</span>
             <a href="contact.html" class="hover:text-primary-500 transition-colors" data-i18n="help.contactGuide">${t("help.contactGuide")}</a>
           </div>

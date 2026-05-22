@@ -168,7 +168,7 @@ export function SettingsChangeEmail(): string {
           <div class="mb-4">${ICONS.checkActive}</div>
           <h3 class="text-lg max-sm:text-base font-bold mb-2 m-0" style="color:var(--color-text-primary)">${t("settings.emailUpdated")}</h3>
           <p class="text-sm max-sm:text-[13px] mb-6 max-sm:mb-4 m-0" style="color:var(--color-text-secondary)">${t("settings.emailUpdatedLoginAgain")}</p>
-          <a href="/pages/auth/login.html" class="th-btn no-underline inline-flex max-sm:w-full max-sm:justify-center">${t("settings.goToLogin")}</a>
+          <a href="/giris" class="th-btn no-underline inline-flex max-sm:w-full max-sm:justify-center">${t("settings.goToLogin")}</a>
         </div>
       </div>
     </div>

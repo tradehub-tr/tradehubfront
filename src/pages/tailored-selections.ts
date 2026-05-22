@@ -7,6 +7,7 @@
 import '../style.css'
 import { initFlowbite } from 'flowbite'
 import { t } from '../i18n'
+import { getListingUrl } from '../utils/listingUrl'
 
 // Header components
 import { TopBar, initMobileDrawer, SubHeader, MegaMenu, initMegaMenu, initHeaderCart } from '../components/header'
@@ -195,7 +196,7 @@ function toTailoredProduct(p: RawTailoredProduct): TailoredProduct {
   return {
     id: p.id || '',
     name: p.name,
-    href: p.href || `/pages/product-detail.html?id=${p.id}`,
+    href: getListingUrl({ id: p.id, href: p.href }),
     price: p.price,
     originalPrice: p.originalPrice || undefined,
     discountPercent: p.discount ? parseInt(p.discount) : undefined,

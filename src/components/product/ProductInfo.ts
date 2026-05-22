@@ -9,6 +9,7 @@ import { t } from "../../i18n";
 import { formatCurrency, getSelectedCurrency } from "../../services/currencyService";
 import type { PriceTier, ProductVariant, SkuMatrixEntry } from "../../types/product";
 import { openShippingModal, openCartDrawer } from "./CartDrawer";
+import { SocialProofBadge } from "./SocialProofBadge";
 
 function renderPriceTiers(tiers: PriceTier[]): string {
   // When a campaign is active the backend sets each tier's originalPrice
@@ -215,6 +216,12 @@ export function ProductInfo(): string {
             <a href="javascript:void(0)" class="text-[13px] font-medium no-underline whitespace-nowrap cursor-pointer" id="pd-ship-card-change" style="color: var(--pd-price-color, #cc9900);">${t("product.changeLabel")} ›</a>
           </div>
         </div>
+
+        <!-- Social Proof Badge — fiyat/stok ile CTA arası -->
+        ${SocialProofBadge({
+          listingId: p.id,
+          supplierId: p.supplier?.id ?? "",
+        })}
 
         ${
           mockProduct.sellerKybVerified === false

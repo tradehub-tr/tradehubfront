@@ -766,7 +766,7 @@ Alpine.data("cartPage", () => ({
         </svg>
         <h2 class="text-2xl font-bold text-text-heading mb-2">${t("cart.empty")}</h2>
         <p class="text-base text-text-secondary mb-8 max-w-md">${t("cart.emptyDesc")}</p>
-        <a href="/pages/products.html" class="inline-flex items-center justify-center th-btn-dark no-underline">
+        <a href="/urunler" class="inline-flex items-center justify-center th-btn-dark no-underline">
           ${t("cart.continueShopping")}
         </a>
       </div>

@@ -10,6 +10,9 @@ import { onCategoriesLoaded } from "../../services/categoryService";
 import type { ApiCategory } from "../../services/categoryService";
 import { cartStore } from "../cart/state/CartStore";
 import { isLoggedIn, getUser, getSessionUser, waitForAuth, logout } from "../../utils/auth";
+import { getListingUrl } from "../../utils/listingUrl";
+import { getBrandUrl } from "../../utils/brandUrl";
+import { getSellerUrl } from "../../utils/sellerUrl";
 import { getSellerStoreUrl } from "../../utils/seller";
 // DISABLED: import { mockConversations } from '../../data/mockMessages';
 import { t, getCurrentLang, updatePageTranslations } from "../../i18n";
@@ -21,9 +24,80 @@ import {
   convertPrice,
   getSelectedCurrency as csGetSelectedCurrency,
 } from "../../services/currencyService";
-import { getSearchSuggestions } from "../../services/listingService";
 import { apiRemoveCartItem, fetchCart } from "../../services/cartService";
 import { HeaderNotice, getCachedNoticeData } from "./HeaderNotice";
+import DOMPurify from "dompurify";
+import { getLucideIcon } from "../icons/lucideIcons";
+import {
+  unifiedSuggest,
+  type UnifiedSuggestResult,
+  type UnifiedSuggestProduct,
+  type UnifiedSuggestCategory,
+  type UnifiedSuggestBrand,
+  type UnifiedSuggestSeller,
+} from "../../services/searchService";
+import { getAllRecent, hasAnyRecent } from "../../services/recentHistoryService";
+
+interface CompactSearchGroupItem {
+  label: string;
+  href: string;
+  iconSvg: string;
+}
+
+function renderCompactSearchGroup(title: string, items: CompactSearchGroupItem[]): string {
+  if (items.length === 0) return "";
+  return `
+    <div class="mb-3 last:mb-0">
+      <h4 class="px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+        ${DOMPurify.sanitize(title)}
+      </h4>
+      <ul>
+        ${items
+          .map(
+            (it) => `
+          <li>
+            <a href="${DOMPurify.sanitize(it.href)}" tabindex="-1" data-compact-expanded-interactive="true"
+               class="flex items-center gap-2 px-2 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm rounded text-gray-900 dark:text-gray-100 no-underline">
+              <span class="w-5 h-5 shrink-0 text-gray-400 dark:text-gray-500">${it.iconSvg}</span>
+              <span class="truncate">${DOMPurify.sanitize(it.label)}</span>
+            </a>
+          </li>
+        `
+          )
+          .join("")}
+      </ul>
+    </div>
+  `;
+}
+
+function compactToProductItem(p: UnifiedSuggestProduct): CompactSearchGroupItem {
+  return {
+    label: p.name,
+    href: getListingUrl({ id: p.id }),
+    iconSvg: getLucideIcon("package", "w-5 h-5"),
+  };
+}
+function compactToCategoryItem(c: UnifiedSuggestCategory): CompactSearchGroupItem {
+  return {
+    label: c.name,
+    href: `/pages/products.html?cat=${encodeURIComponent(c.slug)}`,
+    iconSvg: getLucideIcon("folder", "w-5 h-5"),
+  };
+}
+function compactToBrandItem(b: UnifiedSuggestBrand): CompactSearchGroupItem {
+  return {
+    label: b.name,
+    href: getBrandUrl({ slug: b.slug }),
+    iconSvg: getLucideIcon("tag", "w-5 h-5"),
+  };
+}
+function compactToSellerItem(s: UnifiedSuggestSeller): CompactSearchGroupItem {
+  return {
+    label: s.name,
+    href: getSellerUrl({ id: s.id }),
+    iconSvg: getLucideIcon("store", "w-5 h-5"),
+  };
+}
 
 /** Default country options for the delivery selector */
 const countryOptions: LocaleOption[] = [
@@ -178,7 +252,7 @@ function renderCompactStickySearch(): string {
         id="topbar-compact-search"
         x-ref="searchForm"
         @click="open()"
-        action="/pages/products.html"
+        action="/urunler"
         method="GET"
         role="search"
         aria-label="Sticky header search"
@@ -258,6 +332,7 @@ function renderCompactStickySearch(): string {
         <div class="flex items-center justify-between gap-4">
           <h3 class="text-lg font-bold text-gray-900 dark:text-white"><span data-i18n="header.recommendedForYou">${t("header.recommendedForYou")}</span></h3>
           <button
+            id="topbar-compact-refresh"
             type="button"
             tabindex="-1"
             data-compact-expanded-interactive="true"
@@ -267,27 +342,31 @@ function renderCompactStickySearch(): string {
           </button>
         </div>
 
-        <div id="topbar-compact-reco-list" class="mt-3 space-y-2">
+        <!-- 4 grupta autocomplete sonuçları (boş input → popüler, q≥2 → filtreli) -->
+        <div id="topbar-compact-results-groups" class="mt-3"></div>
+
+        <!-- "Sonuç bulunamadı" mesajı (sadece q≥2 ve hiç eşleşme yoksa) -->
+        <div id="topbar-compact-no-results" class="hidden mt-3 text-sm text-gray-500 dark:text-gray-400 px-2 py-3">
+          <span data-i18n="search.noResults">${t("search.noResults")}</span>
         </div>
 
-        <!-- DISABLED: Deep Search Row — ileride geliştirilecek
-        <p class="text-sm font-semibold text-primary-600 dark:text-primary-400">
-          <span class="mr-1" aria-hidden="true">&#10022;</span>
-          <span data-i18n="header.deepSearch">${t("header.deepSearch")}</span>
-        </p>
-        -->
+        <!-- "Tüm sonuçları gör" linki (sadece q≥2 ve sonuç varsa) -->
+        <div id="topbar-compact-see-all" class="hidden mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+          <a id="topbar-compact-see-all-link" href="#" tabindex="-1" data-compact-expanded-interactive="true"
+             class="block text-sm px-2 py-1 text-primary-600 hover:underline dark:text-primary-400">
+            "<span id="topbar-compact-query-text"></span>" <span data-i18n="search.seeAllResults">${t("search.seeAllResults")}</span> →
+          </a>
+        </div>
+
         <div class="mt-4 flex items-center justify-end">
           <a
-            href="/pages/legal/terms.html"
+            href="/kullanim-kosullari"
             tabindex="-1"
             data-compact-expanded-interactive="true"
             class="text-sm text-gray-500 underline decoration-gray-300 underline-offset-2 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
           >
             <span data-i18n="header.termsOfUse">${t("header.termsOfUse")}</span>
           </a>
-        </div>
-
-        <div id="topbar-compact-chips" class="mt-3 grid grid-cols-1 gap-2 lg:grid-cols-3">
         </div>
       </div>
     </div>
@@ -1078,7 +1157,7 @@ export function MobileSearchTabs(
   return `
     <div class="lg:hidden flex items-center gap-3 sm:gap-6 px-2 sm:px-4 border-b border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-900 overflow-x-auto no-scrollbar scroll-smooth">
       <a href="/" class="${activeTab === "products" ? activeClass : inactiveClass}" data-search-tab="products"><span data-i18n="search.products">${t("search.products")}</span></a>
-      <a href="/pages/manufacturers.html" class="${activeTab === "manufacturers" ? activeClass : inactiveClass}" data-search-tab="manufacturers"><span data-i18n="search.manufacturers">${t("search.manufacturers")}</span></a>${worldwideTab}
+      <a href="/markalar" class="${activeTab === "manufacturers" ? activeClass : inactiveClass}" data-search-tab="manufacturers"><span data-i18n="search.manufacturers">${t("search.manufacturers")}</span></a>${worldwideTab}
     </div>
   `;
 }
@@ -1137,7 +1216,7 @@ export function TopBar(props?: TopBarProps): string {
               </div>
 
               <!-- Sell on iSTOC link -->
-              <a href="/pages/seller/sell.html" class="hidden lg:inline-flex items-center text-[13px] text-[#333] hover:text-[#000] transition-opacity whitespace-nowrap">
+              <a href="/satici-ol" class="hidden lg:inline-flex items-center text-[13px] text-[#333] hover:text-[#000] transition-opacity whitespace-nowrap">
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z"/></svg>
                 <span data-i18n="footer.startSelling">${t("footer.startSelling")}</span>
               </a>
@@ -1199,7 +1278,7 @@ export function TopBar(props?: TopBarProps): string {
 
           <!-- Mobile Inline Search (between logo and icons) -->
           <div class="flex-1 min-w-0 mx-1 sm:mx-2 lg:hidden">
-            <form id="mobile-search-form" action="/pages/products.html" method="GET" role="search">
+            <form id="mobile-search-form" action="/urunler" method="GET" role="search">
               <input type="hidden" id="mobile-search-type" name="searchType" value="products" />
               <div class="flex">
                 <input
@@ -1664,7 +1743,7 @@ document.addEventListener("click", async (e) => {
   if (target.id === "logout-btn" || target.closest("#logout-btn")) {
     e.preventDefault();
     await logout();
-    window.location.replace("/pages/auth/login.html");
+    window.location.replace("/giris");
   }
 });
 
@@ -1779,82 +1858,115 @@ export function initLanguageSelector(): void {
 }
 
 /**
- * Loads dynamic search suggestions into the compact header dropdown.
- * Populates recommendation list (large text) and chip buttons.
+ * Compact header search dropdown — 4 grupta gruplu autocomplete.
+ * Boş input → her gruptan popüler/en yeni 5 kayıt.
+ * q ≥ 2 karakter → LIKE %q% ile filtreli sonuçlar (300ms debounce).
  */
 function initCompactSearchSuggestions(): void {
-  const recoList = document.getElementById("topbar-compact-reco-list");
-  const chipsContainer = document.getElementById("topbar-compact-chips");
-  if (!recoList && !chipsContainer) return;
+  const groupsEl = document.getElementById("topbar-compact-results-groups");
+  if (!groupsEl) return;
 
-  const loadSuggestions = async (): Promise<void> => {
-    try {
-      const data = await getSearchSuggestions();
+  const noResultsEl = document.getElementById("topbar-compact-no-results");
+  const seeAllEl = document.getElementById("topbar-compact-see-all");
+  const seeAllLink = document.getElementById(
+    "topbar-compact-see-all-link"
+  ) as HTMLAnchorElement | null;
+  const queryTextEl = document.getElementById("topbar-compact-query-text");
+  const refreshBtn = document.getElementById("topbar-compact-refresh");
+  const compactInput = document.getElementById(
+    "topbar-compact-search-input"
+  ) as HTMLInputElement | null;
 
-      // Populate large-text suggestion list (first 3 suggestions) — click navigates to search
-      if (recoList) {
-        const items = data.suggestions.slice(0, 3);
-        recoList.innerHTML = items
-          .map(
-            (item) => `
-          <button type="button" tabindex="-1" data-compact-expanded-interactive="true" data-suggestion-text="${item.text.replace(/"/g, "&quot;")}" class="compact-suggestion-btn th-no-press block w-full text-left text-[22px] font-normal leading-tight text-gray-900 dark:text-white truncate cursor-pointer no-underline hover:no-underline focus:no-underline transition-opacity hover:opacity-60">${item.text}</button>
-        `
-          )
-          .join("");
-      }
-
-      // Populate chip buttons (categories or fallback) — click navigates to category or search
-      if (chipsContainer) {
-        const chipItems = data.chips.length > 0 ? data.chips : data.suggestions.slice(3, 6);
-        chipsContainer.innerHTML = chipItems
-          .map((item) => {
-            const href =
-              item.type === "category" && item.slug
-                ? "/pages/products.html?cat=" + encodeURIComponent(item.slug)
-                : "/pages/products.html?q=" + encodeURIComponent(item.text);
-            return (
-              '<button type="button" tabindex="-1" data-compact-expanded-interactive="true" data-chip-href="' +
-              href +
-              '" data-chip-text="' +
-              item.text.replace(/"/g, "&quot;") +
-              '" data-chip-slug="' +
-              (item.slug || "").replace(/"/g, "&quot;") +
-              '" class="compact-chip-btn th-no-press inline-flex items-center gap-1.5 rounded-md border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 min-w-0 overflow-hidden"><span class="text-primary-500 shrink-0">&#10022;</span><span class="truncate">' +
-              item.text +
-              "</span></button>"
-            );
-          })
-          .join("");
-      }
-
-      // Bind click handlers for suggestions (logging handled by products.ts)
-      recoList?.querySelectorAll<HTMLButtonElement>(".compact-suggestion-btn").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const text = btn.getAttribute("data-suggestion-text") || "";
-          window.location.href = "/pages/products.html?q=" + encodeURIComponent(text);
-        });
-      });
-
-      // Bind click handlers for chips (logging handled by products.ts)
-      chipsContainer?.querySelectorAll<HTMLButtonElement>(".compact-chip-btn").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const href = btn.getAttribute("data-chip-href") || "";
-          window.location.href = href;
-        });
-      });
-    } catch {
-      // Silently fail — areas stay empty
-    }
+  const renderGroups = (data: UnifiedSuggestResult): string => {
+    return [
+      renderCompactSearchGroup(t("search.groupProducts"), data.products.map(compactToProductItem)),
+      renderCompactSearchGroup(
+        t("search.groupCategories"),
+        data.categories.map(compactToCategoryItem)
+      ),
+      renderCompactSearchGroup(t("search.groupBrands"), data.brands.map(compactToBrandItem)),
+      renderCompactSearchGroup(t("search.groupSellers"), data.sellers.map(compactToSellerItem)),
+    ].join("");
   };
 
-  loadSuggestions();
+  const isEmpty = (data: UnifiedSuggestResult): boolean =>
+    data.products.length === 0 &&
+    data.categories.length === 0 &&
+    data.brands.length === 0 &&
+    data.sellers.length === 0;
 
-  // Wire up "Refresh" button to reload suggestions
-  const refreshBtn = recoList?.parentElement?.querySelector("button");
-  if (refreshBtn) {
-    refreshBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      loadSuggestions();
+  /**
+   * Boş/kısa input modu — önce son gezilenleri göster (localStorage),
+   * hiç kayıt yoksa popüler/yeni kayıtlara düş (backend).
+   */
+  const loadDefault = async (): Promise<void> => {
+    noResultsEl?.classList.add("hidden");
+    seeAllEl?.classList.add("hidden");
+
+    if (hasAnyRecent()) {
+      const recent = getAllRecent();
+      // Recent veriyi UnifiedSuggestResult şeklinde mapleyip aynı renderer'a ver
+      groupsEl.innerHTML = renderGroups({
+        products: recent.products,
+        categories: recent.categories,
+        brands: recent.brands,
+        sellers: recent.sellers,
+      });
+      return;
+    }
+
+    // Hiç recent kayıt yok → popüler kayıtlara düş
+    const data = await unifiedSuggest("");
+    groupsEl.innerHTML = renderGroups(data);
+  };
+
+  // Backward compat alias — refresh callback'i hala loadPopular ismini bekleyebilir
+  const loadPopular = loadDefault;
+
+  const loadFiltered = async (q: string, seq: number, currentSeq: () => number): Promise<void> => {
+    const data = await unifiedSuggest(q);
+    if (seq !== currentSeq()) return; // stale response
+    if (isEmpty(data)) {
+      groupsEl.innerHTML = "";
+      noResultsEl?.classList.remove("hidden");
+      seeAllEl?.classList.add("hidden");
+      return;
+    }
+    groupsEl.innerHTML = renderGroups(data);
+    noResultsEl?.classList.add("hidden");
+    if (queryTextEl) queryTextEl.textContent = q;
+    if (seeAllLink) seeAllLink.href = `/pages/products.html?q=${encodeURIComponent(q)}`;
+    seeAllEl?.classList.remove("hidden");
+  };
+
+  // İlk açılış → popüler kayıtlar
+  loadPopular();
+
+  // "Yenile" butonu → popüler kayıtları yeniden çek
+  refreshBtn?.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (!compactInput || compactInput.value.trim().length < 2) {
+      loadPopular();
+    }
+  });
+
+  // Input listener → debounce + race-guard
+  if (compactInput) {
+    const DEBOUNCE_MS = 300;
+    let debounceTimer: number | undefined;
+    let requestSeq = 0;
+
+    compactInput.addEventListener("input", (e) => {
+      const q = (e.target as HTMLInputElement).value;
+      if (debounceTimer) window.clearTimeout(debounceTimer);
+      if (q.trim().length < 2) {
+        loadPopular();
+        return;
+      }
+      const mySeq = ++requestSeq;
+      debounceTimer = window.setTimeout(() => {
+        loadFiltered(q.trim(), mySeq, () => requestSeq);
+      }, DEBOUNCE_MS);
     });
   }
 }

@@ -27,6 +27,8 @@ import {
   type FavoriteSellerItem,
 } from "../../stores/sellerFavorites";
 import { getListingDetail } from "../../services/listingService";
+import { getListingUrl } from "../../utils/listingUrl";
+import { getSellerUrl } from "../../utils/sellerUrl";
 
 /* ────────────────────────────────────────
    Favori enrichment (listing detail'den çekilen ek meta)
@@ -327,7 +329,7 @@ function renderSupplierCards(items: FavoriteSellerItem[]): string {
 
   const cards = items
     .map((s) => {
-      const profileHref = `/pages/seller/seller-storefront.html?seller=${encodeURIComponent(s.code)}`;
+      const profileHref = getSellerUrl({ id: s.code });
       const initials = (s.name || "?")
         .split(" ")
         .map((w) => w[0])
@@ -614,7 +616,7 @@ function renderSupplierLine(en: FavEnrichment | undefined): string {
 }
 
 function renderProductCardGrid(p: FavoriteItem): string {
-  const detailHref = `/pages/product-detail.html?id=${encodeURIComponent(p.id)}`;
+  const detailHref = getListingUrl({ id: p.id });
   const lists = getLists();
   const enrichment = enrichmentMap.get(p.id);
   const tagChips = p.listIds
@@ -663,7 +665,7 @@ function renderProductCardGrid(p: FavoriteItem): string {
 }
 
 function renderProductRowList(p: FavoriteItem): string {
-  const detailHref = `/pages/product-detail.html?id=${encodeURIComponent(p.id)}`;
+  const detailHref = getListingUrl({ id: p.id });
   const lists = getLists();
   const tagChips = p.listIds
     .filter((id) => id !== DEFAULT_LIST_ID)

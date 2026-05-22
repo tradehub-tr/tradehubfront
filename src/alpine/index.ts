@@ -15,6 +15,7 @@ import "./orderItemsDrawer";
 import "./remittance";
 import "./coupons";
 import "./product";
+import "./socialProofBadge";
 import "./cart";
 import "./checkout";
 import "./auth";

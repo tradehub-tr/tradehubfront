@@ -59,7 +59,7 @@ export function TopRankingStickyMobileHeader(): string {
         <span class="text-sm font-bold text-gray-900 flex-shrink-0 whitespace-nowrap" data-i18n="topRankingPage.heroTitle">${t("topRankingPage.heroTitle")}</span>
 
         <!-- Search input -->
-        <form action="/pages/products.html" method="GET" class="flex-1 min-w-0">
+        <form action="/urunler" method="GET" class="flex-1 min-w-0">
           <div class="flex items-center bg-gray-100 rounded-full px-3 py-2 gap-2">
             <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>

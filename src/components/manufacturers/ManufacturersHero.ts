@@ -151,7 +151,7 @@ function renderSourceByCategory(): string {
 function sampleCard(dataVar: string, label: string): string {
   const SKELETON = `<div class="w-full h-full bg-gray-100 animate-pulse rounded"></div>`;
   return `
-    <a :href="${dataVar} ? '/pages/product-detail.html?id=' + ${dataVar}.name : '/pages/products.html'" class="block w-[calc(50%-5.5px)] group">
+    <a :href="${dataVar} ? '/urun/' + ${dataVar}.name : '/pages/products.html'" class="block w-[calc(50%-5.5px)] group">
       <div class="w-full h-[105px] overflow-hidden rounded flex items-center justify-center" style="background-color: var(--mfr-sample-img-bg, #f5f5f5)">
         <template x-if="${dataVar} && ${dataVar}.primary_image">
           <img :src="${dataVar}.primary_image" :alt="${dataVar}.title" class="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300" />
@@ -232,7 +232,7 @@ function renderTopRankingColumn(): string {
 
         <!-- Seller cards -->
         <template x-for="(seller, idx) in sellers.slice(0, 4)" :key="seller.seller_code">
-          <a :href="'/pages/seller/seller-storefront.html?seller=' + seller.seller_code"
+          <a :href="'/magaza/' + seller.seller_code"
              class="block w-[calc(50%-5.5px)] h-[156px] mb-4 group">
             <div class="w-full h-[116px] rounded overflow-hidden flex items-center justify-center bg-gray-50">
               <template x-if="seller.logo">
@@ -264,8 +264,8 @@ function renderProfileColumn(): string {
       ? thumbs
           .map(
             (h) => `
-        <a href="${h.href}" class="block w-full aspect-square rounded-md overflow-hidden group" title="${h.title || ""}">
-          <img src="${h.image}" alt="${h.title || ""}" class="block w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+        <a href="${h.href}" class="block w-full h-14 rounded-md overflow-hidden group bg-gray-50 relative" title="${h.title || ""}">
+          <img src="${h.image}" alt="${h.title || ""}" class="absolute inset-0 w-full h-full object-contain group-hover:scale-110 transition-transform duration-300">
         </a>`
           )
           .join("")
@@ -340,9 +340,9 @@ function renderProfileColumn(): string {
 
         <!-- Logged-out: sign in / register buttons -->
         <template x-if="!loggedIn">
-          <div class="flex justify-between mt-6 mb-4">
-            <a href="/pages/auth/login.html" class="w-[calc(50%-4px)] flex items-center justify-center rounded-full h-10 text-xs font-bold transition-colors" style="background-color: var(--mfr-profile-btn-bg, #cc9900); color: var(--mfr-profile-btn-text, #ffffff)">${t("auth.login.submit")}</a>
-            <a href="/pages/auth/register.html" class="w-[calc(50%-4px)] flex items-center justify-center rounded-full h-10 text-xs font-bold transition-colors" style="background-color: var(--mfr-profile-btn-bg, #cc9900); color: var(--mfr-profile-btn-text, #ffffff)">${t("auth.register.freeSignUp")}</a>
+          <div class="flex gap-2 mt-6 mb-4">
+            <a href="/giris" class="th-btn flex-1 h-10 text-xs font-bold no-underline">${t("auth.login.submit")}</a>
+            <a href="/kayit" class="th-btn-outline flex-1 h-10 text-xs font-bold no-underline">${t("auth.register.freeSignUp")}</a>
           </div>
         </template>
 

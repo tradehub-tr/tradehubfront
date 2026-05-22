@@ -17,6 +17,7 @@ import { renderStars } from "./ProductReviews";
 import { showReviewsModal } from "./ReviewsModal";
 import { showQAModal } from "./QAModal";
 import { RelatedProducts } from "./RelatedProducts";
+import { SocialProofBadge } from "./SocialProofBadge";
 
 // Product loaded lazily — getCurrentProduct() called inside functions
 
@@ -197,6 +198,12 @@ export function MobileProductLayout(): string {
     </div>
   `;
 
+  const socialProofSection = SocialProofBadge({
+    listingId: p.id,
+    supplierId: p.supplier?.id ?? "",
+    wrapperClass: "mx-4 mt-3 max-[374px]:mx-3 max-[374px]:mt-2.5",
+  });
+
   const sampleSection = p.samplePrice
     ? `
     <div id="pdm-sample-row" class="flex items-center justify-between px-4 py-2.5 max-[374px]:px-3 max-[374px]:py-2 bg-surface text-[13px] max-[374px]:text-xs text-text-body">
@@ -375,6 +382,7 @@ export function MobileProductLayout(): string {
       <div id="pdm-sec-overview">
         ${badgesSection}
         ${priceTiersSection}
+        ${socialProofSection}
         ${sampleSection}
         ${titleSection}
         ${variantSections}

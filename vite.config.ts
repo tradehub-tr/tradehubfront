@@ -106,6 +106,37 @@ function notFoundFallbackPlugin(): Plugin {
     };
 }
 
+/**
+ * SEO meta tag placeholder injection.
+ *
+ * Multi-page Vite build'i her HTML entry'sinin <head>'ine
+ * `<!-- {{__SEO_HEAD__}} -->` placeholder yerleştirir. Bu placeholder daha
+ * sonra Nginx → Frappe page_resolver pipeline'ında doctype-spesifik meta
+ * tag'lerle değiştirilir (örn. /urun/<slug>).
+ *
+ * Statik sayfalarda (legal, info, vb.) placeholder kalır — production
+ * Nginx rewrite kuralı yoksa storefront default'larıyla servis edilir.
+ *
+ * SPA-style sayfalarda (dashboard, cart, search) `src/seo/setPageMeta.ts`
+ * client-side fallback ile çalışır.
+ */
+function seoPlaceholderPlugin(): Plugin {
+    const PLACEHOLDER = '<!-- {{__SEO_HEAD__}} -->';
+    return {
+        name: 'seo-placeholder-inject',
+        transformIndexHtml: {
+            order: 'post',
+            handler(html) {
+                // Idempotent: placeholder zaten varsa no-op
+                if (html.includes(PLACEHOLDER)) return html;
+                // </head> öncesine yerleştir
+                if (!/<\/head>/i.test(html)) return html;
+                return html.replace(/<\/head>/i, `    ${PLACEHOLDER}\n</head>`);
+            },
+        },
+    };
+}
+
 export default defineConfig({
     base: process.env.GITHUB_PAGES === 'true' ? '/tradehubfront/' : '/',
     server: {
@@ -136,6 +167,7 @@ export default defineConfig({
         themeBootstrapPlugin(),
         cssEditorPlugin(),
         notFoundFallbackPlugin(),
+        seoPlaceholderPlugin(),
     ],
     build: {
         copyPublicDir: true,

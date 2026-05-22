@@ -298,8 +298,8 @@ export function AccountSetupForm(defaultCountry: string = "TR"): string {
             required
           />
           <label for="terms-checkbox" class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-            <a href="/pages/legal/terms.html" class="text-orange-600 dark:text-orange-400 hover:underline" data-i18n="auth.setup.termsOfUse">${t("auth.setup.termsOfUse")}</a> ${t("auth.and")}
-            <a href="/pages/legal/privacy.html" class="text-orange-600 dark:text-orange-400 hover:underline" data-i18n="auth.setup.privacyPolicy">${t("auth.setup.privacyPolicy")}</a><span data-i18n="auth.setup.agreeTerms">${t("auth.setup.agreeTerms")}</span>
+            <a href="/kullanim-kosullari" class="text-orange-600 dark:text-orange-400 hover:underline" data-i18n="auth.setup.termsOfUse">${t("auth.setup.termsOfUse")}</a> ${t("auth.and")}
+            <a href="/gizlilik" class="text-orange-600 dark:text-orange-400 hover:underline" data-i18n="auth.setup.privacyPolicy">${t("auth.setup.privacyPolicy")}</a><span data-i18n="auth.setup.agreeTerms">${t("auth.setup.agreeTerms")}</span>
           </label>
         </div>
 
@@ -317,7 +317,7 @@ export function AccountSetupForm(defaultCountry: string = "TR"): string {
       <!-- Login Link -->
       <div class="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
         <span data-i18n="auth.register.alreadyHave">${t("auth.register.alreadyHave")}</span>
-        <a href="/pages/auth/login.html" class="ml-1 font-medium text-orange-600 dark:text-orange-400 hover:underline">
+        <a href="/giris" class="ml-1 font-medium text-orange-600 dark:text-orange-400 hover:underline">
           <span data-i18n="auth.register.signIn">${t("auth.register.signIn")}</span>
         </a>
       </div>
