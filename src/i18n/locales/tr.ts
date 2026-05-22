@@ -266,7 +266,8 @@ const tr = {
       newsCenter: "Haber merkezi",
       careers: "Kariyer",
       stayConnected: "Bağlantıda Kalın",
-      operatedBy: 'istoc (okunuşu: "aystock") — Thoptan Ltd. (United Kingdom) tarafından işletilmektedir.',
+      operatedBy:
+        'istoc (okunuşu: "aystock") — Thoptan Ltd. (United Kingdom) tarafından işletilmektedir.',
       copyright: "© 2026 Thoptan Ltd. Tüm hakları saklıdır.",
       legalNotice: "Yasal Bildirim",
       privacyPolicy: "Gizlilik Politikası",
@@ -1686,7 +1687,7 @@ const tr = {
         breadcrumbLabel: "Yasal Bildirim",
         section1Title: "1. Şirket Bilgileri",
         section1Content:
-          "<p><strong>Operatör (Tüzel Kişilik):</strong> Thoptan Ltd.</p><p><strong>Yargı Bölgesi:</strong> İngiltere ve Galler (United Kingdom)</p><p><strong>Marka:</strong> istoc (okunuşu: \"aystock\")</p><p><strong>E-posta:</strong> info@istoc.com</p><p class=\"text-sm text-gray-500 mt-2\"><em>Companies House kayıt numarası, kayıtlı adres ve Türkiye temsilcisi bilgileri tamamlandıkça bu sayfa güncellenecektir.</em></p>",
+          '<p><strong>Operatör (Tüzel Kişilik):</strong> Thoptan Ltd.</p><p><strong>Yargı Bölgesi:</strong> İngiltere ve Galler (United Kingdom)</p><p><strong>Marka:</strong> istoc (okunuşu: "aystock")</p><p><strong>E-posta:</strong> info@istoc.com</p><p class="text-sm text-gray-500 mt-2"><em>Companies House kayıt numarası, kayıtlı adres ve Türkiye temsilcisi bilgileri tamamlandıkça bu sayfa güncellenecektir.</em></p>',
         section2Title: "2. Platform Hakkında",
         section2Content:
           "<p>istoc, Thoptan Ltd. (United Kingdom) tarafından işletilen, işletmeler arası (B2B) ticareti kolaylaştırmak amacıyla kurulmuş küresel bir elektronik ticaret platformudur. Platform, satıcı ile alıcı arasındaki ticari ilişkide aracı hizmet sağlayıcı konumundadır.</p><p>Platform üzerinde sunulan ürün ve hizmetlerin sorumluluğu, ilgili satıcılara aittir.</p>",
@@ -3523,7 +3524,8 @@ const tr = {
       startChat: "Sohbet Başlat",
       phone: "Telefon",
       phoneCall: "Ara",
-      phoneDescription: "Telefon desteği şu anda mevcut değil — E-posta veya Canlı Destek üzerinden bize ulaşabilirsiniz.",
+      phoneDescription:
+        "Telefon desteği şu anda mevcut değil — E-posta veya Canlı Destek üzerinden bize ulaşabilirsiniz.",
       emailContact: "E-posta",
       emailSend: "E-posta Gönder",
       chatbot: "Chatbot",
@@ -5399,9 +5401,11 @@ const tr = {
       benefit2Desc:
         "Güvende Ödeme sistemi ile her işlem güvence altında. Alıcı ve satıcı koruma programı.",
       benefit3Title: "Lojistik Entegrasyonu",
-      benefit3Desc: "Uluslararası kargo ortaklarıyla entegre süreçler. Sınır ötesi gönderilerde şeffaf takip.",
+      benefit3Desc:
+        "Uluslararası kargo ortaklarıyla entegre süreçler. Sınır ötesi gönderilerde şeffaf takip.",
       benefit4Title: "Detaylı Analitik",
-      benefit4Desc: "Satış, ziyaretçi ve dönüşüm analitiği. Veri tabanlı satış kararları için içgörüler.",
+      benefit4Desc:
+        "Satış, ziyaretçi ve dönüşüm analitiği. Veri tabanlı satış kararları için içgörüler.",
 
       // How it works
       howItWorksTitle: "Nasıl Çalışır?",

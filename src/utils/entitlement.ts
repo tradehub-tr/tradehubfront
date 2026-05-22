@@ -36,14 +36,7 @@ export interface EntitlementSnapshot {
   is_seller: boolean;
   account_type?: "Individual" | "Business";
   kyc_status?: "Locked" | "Pending" | "Verified" | "Rejected" | "Suspended" | null;
-  kyb_status?:
-    | "Locked"
-    | "Pending"
-    | "Under Review"
-    | "Verified"
-    | "Rejected"
-    | "Suspended"
-    | null;
+  kyb_status?: "Locked" | "Pending" | "Under Review" | "Verified" | "Rejected" | "Suspended" | null;
   can_buy: boolean;
   can_sell: boolean;
   tenant?: string | null;
@@ -114,7 +107,7 @@ export async function getEntitlement(force = false): Promise<EntitlementSnapshot
   // Race condition: paralel çağrılar aynı promise'i bekler
   if (!_inflight) {
     _inflight = callMethod<EntitlementSnapshot>(
-      "tradehub_core.api.v1.entitlement_snapshot.get_snapshot",
+      "tradehub_core.api.v1.entitlement_snapshot.get_snapshot"
     )
       .then((snapshot) => {
         _writeCache(snapshot);
@@ -137,7 +130,7 @@ export async function checkFeatureFresh(featureKey: string): Promise<boolean> {
   try {
     const res = await callMethod<{ has_feature: boolean }>(
       "tradehub_core.api.v1.entitlement_snapshot.check_feature",
-      { feature_key: featureKey },
+      { feature_key: featureKey }
     );
     return !!res.has_feature;
   } catch {
@@ -160,7 +153,7 @@ export function getQuota(snapshot: EntitlementSnapshot | null, key: string): num
 export function withinQuota(
   snapshot: EntitlementSnapshot | null,
   key: string,
-  current: number,
+  current: number
 ): boolean {
   if (!snapshot) return false;
   const limit = snapshot.quotas[key];
@@ -245,7 +238,8 @@ export function shouldShowVerificationBanner(snapshot: EntitlementSnapshot | nul
         return {
           show: true,
           kind: "kyc_pending",
-          message: "Kimlik doğrulamanız incelemede. Sipariş verebilmek için doğrulamanız onaylanmalı.",
+          message:
+            "Kimlik doğrulamanız incelemede. Sipariş verebilmek için doğrulamanız onaylanmalı.",
         };
       }
     }
