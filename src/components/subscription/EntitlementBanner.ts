@@ -77,10 +77,7 @@ function renderBanner({ tone, title, description, ctaLabel, ctaHref }: RenderPro
     success: "bg-green-50 border-green-200 text-green-900",
   }[tone];
 
-  const cta =
-    ctaLabel && ctaHref
-      ? `<a href="${ctaHref}" class="th-btn px-4 py-2 text-sm no-underline whitespace-nowrap">${ctaLabel}</a>`
-      : "";
+  const cta = ctaLabel && ctaHref ? `<a href="${ctaHref}" class="th-btn px-4 py-2 text-sm no-underline whitespace-nowrap">${ctaLabel}</a>` : "";
   const desc = description ? `<div class="text-xs opacity-80">${description}</div>` : "";
 
   return `
