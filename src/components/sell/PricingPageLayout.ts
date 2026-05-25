@@ -52,7 +52,12 @@ export function PricingPageLayout(): string {
         </template>
 
         <!-- Dynamic plan cards from backend -->
-        <div x-show="plans.length > 0" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+        <div x-show="plans.length > 0" class="grid grid-cols-1 gap-6 mb-16"
+             :class="{
+               'md:grid-cols-2': plans.length === 2,
+               'md:grid-cols-3': plans.length === 3,
+               'md:grid-cols-4': plans.length >= 4
+             }">
           <template x-for="plan in plans" :key="plan.plan_code">
             <div class="relative bg-white rounded-md flex flex-col p-6 sm:p-8"
                  :class="plan.highlighted ? 'border-2 border-primary-500 shadow-lg' : 'border border-gray-200 shadow-sm'">
