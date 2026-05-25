@@ -1,3 +1,15 @@
+## [v1.1.9-beta.12] - 2026-05-25 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Duzeltildi
+- fix: SEO URL uyumluluğu ve seller shop routing düzeltmeleri (@ahmeetseker)
+  - nginx.conf.template: /magaza/{code}/dukkan route'u ekle (seller shop)
+  - ManufacturerList: ürün kartları slug ile SEO URL kullanır
+  - ManufacturersHero: ürün linkleri slug fallback ile
+  - CompanyProfile: mağaza ziyaret linki düzeltmesi
+
+---
 ## [v1.1.9-beta.11] - 2026-05-25 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
