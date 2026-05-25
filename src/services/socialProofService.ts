@@ -17,6 +17,8 @@
  * Spec: docs/superpowers/specs/2026-05-20-product-social-proof-badges-design.md
  */
 
+import { getCsrfToken } from "../utils/api";
+
 export type SignalType =
   | "sales"
   | "favorites"
@@ -136,10 +138,14 @@ export function recordListingView(listingId: string): void {
 
 async function postView(listingId: string): Promise<void> {
   try {
+    const csrf = getCsrfToken();
     await fetch("/api/method/tradehub_core.api.social_proof.record_view", {
       method: "POST",
       credentials: "include",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "X-Frappe-CSRF-Token": csrf,
+      },
       body: `listing_id=${encodeURIComponent(listingId)}`,
     });
   } catch {

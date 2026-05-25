@@ -1,6 +1,6 @@
-# Türkçe pretty URL → dist HTML mapping. staticPageUrl.ts STATIC_PAGE_HTML_MAP
-# ve tradehub_core/seo/static_pages_registry.py STATIC_PAGES ile **senkron**
-# tutulmalı. Yeni statik sayfa eklenirken üç dosya da güncellenir.
+# Türkçe pretty URL → dist HTML fallback mapping. SEO backend routing'e
+# düşmeyen path'ler (registry'de olmayan eski URL'ler) bu map üzerinden
+# doğru HTML dosyasına yönlendirilir.
 map $uri $resolved_page {
     default                              $uri;
 
@@ -82,6 +82,101 @@ map $uri $resolved_page {
     /cok-satanlar/kategori               /pages/top-ranking-category.html;
     /size-ozel                           /pages/tailored-selections.html;
     /ticaret-guvencesi                   /pages/trade-assurance.html;
+}
+
+# Statik sayfa SEO backend routing. static_pages_registry.py STATIC_PAGES ile
+# **senkron** tutulmalı. Yeni statik sayfa eklenirken bu map de güncellenir.
+# Eşleşen path'ler backend render_static_page endpoint'ine proxy edilir →
+# SEO meta tag'leri (title, og:*, description) DB'den enjekte edilir.
+map $uri $seo_static_page_path {
+    default "";
+
+    # Ana + listing
+    /                                    /;
+    /urunler                             /urunler;
+    /kategoriler                         /kategoriler;
+    /markalar                            /markalar;
+    /sepet                               /sepet;
+
+    # Auth
+    /giris                               /giris;
+    /kayit                               /kayit;
+    /sifremi-unuttum                     /sifremi-unuttum;
+    /sifre-sifirla                       /sifre-sifirla;
+
+    # Help
+    /yardim-merkezi                      /yardim-merkezi;
+    /sss                                 /sss;
+    /sss/detay                           /sss/detay;
+    /destek/yeni                         /destek/yeni;
+    /destek/taleplerim                   /destek/taleplerim;
+    /destek/talep                        /destek/talep;
+
+    # Info
+    /satis-sonrasi                       /satis-sonrasi;
+    /blog                                /blog;
+    /kariyer                             /kariyer;
+    /kurumsal-sorumluluk                 /kurumsal-sorumluluk;
+    /uyelik                              /uyelik;
+    /izleme                              /izleme;
+    /haberler                            /haberler;
+    /ortakliklar                         /ortakliklar;
+    /odeme-secenekleri                   /odeme-secenekleri;
+    /iade-politikasi                     /iade-politikasi;
+    /kargo-lojistik                      /kargo-lojistik;
+    /kargo-koruma                        /kargo-koruma;
+    /vergi                               /vergi;
+    /ticaret-guvencesi/detay             /ticaret-guvencesi/detay;
+
+    # Legal
+    /erisilebilirlik                     /erisilebilirlik;
+    /cerezler                            /cerezler;
+    /mesafeli-satis                      /mesafeli-satis;
+    /fikri-mulkiyet                      /fikri-mulkiyet;
+    /kvkk                                /kvkk;
+    /yasal-uyari                         /yasal-uyari;
+    /gizlilik                            /gizlilik;
+    /urun-listeleme-kurallari            /urun-listeleme-kurallari;
+    /iade-kosullari                      /iade-kosullari;
+    /kullanim-kosullari                  /kullanim-kosullari;
+
+    # Dashboard
+    /hesabim                             /hesabim;
+    /hesabim/adresler                    /hesabim/adresler;
+    /hesabim/kisiler                     /hesabim/kisiler;
+    /hesabim/favoriler                   /hesabim/favoriler;
+    /hesabim/sorularim                   /hesabim/sorularim;
+    /hesabim/kyb                         /hesabim/kyb;
+    /hesabim/mesajlar                    /hesabim/mesajlar;
+    /hesabim/siparisler                  /hesabim/siparisler;
+    /hesabim/odeme                       /hesabim/odeme;
+    /hesabim/profil                      /hesabim/profil;
+    /hesabim/rfq                         /hesabim/rfq;
+    /hesabim/rfq/yeni                    /hesabim/rfq/yeni;
+    /hesabim/rfq/teklifler               /hesabim/rfq/teklifler;
+    /hesabim/ayarlar                     /hesabim/ayarlar;
+
+    # Order
+    /odeme                               /odeme;
+    /odeme/basarili                      /odeme/basarili;
+    /odeme/basarisiz                     /odeme/basarisiz;
+    /odeme/isleniyor                     /odeme/isleniyor;
+
+    # Seller
+    /satici-ol                           /satici-ol;
+    /satici/fiyatlandirma                /satici/fiyatlandirma;
+    /satici/dashboard                    /satici/dashboard;
+    /satici/basvuru-bekleyen             /satici/basvuru-bekleyen;
+    /satici/tedarikci-kurulum            /satici/tedarikci-kurulum;
+    /satici/dogrulama                    /satici/dogrulama;
+    /satici/vitrin                       /satici/vitrin;
+
+    # Top deals + özel
+    /firsatlar                           /firsatlar;
+    /cok-satanlar                        /cok-satanlar;
+    /cok-satanlar/kategori               /cok-satanlar/kategori;
+    /size-ozel                           /size-ozel;
+    /ticaret-guvencesi                   /ticaret-guvencesi;
 }
 
 server {
@@ -222,10 +317,29 @@ server {
         proxy_read_timeout 120s;
     }
 
+    # ── Statik sayfa SEO → backend render_static_page (meta injection)
+    # $seo_static_page_path map'te eşleşen path'ler buraya yönlendirilir.
+    location @seo_static_backend {
+        internal;
+        rewrite ^ /api/method/tradehub_core.seo.page_resolver.render_static_page?path=$seo_static_page_path break;
+        proxy_pass https://${BACKEND_DOMAIN};
+        proxy_ssl_server_name on;
+        proxy_set_header Host ${BACKEND_DOMAIN};
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 120s;
+    }
+
     # Frontend statik dosyalar
-    # $resolved_page map'ten gelir: pretty URL eşleşirse dist HTML yolu,
-    # eşleşmezse $uri (orijinal istek) — döngü riski yok.
+    # Registry'de kayıtlı statik sayfalar backend'e proxy edilir (SEO meta
+    # injection). Diğer path'ler $resolved_page map üzerinden dist
+    # dosyasından doğrudan sunulur.
     location / {
+        error_page 418 = @seo_static_backend;
+        if ($seo_static_page_path != "") {
+            return 418;
+        }
         try_files $resolved_page $uri/ $uri.html =404;
     }
 

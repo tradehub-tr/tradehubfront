@@ -16,6 +16,8 @@ import { SettingsChangeEmail, initSettingsChangeEmail } from "./SettingsChangeEm
 import { SettingsChangePhone, initSettingsChangePhone } from "./SettingsChangePhone";
 import { SettingsDeleteAccount, initSettingsDeleteAccount } from "./SettingsDeleteAccount";
 import { SettingsMyAccount, initSettingsMyAccount } from "./SettingsMyAccount";
+import { SettingsDataExport, initSettingsDataExport } from "./SettingsDataExport";
+import { SettingsConsentManagement, initSettingsConsentManagement } from "./SettingsConsentManagement";
 
 // ── SVG Icons ────────────────────────────────────────────────────
 
@@ -161,6 +163,7 @@ function getSecurityCard(): SettingsCard {
       { label: t("settings.changeEmailNav"), href: "#eposta-degistir" },
       { label: t("settings.changePhoneNav"), href: "#telefon" },
       { label: t("settings.deleteAccountNav"), href: "#hesabi-sil" },
+      { label: t("settings.downloadMyDataNav"), href: "#verilerimi-indir" },
     ],
   };
 }
@@ -169,7 +172,10 @@ function getPreferencesCard(): SettingsCard {
   return {
     icon: ICONS.preferences,
     title: t("settings.preferencesCardTitle"),
-    items: [{ label: t("settings.emailPreferencesNav"), href: "#eposta" }],
+    items: [
+      { label: t("settings.emailPreferencesNav"), href: "#eposta" },
+      { label: t("settings.consentManagementNav"), href: "#onay-yonetimi" },
+    ],
   };
 }
 
@@ -223,6 +229,8 @@ function getSectionMap(): Record<string, { title: string; render: () => string }
     },
     "#telefon": { title: t("settings.changePhoneNav"), render: () => SettingsChangePhone() },
     "#hesabi-sil": { title: t("settings.deleteAccountNav"), render: () => SettingsDeleteAccount() },
+    "#verilerimi-indir": { title: t("settings.downloadMyDataNav"), render: () => SettingsDataExport() },
+    "#onay-yonetimi": { title: t("settings.consentManagementNav"), render: () => SettingsConsentManagement() },
   };
 }
 
@@ -236,6 +244,8 @@ const INIT_MAP: Record<string, () => void> = {
   "#eposta-degistir": initSettingsChangeEmail,
   "#telefon": initSettingsChangePhone,
   "#hesabi-sil": initSettingsDeleteAccount,
+  "#verilerimi-indir": initSettingsDataExport,
+  "#onay-yonetimi": initSettingsConsentManagement,
 };
 
 // ── Main Layout ──────────────────────────────────────────────────

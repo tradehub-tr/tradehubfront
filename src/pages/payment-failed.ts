@@ -5,8 +5,10 @@
 import '../style.css';
 import { t } from '../i18n';
 import { initLinkRewriter } from '../utils/url';
+import { initTracking } from '../utils/trackingManager';
 
 initLinkRewriter();
+initTracking();
 
 document.addEventListener('DOMContentLoaded', () => {
   const params = new URLSearchParams(window.location.search);
