@@ -116,7 +116,7 @@ export function FAQPageLayout(): string {
                   <template x-for="(sub, si) in cat.subs" :key="si">
                     <span class="flex items-center">
                       <a
-                        :href="'faq-detail.html?cat=' + cat.id + '&sub=' + (sub.key || '')"
+                        :href="'/sss/detay?cat=' + cat.id + '&sub=' + (sub.key || '')"
                         class="text-[12px] transition-colors"
                         :class="sub.highlight ? 'text-[var(--color-primary-500,#f5b800)] hover:text-[var(--color-primary-700,#a87c00)]' : 'text-gray-600 hover:text-[var(--color-primary-500,#f5b800)]'"
                         x-html="highlight(sub.label)"

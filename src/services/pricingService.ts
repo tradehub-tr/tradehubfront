@@ -36,7 +36,7 @@ export interface PricingPlan {
   commission_rate: number;
   max_active_listings: number;
   cta_label: string;
-  cta_action: "signup" | "signup_billing" | "contact_sales";
+  cta_action: "signup" | "signup_billing" | "contact_sales" | "learn_more";
   highlighted: boolean;
   trial_days: number;
   features: PricingPlanFeature[];

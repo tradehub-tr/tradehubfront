@@ -20,9 +20,9 @@ export function FAQDetailLayout(): string {
       <div class="bg-white border-b border-gray-200 py-4">
         <div class="max-w-[900px] mx-auto px-4">
           <nav class="flex items-center gap-2 text-sm text-gray-500">
-            <a href="help-center.html" class="hover:text-primary-500 transition-colors">${t("faqDetail.home")}</a>
+            <a href="/yardim-merkezi" class="hover:text-primary-500 transition-colors">${t("faqDetail.home")}</a>
             <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6"/></svg>
-            <a href="faq.html" class="hover:text-primary-500 transition-colors">${t("faqDetail.faq")}</a>
+            <a href="/sss" class="hover:text-primary-500 transition-colors">${t("faqDetail.faq")}</a>
             <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6"/></svg>
             <span class="text-gray-400" x-text="categoryLabel"></span>
             <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6"/></svg>
@@ -42,7 +42,7 @@ export function FAQDetailLayout(): string {
             </div>
             <template x-for="sib in siblings" :key="sib.key">
               <a
-                :href="'faq-detail.html?cat=' + catParam + '&sub=' + sib.key"
+                :href="'/sss/detay?cat=' + catParam + '&sub=' + sib.key"
                 class="block px-4 py-2.5 text-[13px] border-b border-gray-50 transition-colors"
                 :class="sib.key === subParam ? 'text-primary-600 bg-primary-50 font-semibold border-l-2 border-l-primary-500' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-500'"
                 x-text="sib.label"
@@ -51,7 +51,7 @@ export function FAQDetailLayout(): string {
           </div>
 
           <!-- Back to FAQ -->
-          <a href="faq.html" class="mt-4 flex items-center gap-2 text-sm text-primary-500 hover:text-primary-700 transition-colors px-1">
+          <a href="/sss" class="mt-4 flex items-center gap-2 text-sm text-primary-500 hover:text-primary-700 transition-colors px-1">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/></svg>
             <span>${t("faqDetail.backToFaq")}</span>
           </a>
@@ -61,7 +61,7 @@ export function FAQDetailLayout(): string {
         <div class="flex-1 min-w-0">
 
           <!-- Mobile back button -->
-          <a href="faq.html" class="lg:hidden flex items-center gap-2 text-sm text-primary-500 hover:text-primary-700 transition-colors mb-4">
+          <a href="/sss" class="lg:hidden flex items-center gap-2 text-sm text-primary-500 hover:text-primary-700 transition-colors mb-4">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/></svg>
             <span>${t("faqDetail.backToFaq")}</span>
           </a>
@@ -126,7 +126,7 @@ export function FAQDetailLayout(): string {
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"/>
               </svg>
               <p class="text-gray-500 text-sm">${t("faqDetail.noContent")}</p>
-              <a href="faq.html" class="inline-flex items-center gap-1 text-sm text-primary-500 hover:underline mt-3">
+              <a href="/sss" class="inline-flex items-center gap-1 text-sm text-primary-500 hover:underline mt-3">
                 <span>${t("faqDetail.backToFaq")}</span>
               </a>
             </div>
@@ -162,7 +162,7 @@ export function FAQDetailLayout(): string {
             <div class="flex flex-wrap gap-2">
               <template x-for="rel in relatedTopics" :key="rel.key">
                 <a
-                  :href="'faq-detail.html?cat=' + rel.cat + '&sub=' + rel.key"
+                  :href="'/sss/detay?cat=' + rel.cat + '&sub=' + rel.key"
                   class="text-xs px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 hover:border-primary-300 hover:text-primary-600 hover:bg-primary-50 transition-all"
                   x-text="rel.label"
                 ></a>

@@ -43,7 +43,7 @@ function getModalContent(state: KycState): ModalContent {
       title: t("cart.kycRequiredTitle"),
       description: t("cart.kycSuspendedDesc"),
       ctaLabel: t("cart.kycCtaSupport"),
-      ctaHref: "/pages/help/help-ticket-new.html",
+      ctaHref: "/destek/yeni",
     };
   }
   if (state === "REJECTED") {

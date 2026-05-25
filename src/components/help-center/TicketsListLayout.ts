@@ -24,7 +24,7 @@ export function TicketsListLayout(): string {
             <h1 class="text-2xl font-bold text-gray-900">${t("helpCenter.myTickets")}</h1>
             <p class="text-sm text-gray-500 mt-0.5"><span x-text="total"></span> talep</p>
           </div>
-          <a href="/pages/help/help-ticket-new.html" class="th-btn th-btn-sm inline-flex items-center gap-2">
+          <a href="/destek/yeni" class="th-btn th-btn-sm inline-flex items-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
             ${t("helpCenter.newTicket")}
           </a>
@@ -74,7 +74,7 @@ export function TicketsListLayout(): string {
           <div class="space-y-3">
             <template x-for="ticket in paginatedTickets" :key="ticket.id">
               <a
-                :href="'/pages/help/help-ticket.html?id=' + encodeURIComponent(ticket.id)"
+                :href="'/destek/talep?id=' + encodeURIComponent(ticket.id)"
                 class="block bg-white border border-gray-200 rounded-xl p-4 hover:border-primary-300 hover:shadow-sm transition-all cursor-pointer"
               >
                 <div class="flex items-start gap-3">
@@ -131,7 +131,7 @@ export function TicketsListLayout(): string {
             </svg>
             <h3 class="text-base font-semibold text-gray-700 mb-1">${t("helpCenter.noTickets")}</h3>
             <p class="text-sm text-gray-400 mb-4">${t("helpCenter.noTicketsDesc")}</p>
-            <a href="/pages/help/help-ticket-new.html" class="th-btn th-btn-sm inline-flex items-center gap-2">
+            <a href="/destek/yeni" class="th-btn th-btn-sm inline-flex items-center gap-2">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
               ${t("helpCenter.newTicket")}
             </a>

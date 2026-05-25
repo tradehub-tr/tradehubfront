@@ -17,7 +17,7 @@ export function TicketDetailLayout(): string {
 
         <!-- Breadcrumb + back -->
         <div class="flex items-center gap-2 text-sm mb-4">
-          <a href="/pages/help/help-tickets.html"
+          <a href="/destek/taleplerim"
              class="inline-flex items-center gap-1 text-gray-500 hover:text-gray-700 transition-colors">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
@@ -139,7 +139,7 @@ export function TicketDetailLayout(): string {
               <template x-if="ticket.status === 'Closed'">
                 <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 text-center text-xs text-gray-500">
                   Bu talep kapatıldı. Yeni bir konu için
-                  <a href="/pages/help/help-ticket-new.html" class="text-primary-600 hover:underline">yeni talep açabilirsiniz</a>.
+                  <a href="/destek/yeni" class="text-primary-600 hover:underline">yeni talep açabilirsiniz</a>.
                 </div>
               </template>
 

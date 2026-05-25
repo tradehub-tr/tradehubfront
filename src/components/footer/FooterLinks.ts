@@ -46,7 +46,7 @@ const footerColumnsI18n: FooterColumnI18n[] = [
       { labelKey: "footer.helpCenter", href: "/yardim-merkezi" },
       { labelKey: "footer.checkOrder", href: "/pages/dashboard/orders.html" },
       { labelKey: "footer.refunds", href: "/iade-kosullari" },
-      { labelKey: "footer.reportAbuse", href: "/pages/help/help-ticket-new.html" },
+      { labelKey: "footer.reportAbuse", href: "/destek/yeni" },
     ],
   },
   {

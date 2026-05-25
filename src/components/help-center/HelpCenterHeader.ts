@@ -45,13 +45,13 @@ const NAV_LINKS: { id: ActivePage; label: string; href: string; authOnly?: boole
   {
     id: "ticket-new",
     label: t("helpCenter.navNewTicket"),
-    href: "/pages/help/help-ticket-new.html",
+    href: "/destek/yeni",
     authOnly: true,
   },
   {
     id: "tickets",
     label: t("helpCenter.navMyTickets"),
-    href: "/pages/help/help-tickets.html",
+    href: "/destek/taleplerim",
     authOnly: true,
   },
 ];
