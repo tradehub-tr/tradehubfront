@@ -91,7 +91,7 @@ function MainProductsCarousel(): string {
         <div class="swiper-wrapper">
           <template x-for="(p, idx) in products" :key="p.name">
             <div class="swiper-slide">
-              <a :href="'/urun/' + encodeURIComponent(p.name)" class="block no-underline group">
+              <a :href="'/urun/' + encodeURIComponent(p.slug || p.name)" class="block no-underline group">
                 <div class="relative rounded-md overflow-hidden border border-gray-200 bg-white aspect-square mb-3">
                   <img x-show="p.image" :src="p.image" :alt="p.product_name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
                   <div x-show="!p.image" class="w-full h-full flex items-center justify-center text-gray-200 bg-gray-50">
@@ -323,7 +323,7 @@ function OverviewTab(): string {
           <!-- Product thumbnails -->
           <div class="flex-1 flex gap-3 overflow-x-auto scrollbar-hide sm:grid sm:grid-cols-3">
             <template x-for="(p, idx) in serviceProducts.slice(0, 3)" :key="p.name">
-              <a :href="'/urun/' + encodeURIComponent(p.name)" class="block no-underline group shrink-0 w-[140px] sm:w-auto">
+              <a :href="'/urun/' + encodeURIComponent(p.slug || p.name)" class="block no-underline group shrink-0 w-[140px] sm:w-auto">
                 <div class="relative rounded-md overflow-hidden bg-gray-100 aspect-square mb-2">
                   <img x-show="p.image" :src="p.image" :alt="p.product_name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
                 </div>
@@ -415,7 +415,7 @@ function OverviewTab(): string {
         <!-- Products grid -->
         <div x-show="!loading && overviewProducts.length > 0" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
           <template x-for="(p, idx) in overviewProducts" :key="p.name">
-            <a :href="'/urun/' + encodeURIComponent(p.name)" class="block no-underline group">
+            <a :href="'/urun/' + encodeURIComponent(p.slug || p.name)" class="block no-underline group">
               <div class="relative rounded-md overflow-hidden bg-gray-100 aspect-square mb-2">
                 <img x-show="p.image" :src="p.image" :alt="p.product_name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
                 <div x-show="!p.image" class="w-full h-full flex items-center justify-center text-gray-200">
@@ -779,7 +779,7 @@ function ProductsTab(): string {
         <div x-show="!loading && filteredProducts().length > 0">
           <div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4 product-grid">
             <template x-for="(p, idx) in paginatedProducts" :key="p.name">
-              <a :href="'/urun/' + encodeURIComponent(p.name)" class="product-card flex flex-col gap-2 overflow-hidden text-sm text-start no-underline group">
+              <a :href="'/urun/' + encodeURIComponent(p.slug || p.name)" class="product-card flex flex-col gap-2 overflow-hidden text-sm text-start no-underline group">
                 <div class="product-card__image-area relative rounded-md overflow-hidden bg-gray-100 aspect-square">
                   <img x-show="p.image" :src="p.image" :alt="p.product_name" class="product-card__img block w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
                   <div x-show="!p.image" class="w-full h-full flex items-center justify-center text-gray-200">

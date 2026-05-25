@@ -151,7 +151,7 @@ function renderSourceByCategory(): string {
 function sampleCard(dataVar: string, label: string): string {
   const SKELETON = `<div class="w-full h-full bg-gray-100 animate-pulse rounded"></div>`;
   return `
-    <a :href="${dataVar} ? '/urun/' + ${dataVar}.name : '/pages/products.html'" class="block w-[calc(50%-5.5px)] group">
+    <a :href="${dataVar} ? '/urun/' + (${dataVar}.slug || ${dataVar}.name) : '/pages/products.html'" class="block w-[calc(50%-5.5px)] group">
       <div class="w-full h-[105px] overflow-hidden rounded flex items-center justify-center" style="background-color: var(--mfr-sample-img-bg, #f5f5f5)">
         <template x-if="${dataVar} && ${dataVar}.primary_image">
           <img :src="${dataVar}.primary_image" :alt="${dataVar}.title" class="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300" />

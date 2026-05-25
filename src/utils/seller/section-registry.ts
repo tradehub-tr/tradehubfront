@@ -275,7 +275,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
               <div x-ref="hotScroll" class="flex gap-3 overflow-x-auto scrollbar-hide pb-2 snap-x snap-mandatory" style="scroll-behavior: smooth; -webkit-overflow-scrolling: touch;">
                 <template x-for="p in products" :key="p.name">
                   <div class="shrink-0 snap-start" style="width: calc((100% - 36px) / 5); min-width: 160px; max-width: 220px;">
-                    <a :href="'/urun/' + encodeURIComponent(p.name)" class="block no-underline group">
+                    <a :href="'/urun/' + encodeURIComponent(p.slug || p.name)" class="block no-underline group">
                       <div class="relative rounded-md overflow-hidden border border-gray-200 bg-white aspect-square mb-2">
                         <img x-show="p.image || p.primary_image" :src="p.image || p.primary_image" :alt="p.product_name || p.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
                       </div>
@@ -384,7 +384,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                   <div x-show="viewMode === 'grid'" class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
                     <template x-for="p in filteredProducts" :key="p.name">
                       <div class="bg-white rounded-md border border-gray-200 overflow-hidden group hover:shadow-md transition-shadow flex flex-col h-full">
-                        <a :href="'/urun/' + encodeURIComponent(p.name)" class="block no-underline flex-1">
+                        <a :href="'/urun/' + encodeURIComponent(p.slug || p.name)" class="block no-underline flex-1">
                           <div class="aspect-square overflow-hidden bg-gray-50">
                             <img x-show="p.image || p.primary_image" :src="p.image || p.primary_image" :alt="p.product_name || p.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
                           </div>
@@ -410,11 +410,11 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                   <div x-show="viewMode === 'list'" class="flex flex-col gap-3">
                     <template x-for="p in filteredProducts" :key="p.name">
                       <div class="flex items-center gap-4 p-4 border border-gray-200 rounded-md bg-white hover:shadow-sm transition-shadow">
-                        <a :href="'/urun/' + encodeURIComponent(p.name)" class="w-[120px] h-[120px] rounded-md overflow-hidden shrink-0 bg-gray-50">
+                        <a :href="'/urun/' + encodeURIComponent(p.slug || p.name)" class="w-[120px] h-[120px] rounded-md overflow-hidden shrink-0 bg-gray-50">
                           <img x-show="p.image || p.primary_image" :src="p.image || p.primary_image" :alt="p.product_name || p.title" class="w-full h-full object-cover" loading="lazy" />
                         </a>
                         <div class="flex-1 min-w-0">
-                          <a :href="'/urun/' + encodeURIComponent(p.name)" class="text-[14px] text-gray-800 font-medium line-clamp-2 mb-2 hover:text-blue-600 no-underline" x-text="p.product_name || p.title"></a>
+                          <a :href="'/urun/' + encodeURIComponent(p.slug || p.name)" class="text-[14px] text-gray-800 font-medium line-clamp-2 mb-2 hover:text-blue-600 no-underline" x-text="p.product_name || p.title"></a>
                           <div class="text-[16px] font-bold text-gray-900 mb-1" x-text="formatPrice(p)"></div>
                           <div class="text-[12px] text-gray-500" x-show="p.moq" x-text="'Min. Siparis: ' + p.moq + ' ' + (p.moq_unit || 'Adet')"></div>
                           <div class="text-[11px] text-gray-400" x-show="p.sold_count" x-text="p.sold_count + ' satildi'"></div>

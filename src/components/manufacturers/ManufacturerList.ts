@@ -188,7 +188,7 @@ export function ManufacturerList(): string {
                   </template>
                   <template x-for="(p, i) in (seller.products || []).slice(0, 3)" :key="p.name">
                     <a
-                      :href="'/urun/' + encodeURIComponent(p.name)"
+                      :href="'/urun/' + encodeURIComponent(p.slug || p.name)"
                       class="flex flex-col bg-white border border-gray-100 rounded-lg overflow-hidden w-[140px] xl:w-[180px] flex-shrink-0 no-underline text-inherit hover:border-gray-300 transition-colors"
                     >
                       <div class="bg-gray-50 flex-1 overflow-hidden">
