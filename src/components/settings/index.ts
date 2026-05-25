@@ -9,3 +9,8 @@ export { SettingsChangeEmail, initSettingsChangeEmail } from "./SettingsChangeEm
 export { SettingsChangePhone, initSettingsChangePhone } from "./SettingsChangePhone";
 export { SettingsDeleteAccount, initSettingsDeleteAccount } from "./SettingsDeleteAccount";
 export { SettingsMyAccount, initSettingsMyAccount } from "./SettingsMyAccount";
+export { SettingsDataExport, initSettingsDataExport } from "./SettingsDataExport";
+export {
+  SettingsConsentManagement,
+  initSettingsConsentManagement,
+} from "./SettingsConsentManagement";

@@ -6,6 +6,7 @@ import '../style.css';
 import { t } from '../i18n';
 import { orderStore } from '../components/orders/state/OrderStore';
 import { initLinkRewriter } from '../utils/url';
+import { initTracking } from '../utils/trackingManager';
 
 document.addEventListener('DOMContentLoaded', () => {
   const params = new URLSearchParams(window.location.search);
@@ -149,3 +150,4 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 initLinkRewriter();
+initTracking();

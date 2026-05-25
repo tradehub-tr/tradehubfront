@@ -89,8 +89,8 @@ export async function loadProduct(listingId: string): Promise<ProductDetail> {
     currentProduct = product;
     // Dispatch event for components that need to re-render
     document.dispatchEvent(new CustomEvent("product-loaded", { detail: product }));
-    // Yorumları arka planda yükle
-    void loadProductReviews(listingId);
+    // Yorumları arka planda yükle — slug değil Frappe name (product.id) gönder
+    void loadProductReviews(product.id);
     window.dispatchEvent(new CustomEvent("product-loaded", { detail: product }));
     return product;
   } catch (err) {
