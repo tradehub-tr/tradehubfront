@@ -1,3 +1,18 @@
+## [v1.1.9-beta.13] - 2026-05-25 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat: kullanıcı veri hakları UI, backend-driven tracking ve SEO routing (@ahmeetseker)
+  - Hesap ayarlarına "Verilerimi İndir" ve "Onay Yönetimi" bölümleri eklendi
+  - Tracking Manager artık ID'leri backend API'den alıyor (hardcoded değerler kaldırıldı)
+  - Nginx'e statik sayfa SEO backend routing eklendi (meta tag DB injection)
+  - Social proof view kaydında CSRF token düzeltmesi
+  - Ürün yorumları slug yerine Frappe name ile yükleniyor
+  - Ödeme sayfalarına tracking init eklendi
+  - Türkçe i18n çevirileri (consent, data export)
+
+---
 ## [v1.1.9-beta.12] - 2026-05-25 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
