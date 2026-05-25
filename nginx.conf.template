@@ -84,10 +84,35 @@ map $uri $resolved_page {
     /ticaret-guvencesi                   /pages/trade-assurance.html;
 }
 
-# Statik sayfa SEO backend routing. static_pages_registry.py STATIC_PAGES ile
-# **senkron** tutulmalı. Yeni statik sayfa eklenirken bu map de güncellenir.
-# Eşleşen path'ler backend render_static_page endpoint'ine proxy edilir →
-# SEO meta tag'leri (title, og:*, description) DB'den enjekte edilir.
+# Bot user-agent tespiti — SEO backend routing sadece arama motoru
+# botları için aktif. Cronbi cloud backend storefront dist dosyalarına
+# erişemediğinden normal kullanıcılar lokal dist'ten serve edilir.
+map $http_user_agent $is_bot {
+    default                              0;
+    ~*googlebot                          1;
+    ~*bingbot                            1;
+    ~*yandexbot                          1;
+    ~*duckduckbot                        1;
+    ~*baiduspider                        1;
+    ~*slurp                              1;
+    ~*facebookexternalhit                1;
+    ~*twitterbot                         1;
+    ~*linkedinbot                        1;
+    ~*whatsapp                           1;
+    ~*telegrambot                        1;
+    ~*applebot                           1;
+    ~*discordbot                         1;
+    ~*slackbot                           1;
+    ~*pinterestbot                       1;
+    ~*semrushbot                         1;
+    ~*ahrefsbot                          1;
+    ~*mj12bot                            1;
+    ~*petalbot                           1;
+}
+
+# Statik sayfa SEO path registry (bot-only). static_pages_registry.py ile
+# senkron tutulmalı. $is_bot=1 olduğunda bu map'ten eşleşen path'ler
+# backend render_static_page endpoint'ine proxy edilir.
 map $uri $seo_static_page_path {
     default "";
 
@@ -332,12 +357,16 @@ server {
     }
 
     # Frontend statik dosyalar
-    # Registry'de kayıtlı statik sayfalar backend'e proxy edilir (SEO meta
-    # injection). Diğer path'ler $resolved_page map üzerinden dist
-    # dosyasından doğrudan sunulur.
+    # Bot isteklerinde (Googlebot vb.) statik sayfalar backend'e proxy edilir
+    # (SEO meta injection). Normal kullanıcılar dist'ten doğrudan sunulur.
+    # Dinamik SEO (/urun/, /kategori/, /marka/, /magaza/) yukarıdaki ayrı
+    # location blokları ile her zaman backend'e gider — etkilenmez.
     location / {
         error_page 418 = @seo_static_backend;
-        if ($seo_static_page_path != "") {
+        if ($is_bot) {
+            set $seo_bot_route $seo_static_page_path;
+        }
+        if ($seo_bot_route != "") {
             return 418;
         }
         try_files $resolved_page $uri/ $uri.html =404;
