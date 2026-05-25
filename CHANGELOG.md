@@ -1,3 +1,11 @@
+## [v1.1.9-beta.17] - 2026-05-25 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Duzeltildi
+- fix(help): bozuk yardım merkezi linklerini nginx pretty URL'lerine çevir (@ahmeetseker)
+
+---
 ## [v1.1.9-rc.1] - 2026-05-25 RC
 
 Bu surum rc.istoc.com'da onay asamasindadir.
