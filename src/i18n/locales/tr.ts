@@ -3989,10 +3989,12 @@ const tr = {
       deleteAccountNav: "Hesabı sil",
       downloadMyDataNav: "Verilerimi indir",
       downloadMyDataTitle: "Verilerimi İndir",
-      downloadMyDataDesc: "KVKK ve GDPR kapsamında kişisel verilerinizin bir kopyasını talep edebilirsiniz. Verileriniz JSON ve CSV formatında hazırlanır ve e-posta ile size gönderilir.",
+      downloadMyDataDesc:
+        "KVKK ve GDPR kapsamında kişisel verilerinizin bir kopyasını talep edebilirsiniz. Verileriniz JSON ve CSV formatında hazırlanır ve e-posta ile size gönderilir.",
       downloadMyDataBtn: "Veri Dışa Aktarma Talebi Oluştur",
       downloadMyDataProcessing: "Talebiniz işleniyor...",
-      downloadMyDataSuccess: "Talebiniz alındı. Verileriniz hazır olduğunda e-posta adresinize link gönderilecek.",
+      downloadMyDataSuccess:
+        "Talebiniz alındı. Verileriniz hazır olduğunda e-posta adresinize link gönderilecek.",
       downloadMyDataError: "Bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
       downloadMyDataRateLimit: "24 saat içinde yalnızca 1 talep oluşturabilirsiniz.",
       downloadMyDataPasswordLabel: "Şifrenizi doğrulayın",

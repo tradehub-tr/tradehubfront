@@ -17,7 +17,10 @@ import { SettingsChangePhone, initSettingsChangePhone } from "./SettingsChangePh
 import { SettingsDeleteAccount, initSettingsDeleteAccount } from "./SettingsDeleteAccount";
 import { SettingsMyAccount, initSettingsMyAccount } from "./SettingsMyAccount";
 import { SettingsDataExport, initSettingsDataExport } from "./SettingsDataExport";
-import { SettingsConsentManagement, initSettingsConsentManagement } from "./SettingsConsentManagement";
+import {
+  SettingsConsentManagement,
+  initSettingsConsentManagement,
+} from "./SettingsConsentManagement";
 
 // ── SVG Icons ────────────────────────────────────────────────────
 
@@ -229,8 +232,14 @@ function getSectionMap(): Record<string, { title: string; render: () => string }
     },
     "#telefon": { title: t("settings.changePhoneNav"), render: () => SettingsChangePhone() },
     "#hesabi-sil": { title: t("settings.deleteAccountNav"), render: () => SettingsDeleteAccount() },
-    "#verilerimi-indir": { title: t("settings.downloadMyDataNav"), render: () => SettingsDataExport() },
-    "#onay-yonetimi": { title: t("settings.consentManagementNav"), render: () => SettingsConsentManagement() },
+    "#verilerimi-indir": {
+      title: t("settings.downloadMyDataNav"),
+      render: () => SettingsDataExport(),
+    },
+    "#onay-yonetimi": {
+      title: t("settings.consentManagementNav"),
+      render: () => SettingsConsentManagement(),
+    },
   };
 }
 

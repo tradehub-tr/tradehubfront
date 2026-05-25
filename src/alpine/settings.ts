@@ -641,117 +641,125 @@ Alpine.data("settingsChangePhone", () => ({
 }));
 
 Alpine.data("settingsDataExport", () => ({
-	step: "form" as "form" | "success",
-	password: "",
-	error: "",
-	loading: false,
+  step: "form" as "form" | "success",
+  password: "",
+  error: "",
+  loading: false,
 
-	async requestExport() {
-		if (!this.password) return;
-		this.error = "";
-		this.loading = true;
-		try {
-			await api("/method/tradehub_core.api.v1.compliance.request_data_export", {
-				method: "POST",
-				body: JSON.stringify({ password: this.password }),
-			});
-			this.step = "success";
-		} catch (err) {
-			const msg = err instanceof Error ? err.message : "";
-			if (msg.includes("24 saat") || err instanceof RateLimitError) {
-				this.error = t("settings.downloadMyDataRateLimit");
-			} else if (msg.includes("Incorrect") || msg.includes("incorrect") || msg.includes("Invalid")) {
-				this.error = t("settings.currentPasswordWrong");
-			} else {
-				this.error = t("settings.downloadMyDataError");
-			}
-		} finally {
-			this.loading = false;
-		}
-	},
+  async requestExport() {
+    if (!this.password) return;
+    this.error = "";
+    this.loading = true;
+    try {
+      await api("/method/tradehub_core.api.v1.compliance.request_data_export", {
+        method: "POST",
+        body: JSON.stringify({ password: this.password }),
+      });
+      this.step = "success";
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "";
+      if (msg.includes("24 saat") || err instanceof RateLimitError) {
+        this.error = t("settings.downloadMyDataRateLimit");
+      } else if (
+        msg.includes("Incorrect") ||
+        msg.includes("incorrect") ||
+        msg.includes("Invalid")
+      ) {
+        this.error = t("settings.currentPasswordWrong");
+      } else {
+        this.error = t("settings.downloadMyDataError");
+      }
+    } finally {
+      this.loading = false;
+    }
+  },
 }));
 
 Alpine.data("settingsConsentManagement", () => ({
-	consents: [] as Array<{
-		consent_type: string;
-		has_consent: boolean;
-		version: string | null;
-		granted_at: string | null;
-		busy?: boolean;
-	}>,
-	loading: true,
-	error: "",
+  consents: [] as Array<{
+    consent_type: string;
+    has_consent: boolean;
+    version: string | null;
+    granted_at: string | null;
+    busy?: boolean;
+  }>,
+  loading: true,
+  error: "",
 
-	async init() {
-		try {
-			const res = await api("/method/tradehub_core.api.v1.compliance.get_my_consents");
-			const data = (res as { message?: unknown }).message ?? res;
-			this.consents = (data as typeof this.consents).map((c) => ({ ...c, busy: false }));
-		} catch {
-			this.error = t("settings.downloadMyDataError");
-		} finally {
-			this.loading = false;
-		}
-	},
+  async init() {
+    try {
+      const res = await api("/method/tradehub_core.api.v1.compliance.get_my_consents");
+      const data = (res as { message?: unknown }).message ?? res;
+      this.consents = (data as typeof this.consents).map((c) => ({ ...c, busy: false }));
+    } catch {
+      this.error = t("settings.downloadMyDataError");
+    } finally {
+      this.loading = false;
+    }
+  },
 
-	getLabel(type: string): string {
-		const map: Record<string, string> = {
-			privacy_policy: t("settings.consentPrivacyPolicy"),
-			terms_of_service: t("settings.consentTerms"),
-			marketing_email: t("settings.consentMarketingEmail"),
-			marketing_sms: t("settings.consentMarketingSms"),
-			cookie_analytics: t("settings.consentCookieAnalytics"),
-			cookie_marketing: t("settings.consentCookieMarketing"),
-			cookie_functional: t("settings.consentCookieFunctional"),
-			kvkk_disclosure: t("settings.consentKvkk"),
-			data_processing: t("settings.consentDataProcessing"),
-		};
-		return map[type] || type;
-	},
+  getLabel(type: string): string {
+    const map: Record<string, string> = {
+      privacy_policy: t("settings.consentPrivacyPolicy"),
+      terms_of_service: t("settings.consentTerms"),
+      marketing_email: t("settings.consentMarketingEmail"),
+      marketing_sms: t("settings.consentMarketingSms"),
+      cookie_analytics: t("settings.consentCookieAnalytics"),
+      cookie_marketing: t("settings.consentCookieMarketing"),
+      cookie_functional: t("settings.consentCookieFunctional"),
+      kvkk_disclosure: t("settings.consentKvkk"),
+      data_processing: t("settings.consentDataProcessing"),
+    };
+    return map[type] || type;
+  },
 
-	formatDate(dateStr: string): string {
-		try {
-			return new Date(dateStr).toLocaleDateString("tr-TR", {
-				day: "2-digit", month: "2-digit", year: "numeric",
-			});
-		} catch { return dateStr; }
-	},
+  formatDate(dateStr: string): string {
+    try {
+      return new Date(dateStr).toLocaleDateString("tr-TR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      });
+    } catch {
+      return dateStr;
+    }
+  },
 
-	async withdrawItem(consentType: string) {
-		const item = this.consents.find((c) => c.consent_type === consentType);
-		if (!item) return;
-		item.busy = true;
-		try {
-			await api("/method/tradehub_core.api.v1.compliance.withdraw_consent", {
-				method: "POST",
-				body: JSON.stringify({ consent_type: consentType }),
-			});
-			item.has_consent = false;
-			item.granted_at = null;
-		} catch {
-			this.error = t("settings.downloadMyDataError");
-		} finally {
-			item.busy = false;
-		}
-	},
+  async withdrawItem(consentType: string) {
+    const item = this.consents.find((c) => c.consent_type === consentType);
+    if (!item) return;
+    item.busy = true;
+    try {
+      await api("/method/tradehub_core.api.v1.compliance.withdraw_consent", {
+        method: "POST",
+        body: JSON.stringify({ consent_type: consentType }),
+      });
+      item.has_consent = false;
+      item.granted_at = null;
+    } catch {
+      this.error = t("settings.downloadMyDataError");
+    } finally {
+      item.busy = false;
+    }
+  },
 
-	async grantItem(consentType: string) {
-		const item = this.consents.find((c) => c.consent_type === consentType);
-		if (!item) return;
-		item.busy = true;
-		try {
-			await api("/method/tradehub_core.api.v1.compliance.record_consent", {
-				method: "POST",
-				body: JSON.stringify({ consent_type: consentType, action: "granted", source: "settings" }),
-			});
-			item.has_consent = true;
-			item.granted_at = new Date().toISOString();
-		} catch {
-			this.error = t("settings.downloadMyDataError");
-		} finally {
-			item.busy = false;
-		}
-	},
+  async grantItem(consentType: string) {
+    const item = this.consents.find((c) => c.consent_type === consentType);
+    if (!item) return;
+    item.busy = true;
+    try {
+      await api("/method/tradehub_core.api.v1.compliance.record_consent", {
+        method: "POST",
+        body: JSON.stringify({ consent_type: consentType, action: "granted", source: "settings" }),
+      });
+      item.has_consent = true;
+      item.granted_at = new Date().toISOString();
+    } catch {
+      this.error = t("settings.downloadMyDataError");
+    } finally {
+      item.busy = false;
+    }
+  },
 }));
 
 Alpine.data("settingsDeleteAccount", () => ({

@@ -10,4 +10,7 @@ export { SettingsChangePhone, initSettingsChangePhone } from "./SettingsChangePh
 export { SettingsDeleteAccount, initSettingsDeleteAccount } from "./SettingsDeleteAccount";
 export { SettingsMyAccount, initSettingsMyAccount } from "./SettingsMyAccount";
 export { SettingsDataExport, initSettingsDataExport } from "./SettingsDataExport";
-export { SettingsConsentManagement, initSettingsConsentManagement } from "./SettingsConsentManagement";
+export {
+  SettingsConsentManagement,
+  initSettingsConsentManagement,
+} from "./SettingsConsentManagement";
