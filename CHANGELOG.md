@@ -1,3 +1,133 @@
+## [v1.1.9-rc.1] - 2026-05-25 RC
+
+Bu surum rc.istoc.com'da onay asamasindadir.
+
+### Eklendi
+- feat(changelog): yeni storefront özellikleri eklendi ve belgeler güncellendi (@ahmeetseker)
+- feat(kyc): KYC sayfası + form + prefill API entegrasyonu eklendi (@aliiball)
+  - pages/dashboard/kyc.html + src/pages/kyc.ts entry
+  - src/components/kyc/KycLayout.ts: Kurumsal/Bireysel toggle + boxed layout (account_type register'dan KYC formuna taşındı)
+  - get_prefill_data ile User Profile + son KYC/KYB değerleri prefill
+  - src/types/userProfile.ts type tanımları
+- feat(verification-ui): banner + locked-feature + kyc-required modal eklendi (@aliiball)
+  - VerificationStatusBanner: KYC × KYB state machine ile 9 banner durumu
+  - LockedFeatureModal: sidebar locked item için "Alıcı/Satıcı olun" CTA
+  - KycRequiredModal: checkout'ta [KYC_<STATE>] prefix regex parse + state-bazlı modal (Locked/Pending/Rejected/Suspended → support ticket)
+  - utils/sellerRouter.ts: satıcı dashboard yönlendirme yardımcısı
+- feat(data): countries + country-subdivisions mock data eklendi (@aliiball)
+  - src/data/countries.ts: ülke listesi (ISO kodları + isimler)
+  - src/data/country-subdivisions.ts: ülke-il/eyalet eşlemesi
+- feat(i18n): KYC + verification + address purpose çevirileri eklendi (@aliiball)
+  - en.ts + tr.ts: settings.myAccountTitle, settings.addressDisabledHint, header.myStore ("Mağaza Sayfam" → "Mağazalarım"), kyc.* key'leri, verification banner state'leri, address purpose etiketleri
+- feat(auth): yasal metin onay popup'ı ve ayrı checkbox'lar eklendi (@aliiball)
+  - Tek "Kullanım Koşulları ve Gizlilik Politikası" checkbox'ı iki ayrı onaya bölündü (terms-checkbox + privacy-checkbox)
+  - Turuncu metne tıklayınca tüm sözleşme içeriği popup içinde gösteriliyor (yeni LegalConsentModal component)
+  - Reddet/Kabul Et butonları metnin sonuna kadar okunmadan görünmüyor; her açılışta scroll baştan başlıyor ve buton durumu sıfırlanıyor
+  - Popup içeriği legalContent.ts'ten çekiliyor — terms/privacy sayfalarıyla aynı kaynak
+  - i18n: agreeTerms TR-suffix/EN-prefix çakışması agreeBefore + agreeAfter'a bölündü; auth.setup.legalConsent.{accept, reject} eklendi
+- feat(sell): pricing planları dinamik API + entitlement banner (@boraydeger32)
+  - sell sayfasındaki 4 hardcoded TIERS dizisi kaldırıldı, planlar artık tradehub_core.api.v1.public_pricing.get_pricing_plans endpoint'inden çekiliyor (Süper Admin Permission Console'dan yönetim).
+  - pricingService.ts: localStorage cache (5 dk) + stale-while-revalidate; cache key v2'ye yükseltildi (CTA label şema değişikliği için invalidate).
+  - sell.ts: cache fresh ise senkron paint, değilse fetch await; arka planda daima fetch + updated_at değişirse #paketler section'ı yerinde re-render (tüm DOM swap yerine — Alpine state korunur).
+  - SellPageLayout: CTA action map (signup, contact_sales, learn_more) ve feature icon glyph map (check, x, star, zap, info, default check) eklendi; currency symbol + fmtListings helper'ları.
+  - FAZ 1.7 — utils/entitlement.ts: snapshot client (sessionStorage 5dk cache), hasFeature/withinQuota/isVerifiedForCheckout helper'ları. Güvenlik sınırı değil — gerçek karar her korumalı eylemde backend'de.
+  - components/subscription/EntitlementBanner.ts: trial ending (< 3 gün) ve subscription past_due durumları için banner.
+- feat(routing): Türkçe pretty URL'lere dist HTML mapping katmanı eklendi (@ahmeetseker)
+  - staticPageUrl.ts'e STATIC_PAGE_HTML_MAP ve getStaticPageHtmlPath() eklendi
+  - Vite dev plugin (staticPageRewritePlugin) /ureticiler gibi path'leri pages/manufacturers.html'e rewrite eder
+  - nginx.conf.template'e `map $uri $static_page_html` bloğu eklendi (prod aynı işi yapar)
+  - Slug'lar yenilendi: /markalar → /ureticiler, /firsat → /firsatlar (MegaMenu, TopBar, HeroSideBannerSlider, TopDeals, SubHeader)
+  - Seller storefront `/magaza/<code>` path'inden seller_code parse eder, nginx internal rewrite sonrası query görünmediği için fallback olarak
+  - StoreHeader/CompanyProfile "Mağazayı ziyaret et" linkleri sellerCode state'ine bağlandı
+- feat: kullanıcı veri hakları UI, backend-driven tracking ve SEO routing (@ahmeetseker)
+  - Hesap ayarlarına "Verilerimi İndir" ve "Onay Yönetimi" bölümleri eklendi
+  - Tracking Manager artık ID'leri backend API'den alıyor (hardcoded değerler kaldırıldı)
+  - Nginx'e statik sayfa SEO backend routing eklendi (meta tag DB injection)
+  - Social proof view kaydında CSRF token düzeltmesi
+  - Ürün yorumları slug yerine Frappe name ile yükleniyor
+  - Ödeme sayfalarına tracking init eklendi
+  - Türkçe i18n çevirileri (consent, data export)
+- feat(nginx): enhance SEO routing for bot user-agents and update static page handling (@ahmeetseker)
+- feat(nginx): enhance dynamic SEO routing for bots and users with new rewrite rules (@ahmeetseker)
+
+### Duzeltildi
+- fix(ci): son PROD tag'ini güncelleyerek CHANGELOG girişini düzeltildi (@ahmeetseker)
+- fix(settings): address/city/postal_code disabled + Vergi tab gizlendi (@aliiball)
+  - SettingsAccountEdit + SettingsMyAccount address/city/postal_code disabled + helper text (Frappe Address mimarisinde olduğu için)
+  - SettingsLayout 4 noktada Vergi tab yorum satırı (S3=C kararı)
+  - FavoritesLayout User Profile field uyumu + filter sets
+  - buyer-dashboard NewBuyerInfo + UserInfoCard + types + mock Sprint 2
+  - pages/buyer-dashboard VerificationStatusBanner entegrasyonu
+- fix(cart): sepet popup'larında mağaza adı linklendi ve canonical URL'ye normalize edildi (@ahmeetseker)
+  - SharedCartDrawer: store'a yeni supplier eklenirken href canonical /pages/seller/seller-shop.html?seller= pattern'iyle yazılıyor
+  - TopBar: header sepet özetinde eski /pages/seller.html?id= href'leri normalizeSupplierHref ile canonical pattern'e çevriliyor;
+  - ManufacturersHero: statik "0" yerine favorites/sellerFavorites store'larından canlı count; favorites-changed ve
+  - i18n: mfr.favoriteProducts / mfr.favoriteSuppliers key'leri eklendi (TR/EN), whitespace-pre-line ile iki satır render
+  - ManufacturerList: ürün kartlarında thumbnail block + body sabit yükseklik (h-[78px], min-h-[2lh]) ile kart yüksekliği eşitlendi refactor(product): fiyat tier'larında strikethrough üst satıra alındı, qty font büyüdü
+  - Pre-discount fiyat artık deal fiyatının yanında değil, üstünde block olarak gösteriliyor
+  - Tier qty etiketi 13px → 15px
+  - TR locale'inde "MSA:" prefix'i kaldırıldı; tier başlığı sade "1 adet" / "1 - 5 adet"
+  - SubHeader: products sekmesinde "...\"keyword\" kategorisinde", manufacturers sekmesinde "...\"keyword\" için küresel
+  - ProductListingGrid: chat butonuna list-mode'da tam genişlik ve <1599px grid'de küçük font/padding için container-query
+  - MegaMenu: featured kart tipografisi keyfi [11.5px]/[13px] yerine text-xs / text-sm'e standardize edildi
+  - fix(cart): sepet popup'larında eski /pages/seller.html?id= href'leri canonical /pages/seller/seller-shop.html?seller=
+  - feat(manufacturers): landing favori ürün/tedarikçi sayaçları favorites store'larından canlı, event listener ile güncelleniyor;
+  - refactor(product): fiyat tier'da strikethrough üst satıra taşındı, qty font 15px; TR "MSA:" prefix'i kaldırıldı
+  - refactor(listing): SubHeader başlığı products/manufacturers sekmesine göre dinamik; ProductListingGrid chat butonuna list-mode
+  - refactor(manufacturers): ürün kartlarında thumbnail block + body sabit yükseklik ile hizalama düzeltildi
+- fix: SEO URL uyumluluğu ve seller shop routing düzeltmeleri (@ahmeetseker)
+  - nginx.conf.template: /magaza/{code}/dukkan route'u ekle (seller shop)
+  - ManufacturerList: ürün kartları slug ile SEO URL kullanır
+  - ManufacturersHero: ürün linkleri slug fallback ile
+  - CompanyProfile: mağaza ziyaret linki düzeltmesi
+
+### Degistirildi
+- refactor(sidebar): KYC + KYB iki ayrı lockable item olarak ayrıldı (@aliiball)
+  - sidebarData + sidebarIcons: KYC ve KYB için iki ayrı giriş
+  - SidebarMenuItem: lockable mantığı (session state üzerinden)
+  - Sidebar.ts legacy requireSeller davranışı kaldırıldı
+- refactor(auth): SupplierSetupForm + AccountSetupForm User Profile API'sine taşındı (@aliiball)
+  - supplier-setup + account-setup register_supplier / register_user Sprint 2.6 davranışına uyarlandı
+  - account_type Bireysel/Şirket toggle KYC formuna taşındı (register'dan kaldırıldı)
+  - utils/auth.ts session capability flag'leri (kyc_required, kyb_required, kyc_locked, kyb_locked) eklendi
+  - pages/sell.ts + pages/supplier-setup.ts Sprint 2 akışına uyumlandı
+- refactor(addresses): Bireysel/Kurumsal toggle + tax_no/tax_office eklendi (@aliiball)
+  - AddressesLayout: address_type toggle (Individual/Business)
+  - tax_no + tax_office Business için conditional render
+  - utils/tr-validation.ts: VKN + TCKN checksum
+  - alpine/addresses.ts: purpose alanı + Sprint 1 Faz D uyumu
+- refactor(kyb): mersis_no + kep_address + rejection_category form alanları eklendi (@aliiball)
+  - KybLayout + alpine/kyb purpose/state machine güncellemeleri
+  - pages/kyb.ts mersis (16 hane) + kep (email format) doğrulamaları
+- refactor(cart): SupplierCard + CartStore + cartService Sprint 2 uyumu (@aliiball)
+  - SupplierCard supplierId → admin_seller_profile.name eşleme
+  - CartStore + CartSummary KYC gate state
+  - cartService [KYC_<STATE>] prefix mesajı parse
+  - checkout.ts KycRequiredModal entegrasyonu
+  - pages/product-detail + ProductInfo + MobileLayout + ProductListingGrid capability flag kontrolleri
+  - types/cart + types/productListing Sprint 2 alanları
+- refactor(layout): products/manufacturers sayfaları unified SubHeader'a geçirildi (@ahmeetseker)
+  - SearchHeader → SubHeader: tabs + breadcrumb + sonuç başlığı + sort/view tek bileşende toplandı
+  - MegaMenu: kategori kart görseli yerine icon-only akış
+  - i18n: viewingLead, unitFound, unitFoundManufacturer, viewMode/Grid/List anahtarları eklendi
+  - ManufacturerFilterSidebar/List, FilterSidebar, TopBar SubHeader API'ye uyumlandı
+- refactor(lint): tradehubfront ESLint warning'leri sıfırlandı (@ahmeetseker)
+  - 304 @typescript-eslint/no-explicit-any → proper type tanımları
+  - Global window augmentation: src/types/global.d.ts oluşturuldu (API_BASE, Alpine, dataLayer, __getSellerFavs, __originalListingImages vb.)
+  - Mevcut interface'ler kullanıldı (ProductDetail.videoUrl/brandInfo/specGroups cast'leri kaldırıldı); yeni: NotificationItem, RawTailoredProduct, Quote, Message/Conversation, SectionSettings, SellerStorefrontData, AlpineDataEl vb.
+  - catch (e: any) → catch veya catch (e: unknown) + type guard
+  - Underscore-prefix discard pattern (_id, _tempId, _) için varsIgnorePattern + caughtErrorsIgnorePattern: '^_' eklendi
+  - Debug console.log silindi veya console.warn'a çevrildi
+  - alpine/seller.ts, alpine/orders.ts, alpine/help.ts dahil ~50 dosya temizlendi
+- refactor(upload): RFQ ve KYB/KYC upload-ui kütüphanesine taşındı (@aliiball)
+  - src/lib/upload-ui/ paylaşımlı kütüphane (admin-panel ile aynı API)
+  - rfq/dropzone.ts upload-ui facade'ı üzerinden yeniden yazıldı
+  - rfq/file-list.ts ve rfq/uploader.ts ayrıldı
+  - KybLayout, KycLayout, SettingsLayout, TicketForm, WriteReviewModal yeni upload bileşenlerine bağlandı
+  - rfq-form.ts ve rfq.ts sayfa init'leri sadeleştirildi
+  - i18n: yeni upload string'leri (en/tr)
+
+---
 ## [v1.1.9-beta.16] - 2026-05-25 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
