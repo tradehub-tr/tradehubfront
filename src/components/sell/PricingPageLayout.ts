@@ -1,120 +1,12 @@
 /**
  * PricingPageLayout Component
- * Pricing plans with monthly/yearly toggle, comparison table, and FAQ
+ * Pricing plans fetched from backend API via sellPricing Alpine data.
+ * Falls back to loading skeleton while data is fetched.
  */
 
 import { t } from "../../i18n";
-import { PricingTable } from "../shared/PricingTable";
-
-const PLANS = [
-  {
-    nameKey: "sellPage.pricing.planFree" as const,
-    monthlyPrice: "\u20BA0",
-    yearlyPrice: "\u20BA0",
-    yearlyNoteKey: "",
-    recommended: false,
-    featureKeys: [
-      "sellPage.pricing.feat50Products",
-      "sellPage.pricing.featBasicStore",
-      "sellPage.pricing.featStandardSupport",
-      "sellPage.pricing.featBasicAnalytics",
-    ],
-    isFree: true,
-  },
-  {
-    nameKey: "sellPage.pricing.planGold" as const,
-    monthlyPrice: "\u20BA499",
-    yearlyPrice: "\u20BA399",
-    yearlyNoteKey: "sellPage.pricing.yearlyNoteGold",
-    recommended: false,
-    featureKeys: [
-      "sellPage.pricing.feat500Products",
-      "sellPage.pricing.featCustomStore",
-      "sellPage.pricing.featPrioritySupport",
-      "sellPage.pricing.featDetailedAnalytics",
-      "sellPage.pricing.featGoldBadge",
-      "sellPage.pricing.featFeaturedListing",
-    ],
-    isFree: false,
-  },
-  {
-    nameKey: "sellPage.pricing.planVerified" as const,
-    monthlyPrice: "\u20BA999",
-    yearlyPrice: "\u20BA799",
-    yearlyNoteKey: "sellPage.pricing.yearlyNoteVerified",
-    recommended: true,
-    featureKeys: [
-      "sellPage.pricing.featUnlimitedProducts",
-      "sellPage.pricing.featPremiumStore",
-      "sellPage.pricing.featDedicatedManager",
-      "sellPage.pricing.featAiAnalytics",
-      "sellPage.pricing.featVerifiedBadge",
-      "sellPage.pricing.featPrioritySearch",
-      "sellPage.pricing.featBulkUpload",
-      "sellPage.pricing.featApiAccess",
-    ],
-    isFree: false,
-  },
-];
-
-const COMPARISON_FEATURE_KEYS = [
-  {
-    labelKey: "sellPage.pricing.compProductListing",
-    values: ["50", "500", "sellPage.pricing.compValUnlimited"],
-  },
-  {
-    labelKey: "sellPage.pricing.compStorePage",
-    values: [
-      "sellPage.pricing.compValBasic",
-      "sellPage.pricing.compValCustom",
-      "sellPage.pricing.compValPremium",
-    ],
-  },
-  {
-    labelKey: "sellPage.pricing.compSupport",
-    values: [
-      "sellPage.pricing.compValStandard",
-      "sellPage.pricing.compValPriority",
-      "sellPage.pricing.compValDedicatedManager",
-    ],
-  },
-  {
-    labelKey: "sellPage.pricing.compAnalytics",
-    values: [
-      "sellPage.pricing.compValBasic",
-      "sellPage.pricing.compValDetailed",
-      "sellPage.pricing.compValAiPowered",
-    ],
-  },
-  { labelKey: "sellPage.pricing.compBadge", values: [false, true, true] as (boolean | string)[] },
-  {
-    labelKey: "sellPage.pricing.compFeaturedListing",
-    values: [false, true, true] as (boolean | string)[],
-  },
-  {
-    labelKey: "sellPage.pricing.compBulkUpload",
-    values: [false, false, true] as (boolean | string)[],
-  },
-  {
-    labelKey: "sellPage.pricing.compApiAccess",
-    values: [false, false, true] as (boolean | string)[],
-  },
-  {
-    labelKey: "sellPage.pricing.compPrioritySearch",
-    values: [false, false, true] as (boolean | string)[],
-  },
-];
 
 export function PricingPageLayout(): string {
-  const comparisonFeatures = COMPARISON_FEATURE_KEYS.map((f) => ({
-    label: t(f.labelKey),
-    values: f.values.map((v) => {
-      if (typeof v === "boolean") return v;
-      if (typeof v === "string" && v.startsWith("sellPage.")) return t(v);
-      return v;
-    }),
-  }));
-
   return `
     <div x-data="sellPricing()" class="pb-16">
       <!-- Header -->
@@ -133,49 +25,89 @@ export function PricingPageLayout(): string {
 
       <!-- Pricing Cards -->
       <div class="max-w-[1200px] mx-auto px-4 sm:px-6">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-          ${PLANS.map((plan) => {
-            const planName = t(plan.nameKey);
-            return `
-            <div class="relative bg-white rounded-md ${plan.recommended ? "border-2 border-primary-500 shadow-lg" : "border border-gray-200 shadow-sm"} p-6 sm:p-8 flex flex-col">
-              ${plan.recommended ? `<div class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-primary-500 text-white text-xs font-semibold rounded-full">${t("sellPage.pricing.popular")}</div>` : ""}
-              <h3 class="text-xl font-bold text-gray-900">${planName}</h3>
-              <div class="mt-4 mb-6">
-                <span class="text-3xl font-bold text-gray-900" x-text="billingPeriod === 'monthly' ? '${plan.monthlyPrice}' : '${plan.yearlyPrice}'"></span>
-                <span class="text-sm text-gray-500"> ${t("sellPage.pricing.perMonth")}</span>
-                ${plan.yearlyNoteKey ? `<p class="text-xs text-gray-400 mt-1" x-show="billingPeriod === 'yearly'">${t(plan.yearlyNoteKey)}</p>` : ""}
-              </div>
-              <ul class="space-y-3 mb-8 flex-1">
-                ${plan.featureKeys
-                  .map(
-                    (fk) => `
-                  <li class="flex items-start gap-2 text-sm text-gray-600">
-                    <svg class="w-4 h-4 text-green-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                    ${t(fk)}
-                  </li>
-                `
-                  )
-                  .join("")}
-              </ul>
-              <a href="/satici-ol" class="block text-center ${plan.recommended ? "th-btn" : "th-btn-outline"}">
-                ${plan.isFree ? t("sellPage.pricing.ctaFree") : t("sellPage.pricing.ctaSelect")}
-              </a>
-            </div>
-          `;
-          }).join("")}
-        </div>
 
-        <!-- Feature Comparison -->
-        <div class="mb-16">
-          <h2 class="text-xl font-bold text-gray-900 mb-6 text-center">${t("sellPage.pricing.comparisonTitle")}</h2>
-          ${PricingTable({
-            plans: [
-              { name: t("sellPage.pricing.planFree") },
-              { name: t("sellPage.pricing.planGold") },
-              { name: t("sellPage.pricing.planVerified"), recommended: true },
-            ],
-            features: comparisonFeatures,
-          })}
+        <!-- Loading skeleton -->
+        <template x-if="plansLoading && plans.length === 0">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+            <template x-for="i in 3" :key="i">
+              <div class="bg-white rounded-md border border-gray-200 p-6 sm:p-8 animate-pulse">
+                <div class="h-6 bg-gray-200 rounded w-24 mb-4"></div>
+                <div class="h-10 bg-gray-200 rounded w-32 mb-6"></div>
+                <div class="space-y-3">
+                  <div class="h-4 bg-gray-100 rounded w-full"></div>
+                  <div class="h-4 bg-gray-100 rounded w-3/4"></div>
+                  <div class="h-4 bg-gray-100 rounded w-5/6"></div>
+                </div>
+                <div class="h-10 bg-gray-200 rounded mt-8"></div>
+              </div>
+            </template>
+          </div>
+        </template>
+
+        <!-- Error state -->
+        <template x-if="plansError && plans.length === 0">
+          <div class="text-center py-12 text-gray-500">
+            <p>${t("sellPage.pricing.loadError") || "Fiyatlandırma bilgileri yüklenemedi. Lütfen sayfayı yenileyin."}</p>
+          </div>
+        </template>
+
+        <!-- Dynamic plan cards from backend -->
+        <div x-show="plans.length > 0" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+          <template x-for="plan in plans" :key="plan.plan_code">
+            <div class="relative bg-white rounded-md flex flex-col p-6 sm:p-8"
+                 :class="plan.highlighted ? 'border-2 border-primary-500 shadow-lg' : 'border border-gray-200 shadow-sm'">
+              <!-- Badge -->
+              <template x-if="plan.badge_label">
+                <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 text-white text-xs font-semibold rounded-full"
+                     :class="{
+                       'bg-yellow-500': plan.badge_color === 'yellow',
+                       'bg-gray-900': plan.badge_color === 'black',
+                       'bg-gradient-to-r from-violet-600 to-indigo-600': plan.badge_color === 'premium',
+                       'bg-green-600': plan.badge_color === 'green',
+                       'bg-blue-600': plan.badge_color === 'blue',
+                       'bg-primary-500': !plan.badge_color || plan.badge_color === 'default'
+                     }"
+                     x-text="plan.badge_label"></div>
+              </template>
+
+              <h3 class="text-xl font-bold text-gray-900" x-text="plan.plan_name"></h3>
+              <p x-show="plan.short_tagline" class="text-sm text-gray-500 mt-1" x-text="plan.short_tagline"></p>
+
+              <!-- Price -->
+              <div class="mt-4 mb-6">
+                <span class="text-3xl font-bold text-gray-900"
+                      x-text="formatPrice(billingPeriod === 'monthly' ? plan.monthly_price : plan.yearly_price, plan.currency)"></span>
+                <span class="text-sm text-gray-500" x-show="plan.monthly_price > 0"> ${t("sellPage.pricing.perMonth")}</span>
+                <template x-if="plan.trial_days > 0">
+                  <p class="text-xs text-green-600 mt-1" x-text="plan.trial_days + ' ${t("sellPage.pricing.trialDays") || "gün ücretsiz deneme"}'"></p>
+                </template>
+              </div>
+
+              <!-- Features -->
+              <ul class="space-y-3 mb-8 flex-1">
+                <template x-for="feat in plan.features" :key="feat.display_text">
+                  <li class="flex items-start gap-2 text-sm" :class="feat.is_disabled ? 'text-gray-400 line-through' : 'text-gray-600'">
+                    <template x-if="feat.icon === 'check' || !feat.icon">
+                      <svg class="w-4 h-4 text-green-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                    </template>
+                    <template x-if="feat.icon === 'x'">
+                      <svg class="w-4 h-4 text-red-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </template>
+                    <template x-if="feat.icon === 'star'">
+                      <svg class="w-4 h-4 text-yellow-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </template>
+                    <span x-text="feat.display_text"></span>
+                  </li>
+                </template>
+              </ul>
+
+              <!-- CTA -->
+              <a :href="plan.cta_action === 'contact_sales' ? '/iletisim' : '/satici-ol'"
+                 class="block text-center"
+                 :class="plan.highlighted ? 'th-btn' : 'th-btn-outline'"
+                 x-text="plan.cta_label"></a>
+            </div>
+          </template>
         </div>
 
         <!-- FAQ -->

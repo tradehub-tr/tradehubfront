@@ -159,6 +159,47 @@ Alpine.data("sellPage", () => ({
 Alpine.data("sellPricing", () => ({
   billingPeriod: "monthly" as "monthly" | "yearly",
   faqOpen: [false, false, false, false, false] as boolean[],
+  plans: [] as Array<{
+    plan_code: string;
+    plan_name: string;
+    badge_label: string | null;
+    badge_color: string;
+    theme: string;
+    short_tagline: string | null;
+    monthly_price: number;
+    yearly_price: number;
+    currency: string;
+    commission_rate: number;
+    max_active_listings: number;
+    cta_label: string;
+    cta_action: string;
+    highlighted: boolean;
+    trial_days: number;
+    features: Array<{ display_text: string; icon: string; is_disabled: boolean }>;
+  }>,
+  plansLoading: true,
+  plansError: false,
+
+  async init() {
+    try {
+      const { fetchPricingPlans, getCachedPricingPlans } =
+        await import("../services/pricingService");
+      const cached = getCachedPricingPlans();
+      if (cached.plans.length) {
+        this.plans = cached.plans;
+        this.plansLoading = false;
+      }
+      const fresh = await fetchPricingPlans();
+      if (fresh.plans.length) {
+        this.plans = fresh.plans;
+      }
+    } catch {
+      this.plansError = true;
+    } finally {
+      this.plansLoading = false;
+    }
+  },
+
   get faqItems() {
     return [
       { question: t("pricingFaq.q1"), answer: t("pricingFaq.a1"), open: this.faqOpen[0] },
@@ -169,6 +210,12 @@ Alpine.data("sellPricing", () => ({
     ];
   },
   selectedPlan: "",
+
+  formatPrice(amount: number, currency: string) {
+    if (amount === 0) return t("sellPage.pricing.free") || "Ücretsiz";
+    const sym: Record<string, string> = { EUR: "€", USD: "$", TRY: "₺", GBP: "£" };
+    return `${sym[currency] || currency + " "}${amount.toLocaleString("tr-TR")}`;
+  },
 
   toggleFaq(index: number) {
     this.faqOpen[index] = !this.faqOpen[index];
