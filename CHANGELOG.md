@@ -1,3 +1,20 @@
+## [v1.1.9-beta.18] - 2026-05-25 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(pricing): hardcoded fiyatlandırma kaldırıldı, backend API entegrasyonu (@boraydeger32)
+  - PricingPageLayout statik PLANS array kaldırıldı, Alpine x-for ile backend'den dinamik render (responsive grid: 2/3/4 sütun plan sayısına göre)
+  - sellPricing Alpine data'sına fetchPricingPlans() + SWR cache entegre edildi
+  - Badge color enum'a green/blue eklendi (backend Select ile uyum)
+  - pricingService.ts cta_action type'tan learn_more kaldırıldı
+  - i18n dead string temizliği: tr.ts ve en.ts'den 42 kullanılmayan hardcoded plan/feature/comparison key'i silindi
+  - Yeni i18n key'leri: free, trialDays, loadError
+
+### Duzeltildi
+- fix(help): bozuk yardım merkezi linklerini nginx pretty URL'lerine çevir (@ahmeetseker)
+
+---
 ## [v1.1.9-beta.17] - 2026-05-25 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
