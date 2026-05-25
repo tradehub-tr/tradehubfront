@@ -89,7 +89,7 @@ export function HelpCenterLayout(): string {
           <ul class="divide-y divide-gray-100">
             <template x-for="(r, i) in searchResults" :key="i">
               <li class="py-3">
-                <a :href="'faq-detail.html?cat=' + r.cat + '&sub=' + r.sub" class="group flex items-start gap-3">
+                <a :href="'/sss/detay?cat=' + r.cat + '&sub=' + r.sub" class="group flex items-start gap-3">
                   <span class="mt-0.5 w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center" style="background: var(--color-primary-50)">
                     <svg class="w-3 h-3 text-primary-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 0 1 0-1.414L10.586 10 7.293 6.707a1 1 0 0 1 1.414-1.414l4 4a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414 0z" clip-rule="evenodd"/></svg>
                   </span>
@@ -131,7 +131,7 @@ export function HelpCenterLayout(): string {
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-2">
                   <template x-for="(question, qi) in tab.questions" :key="qi">
                     <a
-                      :href="'faq-detail.html?cat=' + question.cat + '&sub=' + question.sub"
+                      :href="'/sss/detay?cat=' + question.cat + '&sub=' + question.sub"
                       class="flex items-start gap-1.5 py-1.5 text-[13px] text-gray-700 hover:text-primary-600 transition-colors group"
                       :class="qi % 5 === 1 ? 'font-medium text-primary-500 hover:text-primary-700' : ''"
                     >
@@ -142,7 +142,7 @@ export function HelpCenterLayout(): string {
                 </div>
                 <!-- View more link -->
                 <div class="mt-5 pt-4 border-t border-gray-100 text-center">
-                  <a :href="'faq.html?cat=' + tab.faqCat" class="inline-flex items-center gap-1 text-sm text-primary-500 hover:underline font-medium">
+                  <a :href="'/sss?cat=' + tab.faqCat" class="inline-flex items-center gap-1 text-sm text-primary-500 hover:underline font-medium">
                     <span data-i18n="help.viewMore">${t("help.viewMore")}</span>
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6"/></svg>
                   </a>

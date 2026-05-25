@@ -24,14 +24,14 @@ export function TradeAssuranceFooterCards(): string {
           </a>
 
           <!-- Card: Ticari Güvence kılavuzu -->
-          <a href="/pages/help/help-center" class="group block bg-[#000]/40 hover:bg-[#000]/60 rounded-md p-6 transition-all duration-300">
+          <a href="/yardim-merkezi" class="group block bg-[#000]/40 hover:bg-[#000]/60 rounded-md p-6 transition-all duration-300">
             <div class="mb-4">${iconCalendar}</div>
             <h3 class="text-base font-bold text-white mb-3">Ticari Güvence kılavuzu</h3>
             <span class="text-[#FFC200] text-sm font-medium group-hover:underline">İndir &rarr;</span>
           </a>
 
           <!-- Card: Müşteri Hizmetleri -->
-          <a href="/pages/help/help-center" class="group block bg-[#000]/40 hover:bg-[#000]/60 rounded-md p-6 transition-all duration-300">
+          <a href="/yardim-merkezi" class="group block bg-[#000]/40 hover:bg-[#000]/60 rounded-md p-6 transition-all duration-300">
             <div class="mb-4">${iconHeadset}</div>
             <h3 class="text-base font-bold text-white mb-3">Müşteri Hizmetleri</h3>
             <span class="text-[#FFC200] text-sm font-medium group-hover:underline">Yardım alın &rarr;</span>

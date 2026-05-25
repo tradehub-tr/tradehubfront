@@ -5,7 +5,7 @@ import {
   type DropzoneTexts,
 } from "../lib/upload-ui";
 import { t } from "../i18n";
-import { getBaseUrl } from "../components/auth/AuthLayout";
+
 import { fetchCsrfToken } from "../utils/api";
 import { showToast } from "../utils/toast";
 import {
@@ -1115,7 +1115,7 @@ Alpine.data("ticketForm", () => ({
 
       this.submitted = true;
       setTimeout(() => {
-        window.location.href = `${getBaseUrl()}pages/help/help-tickets.html`;
+        window.location.href = "/destek/taleplerim";
       }, 1500);
     } catch (e: unknown) {
       // Login gerekli ise auth sayfasina redirect
