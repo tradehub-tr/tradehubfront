@@ -182,7 +182,8 @@ Alpine.data("sellPricing", () => ({
 
   async init() {
     try {
-      const { fetchPricingPlans, getCachedPricingPlans } = await import("../services/pricingService");
+      const { fetchPricingPlans, getCachedPricingPlans } =
+        await import("../services/pricingService");
       const cached = getCachedPricingPlans();
       if (cached.plans.length) {
         this.plans = cached.plans;
