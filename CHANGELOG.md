@@ -1,3 +1,11 @@
+## [v1.1.9-beta.16] - 2026-05-25 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(nginx): enhance dynamic SEO routing for bots and users with new rewrite rules (@ahmeetseker)
+
+---
 ## [v1.1.9-beta.15] - 2026-05-25 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
