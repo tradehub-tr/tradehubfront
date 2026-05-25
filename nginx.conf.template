@@ -292,8 +292,14 @@ server {
         proxy_set_header Host ${BACKEND_DOMAIN};
     }
 
-    # Dinamik SEO URL'leri → Frappe backend HTML render (meta injection)
+    # Dinamik SEO URL'leri — bot: backend'den meta injection, user: lokal HTML
     location ~ ^/urun/(.+)$ {
+        error_page 418 = @seo_listing;
+        if ($is_bot) { return 418; }
+        rewrite ^ /pages/product-detail.html break;
+    }
+    location @seo_listing {
+        internal;
         rewrite ^/urun/(.+)$ /api/method/tradehub_core.seo.page_resolver.render_listing?slug=$1 break;
         proxy_pass https://${BACKEND_DOMAIN};
         proxy_ssl_server_name on;
@@ -305,6 +311,12 @@ server {
     }
 
     location ~ ^/kategori/(.+)$ {
+        error_page 418 = @seo_category;
+        if ($is_bot) { return 418; }
+        rewrite ^ /pages/categories.html break;
+    }
+    location @seo_category {
+        internal;
         rewrite ^/kategori/(.+)$ /api/method/tradehub_core.seo.page_resolver.render_category?slug=$1 break;
         proxy_pass https://${BACKEND_DOMAIN};
         proxy_ssl_server_name on;
@@ -316,6 +328,12 @@ server {
     }
 
     location ~ ^/marka/(.+)$ {
+        error_page 418 = @seo_brand;
+        if ($is_bot) { return 418; }
+        rewrite ^ /pages/brand.html break;
+    }
+    location @seo_brand {
+        internal;
         rewrite ^/marka/(.+)$ /api/method/tradehub_core.seo.page_resolver.render_brand?slug=$1 break;
         proxy_pass https://${BACKEND_DOMAIN};
         proxy_ssl_server_name on;
@@ -332,6 +350,12 @@ server {
     }
 
     location ~ ^/magaza/(.+)$ {
+        error_page 418 = @seo_seller;
+        if ($is_bot) { return 418; }
+        rewrite ^ /pages/seller/seller-storefront.html break;
+    }
+    location @seo_seller {
+        internal;
         rewrite ^/magaza/(.+)$ /api/method/tradehub_core.seo.page_resolver.render_seller?slug=$1 break;
         proxy_pass https://${BACKEND_DOMAIN};
         proxy_ssl_server_name on;
