@@ -25,9 +25,9 @@ export function QuantityInput({
   const plusDisabled = value >= max ? "disabled" : "";
 
   return `
-    <div class="th-quantity number-picker" x-data="quantityInput({ value: ${value}, min: ${min}, max: ${max}, step: ${step}, id: '${id}' })">
-      <button type="button" class="th-quantity__button number-picker-button number-picker-minus" @click="decrement()" :disabled="value <= min" ${minusDisabled} aria-label="${t("cart.quantityDecrease")}">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <div class="th-quantity number-picker max-[480px]:w-[100px] max-[480px]:h-[34px] max-[380px]:w-[88px] max-[380px]:h-[30px]" x-data="quantityInput({ value: ${value}, min: ${min}, max: ${max}, step: ${step}, id: '${id}' })">
+      <button type="button" class="th-quantity__button number-picker-button number-picker-minus max-[480px]:w-[28px] max-[480px]:h-[28px] max-[380px]:w-[24px] max-[380px]:h-[24px]" @click="decrement()" :disabled="value <= min" ${minusDisabled} aria-label="${t("cart.quantityDecrease")}">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="max-[380px]:w-3 max-[380px]:h-3">
           <path d="M5 12h14" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
@@ -35,7 +35,7 @@ export function QuantityInput({
         type="number"
         id="${id}"
         x-ref="input"
-        class="th-quantity__input number-picker-input"
+        class="th-quantity__input number-picker-input max-[480px]:text-[12px] max-[380px]:text-[11px]"
         :value="value"
         value="${value}"
         @change="clampAndDispatch()"
@@ -44,8 +44,8 @@ export function QuantityInput({
         step="${step}"
         aria-label="${t("cart.quantityLabel")}"
       />
-      <button type="button" class="th-quantity__button number-picker-button number-picker-plus" @click="increment()" :disabled="value >= max" ${plusDisabled} aria-label="${t("cart.quantityIncrease")}">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <button type="button" class="th-quantity__button number-picker-button number-picker-plus max-[480px]:w-[28px] max-[480px]:h-[28px] max-[380px]:w-[24px] max-[380px]:h-[24px]" @click="increment()" :disabled="value >= max" ${plusDisabled} aria-label="${t("cart.quantityIncrease")}">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="max-[380px]:w-3 max-[380px]:h-3">
           <path d="M12 5v14M5 12h14" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>

@@ -52,11 +52,11 @@ function renderCard(card: RecommendationCard): string {
         href="${card.href}"
         aria-label="${safeName}"
         title="${safeName}"
-        class="group/card mx-auto flex h-full w-full flex-col rounded-2xl border border-gray-200 bg-white p-2 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-1 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-primary-400"
+        class="group/card mx-auto flex h-full w-full flex-col rounded-md border border-gray-200 bg-white p-1.5 sm:p-2 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-1 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-primary-400"
       >
         <div class="mb-2">
-          <h3 class="truncate text-sm font-bold leading-tight text-gray-900 sm:text-base dark:text-white">${card.title}</h3>
-          ${card.price ? `<p class="mt-0.5 truncate text-xs font-semibold leading-tight text-red-500 sm:text-[13px]">${formatStartingPrice(card.price)}</p>` : ""}
+          <h3 class="truncate text-[11px] font-bold leading-tight text-gray-900 sm:text-sm md:text-base dark:text-white">${card.title}</h3>
+          ${card.price ? `<p class="mt-0.5 truncate text-[10px] font-semibold leading-tight text-red-500 sm:text-xs md:text-[13px]">${formatStartingPrice(card.price)}</p>` : ""}
         </div>
         <div class="min-h-0 flex-1">
           ${renderCardImage(card)}
@@ -68,7 +68,7 @@ function renderCard(card: RecommendationCard): string {
 
 export function RecommendationSlider(): string {
   return `
-    <div class="group/recommendation relative recommendation-slider-wrapper h-[200px] sm:h-[260px] xl:h-[300px] px-2 sm:px-4 xl:px-0">
+    <div class="group/recommendation relative recommendation-slider-wrapper h-[170px] sm:h-[260px] xl:h-[300px] px-1 sm:px-4 xl:px-0">
       <div class="swiper recommendation-swiper h-full" aria-label="${t("recommendation.frequentlySearched")}">
         <div class="swiper-wrapper h-full" id="recommendation-slides">
           <!-- Populated from API -->
@@ -130,9 +130,9 @@ function initSwiper(): void {
       dynamicBullets: true,
     },
     breakpoints: {
-      0: { slidesPerView: 1, spaceBetween: 12 },
-      640: { slidesPerView: 1, spaceBetween: 16 },
-      960: { slidesPerView: 2, spaceBetween: 20 },
+      0: { slidesPerView: 2, spaceBetween: 6 },
+      400: { slidesPerView: 2, spaceBetween: 8 },
+      600: { slidesPerView: 3, spaceBetween: 12 },
       1280: { slidesPerView: "auto", spaceBetween: 16 },
     },
   });

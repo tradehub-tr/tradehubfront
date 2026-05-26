@@ -20,12 +20,12 @@ const SKELETON_COUNT = 6;
 /* ── Skeleton card ── */
 function renderSkeletonCard(): string {
   return `
-    <div class="flex-shrink-0 flex flex-col items-center w-[156px] sm:w-[188px] rounded-md border border-gray-100 animate-pulse"
+    <div class="flex-shrink-0 flex flex-col items-center w-[130px] sm:w-[156px] md:w-[188px] rounded-md border border-gray-100 animate-pulse"
          style="background: var(--topranking-card-bg, #ffffff); padding: var(--space-card-padding, 12px);">
       <div class="w-full aspect-square rounded-md bg-gray-200"></div>
-      <div class="mt-7 w-full space-y-1.5">
-        <div class="h-3.5 w-4/5 mx-auto rounded bg-gray-200"></div>
-        <div class="h-3 w-3/5 mx-auto rounded bg-gray-200"></div>
+      <div class="mt-5 sm:mt-7 w-full space-y-1.5">
+        <div class="h-3 sm:h-3.5 w-4/5 mx-auto rounded bg-gray-200"></div>
+        <div class="h-2.5 sm:h-3 w-3/5 mx-auto rounded bg-gray-200"></div>
       </div>
     </div>
   `;
@@ -58,7 +58,7 @@ function renderCategoryCard(cat: TopRankingCategory): string {
   return `
     <a
       href="${href}"
-      class="group/rank relative flex-shrink-0 flex flex-col w-[156px] sm:w-[188px] rounded-md border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md no-underline"
+      class="group/rank relative flex-shrink-0 flex flex-col w-[130px] sm:w-[156px] md:w-[188px] rounded-md border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md no-underline"
       style="background: var(--topranking-card-bg, #ffffff); border-color: var(--topranking-card-border, #e5e7eb); padding: var(--space-card-padding, 12px);"
       aria-label="${safeName}"
       data-cat-slug="${escapeHtml(cat.slug || "")}"
@@ -69,17 +69,17 @@ function renderCategoryCard(cat: TopRankingCategory): string {
           ${imgHtml}
         </div>
         <!-- TOP badge -->
-        <div class="absolute -bottom-5 left-1/2 z-10 -translate-x-1/2 flex flex-col items-center pointer-events-none">
-          <img src="${topBadgeUrl}" alt="" class="h-[48px] w-[48px] object-contain drop-shadow" loading="lazy" />
+        <div class="absolute -bottom-4 sm:-bottom-5 left-1/2 z-10 -translate-x-1/2 flex flex-col items-center pointer-events-none">
+          <img src="${topBadgeUrl}" alt="" class="h-[36px] w-[36px] sm:h-[48px] sm:w-[48px] object-contain drop-shadow" loading="lazy" />
         </div>
       </div>
 
       <!-- Info area -->
-      <div class="flex flex-col items-center min-w-0 text-center" style="margin-top: 28px;">
-        <p class="truncate w-full font-semibold leading-tight text-sm"
+      <div class="flex flex-col items-center min-w-0 text-center" style="margin-top: 20px;">
+        <p class="truncate w-full font-semibold leading-tight text-[11px] sm:text-xs md:text-sm"
            style="color: var(--topranking-name-color, #222222);"
            title="${safeName}">${safeName}</p>
-        <p class="truncate w-full text-xs mt-0.5"
+        <p class="truncate w-full text-[10px] sm:text-xs mt-0.5"
            style="color: var(--topranking-subtitle-color, #6b7280);">${escapeHtml(t("topRanking.hotSelling"))}</p>
       </div>
     </a>
@@ -99,18 +99,18 @@ export function TopRanking(): string {
         <div class="relative overflow-hidden rounded-md" style="background-color: var(--topranking-bg, #F5F5F5);">
           <div style="padding: var(--space-card-padding, 20px);">
             <!-- Section header -->
-            <div class="mb-4 flex items-end justify-between gap-4">
-              <div>
-                <h2 class="text-[20px] sm:text-[22px] font-bold leading-tight"
+            <div class="mb-3 sm:mb-4 flex items-end justify-between gap-2 sm:gap-4">
+              <div class="min-w-0">
+                <h2 class="text-[16px] sm:text-[20px] md:text-[22px] font-bold leading-tight"
                     style="color: var(--topranking-title-color, #111827);">
                   <span data-i18n="topRanking.title">${t("topRanking.title")}</span>
                 </h2>
-                <p class="mt-0.5 text-[13px]" style="color: var(--topranking-subtitle-color, #6b7280);">
+                <p class="mt-0.5 text-[11px] sm:text-[13px]" style="color: var(--topranking-subtitle-color, #6b7280);">
                   <span data-i18n="topRanking.subtitle">${t("topRanking.subtitle")}</span>
                 </p>
               </div>
               <a href="/cok-satanlar"
-                 class="flex-shrink-0 text-[13px] font-semibold transition-colors duration-150 hover:underline no-underline"
+                 class="flex-shrink-0 text-[11px] sm:text-[13px] font-semibold transition-colors duration-150 hover:underline no-underline whitespace-nowrap"
                  style="color: var(--topranking-link-color, #111827);">
                 <span data-i18n="common.viewMore">${t("common.viewMore")}</span> &gt;
               </a>
@@ -118,7 +118,7 @@ export function TopRanking(): string {
 
             <!-- Cards row -->
             <div id="top-ranking-cards"
-                 class="flex gap-3 overflow-x-auto pb-2 scrollbar-hide"
+                 class="flex gap-2 sm:gap-3 overflow-x-auto pb-2 scrollbar-hide"
                  role="list"
                  aria-label="Top ranking categories">
               ${skeletons}

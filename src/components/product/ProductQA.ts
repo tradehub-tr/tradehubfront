@@ -191,18 +191,18 @@ export function ProductQA(): string {
   return `
     <div
       x-data="productQA"
-      class="rv-qa-section py-6 border-t border-border-default"
+      class="rv-qa-section py-4 sm:py-6 border-t border-border-default"
     >
-      <div class="flex items-center justify-between mb-4">
-        <h3 class="text-base font-semibold text-secondary-900">
+      <div class="flex items-center justify-between mb-3 sm:mb-4">
+        <h3 class="text-[14px] sm:text-base font-semibold text-secondary-900">
           Soru &amp; Cevap
           <span class="text-secondary-400 font-normal" x-text="'(' + total + ')'"></span>
         </h3>
       </div>
 
       <!-- Soru sor formu -->
-      <div class="bg-secondary-50/40 border border-border-default rounded-lg p-3 mb-5">
-        <label class="block text-[12px] font-medium text-secondary-700 mb-1.5">
+      <div class="bg-secondary-50/40 border border-border-default rounded-md p-2.5 sm:p-3 mb-4 sm:mb-5">
+        <label class="block text-[11px] sm:text-[12px] font-medium text-secondary-700 mb-1 sm:mb-1.5">
           Bir sorunuz mu var?
           <span class="text-secondary-400">Satıcı veya diğer alıcılar yanıtlayabilir.</span>
         </label>
@@ -211,30 +211,30 @@ export function ProductQA(): string {
           rows="2"
           maxlength="500"
           placeholder="Örn: Bu ürünün stok adedi ne kadar? Toptan fiyat aralığı nedir?"
-          class="w-full px-3 py-2 border border-border-default rounded-lg text-sm bg-surface focus:outline-none focus:border-primary-500 resize-vertical"
+          class="w-full px-2.5 sm:px-3 py-2 border border-border-default rounded-md text-[13px] sm:text-sm bg-surface focus:outline-none focus:border-primary-500 resize-vertical"
         ></textarea>
-        <p x-show="errorMsg" x-text="errorMsg" class="text-xs text-red-600 mt-1"></p>
-        <div class="flex items-center justify-between mt-2">
-          <span class="text-[11px] text-secondary-400" x-text="question.length + ' / 500'"></span>
+        <p x-show="errorMsg" x-text="errorMsg" class="text-[11px] sm:text-xs text-red-600 mt-1"></p>
+        <div class="flex items-center justify-between mt-1.5 sm:mt-2">
+          <span class="text-[10px] sm:text-[11px] text-secondary-400" x-text="question.length + ' / 500'"></span>
           <button
             type="button"
             @click="submitQuestion()"
             :disabled="submitting || question.trim().length < 10"
-            class="h-8 px-4 rounded-lg bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[13px] font-medium border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            class="th-btn h-8 sm:h-9 px-3 sm:px-4 text-[12px] sm:text-[13px] flex items-center gap-1.5 sm:gap-2"
           >
-            <svg x-show="submitting" class="animate-spin h-3.5 w-3.5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+            <svg x-show="submitting" class="animate-spin h-3 w-3 sm:h-3.5 sm:w-3.5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
             <span x-text="submitting ? 'Gönderiliyor' : 'Soruyu Gönder'"></span>
           </button>
         </div>
       </div>
 
       <!-- Loader -->
-      <div x-show="loading" class="text-center py-6 text-sm text-secondary-400">Yükleniyor...</div>
+      <div x-show="loading" class="text-center py-4 sm:py-6 text-[13px] sm:text-sm text-secondary-400">Yükleniyor...</div>
 
       <!-- Boş durum -->
       <div
         x-show="!loading && questions.length === 0"
-        class="text-center py-8 text-sm text-secondary-400"
+        class="text-center py-6 sm:py-8 text-[13px] sm:text-sm text-secondary-400"
       >
         Henüz soru sorulmamış. İlk soruyu siz sorun.
       </div>

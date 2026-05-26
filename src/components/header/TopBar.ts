@@ -168,7 +168,7 @@ function renderLogo(): string {
   const baseUrl = getBaseUrl();
   return `
     <a href="${baseUrl}" class="flex items-center hover:opacity-80 transition-opacity cursor-pointer shrink-0" aria-label="iSTOC Home">
-      <img src="${baseUrl}images/istoc-logo.png" alt="iSTOC" class="h-[25px] shrink-0" />
+      <img src="${baseUrl}images/istoc-logo.png" alt="iSTOC" class="h-[18px] min-[400px]:h-[22px] sm:h-[25px] shrink-0" />
     </a>
   `;
 }
@@ -246,7 +246,7 @@ function renderUserButton(): string {
  */
 function renderCompactStickySearch(): string {
   return `
-    <div id="topbar-compact-search-shell" x-data="stickyHeaderSearch" @click.outside="close()" @istoc:close-search.window="close()" class="hidden lg:flex flex-col justify-center relative min-w-0 flex-1 lg:mx-4 h-[56px]">
+    <div id="topbar-compact-search-shell" x-data="stickyHeaderSearch" @click.outside="close()" @istoc:close-search.window="close()" class="hidden xl:flex flex-col justify-center relative min-w-0 flex-1 xl:mx-4 h-[56px]">
 
       <form
         id="topbar-compact-search"
@@ -1270,45 +1270,66 @@ export function TopBar(props?: TopBarProps): string {
     <div class="relative z-30 border-b border-transparent bg-white dark:bg-gray-900">
       <div class="container-boxed">
         <!-- Row 1: Logo + Search (mobile) + Icons -->
-        <div class="flex items-center h-14 sm:h-16 gap-1 sm:gap-2 lg:gap-0">
+        <div class="flex items-center h-10 min-[400px]:h-11 sm:h-12 xl:h-16 gap-1 min-[400px]:gap-1.5 sm:gap-2 xl:gap-0">
           <!-- Logo -->
           <div class="flex-shrink-0">
             ${renderLogo()}
           </div>
 
           <!-- Mobile Inline Search (between logo and icons) -->
-          <div class="flex-1 min-w-0 mx-1 sm:mx-2 lg:hidden">
-            <form id="mobile-search-form" action="/urunler" method="GET" role="search">
-              <input type="hidden" id="mobile-search-type" name="searchType" value="products" />
-              <div class="flex">
-                <input
-                  type="text"
-                  name="q"
-                  class="w-full h-9 sm:h-10 px-2 sm:px-3 text-xs sm:text-sm text-gray-900 bg-white border-2 border-primary-400 border-r-0 rounded-l-md focus:ring-1 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-primary-600 dark:placeholder-gray-400 dark:text-white"
-                  placeholder="Search products..."
-                  autocomplete="off"
-                  aria-label="Search products"
-                />
-                <!-- Mobile gorsel arama (kamera) butonu — DISABLED, ileride tekrar etkinlestirilecek -->
-                <!--
-                <a href="/image-search" class="flex items-center justify-center h-9 sm:h-10 px-1.5 sm:px-2.5 bg-white border-2 border-primary-400 border-l-0 border-r-0 text-gray-400 hover:text-primary-600 transition-colors cursor-pointer shrink-0 dark:bg-gray-700 dark:border-primary-600" aria-label="Image search">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Z"/>
-                  </svg>
-                </a>
-                -->
-                <button
-                  type="submit"
-                  class="th-btn flex items-center justify-center h-9 sm:h-10 px-3 sm:px-4 rounded-r-md transition-colors cursor-pointer shrink-0"
-                  aria-label="Search"
-                >
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>
-                  </svg>
+          <div class="flex-1 min-w-0 mx-0.5 min-[400px]:mx-1 sm:mx-2 xl:hidden" x-data="{ mobileSearchOpen: false }">
+            <!-- Trigger bar (always visible) -->
+            <div
+              class="flex items-center justify-between h-7 min-[400px]:h-8 sm:h-9 rounded-full border border-gray-300 bg-white cursor-text dark:bg-gray-700 dark:border-gray-600"
+              @click="mobileSearchOpen = true; $nextTick(() => $refs.mobileSearchInput.focus())"
+            >
+              <span class="flex-1 px-2 min-[400px]:px-3 text-[11px] min-[400px]:text-xs sm:text-sm text-gray-400 truncate">${t("header.searchPlaceholder")}</span>
+              <span class="th-btn th-no-press flex items-center justify-center h-5 min-[400px]:h-6 sm:h-7 px-2.5 min-[400px]:px-3 sm:px-4 mr-0.5 rounded-full text-[10px] min-[400px]:text-xs font-semibold shrink-0">${t("header.searchButton")}</span>
+            </div>
+
+            <!-- Full-screen search overlay -->
+            <div
+              x-show="mobileSearchOpen"
+              x-transition:enter="transition ease-out duration-150"
+              x-transition:enter-start="opacity-0"
+              x-transition:enter-end="opacity-100"
+              x-transition:leave="transition ease-in duration-100"
+              x-transition:leave-start="opacity-100"
+              x-transition:leave-end="opacity-0"
+              class="fixed inset-0 z-50 bg-white dark:bg-gray-900 flex flex-col"
+              x-cloak
+            >
+              <!-- Top bar: search + cancel -->
+              <div class="flex items-center gap-2 px-3 py-2 border-b border-gray-100 dark:border-gray-700">
+                <form action="/urunler" method="GET" role="search" class="flex-1 min-w-0">
+                  <input type="hidden" name="searchType" value="products" />
+                  <div class="flex items-center h-9 rounded-full border border-gray-300 bg-gray-50 overflow-hidden focus-within:border-gray-400 dark:bg-gray-700 dark:border-gray-600">
+                    <input
+                      x-ref="mobileSearchInput"
+                      type="text"
+                      name="q"
+                      class="w-full h-full px-3 text-sm text-gray-900 bg-transparent border-none focus:ring-0 focus:outline-none placeholder-gray-400 dark:text-white"
+                      placeholder="${t("header.searchPlaceholder")}"
+                      autocomplete="off"
+                    />
+                    <button type="submit" class="th-btn th-no-press flex items-center justify-center h-7 px-4 mr-0.5 rounded-full text-xs font-semibold cursor-pointer shrink-0">
+                      ${t("header.searchButton")}
+                    </button>
+                  </div>
+                </form>
+                <button type="button" @click="mobileSearchOpen = false" class="th-no-press text-sm text-gray-600 dark:text-gray-300 whitespace-nowrap font-medium px-1">
+                  ${t("common.cancel")}
                 </button>
               </div>
-            </form>
+
+              <!-- Suggestions -->
+              <div class="flex-1 overflow-y-auto px-4 py-3" id="mobile-search-suggestions">
+                <div class="flex items-center justify-between mb-3">
+                  <h3 class="text-base font-bold text-gray-900 dark:text-white" data-i18n="header.recommendedForYou">${t("header.recommendedForYou")}</h3>
+                </div>
+                <div id="mobile-search-results-groups"></div>
+              </div>
+            </div>
           </div>
 
           <!-- Desktop Compact Sticky Search -->
@@ -1326,37 +1347,25 @@ export function TopBar(props?: TopBarProps): string {
               ${renderLanguageCurrencySelector()}
             </div>
 
-            <!-- Messages Button (hidden on mobile) -->
-            <div class="hidden lg:block">
+            <!-- Messages Button (xl+ only) -->
+            <div class="hidden xl:block">
               ${renderMessagesButton()}
             </div>
 
-            <!-- Orders Button (hidden on mobile) -->
-            <div class="hidden lg:block">
+            <!-- Orders Button (xl+ only) -->
+            <div class="hidden xl:block">
               ${renderOrdersButton()}
             </div>
 
-            <!-- Cart Button -->
-            ${renderCartButton(0)}
-
-            <!-- Auth/User Button (hidden on mobile) -->
-            <div class="hidden lg:block" data-auth-area>
-              ${isLoggedIn() ? renderUserButton() : renderAuthButtons()}
+            <!-- Cart Button (xl+ only, mobile uses bottom nav) -->
+            <div class="hidden xl:block">
+              ${renderCartButton(0)}
             </div>
 
-            <!-- Mobile Menu Button -->
-            <button
-              data-drawer-target="mobile-menu-drawer"
-              data-drawer-toggle="mobile-menu-drawer"
-              class="th-header-icon inline-flex items-center p-1.5 sm:p-2 rounded-md lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 cursor-pointer shrink-0 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-              type="button"
-              aria-controls="mobile-menu-drawer"
-              aria-label="Open main menu"
-            >
-              <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
-              </svg>
-            </button>
+            <!-- Auth/User Button (xl+ only) -->
+            <div class="hidden xl:block" data-auth-area>
+              ${isLoggedIn() ? renderUserButton() : renderAuthButtons()}
+            </div>
           </div>
         </div>
       </div>
@@ -1852,6 +1861,9 @@ export function initLanguageSelector(): void {
 
   // Load dynamic search suggestions for compact header dropdown
   initCompactSearchSuggestions();
+
+  // Load mobile search suggestions
+  initMobileSearchSuggestions();
 }
 
 /**
@@ -1964,6 +1976,57 @@ function initCompactSearchSuggestions(): void {
       debounceTimer = window.setTimeout(() => {
         loadFiltered(q.trim(), mySeq, () => requestSeq);
       }, DEBOUNCE_MS);
+    });
+  }
+}
+
+function initMobileSearchSuggestions(): void {
+  const groupsEl = document.getElementById("mobile-search-results-groups");
+  if (!groupsEl) return;
+
+  const renderGroups = (data: UnifiedSuggestResult): string => {
+    return [
+      renderCompactSearchGroup(t("search.groupProducts"), data.products.map(compactToProductItem)),
+      renderCompactSearchGroup(t("search.groupCategories"), data.categories.map(compactToCategoryItem)),
+      renderCompactSearchGroup(t("search.groupBrands"), data.brands.map(compactToBrandItem)),
+      renderCompactSearchGroup(t("search.groupSellers"), data.sellers.map(compactToSellerItem)),
+    ].join("");
+  };
+
+  const loadSuggestions = async (): Promise<void> => {
+    if (hasAnyRecent()) {
+      const recent = getAllRecent();
+      groupsEl.innerHTML = renderGroups({
+        products: recent.products,
+        categories: recent.categories,
+        brands: recent.brands,
+        sellers: recent.sellers,
+      });
+      return;
+    }
+    const data = await unifiedSuggest("");
+    groupsEl.innerHTML = renderGroups(data);
+  };
+
+  loadSuggestions();
+
+  const mobileInput = document.querySelector<HTMLInputElement>("[x-ref='mobileSearchInput']");
+  if (mobileInput) {
+    let debounceTimer: number | undefined;
+    let requestSeq = 0;
+    mobileInput.addEventListener("input", (e) => {
+      const q = (e.target as HTMLInputElement).value.trim();
+      if (debounceTimer) window.clearTimeout(debounceTimer);
+      if (q.length < 2) {
+        loadSuggestions();
+        return;
+      }
+      const mySeq = ++requestSeq;
+      debounceTimer = window.setTimeout(async () => {
+        const data = await unifiedSuggest(q);
+        if (mySeq !== requestSeq) return;
+        groupsEl.innerHTML = renderGroups(data);
+      }, 300);
     });
   }
 }

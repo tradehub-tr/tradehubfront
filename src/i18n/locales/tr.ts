@@ -111,6 +111,8 @@ const tr = {
       shoppingCart: "Alışveriş Sepeti",
       startShopping: "Alışverişe başlayın.",
       searchPlaceholder: "Ne arıyorsunuz?",
+      searchButton: "Ara",
+      recentSearches: "Son Aramalar",
       imageSearch: "Görsel Arama",
       recommendedForYou: "Sizin için öneriler",
       deepSearch: "Karmaşık gereksinimler için Derin Arama ile yönlendirin",
@@ -242,6 +244,51 @@ const tr = {
     },
 
     // ============================================================
+    // BOTTOM NAV
+    // ============================================================
+    bottomNav: {
+      home: "Ana Sayfa",
+      categories: "Kategoriler",
+      messages: "Mesaj",
+      cart: "Sepet",
+      account: "Menü",
+    },
+
+    // ACCOUNT MENU
+    // ============================================================
+    accountMenu: {
+      loginTitle: "Daha iyi bir tedarik deneyimi için",
+      loginSubtitle: "Oturum açın veya hesap oluşturun",
+      loginButton: "Giriş Yap",
+      orders: "Siparişlerim",
+      myOrders: "Siparişlerim",
+      myOrdersDesc: "Sipariş takibi ve geçmişi",
+      tradeAssurance: "Sipariş Korumaları",
+      tradeAssuranceDesc: "Güvence ve iade politikaları",
+      discover: "Keşfet",
+      bestSellers: "En çok satanlar",
+      bestSellersDesc: "Bu hafta en çok sevkiyat yapılan ürünler",
+      personalSelections: "Size özel seçimler",
+      personalSelectionsDesc: "Geçmiş siparişlerinize göre öneriler",
+      bestDeals: "En iyi fırsatlar",
+      bestDealsDesc: "Sınırlı süreli toplu alım indirimleri",
+      sellOnIstoc: "istoc'ta Sat",
+      sellOnIstocDesc: "Satıcı olun, ürünlerinizi listeleyin",
+      suppliers: "Tedarikçiler",
+      findSuppliers: "Tedarikçi Bul",
+      findSuppliersDesc: "Tedarikçileri keşfedin ve iletişime geçin",
+      supplierApplication: "Tedarikçi Başvurusu",
+      supplierApplicationDesc: "Doğrulanmış tedarikçi olun",
+      support: "Destek",
+      helpCenter: "Yardım Merkezi",
+      helpCenterDesc: "SSS ve destek talepleri",
+      settings: "Ayarlar",
+      deliveryCountry: "Teslimat Ülkesi",
+      deliveryCountryValue: "Türkiye 🇹🇷",
+      language: "Dil ve Para Birimi",
+      languageValue: "Türkçe — TRY (₺)",
+    },
+
     // FOOTER
     // ============================================================
     footer: {
@@ -776,6 +823,7 @@ const tr = {
       businessDays: "{{min}}-{{max}} iş günü",
       piecesAvailable: "{{count}} adet mevcut",
       reviewsLabel: "{{count}} yorum",
+      qaLabel: "Soru & Cevap",
       ordersLabel: "{{count}}+ sipariş",
       yearsLabel: "{{count}} yıl",
       servingYears: "{{count}} yıldır hizmet veriyor",

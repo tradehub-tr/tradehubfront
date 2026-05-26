@@ -77,23 +77,23 @@ export function QAModal(): string {
         x-transition:leave="transition ease-in duration-150"
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-        class="bg-surface w-full sm:max-w-2xl sm:rounded-xl rounded-t-2xl max-h-[92vh] sm:max-h-[85vh] flex flex-col overflow-hidden shadow-modal"
+        class="bg-surface w-full sm:max-w-2xl sm:rounded-md rounded-t-md max-h-[92vh] sm:max-h-[85vh] flex flex-col overflow-hidden shadow-modal"
       >
         <!-- Header (sticky) -->
-        <div class="flex items-center justify-between gap-3 px-4 py-3 border-b border-border-default shrink-0">
-          <h2 class="text-base font-semibold text-secondary-900">Soru &amp; Cevap</h2>
+        <div class="flex items-center justify-between gap-2 px-4 py-3 border-b border-border-default shrink-0">
+          <h2 class="text-[15px] sm:text-base font-semibold text-secondary-900">Soru &amp; Cevap</h2>
           <button
             type="button"
             @click="close()"
-            class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-black/5 text-secondary-400 hover:text-secondary-900 transition-colors"
+            class="w-7 h-7 sm:w-9 sm:h-9 flex items-center justify-center rounded-full hover:bg-black/5 text-secondary-400 hover:text-secondary-900 transition-colors shrink-0"
             aria-label="Kapat"
           >
-            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="w-4.5 h-4.5 sm:w-5 sm:h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
           </button>
         </div>
 
         <!-- Body — ProductQA komponentini içinde render et -->
-        <div class="overflow-y-auto px-4 pb-6 flex-1">
+        <div class="overflow-y-auto px-4 pb-4 sm:pb-6 flex-1">
           ${ProductQA()}
         </div>
       </div>

@@ -21,15 +21,15 @@ export interface CartPageProps {
 export function CartPage({ suppliers, summary }: CartPageProps): string {
   if (suppliers.length === 0) {
     return `
-      <div class="sc-cart-page max-w-[1680px] mx-auto px-4 py-4 sm:py-6">
-        <div class="flex flex-col items-center justify-center py-20 text-center">
-          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" class="text-text-tertiary mb-6">
+      <div class="sc-cart-page max-w-[1680px] mx-auto px-3 sm:px-4 py-4 sm:py-6">
+        <div class="flex flex-col items-center justify-center py-12 sm:py-20 text-center">
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" class="w-16 h-16 sm:w-20 sm:h-20 text-text-tertiary mb-4 sm:mb-6">
             <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
             <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
           </svg>
-          <h2 class="text-2xl font-bold text-text-heading mb-2" data-i18n="cart.empty">${t("cart.empty")}</h2>
-          <p class="text-base text-text-secondary mb-8 max-w-md" data-i18n="cart.emptyDesc">${t("cart.emptyDesc")}</p>
-          <a href="/urunler" class="inline-flex items-center justify-center th-btn-dark no-underline" data-i18n="cart.continueShopping">
+          <h2 class="text-xl sm:text-2xl font-bold text-text-heading mb-1.5 sm:mb-2" data-i18n="cart.empty">${t("cart.empty")}</h2>
+          <p class="text-[13px] sm:text-base text-text-secondary mb-6 sm:mb-8 max-w-[280px] sm:max-w-md leading-relaxed" data-i18n="cart.emptyDesc">${t("cart.emptyDesc")}</p>
+          <a href="/urunler" class="inline-flex items-center justify-center th-btn-dark no-underline h-10 sm:h-auto text-[13px] sm:text-[14px] px-5 sm:px-6" data-i18n="cart.continueShopping">
             ${t("cart.continueShopping")}
           </a>
         </div>
@@ -54,7 +54,7 @@ export function CartPage({ suppliers, summary }: CartPageProps): string {
   );
 
   return `
-    <div class="sc-cart-page flex flex-col flex-1 w-full max-w-[1680px] mx-auto px-4 py-4 sm:py-6"
+    <div class="sc-cart-page flex flex-col flex-1 w-full max-w-[1680px] mx-auto px-3 max-[380px]:px-2.5 sm:px-4 py-3 max-[380px]:py-2.5 sm:py-6"
       x-data="cartPage"
       @batch-select-toggle="handleBatchSelectToggle($event)"
       @supplier-select="handleSupplierSelect($event)"

@@ -578,7 +578,7 @@ export function initProductInfo(): void {
     });
   }
 
-  // Listen for shipping changes from shared modal
+  // Listen for shipping changes from shared modal — update both desktop and mobile layouts
   document.addEventListener("shipping-change", ((e: CustomEvent) => {
     const { method, costStr, estimatedDays } = e.detail;
     const methodEl = document.getElementById("pd-ship-card-method");
@@ -586,6 +586,14 @@ export function initProductInfo(): void {
     const detailEl = document.querySelector("#pd-shipping-card .pd-shipping-card-detail");
     if (detailEl)
       detailEl.textContent = `${t("product.shippingCost", { cost: costStr, days: estimatedDays })}`;
+
+    const mobileMethodEl = document.querySelector("#pdm-ship-preview .pdm-ship-method");
+    if (mobileMethodEl) mobileMethodEl.textContent = method;
+    const mobileDetailEl = document.querySelector("#pdm-ship-preview .pdm-ship-detail");
+    if (mobileDetailEl) {
+      mobileDetailEl.innerHTML = `<span class="text-text-muted">${t("product.estimatedCost")}: <strong>${costStr}</strong></span>`
+        + `<span class="text-text-muted">${t("product.duration")}: <strong>${estimatedDays}</strong></span>`;
+    }
   }) as EventListener);
 
   // Apply cross-disable for the initially active color (without relying on auto-click)

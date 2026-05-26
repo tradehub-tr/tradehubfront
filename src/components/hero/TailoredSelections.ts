@@ -60,8 +60,8 @@ function renderCollectionSlide(collection: TailoredCollection): string {
   const formattedCount = formatViews(countNum);
   const viewsHtml =
     countNum > 0
-      ? `<p class="truncate" style="color: var(--tailored-views-color, #767676); font-size: var(--text-product-meta, 16px); margin: 0 0 12px;"><span data-i18n="tailored.views" data-i18n-options='${JSON.stringify({ count: formattedCount })}'>${t("tailored.views", { count: formattedCount })}</span></p>`
-      : '<div style="margin: 0 0 12px;"></div>';
+      ? `<p class="truncate text-[11px] sm:text-[13px] md:text-[16px]" style="color: var(--tailored-views-color, #767676); margin: 0 0 8px;"><span data-i18n="tailored.views" data-i18n-options='${JSON.stringify({ count: formattedCount })}'>${t("tailored.views", { count: formattedCount })}</span></p>`
+      : '<div style="margin: 0 0 8px;"></div>';
   return `
     <div class="swiper-slide tailored-slide">
       <a
@@ -72,8 +72,8 @@ function renderCollectionSlide(collection: TailoredCollection): string {
       >
         <!-- Title -->
         <h3
-          class="truncate font-bold leading-tight"
-          style="color: var(--tailored-collection-title-color, #222222); font-size: var(--text-product-price, 20px);"
+          class="truncate font-bold leading-tight text-[14px] sm:text-[16px] md:text-[20px]"
+          style="color: var(--tailored-collection-title-color, #222222);"
         >${titleLabel}</h3>
 
         <!-- Views subtitle -->
@@ -86,8 +86,8 @@ function renderCollectionSlide(collection: TailoredCollection): string {
               ${renderProductImage(product1)}
             </div>
             <p
-              class="font-bold leading-none truncate"
-              style="color: var(--tailored-price-color, #222222); font-size: var(--text-product-price, 20px); margin-top: 8px;"
+              class="font-bold leading-none truncate text-[14px] sm:text-[16px] md:text-[20px]"
+              style="color: var(--tailored-price-color, #222222); margin-top: 6px;"
             >${formatPrice(product1.price)}</p>
           </div>
           <div class="flex-1 flex flex-col">
@@ -95,8 +95,8 @@ function renderCollectionSlide(collection: TailoredCollection): string {
               ${renderProductImage(product2)}
             </div>
             <p
-              class="font-bold leading-none truncate"
-              style="color: var(--tailored-price-color, #222222); font-size: var(--text-product-price, 20px); margin-top: 8px;"
+              class="font-bold leading-none truncate text-[14px] sm:text-[16px] md:text-[20px]"
+              style="color: var(--tailored-price-color, #222222); margin-top: 6px;"
             >${formatPrice(product2.price)}</p>
           </div>
         </div>
@@ -191,16 +191,16 @@ export function TailoredSelections(): string {
       <div class="container-boxed">
         <div class="rounded-md" style="background-color: var(--tailored-bg, #F5F5F5); padding: var(--space-card-padding, 16px);">
           <!-- Section header -->
-          <div class="mb-4 flex items-end justify-between gap-4">
-            <div>
+          <div class="mb-3 sm:mb-4 flex items-end justify-between gap-2 sm:gap-4">
+            <div class="min-w-0">
               <h2
-                class="text-[20px] sm:text-[22px] font-bold leading-tight"
+                class="text-[16px] sm:text-[20px] md:text-[22px] font-bold leading-tight"
                 style="color: var(--tailored-title-color, #111827);"
               ><span data-i18n="tailored.title">${t("tailored.title")}</span></h2>
             </div>
             <a
               href="/size-ozel"
-              class="flex-shrink-0 text-[13px] font-semibold transition-colors duration-150 hover:underline"
+              class="flex-shrink-0 text-[11px] sm:text-[13px] font-semibold transition-colors duration-150 hover:underline whitespace-nowrap"
               style="color: var(--tailored-link-color, #111827);"
             ><span data-i18n="common.viewMore">${t("common.viewMore")}</span> &gt;</a>
           </div>

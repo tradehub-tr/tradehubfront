@@ -18,10 +18,10 @@ export function BatchSelectBar({ totalCount, selectedCount }: BatchSelectBarProp
   const someSelected = selectedCount > 0 && selectedCount < totalCount;
 
   return `
-    <div class="sc-c-batch-select-bar flex items-center justify-between gap-3 p-[12px_16px] rounded-2xl border border-[#e8e6e0] bg-white shadow-[0_1px_2px_rgba(20,20,18,0.04)]" x-data @checkbox-change="$dispatch('batch-select-toggle', { selectAll: $event.detail.checked })">
-      <div class="flex items-center gap-3 min-w-0">
+    <div class="sc-c-batch-select-bar flex items-center justify-between gap-2 max-[380px]:gap-1.5 p-[10px_12px] sm:p-[12px_16px] rounded-2xl border border-[#e8e6e0] bg-white shadow-[0_1px_2px_rgba(20,20,18,0.04)]" x-data @checkbox-change="$dispatch('batch-select-toggle', { selectAll: $event.detail.checked })">
+      <div class="flex items-center gap-2 max-[380px]:gap-1.5 min-w-0">
         ${Checkbox({ id: "batch-select-all", checked: allSelected, indeterminate: someSelected, onChange: "batch-select-all" })}
-        <p class="text-base text-text-heading truncate">${t("cart.selectAll")} <span class="sc-c-batch-count text-[#8a877f] ml-1">(${totalCount})</span></p>
+        <p class="text-sm max-[380px]:text-[13px] sm:text-base text-text-heading truncate">${t("cart.selectAll")} <span class="sc-c-batch-count text-[#8a877f] ml-1">(${totalCount})</span></p>
       </div>
 
       <button type="button" class="${btn({ variant: "danger-ghost" })} sc-c-batch-delete-btn text-[13px] font-medium shrink-0" ${selectedCount === 0 ? "disabled" : ""} @click="$dispatch('batch-delete')">

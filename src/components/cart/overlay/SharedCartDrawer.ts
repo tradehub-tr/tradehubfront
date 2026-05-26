@@ -361,6 +361,9 @@ function applyDrawerTransform(open: boolean): void {
     document.body.style.overflow = "";
   }
 
+  const mobileBar = document.getElementById("pd-mobile-bar");
+  if (mobileBar) mobileBar.style.display = open ? "none" : "";
+
   setPreviewVisible(open && !mobile);
 }
 
@@ -427,13 +430,13 @@ function renderPriceSectionHtml(totals: ReturnType<typeof getTotals>): string {
     `;
   }
   return `
-    <div class="grid grid-cols-3 gap-6 pb-5 mb-5 border-b border-border-default">
+    <div class="grid grid-cols-3 gap-3 sm:gap-6 pb-4 sm:pb-5 mb-4 sm:mb-5 border-b border-border-default">
       ${state.item.priceTiers
         .map((tier, index) => {
           const activeClass = index === totals.tierIndex ? "text-error-500" : "text-text-heading";
           return `<div class="cart-tier-item" data-tier-index="${index}">
-          <p class="text-sm text-text-tertiary">${formatTierLabel(tier, state.item!.unit)}</p>
-          <p class="mt-1 text-[22px] font-bold ${activeClass}">${formatCurrency(tier.rawPrice ?? tier.price, state.item?.currency || getSelectedCurrency())}</p>
+          <p class="text-xs sm:text-sm text-text-tertiary leading-snug">${formatTierLabel(tier, state.item!.unit)}</p>
+          <p class="mt-1 text-base sm:text-[22px] font-bold ${activeClass}">${formatCurrency(tier.rawPrice ?? tier.price, state.item?.currency || getSelectedCurrency())}</p>
         </div>`;
         })
         .join("")}
@@ -476,51 +479,49 @@ function isSelectableAvailable(axisName: string, optionLabel: string): boolean {
   });
 }
 
-/** Renders color thumbnail as a chip (small, horizontal). */
 function renderColorChip(color: CartDrawerColorModel, isSelected: boolean): string {
   const available = isColorAvailable(color.label);
-  const selectedStyle = isSelected
-    ? "border-text-heading bg-surface ring-1 ring-text-heading"
+  const borderStyle = isSelected
+    ? "border-primary-500 bg-primary-50/40 shadow-[0_0_0_1px_var(--color-primary-500,#cc9900)]"
     : available
-      ? "border-border-default bg-surface hover:border-text-secondary"
-      : "border-border-default bg-surface opacity-40 line-through cursor-not-allowed";
+      ? "border-border-default bg-surface hover:border-text-tertiary"
+      : "border-border-default bg-surface opacity-40 cursor-not-allowed";
 
   const thumb = color.imageUrl
-    ? `<img src="${color.imageUrl}" alt="${escapeHtml(color.label)}" class="w-7 h-7 rounded-full object-cover shrink-0${!available ? " grayscale" : ""}" loading="lazy" />`
-    : `<span class="w-5 h-5 rounded-full shrink-0 border border-border-default" style="background:${color.colorHex || "#e5e5e5"};${!available ? "opacity:0.4;" : ""}"></span>`;
+    ? `<img src="${color.imageUrl}" alt="${escapeHtml(color.label)}" class="w-7 h-7 rounded object-cover shrink-0${!available ? " grayscale" : ""}" loading="lazy" />`
+    : `<span class="w-5 h-5 rounded shrink-0 border border-border-default" style="background:${safeHexColor(color.colorHex || "#e5e5e5")};${!available ? "opacity:0.4;" : ""}"></span>`;
 
   return `
     <button type="button"
       data-color-chip="${escapeHtml(color.id)}"
-      class="inline-flex items-center gap-1.5 px-2 py-1.5 rounded-lg border transition-all text-text-heading ${selectedStyle}"
+      class="inline-flex items-center gap-1.5 pl-1 pr-2.5 py-1 rounded-md border transition-all ${borderStyle}"
       ${!available ? "disabled" : ""}
       title="${!available ? `${color.label} — tükendi` : color.label}">
       ${thumb}
-      <span class="text-xs font-medium max-w-[72px] truncate">${escapeHtml(color.label)}</span>
+      <span class="text-xs font-medium text-text-heading truncate">${escapeHtml(color.label)}</span>
     </button>
   `;
 }
 
-/** Renders a selectable chip (for extra axes like Material). */
 function renderSelectableChip(
   axisName: string,
   option: CartDrawerSelectableOption,
   isSelected: boolean
 ): string {
   const available = isSelectableAvailable(axisName, option.label);
-  const selectedStyle = isSelected
-    ? "border-text-heading bg-surface ring-1 ring-text-heading"
+  const borderStyle = isSelected
+    ? "border-primary-500 bg-primary-50/40 shadow-[0_0_0_1px_var(--color-primary-500,#cc9900)]"
     : available
-      ? "border-border-default bg-surface hover:border-text-secondary"
-      : "border-border-default bg-surface opacity-40 line-through cursor-not-allowed";
+      ? "border-border-default bg-surface hover:border-text-tertiary"
+      : "border-border-default bg-surface opacity-40 cursor-not-allowed";
   return `
     <button type="button"
       data-selectable-chip="${escapeHtml(axisName)}"
       data-selectable-value="${escapeHtml(option.label)}"
-      class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border transition-all text-text-heading ${selectedStyle}"
+      class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md border transition-all ${borderStyle}"
       ${!available ? "disabled" : ""}
       title="${!available ? `${option.label} — tükendi` : option.label}">
-      <span class="text-xs font-medium">${escapeHtml(option.label)}</span>
+      <span class="text-xs font-medium text-text-heading">${escapeHtml(option.label)}</span>
     </button>
   `;
 }
@@ -528,13 +529,13 @@ function renderSelectableChip(
 /** Renders a qty stepper pill (reused for sizes and no-variant). */
 function renderQtyStepper(id: string, qty: number, dataAttr = "data-qty-size"): string {
   return `
-    <div class="inline-flex items-center border border-border-default rounded-full overflow-hidden shrink-0">
+    <div class="inline-flex items-center border border-border-default rounded-md overflow-hidden shrink-0">
       <button type="button" data-qty-action="minus" ${dataAttr}="${escapeHtml(id)}"
-        class="w-9 h-9 bg-surface text-text-secondary hover:bg-surface-raised transition-colors">−</button>
+        class="w-8 h-8 bg-surface text-text-secondary hover:bg-surface-raised transition-colors text-sm leading-none">−</button>
       <input type="number" data-qty-input-size="${escapeHtml(id)}" value="${qty}" min="0"
-        class="w-11 h-9 text-center border-x border-border-default bg-surface text-sm font-semibold text-text-heading [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none" />
+        class="w-12 h-8 text-center border-x border-border-default bg-surface text-[13px] font-semibold text-text-heading [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none" />
       <button type="button" data-qty-action="plus" ${dataAttr}="${escapeHtml(id)}"
-        class="w-9 h-9 bg-surface text-text-secondary hover:bg-surface-raised transition-colors">+</button>
+        class="w-8 h-8 bg-surface text-text-secondary hover:bg-surface-raised transition-colors text-sm leading-none">+</button>
     </div>
   `;
 }
@@ -557,9 +558,9 @@ function renderDrawerBody(): void {
       : t("cart.colorLabel");
 
     colorSection = `
-      <div class="mb-5">
-        <h5 class="text-sm font-semibold text-text-heading mb-2">${colorLabel}</h5>
-        <div class="flex flex-wrap gap-2">
+      <div class="mb-4">
+        <h5 class="text-[13px] font-semibold text-text-heading mb-1.5">${colorLabel}</h5>
+        <div class="grid grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-1.5">
           ${item.colors.map((color) => renderColorChip(color, color.id === state.selectedColorId)).join("")}
         </div>
       </div>
@@ -576,8 +577,8 @@ function renderDrawerBody(): void {
           ? `${escapeHtml(group.groupLabel)}: <span class="font-normal text-text-secondary">${escapeHtml(selectedVal)}</span>`
           : escapeHtml(group.groupLabel);
         return `
-        <div class="mb-5">
-          <h5 class="text-sm font-semibold text-text-heading mb-2">${groupLabelHtml}</h5>
+        <div class="mb-4">
+          <h5 class="text-[13px] font-semibold text-text-heading mb-1.5">${groupLabelHtml}</h5>
           <div class="flex flex-wrap gap-2">
             ${group.options.map((opt) => renderSelectableChip(group.axisName, opt, opt.label === selectedVal)).join("")}
           </div>
@@ -609,12 +610,15 @@ function renderDrawerBody(): void {
                 ? `<span class="text-xs font-medium text-amber-500 whitespace-nowrap">${t("cart.lowStock", { count: stock })}</span>`
                 : "";
             return `
-          <div class="flex items-center gap-3 py-2.5 border-b border-border-default last:border-b-0${!available ? " opacity-50" : ""}">
-            <span class="flex-1 text-sm font-medium text-text-heading">${escapeHtml(opt.label)} ${stockLabel}</span>
-            <span class="text-sm font-semibold ${hasQty ? "text-cta-primary" : "text-text-tertiary"} whitespace-nowrap shrink-0">
+          <div class="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-x-2 py-2 border-b border-border-default last:border-b-0${!available ? " opacity-50" : ""}">
+            <div class="min-w-0">
+              <span class="text-[13px] font-medium text-text-heading block truncate">${escapeHtml(opt.label)}</span>
+              ${stockLabel ? `<span class="block">${stockLabel}</span>` : ""}
+            </div>
+            <span class="text-[13px] font-semibold ${hasQty ? "text-cta-primary" : "text-text-tertiary"} whitespace-nowrap">
               ${formatCurrency(displayPrice, itemCurrency)}
             </span>
-            ${available ? renderQtyStepper(opt.id, qty) : `<span class="inline-flex items-center justify-center w-[124px] h-9 text-xs text-red-400 font-medium">${t("cart.outOfStock")}</span>`}
+            ${available ? renderQtyStepper(opt.id, qty) : `<span class="inline-flex items-center justify-center w-[112px] h-8 text-xs text-red-400 font-medium">${t("cart.outOfStock")}</span>`}
           </div>
         `;
           })
@@ -633,10 +637,10 @@ function renderDrawerBody(): void {
     const qty = state.noVariantQty;
     const singleId = "__no_variant__";
     sizeSection = `
-      <div class="mb-5">
-        <div class="flex items-center gap-3 py-2.5 border-b border-border-default">
-          <span class="flex-1 text-sm font-medium text-text-heading">${escapeHtml(item.title)}</span>
-          <span class="text-sm font-semibold text-text-tertiary whitespace-nowrap shrink-0">
+      <div class="mb-4">
+        <div class="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-x-2 py-2 border-b border-border-default">
+          <span class="text-[13px] font-medium text-text-heading min-w-0 truncate">${escapeHtml(item.title)}</span>
+          <span class="text-[13px] font-semibold text-text-tertiary whitespace-nowrap">
             ${formatCurrency(totals.activePrice, itemCurrency)}
           </span>
           ${renderQtyStepper(singleId, qty)}
@@ -646,7 +650,7 @@ function renderDrawerBody(): void {
   }
 
   body.innerHTML = `
-    <h4 class="text-base font-bold text-text-heading leading-tight mb-4">${escapeHtml(item.title)}</h4>
+    <h4 class="text-[15px] sm:text-base font-bold text-text-heading leading-snug mb-3 sm:mb-4">${escapeHtml(item.title)}</h4>
 
     ${priceSection}
 
@@ -656,41 +660,41 @@ function renderDrawerBody(): void {
 
     ${sizeSection}
 
-    <div class="mt-4 mb-2 rounded-md border border-border-default overflow-hidden bg-surface">
-      <div class="flex items-center gap-2.5 px-4 pt-3 pb-2">
+    <div class="mt-3 sm:mt-4 mb-2 rounded-lg border border-border-default overflow-hidden bg-surface">
+      <div class="flex items-center gap-2 sm:gap-2.5 px-3 sm:px-4 pt-2.5 sm:pt-3 pb-1.5 sm:pb-2">
         <span
-          class="shrink-0 w-8 h-8 rounded-full inline-flex items-center justify-center"
+          class="shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full inline-flex items-center justify-center"
           style="background: var(--color-primary-50, #fdf3dd); color: var(--color-primary-600, #b88600);"
           aria-hidden="true"
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <svg class="w-4 h-4 sm:w-[18px] sm:h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
             <path d="M3 7h11v10H3z"/>
             <path d="M14 10h4l3 4v3h-7"/>
             <circle cx="7.5" cy="18.5" r="1.75"/>
             <circle cx="17.5" cy="18.5" r="1.75"/>
           </svg>
         </span>
-        <h5 class="text-[15px] font-bold text-text-heading leading-tight">${t("cart.shipping")}</h5>
+        <h5 class="text-[14px] sm:text-[15px] font-bold text-text-heading leading-tight">${t("cart.shipping")}</h5>
       </div>
 
-      <p class="px-4 pb-3 text-[13px] leading-snug text-text-secondary">
+      <p class="px-3 sm:px-4 pb-2.5 sm:pb-3 text-[12px] sm:text-[13px] leading-snug text-text-secondary">
         ${t("cart.shippingNegotiate")}
       </p>
 
-      <div class="mx-4 border-t border-dashed border-border-default"></div>
+      <div class="mx-3 sm:mx-4 border-t border-dashed border-border-default"></div>
 
       <button
         type="button"
         data-shipping-change
-        class="group th-no-press w-full flex items-center justify-between gap-3 px-4 py-2.5 transition-colors hover:bg-surface-muted focus:outline-none focus-visible:bg-surface-muted"
+        class="group th-no-press w-full flex items-center justify-between gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-2.5 transition-colors hover:bg-surface-muted focus:outline-none focus-visible:bg-surface-muted"
       >
-        <span class="text-[13px] font-semibold text-cta-primary">${t("cart.changeShippingLong")}</span>
+        <span class="text-[12px] sm:text-[13px] font-semibold text-cta-primary">${t("cart.changeShippingLong")}</span>
         <span
-          class="shrink-0 w-6 h-6 rounded-full inline-flex items-center justify-center transition-transform duration-200 group-hover:translate-x-0.5"
+          class="shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded-full inline-flex items-center justify-center transition-transform duration-200 group-hover:translate-x-0.5"
           style="background: var(--color-primary-500, #cc9900); color: #ffffff;"
           aria-hidden="true"
         >
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <svg class="w-[10px] h-[10px] sm:w-3 sm:h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M5 12h14"/>
             <path d="M13 5l7 7-7 7"/>
           </svg>
@@ -711,44 +715,44 @@ function renderDrawerFooter(): void {
   const details = state.footerExpanded
     ? `
       <div class="mb-4">
-        <button type="button" id="shared-cart-footer-toggle" class="th-no-press w-full flex items-center justify-center gap-1 text-sm font-semibold text-text-heading border-b border-border-default pb-3 mb-3">
+        <button type="button" id="shared-cart-footer-toggle" class="th-no-press w-full flex items-center justify-center gap-1 text-[13px] sm:text-sm font-semibold text-text-heading border-b border-border-default pb-2.5 sm:pb-3 mb-2.5 sm:mb-3">
           ${t("cart.price")}
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m18 15-6-6-6 6"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5 sm:w-4 sm:h-4"><path d="m18 15-6-6-6 6"/></svg>
         </button>
 
-        <div class="space-y-2 text-sm text-text-secondary">
-          <div class="flex items-center justify-between">
-            <span>${t("cart.productTotal")} (${t("cart.variationItems", { variation: String(totals.variationCount), items: String(totals.totalQty) })})</span>
-            <strong class="text-text-heading">${formatCurrency(totals.itemSubtotal, itemCurrency)}</strong>
+        <div class="space-y-1.5 sm:space-y-2 text-[12px] sm:text-sm text-text-secondary">
+          <div class="flex items-center justify-between gap-2">
+            <span class="min-w-0 truncate">${t("cart.productTotal")} (${t("cart.variationItems", { variation: String(totals.variationCount), items: String(totals.totalQty) })})</span>
+            <strong class="text-text-heading shrink-0">${formatCurrency(totals.itemSubtotal, itemCurrency)}</strong>
           </div>
-          <div class="flex items-center justify-between">
+          <div class="flex items-center justify-between gap-2">
             <span>${t("cart.shippingTotal")}</span>
-            <span>${escapeHtml(state.item.shippingOptions[state.selectedShippingIndex]?.costText ?? formatCurrency(0, itemCurrency))}</span>
+            <span class="shrink-0">${escapeHtml(state.item.shippingOptions[state.selectedShippingIndex]?.costText ?? formatCurrency(0, itemCurrency))}</span>
           </div>
-          <div class="flex items-center justify-between border-t border-border-default pt-3 mt-3">
-            <strong class="text-text-heading">${t("cart.subtotal")}</strong>
+          <div class="flex items-center justify-between border-t border-border-default pt-2.5 sm:pt-3 mt-2.5 sm:mt-3">
+            <strong class="text-[13px] sm:text-base text-text-heading">${t("cart.subtotal")}</strong>
             <div class="text-right">
-              <strong class="text-base text-cta-primary">${formatCurrency(totals.grandTotal, itemCurrency)}</strong>
-              <p class="text-xs text-text-tertiary">(${formatCurrency(perPiece, itemCurrency)}${t("cart.perUnit")})</p>
+              <strong class="text-[14px] sm:text-base text-cta-primary">${formatCurrency(totals.grandTotal, itemCurrency)}</strong>
+              <p class="text-[10px] sm:text-xs text-text-tertiary">(${formatCurrency(perPiece, itemCurrency)}${t("cart.perUnit")})</p>
             </div>
           </div>
         </div>
       </div>
     `
     : `
-      <button type="button" id="shared-cart-footer-toggle" class="th-no-press w-full flex items-center justify-between mb-4">
-        <strong class="text-base text-text-heading">${t("cart.subtotal")}</strong>
-        <span class="flex items-center gap-1.5">
-          <strong class="text-[17px] text-cta-primary">${formatCurrency(totals.grandTotal, itemCurrency)}</strong>
-          <span class="text-xs text-text-tertiary">(${formatCurrency(perPiece, itemCurrency)}${t("cart.perUnit")})</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-text-tertiary"><path d="m6 9 6 6 6-6"/></svg>
+      <button type="button" id="shared-cart-footer-toggle" class="th-no-press w-full flex items-center justify-between mb-3 sm:mb-4">
+        <strong class="text-[13px] sm:text-base text-text-heading whitespace-nowrap shrink-0">${t("cart.subtotal")}</strong>
+        <span class="flex items-center gap-1 sm:gap-1.5 min-w-0">
+          <strong class="text-[15px] sm:text-[17px] text-cta-primary whitespace-nowrap">${formatCurrency(totals.grandTotal, itemCurrency)}</strong>
+          <span class="text-[10px] sm:text-xs text-text-tertiary whitespace-nowrap">(${formatCurrency(perPiece, itemCurrency)}${t("cart.perUnit")})</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-text-tertiary shrink-0"><path d="m6 9 6 6 6-6"/></svg>
         </span>
       </button>
     `;
 
   footer.innerHTML = `
     ${details}
-    <button type="button" id="shared-cart-confirm" class="w-full th-btn-dark h-12 text-lg">${state.mode === "sample" ? t("cart.orderSample") : t("cart.addToCartBtn")}</button>
+    <button type="button" id="shared-cart-confirm" class="w-full th-btn-dark h-10 sm:h-12 text-[13px] sm:text-lg">${state.mode === "sample" ? t("cart.orderSample") : t("cart.addToCartBtn")}</button>
   `;
 }
 
@@ -774,17 +778,15 @@ function updateShippingModal(quantityOverride?: number): void {
       const active = index === state.selectedShippingIndex;
       const deliveryText = formatDeliveryEstimate(option.estimatedDays);
       return `
-      <label class="flex items-center justify-between rounded-md border px-4 py-3 cursor-pointer transition-colors ${active ? "border-primary-500 bg-primary-50" : "border-border-default bg-surface-muted hover:bg-surface"}" data-shipping-option-index="${index}">
-        <span class="flex items-center gap-3">
-          <span class="w-7 h-7 rounded-full border inline-flex items-center justify-center ${active ? "border-primary-500 bg-primary-500 text-white" : "border-border-medium text-transparent"}">
-            ${active ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 13 4 4L19 7"/></svg>' : ""}
-          </span>
-          <span>
-            <strong class="block text-base text-text-heading">${escapeHtml(option.method)}</strong>
-            <span class="text-sm text-text-secondary">${escapeHtml(deliveryText)}</span>
-          </span>
+      <label class="grid grid-cols-[24px_1fr_auto] items-start gap-x-3 gap-y-0 rounded-lg border px-3 py-3 sm:px-4 sm:py-3.5 cursor-pointer transition-colors ${active ? "border-primary-500 bg-primary-50" : "border-border-default bg-surface-muted hover:bg-surface"}" data-shipping-option-index="${index}">
+        <span class="w-6 h-6 sm:w-7 sm:h-7 rounded-full border inline-flex items-center justify-center mt-0.5 ${active ? "border-primary-500 bg-primary-500 text-white" : "border-border-medium text-transparent"}">
+          ${active ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m5 13 4 4L19 7"/></svg>' : ""}
         </span>
-        <strong class="text-base text-text-heading">${escapeHtml(option.costText)}</strong>
+        <span class="min-w-0">
+          <strong class="block text-[14px] sm:text-base text-text-heading leading-snug">${escapeHtml(option.method)}</strong>
+          <span class="block text-[12px] sm:text-sm text-text-secondary mt-0.5">${escapeHtml(deliveryText)}</span>
+        </span>
+        <strong class="text-[14px] sm:text-base text-text-heading whitespace-nowrap mt-0.5">${escapeHtml(option.costText)}</strong>
       </label>
     `;
     })
@@ -1328,8 +1330,8 @@ function bindShippingEvents(): void {
 
 export function SharedCartDrawer(): string {
   return `
-    <div id="shared-cart-overlay" class="fixed inset-0 z-(--z-backdrop,40) bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300">
-      <div id="shared-cart-preview" class="hidden fixed left-0 top-0 bottom-0 right-[600px] z-(--z-modal,50) items-center justify-center px-8 pointer-events-none">
+    <div id="shared-cart-overlay" class="fixed inset-0 z-[110] bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300">
+      <div id="shared-cart-preview" class="hidden fixed left-0 top-0 bottom-0 right-[600px] z-[120] items-center justify-center px-8 pointer-events-none">
         <div class="relative w-full max-w-[760px] h-[78vh] rounded-md overflow-hidden pointer-events-auto shadow-2xl bg-surface">
           <button type="button" id="shared-cart-preview-prev" class="absolute left-5 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 hover:bg-white text-secondary-700 border border-border-default shadow-md z-20">‹</button>
           <div id="shared-cart-preview-image" class="w-full h-full"></div>
@@ -1340,14 +1342,14 @@ export function SharedCartDrawer(): string {
 
       <aside id="shared-cart-drawer" class="fixed right-0 top-0 h-full w-full sm:w-[500px] lg:w-[600px] max-w-full bg-surface shadow-[-8px_0_30px_rgba(0,0,0,0.18)] xl:rounded-l-md xl:border-l xl:border-border-default flex flex-col transition-transform duration-300">
         <div class="flex items-center justify-between px-6 py-4 border-b border-border-default shrink-0 max-md:px-4 max-md:py-3">
-          <h3 id="shared-cart-heading" class="text-lg font-bold text-text-heading">${t("cart.selectVariation")}</h3>
-          <button type="button" id="shared-cart-close" class="w-8 h-8 rounded-full text-secondary-400 hover:text-secondary-900 hover:bg-surface-raised transition-colors inline-flex items-center justify-center">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18 18 6M6 6l12 12"/></svg>
+          <h3 id="shared-cart-heading" class="text-[15px] sm:text-lg font-bold text-text-heading">${t("cart.selectVariation")}</h3>
+          <button type="button" id="shared-cart-close" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full text-secondary-400 hover:text-secondary-900 hover:bg-surface-raised transition-colors inline-flex items-center justify-center shrink-0">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 sm:w-[18px] sm:h-[18px]"><path d="M6 18 18 6M6 6l12 12"/></svg>
           </button>
         </div>
 
-        <div id="shared-cart-body" class="flex-1 overflow-y-auto px-6 pt-5 pb-8 max-md:px-4 max-md:pt-4 max-md:pb-6"></div>
-        <div id="shared-cart-footer" class="shrink-0 border-t border-border-default bg-surface px-6 pt-4 pb-5 max-md:px-4 max-md:pt-3 max-md:pb-4"></div>
+        <div id="shared-cart-body" class="flex-1 overflow-y-auto px-6 pt-5 pb-4 max-md:px-4 max-md:pt-4 max-md:pb-3"></div>
+        <div id="shared-cart-footer" class="shrink-0 border-t border-border-default bg-surface px-6 pt-3 pb-[calc(12px+env(safe-area-inset-bottom))] sm:pt-4 sm:pb-5 max-md:px-4"></div>
       </aside>
     </div>
   `;
@@ -1355,19 +1357,19 @@ export function SharedCartDrawer(): string {
 
 export function SharedShippingModal(): string {
   return `
-    <div id="shared-cart-shipping-modal" class="fixed inset-0 z-[210] bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300">
-      <div id="shared-cart-shipping-sheet" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[45%] w-[min(92vw,760px)] bg-surface rounded-md border border-border-default shadow-2xl p-6 translate-y-4 transition-transform duration-300 max-md:w-full max-md:max-w-full max-md:rounded-t-md max-md:rounded-b-none max-md:top-auto max-md:bottom-0 max-md:-translate-x-1/2 max-md:-translate-y-0 max-md:p-4">
+    <div id="shared-cart-shipping-modal" class="fixed inset-0 z-[210] bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300 flex items-end md:items-center justify-center">
+      <div id="shared-cart-shipping-sheet" class="w-full md:w-[min(92vw,760px)] bg-surface rounded-t-xl md:rounded-xl border border-border-default shadow-2xl p-4 sm:p-6 translate-y-4 transition-transform duration-300 max-h-[90vh] md:max-h-[80vh] flex flex-col">
         <div class="flex items-center justify-between">
-          <h4 class="text-xl font-bold text-text-heading">${t("cart.selectShipping")}</h4>
-          <button type="button" id="shared-cart-shipping-close" class="w-8 h-8 rounded-full text-secondary-400 hover:text-secondary-900 hover:bg-surface-raised transition-colors inline-flex items-center justify-center">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18 18 6M6 6l12 12"/></svg>
+          <h4 class="text-[15px] sm:text-xl font-bold text-text-heading">${t("cart.selectShipping")}</h4>
+          <button type="button" id="shared-cart-shipping-close" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full text-secondary-400 hover:text-secondary-900 hover:bg-surface-raised transition-colors inline-flex items-center justify-center shrink-0">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 sm:w-[18px] sm:h-[18px]"><path d="M6 18 18 6M6 6l12 12"/></svg>
           </button>
         </div>
 
-        <p class="mt-4 text-base text-text-secondary">${t("cart.shippingTo")}: <strong>${t("countries.TR")}</strong> · ${t("cart.shippingQty")}: <span id="shared-cart-shipping-qty">1 ${state.item?.unit ?? "pc"}</span></p>
-        <div id="shared-cart-shipping-options" class="mt-5 space-y-3 max-h-[46vh] overflow-y-auto"></div>
+        <p class="mt-2.5 sm:mt-4 text-[13px] sm:text-base text-text-secondary">${t("cart.shippingTo")}: <strong>${t("countries.TR")}</strong> · ${t("cart.shippingQty")}: <span id="shared-cart-shipping-qty">1 ${state.item?.unit ?? "pc"}</span></p>
+        <div id="shared-cart-shipping-options" class="mt-3 sm:mt-5 space-y-2 sm:space-y-3 flex-1 overflow-y-auto min-h-0"></div>
 
-        <button type="button" id="shared-cart-shipping-apply" class="mt-6 w-full th-btn-dark h-12">${t("common.apply")}</button>
+        <button type="button" id="shared-cart-shipping-apply" class="mt-3 sm:mt-6 w-full th-btn-dark h-11 sm:h-12 text-[13px] sm:text-[14px] shrink-0">${t("common.apply")}</button>
       </div>
     </div>
   `;

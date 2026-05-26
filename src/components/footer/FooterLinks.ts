@@ -167,7 +167,7 @@ function getSocialIcon(platform: string): string {
  */
 function renderSocialIcons(): string {
   return `
-    <div class="flex items-center gap-2 flex-wrap mt-3">
+    <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap mt-2 sm:mt-3">
       ${socialLinks
         .map(
           (link) => `
@@ -175,7 +175,7 @@ function renderSocialIcons(): string {
           href="${link.href}"
           target="_blank"
           rel="noopener noreferrer"
-          class="th-footer-social inline-flex items-center justify-center w-7 h-7 rounded-full transition-colors duration-200"
+          class="th-footer-social inline-flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 rounded-full transition-colors duration-200"
           aria-label="${link.ariaLabel}"
         >
           ${getSocialIcon(link.platform)}
@@ -194,17 +194,17 @@ function renderColumn(column: FooterColumnI18n): string {
   return `
     <div>
       <h3
-        class="text-[13px] font-bold uppercase tracking-wide mb-4"
+        class="text-[11px] sm:text-[13px] font-bold uppercase tracking-wide mb-3 sm:mb-4"
         style="color: var(--footer-heading-color);"
       ><span data-i18n="${column.titleKey}">${t(column.titleKey)}</span></h3>
-      <ul class="space-y-2.5">
+      <ul class="space-y-1.5 sm:space-y-2.5">
         ${column.links
           .map(
             (link) => `
           <li>
             <a
               href="${link.href}"
-              class="th-footer-link text-[13px] leading-relaxed transition-colors duration-200 block truncate"
+              class="th-footer-link text-[11px] sm:text-[13px] leading-relaxed transition-colors duration-200 block truncate"
             ><span data-i18n="${link.labelKey}">${t(link.labelKey)}</span></a>
           </li>
         `
@@ -222,17 +222,17 @@ function renderLastColumn(column: FooterColumnI18n): string {
   return `
     <div>
       <h3
-        class="text-[13px] font-bold uppercase tracking-wide mb-4"
+        class="text-[11px] sm:text-[13px] font-bold uppercase tracking-wide mb-3 sm:mb-4"
         style="color: var(--footer-heading-color);"
       ><span data-i18n="${column.titleKey}">${t(column.titleKey)}</span></h3>
-      <ul class="space-y-2.5">
+      <ul class="space-y-1.5 sm:space-y-2.5">
         ${column.links
           .map(
             (link) => `
           <li>
             <a
               href="${link.href}"
-              class="th-footer-link text-[13px] leading-relaxed transition-colors duration-200 block truncate"
+              class="th-footer-link text-[11px] sm:text-[13px] leading-relaxed transition-colors duration-200 block truncate"
             ><span data-i18n="${link.labelKey}">${t(link.labelKey)}</span></a>
           </li>
         `
@@ -242,7 +242,7 @@ function renderLastColumn(column: FooterColumnI18n): string {
 
       <!-- Stay Connected -->
       <h3
-        class="text-[13px] font-bold uppercase tracking-wide mt-6 mb-1"
+        class="text-[11px] sm:text-[13px] font-bold uppercase tracking-wide mt-4 sm:mt-6 mb-1"
         style="color: var(--footer-heading-color);"
       ><span data-i18n="footer.stayConnected">${t("footer.stayConnected")}</span></h3>
       ${renderSocialIcons()}
@@ -267,11 +267,11 @@ export function FooterLinks(): string {
   return `
     <section
       class="border-t"
-      style="background-color: var(--footer-bg); border-color: var(--footer-border-color); min-height: 437px;"
+      style="background-color: var(--footer-bg); border-color: var(--footer-border-color);"
       aria-label="Footer navigation"
     >
-      <div class="container-boxed py-6 sm:py-10 md:py-14 px-3 sm:px-4">
-        <div class="grid grid-cols-1 min-[360px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 md:gap-6">
+      <div class="container-boxed py-5 sm:py-10 md:py-14 px-3 sm:px-4">
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-5 sm:gap-6">
           ${regularColumns.map((col) => renderColumn(col)).join("")}
           ${renderLastColumn(lastColumn)}
         </div>

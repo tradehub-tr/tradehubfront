@@ -27,7 +27,7 @@ function floatField(
   return `
     <div class="relative mb-3 group checkout-field-container" data-field="${name}" x-bind:data-error="errors.${name}">
       <input
-        class="peer w-full h-[48px] pt-[18px] px-3 pb-0 text-[14px] text-[var(--color-text-primary)] border border-[var(--color-border-default)] rounded-md bg-[var(--color-surface)] outline-none transition-colors focus:border-[var(--color-primary-500)] data-[error=true]:border-[var(--color-error-500)] placeholder-transparent"
+        class="peer w-full h-11 sm:h-[48px] pt-[16px] sm:pt-[18px] px-3 pb-0 text-[13px] sm:text-[14px] text-[var(--color-text-primary)] border border-[var(--color-border-default)] rounded-md bg-[var(--color-surface)] outline-none transition-colors focus:border-[var(--color-primary-500)] data-[error=true]:border-[var(--color-error-500)] placeholder-transparent"
         type="${type}"
         id="${id}"
         name="${name}"
@@ -43,7 +43,7 @@ function floatField(
         ${label}${required ? ' <span class="text-[var(--color-error-500)]">*</span>' : ""}
       </label>
       <div class="hidden text-[12px] text-[var(--color-error-500)] mt-1 group-data-[error=true]:block">${pageContent.requiredFieldError}</div>
-      ${helperText ? `<p class="text-[14px] text-[#767676] mt-2">${helperText}</p>` : ""}
+      ${helperText ? `<p class="text-[12px] sm:text-[14px] text-[#767676] mt-1.5 sm:mt-2">${helperText}</p>` : ""}
       ${helperAction ? helperAction : ""}
     </div>
   `;
@@ -70,7 +70,7 @@ function dropdownField(
     <div class="relative mb-3 group checkout-dropdown-container" data-field="${name}" data-dropdown="${id}"${containerAlpine}>
       <button
         type="button"
-        class="w-full h-[48px] flex items-center justify-between pt-[18px] px-3 pb-0 text-[14px] text-[var(--color-text-primary)] border border-[var(--color-border-default)] rounded-md bg-[var(--color-surface)] cursor-pointer outline-none transition-colors focus:border-[var(--color-primary-500)] group-data-[error=true]:border-[var(--color-error-500)] dropdown-trigger"
+        class="w-full h-11 sm:h-[48px] flex items-center justify-between pt-[16px] sm:pt-[18px] px-3 pb-0 text-[13px] sm:text-[14px] text-[var(--color-text-primary)] border border-[var(--color-border-default)] rounded-md bg-[var(--color-surface)] cursor-pointer outline-none transition-colors focus:border-[var(--color-primary-500)] group-data-[error=true]:border-[var(--color-error-500)] dropdown-trigger"
         id="${id}"
         aria-haspopup="listbox"
         ${triggerAlpine}
@@ -117,7 +117,7 @@ function renderAddressSelectorModal(): string {
           <div class="mt-4 sm:mt-5 border-t border-[#e5e7eb] pt-4 sm:pt-5 space-y-3 sm:space-y-4">
             <template x-for="address in savedAddresses" :key="address.id">
               <div
-                class="rounded-lg border p-3 sm:p-4"
+                class="rounded-md border p-3 sm:p-4"
                 :class="pendingAddressId === address.id ? 'border-[#111827]' : 'border-[#e5e7eb]'"
               >
                 <div class="flex items-start gap-2 sm:gap-3">
@@ -216,7 +216,7 @@ function renderAddAddressModal(countryOptions: string): string {
               <div>
                 <label class="block text-[14px] text-[#6b7280] mb-1">${t("checkout.phoneNumberLabel")} *</label>
                 <div class="flex gap-2">
-                  <div class="w-[84px] h-12 rounded-lg border border-[#d1d5db] flex items-center justify-center text-[14px] text-[#111827]" x-text="addAddressForm.phonePrefix"></div>
+                  <div class="w-[84px] h-12 rounded-md border border-[#d1d5db] flex items-center justify-center text-[14px] text-[#111827]" x-text="addAddressForm.phonePrefix"></div>
                   <input class="th-input th-input-lg flex-1" type="tel" x-model="addAddressForm.phone" />
                 </div>
                 <p class="mt-1 text-[12px] text-[#dc2626]" x-show="addFormErrors.phone">${t("checkout.requiredShort")}</p>
@@ -313,32 +313,31 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
     .join("");
 
   return `
-    <section class="checkout-section bg-white border border-[#e8e6e0] rounded-2xl shadow-[0_1px_2px_rgba(20,20,18,0.04)] overflow-hidden" id="shipping-address-section" x-data="shippingForm">
-      <div class="checkout-section__header flex items-center gap-3 px-[22px] py-[18px]">
-        <!-- Map pin ikonu — referans tasarımdaki 32×32 icon-box ile tutarlı. -->
-        <span class="checkout-section__icon inline-flex items-center justify-center w-8 h-8 min-w-[32px] rounded-[10px] bg-[#fafaf8] text-[#4a4a48] p-[7px]">
+    <section class="checkout-section bg-white border border-[#e8e6e0] rounded-md shadow-[0_1px_2px_rgba(20,20,18,0.04)] overflow-hidden" id="shipping-address-section" x-data="shippingForm">
+      <div class="checkout-section__header flex items-center gap-2 sm:gap-3 px-4 sm:px-[22px] py-[12px] sm:py-[18px]">
+        <span class="checkout-section__icon hidden sm:inline-flex items-center justify-center w-8 h-8 min-w-[32px] rounded-md bg-[#fafaf8] text-[#4a4a48] p-[7px]">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
           </svg>
         </span>
-        <h2 class="checkout-section__title flex-1 text-left text-[15px] font-semibold text-[#1a1a1a] tracking-[-0.005em]">${t("checkout.shippingAddressLabel")}</h2>
+        <h2 class="checkout-section__title flex-1 text-left text-[13px] sm:text-[15px] font-semibold text-[#1a1a1a] tracking-[-0.005em] whitespace-nowrap truncate">${t("checkout.shippingAddressLabel")}</h2>
         <!-- Hazır rozeti: adres seçili -->
         <span
           x-cloak
           x-show="selectedAddressId && !showAddressForm"
-          class="co-pill co-pill-ok inline-flex items-center gap-1 px-2 py-[3px] rounded-full text-[11.5px] font-medium bg-[#e8f5ed] text-[#1f7a4d] border-transparent border whitespace-nowrap"
+          class="co-pill co-pill-ok inline-flex items-center gap-1 px-1.5 sm:px-2 py-[2px] sm:py-[3px] rounded-full text-[10px] sm:text-[11.5px] font-medium bg-[#e8f5ed] text-[#1f7a4d] border-transparent border whitespace-nowrap shrink-0"
         >
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-2.5 h-2.5 sm:w-3 sm:h-3"><path d="M20 6 9 17l-5-5"/></svg>
           Hazır
         </span>
         <!-- Zorunlu alan rozeti -->
         <span
           x-cloak
           x-show="!selectedAddressId && !showAddressForm"
-          class="co-pill co-pill-warn inline-flex items-center gap-1 px-2 py-[3px] rounded-full text-[11.5px] font-medium bg-[#fff4e5] text-[#b54708] border-transparent border whitespace-nowrap"
+          class="co-pill co-pill-warn inline-flex items-center gap-1 px-1.5 sm:px-2 py-[2px] sm:py-[3px] rounded-full text-[10px] sm:text-[11.5px] font-medium bg-[#fff4e5] text-[#b54708] border-transparent border whitespace-nowrap shrink-0"
         >
-          <span class="co-pill-dot w-[5px] h-[5px] rounded-full bg-[#b54708] inline-block"></span>
+          <span class="co-pill-dot w-1 h-1 sm:w-[5px] sm:h-[5px] rounded-full bg-[#b54708] inline-block"></span>
           Zorunlu
         </span>
         <!-- Düzenle (adres seçili iken header'da link) -->
@@ -346,24 +345,24 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
           x-cloak
           x-show="selectedAddressId && !showAddressForm"
           type="button"
-          class="co-link-btn appearance-none bg-transparent border-0 px-2 py-1 text-[#4a4a48] inline-flex items-center gap-1 text-[13px] font-medium rounded-md cursor-pointer no-underline hover:text-[#1a1a1a] hover:bg-[#fafaf8] focus:outline-none"
+          class="co-link-btn appearance-none bg-transparent border-0 px-1.5 sm:px-2 py-1 text-[#4a4a48] inline-flex items-center gap-1 text-[12px] sm:text-[13px] font-medium rounded-md cursor-pointer no-underline hover:text-[#1a1a1a] hover:bg-[#fafaf8] focus:outline-none shrink-0"
           @click="showAddressForm = true"
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3 sm:w-3.5 sm:h-3.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
           Düzenle
         </button>
       </div>
 
-      <div class="checkout-section__content px-[22px] pb-[22px]">
+      <div class="checkout-section__content px-4 sm:px-[22px] pb-4 sm:pb-[22px]">
         <!-- SEÇİLİ ADRES KARTI -->
         <div
-          class="co-addr-block p-[14px_16px] bg-[#fafaf8] rounded-xl border border-[#e8e6e0]"
+          class="co-addr-block p-3 sm:p-[14px_16px] bg-[#fafaf8] rounded-md border border-[#e8e6e0]"
           x-cloak
           x-show="selectedAddressId && !showAddressForm"
         >
-          <div class="co-addr-name font-semibold mb-1 text-[#1a1a1a]" x-text="selectedAddressName"></div>
-          <div class="co-addr-line text-[13px] text-[#4a4a48]" x-text="selectedAddressLine"></div>
-          <div class="co-addr-line muted text-[13px] text-[#8a877f]" x-text="selectedAddressPhone"></div>
+          <div class="co-addr-name font-semibold mb-0.5 sm:mb-1 text-[14px] sm:text-base text-[#1a1a1a]" x-text="selectedAddressName"></div>
+          <div class="co-addr-line text-[12px] sm:text-[13px] text-[#4a4a48] leading-[1.5]" x-text="selectedAddressLine"></div>
+          <div class="co-addr-line muted text-[12px] sm:text-[13px] text-[#8a877f] mt-0.5" x-text="selectedAddressPhone"></div>
         </div>
 
         <!-- ADRES EKLE TETİKLEYİCİSİ -->
@@ -372,7 +371,7 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
           x-show="!selectedAddressId && !showAddressForm"
           type="button"
           @click="showAddressForm = true"
-          class="co-add-row m-0 p-[14px] border-[1.5px] border-dashed border-[#d5d2c9] rounded-xl bg-[#fafaf8] flex items-center justify-center gap-2 w-full text-[#4a4a48] font-medium text-[14px] cursor-pointer transition-all hover:border-[#f5b800] hover:text-[#1a1a1a] hover:bg-[#fff8e1]"
+          class="co-add-row m-0 p-[14px] border-[1.5px] border-dashed border-[#d5d2c9] rounded-md bg-[#fafaf8] flex items-center justify-center gap-2 w-full text-[#4a4a48] font-medium text-[13px] sm:text-[14px] cursor-pointer transition-all hover:border-[#f5b800] hover:text-[#1a1a1a] hover:bg-[#fff8e1]"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 5v14M5 12h14"/>
@@ -396,7 +395,7 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
             @click.self="showAddressForm = false"
           >
             <div
-              class="bg-white w-full sm:max-w-3xl sm:rounded-2xl shadow-2xl overflow-visible"
+              class="bg-white w-full sm:max-w-3xl sm:rounded-md shadow-2xl overflow-visible"
               @click.stop
               x-transition:enter="transition ease-out duration-200"
               x-transition:enter-start="opacity-0 translate-y-4"
@@ -441,15 +440,15 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
 
             <!-- Phone: +90 prefix ile numara tek container içinde (Evil Martians / Shopify pattern). -->
             <div class="mb-3 group" data-field="phone" x-bind:data-error="errors.phone">
-              <div class="relative flex items-stretch h-[48px] rounded-md border border-[var(--color-border-default)] bg-[var(--color-surface)] transition-colors focus-within:border-[var(--color-primary-500)] group-data-[error=true]:border-[var(--color-error-500)]">
+              <div class="relative flex items-stretch h-11 sm:h-[48px] rounded-md border border-[var(--color-border-default)] bg-[var(--color-surface)] transition-colors focus-within:border-[var(--color-primary-500)] group-data-[error=true]:border-[var(--color-error-500)]">
                 <!-- Ülke kodu prefix -->
-                <div class="flex items-center justify-center w-[64px] shrink-0 border-r border-[var(--color-border-default)] text-[14px] text-[#374151] bg-[#f9fafb] rounded-l-md select-none">
+                <div class="flex items-center justify-center w-14 sm:w-[64px] shrink-0 border-r border-[var(--color-border-default)] text-[13px] sm:text-[14px] text-[#374151] bg-[#f9fafb] rounded-l-md select-none">
                   <span id="phone-prefix" x-text="phonePrefix">${defaultCountry.phonePrefix}</span>
                 </div>
                 <!-- Numara input -->
                 <div class="relative flex-1">
                   <input
-                    class="peer w-full h-full pt-[18px] px-3 pb-0 text-[14px] text-[var(--color-text-primary)] bg-transparent border-0 outline-none placeholder-transparent rounded-r-md"
+                    class="peer w-full h-full pt-[16px] sm:pt-[18px] px-3 pb-0 text-[13px] sm:text-[14px] text-[var(--color-text-primary)] bg-transparent border-0 outline-none placeholder-transparent rounded-r-md"
                     type="tel"
                     id="phone"
                     name="phone"
@@ -465,7 +464,7 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
                   </label>
                 </div>
               </div>
-              <p class="text-[12px] text-[#767676] mt-1.5 ml-1">${t("checkout.phoneHelp")}</p>
+              <p class="text-[11px] sm:text-[12px] text-[#767676] mt-1 sm:mt-1.5 ml-1">${t("checkout.phoneHelp")}</p>
             </div>
 
             ${floatField("street-address", "streetAddress", pageContent.streetAddressLabel, true, "text")}
@@ -491,7 +490,7 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
               <div class="relative mb-3 group checkout-dropdown-container" data-field="city" data-dropdown="city-dropdown" x-bind:data-open="cityOpen" x-bind:data-error="errors.city" @click.outside="cityOpen = false">
                 <button
                   type="button"
-                  class="w-full h-[48px] flex items-center justify-between pt-[18px] px-3 pb-0 text-[14px] text-[var(--color-text-primary)] border border-[var(--color-border-default)] rounded-md bg-[var(--color-surface)] cursor-pointer outline-none transition-colors focus:border-[var(--color-primary-500)] group-data-[error=true]:border-[var(--color-error-500)] dropdown-trigger"
+                  class="w-full h-11 sm:h-[48px] flex items-center justify-between pt-[16px] sm:pt-[18px] px-3 pb-0 text-[13px] sm:text-[14px] text-[var(--color-text-primary)] border border-[var(--color-border-default)] rounded-md bg-[var(--color-surface)] cursor-pointer outline-none transition-colors focus:border-[var(--color-primary-500)] group-data-[error=true]:border-[var(--color-error-500)] dropdown-trigger"
                   id="city-dropdown"
                   aria-haspopup="listbox"
                   @click.prevent="toggleDropdown('city')"
@@ -524,7 +523,7 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
                 name="isDefaultAddress"
                 class="w-4 h-4 rounded border-[var(--color-border-default)] text-[var(--color-primary-500)] focus:ring-[var(--color-primary-500)]"
               />
-              <label for="default-address" class="text-sm text-[var(--color-text-secondary)] cursor-pointer select-none">
+              <label for="default-address" class="text-[12px] sm:text-sm text-[var(--color-text-secondary)] cursor-pointer select-none">
                 ${pageContent.defaultAddressCheckbox}
               </label>
             </div>
@@ -532,7 +531,7 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
             <button
               type="submit"
               id="continue-payment-btn"
-              class="th-btn w-full mt-2"
+              class="th-btn w-full mt-2 h-10 sm:h-auto text-[13px] sm:text-[14px]"
             >
               ${t("checkout.saveAndContinue")}
             </button>

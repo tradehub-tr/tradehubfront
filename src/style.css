@@ -937,7 +937,7 @@
     padding: var(--spacing-button-y) var(--spacing-button-x);
     font-size: var(--btn-font-size);
     font-weight: var(--btn-font-weight);
-    box-shadow: var(--btn-shadow);
+    box-shadow: 0 1px 0 #15803d, inset 0 1px 0 rgba(255, 255, 255, 0.3);
     cursor: pointer;
     line-height: 1.25;
     transition: all 0.15s ease;
@@ -1646,6 +1646,7 @@
     line-height: 18px;
   }
 }
+
 
 .hero-side-slider .swiper-slide {
   transition: transform 200ms ease-out;

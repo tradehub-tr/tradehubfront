@@ -45,14 +45,14 @@ export function Checkbox({
         @change="handleChange()"
         :aria-checked="indeterminate ? 'mixed' : String(checked)"
       />
-      <span class="th-checkbox next-checkbox relative"
+      <span class="th-checkbox next-checkbox relative w-[18px] h-[18px] sm:w-[20px] sm:h-[20px] rounded-[4px] sm:rounded-[5px]"
         :class="{ 'is-checked': checked || indeterminate }">
-        <svg class="next-checkbox-check absolute inset-0 m-auto ${checkVisible}"
+        <svg class="next-checkbox-check absolute inset-0 m-auto w-[10px] h-[10px] sm:w-3 sm:h-3 ${checkVisible}"
           :class="checked ? 'block' : 'hidden'"
-          width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="m5 13 4 4L19 7"/>
         </svg>
-        <span class="next-checkbox-dash absolute left-1 right-1 top-1/2 -translate-y-1/2 h-[2px] bg-current rounded ${dashVisible}"
+        <span class="next-checkbox-dash absolute left-0.5 right-0.5 sm:left-1 sm:right-1 top-1/2 -translate-y-1/2 h-[2px] bg-current rounded ${dashVisible}"
           :class="(indeterminate && !checked) ? 'block' : 'hidden'"
           aria-hidden="true"></span>
       </span>

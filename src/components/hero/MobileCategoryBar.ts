@@ -12,15 +12,17 @@ import { t } from "../../i18n";
 
 /* ──── Subcategory thumbnail renderer ──── */
 
-function renderMobileSubcategory(name: string, slug: string): string {
+function renderMobileSubcategory(name: string, slug: string, image?: string): string {
+  const placeholderSvg = `<svg class="w-4 h-4 min-[400px]:w-5 min-[400px]:h-5 sm:w-6 sm:h-6 text-gray-300 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75Z"/></svg>`;
+  const inner = image
+    ? `<img src="${image}" alt="${name}" class="w-full h-full object-cover rounded-md" loading="lazy" onerror="this.outerHTML=this.dataset.fallback" data-fallback='${placeholderSvg.replace(/'/g, "&apos;")}' />`
+    : placeholderSvg;
   return `
-    <a href="/pages/products.html?cat=${slug}" class="mcb-product flex-shrink-0 flex flex-col items-center gap-1 w-[52px] sm:w-[60px]">
-      <div class="w-[52px] h-[52px] sm:w-[60px] sm:h-[60px] rounded-md bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-gray-300 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75Z"/>
-        </svg>
+    <a href="/pages/products.html?cat=${slug}" class="mcb-product flex-shrink-0 flex flex-col items-center gap-1 w-[42px] min-[400px]:w-[52px] sm:w-[60px]">
+      <div class="w-[42px] h-[42px] min-[400px]:w-[52px] min-[400px]:h-[52px] sm:w-[60px] sm:h-[60px] rounded-md bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
+        ${inner}
       </div>
-      <span class="text-[11px] text-gray-600 dark:text-gray-400 text-center leading-tight line-clamp-2 w-full">${name}</span>
+      <span class="text-[9px] min-[400px]:text-[11px] text-gray-600 dark:text-gray-400 text-center leading-tight truncate w-full">${name}</span>
     </a>
   `;
 }
@@ -40,8 +42,8 @@ function renderBottomSheet(): string {
           <div class="flex items-center justify-center pt-3 pb-2">
             <div class="w-9 h-1 rounded-full bg-gray-300 dark:bg-gray-600"></div>
           </div>
-          <div class="flex items-center px-5 border-b border-gray-100 dark:border-gray-700/50">
-            <span class="text-[15px] font-bold text-gray-900 dark:text-white" data-i18n="categoryBrowse.title">${t("categoryBrowse.title")}</span>
+          <div class="flex items-center px-3 min-[400px]:px-4 sm:px-5 border-b border-gray-100 dark:border-gray-700/50">
+            <span class="text-[13px] min-[400px]:text-[14px] sm:text-[15px] font-bold text-gray-900 dark:text-white" data-i18n="categoryBrowse.title">${t("categoryBrowse.title")}</span>
             <button
               type="button"
               id="mcb-sheet-close"
@@ -95,7 +97,7 @@ export function MobileCategoryBar(): string {
         <button
           type="button"
           id="mcb-dropdown-btn"
-          class="absolute right-0 top-0 bottom-0 w-9 flex items-center justify-center text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800"
+          class="th-no-press absolute right-0 top-0 bottom-0 w-9 flex items-center justify-center text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800"
           aria-label="${t("mobileCategory.allCategories")}" data-i18n-aria-label="mobileCategory.allCategories"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -170,17 +172,17 @@ export function initMobileCategoryBar(): void {
       if (!label) return;
 
       if (id === catId) {
-        label.className = "flex-1 text-[15px] font-semibold text-gray-900 dark:text-white";
+        label.className = "flex-1 text-[13px] min-[400px]:text-[14px] sm:text-[15px] font-semibold text-gray-900 dark:text-white";
         if (radio)
           radio.className =
-            "mcb-sheet-radio flex-shrink-0 w-5 h-5 rounded-full border-2 border-primary-500 bg-primary-500 flex items-center justify-center transition-colors";
-        if (radioDot) radioDot.className = "w-2 h-2 rounded-full bg-white transition-colors";
+            "mcb-sheet-radio flex-shrink-0 w-4 h-4 min-[400px]:w-5 min-[400px]:h-5 rounded-full border-2 border-primary-500 bg-primary-500 flex items-center justify-center transition-colors";
+        if (radioDot) radioDot.className = "w-1.5 h-1.5 min-[400px]:w-2 min-[400px]:h-2 rounded-full bg-white transition-colors";
       } else {
-        label.className = "flex-1 text-[15px] text-gray-800 dark:text-gray-300";
+        label.className = "flex-1 text-[13px] min-[400px]:text-[14px] sm:text-[15px] text-gray-800 dark:text-gray-300";
         if (radio)
           radio.className =
-            "mcb-sheet-radio flex-shrink-0 w-5 h-5 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-transparent flex items-center justify-center transition-colors";
-        if (radioDot) radioDot.className = "w-2 h-2 rounded-full bg-transparent transition-colors";
+            "mcb-sheet-radio flex-shrink-0 w-4 h-4 min-[400px]:w-5 min-[400px]:h-5 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-transparent flex items-center justify-center transition-colors";
+        if (radioDot) radioDot.className = "w-1.5 h-1.5 min-[400px]:w-2 min-[400px]:h-2 rounded-full bg-transparent transition-colors";
       }
     });
 
@@ -189,7 +191,7 @@ export function initMobileCategoryBar(): void {
     if (cat && productsContainer) {
       productsContainer.innerHTML = cat.children
         .slice(0, 10)
-        .map((ch) => renderMobileSubcategory(ch.name, ch.slug))
+        .map((ch) => renderMobileSubcategory(ch.name, ch.slug, ch.image))
         .join("");
     }
   }
@@ -299,12 +301,12 @@ export function initMobileCategoryBar(): void {
           (cat, i) => `
         <button
           type="button"
-          class="mcb-sheet-item flex items-center w-full px-5 py-4 text-left transition-colors border-b border-gray-50 dark:border-gray-700/50"
+          class="mcb-sheet-item th-no-press flex items-center w-full px-3 min-[400px]:px-4 sm:px-5 py-2.5 min-[400px]:py-3 sm:py-4 text-left transition-colors border-b border-gray-50 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/40"
           data-mcb-sheet-cat="${cat.id}"
         >
-          <span class="flex-1 text-[15px] ${i === 0 ? "font-semibold text-gray-900 dark:text-white" : "text-gray-800 dark:text-gray-300"}">${cat.name}</span>
-          <span class="mcb-sheet-radio flex-shrink-0 w-5 h-5 rounded-full border-2 ${i === 0 ? "border-primary-500 bg-primary-500" : "border-gray-300 dark:border-gray-600 bg-transparent"} flex items-center justify-center transition-colors">
-            <span class="w-2 h-2 rounded-full ${i === 0 ? "bg-white" : "bg-transparent"} transition-colors"></span>
+          <span class="flex-1 text-[13px] min-[400px]:text-[14px] sm:text-[15px] ${i === 0 ? "font-semibold text-gray-900 dark:text-white" : "text-gray-800 dark:text-gray-300"}">${cat.name}</span>
+          <span class="mcb-sheet-radio flex-shrink-0 w-4 h-4 min-[400px]:w-5 min-[400px]:h-5 rounded-full border-2 ${i === 0 ? "border-primary-500 bg-primary-500" : "border-gray-300 dark:border-gray-600 bg-transparent"} flex items-center justify-center transition-colors">
+            <span class="w-1.5 h-1.5 min-[400px]:w-2 min-[400px]:h-2 rounded-full ${i === 0 ? "bg-white" : "bg-transparent"} transition-colors"></span>
           </span>
         </button>
       `
@@ -327,7 +329,7 @@ export function initMobileCategoryBar(): void {
     if (cats[0]) {
       productsContainer.innerHTML = cats[0].children
         .slice(0, 10)
-        .map((ch) => renderMobileSubcategory(ch.name, ch.slug))
+        .map((ch) => renderMobileSubcategory(ch.name, ch.slug, ch.image))
         .join("");
     }
   });
