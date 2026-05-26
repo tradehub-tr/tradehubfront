@@ -1,3 +1,32 @@
+## [v1.1.9-beta.20] - 2026-05-26 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(pricing): hardcoded fiyatlandırma kaldırıldı, backend API entegrasyonu (@boraydeger32)
+  - PricingPageLayout statik PLANS array kaldırıldı, Alpine x-for ile backend'den dinamik render (responsive grid: 2/3/4 sütun plan sayısına göre)
+  - sellPricing Alpine data'sına fetchPricingPlans() + SWR cache entegre edildi
+  - Badge color enum'a green/blue eklendi (backend Select ile uyum)
+  - pricingService.ts cta_action type'tan learn_more kaldırıldı
+  - i18n dead string temizliği: tr.ts ve en.ts'den 42 kullanılmayan hardcoded plan/feature/comparison key'i silindi
+  - Yeni i18n key'leri: free, trialDays, loadError
+- feat(ui): mobile/tablet responsive tasarım iyileştirmeleri ve tam ekran kategori (@ahmeetseker)
+  - BottomNav: xl breakpoint'e genişletildi, tam ekran kategori overlay eklendi (sidebar +
+  - TopBar: tablet/mobil uyumlu arama ve navigasyon düzenlemesi
+  - Cart/Checkout: responsive boyut ve spacing iyileştirmeleri
+  - Hero bileşenleri (ProductGrid, TopDeals, TopRanking, vb.): mobil spacing/font
+  - Product detay (MobileLayout, QAModal, ReviewsModal): mobil uyum düzeltmeleri
+  - Footer: mobil grid ve font boyutu optimizasyonu
+  - FloatingPanel: mobil için rounded-full ve konum ayarı
+  - i18n: bottomNav ve checkout için yeni TR/EN çeviri anahtarları eklendi
+
+### Duzeltildi
+- fix(help): bozuk yardım merkezi linklerini nginx pretty URL'lerine çevir (@ahmeetseker)
+- fix(checkout): company field optional, alert→showToast (@boraydeger32)
+  - Remove "company" from requiredFields in validateAddAddressForm and handleSubmit (UI label already says optional, backend enforces for Business addresses only)
+  - Replace 3 alert() calls with showToast({ type: "error" }) for address errors (save, delete, set default) — consistent with rest of storefront UX
+
+---
 ## [v1.1.9-beta.19] - 2026-05-26 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
