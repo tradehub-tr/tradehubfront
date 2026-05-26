@@ -18,6 +18,7 @@ import { showReviewsModal } from "./ReviewsModal";
 import { showQAModal } from "./QAModal";
 import { RelatedProducts } from "./RelatedProducts";
 import { SocialProofBadge } from "./SocialProofBadge";
+import { getSellerUrl } from "../../utils/sellerUrl";
 
 // Product loaded lazily — getCurrentProduct() called inside functions
 
@@ -231,49 +232,37 @@ export function MobileProductLayout(): string {
     : "";
 
   const titleSection = `
-    <div id="pdm-title-section" class="flex flex-col gap-1 pt-3.5 px-4 pb-1.5 max-[374px]:pt-3 max-[374px]:px-3 max-[374px]:pb-1.5 bg-surface">
-      <div id="pdm-title-row" class="flex items-start justify-between gap-3">
+    <div id="pdm-title-section" class="flex flex-col gap-2 pt-3.5 px-4 pb-3 max-[374px]:pt-3 max-[374px]:px-3 max-[374px]:pb-2.5 bg-surface">
+      <div id="pdm-title-row" class="flex items-start justify-between gap-2">
         <h1 id="pdm-product-title" class="text-[15px] max-[374px]:text-sm font-semibold leading-[1.45] text-text-heading m-0 flex-1 line-clamp-3">${p.title}</h1>
         <button type="button" class="pdm-share-btn shrink-0 w-8 h-8 border-none bg-none cursor-pointer text-text-muted p-1 flex items-center justify-center" aria-label="${t("product.share")}">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
         </button>
       </div>
-      <div class="flex items-center justify-between gap-2 px-4 pb-2">
-        <div id="pdm-reviews-row" class="flex items-center gap-1.5 text-[13px] max-[374px]:text-xs text-text-muted cursor-pointer">
-          <span class="pdm-stars flex gap-0.5 text-[#f5a623] [&_svg]:w-3.5 [&_svg]:h-3.5">${renderStars(p.rating)}</span>
-          <span class="pdm-stars flex gap-0.5 text-[#f5a623]">${renderStars(p.rating)}</span>
-          <span>${t("product.reviewsLabel", { count: String(p.reviewCount) })}</span>
-        </div>
-        <button
-          type="button"
-          id="pdm-write-review-btn"
-          class="th-btn-dark h-9 px-3 rounded-full text-[12px] font-semibold inline-flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
-          disabled
-          title="Bu ürünü yorumlayabilmek için doğrulanmış bir siparişiniz olmalı"
-        >
-          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487a2.032 2.032 0 112.872 2.872L7.5 21.613H4v-3.5L16.862 4.487z"/></svg>
-          Yorum Yaz
-        </button>
+
+      <div id="pdm-reviews-row" class="flex items-center gap-1.5 text-[13px] max-[374px]:text-xs text-text-muted cursor-pointer">
+        <span class="pdm-stars flex gap-0.5 text-[#f5a623] [&_svg]:w-3.5 [&_svg]:h-3.5">${renderStars(p.rating)}</span>
+        <span>${t("product.reviewsLabel", { count: String(p.reviewCount) })}</span>
       </div>
-      <!-- İkincil linkler: Tüm yorumlar + Soru & Cevap (mobile-first, sade) -->
-      <div class="flex items-center gap-4 px-4 pb-1">
+
+      <div class="flex items-center gap-3 pt-0.5">
         <button
           type="button"
           id="pdm-view-reviews-btn"
-          class="py-2 text-[12px] text-primary font-medium inline-flex items-center gap-1 cursor-pointer hover:underline"
+          class="text-[12px] text-text-muted font-medium inline-flex items-center gap-1 cursor-pointer border border-border-default rounded-full px-3 py-1.5 bg-surface transition-colors duration-150 active:bg-surface-raised"
           aria-label="Tüm yorumları görüntüle"
         >
-          Tüm yorumları görüntüle
-          <span aria-hidden="true">→</span>
+          ${t("product.reviewsLabel", { count: String(p.reviewCount) })}
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
         </button>
         <button
           type="button"
           id="pdm-view-qa-btn"
-          class="py-2 text-[12px] text-primary font-medium inline-flex items-center gap-1 cursor-pointer hover:underline"
+          class="text-[12px] text-text-muted font-medium inline-flex items-center gap-1 cursor-pointer border border-border-default rounded-full px-3 py-1.5 bg-surface transition-colors duration-150 active:bg-surface-raised"
           aria-label="Soru ve cevaplar"
         >
-          Soru &amp; Cevap
-          <span aria-hidden="true">→</span>
+          ${t("product.qaLabel")}
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
         </button>
       </div>
     </div>
@@ -331,19 +320,22 @@ export function MobileProductLayout(): string {
   // ── Section 11: Supplier Card ──
 
   const si = p.supplier;
+  const sellerProfileUrl = getSellerUrl({ id: si.id });
+  const sellerProductsUrl = `${sellerProfileUrl}#products`;
   const supplierSection = `
     <div class="pdm-section-divider h-2 bg-surface-raised"></div>
-    <div id="pdm-supplier-card" class="bg-surface p-4 max-[374px]:mx-3 max-[374px]:mb-4 max-[374px]:py-3.5 max-[374px]:px-3">
-      <div class="pdm-supplier-header flex items-center gap-3 mb-1">
-        <div class="pdm-supplier-logo w-12 h-12 rounded-lg bg-[#fef9e7] flex items-center justify-center shrink-0 text-lg font-bold text-primary-600">${si.name.charAt(0)}${si.name.split(" ")[1]?.charAt(0) || ""}</div>
-        <div>
-          <div class="pdm-supplier-name text-sm font-bold text-text-heading leading-[1.3]">${si.name}</div>
-          <div class="pdm-supplier-meta text-xs text-text-muted mt-0.5 flex items-center gap-1.5">
+    <div id="pdm-supplier-card" class="bg-surface px-4 py-3.5 max-[374px]:px-3 max-[374px]:py-3">
+      <a href="${sellerProfileUrl}" class="pdm-supplier-header flex items-center gap-3 mb-3 no-underline">
+        <div class="pdm-supplier-logo w-10 h-10 rounded-lg bg-[#fef9e7] flex items-center justify-center shrink-0 text-sm font-bold text-primary-600">${si.name.charAt(0)}${si.name.split(" ")[1]?.charAt(0) || ""}</div>
+        <div class="min-w-0 flex-1">
+          <div class="pdm-supplier-name text-[13px] font-bold text-text-heading leading-snug truncate">${si.name}</div>
+          <div class="pdm-supplier-meta text-[11px] text-text-muted mt-0.5 flex items-center gap-1">
             ${t("product.yearsLabel", { count: String(si.yearsInBusiness) })} <span>&middot;</span> ${si.verified ? t("product.verifiedSupplier") : ""}
           </div>
         </div>
-      </div>
-      <div class="pdm-supplier-stats grid grid-cols-3 border border-border-default rounded-lg my-3 overflow-hidden">
+        <svg class="shrink-0 text-text-muted" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <div class="pdm-supplier-stats grid grid-cols-3 border border-border-default rounded-md overflow-hidden">
         ${[
           { val: si.onTimeDelivery, label: t("product.onTimeDelivery") },
           { val: si.annualRevenue, label: t("product.annualRevenue") },
@@ -351,14 +343,17 @@ export function MobileProductLayout(): string {
         ]
           .map(
             (s) => `
-          <div class="pdm-supplier-stat flex flex-col items-center py-2.5 px-1 border-r border-border-default last:border-r-0 text-center"><strong class="text-sm font-bold text-text-heading">${s.val}</strong><span class="text-[11px] text-text-placeholder mt-0.5">${s.label}</span></div>
+          <div class="pdm-supplier-stat flex flex-col items-center py-2 px-1 border-r border-border-default last:border-r-0 text-center">
+            <strong class="text-[13px] max-[374px]:text-xs font-bold text-text-heading leading-snug">${s.val}</strong>
+            <span class="text-[10px] max-[374px]:text-[9px] text-text-placeholder mt-px leading-snug">${s.label}</span>
+          </div>
         `
           )
           .join("")}
       </div>
-      <div class="pdm-supplier-btns grid grid-cols-2 gap-2">
-        <button type="button" class="pdm-supplier-btn th-btn-outline text-[13px] cursor-pointer text-center transition-[background] duration-150 active:bg-[var(--btn-outline-hover-bg,var(--color-surface-raised,#f5f5f5))]">${t("product.companyProfile")}</button>
-        <button type="button" class="pdm-supplier-btn th-btn-outline text-[13px] cursor-pointer text-center transition-[background] duration-150 active:bg-[var(--btn-outline-hover-bg,var(--color-surface-raised,#f5f5f5))]">${t("product.otherProducts")}</button>
+      <div class="pdm-supplier-btns grid grid-cols-2 gap-2 mt-3">
+        <a href="${sellerProfileUrl}" class="h-9 rounded-md border border-border-medium bg-surface text-[12px] font-semibold text-text-heading cursor-pointer text-center transition-colors duration-150 active:bg-surface-raised inline-flex items-center justify-center no-underline">${t("product.companyProfile")}</a>
+        <a href="${sellerProductsUrl}" class="h-9 rounded-md border border-border-medium bg-surface text-[12px] font-semibold text-text-heading cursor-pointer text-center transition-colors duration-150 active:bg-surface-raised inline-flex items-center justify-center no-underline">${t("product.otherProducts")}</a>
       </div>
     </div>
   `;

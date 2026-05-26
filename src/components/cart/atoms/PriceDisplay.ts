@@ -25,7 +25,7 @@ export function PriceDisplay({
   let unitHtml = "";
   if (unit) {
     unitHtml = `
-      <span class="inline-flex items-center text-[12px] text-[#666] ml-[2px] font-normal">
+      <span class="inline-flex items-center text-[10px] sm:text-[12px] text-[#666] ml-[2px] font-normal">
         ${unit}
       </span>
     `;
@@ -33,7 +33,7 @@ export function PriceDisplay({
 
   return `
     <div class="inline-flex items-baseline relative group cursor-pointer select-none">
-      <span class="text-[16px] font-[700] text-[#111] whitespace-nowrap leading-none">${price}</span>
+      <span class="text-[13px] sm:text-[16px] font-[700] text-[#111] whitespace-nowrap leading-none">${price}</span>
       ${unitHtml}
     </div>
   `;

@@ -48,10 +48,10 @@ export function ReviewsModal(): string {
         class="rv-modal bg-[var(--color-surface,#ffffff)] max-w-[800px] w-[95%] max-h-[85vh] rounded-[var(--radius-modal,16px)] shadow-[var(--shadow-modal)] flex flex-col z-[var(--z-modal,50)] max-sm:!w-full max-sm:!h-full max-sm:!max-h-[100vh] max-sm:!rounded-none"
       >
         <!-- Fixed Header -->
-        <div class="rv-modal-header flex justify-between items-center px-6 py-5 shrink-0 border-b border-[var(--color-border-default,#e5e5e5)] max-sm:!p-4">
-          <span class="rv-modal-title text-[18px] font-semibold text-[var(--pd-title-color,#111827)]" id="rv-modal-title">${t("product.storeReviewsTitle", { count: String(p.storeReviewCount) })}</span>
-          <button type="button" @click="close()" class="rv-modal-close w-8 h-8 flex items-center justify-center rounded-full border-none bg-none cursor-pointer text-[var(--pd-rating-text-color,#6b7280)] transition-[background] duration-150 hover:bg-[var(--pd-spec-header-bg,#f9fafb)] hover:text-[var(--pd-title-color,#111827)]" id="rv-modal-close">
-            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <div class="rv-modal-header flex justify-between items-center px-6 py-5 shrink-0 border-b border-[var(--color-border-default,#e5e5e5)] max-sm:!px-4 max-sm:!py-3">
+          <span class="rv-modal-title text-[18px] font-semibold text-[var(--pd-title-color,#111827)] max-sm:!text-[15px]" id="rv-modal-title">${t("product.storeReviewsTitle", { count: String(p.storeReviewCount) })}</span>
+          <button type="button" @click="close()" class="rv-modal-close w-8 h-8 flex items-center justify-center rounded-full border-none bg-none cursor-pointer text-[var(--pd-rating-text-color,#6b7280)] transition-[background] duration-150 hover:bg-[var(--pd-spec-header-bg,#f9fafb)] hover:text-[var(--pd-title-color,#111827)] max-sm:!w-7 max-sm:!h-7 shrink-0" id="rv-modal-close">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="max-sm:!w-4 max-sm:!h-4">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
             </svg>
           </button>
@@ -60,7 +60,7 @@ export function ReviewsModal(): string {
         <!-- Scrollable Body -->
         <div class="rv-modal-body overflow-y-auto px-6 pb-6 flex-1 max-sm:!px-4 max-sm:!pb-4" @click="ratingOpen = false; sortOpen = false">
           <!-- Filter Row -->
-          <div class="rv-filter-row flex items-center gap-2 flex-wrap mb-4">
+          <div class="rv-filter-row flex items-center gap-1.5 sm:gap-2 flex-wrap mb-3 sm:mb-4 pt-3 sm:pt-0">
             <button type="button" class="rv-filter-pill px-3.5 py-1.5 text-[12px] font-medium rounded-full border border-[var(--pd-spec-border,#e5e5e5)] bg-[var(--color-surface,#ffffff)] text-[var(--pd-rating-text-color,#6b7280)] cursor-pointer transition-all duration-150 whitespace-nowrap [&.active]:border-[var(--pd-tab-active-border,#cc9900)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:bg-[var(--pd-price-tier-active-bg,#fef9e7)] [&:hover:not(.active)]:border-[var(--color-border-medium,#d1d5db)]" :class="{ active: filterType === 'all' }" @click="setFilter('all')">${t("product.allFilter")}</button>
             <button type="button" class="rv-filter-pill px-3.5 py-1.5 text-[12px] font-medium rounded-full border border-[var(--pd-spec-border,#e5e5e5)] bg-[var(--color-surface,#ffffff)] text-[var(--pd-rating-text-color,#6b7280)] cursor-pointer transition-all duration-150 whitespace-nowrap [&.active]:border-[var(--pd-tab-active-border,#cc9900)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:bg-[var(--pd-price-tier-active-bg,#fef9e7)] [&:hover:not(.active)]:border-[var(--color-border-medium,#d1d5db)]" id="rv-modal-photo-filter" :class="{ active: filterType === 'photo' }" @click="setFilter('photo')">${t("product.withPhotos", { count: String(photoReviewCount) })}</button>
 
@@ -94,8 +94,8 @@ export function ReviewsModal(): string {
           </div>
 
           <!-- Mention Tags -->
-          <div class="flex gap-2 flex-wrap mb-5">
-            <span style="font-size: 12px; color: var(--pd-rating-text-color, #6b7280); align-self: center;">${t("product.frequentMentions")}</span>
+          <div class="flex gap-1.5 sm:gap-2 flex-wrap mb-3 sm:mb-5">
+            <span class="text-[11px] sm:text-[12px] self-center" style="color: var(--pd-rating-text-color, #6b7280);">${t("product.frequentMentions")}</span>
             ${p.reviewMentionTags
               .map(
                 (tag) => `
@@ -106,10 +106,9 @@ export function ReviewsModal(): string {
           </div>
 
           <!-- Language Toggle -->
-          <div class="rv-lang-row flex items-center gap-2 mt-2 mb-3">
-            <svg class="w-3.5 h-3.5 shrink-0 text-[var(--pd-rating-text-color,#6b7280)]" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v2.197A5.973 5.973 0 0110 16v-2a2 2 0 00-2-2 2 2 0 01-2-2 2 2 0 00-1.668-1.973z" clip-rule="evenodd"/></svg>
-            <span class="text-[13px] text-[var(--pd-rating-text-color,#6b7280)]">${t("product.langNote")}</span>
-            <a class="rv-lang-toggle-link text-[13px] font-medium text-[var(--pd-rating-text-color,#6b7280)] underline cursor-pointer hover:text-[var(--pd-title-color,#111827)]" href="javascript:void(0)">${t("product.showOriginal")}</a>
+          <div class="rv-lang-row flex items-start sm:items-center gap-1.5 sm:gap-2 mt-2 mb-3">
+            <svg class="w-3.5 h-3.5 shrink-0 mt-0.5 sm:mt-0 text-[var(--pd-rating-text-color,#6b7280)]" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v2.197A5.973 5.973 0 0110 16v-2a2 2 0 00-2-2 2 2 0 01-2-2 2 2 0 00-1.668-1.973z" clip-rule="evenodd"/></svg>
+            <span class="text-[11px] sm:text-[13px] text-[var(--pd-rating-text-color,#6b7280)] leading-snug">${t("product.langNote")} <a class="rv-lang-toggle-link font-medium text-[var(--pd-rating-text-color,#6b7280)] underline cursor-pointer hover:text-[var(--pd-title-color,#111827)]" href="javascript:void(0)">${t("product.showOriginal")}</a></span>
           </div>
 
           <!-- Review Cards (with product thumbnails) -->

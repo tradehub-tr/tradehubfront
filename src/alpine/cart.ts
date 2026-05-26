@@ -150,7 +150,7 @@ Alpine.data("cartPage", () => ({
           );
           if (supplierCheck) {
             const productChecks = supplierCard.querySelectorAll<HTMLInputElement>(
-              ".sc-c-spu-container-new > .flex .next-checkbox-input"
+              ".sc-c-spu-container-new > .sc-c-spu-head .next-checkbox-input"
             );
             const allSelected = Array.from(productChecks).every((checkbox) => checkbox.checked);
             const someSelected = Array.from(productChecks).some(
@@ -376,7 +376,7 @@ Alpine.data("cartPage", () => ({
       : null;
     const productChecks = Array.from(
       supplier.querySelectorAll<HTMLInputElement>(
-        ".sc-c-spu-container-new > .flex .next-checkbox-input"
+        ".sc-c-spu-container-new > .sc-c-spu-head .next-checkbox-input"
       )
     );
 
@@ -599,7 +599,7 @@ Alpine.data("cartPage", () => ({
     track.innerHTML = items
       .map(
         (item) => `
-      <div class="relative w-16 h-16 rounded-md overflow-hidden border border-border-default shrink-0">
+      <div class="relative w-14 h-14 sm:w-16 sm:h-16 rounded-md overflow-hidden border border-border-default shrink-0">
         <img src="${item.image}" alt="SKU" class="w-full h-full object-cover" />
         <span class="absolute right-0 bottom-0 px-1 py-[2px] rounded-tl bg-black/65 text-white text-[11px] font-bold leading-none">${item.quantity}</span>
       </div>
@@ -659,14 +659,14 @@ Alpine.data("cartPage", () => ({
       modal.className = "fixed inset-0 z-[9999] hidden items-center justify-center";
       modal.innerHTML = `
         <div class="absolute inset-0 bg-black/40 backdrop-blur-[2px] transition-opacity" data-modal-backdrop></div>
-        <div class="relative bg-white rounded-md shadow-2xl w-[90vw] max-w-[480px] max-h-[80vh] flex flex-col overflow-hidden" style="animation: modalSlideUp 0.25s ease-out;">
-          <div class="flex items-center justify-between px-5 py-4 border-b border-[#e5e5e5]">
-            <h3 class="text-base font-bold text-[#222]"><span>${t("cart.orderSummary")}</span> — <span class="sc-modal-item-count text-[#f59e0b]"></span></h3>
-            <button type="button" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#f5f5f5] transition-colors" data-close-view-all aria-label="${t("common.close")}">
-              <svg class="w-5 h-5 text-[#666]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        <div class="relative bg-white rounded-md shadow-2xl w-[94vw] max-w-[480px] max-h-[80vh] flex flex-col overflow-hidden" style="animation: modalSlideUp 0.25s ease-out;">
+          <div class="flex items-center justify-between px-3 py-3 sm:px-5 sm:py-4 border-b border-[#e5e5e5]">
+            <h3 class="text-[14px] sm:text-base font-bold text-[#222]"><span>${t("cart.orderSummary")}</span> — <span class="sc-modal-item-count text-primary-500"></span></h3>
+            <button type="button" class="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full hover:bg-[#f5f5f5] transition-colors shrink-0" data-close-view-all aria-label="${t("common.close")}">
+              <svg class="w-4 h-4 sm:w-5 sm:h-5 text-[#666]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
           </div>
-          <div class="overflow-y-auto p-5 flex-1 sc-modal-suppliers-content"></div>
+          <div class="overflow-y-auto p-3 sm:p-5 flex-1 sc-modal-suppliers-content"></div>
         </div>`;
       document.body.appendChild(modal);
     }
@@ -725,8 +725,8 @@ Alpine.data("cartPage", () => ({
         const skuCards = selectedSkus
           .map(
             (sk) => `
-            <div class="flex flex-col items-center gap-1.5 w-[72px] flex-shrink-0">
-              <div class="relative w-[72px] h-[72px] rounded-lg overflow-hidden border border-[#e5e5e5]">
+            <div class="flex flex-col items-center gap-1 sm:gap-1.5 w-[60px] sm:w-[72px] flex-shrink-0">
+              <div class="relative w-[60px] h-[60px] sm:w-[72px] sm:h-[72px] rounded-lg overflow-hidden border border-[#e5e5e5]">
                 <img src="${sk.image}" alt="" class="w-full h-full object-cover" />
                 <span class="absolute bottom-0 right-0 bg-black/60 text-white rounded-tl text-[11px] font-bold leading-4 px-1 py-px">${sk.quantity}</span>
               </div>
@@ -738,8 +738,8 @@ Alpine.data("cartPage", () => ({
         return `
           <div class="mb-4 last:mb-0">
             <div class="flex items-center gap-2 mb-3">
-              <div class="w-5 h-5 rounded-full bg-[#f59e0b]/10 flex items-center justify-center flex-shrink-0">
-                <svg class="w-3 h-3 text-[#f59e0b]" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/></svg>
+              <div class="w-5 h-5 rounded-full bg-primary-500/10 flex items-center justify-center flex-shrink-0">
+                <svg class="w-3 h-3 text-primary-500" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/></svg>
               </div>
               <span class="text-[13px] font-semibold text-[#222] truncate">${supplier.name}</span>
               <span class="text-[11px] text-[#999] flex-shrink-0">(${selectedSkus.length})</span>

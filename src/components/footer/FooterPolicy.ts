@@ -38,7 +38,7 @@ export function FooterPolicy(): string {
       <div class="container-boxed px-3 sm:px-4">
         <div class="flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4">
           <!-- Policy Links -->
-          <div class="flex flex-wrap items-center justify-center md:justify-start gap-x-3 sm:gap-x-4 gap-y-1.5 text-xs dark:text-gray-400" style="color:var(--footer-text-color)">
+          <div class="flex flex-wrap items-center justify-center md:justify-start gap-x-2 sm:gap-x-3 md:gap-x-4 gap-y-1 sm:gap-y-1.5 text-[10px] sm:text-xs dark:text-gray-400" style="color:var(--footer-text-color)">
             ${policyLinksDef
               .map(
                 (link) => `
@@ -49,7 +49,7 @@ export function FooterPolicy(): string {
           </div>
 
           <!-- Operator + Copyright -->
-          <div class="text-xs dark:text-gray-500 text-center md:text-right whitespace-normal" style="color:var(--footer-text-color)">
+          <div class="text-[10px] sm:text-xs dark:text-gray-500 text-center md:text-right whitespace-normal" style="color:var(--footer-text-color)">
             <p class="mb-0.5" data-i18n="footer.operatedBy">${t("footer.operatedBy")}</p>
             <p data-i18n="footer.copyright">${t("footer.copyright")}</p>
           </div>

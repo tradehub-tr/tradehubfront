@@ -11,7 +11,7 @@ export function CartHeader({ title }: CartHeaderProps = {}): string {
   const heading = title ?? "Sepetim";
   return `
     <header class="sc-c-page-head flex items-center justify-between gap-4 mb-1 pt-1 max-[720px]:flex-wrap">
-      <h1 class="text-2xl sm:text-3xl font-bold text-text-heading">${heading}</h1>
+      <h1 class="text-xl max-[380px]:text-lg sm:text-3xl font-bold text-text-heading">${heading}</h1>
     </header>
   `.trim();
 }

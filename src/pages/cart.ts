@@ -42,8 +42,8 @@ function renderPage(suppliers: ReturnType<typeof cartStore.getSuppliers>, summar
     ${CheckoutMinimalHeader()}
 
     <!-- Main Content -->
-    <main class="min-h-screen bg-surface relative z-10 pt-4 flex flex-col">
-      <div class="max-w-[1680px] mx-auto px-4 w-full">
+    <main class="min-h-screen bg-surface relative z-10 pt-3 sm:pt-4 flex flex-col">
+      <div class="max-w-[1680px] mx-auto px-3 max-[380px]:px-2.5 sm:px-4 w-full">
         ${Breadcrumb([{ label: 'Sepetim' }])}
       </div>
 
@@ -52,8 +52,8 @@ function renderPage(suppliers: ReturnType<typeof cartStore.getSuppliers>, summar
     </main>
 
     <!-- Footer -->
-    <footer class="relative z-10 mt-12 border-t border-border-default pt-12 pb-8 bg-white">
-      <div class="max-w-[1680px] mx-auto px-4 w-full">
+    <footer class="relative z-10 mt-8 sm:mt-12 border-t border-border-default pt-8 sm:pt-12 pb-6 sm:pb-8 bg-white">
+      <div class="max-w-[1680px] mx-auto px-3 max-[380px]:px-2.5 sm:px-4 w-full">
         ${FooterLinks()}
       </div>
     </footer>

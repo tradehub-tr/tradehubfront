@@ -18,7 +18,6 @@ import { initHeaderNotice } from "./components/header/HeaderNotice";
 // Header components
 import {
   TopBar,
-  MobileSearchTabs,
   initMobileDrawer,
   SubHeader,
   initStickyHeaderSearch,
@@ -51,7 +50,7 @@ import {
 import { FooterLinks } from "./components/footer";
 
 // Floating components
-import { FloatingPanel } from "./components/floating";
+import { FloatingPanel, BottomNav, initBottomNav } from "./components/floating";
 
 // Alpine.js
 import { startAlpine } from "./alpine";
@@ -67,9 +66,6 @@ appEl.innerHTML = `
     ${TopBar()}
     ${SubHeader()}
   </div>
-
-  <!-- Mobile Search Tabs (Products | Manufacturers) — non-sticky -->
-  ${MobileSearchTabs("products", { hideWorldwide: true })}
 
   <!-- Mobile Category Bar (iSTOC-style, mobile/tablet only) -->
   ${MobileCategoryBar()}
@@ -117,6 +113,9 @@ appEl.innerHTML = `
   <!-- Floating Panel -->
   ${FloatingPanel()}
 
+  <!-- Bottom Navigation (mobile/tablet) -->
+  ${BottomNav()}
+
 `;
 
 // Initialize custom component behaviors FIRST (before Flowbite can interfere)
@@ -141,6 +140,7 @@ initTailoredSelections();
 initProductGrid();
 
 initMobileDrawer();
+initBottomNav();
 initHeaderCart();
 initLanguageSelector();
 // Header notice'ı arka planda taze veriyle güncelle (cache zaten gösterildi)

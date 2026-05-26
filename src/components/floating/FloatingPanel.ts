@@ -123,14 +123,14 @@ function renderScrollTopItem(): string {
       x-transition:leave-start="opacity-100 scale-100"
       x-transition:leave-end="opacity-0 scale-95"
       @click="scrollToTop()"
-      class="flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-gray-100 transition-colors duration-150 cursor-pointer"
+      class="flex items-center justify-center w-9 h-9 md:w-auto md:h-auto md:px-2 md:py-2 rounded-full md:rounded-lg hover:bg-gray-100 transition-colors duration-150 cursor-pointer"
       aria-label="En üste çık"
     >
-      <svg class="shrink-0" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <svg class="shrink-0 w-5 h-5 md:w-7 md:h-7" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path d="M24.5 4.66663H3.5V6.27079H24.5V4.66663Z" fill="#222222"></path>
         <path d="M14 8.19898L5.84953 16.3495L6.98385 17.4838L13.1979 11.2697L13.1979 24.5H14.8021L14.8021 11.2697L21.0162 17.4838L22.1505 16.3495L14 8.19898Z" fill="#222222"></path>
       </svg>
-      <span class="hidden group-hover:inline text-xs text-gray-700 whitespace-nowrap">En üste çık</span>
+      <span class="hidden group-hover:md:inline text-xs text-gray-700 whitespace-nowrap">En üste çık</span>
     </button>
   `;
 }
@@ -241,14 +241,14 @@ export function FloatingPanel(): string {
         x-transition:leave="transition ease-in duration-150"
         x-transition:leave-start="opacity-100 scale-100"
         x-transition:leave-end="opacity-0 scale-95"
-        class="group fixed bottom-16 md:bottom-15 right-0 z-35"
+        class="group fixed bottom-20 md:bottom-15 right-2 md:right-0 z-35"
         aria-label="Quick actions panel"
       >
         <!-- Görsel Arama (Lens) geçici olarak devre dışı -->
         <!-- Lens Popup: ${/* renderLensPopup() — disabled */ ""} -->
 
         <!-- Sidebar butonları -->
-        <div class="inline-flex flex-col gap-2 bg-white rounded-l-[8px] shadow-[0_2px_6px_2px_rgba(0,0,0,0.12)] p-2">
+        <div class="inline-flex flex-col gap-2 bg-white rounded-full md:rounded-l-[8px] md:rounded-r-none shadow-[0_2px_8px_rgba(0,0,0,0.12)] p-1.5 md:p-2">
           <!-- DISABLED: Mesajlarım — ileride geliştirilecek -->
           <!-- ${/* renderMessagesItem() */ ""} -->
 

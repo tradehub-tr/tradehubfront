@@ -670,7 +670,7 @@ appEl.innerHTML = `
 
   <!-- Main Content -->
   <main>
-    <div class="max-w-[1680px] mx-auto px-4">
+    <div class="max-w-[1680px] mx-auto px-3 sm:px-4">
       ${Breadcrumb([{ label: t('cart.title'), href: '/pages/cart.html' }, { label: t('checkout.pageTitle') }])}
     </div>
     ${CheckoutLayout({

@@ -71,16 +71,16 @@ function renderDealCard(card: TopDealCard): string {
   const discountBadge =
     card.discountPercent && card.discountPercent > 0
       ? `<span
-         class="absolute top-2 left-2 z-10 inline-flex items-center rounded-sm font-bold leading-none text-white"
-         style="background-color: var(--topdeals-badge-bg, #DE0505); padding: 3px 5px; font-size: 10px;"
+         class="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 z-10 inline-flex items-center rounded-sm font-bold leading-none text-white text-[8px] sm:text-[10px]"
+         style="background-color: var(--topdeals-badge-bg, #DE0505); padding: 2px 4px;"
        >%${card.discountPercent}</span>`
       : "";
 
   // Strikethrough original price — only when present and different from current.
   const originalPriceLabel = card.originalPrice
     ? `<span
-         class="line-through shrink-0"
-         style="color: var(--topdeals-original-price-color, #9ca3af); font-size: 11px;"
+         class="line-through shrink-0 text-[9px] sm:text-[11px]"
+         style="color: var(--topdeals-original-price-color, #9ca3af);"
        >${card.originalPrice}</span>`
     : "";
 
@@ -98,8 +98,8 @@ function renderDealCard(card: TopDealCard): string {
 
       <!-- Product name: 2-line truncate, fixed height so card heights stay aligned -->
       <p
-        class="leading-snug line-clamp-2"
-        style="color: var(--topdeals-name-color, #6b7280); font-size: 13px; min-height: 2.6em;"
+        class="leading-snug line-clamp-2 text-[11px] sm:text-[13px]"
+        style="color: var(--topdeals-name-color, #6b7280); min-height: 2.6em;"
         title="${card.name}"
       >${card.name}</p>
 
@@ -111,8 +111,8 @@ function renderDealCard(card: TopDealCard): string {
         >
           ${lightningBoltIcon()}
           <span
-            class="font-bold leading-none"
-            style="color: var(--topdeals-price-color, #dc2626); font-size: var(--text-product-price, 15px);"
+            class="font-bold leading-none text-[13px] sm:text-[15px]"
+            style="color: var(--topdeals-price-color, #dc2626);"
           >${card.startingPrice || card.price}</span>
         </span>
         ${originalPriceLabel}
@@ -120,8 +120,8 @@ function renderDealCard(card: TopDealCard): string {
 
       <!-- MOQ on its own row, always below the price row -->
       <p
-        class="mt-1 leading-none truncate"
-        style="color: var(--topdeals-moq-color, #9ca3af); font-size: 11px;"
+        class="mt-1 leading-none truncate text-[9px] sm:text-[11px]"
+        style="color: var(--topdeals-moq-color, #9ca3af);"
       ><span data-i18n="topDeals.moq" data-i18n-options='${moqI18nOptions}'>${moqText}</span></p>
     </a>
   `;
@@ -191,20 +191,20 @@ export function TopDeals(): string {
       <div class="container-boxed">
         <div class="rounded-md" style="background-color: var(--topdeals-bg, #F8F8F8); padding: var(--space-card-padding, 16px);">
           <!-- Section header -->
-          <div class="mb-4 flex items-end justify-between gap-4">
-            <div>
+          <div class="mb-3 sm:mb-4 flex items-end justify-between gap-2 sm:gap-4">
+            <div class="min-w-0">
               <h2
-                class="text-[20px] sm:text-[22px] font-bold leading-tight"
+                class="text-[16px] sm:text-[20px] md:text-[22px] font-bold leading-tight"
                 style="color: var(--topdeals-title-color, #111827);"
               ><span data-i18n="topDeals.title">${t("topDeals.title")}</span></h2>
               <p
-                class="mt-0.5 text-[13px]"
+                class="mt-0.5 text-[11px] sm:text-[13px]"
                 style="color: var(--topdeals-subtitle-color, #6b7280);"
               ><span data-i18n="topDeals.subtitle">${t("topDeals.subtitle")}</span></p>
             </div>
             <a
               href="/firsatlar"
-              class="flex-shrink-0 text-[13px] font-semibold transition-colors duration-150 hover:underline"
+              class="flex-shrink-0 text-[11px] sm:text-[13px] font-semibold transition-colors duration-150 hover:underline whitespace-nowrap"
               style="color: var(--topdeals-link-color, #111827);"
             ><span data-i18n="common.viewMore">${t("common.viewMore")}</span> &gt;</a>
           </div>
@@ -212,7 +212,7 @@ export function TopDeals(): string {
           <!-- Fixed 6-product grid -->
           <div
             id="top-deals-grid"
-            class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 lg:gap-4"
+            class="grid grid-cols-2 min-[550px]:grid-cols-3 lg:grid-cols-4 min-[850px]:grid-cols-5 min-[1000px]:grid-cols-6 gap-x-2 sm:gap-x-3 lg:gap-x-4 auto-rows-[0] grid-rows-[auto] overflow-hidden"
             aria-label="Top deal products"
           ></div>
 

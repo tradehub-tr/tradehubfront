@@ -74,36 +74,36 @@ function renderModalShell(): string {
   return `
 		<div
 			id="${MODAL_ID}"
-			class="hidden fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4"
+			class="hidden fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-3 sm:p-4"
 			role="dialog"
 			aria-modal="true"
 			aria-labelledby="${MODAL_ID}-title"
 		>
-			<div class="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
-				<div class="flex items-start gap-4">
-					<div class="w-12 h-12 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center flex-shrink-0">
-						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="text-amber-600 dark:text-amber-400">
+			<div class="bg-white rounded-md max-w-md w-full p-4 sm:p-6 shadow-2xl">
+				<div class="flex items-start gap-3 sm:gap-4">
+					<div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="w-5 h-5 sm:w-6 sm:h-6 text-amber-600">
 							<path d="M12 9v4M12 17h.01" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
 							<path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
 						</svg>
 					</div>
 					<div class="flex-1 min-w-0">
-						<h3 id="${MODAL_ID}-title" class="text-base font-semibold text-gray-900 dark:text-white mb-2"></h3>
-						<p id="${MODAL_ID}-desc" class="text-sm text-gray-600 dark:text-gray-300"></p>
+						<h3 id="${MODAL_ID}-title" class="text-[14px] sm:text-base font-semibold text-gray-900 mb-1.5 sm:mb-2"></h3>
+						<p id="${MODAL_ID}-desc" class="text-[12px] sm:text-sm text-gray-600 leading-relaxed"></p>
 					</div>
 				</div>
-				<div class="flex gap-3 mt-6 justify-end">
+				<div class="flex gap-2 sm:gap-3 mt-4 sm:mt-6">
 					<button
 						type="button"
 						data-kyc-modal-close
-						class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+						class="flex-1 th-btn-outline h-10 sm:h-auto text-[13px] sm:text-[14px]"
 					>
 						${t("cart.kycCtaCancel")}
 					</button>
 					<a
 						id="${MODAL_ID}-cta"
 						href="#"
-						class="px-4 py-2 text-sm font-medium text-white bg-primary-500 hover:bg-primary-600 rounded-lg transition-colors"
+						class="flex-1 th-btn h-10 sm:h-auto text-[13px] sm:text-[14px] text-center no-underline"
 					></a>
 				</div>
 			</div>

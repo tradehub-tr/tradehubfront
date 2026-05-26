@@ -69,7 +69,7 @@ function renderProductCard(card: ProductCard, index: number): string {
 
   return `
     <a
-      class="product-card flex flex-col relative w-full gap-2 overflow-hidden text-sm leading-[18px] text-start no-underline animate-fade-slide-up"
+      class="product-card flex flex-col relative w-full gap-2 overflow-hidden text-sm leading-[18px] text-start no-underline animate-fade-slide-up max-sm:!min-h-0 max-sm:!p-2"
       style="animation-delay: ${index * 60}ms;"
       href="${card.href}"
       target="_blank"
@@ -89,11 +89,11 @@ function renderProductCard(card: ProductCard, index: number): string {
       </div>
 
       <!-- Content area -->
-      <div class="flex flex-col gap-2 w-full min-h-[126px]">
-        <div class="flex flex-col gap-2">
-          <!-- Title (3 lines) -->
-          <div class="product-card__title-wrap h-[54px] overflow-hidden">
-            <div class="product-card__title line-clamp-3 h-[54px]">
+      <div class="flex flex-col gap-1.5 sm:gap-2 w-full min-h-0 sm:min-h-[126px]">
+        <div class="flex flex-col gap-1.5 sm:gap-2">
+          <!-- Title (2 lines mobile, 3 lines desktop) -->
+          <div class="product-card__title-wrap h-[32px] sm:h-[54px] overflow-hidden">
+            <div class="product-card__title line-clamp-2 sm:line-clamp-3 h-[32px] sm:h-[54px] max-sm:!text-xs max-sm:!leading-[1.3]">
               <span title="${safeName}">${card.name}</span>
             </div>
           </div>
@@ -101,20 +101,20 @@ function renderProductCard(card: ProductCard, index: number): string {
           <div class="flex flex-col gap-px">
             <!-- Price + discount -->
             <div class="flex flex-wrap items-center gap-1 min-h-[26px] overflow-hidden">
-              <div class="product-card__price overflow-hidden">${formatPrice(card.price)}</div>
-              ${discountText ? `<div class="product-card__discount">${discountText}</div>` : ""}
+              <div class="product-card__price overflow-hidden max-sm:!text-sm max-sm:!leading-5">${formatPrice(card.price)}</div>
+              ${discountText ? `<div class="product-card__discount max-sm:!text-[11px]">${discountText}</div>` : ""}
             </div>
 
             <!-- MOQ + sold -->
-            <div class="product-card__moq-line overflow-hidden h-[18px] leading-[18px]">
-              <div class="product-card__moq inline mr-1"><bdi>${moqText}</bdi></div>
+            <div class="product-card__moq-line overflow-hidden h-[18px] leading-[18px] max-sm:!text-[11px]">
+              <div class="product-card__moq inline mr-1 max-sm:!text-[11px]"><bdi>${moqText}</bdi></div>
               ${soldText ? `<span class="product-card__stats" title="${soldText}">${soldText}</span>` : ""}
             </div>
 
             <!-- Supplier info -->
             <div class="product-card__supplier flex items-center min-h-[18px] pt-0.5 leading-4">
-              ${supplierYearsText ? `<span class="product-card__supplier-text block overflow-hidden text-ellipsis">${supplierYearsText}</span>` : ""}
-              ${card.supplierCountry ? `<span class="product-card__supplier-text block overflow-hidden text-ellipsis">${card.supplierCountry}</span>` : ""}
+              ${supplierYearsText ? `<span class="product-card__supplier-text block overflow-hidden text-ellipsis max-sm:!text-[10px]">${supplierYearsText}</span>` : ""}
+              ${card.supplierCountry ? `<span class="product-card__supplier-text block overflow-hidden text-ellipsis max-sm:!text-[10px]">${card.supplierCountry}</span>` : ""}
             </div>
           </div>
         </div>
@@ -166,7 +166,7 @@ export function ProductGrid(): string {
       style="background-color: var(--product-bg, #f4f4f4); padding-top: 28px; padding-bottom: 28px;"
     >
       <div class="container-wide">
-        <div id="home-product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 product-grid home-product-grid" style="gap: var(--product-grid-gap, 8px);" role="list" aria-label="Product listings">
+        <div id="home-product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 product-grid home-product-grid" style="gap: var(--product-grid-gap, 8px);" role="list" aria-label="Product listings">
           ${
             productCardSeed.length > 0
               ? productCardSeed.map((card, index) => renderProductCard(card, index)).join("")

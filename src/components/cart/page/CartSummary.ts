@@ -16,7 +16,7 @@ function renderThumbnailGrid(items: CartSummaryData["items"]): string {
   const thumbnails = items
     .map(
       (item) => `
-      <div class="checkout-item-card relative w-16 h-16 min-w-[64px] rounded overflow-hidden border border-[#e5e5e5] flex-shrink-0">
+      <div class="checkout-item-card relative w-14 h-14 min-w-[56px] max-[380px]:w-12 max-[380px]:h-12 max-[380px]:min-w-[48px] sm:w-16 sm:h-16 sm:min-w-[64px] rounded overflow-hidden border border-[#e5e5e5] flex-shrink-0">
         <div class="block w-full h-full">
           <img class="w-full h-full object-cover" src="${item.image}" alt="" />
         </div>
@@ -42,41 +42,41 @@ function renderThumbnailGrid(items: CartSummaryData["items"]): string {
 export function CartSummary(data: CartSummaryData): string {
   const viewAllLink =
     data.items.length > 0
-      ? `<div class="flex justify-end -mt-2 mb-3"><button type="button" class="sc-view-all-items text-[13px] font-medium text-[#f59e0b] hover:text-[#d97706] hover:underline transition-colors cursor-pointer bg-transparent border-0 p-0" data-i18n="common.viewAll">${t("common.viewAll")}</button></div>`
+      ? `<div class="flex justify-end -mt-1.5 sm:-mt-2 mb-2 sm:mb-3"><button type="button" class="sc-view-all-items text-[12px] max-[380px]:text-[11px] sm:text-[13px] font-medium text-primary-500 hover:text-primary-600 hover:underline transition-colors cursor-pointer bg-transparent border-0 p-0" data-i18n="common.viewAll">${t("common.viewAll")}</button></div>`
       : "";
 
   return `
-    <div class="sc-shopping-cart-summary-container w-full xl:w-[425px] max-h-[calc(100vh-120px)] p-4 sm:p-5 xl:p-8 bg-white border border-[#e5e5e5] rounded-lg overflow-y-auto [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-black/20 hover:[&::-webkit-scrollbar-thumb]:bg-black/30 [&::-webkit-scrollbar-thumb]:rounded-full">
-      <div class="block text-base sm:text-lg xl:text-xl font-bold leading-7 text-[#222] mb-3 sm:mb-4 xl:mb-5"><span data-i18n="cart.orderSummary">${t("cart.orderSummary")}</span> (<span class="sc-summary-selected-count">${data.selectedCount}</span> ${t("common.item")})</div>
+    <div class="sc-shopping-cart-summary-container w-full xl:w-[425px] max-h-[calc(100vh-120px)] p-3 max-[380px]:p-2.5 sm:p-5 xl:p-8 bg-white border border-[#e5e5e5] rounded-lg overflow-y-auto [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-black/20 hover:[&::-webkit-scrollbar-thumb]:bg-black/30 [&::-webkit-scrollbar-thumb]:rounded-full">
+      <div class="block text-[15px] max-[380px]:text-[14px] sm:text-lg xl:text-xl font-bold leading-6 sm:leading-7 text-[#222] mb-2.5 max-[380px]:mb-2 sm:mb-4 xl:mb-5"><span data-i18n="cart.orderSummary">${t("cart.orderSummary")}</span> (<span class="sc-summary-selected-count">${data.selectedCount}</span> ${t("common.item")})</div>
 
       ${renderThumbnailGrid(data.items)}
       ${viewAllLink}
 
       <div class="flex flex-col gap-3">
-        <div class="flex justify-between items-center text-sm leading-5 text-[#333]">
+        <div class="flex justify-between items-center text-[13px] max-[380px]:text-[12px] sm:text-sm leading-5 text-[#333]">
           <span data-i18n="cart.productSubtotal">${t("cart.productSubtotal")}</span>
           <span class="sc-summary-product-subtotal">${PriceDisplay({ amount: data.productSubtotal, fromCurrency: getSelectedCurrency() })}</span>
         </div>
         ${
           data.discount > 0
             ? `
-        <div class="sc-summary-discount-row flex justify-between items-center text-[14px] leading-[18px]">
+        <div class="sc-summary-discount-row flex justify-between items-center text-[12px] max-[380px]:text-[11px] sm:text-[14px] leading-[18px]">
           <span class="text-[#333]" data-i18n="cart.productDiscount">${t("cart.productDiscount")}</span>
           <span class="sc-summary-discount text-[#FF6600] font-semibold">- ${PriceDisplay({ amount: data.discount, fromCurrency: getSelectedCurrency() })}</span>
         </div>`
             : `
-        <div class="sc-summary-discount-row flex justify-between items-center text-[14px] leading-[18px] hidden">
+        <div class="sc-summary-discount-row flex justify-between items-center text-[12px] max-[380px]:text-[11px] sm:text-[14px] leading-[18px] hidden">
           <span class="text-[#333]" data-i18n="cart.productDiscount">${t("cart.productDiscount")}</span>
           <span class="sc-summary-discount text-[#FF6600] font-semibold"></span>
         </div>`
         }
-        <div class="flex justify-between items-center text-sm leading-5 text-[#333]">
+        <div class="flex justify-between items-center text-[13px] max-[380px]:text-[12px] sm:text-sm leading-5 text-[#333]">
           <span data-i18n="cart.shippingFee">${t("cart.shippingFee")}</span>
           <span>${PriceDisplay({ amount: data.shippingFee, fromCurrency: getSelectedCurrency() })}</span>
         </div>
       </div>
 
-      <div class="flex justify-between items-center text-base sm:text-lg font-bold leading-6 text-[#222] pt-4 border-t border-[#e5e5e5] mt-2">
+      <div class="flex justify-between items-center text-[14px] max-[380px]:text-[13px] sm:text-lg font-bold leading-6 text-[#222] pt-3 sm:pt-4 border-t border-[#e5e5e5] mt-2">
         <span class="min-w-0 truncate mr-2" data-i18n="cart.subtotalExTax">${t("cart.subtotalExTax")}</span>
         <span class="sc-summary-subtotal">${PriceDisplay({ amount: data.subtotal, fromCurrency: getSelectedCurrency(), bold: true })}</span>
       </div>
@@ -85,11 +85,11 @@ export function CartSummary(data: CartSummaryData): string {
         data.discount > 0
           ? `
       <div class="sc-summary-savings-banner mt-3 w-full h-12 rounded-[4px] px-3 py-1.5 flex items-center" style="background:linear-gradient(90deg,#ffead1,#ffd5d1)">
-        <span class="text-[14px] leading-[18px] text-[#4B1D1F]">${t("cart.savedOnOrder", { amount: `<strong class="text-[#FF6600]">${PriceDisplay({ amount: data.discount, fromCurrency: getSelectedCurrency() })}</strong>` })}</span>
+        <span class="text-[12px] max-[380px]:text-[11px] sm:text-[14px] leading-[18px] text-[#4B1D1F]">${t("cart.savedOnOrder", { amount: `<strong class="text-[#FF6600]">${PriceDisplay({ amount: data.discount, fromCurrency: getSelectedCurrency() })}</strong>` })}</span>
       </div>`
           : `
       <div class="sc-summary-savings-banner mt-3 w-full h-12 rounded-[4px] px-3 py-1.5 flex items-center hidden" style="background:linear-gradient(90deg,#ffead1,#ffd5d1)">
-        <span class="text-[14px] leading-[18px] text-[#4B1D1F]">${t("cart.savedOnOrder", { amount: '<strong class="text-[#FF6600]"></strong>' })}</span>
+        <span class="text-[12px] max-[380px]:text-[11px] sm:text-[14px] leading-[18px] text-[#4B1D1F]">${t("cart.savedOnOrder", { amount: '<strong class="text-[#FF6600]"></strong>' })}</span>
       </div>`
       }
 
@@ -100,8 +100,8 @@ export function CartSummary(data: CartSummaryData): string {
         <svg class="shrink-0 mt-0.5" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         <div class="text-xs leading-[1.5] flex-1 min-w-0">${t("common.cartHasUnverifiedItems")}</div>
       </div>
-      <button type="button" disabled aria-disabled="true" class="sc-summary-checkout-btn flex items-center justify-center gap-2 w-full mt-3 th-btn-success h-12 text-center opacity-50 !cursor-not-allowed pointer-events-none" title="${t("common.cartCheckoutBlockedKyb")}">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <button type="button" disabled aria-disabled="true" class="sc-summary-checkout-btn flex items-center justify-center gap-1.5 sm:gap-2 w-full mt-3 th-btn-success h-10 sm:h-12 text-[14px] sm:text-base text-center opacity-50 !cursor-not-allowed pointer-events-none" title="${t("common.cartCheckoutBlockedKyb")}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="sm:w-[22px] sm:h-[22px]">
           <path d="M12 3 4 6v6c0 4.5 3.2 8.5 8 9 4.8-.5 8-4.5 8-9V6l-8-3Z" />
           <path d="m9 12 2 2 4-4" />
         </svg>
@@ -109,8 +109,8 @@ export function CartSummary(data: CartSummaryData): string {
       </button>
       `
           : `
-      <button type="button" class="sc-summary-checkout-btn flex items-center justify-center gap-2 w-full mt-4 th-btn-success h-12 text-center" @click="$dispatch('checkout-global')">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <button type="button" class="sc-summary-checkout-btn flex items-center justify-center gap-1.5 sm:gap-2 w-full mt-3 sm:mt-4 th-btn-success h-10 sm:h-12 text-[14px] sm:text-base text-center" @click="$dispatch('checkout-global')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="sm:w-[22px] sm:h-[22px]">
           <path d="M12 3 4 6v6c0 4.5 3.2 8.5 8 9 4.8-.5 8-4.5 8-9V6l-8-3Z" />
           <path d="m9 12 2 2 4-4" />
         </svg>
@@ -118,12 +118,12 @@ export function CartSummary(data: CartSummaryData): string {
       </button>
       `
       }
-      <p class="sc-summary-checkout-warning mt-2 text-[13px] leading-[18px] text-[#dc2626] hidden"></p>
+      <p class="sc-summary-checkout-warning mt-2 text-[11px] max-[380px]:text-[10px] sm:text-[13px] leading-[18px] text-[#dc2626] hidden"></p>
 
-      <div class="mt-5 pt-5 border-t border-[#e5e5e5]">
-        <div class="p-3.5 bg-[#f0fdf4] border border-[#bbf7d0] rounded-md">
-          <img src="/images/istoc-logo.png" alt="iSTOC" class="h-4 w-auto mb-2" />
-          <p class="text-[12px] text-[#6b7280] leading-relaxed">Ödeme güvenli olarak platforma yapılır; sipariş satıcılara iSTOC güvencesi ile yönlendirilir.</p>
+      <div class="mt-4 sm:mt-5 pt-4 sm:pt-5 border-t border-[#e5e5e5]">
+        <div class="p-2.5 sm:p-3.5 bg-[#f0fdf4] border border-[#bbf7d0] rounded-md">
+          <img src="/images/istoc-logo.png" alt="iSTOC" class="h-3.5 max-[380px]:h-3 sm:h-4 w-auto mb-1.5 sm:mb-2" />
+          <p class="text-[11px] max-[380px]:text-[10px] sm:text-[12px] text-[#6b7280] leading-relaxed">Ödeme güvenli olarak platforma yapılır; sipariş satıcılara iSTOC güvencesi ile yönlendirilir.</p>
         </div>
       </div>
     </div>

@@ -16,9 +16,9 @@ function renderUserSection(): string {
     return `
       <a
         href="/giris"
-        class="flex items-center gap-2 px-3 py-1.5 rounded-md text-[14px] text-[#333] hover:text-[var(--color-primary-500)] hover:bg-[#f9fafb] transition-colors no-underline"
+        class="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md text-[12px] sm:text-[14px] text-[#333] hover:text-[var(--color-primary-500,#f5b800)] hover:bg-[#f9fafb] transition-colors no-underline"
       >
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="shrink-0">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 sm:w-[22px] sm:h-[22px]">
           <path d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0"/>
         </svg>
         <span class="hidden sm:inline font-medium">${t("header.login", { defaultValue: "Giriş Yap" })}</span>
@@ -35,10 +35,10 @@ function renderUserSection(): string {
         id="checkout-user-dropdown-btn"
         data-dropdown-toggle="checkout-user-dropdown-menu"
         data-dropdown-placement="bottom-end"
-        class="inline-flex items-center justify-center w-9 h-9 rounded-full hover:bg-[#f9fafb] transition-colors cursor-pointer shrink-0"
+        class="inline-flex items-center justify-center w-7 h-7 sm:w-9 sm:h-9 rounded-full hover:bg-[#f9fafb] transition-colors cursor-pointer shrink-0"
         aria-label="${t("header.myAccount")}"
       >
-        <svg class="w-6 h-6 text-[#333]" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
+        <svg class="w-[18px] h-[18px] sm:w-6 sm:h-6 text-[#333]" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/>
         </svg>
       </button>
@@ -71,9 +71,9 @@ function renderUserSection(): string {
 export function CheckoutMinimalHeader(): string {
   return `
     <header class="w-full bg-white border-b border-[#e5e5e5]">
-      <div class="max-w-[1680px] mx-auto px-4 h-[60px] flex items-center justify-between">
+      <div class="max-w-[1680px] mx-auto px-3 sm:px-4 h-[50px] sm:h-[60px] flex items-center justify-between">
         <a href="/" class="flex items-center shrink-0" aria-label="Ana Sayfa">
-          <img src="/images/istoc-logo.png" alt="iSTOC" class="h-7 sm:h-8" />
+          <img src="/images/istoc-logo.png" alt="iSTOC" class="h-5 sm:h-7 md:h-8" />
         </a>
         ${renderUserSection()}
       </div>

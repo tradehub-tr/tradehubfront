@@ -111,6 +111,8 @@ const en = {
       shoppingCart: "Shopping Cart",
       startShopping: "Start shopping.",
       searchPlaceholder: "What are you looking for?",
+      searchButton: "Search",
+      recentSearches: "Recent Searches",
       imageSearch: "Image Search",
       recommendedForYou: "Recommended for you",
       deepSearch: "Navigate complex requirements with Deep Search",
@@ -242,6 +244,51 @@ const en = {
     },
 
     // ============================================================
+    // BOTTOM NAV
+    // ============================================================
+    bottomNav: {
+      home: "Home",
+      categories: "Categories",
+      messages: "Messages",
+      cart: "Cart",
+      account: "Menu",
+    },
+
+    // ACCOUNT MENU
+    // ============================================================
+    accountMenu: {
+      loginTitle: "For a better sourcing experience",
+      loginSubtitle: "Sign in or create an account",
+      loginButton: "Sign In",
+      orders: "My Orders",
+      myOrders: "My Orders",
+      myOrdersDesc: "Order tracking and history",
+      tradeAssurance: "Trade Assurance",
+      tradeAssuranceDesc: "Guarantees and return policies",
+      discover: "Discover",
+      bestSellers: "Best sellers",
+      bestSellersDesc: "Most shipped products this week",
+      personalSelections: "Curated for you",
+      personalSelectionsDesc: "Recommendations based on your orders",
+      bestDeals: "Best deals",
+      bestDealsDesc: "Limited-time bulk purchase discounts",
+      sellOnIstoc: "Sell on istoc",
+      sellOnIstocDesc: "Become a seller, list your products",
+      suppliers: "Suppliers",
+      findSuppliers: "Find Suppliers",
+      findSuppliersDesc: "Discover suppliers and get in touch",
+      supplierApplication: "Supplier Application",
+      supplierApplicationDesc: "Become a verified supplier",
+      support: "Support",
+      helpCenter: "Help Center",
+      helpCenterDesc: "FAQ and support requests",
+      settings: "Settings",
+      deliveryCountry: "Delivery Country",
+      deliveryCountryValue: "Turkey 🇹🇷",
+      language: "Language & Currency",
+      languageValue: "English — TRY (₺)",
+    },
+
     // FOOTER
     // ============================================================
     footer: {
@@ -775,6 +822,7 @@ const en = {
       businessDays: "{{min}}-{{max}} business days",
       piecesAvailable: "{{count}} pieces available",
       reviewsLabel: "{{count}} reviews",
+      qaLabel: "Q&A",
       ordersLabel: "{{count}}+ orders",
       yearsLabel: "{{count}} yrs",
       servingYears: "{{count}} years of service",
