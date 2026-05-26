@@ -13,6 +13,7 @@ import {
   setDefaultAddressApi,
   type BuyerAddressData,
 } from "../services/cartService";
+import { showToast } from "../utils/toast";
 
 interface CheckoutDeliveryMethod {
   id: string;
@@ -968,7 +969,7 @@ Alpine.data("shippingForm", () => ({
         const msg =
           (err as { _server_messages?: string; message?: string })?.message ||
           "Adres kaydedilemedi";
-        alert(msg);
+        showToast({ message: msg, type: "error" });
         return false;
       }
     }
@@ -1118,7 +1119,7 @@ Alpine.data("shippingForm", () => ({
         // Backend reddetti — listeyi değiştirme, hatayı göster
         const msg =
           (err as { _server_messages?: string; message?: string })?.message || "Adres silinemedi";
-        alert(msg);
+        showToast({ message: msg, type: "error" });
         return;
       }
     }
@@ -1167,7 +1168,7 @@ Alpine.data("shippingForm", () => ({
         const msg =
           (err as { _server_messages?: string; message?: string })?.message ||
           "Varsayılan adres güncellenemedi";
-        alert(msg);
+        showToast({ message: msg, type: "error" });
         return;
       }
     }
@@ -1182,7 +1183,6 @@ Alpine.data("shippingForm", () => ({
     const requiredFields: Array<keyof CheckoutAddAddressForm> = [
       "country",
       "fullName",
-      "company",
       "phone",
       "street",
       "state",
@@ -1351,7 +1351,6 @@ Alpine.data("shippingForm", () => ({
     const requiredFields = [
       "country",
       "firstName",
-      "company",
       "phone",
       "streetAddress",
       "state",
