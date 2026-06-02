@@ -118,7 +118,14 @@ export function MessageContent(): string {
                 </div>
                 <div>
                   <div class="bg-(--color-surface,#ffffff) rounded-md rounded-bl-sm px-4 py-2.5 shadow-sm border border-(--color-border-light,#f0f0f0)">
-                    <p class="text-[13px] text-(--color-text-body,#333333) leading-relaxed whitespace-pre-wrap break-words" x-text="msg.text"></p>
+                    <p class="text-[13px] text-(--color-text-body,#333333) leading-relaxed whitespace-pre-wrap break-words" x-html="msg.textHtml || msg.text"></p>
+                    <template x-if="msg.videoCallUrl">
+                      <a :href="msg.videoCallUrl" target="_blank" rel="noopener noreferrer"
+                         class="inline-flex items-center gap-1.5 mt-2 px-3 py-1.5 rounded-full bg-green-500 text-white text-[12px] font-medium hover:bg-green-600 transition-colors no-underline">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z"/></svg>
+                        Görüşmeye Katıl
+                      </a>
+                    </template>
                   </div>
                   <span class="text-[11px] text-(--color-text-placeholder,#999999) mt-1 ml-1 block" x-text="msg.time"></span>
                 </div>
@@ -130,7 +137,14 @@ export function MessageContent(): string {
               <div class="flex items-end gap-2 max-w-[75%] max-sm:max-w-[85%] flex-row-reverse">
                 <div>
                   <div class="bg-(--color-cta-primary,#cc9900)/10 rounded-md rounded-br-sm px-4 py-2.5">
-                    <p class="text-[13px] text-(--color-text-body,#333333) leading-relaxed whitespace-pre-wrap break-words" x-text="msg.text"></p>
+                    <p class="text-[13px] text-(--color-text-body,#333333) leading-relaxed whitespace-pre-wrap break-words" x-html="msg.textHtml || msg.text"></p>
+                    <template x-if="msg.videoCallUrl">
+                      <a :href="msg.videoCallUrl" target="_blank" rel="noopener noreferrer"
+                         class="inline-flex items-center gap-1.5 mt-2 px-3 py-1.5 rounded-full bg-green-500 text-white text-[12px] font-medium hover:bg-green-600 transition-colors no-underline">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z"/></svg>
+                        Görüşmeye Katıl
+                      </a>
+                    </template>
                   </div>
                   <span class="text-[11px] text-(--color-text-placeholder,#999999) mt-1 mr-1 block text-right" x-text="msg.time"></span>
                 </div>
@@ -149,6 +163,17 @@ export function MessageContent(): string {
                   aria-label="${t("messages.attachFile")}">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13"/>
+            </svg>
+          </button>
+
+          <!-- Video call button -->
+          <button type="button"
+                  @click="startVideoCall()"
+                  :disabled="startingCall"
+                  class="flex items-center justify-center w-9 h-9 border-none bg-transparent text-(--color-text-placeholder,#999999) cursor-pointer rounded-full hover:bg-(--color-surface-muted,#fafafa) hover:text-(--color-cta-primary,#cc9900) transition-colors flex-shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
+                  aria-label="Görüntülü görüşme başlat">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z"/>
             </svg>
           </button>
 

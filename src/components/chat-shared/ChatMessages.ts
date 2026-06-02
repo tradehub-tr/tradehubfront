@@ -13,7 +13,8 @@ export function ChatMessages(): string {
 
       <!-- Scroll container -->
       <div class="flex-1 overflow-y-auto px-4 py-3 flex flex-col gap-2.5"
-           x-ref="msgScroll">
+           x-ref="msgScroll"
+           data-chat-popup-msg-scroll>
         <template x-for="msg in $store.chatPopup.activeMessages" :key="msg.id">
           <div class="flex flex-col"
                :class="msg.body.type === 'order' ? 'items-end' : ''">

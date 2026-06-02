@@ -7,6 +7,7 @@ import {
 } from "../chat-shared";
 import { InboxPanel } from "./InboxPanel";
 import { MobileTabs } from "./MobileTabs";
+import { ReservationModal } from "../reservation/ReservationModal";
 
 export function ChatPopup(): string {
   // TODO(batch-8): add role="dialog" aria-modal="true" aria-labelledby="chat-popup-title"
@@ -49,5 +50,6 @@ export function ChatPopup(): string {
         </div>
       </div>
     </div>
+    ${ReservationModal()}
   `;
 }

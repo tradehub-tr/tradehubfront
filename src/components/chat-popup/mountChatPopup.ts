@@ -6,13 +6,17 @@
  */
 
 import { ChatPopup } from "./ChatPopup";
+import { mountReservationModal } from "../reservation/ReservationModal";
 
 const MOUNT_ID = "chat-popup-mount";
 
 export function mountChatPopup(): void {
-  if (document.getElementById(MOUNT_ID)) return;
-  const container = document.createElement("div");
-  container.id = MOUNT_ID;
-  container.innerHTML = ChatPopup();
-  document.body.appendChild(container);
+  if (!document.getElementById(MOUNT_ID)) {
+    const container = document.createElement("div");
+    container.id = MOUNT_ID;
+    container.innerHTML = ChatPopup();
+    document.body.appendChild(container);
+  }
+  // Rezervasyon modal'ı chat-popup'la birlikte gider — Plus tier'da gerekli
+  mountReservationModal();
 }

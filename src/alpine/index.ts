@@ -24,6 +24,7 @@ import "./payment";
 import "./dashboard";
 import "./messages";
 import "./chatPopup";
+import "./reservationModal";
 import "./sidebar";
 import "./products-filter";
 import "./shared";
