@@ -9,7 +9,7 @@
  */
 
 export function ReservationModal(): string {
-	return /* html */ `
+  return /* html */ `
 		<div x-data
 			 x-show="$store.reservationModal.isOpen"
 			 x-cloak
@@ -147,9 +147,9 @@ export function ReservationModal(): string {
 const MOUNT_ID = "reservation-modal-mount";
 
 export function mountReservationModal(): void {
-	if (document.getElementById(MOUNT_ID)) return;
-	const container = document.createElement("div");
-	container.id = MOUNT_ID;
-	container.innerHTML = ReservationModal();
-	document.body.appendChild(container);
+  if (document.getElementById(MOUNT_ID)) return;
+  const container = document.createElement("div");
+  container.id = MOUNT_ID;
+  container.innerHTML = ReservationModal();
+  document.body.appendChild(container);
 }
