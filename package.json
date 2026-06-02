@@ -1,7 +1,7 @@
 {
   "name": "tradehub",
   "private": true,
-  "version": "1.1.9-beta.21",
+  "version": "1.1.9-beta.22",
   "type": "module",
   "scripts": {
     "dev": "vite",
