@@ -172,17 +172,23 @@ export function initMobileCategoryBar(): void {
       if (!label) return;
 
       if (id === catId) {
-        label.className = "flex-1 text-[13px] min-[400px]:text-[14px] sm:text-[15px] font-semibold text-gray-900 dark:text-white";
+        label.className =
+          "flex-1 text-[13px] min-[400px]:text-[14px] sm:text-[15px] font-semibold text-gray-900 dark:text-white";
         if (radio)
           radio.className =
             "mcb-sheet-radio flex-shrink-0 w-4 h-4 min-[400px]:w-5 min-[400px]:h-5 rounded-full border-2 border-primary-500 bg-primary-500 flex items-center justify-center transition-colors";
-        if (radioDot) radioDot.className = "w-1.5 h-1.5 min-[400px]:w-2 min-[400px]:h-2 rounded-full bg-white transition-colors";
+        if (radioDot)
+          radioDot.className =
+            "w-1.5 h-1.5 min-[400px]:w-2 min-[400px]:h-2 rounded-full bg-white transition-colors";
       } else {
-        label.className = "flex-1 text-[13px] min-[400px]:text-[14px] sm:text-[15px] text-gray-800 dark:text-gray-300";
+        label.className =
+          "flex-1 text-[13px] min-[400px]:text-[14px] sm:text-[15px] text-gray-800 dark:text-gray-300";
         if (radio)
           radio.className =
             "mcb-sheet-radio flex-shrink-0 w-4 h-4 min-[400px]:w-5 min-[400px]:h-5 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-transparent flex items-center justify-center transition-colors";
-        if (radioDot) radioDot.className = "w-1.5 h-1.5 min-[400px]:w-2 min-[400px]:h-2 rounded-full bg-transparent transition-colors";
+        if (radioDot)
+          radioDot.className =
+            "w-1.5 h-1.5 min-[400px]:w-2 min-[400px]:h-2 rounded-full bg-transparent transition-colors";
       }
     });
 

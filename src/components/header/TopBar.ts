@@ -1987,7 +1987,10 @@ function initMobileSearchSuggestions(): void {
   const renderGroups = (data: UnifiedSuggestResult): string => {
     return [
       renderCompactSearchGroup(t("search.groupProducts"), data.products.map(compactToProductItem)),
-      renderCompactSearchGroup(t("search.groupCategories"), data.categories.map(compactToCategoryItem)),
+      renderCompactSearchGroup(
+        t("search.groupCategories"),
+        data.categories.map(compactToCategoryItem)
+      ),
       renderCompactSearchGroup(t("search.groupBrands"), data.brands.map(compactToBrandItem)),
       renderCompactSearchGroup(t("search.groupSellers"), data.sellers.map(compactToSellerItem)),
     ].join("");
