@@ -46,6 +46,11 @@ Thumbs.db
 # ── Test / Coverage ───────────────────────────────────────────────────────────
 coverage/
 
+# ── Capacitor Native Projeleri ────────────────────────────────────────────────
+# Native projeler ve build çıktıları repo dışında — `npx cap add` ile üretilir.
+android/
+ios/
+
 # ── Auto Claude ───────────────────────────────────────────────────────────────
 .auto-claude/
 .auto-claude-security.json

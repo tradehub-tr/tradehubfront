@@ -6713,6 +6713,7 @@ const en = {
     },
     subMenu: {
       photoFromDevice: "Choose a photo from your device",
+      fileFromDevice: "Choose a file from your device",
       photoFromCloud: "Choose from cloud storage",
       callVideo: "Video call",
       callVoice: "Voice call",

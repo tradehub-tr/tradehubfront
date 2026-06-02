@@ -2,6 +2,7 @@ import { PinnedProduct } from "./PinnedProduct";
 import { AttachmentToolbar } from "./AttachmentToolbar";
 import { EmojiPicker } from "./sub/EmojiPicker";
 import { PhotoSourceMenu } from "./sub/PhotoSourceMenu";
+import { FileSourceMenu } from "./sub/FileSourceMenu";
 import { CallMenu } from "./sub/CallMenu";
 import { BusinessCardForm } from "./sub/BusinessCardForm";
 import { getLucideIcon } from "../icons/lucideIcons";
@@ -16,6 +17,7 @@ export function ChatComposer(): string {
 
       ${EmojiPicker()}
       ${PhotoSourceMenu()}
+      ${FileSourceMenu()}
       ${CallMenu()}
       ${BusinessCardForm()}
 

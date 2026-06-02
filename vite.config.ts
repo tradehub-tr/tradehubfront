@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import type { Plugin } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
+import { VitePWA } from 'vite-plugin-pwa'
 import { resolve } from 'path'
 import { readFileSync, writeFileSync, existsSync } from 'fs'
 import fg from 'fast-glob'
@@ -177,15 +178,15 @@ export default defineConfig({
         },
         proxy: {
             '/api': {
-                target: 'http://localhost:8000',
+                target: 'http://localhost:8088',
                 changeOrigin: true,
             },
             '/files': {
-                target: 'http://localhost:8000',
+                target: 'http://localhost:8088',
                 changeOrigin: true,
             },
             '/private/files': {
-                target: 'http://localhost:8000',
+                target: 'http://localhost:8088',
                 changeOrigin: true,
             },
         },
@@ -199,13 +200,130 @@ export default defineConfig({
         staticPageRewritePlugin(),
         notFoundFallbackPlugin(),
         seoPlaceholderPlugin(),
+        VitePWA({
+            // Multi-page yapıda kullanıcı navigation = tam reload — autoUpdate güvenli ve UI gerektirmez.
+            registerType: 'autoUpdate',
+            // Plugin her HTML <head>'ine SW kayıt script'ini otomatik enjekte eder (74 sayfa, manuel iş yok).
+            injectRegister: 'auto',
+            strategies: 'generateSW',
+            // Plugin manifest'i üretir + her HTML <head>'ine <link rel="manifest"> + theme-color enjekte eder.
+            manifest: {
+                id: '/',
+                name: 'istoc — Global B2B Marketplace',
+                short_name: 'istoc',
+                description: 'Doğrulanmış satıcılar, güvenli ödeme ve şeffaf komisyonla küresel B2B toptan ticaret.',
+                lang: 'tr',
+                dir: 'ltr',
+                start_url: '/?source=pwa',
+                scope: '/',
+                display: 'standalone',
+                orientation: 'portrait',
+                background_color: '#ffffff',
+                theme_color: '#cc9900',
+                icons: [
+                    { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+                    { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+                    { src: '/icons/icon-maskable-192.png', sizes: '192x192', type: 'image/png', purpose: 'maskable' },
+                    { src: '/icons/icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+                    { src: '/icons/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+                ],
+                shortcuts: [
+                    { name: 'Sepetim', short_name: 'Sepet', url: '/pages/cart.html', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
+                    { name: 'Siparişlerim', short_name: 'Siparişler', url: '/pages/dashboard/orders.html', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
+                ],
+            },
+            includeAssets: ['icons/**', 'images/**', '_redirects', 'vite.svg'],
+            workbox: {
+                globPatterns: ['**/*.{html,js,css,woff,woff2,svg,png,webp,ico}'],
+                // Multi-page: her HTML kendi entry. SPA fallback yok.
+                navigateFallback: null,
+                cleanupOutdatedCaches: true,
+                clientsClaim: true,
+                skipWaiting: true,
+                // Storefront görselleri (DummyJSON CDN, Frappe files vb.) workbox cache limitlerini aşabilir.
+                maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
+                runtimeCaching: [
+                    {
+                        // Frappe API — cookie session ile, network-first + offline fallback YOK (POST cache'lenmez).
+                        urlPattern: ({ url }) => url.pathname.startsWith('/api/method/'),
+                        handler: 'NetworkFirst',
+                        method: 'GET',
+                        options: {
+                            cacheName: 'frappe-api',
+                            networkTimeoutSeconds: 5,
+                            expiration: { maxEntries: 200, maxAgeSeconds: 60 * 5 },
+                            cacheableResponse: { statuses: [0, 200] },
+                        },
+                    },
+                    {
+                        urlPattern: ({ url }) => url.pathname.startsWith('/api/method/'),
+                        handler: 'NetworkOnly',
+                        method: 'POST',
+                    },
+                    {
+                        // Frappe public files (ürün görselleri)
+                        urlPattern: ({ url }) => url.pathname.startsWith('/files/'),
+                        handler: 'CacheFirst',
+                        options: {
+                            cacheName: 'frappe-files',
+                            expiration: { maxEntries: 500, maxAgeSeconds: 60 * 60 * 24 * 30 },
+                            cacheableResponse: { statuses: [0, 200] },
+                        },
+                    },
+                    {
+                        // DummyJSON CDN (demo ürün görselleri)
+                        urlPattern: /^https:\/\/cdn\.dummyjson\.com\//,
+                        handler: 'CacheFirst',
+                        options: {
+                            cacheName: 'dummyjson-images',
+                            expiration: { maxEntries: 500, maxAgeSeconds: 60 * 60 * 24 * 7 },
+                            cacheableResponse: { statuses: [0, 200] },
+                        },
+                    },
+                    {
+                        // ui-avatars.com (satıcı logo placeholder)
+                        urlPattern: /^https:\/\/ui-avatars\.com\//,
+                        handler: 'CacheFirst',
+                        options: {
+                            cacheName: 'ui-avatars',
+                            expiration: { maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 * 30 },
+                            cacheableResponse: { statuses: [0, 200] },
+                        },
+                    },
+                    {
+                        // HTML sayfaları — stale-while-revalidate; SW kullanıcıya eski sürüm gösterirken arkada günceller.
+                        urlPattern: ({ request }) => request.destination === 'document',
+                        handler: 'StaleWhileRevalidate',
+                        options: { cacheName: 'pages' },
+                    },
+                    {
+                        urlPattern: /^https:\/\/fonts\.(googleapis|gstatic)\.com\//,
+                        handler: 'CacheFirst',
+                        options: {
+                            cacheName: 'google-fonts',
+                            expiration: { maxEntries: 30, maxAgeSeconds: 60 * 60 * 24 * 365 },
+                            cacheableResponse: { statuses: [0, 200] },
+                        },
+                    },
+                ],
+            },
+            // Dev'de SW kapalı — Vite HMR ile çakışmasın.
+            devOptions: { enabled: false },
+        }),
     ],
     build: {
         copyPublicDir: true,
         rollupOptions: {
             input: Object.fromEntries(
                 fg.sync('**/*.html', {
-                    ignore: ['node_modules/**', 'dist/**', '**/style-test.html', '**/test-*.html'],
+                    ignore: [
+                        'node_modules/**',
+                        'dist/**',
+                        'ios/**',
+                        'android/**',
+                        '**/style-test.html',
+                        '**/test-*.html',
+                    ],
                 }).map(file => [
                     file.replace(/\.html$/, '').replace(/\//g, '-'),
                     resolve(__dirname, file),

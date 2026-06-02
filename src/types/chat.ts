@@ -78,6 +78,9 @@ export interface Message {
   dateLabel?: string;
   read: boolean;
   pending?: boolean;
+  /** Jitsi görüntülü görüşme daveti URL'i — mesaj 🎥 marker'ı içeriyorsa
+   *  buyer/seller tarafı bunu "Görüşmeye Katıl" butonu olarak render eder. */
+  videoCallUrl?: string;
 }
 
 export type SubMenuKey =

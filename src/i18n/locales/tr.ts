@@ -6737,6 +6737,7 @@ const tr = {
     },
     subMenu: {
       photoFromDevice: "Cihazınızdan fotoğraf seçin",
+      fileFromDevice: "Cihazınızdan dosya seçin",
       photoFromCloud: "Bulut depolamadan seçin",
       callVideo: "Görselle arama",
       callVoice: "Sesli Arama",

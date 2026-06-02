@@ -26,21 +26,31 @@ export function ChatBubble(): string {
               <div class="inline-block rounded-xl border px-3 py-2 text-[13px] leading-snug whitespace-pre-wrap break-words"
                    :class="msg.direction === 'me'
                      ? 'rounded-br-sm bg-[var(--color-primary-50,#fff8e1)] border-[var(--color-primary-200,#ffe57a)] text-[var(--color-text-primary,#0a0a0a)]'
-                     : 'rounded-bl-sm bg-white border-[var(--color-border-default,#e5e5e5)] text-[var(--color-text-primary,#0a0a0a)]'"
-                   x-text="msg.body.text"></div>
+                     : 'rounded-bl-sm bg-white border-[var(--color-border-default,#e5e5e5)] text-[var(--color-text-primary,#0a0a0a)]'">
+                <span x-text="msg.body.text"></span>
+                <template x-if="msg.videoCallUrl">
+                  <a :href="msg.videoCallUrl" target="_blank" rel="noopener noreferrer"
+                     class="mt-2 inline-flex items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-[12px] font-medium text-white no-underline hover:bg-green-600 transition-colors">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z"/></svg>
+                    Görüşmeye Katıl
+                  </a>
+                </template>
+              </div>
             </template>
 
             <!-- Image -->
             <template x-if="msg.body.type === 'image'">
-              <div class="inline-block rounded-xl border border-[var(--color-border-default,#e5e5e5)] bg-white p-1">
+              <a :href="msg.body.url" target="_blank" rel="noopener noreferrer"
+                 class="inline-block rounded-xl border border-[var(--color-border-default,#e5e5e5)] bg-white p-1 no-underline">
                 <img :src="msg.body.url" :alt="msg.body.caption || ''"
                      class="block max-h-40 max-w-[180px] rounded-md object-cover" />
-              </div>
+              </a>
             </template>
 
             <!-- File -->
             <template x-if="msg.body.type === 'file'">
-              <div class="inline-flex items-center gap-2.5 rounded-xl border border-[var(--color-border-default,#e5e5e5)] bg-white px-3 py-2.5 text-[12px]">
+              <a :href="msg.body.url" target="_blank" rel="noopener noreferrer" :download="msg.body.name"
+                 class="inline-flex items-center gap-2.5 rounded-xl border border-[var(--color-border-default,#e5e5e5)] bg-white px-3 py-2.5 text-[12px] no-underline text-[var(--color-text-primary,#0a0a0a)] hover:bg-[var(--color-primary-50,#fff8e1)] transition-colors">
                 <div class="grid size-8 shrink-0 place-items-center rounded-md bg-[var(--color-primary-50,#fff8e1)]">
                   ${fileIcon}
                 </div>
@@ -49,7 +59,7 @@ export function ChatBubble(): string {
                   <div class="text-[11px] text-[var(--color-text-tertiary,#a3a3a3)]"
                        x-text="(msg.body.size / 1024).toFixed(0) + ' KB · ' + (msg.body.mimeType || '')"></div>
                 </div>
-              </div>
+              </a>
             </template>
 
             <div class="mt-1 px-1 text-[10px] text-[var(--color-text-tertiary,#a3a3a3)]">
