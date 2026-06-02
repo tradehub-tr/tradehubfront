@@ -115,10 +115,13 @@ function renderCommonSection(): string {
 
 function renderDocumentSection(): string {
   // SlotDropzone (tradehub-upload-ui) — autoUpload, multipart Frappe upload_file.
+  // kyc-identity-preview: Karma C preview kartı container'ı.
+  // formData yüklendiğinde JS preview HTML basar; boşsa hidden kalır.
   return `
 		<section class="bg-white rounded-2xl border border-gray-200 p-6 mb-4">
 			<h3 class="text-base font-semibold mb-1">Kimlik Belgesi</h3>
 			<p class="text-xs text-gray-500 mb-4">PDF, JPG, JPEG, PNG, WEBP, DOCX · Maks 10 MB · Zorunlu</p>
+			<div id="kyc-identity-preview" class="hidden mb-3"></div>
 			<div id="kyc-document-slots"></div>
 		</section>
 	`;
@@ -222,6 +225,16 @@ function setAccountType(type: "Business" | "Individual"): void {
   const taxInput = form.querySelector<HTMLInputElement>('[name="tax_id"]');
   if (taxInput) {
     taxInput.placeholder = type === "Business" ? "10-11 hane" : "11 hane";
+    // Bireysel = TCKN tam 11 hane (mod-10 backend doğrulaması), Kurumsal = VKN 10-11 hane
+    if (type === "Business") {
+      taxInput.setAttribute("pattern", "\\d{10,11}");
+      taxInput.setAttribute("minlength", "10");
+      taxInput.setAttribute("maxlength", "11");
+    } else {
+      taxInput.setAttribute("pattern", "\\d{11}");
+      taxInput.setAttribute("minlength", "11");
+      taxInput.setAttribute("maxlength", "11");
+    }
   }
   // Toggle button styles
   const buttons = form.querySelectorAll<HTMLButtonElement>(".kyc-toggle-btn");
@@ -250,26 +263,54 @@ function getFileName(url: string): string {
   }
 }
 
+// Preview kart ikonları — inline SVG (lucide pattern).
+const PREVIEW_ICONS = {
+  image: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.5-3.5a2 2 0 0 0-2.83 0L4 22"/></svg>`,
+  pdf: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`,
+  eye: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`,
+};
+
+function getFileExtUpper(url: string): string {
+  const name = getFileName(url);
+  const dot = name.lastIndexOf(".");
+  return dot >= 0 ? name.slice(dot + 1).toUpperCase() : "DOSYA";
+}
+
 function showDocumentPreview(url: string): void {
-  const empty = document.getElementById("kyc-doc-empty");
-  const preview = document.getElementById("kyc-doc-preview");
-  const img = document.getElementById("kyc-doc-image") as HTMLImageElement | null;
-  const pdf = document.getElementById("kyc-doc-pdf");
-  const fname = document.getElementById("kyc-doc-filename");
-  if (!empty || !preview || !img || !pdf || !fname) return;
-
-  empty.classList.add("hidden");
-  preview.classList.remove("hidden");
-
-  if (isImageUrl(url)) {
-    img.src = url;
-    img.classList.remove("hidden");
-    pdf.classList.add("hidden");
-  } else {
-    img.classList.add("hidden");
-    pdf.classList.remove("hidden");
-    fname.textContent = getFileName(url);
+  const container = document.getElementById("kyc-identity-preview");
+  if (!container) return;
+  if (!url) {
+    container.classList.add("hidden");
+    container.innerHTML = "";
+    return;
   }
+
+  const isImage = isImageUrl(url);
+  const iconHtml = isImage
+    ? `<span class="text-blue-600">${PREVIEW_ICONS.image}</span>`
+    : `<span class="text-red-600">${PREVIEW_ICONS.pdf}</span>`;
+  const filename = getFileName(url);
+  const ext = getFileExtUpper(url);
+
+  container.innerHTML = `
+		<div class="flex items-center gap-3 p-3 rounded-lg bg-emerald-50 border border-emerald-200">
+			<div class="w-14 h-14 rounded-md bg-white border border-gray-200 flex items-center justify-center flex-shrink-0">
+				${iconHtml}
+			</div>
+			<div class="flex-1 min-w-0">
+				<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500 text-white uppercase tracking-wider mb-0.5">
+					Yüklü
+				</span>
+				<div class="text-[13px] font-semibold text-gray-900 truncate">${filename}</div>
+				<div class="text-[11px] text-gray-600">${ext} dosyası</div>
+			</div>
+			<a href="${url}" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-md text-[12px] font-medium bg-white text-emerald-700 border border-emerald-300 hover:bg-emerald-100 inline-flex items-center gap-1">
+				${PREVIEW_ICONS.eye}
+				<span>Görüntüle</span>
+			</a>
+		</div>
+	`;
+  container.classList.remove("hidden");
 }
 
 function getCsrfToken(): string {
@@ -294,6 +335,27 @@ let currentIdentityUrl = "";
 
 let kycSlotController: SlotDropzoneController | null = null;
 
+/**
+ * Verified/Suspended status'larda SlotDropzone'un yükleme alanını gizler.
+ * Preview kartı görünür kalır — sadece "Tıkla veya sürükle" zone'u kapatılır.
+ * Backend Verified KYC için resubmit'e izin vermediğinden 403 → login redirect
+ * sorununu UI tarafında engelleriz.
+ */
+function applyKycSlotReadOnlyState(status: string): void {
+  const readOnly = status === "Verified" || status === "Suspended";
+  const slotCard = document.querySelector('[data-slot-id="identity_document"]');
+  if (!slotCard) return;
+  const slotZone = slotCard.querySelector(".slot-zone");
+  const fileInput = slotCard.querySelector('input[type="file"]');
+  if (readOnly) {
+    if (slotZone instanceof HTMLElement) slotZone.style.display = "none";
+    if (fileInput instanceof HTMLInputElement) fileInput.disabled = true;
+  } else {
+    if (slotZone instanceof HTMLElement) slotZone.style.display = "";
+    if (fileInput instanceof HTMLInputElement) fileInput.disabled = false;
+  }
+}
+
 function mountKycSlotDropzone(): void {
   if (kycSlotController) return; // tek mount
   kycSlotController = new SlotDropzoneController({
@@ -316,6 +378,8 @@ function mountKycSlotDropzone(): void {
     },
     onSlotUploaded: (_slotId, fileUrl) => {
       currentIdentityUrl = fileUrl;
+      // Karma C: yeni dosya yüklenince preview kartını da yenile.
+      showDocumentPreview(fileUrl);
     },
     onSlotUploadError: (_slotId, error) => {
       showMessage(error || "Dosya yüklenemedi.", "error");
@@ -325,6 +389,23 @@ function mountKycSlotDropzone(): void {
     },
   });
   kycSlotController.mount();
+}
+
+/**
+ * TCKN client-side doğrulama — backend `_validate_tckn` ile birebir aynı kural:
+ * 11 hane, '0' ile başlayamaz, 10. hane (odd*7 - even) %10, 11. hane sum(d[:10]) %10.
+ * Backend HTTP 417 dönmeden hatayı önden yakalar.
+ */
+function isValidTckn(value: string): boolean {
+  const digits = value.trim();
+  if (!/^\d{11}$/.test(digits)) return false;
+  if (digits[0] === "0") return false;
+  const d = digits.split("").map(Number);
+  const odd = d[0] + d[2] + d[4] + d[6] + d[8];
+  const even = d[1] + d[3] + d[5] + d[7];
+  if ((odd * 7 - even) % 10 !== d[9]) return false;
+  if (d.slice(0, 10).reduce((s, n) => s + n, 0) % 10 !== d[10]) return false;
+  return true;
 }
 
 async function handleSubmit(e: SubmitEvent): Promise<void> {
@@ -352,6 +433,13 @@ async function handleSubmit(e: SubmitEvent): Promise<void> {
     payload.company_name = String(fd.get("company_name") || "");
   }
 
+  // Bireysel hesapta TCKN client-side doğrula — backend HTTP 417 dönmeden önle.
+  // VKN için HTML5 pattern (10-11 hane) yeterli; ek client-side check yok.
+  if (accountType !== "Business" && !isValidTckn(payload.tax_id)) {
+    showMessage("Geçerli bir TCKN giriniz (11 hane, mod-10 doğrulamalı).", "error");
+    return;
+  }
+
   try {
     await api("/method/tradehub_core.api.v1.kyc.submit_kyc_documents", {
       method: "POST",
@@ -364,6 +452,7 @@ async function handleSubmit(e: SubmitEvent): Promise<void> {
     // 2 saniye sonra reload — status badge yenilenir
     setTimeout(() => window.location.reload(), 2000);
   } catch (err) {
+    console.error("[KYC submit failed]", err);
     showMessage((err as Error).message || "Gönderim başarısız.", "error");
   }
 }
@@ -512,6 +601,9 @@ export function initKycLayout(): void {
       currentIdentityUrl = status.identity_document;
       showDocumentPreview(status.identity_document);
     }
+
+    // Verified/Suspended → slot zone'unu gizle (resubmit 403'ü engellemek için)
+    applyKycSlotReadOnlyState(status.status || "");
 
     updateStatusUI(status);
   });
