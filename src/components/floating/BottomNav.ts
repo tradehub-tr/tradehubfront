@@ -139,7 +139,14 @@ export function initCategoryFullscreen(): void {
   });
 }
 
-function renderAccountMenuItem(href: string, iconBg: string, iconColor: string, iconPath: string, title: string, subtitle: string): string {
+function renderAccountMenuItem(
+  href: string,
+  iconBg: string,
+  iconColor: string,
+  iconPath: string,
+  title: string,
+  subtitle: string
+): string {
   return `
     <a href="${href}" class="flex items-center gap-3 px-3 min-[400px]:px-4 py-2.5 min-[400px]:py-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
       <div class="w-8 h-8 min-[400px]:w-9 min-[400px]:h-9 rounded-md ${iconBg} flex items-center justify-center shrink-0">
@@ -159,7 +166,6 @@ function renderAccountMenuItem(href: string, iconBg: string, iconColor: string, 
 }
 
 function renderAccountOverlay(): string {
-
   return `
     <div id="account-fullscreen-overlay" class="fixed inset-0 z-50 bg-white dark:bg-gray-900 xl:hidden hidden flex-col">
       <!-- Header -->
@@ -387,7 +393,14 @@ function initAccountFullscreen(): void {
   if (authArea) {
     waitForAuth().then((user) => {
       if (user) {
-        const initials = user.full_name ? user.full_name.split(" ").map((w: string) => w[0]).join("").slice(0, 2).toUpperCase() : "";
+        const initials = user.full_name
+          ? user.full_name
+              .split(" ")
+              .map((w: string) => w[0])
+              .join("")
+              .slice(0, 2)
+              .toUpperCase()
+          : "";
         authArea.innerHTML = `
           <a href="/pages/dashboard/buyer-dashboard.html" class="mx-3 min-[400px]:mx-4 mt-4 rounded-md bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-3 min-[400px]:p-4 flex items-center gap-3 no-underline">
             <div class="w-10 h-10 min-[400px]:w-12 min-[400px]:h-12 rounded-full bg-[var(--color-primary-500,#f5b800)] flex items-center justify-center text-white font-bold text-sm min-[400px]:text-lg shrink-0">${initials}</div>
@@ -452,9 +465,17 @@ function initAccountFullscreen(): void {
       countryPicker.classList.toggle("hidden");
     });
 
-    const countryNames: Record<string, string> = { TR: "Türkiye 🇹🇷", DE: "Almanya 🇩🇪", US: "ABD 🇺🇸", GB: "İngiltere 🇬🇧", NL: "Hollanda 🇳🇱" };
+    const countryNames: Record<string, string> = {
+      TR: "Türkiye 🇹🇷",
+      DE: "Almanya 🇩🇪",
+      US: "ABD 🇺🇸",
+      GB: "İngiltere 🇬🇧",
+      NL: "Hollanda 🇳🇱",
+    };
     const currentCountry = localStorage.getItem("deliveryCountry") || "TR";
-    const currentCheck = countryPicker.querySelector<HTMLElement>(`[data-country-check="${currentCountry}"]`);
+    const currentCheck = countryPicker.querySelector<HTMLElement>(
+      `[data-country-check="${currentCountry}"]`
+    );
     if (currentCheck) currentCheck.classList.remove("hidden");
 
     countryPicker.querySelectorAll<HTMLButtonElement>("[data-country-switch]").forEach((btn) => {

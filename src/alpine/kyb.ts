@@ -45,6 +45,116 @@ const DOCUMENT_KEYS = [
   "bank_account_document",
 ] as const;
 
+/* ────────── Karma C preview helpers ────────── */
+
+// Inline SVG ikonlar (lucide pattern). PREVIEW_ICONS storefront genelinde
+// kullanılan inline SVG yaklaşımına uyumlu.
+const KYB_PREVIEW_ICONS = {
+  image: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.5-3.5a2 2 0 0 0-2.83 0L4 22"/></svg>`,
+  pdf: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`,
+  eye: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`,
+};
+
+function kybIsImageUrl(url: string): boolean {
+  return /\.(jpe?g|png|webp|gif)$/i.test(url);
+}
+
+function kybGetFileName(url: string): string {
+  if (!url) return "";
+  try {
+    const decoded = decodeURIComponent(url);
+    return decoded.split("/").pop() || decoded;
+  } catch {
+    return url.split("/").pop() || url;
+  }
+}
+
+function kybGetExtUpper(url: string): string {
+  const name = kybGetFileName(url);
+  const dot = name.lastIndexOf(".");
+  return dot >= 0 ? name.slice(dot + 1).toUpperCase() : "DOSYA";
+}
+
+/**
+ * Karma C: SlotDropzone'un slot card'ının ÜSTÜNE preview kartı inject eder.
+ * SlotDropzone re-render olduğunda preview kaybolur — bu yüzden onSlotUploaded
+ * callback'i ve init() sonu döngüsü preview'ları yeniden basar.
+ */
+function updateKybSlotPreview(slotId: string, fileUrl: string): void {
+  const slotCard = document.querySelector<HTMLElement>(`[data-slot-id="${slotId}"]`);
+  if (!slotCard) return;
+
+  // Önceki preview varsa kaldır (slot-card'ın içine inject ediyoruz).
+  const existing = slotCard.querySelector(".kyb-slot-preview");
+  if (existing) existing.remove();
+
+  if (!fileUrl) return;
+
+  const isImage = kybIsImageUrl(fileUrl);
+  const iconHtml = isImage
+    ? `<span class="text-blue-600">${KYB_PREVIEW_ICONS.image}</span>`
+    : `<span class="text-red-600">${KYB_PREVIEW_ICONS.pdf}</span>`;
+  const filename = kybGetFileName(fileUrl);
+  const ext = kybGetExtUpper(fileUrl);
+
+  const previewDiv = document.createElement("div");
+  previewDiv.className = "kyb-slot-preview mb-2";
+  previewDiv.innerHTML = `
+    <div class="flex items-center gap-2 p-2 rounded-lg bg-emerald-50 border border-emerald-200">
+      <div class="w-10 h-10 rounded-md bg-white border border-gray-200 flex items-center justify-center flex-shrink-0">
+        ${iconHtml}
+      </div>
+      <div class="flex-1 min-w-0">
+        <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-semibold bg-emerald-500 text-white uppercase tracking-wider">
+          Yüklü
+        </span>
+        <div class="text-[12px] font-semibold text-gray-900 truncate">${filename}</div>
+        <div class="text-[10px] text-gray-600">${ext} dosyası</div>
+      </div>
+      <a href="${fileUrl}" target="_blank" rel="noopener" class="px-2 py-1 rounded-md text-[11px] font-medium bg-white text-emerald-700 border border-emerald-300 hover:bg-emerald-100 inline-flex items-center gap-1 flex-shrink-0">
+        ${KYB_PREVIEW_ICONS.eye}
+        <span>Görüntüle</span>
+      </a>
+    </div>
+  `;
+  // slot-card'ın ilk çocuğu olarak ekle (label'in de üstünde) — slot zone'unun üstünde.
+  slotCard.insertBefore(previewDiv, slotCard.firstChild);
+}
+
+/**
+ * Tüm slot preview'larını formData'ya göre senkronize eder.
+ * SlotDropzone re-render'ı sonrası çağrılır (yüklenmiş URL'leri görsel olarak kaybetmeyelim).
+ */
+function refreshAllKybSlotPreviews(formData: Record<string, string>): void {
+  for (const key of DOCUMENT_KEYS) {
+    const url = (formData[key] || "").trim();
+    if (url) updateKybSlotPreview(key, url);
+  }
+}
+
+/**
+ * Verified/Suspended status'larda SlotDropzone'un yükleme alanını gizler.
+ * Preview kartı ve slot label görünür kalır — sadece "Tıkla veya sürükle" zone'u
+ * kapatılır. Backend Verified KYB için resubmit'e izin vermediğinden 403 → login
+ * redirect sorununu UI tarafında engelleriz.
+ */
+function applyKybSlotsReadOnlyState(status: string): void {
+  const readOnly = status === "Verified" || status === "Suspended";
+  for (const key of DOCUMENT_KEYS) {
+    const slotCard = document.querySelector(`[data-slot-id="${key}"]`);
+    if (!slotCard) continue;
+    const slotZone = slotCard.querySelector(".slot-zone");
+    const fileInput = slotCard.querySelector('input[type="file"]');
+    if (readOnly) {
+      if (slotZone instanceof HTMLElement) slotZone.style.display = "none";
+      if (fileInput instanceof HTMLInputElement) fileInput.disabled = true;
+    } else {
+      if (slotZone instanceof HTMLElement) slotZone.style.display = "";
+      if (fileInput instanceof HTMLInputElement) fileInput.disabled = false;
+    }
+  }
+}
+
 Alpine.data("kybPage", () => ({
   loading: true,
   submitting: false,
@@ -208,6 +318,8 @@ Alpine.data("kybPage", () => ({
       },
       onSlotUploaded: (slotId, fileUrl) => {
         this.formData[slotId] = fileUrl;
+        // Karma C: yeni dosya yüklenince ilgili slot preview'ını güncelle.
+        updateKybSlotPreview(slotId, fileUrl);
       },
       onSlotUploadError: (_slotId, error) => {
         queueToast({ message: error || t("kyb.errUploadFailed"), type: "error", duration: 6000 });
@@ -221,6 +333,13 @@ Alpine.data("kybPage", () => ({
       },
     });
     this.slotController.mount();
+
+    // Karma C: mount sonrası, init'te yüklenen URL'ler için preview'ları render et.
+    // SlotDropzone yeni mount edildi ve initial render bitti — DOM hazır.
+    refreshAllKybSlotPreviews(this.formData);
+
+    // Verified/Suspended → slot zone'ları gizle (resubmit 403'ü engellemek için)
+    applyKybSlotsReadOnlyState(this.kybData.status || "");
   },
 
   startApplication() {

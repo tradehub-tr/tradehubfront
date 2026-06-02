@@ -591,8 +591,9 @@ export function initProductInfo(): void {
     if (mobileMethodEl) mobileMethodEl.textContent = method;
     const mobileDetailEl = document.querySelector("#pdm-ship-preview .pdm-ship-detail");
     if (mobileDetailEl) {
-      mobileDetailEl.innerHTML = `<span class="text-text-muted">${t("product.estimatedCost")}: <strong>${costStr}</strong></span>`
-        + `<span class="text-text-muted">${t("product.duration")}: <strong>${estimatedDays}</strong></span>`;
+      mobileDetailEl.innerHTML =
+        `<span class="text-text-muted">${t("product.estimatedCost")}: <strong>${costStr}</strong></span>` +
+        `<span class="text-text-muted">${t("product.duration")}: <strong>${estimatedDays}</strong></span>`;
     }
   }) as EventListener);
 
