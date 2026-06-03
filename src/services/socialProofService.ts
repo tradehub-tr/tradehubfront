@@ -122,6 +122,57 @@ export async function fetchSocialProofSignals(
   return signals;
 }
 
+/**
+ * Listing grid için toplu sinyal çekme — tek istekte birçok listing.
+ * Backend: get_signals_batch (allow_guest). Dönen her sonucu per-listing
+ * sessionStorage cache'ine yazar (detay sayfası + tekil get_signals tekrar kullanır).
+ */
+export async function fetchSocialProofSignalsBatch(
+  listingIds: string[]
+): Promise<Record<string, Signal[]>> {
+  const ids = Array.from(new Set(listingIds.filter(Boolean)));
+  if (!ids.length) return {};
+
+  if (isMockEnabled()) {
+    return Object.fromEntries(ids.map((id) => [id, MOCK_SIGNALS]));
+  }
+
+  const ctrl = new AbortController();
+  const timeout = window.setTimeout(() => ctrl.abort(), FETCH_TIMEOUT_MS);
+
+  let map: Record<string, Signal[]> = {};
+  try {
+    const url =
+      "/api/method/tradehub_core.api.social_proof.get_signals_batch" +
+      `?listing_ids=${encodeURIComponent(ids.join(","))}`;
+    const res = await fetch(url, { signal: ctrl.signal, credentials: "include" });
+    if (!res.ok) throw new Error(String(res.status));
+    const data = (await res.json()) as {
+      message?: Record<string, { signals?: Signal[] }>;
+    };
+    const payload = data.message ?? {};
+    for (const id of Object.keys(payload)) {
+      map[id] = payload[id]?.signals ?? [];
+    }
+  } catch {
+    map = {};
+  } finally {
+    window.clearTimeout(timeout);
+  }
+
+  // Per-listing cache'i ısıt — aynı tab'da kart→detay geçişinde tekrar fetch yok.
+  for (const id of ids) {
+    try {
+      const cached: Cached = { signals: map[id] ?? [], expires_at: Date.now() + CACHE_TTL_MS };
+      sessionStorage.setItem(`${CACHE_PREFIX}${id}`, JSON.stringify(cached));
+    } catch {
+      /* sessionStorage erişimi yoksa geç */
+    }
+  }
+
+  return map;
+}
+
 export function recordListingView(listingId: string): void {
   if (!listingId) return;
   const fire = (): void => void postView(listingId);

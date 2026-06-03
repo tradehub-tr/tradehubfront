@@ -88,7 +88,7 @@ function renderInlineToggle(
   const manufacturersUrl = buildTabUrl("manufacturers", categoryParam);
 
   const basePill =
-    "inline-flex items-center px-4 py-1.5 text-sm font-semibold rounded-full whitespace-nowrap transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary-500/50";
+    "inline-flex items-center px-3 sm:px-4 py-1.5 text-[13px] sm:text-sm font-semibold rounded-full whitespace-nowrap transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary-500/50";
   const activeCls = `${basePill} bg-gray-900 text-white shadow-sm dark:bg-white dark:text-gray-900`;
   const inactiveCls = `${basePill} bg-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white`;
 
@@ -133,7 +133,7 @@ function renderTitle(
     activeTab === "products" ? "products.resultsForProducts" : "products.resultsForManufacturers";
 
   return `
-    <h1 class="text-base sm:text-xl font-medium text-gray-900 dark:text-white min-w-0 break-words leading-snug tracking-tight m-0 max-w-[72ch]">
+    <h1 class="text-sm min-[400px]:text-base sm:text-xl font-medium text-gray-900 dark:text-white min-w-0 break-words leading-snug tracking-tight m-0 max-w-[72ch]">
       <span class="text-gray-900 dark:text-white" data-i18n="products.viewingLead">${t("products.viewingLead")}</span>
       ${renderInlineToggle(activeTab, categoryParam, queryParam)}
       <span id="sub-header-keyword-wrapper" ${keyword ? "" : 'style="display:none"'}>
@@ -153,18 +153,18 @@ function renderSortDropdown(options: SortOption[], selectedValue: string): strin
   const selected = options.find((o) => o.value === selectedValue) || options[0];
 
   return `
-    <div class="relative">
+    <div class="relative shrink-0">
       <button
         id="sub-header-sort-btn"
         type="button"
         @click="sortOpen = !sortOpen"
-        class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full bg-primary-500 border border-primary-600 text-gray-900 hover:bg-primary-600 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/40 dark:text-gray-900"
+        class="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 text-[13px] sm:text-sm font-medium rounded-full bg-primary-500 border border-primary-600 text-gray-900 hover:bg-primary-600 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/40 dark:text-gray-900"
         aria-haspopup="listbox"
         :aria-expanded="sortOpen"
       >
         <span class="opacity-70 hidden sm:inline">${t("products.sortByLabel")}</span>
-        <span x-text="sortLabel" class="font-semibold truncate max-w-[120px] sm:max-w-none">${selected.label}</span>
-        <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor">
+        <span x-text="sortLabel" class="font-semibold whitespace-nowrap">${selected.label}</span>
+        <svg class="w-3.5 h-3.5 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
         </svg>
       </button>
@@ -173,7 +173,7 @@ function renderSortDropdown(options: SortOption[], selectedValue: string): strin
         x-show="sortOpen"
         x-cloak
         @click.outside="sortOpen = false"
-        class="absolute end-0 z-30 mt-2 min-w-[220px] bg-white border border-gray-200 rounded-lg shadow-lg p-1.5 dark:bg-gray-800 dark:border-gray-700"
+        class="absolute left-0 lg:left-auto lg:right-0 z-30 mt-2 w-[230px] max-w-[calc(100vw-2rem)] bg-white border border-gray-200 rounded-lg shadow-lg p-1.5 dark:bg-gray-800 dark:border-gray-700"
         role="listbox"
         aria-labelledby="sub-header-sort-btn"
       >
@@ -191,7 +191,7 @@ function renderSortDropdown(options: SortOption[], selectedValue: string): strin
                 role="option"
                 :aria-selected="selectedSort === '${option.value}'"
               >
-                <span>${option.label}</span>
+                <span class="truncate">${option.label}</span>
                 <svg
                   x-show="selectedSort === '${option.value}'"
                   x-cloak
@@ -225,7 +225,7 @@ function renderViewModeToggle(): string {
     "bg-transparent text-gray-400 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-200";
 
   return `
-    <div class="inline-flex items-center bg-white border border-gray-200 rounded-full p-[3px] dark:bg-gray-800 dark:border-gray-700" role="tablist" aria-label="${t("products.viewMode")}">
+    <div class="shrink-0 inline-flex items-center bg-white border border-gray-200 rounded-full p-[3px] dark:bg-gray-800 dark:border-gray-700" role="tablist" aria-label="${t("products.viewMode")}">
       <button
         type="button"
         @click="setViewMode('grid')"
@@ -262,13 +262,13 @@ function renderMobileFilterToggle(): string {
       id="mobile-filter-toggle"
       data-drawer-target="filter-sidebar-drawer"
       data-drawer-toggle="filter-sidebar-drawer"
-      class="th-btn-outline lg:hidden inline-flex items-center gap-2 px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600"
+      class="th-btn-outline shrink-0 lg:hidden inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600"
       aria-label="${t("products.filters")}"
     >
       <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"/>
       </svg>
-      <span>${t("products.filters")}</span>
+      <span class="hidden min-[400px]:inline">${t("products.filters")}</span>
     </button>
   `;
 }
@@ -310,7 +310,7 @@ export function SubHeader(props: SubHeaderProps): string {
 
   const actionsBlock = showSortView
     ? `
-      <div class="flex items-center gap-2 shrink-0">
+      <div class="flex flex-wrap items-center gap-2 w-full lg:w-auto">
         ${renderMobileFilterToggle()}
         ${renderSortDropdown(sortOptions, selectedSort)}
         ${renderViewModeToggle()}

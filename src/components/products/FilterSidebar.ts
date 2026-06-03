@@ -502,18 +502,22 @@ export function FilterSidebar(sections?: FilterSection[], idPrefix = ""): string
 
   return `
     <aside
-      class="w-full lg:w-60 xl:w-64 flex-shrink-0 rounded-md border flex flex-col"
+      class="w-full lg:w-60 xl:w-64 flex-shrink-0 ${isMobile ? "" : "rounded-md border"} flex flex-col"
       aria-label="Product filters"
       x-data="${xDataArg}"
       data-filter-prefix-root="${idPrefix || "desktop"}"
       style="background: var(--filter-bg, #ffffff); border-color: var(--filter-border-color, #e5e7eb);"
     >
-      <!-- Header: title + inline Clear link -->
-      <div class="flex items-center justify-between px-4 pt-4 pb-2">
-        <h2
+      <!-- Header: title + inline Clear link (mobil drawer'da başlık üstte zaten var → gizle) -->
+      <div class="flex items-center ${isMobile ? "justify-end pt-3" : "justify-between pt-4"} px-4 pb-2">
+        ${
+          isMobile
+            ? ""
+            : `<h2
           class="text-[15px] font-bold"
           style="color: var(--filter-heading-color, #111827);"
-        >${t("products.filters")}</h2>
+        >${t("products.filters")}</h2>`
+        }
         <button
           type="button"
           class="th-btn-link !p-0 text-[12px] font-medium"
@@ -529,12 +533,12 @@ export function FilterSidebar(sections?: FilterSection[], idPrefix = ""): string
 
       <!-- Sahibinden-style: sticks to viewport bottom while sidebar is visible -->
       <div
-        class="${isMobile ? "" : "lg:sticky lg:bottom-0 z-10"} px-4 py-3 border-t"
+        class="${isMobile ? "sticky bottom-0 z-10 py-2.5" : "lg:sticky lg:bottom-0 z-10 py-3"} px-4 border-t"
         style="background: var(--filter-bg, #ffffff); border-color: var(--filter-divider-color, #e5e7eb);"
       >
         <button
           type="button"
-          class="th-btn w-full"
+          class="th-btn w-full ${isMobile ? "!h-11 text-sm flex items-center justify-center" : ""}"
           data-filter-action="apply-all"
           @click="applyFilters()"
         >${t("products.filterApply")}</button>

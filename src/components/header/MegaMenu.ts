@@ -307,8 +307,6 @@ const buyerCentralColumns: BuyerCentralColumn[] = [
     links: [
       { labelKey: "mega.orderProtections", href: "/pages/info/payments" },
       { labelKey: "mega.letterOfCredit", href: "/letter-of-credit" },
-      { labelKey: "mega.productionMonitoring", href: "/pages/info/monitoring" },
-      { labelKey: "mega.taxCompliance", href: "/pages/info/tax" },
     ],
   },
   {

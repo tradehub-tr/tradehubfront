@@ -196,7 +196,7 @@ export function ProductInfo(): string {
         ${
           p.samplePrice
             ? `
-        <div id="pd-sample-price" class="flex items-center justify-between gap-2 px-4 py-2.5 rounded-lg mb-5" style="background: var(--color-surface-raised, #f5f5f5);">
+        <div id="pd-sample-price" class="flex items-center justify-between gap-2 px-4 py-2.5 rounded-md mb-5" style="background: var(--color-surface-raised, #f5f5f5);">
           <div class="flex items-center gap-2 text-sm min-w-0" style="color: var(--color-text-primary);">
             <svg class="shrink-0" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
             <span class="truncate">${t("product.samplePrice")}: <strong class="shrink-0">${formatCurrency(p.samplePrice, getSelectedCurrency())}</strong></span>
@@ -223,7 +223,7 @@ export function ProductInfo(): string {
         <!-- Shipping -->
         <div class="py-5" style="border-bottom: 1px solid var(--color-border-light, #f0f0f0);">
           <h3 class="text-sm font-bold mb-3 flex items-center gap-1.5 m-0" style="color: var(--pd-title-color, #111827);">${t("product.shippingLabel")}</h3>
-          <div class="flex items-center justify-between gap-3 mt-3 px-3.5 py-3 rounded-lg border min-w-0" id="pd-shipping-card" style="background: var(--pd-spec-header-bg, #f9fafb); border-color: var(--color-border-default, #e5e5e5);">
+          <div class="flex items-center justify-between gap-3 mt-3 px-3.5 py-3 rounded-md border min-w-0" id="pd-shipping-card" style="background: var(--pd-spec-header-bg, #f9fafb); border-color: var(--color-border-default, #e5e5e5);">
             <div class="flex flex-col gap-0.5 min-w-0">
               <span class="text-sm font-semibold truncate" id="pd-ship-card-method" style="color: var(--pd-title-color, #111827);">${p.shipping[0]?.method || t("product.shippingLabel")}</span>
               <span class="pd-shipping-card-detail text-xs truncate" style="color: var(--pd-rating-text-color, #6b7280);">${p.shipping[0] ? t("product.shippingCost", { cost: p.shipping[0].cost, days: p.shipping[0].estimatedDays }) : ""}</span>

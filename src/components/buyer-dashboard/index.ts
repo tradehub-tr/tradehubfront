@@ -8,6 +8,7 @@ export type { BuyerDashboardLayoutProps } from "./BuyerDashboardLayout";
 
 // Components
 export { NewBuyerInfo } from "./NewBuyerInfo";
+export { AnalyticsOverview, initAnalyticsOverview } from "./AnalyticsOverview";
 export { OperationSlider } from "./OperationSlider";
 export { OrdersSection, initOrdersSection } from "./OrdersSection";
 export { OrdersTabs } from "./OrdersTabs";

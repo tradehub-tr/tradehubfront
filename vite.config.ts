@@ -341,6 +341,8 @@ export default defineConfig({
                     if (id.includes('node_modules/i18next')) return 'vendor-i18next';
                     // Vendor: DOMPurify
                     if (id.includes('node_modules/dompurify')) return 'vendor-dompurify';
+                    // Vendor: ECharts (+ zrender bağımlılığı) — buyer dashboard analitiği
+                    if (id.includes('node_modules/echarts') || id.includes('node_modules/zrender')) return 'vendor-echarts';
                     // App: i18n locale files (large)
                     if (id.includes('src/i18n/locales/')) return 'locales';
                     // App: Alpine data modules

@@ -34,7 +34,7 @@ export function SkuRow({ sku, productHref }: SkuRowProps): string {
 
   return `
     <article class="sc-c-sku-container-new bg-[#fafaf8] border border-[#e8e6e0] rounded-[10px] p-[6px_8px] sm:p-[8px_12px] [&+&]:mt-1.5 transition-colors${unavailable ? " opacity-60" : ""}" data-sku-id="${escapeHtml(sku.id)}" x-data>
-      <div class="flex items-center gap-2 sm:gap-3">
+      <div class="flex flex-wrap items-center gap-2 sm:gap-3">
         <div class="shrink-0">
           ${Checkbox({ id: `sku-checkbox-${sku.id}`, checked: sku.selected, onChange: unavailable ? "" : `sku-select-${sku.id}`, disabled: unavailable })}
         </div>
@@ -73,8 +73,14 @@ export function SkuRow({ sku, productHref }: SkuRowProps): string {
           </div>
         </div>
 
+        <!-- Adet + satır toplamı: desktop'ta inline, mobilde alt satıra tam genişlik sağa yaslı -->
+        <div class="flex items-center gap-2 sm:gap-3 max-sm:order-last max-sm:w-full max-sm:justify-end ${unavailable ? "pointer-events-none opacity-50" : ""}">
+          ${QuantityInput({ id: `sku-qty-${sku.id}`, value: sku.quantity, min: sku.minQty || 1, max: sku.maxQty, step: sku.sellInMoqMultiples ? sku.minQty || 1 : 1 })}
+          ${!unavailable ? `<span class="sc-c-sku-line-total text-[12px] sm:text-[14px] font-bold text-[#1a1a1a] m-0 whitespace-nowrap">${formatPrice(sku.unitPrice * sku.quantity, sku.baseCurrency || "USD")}</span>` : ""}
+        </div>
+
         <div class="relative group shrink-0">
-          <button type="button" class="sc-c-sku-delete-btn w-[22px] h-[22px] sm:w-[26px] sm:h-[26px] inline-flex items-center justify-center rounded-full text-[#8a877f] hover:bg-white transition-colors" data-sku-id="${escapeHtml(sku.id)}" @click="$dispatch('sku-delete', { skuId: '${escapeHtml(sku.id)}' })" aria-label="SKU sil">
+          <button type="button" class="sc-c-sku-delete-btn th-no-press w-[22px] h-[22px] sm:w-[26px] sm:h-[26px] inline-flex items-center justify-center rounded-full text-[#8a877f] hover:bg-white transition-colors" data-sku-id="${escapeHtml(sku.id)}" @click="$dispatch('sku-delete', { skuId: '${escapeHtml(sku.id)}' })" aria-label="SKU sil">
             <img src="${trashIcon}" class="w-[12px] h-[12px] sm:w-[14px] sm:h-[14px] object-contain" alt="Sil" />
           </button>
         </div>

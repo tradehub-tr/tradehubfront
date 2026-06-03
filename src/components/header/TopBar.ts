@@ -1279,7 +1279,7 @@ export function TopBar(props?: TopBarProps): string {
           </div>
 
           <!-- Mobile Inline Search (between logo and icons) -->
-          <div class="flex-1 min-w-0 mx-0.5 min-[400px]:mx-1 sm:mx-2 xl:hidden" x-data="{ mobileSearchOpen: false }">
+          <div class="flex-1 min-w-0 mx-0.5 min-[400px]:mx-1 sm:mx-2 xl:hidden" x-data="{ mobileSearchOpen: false, mobileSearchQuery: '' }">
             <!-- Trigger bar (always visible) -->
             <div
               class="flex items-center justify-between h-7 min-[400px]:h-8 sm:h-9 rounded-full border border-gray-300 bg-white cursor-text dark:bg-gray-700 dark:border-gray-600"
@@ -1301,27 +1301,38 @@ export function TopBar(props?: TopBarProps): string {
               class="fixed inset-0 z-50 bg-white dark:bg-gray-900 flex flex-col"
               x-cloak
             >
-              <!-- Top bar: search + cancel -->
-              <div class="flex items-center gap-2 px-3 py-2 border-b border-gray-100 dark:border-gray-700">
+              <!-- Top bar: back + search -->
+              <div class="flex items-center gap-1.5 px-3 py-1.5 border-b border-gray-100 dark:border-gray-700">
+                <button type="button" @click="mobileSearchOpen = false" aria-label="${t("common.cancel")}" class="th-no-press appearance-none focus:outline-none flex items-center justify-center w-7 h-7 shrink-0 text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
+                  ${getLucideIcon("chevron-left", "w-5 h-5")}
+                </button>
                 <form action="/urunler" method="GET" role="search" class="flex-1 min-w-0">
                   <input type="hidden" name="searchType" value="products" />
-                  <div class="flex items-center h-9 rounded-full border border-gray-300 bg-gray-50 overflow-hidden focus-within:border-gray-400 dark:bg-gray-700 dark:border-gray-600">
+                  <div class="flex items-center h-8 rounded-full bg-gray-100 overflow-hidden dark:bg-gray-700">
                     <input
                       x-ref="mobileSearchInput"
+                      x-model="mobileSearchQuery"
                       type="text"
                       name="q"
                       class="w-full h-full px-3 text-sm text-gray-900 bg-transparent border-none focus:ring-0 focus:outline-none placeholder-gray-400 dark:text-white"
                       placeholder="${t("header.searchPlaceholder")}"
                       autocomplete="off"
                     />
-                    <button type="submit" class="th-btn th-no-press flex items-center justify-center h-7 px-4 me-0.5 rounded-full text-xs font-semibold cursor-pointer shrink-0">
-                      ${t("header.searchButton")}
+                    <button
+                      type="button"
+                      x-show="mobileSearchQuery"
+                      x-cloak
+                      @click="mobileSearchQuery = ''; $refs.mobileSearchInput.focus()"
+                      aria-label="${t("common.clear")}"
+                      class="th-no-press appearance-none focus:outline-none flex items-center justify-center w-6 h-6 shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                    >
+                      ${getLucideIcon("x", "w-3.5 h-3.5")}
+                    </button>
+                    <button type="submit" aria-label="${t("header.searchButton")}" class="th-btn th-no-press flex items-center justify-center h-7 w-7 p-0 mr-0.5 rounded-full cursor-pointer shrink-0">
+                      ${getLucideIcon("search", "w-3.5 h-3.5")}
                     </button>
                   </div>
                 </form>
-                <button type="button" @click="mobileSearchOpen = false" class="th-no-press text-sm text-gray-600 dark:text-gray-300 whitespace-nowrap font-medium px-1">
-                  ${t("common.cancel")}
-                </button>
               </div>
 
               <!-- Suggestions -->

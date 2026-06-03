@@ -778,7 +778,7 @@ function updateShippingModal(quantityOverride?: number): void {
       const active = index === state.selectedShippingIndex;
       const deliveryText = formatDeliveryEstimate(option.estimatedDays);
       return `
-      <label class="grid grid-cols-[24px_1fr_auto] items-start gap-x-3 gap-y-0 rounded-lg border px-3 py-3 sm:px-4 sm:py-3.5 cursor-pointer transition-colors ${active ? "border-primary-500 bg-primary-50" : "border-border-default bg-surface-muted hover:bg-surface"}" data-shipping-option-index="${index}">
+      <label class="grid grid-cols-[24px_1fr_auto] items-start gap-x-3 gap-y-0 rounded-md border px-3 py-3 sm:px-4 sm:py-3.5 cursor-pointer transition-colors ${active ? "border-primary-500 bg-primary-50" : "border-border-default bg-surface-muted hover:bg-surface"}" data-shipping-option-index="${index}">
         <span class="w-6 h-6 sm:w-7 sm:h-7 rounded-full border inline-flex items-center justify-center mt-0.5 ${active ? "border-primary-500 bg-primary-500 text-white" : "border-border-medium text-transparent"}">
           ${active ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m5 13 4 4L19 7"/></svg>' : ""}
         </span>
@@ -1358,7 +1358,7 @@ export function SharedCartDrawer(): string {
 export function SharedShippingModal(): string {
   return `
     <div id="shared-cart-shipping-modal" class="fixed inset-0 z-[210] bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300 flex items-end md:items-center justify-center">
-      <div id="shared-cart-shipping-sheet" class="w-full md:w-[min(92vw,760px)] bg-surface rounded-t-xl md:rounded-xl border border-border-default shadow-2xl p-4 sm:p-6 translate-y-4 transition-transform duration-300 max-h-[90vh] md:max-h-[80vh] flex flex-col">
+      <div id="shared-cart-shipping-sheet" class="w-full md:w-[min(92vw,760px)] bg-surface rounded-t-md md:rounded-md border border-border-default shadow-2xl p-4 sm:p-6 translate-y-4 transition-transform duration-300 max-h-[90vh] md:max-h-[80vh] flex flex-col">
         <div class="flex items-center justify-between">
           <h4 class="text-[15px] sm:text-xl font-bold text-text-heading">${t("cart.selectShipping")}</h4>
           <button type="button" id="shared-cart-shipping-close" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full text-secondary-400 hover:text-secondary-900 hover:bg-surface-raised transition-colors inline-flex items-center justify-center shrink-0">

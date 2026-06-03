@@ -7,6 +7,22 @@ paths:
 
 # Tailwind v4 utility kuralları
 
+## Border-radius standardı — `rounded-md`
+
+> **Tüm köşe yuvarlamaları `rounded-md`.** Kart, kutu, panel, görsel, slide, input, dropdown, modal gibi dikdörtgen container'larda varsayılan radius `rounded-md`'dir. Daha küçük (`rounded`, `rounded-sm`) veya daha büyük (`rounded-lg/xl/2xl`) **kullanma** — tasarım dili tek tip kalsın.
+
+- **Yeni component oluştururken** container köşeleri için doğrudan `rounded-md` kullan.
+- **İstisna — daireler/pill'ler:** Buton, badge, avatar, dot, toggle, arama çubuğu gibi tam yuvarlak öğelerde `rounded-full` kalır (bunlar radius standardının dışında).
+- Mevcut `rounded-lg/xl/2xl/sm` gördüğünde dokunduğun yerde fırsatçı şekilde `rounded-md`'ye çevir.
+
+## Buton press/inset-shadow hover'ı — UI kontrollerinde `th-no-press`
+
+> `style.css`'te global bir "press efekti" var (~satır 1835): tüm `button` / `[role="button"]` öğelerine hover'da **inset box-shadow**, active'de daha güçlü inset + `scale(0.98)`. Bu efekt **slider dot'u, ok butonu, icon-button, toggle, paginator nokta gibi küçük UI kontrollerinde çirkin gölgeli kutu** üretiyor.
+
+- **Bu inset-shadow hover'ı UI kontrol öğelerinde kullanma/gösterme.** Yeni bir dot/ok/icon/toggle button'u oluştururken **`th-no-press`** class'ını ekle — global efekt o öğede `box-shadow:none + transform:none` ile kapanır (resmi opt-out, `style.css:1900`).
+- Press efekti yalnızca gerçek **aksiyon butonlarında** (CTA, form submit) anlamlı; dekoratif/navigasyon kontrollerinde **kapat**.
+- Yeni component'lerde hover geri bildirimi gerekiyorsa sadece `color/bg/opacity` değiştir (layout shift yok) — inset gölge ekleme.
+
 **Custom CSS yazmadan önce 4 soru:**
 
 1. Bu stil **saf utility kombinasyonuyla** ifade edilebilir mi? → Evet ise HTML/TS içine `class="..."` yaz, CSS'e ASLA ekleme.

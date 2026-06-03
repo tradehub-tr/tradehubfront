@@ -17,7 +17,7 @@ import { initLanguageSelector } from '../components/header/TopBar'
 import { FooterLinks } from '../components/footer'
 
 // Floating components
-import { FloatingPanel } from '../components/floating'
+import { FloatingPanel, BottomNav, initBottomNav } from '../components/floating'
 
 // Alpine.js
 import { startAlpine } from '../alpine'
@@ -37,6 +37,7 @@ import {
   updateFilterChips,
   setGridViewMode,
 } from '../components/products'
+import { applyListingSocialProof } from '../components/products/initListingSocialProof'
 import { ShippingModal, initShippingModal } from '../components/product'
 
 import { initCurrency } from '../services/currencyService'
@@ -167,40 +168,41 @@ appEl.innerHTML = `
   </main>
 
   <!-- Footer -->
-  <footer>
+  <footer class="pb-14 xl:pb-0">
     ${FooterLinks()}
   </footer>
 
   <!-- Floating Panel -->
   ${FloatingPanel()}
 
+  <!-- Bottom Navigation (mobile/tablet) -->
+  ${BottomNav()}
+
   <!-- Mobile Filter Drawer (off-canvas for mobile) -->
   <div
     id="filter-sidebar-drawer"
-    class="fixed top-0 start-0 z-50 h-screen overflow-y-auto transition-transform -translate-x-full bg-white w-72 dark:bg-gray-800 lg:hidden"
+    class="fixed top-0 left-0 z-50 h-screen w-full overflow-y-auto transition-transform -translate-x-full bg-white dark:bg-gray-800 lg:hidden"
     tabindex="-1"
     aria-labelledby="filter-sidebar-drawer-label"
   >
-    <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+    <div class="sticky top-0 z-10 flex items-center justify-between h-12 px-4 border-b border-gray-200 bg-white dark:bg-gray-800 dark:border-gray-700">
       <h5
         id="filter-sidebar-drawer-label"
-        class="text-base font-semibold text-gray-900 dark:text-white"
-      >
-        Filters
-      </h5>
+        class="text-base font-bold text-gray-900 dark:text-white"
+      >${t('products.filters')}</h5>
       <button
         type="button"
         data-drawer-hide="filter-sidebar-drawer"
         aria-controls="filter-sidebar-drawer"
-        class="absolute top-3 end-3 inline-flex items-center justify-center w-8 h-8 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-md text-sm dark:hover:bg-gray-600 dark:hover:text-white"
+        class="inline-flex items-center justify-center w-8 h-8 -mr-1 text-gray-400 bg-transparent hover:bg-gray-100 hover:text-gray-900 rounded-md dark:hover:bg-gray-700 dark:hover:text-white"
       >
-        <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
         </svg>
-        <span class="sr-only">Close menu</span>
+        <span class="sr-only">${t('common.close')}</span>
       </button>
     </div>
-    <div class="p-4">
+    <div>
       ${FilterSidebar(undefined, 'mobile')}
     </div>
   </div>
@@ -230,6 +232,7 @@ startAlpine();
 // Initialize header behaviors (non-Alpine: cart store load, mobile drawer DOM move)
 initHeaderCart();
 initMobileDrawer();
+initBottomNav();
 initLanguageSelector();
 initAnimatedPlaceholder('#topbar-compact-search-input');
 
@@ -350,6 +353,9 @@ initCurrency().then(() => {
       // Initialize listing cart drawer with current products
       initListingCartDrawer(products);
       initProductSliders();
+
+      // Sosyal kanıt: sinyali olan kartların rozetini dinamik (dönen) etiketle değiştir
+      applyListingSocialProof(products);
     },
     onLoading: showGridLoading,
     onError: (err) => {

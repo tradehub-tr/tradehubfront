@@ -34,6 +34,8 @@ import {
   initRecommendationSlider,
   HeroSideBannerSlider,
   initHeroSideBannerSlider,
+  HeroTopSlider,
+  initHeroTopSlider,
   MobileCategoryBar,
   initMobileCategoryBar,
   TopDeals,
@@ -75,6 +77,15 @@ appEl.innerHTML = `
 
   <!-- Main Content -->
   <main>
+    <!-- Top Hero: Full-width promotional banner slider (Journal-style) -->
+    <section class="pt-1 pb-2 xl:pt-3 xl:pb-4" aria-label="Öne çıkan kampanyalar">
+      <div class="container-boxed">
+        <div class="h-[280px] sm:h-[380px] lg:h-[480px] xl:h-[560px]">
+          ${HeroTopSlider()}
+        </div>
+      </div>
+    </section>
+
     <!-- Hero: Categories + Recommendation Slider + Right Banner Slider -->
     <section class="pt-1 pb-2 xl:py-6" aria-label="Browse categories and recommendations">
       <div class="container-boxed">
@@ -129,6 +140,7 @@ startAlpine();
 
 // Initialize remaining custom behaviors
 initStickyHeaderSearch();
+initHeroTopSlider();
 initCategoryBrowse();
 initMobileCategoryBar();
 initRecommendationSlider();

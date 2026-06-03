@@ -48,6 +48,7 @@
     "@tailwindcss/vite": "^4.1.18",
     "alpinejs": "^3.15.8",
     "dompurify": "^3.3.2",
+    "echarts": "^6.1.0",
     "flowbite": "^4.0.1",
     "i18next": "^25.8.14",
     "i18next-browser-languagedetector": "^8.2.1",

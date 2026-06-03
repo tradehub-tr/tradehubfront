@@ -24,6 +24,13 @@ interface ProductData {
   minOrder: string;
 }
 
+export interface OpenFavoritesOptions {
+  /** Tek seçim: bir liste seçilince ürün eklenir, onAdded çağrılır ve popover kapanır. */
+  closeOnSelect?: boolean;
+  /** closeOnSelect modunda, ürün bir listeye eklendikten sonra çağrılır (örn. toast). */
+  onAdded?: (listId: string) => void;
+}
+
 const DEFAULT_LIST_ID = "default";
 let activeDropdown: HTMLElement | null = null;
 let outsideClickHandler: ((e: MouseEvent) => void) | null = null;
@@ -49,7 +56,11 @@ export function closeFavoritesDropdown(): void {
 /**
  * Open the favorites dropdown anchored to the given button element
  */
-export function openFavoritesDropdown(anchorBtn: HTMLElement, product: ProductData): void {
+export function openFavoritesDropdown(
+  anchorBtn: HTMLElement,
+  product: ProductData,
+  options: OpenFavoritesOptions = {}
+): void {
   // Close any existing dropdown
   closeFavoritesDropdown();
 
@@ -80,7 +91,7 @@ export function openFavoritesDropdown(anchorBtn: HTMLElement, product: ProductDa
   });
 
   // Wire events
-  wireDropdownEvents(dropdown, product, anchorBtn);
+  wireDropdownEvents(dropdown, product, anchorBtn, options);
 
   // Outside click to close
   outsideClickHandler = (e: MouseEvent) => {
@@ -220,7 +231,8 @@ function positionDropdown(anchor: HTMLElement, dropdown: HTMLElement): void {
 function wireDropdownEvents(
   dropdown: HTMLElement,
   product: ProductData,
-  _anchorBtn: HTMLElement
+  _anchorBtn: HTMLElement,
+  options: OpenFavoritesOptions
 ): void {
   // Close button
   dropdown.querySelector(".fav-dropdown-close")?.addEventListener("click", () => {
@@ -232,6 +244,15 @@ function wireDropdownEvents(
     checkbox.addEventListener("change", () => {
       syncCheckboxVisual(checkbox);
       const listId = checkbox.dataset.listId!;
+
+      // Tek seçim modu: liste seçilince ekle, onAdded çağır, kapat.
+      if (options.closeOnSelect) {
+        toggleItemInList(product, listId);
+        options.onAdded?.(listId);
+        closeFavoritesDropdown();
+        return;
+      }
+
       const added = toggleItemInList(product, listId);
 
       if (added) {
@@ -280,7 +301,8 @@ function wireDropdownEvents(
         inlineInput,
         inlineSave,
         createBtn as HTMLElement,
-        inlineCreate
+        inlineCreate,
+        options
       );
     }
   });
@@ -293,7 +315,8 @@ function wireDropdownEvents(
         inlineInput,
         inlineSave,
         createBtn as HTMLElement,
-        inlineCreate
+        inlineCreate,
+        options
       );
     }
   });
@@ -313,7 +336,8 @@ function saveNewList(
   input: HTMLInputElement,
   saveBtn: HTMLButtonElement,
   createBtn: HTMLElement,
-  inlineCreate: HTMLElement
+  inlineCreate: HTMLElement,
+  options: OpenFavoritesOptions
 ): void {
   const name = input.value.trim();
   if (!name) return;
@@ -321,6 +345,14 @@ function saveNewList(
   const list = createList(name);
   // Auto-add product to the new list
   toggleItemInList(product, list.id);
+
+  // Tek seçim modu: yeni liste oluşturulup eklendi → onAdded çağır, kapat.
+  if (options.closeOnSelect) {
+    options.onAdded?.(list.id);
+    closeFavoritesDropdown();
+    return;
+  }
+
   updateFavoriteButtons(product.id);
 
   showToast({

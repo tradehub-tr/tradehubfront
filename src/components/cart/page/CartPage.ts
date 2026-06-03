@@ -133,7 +133,7 @@ export function showCartError(message: string): void {
   }, 4000);
 }
 
-/** Show a toast notification when a product is moved to favorites. Used by the cartPage Alpine component. */
+/** Show a toast notification when a product is added to favorites. Used by the cartPage Alpine component. */
 export function showFavoriteToast(): void {
   const existing = document.getElementById("fav-toast");
   if (existing) existing.remove();
@@ -147,7 +147,7 @@ export function showFavoriteToast(): void {
       <svg class="w-4 h-4 text-[#2db744]" viewBox="0 0 1024 1024" fill="currentColor">
         <path d="M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm-55.8 535.2L292.6 435.6a32 32 0 1 0-45.2 45.3l186 186a32 32 0 0 0 45.2 0l324-324a32 32 0 0 0-45.2-45.3L456.2 599.2z"/>
       </svg>
-      <span data-i18n="cart.movedToFavorites">${t("cart.movedToFavorites")}</span> <a href="/pages/dashboard/favorites.html" class="text-[#333] underline hover:text-[#ff6a00]" data-i18n="cart.favorites">${t("cart.favorites")}</a>
+      <span data-i18n="cart.addedToFavorites">${t("cart.addedToFavorites")}</span> <a href="/pages/dashboard/favorites.html" class="text-[#333] underline hover:text-[#ff6a00]" data-i18n="cart.favorites">${t("cart.favorites")}</a>
     </div>
     <button class="text-[#999] hover:text-[#666] shrink-0" onclick="this.parentElement.remove()">
       <svg class="w-3.5 h-3.5" viewBox="0 0 1024 1024" fill="currentColor">

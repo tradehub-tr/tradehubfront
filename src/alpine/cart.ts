@@ -1,6 +1,7 @@
 import Alpine from "alpinejs";
 import { t } from "../i18n";
-import { addToFavorites } from "../stores/favorites";
+import { openFavoritesDropdown } from "../components/favorites/FavoritesDropdown";
+import { isItemFavorited } from "../stores/favorites";
 import { cartStore } from "../components/cart/state/CartStore";
 import { showFavoriteToast, showCartError } from "../components/cart/page/CartPage";
 import { sanitizeHtml } from "../utils/sanitize";
@@ -298,8 +299,13 @@ Alpine.data("cartPage", () => ({
     const snapshot = cartStore.getProduct(productId);
     if (!snapshot) return;
 
-    // Save to favorites store
-    addToFavorites({
+    // Anchor = tıklanan kalp butonu; popover bunun altında açılır.
+    const anchor = (event.target as HTMLElement)?.closest<HTMLElement>(
+      ".sc-c-spu-favorite-btn"
+    );
+    if (!anchor) return;
+
+    const product = {
       id: productId,
       image:
         snapshot.product.skus[0]?.skuImage ||
@@ -310,20 +316,23 @@ Alpine.data("cartPage", () => ({
         snapshot.product.skus[0]?.baseCurrency || "USD"
       ),
       minOrder: snapshot.product.moqLabel || "Min. order: 1 piece",
+    };
+
+    // "Kaydet..." popover'ı aç: liste seçilince ürün o listeye eklenir (popover
+    // içinde) ve sepette KALIR — sadece favorilere ekleme, taşıma/silme yok.
+    openFavoritesDropdown(anchor, product, {
+      closeOnSelect: true,
+      onAdded: () => {
+        // Kalp ikonunu güncel favori durumuna göre doldur (ürün sayfasındaki gibi).
+        const svg = anchor.querySelector("svg");
+        if (svg) {
+          const fav = isItemFavorited(productId);
+          svg.setAttribute("fill", fav ? "#ef4444" : "none");
+          svg.setAttribute("stroke", fav ? "#ef4444" : "currentColor");
+        }
+        showFavoriteToast();
+      },
     });
-
-    showFavoriteToast();
-
-    const supplierId = snapshot.supplier.id;
-    const supplierProductCount = snapshot.supplier.products.length;
-
-    cartStore.deleteProduct(productId);
-    const el = this.$el as HTMLElement;
-    el.querySelector(`[data-product-id="${productId}"]`)?.remove();
-
-    if (supplierProductCount <= 1 && supplierId) {
-      el.querySelector(`[data-supplier-id="${supplierId}"]`)?.remove();
-    }
   },
 
   handleCheckoutGlobal() {
