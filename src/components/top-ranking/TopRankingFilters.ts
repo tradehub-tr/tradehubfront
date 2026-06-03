@@ -57,32 +57,29 @@ export function TopRankingFilters(): string {
           <!-- Level 2: Subcategories -->
           <template x-for="cat in apiCategories.filter(c => c.children && c.children.length > 0)" :key="'l2-' + cat.slug">
             <div x-show="categoryDropdownLevel === 2 && selectedMainCategory === cat.slug" x-cloak class="max-h-[60vh] overflow-y-auto">
-              <label
-                class="flex items-center gap-3 px-4 py-2.5 cursor-pointer hover:bg-surface-raised rounded-lg transition-colors"
-                @click="pendingSubCategory = null"
-              >
-                <input
-                  type="radio"
-                  name="subcategory"
-                  :checked="pendingSubCategory === null"
-                  class="w-4 h-4 text-primary-500 border-border-default focus:ring-primary-400"
-                />
-                <span class="text-sm text-text-secondary font-medium" x-text="$t('topRankingPage.allCategories') + ' - ' + cat.name"></span>
-              </label>
-              <template x-for="sub in cat.children" :key="sub.slug">
-                <label
-                  class="flex items-center gap-3 px-4 py-2.5 cursor-pointer hover:bg-surface-raised rounded-lg transition-colors"
-                  @click="pendingSubCategory = sub.slug"
-                >
-                  <input
-                    type="radio"
-                    name="subcategory"
-                    :checked="pendingSubCategory === sub.slug"
-                    class="w-4 h-4 text-primary-500 border-border-default focus:ring-primary-400"
-                  />
-                  <span class="text-sm text-text-secondary" x-text="sub.name"></span>
-                </label>
-              </template>
+              <!-- Alt kategori seçimi → chip group (tek seçim). pendingSubCategory korunur. -->
+              <div class="flex flex-wrap gap-2 px-2 py-2">
+                <button
+                  type="button"
+                  @click="pendingSubCategory = null"
+                  class="px-3 py-1.5 rounded-full text-sm font-medium border transition-colors cursor-pointer"
+                  :class="pendingSubCategory === null
+                    ? 'bg-[var(--color-primary-500,#cc9900)] text-white border-[var(--color-primary-500,#cc9900)]'
+                    : 'bg-white text-text-secondary border-border-default hover:border-[var(--color-primary-500,#cc9900)]'"
+                  x-text="$t('topRankingPage.allCategories') + ' - ' + cat.name"
+                ></button>
+                <template x-for="sub in cat.children" :key="sub.slug">
+                  <button
+                    type="button"
+                    @click="pendingSubCategory = sub.slug"
+                    class="px-3 py-1.5 rounded-full text-sm font-medium border transition-colors cursor-pointer"
+                    :class="pendingSubCategory === sub.slug
+                      ? 'bg-[var(--color-primary-500,#cc9900)] text-white border-[var(--color-primary-500,#cc9900)]'
+                      : 'bg-white text-text-secondary border-border-default hover:border-[var(--color-primary-500,#cc9900)]'"
+                    x-text="sub.name"
+                  ></button>
+                </template>
+              </div>
               <div class="flex gap-2 pt-3 mt-2 border-t border-border-default px-4 pb-1">
                 <button
                   type="button"

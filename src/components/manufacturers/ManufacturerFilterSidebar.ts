@@ -37,12 +37,21 @@ function section({ id, title, body }: SectionWrapperOpts): string {
   `;
 }
 
-function radioRow(name: string, value: string, label: string): string {
+/**
+ * Tek-seçim filtre chip'i. Eski radio'nun yerine geçer: `name` Alpine model'i,
+ * `value` korunur. Tekrar tıklayınca seçimi kaldırır (radio'da yapılamayan ama
+ * filtrede beklenen davranış). Seçim sonrası apply() çağrılır.
+ */
+function chipRow(name: string, value: string, label: string): string {
   return `
-    <label class="flex items-center gap-2 py-1 cursor-pointer text-[13px]" style="color: var(--filter-text-color, #374151);">
-      <input type="radio" name="${name}" value="${value}" x-model="${name}" @change="apply()" class="border-gray-300 text-primary-500 focus:ring-primary-500" />
-      <span>${label}</span>
-    </label>
+    <button
+      type="button"
+      @click="${name} = ${name} === '${value}' ? '' : '${value}'; apply()"
+      class="px-3 py-1 rounded-full text-[13px] font-medium border transition-colors cursor-pointer"
+      :class="${name} === '${value}'
+        ? 'bg-[var(--color-primary-500,#cc9900)] text-white border-[var(--color-primary-500,#cc9900)]'
+        : 'bg-white text-[color:var(--filter-text-color,#374151)] border-gray-300 hover:border-[var(--color-primary-500,#cc9900)]'"
+    >${label}</button>
   `;
 }
 
@@ -77,12 +86,20 @@ export function ManufacturerFilterSidebar(): string {
   const mgmtCerts = ["ISO", "BSCI", "SEDEX", "FAMA", "ICTI"];
   const productCerts = ["CE", "ROHS", "CPC", "OEKO-TEX 100", "GRS"];
 
-  // Section gövdeleri
-  const ratingsBody = ratings
-    .map((r) =>
-      radioRow("rating", String(r), `${r.toFixed(1)} ${r === 5.0 ? "" : t("products.filterAndUp")}`)
-    )
-    .join("");
+  // Section gövdeleri — tek-seçim chip grupları (flex-wrap)
+  const chipGroup = (chips: string) => `<div class="flex flex-wrap gap-2 pt-1">${chips}</div>`;
+
+  const ratingsBody = chipGroup(
+    ratings
+      .map((r) =>
+        chipRow(
+          "rating",
+          String(r),
+          `${r.toFixed(1)} ${r === 5.0 ? "" : t("products.filterAndUp")}`
+        )
+      )
+      .join("")
+  );
 
   const moqBody = `
     <div class="flex items-center gap-1.5 mt-2">
@@ -132,17 +149,21 @@ export function ManufacturerFilterSidebar(): string {
     </div>
   `;
 
-  const platformBody = platformYears
-    .map((y) => radioRow("platformYears", String(y), `${y} yıl ve üzeri`))
-    .join("");
+  const platformBody = chipGroup(
+    platformYears.map((y) => chipRow("platformYears", String(y), `${y} yıl ve üzeri`)).join("")
+  );
 
-  const onTimeBody = onTime
-    .map((v) => radioRow("onTimeRate", v, `%${v}${v === "100" ? "" : " ve üzeri"}`))
-    .join("");
+  const onTimeBody = chipGroup(
+    onTime.map((v) => chipRow("onTimeRate", v, `%${v}${v === "100" ? "" : " ve üzeri"}`)).join("")
+  );
 
-  const respBody = respHours.map((v) => radioRow("responseHours", v, `≤ ${v} sa.`)).join("");
+  const respBody = chipGroup(
+    respHours.map((v) => chipRow("responseHours", v, `≤ ${v} sa.`)).join("")
+  );
 
-  const reorderBody = reorder.map((v) => radioRow("reorderRate", v, `%${v} ve üzeri`)).join("");
+  const reorderBody = chipGroup(
+    reorder.map((v) => chipRow("reorderRate", v, `%${v} ve üzeri`)).join("")
+  );
 
   return `
     <aside
