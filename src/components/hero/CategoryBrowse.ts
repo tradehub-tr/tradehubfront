@@ -90,7 +90,7 @@ function renderCategoryPopup(): string {
         <!-- Body: sidebar + content -->
         <div class="flex flex-col lg:flex-row flex-1 min-h-0">
           <!-- Sidebar (loading skeleton, replaced after API) -->
-          <div class="w-full lg:w-56 lg:flex-shrink-0 border-b lg:border-b-0 lg:border-r overflow-x-auto lg:overflow-x-visible overflow-y-auto" style="background-color:var(--catpopup-sidebar-bg);border-color:var(--catpopup-border)" id="cat-popup-sidebar">
+          <div class="w-full lg:w-56 lg:flex-shrink-0 border-b lg:border-b-0 lg:border-e overflow-x-auto lg:overflow-x-visible overflow-y-auto" style="background-color:var(--catpopup-sidebar-bg);border-color:var(--catpopup-border)" id="cat-popup-sidebar">
             <ul id="cat-popup-sidebar-list" class="py-1 flex lg:block overflow-x-auto lg:overflow-x-visible gap-1 px-2 lg:px-0">
               ${renderPopupSidebarSkeleton()}
             </ul>
@@ -368,7 +368,7 @@ export function initCategoryBrowse(): void {
         <li>
           <button
             type="button"
-            class="category-browse-item level1-cate-unit th-no-press flex items-center w-full text-left transition-colors duration-150 group bg-transparent hover:bg-white dark:text-gray-300 dark:hover:bg-gray-700/60 dark:hover:text-white"
+            class="category-browse-item level1-cate-unit th-no-press flex items-center w-full text-start transition-colors duration-150 group bg-transparent hover:bg-white dark:text-gray-300 dark:hover:bg-gray-700/60 dark:hover:text-white"
             style="min-height:44px;padding:6px 16px;gap:12px"
             data-category-id="for-you"
           >
@@ -388,7 +388,7 @@ export function initCategoryBrowse(): void {
         <li>
           <button
             type="button"
-            class="category-browse-item level1-cate-unit th-no-press flex items-center w-full text-left transition-colors duration-150 group bg-transparent hover:bg-white dark:text-gray-300 dark:hover:bg-gray-700/60 dark:hover:text-white"
+            class="category-browse-item level1-cate-unit th-no-press flex items-center w-full text-start transition-colors duration-150 group bg-transparent hover:bg-white dark:text-gray-300 dark:hover:bg-gray-700/60 dark:hover:text-white"
             style="min-height:44px;padding:6px 16px;gap:12px"
             data-category-id="${cat.id}"
           >
@@ -421,7 +421,7 @@ export function initCategoryBrowse(): void {
         <li class="flex-shrink-0 lg:flex-shrink">
           <button
             type="button"
-            class="cat-popup-btn th-catpopup-sidebar-item th-no-press flex items-center gap-2 lg:gap-3 w-full px-3 lg:px-4 py-2 lg:py-2.5 text-sm text-left border-l-2 border-l-transparent transition-colors duration-150 whitespace-nowrap lg:whitespace-normal hover:bg-(--catpopup-sidebar-active-bg) hover:text-(--catpopup-heading) th-catpopup-sidebar-item--active"
+            class="cat-popup-btn th-catpopup-sidebar-item th-no-press flex items-center gap-2 lg:gap-3 w-full px-3 lg:px-4 py-2 lg:py-2.5 text-sm text-start border-s-2 border-s-transparent transition-colors duration-150 whitespace-nowrap lg:whitespace-normal hover:bg-(--catpopup-sidebar-active-bg) hover:text-(--catpopup-heading) th-catpopup-sidebar-item--active"
             style="color:var(--catpopup-text)"
             data-category="for-you"
           >
@@ -441,7 +441,7 @@ export function initCategoryBrowse(): void {
         <li class="flex-shrink-0 lg:flex-shrink">
           <button
             type="button"
-            class="cat-popup-btn th-catpopup-sidebar-item th-no-press flex items-center gap-2 lg:gap-3 w-full px-3 lg:px-4 py-2 lg:py-2.5 text-sm text-left border-l-2 border-l-transparent transition-colors duration-150 whitespace-nowrap lg:whitespace-normal hover:bg-(--catpopup-sidebar-active-bg) hover:text-(--catpopup-heading)"
+            class="cat-popup-btn th-catpopup-sidebar-item th-no-press flex items-center gap-2 lg:gap-3 w-full px-3 lg:px-4 py-2 lg:py-2.5 text-sm text-start border-s-2 border-s-transparent transition-colors duration-150 whitespace-nowrap lg:whitespace-normal hover:bg-(--catpopup-sidebar-active-bg) hover:text-(--catpopup-heading)"
             style="color:var(--catpopup-text)"
             data-category="${cat.id}"
           >

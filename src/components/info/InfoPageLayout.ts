@@ -24,8 +24,8 @@ export function InfoPageLayout({ title, subtitle, icon, sections }: InfoPageLayo
     <!-- Hero Banner -->
     <section class="relative bg-gradient-to-br from-orange-600 via-orange-500 to-amber-500 py-14 sm:py-20 overflow-hidden">
       <div class="absolute inset-0 opacity-10">
-        <div class="absolute top-0 right-0 w-80 h-80 bg-white rounded-full blur-3xl translate-x-1/3 -translate-y-1/3"></div>
-        <div class="absolute bottom-0 left-0 w-96 h-96 bg-yellow-300 rounded-full blur-3xl -translate-x-1/3 translate-y-1/3"></div>
+        <div class="absolute top-0 end-0 w-80 h-80 bg-white rounded-full blur-3xl translate-x-1/3 -translate-y-1/3"></div>
+        <div class="absolute bottom-0 start-0 w-96 h-96 bg-yellow-300 rounded-full blur-3xl -translate-x-1/3 translate-y-1/3"></div>
       </div>
       <div class="absolute inset-0 opacity-5">
         <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">

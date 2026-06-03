@@ -221,7 +221,7 @@ function renderFormField(field: FormField): string {
 
   return `
     <div class="flex items-baseline py-2.5 min-h-[38px] max-md:flex-col max-md:gap-1">
-      <div class="w-[220px] flex-shrink-0 text-sm font-bold text-right pr-4 max-md:w-auto max-md:text-left max-md:pr-0" style="color:var(--color-text-primary)">${field.label}:</div>
+      <div class="w-[220px] flex-shrink-0 text-sm font-bold text-end pe-4 max-md:w-auto max-md:text-start max-md:pe-0" style="color:var(--color-text-primary)">${field.label}:</div>
       <div class="flex-1 flex items-center gap-2 text-sm" style="color:var(--color-text-primary)">${valueHtml}</div>
     </div>
   `;

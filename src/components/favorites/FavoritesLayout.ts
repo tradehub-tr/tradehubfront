@@ -344,7 +344,7 @@ function renderSupplierCards(items: FavoriteSellerItem[]): string {
       const reviews = s.reviewCount ?? 0;
       return `
     <div class="relative bg-white rounded-lg border border-[#eee] hover:border-[#F60] hover:shadow-[0_8px_18px_rgba(0,0,0,0.08)] transition-all p-5 max-sm:p-4 group" data-fav-seller-id="${s.code}">
-      <button type="button" class="fav-remove-seller absolute top-3 right-3 w-8 h-8 rounded-full bg-[#f4f4f4] flex items-center justify-center cursor-pointer hover:bg-red-100 z-10 transition-colors opacity-0 group-hover:opacity-100" data-remove-seller="${s.code}" title="${t("favorites.removeFromAll")}">
+      <button type="button" class="fav-remove-seller absolute top-3 end-3 w-8 h-8 rounded-full bg-[#f4f4f4] flex items-center justify-center cursor-pointer hover:bg-red-100 z-10 transition-colors opacity-0 group-hover:opacity-100" data-remove-seller="${s.code}" title="${t("favorites.removeFromAll")}">
         <svg class="w-[16px] h-[16px]" fill="none" stroke="#ef4444" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
       <div class="flex max-md:flex-col gap-4 max-md:gap-3 items-start">
@@ -357,7 +357,7 @@ function renderSupplierCards(items: FavoriteSellerItem[]): string {
           }
         </div>
         <!-- Info -->
-        <div class="flex-1 min-w-0 pr-12 max-md:pr-0">
+        <div class="flex-1 min-w-0 pe-12 max-md:pe-0">
           <a href="${profileHref}" class="text-[15px] font-bold text-[#222] hover:text-[#1a66ff] transition-colors line-clamp-1">${escapeHtml(s.name)}</a>
           <div class="flex flex-wrap items-center gap-1.5 mt-1 text-[12px] text-[#555]">
             <span class="inline-flex items-center gap-1 text-[#1a66ff] font-semibold">
@@ -471,7 +471,7 @@ function renderFilterButton(): string {
         ${badge ? `<span class="inline-flex items-center justify-center min-w-[16px] h-4 px-1 text-[10px] font-bold rounded-full bg-[var(--color-cta-primary,#F5B800)] text-white tabular-nums">${badge}</span>` : ""}
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
       </button>
-      <div data-fav-filter-menu class="hidden absolute top-[calc(100%+6px)] right-0 z-30 w-[300px] max-h-[480px] overflow-y-auto bg-white border border-border-default rounded-xl shadow-[0_24px_60px_-12px_rgba(20,20,18,0.18),0_8px_20px_-6px_rgba(20,20,18,0.08)] p-2">
+      <div data-fav-filter-menu class="hidden absolute top-[calc(100%+6px)] end-0 z-30 w-[300px] max-h-[480px] overflow-y-auto bg-white border border-border-default rounded-xl shadow-[0_24px_60px_-12px_rgba(20,20,18,0.18),0_8px_20px_-6px_rgba(20,20,18,0.08)] p-2">
         ${
           catRows
             ? `<div class="mb-1.5">
@@ -564,11 +564,11 @@ function renderToolbar(count: number): string {
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
         </button>
         <div data-fav-sort-menu
-             class="hidden absolute top-[calc(100%+6px)] right-0 z-30 min-w-[200px] bg-white border border-border-default rounded-xl shadow-[0_24px_60px_-12px_rgba(20,20,18,0.18),0_8px_20px_-6px_rgba(20,20,18,0.08)] p-1.5">
+             class="hidden absolute top-[calc(100%+6px)] end-0 z-30 min-w-[200px] bg-white border border-border-default rounded-xl shadow-[0_24px_60px_-12px_rgba(20,20,18,0.18),0_8px_20px_-6px_rgba(20,20,18,0.08)] p-1.5">
           ${SORTS.map((s) => {
             const on = sortId === s.id;
             return `<button type="button" data-fav-sort-pick="${s.id}"
-                            class="w-full flex items-center justify-between gap-2 bg-transparent border-0 px-2.5 py-2 rounded-lg text-[13px] cursor-pointer text-left transition-colors hover:bg-surface-raised appearance-none focus:outline-none ${on ? "font-semibold text-[var(--color-cta-primary,#F5B800)]" : "text-text-primary"}">
+                            class="w-full flex items-center justify-between gap-2 bg-transparent border-0 px-2.5 py-2 rounded-lg text-[13px] cursor-pointer text-start transition-colors hover:bg-surface-raised appearance-none focus:outline-none ${on ? "font-semibold text-[var(--color-cta-primary,#F5B800)]" : "text-text-primary"}">
                       <span>${escapeHtml(t(s.labelKey, { defaultValue: s.defaultLabel }))}</span>
                       ${on ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>` : ""}
                     </button>`;
@@ -596,7 +596,7 @@ function renderStockPill(en: FavEnrichment | undefined): string {
         ? "bg-neutral-800/85 text-white [&_.dot]:bg-amber-400"
         : "bg-neutral-800/85 text-white [&_.dot]:bg-emerald-400";
   return `
-    <span class="absolute bottom-1.5 left-1.5 inline-flex items-center gap-1 px-2 py-0.5 text-[10.5px] font-medium rounded-full ${cls}">
+    <span class="absolute bottom-1.5 start-1.5 inline-flex items-center gap-1 px-2 py-0.5 text-[10.5px] font-medium rounded-full ${cls}">
       <span class="dot inline-block w-1.5 h-1.5 rounded-full"></span>
       ${escapeHtml(label)}
     </span>
@@ -641,7 +641,7 @@ function renderProductCardGrid(p: FavoriteItem): string {
         ${renderStockPill(enrichment)}
       </a>
       <button type="button"
-              class="fav-remove-item absolute top-1.5 right-1.5 w-8 h-8 inline-flex items-center justify-center rounded-full bg-white shadow-[0_1px_3px_rgba(20,20,18,0.12)] text-[#ef4444] cursor-pointer p-0 border-0 transition-transform duration-150 hover:scale-110 active:scale-95 appearance-none focus:outline-none focus-visible:border focus-visible:border-[var(--color-cta-primary,#F5B800)]"
+              class="fav-remove-item absolute top-1.5 end-1.5 w-8 h-8 inline-flex items-center justify-center rounded-full bg-white shadow-[0_1px_3px_rgba(20,20,18,0.12)] text-[#ef4444] cursor-pointer p-0 border-0 transition-transform duration-150 hover:scale-110 active:scale-95 appearance-none focus:outline-none focus-visible:border focus-visible:border-[var(--color-cta-primary,#F5B800)]"
               data-remove-id="${p.id}"
               aria-label="${t("favorites.removeFromAll")}"
               title="${t("favorites.removeFromAll")}">
@@ -889,7 +889,7 @@ function renderProductCards(items: FavoriteItem[]): string {
 
 function renderFavorites(): string {
   const tabBase =
-    "fav-tabs__tab th-no-press relative inline-flex items-center gap-2 py-2 px-3 text-[13px] font-medium text-text-tertiary bg-transparent border-0 cursor-pointer transition-colors duration-150 hover:text-text-primary appearance-none focus:outline-none [&.fav-tabs__tab--active]:text-text-primary [&.fav-tabs__tab--active]:font-semibold [&.fav-tabs__tab--active]:after:content-[''] [&.fav-tabs__tab--active]:after:absolute [&.fav-tabs__tab--active]:after:left-3 [&.fav-tabs__tab--active]:after:right-3 [&.fav-tabs__tab--active]:after:-bottom-px [&.fav-tabs__tab--active]:after:h-0.5 [&.fav-tabs__tab--active]:after:bg-[var(--color-cta-primary,#F5B800)] [&.fav-tabs__tab--active]:after:rounded-sm";
+    "fav-tabs__tab th-no-press relative inline-flex items-center gap-2 py-2 px-3 text-[13px] font-medium text-text-tertiary bg-transparent border-0 cursor-pointer transition-colors duration-150 hover:text-text-primary appearance-none focus:outline-none [&.fav-tabs__tab--active]:text-text-primary [&.fav-tabs__tab--active]:font-semibold [&.fav-tabs__tab--active]:after:content-[''] [&.fav-tabs__tab--active]:after:absolute [&.fav-tabs__tab--active]:after:start-3 [&.fav-tabs__tab--active]:after:end-3 [&.fav-tabs__tab--active]:after:-bottom-px [&.fav-tabs__tab--active]:after:h-0.5 [&.fav-tabs__tab--active]:after:bg-[var(--color-cta-primary,#F5B800)] [&.fav-tabs__tab--active]:after:rounded-sm";
 
   const productsCount = getTotalCount();
   const suppliersCount = getSellerTotalCount();
@@ -924,13 +924,13 @@ function renderFavorites(): string {
     <!-- Tab: Products -->
     <div class="fav-tab-content fav-tab-content--active hidden [&.fav-tab-content--active]:block" data-content="fav-products">
       <div class="fav-products grid grid-cols-[220px_minmax(0,1fr)] min-h-[400px] max-md:grid-cols-1">
-        <aside class="fav-products__sidebar flex flex-col gap-1 py-6 pl-6 pr-3 max-md:pl-3 max-md:pr-3 max-md:border-b max-md:border-[#f0f0f0]">
+        <aside class="fav-products__sidebar flex flex-col gap-1 py-6 ps-6 pe-3 max-md:ps-3 max-md:pe-3 max-md:border-b max-md:border-[#f0f0f0]">
           ${sidebarHeader}
           <div class="flex flex-col gap-0.5" id="fav-list-sidebar">
             ${renderSidebarLists()}
           </div>
         </aside>
-        <div class="min-w-0 border-l border-border-default max-md:border-l-0 max-md:border-t" id="fav-products-container">
+        <div class="min-w-0 border-s border-border-default max-md:border-s-0 max-md:border-t" id="fav-products-container">
           <!-- Populated via JS -->
           ${renderEmptyState()}
         </div>
@@ -940,13 +940,13 @@ function renderFavorites(): string {
     <!-- Tab: Suppliers -->
     <div class="fav-tab-content hidden [&.fav-tab-content--active]:block" data-content="fav-suppliers">
       <div class="fav-products grid grid-cols-[220px_minmax(0,1fr)] min-h-[400px] max-md:grid-cols-1">
-        <aside class="fav-products__sidebar flex flex-col gap-1 py-6 pl-6 pr-3 max-md:pl-3 max-md:pr-3 max-md:border-b max-md:border-[#f0f0f0]">
+        <aside class="fav-products__sidebar flex flex-col gap-1 py-6 ps-6 pe-3 max-md:ps-3 max-md:pe-3 max-md:border-b max-md:border-[#f0f0f0]">
           ${sidebarHeader}
           <div class="flex flex-col gap-0.5" id="fav-supplier-list-sidebar">
             ${renderSidebarLists("suppliers")}
           </div>
         </aside>
-        <div class="min-w-0 border-l border-border-default max-md:border-l-0 max-md:border-t" id="fav-suppliers-container">
+        <div class="min-w-0 border-s border-border-default max-md:border-s-0 max-md:border-t" id="fav-suppliers-container">
           ${renderEmptyState()}
         </div>
       </div>
@@ -964,8 +964,8 @@ function renderFavorites(): string {
         </div>
         <div class="px-6 pb-5">
           <div class="relative">
-            <input type="text" class="th-input th-input-md pr-[50px]" placeholder="${t("favorites.enterName")}" maxlength="25" id="fav-list-input" />
-            <span class="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs text-text-tertiary"><span id="fav-char-count">0</span>/25</span>
+            <input type="text" class="th-input th-input-md pe-[50px]" placeholder="${t("favorites.enterName")}" maxlength="25" id="fav-list-input" />
+            <span class="absolute end-3.5 top-1/2 -translate-y-1/2 text-xs text-text-tertiary"><span id="fav-char-count">0</span>/25</span>
           </div>
         </div>
         <div class="flex justify-center gap-4 px-6 pb-6">

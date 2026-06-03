@@ -249,12 +249,12 @@ appEl.innerHTML = `
             <table class="w-full text-sm">
               <thead class="bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider">
                 <tr>
-                  <th class="px-4 py-3 text-left">Ürün</th>
-                  <th class="px-4 py-3 text-left">Kategori</th>
-                  <th class="px-4 py-3 text-left">Fiyat</th>
-                  <th class="px-4 py-3 text-left">Min Sipariş</th>
-                  <th class="px-4 py-3 text-left">Durum</th>
-                  <th class="px-4 py-3 text-right">İşlemler</th>
+                  <th class="px-4 py-3 text-start">Ürün</th>
+                  <th class="px-4 py-3 text-start">Kategori</th>
+                  <th class="px-4 py-3 text-start">Fiyat</th>
+                  <th class="px-4 py-3 text-start">Min Sipariş</th>
+                  <th class="px-4 py-3 text-start">Durum</th>
+                  <th class="px-4 py-3 text-end">İşlemler</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-100">
@@ -286,7 +286,7 @@ appEl.innerHTML = `
                         'bg-gray-100 text-gray-500': product.status === 'Archived'
                       }" class="px-2 py-0.5 rounded-full text-xs font-medium" x-text="product.status === 'Active' ? 'Aktif' : product.status === 'Draft' ? 'Taslak' : 'Arşiv'"></span>
                     </td>
-                    <td class="px-4 py-3 text-right">
+                    <td class="px-4 py-3 text-end">
                       <div class="flex items-center justify-end gap-2">
                         <button @click="openProductModal(product)" class="p-1.5 text-gray-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg transition-colors" title="Düzenle">
                           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
@@ -332,7 +332,7 @@ appEl.innerHTML = `
                 </div>
                 <div class="p-3 flex items-center justify-between">
                   <span class="text-sm font-medium text-gray-900 truncate" x-text="cat.category_name"></span>
-                  <div class="flex items-center gap-1 ml-2 shrink-0">
+                  <div class="flex items-center gap-1 ms-2 shrink-0">
                     <button @click="openCategoryModal(cat)" class="p-1 text-gray-400 hover:text-blue-500 rounded transition-colors">
                       <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                     </button>
@@ -413,10 +413,10 @@ appEl.innerHTML = `
               <div class="group relative aspect-square rounded-md overflow-hidden border border-gray-200 bg-gray-100">
                 <img :src="item.image" :alt="item.caption || 'Galeri fotoğrafı'" class="w-full h-full object-cover" />
                 <!-- Sıra numarası -->
-                <div class="absolute top-2 left-2 bg-black/50 text-white text-[10px] px-1.5 py-0.5 rounded font-mono" x-text="idx + 1"></div>
+                <div class="absolute top-2 start-2 bg-black/50 text-white text-[10px] px-1.5 py-0.5 rounded font-mono" x-text="idx + 1"></div>
                 <!-- Caption -->
                 <template x-if="item.caption">
-                  <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-2 py-2">
+                  <div class="absolute bottom-0 start-0 end-0 bg-gradient-to-t from-black/70 to-transparent px-2 py-2">
                     <p class="text-white text-[11px] line-clamp-1" x-text="item.caption"></p>
                   </div>
                 </template>
@@ -592,7 +592,7 @@ appEl.innerHTML = `
                       <span x-show="(order.items || []).length > 2" class="text-[11px] text-gray-400">+<span x-text="(order.items || []).length - 2"></span> daha</span>
                     </div>
                   </div>
-                  <div class="text-right shrink-0">
+                  <div class="text-end shrink-0">
                     <div class="text-sm font-bold text-gray-900" x-text="(order.currency || '') + ' ' + parseFloat(order.total || 0).toFixed(2)"></div>
                     <div class="mt-2 flex items-center gap-2 justify-end">
                       <button x-show="order.status_en === 'Waiting for payment'"
@@ -719,10 +719,10 @@ appEl.innerHTML = `
                 <table class="w-full text-sm">
                   <thead class="bg-gray-50">
                     <tr>
-                      <th class="px-4 py-2.5 text-left text-xs font-semibold text-gray-500">Ürün</th>
+                      <th class="px-4 py-2.5 text-start text-xs font-semibold text-gray-500">Ürün</th>
                       <th class="px-4 py-2.5 text-center text-xs font-semibold text-gray-500">Adet</th>
-                      <th class="px-4 py-2.5 text-right text-xs font-semibold text-gray-500">Birim</th>
-                      <th class="px-4 py-2.5 text-right text-xs font-semibold text-gray-500">Toplam</th>
+                      <th class="px-4 py-2.5 text-end text-xs font-semibold text-gray-500">Birim</th>
+                      <th class="px-4 py-2.5 text-end text-xs font-semibold text-gray-500">Toplam</th>
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-gray-100">
@@ -733,8 +733,8 @@ appEl.innerHTML = `
                           <div x-show="item.variation" class="text-xs text-gray-400" x-text="item.variation"></div>
                         </td>
                         <td class="px-4 py-3 text-center text-gray-600" x-text="item.quantity"></td>
-                        <td class="px-4 py-3 text-right text-gray-600" x-text="parseFloat(item.unit_price || 0).toFixed(2)"></td>
-                        <td class="px-4 py-3 text-right font-semibold text-gray-900" x-text="parseFloat(item.total_price || 0).toFixed(2)"></td>
+                        <td class="px-4 py-3 text-end text-gray-600" x-text="parseFloat(item.unit_price || 0).toFixed(2)"></td>
+                        <td class="px-4 py-3 text-end font-semibold text-gray-900" x-text="parseFloat(item.total_price || 0).toFixed(2)"></td>
                       </tr>
                     </template>
                   </tbody>
@@ -750,7 +750,7 @@ appEl.innerHTML = `
     <!-- ─── Başarı Toast ───────────────────────────────────────── -->
     <div x-show="toast.show" x-transition.opacity
       :class="toast.type === 'success' ? 'bg-green-600' : 'bg-red-600'"
-      class="fixed bottom-6 right-6 text-white px-5 py-3 rounded-md shadow-lg flex items-center gap-3 text-sm font-medium z-[9999]">
+      class="fixed bottom-6 end-6 text-white px-5 py-3 rounded-md shadow-lg flex items-center gap-3 text-sm font-medium z-[9999]">
       <svg x-show="toast.type === 'success'" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
       <svg x-show="toast.type === 'error'" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
       <span x-text="toast.message"></span>

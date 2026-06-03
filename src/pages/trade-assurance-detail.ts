@@ -40,7 +40,7 @@ function HeroSection(): string {
           </a>
         </div>
       </div>
-      <div class="absolute bottom-0 left-0 right-0 h-2 bg-[#FFC200]"></div>
+      <div class="absolute bottom-0 start-0 end-0 h-2 bg-[#FFC200]"></div>
     </section>
   `
 }

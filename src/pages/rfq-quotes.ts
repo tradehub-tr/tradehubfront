@@ -123,10 +123,10 @@ async function loadQuotes() {
             <!-- Vendor Header Row -->
             <thead>
               <tr class="border-b border-gray-200">
-                <th class="p-3 text-left text-sm font-normal w-40"></th>
+                <th class="p-3 text-start text-sm font-normal w-40"></th>
                 ${quotes.map((q) => `
-                  <th class="p-3 text-center min-w-[200px] border-l border-gray-100 relative pt-8">
-                    <button class="quote-dismiss-btn absolute top-2 right-3 text-gray-300 hover:text-gray-500 transition-colors" data-quote="${q.name}">
+                  <th class="p-3 text-center min-w-[200px] border-s border-gray-100 relative pt-8">
+                    <button class="quote-dismiss-btn absolute top-2 end-3 text-gray-300 hover:text-gray-500 transition-colors" data-quote="${q.name}">
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                     </button>
                     <p class="text-sm font-medium text-gray-800">${q.seller_name}</p>
@@ -140,7 +140,7 @@ async function loadQuotes() {
               <tr class="border-b border-gray-200">
                 <td class="p-3 text-sm text-amber-600 font-medium align-top">${t('rfq.vendorComparison')}</td>
                 ${quotes.map((q) => `
-                  <td class="p-3 text-center text-sm border-l border-gray-100 align-top">
+                  <td class="p-3 text-center text-sm border-s border-gray-100 align-top">
                     ${q.status === 'Submitted' ? `
                       <div class="flex justify-center gap-1.5">
                         <button class="quote-accept-btn px-3 py-1 rounded-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-xs font-medium border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150" data-quote="${q.name}">${t('rfq.accept')}</button>
@@ -155,7 +155,7 @@ async function loadQuotes() {
               <tr class="border-b border-gray-100">
                 <td class="p-3 text-sm text-gray-500">${t('rfq.product')}</td>
                 ${quotes.map((q) => `
-                  <td class="p-3 text-center border-l border-gray-100">
+                  <td class="p-3 text-center border-s border-gray-100">
                     ${q.listing_image ? `<img src="${q.listing_image}" alt="" class="w-16 h-16 object-cover rounded mx-auto mb-1" />` : ''}
                     <p class="text-xs text-gray-700">${q.listing_title || '-'}</p>
                   </td>
@@ -170,7 +170,7 @@ async function loadQuotes() {
               <tr class="border-b border-gray-100">
                 <td class="p-3 text-sm text-gray-500">${t('rfq.unitPrice')}</td>
                 ${quotes.map((q) => `
-                  <td class="p-3 text-center border-l border-gray-100">
+                  <td class="p-3 text-center border-s border-gray-100">
                     ${q.total_price ? `
                       <div class="text-xl font-bold text-gray-800 leading-tight tabular-nums">${formatCurrency(q.price_per_unit, q.currency)}</div>
                       ${rfq.unit ? `<div class="text-xs text-gray-400 mt-0.5">/${rfq.unit}</div>` : ''}
@@ -182,14 +182,14 @@ async function loadQuotes() {
               <tr class="border-b border-gray-100">
                 <td class="p-3 text-sm text-gray-500">${t('rfq.leadTime')}</td>
                 ${quotes.map((q) => `
-                  <td class="p-3 text-center text-sm border-l border-gray-100">${q.lead_time_days ? `${q.lead_time_days} ${t('rfq.days')}` : '-'}</td>
+                  <td class="p-3 text-center text-sm border-s border-gray-100">${q.lead_time_days ? `${q.lead_time_days} ${t('rfq.days')}` : '-'}</td>
                 `).join('')}
               </tr>
               <!-- Message -->
               <tr class="border-b border-gray-100">
                 <td class="p-3 text-sm text-gray-500">${t('rfq.messageLbl')}</td>
                 ${quotes.map((q) => `
-                  <td class="p-3 text-center text-sm border-l border-gray-100 text-gray-600">${q.message || '-'}</td>
+                  <td class="p-3 text-center text-sm border-s border-gray-100 text-gray-600">${q.message || '-'}</td>
                 `).join('')}
               </tr>
 
@@ -201,35 +201,35 @@ async function loadQuotes() {
               <tr class="border-b border-gray-100">
                 <td class="p-3 text-sm text-gray-500">${t('rfq.companyName')}</td>
                 ${quotes.map((q) => `
-                  <td class="p-3 text-center text-sm border-l border-gray-100 text-gray-700">${q.seller_company || '-'}</td>
+                  <td class="p-3 text-center text-sm border-s border-gray-100 text-gray-700">${q.seller_company || '-'}</td>
                 `).join('')}
               </tr>
               <!-- Country -->
               <tr class="border-b border-gray-100">
                 <td class="p-3 text-sm text-gray-500">${t('rfq.country')}</td>
                 ${quotes.map((q) => `
-                  <td class="p-3 text-center text-sm border-l border-gray-100 text-gray-600">${q.seller_country || '-'}</td>
+                  <td class="p-3 text-center text-sm border-s border-gray-100 text-gray-600">${q.seller_country || '-'}</td>
                 `).join('')}
               </tr>
               <!-- Business Type -->
               <tr class="border-b border-gray-100">
                 <td class="p-3 text-sm text-gray-500">${t('rfq.businessType')}</td>
                 ${quotes.map((q) => `
-                  <td class="p-3 text-center text-sm border-l border-gray-100 text-gray-600">${q.seller_type || '-'}</td>
+                  <td class="p-3 text-center text-sm border-s border-gray-100 text-gray-600">${q.seller_type || '-'}</td>
                 `).join('')}
               </tr>
               <!-- Year Established -->
               <tr class="border-b border-gray-100">
                 <td class="p-3 text-sm text-gray-500">${t('rfq.yearEstablished')}</td>
                 ${quotes.map((q) => `
-                  <td class="p-3 text-center text-sm border-l border-gray-100 text-gray-600">${q.seller_year_established || '-'}</td>
+                  <td class="p-3 text-center text-sm border-s border-gray-100 text-gray-600">${q.seller_year_established || '-'}</td>
                 `).join('')}
               </tr>
               <!-- Employee Count -->
               <tr class="border-b border-gray-100">
                 <td class="p-3 text-sm text-gray-500">${t('rfq.employeeCount')}</td>
                 ${quotes.map((q) => `
-                  <td class="p-3 text-center text-sm border-l border-gray-100 text-gray-600">${q.seller_employee_count || '-'}</td>
+                  <td class="p-3 text-center text-sm border-s border-gray-100 text-gray-600">${q.seller_employee_count || '-'}</td>
                 `).join('')}
               </tr>
             </tbody>

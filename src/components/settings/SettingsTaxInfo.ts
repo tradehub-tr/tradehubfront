@@ -303,7 +303,7 @@ function buildContent(data: TaxInfoData): string {
         <span class="flex-shrink-0 mt-0.5">${ICONS.info}</span>
         <div class="flex-1 min-w-0">
           <span>${t("settings.taxBannerText")}</span>
-          <a href="#" class="text-blue-600 font-medium no-underline hover:underline ml-1">${t("settings.taxBannerLink")}</a>
+          <a href="#" class="text-blue-600 font-medium no-underline hover:underline ms-1">${t("settings.taxBannerLink")}</a>
         </div>
       </div>
 

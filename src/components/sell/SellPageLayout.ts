@@ -108,7 +108,7 @@ function HeroSection(): string {
               <a href="#paketler" class="th-btn-outline th-btn-lg">Nasıl çalışır?</a>
             </div>
           </div>
-          <div class="relative w-full lg:max-w-[720px] xl:max-w-[800px] 2xl:max-w-[860px] lg:mr-auto lg:h-full">
+          <div class="relative w-full lg:max-w-[720px] xl:max-w-[800px] 2xl:max-w-[860px] lg:me-auto lg:h-full">
             <div class="relative w-full aspect-[5/4] lg:aspect-auto lg:h-full lg:min-h-[360px] rounded-2xl overflow-hidden border border-[#e8e6e0] bg-[#f0ead8] shadow-[0_8px_24px_-12px_rgba(20,20,18,0.18),0_4px_8px_-4px_rgba(20,20,18,0.08)]">
               <img
                 src="${heroImg}"
@@ -210,7 +210,7 @@ function PricingCard(plan: PricingPlan, idx: number): string {
     <div class="relative flex flex-col gap-3.5 rounded-2xl border p-[26px_22px_22px] transition-[border-color,box-shadow,transform] duration-150 ${cardCls}">
       ${
         badge
-          ? `<span class="absolute -top-2.5 left-[22px] bg-[#f5b800] text-[#1a1a1a] text-[10.5px] font-bold uppercase tracking-[0.08em] px-2.5 py-1 rounded-full border border-[#d39c00]">${badge}</span>`
+          ? `<span class="absolute -top-2.5 start-[22px] bg-[#f5b800] text-[#1a1a1a] text-[10.5px] font-bold uppercase tracking-[0.08em] px-2.5 py-1 rounded-full border border-[#d39c00]">${badge}</span>`
           : ""
       }
       <span class="text-[11px] font-semibold uppercase tracking-[0.1em] ${tagCls}">${tag}</span>
@@ -491,7 +491,7 @@ function PricingMatrix(plans: PricingPlan[]): string {
   return /* html */ `
     <div class="mt-14 bg-white border border-[#e8e6e0] rounded-2xl overflow-hidden hidden lg:block">
       <div class="${MATRIX_GRID_CLS} items-end px-6 py-[18px] bg-[#fafaf8] border-b border-[#d5d2c9]">
-        <div class="text-left">
+        <div class="text-start">
           <div class="text-[15px] font-semibold text-[#1a1a1a]">Tüm paket özellikleri</div>
           <div class="text-xs text-[#8a877f] mt-0.5 tabular-nums">yıllık periyot, KDV hariç</div>
         </div>
@@ -609,7 +609,7 @@ function PricingSection(plans: PricingPlan[]): string {
             class="appearance-none border-0 text-[12.5px] font-medium px-4 py-2 rounded-full focus:outline-none transition-colors duration-150"
           >
             Yıllık
-            ${discountBadge ? `<span class="text-[10px] bg-[#f5b800] text-[#1a1a1a] px-1.5 py-0.5 rounded-full font-bold ml-1.5 tracking-[0.04em]">${discountBadge}</span>` : ""}
+            ${discountBadge ? `<span class="text-[10px] bg-[#f5b800] text-[#1a1a1a] px-1.5 py-0.5 rounded-full font-bold ms-1.5 tracking-[0.04em]">${discountBadge}</span>` : ""}
           </button>
           <button
             type="button"
@@ -689,7 +689,7 @@ function renderCompareCell(c: CompareCell): string {
 }
 
 function ComparisonSection(): string {
-  const thBaseCls = "bg-[#fafaf8] font-medium text-[13px] text-[#4a4a48] p-[18px_22px] text-left";
+  const thBaseCls = "bg-[#fafaf8] font-medium text-[13px] text-[#4a4a48] p-[18px_22px] text-start";
   const thHeadCls = "text-[#1a1a1a] text-center p-[22px] border-b border-[#d5d2c9]";
 
   return /* html */ `

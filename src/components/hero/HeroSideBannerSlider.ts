@@ -57,8 +57,8 @@ function renderSlide(slide: HeroSideBannerSlide): string {
     <div class="swiper-slide">
       <a href="${slide.href}" class="hero-side-slide-link group relative block h-[300px] overflow-hidden rounded-md shadow-sm transition-transform duration-200 ease-out">
         <div class="absolute inset-0" style="background: ${slide.background};"></div>
-        <div class="absolute -right-8 -top-8 w-32 h-32 rounded-full bg-white/25 blur-2xl"></div>
-        <div class="absolute -left-10 bottom-2 w-36 h-36 rounded-full bg-white/20 blur-3xl"></div>
+        <div class="absolute -end-8 -top-8 w-32 h-32 rounded-full bg-white/25 blur-2xl"></div>
+        <div class="absolute -start-10 bottom-2 w-36 h-36 rounded-full bg-white/20 blur-3xl"></div>
 
         <div class="relative z-10 flex h-full flex-col justify-between p-4 text-white">
           <div>
@@ -90,7 +90,7 @@ export function HeroSideBannerSlider(): string {
 
       <button
         type="button"
-        class="hero-side-prev absolute left-3 top-1/2 z-20 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-lg transition-[opacity,color] duration-200 ease-out opacity-0 pointer-events-none xl:flex group-hover/hero-side:opacity-100 group-hover/hero-side:pointer-events-auto focus-visible:opacity-100 focus-visible:pointer-events-auto focus-visible:ring-2 focus-visible:ring-primary-300 hover:text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:hover:text-white"
+        class="hero-side-prev absolute start-3 top-1/2 z-20 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-lg transition-[opacity,color] duration-200 ease-out opacity-0 pointer-events-none xl:flex group-hover/hero-side:opacity-100 group-hover/hero-side:pointer-events-auto focus-visible:opacity-100 focus-visible:pointer-events-auto focus-visible:ring-2 focus-visible:ring-primary-300 hover:text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:hover:text-white"
         aria-label="Previous side banner"
       >
         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -100,7 +100,7 @@ export function HeroSideBannerSlider(): string {
 
       <button
         type="button"
-        class="hero-side-next absolute right-3 top-1/2 z-20 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-lg transition-[opacity,color] duration-200 ease-out opacity-0 pointer-events-none xl:flex group-hover/hero-side:opacity-100 group-hover/hero-side:pointer-events-auto focus-visible:opacity-100 focus-visible:pointer-events-auto focus-visible:ring-2 focus-visible:ring-primary-300 hover:text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:hover:text-white"
+        class="hero-side-next absolute end-3 top-1/2 z-20 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-lg transition-[opacity,color] duration-200 ease-out opacity-0 pointer-events-none xl:flex group-hover/hero-side:opacity-100 group-hover/hero-side:pointer-events-auto focus-visible:opacity-100 focus-visible:pointer-events-auto focus-visible:ring-2 focus-visible:ring-primary-300 hover:text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:hover:text-white"
         aria-label="Next side banner"
       >
         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -68,7 +68,7 @@ export function renderRankingGroupCard(group: RankingCategoryGroup): string {
           />
           <!-- Rank badge -->
           <span
-            class="absolute top-1.5 left-1.5 w-6 h-6 flex items-center justify-center rounded text-xs font-bold text-white shadow-sm ${badgeClass}"
+            class="absolute top-1.5 start-1.5 w-6 h-6 flex items-center justify-center rounded text-xs font-bold text-white shadow-sm ${badgeClass}"
           >#${product.rank}</span>
         </div>
         <div class="mt-1.5">

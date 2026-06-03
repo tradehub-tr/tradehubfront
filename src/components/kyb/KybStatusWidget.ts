@@ -46,7 +46,7 @@ export function KybStatusWidget(user: AuthUser | null, kybInfo?: KybStatusInfo):
          class="block bg-green-50 border border-green-200 rounded-lg px-4 py-2.5 mb-4 flex items-center gap-2 text-sm text-green-800 hover:bg-green-100 transition-colors no-underline">
         <span class="text-green-600">${ICONS.shield}</span>
         <span class="font-medium">${t("kyb.statusVerified")}</span>
-        <span class="text-xs text-green-600 ml-auto">${t("kyb.viewDetails")}</span>
+        <span class="text-xs text-green-600 ms-auto">${t("kyb.viewDetails")}</span>
       </a>
     `;
   }

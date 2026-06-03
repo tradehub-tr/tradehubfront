@@ -90,7 +90,7 @@ export function EmojiPicker(): string {
          x-show="$store.chatPopup.openSubMenu === 'emoji'"
          x-transition.opacity
          x-cloak
-         class="absolute bottom-[150px] left-4 z-30 w-[280px] max-w-[calc(100%-2rem)] rounded-lg border border-[var(--color-border-default,#e5e5e5)] bg-white p-2 shadow-lg">
+         class="absolute bottom-[150px] start-4 z-30 w-[280px] max-w-[calc(100%-2rem)] rounded-lg border border-[var(--color-border-default,#e5e5e5)] bg-white p-2 shadow-lg">
       <div class="grid grid-cols-8 gap-1">
         ${grid}
       </div>

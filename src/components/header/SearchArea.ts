@@ -62,7 +62,7 @@ function renderSearchTabs(): string {
                   : "border-transparent dark:text-gray-400 dark:hover:text-gray-300"
               }"
             >
-              ${tab.id === "ai-mode" ? `${renderAIIcon()}<span data-i18n="${tabI18nKeys[tab.id]}">${tab.label}</span><span class="text-red-500 text-xs -mt-2 -ml-0.5">*</span>` : `<span data-i18n="${tabI18nKeys[tab.id]}">${tab.label}</span>`}
+              ${tab.id === "ai-mode" ? `${renderAIIcon()}<span data-i18n="${tabI18nKeys[tab.id]}">${tab.label}</span><span class="text-red-500 text-xs -mt-2 -ms-0.5">*</span>` : `<span data-i18n="${tabI18nKeys[tab.id]}">${tab.label}</span>`}
             </button>
           </li>
         `
@@ -123,7 +123,7 @@ function renderDesktopSearchBar(): string {
           </div>
 
           <!-- Search Dropdown (shown on input focus) -->
-          <div id="search-dropdown" class="absolute left-0 right-0 z-10 mt-2 hidden rounded-md border border-amber-300 bg-white px-3 py-2.5 shadow-lg sm:px-5 sm:py-3">
+          <div id="search-dropdown" class="absolute start-0 end-0 z-10 mt-2 hidden rounded-md border border-amber-300 bg-white px-3 py-2.5 shadow-lg sm:px-5 sm:py-3">
             <!-- DISABLED: Deep Search Row — ileride geliştirilecek
             <div class="flex items-center gap-2 text-sm" style="color:var(--search-dropdown-text)">
               <span class="w-2 h-2 rounded-full inline-block flex-shrink-0" style="background-color:var(--search-chip-accent)"></span>

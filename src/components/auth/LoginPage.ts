@@ -73,7 +73,7 @@ export function LoginPage(): string {
           <button
             type="button"
             id="login-password-toggle"
-            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            class="absolute end-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
           >
             <svg id="login-eye-show" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -86,7 +86,7 @@ export function LoginPage(): string {
         </div>
 
         <!-- Forgot Password -->
-        <div class="text-right">
+        <div class="text-end">
           <a href="${baseUrl}pages/auth/forgot-password.html" class="text-sm font-medium text-gray-900 dark:text-gray-300 hover:underline">
             <span data-i18n="auth.login.forgotPassword">${t("auth.login.forgotPassword")}</span>
           </a>
@@ -115,7 +115,7 @@ export function LoginPage(): string {
           <a
             href="${baseUrl}pages/auth/register.html"
             id="login-create-account-link"
-            class="font-medium text-gray-900 dark:text-white hover:underline ml-1"
+            class="font-medium text-gray-900 dark:text-white hover:underline ms-1"
           >
             <span data-i18n="auth.login.createAccount">${t("auth.login.createAccount")}</span>
           </a>

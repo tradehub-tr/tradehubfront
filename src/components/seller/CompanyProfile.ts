@@ -100,7 +100,7 @@ function MainProductsCarousel(): string {
                   <!-- Video play overlay -->
                   <div x-show="p.video_url" class="absolute inset-0 flex items-center justify-center">
                     <div class="w-9 h-9 bg-black/40 rounded-full flex items-center justify-center">
-                      <svg class="w-4 h-4 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                      <svg class="w-4 h-4 text-white ms-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                     </div>
                   </div>
                 </div>
@@ -162,7 +162,7 @@ function OverviewTab(): string {
             <span x-show="seller?.verified" class="inline-flex items-baseline gap-1 text-[13px] font-semibold text-green-700 dark:text-green-400">
               <svg class="w-4 h-4 self-center" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
               <span>${t("seller.sf.verifiedSupplier")}</span>
-              <img src="/images/istoc-logo.png" alt="iSTOC" class="h-[10px] w-auto self-baseline ml-1" />
+              <img src="/images/istoc-logo.png" alt="iSTOC" class="h-[10px] w-auto self-baseline ms-1" />
               <span class="text-[10px] text-[#999] font-medium">ile</span>
             </span>
           </div>
@@ -213,7 +213,7 @@ function OverviewTab(): string {
               >
                 <div class="w-full aspect-[3/4] bg-gray-50 rounded flex items-center justify-center mb-3 relative">
                   <svg class="w-16 h-16 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                  <span x-show="cert.document" class="absolute bottom-2 right-2 inline-flex items-center gap-1 text-emerald-600 text-xs font-semibold bg-white/90 px-1.5 py-0.5 rounded">
+                  <span x-show="cert.document" class="absolute bottom-2 end-2 inline-flex items-center gap-1 text-emerald-600 text-xs font-semibold bg-white/90 px-1.5 py-0.5 rounded">
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                     PDF
                   </span>
@@ -275,7 +275,7 @@ function OverviewTab(): string {
           <span x-show="seller?.verified" class="inline-flex items-baseline gap-1 text-[13px] font-semibold text-green-700 dark:text-green-400">
             <svg class="w-4 h-4 self-center" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
             <span>${t("seller.sf.verifiedSupplier")}</span>
-            <img src="/images/istoc-logo.png" alt="iSTOC" class="h-[10px] w-auto self-baseline ml-1" />
+            <img src="/images/istoc-logo.png" alt="iSTOC" class="h-[10px] w-auto self-baseline ms-1" />
             <span class="text-[10px] text-[#999] font-medium">ile</span>
           </span>
         </div>
@@ -356,17 +356,17 @@ function OverviewTab(): string {
             <div class="flex items-center gap-3">
               <span class="text-[13px] text-gray-600 w-[160px] shrink-0">${t("seller.sf.supplierService")}</span>
               <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-(--btn-bg,#f5b800) rounded-full" :style="'width:' + ((seller?.rating || 0) / 5 * 100) + '%'"></div></div>
-              <span class="text-[13px] font-medium text-gray-900 w-8 text-right" x-text="seller?.rating ? seller.rating.toFixed(1) : '\u2014'"></span>
+              <span class="text-[13px] font-medium text-gray-900 w-8 text-end" x-text="seller?.rating ? seller.rating.toFixed(1) : '\u2014'"></span>
             </div>
             <div class="flex items-center gap-3">
               <span class="text-[13px] text-gray-600 w-[160px] shrink-0">${t("seller.sf.onTimeDeliveryRate")}</span>
               <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-(--btn-bg,#f5b800) rounded-full" :style="'width:' + (seller?.on_time_delivery || 0) + '%'"></div></div>
-              <span class="text-[13px] font-medium text-gray-900 w-8 text-right" x-text="seller?.on_time_delivery ? (seller.on_time_delivery / 20).toFixed(1) : '\u2014'"></span>
+              <span class="text-[13px] font-medium text-gray-900 w-8 text-end" x-text="seller?.on_time_delivery ? (seller.on_time_delivery / 20).toFixed(1) : '\u2014'"></span>
             </div>
             <div class="flex items-center gap-3">
               <span class="text-[13px] text-gray-600 w-[160px] shrink-0">${t("seller.sf.productQuality")}</span>
               <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-(--btn-bg,#f5b800) rounded-full" :style="'width:' + ((seller?.rating || 0) / 5 * 100) + '%'"></div></div>
-              <span class="text-[13px] font-medium text-gray-900 w-8 text-right" x-text="seller?.rating ? (seller.rating - 0.1).toFixed(1) : '\u2014'"></span>
+              <span class="text-[13px] font-medium text-gray-900 w-8 text-end" x-text="seller?.rating ? (seller.rating - 0.1).toFixed(1) : '\u2014'"></span>
             </div>
           </div>
         </div>
@@ -423,7 +423,7 @@ function OverviewTab(): string {
                 </div>
                 <div x-show="p.video_url" class="absolute inset-0 flex items-center justify-center">
                   <div class="w-8 h-8 bg-black/50 rounded-full flex items-center justify-center">
-                    <svg class="w-4 h-4 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    <svg class="w-4 h-4 text-white ms-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                   </div>
                 </div>
               </div>
@@ -431,7 +431,7 @@ function OverviewTab(): string {
               <div class="text-[12px] sm:text-[13px] font-semibold text-gray-900 mb-0.5" x-text="formatPrice(p)"></div>
               <div class="text-[10px] sm:text-[11px] text-gray-500">
                 <span x-show="p.moq" x-text="'Min. Sipari\u015f ' + p.moq + ' ' + (p.moq_unit || 'Adet')"></span>
-                <span x-show="p.sold_count" class="text-gray-400 ml-1" x-text="p.sold_count + ' sold'"></span>
+                <span x-show="p.sold_count" class="text-gray-400 ms-1" x-text="p.sold_count + ' sold'"></span>
               </div>
             </a>
           </template>
@@ -557,7 +557,7 @@ function ReviewsTab(): string {
                   <div class="flex-1 bg-gray-100 rounded-full h-2.5 overflow-hidden">
                     <div class="h-full bg-(--btn-bg,#f5b800) rounded-full transition-all duration-500" :style="'width:' + ratingPct(seller?.rating)"></div>
                   </div>
-                  <span class="text-[13px] text-gray-700 font-medium w-8 text-right" x-text="seller?.rating ? Number(seller.rating).toFixed(1) : '\u2014'"></span>
+                  <span class="text-[13px] text-gray-700 font-medium w-8 text-end" x-text="seller?.rating ? Number(seller.rating).toFixed(1) : '\u2014'"></span>
                 </div>
                 <!-- On-Time Shipment -->
                 <div class="flex items-center gap-3">
@@ -565,7 +565,7 @@ function ReviewsTab(): string {
                   <div class="flex-1 bg-gray-100 rounded-full h-2.5 overflow-hidden">
                     <div class="h-full bg-(--btn-bg,#f5b800) rounded-full transition-all duration-500" :style="'width:' + ratingPct(seller?.rating)"></div>
                   </div>
-                  <span class="text-[13px] text-gray-700 font-medium w-8 text-right" x-text="seller?.rating ? Number(seller.rating).toFixed(1) : '\u2014'"></span>
+                  <span class="text-[13px] text-gray-700 font-medium w-8 text-end" x-text="seller?.rating ? Number(seller.rating).toFixed(1) : '\u2014'"></span>
                 </div>
                 <!-- Product Quality -->
                 <div class="flex items-center gap-3">
@@ -573,7 +573,7 @@ function ReviewsTab(): string {
                   <div class="flex-1 bg-gray-100 rounded-full h-2.5 overflow-hidden">
                     <div class="h-full bg-(--btn-bg,#f5b800) rounded-full transition-all duration-500" :style="'width:' + ratingPct(seller?.rating)"></div>
                   </div>
-                  <span class="text-[13px] text-gray-700 font-medium w-8 text-right" x-text="seller?.rating ? Number(seller.rating).toFixed(1) : '\u2014'"></span>
+                  <span class="text-[13px] text-gray-700 font-medium w-8 text-end" x-text="seller?.rating ? Number(seller.rating).toFixed(1) : '\u2014'"></span>
                 </div>
               </div>
             </div>
@@ -583,7 +583,7 @@ function ReviewsTab(): string {
               <div x-show="isAuthenticated">
                 <h4 class="text-[16px] font-bold text-gray-900 mb-4">${t("seller.sf.writeReview")}</h4>
                 <div class="flex items-center gap-2 mb-4">
-                  <span class="text-[13px] text-gray-600 mr-2">${t("seller.sf.yourRating")}:</span>
+                  <span class="text-[13px] text-gray-600 me-2">${t("seller.sf.yourRating")}:</span>
                   <template x-for="i in 5" :key="i">
                     <button type="button"
                       @click="setRating(i)"
@@ -621,7 +621,7 @@ function ReviewsTab(): string {
             </div>
 
             <!-- ── Toast ── -->
-            <div x-show="toast.show" x-transition class="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-md shadow-lg text-white text-[14px]"
+            <div x-show="toast.show" x-transition class="fixed bottom-6 end-6 z-50 px-4 py-3 rounded-md shadow-lg text-white text-[14px]"
               :class="toast.type === 'success' ? 'bg-green-600' : 'bg-red-600'"
               x-text="toast.message"></div>
 
@@ -648,7 +648,7 @@ function ReviewsTab(): string {
                         </div>
                       </div>
                       <template x-if="review.rating">
-                        <div class="flex gap-0.5 mt-1 ml-10">
+                        <div class="flex gap-0.5 mt-1 ms-10">
                           <template x-for="i in 5" :key="i">
                             <svg :class="i <= review.rating ? 'text-yellow-400' : 'text-gray-200'" class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                               <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
@@ -788,12 +788,12 @@ function ProductsTab(): string {
                   <!-- Video play overlay -->
                   <div x-show="p.video_url" class="absolute inset-0 flex items-center justify-center pointer-events-none">
                     <div class="w-10 h-10 bg-black/50 rounded-full flex items-center justify-center">
-                      <svg class="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                      <svg class="w-5 h-5 text-white ms-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                     </div>
                   </div>
                   <!-- Certification badges -->
                   <template x-if="p.certifications">
-                    <div class="absolute bottom-2 left-2 flex flex-wrap gap-1">
+                    <div class="absolute bottom-2 start-2 flex flex-wrap gap-1">
                       <template x-for="badge in (p.certifications || '').split(',').slice(0,2)" :key="badge">
                         <span class="bg-white/90 text-[10px] text-gray-700 font-medium px-1.5 py-0.5 rounded shadow-sm" x-text="badge.trim()"></span>
                       </template>
@@ -922,11 +922,11 @@ function VideosTab(): string {
                   <!-- Play button overlay -->
                   <div class="absolute inset-0 flex items-center justify-center">
                     <div class="w-12 h-12 bg-black/60 rounded-full flex items-center justify-center group-hover:bg-black/80 transition-colors">
-                      <svg class="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                      <svg class="w-5 h-5 text-white ms-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                     </div>
                   </div>
                   <!-- Duration badge (placeholder) -->
-                  <div class="absolute top-2 left-2 bg-black/60 text-white text-[11px] px-2 py-0.5 rounded flex items-center gap-1">
+                  <div class="absolute top-2 start-2 bg-black/60 text-white text-[11px] px-2 py-0.5 rounded flex items-center gap-1">
                     <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                     <span>0:44</span>
                   </div>
@@ -953,7 +953,7 @@ function VideosTab(): string {
           <!-- Modal Content -->
           <div class="relative z-10 bg-white rounded-md shadow-2xl w-full max-w-3xl overflow-hidden">
             <!-- Close button -->
-            <button @click="closeModal()" class="absolute top-3 right-3 z-20 w-8 h-8 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center transition-colors">
+            <button @click="closeModal()" class="absolute top-3 end-3 z-20 w-8 h-8 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center transition-colors">
               <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
             <!-- Video Player -->
@@ -1020,7 +1020,7 @@ function ContactSidebar(): string {
     </div>
 
     <!-- Mobile Contact Bar (shown on small screens) -->
-    <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 z-50 flex gap-3 shadow-lg">
+    <div class="lg:hidden fixed bottom-0 start-0 end-0 bg-white border-t border-gray-200 p-3 z-50 flex gap-3 shadow-lg">
       <button @click="setTab('contact')" class="flex-1 bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) font-semibold py-2.5 px-4 border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150 text-[14px]">
         ${t("seller.sf.contactNow")}
       </button>
@@ -1139,7 +1139,7 @@ function ContactTab(): string {
                   aria-required="true"
                   rows="5"
                 ></textarea>
-                <span class="absolute right-3 bottom-3 text-[12px] text-gray-400" x-text="msgText.length + '/8000'"></span>
+                <span class="absolute end-3 bottom-3 text-[12px] text-gray-400" x-text="msgText.length + '/8000'"></span>
               </div>
             </div>
 

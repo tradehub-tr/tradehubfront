@@ -19,7 +19,7 @@ export function TopRankingFilters(): string {
           @click="openCategoryDropdown()"
         >
           <svg class="w-3 h-3 sm:w-4 sm:h-4 text-secondary-500 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
-          <span class="mr-[3px] sm:mr-0" x-text="selectedCategoryLabel">${t("topRankingPage.allCategories")}</span>
+          <span class="me-[3px] sm:me-0" x-text="selectedCategoryLabel">${t("topRankingPage.allCategories")}</span>
           <svg class="w-3 h-3 sm:w-4 sm:h-4 text-secondary-400 transition-transform flex-shrink-0" :class="categoryDropdownOpen && 'rotate-180'" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
         </button>
 
@@ -34,7 +34,7 @@ export function TopRankingFilters(): string {
           <div x-show="categoryDropdownLevel === 1" class="max-h-[60vh] overflow-y-auto">
             <button
               type="button"
-              class="flex items-center w-full px-4 py-2.5 text-sm font-medium text-text-secondary hover:bg-surface-raised rounded-lg transition-colors text-left"
+              class="flex items-center w-full px-4 py-2.5 text-sm font-medium text-text-secondary hover:bg-surface-raised rounded-lg transition-colors text-start"
               @click="selectedMainCategory = null; pendingSubCategory = null; applyCategoryFilter()"
             >
               <span data-i18n="topRankingPage.allCategories">${t("topRankingPage.allCategories")}</span>
@@ -44,7 +44,7 @@ export function TopRankingFilters(): string {
               <template x-for="cat in apiCategories" :key="cat.slug">
                 <button
                   type="button"
-                  class="flex items-center justify-between w-full px-4 py-2.5 text-sm text-text-secondary hover:bg-surface-raised rounded-lg transition-colors text-left"
+                  class="flex items-center justify-between w-full px-4 py-2.5 text-sm text-text-secondary hover:bg-surface-raised rounded-lg transition-colors text-start"
                   @click="cat.children && cat.children.length > 0 ? openCategoryLevel2(cat.slug) : (selectedMainCategory = cat.slug, pendingSubCategory = null, applyCategoryFilter())"
                 >
                   <span x-text="cat.name"></span>
@@ -138,7 +138,7 @@ export function TopRankingFilters(): string {
             <!-- All categories option -->
             <button
               type="button"
-              class="flex items-center w-full px-5 py-4 text-left transition-colors border-b border-gray-50 active:bg-gray-50"
+              class="flex items-center w-full px-5 py-4 text-start transition-colors border-b border-gray-50 active:bg-gray-50"
               @click="selectedMainCategory = null; pendingSubCategory = null; applyCategoryFilter(); showCategorySheet = false"
             >
               <span
@@ -160,7 +160,7 @@ export function TopRankingFilters(): string {
             <template x-for="cat in apiCategories" :key="'m-' + cat.slug">
               <button
                 type="button"
-                class="flex items-center w-full px-5 py-4 text-left transition-colors border-b border-gray-50 active:bg-gray-50"
+                class="flex items-center w-full px-5 py-4 text-start transition-colors border-b border-gray-50 active:bg-gray-50"
                 @click="cat.children && cat.children.length > 0 ? openCategoryLevel2(cat.slug) : (selectedMainCategory = cat.slug, pendingSubCategory = null, applyCategoryFilter(), showCategorySheet = false)"
               >
                 <span
@@ -178,7 +178,7 @@ export function TopRankingFilters(): string {
               <!-- "All" option for this category -->
               <button
                 type="button"
-                class="flex items-center w-full px-5 py-4 text-left transition-colors border-b border-gray-50 active:bg-gray-50"
+                class="flex items-center w-full px-5 py-4 text-start transition-colors border-b border-gray-50 active:bg-gray-50"
                 @click="pendingSubCategory = null"
               >
                 <span
@@ -200,7 +200,7 @@ export function TopRankingFilters(): string {
               <template x-for="sub in cat.children" :key="'ms-' + sub.slug">
                 <button
                   type="button"
-                  class="flex items-center w-full px-5 py-4 text-left transition-colors border-b border-gray-50 active:bg-gray-50"
+                  class="flex items-center w-full px-5 py-4 text-start transition-colors border-b border-gray-50 active:bg-gray-50"
                   @click="pendingSubCategory = sub.slug"
                 >
                   <span

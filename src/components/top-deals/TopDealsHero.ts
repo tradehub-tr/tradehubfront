@@ -30,13 +30,13 @@ export function TopDealsMobileHeader(): string {
     <div class="md:hidden" style="background: var(--topdeals-page-hero-gradient, linear-gradient(135deg, #ff6b35 0%, #ee2737 50%, #c41442 100%));">
       <!-- Nav row: back + title + search -->
       <div class="flex items-center justify-between px-4 pt-3 pb-1">
-        <a href="javascript:history.back()" class="text-white p-1 -ml-1" aria-label="${t("common.goBack")}">
+        <a href="javascript:history.back()" class="text-white p-1 -ms-1" aria-label="${t("common.goBack")}">
           <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/>
           </svg>
         </a>
         <h1 class="text-xl font-extrabold text-white tracking-tight" data-i18n="topDealsPage.heroTitle">${t("topDealsPage.heroTitle")}</h1>
-        <button type="button" class="text-white p-1 -mr-1" aria-label="${t("common.search")}">
+        <button type="button" class="text-white p-1 -me-1" aria-label="${t("common.search")}">
           <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>
           </svg>
@@ -120,8 +120,8 @@ export function TopDealsHero(): string {
         >${t("topDealsPage.heroSubtitle")}</p>
       </div>
       <!-- Decorative circles -->
-      <div class="absolute -top-10 -left-10 w-40 h-40 rounded-full bg-white/5"></div>
-      <div class="absolute -bottom-8 -right-8 w-32 h-32 rounded-full bg-white/5"></div>
+      <div class="absolute -top-10 -start-10 w-40 h-40 rounded-full bg-white/5"></div>
+      <div class="absolute -bottom-8 -end-8 w-32 h-32 rounded-full bg-white/5"></div>
       <div class="absolute top-1/2 left-1/4 w-20 h-20 rounded-full bg-white/5"></div>
     </section>
   `;

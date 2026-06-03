@@ -68,7 +68,7 @@ export function ProductTabs(): string {
           >
             <span data-i18n="${tab.i18nKey}">${tab.label}</span>
             <span
-              class="absolute bottom-2 left-0 right-0 h-0.5 transition-all"
+              class="absolute bottom-2 start-0 end-0 h-0.5 transition-all"
               :style="activeTab === '${tab.id}' ? 'background: var(--pd-tab-active-border, #cc9900)' : 'background: transparent'"
             ></span>
           </button>

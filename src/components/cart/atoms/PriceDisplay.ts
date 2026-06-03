@@ -25,7 +25,7 @@ export function PriceDisplay({
   let unitHtml = "";
   if (unit) {
     unitHtml = `
-      <span class="inline-flex items-center text-[10px] sm:text-[12px] text-[#666] ml-[2px] font-normal">
+      <span class="inline-flex items-center text-[10px] sm:text-[12px] text-[#666] ms-[2px] font-normal">
         ${unit}
       </span>
     `;

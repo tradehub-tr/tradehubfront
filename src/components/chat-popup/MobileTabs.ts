@@ -19,7 +19,7 @@ export function MobileTabs(): string {
                 : 'border-transparent text-[var(--color-text-tertiary,#a3a3a3)]'">
         ${t("chat.tabs.inbox")}
         <template x-if="$store.chatPopup.totalUnread > 0">
-          <span class="ml-1 inline-block rounded-full bg-[var(--color-error-500,#ef4444)] px-1.5 text-[9px] font-bold text-white"
+          <span class="ms-1 inline-block rounded-full bg-[var(--color-error-500,#ef4444)] px-1.5 text-[9px] font-bold text-white"
                 x-text="$store.chatPopup.totalUnread"></span>
         </template>
       </button>

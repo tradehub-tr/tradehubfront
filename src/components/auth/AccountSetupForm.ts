@@ -92,7 +92,7 @@ export function AccountSetupForm(defaultCountry: string = "TR"): string {
   return `
     <div id="account-setup-form" class="w-full">
       <!-- Header -->
-      <div class="mb-6 text-center lg:text-left">
+      <div class="mb-6 text-center lg:text-start">
         <h1 class="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white mb-2">
           ${t("auth.setupTitle")}
         </h1>
@@ -111,7 +111,7 @@ export function AccountSetupForm(defaultCountry: string = "TR"): string {
             <button
               type="button"
               id="country-select-btn"
-              class="th-btn-outline flex items-center justify-between w-full px-4 py-3 text-left dark:bg-gray-800 dark:border-gray-600 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 dark:focus:border-orange-400"
+              class="th-btn-outline flex items-center justify-between w-full px-4 py-3 text-start dark:bg-gray-800 dark:border-gray-600 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 dark:focus:border-orange-400"
               aria-haspopup="listbox"
               aria-expanded="false"
               aria-controls="country-dropdown"
@@ -223,13 +223,13 @@ export function AccountSetupForm(defaultCountry: string = "TR"): string {
               name="password"
               placeholder="${t("auth.setup.passwordPlaceholder")}" data-i18n-placeholder="auth.setup.passwordPlaceholder"
               autocomplete="new-password"
-              class="th-input th-input-lg pr-12"
+              class="th-input th-input-lg pe-12"
               required
             />
             <button
               type="button"
               id="password-toggle-btn"
-              class="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+              class="absolute end-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
               aria-label="${t("auth.forgot.showHidePassword")}" data-i18n-aria-label="auth.forgot.showHidePassword"
             >
               <!-- Eye icon (show) -->
@@ -317,7 +317,7 @@ export function AccountSetupForm(defaultCountry: string = "TR"): string {
       <!-- Login Link -->
       <div class="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
         <span data-i18n="auth.register.alreadyHave">${t("auth.register.alreadyHave")}</span>
-        <a href="/giris" class="ml-1 font-medium text-orange-600 dark:text-orange-400 hover:underline">
+        <a href="/giris" class="ms-1 font-medium text-orange-600 dark:text-orange-400 hover:underline">
           <span data-i18n="auth.register.signIn">${t("auth.register.signIn")}</span>
         </a>
       </div>

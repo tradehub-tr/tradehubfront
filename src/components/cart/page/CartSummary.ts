@@ -20,7 +20,7 @@ function renderThumbnailGrid(items: CartSummaryData["items"]): string {
         <div class="block w-full h-full">
           <img class="w-full h-full object-cover" src="${item.image}" alt="" />
         </div>
-        <span class="absolute bottom-0 right-0 bg-black/60 text-white rounded-tl text-[11px] font-bold leading-4 px-1 py-px">${item.quantity}</span>
+        <span class="absolute bottom-0 end-0 bg-black/60 text-white rounded-ss text-[11px] font-bold leading-4 px-1 py-px">${item.quantity}</span>
       </div>`
     )
     .join("");
@@ -28,11 +28,11 @@ function renderThumbnailGrid(items: CartSummaryData["items"]): string {
   const arrowCls =
     "checkout-items-arrow absolute top-1/2 -translate-y-1/2 w-7 h-7 rounded-full border border-[#e5e5e5] bg-white flex items-center justify-center cursor-pointer z-[2] opacity-0 group-hover:opacity-100 transition-opacity duration-200 shadow-sm hover:bg-[#f5f5f5]";
 
-  const arrowLeft = `<button type="button" class="${arrowCls} -left-1.5" data-dir="left" aria-label="${t("cart.scrollLeft")}">
+  const arrowLeft = `<button type="button" class="${arrowCls} -start-1.5" data-dir="left" aria-label="${t("cart.scrollLeft")}">
     <svg class="w-3.5 h-3.5 stroke-[#222] fill-none" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
   </button>`;
 
-  const arrowRight = `<button type="button" class="${arrowCls} -right-1.5" data-dir="right" aria-label="${t("cart.scrollRight")}">
+  const arrowRight = `<button type="button" class="${arrowCls} -end-1.5" data-dir="right" aria-label="${t("cart.scrollRight")}">
     <svg class="w-3.5 h-3.5 stroke-[#222] fill-none" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
   </button>`;
 
@@ -77,7 +77,7 @@ export function CartSummary(data: CartSummaryData): string {
       </div>
 
       <div class="flex justify-between items-center text-[14px] max-[380px]:text-[13px] sm:text-lg font-bold leading-6 text-[#222] pt-3 sm:pt-4 border-t border-[#e5e5e5] mt-2">
-        <span class="min-w-0 truncate mr-2" data-i18n="cart.subtotalExTax">${t("cart.subtotalExTax")}</span>
+        <span class="min-w-0 truncate me-2" data-i18n="cart.subtotalExTax">${t("cart.subtotalExTax")}</span>
         <span class="sc-summary-subtotal">${PriceDisplay({ amount: data.subtotal, fromCurrency: getSelectedCurrency(), bold: true })}</span>
       </div>
 

@@ -32,7 +32,7 @@ function renderVariantA(data: CompanyInfoData, seller: SellerProfile): string {
         <!-- Content Grid: 55% / 45% -->
         <div class="company-info__content grid grid-cols-1 lg:grid-cols-[55%_45%] gap-4 lg:gap-6 mt-0">
           <!-- Hero Image -->
-          <div class="company-info__hero-image relative rounded-bl-(--radius-md) overflow-hidden">
+          <div class="company-info__hero-image relative rounded-es-(--radius-md) overflow-hidden">
             <img src="${data.heroImage}" alt="${data.heroTitle}" class="w-full h-[200px] sm:h-[250px] lg:h-[400px] object-cover" loading="lazy"
                  onerror="this.parentElement.style.background='linear-gradient(135deg,#1e3a5f,#2563eb)'" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 dark:from-black/70 to-transparent flex flex-col justify-end p-6">
@@ -90,7 +90,7 @@ function renderVariantB(data: CompanyInfoData, seller: SellerProfile): string {
         <div class="grid grid-cols-1 lg:grid-cols-[40%_60%] gap-8">
           <!-- Scrollable Text Panel -->
           <div class="company-info__text-panel">
-            <div class="company-info__scrollable-text max-h-[300px] overflow-y-auto pr-4 text-[14px] text-[#4b5563] dark:text-gray-300 leading-[1.7]">
+            <div class="company-info__scrollable-text max-h-[300px] overflow-y-auto pe-4 text-[14px] text-[#4b5563] dark:text-gray-300 leading-[1.7]">
               <p>${data.description}</p>
               ${data.descriptionExtended ? `<p class="mt-4">${data.descriptionExtended}</p>` : ""}
             </div>
@@ -117,12 +117,12 @@ function renderVariantB(data: CompanyInfoData, seller: SellerProfile): string {
               </div>
             </div>
             <!-- Navigation Arrows -->
-            <button class="${btn({ variant: "ghost", iconOnly: true })} company-info__prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-12 z-10" aria-label="${t("seller.sf.previous")}">
+            <button class="${btn({ variant: "ghost", iconOnly: true })} company-info__prev absolute start-2 top-1/2 -translate-y-1/2 w-8 h-12 z-10" aria-label="${t("seller.sf.previous")}">
               <svg class="w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
               </svg>
             </button>
-            <button class="${btn({ variant: "ghost", iconOnly: true })} company-info__next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-12 z-10" aria-label="${t("seller.sf.nextSlide")}">
+            <button class="${btn({ variant: "ghost", iconOnly: true })} company-info__next absolute end-2 top-1/2 -translate-y-1/2 w-8 h-12 z-10" aria-label="${t("seller.sf.nextSlide")}">
               <svg class="w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
               </svg>

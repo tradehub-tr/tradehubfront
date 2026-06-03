@@ -91,7 +91,7 @@ export function ReservationModal(): string {
 						<div class="space-y-2">
 							<template x-for="slot in $store.reservationModal.slots" :key="slot.id">
 								<button @click="$store.reservationModal.selectSlot(slot.id)"
-										class="w-full flex items-start gap-3 p-3 rounded-lg border text-left cursor-pointer transition-colors bg-white"
+										class="w-full flex items-start gap-3 p-3 rounded-lg border text-start cursor-pointer transition-colors bg-white"
 										:class="$store.reservationModal.selectedSlotId === slot.id
 											? 'border-(--color-cta-primary,#cc9900) bg-(--color-primary-50,#fff8e1)'
 											: 'border-gray-200 hover:border-gray-300'">

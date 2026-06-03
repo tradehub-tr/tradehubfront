@@ -93,7 +93,7 @@ function renderSourceByCategory(): string {
                   ></span>
                   <span class="text-sm font-medium truncate" style="color: var(--mfr-sidebar-text-color, #374151)" x-text="cat.name"></span>
                 </div>
-                <svg class="w-4 h-4 flex-shrink-0 ml-2" style="color: var(--mfr-sidebar-chevron-color, #d1d5db)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-4 flex-shrink-0 ms-2" style="color: var(--mfr-sidebar-chevron-color, #d1d5db)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                 </svg>
               </a>
@@ -104,7 +104,7 @@ function renderSourceByCategory(): string {
                 x-cloak
                 @mouseenter="keepFlyout()"
                 @mouseleave="hideFlyout()"
-                class="absolute left-full top-0 z-50 w-[calc(200%+3rem)] h-full overflow-y-auto pt-5 px-5 pb-2.5"
+                class="absolute start-full top-0 z-50 w-[calc(200%+3rem)] h-full overflow-y-auto pt-5 px-5 pb-2.5"
                 style="background-color: var(--mfr-flyout-bg, #f4f4f4); border-radius: var(--mfr-hero-card-radius, 6px); box-shadow: var(--mfr-hero-card-shadow, 0 0 12px rgba(0,0,0,0.05))"
                 :aria-label="cat.name"
               >
@@ -137,7 +137,7 @@ function renderSourceByCategory(): string {
                   ${t("mfr.allCategories")}
                 </span>
               </div>
-              <svg class="w-4 h-4 flex-shrink-0 ml-2" style="color: var(--mfr-sidebar-chevron-color, #d1d5db)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-4 h-4 flex-shrink-0 ms-2" style="color: var(--mfr-sidebar-chevron-color, #d1d5db)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
               </svg>
             </a>
@@ -301,7 +301,7 @@ function renderProfileColumn(): string {
       >
         <!-- Avatar row -->
         <div class="flex items-center h-[42px] mb-3">
-          <div class="w-10 h-10 rounded-full border mr-3 flex items-center justify-center text-gray-400 flex-shrink-0" style="background-color: var(--mfr-profile-avatar-bg, #dddddd); border-color: var(--mfr-profile-avatar-bg, #dddddd)">
+          <div class="w-10 h-10 rounded-full border me-3 flex items-center justify-center text-gray-400 flex-shrink-0" style="background-color: var(--mfr-profile-avatar-bg, #dddddd); border-color: var(--mfr-profile-avatar-bg, #dddddd)">
             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
           </div>
           <div>
@@ -323,16 +323,16 @@ function renderProfileColumn(): string {
         <!-- Logged-in: favorites stats -->
         <template x-if="loggedIn">
           <div class="flex items-center justify-center rounded-md p-2 mt-2 mb-2 bg-gray-50 border border-transparent">
-            <div class="flex-1 text-center border-r border-gray-200">
+            <div class="flex-1 text-center border-e border-gray-200">
               <div class="flex items-center justify-center gap-1.5">
                 <span class="text-lg font-bold" x-text="productCount">0</span>
-                <span class="text-xs text-left leading-tight text-gray-600 whitespace-pre-line">${t("mfr.favoriteProducts")}</span>
+                <span class="text-xs text-start leading-tight text-gray-600 whitespace-pre-line">${t("mfr.favoriteProducts")}</span>
               </div>
             </div>
             <div class="flex-1 text-center">
-              <div class="flex items-center justify-center gap-1.5 ml-2">
+              <div class="flex items-center justify-center gap-1.5 ms-2">
                 <span class="text-lg font-bold" x-text="sellerCount">0</span>
-                <span class="text-xs text-left leading-tight text-gray-600 whitespace-pre-line">${t("mfr.favoriteSuppliers")}</span>
+                <span class="text-xs text-start leading-tight text-gray-600 whitespace-pre-line">${t("mfr.favoriteSuppliers")}</span>
               </div>
             </div>
           </div>

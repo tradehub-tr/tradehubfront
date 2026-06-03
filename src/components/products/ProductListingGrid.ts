@@ -43,7 +43,7 @@ function renderImageSlider(card: ProductListingCard): string {
   //
   // const cameraIconHtml = `
   //   <div
-  //     class="absolute bottom-2 left-2 z-10 flex h-6 w-6 items-center justify-center rounded-full opacity-60 group-hover/img:opacity-100 transition-opacity"
+  //     class="absolute bottom-2 start-2 z-10 flex h-6 w-6 items-center justify-center rounded-full opacity-60 group-hover/img:opacity-100 transition-opacity"
   //     style="background: rgba(0,0,0,0.4); color: #ffffff;"
   //     aria-hidden="true"
   //   >
@@ -84,7 +84,7 @@ function renderImageSlider(card: ProductListingCard): string {
     ? `
     <!-- Prev arrow -->
     <button type="button"
-      class="product-slider-prev absolute left-1.5 top-1/2 -translate-y-1/2 z-10 w-7 h-7 flex items-center justify-center rounded-full bg-white/80 shadow-sm opacity-0 group-hover/img:opacity-100 transition-opacity hover:bg-white cursor-pointer"
+      class="product-slider-prev absolute start-1.5 top-1/2 -translate-y-1/2 z-10 w-7 h-7 flex items-center justify-center rounded-full bg-white/80 shadow-sm opacity-0 group-hover/img:opacity-100 transition-opacity hover:bg-white cursor-pointer"
       data-slider-prev="${card.id}" aria-label="Previous"
       onclick="event.preventDefault(); event.stopPropagation(); this.dispatchEvent(new CustomEvent('slider-nav', {detail:{id:'${card.id}',dir:-1},bubbles:true}));">
       <svg class="w-3.5 h-3.5 text-gray-700 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
@@ -93,7 +93,7 @@ function renderImageSlider(card: ProductListingCard): string {
     </button>
     <!-- Next arrow -->
     <button type="button"
-      class="product-slider-next absolute right-1.5 top-1/2 -translate-y-1/2 z-10 w-7 h-7 flex items-center justify-center rounded-full bg-white/80 shadow-sm opacity-0 group-hover/img:opacity-100 transition-opacity hover:bg-white cursor-pointer"
+      class="product-slider-next absolute end-1.5 top-1/2 -translate-y-1/2 z-10 w-7 h-7 flex items-center justify-center rounded-full bg-white/80 shadow-sm opacity-0 group-hover/img:opacity-100 transition-opacity hover:bg-white cursor-pointer"
       data-slider-next="${card.id}" aria-label="Next"
       onclick="event.preventDefault(); event.stopPropagation(); this.dispatchEvent(new CustomEvent('slider-nav', {detail:{id:'${card.id}',dir:1},bubbles:true}));">
       <svg class="w-3.5 h-3.5 text-gray-700 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
@@ -228,14 +228,14 @@ function renderProductListingCard(card: ProductListingCard): string {
   // OOS önceliği KYB'den yüksek (envanter bilgisi her zaman gösterilmeli).
   const kybBlocked = card.sellerKybVerified === false;
   const oosBadgeHtml = isOOS
-    ? `<div class="absolute top-2 left-2 z-20 px-2 py-1 rounded-md bg-red-600 text-white text-[11px] font-semibold shadow-sm pointer-events-none">${t("products.outOfStock")}</div>`
+    ? `<div class="absolute top-2 start-2 z-20 px-2 py-1 rounded-md bg-red-600 text-white text-[11px] font-semibold shadow-sm pointer-events-none">${t("products.outOfStock")}</div>`
     : "";
   const oosOverlayHtml = isOOS
     ? `<div class="absolute inset-0 z-10 bg-white/40 pointer-events-none"></div>`
     : "";
   const kybBadgeHtml =
     kybBlocked && !isOOS
-      ? `<div class="absolute top-2 right-2 z-20 px-2 py-1 rounded-md bg-amber-50 border border-amber-300 text-amber-800 text-[10px] font-semibold shadow-sm pointer-events-none max-w-[60%] truncate" title="${t("common.kybGateBannerTitle")}">${t("common.kybGateBannerTitle")}</div>`
+      ? `<div class="absolute top-2 end-2 z-20 px-2 py-1 rounded-md bg-amber-50 border border-amber-300 text-amber-800 text-[10px] font-semibold shadow-sm pointer-events-none max-w-[60%] truncate" title="${t("common.kybGateBannerTitle")}">${t("common.kybGateBannerTitle")}</div>`
       : "";
   const addToCartBtnHtml = isOOS
     ? `<button type="button" class="searchx-product-e-abutton flex-1 flex items-center justify-center h-9 text-xs sm:text-sm font-medium whitespace-nowrap rounded-md bg-gray-200 text-gray-500 cursor-not-allowed
@@ -396,7 +396,7 @@ function renderNoResults(): string {
           </svg>
         </div>
         <!-- Small X badge -->
-        <div class="absolute -top-1 -right-1 w-8 h-8 rounded-full bg-red-100 flex items-center justify-center">
+        <div class="absolute -top-1 -end-1 w-8 h-8 rounded-full bg-red-100 flex items-center justify-center">
           <svg class="h-4 w-4 text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>

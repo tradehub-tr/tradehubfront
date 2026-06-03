@@ -107,7 +107,7 @@ export function ManufacturerList(): string {
               <!-- Title Row -->
               <div class="flex xl:flex-row flex-col gap-4 xl:gap-0 justify-between items-start mb-6">
                 <div class="flex items-start min-w-0">
-                  <div class="w-[50px] h-[50px] border border-[#ddd] rounded overflow-hidden shrink-0 mr-3 bg-gray-50 flex items-center justify-center">
+                  <div class="w-[50px] h-[50px] border border-[#ddd] rounded overflow-hidden shrink-0 me-3 bg-gray-50 flex items-center justify-center">
                     <img
                       x-show="seller.logo"
                       :src="seller.logo"
@@ -165,12 +165,12 @@ export function ManufacturerList(): string {
               <!-- Content Row -->
               <div class="flex gap-4 items-stretch">
                 <!-- Left: Stats -->
-                <div class="w-[200px] xl:w-[244px] shrink-0 pr-3">
+                <div class="w-[200px] xl:w-[244px] shrink-0 pe-3">
                   <h4 class="text-[13px] xl:text-[14px] font-normal text-[#222] mb-1">${t("mfr.list.rankingsAndReviews")}</h4>
                   <div class="mb-4 text-[13px] xl:text-[14px]">
                     <strong class="text-[#222]" x-text="seller.rating ? seller.rating.toFixed(1) : '—'"></strong>
                     <span class="text-[#222]">/5</span>
-                    <span class="text-[#222] ml-1" x-text="'(' + (seller.review_count || 0) + ')'"></span>
+                    <span class="text-[#222] ms-1" x-text="'(' + (seller.review_count || 0) + ')'"></span>
                   </div>
                   <template x-if="seller.short_description">
                     <p class="text-[12px] xl:text-[13px] text-gray-500 line-clamp-4" x-text="seller.short_description"></p>
@@ -218,7 +218,7 @@ export function ManufacturerList(): string {
                       class="w-full h-full object-cover transition-opacity duration-300"
                     />
                     <!-- Photo count badge -->
-                    <div class="absolute bottom-2 right-2 bg-black/60 text-white text-[11px] px-2 py-1 rounded flex items-center gap-1">
+                    <div class="absolute bottom-2 end-2 bg-black/60 text-white text-[11px] px-2 py-1 rounded flex items-center gap-1">
                       <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                       </svg>
@@ -261,7 +261,7 @@ export function ManufacturerList(): string {
                   x-text="seller.seller_name"
                 ></a>
                 <template x-if="seller.city">
-                  <span class="text-[11px] text-gray-400 shrink-0 ml-auto" x-text="seller.city"></span>
+                  <span class="text-[11px] text-gray-400 shrink-0 ms-auto" x-text="seller.city"></span>
                 </template>
               </div>
               <div class="text-[11px] text-[#222] flex items-center gap-1">

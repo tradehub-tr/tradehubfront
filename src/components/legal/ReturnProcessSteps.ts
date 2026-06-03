@@ -63,7 +63,7 @@ export function ReturnProcessSteps(): string {
       </div>
 
       <!-- Mobile: vertical -->
-      <div class="md:hidden space-y-0 pl-4">
+      <div class="md:hidden space-y-0 ps-4">
         ${STEPS.map(
           (s, i) => `
           <div class="flex gap-4 ${i < STEPS.length - 1 ? "pb-6" : ""}">

@@ -103,14 +103,14 @@ function renderProfileHeader(): string {
             </template>
 
             <!-- Dropzone-style progress bar overlay (upload sırasında) -->
-            <div x-show="uploadStatus === 'uploading'" class="absolute top-1/2 left-[15%] right-[15%] -translate-y-1/2 h-2.5 bg-black/75 border-2 border-black/80 rounded-full overflow-hidden z-10">
+            <div x-show="uploadStatus === 'uploading'" class="absolute top-1/2 start-[15%] end-[15%] -translate-y-1/2 h-2.5 bg-black/75 border-2 border-black/80 rounded-full overflow-hidden z-10">
               <div class="h-full bg-white rounded-full transition-all duration-300" :style="'width:' + Math.max(4, uploadProgress) + '%'"></div>
             </div>
 
             <!-- Success mark overlay (350ms hold sonrası) -->
             <div x-show="uploadStatus === 'success'" x-transition.opacity class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 max-sm:w-7 max-sm:h-7 rounded-full bg-emerald-500/90 z-20 flex items-center justify-center text-white text-sm font-bold">✓</div>
           </div>
-          <button type="button" @click="triggerPhotoUpload()" :disabled="uploadingPhoto" class="absolute -bottom-0.5 -left-0.5 w-7 h-7 max-sm:w-6 max-sm:h-6 rounded-full bg-white border border-border-default flex items-center justify-center cursor-pointer transition-all hover:bg-surface-raised disabled:opacity-60 disabled:cursor-wait" style="color:var(--color-text-secondary)" :title="uploadingPhoto ? '${t("common.loading")}' : '${t("settings.changePhoto")}'">
+          <button type="button" @click="triggerPhotoUpload()" :disabled="uploadingPhoto" class="absolute -bottom-0.5 -start-0.5 w-7 h-7 max-sm:w-6 max-sm:h-6 rounded-full bg-white border border-border-default flex items-center justify-center cursor-pointer transition-all hover:bg-surface-raised disabled:opacity-60 disabled:cursor-wait" style="color:var(--color-text-secondary)" :title="uploadingPhoto ? '${t("common.loading")}' : '${t("settings.changePhoto")}'">
             ${ICONS.camera}
           </button>
         </div>

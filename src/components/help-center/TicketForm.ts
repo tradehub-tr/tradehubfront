@@ -79,7 +79,7 @@ export function TicketForm(): string {
                     <textarea x-model="description" rows="6" class="th-input resize-y" :class="{ 'is-error': errors.description }" placeholder="${t("helpCenter.descriptionPlaceholder")}"></textarea>
                     <div class="flex justify-between mt-1">
                       <p x-show="errors.description" x-text="errors.description" class="text-xs text-red-500"></p>
-                      <span class="text-xs text-gray-400 ml-auto" x-text="charCount + ' ${t("helpCenter.characters")}'"></span>
+                      <span class="text-xs text-gray-400 ms-auto" x-text="charCount + ' ${t("helpCenter.characters")}'"></span>
                     </div>
                   </div>
 
@@ -159,10 +159,10 @@ export function TicketForm(): string {
                   ${t("helpCenter.backBtn")}
                 </button>
                 <div x-show="currentStep === 1" class="w-1"></div>
-                <button x-show="currentStep < 2" @click="nextStep()" class="th-btn cursor-pointer ml-auto">
+                <button x-show="currentStep < 2" @click="nextStep()" class="th-btn cursor-pointer ms-auto">
                   ${t("helpCenter.nextBtn")}
                 </button>
-                <button x-show="currentStep === 2" @click="submitTicket()" class="th-btn cursor-pointer ml-auto">
+                <button x-show="currentStep === 2" @click="submitTicket()" class="th-btn cursor-pointer ms-auto">
                   ${t("helpCenter.submitTicket")}
                 </button>
               </div>

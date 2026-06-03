@@ -62,13 +62,13 @@ export function renderFileGrid(container: HTMLElement, opts: FileListOptions): v
       return `
         <div id="${fileCardId(lightboxScope, prefix, i)}" class="relative bg-white border-2 border-gray-200 rounded-lg flex flex-col shadow-md p-2">
           <button type="button" data-remove="${i}" ${removeDisabled}
-            class="upload-remove-file absolute -top-2 -right-2 z-30 w-7 h-7 rounded-full ${removeClass} shadow-md text-sm leading-none flex items-center justify-center transition"
+            class="upload-remove-file absolute -top-2 -end-2 z-30 w-7 h-7 rounded-full ${removeClass} shadow-md text-sm leading-none flex items-center justify-center transition"
             aria-label="Sil">&times;</button>
 
           <div class="relative w-full h-20 rounded overflow-hidden bg-gray-100">
             ${thumb}
 
-            <div class="upload-bar-wrap absolute top-1/2 left-[15%] right-[15%] -translate-y-1/2 h-3 bg-black/75 border-2 border-black/80 rounded-full overflow-hidden z-10 ${barWrapHidden}">
+            <div class="upload-bar-wrap absolute top-1/2 start-[15%] end-[15%] -translate-y-1/2 h-3 bg-black/75 border-2 border-black/80 rounded-full overflow-hidden z-10 ${barWrapHidden}">
               <div class="upload-bar h-full bg-white rounded-full transition-all duration-300" style="width:${visiblePct}%"></div>
             </div>
 

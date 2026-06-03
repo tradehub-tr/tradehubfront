@@ -78,7 +78,7 @@ export function SupplierCard({ supplier, isSingleSupplier = true }: SupplierCard
           </svg>
         </div>
         <div class="sc-c-supplier-total flex items-center gap-3 text-sm font-bold text-text-primary whitespace-nowrap max-md:flex-col max-md:items-stretch max-md:gap-1 shrink-0">
-          <span class="sc-c-supplier-total-text text-[13px] font-medium text-[#4a4a48] whitespace-nowrap [&_strong]:text-[#1a1a1a] [&_strong]:font-bold [&_strong]:ml-1 [&_b]:text-[#1a1a1a] [&_b]:font-bold [&_b]:ml-1" x-show="!expanded" ${isOpen ? "x-cloak" : ""}></span>
+          <span class="sc-c-supplier-total-text text-[13px] font-medium text-[#4a4a48] whitespace-nowrap [&_strong]:text-[#1a1a1a] [&_strong]:font-bold [&_strong]:ms-1 [&_b]:text-[#1a1a1a] [&_b]:font-bold [&_b]:ms-1" x-show="!expanded" ${isOpen ? "x-cloak" : ""}></span>
           ${checkoutBtnHtml}
         </div>
       </header>

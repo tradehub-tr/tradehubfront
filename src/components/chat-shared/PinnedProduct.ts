@@ -11,7 +11,7 @@ export function PinnedProduct(): string {
              class="size-9 shrink-0 rounded bg-[var(--color-surface-raised,#f5f5f5)] object-cover" />
         <div class="min-w-0 flex-1">
           <div class="truncate text-[11px] text-[var(--color-text-primary,#0a0a0a)]">
-            <span class="text-[var(--color-text-tertiary,#a3a3a3)] mr-1">${t("chat.product")}</span>
+            <span class="text-[var(--color-text-tertiary,#a3a3a3)] me-1">${t("chat.product")}</span>
             <span x-text="$store.chatPopup.pinnedProduct.title"></span>
           </div>
           <div class="mt-0.5 flex items-baseline gap-2">

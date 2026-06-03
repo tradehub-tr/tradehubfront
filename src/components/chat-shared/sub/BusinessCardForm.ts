@@ -15,7 +15,7 @@ export function BusinessCardForm(): string {
          x-show="$store.chatPopup.openSubMenu === 'card'"
          x-transition.opacity
          x-cloak
-         class="absolute bottom-[150px] left-20 z-30 w-[320px] overflow-hidden rounded-lg border border-[var(--color-border-default,#e5e5e5)] bg-white shadow-lg">
+         class="absolute bottom-[150px] start-20 z-30 w-[320px] overflow-hidden rounded-lg border border-[var(--color-border-default,#e5e5e5)] bg-white shadow-lg">
 
       <div class="flex items-center justify-between border-b border-[var(--color-border-light,#f0f0f0)] px-3.5 py-2.5">
         <span class="text-[13px] font-semibold text-[var(--color-text-primary,#0a0a0a)]">${t("chat.subMenu.cardTitle")}</span>

@@ -102,13 +102,13 @@ appEl.innerHTML = `
 
     <!-- Section 1: Hero Banner -->
     <section id="rfq-hero" class="relative min-h-[240px] overflow-hidden bg-[linear-gradient(90deg,#231d68_0%,#262772_70%,#242570_71%,#24256b_100%)] sm:min-h-[320px] lg:min-h-[360px]" aria-label="${t('rfq.heroAriaLabel')}">
-      <div class="pointer-events-none absolute inset-y-0 left-0 hidden w-[42%] bg-[linear-gradient(180deg,rgba(34,37,132,0.85)_0%,rgba(34,37,132,0)_100%)] xl:block"></div>
+      <div class="pointer-events-none absolute inset-y-0 start-0 hidden w-[42%] bg-[linear-gradient(180deg,rgba(34,37,132,0.85)_0%,rgba(34,37,132,0)_100%)] xl:block"></div>
 
       <!-- Video Background -->
-      <video src="${rfqVideoUrl}" autoplay loop muted playsinline class="pointer-events-none absolute right-0 top-1/2 z-0 hidden h-full w-full max-w-[664px] -translate-y-1/2 object-cover xl:block [object-position:center] [-webkit-mask-image:linear-gradient(to_right,transparent,black_15%)] [mask-image:linear-gradient(to_right,transparent,black_15%)]"></video>
+      <video src="${rfqVideoUrl}" autoplay loop muted playsinline class="pointer-events-none absolute end-0 top-1/2 z-0 hidden h-full w-full max-w-[664px] -translate-y-1/2 object-cover xl:block [object-position:center] [-webkit-mask-image:linear-gradient(to_right,transparent,black_15%)] [mask-image:linear-gradient(to_right,transparent,black_15%)]"></video>
 
       <div class="container-boxed relative z-10 flex min-h-[240px] items-center pt-8 pb-14 sm:min-h-[320px] sm:pt-10 sm:pb-16 lg:min-h-[360px] lg:py-12">
-        <div class="w-full max-w-2xl text-center xl:text-left">
+        <div class="w-full max-w-2xl text-center xl:text-start">
             <span class="inline-block rounded-full bg-primary-500 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white">RFQ</span>
             <h1 class="mt-3 mb-2 text-2xl leading-tight font-bold text-white sm:mt-4 sm:text-4xl" data-i18n="rfq.createRfqTitle">
               ${t('rfq.createRfqTitle')}

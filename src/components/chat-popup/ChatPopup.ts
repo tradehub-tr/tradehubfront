@@ -23,7 +23,7 @@ export function ChatPopup(): string {
          x-transition:leave="transition ease-in duration-150"
          x-transition:leave-start="opacity-100 translate-y-0"
          x-transition:leave-end="opacity-0 translate-y-4"
-         class="fixed inset-0 z-[100] flex md:inset-auto md:bottom-0 md:right-4">
+         class="fixed inset-0 z-[100] flex md:inset-auto md:bottom-0 md:end-4">
 
       <div class="relative flex h-full w-full flex-col overflow-hidden bg-white md:rounded-t-xl md:shadow-2xl"
            :class="$store.chatPopup.isExpanded

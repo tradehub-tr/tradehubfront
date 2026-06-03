@@ -56,7 +56,7 @@ export function StoreHeader(): string {
             <div class="relative px-4 py-6 sm:px-6 md:px-10 md:py-6 md:pb-10">
 
           <!-- CTA Buttons: absolute top-right on desktop -->
-          <div class="hidden lg:flex items-center gap-3 absolute top-6 right-10">
+          <div class="hidden lg:flex items-center gap-3 absolute top-6 end-10">
             <a :href="sellerCode ? '/magaza/' + sellerCode + '/dukkan' : '#'"
                class="inline-flex items-center gap-2 text-[14px] font-normal text-text-heading hover:text-(--btn-bg) transition-colors whitespace-nowrap"
                style="padding: 5px 5px 5px 25px;">
@@ -72,7 +72,7 @@ export function StoreHeader(): string {
           </div>
 
           <!-- Company name -->
-          <h1 class="text-[28px] font-bold text-[#222] leading-tight mb-2 pr-0 lg:pr-96"
+          <h1 class="text-[28px] font-bold text-[#222] leading-tight mb-2 pe-0 lg:pe-96"
               x-text="seller?.seller_name || '\u2014'"></h1>
 
           <!-- Company info row: location · years · employees · main products -->
@@ -159,7 +159,7 @@ export function StoreHeader(): string {
                 <span class="text-[36px] sm:text-[48px] font-bold text-[#222] leading-none tracking-tight"
                       x-text="seller?.rating ? seller.rating.toFixed(1) : '\u2014'"></span>
                 <span class="text-[16px] sm:text-[20px] text-[#999] font-normal">/5</span>
-                <div class="ml-3 flex flex-col">
+                <div class="ms-3 flex flex-col">
                   <span class="text-[13px] sm:text-[14px] font-bold text-[#222]">${t("seller.sf.satisfactory")}</span>
                   <template x-if="seller?.review_count">
                     <a href="#reviews"
@@ -341,7 +341,7 @@ export function StoreHeader(): string {
                   <button @click="togglePlay()"
                           class="absolute inset-0 flex items-center justify-center z-10">
                     <div class="w-14 h-14 bg-black/50 rounded-full flex items-center justify-center hover:bg-black/70 transition-colors">
-                      <svg class="w-7 h-7 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                      <svg class="w-7 h-7 text-white ms-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                     </div>
                   </button>
                 </template>
@@ -350,7 +350,7 @@ export function StoreHeader(): string {
                 <template x-if="seller?.verified">
                   <div>
                     <div class="absolute inset-x-0 top-0 h-14 bg-gradient-to-b from-black/40 to-transparent pointer-events-none"></div>
-                    <span class="absolute top-3 left-4 text-white text-[18px] italic font-light tracking-wide drop-shadow-lg pointer-events-none">
+                    <span class="absolute top-3 start-4 text-white text-[18px] italic font-light tracking-wide drop-shadow-lg pointer-events-none">
                       ${t("seller.sf.verified")}
                     </span>
                   </div>
@@ -370,7 +370,7 @@ export function StoreHeader(): string {
                     <!-- Progress -->
                     <div class="flex-1 h-[3px] bg-white/30 rounded-full cursor-pointer group relative" @click="seek($event)">
                       <div class="h-full bg-[#ff4500] rounded-full relative" :style="'width:'+progress+'%'">
-                        <div class="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="absolute end-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity"></div>
                       </div>
                     </div>
                     <!-- Duration -->
@@ -398,7 +398,7 @@ export function StoreHeader(): string {
                             : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'">
                     <span x-text="thumb.label"></span>
                     <span x-show="thumb.count > 1"
-                          class="ml-1 text-[11px] opacity-70"
+                          class="ms-1 text-[11px] opacity-70"
                           x-text="'(' + thumb.count + ')'"></span>
                   </button>
                 </template>
@@ -438,7 +438,7 @@ export function StoreHeader(): string {
                     <template x-if="item.media_type === 'video'">
                       <div class="absolute inset-0 flex items-center justify-center bg-black/25 pointer-events-none">
                         <div class="w-7 h-7 rounded-full bg-black/60 flex items-center justify-center">
-                          <svg class="w-3.5 h-3.5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                          <svg class="w-3.5 h-3.5 text-white ms-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                         </div>
                       </div>
                     </template>

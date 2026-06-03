@@ -601,7 +601,7 @@ Alpine.data("cartPage", () => ({
         (item) => `
       <div class="relative w-14 h-14 sm:w-16 sm:h-16 rounded-md overflow-hidden border border-border-default shrink-0">
         <img src="${item.image}" alt="SKU" class="w-full h-full object-cover" />
-        <span class="absolute right-0 bottom-0 px-1 py-[2px] rounded-tl bg-black/65 text-white text-[11px] font-bold leading-none">${item.quantity}</span>
+        <span class="absolute end-0 bottom-0 px-1 py-[2px] rounded-ss bg-black/65 text-white text-[11px] font-bold leading-none">${item.quantity}</span>
       </div>
     `
       )
@@ -728,7 +728,7 @@ Alpine.data("cartPage", () => ({
             <div class="flex flex-col items-center gap-1 sm:gap-1.5 w-[60px] sm:w-[72px] flex-shrink-0">
               <div class="relative w-[60px] h-[60px] sm:w-[72px] sm:h-[72px] rounded-lg overflow-hidden border border-[#e5e5e5]">
                 <img src="${sk.image}" alt="" class="w-full h-full object-cover" />
-                <span class="absolute bottom-0 right-0 bg-black/60 text-white rounded-tl text-[11px] font-bold leading-4 px-1 py-px">${sk.quantity}</span>
+                <span class="absolute bottom-0 end-0 bg-black/60 text-white rounded-ss text-[11px] font-bold leading-4 px-1 py-px">${sk.quantity}</span>
               </div>
               <span class="text-[11px] leading-[14px] text-[#666] text-center line-clamp-2 w-full">${sk.currency}${sk.price.toFixed(2)}</span>
             </div>`
