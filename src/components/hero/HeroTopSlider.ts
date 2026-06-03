@@ -231,7 +231,7 @@ function createSwiper(sliderEl: HTMLElement, root: HTMLElement, slideCount: numb
   // Drive the active bullet's progress ring with the autoplay timer.
   swiperInstance.on("autoplayTimeLeft", (_s, _time, progress) => {
     const circle = root.querySelector<SVGCircleElement>(
-      ".hero-top-bullet-active .hero-top-ring circle",
+      ".hero-top-bullet-active .hero-top-ring circle"
     );
     if (circle) circle.style.strokeDashoffset = String(RING_CIRCUMFERENCE * progress);
   });

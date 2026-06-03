@@ -25,8 +25,7 @@ const TONE: Record<KpiCard["tone"], string> = {
 const esc = (s: string): string =>
   s.replace(
     /[&<>"']/g,
-    (c) =>
-      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] as string
+    (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] as string
   );
 
 /** Grafik verisi boşken halka/eksen yerine gösterilen nazik placeholder. */

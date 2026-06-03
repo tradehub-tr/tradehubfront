@@ -44,10 +44,9 @@ export function getCachedSlides(): HeroSlideItem[] {
 
 export async function fetchActiveSlides(): Promise<HeroSlideItem[]> {
   try {
-    const res = await fetch(
-      "/api/method/tradehub_core.api.hero_slider.get_active_slides",
-      { credentials: "include" },
-    );
+    const res = await fetch("/api/method/tradehub_core.api.hero_slider.get_active_slides", {
+      credentials: "include",
+    });
     if (!res.ok) return getCachedSlides();
     const json = (await res.json()) as { message?: { slides?: HeroSlideItem[] } };
     const slides = json?.message?.slides ?? [];

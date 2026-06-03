@@ -300,9 +300,7 @@ Alpine.data("cartPage", () => ({
     if (!snapshot) return;
 
     // Anchor = tıklanan kalp butonu; popover bunun altında açılır.
-    const anchor = (event.target as HTMLElement)?.closest<HTMLElement>(
-      ".sc-c-spu-favorite-btn"
-    );
+    const anchor = (event.target as HTMLElement)?.closest<HTMLElement>(".sc-c-spu-favorite-btn");
     if (!anchor) return;
 
     const product = {

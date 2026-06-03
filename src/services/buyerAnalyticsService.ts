@@ -74,9 +74,7 @@ function mapCategories(raw: { name: string; value: number }[]): CategorySlice[] 
 }
 
 export async function fetchBuyerAnalytics(): Promise<BuyerAnalytics> {
-  const raw = await callMethod<RawAnalytics>(
-    "tradehub_core.api.v1.dashboard.get_buyer_analytics"
-  );
+  const raw = await callMethod<RawAnalytics>("tradehub_core.api.v1.dashboard.get_buyer_analytics");
   return {
     kpis: mapKpis(raw.kpis),
     spendingTrend: raw.spending_trend,
