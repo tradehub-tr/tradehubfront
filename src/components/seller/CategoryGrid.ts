@@ -24,11 +24,11 @@ export function CategoryGrid(cards: CategoryCard[]): string {
             <a href="${card.link || "#"}"
                class="category-grid__card relative rounded-(--radius-lg) overflow-hidden min-h-[180px] group cursor-pointer hover:shadow-md hover:scale-[1.03] dark:hover:shadow-lg transition-all duration-300 focus-visible:ring-2 focus-visible:ring-(--store-accent)"
                style="background-color: ${card.bgColor}">
-              <span class="category-grid__label absolute top-5 left-5 text-white text-[17px] font-bold uppercase drop-shadow-md z-10 leading-tight max-w-[60%]">
+              <span class="category-grid__label absolute top-5 start-5 text-white text-[17px] font-bold uppercase drop-shadow-md z-10 leading-tight max-w-[60%]">
                 ${card.name}
               </span>
               <img src="${card.image}" alt="${card.name}"
-                   class="category-grid__image absolute right-0 bottom-0 max-h-[80%] object-contain transition-transform duration-300 group-hover:scale-105"
+                   class="category-grid__image absolute end-0 bottom-0 max-h-[80%] object-contain transition-transform duration-300 group-hover:scale-105"
                    loading="lazy"
                    onerror="this.style.display='none'" />
             </a>
@@ -48,11 +48,11 @@ export function CategoryGrid(cards: CategoryCard[]): string {
               <a href="${card.link || "#"}"
                  class="category-grid__card relative rounded-(--radius-lg) overflow-hidden min-h-[160px] group cursor-pointer hover:shadow-md hover:scale-[1.03] dark:hover:shadow-lg transition-all duration-300 focus-visible:ring-2 focus-visible:ring-(--store-accent)"
                  style="background-color: ${card.bgColor}">
-                <span class="category-grid__label absolute top-4 left-4 text-white text-[15px] font-bold uppercase drop-shadow-md z-10 leading-tight max-w-[55%]">
+                <span class="category-grid__label absolute top-4 start-4 text-white text-[15px] font-bold uppercase drop-shadow-md z-10 leading-tight max-w-[55%]">
                   ${card.name}
                 </span>
                 <img src="${card.image}" alt="${card.name}"
-                     class="category-grid__image absolute right-0 bottom-0 max-h-[75%] object-contain transition-transform duration-300 group-hover:scale-105"
+                     class="category-grid__image absolute end-0 bottom-0 max-h-[75%] object-contain transition-transform duration-300 group-hover:scale-105"
                      loading="lazy"
                      onerror="this.style.display='none'" />
               </a>

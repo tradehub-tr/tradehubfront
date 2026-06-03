@@ -63,7 +63,7 @@ export function EmailVerification(email: string = ""): string {
   return `
     <div id="email-verification" class="w-full">
       <!-- Header -->
-      <div class="mb-6 text-center lg:text-left">
+      <div class="mb-6 text-center lg:text-start">
         <h1 class="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white mb-2">
           ${t("auth.verifyEmail")}
         </h1>
@@ -83,13 +83,13 @@ export function EmailVerification(email: string = ""): string {
       </div>
 
       <!-- Resend Section -->
-      <div class="mb-6 text-center lg:text-left">
+      <div class="mb-6 text-center lg:text-start">
         <p class="text-sm text-gray-500 dark:text-gray-400">
           ${t("auth.otpDidntReceive")}
           <button
             type="button"
             id="otp-resend-btn"
-            class="ml-1 font-medium text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300 hover:underline transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:no-underline"
+            class="ms-1 font-medium text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300 hover:underline transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:no-underline"
             disabled
           >
             <span id="otp-resend-text">${t("auth.otpResend")}</span>
@@ -109,7 +109,7 @@ export function EmailVerification(email: string = ""): string {
       </button>
 
       <!-- Back/Change Email Link -->
-      <div class="mt-4 text-center lg:text-left">
+      <div class="mt-4 text-center lg:text-start">
         <button
           type="button"
           id="otp-back-btn"
@@ -524,7 +524,7 @@ function clearFeedback(el: HTMLElement | null): void {
 function renderInlineMessage(el: HTMLElement | null, msg: string): void {
   if (!el) return;
   el.innerHTML = `
-    <p class="text-sm text-red-600 dark:text-red-400 text-center lg:text-left">${escapeText(msg)}</p>
+    <p class="text-sm text-red-600 dark:text-red-400 text-center lg:text-start">${escapeText(msg)}</p>
   `;
 }
 
@@ -635,7 +635,7 @@ function renderFeedback(
 
   // Aşama 1 — silent (1st & 2nd wrong → remaining 4 or 3)
   el.innerHTML = `
-    <p class="mt-3 text-sm text-red-600 dark:text-red-400 text-center lg:text-left">${escapeText(t("auth.otpInvalidCode"))}</p>
+    <p class="mt-3 text-sm text-red-600 dark:text-red-400 text-center lg:text-start">${escapeText(t("auth.otpInvalidCode"))}</p>
   `;
 }
 

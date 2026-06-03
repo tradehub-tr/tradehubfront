@@ -15,7 +15,7 @@ export function ProductAttributes(): string {
   const gridCells = gridSpecs
     .map(
       (spec) => `
-      <div class="pd-attr-cell flex flex-col gap-1 py-3.5 px-4 min-w-0 even:border-r-0 [&:nth-last-child(-n+2)]:border-b-0" style="border-bottom: 1px solid var(--pd-spec-border, #e5e5e5); border-right: 1px solid var(--pd-spec-border, #e5e5e5);">
+      <div class="pd-attr-cell flex flex-col gap-1 py-3.5 px-4 min-w-0 even:border-e-0 [&:nth-last-child(-n+2)]:border-b-0" style="border-bottom: 1px solid var(--pd-spec-border, #e5e5e5); border-right: 1px solid var(--pd-spec-border, #e5e5e5);">
         <span class="text-sm font-bold truncate" style="color: var(--pd-spec-value-color, #111827);">${spec.value}</span>
         <span class="text-xs truncate" style="color: var(--pd-spec-key-color, #6b7280);">${spec.key}</span>
       </div>`

@@ -49,7 +49,7 @@ export function FooterPolicy(): string {
           </div>
 
           <!-- Operator + Copyright -->
-          <div class="text-[10px] sm:text-xs dark:text-gray-500 text-center md:text-right whitespace-normal" style="color:var(--footer-text-color)">
+          <div class="text-[10px] sm:text-xs dark:text-gray-500 text-center md:text-end whitespace-normal" style="color:var(--footer-text-color)">
             <p class="mb-0.5" data-i18n="footer.operatedBy">${t("footer.operatedBy")}</p>
             <p data-i18n="footer.copyright">${t("footer.copyright")}</p>
           </div>

@@ -32,7 +32,7 @@ export function SocialProofBadge(props: Props): string {
         x-show="signals.length > 0"
         x-cloak
         class="relative flex items-center gap-2 py-2 px-2.5 bg-[var(--color-surface-raised,#f9fafb)]
-               border-l-[3px] border-[var(--cta-primary,#d97706)] rounded-md
+               border-s-[3px] border-[var(--cta-primary,#d97706)] rounded-md
                text-xs font-medium text-[var(--color-text-body,#333333)] overflow-hidden h-[36px]"
         @mouseenter="pause()" @mouseleave="resume()"
         role="status" aria-live="polite"

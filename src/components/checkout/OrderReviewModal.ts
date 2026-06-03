@@ -87,7 +87,7 @@ export function OrderReviewModal(): string {
               <div class="mb-2.5 sm:mb-3 border border-[#e5e5e5] rounded-md overflow-hidden">
                 <div class="bg-[#f9fafb] px-2.5 sm:px-3 py-1.5 sm:py-2 text-[12px] sm:text-[13px] font-semibold text-[#222222] border-b border-[#e5e5e5]">
                   <span x-text="order.sellerName"></span>
-                  <span class="text-[#6b7280] font-normal ml-1.5 sm:ml-2 text-[11px] sm:text-[13px]" x-text="'(' + order.orderLabel + ')'"></span>
+                  <span class="text-[#6b7280] font-normal ms-1.5 sm:ms-2 text-[11px] sm:text-[13px]" x-text="'(' + order.orderLabel + ')'"></span>
                 </div>
                 <template x-for="product in order.products" :key="product.id">
                   <div class="flex items-start gap-2 sm:gap-3 px-2.5 sm:px-3 py-2 border-b border-[#f3f4f6] last:border-b-0">
@@ -138,7 +138,7 @@ export function OrderReviewModal(): string {
             @click="confirmOrder()"
             class="w-full flex items-center justify-center th-btn-dark h-10 sm:h-auto text-[13px] sm:text-[14px]"
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="mr-1.5 sm:mr-2 shrink-0 w-4 h-4 sm:w-[18px] sm:h-[18px]"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="me-1.5 sm:me-2 shrink-0 w-4 h-4 sm:w-[18px] sm:h-[18px]"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             ${t("checkout.confirmOrderBtn")}
           </button>
           <button

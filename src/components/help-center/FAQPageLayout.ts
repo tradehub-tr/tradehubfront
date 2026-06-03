@@ -22,7 +22,7 @@ export function FAQPageLayout(): string {
             class="flex items-center h-12 bg-white rounded-lg shadow-sm ring-1 ring-gray-200 max-w-[600px] mx-auto transition-shadow focus-within:ring-2 focus-within:ring-primary-500"
           >
             <!-- Leading search icon (decorative) -->
-            <span class="pl-4 pr-2 text-gray-400 flex items-center shrink-0" aria-hidden="true">
+            <span class="ps-4 pe-2 text-gray-400 flex items-center shrink-0" aria-hidden="true">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35m1.6-5.15a6.75 6.75 0 1 1-13.5 0 6.75 6.75 0 0 1 13.5 0Z"/>
               </svg>
@@ -54,7 +54,7 @@ export function FAQPageLayout(): string {
             <button
               type="submit"
               id="faq-search-btn"
-              class="th-btn th-btn-sm mr-1.5 shrink-0"
+              class="th-btn th-btn-sm me-1.5 shrink-0"
             >
               ${t("helpCenter.faqSearchSubmit")}
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
@@ -80,7 +80,7 @@ export function FAQPageLayout(): string {
           <template x-for="(cat, idx) in categories" :key="cat.id">
             <button
               @click="selectCategory(cat.id)"
-              class="w-full flex items-center justify-between px-4 py-2.5 text-sm text-left transition-colors"
+              class="w-full flex items-center justify-between px-4 py-2.5 text-sm text-start transition-colors"
               :class="activeCategory === cat.id
                 ? 'font-bold text-white bg-[var(--color-primary-500,#f5b800)] border-b border-transparent'
                 : 'text-gray-700 bg-white hover:bg-gray-50 border-b border-gray-100'"

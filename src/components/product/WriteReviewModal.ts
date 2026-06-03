@@ -346,7 +346,7 @@ export function WriteReviewModal(): string {
             <div class="flex items-center gap-1" role="img" :aria-label="rating.toFixed(2) + ' / 5'">${overallStarsHtml()}</div>
             <span class="text-[11px] text-secondary-400 mt-1 block">
               <span x-text="rating.toFixed(rating % 1 === 0 ? 0 : 2) + ' / 5'"></span>
-              <span class="ml-1">— detaylı puanların ortalaması</span>
+              <span class="ms-1">— detaylı puanların ortalaması</span>
             </span>
           </div>
 

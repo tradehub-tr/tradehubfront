@@ -25,7 +25,7 @@ export function ThemeEditorPanel(): string {
     <button
       type="button"
       id="theme-editor-trigger"
-      class="fixed top-1/2 right-0 -translate-y-1/2 z-(--z-sidebar) flex items-center justify-center w-10 h-24 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-l-md shadow-lg border border-r-0 border-gray-200 dark:border-gray-600 transition-all duration-200 hover:w-12 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2"
+      class="fixed top-1/2 end-0 -translate-y-1/2 z-(--z-sidebar) flex items-center justify-center w-10 h-24 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-s-md shadow-lg border border-e-0 border-gray-200 dark:border-gray-600 transition-all duration-200 hover:w-12 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2"
       aria-label="Open theme editor"
       data-tooltip-target="tooltip-theme-editor"
       data-tooltip-placement="left"
@@ -87,7 +87,7 @@ function renderThemeSection(
     <div class="border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900 overflow-hidden">
       <button
         type="button"
-        class="theme-accordion-btn w-full flex items-center justify-between px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+        class="theme-accordion-btn w-full flex items-center justify-between px-4 py-3 text-start hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
         data-target="${sectionId}"
         data-section-id="${id}"
         aria-expanded="${!collapsed}"
@@ -240,7 +240,7 @@ function openThemeEditorDrawer(): void {
   const drawer = document.createElement("div");
   drawer.id = "theme-editor-drawer";
   drawer.className =
-    "fixed top-0 right-0 z-(--z-toast) h-full w-full md:max-w-[400px] bg-white dark:bg-gray-800 shadow-2xl flex flex-col transition-transform duration-300 translate-x-full";
+    "fixed top-0 end-0 z-(--z-toast) h-full w-full md:max-w-[400px] bg-white dark:bg-gray-800 shadow-2xl flex flex-col transition-transform duration-300 translate-x-full";
   drawer.setAttribute("role", "dialog");
   drawer.setAttribute("aria-modal", "true"); // Modal on mobile
   drawer.setAttribute("aria-label", "Theme Editor");
@@ -297,7 +297,7 @@ function openThemeEditorDrawer(): void {
             .map(
               (preset, i) => `
             <button type="button" class="theme-preset-btn px-3 py-2 text-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 active:scale-95 rounded-md transition-all focus:outline-none focus:ring-2 focus:ring-primary-400" data-preset-index="${i}" aria-label="Apply ${preset.name} theme preset" title="${preset.description}">
-              <span class="mr-1">${preset.icon}</span>${preset.name}
+              <span class="me-1">${preset.icon}</span>${preset.name}
             </button>
           `
             )

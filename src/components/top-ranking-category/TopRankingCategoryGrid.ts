@@ -86,7 +86,7 @@ export function renderRankedCategoryCard(product: RankedProduct, rank: number): 
           class="w-full h-full object-cover transition-transform duration-300 group-hover/product:scale-105"
         />
         <span
-          class="absolute top-2 left-2 w-8 h-8 flex items-center justify-center rounded-md text-xs font-bold text-white shadow-sm ${badgeClass}"
+          class="absolute top-2 start-2 w-8 h-8 flex items-center justify-center rounded-md text-xs font-bold text-white shadow-sm ${badgeClass}"
           aria-label="Rank ${rank}"
         >#${rank}</span>
       </div>

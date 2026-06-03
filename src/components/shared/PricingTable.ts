@@ -27,13 +27,13 @@ export function PricingTable({ plans, features }: PricingTableProps): string {
       <table class="w-full text-sm">
         <thead>
           <tr class="border-b border-gray-200">
-            <th class="text-left py-3 px-4 font-semibold text-gray-700 w-1/4" data-i18n="common.feature">${t("common.feature")}</th>
+            <th class="text-start py-3 px-4 font-semibold text-gray-700 w-1/4" data-i18n="common.feature">${t("common.feature")}</th>
             ${plans
               .map(
                 (p) => `
               <th class="text-center py-3 px-4 font-semibold ${p.recommended ? "text-primary-600" : "text-gray-700"}">
                 ${p.name}
-                ${p.recommended ? `<span class="ml-1 text-xs bg-primary-100 text-primary-600 px-2 py-0.5 rounded-full" data-i18n="common.recommended">${t("common.recommended")}</span>` : ""}
+                ${p.recommended ? `<span class="ms-1 text-xs bg-primary-100 text-primary-600 px-2 py-0.5 rounded-full" data-i18n="common.recommended">${t("common.recommended")}</span>` : ""}
               </th>
             `
               )
@@ -76,7 +76,7 @@ export function PricingTable({ plans, features }: PricingTableProps): string {
           (plan, pi) => `
         <div class="border ${plan.recommended ? "border-primary-500" : "border-gray-200"} rounded-lg overflow-hidden">
           <div class="px-4 py-3 font-semibold text-center ${plan.recommended ? "bg-primary-50 text-primary-700" : "bg-gray-50 text-gray-700"}">
-            ${plan.name} ${plan.recommended ? `<span class="text-xs bg-primary-100 text-primary-600 px-2 py-0.5 rounded-full ml-1" data-i18n="common.recommended">${t("common.recommended")}</span>` : ""}
+            ${plan.name} ${plan.recommended ? `<span class="text-xs bg-primary-100 text-primary-600 px-2 py-0.5 rounded-full ms-1" data-i18n="common.recommended">${t("common.recommended")}</span>` : ""}
           </div>
           <div class="divide-y divide-gray-100">
             ${features

@@ -19,7 +19,7 @@ function renderThumbnailGrid(thumbnails: OrderSummaryThumbnail[], itemCount: num
       (thumb, idx) => `
       <div class="relative w-10 sm:w-[48px] h-10 sm:h-[48px] min-w-[40px] sm:min-w-[48px] rounded border border-[#e5e5e5]">
         <img class="w-full h-full object-cover rounded" src="${thumb.image}" alt="" />
-        ${idx === 0 ? `<div class="absolute -top-1.5 -right-1.5 flex items-center justify-center min-w-[18px] sm:min-w-[20px] h-[18px] sm:h-[20px] rounded-full px-1 bg-[#222222] text-white text-[11px] sm:text-[12px] font-bold z-10 leading-none">${itemCount}</div>` : ""}
+        ${idx === 0 ? `<div class="absolute -top-1.5 -end-1.5 flex items-center justify-center min-w-[18px] sm:min-w-[20px] h-[18px] sm:h-[20px] rounded-full px-1 bg-[#222222] text-white text-[11px] sm:text-[12px] font-bold z-10 leading-none">${itemCount}</div>` : ""}
       </div>`
     )
     .join("");

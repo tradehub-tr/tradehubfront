@@ -95,7 +95,7 @@ export function CompanyIntroduction(
                       ? `
                     <button class="absolute inset-0 flex items-center justify-center" aria-label="${t("seller.sf.playVideo")}">
                       <div class="w-14 h-14 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center transition-colors cursor-pointer">
-                        <svg class="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 text-white ms-1" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M8 5v14l11-7z"/>
                         </svg>
                       </div>

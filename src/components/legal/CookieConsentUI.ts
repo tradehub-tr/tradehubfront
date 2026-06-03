@@ -181,11 +181,11 @@ export function CookieConsentUI(): string {
         <table class="w-full text-sm min-w-[600px]">
           <thead class="bg-gray-50">
             <tr>
-              <th class="text-left py-2.5 px-3 font-medium text-gray-700">${t("cookieConsent.thCookieName")}</th>
-              <th class="text-left py-2.5 px-3 font-medium text-gray-700">${t("cookieConsent.thProvider")}</th>
-              <th class="text-left py-2.5 px-3 font-medium text-gray-700">${t("cookieConsent.thPurpose")}</th>
-              <th class="text-left py-2.5 px-3 font-medium text-gray-700">${t("cookieConsent.thDuration")}</th>
-              <th class="text-left py-2.5 px-3 font-medium text-gray-700">${t("cookieConsent.thType")}</th>
+              <th class="text-start py-2.5 px-3 font-medium text-gray-700">${t("cookieConsent.thCookieName")}</th>
+              <th class="text-start py-2.5 px-3 font-medium text-gray-700">${t("cookieConsent.thProvider")}</th>
+              <th class="text-start py-2.5 px-3 font-medium text-gray-700">${t("cookieConsent.thPurpose")}</th>
+              <th class="text-start py-2.5 px-3 font-medium text-gray-700">${t("cookieConsent.thDuration")}</th>
+              <th class="text-start py-2.5 px-3 font-medium text-gray-700">${t("cookieConsent.thType")}</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100">

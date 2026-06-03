@@ -35,7 +35,7 @@ export function OrderItemsDrawer(): string {
         x-transition:leave="transition ease-in duration-150"
         x-transition:leave-start="translate-x-0"
         x-transition:leave-end="translate-x-full"
-        class="fixed top-0 right-0 bottom-0 z-[61] w-full sm:w-[440px] bg-white shadow-2xl flex flex-col"
+        class="fixed top-0 end-0 bottom-0 z-[61] w-full sm:w-[440px] bg-white shadow-2xl flex flex-col"
         role="dialog"
         aria-modal="true"
         aria-labelledby="order-items-drawer-title">
@@ -70,7 +70,7 @@ export function OrderItemsDrawer(): string {
             <select
               x-model="sort"
               aria-label="${t("orders.sortLabel")}"
-              class="shrink-0 h-9 pl-3 pr-2 text-xs rounded-md border border-gray-200 bg-white focus:border-gray-400 focus:outline-none focus:ring-0 transition-colors cursor-pointer">
+              class="shrink-0 h-9 ps-3 pe-2 text-xs rounded-md border border-gray-200 bg-white focus:border-gray-400 focus:outline-none focus:ring-0 transition-colors cursor-pointer">
               <option value="added">${t("orders.sortAdded")}</option>
               <option value="price_asc">${t("orders.sortPriceAsc")}</option>
               <option value="price_desc">${t("orders.sortPriceDesc")}</option>
@@ -91,7 +91,7 @@ export function OrderItemsDrawer(): string {
                 <div class="text-xs font-semibold text-gray-900 line-clamp-1 leading-snug" x-text="product.name"></div>
                 <div class="text-[11px] text-gray-400 mt-0.5 truncate" x-text="product.variation"></div>
               </div>
-              <div class="text-right shrink-0">
+              <div class="text-end shrink-0">
                 <div class="text-xs font-bold text-gray-900">
                   <span x-text="currentOrder.currency + ' ' + product.unitPrice"></span>
                 </div>

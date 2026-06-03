@@ -80,16 +80,16 @@ export function SkuRow({ sku, productHref }: SkuRowProps): string {
         </div>
       </div>
 
-      <div class="flex items-center justify-end gap-2 sm:gap-3 mt-1.5 pl-[calc(20px+0.5rem+36px+0.5rem)] sm:pl-[calc(20px+0.75rem+40px+0.75rem)] ${unavailable ? "pointer-events-none opacity-50" : ""}">
+      <div class="flex items-center justify-end gap-2 sm:gap-3 mt-1.5 ps-[calc(20px+0.5rem+36px+0.5rem)] sm:ps-[calc(20px+0.75rem+40px+0.75rem)] ${unavailable ? "pointer-events-none opacity-50" : ""}">
         ${QuantityInput({ id: `sku-qty-${sku.id}`, value: sku.quantity, min: sku.minQty || 1, max: sku.maxQty, step: sku.sellInMoqMultiples ? sku.minQty || 1 : 1 })}
         ${!unavailable ? `<span class="sc-c-sku-line-total text-[12px] sm:text-[14px] font-bold text-[#1a1a1a] m-0 whitespace-nowrap">${formatPrice(sku.unitPrice * sku.quantity, sku.baseCurrency || "USD")}</span>` : ""}
         ${
           !unavailable
-            ? `<div class="sc-c-sku-moq-warning text-right text-[12px] sm:text-[14px] leading-[20px] text-[#dc2626] hidden">
+            ? `<div class="sc-c-sku-moq-warning text-end text-[12px] sm:text-[14px] leading-[20px] text-[#dc2626] hidden">
           <span class="sc-c-sku-moq-missing">0</span> more required to check out
           <button
             type="button"
-            class="ml-1 underline font-semibold text-[#8b1e1e] hover:opacity-80"
+            class="ms-1 underline font-semibold text-[#8b1e1e] hover:opacity-80"
             @click="$dispatch('sku-fill-min', { skuId: '${escapeHtml(sku.id)}' })"
           >
             Add all

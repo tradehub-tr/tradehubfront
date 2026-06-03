@@ -56,7 +56,7 @@ function renderAddressCard(): string {
             ${ICONS.trash} Sil
           </button>
           <button x-show="!addr.is_default" @click="setDefault(addr.id)"
-                  class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded border border-gray-200 text-gray-600 hover:border-[var(--color-primary-500)] hover:text-[var(--color-primary-500)] transition-colors ml-auto">
+                  class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded border border-gray-200 text-gray-600 hover:border-[var(--color-primary-500)] hover:text-[var(--color-primary-500)] transition-colors ms-auto">
             Varsayılan Yap
           </button>
         </div>

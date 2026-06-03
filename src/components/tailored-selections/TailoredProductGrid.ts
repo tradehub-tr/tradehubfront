@@ -30,7 +30,7 @@ function renderStarRating(rating: number, count: number): string {
   return `
     <div class="flex items-center gap-0.5">
       ${starsHtml}
-      <span class="text-xs text-gray-500 ml-0.5">${count}</span>
+      <span class="text-xs text-gray-500 ms-0.5">${count}</span>
     </div>
   `;
 }
@@ -58,7 +58,7 @@ export function renderProductCard(product: TailoredProduct, index: number): stri
         ${
           product.verifiedBadge
             ? `
-          <span class="absolute top-2 left-2 inline-flex items-center justify-center bg-green-600 text-white p-1 rounded" title="${t("product.verifiedSupplier")}">
+          <span class="absolute top-2 start-2 inline-flex items-center justify-center bg-green-600 text-white p-1 rounded" title="${t("product.verifiedSupplier")}">
             <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
           </span>
         `
@@ -67,7 +67,7 @@ export function renderProductCard(product: TailoredProduct, index: number): stri
         ${
           product.customBadge
             ? `
-          <div class="absolute top-0 left-0 bg-white/95 rounded-br-lg p-2 text-[9px] leading-tight shadow-sm">
+          <div class="absolute top-0 start-0 bg-white/95 rounded-ee-lg p-2 text-[9px] leading-tight shadow-sm">
             <div class="flex items-center gap-1 mb-0.5">
               <span class="text-lg">🎨</span>
               <span class="font-bold text-gray-900">CUSTOM</span>
@@ -93,7 +93,7 @@ export function renderProductCard(product: TailoredProduct, index: number): stri
             ${
               product.verifiedBadge && !product.customBadge
                 ? `
-              <span class="inline-flex items-center justify-center bg-green-600 text-white p-px rounded mr-0.5 align-middle" title="${t("product.verifiedSupplier")}">
+              <span class="inline-flex items-center justify-center bg-green-600 text-white p-px rounded me-0.5 align-middle" title="${t("product.verifiedSupplier")}">
                 <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
               </span>
             `

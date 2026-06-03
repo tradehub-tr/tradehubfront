@@ -179,7 +179,7 @@ function renderCheckbox(option: FilterOption, sectionId: string, idPrefix = ""):
         option.count !== undefined
           ? `
         <span
-          class="text-[11px] ml-auto"
+          class="text-[11px] ms-auto"
           style="color: var(--filter-count-color, #9ca3af);"
         >(${option.count.toLocaleString()})</span>
       `
@@ -286,13 +286,13 @@ function renderSearchableCheckbox(section: SearchableCheckboxFilterSection, idPr
     <div class="space-y-2" ${isCountrySection ? `data-filter-prefix="${idPrefix}"` : ""}>
       <!-- Search input (5+ öğe varsa görünür) -->
       <div class="relative mt-2${hideSearchInitially ? " hidden" : ""}" data-filter-search-wrapper="${section.id}">
-        <div class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none" style="color: var(--filter-search-icon, #9ca3af);">
+        <div class="absolute inset-y-0 start-0 ps-2.5 flex items-center pointer-events-none" style="color: var(--filter-search-icon, #9ca3af);">
           ${icons.search}
         </div>
         <input
           type="text"
           placeholder="${section.searchPlaceholder || "Search..."}"
-          class="th-input th-input-sm pl-8"
+          class="th-input th-input-sm ps-8"
           style="border-color: var(--filter-input-border, #d1d5db); color: var(--filter-text-color, #374151);"
           data-filter-section="${section.id}"
           data-filter-type="search"
@@ -571,7 +571,7 @@ export function initFilterSidebar(query?: string, category?: string): void {
             onclick="window.location.href='/pages/products.html?cat=${cat.slug}'"
           >
             <span class="truncate">${cat.name}</span>
-            <span class="text-[11px] ml-2 flex-shrink-0" style="color:#9ca3af">(${cat.count})</span>
+            <span class="text-[11px] ms-2 flex-shrink-0" style="color:#9ca3af">(${cat.count})</span>
           </button>
         `
                 )
@@ -613,7 +613,7 @@ export function initFilterSidebar(query?: string, category?: string): void {
                 </span>
               </div>
               <span class="text-[13px] leading-tight group-hover:text-primary-600 transition-colors duration-150" style="color: var(--filter-text-color, #374151);">${translatedName}</span>
-              <span class="text-[11px] ml-auto" style="color: var(--filter-count-color, #9ca3af);">(${c.count})</span>
+              <span class="text-[11px] ms-auto" style="color: var(--filter-count-color, #9ca3af);">(${c.count})</span>
             </label>
           `;
                 })
@@ -638,7 +638,7 @@ export function initFilterSidebar(query?: string, category?: string): void {
                 .map((b) => {
                   const checkboxId = `filter-${idPrefix ? idPrefix + "-" : ""}brands-brand-${String(b.value).toLowerCase().replace(/\s+/g, "-")}`;
                   const logoHtml = b.logo
-                    ? `<img src="${b.logo}" alt="${b.label}" class="w-4 h-4 object-contain mr-1" />`
+                    ? `<img src="${b.logo}" alt="${b.label}" class="w-4 h-4 object-contain me-1" />`
                     : "";
                   return `
             <label for="${checkboxId}" class="flex items-center gap-2 cursor-pointer group py-1 filter-searchable-item">
@@ -656,7 +656,7 @@ export function initFilterSidebar(query?: string, category?: string): void {
               </div>
               ${logoHtml}
               <span class="text-[13px] leading-tight group-hover:text-primary-600 transition-colors duration-150" style="color: var(--filter-text-color, #374151);">${b.label}</span>
-              <span class="text-[11px] ml-auto" style="color: var(--filter-count-color, #9ca3af);">(${b.count})</span>
+              <span class="text-[11px] ms-auto" style="color: var(--filter-count-color, #9ca3af);">(${b.count})</span>
             </label>
           `;
                 })
@@ -706,7 +706,7 @@ export function initFilterSidebar(query?: string, category?: string): void {
                   </div>
                   ${colorSwatch}
                   <span class="text-[13px] leading-tight group-hover:text-primary-600 transition-colors duration-150 truncate" style="color: var(--filter-text-color, #374151);">${opt.label}</span>
-                  <span class="text-[11px] ml-auto flex-shrink-0" style="color: var(--filter-count-color, #9ca3af);">(${opt.count})</span>
+                  <span class="text-[11px] ms-auto flex-shrink-0" style="color: var(--filter-count-color, #9ca3af);">(${opt.count})</span>
                 </label>
               `;
                       })
@@ -770,7 +770,7 @@ export function initFilterSidebar(query?: string, category?: string): void {
                   </span>
                 </div>
                 <span class="text-[13px] leading-tight group-hover:text-primary-600 transition-colors duration-150" style="color: var(--filter-text-color, #374151);">${c.label}</span>
-                <span class="text-[11px] ml-auto" style="color: var(--filter-count-color, #9ca3af);">(${c.count})</span>
+                <span class="text-[11px] ms-auto" style="color: var(--filter-count-color, #9ca3af);">(${c.count})</span>
               </label>
             `;
                   })
@@ -816,9 +816,9 @@ export function getDefaultFilterSections(): FilterSection[] {
  * filterEngine, her sonuç fetch'inden sonra aktif filtrelerle yeni facet'leri çekip
  * bu fonksiyonu çağırır → kullanıcı bir filtre seçince diğer seçeneklerin sayıları azalır.
  *
- * DOM yapısı: <label><input data-filter-section data-filter-value>...<span class="ml-auto">(N)</span></label>
+ * DOM yapısı: <label><input data-filter-section data-filter-value>...<span class="ms-auto">(N)</span></label>
  * Bulunamayan opsiyonları gizlemez (UX: kullanıcı yine seçimini kaldırabilsin), sadece
- * mevcut input'ların ml-auto count span'ını günceller.
+ * mevcut input'ların ms-auto count span'ını günceller.
  */
 type FacetCountMap = Map<string, number>; // section + "|" + value → count
 

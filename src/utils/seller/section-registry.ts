@@ -71,9 +71,9 @@ function renderSlideOverlay(slide: HeroSlide): string {
   const hasContent = slide.title || slide.subtitle || slide.ctaText;
   if (!hasContent) return "";
   const justifyMap: Record<string, string> = {
-    left: "justify-start text-left",
+    left: "justify-start text-start",
     center: "justify-center text-center",
-    right: "justify-end text-right",
+    right: "justify-end text-end",
   };
   const justify = justifyMap[slide.textPosition || "left"] || justifyMap.left;
   const isWhite = (slide.textColor || "white") === "white";
@@ -187,10 +187,10 @@ function renderHeroBanner(settings: SectionSettings): string {
   const showNav = slidesToRender.length > 1;
   const navHtml = showNav
     ? `
-    <button type="button" class="store-hero__prev absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center transition-colors backdrop-blur-sm cursor-pointer" aria-label="Onceki">
+    <button type="button" class="store-hero__prev absolute start-2 sm:start-4 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center transition-colors backdrop-blur-sm cursor-pointer" aria-label="Onceki">
       <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
     </button>
-    <button type="button" class="store-hero__next absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center transition-colors backdrop-blur-sm cursor-pointer" aria-label="Sonraki">
+    <button type="button" class="store-hero__next absolute end-2 sm:end-4 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center transition-colors backdrop-blur-sm cursor-pointer" aria-label="Sonraki">
       <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
     </button>
   `
@@ -355,11 +355,11 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                           <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </button>
                         <div x-show="sortOpen" @click.away="sortOpen = false" x-transition
-                             class="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg min-w-[160px] py-1 z-20">
-                          <button @click="sortBy = 'default'; sortProducts(); sortOpen = false" class="block w-full text-left px-4 py-2 text-[13px] hover:bg-gray-50" :class="sortBy === 'default' ? 'text-blue-600 font-medium' : 'text-gray-600'">Yeni</button>
-                          <button @click="sortBy = 'best_selling'; sortProducts(); sortOpen = false" class="block w-full text-left px-4 py-2 text-[13px] hover:bg-gray-50" :class="sortBy === 'best_selling' ? 'text-blue-600 font-medium' : 'text-gray-600'">Cok Satan</button>
-                          <button @click="sortBy = 'price_asc'; sortProducts(); sortOpen = false" class="block w-full text-left px-4 py-2 text-[13px] hover:bg-gray-50" :class="sortBy === 'price_asc' ? 'text-blue-600 font-medium' : 'text-gray-600'">Fiyat: Dusukten Yuksege</button>
-                          <button @click="sortBy = 'price_desc'; sortProducts(); sortOpen = false" class="block w-full text-left px-4 py-2 text-[13px] hover:bg-gray-50" :class="sortBy === 'price_desc' ? 'text-blue-600 font-medium' : 'text-gray-600'">Fiyat: Yuksekten Dusuge</button>
+                             class="absolute top-full start-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg min-w-[160px] py-1 z-20">
+                          <button @click="sortBy = 'default'; sortProducts(); sortOpen = false" class="block w-full text-start px-4 py-2 text-[13px] hover:bg-gray-50" :class="sortBy === 'default' ? 'text-blue-600 font-medium' : 'text-gray-600'">Yeni</button>
+                          <button @click="sortBy = 'best_selling'; sortProducts(); sortOpen = false" class="block w-full text-start px-4 py-2 text-[13px] hover:bg-gray-50" :class="sortBy === 'best_selling' ? 'text-blue-600 font-medium' : 'text-gray-600'">Cok Satan</button>
+                          <button @click="sortBy = 'price_asc'; sortProducts(); sortOpen = false" class="block w-full text-start px-4 py-2 text-[13px] hover:bg-gray-50" :class="sortBy === 'price_asc' ? 'text-blue-600 font-medium' : 'text-gray-600'">Fiyat: Dusukten Yuksege</button>
+                          <button @click="sortBy = 'price_desc'; sortProducts(); sortOpen = false" class="block w-full text-start px-4 py-2 text-[13px] hover:bg-gray-50" :class="sortBy === 'price_desc' ? 'text-blue-600 font-medium' : 'text-gray-600'">Fiyat: Yuksekten Dusuge</button>
                         </div>
                       </div>`
                           : ""
@@ -505,7 +505,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
               >
                 <div class="w-full aspect-[3/4] bg-gray-50 rounded flex items-center justify-center mb-3 relative">
                   <svg class="w-12 h-12 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                  <span x-show="cert.document" class="absolute bottom-2 right-2 inline-flex items-center gap-1 text-emerald-600 text-xs font-semibold bg-white/90 px-1.5 py-0.5 rounded">
+                  <span x-show="cert.document" class="absolute bottom-2 end-2 inline-flex items-center gap-1 text-emerald-600 text-xs font-semibold bg-white/90 px-1.5 py-0.5 rounded">
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                     PDF
                   </span>
@@ -683,7 +683,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                     <p class="text-[12px] text-gray-400 mb-0.5">Firma:</p>
                     <p x-show="isLoggedIn" class="text-[14px] text-gray-800" x-text="seller?.address?.company || seller?.company_name || seller?.seller_name || '-'"></p>
                     <button x-show="!isLoggedIn" type="button" @click="requireLogin()"
-                      class="text-[14px] text-gray-400 tracking-widest cursor-pointer hover:text-blue-600 select-none text-left"
+                      class="text-[14px] text-gray-400 tracking-widest cursor-pointer hover:text-blue-600 select-none text-start"
                       title="Giris yapin">
                       ••••••••• •••• •••. ••••
                     </button>
@@ -711,7 +711,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                       </div>
                     </template>
                     <button x-show="!isLoggedIn" type="button" @click="requireLogin()"
-                      class="block text-left cursor-pointer hover:text-blue-600 group"
+                      class="block text-start cursor-pointer hover:text-blue-600 group"
                       title="Giris yapin">
                       <p class="text-[14px] text-gray-400 tracking-widest group-hover:text-blue-600">•••••••••• ••• •• •••• •••••••• •• •••••••</p>
                       <p class="text-[13px] text-gray-400 tracking-widest mt-1 group-hover:text-blue-600">••••••••• / ••••••••• · •••••• · ••••••</p>

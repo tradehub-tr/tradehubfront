@@ -47,7 +47,7 @@ function renderBottomSheet(): string {
             <button
               type="button"
               id="mcb-sheet-close"
-              class="ml-auto p-1.5 -mr-1.5 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+              class="ms-auto p-1.5 -me-1.5 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
               aria-label="${t("common.close")}" data-i18n-aria-label="common.close"
             >
               <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -80,7 +80,7 @@ export function MobileCategoryBar(): string {
     <div id="mobile-category-bar" class="xl:hidden bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
       <!-- Row 1: Category Tabs (skeleton, replaced after API) -->
       <div class="relative">
-        <div id="mcb-tabs" class="flex overflow-x-auto scrollbar-hide gap-0.5 pr-10">
+        <div id="mcb-tabs" class="flex overflow-x-auto scrollbar-hide gap-0.5 pe-10">
           ${Array.from(
             { length: 6 },
             (_, i) => `
@@ -91,13 +91,13 @@ export function MobileCategoryBar(): string {
           ).join("")}
         </div>
         <!-- Dropdown button with gradient fade -->
-        <div class="absolute right-0 top-0 bottom-0 flex items-center pointer-events-none">
+        <div class="absolute end-0 top-0 bottom-0 flex items-center pointer-events-none">
           <div class="w-12 h-full bg-gradient-to-l from-white dark:from-gray-800 to-transparent"></div>
         </div>
         <button
           type="button"
           id="mcb-dropdown-btn"
-          class="th-no-press absolute right-0 top-0 bottom-0 w-9 flex items-center justify-center text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800"
+          class="th-no-press absolute end-0 top-0 bottom-0 w-9 flex items-center justify-center text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800"
           aria-label="${t("mobileCategory.allCategories")}" data-i18n-aria-label="mobileCategory.allCategories"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -307,7 +307,7 @@ export function initMobileCategoryBar(): void {
           (cat, i) => `
         <button
           type="button"
-          class="mcb-sheet-item th-no-press flex items-center w-full px-3 min-[400px]:px-4 sm:px-5 py-2.5 min-[400px]:py-3 sm:py-4 text-left transition-colors border-b border-gray-50 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/40"
+          class="mcb-sheet-item th-no-press flex items-center w-full px-3 min-[400px]:px-4 sm:px-5 py-2.5 min-[400px]:py-3 sm:py-4 text-start transition-colors border-b border-gray-50 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/40"
           data-mcb-sheet-cat="${cat.id}"
         >
           <span class="flex-1 text-[13px] min-[400px]:text-[14px] sm:text-[15px] ${i === 0 ? "font-semibold text-gray-900 dark:text-white" : "text-gray-800 dark:text-gray-300"}">${cat.name}</span>

@@ -45,7 +45,7 @@ function renderPaymentManagement(): string {
       <div data-card-id="${c.id}" class="relative shrink-0 w-[200px] max-sm:w-[160px] h-[120px] max-sm:h-[100px] rounded-md p-4 max-sm:p-3 flex flex-col justify-between group cursor-default"
            style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%); box-shadow: 0 4px 12px rgba(0,0,0,0.18);">
         <div class="flex items-center justify-between">
-          <span class="text-[11px] max-sm:text-[9px] font-black tracking-wide px-1.5 py-0.5 rounded ml-auto"
+          <span class="text-[11px] max-sm:text-[9px] font-black tracking-wide px-1.5 py-0.5 rounded ms-auto"
                 style="background: rgba(255,255,255,0.15); color: white;">${c.brand}</span>
         </div>
         <div>
@@ -55,14 +55,14 @@ function renderPaymentManagement(): string {
               <div class="text-[9px] max-sm:text-[8px] text-white/40 uppercase tracking-wide">${t("payment.nameLabel")}</div>
               <div class="text-[11px] max-sm:text-[10px] text-white font-medium truncate">${c.cardholderName}</div>
             </div>
-            <div class="text-right shrink-0 ml-2">
+            <div class="text-end shrink-0 ms-2">
               <div class="text-[9px] max-sm:text-[8px] text-white/40 uppercase tracking-wide">${t("payment.lastUsedLabel")}</div>
               <div class="text-[11px] max-sm:text-[10px] text-white font-medium">${c.expiry || "—"}</div>
             </div>
           </div>
         </div>
         <!-- Edit + Sil buttons -->
-        <div class="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div class="absolute top-2 end-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
           <button class="th-no-press w-5 h-5 rounded-full flex items-center justify-center text-white bg-white/20 hover:bg-white/40 border-none cursor-pointer transition-colors"
                   onclick="if(window.editSavedCard) window.editSavedCard('${c.id}')" title="${t("payment.editCardBtn")}">
             <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M8.5 1.5l2 2L4 10H2v-2l6.5-6.5z" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -127,11 +127,11 @@ function renderPaymentManagement(): string {
           <div class="overflow-x-auto mt-2">
             <table class="w-full border-collapse text-[13px]">
               <thead><tr>
-                <th class="text-left py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t("payment.thSendTime")}</th>
-                <th class="text-left py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t("payment.thSupplier")}</th>
-                <th class="text-left py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t("payment.thPaymentMethod")}</th>
-                <th class="text-left py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t("payment.thAmount")}</th>
-                <th class="text-left py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t("payment.thStatus")}</th>
+                <th class="text-start py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t("payment.thSendTime")}</th>
+                <th class="text-start py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t("payment.thSupplier")}</th>
+                <th class="text-start py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t("payment.thPaymentMethod")}</th>
+                <th class="text-start py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t("payment.thAmount")}</th>
+                <th class="text-start py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t("payment.thStatus")}</th>
               </tr></thead>
               <tbody>
                 <template x-for="tx in payments" :key="tx.name">
@@ -161,10 +161,10 @@ function renderPaymentManagement(): string {
           <div class="overflow-x-auto mt-2">
             <table class="w-full border-collapse text-[13px]">
               <thead><tr>
-                <th class="text-left py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t("payment.thSendTime")}</th>
-                <th class="text-left py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t("payment.thSupplier")}</th>
-                <th class="text-left py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t("payment.thAmount")}</th>
-                <th class="text-left py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t("payment.thStatus")}</th>
+                <th class="text-start py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t("payment.thSendTime")}</th>
+                <th class="text-start py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t("payment.thSupplier")}</th>
+                <th class="text-start py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t("payment.thAmount")}</th>
+                <th class="text-start py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t("payment.thStatus")}</th>
               </tr></thead>
               <tbody>
                 <template x-for="tx in refunds" :key="tx.name">
@@ -190,7 +190,7 @@ function renderPaymentManagement(): string {
 
         <!-- Header -->
         <div class="flex items-center justify-between px-6 max-sm:px-4 pt-5 pb-4">
-          <h3 id="pay-card-modal-title" class="text-lg max-sm:text-base font-bold text-text-primary m-0 truncate mr-2">${t("payment.addCardModalTitle")}</h3>
+          <h3 id="pay-card-modal-title" class="text-lg max-sm:text-base font-bold text-text-primary m-0 truncate me-2">${t("payment.addCardModalTitle")}</h3>
           <button class="pay-modal__close flex items-center justify-center w-8 h-8 shrink-0 bg-transparent border-none rounded-md cursor-pointer transition-[background] duration-150 hover:bg-surface-raised" aria-label="${t("payment.closeBtn")}">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M14 4L4 14M4 4l10 10" stroke="#333" stroke-width="1.8" stroke-linecap="round"/></svg>
           </button>
@@ -204,7 +204,7 @@ function renderPaymentManagement(): string {
             <div class="absolute inset-0 transform-3d backface-hidden transition-transform duration-800 ease-[cubic-bezier(0.71,0.03,0.56,0.85)] rounded-[15px] overflow-hidden shadow-[0_20px_60px_0_rgba(14,42,90,0.55)] h-full"
                  :class="isFlipped ? 'rotate-y-180' : 'rotate-y-0'">
               <!-- Cover background -->
-              <div class="absolute inset-0 h-full left-0 top-0 w-full rounded-[15px] overflow-hidden after:content-[''] after:absolute after:inset-0 after:bg-[rgba(6,2,29,0.45)]"
+              <div class="absolute inset-0 h-full start-0 top-0 w-full rounded-[15px] overflow-hidden after:content-[''] after:absolute after:inset-0 after:bg-[rgba(6,2,29,0.45)]"
                    style="background: linear-gradient(135deg, #0c1220 0%, #162544 40%, #1a3a6e 70%, #0f2847 100%);"></div>
               <!-- Card content -->
               <div class="relative z-[4] h-full p-[25px_15px] max-sm:p-[20px_10px] flex flex-col select-none"
@@ -218,12 +218,12 @@ function renderPaymentManagement(): string {
                     <line x1="9" y1="20" x2="41" y2="20" stroke="#c9a84c" stroke-width="0.5"/>
                     <defs><linearGradient id="chipGrad2" x1="0" y1="0" x2="48" y2="36"><stop offset="0%" stop-color="#e8cb80"/><stop offset="50%" stop-color="#d4a84a"/><stop offset="100%" stop-color="#c49a3c"/></linearGradient></defs>
                   </svg>
-                  <div class="h-[45px] max-sm:h-10 flex items-center justify-end max-w-[100px] ml-auto w-full relative">
+                  <div class="h-[45px] max-sm:h-10 flex items-center justify-end max-w-[100px] ms-auto w-full relative">
                     <template x-if="brand === 'VISA'">
                       <svg width="70" height="24" viewBox="0 0 70 24" fill="none"><text x="0" y="20" font-family="Arial,sans-serif" font-size="24" font-weight="bold" font-style="italic" fill="white" opacity="0.95">VISA</text></svg>
                     </template>
                     <template x-if="brand === 'MC'">
-                      <div class="flex items-center"><div class="w-9 h-9 rounded-full bg-[#eb001b] opacity-90"></div><div class="w-9 h-9 rounded-full bg-[#f79e1b] opacity-90 -ml-4"></div></div>
+                      <div class="flex items-center"><div class="w-9 h-9 rounded-full bg-[#eb001b] opacity-90"></div><div class="w-9 h-9 rounded-full bg-[#f79e1b] opacity-90 -ms-4"></div></div>
                     </template>
                     <template x-if="brand === 'AMEX'">
                       <span class="text-base font-black tracking-[2px] text-white/90">AMEX</span>
@@ -258,22 +258,22 @@ function renderPaymentManagement(): string {
             <div class="absolute inset-0 transform-3d backface-hidden transition-transform duration-800 ease-[cubic-bezier(0.71,0.03,0.56,0.85)] z-[2] rounded-[15px] overflow-hidden shadow-[0_20px_60px_0_rgba(14,42,90,0.55)] p-0"
                  :class="isFlipped ? 'rotate-y-0' : '-rotate-y-180'">
               <!-- Cover (counter-rotated to prevent mirror) -->
-              <div class="rotate-y-180 absolute inset-0 h-full left-0 top-0 w-full rounded-[15px] overflow-hidden after:content-[''] after:absolute after:inset-0 after:bg-[rgba(6,2,29,0.45)]"
+              <div class="rotate-y-180 absolute inset-0 h-full start-0 top-0 w-full rounded-[15px] overflow-hidden after:content-[''] after:absolute after:inset-0 after:bg-[rgba(6,2,29,0.45)]"
                    style="background: linear-gradient(135deg, #0c1220 0%, #162544 40%, #1a3a6e 70%, #0f2847 100%);"></div>
               <!-- Magnetic strip -->
               <div class="relative z-[2] w-full h-[50px] max-sm:h-10 mt-[30px] max-sm:mt-5 bg-[rgba(0,0,19,0.8)]"></div>
               <!-- CVV section -->
-              <div class="relative z-[2] text-right p-[15px] max-sm:p-[10px_15px]">
-                <div class="text-[15px] font-medium text-white pr-2.5 mb-1">CVV</div>
-                <div class="h-[45px] max-sm:h-10 bg-white mb-[30px] max-sm:mb-5 flex items-center justify-end pr-2.5 text-[#1a3b5d] text-lg rounded shadow-[0px_10px_20px_-7px_rgba(32,56,117,0.35)]">
+              <div class="relative z-[2] text-end p-[15px] max-sm:p-[10px_15px]">
+                <div class="text-[15px] font-medium text-white pe-2.5 mb-1">CVV</div>
+                <div class="h-[45px] max-sm:h-10 bg-white mb-[30px] max-sm:mb-5 flex items-center justify-end pe-2.5 text-[#1a3b5d] text-lg rounded shadow-[0px_10px_20px_-7px_rgba(32,56,117,0.35)]">
                   <span class="font-mono tracking-[4px]" x-text="cvv ? cvv.replace(/./g, '*') : ''"></span>
                 </div>
-                <div class="h-[45px] max-sm:h-10 flex items-center justify-end max-w-[100px] ml-auto relative opacity-70">
+                <div class="h-[45px] max-sm:h-10 flex items-center justify-end max-w-[100px] ms-auto relative opacity-70">
                   <template x-if="brand === 'VISA'">
                     <svg width="60" height="20" viewBox="0 0 60 20" fill="none"><text x="0" y="17" font-family="Arial,sans-serif" font-size="20" font-weight="bold" font-style="italic" fill="white">VISA</text></svg>
                   </template>
                   <template x-if="brand === 'MC'">
-                    <div class="flex items-center"><div class="w-7 h-7 rounded-full bg-[#eb001b]"></div><div class="w-7 h-7 rounded-full bg-[#f79e1b] -ml-3"></div></div>
+                    <div class="flex items-center"><div class="w-7 h-7 rounded-full bg-[#eb001b]"></div><div class="w-7 h-7 rounded-full bg-[#f79e1b] -ms-3"></div></div>
                   </template>
                   <template x-if="brand === 'AMEX'">
                     <span class="text-sm font-black tracking-wider text-white">AMEX</span>
@@ -420,12 +420,12 @@ function renderTransactions(): string {
         <div class="overflow-x-auto mt-2">
           <table class="w-full border-collapse text-[13px]">
             <thead><tr>
-              <th class="text-left py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t("payment.thSendTime")}</th>
-              <th class="text-left py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t("payment.thSupplier")}</th>
-              <th class="text-left py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t("payment.thPaymentMethod")}</th>
-              <th class="text-left py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t("payment.thAmount")}</th>
-              <th class="text-left py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t("payment.thTransactionFee")}</th>
-              <th class="text-left py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t("payment.thStatus")}</th>
+              <th class="text-start py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t("payment.thSendTime")}</th>
+              <th class="text-start py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t("payment.thSupplier")}</th>
+              <th class="text-start py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t("payment.thPaymentMethod")}</th>
+              <th class="text-start py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t("payment.thAmount")}</th>
+              <th class="text-start py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t("payment.thTransactionFee")}</th>
+              <th class="text-start py-3 px-4 font-semibold text-text-secondary bg-surface-muted border-b border-border-default whitespace-nowrap">${t("payment.thStatus")}</th>
             </tr></thead>
             <tbody>
               <template x-for="tx in transactions" :key="tx.name">
@@ -480,7 +480,7 @@ function renderNav(activeId: string): string {
           item.id === activeId
             ? "pay-nav__link--active font-semibold text-text-primary !border-l-[#222] bg-[#f9f9f9] max-md:!border-l-transparent max-md:!border-b-[#222]"
             : "";
-        return `<a href="#${item.id}" class="pay-nav__link block py-2 px-5 text-sm text-text-primary no-underline border-l-[3px] border-transparent transition-[color,background,border-color] duration-150 leading-[1.4] hover:bg-surface-muted hover:text-text-primary max-md:border-l-0 max-md:border-b-2 max-md:border-transparent max-md:py-1.5 max-md:px-3 max-md:text-[13px] max-md:truncate ${active}" data-nav="${item.id}">${item.label}</a>`;
+        return `<a href="#${item.id}" class="pay-nav__link block py-2 px-5 text-sm text-text-primary no-underline border-s-[3px] border-transparent transition-[color,background,border-color] duration-150 leading-[1.4] hover:bg-surface-muted hover:text-text-primary max-md:border-s-0 max-md:border-b-2 max-md:border-transparent max-md:py-1.5 max-md:px-3 max-md:text-[13px] max-md:truncate ${active}" data-nav="${item.id}">${item.label}</a>`;
       })
       .join("");
     return `
@@ -501,7 +501,7 @@ export function PaymentLayout(): string {
 
   return `
     <div class="pay-layout flex bg-surface rounded-lg min-h-[calc(100vh-80px)] overflow-hidden max-md:flex-col">
-      <aside class="pay-nav w-[220px] shrink-0 border-r border-[#f0f0f0] py-6 sticky top-0 self-start max-h-[calc(100vh-80px)] overflow-y-auto max-md:w-full max-md:static max-md:max-h-none max-md:border-r-0 max-md:border-b max-md:border-[#f0f0f0] max-md:py-4 max-md:flex max-md:flex-wrap max-md:items-center max-md:overflow-x-auto">
+      <aside class="pay-nav w-[220px] shrink-0 border-e border-[#f0f0f0] py-6 sticky top-0 self-start max-h-[calc(100vh-80px)] overflow-y-auto max-md:w-full max-md:static max-md:max-h-none max-md:border-e-0 max-md:border-b max-md:border-[#f0f0f0] max-md:py-4 max-md:flex max-md:flex-wrap max-md:items-center max-md:overflow-x-auto">
         <h2 class="text-base font-bold text-text-primary px-5 pb-4 max-md:w-full max-md:px-4 max-md:pb-2">${t("payment.paymentTitle")}</h2>
         ${renderNav(activeId)}
       </aside>

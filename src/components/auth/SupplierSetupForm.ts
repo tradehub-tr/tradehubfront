@@ -79,7 +79,7 @@ export function SupplierSetupForm(defaultCountry: string = "TR"): string {
 
       <!-- Step 1: Business Information -->
       <div class="supplier-step" data-supplier-step="1">
-        <div class="mb-6 text-center lg:text-left">
+        <div class="mb-6 text-center lg:text-start">
           <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-1">${t("auth.supplierSetup.step1Title")}</h2>
           <p class="text-sm text-gray-500 dark:text-gray-400">${t("auth.supplierSetup.step1Desc")}</p>
         </div>
@@ -102,7 +102,7 @@ export function SupplierSetupForm(defaultCountry: string = "TR"): string {
 
       <!-- Step 2: Tax & Address -->
       <div class="supplier-step hidden" data-supplier-step="2">
-        <div class="mb-6 text-center lg:text-left">
+        <div class="mb-6 text-center lg:text-start">
           <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-1">${t("auth.supplierSetup.step2Title")}</h2>
           <p class="text-sm text-gray-500 dark:text-gray-400">${t("auth.supplierSetup.step2Desc")}</p>
         </div>
@@ -144,7 +144,7 @@ export function SupplierSetupForm(defaultCountry: string = "TR"): string {
                 <button
                   type="button"
                   id="ss-city-btn"
-                  class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-md text-left text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all flex items-center justify-between"
+                  class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-md text-start text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all flex items-center justify-between"
                   aria-haspopup="listbox"
                   aria-expanded="false"
                   aria-controls="ss-city-dropdown"
@@ -204,7 +204,7 @@ export function SupplierSetupForm(defaultCountry: string = "TR"): string {
 
       <!-- Step 3: Bank Information -->
       <div class="supplier-step hidden" data-supplier-step="3">
-        <div class="mb-6 text-center lg:text-left">
+        <div class="mb-6 text-center lg:text-start">
           <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-1">${t("auth.supplierSetup.step3Title")}</h2>
           <p class="text-sm text-gray-500 dark:text-gray-400">${t("auth.supplierSetup.step3Desc")}</p>
         </div>
@@ -239,7 +239,7 @@ export function SupplierSetupForm(defaultCountry: string = "TR"): string {
 
       <!-- Step 4: Identity & Agreements -->
       <div class="supplier-step hidden" data-supplier-step="4">
-        <div class="mb-6 text-center lg:text-left">
+        <div class="mb-6 text-center lg:text-start">
           <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-1">${t("auth.supplierSetup.step4Title")}</h2>
           <p class="text-sm text-gray-500 dark:text-gray-400">${t("auth.supplierSetup.step4Desc")}</p>
         </div>

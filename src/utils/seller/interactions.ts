@@ -399,7 +399,7 @@ export function initContactForm(): void {
   textarea.addEventListener("input", () => {
     const len = textarea.value.length;
     counter.textContent = `${len}/8000`;
-    counter.className = "contact-form__counter absolute right-3 bottom-3 text-[12px]";
+    counter.className = "contact-form__counter absolute end-3 bottom-3 text-[12px]";
 
     if (len >= 8000) {
       counter.classList.add("text-[#ef4444]");
@@ -446,7 +446,7 @@ export function initContactForm(): void {
         textarea.value = "";
         counter.textContent = "0/8000";
         counter.className =
-          "contact-form__counter absolute right-3 bottom-3 text-[12px] text-[#9ca3af]";
+          "contact-form__counter absolute end-3 bottom-3 text-[12px] text-[#9ca3af]";
       } else {
         const errMsg = data._server_messages
           ? JSON.parse(JSON.parse(data._server_messages)[0])?.message

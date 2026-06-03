@@ -81,7 +81,7 @@ export function OrdersContent(): string {
                     <div class="flex-1 min-w-0">
                       <p class="text-sm text-gray-800 truncate m-0" x-text="product.name"></p>
                     </div>
-                    <div class="text-right shrink-0">
+                    <div class="text-end shrink-0">
                       <p class="text-xs text-gray-500 m-0" x-text="order.currency + ' ' + product.unitPrice + ' x' + product.quantity"></p>
                     </div>
                   </div>

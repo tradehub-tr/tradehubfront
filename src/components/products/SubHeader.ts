@@ -173,7 +173,7 @@ function renderSortDropdown(options: SortOption[], selectedValue: string): strin
         x-show="sortOpen"
         x-cloak
         @click.outside="sortOpen = false"
-        class="absolute right-0 z-30 mt-2 min-w-[220px] bg-white border border-gray-200 rounded-lg shadow-lg p-1.5 dark:bg-gray-800 dark:border-gray-700"
+        class="absolute end-0 z-30 mt-2 min-w-[220px] bg-white border border-gray-200 rounded-lg shadow-lg p-1.5 dark:bg-gray-800 dark:border-gray-700"
         role="listbox"
         aria-labelledby="sub-header-sort-btn"
       >
@@ -187,7 +187,7 @@ function renderSortDropdown(options: SortOption[], selectedValue: string): strin
                 :class="selectedSort === '${option.value}'
                   ? 'bg-primary-50 text-primary-700 font-semibold dark:bg-primary-900/20 dark:text-primary-400'
                   : 'text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-700'"
-                class="flex items-center justify-between w-full px-3 py-2 text-sm text-left rounded-md transition-colors"
+                class="flex items-center justify-between w-full px-3 py-2 text-sm text-start rounded-md transition-colors"
                 role="option"
                 :aria-selected="selectedSort === '${option.value}'"
               >
@@ -282,7 +282,7 @@ function renderMetaLine(activeTab: "products" | "manufacturers", count: number):
     activeTab === "products" ? "products.unitFound" : "products.unitFoundManufacturer";
   return `
     <div id="sub-header-meta" class="mt-3 text-sm text-gray-500 dark:text-gray-400">
-      <strong id="sub-header-count" class="text-gray-900 dark:text-white font-bold tabular-nums mr-1">${formatNumber(count)}</strong><span id="sub-header-unit">${t(unitKey)}</span>
+      <strong id="sub-header-count" class="text-gray-900 dark:text-white font-bold tabular-nums me-1">${formatNumber(count)}</strong><span id="sub-header-unit">${t(unitKey)}</span>
     </div>
   `;
 }

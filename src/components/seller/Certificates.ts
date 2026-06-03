@@ -40,12 +40,12 @@ export function Certificates(certificates: Certificate[]): string {
           </div>
 
           <!-- Navigation Arrows -->
-          <button class="${btn({ variant: "ghost", iconOnly: true })} certificates__prev absolute -left-4 top-1/2 -translate-y-1/2 w-8 h-12 z-10" aria-label="${t("seller.sf.prevCertificate")}">
+          <button class="${btn({ variant: "ghost", iconOnly: true })} certificates__prev absolute -start-4 top-1/2 -translate-y-1/2 w-8 h-12 z-10" aria-label="${t("seller.sf.prevCertificate")}">
             <svg class="w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
             </svg>
           </button>
-          <button class="${btn({ variant: "ghost", iconOnly: true })} certificates__next absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-12 z-10" aria-label="${t("seller.sf.nextCertificate")}">
+          <button class="${btn({ variant: "ghost", iconOnly: true })} certificates__next absolute -end-4 top-1/2 -translate-y-1/2 w-8 h-12 z-10" aria-label="${t("seller.sf.nextCertificate")}">
             <svg class="w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
             </svg>

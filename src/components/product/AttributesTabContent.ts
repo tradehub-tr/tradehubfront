@@ -43,7 +43,7 @@ export function AttributesTabContent(): string {
             (g) => `
         <div class="mb-6">
           <h4 class="text-sm font-semibold uppercase tracking-wider mb-2" style="color: var(--pd-spec-key-color, #6b7280);">${g.label}</h4>
-          <table class="pd-attrs-table w-full border-separate border-spacing-0 border border-[var(--pd-spec-border,#e5e5e5)] rounded-md overflow-hidden text-sm [&_th]:px-4 [&_th]:py-3 [&_th]:text-[13px] [&_th]:font-semibold [&_th]:text-[var(--pd-spec-key-color,#6b7280)] [&_th]:bg-[var(--pd-spec-header-bg,#f9fafb)] [&_th]:border-b [&_th]:border-[var(--pd-spec-border,#e5e5e5)] [&_th]:text-left">
+          <table class="pd-attrs-table w-full border-separate border-spacing-0 border border-[var(--pd-spec-border,#e5e5e5)] rounded-md overflow-hidden text-sm [&_th]:px-4 [&_th]:py-3 [&_th]:text-[13px] [&_th]:font-semibold [&_th]:text-[var(--pd-spec-key-color,#6b7280)] [&_th]:bg-[var(--pd-spec-header-bg,#f9fafb)] [&_th]:border-b [&_th]:border-[var(--pd-spec-border,#e5e5e5)] [&_th]:text-start">
             <tbody>
               ${buildTableRows(g.items.map((it) => ({ key: it.label, value: it.value })))}
             </tbody>
@@ -78,7 +78,7 @@ export function AttributesTabContent(): string {
           </svg>
         </button>
         <div id="pd-leadtime-content" class="hidden">
-          <table class="pd-attrs-table w-full border-separate border-spacing-0 border border-[var(--pd-spec-border,#e5e5e5)] rounded-md overflow-hidden text-sm [&_th]:px-4 [&_th]:py-3 [&_th]:text-[13px] [&_th]:font-semibold [&_th]:text-[var(--pd-spec-key-color,#6b7280)] [&_th]:bg-[var(--pd-spec-header-bg,#f9fafb)] [&_th]:border-b [&_th]:border-[var(--pd-spec-border,#e5e5e5)] [&_th]:text-left">
+          <table class="pd-attrs-table w-full border-separate border-spacing-0 border border-[var(--pd-spec-border,#e5e5e5)] rounded-md overflow-hidden text-sm [&_th]:px-4 [&_th]:py-3 [&_th]:text-[13px] [&_th]:font-semibold [&_th]:text-[var(--pd-spec-key-color,#6b7280)] [&_th]:bg-[var(--pd-spec-header-bg,#f9fafb)] [&_th]:border-b [&_th]:border-[var(--pd-spec-border,#e5e5e5)] [&_th]:text-start">
             <thead>
               <tr>
                 <th>${t("product.leadTimeQty")}</th>

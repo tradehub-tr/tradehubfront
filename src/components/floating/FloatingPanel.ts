@@ -78,7 +78,7 @@ function renderLensPopup(): string {
       x-transition:leave-end="opacity-0 translate-x-4"
       @mouseenter="lensOpen = true"
       @mouseleave="lensOpen = false"
-      class="hidden md:block absolute bottom-0 right-full mr-2 w-72 bg-gradient-to-b from-amber-50 to-white rounded-[12px] shadow-[0_2px_6px_2px_rgba(0,0,0,0.12)] p-5"
+      class="hidden md:block absolute bottom-0 end-full me-2 w-72 bg-gradient-to-b from-amber-50 to-white rounded-[12px] shadow-[0_2px_6px_2px_rgba(0,0,0,0.12)] p-5"
     >
       <!-- Header -->
       <div class="flex items-center gap-2 mb-3">
@@ -169,7 +169,7 @@ function renderChatDrawer(): string {
       x-transition:leave-start="translate-x-0"
       x-transition:leave-end="translate-x-full"
       @keydown.escape.window="chatOpen = false"
-      class="fixed top-0 right-0 z-(--z-toast) h-full w-full max-w-sm bg-white dark:bg-gray-800 shadow-2xl flex flex-col"
+      class="fixed top-0 end-0 z-(--z-toast) h-full w-full max-w-sm bg-white dark:bg-gray-800 shadow-2xl flex flex-col"
       role="dialog"
       aria-modal="true"
       aria-label="Chat Support"
@@ -241,14 +241,14 @@ export function FloatingPanel(): string {
         x-transition:leave="transition ease-in duration-150"
         x-transition:leave-start="opacity-100 scale-100"
         x-transition:leave-end="opacity-0 scale-95"
-        class="group fixed bottom-20 md:bottom-15 right-2 md:right-0 z-35"
+        class="group fixed bottom-20 md:bottom-15 end-2 md:end-0 z-35"
         aria-label="Quick actions panel"
       >
         <!-- Görsel Arama (Lens) geçici olarak devre dışı -->
         <!-- Lens Popup: ${/* renderLensPopup() — disabled */ ""} -->
 
         <!-- Sidebar butonları -->
-        <div class="inline-flex flex-col gap-2 bg-white rounded-full md:rounded-l-[8px] md:rounded-r-none shadow-[0_2px_8px_rgba(0,0,0,0.12)] p-1.5 md:p-2">
+        <div class="inline-flex flex-col gap-2 bg-white rounded-full md:rounded-s-[8px] md:rounded-e-none shadow-[0_2px_8px_rgba(0,0,0,0.12)] p-1.5 md:p-2">
           <!-- DISABLED: Mesajlarım — ileride geliştirilecek -->
           <!-- ${/* renderMessagesItem() */ ""} -->
 

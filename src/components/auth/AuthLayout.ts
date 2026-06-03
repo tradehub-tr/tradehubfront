@@ -49,14 +49,14 @@ function renderMobileHeader(options: AuthLayoutOptions = {}): string {
   const baseUrl = getBaseUrl();
 
   return `
-    <header class="lg:hidden fixed top-0 left-0 right-0 z-50 flex items-center h-14 px-4 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+    <header class="lg:hidden fixed top-0 start-0 end-0 z-50 flex items-center h-14 px-4 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
       ${
         showBackButton
           ? `
         <button
           type="button"
           id="auth-mobile-back"
-          class="flex items-center justify-center w-10 h-10 -ml-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+          class="flex items-center justify-center w-10 h-10 -ms-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
           aria-label="${t("auth.mobileBackLabel")}"
         >
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -66,8 +66,8 @@ function renderMobileHeader(options: AuthLayoutOptions = {}): string {
       `
           : ""
       }
-      <span class="flex-1 text-center text-sm font-medium text-gray-900 dark:text-white truncate ${showBackButton ? "pr-10" : ""}">${title}</span>
-      <a href="${baseUrl}" class="absolute right-4 top-1/2 -translate-y-1/2" aria-label="iSTOC Ana Sayfa">
+      <span class="flex-1 text-center text-sm font-medium text-gray-900 dark:text-white truncate ${showBackButton ? "pe-10" : ""}">${title}</span>
+      <a href="${baseUrl}" class="absolute end-4 top-1/2 -translate-y-1/2" aria-label="iSTOC Ana Sayfa">
         <img src="${baseUrl}images/istoc-logo.png" alt="iSTOC" class="h-6" />
       </a>
     </header>
@@ -82,8 +82,8 @@ function renderPromoBanner(): string {
     <div class="auth-promo-banner flex flex-col items-center justify-center px-10 py-12 text-center text-white h-full relative overflow-hidden bg-[linear-gradient(145deg,var(--color-primary-400)_0%,var(--color-primary-500)_45%,var(--color-primary-700)_100%)] w-full">
 
       <!-- Decorative background rings -->
-      <div class="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-white/5"></div>
-      <div class="absolute -bottom-32 -left-24 w-96 h-96 rounded-full bg-white/5"></div>
+      <div class="absolute -top-24 -end-24 w-80 h-80 rounded-full bg-white/5"></div>
+      <div class="absolute -bottom-32 -start-24 w-96 h-96 rounded-full bg-white/5"></div>
       <div class="absolute inset-0 bg-gradient-to-b from-black/10 to-transparent pointer-events-none"></div>
 
       <!-- Content -->
@@ -137,14 +137,14 @@ function renderPromoBanner(): string {
             </div>
 
             <!-- Bouncing pin -->
-            <div class="absolute -top-5 right-6 text-red-400 animate-bounce drop-shadow-lg">
+            <div class="absolute -top-5 end-6 text-red-400 animate-bounce drop-shadow-lg">
               <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24">
                 <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
               </svg>
             </div>
 
             <!-- Badge: Doğrulanmış -->
-            <div class="absolute -left-16 top-6 flex items-center gap-1.5 bg-white/15 border border-white/20 backdrop-blur-sm rounded-lg px-2.5 py-1.5 shadow-lg">
+            <div class="absolute -start-16 top-6 flex items-center gap-1.5 bg-white/15 border border-white/20 backdrop-blur-sm rounded-lg px-2.5 py-1.5 shadow-lg">
               <svg class="w-3.5 h-3.5 text-green-300 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
@@ -152,7 +152,7 @@ function renderPromoBanner(): string {
             </div>
 
             <!-- Badge: Hızlı Kargo -->
-            <div class="absolute -right-16 bottom-6 flex items-center gap-1.5 bg-white/15 border border-white/20 backdrop-blur-sm rounded-lg px-2.5 py-1.5 shadow-lg">
+            <div class="absolute -end-16 bottom-6 flex items-center gap-1.5 bg-white/15 border border-white/20 backdrop-blur-sm rounded-lg px-2.5 py-1.5 shadow-lg">
               <svg class="w-3.5 h-3.5 text-yellow-300 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>

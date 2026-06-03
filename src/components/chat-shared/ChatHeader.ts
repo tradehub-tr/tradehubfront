@@ -46,7 +46,7 @@ export function ChatHeader(opts: ChatHeaderOptions = {}): string {
         </div>
       </div>
 
-      <div class="ml-auto flex items-center gap-2 text-[var(--color-text-tertiary,#a3a3a3)]">
+      <div class="ms-auto flex items-center gap-2 text-[var(--color-text-tertiary,#a3a3a3)]">
         <button type="button"
                 data-submenu-trigger
                 @click.stop="$store.chatPopup.toggleSubMenu('context')"

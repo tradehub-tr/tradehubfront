@@ -59,7 +59,7 @@ function renderToggle(pref: AdPreference): string {
       </div>
       <label class="relative inline-flex w-12 h-[26px] flex-shrink-0 cursor-pointer">
         <input type="checkbox" data-pref-id="${pref.id}" ${pref.enabled ? "checked" : ""} class="peer opacity-0 w-0 h-0 absolute" />
-        <span class="ad-pref__toggle-slider absolute inset-0 rounded-[13px] bg-[var(--color-border-medium)] transition-colors duration-200 peer-checked:bg-[var(--toggle-active-bg,#cc9900)] before:content-[''] before:absolute before:w-5 before:h-5 before:left-[3px] before:top-[3px] before:bg-[var(--color-surface,#fff)] before:rounded-full before:transition-transform before:duration-200 before:shadow-[0_1px_3px_rgba(0,0,0,0.15)] peer-checked:before:translate-x-[22px]"></span>
+        <span class="ad-pref__toggle-slider absolute inset-0 rounded-[13px] bg-[var(--color-border-medium)] transition-colors duration-200 peer-checked:bg-[var(--toggle-active-bg,#cc9900)] before:content-[''] before:absolute before:w-5 before:h-5 before:start-[3px] before:top-[3px] before:bg-[var(--color-surface,#fff)] before:rounded-full before:transition-transform before:duration-200 before:shadow-[0_1px_3px_rgba(0,0,0,0.15)] peer-checked:before:translate-x-[22px]"></span>
       </label>
     </div>
   `;

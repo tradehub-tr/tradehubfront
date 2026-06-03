@@ -166,7 +166,7 @@ function renderProductCard(
     <div class="co-product-card border border-[#e8e6e0] rounded-md bg-white overflow-hidden mt-[10px]" x-data="{ open: ${productOpen}, skuExpanded: false }">
       <button
         type="button"
-        class="co-product-head w-full flex items-center gap-2 sm:gap-3 px-3 py-[10px] text-left cursor-pointer transition-colors hover:bg-[#fafaf8]"
+        class="co-product-head w-full flex items-center gap-2 sm:gap-3 px-3 py-[10px] text-start cursor-pointer transition-colors hover:bg-[#fafaf8]"
         @click="open = !open"
         :aria-expanded="open"
       >
@@ -277,7 +277,7 @@ function renderOrder(order: CheckoutDeliveryOrderGroup, defaultExpanded: boolean
     <div class="p-0 border-t border-[#e8e6e0] first:border-t-0 mt-0"
       x-data="{ expanded: ${defaultExpanded} }">
       <button type="button"
-        class="w-full flex items-center gap-2 sm:gap-3 m-0 px-4 sm:px-[22px] py-[10px] sm:py-[14px] rounded-none cursor-pointer hover:bg-[#fafaf8] transition-colors select-none text-left"
+        class="w-full flex items-center gap-2 sm:gap-3 m-0 px-4 sm:px-[22px] py-[10px] sm:py-[14px] rounded-none cursor-pointer hover:bg-[#fafaf8] transition-colors select-none text-start"
         @click="expanded = !expanded"
         :aria-expanded="expanded">
         <svg class="w-4 h-4 text-[#8a877f] shrink-0 hidden sm:block" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
@@ -332,7 +332,7 @@ function renderSupplierNoteModal(): string {
               maxlength="2000"
               x-model="noteDraft"
             ></textarea>
-            <span class="pointer-events-none absolute bottom-2.5 right-2.5 sm:bottom-3 sm:right-3 text-[12px] sm:text-[14px] text-[#9ca3af]">
+            <span class="pointer-events-none absolute bottom-2.5 end-2.5 sm:bottom-3 sm:end-3 text-[12px] sm:text-[14px] text-[#9ca3af]">
               <span x-text="noteDraft.length"></span>/2000
             </span>
           </div>
@@ -394,7 +394,7 @@ function renderShippingMethodModal(): string {
                 />
                 <span class="text-[13px] sm:text-[17px] font-semibold text-[#111827] leading-snug break-words" x-text="method.etaLabel"></span>
               </div>
-              <span class="shrink-0 text-[12px] sm:text-[16px] text-[#374151] sm:border-l sm:border-[#d1d5db] sm:pl-5 sm:min-w-[180px] sm:text-right pl-[30px] sm:pl-5">
+              <span class="shrink-0 text-[12px] sm:text-[16px] text-[#374151] sm:border-s sm:border-[#d1d5db] sm:ps-5 sm:min-w-[180px] sm:text-end ps-[30px] sm:ps-5">
                 ${t("checkout.shippingFee")}:
                 <strong class="text-[#111827] whitespace-nowrap" x-text="formatShippingFee(method.shippingFee)"></strong>
               </span>
@@ -448,7 +448,7 @@ export function ItemsDeliverySection({ orders = [] }: ItemsDeliverySectionProps 
             <path d="M12 22.08V12" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </span>
-        <h2 class="checkout-section__title flex-1 text-left text-[13px] sm:text-[15px] font-semibold text-[#1a1a1a] tracking-[-0.005em] whitespace-nowrap truncate">${t("checkout.itemsAndDeliveryOptions")}</h2>
+        <h2 class="checkout-section__title flex-1 text-start text-[13px] sm:text-[15px] font-semibold text-[#1a1a1a] tracking-[-0.005em] whitespace-nowrap truncate">${t("checkout.itemsAndDeliveryOptions")}</h2>
         ${supplierCount > 0 ? `<span class="text-[11px] sm:text-[12px] text-[#8a877f] whitespace-nowrap shrink-0">${supplierCount} tedarikçi</span>` : ""}
       </div>
       <div class="checkout-section__content p-0">

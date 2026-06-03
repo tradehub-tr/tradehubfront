@@ -181,14 +181,14 @@ function timelineSection(): string {
         <p class="text-gray-600 leading-relaxed max-w-3xl mb-10">
           Siparişinizin her adımını iSTOC panelinden takip edebilirsiniz. İşte tipik bir sipariş akışı:
         </p>
-        <div class="relative pl-8 sm:pl-12">
-          <div class="absolute left-[19px] sm:left-[23px] top-6 bottom-6 w-[2px] bg-gray-200"></div>
+        <div class="relative ps-8 sm:ps-12">
+          <div class="absolute start-[19px] sm:start-[23px] top-6 bottom-6 w-[2px] bg-gray-200"></div>
 
           ${steps
             .map(
               (step, i) => `
             <div class="relative mb-10 ${i === steps.length - 1 ? "mb-0" : ""}">
-              <div class="absolute -left-8 sm:-left-12 top-0 w-[38px] h-[38px] sm:w-[46px] sm:h-[46px] rounded-full border-2 border-[#FFC800] bg-white flex items-center justify-center z-10">
+              <div class="absolute -start-8 sm:-start-12 top-0 w-[38px] h-[38px] sm:w-[46px] sm:h-[46px] rounded-full border-2 border-[#FFC800] bg-white flex items-center justify-center z-10">
                 <span class="text-sm sm:text-base font-bold text-gray-900">${step.num}</span>
               </div>
               <div class="pt-1 sm:pt-2">

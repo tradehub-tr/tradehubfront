@@ -29,7 +29,7 @@ function renderSlide(slide: HeroSlide): string {
   if (slide.textPosition === "center") {
     alignClasses = "items-center text-center";
   } else if (slide.textPosition === "right") {
-    alignClasses = "items-end text-right";
+    alignClasses = "items-end text-end";
   }
 
   // Handle multi-line titles (newline separated)

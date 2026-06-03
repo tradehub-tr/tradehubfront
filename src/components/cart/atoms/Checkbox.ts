@@ -52,7 +52,7 @@ export function Checkbox({
           viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="m5 13 4 4L19 7"/>
         </svg>
-        <span class="next-checkbox-dash absolute left-0.5 right-0.5 sm:left-1 sm:right-1 top-1/2 -translate-y-1/2 h-[2px] bg-current rounded ${dashVisible}"
+        <span class="next-checkbox-dash absolute start-0.5 end-0.5 sm:start-1 sm:end-1 top-1/2 -translate-y-1/2 h-[2px] bg-current rounded ${dashVisible}"
           :class="(indeterminate && !checked) ? 'block' : 'hidden'"
           aria-hidden="true"></span>
       </span>

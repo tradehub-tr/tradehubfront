@@ -45,7 +45,7 @@ export function NotFoundSection(): string {
   return `
     <section class="py-8 sm:py-12 lg:py-16">
       <div class="container-boxed">
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 text-center sm:text-left">
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 text-center sm:text-start">
 
           <!-- Illustration -->
           <div class="flex-shrink-0">
