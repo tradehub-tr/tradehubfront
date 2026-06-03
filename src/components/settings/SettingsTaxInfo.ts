@@ -5,6 +5,7 @@
  */
 
 import { t } from "../../i18n";
+import { renderSwitch, renderSegmented } from "../../utils/ui/toggle";
 import {
   validateTCKN,
   validateVKN,
@@ -157,16 +158,15 @@ function taxIdentityEdit(d: TaxInfoData): string {
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <div class="sm:col-span-2">
         <label class="block text-[13px] font-medium mb-1.5" style="color:var(--color-text-secondary)">${t("settings.taxpayerTypeLabel")}</label>
-        <div class="flex items-center gap-6">
-          <label class="flex items-center gap-2 cursor-pointer text-sm">
-            <input type="radio" name="taxpayer_type" value="individual" data-field="taxpayer_type" ${!isCorp ? "checked" : ""} class="accent-[var(--color-primary-500)]" />
-            ${t("settings.taxpayerIndividual")}
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer text-sm">
-            <input type="radio" name="taxpayer_type" value="corporate" data-field="taxpayer_type" ${isCorp ? "checked" : ""} class="accent-[var(--color-primary-500)]" />
-            ${t("settings.taxpayerCorporate")}
-          </label>
-        </div>
+        ${renderSegmented({
+          name: "taxpayer_type",
+          field: "taxpayer_type",
+          value: d.taxpayer_type,
+          options: [
+            { value: "individual", label: t("settings.taxpayerIndividual") },
+            { value: "corporate", label: t("settings.taxpayerCorporate") },
+          ],
+        })}
       </div>
 
       <div>
@@ -222,30 +222,27 @@ function invoiceInfoEdit(d: TaxInfoData): string {
 
       <div>
         <label class="block text-[13px] font-medium mb-1.5" style="color:var(--color-text-secondary)">${t("settings.eInvoiceStatusLabel")}</label>
-        <div class="flex items-center gap-6">
-          <label class="flex items-center gap-2 cursor-pointer text-sm">
-            <input type="radio" name="e_invoice" value="true" data-field="e_invoice_registered" ${d.e_invoice_registered ? "checked" : ""} class="accent-[var(--color-primary-500)]" />
-            ${t("settings.eInvoiceRegistered")}
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer text-sm">
-            <input type="radio" name="e_invoice" value="false" data-field="e_invoice_registered" ${!d.e_invoice_registered ? "checked" : ""} class="accent-[var(--color-primary-500)]" />
-            ${t("settings.eInvoiceNotRegistered")}
-          </label>
-        </div>
+        ${renderSwitch({
+          name: "e_invoice",
+          field: "e_invoice_registered",
+          checked: d.e_invoice_registered,
+          label: t("settings.eInvoiceRegistered"),
+          onValue: "true",
+          offValue: "false",
+        })}
       </div>
 
       <div>
         <label class="block text-[13px] font-medium mb-1.5" style="color:var(--color-text-secondary)">${t("settings.invoiceTypeLabel")}</label>
-        <div class="flex items-center gap-6">
-          <label class="flex items-center gap-2 cursor-pointer text-sm">
-            <input type="radio" name="invoice_type" value="e_fatura" data-field="invoice_type_preference" ${d.invoice_type_preference === "e_fatura" ? "checked" : ""} class="accent-[var(--color-primary-500)]" />
-            ${t("settings.invoiceTypeEFatura")}
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer text-sm">
-            <input type="radio" name="invoice_type" value="e_arsiv" data-field="invoice_type_preference" ${!d.invoice_type_preference || d.invoice_type_preference === "e_arsiv" ? "checked" : ""} class="accent-[var(--color-primary-500)]" />
-            ${t("settings.invoiceTypeEArsiv")}
-          </label>
-        </div>
+        ${renderSegmented({
+          name: "invoice_type",
+          field: "invoice_type_preference",
+          value: !d.invoice_type_preference ? "e_arsiv" : d.invoice_type_preference,
+          options: [
+            { value: "e_fatura", label: t("settings.invoiceTypeEFatura") },
+            { value: "e_arsiv", label: t("settings.invoiceTypeEArsiv") },
+          ],
+        })}
       </div>
     </div>
   `;
@@ -378,6 +375,19 @@ export function initSettingsTaxInfo(): void {
   }
 
   function bindEvents(): void {
+    // Switch (value-mapped): checkbox görsel kontrol, gerçek değer hidden
+    // input'ta tutulur. Toggle değişince hidden input on/off değerine yazılır —
+    // collectCardData hidden input'u (data-field) okur, sözleşme korunur.
+    root.querySelectorAll<HTMLInputElement>("input[data-toggle-sync]").forEach((cb) => {
+      const hidden = cb
+        .closest("label")
+        ?.querySelector<HTMLInputElement>('input[type="hidden"][data-on-value]');
+      if (!hidden) return;
+      cb.addEventListener("change", () => {
+        hidden.value = cb.checked ? hidden.dataset.onValue! : hidden.dataset.offValue!;
+      });
+    });
+
     // Tab switching
     root.querySelectorAll<HTMLButtonElement>(".tax-info__tab").forEach((tab) => {
       tab.addEventListener("click", () => {
