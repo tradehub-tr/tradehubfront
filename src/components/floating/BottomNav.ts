@@ -14,7 +14,7 @@ function renderCategoryOverlay(): string {
     <div id="cat-fullscreen-overlay" class="fixed inset-0 z-50 bg-white dark:bg-gray-900 xl:hidden hidden flex-col">
       <!-- Header -->
       <div class="flex items-center justify-between px-4 h-12 border-b border-gray-100 dark:border-gray-700 shrink-0">
-        <button type="button" id="cat-fullscreen-back" class="th-no-press p-1 -ml-1 text-gray-700 dark:text-gray-300" aria-label="${t("common.back")}">
+        <button type="button" id="cat-fullscreen-back" class="th-no-press p-1 -ms-1 text-gray-700 dark:text-gray-300" aria-label="${t("common.back")}">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/>
           </svg>
@@ -26,7 +26,7 @@ function renderCategoryOverlay(): string {
       <!-- Body: sidebar + content -->
       <div class="flex flex-1 min-h-0">
         <!-- Left sidebar -->
-        <div id="cat-fullscreen-sidebar" class="w-[90px] min-[400px]:w-[110px] sm:w-[130px] shrink-0 border-r border-gray-100 dark:border-gray-700 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+        <div id="cat-fullscreen-sidebar" class="w-[90px] min-[400px]:w-[110px] sm:w-[130px] shrink-0 border-e border-gray-100 dark:border-gray-700 overflow-y-auto bg-gray-50 dark:bg-gray-800">
         </div>
 
         <!-- Right content -->
@@ -89,10 +89,10 @@ export function initCategoryFullscreen(): void {
         btn.classList.toggle("bg-white", isActive);
         btn.classList.toggle("dark:bg-gray-900", isActive);
         btn.classList.toggle("font-bold", isActive);
-        btn.classList.toggle("border-l-2", isActive);
-        btn.classList.toggle("border-l-primary-500", isActive);
+        btn.classList.toggle("border-s-2", isActive);
+        btn.classList.toggle("border-s-primary-500", isActive);
         btn.classList.toggle("font-normal", !isActive);
-        btn.classList.toggle("border-l-0", !isActive);
+        btn.classList.toggle("border-s-0", !isActive);
       });
 
       const cat = cats.find((c) => c.id === catId);
@@ -121,7 +121,7 @@ export function initCategoryFullscreen(): void {
       .map(
         (cat, i) => `
         <button type="button"
-          class="cat-fs-item th-no-press w-full text-left px-2 min-[400px]:px-3 py-2.5 min-[400px]:py-3 text-[11px] min-[400px]:text-[12px] sm:text-[13px] text-gray-700 dark:text-gray-300 transition-colors ${i === 0 ? "bg-white dark:bg-gray-900 font-bold border-l-2 border-l-primary-500" : "font-normal border-l-0"}"
+          class="cat-fs-item th-no-press w-full text-start px-2 min-[400px]:px-3 py-2.5 min-[400px]:py-3 text-[11px] min-[400px]:text-[12px] sm:text-[13px] text-gray-700 dark:text-gray-300 transition-colors ${i === 0 ? "bg-white dark:bg-gray-900 font-bold border-s-2 border-s-primary-500" : "font-normal border-s-0"}"
           data-cat-id="${cat.id}"
         >${cat.name}</button>
       `
@@ -170,7 +170,7 @@ function renderAccountOverlay(): string {
     <div id="account-fullscreen-overlay" class="fixed inset-0 z-50 bg-white dark:bg-gray-900 xl:hidden hidden flex-col">
       <!-- Header -->
       <div class="flex items-center justify-between px-4 h-12 border-b border-gray-100 dark:border-gray-700 shrink-0">
-        <button type="button" id="account-fullscreen-back" class="th-no-press p-1 -ml-1 text-gray-700 dark:text-gray-300" aria-label="${t("common.back")}">
+        <button type="button" id="account-fullscreen-back" class="th-no-press p-1 -ms-1 text-gray-700 dark:text-gray-300" aria-label="${t("common.back")}">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/>
           </svg>
@@ -289,7 +289,7 @@ function renderAccountOverlay(): string {
           <p class="px-3 min-[400px]:px-4 text-[10px] min-[400px]:text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">${t("accountMenu.settings")}</p>
 
           <!-- Teslimat Ülkesi -->
-          <button type="button" id="account-country-btn" class="th-no-press flex items-center gap-3 w-full px-3 min-[400px]:px-4 py-2.5 min-[400px]:py-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-left">
+          <button type="button" id="account-country-btn" class="th-no-press flex items-center gap-3 w-full px-3 min-[400px]:px-4 py-2.5 min-[400px]:py-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start">
             <div class="w-8 h-8 min-[400px]:w-9 min-[400px]:h-9 rounded-md bg-gray-100 dark:bg-gray-700 flex items-center justify-center shrink-0">
               <svg class="w-4 h-4 min-[400px]:w-5 min-[400px]:h-5 text-gray-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418"/>
@@ -306,30 +306,30 @@ function renderAccountOverlay(): string {
 
           <!-- Ülke seçici (gizli, tıklayınca açılır) -->
           <div id="account-country-picker" class="hidden mx-3 min-[400px]:mx-4 mt-2 rounded-md border border-gray-200 dark:border-gray-700 overflow-hidden max-h-[200px] overflow-y-auto">
-            <button type="button" data-country-switch="TR" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-left border-b border-gray-100 dark:border-gray-700">
+            <button type="button" data-country-switch="TR" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start border-b border-gray-100 dark:border-gray-700">
               <span>Türkiye</span>
               <span class="country-check text-[var(--color-primary-500,#f5b800)] hidden" data-country-check="TR">✓</span>
             </button>
-            <button type="button" data-country-switch="DE" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-left border-b border-gray-100 dark:border-gray-700">
+            <button type="button" data-country-switch="DE" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start border-b border-gray-100 dark:border-gray-700">
               <span>Almanya</span>
               <span class="country-check text-[var(--color-primary-500,#f5b800)] hidden" data-country-check="DE">✓</span>
             </button>
-            <button type="button" data-country-switch="US" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-left border-b border-gray-100 dark:border-gray-700">
+            <button type="button" data-country-switch="US" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start border-b border-gray-100 dark:border-gray-700">
               <span>ABD</span>
               <span class="country-check text-[var(--color-primary-500,#f5b800)] hidden" data-country-check="US">✓</span>
             </button>
-            <button type="button" data-country-switch="GB" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-left border-b border-gray-100 dark:border-gray-700">
+            <button type="button" data-country-switch="GB" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start border-b border-gray-100 dark:border-gray-700">
               <span>İngiltere</span>
               <span class="country-check text-[var(--color-primary-500,#f5b800)] hidden" data-country-check="GB">✓</span>
             </button>
-            <button type="button" data-country-switch="NL" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-left">
+            <button type="button" data-country-switch="NL" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start">
               <span>Hollanda</span>
               <span class="country-check text-[var(--color-primary-500,#f5b800)] hidden" data-country-check="NL">✓</span>
             </button>
           </div>
 
           <!-- Dil ve Para Birimi -->
-          <button type="button" id="account-lang-btn" class="th-no-press flex items-center gap-3 w-full px-3 min-[400px]:px-4 py-2.5 min-[400px]:py-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-left">
+          <button type="button" id="account-lang-btn" class="th-no-press flex items-center gap-3 w-full px-3 min-[400px]:px-4 py-2.5 min-[400px]:py-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start">
             <div class="w-8 h-8 min-[400px]:w-9 min-[400px]:h-9 rounded-md bg-gray-100 dark:bg-gray-700 flex items-center justify-center shrink-0">
               <svg class="w-4 h-4 min-[400px]:w-5 min-[400px]:h-5 text-gray-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m10.5 21 5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 0 1 6-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 0 1-3.827-5.802"/>
@@ -346,11 +346,11 @@ function renderAccountOverlay(): string {
 
           <!-- Dil seçici (gizli, tıklayınca açılır) -->
           <div id="account-lang-picker" class="hidden mx-3 min-[400px]:mx-4 mt-2 rounded-md border border-gray-200 dark:border-gray-700 overflow-hidden">
-            <button type="button" data-lang-switch="tr" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-left border-b border-gray-100 dark:border-gray-700">
+            <button type="button" data-lang-switch="tr" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start border-b border-gray-100 dark:border-gray-700">
               <span>Türkçe — TRY (₺)</span>
               <span id="lang-check-tr" class="text-[var(--color-primary-500,#f5b800)] hidden">✓</span>
             </button>
-            <button type="button" data-lang-switch="en" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-left">
+            <button type="button" data-lang-switch="en" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start">
               <span>English — TRY (₺)</span>
               <span id="lang-check-en" class="text-[var(--color-primary-500,#f5b800)] hidden">✓</span>
             </button>
@@ -495,7 +495,7 @@ function initAccountFullscreen(): void {
 
 export function BottomNav(): string {
   return `
-    <div id="bottom-nav" class="fixed bottom-0 left-0 z-30 w-full bg-white border-t border-gray-200 dark:bg-gray-800 dark:border-gray-700 xl:hidden safe-area-bottom">
+    <div id="bottom-nav" class="fixed bottom-0 start-0 z-30 w-full bg-white border-t border-gray-200 dark:bg-gray-800 dark:border-gray-700 xl:hidden safe-area-bottom">
       <div class="grid h-12 sm:h-14 grid-cols-5 mx-auto max-w-lg">
         <!-- Ana Sayfa -->
         <a href="/" class="th-no-press inline-flex flex-col items-center justify-center px-1 group" aria-label="${t("bottomNav.home")}">
@@ -529,7 +529,7 @@ export function BottomNav(): string {
             <svg class="w-5 h-5 text-gray-500 group-hover:text-primary-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/>
             </svg>
-            <span id="bottom-nav-cart-badge" class="hidden absolute -top-1.5 -right-2 min-w-4 h-4 px-0.5 bg-error-500 text-white text-[10px] font-bold rounded-full items-center justify-center"></span>
+            <span id="bottom-nav-cart-badge" class="hidden absolute -top-1.5 -end-2 min-w-4 h-4 px-0.5 bg-error-500 text-white text-[10px] font-bold rounded-full items-center justify-center"></span>
           </div>
           <span class="text-[9px] sm:text-[10px] mt-0.5 text-gray-500 group-hover:text-primary-500 dark:text-gray-400" data-i18n="bottomNav.cart">${t("bottomNav.cart")}</span>
         </a>

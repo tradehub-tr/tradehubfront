@@ -112,6 +112,8 @@ const countryOptions: LocaleOption[] = [
 const languageOptions: LocaleOption[] = [
   { code: "TR", name: "Türkçe", flag: "🇹🇷" },
   { code: "EN", name: "English", flag: "🇬🇧" },
+  { code: "AR", name: "العربية", flag: "🇸🇦" },
+  { code: "RU", name: "Русский", flag: "🇷🇺" },
 ];
 
 /** Currency options — loaded from localStorage cache (populated by currencyService) */
@@ -234,7 +236,7 @@ function renderUserButton(): string {
           <li><a href="/pages/dashboard/settings.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.accountSettings">${t("header.accountSettings")}</span></a></li>
         </ul>
         <div class="border-t border-gray-100 pt-1">
-          <button id="logout-btn" class="w-full text-left block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors cursor-pointer"><span data-i18n="header.logout">${t("header.logout")}</span></button>
+          <button id="logout-btn" class="w-full text-start block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors cursor-pointer"><span data-i18n="header.logout">${t("header.logout")}</span></button>
         </div>
       </div>
     </div>
@@ -261,7 +263,7 @@ function renderCompactStickySearch(): string {
         :aria-expanded="expanded ? 'true' : 'false'"
         aria-controls="topbar-compact-dropdown"
         style="height: 42px; border-radius: 9999px; will-change: height, border-radius, box-shadow; transform: translateZ(0);"
-        class="absolute left-0 right-0 top-[7px] z-[50] w-full border border-gray-300 bg-white shadow-sm overflow-hidden dark:border-gray-600 dark:bg-gray-800"
+        class="absolute start-0 end-0 top-[7px] z-[50] w-full border border-gray-300 bg-white shadow-sm overflow-hidden dark:border-gray-600 dark:bg-gray-800"
         :class="expanded ? 'shadow-xl pt-1.5' : ''"
       >
         <div id="topbar-compact-primary-row" class="flex items-center gap-1.5 transition-all duration-300 ease-in-out shrink-0" :class="expanded ? 'px-3 h-[40px] w-full' : 'px-1.5 h-[40px]'">
@@ -280,7 +282,7 @@ function renderCompactStickySearch(): string {
               :aria-expanded="expanded ? 'true' : 'false'"
               aria-controls="topbar-compact-dropdown"
               class="w-full h-full border-0 bg-transparent px-3 text-gray-900 placeholder:text-gray-400 outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 transition-all duration-300 ease-in-out dark:text-white dark:placeholder:text-gray-400"
-              :class="expanded ? 'text-base pr-12' : 'text-[13px] py-0'"
+              :class="expanded ? 'text-base pe-12' : 'text-[13px] py-0'"
             />
           </div>
 
@@ -292,7 +294,7 @@ function renderCompactStickySearch(): string {
             tabindex="-1"
             aria-label="Image search"
             class="inline-flex items-center justify-center text-gray-500 transition-all duration-300 ease-in-out hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 shrink-0"
-            :class="expanded ? 'absolute left-4 bottom-2 h-9 w-auto gap-1.5 rounded-md px-0 text-sm font-medium text-gray-700 hover:bg-transparent dark:hover:bg-transparent' : 'h-[36px] w-[36px] rounded-full hover:bg-gray-100 dark:hover:bg-gray-700'"
+            :class="expanded ? 'absolute start-4 bottom-2 h-9 w-auto gap-1.5 rounded-md px-0 text-sm font-medium text-gray-700 hover:bg-transparent dark:hover:bg-transparent' : 'h-[36px] w-[36px] rounded-full hover:bg-gray-100 dark:hover:bg-gray-700'"
           >
             <svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
@@ -307,7 +309,7 @@ function renderCompactStickySearch(): string {
             type="submit"
             tabindex="-1"
             class="th-btn inline-flex items-center justify-center gap-1.5 font-semibold transition-all duration-300 ease-in-out shrink-0 rounded-full"
-            :class="expanded ? 'px-6 py-2 text-base absolute right-4 bottom-2' : 'px-5 h-[32px] text-[13px] ml-1'"
+            :class="expanded ? 'px-6 py-2 text-base absolute end-4 bottom-2' : 'px-5 h-[32px] text-[13px] ms-1'"
           >
             <span x-show="!expanded" data-i18n="common.search">${t("common.search")}</span>
             <svg x-show="expanded" class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -327,7 +329,7 @@ function renderCompactStickySearch(): string {
         :aria-hidden="expanded ? 'false' : 'true'"
         :style="{ pointerEvents: expanded ? 'auto' : 'none' }"
         style="opacity: 0; transform: translateY(-8px) scale(0.97); transform-origin: top center; will-change: transform, opacity; backface-visibility: hidden;"
-        class="absolute left-0 right-0 top-[110px] z-(--z-modal) rounded-2xl border border-gray-200 bg-white px-5 py-4 dark:border-gray-700 dark:bg-gray-800"
+        class="absolute start-0 end-0 top-[110px] z-(--z-modal) rounded-2xl border border-gray-200 bg-white px-5 py-4 dark:border-gray-700 dark:bg-gray-800"
       >
         <div class="flex items-center justify-between gap-4">
           <h3 class="text-lg font-bold text-gray-900 dark:text-white"><span data-i18n="header.recommendedForYou">${t("header.recommendedForYou")}</span></h3>
@@ -623,7 +625,7 @@ function renderCartButton(itemCount: number = 0): string {
       <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
       </svg>
-      <span id="header-cart-badge" class="th-badge absolute -top-1 -right-1 flex items-center justify-center min-w-5 h-5 px-1 text-xs font-bold${showBadge ? "" : " hidden"}" style="background:var(--btn-bg);color:var(--btn-text)">
+      <span id="header-cart-badge" class="th-badge absolute -top-1 -end-1 flex items-center justify-center min-w-5 h-5 px-1 text-xs font-bold${showBadge ? "" : " hidden"}" style="background:var(--btn-bg);color:var(--btn-text)">
         ${badgeText}
       </span>
     </button>
@@ -725,7 +727,7 @@ function renderMobileDrawer(): string {
     <!-- Mobile Menu Drawer -->
     <div
       id="mobile-menu-drawer"
-      class="fixed top-0 left-0 z-(--z-backdrop) h-screen overflow-hidden transition-transform -translate-x-full bg-white w-[min(80vw,20rem)] sm:w-80 dark:bg-gray-800"
+      class="fixed top-0 start-0 z-(--z-backdrop) h-screen overflow-hidden transition-transform -translate-x-full bg-white w-[min(80vw,20rem)] sm:w-80 dark:bg-gray-800"
       tabindex="-1"
       aria-labelledby="drawer-label"
     >
@@ -782,14 +784,14 @@ function renderMobileDrawer(): string {
             <div id="drawer-account-panel" class="hidden pb-2 space-y-1">
               <a href="/buyer/messages" class="flex items-center gap-3 px-3 py-2.5 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
                 <span data-i18n="header.messages">${t("header.messages")}</span>
-                <span class="th-badge ml-auto flex items-center justify-center min-w-5 h-5 px-1 text-[10px] font-bold" style="background:var(--color-error-500);color:#fff">1</span>
+                <span class="th-badge ms-auto flex items-center justify-center min-w-5 h-5 px-1 text-[10px] font-bold" style="background:var(--color-error-500);color:#fff">1</span>
               </a>
               <a href="/buyer/orders" class="flex items-center gap-3 px-3 py-2.5 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
                 <span data-i18n="header.orders">${t("header.orders")}</span>
               </a>
               <a href="${baseUrl}pages/cart.html" class="flex items-center gap-3 px-3 py-2.5 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
                 <span data-i18n="header.shoppingCart">${t("header.shoppingCart")}</span>
-                <span class="th-badge ml-auto flex items-center justify-center min-w-5 h-5 px-1 text-[10px] font-bold" style="background:var(--btn-bg);color:var(--btn-text)">3</span>
+                <span class="th-badge ms-auto flex items-center justify-center min-w-5 h-5 px-1 text-[10px] font-bold" style="background:var(--btn-bg);color:var(--btn-text)">3</span>
               </a>
             </div>
           </div>
@@ -801,7 +803,7 @@ function renderMobileDrawer(): string {
             <button
               id="drawer-open-categories"
               type="button"
-              class="flex items-center gap-3 w-full px-3 py-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 text-left transition-colors"
+              class="flex items-center gap-3 w-full px-3 py-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 text-start transition-colors"
             >
               <div class="flex-1 min-w-0">
                 <div class="flex items-center gap-2">
@@ -1145,9 +1147,9 @@ export function MobileSearchTabs(
   options?: { hideWorldwide?: boolean }
 ): string {
   const activeClass =
-    "topbar-search-tab relative py-2 text-[13px] font-semibold text-gray-900 dark:text-white whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-gray-900 after:dark:bg-white after:rounded-full";
+    "topbar-search-tab relative py-2 text-[13px] font-semibold text-gray-900 dark:text-white whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:start-0 after:w-full after:h-[3px] after:bg-gray-900 after:dark:bg-white after:rounded-full";
   const inactiveClass =
-    "topbar-search-tab relative py-2 text-[13px] font-normal text-gray-400 dark:text-gray-500 whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-transparent after:rounded-full";
+    "topbar-search-tab relative py-2 text-[13px] font-normal text-gray-400 dark:text-gray-500 whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:start-0 after:w-full after:h-[3px] after:bg-transparent after:rounded-full";
 
   const worldwideTab = options?.hideWorldwide
     ? ""
@@ -1198,7 +1200,7 @@ export function TopBar(props?: TopBarProps): string {
             </div>
 
             <!-- "Hesabım" label like iSTOC's "iSTOC'um" -->
-            <span class="text-[#666] text-[13px] font-normal border-l border-gray-300 pl-2 sm:pl-3 truncate" data-i18n="header.myAccount">${t("header.myAccount")}</span>
+            <span class="text-[#666] text-[13px] font-normal border-s border-gray-300 ps-2 sm:ps-3 truncate" data-i18n="header.myAccount">${t("header.myAccount")}</span>
 
             <!-- Spacer -->
             <div class="flex-1"></div>
@@ -1217,7 +1219,7 @@ export function TopBar(props?: TopBarProps): string {
 
               <!-- Sell on iSTOC link -->
               <a href="/satici-ol" class="hidden lg:inline-flex items-center text-[13px] text-[#333] hover:text-[#000] transition-opacity whitespace-nowrap">
-                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z"/></svg>
+                <svg class="w-4 h-4 me-1" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z"/></svg>
                 <span data-i18n="footer.startSelling">${t("footer.startSelling")}</span>
               </a>
 
@@ -1284,7 +1286,7 @@ export function TopBar(props?: TopBarProps): string {
               @click="mobileSearchOpen = true; $nextTick(() => $refs.mobileSearchInput.focus())"
             >
               <span class="flex-1 px-2 min-[400px]:px-3 text-[11px] min-[400px]:text-xs sm:text-sm text-gray-400 truncate">${t("header.searchPlaceholder")}</span>
-              <span class="th-btn th-no-press flex items-center justify-center h-5 min-[400px]:h-6 sm:h-7 px-2.5 min-[400px]:px-3 sm:px-4 mr-0.5 rounded-full text-[10px] min-[400px]:text-xs font-semibold shrink-0">${t("header.searchButton")}</span>
+              <span class="th-btn th-no-press flex items-center justify-center h-5 min-[400px]:h-6 sm:h-7 px-2.5 min-[400px]:px-3 sm:px-4 me-0.5 rounded-full text-[10px] min-[400px]:text-xs font-semibold shrink-0">${t("header.searchButton")}</span>
             </div>
 
             <!-- Full-screen search overlay -->
@@ -1312,7 +1314,7 @@ export function TopBar(props?: TopBarProps): string {
                       placeholder="${t("header.searchPlaceholder")}"
                       autocomplete="off"
                     />
-                    <button type="submit" class="th-btn th-no-press flex items-center justify-center h-7 px-4 mr-0.5 rounded-full text-xs font-semibold cursor-pointer shrink-0">
+                    <button type="submit" class="th-btn th-no-press flex items-center justify-center h-7 px-4 me-0.5 rounded-full text-xs font-semibold cursor-pointer shrink-0">
                       ${t("header.searchButton")}
                     </button>
                   </div>
@@ -1336,7 +1338,7 @@ export function TopBar(props?: TopBarProps): string {
           ${renderCompactStickySearch()}
 
           <!-- Right Side: Selectors + Icons + Cart + Auth -->
-          <div class="ml-auto flex items-center gap-1 sm:gap-2 lg:gap-4 shrink-0">
+          <div class="ms-auto flex items-center gap-1 sm:gap-2 lg:gap-4 shrink-0">
             <!-- Country Selector (xl+ only) -->
             <div class="hidden xl:block">
               ${renderCountrySelector()}
@@ -1428,7 +1430,7 @@ function renderCartModalContent(modal: HTMLElement, supplierId: string): boolean
     for (const product of supplier.products) {
       for (const sku of product.skus) {
         const sampleBadge = sku.isSample
-          ? `<span class="inline-flex items-center text-[9px] font-semibold px-1 py-0.5 rounded-full bg-amber-100 text-amber-800 mr-1 align-middle">${t("cart.sampleBadge")}</span>`
+          ? `<span class="inline-flex items-center text-[9px] font-semibold px-1 py-0.5 rounded-full bg-amber-100 text-amber-800 me-1 align-middle">${t("cart.sampleBadge")}</span>`
           : "";
         const thumb = sku.skuImage
           ? `<img src="${sku.skuImage}" alt="${product.title}" class="w-11 h-11 rounded-md object-cover border border-gray-100 shadow-sm">`
@@ -1437,7 +1439,7 @@ function renderCartModalContent(modal: HTMLElement, supplierId: string): boolean
           <div class="flex items-center gap-2.5 py-2.5 group">
             <div class="relative w-11 h-11 flex-shrink-0">
               ${thumb}
-              <span class="absolute -bottom-1 -right-1 min-w-[18px] h-[16px] px-1 inline-flex items-center justify-center text-[9px] font-bold text-white bg-gray-900 rounded leading-none">${sku.quantity}</span>
+              <span class="absolute -bottom-1 -end-1 min-w-[18px] h-[16px] px-1 inline-flex items-center justify-center text-[9px] font-bold text-white bg-gray-900 rounded leading-none">${sku.quantity}</span>
             </div>
             <div class="flex-1 min-w-0">
               <p class="text-[12px] font-medium text-gray-800 leading-snug line-clamp-2">${sampleBadge}${product.title}</p>
@@ -1615,10 +1617,10 @@ export function initHeaderCart(): void {
             return `
               <div class="relative w-10 h-10 flex-shrink-0 group">
                 ${img}
-                <button type="button" data-delete-sku="${sku.id}" class="absolute top-0.5 right-0.5 w-[14px] h-[14px] inline-flex items-center justify-center rounded-full bg-white/95 shadow text-gray-700 hover:text-red-500 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity" aria-label="${t("cart.removeProduct")}">
+                <button type="button" data-delete-sku="${sku.id}" class="absolute top-0.5 end-0.5 w-[14px] h-[14px] inline-flex items-center justify-center rounded-full bg-white/95 shadow text-gray-700 hover:text-red-500 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity" aria-label="${t("cart.removeProduct")}">
                   <svg class="w-2 h-2" fill="none" stroke="currentColor" stroke-width="3.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
-                <span class="absolute -bottom-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 inline-flex items-center justify-center text-[10px] font-bold text-white bg-gray-900 rounded leading-none">${sku.quantity}</span>
+                <span class="absolute -bottom-0.5 -end-0.5 min-w-[18px] h-[18px] px-1 inline-flex items-center justify-center text-[10px] font-bold text-white bg-gray-900 rounded leading-none">${sku.quantity}</span>
               </div>`;
           })
           .join("");
@@ -1629,7 +1631,7 @@ export function initHeaderCart(): void {
 
         html += `
           <div data-supplier-id="${supplier.id}" class="py-1">
-            <div data-supplier-open role="button" tabindex="0" class="w-full text-left px-1 py-2 rounded-md hover:bg-gray-50 transition-colors cursor-pointer">
+            <div data-supplier-open role="button" tabindex="0" class="w-full text-start px-1 py-2 rounded-md hover:bg-gray-50 transition-colors cursor-pointer">
               <div class="flex items-center justify-between gap-2 mb-2">
                 <div class="flex items-center gap-2 min-w-0">
                   <div class="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">${storeIconSvg}</div>
@@ -1821,11 +1823,16 @@ export function initLanguageSelector(): void {
 
   const langSelect = document.getElementById("lang-select") as HTMLSelectElement | null;
   const currencySelect = document.getElementById("currency-select") as HTMLSelectElement | null;
-  const langMap: Record<string, SupportedLang> = { TR: "tr", EN: "en", DE: "en" };
+  const langMap: Record<string, SupportedLang> = {
+    TR: "tr",
+    EN: "en",
+    AR: "ar",
+    RU: "ru",
+    DE: "en",
+  };
 
   if (langSelect) {
-    const currentLang = getCurrentLang();
-    langSelect.value = currentLang === "tr" ? "TR" : "EN";
+    langSelect.value = getCurrentLang().toUpperCase();
   }
 
   if (currencySelect) {
@@ -1837,7 +1844,7 @@ export function initLanguageSelector(): void {
   const saveBtn = popover?.querySelector<HTMLButtonElement>(".th-btn");
   if (saveBtn) {
     saveBtn.addEventListener("click", () => {
-      const selectedLangCode = langSelect?.value || (getCurrentLang() === "tr" ? "TR" : "EN");
+      const selectedLangCode = langSelect?.value || getCurrentLang().toUpperCase();
       const lang = langMap[selectedLangCode] || "en";
       localStorage.setItem("i18nextLng", lang);
 

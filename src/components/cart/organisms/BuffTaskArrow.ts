@@ -39,7 +39,7 @@ export function BuffTaskArrow({
   return `
     <button
       type="button"
-      class="sc-c-buff-task-arrow inline-flex items-center justify-center w-10 h-10 border border-border-default rounded-full bg-surface cursor-pointer text-text-body text-lg transition-colors duration-150 fixed bottom-10 right-10 z-[100] shadow-md hover:bg-surface-raised hover:border-cta-primary"
+      class="sc-c-buff-task-arrow inline-flex items-center justify-center w-10 h-10 border border-border-default rounded-full bg-surface cursor-pointer text-text-body text-lg transition-colors duration-150 fixed bottom-10 end-10 z-[100] shadow-md hover:bg-surface-raised hover:border-cta-primary"
       aria-label="${ariaLabel}"
       title="${ariaLabel}"${onClickAttr}
       data-direction="${direction}"

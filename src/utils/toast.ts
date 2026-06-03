@@ -36,7 +36,7 @@ function getOrCreateContainer(): HTMLElement {
     container = document.createElement("div");
     container.id = TOAST_CONTAINER_ID;
     container.className =
-      "fixed top-4 right-4 z-(--z-toast) flex flex-col gap-2.5 pointer-events-none";
+      "fixed top-4 end-4 z-(--z-toast) flex flex-col gap-2.5 pointer-events-none";
     container.style.maxWidth = "360px";
     container.style.width = "100%";
     document.body.appendChild(container);

@@ -113,7 +113,7 @@ export class ImagePickerController {
             ${
               isUploading
                 ? `
-              <div class="absolute top-1/2 left-[15%] right-[15%] -translate-y-1/2 h-3 bg-black/75 border-2 border-black/80 rounded-full overflow-hidden z-10">
+              <div class="absolute top-1/2 start-[15%] end-[15%] -translate-y-1/2 h-3 bg-black/75 border-2 border-black/80 rounded-full overflow-hidden z-10">
                 <div class="h-full bg-white rounded-full transition-all duration-300" style="width:${visiblePct}%"></div>
               </div>
             `

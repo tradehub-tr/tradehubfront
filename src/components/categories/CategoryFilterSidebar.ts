@@ -7,7 +7,7 @@ import type { CategorySection, FilterGroup } from "../../data/categories";
 import { t } from "../../i18n";
 
 /** Chevron SVG for "Shop All" links */
-const chevronRight = `<svg class="w-3 h-3 inline-block ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="m9 5 7 7-7 7"/></svg>`;
+const chevronRight = `<svg class="w-3 h-3 inline-block ms-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="m9 5 7 7-7 7"/></svg>`;
 
 /** Render a single filter group block */
 function renderFilterGroup(group: FilterGroup): string {
@@ -44,7 +44,7 @@ function renderSidebarSection(section: CategorySection, index: number): string {
     <div class="border-b border-gray-200 pb-4 mb-4" data-filter-section="${index}">
       <button
         type="button"
-        class="cat-filter-toggle flex items-center justify-between w-full text-left"
+        class="cat-filter-toggle flex items-center justify-between w-full text-start"
         data-target="${sectionId}"
         aria-expanded="true"
         aria-controls="${sectionId}"

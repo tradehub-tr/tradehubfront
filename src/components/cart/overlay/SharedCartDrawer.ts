@@ -494,7 +494,7 @@ function renderColorChip(color: CartDrawerColorModel, isSelected: boolean): stri
   return `
     <button type="button"
       data-color-chip="${escapeHtml(color.id)}"
-      class="inline-flex items-center gap-1.5 pl-1 pr-2.5 py-1 rounded-md border transition-all ${borderStyle}"
+      class="inline-flex items-center gap-1.5 ps-1 pe-2.5 py-1 rounded-md border transition-all ${borderStyle}"
       ${!available ? "disabled" : ""}
       title="${!available ? `${color.label} — tükendi` : color.label}">
       ${thumb}
@@ -731,7 +731,7 @@ function renderDrawerFooter(): void {
           </div>
           <div class="flex items-center justify-between border-t border-border-default pt-2.5 sm:pt-3 mt-2.5 sm:mt-3">
             <strong class="text-[13px] sm:text-base text-text-heading">${t("cart.subtotal")}</strong>
-            <div class="text-right">
+            <div class="text-end">
               <strong class="text-[14px] sm:text-base text-cta-primary">${formatCurrency(totals.grandTotal, itemCurrency)}</strong>
               <p class="text-[10px] sm:text-xs text-text-tertiary">(${formatCurrency(perPiece, itemCurrency)}${t("cart.perUnit")})</p>
             </div>
@@ -1331,16 +1331,16 @@ function bindShippingEvents(): void {
 export function SharedCartDrawer(): string {
   return `
     <div id="shared-cart-overlay" class="fixed inset-0 z-[110] bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300">
-      <div id="shared-cart-preview" class="hidden fixed left-0 top-0 bottom-0 right-[600px] z-[120] items-center justify-center px-8 pointer-events-none">
+      <div id="shared-cart-preview" class="hidden fixed start-0 top-0 bottom-0 end-[600px] z-[120] items-center justify-center px-8 pointer-events-none">
         <div class="relative w-full max-w-[760px] h-[78vh] rounded-md overflow-hidden pointer-events-auto shadow-2xl bg-surface">
-          <button type="button" id="shared-cart-preview-prev" class="absolute left-5 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 hover:bg-white text-secondary-700 border border-border-default shadow-md z-20">‹</button>
+          <button type="button" id="shared-cart-preview-prev" class="absolute start-5 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 hover:bg-white text-secondary-700 border border-border-default shadow-md z-20">‹</button>
           <div id="shared-cart-preview-image" class="w-full h-full"></div>
-          <button type="button" id="shared-cart-preview-next" class="absolute right-5 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 hover:bg-white text-secondary-700 border border-border-default shadow-md z-20">›</button>
-          <div id="shared-cart-preview-label" class="absolute left-0 right-0 bottom-0 px-6 py-4 text-white text-xl font-medium bg-gradient-to-t from-black/60 to-transparent">color : -</div>
+          <button type="button" id="shared-cart-preview-next" class="absolute end-5 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 hover:bg-white text-secondary-700 border border-border-default shadow-md z-20">›</button>
+          <div id="shared-cart-preview-label" class="absolute start-0 end-0 bottom-0 px-6 py-4 text-white text-xl font-medium bg-gradient-to-t from-black/60 to-transparent">color : -</div>
         </div>
       </div>
 
-      <aside id="shared-cart-drawer" class="fixed right-0 top-0 h-full w-full sm:w-[500px] lg:w-[600px] max-w-full bg-surface shadow-[-8px_0_30px_rgba(0,0,0,0.18)] xl:rounded-l-md xl:border-l xl:border-border-default flex flex-col transition-transform duration-300">
+      <aside id="shared-cart-drawer" class="fixed end-0 top-0 h-full w-full sm:w-[500px] lg:w-[600px] max-w-full bg-surface shadow-[-8px_0_30px_rgba(0,0,0,0.18)] xl:rounded-s-md xl:border-s xl:border-border-default flex flex-col transition-transform duration-300">
         <div class="flex items-center justify-between px-6 py-4 border-b border-border-default shrink-0 max-md:px-4 max-md:py-3">
           <h3 id="shared-cart-heading" class="text-[15px] sm:text-lg font-bold text-text-heading">${t("cart.selectVariation")}</h3>
           <button type="button" id="shared-cart-close" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full text-secondary-400 hover:text-secondary-900 hover:bg-surface-raised transition-colors inline-flex items-center justify-center shrink-0">

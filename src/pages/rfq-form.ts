@@ -63,17 +63,17 @@ appEl.innerHTML = `
             <!-- Left: all form fields -->
             <div class="flex-1 min-w-0 space-y-6 max-w-full">
               <div class="relative">
-                <label class="block text-sm font-semibold text-gray-800 mb-2"><span class="text-red-500 mr-0.5">*</span>${t('rfq.productName')}</label>
+                <label class="block text-sm font-semibold text-gray-800 mb-2"><span class="text-red-500 me-0.5">*</span>${t('rfq.productName')}</label>
                 <input type="text" id="rfq-product-name" autocomplete="off" placeholder="${t('rfq.productNamePlaceholder')}" class="w-full max-w-full h-10 px-3 text-sm border border-gray-300 rounded bg-white text-gray-800 placeholder:text-gray-400 outline-none focus:border-gray-800 transition-colors" />
                 <div id="rfq-category-result" class="hidden mt-1 text-sm text-gray-500">
                   <span class="text-gray-400">Product category:</span>
-                  <a href="#" id="rfq-category-link" class="text-gray-700 underline ml-1"></a>
+                  <a href="#" id="rfq-category-link" class="text-gray-700 underline ms-1"></a>
                 </div>
                 <input type="hidden" id="rfq-category" value="" />
-                <div id="rfq-category-dropdown" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto"></div>
+                <div id="rfq-category-dropdown" class="hidden absolute start-0 end-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto"></div>
               </div>
               <div>
-                <label class="block text-sm font-semibold text-gray-800 mb-2"><span class="text-red-500 mr-0.5">*</span>${t('rfq.detailedRequirements')}</label>
+                <label class="block text-sm font-semibold text-gray-800 mb-2"><span class="text-red-500 me-0.5">*</span>${t('rfq.detailedRequirements')}</label>
                 <div class="border border-gray-200 rounded-lg overflow-hidden">
                   <textarea id="rfq-requirements" rows="14" placeholder="${t('rfq.detailedReqPlaceholder')}" class="w-full px-3 py-3 text-sm text-gray-800 placeholder:text-gray-400 border-none outline-none resize-none focus:ring-0">${prefillDetails}</textarea>
                 </div>
@@ -94,7 +94,7 @@ appEl.innerHTML = `
               </div>
               <!-- Sourcing Quantity (inside outer card) -->
               <div>
-                <label class="block text-sm font-semibold text-gray-800 mb-2"><span class="text-red-500 mr-0.5">*</span>${t('rfq.sourcingQuantity')}</label>
+                <label class="block text-sm font-semibold text-gray-800 mb-2"><span class="text-red-500 me-0.5">*</span>${t('rfq.sourcingQuantity')}</label>
                 <div class="flex gap-3 max-sm:flex-col">
                   <input type="number" id="rfq-quantity" min="1" placeholder="${t('rfq.quantityPlaceholder')}" class="flex-1 min-w-0 h-10 px-3 text-sm border border-gray-300 rounded-lg bg-white text-gray-800 placeholder:text-gray-400 outline-none focus:border-gray-800 transition-colors" />
                   <select id="rfq-unit" disabled class="w-44 max-sm:w-full min-w-0 h-10 px-3 text-sm border border-gray-300 rounded-lg bg-white text-gray-800 outline-none focus:border-gray-800 cursor-pointer transition-colors disabled:opacity-60 disabled:cursor-wait">
@@ -130,7 +130,7 @@ appEl.innerHTML = `
             <input type="checkbox" id="rfq-agree-rules" class="mt-0.5 h-4 w-4 rounded border-gray-300 text-red-500 focus:ring-red-400" />
             <span class="text-sm text-gray-600">${t('rfq.agreePostingRules').replace(t('rfq.postingRules'), `<a href="#" class="text-blue-600 underline hover:text-blue-800">${t('rfq.postingRules')}</a>`)}</span>
           </label>
-          <p class="text-xs text-gray-400 pl-6">${t('rfq.createRfqDesc')}</p>
+          <p class="text-xs text-gray-400 ps-6">${t('rfq.createRfqDesc')}</p>
         </div>
 
         <!-- Submit (sticky bottom iSTOC-style) -->
@@ -215,7 +215,7 @@ productNameInput.addEventListener('input', () => {
         cats.forEach((c) => {
           const btn = document.createElement('button');
           btn.type = 'button';
-          btn.className = 'rfq-cat-option w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-amber-50 transition-colors';
+          btn.className = 'rfq-cat-option w-full text-start px-3 py-2 text-sm text-gray-700 hover:bg-amber-50 transition-colors';
           btn.dataset.name = c.name ?? '';
           btn.dataset.path = c.path ?? '';
           btn.textContent = c.path ?? '';

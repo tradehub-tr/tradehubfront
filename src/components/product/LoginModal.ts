@@ -51,7 +51,7 @@ export function LoginModal(): string {
         <button
           type="button"
           @click="close()"
-          class="rv-login-close absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full border-none bg-transparent cursor-pointer text-secondary-400 hover:bg-black/5 hover:text-secondary-900 transition-colors z-[1]"
+          class="rv-login-close absolute top-3 end-3 w-8 h-8 flex items-center justify-center rounded-full border-none bg-transparent cursor-pointer text-secondary-400 hover:bg-black/5 hover:text-secondary-900 transition-colors z-[1]"
           id="rv-login-close"
         >
           <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -87,12 +87,12 @@ export function LoginModal(): string {
                 x-model="password"
                 required
                 placeholder="${t("auth.login.password")}"
-                class="w-full h-12 px-4 pr-10 border border-border-default rounded-lg text-[15px] bg-surface focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
+                class="w-full h-12 px-4 pe-10 border border-border-default rounded-lg text-[15px] bg-surface focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
               />
               <button
                 type="button"
                 @click="showPassword = !showPassword"
-                class="absolute right-3 top-1/2 -translate-y-1/2 text-secondary-400 hover:text-secondary-900"
+                class="absolute end-3 top-1/2 -translate-y-1/2 text-secondary-400 hover:text-secondary-900"
                 tabindex="-1"
               >
                 <svg x-show="!showPassword" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -105,7 +105,7 @@ export function LoginModal(): string {
               </button>
             </div>
 
-            <div class="text-right">
+            <div class="text-end">
               <a
                 :href="'${baseUrl}' + 'pages/auth/forgot-password.html'"
                 class="text-sm font-medium text-secondary-900 hover:underline"
@@ -130,7 +130,7 @@ export function LoginModal(): string {
             ${t("auth.login.newUser")}
             <a
               :href="'${baseUrl}' + 'pages/auth/register.html'"
-              class="text-primary-500 font-semibold no-underline hover:underline ml-1"
+              class="text-primary-500 font-semibold no-underline hover:underline ms-1"
             >${t("auth.login.createAccount")}</a>
           </div>
         </div>

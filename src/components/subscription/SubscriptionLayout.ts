@@ -135,12 +135,12 @@ function renderMainView(): string {
       <table class="w-full border-collapse">
         <thead>
           <tr>
-            <th class="text-left text-[13px] font-semibold text-gray-500 px-4 py-3 border-b border-border-default bg-surface-muted">${t("subscription.thDate")}</th>
-            <th class="text-left text-[13px] font-semibold text-gray-500 px-4 py-3 border-b border-border-default bg-surface-muted">${t("subscription.thDescription")}</th>
-            <th class="text-left text-[13px] font-semibold text-gray-500 px-4 py-3 border-b border-border-default bg-surface-muted">${t("subscription.thPaymentMethod")}</th>
-            <th class="text-left text-[13px] font-semibold text-gray-500 px-4 py-3 border-b border-border-default bg-surface-muted">${t("subscription.thStatus")}</th>
-            <th class="text-left text-[13px] font-semibold text-gray-500 px-4 py-3 border-b border-border-default bg-surface-muted">${t("subscription.thAmount")}</th>
-            <th class="text-left text-[13px] font-semibold text-gray-500 px-4 py-3 border-b border-border-default bg-surface-muted">${t("subscription.thAction")}</th>
+            <th class="text-start text-[13px] font-semibold text-gray-500 px-4 py-3 border-b border-border-default bg-surface-muted">${t("subscription.thDate")}</th>
+            <th class="text-start text-[13px] font-semibold text-gray-500 px-4 py-3 border-b border-border-default bg-surface-muted">${t("subscription.thDescription")}</th>
+            <th class="text-start text-[13px] font-semibold text-gray-500 px-4 py-3 border-b border-border-default bg-surface-muted">${t("subscription.thPaymentMethod")}</th>
+            <th class="text-start text-[13px] font-semibold text-gray-500 px-4 py-3 border-b border-border-default bg-surface-muted">${t("subscription.thStatus")}</th>
+            <th class="text-start text-[13px] font-semibold text-gray-500 px-4 py-3 border-b border-border-default bg-surface-muted">${t("subscription.thAmount")}</th>
+            <th class="text-start text-[13px] font-semibold text-gray-500 px-4 py-3 border-b border-border-default bg-surface-muted">${t("subscription.thAction")}</th>
           </tr>
         </thead>
         <tbody>
@@ -228,8 +228,8 @@ function renderPricingView(): string {
 
     <!-- Billing Toggle -->
     <div class="flex justify-center my-5 mb-7" id="sub-billing-toggle">
-      <button class="sub-billing-toggle__btn px-7 max-sm:px-4 py-2.5 max-sm:py-2 text-[14px] max-sm:text-[13px] bg-white text-gray-500 border border-border-default cursor-pointer transition-all rounded-l-full border-r-0 data-[state=active]:bg-[var(--color-surface-raised,#f5f5f5)] data-[state=active]:text-[var(--color-text-heading,#111827)] data-[state=active]:font-semibold" data-billing="monthly" data-state="active">${t("subscription.monthly")}</button>
-      <button class="sub-billing-toggle__btn px-7 max-sm:px-4 py-2.5 max-sm:py-2 text-[14px] max-sm:text-[13px] bg-white text-gray-500 border border-border-default cursor-pointer transition-all rounded-r-full data-[state=active]:bg-[var(--color-surface-raised,#f5f5f5)] data-[state=active]:text-[var(--color-text-heading,#111827)] data-[state=active]:font-semibold" data-billing="yearly">${t("subscription.yearly")} <span class="text-primary-500 font-semibold ml-1">${t("subscription.yearlySaving")}</span></button>
+      <button class="sub-billing-toggle__btn px-7 max-sm:px-4 py-2.5 max-sm:py-2 text-[14px] max-sm:text-[13px] bg-white text-gray-500 border border-border-default cursor-pointer transition-all rounded-s-full border-e-0 data-[state=active]:bg-[var(--color-surface-raised,#f5f5f5)] data-[state=active]:text-[var(--color-text-heading,#111827)] data-[state=active]:font-semibold" data-billing="monthly" data-state="active">${t("subscription.monthly")}</button>
+      <button class="sub-billing-toggle__btn px-7 max-sm:px-4 py-2.5 max-sm:py-2 text-[14px] max-sm:text-[13px] bg-white text-gray-500 border border-border-default cursor-pointer transition-all rounded-e-full data-[state=active]:bg-[var(--color-surface-raised,#f5f5f5)] data-[state=active]:text-[var(--color-text-heading,#111827)] data-[state=active]:font-semibold" data-billing="yearly">${t("subscription.yearly")} <span class="text-primary-500 font-semibold ms-1">${t("subscription.yearlySaving")}</span></button>
     </div>
 
     <!-- Pricing Cards -->

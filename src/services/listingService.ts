@@ -1481,7 +1481,7 @@ function mapListingDetail(raw: any): ProductDetail {
               (s, i) =>
                 `<tr style="${i < packagingSpecs.length - 1 ? "border-bottom: 1px solid var(--pd-spec-border, #e5e5e5);" : ""}">
             <td class="py-2.5 font-medium" style="color: var(--pd-spec-key-color, #6b7280); width: 35%; padding-left: 12px;">${s.key}</td>
-            <td class="py-2.5 pl-4" style="color: var(--pd-spec-value-color, #111827);">${s.value}</td>
+            <td class="py-2.5 ps-4" style="color: var(--pd-spec-value-color, #111827);">${s.value}</td>
           </tr>`
             )
             .join("")}</tbody></table>`

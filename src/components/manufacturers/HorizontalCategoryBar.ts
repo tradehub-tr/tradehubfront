@@ -48,7 +48,7 @@ export function HorizontalCategoryBar(): string {
       </div>
 
       <!-- More Content Dropdown (absolutely positioned below tab bar) -->
-      <div id="hm-mega-menu" class="hidden absolute left-0 right-0 top-[62px] z-50 bg-white rounded-b-lg py-8 px-5" style="box-shadow: rgba(0,0,0,0.12) 0 8px 20px 0">
+      <div id="hm-mega-menu" class="hidden absolute start-0 end-0 top-[62px] z-50 bg-white rounded-b-lg py-8 px-5" style="box-shadow: rgba(0,0,0,0.12) 0 8px 20px 0">
         <ul id="hm-mega-menu-list" class="grid grid-cols-4 grid-flow-col max-h-[400px] overflow-y-auto list-none m-0 p-0" style="grid-template-rows: repeat(11, auto);">
           <!-- Dinamik olarak doldurulacak -->
         </ul>
@@ -58,13 +58,13 @@ export function HorizontalCategoryBar(): string {
       <ul class="flex items-center h-[48px] px-5 list-none m-0 p-0 overflow-x-auto" data-factory-sub-tab>
         ${SUB_TAB_FILTERS.map(
           (filter) => `
-          <li class="flex-shrink-0 flex items-center h-8 mr-3 mt-0 px-4 border border-[#767676] rounded-full text-xs text-[#222] text-center cursor-pointer whitespace-nowrap hover:border-[#222] hover:font-medium transition-colors">
+          <li class="flex-shrink-0 flex items-center h-8 me-3 mt-0 px-4 border border-[#767676] rounded-full text-xs text-[#222] text-center cursor-pointer whitespace-nowrap hover:border-[#222] hover:font-medium transition-colors">
             ${filter}
           </li>
         `
         ).join("")}
         <!-- Sub-tab view more -->
-        <li id="sub-tab-more-btn" class="ml-auto flex-shrink-0 flex items-center gap-1 h-8 px-4 border border-[#d8d8d8] rounded-full text-xs text-[#222] text-center cursor-pointer whitespace-nowrap hover:border-[#999] transition-colors">
+        <li id="sub-tab-more-btn" class="ms-auto flex-shrink-0 flex items-center gap-1 h-8 px-4 border border-[#d8d8d8] rounded-full text-xs text-[#222] text-center cursor-pointer whitespace-nowrap hover:border-[#999] transition-colors">
           ${t("mfr.viewMore")}
           <svg class="w-3 h-3 transition-transform duration-200" id="sub-tab-more-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -73,11 +73,11 @@ export function HorizontalCategoryBar(): string {
       </ul>
 
       <!-- Sub-tab More Dropdown -->
-      <div id="sub-tab-dropdown" class="hidden absolute left-0 right-0 top-[110px] z-50 bg-white rounded-b-lg py-6 px-5" style="box-shadow: rgba(0,0,0,0.12) 0 8px 20px 0">
+      <div id="sub-tab-dropdown" class="hidden absolute start-0 end-0 top-[110px] z-50 bg-white rounded-b-lg py-6 px-5" style="box-shadow: rgba(0,0,0,0.12) 0 8px 20px 0">
         <ul class="flex flex-wrap list-none m-0 p-0">
           ${SUB_TAB_MORE_FILTERS.map(
             (filter) => `
-            <li class="w-1/4 mb-3 pr-4 text-sm text-[#222] cursor-pointer hover:text-primary-600 transition-colors">
+            <li class="w-1/4 mb-3 pe-4 text-sm text-[#222] cursor-pointer hover:text-primary-600 transition-colors">
               ${filter}
             </li>
           `
@@ -169,12 +169,12 @@ export async function initHorizontalCategoryBar(): Promise<void> {
 
   function buildCol(header: string, items: Array<{ name: string; slug: string }>): string {
     return [
-      `<li class="mb-3 pr-4 font-bold text-[#222]" style="font-size:14px;line-height:21px;">
+      `<li class="mb-3 pe-4 font-bold text-[#222]" style="font-size:14px;line-height:21px;">
          <a href="${header === allCatLabel ? "/pages/categories" : `/pages/products.html?cat=${items[0]?.slug || ""}`}" class="hover:text-primary-600 transition-colors">${header}</a>
        </li>`,
       ...items.map(
         (it) => `
-        <li class="mb-3 pr-4 font-normal text-[#222]" style="font-size:14px;line-height:21px;" data-dropdown-cat="${it.name}">
+        <li class="mb-3 pe-4 font-normal text-[#222]" style="font-size:14px;line-height:21px;" data-dropdown-cat="${it.name}">
           <a href="/pages/products.html?cat=${it.slug}" class="hover:text-primary-600 transition-colors">${it.name}</a>
         </li>`
       ),

@@ -75,7 +75,7 @@ export function ProductItem({ product }: ProductItemProps): string {
 
           <button
             type="button"
-            class="sc-c-spu-toggle flex-1 min-w-0 flex items-center gap-2 sm:gap-3 text-left cursor-pointer appearance-none bg-transparent border-0 p-0 m-0 focus:outline-none"
+            class="sc-c-spu-toggle flex-1 min-w-0 flex items-center gap-2 sm:gap-3 text-start cursor-pointer appearance-none bg-transparent border-0 p-0 m-0 focus:outline-none"
             @click="productOpen = !productOpen"
             :aria-expanded="productOpen"
           >
@@ -96,7 +96,7 @@ export function ProductItem({ product }: ProductItemProps): string {
           </button>
         </div>
 
-        <div class="flex items-center justify-end gap-1.5 sm:gap-2 mt-1 pl-[calc(18px+0.5rem)] sm:pl-[calc(20px+0.75rem)]" @click.stop x-show="!productOpen" x-cloak>
+        <div class="flex items-center justify-end gap-1.5 sm:gap-2 mt-1 ps-[calc(18px+0.5rem)] sm:ps-[calc(20px+0.75rem)]" @click.stop x-show="!productOpen" x-cloak>
           <span class="sc-c-spu-total whitespace-nowrap text-[12px] sm:text-[14.5px] font-bold text-[#1a1a1a] tabular-nums">${totalText}</span>
           <button type="button" class="sc-c-spu-favorite-btn w-6 h-6 sm:w-7 sm:h-7 inline-flex items-center justify-center rounded-full transition-colors text-[#8a877f] bg-transparent hover:bg-white hover:text-[#4a4a48]" data-product-id="${escapeHtml(product.id)}" @click="$dispatch('product-favorite', { productId: '${escapeHtml(product.id)}' })" aria-label="${t("cart.favorite")}">
             <img src="${favIcon}" class="w-3.5 h-3.5 sm:w-4 sm:h-4 object-contain" alt="${t("cart.favorite")}" />

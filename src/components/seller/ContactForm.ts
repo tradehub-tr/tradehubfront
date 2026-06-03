@@ -42,7 +42,7 @@ export function ContactForm(data: ContactFormData): string {
                 aria-describedby="char-counter"
                 rows="5"
               ></textarea>
-              <span id="char-counter" class="contact-form__counter absolute right-3 bottom-3 text-[12px] text-[#9ca3af] dark:text-gray-500">0/${maxLength}</span>
+              <span id="char-counter" class="contact-form__counter absolute end-3 bottom-3 text-[12px] text-[#9ca3af] dark:text-gray-500">0/${maxLength}</span>
             </div>
           </div>
 

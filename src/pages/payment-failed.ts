@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <svg class="w-5 h-5 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
           </svg>
-          <div class="text-left">
+          <div class="text-start">
             <p class="font-medium mb-1"><span data-i18n="paymentStatus.whatYouCanDo">${t('paymentStatus.whatYouCanDo')}</span></p>
             <ul class="text-xs text-[#b91c1c] space-y-1 list-disc list-inside">
               <li><span data-i18n="paymentStatus.checkCard">${t('paymentStatus.checkCard')}</span></li>

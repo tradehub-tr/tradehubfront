@@ -40,7 +40,7 @@ export function TicketsListLayout(): string {
               :class="activeTab === '${tab.id}' ? 'bg-primary-500 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'"
             >
               ${tab.label}
-              <span class="ml-1 text-xs" :class="activeTab === '${tab.id}' ? 'text-white/70' : 'text-gray-400'" x-text="'(' + tabCount('${tab.id}') + ')'"></span>
+              <span class="ms-1 text-xs" :class="activeTab === '${tab.id}' ? 'text-white/70' : 'text-gray-400'" x-text="'(' + tabCount('${tab.id}') + ')'"></span>
             </button>
           `
           ).join("")}
@@ -49,8 +49,8 @@ export function TicketsListLayout(): string {
         <!-- Search -->
         <div class="mb-5">
           <div class="relative max-w-[420px]">
-            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
-            <input type="text" x-model="searchQuery" placeholder="${t("helpCenter.ticketSearchPlaceholder")}" class="th-input th-input-md pl-10">
+            <svg class="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+            <input type="text" x-model="searchQuery" placeholder="${t("helpCenter.ticketSearchPlaceholder")}" class="th-input th-input-md ps-10">
           </div>
         </div>
 
@@ -87,7 +87,7 @@ export function TicketsListLayout(): string {
                     <div class="flex items-center gap-2 flex-wrap mb-1.5">
                       <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold"
                         :class="statusCls(ticket.status)">
-                        <span class="w-1.5 h-1.5 rounded-full mr-1" :class="statusDotCls(ticket.status)"></span>
+                        <span class="w-1.5 h-1.5 rounded-full me-1" :class="statusDotCls(ticket.status)"></span>
                         <span x-text="statusLabel(ticket.status)"></span>
                       </span>
                       <span x-show="ticket.priority && ticket.priority !== 'Medium'"
@@ -97,7 +97,7 @@ export function TicketsListLayout(): string {
                       <span x-show="ticket.category && ticket.category !== '-'"
                         class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-medium bg-gray-100 text-gray-600"
                         x-text="ticket.category"></span>
-                      <span class="ml-auto text-[11px] text-gray-400" x-text="ticket.createdDate"></span>
+                      <span class="ms-auto text-[11px] text-gray-400" x-text="ticket.createdDate"></span>
                     </div>
 
                     <!-- Subject -->

@@ -97,7 +97,7 @@ function renderCartSkeleton(): void {
     <div class="relative bg-white border-b border-[#e5e5e5] w-full z-40 h-[60px] flex items-center px-4 gap-4">
       <div class="h-8 w-24 ${pulse}"></div>
       <div class="flex-1 h-9 ${pulse} rounded-full max-w-xl"></div>
-      <div class="flex gap-3 ml-auto">
+      <div class="flex gap-3 ms-auto">
         <div class="w-8 h-8 ${pulse} rounded-full"></div>
         <div class="w-8 h-8 ${pulse} rounded-full"></div>
         <div class="w-8 h-8 ${pulse} rounded-full"></div>
@@ -124,7 +124,7 @@ function renderCartSkeleton(): void {
               <div class="flex items-center gap-3 px-5 py-4 border-b border-[#e5e5e5]">
                 <div class="w-5 h-5 ${pulse}"></div>
                 <div class="h-5 ${pulse} w-28"></div>
-                <div class="ml-auto h-9 ${pulse} rounded-full w-36"></div>
+                <div class="ms-auto h-9 ${pulse} rounded-full w-36"></div>
               </div>
               <!-- Product + SKUs -->
               <div class="px-5 pb-1">

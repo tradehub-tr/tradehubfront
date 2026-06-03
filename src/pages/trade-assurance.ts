@@ -64,7 +64,7 @@ function HeroBanner(): string {
         </div>
       </div>
       <!-- Yellow bottom bar -->
-      <div class="absolute bottom-0 left-0 right-0 h-2 bg-[#FFC200]"></div>
+      <div class="absolute bottom-0 start-0 end-0 h-2 bg-[#FFC200]"></div>
     </section>
   `
 }
@@ -95,19 +95,19 @@ function ServiceInfoSection(): string {
           </div>
           <!-- Right: Stats Grid -->
           <div class="lg:w-1/2 grid grid-cols-2 gap-x-10 gap-y-8">
-            <div class="border-l-4 border-red-600 pl-5">
+            <div class="border-s-4 border-red-600 ps-5">
               <div class="text-4xl sm:text-5xl font-bold text-gray-900">160M+</div>
               <div class="text-gray-800 text-sm mt-1">Trade Assurance siparişleri</div>
             </div>
-            <div class="border-l-4 border-red-600 pl-5">
+            <div class="border-s-4 border-red-600 ps-5">
               <div class="text-4xl sm:text-5xl font-bold text-gray-900">37M+</div>
               <div class="text-gray-800 text-sm mt-1">Bizden satın alındı</div>
             </div>
-            <div class="border-l-4 border-red-600 pl-5">
+            <div class="border-s-4 border-red-600 ps-5">
               <div class="text-4xl sm:text-5xl font-bold text-gray-900">200B+</div>
               <div class="text-gray-800 text-sm mt-1">Tedarikçiler</div>
             </div>
-            <div class="border-l-4 border-red-600 pl-5">
+            <div class="border-s-4 border-red-600 ps-5">
               <div class="text-4xl sm:text-5xl font-bold text-gray-900">280M+</div>
               <div class="text-gray-800 text-sm mt-1">Ürünler</div>
             </div>
@@ -226,7 +226,7 @@ function SecurePaymentsSection(): string {
               <!-- Ana görsel -->
               <img src="${videoPaymentImg}" alt="Güvenli ödeme" class="w-[65%] rounded-md object-cover shadow-lg" style="aspect-ratio:4/4.5" />
               <!-- Ödeme kartları overlay -->
-              <div class="absolute top-8 right-0 w-[55%] bg-white rounded-md shadow-xl p-5" style="z-index:2">
+              <div class="absolute top-8 end-0 w-[55%] bg-white rounded-md shadow-xl p-5" style="z-index:2">
                 <p class="text-xs font-semibold text-gray-700 mb-3">Pay online via our checkout</p>
                 <div class="grid grid-cols-3 gap-2 mb-4">
                   <span class="flex items-center justify-center h-9 rounded-lg border border-gray-200 text-xs font-bold text-[#1a1f71]">VISA</span>
@@ -424,7 +424,7 @@ function TestimonialsSection(): string {
                   <div class="relative rounded-md overflow-hidden shadow-xl mx-auto max-w-[780px] mb-8 cursor-pointer group" data-video-trigger="testimonial">
                     <div class="w-full aspect-video bg-gray-800 flex items-center justify-center">
                       <div class="w-16 h-16 rounded-full bg-white/30 flex items-center justify-center group-hover:bg-white/50 transition-colors">
-                        <svg class="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        <svg class="w-8 h-8 text-white ms-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                       </div>
                     </div>
                   </div>

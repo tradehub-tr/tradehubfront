@@ -107,7 +107,7 @@ function renderProductCard(card: ProductCard, index: number): string {
 
             <!-- MOQ + sold -->
             <div class="product-card__moq-line overflow-hidden h-[18px] leading-[18px] max-sm:!text-[11px]">
-              <div class="product-card__moq inline mr-1 max-sm:!text-[11px]"><bdi>${moqText}</bdi></div>
+              <div class="product-card__moq inline me-1 max-sm:!text-[11px]"><bdi>${moqText}</bdi></div>
               ${soldText ? `<span class="product-card__stats" title="${soldText}">${soldText}</span>` : ""}
             </div>
 

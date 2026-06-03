@@ -157,7 +157,7 @@ function renderCategoriesView(): string {
     <div data-mega-view="categories" class="hidden">
       <div class="flex flex-col lg:flex-row">
         <!-- Sidebar -->
-        <div class="w-full overflow-y-auto overflow-x-hidden border-b border-gray-200 bg-gray-50 lg:w-72 lg:flex-shrink-0 lg:border-b-0 lg:border-r xl:w-80 dark:border-gray-700 dark:bg-gray-900" style="max-height:min(520px, 60vh);-webkit-overflow-scrolling:touch" id="mega-sidebar">
+        <div class="w-full overflow-y-auto overflow-x-hidden border-b border-gray-200 bg-gray-50 lg:w-72 lg:flex-shrink-0 lg:border-b-0 lg:border-e xl:w-80 dark:border-gray-700 dark:bg-gray-900" style="max-height:min(520px, 60vh);-webkit-overflow-scrolling:touch" id="mega-sidebar">
           <ul class="py-1">
             <li class="px-4 py-6 text-center" id="mega-sidebar-loading">
               <svg class="w-5 h-5 animate-spin text-gray-300 mx-auto" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
@@ -194,7 +194,7 @@ function renderFeaturedView(): string {
             .map(
               (card) => `
             <a href="${card.href}" class="feat-card-mm group relative isolate overflow-hidden flex flex-col gap-2 rounded-xl border border-gray-200 bg-white p-3 pb-2.5 shadow-[0_1px_2px_rgba(20,20,18,0.03)] transition-all duration-200 hover:-translate-y-0.5 hover:border-amber-400 hover:shadow-[0_8px_24px_rgba(213,156,0,0.14),0_1px_3px_rgba(20,20,18,0.04)]">
-              <span class="feat-card-mm-halo pointer-events-none absolute -right-12 -top-12 h-44 w-44 rounded-full -z-10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" style="background:radial-gradient(circle, rgba(245,184,0,0.22), transparent 70%);"></span>
+              <span class="feat-card-mm-halo pointer-events-none absolute -end-12 -top-12 h-44 w-44 rounded-full -z-10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" style="background:radial-gradient(circle, rgba(245,184,0,0.22), transparent 70%);"></span>
               <span class="pointer-events-none absolute inset-px rounded-[11px] border border-transparent transition-colors group-hover:border-amber-400/25"></span>
               <span class="relative flex h-8 w-8 items-center justify-center rounded-lg bg-amber-100 border border-amber-300/60 text-amber-700 transition-colors group-hover:bg-amber-400 group-hover:text-gray-900 group-hover:border-amber-500">
                 ${card.icon}
@@ -220,7 +220,7 @@ function renderFeaturedView(): string {
         <a href="/ureticiler" class="group relative isolate block overflow-hidden rounded-xl bg-[#1a1a1a] shadow-[0_2px_6px_rgba(20,20,18,0.08)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(20,20,18,0.18)] min-h-[150px] lg:min-h-[180px] xl:min-h-[230px] 2xl:min-h-[280px]" aria-label="${t("mega.discoverProducers")}">
           <img src="${producerImg}" alt="" loading="lazy" decoding="async" class="absolute inset-0 z-0 block w-full h-full object-cover" />
           <div class="absolute inset-0 z-10" style="background:linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.85) 100%);"></div>
-          <span class="absolute top-3 left-3 lg:top-3.5 lg:left-3.5 z-20 inline-block rounded-full bg-amber-400 px-2 py-0.5 text-[10px] lg:text-[10.5px] font-bold uppercase tracking-wider text-gray-900" data-i18n="mega.bannerTagNew">${t("mega.bannerTagNew")}</span>
+          <span class="absolute top-3 start-3 lg:top-3.5 lg:start-3.5 z-20 inline-block rounded-full bg-amber-400 px-2 py-0.5 text-[10px] lg:text-[10.5px] font-bold uppercase tracking-wider text-gray-900" data-i18n="mega.bannerTagNew">${t("mega.bannerTagNew")}</span>
           <div class="relative z-20 flex h-full min-h-[150px] lg:min-h-[180px] xl:min-h-[230px] 2xl:min-h-[280px] flex-col justify-end gap-1 lg:gap-1.5 xl:gap-2 p-3 lg:p-4 xl:p-5 2xl:p-6 text-white">
             <div class="text-[13px] lg:text-[15px] xl:text-[17px] 2xl:text-[19px] font-bold leading-tight tracking-[-0.01em] text-white" data-i18n="mega.discoverProducers">${t("mega.discoverProducers")}</div>
             <div class="hidden lg:block text-[10.5px] lg:text-[11px] xl:text-[11.5px] leading-snug text-white/80 mb-1 lg:mb-1.5 line-clamp-2" data-i18n="mega.discoverProducersDesc">${t("mega.discoverProducersDesc")}</div>
@@ -245,7 +245,7 @@ function renderProtectionsView(): string {
     <div data-mega-view="protections" class="hidden py-6 sm:py-8">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10">
         <!-- Left: Branding + CTA + stats -->
-        <div class="lg:col-span-5 lg:border-r lg:border-gray-200 lg:pr-8 flex flex-col">
+        <div class="lg:col-span-5 lg:border-e lg:border-gray-200 lg:pe-8 flex flex-col">
           <div class="flex items-center gap-2 mb-3">
             <img src="${tasLogo}" alt="${t("mega.tradeAssuranceTitle")}" class="w-7 h-7 object-contain" />
             <span class="text-sm font-semibold text-gray-900" data-i18n="mega.tradeAssuranceTitle">${t("mega.tradeAssuranceTitle")}</span>
@@ -423,7 +423,7 @@ function renderAppExtensionView(): string {
     <div data-mega-view="app-extension" class="hidden py-8 px-4">
       <div class="flex flex-col md:flex-row">
         <!-- Left: Get the app -->
-        <div class="flex-1 md:pr-10">
+        <div class="flex-1 md:pe-10">
           <h4 class="mb-2 text-lg font-bold text-gray-900" data-i18n="mega.getApp">${t("mega.getApp")}</h4>
           <p class="mb-5 max-w-sm text-sm text-gray-500" data-i18n="mega.appDesc">${t("mega.appDesc")}</p>
           <div class="flex items-center gap-5">
@@ -454,7 +454,7 @@ function renderAppExtensionView(): string {
           </div>
         </div>
         <!-- Right: Discover Lens -->
-        <div class="flex-1 border-t border-gray-200 pt-6 md:border-t-0 md:border-l md:pt-0 md:pl-10">
+        <div class="flex-1 border-t border-gray-200 pt-6 md:border-t-0 md:border-s md:pt-0 md:ps-10">
           <h4 class="mb-2 text-lg font-bold text-gray-900" data-i18n="mega.discoverLens">${t("mega.discoverLens")}</h4>
           <p class="mb-5 max-w-md text-sm text-gray-500" data-i18n="mega.lensDesc">${t("mega.lensDesc")}</p>
           <div class="flex flex-col items-start gap-3">
@@ -816,7 +816,7 @@ export function initMegaMenu(): void {
         <li>
           <a
             href="/pages/products.html?cat=${cat.slug}"
-            class="th-mega-sidebar-item mega-cat-btn flex items-center gap-2 sm:gap-3 w-full px-3 sm:px-4 py-3 sm:py-2.5 text-sm text-left transition-colors border-l-2 border-transparent ${index === 0 ? "th-mega-sidebar-item--active" : ""}"
+            class="th-mega-sidebar-item mega-cat-btn flex items-center gap-2 sm:gap-3 w-full px-3 sm:px-4 py-3 sm:py-2.5 text-sm text-start transition-colors border-s-2 border-transparent ${index === 0 ? "th-mega-sidebar-item--active" : ""}"
             data-category="${cat.id}"
           >
             <span class="flex-shrink-0 inline-flex items-center justify-center [&>svg]:w-5 [&>svg]:h-5 text-gray-500 dark:text-gray-400">${cat.icon_class ? getCategoryIcon(cat.icon_class) : getIconByName(cat.name)}</span>

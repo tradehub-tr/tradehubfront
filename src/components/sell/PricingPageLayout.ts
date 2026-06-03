@@ -18,7 +18,7 @@ export function PricingPageLayout(): string {
         <div class="inline-flex items-center bg-gray-100 rounded-full p-1">
           <button @click="billingPeriod = 'monthly'" class="px-4 py-2 text-sm font-medium rounded-full transition-colors cursor-pointer" :class="billingPeriod === 'monthly' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500'">${t("sellPage.pricing.monthly")}</button>
           <button @click="billingPeriod = 'yearly'" class="px-4 py-2 text-sm font-medium rounded-full transition-colors cursor-pointer" :class="billingPeriod === 'yearly' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500'">
-            ${t("sellPage.pricing.yearly")} <span class="text-xs text-green-600 font-semibold ml-1">${t("sellPage.pricing.yearlyDiscount")}</span>
+            ${t("sellPage.pricing.yearly")} <span class="text-xs text-green-600 font-semibold ms-1">${t("sellPage.pricing.yearlyDiscount")}</span>
           </button>
         </div>
       </div>
@@ -121,9 +121,9 @@ export function PricingPageLayout(): string {
           <div class="space-y-2">
             <template x-for="(item, index) in faqItems" :key="index">
               <div class="border border-gray-200 rounded-lg overflow-hidden">
-                <button @click="toggleFaq(index)" class="w-full flex items-center justify-between px-4 py-3.5 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 transition-colors cursor-pointer">
+                <button @click="toggleFaq(index)" class="w-full flex items-center justify-between px-4 py-3.5 text-start text-sm font-medium text-gray-800 hover:bg-gray-50 transition-colors cursor-pointer">
                   <span x-text="item.question"></span>
-                  <svg class="w-4 h-4 text-gray-500 transition-transform shrink-0 ml-2" :class="item.open && 'rotate-180'" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
+                  <svg class="w-4 h-4 text-gray-500 transition-transform shrink-0 ms-2" :class="item.open && 'rotate-180'" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
                 </button>
                 <div x-show="item.open" x-collapse>
                   <p class="px-4 pb-4 text-sm text-gray-600 leading-relaxed" x-text="item.answer"></p>

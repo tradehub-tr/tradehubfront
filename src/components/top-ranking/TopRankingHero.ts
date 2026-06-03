@@ -21,13 +21,13 @@ export function TopRankingMobileHeader(): string {
     <div class="lg:hidden bg-white">
       <!-- Nav row: back + title + search -->
       <div class="flex items-center justify-between px-4 pt-3 pb-3">
-        <a href="javascript:history.back()" class="text-gray-800 p-1 -ml-1" aria-label="${t("common.goBack")}" data-i18n-aria-label="common.goBack">
+        <a href="javascript:history.back()" class="text-gray-800 p-1 -ms-1" aria-label="${t("common.goBack")}" data-i18n-aria-label="common.goBack">
           <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/>
           </svg>
         </a>
         <h1 class="text-base font-bold text-[#222]" data-i18n="topRankingPage.heroTitle">${t("topRankingPage.heroTitle")}</h1>
-        <button type="button" class="text-gray-800 p-1 -mr-1" aria-label="${t("common.search")}" data-i18n-aria-label="common.search">
+        <button type="button" class="text-gray-800 p-1 -me-1" aria-label="${t("common.search")}" data-i18n-aria-label="common.search">
           <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>
           </svg>

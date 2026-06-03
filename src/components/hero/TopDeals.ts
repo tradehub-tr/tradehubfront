@@ -71,7 +71,7 @@ function renderDealCard(card: TopDealCard): string {
   const discountBadge =
     card.discountPercent && card.discountPercent > 0
       ? `<span
-         class="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 z-10 inline-flex items-center rounded-sm font-bold leading-none text-white text-[8px] sm:text-[10px]"
+         class="absolute top-1.5 start-1.5 sm:top-2 sm:start-2 z-10 inline-flex items-center rounded-sm font-bold leading-none text-white text-[8px] sm:text-[10px]"
          style="background-color: var(--topdeals-badge-bg, #DE0505); padding: 2px 4px;"
        >%${card.discountPercent}</span>`
       : "";

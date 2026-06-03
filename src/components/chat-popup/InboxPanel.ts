@@ -25,13 +25,13 @@ export function InboxPanel(): string {
   const tagRfq = t("chat.tag.rfq");
 
   return /* html */ `
-    <aside class="flex h-full min-h-0 w-full flex-col bg-[var(--color-surface-muted,#fafafa)] md:w-[300px] md:border-l md:border-[var(--color-border-light,#f0f0f0)]">
+    <aside class="flex h-full min-h-0 w-full flex-col bg-[var(--color-surface-muted,#fafafa)] md:w-[300px] md:border-s md:border-[var(--color-border-light,#f0f0f0)]">
       <!-- Header -->
       <div class="flex items-center gap-2 border-b border-[var(--color-border-light,#f0f0f0)] bg-white px-4 py-3">
         <span class="text-[var(--color-text-secondary,#525252)]">${messageIcon}</span>
         <div class="text-[14px] font-semibold">${t("chat.popupTitle")}</div>
-        <span class="ml-1 size-1.5 rounded-full bg-[var(--color-success-500,#22c55e)]"></span>
-        <div class="ml-auto flex items-center gap-2 text-[var(--color-text-tertiary,#a3a3a3)]">
+        <span class="ms-1 size-1.5 rounded-full bg-[var(--color-success-500,#22c55e)]"></span>
+        <div class="ms-auto flex items-center gap-2 text-[var(--color-text-tertiary,#a3a3a3)]">
           <button type="button"
                   @click="$store.chatPopup.toggleSearch()"
                   :class="$store.chatPopup.searchOpen
@@ -61,7 +61,7 @@ export function InboxPanel(): string {
         <template x-for="conv in $store.chatPopup.filteredConversations" :key="conv.id">
           <button type="button"
                   @click="$store.chatPopup.setActiveConversation(conv.id)"
-                  class="flex w-full items-start gap-2.5 border-0 border-b border-[var(--color-border-light,#f0f0f0)] bg-transparent px-3.5 py-3 text-left cursor-pointer transition-colors focus:outline-none"
+                  class="flex w-full items-start gap-2.5 border-0 border-b border-[var(--color-border-light,#f0f0f0)] bg-transparent px-3.5 py-3 text-start cursor-pointer transition-colors focus:outline-none"
                   :class="$store.chatPopup.activeConversationId === conv.id
                     ? 'bg-[var(--color-surface-raised,#f5f5f5)]'
                     : 'hover:bg-[var(--color-surface-muted,#fafafa)]'">
@@ -89,7 +89,7 @@ export function InboxPanel(): string {
                 </template>
                 <span class="truncate text-[var(--color-text-secondary,#525252)]" x-text="conv.lastMessage"></span>
                 <template x-if="conv.unread > 0">
-                  <span class="ml-auto rounded-full bg-[var(--color-error-500,#ef4444)] px-1.5 text-[9px] font-bold text-white"
+                  <span class="ms-auto rounded-full bg-[var(--color-error-500,#ef4444)] px-1.5 text-[9px] font-bold text-white"
                         x-text="conv.unread"></span>
                 </template>
               </div>

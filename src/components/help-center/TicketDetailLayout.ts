@@ -63,7 +63,7 @@ export function TicketDetailLayout(): string {
                   <h1 class="text-lg font-bold text-gray-900" x-text="ticket.subject || '(konusuz)'"></h1>
                   <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold"
                     :class="statusCls(ticket.status)">
-                    <span class="w-1.5 h-1.5 rounded-full mr-1.5" :class="statusDotCls(ticket.status)"></span>
+                    <span class="w-1.5 h-1.5 rounded-full me-1.5" :class="statusDotCls(ticket.status)"></span>
                     <span x-text="statusLabel(ticket.status)"></span>
                   </span>
                 </div>
@@ -72,7 +72,7 @@ export function TicketDetailLayout(): string {
                   <span>·</span>
                   <span>Açılış: <span x-text="fmtDT(ticket.creation)"></span></span>
                   <span x-show="ticket.priority && ticket.priority !== 'Medium'"
-                    class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium ml-1"
+                    class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium ms-1"
                     :class="priorityChipCls(ticket.priority)"
                     x-text="priorityLabel(ticket.priority)"></span>
                 </div>

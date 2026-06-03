@@ -37,7 +37,7 @@ function floatField(
         @input="clearError('${name}')"
       />
       <label
-        class="absolute left-3 top-1/2 -translate-y-1/2 text-[14px] text-[#767676] transition-all duration-200 ease-in-out pointer-events-none peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#767676] peer-focus:top-[12px] peer-focus:-translate-y-1/2 peer-focus:text-[12px] peer-focus:text-[var(--color-primary-500)] peer-focus:bg-transparent group-data-[error=true]:text-[var(--color-error-500)] ${type !== "tel" ? `peer-[:not(:placeholder-shown)]:top-[12px] peer-[:not(:placeholder-shown)]:-translate-y-1/2 peer-[:not(:placeholder-shown)]:text-[12px]` : ""}"
+        class="absolute start-3 top-1/2 -translate-y-1/2 text-[14px] text-[#767676] transition-all duration-200 ease-in-out pointer-events-none peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#767676] peer-focus:top-[12px] peer-focus:-translate-y-1/2 peer-focus:text-[12px] peer-focus:text-[var(--color-primary-500)] peer-focus:bg-transparent group-data-[error=true]:text-[var(--color-error-500)] ${type !== "tel" ? `peer-[:not(:placeholder-shown)]:top-[12px] peer-[:not(:placeholder-shown)]:-translate-y-1/2 peer-[:not(:placeholder-shown)]:text-[12px]` : ""}"
         for="${id}"
       >
         ${label}${required ? ' <span class="text-[var(--color-error-500)]">*</span>' : ""}
@@ -75,13 +75,13 @@ function dropdownField(
         aria-haspopup="listbox"
         ${triggerAlpine}
       >
-        <span class="text-left truncate pb-[6px]" data-display${displayAlpine}>${displayValue}</span>
+        <span class="text-start truncate pb-[6px]" data-display${displayAlpine}>${displayValue}</span>
         <span class="pb-[6px]">${ChevronDown}</span>
       </button>
-      <label class="absolute left-3 top-[12px] -translate-y-1/2 text-[12px] text-[#767676] transition-all duration-200 ease-in-out pointer-events-none group-data-[error=true]:text-[var(--color-error-500)] dropdown-label">
+      <label class="absolute start-3 top-[12px] -translate-y-1/2 text-[12px] text-[#767676] transition-all duration-200 ease-in-out pointer-events-none group-data-[error=true]:text-[var(--color-error-500)] dropdown-label">
         ${label} <span class="text-[var(--color-error-500)]">*</span>
       </label>
-      <ul class="absolute top-full left-0 right-0 z-50 max-h-[260px] overflow-y-auto bg-[var(--color-surface)] border border-[var(--color-border-default)] rounded-md shadow-lg mt-1 hidden group-data-[open=true]:block" role="listbox" data-list${listAlpine}>${items || ""}</ul>
+      <ul class="absolute top-full start-0 end-0 z-50 max-h-[260px] overflow-y-auto bg-[var(--color-surface)] border border-[var(--color-border-default)] rounded-md shadow-lg mt-1 hidden group-data-[open=true]:block" role="listbox" data-list${listAlpine}>${items || ""}</ul>
       <div class="hidden text-[12px] text-[var(--color-error-500)] mt-1 group-data-[error=true]:block">${pageContent.requiredFieldError}</div>
     </div>
   `;
@@ -321,7 +321,7 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
           </svg>
         </span>
-        <h2 class="checkout-section__title flex-1 text-left text-[13px] sm:text-[15px] font-semibold text-[#1a1a1a] tracking-[-0.005em] whitespace-nowrap truncate">${t("checkout.shippingAddressLabel")}</h2>
+        <h2 class="checkout-section__title flex-1 text-start text-[13px] sm:text-[15px] font-semibold text-[#1a1a1a] tracking-[-0.005em] whitespace-nowrap truncate">${t("checkout.shippingAddressLabel")}</h2>
         <!-- Hazır rozeti: adres seçili -->
         <span
           x-cloak
@@ -442,13 +442,13 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
             <div class="mb-3 group" data-field="phone" x-bind:data-error="errors.phone">
               <div class="relative flex items-stretch h-11 sm:h-[48px] rounded-md border border-[var(--color-border-default)] bg-[var(--color-surface)] transition-colors focus-within:border-[var(--color-primary-500)] group-data-[error=true]:border-[var(--color-error-500)]">
                 <!-- Ülke kodu prefix -->
-                <div class="flex items-center justify-center w-14 sm:w-[64px] shrink-0 border-r border-[var(--color-border-default)] text-[13px] sm:text-[14px] text-[#374151] bg-[#f9fafb] rounded-l-md select-none">
+                <div class="flex items-center justify-center w-14 sm:w-[64px] shrink-0 border-e border-[var(--color-border-default)] text-[13px] sm:text-[14px] text-[#374151] bg-[#f9fafb] rounded-s-md select-none">
                   <span id="phone-prefix" x-text="phonePrefix">${defaultCountry.phonePrefix}</span>
                 </div>
                 <!-- Numara input -->
                 <div class="relative flex-1">
                   <input
-                    class="peer w-full h-full pt-[16px] sm:pt-[18px] px-3 pb-0 text-[13px] sm:text-[14px] text-[var(--color-text-primary)] bg-transparent border-0 outline-none placeholder-transparent rounded-r-md"
+                    class="peer w-full h-full pt-[16px] sm:pt-[18px] px-3 pb-0 text-[13px] sm:text-[14px] text-[var(--color-text-primary)] bg-transparent border-0 outline-none placeholder-transparent rounded-e-md"
                     type="tel"
                     id="phone"
                     name="phone"
@@ -457,14 +457,14 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
                     @input="clearError('phone')"
                   />
                   <label
-                    class="absolute left-3 top-1/2 -translate-y-1/2 text-[14px] text-[#767676] transition-all duration-200 ease-in-out pointer-events-none peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#767676] peer-focus:top-[12px] peer-focus:-translate-y-1/2 peer-focus:text-[12px] peer-focus:text-[var(--color-primary-500)] peer-focus:bg-transparent peer-[:not(:placeholder-shown)]:top-[12px] peer-[:not(:placeholder-shown)]:-translate-y-1/2 peer-[:not(:placeholder-shown)]:text-[12px] group-data-[error=true]:text-[var(--color-error-500)]"
+                    class="absolute start-3 top-1/2 -translate-y-1/2 text-[14px] text-[#767676] transition-all duration-200 ease-in-out pointer-events-none peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#767676] peer-focus:top-[12px] peer-focus:-translate-y-1/2 peer-focus:text-[12px] peer-focus:text-[var(--color-primary-500)] peer-focus:bg-transparent peer-[:not(:placeholder-shown)]:top-[12px] peer-[:not(:placeholder-shown)]:-translate-y-1/2 peer-[:not(:placeholder-shown)]:text-[12px] group-data-[error=true]:text-[var(--color-error-500)]"
                     for="phone"
                   >
                     ${pageContent.phoneLabel} <span class="text-[var(--color-error-500)]">*</span>
                   </label>
                 </div>
               </div>
-              <p class="text-[11px] sm:text-[12px] text-[#767676] mt-1 sm:mt-1.5 ml-1">${t("checkout.phoneHelp")}</p>
+              <p class="text-[11px] sm:text-[12px] text-[#767676] mt-1 sm:mt-1.5 ms-1">${t("checkout.phoneHelp")}</p>
             </div>
 
             ${floatField("street-address", "streetAddress", pageContent.streetAddressLabel, true, "text")}
@@ -496,13 +496,13 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
                   @click.prevent="toggleDropdown('city')"
                   x-bind:aria-expanded="cityOpen"
                 >
-                  <span class="text-left truncate pb-[6px]" data-display x-text="cityDisplay"></span>
+                  <span class="text-start truncate pb-[6px]" data-display x-text="cityDisplay"></span>
                   <span class="pb-[6px]">${ChevronDown}</span>
                 </button>
-                <label class="absolute left-3 top-[12px] -translate-y-1/2 text-[12px] text-[#767676] transition-all duration-200 ease-in-out pointer-events-none group-data-[error=true]:text-[var(--color-error-500)] dropdown-label">
+                <label class="absolute start-3 top-[12px] -translate-y-1/2 text-[12px] text-[#767676] transition-all duration-200 ease-in-out pointer-events-none group-data-[error=true]:text-[var(--color-error-500)] dropdown-label">
                   ${t("checkout.cityLabel")} <span class="text-[var(--color-error-500)]">*</span>
                 </label>
-                <ul class="absolute top-full left-0 right-0 z-50 max-h-[260px] overflow-y-auto bg-[var(--color-surface)] border border-[var(--color-border-default)] rounded-md shadow-lg mt-1 hidden group-data-[open=true]:block" role="listbox" data-list @click="selectCityItem($event)">
+                <ul class="absolute top-full start-0 end-0 z-50 max-h-[260px] overflow-y-auto bg-[var(--color-surface)] border border-[var(--color-border-default)] rounded-md shadow-lg mt-1 hidden group-data-[open=true]:block" role="listbox" data-list @click="selectCityItem($event)">
                   <template x-for="city in cityOptions" :key="city">
                     <li class="px-3 py-2 text-[14px] text-[var(--color-text-primary)] cursor-pointer hover:bg-[#f5f5f5] transition-colors" role="option" :data-value="city" x-text="city"></li>
                   </template>

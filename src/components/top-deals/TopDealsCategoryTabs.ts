@@ -45,7 +45,7 @@ function buildSheetItemHtml(id: string, label: string): string {
   return `
     <button
       type="button"
-      class="flex items-center w-full px-5 py-4 text-left transition-colors border-b border-gray-50 active:bg-gray-50"
+      class="flex items-center w-full px-5 py-4 text-start transition-colors border-b border-gray-50 active:bg-gray-50"
       @click="setCategory('${id}'); showCategorySheet = false"
     >
       <span
@@ -75,7 +75,7 @@ export function TopDealsCategoryTabs(): string {
       <!-- Left arrow (desktop only) -->
       <button
         type="button"
-        class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center rounded-full bg-white border border-gray-200 shadow-md text-gray-500 hover:text-gray-900 hover:shadow-lg transition-all cursor-pointer"
+        class="hidden md:flex absolute start-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center rounded-full bg-white border border-gray-200 shadow-md text-gray-500 hover:text-gray-900 hover:shadow-lg transition-all cursor-pointer"
         x-show="canScrollLeft"
         x-transition
         @click="scrollTabs('left')"
@@ -116,7 +116,7 @@ export function TopDealsCategoryTabs(): string {
       <!-- Right arrow (desktop only) -->
       <button
         type="button"
-        class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center rounded-full bg-white border border-gray-200 shadow-md text-gray-500 hover:text-gray-900 hover:shadow-lg transition-all cursor-pointer"
+        class="hidden md:flex absolute end-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center rounded-full bg-white border border-gray-200 shadow-md text-gray-500 hover:text-gray-900 hover:shadow-lg transition-all cursor-pointer"
         x-show="canScrollRight"
         x-transition
         @click="scrollTabs('right')"
@@ -221,7 +221,7 @@ async function loadCategoryTabs(): Promise<void> {
         const sheetBtn = document.createElement("button");
         sheetBtn.type = "button";
         sheetBtn.className =
-          "flex items-center w-full px-5 py-4 text-left transition-colors border-b border-gray-50 active:bg-gray-50";
+          "flex items-center w-full px-5 py-4 text-start transition-colors border-b border-gray-50 active:bg-gray-50";
         sheetBtn.dataset.catSlug = slug;
         sheetBtn.innerHTML = `
           <span class="flex-1 text-[15px] text-gray-600">${name}</span>

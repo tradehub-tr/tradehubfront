@@ -20,7 +20,7 @@ export function ProductFAQ(): string {
             <h3 id="${headingId}">
               <button
                 type="button"
-                class="flex items-center justify-between w-full py-4 px-1 text-sm font-medium text-left gap-3 transition-colors"
+                class="flex items-center justify-between w-full py-4 px-1 text-sm font-medium text-start gap-3 transition-colors"
                 style="color: var(--pd-title-color, #111827); border-bottom: 1px solid var(--pd-faq-border, #e5e5e5);"
                 data-accordion-target="#${bodyId}"
                 aria-expanded="${i === 0 ? "true" : "false"}"

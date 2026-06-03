@@ -91,7 +91,7 @@ export function HelpCenterHeader(opts: HelpCenterHeaderOptions = {}): string {
         </div>
 
         <!-- Right: Nav links + language selector -->
-        <div class="flex items-center gap-1 ml-2">
+        <div class="flex items-center gap-1 ms-2">
           <nav class="flex items-center gap-1 overflow-x-auto scrollbar-hide">
             ${NAV_LINKS.map(
               (link) => `
@@ -108,7 +108,7 @@ export function HelpCenterHeader(opts: HelpCenterHeaderOptions = {}): string {
           </nav>
 
           <!-- Language Selector -->
-          <div class="relative shrink-0 ml-2">
+          <div class="relative shrink-0 ms-2">
             <button
               data-popover-target="hc-popover-language"
               data-popover-placement="bottom-end"

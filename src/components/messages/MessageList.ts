@@ -13,7 +13,7 @@ const TRADEHUB_AVATAR = `<svg class="w-full h-full" viewBox="0 0 40 40" fill="no
 
 export function MessageList(): string {
   return `
-    <div class="w-[360px] max-2xl:w-full max-2xl:max-h-none flex-shrink-0 border-r border-(--color-border-light,#f0f0f0) max-2xl:border-r-0 flex flex-col bg-(--color-surface,#ffffff)"
+    <div class="w-[360px] max-2xl:w-full max-2xl:max-h-none flex-shrink-0 border-e border-(--color-border-light,#f0f0f0) max-2xl:border-e-0 flex flex-col bg-(--color-surface,#ffffff)"
          :class="{ 'max-2xl:hidden': selectedConversation }">
       <!-- Header -->
       <div class="flex items-center justify-between px-5 pt-4 pb-3 max-sm:px-3 border-b border-(--color-border-light,#f0f0f0)">
@@ -42,21 +42,21 @@ export function MessageList(): string {
                x-transition:leave-start="opacity-100"
                x-transition:leave-end="opacity-0"
                @click.away="filterOpen = false"
-               class="absolute right-0 top-full mt-1 w-40 bg-(--color-surface,#ffffff) rounded-lg shadow-lg border border-(--color-border-light,#f0f0f0) py-1 z-20">
+               class="absolute end-0 top-full mt-1 w-40 bg-(--color-surface,#ffffff) rounded-lg shadow-lg border border-(--color-border-light,#f0f0f0) py-1 z-20">
             <button @click="setFilter('all')"
-                    class="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-left border-none bg-transparent cursor-pointer hover:bg-(--color-surface-muted,#fafafa) transition-colors"
+                    class="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-start border-none bg-transparent cursor-pointer hover:bg-(--color-surface-muted,#fafafa) transition-colors"
                     :class="filterType === 'all' ? 'text-(--color-cta-primary,#cc9900) font-semibold' : 'text-(--color-text-body,#333333)'">
               <svg class="w-3.5 h-3.5" :class="filterType === 'all' ? 'opacity-100' : 'opacity-0'" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
               ${t("common.all")}
             </button>
             <button @click="setFilter('unread')"
-                    class="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-left border-none bg-transparent cursor-pointer hover:bg-(--color-surface-muted,#fafafa) transition-colors"
+                    class="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-start border-none bg-transparent cursor-pointer hover:bg-(--color-surface-muted,#fafafa) transition-colors"
                     :class="filterType === 'unread' ? 'text-(--color-cta-primary,#cc9900) font-semibold' : 'text-(--color-text-body,#333333)'">
               <svg class="w-3.5 h-3.5" :class="filterType === 'unread' ? 'opacity-100' : 'opacity-0'" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
               ${t("messages.unread")}
             </button>
             <button @click="setFilter('read')"
-                    class="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-left border-none bg-transparent cursor-pointer hover:bg-(--color-surface-muted,#fafafa) transition-colors"
+                    class="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-start border-none bg-transparent cursor-pointer hover:bg-(--color-surface-muted,#fafafa) transition-colors"
                     :class="filterType === 'read' ? 'text-(--color-cta-primary,#cc9900) font-semibold' : 'text-(--color-text-body,#333333)'">
               <svg class="w-3.5 h-3.5" :class="filterType === 'read' ? 'opacity-100' : 'opacity-0'" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
               ${t("messages.read")}
@@ -87,7 +87,7 @@ export function MessageList(): string {
       <div class="flex-1 overflow-y-auto">
         <template x-for="conv in getFilteredConversations()" :key="conv.id">
           <button @click="selectConversation(conv)"
-                  class="w-full flex items-start gap-3 px-5 py-3.5 max-sm:px-3 max-sm:py-3 text-left border-none border-b border-(--color-surface-raised,#f5f5f5) cursor-pointer transition-[background] duration-150 hover:bg-(--color-surface-muted,#fafafa) bg-transparent"
+                  class="w-full flex items-start gap-3 px-5 py-3.5 max-sm:px-3 max-sm:py-3 text-start border-none border-b border-(--color-surface-raised,#f5f5f5) cursor-pointer transition-[background] duration-150 hover:bg-(--color-surface-muted,#fafafa) bg-transparent"
                   :class="selectedConversation?.id === conv.id ? 'bg-(--color-surface-raised,#f5f5f5)!' : ''">
             <!-- Avatar -->
             <div class="relative w-10 h-10 flex-shrink-0 rounded-full overflow-visible">
@@ -98,7 +98,7 @@ export function MessageList(): string {
                 ${TRADEHUB_AVATAR}
               </template>
               <template x-if="conv.unreadCount > 0">
-                <span class="absolute -top-1 -right-1 min-w-[18px] h-[18px] flex items-center justify-center px-1 text-[11px] font-semibold text-(--color-surface) bg-red-500 rounded-full border-2 border-(--color-surface) leading-none" x-text="conv.unreadCount"></span>
+                <span class="absolute -top-1 -end-1 min-w-[18px] h-[18px] flex items-center justify-center px-1 text-[11px] font-semibold text-(--color-surface) bg-red-500 rounded-full border-2 border-(--color-surface) leading-none" x-text="conv.unreadCount"></span>
               </template>
             </div>
             <!-- Info -->

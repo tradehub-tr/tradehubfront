@@ -72,7 +72,7 @@ export function OrdersTabs({
 
       return `
       <button
-        class="orders__dropdown-item ${selectedClass} flex items-center justify-between w-full py-2 px-3.5 border-none bg-transparent text-[13px] text-(--color-text-body,#333333) cursor-pointer transition-colors text-left
+        class="orders__dropdown-item ${selectedClass} flex items-center justify-between w-full py-2 px-3.5 border-none bg-transparent text-[13px] text-(--color-text-body,#333333) cursor-pointer transition-colors text-start
                hover:bg-[var(--color-dropdown-hover-bg)]
                [&.orders__dropdown-item--selected]:font-semibold"
         :class="{ 'orders__dropdown-item--selected': selectedFilterId === '${filter.id}' }"
@@ -96,7 +96,7 @@ export function OrdersTabs({
         ${tabsHtml}
       </div>
       <div class="orders__dropdown ${dropdownVisibility}
-                  absolute top-[calc(100%+6px)] right-5 z-20 min-w-[200px]
+                  absolute top-[calc(100%+6px)] end-5 z-20 min-w-[200px]
                   bg-[var(--color-dropdown-bg)] border border-[var(--color-dropdown-border)]
                   rounded-[var(--radius-dropdown)] shadow-[0_4px_12px_var(--color-dropdown-shadow)]
                   py-1

@@ -24,7 +24,7 @@ function makeChip(label: string, section: string, value: string): string {
       <span>${label}</span>
       <button
         type="button"
-        class="ml-0.5 inline-flex items-center justify-center w-4 h-4 rounded-full hover:bg-primary-200 dark:hover:bg-primary-800/50 transition-colors"
+        class="ms-0.5 inline-flex items-center justify-center w-4 h-4 rounded-full hover:bg-primary-200 dark:hover:bg-primary-800/50 transition-colors"
         @click="removeChipFilter('${safeSection}', '${safeValue}')"
         aria-label="Kaldir: ${label}"
       >

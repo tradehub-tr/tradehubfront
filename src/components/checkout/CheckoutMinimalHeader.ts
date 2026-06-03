@@ -61,7 +61,7 @@ function renderUserSection(): string {
           <li><a href="/pages/dashboard/settings.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors">${t("header.accountSettings")}</a></li>
         </ul>
         <div class="border-t border-gray-100 pt-1">
-          <button id="checkout-logout-btn" class="w-full text-left block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors cursor-pointer">${t("header.logout")}</button>
+          <button id="checkout-logout-btn" class="w-full text-start block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors cursor-pointer">${t("header.logout")}</button>
         </div>
       </div>
     </div>
