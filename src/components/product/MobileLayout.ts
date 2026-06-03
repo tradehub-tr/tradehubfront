@@ -53,7 +53,7 @@ function collapsibleSection(cfg: CollapsibleConfig): string {
   return `
     <div class="pdm-section-divider h-2 bg-surface-raised"></div>
     <div class="pdm-collapsible-section bg-surface${cfg.sectionClass ? " " + cfg.sectionClass : ""}" id="${cfg.id}">
-      <button type="button" class="pdm-collapsible-header w-full flex items-center justify-between px-4 py-3.5 max-[374px]:px-3 max-[374px]:py-3 border-none bg-none text-sm max-[374px]:text-[13px] font-semibold text-text-heading cursor-pointer text-left [&_em]:not-italic [&_em]:font-normal [&_em]:text-[var(--color-text-placeholder,#999)] [&_em]:ml-1 [&.pdm-collapsible-open_svg]:rotate-180" ${headerAttr}>
+      <button type="button" class="pdm-collapsible-header w-full flex items-center justify-between px-4 py-3.5 max-[374px]:px-3 max-[374px]:py-3 border-none bg-none text-sm max-[374px]:text-[13px] font-semibold text-text-heading cursor-pointer text-start [&_em]:not-italic [&_em]:font-normal [&_em]:text-[var(--color-text-placeholder,#999)] [&_em]:ms-1 [&.pdm-collapsible-open_svg]:rotate-180" ${headerAttr}>
         <span>${cfg.title}</span>
         ${chevronSvg}
       </button>
@@ -157,7 +157,7 @@ export function MobileProductLayout(): string {
           .join("")}
       </div>
       <!-- Action buttons -->
-      <div id="pdm-gallery-actions" class="absolute top-3 right-3 flex flex-col gap-2 z-[6]">
+      <div id="pdm-gallery-actions" class="absolute top-3 end-3 flex flex-col gap-2 z-[6]">
         <button type="button" data-favorite-btn class="pdm-gallery-action-btn w-9 h-9 rounded-full bg-white/85 border-none flex items-center justify-center text-text-muted cursor-pointer shadow-[0_1px_3px_rgba(0,0,0,0.12)] transition-[background] duration-150 active:bg-white" aria-label="${t("product.addToFavorites")}">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
         </button>
@@ -202,7 +202,7 @@ export function MobileProductLayout(): string {
       ${p.priceTiers
         .map(
           (tier) => `
-        <div class="pdm-tier-col flex flex-col items-center px-3 border-r border-border-default last:border-r-0">
+        <div class="pdm-tier-col flex flex-col items-center px-3 border-e border-border-default last:border-e-0">
           <span class="pdm-tier-price text-lg max-[374px]:text-[15px] font-bold text-[#111] leading-[1.3]">${formatCurrency(tier.price, getSelectedCurrency())}</span>
           <span class="pdm-tier-qty text-[11px] max-[374px]:text-[10px] text-text-placeholder mt-[3px] text-center">${
             tier.maxQty !== null
@@ -343,7 +343,7 @@ export function MobileProductLayout(): string {
         ]
           .map(
             (s) => `
-          <div class="pdm-supplier-stat flex flex-col items-center py-2 px-1 border-r border-border-default last:border-r-0 text-center">
+          <div class="pdm-supplier-stat flex flex-col items-center py-2 px-1 border-e border-border-default last:border-e-0 text-center">
             <strong class="text-[13px] max-[374px]:text-xs font-bold text-text-heading leading-snug">${s.val}</strong>
             <span class="text-[10px] max-[374px]:text-[9px] text-text-placeholder mt-px leading-snug">${s.label}</span>
           </div>
@@ -366,7 +366,7 @@ export function MobileProductLayout(): string {
       t("product.keyAttributes"),
       `
       <table class="pdm-attrs-table w-full border-collapse table-fixed [&_tr]:border-b [&_tr]:border-[var(--color-border-light,#f0f0f0)] [&_tr:last-child]:border-b-0 [&_td]:py-3 [&_td]:text-sm [&_td]:align-top [&_td]:[word-break:break-word] [&_td]:[overflow-wrap:break-word]">
-        ${p.specs.map((s) => `<tr><td class="text-[var(--color-text-placeholder,#999)] w-[38%] pr-2.5 max-[374px]:text-xs max-[374px]:py-2.5 max-[374px]:w-[35%] max-[374px]:pr-2">${s.key}</td><td class="text-[var(--color-text-heading,#111827)] font-medium max-[374px]:text-xs max-[374px]:py-2.5">${s.value}</td></tr>`).join("")}
+        ${p.specs.map((s) => `<tr><td class="text-[var(--color-text-placeholder,#999)] w-[38%] pe-2.5 max-[374px]:text-xs max-[374px]:py-2.5 max-[374px]:w-[35%] max-[374px]:pe-2">${s.key}</td><td class="text-[var(--color-text-heading,#111827)] font-medium max-[374px]:text-xs max-[374px]:py-2.5">${s.value}</td></tr>`).join("")}
       </table>
     `
     ),

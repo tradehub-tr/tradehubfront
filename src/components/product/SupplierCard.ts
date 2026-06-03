@@ -25,7 +25,7 @@ function statRow(icon: string, label: string, value: string): string {
         ${icon}
       </svg>
       <span class="text-xs truncate" style="color: var(--pd-rating-text-color, #6b7280);">${label}</span>
-      <span class="text-xs font-semibold ml-auto shrink-0" style="color: var(--pd-title-color, #111827);">${value}</span>
+      <span class="text-xs font-semibold ms-auto shrink-0" style="color: var(--pd-title-color, #111827);">${value}</span>
     </div>
   `;
 }

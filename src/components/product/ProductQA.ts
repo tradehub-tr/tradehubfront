@@ -261,7 +261,7 @@ export function ProductQA(): string {
                   <span>· <span x-text="formatDate(q.submitted_at)"></span></span>
                   <button
                     type="button"
-                    class="ml-auto inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-medium text-secondary-600 hover:bg-primary-50 hover:text-primary-600 transition-colors"
+                    class="ms-auto inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-medium text-secondary-600 hover:bg-primary-50 hover:text-primary-600 transition-colors"
                     title="Bu soru faydalı"
                     @click.stop="voteQuestion(q)"
                   >
@@ -273,7 +273,7 @@ export function ProductQA(): string {
             </div>
             <!-- Cevaplar -->
             <template x-if="q.answers && q.answers.length > 0">
-              <div class="pl-8 space-y-2 mt-2 pt-2 border-t border-border-default/50">
+              <div class="ps-8 space-y-2 mt-2 pt-2 border-t border-border-default/50">
                 <template x-for="a in q.answers" :key="a.name">
                   <div class="flex items-start gap-2">
                     <span
@@ -287,7 +287,7 @@ export function ProductQA(): string {
                         <span>· <span x-text="formatDate(a.submitted_at)"></span></span>
                         <button
                           type="button"
-                          class="ml-auto inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-medium text-secondary-600 hover:bg-primary-50 hover:text-primary-600 transition-colors"
+                          class="ms-auto inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-medium text-secondary-600 hover:bg-primary-50 hover:text-primary-600 transition-colors"
                           title="Bu cevap faydalı"
                           @click.stop="voteAnswer(a)"
                         >
@@ -301,7 +301,7 @@ export function ProductQA(): string {
               </div>
             </template>
             <template x-if="!q.answers || q.answers.length === 0">
-              <div class="pl-8 mt-1 text-[12px] text-secondary-400 italic">Henüz cevap yok.</div>
+              <div class="ps-8 mt-1 text-[12px] text-secondary-400 italic">Henüz cevap yok.</div>
             </template>
           </div>
         </template>

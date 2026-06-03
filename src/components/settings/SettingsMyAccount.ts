@@ -66,7 +66,7 @@ function viewRow(label: string, value: string, extra?: string): string {
   const display = value || `<span style="color:var(--color-text-tertiary)">--</span>`;
   return `
     <div class="flex py-3.5 max-sm:py-3 border-b border-gray-100 last:border-b-0 max-md:flex-col max-md:gap-0.5">
-      <div class="w-[200px] flex-shrink-0 text-[13px] font-medium text-right pr-4 max-md:w-auto max-md:text-left max-md:pr-0" style="color:var(--color-text-secondary)">${label}</div>
+      <div class="w-[200px] flex-shrink-0 text-[13px] font-medium text-end pe-4 max-md:w-auto max-md:text-start max-md:pe-0" style="color:var(--color-text-secondary)">${label}</div>
       <div class="flex-1 min-w-0 text-sm flex items-center gap-2 flex-wrap" style="color:var(--color-text-primary)">${display}${extra || ""}</div>
     </div>
   `;

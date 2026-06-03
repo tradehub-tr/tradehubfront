@@ -136,8 +136,8 @@ export function renderAttachmentsCompact(attachments: RfqAttachment[], scope: st
  * Distinct IDs per scope let multiple parent contexts (buyer detail page,
  * seller quote modal) coexist without z-index/id conflicts.
  */
-const ICON_EXTERNAL = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 inline-block -mt-0.5 mr-1.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>`;
-const ICON_DOWNLOAD = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 inline-block -mt-0.5 mr-1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>`;
+const ICON_EXTERNAL = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 inline-block -mt-0.5 me-1.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>`;
+const ICON_DOWNLOAD = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 inline-block -mt-0.5 me-1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>`;
 
 export function renderAttachmentModal(scope: string = "default"): string {
   return `
@@ -149,7 +149,7 @@ export function renderAttachmentModal(scope: string = "default"): string {
           <div class="flex items-center gap-2 shrink-0">
             <a data-attach-modal-newtab="${scope}" href="#" target="_blank" rel="noopener" class="inline-flex items-center px-4 py-2 text-xs font-semibold rounded-md bg-indigo-500/90 hover:bg-indigo-500 transition-colors">${ICON_EXTERNAL}${t("rfq.openInNewTab")}</a>
             <a data-attach-modal-dl="${scope}" href="#" download class="inline-flex items-center px-4 py-2 text-xs font-semibold rounded-md bg-emerald-500 hover:bg-emerald-600 transition-colors">${ICON_DOWNLOAD}${t("rfq.downloadFile")}</a>
-            <button type="button" data-attach-modal-close="${scope}" class="ml-1 w-9 h-9 inline-flex items-center justify-center text-xl hover:bg-white/10 rounded transition-colors" aria-label="${t("rfq.previewClose")}">×</button>
+            <button type="button" data-attach-modal-close="${scope}" class="ms-1 w-9 h-9 inline-flex items-center justify-center text-xl hover:bg-white/10 rounded transition-colors" aria-label="${t("rfq.previewClose")}">×</button>
           </div>
         </div>
         <div data-attach-modal-body="${scope}" class="flex-1 overflow-auto bg-gray-50 flex items-center justify-center p-4"></div>

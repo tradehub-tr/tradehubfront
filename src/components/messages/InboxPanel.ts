@@ -7,23 +7,23 @@ import { t } from "../../i18n";
 
 export function InboxPanel(): string {
   return `
-    <aside class="w-[240px] max-2xl:w-full flex-shrink-0 border-r border-(--color-border-light,#f0f0f0) max-2xl:border-r-0 max-2xl:border-b flex flex-col bg-(--color-surface,#ffffff)"
+    <aside class="w-[240px] max-2xl:w-full flex-shrink-0 border-e border-(--color-border-light,#f0f0f0) max-2xl:border-e-0 max-2xl:border-b flex flex-col bg-(--color-surface,#ffffff)"
            :class="{ 'max-2xl:hidden': selectedConversation }">
       <!-- Search -->
       <div class="relative px-4 pt-4 pb-3 max-sm:px-3">
-        <svg class="absolute left-7 max-sm:left-6 top-1/2 -translate-y-1/2 mt-0.5 w-4 h-4 text-(--color-text-placeholder,#999999) pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <svg class="absolute start-7 max-sm:start-6 top-1/2 -translate-y-1/2 mt-0.5 w-4 h-4 text-(--color-text-placeholder,#999999) pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <circle cx="11" cy="11" r="8"/>
           <path stroke-linecap="round" d="m21 21-4.35-4.35"/>
         </svg>
         <input type="text"
                x-model.debounce.300ms="searchQuery"
-               class="th-input th-input-sm pl-9"
+               class="th-input th-input-sm ps-9"
                placeholder="${t("common.search")}" />
         <!-- Clear -->
         <button x-show="searchQuery.length > 0"
                 x-transition
                 @click="searchQuery = ''"
-                class="absolute right-7 max-sm:right-6 top-1/2 -translate-y-1/2 mt-0.5 w-5 h-5 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300 text-gray-500 cursor-pointer border-none"
+                class="absolute end-7 max-sm:end-6 top-1/2 -translate-y-1/2 mt-0.5 w-5 h-5 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300 text-gray-500 cursor-pointer border-none"
                 aria-label="${t("common.clear")}">
           <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
@@ -57,7 +57,7 @@ export function InboxPanel(): string {
             <span x-text="cat.label"></span>
             <span x-show="cat.id === 'unread'"
                   x-text="getUnreadTotal()"
-                  class="ml-auto text-xs text-(--color-text-placeholder,#999999) font-normal"></span>
+                  class="ms-auto text-xs text-(--color-text-placeholder,#999999) font-normal"></span>
           </button>
         </template>
       </nav>

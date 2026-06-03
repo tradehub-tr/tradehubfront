@@ -60,7 +60,7 @@ export function OrderListItem(): string {
           </div>
 
           <!-- Totals (right-aligned, 2 rows = matches left meta height) -->
-          <div class="text-right shrink-0 flex flex-col items-end justify-between gap-1">
+          <div class="text-end shrink-0 flex flex-col items-end justify-between gap-1">
             <span class="inline-block px-2 py-0.5 rounded text-[9px] font-extrabold uppercase tracking-wider"
               :class="order.statusColor === 'text-amber-600' ? 'bg-amber-100 text-amber-700'
                     : order.statusColor === 'text-green-600' ? 'bg-emerald-100 text-emerald-700'
@@ -69,7 +69,7 @@ export function OrderListItem(): string {
                     : 'bg-gray-100 text-gray-700'"
               x-text="getStatusLabel(order)"></span>
             <div class="text-[16px] sm:text-[18px] lg:text-[20px] font-extrabold text-gray-900 leading-none">
-              <span class="text-[10px] text-gray-500 font-semibold mr-0.5" x-text="order.currency"></span><span x-text="order.total"></span>
+              <span class="text-[10px] text-gray-500 font-semibold me-0.5" x-text="order.currency"></span><span x-text="order.total"></span>
             </div>
           </div>
         </div>
@@ -96,7 +96,7 @@ export function OrderListItem(): string {
               <div class="w-[46px] h-[46px] sm:w-[52px] sm:h-[52px] lg:w-[58px] lg:h-[58px] rounded-md border border-gray-200 shrink-0 relative overflow-hidden bg-gray-50">
                 <img :src="product.image" :alt="product.name" class="w-full h-full object-cover"
                   onerror="this.style.display='none'" />
-                <span class="absolute bottom-0.5 right-0.5 bg-gray-900/85 text-white text-[9px] font-extrabold px-1 py-px rounded">
+                <span class="absolute bottom-0.5 end-0.5 bg-gray-900/85 text-white text-[9px] font-extrabold px-1 py-px rounded">
                   ×<span x-text="product.quantity"></span>
                 </span>
               </div>

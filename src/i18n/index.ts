@@ -2,10 +2,19 @@ import i18next from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import en from "./locales/en";
 import tr from "./locales/tr";
+import ar from "./locales/ar";
+import ru from "./locales/ru";
 import { sanitizeHtml } from "../utils/sanitize";
 
-export const SUPPORTED_LANGS = ["en", "tr"] as const;
+export const SUPPORTED_LANGS = ["en", "tr", "ar", "ru"] as const;
 export type SupportedLang = (typeof SUPPORTED_LANGS)[number];
+
+/** Right-to-left languages — drive document `dir` attribute. */
+export const RTL_LANGS: readonly SupportedLang[] = ["ar"];
+
+export function isRtl(lang: SupportedLang): boolean {
+  return RTL_LANGS.includes(lang);
+}
 
 const LANG_STORAGE_KEY = "i18nextLng";
 
@@ -19,7 +28,12 @@ function mergeIntoTranslation(resource: any): any {
 
 // Initialize i18next
 i18next.use(LanguageDetector).init({
-  resources: { en: mergeIntoTranslation(en), tr: mergeIntoTranslation(tr) },
+  resources: {
+    en: mergeIntoTranslation(en),
+    tr: mergeIntoTranslation(tr),
+    ar: mergeIntoTranslation(ar),
+    ru: mergeIntoTranslation(ru),
+  },
   fallbackLng: "en",
   defaultNS: "translation",
   interpolation: { escapeValue: false },
@@ -30,6 +44,15 @@ i18next.use(LanguageDetector).init({
     lookupLocalStorage: LANG_STORAGE_KEY,
   },
 });
+
+// Sync <html lang> and text direction with the language detected on first
+// paint (reload path). The static HTML files hard-code lang="tr"/"en", so
+// without this the lang attribute would not match the detected language.
+{
+  const initialLang = getCurrentLang();
+  document.documentElement.lang = initialLang;
+  applyDocumentDirection(initialLang);
+}
 
 /**
  * Translate a key. Use in template literals for initial render.
@@ -53,8 +76,17 @@ export function getCurrentLang(): SupportedLang {
 export async function changeLanguage(lang: SupportedLang): Promise<void> {
   await i18next.changeLanguage(lang);
   document.documentElement.lang = lang;
+  applyDocumentDirection(lang);
   updatePageTranslations();
   window.dispatchEvent(new CustomEvent("languageChanged", { detail: { lang } }));
+}
+
+/**
+ * Set <html dir="rtl|ltr"> for the given language so layout mirrors for RTL
+ * locales. Tailwind's `rtl:`/`ltr:` variants and logical properties key off this.
+ */
+export function applyDocumentDirection(lang: SupportedLang): void {
+  document.documentElement.dir = isRtl(lang) ? "rtl" : "ltr";
 }
 
 /**

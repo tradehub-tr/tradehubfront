@@ -17,14 +17,14 @@ export function ContactsLayout(): string {
         </svg>
         <span class="text-[13px] text-(--color-text-body,#333333)">
           ${t("contacts.helpBanner")}
-          <a href="#feedback" class="text-[#2563EB] no-underline ml-1 hover:underline">${t("contacts.clickHere")}</a>
+          <a href="#feedback" class="text-[#2563EB] no-underline ms-1 hover:underline">${t("contacts.clickHere")}</a>
         </span>
       </div>
 
       <!-- Panels -->
       <div class="flex flex-1 bg-(--color-surface,#ffffff) rounded-b-lg overflow-hidden max-md:flex-col">
         <!-- Left: Contact List -->
-        <aside class="w-[300px] max-md:w-full shrink-0 border-r max-md:border-r-0 max-md:border-b border-(--color-border-light,#f0f0f0) flex flex-col p-4">
+        <aside class="w-[300px] max-md:w-full shrink-0 border-e max-md:border-e-0 max-md:border-b border-(--color-border-light,#f0f0f0) flex flex-col p-4">
           <!-- Header -->
           <div class="mb-3">
             <button class="inline-flex items-center gap-1.5 text-sm font-normal text-(--color-text-heading,#111827) bg-transparent border-none cursor-pointer p-0 hover:text-(--color-cta-primary,#333333)">
@@ -38,7 +38,7 @@ export function ContactsLayout(): string {
           <!-- Search -->
           <div class="flex items-center border border-(--color-border-medium,#d1d5db) rounded mb-3 overflow-hidden">
             <input type="text" class="th-input th-input-sm th-input-borderless flex-1" placeholder="${t("contacts.searchPlaceholder")}" />
-            <button class="th-no-press flex items-center justify-center w-8 h-8 border-none border-l border-l-(--color-border-medium,#d1d5db) bg-(--color-surface-muted,#fafafa) text-(--color-text-muted,#666666) cursor-pointer hover:bg-(--color-border-light) hover:text-(--color-text-heading,#111827)" aria-label="${t("inquiries.searchPlaceholder")}">
+            <button class="th-no-press flex items-center justify-center w-8 h-8 border-none border-s border-s-(--color-border-medium,#d1d5db) bg-(--color-surface-muted,#fafafa) text-(--color-text-muted,#666666) cursor-pointer hover:bg-(--color-border-light) hover:text-(--color-text-heading,#111827)" aria-label="${t("inquiries.searchPlaceholder")}">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="8"/>
                 <path stroke-linecap="round" d="m21 21-4.35-4.35"/>
@@ -100,7 +100,7 @@ export function ContactsLayout(): string {
           </div>
 
           <!-- Top-right compose button -->
-          <button class="th-no-press absolute top-4 right-4 flex items-center justify-center w-10 h-10 border-none bg-(--color-border-light) rounded-md text-(--color-text-muted,#666666) cursor-pointer transition-[background,color] duration-150 hover:bg-[#e5e7eb] hover:text-(--color-text-heading,#111827)" aria-label="${t("contacts.newMessage")}">
+          <button class="th-no-press absolute top-4 end-4 flex items-center justify-center w-10 h-10 border-none bg-(--color-border-light) rounded-md text-(--color-text-muted,#666666) cursor-pointer transition-[background,color] duration-150 hover:bg-[#e5e7eb] hover:text-(--color-text-heading,#111827)" aria-label="${t("contacts.newMessage")}">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
             </svg>

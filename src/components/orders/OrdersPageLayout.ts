@@ -70,7 +70,7 @@ function renderAllOrders(): string {
       <!-- Status Tabs — dynamic counts, horizontal scroll -->
       <div class="relative border-b border-gray-200" id="order-tabs-wrapper">
         <!-- Left fade + arrow -->
-        <button type="button" id="order-tabs-left" class="absolute left-0 top-0 bottom-0 z-10 w-8 items-center justify-center bg-gradient-to-r from-white via-white/80 to-transparent cursor-pointer border-none hidden" aria-label="Scroll left">
+        <button type="button" id="order-tabs-left" class="absolute start-0 top-0 bottom-0 z-10 w-8 items-center justify-center bg-gradient-to-r from-white via-white/80 to-transparent cursor-pointer border-none hidden" aria-label="Scroll left">
           <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
         </button>
         <!-- Scrollable tab container -->
@@ -86,7 +86,7 @@ function renderAllOrders(): string {
                   : 'text-gray-500 border-b-2 border-transparent hover:text-gray-700'"
                 class="py-3 px-4 max-sm:px-2.5 text-sm max-sm:text-xs whitespace-nowrap transition-colors bg-transparent cursor-pointer"
               >
-                ${tab.label}<template x-if="tabCount('${tab.id}') > 0"><span class="text-gray-400 ml-0.5" x-text="'(' + tabCount('${tab.id}') + ')'"></span></template>
+                ${tab.label}<template x-if="tabCount('${tab.id}') > 0"><span class="text-gray-400 ms-0.5" x-text="'(' + tabCount('${tab.id}') + ')'"></span></template>
               </button>
             `
               )
@@ -94,7 +94,7 @@ function renderAllOrders(): string {
           </div>
         </div>
         <!-- Right fade + arrow -->
-        <button type="button" id="order-tabs-right" class="absolute right-0 top-0 bottom-0 z-10 w-8 items-center justify-center bg-gradient-to-l from-white via-white/80 to-transparent cursor-pointer border-none hidden" aria-label="Scroll right">
+        <button type="button" id="order-tabs-right" class="absolute end-0 top-0 bottom-0 z-10 w-8 items-center justify-center bg-gradient-to-l from-white via-white/80 to-transparent cursor-pointer border-none hidden" aria-label="Scroll right">
           <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
         </button>
       </div>
@@ -103,7 +103,7 @@ function renderAllOrders(): string {
       <div class="flex items-center gap-2.5 px-5 max-sm:px-3 py-4 flex-wrap">
         <!-- Search Input -->
         <div class="relative flex-1 min-w-[180px] max-w-[380px] max-sm:max-w-full max-sm:min-w-full">
-          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <svg class="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/>
           </svg>
           <input
@@ -111,13 +111,13 @@ function renderAllOrders(): string {
             x-model.debounce.300ms="searchQuery"
             @keydown.escape="searchQuery = ''"
             placeholder="${t("orders.searchPlaceholder")}"
-            class="th-input th-input-sm pl-9 pr-8"
+            class="th-input th-input-sm ps-9 pe-8"
             :class="searchQuery.trim() ? 'border-amber-400! ring-1! ring-amber-200!' : ''"
           />
           <button
             x-show="searchQuery.trim()"
             @click="searchQuery = ''"
-            class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer bg-transparent border-none transition-colors p-0"
+            class="absolute end-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer bg-transparent border-none transition-colors p-0"
           >
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
           </button>
@@ -146,31 +146,31 @@ function renderAllOrders(): string {
             x-transition:leave="transition ease-in duration-100"
             x-transition:leave-start="opacity-100 translate-y-0"
             x-transition:leave-end="opacity-0 translate-y-1"
-            class="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 py-1 min-w-[160px]"
+            class="absolute top-full start-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 py-1 min-w-[160px]"
           >
             <button @click="setDateFilter('all')"
-              class="flex items-center justify-between w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 cursor-pointer bg-transparent border-none transition-colors"
+              class="flex items-center justify-between w-full text-start px-4 py-2.5 text-sm hover:bg-gray-50 cursor-pointer bg-transparent border-none transition-colors"
               :class="dateFilter === 'all' ? 'text-amber-700 font-medium' : 'text-gray-700'"
             >
               ${t("orders.allDates")}
               <svg x-show="dateFilter === 'all'" class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
             </button>
             <button @click="setDateFilter('7d')"
-              class="flex items-center justify-between w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 cursor-pointer bg-transparent border-none transition-colors"
+              class="flex items-center justify-between w-full text-start px-4 py-2.5 text-sm hover:bg-gray-50 cursor-pointer bg-transparent border-none transition-colors"
               :class="dateFilter === '7d' ? 'text-amber-700 font-medium' : 'text-gray-700'"
             >
               ${t("orders.last7Days")}
               <svg x-show="dateFilter === '7d'" class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
             </button>
             <button @click="setDateFilter('30d')"
-              class="flex items-center justify-between w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 cursor-pointer bg-transparent border-none transition-colors"
+              class="flex items-center justify-between w-full text-start px-4 py-2.5 text-sm hover:bg-gray-50 cursor-pointer bg-transparent border-none transition-colors"
               :class="dateFilter === '30d' ? 'text-amber-700 font-medium' : 'text-gray-700'"
             >
               ${t("orders.last30Days")}
               <svg x-show="dateFilter === '30d'" class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
             </button>
             <button @click="setDateFilter('90d')"
-              class="flex items-center justify-between w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 cursor-pointer bg-transparent border-none transition-colors"
+              class="flex items-center justify-between w-full text-start px-4 py-2.5 text-sm hover:bg-gray-50 cursor-pointer bg-transparent border-none transition-colors"
               :class="dateFilter === '90d' ? 'text-amber-700 font-medium' : 'text-gray-700'"
             >
               ${t("orders.last90Days")}
@@ -202,7 +202,7 @@ function renderAllOrders(): string {
             x-transition:leave="transition ease-in duration-100"
             x-transition:leave-start="opacity-100 translate-y-0"
             x-transition:leave-end="opacity-0 translate-y-1"
-            class="absolute top-full right-0 max-sm:left-0 max-sm:right-auto mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 p-4 min-w-[280px]"
+            class="absolute top-full end-0 max-sm:start-0 max-sm:end-auto mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 p-4 min-w-[280px]"
           >
             <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">${t("orders.selectDateRange")}</p>
             <div class="flex items-center gap-2 mb-3">
@@ -509,7 +509,7 @@ function renderAllOrders(): string {
           <!-- Search + sort toolbar (sadece açık durumda) -->
           <div x-show="showAllProducts" x-transition class="flex items-center gap-2 mb-3 pb-3 border-b border-gray-200">
             <div class="relative flex-1">
-              <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <svg class="absolute start-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/>
               </svg>
               <input
@@ -517,7 +517,7 @@ function renderAllOrders(): string {
                 x-model="productSearch"
                 placeholder="${t("orders.productName")}"
                 aria-label="${t("orders.productName")}"
-                class="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--btn-bg,#cc9900)]/30 focus:border-[var(--btn-bg,#cc9900)]" />
+                class="w-full ps-8 pe-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--btn-bg,#cc9900)]/30 focus:border-[var(--btn-bg,#cc9900)]" />
             </div>
             <div class="relative" x-data="{ sortOpen: false }">
               <button @click="sortOpen = !sortOpen" class="flex items-center gap-1.5 px-3 py-2 text-sm border border-gray-200 rounded-md bg-white text-gray-700 hover:bg-gray-50 whitespace-nowrap cursor-pointer">
@@ -525,19 +525,19 @@ function renderAllOrders(): string {
                 <span x-text="productSortLabel"></span>
                 <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M5 8l5 5 5-5H5z"/></svg>
               </button>
-              <div x-show="sortOpen" @click.outside="sortOpen = false" x-transition class="absolute right-0 top-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-10 py-1 min-w-[160px]">
-                <button @click="productSort = 'default'; sortOpen = false" class="th-no-press w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 bg-transparent border-none cursor-pointer">${t("orders.sortDefault")}</button>
-                <button @click="productSort = 'name-asc'; sortOpen = false" class="th-no-press w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 bg-transparent border-none cursor-pointer">${t("orders.sortNameAsc")}</button>
-                <button @click="productSort = 'name-desc'; sortOpen = false" class="th-no-press w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 bg-transparent border-none cursor-pointer">${t("orders.sortNameDesc")}</button>
-                <button @click="productSort = 'price-asc'; sortOpen = false" class="th-no-press w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 bg-transparent border-none cursor-pointer">${t("orders.sortPriceAsc")}</button>
-                <button @click="productSort = 'price-desc'; sortOpen = false" class="th-no-press w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 bg-transparent border-none cursor-pointer">${t("orders.sortPriceDesc")}</button>
+              <div x-show="sortOpen" @click.outside="sortOpen = false" x-transition class="absolute end-0 top-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-10 py-1 min-w-[160px]">
+                <button @click="productSort = 'default'; sortOpen = false" class="th-no-press w-full text-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 bg-transparent border-none cursor-pointer">${t("orders.sortDefault")}</button>
+                <button @click="productSort = 'name-asc'; sortOpen = false" class="th-no-press w-full text-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 bg-transparent border-none cursor-pointer">${t("orders.sortNameAsc")}</button>
+                <button @click="productSort = 'name-desc'; sortOpen = false" class="th-no-press w-full text-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 bg-transparent border-none cursor-pointer">${t("orders.sortNameDesc")}</button>
+                <button @click="productSort = 'price-asc'; sortOpen = false" class="th-no-press w-full text-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 bg-transparent border-none cursor-pointer">${t("orders.sortPriceAsc")}</button>
+                <button @click="productSort = 'price-desc'; sortOpen = false" class="th-no-press w-full text-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 bg-transparent border-none cursor-pointer">${t("orders.sortPriceDesc")}</button>
               </div>
             </div>
           </div>
 
           <!-- Product list: closed = first 5, open = scroll container -->
           <div
-            :class="showAllProducts ? 'max-h-[340px] overflow-y-auto pr-1 relative' : ''">
+            :class="showAllProducts ? 'max-h-[340px] overflow-y-auto pe-1 relative' : ''">
             <template x-for="(product, idx) in (showAllProducts ? filteredProducts : selectedOrder.products.slice(0, productPreviewCount))" :key="product.name + idx">
               <div class="flex items-center gap-3 py-2.5 border-b border-gray-100 last:border-b-0">
                 <div class="w-10 h-10 max-sm:w-8 max-sm:h-8 rounded border border-gray-200 overflow-hidden shrink-0 bg-gray-50">
@@ -547,7 +547,7 @@ function renderAllOrders(): string {
                   <div class="text-sm text-gray-800 line-clamp-2 leading-snug" x-text="product.name"></div>
                   <div class="text-xs text-gray-500 mt-0.5" x-text="product.quantity + ' × ${getCurrencyCode()} ' + product.unitPrice"></div>
                 </div>
-                <span class="text-sm font-medium text-gray-900 text-right whitespace-nowrap">${getCurrencyCode()} <span x-text="product.totalPrice"></span></span>
+                <span class="text-sm font-medium text-gray-900 text-end whitespace-nowrap">${getCurrencyCode()} <span x-text="product.totalPrice"></span></span>
               </div>
             </template>
 
@@ -591,7 +591,7 @@ function renderAllOrders(): string {
               @click="activeDetailTab = 'shipping'"
               @keydown.right.prevent="activeDetailTab = 'payment'; document.getElementById('tab-payment')?.focus()"
               @keydown.left.prevent="activeDetailTab = 'supplier'; document.getElementById('tab-supplier')?.focus()"
-              :class="activeDetailTab === 'shipping' ? 'bg-white border-l border-r border-t border-gray-200 text-gray-900 font-semibold -mb-px z-10 relative' : 'bg-transparent text-gray-500 hover:text-gray-700 border-b border-gray-200'"
+              :class="activeDetailTab === 'shipping' ? 'bg-white border-s border-e border-t border-gray-200 text-gray-900 font-semibold -mb-px z-10 relative' : 'bg-transparent text-gray-500 hover:text-gray-700 border-b border-gray-200'"
               class="px-4 py-2.5 max-sm:px-3 max-sm:py-2 text-sm max-sm:text-xs rounded-t-md cursor-pointer flex items-center gap-2 transition-colors"
               role="tab"
               id="tab-shipping"
@@ -606,7 +606,7 @@ function renderAllOrders(): string {
               @click="activeDetailTab = 'payment'"
               @keydown.right.prevent="activeDetailTab = 'supplier'; document.getElementById('tab-supplier')?.focus()"
               @keydown.left.prevent="activeDetailTab = 'shipping'; document.getElementById('tab-shipping')?.focus()"
-              :class="activeDetailTab === 'payment' ? 'bg-white border-l border-r border-t border-gray-200 text-gray-900 font-semibold -mb-px z-10 relative' : 'bg-transparent text-gray-500 hover:text-gray-700 border-b border-gray-200'"
+              :class="activeDetailTab === 'payment' ? 'bg-white border-s border-e border-t border-gray-200 text-gray-900 font-semibold -mb-px z-10 relative' : 'bg-transparent text-gray-500 hover:text-gray-700 border-b border-gray-200'"
               class="px-4 py-2.5 max-sm:px-3 max-sm:py-2 text-sm max-sm:text-xs rounded-t-md cursor-pointer flex items-center gap-2 transition-colors"
               role="tab"
               id="tab-payment"
@@ -621,7 +621,7 @@ function renderAllOrders(): string {
               @click="activeDetailTab = 'supplier'"
               @keydown.right.prevent="activeDetailTab = 'shipping'; document.getElementById('tab-shipping')?.focus()"
               @keydown.left.prevent="activeDetailTab = 'payment'; document.getElementById('tab-payment')?.focus()"
-              :class="activeDetailTab === 'supplier' ? 'bg-white border-l border-r border-t border-gray-200 text-gray-900 font-semibold -mb-px z-10 relative' : 'bg-transparent text-gray-500 hover:text-gray-700 border-b border-gray-200'"
+              :class="activeDetailTab === 'supplier' ? 'bg-white border-s border-e border-t border-gray-200 text-gray-900 font-semibold -mb-px z-10 relative' : 'bg-transparent text-gray-500 hover:text-gray-700 border-b border-gray-200'"
               class="px-4 py-2.5 max-sm:px-3 max-sm:py-2 text-sm max-sm:text-xs rounded-t-md cursor-pointer flex items-center gap-2 transition-colors"
               role="tab"
               id="tab-supplier"
@@ -636,7 +636,7 @@ function renderAllOrders(): string {
           </div>
 
           <!-- Tab panels (border-l/r/b ile aktif tab'a bağlı) -->
-          <div class="bg-white border-l border-r border-b border-gray-200 rounded-b-md p-5 max-sm:p-4">
+          <div class="bg-white border-s border-e border-b border-gray-200 rounded-b-md p-5 max-sm:p-4">
             <!-- Kargo paneli -->
             <div x-show="activeDetailTab === 'shipping'" x-transition.opacity id="panel-shipping" role="tabpanel" aria-labelledby="tab-shipping">
               <div class="flex items-center justify-end gap-3 mb-4 flex-wrap">
@@ -678,13 +678,13 @@ function renderAllOrders(): string {
                   <button @click="moreOpen = !moreOpen" class="th-no-press flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 bg-transparent border border-gray-200 rounded-full cursor-pointer transition-colors">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><circle cx="4" cy="10" r="2"/><circle cx="10" cy="10" r="2"/><circle cx="16" cy="10" r="2"/></svg>
                   </button>
-                  <div x-show="moreOpen" @click.outside="moreOpen = false" x-transition class="absolute right-0 top-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 py-1 min-w-[160px]">
-                    <button @click="downloadInvoice(selectedOrder); moreOpen = false" class="th-no-press w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 bg-transparent border-none cursor-pointer flex items-center gap-2">
+                  <div x-show="moreOpen" @click.outside="moreOpen = false" x-transition class="absolute end-0 top-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 py-1 min-w-[160px]">
+                    <button @click="downloadInvoice(selectedOrder); moreOpen = false" class="th-no-press w-full text-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 bg-transparent border-none cursor-pointer flex items-center gap-2">
                       <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                       ${t("orders.downloadInvoice")}
                     </button>
                     <template x-if="canRefund(selectedOrder)">
-                      <button @click="openRefundModal(selectedOrder); moreOpen = false" class="th-no-press w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 bg-transparent border-none cursor-pointer flex items-center gap-2">
+                      <button @click="openRefundModal(selectedOrder); moreOpen = false" class="th-no-press w-full text-start px-4 py-2 text-sm text-red-600 hover:bg-red-50 bg-transparent border-none cursor-pointer flex items-center gap-2">
                         <svg class="w-3.5 h-3.5 text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
                         ${t("orders.requestRefund")}
                       </button>
@@ -794,10 +794,10 @@ function renderAllOrders(): string {
             </div>
             <!-- Body — Dynamic timeline based on order status -->
             <div class="px-6 py-5 overflow-y-auto max-h-[60vh]">
-              <div class="relative pl-6 border-l-2 border-gray-200 space-y-6">
+              <div class="relative ps-6 border-s-2 border-gray-200 space-y-6">
                 <!-- Step 1: Order submitted (always) -->
                 <div class="relative">
-                  <div class="absolute -left-[25px] top-1 w-3 h-3 bg-(--btn-bg,#f5b800) rounded-full border-2 border-white"></div>
+                  <div class="absolute -start-[25px] top-1 w-3 h-3 bg-(--btn-bg,#f5b800) rounded-full border-2 border-white"></div>
                   <p class="text-sm font-medium text-gray-900">${t("orders.orderSubmitted")}</p>
                   <p class="text-xs text-gray-500 mt-0.5" x-text="selectedOrder.orderDate"></p>
                   <p class="text-xs text-gray-400 mt-1" x-text="'${t("orders.orderPrefix")} ' + selectedOrder.orderNumber"></p>
@@ -806,7 +806,7 @@ function renderAllOrders(): string {
                 <!-- Cancelled -->
                 <template x-if="selectedOrder.status === 'Cancelled'">
                   <div class="relative">
-                    <div class="absolute -left-[25px] top-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></div>
+                    <div class="absolute -start-[25px] top-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></div>
                     <p class="text-sm font-medium text-red-600">${t("orders.orderCancelled")}</p>
                     <p class="text-xs text-gray-400 mt-1" x-text="selectedOrder.statusDescription"></p>
                   </div>
@@ -817,7 +817,7 @@ function renderAllOrders(): string {
                   <div class="space-y-6">
                     <!-- Step 2: Payment -->
                     <div class="relative">
-                      <div class="absolute -left-[25px] top-1 w-3 h-3 rounded-full border-2 border-white"
+                      <div class="absolute -start-[25px] top-1 w-3 h-3 rounded-full border-2 border-white"
                            :class="getStepIndex(selectedOrder) >= 1 ? 'bg-(--btn-bg,#f5b800)' : 'bg-gray-300'"></div>
                       <p class="text-sm font-medium" :class="getStepIndex(selectedOrder) >= 1 ? 'text-gray-900' : 'text-gray-400'"
                          x-text="getStepIndex(selectedOrder) === 0 ? '${t("orders.awaitingPayment")}' : '${t("orders.orderConfirming")}'"></p>
@@ -827,7 +827,7 @@ function renderAllOrders(): string {
                     <!-- Step 3: Preparing -->
                     <template x-if="getStepIndex(selectedOrder) >= 2">
                       <div class="relative">
-                        <div class="absolute -left-[25px] top-1 w-3 h-3 bg-(--btn-bg,#f5b800) rounded-full border-2 border-white"></div>
+                        <div class="absolute -start-[25px] top-1 w-3 h-3 bg-(--btn-bg,#f5b800) rounded-full border-2 border-white"></div>
                         <p class="text-sm font-medium text-gray-900">${t("orders.orderPreparing")}</p>
                         <p class="text-xs text-gray-400 mt-1">${t("orders.orderPreparingMessage")}</p>
                       </div>
@@ -835,7 +835,7 @@ function renderAllOrders(): string {
                     <!-- Step 4: Delivering -->
                     <template x-if="getStepIndex(selectedOrder) >= 3">
                       <div class="relative">
-                        <div class="absolute -left-[25px] top-1 w-3 h-3 bg-(--btn-bg,#f5b800) rounded-full border-2 border-white"></div>
+                        <div class="absolute -start-[25px] top-1 w-3 h-3 bg-(--btn-bg,#f5b800) rounded-full border-2 border-white"></div>
                         <p class="text-sm font-medium text-gray-900">${t("orders.orderDelivering")}</p>
                         <p class="text-xs text-gray-400 mt-1">${t("orders.orderDeliveringMessage")}</p>
                       </div>
@@ -843,7 +843,7 @@ function renderAllOrders(): string {
                     <!-- Step 5: Completed -->
                     <template x-if="getStepIndex(selectedOrder) >= 4">
                       <div class="relative">
-                        <div class="absolute -left-[25px] top-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                        <div class="absolute -start-[25px] top-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
                         <p class="text-sm font-medium text-green-700">${t("orders.orderCompleted")}</p>
                         <p class="text-xs text-gray-400 mt-1">${t("orders.orderCompletedMessage")}</p>
                       </div>
@@ -851,7 +851,7 @@ function renderAllOrders(): string {
                     <!-- Refund: Pending -->
                     <template x-if="selectedOrder.refundStatus === 'Pending'">
                       <div class="relative">
-                        <div class="absolute -left-[25px] top-1 w-3 h-3 bg-amber-400 rounded-full border-2 border-white"></div>
+                        <div class="absolute -start-[25px] top-1 w-3 h-3 bg-amber-400 rounded-full border-2 border-white"></div>
                         <p class="text-sm font-medium text-amber-700">İade talebi inceleniyor</p>
                         <p class="text-xs text-gray-400 mt-1" x-text="selectedOrder.refundReason || 'Satıcı tarafından inceleniyor.'"></p>
                       </div>
@@ -859,7 +859,7 @@ function renderAllOrders(): string {
                     <!-- Refund: Approved -->
                     <template x-if="selectedOrder.refundStatus === 'Approved'">
                       <div class="relative">
-                        <div class="absolute -left-[25px] top-1 w-3 h-3 bg-purple-500 rounded-full border-2 border-white"></div>
+                        <div class="absolute -start-[25px] top-1 w-3 h-3 bg-purple-500 rounded-full border-2 border-white"></div>
                         <p class="text-sm font-medium text-purple-700">İade onaylandı</p>
                         <p class="text-xs text-gray-400 mt-1">
                           <span x-text="selectedOrder.currency + ' ' + Number(selectedOrder.total).toLocaleString('tr-TR', {minimumFractionDigits: 2})"></span> tutarında iade satıcı tarafından onaylandı.
@@ -869,7 +869,7 @@ function renderAllOrders(): string {
                     <!-- Refund: Rejected -->
                     <template x-if="selectedOrder.refundStatus === 'Rejected'">
                       <div class="relative">
-                        <div class="absolute -left-[25px] top-1 w-3 h-3 bg-red-400 rounded-full border-2 border-white"></div>
+                        <div class="absolute -start-[25px] top-1 w-3 h-3 bg-red-400 rounded-full border-2 border-white"></div>
                         <p class="text-sm font-medium text-red-600">İade talebi reddedildi</p>
                         <p class="text-xs text-gray-400 mt-1">Satıcı iade talebini reddetti.</p>
                       </div>
@@ -992,10 +992,10 @@ function renderAllOrders(): string {
                   <table class="w-full text-sm">
                     <thead>
                       <tr class="border-b border-gray-200">
-                        <th class="text-left text-xs font-semibold text-gray-500 uppercase pb-3 pr-4">${t("orders.date")}</th>
-                        <th class="text-left text-xs font-semibold text-gray-500 uppercase pb-3 pr-4">${t("orders.method")}</th>
-                        <th class="text-right text-xs font-semibold text-gray-500 uppercase pb-3 pr-4">${t("orders.amount")}</th>
-                        <th class="text-right text-xs font-semibold text-gray-500 uppercase pb-3">${t("orders.status")}</th>
+                        <th class="text-start text-xs font-semibold text-gray-500 uppercase pb-3 pe-4">${t("orders.date")}</th>
+                        <th class="text-start text-xs font-semibold text-gray-500 uppercase pb-3 pe-4">${t("orders.method")}</th>
+                        <th class="text-end text-xs font-semibold text-gray-500 uppercase pb-3 pe-4">${t("orders.amount")}</th>
+                        <th class="text-end text-xs font-semibold text-gray-500 uppercase pb-3">${t("orders.status")}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -1006,10 +1006,10 @@ function renderAllOrders(): string {
                       </template>
                       <template x-for="rec in paymentRecords" :key="rec.name">
                         <tr class="border-b border-gray-100">
-                          <td class="py-3 pr-4 text-gray-700" x-text="rec.payment_date ? new Date(rec.payment_date).toLocaleDateString('tr-TR') : '-'"></td>
-                          <td class="py-3 pr-4 text-gray-700" x-text="rec.method || '-'"></td>
-                          <td class="py-3 pr-4 text-right font-medium text-gray-900" x-text="(rec.currency || 'USD') + ' ' + Number(rec.amount || 0).toFixed(2)"></td>
-                          <td class="py-3 text-right">
+                          <td class="py-3 pe-4 text-gray-700" x-text="rec.payment_date ? new Date(rec.payment_date).toLocaleDateString('tr-TR') : '-'"></td>
+                          <td class="py-3 pe-4 text-gray-700" x-text="rec.method || '-'"></td>
+                          <td class="py-3 pe-4 text-end font-medium text-gray-900" x-text="(rec.currency || 'USD') + ' ' + Number(rec.amount || 0).toFixed(2)"></td>
+                          <td class="py-3 text-end">
                             <span class="inline-flex px-2 py-0.5 text-xs font-medium rounded-full"
                                   :class="rec.status === 'Completed' ? 'bg-green-50 text-green-700' : rec.status === 'Failed' ? 'bg-red-50 text-red-700' : 'bg-amber-50 text-amber-700'"
                                   x-text="rec.status"></span>
@@ -1024,10 +1024,10 @@ function renderAllOrders(): string {
                   <table class="w-full text-sm">
                     <thead>
                       <tr class="border-b border-gray-200">
-                        <th class="text-left text-xs font-semibold text-gray-500 uppercase pb-3 pr-4">${t("orders.date")}</th>
-                        <th class="text-left text-xs font-semibold text-gray-500 uppercase pb-3 pr-4">${t("orders.reason")}</th>
-                        <th class="text-right text-xs font-semibold text-gray-500 uppercase pb-3 pr-4">${t("orders.amount")}</th>
-                        <th class="text-right text-xs font-semibold text-gray-500 uppercase pb-3">${t("orders.status")}</th>
+                        <th class="text-start text-xs font-semibold text-gray-500 uppercase pb-3 pe-4">${t("orders.date")}</th>
+                        <th class="text-start text-xs font-semibold text-gray-500 uppercase pb-3 pe-4">${t("orders.reason")}</th>
+                        <th class="text-end text-xs font-semibold text-gray-500 uppercase pb-3 pe-4">${t("orders.amount")}</th>
+                        <th class="text-end text-xs font-semibold text-gray-500 uppercase pb-3">${t("orders.status")}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -1038,10 +1038,10 @@ function renderAllOrders(): string {
                       </template>
                       <template x-for="rec in refundRecords" :key="rec.name">
                         <tr class="border-b border-gray-100">
-                          <td class="py-3 pr-4 text-gray-700" x-text="rec.payment_date ? new Date(rec.payment_date).toLocaleDateString('tr-TR') : '-'"></td>
-                          <td class="py-3 pr-4 text-gray-700" x-text="rec.reason || '-'"></td>
-                          <td class="py-3 pr-4 text-right font-medium text-red-600" x-text="(rec.currency || 'USD') + ' -' + Number(rec.amount || 0).toFixed(2)"></td>
-                          <td class="py-3 text-right">
+                          <td class="py-3 pe-4 text-gray-700" x-text="rec.payment_date ? new Date(rec.payment_date).toLocaleDateString('tr-TR') : '-'"></td>
+                          <td class="py-3 pe-4 text-gray-700" x-text="rec.reason || '-'"></td>
+                          <td class="py-3 pe-4 text-end font-medium text-red-600" x-text="(rec.currency || 'USD') + ' -' + Number(rec.amount || 0).toFixed(2)"></td>
+                          <td class="py-3 text-end">
                             <span class="inline-flex px-2 py-0.5 text-xs font-medium rounded-full"
                                   :class="rec.status === 'Refunded' ? 'bg-purple-50 text-purple-700' : 'bg-amber-50 text-amber-700'"
                                   x-text="rec.status"></span>
@@ -1145,9 +1145,9 @@ function renderAllOrders(): string {
                 <div class="mb-4">
                   <label class="block text-xs font-semibold text-gray-600 mb-1.5">İade tutarı</label>
                   <div class="relative">
-                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-gray-400" x-text="selectedOrder?.currency || 'TRY'"></span>
+                    <span class="absolute start-3 top-1/2 -translate-y-1/2 text-xs text-gray-400" x-text="selectedOrder?.currency || 'TRY'"></span>
                     <input type="text" :value="Number(refundForm.amount).toLocaleString('tr-TR', {minimumFractionDigits: 2})" readonly
-                      class="th-input th-input-md pl-12" aria-disabled="true" />
+                      class="th-input th-input-md ps-12" aria-disabled="true" />
                   </div>
                 </div>
                 <!-- Reason -->
@@ -1436,12 +1436,12 @@ function renderAllOrders(): string {
                     <div class="space-y-3">
                       <div class="flex items-start justify-between gap-3">
                         <span class="text-xs text-amber-700 font-medium w-28 shrink-0 pt-0.5">Hesap Sahibi</span>
-                        <span class="text-sm font-semibold text-gray-900 text-right" x-text="sellerAccountHolder || sellerName || '—'"></span>
+                        <span class="text-sm font-semibold text-gray-900 text-end" x-text="sellerAccountHolder || sellerName || '—'"></span>
                       </div>
                       <div class="border-t border-amber-200"></div>
                       <div class="flex items-start justify-between gap-3">
                         <span class="text-xs text-amber-700 font-medium w-28 shrink-0 pt-0.5">Banka Adı</span>
-                        <span class="text-sm font-semibold text-gray-900 text-right" x-text="sellerBankName || '—'"></span>
+                        <span class="text-sm font-semibold text-gray-900 text-end" x-text="sellerBankName || '—'"></span>
                       </div>
                       <div class="border-t border-amber-200"></div>
                       <div class="flex items-start justify-between gap-3">
@@ -1519,13 +1519,13 @@ function renderAllOrders(): string {
                   </template>
                   <!-- Remove button -->
                   <button x-show="hasFile" @click.stop="removeFile()"
-                    class="absolute top-1 right-1 w-5 h-5 flex items-center justify-center bg-red-500 text-white rounded-full text-xs cursor-pointer border-none hover:bg-red-600 transition-colors">
+                    class="absolute top-1 end-1 w-5 h-5 flex items-center justify-center bg-red-500 text-white rounded-full text-xs cursor-pointer border-none hover:bg-red-600 transition-colors">
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
                   </button>
                 </div>
 
                 <!-- Upload Info -->
-                <div class="flex-1 text-left max-md:text-center">
+                <div class="flex-1 text-start max-md:text-center">
                   <p class="text-sm text-gray-600 mb-1">
                     <span class="text-amber-600 font-semibold">*</span>
                     ${t("orders.remitUploadHint")}
@@ -1562,7 +1562,7 @@ function renderAllOrders(): string {
                 class="px-6 py-2.5 text-sm font-medium text-white bg-(--color-cta-primary) rounded-lg cursor-pointer transition-all hover:bg-(--color-cta-primary-hover)"
                 :class="!hasFile ? 'opacity-40 cursor-not-allowed! scale-[0.98]' : 'hover:shadow-md'">
                 ${t("orders.remitContinue")}
-                <svg class="w-4 h-4 inline ml-1 -mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M9 5l7 7-7 7"/></svg>
+                <svg class="w-4 h-4 inline ms-1 -mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M9 5l7 7-7 7"/></svg>
               </button>
             </div>
           </div>
@@ -1666,7 +1666,7 @@ function renderAllOrders(): string {
                 <div class="flex items-center justify-between mt-6 gap-3">
                   <button @click="step = 'upload'"
                     class="px-4 py-2.5 text-sm text-gray-600 bg-transparent border border-gray-300 rounded-lg cursor-pointer font-medium transition-colors hover:bg-gray-50">
-                    <svg class="w-4 h-4 inline mr-1 -mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M15 19l-7-7 7-7"/></svg>
+                    <svg class="w-4 h-4 inline me-1 -mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M15 19l-7-7 7-7"/></svg>
                     ${t("common.back")}
                   </button>
                   <button @click="submitRemittance()"
@@ -1735,22 +1735,22 @@ function renderRefunds(): string {
             <table class="w-full text-sm border-collapse">
               <thead>
                 <tr class="border-b border-gray-200">
-                  <th class="text-left text-xs font-semibold text-gray-500 uppercase pb-3 pr-4">Sipariş No</th>
-                  <th class="text-left text-xs font-semibold text-gray-500 uppercase pb-3 pr-4">Tarih</th>
-                  <th class="text-left text-xs font-semibold text-gray-500 uppercase pb-3 pr-4">Satıcı</th>
-                  <th class="text-left text-xs font-semibold text-gray-500 uppercase pb-3 pr-4">Sebep</th>
-                  <th class="text-right text-xs font-semibold text-gray-500 uppercase pb-3 pr-4">İade Tutarı</th>
+                  <th class="text-start text-xs font-semibold text-gray-500 uppercase pb-3 pe-4">Sipariş No</th>
+                  <th class="text-start text-xs font-semibold text-gray-500 uppercase pb-3 pe-4">Tarih</th>
+                  <th class="text-start text-xs font-semibold text-gray-500 uppercase pb-3 pe-4">Satıcı</th>
+                  <th class="text-start text-xs font-semibold text-gray-500 uppercase pb-3 pe-4">Sebep</th>
+                  <th class="text-end text-xs font-semibold text-gray-500 uppercase pb-3 pe-4">İade Tutarı</th>
                   <th class="text-center text-xs font-semibold text-gray-500 uppercase pb-3">Durum</th>
                 </tr>
               </thead>
               <tbody>
                 <template x-for="r in refunds" :key="r.order_number">
                   <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                    <td class="py-3 pr-4 font-mono text-xs font-semibold text-gray-800" x-text="r.order_number"></td>
-                    <td class="py-3 pr-4 text-gray-500 text-xs" x-text="r.refund_requested_at || r.order_date"></td>
-                    <td class="py-3 pr-4 text-gray-700 text-xs" x-text="r.seller_name || '-'"></td>
-                    <td class="py-3 pr-4 text-gray-600 text-xs max-w-[200px] truncate" :title="r.refund_reason" x-text="r.refund_reason || '-'"></td>
-                    <td class="py-3 pr-4 text-right font-semibold text-gray-900 text-xs" x-text="r.refund_amount > 0 ? r.currency + ' ' + Number(r.refund_amount).toLocaleString('tr-TR', {minimumFractionDigits: 2}) : '-'"></td>
+                    <td class="py-3 pe-4 font-mono text-xs font-semibold text-gray-800" x-text="r.order_number"></td>
+                    <td class="py-3 pe-4 text-gray-500 text-xs" x-text="r.refund_requested_at || r.order_date"></td>
+                    <td class="py-3 pe-4 text-gray-700 text-xs" x-text="r.seller_name || '-'"></td>
+                    <td class="py-3 pe-4 text-gray-600 text-xs max-w-[200px] truncate" :title="r.refund_reason" x-text="r.refund_reason || '-'"></td>
+                    <td class="py-3 pe-4 text-end font-semibold text-gray-900 text-xs" x-text="r.refund_amount > 0 ? r.currency + ' ' + Number(r.refund_amount).toLocaleString('tr-TR', {minimumFractionDigits: 2}) : '-'"></td>
                     <td class="py-3 text-center">
                       <span class="inline-flex px-2.5 py-0.5 text-xs font-medium rounded-full" :class="statusClass(r.refund_status)" x-text="r.refund_status_label"></span>
                     </td>
@@ -1798,7 +1798,7 @@ function renderReviews(): string {
     <div class="flex justify-end px-7 max-sm:px-3 py-3">
       <div class="flex border border-(--color-border-medium,#d1d5db) rounded overflow-hidden w-full max-w-[320px] max-sm:max-w-full">
         <input type="text" placeholder="${t("orders.reviewSearchPlaceholder")}" class="th-input th-input-sm th-input-borderless flex-1 min-w-0" />
-        <button class="th-no-press flex items-center justify-center w-8 h-8 shrink-0 border-none border-l border-l-(--color-border-medium,#d1d5db) bg-(--color-surface-muted,#fafafa) text-(--color-text-muted,#666) cursor-pointer hover:bg-(--color-border-light) hover:text-(--color-text-heading,#111827)" aria-label="${t("common.search")}">
+        <button class="th-no-press flex items-center justify-center w-8 h-8 shrink-0 border-none border-s border-s-(--color-border-medium,#d1d5db) bg-(--color-surface-muted,#fafafa) text-(--color-text-muted,#666) cursor-pointer hover:bg-(--color-border-light) hover:text-(--color-text-heading,#111827)" aria-label="${t("common.search")}">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/>
           </svg>
@@ -1880,7 +1880,7 @@ function renderCoupons(): string {
                   </div>
                 </div>
                 <!-- Value display -->
-                <div class="flex-shrink-0 text-right">
+                <div class="flex-shrink-0 text-end">
                   <span class="text-lg font-bold" :class="coupon.status === 'available' ? 'text-(--color-text-heading,#111827)' : 'text-(--color-text-muted,#666)'"
                     x-text="coupon.type === 'shipping' ? '${t("orders.free")}' : (coupon.type === 'percent' ? '%' + coupon.value : '${getCurrencySymbol()}' + coupon.value)"></span>
                 </div>

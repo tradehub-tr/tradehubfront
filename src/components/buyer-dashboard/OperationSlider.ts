@@ -118,7 +118,7 @@ export function OperationSlider(props: OperationSliderProps): string {
                     <span class="text-[clamp(0.75rem,0.7rem+0.2vw,0.875rem)] font-normal text-(--color-text-heading,#111827) whitespace-nowrap overflow-hidden text-ellipsis min-w-0" x-text="banner.title"></span>
                     <a :href="banner.link_href" class="text-[clamp(0.75rem,0.7rem+0.2vw,0.875rem)] text-(--color-text-heading,#111827) no-underline inline-flex items-center whitespace-nowrap shrink-0 transition-colors duration-150 hover:text-(--color-cta-primary,#333333)">
                       <span x-text="banner.link_text"></span>
-                      <svg class="w-3 h-3 ml-1 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <svg class="w-3 h-3 ms-1 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
                       </svg>
                     </a>
@@ -136,7 +136,7 @@ export function OperationSlider(props: OperationSliderProps): string {
             <button
               type="button"
               aria-label="${t("dashboard.prevNotification")}"
-              class="operation-slider__prev absolute top-1/2 -translate-y-1/2 left-1 z-10 w-6 h-6 flex items-center justify-center bg-white rounded-full shadow-sm border-none text-(--color-text-muted,#666666) cursor-pointer opacity-0 pointer-events-none transition-all duration-200 group-hover/opslider:opacity-100 group-hover/opslider:pointer-events-auto hover:text-(--color-text-heading,#111827)"
+              class="operation-slider__prev absolute top-1/2 -translate-y-1/2 start-1 z-10 w-6 h-6 flex items-center justify-center bg-white rounded-full shadow-sm border-none text-(--color-text-muted,#666666) cursor-pointer opacity-0 pointer-events-none transition-all duration-200 group-hover/opslider:opacity-100 group-hover/opslider:pointer-events-auto hover:text-(--color-text-heading,#111827)"
             >
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
@@ -145,7 +145,7 @@ export function OperationSlider(props: OperationSliderProps): string {
             <button
               type="button"
               aria-label="${t("dashboard.nextNotification")}"
-              class="operation-slider__next absolute top-1/2 -translate-y-1/2 right-1 z-10 w-6 h-6 flex items-center justify-center bg-white rounded-full shadow-sm border-none text-(--color-text-muted,#666666) cursor-pointer opacity-0 pointer-events-none transition-all duration-200 group-hover/opslider:opacity-100 group-hover/opslider:pointer-events-auto hover:text-(--color-text-heading,#111827)"
+              class="operation-slider__next absolute top-1/2 -translate-y-1/2 end-1 z-10 w-6 h-6 flex items-center justify-center bg-white rounded-full shadow-sm border-none text-(--color-text-muted,#666666) cursor-pointer opacity-0 pointer-events-none transition-all duration-200 group-hover/opslider:opacity-100 group-hover/opslider:pointer-events-auto hover:text-(--color-text-heading,#111827)"
             >
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>

@@ -47,7 +47,7 @@ function noticeContent(n: HeaderNoticeItem): string {
     lang === "en" && n.link_text_en && n.link_text_en.trim() ? n.link_text_en : n.link_text_tr;
   const linkHtml =
     linkText && n.link_href
-      ? `<a href="${escapeAttr(sanitizeHref(n.link_href))}" class="ml-2 underline text-[#ffb800] hover:text-white">${escapeText(linkText)}</a>`
+      ? `<a href="${escapeAttr(sanitizeHref(n.link_href))}" class="ms-2 underline text-[#ffb800] hover:text-white">${escapeText(linkText)}</a>`
       : "";
   return `<span class="inline-flex items-center gap-2"><span>${escapeText(message)}</span>${linkHtml}</span>`;
 }

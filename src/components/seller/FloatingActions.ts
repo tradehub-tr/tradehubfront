@@ -8,14 +8,14 @@ import { t } from "../../i18n";
 
 /**
  * Renders floating action buttons (Contact Supplier + Chat Now)
- * Desktop: fixed right-0 top-[40%], vertical stack, w-[56px] h-[80px]
+ * Desktop: fixed end-0 top-[40%], vertical stack, w-[56px] h-[80px]
  * Tablet (480-768px): w-[44px] h-[60px], icon-only (CSS handles span hide)
  * Mobile (<480px): bottom bar, horizontal, full-width, h-[48px] (CSS handles transform)
  */
 export function FloatingActions(data: FloatingActionsData): string {
   return `
     <div id="floating-actions"
-         class="floating-actions fixed right-0 top-[40%] z-(--z-fixed) flex flex-col max-[480px]:bottom-0 max-[480px]:left-0 max-[480px]:right-0 max-[480px]:!top-auto max-[480px]:flex-row max-[480px]:z-[var(--z-fixed,40)]"
+         class="floating-actions fixed end-0 top-[40%] z-(--z-fixed) flex flex-col max-[480px]:bottom-0 max-[480px]:start-0 max-[480px]:end-0 max-[480px]:!top-auto max-[480px]:flex-row max-[480px]:z-[var(--z-fixed,40)]"
          aria-label="${t("seller.sf.quickAccessButtons")}"
          role="group">
       ${data.buttons
@@ -23,14 +23,14 @@ export function FloatingActions(data: FloatingActionsData): string {
           const isFirst = index === 0;
           const isLast = index === data.buttons.length - 1;
 
-          // Spec: Contact (first) gets rounded-tl + rounded-bl, Chat (last only) gets rounded-bl only
+          // Spec: Contact (first) gets rounded-ss + rounded-bl, Chat (last only) gets rounded-es only
           let roundedClasses = "";
           if (isFirst && isLast) {
-            roundedClasses = "rounded-tl-(--radius-md) rounded-bl-(--radius-md)";
+            roundedClasses = "rounded-ss-(--radius-md) rounded-es-(--radius-md)";
           } else if (isFirst) {
-            roundedClasses = "rounded-tl-(--radius-md)";
+            roundedClasses = "rounded-ss-(--radius-md)";
           } else if (isLast) {
-            roundedClasses = "rounded-bl-(--radius-md)";
+            roundedClasses = "rounded-es-(--radius-md)";
           }
 
           // Split label for 2-line display on desktop (hidden on tablet via CSS, inline on mobile via CSS)

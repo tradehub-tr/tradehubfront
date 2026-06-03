@@ -14,7 +14,7 @@ export function TopRankingCategoryTabs(): string {
       <!-- Left arrow (desktop only) -->
       <button
         type="button"
-        class="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 w-7 h-7 items-center justify-center rounded-full bg-surface shadow border border-border-default text-text-tertiary hover:text-text-primary transition-all"
+        class="hidden lg:flex absolute start-0 top-1/2 -translate-y-1/2 z-10 w-7 h-7 items-center justify-center rounded-full bg-surface shadow border border-border-default text-text-tertiary hover:text-text-primary transition-all"
         x-show="canScrollLeft"
         x-transition
         @click="scrollTabs('left')"
@@ -72,7 +72,7 @@ export function TopRankingCategoryTabs(): string {
       <!-- Right arrow (desktop only) -->
       <button
         type="button"
-        class="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 w-7 h-7 items-center justify-center rounded-full bg-surface shadow border border-border-default text-text-tertiary hover:text-text-primary transition-all"
+        class="hidden lg:flex absolute end-0 top-1/2 -translate-y-1/2 z-10 w-7 h-7 items-center justify-center rounded-full bg-surface shadow border border-border-default text-text-tertiary hover:text-text-primary transition-all"
         x-show="canScrollRight"
         x-transition
         @click="scrollTabs('right')"
@@ -109,7 +109,7 @@ export function TopRankingCategoryTabs(): string {
           <!-- "All" option -->
           <button
             type="button"
-            class="flex items-center w-full px-5 py-4 text-left transition-colors border-b border-gray-50 active:bg-gray-50"
+            class="flex items-center w-full px-5 py-4 text-start transition-colors border-b border-gray-50 active:bg-gray-50"
             @click="setTab('all'); showTabSheet = false"
           >
             <span
@@ -131,7 +131,7 @@ export function TopRankingCategoryTabs(): string {
           <template x-for="cat in apiCategories" :key="'sheet-' + cat.slug">
             <a
               :href="'/pages/top-ranking-category.html?cat=' + encodeURIComponent(cat.slug) + '&sort=' + activeSort + '&page=1'"
-              class="flex items-center w-full px-5 py-4 text-left transition-colors border-b border-gray-50 active:bg-gray-50"
+              class="flex items-center w-full px-5 py-4 text-start transition-colors border-b border-gray-50 active:bg-gray-50"
             >
               <span class="flex-1 text-[15px] text-gray-600" x-text="cat.name"></span>
               <span class="flex-shrink-0 w-5 h-5 rounded-full border-2 border-gray-300 flex items-center justify-center transition-colors">

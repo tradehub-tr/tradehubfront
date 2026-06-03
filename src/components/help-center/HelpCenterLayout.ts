@@ -35,7 +35,7 @@ export function HelpCenterLayout(): string {
           <!-- Search bar -->
           <div class="relative w-full max-w-[580px]">
             <form @submit.prevent="doSearch()" class="flex items-center bg-white rounded-lg shadow-2xl overflow-hidden border border-white/20">
-              <div class="flex items-center pl-4 text-gray-400">
+              <div class="flex items-center ps-4 text-gray-400">
                 <!-- Search icon -->
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35m1.6-5.15a6.75 6.75 0 1 1-13.5 0 6.75 6.75 0 0 1 13.5 0Z"/>

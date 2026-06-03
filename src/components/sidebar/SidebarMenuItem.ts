@@ -117,7 +117,7 @@ export function renderSidebarMenuItem({
         ${i18nKey ? `data-i18n-aria-label="${i18nKey}"` : ""}
       >
         <span class="w-4 h-4 flex-shrink-0">${icon}</span>
-        ${item.badge ? `<span class="absolute -top-1 -right-1 inline-flex items-center justify-center w-4 h-4 text-[9px] font-bold text-white bg-red-500 rounded-full">${item.badge}</span>` : ""}
+        ${item.badge ? `<span class="absolute -top-1 -end-1 inline-flex items-center justify-center w-4 h-4 text-[9px] font-bold text-white bg-red-500 rounded-full">${item.badge}</span>` : ""}
       </a>
       <div id="tooltip-sidebar-${item.id}" role="tooltip" class="absolute z-50 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
         <span${i18nKey ? ` data-i18n="${i18nKey}"` : ""}>${item.label}</span>

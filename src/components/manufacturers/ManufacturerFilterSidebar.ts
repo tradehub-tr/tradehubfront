@@ -113,7 +113,7 @@ export function ManufacturerFilterSidebar(): string {
             "countries",
             c.code,
             c.name,
-            `<span class="inline-block w-5 h-3 bg-gray-100 rounded-sm text-[8px] text-gray-500 leading-3 text-center font-bold mr-1">${c.code}</span>`
+            `<span class="inline-block w-5 h-3 bg-gray-100 rounded-sm text-[8px] text-gray-500 leading-3 text-center font-bold me-1">${c.code}</span>`
           )
         )
         .join("")}

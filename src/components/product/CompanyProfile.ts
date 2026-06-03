@@ -35,21 +35,21 @@ export function CompanyProfile(): string {
 
       <!-- 2. Stat Counters -->
       <div class="grid grid-cols-3 gap-4 mb-6 max-sm:grid-cols-1 max-[374px]:gap-2 max-[374px]:mb-4">
-        <div class="flex flex-col items-center text-center p-4 rounded-lg border max-[374px]:p-3 max-[374px]:flex-row max-[374px]:gap-2 max-[374px]:text-left" style="border-color: var(--pd-spec-border, #e5e5e5); background: var(--color-surface, #ffffff);">
+        <div class="flex flex-col items-center text-center p-4 rounded-lg border max-[374px]:p-3 max-[374px]:flex-row max-[374px]:gap-2 max-[374px]:text-start" style="border-color: var(--pd-spec-border, #e5e5e5); background: var(--color-surface, #ffffff);">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color: var(--pd-rating-text-color, #6b7280); margin-bottom: 6px;">
             <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
           </svg>
           <span class="text-xl font-extrabold" style="color: var(--pd-title-color, #111827);">${s.responseTime}</span>
           <span class="text-xs mt-1" style="color: var(--pd-rating-text-color, #6b7280);">${t("product.responseTime")}</span>
         </div>
-        <div class="flex flex-col items-center text-center p-4 rounded-lg border max-[374px]:p-3 max-[374px]:flex-row max-[374px]:gap-2 max-[374px]:text-left" style="border-color: var(--pd-spec-border, #e5e5e5); background: var(--color-surface, #ffffff);">
+        <div class="flex flex-col items-center text-center p-4 rounded-lg border max-[374px]:p-3 max-[374px]:flex-row max-[374px]:gap-2 max-[374px]:text-start" style="border-color: var(--pd-spec-border, #e5e5e5); background: var(--color-surface, #ffffff);">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color: var(--pd-rating-text-color, #6b7280); margin-bottom: 6px;">
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
           </svg>
           <span class="text-xl font-extrabold" style="color: var(--pd-title-color, #111827);">${s.responseRate}</span>
           <span class="text-xs mt-1" style="color: var(--pd-rating-text-color, #6b7280);">${t("product.responseRate")}</span>
         </div>
-        <div class="flex flex-col items-center text-center p-4 rounded-lg border max-[374px]:p-3 max-[374px]:flex-row max-[374px]:gap-2 max-[374px]:text-left" style="border-color: var(--pd-spec-border, #e5e5e5); background: var(--color-surface, #ffffff);">
+        <div class="flex flex-col items-center text-center p-4 rounded-lg border max-[374px]:p-3 max-[374px]:flex-row max-[374px]:gap-2 max-[374px]:text-start" style="border-color: var(--pd-spec-border, #e5e5e5); background: var(--color-surface, #ffffff);">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color: var(--pd-rating-text-color, #6b7280); margin-bottom: 6px;">
             <rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
           </svg>

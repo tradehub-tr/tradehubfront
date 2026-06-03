@@ -170,7 +170,7 @@ export function ProductInfo(): string {
       <div id="pd-info-scrollable" class="p-5 flex flex-col scrollbar-hide [.pd-sticky_&]:flex-1 [.pd-sticky_&]:overflow-y-auto [.pd-sticky_&]:min-h-0">
         <!-- Wholesale Tab -->
         <div id="pd-card-tabs" class="flex -mx-5 mt-[-20px] p-0 bg-[var(--color-surface-raised,#f5f5f5)] border-b border-[var(--color-border-default,#e5e5e5)]">
-          <button type="button" class="pd-card-tab flex-1 px-4 py-3.5 text-[15px] font-semibold text-center bg-transparent border-0 border-t-[3px] border-t-transparent cursor-pointer text-[var(--color-text-muted,#666)] relative transition-[background,color] duration-150 [&:not(:first-child)]:border-l [&:not(:first-child)]:border-l-[var(--color-border-default,#e5e5e5)] [&.active]:text-[var(--color-text-primary)] [&.active]:font-bold [&.active]:bg-[var(--color-surface,#fff)] [&.active]:border-t-[var(--pd-tab-active-border,#cc9900)] active">${t("product.wholesaleSales")}</button>
+          <button type="button" class="pd-card-tab flex-1 px-4 py-3.5 text-[15px] font-semibold text-center bg-transparent border-0 border-t-[3px] border-t-transparent cursor-pointer text-[var(--color-text-muted,#666)] relative transition-[background,color] duration-150 [&:not(:first-child)]:border-s [&:not(:first-child)]:border-s-[var(--color-border-default,#e5e5e5)] [&.active]:text-[var(--color-text-primary)] [&.active]:font-bold [&.active]:bg-[var(--color-surface,#fff)] [&.active]:border-t-[var(--pd-tab-active-border,#cc9900)] active">${t("product.wholesaleSales")}</button>
         </div>
 
         <!-- Ready to Ship Badge -->

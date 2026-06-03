@@ -94,7 +94,7 @@ export function RegisterPage(initialStep: RegisterStep = "account-type"): string
       <div id="register-step-account-type" class="register-step"
         x-show="currentStep === 'account-type'"${initialStep !== "account-type" ? " x-cloak" : ""}>
         <!-- Header -->
-        <div class="mb-6 text-center lg:text-left">
+        <div class="mb-6 text-center lg:text-start">
           <h1 class="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white mb-2" data-i18n="auth.register.title">
             ${t("auth.register.title")}
           </h1>
@@ -119,7 +119,7 @@ export function RegisterPage(initialStep: RegisterStep = "account-type"): string
         <!-- Login Link -->
         <div class="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
           <span data-i18n="auth.register.alreadyHave">${t("auth.register.alreadyHave")}</span>
-          <a href="${baseUrl}pages/auth/login.html" id="register-login-link" class="ml-1 font-medium text-gray-900 dark:text-white hover:underline">
+          <a href="${baseUrl}pages/auth/login.html" id="register-login-link" class="ms-1 font-medium text-gray-900 dark:text-white hover:underline">
             <span data-i18n="auth.register.signIn">${t("auth.register.signIn")}</span>
           </a>
         </div>
@@ -129,7 +129,7 @@ export function RegisterPage(initialStep: RegisterStep = "account-type"): string
       <div id="register-step-email" class="register-step"
         x-show="currentStep === 'email'"${initialStep !== "email" ? " x-cloak" : ""}>
         <!-- Header -->
-        <div class="mb-6 text-center lg:text-left">
+        <div class="mb-6 text-center lg:text-start">
           <h1 class="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white mb-2" data-i18n="auth.register.emailTitle">
             ${t("auth.register.emailTitle")}
           </h1>
@@ -183,7 +183,7 @@ export function RegisterPage(initialStep: RegisterStep = "account-type"): string
         </form>
 
         <!-- Back Button -->
-        <div class="mt-4 text-center lg:text-left">
+        <div class="mt-4 text-center lg:text-start">
           <button
             type="button"
             id="register-email-back"

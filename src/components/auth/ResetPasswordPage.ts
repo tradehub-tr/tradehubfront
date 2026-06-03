@@ -67,7 +67,7 @@ function StepForm(): string {
             name="new-password"
             x-ref="newPassword"
             @input="onPasswordInput()"
-            class="th-input th-input-lg pr-12"
+            class="th-input th-input-lg pe-12"
             placeholder="${t("auth.reset.newPassword")}" data-i18n-placeholder="auth.reset.newPassword"
             required
             autocomplete="new-password"
@@ -75,7 +75,7 @@ function StepForm(): string {
           <button
             type="button"
             @click="showPassword = !showPassword"
-            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+            class="absolute end-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
             aria-label="${t("auth.forgot.showHidePassword")}" data-i18n-aria-label="auth.forgot.showHidePassword"
           >
             <svg x-show="!showPassword" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -89,7 +89,7 @@ function StepForm(): string {
         </div>
 
         <!-- Password Requirements -->
-        <ul class="space-y-1.5 text-sm text-gray-500 list-disc pl-5">
+        <ul class="space-y-1.5 text-sm text-gray-500 list-disc ps-5">
           <li :style="reqStyle(reqMinLength)" data-i18n="auth.setup.minChars">${t("auth.setup.minChars")}</li>
           <li :style="reqStyle(reqUppercase)" data-i18n="auth.setup.uppercase">${t("auth.setup.uppercase")}</li>
           <li :style="reqStyle(reqLowercase)" data-i18n="auth.setup.lowercase">${t("auth.setup.lowercase")}</li>

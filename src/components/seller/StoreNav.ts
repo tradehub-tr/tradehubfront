@@ -18,7 +18,7 @@ export function StoreNav(data: StoreNavData): string {
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
             </svg>
           </button>
-          <div class="store-nav__dropdown store-nav__dropdown--products absolute top-full left-0 bg-[var(--store-nav-bg)] text-[var(--store-nav-text,#ffffff)] shadow-(--shadow-md) rounded-b-(--radius-md) min-w-[280px] max-h-[400px] overflow-y-auto z-(--z-dropdown)"
+          <div class="store-nav__dropdown store-nav__dropdown--products absolute top-full start-0 bg-[var(--store-nav-bg)] text-[var(--store-nav-text,#ffffff)] shadow-(--shadow-md) rounded-b-(--radius-md) min-w-[280px] max-h-[400px] overflow-y-auto z-(--z-dropdown)"
                x-show="open" x-transition.opacity.duration.200ms style="display: none;"
                role="menu"
                aria-label="${t("seller.sf.productCategories")}">
@@ -61,7 +61,7 @@ export function StoreNav(data: StoreNavData): string {
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
             </svg>
           </button>
-          <div class="store-nav__dropdown store-nav__dropdown--company absolute top-full left-0 bg-[var(--store-nav-bg)] text-[var(--store-nav-text,#ffffff)] shadow-(--shadow-md) rounded-b-(--radius-md) min-w-[200px] z-(--z-dropdown)"
+          <div class="store-nav__dropdown store-nav__dropdown--company absolute top-full start-0 bg-[var(--store-nav-bg)] text-[var(--store-nav-text,#ffffff)] shadow-(--shadow-md) rounded-b-(--radius-md) min-w-[200px] z-(--z-dropdown)"
                x-show="open" x-transition.opacity.duration.200ms style="display: none;"
                role="menu"
                aria-label="${t("seller.sf.companyProfileMenu")}">
@@ -191,10 +191,10 @@ export function StoreNav(data: StoreNavData): string {
         <!-- Desktop Search -->
         <div class="store-nav__search relative hidden xl:block">
           <input type="text"
-                 class="th-input th-input-sm store-nav__search-input pr-9 w-[250px]"
+                 class="th-input th-input-sm store-nav__search-input pe-9 w-[250px]"
                  placeholder="${data.searchPlaceholder}"
                  aria-label="${t("seller.sf.storeSearch")}" />
-          <svg class="store-nav__search-icon absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 cursor-pointer hover:text-primary-500 transition-colors"
+          <svg class="store-nav__search-icon absolute end-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 cursor-pointer hover:text-primary-500 transition-colors"
                fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <circle cx="11" cy="11" r="8"/>
             <path stroke-linecap="round" d="M21 21l-4.35-4.35"/>
@@ -208,10 +208,10 @@ export function StoreNav(data: StoreNavData): string {
         <div class="store-nav__mobile-search px-4 py-3">
           <div class="relative w-full">
             <input type="text"
-                   class="store-nav__search-input w-full bg-gray-50 border border-gray-300 rounded-full px-4 py-2 pr-9 text-[14px] text-[#374151] placeholder-gray-400 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors"
+                   class="store-nav__search-input w-full bg-gray-50 border border-gray-300 rounded-full px-4 py-2 pe-9 text-[14px] text-[#374151] placeholder-gray-400 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors"
                    placeholder="${data.searchPlaceholder}"
                    aria-label="${t("seller.sf.storeSearch")}" />
-            <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
+            <svg class="absolute end-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
                  fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <circle cx="11" cy="11" r="8"/>
               <path stroke-linecap="round" d="M21 21l-4.35-4.35"/>

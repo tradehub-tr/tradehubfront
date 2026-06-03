@@ -42,7 +42,7 @@ export function CookieBanner(): string {
             </div>
 
             <!-- Buttons -->
-            <div class="flex flex-col sm:flex-row gap-2 shrink-0 lg:ml-4">
+            <div class="flex flex-col sm:flex-row gap-2 shrink-0 lg:ms-4">
               <button
                 @click="rejectAll()"
                 class="th-btn-outline px-4 py-2 text-sm font-medium cursor-pointer whitespace-nowrap"

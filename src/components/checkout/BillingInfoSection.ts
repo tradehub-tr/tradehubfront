@@ -76,7 +76,7 @@ export function BillingInfoSection({
             role="tab"
             :aria-selected="type === 'Bireysel'"
             @click="setType('Bireysel')"
-            class="co-billing-toggle-card bg-white border border-[#e8e6e0] rounded-md p-[12px_14px] sm:p-[14px_16px] text-left flex flex-col gap-0.5 sm:gap-1 transition-all cursor-pointer hover:border-[#d5d2c9]"
+            class="co-billing-toggle-card bg-white border border-[#e8e6e0] rounded-md p-[12px_14px] sm:p-[14px_16px] text-start flex flex-col gap-0.5 sm:gap-1 transition-all cursor-pointer hover:border-[#d5d2c9]"
             :class="type === 'Bireysel' ? 'is-active bg-[#fff8e1] border-[#f5b800] shadow-[0_0_0_3px_rgba(245,184,0,0.12)]' : ''"
           >
             <div class="co-bt-title font-semibold text-[12.5px] sm:text-[13.5px] text-[#1a1a1a]" data-i18n="checkout.billingIndividual">${t("checkout.billingIndividual")}</div>
@@ -87,7 +87,7 @@ export function BillingInfoSection({
             role="tab"
             :aria-selected="type === 'Şirket'"
             @click="setType('Şirket')"
-            class="co-billing-toggle-card bg-white border border-[#e8e6e0] rounded-md p-[12px_14px] sm:p-[14px_16px] text-left flex flex-col gap-0.5 sm:gap-1 transition-all cursor-pointer hover:border-[#d5d2c9]"
+            class="co-billing-toggle-card bg-white border border-[#e8e6e0] rounded-md p-[12px_14px] sm:p-[14px_16px] text-start flex flex-col gap-0.5 sm:gap-1 transition-all cursor-pointer hover:border-[#d5d2c9]"
             :class="type === 'Şirket' ? 'is-active bg-[#fff8e1] border-[#f5b800] shadow-[0_0_0_3px_rgba(245,184,0,0.12)]' : ''"
           >
             <div class="co-bt-title font-semibold text-[12.5px] sm:text-[13.5px] text-[#1a1a1a]" data-i18n="checkout.billingCompany">${t("checkout.billingCompany")}</div>

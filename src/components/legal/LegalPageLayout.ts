@@ -60,7 +60,7 @@ export function LegalPageLayout({
                     <li>
                       <button
                         @click="scrollToSection('${s.id}')"
-                        class="w-full text-left text-sm py-1.5 px-2 rounded transition-colors cursor-pointer"
+                        class="w-full text-start text-sm py-1.5 px-2 rounded transition-colors cursor-pointer"
                         :class="activeSection === '${s.id}' ? 'text-primary-600 bg-primary-50 font-medium' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'"
                       >${s.title}</button>
                     </li>
@@ -86,7 +86,7 @@ export function LegalPageLayout({
                   <li>
                     <button
                       @click="scrollToSection('${s.id}'); tocOpen = false"
-                      class="w-full text-left text-sm py-2 px-4 hover:bg-gray-50 transition-colors cursor-pointer"
+                      class="w-full text-start text-sm py-2 px-4 hover:bg-gray-50 transition-colors cursor-pointer"
                       :class="activeSection === '${s.id}' ? 'text-primary-600 font-medium' : 'text-gray-600'"
                     >${s.title}</button>
                   </li>

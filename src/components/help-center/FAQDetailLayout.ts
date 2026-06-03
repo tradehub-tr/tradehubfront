@@ -44,7 +44,7 @@ export function FAQDetailLayout(): string {
               <a
                 :href="'/sss/detay?cat=' + catParam + '&sub=' + sib.key"
                 class="block px-4 py-2.5 text-[13px] border-b border-gray-50 transition-colors"
-                :class="sib.key === subParam ? 'text-primary-600 bg-primary-50 font-semibold border-l-2 border-l-primary-500' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-500'"
+                :class="sib.key === subParam ? 'text-primary-600 bg-primary-50 font-semibold border-s-2 border-s-primary-500' : 'text-gray-600 hover:bg-gray-50 hover:text-primary-500'"
                 x-text="sib.label"
               ></a>
             </template>
@@ -79,7 +79,7 @@ export function FAQDetailLayout(): string {
                 <!-- Question -->
                 <button
                   @click="toggleItem(idx)"
-                  class="w-full flex items-center justify-between gap-3 px-6 py-4 text-left transition-colors"
+                  class="w-full flex items-center justify-between gap-3 px-6 py-4 text-start transition-colors"
                   :class="openItem === idx ? 'bg-primary-50' : 'hover:bg-gray-50'"
                 >
                   <div class="flex items-start gap-3">
@@ -142,14 +142,14 @@ export function FAQDetailLayout(): string {
                   class="px-4 py-1.5 text-sm rounded-full border transition-all"
                   :class="helpful === 'yes' ? 'bg-green-50 border-green-300 text-green-700' : 'border-gray-200 text-gray-500 hover:border-green-300 hover:text-green-600'"
                 >
-                  <span class="mr-1">&uarr;</span> ${t("faqDetail.yes")}
+                  <span class="me-1">&uarr;</span> ${t("faqDetail.yes")}
                 </button>
                 <button
                   @click="helpful = 'no'"
                   class="px-4 py-1.5 text-sm rounded-full border transition-all"
                   :class="helpful === 'no' ? 'bg-red-50 border-red-300 text-red-700' : 'border-gray-200 text-gray-500 hover:border-red-300 hover:text-red-600'"
                 >
-                  <span class="mr-1">&darr;</span> ${t("faqDetail.no")}
+                  <span class="me-1">&darr;</span> ${t("faqDetail.no")}
                 </button>
               </div>
             </div>

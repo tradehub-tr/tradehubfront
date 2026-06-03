@@ -36,7 +36,7 @@ function renderBadge(badge?: string | null): string {
   const label = BADGE_LABELS[badge];
   if (!icon || !label) return "";
   return `
-    <div class="ts-hero-badge absolute top-3 right-3 z-20 inline-flex items-center gap-1 px-2 py-1 rounded-full backdrop-blur-sm"
+    <div class="ts-hero-badge absolute top-3 end-3 z-20 inline-flex items-center gap-1 px-2 py-1 rounded-full backdrop-blur-sm"
          style="background: rgba(251,191,36,0.15); border: 1px solid rgba(251,191,36,0.4); color: #fbbf24; font-size: 10px; font-weight: 800; letter-spacing: 0.3px;">
       ${icon}<span>${label}</span>
     </div>
@@ -186,7 +186,7 @@ export function TailoredSelectionsHero(categories: TailoredCategory[]): string {
           <!-- Navigation arrows (hidden on mobile — swipe works) -->
           <button
             aria-label="Previous categories"
-            class="ts-hero-prev swiper-button absolute left-4 top-1/2 z-10 h-10 w-10 -translate-y-1/2 hidden md:flex items-center justify-center rounded-full bg-white/90 text-gray-700 shadow-lg transition-all duration-200 hover:bg-white hover:text-gray-900 hover:scale-110 disabled:opacity-0 disabled:pointer-events-none"
+            class="ts-hero-prev swiper-button absolute start-4 top-1/2 z-10 h-10 w-10 -translate-y-1/2 hidden md:flex items-center justify-center rounded-full bg-white/90 text-gray-700 shadow-lg transition-all duration-200 hover:bg-white hover:text-gray-900 hover:scale-110 disabled:opacity-0 disabled:pointer-events-none"
           >
             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
@@ -195,7 +195,7 @@ export function TailoredSelectionsHero(categories: TailoredCategory[]): string {
 
           <button
             aria-label="Next categories"
-            class="ts-hero-next swiper-button absolute right-4 top-1/2 z-10 h-10 w-10 -translate-y-1/2 hidden md:flex items-center justify-center rounded-full bg-white/90 text-gray-700 shadow-lg transition-all duration-200 hover:bg-white hover:text-gray-900 hover:scale-110 disabled:opacity-0 disabled:pointer-events-none"
+            class="ts-hero-next swiper-button absolute end-4 top-1/2 z-10 h-10 w-10 -translate-y-1/2 hidden md:flex items-center justify-center rounded-full bg-white/90 text-gray-700 shadow-lg transition-all duration-200 hover:bg-white hover:text-gray-900 hover:scale-110 disabled:opacity-0 disabled:pointer-events-none"
           >
             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>

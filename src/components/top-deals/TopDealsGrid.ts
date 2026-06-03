@@ -56,7 +56,7 @@ export function renderTopDealsFlatCard(product: TopDealsProduct): string {
         ${
           hasDiscount
             ? `
-          <span class="absolute top-1.5 left-1.5 inline-flex items-center bg-red-500 text-white text-[11px] font-bold px-1.5 py-0.5 rounded">%${product.discountPercent}</span>
+          <span class="absolute top-1.5 start-1.5 inline-flex items-center bg-red-500 text-white text-[11px] font-bold px-1.5 py-0.5 rounded">%${product.discountPercent}</span>
         `
             : ""
         }

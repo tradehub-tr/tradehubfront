@@ -98,7 +98,7 @@ function renderCard(card: ProductListingCard): string {
         </div>
 
         <div class="text-xs text-gray-500 truncate">
-          <span class="mr-1.5 font-medium text-gray-600">${card.moq}</span>
+          <span class="me-1.5 font-medium text-gray-600">${card.moq}</span>
           ${card.stats ? `<span>${card.stats}</span>` : ""}
         </div>
 
@@ -145,11 +145,11 @@ function renderTabButton(meta: TabMeta, count: number, active: boolean): string 
       role="tab"
       data-rp-tab="${meta.key}"
       aria-selected="${active ? "true" : "false"}"
-      class="rp-tab ${activeClass} relative py-3.5 px-1 text-sm whitespace-nowrap border-0 bg-transparent cursor-pointer hover:text-gray-900 [&.rp-tab-active]:after:content-[''] [&.rp-tab-active]:after:absolute [&.rp-tab-active]:after:left-0 [&.rp-tab-active]:after:right-0 [&.rp-tab-active]:after:-bottom-px [&.rp-tab-active]:after:h-0.5 [&.rp-tab-active]:after:bg-[var(--pd-tab-active-border,#cc9900)]"
+      class="rp-tab ${activeClass} relative py-3.5 px-1 text-sm whitespace-nowrap border-0 bg-transparent cursor-pointer hover:text-gray-900 [&.rp-tab-active]:after:content-[''] [&.rp-tab-active]:after:absolute [&.rp-tab-active]:after:start-0 [&.rp-tab-active]:after:end-0 [&.rp-tab-active]:after:-bottom-px [&.rp-tab-active]:after:h-0.5 [&.rp-tab-active]:after:bg-[var(--pd-tab-active-border,#cc9900)]"
       style="${activeStyle}"
     >
       ${meta.label}
-      <span class="ml-1 text-[11px] text-gray-400" data-rp-count>${count > 0 ? `(${count})` : ""}</span>
+      <span class="ms-1 text-[11px] text-gray-400" data-rp-count>${count > 0 ? `(${count})` : ""}</span>
     </button>
   `;
 }
@@ -182,7 +182,7 @@ function renderPanel(meta: TabMeta, cards: ProductListingCard[], active: boolean
           type="button"
           aria-label="Önceki ürünler"
           data-rp-prev="${meta.key}"
-          class="rp-swiper-prev hidden md:flex absolute -left-2 top-[40%] -translate-y-1/2 z-10
+          class="rp-swiper-prev hidden md:flex absolute -start-2 top-[40%] -translate-y-1/2 z-10
                  h-9 w-9 rounded-full border border-gray-200 bg-white shadow-md
                  items-center justify-center text-gray-600 hover:text-gray-900
                  opacity-0 group-hover/rp-slider:opacity-100 transition-opacity duration-200
@@ -197,7 +197,7 @@ function renderPanel(meta: TabMeta, cards: ProductListingCard[], active: boolean
           type="button"
           aria-label="Sonraki ürünler"
           data-rp-next="${meta.key}"
-          class="rp-swiper-next hidden md:flex absolute -right-2 top-[40%] -translate-y-1/2 z-10
+          class="rp-swiper-next hidden md:flex absolute -end-2 top-[40%] -translate-y-1/2 z-10
                  h-9 w-9 rounded-full border border-gray-200 bg-white shadow-md
                  items-center justify-center text-gray-600 hover:text-gray-900
                  opacity-0 group-hover/rp-slider:opacity-100 transition-opacity duration-200

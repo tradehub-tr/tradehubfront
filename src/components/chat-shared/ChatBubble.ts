@@ -20,13 +20,13 @@ export function ChatBubble(): string {
           <div class="size-6 shrink-0 rounded-full"
                :class="msg.direction === 'me' ? 'bg-[var(--color-secondary-200,#cccccc)]' : 'bg-[var(--color-primary-100,#ffefb3)]'"></div>
 
-          <div :class="msg.direction === 'me' ? 'text-right' : 'text-left'">
+          <div :class="msg.direction === 'me' ? 'text-end' : 'text-start'">
             <!-- Text -->
             <template x-if="msg.body.type === 'text'">
               <div class="inline-block rounded-xl border px-3 py-2 text-[13px] leading-snug whitespace-pre-wrap break-words"
                    :class="msg.direction === 'me'
-                     ? 'rounded-br-sm bg-[var(--color-primary-50,#fff8e1)] border-[var(--color-primary-200,#ffe57a)] text-[var(--color-text-primary,#0a0a0a)]'
-                     : 'rounded-bl-sm bg-white border-[var(--color-border-default,#e5e5e5)] text-[var(--color-text-primary,#0a0a0a)]'">
+                     ? 'rounded-ee-sm bg-[var(--color-primary-50,#fff8e1)] border-[var(--color-primary-200,#ffe57a)] text-[var(--color-text-primary,#0a0a0a)]'
+                     : 'rounded-es-sm bg-white border-[var(--color-border-default,#e5e5e5)] text-[var(--color-text-primary,#0a0a0a)]'">
                 <span x-text="msg.body.text"></span>
                 <template x-if="msg.videoCallUrl">
                   <a :href="msg.videoCallUrl" target="_blank" rel="noopener noreferrer"

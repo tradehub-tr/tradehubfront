@@ -28,7 +28,7 @@ function formatSoldCount(count: number): string {
 function renderProductCard(product: DetailedProduct): string {
   const detailUrl = getListingUrl({ id: product.id });
   return `
-    <a href="${detailUrl}" class="category-listing__card bg-white dark:bg-gray-800 border-r border-b border-(--card-border-color) dark:border-gray-700 p-4 lg:p-3 flex flex-col hover:shadow-lg dark:hover:shadow-xl transition-shadow duration-300 relative group cursor-pointer">
+    <a href="${detailUrl}" class="category-listing__card bg-white dark:bg-gray-800 border-e border-b border-(--card-border-color) dark:border-gray-700 p-4 lg:p-3 flex flex-col hover:shadow-lg dark:hover:shadow-xl transition-shadow duration-300 relative group cursor-pointer">
       <!-- Image -->
       <div class="category-listing__image relative w-full h-[200px] lg:h-[180px] md:h-[160px] flex items-center justify-center mb-3">
         <img src="${product.image}" alt="${product.name}" class="max-h-full max-w-full object-contain group-hover:scale-[1.02] transition-transform" loading="lazy"
@@ -38,7 +38,7 @@ function renderProductCard(product: DetailedProduct): string {
             ? `
           <button class="category-listing__play-btn absolute inset-0 m-auto w-10 h-10 rounded-full bg-black/50 hover:bg-black/70 focus:ring-2 focus:ring-white focus:ring-offset-2 active:bg-black/80 flex items-center justify-center transition-colors"
                   aria-label="${t("seller.sf.playProductVideo")}">
-            <svg class="w-4 h-4 text-white ml-0.5" fill="currentColor" viewBox="0 0 20 20">
+            <svg class="w-4 h-4 text-white ms-0.5" fill="currentColor" viewBox="0 0 20 20">
               <path d="M6.5 5.5v9l7-4.5-7-4.5z" />
             </svg>
           </button>
@@ -96,7 +96,7 @@ function renderCategory(category: ProductCategory): string {
       </div>
 
       <!-- Product Grid (Shared Border System) -->
-      <div class="category-listing__grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 border-t border-l border-(--card-border-color) dark:border-gray-700">
+      <div class="category-listing__grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 border-t border-s border-(--card-border-color) dark:border-gray-700">
         ${category.products.map((p) => renderProductCard(p)).join("")}
       </div>
     </section>

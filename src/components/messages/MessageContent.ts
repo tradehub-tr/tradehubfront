@@ -117,7 +117,7 @@ export function MessageContent(): string {
                   </template>
                 </div>
                 <div>
-                  <div class="bg-(--color-surface,#ffffff) rounded-md rounded-bl-sm px-4 py-2.5 shadow-sm border border-(--color-border-light,#f0f0f0)">
+                  <div class="bg-(--color-surface,#ffffff) rounded-md rounded-es-sm px-4 py-2.5 shadow-sm border border-(--color-border-light,#f0f0f0)">
                     <p class="text-[13px] text-(--color-text-body,#333333) leading-relaxed whitespace-pre-wrap break-words" x-html="msg.textHtml || msg.text"></p>
                     <template x-if="msg.videoCallUrl">
                       <a :href="msg.videoCallUrl" target="_blank" rel="noopener noreferrer"
@@ -127,7 +127,7 @@ export function MessageContent(): string {
                       </a>
                     </template>
                   </div>
-                  <span class="text-[11px] text-(--color-text-placeholder,#999999) mt-1 ml-1 block" x-text="msg.time"></span>
+                  <span class="text-[11px] text-(--color-text-placeholder,#999999) mt-1 ms-1 block" x-text="msg.time"></span>
                 </div>
               </div>
             </template>
@@ -136,7 +136,7 @@ export function MessageContent(): string {
             <template x-if="msg.isMe">
               <div class="flex items-end gap-2 max-w-[75%] max-sm:max-w-[85%] flex-row-reverse">
                 <div>
-                  <div class="bg-(--color-cta-primary,#cc9900)/10 rounded-md rounded-br-sm px-4 py-2.5">
+                  <div class="bg-(--color-cta-primary,#cc9900)/10 rounded-md rounded-ee-sm px-4 py-2.5">
                     <p class="text-[13px] text-(--color-text-body,#333333) leading-relaxed whitespace-pre-wrap break-words" x-html="msg.textHtml || msg.text"></p>
                     <template x-if="msg.videoCallUrl">
                       <a :href="msg.videoCallUrl" target="_blank" rel="noopener noreferrer"
@@ -146,7 +146,7 @@ export function MessageContent(): string {
                       </a>
                     </template>
                   </div>
-                  <span class="text-[11px] text-(--color-text-placeholder,#999999) mt-1 mr-1 block text-right" x-text="msg.time"></span>
+                  <span class="text-[11px] text-(--color-text-placeholder,#999999) mt-1 me-1 block text-end" x-text="msg.time"></span>
                 </div>
               </div>
             </template>

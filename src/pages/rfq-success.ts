@@ -53,7 +53,7 @@ appEl.innerHTML = `
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
         <h1 class="text-xl font-bold text-gray-800">${t('rfq.submissionSuccessful')}</h1>
-        <a href="/pages/dashboard/inquiries.html" class="text-sm text-amber-600 hover:text-amber-700 hover:underline ml-2">${t('rfq.manageMyRequest')}</a>
+        <a href="/pages/dashboard/inquiries.html" class="text-sm text-amber-600 hover:text-amber-700 hover:underline ms-2">${t('rfq.manageMyRequest')}</a>
       </div>
 
       <!-- Quality Rating Card -->

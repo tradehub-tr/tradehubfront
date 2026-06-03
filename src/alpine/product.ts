@@ -422,7 +422,7 @@ Alpine.data("imageGallery", () => ({
             <div class="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
               <svg width="22" height="22" fill="#fff" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </div>
-            <span class="absolute bottom-0.5 right-0.5 bg-black/80 text-white text-[9px] font-bold px-1 rounded">VIDEO</span>
+            <span class="absolute bottom-0.5 end-0.5 bg-black/80 text-white text-[9px] font-bold px-1 rounded">VIDEO</span>
           `;
         } else {
           thumb.innerHTML = `<img src="${img.src}" alt="${img.alt}" class="gallery-media-asset gallery-media-asset--thumb" loading="lazy" />`;
@@ -445,7 +445,7 @@ Alpine.data("imageGallery", () => ({
               <div class="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
                 <svg width="22" height="22" fill="#fff" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
               </div>
-              <span class="absolute bottom-0.5 right-0.5 bg-black/80 text-white text-[9px] font-bold px-1 rounded">VIDEO</span>
+              <span class="absolute bottom-0.5 end-0.5 bg-black/80 text-white text-[9px] font-bold px-1 rounded">VIDEO</span>
             </button>
           `;
           }

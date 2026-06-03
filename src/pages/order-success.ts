@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <p class="text-[#666] text-sm mb-6"><span data-i18n="paymentStatus.paymentCompleted">${t('paymentStatus.paymentCompleted')}</span></p>
 
         <!-- Order Summary Card -->
-        <div class="bg-white border border-[#e5e5e5] rounded-md p-5 mb-6 text-left max-w-sm mx-auto shadow-sm">
+        <div class="bg-white border border-[#e5e5e5] rounded-md p-5 mb-6 text-start max-w-sm mx-auto shadow-sm">
           <div class="flex items-center justify-between mb-3">
             <span class="text-xs font-medium text-[#999] uppercase tracking-wide" data-i18n="paymentStatus.orderNumber">${t('paymentStatus.orderNumber')}</span>
             <span class="text-sm font-bold text-[#222]">${displayOrderNumber}</span>
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <p class="text-[#666] text-sm mb-6"><span data-i18n="paymentStatus.notPaidYet">${t('paymentStatus.notPaidYet')}</span></p>
 
         <!-- Order Summary Card -->
-        <div class="bg-white border border-[#e5e5e5] rounded-md p-5 mb-6 text-left max-w-sm mx-auto shadow-sm">
+        <div class="bg-white border border-[#e5e5e5] rounded-md p-5 mb-6 text-start max-w-sm mx-auto shadow-sm">
           <div class="flex items-center justify-between mb-3">
             <span class="text-xs font-medium text-[#999] uppercase tracking-wide" data-i18n="paymentStatus.orderNumber">${t('paymentStatus.orderNumber')}</span>
             <span class="text-sm font-bold text-[#222]">${displayOrderNumber}</span>

@@ -101,7 +101,7 @@ export function ProductImageGallery(): string {
               <path d="M8 5v14l11-7z"/>
             </svg>
           </div>
-          <span class="absolute bottom-0.5 right-0.5 bg-black/80 text-white text-[9px] font-bold px-1 rounded">VIDEO</span>
+          <span class="absolute bottom-0.5 end-0.5 bg-black/80 text-white text-[9px] font-bold px-1 rounded">VIDEO</span>
         </div>
       `;
       }
@@ -151,7 +151,7 @@ export function ProductImageGallery(): string {
           <div class="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
             <svg width="22" height="22" fill="#fff" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
           </div>
-          <span class="absolute bottom-0.5 right-0.5 bg-black/80 text-white text-[9px] font-bold px-1 rounded">VIDEO</span>
+          <span class="absolute bottom-0.5 end-0.5 bg-black/80 text-white text-[9px] font-bold px-1 rounded">VIDEO</span>
         </button>
       `;
       }
@@ -234,15 +234,15 @@ export function ProductImageGallery(): string {
       ${ProductAttributes()}
 
       <!-- Navigation arrows — always visible on all slides -->
-      <button type="button" id="gallery-prev" class="gallery-nav-btn absolute top-1/2 -translate-y-1/2 z-[5] w-9 h-9 rounded-full bg-[var(--color-surface,#fff)] shadow-[0_1px_6px_rgba(0,0,0,0.12)] flex items-center justify-center border-0 cursor-pointer transition-shadow duration-150 hover:shadow-[0_2px_10px_rgba(0,0,0,0.18)] left-2.5 2xl:left-[88px]" aria-label="${t("product.previous")}" @click.stop="goToSlide(currentIndex - 1)">
+      <button type="button" id="gallery-prev" class="gallery-nav-btn absolute top-1/2 -translate-y-1/2 z-[5] w-9 h-9 rounded-full bg-[var(--color-surface,#fff)] shadow-[0_1px_6px_rgba(0,0,0,0.12)] flex items-center justify-center border-0 cursor-pointer transition-shadow duration-150 hover:shadow-[0_2px_10px_rgba(0,0,0,0.18)] start-2.5 2xl:start-[88px]" aria-label="${t("product.previous")}" @click.stop="goToSlide(currentIndex - 1)">
         <svg width="16" height="16" fill="none" stroke="#333" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
       </button>
-      <button type="button" id="gallery-next" class="gallery-nav-btn absolute top-1/2 -translate-y-1/2 z-[5] w-9 h-9 rounded-full bg-[var(--color-surface,#fff)] shadow-[0_1px_6px_rgba(0,0,0,0.12)] flex items-center justify-center border-0 cursor-pointer transition-shadow duration-150 hover:shadow-[0_2px_10px_rgba(0,0,0,0.18)] right-2.5" aria-label="${t("product.nextLabel")}" @click.stop="goToSlide(currentIndex + 1)">
+      <button type="button" id="gallery-next" class="gallery-nav-btn absolute top-1/2 -translate-y-1/2 z-[5] w-9 h-9 rounded-full bg-[var(--color-surface,#fff)] shadow-[0_1px_6px_rgba(0,0,0,0.12)] flex items-center justify-center border-0 cursor-pointer transition-shadow duration-150 hover:shadow-[0_2px_10px_rgba(0,0,0,0.18)] end-2.5" aria-label="${t("product.nextLabel")}" @click.stop="goToSlide(currentIndex + 1)">
         <svg width="16" height="16" fill="none" stroke="#333" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
       </button>
 
       <!-- Action buttons — always visible -->
-      <div class="absolute top-3 right-3 z-5 flex flex-col gap-2">
+      <div class="absolute top-3 end-3 z-5 flex flex-col gap-2">
         <button type="button" data-favorite-btn class="gallery-action-btn w-9 h-9 rounded-full flex items-center justify-center border-0 cursor-pointer transition-colors hover:text-[var(--color-text-body,#333)]" style="background: var(--color-surface, #ffffff); box-shadow: 0 1px 6px rgba(0,0,0,.12); color: var(--color-text-tertiary);" aria-label="${t("product.addToFavorites")}">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
         </button>
@@ -267,7 +267,7 @@ export function ProductImageGallery(): string {
       @keydown.left.window="isLightboxOpen && lightboxPrev()"
       @keydown.right.window="isLightboxOpen && lightboxNext()"
     >
-      <div id="gallery-lightbox-toolbar" class="fixed top-0 left-0 right-0 h-[72px] z-[3] flex items-center justify-between px-[18px] bg-transparent max-[960px]:!h-[58px] max-[960px]:!px-2.5">
+      <div id="gallery-lightbox-toolbar" class="fixed top-0 start-0 end-0 h-[72px] z-[3] flex items-center justify-between px-[18px] bg-transparent max-[960px]:!h-[58px] max-[960px]:!px-2.5">
         <div id="gallery-lightbox-actions" class="flex items-center gap-4 max-[960px]:!gap-2">
           <button type="button" data-favorite-btn class="gallery-lightbox-action-btn border-0 bg-transparent text-[var(--color-text-inverse)] opacity-[0.94] inline-flex items-center gap-2 text-sm font-medium leading-none cursor-pointer p-0 hover:opacity-100 max-[960px]:!text-[15px] max-[960px]:!gap-[5px]" aria-label="${t("product.addToFavorites")}">
             <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24">
@@ -319,7 +319,7 @@ export function ProductImageGallery(): string {
             ${renderGalleryMedia(firstImage?.src, firstImage?.alt ?? t("product.productImage"), defaultVisual, "large")}
           </div>
 
-          <div id="gallery-lightbox-vertical-nav" class="absolute right-[14px] top-1/2 -translate-y-1/2 z-[2] w-11 rounded-3xl bg-white/[0.94] shadow-[0_2px_10px_rgba(0,0,0,0.18)] overflow-hidden flex flex-col max-[960px]:!w-10 max-[960px]:!right-2.5" aria-label="${t("product.productGallery")}">
+          <div id="gallery-lightbox-vertical-nav" class="absolute end-[14px] top-1/2 -translate-y-1/2 z-[2] w-11 rounded-3xl bg-white/[0.94] shadow-[0_2px_10px_rgba(0,0,0,0.18)] overflow-hidden flex flex-col max-[960px]:!w-10 max-[960px]:!right-2.5" aria-label="${t("product.productGallery")}">
             <button type="button" id="gallery-lightbox-prev" class="gallery-lightbox-nav-btn w-11 h-11 border-0 bg-transparent text-[var(--color-text-heading,#111827)] flex items-center justify-center cursor-pointer transition-colors duration-150 ease-in-out hover:bg-[rgba(17,24,39,0.06)] max-[960px]:!w-10 max-[960px]:!h-10" aria-label="${t("product.previousImage")}" @click="lightboxPrev()">
               <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7-7-7 7"/></svg>
             </button>

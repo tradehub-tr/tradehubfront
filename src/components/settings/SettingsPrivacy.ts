@@ -141,7 +141,7 @@ function renderPrivacySection(section: PrivacySection): string {
         ${section.title}
         ${section.tooltip ? `<span class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 text-[10px] cursor-help flex-shrink-0" style="color:var(--color-text-tertiary)" title="${t("settings.moreInfo")}">?</span>` : ""}
       </h3>
-      <div class="flex flex-col gap-2 max-sm:gap-1.5 pl-1">
+      <div class="flex flex-col gap-2 max-sm:gap-1.5 ps-1">
         ${optionsHtml}
       </div>
     </div>

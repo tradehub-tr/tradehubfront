@@ -104,7 +104,7 @@ export function PaymentMethodSection({
             <path d="M2 10h20"/>
           </svg>
         </span>
-        <h2 class="checkout-section__title flex-1 text-left text-[13px] sm:text-[15px] font-semibold text-[#1a1a1a] tracking-[-0.005em] whitespace-nowrap truncate" data-i18n="checkout.paymentMethod">${t("checkout.paymentMethod")}</h2>
+        <h2 class="checkout-section__title flex-1 text-start text-[13px] sm:text-[15px] font-semibold text-[#1a1a1a] tracking-[-0.005em] whitespace-nowrap truncate" data-i18n="checkout.paymentMethod">${t("checkout.paymentMethod")}</h2>
         <!-- Kapalıyken seçili yöntem etiketi (gri pill). Açıkken gizle. -->
         <span
           class="co-section-summary hidden sm:inline text-[12.5px] font-medium text-[#4a4a48] bg-[#fafaf8] border border-[#e8e6e0] rounded-full px-[10px] py-[3px] whitespace-nowrap tracking-[0.005em] shrink-0"
