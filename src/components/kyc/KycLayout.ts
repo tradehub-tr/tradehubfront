@@ -14,6 +14,7 @@
 
 import { api } from "../../utils/api";
 import { SlotDropzoneController } from "../../lib/upload-ui";
+import { renderSegmented } from "../../utils/ui/toggle";
 
 const FORM_ID = "kyc-form";
 const TOGGLE_ID = "kyc-account-type-toggle";
@@ -47,16 +48,21 @@ interface KycStatusData {
 }
 
 function renderToggle(): string {
+  // Hesap türü chip-radiogroup → ortak segmented helper. Value'lar
+  // (Individual/Business) ve TOGGLE_ID korunur; seçim native radio change
+  // event'iyle setAccountType()'a bağlanır.
   return `
 		<div class="bg-white rounded-2xl border border-gray-200 p-4 mb-4">
 			<label class="text-sm text-gray-600 mb-2 block">Hesap türü</label>
-			<div id="${TOGGLE_ID}" class="inline-flex rounded-full bg-gray-100 p-1" role="radiogroup" aria-label="Hesap türü">
-				<button type="button" data-kyc-type="Individual"
-					class="kyc-toggle-btn px-5 py-2 text-sm font-medium rounded-full transition-all bg-gray-900 text-white"
-					role="radio" aria-checked="true">Bireysel</button>
-				<button type="button" data-kyc-type="Business"
-					class="kyc-toggle-btn px-5 py-2 text-sm font-medium rounded-full transition-all text-gray-600 hover:bg-gray-200"
-					role="radio" aria-checked="false">Kurumsal</button>
+			<div id="${TOGGLE_ID}" class="max-w-xs">
+				${renderSegmented({
+          name: "kyc_account_type",
+          value: "Individual",
+          options: [
+            { value: "Individual", label: "Bireysel" },
+            { value: "Business", label: "Kurumsal" },
+          ],
+        })}
 			</div>
 		</div>
 	`;
@@ -236,17 +242,11 @@ function setAccountType(type: "Business" | "Individual"): void {
       taxInput.setAttribute("maxlength", "11");
     }
   }
-  // Toggle button styles
-  const buttons = form.querySelectorAll<HTMLButtonElement>(".kyc-toggle-btn");
-  for (const btn of buttons) {
-    const btnType = btn.getAttribute("data-kyc-type");
-    const active = btnType === type;
-    btn.classList.toggle("bg-gray-900", active);
-    btn.classList.toggle("text-white", active);
-    btn.classList.toggle("text-gray-600", !active);
-    btn.classList.toggle("hover:bg-gray-200", !active);
-    btn.setAttribute("aria-checked", active ? "true" : "false");
-  }
+  // Segmented radio'yu seçili tipe senkronla (programatik prefill için de).
+  const radio = form.querySelector<HTMLInputElement>(
+    `#${TOGGLE_ID} input[name="kyc_account_type"][value="${type}"]`
+  );
+  if (radio) radio.checked = true;
 }
 
 function isImageUrl(url: string): boolean {
@@ -555,14 +555,13 @@ export function initKycLayout(): void {
   // Bireysel default — Kurumsal-only section gizli, tax label TCKN
   setAccountType("Individual");
 
-  // Toggle click delegation
+  // Segmented radio change → hesap türü değişimi
   const toggleContainer = document.getElementById(TOGGLE_ID);
   if (toggleContainer) {
-    toggleContainer.addEventListener("click", (e) => {
-      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-kyc-type]");
-      if (!btn) return;
-      const type = btn.getAttribute("data-kyc-type") as "Business" | "Individual";
-      setAccountType(type);
+    toggleContainer.addEventListener("change", (e) => {
+      const radio = e.target as HTMLInputElement;
+      if (radio.name !== "kyc_account_type" || !radio.checked) return;
+      setAccountType(radio.value as "Business" | "Individual");
     });
   }
 

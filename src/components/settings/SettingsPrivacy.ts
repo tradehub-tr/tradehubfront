@@ -4,6 +4,7 @@
  */
 
 import { t } from "../../i18n";
+import { renderSegmented } from "../../utils/ui/toggle";
 
 export interface PrivacyOption {
   value: string;
@@ -123,17 +124,16 @@ function getDefaultSections(): PrivacySection[] {
 }
 
 function renderPrivacySection(section: PrivacySection): string {
-  const optionsHtml = section.options
-    .map(
-      (opt) => `
-    <label class="privacy__radio flex items-center gap-2 text-sm max-sm:text-[13px] cursor-pointer leading-normal" style="color:var(--color-text-primary)">
-      <input type="radio" name="privacy-${section.id}" value="${opt.value}" class="m-0 flex-shrink-0" style="accent-color:var(--color-primary-500, #cc9900)" ${opt.value === section.selected ? "checked" : ""} />
-      <span class="flex-1 min-w-0">${opt.label}</span>
-      ${opt.tooltip ? `<span class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 text-[10px] cursor-help flex-shrink-0" style="color:var(--color-text-tertiary)" title="${t("settings.moreInfo")}">?</span>` : ""}
-    </label>
-  `
-    )
-    .join("");
+  // Radio grubu → segmented toggle. Native radio'lar (name/value/checked)
+  // korunur; sadece görsel pill'e dönüşür — okuma kodu radio:checked üzerinden
+  // aynı çalışır. Per-option "?" tooltip'i segment'e sığmadığından section
+  // başlığındaki tooltip'e bırakıldı.
+  const segmented = renderSegmented({
+    name: `privacy-${section.id}`,
+    value: section.selected,
+    options: section.options.map((opt) => ({ value: opt.value, label: opt.label })),
+    className: "privacy__radio-group",
+  });
 
   return `
     <div>
@@ -195,7 +195,7 @@ export function initSettingsPrivacy(): void {
     saveBtn.addEventListener("click", () => {
       const data: Record<string, string> = {};
       document
-        .querySelectorAll<HTMLInputElement>('.privacy__radio input[type="radio"]:checked')
+        .querySelectorAll<HTMLInputElement>('.privacy__radio-group input[type="radio"]:checked')
         .forEach((r) => {
           if (r.name) data[r.name] = r.value;
         });

@@ -94,12 +94,16 @@ export function registerReportAbuseModal(): void {
 }
 
 export function ReportAbuseModal(): string {
+  // Chip group — tek seçim. value korunur (x-model="reason"); aktif chip primary.
   const reasonOptions = REASONS.map(
     (r) =>
-      `<label class="flex items-center gap-2 py-2 cursor-pointer">
-        <input type="radio" name="abuse-reason" :value="'${r.value}'" x-model="reason" class="w-4 h-4 text-primary-500 focus:ring-primary-500">
-        <span class="text-sm text-secondary-700">${r.label}</span>
-      </label>`
+      `<button type="button" @click="reason = '${r.value}'"
+        class="px-3.5 py-1.5 rounded-full text-sm font-medium border transition-colors cursor-pointer"
+        :class="reason === '${r.value}'
+          ? 'bg-[var(--color-primary-500,#cc9900)] text-white border-[var(--color-primary-500,#cc9900)]'
+          : 'bg-white text-secondary-700 border-border-default hover:border-[var(--color-primary-500,#cc9900)]'">
+        ${r.label}
+      </button>`
   ).join("");
   return `
     <div
@@ -131,7 +135,7 @@ export function ReportAbuseModal(): string {
         <form @submit.prevent="submit()" class="px-5 py-4 space-y-3">
           <div>
             <p class="text-[12px] text-secondary-500 mb-2">Bu yorumu neden şikayet ediyorsunuz?</p>
-            <div class="space-y-0.5">${reasonOptions}</div>
+            <div class="flex flex-wrap gap-2">${reasonOptions}</div>
           </div>
           <div>
             <label class="block text-[12px] font-medium text-secondary-700 mb-1">Açıklama <span class="text-secondary-400">(opsiyonel)</span></label>

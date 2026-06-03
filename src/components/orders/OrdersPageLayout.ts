@@ -1326,44 +1326,23 @@ function renderAllOrders(): string {
             <div class="px-6 py-5 overflow-y-auto max-h-[60vh]">
               <p class="text-sm text-gray-700 mb-1">${t("orders.cancelReasonQuestion")}</p>
               <p class="text-sm text-gray-500 mb-5">${t("orders.cancelReasonSubtext")}</p>
-              <div class="space-y-3">
-                <label class="flex items-center gap-3 cursor-pointer group">
-                  <input type="radio" name="cancelReason" value="shipping_fee" x-model="cancelReason" class="w-4 h-4 cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" />
-                  <span class="text-sm text-gray-700 group-hover:text-gray-900">${t("orders.cancelShippingFee")}</span>
-                </label>
-                <label class="flex items-center gap-3 cursor-pointer group">
-                  <input type="radio" name="cancelReason" value="no_stock" x-model="cancelReason" class="w-4 h-4 cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" />
-                  <span class="text-sm text-gray-700 group-hover:text-gray-900">${t("orders.cancelNoStock")}</span>
-                </label>
-                <label class="flex items-center gap-3 cursor-pointer group">
-                  <input type="radio" name="cancelReason" value="not_paid_30" x-model="cancelReason" class="w-4 h-4 cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" />
-                  <span class="text-sm text-gray-700 group-hover:text-gray-900">${t("orders.cancelNotPaid30Days")}</span>
-                </label>
-                <label class="flex items-center gap-3 cursor-pointer group">
-                  <input type="radio" name="cancelReason" value="shipping_method" x-model="cancelReason" class="w-4 h-4 cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" />
-                  <span class="text-sm text-gray-700 group-hover:text-gray-900">${t("orders.cancelShippingMethod")}</span>
-                </label>
-                <label class="flex items-center gap-3 cursor-pointer group">
-                  <input type="radio" name="cancelReason" value="shipping_time" x-model="cancelReason" class="w-4 h-4 cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" />
-                  <span class="text-sm text-gray-700 group-hover:text-gray-900">${t("orders.cancelShippingTime")}</span>
-                </label>
-                <label class="flex items-center gap-3 cursor-pointer group">
-                  <input type="radio" name="cancelReason" value="no_longer_needed" x-model="cancelReason" class="w-4 h-4 cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" />
-                  <span class="text-sm text-gray-700 group-hover:text-gray-900">${t("orders.cancelNoLongerNeeded")}</span>
-                </label>
-                <label class="flex items-center gap-3 cursor-pointer group">
-                  <input type="radio" name="cancelReason" value="wrong_info" x-model="cancelReason" class="w-4 h-4 cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" />
-                  <span class="text-sm text-gray-700 group-hover:text-gray-900">${t("orders.cancelWrongOrder")}</span>
-                </label>
-                <label class="flex items-center gap-3 cursor-pointer group">
-                  <input type="radio" name="cancelReason" value="price_increased" x-model="cancelReason" class="w-4 h-4 cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" />
-                  <span class="text-sm text-gray-700 group-hover:text-gray-900">${t("orders.cancelPriceIncreased")}</span>
-                </label>
-                <label class="flex items-center gap-3 cursor-pointer group">
-                  <input type="radio" name="cancelReason" value="others" x-model="cancelReason" class="w-4 h-4 cursor-pointer" style="accent-color: var(--checkbox-checked-bg);" />
-                  <span class="text-sm text-gray-700 group-hover:text-gray-900">${t("orders.cancelOther")}</span>
-                </label>
-              </div>
+              <!-- 9 sebep → native dropdown. value'lar ve x-model="cancelReason" korunur. -->
+              <select
+                name="cancelReason"
+                x-model="cancelReason"
+                class="th-input th-input-md w-full"
+              >
+                <option value="" disabled>${t("orders.cancelReasonQuestion")}</option>
+                <option value="shipping_fee">${t("orders.cancelShippingFee")}</option>
+                <option value="no_stock">${t("orders.cancelNoStock")}</option>
+                <option value="not_paid_30">${t("orders.cancelNotPaid30Days")}</option>
+                <option value="shipping_method">${t("orders.cancelShippingMethod")}</option>
+                <option value="shipping_time">${t("orders.cancelShippingTime")}</option>
+                <option value="no_longer_needed">${t("orders.cancelNoLongerNeeded")}</option>
+                <option value="wrong_info">${t("orders.cancelWrongOrder")}</option>
+                <option value="price_increased">${t("orders.cancelPriceIncreased")}</option>
+                <option value="others">${t("orders.cancelOther")}</option>
+              </select>
             </div>
             <!-- Footer -->
             <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-end gap-3">

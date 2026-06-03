@@ -194,7 +194,7 @@ appEl.innerHTML = `
         type="button"
         data-drawer-hide="filter-sidebar-drawer"
         aria-controls="filter-sidebar-drawer"
-        class="inline-flex items-center justify-center w-8 h-8 -mr-1 text-gray-400 bg-transparent hover:bg-gray-100 hover:text-gray-900 rounded-md dark:hover:bg-gray-700 dark:hover:text-white"
+        class="absolute top-3 end-3 inline-flex items-center justify-center w-8 h-8 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-md text-sm dark:hover:bg-gray-600 dark:hover:text-white"
       >
         <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
