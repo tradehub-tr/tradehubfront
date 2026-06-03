@@ -40,7 +40,7 @@ export function ChatComposer(): string {
                 :disabled="!$store.chatPopup.draft.trim() || $store.chatPopup.sending"
                 class="ms-auto mt-2 appearance-none rounded-full px-5 py-1.5 text-[12px] font-semibold cursor-pointer focus:outline-none transition-colors"
                 :class="$store.chatPopup.draft.trim() && !$store.chatPopup.sending
-                  ? 'bg-[var(--color-orange-500,#ea580c)] text-white hover:bg-[var(--color-orange-600,#c2410c)]'
+                  ? 'bg-[var(--color-primary-500,#f5b800)] text-[var(--btn-text,#1a1a1a)] hover:bg-[var(--color-primary-600,#d39c00)]'
                   : 'bg-[var(--color-surface-raised,#f5f5f5)] text-[var(--color-text-tertiary,#a3a3a3)] cursor-not-allowed'">
           ${t("chat.send")}
         </button>

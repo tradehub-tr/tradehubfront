@@ -1,6 +1,7 @@
 export { CategoryBrowse, initCategoryBrowse } from "./CategoryBrowse";
 export { RecommendationSlider, initRecommendationSlider } from "./RecommendationSlider";
 export { HeroSideBannerSlider, initHeroSideBannerSlider } from "./HeroSideBannerSlider";
+export { HeroTopSlider, initHeroTopSlider } from "./HeroTopSlider";
 export { MobileCategoryBar, initMobileCategoryBar } from "./MobileCategoryBar";
 export { TopDeals, initTopDeals } from "./TopDeals";
 export { TopRanking, initTopRanking } from "./TopRanking";

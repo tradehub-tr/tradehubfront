@@ -92,6 +92,11 @@ import shoppingCart from "lucide-static/icons/shopping-cart.svg?raw";
 import eye from "lucide-static/icons/eye.svg?raw";
 import building2 from "lucide-static/icons/building-2.svg?raw";
 import shieldCheck from "lucide-static/icons/shield-check.svg?raw";
+// Buyer dashboard — analytics KPI kartları
+import wallet from "lucide-static/icons/wallet.svg?raw";
+import tag from "lucide-static/icons/tag.svg?raw";
+import trendingUp from "lucide-static/icons/trending-up.svg?raw";
+import trendingDown from "lucide-static/icons/trending-down.svg?raw";
 
 /** Kanonik ikon isim → ham SVG eşlemesi. */
 const ICONS: Record<string, string> = {
@@ -180,6 +185,10 @@ const ICONS: Record<string, string> = {
   eye,
   "building-2": building2,
   "shield-check": shieldCheck,
+  wallet,
+  tag,
+  "trending-up": trendingUp,
+  "trending-down": trendingDown,
 };
 
 /**

@@ -12,9 +12,11 @@ export function ChatMessages(): string {
       </template>
 
       <!-- Scroll container -->
-      <div class="flex-1 overflow-y-auto px-4 py-3 flex flex-col gap-2.5"
+      <div class="flex-1 overflow-y-auto px-4 py-3 flex flex-col"
            x-ref="msgScroll"
            data-chat-popup-msg-scroll>
+        <!-- Mesajlar dibe yaslı: az mesajda alta yapışır, çoğalınca yukarı doğru dolar (standart chat davranışı) -->
+        <div class="mt-auto flex flex-col gap-2.5">
         <template x-for="msg in $store.chatPopup.activeMessages" :key="msg.id">
           <div class="flex flex-col"
                :class="msg.body.type === 'order' ? 'items-end' : ''">
@@ -32,6 +34,7 @@ export function ChatMessages(): string {
             </template>
           </div>
         </template>
+        </div>
 
         <template x-if="!$store.chatPopup.loading && $store.chatPopup.activeMessages.length === 0 && !$store.chatPopup.error">
           <div class="grid flex-1 place-items-center text-[12px] text-[var(--color-text-tertiary,#a3a3a3)]">

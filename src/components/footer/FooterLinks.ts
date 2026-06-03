@@ -54,9 +54,7 @@ const footerColumnsI18n: FooterColumnI18n[] = [
     links: [
       { labelKey: "footer.safePayments", href: "/odeme-secenekleri" },
       { labelKey: "footer.moneyBack", href: "/iade-politikasi" },
-      { labelKey: "footer.onTimeShipping", href: "/kargo-koruma" },
       { labelKey: "footer.afterSales", href: "/pages/info/after-sales.html" },
-      { labelKey: "footer.productMonitoring", href: "/pages/info/monitoring.html" },
     ],
   },
   {
@@ -64,8 +62,6 @@ const footerColumnsI18n: FooterColumnI18n[] = [
     links: [
       { labelKey: "footer.rfq", href: "/pages/dashboard/rfq.html" },
       // { labelKey: 'footer.membership', href: '/membership' },    // TODO: Sayfa henüz hazır değil
-      // { labelKey: 'footer.salesTax', href: '/tax' },             // TODO: Sayfa henüz hazır değil
-      // { labelKey: 'footer.istocReads', href: '/blog' },          // TODO: Sayfa henüz hazır değil
     ],
   },
   {
@@ -74,17 +70,8 @@ const footerColumnsI18n: FooterColumnI18n[] = [
       { labelKey: "footer.startSelling", href: "/satici-ol" },
       { labelKey: "footer.sellerCentral", href: "/panel/" },
       { labelKey: "footer.verifiedSupplier", href: "/pages/seller/verification.html" },
-      { labelKey: "footer.partnerships", href: "/ortakliklar" },
       // TODO: Mobil uygulama hazır olduğunda aktif edilecek
       // { labelKey: 'footer.downloadApp', href: '/seller/app' },
-    ],
-  },
-  {
-    titleKey: "footer.getToKnow",
-    links: [
-      { labelKey: "footer.corporateResponsibility", href: "/kurumsal-sorumluluk" },
-      { labelKey: "footer.newsCenter", href: "/haberler" },
-      { labelKey: "footer.careers", href: "/kariyer" },
     ],
   },
 ];

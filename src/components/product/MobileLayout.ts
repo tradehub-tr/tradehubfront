@@ -17,6 +17,7 @@ import { renderStars } from "./ProductReviews";
 import { showReviewsModal } from "./ReviewsModal";
 import { showQAModal } from "./QAModal";
 import { RelatedProducts } from "./RelatedProducts";
+import { MobileRecommendations, initMobileRecommendations } from "./MobileRecommendations";
 import { SocialProofBadge } from "./SocialProofBadge";
 import { getSellerUrl } from "../../utils/sellerUrl";
 
@@ -317,6 +318,90 @@ export function MobileProductLayout(): string {
     `,
   });
 
+  // ── Section: Order protection (static assurance, istoc-branded) ──
+  // Sprint note: backend yok — bu blok platform güvence bilgisini özetleyen
+  // STATİK içeriktir, listing-level veri çekmez.
+
+  const protectionItems = [
+    {
+      label: t("product.securePayments"),
+      icon: `<path d="M9 12l2 2 4-4"/><path d="M12 3l8 4v5c0 4.4-3.1 8.4-8 9.5C7.1 20.4 4 16.4 4 12V7l8-4z"/>`,
+    },
+    {
+      label: t("product.moneyBackProtection"),
+      icon: `<path d="M3 9h18"/><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 15l-2-2 2-2"/>`,
+    },
+    {
+      label: t("product.support247"),
+      icon: `<path d="M4 14a8 8 0 0 1 16 0"/><rect x="2" y="14" width="4" height="6" rx="1"/><rect x="18" y="14" width="4" height="6" rx="1"/>`,
+    },
+    {
+      label: t("product.dataProtection"),
+      icon: `<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>`,
+    },
+  ];
+
+  const orderProtectionSection = `
+    <div class="pdm-section-divider h-2 bg-surface-raised"></div>
+    <div id="pdm-order-protection" class="bg-surface px-4 py-4 max-[374px]:px-3">
+      <div class="flex items-center gap-2 mb-1">
+        <svg class="shrink-0 text-[#16a34a]" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 4.4-3.1 8.4-8 9.5C7.1 20.4 4 16.4 4 12V7l8-4z"/><path d="M9 12l2 2 4-4"/></svg>
+        <h2 class="text-[15px] font-bold text-text-heading m-0">${t("product.orderProtectionSection")}</h2>
+      </div>
+      <p class="text-xs text-text-muted leading-[1.5] mb-3">${t("product.orderProtectionSectionDesc")}</p>
+      <div class="grid grid-cols-4 gap-1 border border-border-default rounded-lg py-3 px-1">
+        ${protectionItems
+          .map(
+            (it) => `
+          <div class="flex flex-col items-center text-center gap-1.5 px-0.5">
+            <svg class="text-[#16a34a]" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${it.icon}</svg>
+            <span class="text-[10px] max-[374px]:text-[9px] text-text-body leading-[1.3]">${it.label}</span>
+          </div>
+        `
+          )
+          .join("")}
+      </div>
+      <div class="flex items-center gap-2 mt-3 text-[11px] text-text-muted">
+        <span class="shrink-0">${t("product.supportedPayments")}:</span>
+        <span class="flex items-center gap-1.5 flex-wrap">
+          <span class="px-1.5 py-0.5 rounded border border-border-default text-[10px] font-semibold text-text-body bg-surface">VISA</span>
+          <span class="px-1.5 py-0.5 rounded border border-border-default text-[10px] font-semibold text-text-body bg-surface">Mastercard</span>
+          <span class="px-1.5 py-0.5 rounded border border-border-default text-[10px] font-semibold text-text-body bg-surface">PayPal</span>
+        </span>
+      </div>
+    </div>
+  `;
+
+  // ── Section: Processing time + delivery address (Alibaba app pattern) ──
+  // p.leadTimeRanges → her aralık bir kolon (gün üstte, miktar altta).
+
+  const processingTimeSection = p.leadTimeRanges.length
+    ? `
+    <div class="pdm-section-divider h-2 bg-surface-raised"></div>
+    <div id="pdm-processing-time" class="bg-surface px-4 py-4 max-[374px]:px-3">
+      <h2 class="text-[15px] font-bold text-text-heading m-0 mb-3">
+        ${t("product.deliveryAddressLabel")}: <span class="underline">TR</span>
+      </h2>
+      <div class="bg-surface-raised rounded-lg p-3.5">
+        <div class="text-xs text-text-muted mb-2">${t("product.processingTime")}</div>
+        <div class="grid grid-flow-col auto-cols-fr gap-3">
+          ${p.leadTimeRanges
+            .map(
+              (lt) => `
+            <div class="flex flex-col">
+              <span class="text-base max-[374px]:text-sm font-bold text-text-heading leading-tight">${lt.days}</span>
+              <span class="text-[11px] text-text-placeholder mt-0.5">${lt.quantityRange}</span>
+            </div>
+          `
+            )
+            .join("")}
+        </div>
+      </div>
+      <p class="text-xs text-text-muted leading-[1.6] mt-3">${t("product.processingTimeNote")}</p>
+    </div>
+  `
+    : "";
+
   // ── Section 11: Supplier Card ──
 
   const si = p.supplier;
@@ -335,11 +420,12 @@ export function MobileProductLayout(): string {
         </div>
         <svg class="shrink-0 text-text-muted" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
       </a>
+      <div class="text-[13px] font-bold text-text-heading mb-2">${t("product.companyOverview")}</div>
       <div class="pdm-supplier-stats grid grid-cols-3 border border-border-default rounded-md overflow-hidden">
         ${[
           { val: si.onTimeDelivery, label: t("product.onTimeDelivery") },
-          { val: si.annualRevenue, label: t("product.annualRevenue") },
           { val: si.responseTime, label: t("product.responseTime") },
+          { val: si.responseRate, label: t("product.responseRate") },
         ]
           .map(
             (s) => `
@@ -399,17 +485,20 @@ export function MobileProductLayout(): string {
         ${sampleSection}
         ${titleSection}
         ${variantSections}
+        ${orderProtectionSection}
       </div>
 
       <!-- Details section -->
       <div id="pdm-sec-details">
         ${shippingSection}
+        ${processingTimeSection}
         ${keyAttrsSection}
       </div>
 
       <!-- Supplier / Recommendations section -->
       <div id="pdm-sec-supplier">
         ${supplierSection}
+        ${MobileRecommendations()}
         <div class="px-3 pb-4">
           ${RelatedProducts()}
         </div>
@@ -433,6 +522,7 @@ export function initMobileLayout(): void {
   initBottomBar();
   initVariantSelection();
   initReviewsRow();
+  initMobileRecommendations();
 }
 
 /* ── Gallery: scroll-snap carousel ───────────────────── */

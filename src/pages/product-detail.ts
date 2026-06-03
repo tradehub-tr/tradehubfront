@@ -57,7 +57,7 @@ import {
 } from '../components/product'
 // Product data
 import { getCurrentProduct, loadProduct } from '../alpine/product'
-import { initCurrency } from '../services/currencyService'
+import { initCurrency, formatCurrency, getSelectedCurrency } from '../services/currencyService'
 
 // Utilities
 import { initAnimatedPlaceholder } from '../utils/animatedPlaceholder'
@@ -264,9 +264,17 @@ async function renderProductPage() {
     ${ShippingModal()}
 
     <!-- Mobile Sticky Bottom Bar -->
-    <div id="pd-mobile-bar" class="xl:hidden grid grid-cols-[40px_minmax(0,1fr)_minmax(0,1fr)] gap-1.5 px-3 py-2 pb-[calc(8px+env(safe-area-inset-bottom))] fixed bottom-0 start-0 end-0 z-100 bg-surface border-t border-border-default shadow-[0_-2px_10px_rgba(0,0,0,0.08)] overflow-hidden box-border">
-      <button type="button" id="pdm-bar-chat" class="pdm-bar-chat-btn w-10 h-10 border border-border-medium rounded-md bg-surface flex items-center justify-center cursor-pointer text-text-body p-0 active:bg-[var(--color-surface-raised,#f5f5f5)]" aria-label="Sohbet">
-        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+    <div id="pd-mobile-bar" x-data :class="$store.chatPopup.isOpen && 'hidden'" class="xl:hidden grid grid-cols-[40px_minmax(0,1fr)_minmax(0,1fr)] gap-1.5 px-3 py-2 pb-[calc(8px+env(safe-area-inset-bottom))] fixed bottom-0 left-0 right-0 z-100 bg-surface border-t border-border-default shadow-[0_-2px_10px_rgba(0,0,0,0.08)] overflow-hidden box-border">
+      <button type="button" id="pdm-bar-chat"
+              data-chat-trigger
+              data-product-id="${product.id}"
+              data-product-title="${(product.title || '').replace(/"/g, '&quot;')}"
+              data-product-price="${(product.priceTiers[0] ? formatCurrency(product.priceTiers[0].price, getSelectedCurrency()) : '').replace(/"/g, '&quot;')}"
+              data-product-thumb="${product.images?.[0]?.src || ''}"
+              data-product-min-order="${product.moq ? String(product.moq) : '1'}"
+              data-seller-id="${product.supplier?.id || ''}"
+              class="pdm-bar-chat-btn w-10 h-10 border border-border-medium rounded-md bg-surface flex items-center justify-center cursor-pointer text-text-body p-0 active:bg-[var(--color-surface-raised,#f5f5f5)]" aria-label="Sohbet">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
       </button>
       ${
         product.sellerKybVerified === false

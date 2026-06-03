@@ -6,6 +6,7 @@
 
 import type { BuyerDashboardData } from "../../types/buyerDashboard";
 import { NewBuyerInfo } from "./NewBuyerInfo";
+import { AnalyticsOverview, initAnalyticsOverview } from "./AnalyticsOverview";
 import { OrdersSection, initOrdersSection } from "./OrdersSection";
 import { SupportTicketsCard, initSupportTicketsCard } from "./SupportTicketsCard";
 import { FavoritesSection } from "../right-panel/FavoritesSection";
@@ -33,6 +34,7 @@ export function BuyerDashboardLayout({
           <!-- Center Column -->
           <div class="flex-1 min-w-0 flex flex-col gap-[clamp(0.5rem,0.4rem+0.4vw,0.875rem)] max-lg:w-full">
             ${NewBuyerInfo({ user: data.user, emailVerified, userEmail })}
+            ${AnalyticsOverview()}
             ${OrdersSection()}
           </div>
 
@@ -63,6 +65,7 @@ export function BuyerDashboardLayout({
  */
 export function initBuyerDashboardLayout(): void {
   initOrdersSection();
+  void initAnalyticsOverview();
   void initSupportTicketsCard();
   // initPromotionSection();
 }
