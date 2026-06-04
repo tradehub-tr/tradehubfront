@@ -727,14 +727,14 @@ function renderMobileDrawer(): string {
     <!-- Mobile Menu Drawer -->
     <div
       id="mobile-menu-drawer"
-      class="fixed top-0 start-0 z-(--z-backdrop) h-screen overflow-hidden transition-transform -translate-x-full bg-white w-[min(80vw,20rem)] sm:w-80 dark:bg-gray-800"
+      class="fixed top-0 start-0 z-(--z-backdrop) h-screen overflow-hidden transition-transform -translate-x-full rtl:[&.-translate-x-full]:[--tw-translate-x:100%] bg-white w-[min(80vw,20rem)] sm:w-80 dark:bg-gray-800"
       tabindex="-1"
       aria-labelledby="drawer-label"
     >
       <div class="relative h-full w-full">
 
         <!-- Panel 1: Main Menu -->
-        <div id="drawer-panel-main" class="absolute inset-0 overflow-y-auto transition-transform duration-300 ease-in-out">
+        <div id="drawer-panel-main" class="absolute inset-0 overflow-y-auto transition-transform duration-300 ease-in-out rtl:[&.-translate-x-full]:[--tw-translate-x:100%]">
 
           <!-- Header: Logo + Close -->
           <div class="flex items-center justify-between px-4 pt-4 pb-2">
@@ -891,7 +891,7 @@ function renderMobileDrawer(): string {
         </div>
 
         <!-- Panel 2: Categories List -->
-        <div id="drawer-panel-categories" class="absolute inset-0 overflow-y-auto translate-x-full transition-transform duration-300 ease-in-out bg-white dark:bg-gray-800">
+        <div id="drawer-panel-categories" class="absolute inset-0 overflow-y-auto translate-x-full rtl:[&.translate-x-full]:[--tw-translate-x:-100%] rtl:[&.-translate-x-full]:[--tw-translate-x:100%] transition-transform duration-300 ease-in-out bg-white dark:bg-gray-800">
 
           <!-- Header: Back + Close -->
           <div class="flex items-center justify-between px-4 pt-4 pb-2">
@@ -932,7 +932,7 @@ function renderMobileDrawer(): string {
         </div>
 
         <!-- Panel 3: Subcategory -->
-        <div id="drawer-panel-subcategory" class="absolute inset-0 overflow-y-auto translate-x-full transition-transform duration-300 ease-in-out bg-white dark:bg-gray-800">
+        <div id="drawer-panel-subcategory" class="absolute inset-0 overflow-y-auto translate-x-full rtl:[&.translate-x-full]:[--tw-translate-x:-100%] rtl:[&.-translate-x-full]:[--tw-translate-x:100%] transition-transform duration-300 ease-in-out bg-white dark:bg-gray-800">
 
           <!-- Header: Back + Close -->
           <div class="flex items-center justify-between px-4 pt-4 pb-2">

@@ -14,6 +14,7 @@ import { Navigation, EffectCoverflow } from "swiper/modules";
 import "swiper/swiper-bundle.css";
 import { t } from "../../i18n";
 import type { TailoredCategory } from "../../types/tailoredSelections";
+import { applySwiperDir } from "../../utils/direction";
 
 const BADGE_ICONS: Record<string, string> = {
   personal:
@@ -108,6 +109,7 @@ export function initTailoredSelectionsHero(options?: {
   // loop'un eski başlangıç görünümü korunur.
   const initialSlide = Math.max(0, Math.floor(slideCount / 2));
 
+  applySwiperDir(el);
   new Swiper(el, {
     modules: [Navigation, EffectCoverflow],
     effect: "coverflow",

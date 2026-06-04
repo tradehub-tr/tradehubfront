@@ -11,6 +11,7 @@ import { searchListings } from "../../services/listingService";
 import { initCurrency } from "../../services/currencyService";
 import { getListingUrl } from "../../utils/listingUrl";
 import type { ProductListingCard } from "../../types/productListing";
+import { applySwiperDir } from "../../utils/direction";
 
 /* ── Types ── */
 
@@ -229,6 +230,7 @@ function initSwipers(categories: ExploreCategory[]): Swiper[] {
     const el = document.querySelector<HTMLElement>(`.explore-swiper-${i}`);
     if (!el) return;
 
+    applySwiperDir(el);
     swipers.push(
       new Swiper(el, {
         modules: [Navigation],

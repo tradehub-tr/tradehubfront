@@ -14,6 +14,7 @@ import { TradeAssuranceFooterCards } from '../components/shared/TradeAssuranceFo
 import Swiper from 'swiper'
 import { Navigation, Pagination } from 'swiper/modules'
 import 'swiper/swiper-bundle.css'
+import { applySwiperDir } from '../utils/direction'
 
 import tradeAssuranceBg from '../assets/images/Trade Assurance.avif'
 import videoPaymentImg from '../assets/images/videopayment.avif'
@@ -501,6 +502,7 @@ initMobileDrawer()
 initLanguageSelector()
 
 // Initialize Swiper for testimonials
+applySwiperDir('.testimonial-swiper')
 new Swiper('.testimonial-swiper', {
   modules: [Navigation, Pagination],
   slidesPerView: 1,
