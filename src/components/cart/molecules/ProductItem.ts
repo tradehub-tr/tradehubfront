@@ -7,6 +7,7 @@
 import type { CartProduct, CartProductTag } from "../../../types/cart";
 import { Checkbox } from "../atoms/Checkbox";
 import { SkuRow } from "./SkuRow";
+import favIcon from "../../../assets/images/fav.png";
 import trashIcon from "../../../assets/images/trash.png";
 import { t } from "../../../i18n";
 import { formatPrice } from "../../../services/currencyService";
@@ -99,7 +100,7 @@ export function ProductItem({ product }: ProductItemProps): string {
 
         <div class="flex items-center justify-end gap-1.5 sm:gap-2 mt-1 ps-[calc(18px+0.5rem)] sm:ps-[calc(20px+0.75rem)]" @click.stop x-show="!productOpen" x-cloak>
           <span class="sc-c-spu-total whitespace-nowrap text-[12px] sm:text-[14.5px] font-bold text-[#1a1a1a] tabular-nums">${totalText}</span>
-          <button type="button" class="sc-c-spu-favorite-btn w-6 h-6 sm:w-7 sm:h-7 inline-flex items-center justify-center rounded-full transition-colors text-[#8a877f] bg-transparent hover:bg-white hover:text-[#4a4a48]" data-product-id="${escapeHtml(product.id)}" @click="$dispatch('product-favorite', { productId: '${escapeHtml(product.id)}' })" aria-label="${t("cart.favorite")}">
+          <button type="button" class="sc-c-spu-favorite-btn w-6 h-6 sm:w-7 sm:h-7 inline-flex items-center justify-center rounded-full transition-colors ${isFav ? "text-amber-500" : "text-[#8a877f]"} bg-transparent hover:bg-white hover:text-[#4a4a48]" data-product-id="${escapeHtml(product.id)}" @click="$dispatch('product-favorite', { productId: '${escapeHtml(product.id)}' })" aria-label="${t("cart.favorite")}">
             <img src="${favIcon}" class="w-3.5 h-3.5 sm:w-4 sm:h-4 object-contain" alt="${t("cart.favorite")}" />
           </button>
           <button type="button" class="sc-c-spu-delete-btn w-6 h-6 sm:w-7 sm:h-7 lg:w-9 lg:h-9 inline-flex items-center justify-center rounded-full transition-colors text-[#8a877f] bg-transparent hover:bg-white hover:text-[#4a4a48]" data-product-id="${escapeHtml(product.id)}" @click="$dispatch('product-delete', { productId: '${escapeHtml(product.id)}' })" aria-label="${t("cart.removeProduct")}">
