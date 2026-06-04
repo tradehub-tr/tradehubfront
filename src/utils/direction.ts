@@ -20,7 +20,6 @@ export function getDocumentDir(): "rtl" | "ltr" {
  * or selector you hand to `new Swiper()`. Call once prior to instantiation.
  */
 export function applySwiperDir(target: HTMLElement | string): void {
-  const el =
-    typeof target === "string" ? document.querySelector<HTMLElement>(target) : target;
+  const el = typeof target === "string" ? document.querySelector<HTMLElement>(target) : target;
   if (el) el.dir = getDocumentDir();
 }
