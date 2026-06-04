@@ -6,6 +6,7 @@ import Swiper from "swiper";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import "swiper/swiper-bundle.css";
 import { showToast } from "../toast";
+import { applySwiperDir } from "../direction";
 
 // ═══════════════════════════════════════════════════════════
 // Swiper Initialization
@@ -30,6 +31,7 @@ function initMainProductsSwiper(): Swiper | null {
     // Alpine might render it later, retry once after a short delay
     setTimeout(() => {
       if (document.querySelector(".main-products-swiper")) {
+        applySwiperDir(".main-products-swiper");
         new Swiper(".main-products-swiper", {
           modules: [Navigation],
           slidesPerView: 1.2,
@@ -47,6 +49,7 @@ function initMainProductsSwiper(): Swiper | null {
     return null;
   }
 
+  applySwiperDir(".main-products-swiper");
   return new Swiper(".main-products-swiper", {
     modules: [Navigation],
     slidesPerView: 1.2,
@@ -98,6 +101,7 @@ function buildHeroSwiper(): Swiper | null {
     heroSwiperInstance = null;
   }
 
+  applySwiperDir(el as HTMLElement);
   heroSwiperInstance = new Swiper(el, {
     modules: [Autoplay, Pagination, Navigation],
     loop: enableLoop,
@@ -162,6 +166,7 @@ function initCertificatesSwiper(): Swiper | null {
   const el = document.querySelector(".certificates__swiper");
   if (!el) return null;
 
+  applySwiperDir(".certificates__swiper");
   return new Swiper(".certificates__swiper", {
     modules: [Navigation, Pagination],
     slidesPerView: 4,
@@ -185,6 +190,7 @@ function initCompanyCarousel(): Swiper | null {
   const el = document.querySelector(".company-info__carousel-swiper");
   if (!el) return null;
 
+  applySwiperDir(".company-info__carousel-swiper");
   return new Swiper(".company-info__carousel-swiper", {
     modules: [Navigation],
     loop: true,

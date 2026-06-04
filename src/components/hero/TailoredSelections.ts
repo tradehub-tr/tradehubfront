@@ -11,6 +11,7 @@ import { t } from "../../i18n";
 import { formatPrice } from "../../utils/currency";
 import { getTailoredSelections } from "../../services/listingService";
 import { initCurrency } from "../../services/currencyService";
+import { applySwiperDir } from "../../utils/direction";
 
 interface CollectionProduct {
   name: string;
@@ -109,6 +110,7 @@ export function initTailoredSelections(): void {
   const el = document.querySelector<HTMLElement>(".tailored-swiper");
   if (!el) return;
 
+  applySwiperDir(el);
   new Swiper(el, {
     modules: [Navigation],
     spaceBetween: 8,

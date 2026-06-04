@@ -27,6 +27,7 @@ import {
 } from "../../services/listingService";
 import { getCurrentProduct } from "../../alpine/product";
 import type { ProductListingCard } from "../../types/productListing";
+import { applySwiperDir } from "../../utils/direction";
 
 interface TabMeta {
   key: RelatedRelationType;
@@ -239,6 +240,7 @@ function ensurePanelSwiper(root: HTMLElement, key: string): void {
   const prevBtn = root.querySelector<HTMLElement>(`[data-rp-prev="${key}"]`);
   const nextBtn = root.querySelector<HTMLElement>(`[data-rp-next="${key}"]`);
 
+  applySwiperDir(swiperEl);
   const swiper = new Swiper(swiperEl, {
     modules: [Navigation],
     slidesPerView: 1.4,

@@ -10,6 +10,7 @@ import "swiper/swiper-bundle.css";
 import { t } from "../../i18n";
 import { searchListings } from "../../services/listingService";
 import { getListingUrl } from "../../utils/listingUrl";
+import { applySwiperDir } from "../../utils/direction";
 import { initCurrency } from "../../services/currencyService";
 import { formatStartingPrice } from "../../utils/currency";
 
@@ -109,6 +110,7 @@ function initSwiper(): void {
     return;
   }
 
+  applySwiperDir(sliderElement);
   swiperInstance = new Swiper(sliderElement, {
     modules: [Autoplay, Navigation, Pagination],
     loop: true,
