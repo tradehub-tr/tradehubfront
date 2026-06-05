@@ -154,9 +154,9 @@ export function renderReviewCard(review: ProductReview, showProductThumb = false
   // Reviewer reputation tier — Top/Trusted/Verified (B2B güven göstergesi)
   if (review.reviewerTier) {
     const tierLabels: Record<string, string> = {
-      Top: "⭐ Üst Düzey Değerlendirici",
-      Trusted: "🛡 Güvenilir Değerlendirici",
-      Verified: "✓ Doğrulanmış Değerlendirici",
+      Top: "⭐ " + t("product.reviewWrite.reviewerTop"),
+      Trusted: "🛡 " + t("product.reviewWrite.reviewerTrusted"),
+      Verified: "✓ " + t("product.reviewWrite.reviewerVerified"),
     };
     const tierClasses: Record<string, string> = {
       Top: "bg-purple-100 text-purple-700",
@@ -172,9 +172,9 @@ export function renderReviewCard(review: ProductReview, showProductThumb = false
   // Reviewer reputation tier — Top/Trusted/Verified (B2B güven göstergesi)
   if (review.reviewerTier) {
     const tierLabels: Record<string, string> = {
-      Top: "⭐ Üst Düzey Değerlendirici",
-      Trusted: "🛡 Güvenilir Değerlendirici",
-      Verified: "✓ Doğrulanmış Değerlendirici",
+      Top: "⭐ " + t("product.reviewWrite.reviewerTop"),
+      Trusted: "🛡 " + t("product.reviewWrite.reviewerTrusted"),
+      Verified: "✓ " + t("product.reviewWrite.reviewerVerified"),
     };
     const tierClasses: Record<string, string> = {
       Top: "bg-purple-100 text-purple-700",
@@ -272,7 +272,7 @@ export function renderReviewCard(review: ProductReview, showProductThumb = false
         </button>
         ${
           review.canEdit
-            ? `<button type="button" class="rv-edit-own-btn text-[12px] text-primary-600 hover:text-primary-700 transition-colors inline-flex items-center gap-1 ms-auto" data-review-id="${review.id}" title="Yorumumu düzenle (24 saat içinde)">
+            ? `<button type="button" class="rv-edit-own-btn text-[12px] text-primary-600 hover:text-primary-700 transition-colors inline-flex items-center gap-1 ms-auto" data-review-id="${review.id}" title="${t("product.reviewWrite.editMyReviewHint")}">
                 <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487a2.032 2.032 0 112.872 2.872L7.5 21.613H4v-3.5L16.862 4.487z"/></svg>
                 Düzenle
               </button>`
@@ -344,17 +344,17 @@ export function ProductReviews(): string {
         <div class="flex">
           <button type="button" class="rv-sub-tab px-5 py-2.5 text-[14px] font-medium text-[var(--pd-rating-text-color,#6b7280)] bg-none border-none cursor-pointer relative whitespace-nowrap transition-colors duration-150 [&.active]:text-[var(--pd-title-color,#111827)] [&.active]:font-bold [&.active]:after:content-[''] [&.active]:after:absolute [&.active]:after:bottom-[-2px] [&.active]:after:start-0 [&.active]:after:end-0 [&.active]:after:h-[2px] [&.active]:after:bg-[var(--pd-tab-active-border,#cc9900)] max-[374px]:text-[13px] max-[374px]:px-2 max-[374px]:py-2 active" data-rv-panel="rv-product-panel">${t("product.productReviewsTab", { count: String(p.reviewCount) })}</button>
           <button type="button" class="rv-sub-tab px-5 py-2.5 text-[14px] font-medium text-[var(--pd-rating-text-color,#6b7280)] bg-none border-none cursor-pointer relative whitespace-nowrap transition-colors duration-150 [&.active]:text-[var(--pd-title-color,#111827)] [&.active]:font-bold [&.active]:after:content-[''] [&.active]:after:absolute [&.active]:after:bottom-[-2px] [&.active]:after:start-0 [&.active]:after:end-0 [&.active]:after:h-[2px] [&.active]:after:bg-[var(--pd-tab-active-border,#cc9900)] max-[374px]:text-[13px] max-[374px]:px-2 max-[374px]:py-2" data-rv-panel="rv-store-panel">${t("product.storeReviewsTab", { count: String(p.storeReviewCount) })}</button>
-          <button type="button" class="rv-sub-tab px-5 py-2.5 text-[14px] font-medium text-[var(--pd-rating-text-color,#6b7280)] bg-none border-none cursor-pointer relative whitespace-nowrap transition-colors duration-150 [&.active]:text-[var(--pd-title-color,#111827)] [&.active]:font-bold [&.active]:after:content-[''] [&.active]:after:absolute [&.active]:after:bottom-[-2px] [&.active]:after:start-0 [&.active]:after:end-0 [&.active]:after:h-[2px] [&.active]:after:bg-[var(--pd-tab-active-border,#cc9900)] max-[374px]:text-[13px] max-[374px]:px-2 max-[374px]:py-2" data-rv-panel="rv-qa-panel" id="rv-qa-tab-btn">Soru &amp; Cevap <span id="rv-qa-count">(0)</span></button>
+          <button type="button" class="rv-sub-tab px-5 py-2.5 text-[14px] font-medium text-[var(--pd-rating-text-color,#6b7280)] bg-none border-none cursor-pointer relative whitespace-nowrap transition-colors duration-150 [&.active]:text-[var(--pd-title-color,#111827)] [&.active]:font-bold [&.active]:after:content-[''] [&.active]:after:absolute [&.active]:after:bottom-[-2px] [&.active]:after:start-0 [&.active]:after:end-0 [&.active]:after:h-[2px] [&.active]:after:bg-[var(--pd-tab-active-border,#cc9900)] max-[374px]:text-[13px] max-[374px]:px-2 max-[374px]:py-2" data-rv-panel="rv-qa-panel" id="rv-qa-tab-btn">${t("product.reviewWrite.qaTab")} <span id="rv-qa-count">(0)</span></button>
         </div>
         <button
           type="button"
           id="rv-write-review-btn"
           class="th-btn-dark h-9 px-4 rounded-md text-[13px] font-semibold inline-flex items-center gap-1.5 mb-[-2px] disabled:opacity-50 disabled:cursor-not-allowed"
           disabled
-          title="Bu ürünü yorumlayabilmek için doğrulanmış bir siparişiniz olmalı"
+          title="${t("product.reviewWrite.writeReviewDisabledHint")}"
         >
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487a2.032 2.032 0 112.872 2.872L7.5 21.613H4v-3.5L16.862 4.487z"/></svg>
-          <span>Yorum Yaz</span>
+          <span>${t("product.reviewWrite.writeReviewBtn")}</span>
         </button>
       </div>
 

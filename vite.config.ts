@@ -106,6 +106,32 @@ function staticPageRewritePlugin(): Plugin {
     };
 }
 
+/**
+ * Dev-only: dinamik pretty URL'leri ilgili HTML entry'sine internal-rewrite eder.
+ * Production'da bunu Nginx yapıyor; dev server'da Nginx olmadığı için ürün kartı
+ * linkleri (/urun/<slug>) ana sayfaya düşüyordu. URL değişmez — product-detail.ts
+ * slug'ı window.location.pathname'den okur, getListingDetail(slug) ile çözer.
+ */
+function prettyUrlRewritePlugin(): Plugin {
+    const PRETTY: Array<{ re: RegExp; html: string }> = [
+        { re: /^\/(?:en\/)?urun\/[^/]+/, html: '/pages/product-detail.html' },
+    ];
+    return {
+        name: 'pretty-url-rewrite',
+        apply: 'serve',
+        configureServer(server) {
+            server.middlewares.use((req, _res, next) => {
+                if (!req.url) return next();
+                const [pathOnly, queryString] = req.url.split('?');
+                const match = PRETTY.find((p) => p.re.test(pathOnly));
+                if (!match) return next();
+                req.url = queryString ? `${match.html}?${queryString}` : match.html;
+                next();
+            });
+        },
+    };
+}
+
 /** Dev-only plugin: serve 404.html for unknown routes */
 function notFoundFallbackPlugin(): Plugin {
     return {
@@ -198,6 +224,7 @@ export default defineConfig({
         // notFoundFallbackPlugin'den ÖNCE çalışmalı: önce rewrite,
         // eşleşmezse 404.html fallback.
         staticPageRewritePlugin(),
+        prettyUrlRewritePlugin(),
         notFoundFallbackPlugin(),
         seoPlaceholderPlugin(),
         VitePWA({

@@ -72,7 +72,7 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
   if (variant.type === "color") {
     return `
       <div class="variant-group" data-variant-type="${variant.type}" data-variant-label="${variant.label}">
-        <h4 class="pd-variant-label text-sm text-[var(--pd-title-color,#111827)] my-4 mb-3"><strong>${variant.label}:</strong> <span class="variant-selected-label">${selectedOpt.label}</span></h4>
+        <h4 class="pd-variant-label text-sm text-[var(--pd-title-color,#111827)] my-4 mb-3"><strong>${variant.displayLabel || variant.label}:</strong> <span class="variant-selected-label">${selectedOpt.displayLabel || selectedOpt.label}</span></h4>
         <div class="pd-color-thumbs flex flex-wrap gap-2 mt-2">
           ${variant.options
             .map((opt) => {
@@ -84,6 +84,7 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
               class="variant-option pd-color-thumb w-16 h-16 p-0 border-2 border-[var(--color-border-default,#e5e5e5)] rounded-full overflow-hidden cursor-pointer bg-transparent transition-[border-color] duration-150 [&_img]:w-full [&_img]:h-full [&_img]:object-cover [&_img]:block [&.active]:border-[var(--pd-title-color,#111827)] [&:hover:not(.active):not(.pd-color-thumb-disabled)]:border-[#999] [&.pd-color-thumb-disabled]:opacity-40 [&.pd-color-thumb-disabled]:cursor-not-allowed ${isActive ? "active" : ""} ${opt.available ? "" : "pd-color-thumb-disabled"}"
               data-variant-id="${opt.id}"
               data-variant-label="${opt.label}"
+              data-variant-display="${opt.displayLabel || opt.label}"
               data-variant-image="${opt.thumbnail || ""}"
               data-variant-video="${opt.videoUrl || ""}"
               data-variant-title="${encodeURIComponent(opt.title || "")}"
@@ -92,10 +93,10 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
               data-is-default="${isDef ? "1" : "0"}"
               ${opt.price ? `data-variant-price="${opt.price}"` : ""}
               ${opt.available ? "" : "disabled"}
-              aria-label="${opt.label}"
-              title="${opt.label}"
+              aria-label="${opt.displayLabel || opt.label}"
+              title="${opt.displayLabel || opt.label}"
             >
-              <img src="${opt.thumbnail || ""}" alt="${opt.label}" style="background:${opt.value};">
+              <img src="${opt.thumbnail || ""}" alt="${opt.displayLabel || opt.label}" style="background:${opt.value};">
             </button>
           `;
             })
@@ -120,13 +121,14 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
 
   return `
     <div class="variant-group" data-variant-type="${variant.type}" data-variant-label="${variant.label}">
-      <h4 class="pd-variant-label text-sm text-[var(--pd-title-color,#111827)] my-4 mb-3"><strong>${variant.label}:</strong> <span class="variant-selected-label">${selectedOpt.label}</span></h4>
+      <h4 class="pd-variant-label text-sm text-[var(--pd-title-color,#111827)] my-4 mb-3"><strong>${variant.displayLabel || variant.label}:</strong> <span class="variant-selected-label">${selectedOpt.displayLabel || selectedOpt.label}</span></h4>
       <div class="flex flex-wrap gap-2 mt-2">
         ${variant.options
           .map((opt) => {
             const isDef = !!opt.isDefault;
             const isActive = opt.id === selectedOpt.id;
-            // Check availability for the default color (not just global availability)
+            // Check availability for the default color (not just global availability).
+            // Matching KAYNAK label/value ile — opt.label/variant.label kaynak.
             const availableForColor = defaultColorLabel
               ? isOptionAvailableForColor(
                   skuMatrix,
@@ -143,15 +145,16 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
             class="variant-option pd-variant-btn px-4 py-1.5 rounded-full text-[13px] font-medium border border-[var(--color-border-medium,#d1d5db)] bg-[var(--color-surface,#fff)] text-[var(--pd-title-color,#111827)] cursor-pointer transition-all duration-150 [&.active]:border-[var(--pd-title-color,#111827)] [&.active]:font-semibold [&:hover:not(.active):not(:disabled)]:border-[#999] ${isActive ? "active" : ""} ${isAvailable ? "" : "opacity-40 line-through cursor-not-allowed"}"
             data-variant-id="${opt.id}"
             data-variant-label="${opt.label}"
+            data-variant-display="${opt.displayLabel || opt.label}"
             data-variant-video="${opt.videoUrl || ""}"
             data-variant-title="${encodeURIComponent(opt.title || "")}"
             data-variant-images="${encodeURIComponent(JSON.stringify(opt.images || []))}"
             data-is-default="${isDef ? "1" : "0"}"
             ${opt.price ? `data-variant-price="${opt.price}"` : ""}
             ${isAvailable ? "" : "disabled"}
-            title="${isAvailable ? opt.label : `${opt.label} — tükendi`}"
+            title="${isAvailable ? opt.displayLabel : `${opt.displayLabel || opt.label} — tükendi`}"
           >
-            ${opt.label}
+            ${opt.displayLabel || opt.label}
           </button>
         `;
           })
@@ -434,15 +437,17 @@ function crossDisableVariants(_selectedAxisLabel: string, _selectedValue: string
         }
       }
 
+      // Tooltip = çevrili gösterim (eşleşme btnValue=kaynak ile yapıldı).
+      const btnDisplay = btn.getAttribute("data-variant-display") || btnValue;
       if (!hasStock && btnValue) {
         btn.classList.add("opacity-40", "line-through", "cursor-not-allowed");
         btn.classList.remove("active");
-        btn.setAttribute("title", `${btnValue} — tükendi`);
+        btn.setAttribute("title", `${btnDisplay} — tükendi`);
         btn.setAttribute("disabled", "");
       } else {
         btn.classList.remove("opacity-40", "line-through", "cursor-not-allowed");
         btn.removeAttribute("disabled");
-        btn.setAttribute("title", btnValue);
+        btn.setAttribute("title", btnDisplay);
       }
     });
   });
@@ -498,10 +503,11 @@ export function initProductInfo(): void {
         .forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
 
-      // Update label text (e.g., "Renk: Altın" → "Renk: Gümüş")
-      const variantLabel = btn.getAttribute("data-variant-label");
-      if (labelEl && variantLabel) {
-        labelEl.textContent = variantLabel;
+      // Update label text (çevrili gösterim) — eşleşme kaynak data-variant-label ile.
+      const variantDisplay =
+        btn.getAttribute("data-variant-display") || btn.getAttribute("data-variant-label");
+      if (labelEl && variantDisplay) {
+        labelEl.textContent = variantDisplay;
       }
 
       // Read all variant-specific data from the clicked button

@@ -1368,10 +1368,13 @@ function mapListingDetail(raw: any): ProductDetail {
     }
     return {
       type,
+      // label = KAYNAK (matching/cart); displayLabel = çevrili (yalnız gösterim).
       label: v.name,
+      displayLabel: v.displayName || v.name,
       options: (v.options || []).map((o: any, i: number) => ({
         id: o.variantId || `${v.name}-${i}`,
         label: o.label,
+        displayLabel: o.displayLabel || o.label,
         value: o.value,
         thumbnail: o.image || undefined,
         available: o.available !== false,

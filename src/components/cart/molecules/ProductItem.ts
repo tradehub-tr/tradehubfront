@@ -8,9 +8,9 @@ import type { CartProduct, CartProductTag } from "../../../types/cart";
 import { Checkbox } from "../atoms/Checkbox";
 import { SkuRow } from "./SkuRow";
 import trashIcon from "../../../assets/images/trash.png";
+import favIcon from "../../../assets/images/fav.png";
 import { t } from "../../../i18n";
 import { formatPrice } from "../../../services/currencyService";
-import { isItemFavorited } from "../../../stores/favorites";
 
 export interface ProductItemProps {
   product: CartProduct;
@@ -63,7 +63,6 @@ export function ProductItem({ product }: ProductItemProps): string {
   // Tüm ürünler kapalı başlar — kullanıcı düzenlemek istediğini açar.
   const productOpen = false;
   const productImage = product.skus[0]?.skuImage || "";
-  const isFav = isItemFavorited(product.id);
 
   return `
     <section class="sc-c-spu-container-new p-0 border-b border-[#e8e6e0] [&:last-child]:border-b-0" data-product-id="${escapeHtml(product.id)}" x-data="{ productOpen: ${productOpen}, skuExpanded: false }">

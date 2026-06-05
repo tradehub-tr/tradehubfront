@@ -93,7 +93,7 @@ function renderVariantSection(variant: ProductVariant): string {
         data-value="${opt.id}" data-label="${opt.label}" ${opt.price ? `data-variant-price="${opt.price}"` : ""} ${!opt.available ? "disabled" : ""}>
         ${
           opt.thumbnail
-            ? `<img src="${opt.thumbnail}" alt="${opt.label}" class="w-full h-full object-cover" />`
+            ? `<img src="${opt.thumbnail}" alt="${opt.displayLabel || opt.label}" class="w-full h-full object-cover" />`
             : `<span class="pdm-color-swatch" style="background:${opt.value}"></span>`
         }
       </button>
@@ -103,7 +103,7 @@ function renderVariantSection(variant: ProductVariant): string {
 
     return collapsibleSection({
       id: `pdm-color-section`,
-      title: `${variant.label} <em>(${available})</em>`,
+      title: `${variant.displayLabel || variant.label} <em>(${available})</em>`,
       bodyHtml: `<div class="pdm-color-thumbs flex flex-wrap gap-2">${thumbs}</div>`,
     });
   }
@@ -114,7 +114,7 @@ function renderVariantSection(variant: ProductVariant): string {
       (opt) => `
     <button type="button" class="pdm-variant-pill px-4 py-[7px] border border-border-medium rounded-md text-[13px] text-text-body bg-surface cursor-pointer transition-[border-color] duration-150 [&.active]:border-[var(--color-text-heading)] [&.active]:font-semibold [&.pdm-disabled]:opacity-40 [&.pdm-disabled]:cursor-not-allowed${!opt.available ? " pdm-disabled" : ""}"
       data-value="${opt.id}" data-label="${opt.label}" ${opt.price ? `data-variant-price="${opt.price}"` : ""} ${!opt.available ? "disabled" : ""}>
-      ${opt.label}
+      ${opt.displayLabel || opt.label}
     </button>
   `
     )
@@ -122,7 +122,7 @@ function renderVariantSection(variant: ProductVariant): string {
 
   return collapsibleSection({
     id: `pdm-${variant.type}-section`,
-    title: `${variant.label} <em>(${available})</em>`,
+    title: `${variant.displayLabel || variant.label} <em>(${available})</em>`,
     bodyHtml: `<div class="pdm-variant-pills flex flex-wrap gap-2">${pills}</div>`,
   });
 }

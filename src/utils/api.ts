@@ -1,6 +1,18 @@
 import { getBaseUrl } from "./url";
+import { getCurrentLang } from "../i18n";
 
 const BASE_URL = import.meta.env.VITE_API_URL || "/api";
+
+/**
+ * Aktif içerik dilini bir GET endpoint URL'ine `lang` query param olarak ekler.
+ * Backend dinamik içeriği (kategori/ürün metinleri) bu dile çözer; lang param'ı
+ * olmayan endpoint'ler değeri yok sayar. Zaten lang varsa dokunmaz.
+ */
+function appendLangParam(endpoint: string): string {
+  if (/[?&]lang=/.test(endpoint)) return endpoint;
+  const sep = endpoint.includes("?") ? "&" : "?";
+  return `${endpoint}${sep}lang=${encodeURIComponent(getCurrentLang())}`;
+}
 
 // Alpine component'leri window.API_BASE üzerinden erişir
 window.API_BASE = BASE_URL;
@@ -188,6 +200,9 @@ export async function api<T>(endpoint: string, options: RequestInit = {}): Promi
   const method = (options.method || "GET").toUpperCase();
   const needsCsrf = ["POST", "PUT", "DELETE", "PATCH"].includes(method);
 
+  // i18n: okuma (GET) çağrılarına aktif dili ekle.
+  if (method === "GET") endpoint = appendLangParam(endpoint);
+
   const doFetch = async (csrf: string) =>
     fetch(`${BASE_URL}${endpoint}`, {
       ...options,
@@ -295,8 +310,10 @@ export async function callMethod<T = unknown>(
         body: JSON.stringify(params),
       });
     }
+    // i18n: GET çağrısına aktif içerik dilini ekle (zaten varsa dokunma).
+    const langParams = "lang" in params ? params : { ...params, lang: getCurrentLang() };
     const qs = new URLSearchParams(
-      Object.fromEntries(Object.entries(params).map(([k, v]) => [k, String(v)]))
+      Object.fromEntries(Object.entries(langParams).map(([k, v]) => [k, String(v)]))
     ).toString();
     return fetch(qs ? `${url}?${qs}` : url, {
       method: "GET",
