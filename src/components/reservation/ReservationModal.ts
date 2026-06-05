@@ -8,6 +8,8 @@
  *   }))
  */
 
+import { t } from "../../i18n";
+
 export function ReservationModal(): string {
   return /* html */ `
 		<div x-data
@@ -20,9 +22,9 @@ export function ReservationModal(): string {
 				<!-- Header -->
 				<div class="flex items-center justify-between px-5 py-4 border-b border-gray-100">
 					<div>
-						<h2 class="text-base font-semibold text-gray-800">Görüşme Rezervasyonu</h2>
+						<h2 class="text-base font-semibold text-gray-800">${t("commonSvc.meetingReservation")}</h2>
 						<p class="text-xs text-gray-500 mt-0.5">
-							<span x-text="$store.reservationModal.sellerName"></span>'in müsait olduğu bir saat seç
+							<span x-text="$store.reservationModal.sellerName"></span> — ${t("commonSvc.pickAvailableHour")}
 						</p>
 					</div>
 					<button @click="$store.reservationModal.close()"
@@ -39,13 +41,13 @@ export function ReservationModal(): string {
 					<template x-if="$store.reservationModal.successReservation && $store.reservationModal.successActive">
 						<div class="text-center py-6">
 							<div class="text-4xl mb-3">✓</div>
-							<h3 class="text-base font-semibold text-gray-800 mb-2">Rezervasyon onaylandı</h3>
+							<h3 class="text-base font-semibold text-gray-800 mb-2">${t("commonSvc.reservationConfirmed")}</h3>
 							<p class="text-sm text-gray-500 mb-5">
-								Şimdi <strong x-text="$store.reservationModal.sellerName"></strong> ile mesajlaşmaya başlayabilirsin.
+								${t("commonSvc.canStartChatNowPrefix")} <strong x-text="$store.reservationModal.sellerName"></strong> ${t("commonSvc.canStartChatNowSuffix")}
 							</p>
 							<button @click="$store.reservationModal.openChatAfterReserve()"
 									class="th-btn-primary w-full">
-								Sohbete Başla
+								${t("commonSvc.startChatBtn")}
 							</button>
 						</div>
 					</template>
@@ -54,35 +56,35 @@ export function ReservationModal(): string {
 					<template x-if="$store.reservationModal.successReservation && !$store.reservationModal.successActive">
 						<div class="text-center py-6">
 							<div class="text-4xl mb-3">📅</div>
-							<h3 class="text-base font-semibold text-gray-800 mb-2">Rezervasyon kabul edildi</h3>
+							<h3 class="text-base font-semibold text-gray-800 mb-2">${t("commonSvc.reservationAccepted")}</h3>
 							<p class="text-sm text-gray-600 mb-2">
-								<strong x-text="$store.reservationModal.sellerName"></strong> ile görüşme şu zaman aralığında açık olacak:
+								<strong x-text="$store.reservationModal.sellerName"></strong> ${t("commonSvc.meetingWindowSuffix")}
 							</p>
 							<p class="text-sm font-medium text-violet-600 mb-5"
 							   x-text="$store.reservationModal.successReservation
 									? $store.reservationModal.formatSlot($store.reservationModal.successReservation.start_at, $store.reservationModal.successReservation.end_at)
 									: ''"></p>
 							<p class="text-xs text-gray-500 mb-5">
-								Bu saatte tekrar "Sohbet Et" tıklayarak konuşmayı başlatabilirsin.
+								${t("commonSvc.retryChatAtTime")}
 							</p>
 							<button @click="$store.reservationModal.close()"
 									class="th-btn-primary w-full">
-								Tamam
+								${t("commonSvc.ok")}
 							</button>
 						</div>
 					</template>
 
 					<!-- Loading -->
 					<template x-if="!$store.reservationModal.successReservation && $store.reservationModal.loading">
-						<div class="py-8 text-center text-sm text-gray-500">Müsait saatler yükleniyor…</div>
+						<div class="py-8 text-center text-sm text-gray-500">${t("commonSvc.slotsLoading")}</div>
 					</template>
 
 					<!-- Empty -->
 					<template x-if="!$store.reservationModal.successReservation && !$store.reservationModal.loading && $store.reservationModal.slots.length === 0">
 						<div class="py-8 text-center">
 							<div class="text-3xl mb-3">📭</div>
-							<p class="text-sm text-gray-600 mb-1">Şu an müsait bir saat yok.</p>
-							<p class="text-xs text-gray-400">Satıcı yeni slot açtığında burada görünecek.</p>
+							<p class="text-sm text-gray-600 mb-1">${t("commonSvc.noSlotsAvailable")}</p>
+							<p class="text-xs text-gray-400">${t("commonSvc.noSlotsHint")}</p>
 						</div>
 					</template>
 
@@ -103,7 +105,7 @@ export function ReservationModal(): string {
 									<div class="flex-1 min-w-0">
 										<div class="text-sm font-medium text-gray-800"
 											 x-text="$store.reservationModal.formatSlot(slot.start_at, slot.end_at)"></div>
-										<div class="text-xs text-gray-500 mt-0.5" x-text="slot.notes || 'Görüşme için müsait'"></div>
+										<div class="text-xs text-gray-500 mt-0.5" x-text="slot.notes || '${t("commonSvc.availableForMeeting")}'"></div>
 									</div>
 									<template x-if="$store.reservationModal.selectedSlotId === slot.id">
 										<div class="w-5 h-5 rounded-full bg-(--color-cta-primary,#cc9900) text-white flex items-center justify-center flex-shrink-0">
@@ -129,13 +131,13 @@ export function ReservationModal(): string {
 					<div class="border-t border-gray-100 px-5 py-3 flex items-center gap-2">
 						<button @click="$store.reservationModal.close()"
 								class="th-btn-outline flex-1">
-							Vazgeç
+							${t("commonSvc.cancel")}
 						</button>
 						<button @click="$store.reservationModal.confirm()"
 								:disabled="!$store.reservationModal.selectedSlotId || $store.reservationModal.reserving"
 								class="th-btn-primary flex-1"
 								:class="(!$store.reservationModal.selectedSlotId || $store.reservationModal.reserving) ? 'opacity-50 cursor-not-allowed' : ''">
-							<span x-text="$store.reservationModal.reserving ? 'Rezerve ediliyor…' : 'Rezerve Et'"></span>
+							<span x-text="$store.reservationModal.reserving ? '${t("commonSvc.reserving")}' : '${t("commonSvc.reserve")}'"></span>
 						</button>
 					</div>
 				</template>

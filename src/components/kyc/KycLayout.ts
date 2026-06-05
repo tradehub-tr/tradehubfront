@@ -15,6 +15,7 @@
 import { api } from "../../utils/api";
 import { SlotDropzoneController } from "../../lib/upload-ui";
 import { renderSegmented } from "../../utils/ui/toggle";
+import { t } from "../../i18n";
 
 const FORM_ID = "kyc-form";
 const TOGGLE_ID = "kyc-account-type-toggle";
@@ -53,14 +54,14 @@ function renderToggle(): string {
   // event'iyle setAccountType()'a bağlanır.
   return `
 		<div class="bg-white rounded-2xl border border-gray-200 p-4 mb-4">
-			<label class="text-sm text-gray-600 mb-2 block">Hesap türü</label>
+			<label class="text-sm text-gray-600 mb-2 block">${t("kycUi.accountType")}</label>
 			<div id="${TOGGLE_ID}" class="max-w-xs">
 				${renderSegmented({
           name: "kyc_account_type",
           value: "Individual",
           options: [
-            { value: "Individual", label: "Bireysel" },
-            { value: "Business", label: "Kurumsal" },
+            { value: "Individual", label: t("kycUi.individual") },
+            { value: "Business", label: t("kycUi.corporate") },
           ],
         })}
 			</div>
@@ -72,11 +73,11 @@ function renderCorporateOnlySection(): string {
   // Sadece Kurumsal iken görünür. Şirket Ünvanı.
   return `
 		<section data-kyc-section="corporate" class="bg-white rounded-2xl border border-gray-200 p-6 mb-4">
-			<h3 class="text-base font-semibold mb-1">Şirket Bilgileri</h3>
-			<p class="text-xs text-gray-500 mb-4">Kurumsal hesap için zorunlu</p>
+			<h3 class="text-base font-semibold mb-1">${t("kycUi.companyInfoTitle")}</h3>
+			<p class="text-xs text-gray-500 mb-4">${t("kycUi.corporateRequired")}</p>
 			<div>
-				<label class="block text-xs font-medium mb-1.5 text-gray-600">Şirket Ünvanı <span class="text-red-500">*</span></label>
-				<input type="text" name="company_name" class="th-input th-input-md" placeholder="Örn: ACME Ltd. Şti." />
+				<label class="block text-xs font-medium mb-1.5 text-gray-600">${t("kycUi.companyTitleLabel")} <span class="text-red-500">*</span></label>
+				<input type="text" name="company_name" class="th-input th-input-md" placeholder="${t("kycUi.companyTitlePlaceholder")}" />
 			</div>
 		</section>
 	`;
@@ -86,32 +87,32 @@ function renderCommonSection(): string {
   // Hem Kurumsal hem Bireysel için ortak alanlar.
   return `
 		<section class="bg-white rounded-2xl border border-gray-200 p-6 mb-4">
-			<h3 class="text-base font-semibold mb-1">Kimlik & İletişim Bilgileri</h3>
-			<p class="text-xs text-gray-500 mb-4">Tüm alanlar zorunlu</p>
+			<h3 class="text-base font-semibold mb-1">${t("kycUi.identityContactTitle")}</h3>
+			<p class="text-xs text-gray-500 mb-4">${t("kycUi.allFieldsRequired")}</p>
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 				<div>
 					<label class="block text-xs font-medium mb-1.5 text-gray-600">
-						<span data-kyc-tax-label>Vergi Numarası (TCKN)</span> <span class="text-red-500">*</span>
+						<span data-kyc-tax-label>${t("kycUi.taxNumberTckn")}</span> <span class="text-red-500">*</span>
 					</label>
 					<input type="text" name="tax_id" class="th-input th-input-md"
 						minlength="10" maxlength="11" pattern="\\d{10,11}" inputmode="numeric"
-						placeholder="10-11 hane" />
+						placeholder="${t("kycUi.taxDigits1011")}" />
 				</div>
 				<div>
-					<label class="block text-xs font-medium mb-1.5 text-gray-600">Telefon <span class="text-red-500">*</span></label>
+					<label class="block text-xs font-medium mb-1.5 text-gray-600">${t("kycUi.phone")} <span class="text-red-500">*</span></label>
 					<input type="tel" name="phone" class="th-input th-input-md" placeholder="+90 5xx xxx xx xx" />
 				</div>
 				<div>
-					<label class="block text-xs font-medium mb-1.5 text-gray-600">E-Posta <span class="text-red-500">*</span></label>
+					<label class="block text-xs font-medium mb-1.5 text-gray-600">${t("kycUi.email")} <span class="text-red-500">*</span></label>
 					<input type="email" name="email_field" class="th-input th-input-md bg-gray-50 cursor-not-allowed" readonly />
 				</div>
 				<div class="md:col-span-2"></div>
 				<div class="md:col-span-2">
-					<label class="block text-xs font-medium mb-1.5 text-gray-600">Adres <span class="text-red-500">*</span></label>
+					<label class="block text-xs font-medium mb-1.5 text-gray-600">${t("kycUi.address")} <span class="text-red-500">*</span></label>
 					<textarea name="address" rows="2" class="th-input th-input-md"></textarea>
 				</div>
 				<div class="md:col-span-2">
-					<label class="block text-xs font-medium mb-1.5 text-gray-600">Fatura Adresi <span class="text-red-500">*</span></label>
+					<label class="block text-xs font-medium mb-1.5 text-gray-600">${t("kycUi.billingAddress")} <span class="text-red-500">*</span></label>
 					<textarea name="billing_address" rows="2" class="th-input th-input-md"></textarea>
 				</div>
 			</div>
@@ -125,8 +126,8 @@ function renderDocumentSection(): string {
   // formData yüklendiğinde JS preview HTML basar; boşsa hidden kalır.
   return `
 		<section class="bg-white rounded-2xl border border-gray-200 p-6 mb-4">
-			<h3 class="text-base font-semibold mb-1">Kimlik Belgesi</h3>
-			<p class="text-xs text-gray-500 mb-4">PDF, JPG, JPEG, PNG, WEBP, DOCX · Maks 10 MB · Zorunlu</p>
+			<h3 class="text-base font-semibold mb-1">${t("kycUi.identityDocument")}</h3>
+			<p class="text-xs text-gray-500 mb-4">${t("kycUi.documentFormatsHint")}</p>
 			<div id="kyc-identity-preview" class="hidden mb-3"></div>
 			<div id="kyc-document-slots"></div>
 		</section>
@@ -138,10 +139,9 @@ export function KycLayout(): string {
 		<div class="max-w-4xl mx-auto px-4 py-4">
 			<header class="mb-4 flex items-start justify-between gap-4 flex-wrap">
 				<div class="flex-1 min-w-0">
-					<h1 class="text-2xl font-semibold text-gray-900">KYC Doğrulama</h1>
+					<h1 class="text-2xl font-semibold text-gray-900">${t("kycUi.pageTitle")}</h1>
 					<p class="text-sm text-gray-600 mt-1">
-						Ürün satın alabilmek için kimlik doğrulamanızı tamamlayın.
-						Belgeleriniz süper admin tarafından onaylandıktan sonra alışveriş yapabilirsiniz.
+						${t("kycUi.pageDescription")}
 					</p>
 				</div>
 				<span id="kyc-status-badge" class="hidden inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap border">
@@ -160,7 +160,7 @@ export function KycLayout(): string {
 
 				<div class="flex justify-end gap-3">
 					<button type="submit" id="kyc-submit-btn" class="th-btn px-6 py-2.5 text-sm font-semibold">
-						Gönder
+						${t("kycUi.submit")}
 					</button>
 				</div>
 
@@ -226,11 +226,11 @@ function setAccountType(type: "Business" | "Individual"): void {
   // Tax ID label dinamik
   const taxLabel = form.querySelector("[data-kyc-tax-label]");
   if (taxLabel) {
-    taxLabel.textContent = type === "Business" ? "Vergi Numarası (VKN)" : "Vergi Numarası (TCKN)";
+    taxLabel.textContent = type === "Business" ? t("kycUi.taxNumberVkn") : t("kycUi.taxNumberTckn");
   }
   const taxInput = form.querySelector<HTMLInputElement>('[name="tax_id"]');
   if (taxInput) {
-    taxInput.placeholder = type === "Business" ? "10-11 hane" : "11 hane";
+    taxInput.placeholder = type === "Business" ? t("kycUi.taxDigits1011") : t("kycUi.taxDigits11");
     // Bireysel = TCKN tam 11 hane (mod-10 backend doğrulaması), Kurumsal = VKN 10-11 hane
     if (type === "Business") {
       taxInput.setAttribute("pattern", "\\d{10,11}");
@@ -273,7 +273,7 @@ const PREVIEW_ICONS = {
 function getFileExtUpper(url: string): string {
   const name = getFileName(url);
   const dot = name.lastIndexOf(".");
-  return dot >= 0 ? name.slice(dot + 1).toUpperCase() : "DOSYA";
+  return dot >= 0 ? name.slice(dot + 1).toUpperCase() : t("kycUi.fileFallback");
 }
 
 function showDocumentPreview(url: string): void {
@@ -299,14 +299,14 @@ function showDocumentPreview(url: string): void {
 			</div>
 			<div class="flex-1 min-w-0">
 				<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500 text-white uppercase tracking-wider mb-0.5">
-					Yüklü
+					${t("kycUi.uploaded")}
 				</span>
 				<div class="text-[13px] font-semibold text-gray-900 truncate">${filename}</div>
-				<div class="text-[11px] text-gray-600">${ext} dosyası</div>
+				<div class="text-[11px] text-gray-600">${t("kycUi.fileExt", { ext })}</div>
 			</div>
 			<a href="${url}" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-md text-[12px] font-medium bg-white text-emerald-700 border border-emerald-300 hover:bg-emerald-100 inline-flex items-center gap-1">
 				${PREVIEW_ICONS.eye}
-				<span>Görüntüle</span>
+				<span>${t("kycUi.view")}</span>
 			</a>
 		</div>
 	`;
@@ -363,11 +363,11 @@ function mountKycSlotDropzone(): void {
     slots: [
       {
         id: "identity_document",
-        label: "Kimlik Belgesi",
+        label: t("kycUi.identityDocument"),
         required: true,
         accept: ".pdf,.jpg,.jpeg,.png,.webp,.docx",
         maxFileSizeBytes: 10 * 1024 * 1024,
-        hint: "PDF, JPG, PNG, WEBP, DOCX · maks. 10MB",
+        hint: t("kycUi.slotHint"),
       },
     ],
     autoUpload: true,
@@ -382,10 +382,10 @@ function mountKycSlotDropzone(): void {
       showDocumentPreview(fileUrl);
     },
     onSlotUploadError: (_slotId, error) => {
-      showMessage(error || "Dosya yüklenemedi.", "error");
+      showMessage(error || t("kycUi.errUploadFailed"), "error");
     },
     onValidationError: (_slotId, _kind, file) => {
-      showMessage(`${file.name} 10MB üzerinde.`, "error");
+      showMessage(t("kycUi.errTooLarge", { fileName: file.name }), "error");
     },
   });
   kycSlotController.mount();
@@ -416,7 +416,7 @@ async function handleSubmit(e: SubmitEvent): Promise<void> {
   // Dosya zaten autoUpload ile yüklendi (SlotDropzone) — currentIdentityUrl set.
   const identityUrl = currentIdentityUrl;
   if (!identityUrl) {
-    showMessage("Kimlik belgesi zorunludur.", "error");
+    showMessage(t("kycUi.errIdentityRequired"), "error");
     return;
   }
 
@@ -436,7 +436,7 @@ async function handleSubmit(e: SubmitEvent): Promise<void> {
   // Bireysel hesapta TCKN client-side doğrula — backend HTTP 417 dönmeden önle.
   // VKN için HTML5 pattern (10-11 hane) yeterli; ek client-side check yok.
   if (accountType !== "Business" && !isValidTckn(payload.tax_id)) {
-    showMessage("Geçerli bir TCKN giriniz (11 hane, mod-10 doğrulamalı).", "error");
+    showMessage(t("kycUi.errInvalidTckn"), "error");
     return;
   }
 
@@ -445,15 +445,12 @@ async function handleSubmit(e: SubmitEvent): Promise<void> {
       method: "POST",
       body: JSON.stringify(payload),
     });
-    showMessage(
-      "KYC başvurunuz alındı. Süper admin onayından sonra alışveriş yapabileceksiniz.",
-      "success"
-    );
+    showMessage(t("kycUi.submitSuccess"), "success");
     // 2 saniye sonra reload — status badge yenilenir
     setTimeout(() => window.location.reload(), 2000);
   } catch (err) {
     console.error("[KYC submit failed]", err);
-    showMessage((err as Error).message || "Gönderim başarısız.", "error");
+    showMessage((err as Error).message || t("kycUi.errSubmitFailed"), "error");
   }
 }
 
@@ -473,22 +470,22 @@ function updateStatusUI(status: KycStatusData): void {
 
   const stateMap: Record<string, { label: string; tone: string; icon: string }> = {
     Pending: {
-      label: "Onay Bekliyor",
+      label: t("kycUi.statusPending"),
       tone: "bg-amber-100 text-amber-800 border-amber-200",
       icon: STATUS_ICONS.clock,
     },
     Verified: {
-      label: "Doğrulandı",
+      label: t("kycUi.statusVerified"),
       tone: "bg-green-100 text-green-800 border-green-200",
       icon: STATUS_ICONS.check,
     },
     Rejected: {
-      label: "Reddedildi",
+      label: t("kycUi.statusRejected"),
       tone: "bg-red-100 text-red-800 border-red-200",
       icon: STATUS_ICONS.x,
     },
     Suspended: {
-      label: "Askıya Alındı",
+      label: t("kycUi.statusSuspended"),
       tone: "bg-gray-200 text-gray-800 border-gray-300",
       icon: STATUS_ICONS.lock,
     },
@@ -507,23 +504,23 @@ function updateStatusUI(status: KycStatusData): void {
   const banners: Record<string, { tone: string; title: string; desc: string }> = {
     Pending: {
       tone: "bg-amber-50 border-amber-200 text-amber-900",
-      title: "Başvurunuz İnceleniyor",
-      desc: "Belgeleriniz süper admin tarafından inceleniyor. Genellikle 1-2 iş günü içinde sonuçlanır.",
+      title: t("kycUi.bannerPendingTitle"),
+      desc: t("kycUi.bannerPendingDesc"),
     },
     Verified: {
       tone: "bg-green-50 border-green-200 text-green-900",
-      title: "KYC Doğrulamanız Onaylandı",
-      desc: "Artık alışveriş yapabilirsiniz. Bilgilerinizi güncellemek isterseniz formu düzenleyip 'Bilgileri Güncelle' butonuna basın.",
+      title: t("kycUi.bannerVerifiedTitle"),
+      desc: t("kycUi.bannerVerifiedDesc"),
     },
     Rejected: {
       tone: "bg-red-50 border-red-200 text-red-900",
-      title: "Başvurunuz Reddedildi",
-      desc: status.rejection_reason || "Belgelerinizi düzeltip yeniden gönderin.",
+      title: t("kycUi.bannerRejectedTitle"),
+      desc: status.rejection_reason || t("kycUi.bannerRejectedDesc"),
     },
     Suspended: {
       tone: "bg-gray-100 border-gray-300 text-gray-800",
-      title: "Hesabınız Askıya Alındı",
-      desc: status.rejection_reason || "Destek ile iletişime geçin.",
+      title: t("kycUi.bannerSuspendedTitle"),
+      desc: status.rejection_reason || t("kycUi.bannerSuspendedDesc"),
     },
   };
   const bcfg = banners[status.status || ""];
@@ -538,11 +535,11 @@ function updateStatusUI(status: KycStatusData): void {
 
   if (submitBtn) {
     if (status.status === "Verified") {
-      submitBtn.textContent = "Bilgileri Güncelle";
+      submitBtn.textContent = t("kycUi.updateInfo");
     } else if (status.status === "Rejected") {
-      submitBtn.textContent = "Düzelt + Tekrar Gönder";
+      submitBtn.textContent = t("kycUi.fixAndResubmit");
     } else if (status.status === "Suspended") {
-      submitBtn.textContent = "Kilitli";
+      submitBtn.textContent = t("kycUi.locked");
       submitBtn.disabled = true;
     }
   }

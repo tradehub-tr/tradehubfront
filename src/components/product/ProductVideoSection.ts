@@ -9,6 +9,7 @@
  */
 
 import { getCurrentProduct } from "../../alpine/product";
+import { t } from "../../i18n";
 
 const VIDEO_CONTAINER_ID = "product-video-section";
 
@@ -42,7 +43,7 @@ export function toVideoEmbedHtml(rawUrl: string): string {
   }
 
   // Tanınmayan formatta anchor fallback
-  return `<a href="${url}" target="_blank" rel="noopener" class="absolute inset-0 w-full h-full flex items-center justify-center bg-gray-100 text-primary-600 underline">Videoyu aç</a>`;
+  return `<a href="${url}" target="_blank" rel="noopener" class="absolute inset-0 w-full h-full flex items-center justify-center bg-gray-100 text-primary-600 underline">${t("prodUi.openVideo")}</a>`;
 }
 
 function renderVideoPlayer(videoUrl: string, label: string): string {
@@ -68,7 +69,7 @@ export function ProductVideoSection(): string {
     <section id="${VIDEO_CONTAINER_ID}"
       data-listing-video="${listingVideo}"
       class="${hidden ? "hidden " : ""}mt-4 p-4 rounded-lg border border-gray-200 bg-white">
-      ${renderVideoPlayer(initialVideo, "Tanıtım Videosu")}
+      ${renderVideoPlayer(initialVideo, t("prodUi.promoVideo"))}
     </section>
   `;
 }
@@ -91,7 +92,7 @@ export function setProductVideo(variantVideoUrl: string): void {
   el.classList.remove("hidden");
   el.innerHTML = renderVideoPlayer(
     nextUrl,
-    variantVideoUrl ? "Varyant Videosu" : "Tanıtım Videosu"
+    variantVideoUrl ? t("prodUi.variantVideo") : t("prodUi.promoVideo")
   );
 }
 

@@ -376,7 +376,7 @@ function buildOrdersFromCheckout(
       seller: supplier?.name ?? deliveryOrder.sellerName,
       status: 'Waiting for payment',
       statusColor: 'text-amber-600',
-      statusDescription: 'Ödemenizi tamamlayın.',
+      statusDescription: t('checkoutMfr.completeYourPayment'),
       products,
       shipping: {
         trackingStatus: 'Pending',
@@ -430,7 +430,7 @@ function gatherReviewData() {
     if (postalEl?.value) addrParts.push(postalEl.value);
     shippingAddress = addrParts.join(', ');
   }
-  if (!shippingAddress) shippingAddress = 'Belirtilmedi';
+  if (!shippingAddress) shippingAddress = t('checkoutMfr.notSpecified');
 
   let paymentLabel = t('checkout.bankTransfer');
   const selected = document.querySelector<HTMLInputElement>('input[name="payment_method"]:checked');

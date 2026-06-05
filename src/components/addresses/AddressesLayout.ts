@@ -4,6 +4,8 @@
  * Uses Alpine.js x-data="addressesManager".
  */
 
+import { t } from "../../i18n";
+
 const ICONS = {
   pin: `<svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M8 0.5C5.51472 0.5 3.5 2.51472 3.5 5C3.5 8.375 8 15.5 8 15.5C8 15.5 12.5 8.375 12.5 5C12.5 2.51472 10.4853 0.5 8 0.5ZM8 6.875C6.96447 6.875 6.125 6.03553 6.125 5C6.125 3.96447 6.96447 3.125 8 3.125C9.03553 3.125 9.875 3.96447 9.875 5C9.875 6.03553 9.03553 6.875 8 6.875Z" fill="currentColor"/></svg>`,
   plus: `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`,
@@ -30,7 +32,7 @@ function renderAddressCard(): string {
           <span x-show="addr.is_default"
                 class="flex-shrink-0 inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-[var(--color-primary-500)] text-white">
             ${ICONS.check}
-            Varsayılan
+            ${t("authAddr.defaultBadge")}
           </span>
         </div>
 
@@ -49,15 +51,15 @@ function renderAddressCard(): string {
         <div class="flex items-center gap-2 flex-wrap border-t border-gray-100 pt-3">
           <button @click="openEdit(addr)"
                   class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded border border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50 transition-colors">
-            ${ICONS.edit} Düzenle
+            ${ICONS.edit} ${t("authAddr.edit")}
           </button>
           <button @click="confirmDelete(addr)"
                   class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded border border-gray-200 text-gray-700 hover:border-red-200 hover:text-red-600 hover:bg-red-50 transition-colors">
-            ${ICONS.trash} Sil
+            ${ICONS.trash} ${t("authAddr.delete")}
           </button>
           <button x-show="!addr.is_default" @click="setDefault(addr.id)"
                   class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded border border-gray-200 text-gray-600 hover:border-[var(--color-primary-500)] hover:text-[var(--color-primary-500)] transition-colors ms-auto">
-            Varsayılan Yap
+            ${t("authAddr.setDefault")}
           </button>
         </div>
       </div>
@@ -70,10 +72,10 @@ function renderEmptyState(): string {
     <div x-show="addresses.length === 0 && !loading"
          class="bg-white rounded-lg p-12 flex flex-col items-center text-center">
       <div class="mb-4 text-gray-300">${ICONS.emptyBox}</div>
-      <p class="text-gray-500 text-sm mb-4">Henüz kayıtlı adresiniz yok.</p>
+      <p class="text-gray-500 text-sm mb-4">${t("authAddr.emptyStateText")}</p>
       <button @click="openAdd()"
               class="inline-flex items-center gap-2 px-4 py-2 rounded th-btn text-sm font-medium">
-        ${ICONS.plus} İlk Adresinizi Ekleyin
+        ${ICONS.plus} ${t("authAddr.addFirstAddress")}
       </button>
     </div>
   `;
@@ -115,10 +117,10 @@ function renderFormModal(): string {
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 flex-shrink-0">
           <h2 id="address-modal-title"
               class="text-base font-semibold text-gray-900"
-              x-text="editingId ? 'Adresi Düzenle' : 'Yeni Adres Ekle'"></h2>
+              x-text="editingId ? '${t("authAddr.editAddress")}' : '${t("authAddr.addNewAddress")}'"></h2>
           <button type="button"
                   @click="closeModal()"
-                  aria-label="Kapat"
+                  aria-label="${t("authAddr.close")}"
                   class="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors">
             ${ICONS.close}
           </button>
@@ -130,19 +132,19 @@ function renderFormModal(): string {
 
             <!-- Sprint 1 (2026-05-15): Adres Tipi Toggle — Bireysel / Kurumsal -->
             <div>
-              <label class="block text-xs font-medium text-gray-700 mb-2">Adres Tipi</label>
+              <label class="block text-xs font-medium text-gray-700 mb-2">${t("authAddr.addressType")}</label>
               <div class="grid grid-cols-2 gap-2">
                 <button type="button"
                         @click="form.address_type = 'Individual'"
                         :class="form.address_type === 'Individual' ? 'border-amber-500 bg-amber-50 text-amber-900' : 'border-gray-300 bg-white text-gray-700'"
                         class="px-4 py-2 text-sm font-medium border rounded-md transition">
-                  Bireysel
+                  ${t("authAddr.individual")}
                 </button>
                 <button type="button"
                         @click="form.address_type = 'Business'"
                         :class="form.address_type === 'Business' ? 'border-amber-500 bg-amber-50 text-amber-900' : 'border-gray-300 bg-white text-gray-700'"
                         class="px-4 py-2 text-sm font-medium border rounded-md transition">
-                  Kurumsal
+                  ${t("authAddr.business")}
                 </button>
               </div>
             </div>
@@ -150,11 +152,11 @@ function renderFormModal(): string {
             <!-- Adres Başlığı -->
             <div>
               <label class="block text-xs font-medium text-gray-700 mb-1">
-                Adres Başlığı <span class="text-red-500">*</span>
+                ${t("authAddr.addressTitle")} <span class="text-red-500">*</span>
               </label>
               <input type="text"
                      x-model="form.title"
-                     placeholder="örn. Merkez Ofis, Depo"
+                     placeholder="${t("authAddr.addressTitlePlaceholder")}"
                      maxlength="60"
                      class="th-input th-input-md"
                      :class="{ 'is-error': errors.title }"
@@ -165,11 +167,11 @@ function renderFormModal(): string {
             <!-- İrtibat Kişisi -->
             <div>
               <label class="block text-xs font-medium text-gray-700 mb-1">
-                İrtibat Kişisi <span class="text-red-500">*</span>
+                ${t("authAddr.contactPerson")} <span class="text-red-500">*</span>
               </label>
               <input type="text"
                      x-model="form.contact_name"
-                     placeholder="Ad Soyad"
+                     placeholder="${t("authAddr.contactPersonPlaceholder")}"
                      maxlength="80"
                      class="th-input th-input-md"
                      :class="{ 'is-error': errors.contact_name }"
@@ -180,11 +182,11 @@ function renderFormModal(): string {
             <!-- Sprint 1 (2026-05-15): Şirket Adı + Vergi bilgileri — sadece Business için -->
             <div x-show="form.address_type === 'Business'" x-transition>
               <label class="block text-xs font-medium text-gray-700 mb-1">
-                Şirket Adı <span class="text-red-500">*</span>
+                ${t("authAddr.companyName")} <span class="text-red-500">*</span>
               </label>
               <input type="text"
                      x-model="form.company"
-                     placeholder="Şirket A.Ş."
+                     placeholder="${t("authAddr.companyNamePlaceholder")}"
                      maxlength="120"
                      class="th-input th-input-md"
                      :class="{ 'is-error': errors.company }"
@@ -195,11 +197,11 @@ function renderFormModal(): string {
             <div x-show="form.address_type === 'Business'" x-transition class="grid grid-cols-2 gap-3">
               <div>
                 <label class="block text-xs font-medium text-gray-700 mb-1">
-                  Vergi No (VKN/TCKN) <span class="text-red-500">*</span>
+                  ${t("authAddr.taxNo")} <span class="text-red-500">*</span>
                 </label>
                 <input type="text"
                        x-model="form.tax_no"
-                       placeholder="10 hane VKN veya 11 hane TCKN"
+                       placeholder="${t("authAddr.taxNoPlaceholder")}"
                        maxlength="11"
                        class="th-input th-input-md"
                        :class="{ 'is-error': errors.tax_no }"
@@ -208,11 +210,11 @@ function renderFormModal(): string {
               </div>
               <div>
                 <label class="block text-xs font-medium text-gray-700 mb-1">
-                  Vergi Dairesi <span class="text-red-500">*</span>
+                  ${t("authAddr.taxOffice")} <span class="text-red-500">*</span>
                 </label>
                 <input type="text"
                        x-model="form.tax_office"
-                       placeholder="örn. Beyoğlu V.D."
+                       placeholder="${t("authAddr.taxOfficePlaceholder")}"
                        maxlength="80"
                        class="th-input th-input-md"
                        :class="{ 'is-error': errors.tax_office }"
@@ -224,7 +226,7 @@ function renderFormModal(): string {
             <!-- Telefon (TR sabit prefix +90) -->
             <div>
               <label class="block text-xs font-medium text-gray-700 mb-1">
-                Telefon <span class="text-red-500">*</span>
+                ${t("authAddr.phone")} <span class="text-red-500">*</span>
               </label>
               <input type="tel"
                      x-model="form.phone"
@@ -240,13 +242,13 @@ function renderFormModal(): string {
             <div class="grid grid-cols-2 gap-3">
               <div>
                 <label class="block text-xs font-medium text-gray-700 mb-1">
-                  İl <span class="text-red-500">*</span>
+                  ${t("authAddr.province")} <span class="text-red-500">*</span>
                 </label>
                 <select x-model="form.state"
                         @change="form.city = ''; errors.state = ''"
                         class="th-input th-input-md"
                         :class="{ 'is-error': errors.state }">
-                  <option value="">Seçiniz</option>
+                  <option value="">${t("authAddr.select")}</option>
                   <template x-for="p in provinces" :key="p">
                     <option :value="p" x-text="p"></option>
                   </template>
@@ -254,11 +256,11 @@ function renderFormModal(): string {
                 <p x-show="errors.state" x-text="errors.state" class="text-red-500 text-xs mt-1"></p>
               </div>
               <div>
-                <label class="block text-xs font-medium text-gray-700 mb-1">İlçe</label>
+                <label class="block text-xs font-medium text-gray-700 mb-1">${t("authAddr.district")}</label>
                 <select x-model="form.city"
                         class="th-input th-input-md"
                         :disabled="!form.state">
-                  <option value="">Seçiniz</option>
+                  <option value="">${t("authAddr.select")}</option>
                   <template x-for="d in districtOptions" :key="d">
                     <option :value="d" x-text="d"></option>
                   </template>
@@ -269,10 +271,10 @@ function renderFormModal(): string {
             <!-- Açık Adres -->
             <div>
               <label class="block text-xs font-medium text-gray-700 mb-1">
-                Adres Satırı <span class="text-red-500">*</span>
+                ${t("authAddr.addressLine")} <span class="text-red-500">*</span>
               </label>
               <textarea x-model="form.street"
-                        placeholder="Mahalle, sokak, bina adı"
+                        placeholder="${t("authAddr.addressLinePlaceholder")}"
                         rows="2"
                         maxlength="300"
                         class="th-input resize-none"
@@ -284,15 +286,15 @@ function renderFormModal(): string {
             <!-- Daire / Posta Kodu (yan yana) -->
             <div class="grid grid-cols-2 gap-3">
               <div>
-                <label class="block text-xs font-medium text-gray-700 mb-1">Daire / Bina</label>
+                <label class="block text-xs font-medium text-gray-700 mb-1">${t("authAddr.apartment")}</label>
                 <input type="text"
                        x-model="form.apartment"
-                       placeholder="Kat 3, Daire 7"
+                       placeholder="${t("authAddr.apartmentPlaceholder")}"
                        maxlength="80"
                        class="th-input th-input-md" />
               </div>
               <div>
-                <label class="block text-xs font-medium text-gray-700 mb-1">Posta Kodu</label>
+                <label class="block text-xs font-medium text-gray-700 mb-1">${t("authAddr.postalCode")}</label>
                 <input type="text"
                        x-model="form.postal_code"
                        placeholder="34000"
@@ -304,11 +306,11 @@ function renderFormModal(): string {
             <!-- Adres Notu -->
             <div>
               <label class="block text-xs font-medium text-gray-700 mb-1">
-                Adres Notu <span class="text-gray-400 font-normal">(opsiyonel)</span>
+                ${t("authAddr.addressNote")} <span class="text-gray-400 font-normal">${t("authAddr.optional")}</span>
               </label>
               <input type="text"
                      x-model="form.note"
-                     placeholder="örn. Hafta içi 09:00-18:00 teslimat"
+                     placeholder="${t("authAddr.addressNotePlaceholder")}"
                      maxlength="150"
                      class="th-input th-input-md" />
             </div>
@@ -318,7 +320,7 @@ function renderFormModal(): string {
               <input type="checkbox"
                      x-model="form.is_default"
                      class="w-4 h-4 rounded accent-[var(--color-primary-500)]" />
-              <span class="text-sm text-gray-700">Varsayılan teslimat adresi olarak ayarla</span>
+              <span class="text-sm text-gray-700">${t("authAddr.setAsDefaultDelivery")}</span>
             </label>
 
           </form>
@@ -329,19 +331,19 @@ function renderFormModal(): string {
           <button type="button"
                   @click="closeModal()"
                   class="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-200 rounded hover:bg-gray-50 transition-colors">
-            İptal
+            ${t("authAddr.cancel")}
           </button>
           <button type="submit"
                   form="buyer-address-form"
                   :disabled="saving"
                   class="px-5 py-2 text-sm font-medium rounded th-btn disabled:opacity-60 disabled:cursor-not-allowed min-w-[80px]">
-            <span x-show="!saving">Kaydet</span>
+            <span x-show="!saving">${t("authAddr.save")}</span>
             <span x-show="saving" class="inline-flex items-center gap-1.5">
               <svg class="animate-spin h-3.5 w-3.5" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
               </svg>
-              Kaydediliyor...
+              ${t("authAddr.saving")}
             </span>
           </button>
         </div>
@@ -379,20 +381,20 @@ function renderDeleteConfirm(): string {
          style="display:none">
       <div class="bg-white rounded-md shadow-2xl max-w-sm w-full p-6 text-center" @click.stop>
         <div class="flex justify-center mb-3 text-amber-500">${ICONS.warning}</div>
-        <h3 id="delete-confirm-title" class="text-base font-semibold text-gray-900 mb-1">Adresi Sil</h3>
+        <h3 id="delete-confirm-title" class="text-base font-semibold text-gray-900 mb-1">${t("authAddr.deleteAddressTitle")}</h3>
         <p id="delete-confirm-desc" class="text-sm text-gray-500 mb-5">
-          <strong x-text="deletingTitle"></strong> adresini silmek istediğinize emin misiniz?
+          <strong x-text="deletingTitle"></strong> ${t("authAddr.deleteConfirmSuffix")}
         </p>
         <div class="flex gap-3">
           <button type="button"
                   @click="isDeleteConfirmOpen = false"
                   class="flex-1 py-2 text-sm font-medium border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-            İptal
+            ${t("authAddr.cancel")}
           </button>
           <button type="button"
                   @click="deleteAddress()"
                   class="flex-1 py-2 text-sm font-medium bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
-            Sil
+            ${t("authAddr.delete")}
           </button>
         </div>
       </div>
@@ -408,13 +410,13 @@ export function AddressesLayout(): string {
 
       <!-- Page header -->
       <div class="flex items-center justify-between mb-4">
-        <h1 class="text-lg font-bold text-gray-900">Teslimat Adreslerim</h1>
+        <h1 class="text-lg font-bold text-gray-900">${t("authAddr.pageTitle")}</h1>
         <button x-show="addresses.length > 0"
                 @click="openAdd()"
                 :disabled="addresses.length >= maxAddresses"
-                :title="addresses.length >= maxAddresses ? 'Maksimum adres limitine ulaştınız' : ''"
+                :title="addresses.length >= maxAddresses ? '${t("authAddr.maxLimitReachedShort")}' : ''"
                 class="inline-flex items-center gap-1.5 px-4 py-2 rounded th-btn text-sm font-medium disabled:opacity-60 disabled:cursor-not-allowed">
-          ${ICONS.plus} Yeni Adres Ekle
+          ${ICONS.plus} ${t("authAddr.addNewAddress")}
         </button>
       </div>
 
@@ -436,7 +438,7 @@ export function AddressesLayout(): string {
       <div x-show="addresses.length >= maxAddresses && !loading"
            class="mb-4 flex items-center gap-2 text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-4 py-2.5">
         ${ICONS.warning}
-        <span x-text="'Maksimum ' + maxAddresses + ' adres limitine ulaştınız. Yeni adres eklemek için mevcut bir adresi silin.'"></span>
+        <span>${t("authAddr.maxLimitWarning", { max: 10 })}</span>
       </div>
 
       <!-- Address cards grid -->

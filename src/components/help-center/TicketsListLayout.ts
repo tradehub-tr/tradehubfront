@@ -22,7 +22,7 @@ export function TicketsListLayout(): string {
         <div class="flex items-center justify-between mb-6">
           <div>
             <h1 class="text-2xl font-bold text-gray-900">${t("helpCenter.myTickets")}</h1>
-            <p class="text-sm text-gray-500 mt-0.5"><span x-text="total"></span> talep</p>
+            <p class="text-sm text-gray-500 mt-0.5"><span x-text="total"></span> ${t("helpUi.ticketsCountSuffix")}</p>
           </div>
           <a href="/destek/yeni" class="th-btn th-btn-sm inline-flex items-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
@@ -60,7 +60,7 @@ export function TicketsListLayout(): string {
             <svg class="w-6 h-6 mx-auto text-primary-500 animate-spin" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M4 12a8 8 0 018-8V4a8 8 0 018 8h-2a6 6 0 00-6-6 6 6 0 00-6 6H4z"/>
             </svg>
-            <p class="text-sm text-gray-400 mt-3">Talepler yükleniyor...</p>
+            <p class="text-sm text-gray-400 mt-3">${t("helpUi.ticketsLoading")}</p>
           </div>
         </template>
 

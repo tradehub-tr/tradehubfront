@@ -124,8 +124,8 @@ function toHHMM(d: Date | null): string {
 function toRelativeOrDate(d: Date | null): string {
   if (!d) return todayLabel();
   const diffSec = Math.max(0, (Date.now() - d.getTime()) / 1000);
-  if (diffSec < 3600) return `${Math.floor(diffSec / 60)} dk önce`;
-  if (diffSec < 86400) return `${Math.floor(diffSec / 3600)} sa önce`;
+  if (diffSec < 3600) return t("commonSvc.minutesAgo", { n: Math.floor(diffSec / 60) });
+  if (diffSec < 86400) return t("commonSvc.hoursAgo", { n: Math.floor(diffSec / 3600) });
   return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
 }
 
@@ -133,7 +133,7 @@ function toRelativeOrDate(d: Date | null): string {
 function threadToUi(thread: RawThread): UiConversation {
   const contact = thread.contact || {};
   const last = thread.last_message || thread.last_non_activity_message || null;
-  const name = contact.name || contact.email || "Alıcı";
+  const name = contact.name || contact.email || t("commonSvc.buyer");
   const company = contact.email && contact.email !== name ? contact.email : "";
   return {
     id: String(thread.id ?? ""),
@@ -267,7 +267,7 @@ Alpine.data("messagesComponent", () => ({
         }
       }
     } catch (err) {
-      this.error = err instanceof Error ? err.message : "Mesajlar yüklenemedi";
+      this.error = err instanceof Error ? err.message : t("commonSvc.messagesLoadFailed");
     } finally {
       this.loading = false;
     }
@@ -306,7 +306,7 @@ Alpine.data("messagesComponent", () => ({
         scrollChatToBottom();
       }
     } catch (err) {
-      this.error = err instanceof Error ? err.message : "Konuşma yüklenemedi";
+      this.error = err instanceof Error ? err.message : t("commonSvc.conversationLoadFailed");
     }
   },
 
@@ -407,7 +407,7 @@ Alpine.data("messagesComponent", () => ({
       this.newMessage = "";
       scrollChatToBottom();
     } catch (err) {
-      this.error = err instanceof Error ? err.message : "Mesaj gönderilemedi";
+      this.error = err instanceof Error ? err.message : t("commonSvc.messageSendFailed");
     } finally {
       this.sending = false;
     }
@@ -440,10 +440,10 @@ Alpine.data("messagesComponent", () => ({
         // Polling 3sn içinde davet mesajını listede de gösterecek.
         window.open(url, "_blank", "noopener,noreferrer");
       } else {
-        this.error = "Görüşme URL'i alınamadı";
+        this.error = t("commonSvc.callUrlFailed");
       }
     } catch (err) {
-      this.error = err instanceof Error ? err.message : "Görüntülü görüşme başlatılamadı";
+      this.error = err instanceof Error ? err.message : t("commonSvc.videoCallFailed");
     } finally {
       this.startingCall = false;
     }

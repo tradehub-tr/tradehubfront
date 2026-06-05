@@ -4,6 +4,7 @@
  */
 
 import { api } from "../utils/api";
+import { t } from "../i18n";
 import { getListingUrl } from "../utils/listingUrl";
 import {
   convertPrice,
@@ -123,12 +124,12 @@ export async function searchListings(params: ListingSearchParams): Promise<Listi
     totalPages: msg.total_pages || 1,
     freeShippingAvailable: products.some((p) => p.promo?.toLowerCase().includes("shipping")),
     sortOptions: [
-      { id: "relevance", label: "En İyi Eşleşme", value: "relevance" },
-      { id: "newest", label: "En Yeniler", value: "newest" },
-      { id: "orders", label: "Siparişler", value: "orders" },
-      { id: "rating", label: "Değerlendirme", value: "rating" },
-      { id: "price_asc", label: "Fiyat (Düşük → Yüksek)", value: "price_asc" },
-      { id: "price_desc", label: "Fiyat (Yüksek → Düşük)", value: "price_desc" },
+      { id: "relevance", label: t("prodUi.sortBestMatch"), value: "relevance" },
+      { id: "newest", label: t("prodUi.sortNewest"), value: "newest" },
+      { id: "orders", label: t("prodUi.sortOrders"), value: "orders" },
+      { id: "rating", label: t("prodUi.sortRating"), value: "rating" },
+      { id: "price_asc", label: t("prodUi.sortPriceAsc"), value: "price_asc" },
+      { id: "price_desc", label: t("prodUi.sortPriceDesc"), value: "price_desc" },
     ],
     selectedSort: params.sort_by || "relevance",
   };
@@ -216,7 +217,7 @@ function backendReviewToProductReview(
   // renderReviewCard'da dedicated UI veriyoruz.
   return {
     id: String(r.name),
-    author: r.reviewer_display_name || "Anonim",
+    author: r.reviewer_display_name || t("prodUi.anonymous"),
     country: "TR",
     rating: Number(r.rating || 0),
     date: (r.published_at || r.submitted_at || "").slice(0, 10),
@@ -454,7 +455,7 @@ export async function uploadReviewImage(file: File): Promise<{ file_url: string;
   });
   if (!res.ok) {
     const txt = await res.text();
-    throw new Error(`Dosya yüklenemedi: ${txt || res.statusText}`);
+    throw new Error(`${t("prodUi.fileUploadFailed")}: ${txt || res.statusText}`);
   }
   const data = (await res.json()) as {
     message: { file_url: string; name: string };
@@ -518,7 +519,7 @@ function extractError(raw: string): string {
     if (body.exc) {
       // Frappe exception traceback; extract last line
       const lines = String(body.exc).trim().split("\n").filter(Boolean);
-      return lines[lines.length - 1] || "Sunucu hatası";
+      return lines[lines.length - 1] || t("prodUi.serverError");
     }
   } catch {
     /* not JSON */

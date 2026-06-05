@@ -7,6 +7,7 @@
 
 import { uploadFiles, type FileProgress } from "../uploader";
 import { getFileBadge, getFilePreviewUrl, revokeFilePreview } from "../utils";
+import { t } from "../../../i18n";
 
 export interface SlotDef {
   id: string;
@@ -80,7 +81,7 @@ export class SlotDropzoneController {
       .map((e) => e.trim().replace(".", "").toUpperCase())
       .join(", ");
     const maxMB = Math.round((slot.maxFileSizeBytes ?? 5 * 1024 * 1024) / 1024 / 1024);
-    const hint = slot.hint ?? `${formats} · maks. ${maxMB}MB`;
+    const hint = slot.hint ?? `${formats} · ${t("commonSvc.maxAbbr")} ${maxMB}MB`;
 
     if (!file) {
       return `
@@ -89,7 +90,7 @@ export class SlotDropzoneController {
           <div class="slot-zone cursor-pointer bg-white border-2 border-dashed border-gray-300 hover:border-amber-400 rounded-lg h-40 flex items-center justify-center text-center p-3 transition-all">
             <div class="text-xs text-gray-500">
               ${ICON_UPLOAD}
-              Tıkla veya sürükle<br><span class="text-[10px] text-gray-400">${hint}</span>
+              ${t("commonSvc.clickOrDrag")}<br><span class="text-[10px] text-gray-400">${hint}</span>
             </div>
           </div>
           <input type="file" class="hidden" accept="${slot.accept}" />
@@ -210,7 +211,7 @@ export class SlotDropzoneController {
         } else {
           this.progress.set(slot.id, { loaded: 0, total: file.size, status: "error" });
           this.render();
-          this.opts.onSlotUploadError?.(slot.id, result.error ?? "Bilinmeyen hata");
+          this.opts.onSlotUploadError?.(slot.id, result.error ?? t("commonSvc.unknownError"));
         }
         return;
       }

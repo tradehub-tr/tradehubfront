@@ -112,8 +112,8 @@ function MainProductsCarousel(): string {
                   </div>
                   <div class="text-[13px] text-gray-800 line-clamp-2 leading-snug mb-1.5" x-text="p.product_name"></div>
                   <div class="text-[14px] font-bold text-gray-900 mb-1" x-text="formatPrice(p)"></div>
-                  <div class="text-[12px] text-gray-500" x-show="p.moq" x-text="'Min. Sipari\u015f ' + p.moq + ' ' + (p.moq_unit || 'Adet')"></div>
-                  <div class="text-[12px] text-gray-400 mt-0.5" x-show="p.sold_count" x-text="p.sold_count + ' sold'"></div>
+                  <div class="text-[12px] text-gray-500" x-show="p.moq" x-text="'${t("seller.sf.minOrder")} ' + p.moq + ' ' + (p.moq_unit || '${t("sellPage.unitPieces")}')"></div>
+                  <div class="text-[12px] text-gray-400 mt-0.5" x-show="p.sold_count" x-text="p.sold_count + ' ${t("seller.sf.sold")}'"></div>
                 </div>
               </a>
             </div>
@@ -219,7 +219,7 @@ function OverviewTab(): string {
                   </span>
                 </div>
                 <span class="text-[13px] font-bold text-gray-900" x-text="cert.name"></span>
-                <span x-show="cert.expiry_date" class="text-[11px] text-gray-500 mt-1" x-text="'Geçerli: ' + cert.expiry_date"></span>
+                <span x-show="cert.expiry_date" class="text-[11px] text-gray-500 mt-1" x-text="'${t("sellPage.validUntil")}: ' + cert.expiry_date"></span>
               </a>
             </template>
           </div>
@@ -329,7 +329,7 @@ function OverviewTab(): string {
                 </div>
                 <div class="text-[12px] text-gray-800 line-clamp-2 leading-snug mb-0.5" x-text="p.product_name"></div>
                 <div class="text-[13px] font-semibold text-gray-900" x-text="formatPrice(p)"></div>
-                <div class="text-[11px] text-gray-500" x-show="p.moq" x-text="'Min. Sipari\u015f ' + p.moq + ' ' + (p.moq_unit || 'Adet')"></div>
+                <div class="text-[11px] text-gray-500" x-show="p.moq" x-text="'${t("seller.sf.minOrder")} ' + p.moq + ' ' + (p.moq_unit || '${t("sellPage.unitPieces")}')"></div>
               </a>
             </template>
           </div>
@@ -430,8 +430,8 @@ function OverviewTab(): string {
               <div class="text-[11px] sm:text-[12px] text-gray-800 line-clamp-2 leading-snug mb-0.5" x-text="p.product_name"></div>
               <div class="text-[12px] sm:text-[13px] font-semibold text-gray-900 mb-0.5" x-text="formatPrice(p)"></div>
               <div class="text-[10px] sm:text-[11px] text-gray-500">
-                <span x-show="p.moq" x-text="'Min. Sipari\u015f ' + p.moq + ' ' + (p.moq_unit || 'Adet')"></span>
-                <span x-show="p.sold_count" class="text-gray-400 ms-1" x-text="p.sold_count + ' sold'"></span>
+                <span x-show="p.moq" x-text="'${t("seller.sf.minOrder")} ' + p.moq + ' ' + (p.moq_unit || '${t("sellPage.unitPieces")}')"></span>
+                <span x-show="p.sold_count" class="text-gray-400 ms-1" x-text="p.sold_count + ' ${t("seller.sf.sold")}'"></span>
               </div>
             </a>
           </template>
@@ -804,7 +804,7 @@ function ProductsTab(): string {
                   <div class="product-card__title line-clamp-2 text-[13px] leading-snug text-gray-800" x-text="p.product_name"></div>
                   <div class="product-card__price font-semibold text-[14px] text-gray-900" x-text="formatPrice(p)"></div>
                   <div class="flex items-center gap-1.5 text-[11px] text-gray-500">
-                    <span x-show="p.moq" x-text="'${t("seller.sf.minOrder")} ' + p.moq + ' ' + (p.moq_unit || 'Adet')"></span>
+                    <span x-show="p.moq" x-text="'${t("seller.sf.minOrder")} ' + p.moq + ' ' + (p.moq_unit || '${t("sellPage.unitPieces")}')"></span>
                     <span x-show="p.moq && p.sold_count" class="text-gray-300">&middot;</span>
                     <span x-show="p.sold_count" x-text="p.sold_count + ' ${t("seller.sf.sold")}'"></span>
                   </div>
@@ -1073,7 +1073,7 @@ function ContactTab(): string {
             this.msgSent = true;
             this.msgText = '';
           } catch(e) {
-            this.msgError = 'Mesaj gonderilemedi. Lutfen tekrar deneyin.';
+            this.msgError = '${t("sellPage.messageSendError")}';
           }
           this.sending = false;
         }
@@ -1118,7 +1118,7 @@ function ContactTab(): string {
 
             <!-- Success message -->
             <div x-show="msgSent" class="mb-4 p-3 bg-green-50 border border-green-200 rounded-md text-[14px] text-green-700 text-center">
-              Mesajiniz basariyla gonderildi!
+              ${t("sellPage.messageSentSuccess")}
             </div>
 
             <!-- Error message -->
@@ -1147,7 +1147,7 @@ function ContactTab(): string {
             <div x-show="!msgSent" class="flex justify-center mb-4">
               <button @click="sendMsg()" :disabled="sending || !msgText || msgText.trim().length < 10" class="bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) font-semibold py-2.5 px-8 rounded-full border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150 text-[14px] disabled:opacity-50 disabled:cursor-not-allowed">
                 <span x-show="!sending">${t("seller.sf.send")}</span>
-                <span x-show="sending">Gonderiliyor...</span>
+                <span x-show="sending">${t("sellPage.sending")}</span>
               </button>
             </div>
 

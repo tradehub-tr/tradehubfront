@@ -89,7 +89,7 @@ export function ProductItem({ product }: ProductItemProps): string {
             </div>
           </button>
 
-          <button type="button" class="sc-c-spu-chev-btn th-no-press w-6 h-6 sm:w-7 sm:h-7 lg:w-9 lg:h-9 inline-flex items-center justify-center text-[#8a877f] bg-transparent hover:bg-white hover:text-[#4a4a48] transition-colors rounded-full shrink-0" @click="productOpen = !productOpen" aria-label="Aç/Kapat">
+          <button type="button" class="sc-c-spu-chev-btn th-no-press w-6 h-6 sm:w-7 sm:h-7 lg:w-9 lg:h-9 inline-flex items-center justify-center text-[#8a877f] bg-transparent hover:bg-white hover:text-[#4a4a48] transition-colors rounded-full shrink-0" @click="productOpen = !productOpen" aria-label="${t("checkoutMfr.toggleExpand")}">
             <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5 transition-transform duration-200" :class="productOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
             </svg>

@@ -20,6 +20,7 @@
  */
 
 import heroImg from "../../assets/images/liman.avif";
+import { t } from "../../i18n";
 import type { PricingPlan, PricingPlansResponse } from "../../services/pricingService";
 
 const SELL_HREF = "/pages/auth/register.html?type=supplier";
@@ -93,26 +94,25 @@ function HeroSection(): string {
       <div class="${WRAP_CLS}">
         <div class="${INNER_CLS} grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 lg:items-stretch items-center">
           <div class="w-full">
-            <span class="${EYEBROW_CLS}">Üretici platformu</span>
+            <span class="${EYEBROW_CLS}">${t("sellPage.manufacturerPlatform")}</span>
             <h1 class="text-[36px] sm:text-[44px] lg:text-[56px] leading-[1.04] tracking-[-0.025em] font-semibold mt-[18px] mb-[18px] max-w-[14ch] text-[#1a1a1a]">
-              Fabrikanı tüm dünyaya aç.
+              ${t("sellPage.heroTitle")}
             </h1>
             <p class="text-base md:text-lg leading-[1.45] text-[#4a4a48] max-w-[42ch] mb-7">
-              iSTOC, Türkiye'deki üreticileri dünyanın dört bir yanındaki B2B alıcılarıyla aracısız buluşturur.
-              Listele, sat, kargola — komisyon yok.
+              ${t("sellPage.heroSubtitle")}
             </p>
             <div class="flex flex-wrap gap-3 items-center">
               <a href="${SELL_HREF}" data-seller-cta class="th-btn th-btn-lg">
-                Satıcı başvurusu yap ${SVG_ARROW}
+                ${t("sellPage.applyAsSeller")} ${SVG_ARROW}
               </a>
-              <a href="#paketler" class="th-btn-outline th-btn-lg">Nasıl çalışır?</a>
+              <a href="#paketler" class="th-btn-outline th-btn-lg">${t("sellPage.howItWorks")}</a>
             </div>
           </div>
           <div class="relative w-full lg:max-w-[720px] xl:max-w-[800px] 2xl:max-w-[860px] lg:me-auto lg:h-full">
             <div class="relative w-full aspect-[5/4] lg:aspect-auto lg:h-full lg:min-h-[360px] rounded-2xl overflow-hidden border border-[#e8e6e0] bg-[#f0ead8] shadow-[0_8px_24px_-12px_rgba(20,20,18,0.18),0_4px_8px_-4px_rgba(20,20,18,0.08)]">
               <img
                 src="${heroImg}"
-                alt="Türkiye'den dünyaya ihracat: liman ve konteyner lojistiği"
+                alt="${t("sellPage.heroImageAlt")}"
                 class="absolute inset-0 w-full h-full object-cover"
                 loading="eager"
                 fetchpriority="high"
@@ -135,7 +135,7 @@ function HeroSection(): string {
 
 // Sayı formatı: "1500" → "1.500", 0 → "Sınırsız"
 function fmtListings(n: number): string {
-  if (!n || n <= 0) return "Sınırsız";
+  if (!n || n <= 0) return t("sellPage.unlimited");
   return n.toLocaleString("tr-TR");
 }
 
@@ -168,7 +168,7 @@ function PricingCard(plan: PricingPlan, idx: number): string {
   const priceY = plan.yearly_price || 0;
   const priceM = plan.monthly_price || 0;
   const tag = tierTag(plan, idx);
-  const badge = isFeat ? plan.badge_label || "En popüler" : null;
+  const badge = isFeat ? plan.badge_label || t("sellPage.mostPopular") : null;
 
   const cardCls = isFeat
     ? "bg-[#1a1a1a] text-white border-[#1a1a1a] shadow-[0_10px_30px_-10px_rgba(213,156,0,0.35)]"
@@ -197,8 +197,8 @@ function PricingCard(plan: PricingPlan, idx: number): string {
     : "text-[#8a877f] line-through decoration-[#d5d2c9]";
 
   const stripRows = [
-    { l: "Komisyon", v: plan.commission_rate > 0 ? `%${plan.commission_rate}` : "Özel" },
-    { l: "Aktif ürün", v: fmtListings(plan.max_active_listings) },
+    { l: t("sellPage.commission"), v: plan.commission_rate > 0 ? `%${plan.commission_rate}` : t("sellPage.custom") },
+    { l: t("sellPage.activeProduct"), v: fmtListings(plan.max_active_listings) },
   ];
 
   // CTA — seller-cta sadece signup akışları için; contact_sales kendi link'ine gitsin
@@ -223,15 +223,15 @@ function PricingCard(plan: PricingPlan, idx: number): string {
             ? `<span class="text-[42px] font-semibold tracking-[-0.03em] tabular-nums leading-none ${amountCls}">
                 ${sym}<span x-text="yearly ? '${priceY}' : '${priceM}'">${priceY}</span>
               </span>
-              <span class="text-[13px] ${perCls}">/ <span x-text="yearly ? 'yıl' : 'ay'">yıl</span></span>`
-            : `<span class="text-[32px] font-semibold tracking-[-0.03em] leading-none ${amountCls}">Özel teklif</span>`
+              <span class="text-[13px] ${perCls}">/ <span x-text="yearly ? '${t("sellPage.year")}' : '${t("sellPage.month")}'">${t("sellPage.year")}</span></span>`
+            : `<span class="text-[32px] font-semibold tracking-[-0.03em] leading-none ${amountCls}">${t("sellPage.customOffer")}</span>`
         }
       </div>
       <div class="text-[11.5px] -mt-1 ${metaCls}">
         ${
           hasPrice
-            ? `<span x-text="yearly ? 'yıllık peşin · KDV hariç' : 'aylık · istediğin zaman iptal'">yıllık peşin · KDV hariç</span>`
-            : "hacme göre fiyatlandırılır"
+            ? `<span x-text="yearly ? '${t("sellPage.yearlyUpfrontVatExcl")}' : '${t("sellPage.monthlyCancelAnytime")}'">${t("sellPage.yearlyUpfrontVatExcl")}</span>`
+            : t("sellPage.pricedByVolume")
         }
       </div>
 
@@ -249,11 +249,11 @@ function PricingCard(plan: PricingPlan, idx: number): string {
       </div>
 
       <a href="${ctaTargetHref}" ${ctaAttr} class="${ctaCls} mt-0.5">
-        ${plan.cta_label || "Devam et"} ${SVG_ARROW}
+        ${plan.cta_label || t("sellPage.continue")} ${SVG_ARROW}
       </a>
 
       <div class="h-px my-1 ${dividerCls}"></div>
-      <div class="text-[11px] font-semibold uppercase tracking-[0.06em] ${featHeadCls}">Paket içeriği</div>
+      <div class="text-[11px] font-semibold uppercase tracking-[0.06em] ${featHeadCls}">${t("sellPage.packageContents")}</div>
       <ul class="list-none p-0 m-0 flex flex-col gap-2 text-[13px] flex-1">
         ${plan.features
           .map((f) => {
@@ -295,89 +295,93 @@ const txt = (v: string): MatrixCell => ({ type: "text", v });
 // ürün limiti) plan kartlarındaki ile birebir uyuşmalı — bu yüzden plans'tan
 // türetiliyor (bkz. buildDynamicMatrixSections). Diğer satırlar plan modelinde
 // structured field değil (mesela "Numune satışı") — feature_key + fallback.
-const STATIC_COMMISSION_EXTRA_ROWS: MatrixRow[] = [
-  { f: "Numune satışı", feature_key: "sample_sales", v: [yes, yes, yes, yes] },
-  { f: "Toplu yükleme (CSV)", feature_key: "bulk_csv_upload", v: [yes, yes, yes, yes] },
-];
+function staticCommissionExtraRows(): MatrixRow[] {
+  return [
+    { f: t("sellPage.sampleSales"), feature_key: "sample_sales", v: [yes, yes, yes, yes] },
+    { f: t("sellPage.bulkUploadCsv"), feature_key: "bulk_csv_upload", v: [yes, yes, yes, yes] },
+  ];
+}
 
 // Matrix detay section'ları — her satır feature_key taşıyor. Backend'de bir
 // plan'ın Pricing Plan Feature child table'ında aynı feature_key varsa, o
 // plan için satır değeri override edilir. Yoksa fallback `v` array kullanılır.
-const MATRIX_SECTIONS: MatrixSection[] = [
-  // NOTE: "Komisyon & limitler" section runtime'da `buildDynamicMatrixSections`
-  // tarafından plans verisiyle önek olarak eklenir; burada **listelenmez**.
-  {
-    title: "Vitrin & sergileme",
-    rows: [
-      {
-        f: "Üretici rozeti",
-        feature_key: "manufacturer_badge",
-        v: [txt("Standart"), txt("Gümüş"), txt("Altın"), txt("Platinum")],
-      },
-      {
-        f: "Vitrin tipi",
-        feature_key: "storefront_tier",
-        v: [txt("Standart"), txt("Premium"), txt("Premium+"), txt("Tam özel")],
-      },
-      {
-        f: "Çoklu dil",
-        feature_key: "languages",
-        v: [txt("2 dil"), txt("4 dil"), txt("6 dil"), txt("15+ dil")],
-      },
-      { f: "Video & 360° ürün medya", feature_key: "rich_media", v: [no, no, yes, yes] },
-      {
-        f: "Öne çıkan listeleme / ay",
-        feature_key: "featured_listings",
-        v: [txt("—"), txt("5"), txt("20"), txt("Sınırsız")],
-      },
-    ],
-  },
-  {
-    title: "Destek & operasyon",
-    rows: [
-      {
-        f: "Destek",
-        feature_key: "support_tier",
-        v: [txt("Email"), txt("Öncelikli"), txt("Hesap yön."), txt("7/24 dedicated")],
-      },
-      {
-        f: "Ekip kullanıcısı",
-        feature_key: "team_seats",
-        v: [txt("1"), txt("3"), txt("10"), txt("Sınırsız")],
-      },
-      {
-        f: "Reklam kredisi / ay",
-        feature_key: "ad_credit_monthly",
-        v: [txt("—"), txt("€100"), txt("€300"), txt("Özel")],
-      },
-      { f: "KDV iadesi danışmanlığı", feature_key: "vat_refund_advisory", v: [yes, yes, yes, yes] },
-      { f: "Sigortalı kargo dahil", feature_key: "insured_shipping", v: [yes, yes, yes, yes] },
-      { f: "Fuar / etkinlik daveti", feature_key: "event_invitations", v: [no, no, yes, yes] },
-    ],
-  },
-  {
-    title: "Kurumsal",
-    rows: [
-      {
-        f: "API erişimi",
-        help: "Sipariş, stok, fiyat eşitleme",
-        feature_key: "api_access",
-        v: [no, txt("Limitli"), txt("Tam"), txt("Özel SLA")],
-      },
-      {
-        f: "ERP / muhasebe entegrasyonu",
-        feature_key: "erp_integration",
-        v: [no, no, txt("Beta"), yes],
-      },
-      { f: "Özel ödeme koşulları", feature_key: "custom_payment_terms", v: [no, no, no, yes] },
-      {
-        f: "Alt domain (markaniz.istoc.com)",
-        feature_key: "custom_subdomain",
-        v: [no, no, no, yes],
-      },
-    ],
-  },
-];
+function matrixSections(): MatrixSection[] {
+  return [
+    // NOTE: "Komisyon & limitler" section runtime'da `buildDynamicMatrixSections`
+    // tarafından plans verisiyle önek olarak eklenir; burada **listelenmez**.
+    {
+      title: t("sellPage.matrixStorefront"),
+      rows: [
+        {
+          f: t("sellPage.manufacturerBadge"),
+          feature_key: "manufacturer_badge",
+          v: [txt(t("sellPage.tierStandard")), txt(t("sellPage.tierSilver")), txt(t("sellPage.tierGold")), txt("Platinum")],
+        },
+        {
+          f: t("sellPage.storefrontType"),
+          feature_key: "storefront_tier",
+          v: [txt(t("sellPage.tierStandard")), txt("Premium"), txt("Premium+"), txt(t("sellPage.tierFullyCustom"))],
+        },
+        {
+          f: t("sellPage.multiLanguage"),
+          feature_key: "languages",
+          v: [txt(t("sellPage.langCount2")), txt(t("sellPage.langCount4")), txt(t("sellPage.langCount6")), txt(t("sellPage.langCount15Plus"))],
+        },
+        { f: t("sellPage.videoMedia360"), feature_key: "rich_media", v: [no, no, yes, yes] },
+        {
+          f: t("sellPage.featuredListingPerMonth"),
+          feature_key: "featured_listings",
+          v: [txt("—"), txt("5"), txt("20"), txt(t("sellPage.unlimited"))],
+        },
+      ],
+    },
+    {
+      title: t("sellPage.matrixSupport"),
+      rows: [
+        {
+          f: t("sellPage.support"),
+          feature_key: "support_tier",
+          v: [txt("Email"), txt(t("sellPage.supportPriority")), txt(t("sellPage.supportAccountMgr")), txt(t("sellPage.support247Dedicated"))],
+        },
+        {
+          f: t("sellPage.teamSeats"),
+          feature_key: "team_seats",
+          v: [txt("1"), txt("3"), txt("10"), txt(t("sellPage.unlimited"))],
+        },
+        {
+          f: t("sellPage.adCreditPerMonth"),
+          feature_key: "ad_credit_monthly",
+          v: [txt("—"), txt("€100"), txt("€300"), txt(t("sellPage.custom"))],
+        },
+        { f: t("sellPage.vatRefundAdvisory"), feature_key: "vat_refund_advisory", v: [yes, yes, yes, yes] },
+        { f: t("sellPage.insuredShippingIncluded"), feature_key: "insured_shipping", v: [yes, yes, yes, yes] },
+        { f: t("sellPage.eventInvitation"), feature_key: "event_invitations", v: [no, no, yes, yes] },
+      ],
+    },
+    {
+      title: t("sellPage.matrixEnterprise"),
+      rows: [
+        {
+          f: t("sellPage.apiAccess"),
+          help: t("sellPage.apiAccessHelp"),
+          feature_key: "api_access",
+          v: [no, txt(t("sellPage.limited")), txt(t("sellPage.full")), txt(t("sellPage.customSla"))],
+        },
+        {
+          f: t("sellPage.erpIntegration"),
+          feature_key: "erp_integration",
+          v: [no, no, txt("Beta"), yes],
+        },
+        { f: t("sellPage.customPaymentTerms"), feature_key: "custom_payment_terms", v: [no, no, no, yes] },
+        {
+          f: t("sellPage.customSubdomain"),
+          feature_key: "custom_subdomain",
+          v: [no, no, no, yes],
+        },
+      ],
+    },
+  ];
+}
 
 // feature_key bazlı resolution — plan.features'tan satırdaki kaynağı seçer.
 // Öncelik sırası: plan'da matching feature varsa kullan; aksi halde fallback.
@@ -428,10 +432,10 @@ function renderMatrixCell(c: MatrixCell): string {
 //      hardcoded fallback değerleri kullanılır.
 function buildDynamicMatrixSections(plans: PricingPlan[]): MatrixSection[] {
   const four = plans.slice(0, 4);
-  if (four.length < 4) return MATRIX_SECTIONS;
+  if (four.length < 4) return matrixSections();
 
   const commissionCells = four.map((p) =>
-    p.commission_rate > 0 ? txt(`%${p.commission_rate}`) : txt("Özel")
+    p.commission_rate > 0 ? txt(`%${p.commission_rate}`) : txt(t("sellPage.custom"))
   ) as [MatrixCell, MatrixCell, MatrixCell, MatrixCell];
 
   const listingsCells = four.map((p) => txt(fmtListings(p.max_active_listings))) as [
@@ -442,24 +446,24 @@ function buildDynamicMatrixSections(plans: PricingPlan[]): MatrixSection[] {
   ];
 
   const dynamicCommissionSection: MatrixSection = {
-    title: "Komisyon & limitler",
+    title: t("sellPage.matrixCommissionLimits"),
     rows: [
       {
-        f: "Satış komisyonu",
-        help: "Tamamlanan siparişler üzerinden",
+        f: t("sellPage.salesCommission"),
+        help: t("sellPage.salesCommissionHelp"),
         v: commissionCells,
       },
-      { f: "Aktif ürün limiti", v: listingsCells },
+      { f: t("sellPage.activeProductLimit"), v: listingsCells },
       // STATIC extra rows da feature_key resolve etsin (admin "sample_sales"
       // feature_key'i bir plan'a is_disabled=1 ile koyarsa "no" olur).
-      ...STATIC_COMMISSION_EXTRA_ROWS.map((r) => ({
+      ...staticCommissionExtraRows().map((r) => ({
         ...r,
         v: resolveRowCells(r, plans),
       })),
     ],
   };
 
-  const resolvedSections = MATRIX_SECTIONS.map((sec) => ({
+  const resolvedSections = matrixSections().map((sec) => ({
     title: sec.title,
     rows: sec.rows.map((r) => ({
       ...r,
@@ -481,10 +485,10 @@ function PricingMatrix(plans: PricingPlan[]): string {
     n: p.plan_name,
     p:
       (p.yearly_price || 0) > 0
-        ? `${sym}${p.yearly_price} / yıl`
+        ? `${sym}${p.yearly_price} / ${t("sellPage.year")}`
         : (p.monthly_price || 0) > 0
-          ? `${sym}${p.monthly_price} / ay`
-          : "Özel teklif",
+          ? `${sym}${p.monthly_price} / ${t("sellPage.month")}`
+          : t("sellPage.customOffer"),
     featured: !!p.highlighted,
   }));
 
@@ -492,8 +496,8 @@ function PricingMatrix(plans: PricingPlan[]): string {
     <div class="mt-14 bg-white border border-[#e8e6e0] rounded-2xl overflow-hidden hidden lg:block">
       <div class="${MATRIX_GRID_CLS} items-end px-6 py-[18px] bg-[#fafaf8] border-b border-[#d5d2c9]">
         <div class="text-start">
-          <div class="text-[15px] font-semibold text-[#1a1a1a]">Tüm paket özellikleri</div>
-          <div class="text-xs text-[#8a877f] mt-0.5 tabular-nums">yıllık periyot, KDV hariç</div>
+          <div class="text-[15px] font-semibold text-[#1a1a1a]">${t("sellPage.allPackageFeatures")}</div>
+          <div class="text-xs text-[#8a877f] mt-0.5 tabular-nums">${t("sellPage.yearlyPeriodVatExcl")}</div>
         </div>
         ${cols
           .map(
@@ -550,9 +554,9 @@ function PricingMatrix(plans: PricingPlan[]): string {
 function PricingEmpty(): string {
   return /* html */ `
     <div class="rounded-2xl border border-[#e8e6e0] bg-white p-10 text-center text-[#4a4a48]">
-      <p class="m-0 mb-2 text-base font-medium text-[#1a1a1a]">Paketler şu anda yüklenemedi.</p>
-      <p class="m-0 text-sm">Bir kaç saniye sonra tekrar dener veya
-        <a href="${SELL_HREF}" data-seller-cta class="text-[#d39c00] font-medium underline">başvuruyu başlat</a>.
+      <p class="m-0 mb-2 text-base font-medium text-[#1a1a1a]">${t("sellPage.plansLoadFailed")}</p>
+      <p class="m-0 text-sm">${t("sellPage.plansLoadRetry")}
+        <a href="${SELL_HREF}" data-seller-cta class="text-[#d39c00] font-medium underline">${t("sellPage.startApplication")}</a>.
       </p>
     </div>
   `;
@@ -573,7 +577,7 @@ function _computeYearlyDiscountBadge(plans: PricingPlan[]): string {
     if (savedMonths > bestSavedMonths) bestSavedMonths = savedMonths;
   }
   if (bestSavedMonths <= 0) return "";
-  return `${bestSavedMonths} ay bedava`;
+  return t("sellPage.monthsFree", { count: bestSavedMonths });
 }
 
 function PricingSection(plans: PricingPlan[]): string {
@@ -591,15 +595,14 @@ function PricingSection(plans: PricingPlan[]): string {
       <div class="${WRAP_CLS}">
         <div class="${INNER_CLS}">
         <div class="${SECTION_HEAD_CLS}">
-          <span class="${EYEBROW_CLS}">Satıcı paketleri</span>
-          <h2 class="${SECTION_H2_CLS}">Hangi ölçekteysen, o paketi seç.</h2>
+          <span class="${EYEBROW_CLS}">${t("sellPage.sellerPackages")}</span>
+          <h2 class="${SECTION_H2_CLS}">${t("sellPage.pricingSectionTitle")}</h2>
           <p class="${SECTION_P_CLS}">
-            Tüm paketler aynı işi yapar: senin ürününü Avrupa'lı alıcıya ulaştırır.
-            Üst paketler komisyonu düşürür, vitrini büyütür, destek seviyesini artırır.
+            ${t("sellPage.pricingSectionDesc")}
           </p>
         </div>
 
-        <div class="inline-flex bg-white border border-[#e8e6e0] rounded-full p-1 mb-8" role="tablist" aria-label="Periyot">
+        <div class="inline-flex bg-white border border-[#e8e6e0] rounded-full p-1 mb-8" role="tablist" aria-label="${t("sellPage.period")}">
           <button
             type="button"
             role="tab"
@@ -608,7 +611,7 @@ function PricingSection(plans: PricingPlan[]): string {
             :class="yearly ? 'bg-[#1a1a1a] text-white' : 'bg-transparent text-[#8a877f]'"
             class="appearance-none border-0 text-[12.5px] font-medium px-4 py-2 rounded-full focus:outline-none transition-colors duration-150"
           >
-            Yıllık
+            ${t("sellPage.yearlyToggle")}
             ${discountBadge ? `<span class="text-[10px] bg-[#f5b800] text-[#1a1a1a] px-1.5 py-0.5 rounded-full font-bold ms-1.5 tracking-[0.04em]">${discountBadge}</span>` : ""}
           </button>
           <button
@@ -619,7 +622,7 @@ function PricingSection(plans: PricingPlan[]): string {
             :class="!yearly ? 'bg-[#1a1a1a] text-white' : 'bg-transparent text-[#8a877f]'"
             class="appearance-none border-0 text-[12.5px] font-medium px-4 py-2 rounded-full focus:outline-none transition-colors duration-150"
           >
-            Aylık
+            ${t("sellPage.monthlyToggle")}
           </button>
         </div>
 
@@ -636,47 +639,49 @@ function PricingSection(plans: PricingPlan[]): string {
 type CompareCell = string | { type: "icon"; v: "yes" | "no" | "mid"; label?: string };
 type CompareRow = { f: string; i: CompareCell; g: CompareCell; h: CompareCell };
 
-const COMPARE_ROWS: CompareRow[] = [
-  { f: "Komisyon oranı", i: "%4 — %8", g: "%15+", h: "Değişken %12–30" },
-  { f: "Aylık üyelik", i: { type: "icon", v: "no", label: "Yok" }, g: "€40/ay", h: "€39/ay" },
-  {
-    f: "Listeleme ücreti",
-    i: { type: "icon", v: "no", label: "Yok" },
-    g: { type: "icon", v: "no", label: "Yok" },
-    h: "Ürün başı ücret",
-  },
-  { f: "Ödeme süresi", i: "7 gün", g: "14 — 30 gün", h: "14 — 21 gün" },
-  {
-    f: "B2B / toptan odaklı",
-    i: { type: "icon", v: "yes" },
-    g: { type: "icon", v: "mid", label: "Karma" },
-    h: { type: "icon", v: "no" },
-  },
-  {
-    f: "Türkiye üreticisine özel destek",
-    i: { type: "icon", v: "yes" },
-    g: { type: "icon", v: "no" },
-    h: { type: "icon", v: "no" },
-  },
-  {
-    f: "KDV iadesi danışmanlığı",
-    i: { type: "icon", v: "yes" },
-    g: { type: "icon", v: "no" },
-    h: { type: "icon", v: "no" },
-  },
-  {
-    f: "Sigortalı kargo dahil",
-    i: { type: "icon", v: "yes" },
-    g: { type: "icon", v: "mid", label: "Ek ücret" },
-    h: { type: "icon", v: "mid", label: "Ek ücret" },
-  },
-  {
-    f: "Numune satışı",
-    i: { type: "icon", v: "yes" },
-    g: { type: "icon", v: "no" },
-    h: { type: "icon", v: "mid", label: "Kısıtlı" },
-  },
-];
+function compareRows(): CompareRow[] {
+  return [
+    { f: t("sellPage.commissionRate"), i: "%4 — %8", g: "%15+", h: t("sellPage.variable12to30") },
+    { f: t("sellPage.monthlyMembership"), i: { type: "icon", v: "no", label: t("sellPage.none") }, g: "€40/ay", h: "€39/ay" },
+    {
+      f: t("sellPage.listingFee"),
+      i: { type: "icon", v: "no", label: t("sellPage.none") },
+      g: { type: "icon", v: "no", label: t("sellPage.none") },
+      h: t("sellPage.perProductFee"),
+    },
+    { f: t("sellPage.paymentPeriod"), i: t("sellPage.days7"), g: t("sellPage.days14to30"), h: t("sellPage.days14to21") },
+    {
+      f: t("sellPage.b2bWholesaleFocused"),
+      i: { type: "icon", v: "yes" },
+      g: { type: "icon", v: "mid", label: t("sellPage.mixed") },
+      h: { type: "icon", v: "no" },
+    },
+    {
+      f: t("sellPage.dedicatedTurkishSupport"),
+      i: { type: "icon", v: "yes" },
+      g: { type: "icon", v: "no" },
+      h: { type: "icon", v: "no" },
+    },
+    {
+      f: t("sellPage.vatRefundAdvisory"),
+      i: { type: "icon", v: "yes" },
+      g: { type: "icon", v: "no" },
+      h: { type: "icon", v: "no" },
+    },
+    {
+      f: t("sellPage.insuredShippingIncluded"),
+      i: { type: "icon", v: "yes" },
+      g: { type: "icon", v: "mid", label: t("sellPage.extraFee") },
+      h: { type: "icon", v: "mid", label: t("sellPage.extraFee") },
+    },
+    {
+      f: t("sellPage.sampleSales"),
+      i: { type: "icon", v: "yes" },
+      g: { type: "icon", v: "no" },
+      h: { type: "icon", v: "mid", label: t("sellPage.restricted") },
+    },
+  ];
+}
 
 function renderCompareCell(c: CompareCell): string {
   if (typeof c === "string") return c;
@@ -697,11 +702,10 @@ function ComparisonSection(): string {
       <div class="${WRAP_CLS}">
         <div class="${INNER_CLS}">
         <div class="${SECTION_HEAD_CLS}">
-          <span class="${EYEBROW_CLS}">Karşılaştırma</span>
-          <h2 class="${SECTION_H2_CLS}">Diğer pazaryerlerine göre iSTOC.</h2>
+          <span class="${EYEBROW_CLS}">${t("sellPage.comparison")}</span>
+          <h2 class="${SECTION_H2_CLS}">${t("sellPage.comparisonTitle")}</h2>
           <p class="${SECTION_P_CLS}">
-            Üretici penceresinden bakınca fark net görünüyor: daha düşük komisyon,
-            sabit aidat yok, B2B'ye odaklı süreç.
+            ${t("sellPage.comparisonDesc")}
           </p>
         </div>
 
@@ -712,21 +716,21 @@ function ComparisonSection(): string {
                 <th class="${thBaseCls} w-[28%] border-b border-[#d5d2c9]"></th>
                 <th class="bg-[#fff8e1] ${thHeadCls}">
                   <span class="block text-base font-semibold mb-0.5 text-[#d39c00]">iSTOC</span>
-                  <span class="text-[11px] uppercase tracking-[0.06em] font-medium text-[#d39c00]">Üretici platformu</span>
+                  <span class="text-[11px] uppercase tracking-[0.06em] font-medium text-[#d39c00]">${t("sellPage.manufacturerPlatform")}</span>
                 </th>
                 <th class="bg-white ${thHeadCls}">
-                  <span class="block text-base font-semibold mb-0.5">Global B2B pazaryeri</span>
-                  <span class="text-[11px] uppercase tracking-[0.06em] font-medium text-[#8a877f]">Uluslararası genel</span>
+                  <span class="block text-base font-semibold mb-0.5">${t("sellPage.globalB2bMarketplace")}</span>
+                  <span class="text-[11px] uppercase tracking-[0.06em] font-medium text-[#8a877f]">${t("sellPage.internationalGeneral")}</span>
                 </th>
                 <th class="bg-white ${thHeadCls}">
-                  <span class="block text-base font-semibold mb-0.5">Yatay e-ticaret</span>
-                  <span class="text-[11px] uppercase tracking-[0.06em] font-medium text-[#8a877f]">B2C ağırlıklı</span>
+                  <span class="block text-base font-semibold mb-0.5">${t("sellPage.horizontalEcommerce")}</span>
+                  <span class="text-[11px] uppercase tracking-[0.06em] font-medium text-[#8a877f]">${t("sellPage.b2cFocused")}</span>
                 </th>
               </tr>
             </thead>
             <tbody>
-              ${COMPARE_ROWS.map((r, i) => {
-                const last = i === COMPARE_ROWS.length - 1;
+              ${compareRows().map((r, i, arr) => {
+                const last = i === arr.length - 1;
                 const border = last ? "" : "border-b border-[#e8e6e0]";
                 return `
                 <tr>
@@ -743,11 +747,10 @@ function ComparisonSection(): string {
 
         <div class="mt-7 flex flex-wrap justify-between items-center gap-4">
           <p class="text-xs text-[#8a877f] max-w-[60ch] m-0">
-            * Rakip oranları kamuya açık fiyatlandırma sayfalarından alınmıştır (Mayıs 2026).
-            iSTOC komisyonu kategori bazlıdır; tam liste başvuru sonrası paylaşılır.
+            ${t("sellPage.comparisonDisclaimer")}
           </p>
           <a href="${SELL_HREF}" data-seller-cta class="th-btn">
-            Başvuruyu başlat ${SVG_ARROW}
+            ${t("sellPage.startApplication")} ${SVG_ARROW}
           </a>
         </div>
         </div>
@@ -765,19 +768,18 @@ function FinalCtaSection(): string {
       <div class="${WRAP_CLS}">
         <div class="${INNER_CLS}">
         <h2 class="text-[34px] sm:text-[38px] md:text-[42px] tracking-[-0.025em] leading-[1.1] font-semibold max-w-[22ch] mx-auto mb-3.5 text-[#1a1a1a]">
-          Başvuru 4 dakikada biter.
+          ${t("sellPage.finalCtaTitle")}
         </h2>
         <p class="text-base text-[#4a4a48] mx-auto mb-6 max-w-[52ch]">
-          Vergi numarası, üretim kategorisi ve bir iletişim — gerisini birlikte hallederiz.
-          Onay süresi ortalama 2 iş günü.
+          ${t("sellPage.finalCtaDesc")}
         </p>
         <div class="inline-flex flex-wrap gap-3 justify-center">
           <a href="${SELL_HREF}" data-seller-cta class="th-btn th-btn-lg">
-            Satıcı başvurusu yap ${SVG_ARROW}
+            ${t("sellPage.applyAsSeller")} ${SVG_ARROW}
           </a>
-          <a href="#karsilastirma" class="th-btn-outline th-btn-lg">Önce konuşalım</a>
+          <a href="#karsilastirma" class="th-btn-outline th-btn-lg">${t("sellPage.letsTalkFirst")}</a>
         </div>
-        <div class="mt-3.5 text-xs text-[#8a877f]">Başvuru ücretsiz. İptal koşulu yok.</div>
+        <div class="mt-3.5 text-xs text-[#8a877f]">${t("sellPage.finalCtaNote")}</div>
         </div>
       </div>
     </section>

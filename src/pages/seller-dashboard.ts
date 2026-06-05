@@ -9,6 +9,7 @@ import { startAlpine } from '../alpine';
 import { TopBar } from '../components/header';
 import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar';
+import { t } from "../i18n";
 
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
 
@@ -25,7 +26,7 @@ appEl.innerHTML = `
     <div x-show="loading" class="flex items-center justify-center min-h-[60vh]">
       <div class="flex flex-col items-center gap-3">
         <div class="w-8 h-8 border-4 border-[var(--color-primary-500)] border-t-transparent rounded-full animate-spin"></div>
-        <span class="text-gray-500 text-sm">Yükleniyor...</span>
+        <span class="text-gray-500 text-sm">${t("sellerDash.loading")}</span>
       </div>
     </div>
 
@@ -35,9 +36,9 @@ appEl.innerHTML = `
         <svg class="w-12 h-12 text-gray-300 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
         </svg>
-        <h2 class="text-lg font-bold text-gray-900 mb-2">Giriş Gerekli</h2>
-        <p class="text-gray-500 text-sm mb-4">Satıcı paneline erişmek için giriş yapmalısınız.</p>
-        <a href="/giris" class="inline-block w-full py-2.5 bg-[var(--color-primary-500)] text-white rounded-lg font-semibold text-sm hover:bg-[var(--color-primary-600)] transition-colors">Giriş Yap</a>
+        <h2 class="text-lg font-bold text-gray-900 mb-2">${t("sellerDash.loginRequiredTitle")}</h2>
+        <p class="text-gray-500 text-sm mb-4">${t("sellerDash.loginRequiredDesc")}</p>
+        <a href="/giris" class="inline-block w-full py-2.5 bg-[var(--color-primary-500)] text-white rounded-lg font-semibold text-sm hover:bg-[var(--color-primary-600)] transition-colors">${t("sellerDash.loginBtn")}</a>
       </div>
     </div>
 
@@ -47,9 +48,9 @@ appEl.innerHTML = `
         <svg class="w-12 h-12 text-yellow-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
-        <h2 class="text-lg font-bold text-gray-900 mb-2">Satıcı Değilsiniz</h2>
-        <p class="text-gray-500 text-sm mb-4">Bu sayfaya erişmek için satıcı hesabınız olmalıdır.</p>
-        <a href="/satici-ol" class="inline-block w-full py-2.5 bg-[var(--color-primary-500)] text-white rounded-lg font-semibold text-sm hover:bg-[var(--color-primary-600)] transition-colors">Satıcı Ol</a>
+        <h2 class="text-lg font-bold text-gray-900 mb-2">${t("sellerDash.notSellerTitle")}</h2>
+        <p class="text-gray-500 text-sm mb-4">${t("sellerDash.notSellerDesc")}</p>
+        <a href="/satici-ol" class="inline-block w-full py-2.5 bg-[var(--color-primary-500)] text-white rounded-lg font-semibold text-sm hover:bg-[var(--color-primary-600)] transition-colors">${t("sellerDash.becomeSeller")}</a>
       </div>
     </div>
 
@@ -64,11 +65,11 @@ appEl.innerHTML = `
             <svg x-show="!profile.logo" class="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
           </div>
           <div>
-            <h1 class="text-xl font-bold text-gray-900" x-text="profile.seller_name || 'Mağazam'"></h1>
+            <h1 class="text-xl font-bold text-gray-900" x-text="profile.seller_name || '${t("sellerDash.myStore")}'"></h1>
             <div class="flex items-center gap-2 mt-0.5">
               <span class="text-xs font-mono text-gray-400" x-text="profile.seller_code"></span>
               <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>
-              <span class="text-xs text-green-600 font-medium">Aktif</span>
+              <span class="text-xs text-green-600 font-medium">${t("sellerDash.active")}</span>
             </div>
           </div>
         </div>
@@ -76,7 +77,7 @@ appEl.innerHTML = `
            target="_blank"
            class="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-          Mağazayı Gör
+          ${t("sellerDash.viewStore")}
         </a>
       </div>
 
@@ -105,39 +106,39 @@ appEl.innerHTML = `
           <!-- Sol: Temel Bilgiler -->
           <div class="lg:col-span-2 space-y-6">
             <div class="bg-white rounded-md border border-gray-200 p-6">
-              <h2 class="text-base font-bold text-gray-900 mb-5">Temel Bilgiler</h2>
+              <h2 class="text-base font-bold text-gray-900 mb-5">${t("sellerDash.basicInfo")}</h2>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label class="block text-xs font-medium text-gray-600 mb-1.5">Mağaza Adı *</label>
+                  <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.storeName")} *</label>
                   <input x-model="form.account.seller_name" type="text" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)] focus:border-transparent" />
                 </div>
                 <div>
-                  <label class="block text-xs font-medium text-gray-600 mb-1.5">Telefon</label>
+                  <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.phone")}</label>
                   <input x-model="form.account.phone" type="tel" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)] focus:border-transparent" />
                 </div>
                 <div>
-                  <label class="block text-xs font-medium text-gray-600 mb-1.5">Web Sitesi</label>
+                  <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.website")}</label>
                   <input x-model="form.account.website" type="url" placeholder="https://" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)] focus:border-transparent" />
                 </div>
                 <div>
-                  <label class="block text-xs font-medium text-gray-600 mb-1.5">Şehir</label>
+                  <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.city")}</label>
                   <input x-model="form.account.city" type="text" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)] focus:border-transparent" />
                 </div>
                 <div>
-                  <label class="block text-xs font-medium text-gray-600 mb-1.5">İlçe</label>
+                  <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.district")}</label>
                   <input x-model="form.account.district" type="text" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)] focus:border-transparent" />
                 </div>
                 <div>
-                  <label class="block text-xs font-medium text-gray-600 mb-1.5">Posta Kodu</label>
+                  <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.postalCode")}</label>
                   <input x-model="form.account.postal_code" type="text" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)] focus:border-transparent" />
                 </div>
                 <div class="sm:col-span-2">
-                  <label class="block text-xs font-medium text-gray-600 mb-1.5">Mağaza Sloganı</label>
-                  <input x-model="form.account.slogan" type="text" placeholder="Kısa bir slogan..." class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)] focus:border-transparent" />
+                  <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.storeSlogan")}</label>
+                  <input x-model="form.account.slogan" type="text" placeholder="${t("sellerDash.sloganPlaceholder")}" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)] focus:border-transparent" />
                 </div>
                 <div class="sm:col-span-2">
-                  <label class="block text-xs font-medium text-gray-600 mb-1.5">Mağaza Açıklaması</label>
-                  <textarea x-model="form.account.description" rows="4" placeholder="Mağazanız hakkında kısa bir açıklama..." class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)] focus:border-transparent"></textarea>
+                  <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.storeDescription")}</label>
+                  <textarea x-model="form.account.description" rows="4" placeholder="${t("sellerDash.storeDescriptionPlaceholder")}" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)] focus:border-transparent"></textarea>
                 </div>
               </div>
               <div class="mt-5 flex justify-end">
@@ -145,7 +146,7 @@ appEl.innerHTML = `
                   :disabled="saving.account"
                   class="px-5 py-2.5 bg-[var(--color-primary-500)] hover:bg-[var(--color-primary-600)] text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2">
                   <svg x-show="saving.account" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
-                  <span x-text="saving.account ? 'Kaydediliyor...' : 'Kaydet'"></span>
+                  <span x-text="saving.account ? '${t("sellerDash.saving")}' : '${t("sellerDash.save")}'"></span>
                 </button>
               </div>
             </div>
@@ -154,10 +155,10 @@ appEl.innerHTML = `
           <!-- Sağ: Logo & Banner -->
           <div class="space-y-6">
             <div class="bg-white rounded-md border border-gray-200 p-6">
-              <h2 class="text-base font-bold text-gray-900 mb-5">Logo & Banner</h2>
+              <h2 class="text-base font-bold text-gray-900 mb-5">${t("sellerDash.logoBanner")}</h2>
 
               <div class="mb-5">
-                <label class="block text-xs font-medium text-gray-600 mb-2">Logo URL</label>
+                <label class="block text-xs font-medium text-gray-600 mb-2">${t("sellerDash.logoUrl")}</label>
                 <div class="flex items-center gap-3 mb-2">
                   <div class="w-14 h-14 rounded-lg border border-gray-200 overflow-hidden bg-gray-50 flex items-center justify-center shrink-0">
                     <img x-show="form.account.logo" :src="form.account.logo" class="w-full h-full object-cover" />
@@ -168,7 +169,7 @@ appEl.innerHTML = `
               </div>
 
               <div>
-                <label class="block text-xs font-medium text-gray-600 mb-2">Banner URL</label>
+                <label class="block text-xs font-medium text-gray-600 mb-2">${t("sellerDash.bannerUrl")}</label>
                 <div class="w-full h-24 rounded-lg border border-gray-200 overflow-hidden bg-gray-50 mb-2 flex items-center justify-center">
                   <img x-show="form.account.banner_image" :src="form.account.banner_image" class="w-full h-full object-cover" />
                   <svg x-show="!form.account.banner_image" class="w-8 h-8 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
@@ -180,29 +181,29 @@ appEl.innerHTML = `
                 <button @click="saveSection('account')"
                   :disabled="saving.account"
                   class="w-full py-2.5 bg-[var(--color-primary-500)] hover:bg-[var(--color-primary-600)] text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-60">
-                  <span x-text="saving.account ? 'Kaydediliyor...' : 'Görselleri Kaydet'"></span>
+                  <span x-text="saving.account ? '${t("sellerDash.saving")}' : '${t("sellerDash.saveImages")}'"></span>
                 </button>
               </div>
             </div>
 
             <!-- Performans Kartı -->
             <div class="bg-white rounded-md border border-gray-200 p-6">
-              <h2 class="text-base font-bold text-gray-900 mb-4">Performans</h2>
+              <h2 class="text-base font-bold text-gray-900 mb-4">${t("sellerDash.performance")}</h2>
               <div class="space-y-3">
                 <div class="flex justify-between items-center">
-                  <span class="text-sm text-gray-500">Sağlık Skoru</span>
+                  <span class="text-sm text-gray-500">${t("sellerDash.healthScore")}</span>
                   <span class="text-sm font-bold text-green-600" x-text="profile.health_score + '%'"></span>
                 </div>
                 <div class="flex justify-between items-center">
-                  <span class="text-sm text-gray-500">Not</span>
+                  <span class="text-sm text-gray-500">${t("sellerDash.grade")}</span>
                   <span class="text-sm font-bold text-gray-900" x-text="profile.score_grade"></span>
                 </div>
                 <div class="flex justify-between items-center">
-                  <span class="text-sm text-gray-500">Toplam Sipariş</span>
+                  <span class="text-sm text-gray-500">${t("sellerDash.totalOrders")}</span>
                   <span class="text-sm font-bold text-gray-900" x-text="profile.total_orders"></span>
                 </div>
                 <div class="flex justify-between items-center">
-                  <span class="text-sm text-gray-500">Puan</span>
+                  <span class="text-sm text-gray-500">${t("sellerDash.rating")}</span>
                   <span class="text-sm font-bold text-gray-900" x-text="profile.rating > 0 ? profile.rating.toFixed(1) + '/5' : '—'"></span>
                 </div>
               </div>
@@ -214,13 +215,13 @@ appEl.innerHTML = `
       <!-- ─── Yorumlar Tab ─────────────────────────────────────── -->
       <div x-show="activeTab === 'reviews'" x-transition.opacity>
         <div class="bg-white rounded-md border border-gray-200 p-6">
-          <h2 class="text-base font-bold text-gray-900 mb-5">Müşteri Yorumları</h2>
+          <h2 class="text-base font-bold text-gray-900 mb-5">${t("sellerDash.customerReviews")}</h2>
           <div class="text-center py-12 text-gray-400">
             <svg class="w-12 h-12 mx-auto mb-3 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
             </svg>
-            <p class="text-sm font-medium text-gray-500">Henüz yorum bulunmuyor</p>
-            <p class="text-xs text-gray-400 mt-1">İlk siparişlerinizden sonra yorumlar burada görünecek</p>
+            <p class="text-sm font-medium text-gray-500">${t("sellerDash.noReviewsYet")}</p>
+            <p class="text-xs text-gray-400 mt-1">${t("sellerDash.reviewsHint")}</p>
           </div>
         </div>
       </div>
@@ -230,31 +231,31 @@ appEl.innerHTML = `
         <div class="bg-white rounded-md border border-gray-200">
           <!-- Başlık + Ekle butonu -->
           <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-            <h2 class="text-base font-bold text-gray-900">Ürünler (<span x-text="products.length"></span>)</h2>
+            <h2 class="text-base font-bold text-gray-900">${t("sellerDash.products")} (<span x-text="products.length"></span>)</h2>
             <button @click="openProductModal(null)"
               class="flex items-center gap-2 px-4 py-2 bg-[var(--color-primary-500)] hover:bg-[var(--color-primary-600)] text-white text-sm font-semibold rounded-lg transition-colors">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-              Ürün Ekle
+              ${t("sellerDash.addProduct")}
             </button>
           </div>
 
           <!-- Ürün Listesi -->
           <div x-show="products.length === 0" class="text-center py-12 text-gray-400">
             <svg class="w-12 h-12 mx-auto mb-3 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
-            <p class="text-sm font-medium text-gray-500">Henüz ürün eklemediniz</p>
-            <p class="text-xs text-gray-400 mt-1">İlk ürününüzü ekleyin</p>
+            <p class="text-sm font-medium text-gray-500">${t("sellerDash.noProductsYet")}</p>
+            <p class="text-xs text-gray-400 mt-1">${t("sellerDash.addFirstProduct")}</p>
           </div>
 
           <div x-show="products.length > 0" class="overflow-x-auto">
             <table class="w-full text-sm">
               <thead class="bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider">
                 <tr>
-                  <th class="px-4 py-3 text-start">Ürün</th>
-                  <th class="px-4 py-3 text-start">Kategori</th>
-                  <th class="px-4 py-3 text-start">Fiyat</th>
-                  <th class="px-4 py-3 text-start">Min Sipariş</th>
-                  <th class="px-4 py-3 text-start">Durum</th>
-                  <th class="px-4 py-3 text-end">İşlemler</th>
+                  <th class="px-4 py-3 text-start">${t("sellerDash.colProduct")}</th>
+                  <th class="px-4 py-3 text-start">${t("sellerDash.colCategory")}</th>
+                  <th class="px-4 py-3 text-start">${t("sellerDash.colPrice")}</th>
+                  <th class="px-4 py-3 text-start">${t("sellerDash.colMinOrder")}</th>
+                  <th class="px-4 py-3 text-start">${t("sellerDash.colStatus")}</th>
+                  <th class="px-4 py-3 text-end">${t("sellerDash.colActions")}</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-100">
@@ -278,20 +279,20 @@ appEl.innerHTML = `
                     <td class="px-4 py-3 text-gray-900">
                       <span x-text="product.price_min > 0 ? (product.price_max > product.price_min ? window.csFormatPriceRange(product.price_min, product.price_max, product.currency || 'TRY') : window.csFormatPrice(product.price_min, product.currency || 'TRY')) : '—'"></span>
                     </td>
-                    <td class="px-4 py-3 text-gray-600" x-text="product.moq + ' ' + (product.moq_unit || 'Adet')"></td>
+                    <td class="px-4 py-3 text-gray-600" x-text="product.moq + ' ' + (product.moq_unit || '${t("sellerDash.unit")}')"></td>
                     <td class="px-4 py-3">
                       <span :class="{
                         'bg-green-100 text-green-700': product.status === 'Active',
                         'bg-yellow-100 text-yellow-700': product.status === 'Draft',
                         'bg-gray-100 text-gray-500': product.status === 'Archived'
-                      }" class="px-2 py-0.5 rounded-full text-xs font-medium" x-text="product.status === 'Active' ? 'Aktif' : product.status === 'Draft' ? 'Taslak' : 'Arşiv'"></span>
+                      }" class="px-2 py-0.5 rounded-full text-xs font-medium" x-text="product.status === 'Active' ? '${t("sellerDash.statusActive")}' : product.status === 'Draft' ? '${t("sellerDash.statusDraft")}' : '${t("sellerDash.statusArchived")}'"></span>
                     </td>
                     <td class="px-4 py-3 text-end">
                       <div class="flex items-center justify-end gap-2">
-                        <button @click="openProductModal(product)" class="p-1.5 text-gray-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg transition-colors" title="Düzenle">
+                        <button @click="openProductModal(product)" class="p-1.5 text-gray-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg transition-colors" title="${t("sellerDash.edit")}">
                           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                         </button>
-                        <button @click="deleteProduct(product.name)" class="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="Sil">
+                        <button @click="deleteProduct(product.name)" class="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="${t("sellerDash.delete")}">
                           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                         </button>
                       </div>
@@ -308,17 +309,17 @@ appEl.innerHTML = `
       <div x-show="activeTab === 'categories'" x-transition.opacity>
         <div class="bg-white rounded-md border border-gray-200">
           <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-            <h2 class="text-base font-bold text-gray-900">Kategoriler (<span x-text="categories.length"></span>)</h2>
+            <h2 class="text-base font-bold text-gray-900">${t("sellerDash.categories")} (<span x-text="categories.length"></span>)</h2>
             <button @click="openCategoryModal(null)"
               class="flex items-center gap-2 px-4 py-2 bg-[var(--color-primary-500)] hover:bg-[var(--color-primary-600)] text-white text-sm font-semibold rounded-lg transition-colors">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-              Kategori Ekle
+              ${t("sellerDash.addCategory")}
             </button>
           </div>
 
           <div x-show="categories.length === 0" class="text-center py-12">
             <svg class="w-12 h-12 mx-auto mb-3 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-            <p class="text-sm font-medium text-gray-500">Henüz kategori eklemediniz</p>
+            <p class="text-sm font-medium text-gray-500">${t("sellerDash.noCategoriesYet")}</p>
           </div>
 
           <div x-show="categories.length > 0" class="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -352,26 +353,26 @@ appEl.innerHTML = `
         <div class="bg-white rounded-md border border-gray-200">
           <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
             <div>
-              <h2 class="text-base font-bold text-gray-900">Fabrika / Mağaza Fotoğrafları</h2>
-              <p class="text-xs text-gray-400 mt-0.5">Maksimum 20 fotoğraf (<span x-text="gallery.length"></span>/20)</p>
+              <h2 class="text-base font-bold text-gray-900">${t("sellerDash.galleryTitle")}</h2>
+              <p class="text-xs text-gray-400 mt-0.5">${t("sellerDash.maxPhotos")} (<span x-text="gallery.length"></span>/20)</p>
             </div>
           </div>
 
           <!-- Yeni fotoğraf ekle -->
           <div x-show="gallery.length < 20" class="px-6 py-4 border-b border-gray-100 bg-gray-50">
-            <p class="text-xs font-medium text-gray-600 mb-3">Fotoğraf Ekle</p>
+            <p class="text-xs font-medium text-gray-600 mb-3">${t("sellerDash.addPhoto")}</p>
             <div class="flex gap-3 flex-wrap">
               <input
                 x-model="galleryNewUrl"
                 type="url"
-                placeholder="Görsel URL (https://...)"
+                placeholder="${t("sellerDash.imageUrlPlaceholder")}"
                 class="flex-1 min-w-[200px] border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]"
                 @keydown.enter.prevent="addGalleryImage()"
               />
               <input
                 x-model="galleryNewCaption"
                 type="text"
-                placeholder="Açıklama (opsiyonel)"
+                placeholder="${t("sellerDash.captionPlaceholder")}"
                 class="w-48 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]"
               />
               <button
@@ -381,21 +382,21 @@ appEl.innerHTML = `
               >
                 <svg x-show="galleryAdding" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
                 <svg x-show="!galleryAdding" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                <span x-text="galleryAdding ? 'Ekleniyor...' : 'Ekle'"></span>
+                <span x-text="galleryAdding ? '${t("sellerDash.adding")}' : '${t("sellerDash.add")}'"></span>
               </button>
             </div>
             <!-- Önizleme -->
             <template x-if="galleryNewUrl.trim()">
               <div class="mt-3 flex items-center gap-3">
                 <img :src="galleryNewUrl" class="w-16 h-16 rounded-lg object-cover border border-gray-200 bg-gray-100" />
-                <span class="text-xs text-gray-400">Önizleme</span>
+                <span class="text-xs text-gray-400">${t("sellerDash.preview")}</span>
               </div>
             </template>
           </div>
 
           <!-- Fotoğraf limit uyarısı -->
           <div x-show="gallery.length >= 20" class="px-6 py-3 bg-yellow-50 border-b border-yellow-100">
-            <p class="text-xs text-yellow-700 font-medium">Maksimum fotoğraf sayısına ulaşıldı (20/20). Yeni eklemek için mevcut fotoğrafları silin.</p>
+            <p class="text-xs text-yellow-700 font-medium">${t("sellerDash.maxPhotosReached")}</p>
           </div>
 
           <!-- Boş galeri -->
@@ -403,15 +404,15 @@ appEl.innerHTML = `
             <svg class="w-14 h-14 mx-auto mb-3 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
             </svg>
-            <p class="text-sm font-medium text-gray-500">Henüz fotoğraf eklemediniz</p>
-            <p class="text-xs text-gray-400 mt-1">Fabrika, atölye veya mağaza fotoğrafları ekleyin</p>
+            <p class="text-sm font-medium text-gray-500">${t("sellerDash.noPhotosYet")}</p>
+            <p class="text-xs text-gray-400 mt-1">${t("sellerDash.photosHint")}</p>
           </div>
 
           <!-- Fotoğraf grid -->
           <div x-show="gallery.length > 0" class="p-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             <template x-for="(item, idx) in gallery" :key="item.name">
               <div class="group relative aspect-square rounded-md overflow-hidden border border-gray-200 bg-gray-100">
-                <img :src="item.image" :alt="item.caption || 'Galeri fotoğrafı'" class="w-full h-full object-cover" />
+                <img :src="item.image" :alt="item.caption || '${t("sellerDash.galleryPhotoAlt")}'" class="w-full h-full object-cover" />
                 <!-- Sıra numarası -->
                 <div class="absolute top-2 start-2 bg-black/50 text-white text-[10px] px-1.5 py-0.5 rounded font-mono" x-text="idx + 1"></div>
                 <!-- Caption -->
@@ -425,7 +426,7 @@ appEl.innerHTML = `
                   <button
                     @click="removeGalleryImage(item.name)"
                     class="opacity-0 group-hover:opacity-100 transition-opacity w-9 h-9 rounded-full bg-red-500 hover:bg-red-600 text-white flex items-center justify-center shadow-lg"
-                    title="Kaldır"
+                    title="${t("sellerDash.remove")}"
                   >
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                   </button>
@@ -439,48 +440,48 @@ appEl.innerHTML = `
       <!-- ─── Şirket Profili Tab ────────────────────────────────── -->
       <div x-show="activeTab === 'company'" x-transition.opacity>
         <div class="bg-white rounded-md border border-gray-200 p-6">
-          <h2 class="text-base font-bold text-gray-900 mb-5">Şirket Profili</h2>
+          <h2 class="text-base font-bold text-gray-900 mb-5">${t("sellerDash.companyProfile")}</h2>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-medium text-gray-600 mb-1.5">Şirket Adı</label>
+              <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.companyName")}</label>
               <input x-model="form.company.company_name" type="text" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
             </div>
             <div>
-              <label class="block text-xs font-medium text-gray-600 mb-1.5">İşletme Tipi</label>
+              <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.businessType")}</label>
               <select x-model="form.company.business_type" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]">
-                <option value="Manufacturer">Üretici</option>
-                <option value="Wholesaler">Toptancı</option>
-                <option value="Retailer">Perakendeci</option>
-                <option value="Other">Diğer</option>
+                <option value="Manufacturer">${t("sellerDash.manufacturer")}</option>
+                <option value="Wholesaler">${t("sellerDash.wholesaler")}</option>
+                <option value="Retailer">${t("sellerDash.retailer")}</option>
+                <option value="Other">${t("sellerDash.other")}</option>
               </select>
             </div>
             <div>
-              <label class="block text-xs font-medium text-gray-600 mb-1.5">Kuruluş Yılı</label>
+              <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.foundedYear")}</label>
               <input x-model="form.company.founded_year" type="text" placeholder="2010" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
             </div>
             <div>
-              <label class="block text-xs font-medium text-gray-600 mb-1.5">Personel Sayısı</label>
+              <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.staffCount")}</label>
               <input x-model="form.company.staff_count" type="text" placeholder="100-200" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
             </div>
             <div>
-              <label class="block text-xs font-medium text-gray-600 mb-1.5">Yıllık Ciro</label>
+              <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.annualRevenue")}</label>
               <input x-model="form.company.annual_revenue" type="text" placeholder="$1M+" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
             </div>
             <div>
-              <label class="block text-xs font-medium text-gray-600 mb-1.5">Fabrika Büyüklüğü (m²)</label>
+              <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.factorySize")}</label>
               <input x-model="form.company.factory_size" type="text" placeholder="5000+" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
             </div>
             <div>
-              <label class="block text-xs font-medium text-gray-600 mb-1.5">Vergi No / TC No</label>
+              <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.taxId")}</label>
               <input x-model="form.company.tax_id" type="text" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
             </div>
             <div>
-              <label class="block text-xs font-medium text-gray-600 mb-1.5">Vergi Dairesi</label>
+              <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.taxOffice")}</label>
               <input x-model="form.company.tax_office" type="text" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
             </div>
             <div class="sm:col-span-2">
-              <label class="block text-xs font-medium text-gray-600 mb-1.5">Ana Pazarlar</label>
-              <input x-model="form.company.main_markets" type="text" placeholder="Türkiye, AB, Orta Doğu..." class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
+              <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.mainMarkets")}</label>
+              <input x-model="form.company.main_markets" type="text" placeholder="${t("sellerDash.mainMarketsPlaceholder")}" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
             </div>
           </div>
           <div class="mt-5 flex justify-end">
@@ -488,7 +489,7 @@ appEl.innerHTML = `
               :disabled="saving.company"
               class="px-5 py-2.5 bg-[var(--color-primary-500)] hover:bg-[var(--color-primary-600)] text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-60 flex items-center gap-2">
               <svg x-show="saving.company" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
-              <span x-text="saving.company ? 'Kaydediliyor...' : 'Kaydet'"></span>
+              <span x-text="saving.company ? '${t("sellerDash.saving")}' : '${t("sellerDash.save")}'"></span>
             </button>
           </div>
         </div>
@@ -497,34 +498,34 @@ appEl.innerHTML = `
       <!-- ─── İletişim Tab ─────────────────────────────────────── -->
       <div x-show="activeTab === 'contact'" x-transition.opacity>
         <div class="bg-white rounded-md border border-gray-200 p-6">
-          <h2 class="text-base font-bold text-gray-900 mb-5">İletişim Bilgileri</h2>
+          <h2 class="text-base font-bold text-gray-900 mb-5">${t("sellerDash.contactInfo")}</h2>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-medium text-gray-600 mb-1.5">Telefon</label>
+              <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.phone")}</label>
               <input x-model="form.contact.phone" type="tel" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
             </div>
             <div>
-              <label class="block text-xs font-medium text-gray-600 mb-1.5">Web Sitesi</label>
+              <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.website")}</label>
               <input x-model="form.contact.website" type="url" placeholder="https://" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
             </div>
             <div class="sm:col-span-2">
-              <label class="block text-xs font-medium text-gray-600 mb-1.5">Adres</label>
-              <input x-model="form.contact.address_line1" type="text" placeholder="Sokak, Mahalle..." class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
+              <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.address")}</label>
+              <input x-model="form.contact.address_line1" type="text" placeholder="${t("sellerDash.addressPlaceholder")}" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
             </div>
             <div class="sm:col-span-2">
-              <label class="block text-xs font-medium text-gray-600 mb-1.5">Adres 2</label>
-              <input x-model="form.contact.address_line2" type="text" placeholder="Sanayi Sitesi, Blok..." class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
+              <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.address2")}</label>
+              <input x-model="form.contact.address_line2" type="text" placeholder="${t("sellerDash.address2Placeholder")}" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
             </div>
             <div>
-              <label class="block text-xs font-medium text-gray-600 mb-1.5">Şehir</label>
+              <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.city")}</label>
               <input x-model="form.contact.city" type="text" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
             </div>
             <div>
-              <label class="block text-xs font-medium text-gray-600 mb-1.5">İlçe</label>
+              <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.district")}</label>
               <input x-model="form.contact.district" type="text" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
             </div>
             <div>
-              <label class="block text-xs font-medium text-gray-600 mb-1.5">Posta Kodu</label>
+              <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.postalCode")}</label>
               <input x-model="form.contact.postal_code" type="text" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
             </div>
             <div>
@@ -537,7 +538,7 @@ appEl.innerHTML = `
               :disabled="saving.contact"
               class="px-5 py-2.5 bg-[var(--color-primary-500)] hover:bg-[var(--color-primary-600)] text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-60 flex items-center gap-2">
               <svg x-show="saving.contact" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
-              <span x-text="saving.contact ? 'Kaydediliyor...' : 'Kaydet'"></span>
+              <span x-text="saving.contact ? '${t("sellerDash.saving")}' : '${t("sellerDash.save")}'"></span>
             </button>
           </div>
         </div>
@@ -550,9 +551,9 @@ appEl.innerHTML = `
         <div x-show="!selectedOrder">
           <div class="bg-white rounded-md border border-gray-200">
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 flex-wrap gap-3">
-              <h2 class="text-base font-bold text-gray-900">Siparişler (<span x-text="ordersTotal"></span>)</h2>
+              <h2 class="text-base font-bold text-gray-900">${t("sellerDash.orders")} (<span x-text="ordersTotal"></span>)</h2>
               <div class="flex items-center gap-2 flex-wrap">
-                <template x-for="s in [['all','Tümü'],['unpaid','Ödeme Bekl.'],['confirming','Onaylanıyor'],['delivering','Kargoda'],['completed','Tamamlandı'],['cancelled','İptal']]" :key="s[0]">
+                <template x-for="s in [['all','${t("sellerDash.filterAll")}'],['unpaid','${t("sellerDash.filterUnpaid")}'],['confirming','${t("sellerDash.filterConfirming")}'],['delivering','${t("sellerDash.filterDelivering")}'],['completed','${t("sellerDash.filterCompleted")}'],['cancelled','${t("sellerDash.filterCancelled")}']]" :key="s[0]">
                   <button @click="setOrdersStatus(s[0])"
                     :class="ordersStatus === s[0] ? 'bg-[var(--color-primary-500)] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
                     class="px-3 py-1 text-xs font-medium rounded-full transition-colors"
@@ -567,7 +568,7 @@ appEl.innerHTML = `
 
             <div x-show="!ordersLoading && orders.length === 0" class="text-center py-12">
               <svg class="w-12 h-12 mx-auto mb-3 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-              <p class="text-sm font-medium text-gray-500">Sipariş bulunamadı</p>
+              <p class="text-sm font-medium text-gray-500">${t("sellerDash.noOrdersFound")}</p>
             </div>
 
             <div x-show="!ordersLoading && orders.length > 0" class="divide-y divide-gray-100">
@@ -589,7 +590,7 @@ appEl.innerHTML = `
                       <template x-for="item in (order.items || []).slice(0,2)" :key="item.product_name">
                         <span class="text-[11px] text-gray-500 bg-gray-100 px-2 py-0.5 rounded-md" x-text="item.product_name + ' ×' + item.quantity"></span>
                       </template>
-                      <span x-show="(order.items || []).length > 2" class="text-[11px] text-gray-400">+<span x-text="(order.items || []).length - 2"></span> daha</span>
+                      <span x-show="(order.items || []).length > 2" class="text-[11px] text-gray-400">+<span x-text="(order.items || []).length - 2"></span> ${t("sellerDash.more")}</span>
                     </div>
                   </div>
                   <div class="text-end shrink-0">
@@ -599,19 +600,19 @@ appEl.innerHTML = `
                         @click="confirmPayment(order.name)"
                         :disabled="confirmingOrderId === order.name"
                         class="px-3 py-1.5 text-xs font-semibold text-white bg-green-600 hover:bg-green-700 rounded-lg transition-colors disabled:opacity-60">
-                        <span x-show="confirmingOrderId !== order.name">Ödeme Onayla</span>
-                        <span x-show="confirmingOrderId === order.name">Onaylanıyor...</span>
+                        <span x-show="confirmingOrderId !== order.name">${t("sellerDash.confirmPayment")}</span>
+                        <span x-show="confirmingOrderId === order.name">${t("sellerDash.confirming")}</span>
                       </button>
                       <button x-show="order.status_en === 'Confirming'"
                         @click="openShipModal(order.name)"
                         :disabled="confirmingOrderId === order.name"
                         class="px-3 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors disabled:opacity-60">
-                        <span x-show="confirmingOrderId !== order.name">Kargoya Ver</span>
-                        <span x-show="confirmingOrderId === order.name">İşleniyor...</span>
+                        <span x-show="confirmingOrderId !== order.name">${t("sellerDash.ship")}</span>
+                        <span x-show="confirmingOrderId === order.name">${t("sellerDash.processing")}</span>
                       </button>
                       <button @click="viewOrder(order)"
                         class="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
-                        Detay
+                        ${t("sellerDash.detail")}
                       </button>
                     </div>
                   </div>
@@ -641,51 +642,51 @@ appEl.innerHTML = `
                 @click="confirmPayment(selectedOrder.name)"
                 :disabled="confirmingOrderId === selectedOrder?.name"
                 class="px-4 py-2 text-sm font-semibold text-white bg-green-600 hover:bg-green-700 rounded-lg transition-colors disabled:opacity-60">
-                <span x-show="confirmingOrderId !== selectedOrder?.name">Ödemeyi Onayla</span>
-                <span x-show="confirmingOrderId === selectedOrder?.name">Onaylanıyor...</span>
+                <span x-show="confirmingOrderId !== selectedOrder?.name">${t("sellerDash.confirmPaymentDetail")}</span>
+                <span x-show="confirmingOrderId === selectedOrder?.name">${t("sellerDash.confirming")}</span>
               </button>
               <button x-show="selectedOrder?.status_en === 'Confirming'"
                 @click="openShipModal(selectedOrder.name)"
                 :disabled="confirmingOrderId === selectedOrder?.name"
                 class="px-4 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors disabled:opacity-60">
-                <span x-show="confirmingOrderId !== selectedOrder?.name">Kargoya Ver</span>
-                <span x-show="confirmingOrderId === selectedOrder?.name">İşleniyor...</span>
+                <span x-show="confirmingOrderId !== selectedOrder?.name">${t("sellerDash.ship")}</span>
+                <span x-show="confirmingOrderId === selectedOrder?.name">${t("sellerDash.processing")}</span>
               </button>
             </div>
 
             <div class="p-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
-                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Alıcı Bilgileri</p>
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">${t("sellerDash.buyerInfo")}</p>
                 <div class="bg-gray-50 rounded-md p-4 space-y-2">
                   <div class="flex justify-between text-sm">
-                    <span class="text-gray-500">Alıcı</span>
+                    <span class="text-gray-500">${t("sellerDash.buyer")}</span>
                     <span class="font-medium text-gray-900" x-text="selectedOrder?.buyer_name || selectedOrder?.buyer"></span>
                   </div>
                   <div class="flex justify-between text-sm" x-show="selectedOrder?.payment_method">
-                    <span class="text-gray-500">Ödeme Yöntemi</span>
+                    <span class="text-gray-500">${t("sellerDash.paymentMethod")}</span>
                     <span class="font-medium text-gray-900" x-text="selectedOrder?.payment_method"></span>
                   </div>
                   <div x-show="selectedOrder?.remittance_date || selectedOrder?.remittance_amount">
                     <div class="mt-2 pt-2 border-t border-gray-200">
-                      <p class="text-xs font-semibold text-amber-700 mb-2">Havale Bilgileri</p>
+                      <p class="text-xs font-semibold text-amber-700 mb-2">${t("sellerDash.remittanceInfo")}</p>
                       <div class="space-y-1">
                         <div class="flex justify-between text-sm" x-show="selectedOrder?.remittance_date">
-                          <span class="text-gray-500">Havale Tarihi</span>
+                          <span class="text-gray-500">${t("sellerDash.remittanceDate")}</span>
                           <span class="text-gray-900" x-text="String(selectedOrder?.remittance_date || '').substring(0,10)"></span>
                         </div>
                         <div class="flex justify-between text-sm" x-show="selectedOrder?.remittance_amount">
-                          <span class="text-gray-500">Gönderilen Tutar</span>
+                          <span class="text-gray-500">${t("sellerDash.sentAmount")}</span>
                           <span class="text-gray-900" x-text="(selectedOrder?.currency || '') + ' ' + parseFloat(selectedOrder?.remittance_amount || 0).toFixed(2)"></span>
                         </div>
                         <div class="flex justify-between text-sm" x-show="selectedOrder?.remittance_sender">
-                          <span class="text-gray-500">Gönderen Ad</span>
+                          <span class="text-gray-500">${t("sellerDash.senderName")}</span>
                           <span class="text-gray-900" x-text="selectedOrder?.remittance_sender"></span>
                         </div>
                         <div x-show="selectedOrder?.receipt_url" class="pt-1">
                           <a :href="selectedOrder?.receipt_url" target="_blank"
                             class="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 font-medium">
                             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                            Dekontu Görüntüle
+                            ${t("sellerDash.viewReceipt")}
                           </a>
                         </div>
                       </div>
@@ -695,18 +696,18 @@ appEl.innerHTML = `
               </div>
 
               <div>
-                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Ödeme Özeti</p>
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">${t("sellerDash.paymentSummary")}</p>
                 <div class="bg-gray-50 rounded-md p-4 space-y-2">
                   <div class="flex justify-between text-sm">
-                    <span class="text-gray-500">Ara Toplam</span>
+                    <span class="text-gray-500">${t("sellerDash.subtotal")}</span>
                     <span x-text="(selectedOrder?.currency || '') + ' ' + parseFloat(selectedOrder?.subtotal || 0).toFixed(2)"></span>
                   </div>
                   <div class="flex justify-between text-sm">
-                    <span class="text-gray-500">Kargo</span>
+                    <span class="text-gray-500">${t("sellerDash.shipping")}</span>
                     <span x-text="(selectedOrder?.currency || '') + ' ' + parseFloat(selectedOrder?.shipping_fee || 0).toFixed(2)"></span>
                   </div>
                   <div class="border-t border-gray-200 pt-2 flex justify-between text-sm font-bold">
-                    <span>Toplam</span>
+                    <span>${t("sellerDash.total")}</span>
                     <span x-text="(selectedOrder?.currency || '') + ' ' + parseFloat(selectedOrder?.total || 0).toFixed(2)"></span>
                   </div>
                 </div>
@@ -714,15 +715,15 @@ appEl.innerHTML = `
             </div>
 
             <div class="px-6 pb-6">
-              <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">Sipariş Kalemleri</p>
+              <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">${t("sellerDash.orderItems")}</p>
               <div class="border border-gray-200 rounded-md overflow-hidden">
                 <table class="w-full text-sm">
                   <thead class="bg-gray-50">
                     <tr>
-                      <th class="px-4 py-2.5 text-start text-xs font-semibold text-gray-500">Ürün</th>
-                      <th class="px-4 py-2.5 text-center text-xs font-semibold text-gray-500">Adet</th>
-                      <th class="px-4 py-2.5 text-end text-xs font-semibold text-gray-500">Birim</th>
-                      <th class="px-4 py-2.5 text-end text-xs font-semibold text-gray-500">Toplam</th>
+                      <th class="px-4 py-2.5 text-start text-xs font-semibold text-gray-500">${t("sellerDash.colProduct")}</th>
+                      <th class="px-4 py-2.5 text-center text-xs font-semibold text-gray-500">${t("sellerDash.colQuantity")}</th>
+                      <th class="px-4 py-2.5 text-end text-xs font-semibold text-gray-500">${t("sellerDash.colUnit")}</th>
+                      <th class="px-4 py-2.5 text-end text-xs font-semibold text-gray-500">${t("sellerDash.total")}</th>
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-gray-100">
@@ -760,22 +761,22 @@ appEl.innerHTML = `
     <div x-show="productModal.open" x-transition class="fixed inset-0 bg-black/50 z-[999] flex items-center justify-center p-4">
       <div @click.stop class="bg-white rounded-md shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-          <h3 class="text-base font-bold text-gray-900" x-text="productModal.editId ? 'Ürün Düzenle' : 'Yeni Ürün Ekle'"></h3>
+          <h3 class="text-base font-bold text-gray-900" x-text="productModal.editId ? '${t("sellerDash.editProduct")}' : '${t("sellerDash.newProduct")}'"></h3>
           <button @click="productModal.open = false" class="text-gray-400 hover:text-gray-600 transition-colors">
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
           </button>
         </div>
         <div class="p-6 space-y-4">
           <div>
-            <label class="block text-xs font-medium text-gray-600 mb-1.5">Ürün Adı *</label>
+            <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.productName")} *</label>
             <input x-model="productModal.data.product_name" type="text" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
           </div>
           <div>
-            <label class="block text-xs font-medium text-gray-600 mb-1.5">Açıklama</label>
+            <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.description")}</label>
             <textarea x-model="productModal.data.description" rows="3" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]"></textarea>
           </div>
           <div>
-            <label class="block text-xs font-medium text-gray-600 mb-1.5">Görsel URL</label>
+            <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.imageUrl")}</label>
             <div class="flex gap-3 items-start">
               <div class="w-14 h-14 rounded-lg border border-gray-200 bg-gray-50 overflow-hidden shrink-0 flex items-center justify-center">
                 <img x-show="productModal.data.image" :src="productModal.data.image" class="w-full h-full object-cover" />
@@ -786,50 +787,50 @@ appEl.innerHTML = `
           </div>
           <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="block text-xs font-medium text-gray-600 mb-1.5">Min Fiyat ($)</label>
+              <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.minPrice")}</label>
               <input x-model.number="productModal.data.price_min" type="number" step="0.01" min="0" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
             </div>
             <div>
-              <label class="block text-xs font-medium text-gray-600 mb-1.5">Max Fiyat ($)</label>
+              <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.maxPrice")}</label>
               <input x-model.number="productModal.data.price_max" type="number" step="0.01" min="0" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
             </div>
             <div>
-              <label class="block text-xs font-medium text-gray-600 mb-1.5">Min Sipariş</label>
+              <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.colMinOrder")}</label>
               <input x-model.number="productModal.data.moq" type="number" min="1" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
             </div>
             <div>
-              <label class="block text-xs font-medium text-gray-600 mb-1.5">Birim</label>
-              <input x-model="productModal.data.moq_unit" type="text" placeholder="Adet" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
+              <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.colUnit")}</label>
+              <input x-model="productModal.data.moq_unit" type="text" placeholder="${t("sellerDash.unit")}" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
             </div>
           </div>
           <div>
-            <label class="block text-xs font-medium text-gray-600 mb-1.5">Kategori</label>
+            <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.colCategory")}</label>
             <select x-model="productModal.data.category" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]">
-              <option value="">Kategori seçin...</option>
+              <option value="">${t("sellerDash.selectCategory")}</option>
               <template x-for="cat in categories" :key="cat.name">
                 <option :value="cat.name" x-text="cat.category_name"></option>
               </template>
             </select>
           </div>
           <div>
-            <label class="block text-xs font-medium text-gray-600 mb-1.5">Durum</label>
+            <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.colStatus")}</label>
             <select x-model="productModal.data.status" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]">
-              <option value="Active">Aktif</option>
-              <option value="Draft">Taslak</option>
-              <option value="Archived">Arşiv</option>
+              <option value="Active">${t("sellerDash.statusActive")}</option>
+              <option value="Draft">${t("sellerDash.statusDraft")}</option>
+              <option value="Archived">${t("sellerDash.statusArchived")}</option>
             </select>
           </div>
           <div class="flex items-center gap-2">
             <input x-model="productModal.data.is_featured" type="checkbox" id="is_featured" class="w-4 h-4 text-[var(--color-primary-500)] rounded border-gray-300" />
-            <label for="is_featured" class="text-sm text-gray-700">Öne Çıkan Ürün</label>
+            <label for="is_featured" class="text-sm text-gray-700">${t("sellerDash.featuredProduct")}</label>
           </div>
         </div>
         <div class="flex gap-3 px-6 py-4 border-t border-gray-200">
-          <button @click="productModal.open = false" class="flex-1 py-2.5 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors">İptal</button>
+          <button @click="productModal.open = false" class="flex-1 py-2.5 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors">${t("sellerDash.cancel")}</button>
           <button @click="saveProduct()"
             :disabled="productModal.saving"
             class="flex-1 py-2.5 bg-[var(--color-primary-500)] hover:bg-[var(--color-primary-600)] text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-60">
-            <span x-text="productModal.saving ? 'Kaydediliyor...' : 'Kaydet'"></span>
+            <span x-text="productModal.saving ? '${t("sellerDash.saving")}' : '${t("sellerDash.save")}'"></span>
           </button>
         </div>
       </div>
@@ -839,18 +840,18 @@ appEl.innerHTML = `
     <div x-show="categoryModal.open" x-transition class="fixed inset-0 bg-black/50 z-[999] flex items-center justify-center p-4">
       <div @click.stop class="bg-white rounded-md shadow-xl w-full max-w-sm">
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-          <h3 class="text-base font-bold text-gray-900" x-text="categoryModal.editId ? 'Kategori Düzenle' : 'Yeni Kategori'"></h3>
+          <h3 class="text-base font-bold text-gray-900" x-text="categoryModal.editId ? '${t("sellerDash.editCategory")}' : '${t("sellerDash.newCategory")}'"></h3>
           <button @click="categoryModal.open = false" class="text-gray-400 hover:text-gray-600 transition-colors">
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
           </button>
         </div>
         <div class="p-6 space-y-4">
           <div>
-            <label class="block text-xs font-medium text-gray-600 mb-1.5">Kategori Adı *</label>
+            <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.categoryName")} *</label>
             <input x-model="categoryModal.data.category_name" type="text" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
           </div>
           <div>
-            <label class="block text-xs font-medium text-gray-600 mb-1.5">Görsel URL</label>
+            <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.imageUrl")}</label>
             <div class="flex gap-3 items-start">
               <div class="w-14 h-14 rounded-lg border border-gray-200 bg-gray-50 overflow-hidden shrink-0 flex items-center justify-center">
                 <img x-show="categoryModal.data.image" :src="categoryModal.data.image" class="w-full h-full object-cover" />
@@ -860,16 +861,16 @@ appEl.innerHTML = `
             </div>
           </div>
           <div>
-            <label class="block text-xs font-medium text-gray-600 mb-1.5">Sıralama</label>
+            <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.sortOrder")}</label>
             <input x-model.number="categoryModal.data.sort_order" type="number" min="0" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
           </div>
         </div>
         <div class="flex gap-3 px-6 py-4 border-t border-gray-200">
-          <button @click="categoryModal.open = false" class="flex-1 py-2.5 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors">İptal</button>
+          <button @click="categoryModal.open = false" class="flex-1 py-2.5 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors">${t("sellerDash.cancel")}</button>
           <button @click="saveCategory()"
             :disabled="categoryModal.saving"
             class="flex-1 py-2.5 bg-[var(--color-primary-500)] hover:bg-[var(--color-primary-600)] text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-60">
-            <span x-text="categoryModal.saving ? 'Kaydediliyor...' : 'Kaydet'"></span>
+            <span x-text="categoryModal.saving ? '${t("sellerDash.saving")}' : '${t("sellerDash.save")}'"></span>
           </button>
         </div>
       </div>
@@ -878,20 +879,20 @@ appEl.innerHTML = `
     <!-- ─── Kargoya Ver Modal ────────────────────────────────────── -->
     <div x-show="shipModalOpen" x-transition class="fixed inset-0 bg-black/50 z-[999] flex items-center justify-center p-4">
       <div class="bg-white rounded-md shadow-xl w-full max-w-sm p-6">
-        <h3 class="text-base font-bold text-gray-900 mb-1">Kargoya Ver</h3>
-        <p class="text-sm text-gray-500 mb-4"><strong x-text="shipModalOrderNumber"></strong> numaralı sipariş kargoya verildi olarak işaretlenecek.</p>
+        <h3 class="text-base font-bold text-gray-900 mb-1">${t("sellerDash.ship")}</h3>
+        <p class="text-sm text-gray-500 mb-4"><strong x-text="shipModalOrderNumber"></strong> ${t("sellerDash.shipOrderMsg")}</p>
         <div class="mb-4">
-          <label class="block text-xs font-semibold text-gray-600 mb-1.5">Kargo Takip Numarası <span class="text-gray-400 font-normal">(opsiyonel)</span></label>
-          <input x-model="shipModalTracking" type="text" placeholder="örn. 1234567890"
+          <label class="block text-xs font-semibold text-gray-600 mb-1.5">${t("sellerDash.trackingNumber")} <span class="text-gray-400 font-normal">${t("sellerDash.optional")}</span></label>
+          <input x-model="shipModalTracking" type="text" placeholder="${t("sellerDash.trackingPlaceholder")}"
             class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
         </div>
-        <p class="text-xs text-blue-600 bg-blue-50 border border-blue-200 rounded-lg px-3 py-2 mb-5">Onayladığınızda sipariş "Kargoda" durumuna geçecek.</p>
+        <p class="text-xs text-blue-600 bg-blue-50 border border-blue-200 rounded-lg px-3 py-2 mb-5">${t("sellerDash.shipConfirmHint")}</p>
         <div class="flex gap-3">
-          <button @click="shipModalOpen = false" class="flex-1 py-2.5 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors">İptal</button>
+          <button @click="shipModalOpen = false" class="flex-1 py-2.5 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors">${t("sellerDash.cancel")}</button>
           <button @click="doShipOrder()" :disabled="confirmingOrderId !== ''"
             class="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition-colors disabled:opacity-60">
-            <span x-show="confirmingOrderId === ''">Kargoya Ver</span>
-            <span x-show="confirmingOrderId !== ''">İşleniyor...</span>
+            <span x-show="confirmingOrderId === ''">${t("sellerDash.ship")}</span>
+            <span x-show="confirmingOrderId !== ''">${t("sellerDash.processing")}</span>
           </button>
         </div>
       </div>

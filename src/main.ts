@@ -12,6 +12,7 @@ import { applyTheme, loadTheme } from "./utils/themeStorage";
 })();
 
 // i18n
+import { t } from "./i18n";
 import { initLanguageSelector } from "./components/header/TopBar";
 import { initHeaderNotice } from "./components/header/HeaderNotice";
 
@@ -78,7 +79,7 @@ appEl.innerHTML = `
   <!-- Main Content -->
   <main>
     <!-- Top Hero: Full-width promotional banner slider (Journal-style) -->
-    <section class="pt-1 pb-2 xl:pt-3 xl:pb-4" aria-label="Öne çıkan kampanyalar">
+    <section class="pt-1 pb-2 xl:pt-3 xl:pb-4" aria-label="${t("commonNav.featuredCampaigns")}">
       <div class="container-boxed">
         <div class="h-[280px] sm:h-[380px] lg:h-[480px] xl:h-[560px]">
           ${HeroTopSlider()}

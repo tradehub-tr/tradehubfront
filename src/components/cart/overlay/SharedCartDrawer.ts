@@ -496,7 +496,7 @@ function renderColorChip(color: CartDrawerColorModel, isSelected: boolean): stri
       data-color-chip="${escapeHtml(color.id)}"
       class="inline-flex items-center gap-1.5 ps-1 pe-2.5 py-1 rounded-md border transition-all ${borderStyle}"
       ${!available ? "disabled" : ""}
-      title="${!available ? `${color.label} — tükendi` : color.label}">
+      title="${!available ? t("checkoutMfr.optionOutOfStock", { label: color.label }) : color.label}">
       ${thumb}
       <span class="text-xs font-medium text-text-heading truncate">${escapeHtml(color.label)}</span>
     </button>
@@ -520,7 +520,7 @@ function renderSelectableChip(
       data-selectable-value="${escapeHtml(option.label)}"
       class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md border transition-all ${borderStyle}"
       ${!available ? "disabled" : ""}
-      title="${!available ? `${option.label} — tükendi` : option.label}">
+      title="${!available ? t("checkoutMfr.optionOutOfStock", { label: option.label }) : option.label}">
       <span class="text-xs font-medium text-text-heading">${escapeHtml(option.label)}</span>
     </button>
   `;

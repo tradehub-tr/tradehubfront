@@ -495,9 +495,9 @@ function renderFilterButton(): string {
         <div class="border-t border-border-default pt-1.5">
           <div class="text-[10.5px] uppercase tracking-[0.1em] font-semibold text-text-tertiary px-2 py-1">${t("favorites.filterPriceRange", { defaultValue: "Fiyat aralığı" })}</div>
           <div class="flex items-center gap-2 px-2 py-1.5">
-            <input type="number" data-fav-filter-min value="${escapeHtml(activeFilters.minPrice)}" placeholder="Min"
+            <input type="number" data-fav-filter-min value="${escapeHtml(activeFilters.minPrice)}" placeholder="${t("buyerUi.priceMin")}"
                    class="flex-1 min-w-0 h-7 px-2 text-[12px] bg-white border border-border-default rounded-md focus:border-[var(--color-cta-primary,#F5B800)] focus:outline-none appearance-none" />
-            <input type="number" data-fav-filter-max value="${escapeHtml(activeFilters.maxPrice)}" placeholder="Max"
+            <input type="number" data-fav-filter-max value="${escapeHtml(activeFilters.maxPrice)}" placeholder="${t("buyerUi.priceMax")}"
                    class="flex-1 min-w-0 h-7 px-2 text-[12px] bg-white border border-border-default rounded-md focus:border-[var(--color-cta-primary,#F5B800)] focus:outline-none appearance-none" />
           </div>
         </div>
@@ -577,8 +577,8 @@ function renderToolbar(count: number): string {
       </div>
 
       <div class="inline-flex items-center gap-0.5 h-8 p-0.5 bg-surface-raised rounded-md" role="tablist" aria-label="${t("favorites.products")}">
-        ${viewBtn("grid", gridSvg, "Izgara")}
-        ${viewBtn("list", listSvg, "Liste")}
+        ${viewBtn("grid", gridSvg, t("buyerUi.gridView"))}
+        ${viewBtn("list", listSvg, t("buyerUi.listView"))}
       </div>
     </div>
   `;
@@ -611,7 +611,7 @@ function renderSupplierLine(en: FavEnrichment | undefined): string {
       <span class="truncate">${escapeHtml(sup.name)}</span>
       ${
         sup.verified
-          ? `<span class="text-[var(--color-cta-primary,#F5B800)] shrink-0" title="Doğrulanmış"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></span>`
+          ? `<span class="text-[var(--color-cta-primary,#F5B800)] shrink-0" title="${t("buyerUi.verified")}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></span>`
           : ""
       }
     </div>
@@ -777,8 +777,8 @@ function renderPagination(total: number, page: number): string {
     )
     .join("");
 
-  const prev = `<button type="button" data-fav-page="${page - 1}" ${page === 1 ? "disabled" : ""} aria-label="Önceki" class="${btnBase} ${btnIdle} ${page === 1 ? btnDisabled : ""}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>`;
-  const next = `<button type="button" data-fav-page="${page + 1}" ${page === pageCount ? "disabled" : ""} aria-label="Sonraki" class="${btnBase} ${btnIdle} ${page === pageCount ? btnDisabled : ""}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>`;
+  const prev = `<button type="button" data-fav-page="${page - 1}" ${page === 1 ? "disabled" : ""} aria-label="${t("buyerUi.prevPage")}" class="${btnBase} ${btnIdle} ${page === 1 ? btnDisabled : ""}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>`;
+  const next = `<button type="button" data-fav-page="${page + 1}" ${page === pageCount ? "disabled" : ""} aria-label="${t("buyerUi.nextPage")}" class="${btnBase} ${btnIdle} ${page === pageCount ? btnDisabled : ""}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>`;
 
   return `
     <nav class="flex flex-wrap items-center justify-between gap-2 mt-5 text-[12px]">

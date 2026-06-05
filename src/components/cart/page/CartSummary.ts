@@ -123,7 +123,7 @@ export function CartSummary(data: CartSummaryData): string {
       <div class="mt-4 sm:mt-5 pt-4 sm:pt-5 border-t border-[#e5e5e5]">
         <div class="p-2.5 sm:p-3.5 bg-[#f0fdf4] border border-[#bbf7d0] rounded-md">
           <img src="/images/istoc-logo.png" alt="iSTOC" class="h-3.5 max-[380px]:h-3 sm:h-4 w-auto mb-1.5 sm:mb-2" />
-          <p class="text-[11px] max-[380px]:text-[10px] sm:text-[12px] text-[#6b7280] leading-relaxed">Ödeme güvenli olarak platforma yapılır; sipariş satıcılara iSTOC güvencesi ile yönlendirilir.</p>
+          <p class="text-[11px] max-[380px]:text-[10px] sm:text-[12px] text-[#6b7280] leading-relaxed">${t("checkoutMfr.securePaymentNote")}</p>
         </div>
       </div>
     </div>

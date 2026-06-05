@@ -232,7 +232,7 @@ function renderPaymentManagement(): string {
                       <span class="text-base font-bold tracking-wider text-[#00a0e3]">TROY</span>
                     </template>
                     <template x-if="!brand">
-                      <span class="text-xs font-medium tracking-[3px] text-white/30 uppercase">KART</span>
+                      <span class="text-xs font-medium tracking-[3px] text-white/30 uppercase">${t("checkoutMfr.cardWord")}</span>
                     </template>
                   </div>
                 </div>
@@ -242,12 +242,12 @@ function renderPaymentManagement(): string {
                 <!-- Bottom: Name + Expiry -->
                 <div class="flex items-start mt-auto text-white">
                   <div class="flex-1 min-w-0 px-[15px] max-sm:px-2.5 py-2.5 max-w-[calc(100%-85px)]">
-                    <div class="text-[13px] max-sm:text-xs opacity-70 mb-1.5">Kart Sahibi</div>
+                    <div class="text-[13px] max-sm:text-xs opacity-70 mb-1.5">${t("checkoutMfr.cardHolder")}</div>
                     <div class="text-lg max-sm:text-base font-medium leading-none uppercase truncate"
-                         x-text="cardName || 'AD SOYAD'"></div>
+                         x-text="cardName || '${t("checkoutMfr.cardHolderPlaceholder")}'"></div>
                   </div>
                   <div class="shrink-0 w-20 px-2.5 py-2.5 flex flex-wrap whitespace-nowrap">
-                    <div class="text-[13px] max-sm:text-xs opacity-70 pb-1.5 w-full">SKT</div>
+                    <div class="text-[13px] max-sm:text-xs opacity-70 pb-1.5 w-full">${t("checkoutMfr.expiryShort")}</div>
                     <span x-text="displayExpiry" class="text-lg max-sm:text-base font-medium leading-none"></span>
                   </div>
                 </div>
@@ -303,7 +303,7 @@ function renderPaymentManagement(): string {
           </div>
           <!-- Cardholder Name -->
           <div class="mb-3">
-            <label class="text-xs font-medium text-text-secondary mb-1.5 block">Kart Sahibi</label>
+            <label class="text-xs font-medium text-text-secondary mb-1.5 block">${t("checkoutMfr.cardHolder")}</label>
             <input id="pay-card-fn" type="text" class="th-input th-input-md"
                    x-model="firstName"
                    @focus="focusField = 'name'; isFlipped = false"
@@ -315,7 +315,7 @@ function renderPaymentManagement(): string {
           <!-- Expiry + CVV row -->
           <div class="flex gap-3 max-sm:gap-2">
             <div class="flex-1">
-              <label class="text-xs font-medium text-text-secondary mb-1.5 block">Son Kullanma Tarihi</label>
+              <label class="text-xs font-medium text-text-secondary mb-1.5 block">${t("checkoutMfr.expiryDate")}</label>
               <div class="flex gap-2 items-center">
                 <select id="pay-card-month" class="th-input th-input-md flex-1 cursor-pointer"
                         x-model="month"
@@ -443,7 +443,7 @@ function renderTransactions(): string {
         </div>
         <!-- Pagination -->
         <div class="flex items-center justify-between py-4 text-[13px] text-text-secondary">
-          <span x-text="'Toplam ' + pagination.total + ' kayıt'"></span>
+          <span x-text="'${t("checkoutMfr.totalWord")} ' + pagination.total + ' ${t("checkoutMfr.recordsWord")}'"></span>
           <div class="flex items-center gap-2">
             <button @click="prevPage()" :disabled="pagination.page <= 1" class="px-3 py-1.5 rounded border border-border-default bg-surface text-text-secondary cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed hover:bg-surface-muted">&laquo;</button>
             <span x-text="pagination.page + ' / ' + totalPages"></span>

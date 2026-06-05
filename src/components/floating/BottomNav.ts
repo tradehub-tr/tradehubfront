@@ -307,23 +307,23 @@ function renderAccountOverlay(): string {
           <!-- Ülke seçici (gizli, tıklayınca açılır) -->
           <div id="account-country-picker" class="hidden mx-3 min-[400px]:mx-4 mt-2 rounded-md border border-gray-200 dark:border-gray-700 overflow-hidden max-h-[200px] overflow-y-auto">
             <button type="button" data-country-switch="TR" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start border-b border-gray-100 dark:border-gray-700">
-              <span>Türkiye</span>
+              <span>${t("commonNav.countryTurkey")}</span>
               <span class="country-check text-[var(--color-primary-500,#f5b800)] hidden" data-country-check="TR">✓</span>
             </button>
             <button type="button" data-country-switch="DE" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start border-b border-gray-100 dark:border-gray-700">
-              <span>Almanya</span>
+              <span>${t("commonNav.countryGermany")}</span>
               <span class="country-check text-[var(--color-primary-500,#f5b800)] hidden" data-country-check="DE">✓</span>
             </button>
             <button type="button" data-country-switch="US" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start border-b border-gray-100 dark:border-gray-700">
-              <span>ABD</span>
+              <span>${t("commonNav.countryUsa")}</span>
               <span class="country-check text-[var(--color-primary-500,#f5b800)] hidden" data-country-check="US">✓</span>
             </button>
             <button type="button" data-country-switch="GB" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start border-b border-gray-100 dark:border-gray-700">
-              <span>İngiltere</span>
+              <span>${t("commonNav.countryUk")}</span>
               <span class="country-check text-[var(--color-primary-500,#f5b800)] hidden" data-country-check="GB">✓</span>
             </button>
             <button type="button" data-country-switch="NL" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start">
-              <span>Hollanda</span>
+              <span>${t("commonNav.countryNetherlands")}</span>
               <span class="country-check text-[var(--color-primary-500,#f5b800)] hidden" data-country-check="NL">✓</span>
             </button>
           </div>
@@ -466,11 +466,11 @@ function initAccountFullscreen(): void {
     });
 
     const countryNames: Record<string, string> = {
-      TR: "Türkiye 🇹🇷",
-      DE: "Almanya 🇩🇪",
-      US: "ABD 🇺🇸",
-      GB: "İngiltere 🇬🇧",
-      NL: "Hollanda 🇳🇱",
+      TR: `${t("commonNav.countryTurkey")} 🇹🇷`,
+      DE: `${t("commonNav.countryGermany")} 🇩🇪`,
+      US: `${t("commonNav.countryUsa")} 🇺🇸`,
+      GB: `${t("commonNav.countryUk")} 🇬🇧`,
+      NL: `${t("commonNav.countryNetherlands")} 🇳🇱`,
     };
     const currentCountry = localStorage.getItem("deliveryCountry") || "TR";
     const currentCheck = countryPicker.querySelector<HTMLElement>(

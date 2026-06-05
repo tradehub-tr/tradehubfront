@@ -10,6 +10,8 @@
  * URL: /pages/help/help-ticket.html?id=<HD Ticket name>
  */
 
+import { t } from "../../i18n";
+
 export function TicketDetailLayout(): string {
   return `
     <div class="bg-gray-50 min-h-screen" x-data="ticketDetail()" x-init="init()">
@@ -22,7 +24,7 @@ export function TicketDetailLayout(): string {
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
             </svg>
-            Destek Taleplerim
+            ${t("helpUi.breadcrumbMyTickets")}
           </a>
           <span class="text-gray-300">/</span>
           <span class="text-gray-700 font-mono">#<span x-text="ticketId"></span></span>
@@ -34,7 +36,7 @@ export function TicketDetailLayout(): string {
             <svg class="w-6 h-6 mx-auto text-primary-500 animate-spin" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M4 12a8 8 0 018-8V4a8 8 0 018 8h-2a6 6 0 00-6-6 6 6 0 00-6 6H4z"/>
             </svg>
-            <p class="text-sm text-gray-400 mt-3">Talep yükleniyor...</p>
+            <p class="text-sm text-gray-400 mt-3">${t("helpUi.ticketLoading")}</p>
           </div>
         </template>
 
@@ -46,8 +48,8 @@ export function TicketDetailLayout(): string {
         <!-- Not found -->
         <template x-if="!loading && !errorMsg && !ticket">
           <div class="bg-white border border-gray-200 rounded-xl p-12 text-center">
-            <h3 class="text-base font-semibold text-gray-700 mb-1">Talep bulunamadı</h3>
-            <p class="text-sm text-gray-400">Geçersiz veya erişiminiz olmayan bir talep.</p>
+            <h3 class="text-base font-semibold text-gray-700 mb-1">${t("helpUi.ticketNotFound")}</h3>
+            <p class="text-sm text-gray-400">${t("helpUi.ticketNotFoundDesc")}</p>
           </div>
         </template>
 
@@ -60,7 +62,7 @@ export function TicketDetailLayout(): string {
               <!-- Header card -->
               <div class="bg-white border border-gray-200 rounded-xl p-5">
                 <div class="flex items-start justify-between gap-3 flex-wrap mb-2">
-                  <h1 class="text-lg font-bold text-gray-900" x-text="ticket.subject || '(konusuz)'"></h1>
+                  <h1 class="text-lg font-bold text-gray-900" x-text="ticket.subject || '${t("helpUi.noSubject")}'"></h1>
                   <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold"
                     :class="statusCls(ticket.status)">
                     <span class="w-1.5 h-1.5 rounded-full me-1.5" :class="statusDotCls(ticket.status)"></span>
@@ -70,7 +72,7 @@ export function TicketDetailLayout(): string {
                 <div class="flex items-center gap-2 text-xs text-gray-400 flex-wrap">
                   <span class="font-mono">#<span x-text="ticket.name"></span></span>
                   <span>·</span>
-                  <span>Açılış: <span x-text="fmtDT(ticket.creation)"></span></span>
+                  <span>${t("helpUi.openedAt")} <span x-text="fmtDT(ticket.creation)"></span></span>
                   <span x-show="ticket.priority && ticket.priority !== 'Medium'"
                     class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium ms-1"
                     :class="priorityChipCls(ticket.priority)"
@@ -84,10 +86,10 @@ export function TicketDetailLayout(): string {
                 <div class="b-body">
                   <header class="b-head">
                     <span class="b-author" x-text="ticket.raised_by || '-'"></span>
-                    <span class="b-badge b-badge-customer">Müşteri · İlk Talep</span>
+                    <span class="b-badge b-badge-customer">${t("helpUi.customerFirstRequest")}</span>
                     <span class="b-meta" x-text="fmtDT(ticket.creation)"></span>
                   </header>
-                  <div class="b-content prose prose-sm max-w-none" x-html="$safeHtml(ticket.description || '<p class=\\'text-gray-400\\'>Açıklama girilmedi</p>')"></div>
+                  <div class="b-content prose prose-sm max-w-none" x-html="$safeHtml(ticket.description || '<p class=\\'text-gray-400\\'>${t("helpUi.noDescription")}</p>')"></div>
                 </div>
               </article>
 
@@ -101,7 +103,7 @@ export function TicketDetailLayout(): string {
                     <header class="b-head">
                       <span class="b-author" x-text="m.from || '-'"></span>
                       <span class="b-badge" :class="m.sender === 'support' ? 'b-badge-agent' : 'b-badge-customer'"
-                        x-text="m.sender === 'support' ? 'Destek' : 'Siz'"></span>
+                        x-text="m.sender === 'support' ? '${t("helpUi.senderSupport")}' : '${t("helpUi.senderYou")}'"></span>
                       <span class="b-meta" x-text="m.date"></span>
                     </header>
                     <div class="b-content text-sm text-gray-700 whitespace-pre-wrap" x-text="m.text"></div>
@@ -113,7 +115,7 @@ export function TicketDetailLayout(): string {
               <template x-if="attachments.length > 0">
                 <div class="bg-white border border-gray-200 rounded-xl p-4">
                   <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">
-                    Ekler (<span x-text="attachments.length"></span>)
+                    ${t("helpUi.attachments")} (<span x-text="attachments.length"></span>)
                   </h3>
                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <template x-for="f in attachments" :key="f.name">
@@ -138,24 +140,24 @@ export function TicketDetailLayout(): string {
               <!-- Kapalı uyarısı -->
               <template x-if="ticket.status === 'Closed'">
                 <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 text-center text-xs text-gray-500">
-                  Bu talep kapatıldı. Yeni bir konu için
-                  <a href="/destek/yeni" class="text-primary-600 hover:underline">yeni talep açabilirsiniz</a>.
+                  ${t("helpUi.ticketClosedNotice")}
+                  <a href="/destek/yeni" class="text-primary-600 hover:underline">${t("helpUi.openNewTicketLink")}</a>.
                 </div>
               </template>
 
               <!-- Composer (Open/Replied/Resolved'da aktif) -->
               <template x-if="ticket.status !== 'Closed'">
                 <div class="bg-white border border-gray-200 rounded-xl p-4">
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Yanıt yaz</label>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">${t("helpUi.writeReply")}</label>
                   <textarea x-model="replyText" rows="4" class="th-input resize-y"
-                    placeholder="Destek ekibine mesajınız..."></textarea>
+                    placeholder="${t("helpUi.replyPlaceholder")}"></textarea>
                   <div class="flex items-center justify-between gap-2 mt-3">
-                    <p class="text-xs text-gray-400">Ekip yanıtladığında e-posta ve buradan bildirilirsiniz.</p>
+                    <p class="text-xs text-gray-400">${t("helpUi.replyNotifyHint")}</p>
                     <button class="th-btn th-btn-sm inline-flex items-center gap-2"
                       :disabled="sending || !replyText.trim()"
                       @click="sendReply()">
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
-                      <span x-text="sending ? 'Gönderiliyor...' : 'Gönder'"></span>
+                      <span x-text="sending ? '${t("helpUi.sending")}' : '${t("helpUi.send")}'"></span>
                     </button>
                   </div>
                   <p x-show="sendError" x-text="sendError" class="text-xs text-red-500 mt-2"></p>
@@ -168,12 +170,12 @@ export function TicketDetailLayout(): string {
                   <div class="flex items-start gap-3">
                     <svg class="w-5 h-5 text-emerald-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                     <div class="flex-1 min-w-0">
-                      <p class="text-sm font-semibold text-emerald-800">Destek ekibi çözüm olarak işaretledi</p>
-                      <p class="text-xs text-emerald-700 mt-0.5">Çözümü onaylıyorsanız talebi kapatabilirsiniz.</p>
+                      <p class="text-sm font-semibold text-emerald-800">${t("helpUi.markedResolvedTitle")}</p>
+                      <p class="text-xs text-emerald-700 mt-0.5">${t("helpUi.markedResolvedDesc")}</p>
                     </div>
                     <button class="th-btn-outlined th-btn-sm text-emerald-700 border-emerald-300 hover:bg-emerald-100"
                       :disabled="closing" @click="closeTicket()">
-                      <span x-text="closing ? 'İşleniyor...' : 'Talebi Kapat'"></span>
+                      <span x-text="closing ? '${t("helpUi.processing")}' : '${t("helpUi.closeTicket")}'"></span>
                     </button>
                   </div>
                 </div>
@@ -183,30 +185,30 @@ export function TicketDetailLayout(): string {
             <!-- Sag: sidebar -->
             <aside class="space-y-3">
               <div class="bg-white border border-gray-200 rounded-xl p-4">
-                <h3 class="text-[10px] font-bold text-gray-500 mb-3 uppercase tracking-wide">Talep Bilgileri</h3>
+                <h3 class="text-[10px] font-bold text-gray-500 mb-3 uppercase tracking-wide">${t("helpUi.ticketInfo")}</h3>
                 <dl class="space-y-2.5 text-xs">
                   <div class="flex justify-between gap-2">
-                    <dt class="text-gray-500">Durum</dt>
+                    <dt class="text-gray-500">${t("helpUi.statusLabel")}</dt>
                     <dd class="font-medium text-gray-700" x-text="statusLabel(ticket.status)"></dd>
                   </div>
                   <div class="flex justify-between gap-2" x-show="ticket.priority">
-                    <dt class="text-gray-500">Öncelik</dt>
+                    <dt class="text-gray-500">${t("helpUi.priorityLabel")}</dt>
                     <dd class="font-medium text-gray-700" x-text="priorityLabel(ticket.priority)"></dd>
                   </div>
                   <div class="flex justify-between gap-2" x-show="ticket.ticket_type">
-                    <dt class="text-gray-500">Tip</dt>
+                    <dt class="text-gray-500">${t("helpUi.typeLabel")}</dt>
                     <dd class="font-medium text-gray-700" x-text="ticket.ticket_type"></dd>
                   </div>
                   <div class="flex justify-between gap-2" x-show="ticket.agent_group">
-                    <dt class="text-gray-500">Destek Ekibi</dt>
+                    <dt class="text-gray-500">${t("helpUi.supportTeamLabel")}</dt>
                     <dd class="font-medium text-gray-700" x-text="ticket.agent_group"></dd>
                   </div>
                   <div class="flex justify-between gap-2">
-                    <dt class="text-gray-500">Açılış</dt>
+                    <dt class="text-gray-500">${t("helpUi.openingLabel")}</dt>
                     <dd class="font-medium text-gray-700" x-text="fmtDT(ticket.creation)"></dd>
                   </div>
                   <div class="flex justify-between gap-2">
-                    <dt class="text-gray-500">Son Güncelleme</dt>
+                    <dt class="text-gray-500">${t("helpUi.lastUpdateLabel")}</dt>
                     <dd class="font-medium text-gray-700" x-text="fmtDT(ticket.modified)"></dd>
                   </div>
                 </dl>

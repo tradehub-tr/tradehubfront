@@ -1,4 +1,5 @@
 import Alpine from "alpinejs";
+import { t } from "../i18n";
 import { callMethod } from "../utils/api";
 import { getSelectedCurrencyInfo, convertPrice } from "../services/currencyService";
 
@@ -126,11 +127,11 @@ Alpine.data("remittanceComponent", () => ({
     const allowed = ["image/jpeg", "image/png", "image/gif", "application/pdf"];
 
     if (!allowed.includes(file.type)) {
-      this.errors = { file: "Desteklenmeyen dosya formatı" };
+      this.errors = { file: t("commonSvc.unsupportedFileFormat") };
       return;
     }
     if (file.size > maxSize) {
-      this.errors = { file: "Dosya boyutu 20MB'ı aşıyor" };
+      this.errors = { file: t("commonSvc.fileExceeds20mb") };
       return;
     }
 
@@ -205,7 +206,7 @@ Alpine.data("remittanceComponent", () => ({
           reject(err);
         }
       };
-      reader.onerror = () => reject(new Error("Dosya okunamadı"));
+      reader.onerror = () => reject(new Error(t("commonSvc.fileReadFailed")));
       reader.readAsDataURL(this.file!);
     });
   },
@@ -251,7 +252,7 @@ Alpine.data("remittanceComponent", () => ({
       }
       // Error nesnesi `message` taşıyorsa kullan; aksi halde generic mesaj göster.
       const msg = err instanceof Error ? err.message : "";
-      this.apiError = msg || "Bir hata oluştu. Lütfen tekrar deneyin.";
+      this.apiError = msg || t("commonSvc.genericError");
       this.step = "form";
     }
   },

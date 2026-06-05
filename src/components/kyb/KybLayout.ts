@@ -153,14 +153,14 @@ function renderForm(): string {
                  :disabled="!isEditable" />
         </div>
         <div>
-          <label class="block text-xs font-medium mb-1.5" style="color:var(--color-text-secondary)">MERSİS Numarası</label>
+          <label class="block text-xs font-medium mb-1.5" style="color:var(--color-text-secondary)">${t("kycUi.mersisNumber")}</label>
           <input type="text" class="th-input th-input-md" x-model="formData.mersis_no"
-                 :disabled="!isEditable" placeholder="16 hane" maxlength="16" pattern="\\d{16}" />
+                 :disabled="!isEditable" placeholder="${t("kycUi.mersisPlaceholder")}" maxlength="16" pattern="\\d{16}" />
         </div>
         <div>
-          <label class="block text-xs font-medium mb-1.5" style="color:var(--color-text-secondary)">KEP Adresi</label>
+          <label class="block text-xs font-medium mb-1.5" style="color:var(--color-text-secondary)">${t("kycUi.kepAddress")}</label>
           <input type="email" class="th-input th-input-md" x-model="formData.kep_address"
-                 :disabled="!isEditable" placeholder="ornek@hs01.kep.tr" />
+                 :disabled="!isEditable" placeholder="${t("kycUi.kepPlaceholder")}" />
         </div>
       </div>
     </div>
@@ -179,7 +179,7 @@ function renderForm(): string {
       <button type="button" @click="resubmit()" :disabled="submitting || !canSubmit"
               class="th-btn px-6 inline-flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
         ${ICONS.refresh}
-        <span x-text="submitting ? '${t("kyb.submitting")}' : (kybData.status === 'Rejected' ? '${t("kyb.resubmit")}' : kybData.status === 'Verified' ? 'Bilgileri Güncelle' : '${t("kyb.submit")}')"></span>
+        <span x-text="submitting ? '${t("kyb.submitting")}' : (kybData.status === 'Rejected' ? '${t("kyb.resubmit")}' : kybData.status === 'Verified' ? '${t("kycUi.updateInfo")}' : '${t("kyb.submit")}')"></span>
       </button>
     </div>
   `;

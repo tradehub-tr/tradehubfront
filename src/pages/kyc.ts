@@ -74,7 +74,7 @@ appEl.innerHTML = `
         <div class="pt-4">
           ${Breadcrumb([
             { label: t("header.myAccount"), href: "/pages/dashboard/buyer-dashboard.html" },
-            { label: "KYC Doğrulama" },
+            { label: t("kycUi.pageTitle") },
           ])}
         </div>
 

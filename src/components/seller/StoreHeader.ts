@@ -85,7 +85,7 @@ export function StoreHeader(): string {
             </template>
             <template x-if="sellerYears">
               <span>
-                iSTOC'ta <span x-text="sellerYears"></span>
+                ${t("sellPage.onIstocFor")} <span x-text="sellerYears"></span>
                 <span class="mx-1">&middot;</span>
               </span>
             </template>

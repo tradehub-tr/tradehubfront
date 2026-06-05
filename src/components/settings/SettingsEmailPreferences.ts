@@ -114,7 +114,7 @@ function renderLoading(): string {
 function renderEmpty(): string {
   return `
     <div class="bg-white rounded-lg p-8 max-md:p-5 max-sm:p-3.5 flex items-center justify-center min-h-[200px]">
-      <p class="text-sm m-0" style="color:var(--color-text-secondary)">Henüz e-posta tercihi yapılandırılmamış.</p>
+      <p class="text-sm m-0" style="color:var(--color-text-secondary)">${t("settingsUi.emailPrefsEmpty")}</p>
     </div>
   `;
 }
@@ -122,8 +122,8 @@ function renderEmpty(): string {
 function renderError(): string {
   return `
     <div class="bg-white rounded-lg p-8 max-md:p-5 max-sm:p-3.5 flex flex-col items-center justify-center gap-3 min-h-[200px]">
-      <p class="text-sm m-0" style="color:var(--color-text-secondary)">Tercihler yüklenirken bir hata oluştu.</p>
-      <button type="button" id="email-prefs-retry" class="text-sm bg-none border-none cursor-pointer hover:underline" style="color:var(--color-primary-500, #cc9900)">Tekrar dene</button>
+      <p class="text-sm m-0" style="color:var(--color-text-secondary)">${t("settingsUi.emailPrefsLoadError")}</p>
+      <button type="button" id="email-prefs-retry" class="text-sm bg-none border-none cursor-pointer hover:underline" style="color:var(--color-primary-500, #cc9900)">${t("settingsUi.retry")}</button>
     </div>
   `;
 }
