@@ -1103,6 +1103,7 @@ const ru = {
     // COMMON
     // ============================================================
     common: {
+      clear: "Очистить",
       search: "Поиск",
       save: "Сохранить",
       cancel: "Отмена",
@@ -1667,6 +1668,7 @@ const ru = {
     // CART
     // ============================================================
     cart: {
+      addedToFavorites: "Добавлено в избранное",
       title: "Моя корзина",
       empty: "Ваша корзина пуста",
       emptyDesc: "Вы ещё не добавили ни одного товара. Изучите товары и добавьте их в корзину.",
@@ -1909,6 +1911,20 @@ const ru = {
     // PRODUCT
     // ============================================================
     product: {
+      buyersAlsoBought: "Товары, которые покупали похожие на вас покупатели",
+      storeBestSellers: "Бестселлеры этого магазина",
+      similarFromSupplier: "Похожие товары от этого поставщика",
+      reorderRate: "Доля повторных заказов",
+      companyOverview: "Обзор компании",
+      supportedPayments: "Поддерживаемые способы оплаты",
+      dataProtection: "Защита данных",
+      support247: "Круглосуточная поддержка",
+      moneyBackProtection: "Гарантия возврата денег",
+      orderProtectionSectionDesc: "Бесплатно в рамках этой программы защищаются только заказы, оформленные и оплаченные через istoc.",
+      orderProtectionSection: "Защита заказов istoc",
+      processingTimeNote: "Стоимость доставки и дата поставки согласовываются с поставщиком. Свяжитесь с поставщиком сразу.",
+      deliveryAddressLabel: "Адрес доставки",
+      processingTime: "Время обработки",
       qa: {
         askTitle: "У вас есть вопрос?",
         askSubtitle: "Ответить могут продавец или другие покупатели.",
@@ -4500,6 +4516,7 @@ const ru = {
 
       // Manufacturer list
       list: {
+        viewProfile: "Просмотреть профиль",
         verified: "Проверено",
         years: "{{count}} лет",
         staff: "{{count}} сотрудников",
@@ -4850,6 +4867,32 @@ const ru = {
     // SETTINGS
     // ============================================================
     settings: {
+      consentDataProcessing: "Обработка данных",
+      consentKvkk: "Информационное заявление KVKK",
+      consentCookieFunctional: "Функциональные файлы cookie",
+      consentCookieMarketing: "Маркетинговые файлы cookie",
+      consentCookieAnalytics: "Аналитические файлы cookie",
+      consentMarketingSms: "Маркетинговые SMS",
+      consentMarketingEmail: "Маркетинговые электронные письма",
+      consentTerms: "Условия использования",
+      consentPrivacyPolicy: "Политика конфиденциальности",
+      consentGrantBtn: "Предоставить согласие",
+      consentWithdrawBtn: "Отозвать",
+      consentWithdrawn: "Согласие отозвано",
+      consentGranted: "Согласие предоставлено",
+      consentManagementDesc: "Здесь вы можете просмотреть и отозвать предоставленные вами согласия.",
+      consentManagementTitle: "Управление согласиями",
+      consentManagementNav: "Управление согласиями",
+      downloadMyDataPasswordPlaceholder: "Ваш текущий пароль",
+      downloadMyDataPasswordLabel: "Подтвердите ваш пароль",
+      downloadMyDataRateLimit: "Вы можете создать только 1 запрос в течение 24 часов.",
+      downloadMyDataError: "Произошла ошибка. Пожалуйста, повторите попытку позже.",
+      downloadMyDataSuccess: "Ваш запрос принят. Когда данные будут готовы, на вашу почту придёт ссылка.",
+      downloadMyDataProcessing: "Ваш запрос обрабатывается...",
+      downloadMyDataBtn: "Создать запрос на экспорт данных",
+      downloadMyDataDesc: "В соответствии с KVKK и GDPR вы можете запросить копию своих персональных данных. Данные готовятся в форматах JSON и CSV и отправляются вам по электронной почте.",
+      downloadMyDataTitle: "Скачать мои данные",
+      downloadMyDataNav: "Скачать мои данные",
       passwordMinLength: "Пароль должен содержать не менее 8 символов.",
       passwordsMismatch: "Пароли не совпадают.",
       passwordSameAsCurrent: "Ваш новый пароль не может совпадать с текущим паролем.",

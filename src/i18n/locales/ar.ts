@@ -1103,6 +1103,7 @@ const ar = {
     // COMMON
     // ============================================================
     common: {
+      clear: "مسح",
       search: "بحث",
       save: "حفظ",
       cancel: "إلغاء",
@@ -1660,6 +1661,7 @@ const ar = {
     // CART
     // ============================================================
     cart: {
+      addedToFavorites: "تمت الإضافة إلى المفضلة",
       title: "سلة التسوق الخاصة بي",
       empty: "سلة التسوق فارغة",
       emptyDesc: "لم تُضف أي منتجات بعد. استكشف المنتجات وأضفها إلى سلة التسوق.",
@@ -1896,6 +1898,20 @@ const ar = {
     // PRODUCT
     // ============================================================
     product: {
+      buyersAlsoBought: "منتجات اشتراها مشترون مثلك",
+      storeBestSellers: "الأكثر مبيعًا في هذا المتجر",
+      similarFromSupplier: "منتجات مماثلة من هذا المورد",
+      reorderRate: "معدل إعادة الطلب",
+      companyOverview: "نظرة عامة عن الشركة",
+      supportedPayments: "طرق الدفع المدعومة",
+      dataProtection: "حماية البيانات",
+      support247: "دعم على مدار الساعة طوال أيام الأسبوع",
+      moneyBackProtection: "حماية استرداد الأموال",
+      orderProtectionSectionDesc: "تُحمى مجاناً ضمن هذا النطاق الطلبات التي تُقدَّم ويُدفَع ثمنها عبر istoc فقط.",
+      orderProtectionSection: "حماية طلبات istoc",
+      processingTimeNote: "سيتم الاتفاق على تكلفة الشحن وتاريخ التسليم مع المورّد. تواصل مع المورّد على الفور.",
+      deliveryAddressLabel: "عنوان التسليم",
+      processingTime: "مدة المعالجة",
       qa: {
         askTitle: "هل لديك سؤال؟",
         askSubtitle: "يمكن للبائع أو المشترين الآخرين الإجابة.",
@@ -4468,6 +4484,7 @@ const ar = {
 
       // Manufacturer list
       list: {
+        viewProfile: "عرض الملف الشخصي",
         verified: "موثّق",
         years: "{{count}} سنة",
         staff: "{{count}} موظف",
@@ -4811,6 +4828,32 @@ const ar = {
     // SETTINGS
     // ============================================================
     settings: {
+      consentDataProcessing: "معالجة البيانات",
+      consentKvkk: "نص توضيحي بشأن KVKK",
+      consentCookieFunctional: "ملفات تعريف الارتباط الوظيفية",
+      consentCookieMarketing: "ملفات تعريف الارتباط التسويقية",
+      consentCookieAnalytics: "ملفات تعريف الارتباط التحليلية",
+      consentMarketingSms: "الرسائل النصية التسويقية",
+      consentMarketingEmail: "رسائل البريد الإلكتروني التسويقية",
+      consentTerms: "شروط الاستخدام",
+      consentPrivacyPolicy: "سياسة الخصوصية",
+      consentGrantBtn: "منح الموافقة",
+      consentWithdrawBtn: "سحب",
+      consentWithdrawn: "تم سحب الموافقة",
+      consentGranted: "تم منح الموافقة",
+      consentManagementDesc: "يمكنك عرض الموافقات التي منحتها وسحبها من هنا.",
+      consentManagementTitle: "إدارة الموافقات",
+      consentManagementNav: "إدارة الموافقات",
+      downloadMyDataPasswordPlaceholder: "كلمة المرور الحالية",
+      downloadMyDataPasswordLabel: "تحقق من كلمة المرور الخاصة بك",
+      downloadMyDataRateLimit: "يمكنك إنشاء طلب واحد فقط خلال 24 ساعة.",
+      downloadMyDataError: "حدث خطأ. يرجى المحاولة مرة أخرى لاحقًا.",
+      downloadMyDataSuccess: "تم استلام طلبك. سيتم إرسال رابط إلى بريدك الإلكتروني عندما تكون بياناتك جاهزة.",
+      downloadMyDataProcessing: "تتم معالجة طلبك...",
+      downloadMyDataBtn: "إنشاء طلب تصدير البيانات",
+      downloadMyDataDesc: "بموجب KVKK وGDPR يمكنك طلب نسخة من بياناتك الشخصية. تُجهَّز بياناتك بصيغتي JSON وCSV وتُرسَل إليك عبر البريد الإلكتروني.",
+      downloadMyDataTitle: "تنزيل بياناتي",
+      downloadMyDataNav: "تنزيل بياناتي",
       passwordMinLength: "يجب أن تتكوّن كلمة المرور من 8 أحرف على الأقل.",
       passwordsMismatch: "كلمتا المرور غير متطابقتين.",
       passwordSameAsCurrent: "لا يمكن أن تكون كلمة المرور الجديدة مطابقة لكلمة المرور الحالية.",
