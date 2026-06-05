@@ -10,6 +10,7 @@ import Swiper from 'swiper'
 import { Autoplay, Pagination, EffectFade } from 'swiper/modules'
 import 'swiper/swiper-bundle.css'
 import { startAlpine } from '../alpine'
+import { applySwiperDir } from '../utils/direction'
 
 // Assets
 import rfqVideoUrl from '../assets/images/rfqvidehero.mp4'
@@ -243,6 +244,7 @@ initChatTriggers();
 startAlpine();
 
 // --- Initialize Swiper Testimonial Carousel ---
+applySwiperDir('#rfq-testimonials .swiper')
 new Swiper('#rfq-testimonials .swiper', {
   modules: [Autoplay, Pagination, EffectFade],
   effect: 'fade',

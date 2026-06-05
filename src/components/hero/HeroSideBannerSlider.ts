@@ -7,6 +7,7 @@ import Swiper from "swiper";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import "swiper/swiper-bundle.css";
 import { t } from "../../i18n";
+import { applySwiperDir } from "../../utils/direction";
 
 interface HeroSideBannerSlide {
   labelKey: string;
@@ -145,6 +146,7 @@ export function initHeroSideBannerSlider(): void {
   nextButton?.addEventListener("click", stopPeek);
   rootElement?.addEventListener("mouseleave", stopPeek);
 
+  applySwiperDir(sliderElement);
   const swiper = new Swiper(sliderElement, {
     modules: [Autoplay, Navigation, Pagination],
     slidesPerView: 1,

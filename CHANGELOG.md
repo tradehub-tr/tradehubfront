@@ -1,3 +1,141 @@
+## [v1.1.9-beta.28] - 2026-06-04 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(pricing): hardcoded fiyatlandırma kaldırıldı, backend API entegrasyonu (@boraydeger32)
+  - PricingPageLayout statik PLANS array kaldırıldı, Alpine x-for ile backend'den dinamik render (responsive grid: 2/3/4 sütun plan sayısına göre)
+  - sellPricing Alpine data'sına fetchPricingPlans() + SWR cache entegre edildi
+  - Badge color enum'a green/blue eklendi (backend Select ile uyum)
+  - pricingService.ts cta_action type'tan learn_more kaldırıldı
+  - i18n dead string temizliği: tr.ts ve en.ts'den 42 kullanılmayan hardcoded plan/feature/comparison key'i silindi
+  - Yeni i18n key'leri: free, trialDays, loadError
+- feat(ui): mobile/tablet responsive tasarım iyileştirmeleri ve tam ekran kategori (@ahmeetseker)
+  - BottomNav: xl breakpoint'e genişletildi, tam ekran kategori overlay eklendi (sidebar +
+  - TopBar: tablet/mobil uyumlu arama ve navigasyon düzenlemesi
+  - Cart/Checkout: responsive boyut ve spacing iyileştirmeleri
+  - Hero bileşenleri (ProductGrid, TopDeals, TopRanking, vb.): mobil spacing/font
+  - Product detay (MobileLayout, QAModal, ReviewsModal): mobil uyum düzeltmeleri
+  - Footer: mobil grid ve font boyutu optimizasyonu
+  - FloatingPanel: mobil için rounded-full ve konum ayarı
+  - i18n: bottomNav ve checkout için yeni TR/EN çeviri anahtarları eklendi
+- feat(chat,reservation,pwa): chat popup/shared bileşenleri, rezervasyon akışı + PWA/Capacitor (@aliturguttursab)
+  - Chat popup ve paylaşılan bileşenlerde (composer, bubble, messages, attachment) güncellemeler
+  - Rezervasyon modalı + reservationService + reservationModal alpine modülü
+  - PWA: VitePWA + manifest + ikon setleri; Capacitor config (native projeler gitignore'da)
+  - i18n (tr/en) ve chat type/service güncellemeleri
+- feat(kyc-kyb): belge önizleme kartı ve TCKN/VKN doğrulama eklendi (@aliiball)
+  - KYC formunda mod-aware TCKN/VKN client-side validation eklendi; Bireysel modda pattern \d{11} + minlength/maxlength 11, Kurumsal modda \d{10,11}
+  - isValidTckn helper backend kuralları ile birebir mod-10 checksum kontrolü yapıyor (submit'ten önce 11 hane TCKN doğrulanıyor)
+  - KYC submit catch bloğuna console.error eklendi (debug için)
+  - KYC ve KYB formlarında yüklü belgeler için Karma C preview pattern eklendi: yeşil tema kart, dosya ikonu, Yüklü rozet, dosya adı, Görüntüle butonu; SlotDropzone drag-drop davranışı korundu
+  - Yeni dosya yüklenince preview kartı yenisine otomatik refresh oluyor
+  - Verified ve Suspended durumlarında belge yükleme kapatıldı (slot-zone display:none + input disabled), preview kartı görünür kalıyor; backend 403 ve login redirect döngüsü engellendi
+- feat(i18n): add Arabic + Russian locales and RTL layout support (@aliturguttursab)
+  - locales: add ar.ts, ru.ts; register both in i18n/index.ts and extend SUPPORTED_LANGS
+  - RTL: add RTL_LANGS/isRtl(); sync <html lang> and dir on first paint (static HTML hard-codes lang, detector overrides it)
+  - layout: convert physical Tailwind direction classes to logical ones across ~175 components/pages (ml/mr->ms/me, pl/pr->ps/pe, text-left/right->text-start/end, border-l/r->border-s/e, rounded-*->logical, left/right->inset-s/e, float-*)
+  - tooling: add scripts/rtl-logical-convert.mjs - boundary-aware codemod, verified against Tailwind v4 docs
+- feat(storefront): alıcı paneli analitiği, hero slider ve sosyal kanıt eklendi (@ahmeetseker)
+  - Alıcı dashboard'una ECharts tabanlı analitik özeti eklendi (KPI + harcama trendi + kategori dağılımı)
+  - Ana sayfaya hero üst slider ve heroSliderService eklendi
+  - Ürün listelemeye sosyal kanıt rozetleri eklendi (initListingSocialProof + socialProofService, batch sinyal)
+  - Ürün mobil görünümüne öneri şeridi (MobileRecommendations) eklendi
+  - Sepet/favoriler/üst bar UI iyileştirildi; küçük kontrollerde th-no-press ve RTL-logical (ps-/text-start) uyumu sağlandı
+  - Kullanılmayan statik bilgi sayfaları kaldırıldı (blog, careers, csr, monitoring, news, partnerships, shipping-protection, tax)
+
+### Duzeltildi
+- fix(help): bozuk yardım merkezi linklerini nginx pretty URL'lerine çevir (@ahmeetseker)
+- fix(checkout): company field optional, alert→showToast (@boraydeger32)
+  - Remove "company" from requiredFields in validateAddAddressForm and handleSubmit (UI label already says optional, backend enforces for Business addresses only)
+  - Replace 3 alert() calls with showToast({ type: "error" }) for address errors (save, delete, set default) — consistent with rest of storefront UX
+- fix(rtl): mirror Swiper sliders and mobile drawer for Arabic (RTL) (@aliturguttursab)
+  - Every `new Swiper()` rendered LTR on an RTL page (slides packed to the physical left, large empty band on the right). Swiper's computed- direction auto-detect is unreliable at init (async API fill / pre- reflow), so it stayed LTR.
+  - Add src/utils/direction.ts → applySwiperDir(el|selector): sets the container's `dir` attribute (Swiper's documented RTL trigger) to the document direction before instantiation. Applied to all sliders: hero (Recommendation/HeroSideBanner/Tailored), product RelatedProducts, 404 ExploreDeals, TailoredSelectionsHero, alpine/dashboard, seller/interactions (x5), trade-assurance, rfq.
+  - Drawer anchors `start-0` (correct, right edge in RTL) but hide/show toggles physical -translate-x-full / translate-x-full (Flowbite + custom panel JS). Physical translate does not flip, so the hidden drawer slid into the viewport instead of off the right edge.
+  - Tailwind v4 compiles these to the `translate` property via --tw-translate-x. Flip only that var, only in RTL, only while the toggled class is present, via inline variants (rtl:[&.-translate-x-full]:[--tw-translate-x:100%] and the inner-panel counterpart) — no Flowbite/JS changes, LTR untouched.
+- fix(storefront): pre-existing build hataları ve checkout renk temizliği (@aliiball)
+  - Eksik echarts bağımlılığı npm install ile yüklendi (rollup resolve hatası giderildi)
+  - Settings Privacy yarım merge tamamlandı (segmented toggle çalışır hâle geldi, ${optionsHtml} → ${segmented})
+  - Cart ürün satırında favori ikonu (fav.png) import edildi, isFav ile aktif/pasif renk vurgusu eklendi
+  - Checkout ödeme yöntemi kartı hardcoded hex (#f5b800, #d39c00, #fff8e1) yerine Tailwind v4 brand token utility'leri kullanıyor
+  - Görsel değişiklik yok; tek brand kaynağı style.css @theme bloğunda
+
+### Degistirildi
+- refactor(ui): radio seçimleri toggle bileşenlerine dönüştürüldü (@aliiball)
+  - renderSwitch ve renderSegmented helper'ları eklendi
+  - vergi mükellef tipi, fatura tipi ve KYC hesap türü segmented'e çevrildi
+  - e-fatura mükellefiyeti switch'e çevrildi
+  - sipariş iptal sebebi dropdown'a çevrildi
+  - şikayet sebebi ve filtre seçimleri chip grubuna çevrildi
+
+---
+## [v1.1.9-beta.27] - 2026-06-04 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(pricing): hardcoded fiyatlandırma kaldırıldı, backend API entegrasyonu (@boraydeger32)
+  - PricingPageLayout statik PLANS array kaldırıldı, Alpine x-for ile backend'den dinamik render (responsive grid: 2/3/4 sütun plan sayısına göre)
+  - sellPricing Alpine data'sına fetchPricingPlans() + SWR cache entegre edildi
+  - Badge color enum'a green/blue eklendi (backend Select ile uyum)
+  - pricingService.ts cta_action type'tan learn_more kaldırıldı
+  - i18n dead string temizliği: tr.ts ve en.ts'den 42 kullanılmayan hardcoded plan/feature/comparison key'i silindi
+  - Yeni i18n key'leri: free, trialDays, loadError
+- feat(ui): mobile/tablet responsive tasarım iyileştirmeleri ve tam ekran kategori (@ahmeetseker)
+  - BottomNav: xl breakpoint'e genişletildi, tam ekran kategori overlay eklendi (sidebar +
+  - TopBar: tablet/mobil uyumlu arama ve navigasyon düzenlemesi
+  - Cart/Checkout: responsive boyut ve spacing iyileştirmeleri
+  - Hero bileşenleri (ProductGrid, TopDeals, TopRanking, vb.): mobil spacing/font
+  - Product detay (MobileLayout, QAModal, ReviewsModal): mobil uyum düzeltmeleri
+  - Footer: mobil grid ve font boyutu optimizasyonu
+  - FloatingPanel: mobil için rounded-full ve konum ayarı
+  - i18n: bottomNav ve checkout için yeni TR/EN çeviri anahtarları eklendi
+- feat(chat,reservation,pwa): chat popup/shared bileşenleri, rezervasyon akışı + PWA/Capacitor (@aliturguttursab)
+  - Chat popup ve paylaşılan bileşenlerde (composer, bubble, messages, attachment) güncellemeler
+  - Rezervasyon modalı + reservationService + reservationModal alpine modülü
+  - PWA: VitePWA + manifest + ikon setleri; Capacitor config (native projeler gitignore'da)
+  - i18n (tr/en) ve chat type/service güncellemeleri
+- feat(kyc-kyb): belge önizleme kartı ve TCKN/VKN doğrulama eklendi (@aliiball)
+  - KYC formunda mod-aware TCKN/VKN client-side validation eklendi; Bireysel modda pattern \d{11} + minlength/maxlength 11, Kurumsal modda \d{10,11}
+  - isValidTckn helper backend kuralları ile birebir mod-10 checksum kontrolü yapıyor (submit'ten önce 11 hane TCKN doğrulanıyor)
+  - KYC submit catch bloğuna console.error eklendi (debug için)
+  - KYC ve KYB formlarında yüklü belgeler için Karma C preview pattern eklendi: yeşil tema kart, dosya ikonu, Yüklü rozet, dosya adı, Görüntüle butonu; SlotDropzone drag-drop davranışı korundu
+  - Yeni dosya yüklenince preview kartı yenisine otomatik refresh oluyor
+  - Verified ve Suspended durumlarında belge yükleme kapatıldı (slot-zone display:none + input disabled), preview kartı görünür kalıyor; backend 403 ve login redirect döngüsü engellendi
+- feat(i18n): add Arabic + Russian locales and RTL layout support (@aliturguttursab)
+  - locales: add ar.ts, ru.ts; register both in i18n/index.ts and extend SUPPORTED_LANGS
+  - RTL: add RTL_LANGS/isRtl(); sync <html lang> and dir on first paint (static HTML hard-codes lang, detector overrides it)
+  - layout: convert physical Tailwind direction classes to logical ones across ~175 components/pages (ml/mr->ms/me, pl/pr->ps/pe, text-left/right->text-start/end, border-l/r->border-s/e, rounded-*->logical, left/right->inset-s/e, float-*)
+  - tooling: add scripts/rtl-logical-convert.mjs - boundary-aware codemod, verified against Tailwind v4 docs
+- feat(storefront): alıcı paneli analitiği, hero slider ve sosyal kanıt eklendi (@ahmeetseker)
+  - Alıcı dashboard'una ECharts tabanlı analitik özeti eklendi (KPI + harcama trendi + kategori dağılımı)
+  - Ana sayfaya hero üst slider ve heroSliderService eklendi
+  - Ürün listelemeye sosyal kanıt rozetleri eklendi (initListingSocialProof + socialProofService, batch sinyal)
+  - Ürün mobil görünümüne öneri şeridi (MobileRecommendations) eklendi
+  - Sepet/favoriler/üst bar UI iyileştirildi; küçük kontrollerde th-no-press ve RTL-logical (ps-/text-start) uyumu sağlandı
+  - Kullanılmayan statik bilgi sayfaları kaldırıldı (blog, careers, csr, monitoring, news, partnerships, shipping-protection, tax)
+
+### Duzeltildi
+- fix(help): bozuk yardım merkezi linklerini nginx pretty URL'lerine çevir (@ahmeetseker)
+- fix(checkout): company field optional, alert→showToast (@boraydeger32)
+  - Remove "company" from requiredFields in validateAddAddressForm and handleSubmit (UI label already says optional, backend enforces for Business addresses only)
+  - Replace 3 alert() calls with showToast({ type: "error" }) for address errors (save, delete, set default) — consistent with rest of storefront UX
+- fix(rtl): mirror Swiper sliders and mobile drawer for Arabic (RTL) (@aliturguttursab)
+  - Every `new Swiper()` rendered LTR on an RTL page (slides packed to the physical left, large empty band on the right). Swiper's computed- direction auto-detect is unreliable at init (async API fill / pre- reflow), so it stayed LTR.
+  - Add src/utils/direction.ts → applySwiperDir(el|selector): sets the container's `dir` attribute (Swiper's documented RTL trigger) to the document direction before instantiation. Applied to all sliders: hero (Recommendation/HeroSideBanner/Tailored), product RelatedProducts, 404 ExploreDeals, TailoredSelectionsHero, alpine/dashboard, seller/interactions (x5), trade-assurance, rfq.
+  - Drawer anchors `start-0` (correct, right edge in RTL) but hide/show toggles physical -translate-x-full / translate-x-full (Flowbite + custom panel JS). Physical translate does not flip, so the hidden drawer slid into the viewport instead of off the right edge.
+  - Tailwind v4 compiles these to the `translate` property via --tw-translate-x. Flip only that var, only in RTL, only while the toggled class is present, via inline variants (rtl:[&.-translate-x-full]:[--tw-translate-x:100%] and the inner-panel counterpart) — no Flowbite/JS changes, LTR untouched.
+
+### Degistirildi
+- refactor(ui): radio seçimleri toggle bileşenlerine dönüştürüldü (@aliiball)
+  - renderSwitch ve renderSegmented helper'ları eklendi
+  - vergi mükellef tipi, fatura tipi ve KYC hesap türü segmented'e çevrildi
+  - e-fatura mükellefiyeti switch'e çevrildi
+  - sipariş iptal sebebi dropdown'a çevrildi
+  - şikayet sebebi ve filtre seçimleri chip grubuna çevrildi
+
+---
 ## [v1.1.9-beta.26] - 2026-06-04 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
