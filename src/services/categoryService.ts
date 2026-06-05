@@ -172,8 +172,7 @@ export function findCategoryPath(slugOrId: string): CategoryPathItem[] {
     name: c.name,
     slug: c.slug,
   });
-  const matches = (c: ApiCategory | ApiCategoryChild) =>
-    c.slug === slugOrId || c.id === slugOrId;
+  const matches = (c: ApiCategory | ApiCategoryChild) => c.slug === slugOrId || c.id === slugOrId;
 
   for (const sector of _cache ?? []) {
     if (matches(sector)) return [pick(sector)];

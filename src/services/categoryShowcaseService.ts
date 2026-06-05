@@ -65,10 +65,9 @@ export function getCachedShowcase(): ShowcaseData {
 
 export async function fetchActiveShowcase(): Promise<ShowcaseData> {
   try {
-    const res = await fetch(
-      "/api/method/tradehub_core.api.category_showcase.get_active_tiles",
-      { credentials: "include" }
-    );
+    const res = await fetch("/api/method/tradehub_core.api.category_showcase.get_active_tiles", {
+      credentials: "include",
+    });
     if (!res.ok) return getCachedShowcase();
     const json = (await res.json()) as { message?: Partial<ShowcaseData> };
     const m = json?.message ?? {};

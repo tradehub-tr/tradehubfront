@@ -107,7 +107,9 @@ function pick(tr: string, en: string): string {
 
 function categoryTile(t: ShowcaseTile, columns: number): string {
   const label = pick(t.label_tr, t.label_en);
-  const hover = pick(t.hover_text_tr, t.hover_text_en) || (getCurrentLang() === "en" ? "See products" : "Ürünleri gör");
+  const hover =
+    pick(t.hover_text_tr, t.hover_text_en) ||
+    (getCurrentLang() === "en" ? "See products" : "Ürünleri gör");
   const href = t.link_href ? escapeAttr(sanitizeHref(t.link_href)) : "#";
   const sizeCls = spanClasses(t.col_span, t.row_span, columns);
   const safeImage = sanitizeImageUrl(t.image);
