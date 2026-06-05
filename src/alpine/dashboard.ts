@@ -5,6 +5,7 @@ import "swiper/swiper-bundle.css";
 import { getSessionUser, resendVerificationEmail } from "../utils/auth";
 import { callMethod } from "../utils/api";
 import { t } from "../i18n";
+import { applySwiperDir } from "../utils/direction";
 
 Alpine.data("buyerUserInfo", () => ({
   userName: "",
@@ -131,6 +132,7 @@ Alpine.data("dashboardBanners", () => ({
 
     const hasMultiple = this.banners.length > 1;
 
+    applySwiperDir(container);
     this.swiperInstance = new Swiper(container, {
       modules: [Navigation, Pagination, Autoplay],
       slidesPerView: 1,
