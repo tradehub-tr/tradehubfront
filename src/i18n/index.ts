@@ -52,6 +52,11 @@ i18next.use(LanguageDetector).init({
   const initialLang = getCurrentLang();
   document.documentElement.lang = initialLang;
   applyDocumentDirection(initialLang);
+  // Statik HTML'deki <title> Türkçe sabit; ilk boyamada aktif dile çevir.
+  // (Dil değişiminde updatePageTranslations zaten <title> textContent'ini günceller.)
+  const titleEl = document.querySelector("title[data-i18n]");
+  const titleKey = titleEl?.getAttribute("data-i18n");
+  if (titleKey) document.title = i18next.t(titleKey) as string;
 }
 
 /**
