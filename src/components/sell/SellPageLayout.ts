@@ -20,7 +20,12 @@
  */
 
 import heroImg from "../../assets/images/liman.avif";
-import type { PricingPlan, PricingPlansResponse } from "../../services/pricingService";
+import type {
+  PricingPlan,
+  PricingPlansResponse,
+  PricingFeaturesMatrix,
+  PricingMatrixCell,
+} from "../../services/pricingService";
 
 const SELL_HREF = "/pages/auth/register.html?type=supplier";
 
@@ -161,6 +166,16 @@ function tierTag(plan: PricingPlan, idx: number): string {
   return `${num} · ${plan.badge_label || plan.plan_name}`;
 }
 
+// Per-kart "Paket içeriği" özet listesi — SADECE plana dahil (✓) feature'lar
+// gösterilir; devre dışı (✗ / is_disabled) olanlar karta hiç çıkmaz.
+// Dahil olanlar içinde `show_on_card` işaretli varsa yalnızca onlar; yoksa
+// (geçiş dönemi / eski veri) tüm dahil olanlar gösterilir.
+function cardFeatures(plan: PricingPlan): PricingPlan["features"] {
+  const included = plan.features.filter((f) => !f.is_disabled);
+  const carded = included.filter((f) => f.show_on_card);
+  return carded.length ? carded : included;
+}
+
 function PricingCard(plan: PricingPlan, idx: number): string {
   const isFeat = !!plan.highlighted;
   const hasPrice = (plan.yearly_price ?? 0) > 0 || (plan.monthly_price ?? 0) > 0;
@@ -255,7 +270,7 @@ function PricingCard(plan: PricingPlan, idx: number): string {
       <div class="h-px my-1 ${dividerCls}"></div>
       <div class="text-[11px] font-semibold uppercase tracking-[0.06em] ${featHeadCls}">Paket içeriği</div>
       <ul class="list-none p-0 m-0 flex flex-col gap-2 text-[13px] flex-1">
-        ${plan.features
+        ${cardFeatures(plan)
           .map((f) => {
             const ok = !f.is_disabled;
             const icon = ok ? featureIcon(f.icon) : SVG_X;
@@ -283,7 +298,9 @@ type MatrixRow = {
   // Opsiyonel feature_key — varsa plan.features içinde aranır; bulunursa
   // plan'daki display_text / is_disabled kullanılır, yoksa `v` fallback değeri.
   feature_key?: string;
-  v: [MatrixCell, MatrixCell, MatrixCell, MatrixCell];
+  // Plan sayısı kadar hücre (N kolon). Hardcoded fallback satırlarında 4 eleman
+  // olabilir; plan sayısı farklıysa resolveCellFromFeature güvenli fallback yapar.
+  v: MatrixCell[];
 };
 type MatrixSection = { title: string; rows: MatrixRow[] };
 
@@ -386,10 +403,13 @@ function resolveCellFromFeature(
   plan: PricingPlan,
   fallbackIndex: number
 ): MatrixCell {
-  if (!row.feature_key) return row.v[fallbackIndex];
+  // Hardcoded fallback array plan sayısından kısa olabilir → son elemana veya
+  // `no`'ya düş (N-plan güvenliği).
+  const fb = row.v[fallbackIndex] ?? row.v[row.v.length - 1] ?? no;
+  if (!row.feature_key) return fb;
 
   const f = plan.features.find((x) => x.feature_key === row.feature_key);
-  if (!f) return row.v[fallbackIndex];
+  if (!f) return fb;
 
   if (f.is_disabled) return no;
   // display_text yoksa veya boşsa, icon "check"e göre yes/no, diğeri text
@@ -401,17 +421,8 @@ function resolveCellFromFeature(
   return txt(text);
 }
 
-function resolveRowCells(
-  row: MatrixRow,
-  plans: PricingPlan[]
-): [MatrixCell, MatrixCell, MatrixCell, MatrixCell] {
-  const four = plans.slice(0, 4);
-  return four.map((p, i) => resolveCellFromFeature(row, p, i)) as [
-    MatrixCell,
-    MatrixCell,
-    MatrixCell,
-    MatrixCell,
-  ];
+function resolveRowCells(row: MatrixRow, plans: PricingPlan[]): MatrixCell[] {
+  return plans.map((p, i) => resolveCellFromFeature(row, p, i));
 }
 
 function renderMatrixCell(c: MatrixCell): string {
@@ -420,26 +431,66 @@ function renderMatrixCell(c: MatrixCell): string {
   return c.v;
 }
 
-// Matrix tüm section'larını plans verisinden derive eder:
-//   1. "Komisyon & limitler" — commission_rate + max_active_listings doğrudan
-//      plan field'larından alınır (card değerleriyle birebir aynı kaynak).
-//   2. STATIC_COMMISSION_EXTRA + MATRIX_SECTIONS satırları — `feature_key`
-//      taşıyanlar için plan.features içinde override aranır; bulunmazsa
-//      hardcoded fallback değerleri kullanılır.
-function buildDynamicMatrixSections(plans: PricingPlan[]): MatrixSection[] {
-  const four = plans.slice(0, 4);
-  if (four.length < 4) return MATRIX_SECTIONS;
+// Matrix tüm section'larını plans + features_matrix verisinden derive eder.
+// Faz J: backend Feature Catalog'tan kategorize edilmiş matris geliyorsa
+// (features_matrix.categories) onu kullan — tüm UI satırları admin'den yönetilir.
+// features_matrix yoksa (eski API yanıtı veya cache) hardcoded MATRIX_SECTIONS
+// fallback'i kullanılır (geriye uyumluluk).
+//
+// Plan field override'ı: "commission_rate" ve "max_active_listings" feature
+// key'leri için plan model'indeki gerçek değerler matris hücresini ezer
+// (admin'in feature catalog'ta "Özel" yazsa bile satıcı plan'da %8
+// belirlemişse "%8" gösterilir).
+function _matrixCellFromBackend(
+  cell: PricingMatrixCell | undefined,
+  valueType: "checkbox" | "text"
+): MatrixCell {
+  if (!cell) return valueType === "checkbox" ? no : txt("—");
+  if (cell.value_type === "checkbox" || valueType === "checkbox") {
+    return cell.is_included ? yes : no;
+  }
+  const text = (cell.text_value || "").trim();
+  return text ? txt(text) : txt("—");
+}
 
-  const commissionCells = four.map((p) =>
+function buildDynamicMatrixSections(
+  plans: PricingPlan[],
+  featuresMatrix?: PricingFeaturesMatrix
+): MatrixSection[] {
+  // N-plan: kaç public plan varsa o kadar kolon (4 şartı kaldırıldı).
+  if (!plans.length) return MATRIX_SECTIONS;
+
+  // ─ Yeni yol: features_matrix backend'den geldi ──────────
+  if (featuresMatrix?.categories?.length) {
+    const planCodes = plans.map((p) => p.plan_code);
+    return featuresMatrix.categories.map((cat) => ({
+      title: cat.name,
+      rows: cat.features.map((f) => {
+        // values_by_plan backend'de hazırlanır. Genel feature'larda admin
+        // "Paket İçeriği" matris hücresi geçerlidir; ancak komisyon ve aktif
+        // ürün limiti için plan model field'ı OTORİTEDİR ve backend bu iki
+        // hücreyi field değeriyle ezer (bkz. public_pricing._build_features_matrix).
+        // Böylece karşılaştırma tablosu, kart "şerit"i ile birebir aynı kalır.
+        const cells = plans.map((_plan, i) => {
+          const cell = f.values_by_plan?.[planCodes[i]];
+          return _matrixCellFromBackend(cell, f.value_type);
+        });
+        return {
+          f: f.display_name,
+          feature_key: f.feature_key,
+          help: f.tooltip ?? undefined,
+          v: cells,
+        };
+      }),
+    }));
+  }
+
+  // ─ Eski yol: hardcoded MATRIX_SECTIONS fallback ─────────
+  const commissionCells = plans.map((p) =>
     p.commission_rate > 0 ? txt(`%${p.commission_rate}`) : txt("Özel")
-  ) as [MatrixCell, MatrixCell, MatrixCell, MatrixCell];
+  );
 
-  const listingsCells = four.map((p) => txt(fmtListings(p.max_active_listings))) as [
-    MatrixCell,
-    MatrixCell,
-    MatrixCell,
-    MatrixCell,
-  ];
+  const listingsCells = plans.map((p) => txt(fmtListings(p.max_active_listings)));
 
   const dynamicCommissionSection: MatrixSection = {
     title: "Komisyon & limitler",
@@ -450,8 +501,6 @@ function buildDynamicMatrixSections(plans: PricingPlan[]): MatrixSection[] {
         v: commissionCells,
       },
       { f: "Aktif ürün limiti", v: listingsCells },
-      // STATIC extra rows da feature_key resolve etsin (admin "sample_sales"
-      // feature_key'i bir plan'a is_disabled=1 ile koyarsa "no" olur).
       ...STATIC_COMMISSION_EXTRA_ROWS.map((r) => ({
         ...r,
         v: resolveRowCells(r, plans),
@@ -470,14 +519,27 @@ function buildDynamicMatrixSections(plans: PricingPlan[]): MatrixSection[] {
   return [dynamicCommissionSection, ...resolvedSections];
 }
 
-const MATRIX_GRID_CLS = "grid grid-cols-[1.6fr_repeat(4,1fr)] gap-3 items-center";
+// N kolon grid template — sol özellik kolonu + plan sayısı kadar kolon.
+// Dinamik plan sayısı Tailwind arbitrary class'ı ile ifade EDİLEMEZ (build-time
+// tarama interpolasyonu görmez) → inline style ile grid-template-columns veriyoruz.
+// `minmax(...,1fr)` + min-width sayesinde mobilde yatay scroll'da kolonlar ezilmez.
+function matrixGridStyle(n: number): string {
+  return `grid-template-columns: minmax(150px,1.6fr) repeat(${n}, minmax(96px,1fr))`;
+}
 
-function PricingMatrix(plans: PricingPlan[]): string {
-  // Matrix sadece 4 sütun gösteriyor. Plan sayısı 4'ten azsa matrix'i gizle.
-  // 4'ten fazlaysa ilk 4'ünü göster (admin sıraya koyduğu plan'lardan ilk 4).
-  if (plans.length < 4) return "";
+// Grid container'ın statik (Tailwind taranabilir) utility'leri.
+const MATRIX_GRID_CLS = "grid gap-3 items-center";
+
+function PricingMatrix(
+  plans: PricingPlan[],
+  featuresMatrix?: PricingFeaturesMatrix
+): string {
+  // N-plan: kaç public plan varsa o kadar kolon. Karşılaştırma için en az 2 plan.
+  if (plans.length < 2) return "";
+  const gridStyle = matrixGridStyle(plans.length);
+  const featuredIdx = plans.findIndex((p) => p.highlighted);
   const sym = currencySymbol(plans[0]?.currency || "EUR");
-  const cols = plans.slice(0, 4).map((p) => ({
+  const cols = plans.map((p) => ({
     n: p.plan_name,
     p:
       (p.yearly_price || 0) > 0
@@ -488,9 +550,13 @@ function PricingMatrix(plans: PricingPlan[]): string {
     featured: !!p.highlighted,
   }));
 
+  // Mobile-first: dar ekranda yatay scroll; inner min-width plan sayısına göre
+  // (dinamik → inline style, Tailwind arbitrary class taranamaz).
+  const minW = 160 + plans.length * 110;
   return /* html */ `
-    <div class="mt-14 bg-white border border-[#e8e6e0] rounded-2xl overflow-hidden hidden lg:block">
-      <div class="${MATRIX_GRID_CLS} items-end px-6 py-[18px] bg-[#fafaf8] border-b border-[#d5d2c9]">
+    <div class="mt-14 overflow-x-auto">
+      <div class="bg-white border border-[#e8e6e0] rounded-2xl overflow-hidden" style="min-width:${minW}px">
+      <div class="${MATRIX_GRID_CLS} items-end px-6 py-[18px] bg-[#fafaf8] border-b border-[#d5d2c9]" style="${gridStyle}">
         <div class="text-start">
           <div class="text-[15px] font-semibold text-[#1a1a1a]">Tüm paket özellikleri</div>
           <div class="text-xs text-[#8a877f] mt-0.5 tabular-nums">yıllık periyot, KDV hariç</div>
@@ -507,7 +573,7 @@ function PricingMatrix(plans: PricingPlan[]): string {
           .join("")}
       </div>
 
-      ${buildDynamicMatrixSections(plans)
+      ${buildDynamicMatrixSections(plans, featuresMatrix)
         .map(
           (sec) => `
         <div>
@@ -517,7 +583,7 @@ function PricingMatrix(plans: PricingPlan[]): string {
           ${sec.rows
             .map(
               (r) => `
-            <div class="${MATRIX_GRID_CLS} px-6 py-3.5 border-b border-[#e8e6e0] last:border-b-0 text-[13px]">
+            <div class="${MATRIX_GRID_CLS} px-6 py-3.5 border-b border-[#e8e6e0] last:border-b-0 text-[13px]" style="${gridStyle}">
               <div>
                 <div class="text-[#1a1a1a] font-medium">${r.f}</div>
                 ${r.help ? `<div class="text-[11px] text-[#8a877f] mt-0.5 font-normal">${r.help}</div>` : ""}
@@ -526,7 +592,7 @@ function PricingMatrix(plans: PricingPlan[]): string {
                 .map(
                   (c, j) => `
                 <div class="text-center text-[#4a4a48] ${
-                  j === 1
+                  j === featuredIdx
                     ? "bg-[rgba(245,184,0,0.06)] font-semibold text-[#1a1a1a] -mx-1 -my-3.5 px-1 py-3.5 flex items-center justify-center"
                     : ""
                 }">
@@ -543,6 +609,7 @@ function PricingMatrix(plans: PricingPlan[]): string {
       `
         )
         .join("")}
+      </div>
     </div>
   `;
 }
@@ -576,12 +643,15 @@ function _computeYearlyDiscountBadge(plans: PricingPlan[]): string {
   return `${bestSavedMonths} ay bedava`;
 }
 
-function PricingSection(plans: PricingPlan[]): string {
+function PricingSection(
+  plans: PricingPlan[],
+  featuresMatrix?: PricingFeaturesMatrix
+): string {
   const cards = plans.length
     ? `<div class="grid grid-cols-1 md:grid-cols-2 ${plans.length >= 4 ? "lg:grid-cols-4" : plans.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"} gap-3.5 items-stretch">
          ${plans.map((p, i) => PricingCard(p, i)).join("")}
        </div>
-       ${PricingMatrix(plans)}`
+       ${PricingMatrix(plans, featuresMatrix)}`
     : PricingEmpty();
 
   const discountBadge = _computeYearlyDiscountBadge(plans);
@@ -791,9 +861,10 @@ function FinalCtaSection(): string {
 // Plan listesi boşsa PricingSection kendi "yüklenemedi" mesajını gösterir.
 export function SellPageLayout(pricingData?: PricingPlansResponse): string {
   const plans = pricingData?.plans ?? [];
+  const featuresMatrix = pricingData?.features_matrix;
   return `
     ${HeroSection()}
-    ${PricingSection(plans)}
+    ${PricingSection(plans, featuresMatrix)}
     ${ComparisonSection()}
     ${FinalCtaSection()}
   `;

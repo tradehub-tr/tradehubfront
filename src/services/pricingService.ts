@@ -10,8 +10,9 @@
  * invalidate olur ve bu service de yeni veriyi çeker.
  */
 
-// v2 (2026-05-22): CTA label birleşmesi — eski cache'leri zorla geçersiz kıl.
-const CACHE_KEY = "tradehub-pricing-plans-v2";
+// v3 (2026-06-05): Faz J features_matrix + admin matris tek doğru kaynak.
+// Eski v2 cache'leri zorla geçersiz kıl.
+const CACHE_KEY = "tradehub-pricing-plans-v3";
 const CACHE_TTL_MS = 5 * 60_000; // 5 dk
 
 export interface PricingPlanFeature {
@@ -20,6 +21,8 @@ export interface PricingPlanFeature {
   is_disabled: boolean;
   feature_key: string | null;
   tooltip: string | null;
+  /** Faz K — true ise plan kartının "Paket içeriği" özet listesinde bullet olur. */
+  show_on_card: boolean;
 }
 
 export interface PricingPlan {
@@ -42,8 +45,38 @@ export interface PricingPlan {
   features: PricingPlanFeature[];
 }
 
+/**
+ * Faz J — Feature matrix (admin Paket İçeriği matris UI ile aynı veri).
+ * Storefront pricing tablosunu tamamen dinamik render etmek için kullanılır.
+ */
+export interface PricingMatrixCell {
+  value_type: "checkbox" | "text";
+  is_included: boolean;
+  text_value: string;
+}
+
+export interface PricingMatrixFeature {
+  feature_key: string;
+  display_name: string;
+  value_type: "checkbox" | "text";
+  tooltip: string | null;
+  /** Anahtar plan_code (ör. FREE, PRO) — değer hücre */
+  values_by_plan: Record<string, PricingMatrixCell>;
+}
+
+export interface PricingMatrixCategory {
+  name: string;
+  features: PricingMatrixFeature[];
+}
+
+export interface PricingFeaturesMatrix {
+  categories: PricingMatrixCategory[];
+}
+
 export interface PricingPlansResponse {
   plans: PricingPlan[];
+  /** Faz J — backend Feature Catalog'tan beslenir; eski yanıtlarda olmayabilir. */
+  features_matrix?: PricingFeaturesMatrix;
   meta: {
     currency: string;
     /** True if plans use multiple currencies — frontend per-plan currency kullanmalı */

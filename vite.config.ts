@@ -178,15 +178,15 @@ export default defineConfig({
         },
         proxy: {
             '/api': {
-                target: 'http://localhost:8088',
+                target: 'http://localhost:8000',
                 changeOrigin: true,
             },
             '/files': {
-                target: 'http://localhost:8088',
+                target: 'http://localhost:8000',
                 changeOrigin: true,
             },
             '/private/files': {
-                target: 'http://localhost:8088',
+                target: 'http://localhost:8000',
                 changeOrigin: true,
             },
         },
