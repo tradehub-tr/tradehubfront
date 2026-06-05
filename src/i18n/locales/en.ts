@@ -4499,6 +4499,7 @@ const en = {
 
       // Manufacturer list
       list: {
+        viewProfile: "View profile",
         verified: "Verified",
         years: "{{count}} yrs",
         staff: "{{count}} staff",
@@ -4844,6 +4845,32 @@ const en = {
     // SETTINGS
     // ============================================================
     settings: {
+      consentDataProcessing: "Data Processing",
+      consentKvkk: "KVKK Disclosure Statement",
+      consentCookieFunctional: "Functional Cookies",
+      consentCookieMarketing: "Marketing Cookies",
+      consentCookieAnalytics: "Analytics Cookies",
+      consentMarketingSms: "Marketing SMS",
+      consentMarketingEmail: "Marketing Emails",
+      consentTerms: "Terms of Use",
+      consentPrivacyPolicy: "Privacy Policy",
+      consentGrantBtn: "Grant Consent",
+      consentWithdrawBtn: "Withdraw",
+      consentWithdrawn: "Consent withdrawn",
+      consentGranted: "Consent granted",
+      consentManagementDesc: "You can view and withdraw the consents you have granted here.",
+      consentManagementTitle: "Consent Management",
+      consentManagementNav: "Consent management",
+      downloadMyDataPasswordPlaceholder: "Your current password",
+      downloadMyDataPasswordLabel: "Verify your password",
+      downloadMyDataRateLimit: "You can only create 1 request within 24 hours.",
+      downloadMyDataError: "An error occurred. Please try again later.",
+      downloadMyDataSuccess: "Your request has been received. A link will be sent to your email address when your data is ready.",
+      downloadMyDataProcessing: "Your request is being processed...",
+      downloadMyDataBtn: "Create Data Export Request",
+      downloadMyDataDesc: "Under KVKK and GDPR, you can request a copy of your personal data. Your data is prepared in JSON and CSV format and sent to you by email.",
+      downloadMyDataTitle: "Download My Data",
+      downloadMyDataNav: "Download my data",
       passwordMinLength: "Password must be at least 8 characters.",
       passwordsMismatch: "Passwords do not match.",
       passwordSameAsCurrent: "Your new password cannot be the same as your current password.",
