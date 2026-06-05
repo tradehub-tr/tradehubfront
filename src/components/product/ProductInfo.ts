@@ -127,7 +127,8 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
           .map((opt) => {
             const isDef = !!opt.isDefault;
             const isActive = opt.id === selectedOpt.id;
-            // Check availability for the default color (not just global availability)
+            // Check availability for the default color (not just global availability).
+            // Matching KAYNAK label/value ile — opt.label/variant.label kaynak.
             const availableForColor = defaultColorLabel
               ? isOptionAvailableForColor(
                   skuMatrix,
@@ -435,15 +436,17 @@ function crossDisableVariants(_selectedAxisLabel: string, _selectedValue: string
         }
       }
 
+      // Tooltip = çevrili gösterim (eşleşme btnValue=kaynak ile yapıldı).
+      const btnDisplay = btn.getAttribute("data-variant-display") || btnValue;
       if (!hasStock && btnValue) {
         btn.classList.add("opacity-40", "line-through", "cursor-not-allowed");
         btn.classList.remove("active");
-        btn.setAttribute("title", `${btnValue} — tükendi`);
+        btn.setAttribute("title", `${btnDisplay} — tükendi`);
         btn.setAttribute("disabled", "");
       } else {
         btn.classList.remove("opacity-40", "line-through", "cursor-not-allowed");
         btn.removeAttribute("disabled");
-        btn.setAttribute("title", btnValue);
+        btn.setAttribute("title", btnDisplay);
       }
     });
   });
@@ -499,10 +502,11 @@ export function initProductInfo(): void {
         .forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
 
-      // Update label text (e.g., "Renk: Altın" → "Renk: Gümüş")
-      const variantLabel = btn.getAttribute("data-variant-label");
-      if (labelEl && variantLabel) {
-        labelEl.textContent = variantLabel;
+      // Update label text (çevrili gösterim) — eşleşme kaynak data-variant-label ile.
+      const variantDisplay =
+        btn.getAttribute("data-variant-display") || btn.getAttribute("data-variant-label");
+      if (labelEl && variantDisplay) {
+        labelEl.textContent = variantDisplay;
       }
 
       // Read all variant-specific data from the clicked button

@@ -33,7 +33,9 @@ export interface CategoryPathItem {
 }
 
 let _cache: ApiCategory[] | null = null;
-const _listeners: Array<(cats: ApiCategory[]) => void> = [];
+let _promise: Promise<ApiCategory[]> | null = null;
+// Kalıcı aboneler — dil değiştiğinde kategoriler yeniden çekilip bunlara tekrar bildirilir.
+const _subscribers: Array<(cats: ApiCategory[]) => void> = [];
 
 /**
  * Test/spam kategorilerini ayıklar. Backend cleanup yapılana kadar geçici filtre.
@@ -112,14 +114,24 @@ export function loadCategories(): Promise<ApiCategory[]> {
   )
     .then((cats) => {
       _cache = cats;
-      const toNotify = _listeners.splice(0);
-      toNotify.forEach((fn) => fn(cats));
+      _promise = null;
+      _subscribers.forEach((fn) => fn(cats));
       return cats;
     })
     .catch(() => {
       if (_cache === null) _cache = [];
       return _cache;
     });
+}
+
+// Dil değiştiğinde kategori önbelleğini geçersiz kıl ve yeni dilde yeniden çek;
+// kalıcı aboneler (mega menü, sidebar vb.) yeni içerikle tekrar render olur.
+if (typeof window !== "undefined") {
+  window.addEventListener("languageChanged", () => {
+    _cache = null;
+    _promise = null;
+    loadCategories();
+  });
 }
 
 /**
@@ -135,11 +147,12 @@ export function getCategories(): ApiCategory[] {
  * Eğer zaten yüklendiyse hemen çalıştırır.
  */
 export function onCategoriesLoaded(fn: (cats: ApiCategory[]) => void): void {
+  // Kalıcı kayıt: dil değişiminde de tekrar bildirilebilsin.
+  _subscribers.push(fn);
   if (_cache !== null) {
     fn(_cache);
     return;
   }
-  _listeners.push(fn);
   loadCategories();
 }
 
