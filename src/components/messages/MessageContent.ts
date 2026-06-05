@@ -123,7 +123,7 @@ export function MessageContent(): string {
                       <a :href="msg.videoCallUrl" target="_blank" rel="noopener noreferrer"
                          class="inline-flex items-center gap-1.5 mt-2 px-3 py-1.5 rounded-full bg-green-500 text-white text-[12px] font-medium hover:bg-green-600 transition-colors no-underline">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z"/></svg>
-                        Görüşmeye Katıl
+                        ${t("commonSvc.joinCall")}
                       </a>
                     </template>
                   </div>
@@ -142,7 +142,7 @@ export function MessageContent(): string {
                       <a :href="msg.videoCallUrl" target="_blank" rel="noopener noreferrer"
                          class="inline-flex items-center gap-1.5 mt-2 px-3 py-1.5 rounded-full bg-green-500 text-white text-[12px] font-medium hover:bg-green-600 transition-colors no-underline">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z"/></svg>
-                        Görüşmeye Katıl
+                        ${t("commonSvc.joinCall")}
                       </a>
                     </template>
                   </div>
@@ -171,7 +171,7 @@ export function MessageContent(): string {
                   @click="startVideoCall()"
                   :disabled="startingCall"
                   class="flex items-center justify-center w-9 h-9 border-none bg-transparent text-(--color-text-placeholder,#999999) cursor-pointer rounded-full hover:bg-(--color-surface-muted,#fafafa) hover:text-(--color-cta-primary,#cc9900) transition-colors flex-shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
-                  aria-label="Görüntülü görüşme başlat">
+                  aria-label="${t("commonSvc.startVideoCall")}">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z"/>
             </svg>

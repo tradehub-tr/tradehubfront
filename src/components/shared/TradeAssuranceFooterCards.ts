@@ -4,6 +4,8 @@
  * NOTE: Export adı `TradeAssuranceFooterCards` olarak kalıyor çünkü tüm sayfalar bu adla import ediyor.
  */
 
+import { t } from '../../i18n'
+
 const iconBookmark = `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="24" fill="#FFC200"/><g transform="translate(8,8)"><path d="M24.381 3.048c1.262 0 2.286 1.023 2.286 2.285v23.62L16 24.19 5.333 28.952V5.333c0-1.262 1.024-2.285 2.286-2.285h16.762Zm0 2.285H7.619v20.096L16 21.687l8.381 3.742V5.333Zm-3.81 9.143v2.286h-9.142v-2.286h9.143Zm0-5.333v2.286h-9.142V9.143h9.143Z" fill="#222" fill-rule="nonzero"/></g></svg>`;
 
 const iconCalendar = `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="24" fill="#FFC200"/><g transform="translate(8,8)"><path d="M24.381 4.571c1.262 0 2.286 1.024 2.286 2.286v15.879L21.2 28.952H8.381A2.286 2.286 0 0 1 6.095 26.667V6.857c0-1.262 1.024-2.286 2.286-2.286h.001v22.095h9.524v-6.476h6.476V4.571Zm-.53 17.905L20.19 22.476v4.163l3.661-4.163ZM17.524 16v2.286h-6.857V16h6.857Zm3.81-4.571v2.285H10.666v-2.285h10.667Zm4.523-8.381v3.81h-2.286v-3.81h2.286Zm-10.756 0v3.81H12.815v-3.81h2.286Zm6.947 1.192v2.286h-5.334V4.24h5.334Z" fill="#222" fill-rule="nonzero"/></g></svg>`;
@@ -19,22 +21,22 @@ export function TradeAssuranceFooterCards(): string {
           <!-- Card: Hükümler ve Koşullar -->
           <a href="/pages/legal/terms" class="group block bg-[#000]/40 hover:bg-[#000]/60 rounded-md p-6 transition-all duration-300">
             <div class="mb-4">${iconBookmark}</div>
-            <h3 class="text-base font-bold text-white mb-3">Hükümler ve Koşullar</h3>
-            <span class="text-[#FFC200] text-sm font-medium group-hover:underline">Okuyun &rarr;</span>
+            <h3 class="text-base font-bold text-white mb-3">${t("tradeAssurance.footerTermsTitle")}</h3>
+            <span class="text-[#FFC200] text-sm font-medium group-hover:underline">${t("tradeAssurance.footerRead")} &rarr;</span>
           </a>
 
           <!-- Card: Ticari Güvence kılavuzu -->
           <a href="/yardim-merkezi" class="group block bg-[#000]/40 hover:bg-[#000]/60 rounded-md p-6 transition-all duration-300">
             <div class="mb-4">${iconCalendar}</div>
-            <h3 class="text-base font-bold text-white mb-3">Ticari Güvence kılavuzu</h3>
-            <span class="text-[#FFC200] text-sm font-medium group-hover:underline">İndir &rarr;</span>
+            <h3 class="text-base font-bold text-white mb-3">${t("tradeAssurance.footerGuideTitle")}</h3>
+            <span class="text-[#FFC200] text-sm font-medium group-hover:underline">${t("tradeAssurance.footerDownload")} &rarr;</span>
           </a>
 
           <!-- Card: Müşteri Hizmetleri -->
           <a href="/yardim-merkezi" class="group block bg-[#000]/40 hover:bg-[#000]/60 rounded-md p-6 transition-all duration-300">
             <div class="mb-4">${iconHeadset}</div>
-            <h3 class="text-base font-bold text-white mb-3">Müşteri Hizmetleri</h3>
-            <span class="text-[#FFC200] text-sm font-medium group-hover:underline">Yardım alın &rarr;</span>
+            <h3 class="text-base font-bold text-white mb-3">${t("tradeAssurance.footerSupportTitle")}</h3>
+            <span class="text-[#FFC200] text-sm font-medium group-hover:underline">${t("tradeAssurance.footerGetHelp")} &rarr;</span>
           </a>
 
         </div>

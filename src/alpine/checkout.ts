@@ -324,7 +324,7 @@ Alpine.data(
           this.couponError = t("checkout.couponServiceUnavailable");
         }
       } catch (e: unknown) {
-        const msg = (e as { message?: string })?.message || "Geçersiz kupon kodu";
+        const msg = (e as { message?: string })?.message || t("checkoutMfr.invalidCoupon");
         this.couponError = msg;
       } finally {
         this.couponApplying = false;
@@ -968,7 +968,7 @@ Alpine.data("shippingForm", () => ({
         }
         const msg =
           (err as { _server_messages?: string; message?: string })?.message ||
-          "Adres kaydedilemedi";
+          t("checkoutMfr.addressSaveFailed");
         showToast({ message: msg, type: "error" });
         return false;
       }
@@ -1118,7 +1118,7 @@ Alpine.data("shippingForm", () => ({
       } catch (err) {
         // Backend reddetti — listeyi değiştirme, hatayı göster
         const msg =
-          (err as { _server_messages?: string; message?: string })?.message || "Adres silinemedi";
+          (err as { _server_messages?: string; message?: string })?.message || t("checkoutMfr.addressDeleteFailed");
         showToast({ message: msg, type: "error" });
         return;
       }
@@ -1167,7 +1167,7 @@ Alpine.data("shippingForm", () => ({
         // Backend reddetti — local state'i değiştirme, hatayı göster
         const msg =
           (err as { _server_messages?: string; message?: string })?.message ||
-          "Varsayılan adres güncellenemedi";
+          t("checkoutMfr.defaultAddressUpdateFailed");
         showToast({ message: msg, type: "error" });
         return;
       }

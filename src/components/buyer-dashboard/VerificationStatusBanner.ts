@@ -17,6 +17,7 @@
  */
 
 import type { AuthUser } from "../../utils/auth";
+import { t } from "../../i18n";
 
 const KYC_HREF = "/pages/dashboard/kyc.html";
 const KYB_HREF = "/pages/dashboard/kyb.html";
@@ -78,10 +79,9 @@ export function VerificationStatusBanner(user: AuthUser | null): string {
     return renderBanner({
       tone: "error",
       icon: ICONS.alert,
-      title: "Hesabınız askıya alındı",
-      description:
-        "Belge doğrulama sürecinde bir tutarsızlık tespit edildi. Destek ile iletişime geçiniz.",
-      ctas: [{ label: "Destek Talebi", href: "/pages/help.html", primary: true }],
+      title: t("buyerUi.accountSuspendedTitle"),
+      description: t("buyerUi.accountSuspendedDesc"),
+      ctas: [{ label: t("buyerUi.supportRequest"), href: "/pages/help.html", primary: true }],
     });
   }
 
@@ -90,9 +90,9 @@ export function VerificationStatusBanner(user: AuthUser | null): string {
     return renderBanner({
       tone: "error",
       icon: ICONS.alert,
-      title: "KYC reddedildi",
-      description: "Eksik veya hatalı belge tespit edildi. Lütfen düzelt + tekrar gönder.",
-      ctas: [{ label: "KYC'yi Düzelt", href: KYC_HREF, primary: true }],
+      title: t("buyerUi.kycRejectedTitle"),
+      description: t("buyerUi.rejectedDocDesc"),
+      ctas: [{ label: t("buyerUi.fixKyc"), href: KYC_HREF, primary: true }],
     });
   }
 
@@ -101,9 +101,9 @@ export function VerificationStatusBanner(user: AuthUser | null): string {
     return renderBanner({
       tone: "error",
       icon: ICONS.alert,
-      title: "KYB reddedildi",
-      description: "Eksik veya hatalı belge tespit edildi. Lütfen düzelt + tekrar gönder.",
-      ctas: [{ label: "KYB'yi Düzelt", href: KYB_HREF, primary: true }],
+      title: t("buyerUi.kybRejectedTitle"),
+      description: t("buyerUi.rejectedDocDesc"),
+      ctas: [{ label: t("buyerUi.fixKyb"), href: KYB_HREF, primary: true }],
     });
   }
 
@@ -112,8 +112,8 @@ export function VerificationStatusBanner(user: AuthUser | null): string {
     return renderBanner({
       tone: "warning",
       icon: ICONS.shield,
-      title: "Doğrulama tamamlanmadı",
-      description: "Hem KYC hem KYB belgelerinizi yüklemeniz gerekiyor.",
+      title: t("buyerUi.verificationIncompleteTitle"),
+      description: t("buyerUi.bothPendingDesc"),
       ctas: [
         { label: "KYC", href: KYC_HREF },
         { label: "KYB", href: KYB_HREF, primary: true },
@@ -126,9 +126,9 @@ export function VerificationStatusBanner(user: AuthUser | null): string {
     return renderBanner({
       tone: "warning",
       icon: ICONS.shield,
-      title: "KYC doğrulamanız bekliyor",
-      description: "Ürün satın alabilmek için KYC belgelerinizi yükleyin.",
-      ctas: [{ label: "Şimdi Başvur", href: KYC_HREF, primary: true }],
+      title: t("buyerUi.kycPendingTitle"),
+      description: t("buyerUi.kycPendingDesc"),
+      ctas: [{ label: t("buyerUi.applyNow"), href: KYC_HREF, primary: true }],
     });
   }
 
@@ -137,9 +137,9 @@ export function VerificationStatusBanner(user: AuthUser | null): string {
     return renderBanner({
       tone: "info",
       icon: ICONS.shield,
-      title: "KYB doğrulamanız bekliyor",
-      description: "Ürün satabilmek için KYB belgelerinizi yükleyin.",
-      ctas: [{ label: "Şimdi Başvur", href: KYB_HREF, primary: true }],
+      title: t("buyerUi.kybPendingTitle"),
+      description: t("buyerUi.kybPendingDesc"),
+      ctas: [{ label: t("buyerUi.applyNow"), href: KYB_HREF, primary: true }],
     });
   }
 
@@ -148,8 +148,8 @@ export function VerificationStatusBanner(user: AuthUser | null): string {
     return renderBanner({
       tone: "info",
       icon: ICONS.clock,
-      title: "KYB incelemede",
-      description: "Belgeleriniz inceleniyor. Genellikle 1-2 iş günü içinde sonuçlanır.",
+      title: t("buyerUi.kybUnderReviewTitle"),
+      description: t("buyerUi.kybUnderReviewDesc"),
     });
   }
 
@@ -158,9 +158,9 @@ export function VerificationStatusBanner(user: AuthUser | null): string {
     return renderBanner({
       tone: "info",
       icon: ICONS.shield,
-      title: "Alışveriş için KYC doldurun",
-      description: "Satıcı olarak başarılısınız. Alıcı olmak isterseniz KYC doldurun.",
-      ctas: [{ label: "KYC Doldur", href: KYC_HREF }],
+      title: t("buyerUi.fillKycForShoppingTitle"),
+      description: t("buyerUi.fillKycForShoppingDesc"),
+      ctas: [{ label: t("buyerUi.fillKyc"), href: KYC_HREF }],
     });
   }
 

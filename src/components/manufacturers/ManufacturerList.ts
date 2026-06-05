@@ -55,13 +55,13 @@ export function ManufacturerList(): string {
         <template x-if="searchedKeyword">
           <div class="bg-orange-50 border border-orange-100 rounded-lg p-4 mb-1">
             <div class="flex items-center gap-2 mb-3">
-              <span class="text-orange-600 font-semibold text-[14px]">Arama süreci</span>
+              <span class="text-orange-600 font-semibold text-[14px]">${t("checkoutMfr.searchProcess")}</span>
               <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>
             </div>
             <div class="flex items-start gap-2 text-[13px] text-gray-700 mb-2">
               <span class="w-1.5 h-1.5 rounded-full bg-orange-400 mt-1.5 shrink-0 animate-pulse"></span>
               <div class="flex-1">
-                <span>İhtiyacınıza uygun sonuçlar aranıyor</span>
+                <span>${t("checkoutMfr.searchingResults")}</span>
                 <div class="mt-1 inline-flex items-center gap-1 text-orange-600 text-[12px] bg-white border border-orange-200 rounded px-2 py-0.5">
                   <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                   <span x-text="searchedKeyword"></span>
@@ -70,7 +70,7 @@ export function ManufacturerList(): string {
             </div>
             <div class="flex items-start gap-2 text-[13px] text-gray-700">
               <span class="w-1.5 h-1.5 rounded-full bg-orange-300 mt-1.5 shrink-0 animate-pulse"></span>
-              <span>İşletme analizlerine göre tedarikçiler seçiliyor</span>
+              <span>${t("checkoutMfr.selectingSuppliers")}</span>
             </div>
           </div>
         </template>
@@ -94,7 +94,7 @@ export function ManufacturerList(): string {
         <svg class="w-12 h-12 mx-auto mb-3 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
         </svg>
-        <p class="text-[14px]">Henüz satıcı bulunamadı.</p>
+        <p class="text-[14px]">${t("checkoutMfr.noSellersFound")}</p>
       </div>
 
       <!-- Seller cards -->
@@ -200,7 +200,7 @@ export function ManufacturerList(): string {
                       <div class="p-2 flex-shrink-0 h-[78px]">
                         <p class="text-[12px] text-gray-800 font-medium leading-tight line-clamp-2 mb-1 min-h-[2lh]" x-text="p.product_name"></p>
                         <p x-show="p.price_min" class="text-[12px] font-bold text-gray-900" x-text="(_cv, p.price_max && p.price_max > p.price_min ? window.csFormatPriceRange(parseFloat(p.price_min), parseFloat(p.price_max), p.currency || 'USD') : window.csFormatPrice(parseFloat(p.price_min), p.currency || 'USD'))"></p>
-                        <p x-show="p.moq" class="text-[11px] text-gray-400 mt-0.5" x-text="p.moq + ' ' + (p.moq_unit || 'Adet')"></p>
+                        <p x-show="p.moq" class="text-[11px] text-gray-400 mt-0.5" x-text="p.moq + ' ' + (p.moq_unit || '${t("checkoutMfr.unitPieces")}')"></p>
                       </div>
                     </a>
                   </template>
@@ -214,7 +214,7 @@ export function ManufacturerList(): string {
                   >
                     <img
                       :src="seller.gallery_images[activeIdx]"
-                      :alt="seller.seller_name + ' galeri'"
+                      :alt="seller.seller_name + ' ${t("checkoutMfr.galleryAlt")}'"
                       class="w-full h-full object-cover transition-opacity duration-300"
                     />
                     <!-- Photo count badge -->
@@ -268,7 +268,7 @@ export function ManufacturerList(): string {
                 <strong x-text="seller.rating ? seller.rating.toFixed(1) : '—'"></strong>
                 <span>/5</span>
                 <span class="mx-1 text-gray-300">|</span>
-                <span x-text="(seller.review_count || 0) + ' değerlendirme'"></span>
+                <span x-text="(seller.review_count || 0) + ' ${t("checkoutMfr.reviewsWord")}'"></span>
               </div>
               <template x-if="seller.cover_image || (seller.product_images && seller.product_images.length > 0)">
                 <img :src="seller.cover_image || seller.product_images[0]" :alt="seller.seller_name" class="w-full h-[120px] object-cover rounded" />

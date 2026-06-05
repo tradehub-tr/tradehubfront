@@ -12,6 +12,7 @@
  */
 
 import Alpine from "alpinejs";
+import { t } from "../i18n";
 import {
   listSellerSlots,
   reserveSlot,
@@ -67,7 +68,7 @@ Alpine.store("reservationModal", {
   async open(opts) {
     this.isOpen = true;
     this.sellerId = opts.sellerId;
-    this.sellerName = opts.sellerName || "Satıcı";
+    this.sellerName = opts.sellerName || t("commonSvc.seller");
     this.slots = [];
     this.selectedSlotId = null;
     this.error = null;
@@ -77,7 +78,7 @@ Alpine.store("reservationModal", {
     try {
       this.slots = await listSellerSlots(opts.sellerId);
     } catch (err) {
-      this.error = err instanceof Error ? err.message : "Müsait saatler alınamadı";
+      this.error = err instanceof Error ? err.message : t("commonSvc.slotsLoadFailed");
     } finally {
       this.loading = false;
     }
@@ -107,7 +108,7 @@ Alpine.store("reservationModal", {
       this.successReservation = res;
       this.successActive = isReservationActive(res);
     } catch (err) {
-      this.error = err instanceof Error ? err.message : "Rezervasyon yapılamadı";
+      this.error = err instanceof Error ? err.message : t("commonSvc.reservationFailed");
     } finally {
       this.reserving = false;
     }

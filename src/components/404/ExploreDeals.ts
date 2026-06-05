@@ -13,6 +13,7 @@ import { getListingUrl } from "../../utils/listingUrl";
 import type { ProductListingCard } from "../../types/productListing";
 import { applySwiperDir } from "../../utils/direction";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
+import { t } from "../../i18n";
 
 /* ── Types ── */
 
@@ -71,10 +72,10 @@ function renderProductCard(p: ExploreProduct): string {
 
 function renderNavArrows(index: number): string {
   return `
-    <button aria-label="Onceki" class="explore-prev-${index} absolute start-0 top-[calc(50%-40px)] z-10 hidden h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-md transition-all hover:text-gray-900 opacity-0 pointer-events-none md:flex group-hover/explore:opacity-100 group-hover/explore:pointer-events-auto disabled:opacity-0 disabled:pointer-events-none">
+    <button aria-label="${t("infoMisc.previous")}" class="explore-prev-${index} absolute start-0 top-[calc(50%-40px)] z-10 hidden h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-md transition-all hover:text-gray-900 opacity-0 pointer-events-none md:flex group-hover/explore:opacity-100 group-hover/explore:pointer-events-auto disabled:opacity-0 disabled:pointer-events-none">
       <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
     </button>
-    <button aria-label="Sonraki" class="explore-next-${index} absolute end-0 top-[calc(50%-40px)] z-10 hidden h-9 w-9 translate-x-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-md transition-all hover:text-gray-900 opacity-0 pointer-events-none md:flex group-hover/explore:opacity-100 group-hover/explore:pointer-events-auto disabled:opacity-0 disabled:pointer-events-none">
+    <button aria-label="${t("infoMisc.next")}" class="explore-next-${index} absolute end-0 top-[calc(50%-40px)] z-10 hidden h-9 w-9 translate-x-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-md transition-all hover:text-gray-900 opacity-0 pointer-events-none md:flex group-hover/explore:opacity-100 group-hover/explore:pointer-events-auto disabled:opacity-0 disabled:pointer-events-none">
       <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
     </button>
   `;
@@ -87,7 +88,7 @@ function mapToExploreProduct(p: ProductListingCard): ExploreProduct {
     name: p.name,
     href: getListingUrl({ id: p.id, href: p.href }),
     price: p.price,
-    moq: p.moq || "1 adet",
+    moq: p.moq || t("infoMisc.moqOnePiece"),
     imageSrc: p.imageSrc || "",
     badge: p.sellingPoint || undefined,
   };
@@ -97,7 +98,7 @@ function groupByCategory(products: ProductListingCard[]): ExploreCategory[] {
   const allProducts = products.map(mapToExploreProduct);
 
   // "Tümünü Gör" tab always first with all products
-  const categories: ExploreCategory[] = [{ label: "Tümünü Gör", products: allProducts }];
+  const categories: ExploreCategory[] = [{ label: t("infoMisc.viewAll"), products: allProducts }];
 
   // Group remaining by category (first category string from each product)
   const grouped = new Map<string, ExploreProduct[]>();
@@ -124,7 +125,7 @@ export function ExploreDeals(): string {
     <section id="explore-deals" class="py-6 sm:py-8 lg:py-10 border-t border-secondary-100 dark:border-secondary-800">
       <div class="container-boxed">
         <h2 class="text-lg sm:text-xl font-bold text-secondary-900 dark:text-secondary-100 mb-4">
-          En iyi fırsatları keşfedin
+          ${t("infoMisc.exploreTopDeals")}
         </h2>
 
         <!-- Category tabs (populated from API) -->
@@ -138,7 +139,7 @@ export function ExploreDeals(): string {
               <svg class="w-12 h-12 mx-auto mb-3 text-gray-300 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
               </svg>
-              <p class="text-sm text-gray-400">Ürünler yükleniyor...</p>
+              <p class="text-sm text-gray-400">${t("infoMisc.productsLoading")}</p>
             </div>
           </div>
         </div>
@@ -179,7 +180,7 @@ function showEmptyState(): void {
         <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
         </svg>
-        <p class="text-sm text-gray-400">Yakında yeni ürünler eklenecek</p>
+        <p class="text-sm text-gray-400">${t("infoMisc.newProductsSoon")}</p>
       </div>
     </div>
   `;
@@ -211,7 +212,7 @@ function renderPanels(categories: ExploreCategory[]): void {
       (cat, i) => `
     <div class="explore-panel ${i === 0 ? "" : "hidden"}" data-panel-index="${i}">
       <div class="group/explore relative">
-        <div class="swiper explore-swiper-${i} overflow-hidden" aria-label="${escapeHtml(cat.label)} ürünleri">
+        <div class="swiper explore-swiper-${i} overflow-hidden" aria-label="${t("p2g0.categoryProductsAria", { category: escapeHtml(cat.label) })}">
           <div class="swiper-wrapper">
             ${cat.products.map((p) => renderProductCard(p)).join("")}
           </div>

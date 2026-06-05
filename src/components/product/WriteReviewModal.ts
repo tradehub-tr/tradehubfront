@@ -154,7 +154,7 @@ export function registerWriteReviewModal(): void {
                   : `${window.location.origin}${fileUrl}`,
               });
             } catch {
-              showToast({ message: `${file.name} yüklendi ama yanıt okunamadı.`, type: "warning" });
+              showToast({ message: t("p2g3.uploadOkResponseUnreadable", { name: file.name }), type: "warning" });
             }
           },
           onUploadError: (file, error) => {
@@ -162,11 +162,11 @@ export function registerWriteReviewModal(): void {
           },
           onValidationError: (kind, file) => {
             if (kind === "unsupported" && file)
-              showToast({ message: `Desteklenmeyen format: ${file.name}`, type: "error" });
+              showToast({ message: t("p2g3.unsupportedFormat", { name: file.name }), type: "error" });
             else if (kind === "tooLarge" && file)
-              showToast({ message: `${file.name} 5MB üzerinde, atlandı.`, type: "warning" });
+              showToast({ message: t("p2g3.fileTooLarge", { name: file.name }), type: "warning" });
             else if (kind === "maxFiles")
-              showToast({ message: "En fazla 5 fotoğraf yükleyebilirsiniz.", type: "warning" });
+              showToast({ message: t("p2g3.maxFivePhotos"), type: "warning" });
           },
         });
         this.dropzoneController.mount();
@@ -238,7 +238,7 @@ export function registerWriteReviewModal(): void {
           );
           this.close();
         } catch (err: unknown) {
-          const msg = err instanceof Error ? err.message : "Bilinmeyen hata";
+          const msg = err instanceof Error ? err.message : t("p2g3.unknownError");
           this.errorMsg = msg;
           showToast({ message: msg, type: "error" });
         } finally {

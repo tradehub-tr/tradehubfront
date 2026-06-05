@@ -418,42 +418,42 @@ Alpine.data("ordersListComponent", () => ({
   getStatusLabel(order: Order | null): string {
     if (!order) return "";
     // İade durumu ana statüden önce gelir
-    if (order.refundStatus === "Pending") return "İade İnceleniyor";
-    if (order.refundStatus === "Approved") return "İade Onaylandı";
-    if (order.refundStatus === "Rejected") return "İade Reddedildi";
+    if (order.refundStatus === "Pending") return t("ordersUi.statusRefundReviewing");
+    if (order.refundStatus === "Approved") return t("ordersUi.refundApproved");
+    if (order.refundStatus === "Rejected") return t("ordersUi.refundRejected");
     // Normal akış
     if (order.status === "Waiting for payment") {
-      return order.receiptUrl ? "Ödeme Onaylanıyor" : "Ödeme Bekleniyor";
+      return order.receiptUrl ? t("ordersUi.statusPaymentConfirming") : t("ordersUi.statusAwaitingPayment");
     }
     const labels: Record<string, string> = {
-      Confirming: "Hazırlanıyor",
-      Delivering: "Kargoda",
-      Completed: "Tamamlandı",
-      Cancelled: "İptal Edildi",
+      Confirming: t("ordersUi.statusPreparing"),
+      Delivering: t("ordersUi.statusShipping"),
+      Completed: t("ordersUi.statusCompleted"),
+      Cancelled: t("ordersUi.statusCancelled"),
     };
-    return labels[order.status] || order.status || "Bilinmeyen Durum";
+    return labels[order.status] || order.status || t("ordersUi.statusUnknown");
   },
 
   getStatusDescription(order: Order | null): string {
     if (!order) return "";
     // İade durumu açıklamaları
     if (order.refundStatus === "Pending") {
-      return "İade talebiniz satıcı tarafından inceleniyor. En kısa sürede geri dönüş yapılacaktır.";
+      return t("ordersUi.descRefundPending");
     }
     if (order.refundStatus === "Approved") {
       const amt = order.refundAmount
-        ? `${order.currency} ${Number(order.refundAmount).toLocaleString("tr-TR", { minimumFractionDigits: 2 })} tutarındaki`
+        ? `${order.currency} ${Number(order.refundAmount).toLocaleString("tr-TR", { minimumFractionDigits: 2 })} `
         : "";
-      return `${amt} iade talebiniz onaylandı. Ödeme bilgilerinizi kontrol edin.`;
+      return t("ordersUi.descRefundApproved", { amount: amt });
     }
     if (order.refundStatus === "Rejected") {
-      return "Satıcı iade talebinizi reddetti. Detaylar için satıcıyla iletişime geçin.";
+      return t("ordersUi.descRefundRejected");
     }
     // Normal akış açıklamaları
     if (order.status === "Waiting for payment") {
       return order.receiptUrl
-        ? "Havale dekontu inceleniyor. Satıcı ödemenizi onayladıktan sonra sipariş hazırlanmaya başlayacak."
-        : "Ödemenizi tamamlamak için havale makbuzunu gönderin.";
+        ? t("ordersUi.descReceiptUnderReview")
+        : t("ordersUi.descCompletePayment");
     }
     return order.statusDescription || "";
   },
@@ -543,8 +543,7 @@ Alpine.data("ordersListComponent", () => ({
     // Kargoya verilmemiş veya teslim edilmemişse iade yapılamaz
     if (!this.canRefund(order)) {
       this.refundBlocked = true;
-      this.refundError =
-        "İade talebi yalnızca kargoya verilmiş veya teslim edilmiş siparişler için açılabilir.";
+      this.refundError = t("ordersUi.refundOnlyShippedDelivered");
       this.refundSuccess = false;
       this.showRefundModal = true;
       document.body.style.overflow = "hidden";
@@ -555,8 +554,8 @@ Alpine.data("ordersListComponent", () => ({
       this.refundBlocked = true;
       this.refundError =
         order.refundStatus === "Approved"
-          ? "Bu sipariş için iade talebiniz zaten onaylanmıştır."
-          : "Bu sipariş için bekleyen bir iade talebiniz zaten bulunmaktadır.";
+          ? t("ordersUi.refundAlreadyApproved")
+          : t("ordersUi.refundAlreadyPending");
       this.refundSuccess = false;
       this.showRefundModal = true;
       document.body.style.overflow = "hidden";
@@ -588,7 +587,7 @@ Alpine.data("ordersListComponent", () => ({
       );
       this.refundSuccess = true;
     } catch (err) {
-      this.refundError = (err as ApiError)?.message || "Bir hata oluştu.";
+      this.refundError = (err as ApiError)?.message || t("ordersUi.genericError");
     } finally {
       this.submittingRefund = false;
     }

@@ -379,11 +379,9 @@ function sellerBusinessEdit(d: ProfileData): string {
 
 function renderAllCards(d: ProfileData): string {
   const isSeller = d.account_type === "seller";
-  const businessHint = t("settings.cardBusinessInfo")
-    ? `Bu bölümü doldurun, tedarikçilerden daha iyi teklifler alın.`
-    : "";
+  const businessHint = t("settings.cardBusinessInfo") ? t("settingsUi.businessHint") : "";
   const moreHint = businessHint;
-  const sourcingHint = `Bu bölümü doldurun, ihtiyaçlarınıza uygun ürün önerileri görün.`;
+  const sourcingHint = t("settingsUi.sourcingHint");
 
   const basicView = isSeller ? sellerBasicView(d) : buyerBasicView(d);
   const basicEdit = buyerBasicEdit(d); // same edit form for both

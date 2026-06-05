@@ -15,6 +15,7 @@ import {
 } from "../services/chatService";
 import { canChat } from "../services/reservationService";
 import { acquireScrollLock, releaseScrollLock } from "../utils/scrollLock";
+import { t } from "../i18n";
 
 // TeamsLike WebSocket sunmadığı için polling — aktif konuşma 3sn, inbox 10sn
 // (messages.ts'deki seller dashboard pattern'i ile aynı).
@@ -150,7 +151,7 @@ const chatStore: ChatStore = {
           return;
         }
       } catch (err) {
-        this.error = err instanceof Error ? err.message : "Yetki kontrolü başarısız";
+        this.error = err instanceof Error ? err.message : t("commonSvc.authCheckFailed");
         return; // hata durumunda chat'i açma
       }
     }
@@ -166,7 +167,7 @@ const chatStore: ChatStore = {
       try {
         this.conversations = await listConversations();
       } catch (err) {
-        this.error = err instanceof Error ? err.message : "Konuşmalar yüklenemedi";
+        this.error = err instanceof Error ? err.message : t("commonSvc.conversationsLoadFailed");
       } finally {
         this.loading = false;
       }
@@ -190,7 +191,7 @@ const chatStore: ChatStore = {
           this.conversations = [conv, ...this.conversations];
         }
       } catch (err) {
-        this.error = err instanceof Error ? err.message : "Satıcı ile sohbet başlatılamadı";
+        this.error = err instanceof Error ? err.message : t("commonSvc.startChatFailed");
       } finally {
         this.loading = false;
       }
@@ -252,7 +253,7 @@ const chatStore: ChatStore = {
       if (conv) conv.unread = 0;
       scrollChatPopupToBottom();
     } catch (err) {
-      this.error = err instanceof Error ? err.message : "Mesajlar yüklenemedi";
+      this.error = err instanceof Error ? err.message : t("commonSvc.messagesLoadFailed");
     }
   },
 
@@ -281,7 +282,7 @@ const chatStore: ChatStore = {
       this.draft = "";
       scrollChatPopupToBottom();
     } catch (err) {
-      this.error = err instanceof Error ? err.message : "Mesaj gönderilemedi";
+      this.error = err instanceof Error ? err.message : t("commonSvc.messageSendFailed");
     } finally {
       this.sending = false;
     }
@@ -292,7 +293,7 @@ const chatStore: ChatStore = {
     // Backend de 10 MB sınırı uyguluyor; UI tarafında erken reddet ki upload başlamasın.
     const MAX_BYTES = 10 * 1024 * 1024;
     if (file.size > MAX_BYTES) {
-      this.error = `Dosya 10 MB sınırını aşıyor (${Math.round(file.size / 1024)} KB).`;
+      this.error = t("commonSvc.fileExceeds10mb", { kb: Math.round(file.size / 1024) });
       return;
     }
     this.sending = true;
@@ -302,7 +303,7 @@ const chatStore: ChatStore = {
       this.activeMessages = [...this.activeMessages, msg];
       scrollChatPopupToBottom();
     } catch (err) {
-      this.error = err instanceof Error ? err.message : "Dosya gönderilemedi";
+      this.error = err instanceof Error ? err.message : t("commonSvc.fileSendFailed");
     } finally {
       this.sending = false;
     }
@@ -320,11 +321,11 @@ const chatStore: ChatStore = {
         // bir sonraki tıkta otomatik refresh edilir.
         window.open(result.join_url, "_blank", "noopener,noreferrer");
       } else {
-        this.error = "Görüşme URL'i alınamadı";
+        this.error = t("commonSvc.callUrlFailed");
       }
       this.closeSubMenu();
     } catch (err) {
-      this.error = err instanceof Error ? err.message : "Görüntülü görüşme başlatılamadı";
+      this.error = err instanceof Error ? err.message : t("commonSvc.videoCallFailed");
     } finally {
       this.startingCall = false;
     }

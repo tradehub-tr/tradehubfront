@@ -964,13 +964,13 @@ Alpine.data("ticketForm", () => ({
       texts: ticketDropzoneTexts(),
       onValidationError: (kind, file) => {
         if (kind === "unsupported" && file)
-          showToast({ message: `Desteklenmeyen format: ${file.name}`, type: "error" });
+          showToast({ message: `${t("helpUi.fileUnsupported")} ${file.name}`, type: "error" });
         else if (kind === "tooLarge" && file)
-          showToast({ message: `Dosya çok büyük: ${file.name}`, type: "error" });
+          showToast({ message: `${t("helpUi.fileTooLarge")} ${file.name}`, type: "error" });
         else if (kind === "duplicate" && file)
-          showToast({ message: `Zaten eklendi: ${file.name}`, type: "warning" });
+          showToast({ message: `${t("helpUi.fileDuplicate")} ${file.name}`, type: "warning" });
         else if (kind === "maxFiles")
-          showToast({ message: "En fazla 5 dosya ekleyebilirsiniz.", type: "warning" });
+          showToast({ message: t("helpUi.fileMaxFiles"), type: "warning" });
       },
     });
     this.dropzoneController.mount();
@@ -1030,8 +1030,8 @@ Alpine.data("ticketForm", () => ({
   get routingHint(): string {
     if (!this.category) return "";
     return this.requiresOrder
-      ? "Bu talep, seçtiğiniz siparişin satıcısına iletilecek."
-      : "Bu talep Platform Destek ekibine iletilecek.";
+      ? t("helpUi.routingHintSeller")
+      : t("helpUi.routingHintPlatform");
   },
 
   get charCount(): number {
@@ -1050,8 +1050,8 @@ Alpine.data("ticketForm", () => ({
       if (this.requiresOrder && !this.orderRef.trim()) {
         this.errors.orderRef =
           this.orders.length === 0
-            ? "Uygun siparişiniz yok. Lütfen başka bir kategori seçin."
-            : "Bu kategori için sipariş seçimi zorunludur.";
+            ? t("helpUi.orderRefNoOrders")
+            : t("helpUi.orderRefRequired");
       }
     }
     return Object.keys(this.errors).length === 0;
@@ -1109,7 +1109,7 @@ Alpine.data("ticketForm", () => ({
         });
         if (result.failed.length > 0) {
           const failedNames = result.failed.map((f) => f.file.name).join(", ");
-          this.errors.submit = `Ticket oluşturuldu fakat bazı dosyalar yüklenemedi: ${failedNames}`;
+          this.errors.submit = `${t("helpUi.ticketCreatedFilesFailed")} ${failedNames}`;
         }
       }
 
@@ -1147,18 +1147,22 @@ function formatTicketDate(s: string): string {
 }
 
 // Musteri UI etiketleri
-const STATUS_LABELS: Record<string, string> = {
-  Open: "Açık",
-  Replied: "Yanıtlandı",
-  Resolved: "Çözüldü",
-  Closed: "Kapalı",
-};
-const PRIORITY_LABELS: Record<string, string> = {
-  Low: "Düşük",
-  Medium: "Orta",
-  High: "Yüksek",
-  Urgent: "Acil",
-};
+function statusLabels(): Record<string, string> {
+  return {
+    Open: t("helpUi.statusOpen"),
+    Replied: t("helpUi.statusReplied"),
+    Resolved: t("helpUi.statusResolved"),
+    Closed: t("helpUi.statusClosed"),
+  };
+}
+function priorityLabels(): Record<string, string> {
+  return {
+    Low: t("helpUi.priorityLow"),
+    Medium: t("helpUi.priorityMedium"),
+    High: t("helpUi.priorityHigh"),
+    Urgent: t("helpUi.priorityUrgent"),
+  };
+}
 
 function _statusDirectCls(s: string): string {
   const m: Record<string, string> = {
@@ -1277,10 +1281,11 @@ Alpine.data("ticketsList", () => ({
   // Frappe status (Open/Replied/Resolved/Closed) → user-facing label
   statusLabel(raw: string): string {
     // raw burada 'open'/'pending'/'closed' (UI tab keyi) olarak gelir
+    const labels = statusLabels();
     const m: Record<string, string> = {
-      open: STATUS_LABELS.Open,
-      pending: STATUS_LABELS.Replied,
-      closed: STATUS_LABELS.Resolved,
+      open: labels.Open,
+      pending: labels.Replied,
+      closed: labels.Resolved,
     };
     return m[raw] || raw;
   },
@@ -1304,7 +1309,7 @@ Alpine.data("ticketsList", () => ({
   },
 
   priorityLabel(p: string): string {
-    return PRIORITY_LABELS[p] || p || "";
+    return priorityLabels()[p] || p || "";
   },
 
   priorityChipCls(p: string): string {
@@ -1343,7 +1348,7 @@ Alpine.data("ticketsList", () => ({
         status: statusToTab(it.status),
         priority: it.priority || "",
         createdDate: formatTicketDate(it.creation),
-        subject: it.subject || "(konusuz)",
+        subject: it.subject || t("helpUi.noSubject"),
         category: it.ticket_type || "-",
         lastReplyLabel: formatTicketDate(it.modified),
       }));
@@ -1353,7 +1358,7 @@ Alpine.data("ticketsList", () => ({
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "";
       if (msg !== "Unauthorized") {
-        this.errorMsg = msg || "Talepler yüklenemedi";
+        this.errorMsg = msg || t("helpUi.ticketsLoadError");
       }
     } finally {
       this.loading = false;
@@ -1384,7 +1389,7 @@ Alpine.data("ticketDetail", () => ({
     this.ticketId = new URLSearchParams(window.location.search).get("id") || "";
     if (!this.ticketId) {
       this.loading = false;
-      this.errorMsg = "Talep ID verilmedi (?id=...).";
+      this.errorMsg = t("helpUi.ticketIdMissing");
       return;
     }
     await this.loadAll();
@@ -1411,7 +1416,7 @@ Alpine.data("ticketDetail", () => ({
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "";
       if (msg !== "Unauthorized") {
-        this.errorMsg = msg || "Talep yüklenemedi";
+        this.errorMsg = msg || t("helpUi.ticketLoadError");
       }
     } finally {
       this.loading = false;
@@ -1427,7 +1432,7 @@ Alpine.data("ticketDetail", () => ({
       this.replyText = "";
       await this.loadAll();
     } catch (e: unknown) {
-      this.sendError = e instanceof Error ? e.message : "Yanıt gönderilemedi";
+      this.sendError = e instanceof Error ? e.message : t("helpUi.replySendError");
     } finally {
       this.sending = false;
     }
@@ -1440,7 +1445,7 @@ Alpine.data("ticketDetail", () => ({
       await updateTicketStatus(this.ticketId, "Closed");
       await this.loadAll();
     } catch (e: unknown) {
-      this.sendError = e instanceof Error ? e.message : "Talep kapatılamadı";
+      this.sendError = e instanceof Error ? e.message : t("helpUi.ticketCloseError");
     } finally {
       this.closing = false;
     }
@@ -1453,7 +1458,7 @@ Alpine.data("ticketDetail", () => ({
     return _fmtDT(s);
   },
   statusLabel(s: string): string {
-    return STATUS_LABELS[s] || s || "-";
+    return statusLabels()[s] || s || "-";
   },
   statusCls(s: string): string {
     return _statusDirectCls(s);
@@ -1462,7 +1467,7 @@ Alpine.data("ticketDetail", () => ({
     return _statusDotDirectCls(s);
   },
   priorityLabel(p: string): string {
-    return PRIORITY_LABELS[p] || p || "";
+    return priorityLabels()[p] || p || "";
   },
   priorityChipCls(p: string): string {
     return _priorityChipDirectCls(p);

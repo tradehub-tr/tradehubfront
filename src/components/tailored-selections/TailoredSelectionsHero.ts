@@ -27,9 +27,9 @@ const BADGE_ICONS: Record<string, string> = {
 };
 
 const BADGE_LABELS: Record<string, string> = {
-  personal: "İlgi Alanın",
-  trend: "Trend",
-  quality: "Kalite",
+  personal: t("infoMisc.badgeInterest"),
+  trend: t("infoMisc.badgeTrend"),
+  quality: t("infoMisc.badgeQuality"),
 };
 
 function renderBadge(badge?: string | null): string {

@@ -105,8 +105,8 @@ async function renderPage() {
         <div class="w-16 h-16 mx-auto mb-4 rounded-md bg-gray-100 flex items-center justify-center">
           <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349"/></svg>
         </div>
-        <h2 class="text-lg font-bold text-gray-700 mb-1">Magaza bulunamadi</h2>
-        <p class="text-sm text-gray-400">Bu satici icin bir magaza sayfasi henuz olusturulmamis.</p>
+        <h2 class="text-lg font-bold text-gray-700 mb-1">${t("sellPage.storeNotFound")}</h2>
+        <p class="text-sm text-gray-400">${t("sellPage.storeNotFoundDesc")}</p>
       </div>
 
       <!-- DYNAMIC SECTIONS -->
@@ -153,7 +153,7 @@ async function renderPage() {
                       <template x-if="seller?.founded_year || seller?.member_since">
                         <span class="text-[13px] text-[#666]">
                           <span class="mx-1 text-[#ccc]">&middot;</span>
-                          <span x-text="(new Date().getFullYear() - (seller?.founded_year || 2010)) + ' yil'"></span>
+                          <span x-text="(new Date().getFullYear() - (seller?.founded_year || 2010)) + ' ${t("sellPage.years")}'"></span>
                         </span>
                       </template>
                       <template x-if="seller?.city || seller?.country">
@@ -165,7 +165,7 @@ async function renderPage() {
                     </div>
 
                     <!-- Main products / description -->
-                    <p class="text-[13px] text-[#555] leading-relaxed line-clamp-2 mb-2" x-show="seller?.description || seller?.short_description" x-text="'Ana urunler: ' + (seller?.description || seller?.short_description || '')"></p>
+                    <p class="text-[13px] text-[#555] leading-relaxed line-clamp-2 mb-2" x-show="seller?.description || seller?.short_description" x-text="'${t("sellPage.mainProductsLabel")}: ' + (seller?.description || seller?.short_description || '')"></p>
 
                     <!-- Email -->
                     <div class="flex items-center gap-1.5 text-[13px] text-[#666]" x-show="seller?.email">
@@ -180,16 +180,16 @@ async function renderPage() {
                       <svg class="w-4 h-4 self-center" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
                       <span class="text-[12px] font-semibold">${t("seller.sf.verifiedSupplier")}</span>
                       <img src="/images/istoc-logo.png" alt="iSTOC" class="h-[10px] w-auto self-baseline ms-1" />
-                      <span class="text-[10px] text-[#999] font-medium">ile</span>
+                      <span class="text-[10px] text-[#999] font-medium">${t("sellPage.with")}</span>
                     </div>
                     <button
                       class="bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[12px] font-medium border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] px-5 py-2 shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150 whitespace-nowrap"
                       @click="switchPage('contacts')">
-                      Tedarikçiye Ulasin
+                      ${t("sellPage.contactSupplier")}
                     </button>
                     <a href="/magaza/${sellerCode}"
                        class="th-btn-outline text-[12px] font-medium text-[#555] px-5 py-2 text-center hover:text-[#333] whitespace-nowrap">
-                      Profili Goruntule
+                      ${t("sellPage.viewProfile")}
                     </a>
                   </div>
                 </div>
@@ -201,11 +201,11 @@ async function renderPage() {
               <button
                 class="flex-1 bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[12px] font-medium border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] py-2 shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150"
                 @click="switchPage('contacts')">
-                Tedarikçiye Ulasin
+                ${t("sellPage.contactSupplier")}
               </button>
               <a href="/magaza/${sellerCode}"
                  class="th-btn-outline flex-1 text-[12px] font-medium text-[#555] py-2 text-center">
-                Profil
+                ${t("sellPage.profile")}
               </a>
             </div>
           </div>
@@ -224,14 +224,14 @@ async function renderPage() {
 
             <!-- Aktif sayfa adi (mobil) -->
             <span class="sm:hidden text-[13px] font-medium text-white"
-                  x-text="activePage === 'home' ? 'Ana Sayfa' : activePage === 'products' ? 'Urunler' : activePage === 'profile' ? 'Profil' : 'Kisiler'"></span>
+                  x-text="activePage === 'home' ? '${t("sellPage.navHome")}' : activePage === 'products' ? '${t("sellPage.navProducts")}' : activePage === 'profile' ? '${t("sellPage.profile")}' : '${t("sellPage.navContacts")}'"></span>
 
             <!-- Nav Items (desktop) -->
             <nav class="hidden sm:flex items-center gap-0 h-full">
               <a href="#" @click.prevent="switchPage('home')"
                  class="px-4 h-full flex items-center text-[13px] font-medium transition-colors"
                  :class="activePage === 'home' ? 'text-white bg-white/15' : 'text-white/70 hover:text-white hover:bg-white/10'">
-                Ana Sayfa
+                ${t("sellPage.navHome")}
               </a>
 
               <!-- Urunler (dropdown) -->
@@ -239,7 +239,7 @@ async function renderPage() {
                 <button @click="switchPage('products')"
                    class="px-4 h-full flex items-center gap-1.5 text-[13px] font-medium transition-colors"
                    :class="activePage === 'products' ? 'text-white bg-white/15' : 'text-white/70 hover:text-white hover:bg-white/10'">
-                  Urunler
+                  ${t("sellPage.navProducts")}
                   <svg class="w-3 h-3 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                 </button>
                 <div x-show="open" x-transition.opacity.duration.150ms
@@ -247,7 +247,7 @@ async function renderPage() {
                      style="background-color: var(--store-nav-bg);">
                   <a href="#" @click.prevent="filterByCategory(''); switchPage('products'); open = false"
                      class="block px-4 py-2 text-[13px] font-medium hover:bg-white/10 transition-colors"
-                     style="color: var(--store-nav-text, #fff);">Tum Urunler</a>
+                     style="color: var(--store-nav-text, #fff);">${t("sellPage.allProducts")}</a>
                   <template x-for="cat in categories" :key="cat.name">
                     <a href="#" @click.prevent="filterByCategory(cat.name); switchPage('products'); open = false"
                        class="block px-4 py-2 text-[13px] hover:bg-white/10 transition-colors"
@@ -262,7 +262,7 @@ async function renderPage() {
                 <button @click="switchPage('profile')"
                    class="px-4 h-full flex items-center gap-1.5 text-[13px] font-medium transition-colors"
                    :class="activePage === 'profile' ? 'text-white bg-white/15' : 'text-white/70 hover:text-white hover:bg-white/10'">
-                  Profil
+                  ${t("sellPage.profile")}
                   <svg class="w-3 h-3 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                 </button>
                 <div x-show="open" x-transition.opacity.duration.150ms
@@ -270,24 +270,24 @@ async function renderPage() {
                      style="background-color: var(--store-nav-bg);">
                   <a href="#" @click.prevent="switchPage('profile'); open = false"
                      class="block px-4 py-2 text-[13px] hover:bg-white/10 transition-colors"
-                     style="color: var(--store-nav-text, #fff);">Sirket Profili</a>
+                     style="color: var(--store-nav-text, #fff);">${t("sellPage.companyProfile")}</a>
                   <a href="/magaza/${sellerCode}"
                      class="block px-4 py-2 text-[13px] hover:bg-white/10 transition-colors"
-                     style="color: var(--store-nav-text, #fff);">Detayli Profil</a>
+                     style="color: var(--store-nav-text, #fff);">${t("sellPage.detailedProfile")}</a>
                 </div>
               </div>
 
               <a href="#" @click.prevent="switchPage('contacts')"
                  class="px-4 h-full flex items-center text-[13px] font-medium transition-colors"
                  :class="activePage === 'contacts' ? 'text-white bg-white/15' : 'text-white/70 hover:text-white hover:bg-white/10'">
-                Kisiler
+                ${t("sellPage.navContacts")}
               </a>
             </nav>
 
             <!-- Search (desktop) -->
             <div class="hidden sm:flex items-center gap-2">
               <div class="relative">
-                <input type="text" placeholder="Bu Magazada Ara"
+                <input type="text" placeholder="${t("sellPage.searchInStore")}"
                        class="w-[180px] lg:w-[240px] h-[30px] text-[12px] border border-white/30 rounded ps-3 pe-8 bg-white/10 text-white placeholder-white/50 focus:bg-white focus:text-gray-800 focus:placeholder-gray-400 focus:border-white transition-colors" />
                 <svg class="absolute end-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35" stroke-width="2" stroke-linecap="round"/></svg>
               </div>
@@ -304,7 +304,7 @@ async function renderPage() {
           <div x-show="mobileSearch" x-transition.origin.top
                class="sm:hidden px-4 py-2.5 border-t border-white/10">
             <div class="relative">
-              <input type="text" placeholder="Bu Magazada Ara" autofocus
+              <input type="text" placeholder="${t("sellPage.searchInStore")}" autofocus
                      class="w-full h-[36px] text-[13px] border border-white/20 rounded-md ps-3 pe-9 bg-white/10 text-white placeholder-white/50 focus:bg-white focus:text-gray-800 focus:placeholder-gray-400 focus:border-white transition-colors" />
               <svg class="absolute end-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35" stroke-width="2" stroke-linecap="round"/></svg>
             </div>
@@ -316,22 +316,22 @@ async function renderPage() {
             <a href="#" @click.prevent="switchPage('home'); mobileNav = false"
                class="block px-5 py-3 text-[13px] font-medium border-b border-white/5 transition-colors"
                :class="activePage === 'home' ? 'text-white bg-white/10' : 'text-white/70'">
-              Ana Sayfa
+              ${t("sellPage.navHome")}
             </a>
             <a href="#" @click.prevent="switchPage('products'); mobileNav = false"
                class="block px-5 py-3 text-[13px] font-medium border-b border-white/5 transition-colors"
                :class="activePage === 'products' ? 'text-white bg-white/10' : 'text-white/70'">
-              Urunler
+              ${t("sellPage.navProducts")}
             </a>
             <a href="#" @click.prevent="switchPage('profile'); mobileNav = false"
                class="block px-5 py-3 text-[13px] font-medium border-b border-white/5 transition-colors"
                :class="activePage === 'profile' ? 'text-white bg-white/10' : 'text-white/70'">
-              Profil
+              ${t("sellPage.profile")}
             </a>
             <a href="#" @click.prevent="switchPage('contacts'); mobileNav = false"
                class="block px-5 py-3 text-[13px] font-medium transition-colors"
                :class="activePage === 'contacts' ? 'text-white bg-white/10' : 'text-white/70'">
-              Kisiler
+              ${t("sellPage.navContacts")}
             </a>
           </div>
         </div>

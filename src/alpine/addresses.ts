@@ -6,6 +6,7 @@
  */
 
 import Alpine from "alpinejs";
+import { t } from "../i18n";
 import { getUser, isLoggedIn } from "../utils/auth";
 import { turkishProvinces, districtsByProvince } from "../data/mockCheckout";
 import { showToast } from "../utils/toast";
@@ -242,7 +243,7 @@ Alpine.data("addressesManager", () => ({
   openAdd() {
     if (this.addresses.length >= MAX_ADDRESSES) {
       showToast({
-        message: `En fazla ${MAX_ADDRESSES} adres ekleyebilirsiniz. Yeni adres eklemek için mevcut bir adresi silin.`,
+        message: t("authAddr.maxLimitToast", { max: MAX_ADDRESSES }),
         type: "warning",
       });
       return;
@@ -282,7 +283,7 @@ Alpine.data("addressesManager", () => ({
     this.errors = {};
     for (const field of required) {
       if (!String(this.form[field]).trim()) {
-        this.errors[field] = "Bu alan zorunludur.";
+        this.errors[field] = t("authAddr.fieldRequired");
         valid = false;
       }
     }
@@ -290,8 +291,8 @@ Alpine.data("addressesManager", () => ({
     if (this.form.phone.trim() && !validatePhone(this.form.phone, this.form.phone_prefix)) {
       this.errors.phone =
         this.form.phone_prefix === "+90"
-          ? "Geçerli bir telefon numarası giriniz. (örn. 0212 555 00 00)"
-          : "Geçerli bir telefon numarası giriniz (7-15 rakam).";
+          ? t("authAddr.invalidPhoneTR")
+          : t("authAddr.invalidPhoneIntl");
       valid = false;
     }
     // VKN/TCKN basit format kontrolü (Business)
@@ -299,7 +300,7 @@ Alpine.data("addressesManager", () => ({
     if (this.form.address_type === "Business" && taxNoRaw) {
       const digits = taxNoRaw.replace(/\D/g, "");
       if (digits.length !== 10 && digits.length !== 11) {
-        this.errors.tax_no = "VKN 10 hane veya TCKN 11 hane olmalı.";
+        this.errors.tax_no = t("authAddr.invalidTaxNo");
         valid = false;
       }
     }
@@ -347,11 +348,11 @@ Alpine.data("addressesManager", () => ({
       }
       this.closeModal();
       showToast({
-        message: this.editingId ? "Adres güncellendi." : "Adres eklendi.",
+        message: this.editingId ? t("authAddr.addressUpdated") : t("authAddr.addressAdded"),
         type: "success",
       });
     } catch (err: unknown) {
-      const msg = (err as { message?: string })?.message || "Adres kaydedilemedi.";
+      const msg = (err as { message?: string })?.message || t("authAddr.addressSaveFailed");
       showToast({ message: msg, type: "error" });
     } finally {
       this.saving = false;
@@ -367,9 +368,9 @@ Alpine.data("addressesManager", () => ({
       }
       this.addresses = this.addresses.map((a) => ({ ...a, is_default: a.id === id }));
       if (!isLoggedIn()) guestWrite(this.addresses);
-      showToast({ message: "Varsayılan adres güncellendi.", type: "success" });
+      showToast({ message: t("authAddr.defaultUpdated"), type: "success" });
     } catch (err: unknown) {
-      const msg = (err as { message?: string })?.message || "Varsayılan adres güncellenemedi.";
+      const msg = (err as { message?: string })?.message || t("authAddr.defaultUpdateFailed");
       showToast({ message: msg, type: "error" });
     }
   },
@@ -410,9 +411,9 @@ Alpine.data("addressesManager", () => ({
       this.isDeleteConfirmOpen = false;
       this.deletingId = "";
       this.deletingTitle = "";
-      showToast({ message: "Adres silindi.", type: "success" });
+      showToast({ message: t("authAddr.addressDeleted"), type: "success" });
     } catch (err: unknown) {
-      const msg = (err as { message?: string })?.message || "Adres silinemedi.";
+      const msg = (err as { message?: string })?.message || t("authAddr.addressDeleteFailed");
       showToast({ message: msg, type: "error" });
     }
   },

@@ -25,16 +25,18 @@ export function CheckoutHeader({
 
   let sub = subtitle;
   if (!sub) {
-    const baseCta = "adresini, ödeme yöntemini ve kargo seçimlerini doğrula.";
     if (
       typeof supplierCount === "number" &&
       typeof itemCount === "number" &&
       supplierCount > 0 &&
       itemCount > 0
     ) {
-      sub = `${supplierCount} tedarikçiden ${itemCount} ürün — ${baseCta}`;
+      sub = t("checkoutMfr.headerSubtitleWithCounts", {
+        suppliers: supplierCount,
+        items: itemCount,
+      });
     } else {
-      sub = baseCta.charAt(0).toUpperCase() + baseCta.slice(1);
+      sub = t("checkoutMfr.headerSubtitle");
     }
   }
 

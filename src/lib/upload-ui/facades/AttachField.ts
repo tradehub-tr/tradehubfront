@@ -9,6 +9,7 @@
 import { uploadFiles, type FileProgress } from "../uploader";
 import { getFileBadge, formatFileSize } from "../utils";
 import { escapeHtml } from "../../../utils/sanitize";
+import { t } from "../../../i18n";
 
 export interface AttachFieldOptions {
   containerId: string;
@@ -64,9 +65,9 @@ export class AttachFieldController {
 
   private render(): void {
     const labels = this.opts.labels ?? {};
-    const pickLabel = labels.pick ?? "Dosya Seç";
-    const emptyLabel = labels.empty ?? "henüz dosya seçilmedi";
-    const uploadedLabel = labels.uploaded ?? "yüklendi";
+    const pickLabel = labels.pick ?? t("commonSvc.pickFile");
+    const emptyLabel = labels.empty ?? t("commonSvc.noFileSelected");
+    const uploadedLabel = labels.uploaded ?? t("commonSvc.uploaded");
 
     if (!this.currentValue && !this.currentFile) {
       this.container.innerHTML = `
@@ -80,7 +81,7 @@ export class AttachFieldController {
       return;
     }
 
-    const fileName = this.currentName || "dosya";
+    const fileName = this.currentName || t("commonSvc.fileWord");
     const badge = getFileBadge(fileName);
     const isUploading = this.progress?.status === "uploading";
     const pct = this.progress
@@ -94,9 +95,9 @@ export class AttachFieldController {
           ? "bg-amber-500"
           : "bg-emerald-500";
     const statusText = isUploading
-      ? `yükleniyor… ${pct}%`
+      ? t("commonSvc.uploadingPct", { pct })
       : this.progress?.status === "error"
-        ? "hata"
+        ? t("commonSvc.errorWord")
         : uploadedLabel;
     const sizeText = this.currentSize ? `${formatFileSize(this.currentSize)} · ` : "";
 
@@ -134,7 +135,7 @@ export class AttachFieldController {
   private async acceptFile(file: File): Promise<void> {
     const maxBytes = this.opts.maxFileSizeBytes ?? 10 * 1024 * 1024;
     if (file.size > maxBytes) {
-      this.opts.onUploadError?.(`Dosya çok büyük (maks. ${Math.round(maxBytes / 1024 / 1024)}MB)`);
+      this.opts.onUploadError?.(t("commonSvc.fileTooLarge", { mb: Math.round(maxBytes / 1024 / 1024) }));
       return;
     }
 

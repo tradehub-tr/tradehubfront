@@ -151,7 +151,7 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
             data-is-default="${isDef ? "1" : "0"}"
             ${opt.price ? `data-variant-price="${escapeHtml(opt.price)}"` : ""}
             ${isAvailable ? "" : "disabled"}
-            title="${isAvailable ? escapeHtml(opt.label) : `${escapeHtml(opt.label)} — tükendi`}"
+            title="${isAvailable ? escapeHtml(opt.displayLabel || opt.label) : `${escapeHtml(opt.displayLabel || opt.label)} — ${t("prodUi.outOfStockSuffix")}`}"
           >
             ${escapeHtml(opt.label)}
           </button>
@@ -441,7 +441,7 @@ function crossDisableVariants(_selectedAxisLabel: string, _selectedValue: string
       if (!hasStock && btnValue) {
         btn.classList.add("opacity-40", "line-through", "cursor-not-allowed");
         btn.classList.remove("active");
-        btn.setAttribute("title", `${btnDisplay} — tükendi`);
+        btn.setAttribute("title", `${btnDisplay} — ${t("prodUi.outOfStockSuffix")}`);
         btn.setAttribute("disabled", "");
       } else {
         btn.classList.remove("opacity-40", "line-through", "cursor-not-allowed");

@@ -4,6 +4,7 @@
  */
 import { btn } from "../ui/button";
 import { escapeHtml, sanitizeUrl, safeHexColor } from "../sanitize";
+import { t } from "../../i18n";
 
 /** Storefront section ayarları — bölüm tipine göre farklı subset'ler kullanılır */
 export interface SectionSettings {
@@ -104,7 +105,7 @@ function renderSlideImage(slide: HeroSlide, isStatic: boolean): string {
   const hasOverlay = !!(slide.title || slide.subtitle || slide.ctaText);
   const link = !hasOverlay && slide.ctaLink ? slide.ctaLink : "";
   const resolvedSrc = resolveImageUrl(slide.image);
-  const innerImg = `<img src="${escapeHtml(sanitizeUrl(resolvedSrc))}" alt="${escapeAttr(slide.title || "Banner")}" class="${heightCls}" onerror="${fallback}" />${renderSlideOverlay(slide)}`;
+  const innerImg = `<img src="${escapeHtml(sanitizeUrl(resolvedSrc))}" alt="${escapeAttr(slide.title || t("sellerApp.bannerAlt"))}" class="${heightCls}" onerror="${fallback}" />${renderSlideOverlay(slide)}`;
   return link
     ? `<a href="${escapeHtml(sanitizeUrl(link))}" class="${wrapper}">${innerImg}</a>`
     : `<div class="${wrapper}">${innerImg}</div>`;
@@ -272,7 +273,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                       </div>
                       <div class="text-[13px] text-gray-700 line-clamp-2 leading-snug mb-1" x-text="p.product_name || p.title"></div>
                       <div class="text-[14px] font-bold text-gray-900" x-text="formatPrice(p)"></div>
-                      <div class="text-[12px] text-gray-500" x-show="p.moq" x-text="'Min. ' + p.moq + ' ' + (p.moq_unit || 'Adet')"></div>
+                      <div class="text-[12px] text-gray-500" x-show="p.moq" x-text="'${t("sellerApp.minShort")} ' + p.moq + ' ' + (p.moq_unit || '${t("sellerApp.unitPiece")}')"></div>
                     </a>
                   </div>
                 </template>
@@ -301,12 +302,12 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                  :style="!activeCategory ? 'background-color: var(--store-nav-bg)' : ''"
                  >
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
-                <span class="text-[14px] font-semibold">En Iyi Secimler</span>
+                <span class="text-[14px] font-semibold">${t("sellerApp.topPicks")}</span>
               </a>
 
               <!-- Urun Kategorileri -->
               <div class="border-t border-gray-200 pt-4">
-                <h4 class="text-[14px] font-bold text-gray-900 mb-3 px-1">Urun Kategorileri</h4>
+                <h4 class="text-[14px] font-bold text-gray-900 mb-3 px-1">${t("sellerApp.productCategories")}</h4>
                 <div class="space-y-0.5">
                   <template x-for="cat in categories" :key="(cat.type || 'seller') + '-' + cat.name">
                     <a href="#" @click.prevent="filterByCategory(cat.name, cat.type || 'seller')"
@@ -318,7 +319,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                         <span class="truncate" x-text="cat.category_name || cat.name"></span>
                         <span x-show="cat.type === 'platform'"
                               class="shrink-0 text-[10px] font-medium uppercase tracking-wide px-1.5 py-0.5 rounded bg-gray-100 text-gray-500"
-                              title="Platform kategorisi">Platform</span>
+                              title="${t("sellerApp.platformCategory")}">${t("sellerApp.platform")}</span>
                       </span>
                       <svg class="w-3.5 h-3.5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                     </a>
@@ -332,7 +333,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
               <template x-if="products && products.length > 0">
                 <div>
                   <!-- Baslik -->
-                  <h3 class="text-[20px] font-bold text-gray-900 mb-4" x-text="activeCategoryName || 'Tum urunler'"></h3>
+                  <h3 class="text-[20px] font-bold text-gray-900 mb-4" x-text="activeCategoryName || '${t("sellerApp.allProducts")}'"></h3>
 
                   <!-- Toolbar: sort + view toggle -->
                   <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
@@ -342,15 +343,15 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                           ? `
                       <div class="relative" x-data="{ sortOpen: false }">
                         <button @click="sortOpen = !sortOpen" class="th-btn-outline flex items-center gap-1.5 text-[13px] px-4 py-1.5">
-                          <span x-text="sortBy === 'default' ? 'Yeni' : sortBy === 'price_asc' ? 'Fiyat: Dusuk' : sortBy === 'price_desc' ? 'Fiyat: Yuksek' : sortBy === 'best_selling' ? 'Cok Satan' : 'En Yeni'">Yeni</span>
+                          <span x-text="sortBy === 'default' ? '${t("sellerApp.sortNew")}' : sortBy === 'price_asc' ? '${t("sellerApp.sortPriceLow")}' : sortBy === 'price_desc' ? '${t("sellerApp.sortPriceHigh")}' : sortBy === 'best_selling' ? '${t("sellerApp.sortBestSelling")}' : '${t("sellerApp.sortNewest")}'">${t("sellerApp.sortNew")}</span>
                           <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </button>
                         <div x-show="sortOpen" @click.away="sortOpen = false" x-transition
                              class="absolute top-full start-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg min-w-[160px] py-1 z-20">
-                          <button @click="sortBy = 'default'; sortProducts(); sortOpen = false" class="block w-full text-start px-4 py-2 text-[13px] hover:bg-gray-50" :class="sortBy === 'default' ? 'text-blue-600 font-medium' : 'text-gray-600'">Yeni</button>
-                          <button @click="sortBy = 'best_selling'; sortProducts(); sortOpen = false" class="block w-full text-start px-4 py-2 text-[13px] hover:bg-gray-50" :class="sortBy === 'best_selling' ? 'text-blue-600 font-medium' : 'text-gray-600'">Cok Satan</button>
-                          <button @click="sortBy = 'price_asc'; sortProducts(); sortOpen = false" class="block w-full text-start px-4 py-2 text-[13px] hover:bg-gray-50" :class="sortBy === 'price_asc' ? 'text-blue-600 font-medium' : 'text-gray-600'">Fiyat: Dusukten Yuksege</button>
-                          <button @click="sortBy = 'price_desc'; sortProducts(); sortOpen = false" class="block w-full text-start px-4 py-2 text-[13px] hover:bg-gray-50" :class="sortBy === 'price_desc' ? 'text-blue-600 font-medium' : 'text-gray-600'">Fiyat: Yuksekten Dusuge</button>
+                          <button @click="sortBy = 'default'; sortProducts(); sortOpen = false" class="block w-full text-start px-4 py-2 text-[13px] hover:bg-gray-50" :class="sortBy === 'default' ? 'text-blue-600 font-medium' : 'text-gray-600'">${t("sellerApp.sortNew")}</button>
+                          <button @click="sortBy = 'best_selling'; sortProducts(); sortOpen = false" class="block w-full text-start px-4 py-2 text-[13px] hover:bg-gray-50" :class="sortBy === 'best_selling' ? 'text-blue-600 font-medium' : 'text-gray-600'">${t("sellerApp.sortBestSelling")}</button>
+                          <button @click="sortBy = 'price_asc'; sortProducts(); sortOpen = false" class="block w-full text-start px-4 py-2 text-[13px] hover:bg-gray-50" :class="sortBy === 'price_asc' ? 'text-blue-600 font-medium' : 'text-gray-600'">${t("sellerApp.sortPriceAsc")}</button>
+                          <button @click="sortBy = 'price_desc'; sortProducts(); sortOpen = false" class="block w-full text-start px-4 py-2 text-[13px] hover:bg-gray-50" :class="sortBy === 'price_desc' ? 'text-blue-600 font-medium' : 'text-gray-600'">${t("sellerApp.sortPriceDesc")}</button>
                         </div>
                       </div>`
                           : ""
@@ -382,15 +383,15 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                           <div class="p-3">
                             <div class="text-[13px] text-gray-700 line-clamp-2 leading-snug mb-2 min-h-[36px]" x-text="p.product_name || p.title"></div>
                             <div class="text-[15px] font-bold text-gray-900 mb-1" x-text="formatPrice(p)"></div>
-                            <div class="text-[12px] text-gray-500" x-show="p.moq" x-text="'Min. Siparis: ' + p.moq + ' ' + (p.moq_unit || 'Adet')"></div>
+                            <div class="text-[12px] text-gray-500" x-show="p.moq" x-text="'${t("sellerApp.minOrder")} ' + p.moq + ' ' + (p.moq_unit || '${t("sellerApp.unitPiece")}')"></div>
                             <!-- sold_count > 0 ise "X satildi", yoksa "Y goruntuleme" — her zaman alt satir (backend'den view_count gelecek) -->
-                            <div class="text-[11px] text-gray-400" x-show="p.sold_count" x-text="p.sold_count + ' satildi'"></div>
-                            <div class="text-[11px] text-gray-400" x-show="!p.sold_count" x-text="(p.view_count || 0) + ' goruntuleme'"></div>
+                            <div class="text-[11px] text-gray-400" x-show="p.sold_count" x-text="p.sold_count + ' ${t("sellerApp.soldSuffix")}'"></div>
+                            <div class="text-[11px] text-gray-400" x-show="!p.sold_count" x-text="(p.view_count || 0) + ' ${t("sellerApp.viewsSuffix")}'"></div>
                           </div>
                         </a>
                         <div class="px-3 pb-3 mt-auto">
                           <button class="w-full border border-gray-200 text-[12px] font-medium text-gray-600 rounded-md py-1.5 hover:border-gray-400 hover:bg-gray-50 transition-colors">
-                            Hemen sohbet et
+                            ${t("sellerApp.chatNow")}
                           </button>
                         </div>
                       </div>
@@ -407,11 +408,11 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                         <div class="flex-1 min-w-0">
                           <a :href="'/urun/' + encodeURIComponent(p.slug || p.name)" class="text-[14px] text-gray-800 font-medium line-clamp-2 mb-2 hover:text-blue-600 no-underline" x-text="p.product_name || p.title"></a>
                           <div class="text-[16px] font-bold text-gray-900 mb-1" x-text="formatPrice(p)"></div>
-                          <div class="text-[12px] text-gray-500" x-show="p.moq" x-text="'Min. Siparis: ' + p.moq + ' ' + (p.moq_unit || 'Adet')"></div>
-                          <div class="text-[11px] text-gray-400" x-show="p.sold_count" x-text="p.sold_count + ' satildi'"></div>
-                          <div class="text-[11px] text-gray-400 mb-2" x-show="!p.sold_count" x-text="(p.view_count || 0) + ' goruntuleme'"></div>
+                          <div class="text-[12px] text-gray-500" x-show="p.moq" x-text="'${t("sellerApp.minOrder")} ' + p.moq + ' ' + (p.moq_unit || '${t("sellerApp.unitPiece")}')"></div>
+                          <div class="text-[11px] text-gray-400" x-show="p.sold_count" x-text="p.sold_count + ' ${t("sellerApp.soldSuffix")}'"></div>
+                          <div class="text-[11px] text-gray-400 mb-2" x-show="!p.sold_count" x-text="(p.view_count || 0) + ' ${t("sellerApp.viewsSuffix")}'"></div>
                           <button class="border border-gray-200 text-[12px] font-medium text-gray-600 rounded-md px-4 py-1.5 hover:border-gray-400 hover:bg-gray-50 transition-colors">
-                            Hemen sohbet et
+                            ${t("sellerApp.chatNow")}
                           </button>
                         </div>
                       </div>
@@ -423,8 +424,8 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
               <!-- Bos durum -->
               <div x-show="filteredProducts.length === 0 && !loading" class="text-center py-12">
                 <svg class="w-12 h-12 mx-auto text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
-                <p class="text-[14px] text-gray-500">Bu kategoride urun bulunamadi.</p>
-                <button @click="filterByCategory('')" class="mt-2 text-[13px] text-blue-600 hover:underline">Tum urunleri goster</button>
+                <p class="text-[14px] text-gray-500">${t("sellerApp.noProductsInCategory")}</p>
+                <button @click="filterByCategory('')" class="mt-2 text-[13px] text-blue-600 hover:underline">${t("sellerApp.showAllProducts")}</button>
               </div>
             </div>
 
@@ -442,19 +443,19 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
             <h3 class="text-[18px] font-bold text-gray-900 mb-4" x-text="sectionTitle('company_info')"></h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 text-[14px]">
               <div class="flex justify-between py-2 border-b border-gray-50">
-                <span class="text-gray-500">Is Tipi</span>
+                <span class="text-gray-500">${t("sellerApp.bizType")}</span>
                 <span class="text-gray-900 font-medium" x-text="seller?.business_type || '\u2014'"></span>
               </div>
               <div class="flex justify-between py-2 border-b border-gray-50">
-                <span class="text-gray-500">Calisan Sayisi</span>
+                <span class="text-gray-500">${t("sellerApp.staffCount")}</span>
                 <span class="text-gray-900 font-medium" x-text="seller?.staff_count || '\u2014'"></span>
               </div>
               <div class="flex justify-between py-2 border-b border-gray-50">
-                <span class="text-gray-500">Yillik Gelir</span>
+                <span class="text-gray-500">${t("sellerApp.annualRevenue")}</span>
                 <span class="text-gray-900 font-medium" x-text="seller?.annual_revenue || '\u2014'"></span>
               </div>
               <div class="flex justify-between py-2 border-b border-gray-50">
-                <span class="text-gray-500">Ana Pazarlar</span>
+                <span class="text-gray-500">${t("sellerApp.mainMarkets")}</span>
                 <span class="text-gray-900 font-medium" x-text="seller?.main_markets || '\u2014'"></span>
               </div>
             </div>
@@ -502,12 +503,12 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                   </span>
                 </div>
                 <span class="text-[13px] font-bold text-gray-900" x-text="cert.name"></span>
-                <span x-show="cert.expiry_date" class="text-[11px] text-gray-500 mt-1" x-text="'Geçerli: ' + cert.expiry_date"></span>
+                <span x-show="cert.expiry_date" class="text-[11px] text-gray-500 mt-1" x-text="'${t("sellerApp.validUntil")} ' + cert.expiry_date"></span>
               </a>
             </template>
           </div>
           <div x-show="verifiedCerts.length === 0" class="text-gray-400 text-[14px] py-4 text-center">
-            Henüz doğrulanmış sertifika yok.
+            ${t("sellerApp.noCertificates")}
           </div>
         </div>
       </section>
@@ -543,7 +544,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
           <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
             <template x-for="(photo, idx) in (seller?.gallery_images || [])" :key="idx">
               <div class="aspect-square rounded-md overflow-hidden bg-gray-100 cursor-pointer hover:opacity-90 transition-opacity">
-                <img :src="photo.image || photo" :alt="photo.caption || 'Galeri'" class="w-full h-full object-cover" loading="lazy" />
+                <img :src="photo.image || photo" :alt="photo.caption || '${t("sellerApp.galleryAlt")}'" class="w-full h-full object-cover" loading="lazy" />
               </div>
             </template>
           </div>
@@ -573,18 +574,18 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
 
             <!-- SOL: Iletisim Bilgileri -->
             <div class="flex-1 bg-white rounded-md border border-gray-200 p-6 lg:p-8 relative">
-              <h3 class="text-[20px] font-bold text-gray-900 mb-6">Iletisim Bilgileri</h3>
+              <h3 class="text-[20px] font-bold text-gray-900 mb-6">${t("sellerApp.contactInfo")}</h3>
 
               <!-- Guest uyari banneri -->
               <div x-show="!isLoggedIn" @click="requireLogin()"
                    class="mb-5 flex items-center gap-3 p-3 rounded-md border border-amber-200 bg-amber-50 cursor-pointer hover:bg-amber-100 transition-colors">
                 <svg class="w-5 h-5 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                 <div class="flex-1">
-                  <p class="text-[13px] font-semibold text-amber-900">Iletisim bilgilerini goruntulemek icin giris yapin</p>
-                  <p class="text-[12px] text-amber-700">Yildizli alana tiklayarak giris yapabilirsiniz</p>
+                  <p class="text-[13px] font-semibold text-amber-900">${t("sellerApp.loginToViewContact")}</p>
+                  <p class="text-[12px] text-amber-700">${t("sellerApp.loginHint")}</p>
                 </div>
                 <button type="button" class="${btn({ variant: "primary", size: "sm" })} shrink-0">
-                  Giris Yap
+                  ${t("sellerApp.login")}
                 </button>
               </div>
 
@@ -596,7 +597,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                 </div>
                 <div>
                   <p class="text-[16px] font-bold text-gray-900" x-text="seller?.contact_person || seller?.seller_name || ''"></p>
-                  <p class="text-[13px] text-gray-500" x-text="seller?.contact_title || 'Yetkili'"></p>
+                  <p class="text-[13px] text-gray-500" x-text="seller?.contact_title || '${t("sellerApp.contactPerson")}'"></p>
                 </div>
               </div>
 
@@ -606,7 +607,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                 <div class="flex items-start gap-3">
                   <svg class="w-5 h-5 text-gray-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
                   <div>
-                    <p class="text-[12px] text-gray-400 mb-0.5">Telefon:</p>
+                    <p class="text-[12px] text-gray-400 mb-0.5">${t("sellerApp.phoneLabel")}</p>
                     <template x-if="isLoggedIn">
                       <template x-if="seller?.address?.phone || seller?.phone">
                         <a :href="'tel:' + (seller?.address?.phone || seller?.phone)"
@@ -619,7 +620,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                     </template>
                     <button x-show="!isLoggedIn" type="button" @click="requireLogin()"
                       class="text-[14px] text-gray-400 tracking-widest cursor-pointer hover:text-blue-600 select-none"
-                      title="Giris yapin">
+                      title="${t("sellerApp.loginTitle")}">
                       +•• ••• ••• •• ••
                     </button>
                   </div>
@@ -629,7 +630,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                 <div class="flex items-start gap-3">
                   <svg class="w-5 h-5 text-gray-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
                   <div>
-                    <p class="text-[12px] text-gray-400 mb-0.5">E-posta:</p>
+                    <p class="text-[12px] text-gray-400 mb-0.5">${t("sellerApp.emailLabel")}</p>
                     <template x-if="isLoggedIn">
                       <template x-if="seller?.email">
                         <a :href="'mailto:' + seller?.email" class="text-[14px] text-blue-600 hover:underline break-all" x-text="seller?.email"></a>
@@ -640,7 +641,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                     </template>
                     <button x-show="!isLoggedIn" type="button" @click="requireLogin()"
                       class="text-[14px] text-gray-400 tracking-widest cursor-pointer hover:text-blue-600 select-none"
-                      title="Giris yapin">
+                      title="${t("sellerApp.loginTitle")}">
                       •••••••••@•••••.•••
                     </button>
                   </div>
@@ -650,7 +651,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                 <div class="flex items-start gap-3">
                   <svg class="w-5 h-5 text-gray-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418"/></svg>
                   <div>
-                    <p class="text-[12px] text-gray-400 mb-0.5">Sirket internet sitesi:</p>
+                    <p class="text-[12px] text-gray-400 mb-0.5">${t("sellerApp.websiteLabel")}</p>
                     <template x-if="isLoggedIn">
                       <template x-if="seller?.website">
                         <a :href="seller?.website" target="_blank" class="text-[14px] text-blue-600 hover:underline" x-text="seller?.website"></a>
@@ -661,7 +662,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                     </template>
                     <button x-show="!isLoggedIn" type="button" @click="requireLogin()"
                       class="text-[14px] text-gray-400 tracking-widest cursor-pointer hover:text-blue-600 select-none"
-                      title="Giris yapin">
+                      title="${t("sellerApp.loginTitle")}">
                       https://•••••••••.•••
                     </button>
                   </div>
@@ -671,11 +672,11 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                 <div class="flex items-start gap-3">
                   <svg class="w-5 h-5 text-gray-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21"/></svg>
                   <div>
-                    <p class="text-[12px] text-gray-400 mb-0.5">Firma:</p>
+                    <p class="text-[12px] text-gray-400 mb-0.5">${t("sellerApp.companyLabel")}</p>
                     <p x-show="isLoggedIn" class="text-[14px] text-gray-800" x-text="seller?.address?.company || seller?.company_name || seller?.seller_name || '-'"></p>
                     <button x-show="!isLoggedIn" type="button" @click="requireLogin()"
                       class="text-[14px] text-gray-400 tracking-widest cursor-pointer hover:text-blue-600 select-none text-start"
-                      title="Giris yapin">
+                      title="${t("sellerApp.loginTitle")}">
                       ••••••••• •••• •••. ••••
                     </button>
                   </div>
@@ -687,7 +688,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                 <div class="flex items-start gap-3">
                   <svg class="w-5 h-5 text-gray-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
                   <div class="flex-1">
-                    <p class="text-[12px] text-gray-400 mb-1">Adres:</p>
+                    <p class="text-[12px] text-gray-400 mb-1">${t("sellerApp.addressLabel")}</p>
                     <template x-if="isLoggedIn">
                       <div>
                         <p class="text-[14px] text-gray-800 leading-relaxed">
@@ -703,7 +704,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                     </template>
                     <button x-show="!isLoggedIn" type="button" @click="requireLogin()"
                       class="block text-start cursor-pointer hover:text-blue-600 group"
-                      title="Giris yapin">
+                      title="${t("sellerApp.loginTitle")}">
                       <p class="text-[14px] text-gray-400 tracking-widest group-hover:text-blue-600">•••••••••• ••• •• •••• •••••••• •• •••••••</p>
                       <p class="text-[13px] text-gray-400 tracking-widest mt-1 group-hover:text-blue-600">••••••••• / ••••••••• · •••••• · ••••••</p>
                     </button>
@@ -715,7 +716,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
             <!-- SAG: Tedarikçiye Ulasin Sidebar -->
             <div class="w-full lg:w-[280px] shrink-0">
               <div class="bg-white rounded-md border border-gray-200 p-5 sticky top-[54px]">
-                <h4 class="text-[16px] font-bold text-gray-900 mb-4">Tedarikçiye Ulasin</h4>
+                <h4 class="text-[16px] font-bold text-gray-900 mb-4">${t("sellerApp.reachSupplier")}</h4>
 
                 <!-- Sirket Mini Karti -->
                 <div class="flex items-center gap-3 mb-5 pb-4 border-b border-gray-100">
@@ -730,12 +731,12 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                   <button
                     class="w-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[13px] font-semibold border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] py-2.5 shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150"
                     @click="showInquiryModal = true">
-                    Simdi iletisime gecin
+                    ${t("sellerApp.contactNow")}
                   </button>
                   <button
                     class="th-btn-outline w-full text-[13px] font-medium py-2.5"
                     @click="showInquiryModal = true">
-                    Sorgu gonder
+                    ${t("sellerApp.sendInquiry")}
                   </button>
                 </div>
               </div>
@@ -776,14 +777,14 @@ export const SECTION_RENDERERS_REF = SECTION_RENDERERS;
 
 /** List of all available section types with metadata for the admin editor */
 export const SECTION_TYPES = [
-  { type: "hero_banner", label: "Hero Banner", icon: "fas fa-images" },
-  { type: "category_grid", label: "Kategori Grid", icon: "fas fa-th-large" },
-  { type: "hot_products", label: "Populer Urunler", icon: "fas fa-fire" },
-  { type: "category_listing", label: "Urun Listeleme", icon: "fas fa-list" },
-  { type: "company_info", label: "Sirket Bilgisi", icon: "fas fa-building" },
-  { type: "certificates", label: "Sertifikalar", icon: "fas fa-certificate" },
-  { type: "why_choose_us", label: "Neden Biz", icon: "fas fa-star" },
-  { type: "gallery", label: "Galeri", icon: "fas fa-photo-video" },
-  { type: "company_introduction", label: "Sirket Tanitimi", icon: "fas fa-info-circle" },
-  { type: "contact_form", label: "Iletisim Formu", icon: "fas fa-envelope" },
+  { type: "hero_banner", label: t("sellerApp.sectionHeroBanner"), icon: "fas fa-images" },
+  { type: "category_grid", label: t("sellerApp.sectionCategoryGrid"), icon: "fas fa-th-large" },
+  { type: "hot_products", label: t("sellerApp.sectionHotProducts"), icon: "fas fa-fire" },
+  { type: "category_listing", label: t("sellerApp.sectionCategoryListing"), icon: "fas fa-list" },
+  { type: "company_info", label: t("sellerApp.sectionCompanyInfo"), icon: "fas fa-building" },
+  { type: "certificates", label: t("sellerApp.sectionCertificates"), icon: "fas fa-certificate" },
+  { type: "why_choose_us", label: t("sellerApp.sectionWhyChooseUs"), icon: "fas fa-star" },
+  { type: "gallery", label: t("sellerApp.sectionGallery"), icon: "fas fa-photo-video" },
+  { type: "company_introduction", label: t("sellerApp.sectionCompanyIntro"), icon: "fas fa-info-circle" },
+  { type: "contact_form", label: t("sellerApp.sectionContactForm"), icon: "fas fa-envelope" },
 ];

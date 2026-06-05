@@ -67,7 +67,7 @@ function renderMobileHeader(options: AuthLayoutOptions = {}): string {
           : ""
       }
       <span class="flex-1 text-center text-sm font-medium text-gray-900 dark:text-white truncate ${showBackButton ? "pe-10" : ""}">${title}</span>
-      <a href="${baseUrl}" class="absolute end-4 top-1/2 -translate-y-1/2" aria-label="iSTOC Ana Sayfa">
+      <a href="${baseUrl}" class="absolute end-4 top-1/2 -translate-y-1/2" aria-label="${t("authAddr.istocHome")}">
         <img src="${baseUrl}images/istoc-logo.png" alt="iSTOC" class="h-6" />
       </a>
     </header>
@@ -101,27 +101,27 @@ function renderPromoBanner(): string {
 
         <!-- Headline -->
         <h1 class="text-3xl lg:text-4xl font-bold leading-tight text-white mb-3">
-          Global B2B<br/>Ticaret Ağı
+          ${t("authAddr.promoHeadline")}
         </h1>
         <p class="text-sm text-orange-100/80 leading-relaxed mb-8">
-          Güvenli ödeme, doğrulanmış satıcılar ve şeffaf<br/>komisyon ile yeni nesil B2B pazaryeri.
+          ${t("authAddr.promoSubtitle")}
         </p>
 
         <!-- Feature highlights row -->
         <div class="flex justify-center items-center gap-0 mb-10 rounded-md bg-white/10 border border-white/15 overflow-hidden">
           <div class="flex-1 py-4 px-2 text-center">
-            <div class="text-base font-bold text-white">Güvenli</div>
-            <div class="text-xs text-orange-100/70 mt-0.5">Ödeme Koruması</div>
+            <div class="text-base font-bold text-white">${t("authAddr.featSecure")}</div>
+            <div class="text-xs text-orange-100/70 mt-0.5">${t("authAddr.featSecureDesc")}</div>
           </div>
           <div class="w-px h-10 bg-white/20"></div>
           <div class="flex-1 py-4 px-2 text-center">
-            <div class="text-base font-bold text-white">Doğrulanmış</div>
-            <div class="text-xs text-orange-100/70 mt-0.5">Satıcı Sistemi</div>
+            <div class="text-base font-bold text-white">${t("authAddr.featVerified")}</div>
+            <div class="text-xs text-orange-100/70 mt-0.5">${t("authAddr.featVerifiedDesc")}</div>
           </div>
           <div class="w-px h-10 bg-white/20"></div>
           <div class="flex-1 py-4 px-2 text-center">
-            <div class="text-base font-bold text-white">Şeffaf</div>
-            <div class="text-xs text-orange-100/70 mt-0.5">Komisyon Yapısı</div>
+            <div class="text-base font-bold text-white">${t("authAddr.featTransparent")}</div>
+            <div class="text-xs text-orange-100/70 mt-0.5">${t("authAddr.featTransparentDesc")}</div>
           </div>
         </div>
 
@@ -148,7 +148,7 @@ function renderPromoBanner(): string {
               <svg class="w-3.5 h-3.5 text-green-300 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
-              <span class="text-white text-xs font-medium whitespace-nowrap">Doğrulanmış</span>
+              <span class="text-white text-xs font-medium whitespace-nowrap">${t("authAddr.featVerified")}</span>
             </div>
 
             <!-- Badge: Hızlı Kargo -->
@@ -156,7 +156,7 @@ function renderPromoBanner(): string {
               <svg class="w-3.5 h-3.5 text-yellow-300 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
-              <span class="text-white text-xs font-medium whitespace-nowrap">Hızlı Kargo</span>
+              <span class="text-white text-xs font-medium whitespace-nowrap">${t("authAddr.badgeFastShipping")}</span>
             </div>
           </div>
         </div>
@@ -166,7 +166,7 @@ function renderPromoBanner(): string {
           <svg class="w-3.5 h-3.5 shrink-0 text-orange-100/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
           </svg>
-          <span>SSL Şifreleme · Güvenli Ödeme</span>
+          <span>${t("authAddr.trustBar")}</span>
         </div>
 
       </div>
@@ -210,8 +210,8 @@ export function AuthLayout(content: string, options: AuthLayoutOptions = {}): st
             <div class="lg:hidden">
               <div class="h-14"></div>
               <div class="px-6 pt-6 pb-8 text-white text-center">
-                <h2 class="text-xl font-bold mb-1">Global B2B Ticaret Ağı</h2>
-                <p class="text-sm opacity-80">Güvenli ödeme ve şeffaf ticaret</p>
+                <h2 class="text-xl font-bold mb-1">${t("authAddr.mobilePromoTitle")}</h2>
+                <p class="text-sm opacity-80">${t("authAddr.mobilePromoSubtitle")}</p>
               </div>
             </div>
 

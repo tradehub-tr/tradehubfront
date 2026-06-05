@@ -1,5 +1,5 @@
 import { getBaseUrl } from "./url";
-import { getCurrentLang } from "../i18n";
+import { getCurrentLang, t } from "../i18n";
 
 const BASE_URL = import.meta.env.VITE_API_URL || "/api";
 
@@ -340,7 +340,7 @@ export async function callMethod<T = unknown>(
       throw new EmailNotVerifiedError();
     }
     window.location.href = `${getBaseUrl()}pages/auth/login.html`;
-    throw new Error("Oturum süresi doldu");
+    throw new Error(t("commonSvc.sessionExpired"));
   }
 
   if (!res.ok) {
@@ -363,7 +363,7 @@ export async function frappeLogin(email: string, password: string): Promise<void
   });
   if (!res.ok) {
     const err = (await res.json().catch(() => ({}))) as { message?: string };
-    throw new Error(err.message || "Giriş başarısız");
+    throw new Error(err.message || t("commonSvc.loginFailed"));
   }
 }
 

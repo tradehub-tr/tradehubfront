@@ -110,7 +110,7 @@ export function TicketForm(): string {
                     </label>
                     <select x-model="orderRef" class="th-input th-input-md"
                       :class="{ 'is-error': errors.orderRef }">
-                      <option value="">— Sipariş seçiniz —</option>
+                      <option value="">${t("helpUi.selectOrderPlaceholder")}</option>
                       <template x-for="o in orders" :key="o.order_number">
                         <option :value="o.order_number"
                           x-text="o.order_number + ' · ' + (o.seller_name || '') + (o.order_date ? ' · ' + o.order_date : '')">
@@ -119,14 +119,14 @@ export function TicketForm(): string {
                     </select>
                     <p x-show="errors.orderRef" x-text="errors.orderRef" class="text-xs text-red-500 mt-1"></p>
                     <p x-show="!errors.orderRef" class="text-xs text-gray-400 mt-1">
-                      Talep seçtiğiniz siparişin satıcısına iletilir.
+                      ${t("helpUi.orderRoutingHint")}
                     </p>
                   </div>
                 </template>
 
                 <!-- Loading -->
                 <template x-if="requiresOrder && loadingOrders">
-                  <div class="text-xs text-gray-400 py-2">Siparişler yükleniyor...</div>
+                  <div class="text-xs text-gray-400 py-2">${t("helpUi.ordersLoading")}</div>
                 </template>
 
                 <!-- Siparişi olmayan / satici kategorisi ama uygun siparis yok -->
@@ -134,9 +134,7 @@ export function TicketForm(): string {
                   <div class="flex items-start gap-2 px-3 py-2.5 rounded-lg bg-amber-50 text-amber-800 text-xs">
                     <svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
                     <span>
-                      Bu kategori için uygun bir siparişiniz bulunamadı.
-                      Genel sorularınız için kategoriyi <strong>Diğer</strong>,
-                      ödeme ile ilgili sorunlar için <strong>Ödeme</strong> olarak seçin.
+                      ${t("helpUi.noEligibleOrderHint")}
                     </span>
                   </div>
                 </template>

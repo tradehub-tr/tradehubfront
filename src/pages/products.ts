@@ -258,7 +258,7 @@ function showGridLoading(): void {
       <div class="col-span-full flex items-center justify-center py-16">
         <div class="flex flex-col items-center gap-3">
           <div class="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin"></div>
-          <span class="text-sm text-text-muted">Ürünler yükleniyor...</span>
+          <span class="text-sm text-text-muted">${t('infoMisc.productsLoading')}</span>
         </div>
       </div>
     `;
@@ -271,8 +271,8 @@ function showGridError(): void {
     grid.innerHTML = `
       <div class="col-span-full flex items-center justify-center py-16">
         <div class="text-center">
-          <p class="text-text-muted mb-2">Ürünler yüklenemedi</p>
-          <button onclick="window.location.reload()" class="text-sm text-primary hover:underline">Tekrar dene</button>
+          <p class="text-text-muted mb-2">${t('infoMisc.productsLoadFailed')}</p>
+          <button onclick="window.location.reload()" class="text-sm text-primary hover:underline">${t('infoMisc.tryAgain')}</button>
         </div>
       </div>
     `;
@@ -380,7 +380,7 @@ function renderPagination(page: number, totalPages: number, hasNext: boolean, ha
   const activeBtn = `${baseBtn} border-primary-500 bg-primary-500 text-white font-semibold cursor-default shadow-sm`;
   const disabledBtn = `${baseBtn} border-gray-100 bg-white text-gray-300 cursor-not-allowed`;
 
-  pages.push(`<button data-page="${page - 1}" ${!hasPrev ? 'disabled' : ''} aria-label="Önceki sayfa" class="${hasPrev ? idleBtn : disabledBtn}">
+  pages.push(`<button data-page="${page - 1}" ${!hasPrev ? 'disabled' : ''} aria-label="${t('infoMisc.previousPage')}" class="${hasPrev ? idleBtn : disabledBtn}">
     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M9 3L5 7l4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </button>`);
 
@@ -399,11 +399,11 @@ function renderPagination(page: number, totalPages: number, hasNext: boolean, ha
     pages.push(`<button data-page="${totalPages}" class="${idleBtn}">${totalPages}</button>`);
   }
 
-  pages.push(`<button data-page="${page + 1}" ${!hasNext ? 'disabled' : ''} aria-label="Sonraki sayfa" class="${hasNext ? idleBtn : disabledBtn}">
+  pages.push(`<button data-page="${page + 1}" ${!hasNext ? 'disabled' : ''} aria-label="${t('infoMisc.nextPage')}" class="${hasNext ? idleBtn : disabledBtn}">
     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </button>`);
 
-  return `<nav aria-label="Sayfalama" class="flex items-center justify-center gap-1.5 mt-6">${pages.join('')}</nav>`;
+  return `<nav aria-label="${t('infoMisc.pagination')}" class="flex items-center justify-center gap-1.5 mt-6">${pages.join('')}</nav>`;
 }
 
 // Pagination click handler
