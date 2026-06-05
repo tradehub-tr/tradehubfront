@@ -797,6 +797,30 @@ const ar = {
     // PRODUCT
     // ============================================================
     product: {
+      qa: {
+        askTitle: "هل لديك سؤال؟",
+        askSubtitle: "يمكن للبائع أو المشترين الآخرين الإجابة.",
+        askPlaceholder: "مثال: ما كمية المخزون المتاحة لهذا المنتج؟ ما نطاق سعر الجملة؟",
+        submitQuestion: "إرسال السؤال",
+        loading: "جارٍ التحميل...",
+        emptyState: "لا توجد أسئلة بعد. كن أول من يسأل.",
+        pendingApproval: "بانتظار الموافقة",
+        verified: "موثّق",
+        helpfulQTitle: "هذا السؤال مفيد",
+        helpfulATitle: "هذه الإجابة مفيدة",
+        helpful: "مفيد",
+        sellerAnswer: "إجابة البائع",
+        buyerAnswer: "إجابة المشتري",
+        noAnswer: "لا توجد إجابة بعد.",
+        errQuestionMin: "يجب أن يكون سؤالك 10 أحرف على الأقل.",
+        errProductNotLoaded: "لم يتم تحميل معلومات المنتج، يرجى تحديث الصفحة.",
+        okQuestionSubmitted: "تم استلام سؤالك، وسيرد البائع في أقرب وقت.",
+        genericError: "خطأ",
+        voteRecorded: "تم تسجيل تصويتك.",
+        alreadyVotedQuestion: "لقد صوّت على هذا السؤال بالفعل.",
+        alreadyVotedAnswer: "لقد صوّت على هذه الإجابة بالفعل.",
+        voteFailed: "تعذّر تسجيل التصويت.",
+      },
       reviewWrite: {
         qaTab: "أسئلة وأجوبة",
         writeReviewBtn: "اكتب تقييماً",

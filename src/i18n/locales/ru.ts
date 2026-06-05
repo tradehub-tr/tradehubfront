@@ -810,6 +810,30 @@ const ru = {
     // PRODUCT
     // ============================================================
     product: {
+      qa: {
+        askTitle: "У вас есть вопрос?",
+        askSubtitle: "Ответить могут продавец или другие покупатели.",
+        askPlaceholder: "Напр.: Сколько товара в наличии? Какой диапазон оптовых цен?",
+        submitQuestion: "Отправить вопрос",
+        loading: "Загрузка...",
+        emptyState: "Вопросов пока нет. Задайте первый.",
+        pendingApproval: "Ожидает одобрения",
+        verified: "Проверен",
+        helpfulQTitle: "Этот вопрос полезен",
+        helpfulATitle: "Этот ответ полезен",
+        helpful: "Полезно",
+        sellerAnswer: "Ответ продавца",
+        buyerAnswer: "Ответ покупателя",
+        noAnswer: "Ответа пока нет.",
+        errQuestionMin: "Вопрос должен содержать не менее 10 символов.",
+        errProductNotLoaded: "Информация о товаре не загружена, обновите страницу.",
+        okQuestionSubmitted: "Ваш вопрос принят, продавец ответит в ближайшее время.",
+        genericError: "Ошибка",
+        voteRecorded: "Ваш голос учтён.",
+        alreadyVotedQuestion: "Вы уже голосовали за этот вопрос.",
+        alreadyVotedAnswer: "Вы уже голосовали за этот ответ.",
+        voteFailed: "Не удалось учесть голос.",
+      },
       reviewWrite: {
         qaTab: "Вопросы и ответы",
         writeReviewBtn: "Написать отзыв",

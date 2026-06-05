@@ -794,6 +794,30 @@ const tr = {
     // PRODUCT
     // ============================================================
     product: {
+      qa: {
+        askTitle: "Bir sorunuz mu var?",
+        askSubtitle: "Satıcı veya diğer alıcılar yanıtlayabilir.",
+        askPlaceholder: "Örn: Bu ürünün stok adedi ne kadar? Toptan fiyat aralığı nedir?",
+        submitQuestion: "Soruyu Gönder",
+        loading: "Yükleniyor...",
+        emptyState: "Henüz soru sorulmamış. İlk soruyu siz sorun.",
+        pendingApproval: "Onay bekliyor",
+        verified: "Doğrulanmış",
+        helpfulQTitle: "Bu soru faydalı",
+        helpfulATitle: "Bu cevap faydalı",
+        helpful: "Faydalı",
+        sellerAnswer: "Satıcı Cevabı",
+        buyerAnswer: "Alıcı Cevabı",
+        noAnswer: "Henüz cevap yok.",
+        errQuestionMin: "Sorunuz en az 10 karakter olmalı.",
+        errProductNotLoaded: "Ürün bilgisi yüklenmedi, sayfayı yenileyin.",
+        okQuestionSubmitted: "Sorunuz alındı, satıcı en kısa sürede yanıtlayacak.",
+        genericError: "Hata",
+        voteRecorded: "Oyunuz alındı.",
+        alreadyVotedQuestion: "Bu soruya zaten oy verdiniz.",
+        alreadyVotedAnswer: "Bu cevaba zaten oy verdiniz.",
+        voteFailed: "Oy verilemedi",
+      },
       reviewWrite: {
         qaTab: "Soru & Cevap",
         writeReviewBtn: "Yorum Yaz",

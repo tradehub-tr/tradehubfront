@@ -793,6 +793,30 @@ const en = {
     // PRODUCT
     // ============================================================
     product: {
+      qa: {
+        askTitle: "Do you have a question?",
+        askSubtitle: "The seller or other buyers can answer.",
+        askPlaceholder: "e.g. How much stock is available for this product? What is the wholesale price range?",
+        submitQuestion: "Submit Question",
+        loading: "Loading...",
+        emptyState: "No questions yet. Be the first to ask.",
+        pendingApproval: "Awaiting approval",
+        verified: "Verified",
+        helpfulQTitle: "This question is helpful",
+        helpfulATitle: "This answer is helpful",
+        helpful: "Helpful",
+        sellerAnswer: "Seller's Answer",
+        buyerAnswer: "Buyer's Answer",
+        noAnswer: "No answer yet.",
+        errQuestionMin: "Your question must be at least 10 characters.",
+        errProductNotLoaded: "Product info not loaded, please refresh the page.",
+        okQuestionSubmitted: "Your question has been received; the seller will respond shortly.",
+        genericError: "Error",
+        voteRecorded: "Your vote has been recorded.",
+        alreadyVotedQuestion: "You have already voted on this question.",
+        alreadyVotedAnswer: "You have already voted on this answer.",
+        voteFailed: "Vote could not be recorded.",
+      },
       reviewWrite: {
         qaTab: "Q & A",
         writeReviewBtn: "Write Review",

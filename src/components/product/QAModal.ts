@@ -13,6 +13,7 @@
  */
 
 import Alpine from "alpinejs";
+import { t } from "../../i18n";
 import { ProductQA, registerProductQA } from "./ProductQA";
 
 interface QAModalState {
@@ -81,12 +82,12 @@ export function QAModal(): string {
       >
         <!-- Header (sticky) -->
         <div class="flex items-center justify-between gap-2 px-4 py-3 border-b border-border-default shrink-0">
-          <h2 class="text-[15px] sm:text-base font-semibold text-secondary-900">Soru &amp; Cevap</h2>
+          <h2 class="text-[15px] sm:text-base font-semibold text-secondary-900">${t("product.reviewWrite.qaTab")}</h2>
           <button
             type="button"
             @click="close()"
             class="w-7 h-7 sm:w-9 sm:h-9 flex items-center justify-center rounded-full hover:bg-black/5 text-secondary-400 hover:text-secondary-900 transition-colors shrink-0"
-            aria-label="Kapat"
+            aria-label="${t("product.reviewWrite.close")}"
           >
             <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="w-4.5 h-4.5 sm:w-5 sm:h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
           </button>
