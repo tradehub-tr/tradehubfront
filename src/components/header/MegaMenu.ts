@@ -808,6 +808,50 @@ export function initMegaMenu(): void {
           </a>`;
       }
 
+      const leafGridCls =
+        "grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-y-4 gap-x-2 sm:gap-y-5 sm:gap-x-4 lg:gap-y-8 lg:gap-x-6";
+      const grpArrowSvg = `<svg class="w-3.5 h-3.5 text-gray-400 transition-transform group-hover/grp:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/></svg>`;
+
+      /**
+       * Bir sektörün gövdesini render eder.
+       * - Yaprağı olan gruplar (3 seviye): her grup bir alt-başlık + yaprak kartları.
+       * - Yaprağı olmayan gruplar (2 seviyeli veri): eski davranış — tek grid'de kart.
+       */
+      function renderSectorBody(cat: ApiCategory): string {
+        const groups = cat.children ?? [];
+        const withLeaves = groups.filter((g) => (g.children?.length ?? 0) > 0);
+        const childless = groups.filter((g) => (g.children?.length ?? 0) === 0);
+
+        let html = withLeaves
+          .map(
+            (group) => `
+        <div class="mb-6 last:mb-0">
+          <a href="/pages/products.html?cat=${encodeURIComponent(group.slug)}" class="group/grp mb-3 inline-flex items-center gap-1.5 text-sm font-semibold text-gray-800 transition-colors hover:text-primary-600 dark:text-gray-200">
+            <span>${group.name}</span>
+            ${grpArrowSvg}
+          </a>
+          <div class="${leafGridCls}">
+            ${(group.children ?? []).map((leaf) => renderDynCatCard(leaf.name, leaf.slug, leaf.image)).join("")}
+          </div>
+        </div>`
+          )
+          .join("");
+
+        if (childless.length > 0) {
+          html += `
+        <div class="${leafGridCls}">
+          ${childless.map((g) => renderDynCatCard(g.name, g.slug, g.image)).join("")}
+          ${renderDynCatCard("Tümünü gör", cat.slug, undefined, true)}
+        </div>`;
+        }
+
+        if (groups.length === 0) {
+          html += `<div class="${leafGridCls}">${renderDynCatCard("Tümünü gör", cat.slug, undefined, true)}</div>`;
+        }
+
+        return html;
+      }
+
       sidebarUl.innerHTML = cats
         .map(
           (cat, index) => `
@@ -834,10 +878,7 @@ export function initMegaMenu(): void {
             <h3 class="text-base font-bold text-gray-900 lg:text-lg dark:text-white">${cat.name}</h3>
             <a href="/pages/categories.html?cat=${encodeURIComponent(cat.slug)}" class="text-sm font-medium text-primary-600 transition-colors hover:text-primary-700">Tümünü Gör</a>
           </div>
-          <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-y-4 gap-x-2 sm:gap-y-5 sm:gap-x-4 lg:gap-y-8 lg:gap-x-6">
-            ${cat.children.map((ch) => renderDynCatCard(ch.name, ch.slug, ch.image)).join("")}
-            ${renderDynCatCard("Tümünü gör", cat.slug, undefined, true)}
-          </div>
+          ${renderSectorBody(cat)}
         </div>
       `
         )

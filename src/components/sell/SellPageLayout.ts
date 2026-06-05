@@ -98,7 +98,7 @@ function HeroSection(): string {
               Fabrikanı tüm dünyaya aç.
             </h1>
             <p class="text-base md:text-lg leading-[1.45] text-[#4a4a48] max-w-[42ch] mb-7">
-              iSTOC, Türkiye'deki üreticileri dünyanın dört bir yanındaki B2B alıcılarıyla aracısız buluşturur.
+              iSTOC, üreticileri dünyanın dört bir yanındaki B2B alıcılarıyla aracısız buluşturur.
               Listele, sat, kargola — komisyon yok.
             </p>
             <div class="flex flex-wrap gap-3 items-center">
@@ -112,7 +112,7 @@ function HeroSection(): string {
             <div class="relative w-full aspect-[5/4] lg:aspect-auto lg:h-full lg:min-h-[360px] rounded-2xl overflow-hidden border border-[#e8e6e0] bg-[#f0ead8] shadow-[0_8px_24px_-12px_rgba(20,20,18,0.18),0_4px_8px_-4px_rgba(20,20,18,0.08)]">
               <img
                 src="${heroImg}"
-                alt="Türkiye'den dünyaya ihracat: liman ve konteyner lojistiği"
+                alt="Dünya geneline ihracat: liman ve konteyner lojistiği"
                 class="absolute inset-0 w-full h-full object-cover"
                 loading="eager"
                 fetchpriority="high"
@@ -653,7 +653,7 @@ const COMPARE_ROWS: CompareRow[] = [
     h: { type: "icon", v: "no" },
   },
   {
-    f: "Türkiye üreticisine özel destek",
+    f: "Üreticilere özel destek",
     i: { type: "icon", v: "yes" },
     g: { type: "icon", v: "no" },
     h: { type: "icon", v: "no" },

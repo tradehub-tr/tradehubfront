@@ -32,6 +32,7 @@ import {
   initListingCartDrawer,
   SubHeader,
   updateSubHeader,
+  updateBreadcrumb,
   rerenderProductGrid,
   initFilterEngine,
   updateFilterChips,
@@ -43,7 +44,7 @@ import { ShippingModal, initShippingModal } from '../components/product'
 import { initCurrency } from '../services/currencyService'
 
 // Category data for slug/ID → name mapping (dynamic, API-based)
-import { findCategoryBySlug, findCategoryById, onCategoriesLoaded } from '../services/categoryService'
+import { findCategoryBySlug, findCategoryById, findCategoryPath, onCategoriesLoaded } from '../services/categoryService'
 
 // Utilities
 import { initAnimatedPlaceholder } from '../utils/animatedPlaceholder'
@@ -289,20 +290,26 @@ function showGridError(): void {
 // Show initial loading
 showGridLoading();
 
-// Kategoriler async yüklenince keyword'u gerçek kategori adıyla güncelle
+// Kategoriler async yüklenince keyword + breadcrumb'ı gerçek veriyle güncelle
 if (categoryParam) {
   onCategoriesLoaded(() => {
     const resolvedKeyword = resolveKeyword();
     if (resolvedKeyword && resolvedKeyword !== categoryParam) {
       updateSubHeader({ keyword: resolvedKeyword });
-      // Breadcrumb'u da güncelle
-      const breadcrumbNav = document.querySelector('nav[aria-label="Breadcrumb"]');
-      if (breadcrumbNav) {
-        const lastItem = breadcrumbNav.querySelector('li:last-child span');
-        if (lastItem && lastItem.textContent?.trim() !== resolvedKeyword) {
-          lastItem.textContent = resolvedKeyword;
-        }
-      }
+    }
+    // Breadcrumb'ı tam kategori zinciriyle (Sektör › Grup › Yaprak) yeniden kur.
+    // Son öğe mevcut sayfa (linksiz); üst seviyeler ilgili listeye linklenir.
+    const path = findCategoryPath(categoryParam);
+    if (path.length > 0) {
+      updateBreadcrumb(
+        path.map((c, i) => ({
+          label: c.name,
+          href:
+            i === path.length - 1
+              ? undefined
+              : `/pages/products.html?cat=${encodeURIComponent(c.slug)}`,
+        }))
+      );
     }
   });
 }
@@ -333,16 +340,8 @@ initCurrency().then(() => {
       });
       if (engine) updateFilterChips(engine.getState());
 
-      // Update breadcrumb with resolved category name (async categories may now be loaded)
-      if (resolvedKeyword && categoryParam) {
-        const breadcrumbNav = document.querySelector('nav[aria-label="Breadcrumb"]');
-        if (breadcrumbNav) {
-          const lastItem = breadcrumbNav.querySelector('li:last-child span');
-          if (lastItem && lastItem.textContent?.trim() !== resolvedKeyword) {
-            lastItem.textContent = resolvedKeyword;
-          }
-        }
-      }
+      // Breadcrumb tam kategori zinciriyle onCategoriesLoaded içinde kuruluyor
+      // (updateBreadcrumb); burada tekrar dokunmaya gerek yok.
 
       // Update pagination UI
       const paginationEl = document.getElementById('pagination-controls');

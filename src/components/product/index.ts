@@ -40,6 +40,7 @@ export {
 export { MobileProductLayout, initMobileLayout } from "./MobileLayout";
 export { MobileRecommendations, initMobileRecommendations } from "./MobileRecommendations";
 export { SocialProofBadge } from "./SocialProofBadge";
+export { ProductSalesRank } from "./ProductSalesRank";
 export { WriteReviewModal, openWriteReviewModal } from "./WriteReviewModal";
 export { ReportAbuseModal, openReportAbuseModal } from "./ReportAbuseModal";
 export { QAModal, showQAModal, hideQAModal } from "./QAModal";

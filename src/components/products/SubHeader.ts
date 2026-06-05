@@ -356,3 +356,17 @@ export function updateSubHeader(info: { totalCount?: number; keyword?: string })
     }
   }
 }
+
+/**
+ * Breadcrumb'ı yeni öğelerle yeniden render eder. Kategoriler async yüklendikten
+ * sonra tam ata zincirini (Sektör › Grup › Yaprak) basmak için kullanılır.
+ * `items` "Ana Sayfa"yı İÇERMEZ — Breadcrumb() onu otomatik ekler.
+ */
+export function updateBreadcrumb(items: BreadcrumbItem[]): void {
+  const nav = document.querySelector('nav[aria-label="Breadcrumb"]');
+  if (!nav) return;
+  const tmp = document.createElement("div");
+  tmp.innerHTML = Breadcrumb(items);
+  const fresh = tmp.firstElementChild;
+  if (fresh) nav.replaceWith(fresh);
+}
