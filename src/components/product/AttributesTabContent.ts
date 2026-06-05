@@ -5,6 +5,7 @@
 
 import { getCurrentProduct } from "../../alpine/product";
 import { t } from "../../i18n";
+import { ProductSalesRank } from "./ProductSalesRank";
 // Product loaded lazily via getCurrentProduct() inside functions
 
 const KEY_CLS =
@@ -94,6 +95,9 @@ export function AttributesTabContent(): string {
           </table>
         </div>
       </div>
+
+      <!-- Satış Sıralaması (Best Sellers Rank) — sekmenin en altı -->
+      ${ProductSalesRank(p.categoryRanks ?? [])}
     </div>
   `;
 }

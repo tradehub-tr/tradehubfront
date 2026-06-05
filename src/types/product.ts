@@ -174,6 +174,16 @@ export interface CustomizationOption {
   minOrder: string;
 }
 
+export interface CategoryRank {
+  categoryId: string;
+  categoryName: string;
+  slug: string;
+  rank: number;
+  total: number;
+  /** 0 = en spesifik (yaprak), artan = daha geniş kategori */
+  level: number;
+}
+
 export interface ProductDetail {
   id: string;
   /** Pretty URL slug (Faz 4 page_resolver için). Boşsa legacy fallback. */
@@ -228,6 +238,7 @@ export interface ProductDetail {
   rating: number;
   reviewCount: number;
   orderCount: string;
+  categoryRanks?: CategoryRank[];
   reviews: ProductReview[];
   samplePrice?: number;
   baseSamplePrice?: number;

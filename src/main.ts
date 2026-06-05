@@ -48,6 +48,9 @@ import {
   initProductGrid,
 } from "./components/hero";
 
+// Category showcase (bento grid)
+import { CategoryShowcase, initCategoryShowcase } from "./components/category";
+
 // Footer components
 import { FooterLinks } from "./components/footer";
 
@@ -80,9 +83,20 @@ appEl.innerHTML = `
     <!-- Top Hero: Full-width promotional banner slider (Journal-style) -->
     <section class="pt-1 pb-2 xl:pt-3 xl:pb-4" aria-label="Öne çıkan kampanyalar">
       <div class="container-boxed">
-        <div class="h-[280px] sm:h-[380px] lg:h-[480px] xl:h-[560px]">
-          ${HeroTopSlider()}
+        <div class="rounded-md bg-gray-50 px-3 py-2 sm:px-4 sm:py-3 lg:py-4">
+          <div class="mx-auto w-full max-w-[1280px]">
+            <div class="h-[200px] sm:h-[340px] lg:h-[480px] xl:h-[560px]">
+              ${HeroTopSlider()}
+            </div>
+          </div>
         </div>
+      </div>
+    </section>
+
+    <!-- Category Showcase: Bento grid (journal-style) -->
+    <section class="pt-1 pb-2 xl:py-6" aria-label="Kategori vitrini">
+      <div class="container-boxed">
+        ${CategoryShowcase()}
       </div>
     </section>
 
@@ -157,4 +171,6 @@ initHeaderCart();
 initLanguageSelector();
 // Header notice'ı arka planda taze veriyle güncelle (cache zaten gösterildi)
 void initHeaderNotice();
+// Kategori vitrini bento grid'i arka planda taze veriyle güncelle
+void initCategoryShowcase();
 initAnimatedPlaceholder("#topbar-compact-search-input");

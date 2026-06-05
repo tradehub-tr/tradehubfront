@@ -21,7 +21,7 @@ export {
 export { ListingCartDrawer, initListingCartDrawer } from "./ListingCartDrawer";
 
 // SubHeader component - unified tabs + breadcrumb + results title + sort/view header
-export { SubHeader, updateSubHeader } from "./SubHeader";
+export { SubHeader, updateSubHeader, updateBreadcrumb } from "./SubHeader";
 export type { SubHeaderProps } from "./SubHeader";
 
 // Filter engine - connects FilterSidebar UI to ProductListingGrid
