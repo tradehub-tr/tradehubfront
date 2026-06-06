@@ -7,6 +7,7 @@ import { readFileSync, writeFileSync, existsSync } from 'fs'
 import fg from 'fast-glob'
 import { getStaticPageHtmlMap } from './src/utils/staticPageUrl'
 import pkg from './package.json' with { type: 'json' }
+import { visualizer } from 'rollup-plugin-visualizer'
 
 /**
  * Her HTML giriş dosyasının <head>'ine FOUC önleme scripti enjekte eder.
@@ -228,6 +229,13 @@ export default defineConfig({
         staticPageRewritePlugin(),
         notFoundFallbackPlugin(),
         seoPlaceholderPlugin(),
+        // Bundle analizi — yalnızca build'de treemap üretir (perf-reports/bundle-stats.html,
+        // gitignore'lu). tailwindcss() ilk kalmalı; visualizer en sonda zararsız.
+        visualizer({
+            filename: 'perf-reports/bundle-stats.html',
+            gzipSize: true,
+            template: 'treemap',
+        }) as unknown as Plugin,
         VitePWA({
             // Multi-page yapıda kullanıcı navigation = tam reload — autoUpdate güvenli ve UI gerektirmez.
             registerType: 'autoUpdate',

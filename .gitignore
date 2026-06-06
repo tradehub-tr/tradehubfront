@@ -69,3 +69,4 @@ playwright-report/
 # Lighthouse ham raporları (özet .md tutulur, ham .html/.json yoksayılır)
 perf-reports/*.report.html
 perf-reports/*.report.json
+perf-reports/bundle-stats.html
