@@ -249,6 +249,10 @@ export default defineConfig({
                 runtimeCaching: [
                     {
                         // Frappe API — cookie session ile, network-first + offline fallback YOK (POST cache'lenmez).
+                        // CACHE KATMAN SINIRI: Uygulama-veri freshness'ı artık TanStack Query + IndexedDB
+                        // persister (src/lib/query) tarafından yönetiliyor (instant render + SWR + dedup).
+                        // Bu SW cache'i yalnızca OFFLINE / ağ-yedeği rolünde — 5dk TTL bu amaç için yeterli.
+                        // POST istekleri NetworkOnly kalır.
                         urlPattern: ({ url }) => url.pathname.startsWith('/api/method/'),
                         handler: 'NetworkFirst',
                         method: 'GET',
