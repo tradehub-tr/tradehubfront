@@ -65,7 +65,7 @@ function renderImageSlider(card: ProductListingCard): string {
       .map(
         (src, i) => `
       <div class="w-full h-full flex-shrink-0">
-        <img src="${escapeHtml(sanitizeUrl(src))}" alt="${escapeHtml(card.name)}${i > 0 ? ` - ${i + 1}` : ""}" class="w-full h-full object-cover" ${i > 0 ? 'loading="lazy"' : ""} />
+        <img src="${escapeHtml(sanitizeUrl(src))}" alt="${escapeHtml(card.name)}${i > 0 ? ` - ${i + 1}` : ""}" class="w-full h-full object-cover" decoding="async" ${i > 0 ? 'loading="lazy"' : ""} />
       </div>
     `
       )
