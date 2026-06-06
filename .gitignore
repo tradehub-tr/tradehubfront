@@ -61,3 +61,7 @@ ios/
 logs/security/
 .superpowers/
 docs
+
+# Playwright test artifacts
+test-results/
+playwright-report/
