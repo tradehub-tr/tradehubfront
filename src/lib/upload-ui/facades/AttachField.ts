@@ -8,6 +8,7 @@
 
 import { uploadFiles, type FileProgress } from "../uploader";
 import { getFileBadge, formatFileSize } from "../utils";
+import { escapeHtml } from "../../../utils/sanitize";
 
 export interface AttachFieldOptions {
   containerId: string;
@@ -104,7 +105,7 @@ export class AttachFieldController {
       <div class="flex items-center gap-2 bg-white border border-gray-200 rounded px-3 py-2">
         <span class="w-8 h-8 rounded ${badge.cls} text-white text-[10px] font-bold flex items-center justify-center">${badge.label}</span>
         <div class="flex-1 min-w-0">
-          <div class="text-xs font-medium text-gray-800 truncate">${fileName}</div>
+          <div class="text-xs font-medium text-gray-800 truncate">${escapeHtml(fileName)}</div>
           <div class="text-[10px] text-gray-500">${sizeText}${statusText}</div>
         </div>
         <div class="relative h-1 w-24 bg-gray-100 rounded-full overflow-hidden">

@@ -1,4 +1,5 @@
 import { t } from "../../i18n";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 import { getBrowsingHistory } from "../../services/browsingHistoryService";
 import { getTotalCount as getFavoriteProductsCount } from "../../stores/favorites";
 import { getSellerFavoritesCount } from "../../stores/sellerFavorites";
@@ -264,8 +265,8 @@ function renderProfileColumn(): string {
       ? thumbs
           .map(
             (h) => `
-        <a href="${h.href}" class="block w-full h-14 rounded-md overflow-hidden group bg-gray-50 relative" title="${h.title || ""}">
-          <img src="${h.image}" alt="${h.title || ""}" class="absolute inset-0 w-full h-full object-contain group-hover:scale-110 transition-transform duration-300">
+        <a href="${escapeHtml(sanitizeUrl(h.href))}" class="block w-full h-14 rounded-md overflow-hidden group bg-gray-50 relative" title="${escapeHtml(h.title || "")}">
+          <img src="${escapeHtml(sanitizeUrl(h.image))}" alt="${escapeHtml(h.title || "")}" class="absolute inset-0 w-full h-full object-contain group-hover:scale-110 transition-transform duration-300">
         </a>`
           )
           .join("")

@@ -195,15 +195,23 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
 
   /** Fetch from backend with current filters */
   async function fetchResults(): Promise<void> {
-    // Cancel any in-flight request
+    // Supersede any in-flight request. searchListings does not accept an
+    // AbortSignal, so true network cancellation isn't possible — instead we
+    // tag this call with its own controller and, after the await, drop the
+    // result if a newer fetchResults() has started (prevents an older/slower
+    // response from overwriting the grid out of order).
     if (abortCtrl) abortCtrl.abort();
-    abortCtrl = new AbortController();
+    const myCtrl = new AbortController();
+    abortCtrl = myCtrl;
 
     onLoading?.();
 
     try {
       const params = buildParams();
       const result = await searchListings(params);
+
+      // A newer request started while we were awaiting → discard this result.
+      if (myCtrl.signal.aborted) return;
 
       syncToUrl();
 

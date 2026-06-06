@@ -16,14 +16,15 @@ import { requireAuth } from '../utils/auth-guard'
 
 await requireAuth();
 
-// Guard: only accessible after actual RFQ submission
-if (!sessionStorage.getItem('rfq_submitted')) {
+// Guard: only accessible after actual RFQ submission.
+// Module top-level cannot `return`, so redirect + skip the rest of the bootstrap.
+const rfqSubmitted = sessionStorage.getItem('rfq_submitted');
+if (!rfqSubmitted) {
   window.location.href = '/pages/dashboard/rfq.html';
-  throw new Error('redirect');
-}
-sessionStorage.removeItem('rfq_submitted');
+} else {
+  sessionStorage.removeItem('rfq_submitted');
 
-const appEl = document.querySelector<HTMLDivElement>('#app')!;
+  const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.classList.add('relative');
 appEl.innerHTML = `
   <!-- Header -->
@@ -88,11 +89,12 @@ appEl.innerHTML = `
   <footer>${FooterLinks()}</footer>
 `;
 
-initMegaMenu();
-initFlowbite();
-initStickyHeaderSearch();
-initMobileDrawer();
-initLanguageSelector();
-mountChatPopup();
-initChatTriggers();
-startAlpine();
+  initMegaMenu();
+  initFlowbite();
+  initStickyHeaderSearch();
+  initMobileDrawer();
+  initLanguageSelector();
+  mountChatPopup();
+  initChatTriggers();
+  startAlpine();
+}

@@ -8,6 +8,7 @@
 
 import { paymentCardStore } from "./state/PaymentCardStore";
 import { t } from "../../i18n";
+import { escapeHtml } from "../../utils/sanitize";
 
 /* ────────────────────────────────────────
    NAV STRUCTURE
@@ -42,33 +43,33 @@ function renderPaymentManagement(): string {
       ? cards
           .map(
             (c) => `
-      <div data-card-id="${c.id}" class="relative shrink-0 w-[200px] max-sm:w-[160px] h-[120px] max-sm:h-[100px] rounded-md p-4 max-sm:p-3 flex flex-col justify-between group cursor-default"
+      <div data-card-id="${escapeHtml(c.id)}" class="relative shrink-0 w-[200px] max-sm:w-[160px] h-[120px] max-sm:h-[100px] rounded-md p-4 max-sm:p-3 flex flex-col justify-between group cursor-default"
            style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%); box-shadow: 0 4px 12px rgba(0,0,0,0.18);">
         <div class="flex items-center justify-between">
           <span class="text-[11px] max-sm:text-[9px] font-black tracking-wide px-1.5 py-0.5 rounded ms-auto"
-                style="background: rgba(255,255,255,0.15); color: white;">${c.brand}</span>
+                style="background: rgba(255,255,255,0.15); color: white;">${escapeHtml(c.brand)}</span>
         </div>
         <div>
-          <div class="text-sm max-sm:text-xs font-mono font-bold text-white tracking-widest mb-1 truncate">${c.cardNumber}</div>
+          <div class="text-sm max-sm:text-xs font-mono font-bold text-white tracking-widest mb-1 truncate">${escapeHtml(c.cardNumber)}</div>
           <div class="flex items-center justify-between">
             <div class="min-w-0 flex-1">
               <div class="text-[9px] max-sm:text-[8px] text-white/40 uppercase tracking-wide">${t("payment.nameLabel")}</div>
-              <div class="text-[11px] max-sm:text-[10px] text-white font-medium truncate">${c.cardholderName}</div>
+              <div class="text-[11px] max-sm:text-[10px] text-white font-medium truncate">${escapeHtml(c.cardholderName)}</div>
             </div>
             <div class="text-end shrink-0 ms-2">
               <div class="text-[9px] max-sm:text-[8px] text-white/40 uppercase tracking-wide">${t("payment.lastUsedLabel")}</div>
-              <div class="text-[11px] max-sm:text-[10px] text-white font-medium">${c.expiry || "—"}</div>
+              <div class="text-[11px] max-sm:text-[10px] text-white font-medium">${escapeHtml(c.expiry || "—")}</div>
             </div>
           </div>
         </div>
         <!-- Edit + Sil buttons -->
         <div class="absolute top-2 end-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
           <button class="th-no-press w-5 h-5 rounded-full flex items-center justify-center text-white bg-white/20 hover:bg-white/40 border-none cursor-pointer transition-colors"
-                  onclick="if(window.editSavedCard) window.editSavedCard('${c.id}')" title="${t("payment.editCardBtn")}">
+                  onclick="if(window.editSavedCard) window.editSavedCard('${escapeHtml(c.id)}')" title="${t("payment.editCardBtn")}">
             <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M8.5 1.5l2 2L4 10H2v-2l6.5-6.5z" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
           <button class="th-no-press w-5 h-5 rounded-full flex items-center justify-center text-white bg-red-500/70 hover:bg-red-500 border-none cursor-pointer text-[10px] font-bold transition-colors"
-                  onclick="this.closest('[data-card-id]').remove(); if(window.removeSavedCard) window.removeSavedCard('${c.id}')" title="${t("payment.deleteBtn")}">
+                  onclick="this.closest('[data-card-id]').remove(); if(window.removeSavedCard) window.removeSavedCard('${escapeHtml(c.id)}')" title="${t("payment.deleteBtn")}">
             &times;
           </button>
         </div>

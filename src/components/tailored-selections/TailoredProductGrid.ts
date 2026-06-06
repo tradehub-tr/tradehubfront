@@ -6,6 +6,7 @@
 
 import { formatPrice } from "../../utils/currency";
 import { t } from "../../i18n";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 import type { TailoredProduct } from "../../types/tailoredSelections";
 
 function moqLabel(count: number): string {
@@ -36,14 +37,14 @@ function renderStarRating(rating: number, count: number): string {
 }
 
 export function renderProductCard(product: TailoredProduct, index: number): string {
-  const safeName = product.name.replace(/"/g, "&quot;");
+  const safeName = escapeHtml(product.name);
   const moqText = moqLabel(product.moqCount || 1);
 
   return `
     <a
       class="ts-product-card flex flex-col relative w-full overflow-hidden text-sm leading-snug text-start no-underline group animate-fade-slide-up"
       style="animation-delay: ${index * 40}ms;"
-      href="${product.href}"
+      href="${escapeHtml(sanitizeUrl(product.href))}"
       target="_blank"
       aria-label="${safeName}"
     >
@@ -51,7 +52,7 @@ export function renderProductCard(product: TailoredProduct, index: number): stri
       <div class="relative aspect-square w-full overflow-hidden rounded-md bg-gray-100 mb-2">
         <img
           class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-          src="${product.imageSrc}"
+          src="${escapeHtml(sanitizeUrl(product.imageSrc))}"
           alt="${safeName}"
           loading="lazy"
         />
@@ -99,7 +100,7 @@ export function renderProductCard(product: TailoredProduct, index: number): stri
             `
                 : ""
             }
-            ${product.name}
+            ${safeName}
           </p>
         </div>
 
@@ -109,7 +110,7 @@ export function renderProductCard(product: TailoredProduct, index: number): stri
           ${
             product.originalPrice
               ? `
-            <span class="text-xs text-gray-400 line-through">${product.originalPrice}</span>
+            <span class="text-xs text-gray-400 line-through">${escapeHtml(product.originalPrice)}</span>
           `
               : ""
           }
@@ -148,7 +149,7 @@ export function renderProductCard(product: TailoredProduct, index: number): stri
             product.bestReviewedLabel
               ? `
             <div class="text-[11px] text-blue-600 font-medium truncate">
-              ${product.bestReviewedLabel}
+              ${escapeHtml(product.bestReviewedLabel)}
             </div>
           `
               : ""
@@ -161,12 +162,12 @@ export function renderProductCard(product: TailoredProduct, index: number): stri
             ? `
           <div class="flex items-center gap-2 mt-0.5">
             ${renderStarRating(product.starRating, product.ratingCount || 0)}
-            ${product.soldCount ? `<span class="text-[11px] text-gray-500">${product.soldCount} sold</span>` : ""}
+            ${product.soldCount ? `<span class="text-[11px] text-gray-500">${escapeHtml(product.soldCount)} sold</span>` : ""}
           </div>
         `
             : product.soldCount
               ? `
-          <div class="text-[11px] text-gray-500 mt-0.5">${product.soldCount} sold</div>
+          <div class="text-[11px] text-gray-500 mt-0.5">${escapeHtml(product.soldCount)} sold</div>
         `
               : ""
         }
@@ -175,7 +176,7 @@ export function renderProductCard(product: TailoredProduct, index: number): stri
         ${
           product.viewCount
             ? `
-          <div class="text-[11px] text-gray-400 mt-0.5">${product.viewCount} views</div>
+          <div class="text-[11px] text-gray-400 mt-0.5">${escapeHtml(product.viewCount)} views</div>
         `
             : ""
         }

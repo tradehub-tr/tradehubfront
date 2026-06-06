@@ -12,7 +12,6 @@ export function FAQDetailLayout(): string {
     <div
       id="faq-detail-root"
       x-data="faqDetail()"
-      x-init="init()"
       class="min-h-screen bg-[#F5F5F5]"
     >
 

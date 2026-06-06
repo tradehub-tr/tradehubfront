@@ -11,6 +11,7 @@
  */
 
 import { t } from "../../i18n";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 export interface RfqAttachment {
   name: string;
@@ -18,6 +19,18 @@ export interface RfqAttachment {
   file_url: string;
   file_size: number;
   creation: string;
+}
+
+/**
+ * URL guard for the lightbox, which (unlike the card grid) may receive a local
+ * `blob:` URL from openFilePreviewLightbox for pre-submit previews. `blob:` is
+ * same-origin and cannot execute script, so it's safe for img/iframe src; every
+ * other scheme defers to sanitizeUrl's strict http(s)/mailto/tel allowlist.
+ */
+function sanitizePreviewUrl(value: unknown): string {
+  const raw = String(value ?? "").trim();
+  if (/^blob:/i.test(raw)) return raw;
+  return sanitizeUrl(value);
 }
 
 export function getFileKind(fileName: string): "image" | "pdf" | "other" {
@@ -54,7 +67,7 @@ export function renderAttachmentCard(att: RfqAttachment, idx: number, scope: str
   const isPreviewable = kind === "image" || kind === "pdf";
   const thumb =
     kind === "image"
-      ? `<img src="${att.file_url}" alt="" class="w-full h-32 object-cover" loading="lazy" />`
+      ? `<img src="${escapeHtml(sanitizeUrl(att.file_url))}" alt="" class="w-full h-32 object-cover" loading="lazy" />`
       : `<div class="w-full h-32 flex flex-col items-center justify-center bg-gray-50">
          <div class="w-12 h-12 rounded-md ${badge.cls} text-white text-xs font-bold flex items-center justify-center">${badge.label}</div>
          <span class="mt-2 text-xs text-gray-400">${kind === "pdf" ? t("rfq.previewable") : t("rfq.notPreviewable")}</span>
@@ -66,7 +79,7 @@ export function renderAttachmentCard(att: RfqAttachment, idx: number, scope: str
         ${thumb}
       </div>
       <div class="p-2.5 flex flex-col gap-1.5">
-        <div class="text-xs font-semibold text-gray-800 truncate" title="${att.file_name}">${att.file_name}</div>
+        <div class="text-xs font-semibold text-gray-800 truncate" title="${escapeHtml(att.file_name)}">${escapeHtml(att.file_name)}</div>
         <div class="text-[11px] text-gray-400">${formatFileSize(att.file_size)}</div>
         <div class="flex gap-1.5 mt-1">
           ${
@@ -78,7 +91,7 @@ export function renderAttachmentCard(att: RfqAttachment, idx: number, scope: str
           `
               : ""
           }
-          <a href="${att.file_url}" download="${att.file_name}" class="${isPreviewable ? "flex-1" : "w-full"} px-2 py-1 text-[11px] font-semibold rounded bg-emerald-500 text-white text-center hover:bg-emerald-600 transition-colors">
+          <a href="${escapeHtml(sanitizeUrl(att.file_url))}" download="${escapeHtml(att.file_name)}" class="${isPreviewable ? "flex-1" : "w-full"} px-2 py-1 text-[11px] font-semibold rounded bg-emerald-500 text-white text-center hover:bg-emerald-600 transition-colors">
             ${t("rfq.downloadFile")}
           </a>
         </div>
@@ -191,13 +204,13 @@ export function setupAttachmentInteractions(
     if (!titleEl || !bodyEl || !newTabEl || !dlEl) return;
     const kind = getFileKind(att.file_name);
     titleEl.textContent = att.file_name;
-    newTabEl.href = att.file_url;
-    dlEl.href = att.file_url;
+    newTabEl.href = sanitizePreviewUrl(att.file_url);
+    dlEl.href = sanitizePreviewUrl(att.file_url);
     dlEl.setAttribute("download", att.file_name);
     if (kind === "image") {
-      bodyEl.innerHTML = `<img src="${att.file_url}" alt="${att.file_name}" class="max-w-full max-h-full object-contain" />`;
+      bodyEl.innerHTML = `<img src="${escapeHtml(sanitizePreviewUrl(att.file_url))}" alt="${escapeHtml(att.file_name)}" class="max-w-full max-h-full object-contain" />`;
     } else if (kind === "pdf") {
-      bodyEl.innerHTML = `<iframe src="${att.file_url}" class="w-full h-full bg-white" title="${att.file_name}"></iframe>`;
+      bodyEl.innerHTML = `<iframe src="${escapeHtml(sanitizePreviewUrl(att.file_url))}" class="w-full h-full bg-white" title="${escapeHtml(att.file_name)}"></iframe>`;
     } else {
       bodyEl.innerHTML = `<div class="text-gray-300 text-sm">${t("rfq.notPreviewable")}</div>`;
     }
@@ -277,14 +290,14 @@ export function openAttachmentLightbox(att: RfqAttachment, scope: string = "file
 
   const kind = getFileKind(att.file_name);
   titleEl.textContent = att.file_name;
-  newTabEl.href = att.file_url;
-  dlEl.href = att.file_url;
+  newTabEl.href = sanitizePreviewUrl(att.file_url);
+  dlEl.href = sanitizePreviewUrl(att.file_url);
   dlEl.setAttribute("download", att.file_name);
 
   if (kind === "image") {
-    bodyEl.innerHTML = `<img src="${att.file_url}" alt="${att.file_name}" class="max-w-full max-h-full object-contain" />`;
+    bodyEl.innerHTML = `<img src="${escapeHtml(sanitizePreviewUrl(att.file_url))}" alt="${escapeHtml(att.file_name)}" class="max-w-full max-h-full object-contain" />`;
   } else if (kind === "pdf") {
-    bodyEl.innerHTML = `<iframe src="${att.file_url}" class="w-full h-full bg-white" title="${att.file_name}"></iframe>`;
+    bodyEl.innerHTML = `<iframe src="${escapeHtml(sanitizePreviewUrl(att.file_url))}" class="w-full h-full bg-white" title="${escapeHtml(att.file_name)}"></iframe>`;
   } else {
     bodyEl.innerHTML = `<div class="text-gray-500 text-sm p-8">${t("rfq.notPreviewable")}</div>`;
   }

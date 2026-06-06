@@ -1935,6 +1935,13 @@ export function initOrdersPageLayout(): void {
     const renderFn = SECTIONS[activeId] ?? renderAllOrders;
     contentEl!.innerHTML = renderFn();
 
+    // Alpine, innerHTML ile sonradan eklenen x-data ağacını otomatik taramaz —
+    // hash navigasyonunda yeni section'ın (ordersListComponent/refundsComponent/
+    // couponsPageComponent) canlanması için manuel initTree gerekir, aksi halde
+    // içerik "ölü" kalır.
+    const Alpine = (window as unknown as { Alpine?: { initTree(el: HTMLElement): void } }).Alpine;
+    if (Alpine) Alpine.initTree(contentEl!);
+
     // Update nav active state
     document.querySelectorAll<HTMLAnchorElement>(".orders-page__nav-link").forEach((link) => {
       const isActive = link.dataset.nav === activeId;

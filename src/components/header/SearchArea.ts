@@ -7,6 +7,7 @@
 import type { SearchTab } from "../../types/navigation";
 import { t } from "../../i18n";
 import { getSearchSuggestions } from "../../services/listingService";
+import { escapeHtml } from "../../utils/sanitize";
 
 /** Search tabs configuration */
 function getSearchTabs(): SearchTab[] {
@@ -344,9 +345,9 @@ export function initSearchArea(): void {
             chipsContainer.innerHTML = chipItems
               .map(
                 (item) => `
-              <button type="button" class="search-chip flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-full transition-colors max-w-[220px]" style="color:var(--search-chip-text);background-color:var(--search-chip-bg);border:1px solid var(--search-chip-border)" data-chip-type="${item.type || "product"}" data-chip-slug="${item.slug || ""}">
+              <button type="button" class="search-chip flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-full transition-colors max-w-[220px]" style="color:var(--search-chip-text);background-color:var(--search-chip-bg);border:1px solid var(--search-chip-border)" data-chip-type="${escapeHtml(item.type || "product")}" data-chip-slug="${escapeHtml(item.slug || "")}">
                 <span class="text-xs shrink-0" style="color:var(--search-chip-accent)">&#10022;</span>
-                <span class="truncate">${item.text}</span>
+                <span class="truncate">${escapeHtml(item.text)}</span>
               </button>
             `
               )

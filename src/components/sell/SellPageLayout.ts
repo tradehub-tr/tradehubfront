@@ -20,6 +20,7 @@
  */
 
 import heroImg from "../../assets/images/liman.avif";
+import { escapeHtml } from "../../utils/sanitize";
 import type {
   PricingPlan,
   PricingPlansResponse,
@@ -225,18 +226,18 @@ function PricingCard(plan: PricingPlan, idx: number): string {
     <div class="relative flex flex-col gap-3.5 rounded-2xl border p-[26px_22px_22px] transition-[border-color,box-shadow,transform] duration-150 ${cardCls}">
       ${
         badge
-          ? `<span class="absolute -top-2.5 start-[22px] bg-[#f5b800] text-[#1a1a1a] text-[10.5px] font-bold uppercase tracking-[0.08em] px-2.5 py-1 rounded-full border border-[#d39c00]">${badge}</span>`
+          ? `<span class="absolute -top-2.5 start-[22px] bg-[#f5b800] text-[#1a1a1a] text-[10.5px] font-bold uppercase tracking-[0.08em] px-2.5 py-1 rounded-full border border-[#d39c00]">${escapeHtml(badge)}</span>`
           : ""
       }
-      <span class="text-[11px] font-semibold uppercase tracking-[0.1em] ${tagCls}">${tag}</span>
-      <div class="text-[22px] font-semibold tracking-[-0.01em] -mt-1 ${nameCls}">${plan.plan_name}</div>
-      <div class="text-[13px] leading-[1.4] min-h-[36px] ${subCls}">${plan.short_tagline || plan.description || ""}</div>
+      <span class="text-[11px] font-semibold uppercase tracking-[0.1em] ${tagCls}">${escapeHtml(tag)}</span>
+      <div class="text-[22px] font-semibold tracking-[-0.01em] -mt-1 ${nameCls}">${escapeHtml(plan.plan_name)}</div>
+      <div class="text-[13px] leading-[1.4] min-h-[36px] ${subCls}">${escapeHtml(plan.short_tagline || plan.description || "")}</div>
 
       <div class="flex items-baseline gap-1.5 mt-1.5">
         ${
           hasPrice
             ? `<span class="text-[42px] font-semibold tracking-[-0.03em] tabular-nums leading-none ${amountCls}">
-                ${sym}<span x-text="yearly ? '${priceY}' : '${priceM}'">${priceY}</span>
+                ${escapeHtml(sym)}<span x-text="yearly ? '${priceY}' : '${priceM}'">${priceY}</span>
               </span>
               <span class="text-[13px] ${perCls}">/ <span x-text="yearly ? 'yıl' : 'ay'">yıl</span></span>`
             : `<span class="text-[32px] font-semibold tracking-[-0.03em] leading-none ${amountCls}">Özel teklif</span>`
@@ -264,7 +265,7 @@ function PricingCard(plan: PricingPlan, idx: number): string {
       </div>
 
       <a href="${ctaTargetHref}" ${ctaAttr} class="${ctaCls} mt-0.5">
-        ${plan.cta_label || "Devam et"} ${SVG_ARROW}
+        ${escapeHtml(plan.cta_label || "Devam et")} ${SVG_ARROW}
       </a>
 
       <div class="h-px my-1 ${dividerCls}"></div>
@@ -276,11 +277,11 @@ function PricingCard(plan: PricingPlan, idx: number): string {
             const icon = ok ? featureIcon(f.icon) : SVG_X;
             const iconCls = ok ? checkCls : xCls;
             const liCls = ok ? featLiCls : noLineCls;
-            const tip = f.tooltip ? ` title="${f.tooltip.replace(/"/g, "&quot;")}"` : "";
+            const tip = f.tooltip ? ` title="${escapeHtml(f.tooltip)}"` : "";
             return `
               <li class="flex items-start gap-2.5 leading-[1.4] ${liCls}"${tip}>
                 <span class="shrink-0 mt-0.5 ${iconCls}">${icon}</span>
-                <span>${f.display_text}</span>
+                <span>${escapeHtml(f.display_text)}</span>
               </li>
             `;
           })
@@ -428,7 +429,7 @@ function resolveRowCells(row: MatrixRow, plans: PricingPlan[]): MatrixCell[] {
 function renderMatrixCell(c: MatrixCell): string {
   if (c.type === "yes") return `<span class="inline-flex text-[#1f7a4d]">${SVG_CHECK_MD}</span>`;
   if (c.type === "no") return `<span class="inline-flex text-[#d5d2c9]">${SVG_DASH}</span>`;
-  return c.v;
+  return escapeHtml(c.v);
 }
 
 // Matrix tüm section'larını plans + features_matrix verisinden derive eder.
@@ -565,8 +566,8 @@ function PricingMatrix(
           .map(
             (c) => `
           <div class="text-center ${c.featured ? "bg-[#fff8e1] rounded-lg px-2 py-2.5 -mx-1 -my-2.5" : ""}">
-            <div class="text-[15px] font-semibold ${c.featured ? "text-[#d39c00]" : "text-[#1a1a1a]"}">${c.n}</div>
-            <div class="text-xs text-[#8a877f] mt-0.5 tabular-nums">${c.p}</div>
+            <div class="text-[15px] font-semibold ${c.featured ? "text-[#d39c00]" : "text-[#1a1a1a]"}">${escapeHtml(c.n)}</div>
+            <div class="text-xs text-[#8a877f] mt-0.5 tabular-nums">${escapeHtml(c.p)}</div>
           </div>
         `
           )
@@ -578,15 +579,15 @@ function PricingMatrix(
           (sec) => `
         <div>
           <div class="px-6 pt-3.5 pb-2 bg-[#fafaf8] text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8a877f] border-b border-[#e8e6e0]">
-            ${sec.title}
+            ${escapeHtml(sec.title)}
           </div>
           ${sec.rows
             .map(
               (r) => `
             <div class="${MATRIX_GRID_CLS} px-6 py-3.5 border-b border-[#e8e6e0] last:border-b-0 text-[13px]" style="${gridStyle}">
               <div>
-                <div class="text-[#1a1a1a] font-medium">${r.f}</div>
-                ${r.help ? `<div class="text-[11px] text-[#8a877f] mt-0.5 font-normal">${r.help}</div>` : ""}
+                <div class="text-[#1a1a1a] font-medium">${escapeHtml(r.f)}</div>
+                ${r.help ? `<div class="text-[11px] text-[#8a877f] mt-0.5 font-normal">${escapeHtml(r.help)}</div>` : ""}
               </div>
               ${r.v
                 .map(

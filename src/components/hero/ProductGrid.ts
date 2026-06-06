@@ -7,6 +7,7 @@ import { formatPrice } from "../../utils/currency";
 import { searchListings } from "../../services/listingService";
 import { initCurrency } from "../../services/currencyService";
 import { getListingUrl } from "../../utils/listingUrl";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 interface ProductCard {
   name: string;
@@ -34,7 +35,7 @@ const productCardSeed: ProductCard[] = [];
 // }
 
 function renderProductCard(card: ProductCard, index: number): string {
-  const safeName = card.name.replace(/"/g, "&quot;");
+  const safeName = escapeHtml(card.name);
   const unitLabel = card.moqUnit === "kg" ? t("productGrid.kg") : t("productGrid.pcs");
   const moqText = `${card.moqCount} ${unitLabel}`;
   const soldText = "";
@@ -71,7 +72,7 @@ function renderProductCard(card: ProductCard, index: number): string {
     <a
       class="product-card flex flex-col relative w-full gap-2 overflow-hidden text-sm leading-[18px] text-start no-underline animate-fade-slide-up max-sm:!min-h-0 max-sm:!p-2"
       style="animation-delay: ${index * 60}ms;"
-      href="${card.href}"
+      href="${escapeHtml(sanitizeUrl(card.href))}"
       target="_blank"
       aria-label="${safeName}"
     >
@@ -80,7 +81,7 @@ function renderProductCard(card: ProductCard, index: number): string {
         <div class="product-card__image-wrap absolute inset-0 overflow-hidden leading-[0] flex items-center justify-center">
           <img
             class="product-card__img block w-full h-full object-contain origin-center"
-            src="${card.imageSrc}"
+            src="${escapeHtml(sanitizeUrl(card.imageSrc))}"
             alt="${safeName}"
             loading="lazy"
           />
@@ -94,7 +95,7 @@ function renderProductCard(card: ProductCard, index: number): string {
           <!-- Title (2 lines mobile, 3 lines desktop) -->
           <div class="product-card__title-wrap h-[32px] sm:h-[54px] overflow-hidden">
             <div class="product-card__title line-clamp-2 sm:line-clamp-3 h-[32px] sm:h-[54px] max-sm:!text-xs max-sm:!leading-[1.3]">
-              <span title="${safeName}">${card.name}</span>
+              <span title="${safeName}">${safeName}</span>
             </div>
           </div>
 
@@ -114,7 +115,7 @@ function renderProductCard(card: ProductCard, index: number): string {
             <!-- Supplier info -->
             <div class="product-card__supplier flex items-center min-h-[18px] pt-0.5 leading-4">
               ${supplierYearsText ? `<span class="product-card__supplier-text block overflow-hidden text-ellipsis max-sm:!text-[10px]">${supplierYearsText}</span>` : ""}
-              ${card.supplierCountry ? `<span class="product-card__supplier-text block overflow-hidden text-ellipsis max-sm:!text-[10px]">${card.supplierCountry}</span>` : ""}
+              ${card.supplierCountry ? `<span class="product-card__supplier-text block overflow-hidden text-ellipsis max-sm:!text-[10px]">${escapeHtml(card.supplierCountry)}</span>` : ""}
             </div>
           </div>
         </div>

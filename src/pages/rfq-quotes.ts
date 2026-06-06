@@ -9,6 +9,7 @@ import { startAlpine } from '../alpine'
 import { requireAuth } from '../utils/auth-guard'
 import { getCsrfToken, checkEmailNotVerifiedResponse, isEmailNotVerifiedError } from '../utils/api'
 import { showToast } from '../utils/toast'
+import { escapeHtml, sanitizeUrl } from '../utils/sanitize'
 
 import { TopBar, SubHeader, initMobileDrawer, initStickyHeaderSearch, MegaMenu, initMegaMenu } from '../components/header'
 import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
@@ -82,7 +83,7 @@ initMegaMenu(); initFlowbite(); initStickyHeaderSearch(); initMobileDrawer(); in
 async function loadQuotes() {
   if (!rfqId) { window.location.href = '/pages/dashboard/inquiries.html'; return; }
 
-  const res = await fetch(`/api/method/tradehub_core.api.rfq.get_rfq_detail?rfq_id=${rfqId}`, { credentials: 'include' });
+  const res = await fetch(`/api/method/tradehub_core.api.rfq.get_rfq_detail?rfq_id=${encodeURIComponent(rfqId)}`, { credentials: 'include' });
   const d = await res.json();
   const rfq = d.message?.rfq;
   const quotes: Quote[] = d.message?.quotes || [];
@@ -99,17 +100,17 @@ async function loadQuotes() {
         <div class="flex gap-4 items-start">
           <div class="w-16 h-16 bg-gray-100 rounded flex items-center justify-center text-gray-400 text-xs shrink-0">RFQ</div>
           <div>
-            <h1 class="text-lg font-bold text-gray-800">${rfq.product_name}</h1>
-            <p class="text-sm text-gray-500 mt-1">${t('rfq.quantityRequired')}: ${rfq.quantity} ${rfq.unit}</p>
+            <h1 class="text-lg font-bold text-gray-800">${escapeHtml(rfq.product_name)}</h1>
+            <p class="text-sm text-gray-500 mt-1">${t('rfq.quantityRequired')}: ${escapeHtml(rfq.quantity)} ${escapeHtml(rfq.unit)}</p>
             ${rfq.creation ? `<p class="text-xs text-gray-400 mt-0.5">${t('rfq.created')}: ${new Date(rfq.creation).toLocaleString('tr-TR')}</p>` : ''}
-            ${rfq.description ? `<details class="mt-2"><summary class="text-sm text-gray-500 cursor-pointer">Show more</summary><p class="mt-1 text-sm text-gray-600">${rfq.description}</p></details>` : ''}
+            ${rfq.description ? `<details class="mt-2"><summary class="text-sm text-gray-500 cursor-pointer">Show more</summary><p class="mt-1 text-sm text-gray-600">${escapeHtml(rfq.description)}</p></details>` : ''}
           </div>
         </div>
         <div class="flex items-center gap-3">
-          <span class="text-sm font-semibold ${rfq.status === 'Approved' ? 'text-green-600' : rfq.status === 'Pending' ? 'text-yellow-600' : rfq.status === 'Completed' ? 'text-blue-600' : rfq.status === 'Closed' ? 'text-gray-500' : 'text-gray-500'}">${rfq.status}</span>
-          <button class="px-4 py-1.5 text-sm border border-gray-300 rounded-full hover:bg-gray-50 ${rfq.additional_details ? 'opacity-50 cursor-not-allowed' : ''}" ${rfq.additional_details ? 'disabled' : ''} onclick="window.location.href='/pages/dashboard/rfq.html?edit=${rfqId}'">${t('rfq.addDetails')}</button>
+          <span class="text-sm font-semibold ${rfq.status === 'Approved' ? 'text-green-600' : rfq.status === 'Pending' ? 'text-yellow-600' : rfq.status === 'Completed' ? 'text-blue-600' : rfq.status === 'Closed' ? 'text-gray-500' : 'text-gray-500'}">${escapeHtml(rfq.status)}</span>
+          <button class="px-4 py-1.5 text-sm border border-gray-300 rounded-full hover:bg-gray-50 ${rfq.additional_details ? 'opacity-50 cursor-not-allowed' : ''}" ${rfq.additional_details ? 'disabled' : ''} onclick="window.location.href='/pages/dashboard/rfq.html?edit=${encodeURIComponent(rfqId)}'">${t('rfq.addDetails')}</button>
           <a href="/pages/dashboard/rfq.html" class="px-4 py-1.5 text-sm border border-gray-300 rounded-full hover:bg-gray-50">${t('rfq.postAgain')}</a>
-          <button class="rfq-close-btn px-4 py-1.5 text-sm border border-gray-300 rounded-full hover:bg-gray-50 ${rfq.status === 'Closed' || rfq.status === 'Completed' ? 'opacity-50 cursor-not-allowed' : ''}" data-rfq="${rfqId}" ${rfq.status === 'Closed' || rfq.status === 'Completed' ? 'disabled' : ''}>${t('rfq.closeRfq')}</button>
+          <button class="rfq-close-btn px-4 py-1.5 text-sm border border-gray-300 rounded-full hover:bg-gray-50 ${rfq.status === 'Closed' || rfq.status === 'Completed' ? 'opacity-50 cursor-not-allowed' : ''}" data-rfq="${escapeHtml(rfqId)}" ${rfq.status === 'Closed' || rfq.status === 'Completed' ? 'disabled' : ''}>${t('rfq.closeRfq')}</button>
         </div>
       </div>
 
@@ -126,11 +127,11 @@ async function loadQuotes() {
                 <th class="p-3 text-start text-sm font-normal w-40"></th>
                 ${quotes.map((q) => `
                   <th class="p-3 text-center min-w-[200px] border-s border-gray-100 relative pt-8">
-                    <button class="quote-dismiss-btn absolute top-2 end-3 text-gray-300 hover:text-gray-500 transition-colors" data-quote="${q.name}">
+                    <button class="quote-dismiss-btn absolute top-2 end-3 text-gray-300 hover:text-gray-500 transition-colors" data-quote="${escapeHtml(q.name)}">
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                     </button>
-                    <p class="text-sm font-medium text-gray-800">${q.seller_name}</p>
-                    <p class="text-xs text-gray-400">${q.seller_company}</p>
+                    <p class="text-sm font-medium text-gray-800">${escapeHtml(q.seller_name)}</p>
+                    <p class="text-xs text-gray-400">${escapeHtml(q.seller_company)}</p>
                   </th>
                 `).join('')}
               </tr>
@@ -143,10 +144,10 @@ async function loadQuotes() {
                   <td class="p-3 text-center text-sm border-s border-gray-100 align-top">
                     ${q.status === 'Submitted' ? `
                       <div class="flex justify-center gap-1.5">
-                        <button class="quote-accept-btn px-3 py-1 rounded-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-xs font-medium border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150" data-quote="${q.name}">${t('rfq.accept')}</button>
-                        <button class="quote-reject-btn px-3 py-1 rounded-full border border-gray-300 text-gray-700 text-xs font-medium hover:bg-gray-50" data-quote="${q.name}">${t('rfq.reject')}</button>
+                        <button class="quote-accept-btn px-3 py-1 rounded-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-xs font-medium border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150" data-quote="${escapeHtml(q.name)}">${t('rfq.accept')}</button>
+                        <button class="quote-reject-btn px-3 py-1 rounded-full border border-gray-300 text-gray-700 text-xs font-medium hover:bg-gray-50" data-quote="${escapeHtml(q.name)}">${t('rfq.reject')}</button>
                       </div>
-                    ` : `<span class="text-xs font-medium ${q.status === 'Accepted' ? 'text-green-600' : q.status === 'Rejected' ? 'text-red-500' : 'text-gray-400'}">${q.status}</span>`}
+                    ` : `<span class="text-xs font-medium ${q.status === 'Accepted' ? 'text-green-600' : q.status === 'Rejected' ? 'text-red-500' : 'text-gray-400'}">${escapeHtml(q.status)}</span>`}
                   </td>
                 `).join('')}
               </tr>
@@ -156,8 +157,8 @@ async function loadQuotes() {
                 <td class="p-3 text-sm text-gray-500">${t('rfq.product')}</td>
                 ${quotes.map((q) => `
                   <td class="p-3 text-center border-s border-gray-100">
-                    ${q.listing_image ? `<img src="${q.listing_image}" alt="" class="w-16 h-16 object-cover rounded mx-auto mb-1" />` : ''}
-                    <p class="text-xs text-gray-700">${q.listing_title || '-'}</p>
+                    ${q.listing_image ? `<img src="${escapeHtml(sanitizeUrl(q.listing_image))}" alt="" class="w-16 h-16 object-cover rounded mx-auto mb-1" />` : ''}
+                    <p class="text-xs text-gray-700">${escapeHtml(q.listing_title || '-')}</p>
                   </td>
                 `).join('')}
               </tr>
@@ -171,7 +172,7 @@ async function loadQuotes() {
                 <td class="p-3 text-sm text-gray-500">${t('rfq.unitPrice')}</td>
                 ${quotes.map((q) => `
                   <td class="p-3 text-center border-s border-gray-100">
-                    ${q.total_price ? `
+                    ${q.price_per_unit ? `
                       <div class="text-xl font-bold text-gray-800 leading-tight tabular-nums">${formatCurrency(q.price_per_unit, q.currency)}</div>
                       ${rfq.unit ? `<div class="text-xs text-gray-400 mt-0.5">/${rfq.unit}</div>` : ''}
                     ` : `<span class="text-sm italic text-gray-500">${t('rfq.priceOnRequest')}</span>`}
@@ -189,7 +190,7 @@ async function loadQuotes() {
               <tr class="border-b border-gray-100">
                 <td class="p-3 text-sm text-gray-500">${t('rfq.messageLbl')}</td>
                 ${quotes.map((q) => `
-                  <td class="p-3 text-center text-sm border-s border-gray-100 text-gray-600">${q.message || '-'}</td>
+                  <td class="p-3 text-center text-sm border-s border-gray-100 text-gray-600">${escapeHtml(q.message || '-')}</td>
                 `).join('')}
               </tr>
 
@@ -201,35 +202,35 @@ async function loadQuotes() {
               <tr class="border-b border-gray-100">
                 <td class="p-3 text-sm text-gray-500">${t('rfq.companyName')}</td>
                 ${quotes.map((q) => `
-                  <td class="p-3 text-center text-sm border-s border-gray-100 text-gray-700">${q.seller_company || '-'}</td>
+                  <td class="p-3 text-center text-sm border-s border-gray-100 text-gray-700">${escapeHtml(q.seller_company || '-')}</td>
                 `).join('')}
               </tr>
               <!-- Country -->
               <tr class="border-b border-gray-100">
                 <td class="p-3 text-sm text-gray-500">${t('rfq.country')}</td>
                 ${quotes.map((q) => `
-                  <td class="p-3 text-center text-sm border-s border-gray-100 text-gray-600">${q.seller_country || '-'}</td>
+                  <td class="p-3 text-center text-sm border-s border-gray-100 text-gray-600">${escapeHtml(q.seller_country || '-')}</td>
                 `).join('')}
               </tr>
               <!-- Business Type -->
               <tr class="border-b border-gray-100">
                 <td class="p-3 text-sm text-gray-500">${t('rfq.businessType')}</td>
                 ${quotes.map((q) => `
-                  <td class="p-3 text-center text-sm border-s border-gray-100 text-gray-600">${q.seller_type || '-'}</td>
+                  <td class="p-3 text-center text-sm border-s border-gray-100 text-gray-600">${escapeHtml(q.seller_type || '-')}</td>
                 `).join('')}
               </tr>
               <!-- Year Established -->
               <tr class="border-b border-gray-100">
                 <td class="p-3 text-sm text-gray-500">${t('rfq.yearEstablished')}</td>
                 ${quotes.map((q) => `
-                  <td class="p-3 text-center text-sm border-s border-gray-100 text-gray-600">${q.seller_year_established || '-'}</td>
+                  <td class="p-3 text-center text-sm border-s border-gray-100 text-gray-600">${escapeHtml(q.seller_year_established || '-')}</td>
                 `).join('')}
               </tr>
               <!-- Employee Count -->
               <tr class="border-b border-gray-100">
                 <td class="p-3 text-sm text-gray-500">${t('rfq.employeeCount')}</td>
                 ${quotes.map((q) => `
-                  <td class="p-3 text-center text-sm border-s border-gray-100 text-gray-600">${q.seller_employee_count || '-'}</td>
+                  <td class="p-3 text-center text-sm border-s border-gray-100 text-gray-600">${escapeHtml(q.seller_employee_count || '-')}</td>
                 `).join('')}
               </tr>
             </tbody>
@@ -289,13 +290,15 @@ loadQuotes().then(() => {
           headers: { 'Content-Type': 'application/json', 'X-Frappe-CSRF-Token': getCsrfToken() },
           body: JSON.stringify({ quote_id: quoteId }),
         });
+        await checkEmailNotVerifiedResponse(res);
         if (!res.ok) throw new Error();
         showToast({ message: t('rfq.quoteRejected'), type: 'success' });
         setTimeout(() => window.location.reload(), 800);
-      } catch {
-        showToast({ message: t('rfq.quoteRejectError'), type: 'error' });
+      } catch (err) {
         btn.disabled = false;
         btn.textContent = t('rfq.reject');
+        if (isEmailNotVerifiedError(err)) return; // toast api.ts'te
+        showToast({ message: t('rfq.quoteRejectError'), type: 'error' });
       }
     });
   });

@@ -14,6 +14,7 @@ import topBadgeUrl from "../../assets/images/top.avif";
 import { t } from "../../i18n";
 import { getTopRankingCategories, type TopRankingCategory } from "../../services/listingService";
 import { initCurrency } from "../../services/currencyService";
+import { escapeHtml } from "../../utils/sanitize";
 
 const SKELETON_COUNT = 6;
 
@@ -32,15 +33,6 @@ function renderSkeletonCard(): string {
 }
 
 /** HTML-encode user-controlled strings before injecting into innerHTML. */
-function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
-
 /* ── Category card ── */
 function renderCategoryCard(cat: TopRankingCategory): string {
   const safeName = escapeHtml(cat.name || "");

@@ -5,6 +5,7 @@
  */
 
 import { t } from "../../i18n";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 export interface BreadcrumbItem {
   label: string;
@@ -24,12 +25,12 @@ export function Breadcrumb(items: BreadcrumbItem[]): string {
     const isHome = i === 0;
 
     if (isLast) {
-      return `<span class="text-[12px] sm:text-sm truncate max-w-[100px] xs:max-w-[140px] sm:max-w-[200px] text-gray-500 dark:text-gray-400">${item.label}</span>`;
+      return `<span class="text-[12px] sm:text-sm truncate max-w-[100px] xs:max-w-[140px] sm:max-w-[200px] text-gray-500 dark:text-gray-400">${escapeHtml(item.label)}</span>`;
     }
 
     if (isHome) {
       return `
-        <a href="${item.href ?? "#"}" class="text-[12px] sm:text-sm hover:underline whitespace-nowrap truncate max-w-[60px] xs:max-w-[80px] sm:max-w-none text-primary-500 dark:text-primary-400"><span data-i18n="shared.home">${item.label}</span></a>
+        <a href="${escapeHtml(sanitizeUrl(item.href ?? "#"))}" class="text-[12px] sm:text-sm hover:underline whitespace-nowrap truncate max-w-[60px] xs:max-w-[80px] sm:max-w-none text-primary-500 dark:text-primary-400"><span data-i18n="shared.home">${item.label}</span></a>
         <svg class="h-3 w-3 flex-shrink-0 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
         </svg>
@@ -37,7 +38,7 @@ export function Breadcrumb(items: BreadcrumbItem[]): string {
     }
 
     return `
-      <a href="${item.href ?? "#"}" class="text-[12px] sm:text-sm hover:underline whitespace-nowrap truncate max-w-[60px] xs:max-w-[80px] sm:max-w-none text-primary-500 dark:text-primary-400">${item.label}</a>
+      <a href="${escapeHtml(sanitizeUrl(item.href ?? "#"))}" class="text-[12px] sm:text-sm hover:underline whitespace-nowrap truncate max-w-[60px] xs:max-w-[80px] sm:max-w-none text-primary-500 dark:text-primary-400">${escapeHtml(item.label)}</a>
       <svg class="h-3 w-3 flex-shrink-0 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
       </svg>

@@ -6,6 +6,7 @@
 
 import type { BuyerUserInfo } from "../../types/buyerDashboard";
 import { t } from "../../i18n";
+import { escapeHtml } from "../../utils/sanitize";
 
 export interface UserInfoCardProps {
   user: BuyerUserInfo;
@@ -31,7 +32,7 @@ export function UserInfoCard(props: UserInfoCardProps): string {
           <span class="text-xl font-bold text-gray-500 uppercase" x-text="userInitial || '?'"></span>
         </div>
         <div class="flex flex-col gap-1 min-w-0">
-          <span class="text-base font-bold whitespace-nowrap overflow-hidden text-ellipsis" style="color:var(--color-text-primary)" x-text="userName || '${user.username}'">${user.username}</span>
+          <span class="text-base font-bold whitespace-nowrap overflow-hidden text-ellipsis" style="color:var(--color-text-primary)" x-text="userName || '${escapeHtml(user.username)}'">${escapeHtml(user.username)}</span>
           <a href="/pages/dashboard/settings.html#profilim" class="text-[13px] text-blue-600 no-underline inline-flex items-center transition-colors hover:text-blue-700 hover:underline">
             ${t("dashboard.viewProfile")}
             <svg class="w-3 h-3 ms-1 inline-block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">

@@ -7,6 +7,7 @@ import type { ProductCategory, DetailedProduct } from "../../types/seller/types"
 import { formatPriceRange } from "../../services/currencyService";
 import { t } from "../../i18n";
 import { getListingUrl } from "../../utils/listingUrl";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 function getBadgeClasses(type: string): string {
   const base = "inline-flex items-center gap-0.5 text-[11px] rounded-sm px-1.5 py-0.5";
@@ -28,10 +29,10 @@ function formatSoldCount(count: number): string {
 function renderProductCard(product: DetailedProduct): string {
   const detailUrl = getListingUrl({ id: product.id });
   return `
-    <a href="${detailUrl}" class="category-listing__card bg-white dark:bg-gray-800 border-e border-b border-(--card-border-color) dark:border-gray-700 p-4 lg:p-3 flex flex-col hover:shadow-lg dark:hover:shadow-xl transition-shadow duration-300 relative group cursor-pointer">
+    <a href="${escapeHtml(sanitizeUrl(detailUrl))}" class="category-listing__card bg-white dark:bg-gray-800 border-e border-b border-(--card-border-color) dark:border-gray-700 p-4 lg:p-3 flex flex-col hover:shadow-lg dark:hover:shadow-xl transition-shadow duration-300 relative group cursor-pointer">
       <!-- Image -->
       <div class="category-listing__image relative w-full h-[200px] lg:h-[180px] md:h-[160px] flex items-center justify-center mb-3">
-        <img src="${product.image}" alt="${product.name}" class="max-h-full max-w-full object-contain group-hover:scale-[1.02] transition-transform" loading="lazy"
+        <img src="${escapeHtml(sanitizeUrl(product.image))}" alt="${escapeHtml(product.name)}" class="max-h-full max-w-full object-contain group-hover:scale-[1.02] transition-transform" loading="lazy"
              onerror="this.parentElement.style.background='#f3f4f6'" />
         ${
           product.hasVideo
@@ -52,14 +53,14 @@ function renderProductCard(product: DetailedProduct): string {
         product.badges.length
           ? `
         <div class="category-listing__badges flex flex-wrap gap-1 mb-2">
-          ${product.badges.map((b) => `<span class="${getBadgeClasses(b.type)}">${b.label}</span>`).join("")}
+          ${product.badges.map((b) => `<span class="${getBadgeClasses(b.type)}">${escapeHtml(b.label)}</span>`).join("")}
         </div>
       `
           : ""
       }
 
       <!-- Name -->
-      <p class="category-listing__name text-[14px] text-[#222222] dark:text-gray-50 font-normal leading-snug line-clamp-2 mb-2">${product.name}</p>
+      <p class="category-listing__name text-[14px] text-[#222222] dark:text-gray-50 font-normal leading-snug line-clamp-2 mb-2">${escapeHtml(product.name)}</p>
 
       <!-- Price -->
       <p class="category-listing__price text-[16px] text-[#111827] dark:text-gray-50 font-bold">
@@ -68,7 +69,7 @@ function renderProductCard(product: DetailedProduct): string {
 
       <!-- MOQ -->
       <p class="category-listing__moq text-[13px] text-[#6b7280] dark:text-gray-400 mt-1">
-        ${t("seller.sf.minOrder")} ${product.moq} ${product.moqUnit}
+        ${t("seller.sf.minOrder")} ${product.moq} ${escapeHtml(product.moqUnit)}
       </p>
 
       <!-- Sold -->
@@ -81,16 +82,16 @@ function renderProductCard(product: DetailedProduct): string {
 
 function renderCategory(category: ProductCategory): string {
   return `
-    <section id="category-listing-${category.id}" class="category-listing mb-12">
+    <section id="category-listing-${escapeHtml(category.id)}" class="category-listing mb-12">
       <!-- Banner -->
       <div class="category-listing__banner group relative w-full overflow-hidden">
-        <img src="${category.bannerImage}" alt="${category.name}"
+        <img src="${escapeHtml(sanitizeUrl(category.bannerImage))}" alt="${escapeHtml(category.name)}"
              class="w-full h-[160px] sm:h-[160px] md:h-[200px] xl:h-[300px] object-cover transition-transform duration-300 group-hover:scale-[1.02]" loading="lazy"
              onerror="this.parentElement.style.background='linear-gradient(135deg,#1e3a5f,var(--color-primary-500))'" />
         <div class="absolute inset-0 flex items-center justify-center bg-black/10 dark:bg-black/20">
           <h3 class="text-[20px] sm:text-[22px] md:text-[28px] xl:text-[40px] font-black text-white uppercase tracking-tight drop-shadow-xl"
               style="text-shadow: 0 2px 12px rgba(0,0,0,0.4);">
-            ${category.name}
+            ${escapeHtml(category.name)}
           </h3>
         </div>
       </div>

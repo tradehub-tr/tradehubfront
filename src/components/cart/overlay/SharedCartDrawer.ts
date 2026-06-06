@@ -10,7 +10,7 @@ import { isLoggedIn } from "../../../utils/auth";
 import { apiCheckStock, apiAddToCart, fetchCart } from "../../../services/cartService";
 import { getCurrencySymbol as _getCurrencySymbolForCart } from "../../../utils/currency";
 import { showCartError } from "../page/CartPage";
-import { safeHexColor } from "../../../utils/sanitize";
+import { safeHexColor, escapeHtml, sanitizeUrl } from "../../../utils/sanitize";
 
 export interface CartDrawerTierModel {
   minQty: number;
@@ -185,15 +185,6 @@ let productsById = new Map<string, CartDrawerItemModel>();
 let onItemMissing: ((id: string, mode: "cart" | "sample") => Promise<void>) | null = null;
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
-
-function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
 
 function hasSizeGroups(): boolean {
   return (state.item?.sizeGroups.length ?? 0) > 0;
@@ -390,7 +381,7 @@ function updatePreview(): void {
   if (color.imageUrl) {
     // imageUrl backend listing varyant verisinden geliyor; quote breakout +
     // event handler injection riski. URL'i escape edip src'ye yaz.
-    image.innerHTML = `<img src="${escapeHtml(color.imageUrl)}" alt="${escapeHtml(color.label)}" style="width:100%;height:100%;object-fit:cover;" />`;
+    image.innerHTML = `<img src="${escapeHtml(sanitizeUrl(color.imageUrl))}" alt="${escapeHtml(color.label)}" style="width:100%;height:100%;object-fit:cover;" />`;
   } else {
     // colorHex satıcı kontrollü; CSS context injection (";background:url(...)")
     // engellemek için hex pattern doğrulamasından geçir.
@@ -488,7 +479,7 @@ function renderColorChip(color: CartDrawerColorModel, isSelected: boolean): stri
       : "border-border-default bg-surface opacity-40 cursor-not-allowed";
 
   const thumb = color.imageUrl
-    ? `<img src="${color.imageUrl}" alt="${escapeHtml(color.label)}" class="w-7 h-7 rounded object-cover shrink-0${!available ? " grayscale" : ""}" loading="lazy" />`
+    ? `<img src="${escapeHtml(sanitizeUrl(color.imageUrl))}" alt="${escapeHtml(color.label)}" class="w-7 h-7 rounded object-cover shrink-0${!available ? " grayscale" : ""}" loading="lazy" />`
     : `<span class="w-5 h-5 rounded shrink-0 border border-border-default" style="background:${safeHexColor(color.colorHex || "#e5e5e5")};${!available ? "opacity:0.4;" : ""}"></span>`;
 
   return `
@@ -496,7 +487,7 @@ function renderColorChip(color: CartDrawerColorModel, isSelected: boolean): stri
       data-color-chip="${escapeHtml(color.id)}"
       class="inline-flex items-center gap-1.5 ps-1 pe-2.5 py-1 rounded-md border transition-all ${borderStyle}"
       ${!available ? "disabled" : ""}
-      title="${!available ? `${color.label} — tükendi` : color.label}">
+      title="${!available ? `${escapeHtml(color.label)} — tükendi` : escapeHtml(color.label)}">
       ${thumb}
       <span class="text-xs font-medium text-text-heading truncate">${escapeHtml(color.label)}</span>
     </button>
@@ -520,7 +511,7 @@ function renderSelectableChip(
       data-selectable-value="${escapeHtml(option.label)}"
       class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md border transition-all ${borderStyle}"
       ${!available ? "disabled" : ""}
-      title="${!available ? `${option.label} — tükendi` : option.label}">
+      title="${!available ? `${escapeHtml(option.label)} — tükendi` : escapeHtml(option.label)}">
       <span class="text-xs font-medium text-text-heading">${escapeHtml(option.label)}</span>
     </button>
   `;

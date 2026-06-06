@@ -5,6 +5,7 @@
 
 import { getCurrentProduct } from "../../alpine/product";
 import { t } from "../../i18n";
+import { escapeHtml } from "../../utils/sanitize";
 import { ProductSalesRank } from "./ProductSalesRank";
 // Product loaded lazily via getCurrentProduct() inside functions
 
@@ -20,11 +21,11 @@ function buildTableRows(specs: { key: string; value: string }[]): string {
     const right = specs[i + 1];
     if (right) {
       rows.push(
-        `<tr class="last:[&>td]:border-b-0"><td class="${KEY_CLS}">${left.key}</td><td class="${VAL_CLS}">${left.value}</td><td class="${KEY_CLS}">${right.key}</td><td class="${VAL_CLS}">${right.value}</td></tr>`
+        `<tr class="last:[&>td]:border-b-0"><td class="${KEY_CLS}">${escapeHtml(left.key)}</td><td class="${VAL_CLS}">${escapeHtml(left.value)}</td><td class="${KEY_CLS}">${escapeHtml(right.key)}</td><td class="${VAL_CLS}">${escapeHtml(right.value)}</td></tr>`
       );
     } else {
       rows.push(
-        `<tr class="last:[&>td]:border-b-0"><td class="${KEY_CLS}">${left.key}</td><td class="${VAL_CLS}" colspan="3">${left.value}</td></tr>`
+        `<tr class="last:[&>td]:border-b-0"><td class="${KEY_CLS}">${escapeHtml(left.key)}</td><td class="${VAL_CLS}" colspan="3">${escapeHtml(left.value)}</td></tr>`
       );
     }
   }
@@ -43,7 +44,7 @@ export function AttributesTabContent(): string {
           .map(
             (g) => `
         <div class="mb-6">
-          <h4 class="text-sm font-semibold uppercase tracking-wider mb-2" style="color: var(--pd-spec-key-color, #6b7280);">${g.label}</h4>
+          <h4 class="text-sm font-semibold uppercase tracking-wider mb-2" style="color: var(--pd-spec-key-color, #6b7280);">${escapeHtml(g.label)}</h4>
           <table class="pd-attrs-table w-full border-separate border-spacing-0 border border-[var(--pd-spec-border,#e5e5e5)] rounded-md overflow-hidden text-sm [&_th]:px-4 [&_th]:py-3 [&_th]:text-[13px] [&_th]:font-semibold [&_th]:text-[var(--pd-spec-key-color,#6b7280)] [&_th]:bg-[var(--pd-spec-header-bg,#f9fafb)] [&_th]:border-b [&_th]:border-[var(--pd-spec-border,#e5e5e5)] [&_th]:text-start">
             <tbody>
               ${buildTableRows(g.items.map((it) => ({ key: it.label, value: it.value })))}
@@ -83,13 +84,13 @@ export function AttributesTabContent(): string {
             <thead>
               <tr>
                 <th>${t("product.leadTimeQty")}</th>
-                ${p.leadTimeRanges.map((r) => `<th>${r.quantityRange}</th>`).join("")}
+                ${p.leadTimeRanges.map((r) => `<th>${escapeHtml(r.quantityRange)}</th>`).join("")}
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td class="${KEY_CLS}">${t("product.leadTimeDays")}</td>
-                ${p.leadTimeRanges.map((r) => `<td class="${VAL_CLS}">${r.days}</td>`).join("")}
+                ${p.leadTimeRanges.map((r) => `<td class="${VAL_CLS}">${escapeHtml(r.days)}</td>`).join("")}
               </tr>
             </tbody>
           </table>

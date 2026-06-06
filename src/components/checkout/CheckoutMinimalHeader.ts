@@ -9,6 +9,7 @@
 import { getUser, logout, isLoggedIn } from "../../utils/auth";
 import { getSellerStoreUrl } from "../../utils/seller";
 import { t } from "../../i18n";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 /** Giriş yapılmışsa dropdown, aksi halde "Giriş Yap" linki döner. */
 function renderUserSection(): string {
@@ -28,6 +29,8 @@ function renderUserSection(): string {
 
   const user = getUser();
   const displayName = user?.full_name ?? t("topbar.defaultUser");
+  // full_name is user-controlled and lands in innerHTML via t() interpolation → escape.
+  const safeDisplayName = escapeHtml(displayName);
 
   return `
     <div class="relative">
@@ -48,11 +51,11 @@ function renderUserSection(): string {
         class="z-50 hidden bg-white rounded-lg shadow-lg border border-gray-200 w-[220px] py-2"
       >
         <div class="px-4 py-2 border-b border-gray-100">
-          <p class="text-[14px] font-semibold text-[#222]">${t("header.hello", { name: displayName })}</p>
+          <p class="text-[14px] font-semibold text-[#222]">${t("header.hello", { name: safeDisplayName })}</p>
         </div>
         <ul class="py-1">
           <li><a href="/pages/dashboard/buyer-dashboard.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors">${t("header.myDashboard")}</a></li>
-          ${user?.has_seller_profile ? `<li><a href="${getSellerStoreUrl(user!)}" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors">${t("header.myStore")}</a></li>` : ""}
+          ${user && user.has_seller_profile ? `<li><a href="${escapeHtml(sanitizeUrl(getSellerStoreUrl(user)))}" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors">${t("header.myStore")}</a></li>` : ""}
           <li><a href="/pages/dashboard/orders.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors">${t("header.myOrders")}</a></li>
           <!-- DISABLED: Mesajlarım — ileride geliştirilecek (backend chat altyapısı yok). Tek satırlık <li> aynen geri açılır. -->
           <!-- <li><a href="/pages/dashboard/messages.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors">${t("header.myMessages")}</a></li> -->

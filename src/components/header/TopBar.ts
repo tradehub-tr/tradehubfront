@@ -14,6 +14,7 @@ import { getListingUrl } from "../../utils/listingUrl";
 import { getBrandUrl } from "../../utils/brandUrl";
 import { getSellerUrl } from "../../utils/sellerUrl";
 import { getSellerStoreUrl } from "../../utils/seller";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 // DISABLED: import { mockConversations } from '../../data/mockMessages';
 import { t, getCurrentLang, updatePageTranslations } from "../../i18n";
 import type { SupportedLang } from "../../i18n";
@@ -26,7 +27,6 @@ import {
 } from "../../services/currencyService";
 import { apiRemoveCartItem, fetchCart } from "../../services/cartService";
 import { HeaderNotice, getCachedNoticeData } from "./HeaderNotice";
-import DOMPurify from "dompurify";
 import { getLucideIcon } from "../icons/lucideIcons";
 import {
   unifiedSuggest,
@@ -49,17 +49,17 @@ function renderCompactSearchGroup(title: string, items: CompactSearchGroupItem[]
   return `
     <div class="mb-3 last:mb-0">
       <h4 class="px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
-        ${DOMPurify.sanitize(title)}
+        ${escapeHtml(title)}
       </h4>
       <ul>
         ${items
           .map(
             (it) => `
           <li>
-            <a href="${DOMPurify.sanitize(it.href)}" tabindex="-1" data-compact-expanded-interactive="true"
+            <a href="${escapeHtml(sanitizeUrl(it.href))}" tabindex="-1" data-compact-expanded-interactive="true"
                class="flex items-center gap-2 px-2 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm rounded text-gray-900 dark:text-gray-100 no-underline">
               <span class="w-5 h-5 shrink-0 text-gray-400 dark:text-gray-500">${it.iconSvg}</span>
-              <span class="truncate">${DOMPurify.sanitize(it.label)}</span>
+              <span class="truncate">${escapeHtml(it.label)}</span>
             </a>
           </li>
         `
@@ -193,7 +193,7 @@ function renderCompactLogo(): string {
  */
 function renderUserButton(): string {
   const user = getUser();
-  const displayName = user?.full_name ?? t("topbar.defaultUser");
+  const displayName = escapeHtml(user?.full_name ?? t("topbar.defaultUser"));
   return `
     <div class="relative">
       <button
@@ -218,7 +218,7 @@ function renderUserButton(): string {
         </div>
         <ul class="py-1">
           <li><a href="/pages/dashboard/buyer-dashboard.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myDashboard">${t("header.myDashboard")}</span></a></li>
-          ${user?.has_seller_profile ? `<li><a href="${getSellerStoreUrl(user!)}" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myStore">${t("header.myStore")}</span></a></li>` : ""}
+          ${user?.has_seller_profile ? `<li><a href="${escapeHtml(sanitizeUrl(getSellerStoreUrl(user!)))}" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myStore">${t("header.myStore")}</span></a></li>` : ""}
           <li><a href="/pages/dashboard/orders.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myOrders">${t("header.myOrders")}</span></a></li>
           <li>
             <a href="javascript:void(0)"
@@ -1064,10 +1064,10 @@ export function initMobileDrawer(): void {
         (cat) => `
       <button
         type="button"
-        data-drawer-cat-id="${cat.id}"
+        data-drawer-cat-id="${escapeHtml(cat.id)}"
         class="flex items-center justify-between w-full px-4 py-3 text-sm text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
       >
-        <span>${cat.name}</span>
+        <span>${escapeHtml(cat.name)}</span>
         <svg class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
       </button>
     `
@@ -1090,11 +1090,11 @@ export function initMobileDrawer(): void {
           return;
 
         subcategoryTitle.textContent = cat.name;
-        subcategoryLink.href = `/pages/products.html?cat=${cat.slug}`;
+        subcategoryLink.href = `/pages/products.html?cat=${encodeURIComponent(cat.slug)}`;
         subcategoryList.innerHTML = cat.children
           .map(
             (ch) =>
-              `<a href="/pages/products.html?cat=${ch.slug}" class="block px-4 py-3 text-sm text-gray-900 hover:bg-gray-50 dark:text-white dark:hover:bg-gray-700 transition-colors">${ch.name}</a>`
+              `<a href="${escapeHtml(sanitizeUrl(`/pages/products.html?cat=${encodeURIComponent(ch.slug)}`))}" class="block px-4 py-3 text-sm text-gray-900 hover:bg-gray-50 dark:text-white dark:hover:bg-gray-700 transition-colors">${escapeHtml(ch.name)}</a>`
           )
           .join("");
 
@@ -1403,7 +1403,9 @@ let _headerCartInitialized = false;
 // canonical mağaza sayfası `/pages/seller/seller-shop.html?seller=` — normalize et.
 function normalizeSupplierHref(href: string): string {
   if (!href) return "#";
-  return href.replace(/^\/pages\/seller\.html\?id=/, "/pages/seller/seller-shop.html?seller=");
+  return sanitizeUrl(
+    href.replace(/^\/pages\/seller\.html\?id=/, "/pages/seller/seller-shop.html?seller=")
+  );
 }
 
 function renderCartModalContent(modal: HTMLElement, supplierId: string): boolean {
@@ -1434,7 +1436,7 @@ function renderCartModalContent(modal: HTMLElement, supplierId: string): boolean
     let html = `
       <div class="flex items-center gap-2 mb-2">
         <span class="inline-block w-1.5 h-4 rounded-sm" style="background:var(--btn-bg,#d97706)"></span>
-        <p class="text-[13px] font-semibold text-gray-900"><a href="${normalizeSupplierHref(supplier.href)}" class="hover:text-[var(--btn-bg,#d97706)] hover:underline transition-colors focus:outline-none">${supplier.name}</a> <span class="text-gray-400 font-normal">(${skuCount})</span></p>
+        <p class="text-[13px] font-semibold text-gray-900"><a href="${escapeHtml(normalizeSupplierHref(supplier.href))}" class="hover:text-[var(--btn-bg,#d97706)] hover:underline transition-colors focus:outline-none">${escapeHtml(supplier.name)}</a> <span class="text-gray-400 font-normal">(${skuCount})</span></p>
       </div>
       <div class="divide-y divide-gray-100">`;
 
@@ -1444,7 +1446,7 @@ function renderCartModalContent(modal: HTMLElement, supplierId: string): boolean
           ? `<span class="inline-flex items-center text-[9px] font-semibold px-1 py-0.5 rounded-full bg-amber-100 text-amber-800 me-1 align-middle">${t("cart.sampleBadge")}</span>`
           : "";
         const thumb = sku.skuImage
-          ? `<img src="${sku.skuImage}" alt="${product.title}" class="w-11 h-11 rounded-md object-cover border border-gray-100 shadow-sm">`
+          ? `<img src="${escapeHtml(sanitizeUrl(sku.skuImage))}" alt="${escapeHtml(product.title)}" class="w-11 h-11 rounded-md object-cover border border-gray-100 shadow-sm">`
           : `<div class="w-11 h-11 rounded-md bg-gray-100 border border-gray-100"></div>`;
         html += `
           <div class="flex items-center gap-2.5 py-2.5 group">
@@ -1453,11 +1455,11 @@ function renderCartModalContent(modal: HTMLElement, supplierId: string): boolean
               <span class="absolute -bottom-1 -end-1 min-w-[18px] h-[16px] px-1 inline-flex items-center justify-center text-[9px] font-bold text-white bg-gray-900 rounded leading-none">${sku.quantity}</span>
             </div>
             <div class="flex-1 min-w-0">
-              <p class="text-[12px] font-medium text-gray-800 leading-snug line-clamp-2">${sampleBadge}${product.title}</p>
-              ${sku.variantText ? `<p class="text-[10px] text-gray-500 truncate mt-0.5">${sku.variantText}</p>` : ""}
+              <p class="text-[12px] font-medium text-gray-800 leading-snug line-clamp-2">${sampleBadge}${escapeHtml(product.title)}</p>
+              ${sku.variantText ? `<p class="text-[10px] text-gray-500 truncate mt-0.5">${escapeHtml(sku.variantText)}</p>` : ""}
             </div>
             <span class="text-[12px] font-bold text-gray-900 flex-shrink-0 whitespace-nowrap">${formatPrice(sku.unitPrice, sku.baseCurrency || "USD")}</span>
-            <button type="button" data-delete-sku="${sku.id}" class="w-5 h-5 inline-flex items-center justify-center rounded-full text-gray-300 hover:text-red-500 hover:bg-red-50 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity flex-shrink-0" aria-label="${t("cart.removeProduct")}">
+            <button type="button" data-delete-sku="${escapeHtml(sku.id)}" class="w-5 h-5 inline-flex items-center justify-center rounded-full text-gray-300 hover:text-red-500 hover:bg-red-50 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity flex-shrink-0" aria-label="${t("cart.removeProduct")}">
               <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
           </div>`;
@@ -1623,12 +1625,12 @@ export function initHeaderCart(): void {
         const thumbsHtml = visibleThumbs
           .map(({ sku }) => {
             const img = sku.skuImage
-              ? `<img src="${sku.skuImage}" alt="sku" class="w-10 h-10 rounded-md object-cover border border-gray-100 shadow-sm">`
+              ? `<img src="${escapeHtml(sanitizeUrl(sku.skuImage))}" alt="sku" class="w-10 h-10 rounded-md object-cover border border-gray-100 shadow-sm">`
               : `<div class="w-10 h-10 rounded-md bg-gray-100 border border-gray-100 flex items-center justify-center">${placeholderThumbSvg}</div>`;
             return `
               <div class="relative w-10 h-10 flex-shrink-0 group">
                 ${img}
-                <button type="button" data-delete-sku="${sku.id}" class="absolute top-0.5 end-0.5 w-[14px] h-[14px] inline-flex items-center justify-center rounded-full bg-white/95 shadow text-gray-700 hover:text-red-500 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity" aria-label="${t("cart.removeProduct")}">
+                <button type="button" data-delete-sku="${escapeHtml(sku.id)}" class="absolute top-0.5 end-0.5 w-[14px] h-[14px] inline-flex items-center justify-center rounded-full bg-white/95 shadow text-gray-700 hover:text-red-500 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity" aria-label="${t("cart.removeProduct")}">
                   <svg class="w-2 h-2" fill="none" stroke="currentColor" stroke-width="3.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
                 <span class="absolute -bottom-0.5 -end-0.5 min-w-[18px] h-[18px] px-1 inline-flex items-center justify-center text-[10px] font-bold text-white bg-gray-900 rounded leading-none">${sku.quantity}</span>
@@ -1641,16 +1643,16 @@ export function initHeaderCart(): void {
             : "";
 
         html += `
-          <div data-supplier-id="${supplier.id}" class="py-1">
+          <div data-supplier-id="${escapeHtml(supplier.id)}" class="py-1">
             <div data-supplier-open role="button" tabindex="0" class="w-full text-start px-1 py-2 rounded-md hover:bg-gray-50 transition-colors cursor-pointer">
               <div class="flex items-center justify-between gap-2 mb-2">
                 <div class="flex items-center gap-2 min-w-0">
                   <div class="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">${storeIconSvg}</div>
-                  <a href="${normalizeSupplierHref(supplier.href)}" data-supplier-link class="text-[11px] font-semibold text-gray-500 uppercase tracking-wide truncate hover:text-[var(--btn-bg,#d97706)] hover:underline transition-colors focus:outline-none" title="${supplier.name}">${supplier.name}</a>
+                  <a href="${escapeHtml(normalizeSupplierHref(supplier.href))}" data-supplier-link class="text-[11px] font-semibold text-gray-500 uppercase tracking-wide truncate hover:text-[var(--btn-bg,#d97706)] hover:underline transition-colors focus:outline-none" title="${escapeHtml(supplier.name)}">${escapeHtml(supplier.name)}</a>
                 </div>
                 <div class="flex items-center gap-1.5 flex-shrink-0">
                   <span class="text-[11px] font-semibold hover:underline" style="color:var(--btn-bg,#d97706)">${t("common.viewAll")}</span>
-                  <button type="button" data-delete-supplier="${supplier.id}" class="w-5 h-5 inline-flex items-center justify-center rounded-full text-gray-300 hover:text-red-500 hover:bg-red-50 transition-colors" aria-label="${t("cart.removeProduct")}">
+                  <button type="button" data-delete-supplier="${escapeHtml(supplier.id)}" class="w-5 h-5 inline-flex items-center justify-center rounded-full text-gray-300 hover:text-red-500 hover:bg-red-50 transition-colors" aria-label="${t("cart.removeProduct")}">
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                   </button>
                 </div>
@@ -1794,13 +1796,11 @@ export async function initAuthState(): Promise<void> {
     const mobileProfile = document.getElementById("mobile-drawer-profile");
     if (mobileProfile) {
       const initials = (user.full_name || user.email || "U").charAt(0).toUpperCase();
-      const escapedName = (user.full_name || user.email)
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
-      const escapedEmail = user.email.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      const escapedName = escapeHtml(user.full_name || user.email);
+      const escapedEmail = escapeHtml(user.email);
       mobileProfile.innerHTML = `
         <div class="w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-900 flex items-center justify-center flex-shrink-0">
-          <span class="text-sm font-bold text-orange-600 dark:text-orange-300">${initials}</span>
+          <span class="text-sm font-bold text-orange-600 dark:text-orange-300">${escapeHtml(initials)}</span>
         </div>
         <div>
           <p class="text-sm font-medium text-gray-900 dark:text-white">${escapedName}</p>

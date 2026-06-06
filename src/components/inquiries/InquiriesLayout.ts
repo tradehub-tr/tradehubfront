@@ -11,6 +11,7 @@ import {
   isEmailNotVerifiedError,
 } from "../../utils/api";
 import { showToast } from "../../utils/toast";
+import { escapeHtml } from "../../utils/sanitize";
 import {
   type RfqAttachment,
   fetchRfqAttachments,
@@ -118,7 +119,7 @@ function avatarPlaceholder(name: string): string {
     .join("")
     .toUpperCase()
     .slice(0, 2);
-  return `<div class="w-10 h-10 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-xs font-bold shrink-0">${initials}</div>`;
+  return `<div class="w-10 h-10 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-xs font-bold shrink-0">${escapeHtml(initials)}</div>`;
 }
 
 function statusBadge(status: string): string {
@@ -171,23 +172,23 @@ function renderInquiryList(inquiries: Inquiry[]): string {
     ${inquiries
       .map(
         (inq) => `
-      <div class="inq-row sm:grid sm:grid-cols-[1fr_1fr_auto] sm:items-center px-4 sm:px-5 py-3 sm:py-4 border-b border-gray-50 hover:bg-gray-50/60 transition-colors cursor-pointer" data-inquiry-id="${inq.name}">
+      <div class="inq-row sm:grid sm:grid-cols-[1fr_1fr_auto] sm:items-center px-4 sm:px-5 py-3 sm:py-4 border-b border-gray-50 hover:bg-gray-50/60 transition-colors cursor-pointer" data-inquiry-id="${escapeHtml(inq.name)}">
         <div>
           <div class="flex items-center gap-2 text-xs text-gray-400 flex-wrap">
             <span>${new Date(inq.creation).toLocaleString("tr-TR", { dateStyle: "short", timeStyle: "short" })}</span>
             <span class="text-gray-300 max-sm:hidden">|</span>
-            <span>ID: ${inq.name}</span>
+            <span>ID: ${escapeHtml(inq.name)}</span>
           </div>
-          <p class="mt-1 text-sm text-gray-700 line-clamp-2">${inq.message}</p>
+          <p class="mt-1 text-sm text-gray-700 line-clamp-2">${escapeHtml(inq.message)}</p>
         </div>
         <div class="flex items-center gap-3 mt-2 sm:mt-0">
           ${avatarPlaceholder(inq.seller_name)}
           <div class="min-w-0">
-            <p class="text-sm font-medium text-gray-800 truncate">${inq.seller_name}</p>
-            <p class="text-xs text-gray-400 truncate">${inq.seller_company}</p>
+            <p class="text-sm font-medium text-gray-800 truncate">${escapeHtml(inq.seller_name)}</p>
+            <p class="text-xs text-gray-400 truncate">${escapeHtml(inq.seller_company)}</p>
           </div>
         </div>
-        <button class="inq-detail-btn text-sm text-blue-600 hover:text-blue-800 hover:underline whitespace-nowrap mt-2 sm:mt-0" data-inquiry-id="${inq.name}">${t("inquiries.viewDetail")}</button>
+        <button class="inq-detail-btn text-sm text-blue-600 hover:text-blue-800 hover:underline whitespace-nowrap mt-2 sm:mt-0" data-inquiry-id="${escapeHtml(inq.name)}">${t("inquiries.viewDetail")}</button>
       </div>
     `
       )
@@ -208,16 +209,16 @@ function renderRfqList(rfqs: RFQItem[]): string {
     ${rfqs
       .map(
         (rfq) => `
-      <div class="rfq-row sm:grid sm:grid-cols-[1fr_1fr_auto] sm:items-center px-4 sm:px-5 py-3 sm:py-4 border-b border-gray-50 hover:bg-gray-50/60 transition-colors cursor-pointer" data-rfq-id="${rfq.name}">
+      <div class="rfq-row sm:grid sm:grid-cols-[1fr_1fr_auto] sm:items-center px-4 sm:px-5 py-3 sm:py-4 border-b border-gray-50 hover:bg-gray-50/60 transition-colors cursor-pointer" data-rfq-id="${escapeHtml(rfq.name)}">
         <div>
           <div class="flex items-center gap-2 text-xs text-gray-400 flex-wrap">
             <span>${new Date(rfq.creation).toLocaleDateString("tr-TR")}</span>
             <span class="text-gray-300">|</span>
-            <span>ID: ${rfq.name}</span>
+            <span>ID: ${escapeHtml(rfq.name)}</span>
           </div>
-          <p class="mt-1 text-sm font-medium text-gray-800">${rfq.product_name}</p>
+          <p class="mt-1 text-sm font-medium text-gray-800">${escapeHtml(rfq.product_name)}</p>
           <p class="text-xs text-gray-500 flex items-center gap-2">
-            <span>${rfq.quantity} ${rfq.unit}</span>
+            <span>${escapeHtml(rfq.quantity)} ${escapeHtml(rfq.unit)}</span>
             ${
               rfq.attachment_count > 0
                 ? `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 text-[11px] font-semibold" title="${t("rfq.attachmentsTitle")}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3"><path d="m21 12-9.5 9.5a4 4 0 0 1-5.66 0 4 4 0 0 1 0-5.66l9.19-9.19a3 3 0 0 1 4.24 4.24L10.6 19.86a2 2 0 1 1-2.83-2.83l8.49-8.49"/></svg>${rfq.attachment_count}</span>`
@@ -256,8 +257,8 @@ function renderRfqList(rfqs: RFQItem[]): string {
         </div>
         <div class="mt-2 sm:mt-0 flex flex-col items-end gap-1">
           ${statusBadge(rfq.status)}
-          ${rfq.quote_count > 0 ? `<a href="/pages/dashboard/rfq-quotes.html?rfq=${rfq.name}" class="inline-flex items-center px-4 py-1.5 rounded-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-xs font-semibold border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150">${t("rfq.viewQuotes")}</a>` : ""}
-          <button class="rfq-detail-btn text-xs text-blue-600 hover:underline" data-rfq-id="${rfq.name}">${t("rfq.viewThisRfq")}</button>
+          ${rfq.quote_count > 0 ? `<a href="/pages/dashboard/rfq-quotes.html?rfq=${escapeHtml(rfq.name)}" class="inline-flex items-center px-4 py-1.5 rounded-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-xs font-semibold border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150">${t("rfq.viewQuotes")}</a>` : ""}
+          <button class="rfq-detail-btn text-xs text-blue-600 hover:underline" data-rfq-id="${escapeHtml(rfq.name)}">${t("rfq.viewThisRfq")}</button>
         </div>
       </div>
     `
@@ -283,17 +284,17 @@ function renderSellerRfqList(rfqs: SellerRFQItem[]): string {
     ${rfqs
       .map(
         (rfq) => `
-      <div class="seller-rfq-row sm:grid sm:grid-cols-[1fr_auto_auto] sm:items-center px-4 sm:px-5 py-3 sm:py-4 border-b border-gray-50 hover:bg-gray-50/60 transition-colors cursor-pointer" data-rfq-id="${rfq.name}">
+      <div class="seller-rfq-row sm:grid sm:grid-cols-[1fr_auto_auto] sm:items-center px-4 sm:px-5 py-3 sm:py-4 border-b border-gray-50 hover:bg-gray-50/60 transition-colors cursor-pointer" data-rfq-id="${escapeHtml(rfq.name)}">
         <div>
           <div class="flex items-center gap-2 text-xs text-gray-400 flex-wrap">
             <span>${new Date(rfq.creation).toLocaleDateString("tr-TR")}</span>
             <span class="text-gray-300">|</span>
-            <span>ID: ${rfq.name}</span>
-            ${rfq.category ? `<span class="text-gray-300">|</span><span class="text-amber-600">${rfq.category}</span>` : ""}
+            <span>ID: ${escapeHtml(rfq.name)}</span>
+            ${rfq.category ? `<span class="text-gray-300">|</span><span class="text-amber-600">${escapeHtml(rfq.category)}</span>` : ""}
           </div>
-          <p class="mt-1 text-sm font-medium text-gray-800">${rfq.product_name}</p>
-          <p class="text-xs text-gray-500">${rfq.quantity} ${rfq.unit}</p>
-          <p class="mt-1 text-xs text-gray-400 line-clamp-1">${rfq.description || ""}</p>
+          <p class="mt-1 text-sm font-medium text-gray-800">${escapeHtml(rfq.product_name)}</p>
+          <p class="text-xs text-gray-500">${escapeHtml(rfq.quantity)} ${escapeHtml(rfq.unit)}</p>
+          <p class="mt-1 text-xs text-gray-400 line-clamp-1">${escapeHtml(rfq.description || "")}</p>
         </div>
         <div class="mt-2 sm:mt-0 px-4">
           <span class="text-sm text-gray-500">${rfq.quote_count} ${t("inquiries.quotesLabel")}</span>
@@ -302,7 +303,7 @@ function renderSellerRfqList(rfqs: SellerRFQItem[]): string {
           ${
             rfq.my_quote
               ? `<span class="inline-flex items-center px-4 py-1.5 rounded-full bg-gray-200 text-gray-500 text-xs font-semibold cursor-not-allowed">${t("inquiries.quoteSubmitted")}</span>`
-              : `<button class="seller-rfq-quote-btn inline-flex items-center px-4 py-1.5 rounded-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-xs font-semibold border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150" data-rfq-id="${rfq.name}">${t("inquiries.sendQuote")}</button>`
+              : `<button class="seller-rfq-quote-btn inline-flex items-center px-4 py-1.5 rounded-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-xs font-semibold border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150" data-rfq-id="${escapeHtml(rfq.name)}">${t("inquiries.sendQuote")}</button>`
           }
         </div>
       </div>
@@ -343,18 +344,18 @@ function renderMyQuotesList(quotes: MyQuoteItem[]): string {
     ${quotes
       .map(
         (q) => `
-      <div class="my-quote-row sm:grid sm:grid-cols-[1fr_120px_120px] gap-4 sm:items-center px-4 sm:px-5 py-3 sm:py-4 border-b border-gray-50 hover:bg-gray-50/60 transition-colors" data-quote-id="${q.name}">
+      <div class="my-quote-row sm:grid sm:grid-cols-[1fr_120px_120px] gap-4 sm:items-center px-4 sm:px-5 py-3 sm:py-4 border-b border-gray-50 hover:bg-gray-50/60 transition-colors" data-quote-id="${escapeHtml(q.name)}">
         <div>
           <div class="flex items-center gap-2 text-xs text-gray-400 flex-wrap">
             <span>${new Date(q.creation).toLocaleDateString("tr-TR")}</span>
             <span class="text-gray-300">|</span>
-            <span>ID: ${q.rfq}</span>
+            <span>ID: ${escapeHtml(q.rfq)}</span>
           </div>
-          <p class="mt-1 text-sm font-medium text-gray-800">${q.rfq_product_name}</p>
-          <p class="text-xs text-gray-500">${q.rfq_quantity} ${q.rfq_unit}</p>
+          <p class="mt-1 text-sm font-medium text-gray-800">${escapeHtml(q.rfq_product_name)}</p>
+          <p class="text-xs text-gray-500">${escapeHtml(q.rfq_quantity)} ${escapeHtml(q.rfq_unit)}</p>
         </div>
         <div class="mt-2 sm:mt-0 px-4 text-end">
-          <p class="text-sm font-semibold text-gray-800">${q.currency} ${q.price_per_unit}</p>
+          <p class="text-sm font-semibold text-gray-800">${escapeHtml(q.currency)} ${escapeHtml(q.price_per_unit)}</p>
           ${q.lead_time_days ? `<p class="text-xs text-gray-400">${q.lead_time_days} ${t("rfq.days")}</p>` : ""}
         </div>
         <div class="mt-2 sm:mt-0">
@@ -374,8 +375,8 @@ function showQuoteSubmitModal(rfq: SellerRFQItem, onSuccess: () => void): void {
   modal.innerHTML = `
     <div class="bg-white rounded-lg p-6 w-full max-w-2xl mx-4 shadow-xl max-h-[90vh] overflow-y-auto">
       <h3 class="text-base font-semibold mb-1">${t("inquiries.submitQuoteFor")}</h3>
-      <p class="text-sm text-gray-500 mb-4">${rfq.product_name} — ${rfq.quantity} ${rfq.unit}</p>
-      ${rfq.description ? `<p class="text-xs text-gray-400 mb-4 line-clamp-3">${rfq.description}</p>` : ""}
+      <p class="text-sm text-gray-500 mb-4">${escapeHtml(rfq.product_name)} — ${escapeHtml(rfq.quantity)} ${escapeHtml(rfq.unit)}</p>
+      ${rfq.description ? `<p class="text-xs text-gray-400 mb-4 line-clamp-3">${escapeHtml(rfq.description)}</p>` : ""}
 
       <!-- Attachment grid (filled async after modal mounts) -->
       <div id="quote-attachments-slot" class="mb-4"></div>
@@ -617,24 +618,24 @@ function renderRfqDetailPanel(rfqData: RfqDetailPayload): string {
         </button>
       </div>
       <div class="px-5 py-4">
-        <h4 class="text-lg font-bold text-gray-800">${rfq.product_name}</h4>
-        <p class="text-sm text-gray-500 mt-1">Status: ${rfq.status}</p>
+        <h4 class="text-lg font-bold text-gray-800">${escapeHtml(rfq.product_name)}</h4>
+        <p class="text-sm text-gray-500 mt-1">Status: ${escapeHtml(rfq.status)}</p>
         <!-- Action buttons -->
         <div class="flex gap-2 mt-3">
           <button id="rfq-add-details-btn" class="px-4 py-1.5 text-sm border border-gray-300 rounded-full hover:bg-gray-50 ${rfq.additional_details ? "opacity-50 cursor-not-allowed" : ""}" ${rfq.additional_details ? "disabled" : ""}>${t("rfq.addDetails")}</button>
           <a href="/pages/dashboard/rfq.html" class="px-4 py-1.5 text-sm border border-gray-300 rounded-full hover:bg-gray-50">${t("rfq.postAgain")}</a>
-          <button id="rfq-close-btn" class="px-4 py-1.5 text-sm border border-gray-300 rounded-full hover:bg-gray-50 ${rfq.status === "Closed" || rfq.status === "Completed" ? "opacity-50 cursor-not-allowed" : ""}" data-rfq="${rfq.name}" ${rfq.status === "Closed" || rfq.status === "Completed" ? "disabled" : ""}>${t("rfq.closeRfq")}</button>
+          <button id="rfq-close-btn" class="px-4 py-1.5 text-sm border border-gray-300 rounded-full hover:bg-gray-50 ${rfq.status === "Closed" || rfq.status === "Completed" ? "opacity-50 cursor-not-allowed" : ""}" data-rfq="${escapeHtml(rfq.name)}" ${rfq.status === "Closed" || rfq.status === "Completed" ? "disabled" : ""}>${t("rfq.closeRfq")}</button>
         </div>
         <!-- Product info -->
         <div class="mt-4 pt-4 border-t border-gray-100">
           <h5 class="text-sm font-semibold text-gray-700 mb-3">${t("rfq.productBasicInfo")}</h5>
           <div class="space-y-2 text-sm">
-            <div class="flex"><span class="w-28 text-gray-400">Product Name:</span><span class="font-medium text-gray-800">${rfq.product_name}</span></div>
-            ${rfq.category_name ? `<div class="flex"><span class="w-28 text-gray-400">Category:</span><span class="font-medium text-gray-800">${rfq.category_name}</span></div>` : ""}
-            <div class="flex"><span class="w-28 text-gray-400">Quantity:</span><span class="font-medium text-gray-800">${rfq.quantity} ${rfq.unit}</span></div>
-            ${rfq.additional_details ? `<div class="flex"><span class="w-28 text-gray-400">Details:</span><span class="font-medium text-gray-800">${rfq.additional_details}</span></div>` : ""}
+            <div class="flex"><span class="w-28 text-gray-400">Product Name:</span><span class="font-medium text-gray-800">${escapeHtml(rfq.product_name)}</span></div>
+            ${rfq.category_name ? `<div class="flex"><span class="w-28 text-gray-400">Category:</span><span class="font-medium text-gray-800">${escapeHtml(rfq.category_name)}</span></div>` : ""}
+            <div class="flex"><span class="w-28 text-gray-400">Quantity:</span><span class="font-medium text-gray-800">${escapeHtml(rfq.quantity)} ${escapeHtml(rfq.unit)}</span></div>
+            ${rfq.additional_details ? `<div class="flex"><span class="w-28 text-gray-400">Details:</span><span class="font-medium text-gray-800">${escapeHtml(rfq.additional_details)}</span></div>` : ""}
           </div>
-          ${rfq.description ? `<details class="mt-2"><summary class="text-sm text-gray-500 cursor-pointer">${t("rfq.showMore")}</summary><p class="mt-2 text-sm text-gray-700">${rfq.description}</p></details>` : ""}
+          ${rfq.description ? `<details class="mt-2"><summary class="text-sm text-gray-500 cursor-pointer">${t("rfq.showMore")}</summary><p class="mt-2 text-sm text-gray-700">${escapeHtml(rfq.description)}</p></details>` : ""}
         </div>
         <!-- Quotes -->
         ${
@@ -649,11 +650,11 @@ function renderRfqDetailPanel(rfqData: RfqDetailPayload): string {
                 <div class="border border-gray-100 rounded-lg p-3">
                   <div class="flex items-center gap-2 mb-2">
                     ${avatarPlaceholder(q.seller_name)}
-                    <div><p class="text-sm font-medium">${q.seller_name}</p><p class="text-xs text-gray-400">${q.seller_company}</p></div>
+                    <div><p class="text-sm font-medium">${escapeHtml(q.seller_name)}</p><p class="text-xs text-gray-400">${escapeHtml(q.seller_company)}</p></div>
                   </div>
-                  <p class="text-sm">${q.total_price ? `${q.currency} ${q.total_price}` : "Price on request"} ${q.lead_time_days ? `| ${q.lead_time_days} days` : ""}</p>
+                  <p class="text-sm">${q.total_price ? `${escapeHtml(q.currency)} ${escapeHtml(q.total_price)}` : "Price on request"} ${q.lead_time_days ? `| ${q.lead_time_days} days` : ""}</p>
                   <div class="flex gap-3 mt-2 text-xs">
-                    <a href="/pages/dashboard/rfq-quotes.html?rfq=${rfq.name}" class="text-blue-600 hover:underline">${t("rfq.viewDetail")}</a>
+                    <a href="/pages/dashboard/rfq-quotes.html?rfq=${escapeHtml(rfq.name)}" class="text-blue-600 hover:underline">${t("rfq.viewDetail")}</a>
                   </div>
                 </div>
               `
@@ -682,15 +683,15 @@ function renderDetailPanel(inq: Inquiry): string {
           <div class="flex items-center gap-3">
             <span class="text-xs text-gray-400">To:</span>
             ${avatarPlaceholder(inq.seller_name)}
-            <div><p class="text-sm font-medium text-gray-800">${inq.seller_name}</p><p class="text-xs text-gray-400">${inq.seller_company}</p></div>
+            <div><p class="text-sm font-medium text-gray-800">${escapeHtml(inq.seller_name)}</p><p class="text-xs text-gray-400">${escapeHtml(inq.seller_company)}</p></div>
           </div>
           <a href="#" class="inline-flex items-center px-4 py-2 rounded-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-sm font-medium border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150">${t("inquiries.contactNow")}</a>
         </div>
         <div class="flex items-center justify-between text-xs text-gray-400 mb-4 pb-4 border-b border-gray-100">
-          <span>ID: ${inq.name}</span>
+          <span>ID: ${escapeHtml(inq.name)}</span>
           <span>${new Date(inq.creation).toLocaleString("tr-TR")}</span>
         </div>
-        <p class="text-sm text-gray-700 leading-relaxed">${inq.message}</p>
+        <p class="text-sm text-gray-700 leading-relaxed">${escapeHtml(inq.message)}</p>
       </div>
     </div>`;
 }

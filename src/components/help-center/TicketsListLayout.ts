@@ -16,7 +16,7 @@ const STATUS_TABS = [
 
 export function TicketsListLayout(): string {
   return `
-    <div class="bg-gray-50 min-h-screen" x-data="ticketsList()" x-init="init()">
+    <div class="bg-gray-50 min-h-screen" x-data="ticketsList()">
       <div class="max-w-[1100px] mx-auto px-4 sm:px-6 py-8">
         <!-- Header -->
         <div class="flex items-center justify-between mb-6">

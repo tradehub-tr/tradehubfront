@@ -6,6 +6,7 @@ import { getSessionUser, resendVerificationEmail } from "../utils/auth";
 import { callMethod } from "../utils/api";
 import { t } from "../i18n";
 import { applySwiperDir } from "../utils/direction";
+import { sanitizeUrl } from "../utils/sanitize";
 
 Alpine.data("buyerUserInfo", () => ({
   userName: "",
@@ -100,7 +101,16 @@ Alpine.data("dashboardBanners", () => ({
         ? [{ type: "email-verify", email: this.userEmail }]
         : [];
 
-    this.banners = [...synthetic, ...remote.map((b) => ({ type: "remote" as const, ...b }))];
+    this.banners = [
+      ...synthetic,
+      ...remote.map((b) => ({
+        type: "remote" as const,
+        ...b,
+        // Backend-controlled URL → reject javascript:/data:/protocol-relative
+        // before it reaches the :href binding (open-redirect / XSS).
+        link_href: sanitizeUrl(b.link_href),
+      })),
+    ];
 
     if (this.banners.length > 0) {
       this.$nextTick(() => this.initSwiper());

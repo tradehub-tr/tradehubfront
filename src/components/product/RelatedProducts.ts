@@ -28,6 +28,7 @@ import {
 import { getCurrentProduct } from "../../alpine/product";
 import type { ProductListingCard } from "../../types/productListing";
 import { applySwiperDir } from "../../utils/direction";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 interface TabMeta {
   key: RelatedRelationType;
@@ -66,7 +67,7 @@ function tabsMeta(): TabMeta[] {
 }
 
 function renderCard(card: ProductListingCard): string {
-  const safeName = card.name.replace(/"/g, "&quot;");
+  const safeName = escapeHtml(card.name);
   const discountText = card.discount ? card.discount : "";
   const supplierYearsText = card.supplierYears
     ? `${card.supplierYears} ${t("productGrid.yr")}`
@@ -75,13 +76,13 @@ function renderCard(card: ProductListingCard): string {
   return `
     <a
       class="rp-card flex flex-col h-full overflow-hidden no-underline text-inherit transition-shadow hover:shadow-md bg-[var(--pc-related-bg,#fff)] border border-[var(--pc-related-border-color,#f3f4f6)] rounded-[var(--pc-related-radius,8px)]"
-      href="${card.href}"
+      href="${escapeHtml(sanitizeUrl(card.href))}"
       aria-label="${safeName}"
     >
       <div class="aspect-square w-full overflow-hidden bg-gray-50">
         ${
           card.imageSrc
-            ? `<img class="w-full h-full object-cover transition-transform duration-300 hover:scale-105" src="${card.imageSrc}" alt="${safeName}" loading="lazy" />`
+            ? `<img class="w-full h-full object-cover transition-transform duration-300 hover:scale-105" src="${escapeHtml(sanitizeUrl(card.imageSrc))}" alt="${safeName}" loading="lazy" />`
             : `<div class="w-full h-full flex items-center justify-center text-gray-300">
               <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
@@ -91,21 +92,21 @@ function renderCard(card: ProductListingCard): string {
       </div>
 
       <div class="flex flex-col flex-1 gap-1.5 p-3">
-        <p class="text-[13px] leading-[1.4] line-clamp-2 text-gray-800 min-h-[36px]" title="${safeName}">${card.name}</p>
+        <p class="text-[13px] leading-[1.4] line-clamp-2 text-gray-800 min-h-[36px]" title="${safeName}">${safeName}</p>
 
         <div class="flex flex-wrap items-baseline gap-x-2">
           <span class="text-sm font-bold text-gray-900">${formatPrice(card.price)}</span>
-          ${discountText ? `<span class="text-xs font-medium text-red-500">${discountText}</span>` : ""}
+          ${discountText ? `<span class="text-xs font-medium text-red-500">${escapeHtml(discountText)}</span>` : ""}
         </div>
 
         <div class="text-xs text-gray-500 truncate">
-          <span class="me-1.5 font-medium text-gray-600">${card.moq}</span>
-          ${card.stats ? `<span>${card.stats}</span>` : ""}
+          <span class="me-1.5 font-medium text-gray-600">${escapeHtml(card.moq)}</span>
+          ${card.stats ? `<span>${escapeHtml(card.stats)}</span>` : ""}
         </div>
 
         <div class="mt-auto flex items-center gap-1.5 text-xs text-gray-400">
-          ${supplierYearsText ? `<span class="rounded bg-gray-100 px-1.5 py-0.5 text-[11px] text-gray-500">${supplierYearsText}</span>` : ""}
-          ${card.supplierCountry ? `<span class="rounded bg-gray-100 px-1.5 py-0.5 text-[11px] text-gray-500">${card.supplierCountry}</span>` : ""}
+          ${supplierYearsText ? `<span class="rounded bg-gray-100 px-1.5 py-0.5 text-[11px] text-gray-500">${escapeHtml(supplierYearsText)}</span>` : ""}
+          ${card.supplierCountry ? `<span class="rounded bg-gray-100 px-1.5 py-0.5 text-[11px] text-gray-500">${escapeHtml(card.supplierCountry)}</span>` : ""}
         </div>
       </div>
     </a>

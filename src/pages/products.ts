@@ -50,19 +50,11 @@ import { findCategoryBySlug, findCategoryById, findCategoryPath, onCategoriesLoa
 import { initAnimatedPlaceholder } from '../utils/animatedPlaceholder'
 import { pushRecentCategory } from '../utils/recentCategories'
 import { saveRecentCategory } from '../services/recentHistoryService'
+import { escapeHtml } from "../utils/sanitize";
 
 /* ── Helpers ── */
 
 /** HTML-encode user input to prevent XSS when inserted via innerHTML */
-function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
-
 /* ── Read URL parameters ── */
 const urlParams = new URLSearchParams(window.location.search);
 // Both ?category= (MegaMenu ID) and ?cat= (URL slug) are supported

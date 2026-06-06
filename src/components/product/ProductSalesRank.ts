@@ -6,15 +6,11 @@
  */
 
 import { t, getCurrentLang } from "../../i18n";
+import { escapeHtml } from "../../utils/sanitize";
 import type { CategoryRank } from "../../types/product";
 
 function fmt(n: number): string {
   return n.toLocaleString(getCurrentLang() === "en" ? "en-US" : "tr-TR");
-}
-
-/** Kategori adı admin-kontrollü; yine de XSS'e karşı minimal kaçış uygula. */
-function esc(s: string): string {
-  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
 export function ProductSalesRank(ranks: CategoryRank[]): string {
@@ -41,7 +37,7 @@ export function ProductSalesRank(ranks: CategoryRank[]): string {
           </div>
           <div class="min-w-0 flex-1">
             <div class="flex flex-wrap items-center gap-y-1">
-              <span class="truncate text-sm font-semibold group-hover:underline" style="color: var(--pd-title-color, #111827);">${esc(r.categoryName)}</span>
+              <span class="truncate text-sm font-semibold group-hover:underline" style="color: var(--pd-title-color, #111827);">${escapeHtml(r.categoryName)}</span>
               ${badge}
             </div>
             <span class="text-xs tabular-nums" style="color: var(--pd-spec-key-color, #6b7280);">${t("product.salesRankOutOf", { total: fmt(r.total) })}</span>

@@ -10,6 +10,7 @@ import { formatCurrency, getSelectedCurrency } from "../../services/currencyServ
 import type { PriceTier, ProductVariant, SkuMatrixEntry } from "../../types/product";
 import { openShippingModal, openCartDrawer } from "./CartDrawer";
 import { SocialProofBadge } from "./SocialProofBadge";
+import { escapeHtml, sanitizeUrl, safeHexColor } from "../../utils/sanitize";
 
 function renderPriceTiers(tiers: PriceTier[]): string {
   // When a campaign is active the backend sets each tier's originalPrice
@@ -71,8 +72,8 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
 
   if (variant.type === "color") {
     return `
-      <div class="variant-group" data-variant-type="${variant.type}" data-variant-label="${variant.label}">
-        <h4 class="pd-variant-label text-sm text-[var(--pd-title-color,#111827)] my-4 mb-3"><strong>${variant.label}:</strong> <span class="variant-selected-label">${selectedOpt.label}</span></h4>
+      <div class="variant-group" data-variant-type="${escapeHtml(variant.type)}" data-variant-label="${escapeHtml(variant.label)}">
+        <h4 class="pd-variant-label text-sm text-[var(--pd-title-color,#111827)] my-4 mb-3"><strong>${escapeHtml(variant.label)}:</strong> <span class="variant-selected-label">${escapeHtml(selectedOpt.label)}</span></h4>
         <div class="pd-color-thumbs flex flex-wrap gap-2 mt-2">
           ${variant.options
             .map((opt) => {
@@ -82,20 +83,20 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
             <button
               type="button"
               class="variant-option pd-color-thumb w-16 h-16 p-0 border-2 border-[var(--color-border-default,#e5e5e5)] rounded-full overflow-hidden cursor-pointer bg-transparent transition-[border-color] duration-150 [&_img]:w-full [&_img]:h-full [&_img]:object-cover [&_img]:block [&.active]:border-[var(--pd-title-color,#111827)] [&:hover:not(.active):not(.pd-color-thumb-disabled)]:border-[#999] [&.pd-color-thumb-disabled]:opacity-40 [&.pd-color-thumb-disabled]:cursor-not-allowed ${isActive ? "active" : ""} ${opt.available ? "" : "pd-color-thumb-disabled"}"
-              data-variant-id="${opt.id}"
-              data-variant-label="${opt.label}"
-              data-variant-image="${opt.thumbnail || ""}"
-              data-variant-video="${opt.videoUrl || ""}"
+              data-variant-id="${escapeHtml(opt.id)}"
+              data-variant-label="${escapeHtml(opt.label)}"
+              data-variant-image="${escapeHtml(sanitizeUrl(opt.thumbnail || ""))}"
+              data-variant-video="${escapeHtml(sanitizeUrl(opt.videoUrl || ""))}"
               data-variant-title="${encodeURIComponent(opt.title || "")}"
               data-variant-images="${encodeURIComponent(JSON.stringify(opt.images || []))}"
-              data-variant-value="${opt.value}"
+              data-variant-value="${escapeHtml(opt.value)}"
               data-is-default="${isDef ? "1" : "0"}"
-              ${opt.price ? `data-variant-price="${opt.price}"` : ""}
+              ${opt.price ? `data-variant-price="${escapeHtml(opt.price)}"` : ""}
               ${opt.available ? "" : "disabled"}
-              aria-label="${opt.label}"
-              title="${opt.label}"
+              aria-label="${escapeHtml(opt.label)}"
+              title="${escapeHtml(opt.label)}"
             >
-              <img src="${opt.thumbnail || ""}" alt="${opt.label}" style="background:${opt.value};">
+              <img src="${escapeHtml(sanitizeUrl(opt.thumbnail || ""))}" alt="${escapeHtml(opt.label)}" style="background:${safeHexColor(opt.value, "transparent")};">
             </button>
           `;
             })
@@ -119,8 +120,8 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
   const axisIndex = variantIndex >= 1 ? variantIndex : 1;
 
   return `
-    <div class="variant-group" data-variant-type="${variant.type}" data-variant-label="${variant.label}">
-      <h4 class="pd-variant-label text-sm text-[var(--pd-title-color,#111827)] my-4 mb-3"><strong>${variant.label}:</strong> <span class="variant-selected-label">${selectedOpt.label}</span></h4>
+    <div class="variant-group" data-variant-type="${escapeHtml(variant.type)}" data-variant-label="${escapeHtml(variant.label)}">
+      <h4 class="pd-variant-label text-sm text-[var(--pd-title-color,#111827)] my-4 mb-3"><strong>${escapeHtml(variant.label)}:</strong> <span class="variant-selected-label">${escapeHtml(selectedOpt.label)}</span></h4>
       <div class="flex flex-wrap gap-2 mt-2">
         ${variant.options
           .map((opt) => {
@@ -141,17 +142,17 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
           <button
             type="button"
             class="variant-option pd-variant-btn px-4 py-1.5 rounded-full text-[13px] font-medium border border-[var(--color-border-medium,#d1d5db)] bg-[var(--color-surface,#fff)] text-[var(--pd-title-color,#111827)] cursor-pointer transition-all duration-150 [&.active]:border-[var(--pd-title-color,#111827)] [&.active]:font-semibold [&:hover:not(.active):not(:disabled)]:border-[#999] ${isActive ? "active" : ""} ${isAvailable ? "" : "opacity-40 line-through cursor-not-allowed"}"
-            data-variant-id="${opt.id}"
-            data-variant-label="${opt.label}"
-            data-variant-video="${opt.videoUrl || ""}"
+            data-variant-id="${escapeHtml(opt.id)}"
+            data-variant-label="${escapeHtml(opt.label)}"
+            data-variant-video="${escapeHtml(sanitizeUrl(opt.videoUrl || ""))}"
             data-variant-title="${encodeURIComponent(opt.title || "")}"
             data-variant-images="${encodeURIComponent(JSON.stringify(opt.images || []))}"
             data-is-default="${isDef ? "1" : "0"}"
-            ${opt.price ? `data-variant-price="${opt.price}"` : ""}
+            ${opt.price ? `data-variant-price="${escapeHtml(opt.price)}"` : ""}
             ${isAvailable ? "" : "disabled"}
-            title="${isAvailable ? opt.label : `${opt.label} — tükendi`}"
+            title="${isAvailable ? escapeHtml(opt.label) : `${escapeHtml(opt.label)} — tükendi`}"
           >
-            ${opt.label}
+            ${escapeHtml(opt.label)}
           </button>
         `;
           })
@@ -225,7 +226,7 @@ export function ProductInfo(): string {
           <h3 class="text-sm font-bold mb-3 flex items-center gap-1.5 m-0" style="color: var(--pd-title-color, #111827);">${t("product.shippingLabel")}</h3>
           <div class="flex items-center justify-between gap-3 mt-3 px-3.5 py-3 rounded-md border min-w-0" id="pd-shipping-card" style="background: var(--pd-spec-header-bg, #f9fafb); border-color: var(--color-border-default, #e5e5e5);">
             <div class="flex flex-col gap-0.5 min-w-0">
-              <span class="text-sm font-semibold truncate" id="pd-ship-card-method" style="color: var(--pd-title-color, #111827);">${p.shipping[0]?.method || t("product.shippingLabel")}</span>
+              <span class="text-sm font-semibold truncate" id="pd-ship-card-method" style="color: var(--pd-title-color, #111827);">${escapeHtml(p.shipping[0]?.method || t("product.shippingLabel"))}</span>
               <span class="pd-shipping-card-detail text-xs truncate" style="color: var(--pd-rating-text-color, #6b7280);">${p.shipping[0] ? t("product.shippingCost", { cost: p.shipping[0].cost, days: p.shipping[0].estimatedDays }) : ""}</span>
             </div>
             <a href="javascript:void(0)" class="text-[13px] font-medium no-underline whitespace-nowrap cursor-pointer" id="pd-ship-card-change" style="color: var(--pd-price-color, #cc9900);">${t("product.changeLabel")} ›</a>
@@ -273,12 +274,12 @@ export function ProductInfo(): string {
 
           <button type="button" id="pd-chat-with-seller"
                   data-chat-trigger
-                  data-product-id="${mockProduct.id}"
-                  data-product-title="${(p.title || "").replace(/"/g, "&quot;")}"
-                  data-product-price="${(p.priceTiers[0] ? formatCurrency(p.priceTiers[0].price, getSelectedCurrency()) : "").replace(/"/g, "&quot;")}"
-                  data-product-thumb="${p.images?.[0]?.src || ""}"
+                  data-product-id="${escapeHtml(mockProduct.id)}"
+                  data-product-title="${escapeHtml(p.title || "")}"
+                  data-product-price="${escapeHtml(p.priceTiers[0] ? formatCurrency(p.priceTiers[0].price, getSelectedCurrency()) : "")}"
+                  data-product-thumb="${escapeHtml(sanitizeUrl(p.images?.[0]?.src || ""))}"
                   data-product-min-order="${p.moq ? String(p.moq) : "1"}"
-                  data-seller-id="${p.supplier?.id || ""}"
+                  data-seller-id="${escapeHtml(p.supplier?.id || "")}"
                   class="th-btn-outline inline-flex items-center justify-center gap-2 cursor-pointer">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
             ${t("chat.chatWithSeller")}

@@ -3,6 +3,7 @@
  * Used by seller-shop page to dynamically render storefront sections
  */
 import { btn } from "../ui/button";
+import { escapeHtml, sanitizeUrl, safeHexColor } from "../sanitize";
 
 /** Storefront section ayarları — bölüm tipine göre farklı subset'ler kullanılır */
 export interface SectionSettings {
@@ -53,16 +54,6 @@ interface HeroSlide {
   textColor?: "white" | "dark";
 }
 
-function escapeHtml(s: unknown): string {
-  if (s == null) return "";
-  return String(s)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
-
 function escapeAttr(s: unknown): string {
   return escapeHtml(s);
 }
@@ -88,7 +79,7 @@ function renderSlideOverlay(slide: HeroSlide): string {
         <div class="max-w-[600px] inline-block">
           ${slide.title ? `<h2 class="text-2xl md:text-4xl lg:text-5xl font-bold mb-2 ${titleShadow}">${escapeHtml(slide.title)}</h2>` : ""}
           ${slide.subtitle ? `<p class="text-sm md:text-lg lg:text-xl mb-4 ${titleShadow}">${escapeHtml(slide.subtitle)}</p>` : ""}
-          ${slide.ctaText ? `<a href="${escapeAttr(slide.ctaLink || "#")}" class="${btn({ variant: "primary", size: "lg" })} inline-block">${escapeHtml(slide.ctaText)}</a>` : ""}
+          ${slide.ctaText ? `<a href="${escapeHtml(sanitizeUrl(slide.ctaLink || "#"))}" class="${btn({ variant: "primary", size: "lg" })} inline-block">${escapeHtml(slide.ctaText)}</a>` : ""}
         </div>
       </div>
     </div>
@@ -113,9 +104,9 @@ function renderSlideImage(slide: HeroSlide, isStatic: boolean): string {
   const hasOverlay = !!(slide.title || slide.subtitle || slide.ctaText);
   const link = !hasOverlay && slide.ctaLink ? slide.ctaLink : "";
   const resolvedSrc = resolveImageUrl(slide.image);
-  const innerImg = `<img src="${escapeAttr(resolvedSrc)}" alt="${escapeAttr(slide.title || "Banner")}" class="${heightCls}" onerror="${fallback}" />${renderSlideOverlay(slide)}`;
+  const innerImg = `<img src="${escapeHtml(sanitizeUrl(resolvedSrc))}" alt="${escapeAttr(slide.title || "Banner")}" class="${heightCls}" onerror="${fallback}" />${renderSlideOverlay(slide)}`;
   return link
-    ? `<a href="${escapeAttr(link)}" class="${wrapper}">${innerImg}</a>`
+    ? `<a href="${escapeHtml(sanitizeUrl(link))}" class="${wrapper}">${innerImg}</a>`
     : `<div class="${wrapper}">${innerImg}</div>`;
 }
 
@@ -124,7 +115,7 @@ function renderHeroBanner(settings: SectionSettings): string {
   const autoplay = settings?.autoplay !== false;
   const delay = Number(settings?.delay) || 5000;
   const bgColor = settings?.bgColor || "";
-  const bgStyle = bgColor ? `style="background-color: ${escapeAttr(bgColor)};"` : "";
+  const bgStyle = bgColor ? `style="background-color: ${safeHexColor(bgColor)};"` : "";
 
   const rawSlides: HeroSlide[] =
     Array.isArray(settings?.slides) && settings.slides.length > 0
@@ -772,10 +763,10 @@ export function renderDynamicSections(layout: LayoutConfig): string {
       if (!renderer) return "";
 
       const bgStyle = section.settings?.bgColor
-        ? `background-color: ${section.settings.bgColor}`
+        ? `background-color: ${safeHexColor(section.settings.bgColor)}`
         : "";
 
-      return `<div class="storefront-dynamic-section" data-section-type="${section.type}" style="${bgStyle}">${renderer(section.settings || {})}</div>`;
+      return `<div class="storefront-dynamic-section" data-section-type="${escapeHtml(section.type)}" style="${escapeHtml(bgStyle)}">${renderer(section.settings || {})}</div>`;
     })
     .join("");
 }

@@ -578,8 +578,10 @@ Alpine.data("sellerDashboard", () => ({
       headers: { "Content-Type": "application/json", "X-Frappe-CSRF-Token": this._csrf() },
       body: JSON.stringify(body),
     });
-    const data = (await res.json()) as { message: unknown; exc?: string };
-    if (!res.ok) throw new Error((data as { exception?: string }).exception || "Hata");
+    const data = (await res.json()) as { message: unknown; exc?: string; exception?: string };
+    // Frappe bazı hatalarda HTTP 200-OK döndürüp hatayı body'de `exc` (traceback)
+    // veya `exception` alanında taşır. Yalniz res.ok kontrolu bunları yutar.
+    if (!res.ok || data.exc) throw new Error(data.exception || "Hata");
     return data.message;
   },
 

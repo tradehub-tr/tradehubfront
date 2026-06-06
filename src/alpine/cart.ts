@@ -4,7 +4,7 @@ import { openFavoritesDropdown } from "../components/favorites/FavoritesDropdown
 import { isItemFavorited } from "../stores/favorites";
 import { cartStore } from "../components/cart/state/CartStore";
 import { showFavoriteToast, showCartError } from "../components/cart/page/CartPage";
-import { sanitizeHtml } from "../utils/sanitize";
+import { sanitizeHtml, escapeHtml, sanitizeUrl } from "../utils/sanitize";
 import {
   formatCurrency,
   formatPrice,
@@ -607,7 +607,7 @@ Alpine.data("cartPage", () => ({
       .map(
         (item) => `
       <div class="relative w-14 h-14 sm:w-16 sm:h-16 rounded-md overflow-hidden border border-border-default shrink-0">
-        <img src="${item.image}" alt="SKU" class="w-full h-full object-cover" />
+        <img src="${escapeHtml(sanitizeUrl(item.image))}" alt="SKU" class="w-full h-full object-cover" />
         <span class="absolute end-0 bottom-0 px-1 py-[2px] rounded-ss bg-black/65 text-white text-[11px] font-bold leading-none">${item.quantity}</span>
       </div>
     `
@@ -734,10 +734,10 @@ Alpine.data("cartPage", () => ({
             (sk) => `
             <div class="flex flex-col items-center gap-1 sm:gap-1.5 w-[60px] sm:w-[72px] flex-shrink-0">
               <div class="relative w-[60px] h-[60px] sm:w-[72px] sm:h-[72px] rounded-lg overflow-hidden border border-[#e5e5e5]">
-                <img src="${sk.image}" alt="" class="w-full h-full object-cover" />
+                <img src="${escapeHtml(sanitizeUrl(sk.image))}" alt="" class="w-full h-full object-cover" />
                 <span class="absolute bottom-0 end-0 bg-black/60 text-white rounded-ss text-[11px] font-bold leading-4 px-1 py-px">${sk.quantity}</span>
               </div>
-              <span class="text-[11px] leading-[14px] text-[#666] text-center line-clamp-2 w-full">${sk.currency}${sk.price.toFixed(2)}</span>
+              <span class="text-[11px] leading-[14px] text-[#666] text-center line-clamp-2 w-full">${escapeHtml(sk.currency)}${sk.price.toFixed(2)}</span>
             </div>`
           )
           .join("");
@@ -748,7 +748,7 @@ Alpine.data("cartPage", () => ({
               <div class="w-5 h-5 rounded-full bg-primary-500/10 flex items-center justify-center flex-shrink-0">
                 <svg class="w-3 h-3 text-primary-500" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/></svg>
               </div>
-              <span class="text-[13px] font-semibold text-[#222] truncate">${supplier.name}</span>
+              <span class="text-[13px] font-semibold text-[#222] truncate">${escapeHtml(supplier.name)}</span>
               <span class="text-[11px] text-[#999] flex-shrink-0">(${selectedSkus.length})</span>
             </div>
             <div class="flex gap-2.5 overflow-x-auto pb-2 scrollbar-hide">${skuCards}</div>

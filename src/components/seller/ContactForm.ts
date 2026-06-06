@@ -4,11 +4,12 @@
  */
 import type { ContactFormData } from "../../types/seller/types";
 import { t } from "../../i18n";
+import { escapeHtml } from "../../utils/sanitize";
 
 export function ContactForm(data: ContactFormData): string {
-  const title = data.title || t("seller.sf.sendMessageToSupplier");
+  const title = data.title ? escapeHtml(data.title) : t("seller.sf.sendMessageToSupplier");
   const maxLength = data.maxLength || 8000;
-  const placeholder = data.placeholder || t("seller.sf.enterInquiryDetails");
+  const placeholder = data.placeholder ? escapeHtml(data.placeholder) : t("seller.sf.enterInquiryDetails");
 
   return `
     <section id="contact-form" class="contact-form py-12" aria-label="${t("seller.sf.contactFormLabel")}">
@@ -23,8 +24,8 @@ export function ContactForm(data: ContactFormData): string {
           <!-- Recipient -->
           <div class="contact-form__recipient flex items-center gap-2 mb-4">
             <span class="text-[14px] text-[#6b7280] dark:text-gray-400">${t("seller.sf.to")}</span>
-            <span class="text-[14px] text-[#111827] dark:text-gray-50 font-semibold">${data.recipient.name}</span>
-            ${data.recipient.title ? `<span class="text-[12px] text-[#9ca3af]">— ${data.recipient.title}</span>` : ""}
+            <span class="text-[14px] text-[#111827] dark:text-gray-50 font-semibold">${escapeHtml(data.recipient.name)}</span>
+            ${data.recipient.title ? `<span class="text-[12px] text-[#9ca3af]">— ${escapeHtml(data.recipient.title)}</span>` : ""}
           </div>
 
           <!-- Message Area -->

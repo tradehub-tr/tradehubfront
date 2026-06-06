@@ -6,6 +6,7 @@
  */
 
 import { t } from "../../i18n";
+import { escapeHtml } from "../../utils/sanitize";
 import type { AuthUser } from "../../utils/auth";
 
 interface KybStatusInfo {
@@ -59,7 +60,7 @@ export function KybStatusWidget(user: AuthUser | null, kybInfo?: KybStatusInfo):
         <span class="text-red-500 flex-shrink-0 mt-0.5">${ICONS.alert}</span>
         <div class="flex-1 min-w-0">
           <div class="font-semibold text-red-800 mb-1">${t("kyb.widgetRejectedTitle")}</div>
-          ${reason ? `<div class="text-sm text-red-700 mb-2 break-words">${reason}</div>` : ""}
+          ${reason ? `<div class="text-sm text-red-700 mb-2 break-words">${escapeHtml(reason)}</div>` : ""}
           <a href="${KYB_HREF}" class="inline-flex items-center gap-1.5 text-xs font-semibold text-red-700 hover:text-red-900 no-underline">
             ${t("kyb.widgetFixDocuments")} ${ICONS.arrow}
           </a>

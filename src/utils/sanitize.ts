@@ -22,7 +22,23 @@ export function sanitizeHtml(dirty: string): string {
       "sub",
       "sup",
     ],
-    ALLOWED_ATTR: ["href", "target", "rel", "class", "style"],
+    // NOTE: "style" intentionally NOT allowed — inline style enables CSS
+    // injection / clickjacking (background url(), position overlay).
+    ALLOWED_ATTR: ["href", "target", "rel", "class"],
+  });
+}
+
+/**
+ * Sanitize rich HTML (product descriptions, seller rich-text) while keeping
+ * common formatting tags (headings, tables, images, lists). DOMPurify's default
+ * config strips <script>, event-handler attributes and `javascript:` URLs, so
+ * this neutralises stored XSS while preserving legitimate markup. Use this for
+ * backend rich-text fields; use escapeHtml() for short plain-text values.
+ */
+export function sanitizeRichHtml(dirty: unknown): string {
+  return DOMPurify.sanitize(String(dirty ?? ""), {
+    FORBID_TAGS: ["style"],
+    FORBID_ATTR: ["style"],
   });
 }
 
@@ -49,8 +65,38 @@ export function escapeHtml(value: unknown): string {
     .replace(/'/g, "&#39;");
 }
 
+/** Escape a value for safe interpolation inside an HTML attribute. */
+export function escapeAttr(value: unknown): string {
+  return escapeHtml(value);
+}
+
 /** Validate CSS color hex (#abc / #abcdef / #abcdefab) — reject anything else. */
 export function safeHexColor(value: unknown, fallback = "#cccccc"): string {
   const s = String(value ?? "");
   return /^#[0-9a-fA-F]{3,8}$/.test(s) ? s : fallback;
+}
+
+/**
+ * Sanitize a URL before placing it into an href/src attribute. Allows only
+ * http(s)/mailto/tel and relative URLs (path/query/fragment). Rejects
+ * `javascript:`, `data:`, `vbscript:` and protocol-relative `//host` (open
+ * redirect). Whitespace/control chars are stripped before scheme detection so
+ * tricks like `java\nscript:` cannot smuggle a scheme through.
+ */
+export function sanitizeUrl(value: unknown, fallback = "#"): string {
+  const raw = String(value ?? "").trim();
+  if (!raw) return fallback;
+  // Protocol-relative → open redirect risk.
+  if (raw.startsWith("//")) return fallback;
+  // Relative URL (path, query, fragment) is safe.
+  if (/^[/?#]/.test(raw)) return raw;
+  // Strip control chars + whitespace so "java\nscript:" can't smuggle a scheme.
+  // eslint-disable-next-line no-control-regex -- intentional: neutralises control-char scheme smuggling
+  const stripped = raw.replace(/[\u0000-\u0020\u007f-\u009f]/g, "");
+  // Has an explicit scheme → only allow the known-safe ones.
+  if (/^[a-z][a-z0-9+.-]*:/i.test(stripped)) {
+    return /^(https?:|mailto:|tel:)/i.test(stripped) ? raw : fallback;
+  }
+  // No scheme, not protocol-relative → relative path (e.g. "products.html").
+  return raw;
 }

@@ -1,5 +1,6 @@
 import { getCurrencySymbol } from "../../utils/currency";
 import { t } from "../../i18n";
+import { escapeHtml, sanitizeUrl, safeHexColor } from "../../utils/sanitize";
 
 /**
  * FilterSidebar Component (iSTOC-style Filter Panel)
@@ -146,19 +147,19 @@ function renderCheckbox(option: FilterOption, sectionId: string, idPrefix = ""):
   const checkboxId = `filter-${idPrefix ? idPrefix + "-" : ""}${sectionId}-${option.id}`;
   return `
     <label
-      for="${checkboxId}"
+      for="${escapeHtml(checkboxId)}"
       class="flex items-center gap-2 cursor-pointer group py-1"
     >
       <div class="relative flex items-center justify-center w-4 h-4">
         <input
           type="checkbox"
-          id="${checkboxId}"
-          name="${sectionId}"
-          value="${option.value}"
+          id="${escapeHtml(checkboxId)}"
+          name="${escapeHtml(sectionId)}"
+          value="${escapeHtml(option.value)}"
           ${option.checked ? "checked" : ""}
           class="peer sr-only"
-          data-filter-section="${sectionId}"
-          data-filter-value="${option.value}"
+          data-filter-section="${escapeHtml(sectionId)}"
+          data-filter-value="${escapeHtml(option.value)}"
           @change="$dispatch('filter-change')"
         />
         <div
@@ -174,7 +175,7 @@ function renderCheckbox(option: FilterOption, sectionId: string, idPrefix = ""):
       <span
         class="text-[13px] leading-tight group-hover:text-primary-600 transition-colors duration-150"
         style="color: var(--filter-text-color, #374151);"
-      >${option.label}</span>
+      >${escapeHtml(option.label)}</span>
       ${
         option.count !== undefined
           ? `
@@ -340,19 +341,19 @@ function renderCertCheckbox(option: FilterOption, sectionId: string, idPrefix = 
   const checkboxId = `filter-${idPrefix ? idPrefix + "-" : ""}${sectionId}-${option.id}`;
   return `
     <label
-      for="${checkboxId}"
+      for="${escapeHtml(checkboxId)}"
       class="flex items-center gap-2 cursor-pointer group py-1"
     >
       <div class="relative flex items-center justify-center w-4 h-4">
         <input
           type="checkbox"
-          id="${checkboxId}"
-          name="${sectionId}"
-          value="${option.value}"
+          id="${escapeHtml(checkboxId)}"
+          name="${escapeHtml(sectionId)}"
+          value="${escapeHtml(option.value)}"
           ${option.checked ? "checked" : ""}
           class="peer sr-only"
-          data-filter-section="${sectionId}"
-          data-filter-value="${option.value}"
+          data-filter-section="${escapeHtml(sectionId)}"
+          data-filter-value="${escapeHtml(option.value)}"
           @change="$dispatch('filter-change')"
         />
         <div
@@ -369,7 +370,7 @@ function renderCertCheckbox(option: FilterOption, sectionId: string, idPrefix = 
       <span
         class="text-[13px] leading-tight group-hover:text-primary-600 transition-colors duration-150"
         style="color: var(--filter-text-color, #374151);"
-      >${option.label}</span>
+      >${escapeHtml(option.label)}</span>
     </label>
   `;
 }
@@ -572,9 +573,9 @@ export function initFilterSidebar(query?: string, category?: string): void {
             type="button"
             class="th-no-press flex items-center justify-between w-full py-1.5 text-[13px] hover:text-primary-600 transition-colors cursor-pointer"
             style="color: var(--filter-text-color, #374151);"
-            onclick="window.location.href='/pages/products.html?cat=${cat.slug}'"
+            onclick="window.location.href='/pages/products.html?cat=${encodeURIComponent(cat.slug)}'"
           >
-            <span class="truncate">${cat.name}</span>
+            <span class="truncate">${escapeHtml(cat.name)}</span>
             <span class="text-[11px] ms-2 flex-shrink-0" style="color:#9ca3af">(${cat.count})</span>
           </button>
         `
@@ -603,10 +604,10 @@ export function initFilterSidebar(query?: string, category?: string): void {
                       : c.label;
                   const checkboxId = `filter-${idPrefix ? idPrefix + "-" : ""}supplier-country-country-${c.value.toLowerCase()}`;
                   return `
-            <label for="${checkboxId}" class="flex items-center gap-2 cursor-pointer group py-1 filter-searchable-item">
+            <label for="${escapeHtml(checkboxId)}" class="flex items-center gap-2 cursor-pointer group py-1 filter-searchable-item">
               <div class="relative flex items-center justify-center w-4 h-4">
-                <input type="checkbox" id="${checkboxId}" name="supplier-country" value="${c.value}"
-                  class="peer sr-only" data-filter-section="supplier-country" data-filter-value="${c.value}"
+                <input type="checkbox" id="${escapeHtml(checkboxId)}" name="supplier-country" value="${escapeHtml(c.value)}"
+                  class="peer sr-only" data-filter-section="supplier-country" data-filter-value="${escapeHtml(c.value)}"
                   @change="$dispatch('filter-change')" />
                 <div class="absolute inset-0 border rounded transition-colors duration-150
                   peer-checked:bg-primary-500 peer-checked:border-primary-500
@@ -616,7 +617,7 @@ export function initFilterSidebar(query?: string, category?: string): void {
                   <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
                 </span>
               </div>
-              <span class="text-[13px] leading-tight group-hover:text-primary-600 transition-colors duration-150" style="color: var(--filter-text-color, #374151);">${translatedName}</span>
+              <span class="text-[13px] leading-tight group-hover:text-primary-600 transition-colors duration-150" style="color: var(--filter-text-color, #374151);">${escapeHtml(translatedName)}</span>
               <span class="text-[11px] ms-auto" style="color: var(--filter-count-color, #9ca3af);">(${c.count})</span>
             </label>
           `;
@@ -642,13 +643,13 @@ export function initFilterSidebar(query?: string, category?: string): void {
                 .map((b) => {
                   const checkboxId = `filter-${idPrefix ? idPrefix + "-" : ""}brands-brand-${String(b.value).toLowerCase().replace(/\s+/g, "-")}`;
                   const logoHtml = b.logo
-                    ? `<img src="${b.logo}" alt="${b.label}" class="w-4 h-4 object-contain me-1" />`
+                    ? `<img src="${escapeHtml(sanitizeUrl(b.logo))}" alt="${escapeHtml(b.label)}" class="w-4 h-4 object-contain me-1" />`
                     : "";
                   return `
-            <label for="${checkboxId}" class="flex items-center gap-2 cursor-pointer group py-1 filter-searchable-item">
+            <label for="${escapeHtml(checkboxId)}" class="flex items-center gap-2 cursor-pointer group py-1 filter-searchable-item">
               <div class="relative flex items-center justify-center w-4 h-4">
-                <input type="checkbox" id="${checkboxId}" name="brands" value="${b.value}"
-                  class="peer sr-only" data-filter-section="brands" data-filter-value="${b.value}"
+                <input type="checkbox" id="${escapeHtml(checkboxId)}" name="brands" value="${escapeHtml(b.value)}"
+                  class="peer sr-only" data-filter-section="brands" data-filter-value="${escapeHtml(b.value)}"
                   @change="$dispatch('filter-change')" />
                 <div class="absolute inset-0 border rounded transition-colors duration-150
                   peer-checked:bg-primary-500 peer-checked:border-primary-500
@@ -659,7 +660,7 @@ export function initFilterSidebar(query?: string, category?: string): void {
                 </span>
               </div>
               ${logoHtml}
-              <span class="text-[13px] leading-tight group-hover:text-primary-600 transition-colors duration-150" style="color: var(--filter-text-color, #374151);">${b.label}</span>
+              <span class="text-[13px] leading-tight group-hover:text-primary-600 transition-colors duration-150" style="color: var(--filter-text-color, #374151);">${escapeHtml(b.label)}</span>
               <span class="text-[11px] ms-auto" style="color: var(--filter-count-color, #9ca3af);">(${b.count})</span>
             </label>
           `;
@@ -691,14 +692,14 @@ export function initFilterSidebar(query?: string, category?: string): void {
                       .map((opt) => {
                         const checkboxId = `filter-${idPrefix ? idPrefix + "-" : ""}${sectionId}-${String(opt.value).toLowerCase().replace(/\s+/g, "-")}`;
                         const colorSwatch = opt.color
-                          ? `<span class="inline-block w-3.5 h-3.5 rounded-full border border-gray-300 flex-shrink-0" style="background:${opt.color};"></span>`
+                          ? `<span class="inline-block w-3.5 h-3.5 rounded-full border border-gray-300 flex-shrink-0" style="background:${safeHexColor(opt.color)};"></span>`
                           : "";
                         return `
-                <label for="${checkboxId}" class="flex items-center gap-2 cursor-pointer group py-1 filter-searchable-item">
+                <label for="${escapeHtml(checkboxId)}" class="flex items-center gap-2 cursor-pointer group py-1 filter-searchable-item">
                   <div class="relative flex items-center justify-center w-4 h-4 flex-shrink-0">
-                    <input type="checkbox" id="${checkboxId}" name="${sectionId}" value="${opt.value}"
-                      class="peer sr-only" data-filter-section="${sectionId}" data-filter-value="${opt.value}"
-                      data-attribute-code="${attr.code}"
+                    <input type="checkbox" id="${escapeHtml(checkboxId)}" name="${escapeHtml(sectionId)}" value="${escapeHtml(opt.value)}"
+                      class="peer sr-only" data-filter-section="${escapeHtml(sectionId)}" data-filter-value="${escapeHtml(opt.value)}"
+                      data-attribute-code="${escapeHtml(attr.code)}"
                       @change="$dispatch('filter-change')" />
                     <div class="absolute inset-0 border rounded transition-colors duration-150
                       peer-checked:bg-primary-500 peer-checked:border-primary-500
@@ -709,19 +710,19 @@ export function initFilterSidebar(query?: string, category?: string): void {
                     </span>
                   </div>
                   ${colorSwatch}
-                  <span class="text-[13px] leading-tight group-hover:text-primary-600 transition-colors duration-150 truncate" style="color: var(--filter-text-color, #374151);">${opt.label}</span>
+                  <span class="text-[13px] leading-tight group-hover:text-primary-600 transition-colors duration-150 truncate" style="color: var(--filter-text-color, #374151);">${escapeHtml(opt.label)}</span>
                   <span class="text-[11px] ms-auto flex-shrink-0" style="color: var(--filter-count-color, #9ca3af);">(${opt.count})</span>
                 </label>
               `;
                       })
                       .join("");
                     return `
-              <div class="py-3 border-t" data-dynamic-attr-section="${attr.code}"
+              <div class="py-3 border-t" data-dynamic-attr-section="${escapeHtml(attr.code)}"
                 style="border-color: var(--filter-divider-color, #e5e7eb);">
                 <button type="button"
                   class="flex items-center justify-between w-full mb-2 cursor-pointer bg-transparent border-0 p-0"
                   @click="toggle && toggle('${sectionId}')">
-                  <span class="text-[11px] font-bold uppercase tracking-wider" style="color: var(--filter-heading-color, #111827);">${attr.label}</span>
+                  <span class="text-[11px] font-bold uppercase tracking-wider" style="color: var(--filter-heading-color, #111827);">${escapeHtml(attr.label)}</span>
                   <svg class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path d="M19 9l-7 7-7-7" />
                   </svg>
@@ -760,10 +761,10 @@ export function initFilterSidebar(query?: string, category?: string): void {
                   .map((c) => {
                     const checkboxId = `filter-${idPrefix ? idPrefix + "-" : ""}${key}-cert-${c.value.toLowerCase().replace(/\s+/g, "-")}`;
                     return `
-              <label for="${checkboxId}" class="flex items-center gap-2 cursor-pointer group py-1 filter-searchable-item">
+              <label for="${escapeHtml(checkboxId)}" class="flex items-center gap-2 cursor-pointer group py-1 filter-searchable-item">
                 <div class="relative flex items-center justify-center w-4 h-4">
-                  <input type="checkbox" id="${checkboxId}" name="${key}" value="${c.value}"
-                    class="peer sr-only" data-filter-section="${key}" data-filter-value="${c.value}"
+                  <input type="checkbox" id="${escapeHtml(checkboxId)}" name="${escapeHtml(key)}" value="${escapeHtml(c.value)}"
+                    class="peer sr-only" data-filter-section="${key}" data-filter-value="${escapeHtml(c.value)}"
                     @change="$dispatch('filter-change')" />
                   <div class="absolute inset-0 border rounded transition-colors duration-150
                     peer-checked:bg-primary-500 peer-checked:border-primary-500
@@ -773,7 +774,7 @@ export function initFilterSidebar(query?: string, category?: string): void {
                     <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
                   </span>
                 </div>
-                <span class="text-[13px] leading-tight group-hover:text-primary-600 transition-colors duration-150" style="color: var(--filter-text-color, #374151);">${c.label}</span>
+                <span class="text-[13px] leading-tight group-hover:text-primary-600 transition-colors duration-150" style="color: var(--filter-text-color, #374151);">${escapeHtml(c.label)}</span>
                 <span class="text-[11px] ms-auto" style="color: var(--filter-count-color, #9ca3af);">(${c.count})</span>
               </label>
             `;

@@ -5,6 +5,7 @@
  */
 import type { HeroBannerData, HeroSlide } from "../../types/seller/types";
 import { t } from "../../i18n";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 function renderSlide(slide: HeroSlide): string {
   const hasText = !!slide.title;
@@ -13,8 +14,8 @@ function renderSlide(slide: HeroSlide): string {
 
   if (!hasText) {
     return `
-      <div class="swiper-slide store-hero__slide relative" data-slide-id="${slide.id}">
-        <img src="${slide.image}" alt="Banner" class="${imgClasses}" loading="lazy"
+      <div class="swiper-slide store-hero__slide relative" data-slide-id="${escapeHtml(slide.id)}">
+        <img src="${escapeHtml(sanitizeUrl(slide.image))}" alt="Banner" class="${imgClasses}" loading="lazy"
              onerror="this.parentElement.style.background='linear-gradient(135deg,#1e3a5f,#2563eb)'" />
       </div>
     `;
@@ -35,22 +36,22 @@ function renderSlide(slide: HeroSlide): string {
   // Handle multi-line titles (newline separated)
   const titleHtml = (slide.title || "")
     .split("\n")
-    .map((line) => `<span class="block">${line}</span>`)
+    .map((line) => `<span class="block">${escapeHtml(line)}</span>`)
     .join("");
 
   const subtitleHtml = slide.subtitle
-    ? `<p class="store-hero__subtitle text-[13px] sm:text-[13px] md:text-[14px] lg:text-[18px] ${subtitleColor} mt-2 lg:mt-3 drop-shadow-md max-w-[600px] whitespace-pre-line line-clamp-2 sm:line-clamp-none">${slide.subtitle}</p>`
+    ? `<p class="store-hero__subtitle text-[13px] sm:text-[13px] md:text-[14px] lg:text-[18px] ${subtitleColor} mt-2 lg:mt-3 drop-shadow-md max-w-[600px] whitespace-pre-line line-clamp-2 sm:line-clamp-none">${escapeHtml(slide.subtitle)}</p>`
     : "";
 
   const ctaHtml = slide.ctaText
-    ? `<a href="${slide.ctaLink || "#"}" class="store-hero__cta inline-block mt-3 lg:mt-6 px-5 lg:px-8 py-2 lg:py-3 bg-(--store-accent) text-white font-semibold text-[13px] lg:text-(--btn-font-size) rounded-(--radius-button) hover:bg-(--store-accent-hover) transition-colors shadow-(--shadow-md)">
-        ${slide.ctaText}
+    ? `<a href="${escapeHtml(sanitizeUrl(slide.ctaLink || "#"))}" class="store-hero__cta inline-block mt-3 lg:mt-6 px-5 lg:px-8 py-2 lg:py-3 bg-(--store-accent) text-white font-semibold text-[13px] lg:text-(--btn-font-size) rounded-(--radius-button) hover:bg-(--store-accent-hover) transition-colors shadow-(--shadow-md)">
+        ${escapeHtml(slide.ctaText)}
       </a>`
     : "";
 
   return `
-    <div class="swiper-slide store-hero__slide relative" data-slide-id="${slide.id}">
-      <img src="${slide.image}" alt="${slide.title || "Banner"}" class="${imgClasses}" loading="lazy"
+    <div class="swiper-slide store-hero__slide relative" data-slide-id="${escapeHtml(slide.id)}">
+      <img src="${escapeHtml(sanitizeUrl(slide.image))}" alt="${escapeHtml(slide.title || "Banner")}" class="${imgClasses}" loading="lazy"
            onerror="this.parentElement.style.background='linear-gradient(135deg,#1e3a5f,#2563eb)'" />
       <!-- Text Overlay -->
       <div class="store-hero__overlay absolute inset-0 flex flex-col justify-center px-4 sm:px-4 md:px-6 lg:px-10 xl:px-12 ${alignClasses}">

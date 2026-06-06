@@ -9,6 +9,7 @@
 
 import { t } from "../../i18n";
 import { formatPrice } from "../../utils/currency";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 import type { TopDealsProduct } from "../../types/topDeals";
 
 /* ── Renderers ───────────────────────────────────────────────────────── */
@@ -25,8 +26,8 @@ function renderProductImage(imgSrc: string, name: string): string {
   }
   return `
     <img
-      src="${imgSrc}"
-      alt="${name}"
+      src="${escapeHtml(sanitizeUrl(imgSrc))}"
+      alt="${escapeHtml(name)}"
       loading="lazy"
       class="w-full h-full object-cover transition-transform duration-300 group-hover/product:scale-105"
     />
@@ -50,7 +51,7 @@ export function renderTopDealsFlatCard(product: TopDealsProduct): string {
   const hasDiscount =
     product.originalPrice && product.discountPercent && product.discountPercent > 0;
   return `
-    <a href="${product.href}" class="pc-topdeals group/product flex flex-col hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 relative">
+    <a href="${escapeHtml(sanitizeUrl(product.href))}" class="pc-topdeals group/product flex flex-col hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 relative">
       <div class="relative aspect-square w-full overflow-hidden rounded-md bg-surface-raised mb-2">
         ${renderProductImage(product.imageSrc || "", product.name)}
         ${
@@ -63,9 +64,9 @@ export function renderTopDealsFlatCard(product: TopDealsProduct): string {
       </div>
       <div class="flex items-baseline gap-1.5 flex-wrap">
         <span class="text-sm font-semibold text-text-primary">${formatPrice(product.price)}</span>
-        ${hasDiscount ? `<span class="text-xs text-gray-400 line-through">${product.originalPrice}</span>` : ""}
+        ${hasDiscount ? `<span class="text-xs text-gray-400 line-through">${escapeHtml(product.originalPrice ?? "")}</span>` : ""}
       </div>
-      <p class="text-xs text-text-secondary mt-1 line-clamp-2 min-h-[2.4em]">${product.name}</p>
+      <p class="text-xs text-text-secondary mt-1 line-clamp-2 min-h-[2.4em]">${escapeHtml(product.name)}</p>
       <p class="text-xs text-text-tertiary mt-0.5 truncate">${moqLabel(product.moq)}</p>
     </a>
   `;
@@ -157,7 +158,7 @@ export function renderTopDealsGroupCard(group: TopDealsGroup): string {
   const productsHtml = group.products.map((p) => renderTopDealsFlatCard(p)).join("");
   return `
     <div class="bg-surface border border-border-default rounded-md p-4">
-      <h3 class="text-sm font-bold text-text-primary mb-3 truncate" title="${group.name}">${group.name}</h3>
+      <h3 class="text-sm font-bold text-text-primary mb-3 truncate" title="${escapeHtml(group.name)}">${escapeHtml(group.name)}</h3>
       <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
         ${productsHtml}
       </div>

@@ -7,6 +7,7 @@
 
 import { uploadFiles, type FileProgress } from "../uploader";
 import { getFileBadge, getFilePreviewUrl, revokeFilePreview } from "../utils";
+import { escapeHtml } from "../../../utils/sanitize";
 
 export interface SlotDef {
   id: string;
@@ -118,7 +119,7 @@ export class SlotDropzoneController {
             ${showBar ? `<div class="slot-bar-wrap absolute top-1/2 start-[15%] end-[15%] -translate-y-1/2 h-3 bg-black/75 border-2 border-black/80 rounded-full overflow-hidden z-10"><div class="slot-bar h-full bg-white rounded-full transition-all duration-300" style="width:${Math.max(4, Math.round((p!.loaded / Math.max(1, p!.total)) * 100))}%"></div></div>` : ""}
             ${showSuccess ? `<div class="absolute top-1 start-1 w-6 h-6 rounded-full bg-emerald-500 text-white text-xs flex items-center justify-center">✓</div>` : ""}
             ${showError ? `<div class="absolute top-1 start-1 w-6 h-6 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">✕</div>` : ""}
-            <div class="absolute bottom-0 start-0 end-0 bg-black/60 text-white text-[10px] px-2 py-1 truncate rounded-b">${file.name}</div>
+            <div class="absolute bottom-0 start-0 end-0 bg-black/60 text-white text-[10px] px-2 py-1 truncate rounded-b">${escapeHtml(file.name)}</div>
           </div>
         </div>
         <input type="file" class="hidden" accept="${slot.accept}" />

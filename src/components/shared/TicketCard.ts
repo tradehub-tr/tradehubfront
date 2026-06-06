@@ -4,6 +4,7 @@
  */
 
 import { t } from "../../i18n";
+import { escapeHtml } from "../../utils/sanitize";
 
 export interface TicketCardData {
   id: string;
@@ -44,14 +45,14 @@ export function TicketCard(ticket: TicketCardData): string {
       <!-- Top row: status + date -->
       <div class="flex items-center justify-between mb-2">
         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${status.bg}" data-i18n="${status.labelKey}">${t(status.labelKey)}</span>
-        <span class="text-xs text-gray-400">${ticket.createdDate}</span>
+        <span class="text-xs text-gray-400">${escapeHtml(ticket.createdDate)}</span>
       </div>
       <!-- Middle: category icon + subject -->
       <div class="flex items-start gap-2 mb-2">
         <span class="text-gray-400 mt-0.5 shrink-0">${catIcon}</span>
         <div class="min-w-0">
-          <h4 class="text-sm font-semibold text-gray-900 truncate">${ticket.subject}</h4>
-          <span class="text-xs text-gray-500">#${ticket.id} &middot; ${catI18nKey ? `<span data-i18n="${catI18nKey}">${t(catI18nKey)}</span>` : ticket.category}</span>
+          <h4 class="text-sm font-semibold text-gray-900 truncate">${escapeHtml(ticket.subject)}</h4>
+          <span class="text-xs text-gray-500">#${escapeHtml(ticket.id)} &middot; ${catI18nKey ? `<span data-i18n="${catI18nKey}">${t(catI18nKey)}</span>` : escapeHtml(ticket.category)}</span>
         </div>
       </div>
       <!-- Bottom: last reply + snippet -->
@@ -59,8 +60,8 @@ export function TicketCard(ticket: TicketCardData): string {
         ticket.lastReply || ticket.snippet
           ? `
         <div class="pt-2 border-t border-gray-100">
-          ${ticket.lastReply ? `<p class="text-xs text-gray-400 mb-1"><span data-i18n="shared.lastReply">${t("shared.lastReply")}</span> ${ticket.lastReply}</p>` : ""}
-          ${ticket.snippet ? `<p class="text-xs text-gray-500 line-clamp-2">${ticket.snippet}</p>` : ""}
+          ${ticket.lastReply ? `<p class="text-xs text-gray-400 mb-1"><span data-i18n="shared.lastReply">${t("shared.lastReply")}</span> ${escapeHtml(ticket.lastReply)}</p>` : ""}
+          ${ticket.snippet ? `<p class="text-xs text-gray-500 line-clamp-2">${escapeHtml(ticket.snippet)}</p>` : ""}
         </div>
       `
           : ""

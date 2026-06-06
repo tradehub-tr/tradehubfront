@@ -12,6 +12,7 @@ import { formatPrice } from "../../utils/currency";
 import { getTailoredSelections } from "../../services/listingService";
 import { initCurrency } from "../../services/currencyService";
 import { applySwiperDir } from "../../utils/direction";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 interface CollectionProduct {
   name: string;
@@ -35,8 +36,8 @@ function renderProductImage(product: CollectionProduct): string {
   return `
     <div class="relative h-full w-full overflow-hidden rounded-md bg-gray-100" aria-hidden="true">
       <img
-        src="${product.imageSrc}"
-        alt="${product.name}"
+        src="${escapeHtml(sanitizeUrl(product.imageSrc))}"
+        alt="${escapeHtml(product.name)}"
         loading="lazy"
         class="w-full h-full object-cover"
       />
@@ -66,16 +67,16 @@ function renderCollectionSlide(collection: TailoredCollection): string {
   return `
     <div class="swiper-slide tailored-slide">
       <a
-        href="${collection.href}"
+        href="${escapeHtml(sanitizeUrl(collection.href))}"
         class="group/col flex flex-col h-full rounded-md overflow-hidden cursor-pointer"
         style="background: var(--tailored-card-bg, #ffffff); padding: var(--space-card-padding, 16px);"
-        aria-label="${titleLabel}"
+        aria-label="${escapeHtml(titleLabel)}"
       >
         <!-- Title -->
         <h3
           class="truncate font-bold leading-tight text-[14px] sm:text-[16px] md:text-[20px]"
           style="color: var(--tailored-collection-title-color, #222222);"
-        >${titleLabel}</h3>
+        >${escapeHtml(titleLabel)}</h3>
 
         <!-- Views subtitle -->
         ${viewsHtml}

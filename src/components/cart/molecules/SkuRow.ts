@@ -11,25 +11,18 @@ import { QuantityInput } from "../atoms/QuantityInput";
 import { formatPrice } from "../../../services/currencyService";
 import { t } from "../../../i18n";
 import trashIcon from "../../../assets/images/trash.png";
+import { escapeHtml, sanitizeUrl } from "../../../utils/sanitize";
 
 export interface SkuRowProps {
   sku: CartSku;
   productHref?: string;
 }
 
-function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
-
 export function SkuRow({ sku, productHref }: SkuRowProps): string {
   const unavailable = sku.isAvailable === false;
-  const imgContent = `<img src="${escapeHtml(sku.skuImage)}" alt="SKU ${escapeHtml(sku.id)}" class="w-full h-full object-cover" loading="lazy" />`;
+  const imgContent = `<img src="${escapeHtml(sanitizeUrl(sku.skuImage))}" alt="SKU ${escapeHtml(sku.id)}" class="w-full h-full object-cover" loading="lazy" />`;
   const imgWrapper = productHref
-    ? `<a href="${escapeHtml(productHref)}" class="block w-full h-full">${imgContent}</a>`
+    ? `<a href="${escapeHtml(sanitizeUrl(productHref))}" class="block w-full h-full">${imgContent}</a>`
     : imgContent;
 
   return `
@@ -87,8 +80,6 @@ export function SkuRow({ sku, productHref }: SkuRowProps): string {
       </div>
 
       <div class="flex items-center justify-end gap-2 sm:gap-3 mt-1.5 ps-[calc(20px+0.5rem+36px+0.5rem)] sm:ps-[calc(20px+0.75rem+40px+0.75rem)] ${unavailable ? "pointer-events-none opacity-50" : ""}">
-        ${QuantityInput({ id: `sku-qty-${sku.id}`, value: sku.quantity, min: sku.minQty || 1, max: sku.maxQty, step: sku.sellInMoqMultiples ? sku.minQty || 1 : 1 })}
-        ${!unavailable ? `<span class="sc-c-sku-line-total text-[12px] sm:text-[14px] font-bold text-[#1a1a1a] m-0 whitespace-nowrap">${formatPrice(sku.unitPrice * sku.quantity, sku.baseCurrency || "USD")}</span>` : ""}
         ${
           !unavailable
             ? `<div class="sc-c-sku-moq-warning text-end text-[12px] sm:text-[14px] leading-[20px] text-[#dc2626] hidden">

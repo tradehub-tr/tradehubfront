@@ -18,6 +18,7 @@ import {
   LIGHTBOX_THUMB_GAP,
 } from "../components/product/ProductImageGallery";
 import { toVideoEmbedHtml } from "../components/product/ProductVideoSection";
+import { escapeHtml, sanitizeUrl } from "../utils/sanitize";
 
 function renderInlineVideo(url: string): string {
   return `
@@ -425,7 +426,7 @@ Alpine.data("imageGallery", () => ({
             <span class="absolute bottom-0.5 end-0.5 bg-black/80 text-white text-[9px] font-bold px-1 rounded">VIDEO</span>
           `;
         } else {
-          thumb.innerHTML = `<img src="${img.src}" alt="${img.alt}" class="gallery-media-asset gallery-media-asset--thumb" loading="lazy" />`;
+          thumb.innerHTML = `<img src="${escapeHtml(sanitizeUrl(img.src))}" alt="${escapeHtml(img.alt)}" class="gallery-media-asset gallery-media-asset--thumb" loading="lazy" />`;
         }
         thumb.addEventListener("click", () => this.goToSlide(i));
         thumb.addEventListener("mouseenter", () => this.goToSlide(i));
@@ -451,7 +452,7 @@ Alpine.data("imageGallery", () => ({
           }
           return `
           <button type="button" class="gallery-lightbox-thumb ${i === 0 ? "active" : ""}" data-index="${i}">
-            <img src="${img.src}" alt="${img.alt}" class="gallery-media-asset gallery-media-asset--thumb" loading="lazy" />
+            <img src="${escapeHtml(sanitizeUrl(img.src))}" alt="${escapeHtml(img.alt)}" class="gallery-media-asset gallery-media-asset--thumb" loading="lazy" />
           </button>
         `;
         })
@@ -470,7 +471,7 @@ Alpine.data("imageGallery", () => ({
       if (first.isVideo) {
         mainImage.innerHTML = renderInlineVideo(first.src);
       } else {
-        mainImage.innerHTML = `<img src="${first.src}" alt="Variant" data-gallery-main-media="true" class="gallery-media-asset gallery-media-asset--large" />`;
+        mainImage.innerHTML = `<img src="${escapeHtml(sanitizeUrl(first.src))}" alt="Variant" data-gallery-main-media="true" class="gallery-media-asset gallery-media-asset--large" />`;
       }
       this.resetZoom();
     }

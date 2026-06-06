@@ -14,6 +14,7 @@ import { loadCategories } from "../../services/categoryService";
 import type { ApiCategory } from "../../services/categoryService";
 import { searchListings } from "../../services/listingService";
 import { getLucideIcon, getLucideIconByCategoryName } from "../icons/lucideIcons";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 /* ════════════════════════════════════════════════════
    DATA
@@ -793,18 +794,18 @@ export function initMegaMenu(): void {
         const inner = isViewAll
           ? viewAllSvg
           : image
-            ? `<img src="${image}" alt="${name}" class="w-full h-full object-cover" loading="lazy" onerror="this.outerHTML=this.dataset.fallback" data-fallback='${iconFallback.replace(/'/g, "&apos;")}' />`
+            ? `<img src="${escapeHtml(sanitizeUrl(image))}" alt="${escapeHtml(name)}" class="w-full h-full object-cover" loading="lazy" onerror="this.outerHTML=this.dataset.fallback" data-fallback='${iconFallback.replace(/'/g, "&apos;")}' />`
             : iconFallback;
         const borderStyle = isViewAll ? "border:2px dashed #e5e7eb;" : "";
         const href = isViewAll
           ? `/pages/categories.html?cat=${encodeURIComponent(slug)}`
-          : `/pages/products.html?cat=${slug}`;
+          : `/pages/products.html?cat=${encodeURIComponent(slug)}`;
         return `
           <a href="${href}" class="flex flex-col items-center gap-1.5 sm:gap-2 group/product min-h-[44px]">
             <div class="relative w-14 h-14 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full flex items-center justify-center overflow-hidden group-hover/product:ring-2 transition-all" style="background:var(--product-card-bg, var(--card-bg));--tw-ring-color:var(--nav-hover-color);${borderStyle}">
               ${inner}
             </div>
-            <span class="th-nav-link max-w-[4rem] text-center text-[13px] leading-tight transition-colors sm:max-w-[5rem] lg:max-w-[6rem]">${name}</span>
+            <span class="th-nav-link max-w-[4rem] text-center text-[13px] leading-tight transition-colors sm:max-w-[5rem] lg:max-w-[6rem]">${escapeHtml(name)}</span>
           </a>`;
       }
 
@@ -827,7 +828,7 @@ export function initMegaMenu(): void {
             (group) => `
         <div class="mb-6 last:mb-0">
           <a href="/pages/products.html?cat=${encodeURIComponent(group.slug)}" class="group/grp mb-3 inline-flex items-center gap-1.5 text-sm font-semibold text-gray-800 transition-colors hover:text-primary-600 dark:text-gray-200">
-            <span>${group.name}</span>
+            <span>${escapeHtml(group.name)}</span>
             ${grpArrowSvg}
           </a>
           <div class="${leafGridCls}">
@@ -857,12 +858,12 @@ export function initMegaMenu(): void {
           (cat, index) => `
         <li>
           <a
-            href="/pages/products.html?cat=${cat.slug}"
+            href="/pages/products.html?cat=${encodeURIComponent(cat.slug)}"
             class="th-mega-sidebar-item mega-cat-btn flex items-center gap-2 sm:gap-3 w-full px-3 sm:px-4 py-3 sm:py-2.5 text-sm text-start transition-colors border-s-2 border-transparent ${index === 0 ? "th-mega-sidebar-item--active" : ""}"
-            data-category="${cat.id}"
+            data-category="${escapeHtml(cat.id)}"
           >
             <span class="flex-shrink-0 inline-flex items-center justify-center [&>svg]:w-5 [&>svg]:h-5 text-gray-500 dark:text-gray-400">${cat.icon_class ? getCategoryIcon(cat.icon_class) : getIconByName(cat.name)}</span>
-            <span class="flex-1 truncate">${cat.name}</span>
+            <span class="flex-1 truncate">${escapeHtml(cat.name)}</span>
             <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/></svg>
           </a>
         </li>
@@ -875,7 +876,7 @@ export function initMegaMenu(): void {
           (cat) => `
         <div class="mega-cat-section mb-8" id="mega-section-${cat.id}">
           <div class="flex items-center gap-4 mb-5 lg:mb-6">
-            <h3 class="text-base font-bold text-gray-900 lg:text-lg dark:text-white">${cat.name}</h3>
+            <h3 class="text-base font-bold text-gray-900 lg:text-lg dark:text-white">${escapeHtml(cat.name)}</h3>
             <a href="/pages/categories.html?cat=${encodeURIComponent(cat.slug)}" class="text-sm font-medium text-primary-600 transition-colors hover:text-primary-700">Tümünü Gör</a>
           </div>
           ${renderSectorBody(cat)}

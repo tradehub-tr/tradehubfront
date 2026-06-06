@@ -6,6 +6,7 @@
 import { getCurrencyCode } from "../../utils/currency";
 import { formatCurrency } from "../../services/currencyService";
 import { t } from "../../i18n";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 export interface CheckoutDeliveryMethod {
   id: string;
@@ -43,15 +44,6 @@ export interface CheckoutDeliveryOrderGroup {
 
 export interface ItemsDeliverySectionProps {
   orders?: CheckoutDeliveryOrderGroup[];
-}
-
-function escapeHtmlAttribute(value: string): string {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#39;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;");
 }
 
 function escapeJsSingleQuoted(value: string): string {
@@ -116,10 +108,10 @@ function renderSkuLine(sku: CheckoutDeliverySkuLine): string {
   return `
     <!-- Mobile: 2-col grid, image top-aligned. Desktop: 4-col with qty+total columns -->
     <div class="grid grid-cols-[36px_1fr] sm:grid-cols-[40px_1fr_auto_auto] gap-x-2.5 gap-y-0 sm:gap-3 items-start sm:items-center rounded-md bg-[#fafaf8] border border-[#e8e6e0] px-2.5 sm:px-[14px] py-2.5 sm:py-[10px]">
-      <img src="${sku.image}" alt="" class="w-9 h-9 sm:w-10 sm:h-10 rounded-[6px] object-cover border border-[#e5e7eb] mt-0.5 sm:mt-0" />
+      <img src="${escapeHtml(sanitizeUrl(sku.image))}" alt="" class="w-9 h-9 sm:w-10 sm:h-10 rounded-[6px] object-cover border border-[#e5e7eb] mt-0.5 sm:mt-0" />
       <div class="min-w-0">
         ${sampleBadge ? `<div class="mb-1">${sampleBadge}</div>` : ""}
-        <p class="text-[12px] sm:text-[13px] text-[#4a4a48] leading-[1.4]">${sku.variantText}</p>
+        <p class="text-[12px] sm:text-[13px] text-[#4a4a48] leading-[1.4]">${escapeHtml(sku.variantText)}</p>
         <p class="text-[12px] sm:text-[13px] font-semibold text-[#1a1a1a] mt-1">${formatUsd(sku.unitPrice)} <span class="font-normal text-[#8a877f]">/${t("checkout.pieceUnit")}</span></p>
         <div class="flex items-center gap-2 sm:hidden mt-1 pt-1 border-t border-dashed border-[#e8e6e0]">
           <span class="text-[11px] text-[#8a877f]">x ${sku.quantity}</span>
@@ -170,10 +162,10 @@ function renderProductCard(
         @click="open = !open"
         :aria-expanded="open"
       >
-        <img src="${product.image}" alt="" class="w-10 h-10 sm:w-12 sm:h-12 rounded-[6px] object-cover border border-[#e5e7eb] shrink-0" />
+        <img src="${escapeHtml(sanitizeUrl(product.image))}" alt="" class="w-10 h-10 sm:w-12 sm:h-12 rounded-[6px] object-cover border border-[#e5e7eb] shrink-0" />
         <div class="flex-1 min-w-0">
-          <h4 class="text-[12.5px] sm:text-[13.5px] leading-[1.35] font-semibold text-[#1a1a1a] truncate">${product.title}</h4>
-          <p class="text-[11px] sm:text-[11.5px] text-[#8a877f] mt-0.5 leading-[1.4]">${product.moqLabel}</p>
+          <h4 class="text-[12.5px] sm:text-[13.5px] leading-[1.35] font-semibold text-[#1a1a1a] truncate">${escapeHtml(product.title)}</h4>
+          <p class="text-[11px] sm:text-[11.5px] text-[#8a877f] mt-0.5 leading-[1.4]">${escapeHtml(product.moqLabel)}</p>
           <p class="hidden sm:flex mt-1.5 flex-wrap items-center gap-x-2 gap-y-0.5 text-[12.5px] text-[#8a877f]">
             ${summaryParts
               .map(
@@ -283,7 +275,7 @@ function renderOrder(order: CheckoutDeliveryOrderGroup, defaultExpanded: boolean
         <svg class="w-4 h-4 text-[#8a877f] shrink-0 hidden sm:block" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
           <path d="M4 7h16M4 7l2-3h12l2 3M4 7v12a2 2 0 002 2h12a2 2 0 002-2V7" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
-        <h3 class="text-[13px] sm:text-[14.5px] font-semibold text-[#1a1a1a] tracking-[-0.005em] flex-1 truncate">${order.sellerName}</h3>
+        <h3 class="text-[13px] sm:text-[14.5px] font-semibold text-[#1a1a1a] tracking-[-0.005em] flex-1 truncate">${escapeHtml(order.sellerName)}</h3>
         <span class="co-supplier-count hidden sm:inline text-[11.5px] font-medium text-[#4a4a48] bg-[#fafaf8] border border-[#e8e6e0] rounded-full px-2 py-[2px] whitespace-nowrap tracking-[0.01em]" x-show="!expanded">${totalQty} ürün</span>
         <span class="text-[12px] sm:text-[14px] font-semibold text-[#1a1a1a] whitespace-nowrap"
           x-show="!expanded">${formatUsd(itemSubtotal)}</span>
@@ -423,7 +415,7 @@ function renderShippingMethodModal(): string {
 }
 
 export function ItemsDeliverySection({ orders = [] }: ItemsDeliverySectionProps = {}): string {
-  const encodedOrders = escapeHtmlAttribute(JSON.stringify(orders));
+  const encodedOrders = escapeHtml(JSON.stringify(orders));
 
   const defaultExpanded = orders.length <= 1;
   const ordersHtml =

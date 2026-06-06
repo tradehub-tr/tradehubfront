@@ -11,17 +11,7 @@
 import { t } from "../../i18n";
 import { formatPrice } from "../../utils/currency";
 import type { RankingCategoryGroup } from "../../types/topRanking";
-
-/** HTML-encode dynamic strings before injecting into innerHTML. */
-function escapeHtml(str: string): string {
-  if (!str) return "";
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 /** Parse numeric MOQ out of legacy backend format ("532 Nos" → 532). */
 function moqCount(moq: string | undefined): number {
@@ -54,8 +44,8 @@ export function renderRankingGroupCard(group: RankingCategoryGroup): string {
 
       const safeProductName = escapeHtml(product.name);
       const safeMoq = escapeHtml(product.moq);
-      const safeImg = escapeHtml(product.imageSrc || "");
-      const safeHref = escapeHtml(product.href || "#");
+      const safeImg = escapeHtml(sanitizeUrl(product.imageSrc || ""));
+      const safeHref = escapeHtml(sanitizeUrl(product.href || "#"));
 
       return `
       <a href="${safeHref}" class="relative z-10 min-w-0 group/product" aria-label="${safeProductName}">
@@ -72,7 +62,7 @@ export function renderRankingGroupCard(group: RankingCategoryGroup): string {
           >#${product.rank}</span>
         </div>
         <div class="mt-1.5">
-          <p class="text-sm font-semibold text-text-primary">${formatPrice(product.price)}</p>
+          <p class="text-sm font-semibold text-text-primary">${escapeHtml(formatPrice(product.price))}</p>
           <p class="text-xs text-text-tertiary mt-0.5">${escapeHtml(moqLabel(safeMoq))}</p>
         </div>
       </a>
