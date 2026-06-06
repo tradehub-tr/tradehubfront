@@ -2,12 +2,18 @@
  * Currency Service — handles multi-currency display for TradeHub
  *
  * Currencies and rates are fetched from the backend (Supported Currency +
- * Currency Rate Pair DocTypes).  A localStorage cache avoids repeat API calls.
- * Hard-coded defaults are kept only as a last-resort fallback for the very
- * first page-load before the API has ever responded.
+ * Currency Rate Pair DocTypes).  Fetch/dedup/persist is handled by the
+ * `queryFetch` cache layer (in-memory + IndexedDB), so repeat page loads do
+ * not re-hit the API while the data is fresh.  Hard-coded defaults are kept
+ * only as a last-resort fallback for the very first page-load before the API
+ * has ever responded.
+ *
+ * The user's *selected* currency (`STORAGE_KEY`) is a user preference, not a
+ * cache, and stays in localStorage.
  */
 
 import { api } from "../utils/api";
+import { queryFetch, queryKeys, policies } from "../lib/query";
 
 // ── Types ──
 
@@ -37,10 +43,8 @@ export interface CurrencySettings {
 
 // ── State ──
 
+// User preference — NOT a cache. Stays in localStorage.
 const STORAGE_KEY = "tradehub-currency";
-const RATES_CACHE_KEY = "tradehub_rates";
-const META_CACHE_KEY = "tradehub_currency_meta";
-const RATES_CACHE_TTL = 30 * 60 * 1000; // 30 minutes
 
 const DEFAULT_CURRENCY_META: Record<string, CurrencyInfo> = {
   TRY: { code: "TRY", symbol: "₺", name: "Turkish Lira", nameTr: "Türk Lirası", decimalPlaces: 2 },
@@ -52,8 +56,8 @@ const DEFAULT_RATES: ExchangeRates = {
   USD: { USD: 1, EUR: 0.92, TRY: 38.5, GBP: 0.79, CNY: 7.25 },
 };
 
-let _settings: CurrencySettings | null = _loadCachedRates();
-let _currencyMeta: Record<string, CurrencyInfo> = _buildCurrencyMeta(_settings?.currencies);
+let _settings: CurrencySettings | null = null;
+let _currencyMeta: Record<string, CurrencyInfo> = _buildCurrencyMeta();
 let _selectedCurrency: string = localStorage.getItem(STORAGE_KEY) || "USD";
 let _initialized = false;
 
@@ -64,25 +68,24 @@ export async function initCurrency(): Promise<void> {
 
   _selectedCurrency = localStorage.getItem(STORAGE_KEY) || "USD";
 
-  const cached = _loadCachedRates();
-  if (cached) {
-    _settings = cached;
-    _currencyMeta = _buildCurrencyMeta(cached.currencies);
-    _initialized = true;
-  }
-
   try {
-    const response = await api<{ message: CurrencySettings }>(
-      "/method/tradehub_core.api.currency.get_currency_settings"
+    // Fetch + dedup + IndexedDB persist via the queryFetch cache layer.
+    // Across MPA page loads the rates come from cache while still fresh
+    // (policies.currency: staleTime 1h, gcTime 24h) — no repeat API hit.
+    _settings = await queryFetch(
+      queryKeys.currencyRates(),
+      async () => {
+        const response = await api<{ message: CurrencySettings }>(
+          "/method/tradehub_core.api.currency.get_currency_settings"
+        );
+        return response.message;
+      },
+      policies.currency
     );
-    _settings = response.message;
 
     if (_settings.currencies?.length) {
       _currencyMeta = _buildCurrencyMeta(_settings.currencies);
-      _saveCachedMeta(_settings.currencies);
     }
-
-    _saveCachedRates(_settings);
 
     if (!localStorage.getItem(STORAGE_KEY) && _settings.defaultCurrency) {
       _selectedCurrency = _settings.defaultCurrency;
@@ -221,58 +224,13 @@ function _notifyCurrencyChange(): void {
   );
 }
 
-// ── Caching ──
-
-function _loadCachedRates(): CurrencySettings | null {
-  try {
-    const raw = localStorage.getItem(RATES_CACHE_KEY);
-    if (!raw) return null;
-    const cached = JSON.parse(raw);
-    if (Date.now() - cached._timestamp > RATES_CACHE_TTL) return null;
-    return cached.data;
-  } catch {
-    return null;
-  }
-}
-
-function _saveCachedRates(settings: CurrencySettings): void {
-  try {
-    localStorage.setItem(
-      RATES_CACHE_KEY,
-      JSON.stringify({ data: settings, _timestamp: Date.now() })
-    );
-  } catch {
-    // localStorage full or unavailable
-  }
-}
-
-function _saveCachedMeta(currencies: CurrencyInfo[]): void {
-  try {
-    localStorage.setItem(META_CACHE_KEY, JSON.stringify(currencies));
-  } catch {
-    // localStorage full / disabled — ignore
-  }
-}
+// ── Currency Meta ──
 
 function _buildCurrencyMeta(currencies?: CurrencyInfo[]): Record<string, CurrencyInfo> {
   if (currencies?.length) {
     const meta: Record<string, CurrencyInfo> = {};
     for (const c of currencies) meta[c.code] = c;
     return meta;
-  }
-
-  try {
-    const raw = localStorage.getItem(META_CACHE_KEY);
-    if (raw) {
-      const list: CurrencyInfo[] = JSON.parse(raw);
-      if (list.length) {
-        const meta: Record<string, CurrencyInfo> = {};
-        for (const c of list) meta[c.code] = c;
-        return meta;
-      }
-    }
-  } catch {
-    // invalid JSON in cache — use defaults
   }
 
   return { ...DEFAULT_CURRENCY_META };

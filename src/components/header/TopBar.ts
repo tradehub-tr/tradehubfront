@@ -24,6 +24,7 @@ import {
   formatPrice,
   convertPrice,
   getSelectedCurrency as csGetSelectedCurrency,
+  getSupportedCurrencies,
 } from "../../services/currencyService";
 import { apiRemoveCartItem, fetchCart } from "../../services/cartService";
 import { HeaderNotice, getCachedNoticeData } from "./HeaderNotice";
@@ -116,28 +117,16 @@ const languageOptions: LocaleOption[] = [
   { code: "RU", name: "Русский", flag: "🇷🇺" },
 ];
 
-/** Currency options — loaded from localStorage cache (populated by currencyService) */
+/** Currency options — from currencyService (queryFetch-backed list, defaults until loaded) */
 function getCurrencyOptions(): CurrencyOption[] {
-  try {
-    const raw = localStorage.getItem("tradehub_currency_meta");
-    if (raw) {
-      const list = JSON.parse(raw) as Array<{
-        code: string;
-        symbol: string;
-        name: string;
-        nameTr: string;
-      }>;
-      if (list.length > 0) {
-        const lang = getCurrentLang();
-        return list.map((c) => ({
-          code: c.code,
-          symbol: c.symbol,
-          name: lang === "tr" ? c.nameTr || c.name : c.name,
-        }));
-      }
-    }
-  } catch {
-    /* fall through to defaults */
+  const list = getSupportedCurrencies();
+  if (list.length > 0) {
+    const lang = getCurrentLang();
+    return list.map((c) => ({
+      code: c.code,
+      symbol: c.symbol,
+      name: lang === "tr" ? c.nameTr || c.name : c.name,
+    }));
   }
   return [
     { code: "TRY", symbol: "₺", name: t("header.currencyTRY") },
