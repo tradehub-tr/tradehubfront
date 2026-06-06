@@ -6,6 +6,7 @@ import { resolve } from 'path'
 import { readFileSync, writeFileSync, existsSync } from 'fs'
 import fg from 'fast-glob'
 import { getStaticPageHtmlMap } from './src/utils/staticPageUrl'
+import pkg from './package.json' with { type: 'json' }
 
 /**
  * Her HTML giriş dosyasının <head>'ine FOUC önleme scripti enjekte eder.
@@ -168,6 +169,9 @@ function seoPlaceholderPlugin(): Plugin {
 
 export default defineConfig({
     base: process.env.GITHUB_PAGES === 'true' ? '/tradehubfront/' : '/',
+    define: {
+        'import.meta.env.VITE_APP_VERSION': JSON.stringify(pkg.version),
+    },
     server: {
         host: '0.0.0.0',
         // Docker bind mount'larda inotify dosya değişikliklerini kaçırabiliyor.
