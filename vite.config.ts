@@ -383,6 +383,8 @@ export default defineConfig({
                     if (id.includes('node_modules/dompurify')) return 'vendor-dompurify';
                     // Vendor: ECharts (+ zrender bağımlılığı) — buyer dashboard analitiği
                     if (id.includes('node_modules/echarts') || id.includes('node_modules/zrender')) return 'vendor-echarts';
+                    // Vendor: TanStack Query + idb-keyval — client-side cache katmanı (src/lib/query)
+                    if (id.includes('node_modules/@tanstack') || id.includes('node_modules/idb-keyval')) return 'vendor-tanstack';
                     // App: i18n locale files (large)
                     if (id.includes('src/i18n/locales/')) return 'locales';
                     // App: Alpine data modules
