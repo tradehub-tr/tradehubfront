@@ -1,5 +1,8 @@
-/* === GOOGLE FONTS — Inter (Alibaba'nın B2B Sans'ına yakın modern alternatif) === */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap");
+/* === GOOGLE FONTS — Inter (Alibaba'nın B2B Sans'ına yakın modern alternatif) ===
+   Render-blocking'i önlemek için CSS @import yerine HTML <head>'e taşındı
+   (vite.config.ts: fontHeadPlugin → preconnect + parallel stylesheet link).
+   CSS içi remote @import, style.css indirilip parse edilmeden font keşfedilmediği
+   için LCP/FCP zincirini serileştiriyordu. */
 
 @import "tailwindcss";
 @plugin "flowbite/plugin";

@@ -31,6 +31,29 @@ function themeBootstrapPlugin(): Plugin {
     };
 }
 
+function fontHeadPlugin(): Plugin {
+    // Google Fonts (Inter) artık CSS @import yerine HTML <head>'de paralel yükleniyor.
+    // CSS-içi remote @import, style.css indirilip parse edilmeden font keşfedilmediği için
+    // LCP/FCP zincirini serileştiriyordu (T10 baseline'da ~861ms blocking). preconnect +
+    // async-olmayan ama paralel stylesheet link, font'u kritik zincirden çıkarır;
+    // display=swap FOUT yerine FOIT'i önler. Workbox bu host'ları zaten CacheFirst'lüyor.
+    const fontLinks = [
+        '<link rel="preconnect" href="https://fonts.googleapis.com" />',
+        '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />',
+        '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" />',
+    ].join('\n    ');
+    return {
+        name: 'font-head-inject',
+        transformIndexHtml: {
+            order: 'pre',
+            handler(html) {
+                if (html.includes('family=Inter')) return html; // idempotent
+                return html.replace(/<head([^>]*)>/i, `<head$1>\n    ${fontLinks}`);
+            },
+        },
+    };
+}
+
 /** Dev-only plugin: POST /__save-css to update @theme variables in style.css */
 function cssEditorPlugin(): Plugin {
     return {
@@ -198,6 +221,7 @@ export default defineConfig({
     plugins: [
         tailwindcss(),
         themeBootstrapPlugin(),
+        fontHeadPlugin(),
         cssEditorPlugin(),
         // notFoundFallbackPlugin'den ÖNCE çalışmalı: önce rewrite,
         // eşleşmezse 404.html fallback.
