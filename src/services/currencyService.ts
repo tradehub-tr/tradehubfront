@@ -93,6 +93,12 @@ export async function initCurrency(): Promise<void> {
     }
 
     _initialized = true;
+    // Fires "currency-changed": besides the selected-currency detail, this is
+    // also the point at which the full supported-currency LIST first becomes
+    // available (_settings/_currencyMeta now hold the backend currencies, not
+    // just the 3 hard-coded defaults). Consumers that render the currency
+    // picker (e.g. TopBar) listen for this to rebuild their option list once
+    // the async fetch resolves — there is no separate "list-ready" signal.
     _notifyCurrencyChange();
   } catch (err) {
     console.warn("[currency] Failed to fetch rates from API, using defaults:", err);

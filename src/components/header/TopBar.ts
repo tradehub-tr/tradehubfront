@@ -25,6 +25,7 @@ import {
   convertPrice,
   getSelectedCurrency as csGetSelectedCurrency,
   getSupportedCurrencies,
+  onCurrencyChange,
 } from "../../services/currencyService";
 import { apiRemoveCartItem, fetchCart } from "../../services/cartService";
 import { HeaderNotice, getCachedNoticeData } from "./HeaderNotice";
@@ -133,6 +134,29 @@ function getCurrencyOptions(): CurrencyOption[] {
     { code: "USD", symbol: "$", name: t("header.currencyUSD") },
     { code: "EUR", symbol: "€", name: t("header.currencyEUR") },
   ];
+}
+
+/**
+ * Builds the `<option>` markup for the desktop `#currency-select`.
+ * Shared by the initial TopBar render and the post-async-load rebuild so both
+ * paths produce identical markup (DRY).
+ */
+function buildCurrencyOptionsHtml(): string {
+  return getCurrencyOptions()
+    .map((currency) => `\n              <option value="${currency.code}">${currency.code} - ${currency.name}</option>\n            `)
+    .join("");
+}
+
+/**
+ * Builds the mobile currency-pill markup. Shared by the initial render and the
+ * post-async-load rebuild (DRY).
+ */
+function buildCurrencyPillsHtml(): string {
+  return getCurrencyOptions()
+    .map(
+      (currency, i) => `\n                <button type="button" class="px-3 py-1.5 text-xs font-medium rounded-full border transition-colors ${i === 0 ? "border-primary-500 text-primary-600 bg-primary-50 dark:border-primary-400 dark:text-primary-400 dark:bg-primary-900/20" : "border-gray-300 text-gray-600 dark:border-gray-600 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500"}">\n                  ${currency.code === "TRY" ? "TL" : currency.symbol}\n                </button>\n              `
+    )
+    .join("");
 }
 
 /**
@@ -470,15 +494,7 @@ function renderLanguageCurrencySelector(): string {
         <!-- Currency Select -->
         <div class="mb-5">
           <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2" data-i18n="header.currency">${t("header.currency")}</label>
-          <select id="currency-select" class="th-input th-input-md cursor-pointer">
-            ${getCurrencyOptions()
-              .map(
-                (currency) => `
-              <option value="${currency.code}">${currency.code} - ${currency.name}</option>
-            `
-              )
-              .join("")}
-          </select>
+          <select id="currency-select" class="th-input th-input-md cursor-pointer">${buildCurrencyOptionsHtml()}</select>
         </div>
 
         <!-- Save Button -->
@@ -850,17 +866,7 @@ function renderMobileDrawer(): string {
                 .join("")}
             </div>
             <!-- Currency pills -->
-            <div class="flex flex-wrap gap-2">
-              ${getCurrencyOptions()
-                .map(
-                  (currency, i) => `
-                <button type="button" class="px-3 py-1.5 text-xs font-medium rounded-full border transition-colors ${i === 0 ? "border-primary-500 text-primary-600 bg-primary-50 dark:border-primary-400 dark:text-primary-400 dark:bg-primary-900/20" : "border-gray-300 text-gray-600 dark:border-gray-600 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500"}">
-                  ${currency.code === "TRY" ? "TL" : currency.symbol}
-                </button>
-              `
-                )
-                .join("")}
-            </div>
+            <div id="currency-pills" class="flex flex-wrap gap-2">${buildCurrencyPillsHtml()}</div>
           </div>
 
           <!-- Deliver to -->
@@ -1814,6 +1820,34 @@ export async function initAuthState(): Promise<void> {
  * Initialize language selector functionality.
  * Wires up the language <select> in the header popover to change the app language.
  */
+/**
+ * Rebuilds the desktop `#currency-select` options and the mobile currency pills
+ * from the now-available supported-currency list, preserving the currently
+ * selected value. Called after the async currency fetch resolves so a user
+ * whose currency is not one of the 3 hard-coded defaults sees it in the picker
+ * without a reload.
+ */
+function rebuildCurrencyPicker(): void {
+  const currencySelect = document.getElementById("currency-select") as HTMLSelectElement | null;
+  if (currencySelect) {
+    const previous = currencySelect.value || getSelectedCurrency().code;
+    currencySelect.innerHTML = buildCurrencyOptionsHtml();
+    // Re-apply selection; if it still isn't present fall back to the stored pref.
+    currencySelect.value = previous;
+    if (currencySelect.value !== previous) {
+      currencySelect.value = getSelectedCurrency().code;
+    }
+  }
+
+  const pills = document.getElementById("currency-pills");
+  if (pills) {
+    pills.innerHTML = buildCurrencyPillsHtml();
+  }
+}
+
+// Register the list-rebuild listener exactly once across the app lifetime.
+let _currencyPickerListenerBound = false;
+
 export function initLanguageSelector(): void {
   // Check auth state and update header UI (fire-and-forget)
   initAuthState();
@@ -1837,6 +1871,21 @@ export function initLanguageSelector(): void {
 
   if (currencySelect) {
     currencySelect.value = getSelectedCurrency().code;
+  }
+
+  // The TopBar renders synchronously at bootstrap — before initCurrency()'s
+  // async fetch resolves — so the picker initially holds only the hard-coded
+  // defaults. Rebuild the option list + mobile pills once the full supported
+  // list becomes available (signalled by "currency-changed"; see
+  // currencyService.initCurrency). Bind once to avoid duplicate listeners.
+  if (!_currencyPickerListenerBound) {
+    _currencyPickerListenerBound = true;
+    onCurrencyChange(() => rebuildCurrencyPicker());
+  }
+  // If the list already loaded before this ran (e.g. cache hit / reordered
+  // bootstrap), the event has already fired — rebuild now so we don't miss it.
+  if (getSupportedCurrencies().length > 0) {
+    rebuildCurrencyPicker();
   }
 
   // Desktop popover "Save" button — applies language + currency, then refreshes
