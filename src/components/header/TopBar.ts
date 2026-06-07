@@ -1378,7 +1378,13 @@ export function TopBar(props?: TopBarProps): string {
         </div>
       </div>
 
-      ${renderMobileDrawer()}
+      <!-- NOT: mobile-menu-drawer burada (full header) RENDER EDİLMİYOR.
+           Bu header'da drawer'ı açan bir tetikleyici yok — mobil navigasyon
+           BottomNav ile sağlanıyor. Önceden ${"`"}renderMobileDrawer()${"`"} burada
+           render ediliyordu ama açış butonu (data-drawer-target) olmadığı için
+           Flowbite Drawer instance'ı hiç oluşmuyor, içindeki data-drawer-hide
+           butonları "not initialized" hatası veriyordu. Drawer yalnızca compact
+           header'da (hamburger'lı) kullanılıyor; orada render + init ediliyor. -->
 
       <!-- Bildirim Poller (görünmez, sadece toast tetikler) -->
       <div x-data="notificationPoller" class="hidden"></div>
