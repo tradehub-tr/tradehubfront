@@ -88,3 +88,30 @@ test(
     expect(categoryRequests).toBe(afterFirst);
   }
 );
+
+test(
+  "categories.html shows error UI (not a blank grid) when category load fails",
+  async ({ page }) => {
+    // Fresh context → cold IndexedDB cache. loadCategories() swallows backend
+    // failures and resolves with [], so the page must detect the empty result and
+    // render the error state instead of a silently empty grid.
+    await mockBackend(page);
+    await page.route(
+      "**/api/method/tradehub_core.api.category.get_mega_menu*",
+      (route: Route) =>
+        route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify({ message: [] }), // boş → "yüklenemedi" sayılır
+        })
+    );
+
+    await page.goto("/pages/categories.html");
+    await page.waitForLoadState("networkidle");
+    await page.waitForTimeout(800);
+
+    await expect(
+      page.locator("#cat-grid-container", { hasText: "Kategoriler yüklenemedi" })
+    ).toBeVisible();
+  }
+);

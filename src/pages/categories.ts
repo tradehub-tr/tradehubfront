@@ -127,8 +127,21 @@ function scrollToSlugSection(slug: string): void {
 }
 
 // Render categories using the shared cached service (queryFetch + IndexedDB)
+function renderCategoriesError(): void {
+  const gridEl = document.getElementById('cat-grid-container');
+  if (gridEl) gridEl.innerHTML = `<div class="py-16 text-center text-red-400">Kategoriler yüklenemedi.</div>`;
+}
+
 loadCategories()
   .then((apiCats) => {
+    // categoryService.loadCategories() hata durumunda reject ETMEZ, boş dizi döndürür
+    // (no-throw kontratı header MegaMenu vb. tüketicilerce bekleniyor). Bu yüzden boş
+    // sonucu burada "yüklenemedi" olarak ele alıyoruz — yoksa sessizce boş grid çıkardı.
+    if (apiCats.length === 0) {
+      renderCategoriesError();
+      return;
+    }
+
     const sections = mapApiToSections(apiCats);
 
     const sidebarEl = document.getElementById('cat-sidebar-container');
@@ -142,7 +155,4 @@ loadCategories()
     const slug = new URLSearchParams(window.location.search).get('cat');
     if (slug) scrollToSlugSection(slug);
   })
-  .catch(() => {
-    const gridEl = document.getElementById('cat-grid-container');
-    if (gridEl) gridEl.innerHTML = `<div class="py-16 text-center text-red-400">Kategoriler yüklenemedi.</div>`;
-  });
+  .catch(renderCategoriesError);
