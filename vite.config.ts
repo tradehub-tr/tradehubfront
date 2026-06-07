@@ -331,10 +331,20 @@ export default defineConfig({
                         },
                     },
                     {
-                        // HTML sayfaları — stale-while-revalidate; SW kullanıcıya eski sürüm gösterirken arkada günceller.
+                        // HTML sayfaları — NetworkFirst.
+                        // ÖNCEDEN StaleWhileRevalidate'di: navigasyonda (link tıklama) SW cache'teki
+                        // ESKİ HTML'i anında veriyordu. Hash'li asset isimleri her build'de değiştiği için
+                        // eski HTML eski (artık 404 olan) asset'leri referans ediyor → sayfa BOŞ açılıyor,
+                        // ancak refresh'te (arkada güncellenen cache) düzeliyordu. MPA + hash'li asset'lerde
+                        // bu kalıcı bir tuzak. NetworkFirst: önce ağdan taze HTML (doğru hash'ler), ağ
+                        // 3sn'de gelmezse cache'e düş (offline desteği korunur).
                         urlPattern: ({ request }) => request.destination === 'document',
-                        handler: 'StaleWhileRevalidate',
-                        options: { cacheName: 'pages' },
+                        handler: 'NetworkFirst',
+                        options: {
+                            cacheName: 'pages',
+                            networkTimeoutSeconds: 3,
+                            cacheableResponse: { statuses: [0, 200] },
+                        },
                     },
                     {
                         urlPattern: /^https:\/\/fonts\.(googleapis|gstatic)\.com\//,
