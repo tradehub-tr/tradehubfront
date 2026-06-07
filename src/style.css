@@ -94,7 +94,9 @@
   /* --- Text Colors --- */
   --color-text-primary: #0a0a0a;
   --color-text-secondary: #525252;
-  --color-text-tertiary: #a3a3a3;
+  /* WCAG AA: #a3a3a3 (~2.5:1) yetersizdi → #737373 (~4.74:1). Placeholder ve
+     tertiary metin bu token'ı kullandığı için tek noktadan AA'ya çıkar. */
+  --color-text-tertiary: #737373;
   --color-text-disabled: #d4d4d4;
   --color-text-inverse: #fafafa;
   --color-text-link: #cc9900;
@@ -1792,8 +1794,13 @@ footer {
 .operation-slider__pagination .swiper-pagination-bullet {
   width: 8px;
   height: 8px;
+  /* WCAG 2.5.8: görsel nokta 8px kalır; padding + content-box clip ile
+     dokunma hedefi 24px'e çıkar (tasarım değişmez). */
+  padding: 8px;
+  box-sizing: content-box;
+  background-clip: content-box;
   border-radius: 50%;
-  background: var(--color-border-medium);
+  background-color: var(--color-border-medium);
   opacity: 1;
   transition: all 200ms;
 }
@@ -1802,7 +1809,7 @@ footer {
   width: 16px;
   height: 8px;
   border-radius: 4px;
-  background: var(--color-text-body);
+  background-color: var(--color-text-body);
 }
 
 /* === ORDERS PAGE — Siparişlerim === */
@@ -2063,23 +2070,26 @@ button[data-filter-action="apply-all"]:active {
   width: 10px;
   height: 10px;
   border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.5);
   cursor: pointer;
   transition: all 0.3s ease;
   border: none;
-  padding: 0;
-  margin: 0 2px;
+  /* WCAG 2.5.8: görsel 10px kalır; padding + content-box clip ile tap alanı 24px */
+  padding: 7px;
+  box-sizing: content-box;
+  background-clip: content-box;
+  margin: 0;
   display: inline-block;
   opacity: 1;
 }
 
 .store-hero__dot--active {
-  background: var(--color-store-accent, #cc9900);
+  background-color: var(--color-store-accent, #cc9900);
   transform: scale(1.2);
 }
 
 .store-hero__dot:hover:not(.store-hero__dot--active) {
-  background: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.8);
 }
 
 /* Company Info Variant B — Custom Scrollbar pseudo-elements */
@@ -2116,12 +2126,16 @@ button[data-filter-action="apply-all"]:active {
 .certificates__dots .swiper-pagination-bullet {
   width: 8px;
   height: 8px;
+  /* WCAG 2.5.8: görsel 8px kalır; padding + content-box clip ile tap alanı 24px */
+  padding: 8px;
+  box-sizing: content-box;
+  background-clip: content-box;
   border-radius: 9999px;
-  background: #d1d5db;
+  background-color: #d1d5db;
   opacity: 1;
   transition: background-color 0.2s ease;
 }
 
 .certificates__dots .swiper-pagination-bullet-active {
-  background: var(--color-store-accent, #cc9900);
+  background-color: var(--color-store-accent, #cc9900);
 }

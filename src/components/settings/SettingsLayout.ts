@@ -110,7 +110,7 @@ function renderProfileHeader(): string {
             <!-- Success mark overlay (350ms hold sonrası) -->
             <div x-show="uploadStatus === 'success'" x-transition.opacity class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 max-sm:w-7 max-sm:h-7 rounded-full bg-emerald-500/90 z-20 flex items-center justify-center text-white text-sm font-bold">✓</div>
           </div>
-          <button type="button" @click="triggerPhotoUpload()" :disabled="uploadingPhoto" class="absolute -bottom-0.5 -start-0.5 w-7 h-7 max-sm:w-6 max-sm:h-6 rounded-full bg-white border border-border-default flex items-center justify-center cursor-pointer transition-all hover:bg-surface-raised disabled:opacity-60 disabled:cursor-wait" style="color:var(--color-text-secondary)" :title="uploadingPhoto ? '${t("common.loading")}' : '${t("settings.changePhoto")}'">
+          <button type="button" aria-label="Profil fotoğrafını değiştir" @click="triggerPhotoUpload()" :disabled="uploadingPhoto" class="absolute -bottom-0.5 -start-0.5 w-7 h-7 max-sm:w-6 max-sm:h-6 rounded-full bg-white border border-border-default flex items-center justify-center cursor-pointer transition-all hover:bg-surface-raised disabled:opacity-60 disabled:cursor-wait" style="color:var(--color-text-secondary)" :title="uploadingPhoto ? '${t("common.loading")}' : '${t("settings.changePhoto")}'">
             ${ICONS.camera}
           </button>
         </div>
@@ -122,12 +122,12 @@ function renderProfileHeader(): string {
           <div class="flex items-center gap-2 text-[13px] max-sm:text-xs flex-wrap">
             <span class="min-w-[110px] max-sm:min-w-0 flex-shrink-0" style="color:var(--color-text-tertiary)">${t("settings.emailLayoutLabel")}</span>
             <span class="font-mono truncate" style="color:var(--color-text-primary)" x-text="userEmail || '...'"></span>
-            <button type="button" @click="gotoChangeEmail()" class="inline-flex items-center justify-center w-6 h-6 border-none bg-none rounded cursor-pointer transition-all hover:bg-surface-raised flex-shrink-0" style="color:var(--color-text-tertiary)" title="${t("settings.changeEmailNav")}">${ICONS.edit}</button>
+            <button type="button" aria-label="E-postayı değiştir" @click="gotoChangeEmail()" class="inline-flex items-center justify-center w-6 h-6 border-none bg-none rounded cursor-pointer transition-all hover:bg-surface-raised flex-shrink-0" style="color:var(--color-text-tertiary)" title="${t("settings.changeEmailNav")}">${ICONS.edit}</button>
           </div>
           <div class="flex items-center gap-2 text-[13px] max-sm:text-xs flex-wrap">
             <span class="min-w-[110px] max-sm:min-w-0 flex-shrink-0" style="color:var(--color-text-tertiary)">${t("settings.membershipNumber")}</span>
             <span class="font-mono truncate" style="color:var(--color-text-primary)" x-text="memberId || '...'"></span>
-            <button type="button" x-ref="copyBtn" @click="copyMemberId()" class="inline-flex items-center justify-center w-6 h-6 border-none bg-none rounded cursor-pointer transition-all hover:bg-surface-raised flex-shrink-0" :style="copied ? 'color:#16a34a' : 'color:var(--color-text-tertiary)'" :title="copied ? '${t("orders.copied")}' : '${t("settings.copyTooltip")}'">
+            <button type="button" aria-label="Kopyala" x-ref="copyBtn" @click="copyMemberId()" class="inline-flex items-center justify-center w-6 h-6 border-none bg-none rounded cursor-pointer transition-all hover:bg-surface-raised flex-shrink-0" :style="copied ? 'color:#16a34a' : 'color:var(--color-text-tertiary)'" :title="copied ? '${t("orders.copied")}' : '${t("settings.copyTooltip")}'">
               <template x-if="!copied">${ICONS.copy}</template>
               <template x-if="copied"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7.5l2.5 2.5L11 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></template>
             </button>

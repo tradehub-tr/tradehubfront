@@ -143,7 +143,7 @@ export function TicketsListLayout(): string {
           <div class="flex items-center justify-center gap-2 mt-8">
             <button @click="setPage(Math.max(1, currentPage - 1))" :disabled="currentPage === 1" class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg disabled:opacity-40 hover:bg-gray-50 transition-colors cursor-pointer">${t("helpCenter.previousPage")}</button>
             <template x-for="p in totalPages" :key="p">
-              <button @click="setPage(p)" class="w-8 h-8 text-sm rounded-lg transition-colors cursor-pointer" :class="currentPage === p ? 'bg-primary-500 text-white' : 'text-gray-600 hover:bg-gray-100'" x-text="p"></button>
+              <button @click="setPage(p)" :aria-label="'Sayfa ' + p" class="w-8 h-8 text-sm rounded-lg transition-colors cursor-pointer" :class="currentPage === p ? 'bg-primary-500 text-white' : 'text-gray-600 hover:bg-gray-100'" x-text="p"></button>
             </template>
             <button @click="setPage(Math.min(totalPages, currentPage + 1))" :disabled="currentPage === totalPages" class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg disabled:opacity-40 hover:bg-gray-50 transition-colors cursor-pointer">${t("helpCenter.nextPage")}</button>
           </div>

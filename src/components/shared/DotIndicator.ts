@@ -15,7 +15,7 @@ export function DotIndicator({ total, activeIndex, className = "" }: DotIndicato
   }).join("");
 
   return `
-    <div class="flex items-center justify-center gap-1.5 mt-3${className ? ` ${className}` : ""}" role="tablist">
+    <div class="flex items-center justify-center gap-1.5 mt-3${className ? ` ${className}` : ""}" role="group" aria-label="Slide navigation">
       ${dots}
     </div>
   `;

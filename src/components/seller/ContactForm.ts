@@ -37,6 +37,7 @@ export function ContactForm(data: ContactFormData): string {
               <textarea
                 id="contact-textarea"
                 class="th-input contact-form__textarea min-h-[120px] sm:min-h-[100px] xs:min-h-[80px] resize-y"
+                aria-label="Mesajınız"
                 placeholder="${placeholder}"
                 maxlength="${maxLength}"
                 aria-required="true"

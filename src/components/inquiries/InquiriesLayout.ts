@@ -613,7 +613,7 @@ function renderRfqDetailPanel(rfqData: RfqDetailPayload): string {
     <div class="border-s border-gray-200 bg-white h-full overflow-y-auto">
       <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100">
         <h3 class="text-base font-semibold text-gray-800">${t("rfq.rfqDetails")}</h3>
-        <button id="rfq-detail-close" class="w-7 h-7 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors">
+        <button id="rfq-detail-close" aria-label="${t("common.close")}" class="w-7 h-7 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
@@ -674,7 +674,7 @@ function renderDetailPanel(inq: Inquiry): string {
     <div class="border-s border-gray-200 bg-white h-full">
       <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100">
         <h3 class="text-base font-semibold text-gray-800">${t("inquiries.inquiryDetails")}</h3>
-        <button id="inq-detail-close" class="w-7 h-7 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors">
+        <button id="inq-detail-close" aria-label="${t("common.close")}" class="w-7 h-7 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
@@ -732,7 +732,7 @@ function renderInquiryActionBar(): string {
       </div>
       <div class="inline-flex items-center border border-gray-300 rounded overflow-hidden">
         <input type="text" id="inq-search-input" placeholder="${t("inquiries.searchPlaceholder")}" class="w-40 max-md:w-20 h-8 px-2.5 text-[13px] text-gray-700 border-none outline-none bg-white placeholder:text-gray-400 focus:shadow-[inset_0_0_0_1px_#ca8a04]" />
-        <button class="flex items-center justify-center w-8 h-8 border-s border-gray-300 bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-700">
+        <button aria-label="${t("common.search")}" class="flex items-center justify-center w-8 h-8 border-s border-gray-300 bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-700">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg>
         </button>
       </div>
@@ -753,7 +753,7 @@ function renderRfqActionBar(): string {
       </div>
       <div class="inline-flex items-center border border-gray-300 rounded overflow-hidden">
         <input type="text" id="rfq-search-input" placeholder="${t("inquiries.searchPlaceholder")}" class="w-40 max-md:w-20 h-8 px-2.5 text-[13px] text-gray-700 border-none outline-none bg-white placeholder:text-gray-400 focus:shadow-[inset_0_0_0_1px_#ca8a04]" />
-        <button class="flex items-center justify-center w-8 h-8 border-s border-gray-300 bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-700">
+        <button aria-label="${t("common.search")}" class="flex items-center justify-center w-8 h-8 border-s border-gray-300 bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-700">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg>
         </button>
       </div>
@@ -766,7 +766,7 @@ function renderSellerRfqActionBar(): string {
     <span class="text-sm text-gray-500">${t("inquiries.rfqMarketDesc")}</span>
     <div class="inline-flex items-center border border-gray-300 rounded overflow-hidden">
       <input type="text" id="seller-rfq-search-input" placeholder="${t("inquiries.searchPlaceholder")}" class="w-40 max-md:w-20 h-8 px-2.5 text-[13px] text-gray-700 border-none outline-none bg-white placeholder:text-gray-400 focus:shadow-[inset_0_0_0_1px_#ca8a04]" />
-      <button class="flex items-center justify-center w-8 h-8 border-s border-gray-300 bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-700">
+      <button aria-label="${t("common.search")}" class="flex items-center justify-center w-8 h-8 border-s border-gray-300 bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-700">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg>
       </button>
     </div>
@@ -964,7 +964,7 @@ export function initInquiriesLayout(): void {
             <div class="bg-white rounded-lg p-6 w-full max-w-md mx-4 shadow-xl">
               <h3 class="text-base font-semibold mb-2">${t("rfq.addMoreInfo")}</h3>
               <p class="text-sm text-gray-500 mb-3">${t("rfq.addMoreInfoNotice")}</p>
-              <textarea id="rfq-add-details-text" class="th-input resize-none" rows="4" maxlength="100"></textarea>
+              <textarea id="rfq-add-details-text" aria-label="Detaylar" class="th-input resize-none" rows="4" maxlength="100"></textarea>
               <p class="text-xs text-gray-400 text-end mt-1"><span id="rfq-details-count">0</span>/100</p>
               <div class="flex gap-2 mt-4 justify-end">
                 <button id="rfq-details-submit" class="px-5 py-2 bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) rounded-full text-sm font-semibold border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150">${t("rfq.submit")}</button>

@@ -7,7 +7,7 @@
  */
 
 import { getCurrentProduct } from "../../alpine/product";
-import { t } from "../../i18n";
+import { t, getCurrentLang } from "../../i18n";
 import { formatCurrency, getSelectedCurrency } from "../../services/currencyService";
 import { getCurrencySymbol } from "../../utils/currency";
 import type { ProductVariant } from "../../types/product";
@@ -29,6 +29,11 @@ import { escapeHtml, sanitizeUrl, safeHexColor } from "../../utils/sanitize";
 const chevronSvg = `<svg class="pdm-chevron transition-transform duration-200 ease-linear" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg>`;
 
 const closeSvg = `<svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 6l12 12M18 6l-12 12"/></svg>`;
+
+/** Kategori/sıra sayılarını aktif dile göre binlik ayraçla biçimler. */
+function fmtNum(n: number): string {
+  return n.toLocaleString(getCurrentLang() === "en" ? "en-US" : "tr-TR");
+}
 
 /* ── Reusable component builders ─────────────────────── */
 
@@ -403,6 +408,63 @@ export function MobileProductLayout(): string {
   `
     : "";
 
+  // ── Section: Sales Rank (kategori bazlı satış sıralaması) ──
+  // Masaüstü AttributesTabContent'teki ProductSalesRank'ın mobil karşılığı.
+  // En spesifik (i===0) kategori "ödül" hissiyle vurgulanır; her kart o
+  // kategorinin listesine linklenir. categoryRanks boşsa render edilmez.
+
+  const ranks = p.categoryRanks ?? [];
+  const salesRankSection = ranks.length
+    ? `
+    <div class="pdm-section-divider h-2 bg-surface-raised"></div>
+    <div id="pdm-sales-rank" class="bg-surface px-4 py-4 max-[374px]:px-3">
+      <div class="flex items-center gap-2 mb-1">
+        <svg class="shrink-0 text-amber-500" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4zM5 4H3v2a3 3 0 0 0 3 3M19 4h2v2a3 3 0 0 1-3 3"/></svg>
+        <h2 class="text-[15px] font-bold text-text-heading m-0">${t("product.salesRank")}</h2>
+      </div>
+      <p class="text-xs text-text-muted leading-[1.5] mb-3">${t("product.salesRankSubtitle")}</p>
+      <div class="flex flex-col gap-2.5">
+        ${ranks
+          .map((r, i) => {
+            const isTop = i === 0;
+            const cardCls = isTop
+              ? "border-amber-200 bg-amber-50/60"
+              : "border-border-default bg-surface";
+            const medalCls = isTop
+              ? "bg-surface border-amber-200"
+              : "bg-surface-raised border-border-default";
+            const medalLabelCls = isTop ? "text-amber-600/70" : "text-text-placeholder";
+            const medalNumCls = isTop ? "text-amber-500" : "text-primary-600";
+            const badge =
+              isTop && r.rank === 1
+                ? `<span class="inline-flex shrink-0 items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold text-amber-700">
+                     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4zM5 4H3v2a3 3 0 0 0 3 3M19 4h2v2a3 3 0 0 1-3 3"/></svg>
+                     ${t("product.bestSeller")}
+                   </span>`
+                : "";
+            return `
+            <a href="/pages/products.html?cat=${encodeURIComponent(r.slug)}"
+               class="group flex items-center gap-3 rounded-md border ${cardCls} px-2.5 py-2.5 no-underline transition-colors duration-150 active:bg-surface-raised">
+              <div class="flex shrink-0 w-12 h-12 max-[374px]:w-11 max-[374px]:h-11 flex-col items-center justify-center rounded-md border ${medalCls}">
+                <span class="text-[8px] font-semibold uppercase tracking-wider leading-none ${medalLabelCls}">${t("product.salesRankPosition")}</span>
+                <span class="mt-0.5 text-lg max-[374px]:text-base font-extrabold leading-none tabular-nums ${medalNumCls}">#${fmtNum(r.rank)}</span>
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="flex flex-wrap items-center gap-x-1.5 gap-y-1">
+                  <span class="text-[13.5px] max-[374px]:text-[13px] font-bold text-text-heading leading-snug group-active:underline">${escapeHtml(r.categoryName)}</span>
+                  ${badge}
+                </div>
+                <span class="mt-0.5 block text-[11.5px] text-text-muted tabular-nums">${t("product.salesRankOutOf", { total: fmtNum(r.total) })}</span>
+              </div>
+              <svg class="h-4 w-4 shrink-0 text-text-placeholder rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+            </a>`;
+          })
+          .join("")}
+      </div>
+    </div>
+  `
+    : "";
+
   // ── Section 11: Supplier Card ──
 
   const si = p.supplier;
@@ -494,6 +556,7 @@ export function MobileProductLayout(): string {
         ${shippingSection}
         ${processingTimeSection}
         ${keyAttrsSection}
+        ${salesRankSection}
       </div>
 
       <!-- Supplier / Recommendations section -->

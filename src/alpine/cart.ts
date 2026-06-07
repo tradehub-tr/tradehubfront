@@ -607,7 +607,7 @@ Alpine.data("cartPage", () => ({
       .map(
         (item) => `
       <div class="relative w-14 h-14 sm:w-16 sm:h-16 rounded-md overflow-hidden border border-border-default shrink-0">
-        <img src="${escapeHtml(sanitizeUrl(item.image))}" alt="SKU" class="w-full h-full object-cover" />
+        <img src="${escapeHtml(sanitizeUrl(item.image))}" alt="Ürün görseli" class="w-full h-full object-cover" />
         <span class="absolute end-0 bottom-0 px-1 py-[2px] rounded-ss bg-black/65 text-white text-[11px] font-bold leading-none">${item.quantity}</span>
       </div>
     `

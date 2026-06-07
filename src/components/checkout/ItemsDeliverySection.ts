@@ -310,7 +310,7 @@ function renderSupplierNoteModal(): string {
       <div class="w-full max-w-[760px] rounded-md bg-white shadow-xl">
         <div class="flex items-center justify-between px-4 py-3 sm:px-6 sm:py-5 border-b border-[#f1f1f1]">
           <h3 class="text-[16px] sm:text-xl xl:text-2xl font-bold leading-tight text-[#111827]">${t("checkout.noteToSupplierTitle")}</h3>
-          <button type="button" class="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full text-[#111827] hover:bg-gray-100 transition-colors" @click="closeNoteModal()">
+          <button type="button" class="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full text-[#111827] hover:bg-gray-100 transition-colors" @click="closeNoteModal()" aria-label="${t("common.close")}">
             <svg class="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M18 6L6 18M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
@@ -362,7 +362,7 @@ function renderShippingMethodModal(): string {
       <div class="w-full max-w-[860px] rounded-md bg-white shadow-xl">
         <div class="flex items-center justify-between px-4 py-3 sm:px-7 sm:py-6 border-b border-[#e5e5e5]">
           <h3 class="text-[16px] sm:text-2xl font-bold leading-tight text-[#111827]">${t("checkout.selectShippingMethod")}</h3>
-          <button type="button" class="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full text-[#111827] hover:bg-gray-100 transition-colors" @click="closeShippingModal()">
+          <button type="button" class="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full text-[#111827] hover:bg-gray-100 transition-colors" @click="closeShippingModal()" aria-label="${t("common.close")}">
             <svg class="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M18 6L6 18M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
             </svg>

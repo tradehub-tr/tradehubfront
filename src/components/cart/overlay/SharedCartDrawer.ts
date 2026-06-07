@@ -1334,7 +1334,7 @@ export function SharedCartDrawer(): string {
       <aside id="shared-cart-drawer" class="fixed end-0 top-0 h-full w-full sm:w-[500px] lg:w-[600px] max-w-full bg-surface shadow-[-8px_0_30px_rgba(0,0,0,0.18)] xl:rounded-s-md xl:border-s xl:border-border-default flex flex-col transition-transform duration-300">
         <div class="flex items-center justify-between px-6 py-4 border-b border-border-default shrink-0 max-md:px-4 max-md:py-3">
           <h3 id="shared-cart-heading" class="text-[15px] sm:text-lg font-bold text-text-heading">${t("cart.selectVariation")}</h3>
-          <button type="button" id="shared-cart-close" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full text-secondary-400 hover:text-secondary-900 hover:bg-surface-raised transition-colors inline-flex items-center justify-center shrink-0">
+          <button type="button" id="shared-cart-close" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full text-secondary-400 hover:text-secondary-900 hover:bg-surface-raised transition-colors inline-flex items-center justify-center shrink-0" aria-label="${t("common.close")}">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 sm:w-[18px] sm:h-[18px]"><path d="M6 18 18 6M6 6l12 12"/></svg>
           </button>
         </div>

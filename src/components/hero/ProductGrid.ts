@@ -150,7 +150,7 @@ export function initProductGrid(): void {
                 supplierYearCount: p.supplierYears,
                 supplierCountry: p.supplierCountry,
               };
-              return renderProductCard(card, i);
+              return `<div role="listitem">${renderProductCard(card, i)}</div>`;
             })
             .join("");
         }
@@ -170,7 +170,7 @@ export function ProductGrid(): string {
         <div id="home-product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 product-grid home-product-grid" style="gap: var(--product-grid-gap, 8px);" role="list" aria-label="Product listings">
           ${
             productCardSeed.length > 0
-              ? productCardSeed.map((card, index) => renderProductCard(card, index)).join("")
+              ? productCardSeed.map((card, index) => `<div role="listitem">${renderProductCard(card, index)}</div>`).join("")
               : `
           <div id="product-grid-empty" class="col-span-full flex items-center justify-center py-12">
             <div class="text-center">

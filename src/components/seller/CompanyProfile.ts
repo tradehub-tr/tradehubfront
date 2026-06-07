@@ -65,10 +65,10 @@ function MainProductsCarousel(): string {
       <div class="flex items-center justify-between mb-4">
         <h3 class="text-[18px] font-bold text-gray-900 uppercase">${t("seller.sf.mainProducts")}</h3>
         <div class="flex items-center gap-2">
-          <button class="main-products-prev w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 transition-colors" aria-label="Previous">
+          <button class="main-products-prev w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 transition-colors" aria-label="Önceki">
             <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
           </button>
-          <button class="main-products-next w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 transition-colors" aria-label="Next">
+          <button class="main-products-next w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 transition-colors" aria-label="${t("common.next")}">
             <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
           </button>
         </div>
@@ -597,6 +597,7 @@ function ReviewsTab(): string {
                 <textarea
                   x-model="form.comment"
                   rows="3"
+                  aria-label="${t("seller.sf.yourComment")}"
                   :placeholder="'${t("seller.sf.yourComment")}'"
                   class="w-full border border-gray-300 rounded-md p-3 text-[14px] text-gray-700 focus:outline-none focus:border-gray-500 resize-none"
                   :disabled="form.submitting"></textarea>
@@ -812,13 +813,13 @@ function ProductsTab(): string {
 
           <!-- Pagination -->
           <div x-show="totalPages > 1" class="flex items-center justify-center gap-1 mt-8">
-            <button @click="currentPage = Math.max(1, currentPage - 1)" :disabled="currentPage === 1" class="w-8 h-8 flex items-center justify-center rounded border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+            <button @click="currentPage = Math.max(1, currentPage - 1)" :disabled="currentPage === 1" aria-label="Önceki" class="w-8 h-8 flex items-center justify-center rounded border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
             </button>
             <template x-for="pg in totalPages" :key="pg">
               <button @click="currentPage = pg" :class="currentPage === pg ? 'bg-(--btn-bg,#f5b800) text-(--btn-text,#1a1a1a) border-amber-500' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'" class="w-8 h-8 flex items-center justify-center rounded border text-[13px] font-medium transition-colors" x-text="pg"></button>
             </template>
-            <button @click="currentPage = Math.min(totalPages, currentPage + 1)" :disabled="currentPage === totalPages" class="w-8 h-8 flex items-center justify-center rounded border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+            <button @click="currentPage = Math.min(totalPages, currentPage + 1)" :disabled="currentPage === totalPages" aria-label="${t("common.next")}" class="w-8 h-8 flex items-center justify-center rounded border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </button>
           </div>
@@ -950,7 +951,7 @@ function VideosTab(): string {
           <!-- Modal Content -->
           <div class="relative z-10 bg-white rounded-md shadow-2xl w-full max-w-3xl overflow-hidden">
             <!-- Close button -->
-            <button @click="closeModal()" class="absolute top-3 end-3 z-20 w-8 h-8 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center transition-colors">
+            <button @click="closeModal()" aria-label="${t("common.close")}" class="absolute top-3 end-3 z-20 w-8 h-8 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center transition-colors">
               <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
             <!-- Video Player -->
@@ -1131,6 +1132,7 @@ function ContactTab(): string {
                   id="contact-textarea"
                   x-model="msgText"
                   class="th-input min-h-[120px] resize-y"
+                  aria-label="${t("seller.sf.message")}"
                   placeholder="${t("seller.sf.enterInquiryDetails")}"
                   maxlength="8000"
                   aria-required="true"

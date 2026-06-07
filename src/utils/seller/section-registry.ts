@@ -591,7 +591,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
               <!-- Kisi Bilgisi -->
               <div class="flex items-center gap-4 mb-6 pb-6 border-b border-gray-100">
                 <div class="w-[56px] h-[56px] rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center overflow-hidden shrink-0">
-                  <img x-show="seller?.logo" :src="seller?.logo" class="w-full h-full object-contain p-1" />
+                  <img x-show="seller?.logo" :src="seller?.logo" alt="" class="w-full h-full object-contain p-1" />
                   <svg x-show="!seller?.logo" class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0"/></svg>
                 </div>
                 <div>
@@ -720,7 +720,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                 <!-- Sirket Mini Karti -->
                 <div class="flex items-center gap-3 mb-5 pb-4 border-b border-gray-100">
                   <div class="w-10 h-10 rounded-md border border-gray-200 bg-gray-50 flex items-center justify-center overflow-hidden shrink-0">
-                    <img x-show="seller?.logo" :src="seller?.logo" class="w-full h-full object-contain p-0.5" />
+                    <img x-show="seller?.logo" :src="seller?.logo" alt="" class="w-full h-full object-contain p-0.5" />
                   </div>
                   <p class="text-[13px] font-medium text-gray-800 line-clamp-2" x-text="seller?.seller_name || ''"></p>
                 </div>

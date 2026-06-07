@@ -471,7 +471,7 @@ Alpine.data("imageGallery", () => ({
       if (first.isVideo) {
         mainImage.innerHTML = renderInlineVideo(first.src);
       } else {
-        mainImage.innerHTML = `<img src="${escapeHtml(sanitizeUrl(first.src))}" alt="Variant" data-gallery-main-media="true" class="gallery-media-asset gallery-media-asset--large" />`;
+        mainImage.innerHTML = `<img src="${escapeHtml(sanitizeUrl(first.src))}" alt="${escapeHtml(first.alt || "Ürün varyantı")}" data-gallery-main-media="true" class="gallery-media-asset gallery-media-asset--large" />`;
       }
       this.resetZoom();
     }
