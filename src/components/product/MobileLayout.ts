@@ -20,7 +20,7 @@ import { RelatedProducts } from "./RelatedProducts";
 import { MobileRecommendations, initMobileRecommendations } from "./MobileRecommendations";
 import { SocialProofBadge } from "./SocialProofBadge";
 import { getSellerUrl } from "../../utils/sellerUrl";
-import { escapeHtml, sanitizeUrl, safeHexColor } from "../../utils/sanitize";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 // Product loaded lazily — getCurrentProduct() called inside functions
 
