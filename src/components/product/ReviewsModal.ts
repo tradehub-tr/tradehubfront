@@ -10,6 +10,7 @@
 
 import { getCurrentProduct } from "../../alpine/product";
 import { t } from "../../i18n";
+import { escapeHtml } from "../../utils/sanitize";
 import { renderReviewCard, renderStars } from "./ProductReviews";
 
 /* ── Modal HTML ──────────────────────────────────────── */
@@ -99,7 +100,7 @@ export function ReviewsModal(): string {
             ${p.reviewMentionTags
               .map(
                 (tag) => `
-              <button type="button" class="rv-mention-tag th-no-press py-1 px-3 text-[12px] rounded bg-[var(--pd-spec-header-bg,#f9fafb)] text-[var(--pd-rating-text-color,#6b7280)] border border-[var(--pd-spec-border,#e5e5e5)] cursor-pointer transition-all duration-150 hover:border-[var(--color-border-medium,#d1d5db)] [&.active]:border-[var(--pd-tab-active-border,#cc9900)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:bg-[var(--pd-price-tier-active-bg,#fef9e7)] [&.active]:font-semibold" :class="{ active: mentionFilter === '${tag.label}' }" @click="toggleMention('${tag.label}')">${tag.label} (${tag.count})</button>
+              <button type="button" class="rv-mention-tag th-no-press py-1 px-3 text-[12px] rounded bg-[var(--pd-spec-header-bg,#f9fafb)] text-[var(--pd-rating-text-color,#6b7280)] border border-[var(--pd-spec-border,#e5e5e5)] cursor-pointer transition-all duration-150 hover:border-[var(--color-border-medium,#d1d5db)] [&.active]:border-[var(--pd-tab-active-border,#cc9900)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:bg-[var(--pd-price-tier-active-bg,#fef9e7)] [&.active]:font-semibold" :class="{ active: mentionFilter === ${escapeHtml(JSON.stringify(tag.label))} }" @click="toggleMention(${escapeHtml(JSON.stringify(tag.label))})">${escapeHtml(tag.label)} (${tag.count})</button>
             `
               )
               .join("")}

@@ -58,6 +58,16 @@ Alpine.data("socialProofBadge", (initial: Init) => ({
     this.intervalId = window.setInterval(() => this.tick(), ROTATION_INTERVAL_MS);
   },
 
+  // Alpine v3 calls destroy() when the element leaves the DOM. Without it the
+  // rotation interval keeps ticking after a product card is removed (filter
+  // re-render, pagination) → leak that accumulates one timer per removed badge.
+  destroy() {
+    if (this.intervalId !== null) {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
+    }
+  },
+
   tick() {
     if (this.paused || this.signals.length <= 1) return;
     this.currentIndex = (this.currentIndex + 1) % this.signals.length;

@@ -2,13 +2,14 @@
  * Currency utility — reads the user's preferred currency from localStorage
  * and provides helpers to swap the default "$" symbol in price strings.
  *
- * Currency metadata is loaded from the 'tradehub_currency_meta' cache
- * (populated by currencyService on API response).  A hard-coded fallback
+ * Currency metadata is sourced from currencyService's in-memory list
+ * (populated by its queryFetch-backed `initCurrency`).  A hard-coded fallback
  * covers the very first page-load before any API call has completed.
  */
 
+import { getSupportedCurrencies } from "../services/currencyService";
+
 const CURRENCY_STORAGE_KEY = "tradehub-currency";
-const META_CACHE_KEY = "tradehub_currency_meta";
 
 export interface CurrencyInfo {
   code: string;
@@ -22,20 +23,13 @@ const FALLBACK_CURRENCIES: Record<string, CurrencyInfo> = {
 };
 
 function getCurrencyMap(): Record<string, CurrencyInfo> {
-  try {
-    const raw = localStorage.getItem(META_CACHE_KEY);
-    if (raw) {
-      const list = JSON.parse(raw) as Array<{ code: string; symbol: string }>;
-      if (list.length) {
-        const map: Record<string, CurrencyInfo> = {};
-        for (const c of list) {
-          map[c.code] = { code: c.code, symbol: c.symbol };
-        }
-        return map;
-      }
+  const list = getSupportedCurrencies();
+  if (list.length) {
+    const map: Record<string, CurrencyInfo> = {};
+    for (const c of list) {
+      map[c.code] = { code: c.code, symbol: c.symbol };
     }
-  } catch {
-    // ignore parse errors, fallback below
+    return map;
   }
   return FALLBACK_CURRENCIES;
 }

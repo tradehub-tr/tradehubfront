@@ -6,19 +6,20 @@
 
 import type { CategorySection as CategorySectionType } from "../../data/categories";
 import { t } from "../../i18n";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 /** Render a single category item as circular thumbnail + label */
 function CategoryItem(cat: { name: string; href: string; image: string }): string {
   const imageContent = cat.image
-    ? `<img src="${cat.image}" alt="${cat.name}" class="w-full h-full object-cover" loading="lazy" />`
-    : `<span class="text-2xl sm:text-3xl select-none">${cat.name.charAt(0)}</span>`;
+    ? `<img src="${escapeHtml(sanitizeUrl(cat.image))}" alt="${escapeHtml(cat.name)}" class="w-full h-full object-cover" loading="lazy" />`
+    : `<span class="text-2xl sm:text-3xl select-none">${escapeHtml(cat.name.charAt(0))}</span>`;
   return `
-    <a href="${cat.href}" class="group flex flex-col items-center gap-2 text-center no-underline">
+    <a href="${escapeHtml(sanitizeUrl(cat.href))}" class="group flex flex-col items-center gap-2 text-center no-underline">
       <div class="w-[68px] h-[68px] sm:w-24 sm:h-24 lg:w-28 lg:h-28 xl:w-32 xl:h-32 rounded-full bg-gray-100 overflow-hidden border-2 border-transparent group-hover:border-(--primary) group-hover:shadow-lg transition-all duration-200 group-hover:scale-105 flex items-center justify-center text-gray-400 font-bold">
         ${imageContent}
       </div>
       <span class="text-xs sm:text-sm lg:text-sm xl:text-base font-medium text-gray-700 group-hover:text-(--primary) transition-colors duration-200 leading-tight max-w-[80px] sm:max-w-[100px] lg:max-w-[120px] xl:max-w-[140px] line-clamp-2">
-        ${cat.name}
+        ${escapeHtml(cat.name)}
       </span>
     </a>
   `;
@@ -52,11 +53,11 @@ export function CategorySection(
   const items = section.categories.map((cat) => CategoryItem(cat)).join("");
   const seeAll = SeeAllItem(section.title, section.slug);
   const borderClass = isLast ? "" : "border-b border-gray-200";
-  const slugAttr = section.slug ? ` data-slug="${section.slug}"` : "";
+  const slugAttr = section.slug ? ` data-slug="${escapeHtml(section.slug)}"` : "";
 
   return `
     <section id="cat-section-${index}"${slugAttr} class="py-6 lg:py-8 ${borderClass} scroll-mt-28">
-      <h2 class="text-base sm:text-xl lg:text-2xl font-bold text-gray-900 mb-3 sm:mb-5 lg:mb-6">${section.title}</h2>
+      <h2 class="text-base sm:text-xl lg:text-2xl font-bold text-gray-900 mb-3 sm:mb-5 lg:mb-6">${escapeHtml(section.title)}</h2>
       <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-x-2 sm:gap-x-4 lg:gap-x-6 xl:gap-x-8 gap-y-4 sm:gap-y-6 lg:gap-y-8 justify-items-center">
         ${items}
         ${seeAll}

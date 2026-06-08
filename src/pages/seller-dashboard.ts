@@ -19,7 +19,7 @@ appEl.innerHTML = `
   </div>
 
   <!-- Dashboard -->
-  <div x-data="sellerDashboard" x-init="init()" class="min-h-screen bg-[#f0f2f5]">
+  <div x-data="sellerDashboard" class="min-h-screen bg-[#f0f2f5]">
 
     <!-- Auth guard: loading -->
     <div x-show="loading" class="flex items-center justify-center min-h-[60vh]">

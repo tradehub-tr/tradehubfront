@@ -209,6 +209,23 @@ server {
     server_name _;
     root /usr/share/nginx/html;
 
+    # ── Sıkıştırma — metin tabanlı asset'lerin transfer boyutunu ~%75 düşürür.
+    # Lighthouse "Transfer Size" değerleri (style.css 397KB, locales 1.3MB) ham
+    # gönderiliyordu; gzip ile FCP/LCP/Speed Index doğrudan iyileşir.
+    gzip on;
+    gzip_vary on;
+    gzip_comp_level 6;
+    gzip_min_length 1024;
+    gzip_proxied any;
+    gzip_types
+        text/plain
+        text/css
+        text/javascript
+        application/javascript
+        application/json
+        application/manifest+json
+        image/svg+xml;
+
     # Frappe API proxy
     location /api/ {
         # CORS — whitelist: GitHub Pages, *.istoc.com subdomain'leri, Capacitor WebView (iOS/Android).
@@ -278,8 +295,12 @@ server {
     # File upload size limit
     client_max_body_size 50m;
 
-    # Vite build assets — önce lokal dosyaya bak, yoksa Frappe'ye proxy et
+    # Vite build assets — önce lokal dosyaya bak, yoksa Frappe'ye proxy et.
+    # Hash'li dosya isimleri (style-M3JxMgvs.css) içeriğe bağlı → içerik
+    # değişince isim değişir. Bu yüzden immutable + 1 yıl cache güvenli;
+    # "Efficient cache lifetimes" (3MB) denetimini tamamen kapatır.
     location /assets/ {
+        add_header Cache-Control "public, max-age=31536000, immutable";
         try_files $uri @frappe_assets;
     }
     location @frappe_assets {
@@ -384,6 +405,13 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_read_timeout 120s;
+    }
+
+    # Statik medya (logo, PWA ikonları, görseller, font) — hash'siz ama nadiren
+    # değişir. 30 gün cache + revalidation; HTML bu bloğa girmez (uzantı eşleşmesi).
+    location ~* \.(?:png|jpg|jpeg|webp|gif|ico|svg|woff2?|ttf)$ {
+        add_header Cache-Control "public, max-age=2592000";
+        try_files $uri @frappe_assets;
     }
 
     # Frontend statik dosyalar

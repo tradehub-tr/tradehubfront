@@ -5,6 +5,7 @@
  */
 
 import { callMethod } from "../utils/api";
+import { queryFetch, queryKeys, policies } from "../lib/query";
 
 export interface ApiCategory {
   id: string;
@@ -32,7 +33,6 @@ export interface CategoryPathItem {
 }
 
 let _cache: ApiCategory[] | null = null;
-let _promise: Promise<ApiCategory[]> | null = null;
 const _listeners: Array<(cats: ApiCategory[]) => void> = [];
 
 /**
@@ -91,29 +91,35 @@ function filterSpam(cats: ApiCategory[]): ApiCategory[] {
 
 /**
  * Kategorileri API'den çeker ve önbelleğe alır.
- * Birden fazla çağrıda tek fetch yapılır (deduplication).
+ *
+ * Fetch + dedup + IndexedDB persist artık `queryFetch` cache katmanı üzerinden:
+ * aynı key'e gelen paralel çağrılar dedup edilir ve sonuç MPA sayfa
+ * yüklemeleri arasında IndexedDB'de saklanır (her yüklemede yeniden çekilmez).
+ * Senkron getter'lar için modül-içi `_cache` ve `onCategoriesLoaded`
+ * dinleyicileri burada beslenir.
  */
 export function loadCategories(): Promise<ApiCategory[]> {
   if (_cache !== null) return Promise.resolve(_cache);
-  if (_promise) return _promise;
 
-  _promise = callMethod<ApiCategory[]>("tradehub_core.api.category.get_mega_menu")
-    .then((data) => {
+  return queryFetch(
+    queryKeys.categories(),
+    async () => {
+      const data = await callMethod<ApiCategory[]>("tradehub_core.api.category.get_mega_menu");
       const raw: ApiCategory[] = Array.isArray(data) ? data : [];
-      const cats = filterSpam(raw);
+      return filterSpam(raw);
+    },
+    policies.categories
+  )
+    .then((cats) => {
       _cache = cats;
-      _promise = null;
       const toNotify = _listeners.splice(0);
       toNotify.forEach((fn) => fn(cats));
       return cats;
     })
     .catch(() => {
-      _promise = null;
       if (_cache === null) _cache = [];
       return _cache;
     });
-
-  return _promise;
 }
 
 /**

@@ -30,19 +30,13 @@ import { renderCategoryPage, CategoryFilterSidebar, initCategoryFilters } from '
 // Category data (type only — no longer used for rendering)
 import type { CategorySection } from '../data/categories'
 
-// API utility
-import { callMethod } from '../utils/api'
-
 // Utilities
 import { initAnimatedPlaceholder } from '../utils/animatedPlaceholder'
 
-// API response type from get_mega_menu
-interface ApiCat {
-  id: string; name: string; slug: string; image?: string; icon_class?: string;
-  children: { id: string; name: string; slug: string; image?: string }[];
-}
+// Category service (cached via queryFetch + IndexedDB)
+import { loadCategories, type ApiCategory } from '../services/categoryService'
 
-function mapApiToSections(cats: ApiCat[]): CategorySection[] {
+function mapApiToSections(cats: ApiCategory[]): CategorySection[] {
   return cats.map(cat => ({
     title: cat.name,
     slug: cat.slug,
@@ -132,10 +126,22 @@ function scrollToSlugSection(slug: string): void {
   });
 }
 
-// Fetch categories from the same API as MegaMenu and render dynamically
-(async () => {
-  try {
-    const apiCats = await callMethod('tradehub_core.api.category.get_mega_menu') as ApiCat[];
+// Render categories using the shared cached service (queryFetch + IndexedDB)
+function renderCategoriesError(): void {
+  const gridEl = document.getElementById('cat-grid-container');
+  if (gridEl) gridEl.innerHTML = `<div class="py-16 text-center text-red-400">Kategoriler yüklenemedi.</div>`;
+}
+
+loadCategories()
+  .then((apiCats) => {
+    // categoryService.loadCategories() hata durumunda reject ETMEZ, boş dizi döndürür
+    // (no-throw kontratı header MegaMenu vb. tüketicilerce bekleniyor). Bu yüzden boş
+    // sonucu burada "yüklenemedi" olarak ele alıyoruz — yoksa sessizce boş grid çıkardı.
+    if (apiCats.length === 0) {
+      renderCategoriesError();
+      return;
+    }
+
     const sections = mapApiToSections(apiCats);
 
     const sidebarEl = document.getElementById('cat-sidebar-container');
@@ -148,9 +154,5 @@ function scrollToSlugSection(slug: string): void {
     // Deep-link: /pages/categories.html?cat=<slug> → scroll to that section
     const slug = new URLSearchParams(window.location.search).get('cat');
     if (slug) scrollToSlugSection(slug);
-  } catch (err) {
-    console.error('Kategori verisi alınamadı:', err);
-    const gridEl = document.getElementById('cat-grid-container');
-    if (gridEl) gridEl.innerHTML = `<div class="py-16 text-center text-red-400">Kategoriler yüklenemedi.</div>`;
-  }
-})();
+  })
+  .catch(renderCategoriesError);

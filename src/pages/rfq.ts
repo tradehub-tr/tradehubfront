@@ -42,25 +42,26 @@ import { renderDropzone, bindDropzone } from '../components/rfq/dropzone'
 import { renderFileGrid, simulateStagingProgress } from '../components/rfq/file-list'
 import type { FileProgress } from '../components/rfq/uploader'
 import { requireAuth } from '../utils/auth-guard'
+import { escapeHtml, sanitizeUrl } from '../utils/sanitize'
 
 await requireAuth();
 
 // --- Helper: Product Card HTML ---
 function renderProductCard(product: ProductListingCard): string {
   return `
-    <div class="rfq-search-card group overflow-hidden transition-shadow duration-200 hover:shadow-lg" data-product-id="${product.id}">
+    <div class="rfq-search-card group overflow-hidden transition-shadow duration-200 hover:shadow-lg" data-product-id="${escapeHtml(product.id)}">
       <div class="aspect-square overflow-hidden bg-surface-raised">
         <img
-          src="${product.imageSrc || ''}"
-          alt="${product.name}"
+          src="${escapeHtml(product.imageSrc ? sanitizeUrl(product.imageSrc, '') : '')}"
+          alt="${escapeHtml(product.name)}"
           loading="lazy"
           class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
           onerror="this.parentElement.classList.add('flex','items-center','justify-center','text-text-tertiary');this.style.display='none';"
         />
       </div>
       <div class="p-3 sm:p-4">
-        <h3 class="my-1 mb-3 line-clamp-2 text-sm text-text-heading">${product.name}</h3>
-        <a href="/pages/dashboard/rfq-form.html?productId=${product.id}&productName=${encodeURIComponent(product.name)}" class="inline-block text-sm text-text-heading underline transition-colors duration-200 hover:text-primary-600">${t('rfq.getQuote')}</a>
+        <h3 class="my-1 mb-3 line-clamp-2 text-sm text-text-heading">${escapeHtml(product.name)}</h3>
+        <a href="${escapeHtml(`/pages/dashboard/rfq-form.html?productId=${encodeURIComponent(product.id)}&productName=${encodeURIComponent(product.name)}`)}" class="inline-block text-sm text-text-heading underline transition-colors duration-200 hover:text-primary-600">${t('rfq.getQuote')}</a>
       </div>
     </div>
   `;

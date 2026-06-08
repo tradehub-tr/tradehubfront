@@ -7,14 +7,16 @@ import { t } from '../i18n';
 import { orderStore } from '../components/orders/state/OrderStore';
 import { initLinkRewriter } from '../utils/url';
 import { initTracking } from '../utils/trackingManager';
+import { escapeHtml } from '../utils/sanitize';
 
 document.addEventListener('DOMContentLoaded', () => {
   const params = new URLSearchParams(window.location.search);
   const status = params.get('status') || 'pending';
-  const count = params.get('count') || '1';
+  // URL params are reflected into innerHTML below → sanitize at the source.
+  const count = (params.get('count') || '1').replace(/[^0-9]/g, '') || '1';
   const orderNumbersParam = params.get('orderNumbers') || '';
   const orderNumbersList = orderNumbersParam ? orderNumbersParam.split(',') : [];
-  const displayOrderNumber = orderNumbersList[0] || `ORD-${Date.now().toString(36).toUpperCase()}`;
+  const displayOrderNumber = escapeHtml(orderNumbersList[0] || `ORD-${Date.now().toString(36).toUpperCase()}`);
 
   // Update order statuses in the store
   orderStore.load();

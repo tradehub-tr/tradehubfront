@@ -5,6 +5,7 @@
 
 import type { CategorySection, FilterGroup } from "../../data/categories";
 import { t } from "../../i18n";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 /** Chevron SVG for "Shop All" links */
 const chevronRight = `<svg class="w-3 h-3 inline-block ms-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="m9 5 7 7-7 7"/></svg>`;
@@ -14,17 +15,17 @@ function renderFilterGroup(group: FilterGroup): string {
   const items = group.items
     .map(
       (item) =>
-        `<li><a href="${item.href}" class="text-[13px] text-gray-600 hover:text-(--primary) hover:underline leading-relaxed block py-0.5">${item.name}</a></li>`
+        `<li><a href="${escapeHtml(sanitizeUrl(item.href))}" class="text-[13px] text-gray-600 hover:text-(--primary) hover:underline leading-relaxed block py-0.5">${escapeHtml(item.name)}</a></li>`
     )
     .join("");
 
   const shopAll = group.showShopAll
-    ? `<li class="mt-1"><a href="${group.shopAllHref ?? "#"}" class="text-[13px] font-medium text-gray-800 hover:text-(--primary) inline-flex items-center">${chevronRight} ${t("categoryPage.shopAll")}</a></li>`
+    ? `<li class="mt-1"><a href="${escapeHtml(sanitizeUrl(group.shopAllHref ?? "#"))}" class="text-[13px] font-medium text-gray-800 hover:text-(--primary) inline-flex items-center">${chevronRight} ${t("categoryPage.shopAll")}</a></li>`
     : "";
 
   return `
     <div class="mb-4">
-      <h4 class="text-sm font-bold text-gray-900 mb-2">${group.title}</h4>
+      <h4 class="text-sm font-bold text-gray-900 mb-2">${escapeHtml(group.title)}</h4>
       <ul class="space-y-0.5 list-none p-0 m-0">
         ${items}
         ${shopAll}
@@ -49,7 +50,7 @@ function renderSidebarSection(section: CategorySection, index: number): string {
         aria-expanded="true"
         aria-controls="${sectionId}"
       >
-        <h3 class="text-sm font-bold text-gray-900">${section.title}</h3>
+        <h3 class="text-sm font-bold text-gray-900">${escapeHtml(section.title)}</h3>
         <svg class="cat-filter-chevron w-4 h-4 text-gray-500 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7"/>
         </svg>
@@ -73,7 +74,7 @@ export function CategoryFilterSidebar(sections: CategorySection[]): string {
           <div class="border-b border-gray-200 pb-3 mb-4">
             <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">${t("categoryPage.quickNav")}</h3>
             <ul class="space-y-1 list-none p-0 m-0">
-              ${sections.map((s, i) => `<li><a href="#cat-section-${i}" class="text-[13px] text-gray-600 hover:text-(--primary) hover:underline block py-0.5">${s.title}</a></li>`).join("")}
+              ${sections.map((s, i) => `<li><a href="#cat-section-${i}" class="text-[13px] text-gray-600 hover:text-(--primary) hover:underline block py-0.5">${escapeHtml(s.title)}</a></li>`).join("")}
             </ul>
           </div>
 

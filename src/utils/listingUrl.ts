@@ -11,6 +11,8 @@
  * legacy fallback olarak kullanılır (gradual migration için).
  */
 
+import { sanitizeUrl } from "./sanitize";
+
 export interface ListingUrlInput {
   /** Listing.name (örn. "LST-00201"). slug yoksa fallback için kullanılır. */
   id?: string;
@@ -30,7 +32,9 @@ export function getListingUrl(
   lang: "tr" | "en" = "tr"
 ): string {
   if (!listing) return "#";
-  if (listing.href) return listing.href;
+  // Backend href is untrusted — reject javascript:/data:/protocol-relative
+  // (open redirect / XSS) before it reaches an href attribute sink.
+  if (listing.href) return sanitizeUrl(listing.href);
   const prefix = lang === "en" ? "/en" : "";
   if (listing.slug) return `${prefix}/urun/${listing.slug}`;
   if (listing.id) return `/pages/product-detail.html?id=${listing.id}`;

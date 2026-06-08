@@ -7,6 +7,7 @@
 import type { Certificate } from "../../types/seller/types";
 import { t } from "../../i18n";
 import { btn } from "../../utils/ui/button";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 export function Certificates(certificates: Certificate[]): string {
   if (!certificates || !certificates.length) return "";
@@ -27,7 +28,7 @@ export function Certificates(certificates: Certificate[]): string {
                   (cert) => `
                 <div class="swiper-slide">
                   <div class="certificates__card bg-white dark:bg-gray-800 border border-(--card-border-color) dark:border-gray-700 shadow-sm rounded-(--radius-md) p-2 flex items-center justify-center">
-                    <img src="${cert.image}" alt="${cert.name}"
+                    <img src="${escapeHtml(sanitizeUrl(cert.image))}" alt="${escapeHtml(cert.name)}"
                          class="w-full aspect-[3/4] object-contain"
                          loading="lazy"
                          onerror="this.outerHTML='<div class=\\'w-16 h-20 bg-gray-100 rounded flex items-center justify-center\\'><svg class=\\'w-8 h-8 text-gray-300\\' fill=\\'none\\' stroke=\\'currentColor\\' viewBox=\\'0 0 24 24\\'><path stroke-linecap=\\'round\\' stroke-linejoin=\\'round\\' stroke-width=\\'2\\' d=\\'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z\\'/></svg></div>'" />

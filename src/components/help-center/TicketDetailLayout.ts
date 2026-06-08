@@ -12,7 +12,7 @@
 
 export function TicketDetailLayout(): string {
   return `
-    <div class="bg-gray-50 min-h-screen" x-data="ticketDetail()" x-init="init()">
+    <div class="bg-gray-50 min-h-screen" x-data="ticketDetail()">
       <div class="max-w-[1100px] mx-auto px-4 sm:px-6 py-6">
 
         <!-- Breadcrumb + back -->

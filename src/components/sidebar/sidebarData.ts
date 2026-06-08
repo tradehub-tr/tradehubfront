@@ -143,12 +143,7 @@ export function getDiscoverItem(): SidebarMenuItem {
   };
 }
 
-/**
- * @deprecated Use getSidebarSections() instead. Kept for backward compatibility.
- */
-export const sidebarSections: SidebarSection[] = getSidebarSections();
-
-/**
- * @deprecated Use getDiscoverItem() instead. Kept for backward compatibility.
- */
-export const discoverItem: SidebarMenuItem = getDiscoverItem();
+// NOTE: Eski `sidebarSections` / `discoverItem` const export'lari kaldirildi —
+// modul yuklenirken (i18n hazir olmadan) t() cagirip yanlis/bos ceviri
+// donduruyorlardi. Tuketiciler zaten getSidebarSections()/getDiscoverItem()
+// fonksiyonlarini render aninda cagiriyor.

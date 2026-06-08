@@ -5,6 +5,7 @@
 
 import { getCurrentProduct } from "../../alpine/product";
 import { t } from "../../i18n";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 import { getSellerUrl } from "../../utils/sellerUrl";
 
 function verifiedBadge(): string {
@@ -25,7 +26,7 @@ function statRow(icon: string, label: string, value: string): string {
         ${icon}
       </svg>
       <span class="text-xs truncate" style="color: var(--pd-rating-text-color, #6b7280);">${label}</span>
-      <span class="text-xs font-semibold ms-auto shrink-0" style="color: var(--pd-title-color, #111827);">${value}</span>
+      <span class="text-xs font-semibold ms-auto shrink-0" style="color: var(--pd-title-color, #111827);">${escapeHtml(value)}</span>
     </div>
   `;
 }
@@ -45,7 +46,7 @@ export function SupplierCard(): string {
         </div>
         <div class="min-w-0">
           <div class="flex items-center gap-1.5">
-            <h3 class="text-sm font-bold truncate" style="color: var(--pd-title-color, #111827);">${s.name}</h3>
+            <h3 class="text-sm font-bold truncate" style="color: var(--pd-title-color, #111827);">${escapeHtml(s.name)}</h3>
             ${s.verified ? verifiedBadge() : ""}
           </div>
           <p class="text-xs mt-0.5" style="color: var(--pd-rating-text-color, #6b7280);">${t("product.servingYears", { count: String(s.yearsInBusiness) })}</p>
@@ -79,7 +80,7 @@ export function SupplierCard(): string {
             .slice(0, 3)
             .map(
               (mp) => `
-            <span class="text-xs px-2 py-1 rounded-md" style="background: var(--pd-price-tier-bg, #f9fafb); color: var(--pd-title-color, #111827);">${mp}</span>
+            <span class="text-xs px-2 py-1 rounded-md" style="background: var(--pd-price-tier-bg, #f9fafb); color: var(--pd-title-color, #111827);">${escapeHtml(mp)}</span>
           `
             )
             .join("")}
@@ -93,7 +94,7 @@ export function SupplierCard(): string {
           ${s.certifications
             .map(
               (cert) => `
-            <span class="text-xs px-2 py-1 rounded-md font-medium" style="background: var(--pd-trade-assurance-bg, #f0fdf4); color: var(--pd-trade-assurance-text, #15803d);">${cert}</span>
+            <span class="text-xs px-2 py-1 rounded-md font-medium" style="background: var(--pd-trade-assurance-bg, #f0fdf4); color: var(--pd-trade-assurance-text, #15803d);">${escapeHtml(cert)}</span>
           `
             )
             .join("")}
@@ -108,7 +109,7 @@ export function SupplierCard(): string {
           </svg>
           ${t("product.contactUs")}
         </button>
-        <a href="${getSellerUrl({ id: s.id })}" class="text-center text-xs font-medium hover:underline" style="color: var(--pd-breadcrumb-link-color, #cc9900);">
+        <a href="${escapeHtml(sanitizeUrl(getSellerUrl({ id: s.id })))}" class="text-center text-xs font-medium hover:underline" style="color: var(--pd-breadcrumb-link-color, #cc9900);">
           ${t("product.viewCompany")} →
         </a>
       </div>

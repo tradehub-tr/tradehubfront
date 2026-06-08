@@ -4,6 +4,8 @@
  * Docker deploy'da VITE_MEDIA_BASE boş olduğu için hiçbir şey yapmaz.
  */
 
+import { sanitizeUrl } from "./sanitize";
+
 const MEDIA_BASE = import.meta.env.VITE_MEDIA_BASE || "";
 
 function needsRewrite(src: string | null): boolean {
@@ -13,7 +15,9 @@ function needsRewrite(src: string | null): boolean {
 function rewriteImg(img: HTMLImageElement): void {
   const src = img.getAttribute("src");
   if (needsRewrite(src)) {
-    img.setAttribute("src", MEDIA_BASE + src);
+    // src DOM/sunucu kaynaklı bir URL; src attribute'una yazmadan önce
+    // sema-allowlist'ten geçir (javascript:/data:/protocol-relative reddedilir).
+    img.setAttribute("src", sanitizeUrl(MEDIA_BASE + src));
   }
 }
 
@@ -22,7 +26,12 @@ function rewriteBgImages(el: HTMLElement): void {
   if ((style && style.includes("url(/files/")) || style?.includes("url(/private/files/")) {
     el.setAttribute(
       "style",
-      style.replace(/url\((\/(?:private\/)?files\/[^)]+)\)/g, `url(${MEDIA_BASE}$1)`)
+      style.replace(/url\((\/(?:private\/)?files\/[^)]+)\)/g, (_match, path: string) => {
+        // CSS url() context: path DOM/sunucu kaynaklı. Önce sema-allowlist,
+        // sonra url()'den kaçmayı engelleyecek quote/paren/whitespace temizliği.
+        const safe = sanitizeUrl(MEDIA_BASE + path).replace(/["'()\s]/g, "");
+        return `url(${safe})`;
+      })
     );
   }
 }

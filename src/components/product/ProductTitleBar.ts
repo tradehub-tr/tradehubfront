@@ -5,6 +5,7 @@
  */
 
 import { getCurrentProduct } from "../../alpine/product";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 import { t } from "../../i18n";
 import { getCountryCode, getCountryFlag } from "../../utils/country";
 import { getBrandUrl } from "../../utils/brandUrl";
@@ -75,13 +76,13 @@ export function ProductTitleBar(): string {
 
   const brandRowHtml =
     brand && brand.name
-      ? `<a href="${getBrandUrl({ slug: brand.slug })}"
+      ? `<a href="${escapeHtml(sanitizeUrl(getBrandUrl({ slug: brand.slug })))}"
           class="inline-flex items-center gap-1.5 px-2 py-1 mb-2 rounded-md border border-gray-200 bg-white hover:bg-gray-50 text-[12px] font-medium no-underline"
           style="color: var(--pd-title-color, #222222);"
-          title="${brand.name}">
-        ${brand.logo ? `<img src="${brand.logo}" alt="${brand.name}" class="w-4 h-4 object-contain" />` : ""}
+          title="${escapeHtml(brand.name)}">
+        ${brand.logo ? `<img src="${escapeHtml(sanitizeUrl(brand.logo))}" alt="${escapeHtml(brand.name)}" class="w-4 h-4 object-contain" />` : ""}
         <span>${t("product.brandLabel", { defaultValue: "Marka" })}:</span>
-        <strong>${brand.name}</strong>
+        <strong>${escapeHtml(brand.name)}</strong>
       </a>`
       : "";
 
@@ -89,7 +90,7 @@ export function ProductTitleBar(): string {
     <div id="pd-title-bar" class="mb-5">
       ${brandRowHtml}
       <!-- Product Title -->
-      <h1 id="pd-product-title" class="text-lg font-bold leading-snug mb-1.5 line-clamp-2 break-words" style="color: var(--pd-title-color, #222222);">${p.title}</h1>
+      <h1 id="pd-product-title" class="text-lg font-bold leading-snug mb-1.5 line-clamp-2 break-words" style="color: var(--pd-title-color, #222222);">${escapeHtml(p.title)}</h1>
 
       <!-- Rating + Reviews + Orders -->
       <div id="pd-rating-line" class="flex items-center gap-2 flex-wrap text-[13px] mb-3">
@@ -98,7 +99,7 @@ export function ProductTitleBar(): string {
 
       <!-- Supplier Company Bar -->
       <div class="flex items-center gap-2 flex-wrap text-[13px] px-3 py-2 rounded-md min-w-0 overflow-hidden" style="background: var(--color-surface-raised, #f5f5f5); color: var(--pd-rating-text-color, #6b7280);">
-        <a href="${getSellerUrl({ id: s.id })}" class="text-[13px] font-medium hover:underline truncate max-w-[200px]" style="color: var(--pd-breadcrumb-link-color, #cc9900);">${s.name}</a>
+        <a href="${escapeHtml(sanitizeUrl(getSellerUrl({ id: s.id })))}" class="text-[13px] font-medium hover:underline truncate max-w-[200px]" style="color: var(--pd-breadcrumb-link-color, #cc9900);">${escapeHtml(s.name)}</a>
         ${
           s.verified
             ? `

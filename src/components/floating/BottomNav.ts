@@ -8,6 +8,7 @@ import { t } from "../../i18n";
 import { onCategoriesLoaded } from "../../services/categoryService";
 import type { ApiCategory } from "../../services/categoryService";
 import { waitForAuth } from "../../utils/auth";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 function renderCategoryOverlay(): string {
   return `
@@ -40,14 +41,14 @@ function renderCategoryOverlay(): string {
 function renderSubcatItem(name: string, slug: string, image?: string): string {
   const placeholder = `<svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75Z"/></svg>`;
   const imgHtml = image
-    ? `<img src="${image}" alt="${name}" class="w-full h-full object-cover rounded-full" loading="lazy" />`
+    ? `<img src="${escapeHtml(sanitizeUrl(image))}" alt="${escapeHtml(name)}" class="w-full h-full object-cover rounded-full" loading="lazy" />`
     : placeholder;
   return `
-    <a href="/pages/products.html?cat=${slug}" class="flex flex-col items-center gap-1">
+    <a href="/pages/products.html?cat=${escapeHtml(slug)}" class="flex flex-col items-center gap-1">
       <div class="w-12 h-12 min-[400px]:w-14 min-[400px]:h-14 sm:w-16 sm:h-16 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
         ${imgHtml}
       </div>
-      <span class="text-[10px] min-[400px]:text-[11px] text-gray-700 dark:text-gray-300 text-center leading-tight line-clamp-2 w-[56px] min-[400px]:w-[64px] sm:w-[72px]">${name}</span>
+      <span class="text-[10px] min-[400px]:text-[11px] text-gray-700 dark:text-gray-300 text-center leading-tight line-clamp-2 w-[56px] min-[400px]:w-[64px] sm:w-[72px]">${escapeHtml(name)}</span>
     </a>
   `;
 }
@@ -99,7 +100,7 @@ export function initCategoryFullscreen(): void {
       if (!cat) return;
 
       const viewAllItem = `
-        <a href="/pages/products.html?cat=${cat.slug}" class="flex flex-col items-center gap-1">
+        <a href="/pages/products.html?cat=${escapeHtml(cat.slug)}" class="flex flex-col items-center gap-1">
           <div class="w-12 h-12 min-[400px]:w-14 min-[400px]:h-14 sm:w-16 sm:h-16 rounded-full border-2 border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center">
             <svg class="w-5 h-5 sm:w-6 sm:h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"/>
@@ -122,8 +123,8 @@ export function initCategoryFullscreen(): void {
         (cat, i) => `
         <button type="button"
           class="cat-fs-item th-no-press w-full text-start px-2 min-[400px]:px-3 py-2.5 min-[400px]:py-3 text-[11px] min-[400px]:text-[12px] sm:text-[13px] text-gray-700 dark:text-gray-300 transition-colors ${i === 0 ? "bg-white dark:bg-gray-900 font-bold border-s-2 border-s-primary-500" : "font-normal border-s-0"}"
-          data-cat-id="${cat.id}"
-        >${cat.name}</button>
+          data-cat-id="${escapeHtml(cat.id)}"
+        >${escapeHtml(cat.name)}</button>
       `
       )
       .join("");
@@ -403,10 +404,10 @@ function initAccountFullscreen(): void {
           : "";
         authArea.innerHTML = `
           <a href="/pages/dashboard/buyer-dashboard.html" class="mx-3 min-[400px]:mx-4 mt-4 rounded-md bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-3 min-[400px]:p-4 flex items-center gap-3 no-underline">
-            <div class="w-10 h-10 min-[400px]:w-12 min-[400px]:h-12 rounded-full bg-[var(--color-primary-500,#f5b800)] flex items-center justify-center text-white font-bold text-sm min-[400px]:text-lg shrink-0">${initials}</div>
+            <div class="w-10 h-10 min-[400px]:w-12 min-[400px]:h-12 rounded-full bg-[var(--color-primary-500,#f5b800)] flex items-center justify-center text-white font-bold text-sm min-[400px]:text-lg shrink-0">${escapeHtml(initials)}</div>
             <div class="flex-1 min-w-0">
-              <p class="text-[13px] min-[400px]:text-sm font-bold text-gray-900 dark:text-white">${user.full_name || ""}</p>
-              <p class="text-[10px] min-[400px]:text-xs text-gray-500 mt-0.5 truncate">${user.email || ""}</p>
+              <p class="text-[13px] min-[400px]:text-sm font-bold text-gray-900 dark:text-white">${escapeHtml(user.full_name || "")}</p>
+              <p class="text-[10px] min-[400px]:text-xs text-gray-500 mt-0.5 truncate">${escapeHtml(user.email || "")}</p>
             </div>
             <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
           </a>

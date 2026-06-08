@@ -225,7 +225,7 @@ function renderViewModeToggle(): string {
     "bg-transparent text-gray-400 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-200";
 
   return `
-    <div class="shrink-0 inline-flex items-center bg-white border border-gray-200 rounded-full p-[3px] dark:bg-gray-800 dark:border-gray-700" role="tablist" aria-label="${t("products.viewMode")}">
+    <div class="shrink-0 inline-flex items-center bg-white border border-gray-200 rounded-full p-[3px] dark:bg-gray-800 dark:border-gray-700" role="group" aria-label="${t("products.viewMode")}">
       <button
         type="button"
         @click="setViewMode('grid')"

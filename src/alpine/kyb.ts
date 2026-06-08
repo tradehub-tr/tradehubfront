@@ -13,6 +13,7 @@ import { t } from "../i18n";
 import { api, RateLimitError } from "../utils/api";
 import { queueToast } from "../utils/toast";
 import { KYB_DOCUMENT_FIELDS } from "../components/kyb/KybLayout";
+import { escapeHtml, sanitizeUrl } from "../utils/sanitize";
 
 interface KybData {
   exists: boolean;
@@ -94,8 +95,9 @@ function updateKybSlotPreview(slotId: string, fileUrl: string): void {
   const iconHtml = isImage
     ? `<span class="text-blue-600">${KYB_PREVIEW_ICONS.image}</span>`
     : `<span class="text-red-600">${KYB_PREVIEW_ICONS.pdf}</span>`;
-  const filename = kybGetFileName(fileUrl);
-  const ext = kybGetExtUpper(fileUrl);
+  const filename = escapeHtml(kybGetFileName(fileUrl));
+  const ext = escapeHtml(kybGetExtUpper(fileUrl));
+  const safeHref = escapeHtml(sanitizeUrl(fileUrl));
 
   const previewDiv = document.createElement("div");
   previewDiv.className = "kyb-slot-preview mb-2";
@@ -111,7 +113,7 @@ function updateKybSlotPreview(slotId: string, fileUrl: string): void {
         <div class="text-[12px] font-semibold text-gray-900 truncate">${filename}</div>
         <div class="text-[10px] text-gray-600">${ext} dosyası</div>
       </div>
-      <a href="${fileUrl}" target="_blank" rel="noopener" class="px-2 py-1 rounded-md text-[11px] font-medium bg-white text-emerald-700 border border-emerald-300 hover:bg-emerald-100 inline-flex items-center gap-1 flex-shrink-0">
+      <a href="${safeHref}" target="_blank" rel="noopener" class="px-2 py-1 rounded-md text-[11px] font-medium bg-white text-emerald-700 border border-emerald-300 hover:bg-emerald-100 inline-flex items-center gap-1 flex-shrink-0">
         ${KYB_PREVIEW_ICONS.eye}
         <span>Görüntüle</span>
       </a>

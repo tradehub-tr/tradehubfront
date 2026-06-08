@@ -7,6 +7,7 @@
  */
 
 import { getLucideIcon } from "../icons/lucideIcons";
+import { escapeHtml, safeHexColor } from "../../utils/sanitize";
 import { type KpiCard, type CategorySlice } from "../../data/buyerAnalytics";
 import {
   fetchBuyerAnalytics,
@@ -21,13 +22,6 @@ const TONE: Record<KpiCard["tone"], string> = {
   success: "bg-success-50 text-success-700",
 };
 
-/** DB string'ini innerHTML'e basmadan önce escape et (XSS — rules/typescript.md). */
-const esc = (s: string): string =>
-  s.replace(
-    /[&<>"']/g,
-    (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] as string
-  );
-
 /** Grafik verisi boşken halka/eksen yerine gösterilen nazik placeholder. */
 const chartEmptyState = (message: string): string =>
   `<div class="h-full flex items-center justify-center text-center text-sm text-gray-400">${message}</div>`;
@@ -38,13 +32,13 @@ function kpiCard(c: KpiCard): string {
     ? getLucideIcon(c.trend === "down" ? "trending-down" : "trending-up", "w-3.5 h-3.5")
     : "";
   const sub = c.trend
-    ? `<span class="${trendColor} inline-flex items-center gap-1 font-semibold">${trendIcon}${c.trendText ?? ""}</span><span class="text-gray-400">${c.hint}</span>`
-    : `<span class="text-gray-500">${c.hint}</span>`;
+    ? `<span class="${trendColor} inline-flex items-center gap-1 font-semibold">${trendIcon}${escapeHtml(c.trendText ?? "")}</span><span class="text-gray-400">${escapeHtml(c.hint)}</span>`
+    : `<span class="text-gray-500">${escapeHtml(c.hint)}</span>`;
 
   return `
     <div class="relative bg-(--color-surface,#ffffff) rounded-lg border border-gray-100 p-4 max-sm:p-3 overflow-hidden transition-shadow duration-300 hover:shadow-[0_0_12px_0_rgba(0,0,0,0.12)]">
-      <p class="text-[12.5px] text-gray-500">${c.label}</p>
-      <p class="text-[26px] max-sm:text-xl font-extrabold text-gray-900 mt-2 tracking-tight leading-none">${c.value}</p>
+      <p class="text-[12.5px] text-gray-500">${escapeHtml(c.label)}</p>
+      <p class="text-[26px] max-sm:text-xl font-extrabold text-gray-900 mt-2 tracking-tight leading-none">${escapeHtml(c.value)}</p>
       <p class="text-xs mt-2 flex flex-wrap items-center gap-x-1.5 gap-y-0.5">${sub}</p>
       <span class="absolute top-3.5 right-3.5 w-9 h-9 max-sm:w-8 max-sm:h-8 rounded-[10px] flex items-center justify-center ${TONE[c.tone]}">${getLucideIcon(c.icon, "w-[18px] h-[18px]")}</span>
     </div>`;
@@ -65,7 +59,7 @@ function categoryLegend(slices: CategorySlice[]): string {
     .map(
       (c) => `
       <li class="flex items-center justify-between text-sm">
-        <span class="flex items-center gap-2 text-gray-600"><span class="w-2 h-2 rounded-full shrink-0" style="background:${c.color}"></span>${esc(c.name)}</span>
+        <span class="flex items-center gap-2 text-gray-600"><span class="w-2 h-2 rounded-full shrink-0" style="background:${safeHexColor(c.color)}"></span>${escapeHtml(c.name)}</span>
         <span class="font-semibold text-gray-900">%${c.value}</span>
       </li>`
     )
@@ -206,7 +200,7 @@ export async function initAnalyticsOverview(): Promise<void> {
     chart.setOption({
       tooltip: {
         trigger: "item",
-        formatter: (p: { name: string; value: number }) => `${esc(p.name)}: %${p.value}`,
+        formatter: (p: { name: string; value: number }) => `${escapeHtml(p.name)}: %${p.value}`,
       },
       series: [
         {

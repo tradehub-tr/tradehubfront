@@ -16,19 +16,12 @@ import { type EmailVerificationState } from "./EmailVerification";
 import { type AccountSetupFormData } from "./AccountSetupForm";
 import { getBaseUrl } from "./AuthLayout";
 import { t } from "../../i18n";
+import { escapeHtml } from "../../utils/sanitize";
+export { escapeHtml };
 
 /* ── Helpers ────────────────────────────────────────── */
 
 /** HTML-encode user input to prevent XSS when inserted via innerHTML */
-export function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
-
 /* ── Types ──────────────────────────────────────────── */
 
 /** Registration flow steps */

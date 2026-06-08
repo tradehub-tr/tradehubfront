@@ -1,3 +1,4 @@
+import { escapeHtml } from "../../../utils/sanitize";
 /**
  * BuffTaskArrow Organism
  * Navigation/scroll arrow component for back-to-top or section navigation.
@@ -18,14 +19,6 @@ const ARROW_PATHS: Record<ArrowDirection, string> = {
   left: "M15 19l-7-7 7-7",
   right: "M9 5l7 7-7 7",
 };
-
-function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
 
 export function BuffTaskArrow({
   direction = "up",

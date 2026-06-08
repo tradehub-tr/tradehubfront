@@ -11,6 +11,13 @@
 import { getBaseUrl } from "./AuthLayout";
 import { t } from "../../i18n";
 
+export function maskEmail(email: string): string {
+  if (!email || !email.includes("@")) return email;
+  const [local, domain] = email.split("@");
+  if (local.length <= 2) return `${local[0]}***@${domain}`;
+  return `${local.slice(0, 3)}***@${domain}`;
+}
+
 /* ── Types ──────────────────────────────────────────── */
 
 export type ForgotPasswordStep = "find-account" | "link-sent";
@@ -22,13 +29,6 @@ export interface ForgotPasswordState {
 }
 
 /* ── Helper ─────────────────────────────────────────── */
-
-export function maskEmail(email: string): string {
-  if (!email || !email.includes("@")) return email;
-  const [local, domain] = email.split("@");
-  if (local.length <= 2) return `${local[0]}***@${domain}`;
-  return `${local.slice(0, 3)}***@${domain}`;
-}
 
 const supportLink = `
   <a href="mailto:support@istoc.com" class="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 transition-colors">
@@ -50,7 +50,7 @@ function ForgotPasswordHeader(): string {
         <a href="${baseUrl}" aria-label="iSTOC Ana Sayfa">
           <img src="${baseUrl}images/istoc-logo.png" alt="iSTOC" class="h-7" />
         </a>
-        <div x-data="authLangSwitcher" x-init="init()">
+        <div x-data="authLangSwitcher">
           <select
             class="th-input th-input-sm w-auto cursor-pointer"
             x-model="lang"

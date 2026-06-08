@@ -7,6 +7,7 @@
 
 import type { CartSupplier } from "../../types/cart";
 import { t } from "../../i18n";
+import { escapeHtml } from "../../utils/sanitize";
 import "../payment/state/PaymentCardStore";
 
 export interface PaymentMethodSectionProps {
@@ -36,9 +37,11 @@ export function PaymentMethodSection({
           ? suppliers[0].name
           : "iSTOC";
 
+    const supplierNamesOptions = escapeHtml(JSON.stringify({ name: supplierNames }));
+
     return `
       <div class="pt-1">
-        <div class="co-pay-sub text-[11px] sm:text-[12px] text-[#8a877f] pb-3 uppercase tracking-[0.05em] font-semibold" data-i18n="checkout.paymentMethodFor" data-i18n-options='{"name":"${supplierNames}"}'>${t("checkout.paymentMethodFor", { name: supplierNames })}</div>
+        <div class="co-pay-sub text-[11px] sm:text-[12px] text-[#8a877f] pb-3 uppercase tracking-[0.05em] font-semibold" data-i18n="checkout.paymentMethodFor" data-i18n-options='${supplierNamesOptions}'>${t("checkout.paymentMethodFor", { name: supplierNames })}</div>
         <div class="co-pay-list flex flex-col gap-1.5 sm:gap-2">
           <!-- Option 1: Banka Havalesi / EFT (önerilen) -->
           <label class="co-pay-row relative flex items-start gap-2.5 sm:gap-3 px-3 sm:px-4 py-3 sm:py-[14px] border rounded-md bg-white cursor-pointer transition-all"

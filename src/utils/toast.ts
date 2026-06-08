@@ -3,6 +3,8 @@
  * iSTOC design system uyumlu bildirim toast'ları
  */
 
+import { escapeHtml, sanitizeUrl } from "./sanitize";
+
 export type ToastType = "success" | "error" | "warning" | "info";
 
 interface ToastOptions {
@@ -68,7 +70,7 @@ export function showToast(options: ToastOptions): void {
   `;
 
   const linkHtml = link
-    ? `<a href="${link.href}" style="display:inline-block;margin-top:4px;font-size:12px;font-weight:600;color:${colors.bar};text-decoration:none;">${link.text} &rarr;</a>`
+    ? `<a href="${escapeHtml(sanitizeUrl(link.href))}" style="display:inline-block;margin-top:4px;font-size:12px;font-weight:600;color:${colors.bar};text-decoration:none;">${escapeHtml(link.text)} &rarr;</a>`
     : "";
 
   toast.innerHTML = `
@@ -76,7 +78,7 @@ export function showToast(options: ToastOptions): void {
       ${ICONS[type]}
     </div>
     <div style="flex:1;min-width:0">
-      <p style="margin:0;font-size:13px;font-weight:500;color:#1f2937;line-height:1.4">${message}</p>
+      <p style="margin:0;font-size:13px;font-weight:500;color:#1f2937;line-height:1.4">${escapeHtml(message)}</p>
       ${linkHtml}
     </div>
     <button type="button" style="flex-shrink:0;background:none;border:none;cursor:pointer;padding:2px;color:#9ca3af;transition:color 0.15s" aria-label="Kapat">

@@ -13,6 +13,7 @@
 import Alpine from "alpinejs";
 import { t } from "../i18n";
 import { callMethod } from "../utils/api";
+import { escapeHtml, sanitizeUrl } from "../utils/sanitize";
 
 const ACTIVE_POLL_MS = 3_000;
 const INBOX_POLL_MS = 10_000;
@@ -31,15 +32,6 @@ interface UiMessage {
 const VIDEO_CALL_MARKER = "🎥";
 const URL_REGEX_G = /(https?:\/\/[^\s]+)/g;
 
-function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
-
 function linkify(text: string): string {
   let last = 0;
   let out = "";
@@ -47,11 +39,12 @@ function linkify(text: string): string {
     const start = m.index ?? 0;
     out += escapeHtml(text.slice(last, start));
     const url = m[1];
-    const safeUrl = escapeHtml(url);
+    const safeHref = escapeHtml(sanitizeUrl(url));
+    const safeText = escapeHtml(url);
     out +=
-      `<a href="${safeUrl}" target="_blank" rel="noopener noreferrer" ` +
+      `<a href="${safeHref}" target="_blank" rel="noopener noreferrer" ` +
       `class="underline text-(--color-cta-primary,#cc9900) hover:opacity-80 break-all">` +
-      `${safeUrl}</a>`;
+      `${safeText}</a>`;
     last = start + url.length;
   }
   out += escapeHtml(text.slice(last));
@@ -393,7 +386,7 @@ Alpine.data("messagesComponent", () => ({
       );
       const finalText = sent.content || text;
       const uiMsg: UiMessage = {
-        id: String(sent.id ?? `m-${Date.now()}`),
+        id: String(sent.id ?? `m-local-${Date.now()}`),
         sender: "Me",
         text: finalText,
         textHtml: linkify(finalText),

@@ -13,18 +13,9 @@
 import { t } from "../../i18n";
 import { formatPrice } from "../../utils/currency";
 import type { RankedProduct } from "../../types/topRanking";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 const PAGE_SIZE = 50;
-
-function escapeHtml(str: string): string {
-  if (!str) return "";
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
 
 function moqCount(moq: string | undefined): number {
   if (!moq) return 1;
@@ -59,8 +50,8 @@ function renderStars(rating: number): string {
 export function renderRankedCategoryCard(product: RankedProduct, rank: number): string {
   const safeName = escapeHtml(product.name);
   const safeMoq = escapeHtml(product.moq);
-  const safeImg = escapeHtml(product.imageSrc || "");
-  const safeHref = escapeHtml(product.href || "#");
+  const safeImg = escapeHtml(sanitizeUrl(product.imageSrc || ""));
+  const safeHref = escapeHtml(sanitizeUrl(product.href || "#"));
   const badgeClass = rankBadgeClass(rank);
 
   const rating = product.averageRating || 0;

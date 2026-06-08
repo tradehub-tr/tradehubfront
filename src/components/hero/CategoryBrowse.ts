@@ -10,20 +10,21 @@ import type { ApiCategory } from "../../services/categoryService";
 import { getCategoryIcon, getIconByName } from "../header";
 import { t } from "../../i18n";
 import { getRecentCategories } from "../../utils/recentCategories";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 /* ──── Subcategory item renderer ──── */
 
 function renderSubcategoryItem(name: string, slug: string, image?: string): string {
   const placeholderSvg = `<svg class="w-8 h-8 lg:w-10 lg:h-10" style="color:var(--catpopup-icon)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75Z"/></svg>`;
   const inner = image
-    ? `<img src="${image}" alt="${name}" class="w-full h-full object-cover" loading="lazy" onerror="this.outerHTML=this.dataset.fallback" data-fallback='${placeholderSvg.replace(/'/g, "&apos;")}' />`
+    ? `<img src="${escapeHtml(sanitizeUrl(image))}" alt="${escapeHtml(name)}" class="w-full h-full object-cover" loading="lazy" onerror="this.outerHTML=this.dataset.fallback" data-fallback='${placeholderSvg.replace(/'/g, "&apos;")}' />`
     : placeholderSvg;
   return `
-    <a href="/pages/products.html?cat=${slug}" class="flex flex-col items-center gap-2 group/product">
+    <a href="${escapeHtml(sanitizeUrl(`/pages/products.html?cat=${encodeURIComponent(slug)}`))}" class="flex flex-col items-center gap-2 group/product">
       <div class="relative w-20 h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 rounded-full flex items-center justify-center overflow-hidden group-hover/product:ring-2 transition-all" style="background-color:var(--catpopup-product-bg);--tw-ring-color:var(--catpopup-sidebar-active-border)">
         ${inner}
       </div>
-      <span class="text-xs lg:text-sm text-center leading-tight transition-colors duration-150 max-w-[80px] lg:max-w-[100px] xl:max-w-[120px]" style="color:var(--catpopup-text)">${name}</span>
+      <span class="text-xs lg:text-sm text-center leading-tight transition-colors duration-150 max-w-[80px] lg:max-w-[100px] xl:max-w-[120px]" style="color:var(--catpopup-text)">${escapeHtml(name)}</span>
     </a>
   `;
 }
@@ -390,12 +391,12 @@ export function initCategoryBrowse(): void {
             type="button"
             class="category-browse-item level1-cate-unit th-no-press flex items-center w-full text-start transition-colors duration-150 group bg-transparent hover:bg-white dark:text-gray-300 dark:hover:bg-gray-700/60 dark:hover:text-white"
             style="min-height:44px;padding:6px 16px;gap:12px"
-            data-category-id="${cat.id}"
+            data-category-id="${escapeHtml(cat.id)}"
           >
             <span class="flex-shrink-0 inline-flex items-center justify-center [&>svg]:w-5 [&>svg]:h-5" style="color:#222222">
               ${cat.icon_class ? getCategoryIcon(cat.icon_class) : getIconByName(cat.name)}
             </span>
-            <span class="title flex-1 truncate" style="color:#222222;font-size:15px;font-weight:600;font-family:var(--font-sans);line-height:1.3">${cat.name}</span>
+            <span class="title flex-1 truncate" style="color:#222222;font-size:15px;font-weight:600;font-family:var(--font-sans);line-height:1.3">${escapeHtml(cat.name)}</span>
             <svg class="w-4 h-4 flex-shrink-0" style="color:#999999" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
             </svg>
@@ -443,12 +444,12 @@ export function initCategoryBrowse(): void {
             type="button"
             class="cat-popup-btn th-catpopup-sidebar-item th-no-press flex items-center gap-2 lg:gap-3 w-full px-3 lg:px-4 py-2 lg:py-2.5 text-sm text-start border-s-2 border-s-transparent transition-colors duration-150 whitespace-nowrap lg:whitespace-normal hover:bg-(--catpopup-sidebar-active-bg) hover:text-(--catpopup-heading)"
             style="color:var(--catpopup-text)"
-            data-category="${cat.id}"
+            data-category="${escapeHtml(cat.id)}"
           >
             <span class="flex-shrink-0" style="color:var(--catpopup-icon)">
               ${cat.icon_class ? getCategoryIcon(cat.icon_class) : getIconByName(cat.name)}
             </span>
-            <span class="flex-1 truncate">${cat.name}</span>
+            <span class="flex-1 truncate">${escapeHtml(cat.name)}</span>
             <svg class="w-4 h-4 flex-shrink-0 hidden lg:block" style="color:var(--catpopup-icon)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/></svg>
           </button>
         </li>
@@ -481,11 +482,11 @@ export function initCategoryBrowse(): void {
         cats
           .map(
             (cat) => `
-        <div class="cat-popup-section hidden" data-popup-section="${cat.id}">
+        <div class="cat-popup-section hidden" data-popup-section="${escapeHtml(cat.id)}">
           <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-y-5 gap-x-4 lg:gap-y-8 lg:gap-x-6">
             ${cat.children.map((ch) => renderSubcategoryItem(ch.name, ch.slug, ch.image)).join("")}
             <!-- View all item -->
-            <a href="/pages/products.html?cat=${cat.slug}" class="flex flex-col items-center gap-2 group/product">
+            <a href="${escapeHtml(sanitizeUrl(`/pages/products.html?cat=${encodeURIComponent(cat.slug)}`))}" class="flex flex-col items-center gap-2 group/product">
               <div class="w-20 h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 rounded-full border-2 border-dashed flex items-center justify-center transition-all" style="background-color:var(--catpopup-sidebar-bg);border-color:var(--catpopup-border)">
                 <svg class="w-7 h-7 lg:w-9 lg:h-9" style="color:var(--catpopup-icon)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"/>

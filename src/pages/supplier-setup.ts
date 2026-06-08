@@ -13,6 +13,7 @@ import { SupplierSetupForm, initSupplierSetupForm, applySupplierSetupPrefill } f
 import type { SupplierSetupFormData, SupplierSetupPrefill } from '../components/auth/SupplierSetupForm'
 import { t } from '../i18n'
 import { startAlpine } from '../alpine'
+import { escapeHtml } from '../utils/sanitize'
 
 async function init() {
   const appEl = document.querySelector<HTMLDivElement>('#app')!;
@@ -50,7 +51,7 @@ async function init() {
       <div class="min-h-screen flex items-center justify-center bg-gray-100 px-4">
         <div class="bg-white rounded-md shadow-sm p-8 max-w-md w-full text-center">
           <h2 class="text-lg font-semibold text-gray-900 mb-2">${t('auth.supplierSetup.startError')}</h2>
-          <p class="text-sm text-gray-600 mb-4">${msg}</p>
+          <p class="text-sm text-gray-600 mb-4">${escapeHtml(msg)}</p>
           <button onclick="window.location.reload()" class="th-btn">${t('common.retry')}</button>
         </div>
       </div>

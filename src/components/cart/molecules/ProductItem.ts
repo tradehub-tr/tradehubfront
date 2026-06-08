@@ -12,17 +12,10 @@ import trashIcon from "../../../assets/images/trash.png";
 import { t } from "../../../i18n";
 import { formatPrice } from "../../../services/currencyService";
 import { isItemFavorited } from "../../../stores/favorites";
+import { escapeHtml } from "../../../utils/sanitize";
 
 export interface ProductItemProps {
   product: CartProduct;
-}
-
-function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
 }
 
 function renderTag(tag: CartProductTag): string {

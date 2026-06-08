@@ -41,11 +41,14 @@ export async function requireSeller(): Promise<void> {
     await new Promise(() => {});
   }
   if (user!.pending_seller_application || user!.rejected_seller_application) {
-    window.location.href = `${getBaseUrl()}pages/seller/application-pending.html`;
-    return;
+    window.location.replace(`${getBaseUrl()}pages/seller/application-pending.html`);
+    await new Promise(() => {});
   }
   if (!user!.is_seller || !user!.has_seller_profile) {
-    window.location.href = getBaseUrl();
+    // Halt: without freezing here the seller-only page keeps rendering before
+    // the redirect completes (authorization bypass).
+    window.location.replace(getBaseUrl());
+    await new Promise(() => {});
   }
 
   installBfcacheGuard((check) => {

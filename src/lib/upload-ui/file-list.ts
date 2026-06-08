@@ -7,6 +7,7 @@
 
 import { getFileBadge, getFilePreviewUrl, revokeFilePreview, formatFileSize } from "./utils";
 import type { FileProgress } from "./uploader";
+import { escapeHtml } from "../../utils/sanitize";
 
 export interface FileListOptions {
   files: File[];
@@ -76,7 +77,7 @@ export function renderFileGrid(container: HTMLElement, opts: FileListOptions): v
           </div>
 
           <div class="pt-2">
-            <div class="text-[11px] font-semibold text-gray-800 truncate" title="${f.name}">${f.name}</div>
+            <div class="text-[11px] font-semibold text-gray-800 truncate" title="${escapeHtml(f.name)}">${escapeHtml(f.name)}</div>
             <div class="text-[10px] text-gray-500">${formatFileSize(f.size)}</div>
           </div>
         </div>`;
