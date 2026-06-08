@@ -1,3 +1,8 @@
+// Native bundle modunda relative /api → mutlak backend rewrite'ı kur (web/live-reload'da no-op).
+// i18n her sayfada en erken yüklenen modüllerden biri olduğu için buraya konuldu.
+import "../utils/nativeHttp";
+// iOS native'de sol-üst geri butonunu enjekte et (web/Android'de no-op).
+import "../utils/nativeBackButton";
 import i18next from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import en from "./locales/en";
