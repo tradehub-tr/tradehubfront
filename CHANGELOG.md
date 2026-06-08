@@ -1,3 +1,40 @@
+## [v1.2.1-beta.1] - 2026-06-08 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(query): add IndexedDB AsyncStorage adapter for persister (@ahmeetseker)
+- feat(query): add query key factory and per-resource cache policies (@TurksabYonetim)
+- feat(query): add shared QueryClient with IndexedDB persister and queryFetch wrapper (@TurksabYonetim)
+
+### Duzeltildi
+- fix(security): tüm UI bileşenlerinde XSS koruması için HTML/URL kaçışlaması ekle (@ahmeetseker)
+  - escapeHtml: 693 noktada metin/öznitelik enjeksiyonuna karşı
+  - sanitizeUrl: 219 noktada javascript:/data: gibi URL şemalarına karşı
+  - src/utils/sanitize.ts: yardımcı fonksiyonlar güncellendi
+- fix(currency): rebuild currency picker list after async rates load (@TurksabYonetim)
+- fix(categories): show error UI when category load fails (empty result) (@TurksabYonetim)
+- fix(pwa): NetworkFirst for HTML documents to stop stale blank-page-on-navigation (@TurksabYonetim)
+- fix(alpine): register @alpinejs/collapse plugin for x-collapse directive (@TurksabYonetim)
+- fix(header): remove orphaned mobile-menu-drawer from full header (@TurksabYonetim)
+- fix(a11y): add aria-labels, alt text, ARIA roles, contrast & tap targets (@TurksabYonetim)
+  - ikonlu butonlara aria-label eklendi (kapat/ara/ileri-geri, şifre göster, kopyala, düzenle, fotoğraf yükle, video kontrolleri)
+  - görsellere anlamlı alt metni verildi (banner/varyant/rozet/promosyon)
+  - yanlış ARIA rolleri düzeltildi (list→group, ProductGrid'e listitem)
+  - TopBar sticky aramadan geçersiz aria-expanded kaldırıldı
+  - --color-text-tertiary AA kontrast için #a3a3a3→#737373
+  - dot dokunma hedefleri WCAG 2.5.8 için 24px'e çıkarıldı perf(nginx): enable gzip + immutable cache for hashed/static assets
+  - metin asset'leri için gzip (css/js/json/svg)
+  - hash'li /assets/ 1 yıl immutable, statik medya 30 gün Cache-Control
+- fix(lint): simplify lint workflow by removing auto-fix steps and changing permissions (@TurksabYonetim)
+
+### Degistirildi
+- refactor(category): route loadCategories through queryFetch with IndexedDB persist (@TurksabYonetim)
+- refactor(currency): replace hand-rolled localStorage cache with queryFetch (@TurksabYonetim)
+- refactor(listing): cache searchListings via queryFetch; document SW boundary (@TurksabYonetim)
+- refactor(categories): route categories page through cached categoryService (@TurksabYonetim)
+
+---
 ## [v1.2.0] - 2026-06-05 PROD
 
 Bu surum istoc.com'da yayindadir.
