@@ -9,18 +9,11 @@ import { Checkbox } from "../atoms/Checkbox";
 import { ProductItem } from "../molecules/ProductItem";
 import { t } from "../../../i18n";
 import { btn } from "../../../utils/ui/button";
+import { escapeHtml } from "../../../utils/sanitize";
 
 export interface SupplierCardProps {
   supplier: CartSupplier;
   isSingleSupplier?: boolean;
-}
-
-function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
 }
 
 export function SupplierCard({ supplier, isSingleSupplier = true }: SupplierCardProps): string {

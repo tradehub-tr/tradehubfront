@@ -788,7 +788,7 @@ function renderAllOrders(): string {
             <!-- Header -->
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
               <h3 class="text-lg font-bold text-gray-900">${t("orders.operationHistory")}</h3>
-              <button @click="closeModal('showOperationHistory')" class="th-no-press flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 bg-transparent border-none cursor-pointer rounded-full hover:bg-gray-100 transition-colors">
+              <button @click="closeModal('showOperationHistory')" class="th-no-press flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 bg-transparent border-none cursor-pointer rounded-full hover:bg-gray-100 transition-colors" aria-label="${t("common.close")}">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
               </button>
             </div>
@@ -896,7 +896,7 @@ function renderAllOrders(): string {
             <!-- Header -->
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
               <h3 class="text-lg font-bold text-gray-900">${t("orders.chooseAService")}</h3>
-              <button @click="closeModal('showAddServices')" class="th-no-press flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 bg-transparent border-none cursor-pointer rounded-full hover:bg-gray-100 transition-colors">
+              <button @click="closeModal('showAddServices')" class="th-no-press flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 bg-transparent border-none cursor-pointer rounded-full hover:bg-gray-100 transition-colors" aria-label="${t("common.close")}">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
               </button>
             </div>
@@ -953,7 +953,7 @@ function renderAllOrders(): string {
             <!-- Header -->
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
               <h3 class="text-lg font-bold text-gray-900">${t("orders.paymentHistoryTitle")}</h3>
-              <button @click="closeModal('showPaymentHistory')" class="th-no-press flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 bg-transparent border-none cursor-pointer rounded-full hover:bg-gray-100 transition-colors">
+              <button @click="closeModal('showPaymentHistory')" class="th-no-press flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 bg-transparent border-none cursor-pointer rounded-full hover:bg-gray-100 transition-colors" aria-label="${t("common.close")}">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
               </button>
             </div>
@@ -1185,7 +1185,7 @@ function renderAllOrders(): string {
             <!-- Header -->
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
               <h3 class="text-lg font-bold text-gray-900">${t("orders.trackPackage")}</h3>
-              <button @click="closeModal('showTrackPackage')" class="th-no-press flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 bg-transparent border-none cursor-pointer rounded-full hover:bg-gray-100 transition-colors">
+              <button @click="closeModal('showTrackPackage')" class="th-no-press flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 bg-transparent border-none cursor-pointer rounded-full hover:bg-gray-100 transition-colors" aria-label="${t("common.close")}">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
               </button>
             </div>
@@ -1239,7 +1239,7 @@ function renderAllOrders(): string {
             <!-- Header -->
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
               <h3 class="text-lg font-bold text-gray-900">${t("orders.modifyShippingDetails")}</h3>
-              <button @click="closeModal('showModifyShipping')" class="th-no-press flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 bg-transparent border-none cursor-pointer rounded-full hover:bg-gray-100 transition-colors">
+              <button @click="closeModal('showModifyShipping')" class="th-no-press flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 bg-transparent border-none cursor-pointer rounded-full hover:bg-gray-100 transition-colors" aria-label="${t("common.close")}">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
               </button>
             </div>
@@ -1318,7 +1318,7 @@ function renderAllOrders(): string {
             <!-- Header -->
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
               <h3 class="text-lg font-bold text-gray-900">${t("orders.cancelOrderTitle")}</h3>
-              <button @click="cancelReason = ''; cancellingOrder = null; closeModal('showCancelOrder')" class="th-no-press flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 bg-transparent border-none cursor-pointer rounded-full hover:bg-gray-100 transition-colors">
+              <button @click="cancelReason = ''; cancellingOrder = null; closeModal('showCancelOrder')" class="th-no-press flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 bg-transparent border-none cursor-pointer rounded-full hover:bg-gray-100 transition-colors" aria-label="${t("common.close")}">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
               </button>
             </div>
@@ -1934,6 +1934,13 @@ export function initOrdersPageLayout(): void {
     const activeId = getActiveSection();
     const renderFn = SECTIONS[activeId] ?? renderAllOrders;
     contentEl!.innerHTML = renderFn();
+
+    // Alpine, innerHTML ile sonradan eklenen x-data ağacını otomatik taramaz —
+    // hash navigasyonunda yeni section'ın (ordersListComponent/refundsComponent/
+    // couponsPageComponent) canlanması için manuel initTree gerekir, aksi halde
+    // içerik "ölü" kalır.
+    const Alpine = (window as unknown as { Alpine?: { initTree(el: HTMLElement): void } }).Alpine;
+    if (Alpine) Alpine.initTree(contentEl!);
 
     // Update nav active state
     document.querySelectorAll<HTMLAnchorElement>(".orders-page__nav-link").forEach((link) => {

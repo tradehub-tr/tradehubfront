@@ -34,12 +34,16 @@ export function toVideoEmbedHtml(rawUrl: string): string {
 
   // Direkt embed URL
   if (url.includes("/embed/") || url.includes("player.vimeo.com")) {
-    return `<iframe src="${url}" class="absolute inset-0 w-full h-full" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+    const safeSrc = escapeHtml(sanitizeUrl(url));
+    if (!safeSrc) return "";
+    return `<iframe src="${safeSrc}" class="absolute inset-0 w-full h-full" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
   }
 
   // MP4/WebM vb. direkt dosya
   if (/\.(mp4|webm|ogg|mov|m4v)(\?|$)/i.test(url)) {
-    return `<video src="${url}" class="absolute inset-0 w-full h-full object-contain bg-black" controls preload="metadata" playsinline></video>`;
+    const safeSrc = escapeHtml(sanitizeUrl(url));
+    if (!safeSrc) return "";
+    return `<video src="${safeSrc}" class="absolute inset-0 w-full h-full object-contain bg-black" controls preload="metadata" playsinline></video>`;
   }
 
   // Tanınmayan formatta anchor fallback
@@ -67,7 +71,7 @@ export function ProductVideoSection(): string {
 
   return `
     <section id="${VIDEO_CONTAINER_ID}"
-      data-listing-video="${listingVideo}"
+      data-listing-video="${escapeHtml(listingVideo)}"
       class="${hidden ? "hidden " : ""}mt-4 p-4 rounded-lg border border-gray-200 bg-white">
       ${renderVideoPlayer(initialVideo, t("prodUi.promoVideo"))}
     </section>

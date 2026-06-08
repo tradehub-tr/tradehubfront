@@ -200,7 +200,7 @@ export function initSettingsMyAccount(): void {
       <div class="bg-white rounded-lg p-8 max-md:p-5 max-sm:px-4 max-sm:py-4">
         <div class="flex items-center justify-between mb-6">
           <h2 class="text-lg font-semibold m-0" style="color:var(--color-text-primary)">${title}</h2>
-          ${!isEditing ? `<button id="ma-edit-btn" class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-gray-200 cursor-pointer transition-all hover:bg-gray-50" style="color:var(--color-text-secondary)" title="${t("settings.editBtn") || "Düzenle"}">${ICONS.edit}</button>` : ""}
+          ${!isEditing ? `<button id="ma-edit-btn" aria-label="${t("common.edit")}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-gray-200 cursor-pointer transition-all hover:bg-gray-50" style="color:var(--color-text-secondary)" title="${t("settings.editBtn") || "Düzenle"}">${ICONS.edit}</button>` : ""}
         </div>
         <div id="ma-view" ${isEditing ? 'style="display:none"' : ""}>
           ${renderView(current)}

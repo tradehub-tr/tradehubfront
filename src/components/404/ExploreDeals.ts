@@ -13,6 +13,7 @@ import { getListingUrl } from "../../utils/listingUrl";
 import type { ProductListingCard } from "../../types/productListing";
 import { applySwiperDir } from "../../utils/direction";
 import { t } from "../../i18n";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 /* ── Types ── */
 
@@ -45,8 +46,8 @@ function renderProductImage(p: ExploreProduct): string {
   return `
     <div class="relative w-full h-full overflow-hidden rounded-md bg-gray-100" aria-hidden="true">
       <img
-        src="${p.imageSrc}"
-        alt="${p.name}"
+        src="${escapeHtml(sanitizeUrl(p.imageSrc))}"
+        alt="${escapeHtml(p.name)}"
         loading="lazy"
         class="w-full h-full object-cover transition-transform duration-300 group-hover/card:scale-110"
       />
@@ -57,13 +58,13 @@ function renderProductImage(p: ExploreProduct): string {
 function renderProductCard(p: ExploreProduct): string {
   return `
     <div class="swiper-slide">
-      <a href="${p.href}" class="group/card relative flex flex-col min-w-0" aria-label="${p.name}">
-        ${p.badge ? `<span class="absolute top-2 start-2 z-10 inline-flex items-center rounded-sm text-[10px] font-bold leading-none px-1.5 py-0.5 text-white" style="background-color:#DE0505">${p.badge}</span>` : ""}
+      <a href="${escapeHtml(sanitizeUrl(p.href))}" class="group/card relative flex flex-col min-w-0" aria-label="${escapeHtml(p.name)}">
+        ${p.badge ? `<span class="absolute top-2 start-2 z-10 inline-flex items-center rounded-sm text-[10px] font-bold leading-none px-1.5 py-0.5 text-white" style="background-color:#DE0505">${escapeHtml(p.badge)}</span>` : ""}
         <div class="aspect-square w-full mb-2 flex-shrink-0">
           ${renderProductImage(p)}
         </div>
-        <p class="text-sm sm:text-[15px] font-bold leading-tight truncate" style="color:var(--color-error-600, #dc2626)">${p.price}</p>
-        <p class="mt-1 text-xs sm:text-[13px] font-medium leading-none truncate text-secondary-700 dark:text-secondary-300">MOQ: ${p.moq}</p>
+        <p class="text-sm sm:text-[15px] font-bold leading-tight truncate" style="color:var(--color-error-600, #dc2626)">${escapeHtml(p.price)}</p>
+        <p class="mt-1 text-xs sm:text-[13px] font-medium leading-none truncate text-secondary-700 dark:text-secondary-300">MOQ: ${escapeHtml(p.moq)}</p>
       </a>
     </div>
   `;
@@ -196,7 +197,7 @@ function renderTabs(categories: ExploreCategory[]): void {
       type="button"
       class="explore-tab whitespace-nowrap px-1 pb-2 text-sm font-medium transition-colors duration-150 border-b-2 ${i === 0 ? "text-primary-600 border-primary-500" : "text-secondary-500 border-transparent hover:text-secondary-700"}"
       data-tab-index="${i}"
-    >${cat.label}</button>
+    >${escapeHtml(cat.label)}</button>
   `
     )
     .join("");

@@ -8,6 +8,7 @@ import { t } from "../../i18n";
 import { api } from "../../utils/api";
 import { validatePhoneForCountry } from "../../utils/tr-validation";
 import { resolveCountry, ALL_COUNTRIES } from "../../data/countries";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 const ICONS = {
   verified: `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" fill="#22c55e"/><path d="M4.5 7l2 2 3.5-3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
@@ -131,7 +132,7 @@ const labelCls = "block text-[13px] font-medium mb-1.5";
 
 function viewRow(label: string, value: string | undefined | null, extra?: string): string {
   const display =
-    value ||
+    (value ? escapeHtml(value) : "") ||
     `<span class="text-orange-500 text-xs font-medium">${t("settings.incompleteLabel")}</span>`;
   return `
     <div class="flex py-3 border-b border-gray-100 last:border-b-0 max-md:flex-col max-md:gap-0.5">
@@ -145,7 +146,7 @@ function renderSelectOpts(options: string[], selected: string): string {
   return ["", ...options]
     .map(
       (opt) =>
-        `<option value="${opt}" ${opt === selected ? "selected" : ""}>${opt || t("settings.incompleteLabel")}</option>`
+        `<option value="${escapeHtml(opt)}" ${opt === selected ? "selected" : ""}>${opt ? escapeHtml(opt) : t("settings.incompleteLabel")}</option>`
     )
     .join("");
 }
@@ -219,13 +220,13 @@ function buyerBasicView(d: ProfileData): string {
     ? `<span class="inline-flex items-center gap-1 text-xs font-medium whitespace-nowrap" style="color:#22c55e">${ICONS.verified} ${t("settings.emailVerifiedText") || "Verified"}</span>`
     : "";
   const avatarHtml = d.avatar
-    ? `<img src="${d.avatar}" class="w-16 h-16 rounded-full object-cover border-2 border-gray-200" alt="avatar" />`
-    : `<div class="w-16 h-16 rounded-full flex items-center justify-center border-2 border-gray-200 text-2xl font-bold text-white" style="background:linear-gradient(135deg, var(--color-primary-400, #e6b212) 0%, var(--color-primary-500, #cc9900) 100%)">${(fullName || "?")[0].toLowerCase()}</div>`;
+    ? `<img src="${escapeHtml(sanitizeUrl(d.avatar))}" class="w-16 h-16 rounded-full object-cover border-2 border-gray-200" alt="avatar" />`
+    : `<div class="w-16 h-16 rounded-full flex items-center justify-center border-2 border-gray-200 text-2xl font-bold text-white" style="background:linear-gradient(135deg, var(--color-primary-400, #e6b212) 0%, var(--color-primary-500, #cc9900) 100%)">${escapeHtml((fullName || "?")[0].toLowerCase())}</div>`;
 
   return `
     <div class="flex items-center gap-4 mb-4">${avatarHtml}<div>
-      <div class="text-base font-bold" style="color:var(--color-text-primary)">${fullName || "--"}</div>
-      <div class="text-xs" style="color:var(--color-text-secondary)">Member ID: ${d.member_id} · ${t("settings.yearJoined") || "Year Joined"}: ${new Date().getFullYear()}</div>
+      <div class="text-base font-bold" style="color:var(--color-text-primary)">${escapeHtml(fullName) || "--"}</div>
+      <div class="text-xs" style="color:var(--color-text-secondary)">Member ID: ${escapeHtml(d.member_id)} · ${t("settings.yearJoined") || "Year Joined"}: ${new Date().getFullYear()}</div>
     </div></div>
     ${viewRow(t("settings.emailAddressField") || "Email", maskEmail(d.email), verifiedBadge)}
     ${viewRow(t("settings.phoneLabel") || "Phone", d.phone)}
@@ -237,14 +238,14 @@ function buyerBasicEdit(d: ProfileData): string {
   return `
     <div class="grid grid-cols-2 max-sm:grid-cols-1 gap-4 mb-4">
       <div><label class="${labelCls}" style="color:var(--color-text-secondary)">* ${t("settings.firstName") || "Ad"}</label>
-      <input type="text" class="${inputCls}" data-field="first_name" value="${d.first_name}" /></div>
+      <input type="text" class="${inputCls}" data-field="first_name" value="${escapeHtml(d.first_name)}" /></div>
       <div><label class="${labelCls}" style="color:var(--color-text-secondary)">* ${t("settings.lastName") || "Soyad"}</label>
-      <input type="text" class="${inputCls}" data-field="last_name" value="${d.last_name}" /></div>
+      <input type="text" class="${inputCls}" data-field="last_name" value="${escapeHtml(d.last_name)}" /></div>
     </div>
     <div class="mb-4"><label class="${labelCls}" style="color:var(--color-text-secondary)">${t("settings.emailAddressField") || "Email"}</label>
-    <div class="${readonlyCls}">${d.email}</div></div>
+    <div class="${readonlyCls}">${escapeHtml(d.email)}</div></div>
     <div class="mb-4"><label class="${labelCls}" style="color:var(--color-text-secondary)">${t("settings.phoneLabel") || "Telefon"}</label>
-    <input type="tel" class="${inputCls} max-w-[300px]" data-field="phone" value="${d.phone}" placeholder="+90 5XX XXX XX XX" /></div>
+    <input type="tel" class="${inputCls} max-w-[300px]" data-field="phone" value="${escapeHtml(d.phone)}" placeholder="+90 5XX XXX XX XX" /></div>
     <div class="mb-4"><label class="${labelCls}" style="color:var(--color-text-secondary)">* ${t("settings.countryRegion") || "Ülke"}</label>
     <select class="${inputCls} bg-white cursor-pointer" data-field="country">${countryOptions(d.country)}</select></div>
   `;
@@ -265,15 +266,15 @@ function buyerBusinessEdit(d: ProfileData): string {
     <div class="mb-4"><label class="${labelCls}" style="color:var(--color-text-secondary)">${t("settings.businessTypeLabel")}</label>
     <select class="${inputCls} bg-white cursor-pointer" data-field="business_type">${renderSelectOpts(selectOptions.business_type || [], d.business_type || "")}</select></div>
     <div class="mb-4"><label class="${labelCls}" style="color:var(--color-text-secondary)">${t("settings.companyNameLabel")}</label>
-    <input type="text" class="${inputCls}" data-field="company_name" value="${d.company_name || d.business_name || ""}" /></div>
+    <input type="text" class="${inputCls}" data-field="company_name" value="${escapeHtml(d.company_name || d.business_name || "")}" /></div>
     <div class="mb-4"><label class="${labelCls}" style="color:var(--color-text-secondary)">${t("settings.addressLabel") || "Address"}</label>
-    <input type="text" class="${inputCls} opacity-60 cursor-not-allowed" data-field="address" value="${d.address || ""}" disabled />
+    <input type="text" class="${inputCls} opacity-60 cursor-not-allowed" data-field="address" value="${escapeHtml(d.address || "")}" disabled />
     <p class="text-xs text-gray-500 mt-1">${t("settings.addressDisabledHint")}</p></div>
     <div class="grid grid-cols-2 max-sm:grid-cols-1 gap-4 mb-4">
       <div><label class="${labelCls}" style="color:var(--color-text-secondary)">${t("settings.jobTitleLabel")}</label>
-      <input type="text" class="${inputCls}" data-field="job_title" value="${d.job_title || ""}" /></div>
+      <input type="text" class="${inputCls}" data-field="job_title" value="${escapeHtml(d.job_title || "")}" /></div>
       <div><label class="${labelCls}" style="color:var(--color-text-secondary)">${t("settings.websiteLabel")}</label>
-      <input type="url" class="${inputCls}" data-field="website" value="${d.website || ""}" placeholder="https://" /></div>
+      <input type="url" class="${inputCls}" data-field="website" value="${escapeHtml(d.website || "")}" placeholder="https://" /></div>
     </div>
   `;
 }
@@ -291,15 +292,15 @@ function moreInfoEdit(d: ProfileData): string {
   const ecOptions = selectOptions.employee_count || [];
   return `
     <div class="mb-4"><label class="${labelCls}" style="color:var(--color-text-secondary)">${t("settings.sellingPlatformsLabel")}</label>
-    <input type="text" class="${inputCls}" data-field="selling_platforms" value="${d.selling_platforms || ""}" placeholder="Amazon, Trendyol, Hepsiburada..." /></div>
+    <input type="text" class="${inputCls}" data-field="selling_platforms" value="${escapeHtml(d.selling_platforms || "")}" placeholder="Amazon, Trendyol, Hepsiburada..." /></div>
     <div class="grid grid-cols-2 max-sm:grid-cols-1 gap-4 mb-4">
       <div><label class="${labelCls}" style="color:var(--color-text-secondary)">${t("settings.yearEstablishedLabel")}</label>
-      <input type="number" class="${inputCls}" data-field="year_established" value="${d.year_established || ""}" placeholder="2020" /></div>
+      <input type="number" class="${inputCls}" data-field="year_established" value="${escapeHtml(d.year_established || "")}" placeholder="2020" /></div>
       <div><label class="${labelCls}" style="color:var(--color-text-secondary)">${t("settings.employeeCountLabel")}</label>
       <select class="${inputCls} bg-white cursor-pointer" data-field="employee_count">${renderSelectOpts(ecOptions, d.employee_count || "")}</select></div>
     </div>
     <div class="mb-4"><label class="${labelCls}" style="color:var(--color-text-secondary)">${t("settings.aboutUsLabel")}</label>
-    <textarea class="${inputCls} resize-none" rows="3" data-field="about_us" placeholder="${t("settings.aboutUsLabel")}">${d.about_us || ""}</textarea></div>
+    <textarea class="${inputCls} resize-none" rows="3" data-field="about_us" placeholder="${t("settings.aboutUsLabel")}">${escapeHtml(d.about_us || "")}</textarea></div>
   `;
 }
 
@@ -316,7 +317,7 @@ function sourcingPrefsEdit(d: ProfileData): string {
   const asOptions = selectOptions.annual_spending || [];
   return `
     <div class="mb-4"><label class="${labelCls}" style="color:var(--color-text-secondary)">${t("settings.industryPrefsLabel")}</label>
-    <input type="text" class="${inputCls}" data-field="industry_preferences" value="${d.industry_preferences || ""}" placeholder="${t("settings.industryPrefsLabel")}" /></div>
+    <input type="text" class="${inputCls}" data-field="industry_preferences" value="${escapeHtml(d.industry_preferences || "")}" placeholder="${t("settings.industryPrefsLabel")}" /></div>
     <div class="grid grid-cols-2 max-sm:grid-cols-1 gap-4 mb-4">
       <div><label class="${labelCls}" style="color:var(--color-text-secondary)">${t("settings.sourcingFreqLabel")}</label>
       <select class="${inputCls} bg-white cursor-pointer" data-field="sourcing_frequency">${renderSelectOpts(sfOptions, d.sourcing_frequency || "")}</select></div>
@@ -331,13 +332,13 @@ function sourcingPrefsEdit(d: ProfileData): string {
 function sellerBasicView(d: ProfileData): string {
   const fullName = `${d.first_name} ${d.last_name}`.trim();
   const avatarHtml = d.avatar
-    ? `<img src="${d.avatar}" class="w-16 h-16 rounded-full object-cover border-2 border-gray-200" alt="avatar" />`
-    : `<div class="w-16 h-16 rounded-full flex items-center justify-center border-2 border-gray-200 text-2xl font-bold text-white" style="background:linear-gradient(135deg, var(--color-primary-400, #e6b212) 0%, var(--color-primary-500, #cc9900) 100%)">${(fullName || "?")[0].toLowerCase()}</div>`;
+    ? `<img src="${escapeHtml(sanitizeUrl(d.avatar))}" class="w-16 h-16 rounded-full object-cover border-2 border-gray-200" alt="avatar" />`
+    : `<div class="w-16 h-16 rounded-full flex items-center justify-center border-2 border-gray-200 text-2xl font-bold text-white" style="background:linear-gradient(135deg, var(--color-primary-400, #e6b212) 0%, var(--color-primary-500, #cc9900) 100%)">${escapeHtml((fullName || "?")[0].toLowerCase())}</div>`;
 
   return `
     <div class="flex items-center gap-4 mb-4">${avatarHtml}<div>
-      <div class="text-base font-bold" style="color:var(--color-text-primary)">${fullName || "--"}</div>
-      <div class="text-xs" style="color:var(--color-text-secondary)">Member ID: ${d.member_id}</div>
+      <div class="text-base font-bold" style="color:var(--color-text-primary)">${escapeHtml(fullName) || "--"}</div>
+      <div class="text-xs" style="color:var(--color-text-secondary)">Member ID: ${escapeHtml(d.member_id)}</div>
     </div></div>
     ${viewRow(t("settings.emailAddressField") || "Email", maskEmail(d.email))}
     ${viewRow(t("settings.phoneLabel") || "Phone", d.phone)}
@@ -357,19 +358,19 @@ function sellerBusinessView(d: ProfileData): string {
 function sellerBusinessEdit(d: ProfileData): string {
   return `
     <div class="mb-4"><label class="${labelCls}" style="color:var(--color-text-secondary)">* ${t("settings.businessNameLabel")}</label>
-    <input type="text" class="${inputCls}" data-field="business_name" value="${d.business_name || ""}" /></div>
+    <input type="text" class="${inputCls}" data-field="business_name" value="${escapeHtml(d.business_name || "")}" /></div>
     <div class="grid grid-cols-2 max-sm:grid-cols-1 gap-4 mb-4">
       <div><label class="${labelCls}" style="color:var(--color-text-secondary)">${t("settings.addressLabel") || "Address"}</label>
-      <input type="text" class="${inputCls} opacity-60 cursor-not-allowed" data-field="address" value="${d.address || ""}" disabled /></div>
+      <input type="text" class="${inputCls} opacity-60 cursor-not-allowed" data-field="address" value="${escapeHtml(d.address || "")}" disabled /></div>
       <div><label class="${labelCls}" style="color:var(--color-text-secondary)">${t("settings.cityLabel") || "City"}</label>
-      <input type="text" class="${inputCls} opacity-60 cursor-not-allowed" data-field="city" value="${d.city || ""}" disabled /></div>
+      <input type="text" class="${inputCls} opacity-60 cursor-not-allowed" data-field="city" value="${escapeHtml(d.city || "")}" disabled /></div>
     </div>
     <p class="text-xs text-gray-500 -mt-2 mb-4">${t("settings.addressDisabledHint")}</p>
     <div class="grid grid-cols-2 max-sm:grid-cols-1 gap-4 mb-4">
       <div><label class="${labelCls}" style="color:var(--color-text-secondary)">${t("settings.jobTitleLabel")}</label>
-      <input type="text" class="${inputCls}" data-field="job_title" value="${d.job_title || ""}" /></div>
+      <input type="text" class="${inputCls}" data-field="job_title" value="${escapeHtml(d.job_title || "")}" /></div>
       <div><label class="${labelCls}" style="color:var(--color-text-secondary)">${t("settings.websiteLabel")}</label>
-      <input type="url" class="${inputCls}" data-field="website" value="${d.website || ""}" placeholder="https://" /></div>
+      <input type="url" class="${inputCls}" data-field="website" value="${escapeHtml(d.website || "")}" placeholder="https://" /></div>
     </div>
   `;
 }

@@ -11,6 +11,7 @@ import { SectionHeader } from "../shared/SectionHeader";
 import { EmptyState } from "../shared/EmptyState";
 import { ProductCard } from "../shared/ProductCard";
 import { getFavoritesConfig, getFavoritesEmptyState } from "./rightPanelData";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 const MAX_VISIBLE = 3;
 
@@ -39,11 +40,11 @@ export function FavoritesSection(items: FavoriteItem[] = []): string {
   const cards = visibleItems
     .map((item) =>
       ProductCard({
-        image: item.image,
-        price: item.priceRange,
+        image: escapeHtml(sanitizeUrl(item.image)),
+        price: escapeHtml(item.priceRange),
         currency: "",
-        minOrder: item.minOrder,
-        href: getListingUrl({ id: item.id }),
+        minOrder: escapeHtml(item.minOrder),
+        href: escapeHtml(sanitizeUrl(getListingUrl({ id: item.id }))),
       })
     )
     .join("");

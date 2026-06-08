@@ -11,6 +11,7 @@
 import { getCurrentProduct } from "../../alpine/product";
 import { t } from "../../i18n";
 import { ProductAttributes } from "./ProductAttributes";
+import { escapeHtml as escapeHtmlAttr } from "../../utils/sanitize";
 
 interface GalleryVisual {
   background: string;
@@ -37,14 +38,6 @@ function renderPlaceholder(visual: GalleryVisual, size: "large" | "thumb"): stri
       </svg>
     </div>
   `;
-}
-
-function escapeHtmlAttr(value: string): string {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/"/g, "&quot;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
 }
 
 export function renderGalleryMedia(

@@ -1,4 +1,5 @@
 import { t } from "../../i18n";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 function getSubTabFilters(): string[] {
   return [
@@ -147,9 +148,9 @@ export async function initHorizontalCategoryBar(): Promise<void> {
     <li class="whitespace-nowrap cursor-pointer px-5 h-[61px] leading-[61px] text-base transition-colors [&.factory-tab-active]:relative [&.factory-tab-active]:font-bold [&.factory-tab-active]:after:content-[''] [&.factory-tab-active]:after:absolute [&.factory-tab-active]:after:bottom-0 [&.factory-tab-active]:after:left-1/2 [&.factory-tab-active]:after:-translate-x-1/2 [&.factory-tab-active]:after:w-full [&.factory-tab-active]:after:max-w-[100px] [&.factory-tab-active]:after:h-[3px] [&.factory-tab-active]:after:bg-[var(--color-surface-inverse)] [&.factory-tab-active]:after:rounded-[2px]
                ${i === 0 ? "factory-tab-active font-bold text-[#222]" : "font-normal text-[#222] hover:text-[#666]"}"
         data-tab-index="${i}"
-        data-tab-slug="${cat.slug}"
-        data-tab-name="${cat.name}">
-      ${cat.name}
+        data-tab-slug="${escapeHtml(cat.slug)}"
+        data-tab-name="${escapeHtml(cat.name)}">
+      ${escapeHtml(cat.name)}
     </li>
   `
     )
@@ -168,14 +169,18 @@ export async function initHorizontalCategoryBar(): Promise<void> {
   const col4Cat = categories[2];
 
   function buildCol(header: string, items: Array<{ name: string; slug: string }>): string {
+    const headerHref =
+      header === allCatLabel
+        ? "/pages/categories"
+        : escapeHtml(sanitizeUrl(`/pages/products.html?cat=${items[0]?.slug || ""}`));
     return [
       `<li class="mb-3 pe-4 font-bold text-[#222]" style="font-size:14px;line-height:21px;">
-         <a href="${header === allCatLabel ? "/pages/categories" : `/pages/products.html?cat=${items[0]?.slug || ""}`}" class="hover:text-primary-600 transition-colors">${header}</a>
+         <a href="${headerHref}" class="hover:text-primary-600 transition-colors">${escapeHtml(header)}</a>
        </li>`,
       ...items.map(
         (it) => `
-        <li class="mb-3 pe-4 font-normal text-[#222]" style="font-size:14px;line-height:21px;" data-dropdown-cat="${it.name}">
-          <a href="/pages/products.html?cat=${it.slug}" class="hover:text-primary-600 transition-colors">${it.name}</a>
+        <li class="mb-3 pe-4 font-normal text-[#222]" style="font-size:14px;line-height:21px;" data-dropdown-cat="${escapeHtml(it.name)}">
+          <a href="${escapeHtml(sanitizeUrl(`/pages/products.html?cat=${it.slug}`))}" class="hover:text-primary-600 transition-colors">${escapeHtml(it.name)}</a>
         </li>`
       ),
     ].join("");

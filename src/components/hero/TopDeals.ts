@@ -11,6 +11,7 @@ import { formatStartingPrice } from "../../utils/currency";
 import { searchListings } from "../../services/listingService";
 import { initCurrency } from "../../services/currencyService";
 import { getListingUrl } from "../../utils/listingUrl";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 interface TopDealCard {
   name: string;
@@ -55,8 +56,8 @@ function renderDealImage(card: TopDealCard): string {
   }
   return `
     <img
-      src="${card.imageSrc}"
-      alt="${card.name}"
+      src="${escapeHtml(sanitizeUrl(card.imageSrc))}"
+      alt="${escapeHtml(card.name)}"
       loading="lazy"
       class="w-full h-full object-cover transition-transform duration-300 group-hover/deal:scale-110"
     />
@@ -81,14 +82,14 @@ function renderDealCard(card: TopDealCard): string {
     ? `<span
          class="line-through shrink-0 text-[9px] sm:text-[11px]"
          style="color: var(--topdeals-original-price-color, #9ca3af);"
-       >${card.originalPrice}</span>`
+       >${escapeHtml(card.originalPrice)}</span>`
     : "";
 
   return `
     <a
-      href="${card.href}"
+      href="${escapeHtml(sanitizeUrl(card.href))}"
       class="group/deal relative flex flex-col min-w-0"
-      aria-label="${card.name}"
+      aria-label="${escapeHtml(card.name)}"
     >
       <!-- Image with discount badge overlay -->
       <div class="relative aspect-square w-full mb-2 flex-shrink-0 overflow-hidden rounded-md bg-gray-100">
@@ -100,8 +101,8 @@ function renderDealCard(card: TopDealCard): string {
       <p
         class="leading-snug line-clamp-2 text-[11px] sm:text-[13px]"
         style="color: var(--topdeals-name-color, #6b7280); min-height: 2.6em;"
-        title="${card.name}"
-      >${card.name}</p>
+        title="${escapeHtml(card.name)}"
+      >${escapeHtml(card.name)}</p>
 
       <!-- Price row: deal price + strikethrough original (no MOQ here) -->
       <div class="mt-1.5 flex items-center gap-1.5 min-w-0">

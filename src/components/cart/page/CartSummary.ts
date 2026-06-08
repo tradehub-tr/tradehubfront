@@ -9,6 +9,7 @@ import { PriceDisplay } from "../atoms/PriceDisplay";
 import { t } from "../../../i18n";
 import { getSelectedCurrency } from "../../../services/currencyService";
 import { cartStore } from "../state/CartStore";
+import { escapeHtml, sanitizeUrl } from "../../../utils/sanitize";
 
 function renderThumbnailGrid(items: CartSummaryData["items"]): string {
   if (items.length === 0) return "";
@@ -18,7 +19,7 @@ function renderThumbnailGrid(items: CartSummaryData["items"]): string {
       (item) => `
       <div class="checkout-item-card relative w-14 h-14 min-w-[56px] max-[380px]:w-12 max-[380px]:h-12 max-[380px]:min-w-[48px] sm:w-16 sm:h-16 sm:min-w-[64px] rounded overflow-hidden border border-[#e5e5e5] flex-shrink-0">
         <div class="block w-full h-full">
-          <img class="w-full h-full object-cover" src="${item.image}" alt="" />
+          <img class="w-full h-full object-cover" src="${escapeHtml(sanitizeUrl(item.image))}" alt="" />
         </div>
         <span class="absolute bottom-0 end-0 bg-black/60 text-white rounded-ss text-[11px] font-bold leading-4 px-1 py-px">${item.quantity}</span>
       </div>`

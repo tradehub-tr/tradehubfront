@@ -101,6 +101,9 @@ Alpine.data('topDealsPage', () => ({
   page: 1,
   hasMore: false,
   loading: false,
+  /* Monotonic request id — drops stale responses when the category changes
+     mid-flight (otherwise an older fetch could overwrite the new grid). */
+  reqId: 0,
 
   /* Subfilters slot — kept for future use */
   get subFilters(): { id: string; labelKey: string }[] {
@@ -140,6 +143,7 @@ Alpine.data('topDealsPage', () => ({
       this.page += 1
     }
     this.loading = true
+    const myReq = ++this.reqId
 
     const params: Record<string, unknown> = {
       is_deal: true,
@@ -153,12 +157,15 @@ Alpine.data('topDealsPage', () => ({
 
     searchListings(params)
       .then(result => {
+        // A newer load started (e.g. category switched) → drop this response.
+        if (myReq !== this.reqId) return
         const mapped = result.products.map(cardToTopDealsProduct)
         this.products = reset ? mapped : [...this.products, ...mapped]
         this.hasMore = result.hasNext
         this.loading = false
       })
       .catch(err => {
+        if (myReq !== this.reqId) return
         console.warn('[TopDeals] load failed:', err)
         this.hasMore = false
         this.loading = false
@@ -212,7 +219,7 @@ appEl.innerHTML = `
   ${TopDealsStickyMobileHeader()}
 
   <!-- Main Content -->
-  <main x-data="topDealsPage" x-init="init()">
+  <main x-data="topDealsPage">
     <!-- Mobile compact hero header (full-width, orange gradient) -->
     <div id="td-mobile-hero-sentinel">
       ${TopDealsMobileHeader()}

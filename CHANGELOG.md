@@ -1,4 +1,451 @@
-## [v1.1.9-beta.27] - 2026-06-04 BETA
+## [v1.2.1-beta.1] - 2026-06-08 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(query): add IndexedDB AsyncStorage adapter for persister (@ahmeetseker)
+- feat(query): add query key factory and per-resource cache policies (@TurksabYonetim)
+- feat(query): add shared QueryClient with IndexedDB persister and queryFetch wrapper (@TurksabYonetim)
+
+### Duzeltildi
+- fix(security): tüm UI bileşenlerinde XSS koruması için HTML/URL kaçışlaması ekle (@ahmeetseker)
+  - escapeHtml: 693 noktada metin/öznitelik enjeksiyonuna karşı
+  - sanitizeUrl: 219 noktada javascript:/data: gibi URL şemalarına karşı
+  - src/utils/sanitize.ts: yardımcı fonksiyonlar güncellendi
+- fix(currency): rebuild currency picker list after async rates load (@TurksabYonetim)
+- fix(categories): show error UI when category load fails (empty result) (@TurksabYonetim)
+- fix(pwa): NetworkFirst for HTML documents to stop stale blank-page-on-navigation (@TurksabYonetim)
+- fix(alpine): register @alpinejs/collapse plugin for x-collapse directive (@TurksabYonetim)
+- fix(header): remove orphaned mobile-menu-drawer from full header (@TurksabYonetim)
+- fix(a11y): add aria-labels, alt text, ARIA roles, contrast & tap targets (@TurksabYonetim)
+  - ikonlu butonlara aria-label eklendi (kapat/ara/ileri-geri, şifre göster, kopyala, düzenle, fotoğraf yükle, video kontrolleri)
+  - görsellere anlamlı alt metni verildi (banner/varyant/rozet/promosyon)
+  - yanlış ARIA rolleri düzeltildi (list→group, ProductGrid'e listitem)
+  - TopBar sticky aramadan geçersiz aria-expanded kaldırıldı
+  - --color-text-tertiary AA kontrast için #a3a3a3→#737373
+  - dot dokunma hedefleri WCAG 2.5.8 için 24px'e çıkarıldı perf(nginx): enable gzip + immutable cache for hashed/static assets
+  - metin asset'leri için gzip (css/js/json/svg)
+  - hash'li /assets/ 1 yıl immutable, statik medya 30 gün Cache-Control
+- fix(lint): simplify lint workflow by removing auto-fix steps and changing permissions (@TurksabYonetim)
+
+### Degistirildi
+- refactor(category): route loadCategories through queryFetch with IndexedDB persist (@TurksabYonetim)
+- refactor(currency): replace hand-rolled localStorage cache with queryFetch (@TurksabYonetim)
+- refactor(listing): cache searchListings via queryFetch; document SW boundary (@TurksabYonetim)
+- refactor(categories): route categories page through cached categoryService (@TurksabYonetim)
+
+---
+## [v1.2.0] - 2026-06-05 PROD
+
+Bu surum istoc.com'da yayindadir.
+
+### Eklendi
+- feat(changelog): yeni storefront özellikleri eklendi ve belgeler güncellendi (@ahmeetseker)
+- feat(kyc): KYC sayfası + form + prefill API entegrasyonu eklendi (@aliiball)
+  - pages/dashboard/kyc.html + src/pages/kyc.ts entry
+  - src/components/kyc/KycLayout.ts: Kurumsal/Bireysel toggle + boxed layout (account_type register'dan KYC formuna taşındı)
+  - get_prefill_data ile User Profile + son KYC/KYB değerleri prefill
+  - src/types/userProfile.ts type tanımları
+- feat(verification-ui): banner + locked-feature + kyc-required modal eklendi (@aliiball)
+  - VerificationStatusBanner: KYC × KYB state machine ile 9 banner durumu
+  - LockedFeatureModal: sidebar locked item için "Alıcı/Satıcı olun" CTA
+  - KycRequiredModal: checkout'ta [KYC_<STATE>] prefix regex parse + state-bazlı modal (Locked/Pending/Rejected/Suspended → support ticket)
+  - utils/sellerRouter.ts: satıcı dashboard yönlendirme yardımcısı
+- feat(data): countries + country-subdivisions mock data eklendi (@aliiball)
+  - src/data/countries.ts: ülke listesi (ISO kodları + isimler)
+  - src/data/country-subdivisions.ts: ülke-il/eyalet eşlemesi
+- feat(i18n): KYC + verification + address purpose çevirileri eklendi (@aliiball)
+  - en.ts + tr.ts: settings.myAccountTitle, settings.addressDisabledHint, header.myStore ("Mağaza Sayfam" → "Mağazalarım"), kyc.* key'leri, verification banner state'leri, address purpose etiketleri
+- feat(auth): yasal metin onay popup'ı ve ayrı checkbox'lar eklendi (@aliiball)
+  - Tek "Kullanım Koşulları ve Gizlilik Politikası" checkbox'ı iki ayrı onaya bölündü (terms-checkbox + privacy-checkbox)
+  - Turuncu metne tıklayınca tüm sözleşme içeriği popup içinde gösteriliyor (yeni LegalConsentModal component)
+  - Reddet/Kabul Et butonları metnin sonuna kadar okunmadan görünmüyor; her açılışta scroll baştan başlıyor ve buton durumu sıfırlanıyor
+  - Popup içeriği legalContent.ts'ten çekiliyor — terms/privacy sayfalarıyla aynı kaynak
+  - i18n: agreeTerms TR-suffix/EN-prefix çakışması agreeBefore + agreeAfter'a bölündü; auth.setup.legalConsent.{accept, reject} eklendi
+- feat(sell): pricing planları dinamik API + entitlement banner (@boraydeger32)
+  - sell sayfasındaki 4 hardcoded TIERS dizisi kaldırıldı, planlar artık tradehub_core.api.v1.public_pricing.get_pricing_plans endpoint'inden çekiliyor (Süper Admin Permission Console'dan yönetim).
+  - pricingService.ts: localStorage cache (5 dk) + stale-while-revalidate; cache key v2'ye yükseltildi (CTA label şema değişikliği için invalidate).
+  - sell.ts: cache fresh ise senkron paint, değilse fetch await; arka planda daima fetch + updated_at değişirse #paketler section'ı yerinde re-render (tüm DOM swap yerine — Alpine state korunur).
+  - SellPageLayout: CTA action map (signup, contact_sales, learn_more) ve feature icon glyph map (check, x, star, zap, info, default check) eklendi; currency symbol + fmtListings helper'ları.
+  - FAZ 1.7 — utils/entitlement.ts: snapshot client (sessionStorage 5dk cache), hasFeature/withinQuota/isVerifiedForCheckout helper'ları. Güvenlik sınırı değil — gerçek karar her korumalı eylemde backend'de.
+  - components/subscription/EntitlementBanner.ts: trial ending (< 3 gün) ve subscription past_due durumları için banner.
+- feat(routing): Türkçe pretty URL'lere dist HTML mapping katmanı eklendi (@ahmeetseker)
+  - staticPageUrl.ts'e STATIC_PAGE_HTML_MAP ve getStaticPageHtmlPath() eklendi
+  - Vite dev plugin (staticPageRewritePlugin) /ureticiler gibi path'leri pages/manufacturers.html'e rewrite eder
+  - nginx.conf.template'e `map $uri $static_page_html` bloğu eklendi (prod aynı işi yapar)
+  - Slug'lar yenilendi: /markalar → /ureticiler, /firsat → /firsatlar (MegaMenu, TopBar, HeroSideBannerSlider, TopDeals, SubHeader)
+  - Seller storefront `/magaza/<code>` path'inden seller_code parse eder, nginx internal rewrite sonrası query görünmediği için fallback olarak
+  - StoreHeader/CompanyProfile "Mağazayı ziyaret et" linkleri sellerCode state'ine bağlandı
+- feat: kullanıcı veri hakları UI, backend-driven tracking ve SEO routing (@ahmeetseker)
+  - Hesap ayarlarına "Verilerimi İndir" ve "Onay Yönetimi" bölümleri eklendi
+  - Tracking Manager artık ID'leri backend API'den alıyor (hardcoded değerler kaldırıldı)
+  - Nginx'e statik sayfa SEO backend routing eklendi (meta tag DB injection)
+  - Social proof view kaydında CSRF token düzeltmesi
+  - Ürün yorumları slug yerine Frappe name ile yükleniyor
+  - Ödeme sayfalarına tracking init eklendi
+  - Türkçe i18n çevirileri (consent, data export)
+- feat(nginx): enhance SEO routing for bot user-agents and update static page handling (@ahmeetseker)
+- feat(nginx): enhance dynamic SEO routing for bots and users with new rewrite rules (@ahmeetseker)
+- feat(pricing): hardcoded fiyatlandırma kaldırıldı, backend API entegrasyonu (@boraydeger32)
+  - PricingPageLayout statik PLANS array kaldırıldı, Alpine x-for ile backend'den dinamik render (responsive grid: 2/3/4 sütun plan sayısına göre)
+  - sellPricing Alpine data'sına fetchPricingPlans() + SWR cache entegre edildi
+  - Badge color enum'a green/blue eklendi (backend Select ile uyum)
+  - pricingService.ts cta_action type'tan learn_more kaldırıldı
+  - i18n dead string temizliği: tr.ts ve en.ts'den 42 kullanılmayan hardcoded plan/feature/comparison key'i silindi
+  - Yeni i18n key'leri: free, trialDays, loadError
+- feat(ui): mobile/tablet responsive tasarım iyileştirmeleri ve tam ekran kategori (@ahmeetseker)
+  - BottomNav: xl breakpoint'e genişletildi, tam ekran kategori overlay eklendi (sidebar +
+  - TopBar: tablet/mobil uyumlu arama ve navigasyon düzenlemesi
+  - Cart/Checkout: responsive boyut ve spacing iyileştirmeleri
+  - Hero bileşenleri (ProductGrid, TopDeals, TopRanking, vb.): mobil spacing/font
+  - Product detay (MobileLayout, QAModal, ReviewsModal): mobil uyum düzeltmeleri
+  - Footer: mobil grid ve font boyutu optimizasyonu
+  - FloatingPanel: mobil için rounded-full ve konum ayarı
+  - i18n: bottomNav ve checkout için yeni TR/EN çeviri anahtarları eklendi
+- feat(chat,reservation,pwa): chat popup/shared bileşenleri, rezervasyon akışı + PWA/Capacitor (@aliturguttursab)
+  - Chat popup ve paylaşılan bileşenlerde (composer, bubble, messages, attachment) güncellemeler
+  - Rezervasyon modalı + reservationService + reservationModal alpine modülü
+  - PWA: VitePWA + manifest + ikon setleri; Capacitor config (native projeler gitignore'da)
+  - i18n (tr/en) ve chat type/service güncellemeleri
+- feat(kyc-kyb): belge önizleme kartı ve TCKN/VKN doğrulama eklendi (@aliiball)
+  - KYC formunda mod-aware TCKN/VKN client-side validation eklendi; Bireysel modda pattern \d{11} + minlength/maxlength 11, Kurumsal modda \d{10,11}
+  - isValidTckn helper backend kuralları ile birebir mod-10 checksum kontrolü yapıyor (submit'ten önce 11 hane TCKN doğrulanıyor)
+  - KYC submit catch bloğuna console.error eklendi (debug için)
+  - KYC ve KYB formlarında yüklü belgeler için Karma C preview pattern eklendi: yeşil tema kart, dosya ikonu, Yüklü rozet, dosya adı, Görüntüle butonu; SlotDropzone drag-drop davranışı korundu
+  - Yeni dosya yüklenince preview kartı yenisine otomatik refresh oluyor
+  - Verified ve Suspended durumlarında belge yükleme kapatıldı (slot-zone display:none + input disabled), preview kartı görünür kalıyor; backend 403 ve login redirect döngüsü engellendi
+- feat(i18n): add Arabic + Russian locales and RTL layout support (@aliturguttursab)
+  - locales: add ar.ts, ru.ts; register both in i18n/index.ts and extend SUPPORTED_LANGS
+  - RTL: add RTL_LANGS/isRtl(); sync <html lang> and dir on first paint (static HTML hard-codes lang, detector overrides it)
+  - layout: convert physical Tailwind direction classes to logical ones across ~175 components/pages (ml/mr->ms/me, pl/pr->ps/pe, text-left/right->text-start/end, border-l/r->border-s/e, rounded-*->logical, left/right->inset-s/e, float-*)
+  - tooling: add scripts/rtl-logical-convert.mjs - boundary-aware codemod, verified against Tailwind v4 docs
+- feat(storefront): alıcı paneli analitiği, hero slider ve sosyal kanıt eklendi (@ahmeetseker)
+  - Alıcı dashboard'una ECharts tabanlı analitik özeti eklendi (KPI + harcama trendi + kategori dağılımı)
+  - Ana sayfaya hero üst slider ve heroSliderService eklendi
+  - Ürün listelemeye sosyal kanıt rozetleri eklendi (initListingSocialProof + socialProofService, batch sinyal)
+  - Ürün mobil görünümüne öneri şeridi (MobileRecommendations) eklendi
+  - Sepet/favoriler/üst bar UI iyileştirildi; küçük kontrollerde th-no-press ve RTL-logical (ps-/text-start) uyumu sağlandı
+  - Kullanılmayan statik bilgi sayfaları kaldırıldı (blog, careers, csr, monitoring, news, partnerships, shipping-protection, tax)
+- feat(sell): pricing kartı yalnızca dahil özellikleri gösterir + kart/tablo tutarlılığı (@boraydeger32)
+  - PricingCard "Paket içeriği": sadece dahil (✓) özellikler; devre dışı (✗) gizlendi
+  - Karşılaştırma matrisi backend field-otoritesiyle uyumlu (kart ile birebir)
+  - pricingService: v3 cache + SWR (her yüklemede revalidate)
+  - vite.config: küçük güncelleme
+- feat(storefront): kategori vitrini ve satış sıralaması eklendi (@ahmeetseker)
+  - Ana sayfaya Kategori Vitrini bento grid bölümü eklendi (stale-while-revalidate cache, FOUC'suz)
+  - Ürün detayı Özellikler sekmesine kategori bazlı satış sıralaması (Best Sellers Rank) eklendi
+  - Mega menü 3. seviyeyi (sektör › grup › yaprak) destekleyecek şekilde genişletildi
+  - Ürün listesi breadcrumb'ı tam kategori zinciriyle (findCategoryPath) yeniden kuruldu
+  - Hero slider responsive tipografi ve padding ölçekleri iyileştirildi
+  - Satıcı sayfası metinleri "Türkiye" yerine küresel hitaba güncellendi
+  - Sepet favori ikonu inline SVG'ye çevrildi; gizlilik ayarlarında segmented kontrol render hatası düzeltildi
+- feat(overview): update certificate display with image support and improved layout (@ahmeetseker)
+
+### Duzeltildi
+- fix(ci): son PROD tag'ini güncelleyerek CHANGELOG girişini düzeltildi (@ahmeetseker)
+- fix(settings): address/city/postal_code disabled + Vergi tab gizlendi (@aliiball)
+  - SettingsAccountEdit + SettingsMyAccount address/city/postal_code disabled + helper text (Frappe Address mimarisinde olduğu için)
+  - SettingsLayout 4 noktada Vergi tab yorum satırı (S3=C kararı)
+  - FavoritesLayout User Profile field uyumu + filter sets
+  - buyer-dashboard NewBuyerInfo + UserInfoCard + types + mock Sprint 2
+  - pages/buyer-dashboard VerificationStatusBanner entegrasyonu
+- fix(cart): sepet popup'larında mağaza adı linklendi ve canonical URL'ye normalize edildi (@ahmeetseker)
+  - SharedCartDrawer: store'a yeni supplier eklenirken href canonical /pages/seller/seller-shop.html?seller= pattern'iyle yazılıyor
+  - TopBar: header sepet özetinde eski /pages/seller.html?id= href'leri normalizeSupplierHref ile canonical pattern'e çevriliyor;
+  - ManufacturersHero: statik "0" yerine favorites/sellerFavorites store'larından canlı count; favorites-changed ve
+  - i18n: mfr.favoriteProducts / mfr.favoriteSuppliers key'leri eklendi (TR/EN), whitespace-pre-line ile iki satır render
+  - ManufacturerList: ürün kartlarında thumbnail block + body sabit yükseklik (h-[78px], min-h-[2lh]) ile kart yüksekliği eşitlendi refactor(product): fiyat tier'larında strikethrough üst satıra alındı, qty font büyüdü
+  - Pre-discount fiyat artık deal fiyatının yanında değil, üstünde block olarak gösteriliyor
+  - Tier qty etiketi 13px → 15px
+  - TR locale'inde "MSA:" prefix'i kaldırıldı; tier başlığı sade "1 adet" / "1 - 5 adet"
+  - SubHeader: products sekmesinde "...\"keyword\" kategorisinde", manufacturers sekmesinde "...\"keyword\" için küresel
+  - ProductListingGrid: chat butonuna list-mode'da tam genişlik ve <1599px grid'de küçük font/padding için container-query
+  - MegaMenu: featured kart tipografisi keyfi [11.5px]/[13px] yerine text-xs / text-sm'e standardize edildi
+  - fix(cart): sepet popup'larında eski /pages/seller.html?id= href'leri canonical /pages/seller/seller-shop.html?seller=
+  - feat(manufacturers): landing favori ürün/tedarikçi sayaçları favorites store'larından canlı, event listener ile güncelleniyor;
+  - refactor(product): fiyat tier'da strikethrough üst satıra taşındı, qty font 15px; TR "MSA:" prefix'i kaldırıldı
+  - refactor(listing): SubHeader başlığı products/manufacturers sekmesine göre dinamik; ProductListingGrid chat butonuna list-mode
+  - refactor(manufacturers): ürün kartlarında thumbnail block + body sabit yükseklik ile hizalama düzeltildi
+- fix: SEO URL uyumluluğu ve seller shop routing düzeltmeleri (@ahmeetseker)
+  - nginx.conf.template: /magaza/{code}/dukkan route'u ekle (seller shop)
+  - ManufacturerList: ürün kartları slug ile SEO URL kullanır
+  - ManufacturersHero: ürün linkleri slug fallback ile
+  - CompanyProfile: mağaza ziyaret linki düzeltmesi
+- fix(help): bozuk yardım merkezi linklerini nginx pretty URL'lerine çevir (@ahmeetseker)
+- fix(checkout): company field optional, alert→showToast (@boraydeger32)
+  - Remove "company" from requiredFields in validateAddAddressForm and handleSubmit (UI label already says optional, backend enforces for Business addresses only)
+  - Replace 3 alert() calls with showToast({ type: "error" }) for address errors (save, delete, set default) — consistent with rest of storefront UX
+- fix(rtl): mirror Swiper sliders and mobile drawer for Arabic (RTL) (@aliturguttursab)
+  - Every `new Swiper()` rendered LTR on an RTL page (slides packed to the physical left, large empty band on the right). Swiper's computed- direction auto-detect is unreliable at init (async API fill / pre- reflow), so it stayed LTR.
+  - Add src/utils/direction.ts → applySwiperDir(el|selector): sets the container's `dir` attribute (Swiper's documented RTL trigger) to the document direction before instantiation. Applied to all sliders: hero (Recommendation/HeroSideBanner/Tailored), product RelatedProducts, 404 ExploreDeals, TailoredSelectionsHero, alpine/dashboard, seller/interactions (x5), trade-assurance, rfq.
+  - Drawer anchors `start-0` (correct, right edge in RTL) but hide/show toggles physical -translate-x-full / translate-x-full (Flowbite + custom panel JS). Physical translate does not flip, so the hidden drawer slid into the viewport instead of off the right edge.
+  - Tailwind v4 compiles these to the `translate` property via --tw-translate-x. Flip only that var, only in RTL, only while the toggled class is present, via inline variants (rtl:[&.-translate-x-full]:[--tw-translate-x:100%] and the inner-panel counterpart) — no Flowbite/JS changes, LTR untouched.
+- fix(storefront): pre-existing build hataları ve checkout renk temizliği (@aliiball)
+  - Eksik echarts bağımlılığı npm install ile yüklendi (rollup resolve hatası giderildi)
+  - Settings Privacy yarım merge tamamlandı (segmented toggle çalışır hâle geldi, ${optionsHtml} → ${segmented})
+  - Cart ürün satırında favori ikonu (fav.png) import edildi, isFav ile aktif/pasif renk vurgusu eklendi
+  - Checkout ödeme yöntemi kartı hardcoded hex (#f5b800, #d39c00, #fff8e1) yerine Tailwind v4 brand token utility'leri kullanıyor
+  - Görsel değişiklik yok; tek brand kaynağı style.css @theme bloğunda
+
+### Degistirildi
+- refactor(sidebar): KYC + KYB iki ayrı lockable item olarak ayrıldı (@aliiball)
+  - sidebarData + sidebarIcons: KYC ve KYB için iki ayrı giriş
+  - SidebarMenuItem: lockable mantığı (session state üzerinden)
+  - Sidebar.ts legacy requireSeller davranışı kaldırıldı
+- refactor(auth): SupplierSetupForm + AccountSetupForm User Profile API'sine taşındı (@aliiball)
+  - supplier-setup + account-setup register_supplier / register_user Sprint 2.6 davranışına uyarlandı
+  - account_type Bireysel/Şirket toggle KYC formuna taşındı (register'dan kaldırıldı)
+  - utils/auth.ts session capability flag'leri (kyc_required, kyb_required, kyc_locked, kyb_locked) eklendi
+  - pages/sell.ts + pages/supplier-setup.ts Sprint 2 akışına uyumlandı
+- refactor(addresses): Bireysel/Kurumsal toggle + tax_no/tax_office eklendi (@aliiball)
+  - AddressesLayout: address_type toggle (Individual/Business)
+  - tax_no + tax_office Business için conditional render
+  - utils/tr-validation.ts: VKN + TCKN checksum
+  - alpine/addresses.ts: purpose alanı + Sprint 1 Faz D uyumu
+- refactor(kyb): mersis_no + kep_address + rejection_category form alanları eklendi (@aliiball)
+  - KybLayout + alpine/kyb purpose/state machine güncellemeleri
+  - pages/kyb.ts mersis (16 hane) + kep (email format) doğrulamaları
+- refactor(cart): SupplierCard + CartStore + cartService Sprint 2 uyumu (@aliiball)
+  - SupplierCard supplierId → admin_seller_profile.name eşleme
+  - CartStore + CartSummary KYC gate state
+  - cartService [KYC_<STATE>] prefix mesajı parse
+  - checkout.ts KycRequiredModal entegrasyonu
+  - pages/product-detail + ProductInfo + MobileLayout + ProductListingGrid capability flag kontrolleri
+  - types/cart + types/productListing Sprint 2 alanları
+- refactor(layout): products/manufacturers sayfaları unified SubHeader'a geçirildi (@ahmeetseker)
+  - SearchHeader → SubHeader: tabs + breadcrumb + sonuç başlığı + sort/view tek bileşende toplandı
+  - MegaMenu: kategori kart görseli yerine icon-only akış
+  - i18n: viewingLead, unitFound, unitFoundManufacturer, viewMode/Grid/List anahtarları eklendi
+  - ManufacturerFilterSidebar/List, FilterSidebar, TopBar SubHeader API'ye uyumlandı
+- refactor(lint): tradehubfront ESLint warning'leri sıfırlandı (@ahmeetseker)
+  - 304 @typescript-eslint/no-explicit-any → proper type tanımları
+  - Global window augmentation: src/types/global.d.ts oluşturuldu (API_BASE, Alpine, dataLayer, __getSellerFavs, __originalListingImages vb.)
+  - Mevcut interface'ler kullanıldı (ProductDetail.videoUrl/brandInfo/specGroups cast'leri kaldırıldı); yeni: NotificationItem, RawTailoredProduct, Quote, Message/Conversation, SectionSettings, SellerStorefrontData, AlpineDataEl vb.
+  - catch (e: any) → catch veya catch (e: unknown) + type guard
+  - Underscore-prefix discard pattern (_id, _tempId, _) için varsIgnorePattern + caughtErrorsIgnorePattern: '^_' eklendi
+  - Debug console.log silindi veya console.warn'a çevrildi
+  - alpine/seller.ts, alpine/orders.ts, alpine/help.ts dahil ~50 dosya temizlendi
+- refactor(upload): RFQ ve KYB/KYC upload-ui kütüphanesine taşındı (@aliiball)
+  - src/lib/upload-ui/ paylaşımlı kütüphane (admin-panel ile aynı API)
+  - rfq/dropzone.ts upload-ui facade'ı üzerinden yeniden yazıldı
+  - rfq/file-list.ts ve rfq/uploader.ts ayrıldı
+  - KybLayout, KycLayout, SettingsLayout, TicketForm, WriteReviewModal yeni upload bileşenlerine bağlandı
+  - rfq-form.ts ve rfq.ts sayfa init'leri sadeleştirildi
+  - i18n: yeni upload string'leri (en/tr)
+- refactor(ui): radio seçimleri toggle bileşenlerine dönüştürüldü (@aliiball)
+  - renderSwitch ve renderSegmented helper'ları eklendi
+  - vergi mükellef tipi, fatura tipi ve KYC hesap türü segmented'e çevrildi
+  - e-fatura mükellefiyeti switch'e çevrildi
+  - sipariş iptal sebebi dropdown'a çevrildi
+  - şikayet sebebi ve filtre seçimleri chip grubuna çevrildi
+
+---
+## [v1.1.9-rc.2] - 2026-06-05 RC
+
+Bu surum rc.istoc.com'da onay asamasindadir.
+
+### Eklendi
+- feat(changelog): yeni storefront özellikleri eklendi ve belgeler güncellendi (@ahmeetseker)
+- feat(kyc): KYC sayfası + form + prefill API entegrasyonu eklendi (@aliiball)
+  - pages/dashboard/kyc.html + src/pages/kyc.ts entry
+  - src/components/kyc/KycLayout.ts: Kurumsal/Bireysel toggle + boxed layout (account_type register'dan KYC formuna taşındı)
+  - get_prefill_data ile User Profile + son KYC/KYB değerleri prefill
+  - src/types/userProfile.ts type tanımları
+- feat(verification-ui): banner + locked-feature + kyc-required modal eklendi (@aliiball)
+  - VerificationStatusBanner: KYC × KYB state machine ile 9 banner durumu
+  - LockedFeatureModal: sidebar locked item için "Alıcı/Satıcı olun" CTA
+  - KycRequiredModal: checkout'ta [KYC_<STATE>] prefix regex parse + state-bazlı modal (Locked/Pending/Rejected/Suspended → support ticket)
+  - utils/sellerRouter.ts: satıcı dashboard yönlendirme yardımcısı
+- feat(data): countries + country-subdivisions mock data eklendi (@aliiball)
+  - src/data/countries.ts: ülke listesi (ISO kodları + isimler)
+  - src/data/country-subdivisions.ts: ülke-il/eyalet eşlemesi
+- feat(i18n): KYC + verification + address purpose çevirileri eklendi (@aliiball)
+  - en.ts + tr.ts: settings.myAccountTitle, settings.addressDisabledHint, header.myStore ("Mağaza Sayfam" → "Mağazalarım"), kyc.* key'leri, verification banner state'leri, address purpose etiketleri
+- feat(auth): yasal metin onay popup'ı ve ayrı checkbox'lar eklendi (@aliiball)
+  - Tek "Kullanım Koşulları ve Gizlilik Politikası" checkbox'ı iki ayrı onaya bölündü (terms-checkbox + privacy-checkbox)
+  - Turuncu metne tıklayınca tüm sözleşme içeriği popup içinde gösteriliyor (yeni LegalConsentModal component)
+  - Reddet/Kabul Et butonları metnin sonuna kadar okunmadan görünmüyor; her açılışta scroll baştan başlıyor ve buton durumu sıfırlanıyor
+  - Popup içeriği legalContent.ts'ten çekiliyor — terms/privacy sayfalarıyla aynı kaynak
+  - i18n: agreeTerms TR-suffix/EN-prefix çakışması agreeBefore + agreeAfter'a bölündü; auth.setup.legalConsent.{accept, reject} eklendi
+- feat(sell): pricing planları dinamik API + entitlement banner (@boraydeger32)
+  - sell sayfasındaki 4 hardcoded TIERS dizisi kaldırıldı, planlar artık tradehub_core.api.v1.public_pricing.get_pricing_plans endpoint'inden çekiliyor (Süper Admin Permission Console'dan yönetim).
+  - pricingService.ts: localStorage cache (5 dk) + stale-while-revalidate; cache key v2'ye yükseltildi (CTA label şema değişikliği için invalidate).
+  - sell.ts: cache fresh ise senkron paint, değilse fetch await; arka planda daima fetch + updated_at değişirse #paketler section'ı yerinde re-render (tüm DOM swap yerine — Alpine state korunur).
+  - SellPageLayout: CTA action map (signup, contact_sales, learn_more) ve feature icon glyph map (check, x, star, zap, info, default check) eklendi; currency symbol + fmtListings helper'ları.
+  - FAZ 1.7 — utils/entitlement.ts: snapshot client (sessionStorage 5dk cache), hasFeature/withinQuota/isVerifiedForCheckout helper'ları. Güvenlik sınırı değil — gerçek karar her korumalı eylemde backend'de.
+  - components/subscription/EntitlementBanner.ts: trial ending (< 3 gün) ve subscription past_due durumları için banner.
+- feat(routing): Türkçe pretty URL'lere dist HTML mapping katmanı eklendi (@ahmeetseker)
+  - staticPageUrl.ts'e STATIC_PAGE_HTML_MAP ve getStaticPageHtmlPath() eklendi
+  - Vite dev plugin (staticPageRewritePlugin) /ureticiler gibi path'leri pages/manufacturers.html'e rewrite eder
+  - nginx.conf.template'e `map $uri $static_page_html` bloğu eklendi (prod aynı işi yapar)
+  - Slug'lar yenilendi: /markalar → /ureticiler, /firsat → /firsatlar (MegaMenu, TopBar, HeroSideBannerSlider, TopDeals, SubHeader)
+  - Seller storefront `/magaza/<code>` path'inden seller_code parse eder, nginx internal rewrite sonrası query görünmediği için fallback olarak
+  - StoreHeader/CompanyProfile "Mağazayı ziyaret et" linkleri sellerCode state'ine bağlandı
+- feat: kullanıcı veri hakları UI, backend-driven tracking ve SEO routing (@ahmeetseker)
+  - Hesap ayarlarına "Verilerimi İndir" ve "Onay Yönetimi" bölümleri eklendi
+  - Tracking Manager artık ID'leri backend API'den alıyor (hardcoded değerler kaldırıldı)
+  - Nginx'e statik sayfa SEO backend routing eklendi (meta tag DB injection)
+  - Social proof view kaydında CSRF token düzeltmesi
+  - Ürün yorumları slug yerine Frappe name ile yükleniyor
+  - Ödeme sayfalarına tracking init eklendi
+  - Türkçe i18n çevirileri (consent, data export)
+- feat(nginx): enhance SEO routing for bot user-agents and update static page handling (@ahmeetseker)
+- feat(nginx): enhance dynamic SEO routing for bots and users with new rewrite rules (@ahmeetseker)
+- feat(pricing): hardcoded fiyatlandırma kaldırıldı, backend API entegrasyonu (@boraydeger32)
+  - PricingPageLayout statik PLANS array kaldırıldı, Alpine x-for ile backend'den dinamik render (responsive grid: 2/3/4 sütun plan sayısına göre)
+  - sellPricing Alpine data'sına fetchPricingPlans() + SWR cache entegre edildi
+  - Badge color enum'a green/blue eklendi (backend Select ile uyum)
+  - pricingService.ts cta_action type'tan learn_more kaldırıldı
+  - i18n dead string temizliği: tr.ts ve en.ts'den 42 kullanılmayan hardcoded plan/feature/comparison key'i silindi
+  - Yeni i18n key'leri: free, trialDays, loadError
+- feat(ui): mobile/tablet responsive tasarım iyileştirmeleri ve tam ekran kategori (@ahmeetseker)
+  - BottomNav: xl breakpoint'e genişletildi, tam ekran kategori overlay eklendi (sidebar +
+  - TopBar: tablet/mobil uyumlu arama ve navigasyon düzenlemesi
+  - Cart/Checkout: responsive boyut ve spacing iyileştirmeleri
+  - Hero bileşenleri (ProductGrid, TopDeals, TopRanking, vb.): mobil spacing/font
+  - Product detay (MobileLayout, QAModal, ReviewsModal): mobil uyum düzeltmeleri
+  - Footer: mobil grid ve font boyutu optimizasyonu
+  - FloatingPanel: mobil için rounded-full ve konum ayarı
+  - i18n: bottomNav ve checkout için yeni TR/EN çeviri anahtarları eklendi
+- feat(chat,reservation,pwa): chat popup/shared bileşenleri, rezervasyon akışı + PWA/Capacitor (@aliturguttursab)
+  - Chat popup ve paylaşılan bileşenlerde (composer, bubble, messages, attachment) güncellemeler
+  - Rezervasyon modalı + reservationService + reservationModal alpine modülü
+  - PWA: VitePWA + manifest + ikon setleri; Capacitor config (native projeler gitignore'da)
+  - i18n (tr/en) ve chat type/service güncellemeleri
+- feat(kyc-kyb): belge önizleme kartı ve TCKN/VKN doğrulama eklendi (@aliiball)
+  - KYC formunda mod-aware TCKN/VKN client-side validation eklendi; Bireysel modda pattern \d{11} + minlength/maxlength 11, Kurumsal modda \d{10,11}
+  - isValidTckn helper backend kuralları ile birebir mod-10 checksum kontrolü yapıyor (submit'ten önce 11 hane TCKN doğrulanıyor)
+  - KYC submit catch bloğuna console.error eklendi (debug için)
+  - KYC ve KYB formlarında yüklü belgeler için Karma C preview pattern eklendi: yeşil tema kart, dosya ikonu, Yüklü rozet, dosya adı, Görüntüle butonu; SlotDropzone drag-drop davranışı korundu
+  - Yeni dosya yüklenince preview kartı yenisine otomatik refresh oluyor
+  - Verified ve Suspended durumlarında belge yükleme kapatıldı (slot-zone display:none + input disabled), preview kartı görünür kalıyor; backend 403 ve login redirect döngüsü engellendi
+- feat(i18n): add Arabic + Russian locales and RTL layout support (@aliturguttursab)
+  - locales: add ar.ts, ru.ts; register both in i18n/index.ts and extend SUPPORTED_LANGS
+  - RTL: add RTL_LANGS/isRtl(); sync <html lang> and dir on first paint (static HTML hard-codes lang, detector overrides it)
+  - layout: convert physical Tailwind direction classes to logical ones across ~175 components/pages (ml/mr->ms/me, pl/pr->ps/pe, text-left/right->text-start/end, border-l/r->border-s/e, rounded-*->logical, left/right->inset-s/e, float-*)
+  - tooling: add scripts/rtl-logical-convert.mjs - boundary-aware codemod, verified against Tailwind v4 docs
+- feat(storefront): alıcı paneli analitiği, hero slider ve sosyal kanıt eklendi (@ahmeetseker)
+  - Alıcı dashboard'una ECharts tabanlı analitik özeti eklendi (KPI + harcama trendi + kategori dağılımı)
+  - Ana sayfaya hero üst slider ve heroSliderService eklendi
+  - Ürün listelemeye sosyal kanıt rozetleri eklendi (initListingSocialProof + socialProofService, batch sinyal)
+  - Ürün mobil görünümüne öneri şeridi (MobileRecommendations) eklendi
+  - Sepet/favoriler/üst bar UI iyileştirildi; küçük kontrollerde th-no-press ve RTL-logical (ps-/text-start) uyumu sağlandı
+  - Kullanılmayan statik bilgi sayfaları kaldırıldı (blog, careers, csr, monitoring, news, partnerships, shipping-protection, tax)
+- feat(sell): pricing kartı yalnızca dahil özellikleri gösterir + kart/tablo tutarlılığı (@boraydeger32)
+  - PricingCard "Paket içeriği": sadece dahil (✓) özellikler; devre dışı (✗) gizlendi
+  - Karşılaştırma matrisi backend field-otoritesiyle uyumlu (kart ile birebir)
+  - pricingService: v3 cache + SWR (her yüklemede revalidate)
+  - vite.config: küçük güncelleme
+- feat(storefront): kategori vitrini ve satış sıralaması eklendi (@ahmeetseker)
+  - Ana sayfaya Kategori Vitrini bento grid bölümü eklendi (stale-while-revalidate cache, FOUC'suz)
+  - Ürün detayı Özellikler sekmesine kategori bazlı satış sıralaması (Best Sellers Rank) eklendi
+  - Mega menü 3. seviyeyi (sektör › grup › yaprak) destekleyecek şekilde genişletildi
+  - Ürün listesi breadcrumb'ı tam kategori zinciriyle (findCategoryPath) yeniden kuruldu
+  - Hero slider responsive tipografi ve padding ölçekleri iyileştirildi
+  - Satıcı sayfası metinleri "Türkiye" yerine küresel hitaba güncellendi
+  - Sepet favori ikonu inline SVG'ye çevrildi; gizlilik ayarlarında segmented kontrol render hatası düzeltildi
+- feat(overview): update certificate display with image support and improved layout (@ahmeetseker)
+
+### Duzeltildi
+- fix(ci): son PROD tag'ini güncelleyerek CHANGELOG girişini düzeltildi (@ahmeetseker)
+- fix(settings): address/city/postal_code disabled + Vergi tab gizlendi (@aliiball)
+  - SettingsAccountEdit + SettingsMyAccount address/city/postal_code disabled + helper text (Frappe Address mimarisinde olduğu için)
+  - SettingsLayout 4 noktada Vergi tab yorum satırı (S3=C kararı)
+  - FavoritesLayout User Profile field uyumu + filter sets
+  - buyer-dashboard NewBuyerInfo + UserInfoCard + types + mock Sprint 2
+  - pages/buyer-dashboard VerificationStatusBanner entegrasyonu
+- fix(cart): sepet popup'larında mağaza adı linklendi ve canonical URL'ye normalize edildi (@ahmeetseker)
+  - SharedCartDrawer: store'a yeni supplier eklenirken href canonical /pages/seller/seller-shop.html?seller= pattern'iyle yazılıyor
+  - TopBar: header sepet özetinde eski /pages/seller.html?id= href'leri normalizeSupplierHref ile canonical pattern'e çevriliyor;
+  - ManufacturersHero: statik "0" yerine favorites/sellerFavorites store'larından canlı count; favorites-changed ve
+  - i18n: mfr.favoriteProducts / mfr.favoriteSuppliers key'leri eklendi (TR/EN), whitespace-pre-line ile iki satır render
+  - ManufacturerList: ürün kartlarında thumbnail block + body sabit yükseklik (h-[78px], min-h-[2lh]) ile kart yüksekliği eşitlendi refactor(product): fiyat tier'larında strikethrough üst satıra alındı, qty font büyüdü
+  - Pre-discount fiyat artık deal fiyatının yanında değil, üstünde block olarak gösteriliyor
+  - Tier qty etiketi 13px → 15px
+  - TR locale'inde "MSA:" prefix'i kaldırıldı; tier başlığı sade "1 adet" / "1 - 5 adet"
+  - SubHeader: products sekmesinde "...\"keyword\" kategorisinde", manufacturers sekmesinde "...\"keyword\" için küresel
+  - ProductListingGrid: chat butonuna list-mode'da tam genişlik ve <1599px grid'de küçük font/padding için container-query
+  - MegaMenu: featured kart tipografisi keyfi [11.5px]/[13px] yerine text-xs / text-sm'e standardize edildi
+  - fix(cart): sepet popup'larında eski /pages/seller.html?id= href'leri canonical /pages/seller/seller-shop.html?seller=
+  - feat(manufacturers): landing favori ürün/tedarikçi sayaçları favorites store'larından canlı, event listener ile güncelleniyor;
+  - refactor(product): fiyat tier'da strikethrough üst satıra taşındı, qty font 15px; TR "MSA:" prefix'i kaldırıldı
+  - refactor(listing): SubHeader başlığı products/manufacturers sekmesine göre dinamik; ProductListingGrid chat butonuna list-mode
+  - refactor(manufacturers): ürün kartlarında thumbnail block + body sabit yükseklik ile hizalama düzeltildi
+- fix: SEO URL uyumluluğu ve seller shop routing düzeltmeleri (@ahmeetseker)
+  - nginx.conf.template: /magaza/{code}/dukkan route'u ekle (seller shop)
+  - ManufacturerList: ürün kartları slug ile SEO URL kullanır
+  - ManufacturersHero: ürün linkleri slug fallback ile
+  - CompanyProfile: mağaza ziyaret linki düzeltmesi
+- fix(help): bozuk yardım merkezi linklerini nginx pretty URL'lerine çevir (@ahmeetseker)
+- fix(checkout): company field optional, alert→showToast (@boraydeger32)
+  - Remove "company" from requiredFields in validateAddAddressForm and handleSubmit (UI label already says optional, backend enforces for Business addresses only)
+  - Replace 3 alert() calls with showToast({ type: "error" }) for address errors (save, delete, set default) — consistent with rest of storefront UX
+- fix(rtl): mirror Swiper sliders and mobile drawer for Arabic (RTL) (@aliturguttursab)
+  - Every `new Swiper()` rendered LTR on an RTL page (slides packed to the physical left, large empty band on the right). Swiper's computed- direction auto-detect is unreliable at init (async API fill / pre- reflow), so it stayed LTR.
+  - Add src/utils/direction.ts → applySwiperDir(el|selector): sets the container's `dir` attribute (Swiper's documented RTL trigger) to the document direction before instantiation. Applied to all sliders: hero (Recommendation/HeroSideBanner/Tailored), product RelatedProducts, 404 ExploreDeals, TailoredSelectionsHero, alpine/dashboard, seller/interactions (x5), trade-assurance, rfq.
+  - Drawer anchors `start-0` (correct, right edge in RTL) but hide/show toggles physical -translate-x-full / translate-x-full (Flowbite + custom panel JS). Physical translate does not flip, so the hidden drawer slid into the viewport instead of off the right edge.
+  - Tailwind v4 compiles these to the `translate` property via --tw-translate-x. Flip only that var, only in RTL, only while the toggled class is present, via inline variants (rtl:[&.-translate-x-full]:[--tw-translate-x:100%] and the inner-panel counterpart) — no Flowbite/JS changes, LTR untouched.
+- fix(storefront): pre-existing build hataları ve checkout renk temizliği (@aliiball)
+  - Eksik echarts bağımlılığı npm install ile yüklendi (rollup resolve hatası giderildi)
+  - Settings Privacy yarım merge tamamlandı (segmented toggle çalışır hâle geldi, ${optionsHtml} → ${segmented})
+  - Cart ürün satırında favori ikonu (fav.png) import edildi, isFav ile aktif/pasif renk vurgusu eklendi
+  - Checkout ödeme yöntemi kartı hardcoded hex (#f5b800, #d39c00, #fff8e1) yerine Tailwind v4 brand token utility'leri kullanıyor
+  - Görsel değişiklik yok; tek brand kaynağı style.css @theme bloğunda
+
+### Degistirildi
+- refactor(sidebar): KYC + KYB iki ayrı lockable item olarak ayrıldı (@aliiball)
+  - sidebarData + sidebarIcons: KYC ve KYB için iki ayrı giriş
+  - SidebarMenuItem: lockable mantığı (session state üzerinden)
+  - Sidebar.ts legacy requireSeller davranışı kaldırıldı
+- refactor(auth): SupplierSetupForm + AccountSetupForm User Profile API'sine taşındı (@aliiball)
+  - supplier-setup + account-setup register_supplier / register_user Sprint 2.6 davranışına uyarlandı
+  - account_type Bireysel/Şirket toggle KYC formuna taşındı (register'dan kaldırıldı)
+  - utils/auth.ts session capability flag'leri (kyc_required, kyb_required, kyc_locked, kyb_locked) eklendi
+  - pages/sell.ts + pages/supplier-setup.ts Sprint 2 akışına uyumlandı
+- refactor(addresses): Bireysel/Kurumsal toggle + tax_no/tax_office eklendi (@aliiball)
+  - AddressesLayout: address_type toggle (Individual/Business)
+  - tax_no + tax_office Business için conditional render
+  - utils/tr-validation.ts: VKN + TCKN checksum
+  - alpine/addresses.ts: purpose alanı + Sprint 1 Faz D uyumu
+- refactor(kyb): mersis_no + kep_address + rejection_category form alanları eklendi (@aliiball)
+  - KybLayout + alpine/kyb purpose/state machine güncellemeleri
+  - pages/kyb.ts mersis (16 hane) + kep (email format) doğrulamaları
+- refactor(cart): SupplierCard + CartStore + cartService Sprint 2 uyumu (@aliiball)
+  - SupplierCard supplierId → admin_seller_profile.name eşleme
+  - CartStore + CartSummary KYC gate state
+  - cartService [KYC_<STATE>] prefix mesajı parse
+  - checkout.ts KycRequiredModal entegrasyonu
+  - pages/product-detail + ProductInfo + MobileLayout + ProductListingGrid capability flag kontrolleri
+  - types/cart + types/productListing Sprint 2 alanları
+- refactor(layout): products/manufacturers sayfaları unified SubHeader'a geçirildi (@ahmeetseker)
+  - SearchHeader → SubHeader: tabs + breadcrumb + sonuç başlığı + sort/view tek bileşende toplandı
+  - MegaMenu: kategori kart görseli yerine icon-only akış
+  - i18n: viewingLead, unitFound, unitFoundManufacturer, viewMode/Grid/List anahtarları eklendi
+  - ManufacturerFilterSidebar/List, FilterSidebar, TopBar SubHeader API'ye uyumlandı
+- refactor(lint): tradehubfront ESLint warning'leri sıfırlandı (@ahmeetseker)
+  - 304 @typescript-eslint/no-explicit-any → proper type tanımları
+  - Global window augmentation: src/types/global.d.ts oluşturuldu (API_BASE, Alpine, dataLayer, __getSellerFavs, __originalListingImages vb.)
+  - Mevcut interface'ler kullanıldı (ProductDetail.videoUrl/brandInfo/specGroups cast'leri kaldırıldı); yeni: NotificationItem, RawTailoredProduct, Quote, Message/Conversation, SectionSettings, SellerStorefrontData, AlpineDataEl vb.
+  - catch (e: any) → catch veya catch (e: unknown) + type guard
+  - Underscore-prefix discard pattern (_id, _tempId, _) için varsIgnorePattern + caughtErrorsIgnorePattern: '^_' eklendi
+  - Debug console.log silindi veya console.warn'a çevrildi
+  - alpine/seller.ts, alpine/orders.ts, alpine/help.ts dahil ~50 dosya temizlendi
+- refactor(upload): RFQ ve KYB/KYC upload-ui kütüphanesine taşındı (@aliiball)
+  - src/lib/upload-ui/ paylaşımlı kütüphane (admin-panel ile aynı API)
+  - rfq/dropzone.ts upload-ui facade'ı üzerinden yeniden yazıldı
+  - rfq/file-list.ts ve rfq/uploader.ts ayrıldı
+  - KybLayout, KycLayout, SettingsLayout, TicketForm, WriteReviewModal yeni upload bileşenlerine bağlandı
+  - rfq-form.ts ve rfq.ts sayfa init'leri sadeleştirildi
+  - i18n: yeni upload string'leri (en/tr)
+- refactor(ui): radio seçimleri toggle bileşenlerine dönüştürüldü (@aliiball)
+  - renderSwitch ve renderSegmented helper'ları eklendi
+  - vergi mükellef tipi, fatura tipi ve KYC hesap türü segmented'e çevrildi
+  - e-fatura mükellefiyeti switch'e çevrildi
+  - sipariş iptal sebebi dropdown'a çevrildi
+  - şikayet sebebi ve filtre seçimleri chip grubuna çevrildi
+
+---
+## [v1.1.9-beta.31] - 2026-06-05 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
 
@@ -43,6 +490,20 @@ Bu surum beta.istoc.com'da test asamasindadir.
   - Ürün mobil görünümüne öneri şeridi (MobileRecommendations) eklendi
   - Sepet/favoriler/üst bar UI iyileştirildi; küçük kontrollerde th-no-press ve RTL-logical (ps-/text-start) uyumu sağlandı
   - Kullanılmayan statik bilgi sayfaları kaldırıldı (blog, careers, csr, monitoring, news, partnerships, shipping-protection, tax)
+- feat(sell): pricing kartı yalnızca dahil özellikleri gösterir + kart/tablo tutarlılığı (@boraydeger32)
+  - PricingCard "Paket içeriği": sadece dahil (✓) özellikler; devre dışı (✗) gizlendi
+  - Karşılaştırma matrisi backend field-otoritesiyle uyumlu (kart ile birebir)
+  - pricingService: v3 cache + SWR (her yüklemede revalidate)
+  - vite.config: küçük güncelleme
+- feat(storefront): kategori vitrini ve satış sıralaması eklendi (@ahmeetseker)
+  - Ana sayfaya Kategori Vitrini bento grid bölümü eklendi (stale-while-revalidate cache, FOUC'suz)
+  - Ürün detayı Özellikler sekmesine kategori bazlı satış sıralaması (Best Sellers Rank) eklendi
+  - Mega menü 3. seviyeyi (sektör › grup › yaprak) destekleyecek şekilde genişletildi
+  - Ürün listesi breadcrumb'ı tam kategori zinciriyle (findCategoryPath) yeniden kuruldu
+  - Hero slider responsive tipografi ve padding ölçekleri iyileştirildi
+  - Satıcı sayfası metinleri "Türkiye" yerine küresel hitaba güncellendi
+  - Sepet favori ikonu inline SVG'ye çevrildi; gizlilik ayarlarında segmented kontrol render hatası düzeltildi
+- feat(overview): update certificate display with image support and improved layout (@ahmeetseker)
 
 ### Duzeltildi
 - fix(help): bozuk yardım merkezi linklerini nginx pretty URL'lerine çevir (@ahmeetseker)
@@ -54,6 +515,97 @@ Bu surum beta.istoc.com'da test asamasindadir.
   - Add src/utils/direction.ts → applySwiperDir(el|selector): sets the container's `dir` attribute (Swiper's documented RTL trigger) to the document direction before instantiation. Applied to all sliders: hero (Recommendation/HeroSideBanner/Tailored), product RelatedProducts, 404 ExploreDeals, TailoredSelectionsHero, alpine/dashboard, seller/interactions (x5), trade-assurance, rfq.
   - Drawer anchors `start-0` (correct, right edge in RTL) but hide/show toggles physical -translate-x-full / translate-x-full (Flowbite + custom panel JS). Physical translate does not flip, so the hidden drawer slid into the viewport instead of off the right edge.
   - Tailwind v4 compiles these to the `translate` property via --tw-translate-x. Flip only that var, only in RTL, only while the toggled class is present, via inline variants (rtl:[&.-translate-x-full]:[--tw-translate-x:100%] and the inner-panel counterpart) — no Flowbite/JS changes, LTR untouched.
+- fix(storefront): pre-existing build hataları ve checkout renk temizliği (@aliiball)
+  - Eksik echarts bağımlılığı npm install ile yüklendi (rollup resolve hatası giderildi)
+  - Settings Privacy yarım merge tamamlandı (segmented toggle çalışır hâle geldi, ${optionsHtml} → ${segmented})
+  - Cart ürün satırında favori ikonu (fav.png) import edildi, isFav ile aktif/pasif renk vurgusu eklendi
+  - Checkout ödeme yöntemi kartı hardcoded hex (#f5b800, #d39c00, #fff8e1) yerine Tailwind v4 brand token utility'leri kullanıyor
+  - Görsel değişiklik yok; tek brand kaynağı style.css @theme bloğunda
+
+### Degistirildi
+- refactor(ui): radio seçimleri toggle bileşenlerine dönüştürüldü (@aliiball)
+  - renderSwitch ve renderSegmented helper'ları eklendi
+  - vergi mükellef tipi, fatura tipi ve KYC hesap türü segmented'e çevrildi
+  - e-fatura mükellefiyeti switch'e çevrildi
+  - sipariş iptal sebebi dropdown'a çevrildi
+  - şikayet sebebi ve filtre seçimleri chip grubuna çevrildi
+
+---
+## [v1.1.9-beta.30] - 2026-06-05 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(pricing): hardcoded fiyatlandırma kaldırıldı, backend API entegrasyonu (@boraydeger32)
+  - PricingPageLayout statik PLANS array kaldırıldı, Alpine x-for ile backend'den dinamik render (responsive grid: 2/3/4 sütun plan sayısına göre)
+  - sellPricing Alpine data'sına fetchPricingPlans() + SWR cache entegre edildi
+  - Badge color enum'a green/blue eklendi (backend Select ile uyum)
+  - pricingService.ts cta_action type'tan learn_more kaldırıldı
+  - i18n dead string temizliği: tr.ts ve en.ts'den 42 kullanılmayan hardcoded plan/feature/comparison key'i silindi
+  - Yeni i18n key'leri: free, trialDays, loadError
+- feat(ui): mobile/tablet responsive tasarım iyileştirmeleri ve tam ekran kategori (@ahmeetseker)
+  - BottomNav: xl breakpoint'e genişletildi, tam ekran kategori overlay eklendi (sidebar +
+  - TopBar: tablet/mobil uyumlu arama ve navigasyon düzenlemesi
+  - Cart/Checkout: responsive boyut ve spacing iyileştirmeleri
+  - Hero bileşenleri (ProductGrid, TopDeals, TopRanking, vb.): mobil spacing/font
+  - Product detay (MobileLayout, QAModal, ReviewsModal): mobil uyum düzeltmeleri
+  - Footer: mobil grid ve font boyutu optimizasyonu
+  - FloatingPanel: mobil için rounded-full ve konum ayarı
+  - i18n: bottomNav ve checkout için yeni TR/EN çeviri anahtarları eklendi
+- feat(chat,reservation,pwa): chat popup/shared bileşenleri, rezervasyon akışı + PWA/Capacitor (@aliturguttursab)
+  - Chat popup ve paylaşılan bileşenlerde (composer, bubble, messages, attachment) güncellemeler
+  - Rezervasyon modalı + reservationService + reservationModal alpine modülü
+  - PWA: VitePWA + manifest + ikon setleri; Capacitor config (native projeler gitignore'da)
+  - i18n (tr/en) ve chat type/service güncellemeleri
+- feat(kyc-kyb): belge önizleme kartı ve TCKN/VKN doğrulama eklendi (@aliiball)
+  - KYC formunda mod-aware TCKN/VKN client-side validation eklendi; Bireysel modda pattern \d{11} + minlength/maxlength 11, Kurumsal modda \d{10,11}
+  - isValidTckn helper backend kuralları ile birebir mod-10 checksum kontrolü yapıyor (submit'ten önce 11 hane TCKN doğrulanıyor)
+  - KYC submit catch bloğuna console.error eklendi (debug için)
+  - KYC ve KYB formlarında yüklü belgeler için Karma C preview pattern eklendi: yeşil tema kart, dosya ikonu, Yüklü rozet, dosya adı, Görüntüle butonu; SlotDropzone drag-drop davranışı korundu
+  - Yeni dosya yüklenince preview kartı yenisine otomatik refresh oluyor
+  - Verified ve Suspended durumlarında belge yükleme kapatıldı (slot-zone display:none + input disabled), preview kartı görünür kalıyor; backend 403 ve login redirect döngüsü engellendi
+- feat(i18n): add Arabic + Russian locales and RTL layout support (@aliturguttursab)
+  - locales: add ar.ts, ru.ts; register both in i18n/index.ts and extend SUPPORTED_LANGS
+  - RTL: add RTL_LANGS/isRtl(); sync <html lang> and dir on first paint (static HTML hard-codes lang, detector overrides it)
+  - layout: convert physical Tailwind direction classes to logical ones across ~175 components/pages (ml/mr->ms/me, pl/pr->ps/pe, text-left/right->text-start/end, border-l/r->border-s/e, rounded-*->logical, left/right->inset-s/e, float-*)
+  - tooling: add scripts/rtl-logical-convert.mjs - boundary-aware codemod, verified against Tailwind v4 docs
+- feat(storefront): alıcı paneli analitiği, hero slider ve sosyal kanıt eklendi (@ahmeetseker)
+  - Alıcı dashboard'una ECharts tabanlı analitik özeti eklendi (KPI + harcama trendi + kategori dağılımı)
+  - Ana sayfaya hero üst slider ve heroSliderService eklendi
+  - Ürün listelemeye sosyal kanıt rozetleri eklendi (initListingSocialProof + socialProofService, batch sinyal)
+  - Ürün mobil görünümüne öneri şeridi (MobileRecommendations) eklendi
+  - Sepet/favoriler/üst bar UI iyileştirildi; küçük kontrollerde th-no-press ve RTL-logical (ps-/text-start) uyumu sağlandı
+  - Kullanılmayan statik bilgi sayfaları kaldırıldı (blog, careers, csr, monitoring, news, partnerships, shipping-protection, tax)
+- feat(sell): pricing kartı yalnızca dahil özellikleri gösterir + kart/tablo tutarlılığı (@boraydeger32)
+  - PricingCard "Paket içeriği": sadece dahil (✓) özellikler; devre dışı (✗) gizlendi
+  - Karşılaştırma matrisi backend field-otoritesiyle uyumlu (kart ile birebir)
+  - pricingService: v3 cache + SWR (her yüklemede revalidate)
+  - vite.config: küçük güncelleme
+- feat(storefront): kategori vitrini ve satış sıralaması eklendi (@ahmeetseker)
+  - Ana sayfaya Kategori Vitrini bento grid bölümü eklendi (stale-while-revalidate cache, FOUC'suz)
+  - Ürün detayı Özellikler sekmesine kategori bazlı satış sıralaması (Best Sellers Rank) eklendi
+  - Mega menü 3. seviyeyi (sektör › grup › yaprak) destekleyecek şekilde genişletildi
+  - Ürün listesi breadcrumb'ı tam kategori zinciriyle (findCategoryPath) yeniden kuruldu
+  - Hero slider responsive tipografi ve padding ölçekleri iyileştirildi
+  - Satıcı sayfası metinleri "Türkiye" yerine küresel hitaba güncellendi
+  - Sepet favori ikonu inline SVG'ye çevrildi; gizlilik ayarlarında segmented kontrol render hatası düzeltildi
+
+### Duzeltildi
+- fix(help): bozuk yardım merkezi linklerini nginx pretty URL'lerine çevir (@ahmeetseker)
+- fix(checkout): company field optional, alert→showToast (@boraydeger32)
+  - Remove "company" from requiredFields in validateAddAddressForm and handleSubmit (UI label already says optional, backend enforces for Business addresses only)
+  - Replace 3 alert() calls with showToast({ type: "error" }) for address errors (save, delete, set default) — consistent with rest of storefront UX
+- fix(rtl): mirror Swiper sliders and mobile drawer for Arabic (RTL) (@aliturguttursab)
+  - Every `new Swiper()` rendered LTR on an RTL page (slides packed to the physical left, large empty band on the right). Swiper's computed- direction auto-detect is unreliable at init (async API fill / pre- reflow), so it stayed LTR.
+  - Add src/utils/direction.ts → applySwiperDir(el|selector): sets the container's `dir` attribute (Swiper's documented RTL trigger) to the document direction before instantiation. Applied to all sliders: hero (Recommendation/HeroSideBanner/Tailored), product RelatedProducts, 404 ExploreDeals, TailoredSelectionsHero, alpine/dashboard, seller/interactions (x5), trade-assurance, rfq.
+  - Drawer anchors `start-0` (correct, right edge in RTL) but hide/show toggles physical -translate-x-full / translate-x-full (Flowbite + custom panel JS). Physical translate does not flip, so the hidden drawer slid into the viewport instead of off the right edge.
+  - Tailwind v4 compiles these to the `translate` property via --tw-translate-x. Flip only that var, only in RTL, only while the toggled class is present, via inline variants (rtl:[&.-translate-x-full]:[--tw-translate-x:100%] and the inner-panel counterpart) — no Flowbite/JS changes, LTR untouched.
+- fix(storefront): pre-existing build hataları ve checkout renk temizliği (@aliiball)
+  - Eksik echarts bağımlılığı npm install ile yüklendi (rollup resolve hatası giderildi)
+  - Settings Privacy yarım merge tamamlandı (segmented toggle çalışır hâle geldi, ${optionsHtml} → ${segmented})
+  - Cart ürün satırında favori ikonu (fav.png) import edildi, isFav ile aktif/pasif renk vurgusu eklendi
+  - Checkout ödeme yöntemi kartı hardcoded hex (#f5b800, #d39c00, #fff8e1) yerine Tailwind v4 brand token utility'leri kullanıyor
+  - Görsel değişiklik yok; tek brand kaynağı style.css @theme bloğunda
 
 ### Degistirildi
 - refactor(ui): radio seçimleri toggle bileşenlerine dönüştürüldü (@aliiball)

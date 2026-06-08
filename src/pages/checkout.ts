@@ -64,11 +64,63 @@ interface SampleOrderData {
 
 let sampleOrderData: SampleOrderData | null = null;
 
-if (isSampleMode) {
+/**
+ * tradehub_sample_order localStorage'tan geliyor → kullanıcı (saldırgan) kontrolünde.
+ * Blind `as SampleOrderData` cast price/qty injection'a açık: negatif/NaN/aşırı büyük
+ * `samplePrice`/`quantity` ya da yanlış tipte alanlar checkout toplamlarına ve backend
+ * sipariş payload'ına sızabilir. Burada shape + numeric aralık doğrulaması yapıp
+ * geçersizse null döndürüyoruz (mevcut redirect devreye girer). String alanlar render
+ * katmanında escapeHtml/sanitizeUrl ile zaten temizleniyor; burada sadece tip garantisi.
+ */
+function parseSampleOrder(raw: string): SampleOrderData | null {
+  let parsed: unknown;
   try {
-    const raw = localStorage.getItem('tradehub_sample_order');
-    if (raw) sampleOrderData = JSON.parse(raw) as SampleOrderData;
-  } catch { /* ignore */ }
+    parsed = JSON.parse(raw);
+  } catch {
+    return null;
+  }
+  if (typeof parsed !== 'object' || parsed === null) return null;
+  const o = parsed as Record<string, unknown>;
+
+  const samplePrice = Number(o.samplePrice);
+  const quantity = Number(o.quantity);
+  // Fiyat/adet sonlu, negatif olmayan ve makul üst sınır içinde olmalı.
+  if (!Number.isFinite(samplePrice) || samplePrice < 0 || samplePrice > 1_000_000) return null;
+  if (!Number.isFinite(quantity) || quantity < 1 || quantity > 1_000_000) return null;
+
+  if (typeof o.productId !== 'string' || !o.productId) return null;
+
+  const str = (v: unknown): string => (typeof v === 'string' ? v : '');
+
+  let color: SampleOrderData['color'] = null;
+  if (typeof o.color === 'object' && o.color !== null) {
+    const c = o.color as Record<string, unknown>;
+    color = {
+      id: str(c.id),
+      label: str(c.label),
+      imageUrl: typeof c.imageUrl === 'string' ? c.imageUrl : undefined,
+    };
+  }
+
+  const shippingMethods = Array.isArray(o.shippingMethods)
+    ? (o.shippingMethods as CartShippingMethod[])
+    : undefined;
+
+  return {
+    productId: o.productId,
+    title: str(o.title),
+    supplierName: str(o.supplierName),
+    samplePrice,
+    unit: str(o.unit),
+    color,
+    quantity: Math.floor(quantity),
+    shippingMethods,
+  };
+}
+
+if (isSampleMode) {
+  const raw = localStorage.getItem('tradehub_sample_order');
+  if (raw) sampleOrderData = parseSampleOrder(raw);
   if (!sampleOrderData) {
     window.location.replace('/');
   }

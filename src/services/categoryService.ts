@@ -5,6 +5,7 @@
  */
 
 import { callMethod } from "../utils/api";
+import { queryFetch, queryKeys, policies } from "../lib/query";
 
 export interface ApiCategory {
   id: string;
@@ -20,6 +21,15 @@ export interface ApiCategoryChild {
   name: string;
   slug: string;
   image?: string;
+  /** 3. seviye yaprak kategoriler (grup → yaprak). 2 seviyeli veride yok. */
+  children?: ApiCategoryChild[];
+}
+
+/** Kökten yaprağa kadar bir kategori zinciri (breadcrumb için). */
+export interface CategoryPathItem {
+  id: string;
+  name: string;
+  slug: string;
 }
 
 let _cache: ApiCategory[] | null = null;
@@ -63,39 +73,55 @@ function isSpamCategoryName(name: string): boolean {
   return false;
 }
 
+function filterSpamChildren(children: ApiCategoryChild[]): ApiCategoryChild[] {
+  return (children || [])
+    .filter((ch) => !isSpamCategoryName(ch.name))
+    .map((ch) => ({
+      ...ch,
+      children: ch.children ? filterSpamChildren(ch.children) : ch.children,
+    }));
+}
+
 function filterSpam(cats: ApiCategory[]): ApiCategory[] {
   return cats
     .filter((c) => !isSpamCategoryName(c.name))
     .map((c) => ({
       ...c,
-      children: (c.children || []).filter((ch) => !isSpamCategoryName(ch.name)),
+      children: filterSpamChildren(c.children || []),
     }));
 }
 
 /**
  * Kategorileri API'den çeker ve önbelleğe alır.
- * Birden fazla çağrıda tek fetch yapılır (deduplication).
+ *
+ * Fetch + dedup + IndexedDB persist artık `queryFetch` cache katmanı üzerinden:
+ * aynı key'e gelen paralel çağrılar dedup edilir ve sonuç MPA sayfa
+ * yüklemeleri arasında IndexedDB'de saklanır (her yüklemede yeniden çekilmez).
+ * Senkron getter'lar için modül-içi `_cache` ve `onCategoriesLoaded`
+ * dinleyicileri burada beslenir.
  */
 export function loadCategories(): Promise<ApiCategory[]> {
   if (_cache !== null) return Promise.resolve(_cache);
-  if (_promise) return _promise;
 
-  _promise = callMethod<ApiCategory[]>("tradehub_core.api.category.get_mega_menu")
-    .then((data) => {
+  return queryFetch(
+    queryKeys.categories(),
+    async () => {
+      const data = await callMethod<ApiCategory[]>("tradehub_core.api.category.get_mega_menu");
       const raw: ApiCategory[] = Array.isArray(data) ? data : [];
-      const cats = filterSpam(raw);
+      return filterSpam(raw);
+    },
+    policies.categories
+  )
+    .then((cats) => {
       _cache = cats;
       _promise = null;
       _subscribers.forEach((fn) => fn(cats));
       return cats;
     })
     .catch(() => {
-      _promise = null;
       if (_cache === null) _cache = [];
       return _cache;
     });
-
-  return _promise;
 }
 
 // Dil değiştiğinde kategori önbelleğini geçersiz kıl ve yeni dilde yeniden çek;
@@ -130,24 +156,51 @@ export function onCategoriesLoaded(fn: (cats: ApiCategory[]) => void): void {
   loadCategories();
 }
 
-/** URL slug ile kategori bulur (üst + alt kategoriler dahil) */
+/** URL slug ile kategori bulur (3 seviye: sektör + grup + yaprak) */
 export function findCategoryBySlug(slug: string): ApiCategory | ApiCategoryChild | undefined {
-  const cats = _cache ?? [];
-  for (const c of cats) {
-    if (c.slug === slug) return c;
-    const child = c.children?.find((ch) => ch.slug === slug);
-    if (child) return child;
+  return findInTree((c) => c.slug === slug);
+}
+
+/** Frappe document ID ile kategori bulur (3 seviye: sektör + grup + yaprak) */
+export function findCategoryById(id: string): ApiCategory | ApiCategoryChild | undefined {
+  return findInTree((c) => c.id === id);
+}
+
+/** Cache ağacında (3 seviye) predicate'i sağlayan ilk kategoriyi döndürür. */
+function findInTree(
+  match: (c: ApiCategory | ApiCategoryChild) => boolean
+): ApiCategory | ApiCategoryChild | undefined {
+  for (const sector of _cache ?? []) {
+    if (match(sector)) return sector;
+    for (const group of sector.children ?? []) {
+      if (match(group)) return group;
+      const leaf = group.children?.find(match);
+      if (leaf) return leaf;
+    }
   }
   return undefined;
 }
 
-/** Frappe document ID ile kategori bulur (üst + alt kategoriler dahil) */
-export function findCategoryById(id: string): ApiCategory | ApiCategoryChild | undefined {
-  const cats = _cache ?? [];
-  for (const c of cats) {
-    if (c.id === id) return c;
-    const child = c.children?.find((ch) => ch.id === id);
-    if (child) return child;
+/**
+ * slug ya da ID ile eşleşen kategorinin kökten kendisine kadar olan zincirini
+ * döndürür (breadcrumb için). Eşleşme yoksa boş dizi.
+ */
+export function findCategoryPath(slugOrId: string): CategoryPathItem[] {
+  const pick = (c: ApiCategory | ApiCategoryChild): CategoryPathItem => ({
+    id: c.id,
+    name: c.name,
+    slug: c.slug,
+  });
+  const matches = (c: ApiCategory | ApiCategoryChild) => c.slug === slugOrId || c.id === slugOrId;
+
+  for (const sector of _cache ?? []) {
+    if (matches(sector)) return [pick(sector)];
+    for (const group of sector.children ?? []) {
+      if (matches(group)) return [pick(sector), pick(group)];
+      for (const leaf of group.children ?? []) {
+        if (matches(leaf)) return [pick(sector), pick(group), pick(leaf)];
+      }
+    }
   }
-  return undefined;
+  return [];
 }

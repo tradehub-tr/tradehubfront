@@ -10,6 +10,7 @@ import { formatCurrency, getSelectedCurrency } from "../../services/currencyServ
 import type { PriceTier, ProductVariant, SkuMatrixEntry } from "../../types/product";
 import { openShippingModal, openCartDrawer } from "./CartDrawer";
 import { SocialProofBadge } from "./SocialProofBadge";
+import { escapeHtml, sanitizeUrl, safeHexColor } from "../../utils/sanitize";
 
 function renderPriceTiers(tiers: PriceTier[]): string {
   // When a campaign is active the backend sets each tier's originalPrice
@@ -89,9 +90,9 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
               data-variant-video="${opt.videoUrl || ""}"
               data-variant-title="${encodeURIComponent(opt.title || "")}"
               data-variant-images="${encodeURIComponent(JSON.stringify(opt.images || []))}"
-              data-variant-value="${opt.value}"
+              data-variant-value="${escapeHtml(opt.value)}"
               data-is-default="${isDef ? "1" : "0"}"
-              ${opt.price ? `data-variant-price="${opt.price}"` : ""}
+              ${opt.price ? `data-variant-price="${escapeHtml(opt.price)}"` : ""}
               ${opt.available ? "" : "disabled"}
               aria-label="${opt.displayLabel || opt.label}"
               title="${opt.displayLabel || opt.label}"
@@ -150,7 +151,7 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
             data-variant-title="${encodeURIComponent(opt.title || "")}"
             data-variant-images="${encodeURIComponent(JSON.stringify(opt.images || []))}"
             data-is-default="${isDef ? "1" : "0"}"
-            ${opt.price ? `data-variant-price="${opt.price}"` : ""}
+            ${opt.price ? `data-variant-price="${escapeHtml(opt.price)}"` : ""}
             ${isAvailable ? "" : "disabled"}
             title="${isAvailable ? opt.displayLabel : `${opt.displayLabel || opt.label} — ${t("prodUi.outOfStockSuffix")}`}"
           >
@@ -199,12 +200,12 @@ export function ProductInfo(): string {
         ${
           p.samplePrice
             ? `
-        <div id="pd-sample-price" class="flex items-center justify-between gap-2 px-4 py-2.5 rounded-md mb-5" style="background: var(--color-surface-raised, #f5f5f5);">
-          <div class="flex items-center gap-2 text-sm min-w-0" style="color: var(--color-text-primary);">
-            <svg class="shrink-0" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
-            <span class="truncate">${t("product.samplePrice")}: <strong class="shrink-0">${formatCurrency(p.samplePrice, getSelectedCurrency())}</strong></span>
+        <div id="pd-sample-price" class="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 px-3.5 py-2.5 rounded-md mb-5" style="background: var(--color-surface-raised, #f5f5f5);">
+          <div class="flex items-center gap-1.5 text-[13px] min-w-0" style="color: var(--color-text-primary);">
+            <svg class="shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+            <span class="whitespace-nowrap">${t("product.samplePrice")}: <strong>${formatCurrency(p.samplePrice, getSelectedCurrency())}</strong></span>
           </div>
-          <button type="button" data-order-sample="${mockProduct.id}" class="pd-sample-btn shrink-0 cursor-pointer px-5 py-1.5 text-[13px] font-medium border-[length:var(--btn-outline-border-width)] border-[var(--btn-outline-border-color)] rounded-[var(--radius-button)] bg-[var(--btn-outline-bg)] text-[var(--btn-outline-text)] transition-[background,color,border-color] duration-150 hover:bg-[var(--btn-outline-hover-bg,var(--btn-outline-bg))] hover:text-[var(--btn-outline-hover-text,var(--btn-outline-text))]">${t("cart.orderSample")}</button>
+          <button type="button" data-order-sample="${mockProduct.id}" class="pd-sample-btn shrink-0 cursor-pointer whitespace-nowrap px-3.5 py-1.5 text-[13px] font-medium border-[length:var(--btn-outline-border-width)] border-[var(--btn-outline-border-color)] rounded-[var(--radius-button)] bg-[var(--btn-outline-bg)] text-[var(--btn-outline-text)] transition-[background,color,border-color] duration-150 hover:bg-[var(--btn-outline-hover-bg,var(--btn-outline-bg))] hover:text-[var(--btn-outline-hover-text,var(--btn-outline-text))]">${t("cart.orderSample")}</button>
         </div>
         `
             : ""
@@ -228,7 +229,7 @@ export function ProductInfo(): string {
           <h3 class="text-sm font-bold mb-3 flex items-center gap-1.5 m-0" style="color: var(--pd-title-color, #111827);">${t("product.shippingLabel")}</h3>
           <div class="flex items-center justify-between gap-3 mt-3 px-3.5 py-3 rounded-md border min-w-0" id="pd-shipping-card" style="background: var(--pd-spec-header-bg, #f9fafb); border-color: var(--color-border-default, #e5e5e5);">
             <div class="flex flex-col gap-0.5 min-w-0">
-              <span class="text-sm font-semibold truncate" id="pd-ship-card-method" style="color: var(--pd-title-color, #111827);">${p.shipping[0]?.method || t("product.shippingLabel")}</span>
+              <span class="text-sm font-semibold truncate" id="pd-ship-card-method" style="color: var(--pd-title-color, #111827);">${escapeHtml(p.shipping[0]?.method || t("product.shippingLabel"))}</span>
               <span class="pd-shipping-card-detail text-xs truncate" style="color: var(--pd-rating-text-color, #6b7280);">${p.shipping[0] ? t("product.shippingCost", { cost: p.shipping[0].cost, days: p.shipping[0].estimatedDays }) : ""}</span>
             </div>
             <a href="javascript:void(0)" class="text-[13px] font-medium no-underline whitespace-nowrap cursor-pointer" id="pd-ship-card-change" style="color: var(--pd-price-color, #cc9900);">${t("product.changeLabel")} ›</a>
@@ -261,13 +262,13 @@ export function ProductInfo(): string {
           ${
             mockProduct.sellerKybVerified === false
               ? `
-            <button type="button" id="pd-add-to-cart" disabled aria-disabled="true" class="th-btn-dark opacity-50 !cursor-not-allowed pointer-events-none" title="${t("common.addToCartDisabledKyb")}">
+            <button type="button" id="pd-add-to-cart" disabled aria-disabled="true" class="th-btn-dark whitespace-nowrap px-3.5 opacity-50 !cursor-not-allowed pointer-events-none" title="${t("common.addToCartDisabledKyb")}">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
               ${t("product.addToCart")}
             </button>
           `
               : `
-            <button type="button" id="pd-add-to-cart" data-add-to-cart="${mockProduct.id}" class="th-btn-dark">
+            <button type="button" id="pd-add-to-cart" data-add-to-cart="${mockProduct.id}" class="th-btn-dark whitespace-nowrap px-3.5">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
               ${t("product.addToCart")}
             </button>
@@ -276,13 +277,13 @@ export function ProductInfo(): string {
 
           <button type="button" id="pd-chat-with-seller"
                   data-chat-trigger
-                  data-product-id="${mockProduct.id}"
-                  data-product-title="${(p.title || "").replace(/"/g, "&quot;")}"
-                  data-product-price="${(p.priceTiers[0] ? formatCurrency(p.priceTiers[0].price, getSelectedCurrency()) : "").replace(/"/g, "&quot;")}"
-                  data-product-thumb="${p.images?.[0]?.src || ""}"
+                  data-product-id="${escapeHtml(mockProduct.id)}"
+                  data-product-title="${escapeHtml(p.title || "")}"
+                  data-product-price="${escapeHtml(p.priceTiers[0] ? formatCurrency(p.priceTiers[0].price, getSelectedCurrency()) : "")}"
+                  data-product-thumb="${escapeHtml(sanitizeUrl(p.images?.[0]?.src || ""))}"
                   data-product-min-order="${p.moq ? String(p.moq) : "1"}"
-                  data-seller-id="${p.supplier?.id || ""}"
-                  class="th-btn-outline inline-flex items-center justify-center gap-2 cursor-pointer">
+                  data-seller-id="${escapeHtml(p.supplier?.id || "")}"
+                  class="th-btn-outline whitespace-nowrap px-3.5 inline-flex items-center justify-center gap-2 cursor-pointer">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
             ${t("chat.chatWithSeller")}
           </button>

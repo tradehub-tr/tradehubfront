@@ -26,6 +26,7 @@ import { startAlpine } from '../alpine'
 import { Breadcrumb } from '../components/shared/Breadcrumb'
 import { ProductListingGrid } from '../components/products/ProductListingGrid'
 import { callMethod } from '../utils/api'
+import { sanitizeRichHtml, safeHexColor, escapeHtml } from '../utils/sanitize'
 import { saveRecentBrand } from '../services/recentHistoryService'
 import type { ProductListingCard } from '../types/productListing'
 
@@ -76,15 +77,6 @@ function getSlugFromUrl(): string {
   return (params.get('slug') || params.get('code') || '').trim()
 }
 
-function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')
-}
-
 function sanitizeUrl(url: string): string {
   if (!url) return ''
   const trimmed = url.trim()
@@ -94,11 +86,12 @@ function sanitizeUrl(url: string): string {
 
 // ── Hero (banner + logo + meta) ──────────────────────────────────────────────
 function renderHero(brand: BrandDetail): string {
-  const theme = brand.themeColor || '#cc9900'
-  const banner = brand.heroBanner || ''
+  const theme = safeHexColor(brand.themeColor, '#cc9900')
+  // Strip CSS-breaking chars — value is interpolated into a url() in inline style.
+  const banner = sanitizeUrl(brand.heroBanner || '').replace(/['"()]/g, '')
 
   const logoHtml = brand.logo
-    ? `<img src="${brand.logo}" alt="${escapeHtml(brand.name)}" class="w-24 h-24 md:w-32 md:h-32 object-contain bg-white rounded-xl border border-gray-200 p-3 flex-shrink-0 shadow-sm" />`
+    ? `<img src="${escapeHtml(sanitizeUrl(brand.logo))}" alt="${escapeHtml(brand.name)}" class="w-24 h-24 md:w-32 md:h-32 object-contain bg-white rounded-xl border border-gray-200 p-3 flex-shrink-0 shadow-sm" />`
     : `<div class="w-24 h-24 md:w-32 md:h-32 flex items-center justify-center bg-white rounded-xl border border-gray-200 flex-shrink-0 text-3xl font-bold shadow-sm" style="color:${theme}">${escapeHtml(brand.name.charAt(0).toUpperCase())}</div>`
 
   const officialBadge = brand.isOfficial
@@ -115,7 +108,7 @@ function renderHero(brand: BrandDetail): string {
   if (brand.country) metaItems.push(`<span>${escapeHtml(brand.country)}</span>`)
   if (brand.website) {
     const url = sanitizeUrl(brand.website)
-    metaItems.push(`<a href="${url}" target="_blank" rel="noopener" class="hover:underline" style="color:${theme}">Website</a>`)
+    metaItems.push(`<a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="hover:underline" style="color:${theme}">Website</a>`)
   }
   metaItems.push(`<span><strong>${brand.listingCount}</strong> ${t('infoMisc.productsLabel')}</span>`)
 
@@ -128,11 +121,11 @@ function renderHero(brand: BrandDetail): string {
     : ''
 
   const descHtml = brand.description
-    ? `<p class="text-sm mt-3 leading-relaxed max-w-3xl" style="color:rgba(255,255,255,0.78)">${brand.description}</p>`
+    ? `<p class="text-sm mt-3 leading-relaxed max-w-3xl" style="color:rgba(255,255,255,0.78)">${sanitizeRichHtml(brand.description)}</p>`
     : ''
 
   const ownerHtml = brand.owner
-    ? `<a href="${getSellerUrl({ id: brand.owner.code })}"
+    ? `<a href="${escapeHtml(sanitizeUrl(getSellerUrl({ id: brand.owner.code })))}"
            class="inline-flex items-center gap-2 mt-3 px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/20 backdrop-blur border border-white/20 text-xs no-underline"
            style="color:#fff">
          ${brand.owner.logo ? `<img src="${brand.owner.logo}" alt="${escapeHtml(brand.owner.name)}" class="w-4 h-4 object-contain rounded" />` : ''}
@@ -176,7 +169,7 @@ function renderAbout(brand: BrandDetail): string {
       <div class="container-boxed">
         <h2 class="text-xl md:text-2xl font-bold mb-4 pb-2 border-b-2 inline-block" style="border-color:${theme}; color:#111827">${escapeHtml(title)}</h2>
         <div class="prose prose-sm max-w-3xl text-gray-700 leading-relaxed">
-          ${brand.aboutContent}
+          ${sanitizeRichHtml(brand.aboutContent)}
         </div>
       </div>
     </section>
@@ -193,7 +186,7 @@ function renderVideo(brand: BrandDetail): string {
       <div class="container-boxed">
         <h2 class="text-lg font-bold text-gray-900 mb-3">${t('infoMisc.promoVideo')}</h2>
         <div class="relative rounded-lg overflow-hidden shadow-sm" style="padding-top:56.25%">
-          <iframe src="${embedUrl}"
+          <iframe src="${escapeHtml(sanitizeUrl(embedUrl))}"
             class="absolute inset-0 w-full h-full"
             frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -221,7 +214,7 @@ function toEmbedUrl(raw: string): string {
 // ── Featured products (pinned by brand owner) ────────────────────────────────
 function renderFeatured(featured: ProductListingCard[], brand: BrandDetail): string {
   if (!featured || featured.length === 0) return ''
-  const theme = brand.themeColor || '#cc9900'
+  const theme = safeHexColor(brand.themeColor, '#cc9900')
   return `
     <section class="py-8 bg-white border-b border-gray-200">
       <div class="container-boxed">
@@ -269,7 +262,7 @@ function renderSocials(brand: BrandDetail): string {
   const socials = brand.socials || {}
   const entries = Object.entries(socials).filter(([, v]) => v)
   if (entries.length === 0) return ''
-  const theme = brand.themeColor || '#cc9900'
+  const theme = safeHexColor(brand.themeColor, '#cc9900')
 
   const iconMap: Record<string, string> = {
     instagram: '<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>',
@@ -281,12 +274,12 @@ function renderSocials(brand: BrandDetail): string {
 
   const buttonsHtml = entries.map(([platform, url]) => {
     const icon = iconMap[platform] || ''
-    return `<a href="${sanitizeUrl(url)}" target="_blank" rel="noopener"
+    return `<a href="${escapeHtml(sanitizeUrl(url))}" target="_blank" rel="noopener"
               class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 bg-white hover:text-white transition-colors no-underline text-gray-600 hover:border-transparent"
               style="--hover-bg:${theme}"
               onmouseover="this.style.background='${theme}';this.style.color='#fff'"
               onmouseout="this.style.background='';this.style.color=''"
-              title="${platform.charAt(0).toUpperCase() + platform.slice(1)}">
+              title="${escapeHtml(platform.charAt(0).toUpperCase() + platform.slice(1))}">
         ${icon}
       </a>`
   }).join('')

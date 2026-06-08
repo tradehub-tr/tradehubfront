@@ -12,6 +12,7 @@ import { searchListings } from "../../services/listingService";
 import { getListingUrl } from "../../utils/listingUrl";
 import { applySwiperDir } from "../../utils/direction";
 import { initCurrency } from "../../services/currencyService";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 import { formatStartingPrice } from "../../utils/currency";
 
 interface RecommendationCard {
@@ -35,8 +36,8 @@ function renderCardImage(card: RecommendationCard): string {
   return `
     <div class="relative h-full w-full overflow-hidden rounded-md bg-gray-100 flex items-center justify-center" aria-hidden="true">
       <img
-        src="${card.imageSrc}"
-        alt="${card.title}"
+        src="${escapeHtml(sanitizeUrl(card.imageSrc))}"
+        alt="${escapeHtml(card.title)}"
         loading="lazy"
         class="w-full h-full object-contain transition-transform duration-300 group-hover/card:scale-105 group-focus-visible/card:scale-105"
       />
@@ -45,18 +46,18 @@ function renderCardImage(card: RecommendationCard): string {
 }
 
 function renderCard(card: RecommendationCard): string {
-  const safeName = card.title.replace(/"/g, "&quot;");
+  const safeName = escapeHtml(card.title);
 
   return `
     <div class="swiper-slide recommendation-slide h-full xl:!w-[260px]">
       <a
-        href="${card.href}"
+        href="${escapeHtml(sanitizeUrl(card.href))}"
         aria-label="${safeName}"
         title="${safeName}"
         class="group/card mx-auto flex h-full w-full flex-col rounded-md border border-gray-200 bg-white p-1.5 sm:p-2 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-1 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-primary-400"
       >
         <div class="mb-2">
-          <h3 class="truncate text-[11px] font-bold leading-tight text-gray-900 sm:text-sm md:text-base dark:text-white">${card.title}</h3>
+          <h3 class="truncate text-[11px] font-bold leading-tight text-gray-900 sm:text-sm md:text-base dark:text-white">${safeName}</h3>
           ${card.price ? `<p class="mt-0.5 truncate text-[10px] font-semibold leading-tight text-red-500 sm:text-xs md:text-[13px]">${formatStartingPrice(card.price)}</p>` : ""}
         </div>
         <div class="min-h-0 flex-1">

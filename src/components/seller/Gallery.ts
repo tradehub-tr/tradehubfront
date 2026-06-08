@@ -4,6 +4,7 @@
  */
 import type { GalleryPhoto } from "../../types/seller/types";
 import { t } from "../../i18n";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 export function Gallery(photos: GalleryPhoto[], title?: string): string {
   if (!photos || !photos.length) return "";
@@ -14,7 +15,7 @@ export function Gallery(photos: GalleryPhoto[], title?: string): string {
     <section id="gallery" class="gallery py-12" aria-label="${t("seller.sf.factoryPhotos")}">
       <div class="max-w-(--container-lg) mx-auto px-8 lg:px-6 md:px-4">
         <h2 class="gallery__title text-[28px] md:text-[24px] font-bold text-[#1e3a5f] dark:text-blue-300 uppercase text-center mb-8">
-          ${sectionTitle}
+          ${escapeHtml(sectionTitle)}
         </h2>
         <div class="gallery__grid grid grid-cols-3 lg:grid-cols-2 md:grid-cols-1 gap-4">
           ${photos
@@ -23,8 +24,8 @@ export function Gallery(photos: GalleryPhoto[], title?: string): string {
             <div class="gallery__item relative rounded-(--radius-md) overflow-hidden aspect-[4/3] group cursor-pointer hover:shadow-md transition-shadow duration-300 focus-visible:ring-2 focus-visible:ring-[#cc9900] focus-visible:ring-offset-2 outline-none"
                  tabindex="0"
                  role="button"
-                 aria-label="${photo.caption || t("seller.sf.factoryPhoto")}">
-              <img src="${photo.image}" alt="${photo.caption || ""}"
+                 aria-label="${escapeHtml(photo.caption || t("seller.sf.factoryPhoto"))}">
+              <img src="${escapeHtml(sanitizeUrl(photo.image))}" alt="${escapeHtml(photo.caption || "")}"
                    class="gallery__image w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                    loading="lazy"
                    onerror="this.parentElement.style.background='#f3f4f6'" />
@@ -33,7 +34,7 @@ export function Gallery(photos: GalleryPhoto[], title?: string): string {
                   photo.caption
                     ? `
                   <p class="gallery__caption text-white text-[13px] font-medium px-4 py-3 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                    ${photo.caption}
+                    ${escapeHtml(photo.caption)}
                   </p>
                 `
                     : ""

@@ -9,20 +9,21 @@
 import { onCategoriesLoaded } from "../../services/categoryService";
 import type { ApiCategory } from "../../services/categoryService";
 import { t } from "../../i18n";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 /* ──── Subcategory thumbnail renderer ──── */
 
 function renderMobileSubcategory(name: string, slug: string, image?: string): string {
   const placeholderSvg = `<svg class="w-4 h-4 min-[400px]:w-5 min-[400px]:h-5 sm:w-6 sm:h-6 text-gray-300 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75Z"/></svg>`;
   const inner = image
-    ? `<img src="${image}" alt="${name}" class="w-full h-full object-cover rounded-md" loading="lazy" onerror="this.outerHTML=this.dataset.fallback" data-fallback='${placeholderSvg.replace(/'/g, "&apos;")}' />`
+    ? `<img src="${escapeHtml(sanitizeUrl(image))}" alt="${escapeHtml(name)}" class="w-full h-full object-cover rounded-md" loading="lazy" onerror="this.outerHTML=this.dataset.fallback" data-fallback='${placeholderSvg.replace(/'/g, "&apos;")}' />`
     : placeholderSvg;
   return `
-    <a href="/pages/products.html?cat=${slug}" class="mcb-product flex-shrink-0 flex flex-col items-center gap-1 w-[42px] min-[400px]:w-[52px] sm:w-[60px]">
+    <a href="/pages/products.html?cat=${encodeURIComponent(slug)}" class="mcb-product flex-shrink-0 flex flex-col items-center gap-1 w-[42px] min-[400px]:w-[52px] sm:w-[60px]">
       <div class="w-[42px] h-[42px] min-[400px]:w-[52px] min-[400px]:h-[52px] sm:w-[60px] sm:h-[60px] rounded-md bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
         ${inner}
       </div>
-      <span class="text-[9px] min-[400px]:text-[11px] text-gray-600 dark:text-gray-400 text-center leading-tight truncate w-full">${name}</span>
+      <span class="text-[9px] min-[400px]:text-[11px] text-gray-600 dark:text-gray-400 text-center leading-tight truncate w-full">${escapeHtml(name)}</span>
     </a>
   `;
 }
@@ -286,8 +287,8 @@ export function initMobileCategoryBar(): void {
             ? "font-bold text-gray-900 dark:text-white border-b-2 border-gray-900 dark:border-white"
             : "text-gray-500 dark:text-gray-400 font-normal border-b-2 border-transparent"
         }"
-        data-mcb-cat="${cat.id}"
-      >${cat.name}</button>
+        data-mcb-cat="${escapeHtml(cat.id)}"
+      >${escapeHtml(cat.name)}</button>
     `
       )
       .join("");
@@ -308,9 +309,9 @@ export function initMobileCategoryBar(): void {
         <button
           type="button"
           class="mcb-sheet-item th-no-press flex items-center w-full px-3 min-[400px]:px-4 sm:px-5 py-2.5 min-[400px]:py-3 sm:py-4 text-start transition-colors border-b border-gray-50 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/40"
-          data-mcb-sheet-cat="${cat.id}"
+          data-mcb-sheet-cat="${escapeHtml(cat.id)}"
         >
-          <span class="flex-1 text-[13px] min-[400px]:text-[14px] sm:text-[15px] ${i === 0 ? "font-semibold text-gray-900 dark:text-white" : "text-gray-800 dark:text-gray-300"}">${cat.name}</span>
+          <span class="flex-1 text-[13px] min-[400px]:text-[14px] sm:text-[15px] ${i === 0 ? "font-semibold text-gray-900 dark:text-white" : "text-gray-800 dark:text-gray-300"}">${escapeHtml(cat.name)}</span>
           <span class="mcb-sheet-radio flex-shrink-0 w-4 h-4 min-[400px]:w-5 min-[400px]:h-5 rounded-full border-2 ${i === 0 ? "border-primary-500 bg-primary-500" : "border-gray-300 dark:border-gray-600 bg-transparent"} flex items-center justify-center transition-colors">
             <span class="w-1.5 h-1.5 min-[400px]:w-2 min-[400px]:h-2 rounded-full ${i === 0 ? "bg-white" : "bg-transparent"} transition-colors"></span>
           </span>

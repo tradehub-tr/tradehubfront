@@ -22,6 +22,13 @@
 import heroImg from "../../assets/images/liman.avif";
 import { t } from "../../i18n";
 import type { PricingPlan, PricingPlansResponse } from "../../services/pricingService";
+import { escapeHtml } from "../../utils/sanitize";
+import type {
+  PricingPlan,
+  PricingPlansResponse,
+  PricingFeaturesMatrix,
+  PricingMatrixCell,
+} from "../../services/pricingService";
 
 const SELL_HREF = "/pages/auth/register.html?type=supplier";
 
@@ -161,6 +168,16 @@ function tierTag(plan: PricingPlan, idx: number): string {
   return `${num} · ${plan.badge_label || plan.plan_name}`;
 }
 
+// Per-kart "Paket içeriği" özet listesi — SADECE plana dahil (✓) feature'lar
+// gösterilir; devre dışı (✗ / is_disabled) olanlar karta hiç çıkmaz.
+// Dahil olanlar içinde `show_on_card` işaretli varsa yalnızca onlar; yoksa
+// (geçiş dönemi / eski veri) tüm dahil olanlar gösterilir.
+function cardFeatures(plan: PricingPlan): PricingPlan["features"] {
+  const included = plan.features.filter((f) => !f.is_disabled);
+  const carded = included.filter((f) => f.show_on_card);
+  return carded.length ? carded : included;
+}
+
 function PricingCard(plan: PricingPlan, idx: number): string {
   const isFeat = !!plan.highlighted;
   const hasPrice = (plan.yearly_price ?? 0) > 0 || (plan.monthly_price ?? 0) > 0;
@@ -210,18 +227,18 @@ function PricingCard(plan: PricingPlan, idx: number): string {
     <div class="relative flex flex-col gap-3.5 rounded-2xl border p-[26px_22px_22px] transition-[border-color,box-shadow,transform] duration-150 ${cardCls}">
       ${
         badge
-          ? `<span class="absolute -top-2.5 start-[22px] bg-[#f5b800] text-[#1a1a1a] text-[10.5px] font-bold uppercase tracking-[0.08em] px-2.5 py-1 rounded-full border border-[#d39c00]">${badge}</span>`
+          ? `<span class="absolute -top-2.5 start-[22px] bg-[#f5b800] text-[#1a1a1a] text-[10.5px] font-bold uppercase tracking-[0.08em] px-2.5 py-1 rounded-full border border-[#d39c00]">${escapeHtml(badge)}</span>`
           : ""
       }
-      <span class="text-[11px] font-semibold uppercase tracking-[0.1em] ${tagCls}">${tag}</span>
-      <div class="text-[22px] font-semibold tracking-[-0.01em] -mt-1 ${nameCls}">${plan.plan_name}</div>
-      <div class="text-[13px] leading-[1.4] min-h-[36px] ${subCls}">${plan.short_tagline || plan.description || ""}</div>
+      <span class="text-[11px] font-semibold uppercase tracking-[0.1em] ${tagCls}">${escapeHtml(tag)}</span>
+      <div class="text-[22px] font-semibold tracking-[-0.01em] -mt-1 ${nameCls}">${escapeHtml(plan.plan_name)}</div>
+      <div class="text-[13px] leading-[1.4] min-h-[36px] ${subCls}">${escapeHtml(plan.short_tagline || plan.description || "")}</div>
 
       <div class="flex items-baseline gap-1.5 mt-1.5">
         ${
           hasPrice
             ? `<span class="text-[42px] font-semibold tracking-[-0.03em] tabular-nums leading-none ${amountCls}">
-                ${sym}<span x-text="yearly ? '${priceY}' : '${priceM}'">${priceY}</span>
+                ${escapeHtml(sym)}<span x-text="yearly ? '${priceY}' : '${priceM}'">${priceY}</span>
               </span>
               <span class="text-[13px] ${perCls}">/ <span x-text="yearly ? '${t("sellPage.year")}' : '${t("sellPage.month")}'">${t("sellPage.year")}</span></span>`
             : `<span class="text-[32px] font-semibold tracking-[-0.03em] leading-none ${amountCls}">${t("sellPage.customOffer")}</span>`
@@ -255,17 +272,17 @@ function PricingCard(plan: PricingPlan, idx: number): string {
       <div class="h-px my-1 ${dividerCls}"></div>
       <div class="text-[11px] font-semibold uppercase tracking-[0.06em] ${featHeadCls}">${t("sellPage.packageContents")}</div>
       <ul class="list-none p-0 m-0 flex flex-col gap-2 text-[13px] flex-1">
-        ${plan.features
+        ${cardFeatures(plan)
           .map((f) => {
             const ok = !f.is_disabled;
             const icon = ok ? featureIcon(f.icon) : SVG_X;
             const iconCls = ok ? checkCls : xCls;
             const liCls = ok ? featLiCls : noLineCls;
-            const tip = f.tooltip ? ` title="${f.tooltip.replace(/"/g, "&quot;")}"` : "";
+            const tip = f.tooltip ? ` title="${escapeHtml(f.tooltip)}"` : "";
             return `
               <li class="flex items-start gap-2.5 leading-[1.4] ${liCls}"${tip}>
                 <span class="shrink-0 mt-0.5 ${iconCls}">${icon}</span>
-                <span>${f.display_text}</span>
+                <span>${escapeHtml(f.display_text)}</span>
               </li>
             `;
           })
@@ -283,7 +300,9 @@ type MatrixRow = {
   // Opsiyonel feature_key — varsa plan.features içinde aranır; bulunursa
   // plan'daki display_text / is_disabled kullanılır, yoksa `v` fallback değeri.
   feature_key?: string;
-  v: [MatrixCell, MatrixCell, MatrixCell, MatrixCell];
+  // Plan sayısı kadar hücre (N kolon). Hardcoded fallback satırlarında 4 eleman
+  // olabilir; plan sayısı farklıysa resolveCellFromFeature güvenli fallback yapar.
+  v: MatrixCell[];
 };
 type MatrixSection = { title: string; rows: MatrixRow[] };
 
@@ -390,10 +409,13 @@ function resolveCellFromFeature(
   plan: PricingPlan,
   fallbackIndex: number
 ): MatrixCell {
-  if (!row.feature_key) return row.v[fallbackIndex];
+  // Hardcoded fallback array plan sayısından kısa olabilir → son elemana veya
+  // `no`'ya düş (N-plan güvenliği).
+  const fb = row.v[fallbackIndex] ?? row.v[row.v.length - 1] ?? no;
+  if (!row.feature_key) return fb;
 
   const f = plan.features.find((x) => x.feature_key === row.feature_key);
-  if (!f) return row.v[fallbackIndex];
+  if (!f) return fb;
 
   if (f.is_disabled) return no;
   // display_text yoksa veya boşsa, icon "check"e göre yes/no, diğeri text
@@ -405,23 +427,14 @@ function resolveCellFromFeature(
   return txt(text);
 }
 
-function resolveRowCells(
-  row: MatrixRow,
-  plans: PricingPlan[]
-): [MatrixCell, MatrixCell, MatrixCell, MatrixCell] {
-  const four = plans.slice(0, 4);
-  return four.map((p, i) => resolveCellFromFeature(row, p, i)) as [
-    MatrixCell,
-    MatrixCell,
-    MatrixCell,
-    MatrixCell,
-  ];
+function resolveRowCells(row: MatrixRow, plans: PricingPlan[]): MatrixCell[] {
+  return plans.map((p, i) => resolveCellFromFeature(row, p, i));
 }
 
 function renderMatrixCell(c: MatrixCell): string {
   if (c.type === "yes") return `<span class="inline-flex text-[#1f7a4d]">${SVG_CHECK_MD}</span>`;
   if (c.type === "no") return `<span class="inline-flex text-[#d5d2c9]">${SVG_DASH}</span>`;
-  return c.v;
+  return escapeHtml(c.v);
 }
 
 // Matrix tüm section'larını plans verisinden derive eder:
@@ -438,12 +451,7 @@ function buildDynamicMatrixSections(plans: PricingPlan[]): MatrixSection[] {
     p.commission_rate > 0 ? txt(`%${p.commission_rate}`) : txt(t("sellPage.custom"))
   ) as [MatrixCell, MatrixCell, MatrixCell, MatrixCell];
 
-  const listingsCells = four.map((p) => txt(fmtListings(p.max_active_listings))) as [
-    MatrixCell,
-    MatrixCell,
-    MatrixCell,
-    MatrixCell,
-  ];
+  const listingsCells = plans.map((p) => txt(fmtListings(p.max_active_listings)));
 
   const dynamicCommissionSection: MatrixSection = {
     title: t("sellPage.matrixCommissionLimits"),
@@ -474,14 +482,27 @@ function buildDynamicMatrixSections(plans: PricingPlan[]): MatrixSection[] {
   return [dynamicCommissionSection, ...resolvedSections];
 }
 
-const MATRIX_GRID_CLS = "grid grid-cols-[1.6fr_repeat(4,1fr)] gap-3 items-center";
+// N kolon grid template — sol özellik kolonu + plan sayısı kadar kolon.
+// Dinamik plan sayısı Tailwind arbitrary class'ı ile ifade EDİLEMEZ (build-time
+// tarama interpolasyonu görmez) → inline style ile grid-template-columns veriyoruz.
+// `minmax(...,1fr)` + min-width sayesinde mobilde yatay scroll'da kolonlar ezilmez.
+function matrixGridStyle(n: number): string {
+  return `grid-template-columns: minmax(150px,1.6fr) repeat(${n}, minmax(96px,1fr))`;
+}
 
-function PricingMatrix(plans: PricingPlan[]): string {
-  // Matrix sadece 4 sütun gösteriyor. Plan sayısı 4'ten azsa matrix'i gizle.
-  // 4'ten fazlaysa ilk 4'ünü göster (admin sıraya koyduğu plan'lardan ilk 4).
-  if (plans.length < 4) return "";
+// Grid container'ın statik (Tailwind taranabilir) utility'leri.
+const MATRIX_GRID_CLS = "grid gap-3 items-center";
+
+function PricingMatrix(
+  plans: PricingPlan[],
+  featuresMatrix?: PricingFeaturesMatrix
+): string {
+  // N-plan: kaç public plan varsa o kadar kolon. Karşılaştırma için en az 2 plan.
+  if (plans.length < 2) return "";
+  const gridStyle = matrixGridStyle(plans.length);
+  const featuredIdx = plans.findIndex((p) => p.highlighted);
   const sym = currencySymbol(plans[0]?.currency || "EUR");
-  const cols = plans.slice(0, 4).map((p) => ({
+  const cols = plans.map((p) => ({
     n: p.plan_name,
     p:
       (p.yearly_price || 0) > 0
@@ -492,9 +513,13 @@ function PricingMatrix(plans: PricingPlan[]): string {
     featured: !!p.highlighted,
   }));
 
+  // Mobile-first: dar ekranda yatay scroll; inner min-width plan sayısına göre
+  // (dinamik → inline style, Tailwind arbitrary class taranamaz).
+  const minW = 160 + plans.length * 110;
   return /* html */ `
-    <div class="mt-14 bg-white border border-[#e8e6e0] rounded-2xl overflow-hidden hidden lg:block">
-      <div class="${MATRIX_GRID_CLS} items-end px-6 py-[18px] bg-[#fafaf8] border-b border-[#d5d2c9]">
+    <div class="mt-14 overflow-x-auto">
+      <div class="bg-white border border-[#e8e6e0] rounded-2xl overflow-hidden" style="min-width:${minW}px">
+      <div class="${MATRIX_GRID_CLS} items-end px-6 py-[18px] bg-[#fafaf8] border-b border-[#d5d2c9]" style="${gridStyle}">
         <div class="text-start">
           <div class="text-[15px] font-semibold text-[#1a1a1a]">${t("sellPage.allPackageFeatures")}</div>
           <div class="text-xs text-[#8a877f] mt-0.5 tabular-nums">${t("sellPage.yearlyPeriodVatExcl")}</div>
@@ -503,34 +528,34 @@ function PricingMatrix(plans: PricingPlan[]): string {
           .map(
             (c) => `
           <div class="text-center ${c.featured ? "bg-[#fff8e1] rounded-lg px-2 py-2.5 -mx-1 -my-2.5" : ""}">
-            <div class="text-[15px] font-semibold ${c.featured ? "text-[#d39c00]" : "text-[#1a1a1a]"}">${c.n}</div>
-            <div class="text-xs text-[#8a877f] mt-0.5 tabular-nums">${c.p}</div>
+            <div class="text-[15px] font-semibold ${c.featured ? "text-[#d39c00]" : "text-[#1a1a1a]"}">${escapeHtml(c.n)}</div>
+            <div class="text-xs text-[#8a877f] mt-0.5 tabular-nums">${escapeHtml(c.p)}</div>
           </div>
         `
           )
           .join("")}
       </div>
 
-      ${buildDynamicMatrixSections(plans)
+      ${buildDynamicMatrixSections(plans, featuresMatrix)
         .map(
           (sec) => `
         <div>
           <div class="px-6 pt-3.5 pb-2 bg-[#fafaf8] text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8a877f] border-b border-[#e8e6e0]">
-            ${sec.title}
+            ${escapeHtml(sec.title)}
           </div>
           ${sec.rows
             .map(
               (r) => `
-            <div class="${MATRIX_GRID_CLS} px-6 py-3.5 border-b border-[#e8e6e0] last:border-b-0 text-[13px]">
+            <div class="${MATRIX_GRID_CLS} px-6 py-3.5 border-b border-[#e8e6e0] last:border-b-0 text-[13px]" style="${gridStyle}">
               <div>
-                <div class="text-[#1a1a1a] font-medium">${r.f}</div>
-                ${r.help ? `<div class="text-[11px] text-[#8a877f] mt-0.5 font-normal">${r.help}</div>` : ""}
+                <div class="text-[#1a1a1a] font-medium">${escapeHtml(r.f)}</div>
+                ${r.help ? `<div class="text-[11px] text-[#8a877f] mt-0.5 font-normal">${escapeHtml(r.help)}</div>` : ""}
               </div>
               ${r.v
                 .map(
                   (c, j) => `
                 <div class="text-center text-[#4a4a48] ${
-                  j === 1
+                  j === featuredIdx
                     ? "bg-[rgba(245,184,0,0.06)] font-semibold text-[#1a1a1a] -mx-1 -my-3.5 px-1 py-3.5 flex items-center justify-center"
                     : ""
                 }">
@@ -547,6 +572,7 @@ function PricingMatrix(plans: PricingPlan[]): string {
       `
         )
         .join("")}
+      </div>
     </div>
   `;
 }
@@ -580,12 +606,15 @@ function _computeYearlyDiscountBadge(plans: PricingPlan[]): string {
   return t("sellPage.monthsFree", { count: bestSavedMonths });
 }
 
-function PricingSection(plans: PricingPlan[]): string {
+function PricingSection(
+  plans: PricingPlan[],
+  featuresMatrix?: PricingFeaturesMatrix
+): string {
   const cards = plans.length
     ? `<div class="grid grid-cols-1 md:grid-cols-2 ${plans.length >= 4 ? "lg:grid-cols-4" : plans.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"} gap-3.5 items-stretch">
          ${plans.map((p, i) => PricingCard(p, i)).join("")}
        </div>
-       ${PricingMatrix(plans)}`
+       ${PricingMatrix(plans, featuresMatrix)}`
     : PricingEmpty();
 
   const discountBadge = _computeYearlyDiscountBadge(plans);
@@ -793,9 +822,10 @@ function FinalCtaSection(): string {
 // Plan listesi boşsa PricingSection kendi "yüklenemedi" mesajını gösterir.
 export function SellPageLayout(pricingData?: PricingPlansResponse): string {
   const plans = pricingData?.plans ?? [];
+  const featuresMatrix = pricingData?.features_matrix;
   return `
     ${HeroSection()}
-    ${PricingSection(plans)}
+    ${PricingSection(plans, featuresMatrix)}
     ${ComparisonSection()}
     ${FinalCtaSection()}
   `;

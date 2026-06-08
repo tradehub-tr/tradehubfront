@@ -5,6 +5,7 @@
  */
 import type { CompanyInfoCell, CompanyPhoto, SellerProfile } from "../../types/seller/types";
 import { t } from "../../i18n";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 function getInfoIconSvg(iconName: string): string {
   const icons: Record<string, string> = {
@@ -70,8 +71,8 @@ export function CompanyIntroduction(
                   </svg>
                 </div>
                 <div class="flex flex-col">
-                  <span class="text-[13px] text-[var(--color-primary-500)] font-medium uppercase">${cell.label}</span>
-                  <span class="text-[14px] text-[#374151] dark:text-gray-300 font-medium mt-0.5">${cell.value}</span>
+                  <span class="text-[13px] text-[var(--color-primary-500)] font-medium uppercase">${escapeHtml(cell.label)}</span>
+                  <span class="text-[14px] text-[#374151] dark:text-gray-300 font-medium mt-0.5">${escapeHtml(cell.value)}</span>
                   ${/* Cell-level verified rozetleri kaldırıldı (4-B=Y) — üst Verification Line zaten Onaylanmış Satıcı rozetini gösteriyor */ ""}
                 </div>
               </div>
@@ -89,7 +90,7 @@ export function CompanyIntroduction(
                 .map(
                   (photo) => `
                 <div class="relative rounded-(--radius-md) overflow-hidden aspect-[4/3]">
-                  <img src="${photo.image}" alt="${photo.caption}" class="w-full h-full object-cover" loading="lazy" />
+                  <img src="${escapeHtml(sanitizeUrl(photo.image))}" alt="${escapeHtml(photo.caption)}" class="w-full h-full object-cover" loading="lazy" />
                   ${
                     photo.hasVideo
                       ? `
@@ -104,7 +105,7 @@ export function CompanyIntroduction(
                       : ""
                   }
                   <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/50 to-transparent py-2 px-3">
-                    <span class="text-white text-[11px] font-medium">${photo.caption}</span>
+                    <span class="text-white text-[11px] font-medium">${escapeHtml(photo.caption)}</span>
                   </div>
                 </div>
               `

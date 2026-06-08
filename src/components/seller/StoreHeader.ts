@@ -6,7 +6,7 @@ import { t } from "../../i18n";
 
 export function StoreHeader(): string {
   /* Reusable SVG: blue filled circle with white checkmark */
-  const blueCheck = `<img src="/src/assets/images/verfied.png" alt="✓" class="shrink-0" style="width:13px;height:12px;" />`;
+  const blueCheck = `<img src="/src/assets/images/verfied.png" alt="Doğrulanmış satıcı" class="shrink-0" style="width:13px;height:12px;" />`;
 
   /* Reusable SVG: info tooltip icon */
   const infoIcon = `
@@ -209,6 +209,7 @@ export function StoreHeader(): string {
                     <template x-if="items.length > 5">
                       <a href="#"
                          class="inline-flex items-center gap-1 text-[13px] text-[#cc9900] hover:underline font-medium mt-1"
+                         aria-label="${t("seller.sf.viewAllCapabilities").replace("({{count}})", "")}"
                          @click.prevent>
                         <span x-text="'${t("seller.sf.viewAllCapabilities").replace("({{count}})", "")}(' + items.length + ')'"></span>
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -361,7 +362,7 @@ export function StoreHeader(): string {
                   <div class="absolute bottom-0 inset-x-0 px-3 py-2.5 flex items-center gap-2"
                        style="background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, transparent 100%);">
                     <!-- Play/Pause -->
-                    <button @click="togglePlay()" class="text-white shrink-0">
+                    <button @click="togglePlay()" aria-label="Oynat" class="text-white shrink-0">
                       <svg x-show="!playing" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                       <svg x-show="playing" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>
                     </button>
@@ -376,12 +377,12 @@ export function StoreHeader(): string {
                     <!-- Duration -->
                     <span class="text-white text-[11px] font-mono shrink-0" x-text="duration"></span>
                     <!-- Volume -->
-                    <button @click="toggleMute()" class="text-white shrink-0">
+                    <button @click="toggleMute()" aria-label="Sesi aç/kapat" class="text-white shrink-0">
                       <svg x-show="!muted" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072M17.95 6.05a8 8 0 010 11.9M6 9H4a1 1 0 00-1 1v4a1 1 0 001 1h2l4 4V5L6 9z"/></svg>
                       <svg x-show="muted" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707A1 1 0 0112 5.586v12.828a1 1 0 01-1.707.707L5.586 15zM17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"/></svg>
                     </button>
                     <!-- Fullscreen -->
-                    <button @click="fullscreen()" class="text-white shrink-0">
+                    <button @click="fullscreen()" aria-label="Tam ekran" class="text-white shrink-0">
                       <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8V6a2 2 0 012-2h2M4 16v2a2 2 0 002 2h2M16 4h2a2 2 0 012 2v2M16 20h2a2 2 0 002-2v-2"/></svg>
                     </button>
                   </div>

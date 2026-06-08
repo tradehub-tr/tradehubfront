@@ -10,7 +10,7 @@ import { isLoggedIn } from "../../../utils/auth";
 import { apiCheckStock, apiAddToCart, fetchCart } from "../../../services/cartService";
 import { getCurrencySymbol as _getCurrencySymbolForCart } from "../../../utils/currency";
 import { showCartError } from "../page/CartPage";
-import { safeHexColor } from "../../../utils/sanitize";
+import { safeHexColor, escapeHtml, sanitizeUrl } from "../../../utils/sanitize";
 
 export interface CartDrawerTierModel {
   minQty: number;
@@ -185,15 +185,6 @@ let productsById = new Map<string, CartDrawerItemModel>();
 let onItemMissing: ((id: string, mode: "cart" | "sample") => Promise<void>) | null = null;
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
-
-function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
 
 function hasSizeGroups(): boolean {
   return (state.item?.sizeGroups.length ?? 0) > 0;
@@ -390,7 +381,7 @@ function updatePreview(): void {
   if (color.imageUrl) {
     // imageUrl backend listing varyant verisinden geliyor; quote breakout +
     // event handler injection riski. URL'i escape edip src'ye yaz.
-    image.innerHTML = `<img src="${escapeHtml(color.imageUrl)}" alt="${escapeHtml(color.label)}" style="width:100%;height:100%;object-fit:cover;" />`;
+    image.innerHTML = `<img src="${escapeHtml(sanitizeUrl(color.imageUrl))}" alt="${escapeHtml(color.label)}" style="width:100%;height:100%;object-fit:cover;" />`;
   } else {
     // colorHex satıcı kontrollü; CSS context injection (";background:url(...)")
     // engellemek için hex pattern doğrulamasından geçir.
@@ -488,7 +479,7 @@ function renderColorChip(color: CartDrawerColorModel, isSelected: boolean): stri
       : "border-border-default bg-surface opacity-40 cursor-not-allowed";
 
   const thumb = color.imageUrl
-    ? `<img src="${color.imageUrl}" alt="${escapeHtml(color.label)}" class="w-7 h-7 rounded object-cover shrink-0${!available ? " grayscale" : ""}" loading="lazy" />`
+    ? `<img src="${escapeHtml(sanitizeUrl(color.imageUrl))}" alt="${escapeHtml(color.label)}" class="w-7 h-7 rounded object-cover shrink-0${!available ? " grayscale" : ""}" loading="lazy" />`
     : `<span class="w-5 h-5 rounded shrink-0 border border-border-default" style="background:${safeHexColor(color.colorHex || "#e5e5e5")};${!available ? "opacity:0.4;" : ""}"></span>`;
 
   return `
@@ -1343,7 +1334,7 @@ export function SharedCartDrawer(): string {
       <aside id="shared-cart-drawer" class="fixed end-0 top-0 h-full w-full sm:w-[500px] lg:w-[600px] max-w-full bg-surface shadow-[-8px_0_30px_rgba(0,0,0,0.18)] xl:rounded-s-md xl:border-s xl:border-border-default flex flex-col transition-transform duration-300">
         <div class="flex items-center justify-between px-6 py-4 border-b border-border-default shrink-0 max-md:px-4 max-md:py-3">
           <h3 id="shared-cart-heading" class="text-[15px] sm:text-lg font-bold text-text-heading">${t("cart.selectVariation")}</h3>
-          <button type="button" id="shared-cart-close" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full text-secondary-400 hover:text-secondary-900 hover:bg-surface-raised transition-colors inline-flex items-center justify-center shrink-0">
+          <button type="button" id="shared-cart-close" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full text-secondary-400 hover:text-secondary-900 hover:bg-surface-raised transition-colors inline-flex items-center justify-center shrink-0" aria-label="${t("common.close")}">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 sm:w-[18px] sm:h-[18px]"><path d="M6 18 18 6M6 6l12 12"/></svg>
           </button>
         </div>

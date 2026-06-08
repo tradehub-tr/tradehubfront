@@ -15,6 +15,7 @@ import "swiper/swiper-bundle.css";
 import { t } from "../../i18n";
 import type { TailoredCategory } from "../../types/tailoredSelections";
 import { applySwiperDir } from "../../utils/direction";
+import { escapeHtml, sanitizeUrl, safeHexColor } from "../../utils/sanitize";
 
 const BADGE_ICONS: Record<string, string> = {
   personal:
@@ -46,17 +47,18 @@ function renderBadge(badge?: string | null): string {
 
 function renderCategorySlide(category: TailoredCategory, index: number): string {
   const slug = category.slug || category.id;
+  const bgColor = safeHexColor(category.bgColor);
   return `
-    <div class="swiper-slide" style="height: auto;" data-bg-color="${category.bgColor}" data-category-slug="${slug}">
+    <div class="swiper-slide" style="height: auto;" data-bg-color="${bgColor}" data-category-slug="${escapeHtml(slug)}">
       <div
         class="ts-hero-card list-card-container relative rounded-md overflow-hidden h-full group cursor-pointer"
-        style="--list-card-background-color: ${category.bgColor}; --list-card-border-color: #6a6145; --list-card-description-max-lines: 2; background-color: var(--list-card-background-color); border: 1px solid var(--list-card-border-color); padding: 16px;"
+        style="--list-card-background-color: ${bgColor}; --list-card-border-color: #6a6145; --list-card-description-max-lines: 2; background-color: var(--list-card-background-color); border: 1px solid var(--list-card-border-color); padding: 16px;"
       >
         ${renderBadge(category.badge)}
         <!-- Background image -->
         <img
-          src="${category.imageSrc}"
-          alt="${category.title}"
+          src="${escapeHtml(sanitizeUrl(category.imageSrc))}"
+          alt="${escapeHtml(category.title)}"
           loading="${index <= 2 ? "eager" : "lazy"}"
           class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
@@ -69,10 +71,10 @@ function renderCategorySlide(category: TailoredCategory, index: number): string 
         <!-- Content overlay -->
         <div class="relative z-10 flex flex-col justify-end h-full">
           <h3 class="list-card-header-title text-white font-bold text-base sm:text-lg leading-tight mb-1">
-            ${category.title}
+            ${escapeHtml(category.title)}
           </h3>
           <p class="list-card-content text-white/80 text-[13px] leading-[1.4]" style="display:-webkit-box;-webkit-line-clamp:var(--list-card-description-max-lines, 2);-webkit-box-orient:vertical;overflow:hidden;">
-            ${category.description}
+            ${escapeHtml(category.description)}
           </p>
         </div>
       </div>
@@ -161,7 +163,8 @@ export function initTailoredSelectionsHero(options?: {
 }
 
 export function TailoredSelectionsHero(categories: TailoredCategory[]): string {
-  const initialBg = categories.length > 0 ? categories[0].bgColor : "#373224";
+  const initialBg =
+    categories.length > 0 ? safeHexColor(categories[0].bgColor, "#373224") : "#373224";
   return `
     <section
       id="ts-hero-section"

@@ -17,7 +17,7 @@
  * Spec: docs/superpowers/specs/2026-05-20-product-social-proof-badges-design.md
  */
 
-import { getCsrfToken } from "../utils/api";
+import { fetchCsrfToken } from "../utils/api";
 
 export type SignalType =
   | "sales"
@@ -189,7 +189,7 @@ export function recordListingView(listingId: string): void {
 
 async function postView(listingId: string): Promise<void> {
   try {
-    const csrf = getCsrfToken();
+    const csrf = (await fetchCsrfToken()) ?? "None";
     await fetch("/api/method/tradehub_core.api.social_proof.record_view", {
       method: "POST",
       credentials: "include",

@@ -6,6 +6,7 @@
 import type { CompanyInfo as CompanyInfoData, SellerProfile } from "../../types/seller/types";
 import { t } from "../../i18n";
 import { btn } from "../../utils/ui/button";
+import { escapeHtml, sanitizeUrl, sanitizeRichHtml } from "../../utils/sanitize";
 
 function renderVariantA(data: CompanyInfoData, seller: SellerProfile): string {
   return `
@@ -23,7 +24,7 @@ function renderVariantA(data: CompanyInfoData, seller: SellerProfile): string {
           <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
           </svg>
-          <span><strong>${t("seller.sf.verifiedSupplier")}</strong> — ${seller.name}</span>
+          <span><strong>${t("seller.sf.verifiedSupplier")}</strong> — ${escapeHtml(seller.name)}</span>
         </div>
         `
             : ""
@@ -33,19 +34,19 @@ function renderVariantA(data: CompanyInfoData, seller: SellerProfile): string {
         <div class="company-info__content grid grid-cols-1 lg:grid-cols-[55%_45%] gap-4 lg:gap-6 mt-0">
           <!-- Hero Image -->
           <div class="company-info__hero-image relative rounded-es-(--radius-md) overflow-hidden">
-            <img src="${data.heroImage}" alt="${data.heroTitle}" class="w-full h-[200px] sm:h-[250px] lg:h-[400px] object-cover" loading="lazy"
+            <img src="${escapeHtml(sanitizeUrl(data.heroImage))}" alt="${escapeHtml(data.heroTitle)}" class="w-full h-[200px] sm:h-[250px] lg:h-[400px] object-cover" loading="lazy"
                  onerror="this.parentElement.style.background='linear-gradient(135deg,#1e3a5f,#2563eb)'" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 dark:from-black/70 to-transparent flex flex-col justify-end p-6">
-              <h3 class="text-white text-[28px] font-bold">${data.heroTitle}</h3>
-              <p class="text-white/80 text-[14px] mt-1">${data.heroSubtitle}</p>
+              <h3 class="text-white text-[28px] font-bold">${escapeHtml(data.heroTitle)}</h3>
+              <p class="text-white/80 text-[14px] mt-1">${escapeHtml(data.heroSubtitle)}</p>
             </div>
           </div>
 
           <!-- Description -->
           <div class="company-info__description flex flex-col gap-4 py-4">
-            <img src="${seller.logo}" alt="${seller.name}" class="w-[120px] object-contain" onerror="this.style.display='none'" />
-            <p class="text-[14px] text-[#4b5563] dark:text-gray-300 leading-[1.7]">${data.description}</p>
-            ${data.descriptionExtended ? `<p class="text-[14px] text-[#4b5563] dark:text-gray-300 leading-[1.7]">${data.descriptionExtended}</p>` : ""}
+            <img src="${escapeHtml(sanitizeUrl(seller.logo))}" alt="${escapeHtml(seller.name)}" class="w-[120px] object-contain" onerror="this.style.display='none'" />
+            <p class="text-[14px] text-[#4b5563] dark:text-gray-300 leading-[1.7]">${sanitizeRichHtml(data.description)}</p>
+            ${data.descriptionExtended ? `<p class="text-[14px] text-[#4b5563] dark:text-gray-300 leading-[1.7]">${sanitizeRichHtml(data.descriptionExtended)}</p>` : ""}
           </div>
         </div>
 
@@ -58,10 +59,10 @@ function renderVariantA(data: CompanyInfoData, seller: SellerProfile): string {
               .map(
                 (photo) => `
               <div class="relative rounded-(--radius-md) overflow-hidden group">
-                <img src="${photo.image}" alt="${photo.caption}" class="w-full h-[200px] object-cover" loading="lazy"
+                <img src="${escapeHtml(sanitizeUrl(photo.image))}" alt="${escapeHtml(photo.caption)}" class="w-full h-[200px] object-cover" loading="lazy"
                      onerror="this.parentElement.style.background='#f3f4f6'" />
                 <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/50 to-transparent py-2 px-3">
-                  <span class="text-white text-[12px] font-medium">${photo.caption}</span>
+                  <span class="text-white text-[12px] font-medium">${escapeHtml(photo.caption)}</span>
                 </div>
               </div>
             `
@@ -83,7 +84,7 @@ function renderVariantB(data: CompanyInfoData, seller: SellerProfile): string {
     <section id="company-info" class="company-info company-info__variant-b py-12 bg-[#f5f0e8] dark:bg-gray-800" aria-label="${t("seller.sf.companyInfoLabel")}">
       <div class="max-w-(--container-lg) mx-auto px-[clamp(0.75rem,0.5rem+1vw,1.5rem)] lg:px-6 xl:px-8">
         <h2 class="company-info__title-b text-[28px] font-normal text-[#8b5e3c] dark:text-[#d4a76a] mb-6 italic">
-          ${seller.name}
+          ${escapeHtml(seller.name)}
         </h2>
 
         <!-- Content Grid: 40% / 60% -->
@@ -91,8 +92,8 @@ function renderVariantB(data: CompanyInfoData, seller: SellerProfile): string {
           <!-- Scrollable Text Panel -->
           <div class="company-info__text-panel">
             <div class="company-info__scrollable-text max-h-[300px] overflow-y-auto pe-4 text-[14px] text-[#4b5563] dark:text-gray-300 leading-[1.7]">
-              <p>${data.description}</p>
-              ${data.descriptionExtended ? `<p class="mt-4">${data.descriptionExtended}</p>` : ""}
+              <p>${sanitizeRichHtml(data.description)}</p>
+              ${data.descriptionExtended ? `<p class="mt-4">${sanitizeRichHtml(data.descriptionExtended)}</p>` : ""}
             </div>
           </div>
 
@@ -105,9 +106,9 @@ function renderVariantB(data: CompanyInfoData, seller: SellerProfile): string {
                     (photo) => `
                   <div class="swiper-slide">
                     <div class="relative">
-                      <img src="${photo.image}" alt="${photo.caption}" class="w-full h-[320px] object-cover" loading="lazy" />
+                      <img src="${escapeHtml(sanitizeUrl(photo.image))}" alt="${escapeHtml(photo.caption)}" class="w-full h-[320px] object-cover" loading="lazy" />
                       <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 to-transparent py-4 px-6">
-                        <span class="text-white text-[14px] font-medium">${photo.caption}</span>
+                        <span class="text-white text-[14px] font-medium">${escapeHtml(photo.caption)}</span>
                       </div>
                     </div>
                   </div>
@@ -139,9 +140,9 @@ function renderVariantB(data: CompanyInfoData, seller: SellerProfile): string {
               .map(
                 (loc) => `
               <div class="relative rounded-(--radius-md) overflow-hidden aspect-[4/3] group cursor-pointer">
-                <img src="${loc.image}" alt="${loc.name}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy" />
+                <img src="${escapeHtml(sanitizeUrl(loc.image))}" alt="${escapeHtml(loc.name)}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy" />
                 <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 dark:from-black/80 to-transparent py-3 px-4">
-                  <span class="text-white text-[13px] font-medium">${loc.name}</span>
+                  <span class="text-white text-[13px] font-medium">${escapeHtml(loc.name)}</span>
                 </div>
               </div>
             `

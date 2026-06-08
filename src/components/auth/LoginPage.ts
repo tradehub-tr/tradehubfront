@@ -198,22 +198,23 @@ export function initLoginPage(options: LoginPageOptions = {}): void {
         const user = await getSessionUser();
 
         if (user) {
-          // ?redirect= parametresi varsa ve aynı origin'deyse oraya git
+          // ?redirect= parametresi varsa ve aynı origin'deyse oraya git.
+          // Güvenlik: relative dahil her değeri current origin'e göre resolve et;
+          // farklı origin / protocol-relative (//evil) / javascript: reddedilir
+          // ve yalnızca same-origin path+query+hash'e gidilir (open redirect yok).
           const redirectParam = new URLSearchParams(window.location.search).get("redirect");
+          let destination = getRedirectUrl(user);
           if (redirectParam) {
             try {
-              const redirectUrl = new URL(redirectParam);
+              const redirectUrl = new URL(redirectParam, window.location.origin);
               if (redirectUrl.origin === window.location.origin) {
-                window.location.href = redirectParam;
-              } else {
-                window.location.href = getRedirectUrl(user);
+                destination = redirectUrl.pathname + redirectUrl.search + redirectUrl.hash;
               }
             } catch {
-              window.location.href = redirectParam;
+              // geçersiz değer → varsayılan hedefte kal
             }
-          } else {
-            window.location.href = getRedirectUrl(user);
           }
+          window.location.href = destination;
         } else {
           window.location.href = getBaseUrl();
         }

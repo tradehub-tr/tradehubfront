@@ -225,7 +225,7 @@ function renderViewModeToggle(): string {
     "bg-transparent text-gray-400 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-200";
 
   return `
-    <div class="shrink-0 inline-flex items-center bg-white border border-gray-200 rounded-full p-[3px] dark:bg-gray-800 dark:border-gray-700" role="tablist" aria-label="${t("products.viewMode")}">
+    <div class="shrink-0 inline-flex items-center bg-white border border-gray-200 rounded-full p-[3px] dark:bg-gray-800 dark:border-gray-700" role="group" aria-label="${t("products.viewMode")}">
       <button
         type="button"
         @click="setViewMode('grid')"
@@ -355,4 +355,18 @@ export function updateSubHeader(info: { totalCount?: number; keyword?: string })
       }
     }
   }
+}
+
+/**
+ * Breadcrumb'ı yeni öğelerle yeniden render eder. Kategoriler async yüklendikten
+ * sonra tam ata zincirini (Sektör › Grup › Yaprak) basmak için kullanılır.
+ * `items` "Ana Sayfa"yı İÇERMEZ — Breadcrumb() onu otomatik ekler.
+ */
+export function updateBreadcrumb(items: BreadcrumbItem[]): void {
+  const nav = document.querySelector('nav[aria-label="Breadcrumb"]');
+  if (!nav) return;
+  const tmp = document.createElement("div");
+  tmp.innerHTML = Breadcrumb(items);
+  const fresh = tmp.firstElementChild;
+  if (fresh) nav.replaceWith(fresh);
 }

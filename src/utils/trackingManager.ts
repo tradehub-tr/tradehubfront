@@ -45,11 +45,18 @@ async function fetchTrackingConfig(): Promise<TrackingConfig> {
     }
     const data = await res.json();
     const msg = data?.message ?? {};
+    // IDs are interpolated into inline <script> bodies and provider URLs, so a
+    // malformed/hostile value would be script injection. Accept only the exact
+    // format each provider uses; reject (null) anything else.
+    const safeId = (value: unknown, pattern: RegExp): string | null => {
+      const s = String(value ?? "").trim();
+      return s && pattern.test(s) ? s : null;
+    };
     config = {
-      gtm_id: msg.gtm_id || null,
-      metrica_id: msg.metrica_id || null,
-      fb_pixel_id: msg.fb_pixel_id || null,
-      criteo_partner_id: msg.criteo_partner_id || null,
+      gtm_id: safeId(msg.gtm_id, /^GTM-[A-Z0-9]+$/i),
+      metrica_id: safeId(msg.metrica_id, /^\d+$/),
+      fb_pixel_id: safeId(msg.fb_pixel_id, /^\d+$/),
+      criteo_partner_id: safeId(msg.criteo_partner_id, /^\d+$/),
     };
   } catch {
     config = empty;

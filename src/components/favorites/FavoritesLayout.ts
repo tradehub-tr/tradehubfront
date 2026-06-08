@@ -29,6 +29,7 @@ import {
 import { getListingDetail } from "../../services/listingService";
 import { getListingUrl } from "../../utils/listingUrl";
 import { getSellerUrl } from "../../utils/sellerUrl";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 /* ────────────────────────────────────────
    Favori enrichment (listing detail'den çekilen ek meta)
@@ -343,8 +344,8 @@ function renderSupplierCards(items: FavoriteSellerItem[]): string {
       const ratingTxt = s.rating ? s.rating.toFixed(1) : "—";
       const reviews = s.reviewCount ?? 0;
       return `
-    <div class="relative bg-white rounded-lg border border-[#eee] hover:border-[#F60] hover:shadow-[0_8px_18px_rgba(0,0,0,0.08)] transition-all p-5 max-sm:p-4 group" data-fav-seller-id="${s.code}">
-      <button type="button" class="fav-remove-seller absolute top-3 end-3 w-8 h-8 rounded-full bg-[#f4f4f4] flex items-center justify-center cursor-pointer hover:bg-red-100 z-10 transition-colors opacity-0 group-hover:opacity-100" data-remove-seller="${s.code}" title="${t("favorites.removeFromAll")}">
+    <div class="relative bg-white rounded-lg border border-[#eee] hover:border-[#F60] hover:shadow-[0_8px_18px_rgba(0,0,0,0.08)] transition-all p-5 max-sm:p-4 group" data-fav-seller-id="${escapeHtml(s.code)}">
+      <button type="button" class="fav-remove-seller absolute top-3 end-3 w-8 h-8 rounded-full bg-[#f4f4f4] flex items-center justify-center cursor-pointer hover:bg-red-100 z-10 transition-colors opacity-0 group-hover:opacity-100" data-remove-seller="${escapeHtml(s.code)}" title="${t("favorites.removeFromAll")}">
         <svg class="w-[16px] h-[16px]" fill="none" stroke="#ef4444" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
       <div class="flex max-md:flex-col gap-4 max-md:gap-3 items-start">
@@ -352,13 +353,13 @@ function renderSupplierCards(items: FavoriteSellerItem[]): string {
         <div class="w-[64px] h-[64px] rounded-md border border-gray-100 overflow-hidden shrink-0 bg-gray-50 flex items-center justify-center text-[#1a66ff] font-bold text-base">
           ${
             s.logo
-              ? `<img src="${s.logo}" alt="${escapeHtml(s.name)}" class="w-full h-full object-contain p-1" />`
+              ? `<img src="${escapeHtml(sanitizeUrl(s.logo))}" alt="${escapeHtml(s.name)}" class="w-full h-full object-contain p-1" />`
               : `<span>${escapeHtml(initials)}</span>`
           }
         </div>
         <!-- Info -->
         <div class="flex-1 min-w-0 pe-12 max-md:pe-0">
-          <a href="${profileHref}" class="text-[15px] font-bold text-[#222] hover:text-[#1a66ff] transition-colors line-clamp-1">${escapeHtml(s.name)}</a>
+          <a href="${escapeHtml(sanitizeUrl(profileHref))}" class="text-[15px] font-bold text-[#222] hover:text-[#1a66ff] transition-colors line-clamp-1">${escapeHtml(s.name)}</a>
           <div class="flex flex-wrap items-center gap-1.5 mt-1 text-[12px] text-[#555]">
             <span class="inline-flex items-center gap-1 text-[#1a66ff] font-semibold">
               <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
@@ -394,13 +395,13 @@ function renderSupplierCards(items: FavoriteSellerItem[]): string {
         ${
           s.cover
             ? `<div class="w-[140px] h-[100px] max-md:w-full max-md:h-[120px] rounded-md overflow-hidden bg-gray-50 shrink-0 max-lg:hidden">
-                <img src="${s.cover}" alt="" class="w-full h-full object-cover" />
+                <img src="${escapeHtml(sanitizeUrl(s.cover))}" alt="" class="w-full h-full object-cover" />
               </div>`
             : ""
         }
         <!-- Actions -->
         <div class="flex flex-col gap-2 shrink-0 max-md:w-full max-md:flex-row">
-          <a href="${profileHref}" class="th-btn h-9 px-4 text-[13px] font-semibold whitespace-nowrap inline-flex items-center justify-center max-md:flex-1">
+          <a href="${escapeHtml(sanitizeUrl(profileHref))}" class="th-btn h-9 px-4 text-[13px] font-semibold whitespace-nowrap inline-flex items-center justify-center max-md:flex-1">
             ${t("mfr.list.viewProfile", { defaultValue: "Profili görüntüle" })}
           </a>
           <!-- DISABLED: "Bu satıcıyla iletişime geç" butonu — messages.html altyapısı yok, ileride geri açılacak. -->
@@ -633,23 +634,23 @@ function renderProductCardGrid(p: FavoriteItem): string {
     .join("");
 
   return `
-    <article class="group relative flex flex-col bg-white border border-[#eee] rounded-md overflow-hidden transition-all duration-150 hover:border-[var(--color-cta-primary,#F5B800)] hover:shadow-[0_4px_10px_-6px_rgba(20,20,18,0.12)]" data-fav-item-id="${p.id}">
-      <a href="${detailHref}" class="relative block aspect-square overflow-hidden bg-[#fafafa] no-underline">
-        <img src="${p.image}" alt="${escapeHtml(p.title)}"
+    <article class="group relative flex flex-col bg-white border border-[#eee] rounded-md overflow-hidden transition-all duration-150 hover:border-[var(--color-cta-primary,#F5B800)] hover:shadow-[0_4px_10px_-6px_rgba(20,20,18,0.12)]" data-fav-item-id="${escapeHtml(p.id)}">
+      <a href="${escapeHtml(sanitizeUrl(detailHref))}" class="relative block aspect-square overflow-hidden bg-[#fafafa] no-underline">
+        <img src="${escapeHtml(sanitizeUrl(p.image))}" alt="${escapeHtml(p.title)}"
              class="w-full h-full object-cover mix-blend-multiply transition-transform duration-300 ease-out group-hover:scale-[1.03]"
              loading="lazy" />
         ${renderStockPill(enrichment)}
       </a>
       <button type="button"
               class="fav-remove-item absolute top-1.5 end-1.5 w-8 h-8 inline-flex items-center justify-center rounded-full bg-white shadow-[0_1px_3px_rgba(20,20,18,0.12)] text-[#ef4444] cursor-pointer p-0 border-0 transition-transform duration-150 hover:scale-110 active:scale-95 appearance-none focus:outline-none focus-visible:border focus-visible:border-[var(--color-cta-primary,#F5B800)]"
-              data-remove-id="${p.id}"
+              data-remove-id="${escapeHtml(p.id)}"
               aria-label="${t("favorites.removeFromAll")}"
               title="${t("favorites.removeFromAll")}">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" stroke-width="1.5"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
       </button>
       <div class="flex flex-1 flex-col p-2 max-sm:p-1.5">
         ${renderSupplierLine(enrichment)}
-        <a href="${detailHref}" class="no-underline text-inherit">
+        <a href="${escapeHtml(sanitizeUrl(detailHref))}" class="no-underline text-inherit">
           <h4 class="text-[11.5px] leading-[1.3] text-text-primary font-normal line-clamp-2 m-0 min-h-[30px] group-hover:text-[var(--color-cta-primary,#F5B800)] transition-colors">${escapeHtml(p.title)}</h4>
         </a>
         <div class="text-[13px] font-bold text-text-primary leading-none tracking-[-0.01em] tabular-nums mt-1">${formatPrice(p.priceRange)}</div>
@@ -668,7 +669,7 @@ function renderProductCardGrid(p: FavoriteItem): string {
             <svg class="shrink-0" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h2l2.4 12.5a2 2 0 0 0 2 1.5h7.6a2 2 0 0 0 2-1.6L21 7H6"/></svg>
             <span class="truncate">${t("favorites.addToCart", { defaultValue: "Sepete ekle" })}</span>
           </button>`
-              : `<button type="button" data-add-to-cart="${p.id}"
+              : `<button type="button" data-add-to-cart="${escapeHtml(p.id)}"
                   class="th-btn w-full h-7 px-2 text-[11px] font-semibold inline-flex items-center justify-center gap-1 appearance-none focus:outline-none">
             <svg class="shrink-0" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h2l2.4 12.5a2 2 0 0 0 2 1.5h7.6a2 2 0 0 0 2-1.6L21 7H6"/></svg>
             <span class="truncate">${t("favorites.addToCart", { defaultValue: "Sepete ekle" })}</span>
@@ -696,14 +697,14 @@ function renderProductRowList(p: FavoriteItem): string {
     .join("");
 
   return `
-    <article class="group relative flex items-center gap-3 bg-white border border-[#eee] rounded-lg p-2.5 transition-all duration-150 hover:border-[var(--color-cta-primary,#F5B800)] hover:shadow-[0_4px_12px_-6px_rgba(20,20,18,0.12)] max-sm:flex-col max-sm:items-start" data-fav-item-id="${p.id}">
-      <a href="${detailHref}" class="relative w-[88px] h-[88px] shrink-0 rounded-md overflow-hidden bg-[#fafafa] no-underline max-sm:w-full max-sm:h-[160px]">
-        <img src="${p.image}" alt="${escapeHtml(p.title)}"
+    <article class="group relative flex items-center gap-3 bg-white border border-[#eee] rounded-lg p-2.5 transition-all duration-150 hover:border-[var(--color-cta-primary,#F5B800)] hover:shadow-[0_4px_12px_-6px_rgba(20,20,18,0.12)] max-sm:flex-col max-sm:items-start" data-fav-item-id="${escapeHtml(p.id)}">
+      <a href="${escapeHtml(sanitizeUrl(detailHref))}" class="relative w-[88px] h-[88px] shrink-0 rounded-md overflow-hidden bg-[#fafafa] no-underline max-sm:w-full max-sm:h-[160px]">
+        <img src="${escapeHtml(sanitizeUrl(p.image))}" alt="${escapeHtml(p.title)}"
              class="w-full h-full object-cover mix-blend-multiply transition-transform duration-300 ease-out group-hover:scale-[1.04]"
              loading="lazy" />
       </a>
       <div class="flex-1 min-w-0 flex flex-col gap-1">
-        <a href="${detailHref}" class="no-underline text-inherit">
+        <a href="${escapeHtml(sanitizeUrl(detailHref))}" class="no-underline text-inherit">
           <h4 class="text-[12.5px] leading-[1.4] text-text-primary font-medium line-clamp-2 m-0 group-hover:text-[var(--color-cta-primary,#F5B800)] transition-colors">${escapeHtml(p.title)}</h4>
         </a>
         <p class="text-[11px] text-text-tertiary m-0">${escapeHtml(p.minOrder)}</p>
@@ -724,7 +725,7 @@ function renderProductRowList(p: FavoriteItem): string {
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h2l2.4 12.5a2 2 0 0 0 2 1.5h7.6a2 2 0 0 0 2-1.6L21 7H6"/></svg>
             ${t("favorites.addToCart", { defaultValue: "Sepete ekle" })}
           </button>`
-              : `<button type="button" data-add-to-cart="${p.id}"
+              : `<button type="button" data-add-to-cart="${escapeHtml(p.id)}"
                   class="th-btn h-7 px-2.5 text-[11.5px] font-semibold inline-flex items-center justify-center gap-1 appearance-none focus:outline-none">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h2l2.4 12.5a2 2 0 0 0 2 1.5h7.6a2 2 0 0 0 2-1.6L21 7H6"/></svg>
             ${t("favorites.addToCart", { defaultValue: "Sepete ekle" })}
@@ -732,7 +733,7 @@ function renderProductRowList(p: FavoriteItem): string {
           }
           <button type="button"
                   class="fav-remove-item w-7 h-7 inline-flex items-center justify-center rounded-md text-[#ef4444] cursor-pointer p-0 border border-border-default bg-white hover:border-[#ef4444] hover:bg-[#fff5f5] transition-colors appearance-none focus:outline-none"
-                  data-remove-id="${p.id}"
+                  data-remove-id="${escapeHtml(p.id)}"
                   aria-label="${t("favorites.removeFromAll")}"
                   title="${t("favorites.removeFromAll")}">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" stroke-width="1.5"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
@@ -997,13 +998,13 @@ function renderBrowsingHistory(): string {
   const productCards = history
     .map(
       (p) => `
-    <a href="${p.href}" class="group flex flex-col no-underline text-inherit transition-transform duration-150 hover:-translate-y-0.5">
+    <a href="${escapeHtml(sanitizeUrl(p.href))}" class="group flex flex-col no-underline text-inherit transition-transform duration-150 hover:-translate-y-0.5">
       <div class="w-full aspect-square rounded-lg overflow-hidden border border-[#f0f0f0] mb-2.5">
-        <img src="${p.image}" alt="${escapeHtml(p.title)}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.04]" loading="lazy" />
+        <img src="${escapeHtml(sanitizeUrl(p.image))}" alt="${escapeHtml(p.title)}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.04]" loading="lazy" />
       </div>
       <h4 class="text-[13px] text-text-secondary leading-[1.4] line-clamp-2 mb-1.5" title="${escapeHtml(p.title)}">${escapeHtml(p.title)}</h4>
       ${p.priceRange ? `<p class="text-sm font-bold text-text-primary mb-0.5">${formatPrice(p.priceRange)}</p>` : ""}
-      ${p.minOrder ? `<p class="text-xs text-text-tertiary">${p.minOrder}</p>` : ""}
+      ${p.minOrder ? `<p class="text-xs text-text-tertiary">${escapeHtml(p.minOrder)}</p>` : ""}
     </a>
   `
     )
@@ -1527,10 +1528,4 @@ function initFavListModal(): void {
       closeModal();
     }
   });
-}
-
-function escapeHtml(str: string): string {
-  const div = document.createElement("div");
-  div.textContent = str;
-  return div.innerHTML;
 }

@@ -1,5 +1,18 @@
 import Alpine from "alpinejs";
-import { animate } from "motion";
+
+// motion (~) yalnızca arama-formu aç/kapa animasyonunda kullanılıyor (runAnimation,
+// kullanıcı etkileşimiyle tetiklenir). Statik import her sayfada yüklenen alpine
+// chunk'ını ~kBʼlarca şişiriyordu; ilk-paint-kritik DEĞİL → dinamik import ile
+// ayrı async chunk'a alındı (ilk etkileşimde yüklenir, sonrası cache'li).
+type AnimateFn = (typeof import("motion"))["animate"];
+let _animate: AnimateFn | null = null;
+function loadAnimate(): Promise<AnimateFn> {
+  if (_animate) return Promise.resolve(_animate);
+  return import("motion").then((mod) => {
+    _animate = mod.animate;
+    return _animate;
+  });
+}
 
 Alpine.data("floatingPanel", () => ({
   showScrollTop: false,
@@ -97,51 +110,53 @@ Alpine.data("stickyHeaderSearch", () => ({
 
     const easeInOut: [number, number, number, number] = [0.4, 0, 0.2, 1];
 
-    if (isExpanded) {
-      if (form) {
-        animate(
-          form,
-          {
-            height: ["42px", "100px"],
-            borderRadius: ["9999px", "16px"],
-          },
-          { duration: 0.34, ease: easeInOut }
-        );
+    void loadAnimate().then((animate) => {
+      if (isExpanded) {
+        if (form) {
+          animate(
+            form,
+            {
+              height: ["42px", "100px"],
+              borderRadius: ["9999px", "16px"],
+            },
+            { duration: 0.34, ease: easeInOut }
+          );
+        }
+        if (dropdown) {
+          animate(
+            dropdown,
+            {
+              opacity: [0, 1],
+              y: [-4, 0],
+              scale: [0.99, 1],
+            },
+            { duration: 0.3, ease: easeInOut, delay: 0.06 }
+          );
+        }
+      } else {
+        if (form) {
+          animate(
+            form,
+            {
+              height: ["100px", "42px"],
+              borderRadius: ["16px", "9999px"],
+            },
+            { duration: 0.28, ease: easeInOut }
+          );
+        }
+        if (dropdown) {
+          animate(
+            dropdown,
+            {
+              opacity: [1, 0],
+              y: [0, -2],
+              scale: [1, 0.99],
+            },
+            { duration: 0.18, ease: easeInOut }
+          );
+        }
       }
-      if (dropdown) {
-        animate(
-          dropdown,
-          {
-            opacity: [0, 1],
-            y: [-4, 0],
-            scale: [0.99, 1],
-          },
-          { duration: 0.3, ease: easeInOut, delay: 0.06 }
-        );
-      }
-    } else {
-      if (form) {
-        animate(
-          form,
-          {
-            height: ["100px", "42px"],
-            borderRadius: ["16px", "9999px"],
-          },
-          { duration: 0.28, ease: easeInOut }
-        );
-      }
-      if (dropdown) {
-        animate(
-          dropdown,
-          {
-            opacity: [1, 0],
-            y: [0, -2],
-            scale: [1, 0.99],
-          },
-          { duration: 0.18, ease: easeInOut }
-        );
-      }
-    }
+    });
   },
 
   open() {

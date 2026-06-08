@@ -1,6 +1,7 @@
 import { t } from "../../i18n";
 import { formatPrice } from "../../utils/currency";
 import { getBrandUrl } from "../../utils/brandUrl";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 /**
  * ProductListingGrid Component
  * iSTOC-style product listing grid for products page.
@@ -64,7 +65,7 @@ function renderImageSlider(card: ProductListingCard): string {
       .map(
         (src, i) => `
       <div class="w-full h-full flex-shrink-0">
-        <img src="${src}" alt="${card.name}${i > 0 ? ` - ${i + 1}` : ""}" class="w-full h-full object-cover" ${i > 0 ? 'loading="lazy"' : ""} />
+        <img src="${escapeHtml(sanitizeUrl(src))}" alt="${escapeHtml(card.name)}${i > 0 ? ` - ${i + 1}` : ""}" class="w-full h-full object-cover" decoding="async" ${i > 0 ? 'loading="lazy"' : ""} />
       </div>
     `
       )
@@ -85,8 +86,8 @@ function renderImageSlider(card: ProductListingCard): string {
     <!-- Prev arrow -->
     <button type="button"
       class="product-slider-prev absolute start-1.5 top-1/2 -translate-y-1/2 z-10 w-7 h-7 flex items-center justify-center rounded-full bg-white/80 shadow-sm opacity-0 group-hover/img:opacity-100 transition-opacity hover:bg-white cursor-pointer"
-      data-slider-prev="${card.id}" aria-label="Previous"
-      onclick="event.preventDefault(); event.stopPropagation(); this.dispatchEvent(new CustomEvent('slider-nav', {detail:{id:'${card.id}',dir:-1},bubbles:true}));">
+      data-slider-prev="${escapeHtml(card.id)}" aria-label="Previous"
+      onclick="event.preventDefault(); event.stopPropagation(); this.dispatchEvent(new CustomEvent('slider-nav', {detail:{id:this.dataset.sliderPrev,dir:-1},bubbles:true}));">
       <svg class="w-3.5 h-3.5 text-gray-700 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
         <path d="M15 19l-7-7 7-7"/>
       </svg>
@@ -94,8 +95,8 @@ function renderImageSlider(card: ProductListingCard): string {
     <!-- Next arrow -->
     <button type="button"
       class="product-slider-next absolute end-1.5 top-1/2 -translate-y-1/2 z-10 w-7 h-7 flex items-center justify-center rounded-full bg-white/80 shadow-sm opacity-0 group-hover/img:opacity-100 transition-opacity hover:bg-white cursor-pointer"
-      data-slider-next="${card.id}" aria-label="Next"
-      onclick="event.preventDefault(); event.stopPropagation(); this.dispatchEvent(new CustomEvent('slider-nav', {detail:{id:'${card.id}',dir:1},bubbles:true}));">
+      data-slider-next="${escapeHtml(card.id)}" aria-label="Next"
+      onclick="event.preventDefault(); event.stopPropagation(); this.dispatchEvent(new CustomEvent('slider-nav', {detail:{id:this.dataset.sliderNext,dir:1},bubbles:true}));">
       <svg class="w-3.5 h-3.5 text-gray-700 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
         <path d="M9 5l7 7-7 7"/>
       </svg>
@@ -106,7 +107,7 @@ function renderImageSlider(card: ProductListingCard): string {
   const dotsHtml = hasMultiple
     ? `
     <div class="absolute bottom-2 left-1/2 -translate-x-1/2 z-10 flex gap-1 opacity-0 group-hover/img:opacity-100 transition-opacity">
-      ${imageList.map((_, i) => `<div class="w-1.5 h-1.5 rounded-full ${i === 0 ? "bg-white" : "bg-white/50"}" data-slider-dot="${card.id}" data-dot-index="${i}"></div>`).join("")}
+      ${imageList.map((_, i) => `<div class="w-1.5 h-1.5 rounded-full ${i === 0 ? "bg-white" : "bg-white/50"}" data-slider-dot="${escapeHtml(card.id)}" data-dot-index="${i}"></div>`).join("")}
     </div>
   `
     : "";
@@ -115,7 +116,7 @@ function renderImageSlider(card: ProductListingCard): string {
     <div class="relative aspect-square w-full flex-shrink-0 overflow-hidden group/img">
       <!-- Slides container -->
       <div class="product-slider flex w-full h-full transition-transform duration-300 ease-out"
-           data-slider-id="${card.id}"
+           data-slider-id="${escapeHtml(card.id)}"
            style="transform: translateX(0%)">
         ${slidesHtml}
       </div>
@@ -168,9 +169,9 @@ function renderProductListingCard(card: ProductListingCard): string {
   // Selling point badge
   const sellingPointText = card.sellingPoint || card.promo || "";
   const sellingPointHtml = sellingPointText
-    ? `<div data-sp-slot="${card.id}" class="flex group-data-[list-mode=grid]/grid:hidden min-[480px]:group-data-[list-mode=grid]/grid:flex items-center min-w-0 gap-1 mt-1 text-[11px] leading-tight min-[480px]:text-xs text-[rgb(34,137,31)]">
+    ? `<div data-sp-slot="${escapeHtml(card.id)}" class="flex group-data-[list-mode=grid]/grid:hidden min-[480px]:group-data-[list-mode=grid]/grid:flex items-center min-w-0 gap-1 mt-1 text-[11px] leading-tight min-[480px]:text-xs text-[rgb(34,137,31)]">
         ${checkIcon()}
-        <span class="truncate min-[480px]:whitespace-normal">${sellingPointText}</span>
+        <span class="truncate min-[480px]:whitespace-normal">${escapeHtml(sellingPointText)}</span>
       </div>`
     : "";
   // Grid 2'li (mobil <480) kartta selling point görselin altında tam genişlik şerit (ribbon) olarak görünür.
@@ -179,7 +180,7 @@ function renderProductListingCard(card: ProductListingCard): string {
   const sellingIcon = sellingIsAmber ? starIcon() : checkIcon();
   const sellingTone = sellingIsAmber ? "text-[#A6730A]" : "text-[rgb(34,137,31)]";
   const sellingOverlayHtml = sellingPointText
-    ? `<div data-sp-slot="${card.id}" class="hidden group-data-[list-mode=grid]/grid:flex min-[480px]:group-data-[list-mode=grid]/grid:hidden absolute inset-x-0 bottom-0 z-20 items-center gap-1 px-2 py-1 bg-white/95 border-t border-gray-100 text-[9.5px] font-extrabold whitespace-nowrap overflow-hidden ${sellingTone} pointer-events-none">${sellingIcon}<span class="truncate">${sellingPointText}</span></div>`
+    ? `<div data-sp-slot="${escapeHtml(card.id)}" class="hidden group-data-[list-mode=grid]/grid:flex min-[480px]:group-data-[list-mode=grid]/grid:hidden absolute inset-x-0 bottom-0 z-20 items-center gap-1 px-2 py-1 bg-white/95 border-t border-gray-100 text-[9.5px] font-extrabold whitespace-nowrap overflow-hidden ${sellingTone} pointer-events-none">${sellingIcon}<span class="truncate">${escapeHtml(sellingPointText)}</span></div>`
     : "";
 
   // MOQ
@@ -189,16 +190,16 @@ function renderProductListingCard(card: ProductListingCard): string {
 
   // Supplier name
   const supplierNameHtml = card.supplierName
-    ? `<a class="hidden min-[480px]:block text-xs font-normal text-[#767676] no-underline whitespace-nowrap overflow-hidden text-ellipsis mb-0.5">${card.supplierName}</a>`
+    ? `<a class="hidden min-[480px]:block text-xs font-normal text-[#767676] no-underline whitespace-nowrap overflow-hidden text-ellipsis mb-0.5">${escapeHtml(card.supplierName)}</a>`
     : "";
 
   // Brand chip — small badge with brand name (logo if available)
   const brandHtml = card.brandName
     ? `<a class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded border border-gray-200 bg-gray-50 text-[10px] font-medium text-gray-700 hover:bg-gray-100 no-underline max-w-full"
-          href="${getBrandUrl({ slug: card.brandSlug })}"
-          title="${card.brandName}">
-        ${card.brandLogo ? `<img src="${card.brandLogo}" alt="${card.brandName}" class="w-3 h-3 object-contain" />` : ""}
-        <span class="whitespace-nowrap overflow-hidden text-ellipsis">${card.brandName}</span>
+          href="${escapeHtml(sanitizeUrl(getBrandUrl({ slug: card.brandSlug })))}"
+          title="${escapeHtml(card.brandName)}">
+        ${card.brandLogo ? `<img src="${escapeHtml(sanitizeUrl(card.brandLogo))}" alt="${escapeHtml(card.brandName)}" class="w-3 h-3 object-contain" />` : ""}
+        <span class="whitespace-nowrap overflow-hidden text-ellipsis">${escapeHtml(card.brandName)}</span>
       </a>`
     : "";
 
@@ -210,7 +211,7 @@ function renderProductListingCard(card: ProductListingCard): string {
     );
   if (card.supplierCountry)
     yearCountryParts.push(
-      `${countryFlag(card.supplierCountry)} <span>${card.supplierCountry}</span>`
+      `${countryFlag(card.supplierCountry)} <span>${escapeHtml(card.supplierCountry)}</span>`
     );
 
   const yearCountryHtml =
@@ -271,12 +272,11 @@ function renderProductListingCard(card: ProductListingCard): string {
               lg:max-[1599px]:group-data-[list-mode=grid]/grid:text-xs
               lg:max-[1599px]:group-data-[list-mode=grid]/grid:px-2
               lg:max-[1599px]:group-data-[list-mode=grid]/grid:h-8"
-              data-add-to-cart="${card.id}">
+              data-add-to-cart="${escapeHtml(card.id)}">
         ${t("products.addToCart")}
       </button>`;
 
-  const escapeAttr = (s: string): string =>
-    s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+  const escapeAttr = (s: string): string => escapeHtml(s);
   const moqDigits = card.moq?.match(/\d+/)?.[0] ?? "1";
   const chatBtnHtml = `<button type="button"
               data-chat-trigger
@@ -306,7 +306,7 @@ function renderProductListingCard(card: ProductListingCard): string {
       `<span class="inline-flex items-center gap-0.5">${starIcon()}<span class="font-medium text-gray-700">${card.rating}</span>${reviewBit}</span>`
     );
   }
-  if (card.moq) denseMetaParts.push(`<span class="whitespace-nowrap">Min. ${card.moq}</span>`);
+  if (card.moq) denseMetaParts.push(`<span class="whitespace-nowrap">Min. ${escapeHtml(card.moq)}</span>`);
   const denseMetaHtml = denseMetaParts.length
     ? `<div class="flex min-[480px]:hidden items-center gap-x-1.5 gap-y-0.5 mt-1 text-[11px] leading-tight text-gray-500">${denseMetaParts.join(`<span class="text-gray-300">·</span>`)}</div>`
     : "";
@@ -318,7 +318,7 @@ function renderProductListingCard(card: ProductListingCard): string {
     ? `<button type="button" class="${denseAddCls} bg-gray-200 text-gray-400 cursor-not-allowed" disabled aria-disabled="true" aria-label="${t("products.outOfStock")}">${plusIcon}</button>`
     : kybBlocked
       ? `<button type="button" class="${denseAddCls} th-btn opacity-50 !cursor-not-allowed pointer-events-none" disabled aria-disabled="true" aria-label="${t("products.addToCart")}" title="${t("common.addToCartDisabledKyb")}">${plusIcon}</button>`
-      : `<button type="button" class="${denseAddCls} th-btn" data-add-to-cart="${card.id}" aria-label="${t("products.addToCart")}">${plusIcon}</button>`;
+      : `<button type="button" class="${denseAddCls} th-btn" data-add-to-cart="${escapeHtml(card.id)}" aria-label="${t("products.addToCart")}">${plusIcon}</button>`;
   const denseChatBtnHtml = `<button type="button" data-chat-trigger
         data-product-id="${escapeAttr(card.id)}"
         data-product-title="${escapeAttr(card.name)}"
@@ -342,7 +342,7 @@ function renderProductListingCard(card: ProductListingCard): string {
     ? `<button type="button" class="${gridAddCls} bg-gray-200 text-gray-500 cursor-not-allowed" disabled aria-disabled="true">${t("products.outOfStock")}</button>`
     : kybBlocked
       ? `<button type="button" class="${gridAddCls} th-btn opacity-50 !cursor-not-allowed pointer-events-none" disabled aria-disabled="true" title="${t("common.kybGateBannerTitle")}">${cartIcon}<span class="truncate">${t("products.addToCart")}</span></button>`
-      : `<button type="button" class="${gridAddCls} th-btn" data-add-to-cart="${card.id}">${cartIcon}<span class="truncate">${t("products.addToCart")}</span></button>`;
+      : `<button type="button" class="${gridAddCls} th-btn" data-add-to-cart="${escapeHtml(card.id)}">${cartIcon}<span class="truncate">${t("products.addToCart")}</span></button>`;
   const gridChatBtnHtml = `<button type="button" data-chat-trigger
         data-product-id="${escapeAttr(card.id)}"
         data-product-title="${escapeAttr(card.name)}"
@@ -378,7 +378,7 @@ function renderProductListingCard(card: ProductListingCard): string {
             min-[1200px]:group-data-[list-mode=list]/grid:items-start
             min-[1200px]:group-data-[list-mode=list]/grid:gap-4">
       <!-- Image area (full-bleed, kart padding'inin dışında) -->
-      <a href="${card.href}" class="searchx-img-area relative mb-3 block
+      <a href="${escapeHtml(sanitizeUrl(card.href))}" class="searchx-img-area relative mb-3 block
             group-data-[list-mode=grid]/grid:mx-3 group-data-[list-mode=grid]/grid:mt-3 group-data-[list-mode=grid]/grid:mb-2 group-data-[list-mode=grid]/grid:rounded-md group-data-[list-mode=grid]/grid:border group-data-[list-mode=grid]/grid:border-gray-200 group-data-[list-mode=grid]/grid:overflow-hidden
             min-[480px]:group-data-[list-mode=grid]/grid:mx-0 min-[480px]:group-data-[list-mode=grid]/grid:mt-0 min-[480px]:group-data-[list-mode=grid]/grid:mb-3 min-[480px]:group-data-[list-mode=grid]/grid:rounded-none min-[480px]:group-data-[list-mode=grid]/grid:border-0
             group-data-[list-mode=list]/grid:row-[1/-1]
@@ -418,7 +418,7 @@ function renderProductListingCard(card: ProductListingCard): string {
             lg:max-[1599px]:group-data-[list-mode=grid]/grid:text-[13px]
             lg:max-[1599px]:group-data-[list-mode=grid]/grid:leading-[17px]
             lg:max-[1599px]:group-data-[list-mode=grid]/grid:h-[51px]">
-            <a href="${card.href}" target="_blank" class="text-inherit no-underline hover:text-primary-500"><span>${card.name}</span></a>
+            <a href="${escapeHtml(sanitizeUrl(card.href))}" target="_blank" class="text-inherit no-underline hover:text-primary-500"><span>${escapeHtml(card.name)}</span></a>
           </h2>
           ${sellingPointHtml}
           ${denseMetaHtml}

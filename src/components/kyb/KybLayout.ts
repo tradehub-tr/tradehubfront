@@ -187,7 +187,7 @@ function renderForm(): string {
 
 export function KybLayout(): string {
   return `
-    <div class="container-boxed py-6" x-data="kybPage" x-init="init()">
+    <div class="container-boxed py-6" x-data="kybPage">
       <div x-show="loading" class="bg-white rounded-xl p-12 text-center">
         <div class="text-sm" style="color:var(--color-text-tertiary)">${t("kyb.loading")}</div>
       </div>

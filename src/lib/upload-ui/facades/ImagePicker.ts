@@ -11,6 +11,7 @@
 import { uploadFiles, type FileProgress } from "../uploader";
 import { revokeFilePreview, getFilePreviewUrl } from "../utils";
 import { t } from "../../../i18n";
+import { escapeHtml, sanitizeUrl } from "../../../utils/sanitize";
 
 export interface ImagePickerOptions {
   containerId: string;
@@ -96,9 +97,12 @@ export class ImagePickerController {
       : "";
 
     const url = this.currentUrl;
+    // blob: preview URL'leri yerel (URL.createObjectURL) ve güvenilir — olduğu gibi
+    // geçir; geri kalan (server) URL'leri sema-allowlist'ten geçir.
+    const safeUrl = url.startsWith("blob:") ? url : sanitizeUrl(url);
     const previewBg = url
-      ? `<img src="${url}" class="w-full h-full object-cover" />`
-      : `<div class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400 text-sm font-semibold">${placeholder}</div>`;
+      ? `<img src="${escapeHtml(safeUrl)}" class="w-full h-full object-cover" />`
+      : `<div class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400 text-sm font-semibold">${escapeHtml(placeholder)}</div>`;
 
     const isUploading = this.progress?.status === "uploading";
     const pct = this.progress
@@ -124,11 +128,11 @@ export class ImagePickerController {
           ${recommended}
           <div class="flex gap-2 mt-1">
             <button type="button" class="upload-image-pick px-3 py-1.5 text-xs font-semibold rounded-md bg-amber-400 hover:bg-amber-500 text-gray-900 transition" ${isUploading ? "disabled" : ""}>
-              ${isUploading ? uploadingLabel : changeLabel}
+              ${escapeHtml(isUploading ? uploadingLabel : changeLabel)}
             </button>
-            ${url ? `<button type="button" class="upload-image-remove px-3 py-1.5 text-xs font-semibold rounded-md border border-gray-300 hover:bg-gray-100 text-gray-700 transition" ${isUploading ? "disabled" : ""}>${removeLabel}</button>` : ""}
+            ${url ? `<button type="button" class="upload-image-remove px-3 py-1.5 text-xs font-semibold rounded-md border border-gray-300 hover:bg-gray-100 text-gray-700 transition" ${isUploading ? "disabled" : ""}>${escapeHtml(removeLabel)}</button>` : ""}
           </div>
-          <input type="file" class="upload-image-input hidden" accept="${this.opts.accept ?? "image/jpeg,image/png,image/webp"}" />
+          <input type="file" class="upload-image-input hidden" accept="${escapeHtml(this.opts.accept ?? "image/jpeg,image/png,image/webp")}" />
         </div>
       </div>
     `;

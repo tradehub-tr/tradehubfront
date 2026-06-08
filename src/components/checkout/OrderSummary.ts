@@ -3,6 +3,7 @@ import { t } from "../../i18n";
 import { formatCurrency, getSelectedCurrency } from "../../services/currencyService";
 import { getSellerUrl } from "../../utils/sellerUrl";
 import { btn } from "../../utils/ui/button";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 export interface OrderSummaryProps {
   data: OrderSummaryData;
@@ -18,7 +19,7 @@ function renderThumbnailGrid(thumbnails: OrderSummaryThumbnail[], itemCount: num
     .map(
       (thumb, idx) => `
       <div class="relative w-10 sm:w-[48px] h-10 sm:h-[48px] min-w-[40px] sm:min-w-[48px] rounded border border-[#e5e5e5]">
-        <img class="w-full h-full object-cover rounded" src="${thumb.image}" alt="" />
+        <img class="w-full h-full object-cover rounded" src="${escapeHtml(sanitizeUrl(thumb.image))}" alt="" />
         ${idx === 0 ? `<div class="absolute -top-1.5 -end-1.5 flex items-center justify-center min-w-[18px] sm:min-w-[20px] h-[18px] sm:h-[20px] rounded-full px-1 bg-[#222222] text-white text-[11px] sm:text-[12px] font-bold z-10 leading-none">${itemCount}</div>` : ""}
       </div>`
     )
@@ -45,7 +46,7 @@ export function OrderSummary({ data, payeeSuppliers = [] }: OrderSummaryProps): 
     .map(
       (s) => `
     <a
-      href="${getSellerUrl({ id: s.id })}"
+      href="${escapeHtml(sanitizeUrl(getSellerUrl({ id: s.id })))}"
       class="group flex items-center gap-2.5 sm:gap-3 p-2.5 sm:p-3 bg-[#f9fafb] border border-[#e5e5e5] rounded-md hover:border-[var(--color-primary-500)] hover:bg-white transition-colors no-underline"
       title="${t("checkoutMfr.goToStore", { name: s.name })}"
     >
@@ -56,7 +57,7 @@ export function OrderSummary({ data, payeeSuppliers = [] }: OrderSummaryProps): 
           <path d="M9 20v-6h6v6" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
         </svg>
       </div>
-      <span class="flex-1 text-[13px] sm:text-[15px] font-semibold text-[#222222] group-hover:text-[var(--color-primary-500)] transition-colors">${s.name}</span>
+      <span class="flex-1 text-[13px] sm:text-[15px] font-semibold text-[#222222] group-hover:text-[var(--color-primary-500)] transition-colors">${escapeHtml(s.name)}</span>
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" class="text-[#999] group-hover:text-[var(--color-primary-500)] shrink-0 transition-colors">
         <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
@@ -87,7 +88,7 @@ export function OrderSummary({ data, payeeSuppliers = [] }: OrderSummaryProps): 
   return `
     <div
       class="checkout-sidebar w-full p-4 sm:p-5 xl:p-[28px] bg-[#FFFFFF] border border-[#e5e5e5] rounded-md xl:max-h-[calc(100vh-48px)] overflow-y-auto [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-black/20 hover:[&::-webkit-scrollbar-thumb]:bg-black/30 [&::-webkit-scrollbar-thumb]:rounded-full"
-      x-data="checkoutOrderSummary({ itemSubtotal: ${data.itemSubtotal}, discount: ${implicitDiscount}, initialShippingFee: ${data.shipping}, currency: '${cur}' })"
+      x-data="checkoutOrderSummary({ itemSubtotal: ${data.itemSubtotal}, discount: ${implicitDiscount}, initialShippingFee: ${data.shipping}, currency: '${escapeHtml(cur)}' })"
     >
       <!-- Title -->
       <div class="text-[17px] sm:text-[20px] font-bold leading-7 text-[#222222] mb-5 font-inter">

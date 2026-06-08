@@ -11,6 +11,7 @@
  */
 
 import { t } from "../../i18n";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 import { getCurrentProduct } from "../../alpine/product";
 import { searchListings, getFeaturedListings } from "../../services/listingService";
 import type { ProductListingCard } from "../../types/productListing";
@@ -48,21 +49,21 @@ const ROWS: RecRow[] = [
 ];
 
 function recCard(card: ProductListingCard): string {
-  const safeName = card.name.replace(/"/g, "&quot;");
+  const safeName = escapeHtml(card.name);
   return `
-    <a href="${card.href}" class="mrec-card shrink-0 basis-[42%] max-[374px]:basis-[46%] [scroll-snap-align:start] no-underline text-inherit" aria-label="${safeName}">
+    <a href="${escapeHtml(sanitizeUrl(card.href))}" class="mrec-card shrink-0 basis-[42%] max-[374px]:basis-[46%] [scroll-snap-align:start] no-underline text-inherit" aria-label="${safeName}">
       <div class="aspect-square w-full overflow-hidden rounded-lg bg-surface-raised">
         ${
           card.imageSrc
-            ? `<img src="${card.imageSrc}" alt="${safeName}" class="w-full h-full object-cover" loading="lazy" />`
+            ? `<img src="${escapeHtml(sanitizeUrl(card.imageSrc))}" alt="${safeName}" class="w-full h-full object-cover" loading="lazy" />`
             : `<div class="w-full h-full flex items-center justify-center text-text-placeholder">
                 <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
               </div>`
         }
       </div>
       <div class="mt-1.5">
-        <div class="text-sm font-bold text-text-heading leading-tight">${card.price}</div>
-        <div class="text-[11px] text-text-muted mt-0.5 truncate">${card.moq}${card.stats ? ` &middot; ${card.stats}` : ""}</div>
+        <div class="text-sm font-bold text-text-heading leading-tight">${escapeHtml(card.price)}</div>
+        <div class="text-[11px] text-text-muted mt-0.5 truncate">${escapeHtml(card.moq)}${card.stats ? ` &middot; ${escapeHtml(card.stats)}` : ""}</div>
       </div>
     </a>
   `;

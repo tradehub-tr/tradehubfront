@@ -5,6 +5,8 @@
  * Multi-language: lang='en' verilirse /en/marka/<slug> (Faz 7 path prefix).
  */
 
+import { sanitizeUrl } from "./sanitize";
+
 export interface BrandUrlInput {
   slug?: string;
   /** Yedek: backend'in döndürdüğü hazır URL */
@@ -18,7 +20,9 @@ export function getBrandUrl(
   lang: "tr" | "en" = "tr"
 ): string {
   if (!brand) return "#";
-  if (brand.href) return brand.href;
+  // brand.href backend/kullanıcı kaynaklı — open-redirect ve javascript:/data:
+  // şemalarını reddetmek için sanitizeUrl'den geçir.
+  if (brand.href) return sanitizeUrl(brand.href);
   const prefix = lang === "en" ? "/en" : "";
   if (brand.slug) return `${prefix}/marka/${brand.slug}`;
   if (brand.id) return `/pages/brand.html?id=${brand.id}`;

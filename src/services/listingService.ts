@@ -5,6 +5,7 @@
 
 import { api } from "../utils/api";
 import { t } from "../i18n";
+import { queryFetch, queryKeys, policies } from "../lib/query";
 import { getListingUrl } from "../utils/listingUrl";
 import {
   convertPrice,
@@ -134,12 +135,15 @@ export async function searchListings(params: ListingSearchParams): Promise<Listi
     selectedSort: params.sort_by || "relevance",
   };
 
-  return {
-    products,
-    searchHeader,
-    hasNext: msg.has_next || false,
-    hasPrev: msg.has_prev || false,
-  };
+      return {
+        products,
+        searchHeader,
+        hasNext: msg.has_next || false,
+        hasPrev: msg.has_prev || false,
+      };
+    },
+    policies.listings
+  );
 }
 
 /**
@@ -1465,6 +1469,14 @@ function mapListingDetail(raw: any): ProductDetail {
     seo: raw.seo || undefined,
     title: raw.title || "",
     category: raw.category || [],
+    categoryRanks: (raw.categoryRanks || []).map((r: any) => ({
+      categoryId: r.category_id,
+      categoryName: r.category_name,
+      slug: r.slug,
+      rank: Number(r.rank) || 0,
+      total: Number(r.total) || 0,
+      level: Number(r.level) || 0,
+    })),
     productCategoryId: raw.productCategoryId || "",
     images,
     priceTiers,

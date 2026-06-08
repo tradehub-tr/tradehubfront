@@ -14,6 +14,7 @@ import { loadCategories } from "../../services/categoryService";
 import type { ApiCategory } from "../../services/categoryService";
 import { searchListings } from "../../services/listingService";
 import { getLucideIcon, getLucideIconByCategoryName } from "../icons/lucideIcons";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 /* ════════════════════════════════════════════════════
    DATA
@@ -793,19 +794,63 @@ export function initMegaMenu(): void {
         const inner = isViewAll
           ? viewAllSvg
           : image
-            ? `<img src="${image}" alt="${name}" class="w-full h-full object-cover" loading="lazy" onerror="this.outerHTML=this.dataset.fallback" data-fallback='${iconFallback.replace(/'/g, "&apos;")}' />`
+            ? `<img src="${escapeHtml(sanitizeUrl(image))}" alt="${escapeHtml(name)}" class="w-full h-full object-cover" loading="lazy" onerror="this.outerHTML=this.dataset.fallback" data-fallback='${iconFallback.replace(/'/g, "&apos;")}' />`
             : iconFallback;
         const borderStyle = isViewAll ? "border:2px dashed #e5e7eb;" : "";
         const href = isViewAll
           ? `/pages/categories.html?cat=${encodeURIComponent(slug)}`
-          : `/pages/products.html?cat=${slug}`;
+          : `/pages/products.html?cat=${encodeURIComponent(slug)}`;
         return `
           <a href="${href}" class="flex flex-col items-center gap-1.5 sm:gap-2 group/product min-h-[44px]">
             <div class="relative w-14 h-14 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full flex items-center justify-center overflow-hidden group-hover/product:ring-2 transition-all" style="background:var(--product-card-bg, var(--card-bg));--tw-ring-color:var(--nav-hover-color);${borderStyle}">
               ${inner}
             </div>
-            <span class="th-nav-link max-w-[4rem] text-center text-[13px] leading-tight transition-colors sm:max-w-[5rem] lg:max-w-[6rem]">${name}</span>
+            <span class="th-nav-link max-w-[4rem] text-center text-[13px] leading-tight transition-colors sm:max-w-[5rem] lg:max-w-[6rem]">${escapeHtml(name)}</span>
           </a>`;
+      }
+
+      const leafGridCls =
+        "grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-y-4 gap-x-2 sm:gap-y-5 sm:gap-x-4 lg:gap-y-8 lg:gap-x-6";
+      const grpArrowSvg = `<svg class="w-3.5 h-3.5 text-gray-400 transition-transform group-hover/grp:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/></svg>`;
+
+      /**
+       * Bir sektörün gövdesini render eder.
+       * - Yaprağı olan gruplar (3 seviye): her grup bir alt-başlık + yaprak kartları.
+       * - Yaprağı olmayan gruplar (2 seviyeli veri): eski davranış — tek grid'de kart.
+       */
+      function renderSectorBody(cat: ApiCategory): string {
+        const groups = cat.children ?? [];
+        const withLeaves = groups.filter((g) => (g.children?.length ?? 0) > 0);
+        const childless = groups.filter((g) => (g.children?.length ?? 0) === 0);
+
+        let html = withLeaves
+          .map(
+            (group) => `
+        <div class="mb-6 last:mb-0">
+          <a href="/pages/products.html?cat=${encodeURIComponent(group.slug)}" class="group/grp mb-3 inline-flex items-center gap-1.5 text-sm font-semibold text-gray-800 transition-colors hover:text-primary-600 dark:text-gray-200">
+            <span>${escapeHtml(group.name)}</span>
+            ${grpArrowSvg}
+          </a>
+          <div class="${leafGridCls}">
+            ${(group.children ?? []).map((leaf) => renderDynCatCard(leaf.name, leaf.slug, leaf.image)).join("")}
+          </div>
+        </div>`
+          )
+          .join("");
+
+        if (childless.length > 0) {
+          html += `
+        <div class="${leafGridCls}">
+          ${childless.map((g) => renderDynCatCard(g.name, g.slug, g.image)).join("")}
+          ${renderDynCatCard("Tümünü gör", cat.slug, undefined, true)}
+        </div>`;
+        }
+
+        if (groups.length === 0) {
+          html += `<div class="${leafGridCls}">${renderDynCatCard("Tümünü gör", cat.slug, undefined, true)}</div>`;
+        }
+
+        return html;
       }
 
       sidebarUl.innerHTML = cats
@@ -813,12 +858,12 @@ export function initMegaMenu(): void {
           (cat, index) => `
         <li>
           <a
-            href="/pages/products.html?cat=${cat.slug}"
+            href="/pages/products.html?cat=${encodeURIComponent(cat.slug)}"
             class="th-mega-sidebar-item mega-cat-btn flex items-center gap-2 sm:gap-3 w-full px-3 sm:px-4 py-3 sm:py-2.5 text-sm text-start transition-colors border-s-2 border-transparent ${index === 0 ? "th-mega-sidebar-item--active" : ""}"
-            data-category="${cat.id}"
+            data-category="${escapeHtml(cat.id)}"
           >
             <span class="flex-shrink-0 inline-flex items-center justify-center [&>svg]:w-5 [&>svg]:h-5 text-gray-500 dark:text-gray-400">${cat.icon_class ? getCategoryIcon(cat.icon_class) : getIconByName(cat.name)}</span>
-            <span class="flex-1 truncate">${cat.name}</span>
+            <span class="flex-1 truncate">${escapeHtml(cat.name)}</span>
             <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/></svg>
           </a>
         </li>

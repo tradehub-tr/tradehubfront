@@ -4,6 +4,7 @@
  */
 import type { StoreNavData } from "../../types/seller/types";
 import { t } from "../../i18n";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 export function StoreNav(data: StoreNavData): string {
   const menuItems = data.items
@@ -13,7 +14,7 @@ export function StoreNav(data: StoreNavData): string {
         <li class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
           <button @click.prevent="setTab('products')" class="store-nav__item store-nav__item--dropdown flex items-center gap-1 px-5 py-3 text-(--store-nav-text) text-[14px] font-normal cursor-pointer bg-transparent border-none transition-colors hover:bg-[rgba(255,255,255,0.1)]"
                   :aria-expanded="open" aria-haspopup="true">
-            ${item.label}
+            ${escapeHtml(item.label)}
             <svg class="w-3 h-3 text-white/70 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
             </svg>
@@ -32,7 +33,7 @@ export function StoreNav(data: StoreNavData): string {
               .map(
                 (cat) => `
               <a href="#products" @click.prevent="setTab('products'); open = false;" class="store-nav__dropdown-item flex items-center justify-between px-4 py-2 text-[13px] text-(--store-nav-text) hover:bg-white/10 transition-colors" role="menuitem">
-                ${cat.name}
+                ${escapeHtml(cat.name)}
                 ${
                   cat.hasSubcategories
                     ? `
@@ -56,7 +57,7 @@ export function StoreNav(data: StoreNavData): string {
         <li class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
           <button @click.prevent="setTab('company')" class="store-nav__item store-nav__item--dropdown flex items-center gap-1 px-5 py-3 text-(--store-nav-text) text-[14px] font-normal cursor-pointer bg-transparent border-none transition-colors hover:bg-[rgba(255,255,255,0.1)]"
                   :aria-expanded="open" aria-haspopup="true">
-            ${item.label}
+            ${escapeHtml(item.label)}
             <svg class="w-3 h-3 text-white/70 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
             </svg>
@@ -72,8 +73,8 @@ export function StoreNav(data: StoreNavData): string {
                   ? `@click.prevent="setTab('${tabTarget}'); open = false;"`
                   : "";
                 return `
-              <a href="${link.href}" ${clickAction} class="store-nav__dropdown-item block px-4 py-2 text-[13px] text-(--store-nav-text) hover:bg-white/10 transition-colors" role="menuitem">
-                ${link.label}
+              <a href="${escapeHtml(sanitizeUrl(link.href))}" ${clickAction} class="store-nav__dropdown-item block px-4 py-2 text-[13px] text-(--store-nav-text) hover:bg-white/10 transition-colors" role="menuitem">
+                ${escapeHtml(link.label)}
               </a>
             `;
               })
@@ -89,10 +90,10 @@ export function StoreNav(data: StoreNavData): string {
 
       return `
       <li>
-        <a href="${item.href}" ${clickAction}
+        <a href="${escapeHtml(sanitizeUrl(item.href))}" ${clickAction}
            :class="activeTab === '${rootTabTarget}' ? 'store-nav__item store-nav__item--active block px-6 py-3 text-(--store-nav-text) text-[14px] font-semibold bg-(--store-nav-active-overlay) transition-colors' : 'store-nav__item block px-5 py-3 text-(--store-nav-text) text-[14px] font-normal transition-colors hover:bg-[rgba(255,255,255,0.1)]'"
            :aria-current="activeTab === '${rootTabTarget}' ? 'page' : undefined">
-          ${item.label}
+          ${escapeHtml(item.label)}
         </a>
       </li>
     `;
@@ -107,7 +108,7 @@ export function StoreNav(data: StoreNavData): string {
         <li x-data="{ open: false }">
           <button @click="open = !open" class="store-nav__item store-nav__item--dropdown w-full flex items-center justify-between px-6 py-3 text-white text-[15px] font-normal bg-transparent border-none cursor-pointer"
                   :aria-expanded="open" aria-haspopup="true">
-            ${item.label}
+            ${escapeHtml(item.label)}
             <svg class="w-4 h-4 text-white/70 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
             </svg>
@@ -117,7 +118,7 @@ export function StoreNav(data: StoreNavData): string {
             ${data.productCategories
               .map(
                 (cat) => `
-              <a href="#products" @click.prevent="setTab('products'); toggleMobileMenu();" class="block px-10 py-2 text-[14px] text-white/80 hover:text-white hover:bg-white/5 transition-colors">${cat.name}</a>
+              <a href="#products" @click.prevent="setTab('products'); toggleMobileMenu();" class="block px-10 py-2 text-[14px] text-white/80 hover:text-white hover:bg-white/5 transition-colors">${escapeHtml(cat.name)}</a>
             `
               )
               .join("")}
@@ -130,7 +131,7 @@ export function StoreNav(data: StoreNavData): string {
         <li x-data="{ open: false }">
           <button @click="open = !open" class="store-nav__item store-nav__item--dropdown w-full flex items-center justify-between px-6 py-3 text-white text-[15px] font-normal bg-transparent border-none cursor-pointer"
                   :aria-expanded="open" aria-haspopup="true">
-            ${item.label}
+            ${escapeHtml(item.label)}
             <svg class="w-4 h-4 text-white/70 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
             </svg>
@@ -143,7 +144,7 @@ export function StoreNav(data: StoreNavData): string {
                   ? `@click.prevent="setTab('${tabTarget}'); toggleMobileMenu();"`
                   : "";
                 return `
-              <a href="${link.href}" ${clickAction} class="block px-10 py-2 text-[14px] text-white/80 hover:text-white hover:bg-white/5 transition-colors">${link.label}</a>
+              <a href="${escapeHtml(sanitizeUrl(link.href))}" ${clickAction} class="block px-10 py-2 text-[14px] text-white/80 hover:text-white hover:bg-white/5 transition-colors">${escapeHtml(link.label)}</a>
             `;
               })
               .join("")}
@@ -159,11 +160,11 @@ export function StoreNav(data: StoreNavData): string {
         : "";
       return `
       <li>
-        <a href="${item.href}" ${clickAction} 
-           :class="activeTab === '${rootTabTarget}' ? 'store-nav__item store-nav__item--active block px-6 py-3 text-white text-[15px] font-semibold bg-(--store-nav-active-overlay)' : 'store-nav__item block px-6 py-3 text-white text-[15px] font-normal hover:bg-white/5'" 
+        <a href="${escapeHtml(sanitizeUrl(item.href))}" ${clickAction}
+           :class="activeTab === '${rootTabTarget}' ? 'store-nav__item store-nav__item--active block px-6 py-3 text-white text-[15px] font-semibold bg-(--store-nav-active-overlay)' : 'store-nav__item block px-6 py-3 text-white text-[15px] font-normal hover:bg-white/5'"
            class="transition-colors"
            :aria-current="activeTab === '${rootTabTarget}' ? 'page' : undefined">
-          ${item.label}
+          ${escapeHtml(item.label)}
         </a>
       </li>
     `;
@@ -192,7 +193,7 @@ export function StoreNav(data: StoreNavData): string {
         <div class="store-nav__search relative hidden xl:block">
           <input type="text"
                  class="th-input th-input-sm store-nav__search-input pe-9 w-[250px]"
-                 placeholder="${data.searchPlaceholder}"
+                 placeholder="${escapeHtml(data.searchPlaceholder)}"
                  aria-label="${t("seller.sf.storeSearch")}" />
           <svg class="store-nav__search-icon absolute end-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 cursor-pointer hover:text-primary-500 transition-colors"
                fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -209,7 +210,7 @@ export function StoreNav(data: StoreNavData): string {
           <div class="relative w-full">
             <input type="text"
                    class="store-nav__search-input w-full bg-gray-50 border border-gray-300 rounded-full px-4 py-2 pe-9 text-[14px] text-[#374151] placeholder-gray-400 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors"
-                   placeholder="${data.searchPlaceholder}"
+                   placeholder="${escapeHtml(data.searchPlaceholder)}"
                    aria-label="${t("seller.sf.storeSearch")}" />
             <svg class="absolute end-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
                  fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">

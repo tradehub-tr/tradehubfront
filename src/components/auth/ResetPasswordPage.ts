@@ -24,7 +24,7 @@ function ResetPasswordHeader(): string {
         <a href="${baseUrl}" aria-label="iSTOC Ana Sayfa">
           <img src="${baseUrl}images/istoc-logo.png" alt="iSTOC" class="h-7" />
         </a>
-        <div x-data="authLangSwitcher" x-init="init()">
+        <div x-data="authLangSwitcher">
           <select
             class="th-input th-input-sm w-auto cursor-pointer"
             x-model="lang"

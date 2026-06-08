@@ -40,7 +40,7 @@ export function InboxPanel(): string {
                          [&.msg-inbox__cat--active]:bg-[var(--color-border-light)]
                          [&.msg-inbox__cat--active]:text-[var(--color-text-heading,#111827)]
                          [&.msg-inbox__cat--active]:font-semibold"
-                  :class="activeCategory === cat.id ? 'msg-inbox__cat--active' : ''"
+                  :class="activeCategory === cat.id ? 'msg-inbox__cat--active' : ''">
             <!-- Chat icon -->
             <template x-if="cat.icon === 'chat'">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">

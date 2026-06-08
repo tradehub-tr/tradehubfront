@@ -12,6 +12,7 @@ import {
   getFilterFacets,
   type ListingSearchParams,
 } from "../../services/listingService";
+import { queryKeys } from "../../lib/query";
 import { updateFacetCounts } from "./FilterSidebar";
 
 /* ── Types ── */
@@ -139,6 +140,10 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
   let currentSort: SortKey = "best-match";
   let currentPage = 1;
   let abortCtrl: AbortController | null = null;
+  // Son prefetch edilen sonraki-sayfa key'i — aynı sonuç birden çok kez işlenirse
+  // (ör. facet reload tetikli refetch) aynı prefetch'i gereksiz tekrar etmeyelim.
+  // queryFetch/prefetch zaten key bazlı dedup eder; bu sadece bariz tekrarı önler.
+  let lastPrefetchedKey = "";
   const ac = new AbortController();
   const { signal } = ac;
 
@@ -195,15 +200,23 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
 
   /** Fetch from backend with current filters */
   async function fetchResults(): Promise<void> {
-    // Cancel any in-flight request
+    // Supersede any in-flight request. searchListings does not accept an
+    // AbortSignal, so true network cancellation isn't possible — instead we
+    // tag this call with its own controller and, after the await, drop the
+    // result if a newer fetchResults() has started (prevents an older/slower
+    // response from overwriting the grid out of order).
     if (abortCtrl) abortCtrl.abort();
-    abortCtrl = new AbortController();
+    const myCtrl = new AbortController();
+    abortCtrl = myCtrl;
 
     onLoading?.();
 
     try {
       const params = buildParams();
       const result = await searchListings(params);
+
+      // A newer request started while we were awaiting → discard this result.
+      if (myCtrl.signal.aborted) return;
 
       syncToUrl();
 
@@ -215,6 +228,27 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
         result.hasNext,
         result.hasPrev
       );
+
+      // Sonraki sayfayı arka planda prefetch et → kullanıcı "sonraki"ye basınca
+      // cache'ten anında çözülsün. params shape'i searchListings/queryKeys.listings
+      // ile birebir aynı olmalı (yalnızca page artar) yoksa key eşleşmez.
+      //
+      // searchListings KENDİSİ queryFetch ile aynı key'e yazdığı için prefetch()'in
+      // queryFn'ine searchListings'i sarmak çift-wrap olur (dış prefetchQuery iç
+      // fetchQuery'yi aynı key'le dedup eder → network hiç koşmaz). Bu yüzden
+      // doğrudan searchListings çağırıp sonucu yutuyoruz: aynı cache'i doldurur.
+      if (result.hasNext) {
+        const nextParams: ListingSearchParams = { ...params, page: currentPage + 1 };
+        const nextKeyStr = JSON.stringify(
+          queryKeys.listings(nextParams as unknown as Record<string, unknown>)
+        );
+        if (nextKeyStr !== lastPrefetchedKey) {
+          lastPrefetchedKey = nextKeyStr;
+          void searchListings(nextParams).catch(() => {
+            // prefetch hatası sessizce yutulur — UI etkilenmez.
+          });
+        }
+      }
 
       // Aktif filtrelerle facet sayımlarını yeniden çek → sidebar'daki (xx) rakamları
       // dinamik olarak azalsın. Backend henüz aktif filtreleri kabul etmiyorsa

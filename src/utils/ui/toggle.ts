@@ -25,6 +25,8 @@
  *             { value: "corporate", label: "Kurumsal" }] })}`
  */
 
+import { escapeHtml } from "../sanitize";
+
 export interface SwitchOptions {
   /** Native input `name` — veri sözleşmesi, değiştirme. */
   name: string;
@@ -57,24 +59,24 @@ export interface SwitchOptions {
  */
 export function renderSwitch(opts: SwitchOptions): string {
   const { name, field, checked, label, description, onValue, offValue, xModel, className } = opts;
-  const fieldAttr = field ? ` data-field="${field}"` : "";
+  const fieldAttr = field ? ` data-field="${escapeHtml(field)}"` : "";
   const usesHidden = onValue !== undefined && offValue !== undefined;
-  const xModelAttr = xModel ? ` x-model="${xModel}"` : "";
+  const xModelAttr = xModel ? ` x-model="${escapeHtml(xModel)}"` : "";
 
   // value-mapped mod: checkbox görsel + sync, hidden input gerçek değeri tutar.
   const checkboxAttrs = usesHidden
     ? ` data-toggle-sync${xModelAttr}`
-    : ` name="${name}"${fieldAttr}${xModelAttr}`;
+    : ` name="${escapeHtml(name)}"${fieldAttr}${xModelAttr}`;
 
   const hidden = usesHidden
-    ? `<input type="hidden" name="${name}"${fieldAttr} value="${checked ? onValue : offValue}" data-on-value="${onValue}" data-off-value="${offValue}" />`
+    ? `<input type="hidden" name="${escapeHtml(name)}"${fieldAttr} value="${escapeHtml((checked ? onValue : offValue) ?? "")}" data-on-value="${escapeHtml(onValue ?? "")}" data-off-value="${escapeHtml(offValue ?? "")}" />`
     : "";
 
   return `
-    <label class="flex items-center justify-between gap-4 cursor-pointer${className ? ` ${className}` : ""}">
+    <label class="flex items-center justify-between gap-4 cursor-pointer${className ? ` ${escapeHtml(className)}` : ""}">
       <span class="min-w-0">
-        <span class="block text-sm font-medium" style="color:var(--color-text-primary)">${label}</span>
-        ${description ? `<span class="block text-xs mt-0.5" style="color:var(--color-text-tertiary)">${description}</span>` : ""}
+        <span class="block text-sm font-medium" style="color:var(--color-text-primary)">${escapeHtml(label)}</span>
+        ${description ? `<span class="block text-xs mt-0.5" style="color:var(--color-text-tertiary)">${escapeHtml(description)}</span>` : ""}
       </span>
       ${hidden}
       <span class="relative inline-flex shrink-0">
@@ -113,8 +115,8 @@ export interface SegmentedOptions {
  */
 export function renderSegmented(opts: SegmentedOptions): string {
   const { name, field, value, options, xModel, className } = opts;
-  const fieldAttr = field ? ` data-field="${field}"` : "";
-  const xModelAttr = xModel ? ` x-model="${xModel}"` : "";
+  const fieldAttr = field ? ` data-field="${escapeHtml(field)}"` : "";
+  const xModelAttr = xModel ? ` x-model="${escapeHtml(xModel)}"` : "";
 
   // Her segment kendi <label> sarmalayıcısında: radio (peer) hemen kardeş span'i
   // boyar. İsimsiz `peer` kullanılır (Tailwind JIT için statik class şart) —
@@ -124,8 +126,8 @@ export function renderSegmented(opts: SegmentedOptions): string {
       const checked = opt.value === value ? "checked" : "";
       return `
         <label class="flex-1 cursor-pointer">
-          <input type="radio" name="${name}" value="${opt.value}"${fieldAttr}${xModelAttr} ${checked} class="peer sr-only" />
-          <span class="block text-center text-sm font-medium py-2 px-3 rounded-md transition-colors select-none text-[color:var(--color-text-secondary)] peer-checked:bg-[var(--color-primary-500,#cc9900)] peer-checked:text-white">${opt.label}</span>
+          <input type="radio" name="${escapeHtml(name)}" value="${escapeHtml(opt.value)}"${fieldAttr}${xModelAttr} ${checked} class="peer sr-only" />
+          <span class="block text-center text-sm font-medium py-2 px-3 rounded-md transition-colors select-none text-[color:var(--color-text-secondary)] peer-checked:bg-[var(--color-primary-500,#cc9900)] peer-checked:text-white">${escapeHtml(opt.label)}</span>
         </label>
       `;
     })

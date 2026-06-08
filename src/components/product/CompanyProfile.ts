@@ -6,6 +6,7 @@
 
 import { getCurrentProduct } from "../../alpine/product";
 import { t } from "../../i18n";
+import { escapeHtml } from "../../utils/sanitize";
 
 export function CompanyProfile(): string {
   const mockProduct = getCurrentProduct();
@@ -17,7 +18,7 @@ export function CompanyProfile(): string {
       <div class="flex items-center justify-between gap-5 mb-6 p-6 rounded-lg border max-sm:flex-col max-sm:items-start max-[374px]:p-3.5 max-[374px]:gap-3 max-[374px]:mb-4" style="background: linear-gradient(135deg, var(--pd-spec-header-bg, #f9fafb) 0%, #fff 100%); border-color: var(--pd-spec-border, #e5e5e5);">
         <div>
           <div class="flex items-center gap-2 text-xl font-bold max-[374px]:text-base max-[374px]:gap-1.5" style="color: var(--pd-title-color, #111827);">
-            ${s.name}
+            ${escapeHtml(s.name)}
             ${
               s.verified
                 ? `
@@ -39,21 +40,21 @@ export function CompanyProfile(): string {
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color: var(--pd-rating-text-color, #6b7280); margin-bottom: 6px;">
             <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
           </svg>
-          <span class="text-xl font-extrabold" style="color: var(--pd-title-color, #111827);">${s.responseTime}</span>
+          <span class="text-xl font-extrabold" style="color: var(--pd-title-color, #111827);">${escapeHtml(s.responseTime)}</span>
           <span class="text-xs mt-1" style="color: var(--pd-rating-text-color, #6b7280);">${t("product.responseTime")}</span>
         </div>
         <div class="flex flex-col items-center text-center p-4 rounded-lg border max-[374px]:p-3 max-[374px]:flex-row max-[374px]:gap-2 max-[374px]:text-start" style="border-color: var(--pd-spec-border, #e5e5e5); background: var(--color-surface, #ffffff);">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color: var(--pd-rating-text-color, #6b7280); margin-bottom: 6px;">
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
           </svg>
-          <span class="text-xl font-extrabold" style="color: var(--pd-title-color, #111827);">${s.responseRate}</span>
+          <span class="text-xl font-extrabold" style="color: var(--pd-title-color, #111827);">${escapeHtml(s.responseRate)}</span>
           <span class="text-xs mt-1" style="color: var(--pd-rating-text-color, #6b7280);">${t("product.responseRate")}</span>
         </div>
         <div class="flex flex-col items-center text-center p-4 rounded-lg border max-[374px]:p-3 max-[374px]:flex-row max-[374px]:gap-2 max-[374px]:text-start" style="border-color: var(--pd-spec-border, #e5e5e5); background: var(--color-surface, #ffffff);">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color: var(--pd-rating-text-color, #6b7280); margin-bottom: 6px;">
             <rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
           </svg>
-          <span class="text-xl font-extrabold" style="color: var(--pd-title-color, #111827);">${s.onTimeDelivery}</span>
+          <span class="text-xl font-extrabold" style="color: var(--pd-title-color, #111827);">${escapeHtml(s.onTimeDelivery)}</span>
           <span class="text-xs mt-1" style="color: var(--pd-rating-text-color, #6b7280);">${t("product.onTimeDelivery")}</span>
         </div>
       </div>
@@ -65,15 +66,15 @@ export function CompanyProfile(): string {
           <tbody>
             <tr>
               <td class="pd-attrs-key">${t("product.employees")}</td>
-              <td class="pd-attrs-val">${s.employees}</td>
+              <td class="pd-attrs-val">${escapeHtml(s.employees)}</td>
               <td class="pd-attrs-key">${t("product.annualRevenue")}</td>
-              <td class="pd-attrs-val">${s.annualRevenue}</td>
+              <td class="pd-attrs-val">${escapeHtml(s.annualRevenue)}</td>
             </tr>
             <tr>
               <td class="pd-attrs-key">${t("product.yearsInBusiness")}</td>
               <td class="pd-attrs-val">${t("product.servingYears", { count: String(s.yearsInBusiness) })}</td>
               <td class="pd-attrs-key">${t("product.mainProductsLabel")}</td>
-              <td class="pd-attrs-val">${s.mainProducts.join(", ")}</td>
+              <td class="pd-attrs-val">${escapeHtml(s.mainProducts.join(", "))}</td>
             </tr>
           </tbody>
         </table>
@@ -130,7 +131,7 @@ export function CompanyProfile(): string {
               <svg class="h-5 w-5" style="color: var(--pd-trade-assurance-text, #15803d);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
               </svg>
-              <span class="text-sm font-medium" style="color: var(--pd-title-color, #111827);">${cert}</span>
+              <span class="text-sm font-medium" style="color: var(--pd-title-color, #111827);">${escapeHtml(cert)}</span>
             </div>
           `
             )

@@ -17,6 +17,7 @@ import {
   getCachedSlides,
   type HeroSlideItem,
 } from "../../services/heroSliderService";
+import { escapeHtml, sanitizeUrl, safeHexColor } from "../../utils/sanitize";
 
 interface ResolvedSlide {
   label: string;
@@ -39,17 +40,23 @@ const ALIGN_MAP: Record<ResolvedSlide["align"], string> = {
   right: "items-end text-right",
 };
 
-function escapeHtml(s: string): string {
-  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+/**
+ * Sanitize an admin-supplied CSS value for an inline `style` background.
+ * It can be a gradient/color (not reducible to a single hex), so we cannot use
+ * safeHexColor here. Instead we strip the tokens that enable CSS-injection /
+ * clickjacking — url(), expression(), @import, JS schemes and the characters
+ * that could close the declaration or break out of the style attribute — then
+ * escapeHtml() the result before it reaches the attribute.
+ */
+function safeBackgroundCss(value: unknown, fallback: string): string {
+  const raw = String(value ?? "").trim();
+  if (!raw) return fallback;
+  const dangerous =
+    /url\s*\(|expression\s*\(|@import|javascript:|vbscript:|data:|[;{}<>\\]/i;
+  return dangerous.test(raw) ? fallback : raw;
 }
 
-function escapeAttr(s: string): string {
-  return s
-    .replace(/&/g, "&amp;")
-    .replace(/"/g, "&quot;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
-}
+const FALLBACK_BG = "linear-gradient(120deg, #0c2e61 0%, #1f5fae 50%, #2f80ed 100%)";
 
 /** Built-in fallback slides shown when the admin has not added any yet. */
 function defaultSlides(): ResolvedSlide[] {
@@ -115,26 +122,27 @@ function renderSlide(s: ResolvedSlide): string {
   const align = ALIGN_MAP[s.align] ?? ALIGN_MAP.center;
   const overlay = s.overlay ? `<div class="absolute inset-0 bg-black/35"></div>` : "";
   const href = s.href || "#";
+  const backgroundCss = safeBackgroundCss(s.backgroundCss, FALLBACK_BG);
   return `
     <div class="swiper-slide">
-      <a href="${escapeAttr(href)}" class="hero-top-slide-link group relative block h-full overflow-hidden rounded-md shadow-sm transition-transform duration-200 ease-out">
-        <div class="absolute inset-0" style="background: ${s.backgroundCss};"></div>
+      <a href="${escapeHtml(sanitizeUrl(href))}" class="hero-top-slide-link group relative block h-full overflow-hidden rounded-md shadow-sm transition-transform duration-200 ease-out">
+        <div class="absolute inset-0" style="background: ${escapeHtml(backgroundCss)};"></div>
         ${overlay}
-        <div class="relative z-10 flex h-full flex-col justify-center gap-2 p-4 sm:gap-4 sm:p-10 xl:p-14 ${align}" style="color: ${escapeAttr(s.textColor)};">
+        <div class="relative z-10 flex h-full flex-col justify-center gap-1.5 p-3 sm:gap-4 sm:p-10 xl:p-14 ${align}" style="color: ${safeHexColor(s.textColor, "#ffffff")};">
           ${
             s.label
-              ? `<span class="inline-flex items-center rounded-full bg-white px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#1f5fae] shadow-sm sm:px-3 sm:text-xs">${escapeHtml(s.label)}</span>`
+              ? `<span class="inline-flex max-w-full items-center truncate rounded-full bg-white px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#1f5fae] shadow-sm sm:px-3 sm:text-[11px]">${escapeHtml(s.label)}</span>`
               : ""
           }
-          <h2 class="max-w-2xl text-xl font-extrabold leading-[1.15] sm:text-4xl sm:leading-[1.1] lg:text-5xl xl:text-6xl">${escapeHtml(s.title)}</h2>
+          <h2 class="line-clamp-2 max-w-2xl text-xl font-extrabold leading-tight sm:text-3xl sm:leading-[1.1] md:text-4xl lg:text-5xl xl:text-6xl">${escapeHtml(s.title)}</h2>
           ${
             s.description
-              ? `<p class="max-w-md text-xs leading-snug opacity-90 sm:text-base">${escapeHtml(s.description)}</p>`
+              ? `<p class="line-clamp-2 max-w-md text-sm leading-snug opacity-90 sm:text-base lg:text-lg">${escapeHtml(s.description)}</p>`
               : ""
           }
           ${
             s.buttonText
-              ? `<span class="mt-1 inline-flex w-fit items-center justify-center rounded-full bg-white px-5 py-2.5 text-[13px] font-semibold text-[#0c2e61] shadow-lg transition-transform group-hover:scale-[1.03] sm:mt-2 sm:px-9 sm:py-3 sm:text-base">${escapeHtml(s.buttonText)}</span>`
+              ? `<span class="mt-1 inline-flex w-fit items-center justify-center rounded-full bg-white px-4 py-2 text-xs font-semibold text-[#0c2e61] shadow-lg transition-transform group-hover:scale-[1.03] sm:mt-2 sm:px-9 sm:py-3 sm:text-sm lg:text-base">${escapeHtml(s.buttonText)}</span>`
               : ""
           }
         </div>

@@ -8,6 +8,7 @@
  */
 
 import { t } from "../../i18n";
+import { escapeHtml } from "../../utils/sanitize";
 
 /** Alpine internal: x-data binding stack üzerinden component state'ine erişmek için */
 interface AlpineDataEl extends HTMLElement {
@@ -224,7 +225,7 @@ async function loadCategoryTabs(): Promise<void> {
           "flex items-center w-full px-5 py-4 text-start transition-colors border-b border-gray-50 active:bg-gray-50";
         sheetBtn.dataset.catSlug = slug;
         sheetBtn.innerHTML = `
-          <span class="flex-1 text-[15px] text-gray-600">${name}</span>
+          <span class="flex-1 text-[15px] text-gray-600">${escapeHtml(name)}</span>
           <span class="flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors border-gray-300 bg-transparent">
             <span class="w-2 h-2 rounded-full transition-colors bg-transparent"></span>
           </span>

@@ -6,6 +6,8 @@ import { resolve } from 'path'
 import { readFileSync, writeFileSync, existsSync } from 'fs'
 import fg from 'fast-glob'
 import { getStaticPageHtmlMap } from './src/utils/staticPageUrl'
+import pkg from './package.json' with { type: 'json' }
+import { visualizer } from 'rollup-plugin-visualizer'
 
 /**
  * Her HTML giriş dosyasının <head>'ine FOUC önleme scripti enjekte eder.
@@ -25,6 +27,29 @@ function themeBootstrapPlugin(): Plugin {
                 // <head> açılış tag'inin hemen ardına ekle — stylesheet'ten önce
                 if (html.includes('tradehub-theme-remote')) return html; // idempotent
                 return html.replace(/<head([^>]*)>/i, `<head$1>\n    ${inlineScript}`);
+            },
+        },
+    };
+}
+
+function fontHeadPlugin(): Plugin {
+    // Google Fonts (Inter) artık CSS @import yerine HTML <head>'de paralel yükleniyor.
+    // CSS-içi remote @import, style.css indirilip parse edilmeden font keşfedilmediği için
+    // LCP/FCP zincirini serileştiriyordu (T10 baseline'da ~861ms blocking). preconnect +
+    // async-olmayan ama paralel stylesheet link, font'u kritik zincirden çıkarır;
+    // display=swap FOUT yerine FOIT'i önler. Workbox bu host'ları zaten CacheFirst'lüyor.
+    const fontLinks = [
+        '<link rel="preconnect" href="https://fonts.googleapis.com" />',
+        '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />',
+        '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" />',
+    ].join('\n    ');
+    return {
+        name: 'font-head-inject',
+        transformIndexHtml: {
+            order: 'pre',
+            handler(html) {
+                if (html.includes('family=Inter')) return html; // idempotent
+                return html.replace(/<head([^>]*)>/i, `<head$1>\n    ${fontLinks}`);
             },
         },
     };
@@ -194,6 +219,9 @@ function seoPlaceholderPlugin(): Plugin {
 
 export default defineConfig({
     base: process.env.GITHUB_PAGES === 'true' ? '/tradehubfront/' : '/',
+    define: {
+        'import.meta.env.VITE_APP_VERSION': JSON.stringify(pkg.version),
+    },
     server: {
         host: '0.0.0.0',
         // Docker bind mount'larda inotify dosya değişikliklerini kaçırabiliyor.
@@ -204,15 +232,15 @@ export default defineConfig({
         },
         proxy: {
             '/api': {
-                target: 'http://localhost:8088',
+                target: 'http://localhost:8000',
                 changeOrigin: true,
             },
             '/files': {
-                target: 'http://localhost:8088',
+                target: 'http://localhost:8000',
                 changeOrigin: true,
             },
             '/private/files': {
-                target: 'http://localhost:8088',
+                target: 'http://localhost:8000',
                 changeOrigin: true,
             },
         },
@@ -220,6 +248,7 @@ export default defineConfig({
     plugins: [
         tailwindcss(),
         themeBootstrapPlugin(),
+        fontHeadPlugin(),
         cssEditorPlugin(),
         // notFoundFallbackPlugin'den ÖNCE çalışmalı: önce rewrite,
         // eşleşmezse 404.html fallback.
@@ -227,6 +256,13 @@ export default defineConfig({
         prettyUrlRewritePlugin(),
         notFoundFallbackPlugin(),
         seoPlaceholderPlugin(),
+        // Bundle analizi — yalnızca build'de treemap üretir (perf-reports/bundle-stats.html,
+        // gitignore'lu). tailwindcss() ilk kalmalı; visualizer en sonda zararsız.
+        visualizer({
+            filename: 'perf-reports/bundle-stats.html',
+            gzipSize: true,
+            template: 'treemap',
+        }) as unknown as Plugin,
         VitePWA({
             // Multi-page yapıda kullanıcı navigation = tam reload — autoUpdate güvenli ve UI gerektirmez.
             registerType: 'autoUpdate',
@@ -272,6 +308,10 @@ export default defineConfig({
                 runtimeCaching: [
                     {
                         // Frappe API — cookie session ile, network-first + offline fallback YOK (POST cache'lenmez).
+                        // CACHE KATMAN SINIRI: Uygulama-veri freshness'ı artık TanStack Query + IndexedDB
+                        // persister (src/lib/query) tarafından yönetiliyor (instant render + SWR + dedup).
+                        // Bu SW cache'i yalnızca OFFLINE / ağ-yedeği rolünde — 5dk TTL bu amaç için yeterli.
+                        // POST istekleri NetworkOnly kalır.
                         urlPattern: ({ url }) => url.pathname.startsWith('/api/method/'),
                         handler: 'NetworkFirst',
                         method: 'GET',
@@ -318,10 +358,20 @@ export default defineConfig({
                         },
                     },
                     {
-                        // HTML sayfaları — stale-while-revalidate; SW kullanıcıya eski sürüm gösterirken arkada günceller.
+                        // HTML sayfaları — NetworkFirst.
+                        // ÖNCEDEN StaleWhileRevalidate'di: navigasyonda (link tıklama) SW cache'teki
+                        // ESKİ HTML'i anında veriyordu. Hash'li asset isimleri her build'de değiştiği için
+                        // eski HTML eski (artık 404 olan) asset'leri referans ediyor → sayfa BOŞ açılıyor,
+                        // ancak refresh'te (arkada güncellenen cache) düzeliyordu. MPA + hash'li asset'lerde
+                        // bu kalıcı bir tuzak. NetworkFirst: önce ağdan taze HTML (doğru hash'ler), ağ
+                        // 3sn'de gelmezse cache'e düş (offline desteği korunur).
                         urlPattern: ({ request }) => request.destination === 'document',
-                        handler: 'StaleWhileRevalidate',
-                        options: { cacheName: 'pages' },
+                        handler: 'NetworkFirst',
+                        options: {
+                            cacheName: 'pages',
+                            networkTimeoutSeconds: 3,
+                            cacheableResponse: { statuses: [0, 200] },
+                        },
                     },
                     {
                         urlPattern: /^https:\/\/fonts\.(googleapis|gstatic)\.com\//,
@@ -370,6 +420,8 @@ export default defineConfig({
                     if (id.includes('node_modules/dompurify')) return 'vendor-dompurify';
                     // Vendor: ECharts (+ zrender bağımlılığı) — buyer dashboard analitiği
                     if (id.includes('node_modules/echarts') || id.includes('node_modules/zrender')) return 'vendor-echarts';
+                    // Vendor: TanStack Query + idb-keyval — client-side cache katmanı (src/lib/query)
+                    if (id.includes('node_modules/@tanstack') || id.includes('node_modules/idb-keyval')) return 'vendor-tanstack';
                     // App: i18n locale files (large)
                     if (id.includes('src/i18n/locales/')) return 'locales';
                     // App: Alpine data modules

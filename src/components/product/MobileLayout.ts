@@ -7,7 +7,7 @@
  */
 
 import { getCurrentProduct } from "../../alpine/product";
-import { t } from "../../i18n";
+import { t, getCurrentLang } from "../../i18n";
 import { formatCurrency, getSelectedCurrency } from "../../services/currencyService";
 import { getCurrencySymbol } from "../../utils/currency";
 import type { ProductVariant } from "../../types/product";
@@ -20,6 +20,7 @@ import { RelatedProducts } from "./RelatedProducts";
 import { MobileRecommendations, initMobileRecommendations } from "./MobileRecommendations";
 import { SocialProofBadge } from "./SocialProofBadge";
 import { getSellerUrl } from "../../utils/sellerUrl";
+import { escapeHtml, sanitizeUrl, safeHexColor } from "../../utils/sanitize";
 
 // Product loaded lazily — getCurrentProduct() called inside functions
 
@@ -28,6 +29,11 @@ import { getSellerUrl } from "../../utils/sellerUrl";
 const chevronSvg = `<svg class="pdm-chevron transition-transform duration-200 ease-linear" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg>`;
 
 const closeSvg = `<svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 6l12 12M18 6l-12 12"/></svg>`;
+
+/** Kategori/sıra sayılarını aktif dile göre binlik ayraçla biçimler. */
+function fmtNum(n: number): string {
+  return n.toLocaleString(getCurrentLang() === "en" ? "en-US" : "tr-TR");
+}
 
 /* ── Reusable component builders ─────────────────────── */
 
@@ -90,7 +96,7 @@ function renderVariantSection(variant: ProductVariant): string {
       .map(
         (opt) => `
       <button type="button" class="pdm-color-thumb w-14 h-14 rounded-[6px] border-2 border-border-default overflow-hidden cursor-pointer p-0 bg-none transition-[border-color] duration-150 [&.active]:border-[var(--color-text-heading)] [&.pdm-disabled]:opacity-40 [&.pdm-disabled]:cursor-not-allowed${!opt.available ? " pdm-disabled" : ""}"
-        data-value="${opt.id}" data-label="${opt.label}" ${opt.price ? `data-variant-price="${opt.price}"` : ""} ${!opt.available ? "disabled" : ""}>
+        data-value="${escapeHtml(opt.id)}" data-label="${escapeHtml(opt.label)}" ${opt.price ? `data-variant-price="${escapeHtml(opt.price)}"` : ""} ${!opt.available ? "disabled" : ""}>
         ${
           opt.thumbnail
             ? `<img src="${opt.thumbnail}" alt="${opt.displayLabel || opt.label}" class="w-full h-full object-cover" />`
@@ -145,7 +151,7 @@ export function MobileProductLayout(): string {
           <div class="pdm-gallery-slide shrink-0 basis-full w-full h-full [scroll-snap-align:start] [scroll-snap-stop:always]" data-slide-index="${i}">
             ${
               img.src
-                ? `<img class="w-full h-full object-contain select-none" src="${img.src}" alt="${img.alt}" draggable="false" loading="${i === 0 ? "eager" : "lazy"}">`
+                ? `<img class="w-full h-full object-contain select-none" src="${escapeHtml(sanitizeUrl(img.src))}" alt="${escapeHtml(img.alt)}" draggable="false" loading="${i === 0 ? "eager" : "lazy"}">`
                 : `<div class="pdm-gallery-placeholder w-full h-full flex items-center justify-center bg-gradient-to-b from-[#f8f9fa] to-[#e9ecef]">
                   <svg width="64" height="64" fill="none" stroke="#9ca3af" stroke-width="1.4" viewBox="0 0 24 24">
                     <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>
@@ -227,7 +233,7 @@ export function MobileProductLayout(): string {
     ? `
     <div id="pdm-sample-row" class="flex items-center justify-between px-4 py-2.5 max-[374px]:px-3 max-[374px]:py-2 bg-surface text-[13px] max-[374px]:text-xs text-text-body">
       <span>${t("product.samplePrice")}: <strong>${formatCurrency(p.samplePrice, getSelectedCurrency())}</strong></span>
-      <button type="button" data-order-sample="${p.id}" class="pdm-sample-btn th-btn-outline px-[18px] py-1.5 max-[374px]:px-3.5 max-[374px]:py-[5px] text-[13px] max-[374px]:text-xs font-medium cursor-pointer transition-[background] duration-150 active:bg-[var(--btn-outline-hover-bg,var(--color-surface-raised,#f5f5f5))]">${t("cart.orderSample")}</button>
+      <button type="button" data-order-sample="${escapeHtml(p.id)}" class="pdm-sample-btn th-btn-outline px-[18px] py-1.5 max-[374px]:px-3.5 max-[374px]:py-[5px] text-[13px] max-[374px]:text-xs font-medium cursor-pointer transition-[background] duration-150 active:bg-[var(--btn-outline-hover-bg,var(--color-surface-raised,#f5f5f5))]">${t("cart.orderSample")}</button>
     </div>
   `
     : "";
@@ -235,7 +241,7 @@ export function MobileProductLayout(): string {
   const titleSection = `
     <div id="pdm-title-section" class="flex flex-col gap-2 pt-3.5 px-4 pb-3 max-[374px]:pt-3 max-[374px]:px-3 max-[374px]:pb-2.5 bg-surface">
       <div id="pdm-title-row" class="flex items-start justify-between gap-2">
-        <h1 id="pdm-product-title" class="text-[15px] max-[374px]:text-sm font-semibold leading-[1.45] text-text-heading m-0 flex-1 line-clamp-3">${p.title}</h1>
+        <h1 id="pdm-product-title" class="text-[15px] max-[374px]:text-sm font-semibold leading-[1.45] text-text-heading m-0 flex-1 line-clamp-3">${escapeHtml(p.title)}</h1>
         <button type="button" class="pdm-share-btn shrink-0 w-8 h-8 border-none bg-none cursor-pointer text-text-muted p-1 flex items-center justify-center" aria-label="${t("product.share")}">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
         </button>
@@ -282,12 +288,12 @@ export function MobileProductLayout(): string {
     sheetId: "shipping-modal", // special: opens existing ShippingModal
     previewHtml: `
       <div id="pdm-ship-preview" class="px-4 pb-3.5 text-[13px] text-text-body leading-[1.6]">
-        <div class="pdm-ship-method font-semibold text-text-heading">${p.shipping[0]?.method || t("product.shippingLabel")}</div>
+        <div class="pdm-ship-method font-semibold text-text-heading">${escapeHtml(p.shipping[0]?.method) || t("product.shippingLabel")}</div>
         ${
           p.shipping[0]
             ? `<div class="pdm-ship-detail flex gap-4 mt-1">
-          <span class="text-text-muted">${t("product.estimatedCost")}: <strong>${p.shipping[0].cost}</strong></span>
-          <span class="text-text-muted">${t("product.duration")}: <strong>${p.shipping[0].estimatedDays}</strong></span>
+          <span class="text-text-muted">${t("product.estimatedCost")}: <strong>${escapeHtml(p.shipping[0].cost)}</strong></span>
+          <span class="text-text-muted">${t("product.duration")}: <strong>${escapeHtml(p.shipping[0].estimatedDays)}</strong></span>
         </div>`
             : ""
         }
@@ -307,8 +313,8 @@ export function MobileProductLayout(): string {
             .map(
               (s) => `
             <div class="pdm-attr-item flex flex-col">
-              <span class="pdm-attr-key text-[11px] text-text-placeholder">${s.key}</span>
-              <span class="pdm-attr-val text-[13px] text-text-heading font-medium">${s.value}</span>
+              <span class="pdm-attr-key text-[11px] text-text-placeholder">${escapeHtml(s.key)}</span>
+              <span class="pdm-attr-val text-[13px] text-text-heading font-medium">${escapeHtml(s.value)}</span>
             </div>
           `
             )
@@ -389,8 +395,8 @@ export function MobileProductLayout(): string {
             .map(
               (lt) => `
             <div class="flex flex-col">
-              <span class="text-base max-[374px]:text-sm font-bold text-text-heading leading-tight">${lt.days}</span>
-              <span class="text-[11px] text-text-placeholder mt-0.5">${lt.quantityRange}</span>
+              <span class="text-base max-[374px]:text-sm font-bold text-text-heading leading-tight">${escapeHtml(lt.days)}</span>
+              <span class="text-[11px] text-text-placeholder mt-0.5">${escapeHtml(lt.quantityRange)}</span>
             </div>
           `
             )
@@ -398,6 +404,63 @@ export function MobileProductLayout(): string {
         </div>
       </div>
       <p class="text-xs text-text-muted leading-[1.6] mt-3">${t("product.processingTimeNote")}</p>
+    </div>
+  `
+    : "";
+
+  // ── Section: Sales Rank (kategori bazlı satış sıralaması) ──
+  // Masaüstü AttributesTabContent'teki ProductSalesRank'ın mobil karşılığı.
+  // En spesifik (i===0) kategori "ödül" hissiyle vurgulanır; her kart o
+  // kategorinin listesine linklenir. categoryRanks boşsa render edilmez.
+
+  const ranks = p.categoryRanks ?? [];
+  const salesRankSection = ranks.length
+    ? `
+    <div class="pdm-section-divider h-2 bg-surface-raised"></div>
+    <div id="pdm-sales-rank" class="bg-surface px-4 py-4 max-[374px]:px-3">
+      <div class="flex items-center gap-2 mb-1">
+        <svg class="shrink-0 text-amber-500" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4zM5 4H3v2a3 3 0 0 0 3 3M19 4h2v2a3 3 0 0 1-3 3"/></svg>
+        <h2 class="text-[15px] font-bold text-text-heading m-0">${t("product.salesRank")}</h2>
+      </div>
+      <p class="text-xs text-text-muted leading-[1.5] mb-3">${t("product.salesRankSubtitle")}</p>
+      <div class="flex flex-col gap-2.5">
+        ${ranks
+          .map((r, i) => {
+            const isTop = i === 0;
+            const cardCls = isTop
+              ? "border-amber-200 bg-amber-50/60"
+              : "border-border-default bg-surface";
+            const medalCls = isTop
+              ? "bg-surface border-amber-200"
+              : "bg-surface-raised border-border-default";
+            const medalLabelCls = isTop ? "text-amber-600/70" : "text-text-placeholder";
+            const medalNumCls = isTop ? "text-amber-500" : "text-primary-600";
+            const badge =
+              isTop && r.rank === 1
+                ? `<span class="inline-flex shrink-0 items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold text-amber-700">
+                     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4zM5 4H3v2a3 3 0 0 0 3 3M19 4h2v2a3 3 0 0 1-3 3"/></svg>
+                     ${t("product.bestSeller")}
+                   </span>`
+                : "";
+            return `
+            <a href="/pages/products.html?cat=${encodeURIComponent(r.slug)}"
+               class="group flex items-center gap-3 rounded-md border ${cardCls} px-2.5 py-2.5 no-underline transition-colors duration-150 active:bg-surface-raised">
+              <div class="flex shrink-0 w-12 h-12 max-[374px]:w-11 max-[374px]:h-11 flex-col items-center justify-center rounded-md border ${medalCls}">
+                <span class="text-[8px] font-semibold uppercase tracking-wider leading-none ${medalLabelCls}">${t("product.salesRankPosition")}</span>
+                <span class="mt-0.5 text-lg max-[374px]:text-base font-extrabold leading-none tabular-nums ${medalNumCls}">#${fmtNum(r.rank)}</span>
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="flex flex-wrap items-center gap-x-1.5 gap-y-1">
+                  <span class="text-[13.5px] max-[374px]:text-[13px] font-bold text-text-heading leading-snug group-active:underline">${escapeHtml(r.categoryName)}</span>
+                  ${badge}
+                </div>
+                <span class="mt-0.5 block text-[11.5px] text-text-muted tabular-nums">${t("product.salesRankOutOf", { total: fmtNum(r.total) })}</span>
+              </div>
+              <svg class="h-4 w-4 shrink-0 text-text-placeholder rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+            </a>`;
+          })
+          .join("")}
+      </div>
     </div>
   `
     : "";
@@ -410,10 +473,10 @@ export function MobileProductLayout(): string {
   const supplierSection = `
     <div class="pdm-section-divider h-2 bg-surface-raised"></div>
     <div id="pdm-supplier-card" class="bg-surface px-4 py-3.5 max-[374px]:px-3 max-[374px]:py-3">
-      <a href="${sellerProfileUrl}" class="pdm-supplier-header flex items-center gap-3 mb-3 no-underline">
-        <div class="pdm-supplier-logo w-10 h-10 rounded-lg bg-[#fef9e7] flex items-center justify-center shrink-0 text-sm font-bold text-primary-600">${si.name.charAt(0)}${si.name.split(" ")[1]?.charAt(0) || ""}</div>
+      <a href="${escapeHtml(sanitizeUrl(sellerProfileUrl))}" class="pdm-supplier-header flex items-center gap-3 mb-3 no-underline">
+        <div class="pdm-supplier-logo w-10 h-10 rounded-lg bg-[#fef9e7] flex items-center justify-center shrink-0 text-sm font-bold text-primary-600">${escapeHtml(si.name.charAt(0))}${escapeHtml(si.name.split(" ")[1]?.charAt(0) || "")}</div>
         <div class="min-w-0 flex-1">
-          <div class="pdm-supplier-name text-[13px] font-bold text-text-heading leading-snug truncate">${si.name}</div>
+          <div class="pdm-supplier-name text-[13px] font-bold text-text-heading leading-snug truncate">${escapeHtml(si.name)}</div>
           <div class="pdm-supplier-meta text-[11px] text-text-muted mt-0.5 flex items-center gap-1">
             ${t("product.yearsLabel", { count: String(si.yearsInBusiness) })} <span>&middot;</span> ${si.verified ? t("product.verifiedSupplier") : ""}
           </div>
@@ -430,7 +493,7 @@ export function MobileProductLayout(): string {
           .map(
             (s) => `
           <div class="pdm-supplier-stat flex flex-col items-center py-2 px-1 border-e border-border-default last:border-e-0 text-center">
-            <strong class="text-[13px] max-[374px]:text-xs font-bold text-text-heading leading-snug">${s.val}</strong>
+            <strong class="text-[13px] max-[374px]:text-xs font-bold text-text-heading leading-snug">${escapeHtml(s.val)}</strong>
             <span class="text-[10px] max-[374px]:text-[9px] text-text-placeholder mt-px leading-snug">${s.label}</span>
           </div>
         `
@@ -438,8 +501,8 @@ export function MobileProductLayout(): string {
           .join("")}
       </div>
       <div class="pdm-supplier-btns grid grid-cols-2 gap-2 mt-3">
-        <a href="${sellerProfileUrl}" class="h-9 rounded-md border border-border-medium bg-surface text-[12px] font-semibold text-text-heading cursor-pointer text-center transition-colors duration-150 active:bg-surface-raised inline-flex items-center justify-center no-underline">${t("product.companyProfile")}</a>
-        <a href="${sellerProductsUrl}" class="h-9 rounded-md border border-border-medium bg-surface text-[12px] font-semibold text-text-heading cursor-pointer text-center transition-colors duration-150 active:bg-surface-raised inline-flex items-center justify-center no-underline">${t("product.otherProducts")}</a>
+        <a href="${escapeHtml(sanitizeUrl(sellerProfileUrl))}" class="h-9 rounded-md border border-border-medium bg-surface text-[12px] font-semibold text-text-heading cursor-pointer text-center transition-colors duration-150 active:bg-surface-raised inline-flex items-center justify-center no-underline">${t("product.companyProfile")}</a>
+        <a href="${escapeHtml(sanitizeUrl(sellerProductsUrl))}" class="h-9 rounded-md border border-border-medium bg-surface text-[12px] font-semibold text-text-heading cursor-pointer text-center transition-colors duration-150 active:bg-surface-raised inline-flex items-center justify-center no-underline">${t("product.otherProducts")}</a>
       </div>
     </div>
   `;
@@ -452,7 +515,7 @@ export function MobileProductLayout(): string {
       t("product.keyAttributes"),
       `
       <table class="pdm-attrs-table w-full border-collapse table-fixed [&_tr]:border-b [&_tr]:border-[var(--color-border-light,#f0f0f0)] [&_tr:last-child]:border-b-0 [&_td]:py-3 [&_td]:text-sm [&_td]:align-top [&_td]:[word-break:break-word] [&_td]:[overflow-wrap:break-word]">
-        ${p.specs.map((s) => `<tr><td class="text-[var(--color-text-placeholder,#999)] w-[38%] pe-2.5 max-[374px]:text-xs max-[374px]:py-2.5 max-[374px]:w-[35%] max-[374px]:pe-2">${s.key}</td><td class="text-[var(--color-text-heading,#111827)] font-medium max-[374px]:text-xs max-[374px]:py-2.5">${s.value}</td></tr>`).join("")}
+        ${p.specs.map((s) => `<tr><td class="text-[var(--color-text-placeholder,#999)] w-[38%] pe-2.5 max-[374px]:text-xs max-[374px]:py-2.5 max-[374px]:w-[35%] max-[374px]:pe-2">${escapeHtml(s.key)}</td><td class="text-[var(--color-text-heading,#111827)] font-medium max-[374px]:text-xs max-[374px]:py-2.5">${escapeHtml(s.value)}</td></tr>`).join("")}
       </table>
     `
     ),
@@ -493,6 +556,7 @@ export function MobileProductLayout(): string {
         ${shippingSection}
         ${processingTimeSection}
         ${keyAttrsSection}
+        ${salesRankSection}
       </div>
 
       <!-- Supplier / Recommendations section -->

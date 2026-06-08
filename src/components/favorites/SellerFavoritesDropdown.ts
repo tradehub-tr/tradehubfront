@@ -17,6 +17,7 @@ import {
   removeSellerFromAll,
 } from "../../stores/sellerFavorites";
 import { showToast } from "../../utils/toast";
+import { escapeHtml } from "../../utils/sanitize";
 
 interface SellerData {
   code: string;
@@ -363,10 +364,4 @@ function renderCheckboxVisual(checked: boolean): string {
       </svg>
     </span>
   `;
-}
-
-function escapeHtml(str: string): string {
-  const div = document.createElement("div");
-  div.textContent = str;
-  return div.innerHTML;
 }

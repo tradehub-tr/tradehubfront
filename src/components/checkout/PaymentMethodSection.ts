@@ -7,6 +7,7 @@
 
 import type { CartSupplier } from "../../types/cart";
 import { t } from "../../i18n";
+import { escapeHtml } from "../../utils/sanitize";
 import "../payment/state/PaymentCardStore";
 
 export interface PaymentMethodSectionProps {
@@ -36,23 +37,25 @@ export function PaymentMethodSection({
           ? suppliers[0].name
           : "iSTOC";
 
+    const supplierNamesOptions = escapeHtml(JSON.stringify({ name: supplierNames }));
+
     return `
       <div class="pt-1">
-        <div class="co-pay-sub text-[11px] sm:text-[12px] text-[#8a877f] pb-3 uppercase tracking-[0.05em] font-semibold" data-i18n="checkout.paymentMethodFor" data-i18n-options='{"name":"${supplierNames}"}'>${t("checkout.paymentMethodFor", { name: supplierNames })}</div>
+        <div class="co-pay-sub text-[11px] sm:text-[12px] text-[#8a877f] pb-3 uppercase tracking-[0.05em] font-semibold" data-i18n="checkout.paymentMethodFor" data-i18n-options='${supplierNamesOptions}'>${t("checkout.paymentMethodFor", { name: supplierNames })}</div>
         <div class="co-pay-list flex flex-col gap-1.5 sm:gap-2">
           <!-- Option 1: Banka Havalesi / EFT (önerilen) -->
           <label class="co-pay-row relative flex items-start gap-2.5 sm:gap-3 px-3 sm:px-4 py-3 sm:py-[14px] border rounded-md bg-white cursor-pointer transition-all"
-            :class="selectedMethod === 'banka_havale' ? 'is-selected border-[#f5b800] bg-[#fff8e1] shadow-[0_0_0_3px_rgba(245,184,0,0.12)]' : 'border-[#e8e6e0] hover:border-[#d5d2c9]'">
+            :class="selectedMethod === 'banka_havale' ? 'is-selected border-primary-500 bg-primary-50 shadow-[0_0_0_3px_var(--color-primary-500,#cc9900)]/12' : 'border-[#e8e6e0] hover:border-[#d5d2c9]'">
             <input type="radio" name="payment_method" value="banka_havale" x-model="selectedMethod" class="absolute opacity-0 pointer-events-none">
             <span class="co-radio w-4 h-4 sm:w-[18px] sm:h-[18px] rounded-full shrink-0 border-[1.5px] bg-white inline-flex items-center justify-center mt-[1px] transition-all"
-              :class="selectedMethod === 'banka_havale' ? 'border-[#d39c00]' : 'border-[#d5d2c9]'">
+              :class="selectedMethod === 'banka_havale' ? 'border-primary-600' : 'border-[#d5d2c9]'">
               <span class="w-2 h-2 rounded-full transition-all"
-                :class="selectedMethod === 'banka_havale' ? 'bg-[#d39c00]' : 'bg-transparent'"></span>
+                :class="selectedMethod === 'banka_havale' ? 'bg-primary-600' : 'bg-transparent'"></span>
             </span>
             <div class="co-pay-content flex-1 min-w-0">
               <div class="co-pay-title-row flex items-center gap-2 mb-[2px]">
                 <span class="co-pay-title font-semibold text-[13px] sm:text-[14px] text-[#1a1a1a]" data-i18n="checkout.bankTransfer">${t("checkout.bankTransfer")}</span>
-                <span class="co-pill co-pill-amber inline-flex items-center gap-1 px-2 py-[3px] rounded-full text-[11.5px] font-semibold bg-[#fff8e1] text-[#d39c00] border-transparent border whitespace-nowrap" data-i18n="common.recommended">${t("common.recommended")}</span>
+                <span class="co-pill co-pill-amber inline-flex items-center gap-1 px-2 py-[3px] rounded-full text-[11.5px] font-semibold bg-primary-50 text-primary-600 border-transparent border whitespace-nowrap" data-i18n="common.recommended">${t("common.recommended")}</span>
               </div>
               <div class="co-pay-desc text-[11.5px] sm:text-[12.5px] text-[#8a877f]" data-i18n="checkout.bankTransferDesc">${t("checkout.bankTransferDesc")}</div>
             </div>
@@ -60,12 +63,12 @@ export function PaymentMethodSection({
 
           <!-- Option 2: Çek / Senet -->
           <label class="co-pay-row relative flex items-start gap-2.5 sm:gap-3 px-3 sm:px-4 py-3 sm:py-[14px] border rounded-md bg-white cursor-pointer transition-all"
-            :class="selectedMethod === 'cek_senet' ? 'is-selected border-[#f5b800] bg-[#fff8e1] shadow-[0_0_0_3px_rgba(245,184,0,0.12)]' : 'border-[#e8e6e0] hover:border-[#d5d2c9]'">
+            :class="selectedMethod === 'cek_senet' ? 'is-selected border-primary-500 bg-primary-50 shadow-[0_0_0_3px_var(--color-primary-500,#cc9900)]/12' : 'border-[#e8e6e0] hover:border-[#d5d2c9]'">
             <input type="radio" name="payment_method" value="cek_senet" x-model="selectedMethod" class="absolute opacity-0 pointer-events-none">
             <span class="co-radio w-4 h-4 sm:w-[18px] sm:h-[18px] rounded-full shrink-0 border-[1.5px] bg-white inline-flex items-center justify-center mt-[1px] transition-all"
-              :class="selectedMethod === 'cek_senet' ? 'border-[#d39c00]' : 'border-[#d5d2c9]'">
+              :class="selectedMethod === 'cek_senet' ? 'border-primary-600' : 'border-[#d5d2c9]'">
               <span class="w-2 h-2 rounded-full transition-all"
-                :class="selectedMethod === 'cek_senet' ? 'bg-[#d39c00]' : 'bg-transparent'"></span>
+                :class="selectedMethod === 'cek_senet' ? 'bg-primary-600' : 'bg-transparent'"></span>
             </span>
             <div class="co-pay-content flex-1 min-w-0">
               <div class="co-pay-title-row flex items-center gap-2 mb-[2px]">

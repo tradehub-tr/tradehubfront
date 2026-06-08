@@ -33,10 +33,13 @@ const API_BASE = window.API_BASE || '/api';
 // olarak kalır, `?seller=` query browser'da görünmez. Path'tan parse +
 // fallback olarak query (direct dosya erişimleri için).
 const _pathMatch = window.location.pathname.match(/^\/magaza\/([^/]+)/);
-const sellerCode =
+const _rawSellerCode =
   (_pathMatch && _pathMatch[1]) ||
   new URLSearchParams(window.location.search).get('seller') ||
   '';
+// sellerCode is reflected into fetch URLs and href attributes → restrict to the
+// slug charset so a path/query value cannot inject markup or break the URL.
+const sellerCode = decodeURIComponent(_rawSellerCode).replace(/[^a-zA-Z0-9._-]/g, '');
 
 function getDefaultLayout(): LayoutConfig {
   return {

@@ -20,6 +20,7 @@ import { uploadRfqAttachments, type FileProgress } from '../components/rfq/uploa
 import { renderFileGrid, updateFileCardProgress, simulateStagingProgress } from '../components/rfq/file-list'
 import { getCsrfToken, checkEmailNotVerifiedResponse, isEmailNotVerifiedError } from '../utils/api'
 import { getListingDetail } from '../services/listingService'
+import { escapeHtml } from '../utils/sanitize'
 
 await requireAuth();
 
@@ -75,7 +76,7 @@ appEl.innerHTML = `
               <div>
                 <label class="block text-sm font-semibold text-gray-800 mb-2"><span class="text-red-500 me-0.5">*</span>${t('rfq.detailedRequirements')}</label>
                 <div class="border border-gray-200 rounded-lg overflow-hidden">
-                  <textarea id="rfq-requirements" rows="14" placeholder="${t('rfq.detailedReqPlaceholder')}" class="w-full px-3 py-3 text-sm text-gray-800 placeholder:text-gray-400 border-none outline-none resize-none focus:ring-0">${prefillDetails}</textarea>
+                  <textarea id="rfq-requirements" rows="14" placeholder="${t('rfq.detailedReqPlaceholder')}" class="w-full px-3 py-3 text-sm text-gray-800 placeholder:text-gray-400 border-none outline-none resize-none focus:ring-0">${escapeHtml(prefillDetails)}</textarea>
                 </div>
               </div>
               <!-- File Upload — Dropzone (inside outer card) -->
@@ -178,7 +179,7 @@ fetch((window.API_BASE || '/api') + '/method/tradehub_core.api.rfq.get_uom_list'
     const rest = uoms.filter(u => !prioritySet.has(u.name));
     const sorted = [...priority, ...rest];
     unitSelect.innerHTML = sorted.map(u =>
-      `<option value="${u.name}" ${u.name === 'Adet' ? 'selected' : ''}>${u.name}</option>`
+      `<option value="${escapeHtml(u.name)}" ${u.name === 'Adet' ? 'selected' : ''}>${escapeHtml(u.name)}</option>`
     ).join('');
     unitSelect.disabled = false;
   })

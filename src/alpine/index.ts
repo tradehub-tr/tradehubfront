@@ -1,4 +1,5 @@
 import Alpine from "alpinejs";
+import collapse from "@alpinejs/collapse";
 import { initLinkRewriter } from "../utils/url";
 import { initMediaRewriter } from "../utils/mediaUrl";
 import { initTracking } from "../utils/trackingManager";
@@ -56,6 +57,9 @@ window.Alpine = Alpine;
 export function startAlpine(): void {
   initLinkRewriter();
   initMediaRewriter();
+  // x-collapse direktifi (StoreNav, PricingPageLayout akordeonları) için zorunlu.
+  // Kurulu değilken Alpine "you can't use [x-collapse]..." uyarısı veriyordu.
+  Alpine.plugin(collapse);
   Alpine.start();
   // Load tracking scripts based on saved cookie consent preferences
   initTracking();
