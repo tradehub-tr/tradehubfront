@@ -18,6 +18,7 @@
 
 import type { Conversation, Message, PinnedProduct } from "../types/chat";
 import { callMethod, clearCsrfCache, fetchCsrfToken } from "../utils/api";
+import { t } from "../i18n";
 
 const API_BASE = import.meta.env.VITE_API_URL || "/api";
 
@@ -90,10 +91,10 @@ function toHHMM(d: Date | null): string {
 function toRelative(d: Date | null): string {
   if (!d) return "";
   const diffSec = Math.max(0, (Date.now() - d.getTime()) / 1000);
-  if (diffSec < 60) return "Şimdi";
-  if (diffSec < 3600) return `${Math.floor(diffSec / 60)}dk`;
-  if (diffSec < 86400) return `${Math.floor(diffSec / 3600)}sa`;
-  if (diffSec < 172800) return "Dün";
+  if (diffSec < 60) return t("commonSvc.now");
+  if (diffSec < 3600) return t("commonSvc.minutesShort", { n: Math.floor(diffSec / 60) });
+  if (diffSec < 86400) return t("commonSvc.hoursShort", { n: Math.floor(diffSec / 3600) });
+  if (diffSec < 172800) return t("commonSvc.yesterday");
   return d.toLocaleDateString("tr-TR", { day: "numeric", month: "short" });
 }
 
@@ -101,13 +102,13 @@ function toRelative(d: Date | null): string {
 // Mappers
 // ──────────────────────────────────────────────────────────────────────────
 
-function threadToConversation(t: TeamslikeThread): Conversation {
-  const seller = t.seller ?? {};
-  const last = t.last_non_activity_message ?? null;
+function threadToConversation(thread: TeamslikeThread): Conversation {
+  const seller = thread.seller ?? {};
+  const last = thread.last_non_activity_message ?? null;
   const lastDate = toDate(last?.created_at);
-  const name = seller.full_name || seller.email || "Satıcı";
+  const name = seller.full_name || seller.email || t("commonSvc.seller");
   return {
-    id: String(t.id ?? ""),
+    id: String(thread.id ?? ""),
     name,
     company: seller.full_name || seller.email || "",
     sellerId: seller.user_id || undefined,
@@ -115,7 +116,7 @@ function threadToConversation(t: TeamslikeThread): Conversation {
     online: false,
     lastMessage: last?.content || "",
     lastTime: toRelative(lastDate),
-    unread: typeof t.unread_count === "number" ? t.unread_count : 0,
+    unread: typeof thread.unread_count === "number" ? thread.unread_count : 0,
     tags: [],
   };
 }
@@ -145,7 +146,7 @@ function messageToView(m: ChatwootMessage, conversationId: string): Message {
       body = {
         type: "file",
         url,
-        name: att.file_name || "Dosya",
+        name: att.file_name || t("commonSvc.file"),
         size: att.file_size || 0,
         mimeType: att.file_type || "application/octet-stream",
       };
@@ -246,11 +247,11 @@ export async function startOrGetThread(
   sellerId: string,
   initialMessage?: string
 ): Promise<Conversation> {
-  const t = await frappePOST<TeamslikeThread>("tradehub_core.api.chat.start_or_get_thread", {
+  const thread = await frappePOST<TeamslikeThread>("tradehub_core.api.chat.start_or_get_thread", {
     seller_id: sellerId,
     initial_message: initialMessage ?? null,
   });
-  return threadToConversation(t || {});
+  return threadToConversation(thread || {});
 }
 
 export interface VideoCallResult {
@@ -315,7 +316,7 @@ export async function sendAttachment(
   content = ""
 ): Promise<Message> {
   if (!conversationId) throw new Error("conversationId yok");
-  if (!file) throw new Error("Dosya yok");
+  if (!file) throw new Error(t("commonSvc.noFile"));
 
   const url = `${API_BASE}/method/tradehub_core.api.chat.send_attachment`;
   const doFetch = async (csrf: string): Promise<Response> => {

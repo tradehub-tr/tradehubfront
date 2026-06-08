@@ -2,6 +2,7 @@
  * Satış Sonrası Değerlendirme ve Destek Landing Page
  */
 import heroImg from "../../assets/images/satıssonrasıhizmetleri.avif";
+import { t } from "../../i18n";
 import { TradeAssuranceFooterCards } from "../shared/TradeAssuranceFooterCards";
 import { TradeAssuranceBadge } from "../shared/TradeAssuranceBadge";
 
@@ -32,10 +33,10 @@ function heroSection(): string {
       <div class="relative z-10 container-boxed w-full py-16 sm:py-20">
         ${TradeAssuranceBadge({ className: "mb-6" })}
         <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 max-w-2xl leading-tight">
-          Satış sonrası değerlendirme ve destek
+          ${t("infoMisc.afterSalesHeroTitle")}
         </h1>
         <p class="text-base sm:text-lg text-white/90 max-w-2xl leading-relaxed">
-          Her alışveriş sonrası satıcılarınızı değerlendirin, platformun kalitesine katkıda bulunun
+          ${t("infoMisc.afterSalesHeroSubtitle")}
         </p>
       </div>
     </section>
@@ -47,9 +48,9 @@ function breadcrumbSection(): string {
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
       <nav class="flex text-sm text-gray-500" aria-label="Breadcrumb">
         <ol class="flex items-center gap-1.5">
-          <li><a href="/ticaret-guvencesi/detay" class="hover:text-[#FFC800] transition-colors">Ticari Güvence</a></li>
+          <li><a href="/ticaret-guvencesi/detay" class="hover:text-[#FFC800] transition-colors">${t("infoMisc.tradeAssurance")}</a></li>
           <li class="text-gray-400">&gt;</li>
-          <li class="text-gray-900 font-medium">Satış sonrası destek</li>
+          <li class="text-gray-900 font-medium">${t("infoMisc.afterSalesSupport")}</li>
         </ol>
       </nav>
     </div>
@@ -60,9 +61,9 @@ function currentFeaturesSection(): string {
   return `
     <section class="bg-white py-12 sm:py-16">
       <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">Sipariş sonrası size neler sunuyoruz?</h2>
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">${t("infoMisc.afterSalesFeaturesTitle")}</h2>
         <p class="text-gray-600 leading-relaxed max-w-3xl mb-10 text-base sm:text-lg">
-          iSTOC, alım-satım sürecini şeffaf ve güvenli kılacak temel araçları sunar. Siparişiniz tamamlandıktan sonra da platform üzerinde destek almaya devam edebilirsiniz.
+          ${t("infoMisc.afterSalesFeaturesIntro")}
         </p>
 
         <!-- 2 Current Feature Cards -->
@@ -71,9 +72,9 @@ function currentFeaturesSection(): string {
           <!-- Card 1: Satıcı Değerlendirme -->
           <div class="border border-gray-200 rounded-md p-6 flex flex-col gap-4 hover:shadow-md transition-shadow">
             ${yellowIcon(iconStar)}
-            <h3 class="text-lg font-bold text-gray-900">Satıcı Değerlendirme Sistemi</h3>
+            <h3 class="text-lg font-bold text-gray-900">${t("infoMisc.sellerRatingTitle")}</h3>
             <p class="text-sm text-gray-600 leading-relaxed flex-1">
-              Aldığınız ürün ve hizmeti 1-5 yıldız arasında puanlayıp yorum yazabilirsiniz. Değerlendirmeleriniz diğer alıcılara rehberlik eder ve satıcıların kalitesini şekillendirir.
+              ${t("infoMisc.sellerRatingDesc")}
             </p>
             <div class="flex items-center gap-1 pt-2">
               ${[1, 2, 3, 4, 5]
@@ -89,9 +90,9 @@ function currentFeaturesSection(): string {
           <!-- Card 2: Mesajlaşma -->
           <div class="border border-gray-200 rounded-md p-6 flex flex-col gap-4 hover:shadow-md transition-shadow">
             ${yellowIcon(iconMessage)}
-            <h3 class="text-lg font-bold text-gray-900">Satıcı ile Doğrudan İletişim</h3>
+            <h3 class="text-lg font-bold text-gray-900">${t("infoMisc.directContactTitle")}</h3>
             <p class="text-sm text-gray-600 leading-relaxed flex-1">
-              Sipariş sonrası sorularınızı, ürünle ilgili taleplerinizi veya yaşadığınız sorunları doğrudan satıcınıza iletebilir, çözüm arayışına ortak olabilirsiniz.
+              ${t("infoMisc.directContactDesc")}
             </p>
           </div>
 

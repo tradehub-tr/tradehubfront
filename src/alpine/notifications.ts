@@ -14,6 +14,7 @@
  *   (#5 fix — phishing/javascript: koruması).
  */
 import Alpine from "alpinejs";
+import { t } from "../i18n";
 import { queueToast } from "../utils/toast";
 import type { ToastType } from "../utils/toast";
 import { isLoggedIn, waitForAuth } from "../utils/auth";
@@ -152,10 +153,10 @@ Alpine.data("notificationPoller", () => ({
           // action_url guvenli ise link goster; degilse sadece toast
           const safeUrl = isSafeActionUrl(notif.action_url) ? notif.action_url : undefined;
           queueToast({
-            message: notif.title || notif.message || "Yeni bildirim",
+            message: notif.title || notif.message || t("commonSvc.newNotification"),
             type: mapping.type,
             duration: 5000,
-            link: safeUrl ? { text: "Görüntüle", href: safeUrl } : undefined,
+            link: safeUrl ? { text: t("commonSvc.view"), href: safeUrl } : undefined,
           });
         });
       }

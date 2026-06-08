@@ -72,8 +72,8 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
 
   if (variant.type === "color") {
     return `
-      <div class="variant-group" data-variant-type="${escapeHtml(variant.type)}" data-variant-label="${escapeHtml(variant.label)}">
-        <h4 class="pd-variant-label text-sm text-[var(--pd-title-color,#111827)] my-4 mb-3"><strong>${escapeHtml(variant.label)}:</strong> <span class="variant-selected-label">${escapeHtml(selectedOpt.label)}</span></h4>
+      <div class="variant-group" data-variant-type="${variant.type}" data-variant-label="${variant.label}">
+        <h4 class="pd-variant-label text-sm text-[var(--pd-title-color,#111827)] my-4 mb-3"><strong>${variant.displayLabel || variant.label}:</strong> <span class="variant-selected-label">${selectedOpt.displayLabel || selectedOpt.label}</span></h4>
         <div class="pd-color-thumbs flex flex-wrap gap-2 mt-2">
           ${variant.options
             .map((opt) => {
@@ -83,20 +83,21 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
             <button
               type="button"
               class="variant-option pd-color-thumb w-16 h-16 p-0 border-2 border-[var(--color-border-default,#e5e5e5)] rounded-full overflow-hidden cursor-pointer bg-transparent transition-[border-color] duration-150 [&_img]:w-full [&_img]:h-full [&_img]:object-cover [&_img]:block [&.active]:border-[var(--pd-title-color,#111827)] [&:hover:not(.active):not(.pd-color-thumb-disabled)]:border-[#999] [&.pd-color-thumb-disabled]:opacity-40 [&.pd-color-thumb-disabled]:cursor-not-allowed ${isActive ? "active" : ""} ${opt.available ? "" : "pd-color-thumb-disabled"}"
-              data-variant-id="${escapeHtml(opt.id)}"
-              data-variant-label="${escapeHtml(opt.label)}"
-              data-variant-image="${escapeHtml(sanitizeUrl(opt.thumbnail || ""))}"
-              data-variant-video="${escapeHtml(sanitizeUrl(opt.videoUrl || ""))}"
+              data-variant-id="${opt.id}"
+              data-variant-label="${opt.label}"
+              data-variant-display="${opt.displayLabel || opt.label}"
+              data-variant-image="${opt.thumbnail || ""}"
+              data-variant-video="${opt.videoUrl || ""}"
               data-variant-title="${encodeURIComponent(opt.title || "")}"
               data-variant-images="${encodeURIComponent(JSON.stringify(opt.images || []))}"
               data-variant-value="${escapeHtml(opt.value)}"
               data-is-default="${isDef ? "1" : "0"}"
               ${opt.price ? `data-variant-price="${escapeHtml(opt.price)}"` : ""}
               ${opt.available ? "" : "disabled"}
-              aria-label="${escapeHtml(opt.label)}"
-              title="${escapeHtml(opt.label)}"
+              aria-label="${opt.displayLabel || opt.label}"
+              title="${opt.displayLabel || opt.label}"
             >
-              <img src="${escapeHtml(sanitizeUrl(opt.thumbnail || ""))}" alt="${escapeHtml(opt.label)}" style="background:${safeHexColor(opt.value, "transparent")};">
+              <img src="${opt.thumbnail || ""}" alt="${opt.displayLabel || opt.label}" style="background:${opt.value};">
             </button>
           `;
             })
@@ -120,14 +121,15 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
   const axisIndex = variantIndex >= 1 ? variantIndex : 1;
 
   return `
-    <div class="variant-group" data-variant-type="${escapeHtml(variant.type)}" data-variant-label="${escapeHtml(variant.label)}">
-      <h4 class="pd-variant-label text-sm text-[var(--pd-title-color,#111827)] my-4 mb-3"><strong>${escapeHtml(variant.label)}:</strong> <span class="variant-selected-label">${escapeHtml(selectedOpt.label)}</span></h4>
+    <div class="variant-group" data-variant-type="${variant.type}" data-variant-label="${variant.label}">
+      <h4 class="pd-variant-label text-sm text-[var(--pd-title-color,#111827)] my-4 mb-3"><strong>${variant.displayLabel || variant.label}:</strong> <span class="variant-selected-label">${selectedOpt.displayLabel || selectedOpt.label}</span></h4>
       <div class="flex flex-wrap gap-2 mt-2">
         ${variant.options
           .map((opt) => {
             const isDef = !!opt.isDefault;
             const isActive = opt.id === selectedOpt.id;
-            // Check availability for the default color (not just global availability)
+            // Check availability for the default color (not just global availability).
+            // Matching KAYNAK label/value ile — opt.label/variant.label kaynak.
             const availableForColor = defaultColorLabel
               ? isOptionAvailableForColor(
                   skuMatrix,
@@ -142,17 +144,18 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
           <button
             type="button"
             class="variant-option pd-variant-btn px-4 py-1.5 rounded-full text-[13px] font-medium border border-[var(--color-border-medium,#d1d5db)] bg-[var(--color-surface,#fff)] text-[var(--pd-title-color,#111827)] cursor-pointer transition-all duration-150 [&.active]:border-[var(--pd-title-color,#111827)] [&.active]:font-semibold [&:hover:not(.active):not(:disabled)]:border-[#999] ${isActive ? "active" : ""} ${isAvailable ? "" : "opacity-40 line-through cursor-not-allowed"}"
-            data-variant-id="${escapeHtml(opt.id)}"
-            data-variant-label="${escapeHtml(opt.label)}"
-            data-variant-video="${escapeHtml(sanitizeUrl(opt.videoUrl || ""))}"
+            data-variant-id="${opt.id}"
+            data-variant-label="${opt.label}"
+            data-variant-display="${opt.displayLabel || opt.label}"
+            data-variant-video="${opt.videoUrl || ""}"
             data-variant-title="${encodeURIComponent(opt.title || "")}"
             data-variant-images="${encodeURIComponent(JSON.stringify(opt.images || []))}"
             data-is-default="${isDef ? "1" : "0"}"
             ${opt.price ? `data-variant-price="${escapeHtml(opt.price)}"` : ""}
             ${isAvailable ? "" : "disabled"}
-            title="${isAvailable ? escapeHtml(opt.label) : `${escapeHtml(opt.label)} — tükendi`}"
+            title="${isAvailable ? opt.displayLabel : `${opt.displayLabel || opt.label} — ${t("prodUi.outOfStockSuffix")}`}"
           >
-            ${escapeHtml(opt.label)}
+            ${opt.displayLabel || opt.label}
           </button>
         `;
           })
@@ -435,15 +438,17 @@ function crossDisableVariants(_selectedAxisLabel: string, _selectedValue: string
         }
       }
 
+      // Tooltip = çevrili gösterim (eşleşme btnValue=kaynak ile yapıldı).
+      const btnDisplay = btn.getAttribute("data-variant-display") || btnValue;
       if (!hasStock && btnValue) {
         btn.classList.add("opacity-40", "line-through", "cursor-not-allowed");
         btn.classList.remove("active");
-        btn.setAttribute("title", `${btnValue} — tükendi`);
+        btn.setAttribute("title", `${btnDisplay} — ${t("prodUi.outOfStockSuffix")}`);
         btn.setAttribute("disabled", "");
       } else {
         btn.classList.remove("opacity-40", "line-through", "cursor-not-allowed");
         btn.removeAttribute("disabled");
-        btn.setAttribute("title", btnValue);
+        btn.setAttribute("title", btnDisplay);
       }
     });
   });
@@ -499,10 +504,11 @@ export function initProductInfo(): void {
         .forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
 
-      // Update label text (e.g., "Renk: Altın" → "Renk: Gümüş")
-      const variantLabel = btn.getAttribute("data-variant-label");
-      if (labelEl && variantLabel) {
-        labelEl.textContent = variantLabel;
+      // Update label text (çevrili gösterim) — eşleşme kaynak data-variant-label ile.
+      const variantDisplay =
+        btn.getAttribute("data-variant-display") || btn.getAttribute("data-variant-label");
+      if (labelEl && variantDisplay) {
+        labelEl.textContent = variantDisplay;
       }
 
       // Read all variant-specific data from the clicked button

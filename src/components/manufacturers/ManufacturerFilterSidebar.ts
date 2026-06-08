@@ -72,15 +72,15 @@ export function ManufacturerFilterSidebar(): string {
   const reorder = ["15", "30", "50"];
 
   const countries = [
-    { code: "TR", name: "Türkiye" },
-    { code: "CN", name: "Çin Halk Cumhuriyeti" },
-    { code: "PK", name: "Pakistan" },
-    { code: "US", name: "Amerika Birleşik Devletleri" },
-    { code: "IN", name: "Hindistan" },
-    { code: "TW", name: "Tayvan, Çin" },
-    { code: "DE", name: "Almanya" },
-    { code: "IT", name: "İtalya" },
-    { code: "FR", name: "Fransa" },
+    { code: "TR", name: t("checkoutMfr.countryTR") },
+    { code: "CN", name: t("checkoutMfr.countryCN") },
+    { code: "PK", name: t("checkoutMfr.countryPK") },
+    { code: "US", name: t("checkoutMfr.countryUS") },
+    { code: "IN", name: t("checkoutMfr.countryIN") },
+    { code: "TW", name: t("checkoutMfr.countryTW") },
+    { code: "DE", name: t("checkoutMfr.countryDE") },
+    { code: "IT", name: t("checkoutMfr.countryIT") },
+    { code: "FR", name: t("checkoutMfr.countryFR") },
   ];
 
   const mgmtCerts = ["ISO", "BSCI", "SEDEX", "FAMA", "ICTI"];
@@ -150,25 +150,25 @@ export function ManufacturerFilterSidebar(): string {
   `;
 
   const platformBody = chipGroup(
-    platformYears.map((y) => chipRow("platformYears", String(y), `${y} yıl ve üzeri`)).join("")
+    platformYears.map((y) => chipRow("platformYears", String(y), t("checkoutMfr.yearsAndAbove", { count: y }))).join("")
   );
 
   const onTimeBody = chipGroup(
-    onTime.map((v) => chipRow("onTimeRate", v, `%${v}${v === "100" ? "" : " ve üzeri"}`)).join("")
+    onTime.map((v) => chipRow("onTimeRate", v, v === "100" ? `%${v}` : t("checkoutMfr.percentAndAbove", { value: v }))).join("")
   );
 
   const respBody = chipGroup(
-    respHours.map((v) => chipRow("responseHours", v, `≤ ${v} sa.`)).join("")
+    respHours.map((v) => chipRow("responseHours", v, t("checkoutMfr.hoursOrLess", { count: v }))).join("")
   );
 
   const reorderBody = chipGroup(
-    reorder.map((v) => chipRow("reorderRate", v, `%${v} ve üzeri`)).join("")
+    reorder.map((v) => chipRow("reorderRate", v, t("checkoutMfr.percentAndAbove", { value: v }))).join("")
   );
 
   return `
     <aside
       class="w-full lg:w-60 xl:w-64 flex-shrink-0 rounded-md border flex flex-col"
-      aria-label="Tedarikçi filtreleri"
+      aria-label="${t("checkoutMfr.supplierFilters")}"
       x-data="manufacturerFilters"
       style="background: var(--filter-bg, #ffffff); border-color: var(--filter-border-color, #e5e7eb);"
     >
@@ -189,10 +189,10 @@ export function ManufacturerFilterSidebar(): string {
         ${section({ id: "supplier-country", title: t("products.filterSupplierCountry"), body: countryBody })}
         ${section({ id: "mgmt-certifications", title: t("products.filterMgmtCertifications"), body: mgmtBody })}
         ${section({ id: "product-certifications", title: t("products.filterProductCertifications"), body: productCertBody })}
-        ${section({ id: "platform-years", title: "iSTOC'taki yıl sayısı", body: platformBody })}
-        ${section({ id: "ontime", title: "Zamanında teslimat", body: onTimeBody })}
-        ${section({ id: "response-time", title: "Yanıtlama süresi", body: respBody })}
-        ${section({ id: "reorder-rate", title: "Yeniden sipariş oranı", body: reorderBody })}
+        ${section({ id: "platform-years", title: t("checkoutMfr.yearsOnPlatform"), body: platformBody })}
+        ${section({ id: "ontime", title: t("checkoutMfr.onTimeDelivery"), body: onTimeBody })}
+        ${section({ id: "response-time", title: t("checkoutMfr.responseTime"), body: respBody })}
+        ${section({ id: "reorder-rate", title: t("checkoutMfr.reorderRate"), body: reorderBody })}
       </div>
 
       <!-- Sticky apply button -->

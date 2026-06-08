@@ -33,14 +33,20 @@ export interface SkuMatrixEntry {
 
 export interface ProductVariant {
   type: "color" | "size" | "material";
+  /** Source axis name — used for skuMatrix/cart matching (never translated). */
   label: string;
+  /** Translated axis name for DISPLAY only (falls back to label when absent). */
+  displayLabel?: string;
   options: VariantOption[];
   skuMatrix?: SkuMatrixEntry[];
 }
 
 export interface VariantOption {
   id: string;
+  /** Source value — used for matching/cart (never translated). */
   label: string;
+  /** Translated value for DISPLAY only (falls back to label when absent). */
+  displayLabel?: string;
   value: string;
   thumbnail?: string;
   available: boolean;

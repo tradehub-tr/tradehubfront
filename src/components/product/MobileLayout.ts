@@ -78,7 +78,7 @@ function bottomSheet(id: string, title: string, bodyHtml: string): string {
         <div class="pdm-sheet-handle w-10 h-1 bg-[#e0e0e0] rounded-[2px] mx-auto mt-3 mb-2"></div>
         <div class="pdm-sheet-header flex items-center justify-between px-4 pb-4 pt-1 text-base font-bold text-[var(--color-text-heading,#111827)] max-[374px]:px-2.5 max-[374px]:py-1 max-[374px]:pb-2.5 max-[374px]:text-sm">
           <span>${title}</span>
-          <button type="button" class="pdm-sheet-close w-8 h-8 border-0 bg-none cursor-pointer text-[var(--color-text-muted,#666)] flex items-center justify-center p-0" data-pdm-close="${id}" aria-label="Close">${closeSvg}</button>
+          <button type="button" class="pdm-sheet-close w-8 h-8 border-0 bg-none cursor-pointer text-[var(--color-text-muted,#666)] flex items-center justify-center p-0" data-pdm-close="${id}" aria-label="${t("prodUi.close")}">${closeSvg}</button>
         </div>
         <div class="pdm-sheet-body px-4 pb-6 max-[374px]:px-2.5 max-[374px]:pb-4">${bodyHtml}</div>
       </div>
@@ -99,8 +99,8 @@ function renderVariantSection(variant: ProductVariant): string {
         data-value="${escapeHtml(opt.id)}" data-label="${escapeHtml(opt.label)}" ${opt.price ? `data-variant-price="${escapeHtml(opt.price)}"` : ""} ${!opt.available ? "disabled" : ""}>
         ${
           opt.thumbnail
-            ? `<img src="${escapeHtml(sanitizeUrl(opt.thumbnail))}" alt="${escapeHtml(opt.label)}" class="w-full h-full object-cover" />`
-            : `<span class="pdm-color-swatch" style="background:${safeHexColor(opt.value)}"></span>`
+            ? `<img src="${opt.thumbnail}" alt="${opt.displayLabel || opt.label}" class="w-full h-full object-cover" />`
+            : `<span class="pdm-color-swatch" style="background:${opt.value}"></span>`
         }
       </button>
     `
@@ -109,7 +109,7 @@ function renderVariantSection(variant: ProductVariant): string {
 
     return collapsibleSection({
       id: `pdm-color-section`,
-      title: `${escapeHtml(variant.label)} <em>(${available})</em>`,
+      title: `${variant.displayLabel || variant.label} <em>(${available})</em>`,
       bodyHtml: `<div class="pdm-color-thumbs flex flex-wrap gap-2">${thumbs}</div>`,
     });
   }
@@ -119,8 +119,8 @@ function renderVariantSection(variant: ProductVariant): string {
     .map(
       (opt) => `
     <button type="button" class="pdm-variant-pill px-4 py-[7px] border border-border-medium rounded-md text-[13px] text-text-body bg-surface cursor-pointer transition-[border-color] duration-150 [&.active]:border-[var(--color-text-heading)] [&.active]:font-semibold [&.pdm-disabled]:opacity-40 [&.pdm-disabled]:cursor-not-allowed${!opt.available ? " pdm-disabled" : ""}"
-      data-value="${escapeHtml(opt.id)}" data-label="${escapeHtml(opt.label)}" ${opt.price ? `data-variant-price="${escapeHtml(opt.price)}"` : ""} ${!opt.available ? "disabled" : ""}>
-      ${escapeHtml(opt.label)}
+      data-value="${opt.id}" data-label="${opt.label}" ${opt.price ? `data-variant-price="${opt.price}"` : ""} ${!opt.available ? "disabled" : ""}>
+      ${opt.displayLabel || opt.label}
     </button>
   `
     )
@@ -128,7 +128,7 @@ function renderVariantSection(variant: ProductVariant): string {
 
   return collapsibleSection({
     id: `pdm-${variant.type}-section`,
-    title: `${escapeHtml(variant.label)} <em>(${available})</em>`,
+    title: `${variant.displayLabel || variant.label} <em>(${available})</em>`,
     bodyHtml: `<div class="pdm-variant-pills flex flex-wrap gap-2">${pills}</div>`,
   });
 }
@@ -257,7 +257,7 @@ export function MobileProductLayout(): string {
           type="button"
           id="pdm-view-reviews-btn"
           class="text-[12px] text-text-muted font-medium inline-flex items-center gap-1 cursor-pointer border border-border-default rounded-full px-3 py-1.5 bg-surface transition-colors duration-150 active:bg-surface-raised"
-          aria-label="Tüm yorumları görüntüle"
+          aria-label="${t("prodUi.viewAllReviews")}"
         >
           ${t("product.reviewsLabel", { count: String(p.reviewCount) })}
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
@@ -266,7 +266,7 @@ export function MobileProductLayout(): string {
           type="button"
           id="pdm-view-qa-btn"
           class="text-[12px] text-text-muted font-medium inline-flex items-center gap-1 cursor-pointer border border-border-default rounded-full px-3 py-1.5 bg-surface transition-colors duration-150 active:bg-surface-raised"
-          aria-label="Soru ve cevaplar"
+          aria-label="${t("prodUi.questionsAndAnswers")}"
         >
           ${t("product.qaLabel")}
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>

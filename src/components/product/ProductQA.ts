@@ -20,6 +20,7 @@ import {
 import { showToast } from "../../utils/toast";
 import { openLoginModal } from "./LoginModal";
 import { getCurrentProduct } from "../../alpine/product";
+import { t } from "../../i18n";
 
 interface QAState {
   open: boolean;
@@ -113,7 +114,7 @@ export function registerProductQA(): void {
         }
         const q = this.question.trim();
         if (q.length < 10) {
-          this.errorMsg = "Sorunuz en az 10 karakter olmalı.";
+          this.errorMsg = t("product.qa.errQuestionMin");
           return;
         }
         if (!this.listingId) {
@@ -122,7 +123,7 @@ export function registerProductQA(): void {
           if (current?.id) {
             this.listingId = current.id;
           } else {
-            this.errorMsg = "Ürün bilgisi yüklenmedi, sayfayı yenileyin.";
+            this.errorMsg = t("product.qa.errProductNotLoaded");
             return;
           }
         }
@@ -130,13 +131,13 @@ export function registerProductQA(): void {
         try {
           await submitProductQuestion(this.listingId, q);
           showToast({
-            message: "Sorunuz alındı, satıcı en kısa sürede yanıtlayacak.",
+            message: t("product.qa.okQuestionSubmitted"),
             type: "success",
           });
           this.question = "";
           window.dispatchEvent(new CustomEvent("qa-submitted"));
         } catch (err: unknown) {
-          const msg = err instanceof Error ? err.message : "Hata";
+          const msg = err instanceof Error ? err.message : t("product.qa.genericError");
           this.errorMsg = msg;
           showToast({ message: msg, type: "error" });
         } finally {
@@ -152,12 +153,12 @@ export function registerProductQA(): void {
           const res = await voteQAHelpful("question", q.name);
           if (res.changed) {
             q.helpful_count = (q.helpful_count || 0) + 1;
-            showToast({ message: "Oyunuz alındı.", type: "success" });
+            showToast({ message: t("product.qa.voteRecorded"), type: "success" });
           } else {
-            showToast({ message: "Bu soruya zaten oy verdiniz.", type: "info" });
+            showToast({ message: t("product.qa.alreadyVotedQuestion"), type: "info" });
           }
         } catch (err: unknown) {
-          const msg = err instanceof Error ? err.message : "Oy verilemedi";
+          const msg = err instanceof Error ? err.message : t("product.qa.voteFailed");
           showToast({ message: msg, type: "error" });
         }
       },
@@ -170,12 +171,12 @@ export function registerProductQA(): void {
           const res = await voteQAHelpful("answer", a.name);
           if (res.changed) {
             a.helpful_count = (a.helpful_count || 0) + 1;
-            showToast({ message: "Oyunuz alındı.", type: "success" });
+            showToast({ message: t("product.qa.voteRecorded"), type: "success" });
           } else {
-            showToast({ message: "Bu cevaba zaten oy verdiniz.", type: "info" });
+            showToast({ message: t("product.qa.alreadyVotedAnswer"), type: "info" });
           }
         } catch (err: unknown) {
-          const msg = err instanceof Error ? err.message : "Oy verilemedi";
+          const msg = err instanceof Error ? err.message : t("product.qa.voteFailed");
           showToast({ message: msg, type: "error" });
         }
       },
@@ -195,7 +196,7 @@ export function ProductQA(): string {
     >
       <div class="flex items-center justify-between mb-3 sm:mb-4">
         <h3 class="text-[14px] sm:text-base font-semibold text-secondary-900">
-          Soru &amp; Cevap
+          ${t("product.reviewWrite.qaTab")}
           <span class="text-secondary-400 font-normal" x-text="'(' + total + ')'"></span>
         </h3>
       </div>
@@ -203,14 +204,14 @@ export function ProductQA(): string {
       <!-- Soru sor formu -->
       <div class="bg-secondary-50/40 border border-border-default rounded-md p-2.5 sm:p-3 mb-4 sm:mb-5">
         <label class="block text-[11px] sm:text-[12px] font-medium text-secondary-700 mb-1 sm:mb-1.5">
-          Bir sorunuz mu var?
-          <span class="text-secondary-400">Satıcı veya diğer alıcılar yanıtlayabilir.</span>
+          ${t("product.qa.askTitle")}
+          <span class="text-secondary-400">${t("product.qa.askSubtitle")}</span>
         </label>
         <textarea
           x-model="question"
           rows="2"
           maxlength="500"
-          placeholder="Örn: Bu ürünün stok adedi ne kadar? Toptan fiyat aralığı nedir?"
+          placeholder="${t("product.qa.askPlaceholder")}"
           class="w-full px-2.5 sm:px-3 py-2 border border-border-default rounded-md text-[13px] sm:text-sm bg-surface focus:outline-none focus:border-primary-500 resize-vertical"
         ></textarea>
         <p x-show="errorMsg" x-text="errorMsg" class="text-[11px] sm:text-xs text-red-600 mt-1"></p>
@@ -223,20 +224,20 @@ export function ProductQA(): string {
             class="th-btn h-8 sm:h-9 px-3 sm:px-4 text-[12px] sm:text-[13px] flex items-center gap-1.5 sm:gap-2"
           >
             <svg x-show="submitting" class="animate-spin h-3 w-3 sm:h-3.5 sm:w-3.5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-            <span x-text="submitting ? 'Gönderiliyor' : 'Soruyu Gönder'"></span>
+            <span x-text="submitting ? '${t("product.reviewWrite.submitting")}' : '${t("product.qa.submitQuestion")}'"></span>
           </button>
         </div>
       </div>
 
       <!-- Loader -->
-      <div x-show="loading" class="text-center py-4 sm:py-6 text-[13px] sm:text-sm text-secondary-400">Yükleniyor...</div>
+      <div x-show="loading" class="text-center py-4 sm:py-6 text-[13px] sm:text-sm text-secondary-400">${t("product.qa.loading")}</div>
 
       <!-- Boş durum -->
       <div
         x-show="!loading && questions.length === 0"
         class="text-center py-6 sm:py-8 text-[13px] sm:text-sm text-secondary-400"
       >
-        Henüz soru sorulmamış. İlk soruyu siz sorun.
+        ${t("product.qa.emptyState")}
       </div>
 
       <!-- Soru listesi -->
@@ -252,21 +253,21 @@ export function ProductQA(): string {
                   <span
                     x-show="q.is_own_pending"
                     class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-semibold bg-amber-100 text-amber-700"
-                  >⏳ Onay bekliyor</span>
+                  >⏳ ${t("product.qa.pendingApproval")}</span>
                 </div>
                 <div class="text-sm text-secondary-900 font-medium" x-text="q.question"></div>
                 <div class="text-[11px] text-secondary-400 mt-1 flex items-center gap-2 flex-wrap">
                   <span x-text="q.asker_display_name"></span>
-                  <span x-show="q.is_kyb_verified" class="text-emerald-600">✓ Doğrulanmış</span>
+                  <span x-show="q.is_kyb_verified" class="text-emerald-600">✓ ${t("product.qa.verified")}</span>
                   <span>· <span x-text="formatDate(q.submitted_at)"></span></span>
                   <button
                     type="button"
                     class="ms-auto inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-medium text-secondary-600 hover:bg-primary-50 hover:text-primary-600 transition-colors"
-                    title="Bu soru faydalı"
+                    title="${t("product.qa.helpfulQTitle")}"
                     @click.stop="voteQuestion(q)"
                   >
                     <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/></svg>
-                    <span x-text="'Faydalı (' + (q.helpful_count || 0) + ')'"></span>
+                    <span x-text="'${t("product.qa.helpful")} (' + (q.helpful_count || 0) + ')'"></span>
                   </button>
                 </div>
               </div>
@@ -283,12 +284,12 @@ export function ProductQA(): string {
                     <div class="flex-1 min-w-0">
                       <div class="text-[13px] text-secondary-800" x-text="a.answer"></div>
                       <div class="text-[11px] text-secondary-400 mt-0.5 flex items-center gap-2 flex-wrap">
-                        <span x-text="a.is_seller_answer ? 'Satıcı Cevabı' : 'Alıcı Cevabı'"></span>
+                        <span x-text="a.is_seller_answer ? '${t("product.qa.sellerAnswer")}' : '${t("product.qa.buyerAnswer")}'"></span>
                         <span>· <span x-text="formatDate(a.submitted_at)"></span></span>
                         <button
                           type="button"
                           class="ms-auto inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-medium text-secondary-600 hover:bg-primary-50 hover:text-primary-600 transition-colors"
-                          title="Bu cevap faydalı"
+                          title="${t("product.qa.helpfulATitle")}"
                           @click.stop="voteAnswer(a)"
                         >
                           <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/></svg>
@@ -301,7 +302,7 @@ export function ProductQA(): string {
               </div>
             </template>
             <template x-if="!q.answers || q.answers.length === 0">
-              <div class="ps-8 mt-1 text-[12px] text-secondary-400 italic">Henüz cevap yok.</div>
+              <div class="ps-8 mt-1 text-[12px] text-secondary-400 italic">${t("product.qa.noAnswer")}</div>
             </template>
           </div>
         </template>

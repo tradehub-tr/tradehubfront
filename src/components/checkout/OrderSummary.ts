@@ -48,7 +48,7 @@ export function OrderSummary({ data, payeeSuppliers = [] }: OrderSummaryProps): 
     <a
       href="${escapeHtml(sanitizeUrl(getSellerUrl({ id: s.id })))}"
       class="group flex items-center gap-2.5 sm:gap-3 p-2.5 sm:p-3 bg-[#f9fafb] border border-[#e5e5e5] rounded-md hover:border-[var(--color-primary-500)] hover:bg-white transition-colors no-underline"
-      title="${escapeHtml(s.name)} mağazasına git"
+      title="${t("checkoutMfr.goToStore", { name: s.name })}"
     >
       <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-md bg-white border border-[#e5e5e5] flex items-center justify-center shrink-0 group-hover:border-[var(--color-primary-500)] transition-colors">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="w-5 h-5 sm:w-[22px] sm:h-[22px] text-[#555] group-hover:text-[var(--color-primary-500)] transition-colors">
@@ -72,7 +72,7 @@ export function OrderSummary({ data, payeeSuppliers = [] }: OrderSummaryProps): 
     <div class="mt-5 pt-5 border-t border-[#e5e5e5]">
       <div class="p-3 sm:p-3.5 bg-[#f0fdf4] border border-[#bbf7d0] rounded-md">
         <img src="/images/istoc-logo.png" alt="iSTOC" class="h-3.5 sm:h-4 w-auto mb-1.5 sm:mb-2" />
-        <p class="text-[11px] sm:text-[12px] text-[#6b7280] leading-relaxed">Ödeme güvenli olarak platforma yapılır; sipariş satıcılara iSTOC güvencesi ile yönlendirilir.</p>
+        <p class="text-[11px] sm:text-[12px] text-[#6b7280] leading-relaxed">${t("checkoutMfr.securePaymentNote")}</p>
       </div>
     </div>`;
 
@@ -137,7 +137,7 @@ export function OrderSummary({ data, payeeSuppliers = [] }: OrderSummaryProps): 
               <span class="text-[12px] sm:text-[14px] font-semibold text-[#16a34a] truncate" x-text="couponApplied.code"></span>
               <span class="text-[11px] sm:text-[13px] text-[#4b5563] truncate" x-text="'— ' + couponApplied.description"></span>
             </div>
-            <button type="button" @click="removeCoupon()" class="text-[#6b7280] hover:text-[#ef4444] transition-colors cursor-pointer p-0.5" aria-label="Remove coupon">
+            <button type="button" @click="removeCoupon()" class="text-[#6b7280] hover:text-[#ef4444] transition-colors cursor-pointer p-0.5" aria-label="${t("checkoutMfr.removeCoupon")}">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
           </div>
@@ -176,8 +176,8 @@ export function OrderSummary({ data, payeeSuppliers = [] }: OrderSummaryProps): 
             </svg>
           </span>
           <span class="text-[11px] sm:text-[12px] leading-snug text-[#555]">
-            <a href="/mesafeli-satis" target="_blank" rel="noopener" class="text-primary-600 underline hover:text-primary-700">Ön Bilgilendirme Formunu ve Mesafeli Satış Sözleşmesini</a>
-            okudum, kabul ediyorum.
+            <a href="/mesafeli-satis" target="_blank" rel="noopener" class="text-primary-600 underline hover:text-primary-700">${t("checkoutMfr.preInfoAndDistanceSalesContract")}</a>
+            ${t("checkoutMfr.readAndAccept")}
           </span>
         </label>
 

@@ -5,20 +5,21 @@
  */
 
 import type { PlaceholderConfig } from "../types/navigation";
+import { t } from "../i18n";
 
 /**
  * Default configuration for the animated placeholder
  */
 const DEFAULT_CONFIG: Required<PlaceholderConfig> = {
   keywords: [
-    "Tekstil ve Konfeksiyon",
-    "Makine ve Ekipman",
-    "Elektronik ve Yazılım",
-    "Gıda ve İçecek",
-    "İnşaat Malzemeleri",
-    "Otomotiv Parçaları",
-    "Kimyasal Ürünler",
-    "Sağlık Ekipmanları",
+    t("commonSvc.kwTextile"),
+    t("commonSvc.kwMachinery"),
+    t("commonSvc.kwElectronics"),
+    t("commonSvc.kwFood"),
+    t("commonSvc.kwConstruction"),
+    t("commonSvc.kwAutomotive"),
+    t("commonSvc.kwChemicals"),
+    t("commonSvc.kwHealthcare"),
   ],
   interval: 3000,
 };

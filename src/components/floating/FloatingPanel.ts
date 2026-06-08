@@ -10,6 +10,7 @@
  * Alpine.data('floatingPanel') is registered in src/alpine.ts.
  */
 
+import { t } from "../../i18n";
 import { CookieBanner } from "../legal/CookieBanner";
 
 /**
@@ -22,7 +23,7 @@ function renderMessagesItem(): string {
       type="button"
       @click="chatOpen = true"
       class="flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-gray-100 transition-colors duration-150 cursor-pointer"
-      aria-label="Mesajlarım"
+      aria-label="${t("commonNav.myMessages")}"
     >
       <svg class="shrink-0" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <g clip-path="url(#clip0_fp_msg)">
@@ -36,7 +37,7 @@ function renderMessagesItem(): string {
           </clipPath>
         </defs>
       </svg>
-      <span class="hidden group-hover:inline text-xs text-gray-700 whitespace-nowrap">Mesajlarım</span>
+      <span class="hidden group-hover:inline text-xs text-gray-700 whitespace-nowrap">${t("commonNav.myMessages")}</span>
     </button>
   `;
 }
@@ -52,14 +53,14 @@ function renderLensItem(): string {
       @mouseenter="lensOpen = true"
       @mouseleave="lensOpen = false"
       class="flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-gray-100 transition-colors duration-150 cursor-pointer"
-      aria-label="Görsel Arama"
+      aria-label="${t("commonNav.visualSearch")}"
     >
       <svg class="shrink-0" width="28" height="28" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path stroke="#ffc000" stroke-linecap="round" stroke-width="12" d="M74 30H62c-17.673 0-32 14.327-32 32v12m88-44h12c17.673 0 32 14.327 32 32v12m-88 88H62c-17.673 0-32-14.327-32-32v-12"/>
         <circle cx="96" cy="96" r="28" stroke="#ffc000" stroke-width="12"/>
         <circle cx="145" cy="145" r="17" fill="#ffc000"/>
       </svg>
-      <span class="hidden group-hover:inline text-xs text-gray-700 whitespace-nowrap">Görsel Arama</span>
+      <span class="hidden group-hover:inline text-xs text-gray-700 whitespace-nowrap">${t("commonNav.visualSearch")}</span>
     </button>
   `;
 }
@@ -92,7 +93,7 @@ function renderLensPopup(): string {
 
       <!-- Description -->
       <p class="text-sm text-gray-600 leading-relaxed mb-4">
-        Benzer ürünleri daha ucuza bulmak için <span class="font-semibold">ÜCRETSİZ</span> fiyat karşılaştırma eklentimizle zamandan ve paradan tasarruf edin
+        ${t("commonNav.lensDescBefore")} <span class="font-semibold">${t("commonNav.lensFree")}</span> ${t("commonNav.lensDescAfter")}
       </p>
 
       <!-- CTA Button -->
@@ -100,7 +101,7 @@ function renderLensPopup(): string {
         type="button"
         class="th-btn inline-flex items-center px-5 py-2.5 hover:bg-[#e6ad00] text-sm font-semibold"
       >
-        Uzantıyı İndir
+        ${t("commonNav.downloadExtension")}
       </button>
     </div>
   `;
@@ -124,13 +125,13 @@ function renderScrollTopItem(): string {
       x-transition:leave-end="opacity-0 scale-95"
       @click="scrollToTop()"
       class="flex items-center justify-center w-9 h-9 md:w-auto md:h-auto md:px-2 md:py-2 rounded-full md:rounded-lg hover:bg-gray-100 transition-colors duration-150 cursor-pointer"
-      aria-label="En üste çık"
+      aria-label="${t("commonNav.scrollToTop")}"
     >
       <svg class="shrink-0 w-5 h-5 md:w-7 md:h-7" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path d="M24.5 4.66663H3.5V6.27079H24.5V4.66663Z" fill="#222222"></path>
         <path d="M14 8.19898L5.84953 16.3495L6.98385 17.4838L13.1979 11.2697L13.1979 24.5H14.8021L14.8021 11.2697L21.0162 17.4838L22.1505 16.3495L14 8.19898Z" fill="#222222"></path>
       </svg>
-      <span class="hidden group-hover:md:inline text-xs text-gray-700 whitespace-nowrap">En üste çık</span>
+      <span class="hidden group-hover:md:inline text-xs text-gray-700 whitespace-nowrap">${t("commonNav.scrollToTop")}</span>
     </button>
   `;
 }

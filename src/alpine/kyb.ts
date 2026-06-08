@@ -73,7 +73,7 @@ function kybGetFileName(url: string): string {
 function kybGetExtUpper(url: string): string {
   const name = kybGetFileName(url);
   const dot = name.lastIndexOf(".");
-  return dot >= 0 ? name.slice(dot + 1).toUpperCase() : "DOSYA";
+  return dot >= 0 ? name.slice(dot + 1).toUpperCase() : t("kycUi.fileFallback");
 }
 
 /**
@@ -108,14 +108,14 @@ function updateKybSlotPreview(slotId: string, fileUrl: string): void {
       </div>
       <div class="flex-1 min-w-0">
         <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-semibold bg-emerald-500 text-white uppercase tracking-wider">
-          Yüklü
+          ${t("kycUi.uploaded")}
         </span>
         <div class="text-[12px] font-semibold text-gray-900 truncate">${filename}</div>
-        <div class="text-[10px] text-gray-600">${ext} dosyası</div>
+        <div class="text-[10px] text-gray-600">${t("kycUi.fileExt", { ext })}</div>
       </div>
       <a href="${safeHref}" target="_blank" rel="noopener" class="px-2 py-1 rounded-md text-[11px] font-medium bg-white text-emerald-700 border border-emerald-300 hover:bg-emerald-100 inline-flex items-center gap-1 flex-shrink-0">
         ${KYB_PREVIEW_ICONS.eye}
-        <span>Görüntüle</span>
+        <span>${t("kycUi.view")}</span>
       </a>
     </div>
   `;
