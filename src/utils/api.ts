@@ -1,7 +1,9 @@
 import { getBaseUrl } from "./url";
 import { getCurrentLang, t } from "../i18n";
+import { NATIVE_API_BASE } from "./nativeHttp";
 
-const BASE_URL = import.meta.env.VITE_API_URL || "/api";
+// Native bundle (App Store) modunda mutlak backend base; web/live-reload'da relative /api.
+const BASE_URL = NATIVE_API_BASE || import.meta.env.VITE_API_URL || "/api";
 
 /**
  * Aktif içerik dilini bir GET endpoint URL'ine `lang` query param olarak ekler.
