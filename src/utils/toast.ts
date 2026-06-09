@@ -3,6 +3,7 @@
  * iSTOC design system uyumlu bildirim toast'ları
  */
 
+import { t } from "../i18n";
 import { escapeHtml, sanitizeUrl } from "./sanitize";
 
 export type ToastType = "success" | "error" | "warning" | "info";
@@ -81,7 +82,7 @@ export function showToast(options: ToastOptions): void {
       <p style="margin:0;font-size:13px;font-weight:500;color:#1f2937;line-height:1.4">${escapeHtml(message)}</p>
       ${linkHtml}
     </div>
-    <button type="button" style="flex-shrink:0;background:none;border:none;cursor:pointer;padding:2px;color:#9ca3af;transition:color 0.15s" aria-label="Kapat">
+    <button type="button" style="flex-shrink:0;background:none;border:none;cursor:pointer;padding:2px;color:#9ca3af;transition:color 0.15s" aria-label="${t("commonSvc.close")}">
       <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
     </button>
     <div style="position:absolute;bottom:0;left:0;height:2px;background:${colors.bar};opacity:0.3;width:100%;transform-origin:left;animation:toast-progress ${duration}ms linear forwards"></div>

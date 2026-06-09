@@ -10,6 +10,7 @@
 
 import { uploadFiles, type FileProgress } from "../uploader";
 import { revokeFilePreview, getFilePreviewUrl } from "../utils";
+import { t } from "../../../i18n";
 import { escapeHtml, sanitizeUrl } from "../../../utils/sanitize";
 
 export interface ImagePickerOptions {
@@ -86,13 +87,13 @@ export class ImagePickerController {
   }
 
   private render(): void {
-    const placeholder = this.opts.placeholderText ?? "Görsel";
+    const placeholder = this.opts.placeholderText ?? t("commonSvc.image");
     const labels = this.opts.labels ?? {};
-    const changeLabel = labels.change ?? "Değiştir";
-    const removeLabel = labels.remove ?? "Kaldır";
-    const uploadingLabel = labels.uploading ?? "Yükleniyor…";
+    const changeLabel = labels.change ?? t("commonSvc.change");
+    const removeLabel = labels.remove ?? t("commonSvc.remove");
+    const uploadingLabel = labels.uploading ?? t("commonSvc.uploading");
     const recommended = this.opts.recommendedSize
-      ? `<div class="text-[10px] text-gray-500 mt-1">Önerilen: ${escapeHtml(this.opts.recommendedSize)}</div>`
+      ? `<div class="text-[10px] text-gray-500 mt-1">${t("commonSvc.recommended")}: ${this.opts.recommendedSize}</div>`
       : "";
 
     const url = this.currentUrl;

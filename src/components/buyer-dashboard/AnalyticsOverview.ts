@@ -6,6 +6,7 @@
  * ResizeObserver ile responsive. Renkler proje token'larından.
  */
 
+import { t } from "../../i18n";
 import { getLucideIcon } from "../icons/lucideIcons";
 import { escapeHtml, safeHexColor } from "../../utils/sanitize";
 import { type KpiCard, type CategorySlice } from "../../data/buyerAnalytics";
@@ -81,10 +82,10 @@ export function AnalyticsOverview(): string {
       <!-- Harcama Trendi -->
       <div class="${cardBase} lg:col-span-2">
         <div class="flex items-center justify-between px-5 py-4 max-sm:px-4 border-b border-gray-100">
-          <h3 class="text-[15px] font-bold text-gray-900">Harcama Trendi</h3>
+          <h3 class="text-[15px] font-bold text-gray-900">${t("buyerUi.spendingTrend")}</h3>
           <div class="flex items-center gap-3 text-xs">
-            <span class="inline-flex items-center gap-1.5 text-gray-500"><span class="w-2 h-2 rounded-full bg-primary-500"></span>Harcama</span>
-            <span class="inline-flex items-center gap-1.5 text-gray-500"><span class="w-2 h-2 rounded-full bg-gray-400"></span>Sipariş adedi</span>
+            <span class="inline-flex items-center gap-1.5 text-gray-500"><span class="w-2 h-2 rounded-full bg-primary-500"></span>${t("buyerUi.spend")}</span>
+            <span class="inline-flex items-center gap-1.5 text-gray-500"><span class="w-2 h-2 rounded-full bg-gray-400"></span>${t("buyerUi.orderCount")}</span>
           </div>
         </div>
         <div class="p-5 max-sm:p-3">
@@ -95,7 +96,7 @@ export function AnalyticsOverview(): string {
       <!-- Kategori Dağılımı -->
       <div class="${cardBase}">
         <div class="flex items-center justify-between px-5 py-4 max-sm:px-4 border-b border-gray-100">
-          <h3 class="text-[15px] font-bold text-gray-900">Kategori Dağılımı</h3>
+          <h3 class="text-[15px] font-bold text-gray-900">${t("buyerUi.categoryDistribution")}</h3>
         </div>
         <div class="p-5 max-sm:p-4">
           <div id="bd-cat-chart" class="w-full h-[200px]"></div>
@@ -134,7 +135,7 @@ export async function initAnalyticsOverview(): Promise<void> {
   };
 
   if (spendEl && !data.spendingTrend.labels.length) {
-    spendEl.innerHTML = chartEmptyState("Henüz harcama verisi yok");
+    spendEl.innerHTML = chartEmptyState(t("buyerUi.noSpendingData"));
   } else if (spendEl) {
     const chart = echarts.init(spendEl);
     chart.setOption({
@@ -166,7 +167,7 @@ export async function initAnalyticsOverview(): Promise<void> {
       ],
       series: [
         {
-          name: "Harcama",
+          name: t("buyerUi.spend"),
           type: "bar",
           data: data.spendingTrend.spend,
           barWidth: "46%",
@@ -178,7 +179,7 @@ export async function initAnalyticsOverview(): Promise<void> {
           },
         },
         {
-          name: "Sipariş adedi",
+          name: t("buyerUi.orderCount"),
           type: "line",
           yAxisIndex: 1,
           data: data.spendingTrend.orders,
@@ -194,7 +195,7 @@ export async function initAnalyticsOverview(): Promise<void> {
   }
 
   if (catEl && !data.categoryBreakdown.length) {
-    catEl.innerHTML = chartEmptyState("Henüz kategori verisi yok");
+    catEl.innerHTML = chartEmptyState(t("buyerUi.noCategoryData"));
   } else if (catEl) {
     const chart = echarts.init(catEl);
     chart.setOption({

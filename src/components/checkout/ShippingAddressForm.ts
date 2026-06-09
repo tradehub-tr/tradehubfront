@@ -329,7 +329,7 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
           class="co-pill co-pill-ok inline-flex items-center gap-1 px-1.5 sm:px-2 py-[2px] sm:py-[3px] rounded-full text-[10px] sm:text-[11.5px] font-medium bg-[#e8f5ed] text-[#1f7a4d] border-transparent border whitespace-nowrap shrink-0"
         >
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-2.5 h-2.5 sm:w-3 sm:h-3"><path d="M20 6 9 17l-5-5"/></svg>
-          Hazır
+          ${t("checkoutMfr.ready")}
         </span>
         <!-- Zorunlu alan rozeti -->
         <span
@@ -338,7 +338,7 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
           class="co-pill co-pill-warn inline-flex items-center gap-1 px-1.5 sm:px-2 py-[2px] sm:py-[3px] rounded-full text-[10px] sm:text-[11.5px] font-medium bg-[#fff4e5] text-[#b54708] border-transparent border whitespace-nowrap shrink-0"
         >
           <span class="co-pill-dot w-1 h-1 sm:w-[5px] sm:h-[5px] rounded-full bg-[#b54708] inline-block"></span>
-          Zorunlu
+          ${t("checkoutMfr.required")}
         </span>
         <!-- Düzenle (adres seçili iken header'da link) -->
         <button
@@ -349,7 +349,7 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
           @click="showAddressForm = true"
         >
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3 sm:w-3.5 sm:h-3.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-          Düzenle
+          ${t("checkoutMfr.edit")}
         </button>
       </div>
 
@@ -376,7 +376,7 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 5v14M5 12h14"/>
           </svg>
-          <span>Adres Ekle</span>
+          <span>${t("checkoutMfr.addAddress")}</span>
         </button>
 
         <!-- MODAL OVERLAY: dış wrapper scroll eder, iç modal overflow-visible —
@@ -403,12 +403,12 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
             >
               <!-- Modal Header -->
               <div class="bg-white border-b border-[#e5e7eb] flex items-center justify-between px-5 py-4">
-              <h3 class="text-[17px] font-bold text-[#111827]">Teslimat Adresi</h3>
+              <h3 class="text-[17px] font-bold text-[#111827]">${t("checkoutMfr.shippingAddressTitle")}</h3>
               <button
                 type="button"
                 @click="showAddressForm = false"
                 class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-500 hover:text-gray-900 transition-colors"
-                aria-label="Kapat"
+                aria-label="${t("checkoutMfr.close")}"
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
               </button>

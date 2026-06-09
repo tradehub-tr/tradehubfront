@@ -11,6 +11,7 @@
  */
 
 import Alpine from "alpinejs";
+import { t } from "../../i18n";
 import { reportReviewAbuse } from "../../services/listingService";
 import { showToast } from "../../utils/toast";
 
@@ -28,13 +29,14 @@ interface ReportAbuseState {
 }
 
 // Backend valid_reasons = {"Off-topic", "Spam", "Hate Speech", "Personal Info", "Fake", "Other"}
-const REASONS = [
-  { value: "Spam", label: "Spam / Reklam" },
-  { value: "Hate Speech", label: "Hakaret / Nefret İçeriği" },
-  { value: "Fake", label: "Sahte / Yanıltıcı" },
-  { value: "Off-topic", label: "Ürünle Alakasız" },
-  { value: "Personal Info", label: "Kişisel Bilgi İçeriyor" },
-  { value: "Other", label: "Diğer" },
+// i18n: çalışma anında çözülsün diye fonksiyon — modül yüklenirken t() henüz hazır olmayabilir.
+const reasons = (): { value: string; label: string }[] => [
+  { value: "Spam", label: t("prodUi.abuseReasonSpam") },
+  { value: "Hate Speech", label: t("prodUi.abuseReasonHate") },
+  { value: "Fake", label: t("prodUi.abuseReasonFake") },
+  { value: "Off-topic", label: t("prodUi.abuseReasonOffTopic") },
+  { value: "Personal Info", label: t("prodUi.abuseReasonPersonalInfo") },
+  { value: "Other", label: t("prodUi.abuseReasonOther") },
 ];
 
 export function registerReportAbuseModal(): void {
@@ -74,7 +76,7 @@ export function registerReportAbuseModal(): void {
         try {
           await reportReviewAbuse(this.reviewId, this.reason, this.note.trim());
           showToast({
-            message: "Şikayetiniz alındı, moderatörler inceleyecek.",
+            message: t("prodUi.abuseReportReceived"),
             type: "success",
           });
           window.dispatchEvent(
@@ -82,7 +84,7 @@ export function registerReportAbuseModal(): void {
           );
           this.close();
         } catch (err: unknown) {
-          const msg = err instanceof Error ? err.message : "Hata";
+          const msg = err instanceof Error ? err.message : t("prodUi.error");
           this.errorMsg = msg;
           showToast({ message: msg, type: "error" });
         } finally {
@@ -95,7 +97,7 @@ export function registerReportAbuseModal(): void {
 
 export function ReportAbuseModal(): string {
   // Chip group — tek seçim. value korunur (x-model="reason"); aktif chip primary.
-  const reasonOptions = REASONS.map(
+  const reasonOptions = reasons().map(
     (r) =>
       `<button type="button" @click="reason = '${r.value}'"
         class="px-3.5 py-1.5 rounded-full text-sm font-medium border transition-colors cursor-pointer"
@@ -122,28 +124,28 @@ export function ReportAbuseModal(): string {
         class="bg-surface rounded-xl shadow-modal w-full max-w-md relative"
       >
         <div class="border-b border-border-default px-5 py-3.5 flex items-center justify-between">
-          <div class="text-base font-semibold text-secondary-900">Yorumu Şikayet Et</div>
+          <div class="text-base font-semibold text-secondary-900">${t("prodUi.reportReviewTitle")}</div>
           <button
             type="button"
             @click="close()"
             class="w-7 h-7 flex items-center justify-center rounded-full hover:bg-black/5 text-secondary-400 hover:text-secondary-900"
-            aria-label="Kapat"
+            aria-label="${t("prodUi.close")}"
           >
             <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
           </button>
         </div>
         <form @submit.prevent="submit()" class="px-5 py-4 space-y-3">
           <div>
-            <p class="text-[12px] text-secondary-500 mb-2">Bu yorumu neden şikayet ediyorsunuz?</p>
+            <p class="text-[12px] text-secondary-500 mb-2">${t("prodUi.reportReasonPrompt")}</p>
             <div class="flex flex-wrap gap-2">${reasonOptions}</div>
           </div>
           <div>
-            <label class="block text-[12px] font-medium text-secondary-700 mb-1">Açıklama <span class="text-secondary-400">(opsiyonel)</span></label>
+            <label class="block text-[12px] font-medium text-secondary-700 mb-1">${t("prodUi.descriptionLabel")} <span class="text-secondary-400">${t("prodUi.optionalParen")}</span></label>
             <textarea
               x-model="note"
               rows="3"
               maxlength="500"
-              placeholder="Detaylı açıklama..."
+              placeholder="${t("prodUi.detailedDescriptionPlaceholder")}"
               class="w-full px-3 py-2 border border-border-default rounded-lg text-sm focus:outline-none focus:border-primary-500"
             ></textarea>
           </div>
@@ -153,14 +155,14 @@ export function ReportAbuseModal(): string {
               type="button"
               @click="close()"
               class="h-9 px-4 rounded-lg border border-border-default text-sm text-secondary-700 hover:bg-black/5"
-            >İptal</button>
+            >${t("prodUi.cancel")}</button>
             <button
               type="submit"
               :disabled="loading"
               class="h-9 px-4 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm font-medium disabled:opacity-50 flex items-center gap-2"
             >
               <svg x-show="loading" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-              <span x-text="loading ? 'Gönderiliyor' : 'Şikayet Et'"></span>
+              <span x-text="loading ? '${t("prodUi.submitting")}' : '${t("prodUi.reportSubmit")}'"></span>
             </button>
           </div>
         </form>

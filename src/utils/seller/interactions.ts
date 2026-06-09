@@ -7,6 +7,7 @@ import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import "swiper/swiper-bundle.css";
 import { showToast } from "../toast";
 import { applySwiperDir } from "../direction";
+import { t } from "../../i18n";
 
 // ═══════════════════════════════════════════════════════════
 // Swiper Initialization
@@ -211,7 +212,9 @@ export function initStoreHeaderInteractions(): void {
   if (followBtn) {
     followBtn.addEventListener("click", () => {
       const isFollowing = followBtn.classList.toggle("store-header__follow-btn--active");
-      followBtn.textContent = isFollowing ? "Takip Ediliyor" : "Takip Et";
+      followBtn.textContent = isFollowing
+        ? t("sellerApp.following")
+        : t("sellerApp.follow");
       followBtn.setAttribute("aria-pressed", String(isFollowing));
     });
   }
@@ -428,7 +431,7 @@ export function initContactForm(): void {
     textarea.classList.remove("border-[#ef4444]", "focus:ring-[#ef4444]/20");
 
     sendBtn.disabled = true;
-    sendBtn.textContent = "Gönderiliyor...";
+    sendBtn.textContent = t("sellerApp.sending");
 
     try {
       // allow_guest=True endpoint için CSRF header göndermiyoruz
@@ -448,7 +451,7 @@ export function initContactForm(): void {
       });
       const data = await res.json();
       if (data.message?.success) {
-        showToast({ message: "Mesajınız başarıyla gönderildi!", type: "success" });
+        showToast({ message: t("sellerApp.messageSent"), type: "success" });
         textarea.value = "";
         counter.textContent = "0/8000";
         counter.className =
@@ -456,14 +459,14 @@ export function initContactForm(): void {
       } else {
         const errMsg = data._server_messages
           ? JSON.parse(JSON.parse(data._server_messages)[0])?.message
-          : "Mesaj gönderilemedi.";
-        showToast({ message: errMsg || "Mesaj gönderilemedi. Tekrar deneyin.", type: "error" });
+          : t("sellerApp.messageFailed");
+        showToast({ message: errMsg || t("sellerApp.messageFailedRetry"), type: "error" });
       }
     } catch {
-      showToast({ message: "Bağlantı hatası. Tekrar deneyin.", type: "error" });
+      showToast({ message: t("sellerApp.connectionError"), type: "error" });
     } finally {
       sendBtn.disabled = false;
-      sendBtn.textContent = "Gönder";
+      sendBtn.textContent = t("sellerApp.send");
     }
   });
 }

@@ -11,6 +11,7 @@
  */
 
 import { callMethod, api, fetchCsrfToken } from "../utils/api";
+import { t } from "../i18n";
 
 const BASE_URL = import.meta.env.VITE_API_URL || "/api";
 
@@ -220,9 +221,9 @@ export async function uploadTicketAttachment(
       const msg = parsed?._server_messages
         ? JSON.parse(parsed._server_messages)?.[0] || parsed?.exception || text
         : parsed?.exception || text;
-      throw new Error(typeof msg === "string" ? msg : "Dosya yüklenemedi");
+      throw new Error(typeof msg === "string" ? msg : t("commonSvc.fileUploadFailed"));
     } catch {
-      throw new Error(`Dosya yüklenemedi (HTTP ${res.status})`);
+      throw new Error(t("commonSvc.fileUploadFailedHttp", { status: res.status }));
     }
   }
 

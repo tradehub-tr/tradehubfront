@@ -1,4 +1,5 @@
 import { callMethod } from "../utils/api";
+import { t } from "../i18n";
 import {
   type KpiCard,
   type SpendingTrend,
@@ -38,7 +39,7 @@ function mapKpis(k: RawAnalytics["kpis"]): KpiCard[] {
     {
       ...KPI_META.totalSpend,
       value: fmtTRY(k.total_spend.amount),
-      hint: "geçen aya göre",
+      hint: t("buyerUi.kpiVsLastMonth"),
       // Nötr (geçen ay verisi yok / değişim 0): yanıltıcı ok+yüzde gösterme, sadece hint.
       ...(k.total_spend.trend === "neutral"
         ? {}
@@ -50,17 +51,25 @@ function mapKpis(k: RawAnalytics["kpis"]): KpiCard[] {
     {
       ...KPI_META.activeOrders,
       value: String(k.active_orders.count),
-      hint: `yolda ${k.active_orders.shipping}, hazırlanıyor ${k.active_orders.preparing}`,
+      hint: t("buyerUi.kpiActiveOrdersHint", {
+        shipping: k.active_orders.shipping,
+        preparing: k.active_orders.preparing,
+      }),
     },
     {
       ...KPI_META.pendingQuotes,
       value: String(k.pending_quotes.quote_count),
-      hint: `${k.pending_quotes.rfq_count} RFQ · ${k.pending_quotes.quote_count} satıcı yanıtı`,
+      hint: t("buyerUi.kpiPendingQuotesHint", {
+        rfqCount: k.pending_quotes.rfq_count,
+        quoteCount: k.pending_quotes.quote_count,
+      }),
     },
     {
       ...KPI_META.negotiationSavings,
       value: fmtTRY(k.negotiation_savings.amount),
-      hint: `RFQ ile %${fmtNum(k.negotiation_savings.avg_discount_pct)} ortalama indirim`,
+      hint: t("buyerUi.kpiNegotiationSavingsHint", {
+        pct: fmtNum(k.negotiation_savings.avg_discount_pct),
+      }),
     },
   ];
 }
@@ -86,10 +95,28 @@ export async function fetchBuyerAnalytics(): Promise<BuyerAnalytics> {
 export function getZeroAnalytics(): BuyerAnalytics {
   return {
     kpis: [
-      { ...KPI_META.totalSpend, value: "₺0", hint: "geçen aya göre", trend: "up", trendText: "%0" },
-      { ...KPI_META.activeOrders, value: "0", hint: "yolda 0, hazırlanıyor 0" },
-      { ...KPI_META.pendingQuotes, value: "0", hint: "0 RFQ · 0 satıcı yanıtı" },
-      { ...KPI_META.negotiationSavings, value: "₺0", hint: "RFQ ile %0 ortalama indirim" },
+      {
+        ...KPI_META.totalSpend,
+        value: "₺0",
+        hint: t("buyerUi.kpiVsLastMonth"),
+        trend: "up",
+        trendText: "%0",
+      },
+      {
+        ...KPI_META.activeOrders,
+        value: "0",
+        hint: t("buyerUi.kpiActiveOrdersHint", { shipping: 0, preparing: 0 }),
+      },
+      {
+        ...KPI_META.pendingQuotes,
+        value: "0",
+        hint: t("buyerUi.kpiPendingQuotesHint", { rfqCount: 0, quoteCount: 0 }),
+      },
+      {
+        ...KPI_META.negotiationSavings,
+        value: "₺0",
+        hint: t("buyerUi.kpiNegotiationSavingsHint", { pct: 0 }),
+      },
     ],
     spendingTrend: { labels: [], spend: [], orders: [] },
     categoryBreakdown: [],

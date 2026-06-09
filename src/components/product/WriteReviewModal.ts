@@ -13,6 +13,7 @@
  */
 
 import Alpine from "alpinejs";
+import { t } from "../../i18n";
 import { MultiFileDropzoneController, type DropzoneConfig } from "../../lib/upload-ui";
 import { submitReview, type SubmitReviewPayload } from "../../services/listingService";
 import { fetchCsrfToken } from "../../utils/api";
@@ -25,12 +26,14 @@ const REVIEW_DROPZONE_CONFIG: DropzoneConfig = {
   allowedFormatsDisplay: "JPG, PNG, GIF, WEBP",
 };
 
-const REVIEW_DROPZONE_TEXTS = {
-  title: "Fotoğrafları sürükle",
-  or: "veya",
-  pickBtn: "Foto Ekle",
-  dragRelease: "Bırakın",
-};
+// i18n: dil çalışma anında (modal açılırken) çözülsün diye fonksiyon — modül
+// yüklenirken t() henüz hazır olmayabilir.
+const reviewDropzoneTexts = () => ({
+  title: t("product.reviewWrite.dzTitle"),
+  or: t("product.reviewWrite.dzOr"),
+  pickBtn: t("product.reviewWrite.dzPick"),
+  dragRelease: t("product.reviewWrite.dzRelease"),
+});
 
 export interface OrderItemOption {
   name: string;
@@ -67,12 +70,13 @@ interface WriteReviewState {
   submit(): Promise<void>;
 }
 
-const ASPECT_LABELS: Record<string, string> = {
-  product_quality: "Ürün Kalitesi",
-  service: "Satıcı İletişimi",
-  shipping: "Kargo / Teslimat",
-  spec_match: "Açıklamaya Uygunluk",
-};
+// i18n: çalışma anında çözülsün diye fonksiyon (bkz. reviewDropzoneTexts).
+const aspectLabels = (): Record<string, string> => ({
+  product_quality: t("product.reviewWrite.aspectQuality"),
+  service: t("product.reviewWrite.aspectService"),
+  shipping: t("product.reviewWrite.aspectShipping"),
+  spec_match: t("product.reviewWrite.aspectSpecMatch"),
+});
 
 export function registerWriteReviewModal(): void {
   Alpine.data(
@@ -119,7 +123,7 @@ export function registerWriteReviewModal(): void {
           dropzoneId: "review-dropzone",
           fileInputId: "review-file-input",
           config: REVIEW_DROPZONE_CONFIG,
-          texts: REVIEW_DROPZONE_TEXTS,
+          texts: reviewDropzoneTexts(),
         });
         const csrf = (await fetchCsrfToken()) ?? "None";
         const baseUrl = (window as unknown as { API_BASE?: string }).API_BASE || "/api";
@@ -130,7 +134,7 @@ export function registerWriteReviewModal(): void {
           lightboxScope: "review-image",
           scopePrefix: "review",
           config: REVIEW_DROPZONE_CONFIG,
-          texts: REVIEW_DROPZONE_TEXTS,
+          texts: reviewDropzoneTexts(),
           autoUpload: true,
           autoUploadConfig: {
             endpoint: `${baseUrl}/method/upload_file`,
@@ -150,7 +154,7 @@ export function registerWriteReviewModal(): void {
                   : `${window.location.origin}${fileUrl}`,
               });
             } catch {
-              showToast({ message: `${file.name} yüklendi ama yanıt okunamadı.`, type: "warning" });
+              showToast({ message: t("p2g3.uploadOkResponseUnreadable", { name: file.name }), type: "warning" });
             }
           },
           onUploadError: (file, error) => {
@@ -158,11 +162,11 @@ export function registerWriteReviewModal(): void {
           },
           onValidationError: (kind, file) => {
             if (kind === "unsupported" && file)
-              showToast({ message: `Desteklenmeyen format: ${file.name}`, type: "error" });
+              showToast({ message: t("p2g3.unsupportedFormat", { name: file.name }), type: "error" });
             else if (kind === "tooLarge" && file)
-              showToast({ message: `${file.name} 5MB üzerinde, atlandı.`, type: "warning" });
+              showToast({ message: t("p2g3.fileTooLarge", { name: file.name }), type: "warning" });
             else if (kind === "maxFiles")
-              showToast({ message: "En fazla 5 fotoğraf yükleyebilirsiniz.", type: "warning" });
+              showToast({ message: t("p2g3.maxFivePhotos"), type: "warning" });
           },
         });
         this.dropzoneController.mount();
@@ -198,15 +202,15 @@ export function registerWriteReviewModal(): void {
       async submit() {
         this.errorMsg = "";
         if (!this.selectedOrderItem) {
-          this.errorMsg = "Yorum yapabilmek için onaylı bir sipariş seçin.";
+          this.errorMsg = t("product.reviewWrite.errSelectOrder");
           return;
         }
         if (this.rating < 1 || this.rating > 5) {
-          this.errorMsg = "Lütfen 1-5 arası puan verin.";
+          this.errorMsg = t("product.reviewWrite.errRating");
           return;
         }
         if (!this.bodyValid()) {
-          this.errorMsg = "Yorum metni en az 20 karakter olmalı.";
+          this.errorMsg = t("product.reviewWrite.errBodyMin");
           return;
         }
         this.loading = true;
@@ -223,8 +227,8 @@ export function registerWriteReviewModal(): void {
           showToast({
             message:
               res.status === "Approved"
-                ? "Yorumunuz yayınlandı."
-                : "Yorumunuz alındı, moderasyon sonrası yayınlanacaktır.",
+                ? t("product.reviewWrite.okPublished")
+                : t("product.reviewWrite.okPending"),
             type: "success",
           });
           window.dispatchEvent(
@@ -234,7 +238,7 @@ export function registerWriteReviewModal(): void {
           );
           this.close();
         } catch (err: unknown) {
-          const msg = err instanceof Error ? err.message : "Bilinmeyen hata";
+          const msg = err instanceof Error ? err.message : t("p2g3.unknownError");
           this.errorMsg = msg;
           showToast({ message: msg, type: "error" });
         } finally {
@@ -293,7 +297,7 @@ function aspectRowHtml(key: string, label: string): string {
 }
 
 export function WriteReviewModal(): string {
-  const aspectRows = Object.entries(ASPECT_LABELS)
+  const aspectRows = Object.entries(aspectLabels())
     .map(([k, l]) => aspectRowHtml(k, l))
     .join("");
   return `
@@ -314,12 +318,12 @@ export function WriteReviewModal(): string {
       >
         <!-- Header -->
         <div class="sticky top-0 bg-surface border-b border-border-default px-5 py-3.5 flex items-center justify-between z-10">
-          <div class="text-base font-semibold text-secondary-900">Ürünü Değerlendir</div>
+          <div class="text-base font-semibold text-secondary-900">${t("product.reviewWrite.modalTitle")}</div>
           <button
             type="button"
             @click="close()"
             class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-black/5 text-secondary-400 hover:text-secondary-900 transition-colors"
-            aria-label="Kapat"
+            aria-label="${t("product.reviewWrite.close")}"
           >
             <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
           </button>
@@ -329,7 +333,7 @@ export function WriteReviewModal(): string {
         <form @submit.prevent="submit()" class="px-5 py-4 space-y-5">
           <!-- Order item picker (sadece >1 ise göster) -->
           <div x-show="orderItems.length > 1">
-            <label class="block text-[12px] font-medium text-secondary-700 mb-1">Hangi Sipariş?</label>
+            <label class="block text-[12px] font-medium text-secondary-700 mb-1">${t("product.reviewWrite.whichOrder")}</label>
             <select
               x-model="selectedOrderItem"
               class="w-full h-10 px-3 border border-border-default rounded-lg text-sm bg-surface focus:outline-none focus:border-primary-500"
@@ -342,17 +346,17 @@ export function WriteReviewModal(): string {
 
           <!-- Overall rating (read-only: aşağıdaki detaylı puanların ortalaması) -->
           <div>
-            <label class="block text-[12px] font-medium text-secondary-700 mb-2">Genel Puan</label>
+            <label class="block text-[12px] font-medium text-secondary-700 mb-2">${t("product.reviewWrite.overallRating")}</label>
             <div class="flex items-center gap-1" role="img" :aria-label="rating.toFixed(2) + ' / 5'">${overallStarsHtml()}</div>
             <span class="text-[11px] text-secondary-400 mt-1 block">
               <span x-text="rating.toFixed(rating % 1 === 0 ? 0 : 2) + ' / 5'"></span>
-              <span class="ms-1">— detaylı puanların ortalaması</span>
+              <span class="ms-1">${t("product.reviewWrite.overallHint")}</span>
             </span>
           </div>
 
           <!-- Aspect ratings -->
           <div>
-            <label class="block text-[12px] font-medium text-secondary-700 mb-1">Detaylı Puanlama</label>
+            <label class="block text-[12px] font-medium text-secondary-700 mb-1">${t("product.reviewWrite.detailedRating")}</label>
             <div class="border border-border-default rounded-lg px-3">
               ${aspectRows}
             </div>
@@ -360,12 +364,12 @@ export function WriteReviewModal(): string {
 
           <!-- Title -->
           <div>
-            <label class="block text-[12px] font-medium text-secondary-700 mb-1">Başlık <span class="text-secondary-400">(opsiyonel)</span></label>
+            <label class="block text-[12px] font-medium text-secondary-700 mb-1">${t("product.reviewWrite.titleLabel")} <span class="text-secondary-400">${t("product.reviewWrite.optional")}</span></label>
             <input
               type="text"
               x-model="title"
               maxlength="120"
-              placeholder="Kısa bir özet yazın"
+              placeholder="${t("product.reviewWrite.titlePlaceholder")}"
               class="w-full h-10 px-3 border border-border-default rounded-lg text-sm bg-surface focus:outline-none focus:border-primary-500"
             />
           </div>
@@ -373,25 +377,25 @@ export function WriteReviewModal(): string {
           <!-- Body -->
           <div>
             <label class="block text-[12px] font-medium text-secondary-700 mb-1">
-              Yorum
-              <span class="text-secondary-400">(en az 20 karakter)</span>
+              ${t("product.reviewWrite.commentLabel")}
+              <span class="text-secondary-400">${t("product.reviewWrite.commentMinHint")}</span>
             </label>
             <textarea
               x-model="body"
               rows="5"
               maxlength="2000"
-              placeholder="Ürün ve satıcı deneyiminizi paylaşın..."
+              placeholder="${t("product.reviewWrite.commentPlaceholder")}"
               class="w-full px-3 py-2 border border-border-default rounded-lg text-sm bg-surface focus:outline-none focus:border-primary-500 resize-vertical"
             ></textarea>
             <div class="flex items-center justify-between text-[11px] mt-1">
-              <span :class="bodyValid() ? 'text-emerald-600' : 'text-secondary-400'" x-text="body.length + ' karakter'"></span>
-              <span class="text-secondary-400">Maks 2000</span>
+              <span :class="bodyValid() ? 'text-emerald-600' : 'text-secondary-400'" x-text="body.length + ' ${t("product.reviewWrite.charSuffix")}'"></span>
+              <span class="text-secondary-400">${t("product.reviewWrite.maxChars")}</span>
             </div>
           </div>
 
           <!-- Image upload (tradehub-upload-ui MultiFileDropzone — autoUpload mod) -->
           <div>
-            <label class="block text-[12px] font-medium text-secondary-700 mb-1">Fotoğraflar <span class="text-secondary-400">(maks 5, her biri 5MB)</span></label>
+            <label class="block text-[12px] font-medium text-secondary-700 mb-1">${t("product.reviewWrite.photosLabel")} <span class="text-secondary-400">${t("product.reviewWrite.photosHint")}</span></label>
             <div id="review-dropzone-wrap"></div>
             <div id="review-file-list"></div>
           </div>
@@ -405,14 +409,14 @@ export function WriteReviewModal(): string {
               type="button"
               @click="close()"
               class="h-10 px-4 rounded-lg border border-border-default text-sm font-medium text-secondary-700 hover:bg-black/5 transition-colors"
-            >İptal</button>
+            >${t("product.reviewWrite.cancel")}</button>
             <button
               type="submit"
               :disabled="loading || uploadingImage || !bodyValid()"
               class="h-10 px-5 rounded-lg bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-sm font-semibold border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150 flex items-center gap-2"
             >
               <svg x-show="loading" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-              <span x-text="loading ? 'Gönderiliyor' : 'Yorumu Gönder'"></span>
+              <span x-text="loading ? '${t("product.reviewWrite.submitting")}' : '${t("product.reviewWrite.submit")}'"></span>
             </button>
           </div>
         </form>

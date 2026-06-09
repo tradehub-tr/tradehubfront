@@ -182,7 +182,7 @@ function renderPanel(meta: TabMeta, cards: ProductListingCard[], active: boolean
 
         <button
           type="button"
-          aria-label="Önceki ürünler"
+          aria-label="${t("prodUi.previousProducts")}"
           data-rp-prev="${meta.key}"
           class="rp-swiper-prev hidden md:flex absolute -start-2 top-[40%] -translate-y-1/2 z-10
                  h-9 w-9 rounded-full border border-gray-200 bg-white shadow-md
@@ -197,7 +197,7 @@ function renderPanel(meta: TabMeta, cards: ProductListingCard[], active: boolean
 
         <button
           type="button"
-          aria-label="Sonraki ürünler"
+          aria-label="${t("prodUi.nextProducts")}"
           data-rp-next="${meta.key}"
           class="rp-swiper-next hidden md:flex absolute -end-2 top-[40%] -translate-y-1/2 z-10
                  h-9 w-9 rounded-full border border-gray-200 bg-white shadow-md
