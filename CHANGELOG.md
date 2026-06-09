@@ -1,3 +1,18 @@
+## [v1.2.1-beta.3] - 2026-06-09 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Duzeltildi
+- fix(merge): main merge artefaktlarını onar + eksik bağımlılık (@aliturguttursab)
+  - searchListings (listingService): main'in queryFetch cache sarmalayıcısı + benim i18n sort etiketlerim birleştirildi (Unexpected "," giderildi).
+  - ProductItem: çift favIcon import kaldırıldı, eksik `const isFav` geri eklendi.
+  - ProductVideoSection: eksik escapeHtml/sanitizeUrl import'u eklendi.
+  - MobileLayout, ProductInfo: kullanılmayan safeHexColor import'tan çıkarıldı.
+  - categoryService: kullanılmayan _promise kaldırıldı.
+  - SellPageLayout, MegaMenu: derin ayrışma — main'in versiyonu alındı (dinamik fiyat matrisi + 3-seviye mega menü). NOT: bu 2 dosyada i18n etiketleri main'in hardcoded TR'sine döndü; ayrıca yeniden uygulanacak.
+- fix(dev): vite /api proxy hedefini env-driven yap (varsayılan :8088) (@aliturguttursab)
+
+---
 ## [v1.2.1-beta.2] - 2026-06-08 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
