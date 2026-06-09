@@ -1,3 +1,18 @@
+## [v1.2.1-beta.4] - 2026-06-09 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(pricing): satıcı paketleri kart ve karşılaştırma düzenlemeleri (@boraydeger32)
+  - Pricing kartları: ortak özellik seti + ✓/✗ ile eşit uzunluk
+  - enum/quota değerleri kartta gösterimi ("Destek seviyesi: 7×24 tahsisli")
+  - "Yakında" rozeti (henüz çalışmayan özellikler için, coming_soon)
+  - fiyat yerine özel metin (price_override_label) desteği
+  - "14 gün ücretsiz dene" bandı (en dolu paket → kayıt yönlendirmesi)
+  - "Diğer pazaryerlerine göre" rakip karşılaştırma bölümü kaldırıldı
+  - pricingService: price_override_label / text_value / coming_soon / show_on_card tip alanları
+
+---
 ## [v1.2.1-beta.3] - 2026-06-09 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
