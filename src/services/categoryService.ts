@@ -33,7 +33,6 @@ export interface CategoryPathItem {
 }
 
 let _cache: ApiCategory[] | null = null;
-let _promise: Promise<ApiCategory[]> | null = null;
 // Kalıcı aboneler — dil değiştiğinde kategoriler yeniden çekilip bunlara tekrar bildirilir.
 const _subscribers: Array<(cats: ApiCategory[]) => void> = [];
 
@@ -114,7 +113,6 @@ export function loadCategories(): Promise<ApiCategory[]> {
   )
     .then((cats) => {
       _cache = cats;
-      _promise = null;
       _subscribers.forEach((fn) => fn(cats));
       return cats;
     })
@@ -129,7 +127,6 @@ export function loadCategories(): Promise<ApiCategory[]> {
 if (typeof window !== "undefined") {
   window.addEventListener("languageChanged", () => {
     _cache = null;
-    _promise = null;
     loadCategories();
   });
 }

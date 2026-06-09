@@ -82,58 +82,61 @@ export interface ListingSearchResult {
  * Search/filter listings for the product listing page
  */
 export async function searchListings(params: ListingSearchParams): Promise<ListingSearchResult> {
-  const queryParams = new URLSearchParams();
+  return queryFetch(
+    queryKeys.listings(params as unknown as Record<string, unknown>),
+    async () => {
+      const queryParams = new URLSearchParams();
 
-  if (params.query) queryParams.set("query", params.query);
-  if (params.category) queryParams.set("category", params.category);
-  if (params.min_price !== undefined) queryParams.set("min_price", String(params.min_price));
-  if (params.max_price !== undefined) queryParams.set("max_price", String(params.max_price));
-  if (params.min_order !== undefined) queryParams.set("min_order", String(params.min_order));
-  if (params.supplier) queryParams.set("supplier", params.supplier);
-  if (params.sort_by) queryParams.set("sort_by", params.sort_by);
-  if (params.sort_order) queryParams.set("sort_order", params.sort_order);
-  if (params.page) queryParams.set("page", String(params.page));
-  if (params.page_size) queryParams.set("page_size", String(params.page_size));
-  if (params.is_featured) queryParams.set("is_featured", "1");
-  if (params.is_best_seller) queryParams.set("is_best_seller", "1");
-  if (params.is_new_arrival) queryParams.set("is_new_arrival", "1");
-  if (params.is_deal) queryParams.set("is_deal", "1");
-  if (params.free_shipping) queryParams.set("free_shipping", "1");
-  if (params.verified_supplier) queryParams.set("verified_supplier", "1");
-  if (params.min_rating !== undefined) queryParams.set("min_rating", String(params.min_rating));
-  if (params.country) queryParams.set("country", params.country);
-  if (params.paid_samples) queryParams.set("paid_samples", "1");
-  if (params.certifications) queryParams.set("certifications", params.certifications);
-  if (params.mgmt_certifications)
-    queryParams.set("mgmt_certifications", params.mgmt_certifications);
-  if (params.product_certifications)
-    queryParams.set("product_certifications", params.product_certifications);
-  if (params.brands) queryParams.set("brands", params.brands);
-  if (params.attrs) queryParams.set("attrs", params.attrs);
+      if (params.query) queryParams.set("query", params.query);
+      if (params.category) queryParams.set("category", params.category);
+      if (params.min_price !== undefined) queryParams.set("min_price", String(params.min_price));
+      if (params.max_price !== undefined) queryParams.set("max_price", String(params.max_price));
+      if (params.min_order !== undefined) queryParams.set("min_order", String(params.min_order));
+      if (params.supplier) queryParams.set("supplier", params.supplier);
+      if (params.sort_by) queryParams.set("sort_by", params.sort_by);
+      if (params.sort_order) queryParams.set("sort_order", params.sort_order);
+      if (params.page) queryParams.set("page", String(params.page));
+      if (params.page_size) queryParams.set("page_size", String(params.page_size));
+      if (params.is_featured) queryParams.set("is_featured", "1");
+      if (params.is_best_seller) queryParams.set("is_best_seller", "1");
+      if (params.is_new_arrival) queryParams.set("is_new_arrival", "1");
+      if (params.is_deal) queryParams.set("is_deal", "1");
+      if (params.free_shipping) queryParams.set("free_shipping", "1");
+      if (params.verified_supplier) queryParams.set("verified_supplier", "1");
+      if (params.min_rating !== undefined) queryParams.set("min_rating", String(params.min_rating));
+      if (params.country) queryParams.set("country", params.country);
+      if (params.paid_samples) queryParams.set("paid_samples", "1");
+      if (params.certifications) queryParams.set("certifications", params.certifications);
+      if (params.mgmt_certifications)
+        queryParams.set("mgmt_certifications", params.mgmt_certifications);
+      if (params.product_certifications)
+        queryParams.set("product_certifications", params.product_certifications);
+      if (params.brands) queryParams.set("brands", params.brands);
+      if (params.attrs) queryParams.set("attrs", params.attrs);
 
-  const qs = queryParams.toString();
-  const url = `/method/tradehub_core.api.listing.get_listings${qs ? "?" + qs : ""}`;
-  const response = await api<FrappeResponse<Record<string, unknown>[]>>(url);
-  const msg = response.message;
+      const qs = queryParams.toString();
+      const url = `/method/tradehub_core.api.listing.get_listings${qs ? "?" + qs : ""}`;
+      const response = await api<FrappeResponse<Record<string, unknown>[]>>(url);
+      const msg = response.message;
 
-  const products = (msg.data || []).map(mapListingCard);
+      const products = (msg.data || []).map(mapListingCard);
 
-  const searchHeader: SearchHeaderInfo = {
-    keyword: params.query || "",
-    totalProducts: msg.total || 0,
-    currentPage: msg.page || 1,
-    totalPages: msg.total_pages || 1,
-    freeShippingAvailable: products.some((p) => p.promo?.toLowerCase().includes("shipping")),
-    sortOptions: [
-      { id: "relevance", label: t("prodUi.sortBestMatch"), value: "relevance" },
-      { id: "newest", label: t("prodUi.sortNewest"), value: "newest" },
-      { id: "orders", label: t("prodUi.sortOrders"), value: "orders" },
-      { id: "rating", label: t("prodUi.sortRating"), value: "rating" },
-      { id: "price_asc", label: t("prodUi.sortPriceAsc"), value: "price_asc" },
-      { id: "price_desc", label: t("prodUi.sortPriceDesc"), value: "price_desc" },
-    ],
-    selectedSort: params.sort_by || "relevance",
-  };
+      const searchHeader: SearchHeaderInfo = {
+        keyword: params.query || "",
+        totalProducts: msg.total || 0,
+        currentPage: msg.page || 1,
+        totalPages: msg.total_pages || 1,
+        freeShippingAvailable: products.some((p) => p.promo?.toLowerCase().includes("shipping")),
+        sortOptions: [
+          { id: "relevance", label: t("prodUi.sortBestMatch"), value: "relevance" },
+          { id: "newest", label: t("prodUi.sortNewest"), value: "newest" },
+          { id: "orders", label: t("prodUi.sortOrders"), value: "orders" },
+          { id: "rating", label: t("prodUi.sortRating"), value: "rating" },
+          { id: "price_asc", label: t("prodUi.sortPriceAsc"), value: "price_asc" },
+          { id: "price_desc", label: t("prodUi.sortPriceDesc"), value: "price_desc" },
+        ],
+        selectedSort: params.sort_by || "relevance",
+      };
 
       return {
         products,

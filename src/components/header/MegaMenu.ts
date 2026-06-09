@@ -876,13 +876,10 @@ export function initMegaMenu(): void {
           (cat) => `
         <div class="mega-cat-section mb-8" id="mega-section-${cat.id}">
           <div class="flex items-center gap-4 mb-5 lg:mb-6">
-            <h3 class="text-base font-bold text-gray-900 lg:text-lg dark:text-white">${cat.name}</h3>
-            <a href="/pages/categories.html?cat=${encodeURIComponent(cat.slug)}" class="text-sm font-medium text-primary-600 transition-colors hover:text-primary-700">${t("commonNav.viewAll")}</a>
+            <h3 class="text-base font-bold text-gray-900 lg:text-lg dark:text-white">${escapeHtml(cat.name)}</h3>
+            <a href="/pages/categories.html?cat=${encodeURIComponent(cat.slug)}" class="text-sm font-medium text-primary-600 transition-colors hover:text-primary-700">Tümünü Gör</a>
           </div>
-          <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-y-4 gap-x-2 sm:gap-y-5 sm:gap-x-4 lg:gap-y-8 lg:gap-x-6">
-            ${cat.children.map((ch) => renderDynCatCard(ch.name, ch.slug, ch.image)).join("")}
-            ${renderDynCatCard(t("commonNav.viewAll"), cat.slug, undefined, true)}
-          </div>
+          ${renderSectorBody(cat)}
         </div>
       `
         )

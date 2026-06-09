@@ -10,7 +10,7 @@ import { formatCurrency, getSelectedCurrency } from "../../services/currencyServ
 import type { PriceTier, ProductVariant, SkuMatrixEntry } from "../../types/product";
 import { openShippingModal, openCartDrawer } from "./CartDrawer";
 import { SocialProofBadge } from "./SocialProofBadge";
-import { escapeHtml, sanitizeUrl, safeHexColor } from "../../utils/sanitize";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 function renderPriceTiers(tiers: PriceTier[]): string {
   // When a campaign is active the backend sets each tier's originalPrice
