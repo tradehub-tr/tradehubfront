@@ -1,3 +1,14 @@
+## [v1.2.1-beta.5] - 2026-06-09 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(i18n): SellPageLayout + MegaMenu i18n'ini geri uygula (@aliturguttursab)
+  - MegaMenu: "Tümünü gör" → t("commonNav.viewAll")
+  - SellPageLayout: tüm hardcoded TR → t("sellPage.*") (49 mevcut anahtar yeniden kullanıldı + 5 yeni: hero başlık/açıklama, görsel alt, üretici desteği, başvuru linki)
+  - locales {en,tr,ar,ru}: 5 yeni sellPage anahtarı
+
+---
 ## [v1.2.1-beta.4] - 2026-06-09 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
