@@ -842,12 +842,12 @@ export function initMegaMenu(): void {
           html += `
         <div class="${leafGridCls}">
           ${childless.map((g) => renderDynCatCard(g.name, g.slug, g.image)).join("")}
-          ${renderDynCatCard("Tümünü gör", cat.slug, undefined, true)}
+          ${renderDynCatCard(t("commonNav.viewAll"), cat.slug, undefined, true)}
         </div>`;
         }
 
         if (groups.length === 0) {
-          html += `<div class="${leafGridCls}">${renderDynCatCard("Tümünü gör", cat.slug, undefined, true)}</div>`;
+          html += `<div class="${leafGridCls}">${renderDynCatCard(t("commonNav.viewAll"), cat.slug, undefined, true)}</div>`;
         }
 
         return html;
