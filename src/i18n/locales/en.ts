@@ -6919,6 +6919,11 @@ const en = {
       verificationLevelAdvancedDesc: "In addition to basic verification, it includes a production capacity assessment and an on-site audit. During the factory visit, production lines, quality control processes and storage conditions are inspected. An annual verification fee of 2,990 TRY applies.",
       verificationLevelPremiumLabel: "Premium Verification:",
       verificationLevelPremiumDesc: "It is the highest level of credibility badge. In addition to advanced verification, it includes financial soundness analysis, customer reference checks and regular annual audits. Premium verified suppliers are highlighted as iSTOC's most trusted business partners. An annual verification fee of 7,990 TRY applies.",
+      heroTitleMain: "Open your factory to the whole world.",
+      heroDescNoCommission: "iSTOC connects manufacturers directly with B2B buyers around the world. List, sell, ship — no commission.",
+      heroImageAltWorld: "Worldwide export: port and container logistics",
+      manufacturersFocusedSupport: "Dedicated support for manufacturers",
+      startApplicationLink: "start your application",
     },
 
     // ============================================================
