@@ -1,73 +1,73 @@
 const tr = {
   translation: {
     pageTitle: {
-      home: "istoc — Küresel B2B Pazaryeri",
-      auth_forgot_password: "Şifremi Unuttum - iSTOC TradeHub",
-      auth_login: "Giriş Yap - iSTOC TradeHub",
-      auth_register: "Kayıt Ol - iSTOC TradeHub",
-      auth_reset_password: "Şifre Sıfırla - iSTOC TradeHub",
-      brand: "Marka - iSTOC TradeHub",
-      cart: "Sepetim - iSTOC TradeHub",
-      categories: "Kategoriler - iSTOC TradeHub",
-      dashboard_addresses: "Adreslerim - iSTOC TradeHub",
-      dashboard_buyer_dashboard: "Alıcı Kontrol Paneli - iSTOC TradeHub",
-      dashboard_contacts: "Kişilerim - iSTOC TradeHub",
-      dashboard_favorites: "Favorilerim - iSTOC TradeHub",
-      dashboard_inquiries: "Ürün Sorularım - iSTOC TradeHub",
-      dashboard_kyb: "Belge Doğrulama - iSTOC TradeHub",
-      dashboard_kyc: "KYC Doğrulama - iSTOC TradeHub",
-      dashboard_messages: "Mesajlarım - iSTOC TradeHub",
-      dashboard_orders: "Siparişlerim - iSTOC TradeHub",
-      dashboard_payment: "Ödeme - iSTOC TradeHub",
-      dashboard_profile: "Profilim - iSTOC TradeHub",
-      dashboard_rfq_form: "RFQ Detayları | iSTOC TradeHub",
-      dashboard_rfq_quotes: "RFQ Teklifleri | iSTOC TradeHub",
-      dashboard_rfq_success: "RFQ Gönderildi | iSTOC TradeHub",
-      dashboard_rfq: "RFQ - Fiyat Teklifi Talebi | iSTOC TradeHub",
-      dashboard_settings: "Hesap Ayarları - iSTOC TradeHub",
-      dashboard_subscription: "Abonelik - iSTOC TradeHub",
-      help_faq_detail: "SSS Detay - iSTOC TradeHub Yardım Merkezi",
-      help_faq: "SSS - iSTOC TradeHub Yardım Merkezi",
-      help_help_center: "Yardım Merkezi - iSTOC TradeHub",
-      help_help_ticket_new: "Destek Talebi Oluştur - iSTOC TradeHub",
-      help_help_ticket: "Destek Talebi - iSTOC TradeHub",
-      help_help_tickets: "Destek Taleplerim - iSTOC TradeHub",
-      info_after_sales: "Satış Sonrası Korumalar - iSTOC TradeHub",
-      info_membership: "Üyelik Programı - iSTOC TradeHub",
-      info_payments: "Güvenli ve Kolay Ödemeler - iSTOC TradeHub",
-      info_refund_policy: "Para İade Politikası - iSTOC TradeHub",
-      info_shipping_logistics: "Kargo ve Lojistik Hizmetleri - iSTOC TradeHub",
-      info_trade_assurance_detail: "Ticari Güvence Detayı - iSTOC TradeHub",
-      legal_accessibility: "Erişilebilirlik - iSTOC TradeHub",
-      legal_cookies: "Çerez Politikası - iSTOC TradeHub",
-      legal_distance_sales: "Mesafeli Satış Sözleşmesi - iSTOC TradeHub",
-      legal_ip: "Fikri Mülkiyet - iSTOC TradeHub",
-      legal_kvkk: "KVKK Aydınlatma Metni - iSTOC TradeHub",
-      legal_notice: "Yasal Bildirim — istoc",
-      legal_privacy: "Gizlilik Politikası - iSTOC TradeHub",
-      legal_product_listing: "Ürün Listeleme Politikası - iSTOC TradeHub",
-      legal_returns: "İade Politikası - iSTOC TradeHub",
-      legal_terms: "Kullanım Koşulları - iSTOC TradeHub",
-      manufacturers: "Üreticiler - iSTOC",
-      order_checkout: "Ödeme - iSTOC TradeHub",
-      order_order_success: "Sipariş Durumu - iSTOC TradeHub",
-      order_payment_failed: "Ödeme Başarısız - iSTOC TradeHub",
-      order_payment_processing: "Ödeme İşleniyor - iSTOC TradeHub",
-      product_detail: "Ürün Detayı - iSTOC TradeHub",
-      products: "Ürünler - iSTOC TradeHub",
-      seller_application_pending: "Başvuru Durumu - iSTOC TradeHub",
-      seller_dashboard: "Satıcı Paneli - iSTOC",
-      seller_sell_pricing: "Üyelik Paketleri - iSTOC TradeHub",
-      seller_sell: "Satıcı Ol - iSTOC TradeHub",
-      seller_seller_shop: "iSTOC TradeHub - Mağaza",
-      seller_seller_storefront: "iSTOC TradeHub - Satıcı Mağazası",
-      seller_supplier_setup: "Tedarikçi Başvurusu - iSTOC TradeHub",
-      seller_verification: "Doğrulanmış Tedarikçi Olun - iSTOC TradeHub",
-      tailored_selections: "Size Özel Seçimler - iSTOC",
-      top_deals: "En İyi Fırsatlar - iSTOC",
-      top_ranking_category: "En Çok Satanlar — Kategori | iSTOC",
-      top_ranking: "En Çok Tercih Edilenler - iSTOC",
-      trade_assurance: "Ticari Güvence - iSTOC TradeHub",
+      home: "iStoc — Küresel B2B Pazaryeri",
+      auth_forgot_password: "Şifremi Unuttum - iStoc TradeHub",
+      auth_login: "Giriş Yap - iStoc TradeHub",
+      auth_register: "Kayıt Ol - iStoc TradeHub",
+      auth_reset_password: "Şifre Sıfırla - iStoc TradeHub",
+      brand: "Marka - iStoc TradeHub",
+      cart: "Sepetim - iStoc TradeHub",
+      categories: "Kategoriler - iStoc TradeHub",
+      dashboard_addresses: "Adreslerim - iStoc TradeHub",
+      dashboard_buyer_dashboard: "Alıcı Kontrol Paneli - iStoc TradeHub",
+      dashboard_contacts: "Kişilerim - iStoc TradeHub",
+      dashboard_favorites: "Favorilerim - iStoc TradeHub",
+      dashboard_inquiries: "Ürün Sorularım - iStoc TradeHub",
+      dashboard_kyb: "Belge Doğrulama - iStoc TradeHub",
+      dashboard_kyc: "KYC Doğrulama - iStoc TradeHub",
+      dashboard_messages: "Mesajlarım - iStoc TradeHub",
+      dashboard_orders: "Siparişlerim - iStoc TradeHub",
+      dashboard_payment: "Ödeme - iStoc TradeHub",
+      dashboard_profile: "Profilim - iStoc TradeHub",
+      dashboard_rfq_form: "RFQ Detayları | iStoc TradeHub",
+      dashboard_rfq_quotes: "RFQ Teklifleri | iStoc TradeHub",
+      dashboard_rfq_success: "RFQ Gönderildi | iStoc TradeHub",
+      dashboard_rfq: "RFQ - Fiyat Teklifi Talebi | iStoc TradeHub",
+      dashboard_settings: "Hesap Ayarları - iStoc TradeHub",
+      dashboard_subscription: "Abonelik - iStoc TradeHub",
+      help_faq_detail: "SSS Detay - iStoc TradeHub Yardım Merkezi",
+      help_faq: "SSS - iStoc TradeHub Yardım Merkezi",
+      help_help_center: "Yardım Merkezi - iStoc TradeHub",
+      help_help_ticket_new: "Destek Talebi Oluştur - iStoc TradeHub",
+      help_help_ticket: "Destek Talebi - iStoc TradeHub",
+      help_help_tickets: "Destek Taleplerim - iStoc TradeHub",
+      info_after_sales: "Satış Sonrası Korumalar - iStoc TradeHub",
+      info_membership: "Üyelik Programı - iStoc TradeHub",
+      info_payments: "Güvenli ve Kolay Ödemeler - iStoc TradeHub",
+      info_refund_policy: "Para İade Politikası - iStoc TradeHub",
+      info_shipping_logistics: "Kargo ve Lojistik Hizmetleri - iStoc TradeHub",
+      info_trade_assurance_detail: "Ticari Güvence Detayı - iStoc TradeHub",
+      legal_accessibility: "Erişilebilirlik - iStoc TradeHub",
+      legal_cookies: "Çerez Politikası - iStoc TradeHub",
+      legal_distance_sales: "Mesafeli Satış Sözleşmesi - iStoc TradeHub",
+      legal_ip: "Fikri Mülkiyet - iStoc TradeHub",
+      legal_kvkk: "KVKK Aydınlatma Metni - iStoc TradeHub",
+      legal_notice: "Yasal Bildirim — iStoc",
+      legal_privacy: "Gizlilik Politikası - iStoc TradeHub",
+      legal_product_listing: "Ürün Listeleme Politikası - iStoc TradeHub",
+      legal_returns: "İade Politikası - iStoc TradeHub",
+      legal_terms: "Kullanım Koşulları - iStoc TradeHub",
+      manufacturers: "Üreticiler - iStoc",
+      order_checkout: "Ödeme - iStoc TradeHub",
+      order_order_success: "Sipariş Durumu - iStoc TradeHub",
+      order_payment_failed: "Ödeme Başarısız - iStoc TradeHub",
+      order_payment_processing: "Ödeme İşleniyor - iStoc TradeHub",
+      product_detail: "Ürün Detayı - iStoc TradeHub",
+      products: "Ürünler - iStoc TradeHub",
+      seller_application_pending: "Başvuru Durumu - iStoc TradeHub",
+      seller_dashboard: "Satıcı Paneli - iStoc",
+      seller_sell_pricing: "Üyelik Paketleri - iStoc TradeHub",
+      seller_sell: "Satıcı Ol - iStoc TradeHub",
+      seller_seller_shop: "iStoc TradeHub - Mağaza",
+      seller_seller_storefront: "iStoc TradeHub - Satıcı Mağazası",
+      seller_supplier_setup: "Tedarikçi Başvurusu - iStoc TradeHub",
+      seller_verification: "Doğrulanmış Tedarikçi Olun - iStoc TradeHub",
+      tailored_selections: "Size Özel Seçimler - iStoc",
+      top_deals: "En İyi Fırsatlar - iStoc",
+      top_ranking_category: "En Çok Satanlar — Kategori | iStoc",
+      top_ranking: "En Çok Tercih Edilenler - iStoc",
+      trade_assurance: "Ticari Güvence - iStoc TradeHub",
     },
     p2g0: {
       categoryProductsAria: "{{category}} ürünleri",
@@ -82,7 +82,7 @@ const tr = {
       unknownError: "Bilinmeyen hata",
     },
     authAddr: {
-      istocHome: "iSTOC Ana Sayfa",
+      istocHome: "iStoc Ana Sayfa",
       promoHeadline: "Global B2B Ticaret Ağı",
       promoSubtitle: "Güvenli ödeme, doğrulanmış satıcılar ve şeffaf komisyon ile yeni nesil B2B pazaryeri.",
       featSecure: "Güvenli",
@@ -199,7 +199,7 @@ const tr = {
     },
     checkoutMfr: {
       goToStore: "{{name}} mağazasına git",
-      securePaymentNote: "Ödeme güvenli olarak platforma yapılır; sipariş satıcılara iSTOC güvencesi ile yönlendirilir.",
+      securePaymentNote: "Ödeme güvenli olarak platforma yapılır; sipariş satıcılara iStoc güvencesi ile yönlendirilir.",
       removeCoupon: "Kuponu kaldır",
       preInfoAndDistanceSalesContract: "Ön Bilgilendirme Formunu ve Mesafeli Satış Sözleşmesini",
       readAndAccept: "okudum, kabul ediyorum.",
@@ -234,7 +234,7 @@ const tr = {
       percentAndAbove: "%{{value}} ve üzeri",
       hoursOrLess: "≤ {{count}} sa.",
       supplierFilters: "Tedarikçi filtreleri",
-      yearsOnPlatform: "iSTOC'taki yıl sayısı",
+      yearsOnPlatform: "iStoc'taki yıl sayısı",
       onTimeDelivery: "Zamanında teslimat",
       responseTime: "Yanıtlama süresi",
       reorderRate: "Yeniden sipariş oranı",
@@ -407,16 +407,16 @@ const tr = {
     },
     infoMisc: {
       membershipProgram: "Üyelik Programı",
-      membershipSubtitle: "iSTOC üyelik avantajları ve özel fırsatlar",
+      membershipSubtitle: "iStoc üyelik avantajları ve özel fırsatlar",
       membershipTiersTitle: "Üyelik Seviyeleri",
-      membershipTiersP1: "<strong>Ücretsiz Üyelik:</strong> iSTOC platformuna kaydolan her kullanıcı, temel üyelik avantajlarından otomatik olarak yararlanır. Ücretsiz üyelikte sınırsız ürün arama, tedarikçi iletişimi, temel alıcı koruması ve aylık 5 teklif talebi (RFQ) hakkı bulunmaktadır.",
+      membershipTiersP1: "<strong>Ücretsiz Üyelik:</strong> iStoc platformuna kaydolan her kullanıcı, temel üyelik avantajlarından otomatik olarak yararlanır. Ücretsiz üyelikte sınırsız ürün arama, tedarikçi iletişimi, temel alıcı koruması ve aylık 5 teklif talebi (RFQ) hakkı bulunmaktadır.",
       membershipTiersP2: "<strong>Premium Üyelik:</strong> Aylık 499 TL karşılığında sunulan Premium üyelik, ticaret hacminizi büyütmek isteyenler için tasarlanmıştır. Sınırsız RFQ, öncelikli müşteri desteği, gelişmiş analitik raporlar, özel indirim kuponları ve VIP tedarikçi erişimi avantajlarından yararlanabilirsiniz.",
       membershipTiersP3: "<strong>Kurumsal Üyelik:</strong> Büyük ölçekli işletmeler için özel fiyatlandırma ile sunulan Kurumsal üyelik, tüm Premium özelliklere ek olarak özel hesap yöneticisi, API erişimi, çoklu kullanıcı yönetimi, özel entegrasyon desteği ve yıllık strateji danışmanlığı içerir.",
       membershipBenefitsTitle: "Üyelik Avantajları",
-      membershipBenefitsP1: "iSTOC üyelik programı, B2B ticaretinizi her yönden destekler. Premium ve Kurumsal üyeler, platform genelindeki ürünlerde %3 ila %8 arasında özel indirimlerden yararlanır. Ayrıca, sezonluk kampanyalara erken erişim ve özel fırsat bildirimlerinden haberdar olursunuz.",
+      membershipBenefitsP1: "iStoc üyelik programı, B2B ticaretinizi her yönden destekler. Premium ve Kurumsal üyeler, platform genelindeki ürünlerde %3 ila %8 arasında özel indirimlerden yararlanır. Ayrıca, sezonluk kampanyalara erken erişim ve özel fırsat bildirimlerinden haberdar olursunuz.",
       membershipBenefitsP2: "Üyelik seviyeniz yükseldikçe, tedarikçi kalite raporlarına, pazar analiz araçlarına ve rekabet istihbaratı verilerine erişiminiz genişler. Premium üyeler, profesyonel kalite denetim hizmetinden yılda 2 kez ücretsiz yararlanabilir. Kurumsal üyeler ise sınırsız denetim hakkına sahiptir.",
       membershipPricingTitle: "Fiyatlandırma",
-      membershipPricingP1: "iSTOC üyelik planları, her bütçeye uygun esnek fiyatlandırma seçenekleri sunar. Yıllık ödeme tercih ettiğinizde, aylık plana kıyasla %20 tasarruf sağlarsınız. Tüm planlar için 14 günlük ücretsiz deneme süresi mevcuttur; bu süre zarfında herhangi bir ücret alınmaz.",
+      membershipPricingP1: "iStoc üyelik planları, her bütçeye uygun esnek fiyatlandırma seçenekleri sunar. Yıllık ödeme tercih ettiğinizde, aylık plana kıyasla %20 tasarruf sağlarsınız. Tüm planlar için 14 günlük ücretsiz deneme süresi mevcuttur; bu süre zarfında herhangi bir ücret alınmaz.",
       membershipPricingP2: "Ücretsiz plan: 0 TL/ay | Premium plan: 499 TL/ay (yıllık ödemede 399 TL/ay) | Kurumsal plan: Özel fiyatlandırma (satış ekibimizle iletişime geçin). Tüm fiyatlara KDV dahildir. Plan değişikliğini istediğiniz zaman yapabilir, kalan süreniz oransal olarak yeni planınıza aktarılır.",
       membershipUpgradeTitle: "Üyelik Yükseltme",
       membershipUpgradeP1: "Üyeliğinizi yükseltmek son derece kolaydır. Hesap ayarlarınızdan \"Üyelik Planı\" bölümüne gidin, istediğiniz planı seçin ve ödeme bilgilerinizi girin. Yükseltme işlemi anında geçerli olur ve yeni avantajlarınızdan hemen yararlanmaya başlarsınız.",
@@ -426,7 +426,7 @@ const tr = {
       tradeAssurance: "Ticari Güvence",
       afterSalesSupport: "Satış sonrası destek",
       afterSalesFeaturesTitle: "Sipariş sonrası size neler sunuyoruz?",
-      afterSalesFeaturesIntro: "iSTOC, alım-satım sürecini şeffaf ve güvenli kılacak temel araçları sunar. Siparişiniz tamamlandıktan sonra da platform üzerinde destek almaya devam edebilirsiniz.",
+      afterSalesFeaturesIntro: "iStoc, alım-satım sürecini şeffaf ve güvenli kılacak temel araçları sunar. Siparişiniz tamamlandıktan sonra da platform üzerinde destek almaya devam edebilirsiniz.",
       sellerRatingTitle: "Satıcı Değerlendirme Sistemi",
       sellerRatingDesc: "Aldığınız ürün ve hizmeti 1-5 yıldız arasında puanlayıp yorum yazabilirsiniz. Değerlendirmeleriniz diğer alıcılara rehberlik eder ve satıcıların kalitesini şekillendirir.",
       directContactTitle: "Satıcı ile Doğrudan İletişim",
@@ -480,7 +480,7 @@ const tr = {
       shippingHeroTitle: "Kargo ve lojistik hizmetleri",
       shippingHeroSubtitle: "Siparişinizi güvenle takip edin, size en uygun kargo tipini seçin",
       shippingTypesTitle: "Kargo tipleri",
-      shippingTypesIntro: "iSTOC üzerinden satıcılarla anlaşarak siparişinize uygun kargo tipini seçebilirsiniz. Her kargo tipinin teslimat süresi ve maliyet yapısı farklıdır.",
+      shippingTypesIntro: "iStoc üzerinden satıcılarla anlaşarak siparişinize uygun kargo tipini seçebilirsiniz. Her kargo tipinin teslimat süresi ve maliyet yapısı farklıdır.",
       shippingExpressTitle: "Express (Hızlı) Kargo",
       shippingExpressDesc: "Acil siparişleriniz için en hızlı teslimat seçeneği. Şehir içi ve yakın bölgelerde tercih edilir.",
       shippingAirTitle: "Hava Kargo",
@@ -502,7 +502,7 @@ const tr = {
       trackingPara2: "Siparişlerim sayfasından her siparişinizin güncel durumunu görebilir, kargoya verildiği andan teslim alınana kadar süreci takip edebilirsiniz.",
       trackingAutoNote: "Takip numarası sipariş detaylarında otomatik görünür",
       orderProcessTitle: "Sipariş süreci nasıl işler?",
-      orderProcessIntro: "Siparişinizin her adımını iSTOC panelinden takip edebilirsiniz. İşte tipik bir sipariş akışı:",
+      orderProcessIntro: "Siparişinizin her adımını iStoc panelinden takip edebilirsiniz. İşte tipik bir sipariş akışı:",
       timelineStep1Title: "Ödeme Bekleniyor",
       timelineStep1Desc: "Siparişinizi oluşturduktan sonra ödeme yöntemini seçip işlemi tamamlarsınız.",
       timelineStep2Title: "Onaylanıyor",
@@ -514,12 +514,12 @@ const tr = {
       paymentsHeroAlt: "Güvenli ödeme",
       paymentsHeroTitle: "Güvenli ve esnek ödeme yöntemleri",
       paymentsHeroSubtitle: "Basit, şeffaf B2B ödemeleri",
-      paymentsSafetyTitle: "iSTOC ödemelerinizi nasıl güvenli tutar?",
-      paymentsSafetyIntro: "iSTOC üzerinden yapılan tüm ödemeler platform üzerinden yönetilir ve sipariş sürecine entegre şekilde takip edilir.",
+      paymentsSafetyTitle: "iStoc ödemelerinizi nasıl güvenli tutar?",
+      paymentsSafetyIntro: "iStoc üzerinden yapılan tüm ödemeler platform üzerinden yönetilir ve sipariş sürecine entegre şekilde takip edilir.",
       paymentsSafetyWarning: "Ödemenizi korumak için asla platform dışında ödeme yapmayın.",
       paymentsMethodsTitle: "Desteklenen ödeme yöntemleri",
       paymentBankTransferTitle: "Banka Havalesi",
-      paymentBankTransferDesc: "iSTOC'un resmi banka hesabına havale yaparak siparişinizi tamamlayın. Havale sonrası dekontunuzu platform üzerinden yükleyerek ödemenizi belgeleyin.",
+      paymentBankTransferDesc: "iStoc'un resmi banka hesabına havale yaparak siparişinizi tamamlayın. Havale sonrası dekontunuzu platform üzerinden yükleyerek ödemenizi belgeleyin.",
       paymentBankTransferTag: "Dekont yükleme desteği",
       paymentEftTitle: "EFT / Havale",
       paymentEftDesc: "Anlık elektronik fon transferi ile siparişinizi hızlıca tamamlayın. İşlem tarihi, tutarı ve gönderen bilgileri sipariş detaylarınıza otomatik kaydedilir.",
@@ -531,10 +531,10 @@ const tr = {
       paymentInstallmentDesc: "Satıcı ile doğrudan anlaşmalı taksitli ödeme seçeneği. Büyük hacimli siparişlerde satıcıyla taksit planı oluşturabilirsiniz.",
       paymentInstallmentTag: "Satıcıyla anlaşmalı plan",
       currencyBannerTitle: "5 farklı para biriminde alım-satım",
-      currencyBannerDesc: "iSTOC üzerinde Türk Lirası (TRY), ABD Doları (USD), Euro (EUR), İngiliz Sterlini (GBP) ve Çin Yuanı (CNY) ile ödeme yapabilir ve satış gerçekleştirebilirsiniz.",
+      currencyBannerDesc: "iStoc üzerinde Türk Lirası (TRY), ABD Doları (USD), Euro (EUR), İngiliz Sterlini (GBP) ve Çin Yuanı (CNY) ile ödeme yapabilir ve satış gerçekleştirebilirsiniz.",
       paymentProcessTitle: "Ödeme süreci nasıl işler?",
       paymentProcessStep1Title: "Tedarikçinizi bulun ve siparişi oluşturun",
-      paymentProcessStep1Desc: "iSTOC üzerinden ürününüzü seçin, tedarikçiyle anlaşın ve siparişinizi başlatın. Hazır ürünlerde doğrudan, özel üretimlerde tedarikçiyle mesajlaşarak detayları belirleyin.",
+      paymentProcessStep1Desc: "iStoc üzerinden ürününüzü seçin, tedarikçiyle anlaşın ve siparişinizi başlatın. Hazır ürünlerde doğrudan, özel üretimlerde tedarikçiyle mesajlaşarak detayları belirleyin.",
       paymentProcessStep2Title: "Ödeme yönteminizi seçin",
       paymentProcessStep2Desc: "Banka havalesi, EFT, çek/senet veya elden taksit seçeneklerinden size uygun olanı seçin. Para birimini de (TRY, USD, EUR, GBP, CNY) ihtiyacınıza göre belirleyin.",
       paymentProcessStep3Title: "Ödemenizi yapın ve dekontu yükleyin",
@@ -997,21 +997,21 @@ const tr = {
       retry: "Tekrar dene",
     },
     tradeAssurance: {
-      heroTitle: "iSTOC'da ödemeden teslimata korumadan faydalanın",
+      heroTitle: "iStoc'da ödemeden teslimata korumadan faydalanın",
       howItWorksCta: "Süreç şu şekilde işler:",
       serviceInfoTitle: "Trade Assurance, satın alım yolculuğunuzun her aşamasını kapsar",
-      serviceInfoDesc: "iSTOC'daki alıcılara güvenli ödeme yapma imkanı sunuyoruz, ürün veya nakliye sorunları gibi öngörülemeyen durumlara karşı koruma sağlıyoruz ve satın almayla ilgili sorunları çözmek için alıcılarla tedarikçiler arasında arabuluculuk yapıyoruz.",
+      serviceInfoDesc: "iStoc'daki alıcılara güvenli ödeme yapma imkanı sunuyoruz, ürün veya nakliye sorunları gibi öngörülemeyen durumlara karşı koruma sağlıyoruz ve satın almayla ilgili sorunları çözmek için alıcılarla tedarikçiler arasında arabuluculuk yapıyoruz.",
       watchMore: "Daha fazla bilgi almak için izleyin",
       statOrders: "Trade Assurance siparişleri",
       statBought: "Bizden satın alındı",
       statSuppliers: "Tedarikçiler",
       statProducts: "Ürünler",
-      howProtectTitle: "iSTOC'da ödemelerinizi nasıl koruyoruz?",
+      howProtectTitle: "iStoc'da ödemelerinizi nasıl koruyoruz?",
       howProtectIntro: "Trade Assurance, küresel olarak iş yapmayı hem alıcılar hem de satıcılar için daha kolay ve daha güvenli hale getirir. Süreç şu şekilde işler:",
       step1Title: "Trade Assurance siparişini başlat",
-      step1Desc: "iSTOC'da bir tedarikçiyle sipariş anlaşması yaptınız.",
-      step2Title: "iSTOC üzerinden ödeme yapın",
-      step2Desc: "Bir çevrimiçi ödeme yöntemiyle satın alın veya iSTOC aracılığıyla banka havalesi yapın.",
+      step1Desc: "iStoc'da bir tedarikçiyle sipariş anlaşması yaptınız.",
+      step2Title: "iStoc üzerinden ödeme yapın",
+      step2Desc: "Bir çevrimiçi ödeme yöntemiyle satın alın veya iStoc aracılığıyla banka havalesi yapın.",
       step3Title: "Ödeme geçici olarak tutuluyor",
       step3Desc: "Ödemeniz emanette tutuluyor. Siz ürünü teslim alıp onayladıktan sonra tedarikçiye gönderilecek.",
       step4Title: "Sipariş koşulları karşılanmazsa paranızı geri alın",
@@ -1022,7 +1022,7 @@ const tr = {
       coverageShipping: "Gönderim ve lojistik hizmetleri",
       coverageAfterSales: "Satış sonrası korumaları",
       paymentsTitle: "Güvenli ve çeşitli ödeme seçenekleri",
-      paymentsDesc1: "iSTOC aracılığıyla yaptığınız her ödeme şifrelenmiştir, güvenlidir ve 2 saat gibi kısa bir sürede işlenir.",
+      paymentsDesc1: "iStoc aracılığıyla yaptığınız her ödeme şifrelenmiştir, güvenlidir ve 2 saat gibi kısa bir sürede işlenir.",
       paymentsDesc2: "Kredi/banka kartları, dijital cüzdanlar, doğrudan banka hesabına transferler ve esnek ödeme planları* dahil olmak üzere bildiğiniz ve güvendiğiniz ödeme yöntemlerini destekliyoruz.",
       sourceProducts: "Destekleyici ürünleri tedarik edin",
       learnHow: "Nasıl çalıştığını öğrenin",
@@ -1035,14 +1035,14 @@ const tr = {
       here: "buraya",
       clickSuffix: "tıklayın",
       shippingDesc1: "Siparişiniz planlanan tarihte teslim edilsin veya gecikme için bir tazminat alın.",
-      shippingDesc2: "iSTOC Logistics ile lojistik ağımızın güvenilirliğinden yararlanabilir ve gönderinizi dünyanın birçok ülkesi ve bölgesinde gerçek zamanlı olarak takip edebilirsiniz.",
+      shippingDesc2: "iStoc Logistics ile lojistik ağımızın güvenilirliğinden yararlanabilir ve gönderinizi dünyanın birçok ülkesi ve bölgesinde gerçek zamanlı olarak takip edebilirsiniz.",
       logisticsAlt: "Lojistik ve Gönderim",
       afterSalesDesc: "Uygun ürünlerde yerinde kurulum, bakım, onarım ve ücretsiz yedek parça hizmetlerimizle hizmet kapınıza gelsin.",
       testimonialsTitle: "Alıcı sesleri",
       testimonialsIntro: "Trade Assurance'ın sizin gibi diğer insanlara nasıl avantajlar sağladığını öğrenin.",
       testimonial1: "\"İşlem süresince hem tedarikçinin hem de kendimin koruma altında olduğunu bilmek içimi rahatlatıyor.\"",
       testimonial2: "\"Trade Assurance kullandığınız ve korunduğunuz gerçeğini bildiğiniz için endişelenmenize gerek kalmaz.\"",
-      testimonial3: "\"iSTOC üzerinden ödeme yapmak çok güvenli hissettiriyor, emanet sistemi alıcılar için gerçek bir güvence.\"",
+      testimonial3: "\"iStoc üzerinden ödeme yapmak çok güvenli hissettiriyor, emanet sistemi alıcılar için gerçek bir güvence.\"",
       testimonial4: "\"Satış sonrası destek ve hızlı iade süreci beklentilerimizin çok üzerindeydi.\"",
       detailHeroTitle: "Ticari Güvence Sistemi ile Güvenli Ticaret",
       detailHeroDesc: "İşlemlerinizin her aşamasında güven ve şeffaflık sağlayarak, uzun vadeli iş ortaklıkları kurmanıza yardımcı oluyoruz.",
@@ -1063,7 +1063,7 @@ const tr = {
       featureNeutralResolutionDesc: "Anlaşmazlıklarda tarafsız hakemlik mekanizması.",
       detailProcessIntro: "Ticari Güvence, alıcı ve satıcılar arasındaki işlemleri her iki taraf için de daha kolay ve daha güvenli hale getirir. Süreç şu şekilde işler:",
       detailStep1Title: "Ticari Güvence siparişini başlat",
-      detailStep1Desc: "iSTOC'da bir tedarikçiyle sipariş anlaşması yaptınız. Tedarikçi, siparişinizi onaylar ve ürününüzü hazırlamaya başlar.",
+      detailStep1Desc: "iStoc'da bir tedarikçiyle sipariş anlaşması yaptınız. Tedarikçi, siparişinizi onaylar ve ürününüzü hazırlamaya başlar.",
       detailStep2Desc: "Kredi kartı, doğrudan borçlandırma veya banka havalesi ile güvenle ödeme yapın. Tüm ödemeler SSL şifreleme ile korunur.",
       detailStep3Title: "Ödeme bloke hesapta tutulur",
       detailStep3Desc: "Ödemeniz, ürün teslim edilip onaylandığı ana kadar bloke hesapta tutulur. Bu, her iki taraf için de güvence sağlar.",
@@ -1077,14 +1077,14 @@ const tr = {
       cardAgentTitle: "Özel Temsilci",
       cardAgentDesc: "Siparişiniz eksiksiz tamamlanana kadar özel bir temsilci süreci sizin için takip eder.",
       fullAssuranceTitle: "Tam Güvence",
-      cardFullAssuranceDesc: "Üretimden teslimata kadar tüm aşamalar iSTOC ekibi tarafından izlenir; aksaklıkta tarafsız hakemlik devreye girer.",
+      cardFullAssuranceDesc: "Üretimden teslimata kadar tüm aşamalar iStoc ekibi tarafından izlenir; aksaklıkta tarafsız hakemlik devreye girer.",
       howSystemWorksTitle: "Sistem Nasıl Çalışır?",
       howSystemWorksIntro: "Ticari Güvence Sistemi, siparişinizin türüne göre iki katmanlı koruma sunar.",
       layer1Title: "Para Güvencesi",
       layer1Desc1: "Alıcının ödemesi, ürün teslim edilene kadar bloke edilir.",
       layer1Desc2: "Sipariş eksiksiz tamamlandıktan sonra para satıcıya aktarılır. Tüm standart siparişlerde otomatik olarak devreye girer.",
       layer2Desc: "Özel üretim veya baskılı ürün siparişlerinde daha kapsamlı koruma sağlanır. Sistem şunları garantiler:",
-      layer2Item1: "Ürün hazırlanmasından kargolanmasına kadar tüm adımların iSTOC ekibi tarafından takibi",
+      layer2Item1: "Ürün hazırlanmasından kargolanmasına kadar tüm adımların iStoc ekibi tarafından takibi",
       layer2Item2: "Müşteriye eksiksiz ve kusursuz teslimatın yapılması",
       layer2Item3: "Ürün doğruluğu, kalite kontrolü ve zamanında teslimat kontrolü",
       layer2Item4: "Gerekirse ürün kurulumu ve sevkiyat desteği",
@@ -1229,7 +1229,7 @@ const tr = {
       buyerCentral: "Alıcı Merkezi",
       helpCenter: "Yardım Merkezi",
       appExtension: "Uygulama ve Eklenti",
-      sellOnIstoc: "istoc'ta Sat",
+      sellOnIstoc: "iStoc'ta Sat",
     },
 
     // ============================================================
@@ -1241,7 +1241,7 @@ const tr = {
       manufacturers: "Üreticiler",
       worldwide: "Dünya Geneli",
       placeholder: "Tekstil ve Konfeksiyon",
-      welcomeIstoc: "istoc'a Hoş Geldiniz",
+      welcomeIstoc: "iStoc'a Hoş Geldiniz",
       rfq: "Fiyat Teklifi Talebi",
       topRanking: "En Çok Satanlar",
       fastCustomization: "Hızlı Özelleştirme",
@@ -1262,11 +1262,11 @@ const tr = {
       campaigns: "Kampanyalar",
       campaignsDesc: "Fırsatlar, indirimler, kampanyalar",
       brands: "Markalar",
-      brandsDesc: "istoc'ta kayıtlı resmi markalar",
+      brandsDesc: "iStoc'ta kayıtlı resmi markalar",
       sellers: "Satıcılar",
-      sellersDesc: "istoc pazaryerindeki satıcılara göz atın",
-      b2bMarketplace: "istoc B2B Pazaryeri",
-      b2bDesc: "istoc'ta nasıl satış yapacağınızı öğrenin",
+      sellersDesc: "iStoc pazaryerindeki satıcılara göz atın",
+      b2bMarketplace: "iStoc B2B Pazaryeri",
+      b2bDesc: "iStoc'ta nasıl satış yapacağınızı öğrenin",
     },
 
     // ============================================================
@@ -1308,7 +1308,7 @@ const tr = {
       tradeAssuranceLead:
         "Alıcıyı ve satıcıyı bir araya getiren güvenilir bir altyapıyla işlemini sürdürebilirsin.",
       tradeAssuranceHowItWorks: "Nasıl çalışır?",
-      whyIstoc: "Neden istoc",
+      whyIstoc: "Neden iStoc",
       howSourcing: "Tedarik nasıl çalışır",
       membershipProgram: "Üyelik programı",
       tradeServices: "Ticaret hizmetleri",
@@ -1322,20 +1322,20 @@ const tr = {
       overview: "Genel Bakış",
       meetPeers: "Diğer alıcılarla tanışın",
       ecommerceAcademy: "E-ticaret Akademisi",
-      howToSource: "istoc'ta nasıl tedarik yapılır",
+      howToSource: "iStoc'ta nasıl tedarik yapılır",
       forBuyers: "Alıcılar için",
       forSuppliers: "Tedarikçiler için",
       openDispute: "Anlaşmazlık açın",
       reportIpr: "Fikri mülkiyet ihlali bildirin",
       reportAbuse: "Kötüye kullanım bildirin",
-      getApp: "istoc uygulamasını edinin",
+      getApp: "iStoc uygulamasını edinin",
       appDesc:
-        "Ürünleri bulun, tedarikçilerle iletişim kurun ve siparişlerinizi istoc uygulaması ile her yerden yönetin ve ödeyin.",
+        "Ürünleri bulun, tedarikçilerle iletişim kurun ve siparişlerinizi iStoc uygulaması ile her yerden yönetin ve ödeyin.",
       downloadOn: "İndirin:",
       appStore: "App Store",
       getItOn: "EDİNİN:",
       googlePlay: "Google Play",
-      discoverLens: "istoc Lens'i Keşfedin",
+      discoverLens: "iStoc Lens'i Keşfedin",
       lensDesc:
         "Bu görsel arama eklentisiyle, toptan fiyatlar ve özelleştirme seçenekleriyle benzer ürünleri bulun ve karşılaştırın.",
       addToChrome: "Chrome'a Ekle",
@@ -1370,7 +1370,7 @@ const tr = {
       personalSelectionsDesc: "Geçmiş siparişlerinize göre öneriler",
       bestDeals: "En iyi fırsatlar",
       bestDealsDesc: "Sınırlı süreli toplu alım indirimleri",
-      sellOnIstoc: "istoc'ta Sat",
+      sellOnIstoc: "iStoc'ta Sat",
       sellOnIstocDesc: "Satıcı olun, ürünlerinizi listeleyin",
       suppliers: "Tedarikçiler",
       findSuppliers: "Tedarikçi Bul",
@@ -1399,18 +1399,16 @@ const tr = {
       safePayments: "Güvenli ve kolay ödemeler",
       moneyBack: "Para iade politikası",
       afterSales: "Satış sonrası korumalar",
-      sourceOnIstoc: "istoc'ta Tedarik",
+      sourceOnIstoc: "iStoc'ta Tedarik",
       rfq: "Fiyat Teklifi Talebi",
       membership: "Üyelik programı",
-      sellOnIstoc: "istoc'ta Satış",
+      sellOnIstoc: "iStoc'ta Satış",
       startSelling: "Satışa başla",
       sellerCentral: "Satıcı Merkezi",
       verifiedSupplier: "Doğrulanmış Tedarikçi Olun",
       downloadApp: "Tedarikçiler için uygulamayı indirin",
       stayConnected: "Bağlantıda Kalın",
-      operatedBy:
-        'istoc (okunuşu: "aystock") — Thoptan Ltd. (United Kingdom) tarafından işletilmektedir.',
-      copyright: "© 2026 Thoptan Ltd. Tüm hakları saklıdır.",
+      copyright: "© 2026 iStoc Private Company Limited. Tüm hakları saklıdır.",
       legalNotice: "Yasal Bildirim",
       privacyPolicy: "Gizlilik Politikası",
       productListing: "Ürün Listeleme Politikası",
@@ -1435,13 +1433,13 @@ const tr = {
         forgotPassword: "Şifremi unuttum?",
         continue: "Devam Et",
         or: "VEYA",
-        newUser: "istoc'a yeni misiniz?",
+        newUser: "iStoc'a yeni misiniz?",
         createAccount: "Hesap oluştur",
         qrLogin: "QR kod ile giriş yap",
         submit: "Giriş Yap",
         invalidCredentials: "E-posta veya şifre hatalı",
         accountDisabled:
-          "Hesabınız pasif. Yeniden etkinleştirmek için istoc müşteri hizmetlerine başvurun.",
+          "Hesabınız pasif. Yeniden etkinleştirmek için iStoc müşteri hizmetlerine başvurun.",
         "2faRequired": "İki faktörlü doğrulama gerekli",
         emailVerified: "E-posta adresiniz başarıyla doğrulandı. Giriş yapabilirsiniz.",
         emailVerificationFailed: "Doğrulama bağlantısı geçersiz veya süresi dolmuş.",
@@ -1460,7 +1458,7 @@ const tr = {
         emailExistsError:
           "Bu e-posta adresi zaten kayıtlı. Giriş yapmayı veya parolanızı sıfırlamayı deneyin.",
         emailExistsSupplier:
-          'Bu e-posta zaten kayıtlı. Tedarikçi olmak için giriş yapıp "istoc\'ta Sat" sayfasından başvurunuzu yapabilirsiniz.',
+          'Bu e-posta zaten kayıtlı. Tedarikçi olmak için giriş yapıp "iStoc\'ta Sat" sayfasından başvurunuzu yapabilirsiniz.',
         loginLink: "Giriş yapın",
         emailDisabledError:
           "Bu hesap silinmiştir. Yeni bir e-posta adresi ile kayıt olabilirsiniz.",
@@ -1667,7 +1665,7 @@ const tr = {
       subtotalExTax: "Ara toplam (vergi hariç)",
       youSaved: "Siparişinizde {{amount}} tasarruf edildi",
       checkout: "Ödeme yap",
-      orderProtection: "istoc sipariş koruması",
+      orderProtection: "iStoc sipariş koruması",
       securePayment: "Güvenli Ödeme",
       securePaymentDesc: "Her ödeme güvenli ve emniyetlidir",
       easyReturns: "Kolay İade",
@@ -1827,7 +1825,7 @@ const tr = {
       placeOrder: "Siparişi ver",
       payeeLabel: "Ödeme yapılacak satıcı",
       orderTerms:
-        "Yukarıdakilere tıklayarak istoc'un Kullanım Koşullarını ve Gizlilik Politikasını kabul ediyorsunuz",
+        "Yukarıdakilere tıklayarak iStoc'un Kullanım Koşullarını ve Gizlilik Politikasını kabul ediyorsunuz",
       securePayments: "Güvenli Ödemeler",
       guaranteedDelivery: "Garantili Teslimat",
       moneyBackProtection: "Para İade Koruması",
@@ -2024,7 +2022,7 @@ const tr = {
       shippingLabel: "Kargo",
       shippingCost: "Kargo: {{cost}} \u00b7 {{days}}",
       changeLabel: "Değiştir",
-      orderProtectionTitle: "istoc Sipariş Koruma",
+      orderProtectionTitle: "iStoc Sipariş Koruma",
       securePaymentTitle: "Güvenli Ödeme",
       securePaymentDesc: "Her ödeme yöntemiyle korunan ödemeler",
       moneyBackTitle: "Para İade Koruması",
@@ -2099,7 +2097,7 @@ const tr = {
       continueFacebook: "Facebook ile devam et",
       continueLinkedin: "LinkedIn ile devam et",
       continueEmail: "E-posta ile devam et",
-      newToTradehub: "istoc'a yeni misiniz?",
+      newToTradehub: "iStoc'a yeni misiniz?",
       createAccount: "Hesap oluştur",
       qrLogin: "QR kod ile giriş yap",
       orDivider: "VEYA",
@@ -2119,7 +2117,7 @@ const tr = {
       companyProfile: "Şirket Profili",
       otherProducts: "Diğer Ürünler",
       verifiedSupplier: "Onaylanmış Satıcı",
-      verifiedWithIstoc: "istoc ile Onaylanmış",
+      verifiedWithIstoc: "iStoc ile Onaylanmış",
       safePayments: "Güvenli ödemeler",
       returnPolicy: "İade politikası",
       option: "Seçenek",
@@ -2133,9 +2131,9 @@ const tr = {
       processingTimeNote:
         "Kargo ücreti ve teslimat tarihi tedarikçiyle kararlaştırılacaktır. Tedarikçiyle hemen iletişime geçin.",
       // Mobil ürün detay — Sipariş koruması (statik güvence bilgisi)
-      orderProtectionSection: "istoc sipariş koruması",
+      orderProtectionSection: "iStoc sipariş koruması",
       orderProtectionSectionDesc:
-        "Yalnızca istoc üzerinden verilen ve ödemesi yapılan siparişler bu kapsamda ücretsiz korunur.",
+        "Yalnızca iStoc üzerinden verilen ve ödemesi yapılan siparişler bu kapsamda ücretsiz korunur.",
       moneyBackProtection: "Para iade koruması",
       support247: "7/24 destek",
       dataProtection: "Veri koruması",
@@ -2192,7 +2190,7 @@ const tr = {
       filterSearch: "Ara",
       filterClearAll: "Tüm Filtreleri Temizle",
       filterCertDisclaimer:
-        "*Sertifika Uyarısı: Sertifikaların özgünlüğüne ilişkin her türlü değerlendirme, belgelendirme, denetim ve/veya ilgili inceleme, istoc'un hiçbir dahli olmaksızın bağımsız üçüncü taraflarca sağlanmakta veya yürütülmektedir.",
+        "*Sertifika Uyarısı: Sertifikaların özgünlüğüne ilişkin her türlü değerlendirme, belgelendirme, denetim ve/veya ilgili inceleme, iStoc'un hiçbir dahli olmaksızın bağımsız üçüncü taraflarca sağlanmakta veya yürütülmektedir.",
       filterLearnMore: "Daha fazla bilgi",
       filterOk: "Tamam",
       filterApply: "Ara",
@@ -2265,7 +2263,7 @@ const tr = {
       transactions: "İşlemler",
       bankAccounts: "Havale Hesapları",
       wireTransfer: "Havale Takibi",
-      istocCard: "istoc Kartı",
+      istocCard: "iStoc Kartı",
       payLater: "İşletmeler için Sonra Öde",
       savedHistory: "Kaydettiklerim ve Geçmişim",
       myFavorites: "Favorilerim",
@@ -2290,7 +2288,7 @@ const tr = {
       couponsLabel: "Kuponlar",
       validateTax: "Vergiden muaf statüsü için hesabınızı doğrulatın",
       verifyBusiness: "İş bilgilerini doğrulayın",
-      personalizeExp: "istoc deneyiminizi kişiselleştirin",
+      personalizeExp: "iStoc deneyiminizi kişiselleştirin",
       completeProfile: "Profilinizi tamamlayın",
       completeProfileDesc:
         "Tedarikçilerden daha iyi teklifler alabilmek için şirket profilinizi doldurun",
@@ -2358,7 +2356,7 @@ const tr = {
       emailVerifiedSuccess: "E-posta adresiniz doğrulandı.",
       notifVerifyTaxStatus: "Vergiden muaf statüsü için hesabınızı doğrulatın",
       notifVerifyBusiness: "İş bilgilerini doğrulayın",
-      notifPersonalizeExperience: "istoc.com deneyiminizi kişiselleştirin",
+      notifPersonalizeExperience: "iStoc.com deneyiminizi kişiselleştirin",
       notifCompleteProfile: "Profilinizi tamamlayın",
       notifFillCompanyProfile:
         "Tedarikçilerden daha iyi teklifler alabilmek için şirket profilinizi doldurun",
@@ -2385,7 +2383,7 @@ const tr = {
       allMessages: "Tüm Mesajlar",
       feedbackBanner: "İletişim deneyiminizi bizimle paylaşın.",
       emptyStateText:
-        "istoc'da sohbet ederek ve ticaret yaparak keyifli bir alışveriş deneyimi yaşayın",
+        "iStoc'da sohbet ederek ve ticaret yaparak keyifli bir alışveriş deneyimi yaşayın",
       typePlaceholder: "Mesajınızı yazın...",
       sendTip: "Enter ile gönder · Shift+Enter ile yeni satır",
       send: "Gönder",
@@ -2399,7 +2397,7 @@ const tr = {
       noResults: "Sonuç bulunamadı",
       me: "Ben",
       previewRfqReply: "[Fiyat teklifi] Tedarikçi RFQ'nuza yanıt verdi",
-      previewWelcome: "Yeni mi? istoc.com? İleri düzey tedarikçi hizmetlerimizi keşfedin",
+      previewWelcome: "Yeni mi? iStoc.com? İleri düzey tedarikçi hizmetlerimizi keşfedin",
       learnMore: "Daha fazla bilgi",
       // Sohbet mesajları
       conv1m1:
@@ -2418,7 +2416,7 @@ const tr = {
       conv3m1: "Merhaba, tekstil ürünlerimiz hakkında bilgi almak ister misiniz?",
       conv3m2: "Evet, pamuklu kumaş fiyatları hakkında bilgi alabilir miyim?",
       conv4m1:
-        "istoc.com'a hoş geldiniz! İleri düzey tedarikçi hizmetlerimizi keşfedin. Trade Assurance ile güvenle ticaret yapın.",
+        "iStoc.com'a hoş geldiniz! İleri düzey tedarikçi hizmetlerimizi keşfedin. Trade Assurance ile güvenle ticaret yapın.",
     },
 
     // ============================================================
@@ -2707,7 +2705,7 @@ const tr = {
       yourPaymentAmount: "Ödeme tutarınız",
       orderTermsNote:
         "Sipariş koşulları imzalanan sözleşmeye tabidir. Lütfen siparişinizi dikkatlice inceleyin.",
-      onlinePaymentProtected: "Online ödeme istoc Ticaret Güvencesi ile korunmaktadır.",
+      onlinePaymentProtected: "Online ödeme iStoc Ticaret Güvencesi ile korunmaktadır.",
       whatIsSalesTax: "Satış vergisi nedir?",
       whatIsSalesTaxAnswer:
         "Satış vergisi, hükümetler tarafından mal ve hizmetlerin satışına uygulanan bir tüketim vergisidir. Genellikle satın alma fiyatının yüzdesi olarak hesaplanır.",
@@ -2763,7 +2761,7 @@ const tr = {
     // HELP CENTER
     // ============================================================
     help: {
-      title: "istoc — Yardım Merkezi",
+      title: "iStoc — Yardım Merkezi",
       subtitle: "Alıcılar için 7/24 destek ve kılavuzlar",
       searchPlaceholder: "Soru veya anahtar kelime girin. Örnek: Ödeme",
       searchBtn: "Ara",
@@ -2786,7 +2784,7 @@ const tr = {
       termsOfUse: "Kullanım Şartları",
       userInfoLaws: "Kullanıcı Bilgileri Yasaları",
       contactGuide: "İletişim Kılavuzu",
-      copyright: "© 2024 istoc — Tüm hakları saklıdır.",
+      copyright: "© 2024 iStoc — Tüm hakları saklıdır.",
       viewMore: "Daha fazla görüntüle",
       searchResultsFor: "için sonuçlar",
     },
@@ -2810,34 +2808,34 @@ const tr = {
         breadcrumbLabel: "Kullanım Koşulları",
         section1Title: "1. Tanımlar",
         section1Content:
-          '<p><strong>"Platform"</strong>, istoc tarafından işletilen web sitesi ve mobil uygulamayı ifade eder.</p><p><strong>"Kullanıcı"</strong>, Platforma üye olan veya üye olmadan hizmetlerden yararlanan gerçek ve tüzel kişileri ifade eder.</p><p><strong>"Satıcı"</strong>, Platform üzerinden ürün ve hizmet sunan gerçek veya tüzel kişileri ifade eder.</p><p><strong>"Alıcı"</strong>, Platform üzerinden ürün ve hizmet satın alan Kullanıcıları ifade eder.</p><p><strong>"Hizmetler"</strong>, Platform aracılığıyla sunulan B2B ticaret, ödeme, lojistik ve diğer tüm hizmetleri kapsar.</p>',
+          '<p><strong>"Platform"</strong>, iStoc tarafından işletilen web sitesi ve mobil uygulamayı ifade eder.</p><p><strong>"Kullanıcı"</strong>, Platforma üye olan veya üye olmadan hizmetlerden yararlanan gerçek ve tüzel kişileri ifade eder.</p><p><strong>"Satıcı"</strong>, Platform üzerinden ürün ve hizmet sunan gerçek veya tüzel kişileri ifade eder.</p><p><strong>"Alıcı"</strong>, Platform üzerinden ürün ve hizmet satın alan Kullanıcıları ifade eder.</p><p><strong>"Hizmetler"</strong>, Platform aracılığıyla sunulan B2B ticaret, ödeme, lojistik ve diğer tüm hizmetleri kapsar.</p>',
         section2Title: "2. Kapsam ve Kabul",
         section2Content:
-          "<p>Bu Kullanım Koşulları, Platform'a erişen ve/veya Platform'u kullanan tüm Kullanıcılar için geçerlidir. Platform'u kullanarak bu koşulları kabul etmiş sayılırsınız.</p><p>istoc, bu koşulları önceden bildirmeksizin güncelleme hakkını saklı tutar. Güncellemeler yayınlandığı anda yürürlüğe girer. Platform'u kullanmaya devam etmeniz, güncellenmiş koşulları kabul ettiğiniz anlamına gelir.</p>",
+          "<p>Bu Kullanım Koşulları, Platform'a erişen ve/veya Platform'u kullanan tüm Kullanıcılar için geçerlidir. Platform'u kullanarak bu koşulları kabul etmiş sayılırsınız.</p><p>iStoc, bu koşulları önceden bildirmeksizin güncelleme hakkını saklı tutar. Güncellemeler yayınlandığı anda yürürlüğe girer. Platform'u kullanmaya devam etmeniz, güncellenmiş koşulları kabul ettiğiniz anlamına gelir.</p>",
         section3Title: "3. Üyelik ve Hesap",
         section3Content:
-          "<p>Platform'a üye olmak için 18 yaşını doldurmuş olmak ve geçerli bir e-posta adresine sahip olmak gereklidir. Tüzel kişiler adına hareket eden temsilcilerin yetkili olması gerekmektedir.</p><p>Kullanıcılar, hesap bilgilerinin gizliliğinden ve güvenliğinden sorumludur. Hesabınız üzerinden gerçekleştirilen tüm işlemlerden siz sorumlusunuz.</p><p>istoc, önceden bildirimde bulunmaksızın şüpheli veya kurallara aykırı hesapları askıya alma veya kapatma hakkına sahiptir.</p>",
+          "<p>Platform'a üye olmak için 18 yaşını doldurmuş olmak ve geçerli bir e-posta adresine sahip olmak gereklidir. Tüzel kişiler adına hareket eden temsilcilerin yetkili olması gerekmektedir.</p><p>Kullanıcılar, hesap bilgilerinin gizliliğinden ve güvenliğinden sorumludur. Hesabınız üzerinden gerçekleştirilen tüm işlemlerden siz sorumlusunuz.</p><p>iStoc, önceden bildirimde bulunmaksızın şüpheli veya kurallara aykırı hesapları askıya alma veya kapatma hakkına sahiptir.</p>",
         section4Title: "4. Sipariş ve Sözleşme",
         section4Content:
-          "<p>Platform üzerinden verilen siparişler, Alıcı ile Satıcı arasında bir satış sözleşmesi oluşturur. istoc, bu sözleşmenin tarafı değildir; yalnızca aracı platform hizmeti sunmaktadır.</p><p>Siparişin onaylanması, ödemenin başarıyla tamamlanması ve Satıcı tarafından kabul edilmesi koşuluna bağlıdır. Satıcılar, stok durumu veya diğer geçerli nedenlerle siparişi reddetme hakkına sahiptir.</p><p>Sipariş detayları, teyit e-postası ve Platform üzerindeki sipariş takip sayfasından görüntülenebilir.</p>",
+          "<p>Platform üzerinden verilen siparişler, Alıcı ile Satıcı arasında bir satış sözleşmesi oluşturur. iStoc, bu sözleşmenin tarafı değildir; yalnızca aracı platform hizmeti sunmaktadır.</p><p>Siparişin onaylanması, ödemenin başarıyla tamamlanması ve Satıcı tarafından kabul edilmesi koşuluna bağlıdır. Satıcılar, stok durumu veya diğer geçerli nedenlerle siparişi reddetme hakkına sahiptir.</p><p>Sipariş detayları, teyit e-postası ve Platform üzerindeki sipariş takip sayfasından görüntülenebilir.</p>",
         section5Title: "5. Ödeme Koşulları",
         section5Content:
-          "<p>Platform üzerinden kredi kartı, banka kartı, havale/EFT ve Platform bakiyesi ile ödeme yapılabilir. Tüm ödemeler güvenli altyapılar üzerinden işlenir.</p><p>Fiyatlar, aksi belirtilmedikçe KDV dahildir. B2B işlemlerde fatura bilgileri Satıcı tarafından düzenlenir.</p><p>istoc Güvende Ödeme sistemi, ödemenin Satıcıya aktarılmasını ürün teslimatına kadar askıda tutar. Bu sistem Alıcıları koruma amaçlıdır.</p>",
+          "<p>Platform üzerinden kredi kartı, banka kartı, havale/EFT ve Platform bakiyesi ile ödeme yapılabilir. Tüm ödemeler güvenli altyapılar üzerinden işlenir.</p><p>Fiyatlar, aksi belirtilmedikçe KDV dahildir. B2B işlemlerde fatura bilgileri Satıcı tarafından düzenlenir.</p><p>iStoc Güvende Ödeme sistemi, ödemenin Satıcıya aktarılmasını ürün teslimatına kadar askıda tutar. Bu sistem Alıcıları koruma amaçlıdır.</p>",
         section6Title: "6. Kargo ve Teslimat",
         section6Content:
           "<p>Tahmini teslimat süreleri ürün sayfasında belirtilir ve bilgilendirme amaçlıdır. Gerçek teslimat süreleri lojistik koşullara bağlı olarak değişebilir.</p><p>Kargo sürecinde oluşabilecek hasarlardan kargo firması sorumludur. Teslimat sırasında paket kontrolü yapılması önerilir.</p><p>Uluslararası gönderilerde gümrük vergisi ve ek masraflar Alıcıya aittir.</p>",
         section7Title: "7. İade ve Cayma Hakkı",
         section7Content:
-          '<p>İade ve cayma hakkı, satıcının yerleşik olduğu ülkenin tüketici/ticaret mevzuatına ve satıcının kendi iade politikasına tabidir. Her satıcı, ürün sayfasında ve mağaza profilinde geçerli iade koşullarını ilan eder.</p><p>istoc; alıcı ve satıcı arasındaki ticari ilişkide aracı hizmet sağlayıcı konumundadır ve iade koşullarını taraflar yerine belirlemez. Platform yalnızca iade talebinin iletilmesi ve anlaşmazlıkların çözümü için süreç altyapısı sağlar. Detaylı süreç için <a href="/iade-kosullari" class="text-primary-500 hover:underline">İade Politikası</a> sayfamızı inceleyiniz.</p>',
+          '<p>İade ve cayma hakkı, satıcının yerleşik olduğu ülkenin tüketici/ticaret mevzuatına ve satıcının kendi iade politikasına tabidir. Her satıcı, ürün sayfasında ve mağaza profilinde geçerli iade koşullarını ilan eder.</p><p>iStoc; alıcı ve satıcı arasındaki ticari ilişkide aracı hizmet sağlayıcı konumundadır ve iade koşullarını taraflar yerine belirlemez. Platform yalnızca iade talebinin iletilmesi ve anlaşmazlıkların çözümü için süreç altyapısı sağlar. Detaylı süreç için <a href="/iade-kosullari" class="text-primary-500 hover:underline">İade Politikası</a> sayfamızı inceleyiniz.</p>',
         section8Title: "8. Fikri Mülkiyet Hakları",
         section8Content:
-          "<p>Platform üzerindeki tüm içerik, tasarım, logo, yazılım ve veritabanları istoc markası adına Thoptan Ltd.'in veya lisans verenlerinin fikri mülkiyetindedir.</p><p>Kullanıcılar, Platform içeriğini kopyalayamaz, çoğaltamaz, dağıtamaz veya ticari amaçla kullanamaz. Satıcılar tarafından yüklenen ürün görselleri ve açıklamalarının sorumluluğu ilgili Satıcıya aittir.</p>",
+          "<p>Platform üzerindeki tüm içerik, tasarım, logo, yazılım ve veritabanları iStoc markası adına iStoc Private Company Limited'in veya lisans verenlerinin fikri mülkiyetindedir.</p><p>Kullanıcılar, Platform içeriğini kopyalayamaz, çoğaltamaz, dağıtamaz veya ticari amaçla kullanamaz. Satıcılar tarafından yüklenen ürün görselleri ve açıklamalarının sorumluluğu ilgili Satıcıya aittir.</p>",
         section9Title: "9. Sorumluluk Sınırlaması",
         section9Content:
-          "<p>istoc, Platform üzerinden gerçekleştirilen alım-satım işlemlerinde aracı konumundadır. Ürünlerin kalitesi, uygunluğu ve teslimatından Satıcılar sorumludur.</p><p>Platform, teknik arızalar, kesintiler veya üçüncü taraf hizmetlerindeki aksaklıklar nedeniyle doğabilecek zararlardan sorumlu tutulamaz.</p><p>istoc'un toplam sorumluluğu, ilgili işleme ait hizmet bedelini aşamaz.</p>",
+          "<p>iStoc, Platform üzerinden gerçekleştirilen alım-satım işlemlerinde aracı konumundadır. Ürünlerin kalitesi, uygunluğu ve teslimatından Satıcılar sorumludur.</p><p>Platform, teknik arızalar, kesintiler veya üçüncü taraf hizmetlerindeki aksaklıklar nedeniyle doğabilecek zararlardan sorumlu tutulamaz.</p><p>iStoc'un toplam sorumluluğu, ilgili işleme ait hizmet bedelini aşamaz.</p>",
         section10Title: "10. Uygulanacak Hukuk ve Uyuşmazlık",
         section10Content:
-          "<p>Bu Kullanım Koşulları, İngiltere ve Galler hukukuna tabidir.</p><p>Taraflar arasında doğabilecek uyuşmazlıklarda münhasıran Londra Uluslararası Tahkim Mahkemesi (LCIA) yetkilidir; tahkim dili İngilizce'dir.</p><p>istoc yalnızca işletmeler arası (B2B) ticaret hizmeti sunar; tüketici hukuku hükümleri Platform kullanımına uygulanmaz.</p>",
+          "<p>Bu Kullanım Koşulları, İngiltere ve Galler hukukuna tabidir.</p><p>Taraflar arasında doğabilecek uyuşmazlıklarda münhasıran Londra Uluslararası Tahkim Mahkemesi (LCIA) yetkilidir; tahkim dili İngilizce'dir.</p><p>iStoc yalnızca işletmeler arası (B2B) ticaret hizmeti sunar; tüketici hukuku hükümleri Platform kullanımına uygulanmaz.</p>",
       },
       privacy: {
         pageTitle: "Gizlilik Politikası",
@@ -2845,7 +2843,7 @@ const tr = {
         breadcrumbLabel: "Gizlilik Politikası",
         section1Title: "1. Veri Sorumlusu",
         section1Content:
-          "<p>Kişisel verilerinizin işlenmesinde veri sorumlusu sıfatıyla hareket eden taraf:</p><p><strong>Thoptan Ltd.</strong> (United Kingdom)<br>istoc markası adına işletmektedir.<br><strong>E-posta:</strong> kvkk@istoc.com</p>",
+          "<p>Kişisel verilerinizin işlenmesinde veri sorumlusu sıfatıyla hareket eden taraf:</p><p><strong>iStoc Private Company Limited</strong> (United Kingdom)<br>iStoc markası adına işletmektedir.<br><strong>E-posta:</strong> kvkk@istoc.com</p>",
         section2Title: "2. Toplanan Kişisel Veriler",
         section2Content:
           '<p>Platform hizmetlerinin sunulması kapsamında aşağıdaki kişisel veriler toplanmaktadır:</p><ul class="list-disc ps-5 space-y-1"><li><strong>Kimlik Bilgileri:</strong> Ad, soyad, T.C. kimlik numarası (satıcılar için), vergi numarası</li><li><strong>İletişim Bilgileri:</strong> E-posta adresi, telefon numarası, adres</li><li><strong>Finansal Bilgiler:</strong> Banka hesap bilgileri, kredi kartı bilgileri (maskelenerek saklanır)</li><li><strong>İşlem Bilgileri:</strong> Sipariş geçmişi, ödeme kayıtları, iade talepleri</li><li><strong>Dijital İzler:</strong> IP adresi, çerez verileri, cihaz bilgileri, tarayıcı bilgileri</li><li><strong>Kullanım Verileri:</strong> Arama geçmişi, sayfa görüntülemeleri, tıklama verileri</li></ul>',
@@ -2860,7 +2858,7 @@ const tr = {
           '<p>Kişisel verileriniz, yalnızca aşağıdaki durumlarda üçüncü taraflarla paylaşılabilir:</p><ul class="list-disc ps-5 space-y-1"><li>Sipariş teslimatı için kargo şirketleriyle</li><li>Ödeme işlemleri için ödeme kuruluşlarıyla</li><li>Yasal zorunluluklar kapsamında yetkili kamu kurumlarıyla</li><li>Hizmet sağlayıcılarımızla (hosting, analitik, müşteri destek araçları)</li></ul><p>Verileriniz hiçbir koşulda üçüncü taraflara satılmaz.</p>',
         section6Title: "6. Uluslararası Veri Transferi",
         section6Content:
-          "<p>Veri sorumlusu Thoptan Ltd. Birleşik Krallık'ta yerleşik olduğundan, Türkiye'den toplanan kişisel veriler işlenmek üzere Birleşik Krallık'a aktarılmaktadır. Bu aktarım, KVKK m.9 kapsamında veri sahibinin açık rızası ve/veya KVKK Kurulu'nun belirlediği standart sözleşme maddeleri esas alınarak gerçekleştirilir.</p><p>Veri transferi yapılan başlıca ülkeler: Birleşik Krallık (operasyon merkezi), Avrupa Birliği ülkeleri ve Amerika Birleşik Devletleri (hizmet sağlayıcılar için standart sözleşme maddeleri ile).</p>",
+          "<p>Veri sorumlusu iStoc Private Company Limited Birleşik Krallık'ta yerleşik olduğundan, Türkiye'den toplanan kişisel veriler işlenmek üzere Birleşik Krallık'a aktarılmaktadır. Bu aktarım, KVKK m.9 kapsamında veri sahibinin açık rızası ve/veya KVKK Kurulu'nun belirlediği standart sözleşme maddeleri esas alınarak gerçekleştirilir.</p><p>Veri transferi yapılan başlıca ülkeler: Birleşik Krallık (operasyon merkezi), Avrupa Birliği ülkeleri ve Amerika Birleşik Devletleri (hizmet sağlayıcılar için standart sözleşme maddeleri ile).</p>",
         section7Title: "7. Veri Sahibi Hakları",
         section7Content:
           "<p>KVKK'nın 11. maddesi uyarınca aşağıdaki haklara sahipsiniz:</p><ul class=\"list-disc ps-5 space-y-1\"><li>Kişisel verilerinizin işlenip işlenmediğini öğrenme</li><li>İşlenmişse buna ilişkin bilgi talep etme</li><li>İşlenme amacını ve amacına uygun kullanılıp kullanılmadığını öğrenme</li><li>Yurt içinde veya yurt dışında aktarıldığı üçüncü kişileri bilme</li><li>Eksik veya yanlış işlenmişse düzeltilmesini isteme</li><li>KVKK'nın 7. maddesi kapsamında silinmesini veya yok edilmesini isteme</li><li>İşlenen verilerin münhasıran otomatik sistemler vasıtasıyla analiz edilmesi suretiyle aleyhinize bir sonucun ortaya çıkmasına itiraz etme</li></ul>",
@@ -2897,7 +2895,7 @@ const tr = {
         breadcrumbLabel: "İade Politikası",
         section1Title: "1. Genel Koşullar",
         section1Content:
-          "<p>istoc, küresel bir B2B ticaret platformudur. İade hakkı ve süresi <strong>satıcının yerleşik olduğu ülkenin mevzuatına</strong> ve <strong>satıcının kendi iade politikasına</strong> göre belirlenir. Sipariş vermeden önce ürün sayfasındaki veya satıcı profilindeki iade koşullarını inceleyiniz.</p><p>Bu sayfa, Platform üzerinden iade taleplerinin nasıl iletileceği ve anlaşmazlıkların nasıl çözümleneceğine ilişkin <strong>genel süreci</strong> açıklar; spesifik iade süreleri, ücretler ve uygulanabilir mevzuat satıcıya göre değişir.</p>",
+          "<p>iStoc, küresel bir B2B ticaret platformudur. İade hakkı ve süresi <strong>satıcının yerleşik olduğu ülkenin mevzuatına</strong> ve <strong>satıcının kendi iade politikasına</strong> göre belirlenir. Sipariş vermeden önce ürün sayfasındaki veya satıcı profilindeki iade koşullarını inceleyiniz.</p><p>Bu sayfa, Platform üzerinden iade taleplerinin nasıl iletileceği ve anlaşmazlıkların nasıl çözümleneceğine ilişkin <strong>genel süreci</strong> açıklar; spesifik iade süreleri, ücretler ve uygulanabilir mevzuat satıcıya göre değişir.</p>",
         section2Title: "2. İade Süresi",
         section2Content:
           "<p>Standart ürünler için iade süresi teslim tarihinden itibaren <strong>14 takvim günüdür</strong>.</p><p>Hasarlı veya hatalı ürünlerde bu süre <strong>30 güne</strong> uzatılmaktadır. Hasarlı ürün bildirimi, teslimattan itibaren ilk 48 saat içinde fotoğraflı olarak yapılmalıdır.</p><p>B2B toplu siparişlerde iade süreleri satıcı ile yapılan sözleşmeye göre belirlenir.</p>",
@@ -2923,16 +2921,16 @@ const tr = {
         breadcrumbLabel: "Yasal Bildirim",
         section1Title: "1. Şirket Bilgileri",
         section1Content:
-          '<p><strong>Operatör (Tüzel Kişilik):</strong> Thoptan Ltd.</p><p><strong>Yargı Bölgesi:</strong> İngiltere ve Galler (United Kingdom)</p><p><strong>Marka:</strong> istoc (okunuşu: "aystock")</p><p><strong>E-posta:</strong> info@istoc.com</p><p class="text-sm text-gray-500 mt-2"><em>Companies House kayıt numarası, kayıtlı adres ve Türkiye temsilcisi bilgileri tamamlandıkça bu sayfa güncellenecektir.</em></p>',
+          '<p><strong>Operatör (Tüzel Kişilik):</strong> iStoc Private Company Limited</p><p><strong>Yargı Bölgesi:</strong> İngiltere ve Galler (United Kingdom)</p><p><strong>Marka:</strong> iStoc</p><p><strong>E-posta:</strong> info@istoc.com</p><p class="text-sm text-gray-500 mt-2"><em>Companies House kayıt numarası, kayıtlı adres ve Türkiye temsilcisi bilgileri tamamlandıkça bu sayfa güncellenecektir.</em></p>',
         section2Title: "2. Platform Hakkında",
         section2Content:
-          "<p>istoc, Thoptan Ltd. (United Kingdom) tarafından işletilen, işletmeler arası (B2B) ticareti kolaylaştırmak amacıyla kurulmuş küresel bir elektronik ticaret platformudur. Platform, satıcı ile alıcı arasındaki ticari ilişkide aracı hizmet sağlayıcı konumundadır.</p><p>Platform üzerinde sunulan ürün ve hizmetlerin sorumluluğu, ilgili satıcılara aittir.</p>",
+          "<p>iStoc, iStoc Private Company Limited (United Kingdom) tarafından işletilen, işletmeler arası (B2B) ticareti kolaylaştırmak amacıyla kurulmuş küresel bir elektronik ticaret platformudur. Platform, satıcı ile alıcı arasındaki ticari ilişkide aracı hizmet sağlayıcı konumundadır.</p><p>Platform üzerinde sunulan ürün ve hizmetlerin sorumluluğu, ilgili satıcılara aittir.</p>",
         section3Title: "3. Sorumluluğun Sınırlandırılması",
         section3Content:
-          "<p>Platform üzerinde yayınlanan bilgiler, doğruluğu ve güncelliği konusunda azami özen gösterilmekle birlikte, yalnızca bilgilendirme amaçlıdır. istoc, bu bilgilerin eksiksiz, doğru veya güncel olduğuna dair herhangi bir garanti vermemektedir.</p><p>Platform üzerinden erişilen üçüncü taraf web sitelerinin içeriğinden istoc sorumlu değildir.</p><p>Teknik arızalar, bakım çalışmaları veya mücbir sebepler nedeniyle oluşabilecek erişim kesintilerinden istoc sorumlu tutulamaz.</p>",
+          "<p>Platform üzerinde yayınlanan bilgiler, doğruluğu ve güncelliği konusunda azami özen gösterilmekle birlikte, yalnızca bilgilendirme amaçlıdır. iStoc, bu bilgilerin eksiksiz, doğru veya güncel olduğuna dair herhangi bir garanti vermemektedir.</p><p>Platform üzerinden erişilen üçüncü taraf web sitelerinin içeriğinden iStoc sorumlu değildir.</p><p>Teknik arızalar, bakım çalışmaları veya mücbir sebepler nedeniyle oluşabilecek erişim kesintilerinden iStoc sorumlu tutulamaz.</p>",
         section4Title: "4. Denetim ve Şikayet",
         section4Content:
-          "<p>istoc, işletmeler arası (B2B) hizmet sunan bir platformdur ve tüketici hakem heyetleri ile tüketici mahkemeleri Platform kullanımına uygulanmaz.</p><p>Platform kullanımına dair şikayet ve görüşlerinizi <strong>info@istoc.com</strong> adresine iletebilirsiniz. Talepleriniz 5 iş günü içinde değerlendirilecektir.</p>",
+          "<p>iStoc, işletmeler arası (B2B) hizmet sunan bir platformdur ve tüketici hakem heyetleri ile tüketici mahkemeleri Platform kullanımına uygulanmaz.</p><p>Platform kullanımına dair şikayet ve görüşlerinizi <strong>info@istoc.com</strong> adresine iletebilirsiniz. Talepleriniz 5 iş günü içinde değerlendirilecektir.</p>",
         section5Title: "5. Uygulanacak Hukuk",
         section5Content:
           "<p>Bu yasal bildirim ve Platform kullanımı, İngiltere ve Galler hukukuna tabidir. Her türlü uyuşmazlıkta münhasıran Londra Uluslararası Tahkim Mahkemesi (LCIA) yetkilidir; tahkim dili İngilizce'dir.</p><p>İşbu yasal bildirim, Platform'un kullanımına ilişkin genel bilgilendirme amacı taşımakta olup, hukuki danışmanlık niteliği taşımamaktadır.</p>",
@@ -2943,7 +2941,7 @@ const tr = {
         breadcrumbLabel: "Ürün Listeleme Politikası",
         section1Title: "1. Genel İlkeler",
         section1Content:
-          "<p>istoc platformunda ürün listeleme, belirli standart ve kurallara tabidir. Tüm satıcılar, ürünlerini listelemeden önce bu politikayı okumuş ve kabul etmiş sayılır.</p><p>Listelenen ürünlerin satıcının yerleşik olduğu ülkenin mevzuatına, ürünün satıldığı pazarın yerel kurallarına, uluslararası ticaret kurallarına ve Platform politikalarına uygun olması zorunludur.</p>",
+          "<p>iStoc platformunda ürün listeleme, belirli standart ve kurallara tabidir. Tüm satıcılar, ürünlerini listelemeden önce bu politikayı okumuş ve kabul etmiş sayılır.</p><p>Listelenen ürünlerin satıcının yerleşik olduğu ülkenin mevzuatına, ürünün satıldığı pazarın yerel kurallarına, uluslararası ticaret kurallarına ve Platform politikalarına uygun olması zorunludur.</p>",
         section2Title: "2. Ürün Bilgileri ve Doğruluk",
         section2Content:
           '<p>Satıcılar, listeledikleri ürünlere ilişkin aşağıdaki bilgileri doğru ve eksiksiz olarak sağlamakla yükümlüdür:</p><ul class="list-disc ps-5 space-y-1"><li><strong>Ürün Başlığı:</strong> Açık, anlaşılır ve ürünü doğru tanımlayan başlık</li><li><strong>Açıklama:</strong> Ürünün özelliklerini, malzeme bilgilerini ve kullanım alanlarını içeren detaylı açıklama</li><li><strong>Görseller:</strong> Ürünü gerçeğe uygun şekilde yansıtan, yüksek kaliteli ve orijinal fotoğraflar</li><li><strong>Fiyatlandırma:</strong> KDV dahil/hariç durumu açıkça belirtilmiş, güncel fiyat bilgisi</li><li><strong>Stok Durumu:</strong> Gerçek zamanlı ve doğru stok bilgisi</li><li><strong>Minimum Sipariş:</strong> B2B satışlar için minimum sipariş miktarı</li></ul>',
@@ -2952,10 +2950,10 @@ const tr = {
           '<p>Aşağıdaki ürünlerin Platform üzerinde listelenmesi kesinlikle yasaktır:</p><ul class="list-disc ps-5 space-y-1"><li>Yasa dışı ürünler ve kaçak mallar</li><li>Sahte, taklit veya korsan ürünler</li><li>Silah, mühimmat ve patlayıcı maddeler</li><li>Uyuşturucu ve psikotrop maddeler</li><li>İnsan organları ve dokuları</li><li>Nesli tükenmekte olan türlerden elde edilen ürünler</li><li>Çocuk istismarı içeren veya çağrıştıran ürünler</li><li>Kişisel verilerin satışına yönelik ürün/hizmetler</li></ul><p>Belirli kategorilerdeki ürünler (gıda, ilaç, tıbbi cihaz, kimyasal maddeler vb.) ek belge ve sertifika gerektirebilir.</p>',
         section4Title: "4. Görsel ve İçerik Standartları",
         section4Content:
-          '<p>Ürün görselleri ve içerikleri aşağıdaki standartlara uygun olmalıdır:</p><ul class="list-disc ps-5 space-y-1"><li>Minimum 800x800 piksel çözünürlükte, net ve aydınlık görseller</li><li>Filigran, promosyon metni veya başka platformların logoları içermeyen görseller</li><li>Yanıltıcı veya abartılı ifadeler içermeyen açıklamalar</li><li>Rakip ürün veya markaları kötüleyen ifadeler kullanılmaması</li><li>İletişim bilgisi (telefon, e-posta, web sitesi) içermeyen açıklamalar</li></ul><p>istoc, standartlara uymayan görselleri ve içerikleri önceden bildirmeksizin kaldırma hakkını saklı tutar.</p>',
+          '<p>Ürün görselleri ve içerikleri aşağıdaki standartlara uygun olmalıdır:</p><ul class="list-disc ps-5 space-y-1"><li>Minimum 800x800 piksel çözünürlükte, net ve aydınlık görseller</li><li>Filigran, promosyon metni veya başka platformların logoları içermeyen görseller</li><li>Yanıltıcı veya abartılı ifadeler içermeyen açıklamalar</li><li>Rakip ürün veya markaları kötüleyen ifadeler kullanılmaması</li><li>İletişim bilgisi (telefon, e-posta, web sitesi) içermeyen açıklamalar</li></ul><p>iStoc, standartlara uymayan görselleri ve içerikleri önceden bildirmeksizin kaldırma hakkını saklı tutar.</p>',
         section5Title: "5. Fiyatlandırma Kuralları",
         section5Content:
-          '<p>Satıcılar, fiyatlandırma konusunda aşağıdaki kurallara uymakla yükümlüdür:</p><ul class="list-disc ps-5 space-y-1"><li>Fiyatlar gerçekçi ve piyasa koşullarına uygun olmalıdır</li><li>Yanıltıcı indirim ve kampanya uygulamaları yasaktır</li><li>Toptan ve perakende fiyatlar açıkça belirtilmelidir</li><li>Kargo ücreti ve ek masraflar şeffaf bir şekilde gösterilmelidir</li></ul><p>istoc, piyasa koşullarına aykırı veya manipülatif fiyatlandırma tespit ettiğinde ilgili listelemeyi askıya alma hakkına sahiptir.</p>',
+          '<p>Satıcılar, fiyatlandırma konusunda aşağıdaki kurallara uymakla yükümlüdür:</p><ul class="list-disc ps-5 space-y-1"><li>Fiyatlar gerçekçi ve piyasa koşullarına uygun olmalıdır</li><li>Yanıltıcı indirim ve kampanya uygulamaları yasaktır</li><li>Toptan ve perakende fiyatlar açıkça belirtilmelidir</li><li>Kargo ücreti ve ek masraflar şeffaf bir şekilde gösterilmelidir</li></ul><p>iStoc, piyasa koşullarına aykırı veya manipülatif fiyatlandırma tespit ettiğinde ilgili listelemeyi askıya alma hakkına sahiptir.</p>',
         section6Title: "6. İhlal ve Yaptırımlar",
         section6Content:
           '<p>Bu politikanın ihlali halinde aşağıdaki yaptırımlar uygulanabilir:</p><ul class="list-disc ps-5 space-y-1"><li><strong>Uyarı:</strong> İlk ihlalde yazılı uyarı</li><li><strong>Listeleme Kaldırma:</strong> Kurallara aykırı ürün listelerinin kaldırılması</li><li><strong>Hesap Askıya Alma:</strong> Tekrarlayan ihlallerde hesabın geçici olarak askıya alınması</li><li><strong>Hesap Kapatma:</strong> Ağır veya sürekli ihlallerde hesabın kalıcı olarak kapatılması</li></ul><p>Satıcılar, yaptırım kararlarına karşı 15 iş günü içinde itiraz hakkına sahiptir.</p>',
@@ -2966,10 +2964,10 @@ const tr = {
         breadcrumbLabel: "Fikri Mülkiyet",
         section1Title: "1. Fikri Mülkiyet Koruma Taahhüdü",
         section1Content:
-          "<p>istoc, fikri mülkiyet haklarına saygı gösterilmesini en üst düzeyde önemser. Platform, telif hakları, ticari markalar, patentler ve diğer fikri mülkiyet haklarının korunması için gerekli tedbirleri almaktadır.</p><p>Platform kullanıcıları, üçüncü tarafların fikri mülkiyet haklarını ihlal eden içerik yayınlamamak ve ürün listelememekle yükümlüdür.</p>",
-        section2Title: "2. istoc Markası Fikri Mülkiyet Hakları",
+          "<p>iStoc, fikri mülkiyet haklarına saygı gösterilmesini en üst düzeyde önemser. Platform, telif hakları, ticari markalar, patentler ve diğer fikri mülkiyet haklarının korunması için gerekli tedbirleri almaktadır.</p><p>Platform kullanıcıları, üçüncü tarafların fikri mülkiyet haklarını ihlal eden içerik yayınlamamak ve ürün listelememekle yükümlüdür.</p>",
+        section2Title: "2. iStoc Markası Fikri Mülkiyet Hakları",
         section2Content:
-          "<p>Aşağıdakiler dahil ancak bunlarla sınırlı olmamak üzere, Platform üzerindeki tüm içerik ve materyaller istoc markası adına Thoptan Ltd.'in veya lisans verenlerinin fikri mülkiyetindedir:</p><ul class=\"list-disc ps-5 space-y-1\"><li>istoc adı, logosu ve tüm ticari markaları</li><li>Platform tasarımı, arayüz düzeni ve kullanıcı deneyimi</li><li>Yazılım kodu, algoritmalar ve veritabanları</li><li>Platform tarafından üretilen içerik, raporlar ve analizler</li><li>Eğitim materyalleri ve dokümantasyonlar</li></ul><p>Bu materyallerin Thoptan Ltd.'in yazılı izni olmaksızın kopyalanması, çoğaltılması, dağıtılması veya ticari amaçla kullanılması yasaktır.</p>",
+          "<p>Aşağıdakiler dahil ancak bunlarla sınırlı olmamak üzere, Platform üzerindeki tüm içerik ve materyaller iStoc markası adına iStoc Private Company Limited'in veya lisans verenlerinin fikri mülkiyetindedir:</p><ul class=\"list-disc ps-5 space-y-1\"><li>iStoc adı, logosu ve tüm ticari markaları</li><li>Platform tasarımı, arayüz düzeni ve kullanıcı deneyimi</li><li>Yazılım kodu, algoritmalar ve veritabanları</li><li>Platform tarafından üretilen içerik, raporlar ve analizler</li><li>Eğitim materyalleri ve dokümantasyonlar</li></ul><p>Bu materyallerin iStoc Private Company Limited'in yazılı izni olmaksızın kopyalanması, çoğaltılması, dağıtılması veya ticari amaçla kullanılması yasaktır.</p>",
         section3Title: "3. İhlal Bildirimi",
         section3Content:
           '<p>Fikri mülkiyet haklarınızın ihlal edildiğini düşünüyorsanız, aşağıdaki bilgilerle birlikte bize başvurabilirsiniz:</p><ul class="list-disc ps-5 space-y-1"><li>Hak sahibinin veya yetkili temsilcisinin kimlik bilgileri</li><li>İhlal edildiği iddia edilen fikri mülkiyet hakkının açıklaması</li><li>İhlal içeren içeriğin Platform üzerindeki konumu (URL)</li><li>İhlal iddiasını destekleyen belgeler (tescil belgesi, lisans sözleşmesi vb.)</li><li>İyi niyetle yapılan bir bildirim olduğuna dair beyan</li></ul><p><strong>Bildirim adresi:</strong> ipr@istoc.com</p>',
@@ -2981,7 +2979,7 @@ const tr = {
           '<p>İçeriği kaldırılan satıcılar, kaldırma işlemine karşı bildirimde bulunma hakkına sahiptir. Karşı bildirim aşağıdaki bilgileri içermelidir:</p><ul class="list-disc ps-5 space-y-1"><li>Satıcının kimlik ve iletişim bilgileri</li><li>Kaldırılan içeriğin tanımı</li><li>İçeriğin neden hak ihlali oluşturmadığına dair açıklama ve destekleyici belgeler</li><li>Yanlış bildirim durumunda yasal sorumluluğu kabul ettiğine dair beyan</li></ul><p>Karşı bildirimler, kaldırma işleminden itibaren 10 iş günü içinde yapılmalıdır.</p>',
         section6Title: "6. Tekrarlayan İhlaller",
         section6Content:
-          '<p>istoc, tekrarlayan fikri mülkiyet ihlallerine karşı sıfır tolerans politikası uygulamaktadır:</p><ul class="list-disc ps-5 space-y-1"><li><strong>İlk ihlal:</strong> Yazılı uyarı ve içerik kaldırma</li><li><strong>İkinci ihlal:</strong> 30 gün hesap askıya alma</li><li><strong>Üçüncü ihlal:</strong> Hesabın kalıcı olarak kapatılması</li></ul><p>Kasıtlı ve organizasyonel ihlallerde istoc, ilk ihlalde dahi hesabı kalıcı olarak kapatma ve yasal işlem başlatma hakkını saklı tutar.</p>',
+          '<p>iStoc, tekrarlayan fikri mülkiyet ihlallerine karşı sıfır tolerans politikası uygulamaktadır:</p><ul class="list-disc ps-5 space-y-1"><li><strong>İlk ihlal:</strong> Yazılı uyarı ve içerik kaldırma</li><li><strong>İkinci ihlal:</strong> 30 gün hesap askıya alma</li><li><strong>Üçüncü ihlal:</strong> Hesabın kalıcı olarak kapatılması</li></ul><p>Kasıtlı ve organizasyonel ihlallerde iStoc, ilk ihlalde dahi hesabı kalıcı olarak kapatma ve yasal işlem başlatma hakkını saklı tutar.</p>',
       },
       accessibility: {
         pageTitle: "Erişilebilirlik",
@@ -2989,7 +2987,7 @@ const tr = {
         breadcrumbLabel: "Erişilebilirlik",
         section1Title: "1. Erişilebilirlik Taahhüdümüz",
         section1Content:
-          "<p>istoc olarak, platformumuzun engelli bireyler dahil tüm kullanıcılar tarafından erişilebilir olmasını sağlamayı taahhüt ediyoruz. Dijital erişilebilirlik, kurumsal sorumluluğumuzun ayrılmaz bir parçasıdır.</p><p>Platformumuz, Web İçerik Erişilebilirlik Yönergeleri (WCAG) 2.1 AA standardına uygun olacak şekilde sürekli olarak geliştirilmektedir.</p>",
+          "<p>iStoc olarak, platformumuzun engelli bireyler dahil tüm kullanıcılar tarafından erişilebilir olmasını sağlamayı taahhüt ediyoruz. Dijital erişilebilirlik, kurumsal sorumluluğumuzun ayrılmaz bir parçasıdır.</p><p>Platformumuz, Web İçerik Erişilebilirlik Yönergeleri (WCAG) 2.1 AA standardına uygun olacak şekilde sürekli olarak geliştirilmektedir.</p>",
         section2Title: "2. Erişilebilirlik Özellikleri",
         section2Content:
           '<p>Platformumuzda aşağıdaki erişilebilirlik özelliklerini sunmaktayız:</p><ul class="list-disc ps-5 space-y-1"><li><strong>Klavye Navigasyonu:</strong> Tüm Platform özellikleri yalnızca klavye kullanılarak erişilebilir</li><li><strong>Ekran Okuyucu Desteği:</strong> İçeriklerimiz, popüler ekran okuyucu yazılımlarıyla uyumludur</li><li><strong>Metin Boyutu Ayarı:</strong> Kullanıcılar metin boyutunu tarayıcı ayarlarından değiştirebilir</li><li><strong>Renk Kontrastı:</strong> WCAG AA standartlarını karşılayan renk kontrastı oranları</li><li><strong>Alternatif Metinler:</strong> Görseller için açıklayıcı alternatif metinler</li><li><strong>Form Etiketleri:</strong> Tüm form alanları için açık ve anlaşılır etiketler</li><li><strong>Odak Göstergeleri:</strong> Klavye ile gezinirken görünür odak göstergeleri</li></ul>',
@@ -3025,7 +3023,7 @@ const tr = {
     // DROPSHIPPING
     // ============================================================
     dropshipping: {
-      istocPicks: "istoc seçimleri",
+      istocPicks: "iStoc seçimleri",
       hotSales: "Sıcak satış",
       brandedProducts: "Markalı ürünler",
       complianceReady: "Uyumluluk Hazır",
@@ -3151,7 +3149,7 @@ const tr = {
     // CONTACTS
     // ============================================================
     contacts: {
-      helpBanner: "istoc'u geliştirmemize yardım edin!",
+      helpBanner: "iStoc'u geliştirmemize yardım edin!",
       clickHere: "Buraya tıklayın",
       allContacts: "Tüm kişiler - 0",
       searchPlaceholder: "Tedarikçi kişilerinizi arayın",
@@ -3229,7 +3227,7 @@ const tr = {
     // ============================================================
     logistics: {
       ordersBannerInfo:
-        "Bilgilendirme: Lojistik pazar yeri siparişleri, ticaret güvencesi siparişlerine yükseltilmiştir. Ticaret güvencesi siparişlerinizi istoc> siparişler menüsünden yönetebilirsiniz.",
+        "Bilgilendirme: Lojistik pazar yeri siparişleri, ticaret güvencesi siparişlerine yükseltilmiştir. Ticaret güvencesi siparişlerinizi iStoc> siparişler menüsünden yönetebilirsiniz.",
       reviewsBannerInfo:
         "Bilgilendirme: Lojistik pazar yeri siparişleri yaklaşık 20 Şubat tarihinden itibaren ticaret güvencesi siparişlerine yükseltilecektir.",
       manageOrders: "Lojistik siparişlerini yönet",
@@ -3287,7 +3285,7 @@ const tr = {
       transactions: "İşlemler",
       ttAccounts: "Havale hesapları",
       ttTracking: "Havale Takibi",
-      istocCard: "istoc.com Kart",
+      istocCard: "iStoc.com Kart",
       payLater: "İşletme İçin Sonra Öde",
       paymentTitle: "Ödeme",
       paymentManagementTitle: "Ödeme yönetimi",
@@ -3337,7 +3335,7 @@ const tr = {
       verifySupplierAccount: "Tedarikçi hesabını doğrula",
       uploadWireReceipt: "Havale dekontu yükle",
       tooltipVerify:
-        "Tedarikçinin hesabının resmi bir istoc.com banka hesabı olup olmadığını doğrulayın. Ödemenizin istoc.com tarafından korunduğunu doğrulamak için bir havale dekontu yükleyin.",
+        "Tedarikçinin hesabının resmi bir iStoc.com banka hesabı olup olmadığını doğrulayın. Ödemenizin iStoc.com tarafından korunduğunu doğrulamak için bir havale dekontu yükleyin.",
       allTab: "Tümü",
       pendingMatchTab: "Tedarikçi Eşleşmesi Bekleniyor",
       matchedTab: "Tedarikçi Tarafından Tam Eşleşme",
@@ -3351,7 +3349,7 @@ const tr = {
       verifyModalTitle: "Tedarikçi hesabını doğrula",
       verifyWarning: "Ödeme yapmadan önce tedarikçinin banka hesabını her zaman doğrulayın",
       verifyDescription:
-        "Bir tedarikçiden ödeme talimatı aldığınızda, ödeme yapmadan önce hesap numarasının resmi istoc.com banka hesabına ait olduğunu doğrulayın. Bu şekilde sipariş korumasından yararlanabilirsiniz.",
+        "Bir tedarikçiden ödeme talimatı aldığınızda, ödeme yapmadan önce hesap numarasının resmi iStoc.com banka hesabına ait olduğunu doğrulayın. Bu şekilde sipariş korumasından yararlanabilirsiniz.",
       supplierAccountPlaceholder: "Tedarikçinin banka hesap numarası *",
       cancelBtn: "İptal",
       verifyBtn: "Doğrula",
@@ -3361,7 +3359,7 @@ const tr = {
       thWireAmount: "Havale Tutarı",
       thSendDate: "Gönderim Tarihi",
       noTrackingRecord: "Havale takip kaydı bulunamadı",
-      istocCardTitle: "istoc.com Kart",
+      istocCardTitle: "iStoc.com Kart",
       comingSoon: "Bu hizmet yakında kullanıma sunulacaktır",
       payLaterTitle: "İşletme İçin Sonra Öde",
       uploadReceiptTitle: "Havale dekontu yükle",
@@ -3516,7 +3514,7 @@ const tr = {
         'Yaşanabilecek herhangi bir rahatsızlık için içtenlikle özür dileriz ve daha iyi çözümler sunmak için çalışırken anlayışınız için minnettarız. Hâlâ ödeme çözümü hizmetlerine ihtiyacınız varsa, <strong class="text-gray-900 font-bold">Şimdi Al Sonra Öde</strong> veya <strong class="text-gray-900 font-bold">İşletme İçin Sonra Öde</strong> ödeme seçeneklerini değerlendirebilirsiniz. Daha fazla bilgi için <a href="/pages/dashboard/payment.html#pay-later" class="text-blue-600 underline underline-offset-2 font-medium hover:text-blue-700">buraya</a> tıklayın.',
       ptParagraph3: "Süregelen desteğiniz için teşekkür ederiz!",
       ptRegards: "Saygılarımızla,",
-      ptTeam: "istoc.com Ödeme Koşulları Ekibi",
+      ptTeam: "iStoc.com Ödeme Koşulları Ekibi",
       piTitle: "Ürün Denetim Hizmeti",
       piSubtitle: "Tedarikçi ürünlerinizi profesyonel olarak denetletin",
       piDearBuyers: "Sayın alıcılar,",
@@ -3525,7 +3523,7 @@ const tr = {
       piParagraph2:
         "Denetim hizmeti hakkında daha fazla bilgi için müşteri hizmetlerimizle iletişime geçebilirsiniz.",
       piRegards: "Saygılarımızla,",
-      piTeam: "istoc.com Kalite Denetim Ekibi",
+      piTeam: "iStoc.com Kalite Denetim Ekibi",
     },
 
     // ============================================================
@@ -3558,7 +3556,7 @@ const tr = {
     // SELLER
     // ============================================================
     seller: {
-      sellOnIstoc: "istoc'ta Satış Yap",
+      sellOnIstoc: "iStoc'ta Satış Yap",
       pricing: "Fiyatlandırma",
       storefront: "Satıcı Vitrini",
       sf: {
@@ -3683,7 +3681,7 @@ const tr = {
         // CompanyInfo extras
         companyTitle: "ŞİRKET",
         verifiedSupplier: "Onaylanmış Satıcı",
-        verifiedWithIstoc: "istoc ile Onaylanmış",
+        verifiedWithIstoc: "iStoc ile Onaylanmış",
         // HotProducts extras
         hotProductsTitle: "POPÜLER ÜRÜNLER",
         buyNow: "Şimdi Satın Al",
@@ -3691,9 +3689,9 @@ const tr = {
         minOrder: "Min. Sipariş",
         sold: "satıldı",
 
-        // === YENİ: Storefront Yeniden Tasarım (istoc stili) ===
+        // === YENİ: Storefront Yeniden Tasarım (iStoc stili) ===
         // Header istatistikleri
-        platformYears: "istoc'ta {{count}} yıl",
+        platformYears: "iStoc'ta {{count}} yıl",
         employees: "{{count}} çalışan",
         totalOrders: "{{count}} sipariş",
         transactionVolume: "US ${{amount}}+",
@@ -4164,7 +4162,7 @@ const tr = {
     // ============================================================
     topDeals: {
       title: "En İyi Fırsatlar",
-      subtitle: "istoc'ta en düşük fiyatları yakalayın",
+      subtitle: "iStoc'ta en düşük fiyatları yakalayın",
       topPicks: "En seçkinler",
       moq: "MSA: {{count}} {{unit}}",
       pieces: "adet",
@@ -4525,7 +4523,7 @@ const tr = {
       },
 
       noHistory: "Henüz gezinti geçmişi yok. Ürünleri burada görmek için göz atın.",
-      welcomeTitle: "istoc.com'a Hoş Geldiniz",
+      welcomeTitle: "iStoc.com'a Hoş Geldiniz",
     },
 
     // ============================================================
@@ -4677,10 +4675,10 @@ const tr = {
       sourcing: "Kaynak Bulmak",
       sourcingDesc: "Tedarik, Sipariş ve Kargo",
       tradeAssurance: "Ticaret Güvencesi",
-      tradeAssuranceDesc: "istoc Siparişlerinizi Koruyun",
+      tradeAssuranceDesc: "iStoc Siparişlerinizi Koruyun",
       downloadApp: "Mobil Uygulamayı İndir",
-      downloadAppDesc: "istoc Uygulaması",
-      logistics: "istoc Lojistik",
+      downloadAppDesc: "iStoc Uygulaması",
+      logistics: "iStoc Lojistik",
       logisticsDesc: "Akıllı lojistik hizmetleri",
       tabAccount: "Hesabım",
       tabSourcing: "Kaynak Bulmak",
@@ -4689,7 +4687,7 @@ const tr = {
       tabAfterSales: "Satış Sonrası",
       tabSelfService: "Self-Servis",
       q_account_1: "Şifremi unutursam ne yapmalıyım?",
-      q_account_2: "istoc'ta nasıl hesap açabilirim?",
+      q_account_2: "iStoc'ta nasıl hesap açabilirim?",
       q_account_3: "E-posta doğrulama kodunu neden alamıyorum?",
       q_account_4: "SMS doğrulama kodu neden gelmiyor?",
       q_account_5: "Hesabım neden devre dışı bırakıldı?",
@@ -4697,8 +4695,8 @@ const tr = {
       q_account_7: "Hesap bilgilerimi nasıl güncellerim?",
       q_account_8: "İki faktörlü kimlik doğrulama nedir?",
       q_account_9: "Hesabımı nasıl silerim?",
-      q_sourcing_1: "istoc'ta nasıl alışveriş yapabilirim?",
-      q_sourcing_2: "istoc'ta ürünleri nasıl arayabilirim?",
+      q_sourcing_1: "iStoc'ta nasıl alışveriş yapabilirim?",
+      q_sourcing_2: "iStoc'ta ürünleri nasıl arayabilirim?",
       q_sourcing_3: "Favorilerime nasıl ürün eklerim?",
       q_sourcing_4: "Ürün fiyatı, MOQ, kargo masrafı gibi bilgiler nasıl öğrenirim?",
       q_sourcing_5: "Tedarikçinin iletişim bilgilerine nasıl ulaşırım?",
@@ -4800,7 +4798,7 @@ const tr = {
       messageSentDesc: "En kısa sürede size dönüş yapacağız. Ortalama yanıt süremiz 24 saattir.",
       sendNewMessage: "Yeni Mesaj Gönder",
       addressInfo: "Şirket Bilgileri",
-      addressCompany: "Thoptan Ltd.",
+      addressCompany: "iStoc Private Company Limited",
       addressLine1: "United Kingdom",
       addressLine2: "Kayıtlı adres bilgileri yakında güncellenecek.",
       businessHours: "Pazartesi - Cuma: 09:00 - 18:00 (UTC)",
@@ -4819,7 +4817,7 @@ const tr = {
       faqFooterTerms: "Kullanım Şartları",
       faqFooterUserInfo: "Kullanıcı Bilgileri Yasaları",
       faqFooterContact: "İletişim Kılavuzu",
-      faqFooterCopyright: "© 2024 istoc — Tüm hakları saklıdır.",
+      faqFooterCopyright: "© 2024 iStoc — Tüm hakları saklıdır.",
       // ── TicketsListLayout ──
       myTickets: "Destek Taleplerim",
       newTicket: "Yeni Talep",
@@ -4941,7 +4939,7 @@ const tr = {
       sectionContactInfo: "İletişim bilgileri",
       sectionSpam: "Kişi ekleme, engelleme ve spam durumunuz",
       sectionSourcingInfo: "Tedarik bilgileri",
-      sectionActivity: "istoc.com'daki aktiviteniz",
+      sectionActivity: "iStoc.com'daki aktiviteniz",
       sectionIndustries: "İlgilendiğiniz endüstriler",
       sectionTopKeywords: "En çok aranan anahtar kelimeler",
       sectionRecentKeywords: "Son aranan anahtar kelimeler ve görüntülenen ürünler",
@@ -5058,9 +5056,9 @@ const tr = {
       deleteMyAccount: "Hesabımı sil",
       accountDeleted: "Hesabınız pasif edildi",
       accountDeletedDesc:
-        "Hesabınız pasif edildi. Yeniden etkinleştirmek için istoc müşteri hizmetlerine başvurmanız gerekir.",
+        "Hesabınız pasif edildi. Yeniden etkinleştirmek için iStoc müşteri hizmetlerine başvurmanız gerekir.",
       accountDeactivatedContactAdmin:
-        "Hesabınız pasif. Yeniden etkinleştirmek için istoc müşteri hizmetlerine başvurun.",
+        "Hesabınız pasif. Yeniden etkinleştirmek için iStoc müşteri hizmetlerine başvurun.",
       goToLogin: "Giriş sayfasına git",
       confirmDeleteRequired: "Lütfen onay kutusunu işaretleyin.",
       deleteAccountFailed: "Hesap silinemedi. Lütfen tekrar deneyin.",
@@ -5173,7 +5171,7 @@ const tr = {
       resubscribeAll: "Tekrar abone ol",
       allNotificationEmails: "Tüm bildirim e-postaları",
       notificationEmailsDesc:
-        "istoc.com'da önemli hesap güncellemeleri ve etkinlikleri hakkında sizi bilgilendiren e-postalar",
+        "iStoc.com'da önemli hesap güncellemeleri ve etkinlikleri hakkında sizi bilgilendiren e-postalar",
       generalNotificationEmails: "Genel bildirim e-postaları",
       generalNotificationEmailsDesc:
         "Hesaplarınız, iletişimleriniz, siparişleriniz, gönderilerinize ilgili güncellemeler dahil olmak üzere platformdaki faaliyetleriniz tarafından tetiklenen e-postalar.",
@@ -5182,7 +5180,7 @@ const tr = {
         "Taraf olduğunuz herhangi bir anlaşmazlık olması durumunda (sizin tarafınız tarafından başlatılmış olsun ya da olmasın), sizi bilgilendirecek ve ilerlemesi konusunda sizi bilgilendireceğiz.",
       allMarketingEmails: "Tüm pazarlama e-postaları",
       marketingEmailsDesc:
-        "istoc.com'da ürünler ve hizmetler hakkında tanıtım mesajları içeren e-postalar",
+        "iStoc.com'da ürünler ve hizmetler hakkında tanıtım mesajları içeren e-postalar",
       generalMarketingEmails: "Genel pazarlama e-postaları",
       generalMarketingEmailsDesc:
         "İşletmenize fayda sağlayabilecek ürün indirimleri, özel teklifler, etkinlikler ve hizmet teklifleri dahil olmak üzere fırsatlar, etkinlikler ve hizmet güncellemeleri hakkında sizi bilgilendirmek için e-postalar.",
@@ -5333,7 +5331,7 @@ const tr = {
         "Tüm dünyadan satıcı ve alıcıları güvenli, şeffaf B2B ticarette buluşturuyoruz.",
       storyTitle: "Hikayemiz",
       storyP1:
-        'istoc (okunuşu: "aystock"), Birleşik Krallık merkezli Thoptan Ltd. tarafından işletilen küresel bir B2B ticaret markasıdır. Amacımız basit: dünyanın her yerindeki üreticileri, toptancıları ve perakendecileri tek bir dijital platformda buluşturmak.',
+        'iStoc, Birleşik Krallık merkezli iStoc Private Company Limited tarafından işletilen küresel bir B2B ticaret markasıdır. Amacımız basit: dünyanın her yerindeki üreticileri, toptancıları ve perakendecileri tek bir dijital platformda buluşturmak.',
       storyP2:
         "Coğrafi sınır tanımadan, satıcılarımız ve alıcılarımızın güvenle, hızla ve şeffaf bir şekilde ticaret yapabileceği bir altyapı kuruyoruz. Doğrulanmış satıcılar, güvenli ödeme ve sade komisyon yapısı ile yeni nesil B2B pazaryeri olma yolunda ilerliyoruz.",
       storyP3:
@@ -5344,7 +5342,7 @@ const tr = {
       vision: "Vizyonumuz",
       visionText:
         "Dünyanın en güvenilir, en yenilikçi B2B ticaret ekosistemi olmak. Sınır tanımayan, şeffaf ve verimli bir küresel ticaret altyapısı sunmak.",
-      statsTitle: "Rakamlarla istoc",
+      statsTitle: "Rakamlarla iStoc",
       counterUsers: "Kayıtlı Kullanıcı",
       counterSellers: "Aktif Satıcı",
       counterCountries: "Ülke",
@@ -5367,9 +5365,9 @@ const tr = {
     },
     faq: {
       allCategories: "Tüm Kategoriler",
-      intro: "istoc Giriş",
-      introDesc: "istoc Tanıtımı",
-      introMembership: "istoc Üyeliği",
+      intro: "iStoc Giriş",
+      introDesc: "iStoc Tanıtımı",
+      introMembership: "iStoc Üyeliği",
       account: "Hesap Yönetimi",
       accountSettings: "Hesap Ayarları",
       accountCancelReactivate: "İptal & Yeniden Etkinleştirme",
@@ -5407,7 +5405,7 @@ const tr = {
       taxRefund: "Vergi İadesi",
       shipping: "Kargo",
       shippingShipping: "Kargo",
-      shippingLogistics: "istoc Lojistik Hizmetleri",
+      shippingLogistics: "iStoc Lojistik Hizmetleri",
       shippingMaersk: "MSK Kargo Hizmetleri (Maersk)",
       shippingImportFees: "İthalat Ücretleri",
       receipt: "Sipariş Alımı",
@@ -5426,7 +5424,7 @@ const tr = {
       feedback: "Sipariş Geri Bildirimi",
       feedbackManagement: "Geri Bildirim Yönetimi",
       feedbackRules: "Geri Bildirim Kuralları",
-      security: "Güvenlik & istoc Kuralları",
+      security: "Güvenlik & iStoc Kuralları",
       securityFraud: "Dolandırıcılık/Sahte E-posta",
       securityIpr: "IPR Şikayeti",
       others: "Diğerleri",
@@ -5439,16 +5437,16 @@ const tr = {
       promotionsSuper: "Süper Promosyon",
       promotionsPayment: "Ödeme Promosyonları",
       promotionsOtherIssues: "Diğer Promosyon Sorunları",
-      guaranteed: "istoc Garantisi",
+      guaranteed: "iStoc Garantisi",
       guaranteedShipping: "Garantili Kargo",
       guaranteedAfterSales: "Garantili Satış Sonrası",
       guaranteedPreSales: "Garantili Ön Satış",
       guaranteedPlaceOrder: "Garantili Sipariş Verme",
       guaranteedOverseasWarehouse: "Denizaşırı Doğrulanmış Depo",
-      appSettings: "istoc Uygulama Ayarları",
-      appSettingsLabel: "istoc Uygulama Ayarları",
+      appSettings: "iStoc Uygulama Ayarları",
+      appSettingsLabel: "iStoc Uygulama Ayarları",
       localization: "Dil ve Yerelleştirme",
-      localizationSettings: "istoc Dil Ayarları",
+      localizationSettings: "iStoc Dil Ayarları",
     },
     faqDetail: {
       // UI
@@ -5462,35 +5460,35 @@ const tr = {
       noContent: "Bu konu için henüz içerik bulunmamaktadır.",
       relatedTopics: "İlgili Konular",
 
-      // ── istoc Giriş ──
-      introDesc_title: "istoc Tanıtımı",
-      introDesc_desc: "istoc platformu hakkında genel bilgiler ve nasıl çalıştığını öğrenin.",
+      // ── iStoc Giriş ──
+      introDesc_title: "iStoc Tanıtımı",
+      introDesc_desc: "iStoc platformu hakkında genel bilgiler ve nasıl çalıştığını öğrenin.",
       introDesc_items: [
         {
-          q: "istoc nedir?",
-          a: "istoc, Birleşik Krallık merkezli Thoptan Ltd. tarafından işletilen küresel bir B2B (işletmeden işletmeye) e-ticaret platformudur. Tüm dünyadan üreticiler, toptancılar ve distribütörler ile alıcıları bir araya getirerek güvenli ve verimli ticaret yapılmasını sağlar.",
+          q: "iStoc nedir?",
+          a: "iStoc, Birleşik Krallık merkezli iStoc Private Company Limited tarafından işletilen küresel bir B2B (işletmeden işletmeye) e-ticaret platformudur. Tüm dünyadan üreticiler, toptancılar ve distribütörler ile alıcıları bir araya getirerek güvenli ve verimli ticaret yapılmasını sağlar.",
         },
         {
-          q: "istoc'u kimler kullanabilir?",
-          a: "istoc, hem bireysel girişimciler hem de kurumsal alıcılar ve satıcılar tarafından kullanılabilir. <strong>Alıcılar</strong> toptan fiyatlarla ürün temin edebilirken, <strong>satıcılar</strong> geniş bir alıcı kitlesine ulaşabilir. Platforma kayıt olmak ücretsizdir.",
+          q: "iStoc'u kimler kullanabilir?",
+          a: "iStoc, hem bireysel girişimciler hem de kurumsal alıcılar ve satıcılar tarafından kullanılabilir. <strong>Alıcılar</strong> toptan fiyatlarla ürün temin edebilirken, <strong>satıcılar</strong> geniş bir alıcı kitlesine ulaşabilir. Platforma kayıt olmak ücretsizdir.",
         },
         {
-          q: "istoc'un diğer platformlardan farkı nedir?",
-          a: "istoc, Ticaret Güvencesi programı ile alıcı ve satıcıları koruma altına alır. Entegre lojistik çözümleri, güvenli ödeme sistemi ve 7/24 müşteri desteği ile öne çıkar. Ayrıca AI destekli tedarikçi eşleştirme ve kalite denetim hizmetleri sunar.",
+          q: "iStoc'un diğer platformlardan farkı nedir?",
+          a: "iStoc, Ticaret Güvencesi programı ile alıcı ve satıcıları koruma altına alır. Entegre lojistik çözümleri, güvenli ödeme sistemi ve 7/24 müşteri desteği ile öne çıkar. Ayrıca AI destekli tedarikçi eşleştirme ve kalite denetim hizmetleri sunar.",
         },
         {
-          q: "istoc'ta hangi kategorilerde ürün bulunur?",
+          q: "iStoc'ta hangi kategorilerde ürün bulunur?",
           a: "Platformda Tekstil & Giyim, Elektronik, Gıda & İçecek, Otomotiv, Makine & Ekipman, İnşaat & Yapı Malzemeleri, Kozmetik, Mobilya, Tarım ürünleri ve daha birçok kategoride ürün listelenmektedir.",
         },
       ],
 
-      introMembership_title: "istoc Üyeliği",
+      introMembership_title: "iStoc Üyeliği",
       introMembership_desc:
         "Üyelik türleri, avantajları ve yükseltme seçenekleri hakkında bilgi alın.",
       introMembership_items: [
         {
-          q: "istoc'ta hangi üyelik türleri var?",
-          a: "istoc'ta üç temel üyelik türü bulunur: <strong>Ücretsiz Üyelik</strong> (temel özellikler, sınırlı listeleme), <strong>Gold Üyelik</strong> (öncelikli listeleme, gelişmiş analitik) ve <strong>Verified Üyelik</strong> (doğrulanmış rozet, özel hesap yöneticisi, sınırsız listeleme).",
+          q: "iStoc'ta hangi üyelik türleri var?",
+          a: "iStoc'ta üç temel üyelik türü bulunur: <strong>Ücretsiz Üyelik</strong> (temel özellikler, sınırlı listeleme), <strong>Gold Üyelik</strong> (öncelikli listeleme, gelişmiş analitik) ve <strong>Verified Üyelik</strong> (doğrulanmış rozet, özel hesap yöneticisi, sınırsız listeleme).",
         },
         {
           q: "Ücretsiz üyelik ile neler yapabilirim?",
@@ -5533,11 +5531,11 @@ const tr = {
       accountCancelReactivate_items: [
         {
           q: "Hesabımı nasıl iptal ederim?",
-          a: 'Hesap Ayarları > Hesap Yönetimi bölümünden "Hesabı Kapat" seçeneğini kullanabilirsiniz. İptal işlemi öncesinde açık siparişlerinizin ve anlaşmazlıklarınızın çözülmüş olması gerekir. Hesap kapatma sonrasında yeniden etkinleştirme yalnızca <strong>istoc müşteri hizmetleri</strong> tarafından yapılır.',
+          a: 'Hesap Ayarları > Hesap Yönetimi bölümünden "Hesabı Kapat" seçeneğini kullanabilirsiniz. İptal işlemi öncesinde açık siparişlerinizin ve anlaşmazlıklarınızın çözülmüş olması gerekir. Hesap kapatma sonrasında yeniden etkinleştirme yalnızca <strong>iStoc müşteri hizmetleri</strong> tarafından yapılır.',
         },
         {
           q: "Hesabımı yeniden etkinleştirebilir miyim?",
-          a: "Hesabınızı kapattıktan sonra kendi başınıza giriş yaparak yeniden etkinleştiremezsiniz. Yeniden etkinleştirme talebi için istoc müşteri hizmetlerine başvurmanız gerekir; talebiniz incelendikten sonra hesabınız tekrar açılabilir.",
+          a: "Hesabınızı kapattıktan sonra kendi başınıza giriş yaparak yeniden etkinleştiremezsiniz. Yeniden etkinleştirme talebi için iStoc müşteri hizmetlerine başvurmanız gerekir; talebiniz incelendikten sonra hesabınız tekrar açılabilir.",
         },
         {
           q: "Gold/Verified üyeliğimi iptal edersem ne olur?",
@@ -5549,7 +5547,7 @@ const tr = {
       accountLogin_desc: "Hesabınıza giriş yapma ve giriş sorunlarını çözme.",
       accountLogin_items: [
         {
-          q: "istoc'a nasıl giriş yaparım?",
+          q: "iStoc'a nasıl giriş yaparım?",
           a: 'Ana sayfadaki "Giriş" butonuna tıklayarak e-posta adresiniz ve şifrenizle giriş yapabilirsiniz. Ayrıca Google, Apple veya telefon numarası ile hızlı giriş seçeneklerini de kullanabilirsiniz.',
         },
         {
@@ -5567,10 +5565,10 @@ const tr = {
       ],
 
       accountRegister_title: "Kayıt",
-      accountRegister_desc: "istoc'a yeni hesap oluşturma adımları.",
+      accountRegister_desc: "iStoc'a yeni hesap oluşturma adımları.",
       accountRegister_items: [
         {
-          q: "istoc'a nasıl kayıt olurum?",
+          q: "iStoc'a nasıl kayıt olurum?",
           a: 'Ana sayfadaki "Kayıt Ol" butonuna tıklayın. E-posta adresinizi girin, bir şifre belirleyin ve kullanım koşullarını kabul edin. Kayıt sonrası e-posta doğrulaması yapmanız gerekecektir.',
         },
         {
@@ -5584,10 +5582,10 @@ const tr = {
       ],
 
       accountBecomeSeller_title: "Satıcı Ol",
-      accountBecomeSeller_desc: "istoc'ta satıcı olma süreci ve gereksinimleri.",
+      accountBecomeSeller_desc: "iStoc'ta satıcı olma süreci ve gereksinimleri.",
       accountBecomeSeller_items: [
         {
-          q: "istoc'ta satıcı olmak için ne gerekir?",
+          q: "iStoc'ta satıcı olmak için ne gerekir?",
           a: "Satıcı olmak için geçerli bir ticaret sicili, vergi levhası ve şirket iletişim bilgilerine ihtiyacınız vardır. Kayıt formunu doldurduktan sonra belgeleriniz <strong>1-3 iş günü</strong> içinde incelenir ve onaylanır.",
         },
         {
@@ -5596,7 +5594,7 @@ const tr = {
         },
         {
           q: "Hangi ürünleri satabilirim?",
-          a: "istoc'ta yasalara uygun tüm B2B ürünleri satabilirsiniz. Yasaklı ürünler listesi (silah, uyuşturucu, taklit ürünler vb.) platform kurallarında belirtilmiştir. Gıda ve ilaç gibi özel kategorilerde ek belgeler gerekebilir.",
+          a: "iStoc'ta yasalara uygun tüm B2B ürünleri satabilirsiniz. Yasaklı ürünler listesi (silah, uyuşturucu, taklit ürünler vb.) platform kurallarında belirtilmiştir. Gıda ve ilaç gibi özel kategorilerde ek belgeler gerekebilir.",
         },
         {
           q: "Satıcı onay süreci ne kadar sürer?",
@@ -5606,7 +5604,7 @@ const tr = {
 
       // ── Kaynak Bulma ──
       sourcingSearch_title: "Arama",
-      sourcingSearch_desc: "istoc'ta ürün ve tedarikçi arama yöntemleri.",
+      sourcingSearch_desc: "iStoc'ta ürün ve tedarikçi arama yöntemleri.",
       sourcingSearch_items: [
         {
           q: "Ürün araması nasıl yapılır?",
@@ -5648,7 +5646,7 @@ const tr = {
         },
         {
           q: "HS kodu nedir ve nasıl bulurum?",
-          a: "HS (Harmonized System) kodu, uluslararası ticarette ürünleri sınıflandırmak için kullanılan standart bir koddur. istoc'ta ürün detay sayfasında veya ticaret bilgisi aracını kullanarak ürününüzün HS kodunu bulabilirsiniz.",
+          a: "HS (Harmonized System) kodu, uluslararası ticarette ürünleri sınıflandırmak için kullanılan standart bir koddur. iStoc'ta ürün detay sayfasında veya ticaret bilgisi aracını kullanarak ürününüzün HS kodunu bulabilirsiniz.",
         },
         {
           q: "Gümrük vergisi hesaplama aracı nasıl kullanılır?",
@@ -5661,7 +5659,7 @@ const tr = {
       sourcingRecommender_items: [
         {
           q: "Öneren sistemi nasıl çalışır?",
-          a: "istoc Öneren sistemi, arama geçmişiniz, satın alma alışkanlıklarınız ve sektör trendlerine göre size uygun ürün ve tedarikçileri AI algoritmaları ile önerir. Sistem kullandıkça daha kişiselleştirilmiş öneriler sunar.",
+          a: "iStoc Öneren sistemi, arama geçmişiniz, satın alma alışkanlıklarınız ve sektör trendlerine göre size uygun ürün ve tedarikçileri AI algoritmaları ile önerir. Sistem kullandıkça daha kişiselleştirilmiş öneriler sunar.",
         },
         {
           q: "Önerileri nasıl kişiselleştirebilirim?",
@@ -5677,8 +5675,8 @@ const tr = {
       sourcingAiApp_desc: "Yapay zeka destekli ticaret araçları ve özellikleri.",
       sourcingAiApp_items: [
         {
-          q: "istoc AI uygulaması ne işe yarar?",
-          a: "istoc AI uygulaması; görsel ürün arama, otomatik tedarikçi eşleştirme, fiyat analizi, pazar trendi tahmini ve akıllı sohbet asistanı gibi AI destekli özellikler sunar.",
+          q: "iStoc AI uygulaması ne işe yarar?",
+          a: "iStoc AI uygulaması; görsel ürün arama, otomatik tedarikçi eşleştirme, fiyat analizi, pazar trendi tahmini ve akıllı sohbet asistanı gibi AI destekli özellikler sunar.",
         },
         {
           q: "AI sohbet asistanını nasıl kullanırım?",
@@ -5695,7 +5693,7 @@ const tr = {
       sourcingSourcing_items: [
         {
           q: "Toptan kaynak bulma süreci nasıl işler?",
-          a: "istoc'ta kaynak bulma süreci: ürün araştırması, tedarikçi değerlendirmesi, numune talebi, fiyat müzakeresi ve sipariş verme adımlarından oluşur. Her adımda platform araçları size rehberlik eder.",
+          a: "iStoc'ta kaynak bulma süreci: ürün araştırması, tedarikçi değerlendirmesi, numune talebi, fiyat müzakeresi ve sipariş verme adımlarından oluşur. Her adımda platform araçları size rehberlik eder.",
         },
         {
           q: "RFQ (Teklif İsteme) göndermeli miyim?",
@@ -5747,7 +5745,7 @@ const tr = {
       negotiationOtherIssues_items: [
         {
           q: "Tedarikçi ile dil sorunu yaşıyorum, ne yapmalıyım?",
-          a: "istoc'un yerleşik çeviri özelliği mesajlarınızı otomatik olarak çevirir. Mesaj yazma alanındaki çeviri simgesini etkinleştirerek mesajlarınızı tedarikçinin diline otomatik çevirebilirsiniz.",
+          a: "iStoc'un yerleşik çeviri özelliği mesajlarınızı otomatik olarak çevirir. Mesaj yazma alanındaki çeviri simgesini etkinleştirerek mesajlarınızı tedarikçinin diline otomatik çevirebilirsiniz.",
         },
         {
           q: "Şüpheli bir tedarikçiyi nasıl bildiririm?",
@@ -5761,11 +5759,11 @@ const tr = {
 
       // ── Sipariş Ver ──
       placeOrderTradeAssurance_title: "Ticaret Güvencesi Tanıtımı",
-      placeOrderTradeAssurance_desc: "istoc Ticaret Güvencesi programı hakkında bilgi.",
+      placeOrderTradeAssurance_desc: "iStoc Ticaret Güvencesi programı hakkında bilgi.",
       placeOrderTradeAssurance_items: [
         {
           q: "Ticaret Güvencesi nedir?",
-          a: "Ticaret Güvencesi, istoc'un alıcı ve satıcıları koruyan bir programdır. Sipariş edilen ürünler sözleşme şartlarına uygun teslim edilmezse, alıcıya tam veya kısmi geri ödeme yapılmasını garanti eder.",
+          a: "Ticaret Güvencesi, iStoc'un alıcı ve satıcıları koruyan bir programdır. Sipariş edilen ürünler sözleşme şartlarına uygun teslim edilmezse, alıcıya tam veya kısmi geri ödeme yapılmasını garanti eder.",
         },
         {
           q: "Ticaret Güvencesi kapsamında neler korunur?",
@@ -5773,7 +5771,7 @@ const tr = {
         },
         {
           q: "Ticaret Güvencesi ücretsiz mi?",
-          a: "Evet, Ticaret Güvencesi temel kapsamı tüm istoc kullanıcıları için ücretsizdir. Gold ve Verified üyeliklerde genişletilmiş koruma limitleri ve öncelikli arabuluculuk hizmeti sunulur.",
+          a: "Evet, Ticaret Güvencesi temel kapsamı tüm iStoc kullanıcıları için ücretsizdir. Gold ve Verified üyeliklerde genişletilmiş koruma limitleri ve öncelikli arabuluculuk hizmeti sunulur.",
         },
       ],
 
@@ -5834,7 +5832,7 @@ const tr = {
       paymentOrderPayment_items: [
         {
           q: "Hangi ödeme yöntemleriyle ödeme yapabilirim?",
-          a: "istoc'ta <strong>kredi kartı</strong>, <strong>banka kartı</strong>, <strong>havale/EFT</strong>, <strong>online bankacılık</strong> ve <strong>istoc Cüzdan</strong> ile ödeme yapabilirsiniz. Bazı tedarikçiler ayrıca LC (akreditif) ve T/T ödemelerini de kabul eder.",
+          a: "iStoc'ta <strong>kredi kartı</strong>, <strong>banka kartı</strong>, <strong>havale/EFT</strong>, <strong>online bankacılık</strong> ve <strong>iStoc Cüzdan</strong> ile ödeme yapabilirsiniz. Bazı tedarikçiler ayrıca LC (akreditif) ve T/T ödemelerini de kabul eder.",
         },
         {
           q: "Ödeme güvenliği nasıl sağlanır?",
@@ -5867,8 +5865,8 @@ const tr = {
       paymentFinancial_desc: "Finansal hizmetler ve ticaret finansmanı.",
       paymentFinancial_items: [
         {
-          q: "istoc finansman hizmetleri nelerdir?",
-          a: "istoc, alıcılara ticaret finansmanı, kredi limiti ve vadeli ödeme seçenekleri sunar. Bu hizmetler anlaşmalı finans kuruluşları aracılığıyla sağlanır ve uygun koşullarda kullanılabilir.",
+          q: "iStoc finansman hizmetleri nelerdir?",
+          a: "iStoc, alıcılara ticaret finansmanı, kredi limiti ve vadeli ödeme seçenekleri sunar. Bu hizmetler anlaşmalı finans kuruluşları aracılığıyla sağlanır ve uygun koşullarda kullanılabilir.",
         },
         {
           q: "Kredi limiti nasıl başvururum?",
@@ -5893,7 +5891,7 @@ const tr = {
         },
         {
           q: "Döviz kuru nasıl hesaplanır?",
-          a: "istoc'ta fiyatlar varsayılan olarak Türk Lirası cinsinden gösterilir. Döviz bazlı ödemelerde güncel kur, ödeme anında banka tarafından uygulanır. Kur farkından kaynaklanabilecek tutarlar bilgilendirme amaçlıdır.",
+          a: "iStoc'ta fiyatlar varsayılan olarak Türk Lirası cinsinden gösterilir. Döviz bazlı ödemelerde güncel kur, ödeme anında banka tarafından uygulanır. Kur farkından kaynaklanabilecek tutarlar bilgilendirme amaçlıdır.",
         },
       ],
 
@@ -5902,11 +5900,11 @@ const tr = {
       paymentTypes_items: [
         {
           q: "Hangi ödeme türleri destekleniyor?",
-          a: "istoc'ta Visa, Mastercard, American Express kredi/banka kartları, banka havalesi/EFT, online bankacılık, istoc Cüzdan ve uluslararası siparişlerde LC (Akreditif), T/T (Telegrafik Transfer) gibi ödeme türleri desteklenmektedir.",
+          a: "iStoc'ta Visa, Mastercard, American Express kredi/banka kartları, banka havalesi/EFT, online bankacılık, iStoc Cüzdan ve uluslararası siparişlerde LC (Akreditif), T/T (Telegrafik Transfer) gibi ödeme türleri desteklenmektedir.",
         },
         {
-          q: "istoc Cüzdan nedir?",
-          a: "istoc Cüzdan, platform içi dijital cüzdan sistemidir. Bakiye yükleyerek hızlı ve komisyonsuz ödeme yapabilirsiniz. İadeler de cüzdana anında yansır. Cüzdan bakiyesini istediğiniz zaman banka hesabınıza çekebilirsiniz.",
+          q: "iStoc Cüzdan nedir?",
+          a: "iStoc Cüzdan, platform içi dijital cüzdan sistemidir. Bakiye yükleyerek hızlı ve komisyonsuz ödeme yapabilirsiniz. İadeler de cüzdana anında yansır. Cüzdan bakiyesini istediğiniz zaman banka hesabınıza çekebilirsiniz.",
         },
         {
           q: "LC (Akreditif) ödeme nasıl çalışır?",
@@ -5933,11 +5931,11 @@ const tr = {
       ],
 
       taxTypes_title: "Vergi Türleri",
-      taxTypes_desc: "istoc işlemlerinde uygulanan vergi türleri.",
+      taxTypes_desc: "iStoc işlemlerinde uygulanan vergi türleri.",
       taxTypes_items: [
         {
-          q: "istoc'ta hangi vergiler uygulanır?",
-          a: "istoc işlemlerinde <strong>KDV (Katma Değer Vergisi)</strong>, ithalat işlemlerinde <strong>gümrük vergisi</strong> ve bazı ürün gruplarında <strong>ÖTV (Özel Tüketim Vergisi)</strong> uygulanabilir.",
+          q: "iStoc'ta hangi vergiler uygulanır?",
+          a: "iStoc işlemlerinde <strong>KDV (Katma Değer Vergisi)</strong>, ithalat işlemlerinde <strong>gümrük vergisi</strong> ve bazı ürün gruplarında <strong>ÖTV (Özel Tüketim Vergisi)</strong> uygulanabilir.",
         },
         {
           q: "KDV oranları nedir?",
@@ -5945,7 +5943,7 @@ const tr = {
         },
         {
           q: "KDV iadesi alabilir miyim?",
-          a: "İhracat işlemlerinde KDV iadesi alınabilir. KDV iade süreçleri vergi dairesi üzerinden yürütülür. istoc, gerekli belgeleri (fatura, gümrük beyannamesi vb.) dijital olarak sunar.",
+          a: "İhracat işlemlerinde KDV iadesi alınabilir. KDV iade süreçleri vergi dairesi üzerinden yürütülür. iStoc, gerekli belgeleri (fatura, gümrük beyannamesi vb.) dijital olarak sunar.",
         },
       ],
 
@@ -6005,15 +6003,15 @@ const tr = {
       taxRefund_items: [
         {
           q: "Vergi iadesi nasıl talep ederim?",
-          a: 'İhracat işlemlerinde vergi iadesi için "Belgelerim" bölümünden gerekli belgeleri indirip vergi dairenize başvurabilirsiniz. istoc, gümrük beyannamesi ve fatura gibi belgeleri dijital olarak sunar.',
+          a: 'İhracat işlemlerinde vergi iadesi için "Belgelerim" bölümünden gerekli belgeleri indirip vergi dairenize başvurabilirsiniz. iStoc, gümrük beyannamesi ve fatura gibi belgeleri dijital olarak sunar.',
         },
         {
           q: "Vergi iadesi ne kadar sürede tamamlanır?",
-          a: "Vergi iadesi süreci vergi dairesi tarafından yürütülür ve genellikle <strong>30-90 gün</strong> sürer. istoc tarafındaki belge hazırlığı ise 3-5 iş günü içinde tamamlanır.",
+          a: "Vergi iadesi süreci vergi dairesi tarafından yürütülür ve genellikle <strong>30-90 gün</strong> sürer. iStoc tarafındaki belge hazırlığı ise 3-5 iş günü içinde tamamlanır.",
         },
         {
           q: "KDV iadesi için hangi belgeler gerekli?",
-          a: "KDV iadesi için <strong>gümrük beyannamesi</strong>, <strong>satış faturası</strong>, <strong>ödeme belgesi</strong> ve <strong>taşıma belgesi</strong> gereklidir. Tüm belgeler istoc platform üzerinden dijital olarak temin edilebilir.",
+          a: "KDV iadesi için <strong>gümrük beyannamesi</strong>, <strong>satış faturası</strong>, <strong>ödeme belgesi</strong> ve <strong>taşıma belgesi</strong> gereklidir. Tüm belgeler iStoc platform üzerinden dijital olarak temin edilebilir.",
         },
       ],
 
@@ -6023,7 +6021,7 @@ const tr = {
       shippingShipping_items: [
         {
           q: "Hangi kargo seçenekleri mevcut?",
-          a: "istoc'ta <strong>standart kargo</strong>, <strong>hızlı kargo</strong>, <strong>ekspres kargo</strong> ve <strong>deniz yolu</strong> gibi farklı teslimat seçenekleri mevcuttur. Seçenekler ürün boyutu, ağırlığı ve teslimat adresine göre değişir.",
+          a: "iStoc'ta <strong>standart kargo</strong>, <strong>hızlı kargo</strong>, <strong>ekspres kargo</strong> ve <strong>deniz yolu</strong> gibi farklı teslimat seçenekleri mevcuttur. Seçenekler ürün boyutu, ağırlığı ve teslimat adresine göre değişir.",
         },
         {
           q: "Kargo ücreti nasıl hesaplanır?",
@@ -6035,20 +6033,20 @@ const tr = {
         },
       ],
 
-      shippingLogistics_title: "istoc Lojistik Hizmetleri",
-      shippingLogistics_desc: "istoc'un entegre lojistik çözümleri.",
+      shippingLogistics_title: "iStoc Lojistik Hizmetleri",
+      shippingLogistics_desc: "iStoc'un entegre lojistik çözümleri.",
       shippingLogistics_items: [
         {
-          q: "istoc Lojistik nedir?",
-          a: "istoc Lojistik, platformun kendi entegre kargo ve lojistik çözümüdür. Kapıdan kapıya teslimat, depolama, gümrükleme ve son mil teslimat hizmetlerini tek bir çatı altında sunar.",
+          q: "iStoc Lojistik nedir?",
+          a: "iStoc Lojistik, platformun kendi entegre kargo ve lojistik çözümüdür. Kapıdan kapıya teslimat, depolama, gümrükleme ve son mil teslimat hizmetlerini tek bir çatı altında sunar.",
         },
         {
-          q: "istoc Lojistik'in avantajları nelerdir?",
+          q: "iStoc Lojistik'in avantajları nelerdir?",
           a: "Rekabetçi fiyatlar, uçtan uca takip, gümrük işlemleri desteği, sigorta kapsamı ve öncelikli müşteri desteği gibi avantajlar sunar. Ayrıca Ticaret Güvencesi ile tam entegrasyon sağlar.",
         },
         {
-          q: "istoc Lojistik hangi ülkelere teslimat yapar?",
-          a: "istoc Lojistik, <strong>45+ ülkeye</strong> teslimat hizmeti sunmaktadır. Teslimat yapılan ülkeler ve tahmini süreleri sipariş sırasında görüntüleyebilirsiniz.",
+          q: "iStoc Lojistik hangi ülkelere teslimat yapar?",
+          a: "iStoc Lojistik, <strong>45+ ülkeye</strong> teslimat hizmeti sunmaktadır. Teslimat yapılan ülkeler ve tahmini süreleri sipariş sırasında görüntüleyebilirsiniz.",
         },
       ],
 
@@ -6057,7 +6055,7 @@ const tr = {
       shippingMaersk_items: [
         {
           q: "Maersk kargo hizmeti nedir?",
-          a: "Maersk, istoc'un anlaşmalı deniz yolu kargo ortağıdır. Konteyner bazlı uluslararası kargo hizmeti sunar. Özellikle büyük hacimli ve ağır yükler için ekonomik bir seçenektir.",
+          a: "Maersk, iStoc'un anlaşmalı deniz yolu kargo ortağıdır. Konteyner bazlı uluslararası kargo hizmeti sunar. Özellikle büyük hacimli ve ağır yükler için ekonomik bir seçenektir.",
         },
         {
           q: "Maersk ile kargo ne kadar sürede ulaşır?",
@@ -6065,7 +6063,7 @@ const tr = {
         },
         {
           q: "Maersk kargo takibi nasıl yapılır?",
-          a: "istoc platform üzerinden konteyner numaranız ile gerçek zamanlı kargo takibi yapabilirsiniz. Gemi pozisyonu, tahmini varış tarihi ve liman bilgileri görüntülenir.",
+          a: "iStoc platform üzerinden konteyner numaranız ile gerçek zamanlı kargo takibi yapabilirsiniz. Gemi pozisyonu, tahmini varış tarihi ve liman bilgileri görüntülenir.",
         },
       ],
 
@@ -6078,7 +6076,7 @@ const tr = {
         },
         {
           q: "İthalat ücretlerini önceden hesaplayabilir miyim?",
-          a: "Evet, istoc'un ithalat ücreti hesaplama aracını kullanarak tahmini maliyetleri önceden görebilirsiniz. Ürün kategorisi, HS kodu, menşei ve hedef ülke bilgilerini girerek hesaplama yapılır.",
+          a: "Evet, iStoc'un ithalat ücreti hesaplama aracını kullanarak tahmini maliyetleri önceden görebilirsiniz. Ürün kategorisi, HS kodu, menşei ve hedef ülke bilgilerini girerek hesaplama yapılır.",
         },
         {
           q: "Gümrük vergisinden muaf ürünler var mı?",
@@ -6096,7 +6094,7 @@ const tr = {
         },
         {
           q: "Teslimat sırasında nelere dikkat etmeliyim?",
-          a: "Teslimat sırasında <strong>paket bütünlüğünü</strong>, <strong>ürün miktarını</strong> ve <strong>görsel durumu</strong> kontrol edin. Hasarlı veya eksik ürün varsa teslimat görevlisi huzurunda tutanak tutun ve 24 saat içinde istoc'a bildirin.",
+          a: "Teslimat sırasında <strong>paket bütünlüğünü</strong>, <strong>ürün miktarını</strong> ve <strong>görsel durumu</strong> kontrol edin. Hasarlı veya eksik ürün varsa teslimat görevlisi huzurunda tutanak tutun ve 24 saat içinde iStoc'a bildirin.",
         },
         {
           q: "Teslimat adresimi değiştirebilir miyim?",
@@ -6127,7 +6125,7 @@ const tr = {
       inspectionServices_items: [
         {
           q: "Denetim hizmeti nedir?",
-          a: "istoc Denetim Hizmeti, bağımsız denetçiler tarafından ürünlerinizin kalite kontrolünü, üretim standartlarına uygunluğunu ve sipariş spesifikasyonlarını yerinde denetleyen profesyonel bir hizmettir.",
+          a: "iStoc Denetim Hizmeti, bağımsız denetçiler tarafından ürünlerinizin kalite kontrolünü, üretim standartlarına uygunluğunu ve sipariş spesifikasyonlarını yerinde denetleyen profesyonel bir hizmettir.",
         },
         {
           q: "Hangi denetim türleri sunulmaktadır?",
@@ -6166,7 +6164,7 @@ const tr = {
         },
         {
           q: "Anlaşmazlık süreci ne kadar sürer?",
-          a: "Anlaşmazlık süreci genellikle <strong>7-15 iş günü</strong> içinde çözümlenir. Öncelikle taraflar arasında uzlaşma aranır. Uzlaşma sağlanamazsa istoc arabuluculuk ekibi devreye girer.",
+          a: "Anlaşmazlık süreci genellikle <strong>7-15 iş günü</strong> içinde çözümlenir. Öncelikle taraflar arasında uzlaşma aranır. Uzlaşma sağlanamazsa iStoc arabuluculuk ekibi devreye girer.",
         },
         {
           q: "Anlaşmazlık süresince ödemem ne olur?",
@@ -6196,7 +6194,7 @@ const tr = {
       afterSalesDisputeProcess_items: [
         {
           q: "Anlaşmazlık çözüm süreci nasıl işler?",
-          a: "Süreç şu adımlardan oluşur: <strong>1)</strong> Anlaşmazlık başlatma, <strong>2)</strong> Tedarikçi yanıtı (3 gün), <strong>3)</strong> Taraflar arası müzakere (5 gün), <strong>4)</strong> istoc arabuluculuğu (gerekirse), <strong>5)</strong> Karar ve uygulama.",
+          a: "Süreç şu adımlardan oluşur: <strong>1)</strong> Anlaşmazlık başlatma, <strong>2)</strong> Tedarikçi yanıtı (3 gün), <strong>3)</strong> Taraflar arası müzakere (5 gün), <strong>4)</strong> iStoc arabuluculuğu (gerekirse), <strong>5)</strong> Karar ve uygulama.",
         },
         {
           q: "Arabuluculuk kararına itiraz edebilir miyim?",
@@ -6217,7 +6215,7 @@ const tr = {
         },
         {
           q: "Ürün hasarlı geldi, ne yapmalıyım?",
-          a: "Teslimat anında hasarı belgelendirin (fotoğraf/video). 24 saat içinde istoc üzerinden bildirimde bulunun. Kargo sigortası kapsamında hasar tazminatı veya yeniden gönderim sağlanır.",
+          a: "Teslimat anında hasarı belgelendirin (fotoğraf/video). 24 saat içinde iStoc üzerinden bildirimde bulunun. Kargo sigortası kapsamında hasar tazminatı veya yeniden gönderim sağlanır.",
         },
         {
           q: "Ürün kalitesi beklentilerimi karşılamıyor, ne yapmalıyım?",
@@ -6294,17 +6292,17 @@ const tr = {
         },
       ],
 
-      // ── Güvenlik & istoc Kuralları ──
+      // ── Güvenlik & iStoc Kuralları ──
       securityFraud_title: "Dolandırıcılık/Sahte E-posta",
       securityFraud_desc: "Dolandırıcılık ve sahte e-postaları tanıma ve bildirme.",
       securityFraud_items: [
         {
           q: "Dolandırıcılık girişimini nasıl tanırım?",
-          a: "Platform dışında ödeme yapmanızı isteyen, olağanüstü düşük fiyat sunan, kişisel bilgi isteyen ve acil ödeme baskısı yapan mesajlara dikkat edin. istoc hiçbir zaman platform dışı ödeme talep etmez.",
+          a: "Platform dışında ödeme yapmanızı isteyen, olağanüstü düşük fiyat sunan, kişisel bilgi isteyen ve acil ödeme baskısı yapan mesajlara dikkat edin. iStoc hiçbir zaman platform dışı ödeme talep etmez.",
         },
         {
           q: "Sahte e-posta aldım, ne yapmalıyım?",
-          a: "istoc'tan geldiğini iddia eden şüpheli e-postalar alırsanız, e-posta adresinin @istoc.com uzantılı olduğunu doğrulayın. Sahte e-postaları <strong>security@istoc.com</strong> adresine yönlendirerek bildirin. E-postadaki linklere tıklamayın.",
+          a: "iStoc'tan geldiğini iddia eden şüpheli e-postalar alırsanız, e-posta adresinin @iStoc.com uzantılı olduğunu doğrulayın. Sahte e-postaları <strong>security@istoc.com</strong> adresine yönlendirerek bildirin. E-postadaki linklere tıklamayın.",
         },
         {
           q: "Hesabım ele geçirildi, ne yapmalıyım?",
@@ -6339,7 +6337,7 @@ const tr = {
         },
         {
           q: "Müşteri hizmetleri hangi dillerde destek veriyor?",
-          a: "istoc müşteri hizmetleri Türkçe ve İngilizce dillerinde destek sunmaktadır. Diğer diller için çeviri desteği mevcuttur.",
+          a: "iStoc müşteri hizmetleri Türkçe ve İngilizce dillerinde destek sunmaktadır. Diğer diller için çeviri desteği mevcuttur.",
         },
         {
           q: "Destek talebimin yanıt süresi ne kadardır?",
@@ -6365,15 +6363,15 @@ const tr = {
       ],
 
       othersOfflineService_title: "Çevrimdışı Hizmet",
-      othersOfflineService_desc: "istoc'un fiziksel hizmet noktaları.",
+      othersOfflineService_desc: "iStoc'un fiziksel hizmet noktaları.",
       othersOfflineService_items: [
         {
-          q: "istoc'un fiziksel ofisleri var mı?",
-          a: "istoc tamamen dijital bir B2B ticaret platformudur ve şu anda fiziksel müşteri hizmet ofisi sunmamaktadır. Tüm hizmetlerimiz (üyelik, sözleşme, eğitim, destek) çevrimiçi kanallar üzerinden sağlanır.",
+          q: "iStoc'un fiziksel ofisleri var mı?",
+          a: "iStoc tamamen dijital bir B2B ticaret platformudur ve şu anda fiziksel müşteri hizmet ofisi sunmamaktadır. Tüm hizmetlerimiz (üyelik, sözleşme, eğitim, destek) çevrimiçi kanallar üzerinden sağlanır.",
         },
         {
           q: "Fuar ve etkinliklere katılıyor musunuz?",
-          a: 'istoc, yıl boyunca çeşitli sektörel fuarlara ve ticaret etkinliklerine katılmaktadır. Yaklaşan etkinlikler ana sayfadaki "Etkinlikler" bölümünden takip edilebilir.',
+          a: 'iStoc, yıl boyunca çeşitli sektörel fuarlara ve ticaret etkinliklerine katılmaktadır. Yaklaşan etkinlikler ana sayfadaki "Etkinlikler" bölümünden takip edilebilir.',
         },
         {
           q: "Yüz yüze randevu nasıl alırım?",
@@ -6383,15 +6381,15 @@ const tr = {
 
       // ── Promosyonlar & Alışveriş Rehberi ──
       promotionsShoppingGuide_title: "Alışveriş Rehberi",
-      promotionsShoppingGuide_desc: "istoc'ta etkili alışveriş yapma rehberi.",
+      promotionsShoppingGuide_desc: "iStoc'ta etkili alışveriş yapma rehberi.",
       promotionsShoppingGuide_items: [
         {
-          q: "istoc'ta ilk alışverişimi nasıl yapmalıyım?",
+          q: "iStoc'ta ilk alışverişimi nasıl yapmalıyım?",
           a: "İlk olarak ihtiyacınız olan ürünü arayın, birkaç tedarikçiyi karşılaştırın, numune isteyin ve memnun kaldıktan sonra sipariş verin. İlk siparişte küçük miktarlarla başlamanızı öneriyoruz.",
         },
         {
           q: "En iyi fiyatı nasıl bulurum?",
-          a: "Birden fazla tedarikçiden teklif alın, RFQ gönderin ve miktar bazlı indirim müzakeresi yapın. istoc AI fiyat analizi aracı da piyasa değerini değerlendirmenize yardımcı olur.",
+          a: "Birden fazla tedarikçiden teklif alın, RFQ gönderin ve miktar bazlı indirim müzakeresi yapın. iStoc AI fiyat analizi aracı da piyasa değerini değerlendirmenize yardımcı olur.",
         },
         {
           q: "Güvenli alışveriş için ipuçları nelerdir?",
@@ -6438,7 +6436,7 @@ const tr = {
       promotionsPayment_items: [
         {
           q: "Ödeme yöntemine özel indirimler var mı?",
-          a: "Evet, zaman zaman belirli banka kartlarına, istoc Cüzdan ile yapılan ödemelere veya banka havalelerine özel indirimler sunulmaktadır. Aktif ödeme promosyonları ödeme sayfasında gösterilir.",
+          a: "Evet, zaman zaman belirli banka kartlarına, iStoc Cüzdan ile yapılan ödemelere veya banka havalelerine özel indirimler sunulmaktadır. Aktif ödeme promosyonları ödeme sayfasında gösterilir.",
         },
         {
           q: "İlk sipariş indirimi var mı?",
@@ -6467,21 +6465,21 @@ const tr = {
         },
       ],
 
-      // ── istoc Garantisi ──
+      // ── iStoc Garantisi ──
       guaranteedShipping_title: "Garantili Kargo",
-      guaranteedShipping_desc: "istoc kargo garantisi programı.",
+      guaranteedShipping_desc: "iStoc kargo garantisi programı.",
       guaranteedShipping_items: [
         {
           q: "Garantili Kargo nedir?",
-          a: "istoc Garantili Kargo, siparişinizin belirtilen sürede teslim edilmesini garanti eder. Gecikme durumunda kargo ücretinin tamamı veya bir kısmı iade edilir.",
+          a: "iStoc Garantili Kargo, siparişinizin belirtilen sürede teslim edilmesini garanti eder. Gecikme durumunda kargo ücretinin tamamı veya bir kısmı iade edilir.",
         },
         {
           q: "Kargo gecikmesinde tazminat nasıl alırım?",
-          a: "Teslimat, garanti edilen süreden geç yapılırsa otomatik olarak tazminat hesaplanır ve istoc Cüzdan'ınıza veya orijinal ödeme yönteminize iade edilir.",
+          a: "Teslimat, garanti edilen süreden geç yapılırsa otomatik olarak tazminat hesaplanır ve iStoc Cüzdan'ınıza veya orijinal ödeme yönteminize iade edilir.",
         },
         {
           q: "Hangi kargo yöntemleri garantili?",
-          a: "istoc Lojistik ve anlaşmalı kargo firmalarıyla yapılan gönderilerde kargo garantisi geçerlidir. Tedarikçinin kendi kargo anlaşması ile gönderilen ürünlerde garanti kapsamı farklılık gösterebilir.",
+          a: "iStoc Lojistik ve anlaşmalı kargo firmalarıyla yapılan gönderilerde kargo garantisi geçerlidir. Tedarikçinin kendi kargo anlaşması ile gönderilen ürünlerde garanti kapsamı farklılık gösterebilir.",
         },
       ],
 
@@ -6490,7 +6488,7 @@ const tr = {
       guaranteedAfterSales_items: [
         {
           q: "Garantili Satış Sonrası Servis nedir?",
-          a: "istoc'un alıcılara sunduğu ek koruma programıdır. Ürün sorunlarında hızlandırılmış arabuluculuk, öncelikli müşteri desteği ve genişletilmiş iade süresi gibi avantajlar sunar.",
+          a: "iStoc'un alıcılara sunduğu ek koruma programıdır. Ürün sorunlarında hızlandırılmış arabuluculuk, öncelikli müşteri desteği ve genişletilmiş iade süresi gibi avantajlar sunar.",
         },
         {
           q: "Bu garanti ne kadar süre geçerlidir?",
@@ -6528,7 +6526,7 @@ const tr = {
         },
         {
           q: "Sipariş güvencesi için ek ücret var mı?",
-          a: "Hayır, Ticaret Güvencesi kapsamındaki sipariş koruması ücretsizdir. Tüm istoc kullanıcıları bu korumadan otomatik olarak yararlanır.",
+          a: "Hayır, Ticaret Güvencesi kapsamındaki sipariş koruması ücretsizdir. Tüm iStoc kullanıcıları bu korumadan otomatik olarak yararlanır.",
         },
         {
           q: "Garantili sipariş limiti nedir?",
@@ -6541,7 +6539,7 @@ const tr = {
       guaranteedOverseasWarehouse_items: [
         {
           q: "Denizaşırı Doğrulanmış Depo nedir?",
-          a: "istoc'un yurt dışındaki anlaşmalı ve denetlenmiş depo tesisleridir. Bu depolar üzerinden yapılan gönderilerde ürün kalitesi ve stok doğrulaması yapılmıştır. Daha hızlı teslimat ve yerel iade imkanı sunar.",
+          a: "iStoc'un yurt dışındaki anlaşmalı ve denetlenmiş depo tesisleridir. Bu depolar üzerinden yapılan gönderilerde ürün kalitesi ve stok doğrulaması yapılmıştır. Daha hızlı teslimat ve yerel iade imkanı sunar.",
         },
         {
           q: "Hangi ülkelerde doğrulanmış depo var?",
@@ -6553,13 +6551,13 @@ const tr = {
         },
       ],
 
-      // ── istoc Uygulama Ayarları ──
-      appSettingsLabel_title: "istoc Uygulama Ayarları",
+      // ── iStoc Uygulama Ayarları ──
+      appSettingsLabel_title: "iStoc Uygulama Ayarları",
       appSettingsLabel_desc: "Mobil uygulama ayarları ve konfigürasyonu.",
       appSettingsLabel_items: [
         {
-          q: "istoc mobil uygulaması nereden indirilir?",
-          a: "istoc uygulaması <strong>App Store</strong> (iOS) ve <strong>Google Play Store</strong> (Android) üzerinden ücretsiz olarak indirilebilir. QR kodu ana sayfamızdan tarayarak da indirebilirsiniz.",
+          q: "iStoc mobil uygulaması nereden indirilir?",
+          a: "iStoc uygulaması <strong>App Store</strong> (iOS) ve <strong>Google Play Store</strong> (Android) üzerinden ücretsiz olarak indirilebilir. QR kodu ana sayfamızdan tarayarak da indirebilirsiniz.",
         },
         {
           q: "Uygulama bildirimleri nasıl ayarlanır?",
@@ -6576,7 +6574,7 @@ const tr = {
       ],
 
       // ── Dil ve Yerelleştirme ──
-      localizationSettings_title: "istoc Dil Ayarları",
+      localizationSettings_title: "iStoc Dil Ayarları",
       localizationSettings_desc: "Platform dil ve bölge ayarları.",
       localizationSettings_items: [
         {
@@ -6585,7 +6583,7 @@ const tr = {
         },
         {
           q: "Hangi diller destekleniyor?",
-          a: "istoc şu anda <strong>Türkçe</strong> ve <strong>İngilizce</strong> dillerini desteklemektedir. Ek dil seçenekleri gelecekte eklenecektir.",
+          a: "iStoc şu anda <strong>Türkçe</strong> ve <strong>İngilizce</strong> dillerini desteklemektedir. Ek dil seçenekleri gelecekte eklenecektir.",
         },
         {
           q: "Para birimi ayarını nasıl değiştiririm?",
@@ -6675,7 +6673,7 @@ const tr = {
       heroCta: "Ücretsiz Başlayın",
 
       // Benefits
-      benefitsTitle: "Neden istoc?",
+      benefitsTitle: "Neden iStoc?",
       benefit1Title: "Geniş Alıcı Tabanı",
       benefit1Desc:
         "Küresel B2B pazaryerinde geniş bir alıcı kitlesine doğrudan ulaşın. Pazardaki görünürlüğünüzü artırın.",
@@ -6775,7 +6773,7 @@ const tr = {
         loadError: "Fiyatlandırma bilgileri yüklenemedi. Lütfen sayfayı yenileyin.",
       },
       manufacturerPlatform: "Üretici platformu",
-      heroSubtitle: "iSTOC, Türkiye'deki üreticileri dünyanın dört bir yanındaki B2B alıcılarıyla aracısız buluşturur. Listele, sat, kargola — komisyon yok.",
+      heroSubtitle: "iStoc, Türkiye'deki üreticileri dünyanın dört bir yanındaki B2B alıcılarıyla aracısız buluşturur. Listele, sat, kargola — komisyon yok.",
       heroImageAlt: "Türkiye'den dünyaya ihracat: liman ve konteyner lojistiği",
       applyAsSeller: "Satıcı başvurusu yap",
       howItWorks: "Nasıl çalışır?",
@@ -6844,7 +6842,7 @@ const tr = {
       yearlyToggle: "Yıllık",
       monthlyToggle: "Aylık",
       comparison: "Karşılaştırma",
-      comparisonTitle: "Diğer pazaryerlerine göre iSTOC.",
+      comparisonTitle: "Diğer pazaryerlerine göre iStoc.",
       comparisonDesc: "Üretici penceresinden bakınca fark net görünüyor: daha düşük komisyon, sabit aidat yok, B2B'ye odaklı süreç.",
       globalB2bMarketplace: "Global B2B pazaryeri",
       internationalGeneral: "Uluslararası genel",
@@ -6865,7 +6863,7 @@ const tr = {
       dedicatedTurkishSupport: "Türkiye üreticisine özel destek",
       extraFee: "Ek ücret",
       restricted: "Kısıtlı",
-      comparisonDisclaimer: "* Rakip oranları kamuya açık fiyatlandırma sayfalarından alınmıştır (Mayıs 2026). iSTOC komisyonu kategori bazlıdır; tam liste başvuru sonrası paylaşılır.",
+      comparisonDisclaimer: "* Rakip oranları kamuya açık fiyatlandırma sayfalarından alınmıştır (Mayıs 2026). iStoc komisyonu kategori bazlıdır; tam liste başvuru sonrası paylaşılır.",
       finalCtaTitle: "Başvuru 4 dakikada biter.",
       finalCtaDesc: "Vergi numarası, üretim kategorisi ve bir iletişim — gerisini birlikte hallederiz. Onay süresi ortalama 2 iş günü.",
       letsTalkFirst: "Önce konuşalım",
@@ -6899,25 +6897,25 @@ const tr = {
       messageSendError: "Mesaj gönderilemedi. Lütfen tekrar deneyin.",
       messageSentSuccess: "Mesajınız başarıyla gönderildi!",
       sending: "Gönderiliyor...",
-      onIstocFor: "iSTOC'ta",
+      onIstocFor: "iStoc'ta",
       verificationSubtitle: "Güvenilir tedarikçi rozetinizi kazanın",
       verificationBenefitsTitle: "Doğrulama Avantajları",
-      verificationBenefitsP1: "iSTOC Doğrulanmış Tedarikçi rozeti, platformdaki güvenilirliğinizin en güçlü göstergesidir. Doğrulanmış tedarikçiler, arama sonuçlarında %40 daha fazla görünürlük elde eder ve alıcıların %78'i doğrulanmış tedarikçileri tercih etmektedir.",
+      verificationBenefitsP1: "iStoc Doğrulanmış Tedarikçi rozeti, platformdaki güvenilirliğinizin en güçlü göstergesidir. Doğrulanmış tedarikçiler, arama sonuçlarında %40 daha fazla görünürlük elde eder ve alıcıların %78'i doğrulanmış tedarikçileri tercih etmektedir.",
       verificationBenefitsP2: "Rozetiniz, mağaza profilinizde, ürün listelerinizde ve arama sonuçlarında belirgin şekilde görüntülenir. Alıcılar, doğrulanmış tedarikçilere daha yüksek güvenle sipariş verir; bu da dönüşüm oranınızı önemli ölçüde artırır. Ayrıca, doğrulanmış tedarikçilere özel kampanyalara ve vitrin alanlarına erişim hakkı kazanırsınız.",
-      verificationBenefitsP3: "Doğrulanmış tedarikçiler, iSTOC'un öncelikli destek hattından yararlanır, özel eğitim programlarına katılabilir ve iSTOC iş geliştirme etkinliklerinde ağırlıklı olarak yer alır.",
+      verificationBenefitsP3: "Doğrulanmış tedarikçiler, iStoc'un öncelikli destek hattından yararlanır, özel eğitim programlarına katılabilir ve iStoc iş geliştirme etkinliklerinde ağırlıklı olarak yer alır.",
       verificationRequirementsTitle: "Doğrulama Gereksinimleri",
       verificationRequirementsP1: "Doğrulama sürecine başvurmak için aşağıdaki temel belgelerin hazır olması gerekmektedir: güncel ticaret sicil gazetesi, vergi levhası, imza sirküleri, son 2 yıla ait bilanço ve gelir tablosu, üretim tesisi fotoğrafları ve faaliyet belgesi.",
-      verificationRequirementsP2: "Firmanızın en az 2 yıldır faaliyette olması, geçerli bir ticaret sicil kaydına sahip olması ve iSTOC platformunda en az 6 aydır aktif satıcı olarak kayıtlı bulunması gerekmektedir. Ayrıca, son 6 ayda müşteri memnuniyet puanınızın 4.0/5.0 üzerinde olması beklenmektedir.",
+      verificationRequirementsP2: "Firmanızın en az 2 yıldır faaliyette olması, geçerli bir ticaret sicil kaydına sahip olması ve iStoc platformunda en az 6 aydır aktif satıcı olarak kayıtlı bulunması gerekmektedir. Ayrıca, son 6 ayda müşteri memnuniyet puanınızın 4.0/5.0 üzerinde olması beklenmektedir.",
       verificationProcessTitle: "Başvuru Süreci",
-      verificationProcessP1: "Doğrulama başvurusu 4 basit adımda tamamlanır. İlk olarak, satıcı panelinizden \"Doğrulama Başvurusu\" bölümüne gidin ve çevrimiçi başvuru formunu doldurun. İkinci adımda, gerekli belgeleri sisteme yükleyin. Üçüncü adımda, iSTOC doğrulama ekibi belgelerinizi inceleyecek ve gerekirse ek bilgi talep edecektir.",
-      verificationProcessP2: "Dördüncü ve son adımda, Gelişmiş ve Premium doğrulama seviyeleri için iSTOC temsilcisi tarafından iş yerinize ziyaret gerçekleştirilir. Tüm süreç ortalama 10-15 iş günü içinde tamamlanır. Başvurunuzun durumunu satıcı panelinizden anlık olarak takip edebilirsiniz.",
+      verificationProcessP1: "Doğrulama başvurusu 4 basit adımda tamamlanır. İlk olarak, satıcı panelinizden \"Doğrulama Başvurusu\" bölümüne gidin ve çevrimiçi başvuru formunu doldurun. İkinci adımda, gerekli belgeleri sisteme yükleyin. Üçüncü adımda, iStoc doğrulama ekibi belgelerinizi inceleyecek ve gerekirse ek bilgi talep edecektir.",
+      verificationProcessP2: "Dördüncü ve son adımda, Gelişmiş ve Premium doğrulama seviyeleri için iStoc temsilcisi tarafından iş yerinize ziyaret gerçekleştirilir. Tüm süreç ortalama 10-15 iş günü içinde tamamlanır. Başvurunuzun durumunu satıcı panelinizden anlık olarak takip edebilirsiniz.",
       verificationLevelsTitle: "Doğrulama Seviyeleri",
       verificationLevelBasicLabel: "Temel Doğrulama:",
       verificationLevelBasicDesc: "Şirket tescil belgelerinin ve vergi mükellefiyet durumunun doğrulanması. Bu seviye, firmanızın yasal olarak faaliyet gösterdiğini teyit eder. Ücretsiz olarak sunulmaktadır.",
       verificationLevelAdvancedLabel: "Gelişmiş Doğrulama:",
       verificationLevelAdvancedDesc: "Temel doğrulamaya ek olarak, üretim kapasitesi değerlendirmesi ve yerinde denetim içerir. Fabrika ziyareti sırasında üretim hatları, kalite kontrol süreçleri ve depolama koşulları incelenir. Yıllık 2.990 TL doğrulama ücreti uygulanır.",
       verificationLevelPremiumLabel: "Premium Doğrulama:",
-      verificationLevelPremiumDesc: "En üst düzey güvenilirlik rozetidir. Gelişmiş doğrulamaya ek olarak, finansal sağlamlık analizi, müşteri referans kontrolü ve yıllık düzenli denetimler içerir. Premium doğrulanmış tedarikçiler, iSTOC'un en güvenilir iş ortakları olarak öne çıkarılır. Yıllık 7.990 TL doğrulama ücreti uygulanır.",
+      verificationLevelPremiumDesc: "En üst düzey güvenilirlik rozetidir. Gelişmiş doğrulamaya ek olarak, finansal sağlamlık analizi, müşteri referans kontrolü ve yıllık düzenli denetimler içerir. Premium doğrulanmış tedarikçiler, iStoc'un en güvenilir iş ortakları olarak öne çıkarılır. Yıllık 7.990 TL doğrulama ücreti uygulanır.",
     },
 
     // ============================================================
@@ -7132,7 +7130,7 @@ const tr = {
         custCard4Title: "Ambalajlama",
         custCard4Subtitle: "Profesyonel ambalaj",
         testimonial1Quote:
-          "istoc sayesinde tedarikçi bulma sürecimiz yarıya indi. Özellikle fiyat teklifi sistemi çok hızlı ve pratik. 3 ayda 12 yeni tedarikçi ile anlaşma sağladık.",
+          "iStoc sayesinde tedarikçi bulma sürecimiz yarıya indi. Özellikle fiyat teklifi sistemi çok hızlı ve pratik. 3 ayda 12 yeni tedarikçi ile anlaşma sağladık.",
         testimonial1Name: "Mehmet Kaya",
         testimonial1Title: "Satın Alma Müdürü",
         testimonial1Company: "Anadolu Tekstil A.Ş.",
@@ -7454,7 +7452,7 @@ const tr = {
   // ============================================================
   topDealsPage: {
     heroTitle: "En İyi Fırsatlar",
-    heroSubtitle: "istoc'ta en düşük fiyatları yakalayın",
+    heroSubtitle: "iStoc'ta en düşük fiyatları yakalayın",
     promoShipping: "Ücretsiz kargo $20'ye kadar",
     promoDays: "3 gün",
     tabAll: "Tümü",
@@ -7588,7 +7586,7 @@ const tr = {
 
     // Collection chips
     collectionLabel: "Koleksiyon",
-    chipIstocPicks: "istoc Seçimleri",
+    chipIstocPicks: "iStoc Seçimleri",
     chip48hShip: "48 Saat Kargo",
     chipHotSale: "Çok Satan",
     chipBranded: "Markalı",
@@ -8036,7 +8034,7 @@ const tr = {
     headerLocalTime: "Yerel Saat",
     online: "Çevrimiçi",
     securityBanner:
-      "Sipariş korumalarından yararlanmak için sohbet ve işlemlerinizi her zaman istoc üzerinden gerçekleştirin.",
+      "Sipariş korumalarından yararlanmak için sohbet ve işlemlerinizi her zaman iStoc üzerinden gerçekleştirin.",
     endToEndEncrypted: "Bu konuşma uçtan uca şifrelidir. Sadece siz ve satıcı görebilir.",
     typingIndicator: "{{name}} yazıyor",
     send: "Gönder",
@@ -8072,7 +8070,7 @@ const tr = {
       country: "Ülke",
       emailLabel: "E-posta",
       placeholderEmail: "ornek@firma.com",
-      verifiedBy: "istoc tarafından doğrulanan hesaplar:",
+      verifiedBy: "iStoc tarafından doğrulanan hesaplar:",
     },
     tabs: {
       chat: "Sohbet",

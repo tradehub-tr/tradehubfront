@@ -1,73 +1,73 @@
 const ru = {
   translation: {
     pageTitle: {
-      home: "istoc — Глобальный B2B маркетплейс",
-      auth_forgot_password: "Забыли пароль - iSTOC TradeHub",
-      auth_login: "Вход - iSTOC TradeHub",
-      auth_register: "Регистрация - iSTOC TradeHub",
-      auth_reset_password: "Сброс пароля - iSTOC TradeHub",
-      brand: "Бренд - iSTOC TradeHub",
-      cart: "Моя корзина - iSTOC TradeHub",
-      categories: "Категории - iSTOC TradeHub",
-      dashboard_addresses: "Мои адреса - iSTOC TradeHub",
-      dashboard_buyer_dashboard: "Панель покупателя - iSTOC TradeHub",
-      dashboard_contacts: "Мои контакты - iSTOC TradeHub",
-      dashboard_favorites: "Избранное - iSTOC TradeHub",
-      dashboard_inquiries: "Мои вопросы о товарах - iSTOC TradeHub",
-      dashboard_kyb: "Проверка документов - iSTOC TradeHub",
-      dashboard_kyc: "KYC-проверка - iSTOC TradeHub",
-      dashboard_messages: "Мои сообщения - iSTOC TradeHub",
-      dashboard_orders: "Мои заказы - iSTOC TradeHub",
-      dashboard_payment: "Оплата - iSTOC TradeHub",
-      dashboard_profile: "Мой профиль - iSTOC TradeHub",
-      dashboard_rfq_form: "Детали RFQ | iSTOC TradeHub",
-      dashboard_rfq_quotes: "Предложения RFQ | iSTOC TradeHub",
-      dashboard_rfq_success: "RFQ отправлен | iSTOC TradeHub",
-      dashboard_rfq: "RFQ — запрос цены | iSTOC TradeHub",
-      dashboard_settings: "Настройки аккаунта - iSTOC TradeHub",
-      dashboard_subscription: "Подписка - iSTOC TradeHub",
-      help_faq_detail: "Детали FAQ - iSTOC TradeHub Yardım Merkezi",
-      help_faq: "FAQ - iSTOC TradeHub Yardım Merkezi",
-      help_help_center: "Центр помощи - iSTOC TradeHub",
-      help_help_ticket_new: "Создать обращение - iSTOC TradeHub",
-      help_help_ticket: "Обращение в поддержку - iSTOC TradeHub",
-      help_help_tickets: "Мои обращения - iSTOC TradeHub",
-      info_after_sales: "Постпродажная защита - iSTOC TradeHub",
-      info_membership: "Программа членства - iSTOC TradeHub",
-      info_payments: "Безопасные и удобные платежи - iSTOC TradeHub",
-      info_refund_policy: "Политика возврата средств - iSTOC TradeHub",
-      info_shipping_logistics: "Доставка и логистика - iSTOC TradeHub",
-      info_trade_assurance_detail: "Детали Trade Assurance - iSTOC TradeHub",
-      legal_accessibility: "Доступность - iSTOC TradeHub",
-      legal_cookies: "Политика cookie - iSTOC TradeHub",
-      legal_distance_sales: "Договор дистанционной продажи - iSTOC TradeHub",
-      legal_ip: "Интеллектуальная собственность - iSTOC TradeHub",
-      legal_kvkk: "Уведомление о защите данных - iSTOC TradeHub",
-      legal_notice: "Правовое уведомление — istoc",
-      legal_privacy: "Политика конфиденциальности - iSTOC TradeHub",
-      legal_product_listing: "Политика размещения товаров - iSTOC TradeHub",
-      legal_returns: "Политика возврата - iSTOC TradeHub",
-      legal_terms: "Условия использования - iSTOC TradeHub",
-      manufacturers: "Производители - iSTOC",
-      order_checkout: "Оформление заказа - iSTOC TradeHub",
-      order_order_success: "Статус заказа - iSTOC TradeHub",
-      order_payment_failed: "Платёж не прошёл - iSTOC TradeHub",
-      order_payment_processing: "Обработка платежа - iSTOC TradeHub",
-      product_detail: "Детали товара - iSTOC TradeHub",
-      products: "Товары - iSTOC TradeHub",
-      seller_application_pending: "Статус заявки - iSTOC TradeHub",
-      seller_dashboard: "Панель продавца - iSTOC",
-      seller_sell_pricing: "Тарифы членства - iSTOC TradeHub",
-      seller_sell: "Стать продавцом - iSTOC TradeHub",
-      seller_seller_shop: "iSTOC TradeHub - Магазин",
-      seller_seller_storefront: "iSTOC TradeHub - Магазин продавца",
-      seller_supplier_setup: "Заявка поставщика - iSTOC TradeHub",
-      seller_verification: "Станьте проверенным поставщиком - iSTOC TradeHub",
-      tailored_selections: "Подборки для вас - iSTOC",
-      top_deals: "Лучшие предложения - iSTOC",
-      top_ranking_category: "Бестселлеры — категория | iSTOC",
-      top_ranking: "Топ рейтинг - iSTOC",
-      trade_assurance: "Trade Assurance - iSTOC TradeHub",
+      home: "iStoc — Глобальный B2B маркетплейс",
+      auth_forgot_password: "Забыли пароль - iStoc TradeHub",
+      auth_login: "Вход - iStoc TradeHub",
+      auth_register: "Регистрация - iStoc TradeHub",
+      auth_reset_password: "Сброс пароля - iStoc TradeHub",
+      brand: "Бренд - iStoc TradeHub",
+      cart: "Моя корзина - iStoc TradeHub",
+      categories: "Категории - iStoc TradeHub",
+      dashboard_addresses: "Мои адреса - iStoc TradeHub",
+      dashboard_buyer_dashboard: "Панель покупателя - iStoc TradeHub",
+      dashboard_contacts: "Мои контакты - iStoc TradeHub",
+      dashboard_favorites: "Избранное - iStoc TradeHub",
+      dashboard_inquiries: "Мои вопросы о товарах - iStoc TradeHub",
+      dashboard_kyb: "Проверка документов - iStoc TradeHub",
+      dashboard_kyc: "KYC-проверка - iStoc TradeHub",
+      dashboard_messages: "Мои сообщения - iStoc TradeHub",
+      dashboard_orders: "Мои заказы - iStoc TradeHub",
+      dashboard_payment: "Оплата - iStoc TradeHub",
+      dashboard_profile: "Мой профиль - iStoc TradeHub",
+      dashboard_rfq_form: "Детали RFQ | iStoc TradeHub",
+      dashboard_rfq_quotes: "Предложения RFQ | iStoc TradeHub",
+      dashboard_rfq_success: "RFQ отправлен | iStoc TradeHub",
+      dashboard_rfq: "RFQ — запрос цены | iStoc TradeHub",
+      dashboard_settings: "Настройки аккаунта - iStoc TradeHub",
+      dashboard_subscription: "Подписка - iStoc TradeHub",
+      help_faq_detail: "Детали FAQ - iStoc TradeHub Yardım Merkezi",
+      help_faq: "FAQ - iStoc TradeHub Yardım Merkezi",
+      help_help_center: "Центр помощи - iStoc TradeHub",
+      help_help_ticket_new: "Создать обращение - iStoc TradeHub",
+      help_help_ticket: "Обращение в поддержку - iStoc TradeHub",
+      help_help_tickets: "Мои обращения - iStoc TradeHub",
+      info_after_sales: "Постпродажная защита - iStoc TradeHub",
+      info_membership: "Программа членства - iStoc TradeHub",
+      info_payments: "Безопасные и удобные платежи - iStoc TradeHub",
+      info_refund_policy: "Политика возврата средств - iStoc TradeHub",
+      info_shipping_logistics: "Доставка и логистика - iStoc TradeHub",
+      info_trade_assurance_detail: "Детали Trade Assurance - iStoc TradeHub",
+      legal_accessibility: "Доступность - iStoc TradeHub",
+      legal_cookies: "Политика cookie - iStoc TradeHub",
+      legal_distance_sales: "Договор дистанционной продажи - iStoc TradeHub",
+      legal_ip: "Интеллектуальная собственность - iStoc TradeHub",
+      legal_kvkk: "Уведомление о защите данных - iStoc TradeHub",
+      legal_notice: "Правовое уведомление — iStoc",
+      legal_privacy: "Политика конфиденциальности - iStoc TradeHub",
+      legal_product_listing: "Политика размещения товаров - iStoc TradeHub",
+      legal_returns: "Политика возврата - iStoc TradeHub",
+      legal_terms: "Условия использования - iStoc TradeHub",
+      manufacturers: "Производители - iStoc",
+      order_checkout: "Оформление заказа - iStoc TradeHub",
+      order_order_success: "Статус заказа - iStoc TradeHub",
+      order_payment_failed: "Платёж не прошёл - iStoc TradeHub",
+      order_payment_processing: "Обработка платежа - iStoc TradeHub",
+      product_detail: "Детали товара - iStoc TradeHub",
+      products: "Товары - iStoc TradeHub",
+      seller_application_pending: "Статус заявки - iStoc TradeHub",
+      seller_dashboard: "Панель продавца - iStoc",
+      seller_sell_pricing: "Тарифы членства - iStoc TradeHub",
+      seller_sell: "Стать продавцом - iStoc TradeHub",
+      seller_seller_shop: "iStoc TradeHub - Магазин",
+      seller_seller_storefront: "iStoc TradeHub - Магазин продавца",
+      seller_supplier_setup: "Заявка поставщика - iStoc TradeHub",
+      seller_verification: "Станьте проверенным поставщиком - iStoc TradeHub",
+      tailored_selections: "Подборки для вас - iStoc",
+      top_deals: "Лучшие предложения - iStoc",
+      top_ranking_category: "Бестселлеры — категория | iStoc",
+      top_ranking: "Топ рейтинг - iStoc",
+      trade_assurance: "Trade Assurance - iStoc TradeHub",
     },
     p2g0: {
       categoryProductsAria: "Товары {{category}}",
@@ -82,7 +82,7 @@ const ru = {
       unknownError: "Неизвестная ошибка",
     },
     authAddr: {
-      istocHome: "Главная iSTOC",
+      istocHome: "Главная iStoc",
       promoHeadline: "Глобальная сеть B2B-торговли",
       promoSubtitle: "Маркетплейс B2B нового поколения с безопасными платежами, проверенными продавцами и прозрачной комиссией.",
       featSecure: "Безопасно",
@@ -199,7 +199,7 @@ const ru = {
     },
     checkoutMfr: {
       goToStore: "Перейти в магазин {{name}}",
-      securePaymentNote: "Оплата безопасно проводится через платформу; заказ направляется поставщикам под гарантией iSTOC.",
+      securePaymentNote: "Оплата безопасно проводится через платформу; заказ направляется поставщикам под гарантией iStoc.",
       removeCoupon: "Удалить купон",
       preInfoAndDistanceSalesContract: "Форму предварительного уведомления и Договор дистанционной продажи",
       readAndAccept: "я прочитал(а) и принимаю.",
@@ -234,7 +234,7 @@ const ru = {
       percentAndAbove: "{{value}}% и выше",
       hoursOrLess: "≤ {{count}} ч",
       supplierFilters: "Фильтры поставщиков",
-      yearsOnPlatform: "Лет на iSTOC",
+      yearsOnPlatform: "Лет на iStoc",
       onTimeDelivery: "Своевременная доставка",
       responseTime: "Время ответа",
       reorderRate: "Доля повторных заказов",
@@ -407,16 +407,16 @@ const ru = {
     },
     infoMisc: {
       membershipProgram: "Программа членства",
-      membershipSubtitle: "Преимущества членства iSTOC и эксклюзивные предложения",
+      membershipSubtitle: "Преимущества членства iStoc и эксклюзивные предложения",
       membershipTiersTitle: "Уровни членства",
-      membershipTiersP1: "<strong>Бесплатное членство:</strong> Каждый пользователь, зарегистрировавшийся на платформе iSTOC, автоматически получает базовые преимущества членства. Бесплатное членство включает неограниченный поиск товаров, общение с поставщиками, базовую защиту покупателя и 5 запросов на коммерческое предложение (RFQ) в месяц.",
+      membershipTiersP1: "<strong>Бесплатное членство:</strong> Каждый пользователь, зарегистрировавшийся на платформе iStoc, автоматически получает базовые преимущества членства. Бесплатное членство включает неограниченный поиск товаров, общение с поставщиками, базовую защиту покупателя и 5 запросов на коммерческое предложение (RFQ) в месяц.",
       membershipTiersP2: "<strong>Премиум-членство:</strong> Премиум-членство, предлагаемое за 499 TL в месяц, предназначено для тех, кто хочет увеличить объём торговли. Вы можете воспользоваться неограниченными RFQ, приоритетной поддержкой клиентов, расширенными аналитическими отчётами, эксклюзивными купонами на скидки и VIP-доступом к поставщикам.",
       membershipTiersP3: "<strong>Корпоративное членство:</strong> Корпоративное членство, предлагаемое по индивидуальным ценам для крупного бизнеса, включает выделенного менеджера по работе с клиентами, доступ к API, управление несколькими пользователями, поддержку индивидуальной интеграции и ежегодную стратегическую консультацию в дополнение ко всем функциям Премиум.",
       membershipBenefitsTitle: "Преимущества членства",
-      membershipBenefitsP1: "Программа членства iSTOC поддерживает вашу B2B-торговлю во всех аспектах. Премиум- и Корпоративные участники получают эксклюзивные скидки от 3% до 8% на товары по всей платформе. Вы также получаете ранний доступ к сезонным кампаниям и уведомления об эксклюзивных предложениях.",
+      membershipBenefitsP1: "Программа членства iStoc поддерживает вашу B2B-торговлю во всех аспектах. Премиум- и Корпоративные участники получают эксклюзивные скидки от 3% до 8% на товары по всей платформе. Вы также получаете ранний доступ к сезонным кампаниям и уведомления об эксклюзивных предложениях.",
       membershipBenefitsP2: "По мере повышения вашего уровня членства расширяется доступ к отчётам о качестве поставщиков, инструментам анализа рынка и данным конкурентной разведки. Премиум-участники могут бесплатно пользоваться услугой профессиональной проверки качества дважды в год. Корпоративные участники имеют неограниченное право на проверки.",
       membershipPricingTitle: "Цены",
-      membershipPricingP1: "Планы членства iSTOC предлагают гибкие варианты ценообразования для любого бюджета. При выборе годовой оплаты вы экономите 20% по сравнению с месячным планом. Для всех планов доступен 14-дневный бесплатный пробный период; в течение этого срока плата не взимается.",
+      membershipPricingP1: "Планы членства iStoc предлагают гибкие варианты ценообразования для любого бюджета. При выборе годовой оплаты вы экономите 20% по сравнению с месячным планом. Для всех планов доступен 14-дневный бесплатный пробный период; в течение этого срока плата не взимается.",
       membershipPricingP2: "Бесплатный план: 0 TL/месяц | Премиум-план: 499 TL/месяц (399 TL/месяц при годовой оплате) | Корпоративный план: индивидуальные цены (свяжитесь с нашим отделом продаж). Все цены включают НДС. Вы можете изменить план в любое время, а оставшийся период пропорционально переносится на новый план.",
       membershipUpgradeTitle: "Повышение членства",
       membershipUpgradeP1: "Повысить уровень членства предельно просто. Перейдите в раздел «План членства» в настройках аккаунта, выберите нужный план и введите платёжные данные. Повышение вступает в силу немедленно, и вы сразу начинаете пользоваться новыми преимуществами.",
@@ -426,7 +426,7 @@ const ru = {
       tradeAssurance: "Торговая гарантия",
       afterSalesSupport: "Послепродажная поддержка",
       afterSalesFeaturesTitle: "Что мы предлагаем вам после заказа?",
-      afterSalesFeaturesIntro: "iSTOC предоставляет основные инструменты, делающие процесс купли-продажи прозрачным и безопасным. Вы можете продолжать получать поддержку на платформе даже после завершения заказа.",
+      afterSalesFeaturesIntro: "iStoc предоставляет основные инструменты, делающие процесс купли-продажи прозрачным и безопасным. Вы можете продолжать получать поддержку на платформе даже после завершения заказа.",
       sellerRatingTitle: "Система оценки продавцов",
       sellerRatingDesc: "Вы можете оценить полученный товар и услугу от 1 до 5 звёзд и оставить отзыв. Ваши отзывы помогают другим покупателям и формируют качество продавцов.",
       directContactTitle: "Прямая связь с продавцом",
@@ -480,7 +480,7 @@ const ru = {
       shippingHeroTitle: "Услуги доставки и логистики",
       shippingHeroSubtitle: "Отслеживайте заказ с уверенностью и выбирайте наиболее подходящий способ доставки",
       shippingTypesTitle: "Типы доставки",
-      shippingTypesIntro: "Договариваясь с продавцами на iSTOC, вы можете выбрать тип доставки, подходящий для вашего заказа. У каждого типа доставки разные сроки и структура стоимости.",
+      shippingTypesIntro: "Договариваясь с продавцами на iStoc, вы можете выбрать тип доставки, подходящий для вашего заказа. У каждого типа доставки разные сроки и структура стоимости.",
       shippingExpressTitle: "Экспресс-доставка",
       shippingExpressDesc: "Самый быстрый вариант доставки для срочных заказов. Предпочтителен в пределах города и близлежащих районов.",
       shippingAirTitle: "Авиаперевозки",
@@ -502,7 +502,7 @@ const ru = {
       trackingPara2: "На странице «Мои заказы» вы можете видеть текущий статус каждого заказа и отслеживать процесс с момента отправки до получения.",
       trackingAutoNote: "Трек-номер автоматически отображается в деталях заказа",
       orderProcessTitle: "Как работает процесс заказа?",
-      orderProcessIntro: "Вы можете отслеживать каждый этап заказа в панели iSTOC. Вот типичный ход заказа:",
+      orderProcessIntro: "Вы можете отслеживать каждый этап заказа в панели iStoc. Вот типичный ход заказа:",
       timelineStep1Title: "Ожидание оплаты",
       timelineStep1Desc: "После создания заказа вы выбираете способ оплаты и завершаете операцию.",
       timelineStep2Title: "Подтверждается",
@@ -514,12 +514,12 @@ const ru = {
       paymentsHeroAlt: "Безопасная оплата",
       paymentsHeroTitle: "Безопасные и гибкие способы оплаты",
       paymentsHeroSubtitle: "Простые, прозрачные B2B-платежи",
-      paymentsSafetyTitle: "Как iSTOC обеспечивает безопасность ваших платежей?",
-      paymentsSafetyIntro: "Все платежи, совершённые через iSTOC, управляются платформой и отслеживаются в рамках процесса заказа.",
+      paymentsSafetyTitle: "Как iStoc обеспечивает безопасность ваших платежей?",
+      paymentsSafetyIntro: "Все платежи, совершённые через iStoc, управляются платформой и отслеживаются в рамках процесса заказа.",
       paymentsSafetyWarning: "Чтобы защитить свой платёж, никогда не платите вне платформы.",
       paymentsMethodsTitle: "Поддерживаемые способы оплаты",
       paymentBankTransferTitle: "Банковский перевод",
-      paymentBankTransferDesc: "Завершите заказ переводом на официальный банковский счёт iSTOC. После перевода загрузите квитанцию через платформу, чтобы подтвердить оплату.",
+      paymentBankTransferDesc: "Завершите заказ переводом на официальный банковский счёт iStoc. После перевода загрузите квитанцию через платформу, чтобы подтвердить оплату.",
       paymentBankTransferTag: "Поддержка загрузки квитанции",
       paymentEftTitle: "ЭПС / Денежный перевод",
       paymentEftDesc: "Быстро завершите заказ с помощью мгновенного электронного перевода средств. Дата операции, сумма и данные отправителя автоматически фиксируются в деталях заказа.",
@@ -531,10 +531,10 @@ const ru = {
       paymentInstallmentDesc: "Вариант оплаты в рассрочку, согласованный напрямую с продавцом. Для крупнообъёмных заказов вы можете составить план рассрочки с продавцом.",
       paymentInstallmentTag: "План, согласованный с продавцом",
       currencyBannerTitle: "Покупка и продажа в 5 разных валютах",
-      currencyBannerDesc: "На iSTOC вы можете платить и продавать в турецких лирах (TRY), долларах США (USD), евро (EUR), британских фунтах (GBP) и китайских юанях (CNY).",
+      currencyBannerDesc: "На iStoc вы можете платить и продавать в турецких лирах (TRY), долларах США (USD), евро (EUR), британских фунтах (GBP) и китайских юанях (CNY).",
       paymentProcessTitle: "Как работает процесс оплаты?",
       paymentProcessStep1Title: "Найдите поставщика и создайте заказ",
-      paymentProcessStep1Desc: "Выберите товар на iSTOC, договоритесь с поставщиком и начните заказ. Для готовых товаров переходите напрямую, а для индивидуального производства уточните детали в переписке с поставщиком.",
+      paymentProcessStep1Desc: "Выберите товар на iStoc, договоритесь с поставщиком и начните заказ. Для готовых товаров переходите напрямую, а для индивидуального производства уточните детали в переписке с поставщиком.",
       paymentProcessStep2Title: "Выберите способ оплаты",
       paymentProcessStep2Desc: "Выберите подходящий вариант: банковский перевод, ЭПС, чек/вексель или прямую рассрочку. Также установите валюту (TRY, USD, EUR, GBP, CNY) в соответствии с вашими потребностями.",
       paymentProcessStep3Title: "Совершите оплату и загрузите квитанцию",
@@ -997,21 +997,21 @@ const ru = {
       retry: "Повторить",
     },
     tradeAssurance: {
-      heroTitle: "Воспользуйтесь защитой от оплаты до доставки на iSTOC",
+      heroTitle: "Воспользуйтесь защитой от оплаты до доставки на iStoc",
       howItWorksCta: "Вот как это работает:",
       serviceInfoTitle: "Trade Assurance охватывает каждый этап вашего пути покупки",
-      serviceInfoDesc: "Мы предоставляем покупателям на iSTOC возможность безопасной оплаты, обеспечиваем защиту от непредвиденных ситуаций, таких как проблемы с товаром или доставкой, и выступаем посредниками между покупателями и поставщиками для решения проблем, связанных с покупкой.",
+      serviceInfoDesc: "Мы предоставляем покупателям на iStoc возможность безопасной оплаты, обеспечиваем защиту от непредвиденных ситуаций, таких как проблемы с товаром или доставкой, и выступаем посредниками между покупателями и поставщиками для решения проблем, связанных с покупкой.",
       watchMore: "Смотрите, чтобы узнать больше",
       statOrders: "Заказы Trade Assurance",
       statBought: "Куплено у нас",
       statSuppliers: "Поставщики",
       statProducts: "Товары",
-      howProtectTitle: "Как мы защищаем ваши платежи на iSTOC?",
+      howProtectTitle: "Как мы защищаем ваши платежи на iStoc?",
       howProtectIntro: "Trade Assurance делает ведение бизнеса по всему миру проще и безопаснее как для покупателей, так и для продавцов. Вот как это работает:",
       step1Title: "Начните заказ Trade Assurance",
-      step1Desc: "Вы заключили соглашение о заказе с поставщиком на iSTOC.",
-      step2Title: "Оплатите через iSTOC",
-      step2Desc: "Купите с помощью онлайн-способа оплаты или сделайте банковский перевод через iSTOC.",
+      step1Desc: "Вы заключили соглашение о заказе с поставщиком на iStoc.",
+      step2Title: "Оплатите через iStoc",
+      step2Desc: "Купите с помощью онлайн-способа оплаты или сделайте банковский перевод через iStoc.",
       step3Title: "Платёж временно удерживается",
       step3Desc: "Ваш платёж удерживается на эскроу-счёте. Он будет переведён поставщику после того, как вы получите и подтвердите товар.",
       step4Title: "Верните деньги, если условия заказа не выполнены",
@@ -1022,7 +1022,7 @@ const ru = {
       coverageShipping: "Услуги доставки и логистики",
       coverageAfterSales: "Послепродажная защита",
       paymentsTitle: "Безопасные и разнообразные способы оплаты",
-      paymentsDesc1: "Каждый платёж, который вы совершаете через iSTOC, зашифрован, безопасен и обрабатывается всего за 2 часа.",
+      paymentsDesc1: "Каждый платёж, который вы совершаете через iStoc, зашифрован, безопасен и обрабатывается всего за 2 часа.",
       paymentsDesc2: "Мы поддерживаем известные и надёжные способы оплаты, включая кредитные/дебетовые карты, цифровые кошельки, прямые банковские переводы и гибкие планы оплаты*.",
       sourceProducts: "Найдите поддерживаемые товары",
       learnHow: "Узнайте, как это работает",
@@ -1035,19 +1035,19 @@ const ru = {
       here: "здесь",
       clickSuffix: "нажмите",
       shippingDesc1: "Получите заказ в запланированную дату или компенсацию за задержку.",
-      shippingDesc2: "С iSTOC Logistics вы можете воспользоваться надёжностью нашей логистической сети и отслеживать отправление в режиме реального времени во многих странах и регионах мира.",
+      shippingDesc2: "С iStoc Logistics вы можете воспользоваться надёжностью нашей логистической сети и отслеживать отправление в режиме реального времени во многих странах и регионах мира.",
       logisticsAlt: "Логистика и доставка",
       afterSalesDesc: "Для подходящих товаров мы доставим сервис к вашей двери с услугами установки на месте, обслуживания, ремонта и бесплатных запасных частей.",
       testimonialsTitle: "Отзывы покупателей",
       testimonialsIntro: "Узнайте, какие преимущества Trade Assurance даёт таким же людям, как вы.",
       testimonial1: "«Осознание того, что и поставщик, и я защищены на протяжении всей сделки, успокаивает меня.»",
       testimonial2: "«Поскольку вы используете Trade Assurance и знаете, что защищены, беспокоиться не о чем.»",
-      testimonial3: "«Оплата через iSTOC ощущается очень безопасной; эскроу-система — настоящая гарантия для покупателей.»",
+      testimonial3: "«Оплата через iStoc ощущается очень безопасной; эскроу-система — настоящая гарантия для покупателей.»",
       testimonial4: "«Послепродажная поддержка и быстрый процесс возврата значительно превзошли наши ожидания.»",
       detailHeroTitle: "Безопасная торговля с системой Trade Assurance",
       detailHeroDesc: "Обеспечивая доверие и прозрачность на каждом этапе ваших сделок, мы помогаем вам строить долгосрочные деловые партнёрства.",
       detailServiceTitle: "Trade Assurance охватывает каждый этап вашего пути покупки",
-      detailServiceDesc: "Система Trade Assurance от iSTOC составляет основу беспрепятственной торговли между покупателями и продавцами. Благодаря безопасной оплате, беспристрастным механизмам разрешения споров и сквозному отслеживанию мы обеспечиваем защиту от непредвиденных ситуаций.",
+      detailServiceDesc: "Система Trade Assurance от iStoc составляет основу беспрепятственной торговли между покупателями и продавцами. Благодаря безопасной оплате, беспристрастным механизмам разрешения споров и сквозному отслеживанию мы обеспечиваем защиту от непредвиденных ситуаций.",
       tradeAssuranceLabel: "Trade Assurance",
       featureDigitalPaymentTitle: "Цифровые платёжные каналы",
       featureDigitalPaymentDesc: "Быстрые и безопасные операции с несколькими способами оплаты.",
@@ -1063,7 +1063,7 @@ const ru = {
       featureNeutralResolutionDesc: "Беспристрастный арбитражный механизм для споров.",
       detailProcessIntro: "Trade Assurance делает сделки между покупателями и продавцами проще и безопаснее для обеих сторон. Вот как это работает:",
       detailStep1Title: "Начните заказ Trade Assurance",
-      detailStep1Desc: "Вы заключили соглашение о заказе с поставщиком на iSTOC. Поставщик подтверждает ваш заказ и начинает подготовку товара.",
+      detailStep1Desc: "Вы заключили соглашение о заказе с поставщиком на iStoc. Поставщик подтверждает ваш заказ и начинает подготовку товара.",
       detailStep2Desc: "Оплачивайте безопасно с помощью кредитной карты, прямого дебета или банковского перевода. Все платежи защищены SSL-шифрованием.",
       detailStep3Title: "Платёж удерживается на эскроу-счёте",
       detailStep3Desc: "Ваш платёж удерживается на эскроу-счёте до тех пор, пока товар не будет доставлен и подтверждён. Это обеспечивает гарантию для обеих сторон.",
@@ -1077,14 +1077,14 @@ const ru = {
       cardAgentTitle: "Персональный представитель",
       cardAgentDesc: "Персональный представитель отслеживает процесс за вас, пока ваш заказ не будет полностью завершён.",
       fullAssuranceTitle: "Полная гарантия",
-      cardFullAssuranceDesc: "Все этапы от производства до доставки контролируются командой iSTOC; в случае сбоя вступает в действие беспристрастный арбитраж.",
+      cardFullAssuranceDesc: "Все этапы от производства до доставки контролируются командой iStoc; в случае сбоя вступает в действие беспристрастный арбитраж.",
       howSystemWorksTitle: "Как работает система?",
       howSystemWorksIntro: "Система Trade Assurance предлагает двухуровневую защиту в зависимости от типа вашего заказа.",
       layer1Title: "Гарантия платежа",
       layer1Desc1: "Платёж покупателя удерживается до тех пор, пока товар не будет доставлен.",
       layer1Desc2: "После полного завершения заказа деньги переводятся продавцу. Это применяется автоматически ко всем стандартным заказам.",
       layer2Desc: "Для заказов на изготовление по индивидуальному заказу или печатных товаров обеспечивается более комплексная защита. Система гарантирует следующее:",
-      layer2Item1: "Отслеживание всех этапов от подготовки товара до отправки командой iSTOC",
+      layer2Item1: "Отслеживание всех этапов от подготовки товара до отправки командой iStoc",
       layer2Item2: "Полная и безупречная доставка клиенту",
       layer2Item3: "Проверка точности товара, контроль качества и контроль своевременной доставки",
       layer2Item4: "Поддержка установки товара и отгрузки при необходимости",
@@ -1230,7 +1230,7 @@ const ru = {
       buyerCentral: "Центр покупателя",
       helpCenter: "Центр помощи",
       appExtension: "Приложение и расширение",
-      sellOnIstoc: "Продавать на istoc",
+      sellOnIstoc: "Продавать на iStoc",
     },
 
     // ============================================================
@@ -1242,7 +1242,7 @@ const ru = {
       manufacturers: "Производители",
       worldwide: "По всему миру",
       placeholder: "Текстиль и одежда",
-      welcomeIstoc: "Добро пожаловать на istoc",
+      welcomeIstoc: "Добро пожаловать на iStoc",
       rfq: "Запрос на предложение цены",
       topRanking: "Топ рейтинга",
       fastCustomization: "Быстрая кастомизация",
@@ -1263,11 +1263,11 @@ const ru = {
       campaigns: "Акции",
       campaignsDesc: "Предложения, скидки, акции",
       brands: "Бренды",
-      brandsDesc: "Официально зарегистрированные бренды на istoc",
+      brandsDesc: "Официально зарегистрированные бренды на iStoc",
       sellers: "Продавцы",
-      sellersDesc: "Просматривайте продавцов на маркетплейсе istoc",
-      b2bMarketplace: "B2B-маркетплейс istoc",
-      b2bDesc: "Узнайте, как продавать на istoc",
+      sellersDesc: "Просматривайте продавцов на маркетплейсе iStoc",
+      b2bMarketplace: "B2B-маркетплейс iStoc",
+      b2bDesc: "Узнайте, как продавать на iStoc",
     },
 
     // ============================================================
@@ -1309,7 +1309,7 @@ const ru = {
       tradeAssuranceLead:
         "Продолжайте торговать на надёжной инфраструктуре, которая объединяет покупателей и продавцов.",
       tradeAssuranceHowItWorks: "Как это работает?",
-      whyIstoc: "Почему istoc",
+      whyIstoc: "Почему iStoc",
       howSourcing: "Как работает закупка",
       membershipProgram: "Программа членства",
       tradeServices: "Торговые услуги",
@@ -1325,20 +1325,20 @@ const ru = {
       overview: "Обзор",
       meetPeers: "Познакомьтесь с коллегами",
       ecommerceAcademy: "Академия электронной коммерции",
-      howToSource: "Как закупать на istoc",
+      howToSource: "Как закупать на iStoc",
       forBuyers: "Для покупателей",
       forSuppliers: "Для поставщиков",
       openDispute: "Открыть спор",
       reportIpr: "Сообщить о нарушении прав интеллектуальной собственности",
       reportAbuse: "Сообщить о нарушении",
-      getApp: "Скачать приложение istoc",
+      getApp: "Скачать приложение iStoc",
       appDesc:
-        "Находите товары, общайтесь с поставщиками, управляйте заказами и оплачивайте их с помощью приложения istoc в любое время и в любом месте.",
+        "Находите товары, общайтесь с поставщиками, управляйте заказами и оплачивайте их с помощью приложения iStoc в любое время и в любом месте.",
       downloadOn: "Скачать в",
       appStore: "App Store",
       getItOn: "ДОСТУПНО В",
       googlePlay: "Google Play",
-      discoverLens: "Откройте для себя istoc Lens",
+      discoverLens: "Откройте для себя iStoc Lens",
       lensDesc:
         "Используйте это расширение для поиска по изображению, чтобы находить и сравнивать похожие товары с оптовыми ценами и опциями кастомизации в любом месте в интернете.",
       addToChrome: "Добавить в Chrome",
@@ -1373,7 +1373,7 @@ const ru = {
       personalSelectionsDesc: "Рекомендации на основе ваших заказов",
       bestDeals: "Лучшие предложения",
       bestDealsDesc: "Ограниченные по времени скидки на оптовые закупки",
-      sellOnIstoc: "Продавать на istoc",
+      sellOnIstoc: "Продавать на iStoc",
       sellOnIstocDesc: "Станьте продавцом, разместите свои товары",
       suppliers: "Поставщики",
       findSuppliers: "Найти поставщиков",
@@ -1404,12 +1404,12 @@ const ru = {
       onTimeShipping: "Своевременная доставка",
       afterSales: "Послепродажная защита",
       productMonitoring: "Услуги контроля товаров",
-      sourceOnIstoc: "Закупать на istoc",
+      sourceOnIstoc: "Закупать на iStoc",
       rfq: "Запрос на предложение цены",
       membership: "Программа членства",
       salesTax: "Налог с продаж и НДС",
-      istocReads: "istoc Reads",
-      sellOnIstoc: "Продавать на istoc",
+      istocReads: "iStoc Reads",
+      sellOnIstoc: "Продавать на iStoc",
       startSelling: "Начать продавать",
       sellerCentral: "Центр продавца",
       verifiedSupplier: "Стать проверенным поставщиком",
@@ -1420,8 +1420,7 @@ const ru = {
       newsCenter: "Центр новостей",
       careers: "Карьера",
       stayConnected: "Оставайтесь на связи",
-      operatedBy: 'istoc (произносится "аысток") управляется Thoptan Ltd. (Великобритания).',
-      copyright: "© 2026 Thoptan Ltd. Все права защищены.",
+      copyright: "© 2026 iStoc Private Company Limited. Все права защищены.",
       legalNotice: "Правовая информация",
       privacyPolicy: "Политика конфиденциальности",
       productListing: "Политика размещения товаров",
@@ -1446,13 +1445,13 @@ const ru = {
         forgotPassword: "Забыли пароль?",
         continue: "Продолжить",
         or: "ИЛИ",
-        newUser: "Впервые на istoc?",
+        newUser: "Впервые на iStoc?",
         createAccount: "Создать аккаунт",
         qrLogin: "Войти с помощью QR-кода",
         submit: "Войти",
         invalidCredentials: "Неверный email или пароль",
         accountDisabled:
-          "Ваш аккаунт деактивирован. Пожалуйста, обратитесь в службу поддержки istoc для его повторной активации.",
+          "Ваш аккаунт деактивирован. Пожалуйста, обратитесь в службу поддержки iStoc для его повторной активации.",
         "2faRequired": "Требуется двухфакторная аутентификация",
         emailVerified: "Ваш email успешно подтверждён. Теперь вы можете войти.",
         emailVerificationFailed:
@@ -1471,7 +1470,7 @@ const ru = {
         emailError: "Введите действительный адрес электронной почты",
         emailExistsError: "Этот email уже зарегистрирован. Попробуйте войти или сбросить пароль.",
         emailExistsSupplier:
-          "Этот email уже зарегистрирован. Чтобы стать поставщиком, войдите и подайте заявку на странице «Продавать на istoc».",
+          "Этот email уже зарегистрирован. Чтобы стать поставщиком, войдите и подайте заявку на странице «Продавать на iStoc».",
         loginLink: "Войти",
         emailDisabledError:
           "Этот аккаунт был удалён. Пожалуйста, зарегистрируйтесь с другим адресом электронной почты.",
@@ -1682,7 +1681,7 @@ const ru = {
       subtotalExTax: "Промежуточный итог (без налога)",
       youSaved: "Вы сэкономили {{amount}} на заказе",
       checkout: "Оформление заказа",
-      orderProtection: "Защита заказа istoc",
+      orderProtection: "Защита заказа iStoc",
       securePayment: "Безопасная оплата",
       securePaymentDesc: "Каждый платёж надёжен и безопасен",
       easyReturns: "Лёгкий возврат",
@@ -1842,7 +1841,7 @@ const ru = {
       placeOrder: "Оформить заказ",
       payeeLabel: "Получатель платежа",
       orderTerms:
-        "Нажимая выше, вы соглашаетесь с Условиями использования и Политикой конфиденциальности istoc",
+        "Нажимая выше, вы соглашаетесь с Условиями использования и Политикой конфиденциальности iStoc",
       securePayments: "Безопасные платежи",
       guaranteedDelivery: "Гарантированная доставка",
       moneyBackProtection: "Защита с возвратом денег",
@@ -1920,8 +1919,8 @@ const ru = {
       dataProtection: "Защита данных",
       support247: "Круглосуточная поддержка",
       moneyBackProtection: "Гарантия возврата денег",
-      orderProtectionSectionDesc: "Бесплатно в рамках этой программы защищаются только заказы, оформленные и оплаченные через istoc.",
-      orderProtectionSection: "Защита заказов istoc",
+      orderProtectionSectionDesc: "Бесплатно в рамках этой программы защищаются только заказы, оформленные и оплаченные через iStoc.",
+      orderProtectionSection: "Защита заказов iStoc",
       processingTimeNote: "Стоимость доставки и дата поставки согласовываются с поставщиком. Свяжитесь с поставщиком сразу.",
       deliveryAddressLabel: "Адрес доставки",
       processingTime: "Время обработки",
@@ -2056,7 +2055,7 @@ const ru = {
       shippingLabel: "Доставка",
       shippingCost: "Доставка: {{cost}} · {{days}}",
       changeLabel: "Изменить",
-      orderProtectionTitle: "Защита заказа istoc",
+      orderProtectionTitle: "Защита заказа iStoc",
       securePaymentTitle: "Безопасная оплата",
       securePaymentDesc: "Платежи защищены при любом способе оплаты",
       moneyBackTitle: "Защита возврата средств",
@@ -2131,7 +2130,7 @@ const ru = {
       continueFacebook: "Продолжить с Facebook",
       continueLinkedin: "Продолжить с LinkedIn",
       continueEmail: "Продолжить по электронной почте",
-      newToTradehub: "Впервые на istoc?",
+      newToTradehub: "Впервые на iStoc?",
       createAccount: "Создать аккаунт",
       qrLogin: "Войти по QR-коду",
       orDivider: "ИЛИ",
@@ -2151,7 +2150,7 @@ const ru = {
       companyProfile: "Профиль компании",
       otherProducts: "Другие товары",
       verifiedSupplier: "Проверенный поставщик",
-      verifiedWithIstoc: "Проверено istoc",
+      verifiedWithIstoc: "Проверено iStoc",
       safePayments: "Безопасные платежи",
       returnPolicy: "Политика возврата",
       option: "Вариант",
@@ -2205,7 +2204,7 @@ const ru = {
       filterSearch: "Поиск",
       filterClearAll: "Очистить все фильтры",
       filterCertDisclaimer:
-        "*Отказ от ответственности по сертификатам: любая оценка, сертификация, инспекция и/или связанная с ними проверка подлинности сертификатов предоставляются или проводятся независимыми третьими сторонами без участия istoc.",
+        "*Отказ от ответственности по сертификатам: любая оценка, сертификация, инспекция и/или связанная с ними проверка подлинности сертификатов предоставляются или проводятся независимыми третьими сторонами без участия iStoc.",
       filterLearnMore: "Узнать больше",
       filterOk: "ОК",
       filterApply: "Поиск",
@@ -2278,7 +2277,7 @@ const ru = {
       transactions: "Транзакции",
       bankAccounts: "Банковские счета",
       wireTransfer: "Отслеживание банковских переводов",
-      istocCard: "Карта istoc",
+      istocCard: "Карта iStoc",
       payLater: "Оплата позже для бизнеса",
       savedHistory: "Сохранённое и история",
       myFavorites: "Моё избранное",
@@ -2303,7 +2302,7 @@ const ru = {
       couponsLabel: "Купоны",
       validateTax: "Подтвердите аккаунт для статуса освобождения от налогов",
       verifyBusiness: "Подтвердить информацию о бизнесе",
-      personalizeExp: "Персонализируйте ваш опыт работы с istoc",
+      personalizeExp: "Персонализируйте ваш опыт работы с iStoc",
       completeProfile: "Заполните ваш профиль",
       completeProfileDesc:
         "Заполните профиль компании, чтобы получать лучшие предложения от поставщиков",
@@ -2372,7 +2371,7 @@ const ru = {
       emailVerifiedSuccess: "Ваш адрес электронной почты подтверждён.",
       notifVerifyTaxStatus: "Подтвердите аккаунт для статуса освобождения от налогов",
       notifVerifyBusiness: "Подтвердить информацию о бизнесе",
-      notifPersonalizeExperience: "Персонализируйте ваш опыт работы с istoc.com",
+      notifPersonalizeExperience: "Персонализируйте ваш опыт работы с iStoc.com",
       notifCompleteProfile: "Заполните ваш профиль",
       notifFillCompanyProfile:
         "Заполните профиль компании, чтобы получать лучшие предложения от поставщиков",
@@ -2398,7 +2397,7 @@ const ru = {
       inbox: "Входящие",
       allMessages: "Все сообщения",
       feedbackBanner: "Поделитесь с нами своим опытом общения.",
-      emptyStateText: "Наслаждайтесь приятным шопингом, общаясь и торгуя на istoc",
+      emptyStateText: "Наслаждайтесь приятным шопингом, общаясь и торгуя на iStoc",
       typePlaceholder: "Введите ваше сообщение...",
       sendTip: "Нажмите Enter для отправки · Shift+Enter для новой строки",
       send: "Отправить",
@@ -2413,7 +2412,7 @@ const ru = {
       me: "Я",
       previewRfqReply: "[Предложение цены] Поставщик ответил на ваш RFQ",
       previewWelcome:
-        "Впервые на istoc.com? Откройте для себя наши расширенные услуги для поставщиков",
+        "Впервые на iStoc.com? Откройте для себя наши расширенные услуги для поставщиков",
       learnMore: "Подробнее",
       // Chat messages
       conv1m1:
@@ -2432,7 +2431,7 @@ const ru = {
       conv3m1: "Здравствуйте, хотели бы вы получить информацию о наших текстильных товарах?",
       conv3m2: "Да, могу ли я получить информацию о ценах на хлопковую ткань?",
       conv4m1:
-        "Добро пожаловать на istoc.com! Откройте для себя наши расширенные услуги для поставщиков. Торгуйте безопасно с Trade Assurance.",
+        "Добро пожаловать на iStoc.com! Откройте для себя наши расширенные услуги для поставщиков. Торгуйте безопасно с Trade Assurance.",
     },
 
     // ============================================================
@@ -2733,7 +2732,7 @@ const ru = {
       yourPaymentAmount: "Сумма вашего платежа",
       orderTermsNote:
         "Условия заказа регулируются подписанным договором. Пожалуйста, внимательно проверьте ваш заказ.",
-      onlinePaymentProtected: "Онлайн-оплата защищена istoc Trade Assurance.",
+      onlinePaymentProtected: "Онлайн-оплата защищена iStoc Trade Assurance.",
       // FAQ
       whatIsSalesTax: "Что такое налог с продаж?",
       whatIsSalesTaxAnswer:
@@ -2790,7 +2789,7 @@ const ru = {
     // HELP CENTER
     // ============================================================
     help: {
-      title: "istoc — Центр помощи",
+      title: "iStoc — Центр помощи",
       subtitle: "Круглосуточная поддержка и руководства для покупателей",
       searchPlaceholder: "Введите вопрос или ключевое слово. Например: Оплата",
       searchBtn: "Поиск",
@@ -2813,7 +2812,7 @@ const ru = {
       termsOfUse: "Условия использования",
       userInfoLaws: "Законы о пользовательской информации",
       contactGuide: "Руководство по обращению",
-      copyright: "© 2024 istoc — Все права защищены.",
+      copyright: "© 2024 iStoc — Все права защищены.",
       viewMore: "Показать больше",
       searchResultsFor: "Результаты по запросу",
     },
@@ -2837,34 +2836,34 @@ const ru = {
         breadcrumbLabel: "Условия использования",
         section1Title: "1. Определения",
         section1Content:
-          '<p><strong>"Платформа"</strong> означает веб-сайт и мобильное приложение, управляемые istoc.</p><p><strong>"Пользователь"</strong> означает физических и юридических лиц, которые являются членами Платформы или пользуются её услугами без членства.</p><p><strong>"Продавец"</strong> означает физических или юридических лиц, предлагающих товары и услуги через Платформу.</p><p><strong>"Покупатель"</strong> означает Пользователей, которые приобретают товары и услуги через Платформу.</p><p><strong>"Услуги"</strong> охватывают все услуги B2B-торговли, оплаты, логистики и иные услуги, предоставляемые через Платформу.</p>',
+          '<p><strong>"Платформа"</strong> означает веб-сайт и мобильное приложение, управляемые iStoc.</p><p><strong>"Пользователь"</strong> означает физических и юридических лиц, которые являются членами Платформы или пользуются её услугами без членства.</p><p><strong>"Продавец"</strong> означает физических или юридических лиц, предлагающих товары и услуги через Платформу.</p><p><strong>"Покупатель"</strong> означает Пользователей, которые приобретают товары и услуги через Платформу.</p><p><strong>"Услуги"</strong> охватывают все услуги B2B-торговли, оплаты, логистики и иные услуги, предоставляемые через Платформу.</p>',
         section2Title: "2. Сфера применения и принятие",
         section2Content:
-          "<p>Настоящие Условия использования применяются ко всем Пользователям, которые получают доступ к Платформе и/или используют её. Используя Платформу, вы считаетесь принявшими настоящие условия.</p><p>istoc оставляет за собой право обновлять настоящие условия без предварительного уведомления. Обновления вступают в силу сразу после их публикации. Продолжение использования вами Платформы означает, что вы принимаете обновлённые условия.</p>",
+          "<p>Настоящие Условия использования применяются ко всем Пользователям, которые получают доступ к Платформе и/или используют её. Используя Платформу, вы считаетесь принявшими настоящие условия.</p><p>iStoc оставляет за собой право обновлять настоящие условия без предварительного уведомления. Обновления вступают в силу сразу после их публикации. Продолжение использования вами Платформы означает, что вы принимаете обновлённые условия.</p>",
         section3Title: "3. Членство и аккаунт",
         section3Content:
-          "<p>Чтобы стать членом Платформы, вам должно быть не менее 18 лет и вы должны иметь действующий адрес электронной почты. Представители, действующие от имени юридических лиц, должны быть надлежащим образом уполномочены.</p><p>Пользователи несут ответственность за конфиденциальность и безопасность информации своего аккаунта. Вы несёте ответственность за все операции, совершённые через ваш аккаунт.</p><p>istoc имеет право приостановить или закрыть подозрительные или несоответствующие требованиям аккаунты без предварительного уведомления.</p>",
+          "<p>Чтобы стать членом Платформы, вам должно быть не менее 18 лет и вы должны иметь действующий адрес электронной почты. Представители, действующие от имени юридических лиц, должны быть надлежащим образом уполномочены.</p><p>Пользователи несут ответственность за конфиденциальность и безопасность информации своего аккаунта. Вы несёте ответственность за все операции, совершённые через ваш аккаунт.</p><p>iStoc имеет право приостановить или закрыть подозрительные или несоответствующие требованиям аккаунты без предварительного уведомления.</p>",
         section4Title: "4. Заказы и договоры",
         section4Content:
-          "<p>Заказы, размещённые через Платформу, составляют договор купли-продажи между Покупателем и Продавцом. istoc не является стороной этого договора; она лишь предоставляет посреднические услуги платформы.</p><p>Подтверждение заказа зависит от успешного завершения оплаты и принятия его Продавцом. Продавцы имеют право отклонять заказы по причине наличия товара на складе или иным уважительным причинам.</p><p>Детали заказа можно просмотреть в письме с подтверждением и на странице отслеживания заказа на Платформе.</p>",
+          "<p>Заказы, размещённые через Платформу, составляют договор купли-продажи между Покупателем и Продавцом. iStoc не является стороной этого договора; она лишь предоставляет посреднические услуги платформы.</p><p>Подтверждение заказа зависит от успешного завершения оплаты и принятия его Продавцом. Продавцы имеют право отклонять заказы по причине наличия товара на складе или иным уважительным причинам.</p><p>Детали заказа можно просмотреть в письме с подтверждением и на странице отслеживания заказа на Платформе.</p>",
         section5Title: "5. Условия оплаты",
         section5Content:
-          "<p>Оплата может производиться с помощью кредитной карты, дебетовой карты, банковского перевода и баланса Платформы. Все платежи обрабатываются через защищённую инфраструктуру.</p><p>Цены включают НДС, если не указано иное. В B2B-операциях счета выставляются Продавцом.</p><p>Система Безопасной оплаты istoc удерживает платёж Продавцу до момента доставки товара. Эта система предназначена для защиты Покупателей.</p>",
+          "<p>Оплата может производиться с помощью кредитной карты, дебетовой карты, банковского перевода и баланса Платформы. Все платежи обрабатываются через защищённую инфраструктуру.</p><p>Цены включают НДС, если не указано иное. В B2B-операциях счета выставляются Продавцом.</p><p>Система Безопасной оплаты iStoc удерживает платёж Продавцу до момента доставки товара. Эта система предназначена для защиты Покупателей.</p>",
         section6Title: "6. Отправка и доставка",
         section6Content:
           "<p>Расчётные сроки доставки указаны на странице товара и носят информационный характер. Фактические сроки доставки могут различаться в зависимости от логистических условий.</p><p>Транспортная компания несёт ответственность за повреждения, которые могут возникнуть в процессе доставки. Рекомендуется осматривать посылку при получении.</p><p>Для международных отправлений таможенные пошлины и дополнительные сборы являются ответственностью Покупателя.</p>",
         section7Title: "7. Возврат и право на отказ",
         section7Content:
-          '<p>Права на возврат и отказ регулируются потребительским/коммерческим законодательством страны, в которой учреждён продавец, и собственной политикой возврата продавца. Каждый продавец публикует применимые условия возврата на странице товара и в профиле своего магазина.</p><p>istoc выступает в качестве посреднического поставщика услуг в коммерческих отношениях между покупателем и продавцом и не устанавливает условия возврата от имени сторон. Платформа предоставляет лишь инфраструктуру процесса для передачи запросов на возврат и разрешения споров. Подробнее о процессе см. на нашей странице <a href="/iade-kosullari" class="text-primary-500 hover:underline">Политика возврата</a>.</p>',
+          '<p>Права на возврат и отказ регулируются потребительским/коммерческим законодательством страны, в которой учреждён продавец, и собственной политикой возврата продавца. Каждый продавец публикует применимые условия возврата на странице товара и в профиле своего магазина.</p><p>iStoc выступает в качестве посреднического поставщика услуг в коммерческих отношениях между покупателем и продавцом и не устанавливает условия возврата от имени сторон. Платформа предоставляет лишь инфраструктуру процесса для передачи запросов на возврат и разрешения споров. Подробнее о процессе см. на нашей странице <a href="/iade-kosullari" class="text-primary-500 hover:underline">Политика возврата</a>.</p>',
         section8Title: "8. Права интеллектуальной собственности",
         section8Content:
-          "<p>Весь контент, дизайн, логотипы, программное обеспечение и базы данных на Платформе являются интеллектуальной собственностью Thoptan Ltd. (оператора бренда istoc) или его лицензиаров.</p><p>Пользователи не вправе копировать, воспроизводить, распространять или использовать контент Платформы в коммерческих целях. Ответственность за изображения и описания товаров, загруженные Продавцами, несёт соответствующий Продавец.</p>",
+          "<p>Весь контент, дизайн, логотипы, программное обеспечение и базы данных на Платформе являются интеллектуальной собственностью iStoc Private Company Limited (оператора бренда iStoc) или его лицензиаров.</p><p>Пользователи не вправе копировать, воспроизводить, распространять или использовать контент Платформы в коммерческих целях. Ответственность за изображения и описания товаров, загруженные Продавцами, несёт соответствующий Продавец.</p>",
         section9Title: "9. Ограничение ответственности",
         section9Content:
-          "<p>istoc выступает в качестве посредника в операциях купли-продажи, осуществляемых через Платформу. Продавцы несут ответственность за качество, пригодность и доставку товаров.</p><p>Платформа не может нести ответственность за ущерб, возникший из-за технических сбоев, перерывов или нарушений в работе сторонних сервисов.</p><p>Совокупная ответственность istoc не может превышать размер платы за услугу по соответствующей операции.</p>",
+          "<p>iStoc выступает в качестве посредника в операциях купли-продажи, осуществляемых через Платформу. Продавцы несут ответственность за качество, пригодность и доставку товаров.</p><p>Платформа не может нести ответственность за ущерб, возникший из-за технических сбоев, перерывов или нарушений в работе сторонних сервисов.</p><p>Совокупная ответственность iStoc не может превышать размер платы за услугу по соответствующей операции.</p>",
         section10Title: "10. Применимое право и споры",
         section10Content:
-          "<p>Настоящие Условия использования регулируются законодательством Англии и Уэльса.</p><p>Любые споры, возникающие между сторонами, подлежат исключительной передаче в Лондонский международный арбитражный суд (LCIA), находящийся в Лондоне; языком арбитража является английский.</p><p>istoc предоставляет только услуги торговли между предприятиями (B2B); положения потребительского права не применяются к использованию Платформы.</p>",
+          "<p>Настоящие Условия использования регулируются законодательством Англии и Уэльса.</p><p>Любые споры, возникающие между сторонами, подлежат исключительной передаче в Лондонский международный арбитражный суд (LCIA), находящийся в Лондоне; языком арбитража является английский.</p><p>iStoc предоставляет только услуги торговли между предприятиями (B2B); положения потребительского права не применяются к использованию Платформы.</p>",
       },
       privacy: {
         pageTitle: "Политика конфиденциальности",
@@ -2872,7 +2871,7 @@ const ru = {
         breadcrumbLabel: "Политика конфиденциальности",
         section1Title: "1. Оператор данных",
         section1Content:
-          "<p>Сторона, выступающая в качестве оператора данных при обработке ваших персональных данных:</p><p><strong>Thoptan Ltd.</strong> (Великобритания)<br>Управляет брендом istoc.<br><strong>Эл. почта:</strong> kvkk@istoc.com</p>",
+          "<p>Сторона, выступающая в качестве оператора данных при обработке ваших персональных данных:</p><p><strong>iStoc Private Company Limited</strong> (Великобритания)<br>Управляет брендом iStoc.<br><strong>Эл. почта:</strong> kvkk@istoc.com</p>",
         section2Title: "2. Собираемые персональные данные",
         section2Content:
           '<p>В рамках предоставления услуг Платформы собираются следующие персональные данные:</p><ul class="list-disc ps-5 space-y-1"><li><strong>Идентификационные данные:</strong> Имя, фамилия, национальный идентификационный номер (для продавцов), налоговый номер</li><li><strong>Контактные данные:</strong> Адрес электронной почты, номер телефона, адрес</li><li><strong>Финансовые данные:</strong> Реквизиты банковского счёта, данные кредитной карты (хранятся в маскированном виде)</li><li><strong>Данные об операциях:</strong> История заказов, записи об оплате, запросы на возврат</li><li><strong>Цифровые следы:</strong> IP-адрес, данные файлов cookie, информация об устройстве, информация о браузере</li><li><strong>Данные об использовании:</strong> История поиска, просмотры страниц, данные о кликах</li></ul>',
@@ -2887,7 +2886,7 @@ const ru = {
           '<p>Ваши персональные данные могут передаваться третьим лицам только в следующих случаях:</p><ul class="list-disc ps-5 space-y-1"><li>Транспортным компаниям для доставки заказа</li><li>Платёжным учреждениям для проведения платёжных операций</li><li>Уполномоченным государственным органам в рамках юридических обязательств</li><li>Нашим поставщикам услуг (хостинг, аналитика, инструменты поддержки клиентов)</li></ul><p>Ваши данные ни при каких обстоятельствах не продаются третьим лицам.</p>',
         section6Title: "6. Международная передача данных",
         section6Content:
-          "<p>Поскольку оператор данных Thoptan Ltd. учреждён в Великобритании, персональные данные, собранные у пользователей в Турции, передаются в Великобританию для обработки. Эта передача осуществляется на основании явного согласия субъекта данных и/или стандартных договорных положений, установленных Органом по защите персональных данных в соответствии со статьёй 9 KVKK.</p><p>Основные страны, в которые осуществляется передача данных: Великобритания (операционный центр), страны Европейского союза и Соединённые Штаты Америки (для поставщиков услуг, на основании стандартных договорных положений).</p>",
+          "<p>Поскольку оператор данных iStoc Private Company Limited учреждён в Великобритании, персональные данные, собранные у пользователей в Турции, передаются в Великобританию для обработки. Эта передача осуществляется на основании явного согласия субъекта данных и/или стандартных договорных положений, установленных Органом по защите персональных данных в соответствии со статьёй 9 KVKK.</p><p>Основные страны, в которые осуществляется передача данных: Великобритания (операционный центр), страны Европейского союза и Соединённые Штаты Америки (для поставщиков услуг, на основании стандартных договорных положений).</p>",
         section7Title: "7. Права субъекта данных",
         section7Content:
           '<p>В соответствии со статьёй 11 KVKK вы обладаете следующими правами:</p><ul class="list-disc ps-5 space-y-1"><li>Узнавать, обрабатывались ли ваши персональные данные</li><li>Запрашивать информацию об обработке, если она проводилась</li><li>Узнавать цель обработки и используются ли данные в соответствии с этой целью</li><li>Знать третьих лиц, которым данные были переданы внутри страны или за рубежом</li><li>Требовать исправления, если данные были обработаны неполно или неверно</li><li>Требовать удаления или уничтожения в соответствии со статьёй 7 KVKK</li><li>Возражать против возникновения неблагоприятного для вас результата вследствие анализа обработанных данных исключительно автоматическими системами</li></ul>',
@@ -2924,7 +2923,7 @@ const ru = {
         breadcrumbLabel: "Политика возврата",
         section1Title: "1. Общие условия",
         section1Content:
-          "<p>istoc — это глобальная B2B-платформа для торговли. Право на возврат и применимый срок возврата определяются <strong>законодательством страны, в которой учреждён продавец</strong>, и <strong>собственной политикой возврата продавца</strong>. Пожалуйста, ознакомьтесь с условиями возврата на странице товара или в профиле продавца перед размещением заказа.</p><p>На этой странице описан <strong>общий процесс</strong> подачи запросов на возврат и разрешения споров через Платформу; конкретные сроки возврата, сборы и применимое законодательство различаются в зависимости от продавца.</p>",
+          "<p>iStoc — это глобальная B2B-платформа для торговли. Право на возврат и применимый срок возврата определяются <strong>законодательством страны, в которой учреждён продавец</strong>, и <strong>собственной политикой возврата продавца</strong>. Пожалуйста, ознакомьтесь с условиями возврата на странице товара или в профиле продавца перед размещением заказа.</p><p>На этой странице описан <strong>общий процесс</strong> подачи запросов на возврат и разрешения споров через Платформу; конкретные сроки возврата, сборы и применимое законодательство различаются в зависимости от продавца.</p>",
         section2Title: "2. Срок возврата",
         section2Content:
           "<p>Срок возврата для стандартных товаров составляет <strong>14 календарных дней</strong> с даты доставки.</p><p>Этот срок продлевается до <strong>30 дней</strong> для повреждённых или дефектных товаров. Уведомление о повреждённом товаре должно быть сделано с фотографиями в течение первых 48 часов с момента доставки.</p><p>Сроки возврата для оптовых B2B-заказов определяются в соответствии с договором с продавцом.</p>",
@@ -2950,16 +2949,16 @@ const ru = {
         breadcrumbLabel: "Правовое уведомление",
         section1Title: "1. Информация о компании",
         section1Content:
-          '<p><strong>Оператор (юридическое лицо):</strong> Thoptan Ltd.</p><p><strong>Юрисдикция:</strong> Англия и Уэльс (Великобритания)</p><p><strong>Бренд:</strong> istoc (произносится "айсток")</p><p><strong>Эл. почта:</strong> info@istoc.com</p><p class="text-sm text-gray-500 mt-2"><em>Регистрационный номер в Companies House, юридический адрес и информация о представителе в Турции будут обновлены на этой странице по мере поступления.</em></p>',
+          '<p><strong>Оператор (юридическое лицо):</strong> iStoc Private Company Limited</p><p><strong>Юрисдикция:</strong> Англия и Уэльс (Великобритания)</p><p><strong>Бренд:</strong> iStoc</p><p><strong>Эл. почта:</strong> info@istoc.com</p><p class="text-sm text-gray-500 mt-2"><em>Регистрационный номер в Companies House, юридический адрес и информация о представителе в Турции будут обновлены на этой странице по мере поступления.</em></p>',
         section2Title: "2. О Платформе",
         section2Content:
-          "<p>istoc, управляемая Thoptan Ltd. (Великобритания), — это глобальная платформа электронной коммерции, созданная для содействия торговле между предприятиями (B2B). Платформа выступает в качестве посреднического поставщика услуг в коммерческих отношениях между продавцом и покупателем.</p><p>Ответственность за товары и услуги, предлагаемые на Платформе, несут соответствующие продавцы.</p>",
+          "<p>iStoc, управляемая iStoc Private Company Limited (Великобритания), — это глобальная платформа электронной коммерции, созданная для содействия торговле между предприятиями (B2B). Платформа выступает в качестве посреднического поставщика услуг в коммерческих отношениях между продавцом и покупателем.</p><p>Ответственность за товары и услуги, предлагаемые на Платформе, несут соответствующие продавцы.</p>",
         section3Title: "3. Ограничение ответственности",
         section3Content:
-          "<p>Несмотря на все усилия по обеспечению точности и актуальности информации, публикуемой на Платформе, она носит исключительно информационный характер. istoc не гарантирует полноту, точность или актуальность этой информации.</p><p>istoc не несёт ответственности за содержание сторонних веб-сайтов, доступ к которым осуществляется через Платформу.</p><p>istoc не может нести ответственность за перерывы в доступе из-за технических сбоев, работ по техническому обслуживанию или обстоятельств непреодолимой силы.</p>",
+          "<p>Несмотря на все усилия по обеспечению точности и актуальности информации, публикуемой на Платформе, она носит исключительно информационный характер. iStoc не гарантирует полноту, точность или актуальность этой информации.</p><p>iStoc не несёт ответственности за содержание сторонних веб-сайтов, доступ к которым осуществляется через Платформу.</p><p>iStoc не может нести ответственность за перерывы в доступе из-за технических сбоев, работ по техническому обслуживанию или обстоятельств непреодолимой силы.</p>",
         section4Title: "4. Надзор и жалобы",
         section4Content:
-          "<p>istoc — это платформа между предприятиями (B2B), и арбитражные комитеты по делам потребителей и потребительские суды не применяются к использованию Платформы.</p><p>Вы можете направить свои жалобы и отзывы относительно использования Платформы на <strong>info@istoc.com</strong>. Ваши обращения будут рассмотрены в течение 5 рабочих дней.</p>",
+          "<p>iStoc — это платформа между предприятиями (B2B), и арбитражные комитеты по делам потребителей и потребительские суды не применяются к использованию Платформы.</p><p>Вы можете направить свои жалобы и отзывы относительно использования Платформы на <strong>info@istoc.com</strong>. Ваши обращения будут рассмотрены в течение 5 рабочих дней.</p>",
         section5Title: "5. Применимое право",
         section5Content:
           "<p>Настоящее правовое уведомление и использование Платформы регулируются законодательством Англии и Уэльса. Любые споры подлежат исключительной передаче в Лондонский международный арбитражный суд (LCIA); языком арбитража является английский.</p><p>Настоящее правовое уведомление носит общий информационный характер относительно использования Платформы и не является юридической консультацией.</p>",
@@ -2970,7 +2969,7 @@ const ru = {
         breadcrumbLabel: "Политика размещения товаров",
         section1Title: "1. Общие принципы",
         section1Content:
-          "<p>Размещение товаров на платформе istoc подчиняется определённым стандартам и правилам. Все продавцы считаются прочитавшими и принявшими эту политику перед размещением своих товаров.</p><p>Размещённые товары должны соответствовать законодательству страны, в которой учреждён продавец, местным правилам рынка, на котором продаётся товар, международным торговым правилам и политикам Платформы.</p>",
+          "<p>Размещение товаров на платформе iStoc подчиняется определённым стандартам и правилам. Все продавцы считаются прочитавшими и принявшими эту политику перед размещением своих товаров.</p><p>Размещённые товары должны соответствовать законодательству страны, в которой учреждён продавец, местным правилам рынка, на котором продаётся товар, международным торговым правилам и политикам Платформы.</p>",
         section2Title: "2. Информация о товаре и её точность",
         section2Content:
           '<p>Продавцы обязаны предоставлять следующую информацию точно и полностью для размещаемых товаров:</p><ul class="list-disc ps-5 space-y-1"><li><strong>Название товара:</strong> Ясное, понятное название, точно описывающее товар</li><li><strong>Описание:</strong> Подробное описание, включающее характеристики товара, информацию о материале и сценарии использования</li><li><strong>Изображения:</strong> Высококачественные оригинальные фотографии, точно представляющие товар</li><li><strong>Ценообразование:</strong> Актуальная информация о цене с чётким указанием статуса включения/исключения НДС</li><li><strong>Наличие на складе:</strong> Актуальная и точная информация о наличии</li><li><strong>Минимальный заказ:</strong> Минимальное количество заказа для B2B-продаж</li></ul>',
@@ -2979,10 +2978,10 @@ const ru = {
           '<p>Размещение следующих товаров на Платформе строго запрещено:</p><ul class="list-disc ps-5 space-y-1"><li>Незаконные товары и контрабандная продукция</li><li>Контрафактные, поддельные или пиратские товары</li><li>Оружие, боеприпасы и взрывчатые вещества</li><li>Наркотические и психотропные вещества</li><li>Человеческие органы и ткани</li><li>Товары, полученные из вымирающих видов</li><li>Товары, содержащие или предполагающие эксплуатацию детей</li><li>Товары/услуги, направленные на продажу персональных данных</li></ul><p>Товары некоторых категорий (продукты питания, фармацевтика, медицинские изделия, химические вещества и т. п.) могут требовать дополнительных документов и сертификатов.</p>',
         section4Title: "4. Стандарты изображений и контента",
         section4Content:
-          '<p>Изображения и контент товаров должны соответствовать следующим стандартам:</p><ul class="list-disc ps-5 space-y-1"><li>Чёткие и хорошо освещённые изображения с минимальным разрешением 800x800 пикселей</li><li>Изображения без водяных знаков, рекламного текста или логотипов других платформ</li><li>Описания без вводящих в заблуждение или преувеличенных утверждений</li><li>Отсутствие пренебрежительных высказываний о товарах или брендах конкурентов</li><li>Описания без контактной информации (телефон, эл. почта, веб-сайт)</li></ul><p>istoc оставляет за собой право удалять изображения и контент, не соответствующие стандартам, без предварительного уведомления.</p>',
+          '<p>Изображения и контент товаров должны соответствовать следующим стандартам:</p><ul class="list-disc ps-5 space-y-1"><li>Чёткие и хорошо освещённые изображения с минимальным разрешением 800x800 пикселей</li><li>Изображения без водяных знаков, рекламного текста или логотипов других платформ</li><li>Описания без вводящих в заблуждение или преувеличенных утверждений</li><li>Отсутствие пренебрежительных высказываний о товарах или брендах конкурентов</li><li>Описания без контактной информации (телефон, эл. почта, веб-сайт)</li></ul><p>iStoc оставляет за собой право удалять изображения и контент, не соответствующие стандартам, без предварительного уведомления.</p>',
         section5Title: "5. Правила ценообразования",
         section5Content:
-          '<p>Продавцы обязаны соблюдать следующие правила ценообразования:</p><ul class="list-disc ps-5 space-y-1"><li>Цены должны быть реалистичными и соответствовать рыночным условиям</li><li>Вводящие в заблуждение практики скидок и акций запрещены</li><li>Оптовые и розничные цены должны быть чётко указаны</li><li>Расходы на доставку и дополнительные сборы должны отображаться прозрачно</li></ul><p>istoc имеет право приостанавливать соответствующие размещения при обнаружении ценообразования, противоречащего рыночным условиям или являющегося манипулятивным.</p>',
+          '<p>Продавцы обязаны соблюдать следующие правила ценообразования:</p><ul class="list-disc ps-5 space-y-1"><li>Цены должны быть реалистичными и соответствовать рыночным условиям</li><li>Вводящие в заблуждение практики скидок и акций запрещены</li><li>Оптовые и розничные цены должны быть чётко указаны</li><li>Расходы на доставку и дополнительные сборы должны отображаться прозрачно</li></ul><p>iStoc имеет право приостанавливать соответствующие размещения при обнаружении ценообразования, противоречащего рыночным условиям или являющегося манипулятивным.</p>',
         section6Title: "6. Нарушения и санкции",
         section6Content:
           '<p>В случае нарушения этой политики могут применяться следующие санкции:</p><ul class="list-disc ps-5 space-y-1"><li><strong>Предупреждение:</strong> Письменное предупреждение за первое нарушение</li><li><strong>Удаление размещения:</strong> Удаление размещений товаров, нарушающих правила</li><li><strong>Приостановка аккаунта:</strong> Временная приостановка аккаунта за повторные нарушения</li><li><strong>Закрытие аккаунта:</strong> Постоянное закрытие аккаунта за серьёзные или продолжающиеся нарушения</li></ul><p>Продавцы имеют право обжаловать решения о санкциях в течение 15 рабочих дней.</p>',
@@ -2993,10 +2992,10 @@ const ru = {
         breadcrumbLabel: "Интеллектуальная собственность",
         section1Title: "1. Обязательство по защите интеллектуальной собственности",
         section1Content:
-          "<p>istoc придаёт первостепенное значение уважению прав интеллектуальной собственности. Платформа принимает необходимые меры для защиты авторских прав, товарных знаков, патентов и других прав интеллектуальной собственности.</p><p>Пользователи Платформы обязаны не публиковать контент и не размещать товары, нарушающие права интеллектуальной собственности третьих лиц.</p>",
-        section2Title: "2. Права интеллектуальной собственности на бренд istoc",
+          "<p>iStoc придаёт первостепенное значение уважению прав интеллектуальной собственности. Платформа принимает необходимые меры для защиты авторских прав, товарных знаков, патентов и других прав интеллектуальной собственности.</p><p>Пользователи Платформы обязаны не публиковать контент и не размещать товары, нарушающие права интеллектуальной собственности третьих лиц.</p>",
+        section2Title: "2. Права интеллектуальной собственности на бренд iStoc",
         section2Content:
-          '<p>Весь контент и материалы на Платформе, включая, помимо прочего, перечисленное ниже, являются интеллектуальной собственностью Thoptan Ltd. (оператора бренда istoc) или его лицензиаров:</p><ul class="list-disc ps-5 space-y-1"><li>Название, логотип и все товарные знаки istoc</li><li>Дизайн Платформы, компоновка интерфейса и пользовательский опыт</li><li>Программный код, алгоритмы и базы данных</li><li>Контент, отчёты и аналитика, создаваемые Платформой</li><li>Учебные материалы и документация</li></ul><p>Копирование, воспроизведение, распространение или использование этих материалов в коммерческих целях без письменного разрешения Thoptan Ltd. запрещено.</p>',
+          '<p>Весь контент и материалы на Платформе, включая, помимо прочего, перечисленное ниже, являются интеллектуальной собственностью iStoc Private Company Limited (оператора бренда iStoc) или его лицензиаров:</p><ul class="list-disc ps-5 space-y-1"><li>Название, логотип и все товарные знаки iStoc</li><li>Дизайн Платформы, компоновка интерфейса и пользовательский опыт</li><li>Программный код, алгоритмы и базы данных</li><li>Контент, отчёты и аналитика, создаваемые Платформой</li><li>Учебные материалы и документация</li></ul><p>Копирование, воспроизведение, распространение или использование этих материалов в коммерческих целях без письменного разрешения iStoc Private Company Limited запрещено.</p>',
         section3Title: "3. Уведомление о нарушении",
         section3Content:
           '<p>Если вы считаете, что ваши права интеллектуальной собственности были нарушены, вы можете связаться с нами, указав следующую информацию:</p><ul class="list-disc ps-5 space-y-1"><li>Идентификационные данные правообладателя или уполномоченного представителя</li><li>Описание права интеллектуальной собственности, которое предположительно нарушено</li><li>Местонахождение (URL) нарушающего контента на Платформе</li><li>Документы, подтверждающие заявление о нарушении (свидетельство о регистрации, лицензионное соглашение и т. п.)</li><li>Заявление о том, что уведомление сделано добросовестно</li></ul><p><strong>Адрес для уведомлений:</strong> ipr@istoc.com</p>',
@@ -3008,7 +3007,7 @@ const ru = {
           '<p>Продавцы, чей контент был удалён, имеют право подать встречное уведомление против удаления. Встречные уведомления должны включать:</p><ul class="list-disc ps-5 space-y-1"><li>Идентификационные и контактные данные продавца</li><li>Описание удалённого контента</li><li>Объяснение и подтверждающие документы относительно того, почему контент не является нарушением</li><li>Заявление о принятии юридической ответственности в случае ложного уведомления</li></ul><p>Встречные уведомления должны быть поданы в течение 10 рабочих дней с момента удаления.</p>',
         section6Title: "6. Повторные нарушения",
         section6Content:
-          '<p>istoc применяет политику нулевой терпимости к повторным нарушениям прав интеллектуальной собственности:</p><ul class="list-disc ps-5 space-y-1"><li><strong>Первое нарушение:</strong> Письменное предупреждение и удаление контента</li><li><strong>Второе нарушение:</strong> Приостановка аккаунта на 30 дней</li><li><strong>Третье нарушение:</strong> Постоянное закрытие аккаунта</li></ul><p>При умышленных и организованных нарушениях istoc оставляет за собой право навсегда закрыть аккаунт и инициировать судебное разбирательство даже при первом нарушении.</p>',
+          '<p>iStoc применяет политику нулевой терпимости к повторным нарушениям прав интеллектуальной собственности:</p><ul class="list-disc ps-5 space-y-1"><li><strong>Первое нарушение:</strong> Письменное предупреждение и удаление контента</li><li><strong>Второе нарушение:</strong> Приостановка аккаунта на 30 дней</li><li><strong>Третье нарушение:</strong> Постоянное закрытие аккаунта</li></ul><p>При умышленных и организованных нарушениях iStoc оставляет за собой право навсегда закрыть аккаунт и инициировать судебное разбирательство даже при первом нарушении.</p>',
       },
       accessibility: {
         pageTitle: "Доступность",
@@ -3016,7 +3015,7 @@ const ru = {
         breadcrumbLabel: "Доступность",
         section1Title: "1. Наше обязательство по доступности",
         section1Content:
-          "<p>В istoc мы стремимся обеспечить доступность нашей платформы для всех пользователей, включая людей с ограниченными возможностями. Цифровая доступность является неотъемлемой частью нашей корпоративной ответственности.</p><p>Наша платформа постоянно развивается в соответствии со стандартом Руководства по доступности веб-контента (WCAG) 2.1 AA.</p>",
+          "<p>В iStoc мы стремимся обеспечить доступность нашей платформы для всех пользователей, включая людей с ограниченными возможностями. Цифровая доступность является неотъемлемой частью нашей корпоративной ответственности.</p><p>Наша платформа постоянно развивается в соответствии со стандартом Руководства по доступности веб-контента (WCAG) 2.1 AA.</p>",
         section2Title: "2. Функции доступности",
         section2Content:
           '<p>Мы предлагаем на нашей платформе следующие функции доступности:</p><ul class="list-disc ps-5 space-y-1"><li><strong>Навигация с клавиатуры:</strong> Все функции Платформы доступны с использованием только клавиатуры</li><li><strong>Поддержка программ чтения с экрана:</strong> Наш контент совместим с популярными программами чтения с экрана</li><li><strong>Настройка размера текста:</strong> Пользователи могут изменять размер текста через настройки браузера</li><li><strong>Цветовой контраст:</strong> Коэффициенты цветового контраста, соответствующие стандартам WCAG AA</li><li><strong>Альтернативный текст:</strong> Описательный альтернативный текст для изображений</li><li><strong>Метки форм:</strong> Ясные и понятные метки для всех полей форм</li><li><strong>Индикаторы фокуса:</strong> Видимые индикаторы фокуса при навигации с клавиатуры</li></ul>',
@@ -3053,7 +3052,7 @@ const ru = {
     // DROPSHIPPING
     // ============================================================
     dropshipping: {
-      istocPicks: "Выбор istoc",
+      istocPicks: "Выбор iStoc",
       hotSales: "Горячие продажи",
       brandedProducts: "Брендовые товары",
       complianceReady: "Готово к соответствию требованиям",
@@ -3178,7 +3177,7 @@ const ru = {
     // CONTACTS
     // ============================================================
     contacts: {
-      helpBanner: "Помогите нам улучшить istoc!",
+      helpBanner: "Помогите нам улучшить iStoc!",
       clickHere: "Нажмите здесь",
       allContacts: "Все контакты - 0",
       searchPlaceholder: "Поиск по контактам поставщиков",
@@ -3257,7 +3256,7 @@ const ru = {
     // ============================================================
     logistics: {
       ordersBannerInfo:
-        "Уведомление: заказы логистического маркетплейса были переведены в заказы Trade Assurance. Вы можете управлять своими заказами Trade Assurance в меню istoc> orders.",
+        "Уведомление: заказы логистического маркетплейса были переведены в заказы Trade Assurance. Вы можете управлять своими заказами Trade Assurance в меню iStoc> orders.",
       reviewsBannerInfo:
         "Уведомление: заказы логистического маркетплейса будут переведены в заказы Trade Assurance ориентировочно с 20 февраля.",
       manageOrders: "Управление логистическими заказами",
@@ -3315,7 +3314,7 @@ const ru = {
       transactions: "Транзакции",
       ttAccounts: "Счета для банковского перевода",
       ttTracking: "Отслеживание банковского перевода",
-      istocCard: "Карта istoc.com",
+      istocCard: "Карта iStoc.com",
       payLater: "Pay Later for Business",
       paymentTitle: "Оплата",
       paymentManagementTitle: "Управление оплатой",
@@ -3365,7 +3364,7 @@ const ru = {
       verifySupplierAccount: "Проверить счёт поставщика",
       uploadWireReceipt: "Загрузить квитанцию о переводе",
       tooltipVerify:
-        "Проверьте, является ли счёт поставщика официальным банковским счётом istoc.com. Загрузите квитанцию о переводе, чтобы убедиться, что ваш платёж защищён istoc.com.",
+        "Проверьте, является ли счёт поставщика официальным банковским счётом iStoc.com. Загрузите квитанцию о переводе, чтобы убедиться, что ваш платёж защищён iStoc.com.",
       allTab: "Все",
       pendingMatchTab: "Ожидание сопоставления поставщиком",
       matchedTab: "Полное сопоставление поставщиком",
@@ -3379,7 +3378,7 @@ const ru = {
       verifyModalTitle: "Проверить счёт поставщика",
       verifyWarning: "Всегда проверяйте банковский счёт поставщика перед оплатой",
       verifyDescription:
-        "Когда вы получаете инструкцию по оплате от поставщика, перед оплатой убедитесь, что номер счёта принадлежит официальному банковскому счёту istoc.com. Так вы сможете воспользоваться защитой заказа.",
+        "Когда вы получаете инструкцию по оплате от поставщика, перед оплатой убедитесь, что номер счёта принадлежит официальному банковскому счёту iStoc.com. Так вы сможете воспользоваться защитой заказа.",
       supplierAccountPlaceholder: "Номер банковского счёта поставщика *",
       cancelBtn: "Отмена",
       verifyBtn: "Проверить",
@@ -3389,7 +3388,7 @@ const ru = {
       thWireAmount: "Сумма перевода",
       thSendDate: "Дата отправки",
       noTrackingRecord: "Записи об отслеживании переводов не найдены",
-      istocCardTitle: "Карта istoc.com",
+      istocCardTitle: "Карта iStoc.com",
       comingSoon: "Эта услуга скоро станет доступна",
       payLaterTitle: "Pay Later for Business",
       uploadReceiptTitle: "Загрузить квитанцию о переводе",
@@ -3543,7 +3542,7 @@ const ru = {
         'Мы искренне приносим извинения за возможные неудобства и благодарны за ваше понимание, пока мы работаем над предоставлением более качественных решений. Если вам по-прежнему нужны услуги платёжных решений, вы можете рассмотреть варианты оплаты <strong class="text-gray-900 font-bold">Buy Now Pay Later</strong> или <strong class="text-gray-900 font-bold">Pay Later for Business</strong>. Нажмите <a href="/pages/dashboard/payment.html#pay-later" class="text-blue-600 underline underline-offset-2 font-medium hover:text-blue-700">здесь</a>, чтобы узнать больше.',
       ptParagraph3: "Благодарим вас за вашу неизменную поддержку!",
       ptRegards: "С наилучшими пожеланиями,",
-      ptTeam: "Команда условий оплаты istoc.com",
+      ptTeam: "Команда условий оплаты iStoc.com",
       piTitle: "Услуга проверки товара",
       piSubtitle: "Профессиональная проверка товаров вашего поставщика",
       piDearBuyers: "Уважаемые покупатели,",
@@ -3552,7 +3551,7 @@ const ru = {
       piParagraph2:
         "Для получения дополнительной информации об услуге проверки вы можете обратиться в нашу службу поддержки клиентов.",
       piRegards: "С наилучшими пожеланиями,",
-      piTeam: "Команда контроля качества istoc.com",
+      piTeam: "Команда контроля качества iStoc.com",
     },
 
     // ============================================================
@@ -3582,7 +3581,7 @@ const ru = {
     // SELLER
     // ============================================================
     seller: {
-      sellOnIstoc: "Продавать на istoc",
+      sellOnIstoc: "Продавать на iStoc",
       pricing: "Цены",
       storefront: "Витрина продавца",
       sf: {
@@ -3707,7 +3706,7 @@ const ru = {
         // CompanyInfo extras
         companyTitle: "КОМПАНИЯ",
         verifiedSupplier: "Проверенный поставщик",
-        verifiedWithIstoc: "Проверено с istoc",
+        verifiedWithIstoc: "Проверено с iStoc",
         // HotProducts extras
         hotProductsTitle: "ПОПУЛЯРНЫЕ ТОВАРЫ",
         buyNow: "Купить сейчас",
@@ -3717,7 +3716,7 @@ const ru = {
 
         // === NEW: Storefront Redesign (istoc-style) ===
         // Header stats
-        platformYears: "{{count}} лет на istoc",
+        platformYears: "{{count}} лет на iStoc",
         employees: "{{count}} сотрудников",
         totalOrders: "{{count}} заказов",
         transactionVolume: "US ${{amount}}+",
@@ -4186,7 +4185,7 @@ const ru = {
     // ============================================================
     topDeals: {
       title: "Лучшие предложения",
-      subtitle: "Найдите самые низкие цены на istoc",
+      subtitle: "Найдите самые низкие цены на iStoc",
       topPicks: "Лучший выбор",
       moq: "MOQ: {{count}} {{unit}}",
       pieces: "штук",
@@ -4547,7 +4546,7 @@ const ru = {
       },
 
       noHistory: "История просмотров пока пуста. Просматривайте товары, чтобы они появились здесь.",
-      welcomeTitle: "Добро пожаловать на istoc.com",
+      welcomeTitle: "Добро пожаловать на iStoc.com",
     },
 
     // ============================================================
@@ -4703,10 +4702,10 @@ const ru = {
       sourcing: "Поиск источников",
       sourcingDesc: "Поиск источников, заказы и доставка",
       tradeAssurance: "Trade Assurance",
-      tradeAssuranceDesc: "Защитите свои заказы istoc",
+      tradeAssuranceDesc: "Защитите свои заказы iStoc",
       downloadApp: "Скачать мобильное приложение",
-      downloadAppDesc: "Приложение istoc",
-      logistics: "istoc Logistics",
+      downloadAppDesc: "Приложение iStoc",
+      logistics: "iStoc Logistics",
       logisticsDesc: "Умные логистические услуги",
       tabAccount: "Мой аккаунт",
       tabSourcing: "Поиск источников",
@@ -4715,7 +4714,7 @@ const ru = {
       tabAfterSales: "Послепродажное обслуживание",
       tabSelfService: "Самообслуживание",
       q_account_1: "Что делать, если я забыл пароль?",
-      q_account_2: "Как создать аккаунт на istoc?",
+      q_account_2: "Как создать аккаунт на iStoc?",
       q_account_3: "Почему я не получаю код подтверждения по электронной почте?",
       q_account_4: "Почему я не получаю код подтверждения по SMS?",
       q_account_5: "Почему мой аккаунт был заблокирован?",
@@ -4723,8 +4722,8 @@ const ru = {
       q_account_7: "Как обновить информацию о моём аккаунте?",
       q_account_8: "Что такое двухфакторная аутентификация?",
       q_account_9: "Как удалить мой аккаунт?",
-      q_sourcing_1: "Как совершать покупки на istoc?",
-      q_sourcing_2: "Как искать товары на istoc?",
+      q_sourcing_1: "Как совершать покупки на iStoc?",
+      q_sourcing_2: "Как искать товары на iStoc?",
       q_sourcing_3: "Как добавить товары в избранное?",
       q_sourcing_4: "Как узнать цену товара, MOQ, стоимость доставки?",
       q_sourcing_5: "Как получить доступ к контактной информации поставщика?",
@@ -4827,7 +4826,7 @@ const ru = {
         "Мы свяжемся с вами как можно скорее. Наше среднее время ответа составляет 24 часа.",
       sendNewMessage: "Отправить новое сообщение",
       addressInfo: "Информация о компании",
-      addressCompany: "Thoptan Ltd.",
+      addressCompany: "iStoc Private Company Limited",
       addressLine1: "Великобритания",
       addressLine2: "Сведения о зарегистрированном адресе скоро будут обновлены.",
       businessHours: "Понедельник - пятница: 09:00 - 18:00 (UTC)",
@@ -4846,7 +4845,7 @@ const ru = {
       faqFooterTerms: "Условия использования",
       faqFooterUserInfo: "Законы об информации о пользователях",
       faqFooterContact: "Руководство по обращению",
-      faqFooterCopyright: "© 2024 istoc — Все права защищены.",
+      faqFooterCopyright: "© 2024 iStoc — Все права защищены.",
       // ── TicketsListLayout ──
       myTickets: "Мои заявки в поддержку",
       newTicket: "Новая заявка",
@@ -4995,7 +4994,7 @@ const ru = {
       sectionContactInfo: "Контактная информация",
       sectionSpam: "Добавление контактов, блокировка и статус спама",
       sectionSourcingInfo: "Информация о поиске источников",
-      sectionActivity: "Ваша активность на istoc.com",
+      sectionActivity: "Ваша активность на iStoc.com",
       sectionIndustries: "Отрасли, которые вас интересуют",
       sectionTopKeywords: "Наиболее часто искомые ключевые слова",
       sectionRecentKeywords: "Недавно искомые ключевые слова и просмотренные товары",
@@ -5116,9 +5115,9 @@ const ru = {
       deleteMyAccount: "Удалить мой аккаунт",
       accountDeleted: "Ваш аккаунт был деактивирован",
       accountDeletedDesc:
-        "Ваш аккаунт был деактивирован. Чтобы повторно активировать его, пожалуйста, свяжитесь со службой поддержки клиентов istoc.",
+        "Ваш аккаунт был деактивирован. Чтобы повторно активировать его, пожалуйста, свяжитесь со службой поддержки клиентов iStoc.",
       accountDeactivatedContactAdmin:
-        "Ваш аккаунт деактивирован. Пожалуйста, свяжитесь со службой поддержки клиентов istoc, чтобы повторно активировать его.",
+        "Ваш аккаунт деактивирован. Пожалуйста, свяжитесь со службой поддержки клиентов iStoc, чтобы повторно активировать его.",
       goToLogin: "Перейти на страницу входа",
       confirmDeleteRequired: "Пожалуйста, установите флажок подтверждения.",
       deleteAccountFailed: "Не удалось удалить аккаунт. Пожалуйста, попробуйте снова.",
@@ -5230,7 +5229,7 @@ const ru = {
       resubscribeAll: "Подписаться на все снова",
       allNotificationEmails: "Все письма-уведомления",
       notificationEmailsDesc:
-        "Письма, которые информируют вас о важных обновлениях аккаунта и событиях на istoc.com",
+        "Письма, которые информируют вас о важных обновлениях аккаунта и событиях на iStoc.com",
       generalNotificationEmails: "Общие письма-уведомления",
       generalNotificationEmailsDesc:
         "Письма, вызванные вашими действиями на платформе, включая обновления о ваших аккаунтах, сообщениях, заказах и отправлениях.",
@@ -5239,7 +5238,7 @@ const ru = {
         "Если есть какой-либо спор, стороной которого вы являетесь (независимо от того, инициирован он вами или нет), мы будем информировать вас и держать в курсе его хода.",
       allMarketingEmails: "Все маркетинговые письма",
       marketingEmailsDesc:
-        "Письма, содержащие рекламные сообщения о товарах и услугах на istoc.com",
+        "Письма, содержащие рекламные сообщения о товарах и услугах на iStoc.com",
       generalMarketingEmails: "Общие маркетинговые письма",
       generalMarketingEmailsDesc:
         "Письма, информирующие вас о возможностях, событиях и обновлениях услуг, включая скидки на товары, специальные предложения, мероприятия и предложения услуг, которые могут принести пользу вашему бизнесу.",
@@ -5362,7 +5361,7 @@ const ru = {
         "Объединяем продавцов и покупателей со всего мира для безопасной, прозрачной B2B-торговли.",
       storyTitle: "Наша история",
       storyP1:
-        "istoc (произносится «эйсток») — это глобальный B2B-бренд для торговли, управляемый Thoptan Ltd. (Великобритания). Наша цель проста: объединить производителей, оптовиков и розничных продавцов со всех уголков мира на единой цифровой платформе.",
+        "iStoc — это глобальный B2B-бренд для торговли, управляемый iStoc Private Company Limited (Великобритания). Наша цель проста: объединить производителей, оптовиков и розничных продавцов со всех уголков мира на единой цифровой платформе.",
       storyP2:
         "Без географических границ мы создаём инфраструктуру, в которой наши продавцы и покупатели могут торговать уверенно, быстро и прозрачно. Благодаря проверенным продавцам, безопасным платежам и простой структуре комиссий мы движемся к тому, чтобы стать B2B-маркетплейсом нового поколения.",
       storyP3:
@@ -5373,7 +5372,7 @@ const ru = {
       vision: "Наше видение",
       visionText:
         "Стать самой надёжной и инновационной B2B-экосистемой торговли в мире. Обеспечить безграничную, прозрачную и эффективную инфраструктуру глобальной торговли.",
-      statsTitle: "istoc в цифрах",
+      statsTitle: "iStoc в цифрах",
       counterUsers: "Зарегистрированных пользователей",
       counterSellers: "Активных продавцов",
       counterCountries: "Стран",
@@ -5396,9 +5395,9 @@ const ru = {
     },
     faq: {
       allCategories: "Все категории",
-      intro: "Знакомство с istoc",
-      introDesc: "Знакомство с istoc",
-      introMembership: "Членство в istoc",
+      intro: "Знакомство с iStoc",
+      introDesc: "Знакомство с iStoc",
+      introMembership: "Членство в iStoc",
       account: "Управление аккаунтом",
       accountSettings: "Настройки аккаунта",
       accountCancelReactivate: "Закрытие и повторная активация",
@@ -5436,7 +5435,7 @@ const ru = {
       taxRefund: "Возврат налога",
       shipping: "Доставка",
       shippingShipping: "Доставка",
-      shippingLogistics: "Логистические услуги istoc",
+      shippingLogistics: "Логистические услуги iStoc",
       shippingMaersk: "Услуги доставки MSK (Maersk)",
       shippingImportFees: "Импортные сборы",
       receipt: "Получение заказа",
@@ -5455,7 +5454,7 @@ const ru = {
       feedback: "Отзыв о заказе",
       feedbackManagement: "Управление отзывами",
       feedbackRules: "Правила отзывов",
-      security: "Безопасность и правила istoc",
+      security: "Безопасность и правила iStoc",
       securityFraud: "Мошенничество/поддельные письма",
       securityIpr: "Жалоба о нарушении прав ИС",
       others: "Прочее",
@@ -5468,16 +5467,16 @@ const ru = {
       promotionsSuper: "Супер-акция",
       promotionsPayment: "Платёжные акции",
       promotionsOtherIssues: "Другие вопросы по акциям",
-      guaranteed: "Гарантия istoc",
+      guaranteed: "Гарантия iStoc",
       guaranteedShipping: "Гарантированная доставка",
       guaranteedAfterSales: "Гарантированное послепродажное обслуживание",
       guaranteedPreSales: "Гарантированное предпродажное обслуживание",
       guaranteedPlaceOrder: "Гарантированное оформление заказа",
       guaranteedOverseasWarehouse: "Проверенный зарубежный склад",
-      appSettings: "Настройки приложения istoc",
-      appSettingsLabel: "Настройки приложения istoc",
+      appSettings: "Настройки приложения iStoc",
+      appSettingsLabel: "Настройки приложения iStoc",
       localization: "Язык и локализация",
-      localizationSettings: "Языковые настройки istoc",
+      localizationSettings: "Языковые настройки iStoc",
     },
     faqDetail: {
       // UI
@@ -5491,34 +5490,34 @@ const ru = {
       noContent: "По этой теме пока нет материалов.",
       relatedTopics: "Похожие темы",
 
-      // ── istoc Introduction ──
-      introDesc_title: "Знакомство с istoc",
-      introDesc_desc: "Узнайте о платформе istoc и о том, как она работает.",
+      // ── iStoc Introduction ──
+      introDesc_title: "Знакомство с iStoc",
+      introDesc_desc: "Узнайте о платформе iStoc и о том, как она работает.",
       introDesc_items: [
         {
-          q: "Что такое istoc?",
-          a: "istoc — это глобальная B2B (business-to-business) платформа электронной коммерции, управляемая Thoptan Ltd. (Великобритания). Она объединяет производителей, оптовиков и дистрибьюторов со всего мира с покупателями для удобной, безопасной и эффективной торговли.",
+          q: "Что такое iStoc?",
+          a: "iStoc — это глобальная B2B (business-to-business) платформа электронной коммерции, управляемая iStoc Private Company Limited (Великобритания). Она объединяет производителей, оптовиков и дистрибьюторов со всего мира с покупателями для удобной, безопасной и эффективной торговли.",
         },
         {
-          q: "Кто может пользоваться istoc?",
-          a: "istoc могут пользоваться как индивидуальные предприниматели, так и корпоративные покупатели и продавцы. <strong>Покупатели</strong> могут закупать товары по оптовым ценам, а <strong>продавцы</strong> — выходить на широкую аудиторию покупателей. Регистрация на платформе бесплатна.",
+          q: "Кто может пользоваться iStoc?",
+          a: "iStoc могут пользоваться как индивидуальные предприниматели, так и корпоративные покупатели и продавцы. <strong>Покупатели</strong> могут закупать товары по оптовым ценам, а <strong>продавцы</strong> — выходить на широкую аудиторию покупателей. Регистрация на платформе бесплатна.",
         },
         {
-          q: "Чем istoc отличается от других платформ?",
-          a: "istoc выделяется программой Trade Assurance, которая защищает и покупателей, и продавцов. Платформа предлагает интегрированные логистические решения, безопасную платёжную систему и круглосуточную поддержку клиентов. Кроме того, она предоставляет подбор поставщиков на основе ИИ и услуги инспекции качества.",
+          q: "Чем iStoc отличается от других платформ?",
+          a: "iStoc выделяется программой Trade Assurance, которая защищает и покупателей, и продавцов. Платформа предлагает интегрированные логистические решения, безопасную платёжную систему и круглосуточную поддержку клиентов. Кроме того, она предоставляет подбор поставщиков на основе ИИ и услуги инспекции качества.",
         },
         {
-          q: "Какие категории товаров доступны на istoc?",
+          q: "Какие категории товаров доступны на iStoc?",
           a: "На платформе представлены товары в категориях «Текстиль и одежда», «Электроника», «Продукты питания и напитки», «Автотовары», «Машины и оборудование», «Строительство и стройматериалы», «Косметика», «Мебель», «Сельскохозяйственная продукция» и многих других.",
         },
       ],
 
-      introMembership_title: "Членство в istoc",
+      introMembership_title: "Членство в iStoc",
       introMembership_desc: "Узнайте о типах членства, преимуществах и вариантах повышения уровня.",
       introMembership_items: [
         {
-          q: "Какие типы членства доступны на istoc?",
-          a: "istoc предлагает три уровня членства: <strong>бесплатное членство</strong> (базовые функции, ограниченное число объявлений), <strong>золотое членство</strong> (приоритетное размещение, расширенная аналитика) и <strong>проверенное членство</strong> (значок верификации, персональный менеджер, неограниченное число объявлений).",
+          q: "Какие типы членства доступны на iStoc?",
+          a: "iStoc предлагает три уровня членства: <strong>бесплатное членство</strong> (базовые функции, ограниченное число объявлений), <strong>золотое членство</strong> (приоритетное размещение, расширенная аналитика) и <strong>проверенное членство</strong> (значок верификации, персональный менеджер, неограниченное число объявлений).",
         },
         {
           q: "Что я могу делать с бесплатным членством?",
@@ -5561,11 +5560,11 @@ const ru = {
       accountCancelReactivate_items: [
         {
           q: "Как закрыть мой аккаунт?",
-          a: "Вы можете воспользоваться опцией «Закрыть аккаунт» в разделе «Настройки аккаунта» > «Управление аккаунтом». Перед закрытием все открытые заказы и споры должны быть урегулированы. После закрытия повторная активация может быть выполнена только <strong>службой поддержки istoc</strong>.",
+          a: "Вы можете воспользоваться опцией «Закрыть аккаунт» в разделе «Настройки аккаунта» > «Управление аккаунтом». Перед закрытием все открытые заказы и споры должны быть урегулированы. После закрытия повторная активация может быть выполнена только <strong>службой поддержки iStoc</strong>.",
         },
         {
           q: "Могу ли я повторно активировать свой аккаунт?",
-          a: "После закрытия аккаунта вы не сможете повторно активировать его самостоятельно простым входом. Чтобы повторно активировать аккаунт, необходимо подать запрос в службу поддержки istoc; после рассмотрения запроса ваш аккаунт может быть восстановлен.",
+          a: "После закрытия аккаунта вы не сможете повторно активировать его самостоятельно простым входом. Чтобы повторно активировать аккаунт, необходимо подать запрос в службу поддержки iStoc; после рассмотрения запроса ваш аккаунт может быть восстановлен.",
         },
         {
           q: "Что произойдёт, если я отменю золотое/проверенное членство?",
@@ -5577,7 +5576,7 @@ const ru = {
       accountLogin_desc: "Вход в аккаунт и устранение проблем со входом.",
       accountLogin_items: [
         {
-          q: "Как войти в istoc?",
+          q: "Как войти в iStoc?",
           a: "Нажмите кнопку «Войти» на главной странице и введите свой адрес электронной почты и пароль. Вы также можете воспользоваться быстрым входом через Google, Apple или номер телефона.",
         },
         {
@@ -5595,10 +5594,10 @@ const ru = {
       ],
 
       accountRegister_title: "Регистрация",
-      accountRegister_desc: "Шаги для создания нового аккаунта istoc.",
+      accountRegister_desc: "Шаги для создания нового аккаунта iStoc.",
       accountRegister_items: [
         {
-          q: "Как зарегистрироваться на istoc?",
+          q: "Как зарегистрироваться на iStoc?",
           a: "Нажмите кнопку «Зарегистрироваться» на главной странице. Введите адрес электронной почты, задайте пароль и примите условия использования. После регистрации вам нужно будет подтвердить адрес электронной почты.",
         },
         {
@@ -5612,10 +5611,10 @@ const ru = {
       ],
 
       accountBecomeSeller_title: "Стать продавцом",
-      accountBecomeSeller_desc: "Процесс и требования для того, чтобы стать продавцом на istoc.",
+      accountBecomeSeller_desc: "Процесс и требования для того, чтобы стать продавцом на iStoc.",
       accountBecomeSeller_items: [
         {
-          q: "Что нужно, чтобы стать продавцом на istoc?",
+          q: "Что нужно, чтобы стать продавцом на iStoc?",
           a: "Чтобы стать продавцом, вам понадобятся действующая регистрация в торговом реестре, налоговое свидетельство и контактная информация компании. После заполнения регистрационной формы ваши документы будут рассмотрены и одобрены в течение <strong>1-3 рабочих дней</strong>.",
         },
         {
@@ -5624,7 +5623,7 @@ const ru = {
         },
         {
           q: "Какие товары я могу продавать?",
-          a: "Вы можете продавать на istoc любые законные B2B-товары. Список запрещённых товаров (оружие, наркотики, контрафакт и т. д.) указан в правилах платформы. Для особых категорий, таких как продукты питания и фармацевтика, может потребоваться дополнительная документация.",
+          a: "Вы можете продавать на iStoc любые законные B2B-товары. Список запрещённых товаров (оружие, наркотики, контрафакт и т. д.) указан в правилах платформы. Для особых категорий, таких как продукты питания и фармацевтика, может потребоваться дополнительная документация.",
         },
         {
           q: "Сколько времени занимает процесс одобрения продавца?",
@@ -5634,7 +5633,7 @@ const ru = {
 
       // ── Sourcing ──
       sourcingSearch_title: "Поиск",
-      sourcingSearch_desc: "Способы поиска товаров и поставщиков на istoc.",
+      sourcingSearch_desc: "Способы поиска товаров и поставщиков на iStoc.",
       sourcingSearch_items: [
         {
           q: "Как искать товары?",
@@ -5676,7 +5675,7 @@ const ru = {
         },
         {
           q: "Что такое код HS и как его найти?",
-          a: "Код HS (Гармонизированной системы) — это стандартный код, используемый для классификации товаров в международной торговле. На istoc вы можете найти код HS вашего товара на странице сведений о товаре или с помощью инструмента торговой информации.",
+          a: "Код HS (Гармонизированной системы) — это стандартный код, используемый для классификации товаров в международной торговле. На iStoc вы можете найти код HS вашего товара на странице сведений о товаре или с помощью инструмента торговой информации.",
         },
         {
           q: "Как пользоваться калькулятором таможенных пошлин?",
@@ -5689,7 +5688,7 @@ const ru = {
       sourcingRecommender_items: [
         {
           q: "Как работает система рекомендаций?",
-          a: "Система рекомендаций istoc использует алгоритмы ИИ, чтобы предлагать подходящие товары и поставщиков на основе вашей истории поиска, привычек покупок и отраслевых трендов. Чем больше вы пользуетесь системой, тем более персонализированные рекомендации она предоставляет.",
+          a: "Система рекомендаций iStoc использует алгоритмы ИИ, чтобы предлагать подходящие товары и поставщиков на основе вашей истории поиска, привычек покупок и отраслевых трендов. Чем больше вы пользуетесь системой, тем более персонализированные рекомендации она предоставляет.",
         },
         {
           q: "Как настроить рекомендации?",
@@ -5705,8 +5704,8 @@ const ru = {
       sourcingAiApp_desc: "Инструменты и функции для торговли на основе ИИ.",
       sourcingAiApp_items: [
         {
-          q: "Что делает ИИ-приложение istoc?",
-          a: "ИИ-приложение istoc предлагает функции на основе ИИ, включая визуальный поиск товаров, автоматический подбор поставщиков, анализ цен, прогнозирование рыночных трендов и умный чат-помощник.",
+          q: "Что делает ИИ-приложение iStoc?",
+          a: "ИИ-приложение iStoc предлагает функции на основе ИИ, включая визуальный поиск товаров, автоматический подбор поставщиков, анализ цен, прогнозирование рыночных трендов и умный чат-помощник.",
         },
         {
           q: "Как пользоваться ИИ-чат-помощником?",
@@ -5723,7 +5722,7 @@ const ru = {
       sourcingSourcing_items: [
         {
           q: "Как работает процесс оптового поиска поставщиков?",
-          a: "Процесс поиска поставщиков на istoc состоит из: исследования товаров, оценки поставщиков, запроса образца, переговоров о цене и оформления заказа. Инструменты платформы помогают вам на каждом этапе.",
+          a: "Процесс поиска поставщиков на iStoc состоит из: исследования товаров, оценки поставщиков, запроса образца, переговоров о цене и оформления заказа. Инструменты платформы помогают вам на каждом этапе.",
         },
         {
           q: "Стоит ли отправлять RFQ (запрос предложения цены)?",
@@ -5776,7 +5775,7 @@ const ru = {
       negotiationOtherIssues_items: [
         {
           q: "У меня языковые проблемы с поставщиком, что делать?",
-          a: "Встроенная функция перевода istoc автоматически переводит ваши сообщения. Включите значок перевода в области ввода сообщения, чтобы автоматически переводить ваши сообщения на язык поставщика.",
+          a: "Встроенная функция перевода iStoc автоматически переводит ваши сообщения. Включите значок перевода в области ввода сообщения, чтобы автоматически переводить ваши сообщения на язык поставщика.",
         },
         {
           q: "Как сообщить о подозрительном поставщике?",
@@ -5790,11 +5789,11 @@ const ru = {
 
       // ── Place Order ──
       placeOrderTradeAssurance_title: "О программе Trade Assurance",
-      placeOrderTradeAssurance_desc: "Информация о программе istoc Trade Assurance.",
+      placeOrderTradeAssurance_desc: "Информация о программе iStoc Trade Assurance.",
       placeOrderTradeAssurance_items: [
         {
           q: "Что такое Trade Assurance?",
-          a: "Trade Assurance — это программа istoc, которая защищает и покупателей, и продавцов. Она гарантирует полный или частичный возврат средств покупателю, если заказанные товары не доставлены в соответствии с условиями договора.",
+          a: "Trade Assurance — это программа iStoc, которая защищает и покупателей, и продавцов. Она гарантирует полный или частичный возврат средств покупателю, если заказанные товары не доставлены в соответствии с условиями договора.",
         },
         {
           q: "Что покрывается программой Trade Assurance?",
@@ -5802,7 +5801,7 @@ const ru = {
         },
         {
           q: "Trade Assurance бесплатна?",
-          a: "Да, базовое покрытие Trade Assurance бесплатно для всех пользователей istoc. Золотое и проверенное членство предлагают расширенные лимиты защиты и приоритетные посреднические услуги.",
+          a: "Да, базовое покрытие Trade Assurance бесплатно для всех пользователей iStoc. Золотое и проверенное членство предлагают расширенные лимиты защиты и приоритетные посреднические услуги.",
         },
       ],
 
@@ -5863,7 +5862,7 @@ const ru = {
       paymentOrderPayment_items: [
         {
           q: "Какие способы оплаты я могу использовать?",
-          a: "На istoc вы можете оплачивать <strong>кредитными картами</strong>, <strong>дебетовыми картами</strong>, <strong>банковским переводом/wire</strong>, <strong>онлайн-банкингом</strong> и <strong>кошельком istoc</strong>. Некоторые поставщики также принимают платежи LC (аккредитив) и T/T.",
+          a: "На iStoc вы можете оплачивать <strong>кредитными картами</strong>, <strong>дебетовыми картами</strong>, <strong>банковским переводом/wire</strong>, <strong>онлайн-банкингом</strong> и <strong>кошельком iStoc</strong>. Некоторые поставщики также принимают платежи LC (аккредитив) и T/T.",
         },
         {
           q: "Как обеспечивается безопасность оплаты?",
@@ -5896,8 +5895,8 @@ const ru = {
       paymentFinancial_desc: "Финансовые услуги и торговое финансирование.",
       paymentFinancial_items: [
         {
-          q: "Какие финансовые услуги предлагает istoc?",
-          a: "istoc предлагает покупателям торговое финансирование, кредитные лимиты и варианты отсрочки платежа. Эти услуги предоставляются через партнёрские финансовые учреждения и доступны при соответствующих условиях.",
+          q: "Какие финансовые услуги предлагает iStoc?",
+          a: "iStoc предлагает покупателям торговое финансирование, кредитные лимиты и варианты отсрочки платежа. Эти услуги предоставляются через партнёрские финансовые учреждения и доступны при соответствующих условиях.",
         },
         {
           q: "Как подать заявку на кредитный лимит?",
@@ -5922,7 +5921,7 @@ const ru = {
         },
         {
           q: "Как рассчитываются обменные курсы?",
-          a: "Цены на istoc по умолчанию отображаются в турецких лирах. Для платежей в валюте текущий обменный курс применяется банком в момент оплаты. Суммы, обусловленные разницей обменных курсов, носят информационный характер.",
+          a: "Цены на iStoc по умолчанию отображаются в турецких лирах. Для платежей в валюте текущий обменный курс применяется банком в момент оплаты. Суммы, обусловленные разницей обменных курсов, носят информационный характер.",
         },
       ],
 
@@ -5931,11 +5930,11 @@ const ru = {
       paymentTypes_items: [
         {
           q: "Какие типы оплаты поддерживаются?",
-          a: "istoc поддерживает кредитные/дебетовые карты Visa, Mastercard, American Express, банковский перевод/wire, онлайн-банкинг, кошелёк istoc, а для международных заказов — LC (аккредитив) и T/T (телеграфный перевод).",
+          a: "iStoc поддерживает кредитные/дебетовые карты Visa, Mastercard, American Express, банковский перевод/wire, онлайн-банкинг, кошелёк iStoc, а для международных заказов — LC (аккредитив) и T/T (телеграфный перевод).",
         },
         {
-          q: "Что такое кошелёк istoc?",
-          a: "Кошелёк istoc — это внутренняя цифровая платёжная система платформы. Вы можете пополнить баланс и совершать быстрые платежи без комиссии. Возвраты средств мгновенно отражаются в вашем кошельке. Вы можете в любое время вывести баланс кошелька на свой банковский счёт.",
+          q: "Что такое кошелёк iStoc?",
+          a: "Кошелёк iStoc — это внутренняя цифровая платёжная система платформы. Вы можете пополнить баланс и совершать быстрые платежи без комиссии. Возвраты средств мгновенно отражаются в вашем кошельке. Вы можете в любое время вывести баланс кошелька на свой банковский счёт.",
         },
         {
           q: "Как работает оплата LC (аккредитив)?",
@@ -5962,11 +5961,11 @@ const ru = {
       ],
 
       taxTypes_title: "Типы налогов",
-      taxTypes_desc: "Типы налогов, применяемых к операциям на istoc.",
+      taxTypes_desc: "Типы налогов, применяемых к операциям на iStoc.",
       taxTypes_items: [
         {
-          q: "Какие налоги применяются на istoc?",
-          a: "К операциям на istoc применяется <strong>НДС (налог на добавленную стоимость)</strong>. Для импортных операций может применяться <strong>таможенная пошлина</strong>, а для некоторых групп товаров — <strong>специальный налог на потребление</strong>.",
+          q: "Какие налоги применяются на iStoc?",
+          a: "К операциям на iStoc применяется <strong>НДС (налог на добавленную стоимость)</strong>. Для импортных операций может применяться <strong>таможенная пошлина</strong>, а для некоторых групп товаров — <strong>специальный налог на потребление</strong>.",
         },
         {
           q: "Каковы ставки НДС?",
@@ -5974,7 +5973,7 @@ const ru = {
         },
         {
           q: "Могу ли я получить возврат НДС?",
-          a: "Возврат НДС доступен для экспортных операций. Процессы возврата НДС проводятся через налоговую инспекцию. istoc предоставляет необходимые документы (счета-фактуры, таможенные декларации и т. д.) в цифровом виде.",
+          a: "Возврат НДС доступен для экспортных операций. Процессы возврата НДС проводятся через налоговую инспекцию. iStoc предоставляет необходимые документы (счета-фактуры, таможенные декларации и т. д.) в цифровом виде.",
         },
       ],
 
@@ -6034,15 +6033,15 @@ const ru = {
       taxRefund_items: [
         {
           q: "Как запросить возврат налога?",
-          a: "Для экспортных операций вы можете скачать необходимые документы в разделе «Мои документы» и подать заявление в свою налоговую инспекцию. istoc предоставляет документы, такие как таможенные декларации и счета-фактуры, в цифровом виде.",
+          a: "Для экспортных операций вы можете скачать необходимые документы в разделе «Мои документы» и подать заявление в свою налоговую инспекцию. iStoc предоставляет документы, такие как таможенные декларации и счета-фактуры, в цифровом виде.",
         },
         {
           q: "Сколько времени занимает возврат налога?",
-          a: "Процесс возврата налога проводится налоговой инспекцией и обычно занимает <strong>30-90 дней</strong>. Подготовка документов на стороне istoc завершается в течение 3-5 рабочих дней.",
+          a: "Процесс возврата налога проводится налоговой инспекцией и обычно занимает <strong>30-90 дней</strong>. Подготовка документов на стороне iStoc завершается в течение 3-5 рабочих дней.",
         },
         {
           q: "Какие документы требуются для возврата НДС?",
-          a: "Для возврата НДС требуются <strong>таможенная декларация</strong>, <strong>счёт-фактура продажи</strong>, <strong>подтверждение оплаты</strong> и <strong>документ о доставке</strong>. Все документы можно получить в цифровом виде через платформу istoc.",
+          a: "Для возврата НДС требуются <strong>таможенная декларация</strong>, <strong>счёт-фактура продажи</strong>, <strong>подтверждение оплаты</strong> и <strong>документ о доставке</strong>. Все документы можно получить в цифровом виде через платформу iStoc.",
         },
       ],
 
@@ -6052,7 +6051,7 @@ const ru = {
       shippingShipping_items: [
         {
           q: "Какие варианты доставки доступны?",
-          a: "istoc предлагает варианты доставки: <strong>стандартная доставка</strong>, <strong>экспресс-доставка</strong>, <strong>приоритетная доставка</strong> и <strong>морская перевозка</strong>. Варианты различаются в зависимости от размера, веса товара и адреса доставки.",
+          a: "iStoc предлагает варианты доставки: <strong>стандартная доставка</strong>, <strong>экспресс-доставка</strong>, <strong>приоритетная доставка</strong> и <strong>морская перевозка</strong>. Варианты различаются в зависимости от размера, веса товара и адреса доставки.",
         },
         {
           q: "Как рассчитывается стоимость доставки?",
@@ -6064,20 +6063,20 @@ const ru = {
         },
       ],
 
-      shippingLogistics_title: "Логистические услуги istoc",
-      shippingLogistics_desc: "Интегрированные логистические решения istoc.",
+      shippingLogistics_title: "Логистические услуги iStoc",
+      shippingLogistics_desc: "Интегрированные логистические решения iStoc.",
       shippingLogistics_items: [
         {
-          q: "Что такое istoc Logistics?",
-          a: "istoc Logistics — это собственное интегрированное решение платформы для доставки и логистики. Оно предлагает доставку «от двери до двери», складское хранение, таможенное оформление и услуги доставки «последней мили» под единым брендом.",
+          q: "Что такое iStoc Logistics?",
+          a: "iStoc Logistics — это собственное интегрированное решение платформы для доставки и логистики. Оно предлагает доставку «от двери до двери», складское хранение, таможенное оформление и услуги доставки «последней мили» под единым брендом.",
         },
         {
-          q: "Каковы преимущества istoc Logistics?",
+          q: "Каковы преимущества iStoc Logistics?",
           a: "Оно предлагает конкурентные цены, сквозное отслеживание, поддержку таможенного оформления, страховое покрытие и приоритетную поддержку клиентов. Также обеспечивается полная интеграция с Trade Assurance.",
         },
         {
-          q: "В какие страны осуществляет доставку istoc Logistics?",
-          a: "istoc Logistics предлагает услуги доставки в <strong>45+ стран</strong>. Вы можете просмотреть страны и ориентировочные сроки доставки в процессе оформления заказа.",
+          q: "В какие страны осуществляет доставку iStoc Logistics?",
+          a: "iStoc Logistics предлагает услуги доставки в <strong>45+ стран</strong>. Вы можете просмотреть страны и ориентировочные сроки доставки в процессе оформления заказа.",
         },
       ],
 
@@ -6086,7 +6085,7 @@ const ru = {
       shippingMaersk_items: [
         {
           q: "Что такое услуга доставки Maersk?",
-          a: "Maersk — это партнёр istoc по морским грузоперевозкам. Он предлагает услуги международных контейнерных грузоперевозок. Это экономичный вариант, особенно для крупнообъёмных и тяжёлых грузов.",
+          a: "Maersk — это партнёр iStoc по морским грузоперевозкам. Он предлагает услуги международных контейнерных грузоперевозок. Это экономичный вариант, особенно для крупнообъёмных и тяжёлых грузов.",
         },
         {
           q: "Сколько времени занимает доставка Maersk?",
@@ -6094,7 +6093,7 @@ const ru = {
         },
         {
           q: "Как отслеживать отправки Maersk?",
-          a: "Вы можете отслеживать вашу отправку в реальном времени через платформу istoc, используя номер контейнера. Отображаются местоположение судна, ориентировочная дата прибытия и информация о порте.",
+          a: "Вы можете отслеживать вашу отправку в реальном времени через платформу iStoc, используя номер контейнера. Отображаются местоположение судна, ориентировочная дата прибытия и информация о порте.",
         },
       ],
 
@@ -6107,7 +6106,7 @@ const ru = {
         },
         {
           q: "Могу ли я рассчитать импортные сборы заранее?",
-          a: "Да, вы можете использовать калькулятор импортных сборов istoc, чтобы заранее увидеть ориентировочные расходы. Введите категорию товара, код ТН ВЭД, страну происхождения и страну назначения для расчёта.",
+          a: "Да, вы можете использовать калькулятор импортных сборов iStoc, чтобы заранее увидеть ориентировочные расходы. Введите категорию товара, код ТН ВЭД, страну происхождения и страну назначения для расчёта.",
         },
         {
           q: "Есть ли товары, освобождённые от таможенной пошлины?",
@@ -6125,7 +6124,7 @@ const ru = {
         },
         {
           q: "Что следует проверить при доставке?",
-          a: "При доставке проверьте <strong>целостность упаковки</strong>, <strong>количество товара</strong> и <strong>внешнее состояние</strong>. Если есть повреждённые или отсутствующие товары, задокументируйте это в присутствии курьера и сообщите в istoc в течение 24 часов.",
+          a: "При доставке проверьте <strong>целостность упаковки</strong>, <strong>количество товара</strong> и <strong>внешнее состояние</strong>. Если есть повреждённые или отсутствующие товары, задокументируйте это в присутствии курьера и сообщите в iStoc в течение 24 часов.",
         },
         {
           q: "Могу ли я изменить адрес доставки?",
@@ -6156,7 +6155,7 @@ const ru = {
       inspectionServices_items: [
         {
           q: "Что такое услуга инспекции?",
-          a: "Услуга инспекции istoc — это профессиональная услуга, в рамках которой независимые инспекторы проводят контроль качества ваших товаров, проверяют соответствие производственным стандартам и проверяют спецификации заказа на месте.",
+          a: "Услуга инспекции iStoc — это профессиональная услуга, в рамках которой независимые инспекторы проводят контроль качества ваших товаров, проверяют соответствие производственным стандартам и проверяют спецификации заказа на месте.",
         },
         {
           q: "Какие виды инспекции предлагаются?",
@@ -6195,7 +6194,7 @@ const ru = {
         },
         {
           q: "Сколько времени занимает процесс разрешения спора?",
-          a: "Процесс разрешения спора обычно завершается в течение <strong>7-15 рабочих дней</strong>. Сначала ищется урегулирование между сторонами. Если урегулирование не достигнуто, в дело вступает команда медиации istoc.",
+          a: "Процесс разрешения спора обычно завершается в течение <strong>7-15 рабочих дней</strong>. Сначала ищется урегулирование между сторонами. Если урегулирование не достигнуто, в дело вступает команда медиации iStoc.",
         },
         {
           q: "Что происходит с моей оплатой во время спора?",
@@ -6225,7 +6224,7 @@ const ru = {
       afterSalesDisputeProcess_items: [
         {
           q: "Как работает процесс разрешения спора?",
-          a: "Процесс состоит из: <strong>1)</strong> Подача спора, <strong>2)</strong> Ответ поставщика (3 дня), <strong>3)</strong> Переговоры между сторонами (5 дней), <strong>4)</strong> Медиация istoc (при необходимости), <strong>5)</strong> Решение и исполнение.",
+          a: "Процесс состоит из: <strong>1)</strong> Подача спора, <strong>2)</strong> Ответ поставщика (3 дня), <strong>3)</strong> Переговоры между сторонами (5 дней), <strong>4)</strong> Медиация iStoc (при необходимости), <strong>5)</strong> Решение и исполнение.",
         },
         {
           q: "Могу ли я обжаловать решение медиации?",
@@ -6246,7 +6245,7 @@ const ru = {
         },
         {
           q: "Товар прибыл повреждённым, что мне делать?",
-          a: "Задокументируйте повреждение в момент доставки (фото/видео). Сообщите в istoc в течение 24 часов. Компенсация за повреждение или повторная отправка предоставляется в рамках страхования доставки.",
+          a: "Задокументируйте повреждение в момент доставки (фото/видео). Сообщите в iStoc в течение 24 часов. Компенсация за повреждение или повторная отправка предоставляется в рамках страхования доставки.",
         },
         {
           q: "Качество товара не соответствует ожиданиям, что мне делать?",
@@ -6323,17 +6322,17 @@ const ru = {
         },
       ],
 
-      // ── Security & istoc Rules ──
+      // ── Security & iStoc Rules ──
       securityFraud_title: "Мошенничество/Фальшивые письма",
       securityFraud_desc: "Распознавание и сообщение о мошенничестве и фальшивых письмах.",
       securityFraud_items: [
         {
           q: "Как распознать попытку мошенничества?",
-          a: "Остерегайтесь сообщений, запрашивающих оплату вне платформы, предлагающих необычно низкие цены, запрашивающих личную информацию и оказывающих давление для срочной оплаты. istoc никогда не запрашивает оплату вне платформы.",
+          a: "Остерегайтесь сообщений, запрашивающих оплату вне платформы, предлагающих необычно низкие цены, запрашивающих личную информацию и оказывающих давление для срочной оплаты. iStoc никогда не запрашивает оплату вне платформы.",
         },
         {
           q: "Я получил фальшивое письмо, что мне делать?",
-          a: "Если вы получаете подозрительные письма, якобы от istoc, убедитесь, что адрес электронной почты имеет расширение @istoc.com. Сообщайте о фальшивых письмах, пересылая их на <strong>security@istoc.com</strong>. Не переходите по ссылкам в письме.",
+          a: "Если вы получаете подозрительные письма, якобы от iStoc, убедитесь, что адрес электронной почты имеет расширение @iStoc.com. Сообщайте о фальшивых письмах, пересылая их на <strong>security@istoc.com</strong>. Не переходите по ссылкам в письме.",
         },
         {
           q: "Мой аккаунт был взломан, что мне делать?",
@@ -6368,7 +6367,7 @@ const ru = {
         },
         {
           q: "Какие языки поддерживает служба поддержки клиентов?",
-          a: "Служба поддержки клиентов istoc предоставляет помощь на турецком и английском языках. Для других языков доступна поддержка с переводом.",
+          a: "Служба поддержки клиентов iStoc предоставляет помощь на турецком и английском языках. Для других языков доступна поддержка с переводом.",
         },
         {
           q: "Каково время ответа на мой запрос в поддержку?",
@@ -6394,15 +6393,15 @@ const ru = {
       ],
 
       othersOfflineService_title: "Офлайн-обслуживание",
-      othersOfflineService_desc: "Физические точки обслуживания istoc.",
+      othersOfflineService_desc: "Физические точки обслуживания iStoc.",
       othersOfflineService_items: [
         {
-          q: "Есть ли у istoc физические офисы?",
-          a: "istoc — это полностью цифровая B2B-платформа торговли, и в настоящее время не имеет физических офисов обслуживания клиентов. Все наши услуги (членство, договоры, обучение, поддержка) предоставляются через онлайн-каналы.",
+          q: "Есть ли у iStoc физические офисы?",
+          a: "iStoc — это полностью цифровая B2B-платформа торговли, и в настоящее время не имеет физических офисов обслуживания клиентов. Все наши услуги (членство, договоры, обучение, поддержка) предоставляются через онлайн-каналы.",
         },
         {
           q: "Участвуете ли вы в выставках и мероприятиях?",
-          a: 'istoc участвует в различных отраслевых выставках и торговых мероприятиях в течение года. За предстоящими мероприятиями можно следить в разделе "Мероприятия" на главной странице.',
+          a: 'iStoc участвует в различных отраслевых выставках и торговых мероприятиях в течение года. За предстоящими мероприятиями можно следить в разделе "Мероприятия" на главной странице.',
         },
         {
           q: "Как записаться на личную встречу?",
@@ -6412,15 +6411,15 @@ const ru = {
 
       // ── Promotions & Shopping Guide ──
       promotionsShoppingGuide_title: "Руководство по покупкам",
-      promotionsShoppingGuide_desc: "Руководство по эффективным покупкам на istoc.",
+      promotionsShoppingGuide_desc: "Руководство по эффективным покупкам на iStoc.",
       promotionsShoppingGuide_items: [
         {
-          q: "Как мне сделать первую покупку на istoc?",
+          q: "Как мне сделать первую покупку на iStoc?",
           a: "Сначала найдите нужный вам товар, сравните нескольких поставщиков, запросите образцы и оформите заказ, когда будете удовлетворены. Для первого заказа рекомендуем начинать с небольших объёмов.",
         },
         {
           q: "Как найти лучшую цену?",
-          a: "Получите предложения цены от нескольких поставщиков, отправьте RFQ и договоритесь о скидках в зависимости от объёма. Инструмент анализа цен istoc на основе ИИ также помогает оценить рыночную стоимость.",
+          a: "Получите предложения цены от нескольких поставщиков, отправьте RFQ и договоритесь о скидках в зависимости от объёма. Инструмент анализа цен iStoc на основе ИИ также помогает оценить рыночную стоимость.",
         },
         {
           q: "Каковы советы по безопасным покупкам?",
@@ -6467,7 +6466,7 @@ const ru = {
       promotionsPayment_items: [
         {
           q: "Есть ли скидки для определённых способов оплаты?",
-          a: "Да, время от времени предлагаются специальные скидки для определённых банковских карт, оплат через istoc Wallet или банковских переводов. Активные акции по оплате отображаются на странице оплаты.",
+          a: "Да, время от времени предлагаются специальные скидки для определённых банковских карт, оплат через iStoc Wallet или банковских переводов. Активные акции по оплате отображаются на странице оплаты.",
         },
         {
           q: "Есть ли скидка на первый заказ?",
@@ -6496,21 +6495,21 @@ const ru = {
         },
       ],
 
-      // ── istoc Guarantee ──
+      // ── iStoc Guarantee ──
       guaranteedShipping_title: "Гарантированная доставка",
-      guaranteedShipping_desc: "Программа гарантии доставки istoc.",
+      guaranteedShipping_desc: "Программа гарантии доставки iStoc.",
       guaranteedShipping_items: [
         {
           q: "Что такое Гарантированная доставка?",
-          a: "Гарантированная доставка istoc гарантирует, что ваш заказ будет доставлен в указанный срок. В случае задержки полная или частичная стоимость доставки возвращается.",
+          a: "Гарантированная доставка iStoc гарантирует, что ваш заказ будет доставлен в указанный срок. В случае задержки полная или частичная стоимость доставки возвращается.",
         },
         {
           q: "Как получить компенсацию за задержки доставки?",
-          a: "Если доставка осуществлена после гарантированного срока, компенсация автоматически рассчитывается и возвращается на ваш istoc Wallet или исходный способ оплаты.",
+          a: "Если доставка осуществлена после гарантированного срока, компенсация автоматически рассчитывается и возвращается на ваш iStoc Wallet или исходный способ оплаты.",
         },
         {
           q: "Какие способы доставки гарантированы?",
-          a: "Гарантия доставки действует для отправок, осуществлённых через istoc Logistics и партнёрских перевозчиков. Для товаров, отправляемых с использованием собственной организации доставки поставщика, покрытие гарантии может отличаться.",
+          a: "Гарантия доставки действует для отправок, осуществлённых через iStoc Logistics и партнёрских перевозчиков. Для товаров, отправляемых с использованием собственной организации доставки поставщика, покрытие гарантии может отличаться.",
         },
       ],
 
@@ -6519,7 +6518,7 @@ const ru = {
       guaranteedAfterSales_items: [
         {
           q: "Что такое Гарантированное послепродажное обслуживание?",
-          a: "Это дополнительная программа защиты, предлагаемая istoc покупателям. Она предоставляет такие преимущества, как ускоренная медиация при проблемах с товаром, приоритетная поддержка клиентов и увеличенные сроки возврата.",
+          a: "Это дополнительная программа защиты, предлагаемая iStoc покупателям. Она предоставляет такие преимущества, как ускоренная медиация при проблемах с товаром, приоритетная поддержка клиентов и увеличенные сроки возврата.",
         },
         {
           q: "Как долго действует эта гарантия?",
@@ -6557,7 +6556,7 @@ const ru = {
         },
         {
           q: "Есть ли дополнительная плата за гарантию заказа?",
-          a: "Нет, защита заказа в рамках Trade Assurance бесплатна. Все пользователи istoc автоматически пользуются этой защитой.",
+          a: "Нет, защита заказа в рамках Trade Assurance бесплатна. Все пользователи iStoc автоматически пользуются этой защитой.",
         },
         {
           q: "Каков лимит гарантированного заказа?",
@@ -6570,7 +6569,7 @@ const ru = {
       guaranteedOverseasWarehouse_items: [
         {
           q: "Что такое Проверенный зарубежный склад?",
-          a: "Это законтрактованные и проверенные складские объекты istoc за рубежом. Товары, отправляемые с этих складов, прошли проверку качества товара и наличия на складе. Они предлагают более быструю доставку и опции местного возврата.",
+          a: "Это законтрактованные и проверенные складские объекты iStoc за рубежом. Товары, отправляемые с этих складов, прошли проверку качества товара и наличия на складе. Они предлагают более быструю доставку и опции местного возврата.",
         },
         {
           q: "В каких странах есть проверенные склады?",
@@ -6582,13 +6581,13 @@ const ru = {
         },
       ],
 
-      // ── istoc App Settings ──
-      appSettingsLabel_title: "Настройки приложения istoc",
+      // ── iStoc App Settings ──
+      appSettingsLabel_title: "Настройки приложения iStoc",
       appSettingsLabel_desc: "Настройки и конфигурация мобильного приложения.",
       appSettingsLabel_items: [
         {
-          q: "Где я могу скачать мобильное приложение istoc?",
-          a: "Приложение istoc можно бесплатно скачать в <strong>App Store</strong> (iOS) и <strong>Google Play Store</strong> (Android). Вы также можете скачать его, отсканировав QR-код на нашей главной странице.",
+          q: "Где я могу скачать мобильное приложение iStoc?",
+          a: "Приложение iStoc можно бесплатно скачать в <strong>App Store</strong> (iOS) и <strong>Google Play Store</strong> (Android). Вы также можете скачать его, отсканировав QR-код на нашей главной странице.",
         },
         {
           q: "Как настроить уведомления приложения?",
@@ -6605,7 +6604,7 @@ const ru = {
       ],
 
       // ── Language & Localization ──
-      localizationSettings_title: "Языковые настройки istoc",
+      localizationSettings_title: "Языковые настройки iStoc",
       localizationSettings_desc: "Языковые и региональные настройки платформы.",
       localizationSettings_items: [
         {
@@ -6614,7 +6613,7 @@ const ru = {
         },
         {
           q: "Какие языки поддерживаются?",
-          a: "istoc в настоящее время поддерживает <strong>турецкий</strong> и <strong>английский</strong> языки. Дополнительные языковые варианты будут добавлены в будущем.",
+          a: "iStoc в настоящее время поддерживает <strong>турецкий</strong> и <strong>английский</strong> языки. Дополнительные языковые варианты будут добавлены в будущем.",
         },
         {
           q: "Как изменить настройку валюты?",
@@ -6735,7 +6734,7 @@ const ru = {
       heroCta: "Начать бесплатно",
 
       // Benefits
-      benefitsTitle: "Почему istoc?",
+      benefitsTitle: "Почему iStoc?",
       benefit1Title: "Широкая база покупателей",
       benefit1Desc:
         "Охватите широкую аудиторию покупателей напрямую на глобальном B2B-маркетплейсе. Повысьте свою заметность.",
@@ -6835,7 +6834,7 @@ const ru = {
         loadError: "Не удалось загрузить информацию о ценах. Пожалуйста, обновите страницу.",
       },
       manufacturerPlatform: "Платформа для производителей",
-      heroSubtitle: "iSTOC напрямую связывает производителей из Турции с B2B-покупателями по всему миру. Размещайте, продавайте, отправляйте — без комиссии.",
+      heroSubtitle: "iStoc напрямую связывает производителей из Турции с B2B-покупателями по всему миру. Размещайте, продавайте, отправляйте — без комиссии.",
       heroImageAlt: "Экспорт из Турции в мир: портовая и контейнерная логистика",
       applyAsSeller: "Подать заявку продавца",
       howItWorks: "Как это работает?",
@@ -6904,7 +6903,7 @@ const ru = {
       yearlyToggle: "Год",
       monthlyToggle: "Месяц",
       comparison: "Сравнение",
-      comparisonTitle: "iSTOC в сравнении с другими маркетплейсами.",
+      comparisonTitle: "iStoc в сравнении с другими маркетплейсами.",
       comparisonDesc: "С точки зрения производителя разница очевидна: ниже комиссия, нет фиксированных взносов, процесс ориентирован на B2B.",
       globalB2bMarketplace: "Глобальный B2B-маркетплейс",
       internationalGeneral: "Международный общий",
@@ -6925,7 +6924,7 @@ const ru = {
       dedicatedTurkishSupport: "Специальная поддержка турецких производителей",
       extraFee: "Дополнительная плата",
       restricted: "Ограничено",
-      comparisonDisclaimer: "* Тарифы конкурентов взяты из общедоступных страниц с ценами (май 2026). Комиссия iSTOC зависит от категории; полный перечень предоставляется после подачи заявки.",
+      comparisonDisclaimer: "* Тарифы конкурентов взяты из общедоступных страниц с ценами (май 2026). Комиссия iStoc зависит от категории; полный перечень предоставляется после подачи заявки.",
       finalCtaTitle: "Заявка занимает всего 4 минуты.",
       finalCtaDesc: "Налоговый номер, категория производства и контакт — остальное мы возьмём на себя. Одобрение в среднем за 2 рабочих дня.",
       letsTalkFirst: "Сначала обсудим",
@@ -6959,25 +6958,25 @@ const ru = {
       messageSendError: "Не удалось отправить сообщение. Пожалуйста, попробуйте снова.",
       messageSentSuccess: "Ваше сообщение успешно отправлено!",
       sending: "Отправка...",
-      onIstocFor: "На iSTOC уже",
+      onIstocFor: "На iStoc уже",
       verificationSubtitle: "Получите значок надёжного поставщика",
       verificationBenefitsTitle: "Преимущества верификации",
-      verificationBenefitsP1: "Значок «Проверенный поставщик» iSTOC — это самый убедительный показатель вашей надёжности на платформе. Проверенные поставщики получают на 40% больше видимости в результатах поиска, и 78% покупателей предпочитают проверенных поставщиков.",
+      verificationBenefitsP1: "Значок «Проверенный поставщик» iStoc — это самый убедительный показатель вашей надёжности на платформе. Проверенные поставщики получают на 40% больше видимости в результатах поиска, и 78% покупателей предпочитают проверенных поставщиков.",
       verificationBenefitsP2: "Ваш значок заметно отображается в профиле магазина, списках товаров и результатах поиска. Покупатели охотнее размещают заказы у проверенных поставщиков, что существенно повышает вашу конверсию. Вы также получаете доступ к кампаниям и местам на витрине, доступным только проверенным поставщикам.",
-      verificationBenefitsP3: "Проверенные поставщики пользуются приоритетной линией поддержки iSTOC, могут участвовать в эксклюзивных обучающих программах и занимают видное место на мероприятиях iSTOC по развитию бизнеса.",
+      verificationBenefitsP3: "Проверенные поставщики пользуются приоритетной линией поддержки iStoc, могут участвовать в эксклюзивных обучающих программах и занимают видное место на мероприятиях iStoc по развитию бизнеса.",
       verificationRequirementsTitle: "Требования к верификации",
       verificationRequirementsP1: "Для подачи заявки на верификацию должны быть подготовлены следующие основные документы: актуальная выписка из торгового реестра, налоговое свидетельство, образец подписей, баланс и отчёт о прибылях и убытках за последние 2 года, фотографии производственного объекта и свидетельство о деятельности.",
-      verificationRequirementsP2: "Ваша компания должна работать не менее 2 лет, иметь действующую запись в торговом реестре и быть зарегистрирована как активный продавец на платформе iSTOC не менее 6 месяцев. Кроме того, ожидается, что ваш показатель удовлетворённости клиентов за последние 6 месяцев будет выше 4.0/5.0.",
+      verificationRequirementsP2: "Ваша компания должна работать не менее 2 лет, иметь действующую запись в торговом реестре и быть зарегистрирована как активный продавец на платформе iStoc не менее 6 месяцев. Кроме того, ожидается, что ваш показатель удовлетворённости клиентов за последние 6 месяцев будет выше 4.0/5.0.",
       verificationProcessTitle: "Процесс подачи заявки",
-      verificationProcessP1: "Заявка на верификацию выполняется в 4 простых шага. Сначала перейдите в раздел «Заявка на верификацию» в панели продавца и заполните онлайн-форму. На втором шаге загрузите необходимые документы в систему. На третьем шаге команда верификации iSTOC проверит ваши документы и при необходимости запросит дополнительную информацию.",
-      verificationProcessP2: "На четвёртом и последнем шаге для уровней «Расширенная» и «Премиум» представитель iSTOC посещает ваше предприятие. Весь процесс в среднем занимает 10-15 рабочих дней. Вы можете отслеживать статус заявки в реальном времени в панели продавца.",
+      verificationProcessP1: "Заявка на верификацию выполняется в 4 простых шага. Сначала перейдите в раздел «Заявка на верификацию» в панели продавца и заполните онлайн-форму. На втором шаге загрузите необходимые документы в систему. На третьем шаге команда верификации iStoc проверит ваши документы и при необходимости запросит дополнительную информацию.",
+      verificationProcessP2: "На четвёртом и последнем шаге для уровней «Расширенная» и «Премиум» представитель iStoc посещает ваше предприятие. Весь процесс в среднем занимает 10-15 рабочих дней. Вы можете отслеживать статус заявки в реальном времени в панели продавца.",
       verificationLevelsTitle: "Уровни верификации",
       verificationLevelBasicLabel: "Базовая верификация:",
       verificationLevelBasicDesc: "Проверка регистрационных документов компании и налогового статуса. Этот уровень подтверждает, что ваша компания работает законно. Предоставляется бесплатно.",
       verificationLevelAdvancedLabel: "Расширенная верификация:",
       verificationLevelAdvancedDesc: "В дополнение к базовой верификации включает оценку производственной мощности и выездной аудит. Во время посещения фабрики проверяются производственные линии, процессы контроля качества и условия хранения. Применяется ежегодная плата за верификацию в размере 2 990 TRY.",
       verificationLevelPremiumLabel: "Премиум-верификация:",
-      verificationLevelPremiumDesc: "Это значок доверия высшего уровня. В дополнение к расширенной верификации включает анализ финансовой устойчивости, проверку рекомендаций клиентов и регулярные ежегодные аудиты. Поставщики с премиум-верификацией выделяются как самые надёжные бизнес-партнёры iSTOC. Применяется ежегодная плата за верификацию в размере 7 990 TRY.",
+      verificationLevelPremiumDesc: "Это значок доверия высшего уровня. В дополнение к расширенной верификации включает анализ финансовой устойчивости, проверку рекомендаций клиентов и регулярные ежегодные аудиты. Поставщики с премиум-верификацией выделяются как самые надёжные бизнес-партнёры iStoc. Применяется ежегодная плата за верификацию в размере 7 990 TRY.",
     },
 
     // ============================================================
@@ -7208,7 +7207,7 @@ const ru = {
         custCard4Title: "Обёртка",
         custCard4Subtitle: "Профессиональная обёртка",
         testimonial1Quote:
-          "Благодаря istoc процесс поиска поставщиков сократился вдвое. Система предложений цены особенно быстрая и удобная. За 3 месяца мы заключили соглашения с 12 новыми поставщиками.",
+          "Благодаря iStoc процесс поиска поставщиков сократился вдвое. Система предложений цены особенно быстрая и удобная. За 3 месяца мы заключили соглашения с 12 новыми поставщиками.",
         testimonial1Name: "Mehmet Kaya",
         testimonial1Title: "Менеджер по закупкам",
         testimonial1Company: "Anadolu Tekstil Inc.",
@@ -7362,7 +7361,7 @@ const ru = {
       "Наши изделия со степенью защиты IP67 проходят испытания на водостойкость. Если какое-либо изделие покажет повреждения от воды в течение 2-летнего гарантийного срока, мы заменим его бесплатно.",
     faq5Q: "Какие способы оплаты вы принимаете?",
     faq5A:
-      "Мы принимаем T/T (банковский перевод), PayPal, istoc Trade Assurance и L/C для заказов свыше $10,000. Требуется предоплата 30% с остатком до отгрузки.",
+      "Мы принимаем T/T (банковский перевод), PayPal, iStoc Trade Assurance и L/C для заказов свыше $10,000. Требуется предоплата 30% с остатком до отгрузки.",
     faq6Q: "Можете ли вы предоставить сертификаты на материалы?",
     faq6A:
       "Да, мы можем предоставить отчёты об испытаниях SGS, сертификаты соответствия ROHS и декларации об отсутствии никеля. Они могут быть отправлены в электронном виде или в оригинале вместе с вашей отгрузкой.",
@@ -7532,7 +7531,7 @@ const ru = {
   // ============================================================
   topDealsPage: {
     heroTitle: "Лучшие предложения",
-    heroSubtitle: "Найдите самые низкие цены на istoc",
+    heroSubtitle: "Найдите самые низкие цены на iStoc",
     promoShipping: "БЕСПЛАТНАЯ доставка с лимитом до $20",
     promoDays: "3 дня",
     tabAll: "Все",
@@ -7666,7 +7665,7 @@ const ru = {
 
     // Collection chips
     collectionLabel: "Коллекция",
-    chipIstocPicks: "Выбор istoc",
+    chipIstocPicks: "Выбор iStoc",
     chip48hShip: "Доставка за 48 ч",
     chipHotSale: "Горячая распродажа",
     chipBranded: "Брендовые",
@@ -8107,7 +8106,7 @@ const ru = {
     headerLocalTime: "Местное время",
     online: "В сети",
     securityBanner:
-      "Чтобы пользоваться защитой заказов, всегда ведите переписку и сделки на istoc.",
+      "Чтобы пользоваться защитой заказов, всегда ведите переписку и сделки на iStoc.",
     endToEndEncrypted:
       "Эта переписка защищена сквозным шифрованием. Только вы и продавец можете её видеть.",
     typingIndicator: "{{name}} печатает",
@@ -8144,7 +8143,7 @@ const ru = {
       country: "Страна",
       emailLabel: "Email",
       placeholderEmail: "example@company.com",
-      verifiedBy: "Аккаунты, проверенные istoc:",
+      verifiedBy: "Аккаунты, проверенные iStoc:",
     },
     tabs: {
       chat: "Чат",

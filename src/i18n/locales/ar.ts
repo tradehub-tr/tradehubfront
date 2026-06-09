@@ -1,73 +1,73 @@
 const ar = {
   translation: {
     pageTitle: {
-      home: "istoc — سوق B2B عالمي",
-      auth_forgot_password: "نسيت كلمة المرور - iSTOC TradeHub",
-      auth_login: "تسجيل الدخول - iSTOC TradeHub",
-      auth_register: "إنشاء حساب - iSTOC TradeHub",
-      auth_reset_password: "إعادة تعيين كلمة المرور - iSTOC TradeHub",
-      brand: "العلامة التجارية - iSTOC TradeHub",
-      cart: "سلتي - iSTOC TradeHub",
-      categories: "الفئات - iSTOC TradeHub",
-      dashboard_addresses: "عناويني - iSTOC TradeHub",
-      dashboard_buyer_dashboard: "لوحة تحكم المشتري - iSTOC TradeHub",
-      dashboard_contacts: "جهات اتصالي - iSTOC TradeHub",
-      dashboard_favorites: "مفضلاتي - iSTOC TradeHub",
-      dashboard_inquiries: "أسئلتي عن المنتجات - iSTOC TradeHub",
-      dashboard_kyb: "التحقق من المستندات - iSTOC TradeHub",
-      dashboard_kyc: "التحقق من الهوية (KYC) - iSTOC TradeHub",
-      dashboard_messages: "رسائلي - iSTOC TradeHub",
-      dashboard_orders: "طلباتي - iSTOC TradeHub",
-      dashboard_payment: "الدفع - iSTOC TradeHub",
-      dashboard_profile: "ملفي الشخصي - iSTOC TradeHub",
-      dashboard_rfq_form: "تفاصيل طلب عرض السعر | iSTOC TradeHub",
-      dashboard_rfq_quotes: "عروض أسعار RFQ | iSTOC TradeHub",
-      dashboard_rfq_success: "تم إرسال RFQ | iSTOC TradeHub",
-      dashboard_rfq: "RFQ - طلب عرض سعر | iSTOC TradeHub",
-      dashboard_settings: "إعدادات الحساب - iSTOC TradeHub",
-      dashboard_subscription: "الاشتراك - iSTOC TradeHub",
-      help_faq_detail: "تفاصيل الأسئلة الشائعة - iSTOC TradeHub Yardım Merkezi",
-      help_faq: "الأسئلة الشائعة - iSTOC TradeHub Yardım Merkezi",
-      help_help_center: "مركز المساعدة - iSTOC TradeHub",
-      help_help_ticket_new: "إنشاء طلب دعم - iSTOC TradeHub",
-      help_help_ticket: "طلب دعم - iSTOC TradeHub",
-      help_help_tickets: "طلبات الدعم الخاصة بي - iSTOC TradeHub",
-      info_after_sales: "حماية ما بعد البيع - iSTOC TradeHub",
-      info_membership: "برنامج العضوية - iSTOC TradeHub",
-      info_payments: "مدفوعات آمنة وسهلة - iSTOC TradeHub",
-      info_refund_policy: "سياسة استرداد الأموال - iSTOC TradeHub",
-      info_shipping_logistics: "خدمات الشحن والخدمات اللوجستية - iSTOC TradeHub",
-      info_trade_assurance_detail: "تفاصيل ضمان التجارة - iSTOC TradeHub",
-      legal_accessibility: "إمكانية الوصول - iSTOC TradeHub",
-      legal_cookies: "سياسة ملفات تعريف الارتباط - iSTOC TradeHub",
-      legal_distance_sales: "اتفاقية البيع عن بُعد - iSTOC TradeHub",
-      legal_ip: "الملكية الفكرية - iSTOC TradeHub",
-      legal_kvkk: "إشعار حماية البيانات - iSTOC TradeHub",
-      legal_notice: "إشعار قانوني — istoc",
-      legal_privacy: "سياسة الخصوصية - iSTOC TradeHub",
-      legal_product_listing: "سياسة إدراج المنتجات - iSTOC TradeHub",
-      legal_returns: "سياسة الإرجاع - iSTOC TradeHub",
-      legal_terms: "شروط الاستخدام - iSTOC TradeHub",
-      manufacturers: "المصنّعون - iSTOC",
-      order_checkout: "الدفع - iSTOC TradeHub",
-      order_order_success: "حالة الطلب - iSTOC TradeHub",
-      order_payment_failed: "فشل الدفع - iSTOC TradeHub",
-      order_payment_processing: "جارٍ معالجة الدفع - iSTOC TradeHub",
-      product_detail: "تفاصيل المنتج - iSTOC TradeHub",
-      products: "المنتجات - iSTOC TradeHub",
-      seller_application_pending: "حالة الطلب - iSTOC TradeHub",
-      seller_dashboard: "لوحة البائع - iSTOC",
-      seller_sell_pricing: "باقات العضوية - iSTOC TradeHub",
-      seller_sell: "كن بائعاً - iSTOC TradeHub",
-      seller_seller_shop: "iSTOC TradeHub - المتجر",
-      seller_seller_storefront: "iSTOC TradeHub - متجر البائع",
-      seller_supplier_setup: "طلب المورّد - iSTOC TradeHub",
-      seller_verification: "كن مورّداً موثّقاً - iSTOC TradeHub",
-      tailored_selections: "مختارات مخصصة لك - iSTOC",
-      top_deals: "أفضل العروض - iSTOC",
-      top_ranking_category: "الأكثر مبيعاً — الفئة | iSTOC",
-      top_ranking: "الأعلى تصنيفاً - iSTOC",
-      trade_assurance: "ضمان التجارة - iSTOC TradeHub",
+      home: "iStoc — سوق B2B عالمي",
+      auth_forgot_password: "نسيت كلمة المرور - iStoc TradeHub",
+      auth_login: "تسجيل الدخول - iStoc TradeHub",
+      auth_register: "إنشاء حساب - iStoc TradeHub",
+      auth_reset_password: "إعادة تعيين كلمة المرور - iStoc TradeHub",
+      brand: "العلامة التجارية - iStoc TradeHub",
+      cart: "سلتي - iStoc TradeHub",
+      categories: "الفئات - iStoc TradeHub",
+      dashboard_addresses: "عناويني - iStoc TradeHub",
+      dashboard_buyer_dashboard: "لوحة تحكم المشتري - iStoc TradeHub",
+      dashboard_contacts: "جهات اتصالي - iStoc TradeHub",
+      dashboard_favorites: "مفضلاتي - iStoc TradeHub",
+      dashboard_inquiries: "أسئلتي عن المنتجات - iStoc TradeHub",
+      dashboard_kyb: "التحقق من المستندات - iStoc TradeHub",
+      dashboard_kyc: "التحقق من الهوية (KYC) - iStoc TradeHub",
+      dashboard_messages: "رسائلي - iStoc TradeHub",
+      dashboard_orders: "طلباتي - iStoc TradeHub",
+      dashboard_payment: "الدفع - iStoc TradeHub",
+      dashboard_profile: "ملفي الشخصي - iStoc TradeHub",
+      dashboard_rfq_form: "تفاصيل طلب عرض السعر | iStoc TradeHub",
+      dashboard_rfq_quotes: "عروض أسعار RFQ | iStoc TradeHub",
+      dashboard_rfq_success: "تم إرسال RFQ | iStoc TradeHub",
+      dashboard_rfq: "RFQ - طلب عرض سعر | iStoc TradeHub",
+      dashboard_settings: "إعدادات الحساب - iStoc TradeHub",
+      dashboard_subscription: "الاشتراك - iStoc TradeHub",
+      help_faq_detail: "تفاصيل الأسئلة الشائعة - iStoc TradeHub Yardım Merkezi",
+      help_faq: "الأسئلة الشائعة - iStoc TradeHub Yardım Merkezi",
+      help_help_center: "مركز المساعدة - iStoc TradeHub",
+      help_help_ticket_new: "إنشاء طلب دعم - iStoc TradeHub",
+      help_help_ticket: "طلب دعم - iStoc TradeHub",
+      help_help_tickets: "طلبات الدعم الخاصة بي - iStoc TradeHub",
+      info_after_sales: "حماية ما بعد البيع - iStoc TradeHub",
+      info_membership: "برنامج العضوية - iStoc TradeHub",
+      info_payments: "مدفوعات آمنة وسهلة - iStoc TradeHub",
+      info_refund_policy: "سياسة استرداد الأموال - iStoc TradeHub",
+      info_shipping_logistics: "خدمات الشحن والخدمات اللوجستية - iStoc TradeHub",
+      info_trade_assurance_detail: "تفاصيل ضمان التجارة - iStoc TradeHub",
+      legal_accessibility: "إمكانية الوصول - iStoc TradeHub",
+      legal_cookies: "سياسة ملفات تعريف الارتباط - iStoc TradeHub",
+      legal_distance_sales: "اتفاقية البيع عن بُعد - iStoc TradeHub",
+      legal_ip: "الملكية الفكرية - iStoc TradeHub",
+      legal_kvkk: "إشعار حماية البيانات - iStoc TradeHub",
+      legal_notice: "إشعار قانوني — iStoc",
+      legal_privacy: "سياسة الخصوصية - iStoc TradeHub",
+      legal_product_listing: "سياسة إدراج المنتجات - iStoc TradeHub",
+      legal_returns: "سياسة الإرجاع - iStoc TradeHub",
+      legal_terms: "شروط الاستخدام - iStoc TradeHub",
+      manufacturers: "المصنّعون - iStoc",
+      order_checkout: "الدفع - iStoc TradeHub",
+      order_order_success: "حالة الطلب - iStoc TradeHub",
+      order_payment_failed: "فشل الدفع - iStoc TradeHub",
+      order_payment_processing: "جارٍ معالجة الدفع - iStoc TradeHub",
+      product_detail: "تفاصيل المنتج - iStoc TradeHub",
+      products: "المنتجات - iStoc TradeHub",
+      seller_application_pending: "حالة الطلب - iStoc TradeHub",
+      seller_dashboard: "لوحة البائع - iStoc",
+      seller_sell_pricing: "باقات العضوية - iStoc TradeHub",
+      seller_sell: "كن بائعاً - iStoc TradeHub",
+      seller_seller_shop: "iStoc TradeHub - المتجر",
+      seller_seller_storefront: "iStoc TradeHub - متجر البائع",
+      seller_supplier_setup: "طلب المورّد - iStoc TradeHub",
+      seller_verification: "كن مورّداً موثّقاً - iStoc TradeHub",
+      tailored_selections: "مختارات مخصصة لك - iStoc",
+      top_deals: "أفضل العروض - iStoc",
+      top_ranking_category: "الأكثر مبيعاً — الفئة | iStoc",
+      top_ranking: "الأعلى تصنيفاً - iStoc",
+      trade_assurance: "ضمان التجارة - iStoc TradeHub",
     },
     p2g0: {
       categoryProductsAria: "منتجات {{category}}",
@@ -82,7 +82,7 @@ const ar = {
       unknownError: "خطأ غير معروف",
     },
     authAddr: {
-      istocHome: "الصفحة الرئيسية iSTOC",
+      istocHome: "الصفحة الرئيسية iStoc",
       promoHeadline: "شبكة التجارة العالمية بين الشركات",
       promoSubtitle: "سوق الجيل الجديد للتجارة بين الشركات مع مدفوعات آمنة وبائعين موثقين وعمولات شفافة.",
       featSecure: "آمن",
@@ -199,7 +199,7 @@ const ar = {
     },
     checkoutMfr: {
       goToStore: "الانتقال إلى متجر {{name}}",
-      securePaymentNote: "يتم الدفع بشكل آمن إلى المنصة؛ ويُحال طلبك إلى الموردين بضمان iSTOC.",
+      securePaymentNote: "يتم الدفع بشكل آمن إلى المنصة؛ ويُحال طلبك إلى الموردين بضمان iStoc.",
       removeCoupon: "إزالة القسيمة",
       preInfoAndDistanceSalesContract: "نموذج المعلومات الأولية واتفاقية البيع عن بُعد",
       readAndAccept: "قرأته وأوافق عليه.",
@@ -234,7 +234,7 @@ const ar = {
       percentAndAbove: "{{value}}% فأكثر",
       hoursOrLess: "≤ {{count}} ساعة",
       supplierFilters: "عوامل تصفية الموردين",
-      yearsOnPlatform: "عدد السنوات على iSTOC",
+      yearsOnPlatform: "عدد السنوات على iStoc",
       onTimeDelivery: "التسليم في الوقت المحدد",
       responseTime: "وقت الاستجابة",
       reorderRate: "معدل إعادة الطلب",
@@ -407,16 +407,16 @@ const ar = {
     },
     infoMisc: {
       membershipProgram: "برنامج العضوية",
-      membershipSubtitle: "مزايا عضوية iSTOC والعروض الحصرية",
+      membershipSubtitle: "مزايا عضوية iStoc والعروض الحصرية",
       membershipTiersTitle: "مستويات العضوية",
-      membershipTiersP1: "<strong>العضوية المجانية:</strong> يستفيد كل مستخدم يسجل في منصة iSTOC تلقائيًا من مزايا العضوية الأساسية. تشمل العضوية المجانية البحث غير المحدود عن المنتجات، والتواصل مع الموردين، وحماية أساسية للمشتري، و5 طلبات عروض أسعار (RFQ) شهريًا.",
+      membershipTiersP1: "<strong>العضوية المجانية:</strong> يستفيد كل مستخدم يسجل في منصة iStoc تلقائيًا من مزايا العضوية الأساسية. تشمل العضوية المجانية البحث غير المحدود عن المنتجات، والتواصل مع الموردين، وحماية أساسية للمشتري، و5 طلبات عروض أسعار (RFQ) شهريًا.",
       membershipTiersP2: "<strong>العضوية المميزة:</strong> تُقدَّم العضوية المميزة مقابل 499 ليرة تركية شهريًا، وهي مصممة لمن يرغبون في زيادة حجم تجارتهم. يمكنك الاستفادة من طلبات عروض الأسعار غير المحدودة، ودعم العملاء ذي الأولوية، والتقارير التحليلية المتقدمة، وقسائم الخصم الحصرية، والوصول إلى الموردين كبار الشخصيات.",
       membershipTiersP3: "<strong>العضوية المؤسسية:</strong> تُقدَّم العضوية المؤسسية بتسعير مخصص للشركات الكبيرة، وتشمل مدير حساب مخصصًا، والوصول إلى واجهة برمجة التطبيقات (API)، وإدارة متعددة المستخدمين، ودعم تكامل مخصص، واستشارات استراتيجية سنوية بالإضافة إلى جميع مزايا العضوية المميزة.",
       membershipBenefitsTitle: "مزايا العضوية",
-      membershipBenefitsP1: "يدعم برنامج عضوية iSTOC تجارتك بين الشركات من جميع الجوانب. يستفيد الأعضاء المميزون والمؤسسيون من خصومات حصرية تتراوح بين 3% و8% على المنتجات عبر المنصة. كما تحصل على وصول مبكر إلى الحملات الموسمية وتبقى على اطلاع بإشعارات العروض الحصرية.",
+      membershipBenefitsP1: "يدعم برنامج عضوية iStoc تجارتك بين الشركات من جميع الجوانب. يستفيد الأعضاء المميزون والمؤسسيون من خصومات حصرية تتراوح بين 3% و8% على المنتجات عبر المنصة. كما تحصل على وصول مبكر إلى الحملات الموسمية وتبقى على اطلاع بإشعارات العروض الحصرية.",
       membershipBenefitsP2: "كلما ارتفع مستوى عضويتك، اتسع وصولك إلى تقارير جودة الموردين، وأدوات تحليل السوق، وبيانات الاستخبارات التنافسية. يمكن للأعضاء المميزين الاستفادة من خدمة فحص الجودة الاحترافية مجانًا مرتين في السنة. أما الأعضاء المؤسسيون فلديهم حق فحص غير محدود.",
       membershipPricingTitle: "التسعير",
-      membershipPricingP1: "تقدم خطط عضوية iSTOC خيارات تسعير مرنة تناسب كل ميزانية. عند اختيارك الدفع السنوي، توفر 20% مقارنة بالخطة الشهرية. تتوفر فترة تجريبية مجانية مدتها 14 يومًا لجميع الخطط؛ ولا تُفرض أي رسوم خلال هذه الفترة.",
+      membershipPricingP1: "تقدم خطط عضوية iStoc خيارات تسعير مرنة تناسب كل ميزانية. عند اختيارك الدفع السنوي، توفر 20% مقارنة بالخطة الشهرية. تتوفر فترة تجريبية مجانية مدتها 14 يومًا لجميع الخطط؛ ولا تُفرض أي رسوم خلال هذه الفترة.",
       membershipPricingP2: "الخطة المجانية: 0 ليرة تركية/شهر | الخطة المميزة: 499 ليرة تركية/شهر (399 ليرة تركية/شهر مع الدفع السنوي) | الخطة المؤسسية: تسعير مخصص (تواصل مع فريق المبيعات لدينا). جميع الأسعار شاملة ضريبة القيمة المضافة. يمكنك تغيير خطتك في أي وقت، وتُنقل المدة المتبقية بشكل تناسبي إلى خطتك الجديدة.",
       membershipUpgradeTitle: "ترقية العضوية",
       membershipUpgradeP1: "ترقية عضويتك سهلة للغاية. انتقل إلى قسم \"خطة العضوية\" في إعدادات حسابك، واختر الخطة التي تريدها، وأدخل بيانات الدفع الخاصة بك. تسري الترقية على الفور، وتبدأ في الاستفادة من مزاياك الجديدة فورًا.",
@@ -426,7 +426,7 @@ const ar = {
       tradeAssurance: "ضمان التجارة",
       afterSalesSupport: "الدعم بعد البيع",
       afterSalesFeaturesTitle: "ماذا نقدم لك بعد طلبك؟",
-      afterSalesFeaturesIntro: "توفر iSTOC الأدوات الأساسية لجعل عملية البيع والشراء شفافة وآمنة. يمكنك مواصلة الحصول على الدعم عبر المنصة حتى بعد إتمام طلبك.",
+      afterSalesFeaturesIntro: "توفر iStoc الأدوات الأساسية لجعل عملية البيع والشراء شفافة وآمنة. يمكنك مواصلة الحصول على الدعم عبر المنصة حتى بعد إتمام طلبك.",
       sellerRatingTitle: "نظام تقييم البائعين",
       sellerRatingDesc: "يمكنك تقييم المنتج والخدمة التي تلقيتها من 1 إلى 5 نجوم وكتابة مراجعة. تُرشد مراجعاتك المشترين الآخرين وتشكّل جودة البائعين.",
       directContactTitle: "التواصل المباشر مع البائع",
@@ -480,7 +480,7 @@ const ar = {
       shippingHeroTitle: "خدمات الشحن والخدمات اللوجستية",
       shippingHeroSubtitle: "تتبع طلبك بثقة واختر نوع الشحن الأنسب لك",
       shippingTypesTitle: "أنواع الشحن",
-      shippingTypesIntro: "من خلال الاتفاق مع البائعين على iSTOC، يمكنك اختيار نوع الشحن المناسب لطلبك. لكل نوع شحن مدة تسليم وهيكل تكلفة مختلف.",
+      shippingTypesIntro: "من خلال الاتفاق مع البائعين على iStoc، يمكنك اختيار نوع الشحن المناسب لطلبك. لكل نوع شحن مدة تسليم وهيكل تكلفة مختلف.",
       shippingExpressTitle: "الشحن السريع (إكسبريس)",
       shippingExpressDesc: "أسرع خيار للتسليم لطلباتك العاجلة. يُفضّل داخل المدينة والمناطق القريبة.",
       shippingAirTitle: "الشحن الجوي",
@@ -502,7 +502,7 @@ const ar = {
       trackingPara2: "من صفحة طلباتي، يمكنك رؤية الحالة الحالية لكل طلب ومتابعة العملية من لحظة الشحن حتى التسليم.",
       trackingAutoNote: "يظهر رقم التتبع تلقائياً في تفاصيل الطلب",
       orderProcessTitle: "كيف تسير عملية الطلب؟",
-      orderProcessIntro: "يمكنك متابعة كل خطوة من خطوات طلبك من لوحة iSTOC. إليك مسار طلب نموذجي:",
+      orderProcessIntro: "يمكنك متابعة كل خطوة من خطوات طلبك من لوحة iStoc. إليك مسار طلب نموذجي:",
       timelineStep1Title: "بانتظار الدفع",
       timelineStep1Desc: "بعد إنشاء طلبك، تختار طريقة الدفع وتُكمل العملية.",
       timelineStep2Title: "قيد التأكيد",
@@ -514,12 +514,12 @@ const ar = {
       paymentsHeroAlt: "دفع آمن",
       paymentsHeroTitle: "طرق دفع آمنة ومرنة",
       paymentsHeroSubtitle: "مدفوعات B2B بسيطة وشفافة",
-      paymentsSafetyTitle: "كيف يحافظ iSTOC على أمان مدفوعاتك؟",
-      paymentsSafetyIntro: "تُدار جميع المدفوعات التي تتم عبر iSTOC من خلال المنصة وتُتابع كجزء من عملية الطلب.",
+      paymentsSafetyTitle: "كيف يحافظ iStoc على أمان مدفوعاتك؟",
+      paymentsSafetyIntro: "تُدار جميع المدفوعات التي تتم عبر iStoc من خلال المنصة وتُتابع كجزء من عملية الطلب.",
       paymentsSafetyWarning: "لحماية مدفوعاتك، لا تدفع أبداً خارج المنصة.",
       paymentsMethodsTitle: "طرق الدفع المدعومة",
       paymentBankTransferTitle: "التحويل المصرفي",
-      paymentBankTransferDesc: "أكمل طلبك عبر التحويل إلى الحساب المصرفي الرسمي لـ iSTOC. بعد التحويل، ارفع إيصالك عبر المنصة لتوثيق دفعتك.",
+      paymentBankTransferDesc: "أكمل طلبك عبر التحويل إلى الحساب المصرفي الرسمي لـ iStoc. بعد التحويل، ارفع إيصالك عبر المنصة لتوثيق دفعتك.",
       paymentBankTransferTag: "دعم رفع الإيصال",
       paymentEftTitle: "التحويل الإلكتروني للأموال / الحوالة",
       paymentEftDesc: "أكمل طلبك بسرعة عبر تحويل إلكتروني فوري للأموال. يُسجَّل تاريخ المعاملة والمبلغ ومعلومات المرسل تلقائياً في تفاصيل طلبك.",
@@ -531,10 +531,10 @@ const ar = {
       paymentInstallmentDesc: "خيار دفع بالتقسيط متفق عليه مباشرة مع البائع. للطلبات كبيرة الحجم، يمكنك إعداد خطة تقسيط مع البائع.",
       paymentInstallmentTag: "خطة متفق عليها مع البائع",
       currencyBannerTitle: "البيع والشراء بـ 5 عملات مختلفة",
-      currencyBannerDesc: "على iSTOC يمكنك الدفع والبيع بالليرة التركية (TRY) والدولار الأمريكي (USD) واليورو (EUR) والجنيه الإسترليني (GBP) واليوان الصيني (CNY).",
+      currencyBannerDesc: "على iStoc يمكنك الدفع والبيع بالليرة التركية (TRY) والدولار الأمريكي (USD) واليورو (EUR) والجنيه الإسترليني (GBP) واليوان الصيني (CNY).",
       paymentProcessTitle: "كيف تسير عملية الدفع؟",
       paymentProcessStep1Title: "اعثر على المورّد الخاص بك وأنشئ الطلب",
-      paymentProcessStep1Desc: "اختر منتجك على iSTOC، واتفق مع المورّد، وابدأ طلبك. للمنتجات الجاهزة انتقل مباشرة، وللإنتاج المخصص حدّد التفاصيل عبر مراسلة المورّد.",
+      paymentProcessStep1Desc: "اختر منتجك على iStoc، واتفق مع المورّد، وابدأ طلبك. للمنتجات الجاهزة انتقل مباشرة، وللإنتاج المخصص حدّد التفاصيل عبر مراسلة المورّد.",
       paymentProcessStep2Title: "اختر طريقة الدفع الخاصة بك",
       paymentProcessStep2Desc: "اختر الخيار المناسب لك من التحويل المصرفي أو التحويل الإلكتروني للأموال أو الشيك/السند الإذني أو التقسيط المباشر. وحدّد أيضاً العملة (TRY، USD، EUR، GBP، CNY) وفقاً لاحتياجك.",
       paymentProcessStep3Title: "قم بالدفع وارفع الإيصال",
@@ -997,21 +997,21 @@ const ar = {
       retry: "حاول مرة أخرى",
     },
     tradeAssurance: {
-      heroTitle: "استفد من الحماية من الدفع حتى التسليم على iSTOC",
+      heroTitle: "استفد من الحماية من الدفع حتى التسليم على iStoc",
       howItWorksCta: "إليك كيف تعمل العملية:",
       serviceInfoTitle: "يغطي ضمان التجارة كل مرحلة من مراحل رحلة الشراء الخاصة بك",
-      serviceInfoDesc: "نوفر للمشترين على iSTOC إمكانية الدفع بأمان، ونقدم الحماية ضد الحالات غير المتوقعة مثل مشكلات المنتج أو الشحن، ونتوسط بين المشترين والموردين لحل المشكلات المتعلقة بالشراء.",
+      serviceInfoDesc: "نوفر للمشترين على iStoc إمكانية الدفع بأمان، ونقدم الحماية ضد الحالات غير المتوقعة مثل مشكلات المنتج أو الشحن، ونتوسط بين المشترين والموردين لحل المشكلات المتعلقة بالشراء.",
       watchMore: "شاهد لمعرفة المزيد",
       statOrders: "طلبات ضمان التجارة",
       statBought: "تم الشراء منا",
       statSuppliers: "الموردون",
       statProducts: "المنتجات",
-      howProtectTitle: "كيف نحمي مدفوعاتك على iSTOC؟",
+      howProtectTitle: "كيف نحمي مدفوعاتك على iStoc؟",
       howProtectIntro: "يجعل ضمان التجارة ممارسة الأعمال عالميًا أسهل وأكثر أمانًا لكل من المشترين والبائعين. إليك كيف تعمل العملية:",
       step1Title: "ابدأ طلب ضمان التجارة",
-      step1Desc: "لقد توصلت إلى اتفاق طلب مع مورد على iSTOC.",
-      step2Title: "ادفع عبر iSTOC",
-      step2Desc: "اشترِ باستخدام طريقة دفع عبر الإنترنت أو قم بإجراء تحويل مصرفي عبر iSTOC.",
+      step1Desc: "لقد توصلت إلى اتفاق طلب مع مورد على iStoc.",
+      step2Title: "ادفع عبر iStoc",
+      step2Desc: "اشترِ باستخدام طريقة دفع عبر الإنترنت أو قم بإجراء تحويل مصرفي عبر iStoc.",
       step3Title: "يتم الاحتفاظ بالدفعة مؤقتًا",
       step3Desc: "يتم الاحتفاظ بدفعتك في حساب ضمان. سيتم تحويلها إلى المورد بعد استلامك للمنتج وتأكيده.",
       step4Title: "استرد أموالك إذا لم يتم الوفاء بشروط الطلب",
@@ -1022,7 +1022,7 @@ const ar = {
       coverageShipping: "خدمات الشحن والخدمات اللوجستية",
       coverageAfterSales: "حماية ما بعد البيع",
       paymentsTitle: "خيارات دفع آمنة ومتنوعة",
-      paymentsDesc1: "كل دفعة تقوم بها عبر iSTOC مشفرة وآمنة وتتم معالجتها في غضون ساعتين فقط.",
+      paymentsDesc1: "كل دفعة تقوم بها عبر iStoc مشفرة وآمنة وتتم معالجتها في غضون ساعتين فقط.",
       paymentsDesc2: "ندعم طرق الدفع التي تعرفها وتثق بها، بما في ذلك بطاقات الائتمان/الخصم والمحافظ الرقمية والتحويلات المصرفية المباشرة وخطط الدفع المرنة*.",
       sourceProducts: "احصل على المنتجات المدعومة",
       learnHow: "تعرّف على كيفية العمل",
@@ -1035,19 +1035,19 @@ const ar = {
       here: "هنا",
       clickSuffix: "انقر",
       shippingDesc1: "احصل على طلبك في التاريخ المحدد أو احصل على تعويض عن أي تأخير.",
-      shippingDesc2: "مع iSTOC Logistics، يمكنك الاستفادة من موثوقية شبكتنا اللوجستية وتتبع شحنتك في الوقت الفعلي عبر العديد من البلدان والمناطق حول العالم.",
+      shippingDesc2: "مع iStoc Logistics، يمكنك الاستفادة من موثوقية شبكتنا اللوجستية وتتبع شحنتك في الوقت الفعلي عبر العديد من البلدان والمناطق حول العالم.",
       logisticsAlt: "الخدمات اللوجستية والشحن",
       afterSalesDesc: "بالنسبة للمنتجات المؤهلة، اجعل الخدمة تصل إلى بابك مع خدمات التركيب في الموقع والصيانة والإصلاح وقطع الغيار المجانية.",
       testimonialsTitle: "أصوات المشترين",
       testimonialsIntro: "اكتشف كيف يفيد ضمان التجارة أشخاصًا آخرين مثلك.",
       testimonial1: "\"معرفة أنني والمورد محميان طوال المعاملة تمنحني راحة البال.\"",
       testimonial2: "\"لأنك تستخدم ضمان التجارة وتعلم أنك محمي، فلا داعي للقلق.\"",
-      testimonial3: "\"الدفع عبر iSTOC يمنح شعورًا كبيرًا بالأمان، ونظام الضمان يمثل ضمانة حقيقية للمشترين.\"",
+      testimonial3: "\"الدفع عبر iStoc يمنح شعورًا كبيرًا بالأمان، ونظام الضمان يمثل ضمانة حقيقية للمشترين.\"",
       testimonial4: "\"كان دعم ما بعد البيع وعملية الإرجاع السريعة يفوقان توقعاتنا بكثير.\"",
       detailHeroTitle: "تجارة آمنة مع نظام ضمان التجارة",
       detailHeroDesc: "من خلال ضمان الثقة والشفافية في كل مرحلة من معاملاتك، نساعدك على بناء شراكات تجارية طويلة الأمد.",
       detailServiceTitle: "يغطي ضمان التجارة كل مرحلة من مراحل رحلة الشراء الخاصة بك",
-      detailServiceDesc: "يشكّل نظام ضمان التجارة من iSTOC أساس التجارة السلسة بين المشترين والبائعين. من خلال الدفع الآمن وآليات الحل المحايدة والتتبع الشامل، نوفر الحماية ضد الحالات غير المتوقعة.",
+      detailServiceDesc: "يشكّل نظام ضمان التجارة من iStoc أساس التجارة السلسة بين المشترين والبائعين. من خلال الدفع الآمن وآليات الحل المحايدة والتتبع الشامل، نوفر الحماية ضد الحالات غير المتوقعة.",
       tradeAssuranceLabel: "ضمان التجارة",
       featureDigitalPaymentTitle: "قنوات الدفع الرقمية",
       featureDigitalPaymentDesc: "معاملات سريعة وآمنة بطرق دفع متعددة.",
@@ -1063,7 +1063,7 @@ const ar = {
       featureNeutralResolutionDesc: "آلية تحكيم محايدة لتسوية النزاعات.",
       detailProcessIntro: "يجعل ضمان التجارة المعاملات بين المشترين والبائعين أسهل وأكثر أمانًا لكلا الطرفين. إليك كيف تعمل العملية:",
       detailStep1Title: "ابدأ طلب ضمان التجارة",
-      detailStep1Desc: "لقد توصلت إلى اتفاق طلب مع مورد على iSTOC. يؤكد المورد طلبك ويبدأ في تجهيز منتجك.",
+      detailStep1Desc: "لقد توصلت إلى اتفاق طلب مع مورد على iStoc. يؤكد المورد طلبك ويبدأ في تجهيز منتجك.",
       detailStep2Desc: "ادفع بأمان عن طريق بطاقة الائتمان أو الخصم المباشر أو التحويل المصرفي. جميع المدفوعات محمية بتشفير SSL.",
       detailStep3Title: "يُحتفظ بالدفعة في حساب ضمان",
       detailStep3Desc: "يُحتفظ بدفعتك في حساب ضمان حتى يتم تسليم المنتج وتأكيده. وهذا يوفر ضمانًا لكلا الطرفين.",
@@ -1077,14 +1077,14 @@ const ar = {
       cardAgentTitle: "ممثل مخصص",
       cardAgentDesc: "يتابع ممثل مخصص العملية نيابة عنك حتى يكتمل طلبك بالكامل.",
       fullAssuranceTitle: "ضمان كامل",
-      cardFullAssuranceDesc: "تتم مراقبة جميع المراحل من الإنتاج إلى التسليم من قبل فريق iSTOC؛ وفي حالة وجود خلل، يتدخل التحكيم المحايد.",
+      cardFullAssuranceDesc: "تتم مراقبة جميع المراحل من الإنتاج إلى التسليم من قبل فريق iStoc؛ وفي حالة وجود خلل، يتدخل التحكيم المحايد.",
       howSystemWorksTitle: "كيف يعمل النظام؟",
       howSystemWorksIntro: "يقدم نظام ضمان التجارة حماية من طبقتين بناءً على نوع طلبك.",
       layer1Title: "ضمان الأموال",
       layer1Desc1: "تُحجز دفعة المشتري حتى يتم تسليم المنتج.",
       layer1Desc2: "بمجرد اكتمال الطلب بالكامل، يتم تحويل الأموال إلى البائع. ويُطبّق تلقائيًا على جميع الطلبات القياسية.",
       layer2Desc: "يتم توفير حماية أكثر شمولاً لطلبات المنتجات المصنوعة حسب الطلب أو المطبوعة. يضمن النظام ما يلي:",
-      layer2Item1: "متابعة جميع الخطوات من تجهيز المنتج حتى شحنه من قبل فريق iSTOC",
+      layer2Item1: "متابعة جميع الخطوات من تجهيز المنتج حتى شحنه من قبل فريق iStoc",
       layer2Item2: "تسليم كامل وخالٍ من العيوب إلى العميل",
       layer2Item3: "التحقق من دقة المنتج ومراقبة الجودة والتسليم في الوقت المحدد",
       layer2Item4: "دعم تركيب المنتج والشحن عند الحاجة",
@@ -1228,7 +1228,7 @@ const ar = {
       buyerCentral: "مركز المشتري",
       helpCenter: "مركز المساعدة",
       appExtension: "التطبيق والإضافة",
-      sellOnIstoc: "البيع على istoc",
+      sellOnIstoc: "البيع على iStoc",
     },
 
     // ============================================================
@@ -1240,7 +1240,7 @@ const ar = {
       manufacturers: "الشركات المصنّعة",
       worldwide: "حول العالم",
       placeholder: "المنسوجات والملابس",
-      welcomeIstoc: "مرحبًا بك في istoc",
+      welcomeIstoc: "مرحبًا بك في iStoc",
       rfq: "طلب عرض سعر",
       topRanking: "الأعلى تصنيفًا",
       fastCustomization: "تخصيص سريع",
@@ -1261,11 +1261,11 @@ const ar = {
       campaigns: "الحملات",
       campaignsDesc: "عروض وخصومات وحملات",
       brands: "العلامات التجارية",
-      brandsDesc: "العلامات التجارية الرسمية المسجّلة على istoc",
+      brandsDesc: "العلامات التجارية الرسمية المسجّلة على iStoc",
       sellers: "البائعون",
-      sellersDesc: "تصفّح البائعين في سوق istoc",
-      b2bMarketplace: "سوق istoc للأعمال B2B",
-      b2bDesc: "تعرّف على كيفية البيع على istoc",
+      sellersDesc: "تصفّح البائعين في سوق iStoc",
+      b2bMarketplace: "سوق iStoc للأعمال B2B",
+      b2bDesc: "تعرّف على كيفية البيع على iStoc",
     },
 
     // ============================================================
@@ -1306,7 +1306,7 @@ const ar = {
       tradeAssuranceSubtitle: "تمتّع بالحماية من الدفع حتى التسليم",
       tradeAssuranceLead: "واصل التداول على بنية تحتية موثوقة تجمع بين المشترين والبائعين.",
       tradeAssuranceHowItWorks: "كيف يعمل؟",
-      whyIstoc: "لماذا istoc",
+      whyIstoc: "لماذا iStoc",
       howSourcing: "كيف يعمل التوريد",
       membershipProgram: "برنامج العضوية",
       tradeServices: "الخدمات التجارية",
@@ -1322,20 +1322,20 @@ const ar = {
       overview: "نظرة عامة",
       meetPeers: "تعرّف على الأقران",
       ecommerceAcademy: "أكاديمية التجارة الإلكترونية",
-      howToSource: "كيفية التوريد على istoc",
+      howToSource: "كيفية التوريد على iStoc",
       forBuyers: "للمشترين",
       forSuppliers: "للمورّدين",
       openDispute: "فتح نزاع",
       reportIpr: "الإبلاغ عن انتهاك حقوق الملكية الفكرية",
       reportAbuse: "الإبلاغ عن إساءة",
-      getApp: "احصل على تطبيق istoc",
+      getApp: "احصل على تطبيق iStoc",
       appDesc:
-        "ابحث عن المنتجات، وتواصل مع المورّدين، وأدِر طلباتك وادفع ثمنها باستخدام تطبيق istoc في أي وقت ومن أي مكان.",
+        "ابحث عن المنتجات، وتواصل مع المورّدين، وأدِر طلباتك وادفع ثمنها باستخدام تطبيق iStoc في أي وقت ومن أي مكان.",
       downloadOn: "حمّله من",
       appStore: "App Store",
       getItOn: "احصل عليه من",
       googlePlay: "Google Play",
-      discoverLens: "اكتشف istoc Lens",
+      discoverLens: "اكتشف iStoc Lens",
       lensDesc:
         "استخدم إضافة البحث بالصورة هذه للعثور على منتجات مشابهة ومقارنتها بأسعار الجملة وخيارات التخصيص في أي مكان على الإنترنت.",
       addToChrome: "إضافة إلى Chrome",
@@ -1370,7 +1370,7 @@ const ar = {
       personalSelectionsDesc: "توصيات بناءً على طلباتك",
       bestDeals: "أفضل العروض",
       bestDealsDesc: "خصومات الشراء بالجملة لفترة محدودة",
-      sellOnIstoc: "البيع على istoc",
+      sellOnIstoc: "البيع على iStoc",
       sellOnIstocDesc: "كن بائعًا، واعرض منتجاتك",
       suppliers: "المورّدون",
       findSuppliers: "ابحث عن مورّدين",
@@ -1401,12 +1401,12 @@ const ar = {
       onTimeShipping: "الشحن في الوقت المحدّد",
       afterSales: "حماية ما بعد البيع",
       productMonitoring: "خدمات مراقبة المنتجات",
-      sourceOnIstoc: "التوريد على istoc",
+      sourceOnIstoc: "التوريد على iStoc",
       rfq: "طلب عرض سعر",
       membership: "برنامج العضوية",
       salesTax: "ضريبة المبيعات وضريبة القيمة المضافة",
-      istocReads: "مقالات istoc",
-      sellOnIstoc: "البيع على istoc",
+      istocReads: "مقالات iStoc",
+      sellOnIstoc: "البيع على iStoc",
       startSelling: "ابدأ البيع",
       sellerCentral: "مركز البائع",
       verifiedSupplier: "كن مورّدًا موثّقًا",
@@ -1417,8 +1417,7 @@ const ar = {
       newsCenter: "مركز الأخبار",
       careers: "الوظائف",
       stayConnected: "ابقَ على تواصل",
-      operatedBy: 'يتم تشغيل istoc (يُلفظ "آيستوك") من قِبل Thoptan Ltd. (المملكة المتحدة).',
-      copyright: "© 2026 Thoptan Ltd. جميع الحقوق محفوظة.",
+      copyright: "© 2026 iStoc Private Company Limited. جميع الحقوق محفوظة.",
       legalNotice: "إشعار قانوني",
       privacyPolicy: "سياسة الخصوصية",
       productListing: "سياسة إدراج المنتجات",
@@ -1443,12 +1442,12 @@ const ar = {
         forgotPassword: "هل نسيت كلمة المرور؟",
         continue: "متابعة",
         or: "أو",
-        newUser: "هل أنت جديد على istoc؟",
+        newUser: "هل أنت جديد على iStoc؟",
         createAccount: "إنشاء حساب",
         qrLogin: "تسجيل الدخول برمز QR",
         submit: "تسجيل الدخول",
         invalidCredentials: "البريد الإلكتروني أو كلمة المرور غير صحيحة",
-        accountDisabled: "تم تعطيل حسابك. يُرجى التواصل مع دعم عملاء istoc لإعادة تفعيله.",
+        accountDisabled: "تم تعطيل حسابك. يُرجى التواصل مع دعم عملاء iStoc لإعادة تفعيله.",
         "2faRequired": "المصادقة الثنائية مطلوبة",
         emailVerified: "تم التحقق من بريدك الإلكتروني بنجاح. يمكنك الآن تسجيل الدخول.",
         emailVerificationFailed: "رابط التحقق غير صالح أو انتهت صلاحيته.",
@@ -1467,7 +1466,7 @@ const ar = {
         emailExistsError:
           "هذا البريد الإلكتروني مسجَّل بالفعل. حاول تسجيل الدخول أو إعادة تعيين كلمة المرور.",
         emailExistsSupplier:
-          'هذا البريد الإلكتروني مسجَّل بالفعل. لتصبح مورّدًا، سجّل الدخول وقدّم طلبك من صفحة "البيع على istoc".',
+          'هذا البريد الإلكتروني مسجَّل بالفعل. لتصبح مورّدًا، سجّل الدخول وقدّم طلبك من صفحة "البيع على iStoc".',
         loginLink: "تسجيل الدخول",
         emailDisabledError: "تم حذف هذا الحساب. يُرجى التسجيل بعنوان بريد إلكتروني مختلف.",
         sendCode: "إرسال رمز التحقق",
@@ -1675,7 +1674,7 @@ const ar = {
       subtotalExTax: "المجموع الفرعي (بدون ضريبة)",
       youSaved: "وفّرت {{amount}} على طلبك",
       checkout: "إتمام الطلب",
-      orderProtection: "حماية طلبات istoc",
+      orderProtection: "حماية طلبات iStoc",
       securePayment: "دفع آمن",
       securePaymentDesc: "كل عملية دفع آمنة ومحمية",
       easyReturns: "إرجاع سهل",
@@ -1831,7 +1830,7 @@ const ar = {
       placeOrder: "إتمام الطلب",
       payeeLabel: "المستفيد",
       orderTerms:
-        "بالنقر على ما سبق، فإنك توافق على شروط الاستخدام وسياسة الخصوصية الخاصة بـ istoc",
+        "بالنقر على ما سبق، فإنك توافق على شروط الاستخدام وسياسة الخصوصية الخاصة بـ iStoc",
       securePayments: "مدفوعات آمنة",
       guaranteedDelivery: "تسليم مضمون",
       moneyBackProtection: "حماية استرداد الأموال",
@@ -1907,8 +1906,8 @@ const ar = {
       dataProtection: "حماية البيانات",
       support247: "دعم على مدار الساعة طوال أيام الأسبوع",
       moneyBackProtection: "حماية استرداد الأموال",
-      orderProtectionSectionDesc: "تُحمى مجاناً ضمن هذا النطاق الطلبات التي تُقدَّم ويُدفَع ثمنها عبر istoc فقط.",
-      orderProtectionSection: "حماية طلبات istoc",
+      orderProtectionSectionDesc: "تُحمى مجاناً ضمن هذا النطاق الطلبات التي تُقدَّم ويُدفَع ثمنها عبر iStoc فقط.",
+      orderProtectionSection: "حماية طلبات iStoc",
       processingTimeNote: "سيتم الاتفاق على تكلفة الشحن وتاريخ التسليم مع المورّد. تواصل مع المورّد على الفور.",
       deliveryAddressLabel: "عنوان التسليم",
       processingTime: "مدة المعالجة",
@@ -2043,7 +2042,7 @@ const ar = {
       shippingLabel: "الشحن",
       shippingCost: "الشحن: {{cost}} · {{days}}",
       changeLabel: "تغيير",
-      orderProtectionTitle: "حماية الطلب من istoc",
+      orderProtectionTitle: "حماية الطلب من iStoc",
       securePaymentTitle: "دفع آمن",
       securePaymentDesc: "مدفوعات محمية مع كل طريقة دفع",
       moneyBackTitle: "حماية استرداد الأموال",
@@ -2118,7 +2117,7 @@ const ar = {
       continueFacebook: "المتابعة باستخدام Facebook",
       continueLinkedin: "المتابعة باستخدام LinkedIn",
       continueEmail: "المتابعة باستخدام البريد الإلكتروني",
-      newToTradehub: "جديد على istoc؟",
+      newToTradehub: "جديد على iStoc؟",
       createAccount: "إنشاء حساب",
       qrLogin: "تسجيل الدخول برمز QR",
       orDivider: "أو",
@@ -2138,7 +2137,7 @@ const ar = {
       companyProfile: "ملف الشركة",
       otherProducts: "منتجات أخرى",
       verifiedSupplier: "مورّد موثّق",
-      verifiedWithIstoc: "موثّق لدى istoc",
+      verifiedWithIstoc: "موثّق لدى iStoc",
       safePayments: "مدفوعات آمنة",
       returnPolicy: "سياسة الإرجاع",
       option: "الخيار",
@@ -2192,7 +2191,7 @@ const ar = {
       filterSearch: "بحث",
       filterClearAll: "مسح جميع الفلاتر",
       filterCertDisclaimer:
-        "*إخلاء مسؤولية بشأن الشهادات: أي تقييم أو اعتماد أو فحص و/أو فحص متعلق بصحة أي من الشهادات يتم تقديمه أو إجراؤه بواسطة أطراف ثالثة مستقلة دون أي تدخل من istoc.",
+        "*إخلاء مسؤولية بشأن الشهادات: أي تقييم أو اعتماد أو فحص و/أو فحص متعلق بصحة أي من الشهادات يتم تقديمه أو إجراؤه بواسطة أطراف ثالثة مستقلة دون أي تدخل من iStoc.",
       filterLearnMore: "اعرف المزيد",
       filterOk: "موافق",
       filterApply: "بحث",
@@ -2265,7 +2264,7 @@ const ar = {
       transactions: "المعاملات",
       bankAccounts: "الحسابات المصرفية",
       wireTransfer: "تتبع التحويلات المصرفية",
-      istocCard: "بطاقة istoc",
+      istocCard: "بطاقة iStoc",
       payLater: "الدفع لاحقاً للأعمال",
       savedHistory: "المحفوظات والسجل",
       myFavorites: "مفضلتي",
@@ -2290,7 +2289,7 @@ const ar = {
       couponsLabel: "القسائم",
       validateTax: "وثّق حسابك للحصول على وضع الإعفاء الضريبي",
       verifyBusiness: "تحقّق من معلومات النشاط التجاري",
-      personalizeExp: "خصّص تجربتك على istoc",
+      personalizeExp: "خصّص تجربتك على iStoc",
       completeProfile: "أكمل ملفك الشخصي",
       completeProfileDesc: "املأ ملف شركتك للحصول على عروض أفضل من الموردين",
       completeNow: "أكمل الآن",
@@ -2356,7 +2355,7 @@ const ar = {
       emailVerifiedSuccess: "تم التحقق من عنوان بريدك الإلكتروني.",
       notifVerifyTaxStatus: "وثّق حسابك للحصول على وضع الإعفاء الضريبي",
       notifVerifyBusiness: "تحقّق من معلومات النشاط التجاري",
-      notifPersonalizeExperience: "خصّص تجربتك على istoc.com",
+      notifPersonalizeExperience: "خصّص تجربتك على iStoc.com",
       notifCompleteProfile: "أكمل ملفك الشخصي",
       notifFillCompanyProfile: "املأ ملف شركتك للحصول على عروض أفضل من الموردين",
       notifCompleteNow: "أكمل الآن",
@@ -2381,7 +2380,7 @@ const ar = {
       inbox: "صندوق الوارد",
       allMessages: "كل الرسائل",
       feedbackBanner: "شاركنا تجربتك في التواصل.",
-      emptyStateText: "استمتع بتجربة تسوق ممتعة عبر الدردشة والتجارة على istoc",
+      emptyStateText: "استمتع بتجربة تسوق ممتعة عبر الدردشة والتجارة على iStoc",
       typePlaceholder: "اكتب رسالتك...",
       sendTip: "اضغط Enter للإرسال · Shift+Enter لسطر جديد",
       send: "إرسال",
@@ -2395,7 +2394,7 @@ const ar = {
       noResults: "لم يتم العثور على نتائج",
       me: "أنا",
       previewRfqReply: "[عرض سعر] رد المورّد على طلب RFQ الخاص بك",
-      previewWelcome: "جديد على istoc.com؟ اكتشف خدمات المورّدين المتقدمة لدينا",
+      previewWelcome: "جديد على iStoc.com؟ اكتشف خدمات المورّدين المتقدمة لدينا",
       learnMore: "اعرف المزيد",
       // Chat messages
       conv1m1: "مرحباً، أودّ الردّ على طلب RFQ الخاص بك. يمكنني مشاركة معلومات مفصّلة عن منتجاتنا.",
@@ -2413,7 +2412,7 @@ const ar = {
       conv3m1: "مرحباً، هل ترغب في الحصول على معلومات عن منتجاتنا النسيجية؟",
       conv3m2: "نعم، هل يمكنني الحصول على معلومات عن أسعار القماش القطني؟",
       conv4m1:
-        "مرحباً بك في istoc.com! اكتشف خدمات المورّدين المتقدمة لدينا. تاجر بأمان مع Trade Assurance.",
+        "مرحباً بك في iStoc.com! اكتشف خدمات المورّدين المتقدمة لدينا. تاجر بأمان مع Trade Assurance.",
     },
 
     // ============================================================
@@ -2709,7 +2708,7 @@ const ar = {
       // Payment info
       yourPaymentAmount: "مبلغ دفعتك",
       orderTermsNote: "تخضع شروط الطلب للعقد الموقّع. يرجى مراجعة طلبك بعناية.",
-      onlinePaymentProtected: "الدفع عبر الإنترنت محمي بواسطة istoc Trade Assurance.",
+      onlinePaymentProtected: "الدفع عبر الإنترنت محمي بواسطة iStoc Trade Assurance.",
       // FAQ
       whatIsSalesTax: "ما هي ضريبة المبيعات؟",
       whatIsSalesTaxAnswer:
@@ -2766,7 +2765,7 @@ const ar = {
     // HELP CENTER
     // ============================================================
     help: {
-      title: "istoc — مركز المساعدة",
+      title: "iStoc — مركز المساعدة",
       subtitle: "دعم على مدار الساعة طوال أيام الأسبوع وأدلّة إرشادية للمشترين",
       searchPlaceholder: "أدخل سؤالاً أو كلمة مفتاحية. مثال: الدفع",
       searchBtn: "بحث",
@@ -2789,7 +2788,7 @@ const ar = {
       termsOfUse: "شروط الاستخدام",
       userInfoLaws: "قوانين معلومات المستخدم",
       contactGuide: "دليل التواصل",
-      copyright: "© 2024 istoc — جميع الحقوق محفوظة.",
+      copyright: "© 2024 iStoc — جميع الحقوق محفوظة.",
       viewMore: "عرض المزيد",
       searchResultsFor: "النتائج عن",
     },
@@ -2813,34 +2812,34 @@ const ar = {
         breadcrumbLabel: "شروط الاستخدام",
         section1Title: "1. التعريفات",
         section1Content:
-          '<p><strong>"المنصّة"</strong> تشير إلى الموقع الإلكتروني والتطبيق المحمول اللذين تشغّلهما istoc.</p><p><strong>"المستخدم"</strong> يشير إلى الأشخاص الطبيعيين والاعتباريين الأعضاء في المنصّة أو المستفيدين من خدماتها دون عضوية.</p><p><strong>"البائع"</strong> يشير إلى الأشخاص الطبيعيين أو الاعتباريين الذين يعرضون منتجات وخدمات عبر المنصّة.</p><p><strong>"المشتري"</strong> يشير إلى المستخدمين الذين يشترون المنتجات والخدمات عبر المنصّة.</p><p><strong>"الخدمات"</strong> تشمل جميع خدمات التجارة بين الشركات والدفع والخدمات اللوجستية وغيرها من الخدمات المقدَّمة عبر المنصّة.</p>',
+          '<p><strong>"المنصّة"</strong> تشير إلى الموقع الإلكتروني والتطبيق المحمول اللذين تشغّلهما iStoc.</p><p><strong>"المستخدم"</strong> يشير إلى الأشخاص الطبيعيين والاعتباريين الأعضاء في المنصّة أو المستفيدين من خدماتها دون عضوية.</p><p><strong>"البائع"</strong> يشير إلى الأشخاص الطبيعيين أو الاعتباريين الذين يعرضون منتجات وخدمات عبر المنصّة.</p><p><strong>"المشتري"</strong> يشير إلى المستخدمين الذين يشترون المنتجات والخدمات عبر المنصّة.</p><p><strong>"الخدمات"</strong> تشمل جميع خدمات التجارة بين الشركات والدفع والخدمات اللوجستية وغيرها من الخدمات المقدَّمة عبر المنصّة.</p>',
         section2Title: "2. النطاق والقبول",
         section2Content:
-          "<p>تنطبق شروط الاستخدام هذه على جميع المستخدمين الذين يدخلون إلى المنصّة و/أو يستخدمونها. باستخدامك للمنصّة، تُعدّ قد قبلت هذه الشروط.</p><p>تحتفظ istoc بالحق في تحديث هذه الشروط دون إشعار مسبق. تدخل التحديثات حيّز التنفيذ فور نشرها. ويعني استمرارك في استخدام المنصّة قبولك للشروط المحدَّثة.</p>",
+          "<p>تنطبق شروط الاستخدام هذه على جميع المستخدمين الذين يدخلون إلى المنصّة و/أو يستخدمونها. باستخدامك للمنصّة، تُعدّ قد قبلت هذه الشروط.</p><p>تحتفظ iStoc بالحق في تحديث هذه الشروط دون إشعار مسبق. تدخل التحديثات حيّز التنفيذ فور نشرها. ويعني استمرارك في استخدام المنصّة قبولك للشروط المحدَّثة.</p>",
         section3Title: "3. العضوية والحساب",
         section3Content:
-          "<p>لتصبح عضوًا في المنصّة، يجب أن يكون عمرك 18 عامًا على الأقل وأن يكون لديك عنوان بريد إلكتروني صالح. ويجب أن يكون الممثّلون الذين يتصرفون نيابةً عن الكيانات الاعتبارية مفوَّضين.</p><p>المستخدمون مسؤولون عن سرية معلومات حساباتهم وأمانها. وأنت مسؤول عن جميع المعاملات التي تُجرى عبر حسابك.</p><p>تملك istoc الحق في تعليق أو إنهاء الحسابات المشبوهة أو غير المتوافقة دون إشعار مسبق.</p>",
+          "<p>لتصبح عضوًا في المنصّة، يجب أن يكون عمرك 18 عامًا على الأقل وأن يكون لديك عنوان بريد إلكتروني صالح. ويجب أن يكون الممثّلون الذين يتصرفون نيابةً عن الكيانات الاعتبارية مفوَّضين.</p><p>المستخدمون مسؤولون عن سرية معلومات حساباتهم وأمانها. وأنت مسؤول عن جميع المعاملات التي تُجرى عبر حسابك.</p><p>تملك iStoc الحق في تعليق أو إنهاء الحسابات المشبوهة أو غير المتوافقة دون إشعار مسبق.</p>",
         section4Title: "4. الطلبات والعقود",
         section4Content:
-          "<p>تشكّل الطلبات المقدَّمة عبر المنصّة عقد بيع بين المشتري والبائع. وليست istoc طرفًا في هذا العقد؛ فهي تقدّم خدمات وساطة عبر المنصّة فقط.</p><p>يخضع تأكيد الطلب لإتمام الدفع بنجاح وقبول البائع. ويملك البائعون الحق في رفض الطلبات بسبب توفّر المخزون أو لأسباب وجيهة أخرى.</p><p>يمكن عرض تفاصيل الطلب عبر بريد التأكيد الإلكتروني وصفحة تتبّع الطلب على المنصّة.</p>",
+          "<p>تشكّل الطلبات المقدَّمة عبر المنصّة عقد بيع بين المشتري والبائع. وليست iStoc طرفًا في هذا العقد؛ فهي تقدّم خدمات وساطة عبر المنصّة فقط.</p><p>يخضع تأكيد الطلب لإتمام الدفع بنجاح وقبول البائع. ويملك البائعون الحق في رفض الطلبات بسبب توفّر المخزون أو لأسباب وجيهة أخرى.</p><p>يمكن عرض تفاصيل الطلب عبر بريد التأكيد الإلكتروني وصفحة تتبّع الطلب على المنصّة.</p>",
         section5Title: "5. شروط الدفع",
         section5Content:
-          "<p>يمكن إجراء المدفوعات عبر بطاقة الائتمان أو بطاقة الخصم أو التحويل البنكي/الحوالة المصرفية ورصيد المنصّة. وتُعالَج جميع المدفوعات عبر بنية تحتية آمنة.</p><p>تشمل الأسعار ضريبة القيمة المضافة ما لم يُذكر خلاف ذلك. وفي معاملات التجارة بين الشركات، تُصدر الفواتير من قبل البائع.</p><p>يحتفظ نظام الدفع الآمن من istoc بالمبلغ المستحق للبائع معلَّقًا حتى تسليم المنتج. وقد صُمّم هذا النظام لحماية المشترين.</p>",
+          "<p>يمكن إجراء المدفوعات عبر بطاقة الائتمان أو بطاقة الخصم أو التحويل البنكي/الحوالة المصرفية ورصيد المنصّة. وتُعالَج جميع المدفوعات عبر بنية تحتية آمنة.</p><p>تشمل الأسعار ضريبة القيمة المضافة ما لم يُذكر خلاف ذلك. وفي معاملات التجارة بين الشركات، تُصدر الفواتير من قبل البائع.</p><p>يحتفظ نظام الدفع الآمن من iStoc بالمبلغ المستحق للبائع معلَّقًا حتى تسليم المنتج. وقد صُمّم هذا النظام لحماية المشترين.</p>",
         section6Title: "6. الشحن والتسليم",
         section6Content:
           "<p>تُذكر أوقات التسليم المقدَّرة في صفحة المنتج وهي لأغراض إعلامية. وقد تختلف أوقات التسليم الفعلية تبعًا للظروف اللوجستية.</p><p>شركة الشحن مسؤولة عن الأضرار التي قد تحدث أثناء عملية الشحن. ويُوصى بفحص الطرد عند التسليم.</p><p>بالنسبة للشحنات الدولية، تقع الرسوم الجمركية والرسوم الإضافية على عاتق المشتري.</p>",
         section7Title: "7. الإرجاع وحق الانسحاب",
         section7Content:
-          '<p>تخضع حقوق الإرجاع والانسحاب لتشريعات المستهلك/التشريعات التجارية للبلد الذي يقع فيه البائع ولسياسة الإرجاع الخاصة بالبائع نفسه. وينشر كل بائع شروط الإرجاع المعمول بها في صفحة المنتج وفي ملف متجره الشخصي.</p><p>تعمل istoc كمزوّد خدمة وساطة في العلاقة التجارية بين المشتري والبائع، ولا تحدّد شروط الإرجاع نيابةً عن الأطراف. وتقدّم المنصّة البنية التحتية للعملية فقط لإحالة طلبات الإرجاع وحلّ النزاعات. لمعرفة تفاصيل العملية، يُرجى مراجعة صفحة <a href="/iade-kosullari" class="text-primary-500 hover:underline">سياسة الإرجاع</a>.</p>',
+          '<p>تخضع حقوق الإرجاع والانسحاب لتشريعات المستهلك/التشريعات التجارية للبلد الذي يقع فيه البائع ولسياسة الإرجاع الخاصة بالبائع نفسه. وينشر كل بائع شروط الإرجاع المعمول بها في صفحة المنتج وفي ملف متجره الشخصي.</p><p>تعمل iStoc كمزوّد خدمة وساطة في العلاقة التجارية بين المشتري والبائع، ولا تحدّد شروط الإرجاع نيابةً عن الأطراف. وتقدّم المنصّة البنية التحتية للعملية فقط لإحالة طلبات الإرجاع وحلّ النزاعات. لمعرفة تفاصيل العملية، يُرجى مراجعة صفحة <a href="/iade-kosullari" class="text-primary-500 hover:underline">سياسة الإرجاع</a>.</p>',
         section8Title: "8. حقوق الملكية الفكرية",
         section8Content:
-          "<p>جميع المحتويات والتصاميم والشعارات والبرمجيات وقواعد البيانات الموجودة على المنصّة هي ملكية فكرية لشركة Thoptan Ltd. (مشغّلة علامة istoc) أو الجهات المرخِّصة لها.</p><p>لا يجوز للمستخدمين نسخ محتوى المنصّة أو إعادة إنتاجه أو توزيعه أو استخدامه لأغراض تجارية. وتقع مسؤولية صور المنتجات وأوصافها التي يحمّلها البائعون على البائع المعني.</p>",
+          "<p>جميع المحتويات والتصاميم والشعارات والبرمجيات وقواعد البيانات الموجودة على المنصّة هي ملكية فكرية لشركة iStoc Private Company Limited (مشغّلة علامة iStoc) أو الجهات المرخِّصة لها.</p><p>لا يجوز للمستخدمين نسخ محتوى المنصّة أو إعادة إنتاجه أو توزيعه أو استخدامه لأغراض تجارية. وتقع مسؤولية صور المنتجات وأوصافها التي يحمّلها البائعون على البائع المعني.</p>",
         section9Title: "9. تحديد المسؤولية",
         section9Content:
-          "<p>تعمل istoc كوسيط في معاملات البيع والشراء التي تُجرى عبر المنصّة. والبائعون مسؤولون عن جودة المنتجات وملاءمتها وتسليمها.</p><p>لا يمكن تحميل المنصّة مسؤولية الأضرار الناجمة عن الأعطال الفنية أو الانقطاعات أو الاضطرابات في خدمات الأطراف الثالثة.</p><p>لا يمكن أن تتجاوز المسؤولية الإجمالية لـ istoc رسوم الخدمة الخاصة بالمعاملة المعنية.</p>",
+          "<p>تعمل iStoc كوسيط في معاملات البيع والشراء التي تُجرى عبر المنصّة. والبائعون مسؤولون عن جودة المنتجات وملاءمتها وتسليمها.</p><p>لا يمكن تحميل المنصّة مسؤولية الأضرار الناجمة عن الأعطال الفنية أو الانقطاعات أو الاضطرابات في خدمات الأطراف الثالثة.</p><p>لا يمكن أن تتجاوز المسؤولية الإجمالية لـ iStoc رسوم الخدمة الخاصة بالمعاملة المعنية.</p>",
         section10Title: "10. القانون الواجب التطبيق والنزاعات",
         section10Content:
-          "<p>تخضع شروط الاستخدام هذه لقوانين إنجلترا وويلز.</p><p>تُحال أي نزاعات تنشأ بين الأطراف حصريًا إلى محكمة لندن للتحكيم الدولي (LCIA) ومقرّها في لندن؛ وتكون لغة التحكيم الإنجليزية.</p><p>تقدّم istoc خدمات التجارة بين الشركات (B2B) فقط؛ ولا تنطبق أحكام قانون المستهلك على استخدام المنصّة.</p>",
+          "<p>تخضع شروط الاستخدام هذه لقوانين إنجلترا وويلز.</p><p>تُحال أي نزاعات تنشأ بين الأطراف حصريًا إلى محكمة لندن للتحكيم الدولي (LCIA) ومقرّها في لندن؛ وتكون لغة التحكيم الإنجليزية.</p><p>تقدّم iStoc خدمات التجارة بين الشركات (B2B) فقط؛ ولا تنطبق أحكام قانون المستهلك على استخدام المنصّة.</p>",
       },
       privacy: {
         pageTitle: "سياسة الخصوصية",
@@ -2848,7 +2847,7 @@ const ar = {
         breadcrumbLabel: "سياسة الخصوصية",
         section1Title: "1. المتحكّم في البيانات",
         section1Content:
-          "<p>الطرف الذي يعمل بصفته المتحكّم في البيانات عند معالجة بياناتك الشخصية:</p><p><strong>Thoptan Ltd.</strong> (المملكة المتحدة)<br>تشغّل علامة istoc.<br><strong>البريد الإلكتروني:</strong> kvkk@istoc.com</p>",
+          "<p>الطرف الذي يعمل بصفته المتحكّم في البيانات عند معالجة بياناتك الشخصية:</p><p><strong>iStoc Private Company Limited</strong> (المملكة المتحدة)<br>تشغّل علامة iStoc.<br><strong>البريد الإلكتروني:</strong> kvkk@istoc.com</p>",
         section2Title: "2. البيانات الشخصية التي يتم جمعها",
         section2Content:
           '<p>يتم جمع البيانات الشخصية التالية في إطار تقديم خدمات المنصّة:</p><ul class="list-disc ps-5 space-y-1"><li><strong>معلومات الهوية:</strong> الاسم، اللقب، رقم الهوية الوطنية (للبائعين)، الرقم الضريبي</li><li><strong>معلومات الاتصال:</strong> عنوان البريد الإلكتروني، رقم الهاتف، العنوان</li><li><strong>المعلومات المالية:</strong> تفاصيل الحساب المصرفي، معلومات بطاقة الائتمان (مخزَّنة بصيغة مقنَّعة)</li><li><strong>معلومات المعاملات:</strong> سجل الطلبات، سجلات الدفع، طلبات الإرجاع</li><li><strong>الآثار الرقمية:</strong> عنوان IP، بيانات ملفات تعريف الارتباط، معلومات الجهاز، معلومات المتصفح</li><li><strong>بيانات الاستخدام:</strong> سجل البحث، مشاهدات الصفحات، بيانات النقر</li></ul>',
@@ -2863,7 +2862,7 @@ const ar = {
           '<p>قد تتم مشاركة بياناتك الشخصية مع أطراف ثالثة في الحالات التالية فقط:</p><ul class="list-disc ps-5 space-y-1"><li>مع شركات الشحن لتسليم الطلبات</li><li>مع مؤسسات الدفع لمعاملات الدفع</li><li>مع المؤسسات العامة المخوَّلة بموجب الالتزامات القانونية</li><li>مع مزوّدي خدماتنا (الاستضافة، التحليلات، أدوات دعم العملاء)</li></ul><p>لا تُباع بياناتك أبدًا لأطراف ثالثة تحت أي ظرف من الظروف.</p>',
         section6Title: "6. النقل الدولي للبيانات",
         section6Content:
-          "<p>بما أن المتحكّم في البيانات Thoptan Ltd. مقرّه في المملكة المتحدة، تُنقل البيانات الشخصية التي تُجمع من المستخدمين في تركيا إلى المملكة المتحدة لمعالجتها. ويتم هذا النقل استنادًا إلى الموافقة الصريحة لصاحب البيانات و/أو البنود التعاقدية المعيارية التي تحدّدها هيئة حماية البيانات الشخصية بموجب المادة 9 من قانون KVKK.</p><p>الدول الرئيسية التي يتم فيها نقل البيانات: المملكة المتحدة (مركز العمليات)، ودول الاتحاد الأوروبي، والولايات المتحدة الأمريكية (لمزوّدي الخدمة، بموجب البنود التعاقدية المعيارية).</p>",
+          "<p>بما أن المتحكّم في البيانات iStoc Private Company Limited مقرّه في المملكة المتحدة، تُنقل البيانات الشخصية التي تُجمع من المستخدمين في تركيا إلى المملكة المتحدة لمعالجتها. ويتم هذا النقل استنادًا إلى الموافقة الصريحة لصاحب البيانات و/أو البنود التعاقدية المعيارية التي تحدّدها هيئة حماية البيانات الشخصية بموجب المادة 9 من قانون KVKK.</p><p>الدول الرئيسية التي يتم فيها نقل البيانات: المملكة المتحدة (مركز العمليات)، ودول الاتحاد الأوروبي، والولايات المتحدة الأمريكية (لمزوّدي الخدمة، بموجب البنود التعاقدية المعيارية).</p>",
         section7Title: "7. حقوق صاحب البيانات",
         section7Content:
           '<p>بموجب المادة 11 من قانون KVKK، تتمتع بالحقوق التالية:</p><ul class="list-disc ps-5 space-y-1"><li>معرفة ما إذا كانت بياناتك الشخصية قد عُولجت</li><li>طلب معلومات حول المعالجة إذا كانت قد عُولجت</li><li>معرفة الغرض من المعالجة وما إذا كانت تُستخدم وفقًا للغرض منها</li><li>معرفة الأطراف الثالثة التي نُقلت إليها داخليًا أو خارجيًا</li><li>طلب التصحيح إذا عُولجت بشكل ناقص أو غير صحيح</li><li>طلب الحذف أو الإتلاف بموجب المادة 7 من قانون KVKK</li><li>الاعتراض على نشوء نتيجة ضدك من خلال تحليل البيانات المعالَجة بواسطة الأنظمة الآلية حصريًا</li></ul>',
@@ -2900,7 +2899,7 @@ const ar = {
         breadcrumbLabel: "سياسة الإرجاع",
         section1Title: "1. الشروط العامة",
         section1Content:
-          "<p>istoc هي منصّة تجارة عالمية بين الشركات. ويُحدَّد حق الإرجاع وفترة الإرجاع المعمول بها وفقًا <strong>لتشريعات البلد الذي يقع فيه البائع</strong> و<strong>لسياسة الإرجاع الخاصة بالبائع نفسه</strong>. يُرجى مراجعة شروط الإرجاع في صفحة المنتج أو في ملف البائع الشخصي قبل تقديم الطلب.</p><p>تصف هذه الصفحة <strong>العملية العامة</strong> لتقديم طلبات الإرجاع وحلّ النزاعات عبر المنصّة؛ وتختلف فترات الإرجاع المحدَّدة والرسوم والتشريعات المعمول بها حسب البائع.</p>",
+          "<p>iStoc هي منصّة تجارة عالمية بين الشركات. ويُحدَّد حق الإرجاع وفترة الإرجاع المعمول بها وفقًا <strong>لتشريعات البلد الذي يقع فيه البائع</strong> و<strong>لسياسة الإرجاع الخاصة بالبائع نفسه</strong>. يُرجى مراجعة شروط الإرجاع في صفحة المنتج أو في ملف البائع الشخصي قبل تقديم الطلب.</p><p>تصف هذه الصفحة <strong>العملية العامة</strong> لتقديم طلبات الإرجاع وحلّ النزاعات عبر المنصّة؛ وتختلف فترات الإرجاع المحدَّدة والرسوم والتشريعات المعمول بها حسب البائع.</p>",
         section2Title: "2. فترة الإرجاع",
         section2Content:
           "<p>فترة الإرجاع للمنتجات القياسية هي <strong>14 يومًا تقويميًا</strong> من تاريخ التسليم.</p><p>تُمدَّد هذه الفترة إلى <strong>30 يومًا</strong> للمنتجات التالفة أو المعيبة. ويجب الإبلاغ عن المنتج التالف مع الصور خلال أول 48 ساعة من التسليم.</p><p>تُحدَّد فترات الإرجاع لطلبات الجملة بين الشركات وفقًا للعقد المبرم مع البائع.</p>",
@@ -2926,16 +2925,16 @@ const ar = {
         breadcrumbLabel: "إشعار قانوني",
         section1Title: "1. معلومات الشركة",
         section1Content:
-          '<p><strong>المشغّل (الكيان الاعتباري):</strong> Thoptan Ltd.</p><p><strong>الولاية القضائية:</strong> إنجلترا وويلز (المملكة المتحدة)</p><p><strong>العلامة التجارية:</strong> istoc (تُنطق "آيستوك")</p><p><strong>البريد الإلكتروني:</strong> info@istoc.com</p><p class="text-sm text-gray-500 mt-2"><em>سيتم تحديث رقم تسجيل Companies House والعنوان المسجّل ومعلومات ممثّل تركيا على هذه الصفحة فور توفّرها.</em></p>',
+          '<p><strong>المشغّل (الكيان الاعتباري):</strong> iStoc Private Company Limited</p><p><strong>الولاية القضائية:</strong> إنجلترا وويلز (المملكة المتحدة)</p><p><strong>العلامة التجارية:</strong> iStoc</p><p><strong>البريد الإلكتروني:</strong> info@istoc.com</p><p class="text-sm text-gray-500 mt-2"><em>سيتم تحديث رقم تسجيل Companies House والعنوان المسجّل ومعلومات ممثّل تركيا على هذه الصفحة فور توفّرها.</em></p>',
         section2Title: "2. حول المنصّة",
         section2Content:
-          "<p>istoc، التي تشغّلها Thoptan Ltd. (المملكة المتحدة)، هي منصّة تجارة إلكترونية عالمية أُنشئت لتسهيل التجارة بين الشركات (B2B). وتعمل المنصّة كمزوّد خدمة وساطة في العلاقة التجارية بين البائع والمشتري.</p><p>تقع مسؤولية المنتجات والخدمات المعروضة على المنصّة على البائعين المعنيين.</p>",
+          "<p>iStoc، التي تشغّلها iStoc Private Company Limited (المملكة المتحدة)، هي منصّة تجارة إلكترونية عالمية أُنشئت لتسهيل التجارة بين الشركات (B2B). وتعمل المنصّة كمزوّد خدمة وساطة في العلاقة التجارية بين البائع والمشتري.</p><p>تقع مسؤولية المنتجات والخدمات المعروضة على المنصّة على البائعين المعنيين.</p>",
         section3Title: "3. تحديد المسؤولية",
         section3Content:
-          "<p>على الرغم من بذل كل جهد لضمان دقة وحداثة المعلومات المنشورة على المنصّة، فإنها لأغراض إعلامية فقط. ولا تضمن istoc أن تكون هذه المعلومات كاملة أو دقيقة أو محدَّثة.</p><p>istoc غير مسؤولة عن محتوى مواقع الأطراف الثالثة التي يتم الوصول إليها عبر المنصّة.</p><p>لا يمكن تحميل istoc مسؤولية انقطاعات الوصول الناتجة عن الأعطال الفنية أو أعمال الصيانة أو أحداث القوة القاهرة.</p>",
+          "<p>على الرغم من بذل كل جهد لضمان دقة وحداثة المعلومات المنشورة على المنصّة، فإنها لأغراض إعلامية فقط. ولا تضمن iStoc أن تكون هذه المعلومات كاملة أو دقيقة أو محدَّثة.</p><p>iStoc غير مسؤولة عن محتوى مواقع الأطراف الثالثة التي يتم الوصول إليها عبر المنصّة.</p><p>لا يمكن تحميل iStoc مسؤولية انقطاعات الوصول الناتجة عن الأعطال الفنية أو أعمال الصيانة أو أحداث القوة القاهرة.</p>",
         section4Title: "4. الرقابة والشكاوى",
         section4Content:
-          "<p>istoc هي منصّة للتجارة بين الشركات (B2B)، ولا تنطبق لجان التحكيم الاستهلاكي ومحاكم المستهلك على استخدام المنصّة.</p><p>يمكنك إرسال شكاويك وملاحظاتك المتعلّقة باستخدام المنصّة إلى <strong>info@istoc.com</strong>. وسيتم تقييم طلباتك خلال 5 أيام عمل.</p>",
+          "<p>iStoc هي منصّة للتجارة بين الشركات (B2B)، ولا تنطبق لجان التحكيم الاستهلاكي ومحاكم المستهلك على استخدام المنصّة.</p><p>يمكنك إرسال شكاويك وملاحظاتك المتعلّقة باستخدام المنصّة إلى <strong>info@istoc.com</strong>. وسيتم تقييم طلباتك خلال 5 أيام عمل.</p>",
         section5Title: "5. القانون الواجب التطبيق",
         section5Content:
           "<p>يخضع هذا الإشعار القانوني واستخدام المنصّة لقوانين إنجلترا وويلز. وتُحال أي نزاعات حصريًا إلى محكمة لندن للتحكيم الدولي (LCIA)؛ وتكون لغة التحكيم الإنجليزية.</p><p>هذا الإشعار القانوني لأغراض إعلامية عامة بشأن استخدام المنصّة ولا يشكّل استشارة قانونية.</p>",
@@ -2946,7 +2945,7 @@ const ar = {
         breadcrumbLabel: "سياسة إدراج المنتجات",
         section1Title: "1. المبادئ العامة",
         section1Content:
-          "<p>يخضع إدراج المنتجات على منصّة istoc لمعايير وقواعد محدَّدة. ويُعدّ جميع البائعين قد قرأوا هذه السياسة وقبلوها قبل إدراج منتجاتهم.</p><p>يجب أن تتوافق المنتجات المدرَجة مع تشريعات البلد الذي يقع فيه البائع، والقواعد المحلية للسوق الذي يُباع فيه المنتج، وقواعد التجارة الدولية، وسياسات المنصّة.</p>",
+          "<p>يخضع إدراج المنتجات على منصّة iStoc لمعايير وقواعد محدَّدة. ويُعدّ جميع البائعين قد قرأوا هذه السياسة وقبلوها قبل إدراج منتجاتهم.</p><p>يجب أن تتوافق المنتجات المدرَجة مع تشريعات البلد الذي يقع فيه البائع، والقواعد المحلية للسوق الذي يُباع فيه المنتج، وقواعد التجارة الدولية، وسياسات المنصّة.</p>",
         section2Title: "2. معلومات المنتج ودقّتها",
         section2Content:
           '<p>يلتزم البائعون بتقديم المعلومات التالية بدقّة وبشكل كامل لمنتجاتهم المدرَجة:</p><ul class="list-disc ps-5 space-y-1"><li><strong>عنوان المنتج:</strong> عنوان واضح ومفهوم يصف المنتج بدقّة</li><li><strong>الوصف:</strong> وصف مفصّل يشمل خصائص المنتج ومعلومات المواد وحالات الاستخدام</li><li><strong>الصور:</strong> صور أصلية عالية الجودة تمثّل المنتج بدقّة</li><li><strong>التسعير:</strong> معلومات السعر الحالية مع توضيح حالة شمول/استثناء ضريبة القيمة المضافة</li><li><strong>حالة المخزون:</strong> معلومات مخزون دقيقة وفي الوقت الفعلي</li><li><strong>الحد الأدنى للطلب:</strong> الحد الأدنى لكمية الطلب للبيع بين الشركات</li></ul>',
@@ -2955,10 +2954,10 @@ const ar = {
           '<p>يُحظر تمامًا إدراج المنتجات التالية على المنصّة:</p><ul class="list-disc ps-5 space-y-1"><li>المنتجات غير القانونية والبضائع المهرَّبة</li><li>المنتجات المقلَّدة أو المزيَّفة أو المقرصنة</li><li>الأسلحة والذخائر والمواد المتفجّرة</li><li>المواد المخدّرة والمؤثّرات العقلية</li><li>الأعضاء والأنسجة البشرية</li><li>المنتجات المشتقّة من الأنواع المهدَّدة بالانقراض</li><li>المنتجات التي تتضمّن أو توحي باستغلال الأطفال</li><li>المنتجات/الخدمات الهادفة إلى بيع البيانات الشخصية</li></ul><p>قد تتطلّب المنتجات في فئات معيّنة (الأغذية، الأدوية، الأجهزة الطبية، المواد الكيميائية، إلخ) مستندات وشهادات إضافية.</p>',
         section4Title: "4. معايير الصور والمحتوى",
         section4Content:
-          '<p>يجب أن تتوافق صور المنتجات ومحتواها مع المعايير التالية:</p><ul class="list-disc ps-5 space-y-1"><li>صور واضحة وجيدة الإضاءة بدقّة 800x800 بكسل كحدّ أدنى</li><li>صور خالية من العلامات المائية أو النصوص الترويجية أو شعارات المنصّات الأخرى</li><li>أوصاف خالية من الادّعاءات المضلّلة أو المبالَغ فيها</li><li>عدم وجود عبارات تحطّ من قدر منتجات أو علامات المنافسين</li><li>أوصاف خالية من معلومات الاتصال (الهاتف، البريد الإلكتروني، الموقع الإلكتروني)</li></ul><p>تحتفظ istoc بالحق في إزالة الصور والمحتوى الذي لا يستوفي المعايير دون إشعار مسبق.</p>',
+          '<p>يجب أن تتوافق صور المنتجات ومحتواها مع المعايير التالية:</p><ul class="list-disc ps-5 space-y-1"><li>صور واضحة وجيدة الإضاءة بدقّة 800x800 بكسل كحدّ أدنى</li><li>صور خالية من العلامات المائية أو النصوص الترويجية أو شعارات المنصّات الأخرى</li><li>أوصاف خالية من الادّعاءات المضلّلة أو المبالَغ فيها</li><li>عدم وجود عبارات تحطّ من قدر منتجات أو علامات المنافسين</li><li>أوصاف خالية من معلومات الاتصال (الهاتف، البريد الإلكتروني، الموقع الإلكتروني)</li></ul><p>تحتفظ iStoc بالحق في إزالة الصور والمحتوى الذي لا يستوفي المعايير دون إشعار مسبق.</p>',
         section5Title: "5. قواعد التسعير",
         section5Content:
-          '<p>يلتزم البائعون بالامتثال لقواعد التسعير التالية:</p><ul class="list-disc ps-5 space-y-1"><li>يجب أن تكون الأسعار واقعية ومتماشية مع ظروف السوق</li><li>تُحظر ممارسات الخصومات والحملات المضلّلة</li><li>يجب ذكر أسعار الجملة والتجزئة بوضوح</li><li>يجب عرض تكاليف الشحن والرسوم الإضافية بشفافية</li></ul><p>تملك istoc الحق في تعليق الإدراجات المعنية عند اكتشاف تسعير مخالف لظروف السوق أو تلاعبي.</p>',
+          '<p>يلتزم البائعون بالامتثال لقواعد التسعير التالية:</p><ul class="list-disc ps-5 space-y-1"><li>يجب أن تكون الأسعار واقعية ومتماشية مع ظروف السوق</li><li>تُحظر ممارسات الخصومات والحملات المضلّلة</li><li>يجب ذكر أسعار الجملة والتجزئة بوضوح</li><li>يجب عرض تكاليف الشحن والرسوم الإضافية بشفافية</li></ul><p>تملك iStoc الحق في تعليق الإدراجات المعنية عند اكتشاف تسعير مخالف لظروف السوق أو تلاعبي.</p>',
         section6Title: "6. المخالفات والعقوبات",
         section6Content:
           '<p>قد تُطبَّق العقوبات التالية في حالة مخالفة هذه السياسة:</p><ul class="list-disc ps-5 space-y-1"><li><strong>التحذير:</strong> تحذير كتابي للمخالفة الأولى</li><li><strong>إزالة الإدراج:</strong> إزالة إدراجات المنتجات التي تخالف القواعد</li><li><strong>تعليق الحساب:</strong> تعليق مؤقت للحساب في حالة المخالفات المتكرّرة</li><li><strong>إغلاق الحساب:</strong> إغلاق دائم للحساب في حالة المخالفات الجسيمة أو المستمرّة</li></ul><p>يملك البائعون الحق في الطعن في قرارات العقوبات خلال 15 يوم عمل.</p>',
@@ -2969,10 +2968,10 @@ const ar = {
         breadcrumbLabel: "الملكية الفكرية",
         section1Title: "1. الالتزام بحماية الملكية الفكرية",
         section1Content:
-          "<p>تولي istoc أهمية قصوى لاحترام حقوق الملكية الفكرية. وتتّخذ المنصّة التدابير اللازمة لحماية حقوق التأليف والنشر والعلامات التجارية وبراءات الاختراع وغيرها من حقوق الملكية الفكرية.</p><p>يلتزم مستخدمو المنصّة بعدم نشر محتوى أو إدراج منتجات تنتهك حقوق الملكية الفكرية للأطراف الثالثة.</p>",
-        section2Title: "2. حقوق الملكية الفكرية لعلامة istoc",
+          "<p>تولي iStoc أهمية قصوى لاحترام حقوق الملكية الفكرية. وتتّخذ المنصّة التدابير اللازمة لحماية حقوق التأليف والنشر والعلامات التجارية وبراءات الاختراع وغيرها من حقوق الملكية الفكرية.</p><p>يلتزم مستخدمو المنصّة بعدم نشر محتوى أو إدراج منتجات تنتهك حقوق الملكية الفكرية للأطراف الثالثة.</p>",
+        section2Title: "2. حقوق الملكية الفكرية لعلامة iStoc",
         section2Content:
-          '<p>جميع المحتويات والمواد الموجودة على المنصّة، بما في ذلك على سبيل المثال لا الحصر ما يلي، هي ملكية فكرية لشركة Thoptan Ltd. (مشغّلة علامة istoc) أو الجهات المرخِّصة لها:</p><ul class="list-disc ps-5 space-y-1"><li>اسم istoc وشعارها وجميع علاماتها التجارية</li><li>تصميم المنصّة وتخطيط الواجهة وتجربة المستخدم</li><li>الشيفرة البرمجية والخوارزميات وقواعد البيانات</li><li>المحتوى والتقارير والتحليلات التي تنشئها المنصّة</li><li>المواد التدريبية والوثائق</li></ul><p>يُحظر نسخ هذه المواد أو إعادة إنتاجها أو توزيعها أو استخدامها لأغراض تجارية دون إذن كتابي من Thoptan Ltd.</p>',
+          '<p>جميع المحتويات والمواد الموجودة على المنصّة، بما في ذلك على سبيل المثال لا الحصر ما يلي، هي ملكية فكرية لشركة iStoc Private Company Limited (مشغّلة علامة iStoc) أو الجهات المرخِّصة لها:</p><ul class="list-disc ps-5 space-y-1"><li>اسم iStoc وشعارها وجميع علاماتها التجارية</li><li>تصميم المنصّة وتخطيط الواجهة وتجربة المستخدم</li><li>الشيفرة البرمجية والخوارزميات وقواعد البيانات</li><li>المحتوى والتقارير والتحليلات التي تنشئها المنصّة</li><li>المواد التدريبية والوثائق</li></ul><p>يُحظر نسخ هذه المواد أو إعادة إنتاجها أو توزيعها أو استخدامها لأغراض تجارية دون إذن كتابي من iStoc Private Company Limited</p>',
         section3Title: "3. الإبلاغ عن الانتهاك",
         section3Content:
           '<p>إذا كنت تعتقد أن حقوق ملكيتك الفكرية قد انتُهكت، يمكنك التواصل معنا بالمعلومات التالية:</p><ul class="list-disc ps-5 space-y-1"><li>معلومات هوية صاحب الحق أو الممثّل المفوَّض</li><li>وصف حق الملكية الفكرية المزعوم انتهاكه</li><li>موقع (URL) المحتوى المنتهِك على المنصّة</li><li>المستندات الداعمة لادّعاء الانتهاك (شهادة التسجيل، اتفاقية الترخيص، إلخ)</li><li>بيان بأن الإبلاغ تم بحسن نية</li></ul><p><strong>عنوان الإبلاغ:</strong> ipr@istoc.com</p>',
@@ -2984,7 +2983,7 @@ const ar = {
           '<p>يملك البائعون الذين أُزيل محتواهم الحق في تقديم إشعار مضادّ ضدّ الإزالة. ويجب أن تتضمّن الإشعارات المضادّة:</p><ul class="list-disc ps-5 space-y-1"><li>هوية البائع ومعلومات الاتصال الخاصة به</li><li>وصف المحتوى المُزال</li><li>توضيح ومستندات داعمة حول سبب عدم تشكيل المحتوى انتهاكًا</li><li>بيان بقبول المسؤولية القانونية في حالة الإشعار الكاذب</li></ul><p>يجب تقديم الإشعارات المضادّة خلال 10 أيام عمل من الإزالة.</p>',
         section6Title: "6. الانتهاكات المتكرّرة",
         section6Content:
-          '<p>تطبّق istoc سياسة عدم التسامح إطلاقًا تجاه انتهاكات الملكية الفكرية المتكرّرة:</p><ul class="list-disc ps-5 space-y-1"><li><strong>الانتهاك الأول:</strong> تحذير كتابي وإزالة المحتوى</li><li><strong>الانتهاك الثاني:</strong> تعليق الحساب لمدة 30 يومًا</li><li><strong>الانتهاك الثالث:</strong> إغلاق دائم للحساب</li></ul><p>بالنسبة للانتهاكات المتعمَّدة والمنظَّمة، تحتفظ istoc بالحق في إغلاق الحساب نهائيًا وبدء الإجراءات القانونية حتى في الانتهاك الأول.</p>',
+          '<p>تطبّق iStoc سياسة عدم التسامح إطلاقًا تجاه انتهاكات الملكية الفكرية المتكرّرة:</p><ul class="list-disc ps-5 space-y-1"><li><strong>الانتهاك الأول:</strong> تحذير كتابي وإزالة المحتوى</li><li><strong>الانتهاك الثاني:</strong> تعليق الحساب لمدة 30 يومًا</li><li><strong>الانتهاك الثالث:</strong> إغلاق دائم للحساب</li></ul><p>بالنسبة للانتهاكات المتعمَّدة والمنظَّمة، تحتفظ iStoc بالحق في إغلاق الحساب نهائيًا وبدء الإجراءات القانونية حتى في الانتهاك الأول.</p>',
       },
       accessibility: {
         pageTitle: "إمكانية الوصول",
@@ -2992,7 +2991,7 @@ const ar = {
         breadcrumbLabel: "إمكانية الوصول",
         section1Title: "1. التزامنا بإمكانية الوصول",
         section1Content:
-          "<p>في istoc، نلتزم بضمان أن تكون منصّتنا في متناول جميع المستخدمين، بمن فيهم الأشخاص ذوو الإعاقة. وتُعدّ إمكانية الوصول الرقمي جزءًا لا يتجزّأ من مسؤوليتنا المؤسسية.</p><p>يجري تطوير منصّتنا باستمرار للامتثال لمعيار إرشادات الوصول إلى محتوى الويب (WCAG) 2.1 AA.</p>",
+          "<p>في iStoc، نلتزم بضمان أن تكون منصّتنا في متناول جميع المستخدمين، بمن فيهم الأشخاص ذوو الإعاقة. وتُعدّ إمكانية الوصول الرقمي جزءًا لا يتجزّأ من مسؤوليتنا المؤسسية.</p><p>يجري تطوير منصّتنا باستمرار للامتثال لمعيار إرشادات الوصول إلى محتوى الويب (WCAG) 2.1 AA.</p>",
         section2Title: "2. ميزات إمكانية الوصول",
         section2Content:
           '<p>نقدّم ميزات إمكانية الوصول التالية على منصّتنا:</p><ul class="list-disc ps-5 space-y-1"><li><strong>التنقّل بلوحة المفاتيح:</strong> يمكن الوصول إلى جميع ميزات المنصّة باستخدام لوحة المفاتيح فقط</li><li><strong>دعم قارئ الشاشة:</strong> محتوانا متوافق مع برامج قارئات الشاشة الشائعة</li><li><strong>ضبط حجم النص:</strong> يمكن للمستخدمين تغيير حجم النص عبر إعدادات المتصفح</li><li><strong>تباين الألوان:</strong> نسب تباين ألوان تستوفي معايير WCAG AA</li><li><strong>النص البديل:</strong> نص بديل وصفي للصور</li><li><strong>تسميات النماذج:</strong> تسميات واضحة ومفهومة لجميع حقول النماذج</li><li><strong>مؤشّرات التركيز:</strong> مؤشّرات تركيز مرئية عند التنقّل بلوحة المفاتيح</li></ul>',
@@ -3029,7 +3028,7 @@ const ar = {
     // DROPSHIPPING
     // ============================================================
     dropshipping: {
-      istocPicks: "اختيارات istoc",
+      istocPicks: "اختيارات iStoc",
       hotSales: "مبيعات رائجة",
       brandedProducts: "منتجات ذات علامات تجارية",
       complianceReady: "جاهز للامتثال",
@@ -3154,7 +3153,7 @@ const ar = {
     // CONTACTS
     // ============================================================
     contacts: {
-      helpBanner: "ساعدنا على تحسين istoc!",
+      helpBanner: "ساعدنا على تحسين iStoc!",
       clickHere: "انقر هنا",
       allContacts: "جميع جهات الاتصال - 0",
       searchPlaceholder: "ابحث في جهات اتصال المورّدين الخاصة بك",
@@ -3232,7 +3231,7 @@ const ar = {
     // ============================================================
     logistics: {
       ordersBannerInfo:
-        "ملاحظة: تمت ترقية طلبات سوق الخدمات اللوجستية إلى طلبات Trade Assurance. يمكنك إدارة طلبات Trade Assurance الخاصة بك في قائمة الطلبات istoc> .",
+        "ملاحظة: تمت ترقية طلبات سوق الخدمات اللوجستية إلى طلبات Trade Assurance. يمكنك إدارة طلبات Trade Assurance الخاصة بك في قائمة الطلبات iStoc> .",
       reviewsBannerInfo:
         "ملاحظة: ستتم ترقية طلبات سوق الخدمات اللوجستية إلى طلبات Trade Assurance بدءًا من 20 فبراير تقريبًا.",
       manageOrders: "إدارة الطلبات اللوجستية",
@@ -3289,7 +3288,7 @@ const ar = {
       transactions: "المعاملات",
       ttAccounts: "حسابات التحويل البنكي",
       ttTracking: "تتبع التحويل البنكي",
-      istocCard: "بطاقة istoc.com",
+      istocCard: "بطاقة iStoc.com",
       payLater: "الدفع لاحقًا للأعمال",
       paymentTitle: "الدفع",
       paymentManagementTitle: "إدارة الدفع",
@@ -3339,7 +3338,7 @@ const ar = {
       verifySupplierAccount: "التحقق من حساب المورّد",
       uploadWireReceipt: "رفع إيصال التحويل",
       tooltipVerify:
-        "تحقق مما إذا كان حساب المورّد حسابًا بنكيًا رسميًا لـ istoc.com. ارفع إيصال التحويل للتحقق من أن دفعتك محمية بواسطة istoc.com.",
+        "تحقق مما إذا كان حساب المورّد حسابًا بنكيًا رسميًا لـ iStoc.com. ارفع إيصال التحويل للتحقق من أن دفعتك محمية بواسطة iStoc.com.",
       allTab: "الكل",
       pendingMatchTab: "بانتظار مطابقة المورّد",
       matchedTab: "مطابقة كاملة من المورّد",
@@ -3353,7 +3352,7 @@ const ar = {
       verifyModalTitle: "التحقق من حساب المورّد",
       verifyWarning: "تحقق دائمًا من الحساب البنكي للمورّد قبل إجراء الدفع",
       verifyDescription:
-        "عند تلقيك تعليمات دفع من مورّد، تحقق من أن رقم الحساب يخص الحساب البنكي الرسمي لـ istoc.com قبل إجراء الدفع. بهذه الطريقة يمكنك الاستفادة من حماية الطلب.",
+        "عند تلقيك تعليمات دفع من مورّد، تحقق من أن رقم الحساب يخص الحساب البنكي الرسمي لـ iStoc.com قبل إجراء الدفع. بهذه الطريقة يمكنك الاستفادة من حماية الطلب.",
       supplierAccountPlaceholder: "رقم الحساب البنكي للمورّد *",
       cancelBtn: "إلغاء",
       verifyBtn: "تحقق",
@@ -3363,7 +3362,7 @@ const ar = {
       thWireAmount: "مبلغ التحويل",
       thSendDate: "تاريخ الإرسال",
       noTrackingRecord: "لم يتم العثور على سجل تتبع تحويل",
-      istocCardTitle: "بطاقة istoc.com",
+      istocCardTitle: "بطاقة iStoc.com",
       comingSoon: "ستتوفر هذه الخدمة قريبًا",
       payLaterTitle: "الدفع لاحقًا للأعمال",
       uploadReceiptTitle: "رفع إيصال التحويل",
@@ -3517,7 +3516,7 @@ const ar = {
         'نعتذر بصدق عن أي إزعاج ونحن ممتنون لتفهمك بينما نعمل على تقديم حلول أفضل. إذا كنت لا تزال بحاجة إلى خدمات حلول الدفع، يمكنك التفكير في خيارات الدفع <strong class="text-gray-900 font-bold">اشترِ الآن وادفع لاحقًا</strong> أو <strong class="text-gray-900 font-bold">الدفع لاحقًا للأعمال</strong>. انقر <a href="/pages/dashboard/payment.html#pay-later" class="text-blue-600 underline underline-offset-2 font-medium hover:text-blue-700">هنا</a> لمعرفة المزيد.',
       ptParagraph3: "شكرًا لك على دعمك المستمر!",
       ptRegards: "مع أطيب التحيات،",
-      ptTeam: "فريق شروط الدفع في istoc.com",
+      ptTeam: "فريق شروط الدفع في iStoc.com",
       piTitle: "خدمة فحص المنتج",
       piSubtitle: "احصل على فحص احترافي لمنتجات المورّد الخاص بك",
       piDearBuyers: "أعزاءنا المشترين،",
@@ -3525,7 +3524,7 @@ const ar = {
         "من خلال خدمة فحص المنتجات لدينا، يمكنك فحص جودة طلباتك على يد مفتشين محترفين قبل الشحن. تُهيّأ هذه الخدمة حاليًا.",
       piParagraph2: "لمزيد من المعلومات حول خدمة الفحص، يمكنك التواصل مع خدمة العملاء لدينا.",
       piRegards: "مع أطيب التحيات،",
-      piTeam: "فريق فحص الجودة في istoc.com",
+      piTeam: "فريق فحص الجودة في iStoc.com",
     },
 
     // ============================================================
@@ -3555,7 +3554,7 @@ const ar = {
     // SELLER
     // ============================================================
     seller: {
-      sellOnIstoc: "البيع على istoc",
+      sellOnIstoc: "البيع على iStoc",
       pricing: "الأسعار",
       storefront: "واجهة متجر البائع",
       sf: {
@@ -3680,7 +3679,7 @@ const ar = {
         // CompanyInfo extras
         companyTitle: "الشركة",
         verifiedSupplier: "مورّد موثّق",
-        verifiedWithIstoc: "موثّق مع istoc",
+        verifiedWithIstoc: "موثّق مع iStoc",
         // HotProducts extras
         hotProductsTitle: "المنتجات الرائجة",
         buyNow: "اشترِ الآن",
@@ -3690,7 +3689,7 @@ const ar = {
 
         // === NEW: Storefront Redesign (istoc-style) ===
         // Header stats
-        platformYears: "{{count}} سنة على istoc",
+        platformYears: "{{count}} سنة على iStoc",
         employees: "{{count}} موظف",
         totalOrders: "{{count}} طلب",
         transactionVolume: "US ${{amount}}+",
@@ -4154,7 +4153,7 @@ const ar = {
     // ============================================================
     topDeals: {
       title: "أفضل العروض",
-      subtitle: "احصل على أدنى الأسعار على istoc",
+      subtitle: "احصل على أدنى الأسعار على iStoc",
       topPicks: "أفضل المختارات",
       moq: "الحد الأدنى للطلب: {{count}} {{unit}}",
       pieces: "قطع",
@@ -4515,7 +4514,7 @@ const ar = {
       },
 
       noHistory: "لا يوجد سجل تصفّح بعد. تصفّح المنتجات لتظهر هنا.",
-      welcomeTitle: "مرحبًا بك في istoc.com",
+      welcomeTitle: "مرحبًا بك في iStoc.com",
     },
 
     // ============================================================
@@ -4666,10 +4665,10 @@ const ar = {
       sourcing: "البحث عن مصادر التوريد",
       sourcingDesc: "التوريد والطلبات والشحن",
       tradeAssurance: "Trade Assurance",
-      tradeAssuranceDesc: "احمِ طلباتك على istoc",
+      tradeAssuranceDesc: "احمِ طلباتك على iStoc",
       downloadApp: "تنزيل تطبيق الجوّال",
-      downloadAppDesc: "تطبيق istoc",
-      logistics: "istoc Logistics",
+      downloadAppDesc: "تطبيق iStoc",
+      logistics: "iStoc Logistics",
       logisticsDesc: "خدمات لوجستية ذكية",
       tabAccount: "حسابي",
       tabSourcing: "البحث عن مصادر التوريد",
@@ -4678,7 +4677,7 @@ const ar = {
       tabAfterSales: "خدمات ما بعد البيع",
       tabSelfService: "الخدمة الذاتية",
       q_account_1: "ماذا أفعل إذا نسيت كلمة المرور؟",
-      q_account_2: "كيف يمكنني إنشاء حساب على istoc؟",
+      q_account_2: "كيف يمكنني إنشاء حساب على iStoc؟",
       q_account_3: "لماذا لا أتلقّى رمز التحقق عبر البريد الإلكتروني؟",
       q_account_4: "لماذا لا أتلقّى رمز التحقق عبر الرسائل النصية القصيرة؟",
       q_account_5: "لماذا تم تعطيل حسابي؟",
@@ -4686,8 +4685,8 @@ const ar = {
       q_account_7: "كيف يمكنني تحديث معلومات حسابي؟",
       q_account_8: "ما هي المصادقة الثنائية؟",
       q_account_9: "كيف يمكنني حذف حسابي؟",
-      q_sourcing_1: "كيف يمكنني التسوّق على istoc؟",
-      q_sourcing_2: "كيف يمكنني البحث عن المنتجات على istoc؟",
+      q_sourcing_1: "كيف يمكنني التسوّق على iStoc؟",
+      q_sourcing_2: "كيف يمكنني البحث عن المنتجات على iStoc؟",
       q_sourcing_3: "كيف يمكنني إضافة المنتجات إلى المفضلة؟",
       q_sourcing_4: "كيف يمكنني معرفة سعر المنتج والحد الأدنى للطلب (MOQ) وتكاليف الشحن؟",
       q_sourcing_5: "كيف يمكنني الوصول إلى معلومات الاتصال الخاصة بالمورّد؟",
@@ -4789,7 +4788,7 @@ const ar = {
       messageSentDesc: "سنعاود التواصل معك في أقرب وقت ممكن. متوسط وقت الاستجابة لدينا 24 ساعة.",
       sendNewMessage: "إرسال رسالة جديدة",
       addressInfo: "معلومات الشركة",
-      addressCompany: "Thoptan Ltd.",
+      addressCompany: "iStoc Private Company Limited",
       addressLine1: "المملكة المتحدة",
       addressLine2: "سيتم تحديث تفاصيل العنوان المسجَّل قريبًا.",
       businessHours: "الإثنين - الجمعة: 09:00 - 18:00 (UTC)",
@@ -4808,7 +4807,7 @@ const ar = {
       faqFooterTerms: "شروط الاستخدام",
       faqFooterUserInfo: "قوانين معلومات المستخدم",
       faqFooterContact: "دليل الاتصال",
-      faqFooterCopyright: "© 2024 istoc — جميع الحقوق محفوظة.",
+      faqFooterCopyright: "© 2024 iStoc — جميع الحقوق محفوظة.",
       // ── TicketsListLayout ──
       myTickets: "تذاكر الدعم الخاصة بي",
       newTicket: "تذكرة جديدة",
@@ -4954,7 +4953,7 @@ const ar = {
       sectionContactInfo: "معلومات الاتصال",
       sectionSpam: "حالة إضافة جهات الاتصال والحظر والرسائل غير المرغوب فيها",
       sectionSourcingInfo: "معلومات التوريد",
-      sectionActivity: "نشاطك على istoc.com",
+      sectionActivity: "نشاطك على iStoc.com",
       sectionIndustries: "الصناعات التي تهتم بها",
       sectionTopKeywords: "أكثر الكلمات المفتاحية بحثًا",
       sectionRecentKeywords: "الكلمات المفتاحية التي بحثت عنها مؤخرًا والمنتجات التي شاهدتها",
@@ -5067,9 +5066,9 @@ const ar = {
       confirmDeleteCheck: "أفهم وأؤكد أنه سيتم حذف حسابي وجميع بياناتي نهائيًا.",
       deleteMyAccount: "حذف حسابي",
       accountDeleted: "تم تعطيل حسابك",
-      accountDeletedDesc: "تم تعطيل حسابك. لإعادة تنشيطه، يُرجى التواصل مع دعم عملاء istoc.",
+      accountDeletedDesc: "تم تعطيل حسابك. لإعادة تنشيطه، يُرجى التواصل مع دعم عملاء iStoc.",
       accountDeactivatedContactAdmin:
-        "حسابك معطَّل. يُرجى التواصل مع دعم عملاء istoc لإعادة تنشيطه.",
+        "حسابك معطَّل. يُرجى التواصل مع دعم عملاء iStoc لإعادة تنشيطه.",
       goToLogin: "الانتقال إلى صفحة تسجيل الدخول",
       confirmDeleteRequired: "يُرجى تحديد مربّع التأكيد.",
       deleteAccountFailed: "فشل حذف الحساب. يُرجى المحاولة مرة أخرى.",
@@ -5181,7 +5180,7 @@ const ar = {
       resubscribeAll: "إعادة الاشتراك في الكل",
       allNotificationEmails: "جميع رسائل الإشعارات",
       notificationEmailsDesc:
-        "رسائل بريد إلكتروني تُعلمك بتحديثات الحساب المهمة والأحداث على istoc.com",
+        "رسائل بريد إلكتروني تُعلمك بتحديثات الحساب المهمة والأحداث على iStoc.com",
       generalNotificationEmails: "رسائل الإشعارات العامة",
       generalNotificationEmailsDesc:
         "رسائل بريد إلكتروني تُطلَق بناءً على أنشطتك على المنصة، بما في ذلك التحديثات على حساباتك ومراسلاتك وطلباتك وشحناتك.",
@@ -5190,7 +5189,7 @@ const ar = {
         "في حال وجود أي نزاع أنت طرف فيه (سواء بدأته أنت أم لا)، فسنُعلمك ونُبقيك على اطّلاع بشأن تقدّمه.",
       allMarketingEmails: "جميع رسائل التسويق",
       marketingEmailsDesc:
-        "رسائل بريد إلكتروني تحتوي على رسائل ترويجية حول المنتجات والخدمات على istoc.com",
+        "رسائل بريد إلكتروني تحتوي على رسائل ترويجية حول المنتجات والخدمات على iStoc.com",
       generalMarketingEmails: "رسائل التسويق العامة",
       generalMarketingEmailsDesc:
         "رسائل بريد إلكتروني لإعلامك بالفرص والأحداث وتحديثات الخدمة، بما في ذلك خصومات المنتجات والعروض الخاصة والأحداث وعروض الخدمات التي قد تفيد نشاطك التجاري.",
@@ -5311,7 +5310,7 @@ const ar = {
       heroSubtitle: "نجمع بين البائعين والمشترين من جميع أنحاء العالم لتجارة B2B آمنة وشفافة.",
       storyTitle: "قصتنا",
       storyP1:
-        'istoc (تُنطق "آيستوك") هي علامة تجارية عالمية للتجارة بين الشركات B2B تديرها Thoptan Ltd. (المملكة المتحدة). هدفنا بسيط: جمع الشركات المصنّعة وتجار الجملة وتجار التجزئة من كل ركن من أركان العالم على منصة رقمية واحدة.',
+        'iStoc هي علامة تجارية عالمية للتجارة بين الشركات B2B تديرها iStoc Private Company Limited (المملكة المتحدة). هدفنا بسيط: جمع الشركات المصنّعة وتجار الجملة وتجار التجزئة من كل ركن من أركان العالم على منصة رقمية واحدة.',
       storyP2:
         "بلا حدود جغرافية، نبني البنية التحتية التي يمكن لبائعينا ومشترينا التداول من خلالها بثقة وسرعة وشفافية. بفضل البائعين الموثّقين والمدفوعات الآمنة وهيكل العمولة البسيط، نحن في طريقنا لنصبح سوق B2B من الجيل القادم.",
       storyP3:
@@ -5322,7 +5321,7 @@ const ar = {
       vision: "رؤيتنا",
       visionText:
         "أن نكون أكثر منظومات التجارة بين الشركات B2B موثوقية وابتكارًا في العالم. وأن نقدّم بنية تحتية عالمية للتجارة بلا حدود وشفافة وفعّالة.",
-      statsTitle: "istoc بالأرقام",
+      statsTitle: "iStoc بالأرقام",
       counterUsers: "المستخدمون المسجّلون",
       counterSellers: "البائعون النشطون",
       counterCountries: "الدول",
@@ -5345,9 +5344,9 @@ const ar = {
     },
     faq: {
       allCategories: "جميع الفئات",
-      intro: "مقدمة عن istoc",
-      introDesc: "مقدمة عن istoc",
-      introMembership: "عضوية istoc",
+      intro: "مقدمة عن iStoc",
+      introDesc: "مقدمة عن iStoc",
+      introMembership: "عضوية iStoc",
       account: "إدارة الحساب",
       accountSettings: "إعدادات الحساب",
       accountCancelReactivate: "الإلغاء وإعادة التفعيل",
@@ -5385,7 +5384,7 @@ const ar = {
       taxRefund: "استرداد الضريبة",
       shipping: "الشحن",
       shippingShipping: "الشحن",
-      shippingLogistics: "خدمات istoc اللوجستية",
+      shippingLogistics: "خدمات iStoc اللوجستية",
       shippingMaersk: "خدمات الشحن MSK (Maersk)",
       shippingImportFees: "رسوم الاستيراد",
       receipt: "استلام الطلب",
@@ -5404,7 +5403,7 @@ const ar = {
       feedback: "تقييم الطلب",
       feedbackManagement: "إدارة التقييمات",
       feedbackRules: "قواعد التقييم",
-      security: "الأمان وقواعد istoc",
+      security: "الأمان وقواعد iStoc",
       securityFraud: "الاحتيال/البريد الإلكتروني المزيّف",
       securityIpr: "شكوى حقوق الملكية الفكرية",
       others: "أخرى",
@@ -5417,16 +5416,16 @@ const ar = {
       promotionsSuper: "العرض الترويجي الكبير",
       promotionsPayment: "العروض الترويجية للدفع",
       promotionsOtherIssues: "مشكلات العروض الترويجية الأخرى",
-      guaranteed: "ضمان istoc",
+      guaranteed: "ضمان iStoc",
       guaranteedShipping: "الشحن المضمون",
       guaranteedAfterSales: "خدمة ما بعد البيع المضمونة",
       guaranteedPreSales: "خدمة ما قبل البيع المضمونة",
       guaranteedPlaceOrder: "تقديم الطلب المضمون",
       guaranteedOverseasWarehouse: "مستودع موثّق في الخارج",
-      appSettings: "إعدادات تطبيق istoc",
-      appSettingsLabel: "إعدادات تطبيق istoc",
+      appSettings: "إعدادات تطبيق iStoc",
+      appSettingsLabel: "إعدادات تطبيق iStoc",
       localization: "اللغة والتعريب",
-      localizationSettings: "إعدادات لغة istoc",
+      localizationSettings: "إعدادات لغة iStoc",
     },
     faqDetail: {
       // UI
@@ -5440,34 +5439,34 @@ const ar = {
       noContent: "لا يوجد محتوى متاح لهذا الموضوع بعد.",
       relatedTopics: "مواضيع ذات صلة",
 
-      // ── istoc Introduction ──
-      introDesc_title: "مقدمة عن istoc",
-      introDesc_desc: "تعرّف على منصة istoc وكيفية عملها.",
+      // ── iStoc Introduction ──
+      introDesc_title: "مقدمة عن iStoc",
+      introDesc_desc: "تعرّف على منصة iStoc وكيفية عملها.",
       introDesc_items: [
         {
-          q: "ما هي istoc؟",
-          a: "istoc هي منصة عالمية للتجارة الإلكترونية بين الشركات B2B (من شركة إلى شركة) تديرها Thoptan Ltd. (المملكة المتحدة). تجمع بين الشركات المصنّعة وتجار الجملة والموزّعين من جميع أنحاء العالم مع المشترين لتسهيل التجارة الآمنة والفعّالة.",
+          q: "ما هي iStoc؟",
+          a: "iStoc هي منصة عالمية للتجارة الإلكترونية بين الشركات B2B (من شركة إلى شركة) تديرها iStoc Private Company Limited (المملكة المتحدة). تجمع بين الشركات المصنّعة وتجار الجملة والموزّعين من جميع أنحاء العالم مع المشترين لتسهيل التجارة الآمنة والفعّالة.",
         },
         {
-          q: "من يمكنه استخدام istoc؟",
-          a: "يمكن استخدام istoc من قِبل رواد الأعمال الأفراد والمشترين والبائعين من الشركات على حد سواء. يمكن لـ<strong>المشترين</strong> توريد المنتجات بأسعار الجملة، بينما يمكن لـ<strong>البائعين</strong> الوصول إلى جمهور واسع من المشترين. التسجيل في المنصة مجاني.",
+          q: "من يمكنه استخدام iStoc؟",
+          a: "يمكن استخدام iStoc من قِبل رواد الأعمال الأفراد والمشترين والبائعين من الشركات على حد سواء. يمكن لـ<strong>المشترين</strong> توريد المنتجات بأسعار الجملة، بينما يمكن لـ<strong>البائعين</strong> الوصول إلى جمهور واسع من المشترين. التسجيل في المنصة مجاني.",
         },
         {
-          q: "ما الذي يميّز istoc عن المنصات الأخرى؟",
-          a: "تتميّز istoc ببرنامج Trade Assurance الذي يحمي المشترين والبائعين معًا. وتتضمّن حلولًا لوجستية متكاملة، ونظام دفع آمن، ودعم عملاء على مدار الساعة طوال أيام الأسبوع. إضافةً إلى ذلك، تقدّم مطابقة الموردين المدعومة بالذكاء الاصطناعي وخدمات فحص الجودة.",
+          q: "ما الذي يميّز iStoc عن المنصات الأخرى؟",
+          a: "تتميّز iStoc ببرنامج Trade Assurance الذي يحمي المشترين والبائعين معًا. وتتضمّن حلولًا لوجستية متكاملة، ونظام دفع آمن، ودعم عملاء على مدار الساعة طوال أيام الأسبوع. إضافةً إلى ذلك، تقدّم مطابقة الموردين المدعومة بالذكاء الاصطناعي وخدمات فحص الجودة.",
         },
         {
-          q: "ما فئات المنتجات المتوفرة على istoc؟",
+          q: "ما فئات المنتجات المتوفرة على iStoc؟",
           a: "تعرض المنصة منتجات في فئات المنسوجات والملابس، والإلكترونيات، والأغذية والمشروبات، والسيارات، والآلات والمعدات، والإنشاءات ومواد البناء، ومستحضرات التجميل، والأثاث، والمنتجات الزراعية، والعديد من الفئات الأخرى.",
         },
       ],
 
-      introMembership_title: "عضوية istoc",
+      introMembership_title: "عضوية iStoc",
       introMembership_desc: "تعرّف على أنواع العضوية والمزايا وخيارات الترقية.",
       introMembership_items: [
         {
-          q: "ما أنواع العضوية المتوفرة على istoc؟",
-          a: "تقدّم istoc ثلاث مستويات للعضوية: <strong>العضوية المجانية</strong> (مزايا أساسية، قوائم محدودة)، و<strong>العضوية الذهبية</strong> (أولوية في الإدراج، تحليلات متقدمة)، و<strong>العضوية الموثّقة</strong> (شارة توثيق، مدير حساب مخصّص، قوائم غير محدودة).",
+          q: "ما أنواع العضوية المتوفرة على iStoc؟",
+          a: "تقدّم iStoc ثلاث مستويات للعضوية: <strong>العضوية المجانية</strong> (مزايا أساسية، قوائم محدودة)، و<strong>العضوية الذهبية</strong> (أولوية في الإدراج، تحليلات متقدمة)، و<strong>العضوية الموثّقة</strong> (شارة توثيق، مدير حساب مخصّص، قوائم غير محدودة).",
         },
         {
           q: "ماذا يمكنني أن أفعل بالعضوية المجانية؟",
@@ -5510,11 +5509,11 @@ const ar = {
       accountCancelReactivate_items: [
         {
           q: "كيف أُلغي حسابي؟",
-          a: 'يمكنك استخدام خيار "إغلاق الحساب" من إعدادات الحساب > إدارة الحساب. قبل الإلغاء، يجب حل جميع الطلبات والنزاعات المفتوحة. بعد الإغلاق، لا يمكن إعادة التفعيل إلا من قِبل <strong>دعم عملاء istoc</strong>.',
+          a: 'يمكنك استخدام خيار "إغلاق الحساب" من إعدادات الحساب > إدارة الحساب. قبل الإلغاء، يجب حل جميع الطلبات والنزاعات المفتوحة. بعد الإغلاق، لا يمكن إعادة التفعيل إلا من قِبل <strong>دعم عملاء iStoc</strong>.',
         },
         {
           q: "هل يمكنني إعادة تفعيل حسابي؟",
-          a: "بعد إغلاق حسابك، لا يمكنك إعادة تفعيله بنفسك عن طريق تسجيل الدخول. لإعادة تفعيل حسابك، يجب أن تقدّم طلبًا إلى دعم عملاء istoc؛ وبمجرد مراجعة طلبك، يمكن إعادة فتح حسابك.",
+          a: "بعد إغلاق حسابك، لا يمكنك إعادة تفعيله بنفسك عن طريق تسجيل الدخول. لإعادة تفعيل حسابك، يجب أن تقدّم طلبًا إلى دعم عملاء iStoc؛ وبمجرد مراجعة طلبك، يمكن إعادة فتح حسابك.",
         },
         {
           q: "ماذا يحدث إذا ألغيت عضويتي الذهبية/الموثّقة؟",
@@ -5526,7 +5525,7 @@ const ar = {
       accountLogin_desc: "سجّل الدخول إلى حسابك وحلّ مشكلات تسجيل الدخول.",
       accountLogin_items: [
         {
-          q: "كيف أُسجّل الدخول إلى istoc؟",
+          q: "كيف أُسجّل الدخول إلى iStoc؟",
           a: 'انقر على زر "تسجيل الدخول" في الصفحة الرئيسية وأدخل عنوان بريدك الإلكتروني وكلمة المرور. يمكنك أيضًا استخدام خيارات تسجيل الدخول السريع عبر Google أو Apple أو رقم الهاتف.',
         },
         {
@@ -5544,10 +5543,10 @@ const ar = {
       ],
 
       accountRegister_title: "إنشاء حساب",
-      accountRegister_desc: "خطوات إنشاء حساب istoc جديد.",
+      accountRegister_desc: "خطوات إنشاء حساب iStoc جديد.",
       accountRegister_items: [
         {
-          q: "كيف أُنشئ حسابًا على istoc؟",
+          q: "كيف أُنشئ حسابًا على iStoc؟",
           a: 'انقر على زر "التسجيل" في الصفحة الرئيسية. أدخل عنوان بريدك الإلكتروني، وعيّن كلمة مرور، ووافق على شروط الاستخدام. بعد التسجيل، ستحتاج إلى التحقق من بريدك الإلكتروني.',
         },
         {
@@ -5561,10 +5560,10 @@ const ar = {
       ],
 
       accountBecomeSeller_title: "كن بائعًا",
-      accountBecomeSeller_desc: "عملية ومتطلبات أن تصبح بائعًا على istoc.",
+      accountBecomeSeller_desc: "عملية ومتطلبات أن تصبح بائعًا على iStoc.",
       accountBecomeSeller_items: [
         {
-          q: "ماذا أحتاج لأصبح بائعًا على istoc؟",
+          q: "ماذا أحتاج لأصبح بائعًا على iStoc؟",
           a: "لتصبح بائعًا، تحتاج إلى سجل تجاري ساري المفعول، وشهادة ضريبية، ومعلومات الاتصال بالشركة. بعد ملء نموذج التسجيل، ستتم مراجعة مستنداتك والموافقة عليها خلال <strong>1-3 أيام عمل</strong>.",
         },
         {
@@ -5573,7 +5572,7 @@ const ar = {
         },
         {
           q: "ما المنتجات التي يمكنني بيعها؟",
-          a: "يمكنك بيع أي منتجات B2B قانونية على istoc. وقائمة المنتجات المحظورة (الأسلحة والمخدرات والسلع المقلّدة وما إلى ذلك) محدّدة في قواعد المنصة. وقد تتطلّب الفئات الخاصة مثل الأغذية والأدوية مستندات إضافية.",
+          a: "يمكنك بيع أي منتجات B2B قانونية على iStoc. وقائمة المنتجات المحظورة (الأسلحة والمخدرات والسلع المقلّدة وما إلى ذلك) محدّدة في قواعد المنصة. وقد تتطلّب الفئات الخاصة مثل الأغذية والأدوية مستندات إضافية.",
         },
         {
           q: "كم تستغرق عملية الموافقة على البائع؟",
@@ -5583,7 +5582,7 @@ const ar = {
 
       // ── Sourcing ──
       sourcingSearch_title: "بحث",
-      sourcingSearch_desc: "طرق البحث عن المنتجات والموردين على istoc.",
+      sourcingSearch_desc: "طرق البحث عن المنتجات والموردين على iStoc.",
       sourcingSearch_items: [
         {
           q: "كيف أبحث عن المنتجات؟",
@@ -5625,7 +5624,7 @@ const ar = {
         },
         {
           q: "ما هو رمز HS وكيف أعثر عليه؟",
-          a: "رمز HS (النظام المنسّق) هو رمز قياسي يُستخدم لتصنيف المنتجات في التجارة الدولية. على istoc، يمكنك العثور على رمز HS لمنتجك في صفحة تفاصيل المنتج أو باستخدام أداة معلومات التجارة.",
+          a: "رمز HS (النظام المنسّق) هو رمز قياسي يُستخدم لتصنيف المنتجات في التجارة الدولية. على iStoc، يمكنك العثور على رمز HS لمنتجك في صفحة تفاصيل المنتج أو باستخدام أداة معلومات التجارة.",
         },
         {
           q: "كيف أستخدم حاسبة الرسوم الجمركية؟",
@@ -5638,7 +5637,7 @@ const ar = {
       sourcingRecommender_items: [
         {
           q: "كيف يعمل نظام التوصيات؟",
-          a: "يستخدم نظام التوصيات istoc Recommender خوارزميات الذكاء الاصطناعي لاقتراح المنتجات والموردين المناسبين بناءً على سجل بحثك وعاداتك الشرائية واتجاهات القطاع. ويقدّم النظام توصيات أكثر تخصيصًا كلما استخدمته أكثر.",
+          a: "يستخدم نظام التوصيات iStoc Recommender خوارزميات الذكاء الاصطناعي لاقتراح المنتجات والموردين المناسبين بناءً على سجل بحثك وعاداتك الشرائية واتجاهات القطاع. ويقدّم النظام توصيات أكثر تخصيصًا كلما استخدمته أكثر.",
         },
         {
           q: "كيف يمكنني تخصيص التوصيات؟",
@@ -5654,8 +5653,8 @@ const ar = {
       sourcingAiApp_desc: "أدوات وميزات التداول المدعومة بالذكاء الاصطناعي.",
       sourcingAiApp_items: [
         {
-          q: "ماذا يفعل تطبيق istoc للذكاء الاصطناعي؟",
-          a: "يقدّم تطبيق istoc للذكاء الاصطناعي ميزات مدعومة بالذكاء الاصطناعي تشمل البحث المرئي عن المنتجات، والمطابقة التلقائية للموردين، وتحليل الأسعار، والتنبؤ باتجاهات السوق، ومساعد دردشة ذكي.",
+          q: "ماذا يفعل تطبيق iStoc للذكاء الاصطناعي؟",
+          a: "يقدّم تطبيق iStoc للذكاء الاصطناعي ميزات مدعومة بالذكاء الاصطناعي تشمل البحث المرئي عن المنتجات، والمطابقة التلقائية للموردين، وتحليل الأسعار، والتنبؤ باتجاهات السوق، ومساعد دردشة ذكي.",
         },
         {
           q: "كيف أستخدم مساعد الدردشة بالذكاء الاصطناعي؟",
@@ -5672,7 +5671,7 @@ const ar = {
       sourcingSourcing_items: [
         {
           q: "كيف تعمل عملية التوريد بالجملة؟",
-          a: "تتكوّن عملية التوريد على istoc من: بحث المنتجات، وتقييم المورّد، وطلب عيّنة، والتفاوض على السعر، وتقديم الطلب. وترشدك أدوات المنصة في كل خطوة.",
+          a: "تتكوّن عملية التوريد على iStoc من: بحث المنتجات، وتقييم المورّد، وطلب عيّنة، والتفاوض على السعر، وتقديم الطلب. وترشدك أدوات المنصة في كل خطوة.",
         },
         {
           q: "هل ينبغي أن أرسل RFQ (طلب عرض سعر)؟",
@@ -5724,7 +5723,7 @@ const ar = {
       negotiationOtherIssues_items: [
         {
           q: "أواجه مشكلات لغوية مع مورّد، ماذا أفعل؟",
-          a: "تترجم ميزة الترجمة المدمجة في istoc رسائلك تلقائيًا. فعّل أيقونة الترجمة في منطقة إدخال الرسالة لترجمة رسائلك تلقائيًا إلى لغة المورّد.",
+          a: "تترجم ميزة الترجمة المدمجة في iStoc رسائلك تلقائيًا. فعّل أيقونة الترجمة في منطقة إدخال الرسالة لترجمة رسائلك تلقائيًا إلى لغة المورّد.",
         },
         {
           q: "كيف أُبلّغ عن مورّد مشبوه؟",
@@ -5738,11 +5737,11 @@ const ar = {
 
       // ── Place Order ──
       placeOrderTradeAssurance_title: "مقدمة عن Trade Assurance",
-      placeOrderTradeAssurance_desc: "معلومات عن برنامج istoc Trade Assurance.",
+      placeOrderTradeAssurance_desc: "معلومات عن برنامج iStoc Trade Assurance.",
       placeOrderTradeAssurance_items: [
         {
           q: "ما هو Trade Assurance؟",
-          a: "Trade Assurance هو برنامج من istoc يحمي المشترين والبائعين معًا. ويضمن استرداد المبلغ كاملًا أو جزئيًا للمشتري إذا لم تُسلَّم المنتجات المطلوبة وفقًا لشروط العقد.",
+          a: "Trade Assurance هو برنامج من iStoc يحمي المشترين والبائعين معًا. ويضمن استرداد المبلغ كاملًا أو جزئيًا للمشتري إذا لم تُسلَّم المنتجات المطلوبة وفقًا لشروط العقد.",
         },
         {
           q: "ما الذي يشمله Trade Assurance؟",
@@ -5750,7 +5749,7 @@ const ar = {
         },
         {
           q: "هل Trade Assurance مجاني؟",
-          a: "نعم، التغطية الأساسية من Trade Assurance مجانية لجميع مستخدمي istoc. وتقدّم العضويتان الذهبية والموثّقة حدود حماية موسّعة وخدمات وساطة ذات أولوية.",
+          a: "نعم، التغطية الأساسية من Trade Assurance مجانية لجميع مستخدمي iStoc. وتقدّم العضويتان الذهبية والموثّقة حدود حماية موسّعة وخدمات وساطة ذات أولوية.",
         },
       ],
 
@@ -5811,7 +5810,7 @@ const ar = {
       paymentOrderPayment_items: [
         {
           q: "ما طرق الدفع التي يمكنني استخدامها؟",
-          a: "على istoc، يمكنك الدفع باستخدام <strong>بطاقات الائتمان</strong>، و<strong>بطاقات الخصم</strong>، و<strong>التحويل المصرفي/الحوالة</strong>، و<strong>الخدمات المصرفية عبر الإنترنت</strong>، و<strong>محفظة istoc</strong>. كما يقبل بعض الموردين أيضًا مدفوعات LC (خطاب الاعتماد) وT/T.",
+          a: "على iStoc، يمكنك الدفع باستخدام <strong>بطاقات الائتمان</strong>، و<strong>بطاقات الخصم</strong>، و<strong>التحويل المصرفي/الحوالة</strong>، و<strong>الخدمات المصرفية عبر الإنترنت</strong>، و<strong>محفظة iStoc</strong>. كما يقبل بعض الموردين أيضًا مدفوعات LC (خطاب الاعتماد) وT/T.",
         },
         {
           q: "كيف يتم ضمان أمان الدفع؟",
@@ -5844,8 +5843,8 @@ const ar = {
       paymentFinancial_desc: "الخدمات المالية وتمويل التجارة.",
       paymentFinancial_items: [
         {
-          q: "ما الخدمات المالية التي تقدّمها istoc؟",
-          a: "تقدّم istoc للمشترين تمويل التجارة، وحدود ائتمانية، وخيارات الدفع الآجل. وتُقدَّم هذه الخدمات عبر مؤسسات مالية شريكة وتتوفر بموجب الشروط المؤهِّلة.",
+          q: "ما الخدمات المالية التي تقدّمها iStoc؟",
+          a: "تقدّم iStoc للمشترين تمويل التجارة، وحدود ائتمانية، وخيارات الدفع الآجل. وتُقدَّم هذه الخدمات عبر مؤسسات مالية شريكة وتتوفر بموجب الشروط المؤهِّلة.",
         },
         {
           q: "كيف أتقدّم بطلب للحصول على حد ائتماني؟",
@@ -5870,7 +5869,7 @@ const ar = {
         },
         {
           q: "كيف تُحتسب أسعار الصرف؟",
-          a: "تُعرَض الأسعار على istoc بالليرة التركية افتراضيًا. وللمدفوعات بالعملات، يطبّق البنك سعر الصرف الحالي وقت الدفع. والمبالغ الناتجة عن فروق أسعار الصرف هي لأغراض إعلامية.",
+          a: "تُعرَض الأسعار على iStoc بالليرة التركية افتراضيًا. وللمدفوعات بالعملات، يطبّق البنك سعر الصرف الحالي وقت الدفع. والمبالغ الناتجة عن فروق أسعار الصرف هي لأغراض إعلامية.",
         },
       ],
 
@@ -5879,11 +5878,11 @@ const ar = {
       paymentTypes_items: [
         {
           q: "ما أنواع الدفع المدعومة؟",
-          a: "تدعم istoc بطاقات الائتمان/الخصم Visa وMastercard وAmerican Express، والتحويل المصرفي/الحوالة، والخدمات المصرفية عبر الإنترنت، ومحفظة istoc، وللطلبات الدولية LC (خطاب الاعتماد) وT/T (التحويل البرقي).",
+          a: "تدعم iStoc بطاقات الائتمان/الخصم Visa وMastercard وAmerican Express، والتحويل المصرفي/الحوالة، والخدمات المصرفية عبر الإنترنت، ومحفظة iStoc، وللطلبات الدولية LC (خطاب الاعتماد) وT/T (التحويل البرقي).",
         },
         {
-          q: "ما هي محفظة istoc؟",
-          a: "محفظة istoc هي نظام محفظة رقمية داخل المنصة. يمكنك تحميل رصيد وإجراء مدفوعات سريعة وبلا عمولة. وتنعكس عمليات الاسترداد فورًا في محفظتك. ويمكنك سحب رصيد محفظتك إلى حسابك المصرفي في أي وقت.",
+          q: "ما هي محفظة iStoc؟",
+          a: "محفظة iStoc هي نظام محفظة رقمية داخل المنصة. يمكنك تحميل رصيد وإجراء مدفوعات سريعة وبلا عمولة. وتنعكس عمليات الاسترداد فورًا في محفظتك. ويمكنك سحب رصيد محفظتك إلى حسابك المصرفي في أي وقت.",
         },
         {
           q: "كيف يعمل الدفع عبر LC (خطاب الاعتماد)؟",
@@ -5910,11 +5909,11 @@ const ar = {
       ],
 
       taxTypes_title: "أنواع الضرائب",
-      taxTypes_desc: "أنواع الضرائب المطبّقة على معاملات istoc.",
+      taxTypes_desc: "أنواع الضرائب المطبّقة على معاملات iStoc.",
       taxTypes_items: [
         {
-          q: "ما الضرائب المطبّقة على istoc؟",
-          a: "تُطبَّق <strong>ضريبة القيمة المضافة (VAT)</strong> على معاملات istoc. وبالنسبة لمعاملات الاستيراد، قد تُطبَّق <strong>رسوم جمركية</strong>، وقد تخضع بعض مجموعات المنتجات لـ<strong>ضريبة استهلاك خاصة</strong>.",
+          q: "ما الضرائب المطبّقة على iStoc؟",
+          a: "تُطبَّق <strong>ضريبة القيمة المضافة (VAT)</strong> على معاملات iStoc. وبالنسبة لمعاملات الاستيراد، قد تُطبَّق <strong>رسوم جمركية</strong>، وقد تخضع بعض مجموعات المنتجات لـ<strong>ضريبة استهلاك خاصة</strong>.",
         },
         {
           q: "ما معدلات ضريبة القيمة المضافة؟",
@@ -5922,7 +5921,7 @@ const ar = {
         },
         {
           q: "هل يمكنني الحصول على استرداد لضريبة القيمة المضافة؟",
-          a: "تتوفر عمليات استرداد ضريبة القيمة المضافة لمعاملات التصدير. وتُجرى عمليات استرداد ضريبة القيمة المضافة عبر المكتب الضريبي. وتوفّر istoc المستندات اللازمة (الفواتير، والإقرارات الجمركية، وما إلى ذلك) رقميًا.",
+          a: "تتوفر عمليات استرداد ضريبة القيمة المضافة لمعاملات التصدير. وتُجرى عمليات استرداد ضريبة القيمة المضافة عبر المكتب الضريبي. وتوفّر iStoc المستندات اللازمة (الفواتير، والإقرارات الجمركية، وما إلى ذلك) رقميًا.",
         },
       ],
 
@@ -5982,15 +5981,15 @@ const ar = {
       taxRefund_items: [
         {
           q: "كيف أطلب استرداد الضريبة؟",
-          a: 'بالنسبة لمعاملات التصدير، يمكنك تنزيل المستندات المطلوبة من قسم "مستنداتي" والتقدّم إلى مكتبك الضريبي. وتوفّر istoc مستندات مثل الإقرارات الجمركية والفواتير رقميًا.',
+          a: 'بالنسبة لمعاملات التصدير، يمكنك تنزيل المستندات المطلوبة من قسم "مستنداتي" والتقدّم إلى مكتبك الضريبي. وتوفّر iStoc مستندات مثل الإقرارات الجمركية والفواتير رقميًا.',
         },
         {
           q: "كم يستغرق استرداد الضريبة؟",
-          a: "تُجرى عملية استرداد الضريبة من قِبل المكتب الضريبي وتستغرق عادةً <strong>30-90 يومًا</strong>. ويكتمل إعداد المستندات من جانب istoc خلال 3-5 أيام عمل.",
+          a: "تُجرى عملية استرداد الضريبة من قِبل المكتب الضريبي وتستغرق عادةً <strong>30-90 يومًا</strong>. ويكتمل إعداد المستندات من جانب iStoc خلال 3-5 أيام عمل.",
         },
         {
           q: "ما المستندات المطلوبة لاسترداد ضريبة القيمة المضافة؟",
-          a: "يلزم لاسترداد ضريبة القيمة المضافة <strong>الإقرار الجمركي</strong>، و<strong>فاتورة البيع</strong>، و<strong>إثبات الدفع</strong>، و<strong>مستند الشحن</strong>. ويمكن الحصول على جميع المستندات رقميًا عبر منصة istoc.",
+          a: "يلزم لاسترداد ضريبة القيمة المضافة <strong>الإقرار الجمركي</strong>، و<strong>فاتورة البيع</strong>، و<strong>إثبات الدفع</strong>، و<strong>مستند الشحن</strong>. ويمكن الحصول على جميع المستندات رقميًا عبر منصة iStoc.",
         },
       ],
 
@@ -6000,7 +5999,7 @@ const ar = {
       shippingShipping_items: [
         {
           q: "ما خيارات الشحن المتوفرة؟",
-          a: "تقدّم istoc خيارات تسليم تشمل <strong>الشحن القياسي</strong>، و<strong>الشحن السريع</strong>، و<strong>الشحن ذا الأولوية</strong>، و<strong>الشحن البحري</strong>. وتختلف الخيارات بناءً على حجم المنتج ووزنه وعنوان التسليم.",
+          a: "تقدّم iStoc خيارات تسليم تشمل <strong>الشحن القياسي</strong>، و<strong>الشحن السريع</strong>، و<strong>الشحن ذا الأولوية</strong>، و<strong>الشحن البحري</strong>. وتختلف الخيارات بناءً على حجم المنتج ووزنه وعنوان التسليم.",
         },
         {
           q: "كيف يتم احتساب رسوم الشحن؟",
@@ -6012,20 +6011,20 @@ const ar = {
         },
       ],
 
-      shippingLogistics_title: "خدمات istoc اللوجستية",
-      shippingLogistics_desc: "حلول istoc اللوجستية المتكاملة.",
+      shippingLogistics_title: "خدمات iStoc اللوجستية",
+      shippingLogistics_desc: "حلول iStoc اللوجستية المتكاملة.",
       shippingLogistics_items: [
         {
-          q: "ما هي istoc Logistics؟",
-          a: "istoc Logistics هو حل الشحن والخدمات اللوجستية المتكامل الخاص بالمنصة. يوفّر خدمات التسليم من الباب إلى الباب والتخزين والتخليص الجمركي والتسليم في الميل الأخير تحت مظلة واحدة.",
+          q: "ما هي iStoc Logistics؟",
+          a: "iStoc Logistics هو حل الشحن والخدمات اللوجستية المتكامل الخاص بالمنصة. يوفّر خدمات التسليم من الباب إلى الباب والتخزين والتخليص الجمركي والتسليم في الميل الأخير تحت مظلة واحدة.",
         },
         {
-          q: "ما هي مزايا istoc Logistics؟",
+          q: "ما هي مزايا iStoc Logistics؟",
           a: "يقدّم أسعاراً تنافسية وتتبّعاً شاملاً من البداية إلى النهاية ودعماً لمعالجة الجمارك وتغطية تأمينية ودعم عملاء ذا أولوية. كما يوفّر تكاملاً كاملاً مع Trade Assurance.",
         },
         {
-          q: "إلى أي البلدان يقوم istoc Logistics بالتسليم؟",
-          a: "يقدّم istoc Logistics خدمات التسليم إلى <strong>أكثر من 45 دولة</strong>. يمكنك عرض البلدان وأوقات التسليم المقدّرة أثناء عملية الطلب.",
+          q: "إلى أي البلدان يقوم iStoc Logistics بالتسليم؟",
+          a: "يقدّم iStoc Logistics خدمات التسليم إلى <strong>أكثر من 45 دولة</strong>. يمكنك عرض البلدان وأوقات التسليم المقدّرة أثناء عملية الطلب.",
         },
       ],
 
@@ -6034,7 +6033,7 @@ const ar = {
       shippingMaersk_items: [
         {
           q: "ما هي خدمة الشحن من Maersk؟",
-          a: "Maersk هي شريكة istoc في الشحن البحري. تقدّم خدمات شحن دولية قائمة على الحاويات. وهي خيار اقتصادي خصوصاً للأحمال ذات الحجم الكبير والثقيلة.",
+          a: "Maersk هي شريكة iStoc في الشحن البحري. تقدّم خدمات شحن دولية قائمة على الحاويات. وهي خيار اقتصادي خصوصاً للأحمال ذات الحجم الكبير والثقيلة.",
         },
         {
           q: "كم يستغرق الشحن عبر Maersk؟",
@@ -6042,7 +6041,7 @@ const ar = {
         },
         {
           q: "كيف أتتبّع شحنات Maersk؟",
-          a: "يمكنك تتبّع شحنتك في الوقت الفعلي عبر منصة istoc باستخدام رقم الحاوية الخاص بك. يتم عرض موقع السفينة وتاريخ الوصول المقدّر ومعلومات الميناء.",
+          a: "يمكنك تتبّع شحنتك في الوقت الفعلي عبر منصة iStoc باستخدام رقم الحاوية الخاص بك. يتم عرض موقع السفينة وتاريخ الوصول المقدّر ومعلومات الميناء.",
         },
       ],
 
@@ -6055,7 +6054,7 @@ const ar = {
         },
         {
           q: "هل يمكنني احتساب رسوم الاستيراد مسبقاً؟",
-          a: "نعم، يمكنك استخدام حاسبة رسوم الاستيراد من istoc لرؤية التكاليف المقدّرة مسبقاً. أدخل فئة المنتج ورمز HS وبلد المنشأ وبلد الوجهة للاحتساب.",
+          a: "نعم، يمكنك استخدام حاسبة رسوم الاستيراد من iStoc لرؤية التكاليف المقدّرة مسبقاً. أدخل فئة المنتج ورمز HS وبلد المنشأ وبلد الوجهة للاحتساب.",
         },
         {
           q: "هل توجد منتجات معفاة من الرسوم الجمركية؟",
@@ -6073,7 +6072,7 @@ const ar = {
         },
         {
           q: "ما الذي يجب أن أتحقق منه أثناء التسليم؟",
-          a: "أثناء التسليم، تحقّق من <strong>سلامة الطرد</strong> و<strong>كمية المنتج</strong> و<strong>الحالة الظاهرية</strong>. إذا كانت هناك منتجات تالفة أو مفقودة، فوثّق ذلك بحضور موظف التسليم وأبلغ istoc خلال 24 ساعة.",
+          a: "أثناء التسليم، تحقّق من <strong>سلامة الطرد</strong> و<strong>كمية المنتج</strong> و<strong>الحالة الظاهرية</strong>. إذا كانت هناك منتجات تالفة أو مفقودة، فوثّق ذلك بحضور موظف التسليم وأبلغ iStoc خلال 24 ساعة.",
         },
         {
           q: "هل يمكنني تغيير عنوان التسليم الخاص بي؟",
@@ -6104,7 +6103,7 @@ const ar = {
       inspectionServices_items: [
         {
           q: "ما هي خدمة الفحص؟",
-          a: "خدمة الفحص من istoc هي خدمة احترافية يقوم فيها مفتشون مستقلون بمراقبة جودة منتجاتك والتحقق من توافقها مع معايير الإنتاج وفحص مواصفات الطلب في الموقع.",
+          a: "خدمة الفحص من iStoc هي خدمة احترافية يقوم فيها مفتشون مستقلون بمراقبة جودة منتجاتك والتحقق من توافقها مع معايير الإنتاج وفحص مواصفات الطلب في الموقع.",
         },
         {
           q: "ما هي أنواع الفحص المقدّمة؟",
@@ -6143,7 +6142,7 @@ const ar = {
         },
         {
           q: "كم تستغرق عملية النزاع؟",
-          a: "تُحَل عملية النزاع عادةً خلال <strong>7-15 يوم عمل</strong>. أولاً، يتم السعي للتوصل إلى تسوية بين الطرفين. إذا لم يتم التوصل إلى تسوية، يتدخّل فريق الوساطة في istoc.",
+          a: "تُحَل عملية النزاع عادةً خلال <strong>7-15 يوم عمل</strong>. أولاً، يتم السعي للتوصل إلى تسوية بين الطرفين. إذا لم يتم التوصل إلى تسوية، يتدخّل فريق الوساطة في iStoc.",
         },
         {
           q: "ماذا يحدث لدفعتي أثناء النزاع؟",
@@ -6173,7 +6172,7 @@ const ar = {
       afterSalesDisputeProcess_items: [
         {
           q: "كيف تعمل عملية حل النزاع؟",
-          a: "تتكوّن العملية من: <strong>1)</strong> تقديم النزاع، <strong>2)</strong> رد المورّد (3 أيام)، <strong>3)</strong> التفاوض بين الطرفين (5 أيام)، <strong>4)</strong> وساطة istoc (إذا لزم الأمر)، <strong>5)</strong> القرار والتنفيذ.",
+          a: "تتكوّن العملية من: <strong>1)</strong> تقديم النزاع، <strong>2)</strong> رد المورّد (3 أيام)، <strong>3)</strong> التفاوض بين الطرفين (5 أيام)، <strong>4)</strong> وساطة iStoc (إذا لزم الأمر)، <strong>5)</strong> القرار والتنفيذ.",
         },
         {
           q: "هل يمكنني الطعن في قرار الوساطة؟",
@@ -6194,7 +6193,7 @@ const ar = {
         },
         {
           q: "وصل المنتج تالفاً، ماذا أفعل؟",
-          a: "وثّق التلف وقت التسليم (صور/مقاطع فيديو). أبلغ على istoc خلال 24 ساعة. يتم توفير تعويض عن التلف أو إعادة الشحن بموجب تأمين الشحن.",
+          a: "وثّق التلف وقت التسليم (صور/مقاطع فيديو). أبلغ على iStoc خلال 24 ساعة. يتم توفير تعويض عن التلف أو إعادة الشحن بموجب تأمين الشحن.",
         },
         {
           q: "جودة المنتج لا تلبّي التوقعات، ماذا أفعل؟",
@@ -6271,17 +6270,17 @@ const ar = {
         },
       ],
 
-      // ── Security & istoc Rules ──
+      // ── Security & iStoc Rules ──
       securityFraud_title: "الاحتيال/البريد الإلكتروني المزيّف",
       securityFraud_desc: "التعرّف على الاحتيال والبريد الإلكتروني المزيّف والإبلاغ عنهما.",
       securityFraud_items: [
         {
           q: "كيف أتعرّف على محاولة احتيال؟",
-          a: "احذر من الرسائل التي تطلب مدفوعات خارج المنصة وتعرض أسعاراً منخفضة بشكل غير عادي وتطلب معلومات شخصية وتضغط من أجل دفع عاجل. لا تطلب istoc أبداً الدفع خارج المنصة.",
+          a: "احذر من الرسائل التي تطلب مدفوعات خارج المنصة وتعرض أسعاراً منخفضة بشكل غير عادي وتطلب معلومات شخصية وتضغط من أجل دفع عاجل. لا تطلب iStoc أبداً الدفع خارج المنصة.",
         },
         {
           q: "تلقّيت بريداً إلكترونياً مزيّفاً، ماذا أفعل؟",
-          a: "إذا تلقّيت رسائل بريد إلكتروني مشبوهة تدّعي أنها من istoc، فتحقق من أن عنوان البريد الإلكتروني يحمل الامتداد @istoc.com. أبلغ عن رسائل البريد الإلكتروني المزيّفة بإعادة توجيهها إلى <strong>security@istoc.com</strong>. لا تنقر على الروابط الموجودة في البريد الإلكتروني.",
+          a: "إذا تلقّيت رسائل بريد إلكتروني مشبوهة تدّعي أنها من iStoc، فتحقق من أن عنوان البريد الإلكتروني يحمل الامتداد @iStoc.com. أبلغ عن رسائل البريد الإلكتروني المزيّفة بإعادة توجيهها إلى <strong>security@istoc.com</strong>. لا تنقر على الروابط الموجودة في البريد الإلكتروني.",
         },
         {
           q: "تم اختراق حسابي، ماذا أفعل؟",
@@ -6316,7 +6315,7 @@ const ar = {
         },
         {
           q: "ما هي اللغات التي تدعمها خدمة العملاء؟",
-          a: "تقدّم خدمة عملاء istoc الدعم باللغتين التركية والإنجليزية. يتوفّر دعم الترجمة للغات الأخرى.",
+          a: "تقدّم خدمة عملاء iStoc الدعم باللغتين التركية والإنجليزية. يتوفّر دعم الترجمة للغات الأخرى.",
         },
         {
           q: "ما هو وقت الاستجابة لطلب الدعم الخاص بي؟",
@@ -6342,15 +6341,15 @@ const ar = {
       ],
 
       othersOfflineService_title: "الخدمة دون اتصال",
-      othersOfflineService_desc: "نقاط خدمة istoc الفعلية.",
+      othersOfflineService_desc: "نقاط خدمة iStoc الفعلية.",
       othersOfflineService_items: [
         {
-          q: "هل لدى istoc مكاتب فعلية؟",
-          a: "istoc هي منصة تجارة B2B رقمية بالكامل ولا تشغّل حالياً مكاتب خدمة عملاء فعلية. تُقدَّم جميع خدماتنا (العضوية، العقود، التدريب، الدعم) من خلال القنوات عبر الإنترنت.",
+          q: "هل لدى iStoc مكاتب فعلية؟",
+          a: "iStoc هي منصة تجارة B2B رقمية بالكامل ولا تشغّل حالياً مكاتب خدمة عملاء فعلية. تُقدَّم جميع خدماتنا (العضوية، العقود، التدريب، الدعم) من خلال القنوات عبر الإنترنت.",
         },
         {
           q: "هل تشاركون في المعارض والفعاليات؟",
-          a: 'تشارك istoc في معارض صناعية وفعاليات تجارية متنوعة على مدار العام. يمكن متابعة الفعاليات القادمة من قسم "الفعاليات" على الصفحة الرئيسية.',
+          a: 'تشارك iStoc في معارض صناعية وفعاليات تجارية متنوعة على مدار العام. يمكن متابعة الفعاليات القادمة من قسم "الفعاليات" على الصفحة الرئيسية.',
         },
         {
           q: "كيف أحجز موعداً وجهاً لوجه؟",
@@ -6360,15 +6359,15 @@ const ar = {
 
       // ── Promotions & Shopping Guide ──
       promotionsShoppingGuide_title: "دليل التسوق",
-      promotionsShoppingGuide_desc: "دليل للتسوق الفعّال على istoc.",
+      promotionsShoppingGuide_desc: "دليل للتسوق الفعّال على iStoc.",
       promotionsShoppingGuide_items: [
         {
-          q: "كيف يجب أن أقوم بأول عملية شراء لي على istoc؟",
+          q: "كيف يجب أن أقوم بأول عملية شراء لي على iStoc؟",
           a: "أولاً، ابحث عن المنتج الذي تحتاجه، وقارن بين عدة مورّدين، واطلب عينات، وقدّم طلباً بمجرد رضاك. نوصي بالبدء بكميات صغيرة لطلبك الأول.",
         },
         {
           q: "كيف أجد أفضل سعر؟",
-          a: "احصل على عروض أسعار من مورّدين متعددين، وأرسل طلبات RFQ، وتفاوض على خصومات قائمة على الكمية. تساعدك أيضاً أداة تحليل الأسعار بالذكاء الاصطناعي من istoc على تقييم القيمة السوقية.",
+          a: "احصل على عروض أسعار من مورّدين متعددين، وأرسل طلبات RFQ، وتفاوض على خصومات قائمة على الكمية. تساعدك أيضاً أداة تحليل الأسعار بالذكاء الاصطناعي من iStoc على تقييم القيمة السوقية.",
         },
         {
           q: "ما هي نصائح التسوق الآمن؟",
@@ -6415,7 +6414,7 @@ const ar = {
       promotionsPayment_items: [
         {
           q: "هل توجد خصومات لطرق دفع معينة؟",
-          a: "نعم، من حين لآخر، تُقدَّم خصومات خاصة لبطاقات مصرفية معينة أو المدفوعات التي تتم عبر istoc Wallet أو التحويلات المصرفية. تظهر العروض الترويجية النشطة للدفع على صفحة الدفع.",
+          a: "نعم، من حين لآخر، تُقدَّم خصومات خاصة لبطاقات مصرفية معينة أو المدفوعات التي تتم عبر iStoc Wallet أو التحويلات المصرفية. تظهر العروض الترويجية النشطة للدفع على صفحة الدفع.",
         },
         {
           q: "هل يوجد خصم على الطلب الأول؟",
@@ -6444,21 +6443,21 @@ const ar = {
         },
       ],
 
-      // ── istoc Guarantee ──
+      // ── iStoc Guarantee ──
       guaranteedShipping_title: "الشحن المضمون",
-      guaranteedShipping_desc: "برنامج ضمان الشحن من istoc.",
+      guaranteedShipping_desc: "برنامج ضمان الشحن من iStoc.",
       guaranteedShipping_items: [
         {
           q: "ما هو الشحن المضمون؟",
-          a: "يضمن الشحن المضمون من istoc تسليم طلبك خلال الوقت المحدد. في حال التأخير، يتم استرداد رسوم الشحن كاملة أو جزئياً.",
+          a: "يضمن الشحن المضمون من iStoc تسليم طلبك خلال الوقت المحدد. في حال التأخير، يتم استرداد رسوم الشحن كاملة أو جزئياً.",
         },
         {
           q: "كيف أحصل على تعويض عن تأخر الشحن؟",
-          a: "إذا تم التسليم بعد الوقت المضمون، يتم احتساب التعويض تلقائياً وإعادته إلى istoc Wallet أو طريقة الدفع الأصلية.",
+          a: "إذا تم التسليم بعد الوقت المضمون، يتم احتساب التعويض تلقائياً وإعادته إلى iStoc Wallet أو طريقة الدفع الأصلية.",
         },
         {
           q: "ما هي طرق الشحن المضمونة؟",
-          a: "يسري ضمان الشحن على الشحنات المُرسَلة عبر istoc Logistics وشركات النقل المتعاقدة. قد تختلف تغطية الضمان للمنتجات المشحونة بترتيب الشحن الخاص بالمورّد.",
+          a: "يسري ضمان الشحن على الشحنات المُرسَلة عبر iStoc Logistics وشركات النقل المتعاقدة. قد تختلف تغطية الضمان للمنتجات المشحونة بترتيب الشحن الخاص بالمورّد.",
         },
       ],
 
@@ -6467,7 +6466,7 @@ const ar = {
       guaranteedAfterSales_items: [
         {
           q: "ما هي خدمة ما بعد البيع المضمونة؟",
-          a: "هي برنامج حماية إضافي تقدّمه istoc للمشترين. يوفّر مزايا مثل الوساطة المعجَّلة لمشكلات المنتجات ودعم العملاء ذا الأولوية وفترات إرجاع مُمدّدة.",
+          a: "هي برنامج حماية إضافي تقدّمه iStoc للمشترين. يوفّر مزايا مثل الوساطة المعجَّلة لمشكلات المنتجات ودعم العملاء ذا الأولوية وفترات إرجاع مُمدّدة.",
         },
         {
           q: "كم مدة صلاحية هذا الضمان؟",
@@ -6505,7 +6504,7 @@ const ar = {
         },
         {
           q: "هل توجد رسوم إضافية لضمان الطلب؟",
-          a: "لا، حماية الطلب بموجب Trade Assurance مجانية. يستفيد جميع مستخدمي istoc من هذه الحماية تلقائياً.",
+          a: "لا، حماية الطلب بموجب Trade Assurance مجانية. يستفيد جميع مستخدمي iStoc من هذه الحماية تلقائياً.",
         },
         {
           q: "ما هو حد الطلب المضمون؟",
@@ -6518,7 +6517,7 @@ const ar = {
       guaranteedOverseasWarehouse_items: [
         {
           q: "ما هو المستودع الموثّق في الخارج؟",
-          a: "هذه مرافق مستودعات تابعة لـ istoc ومتعاقد عليها ومدقَّقة في الخارج. خضعت المنتجات المشحونة من هذه المستودعات للتحقق من جودة المنتج والمخزون. تقدّم تسليماً أسرع وخيارات إرجاع محلية.",
+          a: "هذه مرافق مستودعات تابعة لـ iStoc ومتعاقد عليها ومدقَّقة في الخارج. خضعت المنتجات المشحونة من هذه المستودعات للتحقق من جودة المنتج والمخزون. تقدّم تسليماً أسرع وخيارات إرجاع محلية.",
         },
         {
           q: "ما هي البلدان التي لديها مستودعات موثّقة؟",
@@ -6530,13 +6529,13 @@ const ar = {
         },
       ],
 
-      // ── istoc App Settings ──
-      appSettingsLabel_title: "إعدادات تطبيق istoc",
+      // ── iStoc App Settings ──
+      appSettingsLabel_title: "إعدادات تطبيق iStoc",
       appSettingsLabel_desc: "إعدادات تطبيق الجوال وتهيئته.",
       appSettingsLabel_items: [
         {
-          q: "أين يمكنني تنزيل تطبيق istoc للجوال؟",
-          a: "يمكن تنزيل تطبيق istoc مجاناً من <strong>App Store</strong> (iOS) و<strong>Google Play Store</strong> (Android). يمكنك أيضاً تنزيله بمسح رمز QR الموجود على صفحتنا الرئيسية.",
+          q: "أين يمكنني تنزيل تطبيق iStoc للجوال؟",
+          a: "يمكن تنزيل تطبيق iStoc مجاناً من <strong>App Store</strong> (iOS) و<strong>Google Play Store</strong> (Android). يمكنك أيضاً تنزيله بمسح رمز QR الموجود على صفحتنا الرئيسية.",
         },
         {
           q: "كيف أهيّئ إشعارات التطبيق؟",
@@ -6553,7 +6552,7 @@ const ar = {
       ],
 
       // ── Language & Localization ──
-      localizationSettings_title: "إعدادات لغة istoc",
+      localizationSettings_title: "إعدادات لغة iStoc",
       localizationSettings_desc: "إعدادات لغة المنصة والإعدادات الإقليمية.",
       localizationSettings_items: [
         {
@@ -6562,7 +6561,7 @@ const ar = {
         },
         {
           q: "ما هي اللغات المدعومة؟",
-          a: "تدعم istoc حالياً <strong>التركية</strong> و<strong>الإنجليزية</strong>. ستتم إضافة خيارات لغات إضافية في المستقبل.",
+          a: "تدعم iStoc حالياً <strong>التركية</strong> و<strong>الإنجليزية</strong>. ستتم إضافة خيارات لغات إضافية في المستقبل.",
         },
         {
           q: "كيف أغيّر إعداد العملة؟",
@@ -6657,7 +6656,7 @@ const ar = {
       heroCta: "ابدأ مجانًا",
 
       // Benefits
-      benefitsTitle: "لماذا istoc؟",
+      benefitsTitle: "لماذا iStoc؟",
       benefit1Title: "قاعدة مشترين واسعة",
       benefit1Desc: "اوصل إلى جمهور واسع من المشترين مباشرة في سوق B2B العالمي. ازِد من ظهورك.",
       benefit2Title: "Trade Assurance",
@@ -6754,7 +6753,7 @@ const ar = {
         loadError: "تعذّر تحميل معلومات الأسعار. يرجى تحديث الصفحة.",
       },
       manufacturerPlatform: "منصة المُصنّعين",
-      heroSubtitle: "تربط iSTOC المُصنّعين في تركيا مباشرةً بالمشترين في قطاع الأعمال (B2B) حول العالم. أدرج وبِع واشحن — دون عمولة.",
+      heroSubtitle: "تربط iStoc المُصنّعين في تركيا مباشرةً بالمشترين في قطاع الأعمال (B2B) حول العالم. أدرج وبِع واشحن — دون عمولة.",
       heroImageAlt: "التصدير من تركيا إلى العالم: لوجستيات الموانئ والحاويات",
       applyAsSeller: "قدّم كبائع",
       howItWorks: "كيف يعمل؟",
@@ -6823,7 +6822,7 @@ const ar = {
       yearlyToggle: "سنوي",
       monthlyToggle: "شهري",
       comparison: "المقارنة",
-      comparisonTitle: "iSTOC مقارنةً بالأسواق الأخرى.",
+      comparisonTitle: "iStoc مقارنةً بالأسواق الأخرى.",
       comparisonDesc: "من منظور المُصنّع يبدو الفرق واضحًا: عمولة أقل، دون رسوم اشتراك ثابتة، وعملية تركّز على قطاع الأعمال (B2B).",
       globalB2bMarketplace: "سوق B2B عالمي",
       internationalGeneral: "دولي عام",
@@ -6844,7 +6843,7 @@ const ar = {
       dedicatedTurkishSupport: "دعم مخصّص للمُصنّعين الأتراك",
       extraFee: "رسوم إضافية",
       restricted: "مقيّد",
-      comparisonDisclaimer: "* أُخذت أسعار المنافسين من صفحات التسعير المتاحة للعموم (مايو 2026). عمولة iSTOC قائمة على الفئة؛ تُشارك القائمة الكاملة بعد التقديم.",
+      comparisonDisclaimer: "* أُخذت أسعار المنافسين من صفحات التسعير المتاحة للعموم (مايو 2026). عمولة iStoc قائمة على الفئة؛ تُشارك القائمة الكاملة بعد التقديم.",
       finalCtaTitle: "يستغرق التقديم 4 دقائق فقط.",
       finalCtaDesc: "رقم ضريبي وفئة إنتاج وجهة اتصال — ونتكفّل بالباقي معًا. تستغرق الموافقة يومَي عمل في المتوسط.",
       letsTalkFirst: "لنتحدّث أولًا",
@@ -6878,25 +6877,25 @@ const ar = {
       messageSendError: "تعذّر إرسال الرسالة. يُرجى المحاولة مرة أخرى.",
       messageSentSuccess: "تم إرسال رسالتك بنجاح!",
       sending: "جارٍ الإرسال...",
-      onIstocFor: "على iSTOC منذ",
+      onIstocFor: "على iStoc منذ",
       verificationSubtitle: "احصل على شارة المورّد الموثوق",
       verificationBenefitsTitle: "مزايا التوثيق",
-      verificationBenefitsP1: "تُعدّ شارة المورّد الموثّق من iSTOC أقوى مؤشّر على مصداقيتك على المنصة. يحصل المورّدون الموثّقون على ظهور أكبر بنسبة 40% في نتائج البحث، ويُفضّل 78% من المشترين المورّدين الموثّقين.",
+      verificationBenefitsP1: "تُعدّ شارة المورّد الموثّق من iStoc أقوى مؤشّر على مصداقيتك على المنصة. يحصل المورّدون الموثّقون على ظهور أكبر بنسبة 40% في نتائج البحث، ويُفضّل 78% من المشترين المورّدين الموثّقين.",
       verificationBenefitsP2: "تظهر شارتك بوضوح في ملف متجرك وقوائم منتجاتك ونتائج البحث. يطلب المشترون من المورّدين الموثّقين بثقة أكبر، ما يرفع معدّل التحويل لديك بشكل ملحوظ. كما تحصل على إمكانية الوصول إلى حملات ومساحات عرض مخصّصة للمورّدين الموثّقين.",
-      verificationBenefitsP3: "يستفيد المورّدون الموثّقون من خط الدعم ذي الأولوية في iSTOC، ويمكنهم الانضمام إلى برامج تدريبية حصرية، ويحظون بحضور بارز في فعاليات تطوير الأعمال لدى iSTOC.",
+      verificationBenefitsP3: "يستفيد المورّدون الموثّقون من خط الدعم ذي الأولوية في iStoc، ويمكنهم الانضمام إلى برامج تدريبية حصرية، ويحظون بحضور بارز في فعاليات تطوير الأعمال لدى iStoc.",
       verificationRequirementsTitle: "متطلبات التوثيق",
       verificationRequirementsP1: "لتقديم طلب التوثيق، يجب أن تكون المستندات الأساسية التالية جاهزة: جريدة السجل التجاري الحديثة، وشهادة ضريبية، ونموذج التوقيعات المعتمدة، والميزانية وبيان الدخل لآخر سنتين، وصور لمنشأة الإنتاج، وشهادة النشاط.",
-      verificationRequirementsP2: "يجب أن تكون شركتك قد مارست نشاطها لمدة سنتين على الأقل، وأن تمتلك سجلًا تجاريًا ساريًا، وأن تكون مسجّلة كبائع نشط على منصة iSTOC لمدة 6 أشهر على الأقل. كما يُتوقّع أن يكون مؤشّر رضا العملاء خلال الأشهر الستة الأخيرة أعلى من 4.0/5.0.",
+      verificationRequirementsP2: "يجب أن تكون شركتك قد مارست نشاطها لمدة سنتين على الأقل، وأن تمتلك سجلًا تجاريًا ساريًا، وأن تكون مسجّلة كبائع نشط على منصة iStoc لمدة 6 أشهر على الأقل. كما يُتوقّع أن يكون مؤشّر رضا العملاء خلال الأشهر الستة الأخيرة أعلى من 4.0/5.0.",
       verificationProcessTitle: "عملية التقديم",
-      verificationProcessP1: "يكتمل طلب التوثيق في 4 خطوات بسيطة. أولًا، انتقل إلى قسم \"طلب التوثيق\" في لوحة البائع وأكمل نموذج التقديم عبر الإنترنت. في الخطوة الثانية، حمّل المستندات المطلوبة إلى النظام. في الخطوة الثالثة، يراجع فريق التوثيق في iSTOC مستنداتك ويطلب معلومات إضافية عند الحاجة.",
-      verificationProcessP2: "في الخطوة الرابعة والأخيرة، يزور مندوب iSTOC مقرّ عملك لمستويَي التوثيق المتقدّم والمميّز. تكتمل العملية بأكملها خلال 10-15 يوم عمل في المتوسط. يمكنك تتبّع حالة طلبك لحظيًا من لوحة البائع.",
+      verificationProcessP1: "يكتمل طلب التوثيق في 4 خطوات بسيطة. أولًا، انتقل إلى قسم \"طلب التوثيق\" في لوحة البائع وأكمل نموذج التقديم عبر الإنترنت. في الخطوة الثانية، حمّل المستندات المطلوبة إلى النظام. في الخطوة الثالثة، يراجع فريق التوثيق في iStoc مستنداتك ويطلب معلومات إضافية عند الحاجة.",
+      verificationProcessP2: "في الخطوة الرابعة والأخيرة، يزور مندوب iStoc مقرّ عملك لمستويَي التوثيق المتقدّم والمميّز. تكتمل العملية بأكملها خلال 10-15 يوم عمل في المتوسط. يمكنك تتبّع حالة طلبك لحظيًا من لوحة البائع.",
       verificationLevelsTitle: "مستويات التوثيق",
       verificationLevelBasicLabel: "التوثيق الأساسي:",
       verificationLevelBasicDesc: "التحقّق من مستندات تسجيل الشركة وحالة الالتزام الضريبي. يؤكّد هذا المستوى أنّ شركتك تعمل بشكل قانوني. ويُقدَّم مجانًا.",
       verificationLevelAdvancedLabel: "التوثيق المتقدّم:",
       verificationLevelAdvancedDesc: "بالإضافة إلى التوثيق الأساسي، يشمل تقييم الطاقة الإنتاجية وتدقيقًا ميدانيًا. خلال زيارة المصنع، تُفحص خطوط الإنتاج وعمليات مراقبة الجودة وظروف التخزين. تُطبَّق رسوم توثيق سنوية قدرها 2.990 ليرة تركية.",
       verificationLevelPremiumLabel: "التوثيق المميّز:",
-      verificationLevelPremiumDesc: "هو أعلى مستوى من شارات المصداقية. بالإضافة إلى التوثيق المتقدّم، يشمل تحليل المتانة المالية والتحقّق من مراجع العملاء وعمليات تدقيق سنوية منتظمة. يُبرَز المورّدون الموثّقون من فئة Premium بوصفهم أكثر شركاء أعمال iSTOC موثوقية. تُطبَّق رسوم توثيق سنوية قدرها 7.990 ليرة تركية.",
+      verificationLevelPremiumDesc: "هو أعلى مستوى من شارات المصداقية. بالإضافة إلى التوثيق المتقدّم، يشمل تحليل المتانة المالية والتحقّق من مراجع العملاء وعمليات تدقيق سنوية منتظمة. يُبرَز المورّدون الموثّقون من فئة Premium بوصفهم أكثر شركاء أعمال iStoc موثوقية. تُطبَّق رسوم توثيق سنوية قدرها 7.990 ليرة تركية.",
     },
 
     // ============================================================
@@ -7109,7 +7108,7 @@ const ar = {
         custCard4Title: "اللف والتغليف",
         custCard4Subtitle: "تغليف احترافي",
         testimonial1Quote:
-          "بفضل istoc، تقلّصت عملية البحث عن الموردين إلى النصف. نظام عرض السعر سريع وعملي بشكل خاص. وقّعنا اتفاقيات مع 12 موردًا جديدًا في 3 أشهر.",
+          "بفضل iStoc، تقلّصت عملية البحث عن الموردين إلى النصف. نظام عرض السعر سريع وعملي بشكل خاص. وقّعنا اتفاقيات مع 12 موردًا جديدًا في 3 أشهر.",
         testimonial1Name: "Mehmet Kaya",
         testimonial1Title: "مدير المشتريات",
         testimonial1Company: "Anadolu Tekstil Inc.",
@@ -7258,7 +7257,7 @@ const ar = {
       "تخضع منتجاتنا المصنّفة IP67 لاختبارات مقاومة الماء. وإذا ظهر على أي منتج تلف ناتج عن الماء خلال فترة الضمان البالغة سنتين، فسنستبدله مجانًا.",
     faq5Q: "ما طرق الدفع التي تقبلونها؟",
     faq5A:
-      "نقبل T/T (التحويل المصرفي)، وPayPal، وistoc Trade Assurance، وL/C للطلبات التي تتجاوز 10,000 دولار. يُطلب دفعة مقدمة بنسبة 30% مع سداد الباقي قبل الشحن.",
+      "نقبل T/T (التحويل المصرفي)، وPayPal، وiStoc Trade Assurance، وL/C للطلبات التي تتجاوز 10,000 دولار. يُطلب دفعة مقدمة بنسبة 30% مع سداد الباقي قبل الشحن.",
     faq6Q: "هل يمكنكم تقديم شهادات للمواد؟",
     faq6A:
       "نعم، يمكننا تقديم تقارير اختبار SGS، وشهادات الامتثال لـ ROHS، وإقرارات خلوّ المنتج من النيكل. ويمكن إرسالها رقميًا أو كنسخ أصلية مع شحنتك.",
@@ -7427,7 +7426,7 @@ const ar = {
   // ============================================================
   topDealsPage: {
     heroTitle: "أفضل العروض",
-    heroSubtitle: "احصل على أدنى الأسعار على istoc",
+    heroSubtitle: "احصل على أدنى الأسعار على iStoc",
     promoShipping: "شحن مجاني بحد أقصى 20$",
     promoDays: "3 أيام",
     tabAll: "الكل",
@@ -7561,7 +7560,7 @@ const ar = {
 
     // Collection chips
     collectionLabel: "المجموعة",
-    chipIstocPicks: "اختيارات istoc",
+    chipIstocPicks: "اختيارات iStoc",
     chip48hShip: "شحن خلال 48 ساعة",
     chipHotSale: "تخفيضات رائجة",
     chipBranded: "ماركات",
@@ -7997,7 +7996,7 @@ const ar = {
     headerLocalTime: "التوقيت المحلي",
     online: "متصل",
     securityBanner:
-      "للاستفادة من حماية الطلبات، احرص دائمًا على إبقاء محادثاتك ومعاملاتك على istoc.",
+      "للاستفادة من حماية الطلبات، احرص دائمًا على إبقاء محادثاتك ومعاملاتك على iStoc.",
     endToEndEncrypted: "هذه المحادثة مشفّرة من طرف إلى طرف. أنت والبائع فقط من يمكنه رؤيتها.",
     typingIndicator: "{{name}} يكتب الآن",
     send: "إرسال",
@@ -8033,7 +8032,7 @@ const ar = {
       country: "البلد",
       emailLabel: "البريد الإلكتروني",
       placeholderEmail: "example@company.com",
-      verifiedBy: "الحسابات الموثّقة بواسطة istoc:",
+      verifiedBy: "الحسابات الموثّقة بواسطة iStoc:",
     },
     tabs: {
       chat: "المحادثة",
