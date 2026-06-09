@@ -315,6 +315,7 @@ type MatrixCell = { type: "yes" } | { type: "no" } | { type: "text"; v: string }
 type MatrixRow = {
   f: string;
   help?: string;
+  coming_soon?: boolean;
   // Opsiyonel feature_key — varsa plan.features içinde aranır; bulunursa
   // plan'daki display_text / is_disabled kullanılır, yoksa `v` fallback değeri.
   feature_key?: string;
@@ -499,6 +500,7 @@ function buildDynamicMatrixSections(
           f: f.display_name,
           feature_key: f.feature_key,
           help: f.tooltip ?? undefined,
+          coming_soon: f.coming_soon,
           v: cells,
         };
       }),
@@ -605,7 +607,11 @@ function PricingMatrix(
               (r) => `
             <div class="${MATRIX_GRID_CLS} px-6 py-3.5 border-b border-[#e8e6e0] last:border-b-0 text-[13px]" style="${gridStyle}">
               <div>
-                <div class="text-[#1a1a1a] font-medium">${escapeHtml(r.f)}</div>
+                <div class="text-[#1a1a1a] font-medium">${escapeHtml(r.f)}${
+                  r.coming_soon
+                    ? ` <span class="inline-block align-middle ms-1 text-[9.5px] font-semibold uppercase tracking-[0.04em] px-1.5 py-0.5 rounded-full bg-[#f5b800]/15 text-[#9a7400]">Yakında</span>`
+                    : ""
+                }</div>
                 ${r.help ? `<div class="text-[11px] text-[#8a877f] mt-0.5 font-normal">${escapeHtml(r.help)}</div>` : ""}
               </div>
               ${r.v

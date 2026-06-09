@@ -12,7 +12,7 @@
 
 // v3 (2026-06-05): Faz J features_matrix + admin matris tek doğru kaynak.
 // Eski v2 cache'leri zorla geçersiz kıl.
-const CACHE_KEY = "tradehub-pricing-plans-v3";
+const CACHE_KEY = "tradehub-pricing-plans-v4";
 const CACHE_TTL_MS = 5 * 60_000; // 5 dk
 
 export interface PricingPlanFeature {
@@ -66,6 +66,8 @@ export interface PricingMatrixFeature {
   display_name: string;
   value_type: "checkbox" | "text";
   tooltip: string | null;
+  /** true ise karşılaştırma tablosunda adın yanında "Yakında" rozeti. */
+  coming_soon?: boolean;
   /** Anahtar plan_code (ör. FREE, PRO) — değer hücre */
   values_by_plan: Record<string, PricingMatrixCell>;
 }
