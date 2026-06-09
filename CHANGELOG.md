@@ -1,3 +1,13 @@
+## [v1.2.1-beta.6] - 2026-06-09 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(pricing): karşılaştırma tablosunda "Yakında" rozeti + cache bump (@boraydeger32)
+  - PricingMatrixFeature / MatrixRow tiplerine coming_soon eklendi; karşılaştırma tablosu satır adının yanında "Yakında" rozeti gösterir (kartlarla senkron)
+  - localStorage cache anahtarı v3 → v4 (eski önbellek coming_soon alanını taşımadığı için otomatik geçersiz kılınır)
+
+---
 ## [v1.2.1-beta.5] - 2026-06-09 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
