@@ -23,6 +23,10 @@ export interface PricingPlanFeature {
   tooltip: string | null;
   /** Faz K — true ise plan kartının "Paket içeriği" özet listesinde bullet olur. */
   show_on_card: boolean;
+  /** Enum/quota değeri (ör. "7×24 tahsisli", "15+ dil"); boolean'da boş. */
+  text_value?: string;
+  /** true ise kartta "Yakında" rozeti gösterilir (henüz çalışmayan özellik). */
+  coming_soon?: boolean;
 }
 
 export interface PricingPlan {
@@ -40,6 +44,8 @@ export interface PricingPlan {
   max_active_listings: number;
   cta_label: string;
   cta_action: "signup" | "signup_billing" | "contact_sales" | "learn_more";
+  /** Doluysa fiyat yerine bu metin gösterilir (ör. "Özel teklif"). */
+  price_override_label: string | null;
   highlighted: boolean;
   trial_days: number;
   features: PricingPlanFeature[];

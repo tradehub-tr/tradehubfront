@@ -5,9 +5,8 @@
  *
  * Bölümler:
  *   1. HeroSection      Klasik split (sol metin + sağ foto)
- *   2. PricingSection   4 paket + yıllık/aylık toggle + detaylı matris
- *   3. ComparisonSection iSTOC vs diğer pazaryerleri
- *   4. FinalCtaSection  "Başvuru 4 dakikada biter."
+ *   2. PricingSection   3 paket + yıllık/aylık toggle + detaylı matris
+ *   3. FinalCtaSection  "Başvuru 4 dakikada biter."
  *
  * Stil: Tailwind v4 utility-first, hex değerleri referans seller.css token'larından
  *   --brand=#f5b800  --brand-700=#d39c00  --brand-50=#fff8e1
@@ -167,19 +166,20 @@ function tierTag(plan: PricingPlan, idx: number): string {
   return `${num} · ${plan.badge_label || plan.plan_name}`;
 }
 
-// Per-kart "Paket içeriği" özet listesi — SADECE plana dahil (✓) feature'lar
-// gösterilir; devre dışı (✗ / is_disabled) olanlar karta hiç çıkmaz.
-// Dahil olanlar içinde `show_on_card` işaretli varsa yalnızca onlar; yoksa
-// (geçiş dönemi / eski veri) tüm dahil olanlar gösterilir.
+// Per-kart "Paket içeriği" özet listesi — SADECE plana dahil (✓) VE admin'de
+// "Kartta Göster" işaretli feature'lar gösterilir. İşaretli hiç feature yoksa
+// liste boş kalır (fallback YOK) — kart içeriği tamamen admin seçimine bağlı.
 function cardFeatures(plan: PricingPlan): PricingPlan["features"] {
-  const included = plan.features.filter((f) => !f.is_disabled);
-  const carded = included.filter((f) => f.show_on_card);
-  return carded.length ? carded : included;
+  // Ortak set: show_on_card=1 olanların hepsi; pakette dahil değilse (is_disabled)
+  // ✗ + üstü çizili gösterilir (klasik karşılaştırma — tüm kartlar eşit uzunluk).
+  return plan.features.filter((f) => f.show_on_card);
 }
 
 function PricingCard(plan: PricingPlan, idx: number): string {
   const isFeat = !!plan.highlighted;
   const hasPrice = (plan.yearly_price ?? 0) > 0 || (plan.monthly_price ?? 0) > 0;
+  // Admin'den girilen "fiyat yerine metin" — doluysa fiyatın yerini alır (ör. "Özel teklif").
+  const overrideLabel = (plan.price_override_label || "").trim();
   const sym = currencySymbol(plan.currency);
   const priceY = plan.yearly_price || 0;
   const priceM = plan.monthly_price || 0;
@@ -235,17 +235,21 @@ function PricingCard(plan: PricingPlan, idx: number): string {
 
       <div class="flex items-baseline gap-1.5 mt-1.5">
         ${
-          hasPrice
-            ? `<span class="text-[42px] font-semibold tracking-[-0.03em] tabular-nums leading-none ${amountCls}">
+          overrideLabel
+            ? `<span class="text-[32px] font-semibold tracking-[-0.03em] leading-none ${amountCls}">${escapeHtml(overrideLabel)}</span>`
+            : hasPrice
+              ? `<span class="text-[42px] font-semibold tracking-[-0.03em] tabular-nums leading-none ${amountCls}">
                 ${escapeHtml(sym)}<span x-text="yearly ? '${priceY}' : '${priceM}'">${priceY}</span>
               </span>
               <span class="text-[13px] ${perCls}">/ <span x-text="yearly ? 'yıl' : 'ay'">yıl</span></span>`
-            : `<span class="text-[32px] font-semibold tracking-[-0.03em] leading-none ${amountCls}">Özel teklif</span>`
+              : `<span class="text-[32px] font-semibold tracking-[-0.03em] leading-none ${amountCls}">Özel teklif</span>`
         }
       </div>
       <div class="text-[11.5px] -mt-1 ${metaCls}">
         ${
-          hasPrice
+          overrideLabel
+            ? ""
+            : hasPrice
             ? `<span x-text="yearly ? 'yıllık peşin · KDV hariç' : 'aylık · istediğin zaman iptal'">yıllık peşin · KDV hariç</span>`
             : "hacme göre fiyatlandırılır"
         }
@@ -278,10 +282,25 @@ function PricingCard(plan: PricingPlan, idx: number): string {
             const iconCls = ok ? checkCls : xCls;
             const liCls = ok ? featLiCls : noLineCls;
             const tip = f.tooltip ? ` title="${escapeHtml(f.tooltip)}"` : "";
+            // Enum/quota değeri varsa (ör. "7×24 tahsisli") adın yanında kalın göster.
+            // Boolean / değersiz ("", "0", "Yok") → sadece ad.
+            const tv = (f.text_value || "").trim();
+            const showVal = ok && tv && tv !== "0" && tv.toLocaleLowerCase("tr") !== "yok";
+            const label = showVal
+              ? `${escapeHtml(f.display_text)}: <span class="font-semibold">${escapeHtml(tv)}</span>`
+              : escapeHtml(f.display_text);
+            // "Yakında" rozeti — özellik dahil (✓) ama henüz çalışmıyorsa.
+            const soonCls = isFeat
+              ? "bg-[#f5b800]/20 text-[#f5b800]"
+              : "bg-[#f5b800]/15 text-[#9a7400]";
+            const badge =
+              ok && f.coming_soon
+                ? ` <span class="inline-block align-middle ms-1 text-[9.5px] font-semibold uppercase tracking-[0.04em] px-1.5 py-0.5 rounded-full ${soonCls}">Yakında</span>`
+                : "";
             return `
               <li class="flex items-start gap-2.5 leading-[1.4] ${liCls}"${tip}>
                 <span class="shrink-0 mt-0.5 ${iconCls}">${icon}</span>
-                <span>${escapeHtml(f.display_text)}</span>
+                <span>${label}${badge}</span>
               </li>
             `;
           })
@@ -644,6 +663,33 @@ function _computeYearlyDiscountBadge(plans: PricingPlan[]): string {
   return `${bestSavedMonths} ay bedava`;
 }
 
+// Pricing üstü öne çıkan "X gün ücretsiz dene" bandı — en dolu paketi (trial_days>0
+// olan plan, ör. Enterprise) ücretsiz denetir. trial_days yoksa bant gizlenir.
+function TrialBanner(plans: PricingPlan[]): string {
+  const trialPlan = plans.find((p) => (p.trial_days ?? 0) > 0);
+  if (!trialPlan) return "";
+  const days = trialPlan.trial_days;
+  const href = `/pages/auth/register.html?type=supplier&plan=${encodeURIComponent(
+    trialPlan.plan_code
+  )}&trial=1`;
+  return /* html */ `
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl bg-[#1a1a1a] text-white p-5 sm:p-6 mb-8 shadow-[0_10px_30px_-10px_rgba(213,156,0,0.35)]">
+      <div class="flex items-center gap-3.5 text-center sm:text-start">
+        <span class="shrink-0 inline-flex items-center justify-center w-10 h-10 rounded-full bg-[#f5b800] text-[#1a1a1a]">${SVG_ZAP}</span>
+        <div>
+          <div class="text-[15px] font-semibold">${days} gün ücretsiz dene</div>
+          <div class="text-[13px] text-white/70">${escapeHtml(
+            trialPlan.plan_name
+          )} paketinin tüm özelliklerini kart bilgisi olmadan keşfet.</div>
+        </div>
+      </div>
+      <a href="${href}" data-seller-cta class="th-btn shrink-0 whitespace-nowrap">
+        Ücretsiz dene ${SVG_ARROW}
+      </a>
+    </div>
+  `;
+}
+
 function PricingSection(
   plans: PricingPlan[],
   featuresMatrix?: PricingFeaturesMatrix
@@ -670,6 +716,8 @@ function PricingSection(
           </p>
         </div>
 
+        ${TrialBanner(plans)}
+
         <div class="inline-flex bg-white border border-[#e8e6e0] rounded-full p-1 mb-8" role="tablist" aria-label="Periyot">
           <button
             type="button"
@@ -695,132 +743,6 @@ function PricingSection(
         </div>
 
         ${cards}
-        </div>
-      </div>
-    </section>
-  `;
-}
-
-// =====================================================
-// 3. COMPARISON — Diğer pazaryerlerine göre iSTOC
-// =====================================================
-type CompareCell = string | { type: "icon"; v: "yes" | "no" | "mid"; label?: string };
-type CompareRow = { f: string; i: CompareCell; g: CompareCell; h: CompareCell };
-
-const COMPARE_ROWS: CompareRow[] = [
-  { f: "Komisyon oranı", i: "%4 — %8", g: "%15+", h: "Değişken %12–30" },
-  { f: "Aylık üyelik", i: { type: "icon", v: "no", label: "Yok" }, g: "€40/ay", h: "€39/ay" },
-  {
-    f: "Listeleme ücreti",
-    i: { type: "icon", v: "no", label: "Yok" },
-    g: { type: "icon", v: "no", label: "Yok" },
-    h: "Ürün başı ücret",
-  },
-  { f: "Ödeme süresi", i: "7 gün", g: "14 — 30 gün", h: "14 — 21 gün" },
-  {
-    f: "B2B / toptan odaklı",
-    i: { type: "icon", v: "yes" },
-    g: { type: "icon", v: "mid", label: "Karma" },
-    h: { type: "icon", v: "no" },
-  },
-  {
-    f: "Üreticilere özel destek",
-    i: { type: "icon", v: "yes" },
-    g: { type: "icon", v: "no" },
-    h: { type: "icon", v: "no" },
-  },
-  {
-    f: "KDV iadesi danışmanlığı",
-    i: { type: "icon", v: "yes" },
-    g: { type: "icon", v: "no" },
-    h: { type: "icon", v: "no" },
-  },
-  {
-    f: "Sigortalı kargo dahil",
-    i: { type: "icon", v: "yes" },
-    g: { type: "icon", v: "mid", label: "Ek ücret" },
-    h: { type: "icon", v: "mid", label: "Ek ücret" },
-  },
-  {
-    f: "Numune satışı",
-    i: { type: "icon", v: "yes" },
-    g: { type: "icon", v: "no" },
-    h: { type: "icon", v: "mid", label: "Kısıtlı" },
-  },
-];
-
-function renderCompareCell(c: CompareCell): string {
-  if (typeof c === "string") return c;
-  const labelHtml = c.label ? `<span class="text-[#8a877f] text-[12.5px]">${c.label}</span>` : "";
-  if (c.v === "yes")
-    return `<span class="inline-flex items-center justify-center text-[#1f7a4d]">${SVG_CHECK_MD}</span>`;
-  if (c.v === "no")
-    return `<span class="inline-flex items-center gap-1.5"><span class="text-[#b42318]/55">${SVG_X}</span>${labelHtml}</span>`;
-  return `<span class="inline-flex items-center gap-1.5"><span class="text-[#b54708]">${SVG_DASH}</span>${labelHtml}</span>`;
-}
-
-function ComparisonSection(): string {
-  const thBaseCls = "bg-[#fafaf8] font-medium text-[13px] text-[#4a4a48] p-[18px_22px] text-start";
-  const thHeadCls = "text-[#1a1a1a] text-center p-[22px] border-b border-[#d5d2c9]";
-
-  return /* html */ `
-    <section id="karsilastirma" class="py-16 md:py-24 bg-[#fafaf8] border-t border-b border-[#e8e6e0]">
-      <div class="${WRAP_CLS}">
-        <div class="${INNER_CLS}">
-        <div class="${SECTION_HEAD_CLS}">
-          <span class="${EYEBROW_CLS}">Karşılaştırma</span>
-          <h2 class="${SECTION_H2_CLS}">Diğer pazaryerlerine göre iSTOC.</h2>
-          <p class="${SECTION_P_CLS}">
-            Üretici penceresinden bakınca fark net görünüyor: daha düşük komisyon,
-            sabit aidat yok, B2B'ye odaklı süreç.
-          </p>
-        </div>
-
-        <div class="overflow-x-auto rounded-2xl">
-          <table class="w-full border-separate border-spacing-0 bg-white border border-[#e8e6e0] rounded-2xl overflow-hidden min-w-[640px]">
-            <thead>
-              <tr>
-                <th class="${thBaseCls} w-[28%] border-b border-[#d5d2c9]"></th>
-                <th class="bg-[#fff8e1] ${thHeadCls}">
-                  <span class="block text-base font-semibold mb-0.5 text-[#d39c00]">iSTOC</span>
-                  <span class="text-[11px] uppercase tracking-[0.06em] font-medium text-[#d39c00]">Üretici platformu</span>
-                </th>
-                <th class="bg-white ${thHeadCls}">
-                  <span class="block text-base font-semibold mb-0.5">Global B2B pazaryeri</span>
-                  <span class="text-[11px] uppercase tracking-[0.06em] font-medium text-[#8a877f]">Uluslararası genel</span>
-                </th>
-                <th class="bg-white ${thHeadCls}">
-                  <span class="block text-base font-semibold mb-0.5">Yatay e-ticaret</span>
-                  <span class="text-[11px] uppercase tracking-[0.06em] font-medium text-[#8a877f]">B2C ağırlıklı</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              ${COMPARE_ROWS.map((r, i) => {
-                const last = i === COMPARE_ROWS.length - 1;
-                const border = last ? "" : "border-b border-[#e8e6e0]";
-                return `
-                <tr>
-                  <th class="${thBaseCls} w-[28%] ${border}">${r.f}</th>
-                  <td class="bg-[rgba(245,184,0,0.05)] text-[#1a1a1a] font-semibold text-[13.5px] text-center p-[18px_22px] ${border}">${renderCompareCell(r.i)}</td>
-                  <td class="text-[#4a4a48] text-[13.5px] text-center p-[18px_22px] ${border}">${renderCompareCell(r.g)}</td>
-                  <td class="text-[#4a4a48] text-[13.5px] text-center p-[18px_22px] ${border}">${renderCompareCell(r.h)}</td>
-                </tr>
-                `;
-              }).join("")}
-            </tbody>
-          </table>
-        </div>
-
-        <div class="mt-7 flex flex-wrap justify-between items-center gap-4">
-          <p class="text-xs text-[#8a877f] max-w-[60ch] m-0">
-            * Rakip oranları kamuya açık fiyatlandırma sayfalarından alınmıştır (Mayıs 2026).
-            iSTOC komisyonu kategori bazlıdır; tam liste başvuru sonrası paylaşılır.
-          </p>
-          <a href="${SELL_HREF}" data-seller-cta class="th-btn">
-            Başvuruyu başlat ${SVG_ARROW}
-          </a>
-        </div>
         </div>
       </div>
     </section>
@@ -866,7 +788,6 @@ export function SellPageLayout(pricingData?: PricingPlansResponse): string {
   return `
     ${HeroSection()}
     ${PricingSection(plans, featuresMatrix)}
-    ${ComparisonSection()}
     ${FinalCtaSection()}
   `;
 }
