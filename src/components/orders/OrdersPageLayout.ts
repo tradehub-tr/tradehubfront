@@ -1109,7 +1109,7 @@ function renderAllOrders(): string {
             <!-- Header -->
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
               <h3 class="text-base font-bold text-gray-900">${t("ordersUi.refundRequest")}</h3>
-              <button @click="closeModal('showRefundModal')" class="th-no-press flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 bg-transparent border-none cursor-pointer rounded-full hover:bg-gray-100 transition-colors">
+              <button @click="closeModal('showRefundModal')" class="th-no-press flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 bg-transparent border-none cursor-pointer rounded-full hover:bg-gray-100 transition-colors" aria-label="${t("common.close")}">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
               </button>
             </div>

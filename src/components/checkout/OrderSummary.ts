@@ -48,7 +48,7 @@ export function OrderSummary({ data, payeeSuppliers = [] }: OrderSummaryProps): 
     <a
       href="${escapeHtml(sanitizeUrl(getSellerUrl({ id: s.id })))}"
       class="group flex items-center gap-2.5 sm:gap-3 p-2.5 sm:p-3 bg-[#f9fafb] border border-[#e5e5e5] rounded-md hover:border-[var(--color-primary-500)] hover:bg-white transition-colors no-underline"
-      title="${t("checkoutMfr.goToStore", { name: s.name })}"
+      title="${t("checkoutMfr.goToStore", { name: escapeHtml(s.name) })}"
     >
       <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-md bg-white border border-[#e5e5e5] flex items-center justify-center shrink-0 group-hover:border-[var(--color-primary-500)] transition-colors">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="w-5 h-5 sm:w-[22px] sm:h-[22px] text-[#555] group-hover:text-[var(--color-primary-500)] transition-colors">

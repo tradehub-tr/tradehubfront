@@ -877,7 +877,7 @@ export function initMegaMenu(): void {
         <div class="mega-cat-section mb-8" id="mega-section-${cat.id}">
           <div class="flex items-center gap-4 mb-5 lg:mb-6">
             <h3 class="text-base font-bold text-gray-900 lg:text-lg dark:text-white">${escapeHtml(cat.name)}</h3>
-            <a href="/pages/categories.html?cat=${encodeURIComponent(cat.slug)}" class="text-sm font-medium text-primary-600 transition-colors hover:text-primary-700">Tümünü Gör</a>
+            <a href="/pages/categories.html?cat=${encodeURIComponent(cat.slug)}" class="text-sm font-medium text-primary-600 transition-colors hover:text-primary-700">${t("commonNav.viewAll")}</a>
           </div>
           ${renderSectorBody(cat)}
         </div>

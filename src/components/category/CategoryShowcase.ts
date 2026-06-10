@@ -43,6 +43,29 @@ const COLUMN_CLASSES: Record<number, string> = {
   5: "lg:grid-cols-5",
   6: "lg:grid-cols-6",
 };
+// 2xl'de +2 sütun: kart boyu sabit kalsın diye geniş ekran stretch yerine daha çok
+// kartla dolar (sütun sayısı + container birlikte büyür → sütun-başı px ~sabit).
+// Literal sınıflar — Tailwind kaynak taraması için bütün halde durmalı.
+const TWOXL_COLUMN_CLASSES: Record<number, string> = {
+  5: "2xl:grid-cols-5",
+  6: "2xl:grid-cols-6",
+};
+
+// 2xl sütun sayısı: tile hücre toplamını tam bölen, columns'tan büyük en geniş değer
+// (max 6). Bölen yoksa columns döner → 2xl'de ek sütun yok, dizilim boşluksuz kalır.
+// Örn. 12 hücre + columns=4 → 6; 8 hücre + columns=4 → 4 (6 ve 5 bölmez).
+function pickTwoXlColumns(data: ShowcaseData): number {
+  const columns = data.columns || 4;
+  const cells = data.tiles.reduce((sum, t) => {
+    const c = Math.max(1, Math.min(t.col_span || 1, columns));
+    const r = Math.max(1, Math.min(t.row_span || 1, 4));
+    return sum + c * r;
+  }, 0);
+  for (let n = Math.min(columns + 2, 6); n > columns; n--) {
+    if (cells > 0 && cells % n === 0) return n;
+  }
+  return columns;
+}
 
 // col_span/row_span → Tailwind span sınıfları (lg tam, sm en fazla 2 sütun, mobil tek sütun).
 function spanClasses(colSpan: number, rowSpan: number, columns: number): string {
@@ -185,12 +208,16 @@ export function CategoryShowcase(data: ShowcaseData = getCachedShowcase()): stri
   const hashAttr = signature(data);
   const title = pick(data.section_title.tr, data.section_title.en);
   const colCls = COLUMN_CLASSES[data.columns] ?? COLUMN_CLASSES[4];
+  // 2xl'de geniş ekranı ek kartlarla doldurur — AMA yalnızca tile hücreleri yeni sütun
+  // sayısına tam bölünüyorsa (aksi halde kısa tile'ların altında boş hücre kalırdı).
+  // Bölen yoksa base columns'ta kalır → her tile sayısında boşluksuz dizilim.
+  const twoXlColCls = TWOXL_COLUMN_CLASSES[pickTwoXlColumns(data)] ?? "";
   const tilesHtml = data.tiles.map((t) => tileHtml(t, data.columns)).join("");
   return `
     <div data-category-showcase-root data-showcase-hash='${escapeAttr(hashAttr)}' class="rounded-md bg-gray-50 px-3 py-2 sm:px-4 sm:py-3 lg:py-4">
-      <div class="mx-auto w-full max-w-[1280px]">
+      <div class="mx-auto w-full max-w-[1280px] 2xl:max-w-[1680px]">
         ${title ? `<h2 class="mb-4 text-xl font-semibold text-gray-900">${escapeText(title)}</h2>` : ""}
-        <div class="grid grid-cols-2 ${colCls} gap-2 sm:gap-4 auto-rows-[85px] sm:auto-rows-[145px] lg:auto-rows-[210px] grid-flow-row-dense">
+        <div class="grid grid-cols-2 ${colCls} ${twoXlColCls} gap-2 sm:gap-4 auto-rows-[85px] sm:auto-rows-[145px] lg:auto-rows-[210px] grid-flow-row-dense">
           ${tilesHtml}
         </div>
       </div>

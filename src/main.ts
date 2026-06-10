@@ -85,8 +85,8 @@ appEl.innerHTML = `
     <section class="pt-1 pb-2 xl:pt-3 xl:pb-4" aria-label="${t("commonNav.featuredCampaigns")}">
       <div class="container-boxed">
         <div class="rounded-md bg-gray-50 px-3 py-2 sm:px-4 sm:py-3 lg:py-4">
-          <div class="mx-auto w-full max-w-[1280px]">
-            <div class="h-[200px] sm:h-[340px] lg:h-[480px] xl:h-[560px]">
+          <div class="mx-auto w-full max-w-[1280px] 2xl:max-w-[1680px]">
+            <div class="h-[200px] sm:h-[340px] lg:h-[400px] xl:h-[430px] 2xl:h-[480px]">
               ${HeroTopSlider()}
             </div>
           </div>

@@ -5,6 +5,7 @@
 import { btn } from "../ui/button";
 import { t } from "../../i18n";
 import { escapeHtml, sanitizeUrl, safeHexColor } from "../sanitize";
+import { t } from "../../i18n";
 
 /** Storefront section ayarları — bölüm tipine göre farklı subset'ler kullanılır */
 export interface SectionSettings {
@@ -105,7 +106,7 @@ function renderSlideImage(slide: HeroSlide, isStatic: boolean): string {
   const hasOverlay = !!(slide.title || slide.subtitle || slide.ctaText);
   const link = !hasOverlay && slide.ctaLink ? slide.ctaLink : "";
   const resolvedSrc = resolveImageUrl(slide.image);
-  const innerImg = `<img src="${escapeAttr(resolvedSrc)}" alt="${escapeAttr(slide.title || t("sellerApp.bannerAlt"))}" class="${heightCls}" onerror="${fallback}" />${renderSlideOverlay(slide)}`;
+  const innerImg = `<img src="${escapeHtml(sanitizeUrl(resolvedSrc))}" alt="${escapeAttr(slide.title || t("sellerApp.bannerAlt"))}" class="${heightCls}" onerror="${fallback}" />${renderSlideOverlay(slide)}`;
   return link
     ? `<a href="${escapeHtml(sanitizeUrl(link))}" class="${wrapper}">${innerImg}</a>`
     : `<div class="${wrapper}">${innerImg}</div>`;

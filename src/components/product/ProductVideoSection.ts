@@ -11,6 +11,7 @@
 import { getCurrentProduct } from "../../alpine/product";
 import { t } from "../../i18n";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
+import { t } from "../../i18n";
 
 const VIDEO_CONTAINER_ID = "product-video-section";
 
@@ -48,7 +49,9 @@ export function toVideoEmbedHtml(rawUrl: string): string {
   }
 
   // Tanınmayan formatta anchor fallback
-  return `<a href="${url}" target="_blank" rel="noopener" class="absolute inset-0 w-full h-full flex items-center justify-center bg-gray-100 text-primary-600 underline">${t("prodUi.openVideo")}</a>`;
+  const safeHref = escapeHtml(sanitizeUrl(url));
+  if (!safeHref) return "";
+  return `<a href="${safeHref}" target="_blank" rel="noopener" class="absolute inset-0 w-full h-full flex items-center justify-center bg-gray-100 text-primary-600 underline">${t("prodUi.openVideo")}</a>`;
 }
 
 function renderVideoPlayer(videoUrl: string, label: string): string {
