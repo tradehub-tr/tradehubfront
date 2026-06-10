@@ -1,3 +1,22 @@
+## [v1.2.1-beta.10] - 2026-06-10 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(trial): Enterprise butonu "14 gun ucretsiz dene" + komisyon/Yakinda fix (@boraydeger32)
+  - Trial paketinin ANA buton metni "X gun ucretsiz dene" olur (trial_config); ayri buton-ustu CTA ve ust bant kaldirildi
+  - Komisyon kartta/matriste her zaman gercek oran (0 -> "%0"); "Ozel" kaldirildi
+  - Karsilastirma tablosunda "Yakinda" rozeti (matris coming_soon)
+  - pricingService: trial_config + coming_soon tipleri; cache anahtari v4->v6
+
+### Duzeltildi
+- fix(auth): login promosyon panelinde komisyon mesajı sıfır komisyon olarak güncellendi (@ahmeetseker)
+  - promoSubtitle "şeffaf komisyon" → "sıfır komisyon"
+  - featTransparent "Şeffaf" → "Komisyonsuz"
+  - featTransparentDesc "Komisyon Yapısı" → "%0 Komisyon"
+  - 4 locale (tr/en/ar/ru) güncellendi
+
+---
 ## [v1.2.1-beta.8] - 2026-06-10 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
