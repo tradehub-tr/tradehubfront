@@ -102,10 +102,10 @@ function HeroSection(): string {
           <div class="w-full">
             <span class="${EYEBROW_CLS}">${t("sellPage.manufacturerPlatform")}</span>
             <h1 class="text-[36px] sm:text-[44px] lg:text-[56px] leading-[1.04] tracking-[-0.025em] font-semibold mt-[18px] mb-[18px] max-w-[14ch] text-[#1a1a1a]">
-              ${t("sellPage.heroTitleMain")}
+              ${t("sellPage.heroTitle")}
             </h1>
             <p class="text-base md:text-lg leading-[1.45] text-[#4a4a48] max-w-[42ch] mb-7">
-              ${t("sellPage.heroDescNoCommission")}
+              ${t("sellPage.heroSubtitle")}
             </p>
             <div class="flex flex-wrap gap-3 items-center">
               <a href="${SELL_HREF}" data-seller-cta class="th-btn th-btn-lg">
@@ -118,7 +118,7 @@ function HeroSection(): string {
             <div class="relative w-full aspect-[5/4] lg:aspect-auto lg:h-full lg:min-h-[360px] rounded-2xl overflow-hidden border border-[#e8e6e0] bg-[#f0ead8] shadow-[0_8px_24px_-12px_rgba(20,20,18,0.18),0_4px_8px_-4px_rgba(20,20,18,0.08)]">
               <img
                 src="${heroImg}"
-                alt="${t("sellPage.heroImageAltWorld")}"
+                alt="${t("sellPage.heroImageAlt")}"
                 class="absolute inset-0 w-full h-full object-cover"
                 loading="eager"
                 fetchpriority="high"
@@ -258,9 +258,7 @@ function PricingCard(
       </div>
       <div class="text-[11.5px] -mt-1 ${metaCls}">
         ${
-          overrideLabel
-            ? ""
-            : hasPrice
+          hasPrice
             ? `<span x-text="yearly ? '${t("sellPage.yearlyUpfrontVatExcl")}' : '${t("sellPage.monthlyCancelAnytime")}'">${t("sellPage.yearlyUpfrontVatExcl")}</span>`
             : t("sellPage.pricedByVolume")
         }
@@ -479,7 +477,7 @@ function renderMatrixCell(c: MatrixCell): string {
 // Matrix tüm section'larını plans + features_matrix verisinden derive eder.
 // Faz J: backend Feature Catalog'tan kategorize edilmiş matris geliyorsa
 // (features_matrix.categories) onu kullan — tüm UI satırları admin'den yönetilir.
-// features_matrix yoksa (eski API yanıtı veya cache) hardcoded MATRIX_SECTIONS
+// features_matrix yoksa (eski API yanıtı veya cache) hardcoded matrixSections()
 // fallback'i kullanılır (geriye uyumluluk).
 //
 // Plan field override'ı: "commission_rate" ve "max_active_listings" feature
@@ -545,6 +543,8 @@ function buildDynamicMatrixSections(
         v: commissionCells,
       },
       { f: t("sellPage.activeProductLimit"), v: listingsCells },
+      // STATIC extra rows da feature_key resolve etsin (admin "sample_sales"
+      // feature_key'i bir plan'a is_disabled=1 ile koyarsa "no" olur).
       ...staticCommissionExtraRows().map((r) => ({
         ...r,
         v: resolveRowCells(r, plans),
@@ -667,7 +667,7 @@ function PricingEmpty(): string {
     <div class="rounded-2xl border border-[#e8e6e0] bg-white p-10 text-center text-[#4a4a48]">
       <p class="m-0 mb-2 text-base font-medium text-[#1a1a1a]">${t("sellPage.plansLoadFailed")}</p>
       <p class="m-0 text-sm">${t("sellPage.plansLoadRetry")}
-        <a href="${SELL_HREF}" data-seller-cta class="text-[#d39c00] font-medium underline">${t("sellPage.startApplicationLink")}</a>.
+        <a href="${SELL_HREF}" data-seller-cta class="text-[#d39c00] font-medium underline">${t("sellPage.startApplication")}</a>.
       </p>
     </div>
   `;

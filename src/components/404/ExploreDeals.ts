@@ -14,6 +14,7 @@ import type { ProductListingCard } from "../../types/productListing";
 import { applySwiperDir } from "../../utils/direction";
 import { t } from "../../i18n";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
+import { t } from "../../i18n";
 
 /* ── Types ── */
 
@@ -212,7 +213,7 @@ function renderPanels(categories: ExploreCategory[]): void {
       (cat, i) => `
     <div class="explore-panel ${i === 0 ? "" : "hidden"}" data-panel-index="${i}">
       <div class="group/explore relative">
-        <div class="swiper explore-swiper-${i} overflow-hidden" aria-label="${t("p2g0.categoryProductsAria", { category: cat.label })}">
+        <div class="swiper explore-swiper-${i} overflow-hidden" aria-label="${t("p2g0.categoryProductsAria", { category: escapeHtml(cat.label) })}">
           <div class="swiper-wrapper">
             ${cat.products.map((p) => renderProductCard(p)).join("")}
           </div>

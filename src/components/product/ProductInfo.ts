@@ -153,7 +153,7 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
             data-is-default="${isDef ? "1" : "0"}"
             ${opt.price ? `data-variant-price="${escapeHtml(opt.price)}"` : ""}
             ${isAvailable ? "" : "disabled"}
-            title="${isAvailable ? opt.displayLabel : `${opt.displayLabel || opt.label} — ${t("prodUi.outOfStockSuffix")}`}"
+            title="${isAvailable ? escapeHtml(opt.displayLabel || opt.label) : `${escapeHtml(opt.displayLabel || opt.label)} — ${t("prodUi.outOfStockSuffix")}`}"
           >
             ${opt.displayLabel || opt.label}
           </button>

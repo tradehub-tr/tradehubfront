@@ -12,6 +12,7 @@ import { uploadFiles, type FileProgress } from "../uploader";
 import { revokeFilePreview, getFilePreviewUrl } from "../utils";
 import { t } from "../../../i18n";
 import { escapeHtml, sanitizeUrl } from "../../../utils/sanitize";
+import { t } from "../../../i18n";
 
 export interface ImagePickerOptions {
   containerId: string;
@@ -93,7 +94,7 @@ export class ImagePickerController {
     const removeLabel = labels.remove ?? t("commonSvc.remove");
     const uploadingLabel = labels.uploading ?? t("commonSvc.uploading");
     const recommended = this.opts.recommendedSize
-      ? `<div class="text-[10px] text-gray-500 mt-1">${t("commonSvc.recommended")}: ${this.opts.recommendedSize}</div>`
+      ? `<div class="text-[10px] text-gray-500 mt-1">${t("commonSvc.recommended")}: ${escapeHtml(this.opts.recommendedSize)}</div>`
       : "";
 
     const url = this.currentUrl;

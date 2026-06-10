@@ -128,7 +128,7 @@ function renderHero(brand: BrandDetail): string {
     ? `<a href="${escapeHtml(sanitizeUrl(getSellerUrl({ id: brand.owner.code })))}"
            class="inline-flex items-center gap-2 mt-3 px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/20 backdrop-blur border border-white/20 text-xs no-underline"
            style="color:#fff">
-         ${brand.owner.logo ? `<img src="${brand.owner.logo}" alt="${escapeHtml(brand.owner.name)}" class="w-4 h-4 object-contain rounded" />` : ''}
+         ${brand.owner.logo ? `<img src="${escapeHtml(sanitizeUrl(brand.owner.logo))}" alt="${escapeHtml(brand.owner.name)}" class="w-4 h-4 object-contain rounded" />` : ''}
          <span>${t('infoMisc.sellerLabel')} <strong>${escapeHtml(brand.owner.name)}</strong></span>
        </a>`
     : ''
@@ -163,7 +163,7 @@ function renderHero(brand: BrandDetail): string {
 function renderAbout(brand: BrandDetail): string {
   if (!brand.aboutContent || !brand.aboutContent.trim()) return ''
   const title = brand.aboutTitle || t('infoMisc.aboutUs')
-  const theme = brand.themeColor || '#cc9900'
+  const theme = safeHexColor(brand.themeColor, '#cc9900')
   return `
     <section class="py-8 md:py-12 bg-white border-b border-gray-200">
       <div class="container-boxed">

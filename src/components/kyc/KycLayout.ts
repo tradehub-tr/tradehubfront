@@ -17,6 +17,7 @@ import { SlotDropzoneController } from "../../lib/upload-ui";
 import { renderSegmented } from "../../utils/ui/toggle";
 import { t } from "../../i18n";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
+import { t } from "../../i18n";
 
 const FORM_ID = "kyc-form";
 const TOGGLE_ID = "kyc-account-type-toggle";
@@ -302,8 +303,8 @@ function showDocumentPreview(url: string): void {
 				<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500 text-white uppercase tracking-wider mb-0.5">
 					${t("kycUi.uploaded")}
 				</span>
-				<div class="text-[13px] font-semibold text-gray-900 truncate">${filename}</div>
-				<div class="text-[11px] text-gray-600">${t("kycUi.fileExt", { ext })}</div>
+				<div class="text-[13px] font-semibold text-gray-900 truncate">${escapeHtml(filename)}</div>
+				<div class="text-[11px] text-gray-600">${t("kycUi.fileExt", { ext: escapeHtml(ext) })}</div>
 			</div>
 			<a href="${escapeHtml(sanitizeUrl(url))}" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-md text-[12px] font-medium bg-white text-emerald-700 border border-emerald-300 hover:bg-emerald-100 inline-flex items-center gap-1">
 				${PREVIEW_ICONS.eye}

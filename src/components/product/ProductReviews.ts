@@ -709,6 +709,7 @@ function openImageLightbox(url: string): void {
     "fixed inset-0 bg-black/85 z-[80] flex items-center justify-center p-4 cursor-zoom-out";
   overlay.innerHTML = `
     <button type="button" class="absolute top-4 end-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors" aria-label="${t("prodUi.close")}">
+
       <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
     </button>
     <img src="${escapeHtml(url)}" class="max-w-[95vw] max-h-[90vh] object-contain shadow-2xl rounded-lg" alt="Büyütülmüş inceleme görseli" />
