@@ -19,6 +19,8 @@ export function getSellerUrl(
   if (seller.href) return seller.href;
   const prefix = lang === "en" ? "/en" : "";
   if (seller.slug) return `${prefix}/magaza/${seller.slug}`;
-  if (seller.id) return `/pages/seller/seller-shop.html?id=${seller.id}`;
+  // seller-shop.html `?seller=<code>` parametresini okur (slug olarak fetch eder).
+  // Eskiden `?id=` üretiliyordu → sayfa parametreyi bulamayıp mock'a düşüyordu.
+  if (seller.id) return `/pages/seller/seller-shop.html?seller=${encodeURIComponent(seller.id)}`;
   return "#";
 }
