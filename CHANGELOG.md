@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ## [v1.3.1] - 2026-06-10 PROD
 
 Bu surum istoc.com'da yayindadir.
@@ -146,6 +147,8 @@ Bu surum istoc.com'da yayindadir.
 - refactor(categories): route categories page through cached categoryService (@TurksabYonetim)
 
 ---
+=======
+>>>>>>> 0244837 (chore: v1.2.1-rc.1 RC changelog + package.json)
 ## [v1.2.1-rc.1] - 2026-06-10 RC
 
 Bu surum rc.istoc.com'da onay asamasindadir.
