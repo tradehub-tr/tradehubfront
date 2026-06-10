@@ -269,7 +269,14 @@ Alpine.data("sellerShop", () => ({
   isLoggedIn: false as boolean,
 
   async init() {
-    this.sellerCode = new URLSearchParams(window.location.search).get("seller") || "";
+    // Hem `?seller=<code>` query'sini hem de `/magaza/<code>/...` pretty-URL
+    // path'ini destekle. "Mağazayı ziyaret et" linkleri path formatı kullanıyor;
+    // query yoksa path'ten oku (yoksa mock'a düşüp yanlış mağaza gösteriyordu).
+    const pathMatch = window.location.pathname.match(/\/magaza\/([^/?#]+)/);
+    this.sellerCode =
+      new URLSearchParams(window.location.search).get("seller") ||
+      (pathMatch ? decodeURIComponent(pathMatch[1]) : "") ||
+      "";
 
     // Auth: contact bilgileri login kullanıcıya gösterilir
     waitForAuth()
@@ -322,13 +329,15 @@ Alpine.data("sellerShop", () => ({
           };
         }
       } catch (e) {
-        console.error("Seller shop API error, falling back to mock:", e);
-        this._loadMockData();
+        // Gerçek sellerCode ile API hatası → mock'a DÜŞME. Yanlış mağaza (Demo
+        // Ambalaj) göstermek hatayı maskeler; seller'ı null bırak.
+        console.error("Seller shop API error:", e);
       }
     }
 
-    // API sonrasi seller hala null ise mock data yukle
-    if (!this.seller) {
+    // Mock yalnızca DEMO önizleme içindir: URL'de hiç `?seller=` yoksa. Geçerli
+    // ama bulunamayan sellerCode'da mock GÖSTERME (yanlış mağaza maskelemesi).
+    if (!this.seller && !this.sellerCode) {
       this._loadMockData();
     }
 
