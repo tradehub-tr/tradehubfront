@@ -374,13 +374,31 @@ interface CompleteApplicationResponse {
 export async function completeRegistrationApplication(
   params: Record<string, unknown>
 ): Promise<CompleteApplicationResponse> {
+  // Storefront "X gün ücretsiz dene" niyeti (sell.ts → localStorage) başvuruya
+  // requested_trial_plan olarak taşınır; onayda deneme otomatik başlar.
+  let trialPlan = "";
+  try {
+    trialPlan = localStorage.getItem("th_trial_intent") || "";
+  } catch {
+    /* localStorage yoksa geç */
+  }
+  const body =
+    trialPlan && !params.requested_trial_plan
+      ? { ...params, requested_trial_plan: trialPlan }
+      : params;
   const res = await api<{ message: CompleteApplicationResponse }>(
     "/method/tradehub_core.api.v1.identity.complete_registration_application",
     {
       method: "POST",
-      body: JSON.stringify(params),
+      body: JSON.stringify(body),
     }
   );
+  // Niyet tüketildi — tekrar kullanılmasın.
+  try {
+    localStorage.removeItem("th_trial_intent");
+  } catch {
+    /* ignore */
+  }
   return res.message;
 }
 
