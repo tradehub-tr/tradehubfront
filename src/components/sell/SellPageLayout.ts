@@ -529,7 +529,7 @@ function buildDynamicMatrixSections(
     }));
   }
 
-  // ─ Eski yol: hardcoded MATRIX_SECTIONS fallback ─────────
+  // ─ Eski yol: hardcoded matrixSections() fallback ─────────
   const commissionCells = plans.map((p) => txt(commissionLabel(p)));
 
   const listingsCells = plans.map((p) => txt(fmtListings(p.max_active_listings)));
