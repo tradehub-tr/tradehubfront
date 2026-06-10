@@ -1,3 +1,11 @@
+## [v1.3.0-beta.1] - 2026-06-10 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(sell): trial niyetini satıcı başvurusuna taşı (@boraydeger32)
+
+---
 ## [v1.3.0] - 2026-06-10 PROD
 
 Bu surum istoc.com'da yayindadir.
