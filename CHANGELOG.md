@@ -1,3 +1,14 @@
+## [v1.2.1-beta.9] - 2026-06-10 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Duzeltildi
+- fix(i18n): tekrarlanan t import'ları kaldırıldı, storefront build düzeltildi (@ahmeetseker)
+  - 9 dosyada merge artığı çift "import { t } from i18n" satırı silindi
+  - Rollup "Identifier t has already been declared" hatası giderildi
+  - beta.istoc.com otomatik deploy build'i artık geçiyor (vite build temiz)
+
+---
 ## [v1.2.1-beta.8] - 2026-06-10 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
