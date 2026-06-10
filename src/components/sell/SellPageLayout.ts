@@ -26,6 +26,7 @@ import type {
   PricingPlansResponse,
   PricingFeaturesMatrix,
   PricingMatrixCell,
+  TrialConfig,
 } from "../../services/pricingService";
 
 const SELL_HREF = "/pages/auth/register.html?type=supplier";
@@ -144,6 +145,12 @@ function fmtListings(n: number): string {
   return n.toLocaleString("tr-TR");
 }
 
+// Komisyon etiketi: her zaman gerçek oran gösterilir (0 → "%0"). Admin komisyonu
+// kaç yazdıysa kartta da o görünür — "Özel" yazılmaz (Enterprise dahil).
+function commissionLabel(plan: PricingPlan): string {
+  return `%${plan.commission_rate || 0}`;
+}
+
 // Para sembolü map'i
 function currencySymbol(c: string): string {
   switch ((c || "EUR").toUpperCase()) {
@@ -175,7 +182,11 @@ function cardFeatures(plan: PricingPlan): PricingPlan["features"] {
   return plan.features.filter((f) => f.show_on_card);
 }
 
-function PricingCard(plan: PricingPlan, idx: number): string {
+function PricingCard(
+  plan: PricingPlan,
+  idx: number,
+  trial?: TrialConfig
+): string {
   const isFeat = !!plan.highlighted;
   const hasPrice = (plan.yearly_price ?? 0) > 0 || (plan.monthly_price ?? 0) > 0;
   // Admin'den girilen "fiyat yerine metin" — doluysa fiyatın yerini alır (ör. "Özel teklif").
@@ -266,9 +277,18 @@ function PricingCard(plan: PricingPlan, idx: number): string {
           .join("")}
       </div>
 
-      <a href="${ctaTargetHref}" ${ctaAttr} class="${ctaCls} mt-0.5">
-        ${escapeHtml(plan.cta_label || t("sellPage.continue"))} ${SVG_ARROW}
-      </a>
+      ${
+        trial?.enabled && plan.plan_code === trial.plan_code
+          ? `<a href="/pages/auth/register.html?type=supplier&plan=${encodeURIComponent(
+              plan.plan_code
+            )}&trial=1" data-seller-cta class="${ctaCls} mt-0.5">${SVG_ZAP} ${escapeHtml(
+              (trial.cta_label || "").trim() ||
+                `${trial.days || plan.trial_days || 0} gün ücretsiz dene`
+            )}</a>`
+          : `<a href="${ctaTargetHref}" ${ctaAttr} class="${ctaCls} mt-0.5">${escapeHtml(
+              plan.cta_label || t("sellPage.continue")
+            )} ${SVG_ARROW}</a>`
+      }
 
       <div class="h-px my-1 ${dividerCls}"></div>
       <div class="text-[11px] font-semibold uppercase tracking-[0.06em] ${featHeadCls}">${t("sellPage.packageContents")}</div>
@@ -673,40 +693,14 @@ function _computeYearlyDiscountBadge(plans: PricingPlan[]): string {
   return t("sellPage.monthsFree", { count: bestSavedMonths });
 }
 
-// Pricing üstü öne çıkan "X gün ücretsiz dene" bandı — en dolu paketi (trial_days>0
-// olan plan, ör. Enterprise) ücretsiz denetir. trial_days yoksa bant gizlenir.
-function TrialBanner(plans: PricingPlan[]): string {
-  const trialPlan = plans.find((p) => (p.trial_days ?? 0) > 0);
-  if (!trialPlan) return "";
-  const days = trialPlan.trial_days;
-  const href = `/pages/auth/register.html?type=supplier&plan=${encodeURIComponent(
-    trialPlan.plan_code
-  )}&trial=1`;
-  return /* html */ `
-    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl bg-[#1a1a1a] text-white p-5 sm:p-6 mb-8 shadow-[0_10px_30px_-10px_rgba(213,156,0,0.35)]">
-      <div class="flex items-center gap-3.5 text-center sm:text-start">
-        <span class="shrink-0 inline-flex items-center justify-center w-10 h-10 rounded-full bg-[#f5b800] text-[#1a1a1a]">${SVG_ZAP}</span>
-        <div>
-          <div class="text-[15px] font-semibold">${days} gün ücretsiz dene</div>
-          <div class="text-[13px] text-white/70">${escapeHtml(
-            trialPlan.plan_name
-          )} paketinin tüm özelliklerini kart bilgisi olmadan keşfet.</div>
-        </div>
-      </div>
-      <a href="${href}" data-seller-cta class="th-btn shrink-0 whitespace-nowrap">
-        Ücretsiz dene ${SVG_ARROW}
-      </a>
-    </div>
-  `;
-}
-
 function PricingSection(
   plans: PricingPlan[],
-  featuresMatrix?: PricingFeaturesMatrix
+  featuresMatrix?: PricingFeaturesMatrix,
+  trial?: TrialConfig
 ): string {
   const cards = plans.length
     ? `<div class="grid grid-cols-1 md:grid-cols-2 ${plans.length >= 4 ? "lg:grid-cols-4" : plans.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"} gap-3.5 items-stretch">
-         ${plans.map((p, i) => PricingCard(p, i)).join("")}
+         ${plans.map((p, i) => PricingCard(p, i, trial)).join("")}
        </div>
        ${PricingMatrix(plans, featuresMatrix)}`
     : PricingEmpty();
@@ -725,7 +719,6 @@ function PricingSection(
           </p>
         </div>
 
-        ${TrialBanner(plans)}
 
         <div class="inline-flex bg-white border border-[#e8e6e0] rounded-full p-1 mb-8" role="tablist" aria-label="${t("sellPage.period")}">
           <button
@@ -793,9 +786,10 @@ function FinalCtaSection(): string {
 export function SellPageLayout(pricingData?: PricingPlansResponse): string {
   const plans = pricingData?.plans ?? [];
   const featuresMatrix = pricingData?.features_matrix;
+  const trial = pricingData?.trial_config;
   return `
     ${HeroSection()}
-    ${PricingSection(plans, featuresMatrix)}
+    ${PricingSection(plans, featuresMatrix, trial)}
     ${FinalCtaSection()}
   `;
 }

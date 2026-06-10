@@ -12,7 +12,7 @@
 
 // v3 (2026-06-05): Faz J features_matrix + admin matris tek doğru kaynak.
 // Eski v2 cache'leri zorla geçersiz kıl.
-const CACHE_KEY = "tradehub-pricing-plans-v4";
+const CACHE_KEY = "tradehub-pricing-plans-v6";
 const CACHE_TTL_MS = 5 * 60_000; // 5 dk
 
 export interface PricingPlanFeature {
@@ -81,10 +81,20 @@ export interface PricingFeaturesMatrix {
   categories: PricingMatrixCategory[];
 }
 
+/** Global trial konfigürasyonu (Trial Settings) — seçilen pakette buton-üstü CTA + üst bant. */
+export interface TrialConfig {
+  enabled: boolean;
+  plan_code: string;
+  days: number;
+  cta_label: string;
+}
+
 export interface PricingPlansResponse {
   plans: PricingPlan[];
   /** Faz J — backend Feature Catalog'tan beslenir; eski yanıtlarda olmayabilir. */
   features_matrix?: PricingFeaturesMatrix;
+  /** Trial ayarı; eski yanıtlarda olmayabilir (enabled=false fallback). */
+  trial_config?: TrialConfig;
   meta: {
     currency: string;
     /** True if plans use multiple currencies — frontend per-plan currency kullanmalı */
