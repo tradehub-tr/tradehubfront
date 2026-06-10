@@ -1,3 +1,53 @@
+## [v1.2.1-beta.7] - 2026-06-10 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(i18n): ürün detay yorum akışı çevirisi + storefront i18n/RTL düzeltmeleri (@aliturguttursab)
+  - WriteReviewModal.ts + ProductReviews.ts: koda gömülü Türkçe metinler (modal başlık/etiket/buton/dropzone/puanlama boyutları + JS hata/başarı mesajları, "Yorum Yaz" butonu, Soru&Cevap sekmesi, değerlendirici rozetleri, edit tooltip) artık t() ile çözülüyor.
+  - i18n/locales/{en,tr,ar,ru}.ts: product.reviewWrite.* (~39 anahtar).
+  - Modül-seviyesi sabit haritalar (ASPECT_LABELS, REVIEW_DROPZONE_TEXTS) fonksiyona çevrildi ki t() import anında değil render/açılış anında çözülsün.
+  - services/categoryService.ts, listingService.ts, utils/api.ts: GET isteklerine aktif içerik dili (lang) eklenmesi + detay/varyant displayLabel eşlemesi.
+  - types/product.ts: ProductVariant/VariantOption displayLabel alanları.
+  - components/product/{ProductInfo,MobileLayout}.ts: varyant gösteriminde displayLabel || label.
+  - components/cart/molecules/ProductItem.ts, settings/SettingsPrivacy.ts: i18n düzeltmeleri.
+  - vite.config.ts: dev-only pretty-URL rewrite (/urun/<slug> → product detail entry) — dev server'da Nginx olmadığı için.
+- feat(i18n): Soru & Cevap (Q&A) bölümü çevirisi (@aliturguttursab)
+  - Soru sorma formu (başlık, alt açıklama, placeholder, gönder butonu).
+  - Liste durumları: yükleniyor, boş durum, onay-bekliyor/doğrulanmış rozetleri, faydalı sayacı + tooltip'ler, satıcı/alıcı cevabı, cevap yok.
+  - JS toast/hata mesajları (min karakter, ürün yüklenmedi, soru alındı, oy alındı / zaten oy verildi / oy verilemedi).
+- feat(i18n): storefront genel i18n süpürmesi — kalan tüm alanlar (en/tr/ar/ru) (@aliturguttursab)
+  - Satıcı: seller-dashboard, sell/pricing sayfaları, seller-verification, seller-shop, alpine/seller, utils/seller
+  - Siparişler + RFQ, Ayarlar, Trade Assurance, bilgi sayfaları (payments, refund-policy, membership, shipping-logistics, after-sales), KYC/KYB
+  - Yardım merkezi, buyer dashboard, favoriler, auth + adresler
+  - Checkout/sepet, üreticiler, header/nav/floating/footer
+  - Chat/bildirim/mesaj/rezervasyon servisleri, upload-ui facade'ları
+  - Ürün artıkları (ReportAbuseModal, WriteReviewModal dropzone, vb.)
+- feat(i18n): HTML sayfa başlıklarını (document.title) çevir (en/tr/ar/ru) (@aliturguttursab)
+  - 67 sayfanın <title>'ına data-i18n="pageTitle.<key>" eklendi (Türkçe metin no-JS/SEO fallback olarak korundu).
+  - i18n/locales/{en,tr,ar,ru}.ts: pageTitle namespace (67 anahtar × 4 dil); marka "iSTOC TradeHub" korunarak açıklama kısmı çevrildi.
+  - i18n/index.ts: import-anında <title data-i18n> anahtarından document.title ilk boyamada set ediliyor; dil değişiminde mevcut updatePageTranslations <title> textContent'ini güncellediği için başlık canlı değişiyor.
+- feat(native): iOS hazırlığı — cross-origin API köprüsü + iOS geri butonu (@aliturguttursab)
+  - server bloğu env-driven: CAP_SERVER_URL verilirse dev live-reload, yoksa bundle (App Store) modu. Makineye-özel IP artık koda gömülü değil.
+  - CapacitorHttp.enabled=true → fetch native ağdan geçer; cross-origin istekler browser CORS'a takılmaz, cookie native jar'da (backend CORS gereksiz).
+  - src/utils/nativeHttp.ts (yeni): bundle modunda window.fetch'i sarıp /api|/files|/private|/assets|/socket.io URL'lerini VITE_NATIVE_API_URL ile mutlaklaştırır. Web ve live-reload'da no-op.
+  - src/utils/api.ts: BASE_URL (+ window.API_BASE) native bundle'da mutlak backend.
+  - src/utils/nativeBackButton.ts (yeni): yalnızca native iOS'ta sol-üste, safe-area altına yüzen geri butonu enjekte eder; ana sayfada gizli; RTL uyumlu; history.back() / ana sayfa fallback. Web ve Android'de no-op.
+- feat(storefront): 2xl geniş ekran desteği ve iStoc marka geçişi (@ahmeetseker)
+  - Kategori Vitrini bento grid 2xl'de tile sayısına göre +2 sütuna genişler (max-w-1680px, tam bölen kontrolüyle boşluksuz)
+  - Hero slider 2xl breakpoint'inde tipografi/padding/spacing ölçeklenir
+  - Marka adı "Thoptan Ltd." → "iStoc Private Company Limited" güncellendi (tr/en/ru/ar + yasal bildirim)
+  - Footer operatedBy satırı kaldırıldı, telif "© 2026 iStoc Private Company Limited" olarak sadeleşti
+  - MegaMenu'deki kullanılmayan renderSectorBody fonksiyonu temizlendi
+  - Kullanılmayan import'lar ve mükerrer favIcon import'u kaldırıldı
+
+### Duzeltildi
+- fix(i18n): en/ar/ru locale parite — tr'de olup eksik 43 anahtarı çevir/ekle (@aliturguttursab)
+  - settings.consent* / downloadMyData* (KVKK/GDPR onay yönetimi + veri indirme)
+  - product.* (sipariş koruma / işlem süresi bölümleri)
+  - rfq.*, auth.*, checkout.*, kyb.* + birkaç mock veri anahtarı
+
+---
 ## [v1.2.1-beta.6] - 2026-06-09 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
