@@ -5,7 +5,6 @@
 
 import { t } from "../i18n";
 import { escapeHtml, sanitizeUrl } from "./sanitize";
-import { t } from "../i18n";
 
 export type ToastType = "success" | "error" | "warning" | "info";
 

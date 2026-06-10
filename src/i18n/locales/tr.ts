@@ -6915,7 +6915,6 @@ const tr = {
       verificationLevelAdvancedLabel: "Gelişmiş Doğrulama:",
       verificationLevelAdvancedDesc: "Temel doğrulamaya ek olarak, üretim kapasitesi değerlendirmesi ve yerinde denetim içerir. Fabrika ziyareti sırasında üretim hatları, kalite kontrol süreçleri ve depolama koşulları incelenir. Yıllık 2.990 TL doğrulama ücreti uygulanır.",
       verificationLevelPremiumLabel: "Premium Doğrulama:",
-      verificationLevelPremiumDesc: "En üst düzey güvenilirlik rozetidir. Gelişmiş doğrulamaya ek olarak, finansal sağlamlık analizi, müşteri referans kontrolü ve yıllık düzenli denetimler içerir. Premium doğrulanmış tedarikçiler, iStoc'un en güvenilir iş ortakları olarak öne çıkarılır. Yıllık 7.990 TL doğrulama ücreti uygulanır.",
       verificationLevelPremiumDesc: "En üst düzey güvenilirlik rozetidir. Gelişmiş doğrulamaya ek olarak, finansal sağlamlık analizi, müşteri referans kontrolü ve yıllık düzenli denetimler içerir. Premium doğrulanmış tedarikçiler, iSTOC'un en güvenilir iş ortakları olarak öne çıkarılır. Yıllık 7.990 TL doğrulama ücreti uygulanır.",
       heroTitleMain: "Fabrikanı tüm dünyaya aç.",
       heroDescNoCommission: "iSTOC, üreticileri dünyanın dört bir yanındaki B2B alıcılarıyla aracısız buluşturur. Listele, sat, kargola — komisyon yok.",
