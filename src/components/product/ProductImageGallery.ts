@@ -79,7 +79,7 @@ export function ProductImageGallery(): string {
 
   const thumbsHtml = images
     .map((img, i) => {
-      if (img.isVideo) {
+      if (img.isVideo && img.src && img.src.trim()) {
         return `
         <div
           class="gallery-thumb gallery-thumb-video relative w-[60px] h-[60px] rounded-md overflow-hidden shrink-0 border-2 border-[var(--color-border-default,#e5e5e5)] cursor-pointer transition-colors duration-150 [&.active]:border-[var(--color-text-heading)] [&:hover:not(.active)]:border-[var(--color-border-strong)]"
@@ -131,7 +131,7 @@ export function ProductImageGallery(): string {
 
   const lightboxThumbsHtml = images
     .map((img, i) => {
-      if (img.isVideo) {
+      if (img.isVideo && img.src && img.src.trim()) {
         return `
         <button
           type="button"
