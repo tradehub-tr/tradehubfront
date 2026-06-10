@@ -84,13 +84,13 @@ const ru = {
     authAddr: {
       istocHome: "Главная iStoc",
       promoHeadline: "Глобальная сеть B2B-торговли",
-      promoSubtitle: "Маркетплейс B2B нового поколения с безопасными платежами, проверенными продавцами и прозрачной комиссией.",
+      promoSubtitle: "Маркетплейс B2B нового поколения с безопасными платежами, проверенными продавцами и нулевой комиссией.",
       featSecure: "Безопасно",
       featSecureDesc: "Защита платежей",
       featVerified: "Проверено",
       featVerifiedDesc: "Система продавцов",
-      featTransparent: "Прозрачно",
-      featTransparentDesc: "Структура комиссии",
+      featTransparent: "Без комиссии",
+      featTransparentDesc: "0% комиссии",
       badgeFastShipping: "Быстрая доставка",
       trustBar: "SSL-шифрование · Безопасная оплата",
       mobilePromoTitle: "Глобальная сеть B2B-торговли",
@@ -1103,6 +1103,8 @@ const ru = {
     // COMMON
     // ============================================================
     common: {
+      goBack: "Назад",
+      more: "Ещё",
       clear: "Очистить",
       search: "Поиск",
       save: "Сохранить",
@@ -1165,6 +1167,7 @@ const ru = {
     // HEADER / TOPBAR
     // ============================================================
     header: {
+      login: "Войти",
       deliverTo: "Доставка в:",
       specifyLocation: "Укажите ваше местоположение",
       shippingVary: "Варианты и стоимость доставки зависят от вашего местоположения",
@@ -1258,6 +1261,7 @@ const ru = {
     // MOBILE DRAWER
     // ============================================================
     drawer: {
+      home: "Главная",
       categories: "Категории",
       browseCategories: "Просматривайте категории, чтобы находить товары",
       campaigns: "Акции",
@@ -1761,6 +1765,7 @@ const ru = {
     // CHECKOUT
     // ============================================================
     checkout: {
+      selectSavedAddress: "Выберите сохранённый адрес доставки или сохраните новый.",
       // Page title
       pageTitle: "Сводка заказа",
       // Order review modal
@@ -1910,6 +1915,7 @@ const ru = {
     // PRODUCT
     // ============================================================
     product: {
+      brandLabel: "Бренд",
       buyersAlsoBought: "Товары, которые покупали похожие на вас покупатели",
       storeBestSellers: "Бестселлеры этого магазина",
       similarFromSupplier: "Похожие товары от этого поставщика",
@@ -2178,6 +2184,8 @@ const ru = {
     // PRODUCTS LISTING
     // ============================================================
     products: {
+      filterBrand: "Бренд",
+      filterSearchBrand: "Поиск бренда...",
       filters: "Фильтры",
       filterTradeAssurance: "Trade Assurance",
       filterSupplierFeatures: "Особенности поставщика",
@@ -2438,6 +2446,7 @@ const ru = {
     // ORDERS
     // ============================================================
     orders: {
+      loadingOrders: "Загрузка деталей заказа...",
       waitingPayment: "Ожидание оплаты",
       confirming: "Подтверждение",
       preparingShipment: "Подготовка к отправке",
@@ -3442,6 +3451,14 @@ const ru = {
     // COOKIE CONSENT
     // ============================================================
     cookieConsent: {
+      criteoBundle: "Персонализация рекламы",
+      criteoRetargeting: "Ретаргетинг",
+      metricaAdBlock: "Обнаружение блокировщика рекламы",
+      metricaFirstVisit: "Отслеживание первого визита",
+      metricaUserId: "Идентификация пользователя",
+      metricaVisor: "Запись сессии (Вебвизор)",
+      sixMonths: "6 месяцев",
+      thirteenMonths: "13 месяцев",
       title: "Управление настройками файлов cookie",
       necessaryCookies: "Необходимые файлы cookie",
       necessaryDesc: "Необходимы для базовых функций сайта. Эти файлы cookie нельзя отключить.",
@@ -4695,6 +4712,7 @@ const ru = {
     // HELP CENTER
     // ============================================================
     helpCenter: {
+      ticketSubmitError: "Не удалось отправить الطلب. Попробуйте ещё раз.",
       search1: "Забыли пароль",
       search2: "Отмена заказа",
       search3: "Отслеживание отправления",
@@ -4871,6 +4889,7 @@ const ru = {
     // SETTINGS
     // ============================================================
     settings: {
+      phoneRequired: "Требуется номер телефона.",
       consentDataProcessing: "Обработка данных",
       consentKvkk: "Информационное заявление KVKK",
       consentCookieFunctional: "Функциональные файлы cookie",
@@ -5327,6 +5346,25 @@ const ru = {
       view: "Просмотреть",
     },
     favorites: {
+      searchPlaceholder: "Искать в списке — товар, поставщик, категория...",
+      filter: "Фильтр",
+      filterApply: "Применить",
+      filterReset: "Сбросить",
+      filterCategory: "Категория",
+      filterPriceRange: "Диапазон цен",
+      filterStock: "Наличие",
+      filterSupplier: "Поставщик",
+      addToCart: "В корзину",
+      itemsListed: "товаров в списке",
+      listRecent: "Недавно",
+      noSearchResults: "Ничего не найдено",
+      noSearchResultsDesc: "Попробуйте очистить поиск и повторить.",
+      stockIn: "В наличии",
+      stockN: "{{n}} в наличии",
+      stockOut: "Нет в наличии",
+      stockInOpt: "В наличии",
+      stockLowOpt: "Заканчивается",
+      stockOutOpt: "Нет в наличии",
       title: "Избранное",
       noFavorites: "У вас нет избранных товаров",
       noFavoritesDesc:
@@ -6626,6 +6664,7 @@ const ru = {
       ],
     },
     contactForm: {
+      submitError: "Не удалось отправить форму. Попробуйте ещё раз.",
       subjectOrder: "Заказ",
       subjectPayment: "Оплата",
       subjectShipping: "Доставка",
@@ -6681,6 +6720,7 @@ const ru = {
       descriptionMinLength: "Введите не менее 20 символов",
     },
     sellerForm: {
+      submitError: "Не удалось отправить форму. Попробуйте ещё раз.",
       businessTypes: [
         "Производитель",
         "Оптовый продавец",

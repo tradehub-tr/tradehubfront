@@ -84,13 +84,13 @@ const en = {
     authAddr: {
       istocHome: "iStoc Home",
       promoHeadline: "Global B2B Trade Network",
-      promoSubtitle: "The new-generation B2B marketplace with secure payments, verified sellers and transparent commissions.",
+      promoSubtitle: "The new-generation B2B marketplace with secure payments, verified sellers and zero commission.",
       featSecure: "Secure",
       featSecureDesc: "Payment Protection",
       featVerified: "Verified",
       featVerifiedDesc: "Seller System",
-      featTransparent: "Transparent",
-      featTransparentDesc: "Commission Structure",
+      featTransparent: "Commission-Free",
+      featTransparentDesc: "0% Commission",
       badgeFastShipping: "Fast Shipping",
       trustBar: "SSL Encryption · Secure Payment",
       mobilePromoTitle: "Global B2B Trade Network",
@@ -1103,6 +1103,8 @@ const en = {
     // COMMON
     // ============================================================
     common: {
+      goBack: "Go back",
+      more: "More",
       search: "Search",
       save: "Save",
       cancel: "Cancel",
@@ -1164,6 +1166,7 @@ const en = {
     // HEADER / TOPBAR
     // ============================================================
     header: {
+      login: "Sign in",
       deliverTo: "Deliver to:",
       specifyLocation: "Specify your location",
       shippingVary: "Shipping options and fees vary based on your location",
@@ -1257,6 +1260,7 @@ const en = {
     // MOBILE DRAWER
     // ============================================================
     drawer: {
+      home: "Home",
       categories: "Categories",
       browseCategories: "Browse categories to discover products",
       campaigns: "Campaigns",
@@ -1745,6 +1749,7 @@ const en = {
     // CHECKOUT
     // ============================================================
     checkout: {
+      selectSavedAddress: "Please select a saved delivery address or save a new one.",
       // Page title
       pageTitle: "Order summary",
       // Order review modal
@@ -1891,6 +1896,7 @@ const en = {
     // PRODUCT
     // ============================================================
     product: {
+      brandLabel: "Brand",
       qa: {
         askTitle: "Do you have a question?",
         askSubtitle: "The seller or other buyers can answer.",
@@ -2164,6 +2170,8 @@ const en = {
     // PRODUCTS LISTING
     // ============================================================
     products: {
+      filterBrand: "Brand",
+      filterSearchBrand: "Search brand...",
       filters: "Filters",
       filterTradeAssurance: "Trade Assurance",
       filterSupplierFeatures: "Supplier Features",
@@ -2419,6 +2427,8 @@ const en = {
     // ORDERS
     // ============================================================
     orders: {
+      loadingOrders: "Loading your order details...",
+      productionMonitoring: "Production Monitoring",
       waitingPayment: "Waiting for payment",
       confirming: "Confirming",
       preparingShipment: "Preparing for shipment",
@@ -3419,6 +3429,14 @@ const en = {
     // COOKIE CONSENT
     // ============================================================
     cookieConsent: {
+      criteoBundle: "Ad personalization",
+      criteoRetargeting: "Retargeting",
+      metricaAdBlock: "Ad blocker detection",
+      metricaFirstVisit: "First visit tracking",
+      metricaUserId: "User identification",
+      metricaVisor: "Session recording (Webvisor)",
+      sixMonths: "6 months",
+      thirteenMonths: "13 months",
       title: "Manage Your Cookie Preferences",
       necessaryCookies: "Necessary Cookies",
       necessaryDesc:
@@ -4669,6 +4687,7 @@ const en = {
     // HELP CENTER
     // ============================================================
     helpCenter: {
+      ticketSubmitError: "Could not submit the ticket. Please try again.",
       search1: "Forgot password",
       search2: "Order cancellation",
       search3: "Shipment tracking",
@@ -4844,6 +4863,7 @@ const en = {
     // SETTINGS
     // ============================================================
     settings: {
+      phoneRequired: "Phone number is required.",
       consentDataProcessing: "Data Processing",
       consentKvkk: "KVKK Disclosure Statement",
       consentCookieFunctional: "Functional Cookies",
@@ -5295,6 +5315,25 @@ const en = {
       view: "View",
     },
     favorites: {
+      searchPlaceholder: "Search this list — product, supplier, category...",
+      filter: "Filter",
+      filterApply: "Apply",
+      filterReset: "Reset",
+      filterCategory: "Category",
+      filterPriceRange: "Price range",
+      filterStock: "Stock status",
+      filterSupplier: "Supplier",
+      addToCart: "Add to cart",
+      itemsListed: "items listed",
+      listRecent: "Recently",
+      noSearchResults: "No results found",
+      noSearchResultsDesc: "Try clearing your search and searching again.",
+      stockIn: "In stock",
+      stockN: "{{n}} in stock",
+      stockOut: "Out of stock",
+      stockInOpt: "In stock",
+      stockLowOpt: "Low stock",
+      stockOutOpt: "Out of stock",
       title: "Favorites",
       noFavorites: "You have no favorite products",
       noFavoritesDesc:
@@ -6593,6 +6632,7 @@ const en = {
       ],
     },
     contactForm: {
+      submitError: "Could not submit the form. Please try again.",
       subjectOrder: "Order",
       subjectPayment: "Payment",
       subjectShipping: "Shipping",
@@ -6629,6 +6669,7 @@ const en = {
       descriptionMinLength: "Enter at least 20 characters",
     },
     sellerForm: {
+      submitError: "Could not submit the form. Please try again.",
       businessTypes: ["Manufacturer", "Wholesaler", "Distributor", "Retailer", "Importer/Exporter"],
       categoryOptions: [
         "Textile & Apparel",
