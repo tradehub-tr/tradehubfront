@@ -224,7 +224,7 @@ function PricingCard(
     : "text-[#8a877f] line-through decoration-[#d5d2c9]";
 
   const stripRows = [
-    { l: t("sellPage.commission"), v: plan.commission_rate > 0 ? `%${plan.commission_rate}` : t("sellPage.custom") },
+    { l: t("sellPage.commission"), v: commissionLabel(plan) },
     { l: t("sellPage.activeProduct"), v: fmtListings(plan.max_active_listings) },
   ];
 
@@ -530,9 +530,7 @@ function buildDynamicMatrixSections(
   }
 
   // ─ Eski yol: hardcoded matrixSections() fallback ─────────
-  const commissionCells = plans.map((p) =>
-    p.commission_rate > 0 ? txt(`%${p.commission_rate}`) : txt(t("sellPage.custom"))
-  );
+  const commissionCells = plans.map((p) => txt(commissionLabel(p)));
 
   const listingsCells = plans.map((p) => txt(fmtListings(p.max_active_listings)));
 
