@@ -74,6 +74,17 @@ document.addEventListener('click', async (e) => {
   const link = (e.target as HTMLElement).closest<HTMLAnchorElement>('[data-seller-cta]');
   if (!link) return;
   e.preventDefault();
+  // "X gün ücretsiz dene" tıklandıysa trial niyetini sakla; başvuru gönderilirken
+  // (completeRegistrationApplication) requested_trial_plan olarak taşınır → onayda
+  // deneme otomatik başlar. Çok adımlı akışta (kayıt→form) hayatta kalsın diye localStorage.
+  const trialPlan = link.getAttribute('data-trial-plan');
+  if (trialPlan) {
+    try {
+      localStorage.setItem('th_trial_intent', trialPlan);
+    } catch {
+      /* localStorage yoksa sessizce geç */
+    }
+  }
   await routeToSellerFlow();
 });
 
