@@ -1331,10 +1331,14 @@ function mapListingDetail(raw: any): ProductDetail {
 
   // Promo video is appended as a pseudo-image at the end of the gallery so
   // it becomes a regular slide (with a play-icon thumbnail + iframe in main area).
-  if (raw.videoUrl) {
+  // Sadece GERÇEK bir video URL'i varsa video slide ekle. Boş/whitespace
+  // videoUrl (örn. " " veya "") truthy olup fantom "VIDEO" rozeti + açılmayan
+  // boş video üretiyordu — trim ile boşları ele.
+  const promoVideo = typeof raw.videoUrl === "string" ? raw.videoUrl.trim() : "";
+  if (promoVideo) {
     images.push({
       id: "video-main",
-      src: raw.videoUrl,
+      src: promoVideo,
       alt: `${raw.title || ""} - Video`,
       isVideo: true,
     });
