@@ -84,13 +84,13 @@ const ar = {
     authAddr: {
       istocHome: "الصفحة الرئيسية iStoc",
       promoHeadline: "شبكة التجارة العالمية بين الشركات",
-      promoSubtitle: "سوق الجيل الجديد للتجارة بين الشركات مع مدفوعات آمنة وبائعين موثقين وعمولات شفافة.",
+      promoSubtitle: "سوق الجيل الجديد للتجارة بين الشركات مع مدفوعات آمنة وبائعين موثقين وبدون أي عمولة.",
       featSecure: "آمن",
       featSecureDesc: "حماية المدفوعات",
       featVerified: "موثّق",
       featVerifiedDesc: "نظام البائعين",
-      featTransparent: "شفّاف",
-      featTransparentDesc: "هيكل العمولة",
+      featTransparent: "بدون عمولة",
+      featTransparentDesc: "عمولة 0%",
       badgeFastShipping: "شحن سريع",
       trustBar: "تشفير SSL · دفع آمن",
       mobilePromoTitle: "شبكة التجارة العالمية بين الشركات",
@@ -1103,6 +1103,8 @@ const ar = {
     // COMMON
     // ============================================================
     common: {
+      goBack: "رجوع",
+      more: "المزيد",
       clear: "مسح",
       search: "بحث",
       save: "حفظ",
@@ -1164,6 +1166,7 @@ const ar = {
     // HEADER / TOPBAR
     // ============================================================
     header: {
+      login: "تسجيل الدخول",
       deliverTo: "التوصيل إلى:",
       specifyLocation: "حدّد موقعك",
       shippingVary: "تختلف خيارات الشحن ورسومه حسب موقعك",
@@ -1256,6 +1259,7 @@ const ar = {
     // MOBILE DRAWER
     // ============================================================
     drawer: {
+      home: "الرئيسية",
       categories: "الفئات",
       browseCategories: "تصفّح الفئات لاكتشاف المنتجات",
       campaigns: "الحملات",
@@ -1752,6 +1756,7 @@ const ar = {
     // CHECKOUT
     // ============================================================
     checkout: {
+      selectSavedAddress: "يرجى اختيار عنوان تسليم محفوظ أو حفظ عنوان جديد.",
       // Page title
       pageTitle: "ملخص الطلب",
       // Order review modal
@@ -1897,6 +1902,7 @@ const ar = {
     // PRODUCT
     // ============================================================
     product: {
+      brandLabel: "العلامة التجارية",
       buyersAlsoBought: "منتجات اشتراها مشترون مثلك",
       storeBestSellers: "الأكثر مبيعًا في هذا المتجر",
       similarFromSupplier: "منتجات مماثلة من هذا المورد",
@@ -2165,6 +2171,8 @@ const ar = {
     // PRODUCTS LISTING
     // ============================================================
     products: {
+      filterBrand: "العلامة التجارية",
+      filterSearchBrand: "ابحث عن علامة تجارية...",
       filters: "الفلاتر",
       filterTradeAssurance: "Trade Assurance",
       filterSupplierFeatures: "ميزات المورّد",
@@ -2419,6 +2427,7 @@ const ar = {
     // ORDERS
     // ============================================================
     orders: {
+      loadingOrders: "جارٍ تحميل تفاصيل طلبك...",
       waitingPayment: "في انتظار الدفع",
       confirming: "قيد التأكيد",
       preparingShipment: "قيد التجهيز للشحن",
@@ -3416,6 +3425,14 @@ const ar = {
     // COOKIE CONSENT
     // ============================================================
     cookieConsent: {
+      criteoBundle: "تخصيص الإعلانات",
+      criteoRetargeting: "إعادة الاستهداف",
+      metricaAdBlock: "اكتشاف مانع الإعلانات",
+      metricaFirstVisit: "تتبع الزيارة الأولى",
+      metricaUserId: "تعريف المستخدم",
+      metricaVisor: "تسجيل الجلسة (Webvisor)",
+      sixMonths: "6 أشهر",
+      thirteenMonths: "13 شهرًا",
       title: "إدارة تفضيلات ملفات تعريف الارتباط الخاصة بك",
       necessaryCookies: "ملفات تعريف الارتباط الضرورية",
       necessaryDesc: "مطلوبة للوظائف الأساسية للموقع. لا يمكن تعطيل ملفات تعريف الارتباط هذه.",
@@ -4658,6 +4675,7 @@ const ar = {
     // HELP CENTER
     // ============================================================
     helpCenter: {
+      ticketSubmitError: "تعذّر إرسال التذكرة. يرجى المحاولة مرة أخرى.",
       search1: "نسيت كلمة المرور",
       search2: "إلغاء الطلب",
       search3: "تتبّع الشحنة",
@@ -4832,6 +4850,7 @@ const ar = {
     // SETTINGS
     // ============================================================
     settings: {
+      phoneRequired: "رقم الهاتف مطلوب.",
       consentDataProcessing: "معالجة البيانات",
       consentKvkk: "نص توضيحي بشأن KVKK",
       consentCookieFunctional: "ملفات تعريف الارتباط الوظيفية",
@@ -5278,6 +5297,25 @@ const ar = {
       view: "عرض",
     },
     favorites: {
+      searchPlaceholder: "ابحث في هذه القائمة — منتج، مورّد، فئة...",
+      filter: "تصفية",
+      filterApply: "تطبيق",
+      filterReset: "إعادة تعيين",
+      filterCategory: "الفئة",
+      filterPriceRange: "نطاق السعر",
+      filterStock: "حالة المخزون",
+      filterSupplier: "المورّد",
+      addToCart: "أضف إلى السلة",
+      itemsListed: "منتج مدرج",
+      listRecent: "مؤخرًا",
+      noSearchResults: "لم يتم العثور على نتائج",
+      noSearchResultsDesc: "حاول مسح البحث والمحاولة مرة أخرى.",
+      stockIn: "متوفر",
+      stockN: "{{n}} في المخزون",
+      stockOut: "نفد المخزون",
+      stockInOpt: "متوفر",
+      stockLowOpt: "كمية محدودة",
+      stockOutOpt: "نفد المخزون",
       title: "المفضلة",
       noFavorites: "ليس لديك أي منتجات مفضلة",
       noFavoritesDesc: "أعجبك شيء ما لكنك لست مستعدًا للشراء بعد؟<br/>سنحفظه لك في مفضلتك",
@@ -6574,6 +6612,7 @@ const ar = {
       ],
     },
     contactForm: {
+      submitError: "تعذّر إرسال النموذج. يرجى المحاولة مرة أخرى.",
       subjectOrder: "الطلب",
       subjectPayment: "الدفع",
       subjectShipping: "الشحن",
@@ -6610,6 +6649,7 @@ const ar = {
       descriptionMinLength: "أدخل 20 حرفًا على الأقل",
     },
     sellerForm: {
+      submitError: "تعذّر إرسال النموذج. يرجى المحاولة مرة أخرى.",
       businessTypes: ["الشركة المصنّعة", "تاجر جملة", "موزّع", "تاجر تجزئة", "مستورد/مصدّر"],
       categoryOptions: [
         "المنسوجات والملابس",

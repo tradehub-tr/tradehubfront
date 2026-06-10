@@ -5,7 +5,6 @@
 import { btn } from "../ui/button";
 import { t } from "../../i18n";
 import { escapeHtml, sanitizeUrl, safeHexColor } from "../sanitize";
-import { t } from "../../i18n";
 
 /** Storefront section ayarları — bölüm tipine göre farklı subset'ler kullanılır */
 export interface SectionSettings {

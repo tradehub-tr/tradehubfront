@@ -12,7 +12,6 @@ import { uploadFiles, type FileProgress } from "../uploader";
 import { revokeFilePreview, getFilePreviewUrl } from "../utils";
 import { t } from "../../../i18n";
 import { escapeHtml, sanitizeUrl } from "../../../utils/sanitize";
-import { t } from "../../../i18n";
 
 export interface ImagePickerOptions {
   containerId: string;

@@ -84,13 +84,13 @@ const tr = {
     authAddr: {
       istocHome: "iStoc Ana Sayfa",
       promoHeadline: "Global B2B Ticaret Ağı",
-      promoSubtitle: "Güvenli ödeme, doğrulanmış satıcılar ve şeffaf komisyon ile yeni nesil B2B pazaryeri.",
+      promoSubtitle: "Güvenli ödeme, doğrulanmış satıcılar ve sıfır komisyon ile yeni nesil B2B pazaryeri.",
       featSecure: "Güvenli",
       featSecureDesc: "Ödeme Koruması",
       featVerified: "Doğrulanmış",
       featVerifiedDesc: "Satıcı Sistemi",
-      featTransparent: "Şeffaf",
-      featTransparentDesc: "Komisyon Yapısı",
+      featTransparent: "Komisyonsuz",
+      featTransparentDesc: "%0 Komisyon",
       badgeFastShipping: "Hızlı Kargo",
       trustBar: "SSL Şifreleme · Güvenli Ödeme",
       mobilePromoTitle: "Global B2B Ticaret Ağı",
@@ -1103,6 +1103,8 @@ const tr = {
     // COMMON
     // ============================================================
     common: {
+      goBack: "Geri",
+      more: "Daha fazla",
       search: "Ara",
       save: "Kaydet",
       cancel: "İptal",
@@ -1164,6 +1166,7 @@ const tr = {
     // HEADER / TOPBAR
     // ============================================================
     header: {
+      login: "Giriş Yap",
       deliverTo: "Teslimat:",
       specifyLocation: "Konumunuzu belirtin",
       shippingVary: "Kargo seçenekleri ve ücretleri konumunuza göre değişir",
@@ -1257,6 +1260,7 @@ const tr = {
     // MOBILE DRAWER
     // ============================================================
     drawer: {
+      home: "Ana Sayfa",
       categories: "Kategoriler",
       browseCategories: "Ürünleri keşfetmek için kategorilere göz atın",
       campaigns: "Kampanyalar",
@@ -1744,6 +1748,7 @@ const tr = {
     // CHECKOUT
     // ============================================================
     checkout: {
+      selectSavedAddress: "Lütfen kayıtlı bir teslimat adresi seçin veya yeni adresinizi kaydedin.",
       // Sayfa başlığı
       pageTitle: "Sipariş Onayı",
       // Order review modal
@@ -1891,6 +1896,7 @@ const tr = {
     // PRODUCT
     // ============================================================
     product: {
+      brandLabel: "Marka",
       qa: {
         askTitle: "Bir sorunuz mu var?",
         askSubtitle: "Satıcı veya diğer alıcılar yanıtlayabilir.",
@@ -2164,6 +2170,8 @@ const tr = {
     // PRODUCTS LISTING
     // ============================================================
     products: {
+      filterBrand: "Marka",
+      filterSearchBrand: "Marka ara...",
       filters: "Filtreler",
       filterTradeAssurance: "Ticaret Güvencesi",
       filterSupplierFeatures: "Tedarikçi Özellikleri",
@@ -2423,6 +2431,8 @@ const tr = {
     // ORDERS
     // ============================================================
     orders: {
+      loadingOrders: "Sipariş detaylarınız yükleniyor...",
+      productionMonitoring: "Üretim İzleme",
       waitingPayment: "Ödeme bekleniyor",
       confirming: "Onaylanıyor",
       preparingShipment: "Gönderime hazırlanıyor",
@@ -3413,6 +3423,14 @@ const tr = {
     // COOKIE CONSENT
     // ============================================================
     cookieConsent: {
+      criteoBundle: "Reklam kişiselleştirme",
+      criteoRetargeting: "Yeniden hedefleme",
+      metricaAdBlock: "Reklam engelleyici tespiti",
+      metricaFirstVisit: "İlk ziyaret takibi",
+      metricaUserId: "Kullanıcı tanımlama",
+      metricaVisor: "Oturum kaydı (Webvisor)",
+      sixMonths: "6 ay",
+      thirteenMonths: "13 ay",
       title: "Çerez Tercihlerinizi Yönetin",
       necessaryCookies: "Zorunlu Çerezler",
       necessaryDesc:
@@ -4668,6 +4686,7 @@ const tr = {
     // HELP CENTER
     // ============================================================
     helpCenter: {
+      ticketSubmitError: "Talep gönderilemedi. Lütfen tekrar deneyin.",
       search1: "Şifremi unuttum",
       search2: "Sipariş iptali",
       search3: "Kargo takibi",
@@ -4843,6 +4862,7 @@ const tr = {
     // SETTINGS
     // ============================================================
     settings: {
+      phoneRequired: "Telefon numarası gereklidir.",
       passwordMinLength: "Parola en az 8 karakter olmalıdır.",
       passwordsMismatch: "Parolalar eşleşmiyor.",
       passwordSameAsCurrent: "Yeni parolanız mevcut parolanızla aynı olamaz.",
@@ -5297,6 +5317,25 @@ const tr = {
       view: "Görüntüle",
     },
     favorites: {
+      searchPlaceholder: "Bu listede ara — ürün, tedarikçi, kategori...",
+      filter: "Filtrele",
+      filterApply: "Uygula",
+      filterReset: "Sıfırla",
+      filterCategory: "Kategori",
+      filterPriceRange: "Fiyat aralığı",
+      filterStock: "Stok durumu",
+      filterSupplier: "Tedarikçi",
+      addToCart: "Sepete ekle",
+      itemsListed: "ürün listelendi",
+      listRecent: "Yakın zamanda",
+      noSearchResults: "Sonuç bulunamadı",
+      noSearchResultsDesc: "Aramayı temizleyip tekrar deneyebilirsin.",
+      stockIn: "Stokta",
+      stockN: "{{n}} stok",
+      stockOut: "Tükendi",
+      stockInOpt: "Stokta var",
+      stockLowOpt: "Az kaldı",
+      stockOutOpt: "Tükendi",
       title: "Sık Kullanılanlar",
       noFavorites: "Favori ürününüz yok",
       noFavoritesDesc:
@@ -6596,6 +6635,7 @@ const tr = {
       ],
     },
     contactForm: {
+      submitError: "Form gönderilemedi. Lütfen tekrar deneyin.",
       subjectOrder: "Sipariş",
       subjectPayment: "Ödeme",
       subjectShipping: "Kargo",
@@ -6627,6 +6667,7 @@ const tr = {
       descriptionMinLength: "En az 20 karakter giriniz",
     },
     sellerForm: {
+      submitError: "Form gönderilemedi. Lütfen tekrar deneyin.",
       businessTypes: ["Üretici", "Toptancı", "Distribütör", "Perakendeci", "İthalatçı/İhracatçı"],
       categoryOptions: [
         "Tekstil & Giyim",
@@ -6916,7 +6957,6 @@ const tr = {
       verificationLevelAdvancedDesc: "Temel doğrulamaya ek olarak, üretim kapasitesi değerlendirmesi ve yerinde denetim içerir. Fabrika ziyareti sırasında üretim hatları, kalite kontrol süreçleri ve depolama koşulları incelenir. Yıllık 2.990 TL doğrulama ücreti uygulanır.",
       verificationLevelPremiumLabel: "Premium Doğrulama:",
       verificationLevelPremiumDesc: "En üst düzey güvenilirlik rozetidir. Gelişmiş doğrulamaya ek olarak, finansal sağlamlık analizi, müşteri referans kontrolü ve yıllık düzenli denetimler içerir. Premium doğrulanmış tedarikçiler, iStoc'un en güvenilir iş ortakları olarak öne çıkarılır. Yıllık 7.990 TL doğrulama ücreti uygulanır.",
-      verificationLevelPremiumDesc: "En üst düzey güvenilirlik rozetidir. Gelişmiş doğrulamaya ek olarak, finansal sağlamlık analizi, müşteri referans kontrolü ve yıllık düzenli denetimler içerir. Premium doğrulanmış tedarikçiler, iSTOC'un en güvenilir iş ortakları olarak öne çıkarılır. Yıllık 7.990 TL doğrulama ücreti uygulanır.",
       heroTitleMain: "Fabrikanı tüm dünyaya aç.",
       heroDescNoCommission: "iSTOC, üreticileri dünyanın dört bir yanındaki B2B alıcılarıyla aracısız buluşturur. Listele, sat, kargola — komisyon yok.",
       heroImageAltWorld: "Dünya geneline ihracat: liman ve konteyner lojistiği",

@@ -17,7 +17,6 @@ import { SlotDropzoneController } from "../../lib/upload-ui";
 import { renderSegmented } from "../../utils/ui/toggle";
 import { t } from "../../i18n";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
-import { t } from "../../i18n";
 
 const FORM_ID = "kyc-form";
 const TOGGLE_ID = "kyc-account-type-toggle";
