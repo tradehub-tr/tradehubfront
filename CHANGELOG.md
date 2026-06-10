@@ -1,3 +1,21 @@
+## [v1.2.1-beta.13] - 2026-06-10 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(sell): show feature tooltips as hover ⓘ in pricing comparison table (@boraydeger32)
+
+### Duzeltildi
+- fix(storefront): satıcı→mağaza linki doğru mağazayı açar (@aliiball)
+  - getSellerUrl artık ?seller=<code> üretir (sayfanın okuduğu parametre)
+  - sellerShop /magaza/<code> path'ini de okur (Mağazayı ziyaret et linkleri)
+  - mock satıcı yalnız demo'da yüklenir (geçersiz satıcıda yanlış mağaza maskelenmez)
+- fix(storefront): video_url boşken VIDEO rozeti gösterilmez (@aliiball)
+  - mapListingDetail boş/whitespace videoUrl'i galeriye eklemez
+  - ProductImageGallery video thumb'ı yalnız isVideo && src dolu iken çizer
+- fix(seller): Mağazalarım panel URL'i host-relative /panel/ yapıldı (@ahmeetseker)
+
+---
 ## [v1.2.1-beta.12] - 2026-06-10 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
