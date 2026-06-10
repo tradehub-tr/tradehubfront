@@ -10,7 +10,6 @@ import { uploadFiles, type FileProgress } from "../uploader";
 import { getFileBadge, formatFileSize } from "../utils";
 import { t } from "../../../i18n";
 import { escapeHtml } from "../../../utils/sanitize";
-import { t } from "../../../i18n";
 
 export interface AttachFieldOptions {
   containerId: string;
