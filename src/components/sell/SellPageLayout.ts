@@ -281,7 +281,9 @@ function PricingCard(
         trial?.enabled && plan.plan_code === trial.plan_code
           ? `<a href="/pages/auth/register.html?type=supplier&plan=${encodeURIComponent(
               plan.plan_code
-            )}&trial=1" data-seller-cta class="${ctaCls} mt-0.5">${SVG_ZAP} ${escapeHtml(
+            )}&trial=1" data-seller-cta data-trial-plan="${escapeHtml(
+              plan.plan_code
+            )}" class="${ctaCls} mt-0.5">${SVG_ZAP} ${escapeHtml(
               (trial.cta_label || "").trim() ||
                 `${trial.days || plan.trial_days || 0} gün ücretsiz dene`
             )}</a>`
