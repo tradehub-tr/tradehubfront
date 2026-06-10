@@ -1,3 +1,11 @@
+## [v1.3.1] - 2026-06-10 PROD
+
+Bu surum istoc.com'da yayindadir.
+
+### Eklendi
+- feat(sell): trial niyetini satıcı başvurusuna taşı (@boraydeger32)
+
+---
 ## [v1.3.0-rc.1] - 2026-06-10 RC
 
 Bu surum rc.istoc.com'da onay asamasindadir.
