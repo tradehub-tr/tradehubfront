@@ -1,3 +1,11 @@
+## [v1.2.1-beta.12] - 2026-06-10 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(sell): show feature tooltips as hover ⓘ in pricing comparison table (@boraydeger32)
+
+---
 ## [v1.2.1-beta.11] - 2026-06-10 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
