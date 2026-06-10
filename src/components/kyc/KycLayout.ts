@@ -15,6 +15,7 @@
 import { api } from "../../utils/api";
 import { SlotDropzoneController } from "../../lib/upload-ui";
 import { renderSegmented } from "../../utils/ui/toggle";
+import { t } from "../../i18n";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 import { t } from "../../i18n";
 

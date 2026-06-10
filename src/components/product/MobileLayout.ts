@@ -20,7 +20,7 @@ import { RelatedProducts } from "./RelatedProducts";
 import { MobileRecommendations, initMobileRecommendations } from "./MobileRecommendations";
 import { SocialProofBadge } from "./SocialProofBadge";
 import { getSellerUrl } from "../../utils/sellerUrl";
-import { escapeHtml, sanitizeUrl, safeHexColor } from "../../utils/sanitize";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 // Product loaded lazily — getCurrentProduct() called inside functions
 
@@ -99,8 +99,8 @@ function renderVariantSection(variant: ProductVariant): string {
         data-value="${escapeHtml(opt.id)}" data-label="${escapeHtml(opt.label)}" ${opt.price ? `data-variant-price="${escapeHtml(opt.price)}"` : ""} ${!opt.available ? "disabled" : ""}>
         ${
           opt.thumbnail
-            ? `<img src="${escapeHtml(sanitizeUrl(opt.thumbnail))}" alt="${escapeHtml(opt.label)}" class="w-full h-full object-cover" />`
-            : `<span class="pdm-color-swatch" style="background:${safeHexColor(opt.value)}"></span>`
+            ? `<img src="${opt.thumbnail}" alt="${opt.displayLabel || opt.label}" class="w-full h-full object-cover" />`
+            : `<span class="pdm-color-swatch" style="background:${opt.value}"></span>`
         }
       </button>
     `
@@ -109,7 +109,7 @@ function renderVariantSection(variant: ProductVariant): string {
 
     return collapsibleSection({
       id: `pdm-color-section`,
-      title: `${escapeHtml(variant.label)} <em>(${available})</em>`,
+      title: `${variant.displayLabel || variant.label} <em>(${available})</em>`,
       bodyHtml: `<div class="pdm-color-thumbs flex flex-wrap gap-2">${thumbs}</div>`,
     });
   }
@@ -119,8 +119,8 @@ function renderVariantSection(variant: ProductVariant): string {
     .map(
       (opt) => `
     <button type="button" class="pdm-variant-pill px-4 py-[7px] border border-border-medium rounded-md text-[13px] text-text-body bg-surface cursor-pointer transition-[border-color] duration-150 [&.active]:border-[var(--color-text-heading)] [&.active]:font-semibold [&.pdm-disabled]:opacity-40 [&.pdm-disabled]:cursor-not-allowed${!opt.available ? " pdm-disabled" : ""}"
-      data-value="${escapeHtml(opt.id)}" data-label="${escapeHtml(opt.label)}" ${opt.price ? `data-variant-price="${escapeHtml(opt.price)}"` : ""} ${!opt.available ? "disabled" : ""}>
-      ${escapeHtml(opt.label)}
+      data-value="${opt.id}" data-label="${opt.label}" ${opt.price ? `data-variant-price="${opt.price}"` : ""} ${!opt.available ? "disabled" : ""}>
+      ${opt.displayLabel || opt.label}
     </button>
   `
     )
@@ -128,7 +128,7 @@ function renderVariantSection(variant: ProductVariant): string {
 
   return collapsibleSection({
     id: `pdm-${variant.type}-section`,
-    title: `${escapeHtml(variant.label)} <em>(${available})</em>`,
+    title: `${variant.displayLabel || variant.label} <em>(${available})</em>`,
     bodyHtml: `<div class="pdm-variant-pills flex flex-wrap gap-2">${pills}</div>`,
   });
 }

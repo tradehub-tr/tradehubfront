@@ -9,6 +9,7 @@
  */
 
 import { getCurrentProduct } from "../../alpine/product";
+import { t } from "../../i18n";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 import { t } from "../../i18n";
 

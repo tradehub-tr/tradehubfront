@@ -7,6 +7,7 @@
 
 import { uploadFiles, type FileProgress } from "../uploader";
 import { getFileBadge, getFilePreviewUrl, revokeFilePreview } from "../utils";
+import { t } from "../../../i18n";
 import { escapeHtml } from "../../../utils/sanitize";
 import { t } from "../../../i18n";
 

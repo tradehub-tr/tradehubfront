@@ -3,6 +3,7 @@
  * Used by seller-shop page to dynamically render storefront sections
  */
 import { btn } from "../ui/button";
+import { t } from "../../i18n";
 import { escapeHtml, sanitizeUrl, safeHexColor } from "../sanitize";
 import { t } from "../../i18n";
 

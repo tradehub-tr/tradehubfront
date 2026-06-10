@@ -12,6 +12,7 @@ import { initCurrency } from "../../services/currencyService";
 import { getListingUrl } from "../../utils/listingUrl";
 import type { ProductListingCard } from "../../types/productListing";
 import { applySwiperDir } from "../../utils/direction";
+import { t } from "../../i18n";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 import { t } from "../../i18n";
 

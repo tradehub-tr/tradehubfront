@@ -1,3 +1,54 @@
+## [v1.2.1-beta.6] - 2026-06-09 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(pricing): karşılaştırma tablosunda "Yakında" rozeti + cache bump (@boraydeger32)
+  - PricingMatrixFeature / MatrixRow tiplerine coming_soon eklendi; karşılaştırma tablosu satır adının yanında "Yakında" rozeti gösterir (kartlarla senkron)
+  - localStorage cache anahtarı v3 → v4 (eski önbellek coming_soon alanını taşımadığı için otomatik geçersiz kılınır)
+
+---
+## [v1.2.1-beta.5] - 2026-06-09 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(i18n): SellPageLayout + MegaMenu i18n'ini geri uygula (@aliturguttursab)
+  - MegaMenu: "Tümünü gör" → t("commonNav.viewAll")
+  - SellPageLayout: tüm hardcoded TR → t("sellPage.*") (49 mevcut anahtar yeniden kullanıldı + 5 yeni: hero başlık/açıklama, görsel alt, üretici desteği, başvuru linki)
+  - locales {en,tr,ar,ru}: 5 yeni sellPage anahtarı
+
+---
+## [v1.2.1-beta.4] - 2026-06-09 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(pricing): satıcı paketleri kart ve karşılaştırma düzenlemeleri (@boraydeger32)
+  - Pricing kartları: ortak özellik seti + ✓/✗ ile eşit uzunluk
+  - enum/quota değerleri kartta gösterimi ("Destek seviyesi: 7×24 tahsisli")
+  - "Yakında" rozeti (henüz çalışmayan özellikler için, coming_soon)
+  - fiyat yerine özel metin (price_override_label) desteği
+  - "14 gün ücretsiz dene" bandı (en dolu paket → kayıt yönlendirmesi)
+  - "Diğer pazaryerlerine göre" rakip karşılaştırma bölümü kaldırıldı
+  - pricingService: price_override_label / text_value / coming_soon / show_on_card tip alanları
+
+---
+## [v1.2.1-beta.3] - 2026-06-09 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Duzeltildi
+- fix(merge): main merge artefaktlarını onar + eksik bağımlılık (@aliturguttursab)
+  - searchListings (listingService): main'in queryFetch cache sarmalayıcısı + benim i18n sort etiketlerim birleştirildi (Unexpected "," giderildi).
+  - ProductItem: çift favIcon import kaldırıldı, eksik `const isFav` geri eklendi.
+  - ProductVideoSection: eksik escapeHtml/sanitizeUrl import'u eklendi.
+  - MobileLayout, ProductInfo: kullanılmayan safeHexColor import'tan çıkarıldı.
+  - categoryService: kullanılmayan _promise kaldırıldı.
+  - SellPageLayout, MegaMenu: derin ayrışma — main'in versiyonu alındı (dinamik fiyat matrisi + 3-seviye mega menü). NOT: bu 2 dosyada i18n etiketleri main'in hardcoded TR'sine döndü; ayrıca yeniden uygulanacak.
+- fix(dev): vite /api proxy hedefini env-driven yap (varsayılan :8088) (@aliturguttursab)
+
+---
 ## [v1.2.1-beta.2] - 2026-06-08 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.

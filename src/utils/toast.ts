@@ -3,6 +3,7 @@
  * iSTOC design system uyumlu bildirim toast'ları
  */
 
+import { t } from "../i18n";
 import { escapeHtml, sanitizeUrl } from "./sanitize";
 import { t } from "../i18n";
 
