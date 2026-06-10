@@ -12,7 +12,7 @@
 
 // v3 (2026-06-05): Faz J features_matrix + admin matris tek doğru kaynak.
 // Eski v2 cache'leri zorla geçersiz kıl.
-const CACHE_KEY = "tradehub-pricing-plans-v3";
+const CACHE_KEY = "tradehub-pricing-plans-v6";
 const CACHE_TTL_MS = 5 * 60_000; // 5 dk
 
 export interface PricingPlanFeature {
@@ -23,6 +23,10 @@ export interface PricingPlanFeature {
   tooltip: string | null;
   /** Faz K — true ise plan kartının "Paket içeriği" özet listesinde bullet olur. */
   show_on_card: boolean;
+  /** Enum/quota değeri (ör. "7×24 tahsisli", "15+ dil"); boolean'da boş. */
+  text_value?: string;
+  /** true ise kartta "Yakında" rozeti gösterilir (henüz çalışmayan özellik). */
+  coming_soon?: boolean;
 }
 
 export interface PricingPlan {
@@ -40,6 +44,8 @@ export interface PricingPlan {
   max_active_listings: number;
   cta_label: string;
   cta_action: "signup" | "signup_billing" | "contact_sales" | "learn_more";
+  /** Doluysa fiyat yerine bu metin gösterilir (ör. "Özel teklif"). */
+  price_override_label: string | null;
   highlighted: boolean;
   trial_days: number;
   features: PricingPlanFeature[];
@@ -60,6 +66,8 @@ export interface PricingMatrixFeature {
   display_name: string;
   value_type: "checkbox" | "text";
   tooltip: string | null;
+  /** true ise karşılaştırma tablosunda adın yanında "Yakında" rozeti. */
+  coming_soon?: boolean;
   /** Anahtar plan_code (ör. FREE, PRO) — değer hücre */
   values_by_plan: Record<string, PricingMatrixCell>;
 }
@@ -73,10 +81,20 @@ export interface PricingFeaturesMatrix {
   categories: PricingMatrixCategory[];
 }
 
+/** Global trial konfigürasyonu (Trial Settings) — seçilen pakette buton-üstü CTA + üst bant. */
+export interface TrialConfig {
+  enabled: boolean;
+  plan_code: string;
+  days: number;
+  cta_label: string;
+}
+
 export interface PricingPlansResponse {
   plans: PricingPlan[];
   /** Faz J — backend Feature Catalog'tan beslenir; eski yanıtlarda olmayabilir. */
   features_matrix?: PricingFeaturesMatrix;
+  /** Trial ayarı; eski yanıtlarda olmayabilir (enabled=false fallback). */
+  trial_config?: TrialConfig;
   meta: {
     currency: string;
     /** True if plans use multiple currencies — frontend per-plan currency kullanmalı */

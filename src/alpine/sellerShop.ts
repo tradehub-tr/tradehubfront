@@ -3,6 +3,7 @@
  * Fetches layout config + seller data, manages product filtering/sorting.
  */
 import Alpine from "alpinejs";
+import { t } from "../i18n";
 import { isLoggedIn, waitForAuth } from "../utils/auth";
 import { showLoginModal } from "../components/product/LoginModal";
 import { saveRecentSeller } from "../services/recentHistoryService";
@@ -229,18 +230,20 @@ const DEFAULT_SECTIONS = [
   },
 ];
 
-const SECTION_LABELS: Record<string, string> = {
-  hero_banner: "Banner",
-  category_grid: "Kategoriler",
-  hot_products: "Populer Urunler",
-  category_listing: "Urunler",
-  company_info: "Sirket Bilgisi",
-  certificates: "Sertifikalar",
-  why_choose_us: "Neden Bizi Secmelisiniz",
-  gallery: "Galeri",
-  company_introduction: "Sirket Tanitimi",
-  contact_form: "Iletisim",
-};
+function sectionLabels(): Record<string, string> {
+  return {
+    hero_banner: "Banner",
+    category_grid: t("sellPage.sectionCategories"),
+    hot_products: t("sellPage.sectionPopularProducts"),
+    category_listing: t("sellPage.navProducts"),
+    company_info: t("sellPage.sectionCompanyInfo"),
+    certificates: t("sellPage.sectionCertificates"),
+    why_choose_us: t("sellPage.sectionWhyChooseUs"),
+    gallery: t("sellPage.sectionGallery"),
+    company_introduction: t("sellPage.sectionCompanyIntroduction"),
+    contact_form: t("sellPage.sectionContact"),
+  };
+}
 
 Alpine.data("sellerShop", () => ({
   // State
@@ -404,7 +407,7 @@ Alpine.data("sellerShop", () => ({
 
   sectionTitle(type: string): string {
     const section = this.layout.sections.find((s) => s.type === type);
-    return section?.settings?.title || SECTION_LABELS[type] || "";
+    return section?.settings?.title || sectionLabels()[type] || "";
   },
 
   filterByCategory(categoryName: string, categoryType: string = "seller") {
@@ -479,7 +482,7 @@ Alpine.data("sellerShop", () => ({
       });
       if (res.ok) {
         this.inquiryMessage = "";
-        alert("Mesajiniz gonderildi!");
+        alert(t("sellPage.messageSent"));
       }
     } catch (e) {
       console.error("Inquiry error:", e);

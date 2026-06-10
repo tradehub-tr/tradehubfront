@@ -99,18 +99,18 @@ function renderHero(brand: BrandDetail): string {
          <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/>
          </svg>
-         Resmi Marka
+         ${t('infoMisc.officialBrand')}
        </span>`
     : ''
 
   const metaItems: string[] = []
-  if (brand.foundedYear) metaItems.push(`<span><strong>${brand.foundedYear}</strong> kuruldu</span>`)
+  if (brand.foundedYear) metaItems.push(`<span><strong>${brand.foundedYear}</strong> ${t('infoMisc.founded')}</span>`)
   if (brand.country) metaItems.push(`<span>${escapeHtml(brand.country)}</span>`)
   if (brand.website) {
     const url = sanitizeUrl(brand.website)
     metaItems.push(`<a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="hover:underline" style="color:${theme}">Website</a>`)
   }
-  metaItems.push(`<span><strong>${brand.listingCount}</strong> ürün</span>`)
+  metaItems.push(`<span><strong>${brand.listingCount}</strong> ${t('infoMisc.productsLabel')}</span>`)
 
   const metaHtml = metaItems.length > 0
     ? `<div class="flex items-center gap-3 flex-wrap text-sm mt-2" style="color:rgba(255,255,255,0.88)">${metaItems.join('<span style="color:rgba(255,255,255,0.4)">·</span>')}</div>`
@@ -129,7 +129,7 @@ function renderHero(brand: BrandDetail): string {
            class="inline-flex items-center gap-2 mt-3 px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/20 backdrop-blur border border-white/20 text-xs no-underline"
            style="color:#fff">
          ${brand.owner.logo ? `<img src="${escapeHtml(sanitizeUrl(brand.owner.logo))}" alt="${escapeHtml(brand.owner.name)}" class="w-4 h-4 object-contain rounded" />` : ''}
-         <span>Satıcı: <strong>${escapeHtml(brand.owner.name)}</strong></span>
+         <span>${t('infoMisc.sellerLabel')} <strong>${escapeHtml(brand.owner.name)}</strong></span>
        </a>`
     : ''
 
@@ -162,7 +162,7 @@ function renderHero(brand: BrandDetail): string {
 // ── About ────────────────────────────────────────────────────────────────────
 function renderAbout(brand: BrandDetail): string {
   if (!brand.aboutContent || !brand.aboutContent.trim()) return ''
-  const title = brand.aboutTitle || 'Hakkımızda'
+  const title = brand.aboutTitle || t('infoMisc.aboutUs')
   const theme = safeHexColor(brand.themeColor, '#cc9900')
   return `
     <section class="py-8 md:py-12 bg-white border-b border-gray-200">
@@ -184,7 +184,7 @@ function renderVideo(brand: BrandDetail): string {
   return `
     <section class="py-6 bg-gray-50 border-b border-gray-200">
       <div class="container-boxed">
-        <h2 class="text-lg font-bold text-gray-900 mb-3">Tanıtım Videosu</h2>
+        <h2 class="text-lg font-bold text-gray-900 mb-3">${t('infoMisc.promoVideo')}</h2>
         <div class="relative rounded-lg overflow-hidden shadow-sm" style="padding-top:56.25%">
           <iframe src="${escapeHtml(sanitizeUrl(embedUrl))}"
             class="absolute inset-0 w-full h-full"
@@ -219,9 +219,9 @@ function renderFeatured(featured: ProductListingCard[], brand: BrandDetail): str
     <section class="py-8 bg-white border-b border-gray-200">
       <div class="container-boxed">
         <div class="flex items-end justify-between mb-4">
-          <h2 class="text-xl font-bold text-gray-900">Öne Çıkan Ürünler</h2>
+          <h2 class="text-xl font-bold text-gray-900">${t('infoMisc.featuredProducts')}</h2>
           <span class="text-xs font-semibold uppercase tracking-wider px-2 py-0.5 rounded" style="background:${theme}20; color:${theme}">
-            Editör Seçimi
+            ${t('infoMisc.editorsChoice')}
           </span>
         </div>
         <div id="brand-featured-grid"></div>
@@ -240,8 +240,8 @@ function renderGridSection(total: number): string {
             <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0v10l-8 4-8-4V7m16 0l-8 4m0 0L4 7m8 4v10"/>
             </svg>
-            <p class="text-lg font-medium">Bu markanın henüz ürünü yok</p>
-            <p class="text-sm mt-1">Yakında ürünler eklenecek.</p>
+            <p class="text-lg font-medium">${t('infoMisc.brandNoProducts')}</p>
+            <p class="text-sm mt-1">${t('infoMisc.productsSoon')}</p>
           </div>
         </div>
       </section>
@@ -250,7 +250,7 @@ function renderGridSection(total: number): string {
   return `
     <section class="py-8">
       <div class="container-boxed">
-        <h2 class="text-xl font-bold text-gray-900 mb-4">Tüm Ürünler (${total})</h2>
+        <h2 class="text-xl font-bold text-gray-900 mb-4">${t('infoMisc.allProducts')} (${total})</h2>
         <div id="brand-product-grid"></div>
       </div>
     </section>
@@ -287,7 +287,7 @@ function renderSocials(brand: BrandDetail): string {
   return `
     <section class="py-8 bg-gray-50 border-t border-gray-200">
       <div class="container-boxed text-center">
-        <p class="text-sm font-semibold text-gray-700 mb-3">${escapeHtml(brand.name)} Sosyal Medya</p>
+        <p class="text-sm font-semibold text-gray-700 mb-3">${escapeHtml(brand.name)} ${t('infoMisc.socialMedia')}</p>
         <div class="flex items-center justify-center gap-3 flex-wrap">
           ${buttonsHtml}
         </div>
@@ -303,8 +303,8 @@ async function main() {
     document.querySelector('#app')!.innerHTML = `
       <div class="min-h-screen flex items-center justify-center">
         <div class="text-center text-gray-500">
-          <p class="text-lg">Marka bulunamadı</p>
-          <a href="/urunler" class="text-primary-600 hover:underline mt-2 inline-block">Tüm ürünlere dön</a>
+          <p class="text-lg">${t('infoMisc.brandNotFound')}</p>
+          <a href="/urunler" class="text-primary-600 hover:underline mt-2 inline-block">${t('infoMisc.backToAllProducts')}</a>
         </div>
       </div>
     `
@@ -322,8 +322,8 @@ async function main() {
     document.querySelector('#app')!.innerHTML = `
       <div class="min-h-screen flex items-center justify-center">
         <div class="text-center text-gray-500">
-          <p class="text-lg">Marka bulunamadı veya onaylanmamış</p>
-          <a href="/urunler" class="text-primary-600 hover:underline mt-2 inline-block">Tüm ürünlere dön</a>
+          <p class="text-lg">${t('infoMisc.brandNotFoundOrUnapproved')}</p>
+          <a href="/urunler" class="text-primary-600 hover:underline mt-2 inline-block">${t('infoMisc.backToAllProducts')}</a>
         </div>
       </div>
     `

@@ -532,7 +532,7 @@ Alpine.data("cartPage", () => ({
       const totalEl = container.querySelector<HTMLElement>(".sc-c-supplier-total-text");
       if (totalEl) {
         if (subtotal > 0) {
-          totalEl.textContent = `Toplam: ${formatCurrency(subtotal, getSelectedCurrency())}`;
+          totalEl.textContent = `${t("checkoutMfr.totalLabel")}: ${formatCurrency(subtotal, getSelectedCurrency())}`;
         } else {
           totalEl.textContent = "";
         }

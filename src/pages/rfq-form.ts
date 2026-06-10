@@ -67,7 +67,7 @@ appEl.innerHTML = `
                 <label class="block text-sm font-semibold text-gray-800 mb-2"><span class="text-red-500 me-0.5">*</span>${t('rfq.productName')}</label>
                 <input type="text" id="rfq-product-name" autocomplete="off" placeholder="${t('rfq.productNamePlaceholder')}" class="w-full max-w-full h-10 px-3 text-sm border border-gray-300 rounded bg-white text-gray-800 placeholder:text-gray-400 outline-none focus:border-gray-800 transition-colors" />
                 <div id="rfq-category-result" class="hidden mt-1 text-sm text-gray-500">
-                  <span class="text-gray-400">Product category:</span>
+                  <span class="text-gray-400">${t('p2g0.productCategoryLabel')}</span>
                   <a href="#" id="rfq-category-link" class="text-gray-700 underline ms-1"></a>
                 </div>
                 <input type="hidden" id="rfq-category" value="" />
@@ -238,7 +238,7 @@ productNameInput.addEventListener('input', () => {
         });
         categoryDropdown.classList.remove('hidden');
       } else {
-        categoryDropdown.innerHTML = '<div class="px-3 py-2 text-sm text-gray-400">No matching category found.</div>';
+        categoryDropdown.innerHTML = `<div class="px-3 py-2 text-sm text-gray-400">${t('p2g0.noCategoryMatch')}</div>`;
         categoryDropdown.classList.remove('hidden');
       }
     } catch { categoryDropdown.classList.add('hidden'); }
@@ -408,7 +408,7 @@ form.addEventListener('submit', (e) => {
   const unit = (document.getElementById('rfq-unit') as HTMLSelectElement).value;
 
   if (!productName) {
-    showToast({ message: t('rfq.productName') + ' gerekli', type: 'warning' });
+    showToast({ message: t('ordersUi.fieldRequired', { field: t('rfq.productName') }), type: 'warning' });
     return;
   }
   if (productName.length < 2) {
@@ -420,11 +420,11 @@ form.addEventListener('submit', (e) => {
     return;
   }
   if (!requirements) {
-    showToast({ message: t('rfq.detailedRequirements') + ' gerekli', type: 'warning' });
+    showToast({ message: t('ordersUi.fieldRequired', { field: t('rfq.detailedRequirements') }), type: 'warning' });
     return;
   }
   if (!quantity || Number(quantity) <= 0) {
-    showToast({ message: t('rfq.sourcingQuantity') + ' gerekli', type: 'warning' });
+    showToast({ message: t('ordersUi.fieldRequired', { field: t('rfq.sourcingQuantity') }), type: 'warning' });
     return;
   }
   if (!unit) {
@@ -464,7 +464,7 @@ form.addEventListener('submit', (e) => {
     await checkEmailNotVerifiedResponse(res);
     const data = await res.json();
     if (!data.message?.success) {
-      throw new Error(data.exception || 'RFQ oluşturulamadı');
+      throw new Error(data.exception || t('ordersUi.rfqCreateFailed'));
     }
     const rfqId = data.message.rfq_id;
 
@@ -524,6 +524,6 @@ form.addEventListener('submit', (e) => {
       submitBtn.disabled = false;
       submitBtn.textContent = t('rfq.postRequest');
       if (isEmailNotVerifiedError(err)) return; // toast api.ts'te gösterildi
-      showToast({ message: err.message || 'Sunucu hatası', type: 'error' });
+      showToast({ message: err.message || t('ordersUi.serverError'), type: 'error' });
     });
 });

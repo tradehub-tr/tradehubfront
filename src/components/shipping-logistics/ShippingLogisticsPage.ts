@@ -5,6 +5,7 @@ import kargoImg from "../../assets/images/kargo.avif";
 import logisticsPattern from "../../assets/images/svgviewer-output.svg";
 import { TradeAssuranceFooterCards } from "../shared/TradeAssuranceFooterCards";
 import { TradeAssuranceBadge } from "../shared/TradeAssuranceBadge";
+import { t } from "../../i18n";
 
 /* ════════════════════════════════════════════════════
    ICONS (inline SVG)
@@ -53,10 +54,10 @@ function heroSection(): string {
       <div class="relative z-10 container-boxed w-full py-16 sm:py-20">
         ${TradeAssuranceBadge({ className: "mb-6" })}
         <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 max-w-2xl leading-tight">
-          Kargo ve lojistik hizmetleri
+          ${t("infoPages.shippingHeroTitle")}
         </h1>
         <p class="text-base sm:text-lg text-white/90 max-w-2xl leading-relaxed">
-          Siparişinizi güvenle takip edin, size en uygun kargo tipini seçin
+          ${t("infoPages.shippingHeroSubtitle")}
         </p>
       </div>
     </section>
@@ -68,9 +69,9 @@ function breadcrumbSection(): string {
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
       <nav class="flex text-sm text-gray-500" aria-label="Breadcrumb">
         <ol class="flex items-center gap-1.5">
-          <li><a href="/ticaret-guvencesi/detay" class="hover:text-[#FFC800] transition-colors">Ticari Güvence</a></li>
+          <li><a href="/ticaret-guvencesi/detay" class="hover:text-[#FFC800] transition-colors">${t("infoPages.tradeAssurance")}</a></li>
           <li class="text-gray-400">&gt;</li>
-          <li class="text-gray-900 font-medium">Kargo ve lojistik hizmetleri</li>
+          <li class="text-gray-900 font-medium">${t("infoPages.shippingHeroTitle")}</li>
         </ol>
       </nav>
     </div>
@@ -81,40 +82,40 @@ function shippingTypesSection(): string {
   return `
     <section class="bg-white py-12 sm:py-16">
       <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Kargo tipleri</h2>
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">${t("infoPages.shippingTypesTitle")}</h2>
         <p class="text-gray-600 leading-relaxed max-w-3xl mb-10">
-          iSTOC üzerinden satıcılarla anlaşarak siparişinize uygun kargo tipini seçebilirsiniz. Her kargo tipinin teslimat süresi ve maliyet yapısı farklıdır.
+          ${t("infoPages.shippingTypesIntro")}
         </p>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           ${shippingTypeCard(
             iconExpress,
-            "Express (Hızlı) Kargo",
-            "Acil siparişleriniz için en hızlı teslimat seçeneği. Şehir içi ve yakın bölgelerde tercih edilir."
+            t("infoPages.shippingExpressTitle"),
+            t("infoPages.shippingExpressDesc")
           )}
           ${shippingTypeCard(
             iconAir,
-            "Hava Kargo",
-            "Uluslararası ve uzak mesafe siparişlerde hızlı teslimat sağlar. Değerli ve acil ürünler için uygundur."
+            t("infoPages.shippingAirTitle"),
+            t("infoPages.shippingAirDesc")
           )}
           ${shippingTypeCard(
             iconSea,
-            "Deniz Kargo",
-            "Toplu ve ağır yükler için ekonomik çözüm. Uluslararası konteyner ve büyük hacimli siparişlerde idealdir."
+            t("infoPages.shippingSeaTitle"),
+            t("infoPages.shippingSeaDesc")
           )}
           ${shippingTypeCard(
             iconLand,
-            "Kara Kargo",
-            "Yurt içi ve komşu ülke teslimatlarında ekonomik ve güvenilir seçenek."
+            t("infoPages.shippingLandTitle"),
+            t("infoPages.shippingLandDesc")
           )}
           ${shippingTypeCard(
             iconBox,
-            "Standart Kargo",
-            "Varsayılan teslimat seçeneği. Normal ebat ve ağırlıktaki siparişler için uygun fiyatlı çözüm."
+            t("infoPages.shippingStandardTitle"),
+            t("infoPages.shippingStandardDesc")
           )}
           ${shippingTypeCard(
             iconFreeShipping,
-            "Ücretsiz Kargo",
-            "Belirli ürünlerde satıcı tarafından sunulan ücretsiz kargo imkanı. Ürün sayfasında işaretli olarak görünür."
+            t("infoPages.shippingFreeTitle"),
+            t("infoPages.shippingFreeDesc")
           )}
         </div>
       </div>
@@ -131,16 +132,16 @@ function trackingSection(): string {
             <div class="inline-flex items-center gap-2 mb-4">
               ${yellowIcon(iconTracking)}
             </div>
-            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Takip numarası ile kolay izleme</h2>
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">${t("infoPages.trackingTitle")}</h2>
             <p class="text-gray-600 leading-relaxed max-w-2xl mb-4">
-              Satıcınız siparişinizi kargoya verdiğinde, <strong>takip numarası</strong> ve <strong>kargo firması bilgisi</strong> sipariş detaylarınıza otomatik olarak eklenir.
+              ${t("infoPages.trackingPara1Before")}<strong>${t("infoPages.trackingNumber")}</strong>${t("infoPages.trackingPara1Mid")}<strong>${t("infoPages.trackingCarrierInfo")}</strong>${t("infoPages.trackingPara1After")}
             </p>
             <p class="text-gray-600 leading-relaxed max-w-2xl mb-6">
-              Siparişlerim sayfasından her siparişinizin güncel durumunu görebilir, kargoya verildiği andan teslim alınana kadar süreci takip edebilirsiniz.
+              ${t("infoPages.trackingPara2")}
             </p>
             <div class="bg-white border border-gray-200 rounded-md p-4 inline-flex items-center gap-3">
               <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
-              <span class="text-sm text-gray-700">Takip numarası sipariş detaylarında otomatik görünür</span>
+              <span class="text-sm text-gray-700">${t("infoPages.trackingAutoNote")}</span>
             </div>
           </div>
         </div>
@@ -153,33 +154,32 @@ function timelineSection(): string {
   const steps = [
     {
       num: "01",
-      title: "Ödeme Bekleniyor",
-      description: "Siparişinizi oluşturduktan sonra ödeme yöntemini seçip işlemi tamamlarsınız.",
+      title: t("infoPages.timelineStep1Title"),
+      description: t("infoPages.timelineStep1Desc"),
     },
     {
       num: "02",
-      title: "Onaylanıyor",
-      description: "Ödeme doğrulandıktan sonra satıcı siparişinizi hazırlamaya başlar.",
+      title: t("infoPages.timelineStep2Title"),
+      description: t("infoPages.timelineStep2Desc"),
     },
     {
       num: "03",
-      title: "Kargoda",
-      description:
-        "Satıcı siparişinizi kargoya verir ve takip numarası sipariş detaylarınıza eklenir.",
+      title: t("infoPages.timelineStep3Title"),
+      description: t("infoPages.timelineStep3Desc"),
     },
     {
       num: "04",
-      title: "Tamamlandı",
-      description: "Siparişiniz size ulaştığında süreç tamamlanmış olur.",
+      title: t("infoPages.timelineStep4Title"),
+      description: t("infoPages.timelineStep4Desc"),
     },
   ];
 
   return `
     <section class="bg-white py-12 sm:py-16">
       <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Sipariş süreci nasıl işler?</h2>
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">${t("infoPages.orderProcessTitle")}</h2>
         <p class="text-gray-600 leading-relaxed max-w-3xl mb-10">
-          Siparişinizin her adımını iSTOC panelinden takip edebilirsiniz. İşte tipik bir sipariş akışı:
+          ${t("infoPages.orderProcessIntro")}
         </p>
         <div class="relative ps-8 sm:ps-12">
           <div class="absolute start-[19px] sm:start-[23px] top-6 bottom-6 w-[2px] bg-gray-200"></div>

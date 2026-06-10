@@ -3,6 +3,7 @@
  * iSTOC Trade Assurance tarzında tasarlanmış, tüm korumaları kapsayan ana sayfa
  */
 import '../style.css'
+import { t } from '../i18n'
 import { initFlowbite } from 'flowbite'
 import { TopBar, SubHeader, MegaMenu, initMegaMenu, initStickyHeaderSearch, initMobileDrawer } from '../components/header'
 import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
@@ -56,11 +57,11 @@ function HeroBanner(): string {
       <div class="relative z-10 container-boxed px-4 sm:px-6 lg:px-8 flex items-center" style="min-height:500px">
         <div class="max-w-[640px]">
           <h1 class="text-3xl sm:text-4xl lg:text-[52px] font-bold text-white leading-tight mb-6">
-            iSTOC'da ödemeden teslimata korumadan faydalanın
+            ${t("tradeAssurance.heroTitle")}
           </h1>
           <a href="#how-it-works" class="th-btn inline-flex items-center gap-2 font-semibold px-7 py-3.5 text-base shadow-lg">
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            Süreç şu şekilde işler:
+            ${t("tradeAssurance.howItWorksCta")}
           </a>
         </div>
       </div>
@@ -82,35 +83,35 @@ function ServiceInfoSection(): string {
           <!-- Left: Text -->
           <div class="lg:w-1/2">
             <h2 class="text-2xl sm:text-3xl lg:text-[36px] font-bold text-gray-900 leading-tight mb-6">
-              Trade Assurance, satın alım yolculuğunuzun her aşamasını kapsar
+              ${t("tradeAssurance.serviceInfoTitle")}
             </h2>
             <p class="text-gray-800 text-base leading-relaxed mb-6">
-              iSTOC'daki alıcılara güvenli ödeme yapma imkanı sunuyoruz, ürün veya nakliye sorunları gibi öngörülemeyen durumlara karşı koruma sağlıyoruz ve satın almayla ilgili sorunları çözmek için alıcılarla tedarikçiler arasında arabuluculuk yapıyoruz.
+              ${t("tradeAssurance.serviceInfoDesc")}
             </p>
             <div class="flex items-center gap-3 mb-4">
               <img src="${taLogoUrl}" alt="Trade Assurance" class="h-6" />
             </div>
             <a href="/pages/info/trade-assurance-detail" class="text-gray-900 font-medium underline hover:no-underline text-base">
-              Daha fazla bilgi almak için izleyin
+              ${t("tradeAssurance.watchMore")}
             </a>
           </div>
           <!-- Right: Stats Grid -->
           <div class="lg:w-1/2 grid grid-cols-2 gap-x-10 gap-y-8">
             <div class="border-s-4 border-red-600 ps-5">
               <div class="text-4xl sm:text-5xl font-bold text-gray-900">160M+</div>
-              <div class="text-gray-800 text-sm mt-1">Trade Assurance siparişleri</div>
+              <div class="text-gray-800 text-sm mt-1">${t("tradeAssurance.statOrders")}</div>
             </div>
             <div class="border-s-4 border-red-600 ps-5">
               <div class="text-4xl sm:text-5xl font-bold text-gray-900">37M+</div>
-              <div class="text-gray-800 text-sm mt-1">Bizden satın alındı</div>
+              <div class="text-gray-800 text-sm mt-1">${t("tradeAssurance.statBought")}</div>
             </div>
             <div class="border-s-4 border-red-600 ps-5">
               <div class="text-4xl sm:text-5xl font-bold text-gray-900">200B+</div>
-              <div class="text-gray-800 text-sm mt-1">Tedarikçiler</div>
+              <div class="text-gray-800 text-sm mt-1">${t("tradeAssurance.statSuppliers")}</div>
             </div>
             <div class="border-s-4 border-red-600 ps-5">
               <div class="text-4xl sm:text-5xl font-bold text-gray-900">280M+</div>
-              <div class="text-gray-800 text-sm mt-1">Ürünler</div>
+              <div class="text-gray-800 text-sm mt-1">${t("tradeAssurance.statProducts")}</div>
             </div>
           </div>
         </div>
@@ -129,16 +130,16 @@ function HowItWorks(): string {
     <section id="how-it-works" class="bg-white pt-16 sm:pt-20 lg:pt-24 pb-8">
       <div class="container-boxed px-4 sm:px-6 lg:px-8">
         <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 text-center mb-4">
-          iSTOC'da ödemelerinizi nasıl koruyoruz?
+          ${t("tradeAssurance.howProtectTitle")}
         </h2>
         <p class="text-gray-600 text-base sm:text-lg text-center max-w-[800px] mx-auto mb-14">
-          Trade Assurance, küresel olarak iş yapmayı hem alıcılar hem de satıcılar için daha kolay ve daha güvenli hale getirir. Süreç şu şekilde işler:
+          ${t("tradeAssurance.howProtectIntro")}
         </p>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 mb-12">
-          ${stepCard('01', 'Trade Assurance siparişini başlat', 'iSTOC\'da bir tedarikçiyle sipariş anlaşması yaptınız.')}
-          ${stepCard('02', 'iSTOC üzerinden ödeme yapın', 'Bir çevrimiçi ödeme yöntemiyle satın alın veya iSTOC aracılığıyla banka havalesi yapın.')}
-          ${stepCard('03', 'Ödeme geçici olarak tutuluyor', 'Ödemeniz emanette tutuluyor. Siz ürünü teslim alıp onayladıktan sonra tedarikçiye gönderilecek.')}
-          ${stepCard('04', 'Sipariş koşulları karşılanmazsa paranızı geri alın', 'Para iadelerinde ve sorunlu siparişlerde tazminat talebinde bulunduğunuzda bir çözüme ulaşmanız için size yardımcı olacağız.')}
+          ${stepCard('01', t("tradeAssurance.step1Title"), t("tradeAssurance.step1Desc"))}
+          ${stepCard('02', t("tradeAssurance.step2Title"), t("tradeAssurance.step2Desc"))}
+          ${stepCard('03', t("tradeAssurance.step3Title"), t("tradeAssurance.step3Desc"))}
+          ${stepCard('04', t("tradeAssurance.step4Title"), t("tradeAssurance.step4Desc"))}
         </div>
         <!-- Escrow Video -->
         <div class="max-w-[1000px] mx-auto rounded-md overflow-hidden">
@@ -152,12 +153,12 @@ function HowItWorks(): string {
     <!-- Yellow part: Kapsamdakiler -->
     <section class="relative py-14 sm:py-16" style="background-color:#FFC200;background-image:url('${bgPatternSvg}');background-size:400px">
       <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-8">Kapsamdakiler</h2>
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-8">${t("tradeAssurance.whatsCovered")}</h2>
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          ${coverageCard(shieldCheckIcon, 'Güvenli ve kolay ödemeler', '#section-payments')}
-          ${coverageCard(dollarIcon, 'Para iade politikası', '#section-refund')}
-          ${coverageCard(truckIcon, 'Gönderim ve lojistik hizmetleri', '#section-shipping')}
-          ${coverageCard(wrenchIcon, 'Satış sonrası korumaları', '#section-after-sales')}
+          ${coverageCard(shieldCheckIcon, t("tradeAssurance.coveragePayments"), '#section-payments')}
+          ${coverageCard(dollarIcon, t("tradeAssurance.coverageRefund"), '#section-refund')}
+          ${coverageCard(truckIcon, t("tradeAssurance.coverageShipping"), '#section-shipping')}
+          ${coverageCard(wrenchIcon, t("tradeAssurance.coverageAfterSales"), '#section-after-sales')}
         </div>
       </div>
     </section>
@@ -203,29 +204,29 @@ function SecurePaymentsSection(): string {
           <!-- Left: Text -->
           <div class="lg:w-1/2">
             <h2 class="text-2xl sm:text-3xl lg:text-[36px] font-bold text-gray-900 leading-tight mb-6">
-              Güvenli ve çeşitli ödeme seçenekleri
+              ${t("tradeAssurance.paymentsTitle")}
             </h2>
             <p class="text-gray-600 text-base leading-relaxed mb-4">
-              iSTOC aracılığıyla yaptığınız her ödeme şifrelenmiştir, güvenlidir ve 2 saat gibi kısa bir sürede işlenir.
+              ${t("tradeAssurance.paymentsDesc1")}
             </p>
             <p class="text-gray-600 text-base leading-relaxed mb-8">
-              Kredi/banka kartları, dijital cüzdanlar, doğrudan banka hesabına transferler ve esnek ödeme planları* dahil olmak üzere bildiğiniz ve güvendiğiniz ödeme yöntemlerini destekliyoruz.
+              ${t("tradeAssurance.paymentsDesc2")}
             </p>
             <div class="flex flex-wrap gap-3 mb-4">
               <a href="/pages/info/payments" class="th-btn inline-flex items-center gap-2 font-semibold px-6 py-3 text-sm">
-                Destekleyici ürünleri tedarik edin
+                ${t("tradeAssurance.sourceProducts")}
               </a>
               <a href="/pages/info/payments" class="th-btn-outline inline-flex items-center gap-2 font-semibold px-6 py-3 text-sm">
-                Nasıl çalıştığını öğrenin
+                ${t("tradeAssurance.learnHow")}
               </a>
             </div>
-            <p class="text-xs text-gray-400 mt-2">*Uygun alıcılar için</p>
+            <p class="text-xs text-gray-400 mt-2">${t("tradeAssurance.eligibleBuyersNote")}</p>
           </div>
           <!-- Right: Image + Payment Card Overlay (iSTOC tarzı) -->
           <div class="lg:w-1/2">
             <div class="relative">
               <!-- Ana görsel -->
-              <img src="${videoPaymentImg}" alt="Güvenli ödeme" class="w-[65%] rounded-md object-cover shadow-lg" style="aspect-ratio:4/4.5" />
+              <img src="${videoPaymentImg}" alt="${t("tradeAssurance.securePaymentAlt")}" class="w-[65%] rounded-md object-cover shadow-lg" style="aspect-ratio:4/4.5" />
               <!-- Ödeme kartları overlay -->
               <div class="absolute top-8 end-0 w-[55%] bg-white rounded-md shadow-xl p-5" style="z-index:2">
                 <p class="text-xs font-semibold text-gray-700 mb-3">Pay online via our checkout</p>
@@ -282,23 +283,23 @@ function RefundPolicySection(): string {
           <!-- Right: Text -->
           <div class="lg:w-1/2 order-1 lg:order-2">
             <h2 class="text-2xl sm:text-3xl lg:text-[36px] font-bold text-gray-900 leading-tight mb-6">
-              Para iade politikası
+              ${t("tradeAssurance.refundTitle")}
             </h2>
             <p class="text-gray-600 text-base leading-relaxed mb-4">
-              Siparişiniz gönderilmezse, kaybolursa veya kusurlu, yanlış, hasarlı veya başka bir sorunla elinize ulaşırsa paranızı geri almak için para iadesi talebinde bulunun.
+              ${t("tradeAssurance.refundDesc1")}
             </p>
             <p class="text-gray-600 text-base leading-relaxed mb-8">
-              Uygun bir ülkede* bulunuyorsanız kusurlu ürünleri yerel olarak ücretsiz iade etmek için Easy Return hizmetimizden de yararlanabilirsiniz.
+              ${t("tradeAssurance.refundDesc2")}
             </p>
             <div class="flex flex-wrap gap-3 mb-4">
               <a href="/pages/info/refund-policy" class="th-btn inline-flex items-center gap-2 font-semibold px-6 py-3 text-sm">
-                Destekleyici ürünleri tedarik edin
+                ${t("tradeAssurance.sourceProducts")}
               </a>
               <a href="/pages/info/refund-policy" class="th-btn-outline inline-flex items-center gap-2 font-semibold px-6 py-3 text-sm">
-                Nasıl çalıştığını öğrenin
+                ${t("tradeAssurance.learnHow")}
               </a>
             </div>
-            <p class="text-xs text-gray-400">*Uygun ülkelerin listesi için <a href="/pages/info/refund-policy" class="underline hover:no-underline">buraya</a> tıklayın</p>
+            <p class="text-xs text-gray-400">${t("tradeAssurance.eligibleCountriesNote")} <a href="/pages/info/refund-policy" class="underline hover:no-underline">${t("tradeAssurance.here")}</a> ${t("tradeAssurance.clickSuffix")}</p>
           </div>
         </div>
       </div>
@@ -316,21 +317,21 @@ function ShippingSection(): string {
       <div class="container-boxed px-4 sm:px-6 lg:px-8">
         <div class="max-w-[900px]">
           <h2 class="text-2xl sm:text-3xl lg:text-[36px] font-bold text-gray-900 leading-tight mb-6">
-            Gönderim ve lojistik hizmetleri
+            ${t("tradeAssurance.coverageShipping")}
           </h2>
           <p class="text-gray-600 text-base leading-relaxed mb-4">
-            Siparişiniz planlanan tarihte teslim edilsin veya gecikme için bir tazminat alın.
+            ${t("tradeAssurance.shippingDesc1")}
           </p>
           <p class="text-gray-600 text-base leading-relaxed mb-8">
-            iSTOC Logistics ile lojistik ağımızın güvenilirliğinden yararlanabilir ve gönderinizi dünyanın birçok ülkesi ve bölgesinde gerçek zamanlı olarak takip edebilirsiniz.
+            ${t("tradeAssurance.shippingDesc2")}
           </p>
           <a href="/pages/info/shipping-logistics" class="th-btn-outline inline-flex items-center gap-2 font-semibold px-6 py-3 text-sm">
-            Nasıl çalıştığını öğrenin
+            ${t("tradeAssurance.learnHow")}
           </a>
         </div>
         <!-- Liman Görseli -->
         <div class="mt-12 rounded-md overflow-hidden shadow-lg">
-          <img src="${limanImg}" alt="Lojistik ve Gönderim" class="w-full h-auto max-h-[500px] object-cover" />
+          <img src="${limanImg}" alt="${t("tradeAssurance.logisticsAlt")}" class="w-full h-auto max-h-[500px] object-cover" />
         </div>
       </div>
     </section>
@@ -357,17 +358,17 @@ function AfterSalesSection(): string {
           <!-- Right: Text -->
           <div class="lg:w-1/2">
             <h2 class="text-2xl sm:text-3xl lg:text-[36px] font-bold text-gray-900 leading-tight mb-6">
-              Satış sonrası korumaları
+              ${t("tradeAssurance.coverageAfterSales")}
             </h2>
             <p class="text-gray-600 text-base leading-relaxed mb-8">
-              Uygun ürünlerde yerinde kurulum, bakım, onarım ve ücretsiz yedek parça hizmetlerimizle hizmet kapınıza gelsin.
+              ${t("tradeAssurance.afterSalesDesc")}
             </p>
             <div class="flex flex-wrap gap-3">
               <a href="/pages/info/after-sales" class="th-btn inline-flex items-center gap-2 font-semibold px-6 py-3 text-sm">
-                Destekleyici ürünleri tedarik edin
+                ${t("tradeAssurance.sourceProducts")}
               </a>
               <a href="/pages/info/after-sales" class="th-btn-outline inline-flex items-center gap-2 font-semibold px-6 py-3 text-sm">
-                Nasıl çalıştığını öğrenin
+                ${t("tradeAssurance.learnHow")}
               </a>
             </div>
           </div>
@@ -386,22 +387,22 @@ function AfterSalesSection(): string {
 function TestimonialsSection(): string {
   const testimonials = [
     {
-      quote: '"İşlem süresince hem tedarikçinin hem de kendimin koruma altında olduğunu bilmek içimi rahatlatıyor."',
+      quote: t("tradeAssurance.testimonial1"),
       company: 'Nodnal',
       name: 'Brandon Cubina',
     },
     {
-      quote: '"Trade Assurance kullandığınız ve korunduğunuz gerçeğini bildiğiniz için endişelenmenize gerek kalmaz."',
+      quote: t("tradeAssurance.testimonial2"),
       company: 'LifeToo',
       name: 'Darren Tang',
     },
     {
-      quote: '"iSTOC üzerinden ödeme yapmak çok güvenli hissettiriyor, emanet sistemi alıcılar için gerçek bir güvence."',
+      quote: t("tradeAssurance.testimonial3"),
       company: 'TechImport',
       name: 'Ayşe Kılıç',
     },
     {
-      quote: '"Satış sonrası destek ve hızlı iade süreci beklentilerimizin çok üzerindeydi."',
+      quote: t("tradeAssurance.testimonial4"),
       company: 'EuroTrade',
       name: 'Mehmet Demir',
     },
@@ -410,9 +411,9 @@ function TestimonialsSection(): string {
   return `
     <section class="relative py-16 sm:py-20 overflow-hidden" style="background-color:#FFC200;background-image:url('${bgPatternSvg}');background-size:400px">
       <div class="container-boxed px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-3">Alıcı sesleri</h2>
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-3">${t("tradeAssurance.testimonialsTitle")}</h2>
         <p class="text-gray-800 text-base text-center mb-12">
-          Trade Assurance'ın sizin gibi diğer insanlara nasıl avantajlar sağladığını öğrenin.
+          ${t("tradeAssurance.testimonialsIntro")}
         </p>
 
         <!-- Swiper -->

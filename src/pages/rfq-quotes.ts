@@ -257,7 +257,7 @@ loadQuotes().then(() => {
   document.querySelectorAll<HTMLButtonElement>('.quote-accept-btn').forEach(btn => {
     btn.addEventListener('click', async () => {
       const quoteId = btn.dataset.quote;
-      if (!quoteId || !confirm('Bu teklifi kabul etmek istediğinize emin misiniz?')) return;
+      if (!quoteId || !confirm(t('ordersUi.confirmAcceptQuote'))) return;
       btn.disabled = true;
       btn.textContent = '...';
       try {
@@ -281,7 +281,7 @@ loadQuotes().then(() => {
   document.querySelectorAll<HTMLButtonElement>('.quote-reject-btn').forEach(btn => {
     btn.addEventListener('click', async () => {
       const quoteId = btn.dataset.quote;
-      if (!quoteId || !confirm('Bu teklifi reddetmek istediğinize emin misiniz?')) return;
+      if (!quoteId || !confirm(t('ordersUi.confirmRejectQuote'))) return;
       btn.disabled = true;
       btn.textContent = '...';
       try {
@@ -326,7 +326,7 @@ loadQuotes().then(() => {
   const closeBtn = document.querySelector<HTMLButtonElement>('.rfq-close-btn');
   if (closeBtn) {
     closeBtn.addEventListener('click', async () => {
-      if (!confirm('Bu RFQ\'yu kapatmak istediğinize emin misiniz?')) return;
+      if (!confirm(t('ordersUi.confirmCloseRfq'))) return;
       closeBtn.disabled = true;
       closeBtn.textContent = '...';
       try {

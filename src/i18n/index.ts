@@ -1,3 +1,8 @@
+// Native bundle modunda relative /api → mutlak backend rewrite'ı kur (web/live-reload'da no-op).
+// i18n her sayfada en erken yüklenen modüllerden biri olduğu için buraya konuldu.
+import "../utils/nativeHttp";
+// iOS native'de sol-üst geri butonunu enjekte et (web/Android'de no-op).
+import "../utils/nativeBackButton";
 import i18next from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import en from "./locales/en";
@@ -52,6 +57,11 @@ i18next.use(LanguageDetector).init({
   const initialLang = getCurrentLang();
   document.documentElement.lang = initialLang;
   applyDocumentDirection(initialLang);
+  // Statik HTML'deki <title> Türkçe sabit; ilk boyamada aktif dile çevir.
+  // (Dil değişiminde updatePageTranslations zaten <title> textContent'ini günceller.)
+  const titleEl = document.querySelector("title[data-i18n]");
+  const titleKey = titleEl?.getAttribute("data-i18n");
+  if (titleKey) document.title = i18next.t(titleKey) as string;
 }
 
 /**

@@ -128,21 +128,21 @@ function renderSlide(s: ResolvedSlide): string {
       <a href="${escapeHtml(sanitizeUrl(href))}" class="hero-top-slide-link group relative block h-full overflow-hidden rounded-md shadow-sm transition-transform duration-200 ease-out">
         <div class="absolute inset-0" style="background: ${escapeHtml(backgroundCss)};"></div>
         ${overlay}
-        <div class="relative z-10 flex h-full flex-col justify-center gap-1.5 p-3 sm:gap-4 sm:p-10 xl:p-14 ${align}" style="color: ${safeHexColor(s.textColor, "#ffffff")};">
+        <div class="relative z-10 flex h-full flex-col justify-center gap-1.5 p-3 sm:gap-4 sm:p-10 xl:p-14 2xl:gap-5 2xl:p-20 ${align}" style="color: ${safeHexColor(s.textColor, "#ffffff")};">
           ${
             s.label
-              ? `<span class="inline-flex max-w-full items-center truncate rounded-full bg-white px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#1f5fae] shadow-sm sm:px-3 sm:text-[11px]">${escapeHtml(s.label)}</span>`
+              ? `<span class="inline-flex max-w-full items-center truncate rounded-full bg-white px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#1f5fae] shadow-sm sm:px-3 sm:text-[11px] 2xl:px-4 2xl:py-1.5 2xl:text-xs">${escapeHtml(s.label)}</span>`
               : ""
           }
-          <h2 class="line-clamp-2 max-w-2xl text-xl font-extrabold leading-tight sm:text-3xl sm:leading-[1.1] md:text-4xl lg:text-5xl xl:text-6xl">${escapeHtml(s.title)}</h2>
+          <h2 class="line-clamp-2 max-w-2xl text-xl font-extrabold leading-tight tracking-tight sm:text-3xl sm:leading-[1.1] md:text-4xl lg:text-5xl xl:text-5xl 2xl:max-w-4xl 2xl:text-6xl">${escapeHtml(s.title)}</h2>
           ${
             s.description
-              ? `<p class="line-clamp-2 max-w-md text-sm leading-snug opacity-90 sm:text-base lg:text-lg">${escapeHtml(s.description)}</p>`
+              ? `<p class="line-clamp-2 max-w-md text-sm leading-snug opacity-90 sm:text-base lg:text-lg 2xl:max-w-xl 2xl:text-xl">${escapeHtml(s.description)}</p>`
               : ""
           }
           ${
             s.buttonText
-              ? `<span class="mt-1 inline-flex w-fit items-center justify-center rounded-full bg-white px-4 py-2 text-xs font-semibold text-[#0c2e61] shadow-lg transition-transform group-hover:scale-[1.03] sm:mt-2 sm:px-9 sm:py-3 sm:text-sm lg:text-base">${escapeHtml(s.buttonText)}</span>`
+              ? `<span class="mt-1 inline-flex w-fit items-center justify-center rounded-full bg-white px-4 py-2 text-xs font-semibold text-[#0c2e61] shadow-lg transition-transform group-hover:scale-[1.03] sm:mt-2 sm:px-9 sm:py-3 sm:text-sm lg:text-base 2xl:px-10 2xl:py-3.5 2xl:text-lg">${escapeHtml(s.buttonText)}</span>`
               : ""
           }
         </div>
@@ -213,7 +213,8 @@ function createSwiper(sliderEl: HTMLElement, root: HTMLElement, slideCount: numb
     speed: 650,
     breakpoints: {
       640: { slidesPerView: 1.12, spaceBetween: 16 },
-      1280: { slidesPerView: 1.16, spaceBetween: 20 },
+      1280: { slidesPerView: 1.12, spaceBetween: 22 },
+      1536: { slidesPerView: 1.13, spaceBetween: 26 },
     },
     autoplay: {
       delay: 5000,

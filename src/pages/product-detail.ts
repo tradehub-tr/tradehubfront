@@ -96,7 +96,7 @@ appEl.innerHTML = `
     <div class="flex items-center justify-center py-32">
       <div class="flex flex-col items-center gap-3">
         <div class="w-10 h-10 border-3 border-primary border-t-transparent rounded-full animate-spin"></div>
-        <span class="text-sm text-text-muted">Ürün yükleniyor...</span>
+        <span class="text-sm text-text-muted">${t('prodUi.productLoading')}</span>
       </div>
     </div>
   </main>
@@ -173,9 +173,9 @@ async function renderProductPage() {
         <div class="flex items-center justify-center py-32">
           <div class="text-center">
             <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
-            <h2 class="text-xl font-semibold text-gray-600 mb-2">Ürün bulunamadı</h2>
-            <p class="text-gray-400 mb-4">Aradığınız ürün mevcut değil veya kaldırılmış olabilir.</p>
-            <a href="/urunler" class="text-primary hover:underline font-medium">Ürünlere gözat</a>
+            <h2 class="text-xl font-semibold text-gray-600 mb-2">${t('prodUi.productNotFound')}</h2>
+            <p class="text-gray-400 mb-4">${t('prodUi.productNotFoundDesc')}</p>
+            <a href="/urunler" class="text-primary hover:underline font-medium">${t('prodUi.browseProducts')}</a>
           </div>
         </div>
       </main>
@@ -273,7 +273,7 @@ async function renderProductPage() {
               data-product-thumb="${product.images?.[0]?.src || ''}"
               data-product-min-order="${product.moq ? String(product.moq) : '1'}"
               data-seller-id="${product.supplier?.id || ''}"
-              class="pdm-bar-chat-btn w-10 h-10 border border-border-medium rounded-md bg-surface flex items-center justify-center cursor-pointer text-text-body p-0 active:bg-[var(--color-surface-raised,#f5f5f5)]" aria-label="Sohbet">
+              class="pdm-bar-chat-btn w-10 h-10 border border-border-medium rounded-md bg-surface flex items-center justify-center cursor-pointer text-text-body p-0 active:bg-[var(--color-surface-raised,#f5f5f5)]" aria-label="${t('prodUi.chat')}">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
       </button>
       ${

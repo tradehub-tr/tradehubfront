@@ -27,6 +27,7 @@
  */
 
 import { callMethod } from "./api";
+import { t } from "../i18n";
 
 // ─── Types ──────────────────────────────────────────────
 
@@ -205,7 +206,7 @@ export function shouldShowVerificationBanner(snapshot: EntitlementSnapshot | nul
       return {
         show: true,
         kind: "trial_ending",
-        message: `Deneme süreniz ${Math.ceil(diffDays)} gün içinde sona eriyor.`,
+        message: t("infoMisc.trialEndingDays", { days: Math.ceil(diffDays) }),
       };
     }
   }
@@ -216,14 +217,14 @@ export function shouldShowVerificationBanner(snapshot: EntitlementSnapshot | nul
         return {
           show: true,
           kind: "kyb_rejected",
-          message: "KYB doğrulamanız reddedildi. Lütfen belgelerinizi güncelleyin.",
+          message: t("infoMisc.kybRejected"),
         };
       }
       if (snapshot.kyb_status === "Pending" || snapshot.kyb_status === "Under Review") {
         return {
           show: true,
           kind: "kyb_pending",
-          message: "KYB doğrulamanız incelemede. Sipariş verebilmek için doğrulamanız onaylanmalı.",
+          message: t("infoMisc.kybPending"),
         };
       }
     } else {
@@ -231,15 +232,14 @@ export function shouldShowVerificationBanner(snapshot: EntitlementSnapshot | nul
         return {
           show: true,
           kind: "kyc_rejected",
-          message: "Kimlik doğrulamanız reddedildi. Lütfen belgelerinizi güncelleyin.",
+          message: t("infoMisc.kycRejected"),
         };
       }
       if (snapshot.kyc_status === "Pending") {
         return {
           show: true,
           kind: "kyc_pending",
-          message:
-            "Kimlik doğrulamanız incelemede. Sipariş verebilmek için doğrulamanız onaylanmalı.",
+          message: t("infoMisc.kycPending"),
         };
       }
     }

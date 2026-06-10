@@ -131,6 +131,32 @@ function staticPageRewritePlugin(): Plugin {
     };
 }
 
+/**
+ * Dev-only: dinamik pretty URL'leri ilgili HTML entry'sine internal-rewrite eder.
+ * Production'da bunu Nginx yapıyor; dev server'da Nginx olmadığı için ürün kartı
+ * linkleri (/urun/<slug>) ana sayfaya düşüyordu. URL değişmez — product-detail.ts
+ * slug'ı window.location.pathname'den okur, getListingDetail(slug) ile çözer.
+ */
+function prettyUrlRewritePlugin(): Plugin {
+    const PRETTY: Array<{ re: RegExp; html: string }> = [
+        { re: /^\/(?:en\/)?urun\/[^/]+/, html: '/pages/product-detail.html' },
+    ];
+    return {
+        name: 'pretty-url-rewrite',
+        apply: 'serve',
+        configureServer(server) {
+            server.middlewares.use((req, _res, next) => {
+                if (!req.url) return next();
+                const [pathOnly, queryString] = req.url.split('?');
+                const match = PRETTY.find((p) => p.re.test(pathOnly));
+                if (!match) return next();
+                req.url = queryString ? `${match.html}?${queryString}` : match.html;
+                next();
+            });
+        },
+    };
+}
+
 /** Dev-only plugin: serve 404.html for unknown routes */
 function notFoundFallbackPlugin(): Plugin {
     return {
@@ -191,6 +217,11 @@ function seoPlaceholderPlugin(): Plugin {
     };
 }
 
+
+// Frappe backend proxy hedefi. Bu monorepo'nun docker'ı 8088'i expose eder;
+// farklı dev kurulumu (örn. bench serve :8000) için VITE_API_PROXY ile override edilebilir.
+const API_PROXY_TARGET = process.env.VITE_API_PROXY || 'http://localhost:8088';
+
 export default defineConfig({
     base: process.env.GITHUB_PAGES === 'true' ? '/tradehubfront/' : '/',
     define: {
@@ -206,15 +237,15 @@ export default defineConfig({
         },
         proxy: {
             '/api': {
-                target: 'http://localhost:8000',
+                target: API_PROXY_TARGET,
                 changeOrigin: true,
             },
             '/files': {
-                target: 'http://localhost:8000',
+                target: API_PROXY_TARGET,
                 changeOrigin: true,
             },
             '/private/files': {
-                target: 'http://localhost:8000',
+                target: API_PROXY_TARGET,
                 changeOrigin: true,
             },
         },
@@ -227,6 +258,7 @@ export default defineConfig({
         // notFoundFallbackPlugin'den ÖNCE çalışmalı: önce rewrite,
         // eşleşmezse 404.html fallback.
         staticPageRewritePlugin(),
+        prettyUrlRewritePlugin(),
         notFoundFallbackPlugin(),
         seoPlaceholderPlugin(),
         // Bundle analizi — yalnızca build'de treemap üretir (perf-reports/bundle-stats.html,

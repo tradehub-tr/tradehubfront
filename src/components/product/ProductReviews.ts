@@ -138,7 +138,7 @@ export function renderReviewCard(review: ProductReview, showProductThumb = false
   const badges: string[] = [];
   if (review.isOwnPending) {
     badges.push(
-      `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-semibold bg-amber-100 text-amber-700">⏳ Onay bekliyor</span>`
+      `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-semibold bg-amber-100 text-amber-700">⏳ ${t("prodUi.pendingApproval")}</span>`
     );
   }
   if (review.verified) {
@@ -154,9 +154,9 @@ export function renderReviewCard(review: ProductReview, showProductThumb = false
   // Reviewer reputation tier — Top/Trusted/Verified (B2B güven göstergesi)
   if (review.reviewerTier) {
     const tierLabels: Record<string, string> = {
-      Top: "⭐ Üst Düzey Değerlendirici",
-      Trusted: "🛡 Güvenilir Değerlendirici",
-      Verified: "✓ Doğrulanmış Değerlendirici",
+      Top: "⭐ " + t("product.reviewWrite.reviewerTop"),
+      Trusted: "🛡 " + t("product.reviewWrite.reviewerTrusted"),
+      Verified: "✓ " + t("product.reviewWrite.reviewerVerified"),
     };
     const tierClasses: Record<string, string> = {
       Top: "bg-purple-100 text-purple-700",
@@ -172,9 +172,9 @@ export function renderReviewCard(review: ProductReview, showProductThumb = false
   // Reviewer reputation tier — Top/Trusted/Verified (B2B güven göstergesi)
   if (review.reviewerTier) {
     const tierLabels: Record<string, string> = {
-      Top: "⭐ Üst Düzey Değerlendirici",
-      Trusted: "🛡 Güvenilir Değerlendirici",
-      Verified: "✓ Doğrulanmış Değerlendirici",
+      Top: "⭐ " + t("product.reviewWrite.reviewerTop"),
+      Trusted: "🛡 " + t("product.reviewWrite.reviewerTrusted"),
+      Verified: "✓ " + t("product.reviewWrite.reviewerVerified"),
     };
     const tierClasses: Record<string, string> = {
       Top: "bg-purple-100 text-purple-700",
@@ -263,8 +263,8 @@ export function renderReviewCard(review: ProductReview, showProductThumb = false
           class="rv-helpful-btn flex items-center gap-1.5 text-[12px] text-[var(--pd-rating-text-color,#6b7280)] bg-none border border-[var(--pd-spec-border,#e5e5e5)] rounded px-2.5 py-1 cursor-pointer transition-all duration-150 hover:border-[var(--color-border-medium,#d1d5db)] hover:text-[var(--pd-title-color,#111827)] [&.voted]:border-[var(--pd-tab-active-border,#cc9900)] [&.voted]:text-[var(--pd-tab-active-color,#cc9900)]"
           data-review-id="${review.id}"
           data-vote="not_helpful"
-          title="Faydalı değildi"
-          aria-label="Faydalı değildi"
+          title="${t("prodUi.notHelpful")}"
+          aria-label="${t("prodUi.notHelpful")}"
         >
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="transform: rotate(180deg);">
             <path stroke-linecap="round" stroke-linejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
@@ -272,15 +272,15 @@ export function renderReviewCard(review: ProductReview, showProductThumb = false
         </button>
         ${
           review.canEdit
-            ? `<button type="button" class="rv-edit-own-btn text-[12px] text-primary-600 hover:text-primary-700 transition-colors inline-flex items-center gap-1 ms-auto" data-review-id="${review.id}" title="Yorumumu düzenle (24 saat içinde)">
+            ? `<button type="button" class="rv-edit-own-btn text-[12px] text-primary-600 hover:text-primary-700 transition-colors inline-flex items-center gap-1 ms-auto" data-review-id="${review.id}" title="${t("product.reviewWrite.editMyReviewHint")}">
                 <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487a2.032 2.032 0 112.872 2.872L7.5 21.613H4v-3.5L16.862 4.487z"/></svg>
-                Düzenle
+                ${t("prodUi.edit")}
               </button>`
             : ""
         }
-        <button type="button" class="rv-report-btn text-[12px] text-secondary-400 hover:text-red-600 transition-colors inline-flex items-center gap-1 ${review.canEdit ? "" : "ms-auto"}" data-review-id="${review.id}" title="Şikayet et">
+        <button type="button" class="rv-report-btn text-[12px] text-secondary-400 hover:text-red-600 transition-colors inline-flex items-center gap-1 ${review.canEdit ? "" : "ms-auto"}" data-review-id="${review.id}" title="${t("prodUi.reportAction")}">
           <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 2H21l-3 6 3 6h-8.5l-1-2H5a2 2 0 00-2 2zm9-13.5V9"/></svg>
-          Şikayet
+          ${t("prodUi.reportShort")}
         </button>
       </div>
     </div>
@@ -344,17 +344,17 @@ export function ProductReviews(): string {
         <div class="flex">
           <button type="button" class="rv-sub-tab px-5 py-2.5 text-[14px] font-medium text-[var(--pd-rating-text-color,#6b7280)] bg-none border-none cursor-pointer relative whitespace-nowrap transition-colors duration-150 [&.active]:text-[var(--pd-title-color,#111827)] [&.active]:font-bold [&.active]:after:content-[''] [&.active]:after:absolute [&.active]:after:bottom-[-2px] [&.active]:after:start-0 [&.active]:after:end-0 [&.active]:after:h-[2px] [&.active]:after:bg-[var(--pd-tab-active-border,#cc9900)] max-[374px]:text-[13px] max-[374px]:px-2 max-[374px]:py-2 active" data-rv-panel="rv-product-panel">${t("product.productReviewsTab", { count: String(p.reviewCount) })}</button>
           <button type="button" class="rv-sub-tab px-5 py-2.5 text-[14px] font-medium text-[var(--pd-rating-text-color,#6b7280)] bg-none border-none cursor-pointer relative whitespace-nowrap transition-colors duration-150 [&.active]:text-[var(--pd-title-color,#111827)] [&.active]:font-bold [&.active]:after:content-[''] [&.active]:after:absolute [&.active]:after:bottom-[-2px] [&.active]:after:start-0 [&.active]:after:end-0 [&.active]:after:h-[2px] [&.active]:after:bg-[var(--pd-tab-active-border,#cc9900)] max-[374px]:text-[13px] max-[374px]:px-2 max-[374px]:py-2" data-rv-panel="rv-store-panel">${t("product.storeReviewsTab", { count: String(p.storeReviewCount) })}</button>
-          <button type="button" class="rv-sub-tab px-5 py-2.5 text-[14px] font-medium text-[var(--pd-rating-text-color,#6b7280)] bg-none border-none cursor-pointer relative whitespace-nowrap transition-colors duration-150 [&.active]:text-[var(--pd-title-color,#111827)] [&.active]:font-bold [&.active]:after:content-[''] [&.active]:after:absolute [&.active]:after:bottom-[-2px] [&.active]:after:start-0 [&.active]:after:end-0 [&.active]:after:h-[2px] [&.active]:after:bg-[var(--pd-tab-active-border,#cc9900)] max-[374px]:text-[13px] max-[374px]:px-2 max-[374px]:py-2" data-rv-panel="rv-qa-panel" id="rv-qa-tab-btn">Soru &amp; Cevap <span id="rv-qa-count">(0)</span></button>
+          <button type="button" class="rv-sub-tab px-5 py-2.5 text-[14px] font-medium text-[var(--pd-rating-text-color,#6b7280)] bg-none border-none cursor-pointer relative whitespace-nowrap transition-colors duration-150 [&.active]:text-[var(--pd-title-color,#111827)] [&.active]:font-bold [&.active]:after:content-[''] [&.active]:after:absolute [&.active]:after:bottom-[-2px] [&.active]:after:start-0 [&.active]:after:end-0 [&.active]:after:h-[2px] [&.active]:after:bg-[var(--pd-tab-active-border,#cc9900)] max-[374px]:text-[13px] max-[374px]:px-2 max-[374px]:py-2" data-rv-panel="rv-qa-panel" id="rv-qa-tab-btn">${t("product.reviewWrite.qaTab")} <span id="rv-qa-count">(0)</span></button>
         </div>
         <button
           type="button"
           id="rv-write-review-btn"
           class="th-btn-dark h-9 px-4 rounded-md text-[13px] font-semibold inline-flex items-center gap-1.5 mb-[-2px] disabled:opacity-50 disabled:cursor-not-allowed"
           disabled
-          title="Bu ürünü yorumlayabilmek için doğrulanmış bir siparişiniz olmalı"
+          title="${t("product.reviewWrite.writeReviewDisabledHint")}"
         >
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487a2.032 2.032 0 112.872 2.872L7.5 21.613H4v-3.5L16.862 4.487z"/></svg>
-          <span>Yorum Yaz</span>
+          <span>${t("product.reviewWrite.writeReviewBtn")}</span>
         </button>
       </div>
 
@@ -478,12 +478,12 @@ function attachWriteReviewButton(listingId: string): void {
       return;
     }
     if (!eligibilityCache.loaded) {
-      showToast({ message: "Sipariş bilgisi yükleniyor…", type: "info" });
+      showToast({ message: t("prodUi.orderInfoLoading"), type: "info" });
       return;
     }
     if (!eligibilityCache.can_review) {
       showToast({
-        message: "Bu ürünü yorumlayabilmek için onaylı/teslim alınmış bir siparişiniz olmalı.",
+        message: t("prodUi.reviewRequiresOrder"),
         type: "warning",
       });
       return;
@@ -501,7 +501,7 @@ async function loadEligibilityAndEnableBtn(listingId: string): Promise<void> {
   if (!isUserLoggedIn()) {
     btns.forEach((btn) => {
       btn.disabled = false;
-      btn.title = "Yorum yapabilmek için giriş yapın";
+      btn.title = t("prodUi.loginToReview");
     });
     return;
   }
@@ -513,12 +513,12 @@ async function loadEligibilityAndEnableBtn(listingId: string): Promise<void> {
       loaded: true,
     };
     const title = elig.can_review
-      ? "Bu ürünü değerlendir"
+      ? t("prodUi.reviewThisProduct")
       : elig.reason === "already_reviewed"
-        ? "Bu ürünü zaten yorumladınız"
+        ? t("prodUi.alreadyReviewed")
         : elig.reason === "own_listing"
-          ? "Kendi sattığınız ürünü yorumlayamazsınız"
-          : "Bu ürünü yorumlayabilmek için onaylı bir siparişiniz olmalı";
+          ? t("prodUi.cannotReviewOwn")
+          : t("prodUi.reviewRequiresApprovedOrder");
     btns.forEach((btn) => {
       btn.disabled = !elig.can_review;
       btn.title = title;
@@ -621,10 +621,10 @@ export function bindHelpfulButtons(container: HTMLElement): void {
             ${t("product.helpful", { count: String(count) })}
           `;
         } else {
-          showToast({ message: "Geri bildiriminiz alındı.", type: "success" });
+          showToast({ message: t("prodUi.feedbackReceived"), type: "success" });
         }
       } catch (err: unknown) {
-        const msg = err instanceof Error ? err.message : "Oy verilemedi";
+        const msg = err instanceof Error ? err.message : t("prodUi.voteFailed");
         showToast({ message: msg, type: "error" });
         // Hata olduysa kardeşleri serbest bırak — kullanıcı yeniden deneyebilsin
         siblings.forEach((b) => {
@@ -667,7 +667,7 @@ export function bindHelpfulButtons(container: HTMLElement): void {
       const commentEl = card?.querySelector(".rv-card-comment");
       const oldBody = commentEl?.textContent?.trim() || "";
       const newBody = window.prompt(
-        "Yorumunuzu düzenleyin (sadece bir kez, 24 saat içinde):",
+        t("prodUi.editReviewPrompt"),
         oldBody
       );
       if (newBody == null || newBody.trim() === "" || newBody.trim() === oldBody) {
@@ -675,7 +675,7 @@ export function bindHelpfulButtons(container: HTMLElement): void {
       }
       if (newBody.trim().length < 20) {
         showToast({
-          message: "Yorum metni en az 20 karakter olmalı.",
+          message: t("prodUi.reviewMinChars"),
           type: "warning",
         });
         return;
@@ -684,13 +684,13 @@ export function bindHelpfulButtons(container: HTMLElement): void {
       try {
         await updateOwnReview({ name: reviewId, body: newBody.trim() });
         showToast({
-          message: "Yorumunuz güncellendi.",
+          message: t("prodUi.reviewUpdated"),
           type: "success",
         });
         // Listeyi yenile (reload event listener tetikler)
         window.dispatchEvent(new CustomEvent("review-submitted"));
       } catch (err: unknown) {
-        const msg = err instanceof Error ? err.message : "Düzenleme başarısız";
+        const msg = err instanceof Error ? err.message : t("prodUi.editFailed");
         showToast({ message: msg, type: "error" });
         btn.disabled = false;
       }
@@ -708,7 +708,8 @@ function openImageLightbox(url: string): void {
   overlay.className =
     "fixed inset-0 bg-black/85 z-[80] flex items-center justify-center p-4 cursor-zoom-out";
   overlay.innerHTML = `
-    <button type="button" class="absolute top-4 end-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors" aria-label="${t("common.close")}">
+    <button type="button" class="absolute top-4 end-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors" aria-label="${t("prodUi.close")}">
+
       <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
     </button>
     <img src="${escapeHtml(url)}" class="max-w-[95vw] max-h-[90vh] object-contain shadow-2xl rounded-lg" alt="Büyütülmüş inceleme görseli" />

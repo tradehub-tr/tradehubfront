@@ -12,6 +12,7 @@
 
 import type { EntitlementSnapshot } from "../../utils/entitlement";
 import { shouldShowVerificationBanner } from "../../utils/entitlement";
+import { t } from "../../i18n";
 
 const SUBSCRIPTION_HREF = "/pages/dashboard/subscription.html";
 
@@ -26,19 +27,18 @@ export function EntitlementBanner(snapshot: EntitlementSnapshot | null): string 
   if (snapshot.is_seller && snapshot.subscription_status === "past_due") {
     return renderBanner({
       tone: "error",
-      title: "Aboneliğinizin ödemesi başarısız",
-      description:
-        "Mağazanız erişiminizi sürdürmek için ödeme bilgilerinizi güncellemeniz gerekiyor.",
-      ctaLabel: "Aboneliği Yönet",
+      title: t("infoMisc.subPaymentFailedTitle"),
+      description: t("infoMisc.subPaymentFailedDesc"),
+      ctaLabel: t("infoMisc.manageSubscription"),
       ctaHref: SUBSCRIPTION_HREF,
     });
   }
   if (snapshot.is_seller && snapshot.subscription_status === "suspended") {
     return renderBanner({
       tone: "error",
-      title: "Aboneliğiniz askıya alındı",
-      description: "Yeni ürün ekleyemez veya sipariş işleyemezsiniz. Destek ile iletişime geçin.",
-      ctaLabel: "Destek",
+      title: t("infoMisc.subSuspendedTitle"),
+      description: t("infoMisc.subSuspendedDesc"),
+      ctaLabel: t("infoMisc.support"),
       ctaHref: "/pages/help.html",
     });
   }
@@ -51,9 +51,9 @@ export function EntitlementBanner(snapshot: EntitlementSnapshot | null): string 
   if (verif.show && verif.kind === "trial_ending") {
     return renderBanner({
       tone: "warning",
-      title: "Deneme süreniz sona eriyor",
+      title: t("infoMisc.trialEndingTitle"),
       description: verif.message || "",
-      ctaLabel: "Planımı Yükselt",
+      ctaLabel: t("infoMisc.upgradePlan"),
       ctaHref: SUBSCRIPTION_HREF,
     });
   }

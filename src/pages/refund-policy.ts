@@ -11,6 +11,7 @@ import { FloatingPanel } from '../components/floating'
 import { startAlpine } from '../alpine'
 import { TradeAssuranceFooterCards } from '../components/shared/TradeAssuranceFooterCards'
 import { TradeAssuranceBadge } from '../components/shared/TradeAssuranceBadge'
+import { t } from '../i18n'
 import heroImage from '../assets/images/paraiadepolitikası.avif'
 
 /* ───────────────────────── SVG Icons ───────────────────────── */
@@ -48,16 +49,16 @@ function timelineStep(
 function HeroSection(): string {
   return `
     <section class="relative w-full h-[380px] md:h-[400px] overflow-hidden">
-      <img src="${heroImage}" alt="Para İade Garantisi" class="absolute inset-0 w-full h-full object-cover" />
+      <img src="${heroImage}" alt="${t('infoPages.refundHeroTitle')}" class="absolute inset-0 w-full h-full object-cover" />
       <div class="absolute inset-0 bg-gradient-to-r from-[#1C0C05]/90 via-[#1C0C05]/70 to-transparent"></div>
       <div class="relative z-10 h-full container-boxed flex items-center">
         <div class="max-w-xl">
           ${TradeAssuranceBadge({ className: 'mb-6' })}
           <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
-            Para İade Garantisi
+            ${t('infoPages.refundHeroTitle')}
           </h1>
           <p class="text-white/80 text-base sm:text-lg leading-relaxed max-w-lg">
-            Siparişinizle ilgili bir sorun yaşarsanız, iade talebinde bulunarak çözüme ulaşabilirsiniz.
+            ${t('infoPages.refundHeroSubtitle')}
           </p>
         </div>
       </div>
@@ -69,9 +70,9 @@ function BreadcrumbSection(): string {
   return `
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
       <nav class="text-sm text-gray-500">
-        <a href="/ticaret-guvencesi/detay" class="hover:text-gray-800 transition-colors">Ticari Güvence</a>
+        <a href="/ticaret-guvencesi/detay" class="hover:text-gray-800 transition-colors">${t('infoPages.tradeAssurance')}</a>
         <span class="mx-2">&gt;</span>
-        <span class="text-gray-800 font-medium">Para İade Garantisi</span>
+        <span class="text-gray-800 font-medium">${t('infoPages.refundHeroTitle')}</span>
       </nav>
     </div>
   `
@@ -80,9 +81,9 @@ function BreadcrumbSection(): string {
 function MoneyBackPolicySection(): string {
   return `
     <section class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">İade süreci nasıl işler?</h2>
+      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">${t('infoPages.refundProcessTitle')}</h2>
       <p class="text-gray-600 text-base sm:text-lg leading-relaxed mb-10 max-w-3xl">
-        Siparişiniz gönderilmezse, eksik gelirse veya ürünleriniz sorunlu bir şekilde ulaşırsa (ör. kusurlu, hatalı, hasarlı) para iadesi talebinde bulunabilirsiniz.
+        ${t('infoPages.refundProcessIntro')}
       </p>
 
       <!-- 3 Feature Cards -->
@@ -90,25 +91,25 @@ function MoneyBackPolicySection(): string {
         <!-- Card 1: İade Talebi -->
         <div class="border border-gray-200 rounded-md p-6 hover:shadow-md transition-shadow duration-300">
           <div class="mb-4">${requestIcon}</div>
-          <h3 class="text-lg font-bold text-gray-900 mb-2">İade Talebi Oluştur</h3>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">${t('infoPages.refundCard1Title')}</h3>
           <p class="text-gray-600 text-sm leading-relaxed">
-            Siparişlerim sayfasından iade talebinizi doğrudan oluşturun. İade nedeninizi ve tutarı belirtin.
+            ${t('infoPages.refundCard1Desc')}
           </p>
         </div>
         <!-- Card 2: Satıcı Değerlendirmesi -->
         <div class="border border-gray-200 rounded-md p-6 hover:shadow-md transition-shadow duration-300">
           <div class="mb-4">${reviewIcon}</div>
-          <h3 class="text-lg font-bold text-gray-900 mb-2">Satıcı Değerlendirmesi</h3>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">${t('infoPages.refundCard2Title')}</h3>
           <p class="text-gray-600 text-sm leading-relaxed">
-            Satıcı talebinizi inceler ve onaylar veya reddeder. Talebiniz "Beklemede" durumundan sonuçlanır.
+            ${t('infoPages.refundCard2Desc')}
           </p>
         </div>
         <!-- Card 3: İade Sonuçlanması -->
         <div class="border border-gray-200 rounded-md p-6 hover:shadow-md transition-shadow duration-300">
           <div class="mb-4">${refundIcon}</div>
-          <h3 class="text-lg font-bold text-gray-900 mb-2">İade Sonuçlanması</h3>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">${t('infoPages.refundCard3Title')}</h3>
           <p class="text-gray-600 text-sm leading-relaxed">
-            Onaylanan talepler için ödemeniz iade edilir. Her adımı sipariş detaylarınızdan takip edebilirsiniz.
+            ${t('infoPages.refundCard3Desc')}
           </p>
         </div>
       </div>
@@ -119,28 +120,28 @@ function MoneyBackPolicySection(): string {
 function HowToApplySection(): string {
   return `
     <section class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 bg-[#fafafa]">
-      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-10">Para iadesi başvurusu nasıl yapılır?</h2>
+      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-10">${t('infoPages.refundApplyTitle')}</h2>
 
       <div class="max-w-3xl">
         ${timelineStep(
           '01',
-          'Sipariş Detaylarına Gidin',
-          'Siparişlerim > Sipariş Detayları sayfasına giderek ilgili siparişinizi açın ve "İade Talebi Oluştur" butonuna tıklayın.'
+          t('infoPages.refundStep1Title'),
+          t('infoPages.refundStep1Desc')
         )}
         ${timelineStep(
           '02',
-          'İade Nedenini ve Tutarını Belirtin',
-          'İade talep etmenizin nedenini yazın ve iade edilmesini istediğiniz tutarı girin. Varsa fotoğraf veya ek belge yükleyin.'
+          t('infoPages.refundStep2Title'),
+          t('infoPages.refundStep2Desc')
         )}
         ${timelineStep(
           '03',
-          'Satıcı İncelemesi',
-          'Talebiniz satıcıya iletilir. Satıcı talebinizi "Onaylandı" veya "Reddedildi" olarak sonuçlandırır.'
+          t('infoPages.refundStep3Title'),
+          t('infoPages.refundStep3Desc')
         )}
         ${timelineStep(
           '04',
-          'İadenizi Alın',
-          'Talebiniz onaylandığında ödeme iadesi süreci başlatılır ve siparişiniz iade edilmiş olarak işaretlenir.',
+          t('infoPages.refundStep4Title'),
+          t('infoPages.refundStep4Desc'),
           true
         )}
       </div>
@@ -152,9 +153,9 @@ function HowToApplySection(): string {
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.008v.008H12v-.008z"/>
           </svg>
           <div>
-            <h4 class="font-bold text-gray-900 text-sm mb-1">İade süreci hakkında</h4>
+            <h4 class="font-bold text-gray-900 text-sm mb-1">${t('infoPages.refundNoteTitle')}</h4>
             <p class="text-gray-700 text-sm leading-relaxed">
-              Sipariş sürecinizin her aşamasında doğrudan satıcıyla mesajlaşarak sorunları çözebilirsiniz. Satıcı ile anlaşmazlık halinde iade talebinizi oluşturabilirsiniz.
+              ${t('infoPages.refundNoteDesc')}
             </p>
           </div>
         </div>

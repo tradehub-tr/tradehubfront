@@ -389,7 +389,7 @@ function renderAllOrders(): string {
               <div class="flex flex-col items-center gap-1.5 relative z-10">
                 <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
                      :class="getRefundStepIndex(selectedOrder) >= 0 ? getRefundStepColor(selectedOrder) + ' text-white' : 'bg-gray-200 text-gray-500'">1</div>
-                <span class="text-xs max-sm:text-[9px] text-gray-600 text-center max-sm:whitespace-normal max-sm:leading-tight max-sm:max-w-[52px]">İade Talebi</span>
+                <span class="text-xs max-sm:text-[9px] text-gray-600 text-center max-sm:whitespace-normal max-sm:leading-tight max-sm:max-w-[52px]">${t("ordersUi.refundRequest")}</span>
               </div>
               <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3"
                    :class="getRefundStepIndex(selectedOrder) >= 1 ? getRefundStepColor(selectedOrder) : 'bg-gray-200'"></div>
@@ -397,7 +397,7 @@ function renderAllOrders(): string {
               <div class="flex flex-col items-center gap-1.5 relative z-10">
                 <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
                      :class="getRefundStepIndex(selectedOrder) >= 1 ? getRefundStepColor(selectedOrder) + ' text-white' : 'bg-gray-200 text-gray-500'">2</div>
-                <span class="text-xs max-sm:text-[9px] text-gray-600 text-center max-sm:whitespace-normal max-sm:leading-tight max-sm:max-w-[52px]">İnceleniyor</span>
+                <span class="text-xs max-sm:text-[9px] text-gray-600 text-center max-sm:whitespace-normal max-sm:leading-tight max-sm:max-w-[52px]">${t("ordersUi.underReview")}</span>
               </div>
               <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3"
                    :class="getRefundStepIndex(selectedOrder) >= 2 ? getRefundStepColor(selectedOrder) : 'bg-gray-200'"></div>
@@ -407,7 +407,7 @@ function renderAllOrders(): string {
                      :class="getRefundStepIndex(selectedOrder) >= 2 ? getRefundStepColor(selectedOrder) + ' text-white' : 'bg-gray-200 text-gray-500'">3</div>
                 <span class="text-xs max-sm:text-[9px] text-center max-sm:whitespace-normal max-sm:leading-tight max-sm:max-w-[52px]"
                       :class="selectedOrder.refundStatus === 'Rejected' ? 'text-red-500' : selectedOrder.refundStatus === 'Approved' ? 'text-orange-600 font-medium' : 'text-gray-600'">
-                  <span x-text="selectedOrder.refundStatus === 'Rejected' ? 'İade Reddedildi' : 'İade Onaylandı'"></span>
+                  <span x-text="selectedOrder.refundStatus === 'Rejected' ? '${t("ordersUi.refundRejected")}' : '${t("ordersUi.refundApproved")}'"></span>
                 </span>
               </div>
             </div>
@@ -470,7 +470,7 @@ function renderAllOrders(): string {
             <template x-if="hasReceipt(selectedOrder)">
               <a :href="selectedOrder.receiptUrl" target="_blank" class="th-btn-outline inline-flex items-center gap-1.5 text-emerald-700 border-emerald-200 bg-emerald-50 hover:bg-emerald-100">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                Dekontu görüntüle
+                ${t("ordersUi.viewReceipt")}
               </a>
             </template>
             <template x-if="canModifyShipping(selectedOrder)">
@@ -586,7 +586,7 @@ function renderAllOrders(): string {
         <!-- Section 5-7: Detay tab container (Kargo / Ödeme / Tedarikçi) -->
         <div class="px-7 max-sm:px-3 pt-5">
           <!-- Boxed tab bar -->
-          <div class="flex items-end gap-0" role="tablist" aria-label="Sipariş detay bölümleri">
+          <div class="flex items-end gap-0" role="tablist" aria-label="${t("ordersUi.orderDetailSections")}">
             <button
               @click="activeDetailTab = 'shipping'"
               @keydown.right.prevent="activeDetailTab = 'payment'; document.getElementById('tab-payment')?.focus()"
@@ -706,7 +706,7 @@ function renderAllOrders(): string {
                            x-show="selectedOrder.payment.status === 'Refunded'"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
                       <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
                            x-show="selectedOrder.payment.status !== 'Paid' && selectedOrder.payment.status !== 'Refunded'"><path stroke-linecap="round" d="M12 8v4m0 4h.01"/><circle cx="12" cy="12" r="10"/></svg>
-                      <span x-text="selectedOrder.payment.status === 'Paid' ? 'Ödendi' : selectedOrder.payment.status === 'Refunded' ? 'İade Edildi' : selectedOrder.payment.status === 'Unpaid' ? 'Ödenmedi' : selectedOrder.payment.status"></span>
+                      <span x-text="selectedOrder.payment.status === 'Paid' ? '${t("ordersUi.paid")}' : selectedOrder.payment.status === 'Refunded' ? '${t("ordersUi.refundedStatus")}' : selectedOrder.payment.status === 'Unpaid' ? '${t("ordersUi.unpaidStatus")}' : selectedOrder.payment.status"></span>
                     </span>
                   </div>
                   <template x-if="selectedOrder.payment.hasRecord">
@@ -852,17 +852,17 @@ function renderAllOrders(): string {
                     <template x-if="selectedOrder.refundStatus === 'Pending'">
                       <div class="relative">
                         <div class="absolute -start-[25px] top-1 w-3 h-3 bg-amber-400 rounded-full border-2 border-white"></div>
-                        <p class="text-sm font-medium text-amber-700">İade talebi inceleniyor</p>
-                        <p class="text-xs text-gray-400 mt-1" x-text="selectedOrder.refundReason || 'Satıcı tarafından inceleniyor.'"></p>
+                        <p class="text-sm font-medium text-amber-700">${t("ordersUi.refundUnderReview")}</p>
+                        <p class="text-xs text-gray-400 mt-1" x-text="selectedOrder.refundReason || '${t("ordersUi.reviewedBySeller")}'"></p>
                       </div>
                     </template>
                     <!-- Refund: Approved -->
                     <template x-if="selectedOrder.refundStatus === 'Approved'">
                       <div class="relative">
                         <div class="absolute -start-[25px] top-1 w-3 h-3 bg-purple-500 rounded-full border-2 border-white"></div>
-                        <p class="text-sm font-medium text-purple-700">İade onaylandı</p>
+                        <p class="text-sm font-medium text-purple-700">${t("ordersUi.refundApprovedTitle")}</p>
                         <p class="text-xs text-gray-400 mt-1">
-                          <span x-text="selectedOrder.currency + ' ' + Number(selectedOrder.total).toLocaleString('tr-TR', {minimumFractionDigits: 2})"></span> tutarında iade satıcı tarafından onaylandı.
+                          <span x-text="selectedOrder.currency + ' ' + Number(selectedOrder.total).toLocaleString('tr-TR', {minimumFractionDigits: 2})"></span> ${t("ordersUi.refundApprovedBySeller")}
                         </p>
                       </div>
                     </template>
@@ -870,8 +870,8 @@ function renderAllOrders(): string {
                     <template x-if="selectedOrder.refundStatus === 'Rejected'">
                       <div class="relative">
                         <div class="absolute -start-[25px] top-1 w-3 h-3 bg-red-400 rounded-full border-2 border-white"></div>
-                        <p class="text-sm font-medium text-red-600">İade talebi reddedildi</p>
-                        <p class="text-xs text-gray-400 mt-1">Satıcı iade talebini reddetti.</p>
+                        <p class="text-sm font-medium text-red-600">${t("ordersUi.refundRejectedTitle")}</p>
+                        <p class="text-xs text-gray-400 mt-1">${t("ordersUi.refundRejectedBySeller")}</p>
                       </div>
                     </template>
                   </div>
@@ -1059,30 +1059,30 @@ function renderAllOrders(): string {
                   <template x-for="rec in wireRecords" :key="rec.name">
                     <div class="border border-gray-100 rounded-md p-5 mb-3 space-y-3">
                       <div class="flex items-center justify-between">
-                        <span class="text-xs font-semibold text-gray-500 uppercase">Havale / EFT</span>
+                        <span class="text-xs font-semibold text-gray-500 uppercase">${t("ordersUi.wireEft")}</span>
                         <span class="inline-flex px-2.5 py-0.5 text-xs font-medium rounded-full"
                               :class="rec.status === 'Completed' ? 'bg-green-50 text-green-700' : 'bg-amber-50 text-amber-700'"
-                              x-text="rec.status === 'Completed' ? 'Onaylandı' : 'Beklemede'"></span>
+                              x-text="rec.status === 'Completed' ? '${t("ordersUi.confirmed")}' : '${t("ordersUi.pendingStatus")}'"></span>
                       </div>
                       <div class="grid grid-cols-2 gap-3 text-sm">
                         <div>
-                          <p class="text-xs text-gray-400 mb-0.5">Havale Tarihi</p>
+                          <p class="text-xs text-gray-400 mb-0.5">${t("ordersUi.transferDate")}</p>
                           <p class="font-medium text-gray-800" x-text="rec.payment_date ? new Date(rec.payment_date).toLocaleDateString('tr-TR') : '-'"></p>
                         </div>
                         <div>
-                          <p class="text-xs text-gray-400 mb-0.5">Gönderen</p>
+                          <p class="text-xs text-gray-400 mb-0.5">${t("ordersUi.sender")}</p>
                           <p class="font-medium text-gray-800" x-text="rec.reference || '-'"></p>
                         </div>
                         <div>
-                          <p class="text-xs text-gray-400 mb-0.5">Tutar</p>
+                          <p class="text-xs text-gray-400 mb-0.5">${t("ordersUi.amountLabel")}</p>
                           <p class="font-semibold text-gray-900" x-text="(rec.currency || 'USD') + ' ' + Number(rec.amount || 0).toLocaleString('tr-TR', {minimumFractionDigits: 2})"></p>
                         </div>
                         <div x-show="rec.receipt_url">
-                          <p class="text-xs text-gray-400 mb-0.5">Dekont</p>
+                          <p class="text-xs text-gray-400 mb-0.5">${t("ordersUi.receipt")}</p>
                           <a :href="rec.receipt_url" target="_blank"
                             class="inline-flex items-center gap-1 text-xs font-medium text-violet-600 hover:underline">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
-                            Dekontu görüntüle
+                            ${t("ordersUi.viewReceipt")}
                           </a>
                         </div>
                       </div>
@@ -1108,7 +1108,7 @@ function renderAllOrders(): string {
           <div class="relative bg-white rounded-md shadow-2xl w-full max-w-lg overflow-hidden" @click.stop>
             <!-- Header -->
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-              <h3 class="text-base font-bold text-gray-900">İade Talebi</h3>
+              <h3 class="text-base font-bold text-gray-900">${t("ordersUi.refundRequest")}</h3>
               <button @click="closeModal('showRefundModal')" class="th-no-press flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 bg-transparent border-none cursor-pointer rounded-full hover:bg-gray-100 transition-colors" aria-label="${t("common.close")}">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
               </button>
@@ -1119,9 +1119,9 @@ function renderAllOrders(): string {
                 <div class="w-14 h-14 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <svg class="w-7 h-7 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
                 </div>
-                <h4 class="text-base font-semibold text-gray-900 mb-2">İade talebi oluşturulamaz</h4>
+                <h4 class="text-base font-semibold text-gray-900 mb-2">${t("ordersUi.refundCannotCreate")}</h4>
                 <p class="text-sm text-gray-500 mb-6" x-text="refundError"></p>
-                <button @click="closeModal('showRefundModal')" class="px-6 py-2 text-sm font-medium bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) rounded-full border border-(--btn-border-color,#d39c00) cursor-pointer shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150">Kapat</button>
+                <button @click="closeModal('showRefundModal')" class="px-6 py-2 text-sm font-medium bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) rounded-full border border-(--btn-border-color,#d39c00) cursor-pointer shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150">${t("common.close")}</button>
               </div>
             </template>
             <!-- Success state -->
@@ -1130,20 +1130,20 @@ function renderAllOrders(): string {
                 <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <svg class="w-7 h-7 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                 </div>
-                <h4 class="text-base font-semibold text-gray-900 mb-2">İade talebiniz alındı</h4>
-                <p class="text-sm text-gray-500 mb-6">Satıcı talebinizi inceleyecek ve en kısa sürede geri dönüş yapacaktır.</p>
-                <button @click="closeModal('showRefundModal')" class="px-6 py-2 text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 rounded-full border-none cursor-pointer transition-colors">Kapat</button>
+                <h4 class="text-base font-semibold text-gray-900 mb-2">${t("ordersUi.refundReceived")}</h4>
+                <p class="text-sm text-gray-500 mb-6">${t("ordersUi.refundReceivedDesc")}</p>
+                <button @click="closeModal('showRefundModal')" class="px-6 py-2 text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 rounded-full border-none cursor-pointer transition-colors">${t("common.close")}</button>
               </div>
             </template>
             <!-- Form -->
             <template x-if="!refundSuccess && !refundBlocked">
               <div class="px-6 py-5">
                 <p class="text-sm text-gray-500 mb-5">
-                  <strong x-text="selectedOrder?.orderNumber"></strong> numaralı sipariş için iade talebinizi aşağıda açıklayın. Satıcı tarafından incelenecektir.
+                  <strong x-text="selectedOrder?.orderNumber"></strong> ${t("ordersUi.refundFormIntro")}
                 </p>
                 <!-- Refund amount -->
                 <div class="mb-4">
-                  <label class="block text-xs font-semibold text-gray-600 mb-1.5">İade tutarı</label>
+                  <label class="block text-xs font-semibold text-gray-600 mb-1.5">${t("ordersUi.refundAmount")}</label>
                   <div class="relative">
                     <span class="absolute start-3 top-1/2 -translate-y-1/2 text-xs text-gray-400" x-text="selectedOrder?.currency || 'TRY'"></span>
                     <input type="text" :value="Number(refundForm.amount).toLocaleString('tr-TR', {minimumFractionDigits: 2})" readonly
@@ -1152,23 +1152,23 @@ function renderAllOrders(): string {
                 </div>
                 <!-- Reason -->
                 <div class="mb-5">
-                  <label class="block text-xs font-semibold text-gray-600 mb-1.5">İade sebebi <span class="text-red-500">*</span></label>
+                  <label class="block text-xs font-semibold text-gray-600 mb-1.5">${t("ordersUi.refundReason")} <span class="text-red-500">*</span></label>
                   <textarea x-model="refundForm.reason" rows="4"
                     class="th-input resize-none"
-                    placeholder="Ürün beklentilerinizi karşılamadıysa veya bir sorun yaşadıysanız lütfen açıklayın..."></textarea>
+                    placeholder="${t("ordersUi.refundReasonPlaceholder")}"></textarea>
                 </div>
                 <!-- Error -->
                 <p x-show="refundError" x-text="refundError" class="text-xs text-red-500 mb-3"></p>
                 <!-- Actions -->
                 <div class="flex gap-3 justify-end">
-                  <button @click="closeModal('showRefundModal')" class="th-btn-outline px-5 py-2 text-sm font-medium cursor-pointer">İptal</button>
+                  <button @click="closeModal('showRefundModal')" class="th-btn-outline px-5 py-2 text-sm font-medium cursor-pointer">${t("common.cancel")}</button>
                   <button @click="submitRefundRequest()"
                     :disabled="submittingRefund || !refundForm.reason.trim()"
                     class="px-5 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-full border-none cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
                     <template x-if="submittingRefund">
                       <svg class="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
                     </template>
-                    İade Talebi Gönder
+                    ${t("ordersUi.submitRefundRequest")}
                   </button>
                 </div>
               </div>
@@ -1372,7 +1372,7 @@ function renderAllOrders(): string {
           <!-- Modal Header -->
           <div class="flex items-center justify-between px-6 pt-5 pb-4 border-b border-gray-100 sticky top-0 bg-white z-10 rounded-t-md">
             <div class="flex items-center gap-3">
-              <h3 class="text-lg font-bold text-gray-900" x-text="isCheckPayment ? 'Evrak Gönder' : '${t("orders.submitRemittanceProof")}'"></h3>
+              <h3 class="text-lg font-bold text-gray-900" x-text="isCheckPayment ? '${t("ordersUi.submitDocument")}' : '${t("orders.submitRemittanceProof")}'"></h3>
               <!-- Step indicator (3 steps) -->
               <div class="flex items-center gap-1.5" x-show="step !== 'success'">
                 <span class="w-2 h-2 rounded-full transition-colors" :class="step === 'iban' ? 'bg-(--btn-bg,#f5b800)' : 'bg-gray-300'"></span>
@@ -1391,35 +1391,35 @@ function renderAllOrders(): string {
             <template x-if="loadingBank">
               <div class="flex items-center justify-center py-12 gap-3 text-gray-400">
                 <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/></svg>
-                <span class="text-sm">Banka bilgileri yükleniyor...</span>
+                <span class="text-sm">${t("ordersUi.loadingBankInfo")}</span>
               </div>
             </template>
 
             <template x-if="!loadingBank">
               <div>
                 <!-- Title -->
-                <p class="text-sm text-gray-600 mb-5">Aşağıdaki banka hesabına havale/EFT yapın, ardından <strong>"Ödeme Yaptım"</strong> butonuna tıklayın.</p>
+                <p class="text-sm text-gray-600 mb-5">${t("ordersUi.transferToAccountHint")}</p>
 
                 <!-- IBAN Card -->
                 <div class="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 rounded-md p-5 mb-5">
                   <div class="flex items-center gap-2 mb-4">
                     <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
-                    <h4 class="font-bold text-amber-900 text-sm">Ödeme Bilgileri</h4>
+                    <h4 class="font-bold text-amber-900 text-sm">${t("ordersUi.paymentInfo")}</h4>
                   </div>
 
                   <template x-if="!sellerIban">
-                    <p class="text-sm text-red-500">Bu satıcı henüz banka bilgisi girmemiş. Satıcıyla iletişime geçin.</p>
+                    <p class="text-sm text-red-500">${t("ordersUi.sellerNoBankInfo")}</p>
                   </template>
 
                   <template x-if="sellerIban">
                     <div class="space-y-3">
                       <div class="flex items-start justify-between gap-3">
-                        <span class="text-xs text-amber-700 font-medium w-28 shrink-0 pt-0.5">Hesap Sahibi</span>
+                        <span class="text-xs text-amber-700 font-medium w-28 shrink-0 pt-0.5">${t("ordersUi.accountHolder")}</span>
                         <span class="text-sm font-semibold text-gray-900 text-end" x-text="sellerAccountHolder || sellerName || '—'"></span>
                       </div>
                       <div class="border-t border-amber-200"></div>
                       <div class="flex items-start justify-between gap-3">
-                        <span class="text-xs text-amber-700 font-medium w-28 shrink-0 pt-0.5">Banka Adı</span>
+                        <span class="text-xs text-amber-700 font-medium w-28 shrink-0 pt-0.5">${t("ordersUi.bankName")}</span>
                         <span class="text-sm font-semibold text-gray-900 text-end" x-text="sellerBankName || '—'"></span>
                       </div>
                       <div class="border-t border-amber-200"></div>
@@ -1427,9 +1427,9 @@ function renderAllOrders(): string {
                         <span class="text-xs text-amber-700 font-medium w-28 shrink-0 pt-0.5">IBAN</span>
                         <div class="flex items-center gap-2 flex-wrap justify-end">
                           <span class="text-sm font-mono font-bold text-gray-900 tracking-wider" x-text="sellerIban"></span>
-                          <button type="button" @click="navigator.clipboard.writeText(sellerIban); $el.textContent='Kopyalandı!'; setTimeout(() => $el.textContent='Kopyala', 2000)"
+                          <button type="button" @click="navigator.clipboard.writeText(sellerIban); $el.textContent='${t("ordersUi.copiedExcl")}'; setTimeout(() => $el.textContent='${t("ordersUi.copy")}', 2000)"
                             class="text-xs text-amber-700 hover:text-amber-900 bg-amber-100 hover:bg-amber-200 px-2 py-0.5 rounded-full border border-amber-300 transition-colors cursor-pointer whitespace-nowrap">
-                            Kopyala
+                            ${t("ordersUi.copy")}
                           </button>
                         </div>
                       </div>
@@ -1440,16 +1440,16 @@ function renderAllOrders(): string {
                 <!-- Warning note -->
                 <div class="flex items-start gap-2.5 bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 mb-6">
                   <svg class="w-4 h-4 text-blue-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                  <p class="text-xs text-blue-700" x-text="isCheckPayment ? 'Ödemeyi yaptıktan sonra &quot;Ödeme Yaptım&quot; butonuna tıklayın ve evrakınızı yükleyin. Satıcı inceledikten sonra siparişiniz hazırlanmaya başlayacaktır.' : 'Havaleyi yaptıktan sonra &quot;Ödeme Yaptım&quot; butonuna tıklayın ve dekontunuzu yükleyin. Satıcı ödemeyi onayladıktan sonra siparişiniz hazırlanmaya başlayacaktır.'"></p>
+                  <p class="text-xs text-blue-700" x-text="isCheckPayment ? '${t("ordersUi.checkPaymentNote")}' : '${t("ordersUi.wirePaymentNote")}'"></p>
                 </div>
 
                 <!-- Actions -->
                 <div class="flex items-center justify-between gap-3">
-                  <button @click="reset()" class="th-no-press text-sm text-gray-500 hover:text-gray-700 bg-transparent border-none cursor-pointer transition-colors">İptal</button>
+                  <button @click="reset()" class="th-no-press text-sm text-gray-500 hover:text-gray-700 bg-transparent border-none cursor-pointer transition-colors">${t("common.cancel")}</button>
                   <button @click="goToUpload()" :disabled="!sellerIban"
                     class="flex items-center gap-2 px-7 py-3 text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-md cursor-pointer transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                    <span x-text="isCheckPayment ? 'Ödeme Yaptım — Evrak Yükle' : 'Ödeme Yaptım — Dekont Yükle'"></span>
+                    <span x-text="isCheckPayment ? '${t("ordersUi.paidUploadDoc")}' : '${t("ordersUi.paidUploadReceipt")}'"></span>
                   </button>
                 </div>
               </div>
@@ -1714,12 +1714,12 @@ function renderRefunds(): string {
             <table class="w-full text-sm border-collapse">
               <thead>
                 <tr class="border-b border-gray-200">
-                  <th class="text-start text-xs font-semibold text-gray-500 uppercase pb-3 pe-4">Sipariş No</th>
-                  <th class="text-start text-xs font-semibold text-gray-500 uppercase pb-3 pe-4">Tarih</th>
-                  <th class="text-start text-xs font-semibold text-gray-500 uppercase pb-3 pe-4">Satıcı</th>
-                  <th class="text-start text-xs font-semibold text-gray-500 uppercase pb-3 pe-4">Sebep</th>
-                  <th class="text-end text-xs font-semibold text-gray-500 uppercase pb-3 pe-4">İade Tutarı</th>
-                  <th class="text-center text-xs font-semibold text-gray-500 uppercase pb-3">Durum</th>
+                  <th class="text-start text-xs font-semibold text-gray-500 uppercase pb-3 pe-4">${t("ordersUi.orderNo")}</th>
+                  <th class="text-start text-xs font-semibold text-gray-500 uppercase pb-3 pe-4">${t("ordersUi.date")}</th>
+                  <th class="text-start text-xs font-semibold text-gray-500 uppercase pb-3 pe-4">${t("ordersUi.seller")}</th>
+                  <th class="text-start text-xs font-semibold text-gray-500 uppercase pb-3 pe-4">${t("ordersUi.reason")}</th>
+                  <th class="text-end text-xs font-semibold text-gray-500 uppercase pb-3 pe-4">${t("ordersUi.refundAmountCol")}</th>
+                  <th class="text-center text-xs font-semibold text-gray-500 uppercase pb-3">${t("ordersUi.statusCol")}</th>
                 </tr>
               </thead>
               <tbody>
