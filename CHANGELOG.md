@@ -1,3 +1,15 @@
+## [v1.2.1-beta.8] - 2026-06-10 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(trial): Enterprise butonu "14 gun ucretsiz dene" + komisyon/Yakinda fix (@boraydeger32)
+  - Trial paketinin ANA buton metni "X gun ucretsiz dene" olur (trial_config); ayri buton-ustu CTA ve ust bant kaldirildi
+  - Komisyon kartta/matriste her zaman gercek oran (0 -> "%0"); "Ozel" kaldirildi
+  - Karsilastirma tablosunda "Yakinda" rozeti (matris coming_soon)
+  - pricingService: trial_config + coming_soon tipleri; cache anahtari v4->v6
+
+---
 ## [v1.2.1-beta.7] - 2026-06-10 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
