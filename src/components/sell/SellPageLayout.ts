@@ -628,13 +628,18 @@ function PricingMatrix(
             .map(
               (r) => `
             <div class="${MATRIX_GRID_CLS} px-6 py-3.5 border-b border-[#e8e6e0] last:border-b-0 text-[13px]" style="${gridStyle}">
-              <div>
-                <div class="text-[#1a1a1a] font-medium">${escapeHtml(r.f)}${
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="text-[#1a1a1a] font-medium">${escapeHtml(r.f)}</span>
+                ${
                   r.coming_soon
-                    ? ` <span class="inline-block align-middle ms-1 text-[9.5px] font-semibold uppercase tracking-[0.04em] px-1.5 py-0.5 rounded-full bg-[#f5b800]/15 text-[#9a7400]">Yakında</span>`
+                    ? `<span class="inline-block align-middle text-[9.5px] font-semibold uppercase tracking-[0.04em] px-1.5 py-0.5 rounded-full bg-[#f5b800]/15 text-[#9a7400]">Yakında</span>`
                     : ""
-                }</div>
-                ${r.help ? `<div class="text-[11px] text-[#8a877f] mt-0.5 font-normal">${escapeHtml(r.help)}</div>` : ""}
+                }
+                ${
+                  r.help
+                    ? `<span class="shrink-0 inline-flex items-center text-[#bdbab2] hover:text-[#8a877f] focus:text-[#8a877f] cursor-help transition-colors" tabindex="0" title="${escapeHtml(r.help)}" aria-label="${escapeHtml(r.help)}">${SVG_INFO}</span>`
+                    : ""
+                }
               </div>
               ${r.v
                 .map(
