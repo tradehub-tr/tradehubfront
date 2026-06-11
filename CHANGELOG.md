@@ -1,3 +1,17 @@
+## [v1.3.3-rc.1] - 2026-06-11 RC
+
+Bu surum rc.istoc.com'da onay asamasindadir.
+
+### Duzeltildi
+- fix(seo): canonical ve og:url paylaşımda backend domaini gösterme hatası düzeltildi (@ahmeetseker)
+  - applyServerSeo artık canonical, og:url ve hreflang URL'lerini mevcut origin'e (istoc.com) sabitliyor; backend payload'u bunları kendi domain'iyle (istoc.cronbi.com) ürettiği için Safari "Paylaş" DOM'daki canonical'ı okuyup backend domainini gösteriyordu
+  - toCurrentOrigin helper'ı eklendi (path/query korunur, host origin'e çevrilir); og:image dış CDN olabileceği için kapsam dışı bırakıldı
+  - ortamdan bağımsız çalışır (rc/beta/prod kendi domainini gösterir)
+
+### Degistirildi
+- refactor(format): storefront kaynakları Prettier ile yeniden biçimlendirildi (@ahmeetseker)
+
+---
 ## [v1.3.3-beta.1] - 2026-06-11 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
