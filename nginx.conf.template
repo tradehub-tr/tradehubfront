@@ -334,6 +334,10 @@ server {
     location @seo_listing {
         internal;
         rewrite ^/urun/(.+)$ /api/method/tradehub_core.seo.page_resolver.render_listing?slug=$1 break;
+        # Paylaşım önizlemesinde müşteri backend domaini görmesin (canonical/og:url → ${FRONTEND_DOMAIN}).
+        proxy_set_header Accept-Encoding "";
+        sub_filter "${BACKEND_DOMAIN}" "${FRONTEND_DOMAIN}";
+        sub_filter_once off;
         proxy_pass https://${BACKEND_DOMAIN};
         proxy_ssl_server_name on;
         proxy_set_header Host ${BACKEND_DOMAIN};
@@ -351,6 +355,10 @@ server {
     location @seo_category {
         internal;
         rewrite ^/kategori/(.+)$ /api/method/tradehub_core.seo.page_resolver.render_category?slug=$1 break;
+        # Paylaşım önizlemesinde müşteri backend domaini görmesin (canonical/og:url → ${FRONTEND_DOMAIN}).
+        proxy_set_header Accept-Encoding "";
+        sub_filter "${BACKEND_DOMAIN}" "${FRONTEND_DOMAIN}";
+        sub_filter_once off;
         proxy_pass https://${BACKEND_DOMAIN};
         proxy_ssl_server_name on;
         proxy_set_header Host ${BACKEND_DOMAIN};
@@ -368,6 +376,10 @@ server {
     location @seo_brand {
         internal;
         rewrite ^/marka/(.+)$ /api/method/tradehub_core.seo.page_resolver.render_brand?slug=$1 break;
+        # Paylaşım önizlemesinde müşteri backend domaini görmesin (canonical/og:url → ${FRONTEND_DOMAIN}).
+        proxy_set_header Accept-Encoding "";
+        sub_filter "${BACKEND_DOMAIN}" "${FRONTEND_DOMAIN}";
+        sub_filter_once off;
         proxy_pass https://${BACKEND_DOMAIN};
         proxy_ssl_server_name on;
         proxy_set_header Host ${BACKEND_DOMAIN};
@@ -390,6 +402,10 @@ server {
     location @seo_seller {
         internal;
         rewrite ^/magaza/(.+)$ /api/method/tradehub_core.seo.page_resolver.render_seller?slug=$1 break;
+        # Paylaşım önizlemesinde müşteri backend domaini görmesin (canonical/og:url → ${FRONTEND_DOMAIN}).
+        proxy_set_header Accept-Encoding "";
+        sub_filter "${BACKEND_DOMAIN}" "${FRONTEND_DOMAIN}";
+        sub_filter_once off;
         proxy_pass https://${BACKEND_DOMAIN};
         proxy_ssl_server_name on;
         proxy_set_header Host ${BACKEND_DOMAIN};
@@ -404,6 +420,10 @@ server {
     location @seo_static_backend {
         internal;
         rewrite ^ /api/method/tradehub_core.seo.page_resolver.render_static_page?path=$seo_static_page_path break;
+        # Paylaşım önizlemesinde müşteri backend domaini görmesin (canonical/og:url → ${FRONTEND_DOMAIN}).
+        proxy_set_header Accept-Encoding "";
+        sub_filter "${BACKEND_DOMAIN}" "${FRONTEND_DOMAIN}";
+        sub_filter_once off;
         proxy_pass https://${BACKEND_DOMAIN};
         proxy_ssl_server_name on;
         proxy_set_header Host ${BACKEND_DOMAIN};
@@ -418,6 +438,17 @@ server {
     location ~* \.(?:png|jpg|jpeg|webp|gif|ico|svg|woff2?|ttf)$ {
         add_header Cache-Control "public, max-age=2592000";
         try_files $uri @frappe_assets;
+    }
+
+    # ──────────────────────────────────────────
+    # Admin Panel SPA (/panel) — birleşik container'da (örn. PROD/istoc) admin'i
+    # aynı container'dan serve eder. Ayrı-container ortamlarda (beta/rc) /panel
+    # zaten upstream'de (gateway) ayrı admin'e yönlenir → bu blok erişilmez/zararsız.
+    # ^~ ZORUNLU: /panel/assets/*.js|css yukarıdaki resim/asset regex'lerine düşmesin.
+    # ──────────────────────────────────────────
+    location ^~ /panel {
+        alias /usr/share/nginx/html/panel;
+        try_files $uri $uri/ /panel/index.html;
     }
 
     # Frontend statik dosyalar
