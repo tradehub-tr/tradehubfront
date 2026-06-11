@@ -84,7 +84,8 @@ const en = {
     authAddr: {
       istocHome: "iStoc Home",
       promoHeadline: "Global B2B Trade Network",
-      promoSubtitle: "The new-generation B2B marketplace with secure payments, verified sellers and zero commission.",
+      promoSubtitle:
+        "The new-generation B2B marketplace with secure payments, verified sellers and zero commission.",
       featSecure: "Secure",
       featSecureDesc: "Payment Protection",
       featVerified: "Verified",
@@ -98,8 +99,10 @@ const en = {
       pageTitle: "My Delivery Addresses",
       addNewAddress: "Add New Address",
       maxLimitReachedShort: "You have reached the maximum address limit",
-      maxLimitWarning: "You have reached the maximum limit of {{max}} addresses. Delete an existing address to add a new one.",
-      maxLimitToast: "You can add at most {{max}} addresses. Delete an existing address to add a new one.",
+      maxLimitWarning:
+        "You have reached the maximum limit of {{max}} addresses. Delete an existing address to add a new one.",
+      maxLimitToast:
+        "You can add at most {{max}} addresses. Delete an existing address to add a new one.",
       defaultBadge: "Default",
       edit: "Edit",
       delete: "Delete",
@@ -170,7 +173,8 @@ const en = {
       ticketAwaitingReply: "Awaiting Reply",
       loadFailed: "Could not load information.",
       accountSuspendedTitle: "Your account has been suspended",
-      accountSuspendedDesc: "An inconsistency was detected during document verification. Please contact support.",
+      accountSuspendedDesc:
+        "An inconsistency was detected during document verification. Please contact support.",
       supportRequest: "Support Request",
       kycRejectedTitle: "KYC rejected",
       kybRejectedTitle: "KYB rejected",
@@ -185,9 +189,11 @@ const en = {
       kybPendingDesc: "Upload your KYB documents to be able to sell products.",
       applyNow: "Apply Now",
       kybUnderReviewTitle: "KYB under review",
-      kybUnderReviewDesc: "Your documents are being reviewed. This usually takes 1-2 business days.",
+      kybUnderReviewDesc:
+        "Your documents are being reviewed. This usually takes 1-2 business days.",
       fillKycForShoppingTitle: "Complete KYC to start shopping",
-      fillKycForShoppingDesc: "You are successful as a seller. Complete KYC if you also want to buy.",
+      fillKycForShoppingDesc:
+        "You are successful as a seller. Complete KYC if you also want to buy.",
       fillKyc: "Complete KYC",
       gridView: "Grid",
       listView: "List",
@@ -199,9 +205,11 @@ const en = {
     },
     checkoutMfr: {
       goToStore: "Go to {{name}} store",
-      securePaymentNote: "Payment is made securely to the platform; your order is forwarded to suppliers under iStoc assurance.",
+      securePaymentNote:
+        "Payment is made securely to the platform; your order is forwarded to suppliers under iStoc assurance.",
       removeCoupon: "Remove coupon",
-      preInfoAndDistanceSalesContract: "the Preliminary Information Form and the Distance Sales Agreement",
+      preInfoAndDistanceSalesContract:
+        "the Preliminary Information Form and the Distance Sales Agreement",
       readAndAccept: "I have read and accept.",
       ready: "Ready",
       required: "Required",
@@ -209,7 +217,8 @@ const en = {
       addAddress: "Add Address",
       shippingAddressTitle: "Shipping Address",
       close: "Close",
-      headerSubtitleWithCounts: "{{items}} products from {{suppliers}} suppliers — confirm your address, payment method, and shipping options.",
+      headerSubtitleWithCounts:
+        "{{items}} products from {{suppliers}} suppliers — confirm your address, payment method, and shipping options.",
       headerSubtitle: "Confirm your address, payment method, and shipping options.",
       homePage: "Home Page",
       invalidCoupon: "Invalid coupon code",
@@ -302,7 +311,7 @@ const en = {
       startChatBtn: "Start Chat",
       reservationAccepted: "Reservation accepted",
       meetingWindowSuffix: "— your meeting will be open during the following time window:",
-      retryChatAtTime: "At that time, click \"Chat\" again to start the conversation.",
+      retryChatAtTime: 'At that time, click "Chat" again to start the conversation.',
       ok: "OK",
       slotsLoading: "Loading available times…",
       noSlotsAvailable: "No available time right now.",
@@ -381,7 +390,8 @@ const en = {
       selectOrderPlaceholder: "— Select an order —",
       orderRoutingHint: "The ticket is forwarded to the seller of the order you select.",
       ordersLoading: "Loading orders...",
-      noEligibleOrderHint: "No eligible order was found for this category. For general questions select the <strong>Other</strong> category, and for payment-related issues select <strong>Payment</strong>.",
+      noEligibleOrderHint:
+        "No eligible order was found for this category. For general questions select the <strong>Other</strong> category, and for payment-related issues select <strong>Payment</strong>.",
       statusOpen: "Open",
       statusReplied: "Replied",
       statusResolved: "Resolved",
@@ -409,30 +419,44 @@ const en = {
       membershipProgram: "Membership Program",
       membershipSubtitle: "iStoc membership benefits and exclusive offers",
       membershipTiersTitle: "Membership Tiers",
-      membershipTiersP1: "<strong>Free Membership:</strong> Every user who registers on the iStoc platform automatically benefits from basic membership advantages. Free membership includes unlimited product search, supplier communication, basic buyer protection, and 5 requests for quotation (RFQ) per month.",
-      membershipTiersP2: "<strong>Premium Membership:</strong> Offered for 499 TL per month, Premium membership is designed for those who want to grow their trade volume. You can benefit from unlimited RFQ, priority customer support, advanced analytical reports, exclusive discount coupons, and VIP supplier access.",
-      membershipTiersP3: "<strong>Corporate Membership:</strong> Offered with custom pricing for large-scale businesses, Corporate membership includes a dedicated account manager, API access, multi-user management, custom integration support, and annual strategy consultancy in addition to all Premium features.",
+      membershipTiersP1:
+        "<strong>Free Membership:</strong> Every user who registers on the iStoc platform automatically benefits from basic membership advantages. Free membership includes unlimited product search, supplier communication, basic buyer protection, and 5 requests for quotation (RFQ) per month.",
+      membershipTiersP2:
+        "<strong>Premium Membership:</strong> Offered for 499 TL per month, Premium membership is designed for those who want to grow their trade volume. You can benefit from unlimited RFQ, priority customer support, advanced analytical reports, exclusive discount coupons, and VIP supplier access.",
+      membershipTiersP3:
+        "<strong>Corporate Membership:</strong> Offered with custom pricing for large-scale businesses, Corporate membership includes a dedicated account manager, API access, multi-user management, custom integration support, and annual strategy consultancy in addition to all Premium features.",
       membershipBenefitsTitle: "Membership Benefits",
-      membershipBenefitsP1: "The iStoc membership program supports your B2B trade in every aspect. Premium and Corporate members benefit from exclusive discounts of 3% to 8% on products across the platform. You also gain early access to seasonal campaigns and stay informed of exclusive offer notifications.",
-      membershipBenefitsP2: "As your membership tier rises, your access to supplier quality reports, market analysis tools, and competitive intelligence data expands. Premium members can use the professional quality inspection service free of charge twice a year. Corporate members have unlimited inspection rights.",
+      membershipBenefitsP1:
+        "The iStoc membership program supports your B2B trade in every aspect. Premium and Corporate members benefit from exclusive discounts of 3% to 8% on products across the platform. You also gain early access to seasonal campaigns and stay informed of exclusive offer notifications.",
+      membershipBenefitsP2:
+        "As your membership tier rises, your access to supplier quality reports, market analysis tools, and competitive intelligence data expands. Premium members can use the professional quality inspection service free of charge twice a year. Corporate members have unlimited inspection rights.",
       membershipPricingTitle: "Pricing",
-      membershipPricingP1: "iStoc membership plans offer flexible pricing options to suit every budget. When you choose annual payment, you save 20% compared to the monthly plan. A 14-day free trial is available for all plans; no charges are applied during this period.",
-      membershipPricingP2: "Free plan: 0 TL/month | Premium plan: 499 TL/month (399 TL/month with annual payment) | Corporate plan: Custom pricing (contact our sales team). All prices include VAT. You can change your plan at any time, and your remaining period is transferred proportionally to your new plan.",
+      membershipPricingP1:
+        "iStoc membership plans offer flexible pricing options to suit every budget. When you choose annual payment, you save 20% compared to the monthly plan. A 14-day free trial is available for all plans; no charges are applied during this period.",
+      membershipPricingP2:
+        "Free plan: 0 TL/month | Premium plan: 499 TL/month (399 TL/month with annual payment) | Corporate plan: Custom pricing (contact our sales team). All prices include VAT. You can change your plan at any time, and your remaining period is transferred proportionally to your new plan.",
       membershipUpgradeTitle: "Membership Upgrade",
-      membershipUpgradeP1: "Upgrading your membership is extremely easy. Go to the \"Membership Plan\" section in your account settings, select the plan you want, and enter your payment details. The upgrade takes effect immediately, and you start benefiting from your new advantages right away.",
-      membershipUpgradeP2: "If you wish to switch to a lower plan than your current one, the change takes effect at the end of the current period. In case of cancellation, your active membership benefits continue until the end of the period. No penalty or additional fee is applied for membership upgrades or changes.",
+      membershipUpgradeP1:
+        'Upgrading your membership is extremely easy. Go to the "Membership Plan" section in your account settings, select the plan you want, and enter your payment details. The upgrade takes effect immediately, and you start benefiting from your new advantages right away.',
+      membershipUpgradeP2:
+        "If you wish to switch to a lower plan than your current one, the change takes effect at the end of the current period. In case of cancellation, your active membership benefits continue until the end of the period. No penalty or additional fee is applied for membership upgrades or changes.",
       afterSalesHeroTitle: "After-sales evaluation and support",
-      afterSalesHeroSubtitle: "Rate your sellers after every purchase and contribute to the platform's quality",
+      afterSalesHeroSubtitle:
+        "Rate your sellers after every purchase and contribute to the platform's quality",
       tradeAssurance: "Trade Assurance",
       afterSalesSupport: "After-sales support",
       afterSalesFeaturesTitle: "What do we offer you after your order?",
-      afterSalesFeaturesIntro: "iStoc provides the essential tools to make the buying and selling process transparent and secure. You can continue to receive support on the platform even after your order is completed.",
+      afterSalesFeaturesIntro:
+        "iStoc provides the essential tools to make the buying and selling process transparent and secure. You can continue to receive support on the platform even after your order is completed.",
       sellerRatingTitle: "Seller Rating System",
-      sellerRatingDesc: "You can rate the product and service you received from 1 to 5 stars and write a review. Your reviews guide other buyers and shape the quality of sellers.",
+      sellerRatingDesc:
+        "You can rate the product and service you received from 1 to 5 stars and write a review. Your reviews guide other buyers and shape the quality of sellers.",
       directContactTitle: "Direct Communication with the Seller",
-      directContactDesc: "After your order, you can convey your questions, product-related requests, or any issues you experience directly to your seller and join the search for a solution.",
+      directContactDesc:
+        "After your order, you can convey your questions, product-related requests, or any issues you experience directly to your seller and join the search for a solution.",
       subPaymentFailedTitle: "Your subscription payment failed",
-      subPaymentFailedDesc: "You need to update your payment information to maintain your store access.",
+      subPaymentFailedDesc:
+        "You need to update your payment information to maintain your store access.",
       manageSubscription: "Manage Subscription",
       subSuspendedTitle: "Your subscription has been suspended",
       subSuspendedDesc: "You cannot add new products or process orders. Please contact support.",
@@ -441,9 +465,11 @@ const en = {
       upgradePlan: "Upgrade My Plan",
       trialEndingDays: "Your trial period ends in {{days}} days.",
       kybRejected: "Your KYB verification was rejected. Please update your documents.",
-      kybPending: "Your KYB verification is under review. Your verification must be approved before you can place orders.",
+      kybPending:
+        "Your KYB verification is under review. Your verification must be approved before you can place orders.",
       kycRejected: "Your identity verification was rejected. Please update your documents.",
-      kycPending: "Your identity verification is under review. Your verification must be approved before you can place orders.",
+      kycPending:
+        "Your identity verification is under review. Your verification must be approved before you can place orders.",
       previous: "Previous",
       next: "Next",
       moqOnePiece: "1 piece",
@@ -478,90 +504,122 @@ const en = {
     infoPages: {
       tradeAssurance: "Trade Assurance",
       shippingHeroTitle: "Shipping and logistics services",
-      shippingHeroSubtitle: "Track your order with confidence and choose the shipping option that suits you best",
+      shippingHeroSubtitle:
+        "Track your order with confidence and choose the shipping option that suits you best",
       shippingTypesTitle: "Shipping types",
-      shippingTypesIntro: "By arranging with sellers on iStoc, you can choose the shipping type that fits your order. Each shipping type has a different delivery time and cost structure.",
+      shippingTypesIntro:
+        "By arranging with sellers on iStoc, you can choose the shipping type that fits your order. Each shipping type has a different delivery time and cost structure.",
       shippingExpressTitle: "Express Shipping",
-      shippingExpressDesc: "The fastest delivery option for your urgent orders. Preferred for intra-city and nearby areas.",
+      shippingExpressDesc:
+        "The fastest delivery option for your urgent orders. Preferred for intra-city and nearby areas.",
       shippingAirTitle: "Air Freight",
-      shippingAirDesc: "Provides fast delivery for international and long-distance orders. Suitable for valuable and urgent goods.",
+      shippingAirDesc:
+        "Provides fast delivery for international and long-distance orders. Suitable for valuable and urgent goods.",
       shippingSeaTitle: "Sea Freight",
-      shippingSeaDesc: "An economical solution for bulk and heavy loads. Ideal for international container shipments and high-volume orders.",
+      shippingSeaDesc:
+        "An economical solution for bulk and heavy loads. Ideal for international container shipments and high-volume orders.",
       shippingLandTitle: "Land Freight",
-      shippingLandDesc: "An economical and reliable option for domestic and neighboring-country deliveries.",
+      shippingLandDesc:
+        "An economical and reliable option for domestic and neighboring-country deliveries.",
       shippingStandardTitle: "Standard Shipping",
-      shippingStandardDesc: "The default delivery option. An affordable solution for orders of standard size and weight.",
+      shippingStandardDesc:
+        "The default delivery option. An affordable solution for orders of standard size and weight.",
       shippingFreeTitle: "Free Shipping",
-      shippingFreeDesc: "Free shipping offered by the seller on selected products. It is shown marked on the product page.",
+      shippingFreeDesc:
+        "Free shipping offered by the seller on selected products. It is shown marked on the product page.",
       trackingTitle: "Easy tracking with a tracking number",
       trackingPara1Before: "When your seller ships your order, the ",
       trackingNumber: "tracking number",
       trackingPara1Mid: " and ",
       trackingCarrierInfo: "carrier information",
       trackingPara1After: " are automatically added to your order details.",
-      trackingPara2: "From the My Orders page, you can see the current status of each order and follow the process from the moment it is shipped until it is delivered.",
+      trackingPara2:
+        "From the My Orders page, you can see the current status of each order and follow the process from the moment it is shipped until it is delivered.",
       trackingAutoNote: "The tracking number appears automatically in the order details",
       orderProcessTitle: "How does the order process work?",
-      orderProcessIntro: "You can follow every step of your order from the iStoc panel. Here is a typical order flow:",
+      orderProcessIntro:
+        "You can follow every step of your order from the iStoc panel. Here is a typical order flow:",
       timelineStep1Title: "Awaiting Payment",
-      timelineStep1Desc: "After creating your order, you select a payment method and complete the transaction.",
+      timelineStep1Desc:
+        "After creating your order, you select a payment method and complete the transaction.",
       timelineStep2Title: "Being Confirmed",
       timelineStep2Desc: "Once the payment is verified, the seller starts preparing your order.",
       timelineStep3Title: "In Transit",
-      timelineStep3Desc: "The seller ships your order and the tracking number is added to your order details.",
+      timelineStep3Desc:
+        "The seller ships your order and the tracking number is added to your order details.",
       timelineStep4Title: "Completed",
       timelineStep4Desc: "When your order reaches you, the process is complete.",
       paymentsHeroAlt: "Secure payment",
       paymentsHeroTitle: "Secure and flexible payment methods",
       paymentsHeroSubtitle: "Simple, transparent B2B payments",
       paymentsSafetyTitle: "How does iStoc keep your payments secure?",
-      paymentsSafetyIntro: "All payments made through iStoc are managed via the platform and tracked as part of the order process.",
+      paymentsSafetyIntro:
+        "All payments made through iStoc are managed via the platform and tracked as part of the order process.",
       paymentsSafetyWarning: "To protect your payment, never pay outside the platform.",
       paymentsMethodsTitle: "Supported payment methods",
       paymentBankTransferTitle: "Bank Transfer",
-      paymentBankTransferDesc: "Complete your order by transferring to iStoc's official bank account. After the transfer, upload your receipt through the platform to document your payment.",
+      paymentBankTransferDesc:
+        "Complete your order by transferring to iStoc's official bank account. After the transfer, upload your receipt through the platform to document your payment.",
       paymentBankTransferTag: "Receipt upload support",
       paymentEftTitle: "EFT / Wire Transfer",
-      paymentEftDesc: "Complete your order quickly with an instant electronic funds transfer. The transaction date, amount, and sender information are automatically recorded in your order details.",
+      paymentEftDesc:
+        "Complete your order quickly with an instant electronic funds transfer. The transaction date, amount, and sender information are automatically recorded in your order details.",
       paymentEftTag: "Transaction details recorded automatically",
       paymentChequeTitle: "Cheque / Promissory Note",
-      paymentChequeDesc: "A payment option using a cheque or promissory note for your deferred commercial payments. Use the classic methods of B2B trade under platform assurance.",
+      paymentChequeDesc:
+        "A payment option using a cheque or promissory note for your deferred commercial payments. Use the classic methods of B2B trade under platform assurance.",
       paymentChequeTag: "Deferred payment support",
       paymentInstallmentTitle: "Direct Installment",
-      paymentInstallmentDesc: "An installment payment option arranged directly with the seller. For high-volume orders, you can set up an installment plan with the seller.",
+      paymentInstallmentDesc:
+        "An installment payment option arranged directly with the seller. For high-volume orders, you can set up an installment plan with the seller.",
       paymentInstallmentTag: "Plan agreed with the seller",
       currencyBannerTitle: "Buy and sell in 5 different currencies",
-      currencyBannerDesc: "On iStoc you can pay and sell in Turkish Lira (TRY), US Dollar (USD), Euro (EUR), British Pound (GBP), and Chinese Yuan (CNY).",
+      currencyBannerDesc:
+        "On iStoc you can pay and sell in Turkish Lira (TRY), US Dollar (USD), Euro (EUR), British Pound (GBP), and Chinese Yuan (CNY).",
       paymentProcessTitle: "How does the payment process work?",
       paymentProcessStep1Title: "Find your supplier and create the order",
-      paymentProcessStep1Desc: "Select your product on iStoc, reach an agreement with the supplier, and start your order. For ready-made products go directly, and for custom production define the details by messaging the supplier.",
+      paymentProcessStep1Desc:
+        "Select your product on iStoc, reach an agreement with the supplier, and start your order. For ready-made products go directly, and for custom production define the details by messaging the supplier.",
       paymentProcessStep2Title: "Choose your payment method",
-      paymentProcessStep2Desc: "Choose the option that suits you from bank transfer, EFT, cheque/promissory note, or direct installment. Also set the currency (TRY, USD, EUR, GBP, CNY) according to your needs.",
+      paymentProcessStep2Desc:
+        "Choose the option that suits you from bank transfer, EFT, cheque/promissory note, or direct installment. Also set the currency (TRY, USD, EUR, GBP, CNY) according to your needs.",
       paymentProcessStep3Title: "Make your payment and upload the receipt",
-      paymentProcessStep3Desc: "For bank transfer or EFT methods, upload your receipt via the \"My Orders > Order Details\" page. The platform automatically records the sender name, date, and amount.",
+      paymentProcessStep3Desc:
+        'For bank transfer or EFT methods, upload your receipt via the "My Orders > Order Details" page. The platform automatically records the sender name, date, and amount.',
       paymentProcessStep4Title: "Order confirmation and tracking",
-      paymentProcessStep4Desc: "Once the payment is verified, the seller starts preparing your order. You can follow every stage of the process from the \"My Orders\" page.",
+      paymentProcessStep4Desc:
+        'Once the payment is verified, the seller starts preparing your order. You can follow every stage of the process from the "My Orders" page.',
       refundHeroTitle: "Money-Back Guarantee",
-      refundHeroSubtitle: "If you experience a problem with your order, you can reach a resolution by submitting a refund request.",
+      refundHeroSubtitle:
+        "If you experience a problem with your order, you can reach a resolution by submitting a refund request.",
       refundProcessTitle: "How does the refund process work?",
-      refundProcessIntro: "If your order is not shipped, arrives incomplete, or your products arrive with a problem (e.g. defective, incorrect, damaged), you can submit a refund request.",
+      refundProcessIntro:
+        "If your order is not shipped, arrives incomplete, or your products arrive with a problem (e.g. defective, incorrect, damaged), you can submit a refund request.",
       refundCard1Title: "Create a Refund Request",
-      refundCard1Desc: "Create your refund request directly from the My Orders page. Specify your reason for the refund and the amount.",
+      refundCard1Desc:
+        "Create your refund request directly from the My Orders page. Specify your reason for the refund and the amount.",
       refundCard2Title: "Seller Review",
-      refundCard2Desc: "The seller reviews your request and approves or rejects it. Your request moves from the \"Pending\" status to a result.",
+      refundCard2Desc:
+        'The seller reviews your request and approves or rejects it. Your request moves from the "Pending" status to a result.',
       refundCard3Title: "Refund Resolution",
-      refundCard3Desc: "For approved requests, your payment is refunded. You can track every step from your order details.",
+      refundCard3Desc:
+        "For approved requests, your payment is refunded. You can track every step from your order details.",
       refundApplyTitle: "How do you apply for a refund?",
       refundStep1Title: "Go to Order Details",
-      refundStep1Desc: "Go to the My Orders > Order Details page, open the relevant order, and click the \"Create Refund Request\" button.",
+      refundStep1Desc:
+        'Go to the My Orders > Order Details page, open the relevant order, and click the "Create Refund Request" button.',
       refundStep2Title: "Specify the Refund Reason and Amount",
-      refundStep2Desc: "Write the reason for your refund request and enter the amount you want refunded. Upload a photo or supporting document if available.",
+      refundStep2Desc:
+        "Write the reason for your refund request and enter the amount you want refunded. Upload a photo or supporting document if available.",
       refundStep3Title: "Seller Review",
-      refundStep3Desc: "Your request is forwarded to the seller. The seller resolves your request as \"Approved\" or \"Rejected\".",
+      refundStep3Desc:
+        'Your request is forwarded to the seller. The seller resolves your request as "Approved" or "Rejected".',
       refundStep4Title: "Receive Your Refund",
-      refundStep4Desc: "When your request is approved, the payment refund process is initiated and your order is marked as refunded.",
+      refundStep4Desc:
+        "When your request is approved, the payment refund process is initiated and your order is marked as refunded.",
       refundNoteTitle: "About the refund process",
-      refundNoteDesc: "At every stage of your order process, you can resolve issues by messaging the seller directly. In the event of a dispute with the seller, you can create a refund request.",
+      refundNoteDesc:
+        "At every stage of your order process, you can resolve issues by messaging the seller directly. In the event of a dispute with the seller, you can create a refund request.",
     },
     kycUi: {
       accountType: "Account type",
@@ -585,7 +643,8 @@ const en = {
       documentFormatsHint: "PDF, JPG, JPEG, PNG, WEBP, DOCX · Max 10 MB · Required",
       slotHint: "PDF, JPG, PNG, WEBP, DOCX · max. 10MB",
       pageTitle: "KYC Verification",
-      pageDescription: "Complete your identity verification to purchase products. You can start shopping once your documents are approved by the super admin.",
+      pageDescription:
+        "Complete your identity verification to purchase products. You can start shopping once your documents are approved by the super admin.",
       submit: "Submit",
       uploaded: "Uploaded",
       fileExt: "{{ext}} file",
@@ -595,16 +654,19 @@ const en = {
       errTooLarge: "{{fileName}} exceeds 10MB.",
       errIdentityRequired: "Identity document is required.",
       errInvalidTckn: "Enter a valid TR ID number (11 digits, mod-10 validated).",
-      submitSuccess: "Your KYC application has been received. You can start shopping after super admin approval.",
+      submitSuccess:
+        "Your KYC application has been received. You can start shopping after super admin approval.",
       errSubmitFailed: "Submission failed.",
       statusPending: "Pending Approval",
       statusVerified: "Verified",
       statusRejected: "Rejected",
       statusSuspended: "Suspended",
       bannerPendingTitle: "Your Application Is Under Review",
-      bannerPendingDesc: "Your documents are being reviewed by the super admin. This usually takes 1-2 business days.",
+      bannerPendingDesc:
+        "Your documents are being reviewed by the super admin. This usually takes 1-2 business days.",
       bannerVerifiedTitle: "Your KYC Verification Is Approved",
-      bannerVerifiedDesc: "You can now start shopping. To update your information, edit the form and click the 'Update Information' button.",
+      bannerVerifiedDesc:
+        "You can now start shopping. To update your information, edit the form and click the 'Update Information' button.",
       bannerRejectedTitle: "Your Application Was Rejected",
       bannerRejectedDesc: "Correct your documents and resubmit.",
       bannerSuspendedTitle: "Your Account Has Been Suspended",
@@ -645,22 +707,27 @@ const en = {
       refundCannotCreate: "Refund request cannot be created",
       refundReceived: "Your refund request has been received",
       refundReceivedDesc: "The seller will review your request and respond as soon as possible.",
-      refundFormIntro: "Describe your refund request for this order below. It will be reviewed by the seller.",
+      refundFormIntro:
+        "Describe your refund request for this order below. It will be reviewed by the seller.",
       refundAmount: "Refund amount",
       refundReason: "Refund reason",
-      refundReasonPlaceholder: "Please explain if the product did not meet your expectations or if you experienced an issue...",
+      refundReasonPlaceholder:
+        "Please explain if the product did not meet your expectations or if you experienced an issue...",
       submitRefundRequest: "Submit Refund Request",
       submitDocument: "Submit Document",
       loadingBankInfo: "Loading bank details...",
-      transferToAccountHint: "Make a wire transfer/EFT to the bank account below, then click the <strong>\"I Have Paid\"</strong> button.",
+      transferToAccountHint:
+        'Make a wire transfer/EFT to the bank account below, then click the <strong>"I Have Paid"</strong> button.',
       paymentInfo: "Payment Details",
       sellerNoBankInfo: "This seller has not entered bank details yet. Please contact the seller.",
       accountHolder: "Account Holder",
       bankName: "Bank Name",
       copy: "Copy",
       copiedExcl: "Copied!",
-      checkPaymentNote: "After making the payment, click the &quot;I Have Paid&quot; button and upload your document. Your order will start being prepared once the seller reviews it.",
-      wirePaymentNote: "After making the wire transfer, click the &quot;I Have Paid&quot; button and upload your receipt. Your order will start being prepared once the seller confirms the payment.",
+      checkPaymentNote:
+        "After making the payment, click the &quot;I Have Paid&quot; button and upload your document. Your order will start being prepared once the seller reviews it.",
+      wirePaymentNote:
+        "After making the wire transfer, click the &quot;I Have Paid&quot; button and upload your receipt. Your order will start being prepared once the seller confirms the payment.",
       paidUploadDoc: "I Have Paid — Upload Document",
       paidUploadReceipt: "I Have Paid — Upload Receipt",
       orderNo: "Order No.",
@@ -681,12 +748,17 @@ const en = {
       statusCompleted: "Completed",
       statusCancelled: "Cancelled",
       statusUnknown: "Unknown Status",
-      descRefundPending: "Your refund request is being reviewed by the seller. You will receive a response as soon as possible.",
-      descRefundApproved: "Your {{amount}}refund request has been approved. Please check your payment details.",
-      descRefundRejected: "The seller rejected your refund request. Contact the seller for details.",
-      descReceiptUnderReview: "Your wire transfer receipt is under review. The order will start being prepared once the seller confirms your payment.",
+      descRefundPending:
+        "Your refund request is being reviewed by the seller. You will receive a response as soon as possible.",
+      descRefundApproved:
+        "Your {{amount}}refund request has been approved. Please check your payment details.",
+      descRefundRejected:
+        "The seller rejected your refund request. Contact the seller for details.",
+      descReceiptUnderReview:
+        "Your wire transfer receipt is under review. The order will start being prepared once the seller confirms your payment.",
       descCompletePayment: "Submit your wire transfer receipt to complete your payment.",
-      refundOnlyShippedDelivered: "A refund request can only be opened for orders that have been shipped or delivered.",
+      refundOnlyShippedDelivered:
+        "A refund request can only be opened for orders that have been shipped or delivered.",
       refundAlreadyApproved: "Your refund request for this order has already been approved.",
       refundAlreadyPending: "You already have a pending refund request for this order.",
       genericError: "An error occurred.",
@@ -746,7 +818,8 @@ const en = {
       questionsAndAnswers: "Questions and answers",
       productLoading: "Loading product...",
       productNotFound: "Product not found",
-      productNotFoundDesc: "The product you are looking for does not exist or may have been removed.",
+      productNotFoundDesc:
+        "The product you are looking for does not exist or may have been removed.",
       browseProducts: "Browse products",
       chat: "Chat",
     },
@@ -780,7 +853,8 @@ const en = {
       photoAdded: "Photo added",
       confirmRemovePhoto: "Are you sure you want to remove this photo?",
       photoRemoved: "Photo removed",
-      confirmPaymentPrompt: "Do you want to confirm that payment has been received? The order status will be updated to \"Confirming\".",
+      confirmPaymentPrompt:
+        'Do you want to confirm that payment has been received? The order status will be updated to "Confirming".',
       paymentConfirmed: "Payment confirmed, order is being processed",
       confirmFailed: "Confirmation failed",
       orderShipped: "Order marked as shipped",
@@ -914,7 +988,8 @@ const en = {
       adding: "Adding...",
       add: "Add",
       preview: "Preview",
-      maxPhotosReached: "Maximum number of photos reached (20/20). Delete existing photos to add new ones.",
+      maxPhotosReached:
+        "Maximum number of photos reached (20/20). Delete existing photos to add new ones.",
       noPhotosYet: "You haven't added any photos yet",
       photosHint: "Add factory, workshop or store photos",
       galleryPhotoAlt: "Gallery photo",
@@ -987,7 +1062,7 @@ const en = {
       trackingNumber: "Tracking Number",
       optional: "(optional)",
       trackingPlaceholder: "e.g. 1234567890",
-      shipConfirmHint: "Once confirmed, the order will move to the \"Shipping\" status.",
+      shipConfirmHint: 'Once confirmed, the order will move to the "Shipping" status.',
     },
     settingsUi: {
       businessHint: "Complete this section to receive better offers from suppliers.",
@@ -1000,54 +1075,71 @@ const en = {
       heroTitle: "Enjoy protection from payment to delivery on iStoc",
       howItWorksCta: "Here's how it works:",
       serviceInfoTitle: "Trade Assurance covers every stage of your purchasing journey",
-      serviceInfoDesc: "We offer buyers on iStoc the ability to pay securely, provide protection against unforeseen situations such as product or shipping issues, and mediate between buyers and suppliers to resolve purchase-related problems.",
+      serviceInfoDesc:
+        "We offer buyers on iStoc the ability to pay securely, provide protection against unforeseen situations such as product or shipping issues, and mediate between buyers and suppliers to resolve purchase-related problems.",
       watchMore: "Watch to learn more",
       statOrders: "Trade Assurance orders",
       statBought: "Purchased from us",
       statSuppliers: "Suppliers",
       statProducts: "Products",
       howProtectTitle: "How do we protect your payments on iStoc?",
-      howProtectIntro: "Trade Assurance makes doing business globally easier and safer for both buyers and sellers. Here's how it works:",
+      howProtectIntro:
+        "Trade Assurance makes doing business globally easier and safer for both buyers and sellers. Here's how it works:",
       step1Title: "Start a Trade Assurance order",
       step1Desc: "You've reached an order agreement with a supplier on iStoc.",
       step2Title: "Pay through iStoc",
       step2Desc: "Buy with an online payment method or make a bank transfer through iStoc.",
       step3Title: "Payment is held temporarily",
-      step3Desc: "Your payment is held in escrow. It will be released to the supplier after you receive and confirm the product.",
+      step3Desc:
+        "Your payment is held in escrow. It will be released to the supplier after you receive and confirm the product.",
       step4Title: "Get your money back if order terms aren't met",
-      step4Desc: "We'll help you reach a resolution when you file a refund or claim compensation for problematic orders.",
+      step4Desc:
+        "We'll help you reach a resolution when you file a refund or claim compensation for problematic orders.",
       whatsCovered: "What's covered",
       coveragePayments: "Secure and easy payments",
       coverageRefund: "Refund policy",
       coverageShipping: "Shipping and logistics services",
       coverageAfterSales: "After-sales protections",
       paymentsTitle: "Secure and diverse payment options",
-      paymentsDesc1: "Every payment you make through iStoc is encrypted, secure, and processed in as little as 2 hours.",
-      paymentsDesc2: "We support the payment methods you know and trust, including credit/debit cards, digital wallets, direct bank transfers, and flexible payment plans*.",
+      paymentsDesc1:
+        "Every payment you make through iStoc is encrypted, secure, and processed in as little as 2 hours.",
+      paymentsDesc2:
+        "We support the payment methods you know and trust, including credit/debit cards, digital wallets, direct bank transfers, and flexible payment plans*.",
       sourceProducts: "Source supported products",
       learnHow: "Learn how it works",
       eligibleBuyersNote: "*For eligible buyers",
       securePaymentAlt: "Secure payment",
       refundTitle: "Refund policy",
-      refundDesc1: "If your order isn't shipped, gets lost, or arrives defective, incorrect, damaged, or with any other issue, file a refund request to get your money back.",
-      refundDesc2: "If you're located in an eligible country*, you can also use our Easy Return service to return defective products locally for free.",
+      refundDesc1:
+        "If your order isn't shipped, gets lost, or arrives defective, incorrect, damaged, or with any other issue, file a refund request to get your money back.",
+      refundDesc2:
+        "If you're located in an eligible country*, you can also use our Easy Return service to return defective products locally for free.",
       eligibleCountriesNote: "*For the list of eligible countries, click",
       here: "here",
       clickSuffix: "click",
-      shippingDesc1: "Have your order delivered on the scheduled date or receive compensation for any delay.",
-      shippingDesc2: "With iStoc Logistics, you can benefit from the reliability of our logistics network and track your shipment in real time across many countries and regions worldwide.",
+      shippingDesc1:
+        "Have your order delivered on the scheduled date or receive compensation for any delay.",
+      shippingDesc2:
+        "With iStoc Logistics, you can benefit from the reliability of our logistics network and track your shipment in real time across many countries and regions worldwide.",
       logisticsAlt: "Logistics and shipping",
-      afterSalesDesc: "For eligible products, bring service to your door with our on-site installation, maintenance, repair, and free spare parts services.",
+      afterSalesDesc:
+        "For eligible products, bring service to your door with our on-site installation, maintenance, repair, and free spare parts services.",
       testimonialsTitle: "Buyer voices",
       testimonialsIntro: "Discover how Trade Assurance benefits other people like you.",
-      testimonial1: "\"Knowing that both the supplier and I are protected throughout the transaction puts my mind at ease.\"",
-      testimonial2: "\"Because you use Trade Assurance and know you're protected, there's no need to worry.\"",
-      testimonial3: "\"Paying through iStoc feels very secure; the escrow system is a real assurance for buyers.\"",
-      testimonial4: "\"The after-sales support and fast return process far exceeded our expectations.\"",
+      testimonial1:
+        '"Knowing that both the supplier and I are protected throughout the transaction puts my mind at ease."',
+      testimonial2:
+        "\"Because you use Trade Assurance and know you're protected, there's no need to worry.\"",
+      testimonial3:
+        '"Paying through iStoc feels very secure; the escrow system is a real assurance for buyers."',
+      testimonial4:
+        '"The after-sales support and fast return process far exceeded our expectations."',
       detailHeroTitle: "Secure Trade with the Trade Assurance System",
-      detailHeroDesc: "By ensuring trust and transparency at every stage of your transactions, we help you build long-term business partnerships.",
+      detailHeroDesc:
+        "By ensuring trust and transparency at every stage of your transactions, we help you build long-term business partnerships.",
       detailServiceTitle: "Trade Assurance covers every stage of your purchasing journey",
-      detailServiceDesc: "The iStoc Trade Assurance System forms the foundation of seamless trade between buyers and sellers. With secure payment, impartial resolution mechanisms, and end-to-end tracking, we provide protection against unforeseen situations.",
+      detailServiceDesc:
+        "The iStoc Trade Assurance System forms the foundation of seamless trade between buyers and sellers. With secure payment, impartial resolution mechanisms, and end-to-end tracking, we provide protection against unforeseen situations.",
       tradeAssuranceLabel: "Trade Assurance",
       featureDigitalPaymentTitle: "Digital Payment Channels",
       featureDigitalPaymentDesc: "Fast and secure transactions with multiple payment methods.",
@@ -1061,36 +1153,49 @@ const en = {
       featureReturnsDesc: "Support for hassle-free return and exchange policies.",
       featureNeutralResolutionTitle: "Impartial Resolution",
       featureNeutralResolutionDesc: "An impartial arbitration mechanism for disputes.",
-      detailProcessIntro: "Trade Assurance makes transactions between buyers and sellers easier and safer for both parties. Here's how it works:",
+      detailProcessIntro:
+        "Trade Assurance makes transactions between buyers and sellers easier and safer for both parties. Here's how it works:",
       detailStep1Title: "Start a Trade Assurance order",
-      detailStep1Desc: "You've reached an order agreement with a supplier on iStoc. The supplier confirms your order and begins preparing your product.",
-      detailStep2Desc: "Pay securely by credit card, direct debit, or bank transfer. All payments are protected with SSL encryption.",
+      detailStep1Desc:
+        "You've reached an order agreement with a supplier on iStoc. The supplier confirms your order and begins preparing your product.",
+      detailStep2Desc:
+        "Pay securely by credit card, direct debit, or bank transfer. All payments are protected with SSL encryption.",
       detailStep3Title: "Payment is held in an escrow account",
-      detailStep3Desc: "Your payment is held in an escrow account until the product is delivered and confirmed. This provides assurance for both parties.",
+      detailStep3Desc:
+        "Your payment is held in an escrow account until the product is delivered and confirmed. This provides assurance for both parties.",
       detailStep4Title: "Get your money back if there's a problem",
-      detailStep4Desc: "If the order terms aren't met, your dedicated representative follows up on the process and helps you get your money refunded.",
+      detailStep4Desc:
+        "If the order terms aren't met, your dedicated representative follows up on the process and helps you get your money refunded.",
       whatsCoveredSubtitle: "The core guarantees you have with the Trade Assurance System",
       cardSecurePaymentTitle: "Secure Payment",
-      cardSecurePaymentDesc: "Payments made by credit card and direct debit are held securely in an escrow account until the order is completed.",
+      cardSecurePaymentDesc:
+        "Payments made by credit card and direct debit are held securely in an escrow account until the order is completed.",
       cardRefundTitle: "Refund Guarantee",
       cardRefundDesc: "If a problem occurs with the order, your refund is guaranteed.",
       cardAgentTitle: "Dedicated Representative",
-      cardAgentDesc: "A dedicated representative follows up on the process for you until your order is fully completed.",
+      cardAgentDesc:
+        "A dedicated representative follows up on the process for you until your order is fully completed.",
       fullAssuranceTitle: "Full Assurance",
-      cardFullAssuranceDesc: "All stages from production to delivery are monitored by the iStoc team; in case of disruption, impartial arbitration steps in.",
+      cardFullAssuranceDesc:
+        "All stages from production to delivery are monitored by the iStoc team; in case of disruption, impartial arbitration steps in.",
       howSystemWorksTitle: "How Does the System Work?",
-      howSystemWorksIntro: "The Trade Assurance System offers two-layer protection based on your order type.",
+      howSystemWorksIntro:
+        "The Trade Assurance System offers two-layer protection based on your order type.",
       layer1Title: "Payment Assurance",
       layer1Desc1: "The buyer's payment is held until the product is delivered.",
-      layer1Desc2: "Once the order is fully completed, the money is transferred to the seller. It applies automatically to all standard orders.",
-      layer2Desc: "More comprehensive protection is provided for custom-made or printed product orders. The system guarantees the following:",
+      layer1Desc2:
+        "Once the order is fully completed, the money is transferred to the seller. It applies automatically to all standard orders.",
+      layer2Desc:
+        "More comprehensive protection is provided for custom-made or printed product orders. The system guarantees the following:",
       layer2Item1: "Tracking of all steps from product preparation to shipping by the iStoc team",
       layer2Item2: "Complete and flawless delivery to the customer",
       layer2Item3: "Verification of product accuracy, quality control, and on-time delivery",
       layer2Item4: "Product installation and shipment support if needed",
       layer2Item5: "Refund to the buyer or compensation to the seller when terms are not met",
-      detailShippingDesc1: "Choose the shipping type that suits your order — Express, Air, Sea, Land, or Standard shipping options are available.",
-      detailShippingDesc2: "When your order is shipped, the tracking number and carrier information are automatically added to your order details. You can monitor the process on the platform from the moment it's shipped until it's received.",
+      detailShippingDesc1:
+        "Choose the shipping type that suits your order — Express, Air, Sea, Land, or Standard shipping options are available.",
+      detailShippingDesc2:
+        "When your order is shipped, the tracking number and carrier information are automatically added to your order details. You can monitor the process on the platform from the moment it's shipped until it's received.",
       shippingLogisticsAlt: "Shipping and logistics",
       footerTermsTitle: "Terms and Conditions",
       footerRead: "Read",
@@ -1900,7 +2005,8 @@ const en = {
       qa: {
         askTitle: "Do you have a question?",
         askSubtitle: "The seller or other buyers can answer.",
-        askPlaceholder: "e.g. How much stock is available for this product? What is the wholesale price range?",
+        askPlaceholder:
+          "e.g. How much stock is available for this product? What is the wholesale price range?",
         submitQuestion: "Submit Question",
         loading: "Loading...",
         emptyState: "No questions yet. Be the first to ask.",
@@ -4884,10 +4990,12 @@ const en = {
       downloadMyDataPasswordLabel: "Verify your password",
       downloadMyDataRateLimit: "You can only create 1 request within 24 hours.",
       downloadMyDataError: "An error occurred. Please try again later.",
-      downloadMyDataSuccess: "Your request has been received. A link will be sent to your email address when your data is ready.",
+      downloadMyDataSuccess:
+        "Your request has been received. A link will be sent to your email address when your data is ready.",
       downloadMyDataProcessing: "Your request is being processed...",
       downloadMyDataBtn: "Create Data Export Request",
-      downloadMyDataDesc: "Under KVKK and GDPR, you can request a copy of your personal data. Your data is prepared in JSON and CSV format and sent to you by email.",
+      downloadMyDataDesc:
+        "Under KVKK and GDPR, you can request a copy of your personal data. Your data is prepared in JSON and CSV format and sent to you by email.",
       downloadMyDataTitle: "Download My Data",
       downloadMyDataNav: "Download my data",
       passwordMinLength: "Password must be at least 8 characters.",
@@ -5368,7 +5476,7 @@ const en = {
         "Bringing sellers and buyers from around the world together for secure, transparent B2B trade.",
       storyTitle: "Our Story",
       storyP1:
-        'iStoc is a global B2B trade brand operated by iStoc Private Company Limited (United Kingdom). Our goal is simple: to bring together manufacturers, wholesalers, and retailers from every corner of the world on a single digital platform.',
+        "iStoc is a global B2B trade brand operated by iStoc Private Company Limited (United Kingdom). Our goal is simple: to bring together manufacturers, wholesalers, and retailers from every corner of the world on a single digital platform.",
       storyP2:
         "Without geographic boundaries, we are building the infrastructure where our sellers and buyers can trade with confidence, speed, and transparency. With verified sellers, secure payments and a simple commission structure, we are on our way to becoming the next-generation B2B marketplace.",
       storyP3:
@@ -6816,7 +6924,8 @@ const en = {
         loadError: "Could not load pricing information. Please refresh the page.",
       },
       manufacturerPlatform: "Manufacturer platform",
-      heroSubtitle: "iStoc connects manufacturers in Türkiye directly with B2B buyers around the world. List, sell, ship — no commission.",
+      heroSubtitle:
+        "iStoc connects manufacturers in Türkiye directly with B2B buyers around the world. List, sell, ship — no commission.",
       heroImageAlt: "Export from Türkiye to the world: port and container logistics",
       applyAsSeller: "Apply as a seller",
       howItWorks: "How it works?",
@@ -6880,13 +6989,15 @@ const en = {
       monthsFree: "{{count}} months free",
       sellerPackages: "Seller packages",
       pricingSectionTitle: "Choose the package that fits your scale.",
-      pricingSectionDesc: "All packages do the same job: they get your product to European buyers. Higher packages lower your commission, expand your storefront, and raise your support level.",
+      pricingSectionDesc:
+        "All packages do the same job: they get your product to European buyers. Higher packages lower your commission, expand your storefront, and raise your support level.",
       period: "Period",
       yearlyToggle: "Yearly",
       monthlyToggle: "Monthly",
       comparison: "Comparison",
       comparisonTitle: "iStoc versus other marketplaces.",
-      comparisonDesc: "From a manufacturer's perspective the difference is clear: lower commission, no fixed membership fees, a B2B-focused process.",
+      comparisonDesc:
+        "From a manufacturer's perspective the difference is clear: lower commission, no fixed membership fees, a B2B-focused process.",
       globalB2bMarketplace: "Global B2B marketplace",
       internationalGeneral: "International general",
       horizontalEcommerce: "Horizontal e-commerce",
@@ -6906,9 +7017,11 @@ const en = {
       dedicatedTurkishSupport: "Dedicated support for Turkish manufacturers",
       extraFee: "Extra fee",
       restricted: "Restricted",
-      comparisonDisclaimer: "* Competitor rates are taken from publicly available pricing pages (May 2026). iStoc commission is category-based; the full list is shared after application.",
+      comparisonDisclaimer:
+        "* Competitor rates are taken from publicly available pricing pages (May 2026). iStoc commission is category-based; the full list is shared after application.",
       finalCtaTitle: "The application takes just 4 minutes.",
-      finalCtaDesc: "A tax number, a production category and a contact — we handle the rest together. Approval takes 2 business days on average.",
+      finalCtaDesc:
+        "A tax number, a production category and a contact — we handle the rest together. Approval takes 2 business days on average.",
       letsTalkFirst: "Let's talk first",
       finalCtaNote: "Application is free. No cancellation conditions.",
       storeNotFound: "Store not found",
@@ -6943,22 +7056,32 @@ const en = {
       onIstocFor: "On iStoc for",
       verificationSubtitle: "Earn your trusted supplier badge",
       verificationBenefitsTitle: "Verification Benefits",
-      verificationBenefitsP1: "The iStoc Verified Supplier badge is the strongest signal of your credibility on the platform. Verified suppliers gain 40% more visibility in search results, and 78% of buyers prefer verified suppliers.",
-      verificationBenefitsP2: "Your badge appears prominently on your store profile, product listings and search results. Buyers place orders with verified suppliers with greater confidence, which significantly increases your conversion rate. You also gain access to campaigns and storefront placements reserved for verified suppliers.",
-      verificationBenefitsP3: "Verified suppliers benefit from iStoc's priority support line, can join exclusive training programs, and are featured prominently at iStoc business development events.",
+      verificationBenefitsP1:
+        "The iStoc Verified Supplier badge is the strongest signal of your credibility on the platform. Verified suppliers gain 40% more visibility in search results, and 78% of buyers prefer verified suppliers.",
+      verificationBenefitsP2:
+        "Your badge appears prominently on your store profile, product listings and search results. Buyers place orders with verified suppliers with greater confidence, which significantly increases your conversion rate. You also gain access to campaigns and storefront placements reserved for verified suppliers.",
+      verificationBenefitsP3:
+        "Verified suppliers benefit from iStoc's priority support line, can join exclusive training programs, and are featured prominently at iStoc business development events.",
       verificationRequirementsTitle: "Verification Requirements",
-      verificationRequirementsP1: "To apply for the verification process, the following core documents must be ready: a current trade registry gazette, tax certificate, signature circular, balance sheet and income statement for the last 2 years, production facility photos, and an activity certificate.",
-      verificationRequirementsP2: "Your company must have been operating for at least 2 years, hold a valid trade registry record, and be registered as an active seller on the iStoc platform for at least 6 months. In addition, your customer satisfaction score over the last 6 months is expected to be above 4.0/5.0.",
+      verificationRequirementsP1:
+        "To apply for the verification process, the following core documents must be ready: a current trade registry gazette, tax certificate, signature circular, balance sheet and income statement for the last 2 years, production facility photos, and an activity certificate.",
+      verificationRequirementsP2:
+        "Your company must have been operating for at least 2 years, hold a valid trade registry record, and be registered as an active seller on the iStoc platform for at least 6 months. In addition, your customer satisfaction score over the last 6 months is expected to be above 4.0/5.0.",
       verificationProcessTitle: "Application Process",
-      verificationProcessP1: "The verification application is completed in 4 simple steps. First, go to the \"Verification Application\" section in your seller panel and fill out the online application form. In the second step, upload the required documents to the system. In the third step, the iStoc verification team will review your documents and request additional information if needed.",
-      verificationProcessP2: "In the fourth and final step, an iStoc representative visits your premises for the Advanced and Premium verification levels. The entire process is completed within 10-15 business days on average. You can track the status of your application in real time from your seller panel.",
+      verificationProcessP1:
+        'The verification application is completed in 4 simple steps. First, go to the "Verification Application" section in your seller panel and fill out the online application form. In the second step, upload the required documents to the system. In the third step, the iStoc verification team will review your documents and request additional information if needed.',
+      verificationProcessP2:
+        "In the fourth and final step, an iStoc representative visits your premises for the Advanced and Premium verification levels. The entire process is completed within 10-15 business days on average. You can track the status of your application in real time from your seller panel.",
       verificationLevelsTitle: "Verification Levels",
       verificationLevelBasicLabel: "Basic Verification:",
-      verificationLevelBasicDesc: "Verification of company registration documents and tax liability status. This level confirms that your company operates legally. It is offered free of charge.",
+      verificationLevelBasicDesc:
+        "Verification of company registration documents and tax liability status. This level confirms that your company operates legally. It is offered free of charge.",
       verificationLevelAdvancedLabel: "Advanced Verification:",
-      verificationLevelAdvancedDesc: "In addition to basic verification, it includes a production capacity assessment and an on-site audit. During the factory visit, production lines, quality control processes and storage conditions are inspected. An annual verification fee of 2,990 TRY applies.",
+      verificationLevelAdvancedDesc:
+        "In addition to basic verification, it includes a production capacity assessment and an on-site audit. During the factory visit, production lines, quality control processes and storage conditions are inspected. An annual verification fee of 2,990 TRY applies.",
       verificationLevelPremiumLabel: "Premium Verification:",
-      verificationLevelPremiumDesc: "It is the highest level of credibility badge. In addition to advanced verification, it includes financial soundness analysis, customer reference checks and regular annual audits. Premium verified suppliers are highlighted as iStoc's most trusted business partners. An annual verification fee of 7,990 TRY applies.",
+      verificationLevelPremiumDesc:
+        "It is the highest level of credibility badge. In addition to advanced verification, it includes financial soundness analysis, customer reference checks and regular annual audits. Premium verified suppliers are highlighted as iStoc's most trusted business partners. An annual verification fee of 7,990 TRY applies.",
     },
 
     // ============================================================

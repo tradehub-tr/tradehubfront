@@ -150,19 +150,33 @@ export function ManufacturerFilterSidebar(): string {
   `;
 
   const platformBody = chipGroup(
-    platformYears.map((y) => chipRow("platformYears", String(y), t("checkoutMfr.yearsAndAbove", { count: y }))).join("")
+    platformYears
+      .map((y) => chipRow("platformYears", String(y), t("checkoutMfr.yearsAndAbove", { count: y })))
+      .join("")
   );
 
   const onTimeBody = chipGroup(
-    onTime.map((v) => chipRow("onTimeRate", v, v === "100" ? `%${v}` : t("checkoutMfr.percentAndAbove", { value: v }))).join("")
+    onTime
+      .map((v) =>
+        chipRow(
+          "onTimeRate",
+          v,
+          v === "100" ? `%${v}` : t("checkoutMfr.percentAndAbove", { value: v })
+        )
+      )
+      .join("")
   );
 
   const respBody = chipGroup(
-    respHours.map((v) => chipRow("responseHours", v, t("checkoutMfr.hoursOrLess", { count: v }))).join("")
+    respHours
+      .map((v) => chipRow("responseHours", v, t("checkoutMfr.hoursOrLess", { count: v })))
+      .join("")
   );
 
   const reorderBody = chipGroup(
-    reorder.map((v) => chipRow("reorderRate", v, t("checkoutMfr.percentAndAbove", { value: v }))).join("")
+    reorder
+      .map((v) => chipRow("reorderRate", v, t("checkoutMfr.percentAndAbove", { value: v })))
+      .join("")
   );
 
   return `

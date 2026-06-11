@@ -666,10 +666,7 @@ export function bindHelpfulButtons(container: HTMLElement): void {
       const card = btn.closest(".rv-card") as HTMLElement | null;
       const commentEl = card?.querySelector(".rv-card-comment");
       const oldBody = commentEl?.textContent?.trim() || "";
-      const newBody = window.prompt(
-        t("prodUi.editReviewPrompt"),
-        oldBody
-      );
+      const newBody = window.prompt(t("prodUi.editReviewPrompt"), oldBody);
       if (newBody == null || newBody.trim() === "" || newBody.trim() === oldBody) {
         return; // İptal veya değişiklik yok
       }

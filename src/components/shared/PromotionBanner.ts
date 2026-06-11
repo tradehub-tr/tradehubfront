@@ -4,11 +4,7 @@
  */
 
 import type { PromotionBannerProps } from "../../types/buyerDashboard";
-import {
-  escapeHtml,
-  sanitizeUrl,
-  safeHexColor,
-} from "../../utils/sanitize";
+import { escapeHtml, sanitizeUrl, safeHexColor } from "../../utils/sanitize";
 
 export function PromotionBanner({
   title,

@@ -143,7 +143,10 @@ function getCurrencyOptions(): CurrencyOption[] {
  */
 function buildCurrencyOptionsHtml(): string {
   return getCurrencyOptions()
-    .map((currency) => `\n              <option value="${currency.code}">${currency.code} - ${currency.name}</option>\n            `)
+    .map(
+      (currency) =>
+        `\n              <option value="${currency.code}">${currency.code} - ${currency.name}</option>\n            `
+    )
     .join("");
 }
 
@@ -154,7 +157,8 @@ function buildCurrencyOptionsHtml(): string {
 function buildCurrencyPillsHtml(): string {
   return getCurrencyOptions()
     .map(
-      (currency, i) => `\n                <button type="button" class="px-3 py-1.5 text-xs font-medium rounded-full border transition-colors ${i === 0 ? "border-primary-500 text-primary-600 bg-primary-50 dark:border-primary-400 dark:text-primary-400 dark:bg-primary-900/20" : "border-gray-300 text-gray-600 dark:border-gray-600 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500"}">\n                  ${currency.code === "TRY" ? "TL" : currency.symbol}\n                </button>\n              `
+      (currency, i) =>
+        `\n                <button type="button" class="px-3 py-1.5 text-xs font-medium rounded-full border transition-colors ${i === 0 ? "border-primary-500 text-primary-600 bg-primary-50 dark:border-primary-400 dark:text-primary-400 dark:bg-primary-900/20" : "border-gray-300 text-gray-600 dark:border-gray-600 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500"}">\n                  ${currency.code === "TRY" ? "TL" : currency.symbol}\n                </button>\n              `
     )
     .join("");
 }

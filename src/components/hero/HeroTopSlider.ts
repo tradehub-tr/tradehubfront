@@ -51,8 +51,7 @@ const ALIGN_MAP: Record<ResolvedSlide["align"], string> = {
 function safeBackgroundCss(value: unknown, fallback: string): string {
   const raw = String(value ?? "").trim();
   if (!raw) return fallback;
-  const dangerous =
-    /url\s*\(|expression\s*\(|@import|javascript:|vbscript:|data:|[;{}<>\\]/i;
+  const dangerous = /url\s*\(|expression\s*\(|@import|javascript:|vbscript:|data:|[;{}<>\\]/i;
   return dangerous.test(raw) ? fallback : raw;
 }
 

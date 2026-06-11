@@ -157,11 +157,7 @@ function tierTag(plan: PricingPlan, idx: number): string {
 // Per-kart "Paket içeriği" özet listesi — SADECE plana dahil (✓) VE admin'de
 // "Kartta Göster" işaretli feature'lar gösterilir. İşaretli hiç feature yoksa
 // liste boş kalır (fallback YOK) — kart içeriği tamamen admin seçimine bağlı.
-function PricingCard(
-  plan: PricingPlan,
-  idx: number,
-  trial?: TrialConfig
-): string {
+function PricingCard(plan: PricingPlan, idx: number, trial?: TrialConfig): string {
   const isFeat = !!plan.highlighted;
   const hasPrice = (plan.yearly_price ?? 0) > 0 || (plan.monthly_price ?? 0) > 0;
   // Admin'den girilen "fiyat yerine metin" — doluysa fiyatın yerini alır (ör. "Özel teklif").
@@ -220,7 +216,7 @@ function PricingCard(
                 ${escapeHtml(sym)}<span x-text="yearly ? '${priceY}' : '${priceM}'">${priceY}</span>
               </span>
               <span class="text-[13px] ${perCls}">/ <span x-text="yearly ? '${t("sellPage.year")}' : '${t("sellPage.month")}'">${t("sellPage.year")}</span></span>`
-            : `<span class="text-[32px] font-semibold tracking-[-0.03em] leading-none ${amountCls}">${t("sellPage.customOffer")}</span>`
+              : `<span class="text-[32px] font-semibold tracking-[-0.03em] leading-none ${amountCls}">${t("sellPage.customOffer")}</span>`
         }
       </div>
       <div class="text-[11.5px] -mt-1 ${metaCls}">
@@ -306,17 +302,32 @@ function matrixSections(): MatrixSection[] {
         {
           f: t("sellPage.manufacturerBadge"),
           feature_key: "manufacturer_badge",
-          v: [txt(t("sellPage.tierStandard")), txt(t("sellPage.tierSilver")), txt(t("sellPage.tierGold")), txt("Platinum")],
+          v: [
+            txt(t("sellPage.tierStandard")),
+            txt(t("sellPage.tierSilver")),
+            txt(t("sellPage.tierGold")),
+            txt("Platinum"),
+          ],
         },
         {
           f: t("sellPage.storefrontType"),
           feature_key: "storefront_tier",
-          v: [txt(t("sellPage.tierStandard")), txt("Premium"), txt("Premium+"), txt(t("sellPage.tierFullyCustom"))],
+          v: [
+            txt(t("sellPage.tierStandard")),
+            txt("Premium"),
+            txt("Premium+"),
+            txt(t("sellPage.tierFullyCustom")),
+          ],
         },
         {
           f: t("sellPage.multiLanguage"),
           feature_key: "languages",
-          v: [txt(t("sellPage.langCount2")), txt(t("sellPage.langCount4")), txt(t("sellPage.langCount6")), txt(t("sellPage.langCount15Plus"))],
+          v: [
+            txt(t("sellPage.langCount2")),
+            txt(t("sellPage.langCount4")),
+            txt(t("sellPage.langCount6")),
+            txt(t("sellPage.langCount15Plus")),
+          ],
         },
         { f: t("sellPage.videoMedia360"), feature_key: "rich_media", v: [no, no, yes, yes] },
         {
@@ -332,7 +343,12 @@ function matrixSections(): MatrixSection[] {
         {
           f: t("sellPage.support"),
           feature_key: "support_tier",
-          v: [txt("Email"), txt(t("sellPage.supportPriority")), txt(t("sellPage.supportAccountMgr")), txt(t("sellPage.support247Dedicated"))],
+          v: [
+            txt("Email"),
+            txt(t("sellPage.supportPriority")),
+            txt(t("sellPage.supportAccountMgr")),
+            txt(t("sellPage.support247Dedicated")),
+          ],
         },
         {
           f: t("sellPage.teamSeats"),
@@ -344,9 +360,21 @@ function matrixSections(): MatrixSection[] {
           feature_key: "ad_credit_monthly",
           v: [txt("—"), txt("€100"), txt("€300"), txt(t("sellPage.custom"))],
         },
-        { f: t("sellPage.vatRefundAdvisory"), feature_key: "vat_refund_advisory", v: [yes, yes, yes, yes] },
-        { f: t("sellPage.insuredShippingIncluded"), feature_key: "insured_shipping", v: [yes, yes, yes, yes] },
-        { f: t("sellPage.eventInvitation"), feature_key: "event_invitations", v: [no, no, yes, yes] },
+        {
+          f: t("sellPage.vatRefundAdvisory"),
+          feature_key: "vat_refund_advisory",
+          v: [yes, yes, yes, yes],
+        },
+        {
+          f: t("sellPage.insuredShippingIncluded"),
+          feature_key: "insured_shipping",
+          v: [yes, yes, yes, yes],
+        },
+        {
+          f: t("sellPage.eventInvitation"),
+          feature_key: "event_invitations",
+          v: [no, no, yes, yes],
+        },
       ],
     },
     {
@@ -356,14 +384,23 @@ function matrixSections(): MatrixSection[] {
           f: t("sellPage.apiAccess"),
           help: t("sellPage.apiAccessHelp"),
           feature_key: "api_access",
-          v: [no, txt(t("sellPage.limited")), txt(t("sellPage.full")), txt(t("sellPage.customSla"))],
+          v: [
+            no,
+            txt(t("sellPage.limited")),
+            txt(t("sellPage.full")),
+            txt(t("sellPage.customSla")),
+          ],
         },
         {
           f: t("sellPage.erpIntegration"),
           feature_key: "erp_integration",
           v: [no, no, txt("Beta"), yes],
         },
-        { f: t("sellPage.customPaymentTerms"), feature_key: "custom_payment_terms", v: [no, no, no, yes] },
+        {
+          f: t("sellPage.customPaymentTerms"),
+          feature_key: "custom_payment_terms",
+          v: [no, no, no, yes],
+        },
         {
           f: t("sellPage.customSubdomain"),
           feature_key: "custom_subdomain",
@@ -509,10 +546,7 @@ function matrixGridStyle(n: number): string {
 // Grid container'ın statik (Tailwind taranabilir) utility'leri.
 const MATRIX_GRID_CLS = "grid gap-3 items-center";
 
-function PricingMatrix(
-  plans: PricingPlan[],
-  featuresMatrix?: PricingFeaturesMatrix
-): string {
+function PricingMatrix(plans: PricingPlan[], featuresMatrix?: PricingFeaturesMatrix): string {
   // N-plan: kaç public plan varsa o kadar kolon. Karşılaştırma için en az 2 plan.
   if (plans.length < 2) return "";
   const gridStyle = matrixGridStyle(plans.length);

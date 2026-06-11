@@ -4,7 +4,7 @@
  * NOTE: Export adı `TradeAssuranceFooterCards` olarak kalıyor çünkü tüm sayfalar bu adla import ediyor.
  */
 
-import { t } from '../../i18n'
+import { t } from "../../i18n";
 
 const iconBookmark = `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="24" fill="#FFC200"/><g transform="translate(8,8)"><path d="M24.381 3.048c1.262 0 2.286 1.023 2.286 2.285v23.62L16 24.19 5.333 28.952V5.333c0-1.262 1.024-2.285 2.286-2.285h16.762Zm0 2.285H7.619v20.096L16 21.687l8.381 3.742V5.333Zm-3.81 9.143v2.286h-9.142v-2.286h9.143Zm0-5.333v2.286h-9.142V9.143h9.143Z" fill="#222" fill-rule="nonzero"/></g></svg>`;
 

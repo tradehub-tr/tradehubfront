@@ -28,8 +28,7 @@ export const queryKeys = {
   categories: () => ["categories"] as const,
   currencyRates: () => ["currency", "rates"] as const,
   filters: (category: string) => ["filters", category] as const,
-  listings: (params: Record<string, unknown>) =>
-    ["listings", normalize(params)] as const,
+  listings: (params: Record<string, unknown>) => ["listings", normalize(params)] as const,
   heroSlider: () => ["promo", "hero"] as const,
   headerNotice: () => ["promo", "header-notice"] as const,
 };
