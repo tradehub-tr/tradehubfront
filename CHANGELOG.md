@@ -1,3 +1,11 @@
+## [v1.3.1-beta.1] - 2026-06-11 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Degistirildi
+- refactor(sell): pricing kartlarından boş "Paket İçeriği" bölümünü kaldır (@boraydeger32)
+
+---
 ## [v1.3.1] - 2026-06-10 PROD
 
 Bu surum istoc.com'da yayindadir.
