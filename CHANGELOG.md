@@ -1,3 +1,14 @@
+## [v1.3.4-beta.1] - 2026-06-11 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(nginx): birleşik container'da /panel admin SPA servisi ve SEO domain maskeleme eklendi (@ahmeetseker)
+  - /panel location bloğu eklendi: birleşik container'da (PROD/istoc) admin paneli aynı container'dan serve edilir; ^~ ile asset regex'lerine düşmesi engellendi
+  - SEO render location'larında (listing/category/brand/seller/static) sub_filter ile paylaşım önizlemesindeki backend domaini frontend domaine çevrildi (canonical/og:url)
+  - sub_filter için proxy Accept-Encoding boşaltıldı (gzip yanıtta filtre çalışsın)
+
+---
 ## [v1.3.4] - 2026-06-11 PROD
 
 Bu surum istoc.com'da yayindadir.
