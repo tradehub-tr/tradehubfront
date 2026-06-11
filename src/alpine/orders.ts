@@ -423,7 +423,9 @@ Alpine.data("ordersListComponent", () => ({
     if (order.refundStatus === "Rejected") return t("ordersUi.refundRejected");
     // Normal akış
     if (order.status === "Waiting for payment") {
-      return order.receiptUrl ? t("ordersUi.statusPaymentConfirming") : t("ordersUi.statusAwaitingPayment");
+      return order.receiptUrl
+        ? t("ordersUi.statusPaymentConfirming")
+        : t("ordersUi.statusAwaitingPayment");
     }
     const labels: Record<string, string> = {
       Confirming: t("ordersUi.statusPreparing"),

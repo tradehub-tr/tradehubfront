@@ -48,6 +48,22 @@ function upsertMetaTag(attr: "name" | "property", key: string, content: string):
   tag.setAttribute("content", content);
 }
 
+/**
+ * Mutlak URL'in path'ini koruyup host'unu mevcut origin'e (istoc.com) çevirir.
+ * Backend SEO payload'u canonical/og:url'i kendi domain'iyle (istoc.cronbi.com)
+ * üretebiliyor; müşteri Safari'de "Paylaş" deyince DOM'daki canonical'ı okuduğu
+ * için backend domaini görünüyordu. Origin'e sabitleyince rc/beta/prod'da
+ * otomatik doğru domain çıkar. Dış URL'lere (og:image CDN) UYGULANMAZ.
+ */
+function toCurrentOrigin(url: string): string {
+  try {
+    const u = new URL(url, window.location.origin);
+    return `${window.location.origin}${u.pathname}${u.search}${u.hash}`;
+  } catch {
+    return url;
+  }
+}
+
 function upsertLinkTag(rel: string, href: string, hreflang?: string): void {
   const selector = hreflang
     ? `link[rel="${rel}"][hreflang="${hreflang}"]`
@@ -90,20 +106,20 @@ export function applyServerSeo(seo: ServerSeoPayload | null | undefined): void {
   if (seo.og_title) upsertMetaTag("property", "og:title", seo.og_title);
   if (seo.og_description) upsertMetaTag("property", "og:description", seo.og_description);
   if (seo.og_image) upsertMetaTag("property", "og:image", seo.og_image);
-  if (seo.og_url) upsertMetaTag("property", "og:url", seo.og_url);
+  if (seo.og_url) upsertMetaTag("property", "og:url", toCurrentOrigin(seo.og_url));
 
   // Twitter
   upsertMetaTag("name", "twitter:card", "summary_large_image");
   if (seo.twitter_handle) upsertMetaTag("name", "twitter:site", seo.twitter_handle);
 
   // Canonical
-  if (seo.canonical) upsertLinkTag("canonical", seo.canonical);
+  if (seo.canonical) upsertLinkTag("canonical", toCurrentOrigin(seo.canonical));
 
   // Hreflang annotations (Faz 7)
   if (seo.hreflang_links?.length) {
     for (const alt of seo.hreflang_links) {
       if (alt.hreflang && alt.href) {
-        upsertLinkTag("alternate", alt.href, alt.hreflang);
+        upsertLinkTag("alternate", toCurrentOrigin(alt.href), alt.hreflang);
       }
     }
   }

@@ -580,7 +580,8 @@ Alpine.data("sellerDashboard", () => ({
       body: JSON.stringify(body),
     });
     const data = (await res.json()) as { message: unknown; exc?: string };
-    if (!res.ok) throw new Error((data as { exception?: string }).exception || t("sellerApp.error"));
+    if (!res.ok)
+      throw new Error((data as { exception?: string }).exception || t("sellerApp.error"));
     return data.message;
   },
 

@@ -15,7 +15,7 @@ describe("idbStorage AsyncStorage adapter", () => {
   it("removes a value", async () => {
     await idbStorage.setItem("k2", "v2");
     await idbStorage.removeItem("k2");
-    expect(await idbStorage.getItem("k2") == null).toBe(true);
+    expect((await idbStorage.getItem("k2")) == null).toBe(true);
   });
 
   it("lists entries", async () => {

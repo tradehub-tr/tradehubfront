@@ -9,7 +9,9 @@ import { escapeHtml } from "../../utils/sanitize";
 export function ContactForm(data: ContactFormData): string {
   const title = data.title ? escapeHtml(data.title) : t("seller.sf.sendMessageToSupplier");
   const maxLength = data.maxLength || 8000;
-  const placeholder = data.placeholder ? escapeHtml(data.placeholder) : t("seller.sf.enterInquiryDetails");
+  const placeholder = data.placeholder
+    ? escapeHtml(data.placeholder)
+    : t("seller.sf.enterInquiryDetails");
 
   return `
     <section id="contact-form" class="contact-form py-12" aria-label="${t("seller.sf.contactFormLabel")}">

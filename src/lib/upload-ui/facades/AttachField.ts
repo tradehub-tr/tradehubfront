@@ -135,7 +135,9 @@ export class AttachFieldController {
   private async acceptFile(file: File): Promise<void> {
     const maxBytes = this.opts.maxFileSizeBytes ?? 10 * 1024 * 1024;
     if (file.size > maxBytes) {
-      this.opts.onUploadError?.(t("commonSvc.fileTooLarge", { mb: Math.round(maxBytes / 1024 / 1024) }));
+      this.opts.onUploadError?.(
+        t("commonSvc.fileTooLarge", { mb: Math.round(maxBytes / 1024 / 1024) })
+      );
       return;
     }
 

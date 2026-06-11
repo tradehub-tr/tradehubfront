@@ -1118,7 +1118,8 @@ Alpine.data("shippingForm", () => ({
       } catch (err) {
         // Backend reddetti — listeyi değiştirme, hatayı göster
         const msg =
-          (err as { _server_messages?: string; message?: string })?.message || t("checkoutMfr.addressDeleteFailed");
+          (err as { _server_messages?: string; message?: string })?.message ||
+          t("checkoutMfr.addressDeleteFailed");
         showToast({ message: msg, type: "error" });
         return;
       }

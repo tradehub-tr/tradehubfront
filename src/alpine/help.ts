@@ -1029,9 +1029,7 @@ Alpine.data("ticketForm", () => ({
 
   get routingHint(): string {
     if (!this.category) return "";
-    return this.requiresOrder
-      ? t("helpUi.routingHintSeller")
-      : t("helpUi.routingHintPlatform");
+    return this.requiresOrder ? t("helpUi.routingHintSeller") : t("helpUi.routingHintPlatform");
   },
 
   get charCount(): number {
@@ -1049,9 +1047,7 @@ Alpine.data("ticketForm", () => ({
         this.errors.description = t("ticketForm.descriptionMinLength");
       if (this.requiresOrder && !this.orderRef.trim()) {
         this.errors.orderRef =
-          this.orders.length === 0
-            ? t("helpUi.orderRefNoOrders")
-            : t("helpUi.orderRefRequired");
+          this.orders.length === 0 ? t("helpUi.orderRefNoOrders") : t("helpUi.orderRefRequired");
       }
     }
     return Object.keys(this.errors).length === 0;
