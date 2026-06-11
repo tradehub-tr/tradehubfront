@@ -46,26 +46,9 @@ function ctaHref(action: PricingPlan["cta_action"]): string {
   }
 }
 
-// FAZ 4.1 — feature icon glyph map (backend "check"|"x"|"star"|"zap"|"info" → svg)
-const SVG_STAR = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 22l-6-4-6 4 1.5-8.5L2 9h7z"/></svg>`;
 const SVG_ZAP = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>`;
 const SVG_INFO = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>`;
 
-function featureIcon(icon: PricingPlan["features"][number]["icon"]): string {
-  switch (icon) {
-    case "x":
-      return SVG_X;
-    case "star":
-      return SVG_STAR;
-    case "zap":
-      return SVG_ZAP;
-    case "info":
-      return SVG_INFO;
-    case "check":
-    default:
-      return SVG_CHECK;
-  }
-}
 // Section sarmal: header/footer ile aynı dış genişlik — `container-boxed` (max 1840px).
 // Inner sınır: 1500px max, mx-auto. 4 section'da ortak ki içerikler simetrik / hizalı dursun.
 const WRAP_CLS = "container-boxed";
@@ -73,9 +56,7 @@ const INNER_CLS = "max-w-[1500px] mx-auto";
 
 // ---------- SVG ikonları ----------
 const SVG_ARROW = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>`;
-const SVG_CHECK = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`;
 const SVG_CHECK_MD = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`;
-const SVG_X = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>`;
 const SVG_DASH = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 12h12"/></svg>`;
 // ---------- Paylaşılan class'lar ----------
 const EYEBROW_CLS =
@@ -176,12 +157,6 @@ function tierTag(plan: PricingPlan, idx: number): string {
 // Per-kart "Paket içeriği" özet listesi — SADECE plana dahil (✓) VE admin'de
 // "Kartta Göster" işaretli feature'lar gösterilir. İşaretli hiç feature yoksa
 // liste boş kalır (fallback YOK) — kart içeriği tamamen admin seçimine bağlı.
-function cardFeatures(plan: PricingPlan): PricingPlan["features"] {
-  // Ortak set: show_on_card=1 olanların hepsi; pakette dahil değilse (is_disabled)
-  // ✗ + üstü çizili gösterilir (klasik karşılaştırma — tüm kartlar eşit uzunluk).
-  return plan.features.filter((f) => f.show_on_card);
-}
-
 function PricingCard(
   plan: PricingPlan,
   idx: number,
@@ -214,14 +189,6 @@ function PricingCard(
   // Diğer kartlar açık zemin → th-btn-outline (sarı çerçeve)
   // Her ikisi th-btn-block ile kart genişliğine yayılır.
   const ctaCls = isFeat ? "th-btn th-btn-block" : "th-btn-outline th-btn-block";
-  const dividerCls = isFeat ? "bg-white/10" : "bg-[#e8e6e0]";
-  const featHeadCls = isFeat ? "text-white/55" : "text-[#8a877f]";
-  const featLiCls = isFeat ? "text-white/85" : "text-[#4a4a48]";
-  const checkCls = isFeat ? "text-[#f5b800]" : "text-[#1f7a4d]";
-  const xCls = isFeat ? "text-white/35" : "text-[#d5d2c9]";
-  const noLineCls = isFeat
-    ? "text-white/40 line-through decoration-white/30"
-    : "text-[#8a877f] line-through decoration-[#d5d2c9]";
 
   const stripRows = [
     { l: t("sellPage.commission"), v: commissionLabel(plan) },
@@ -292,40 +259,6 @@ function PricingCard(
             )} ${SVG_ARROW}</a>`
       }
 
-      <div class="h-px my-1 ${dividerCls}"></div>
-      <div class="text-[11px] font-semibold uppercase tracking-[0.06em] ${featHeadCls}">${t("sellPage.packageContents")}</div>
-      <ul class="list-none p-0 m-0 flex flex-col gap-2 text-[13px] flex-1">
-        ${cardFeatures(plan)
-          .map((f) => {
-            const ok = !f.is_disabled;
-            const icon = ok ? featureIcon(f.icon) : SVG_X;
-            const iconCls = ok ? checkCls : xCls;
-            const liCls = ok ? featLiCls : noLineCls;
-            const tip = f.tooltip ? ` title="${escapeHtml(f.tooltip)}"` : "";
-            // Enum/quota değeri varsa (ör. "7×24 tahsisli") adın yanında kalın göster.
-            // Boolean / değersiz ("", "0", "Yok") → sadece ad.
-            const tv = (f.text_value || "").trim();
-            const showVal = ok && tv && tv !== "0" && tv.toLocaleLowerCase("tr") !== "yok";
-            const label = showVal
-              ? `${escapeHtml(f.display_text)}: <span class="font-semibold">${escapeHtml(tv)}</span>`
-              : escapeHtml(f.display_text);
-            // "Yakında" rozeti — özellik dahil (✓) ama henüz çalışmıyorsa.
-            const soonCls = isFeat
-              ? "bg-[#f5b800]/20 text-[#f5b800]"
-              : "bg-[#f5b800]/15 text-[#9a7400]";
-            const badge =
-              ok && f.coming_soon
-                ? ` <span class="inline-block align-middle ms-1 text-[9.5px] font-semibold uppercase tracking-[0.04em] px-1.5 py-0.5 rounded-full ${soonCls}">Yakında</span>`
-                : "";
-            return `
-              <li class="flex items-start gap-2.5 leading-[1.4] ${liCls}"${tip}>
-                <span class="shrink-0 mt-0.5 ${iconCls}">${icon}</span>
-                <span>${label}${badge}</span>
-              </li>
-            `;
-          })
-          .join("")}
-      </ul>
     </div>
   `;
 }
