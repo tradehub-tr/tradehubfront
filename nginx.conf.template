@@ -273,7 +273,9 @@ server {
     }
 
     # Private files — Frappe permission-checked download (identity docs etc.)
-    location /private/files/ {
+    # ^~ ZORUNLU: aşağıdaki resim-uzantı regex'i (~* \.(png|jpg…)$) bu prefix'i
+    # ezmesin diye. ^~ olmadan /private/files/x.jpg backend yerine regex'e düşer.
+    location ^~ /private/files/ {
         proxy_pass https://${BACKEND_DOMAIN}/private/files/;
         proxy_ssl_server_name on;
         proxy_set_header Host ${BACKEND_DOMAIN};
@@ -283,7 +285,9 @@ server {
     }
 
     # Public files (product images etc.)
-    location /files/ {
+    # ^~ ZORUNLU: resim-uzantı regex'i (~* \.(png|jpg…)$) bu prefix'i ezmesin.
+    # ^~ olmadan /files/urun.jpg backend'e gitmez, regex'e düşer → 404.
+    location ^~ /files/ {
         proxy_pass https://${BACKEND_DOMAIN}/files/;
         proxy_ssl_server_name on;
         proxy_set_header Host ${BACKEND_DOMAIN};
@@ -299,7 +303,9 @@ server {
     # Hash'li dosya isimleri (style-M3JxMgvs.css) içeriğe bağlı → içerik
     # değişince isim değişir. Bu yüzden immutable + 1 yıl cache güvenli;
     # "Efficient cache lifetimes" (3MB) denetimini tamamen kapatır.
-    location /assets/ {
+    # ^~ ZORUNLU: /assets/ içinde .svg/.png/.woff2 gibi uzantılar resim regex'ine
+    # düşmesin; bu blok zaten @frappe_assets fallback'i ile backend'e gidiyor.
+    location ^~ /assets/ {
         add_header Cache-Control "public, max-age=31536000, immutable";
         try_files $uri @frappe_assets;
     }
