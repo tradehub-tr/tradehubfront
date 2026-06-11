@@ -1,3 +1,14 @@
+## [v1.3.2] - 2026-06-11 PROD
+
+Bu surum istoc.com'da yayindadir.
+
+### Eklendi
+- feat(sell): trial niyetini satıcı başvurusuna taşı (@boraydeger32)
+
+### Degistirildi
+- refactor(sell): pricing kartlarından boş "Paket İçeriği" bölümünü kaldır (@boraydeger32)
+
+---
 ## [v1.3.1-rc.1] - 2026-06-11 RC
 
 Bu surum rc.istoc.com'da onay asamasindadir.
