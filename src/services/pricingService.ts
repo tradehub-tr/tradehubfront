@@ -41,6 +41,8 @@ export interface PricingPlan {
   yearly_price: number;
   currency: string;
   commission_rate: number;
+  /** Admin komisyon alanını boş bıraktıysa true — oran yerine "Özel" gösterilir. */
+  commission_custom?: boolean;
   max_active_listings: number;
   cta_label: string;
   cta_action: "signup" | "signup_billing" | "contact_sales" | "learn_more";

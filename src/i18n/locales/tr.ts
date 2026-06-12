@@ -6976,6 +6976,8 @@ const tr = {
       activeProductLimit: "Aktif ürün limiti",
       allPackageFeatures: "Tüm paket özellikleri",
       yearlyPeriodVatExcl: "yıllık periyot, KDV hariç",
+      monthlyPeriodVatExcl: "aylık periyot, KDV hariç",
+      commissionCustom: "Özel",
       plansLoadFailed: "Paketler şu anda yüklenemedi.",
       plansLoadRetry: "Bir kaç saniye sonra tekrar dener veya",
       startApplication: "Başvuruyu başlat",

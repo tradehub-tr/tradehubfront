@@ -7046,6 +7046,8 @@ const ru = {
       activeProductLimit: "Лимит активных товаров",
       allPackageFeatures: "Все возможности пакетов",
       yearlyPeriodVatExcl: "годовой период, без НДС",
+      monthlyPeriodVatExcl: "месячный период, без НДС",
+      commissionCustom: "Индивидуально",
       plansLoadFailed: "Сейчас не удалось загрузить пакеты.",
       plansLoadRetry: "Повторите попытку через несколько секунд или",
       startApplication: "Начать заявку",

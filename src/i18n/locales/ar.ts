@@ -6930,6 +6930,8 @@ const ar = {
       activeProductLimit: "حد المنتجات النشطة",
       allPackageFeatures: "جميع ميزات الباقات",
       yearlyPeriodVatExcl: "الفترة السنوية، باستثناء ضريبة القيمة المضافة",
+      monthlyPeriodVatExcl: "الفترة الشهرية، باستثناء ضريبة القيمة المضافة",
+      commissionCustom: "مخصص",
       plansLoadFailed: "تعذّر تحميل الباقات حاليًا.",
       plansLoadRetry: "أعد المحاولة بعد بضع ثوانٍ، أو",
       startApplication: "ابدأ طلبك",
