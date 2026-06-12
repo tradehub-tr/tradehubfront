@@ -6984,6 +6984,8 @@ const en = {
       activeProductLimit: "Active product limit",
       allPackageFeatures: "All package features",
       yearlyPeriodVatExcl: "annual period, VAT excluded",
+      monthlyPeriodVatExcl: "monthly period, VAT excluded",
+      commissionCustom: "Custom",
       plansLoadFailed: "Packages could not be loaded right now.",
       plansLoadRetry: "Try again in a few seconds, or",
       startApplication: "Start your application",

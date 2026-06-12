@@ -126,9 +126,10 @@ function fmtListings(n: number): string {
   return n.toLocaleString("tr-TR");
 }
 
-// Komisyon etiketi: her zaman gerçek oran gösterilir (0 → "%0"). Admin komisyonu
-// kaç yazdıysa kartta da o görünür — "Özel" yazılmaz (Enterprise dahil).
+// Komisyon etiketi: admin komisyon alanını boş bıraktıysa (commission_custom)
+// "Özel"; aksi halde gerçek oran — 0 dahil ("%0" geçerli pazarlama değeri).
 function commissionLabel(plan: PricingPlan): string {
+  if (plan.commission_custom) return t("sellPage.commissionCustom");
   return `%${plan.commission_rate || 0}`;
 }
 
@@ -213,16 +214,16 @@ function PricingCard(plan: PricingPlan, idx: number, trial?: TrialConfig): strin
             ? `<span class="text-[32px] font-semibold tracking-[-0.03em] leading-none ${amountCls}">${escapeHtml(overrideLabel)}</span>`
             : hasPrice
               ? `<span class="text-[42px] font-semibold tracking-[-0.03em] tabular-nums leading-none ${amountCls}">
-                ${escapeHtml(sym)}<span x-text="yearly ? '${priceY}' : '${priceM}'">${priceY}</span>
+                ${escapeHtml(sym)}<span x-text="yearly ? '${priceY}' : '${priceM}'">${priceM}</span>
               </span>
-              <span class="text-[13px] ${perCls}">/ <span x-text="yearly ? '${t("sellPage.year")}' : '${t("sellPage.month")}'">${t("sellPage.year")}</span></span>`
+              <span class="text-[13px] ${perCls}">/ <span x-text="yearly ? '${t("sellPage.year")}' : '${t("sellPage.month")}'">${t("sellPage.month")}</span></span>`
               : `<span class="text-[32px] font-semibold tracking-[-0.03em] leading-none ${amountCls}">${t("sellPage.customOffer")}</span>`
         }
       </div>
       <div class="text-[11.5px] -mt-1 ${metaCls}">
         ${
           hasPrice
-            ? `<span x-text="yearly ? '${t("sellPage.yearlyUpfrontVatExcl")}' : '${t("sellPage.monthlyCancelAnytime")}'">${t("sellPage.yearlyUpfrontVatExcl")}</span>`
+            ? `<span x-text="yearly ? '${t("sellPage.yearlyUpfrontVatExcl")}' : '${t("sellPage.monthlyCancelAnytime")}'">${t("sellPage.monthlyCancelAnytime")}</span>`
             : t("sellPage.pricedByVolume")
         }
       </div>
@@ -552,13 +553,21 @@ function PricingMatrix(plans: PricingPlan[], featuresMatrix?: PricingFeaturesMat
   const gridStyle = matrixGridStyle(plans.length);
   const featuredIdx = plans.findIndex((p) => p.highlighted);
   const sym = currencySymbol(plans[0]?.currency || "EUR");
+  // Alpine x-text içine gömülen JS string literal'i için tek tırnak kaçışı.
+  const escJs = (s: string) => s.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
   const cols = plans.map((p) => ({
     n: p.plan_name,
-    p:
+    py:
       (p.yearly_price || 0) > 0
         ? `${sym}${p.yearly_price} / ${t("sellPage.year")}`
         : (p.monthly_price || 0) > 0
           ? `${sym}${p.monthly_price} / ${t("sellPage.month")}`
+          : t("sellPage.customOffer"),
+    pm:
+      (p.monthly_price || 0) > 0
+        ? `${sym}${p.monthly_price} / ${t("sellPage.month")}`
+        : (p.yearly_price || 0) > 0
+          ? `${sym}${p.yearly_price} / ${t("sellPage.year")}`
           : t("sellPage.customOffer"),
     featured: !!p.highlighted,
   }));
@@ -572,14 +581,14 @@ function PricingMatrix(plans: PricingPlan[], featuresMatrix?: PricingFeaturesMat
       <div class="${MATRIX_GRID_CLS} items-end px-6 py-[18px] bg-[#fafaf8] border-b border-[#d5d2c9]" style="${gridStyle}">
         <div class="text-start">
           <div class="text-[15px] font-semibold text-[#1a1a1a]">${t("sellPage.allPackageFeatures")}</div>
-          <div class="text-xs text-[#8a877f] mt-0.5 tabular-nums">${t("sellPage.yearlyPeriodVatExcl")}</div>
+          <div class="text-xs text-[#8a877f] mt-0.5 tabular-nums" x-text="yearly ? '${escJs(t("sellPage.yearlyPeriodVatExcl"))}' : '${escJs(t("sellPage.monthlyPeriodVatExcl"))}'">${t("sellPage.monthlyPeriodVatExcl")}</div>
         </div>
         ${cols
           .map(
             (c) => `
           <div class="text-center ${c.featured ? "bg-[#fff8e1] rounded-lg px-2 py-2.5 -mx-1 -my-2.5" : ""}">
             <div class="text-[15px] font-semibold ${c.featured ? "text-[#d39c00]" : "text-[#1a1a1a]"}">${escapeHtml(c.n)}</div>
-            <div class="text-xs text-[#8a877f] mt-0.5 tabular-nums">${escapeHtml(c.p)}</div>
+            <div class="text-xs text-[#8a877f] mt-0.5 tabular-nums" x-text="yearly ? '${escJs(c.py)}' : '${escJs(c.pm)}'">${escapeHtml(c.pm)}</div>
           </div>
         `
           )
@@ -680,7 +689,7 @@ function PricingSection(
   const discountBadge = _computeYearlyDiscountBadge(plans);
 
   return /* html */ `
-    <section id="paketler" class="py-16 md:py-24 border-t border-[#e8e6e0] bg-[#f7f7f5]" x-data="{ yearly: true }">
+    <section id="paketler" class="py-16 md:py-24 border-t border-[#e8e6e0] bg-[#f7f7f5]" x-data="{ yearly: false }">
       <div class="${WRAP_CLS}">
         <div class="${INNER_CLS}">
         <div class="${SECTION_HEAD_CLS}">
@@ -696,6 +705,16 @@ function PricingSection(
           <button
             type="button"
             role="tab"
+            @click="yearly = false"
+            :aria-selected="!yearly"
+            :class="!yearly ? 'bg-[#1a1a1a] text-white' : 'bg-transparent text-[#8a877f]'"
+            class="appearance-none border-0 text-[12.5px] font-medium px-4 py-2 rounded-full focus:outline-none transition-colors duration-150"
+          >
+            ${t("sellPage.monthlyToggle")}
+          </button>
+          <button
+            type="button"
+            role="tab"
             @click="yearly = true"
             :aria-selected="yearly"
             :class="yearly ? 'bg-[#1a1a1a] text-white' : 'bg-transparent text-[#8a877f]'"
@@ -703,16 +722,6 @@ function PricingSection(
           >
             ${t("sellPage.yearlyToggle")}
             ${discountBadge ? `<span class="text-[10px] bg-[#f5b800] text-[#1a1a1a] px-1.5 py-0.5 rounded-full font-bold ms-1.5 tracking-[0.04em]">${discountBadge}</span>` : ""}
-          </button>
-          <button
-            type="button"
-            role="tab"
-            @click="yearly = false"
-            :aria-selected="!yearly"
-            :class="!yearly ? 'bg-[#1a1a1a] text-white' : 'bg-transparent text-[#8a877f]'"
-            class="appearance-none border-0 text-[12.5px] font-medium px-4 py-2 rounded-full focus:outline-none transition-colors duration-150"
-          >
-            ${t("sellPage.monthlyToggle")}
           </button>
         </div>
 
