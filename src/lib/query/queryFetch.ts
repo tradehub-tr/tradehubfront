@@ -9,7 +9,7 @@ import type { CachePolicy } from "./keys";
 export function queryFetch<T>(
   key: QueryKey,
   fn: () => Promise<T>,
-  policy?: Partial<CachePolicy>,
+  policy?: Partial<CachePolicy>
 ): Promise<T> {
   return queryClient.fetchQuery({
     queryKey: key,
@@ -23,7 +23,7 @@ export function queryFetch<T>(
 export function prefetch<T>(
   key: QueryKey,
   fn: () => Promise<T>,
-  policy?: Partial<CachePolicy>,
+  policy?: Partial<CachePolicy>
 ): void {
   void queryClient.prefetchQuery({
     queryKey: key,

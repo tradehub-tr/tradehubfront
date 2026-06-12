@@ -18,10 +18,9 @@
  */
 import { Capacitor } from "@capacitor/core";
 
-const NATIVE_BACKEND = ((import.meta.env.VITE_NATIVE_API_URL as string) || "https://rc.istoc.com").replace(
-  /\/+$/,
-  ""
-);
+const NATIVE_BACKEND = (
+  (import.meta.env.VITE_NATIVE_API_URL as string) || "https://rc.istoc.com"
+).replace(/\/+$/, "");
 
 // Yalnızca backend'e ait relative kökler çevrilir (statik asset/route'lar değil).
 const REWRITE_RE = /^\/(api|files|private|assets|socket\.io)(\/|$|\?)/;
@@ -36,7 +35,9 @@ export function isNativeBundleContext(): boolean {
 }
 
 /** Bundle modunda mutlak API base; değilse null (web/live-reload relative kullanır). */
-export const NATIVE_API_BASE: string | null = isNativeBundleContext() ? `${NATIVE_BACKEND}/api` : null;
+export const NATIVE_API_BASE: string | null = isNativeBundleContext()
+  ? `${NATIVE_BACKEND}/api`
+  : null;
 
 let _installed = false;
 

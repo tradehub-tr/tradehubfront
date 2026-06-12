@@ -84,7 +84,8 @@ const tr = {
     authAddr: {
       istocHome: "iStoc Ana Sayfa",
       promoHeadline: "Global B2B Ticaret Ağı",
-      promoSubtitle: "Güvenli ödeme, doğrulanmış satıcılar ve sıfır komisyon ile yeni nesil B2B pazaryeri.",
+      promoSubtitle:
+        "Güvenli ödeme, doğrulanmış satıcılar ve sıfır komisyon ile yeni nesil B2B pazaryeri.",
       featSecure: "Güvenli",
       featSecureDesc: "Ödeme Koruması",
       featVerified: "Doğrulanmış",
@@ -98,8 +99,10 @@ const tr = {
       pageTitle: "Teslimat Adreslerim",
       addNewAddress: "Yeni Adres Ekle",
       maxLimitReachedShort: "Maksimum adres limitine ulaştınız",
-      maxLimitWarning: "Maksimum {{max}} adres limitine ulaştınız. Yeni adres eklemek için mevcut bir adresi silin.",
-      maxLimitToast: "En fazla {{max}} adres ekleyebilirsiniz. Yeni adres eklemek için mevcut bir adresi silin.",
+      maxLimitWarning:
+        "Maksimum {{max}} adres limitine ulaştınız. Yeni adres eklemek için mevcut bir adresi silin.",
+      maxLimitToast:
+        "En fazla {{max}} adres ekleyebilirsiniz. Yeni adres eklemek için mevcut bir adresi silin.",
       defaultBadge: "Varsayılan",
       edit: "Düzenle",
       delete: "Sil",
@@ -170,7 +173,8 @@ const tr = {
       ticketAwaitingReply: "Yanıt Bekleyen",
       loadFailed: "Bilgi alınamadı.",
       accountSuspendedTitle: "Hesabınız askıya alındı",
-      accountSuspendedDesc: "Belge doğrulama sürecinde bir tutarsızlık tespit edildi. Destek ile iletişime geçiniz.",
+      accountSuspendedDesc:
+        "Belge doğrulama sürecinde bir tutarsızlık tespit edildi. Destek ile iletişime geçiniz.",
       supportRequest: "Destek Talebi",
       kycRejectedTitle: "KYC reddedildi",
       kybRejectedTitle: "KYB reddedildi",
@@ -199,7 +203,8 @@ const tr = {
     },
     checkoutMfr: {
       goToStore: "{{name}} mağazasına git",
-      securePaymentNote: "Ödeme güvenli olarak platforma yapılır; sipariş satıcılara iStoc güvencesi ile yönlendirilir.",
+      securePaymentNote:
+        "Ödeme güvenli olarak platforma yapılır; sipariş satıcılara iStoc güvencesi ile yönlendirilir.",
       removeCoupon: "Kuponu kaldır",
       preInfoAndDistanceSalesContract: "Ön Bilgilendirme Formunu ve Mesafeli Satış Sözleşmesini",
       readAndAccept: "okudum, kabul ediyorum.",
@@ -209,7 +214,8 @@ const tr = {
       addAddress: "Adres Ekle",
       shippingAddressTitle: "Teslimat Adresi",
       close: "Kapat",
-      headerSubtitleWithCounts: "{{suppliers}} tedarikçiden {{items}} ürün — adresini, ödeme yöntemini ve kargo seçimlerini doğrula.",
+      headerSubtitleWithCounts:
+        "{{suppliers}} tedarikçiden {{items}} ürün — adresini, ödeme yöntemini ve kargo seçimlerini doğrula.",
       headerSubtitle: "Adresini, ödeme yöntemini ve kargo seçimlerini doğrula.",
       homePage: "Ana Sayfa",
       invalidCoupon: "Geçersiz kupon kodu",
@@ -302,7 +308,7 @@ const tr = {
       startChatBtn: "Sohbete Başla",
       reservationAccepted: "Rezervasyon kabul edildi",
       meetingWindowSuffix: "ile görüşme şu zaman aralığında açık olacak:",
-      retryChatAtTime: "Bu saatte tekrar \"Sohbet Et\" tıklayarak konuşmayı başlatabilirsin.",
+      retryChatAtTime: 'Bu saatte tekrar "Sohbet Et" tıklayarak konuşmayı başlatabilirsin.',
       ok: "Tamam",
       slotsLoading: "Müsait saatler yükleniyor…",
       noSlotsAvailable: "Şu an müsait bir saat yok.",
@@ -381,7 +387,8 @@ const tr = {
       selectOrderPlaceholder: "— Sipariş seçiniz —",
       orderRoutingHint: "Talep seçtiğiniz siparişin satıcısına iletilir.",
       ordersLoading: "Siparişler yükleniyor...",
-      noEligibleOrderHint: "Bu kategori için uygun bir siparişiniz bulunamadı. Genel sorularınız için kategoriyi <strong>Diğer</strong>, ödeme ile ilgili sorunlar için <strong>Ödeme</strong> olarak seçin.",
+      noEligibleOrderHint:
+        "Bu kategori için uygun bir siparişiniz bulunamadı. Genel sorularınız için kategoriyi <strong>Diğer</strong>, ödeme ile ilgili sorunlar için <strong>Ödeme</strong> olarak seçin.",
       statusOpen: "Açık",
       statusReplied: "Yanıtlandı",
       statusResolved: "Çözüldü",
@@ -409,33 +416,48 @@ const tr = {
       membershipProgram: "Üyelik Programı",
       membershipSubtitle: "iStoc üyelik avantajları ve özel fırsatlar",
       membershipTiersTitle: "Üyelik Seviyeleri",
-      membershipTiersP1: "<strong>Ücretsiz Üyelik:</strong> iStoc platformuna kaydolan her kullanıcı, temel üyelik avantajlarından otomatik olarak yararlanır. Ücretsiz üyelikte sınırsız ürün arama, tedarikçi iletişimi, temel alıcı koruması ve aylık 5 teklif talebi (RFQ) hakkı bulunmaktadır.",
-      membershipTiersP2: "<strong>Premium Üyelik:</strong> Aylık 499 TL karşılığında sunulan Premium üyelik, ticaret hacminizi büyütmek isteyenler için tasarlanmıştır. Sınırsız RFQ, öncelikli müşteri desteği, gelişmiş analitik raporlar, özel indirim kuponları ve VIP tedarikçi erişimi avantajlarından yararlanabilirsiniz.",
-      membershipTiersP3: "<strong>Kurumsal Üyelik:</strong> Büyük ölçekli işletmeler için özel fiyatlandırma ile sunulan Kurumsal üyelik, tüm Premium özelliklere ek olarak özel hesap yöneticisi, API erişimi, çoklu kullanıcı yönetimi, özel entegrasyon desteği ve yıllık strateji danışmanlığı içerir.",
+      membershipTiersP1:
+        "<strong>Ücretsiz Üyelik:</strong> iStoc platformuna kaydolan her kullanıcı, temel üyelik avantajlarından otomatik olarak yararlanır. Ücretsiz üyelikte sınırsız ürün arama, tedarikçi iletişimi, temel alıcı koruması ve aylık 5 teklif talebi (RFQ) hakkı bulunmaktadır.",
+      membershipTiersP2:
+        "<strong>Premium Üyelik:</strong> Aylık 499 TL karşılığında sunulan Premium üyelik, ticaret hacminizi büyütmek isteyenler için tasarlanmıştır. Sınırsız RFQ, öncelikli müşteri desteği, gelişmiş analitik raporlar, özel indirim kuponları ve VIP tedarikçi erişimi avantajlarından yararlanabilirsiniz.",
+      membershipTiersP3:
+        "<strong>Kurumsal Üyelik:</strong> Büyük ölçekli işletmeler için özel fiyatlandırma ile sunulan Kurumsal üyelik, tüm Premium özelliklere ek olarak özel hesap yöneticisi, API erişimi, çoklu kullanıcı yönetimi, özel entegrasyon desteği ve yıllık strateji danışmanlığı içerir.",
       membershipBenefitsTitle: "Üyelik Avantajları",
-      membershipBenefitsP1: "iStoc üyelik programı, B2B ticaretinizi her yönden destekler. Premium ve Kurumsal üyeler, platform genelindeki ürünlerde %3 ila %8 arasında özel indirimlerden yararlanır. Ayrıca, sezonluk kampanyalara erken erişim ve özel fırsat bildirimlerinden haberdar olursunuz.",
-      membershipBenefitsP2: "Üyelik seviyeniz yükseldikçe, tedarikçi kalite raporlarına, pazar analiz araçlarına ve rekabet istihbaratı verilerine erişiminiz genişler. Premium üyeler, profesyonel kalite denetim hizmetinden yılda 2 kez ücretsiz yararlanabilir. Kurumsal üyeler ise sınırsız denetim hakkına sahiptir.",
+      membershipBenefitsP1:
+        "iStoc üyelik programı, B2B ticaretinizi her yönden destekler. Premium ve Kurumsal üyeler, platform genelindeki ürünlerde %3 ila %8 arasında özel indirimlerden yararlanır. Ayrıca, sezonluk kampanyalara erken erişim ve özel fırsat bildirimlerinden haberdar olursunuz.",
+      membershipBenefitsP2:
+        "Üyelik seviyeniz yükseldikçe, tedarikçi kalite raporlarına, pazar analiz araçlarına ve rekabet istihbaratı verilerine erişiminiz genişler. Premium üyeler, profesyonel kalite denetim hizmetinden yılda 2 kez ücretsiz yararlanabilir. Kurumsal üyeler ise sınırsız denetim hakkına sahiptir.",
       membershipPricingTitle: "Fiyatlandırma",
-      membershipPricingP1: "iStoc üyelik planları, her bütçeye uygun esnek fiyatlandırma seçenekleri sunar. Yıllık ödeme tercih ettiğinizde, aylık plana kıyasla %20 tasarruf sağlarsınız. Tüm planlar için 14 günlük ücretsiz deneme süresi mevcuttur; bu süre zarfında herhangi bir ücret alınmaz.",
-      membershipPricingP2: "Ücretsiz plan: 0 TL/ay | Premium plan: 499 TL/ay (yıllık ödemede 399 TL/ay) | Kurumsal plan: Özel fiyatlandırma (satış ekibimizle iletişime geçin). Tüm fiyatlara KDV dahildir. Plan değişikliğini istediğiniz zaman yapabilir, kalan süreniz oransal olarak yeni planınıza aktarılır.",
+      membershipPricingP1:
+        "iStoc üyelik planları, her bütçeye uygun esnek fiyatlandırma seçenekleri sunar. Yıllık ödeme tercih ettiğinizde, aylık plana kıyasla %20 tasarruf sağlarsınız. Tüm planlar için 14 günlük ücretsiz deneme süresi mevcuttur; bu süre zarfında herhangi bir ücret alınmaz.",
+      membershipPricingP2:
+        "Ücretsiz plan: 0 TL/ay | Premium plan: 499 TL/ay (yıllık ödemede 399 TL/ay) | Kurumsal plan: Özel fiyatlandırma (satış ekibimizle iletişime geçin). Tüm fiyatlara KDV dahildir. Plan değişikliğini istediğiniz zaman yapabilir, kalan süreniz oransal olarak yeni planınıza aktarılır.",
       membershipUpgradeTitle: "Üyelik Yükseltme",
-      membershipUpgradeP1: "Üyeliğinizi yükseltmek son derece kolaydır. Hesap ayarlarınızdan \"Üyelik Planı\" bölümüne gidin, istediğiniz planı seçin ve ödeme bilgilerinizi girin. Yükseltme işlemi anında geçerli olur ve yeni avantajlarınızdan hemen yararlanmaya başlarsınız.",
-      membershipUpgradeP2: "Mevcut planınızdan daha düşük bir plana geçiş yapmak isterseniz, mevcut dönem sonunda değişiklik uygulanır. İptal durumunda da dönem sonuna kadar aktif üyelik avantajlarınız devam eder. Üyelik yükseltme veya değişiklik işlemlerinde herhangi bir ceza veya ek ücret uygulanmaz.",
+      membershipUpgradeP1:
+        'Üyeliğinizi yükseltmek son derece kolaydır. Hesap ayarlarınızdan "Üyelik Planı" bölümüne gidin, istediğiniz planı seçin ve ödeme bilgilerinizi girin. Yükseltme işlemi anında geçerli olur ve yeni avantajlarınızdan hemen yararlanmaya başlarsınız.',
+      membershipUpgradeP2:
+        "Mevcut planınızdan daha düşük bir plana geçiş yapmak isterseniz, mevcut dönem sonunda değişiklik uygulanır. İptal durumunda da dönem sonuna kadar aktif üyelik avantajlarınız devam eder. Üyelik yükseltme veya değişiklik işlemlerinde herhangi bir ceza veya ek ücret uygulanmaz.",
       afterSalesHeroTitle: "Satış sonrası değerlendirme ve destek",
-      afterSalesHeroSubtitle: "Her alışveriş sonrası satıcılarınızı değerlendirin, platformun kalitesine katkıda bulunun",
+      afterSalesHeroSubtitle:
+        "Her alışveriş sonrası satıcılarınızı değerlendirin, platformun kalitesine katkıda bulunun",
       tradeAssurance: "Ticari Güvence",
       afterSalesSupport: "Satış sonrası destek",
       afterSalesFeaturesTitle: "Sipariş sonrası size neler sunuyoruz?",
-      afterSalesFeaturesIntro: "iStoc, alım-satım sürecini şeffaf ve güvenli kılacak temel araçları sunar. Siparişiniz tamamlandıktan sonra da platform üzerinde destek almaya devam edebilirsiniz.",
+      afterSalesFeaturesIntro:
+        "iStoc, alım-satım sürecini şeffaf ve güvenli kılacak temel araçları sunar. Siparişiniz tamamlandıktan sonra da platform üzerinde destek almaya devam edebilirsiniz.",
       sellerRatingTitle: "Satıcı Değerlendirme Sistemi",
-      sellerRatingDesc: "Aldığınız ürün ve hizmeti 1-5 yıldız arasında puanlayıp yorum yazabilirsiniz. Değerlendirmeleriniz diğer alıcılara rehberlik eder ve satıcıların kalitesini şekillendirir.",
+      sellerRatingDesc:
+        "Aldığınız ürün ve hizmeti 1-5 yıldız arasında puanlayıp yorum yazabilirsiniz. Değerlendirmeleriniz diğer alıcılara rehberlik eder ve satıcıların kalitesini şekillendirir.",
       directContactTitle: "Satıcı ile Doğrudan İletişim",
-      directContactDesc: "Sipariş sonrası sorularınızı, ürünle ilgili taleplerinizi veya yaşadığınız sorunları doğrudan satıcınıza iletebilir, çözüm arayışına ortak olabilirsiniz.",
+      directContactDesc:
+        "Sipariş sonrası sorularınızı, ürünle ilgili taleplerinizi veya yaşadığınız sorunları doğrudan satıcınıza iletebilir, çözüm arayışına ortak olabilirsiniz.",
       subPaymentFailedTitle: "Aboneliğinizin ödemesi başarısız",
-      subPaymentFailedDesc: "Mağazanız erişiminizi sürdürmek için ödeme bilgilerinizi güncellemeniz gerekiyor.",
+      subPaymentFailedDesc:
+        "Mağazanız erişiminizi sürdürmek için ödeme bilgilerinizi güncellemeniz gerekiyor.",
       manageSubscription: "Aboneliği Yönet",
       subSuspendedTitle: "Aboneliğiniz askıya alındı",
-      subSuspendedDesc: "Yeni ürün ekleyemez veya sipariş işleyemezsiniz. Destek ile iletişime geçin.",
+      subSuspendedDesc:
+        "Yeni ürün ekleyemez veya sipariş işleyemezsiniz. Destek ile iletişime geçin.",
       support: "Destek",
       trialEndingTitle: "Deneme süreniz sona eriyor",
       upgradePlan: "Planımı Yükselt",
@@ -443,7 +465,8 @@ const tr = {
       kybRejected: "KYB doğrulamanız reddedildi. Lütfen belgelerinizi güncelleyin.",
       kybPending: "KYB doğrulamanız incelemede. Sipariş verebilmek için doğrulamanız onaylanmalı.",
       kycRejected: "Kimlik doğrulamanız reddedildi. Lütfen belgelerinizi güncelleyin.",
-      kycPending: "Kimlik doğrulamanız incelemede. Sipariş verebilmek için doğrulamanız onaylanmalı.",
+      kycPending:
+        "Kimlik doğrulamanız incelemede. Sipariş verebilmek için doğrulamanız onaylanmalı.",
       previous: "Önceki",
       next: "Sonraki",
       moqOnePiece: "1 adet",
@@ -480,88 +503,118 @@ const tr = {
       shippingHeroTitle: "Kargo ve lojistik hizmetleri",
       shippingHeroSubtitle: "Siparişinizi güvenle takip edin, size en uygun kargo tipini seçin",
       shippingTypesTitle: "Kargo tipleri",
-      shippingTypesIntro: "iStoc üzerinden satıcılarla anlaşarak siparişinize uygun kargo tipini seçebilirsiniz. Her kargo tipinin teslimat süresi ve maliyet yapısı farklıdır.",
+      shippingTypesIntro:
+        "iStoc üzerinden satıcılarla anlaşarak siparişinize uygun kargo tipini seçebilirsiniz. Her kargo tipinin teslimat süresi ve maliyet yapısı farklıdır.",
       shippingExpressTitle: "Express (Hızlı) Kargo",
-      shippingExpressDesc: "Acil siparişleriniz için en hızlı teslimat seçeneği. Şehir içi ve yakın bölgelerde tercih edilir.",
+      shippingExpressDesc:
+        "Acil siparişleriniz için en hızlı teslimat seçeneği. Şehir içi ve yakın bölgelerde tercih edilir.",
       shippingAirTitle: "Hava Kargo",
-      shippingAirDesc: "Uluslararası ve uzak mesafe siparişlerde hızlı teslimat sağlar. Değerli ve acil ürünler için uygundur.",
+      shippingAirDesc:
+        "Uluslararası ve uzak mesafe siparişlerde hızlı teslimat sağlar. Değerli ve acil ürünler için uygundur.",
       shippingSeaTitle: "Deniz Kargo",
-      shippingSeaDesc: "Toplu ve ağır yükler için ekonomik çözüm. Uluslararası konteyner ve büyük hacimli siparişlerde idealdir.",
+      shippingSeaDesc:
+        "Toplu ve ağır yükler için ekonomik çözüm. Uluslararası konteyner ve büyük hacimli siparişlerde idealdir.",
       shippingLandTitle: "Kara Kargo",
       shippingLandDesc: "Yurt içi ve komşu ülke teslimatlarında ekonomik ve güvenilir seçenek.",
       shippingStandardTitle: "Standart Kargo",
-      shippingStandardDesc: "Varsayılan teslimat seçeneği. Normal ebat ve ağırlıktaki siparişler için uygun fiyatlı çözüm.",
+      shippingStandardDesc:
+        "Varsayılan teslimat seçeneği. Normal ebat ve ağırlıktaki siparişler için uygun fiyatlı çözüm.",
       shippingFreeTitle: "Ücretsiz Kargo",
-      shippingFreeDesc: "Belirli ürünlerde satıcı tarafından sunulan ücretsiz kargo imkanı. Ürün sayfasında işaretli olarak görünür.",
+      shippingFreeDesc:
+        "Belirli ürünlerde satıcı tarafından sunulan ücretsiz kargo imkanı. Ürün sayfasında işaretli olarak görünür.",
       trackingTitle: "Takip numarası ile kolay izleme",
       trackingPara1Before: "Satıcınız siparişinizi kargoya verdiğinde, ",
       trackingNumber: "takip numarası",
       trackingPara1Mid: " ve ",
       trackingCarrierInfo: "kargo firması bilgisi",
       trackingPara1After: " sipariş detaylarınıza otomatik olarak eklenir.",
-      trackingPara2: "Siparişlerim sayfasından her siparişinizin güncel durumunu görebilir, kargoya verildiği andan teslim alınana kadar süreci takip edebilirsiniz.",
+      trackingPara2:
+        "Siparişlerim sayfasından her siparişinizin güncel durumunu görebilir, kargoya verildiği andan teslim alınana kadar süreci takip edebilirsiniz.",
       trackingAutoNote: "Takip numarası sipariş detaylarında otomatik görünür",
       orderProcessTitle: "Sipariş süreci nasıl işler?",
-      orderProcessIntro: "Siparişinizin her adımını iStoc panelinden takip edebilirsiniz. İşte tipik bir sipariş akışı:",
+      orderProcessIntro:
+        "Siparişinizin her adımını iStoc panelinden takip edebilirsiniz. İşte tipik bir sipariş akışı:",
       timelineStep1Title: "Ödeme Bekleniyor",
-      timelineStep1Desc: "Siparişinizi oluşturduktan sonra ödeme yöntemini seçip işlemi tamamlarsınız.",
+      timelineStep1Desc:
+        "Siparişinizi oluşturduktan sonra ödeme yöntemini seçip işlemi tamamlarsınız.",
       timelineStep2Title: "Onaylanıyor",
       timelineStep2Desc: "Ödeme doğrulandıktan sonra satıcı siparişinizi hazırlamaya başlar.",
       timelineStep3Title: "Kargoda",
-      timelineStep3Desc: "Satıcı siparişinizi kargoya verir ve takip numarası sipariş detaylarınıza eklenir.",
+      timelineStep3Desc:
+        "Satıcı siparişinizi kargoya verir ve takip numarası sipariş detaylarınıza eklenir.",
       timelineStep4Title: "Tamamlandı",
       timelineStep4Desc: "Siparişiniz size ulaştığında süreç tamamlanmış olur.",
       paymentsHeroAlt: "Güvenli ödeme",
       paymentsHeroTitle: "Güvenli ve esnek ödeme yöntemleri",
       paymentsHeroSubtitle: "Basit, şeffaf B2B ödemeleri",
       paymentsSafetyTitle: "iStoc ödemelerinizi nasıl güvenli tutar?",
-      paymentsSafetyIntro: "iStoc üzerinden yapılan tüm ödemeler platform üzerinden yönetilir ve sipariş sürecine entegre şekilde takip edilir.",
+      paymentsSafetyIntro:
+        "iStoc üzerinden yapılan tüm ödemeler platform üzerinden yönetilir ve sipariş sürecine entegre şekilde takip edilir.",
       paymentsSafetyWarning: "Ödemenizi korumak için asla platform dışında ödeme yapmayın.",
       paymentsMethodsTitle: "Desteklenen ödeme yöntemleri",
       paymentBankTransferTitle: "Banka Havalesi",
-      paymentBankTransferDesc: "iStoc'un resmi banka hesabına havale yaparak siparişinizi tamamlayın. Havale sonrası dekontunuzu platform üzerinden yükleyerek ödemenizi belgeleyin.",
+      paymentBankTransferDesc:
+        "iStoc'un resmi banka hesabına havale yaparak siparişinizi tamamlayın. Havale sonrası dekontunuzu platform üzerinden yükleyerek ödemenizi belgeleyin.",
       paymentBankTransferTag: "Dekont yükleme desteği",
       paymentEftTitle: "EFT / Havale",
-      paymentEftDesc: "Anlık elektronik fon transferi ile siparişinizi hızlıca tamamlayın. İşlem tarihi, tutarı ve gönderen bilgileri sipariş detaylarınıza otomatik kaydedilir.",
+      paymentEftDesc:
+        "Anlık elektronik fon transferi ile siparişinizi hızlıca tamamlayın. İşlem tarihi, tutarı ve gönderen bilgileri sipariş detaylarınıza otomatik kaydedilir.",
       paymentEftTag: "İşlem bilgileri otomatik kaydedilir",
       paymentChequeTitle: "Çek / Senet",
-      paymentChequeDesc: "Vadeli ticari ödemeleriniz için çek veya senet ile ödeme seçeneği. B2B ticaretin klasik yöntemlerini platform güvencesi altında kullanın.",
+      paymentChequeDesc:
+        "Vadeli ticari ödemeleriniz için çek veya senet ile ödeme seçeneği. B2B ticaretin klasik yöntemlerini platform güvencesi altında kullanın.",
       paymentChequeTag: "Vadeli ödeme desteği",
       paymentInstallmentTitle: "Elden Taksit",
-      paymentInstallmentDesc: "Satıcı ile doğrudan anlaşmalı taksitli ödeme seçeneği. Büyük hacimli siparişlerde satıcıyla taksit planı oluşturabilirsiniz.",
+      paymentInstallmentDesc:
+        "Satıcı ile doğrudan anlaşmalı taksitli ödeme seçeneği. Büyük hacimli siparişlerde satıcıyla taksit planı oluşturabilirsiniz.",
       paymentInstallmentTag: "Satıcıyla anlaşmalı plan",
       currencyBannerTitle: "5 farklı para biriminde alım-satım",
-      currencyBannerDesc: "iStoc üzerinde Türk Lirası (TRY), ABD Doları (USD), Euro (EUR), İngiliz Sterlini (GBP) ve Çin Yuanı (CNY) ile ödeme yapabilir ve satış gerçekleştirebilirsiniz.",
+      currencyBannerDesc:
+        "iStoc üzerinde Türk Lirası (TRY), ABD Doları (USD), Euro (EUR), İngiliz Sterlini (GBP) ve Çin Yuanı (CNY) ile ödeme yapabilir ve satış gerçekleştirebilirsiniz.",
       paymentProcessTitle: "Ödeme süreci nasıl işler?",
       paymentProcessStep1Title: "Tedarikçinizi bulun ve siparişi oluşturun",
-      paymentProcessStep1Desc: "iStoc üzerinden ürününüzü seçin, tedarikçiyle anlaşın ve siparişinizi başlatın. Hazır ürünlerde doğrudan, özel üretimlerde tedarikçiyle mesajlaşarak detayları belirleyin.",
+      paymentProcessStep1Desc:
+        "iStoc üzerinden ürününüzü seçin, tedarikçiyle anlaşın ve siparişinizi başlatın. Hazır ürünlerde doğrudan, özel üretimlerde tedarikçiyle mesajlaşarak detayları belirleyin.",
       paymentProcessStep2Title: "Ödeme yönteminizi seçin",
-      paymentProcessStep2Desc: "Banka havalesi, EFT, çek/senet veya elden taksit seçeneklerinden size uygun olanı seçin. Para birimini de (TRY, USD, EUR, GBP, CNY) ihtiyacınıza göre belirleyin.",
+      paymentProcessStep2Desc:
+        "Banka havalesi, EFT, çek/senet veya elden taksit seçeneklerinden size uygun olanı seçin. Para birimini de (TRY, USD, EUR, GBP, CNY) ihtiyacınıza göre belirleyin.",
       paymentProcessStep3Title: "Ödemenizi yapın ve dekontu yükleyin",
-      paymentProcessStep3Desc: "Havale veya EFT yöntemlerinde dekontunuzu \"Siparişlerim > Sipariş Detayları\" sayfası üzerinden yükleyin. Platform gönderen adı, tarih ve tutarı otomatik olarak kaydeder.",
+      paymentProcessStep3Desc:
+        'Havale veya EFT yöntemlerinde dekontunuzu "Siparişlerim > Sipariş Detayları" sayfası üzerinden yükleyin. Platform gönderen adı, tarih ve tutarı otomatik olarak kaydeder.',
       paymentProcessStep4Title: "Sipariş onayı ve takip",
-      paymentProcessStep4Desc: "Ödeme doğrulandıktan sonra satıcı siparişinizi hazırlamaya başlar. Sürecin her aşamasını \"Siparişlerim\" sayfasından takip edebilirsiniz.",
+      paymentProcessStep4Desc:
+        'Ödeme doğrulandıktan sonra satıcı siparişinizi hazırlamaya başlar. Sürecin her aşamasını "Siparişlerim" sayfasından takip edebilirsiniz.',
       refundHeroTitle: "Para İade Garantisi",
-      refundHeroSubtitle: "Siparişinizle ilgili bir sorun yaşarsanız, iade talebinde bulunarak çözüme ulaşabilirsiniz.",
+      refundHeroSubtitle:
+        "Siparişinizle ilgili bir sorun yaşarsanız, iade talebinde bulunarak çözüme ulaşabilirsiniz.",
       refundProcessTitle: "İade süreci nasıl işler?",
-      refundProcessIntro: "Siparişiniz gönderilmezse, eksik gelirse veya ürünleriniz sorunlu bir şekilde ulaşırsa (ör. kusurlu, hatalı, hasarlı) para iadesi talebinde bulunabilirsiniz.",
+      refundProcessIntro:
+        "Siparişiniz gönderilmezse, eksik gelirse veya ürünleriniz sorunlu bir şekilde ulaşırsa (ör. kusurlu, hatalı, hasarlı) para iadesi talebinde bulunabilirsiniz.",
       refundCard1Title: "İade Talebi Oluştur",
-      refundCard1Desc: "Siparişlerim sayfasından iade talebinizi doğrudan oluşturun. İade nedeninizi ve tutarı belirtin.",
+      refundCard1Desc:
+        "Siparişlerim sayfasından iade talebinizi doğrudan oluşturun. İade nedeninizi ve tutarı belirtin.",
       refundCard2Title: "Satıcı Değerlendirmesi",
-      refundCard2Desc: "Satıcı talebinizi inceler ve onaylar veya reddeder. Talebiniz \"Beklemede\" durumundan sonuçlanır.",
+      refundCard2Desc:
+        'Satıcı talebinizi inceler ve onaylar veya reddeder. Talebiniz "Beklemede" durumundan sonuçlanır.',
       refundCard3Title: "İade Sonuçlanması",
-      refundCard3Desc: "Onaylanan talepler için ödemeniz iade edilir. Her adımı sipariş detaylarınızdan takip edebilirsiniz.",
+      refundCard3Desc:
+        "Onaylanan talepler için ödemeniz iade edilir. Her adımı sipariş detaylarınızdan takip edebilirsiniz.",
       refundApplyTitle: "Para iadesi başvurusu nasıl yapılır?",
       refundStep1Title: "Sipariş Detaylarına Gidin",
-      refundStep1Desc: "Siparişlerim > Sipariş Detayları sayfasına giderek ilgili siparişinizi açın ve \"İade Talebi Oluştur\" butonuna tıklayın.",
+      refundStep1Desc:
+        'Siparişlerim > Sipariş Detayları sayfasına giderek ilgili siparişinizi açın ve "İade Talebi Oluştur" butonuna tıklayın.',
       refundStep2Title: "İade Nedenini ve Tutarını Belirtin",
-      refundStep2Desc: "İade talep etmenizin nedenini yazın ve iade edilmesini istediğiniz tutarı girin. Varsa fotoğraf veya ek belge yükleyin.",
+      refundStep2Desc:
+        "İade talep etmenizin nedenini yazın ve iade edilmesini istediğiniz tutarı girin. Varsa fotoğraf veya ek belge yükleyin.",
       refundStep3Title: "Satıcı İncelemesi",
-      refundStep3Desc: "Talebiniz satıcıya iletilir. Satıcı talebinizi \"Onaylandı\" veya \"Reddedildi\" olarak sonuçlandırır.",
+      refundStep3Desc:
+        'Talebiniz satıcıya iletilir. Satıcı talebinizi "Onaylandı" veya "Reddedildi" olarak sonuçlandırır.',
       refundStep4Title: "İadenizi Alın",
-      refundStep4Desc: "Talebiniz onaylandığında ödeme iadesi süreci başlatılır ve siparişiniz iade edilmiş olarak işaretlenir.",
+      refundStep4Desc:
+        "Talebiniz onaylandığında ödeme iadesi süreci başlatılır ve siparişiniz iade edilmiş olarak işaretlenir.",
       refundNoteTitle: "İade süreci hakkında",
-      refundNoteDesc: "Sipariş sürecinizin her aşamasında doğrudan satıcıyla mesajlaşarak sorunları çözebilirsiniz. Satıcı ile anlaşmazlık halinde iade talebinizi oluşturabilirsiniz.",
+      refundNoteDesc:
+        "Sipariş sürecinizin her aşamasında doğrudan satıcıyla mesajlaşarak sorunları çözebilirsiniz. Satıcı ile anlaşmazlık halinde iade talebinizi oluşturabilirsiniz.",
     },
     kycUi: {
       accountType: "Hesap türü",
@@ -585,7 +638,8 @@ const tr = {
       documentFormatsHint: "PDF, JPG, JPEG, PNG, WEBP, DOCX · Maks 10 MB · Zorunlu",
       slotHint: "PDF, JPG, PNG, WEBP, DOCX · maks. 10MB",
       pageTitle: "KYC Doğrulama",
-      pageDescription: "Ürün satın alabilmek için kimlik doğrulamanızı tamamlayın. Belgeleriniz süper admin tarafından onaylandıktan sonra alışveriş yapabilirsiniz.",
+      pageDescription:
+        "Ürün satın alabilmek için kimlik doğrulamanızı tamamlayın. Belgeleriniz süper admin tarafından onaylandıktan sonra alışveriş yapabilirsiniz.",
       submit: "Gönder",
       uploaded: "Yüklü",
       fileExt: "{{ext}} dosyası",
@@ -595,16 +649,19 @@ const tr = {
       errTooLarge: "{{fileName}} 10MB üzerinde.",
       errIdentityRequired: "Kimlik belgesi zorunludur.",
       errInvalidTckn: "Geçerli bir TCKN giriniz (11 hane, mod-10 doğrulamalı).",
-      submitSuccess: "KYC başvurunuz alındı. Süper admin onayından sonra alışveriş yapabileceksiniz.",
+      submitSuccess:
+        "KYC başvurunuz alındı. Süper admin onayından sonra alışveriş yapabileceksiniz.",
       errSubmitFailed: "Gönderim başarısız.",
       statusPending: "Onay Bekliyor",
       statusVerified: "Doğrulandı",
       statusRejected: "Reddedildi",
       statusSuspended: "Askıya Alındı",
       bannerPendingTitle: "Başvurunuz İnceleniyor",
-      bannerPendingDesc: "Belgeleriniz süper admin tarafından inceleniyor. Genellikle 1-2 iş günü içinde sonuçlanır.",
+      bannerPendingDesc:
+        "Belgeleriniz süper admin tarafından inceleniyor. Genellikle 1-2 iş günü içinde sonuçlanır.",
       bannerVerifiedTitle: "KYC Doğrulamanız Onaylandı",
-      bannerVerifiedDesc: "Artık alışveriş yapabilirsiniz. Bilgilerinizi güncellemek isterseniz formu düzenleyip 'Bilgileri Güncelle' butonuna basın.",
+      bannerVerifiedDesc:
+        "Artık alışveriş yapabilirsiniz. Bilgilerinizi güncellemek isterseniz formu düzenleyip 'Bilgileri Güncelle' butonuna basın.",
       bannerRejectedTitle: "Başvurunuz Reddedildi",
       bannerRejectedDesc: "Belgelerinizi düzeltip yeniden gönderin.",
       bannerSuspendedTitle: "Hesabınız Askıya Alındı",
@@ -645,22 +702,27 @@ const tr = {
       refundCannotCreate: "İade talebi oluşturulamaz",
       refundReceived: "İade talebiniz alındı",
       refundReceivedDesc: "Satıcı talebinizi inceleyecek ve en kısa sürede geri dönüş yapacaktır.",
-      refundFormIntro: "numaralı sipariş için iade talebinizi aşağıda açıklayın. Satıcı tarafından incelenecektir.",
+      refundFormIntro:
+        "numaralı sipariş için iade talebinizi aşağıda açıklayın. Satıcı tarafından incelenecektir.",
       refundAmount: "İade tutarı",
       refundReason: "İade sebebi",
-      refundReasonPlaceholder: "Ürün beklentilerinizi karşılamadıysa veya bir sorun yaşadıysanız lütfen açıklayın...",
+      refundReasonPlaceholder:
+        "Ürün beklentilerinizi karşılamadıysa veya bir sorun yaşadıysanız lütfen açıklayın...",
       submitRefundRequest: "İade Talebi Gönder",
       submitDocument: "Evrak Gönder",
       loadingBankInfo: "Banka bilgileri yükleniyor...",
-      transferToAccountHint: "Aşağıdaki banka hesabına havale/EFT yapın, ardından <strong>\"Ödeme Yaptım\"</strong> butonuna tıklayın.",
+      transferToAccountHint:
+        'Aşağıdaki banka hesabına havale/EFT yapın, ardından <strong>"Ödeme Yaptım"</strong> butonuna tıklayın.',
       paymentInfo: "Ödeme Bilgileri",
       sellerNoBankInfo: "Bu satıcı henüz banka bilgisi girmemiş. Satıcıyla iletişime geçin.",
       accountHolder: "Hesap Sahibi",
       bankName: "Banka Adı",
       copy: "Kopyala",
       copiedExcl: "Kopyalandı!",
-      checkPaymentNote: "Ödemeyi yaptıktan sonra &quot;Ödeme Yaptım&quot; butonuna tıklayın ve evrakınızı yükleyin. Satıcı inceledikten sonra siparişiniz hazırlanmaya başlayacaktır.",
-      wirePaymentNote: "Havaleyi yaptıktan sonra &quot;Ödeme Yaptım&quot; butonuna tıklayın ve dekontunuzu yükleyin. Satıcı ödemeyi onayladıktan sonra siparişiniz hazırlanmaya başlayacaktır.",
+      checkPaymentNote:
+        "Ödemeyi yaptıktan sonra &quot;Ödeme Yaptım&quot; butonuna tıklayın ve evrakınızı yükleyin. Satıcı inceledikten sonra siparişiniz hazırlanmaya başlayacaktır.",
+      wirePaymentNote:
+        "Havaleyi yaptıktan sonra &quot;Ödeme Yaptım&quot; butonuna tıklayın ve dekontunuzu yükleyin. Satıcı ödemeyi onayladıktan sonra siparişiniz hazırlanmaya başlayacaktır.",
       paidUploadDoc: "Ödeme Yaptım — Evrak Yükle",
       paidUploadReceipt: "Ödeme Yaptım — Dekont Yükle",
       orderNo: "Sipariş No",
@@ -681,12 +743,16 @@ const tr = {
       statusCompleted: "Tamamlandı",
       statusCancelled: "İptal Edildi",
       statusUnknown: "Bilinmeyen Durum",
-      descRefundPending: "İade talebiniz satıcı tarafından inceleniyor. En kısa sürede geri dönüş yapılacaktır.",
+      descRefundPending:
+        "İade talebiniz satıcı tarafından inceleniyor. En kısa sürede geri dönüş yapılacaktır.",
       descRefundApproved: "{{amount}}iade talebiniz onaylandı. Ödeme bilgilerinizi kontrol edin.",
-      descRefundRejected: "Satıcı iade talebinizi reddetti. Detaylar için satıcıyla iletişime geçin.",
-      descReceiptUnderReview: "Havale dekontu inceleniyor. Satıcı ödemenizi onayladıktan sonra sipariş hazırlanmaya başlayacak.",
+      descRefundRejected:
+        "Satıcı iade talebinizi reddetti. Detaylar için satıcıyla iletişime geçin.",
+      descReceiptUnderReview:
+        "Havale dekontu inceleniyor. Satıcı ödemenizi onayladıktan sonra sipariş hazırlanmaya başlayacak.",
       descCompletePayment: "Ödemenizi tamamlamak için havale makbuzunu gönderin.",
-      refundOnlyShippedDelivered: "İade talebi yalnızca kargoya verilmiş veya teslim edilmiş siparişler için açılabilir.",
+      refundOnlyShippedDelivered:
+        "İade talebi yalnızca kargoya verilmiş veya teslim edilmiş siparişler için açılabilir.",
       refundAlreadyApproved: "Bu sipariş için iade talebiniz zaten onaylanmıştır.",
       refundAlreadyPending: "Bu sipariş için bekleyen bir iade talebiniz zaten bulunmaktadır.",
       genericError: "Bir hata oluştu.",
@@ -724,7 +790,8 @@ const tr = {
       reportAction: "Şikayet et",
       reportShort: "Şikayet",
       orderInfoLoading: "Sipariş bilgisi yükleniyor…",
-      reviewRequiresOrder: "Bu ürünü yorumlayabilmek için onaylı/teslim alınmış bir siparişiniz olmalı.",
+      reviewRequiresOrder:
+        "Bu ürünü yorumlayabilmek için onaylı/teslim alınmış bir siparişiniz olmalı.",
       loginToReview: "Yorum yapabilmek için giriş yapın",
       reviewThisProduct: "Bu ürünü değerlendir",
       alreadyReviewed: "Bu ürünü zaten yorumladınız",
@@ -780,7 +847,8 @@ const tr = {
       photoAdded: "Fotoğraf eklendi",
       confirmRemovePhoto: "Bu fotoğrafı kaldırmak istediğinizden emin misiniz?",
       photoRemoved: "Fotoğraf kaldırıldı",
-      confirmPaymentPrompt: "Ödeme alındığını onaylamak istiyor musunuz? Sipariş durumu \"Onaylanıyor\" olarak güncellenecek.",
+      confirmPaymentPrompt:
+        'Ödeme alındığını onaylamak istiyor musunuz? Sipariş durumu "Onaylanıyor" olarak güncellenecek.',
       paymentConfirmed: "Ödeme onaylandı, sipariş işleme alındı",
       confirmFailed: "Onaylama başarısız",
       orderShipped: "Sipariş kargoya verildi olarak işaretlendi",
@@ -914,7 +982,8 @@ const tr = {
       adding: "Ekleniyor...",
       add: "Ekle",
       preview: "Önizleme",
-      maxPhotosReached: "Maksimum fotoğraf sayısına ulaşıldı (20/20). Yeni eklemek için mevcut fotoğrafları silin.",
+      maxPhotosReached:
+        "Maksimum fotoğraf sayısına ulaşıldı (20/20). Yeni eklemek için mevcut fotoğrafları silin.",
       noPhotosYet: "Henüz fotoğraf eklemediniz",
       photosHint: "Fabrika, atölye veya mağaza fotoğrafları ekleyin",
       galleryPhotoAlt: "Galeri fotoğrafı",
@@ -987,7 +1056,7 @@ const tr = {
       trackingNumber: "Kargo Takip Numarası",
       optional: "(opsiyonel)",
       trackingPlaceholder: "örn. 1234567890",
-      shipConfirmHint: "Onayladığınızda sipariş \"Kargoda\" durumuna geçecek.",
+      shipConfirmHint: 'Onayladığınızda sipariş "Kargoda" durumuna geçecek.',
     },
     settingsUi: {
       businessHint: "Bu bölümü doldurun, tedarikçilerden daha iyi teklifler alın.",
@@ -1000,54 +1069,73 @@ const tr = {
       heroTitle: "iStoc'da ödemeden teslimata korumadan faydalanın",
       howItWorksCta: "Süreç şu şekilde işler:",
       serviceInfoTitle: "Trade Assurance, satın alım yolculuğunuzun her aşamasını kapsar",
-      serviceInfoDesc: "iStoc'daki alıcılara güvenli ödeme yapma imkanı sunuyoruz, ürün veya nakliye sorunları gibi öngörülemeyen durumlara karşı koruma sağlıyoruz ve satın almayla ilgili sorunları çözmek için alıcılarla tedarikçiler arasında arabuluculuk yapıyoruz.",
+      serviceInfoDesc:
+        "iStoc'daki alıcılara güvenli ödeme yapma imkanı sunuyoruz, ürün veya nakliye sorunları gibi öngörülemeyen durumlara karşı koruma sağlıyoruz ve satın almayla ilgili sorunları çözmek için alıcılarla tedarikçiler arasında arabuluculuk yapıyoruz.",
       watchMore: "Daha fazla bilgi almak için izleyin",
       statOrders: "Trade Assurance siparişleri",
       statBought: "Bizden satın alındı",
       statSuppliers: "Tedarikçiler",
       statProducts: "Ürünler",
       howProtectTitle: "iStoc'da ödemelerinizi nasıl koruyoruz?",
-      howProtectIntro: "Trade Assurance, küresel olarak iş yapmayı hem alıcılar hem de satıcılar için daha kolay ve daha güvenli hale getirir. Süreç şu şekilde işler:",
+      howProtectIntro:
+        "Trade Assurance, küresel olarak iş yapmayı hem alıcılar hem de satıcılar için daha kolay ve daha güvenli hale getirir. Süreç şu şekilde işler:",
       step1Title: "Trade Assurance siparişini başlat",
       step1Desc: "iStoc'da bir tedarikçiyle sipariş anlaşması yaptınız.",
       step2Title: "iStoc üzerinden ödeme yapın",
-      step2Desc: "Bir çevrimiçi ödeme yöntemiyle satın alın veya iStoc aracılığıyla banka havalesi yapın.",
+      step2Desc:
+        "Bir çevrimiçi ödeme yöntemiyle satın alın veya iStoc aracılığıyla banka havalesi yapın.",
       step3Title: "Ödeme geçici olarak tutuluyor",
-      step3Desc: "Ödemeniz emanette tutuluyor. Siz ürünü teslim alıp onayladıktan sonra tedarikçiye gönderilecek.",
+      step3Desc:
+        "Ödemeniz emanette tutuluyor. Siz ürünü teslim alıp onayladıktan sonra tedarikçiye gönderilecek.",
       step4Title: "Sipariş koşulları karşılanmazsa paranızı geri alın",
-      step4Desc: "Para iadelerinde ve sorunlu siparişlerde tazminat talebinde bulunduğunuzda bir çözüme ulaşmanız için size yardımcı olacağız.",
+      step4Desc:
+        "Para iadelerinde ve sorunlu siparişlerde tazminat talebinde bulunduğunuzda bir çözüme ulaşmanız için size yardımcı olacağız.",
       whatsCovered: "Kapsamdakiler",
       coveragePayments: "Güvenli ve kolay ödemeler",
       coverageRefund: "Para iade politikası",
       coverageShipping: "Gönderim ve lojistik hizmetleri",
       coverageAfterSales: "Satış sonrası korumaları",
       paymentsTitle: "Güvenli ve çeşitli ödeme seçenekleri",
-      paymentsDesc1: "iStoc aracılığıyla yaptığınız her ödeme şifrelenmiştir, güvenlidir ve 2 saat gibi kısa bir sürede işlenir.",
-      paymentsDesc2: "Kredi/banka kartları, dijital cüzdanlar, doğrudan banka hesabına transferler ve esnek ödeme planları* dahil olmak üzere bildiğiniz ve güvendiğiniz ödeme yöntemlerini destekliyoruz.",
+      paymentsDesc1:
+        "iStoc aracılığıyla yaptığınız her ödeme şifrelenmiştir, güvenlidir ve 2 saat gibi kısa bir sürede işlenir.",
+      paymentsDesc2:
+        "Kredi/banka kartları, dijital cüzdanlar, doğrudan banka hesabına transferler ve esnek ödeme planları* dahil olmak üzere bildiğiniz ve güvendiğiniz ödeme yöntemlerini destekliyoruz.",
       sourceProducts: "Destekleyici ürünleri tedarik edin",
       learnHow: "Nasıl çalıştığını öğrenin",
       eligibleBuyersNote: "*Uygun alıcılar için",
       securePaymentAlt: "Güvenli ödeme",
       refundTitle: "Para iade politikası",
-      refundDesc1: "Siparişiniz gönderilmezse, kaybolursa veya kusurlu, yanlış, hasarlı veya başka bir sorunla elinize ulaşırsa paranızı geri almak için para iadesi talebinde bulunun.",
-      refundDesc2: "Uygun bir ülkede* bulunuyorsanız kusurlu ürünleri yerel olarak ücretsiz iade etmek için Easy Return hizmetimizden de yararlanabilirsiniz.",
+      refundDesc1:
+        "Siparişiniz gönderilmezse, kaybolursa veya kusurlu, yanlış, hasarlı veya başka bir sorunla elinize ulaşırsa paranızı geri almak için para iadesi talebinde bulunun.",
+      refundDesc2:
+        "Uygun bir ülkede* bulunuyorsanız kusurlu ürünleri yerel olarak ücretsiz iade etmek için Easy Return hizmetimizden de yararlanabilirsiniz.",
       eligibleCountriesNote: "*Uygun ülkelerin listesi için",
       here: "buraya",
       clickSuffix: "tıklayın",
-      shippingDesc1: "Siparişiniz planlanan tarihte teslim edilsin veya gecikme için bir tazminat alın.",
-      shippingDesc2: "iStoc Logistics ile lojistik ağımızın güvenilirliğinden yararlanabilir ve gönderinizi dünyanın birçok ülkesi ve bölgesinde gerçek zamanlı olarak takip edebilirsiniz.",
+      shippingDesc1:
+        "Siparişiniz planlanan tarihte teslim edilsin veya gecikme için bir tazminat alın.",
+      shippingDesc2:
+        "iStoc Logistics ile lojistik ağımızın güvenilirliğinden yararlanabilir ve gönderinizi dünyanın birçok ülkesi ve bölgesinde gerçek zamanlı olarak takip edebilirsiniz.",
       logisticsAlt: "Lojistik ve Gönderim",
-      afterSalesDesc: "Uygun ürünlerde yerinde kurulum, bakım, onarım ve ücretsiz yedek parça hizmetlerimizle hizmet kapınıza gelsin.",
+      afterSalesDesc:
+        "Uygun ürünlerde yerinde kurulum, bakım, onarım ve ücretsiz yedek parça hizmetlerimizle hizmet kapınıza gelsin.",
       testimonialsTitle: "Alıcı sesleri",
-      testimonialsIntro: "Trade Assurance'ın sizin gibi diğer insanlara nasıl avantajlar sağladığını öğrenin.",
-      testimonial1: "\"İşlem süresince hem tedarikçinin hem de kendimin koruma altında olduğunu bilmek içimi rahatlatıyor.\"",
-      testimonial2: "\"Trade Assurance kullandığınız ve korunduğunuz gerçeğini bildiğiniz için endişelenmenize gerek kalmaz.\"",
-      testimonial3: "\"iStoc üzerinden ödeme yapmak çok güvenli hissettiriyor, emanet sistemi alıcılar için gerçek bir güvence.\"",
-      testimonial4: "\"Satış sonrası destek ve hızlı iade süreci beklentilerimizin çok üzerindeydi.\"",
+      testimonialsIntro:
+        "Trade Assurance'ın sizin gibi diğer insanlara nasıl avantajlar sağladığını öğrenin.",
+      testimonial1:
+        '"İşlem süresince hem tedarikçinin hem de kendimin koruma altında olduğunu bilmek içimi rahatlatıyor."',
+      testimonial2:
+        '"Trade Assurance kullandığınız ve korunduğunuz gerçeğini bildiğiniz için endişelenmenize gerek kalmaz."',
+      testimonial3:
+        '"iStoc üzerinden ödeme yapmak çok güvenli hissettiriyor, emanet sistemi alıcılar için gerçek bir güvence."',
+      testimonial4:
+        '"Satış sonrası destek ve hızlı iade süreci beklentilerimizin çok üzerindeydi."',
       detailHeroTitle: "Ticari Güvence Sistemi ile Güvenli Ticaret",
-      detailHeroDesc: "İşlemlerinizin her aşamasında güven ve şeffaflık sağlayarak, uzun vadeli iş ortaklıkları kurmanıza yardımcı oluyoruz.",
+      detailHeroDesc:
+        "İşlemlerinizin her aşamasında güven ve şeffaflık sağlayarak, uzun vadeli iş ortaklıkları kurmanıza yardımcı oluyoruz.",
       detailServiceTitle: "Ticari Güvence, satın alım yolculuğunuzun her aşamasını kapsar",
-      detailServiceDesc: "İstoc Ticari Güvence Sistemi, alıcı ve satıcılar arasında sorunsuz ticaretin temelini oluşturur. Güvenli ödeme, tarafsız çözüm mekanizmaları ve uçtan uca takip ile öngörülemeyen durumlara karşı koruma sağlıyoruz.",
+      detailServiceDesc:
+        "İstoc Ticari Güvence Sistemi, alıcı ve satıcılar arasında sorunsuz ticaretin temelini oluşturur. Güvenli ödeme, tarafsız çözüm mekanizmaları ve uçtan uca takip ile öngörülemeyen durumlara karşı koruma sağlıyoruz.",
       tradeAssuranceLabel: "Ticari Güvence",
       featureDigitalPaymentTitle: "Dijital Ödeme Kanalları",
       featureDigitalPaymentDesc: "Çoklu ödeme yöntemleriyle hızlı ve güvenli işlem.",
@@ -1061,36 +1149,50 @@ const tr = {
       featureReturnsDesc: "Sorunsuz iade ve değişim politikaları desteği.",
       featureNeutralResolutionTitle: "Tarafsız Çözüm",
       featureNeutralResolutionDesc: "Anlaşmazlıklarda tarafsız hakemlik mekanizması.",
-      detailProcessIntro: "Ticari Güvence, alıcı ve satıcılar arasındaki işlemleri her iki taraf için de daha kolay ve daha güvenli hale getirir. Süreç şu şekilde işler:",
+      detailProcessIntro:
+        "Ticari Güvence, alıcı ve satıcılar arasındaki işlemleri her iki taraf için de daha kolay ve daha güvenli hale getirir. Süreç şu şekilde işler:",
       detailStep1Title: "Ticari Güvence siparişini başlat",
-      detailStep1Desc: "iStoc'da bir tedarikçiyle sipariş anlaşması yaptınız. Tedarikçi, siparişinizi onaylar ve ürününüzü hazırlamaya başlar.",
-      detailStep2Desc: "Kredi kartı, doğrudan borçlandırma veya banka havalesi ile güvenle ödeme yapın. Tüm ödemeler SSL şifreleme ile korunur.",
+      detailStep1Desc:
+        "iStoc'da bir tedarikçiyle sipariş anlaşması yaptınız. Tedarikçi, siparişinizi onaylar ve ürününüzü hazırlamaya başlar.",
+      detailStep2Desc:
+        "Kredi kartı, doğrudan borçlandırma veya banka havalesi ile güvenle ödeme yapın. Tüm ödemeler SSL şifreleme ile korunur.",
       detailStep3Title: "Ödeme bloke hesapta tutulur",
-      detailStep3Desc: "Ödemeniz, ürün teslim edilip onaylandığı ana kadar bloke hesapta tutulur. Bu, her iki taraf için de güvence sağlar.",
+      detailStep3Desc:
+        "Ödemeniz, ürün teslim edilip onaylandığı ana kadar bloke hesapta tutulur. Bu, her iki taraf için de güvence sağlar.",
       detailStep4Title: "Sorun olursa paranızı geri alın",
-      detailStep4Desc: "Sipariş koşulları karşılanmazsa, özel temsilciniz süreci takip eder ve paranızın iade edilmesi için size yardımcı olur.",
+      detailStep4Desc:
+        "Sipariş koşulları karşılanmazsa, özel temsilciniz süreci takip eder ve paranızın iade edilmesi için size yardımcı olur.",
       whatsCoveredSubtitle: "Ticari Güvence Sistemi ile sahip olduğunuz temel garantiler",
       cardSecurePaymentTitle: "Güvenli Ödeme",
-      cardSecurePaymentDesc: "Kredi kartı ve doğrudan borçlandırma ile yapılan ödemeler, sipariş tamamlanana kadar bloke hesapta güvenle tutulur.",
+      cardSecurePaymentDesc:
+        "Kredi kartı ve doğrudan borçlandırma ile yapılan ödemeler, sipariş tamamlanana kadar bloke hesapta güvenle tutulur.",
       cardRefundTitle: "Para İade Garantisi",
       cardRefundDesc: "Siparişle ilgili bir problem yaşanırsa paranızın iadesi güvence altındadır.",
       cardAgentTitle: "Özel Temsilci",
-      cardAgentDesc: "Siparişiniz eksiksiz tamamlanana kadar özel bir temsilci süreci sizin için takip eder.",
+      cardAgentDesc:
+        "Siparişiniz eksiksiz tamamlanana kadar özel bir temsilci süreci sizin için takip eder.",
       fullAssuranceTitle: "Tam Güvence",
-      cardFullAssuranceDesc: "Üretimden teslimata kadar tüm aşamalar iStoc ekibi tarafından izlenir; aksaklıkta tarafsız hakemlik devreye girer.",
+      cardFullAssuranceDesc:
+        "Üretimden teslimata kadar tüm aşamalar iStoc ekibi tarafından izlenir; aksaklıkta tarafsız hakemlik devreye girer.",
       howSystemWorksTitle: "Sistem Nasıl Çalışır?",
-      howSystemWorksIntro: "Ticari Güvence Sistemi, siparişinizin türüne göre iki katmanlı koruma sunar.",
+      howSystemWorksIntro:
+        "Ticari Güvence Sistemi, siparişinizin türüne göre iki katmanlı koruma sunar.",
       layer1Title: "Para Güvencesi",
       layer1Desc1: "Alıcının ödemesi, ürün teslim edilene kadar bloke edilir.",
-      layer1Desc2: "Sipariş eksiksiz tamamlandıktan sonra para satıcıya aktarılır. Tüm standart siparişlerde otomatik olarak devreye girer.",
-      layer2Desc: "Özel üretim veya baskılı ürün siparişlerinde daha kapsamlı koruma sağlanır. Sistem şunları garantiler:",
-      layer2Item1: "Ürün hazırlanmasından kargolanmasına kadar tüm adımların iStoc ekibi tarafından takibi",
+      layer1Desc2:
+        "Sipariş eksiksiz tamamlandıktan sonra para satıcıya aktarılır. Tüm standart siparişlerde otomatik olarak devreye girer.",
+      layer2Desc:
+        "Özel üretim veya baskılı ürün siparişlerinde daha kapsamlı koruma sağlanır. Sistem şunları garantiler:",
+      layer2Item1:
+        "Ürün hazırlanmasından kargolanmasına kadar tüm adımların iStoc ekibi tarafından takibi",
       layer2Item2: "Müşteriye eksiksiz ve kusursuz teslimatın yapılması",
       layer2Item3: "Ürün doğruluğu, kalite kontrolü ve zamanında teslimat kontrolü",
       layer2Item4: "Gerekirse ürün kurulumu ve sevkiyat desteği",
       layer2Item5: "Şartlar yerine getirilmediğinde para iadesi veya satıcıya tazminat uygulanması",
-      detailShippingDesc1: "Siparişinize uygun kargo tipini seçin — Express, Hava, Deniz, Kara veya Standart kargo seçenekleri mevcuttur.",
-      detailShippingDesc2: "Siparişiniz kargoya verildiğinde takip numarası ve kargo firması bilgisi otomatik olarak sipariş detaylarınıza eklenir. Kargoya verildiği andan teslim alınana kadar süreci platform üzerinden izleyebilirsiniz.",
+      detailShippingDesc1:
+        "Siparişinize uygun kargo tipini seçin — Express, Hava, Deniz, Kara veya Standart kargo seçenekleri mevcuttur.",
+      detailShippingDesc2:
+        "Siparişiniz kargoya verildiğinde takip numarası ve kargo firması bilgisi otomatik olarak sipariş detaylarınıza eklenir. Kargoya verildiği andan teslim alınana kadar süreci platform üzerinden izleyebilirsiniz.",
       shippingLogisticsAlt: "Gönderim ve lojistik",
       footerTermsTitle: "Hükümler ve Koşullar",
       footerRead: "Okuyun",
@@ -5370,7 +5472,7 @@ const tr = {
         "Tüm dünyadan satıcı ve alıcıları güvenli, şeffaf B2B ticarette buluşturuyoruz.",
       storyTitle: "Hikayemiz",
       storyP1:
-        'iStoc, Birleşik Krallık merkezli iStoc Private Company Limited tarafından işletilen küresel bir B2B ticaret markasıdır. Amacımız basit: dünyanın her yerindeki üreticileri, toptancıları ve perakendecileri tek bir dijital platformda buluşturmak.',
+        "iStoc, Birleşik Krallık merkezli iStoc Private Company Limited tarafından işletilen küresel bir B2B ticaret markasıdır. Amacımız basit: dünyanın her yerindeki üreticileri, toptancıları ve perakendecileri tek bir dijital platformda buluşturmak.",
       storyP2:
         "Coğrafi sınır tanımadan, satıcılarımız ve alıcılarımızın güvenle, hızla ve şeffaf bir şekilde ticaret yapabileceği bir altyapı kuruyoruz. Doğrulanmış satıcılar, güvenli ödeme ve sade komisyon yapısı ile yeni nesil B2B pazaryeri olma yolunda ilerliyoruz.",
       storyP3:
@@ -6814,7 +6916,8 @@ const tr = {
         loadError: "Fiyatlandırma bilgileri yüklenemedi. Lütfen sayfayı yenileyin.",
       },
       manufacturerPlatform: "Üretici platformu",
-      heroSubtitle: "iStoc, Türkiye'deki üreticileri dünyanın dört bir yanındaki B2B alıcılarıyla aracısız buluşturur. Listele, sat, kargola — komisyon yok.",
+      heroSubtitle:
+        "iStoc, Türkiye'deki üreticileri dünyanın dört bir yanındaki B2B alıcılarıyla aracısız buluşturur. Listele, sat, kargola — komisyon yok.",
       heroImageAlt: "Türkiye'den dünyaya ihracat: liman ve konteyner lojistiği",
       applyAsSeller: "Satıcı başvurusu yap",
       howItWorks: "Nasıl çalışır?",
@@ -6878,13 +6981,15 @@ const tr = {
       monthsFree: "{{count}} ay bedava",
       sellerPackages: "Satıcı paketleri",
       pricingSectionTitle: "Hangi ölçekteysen, o paketi seç.",
-      pricingSectionDesc: "Tüm paketler aynı işi yapar: senin ürününü Avrupa'lı alıcıya ulaştırır. Üst paketler komisyonu düşürür, vitrini büyütür, destek seviyesini artırır.",
+      pricingSectionDesc:
+        "Tüm paketler aynı işi yapar: senin ürününü Avrupa'lı alıcıya ulaştırır. Üst paketler komisyonu düşürür, vitrini büyütür, destek seviyesini artırır.",
       period: "Periyot",
       yearlyToggle: "Yıllık",
       monthlyToggle: "Aylık",
       comparison: "Karşılaştırma",
       comparisonTitle: "Diğer pazaryerlerine göre iStoc.",
-      comparisonDesc: "Üretici penceresinden bakınca fark net görünüyor: daha düşük komisyon, sabit aidat yok, B2B'ye odaklı süreç.",
+      comparisonDesc:
+        "Üretici penceresinden bakınca fark net görünüyor: daha düşük komisyon, sabit aidat yok, B2B'ye odaklı süreç.",
       globalB2bMarketplace: "Global B2B pazaryeri",
       internationalGeneral: "Uluslararası genel",
       horizontalEcommerce: "Yatay e-ticaret",
@@ -6904,9 +7009,11 @@ const tr = {
       dedicatedTurkishSupport: "Türkiye üreticisine özel destek",
       extraFee: "Ek ücret",
       restricted: "Kısıtlı",
-      comparisonDisclaimer: "* Rakip oranları kamuya açık fiyatlandırma sayfalarından alınmıştır (Mayıs 2026). iStoc komisyonu kategori bazlıdır; tam liste başvuru sonrası paylaşılır.",
+      comparisonDisclaimer:
+        "* Rakip oranları kamuya açık fiyatlandırma sayfalarından alınmıştır (Mayıs 2026). iStoc komisyonu kategori bazlıdır; tam liste başvuru sonrası paylaşılır.",
       finalCtaTitle: "Başvuru 4 dakikada biter.",
-      finalCtaDesc: "Vergi numarası, üretim kategorisi ve bir iletişim — gerisini birlikte hallederiz. Onay süresi ortalama 2 iş günü.",
+      finalCtaDesc:
+        "Vergi numarası, üretim kategorisi ve bir iletişim — gerisini birlikte hallederiz. Onay süresi ortalama 2 iş günü.",
       letsTalkFirst: "Önce konuşalım",
       finalCtaNote: "Başvuru ücretsiz. İptal koşulu yok.",
       storeNotFound: "Mağaza bulunamadı",
@@ -6941,24 +7048,35 @@ const tr = {
       onIstocFor: "iStoc'ta",
       verificationSubtitle: "Güvenilir tedarikçi rozetinizi kazanın",
       verificationBenefitsTitle: "Doğrulama Avantajları",
-      verificationBenefitsP1: "iStoc Doğrulanmış Tedarikçi rozeti, platformdaki güvenilirliğinizin en güçlü göstergesidir. Doğrulanmış tedarikçiler, arama sonuçlarında %40 daha fazla görünürlük elde eder ve alıcıların %78'i doğrulanmış tedarikçileri tercih etmektedir.",
-      verificationBenefitsP2: "Rozetiniz, mağaza profilinizde, ürün listelerinizde ve arama sonuçlarında belirgin şekilde görüntülenir. Alıcılar, doğrulanmış tedarikçilere daha yüksek güvenle sipariş verir; bu da dönüşüm oranınızı önemli ölçüde artırır. Ayrıca, doğrulanmış tedarikçilere özel kampanyalara ve vitrin alanlarına erişim hakkı kazanırsınız.",
-      verificationBenefitsP3: "Doğrulanmış tedarikçiler, iStoc'un öncelikli destek hattından yararlanır, özel eğitim programlarına katılabilir ve iStoc iş geliştirme etkinliklerinde ağırlıklı olarak yer alır.",
+      verificationBenefitsP1:
+        "iStoc Doğrulanmış Tedarikçi rozeti, platformdaki güvenilirliğinizin en güçlü göstergesidir. Doğrulanmış tedarikçiler, arama sonuçlarında %40 daha fazla görünürlük elde eder ve alıcıların %78'i doğrulanmış tedarikçileri tercih etmektedir.",
+      verificationBenefitsP2:
+        "Rozetiniz, mağaza profilinizde, ürün listelerinizde ve arama sonuçlarında belirgin şekilde görüntülenir. Alıcılar, doğrulanmış tedarikçilere daha yüksek güvenle sipariş verir; bu da dönüşüm oranınızı önemli ölçüde artırır. Ayrıca, doğrulanmış tedarikçilere özel kampanyalara ve vitrin alanlarına erişim hakkı kazanırsınız.",
+      verificationBenefitsP3:
+        "Doğrulanmış tedarikçiler, iStoc'un öncelikli destek hattından yararlanır, özel eğitim programlarına katılabilir ve iStoc iş geliştirme etkinliklerinde ağırlıklı olarak yer alır.",
       verificationRequirementsTitle: "Doğrulama Gereksinimleri",
-      verificationRequirementsP1: "Doğrulama sürecine başvurmak için aşağıdaki temel belgelerin hazır olması gerekmektedir: güncel ticaret sicil gazetesi, vergi levhası, imza sirküleri, son 2 yıla ait bilanço ve gelir tablosu, üretim tesisi fotoğrafları ve faaliyet belgesi.",
-      verificationRequirementsP2: "Firmanızın en az 2 yıldır faaliyette olması, geçerli bir ticaret sicil kaydına sahip olması ve iStoc platformunda en az 6 aydır aktif satıcı olarak kayıtlı bulunması gerekmektedir. Ayrıca, son 6 ayda müşteri memnuniyet puanınızın 4.0/5.0 üzerinde olması beklenmektedir.",
+      verificationRequirementsP1:
+        "Doğrulama sürecine başvurmak için aşağıdaki temel belgelerin hazır olması gerekmektedir: güncel ticaret sicil gazetesi, vergi levhası, imza sirküleri, son 2 yıla ait bilanço ve gelir tablosu, üretim tesisi fotoğrafları ve faaliyet belgesi.",
+      verificationRequirementsP2:
+        "Firmanızın en az 2 yıldır faaliyette olması, geçerli bir ticaret sicil kaydına sahip olması ve iStoc platformunda en az 6 aydır aktif satıcı olarak kayıtlı bulunması gerekmektedir. Ayrıca, son 6 ayda müşteri memnuniyet puanınızın 4.0/5.0 üzerinde olması beklenmektedir.",
       verificationProcessTitle: "Başvuru Süreci",
-      verificationProcessP1: "Doğrulama başvurusu 4 basit adımda tamamlanır. İlk olarak, satıcı panelinizden \"Doğrulama Başvurusu\" bölümüne gidin ve çevrimiçi başvuru formunu doldurun. İkinci adımda, gerekli belgeleri sisteme yükleyin. Üçüncü adımda, iStoc doğrulama ekibi belgelerinizi inceleyecek ve gerekirse ek bilgi talep edecektir.",
-      verificationProcessP2: "Dördüncü ve son adımda, Gelişmiş ve Premium doğrulama seviyeleri için iStoc temsilcisi tarafından iş yerinize ziyaret gerçekleştirilir. Tüm süreç ortalama 10-15 iş günü içinde tamamlanır. Başvurunuzun durumunu satıcı panelinizden anlık olarak takip edebilirsiniz.",
+      verificationProcessP1:
+        'Doğrulama başvurusu 4 basit adımda tamamlanır. İlk olarak, satıcı panelinizden "Doğrulama Başvurusu" bölümüne gidin ve çevrimiçi başvuru formunu doldurun. İkinci adımda, gerekli belgeleri sisteme yükleyin. Üçüncü adımda, iStoc doğrulama ekibi belgelerinizi inceleyecek ve gerekirse ek bilgi talep edecektir.',
+      verificationProcessP2:
+        "Dördüncü ve son adımda, Gelişmiş ve Premium doğrulama seviyeleri için iStoc temsilcisi tarafından iş yerinize ziyaret gerçekleştirilir. Tüm süreç ortalama 10-15 iş günü içinde tamamlanır. Başvurunuzun durumunu satıcı panelinizden anlık olarak takip edebilirsiniz.",
       verificationLevelsTitle: "Doğrulama Seviyeleri",
       verificationLevelBasicLabel: "Temel Doğrulama:",
-      verificationLevelBasicDesc: "Şirket tescil belgelerinin ve vergi mükellefiyet durumunun doğrulanması. Bu seviye, firmanızın yasal olarak faaliyet gösterdiğini teyit eder. Ücretsiz olarak sunulmaktadır.",
+      verificationLevelBasicDesc:
+        "Şirket tescil belgelerinin ve vergi mükellefiyet durumunun doğrulanması. Bu seviye, firmanızın yasal olarak faaliyet gösterdiğini teyit eder. Ücretsiz olarak sunulmaktadır.",
       verificationLevelAdvancedLabel: "Gelişmiş Doğrulama:",
-      verificationLevelAdvancedDesc: "Temel doğrulamaya ek olarak, üretim kapasitesi değerlendirmesi ve yerinde denetim içerir. Fabrika ziyareti sırasında üretim hatları, kalite kontrol süreçleri ve depolama koşulları incelenir. Yıllık 2.990 TL doğrulama ücreti uygulanır.",
+      verificationLevelAdvancedDesc:
+        "Temel doğrulamaya ek olarak, üretim kapasitesi değerlendirmesi ve yerinde denetim içerir. Fabrika ziyareti sırasında üretim hatları, kalite kontrol süreçleri ve depolama koşulları incelenir. Yıllık 2.990 TL doğrulama ücreti uygulanır.",
       verificationLevelPremiumLabel: "Premium Doğrulama:",
-      verificationLevelPremiumDesc: "En üst düzey güvenilirlik rozetidir. Gelişmiş doğrulamaya ek olarak, finansal sağlamlık analizi, müşteri referans kontrolü ve yıllık düzenli denetimler içerir. Premium doğrulanmış tedarikçiler, iSTOC'un en güvenilir iş ortakları olarak öne çıkarılır. Yıllık 7.990 TL doğrulama ücreti uygulanır.",
+      verificationLevelPremiumDesc:
+        "En üst düzey güvenilirlik rozetidir. Gelişmiş doğrulamaya ek olarak, finansal sağlamlık analizi, müşteri referans kontrolü ve yıllık düzenli denetimler içerir. Premium doğrulanmış tedarikçiler, iSTOC'un en güvenilir iş ortakları olarak öne çıkarılır. Yıllık 7.990 TL doğrulama ücreti uygulanır.",
       heroTitleMain: "Fabrikanı tüm dünyaya aç.",
-      heroDescNoCommission: "iSTOC, üreticileri dünyanın dört bir yanındaki B2B alıcılarıyla aracısız buluşturur. Listele, sat, kargola — komisyon yok.",
+      heroDescNoCommission:
+        "iSTOC, üreticileri dünyanın dört bir yanındaki B2B alıcılarıyla aracısız buluşturur. Listele, sat, kargola — komisyon yok.",
       heroImageAltWorld: "Dünya geneline ihracat: liman ve konteyner lojistiği",
       manufacturersFocusedSupport: "Üreticilere özel destek",
       startApplicationLink: "başvuruyu başlat",

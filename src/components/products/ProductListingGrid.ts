@@ -306,7 +306,8 @@ function renderProductListingCard(card: ProductListingCard): string {
       `<span class="inline-flex items-center gap-0.5">${starIcon()}<span class="font-medium text-gray-700">${card.rating}</span>${reviewBit}</span>`
     );
   }
-  if (card.moq) denseMetaParts.push(`<span class="whitespace-nowrap">Min. ${escapeHtml(card.moq)}</span>`);
+  if (card.moq)
+    denseMetaParts.push(`<span class="whitespace-nowrap">Min. ${escapeHtml(card.moq)}</span>`);
   const denseMetaHtml = denseMetaParts.length
     ? `<div class="flex min-[480px]:hidden items-center gap-x-1.5 gap-y-0.5 mt-1 text-[11px] leading-tight text-gray-500">${denseMetaParts.join(`<span class="text-gray-300">·</span>`)}</div>`
     : "";
