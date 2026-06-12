@@ -218,9 +218,10 @@ function seoPlaceholderPlugin(): Plugin {
 }
 
 
-// Frappe backend proxy hedefi. Bu monorepo'nun docker'ı 8088'i expose eder;
-// farklı dev kurulumu (örn. bench serve :8000) için VITE_API_PROXY ile override edilebilir.
-const API_PROXY_TARGET = process.env.VITE_API_PROXY || 'http://localhost:8088';
+// Frappe backend proxy hedefi. Bu monorepo'nun docker'ı 8000'i expose eder
+// (docker-frontend-1: container 8080 → host 8000); farklı dev kurulumu için
+// VITE_API_PROXY ile override edilebilir.
+const API_PROXY_TARGET = process.env.VITE_API_PROXY || 'http://localhost:8000';
 
 export default defineConfig({
     base: process.env.GITHUB_PAGES === 'true' ? '/tradehubfront/' : '/',
