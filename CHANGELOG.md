@@ -1,3 +1,16 @@
+## [v1.3.7-rc.1] - 2026-06-12 RC
+
+Bu surum rc.istoc.com'da onay asamasindadir.
+
+### Eklendi
+- feat(satici-ol): pricing varsayılanı aylık + matris dinamik + komisyon "Özel" (@boraydeger32)
+  - Paket toggle varsayılanı aylık; buton sırası Aylık | Yıllık olarak değişti
+  - İlk render fallback'leri aylık (fiyat, periyot, alt açıklama — FOUC yok)
+  - Karşılaştırma tablosu başlık fiyatları ve periyot metni artık toggle'a bağlı (x-text), escJs helper ile tek tırnak kaçışı
+  - commissionLabel: commission_custom ise "Özel", aksi halde %X (0 dahil)
+  - i18n: monthlyPeriodVatExcl + commissionCustom anahtarları (tr/en/ru/ar)
+
+---
 ## [v1.3.7-beta.1] - 2026-06-12 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
