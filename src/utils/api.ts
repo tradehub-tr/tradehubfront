@@ -174,6 +174,51 @@ export function isEmailNotVerifiedError(err: unknown): boolean {
 }
 
 /**
+ * Frappe 403 — oturum GEÇERLİ ama kullanıcı bu kaynağa yetkili değil
+ * (ör. Buyer rolü olmayan hesap buyer dashboard analytics'ini çağırıyor).
+ *
+ * Oturum-dolması ile **karıştırılmamalı**: Frappe hem guest hem
+ * girişli-ama-yetkisiz kullanıcı için 403 döndürdüğünden status koduyla
+ * ayrım yapılamaz. Bu hata fırlatıldığında login'e YÖNLENDİRME yapılmaz;
+ * çağıran kod yakalayıp boş/yetkisiz durumu kendi render eder
+ * (ör. buyer dashboard → getZeroAnalytics()).
+ */
+export class ForbiddenError extends Error {
+  status: number;
+  constructor(message: string) {
+    super(message);
+    this.name = "ForbiddenError";
+    this.status = 403;
+  }
+}
+
+/** Helper — bir error yetki (403) hatası mı? */
+export function isForbiddenError(err: unknown): boolean {
+  return err instanceof ForbiddenError;
+}
+
+/**
+ * 403 alındığında oturumun gerçekten ölü mü (guest) yoksa sadece bu işlemin
+ * mi yasak olduğunu ayırt eder. `get_session_user` guest'te
+ * `{logged_in: false}`, girişli kullanıcıda `{logged_in: true}` döner.
+ *
+ * Cache'siz kasıtlı: 403 anında oturumun güncel durumunu sorgular (CSRF
+ * cache'i bayatlamış olabilir). Yalnızca 403 yolunda (nadir) çağrılır.
+ */
+async function isSessionAlive(): Promise<boolean> {
+  try {
+    const r = await fetch(`${BASE_URL}/method/tradehub_core.api.v1.auth.get_session_user`, {
+      credentials: "include",
+    });
+    if (!r.ok) return false;
+    const d = (await r.json()) as { message?: { logged_in?: boolean } };
+    return d?.message?.logged_in === true;
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Direct ``fetch`` kullanan caller'lar (api()/callMethod yerine raw fetch yapanlar)
  * için yardımcı: response 401/403 ise ve error_code EMAIL_NOT_VERIFIED ise
  * i18n toast gösterir + ``EmailNotVerifiedError`` fırlatır.
@@ -251,13 +296,20 @@ export async function api<T>(endpoint: string, options: RequestInit = {}): Promi
 
     // Pre-auth endpoint'lerde (kayıt, OTP, şifre sıfırlama) login'e yönlendirme
     const isPreAuth = endpoint.includes(".identity.") || endpoint.includes(".auth.check_email");
-    if (!isPreAuth) {
-      window.location.href = `${getBaseUrl()}pages/auth/login.html`;
-      throw new Error("Unauthorized");
+    if (isPreAuth) {
+      // Pre-auth endpoint'lerde hatayı çağıran koda dönder
+      const msg = extractFrappeError(raw);
+      throw new Error(msg || `HTTP ${res.status}`);
     }
-    // Pre-auth endpoint'lerde hatayı çağıran koda dönder
-    const msg = extractFrappeError(raw);
-    throw new Error(msg || `HTTP ${res.status}`);
+
+    // 403 + canlı oturum → oturum dolması DEĞİL, yetki hatası: login'e atma,
+    // çağırana ForbiddenError fırlat (caller boş/yetkisiz durumu render eder).
+    if (res.status === 403 && (await isSessionAlive())) {
+      throw new ForbiddenError(extractFrappeError(raw) || "HTTP 403");
+    }
+
+    window.location.href = `${getBaseUrl()}pages/auth/login.html`;
+    throw new Error("Unauthorized");
   }
 
   if (res.status === 429) {
@@ -361,6 +413,12 @@ export async function callMethod<T = unknown>(
     if (errorCode === "EMAIL_NOT_VERIFIED") {
       void notifyEmailNotVerified();
       throw new EmailNotVerifiedError();
+    }
+    // 403 ≠ otomatik "oturum doldu": Frappe hem guest hem girişli-ama-yetkisiz
+    // kullanıcı için 403 döner. Oturum hâlâ canlıysa bu bir YETKİ hatasıdır —
+    // login'e atma, çağırana ForbiddenError fırlat (caller boş durumu render eder).
+    if (await isSessionAlive()) {
+      throw new ForbiddenError(extractFrappeError(raw) || "HTTP 403");
     }
     window.location.href = `${getBaseUrl()}pages/auth/login.html`;
     throw new Error(t("commonSvc.sessionExpired"));
