@@ -1,3 +1,11 @@
+## [v1.3.6] - 2026-06-12 PROD
+
+Bu surum istoc.com'da yayindadir.
+
+### Duzeltildi
+- fix(security): Capacitor WebView navigasyon kısıtı (@boraydeger32)
+
+---
 ## [v1.3.5-rc.1] - 2026-06-12 RC
 
 Bu surum rc.istoc.com'da onay asamasindadir.
