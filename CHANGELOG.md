@@ -1,3 +1,15 @@
+## [v1.3.7] - 2026-06-12 PROD
+
+Bu surum istoc.com'da yayindadir.
+
+### Duzeltildi
+- fix(auth): süresi dolmuş OTP'de doğru uyarı ve anında tekrar gönder (@aliiball)
+  - 404 (kod bulunamadı/süresi doldu) artık generic "kod hatalı" yerine ayrı OtpExpiredError ile yakalanıyor
+  - süre dolunca "Kodun süresi doldu, yeni kod isteyin" mesajı gösteriliyor ve "Tekrar gönder" 60sn beklenmeden anında aktifleşiyor
+  - ortak enableResendNow helper'ı çıkarıldı; lockout bloğu da onu kullanıyor
+  - auth.otpExpired anahtarı 4 dile eklendi (tr/en/ar/ru)
+
+---
 ## [v1.3.6-rc.1] - 2026-06-12 RC
 
 Bu surum rc.istoc.com'da onay asamasindadir.
