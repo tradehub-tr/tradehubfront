@@ -785,6 +785,10 @@ export const SECTION_TYPES = [
   { type: "certificates", label: t("sellerApp.sectionCertificates"), icon: "fas fa-certificate" },
   { type: "why_choose_us", label: t("sellerApp.sectionWhyChooseUs"), icon: "fas fa-star" },
   { type: "gallery", label: t("sellerApp.sectionGallery"), icon: "fas fa-photo-video" },
-  { type: "company_introduction", label: t("sellerApp.sectionCompanyIntro"), icon: "fas fa-info-circle" },
+  {
+    type: "company_introduction",
+    label: t("sellerApp.sectionCompanyIntro"),
+    icon: "fas fa-info-circle",
+  },
   { type: "contact_form", label: t("sellerApp.sectionContactForm"), icon: "fas fa-envelope" },
 ];

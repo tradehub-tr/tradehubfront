@@ -212,9 +212,7 @@ export function initStoreHeaderInteractions(): void {
   if (followBtn) {
     followBtn.addEventListener("click", () => {
       const isFollowing = followBtn.classList.toggle("store-header__follow-btn--active");
-      followBtn.textContent = isFollowing
-        ? t("sellerApp.following")
-        : t("sellerApp.follow");
+      followBtn.textContent = isFollowing ? t("sellerApp.following") : t("sellerApp.follow");
       followBtn.setAttribute("aria-pressed", String(isFollowing));
     });
   }
