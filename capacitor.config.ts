@@ -20,17 +20,19 @@ const config: CapacitorConfig = {
 	appId: 'com.istoc.app',
 	appName: 'istoc',
 	webDir: 'dist',
-	// server bloğu YALNIZCA CAP_SERVER_URL verildiğinde eklenir (dev live-reload).
-	// Verilmezse prod/bundle modu — App Store derlemesi bu hâlde yapılır.
-	...(devServerUrl
-		? {
-				server: {
+	// M24 fix — WebView navigasyonunu yalnız backend host'larına kısıtla (open-redirect /
+	// enjekte içerikle keyfi domaine gitmeyi engeller). allowNavigation her modda uygulanır;
+	// dev'de ayrıca live-reload server.url eklenir.
+	server: {
+		allowNavigation: ['rc.istoc.com', 'istoc.com', '*.istoc.com'],
+		...(devServerUrl
+			? {
 					url: devServerUrl,
 					cleartext: true,
 					androidScheme: 'http',
-				},
-			}
-		: {}),
+				}
+			: {}),
+	},
 	ios: {
 		contentInset: 'always',
 		limitsNavigationsToAppBoundDomains: false,
