@@ -1662,6 +1662,7 @@ const en = {
       otpSentTo: "Enter the 6-digit code sent to",
       otpSentFallback: "your email address",
       otpInvalidCode: "Verification code is incorrect. Please re-enter it.",
+      otpExpired: "Your code has expired. Please request a new one.",
       otpVerifying: "Verifying…",
       otpTooManyAttempts: "Too many attempts. Please wait a moment and try again.",
       otpCooldownTitle: "Too many requests",

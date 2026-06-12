@@ -6,7 +6,7 @@
  */
 
 import { t } from "../../i18n";
-import { OtpVerifyError, RateLimitError } from "../../utils/api";
+import { OtpExpiredError, OtpVerifyError, RateLimitError } from "../../utils/api";
 
 /* ── Types ──────────────────────────────────────────── */
 
@@ -242,6 +242,10 @@ export function initEmailVerification(
         if (err instanceof OtpVerifyError) {
           state.attemptsRemaining = err.attemptsRemaining;
           renderFeedback(state, feedbackEl, resendBtn, countdownSpan);
+        } else if (err instanceof OtpExpiredError) {
+          // Kod TTL'i doldu — "süre doldu" mesajı göster ve resend'i anında aç.
+          renderInlineMessage(feedbackEl, t("auth.otpExpired"));
+          enableResendNow(state, resendBtn, countdownSpan);
         } else if (err instanceof RateLimitError) {
           startCooldown(
             state,
@@ -468,6 +472,25 @@ function startCountdown(
 }
 
 /**
+ * "Tekrar gönder"i anında etkinleştir: cooldown sayacını durdur, butonu aç ve
+ * süre metnini gizle. Hem lockout (attempts=0) hem süre-doldu (404) durumunda
+ * kullanıcı beklemeden yeni kod isteyebilsin diye.
+ */
+function enableResendNow(
+  state: EmailVerificationState,
+  resendBtn: HTMLButtonElement | null,
+  countdownSpan: HTMLElement | null
+): void {
+  state.canResend = true;
+  if (resendBtn) resendBtn.disabled = false;
+  if (state.countdownInterval) {
+    clearInterval(state.countdownInterval);
+    state.countdownInterval = null;
+  }
+  if (countdownSpan) countdownSpan.classList.add("hidden");
+}
+
+/**
  * Update countdown UI elements
  */
 function updateCountdownUI(
@@ -591,13 +614,7 @@ function renderFeedback(
       </div>
     `;
     // Lockout: enable the resend button immediately, hide the cooldown text.
-    if (resendBtn) resendBtn.disabled = false;
-    state.canResend = true;
-    if (state.countdownInterval) {
-      clearInterval(state.countdownInterval);
-      state.countdownInterval = null;
-    }
-    if (countdownSpan) countdownSpan.classList.add("hidden");
+    enableResendNow(state, resendBtn, countdownSpan);
     return;
   }
 
