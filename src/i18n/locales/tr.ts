@@ -1657,6 +1657,7 @@ const tr = {
       otpSentTo: "gönderilen 6 haneli kodu girin",
       otpSentFallback: "E-posta adresinize",
       otpInvalidCode: "Doğrulama kodu hatalı. Lütfen tekrar girin.",
+      otpExpired: "Kodun süresi doldu. Lütfen yeni bir kod isteyin.",
       otpVerifying: "Doğrulanıyor…",
       otpTooManyAttempts: "Çok fazla deneme. Lütfen biraz bekleyip tekrar deneyin.",
       otpCooldownTitle: "Çok fazla istek",

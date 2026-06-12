@@ -141,6 +141,19 @@ export class RateLimitError extends Error {
 }
 
 /**
+ * OTP doğrulama endpoint'i 404 döndüğünde fırlatılır: kod Redis TTL'i dolduğu
+ * için silinmiş ("not found or expired"). Generic "yanlış kod" mesajından ayrı
+ * bir tip — UI bunu yakalayıp kullanıcıya "süre doldu, yeni kod iste" diyebilir
+ * ve "Tekrar gönder"i anında etkinleştirebilir.
+ */
+export class OtpExpiredError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "OtpExpiredError";
+  }
+}
+
+/**
  * EMAIL_NOT_VERIFIED gating'inde fırlatılan özel hata.
  *
  * Caller'lar generic catch'lerde ``instanceof EmailNotVerifiedError`` ile
@@ -270,6 +283,14 @@ export async function api<T>(endpoint: string, options: RequestInit = {}): Promi
     const raw = await res.text();
     const msg = extractFrappeError(raw);
     const ar = extractAttemptsRemaining(raw);
+    // OTP doğrulama endpoint'inde 404 = kod süresi doldu / bulunamadı.
+    // Ayrı tip fırlat ki UI generic "yanlış kod" yerine "süre doldu" göstersin.
+    if (
+      res.status === 404 &&
+      (endpoint.includes("verify_registration_otp") || endpoint.includes("verify_email_otp"))
+    ) {
+      throw new OtpExpiredError(msg || "OTP_EXPIRED");
+    }
     if (ar !== null) {
       throw new OtpVerifyError(msg || `HTTP ${res.status}`, res.status, ar);
     }
