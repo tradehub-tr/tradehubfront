@@ -99,18 +99,35 @@ Alpine.data("stickyHeaderSearch", () => ({
   },
 
   /**
-   * Form shell + dropdown — yumuşak, bounce'siz duration-based animation.
-   * Material standart "ease-in-out" curve (0.4, 0, 0.2, 1) → akıcı, sakin
-   * büyüme; spring overshoot/wobble yok, just-an-easy flow.
+   * Form shell + dropdown animasyonu (Emil prensipleri).
+   * Açılış = giren öğe → güçlü EASE-OUT (anında hisseden, responsive).
+   * Kapanış = çıkan öğe → daha snappy/kısa eğri. Material ease-in-out
+   * (başta yavaş, sluggish) terk edildi. prefers-reduced-motion'da
+   * hareket atlanır, son duruma anında geçilir.
    */
   runAnimation(isExpanded: boolean) {
     const refs = this.$refs as Record<string, HTMLElement | undefined>;
     const form = refs.searchForm;
     const dropdown = refs.dropdown;
 
-    const easeInOut: [number, number, number, number] = [0.4, 0, 0.2, 1];
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Güçlü ease-out (girer) / snappy çıkış eğrisi.
+    const easeOut: [number, number, number, number] = [0.22, 1, 0.36, 1];
+    const easeExit: [number, number, number, number] = [0.32, 0.72, 0, 1];
 
     void loadAnimate().then((animate) => {
+      if (prefersReduced) {
+        if (form) {
+          animate(
+            form,
+            { height: isExpanded ? "100px" : "42px", borderRadius: isExpanded ? "16px" : "9999px" },
+            { duration: 0 }
+          );
+        }
+        if (dropdown) animate(dropdown, { opacity: isExpanded ? 1 : 0 }, { duration: 0.12 });
+        return;
+      }
+
       if (isExpanded) {
         if (form) {
           animate(
@@ -119,7 +136,7 @@ Alpine.data("stickyHeaderSearch", () => ({
               height: ["42px", "100px"],
               borderRadius: ["9999px", "16px"],
             },
-            { duration: 0.34, ease: easeInOut }
+            { duration: 0.3, ease: easeOut }
           );
         }
         if (dropdown) {
@@ -130,7 +147,7 @@ Alpine.data("stickyHeaderSearch", () => ({
               y: [-4, 0],
               scale: [0.99, 1],
             },
-            { duration: 0.3, ease: easeInOut, delay: 0.06 }
+            { duration: 0.26, ease: easeOut, delay: 0.05 }
           );
         }
       } else {
@@ -141,7 +158,7 @@ Alpine.data("stickyHeaderSearch", () => ({
               height: ["100px", "42px"],
               borderRadius: ["16px", "9999px"],
             },
-            { duration: 0.28, ease: easeInOut }
+            { duration: 0.2, ease: easeExit }
           );
         }
         if (dropdown) {
@@ -152,7 +169,7 @@ Alpine.data("stickyHeaderSearch", () => ({
               y: [0, -2],
               scale: [1, 0.99],
             },
-            { duration: 0.18, ease: easeInOut }
+            { duration: 0.15, ease: easeExit }
           );
         }
       }

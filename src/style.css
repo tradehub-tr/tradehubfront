@@ -1358,27 +1358,21 @@
     border-radius: 8px;
     background-color: transparent;
     transition:
-      color 0.18s ease,
-      background-color 0.18s ease,
-      transform 0.12s ease,
-      box-shadow 0.18s ease;
+      color 0.16s ease,
+      background-color 0.16s cubic-bezier(0.23, 1, 0.32, 1);
   }
 
+  /* Yardımcı seçiciler/ikonlar AKSIYON butonu değil — sessiz nötr hover.
+     İçe-basık (inset bevel) gölge ve scale YOK (press yalnız gerçek CTA'da).
+     Marka sarısı yalnız aksiyon/seçim/durum içindir (Sorumlu Sarı Rule),
+     hover dekorasyonu için değil — bu yüzden nötr ink tint. */
   .th-header-icon:hover {
-    color: var(--color-primary-500);
-    background-color: rgba(245, 184, 0, 0.1);
-    box-shadow:
-      inset 2px 2px 4px rgba(0, 0, 0, 0.1),
-      inset -1px -1px 2px rgba(255, 255, 255, 0.6);
+    color: #111827;
+    background-color: rgba(17, 24, 39, 0.06);
   }
 
   .th-header-icon:active {
-    background-color: rgba(245, 184, 0, 0.18);
-    box-shadow:
-      inset 3px 3px 6px rgba(0, 0, 0, 0.18),
-      inset -1px -1px 2px rgba(255, 255, 255, 0.4);
-    transform: scale(0.98);
-    transition-duration: 0.06s;
+    background-color: rgba(17, 24, 39, 0.1);
   }
 
   /* --- SubHeader Link (statik renk, admin tarafından yönetilmez) --- */
@@ -1441,18 +1435,43 @@
   .th-mega-sidebar-item {
     color: var(--color-text-primary);
     font-size: 0.8125rem;
+    transition:
+      background-color 0.16s cubic-bezier(0.23, 1, 0.32, 1),
+      color 0.16s ease;
   }
 
-  .th-mega-sidebar-item:hover {
-    background-color: #ffffff;
-    color: var(--color-text-primary);
+  /* Chevron — Alibaba-vari hover nudge (yalnızca son doğrudan svg = ok işareti) */
+  .th-mega-sidebar-item > svg {
+    transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
   }
 
+  @media (hover: hover) and (pointer: fine) {
+    .th-mega-sidebar-item:hover {
+      background-color: #ffffff;
+      font-weight: 500;
+    }
+
+    .th-mega-sidebar-item:hover > svg {
+      transform: translateX(2px);
+    }
+  }
+
+  /* Aktif (seçili bölüm) — hover'dan amber çubuk + 500 ağırlıkla ayrışır.
+     Genişlik değişmesin diye tabandaki border-s-2 (transparent) korunur,
+     yalnızca renk verilir; font-weight flex-1 truncate etiketi kaydırmaz. */
   .th-mega-sidebar-item--active {
     background-color: #ffffff;
     color: var(--color-text-primary);
     font-weight: 500;
-    border-left: 2px solid #e1b533;
+    border-inline-start-color: #e1b533;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .th-mega-sidebar-item > svg,
+    .th-mega-sidebar-item:hover > svg {
+      transition: none;
+      transform: none;
+    }
   }
 
   /* --- Category Popup sidebar item (active state — JS-toggled) --- */
@@ -1711,15 +1730,70 @@ footer {
 
 /* === Password Requirements (AccountSetupForm) === */
 
-/* valid::before — SVG checkmark pseudo-element kept in CSS (data URL too long for arbitrary class) */
-.auth-password-req-item.valid::before {
+/* State styling + dot↔check crossfade kept in CSS: pseudo-element coupled
+   (::before dot + ::after green check) and shared by all 4 requirement items.
+   JS toggles .valid / .invalid on .auth-password-req-item. */
+.auth-password-req-item {
+  color: var(--color-text-placeholder, #999);
+  transition: color 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.auth-password-req-item.valid {
+  color: #16a34a;
+}
+.auth-password-req-item.invalid {
+  color: #dc2626;
+}
+
+/* Icon slot — fixed 16px so the dot↔check swap never shifts the row */
+.auth-password-req-icon {
+  position: relative;
+  width: 16px;
+  height: 16px;
+}
+/* Dot — pending / invalid state (inherits row color via currentColor) */
+.auth-password-req-icon::before {
   content: "";
-  flex-shrink: 0;
-  width: 14px;
-  height: 14px;
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background: currentColor;
+  transition:
+    opacity 180ms cubic-bezier(0.23, 1, 0.32, 1),
+    transform 180ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+/* Green check — valid state (data URL too long for arbitrary class) */
+.auth-password-req-icon::after {
+  content: "";
+  position: absolute;
+  inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%2316a34a'%3E%3Cpath d='M12.207 4.793a1 1 0 0 1 0 1.414l-5 5a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L6.5 9.086l4.293-4.293a1 1 0 0 1 1.414 0z'/%3E%3C/svg%3E");
   background-size: contain;
   background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0;
+  transform: scale(0.6);
+  transition:
+    opacity 200ms cubic-bezier(0.23, 1, 0.32, 1),
+    transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.auth-password-req-item.valid .auth-password-req-icon::before {
+  opacity: 0;
+  transform: scale(0.4);
+}
+.auth-password-req-item.valid .auth-password-req-icon::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-password-req-item,
+  .auth-password-req-icon::before,
+  .auth-password-req-icon::after {
+    transition-duration: 0ms;
+  }
 }
 
 /* === CART — Pseudo-element styles (cannot be done with Tailwind) === */
@@ -1858,7 +1932,9 @@ button:not(:disabled):not([role="tab"]):not([class*="-tab"]):not([class*="__tab"
     .th-btn-link
   ):not(.th-btn-ghost):not(.mega-trigger):not(.th-subheader-link):not(.search-tab-btn):not(
     .th-search-tab
-  ):not(.mega-cat-btn):not(.th-mega-sidebar-item):not(.th-no-press):hover,
+  ):not(.mega-cat-btn):not(.th-mega-sidebar-item):not([class*="th-header-icon"]):not(
+    .th-no-press
+  ):hover,
 input[type="submit"]:not(:disabled):not(.th-no-press):hover,
 input[type="button"]:not(:disabled):not(.th-no-press):hover,
 input[type="reset"]:not(:disabled):not(.th-no-press):hover,
@@ -1888,7 +1964,9 @@ button:not(:disabled):not([role="tab"]):not([class*="-tab"]):not([class*="__tab"
     .th-btn-link
   ):not(.th-btn-ghost):not(.mega-trigger):not(.th-subheader-link):not(.search-tab-btn):not(
     .th-search-tab
-  ):not(.mega-cat-btn):not(.th-mega-sidebar-item):not(.th-no-press):active,
+  ):not(.mega-cat-btn):not(.th-mega-sidebar-item):not([class*="th-header-icon"]):not(
+    .th-no-press
+  ):active,
 input[type="submit"]:not(:disabled):not(.th-no-press):active,
 input[type="button"]:not(:disabled):not(.th-no-press):active,
 input[type="reset"]:not(:disabled):not(.th-no-press):active,

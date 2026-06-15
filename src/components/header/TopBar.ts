@@ -14,6 +14,7 @@ import { getListingUrl } from "../../utils/listingUrl";
 import { getBrandUrl } from "../../utils/brandUrl";
 import { getSellerUrl } from "../../utils/sellerUrl";
 import { getSellerStoreUrl } from "../../utils/seller";
+import { getFlagSvg } from "../../utils/flags";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 // DISABLED: import { mockConversations } from '../../data/mockMessages';
 import { t, getCurrentLang, updatePageTranslations } from "../../i18n";
@@ -295,7 +296,7 @@ function renderCompactStickySearch(): string {
               aria-label="Search products from sticky header"
               aria-controls="topbar-compact-dropdown"
               class="w-full h-full border-0 bg-transparent px-3 text-gray-900 placeholder:text-gray-400 outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 transition-all duration-300 ease-in-out dark:text-white dark:placeholder:text-gray-400"
-              :class="expanded ? 'text-base pe-12' : 'text-[13px] py-0'"
+              :class="expanded ? 'text-[15px] pe-12' : 'text-[13px] pe-[78px] py-0'"
             />
           </div>
 
@@ -322,7 +323,7 @@ function renderCompactStickySearch(): string {
             type="submit"
             tabindex="-1"
             class="th-btn inline-flex items-center justify-center gap-1.5 font-semibold transition-all duration-300 ease-in-out shrink-0 rounded-full"
-            :class="expanded ? 'px-6 py-2 text-base absolute end-4 bottom-2' : 'px-5 h-[32px] text-[13px] ms-1'"
+            :class="expanded ? 'px-6 h-[40px] text-[15px] absolute end-4 bottom-2' : 'px-5 h-[32px] text-[13px] absolute end-1.5 bottom-[5px]'"
           >
             <span x-show="!expanded" data-i18n="common.search">${t("common.search")}</span>
             <svg x-show="expanded" class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -397,12 +398,18 @@ function renderCountrySelector(): string {
     <button
       data-popover-target="popover-deliver-to"
       data-popover-placement="bottom"
-      class="th-header-icon flex flex-col items-center px-2 py-1 dark:text-gray-300 dark:hover:text-primary-400 transition-colors cursor-pointer shrink-0"
+      class="th-header-icon flex items-center gap-1.5 px-2 py-1.5 text-[14px] dark:text-gray-300 dark:hover:text-primary-400 transition-colors cursor-pointer shrink-0"
       type="button"
       aria-label="Select delivery country"
     >
-      <span class="text-xs text-gray-500 dark:text-gray-400" data-i18n="header.deliverTo">${t("header.deliverTo")}</span>
-      <span class="text-sm font-medium">${defaultCountry.flag} ${defaultCountry.code}</span>
+      <svg class="w-4 h-4 text-gray-400 dark:text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+      </svg>
+      <span class="flex items-center gap-1 whitespace-nowrap">
+        <span class="text-gray-500 dark:text-gray-400" data-i18n="header.deliverTo">${t("header.deliverTo")}</span>
+        <span class="inline-flex items-center gap-1.5 text-gray-900 dark:text-white">${getFlagSvg(defaultCountry.code)}${defaultCountry.code}</span>
+      </span>
     </button>
 
     <!-- Deliver To Popover -->
@@ -429,7 +436,7 @@ function renderCountrySelector(): string {
             ${countryOptions
               .map(
                 (country) => `
-              <option value="${country.code}">${country.flag} ${country.name}</option>
+              <option value="${country.code}">${country.name}</option>
             `
               )
               .join("")}
@@ -459,14 +466,14 @@ function renderLanguageCurrencySelector(): string {
     <button
       data-popover-target="popover-language-currency"
       data-popover-placement="bottom"
-      class="th-header-icon flex items-center gap-1.5 px-2 py-1.5 text-sm dark:text-gray-300 dark:hover:text-primary-400 transition-colors cursor-pointer shrink-0"
+      class="th-header-icon flex items-center gap-1.5 px-2 py-1.5 text-[14px] dark:text-gray-300 dark:hover:text-primary-400 transition-colors cursor-pointer shrink-0"
       type="button"
       aria-label="Select language and currency"
     >
-      <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+      <svg class="w-4 h-4 text-gray-400 dark:text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5a17.92 17.92 0 0 1-8.716-4.247m0 0A8.959 8.959 0 0 1 3 12c0-1.177.227-2.302.637-3.332" />
       </svg>
-      <span class="font-medium truncate" data-i18n="header.englishUsd" id="lang-currency-label">${t("header.englishUsd")}</span>
+      <span class="text-gray-900 dark:text-white truncate" data-i18n="header.englishUsd" id="lang-currency-label">${t("header.englishUsd")}</span>
     </button>
 
     <!-- Language & Currency Popover -->
@@ -691,7 +698,7 @@ function renderAuthButtons(): string {
         id="auth-dropdown-button"
         data-dropdown-toggle="auth-dropdown-menu"
         data-dropdown-placement="bottom-end"
-        class="inline-flex items-center gap-1.5 px-2 py-1.5 text-sm font-medium rounded-md hover:bg-gray-50 transition-colors cursor-pointer"
+        class="th-no-press inline-flex items-center gap-1.5 px-2 py-1.5 text-[14px] font-normal rounded-md hover:bg-gray-50 transition-colors cursor-pointer"
         aria-label="Sign in"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
@@ -876,7 +883,7 @@ function renderMobileDrawer(): string {
               ${countryOptions
                 .map(
                   (country) => `
-                <option value="${country.code}">${country.flag} ${country.name}</option>
+                <option value="${country.code}">${country.name}</option>
               `
                 )
                 .join("")}
@@ -1344,7 +1351,7 @@ export function TopBar(props?: TopBarProps): string {
           ${renderCompactStickySearch()}
 
           <!-- Right Side: Selectors + Icons + Cart + Auth -->
-          <div class="ms-auto flex items-center gap-1 sm:gap-2 lg:gap-4 shrink-0">
+          <div class="ms-auto flex items-center gap-1 sm:gap-2 lg:gap-3 shrink-0">
             <!-- Country Selector (xl+ only) -->
             <div class="hidden xl:block">
               ${renderCountrySelector()}
@@ -1354,6 +1361,9 @@ export function TopBar(props?: TopBarProps): string {
             <div class="hidden xl:block">
               ${renderLanguageCurrencySelector()}
             </div>
+
+            <!-- Divider: locale selectors | action icons -->
+            <span class="hidden xl:block w-px h-5 bg-gray-200 dark:bg-gray-700" aria-hidden="true"></span>
 
             <!-- Messages Button (xl+ only) -->
             <div class="hidden xl:block">

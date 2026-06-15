@@ -129,7 +129,7 @@ export function AccountSetupForm(defaultCountry: string = "TR"): string {
             <!-- Dropdown Panel -->
             <div
               id="country-dropdown"
-              class="absolute z-50 hidden w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg flex flex-col"
+              class="absolute z-50 hidden w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg flex flex-col origin-top opacity-0 scale-95 transition-[opacity,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] data-[state=open]:opacity-100 data-[state=open]:scale-100 motion-reduce:transition-none"
             >
               <!-- Search input (sticky) -->
               <div class="shrink-0 p-2 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
@@ -244,30 +244,23 @@ export function AccountSetupForm(defaultCountry: string = "TR"): string {
             </button>
           </div>
 
-          <!-- Password Requirements -->
+          <!-- Password Requirements — durum stilleri ve nokta↔tik geçişi style.css'te
+               (.auth-password-req-item / .auth-password-req-icon, pseudo-element coupled) -->
           <div id="password-requirements" class="auth-password-requirements flex flex-col gap-1.5 mt-3">
-            <div class="auth-password-req-item flex items-center gap-2 text-[13px] transition-colors text-[var(--color-text-placeholder,#999)] [&.valid]:text-[#16a34a] [&.invalid]:text-[#dc2626] [&.valid_.auth-password-req-icon]:opacity-0 [&.valid_.auth-password-req-icon]:w-0 [&.valid_.auth-password-req-icon]:h-0 [&.valid_.auth-password-req-icon]:overflow-hidden [&.invalid_.auth-password-req-icon]:text-[#dc2626]" data-requirement="minLength">
-              <svg class="auth-password-req-icon shrink-0 w-2 h-2 transition-all" viewBox="0 0 16 16" fill="currentColor">
-                <circle cx="8" cy="8" r="3"/>
-              </svg>
+            <div class="auth-password-req-item flex items-center gap-2 text-[13px]" data-requirement="minLength">
+              <span class="auth-password-req-icon shrink-0" aria-hidden="true"></span>
               <span data-i18n="auth.setup.minChars">${t("auth.setup.minChars")}</span>
             </div>
-            <div class="auth-password-req-item flex items-center gap-2 text-[13px] transition-colors" data-requirement="hasUppercase">
-              <svg class="auth-password-req-icon shrink-0 w-2 h-2 transition-all" viewBox="0 0 16 16" fill="currentColor">
-                <circle cx="8" cy="8" r="3"/>
-              </svg>
+            <div class="auth-password-req-item flex items-center gap-2 text-[13px]" data-requirement="hasUppercase">
+              <span class="auth-password-req-icon shrink-0" aria-hidden="true"></span>
               <span data-i18n="auth.setup.uppercase">${t("auth.setup.uppercase")}</span>
             </div>
-            <div class="auth-password-req-item flex items-center gap-2 text-[13px] transition-colors" data-requirement="hasLowercase">
-              <svg class="auth-password-req-icon shrink-0 w-2 h-2 transition-all" viewBox="0 0 16 16" fill="currentColor">
-                <circle cx="8" cy="8" r="3"/>
-              </svg>
+            <div class="auth-password-req-item flex items-center gap-2 text-[13px]" data-requirement="hasLowercase">
+              <span class="auth-password-req-icon shrink-0" aria-hidden="true"></span>
               <span data-i18n="auth.setup.lowercase">${t("auth.setup.lowercase")}</span>
             </div>
-            <div class="auth-password-req-item flex items-center gap-2 text-[13px] transition-colors" data-requirement="hasNumber">
-              <svg class="auth-password-req-icon shrink-0 w-2 h-2 transition-all" viewBox="0 0 16 16" fill="currentColor">
-                <circle cx="8" cy="8" r="3"/>
-              </svg>
+            <div class="auth-password-req-item flex items-center gap-2 text-[13px]" data-requirement="hasNumber">
+              <span class="auth-password-req-icon shrink-0" aria-hidden="true"></span>
               <span data-i18n="auth.setup.number">${t("auth.setup.number")}</span>
             </div>
           </div>
@@ -482,6 +475,9 @@ export function initAccountSetupForm(options: AccountSetupFormOptions = {}): Acc
   function openCountryDropdown(): void {
     if (!countryDropdown || !countryBtn || !dropdownIcon) return;
     countryDropdown.classList.remove("hidden");
+    // Reflow so the enter transition runs from the closed (scale-95/opacity-0) state.
+    void countryDropdown.offsetHeight;
+    countryDropdown.dataset.state = "open";
     countryBtn.setAttribute("aria-expanded", "true");
     dropdownIcon.classList.add("rotate-180");
     if (countrySearch) {
@@ -500,6 +496,7 @@ export function initAccountSetupForm(options: AccountSetupFormOptions = {}): Acc
 
   function closeCountryDropdown(): void {
     if (!countryDropdown || !countryBtn || !dropdownIcon) return;
+    countryDropdown.dataset.state = "closed";
     countryDropdown.classList.add("hidden");
     countryBtn.setAttribute("aria-expanded", "false");
     dropdownIcon.classList.remove("rotate-180");
