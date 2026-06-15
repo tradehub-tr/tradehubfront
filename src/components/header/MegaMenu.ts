@@ -859,7 +859,7 @@ export function initMegaMenu(): void {
         <li>
           <a
             href="/pages/products.html?cat=${encodeURIComponent(cat.slug)}"
-            class="th-mega-sidebar-item mega-cat-btn flex items-center gap-2 sm:gap-3 w-full px-3 sm:px-4 py-3 sm:py-2.5 text-sm text-start transition-colors border-s-2 border-transparent ${index === 0 ? "th-mega-sidebar-item--active" : ""}"
+            class="th-mega-sidebar-item mega-cat-btn flex items-center gap-2 sm:gap-3 w-full px-3 sm:px-4 py-3 sm:py-2.5 text-sm text-start border-s-2 border-transparent ${index === 0 ? "th-mega-sidebar-item--active" : ""}"
             data-category="${escapeHtml(cat.id)}"
           >
             <span class="flex-shrink-0 inline-flex items-center justify-center [&>svg]:w-5 [&>svg]:h-5 text-gray-500 dark:text-gray-400">${cat.icon_class ? getCategoryIcon(cat.icon_class) : getIconByName(cat.name)}</span>

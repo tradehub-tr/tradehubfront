@@ -16,7 +16,7 @@ function renderCategoriesTrigger(): string {
   return `
     <button
       id="mega-menu-trigger"
-      class="mega-trigger subheader-link th-subheader-link relative flex items-center gap-1.5 rounded-md py-2 text-sm text-black transition-all sm:gap-2 sm:py-2.5 sm:text-base dark:text-primary-400 dark:hover:bg-gray-800/60 dark:hover:text-primary-300"
+      class="mega-trigger subheader-link th-subheader-link relative flex items-center gap-1.5 rounded-md py-2 text-[14px] transition-all sm:gap-2 sm:py-2.5 dark:text-primary-400 dark:hover:bg-gray-800/60 dark:hover:text-primary-300"
       type="button"
       aria-expanded="false"
       data-mega-target="categories"
@@ -36,14 +36,14 @@ function renderNavigationLinks(): string {
   return `
     <div class="hidden lg:flex items-center gap-0.5 xl:gap-1">
       <button
-        class="mega-trigger subheader-link th-subheader-link relative flex items-center gap-1.5 px-2 xl:px-3 py-2.5 rounded-md text-sm whitespace-nowrap dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all"
+        class="mega-trigger subheader-link th-subheader-link relative flex items-center gap-1.5 px-2 xl:px-3 py-2.5 rounded-md text-[14px] whitespace-nowrap dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all"
         type="button"
         data-mega-target="featured"
       >
         <span data-i18n="subheader.featuredSelections">${t("subheader.featuredSelections")}</span>
       </button>
       <button
-        class="mega-trigger subheader-link th-subheader-link relative flex items-center gap-1.5 px-2 xl:px-3 py-2.5 rounded-md text-sm whitespace-nowrap dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all"
+        class="mega-trigger subheader-link th-subheader-link relative flex items-center gap-1.5 px-2 xl:px-3 py-2.5 rounded-md text-[14px] whitespace-nowrap dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all"
         type="button"
         data-mega-target="protections"
       >
@@ -63,7 +63,7 @@ function renderUtilityLinks(): string {
     <div class="hidden xl:flex items-center gap-0.5">
       <a
         href="${helpHref}"
-        class="subheader-link th-subheader-link relative px-2 xl:px-3 py-2.5 rounded-md text-sm whitespace-nowrap dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all${helpActive ? " active" : ""}"
+        class="subheader-link th-subheader-link relative px-2 xl:px-3 py-2.5 rounded-md text-[14px] whitespace-nowrap dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all${helpActive ? " active" : ""}"
       >
         <span data-i18n="subheader.helpCenter">${t("subheader.helpCenter")}</span>
       </a>
@@ -73,7 +73,7 @@ function renderUtilityLinks(): string {
           return `
         <a
           href="${link.href}"
-          class="subheader-link th-subheader-link relative px-2 xl:px-3 py-2.5 rounded-md text-sm whitespace-nowrap dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all${isActive ? " active" : ""}"
+          class="subheader-link th-subheader-link relative px-2 xl:px-3 py-2.5 rounded-md text-[14px] whitespace-nowrap dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all${isActive ? " active" : ""}"
         >
           <span data-i18n="${link.labelKey}">${t(link.labelKey)}</span>
         </a>

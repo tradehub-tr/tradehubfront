@@ -22,7 +22,7 @@ function renderMessagesItem(): string {
     <button
       type="button"
       @click="chatOpen = true"
-      class="flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-gray-100 transition-colors duration-150 cursor-pointer"
+      class="th-no-press flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-gray-100 transition-colors duration-150 cursor-pointer"
       aria-label="${t("commonNav.myMessages")}"
     >
       <svg class="shrink-0" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -52,7 +52,7 @@ function renderLensItem(): string {
       type="button"
       @mouseenter="lensOpen = true"
       @mouseleave="lensOpen = false"
-      class="flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-gray-100 transition-colors duration-150 cursor-pointer"
+      class="th-no-press flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-gray-100 transition-colors duration-150 cursor-pointer"
       aria-label="${t("commonNav.visualSearch")}"
     >
       <svg class="shrink-0" width="28" height="28" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -124,7 +124,7 @@ function renderScrollTopItem(): string {
       x-transition:leave-start="opacity-100 scale-100"
       x-transition:leave-end="opacity-0 scale-95"
       @click="scrollToTop()"
-      class="flex items-center justify-center w-9 h-9 md:w-auto md:h-auto md:px-2 md:py-2 rounded-full md:rounded-lg hover:bg-gray-100 transition-colors duration-150 cursor-pointer"
+      class="th-no-press flex items-center justify-center w-9 h-9 md:w-auto md:h-auto md:px-2 md:py-2 rounded-full md:rounded-lg hover:bg-gray-100 transition-colors duration-150 cursor-pointer"
       aria-label="${t("commonNav.scrollToTop")}"
     >
       <svg class="shrink-0 w-5 h-5 md:w-7 md:h-7" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
