@@ -1,3 +1,18 @@
+## [v1.3.9] - 2026-06-15 PROD
+
+Bu surum istoc.com'da yayindadir.
+
+### Duzeltildi
+- fix(perm): Seller Owner mağaza profili yazma izni geri verildi (@ahmeetseker)
+  - Admin Seller Profile Custom DocPerm'inde Seller Owner permlevel-0 satırı eksikti; satıcı kendi profilini okuyabiliyor ama kaydedemiyordu ("does not have doctype access via role permission" 403)
+  - v15_8_1_seller_owner_asp_docperm patch'i permlevel-0 read/write ekler (if_owner=0; izolasyonu admin_seller_profile_has_permission hook sağlar)
+  - v15_5_1 RBAC reseed regresyonu; Listing (v15_7_1) ve KYB/KYC (v15_7_6) düzeltilmişti, Admin Seller Profile atlanmıştı
+
+### Degistirildi
+- refactor(ci): lint workflow PR tetiği kaldırıldı (@ahmeetseker)
+  - pull_request trigger silindi; lint artık sadece push'ta çalışır
+
+---
 ## [v1.3.8-rc.1] - 2026-06-15 RC
 
 Bu surum rc.istoc.com'da onay asamasindadir.
