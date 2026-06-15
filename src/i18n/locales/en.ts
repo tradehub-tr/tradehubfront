@@ -8124,6 +8124,7 @@ const en = {
     loading: "Loading...",
 
     statusNone: "Not Started",
+    statusDraft: "Draft",
     statusPending: "Pending",
     statusUnderReview: "Under Review",
     statusVerified: "Verified",
@@ -8135,6 +8136,9 @@ const en = {
       "Verify your identity and company documents to start selling. The process takes a few minutes.",
     applyNow: "Apply Now",
 
+    draftTitle: "Draft — Not Yet Submitted",
+    draftHint:
+      "Upload your documents and click 'Submit'. Once submitted, your application enters review.",
     rejectedTitle: "Your Application Was Rejected",
     rejectionReason: "Reason",
     rejectedHint:

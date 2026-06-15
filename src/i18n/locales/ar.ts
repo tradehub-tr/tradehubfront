@@ -8052,6 +8052,7 @@ const ar = {
     loading: "جارٍ التحميل...",
 
     statusNone: "لم يبدأ",
+    statusDraft: "مسودة",
     statusPending: "قيد الانتظار",
     statusUnderReview: "قيد المراجعة",
     statusVerified: "موثّق",
@@ -8062,6 +8063,8 @@ const ar = {
     notStartedDesc: "تحقّق من هويتك ومستندات شركتك لبدء البيع. تستغرق العملية بضع دقائق.",
     applyNow: "تقدّم الآن",
 
+    draftTitle: "مسودة — لم تُرسل بعد",
+    draftHint: "قم بتحميل مستنداتك واضغط على 'إرسال'. بعد الإرسال، يدخل طلبك مرحلة المراجعة.",
     rejectedTitle: "تم رفض طلبك",
     rejectionReason: "السبب",
     rejectedHint:
