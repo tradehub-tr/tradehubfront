@@ -1,3 +1,19 @@
+## [v1.3.9-beta.2] - 2026-06-16 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(ui): hareket cilası ve mobil üretici filtre çekmecesi eklendi (@ahmeetseker)
+  - Üretici listesine mobil bottom-sheet filtre çekmecesi (ManufacturerFilterSheet) eklendi
+  - Tutarlı giriş easing token'ı (--ease-emil cubic-bezier) ve motion-reduce fallback'leri eklendi
+  - Shell içeriği init tamamlandıktan sonra yumuşak opacity geçişiyle gösteriliyor
+  - iOS geri butonuna press/hover geri bildirimi eklendi
+  - Accordion/SKU listelerinde x-collapse ve scaleX-tabanlı sekme alt çizgisi animasyonu eklendi
+  - Krem renk tell'leri (#e8e6e0, #f7f7f5, #8a877f) nötr gri token'lara taşındı
+  - th-no-press press yönetimi link/başlık/ikon butonlarına genişletildi
+  - Yeni i18n anahtarları (varyant silme, MOQ uyarıları, mağaza profili) eklendi
+
+---
 ## [v1.3.9] - 2026-06-15 PROD
 
 Bu surum istoc.com'da yayindadir.
