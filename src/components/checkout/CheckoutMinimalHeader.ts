@@ -76,7 +76,7 @@ export function CheckoutMinimalHeader(): string {
     <header class="w-full bg-white border-b border-[#e5e5e5]">
       <div class="max-w-[1680px] mx-auto px-3 sm:px-4 h-[50px] sm:h-[60px] flex items-center justify-between">
         <a href="/" class="flex items-center shrink-0" aria-label="${t("checkoutMfr.homePage")}">
-          <img src="/images/istoc-logo.png" alt="iSTOC" class="h-5 sm:h-7 md:h-8" />
+          <img src="/images/istoc-logo.png" alt="iSTOC" class="h-[18px] min-[400px]:h-[22px] sm:h-[25px]" />
         </a>
         ${renderUserSection()}
       </div>

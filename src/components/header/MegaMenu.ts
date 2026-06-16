@@ -194,7 +194,7 @@ function renderFeaturedView(): string {
           ${featureCards
             .map(
               (card) => `
-            <a href="${card.href}" class="feat-card-mm group relative isolate overflow-hidden flex flex-col gap-2 rounded-xl border border-gray-200 bg-white p-3 pb-2.5 shadow-[0_1px_2px_rgba(20,20,18,0.03)] transition-all duration-200 hover:-translate-y-0.5 hover:border-amber-400 hover:shadow-[0_8px_24px_rgba(213,156,0,0.14),0_1px_3px_rgba(20,20,18,0.04)]">
+            <a href="${card.href}" class="feat-card-mm group relative isolate overflow-hidden flex flex-col gap-2 rounded-xl border border-gray-200 bg-white p-3 pb-2.5 shadow-[0_1px_2px_rgba(20,20,18,0.03)] transition-[transform,border-color,box-shadow] duration-200 motion-reduce:transition-none hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 hover:border-amber-400 hover:shadow-[0_8px_24px_rgba(213,156,0,0.14),0_1px_3px_rgba(20,20,18,0.04)]">
               <span class="feat-card-mm-halo pointer-events-none absolute -end-12 -top-12 h-44 w-44 rounded-full -z-10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" style="background:radial-gradient(circle, rgba(245,184,0,0.22), transparent 70%);"></span>
               <span class="pointer-events-none absolute inset-px rounded-[11px] border border-transparent transition-colors group-hover:border-amber-400/25"></span>
               <span class="relative flex h-8 w-8 items-center justify-center rounded-lg bg-amber-100 border border-amber-300/60 text-amber-700 transition-colors group-hover:bg-amber-400 group-hover:text-gray-900 group-hover:border-amber-500">
@@ -206,7 +206,7 @@ function renderFeaturedView(): string {
               </div>
               <div class="relative flex items-center justify-between border-t border-dashed border-gray-200 pt-2.5 mt-1">
                 <span class="text-[11px] font-semibold text-amber-700 uppercase tracking-wider" data-i18n="${card.metaKey}"${card.metaSource ? ` data-meta-source="${card.metaSource}"` : ""}>${t(card.metaKey)}</span>
-                <span class="flex h-6 w-6 items-center justify-center rounded-full bg-gray-50 border border-gray-200 text-gray-500 transition-all group-hover:bg-amber-400 group-hover:text-gray-900 group-hover:border-amber-500 group-hover:translate-x-1">
+                <span class="flex h-6 w-6 items-center justify-center rounded-full bg-gray-50 border border-gray-200 text-gray-500 transition-[transform,background-color,color,border-color] motion-reduce:transition-none group-hover:bg-amber-400 group-hover:text-gray-900 group-hover:border-amber-500 group-hover:translate-x-1 motion-reduce:group-hover:translate-x-0">
                   ${arrowSvg}
                 </span>
               </div>
@@ -218,14 +218,14 @@ function renderFeaturedView(): string {
         </div>
 
         <!-- Producers banner -->
-        <a href="/ureticiler" class="group relative isolate block overflow-hidden rounded-xl bg-[#1a1a1a] shadow-[0_2px_6px_rgba(20,20,18,0.08)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(20,20,18,0.18)] min-h-[150px] lg:min-h-[180px] xl:min-h-[230px] 2xl:min-h-[280px]" aria-label="${t("mega.discoverProducers")}">
+        <a href="/ureticiler" class="group relative isolate block overflow-hidden rounded-xl bg-[#1a1a1a] shadow-[0_2px_6px_rgba(20,20,18,0.08)] transition-[transform,box-shadow] duration-200 motion-reduce:transition-none hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 hover:shadow-[0_12px_28px_rgba(20,20,18,0.18)] min-h-[150px] lg:min-h-[180px] xl:min-h-[230px] 2xl:min-h-[280px]" aria-label="${t("mega.discoverProducers")}">
           <img src="${producerImg}" alt="" loading="lazy" decoding="async" class="absolute inset-0 z-0 block w-full h-full object-cover" />
           <div class="absolute inset-0 z-10" style="background:linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.85) 100%);"></div>
           <span class="absolute top-3 start-3 lg:top-3.5 lg:start-3.5 z-20 inline-block rounded-full bg-amber-400 px-2 py-0.5 text-[10px] lg:text-[10.5px] font-bold uppercase tracking-wider text-gray-900" data-i18n="mega.bannerTagNew">${t("mega.bannerTagNew")}</span>
           <div class="relative z-20 flex h-full min-h-[150px] lg:min-h-[180px] xl:min-h-[230px] 2xl:min-h-[280px] flex-col justify-end gap-1 lg:gap-1.5 xl:gap-2 p-3 lg:p-4 xl:p-5 2xl:p-6 text-white">
             <div class="text-[13px] lg:text-[15px] xl:text-[17px] 2xl:text-[19px] font-bold leading-tight tracking-[-0.01em] text-white" data-i18n="mega.discoverProducers">${t("mega.discoverProducers")}</div>
             <div class="hidden lg:block text-[10.5px] lg:text-[11px] xl:text-[11.5px] leading-snug text-white/80 mb-1 lg:mb-1.5 line-clamp-2" data-i18n="mega.discoverProducersDesc">${t("mega.discoverProducersDesc")}</div>
-            <span class="inline-flex items-center gap-1 lg:gap-1.5 self-start text-[11px] lg:text-[11.5px] xl:text-[12px] font-semibold text-amber-400 transition-all group-hover:gap-2.5">
+            <span class="inline-flex items-center gap-1 lg:gap-1.5 self-start text-[11px] lg:text-[11.5px] xl:text-[12px] font-semibold text-amber-400 transition-[gap] motion-reduce:transition-none group-hover:gap-2.5 motion-reduce:group-hover:gap-1">
               <span data-i18n="mega.findSupplier">${t("mega.findSupplier")}</span>
               ${ctaArrowSvg}
             </span>
@@ -371,7 +371,7 @@ function renderHelpCenterView(): string {
       <div class="flex flex-col md:flex-row gap-6 md:gap-8">
         <!-- Left: Two cards -->
         <div class="flex gap-6 flex-1">
-          <a href="/help/buyers" class="group flex flex-1 flex-col items-center justify-center gap-4 rounded-md border border-dashed border-gray-200 p-8 transition-all">
+          <a href="/help/buyers" class="group flex flex-1 flex-col items-center justify-center gap-4 rounded-md border border-dashed border-gray-200 p-8 transition-[background-color,border-color,color]">
             <span class="flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 transition-colors">
               <svg class="h-7 w-7 text-gray-500 transition-colors" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/>
@@ -379,7 +379,7 @@ function renderHelpCenterView(): string {
             </span>
             <span class="text-sm font-semibold text-gray-900 transition-colors" data-i18n="mega.forBuyers">${t("mega.forBuyers")}</span>
           </a>
-          <a href="/help/suppliers" class="group flex flex-1 flex-col items-center justify-center gap-4 rounded-md border border-dashed border-gray-200 p-8 transition-all">
+          <a href="/help/suppliers" class="group flex flex-1 flex-col items-center justify-center gap-4 rounded-md border border-dashed border-gray-200 p-8 transition-[background-color,border-color,color]">
             <span class="flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 transition-colors">
               <svg class="h-7 w-7 text-gray-500 transition-colors" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z"/>
@@ -478,10 +478,10 @@ function renderAppExtensionView(): string {
 export function MegaMenu(): string {
   return `
     <div id="istoc-mega-overlay"
-      style="position:fixed;left:0;right:0;bottom:0;z-index:var(--z-backdrop);background:rgba(0,0,0,0.5);opacity:0;pointer-events:none;transition:opacity 0.2s ease;"
+      style="position:fixed;left:0;right:0;bottom:0;z-index:var(--z-backdrop);background:rgba(0,0,0,0.5);opacity:0;pointer-events:none;transition:opacity 0.2s cubic-bezier(0.23,1,0.32,1);"
     ></div>
     <div id="istoc-mega-panel"
-      style="position:fixed;left:0;width:100%;z-index:var(--z-modal);opacity:0;pointer-events:none;transform:translateY(-8px);transition:opacity 0.2s ease, transform 0.2s ease;max-height:100vh"
+      style="position:fixed;left:0;width:100%;z-index:var(--z-modal);opacity:0;pointer-events:none;transform:translateY(-8px);transition:opacity 0.2s cubic-bezier(0.23,1,0.32,1), transform 0.2s cubic-bezier(0.23,1,0.32,1);max-height:100vh"
       class="max-h-[85vh] overflow-y-auto overscroll-contain border-b border-gray-200 bg-white sm:max-h-[100vh] lg:!max-h-[80vh] dark:border-gray-700 dark:bg-gray-800"
     >
       <div class="container-boxed">
@@ -802,7 +802,7 @@ export function initMegaMenu(): void {
           : `/pages/products.html?cat=${encodeURIComponent(slug)}`;
         return `
           <a href="${href}" class="flex flex-col items-center gap-1.5 sm:gap-2 group/product min-h-[44px]">
-            <div class="relative w-14 h-14 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full flex items-center justify-center overflow-hidden group-hover/product:ring-2 transition-all" style="background:var(--product-card-bg, var(--card-bg));--tw-ring-color:var(--nav-hover-color);${borderStyle}">
+            <div class="relative w-14 h-14 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full flex items-center justify-center overflow-hidden group-hover/product:ring-2 transition-[box-shadow]" style="background:var(--product-card-bg, var(--card-bg));--tw-ring-color:var(--nav-hover-color);${borderStyle}">
               ${inner}
             </div>
             <span class="th-nav-link max-w-[4rem] text-center text-[13px] leading-tight transition-colors sm:max-w-[5rem] lg:max-w-[6rem]">${escapeHtml(name)}</span>

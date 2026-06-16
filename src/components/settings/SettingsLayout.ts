@@ -104,13 +104,13 @@ function renderProfileHeader(): string {
 
             <!-- Dropzone-style progress bar overlay (upload sırasında) -->
             <div x-show="uploadStatus === 'uploading'" class="absolute top-1/2 start-[15%] end-[15%] -translate-y-1/2 h-2.5 bg-black/75 border-2 border-black/80 rounded-full overflow-hidden z-10">
-              <div class="h-full bg-white rounded-full transition-all duration-300" :style="'width:' + Math.max(4, uploadProgress) + '%'"></div>
+              <div class="h-full w-full bg-white rounded-full origin-left transition-transform duration-300 motion-reduce:transition-none" :style="'transform:scaleX(' + (Math.max(4, uploadProgress) / 100) + ')'"></div>
             </div>
 
             <!-- Success mark overlay (350ms hold sonrası) -->
-            <div x-show="uploadStatus === 'success'" x-transition.opacity class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 max-sm:w-7 max-sm:h-7 rounded-full bg-emerald-500/90 z-20 flex items-center justify-center text-white text-sm font-bold">✓</div>
+            <div x-show="uploadStatus === 'success'" x-transition:enter="transition ease-out duration-200 motion-reduce:transition-none" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150 motion-reduce:transition-none" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 max-sm:w-7 max-sm:h-7 rounded-full bg-emerald-500/90 z-20 flex items-center justify-center text-white"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
           </div>
-          <button type="button" aria-label="Profil fotoğrafını değiştir" @click="triggerPhotoUpload()" :disabled="uploadingPhoto" class="absolute -bottom-0.5 -start-0.5 w-7 h-7 max-sm:w-6 max-sm:h-6 rounded-full bg-white border border-border-default flex items-center justify-center cursor-pointer transition-all hover:bg-surface-raised disabled:opacity-60 disabled:cursor-wait" style="color:var(--color-text-secondary)" :title="uploadingPhoto ? '${t("common.loading")}' : '${t("settings.changePhoto")}'">
+          <button type="button" aria-label="Profil fotoğrafını değiştir" @click="triggerPhotoUpload()" :disabled="uploadingPhoto" class="absolute -bottom-0.5 -start-0.5 w-7 h-7 max-sm:w-6 max-sm:h-6 rounded-full bg-white border border-border-default flex items-center justify-center cursor-pointer transition-colors duration-150 motion-reduce:transition-none hover:bg-surface-raised disabled:opacity-60 disabled:cursor-wait" style="color:var(--color-text-secondary)" :title="uploadingPhoto ? '${t("common.loading")}' : '${t("settings.changePhoto")}'">
             ${ICONS.camera}
           </button>
         </div>
@@ -122,12 +122,12 @@ function renderProfileHeader(): string {
           <div class="flex items-center gap-2 text-[13px] max-sm:text-xs flex-wrap">
             <span class="min-w-[110px] max-sm:min-w-0 flex-shrink-0" style="color:var(--color-text-tertiary)">${t("settings.emailLayoutLabel")}</span>
             <span class="font-mono truncate" style="color:var(--color-text-primary)" x-text="userEmail || '...'"></span>
-            <button type="button" aria-label="E-postayı değiştir" @click="gotoChangeEmail()" class="inline-flex items-center justify-center w-6 h-6 border-none bg-none rounded cursor-pointer transition-all hover:bg-surface-raised flex-shrink-0" style="color:var(--color-text-tertiary)" title="${t("settings.changeEmailNav")}">${ICONS.edit}</button>
+            <button type="button" aria-label="E-postayı değiştir" @click="gotoChangeEmail()" class="inline-flex items-center justify-center w-6 h-6 border-none bg-none rounded cursor-pointer transition-colors duration-150 motion-reduce:transition-none hover:bg-surface-raised flex-shrink-0" style="color:var(--color-text-tertiary)" title="${t("settings.changeEmailNav")}">${ICONS.edit}</button>
           </div>
           <div class="flex items-center gap-2 text-[13px] max-sm:text-xs flex-wrap">
             <span class="min-w-[110px] max-sm:min-w-0 flex-shrink-0" style="color:var(--color-text-tertiary)">${t("settings.membershipNumber")}</span>
             <span class="font-mono truncate" style="color:var(--color-text-primary)" x-text="memberId || '...'"></span>
-            <button type="button" aria-label="Kopyala" x-ref="copyBtn" @click="copyMemberId()" class="inline-flex items-center justify-center w-6 h-6 border-none bg-none rounded cursor-pointer transition-all hover:bg-surface-raised flex-shrink-0" :style="copied ? 'color:#16a34a' : 'color:var(--color-text-tertiary)'" :title="copied ? '${t("orders.copied")}' : '${t("settings.copyTooltip")}'">
+            <button type="button" aria-label="Kopyala" x-ref="copyBtn" @click="copyMemberId()" class="inline-flex items-center justify-center w-6 h-6 border-none bg-none rounded cursor-pointer transition-colors duration-150 motion-reduce:transition-none hover:bg-surface-raised flex-shrink-0" :style="copied ? 'color:#16a34a' : 'color:var(--color-text-tertiary)'" :title="copied ? '${t("orders.copied")}' : '${t("settings.copyTooltip")}'">
               <template x-if="!copied">${ICONS.copy}</template>
               <template x-if="copied"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7.5l2.5 2.5L11 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></template>
             </button>
@@ -136,7 +136,7 @@ function renderProfileHeader(): string {
       </div>
       <div class="flex items-center gap-4 flex-shrink-0 max-lg:w-full">
         <a href="#profilim" class="th-btn no-underline whitespace-nowrap max-lg:flex-1 max-lg:text-center">${t("settings.editProfile")}</a>
-        <button @click="handleLogout()" class="inline-flex items-center justify-center px-6 max-sm:px-3 h-10 rounded-full text-sm max-sm:text-[13px] font-semibold no-underline transition-all whitespace-nowrap bg-none hover:underline max-lg:flex-1 max-lg:text-center cursor-pointer border-none" style="color:var(--color-text-primary)">${t("settings.signOut")}</button>
+        <button @click="handleLogout()" class="inline-flex items-center justify-center px-6 max-sm:px-3 h-10 rounded-full text-sm max-sm:text-[13px] font-semibold no-underline transition-colors duration-150 motion-reduce:transition-none whitespace-nowrap bg-none hover:underline max-lg:flex-1 max-lg:text-center cursor-pointer border-none" style="color:var(--color-text-primary)">${t("settings.signOut")}</button>
       </div>
     </div>
   `;

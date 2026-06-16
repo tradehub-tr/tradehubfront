@@ -91,7 +91,7 @@ export function OrderSummary({ data, payeeSuppliers = [] }: OrderSummaryProps): 
       x-data="checkoutOrderSummary({ itemSubtotal: ${data.itemSubtotal}, discount: ${implicitDiscount}, initialShippingFee: ${data.shipping}, currency: '${escapeHtml(cur)}' })"
     >
       <!-- Title -->
-      <div class="text-[17px] sm:text-[20px] font-bold leading-7 text-[#222222] mb-5 font-inter">
+      <div class="text-[16px] sm:text-[18px] font-bold leading-tight text-text-primary mb-5 font-inter">
         <span data-i18n="checkout.orderSummary">${t("checkout.orderSummary")}</span> (${data.itemCount} <span data-i18n="common.items">${t("common.items")}</span>)
       </div>
 
@@ -100,11 +100,11 @@ export function OrderSummary({ data, payeeSuppliers = [] }: OrderSummaryProps): 
 
       <!-- Price Breakdown -->
       <div class="flex flex-col summary-amounts-layout-row">
-        <div class="flex justify-between items-center py-[6px] text-[13px] sm:text-[14px] leading-5 text-[#222222]">
+        <div class="flex justify-between items-center py-[6px] text-[13px] sm:text-[14px] leading-5 text-text-secondary">
           <span data-i18n="checkout.itemSubtotal">${t("checkout.itemSubtotal")}</span>
           <span x-text="formatMoney(itemSubtotal)">${subtotalStr}</span>
         </div>
-        <div class="flex justify-between items-center py-[6px] text-[13px] sm:text-[14px] leading-5 text-[#222222]">
+        <div class="flex justify-between items-center py-[6px] text-[13px] sm:text-[14px] leading-5 text-text-secondary">
           <span data-i18n="checkout.estimatedShipping">${t("checkout.estimatedShipping")}</span>
           <span x-text="formatMoney(shippingFee)">${shippingStr}</span>
         </div>
@@ -157,7 +157,7 @@ export function OrderSummary({ data, payeeSuppliers = [] }: OrderSummaryProps): 
       </template>
 
       <!-- Total -->
-      <div class="flex justify-between items-center mt-[10px] pt-[16px] border-t border-[#e5e5e5] summary-amounts-total-block text-[17px] sm:text-[20px] font-bold text-[#222222]">
+      <div class="flex justify-between items-center mt-[10px] pt-[16px] border-t border-[#e5e5e5] summary-amounts-total-block text-[15px] sm:text-[17px] font-bold text-text-primary">
         <span data-i18n="checkout.total">${t("checkout.total")}</span>
         <span x-text="formatMoney(total)">${totalStr}</span>
       </div>

@@ -59,7 +59,7 @@ function renderDealImage(card: TopDealCard): string {
       src="${escapeHtml(sanitizeUrl(card.imageSrc))}"
       alt="${escapeHtml(card.name)}"
       loading="lazy"
-      class="w-full h-full object-cover transition-transform duration-300 group-hover/deal:scale-110"
+      class="w-full h-full object-cover transition-transform duration-200 ease-out motion-reduce:transition-none motion-reduce:transform-none group-hover/deal:scale-110"
     />
   `;
 }

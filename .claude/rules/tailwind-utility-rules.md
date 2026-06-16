@@ -15,13 +15,25 @@ paths:
 - **İstisna — daireler/pill'ler:** Buton, badge, avatar, dot, toggle, arama çubuğu gibi tam yuvarlak öğelerde `rounded-full` kalır (bunlar radius standardının dışında).
 - Mevcut `rounded-lg/xl/2xl/sm` gördüğünde dokunduğun yerde fırsatçı şekilde `rounded-md`'ye çevir.
 
-## Buton press/inset-shadow hover'ı — UI kontrollerinde `th-no-press`
+## Buton press/inset-shadow hover'ı — press SADECE gerçek CTA'da
 
-> `style.css`'te global bir "press efekti" var (~satır 1835): tüm `button` / `[role="button"]` öğelerine hover'da **inset box-shadow**, active'de daha güçlü inset + `scale(0.98)`. Bu efekt **slider dot'u, ok butonu, icon-button, toggle, paginator nokta gibi küçük UI kontrollerinde çirkin gölgeli kutu** üretiyor.
+> `style.css`'te global bir "press efekti" var (~satır 1835): tüm `button` / `[role="button"]` öğelerine hover'da **inset box-shadow**, active'de daha güçlü inset + `scale(0.98)`. Selector **opt-out** (varsayılan açık, dev hariç-tutma listesiyle kapatır) olduğu için **yeni eklediğin her `<button>` otomatik press alır** — fark etmezsen link/yazı/toggle gibi öğelerde çirkin basık-kutu çıkar.
 
-- **Bu inset-shadow hover'ı UI kontrol öğelerinde kullanma/gösterme.** Yeni bir dot/ok/icon/toggle button'u oluştururken **`th-no-press`** class'ını ekle — global efekt o öğede `box-shadow:none + transform:none` ile kapanır (resmi opt-out, `style.css:1900`).
-- Press efekti yalnızca gerçek **aksiyon butonlarında** (CTA, form submit) anlamlı; dekoratif/navigasyon kontrollerinde **kapat**.
-- Yeni component'lerde hover geri bildirimi gerekiyorsa sadece `color/bg/opacity` değiştir (layout shift yok) — inset gölge ekleme.
+**Karar kuralı — press kime KALIR, kime `th-no-press` eklenir:**
+
+| Press KALIR (efekt anlamlı) | `th-no-press` ZORUNLU (efekt çirkin) |
+|---|---|
+| Dolu/renkli **CTA** butonları: `.th-btn`, `.th-btn-primary`, `.th-btn-dark`, `.th-btn-outline`, `[type="submit"]`, "Siparişi ver", "Uygula", "Onayla" | **Accordion / section toggle header'ları** (`checkout-section__header--toggle`, kart başlığı aç/kapa) |
+| | **Satır/ürün genişletici** toggle'lar (ürün başlığına tıkla-aç, `co-product-head`) |
+| | **Link-stil yazı butonları**: `underline`/düz-metin, "Düzenle", "Değiştir", "Tedarikçiye not ekle", "Daha fazla göster", "Varsayılan yap" (`co-link-btn`) |
+| | **İkincil/dashed "+ Ekle" affordance'ları** ("Adres Ekle" `co-add-row`, kesikli kenarlı kutu) |
+| | **İkon-only butonlar**: close-X, düzenle/sil ikonu, ok, dot, toggle, paginator (aria-label `close`/`kapat`/`sil` zaten hariç ama emin değilsen ekle) |
+| | **Mağaza/satıcı adı header satırları** (tıklanabilir başlık) |
+
+- **Test:** Buton dolu zeminli bir aksiyon mu (basılınca "tık" hissi doğru), yoksa link/başlık/ikon mu? Link/başlık/ikonsa **`th-no-press` ekle** — global efekt o öğede `box-shadow:none + transform:none` ile kapanır (resmi opt-out, `style.css:2052`).
+- `th-no-press`'i **class listesinin başına** koy (mevcut paylaşılan class'larla — `co-link-btn`, `co-add-row` — birlikte).
+- Press dışı buton'da hover geri bildirimi gerekiyorsa sadece `color/bg/opacity` değiştir (layout shift yok) — inset gölge/scale **ekleme**.
+- Paylaşılan bir link/toggle class'ı (`co-link-btn` gibi) birden çok yerde kullanılıyorsa, o class'ı kullanan **her** örneğe `th-no-press` ekle — biri unutulursa o ekranda yeniden çıkar.
 
 **Custom CSS yazmadan önce 4 soru:**
 

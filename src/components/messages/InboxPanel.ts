@@ -21,7 +21,12 @@ export function InboxPanel(): string {
                placeholder="${t("common.search")}" />
         <!-- Clear -->
         <button x-show="searchQuery.length > 0"
-                x-transition
+                x-transition:enter="transition ease-out duration-150 motion-reduce:transition-none"
+                x-transition:enter-start="opacity-0"
+                x-transition:enter-end="opacity-100"
+                x-transition:leave="transition ease-out duration-100 motion-reduce:transition-none"
+                x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0"
                 @click="searchQuery = ''"
                 class="absolute end-7 max-sm:end-6 top-1/2 -translate-y-1/2 mt-0.5 w-5 h-5 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300 text-gray-500 cursor-pointer border-none"
                 aria-label="${t("common.clear")}">

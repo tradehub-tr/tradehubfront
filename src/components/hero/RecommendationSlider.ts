@@ -39,7 +39,7 @@ function renderCardImage(card: RecommendationCard): string {
         src="${escapeHtml(sanitizeUrl(card.imageSrc))}"
         alt="${escapeHtml(card.title)}"
         loading="lazy"
-        class="w-full h-full object-contain transition-transform duration-300 group-hover/card:scale-105 group-focus-visible/card:scale-105"
+        class="w-full h-full object-contain transition-transform duration-200 ease-out motion-reduce:transition-none motion-reduce:transform-none group-hover/card:scale-105 group-focus-visible/card:scale-105"
       />
     </div>
   `;
@@ -54,7 +54,7 @@ function renderCard(card: RecommendationCard): string {
         href="${escapeHtml(sanitizeUrl(card.href))}"
         aria-label="${safeName}"
         title="${safeName}"
-        class="group/card mx-auto flex h-full w-full flex-col rounded-md border border-gray-200 bg-white p-1.5 sm:p-2 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-1 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-primary-400"
+        class="group/card mx-auto flex h-full w-full flex-col rounded-md border border-gray-200 bg-white p-1.5 sm:p-2 shadow-sm transition-[transform,border-color,box-shadow] duration-200 ease-out motion-reduce:transition-none motion-reduce:transform-none hover:-translate-y-0.5 hover:border-primary-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-1 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-primary-400"
       >
         <div class="mb-2">
           <h3 class="truncate text-[11px] font-bold leading-tight text-gray-900 sm:text-sm md:text-base dark:text-white">${safeName}</h3>
@@ -81,7 +81,7 @@ export function RecommendationSlider(): string {
 
       <button
         aria-label="Previous recommendations"
-        class="rec-swiper-prev absolute start-2 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-lg transition-all duration-200 hover:text-gray-900 opacity-0 pointer-events-none md:flex group-hover/recommendation:opacity-100 group-hover/recommendation:pointer-events-auto focus-visible:opacity-100 focus-visible:pointer-events-auto focus-visible:ring-2 focus-visible:ring-primary-300 disabled:opacity-0 disabled:pointer-events-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:hover:text-white"
+        class="rec-swiper-prev absolute start-2 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-lg transition-[opacity,color] duration-200 ease-out hover:text-gray-900 opacity-0 pointer-events-none md:flex group-hover/recommendation:opacity-100 group-hover/recommendation:pointer-events-auto focus-visible:opacity-100 focus-visible:pointer-events-auto focus-visible:ring-2 focus-visible:ring-primary-300 disabled:opacity-0 disabled:pointer-events-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:hover:text-white"
       >
         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
@@ -90,7 +90,7 @@ export function RecommendationSlider(): string {
 
       <button
         aria-label="Next recommendations"
-        class="rec-swiper-next absolute end-2 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-lg transition-all duration-200 hover:text-gray-900 opacity-0 pointer-events-none md:flex group-hover/recommendation:opacity-100 group-hover/recommendation:pointer-events-auto focus-visible:opacity-100 focus-visible:pointer-events-auto focus-visible:ring-2 focus-visible:ring-primary-300 disabled:opacity-0 disabled:pointer-events-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:hover:text-white"
+        class="rec-swiper-next absolute end-2 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-lg transition-[opacity,color] duration-200 ease-out hover:text-gray-900 opacity-0 pointer-events-none md:flex group-hover/recommendation:opacity-100 group-hover/recommendation:pointer-events-auto focus-visible:opacity-100 focus-visible:pointer-events-auto focus-visible:ring-2 focus-visible:ring-primary-300 disabled:opacity-0 disabled:pointer-events-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:hover:text-white"
       >
         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>

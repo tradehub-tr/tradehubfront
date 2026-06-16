@@ -38,7 +38,7 @@ function renderVariantA(advantages: Advantage[]): string {
           ${advantages
             .map(
               (adv) => `
-            <div class="why-choose__icon-card flex flex-col items-center text-center p-4 hover:shadow-md hover:-translate-y-1 transition-[transform,box-shadow] duration-300">
+            <div class="why-choose__icon-card flex flex-col items-center text-center p-4 hover:shadow-md [@media(hover:hover)and(pointer:fine)]:hover:-translate-y-1 motion-reduce:hover:translate-y-0 motion-reduce:transition-none transition-[transform,box-shadow] duration-300">
               <div class="why-choose__icon w-[120px] h-[120px] rounded-full border-[3px] border-[var(--color-primary-500)] flex items-center justify-center mb-4">
                 <svg class="w-12 h-12 text-[var(--color-primary-500)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   ${getIconSvg(adv.icon)}

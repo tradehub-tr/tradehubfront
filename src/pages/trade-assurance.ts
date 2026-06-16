@@ -183,11 +183,11 @@ function stepCard(num: string, title: string, desc: string): string {
 
 function coverageCard(icon: string, title: string, href: string): string {
   return `
-    <a href="${href}" class="bg-white rounded-md hover:shadow-md transition-all duration-300 group block" style="padding:26px 26px 38px">
+    <a href="${href}" class="bg-white rounded-md [@media(hover:hover)and(pointer:fine)]:hover:shadow-md transition-shadow duration-200 ease-out motion-reduce:transition-none group block" style="padding:26px 26px 38px">
       <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center mb-6" style="background:#FFF3C4;color:#92400e">
         ${icon}
       </div>
-      <h3 class="text-sm sm:text-base font-bold text-gray-900 group-hover:text-orange-600 transition-colors leading-snug">${title}</h3>
+      <h3 class="text-sm sm:text-base font-bold text-gray-900 group-hover:text-orange-600 transition-colors motion-reduce:transition-none leading-snug">${title}</h3>
     </a>
   `
 }
@@ -425,7 +425,7 @@ function TestimonialsSection(): string {
                   <!-- Video placeholder -->
                   <div class="relative rounded-md overflow-hidden shadow-xl mx-auto max-w-[780px] mb-8 cursor-pointer group" data-video-trigger="testimonial">
                     <div class="w-full aspect-video bg-gray-800 flex items-center justify-center">
-                      <div class="w-16 h-16 rounded-full bg-white/30 flex items-center justify-center group-hover:bg-white/50 transition-colors">
+                      <div class="w-16 h-16 rounded-full bg-white/30 flex items-center justify-center [@media(hover:hover)and(pointer:fine)]:group-hover:bg-white/50 transition-colors motion-reduce:transition-none">
                         <svg class="w-8 h-8 text-white ms-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                       </div>
                     </div>
@@ -444,11 +444,11 @@ function TestimonialsSection(): string {
 
         <!-- Navigation (Swiper dışında, tam ortalı) -->
         <div class="flex items-center justify-center gap-5 mt-12">
-          <button class="testimonial-prev w-10 h-10 rounded-full border-2 border-gray-900 flex items-center justify-center hover:bg-gray-900 hover:text-white text-gray-900 transition-colors flex-shrink-0">
+          <button class="testimonial-prev w-10 h-10 rounded-full border-2 border-gray-900 flex items-center justify-center [@media(hover:hover)and(pointer:fine)]:hover:bg-gray-900 [@media(hover:hover)and(pointer:fine)]:hover:text-white text-gray-900 transition-colors motion-reduce:transition-none flex-shrink-0">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg>
           </button>
           <div class="testimonial-pagination flex items-center gap-2"></div>
-          <button class="testimonial-next w-10 h-10 rounded-full border-2 border-gray-900 flex items-center justify-center hover:bg-gray-900 hover:text-white text-gray-900 transition-colors flex-shrink-0">
+          <button class="testimonial-next w-10 h-10 rounded-full border-2 border-gray-900 flex items-center justify-center [@media(hover:hover)and(pointer:fine)]:hover:bg-gray-900 [@media(hover:hover)and(pointer:fine)]:hover:text-white text-gray-900 transition-colors motion-reduce:transition-none flex-shrink-0">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
           </button>
         </div>

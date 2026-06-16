@@ -300,6 +300,10 @@
   --ease-default: ease-in-out;
   --ease-in: ease-in;
   --ease-out: ease-out;
+  /* Giriş (enter) animasyonları için güçlü out-curve — kod tabanında zaten
+     elle kullanılan eğri. Hover/exit'te ham ease meşru kalır; bu token yalnız
+     fade-in/slide-up gibi giriş token'larına bağlanır. */
+  --ease-emil: cubic-bezier(0.23, 1, 0.32, 1);
 
   /* --- animate tokens — moved to @theme inline below --- */
 
@@ -685,9 +689,9 @@
   --shadow-toast: var(--shadow-lg);
 
   /* --- Animation --- */
-  --animate-fade-in: fade-in var(--duration-default) var(--ease-default);
-  --animate-fade-out: fade-out var(--duration-default) var(--ease-default);
-  --animate-slide-up: slide-up var(--duration-default) var(--ease-default);
+  --animate-fade-in: fade-in var(--duration-default) var(--ease-emil);
+  --animate-fade-out: fade-out var(--duration-fast) var(--ease-default);
+  --animate-slide-up: slide-up var(--duration-default) var(--ease-emil);
   --animate-notice-scroll: notice-scroll 22s linear infinite;
 
   /* --- CTA Semantic (Secondary / Dark) ---
@@ -734,7 +738,7 @@
 
 .animate-fade-slide-up {
   opacity: 0;
-  animation: slide-up 0.5s ease-out forwards;
+  animation: slide-up 0.32s cubic-bezier(0.23, 1, 0.32, 1) forwards;
 }
 
 /* --- Reduced Motion: disable all animations --- */
@@ -776,16 +780,16 @@
     outline-offset: 2px;
   }
 
-  /* Cart page: light gray surface background */
+  /* Cart page: neutral gray surface background (cream tell'i yerine nötr token) */
   body:has(.sc-cart-page),
   body:has(.sc-cart-page) main {
-    background: #f7f7f5;
+    background: #fafafa;
   }
 
-  /* Checkout page: light gray surface background */
+  /* Checkout page: cart ile aynı nötr zemin */
   body:has(.sc-checkout-page),
   body:has(.sc-checkout-page) main {
-    background: #f7f7f5;
+    background: #fafafa;
   }
 }
 
@@ -808,7 +812,11 @@
     box-shadow: var(--btn-shadow);
     cursor: pointer;
     line-height: 1.25;
-    transition: all 0.15s ease;
+    transition:
+      background-color 0.15s,
+      color 0.15s,
+      box-shadow 0.15s,
+      transform 0.15s cubic-bezier(0.23, 1, 0.32, 1);
   }
 
   .th-btn:hover {
@@ -849,7 +857,11 @@
     font-weight: var(--btn-font-weight);
     cursor: pointer;
     line-height: 1.25;
-    transition: all 0.15s ease;
+    transition:
+      background-color 0.15s,
+      color 0.15s,
+      box-shadow 0.15s,
+      transform 0.15s;
   }
 
   .th-btn-outline:hover {
@@ -904,7 +916,11 @@
     box-shadow: var(--btn-shadow);
     cursor: pointer;
     line-height: 1.25;
-    transition: all 0.15s ease;
+    transition:
+      background-color 0.15s,
+      color 0.15s,
+      box-shadow 0.15s,
+      transform 0.15s;
   }
 
   .th-btn-dark:hover {
@@ -947,13 +963,22 @@
       inset 0 1px 0 rgba(255, 255, 255, 0.3);
     cursor: pointer;
     line-height: 1.25;
-    transition: all 0.15s ease;
+    transition:
+      background-color 0.15s,
+      border-color 0.15s,
+      color 0.15s,
+      transform 0.15s;
   }
 
   .th-btn-success:hover {
     background: #15803d;
     border-color: #15803d;
     color: #ffffff;
+  }
+
+  .th-btn-success:active {
+    transform: scale(0.98);
+    transition-duration: 0.06s;
   }
 
   .th-btn-success:disabled {
@@ -977,12 +1002,20 @@
     font-weight: var(--btn-font-weight);
     cursor: pointer;
     line-height: 1.25;
-    transition: all 0.15s ease;
+    transition:
+      background-color 0.15s,
+      color 0.15s,
+      transform 0.15s;
   }
 
   .th-btn-ghost:hover {
     background: color-mix(in srgb, var(--btn-bg) 10%, transparent);
     color: var(--btn-hover-bg, var(--btn-bg));
+  }
+
+  .th-btn-ghost:active {
+    transform: scale(0.98);
+    transition-duration: 0.06s;
   }
 
   .th-btn-ghost:disabled {
@@ -1035,12 +1068,21 @@
     box-shadow: var(--btn-shadow);
     cursor: pointer;
     line-height: 1.25;
-    transition: all 0.15s ease;
+    transition:
+      background-color 0.15s,
+      border-color 0.15s,
+      color 0.15s,
+      transform 0.15s;
   }
 
   .th-btn-danger:hover {
     background: var(--color-error-700, #b91c1c);
     border-color: var(--color-error-700, #b91c1c);
+  }
+
+  .th-btn-danger:active {
+    transform: scale(0.98);
+    transition-duration: 0.06s;
   }
 
   .th-btn-danger:disabled {
@@ -1147,9 +1189,9 @@
     padding: 0 var(--spacing-input-x);
     outline: none;
     transition:
-      border-color 0.15s ease,
-      box-shadow 0.15s ease,
-      background 0.15s ease;
+      border-color 0.15s cubic-bezier(0.23, 1, 0.32, 1),
+      box-shadow 0.15s cubic-bezier(0.23, 1, 0.32, 1),
+      background 0.15s cubic-bezier(0.23, 1, 0.32, 1);
   }
 
   /* textarea özel — tek satır yüksekliği iptal */
@@ -1247,9 +1289,9 @@
     border-radius: var(--checkbox-radius);
     color: transparent;
     transition:
-      background 0.15s,
-      border-color 0.15s,
-      color 0.15s;
+      background 0.15s cubic-bezier(0.23, 1, 0.32, 1),
+      border-color 0.15s cubic-bezier(0.23, 1, 0.32, 1),
+      color 0.15s cubic-bezier(0.23, 1, 0.32, 1);
     cursor: pointer;
     flex-shrink: 0;
   }
@@ -1513,24 +1555,22 @@
     content: "";
     position: absolute;
     bottom: 0;
-    left: 50%;
-    width: 0;
+    left: 0;
+    width: 100%;
     height: 2px;
     background-color: var(--color-text-primary);
-    transition:
-      width 0.25s ease,
-      left 0.25s ease;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.25s cubic-bezier(0.23, 1, 0.32, 1);
   }
 
   .subheader-link:hover::after {
-    width: 100%;
-    left: 0;
+    transform: scaleX(1);
   }
 
   .subheader-link--active::after,
   .subheader-link.active::after {
-    width: 100%;
-    left: 0;
+    transform: scaleX(1);
   }
 
   /* --- Product Card: themeable card with CSS variable support --- */
@@ -1586,12 +1626,34 @@
 
   .product-card__img {
     border-radius: var(--product-image-radius, 8px);
-    transition: transform 0.3s ease;
+    transition: transform 0.25s cubic-bezier(0.23, 1, 0.32, 1);
   }
 
-  .product-card__image-area:hover .product-card__img,
+  /* Hover zoom yalnızca gerçek hover/pointer cihazlarda — dokunmatikte
+     sticky :hover yanlış-pozitif zoom yapmasın. focus-within ayrı tutulur. */
+  @media (hover: hover) and (pointer: fine) {
+    .product-card__image-area:hover .product-card__img {
+      transform: scale(var(--product-image-hover-scale, 1.06));
+    }
+  }
+
   .product-card__image-area:focus-within .product-card__img {
     transform: scale(var(--product-image-hover-scale, 1.06));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .product-card__img {
+      transition: none;
+    }
+
+    .product-card__image-area:hover .product-card__img,
+    .product-card__image-area:focus-within .product-card__img {
+      transform: none;
+    }
+
+    .subheader-link::after {
+      transition: none;
+    }
   }
 
   .product-card__lens-wrap {
@@ -1876,7 +1938,9 @@ footer {
   border-radius: 50%;
   background-color: var(--color-border-medium);
   opacity: 1;
-  transition: all 200ms;
+  transition:
+    width 200ms ease,
+    background-color 200ms ease;
 }
 
 .operation-slider__pagination .swiper-pagination-bullet-active {
@@ -1911,9 +1975,9 @@ input[type="button"]:not(:disabled),
 input[type="reset"]:not(:disabled),
 [role="button"]:not([aria-disabled="true"]) {
   transition:
-    background-color 0.18s ease,
-    color 0.18s ease,
-    border-color 0.18s ease;
+    background-color 0.18s cubic-bezier(0.23, 1, 0.32, 1),
+    color 0.18s cubic-bezier(0.23, 1, 0.32, 1),
+    border-color 0.18s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 button:not(:disabled):not([role="tab"]):not([class*="-tab"]):not([class*="__tab"]):not(
@@ -2020,7 +2084,9 @@ button[data-filter-action="apply-all"]:active {
     inset 3px 3px 7px rgba(0, 0, 0, 0.3),
     inset -1px -1px 2px rgba(255, 255, 255, 0.18) !important;
   transform: scale(0.97);
-  transition: all 0.06s ease;
+  transition:
+    transform 0.06s ease,
+    box-shadow 0.06s ease;
 }
 
 @keyframes favModalIn {
@@ -2150,7 +2216,9 @@ button[data-filter-action="apply-all"]:active {
   border-radius: 9999px;
   background-color: rgba(255, 255, 255, 0.5);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
   border: none;
   /* WCAG 2.5.8: görsel 10px kalır; padding + content-box clip ile tap alanı 24px */
   padding: 7px;

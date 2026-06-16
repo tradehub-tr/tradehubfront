@@ -35,14 +35,14 @@ export function MessageList(): string {
 
           <!-- Filter dropdown menu -->
           <div x-show="filterOpen"
-               x-transition:enter="transition ease-out duration-150"
-               x-transition:enter-start="opacity-0 -translate-y-1"
+               x-transition:enter="transition ease-out duration-150 motion-reduce:transition-none"
+               x-transition:enter-start="opacity-0 -translate-y-1 motion-reduce:translate-y-0"
                x-transition:enter-end="opacity-100 translate-y-0"
-               x-transition:leave="transition ease-in duration-100"
+               x-transition:leave="transition ease-out duration-100 motion-reduce:transition-none"
                x-transition:leave-start="opacity-100"
                x-transition:leave-end="opacity-0"
                @click.away="filterOpen = false"
-               class="absolute end-0 top-full mt-1 w-40 bg-(--color-surface,#ffffff) rounded-lg shadow-lg border border-(--color-border-light,#f0f0f0) py-1 z-20">
+               class="absolute end-0 top-full mt-1 w-40 origin-top-end bg-(--color-surface,#ffffff) rounded-lg shadow-lg border border-(--color-border-light,#f0f0f0) py-1 z-20">
             <button @click="setFilter('all')"
                     class="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-start border-none bg-transparent cursor-pointer hover:bg-(--color-surface-muted,#fafafa) transition-colors"
                     :class="filterType === 'all' ? 'text-(--color-cta-primary,#cc9900) font-semibold' : 'text-(--color-text-body,#333333)'">
@@ -67,7 +67,12 @@ export function MessageList(): string {
 
       <!-- Active filter badge -->
       <div x-show="filterType !== 'all' || searchQuery.length > 0"
-           x-transition
+           x-transition:enter="transition ease-out duration-150 motion-reduce:transition-none"
+           x-transition:enter-start="opacity-0"
+           x-transition:enter-end="opacity-100"
+           x-transition:leave="transition ease-out duration-100 motion-reduce:transition-none"
+           x-transition:leave-start="opacity-100"
+           x-transition:leave-end="opacity-0"
            class="flex items-center gap-2 px-5 max-sm:px-3 py-2 border-b border-(--color-border-light,#f0f0f0) bg-(--color-surface-muted,#fafafa)">
         <template x-if="filterType !== 'all'">
           <span class="inline-flex items-center gap-1 text-xs bg-(--color-cta-primary,#cc9900)/10 text-(--color-cta-primary,#cc9900) px-2 py-0.5 rounded-full">

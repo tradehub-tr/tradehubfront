@@ -652,7 +652,7 @@ function renderProductCardGrid(p: FavoriteItem): string {
     <article class="group relative flex flex-col bg-white border border-[#eee] rounded-md overflow-hidden transition-all duration-150 hover:border-[var(--color-cta-primary,#F5B800)] hover:shadow-[0_4px_10px_-6px_rgba(20,20,18,0.12)]" data-fav-item-id="${escapeHtml(p.id)}">
       <a href="${escapeHtml(sanitizeUrl(detailHref))}" class="relative block aspect-square overflow-hidden bg-[#fafafa] no-underline">
         <img src="${escapeHtml(sanitizeUrl(p.image))}" alt="${escapeHtml(p.title)}"
-             class="w-full h-full object-cover mix-blend-multiply transition-transform duration-300 ease-out group-hover:scale-[1.03]"
+             class="w-full h-full object-cover mix-blend-multiply transition-transform duration-300 ease-out [@media(hover:hover)and(pointer:fine)]:group-hover:scale-[1.03] motion-reduce:transition-none"
              loading="lazy" />
         ${renderStockPill(enrichment)}
       </a>
@@ -715,7 +715,7 @@ function renderProductRowList(p: FavoriteItem): string {
     <article class="group relative flex items-center gap-3 bg-white border border-[#eee] rounded-lg p-2.5 transition-all duration-150 hover:border-[var(--color-cta-primary,#F5B800)] hover:shadow-[0_4px_12px_-6px_rgba(20,20,18,0.12)] max-sm:flex-col max-sm:items-start" data-fav-item-id="${escapeHtml(p.id)}">
       <a href="${escapeHtml(sanitizeUrl(detailHref))}" class="relative w-[88px] h-[88px] shrink-0 rounded-md overflow-hidden bg-[#fafafa] no-underline max-sm:w-full max-sm:h-[160px]">
         <img src="${escapeHtml(sanitizeUrl(p.image))}" alt="${escapeHtml(p.title)}"
-             class="w-full h-full object-cover mix-blend-multiply transition-transform duration-300 ease-out group-hover:scale-[1.04]"
+             class="w-full h-full object-cover mix-blend-multiply transition-transform duration-300 ease-out [@media(hover:hover)and(pointer:fine)]:group-hover:scale-[1.04] motion-reduce:transition-none"
              loading="lazy" />
       </a>
       <div class="flex-1 min-w-0 flex flex-col gap-1">
@@ -1013,9 +1013,9 @@ function renderBrowsingHistory(): string {
   const productCards = history
     .map(
       (p) => `
-    <a href="${escapeHtml(sanitizeUrl(p.href))}" class="group flex flex-col no-underline text-inherit transition-transform duration-150 hover:-translate-y-0.5">
+    <a href="${escapeHtml(sanitizeUrl(p.href))}" class="group flex flex-col no-underline text-inherit transition-transform duration-150 [@media(hover:hover)and(pointer:fine)]:hover:-translate-y-0.5 motion-reduce:transition-none motion-reduce:translate-y-0">
       <div class="w-full aspect-square rounded-lg overflow-hidden border border-[#f0f0f0] mb-2.5">
-        <img src="${escapeHtml(sanitizeUrl(p.image))}" alt="${escapeHtml(p.title)}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.04]" loading="lazy" />
+        <img src="${escapeHtml(sanitizeUrl(p.image))}" alt="${escapeHtml(p.title)}" class="w-full h-full object-cover transition-transform duration-300 [@media(hover:hover)and(pointer:fine)]:group-hover:scale-[1.04] motion-reduce:transition-none" loading="lazy" />
       </div>
       <h4 class="text-[13px] text-text-secondary leading-[1.4] line-clamp-2 mb-1.5" title="${escapeHtml(p.title)}">${escapeHtml(p.title)}</h4>
       ${typeof p.price === "number" ? `<p class="text-sm font-bold text-text-primary mb-0.5">${formatCurrency(convertPrice(p.price, p.currency || getSelectedCurrency()), getSelectedCurrency())}</p>` : p.priceRange ? `<p class="text-sm font-bold text-text-primary mb-0.5">${formatPrice(p.priceRange)}</p>` : ""}
@@ -1385,8 +1385,9 @@ function initRemoveSupplierButtons(): void {
       removeSellerFromAll(code);
 
       const card = btn.closest("[data-fav-seller-id]") as HTMLElement;
-      if (card) {
-        card.style.transition = "all 300ms ease-out";
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (card && !reduceMotion) {
+        card.style.transition = "opacity 300ms ease-out, transform 300ms ease-out";
         card.style.opacity = "0";
         card.style.transform = "scale(0.96)";
         setTimeout(() => refreshSuppliersView(), 300);
@@ -1409,8 +1410,9 @@ function initRemoveButtons(): void {
 
       // Animate out and refresh
       const card = btn.closest("[data-fav-item-id]") as HTMLElement;
-      if (card) {
-        card.style.transition = "all 300ms ease-out";
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (card && !reduceMotion) {
+        card.style.transition = "opacity 300ms ease-out, transform 300ms ease-out";
         card.style.opacity = "0";
         card.style.transform = "scale(0.9)";
         setTimeout(() => refreshFavoritesView(), 300);
@@ -1474,17 +1476,9 @@ function initFavListModal(): void {
   const saveBtn = modal.querySelector<HTMLButtonElement>(".fav-modal__btn--save");
   const input = document.getElementById("fav-list-input") as HTMLInputElement | null;
   const counter = document.getElementById("fav-char-count");
+  const panel = modal.querySelector<HTMLElement>(".relative");
 
-  function openModal(): void {
-    modal!.classList.remove("hidden");
-    modal!.classList.add("flex");
-    document.body.style.overflow = "hidden";
-    input?.focus();
-  }
-
-  function closeModal(): void {
-    modal!.classList.add("hidden");
-    modal!.classList.remove("flex");
+  function resetModalState(): void {
     document.body.style.overflow = "";
     if (input) {
       input.value = "";
@@ -1495,6 +1489,41 @@ function initFavListModal(): void {
     if (saveBtn) {
       saveBtn.disabled = true;
     }
+  }
+
+  function openModal(): void {
+    if (panel) {
+      panel.style.opacity = "";
+      panel.style.transform = "";
+      panel.style.transition = "";
+    }
+    if (overlay) {
+      overlay.style.opacity = "";
+      overlay.style.transition = "";
+    }
+    modal!.classList.remove("hidden");
+    modal!.classList.add("flex");
+    document.body.style.overflow = "hidden";
+    input?.focus();
+  }
+
+  function closeModal(): void {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (panel && overlay && !reduceMotion) {
+      panel.style.transition = "opacity 150ms ease-out, transform 150ms ease-out";
+      overlay.style.transition = "opacity 150ms ease-out";
+      panel.style.opacity = "0";
+      panel.style.transform = "scale(0.97)";
+      overlay.style.opacity = "0";
+      setTimeout(() => {
+        modal!.classList.add("hidden");
+        modal!.classList.remove("flex");
+      }, 150);
+    } else {
+      modal!.classList.add("hidden");
+      modal!.classList.remove("flex");
+    }
+    resetModalState();
   }
 
   function handleSave(): void {

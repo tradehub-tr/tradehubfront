@@ -88,7 +88,7 @@ function renderFormModal(): string {
          x-transition:enter="transition-opacity ease-out duration-200"
          x-transition:enter-start="opacity-0"
          x-transition:enter-end="opacity-100"
-         x-transition:leave="transition-opacity ease-in duration-150"
+         x-transition:leave="transition-opacity ease-out duration-150"
          x-transition:leave-start="opacity-100"
          x-transition:leave-end="opacity-0"
          @click="closeModal()"
@@ -98,11 +98,11 @@ function renderFormModal(): string {
     <!-- Modal panel -->
     <div x-show="isModalOpen"
          x-transition:enter="transition ease-out duration-200"
-         x-transition:enter-start="opacity-0 translate-y-4"
+         x-transition:enter-start="opacity-0 translate-y-4 motion-reduce:translate-y-0"
          x-transition:enter-end="opacity-100 translate-y-0"
-         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave="transition ease-out duration-150"
          x-transition:leave-start="opacity-100 translate-y-0"
-         x-transition:leave-end="opacity-0 translate-y-4"
+         x-transition:leave-end="opacity-0 translate-y-4 motion-reduce:translate-y-0"
          @keydown.escape.window="isModalOpen && closeModal()"
          @keydown.tab="handleFocusTrap($event)"
          role="dialog"
@@ -137,13 +137,13 @@ function renderFormModal(): string {
                 <button type="button"
                         @click="form.address_type = 'Individual'"
                         :class="form.address_type === 'Individual' ? 'border-amber-500 bg-amber-50 text-amber-900' : 'border-gray-300 bg-white text-gray-700'"
-                        class="px-4 py-2 text-sm font-medium border rounded-md transition">
+                        class="px-4 py-2 text-sm font-medium border rounded-md transition-colors">
                   ${t("authAddr.individual")}
                 </button>
                 <button type="button"
                         @click="form.address_type = 'Business'"
                         :class="form.address_type === 'Business' ? 'border-amber-500 bg-amber-50 text-amber-900' : 'border-gray-300 bg-white text-gray-700'"
-                        class="px-4 py-2 text-sm font-medium border rounded-md transition">
+                        class="px-4 py-2 text-sm font-medium border rounded-md transition-colors">
                   ${t("authAddr.business")}
                 </button>
               </div>
@@ -180,7 +180,13 @@ function renderFormModal(): string {
             </div>
 
             <!-- Sprint 1 (2026-05-15): Şirket Adı + Vergi bilgileri — sadece Business için -->
-            <div x-show="form.address_type === 'Business'" x-transition>
+            <div x-show="form.address_type === 'Business'"
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0 -translate-y-1 motion-reduce:translate-y-0"
+                 x-transition:enter-end="opacity-100 translate-y-0"
+                 x-transition:leave="transition ease-out duration-150"
+                 x-transition:leave-start="opacity-100 translate-y-0"
+                 x-transition:leave-end="opacity-0 -translate-y-1 motion-reduce:translate-y-0">
               <label class="block text-xs font-medium text-gray-700 mb-1">
                 ${t("authAddr.companyName")} <span class="text-red-500">*</span>
               </label>
@@ -194,7 +200,14 @@ function renderFormModal(): string {
               <p x-show="errors.company" x-text="errors.company" class="text-red-500 text-xs mt-1"></p>
             </div>
 
-            <div x-show="form.address_type === 'Business'" x-transition class="grid grid-cols-2 gap-3">
+            <div x-show="form.address_type === 'Business'"
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0 -translate-y-1 motion-reduce:translate-y-0"
+                 x-transition:enter-end="opacity-100 translate-y-0"
+                 x-transition:leave="transition ease-out duration-150"
+                 x-transition:leave-start="opacity-100 translate-y-0"
+                 x-transition:leave-end="opacity-0 -translate-y-1 motion-reduce:translate-y-0"
+                 class="grid grid-cols-2 gap-3">
               <div>
                 <label class="block text-xs font-medium text-gray-700 mb-1">
                   ${t("authAddr.taxNo")} <span class="text-red-500">*</span>
@@ -359,7 +372,7 @@ function renderDeleteConfirm(): string {
          x-transition:enter="transition-opacity ease-out duration-150"
          x-transition:enter-start="opacity-0"
          x-transition:enter-end="opacity-100"
-         x-transition:leave="transition-opacity ease-in duration-100"
+         x-transition:leave="transition-opacity ease-out duration-100"
          x-transition:leave-start="opacity-100"
          x-transition:leave-end="opacity-0"
          class="fixed inset-0 bg-black/50 z-50"
@@ -367,11 +380,11 @@ function renderDeleteConfirm(): string {
 
     <div x-show="isDeleteConfirmOpen"
          x-transition:enter="transition ease-out duration-150"
-         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-start="opacity-0 scale-95 motion-reduce:scale-100"
          x-transition:enter-end="opacity-100 scale-100"
-         x-transition:leave="transition ease-in duration-100"
+         x-transition:leave="transition ease-out duration-100"
          x-transition:leave-start="opacity-100 scale-100"
-         x-transition:leave-end="opacity-0 scale-95"
+         x-transition:leave-end="opacity-0 scale-95 motion-reduce:scale-100"
          @keydown.escape.window="isDeleteConfirmOpen && (isDeleteConfirmOpen = false)"
          role="alertdialog"
          aria-modal="true"

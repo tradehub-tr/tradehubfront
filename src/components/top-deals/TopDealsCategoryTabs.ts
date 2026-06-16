@@ -76,9 +76,14 @@ export function TopDealsCategoryTabs(): string {
       <!-- Left arrow (desktop only) -->
       <button
         type="button"
-        class="hidden md:flex absolute start-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center rounded-full bg-white border border-gray-200 shadow-md text-gray-500 hover:text-gray-900 hover:shadow-lg transition-all cursor-pointer"
+        class="hidden md:flex absolute start-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center rounded-full bg-white border border-gray-200 shadow-md text-gray-500 hover:text-gray-900 hover:shadow-lg transition-[color,box-shadow] duration-150 cursor-pointer"
         x-show="canScrollLeft"
-        x-transition
+        x-transition:enter="transition ease-out duration-150"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-out duration-100"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
         @click="scrollTabs('left')"
         aria-label="Scroll left"
       >
@@ -117,9 +122,14 @@ export function TopDealsCategoryTabs(): string {
       <!-- Right arrow (desktop only) -->
       <button
         type="button"
-        class="hidden md:flex absolute end-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center rounded-full bg-white border border-gray-200 shadow-md text-gray-500 hover:text-gray-900 hover:shadow-lg transition-all cursor-pointer"
+        class="hidden md:flex absolute end-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center rounded-full bg-white border border-gray-200 shadow-md text-gray-500 hover:text-gray-900 hover:shadow-lg transition-[color,box-shadow] duration-150 cursor-pointer"
         x-show="canScrollRight"
-        x-transition
+        x-transition:enter="transition ease-out duration-150"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-out duration-100"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
         @click="scrollTabs('right')"
         aria-label="Scroll right"
       >
@@ -132,7 +142,7 @@ export function TopDealsCategoryTabs(): string {
     <!-- Mobile Category Bottom Sheet -->
     <!-- Backdrop -->
     <div
-      class="md:hidden fixed inset-0 z-[99] bg-black/50 transition-opacity duration-300"
+      class="md:hidden fixed inset-0 z-[99] bg-black/50 transition-opacity duration-200"
       :class="showCategorySheet ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'"
       @click="showCategorySheet = false"
       x-effect="document.body.style.overflow = showCategorySheet ? 'hidden' : ''"
@@ -140,7 +150,7 @@ export function TopDealsCategoryTabs(): string {
 
     <!-- Sheet Panel -->
     <div
-      class="md:hidden fixed inset-x-0 bottom-0 z-[100] transition-transform duration-300 ease-out"
+      class="md:hidden fixed inset-x-0 bottom-0 z-[100] transition-transform duration-300 ease-out motion-reduce:transition-none"
       :class="showCategorySheet ? 'translate-y-0' : 'translate-y-full'"
     >
       <div class="bg-white rounded-t-md max-h-[85vh] flex flex-col shadow-2xl">

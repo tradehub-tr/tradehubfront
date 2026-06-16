@@ -252,7 +252,7 @@ export function renderReviewCard(review: ProductReview, showProductThumb = false
       ${supplierReplyHtml}
       ${productThumbHtml}
       <div class="flex items-center gap-2 flex-wrap">
-        <button type="button" class="rv-helpful-btn flex items-center gap-1.5 text-[12px] text-[var(--pd-rating-text-color,#6b7280)] bg-none border border-[var(--pd-spec-border,#e5e5e5)] rounded px-2.5 py-1 cursor-pointer transition-all duration-150 hover:border-[var(--color-border-medium,#d1d5db)] hover:text-[var(--pd-title-color,#111827)] [&.voted]:border-[var(--pd-tab-active-border,#cc9900)] [&.voted]:text-[var(--pd-tab-active-color,#cc9900)]" data-review-id="${review.id}" data-vote="helpful">
+        <button type="button" class="rv-helpful-btn flex items-center gap-1.5 text-[12px] text-[var(--pd-rating-text-color,#6b7280)] bg-none border border-[var(--pd-spec-border,#e5e5e5)] rounded px-2.5 py-1 cursor-pointer transition-colors duration-150 hover:border-[var(--color-border-medium,#d1d5db)] hover:text-[var(--pd-title-color,#111827)] [&.voted]:border-[var(--pd-tab-active-border,#cc9900)] [&.voted]:text-[var(--pd-tab-active-color,#cc9900)]" data-review-id="${review.id}" data-vote="helpful">
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
           </svg>
@@ -260,7 +260,7 @@ export function renderReviewCard(review: ProductReview, showProductThumb = false
         </button>
         <button
           type="button"
-          class="rv-helpful-btn flex items-center gap-1.5 text-[12px] text-[var(--pd-rating-text-color,#6b7280)] bg-none border border-[var(--pd-spec-border,#e5e5e5)] rounded px-2.5 py-1 cursor-pointer transition-all duration-150 hover:border-[var(--color-border-medium,#d1d5db)] hover:text-[var(--pd-title-color,#111827)] [&.voted]:border-[var(--pd-tab-active-border,#cc9900)] [&.voted]:text-[var(--pd-tab-active-color,#cc9900)]"
+          class="rv-helpful-btn flex items-center gap-1.5 text-[12px] text-[var(--pd-rating-text-color,#6b7280)] bg-none border border-[var(--pd-spec-border,#e5e5e5)] rounded px-2.5 py-1 cursor-pointer transition-colors duration-150 hover:border-[var(--color-border-medium,#d1d5db)] hover:text-[var(--pd-title-color,#111827)] [&.voted]:border-[var(--pd-tab-active-border,#cc9900)] [&.voted]:text-[var(--pd-tab-active-color,#cc9900)]"
           data-review-id="${review.id}"
           data-vote="not_helpful"
           title="${t("prodUi.notHelpful")}"
@@ -292,7 +292,7 @@ export function renderReviewCard(review: ProductReview, showProductThumb = false
 function ratingDropdownHtml(idPrefix: string): string {
   return `
     <div class="rv-rating-dropdown relative inline-block [&.open_.rv-rating-dropdown-panel]:block" id="${idPrefix}-rating-dropdown">
-      <button type="button" class="rv-rating-dropdown-trigger px-3.5 py-1.5 text-[12px] font-medium rounded-full border border-[var(--pd-spec-border,#e5e5e5)] bg-[var(--color-surface,#ffffff)] text-[var(--pd-rating-text-color,#6b7280)] cursor-pointer flex items-center gap-1.5 transition-all duration-150 whitespace-nowrap hover:border-[var(--color-border-medium,#d1d5db)] [&.active]:border-[var(--pd-tab-active-border,#cc9900)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:bg-[var(--pd-price-tier-active-bg,#fef9e7)]">
+      <button type="button" class="rv-rating-dropdown-trigger px-3.5 py-1.5 text-[12px] font-medium rounded-full border border-[var(--pd-spec-border,#e5e5e5)] bg-[var(--color-surface,#ffffff)] text-[var(--pd-rating-text-color,#6b7280)] cursor-pointer flex items-center gap-1.5 transition-colors duration-150 whitespace-nowrap hover:border-[var(--color-border-medium,#d1d5db)] [&.active]:border-[var(--pd-tab-active-border,#cc9900)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:bg-[var(--pd-price-tier-active-bg,#fef9e7)]">
         ${t("product.ratingLabel")}
         <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
       </button>
@@ -310,7 +310,7 @@ function ratingDropdownHtml(idPrefix: string): string {
 function sortDropdownHtml(idPrefix: string): string {
   return `
     <div class="rv-sort-dropdown relative inline-block ms-auto [&.open_.rv-sort-dropdown-panel]:block max-sm:!ml-0 max-sm:!w-full" id="${idPrefix}-sort-dropdown">
-      <button type="button" class="rv-sort-dropdown-trigger px-3.5 py-1.5 text-[12px] font-medium rounded-full border border-[var(--pd-spec-border,#e5e5e5)] bg-[var(--color-surface,#ffffff)] text-[var(--pd-rating-text-color,#6b7280)] cursor-pointer flex items-center gap-1 transition-all duration-150 whitespace-nowrap hover:border-[var(--color-border-medium,#d1d5db)] max-sm:!w-full max-sm:!justify-between">
+      <button type="button" class="rv-sort-dropdown-trigger px-3.5 py-1.5 text-[12px] font-medium rounded-full border border-[var(--pd-spec-border,#e5e5e5)] bg-[var(--color-surface,#ffffff)] text-[var(--pd-rating-text-color,#6b7280)] cursor-pointer flex items-center gap-1 transition-colors duration-150 whitespace-nowrap hover:border-[var(--color-border-medium,#d1d5db)] max-sm:!w-full max-sm:!justify-between">
         ${t("product.sortLabel")}: ${t("product.sortRelevant")}
         <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
       </button>
@@ -367,7 +367,7 @@ export function ProductReviews(): string {
 
         <!-- Filter Row -->
         <div class="rv-filter-row flex items-center gap-2 flex-wrap mb-4">
-          <button type="button" class="rv-filter-pill px-3.5 py-1.5 text-[12px] font-medium rounded-full border border-[var(--pd-spec-border,#e5e5e5)] bg-[var(--color-surface,#ffffff)] text-[var(--pd-rating-text-color,#6b7280)] cursor-pointer transition-all duration-150 whitespace-nowrap [&.active]:border-[var(--pd-tab-active-border,#cc9900)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:bg-[var(--pd-price-tier-active-bg,#fef9e7)] [&:hover:not(.active)]:border-[var(--color-border-medium,#d1d5db)] active" data-rv-filter="all">${t("product.allFilter")}</button>
+          <button type="button" class="rv-filter-pill px-3.5 py-1.5 text-[12px] font-medium rounded-full border border-[var(--pd-spec-border,#e5e5e5)] bg-[var(--color-surface,#ffffff)] text-[var(--pd-rating-text-color,#6b7280)] cursor-pointer transition-colors duration-150 whitespace-nowrap [&.active]:border-[var(--pd-tab-active-border,#cc9900)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:bg-[var(--pd-price-tier-active-bg,#fef9e7)] [&:hover:not(.active)]:border-[var(--color-border-medium,#d1d5db)] active" data-rv-filter="all">${t("product.allFilter")}</button>
           ${ratingDropdownHtml("rv-product")}
           ${sortDropdownHtml("rv-product")}
         </div>
@@ -396,7 +396,7 @@ export function ProductReviews(): string {
               <div class="flex items-center gap-2.5">
                 <span class="rv-category-label text-[13px] text-[var(--pd-rating-text-color,#6b7280)] min-w-[140px] shrink-0 max-sm:!min-w-[100px]">${cat.label}</span>
                 <div class="rv-category-bar-track flex-1 h-[6px] rounded-[3px] bg-[var(--pd-review-bar-bg,#e5e5e5)] overflow-hidden">
-                  <div class="rv-category-bar-fill h-full rounded-[3px] bg-[var(--pd-review-bar-fill,#f59e0b)] transition-[width] duration-300 ease-[ease]" style="width: ${(cat.score / 5) * 100}%;"></div>
+                  <div class="rv-category-bar-fill h-full w-full origin-left rounded-[3px] bg-[var(--pd-review-bar-fill,#f59e0b)] transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none" style="transform: scaleX(${cat.score / 5});"></div>
                 </div>
                 <span class="rv-category-score text-[13px] font-bold text-[var(--pd-title-color,#111827)] min-w-[28px] text-end">${cat.score}</span>
               </div>
@@ -408,8 +408,8 @@ export function ProductReviews(): string {
 
         <!-- Filter Row -->
         <div class="rv-filter-row flex items-center gap-2 flex-wrap mb-4">
-          <button type="button" class="rv-filter-pill px-3.5 py-1.5 text-[12px] font-medium rounded-full border border-[var(--pd-spec-border,#e5e5e5)] bg-[var(--color-surface,#ffffff)] text-[var(--pd-rating-text-color,#6b7280)] cursor-pointer transition-all duration-150 whitespace-nowrap [&.active]:border-[var(--pd-tab-active-border,#cc9900)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:bg-[var(--pd-price-tier-active-bg,#fef9e7)] [&:hover:not(.active)]:border-[var(--color-border-medium,#d1d5db)] active" data-rv-filter="all">${t("product.allFilter")}</button>
-          <button type="button" class="rv-filter-pill px-3.5 py-1.5 text-[12px] font-medium rounded-full border border-[var(--pd-spec-border,#e5e5e5)] bg-[var(--color-surface,#ffffff)] text-[var(--pd-rating-text-color,#6b7280)] cursor-pointer transition-all duration-150 whitespace-nowrap [&.active]:border-[var(--pd-tab-active-border,#cc9900)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:bg-[var(--pd-price-tier-active-bg,#fef9e7)] [&:hover:not(.active)]:border-[var(--color-border-medium,#d1d5db)]" data-rv-filter="photo">${t("product.withPhotos", { count: String(photoReviewCount) })}</button>
+          <button type="button" class="rv-filter-pill px-3.5 py-1.5 text-[12px] font-medium rounded-full border border-[var(--pd-spec-border,#e5e5e5)] bg-[var(--color-surface,#ffffff)] text-[var(--pd-rating-text-color,#6b7280)] cursor-pointer transition-colors duration-150 whitespace-nowrap [&.active]:border-[var(--pd-tab-active-border,#cc9900)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:bg-[var(--pd-price-tier-active-bg,#fef9e7)] [&:hover:not(.active)]:border-[var(--color-border-medium,#d1d5db)] active" data-rv-filter="all">${t("product.allFilter")}</button>
+          <button type="button" class="rv-filter-pill px-3.5 py-1.5 text-[12px] font-medium rounded-full border border-[var(--pd-spec-border,#e5e5e5)] bg-[var(--color-surface,#ffffff)] text-[var(--pd-rating-text-color,#6b7280)] cursor-pointer transition-colors duration-150 whitespace-nowrap [&.active]:border-[var(--pd-tab-active-border,#cc9900)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:bg-[var(--pd-price-tier-active-bg,#fef9e7)] [&:hover:not(.active)]:border-[var(--color-border-medium,#d1d5db)]" data-rv-filter="photo">${t("product.withPhotos", { count: String(photoReviewCount) })}</button>
           ${ratingDropdownHtml("rv-store")}
           ${sortDropdownHtml("rv-store")}
         </div>
@@ -420,7 +420,7 @@ export function ProductReviews(): string {
           ${p.reviewMentionTags
             .map(
               (tag) => `
-            <button type="button" class="rv-mention-tag py-1 px-3 text-[12px] rounded bg-[var(--pd-spec-header-bg,#f9fafb)] text-[var(--pd-rating-text-color,#6b7280)] border border-[var(--pd-spec-border,#e5e5e5)] cursor-pointer transition-all duration-150 hover:border-[var(--color-border-medium,#d1d5db)] [&.active]:border-[var(--pd-tab-active-border,#cc9900)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:bg-[var(--pd-price-tier-active-bg,#fef9e7)] [&.active]:font-semibold" data-rv-mention="${tag.label}">${tag.label} (${tag.count})</button>
+            <button type="button" class="rv-mention-tag py-1 px-3 text-[12px] rounded bg-[var(--pd-spec-header-bg,#f9fafb)] text-[var(--pd-rating-text-color,#6b7280)] border border-[var(--pd-spec-border,#e5e5e5)] cursor-pointer transition-colors duration-150 hover:border-[var(--color-border-medium,#d1d5db)] [&.active]:border-[var(--pd-tab-active-border,#cc9900)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:bg-[var(--pd-price-tier-active-bg,#fef9e7)] [&.active]:font-semibold" data-rv-mention="${tag.label}">${tag.label} (${tag.count})</button>
           `
             )
             .join("")}
@@ -433,7 +433,7 @@ export function ProductReviews(): string {
         ${p.reviews.map((r) => renderReviewCard(r, true)).join("")}
 
         <!-- Show All Button -->
-        <button type="button" class="rv-show-all-btn block w-full p-3 mt-5 text-[14px] font-semibold text-center border border-[var(--pd-spec-border,#e5e5e5)] rounded-lg bg-[var(--color-surface,#ffffff)] text-[var(--pd-title-color,#111827)] cursor-pointer transition-all duration-150 hover:border-[var(--color-border-medium,#d1d5db)] hover:bg-[var(--pd-spec-header-bg,#f9fafb)]">${t("product.showAll")}</button>
+        <button type="button" class="rv-show-all-btn block w-full p-3 mt-5 text-[14px] font-semibold text-center border border-[var(--pd-spec-border,#e5e5e5)] rounded-lg bg-[var(--color-surface,#ffffff)] text-[var(--pd-title-color,#111827)] cursor-pointer transition-colors duration-150 hover:border-[var(--color-border-medium,#d1d5db)] hover:bg-[var(--pd-spec-header-bg,#f9fafb)]">${t("product.showAll")}</button>
       </div>
 
       <!-- Q&A Panel (hidden by default) -->

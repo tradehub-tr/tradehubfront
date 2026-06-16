@@ -75,7 +75,7 @@ export function TicketsListLayout(): string {
             <template x-for="ticket in paginatedTickets" :key="ticket.id">
               <a
                 :href="'/destek/talep?id=' + encodeURIComponent(ticket.id)"
-                class="block bg-white border border-gray-200 rounded-xl p-4 hover:border-primary-300 hover:shadow-sm transition-all cursor-pointer"
+                class="block bg-white border border-gray-200 rounded-xl p-4 hover:border-primary-300 hover:shadow-sm transition-[border-color,box-shadow] duration-150 motion-reduce:transition-none cursor-pointer"
               >
                 <div class="flex items-start gap-3">
                   <!-- Priority bar -->

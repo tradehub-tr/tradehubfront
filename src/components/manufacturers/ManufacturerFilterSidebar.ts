@@ -28,10 +28,10 @@ function section({ id, title, body }: SectionWrapperOpts): string {
         <span class="transition-transform duration-200" :class="{ 'rotate-180': !collapsed['${id}'] }" style="color: var(--filter-chevron-color, #6b7280);">${chevronDown}</span>
       </div>
       <div
-        class="overflow-hidden transition-all duration-200"
-        :class="{ 'max-h-0 opacity-0': collapsed['${id}'], 'max-h-[500px] opacity-100': !collapsed['${id}'] }"
+        class="grid transition-[grid-template-rows,opacity] duration-200 ease-out motion-reduce:transition-none"
+        :class="{ 'grid-rows-[0fr] opacity-0': collapsed['${id}'], 'grid-rows-[1fr] opacity-100': !collapsed['${id}'] }"
       >
-        <div class="pt-2">${body}</div>
+        <div class="overflow-hidden min-h-0"><div class="pt-2">${body}</div></div>
       </div>
     </div>
   `;
@@ -64,7 +64,12 @@ function checkboxRow(model: string, value: string, label: string, leading = ""):
   `;
 }
 
-export function ManufacturerFilterSidebar(): string {
+/**
+ * Filtre bölümleri (9 collapsible section) — desktop sidebar ile mobil bottom
+ * sheet arasında paylaşılır. Her ikisi de aynı `manufacturerFilters` Alpine
+ * data'sına bağlandığından markup tek kaynaktan üretilir.
+ */
+function buildFilterSections(): string {
   const ratings = [4.0, 4.5, 5.0];
   const platformYears = [5, 10, 15];
   const onTime = ["90", "95", "100"];
@@ -180,6 +185,21 @@ export function ManufacturerFilterSidebar(): string {
   );
 
   return `
+    ${section({ id: "store-reviews", title: t("products.filterStoreReviews"), body: ratingsBody })}
+    ${section({ id: "min-order", title: t("products.filterMinOrder"), body: moqBody })}
+    ${section({ id: "supplier-country", title: t("products.filterSupplierCountry"), body: countryBody })}
+    ${section({ id: "mgmt-certifications", title: t("products.filterMgmtCertifications"), body: mgmtBody })}
+    ${section({ id: "product-certifications", title: t("products.filterProductCertifications"), body: productCertBody })}
+    ${section({ id: "platform-years", title: t("checkoutMfr.yearsOnPlatform"), body: platformBody })}
+    ${section({ id: "ontime", title: t("checkoutMfr.onTimeDelivery"), body: onTimeBody })}
+    ${section({ id: "response-time", title: t("checkoutMfr.responseTime"), body: respBody })}
+    ${section({ id: "reorder-rate", title: t("checkoutMfr.reorderRate"), body: reorderBody })}
+  `;
+}
+
+/** Desktop sol sticky filtre paneli (≥lg). */
+export function ManufacturerFilterSidebar(): string {
+  return `
     <aside
       class="w-full lg:w-60 xl:w-64 flex-shrink-0 rounded-md border flex flex-col"
       aria-label="${t("checkoutMfr.supplierFilters")}"
@@ -197,17 +217,7 @@ export function ManufacturerFilterSidebar(): string {
       </div>
 
       <!-- Sections -->
-      <div class="px-4 pb-2">
-        ${section({ id: "store-reviews", title: t("products.filterStoreReviews"), body: ratingsBody })}
-        ${section({ id: "min-order", title: t("products.filterMinOrder"), body: moqBody })}
-        ${section({ id: "supplier-country", title: t("products.filterSupplierCountry"), body: countryBody })}
-        ${section({ id: "mgmt-certifications", title: t("products.filterMgmtCertifications"), body: mgmtBody })}
-        ${section({ id: "product-certifications", title: t("products.filterProductCertifications"), body: productCertBody })}
-        ${section({ id: "platform-years", title: t("checkoutMfr.yearsOnPlatform"), body: platformBody })}
-        ${section({ id: "ontime", title: t("checkoutMfr.onTimeDelivery"), body: onTimeBody })}
-        ${section({ id: "response-time", title: t("checkoutMfr.responseTime"), body: respBody })}
-        ${section({ id: "reorder-rate", title: t("checkoutMfr.reorderRate"), body: reorderBody })}
-      </div>
+      <div class="px-4 pb-2">${buildFilterSections()}</div>
 
       <!-- Sticky apply button -->
       <div
@@ -221,6 +231,79 @@ export function ManufacturerFilterSidebar(): string {
         >${t("products.filterApply")}</button>
       </div>
     </aside>
+  `;
+}
+
+/**
+ * Mobil filtre — alttan açılan bottom sheet (drawer). `<lg` ekranlarda sidebar
+ * gizlendiğinden filtrelere buradan erişilir. Toolbar'daki "Filtrele" butonu
+ * `mfr-filter-open` window event'i ile açar (ManufacturerList içinden dispatch).
+ */
+export function ManufacturerFilterSheet(): string {
+  return `
+    <div
+      x-data="{ open: false }"
+      x-cloak
+      @mfr-filter-open.window="open = true"
+      x-effect="document.body.style.overflow = open ? 'hidden' : ''"
+    >
+      <!-- Backdrop -->
+      <div
+        x-show="open"
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        class="fixed inset-0 bg-black/45 z-[300] lg:hidden"
+        @click="open = false"
+      ></div>
+
+      <!-- Drawer -->
+      <div
+        x-show="open"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="translate-y-full"
+        x-transition:enter-end="translate-y-0"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="translate-y-0"
+        x-transition:leave-end="translate-y-full"
+        class="fixed inset-x-0 bottom-0 z-[301] max-h-[86vh] flex flex-col rounded-t-2xl lg:hidden"
+        style="background: var(--filter-bg, #ffffff);"
+        role="dialog"
+        aria-modal="true"
+        aria-label="${t("products.filters")}"
+        x-data="manufacturerFilters"
+      >
+        <!-- Drag handle -->
+        <div class="grid place-items-center pt-2.5 pb-1">
+          <span class="w-10 h-1 rounded-full bg-gray-300"></span>
+        </div>
+        <!-- Header -->
+        <div class="flex items-center justify-between px-4 pb-3 border-b" style="border-color: var(--filter-divider-color, #e5e7eb);">
+          <h2 class="text-[16px] font-bold" style="color: var(--filter-heading-color, #111827);">${t("products.filters")}</h2>
+          <button
+            type="button"
+            class="th-no-press w-9 h-9 rounded-full bg-gray-100 grid place-items-center text-gray-500"
+            @click="open = false"
+            aria-label="${t("common.close")}"
+          >
+            <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+        </div>
+        <!-- Scrollable sections -->
+        <div class="flex-1 overflow-y-auto px-4 pb-2">${buildFilterSections()}</div>
+        <!-- Footer -->
+        <div
+          class="px-4 py-3 border-t flex gap-2.5"
+          style="border-color: var(--filter-divider-color, #e5e7eb); padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));"
+        >
+          <button type="button" class="th-btn-outline px-5" @click="clearAll()">${t("mfr.list.clear")}</button>
+          <button type="button" class="th-btn flex-1" @click="apply(); open = false">${t("products.filterApply")}</button>
+        </div>
+      </div>
+    </div>
   `;
 }
 

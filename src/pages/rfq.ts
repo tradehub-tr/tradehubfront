@@ -119,7 +119,7 @@ appEl.innerHTML = `
               ${t('rfq.createRfqDesc')}
             </p>
             <div class="mt-5 flex items-center justify-center xl:justify-start">
-              <a href="#" class="inline-flex items-center gap-2 rounded-full border-2 border-white/60 px-5 py-2 text-sm font-medium text-white transition-all duration-200 hover:border-white hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#262772] sm:px-6 sm:py-2.5 sm:text-base">
+              <a href="#" class="inline-flex items-center gap-2 rounded-full border-2 border-white/60 px-5 py-2 text-sm font-medium text-white transition-[color,background-color,border-color] duration-200 hover:border-white hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#262772] sm:px-6 sm:py-2.5 sm:text-base">
                 <span data-i18n="rfq.howItWorks">${t('rfq.howItWorks')}</span>
               </a>
             </div>

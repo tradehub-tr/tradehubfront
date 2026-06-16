@@ -81,11 +81,8 @@ function renderPaymentManagement(): string {
 
   // Add-card button as a card-shaped tile
   const addCardTile = `
-    <div id="pay-add-card-btn" class="pay-add-card shrink-0 w-[200px] max-sm:w-[160px] h-[120px] max-sm:h-[100px] rounded-md flex flex-col items-center justify-center gap-2 border-2 border-dashed cursor-pointer transition-[border-color,background] duration-200"
-         style="border-color: var(--color-border-strong, #ccc); background: transparent;"
-         data-action="open-card-modal"
-         onmouseenter="this.style.borderColor='var(--btn-bg, #ff6600)'; this.style.background='var(--color-primary-50, #fff9f5)';"
-         onmouseleave="this.style.borderColor='var(--color-border-strong, #ccc)'; this.style.background='transparent';">
+    <div id="pay-add-card-btn" class="pay-add-card shrink-0 w-[200px] max-sm:w-[160px] h-[120px] max-sm:h-[100px] rounded-md flex flex-col items-center justify-center gap-2 border-2 border-dashed cursor-pointer transition-[border-color,background] duration-200 border-[var(--color-border-strong,#ccc)] bg-transparent [@media(hover:hover)and(pointer:fine)]:hover:border-[var(--btn-bg,#ff6600)] [@media(hover:hover)and(pointer:fine)]:hover:bg-[var(--color-primary-50,#fff9f5)]"
+         data-action="open-card-modal">
       <span style="font-size: 28px; line-height: 1; color: var(--color-text-secondary, #888);">+</span>
       <span class="text-xs font-medium text-center px-2" style="color: var(--color-text-primary, #333);">${t("payment.addNewCard")}</span>
     </div>
@@ -202,7 +199,7 @@ function renderPaymentManagement(): string {
           <div class="relative mx-auto max-w-[430px] h-[270px] max-sm:max-w-[310px] max-sm:h-[220px] w-full z-[2] perspective-[2000px]">
 
             <!-- FRONT SIDE -->
-            <div class="absolute inset-0 transform-3d backface-hidden transition-transform duration-800 ease-[cubic-bezier(0.71,0.03,0.56,0.85)] rounded-[15px] overflow-hidden shadow-[0_20px_60px_0_rgba(14,42,90,0.55)] h-full"
+            <div class="absolute inset-0 transform-3d backface-hidden transition-transform duration-[450ms] ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none rounded-[15px] overflow-hidden shadow-[0_20px_60px_0_rgba(14,42,90,0.55)] h-full"
                  :class="isFlipped ? 'rotate-y-180' : 'rotate-y-0'">
               <!-- Cover background -->
               <div class="absolute inset-0 h-full start-0 top-0 w-full rounded-[15px] overflow-hidden after:content-[''] after:absolute after:inset-0 after:bg-[rgba(6,2,29,0.45)]"
@@ -256,7 +253,7 @@ function renderPaymentManagement(): string {
             </div>
 
             <!-- BACK SIDE -->
-            <div class="absolute inset-0 transform-3d backface-hidden transition-transform duration-800 ease-[cubic-bezier(0.71,0.03,0.56,0.85)] z-[2] rounded-[15px] overflow-hidden shadow-[0_20px_60px_0_rgba(14,42,90,0.55)] p-0"
+            <div class="absolute inset-0 transform-3d backface-hidden transition-transform duration-[450ms] ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none z-[2] rounded-[15px] overflow-hidden shadow-[0_20px_60px_0_rgba(14,42,90,0.55)] p-0"
                  :class="isFlipped ? 'rotate-y-0' : '-rotate-y-180'">
               <!-- Cover (counter-rotated to prevent mirror) -->
               <div class="rotate-y-180 absolute inset-0 h-full start-0 top-0 w-full rounded-[15px] overflow-hidden after:content-[''] after:absolute after:inset-0 after:bg-[rgba(6,2,29,0.45)]"
@@ -376,7 +373,7 @@ function renderTransactions(): string {
       <span class="text-[13px] font-semibold text-text-primary whitespace-nowrap">${t("payment.statusLabel")}</span>
       <div class="flex flex-wrap gap-2">
         <template x-for="s in [{key:'all',label:'${t("payment.statusAll")}'},{key:'not_arrived',label:'${t("payment.paymentsNotArrived")}'},{key:'pending_match',label:'${t("payment.pendingSupplierMatch")}'},{key:'completed',label:'${t("payment.completed")}'}]" :key="s.key">
-          <button @click="setStatus(s.key)" :class="activeStatus === s.key ? '!text-white !bg-[#222] !border-[#222]' : 'text-text-secondary bg-surface-raised border-border-default hover:border-[#bbb] hover:bg-[#eee]'" class="py-1.5 px-3.5 text-xs rounded-md border cursor-pointer whitespace-nowrap transition-all duration-150" x-text="s.label"></button>
+          <button @click="setStatus(s.key)" :class="activeStatus === s.key ? '!text-white !bg-[#222] !border-[#222]' : 'text-text-secondary bg-surface-raised border-border-default hover:border-[#bbb] hover:bg-[#eee]'" class="py-1.5 px-3.5 text-xs rounded-md border cursor-pointer whitespace-nowrap transition-[color,background-color,border-color] duration-150" x-text="s.label"></button>
         </template>
       </div>
     </div>

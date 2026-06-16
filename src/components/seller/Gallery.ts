@@ -26,14 +26,14 @@ export function Gallery(photos: GalleryPhoto[], title?: string): string {
                  role="button"
                  aria-label="${escapeHtml(photo.caption || t("seller.sf.factoryPhoto"))}">
               <img src="${escapeHtml(sanitizeUrl(photo.image))}" alt="${escapeHtml(photo.caption || "")}"
-                   class="gallery__image w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                   class="gallery__image w-full h-full object-cover transition-transform duration-200 motion-reduce:transition-none motion-reduce:group-hover:scale-100 group-hover:scale-105"
                    loading="lazy"
                    onerror="this.parentElement.style.background='#f3f4f6'" />
-              <div class="gallery__overlay absolute inset-0 bg-gradient-to-t from-black/40 dark:from-black/50 via-black/0 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+              <div class="gallery__overlay absolute inset-0 bg-gradient-to-t from-black/40 dark:from-black/50 via-black/0 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-end">
                 ${
                   photo.caption
                     ? `
-                  <p class="gallery__caption text-white text-[13px] font-medium px-4 py-3 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                  <p class="gallery__caption text-white text-[13px] font-medium px-4 py-3 translate-y-2 group-hover:translate-y-0 motion-reduce:translate-y-0 transition-transform duration-200 motion-reduce:transition-none">
                     ${escapeHtml(photo.caption)}
                   </p>
                 `

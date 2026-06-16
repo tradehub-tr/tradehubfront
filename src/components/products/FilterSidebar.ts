@@ -173,7 +173,7 @@ function renderCheckbox(option: FilterOption, sectionId: string, idPrefix = ""):
         </span>
       </div>
       <span
-        class="text-[13px] leading-tight group-hover:text-primary-600 transition-colors duration-150"
+        class="text-[13px] leading-tight [@media(hover:hover)]:group-hover:text-primary-600 transition-colors duration-150"
         style="color: var(--filter-text-color, #374151);"
       >${escapeHtml(option.label)}</span>
       ${
@@ -368,7 +368,7 @@ function renderCertCheckbox(option: FilterOption, sectionId: string, idPrefix = 
       </div>
       ${icons.certBadge}
       <span
-        class="text-[13px] leading-tight group-hover:text-primary-600 transition-colors duration-150"
+        class="text-[13px] leading-tight [@media(hover:hover)]:group-hover:text-primary-600 transition-colors duration-150"
         style="color: var(--filter-text-color, #374151);"
       >${escapeHtml(option.label)}</span>
     </label>
@@ -411,7 +411,7 @@ function renderSectionHeader(section: FilterSection): string {
         isCollapsible
           ? `
         <span
-          class="transition-transform duration-200"
+          class="transition-transform duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none"
           :class="{ 'rotate-180': !collapsed['${section.id}'] }"
           style="color: var(--filter-chevron-color, #6b7280);"
           data-filter-chevron="${section.id}"
@@ -472,7 +472,7 @@ function renderFilterSection(section: FilterSection, idPrefix = ""): string {
     >
       ${renderSectionHeader(section)}
       <div
-        class="overflow-hidden transition-all duration-200"
+        class="overflow-hidden transition-[max-height,opacity] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none"
         :class="{ 'max-h-0 opacity-0': collapsed['${section.id}'], 'max-h-[500px] opacity-100': !collapsed['${section.id}'] }"
         data-filter-content="${section.id}"
       >
@@ -617,7 +617,7 @@ export function initFilterSidebar(query?: string, category?: string): void {
                   <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
                 </span>
               </div>
-              <span class="text-[13px] leading-tight group-hover:text-primary-600 transition-colors duration-150" style="color: var(--filter-text-color, #374151);">${escapeHtml(translatedName)}</span>
+              <span class="text-[13px] leading-tight [@media(hover:hover)]:group-hover:text-primary-600 transition-colors duration-150" style="color: var(--filter-text-color, #374151);">${escapeHtml(translatedName)}</span>
               <span class="text-[11px] ms-auto" style="color: var(--filter-count-color, #9ca3af);">(${c.count})</span>
             </label>
           `;
@@ -660,7 +660,7 @@ export function initFilterSidebar(query?: string, category?: string): void {
                 </span>
               </div>
               ${logoHtml}
-              <span class="text-[13px] leading-tight group-hover:text-primary-600 transition-colors duration-150" style="color: var(--filter-text-color, #374151);">${escapeHtml(b.label)}</span>
+              <span class="text-[13px] leading-tight [@media(hover:hover)]:group-hover:text-primary-600 transition-colors duration-150" style="color: var(--filter-text-color, #374151);">${escapeHtml(b.label)}</span>
               <span class="text-[11px] ms-auto" style="color: var(--filter-count-color, #9ca3af);">(${b.count})</span>
             </label>
           `;
@@ -710,7 +710,7 @@ export function initFilterSidebar(query?: string, category?: string): void {
                     </span>
                   </div>
                   ${colorSwatch}
-                  <span class="text-[13px] leading-tight group-hover:text-primary-600 transition-colors duration-150 truncate" style="color: var(--filter-text-color, #374151);">${escapeHtml(opt.label)}</span>
+                  <span class="text-[13px] leading-tight [@media(hover:hover)]:group-hover:text-primary-600 transition-colors duration-150 truncate" style="color: var(--filter-text-color, #374151);">${escapeHtml(opt.label)}</span>
                   <span class="text-[11px] ms-auto flex-shrink-0" style="color: var(--filter-count-color, #9ca3af);">(${opt.count})</span>
                 </label>
               `;
@@ -774,7 +774,7 @@ export function initFilterSidebar(query?: string, category?: string): void {
                     <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
                   </span>
                 </div>
-                <span class="text-[13px] leading-tight group-hover:text-primary-600 transition-colors duration-150" style="color: var(--filter-text-color, #374151);">${escapeHtml(c.label)}</span>
+                <span class="text-[13px] leading-tight [@media(hover:hover)]:group-hover:text-primary-600 transition-colors duration-150" style="color: var(--filter-text-color, #374151);">${escapeHtml(c.label)}</span>
                 <span class="text-[11px] ms-auto" style="color: var(--filter-count-color, #9ca3af);">(${c.count})</span>
               </label>
             `;

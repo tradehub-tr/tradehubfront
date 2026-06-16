@@ -33,7 +33,10 @@ export function SettingsConsentManagement(): string {
       </div>
 
       <!-- Consent List -->
-      <div x-show="!loading" x-cloak class="flex flex-col gap-3">
+      <div x-show="!loading" x-cloak class="flex flex-col gap-3"
+        x-transition:enter="transition ease-out duration-200 motion-reduce:transition-none"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100">
         <template x-for="item in consents" :key="item.consent_type">
           <div class="flex items-center justify-between py-3 px-4 rounded-lg border" :class="item.has_consent ? 'border-emerald-200 bg-emerald-50/50' : 'border-gray-200 bg-gray-50/50'">
             <div class="flex flex-col gap-0.5 min-w-0">

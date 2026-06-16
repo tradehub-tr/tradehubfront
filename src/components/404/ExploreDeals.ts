@@ -49,7 +49,7 @@ function renderProductImage(p: ExploreProduct): string {
         src="${escapeHtml(sanitizeUrl(p.imageSrc))}"
         alt="${escapeHtml(p.name)}"
         loading="lazy"
-        class="w-full h-full object-cover transition-transform duration-300 group-hover/card:scale-110"
+        class="w-full h-full object-cover transition-transform duration-200 motion-reduce:transition-none [@media(hover:hover)and(pointer:fine)]:group-hover/card:scale-110"
       />
     </div>
   `;
@@ -72,10 +72,10 @@ function renderProductCard(p: ExploreProduct): string {
 
 function renderNavArrows(index: number): string {
   return `
-    <button aria-label="${t("infoMisc.previous")}" class="explore-prev-${index} absolute start-0 top-[calc(50%-40px)] z-10 hidden h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-md transition-all hover:text-gray-900 opacity-0 pointer-events-none md:flex group-hover/explore:opacity-100 group-hover/explore:pointer-events-auto disabled:opacity-0 disabled:pointer-events-none">
+    <button aria-label="${t("infoMisc.previous")}" class="explore-prev-${index} absolute start-0 top-[calc(50%-40px)] z-10 hidden h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-md transition-[color,opacity] duration-150 motion-reduce:transition-none hover:text-gray-900 opacity-0 pointer-events-none md:flex group-hover/explore:opacity-100 group-hover/explore:pointer-events-auto disabled:opacity-0 disabled:pointer-events-none">
       <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
     </button>
-    <button aria-label="${t("infoMisc.next")}" class="explore-next-${index} absolute end-0 top-[calc(50%-40px)] z-10 hidden h-9 w-9 translate-x-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-md transition-all hover:text-gray-900 opacity-0 pointer-events-none md:flex group-hover/explore:opacity-100 group-hover/explore:pointer-events-auto disabled:opacity-0 disabled:pointer-events-none">
+    <button aria-label="${t("infoMisc.next")}" class="explore-next-${index} absolute end-0 top-[calc(50%-40px)] z-10 hidden h-9 w-9 translate-x-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-md transition-[color,opacity] duration-150 motion-reduce:transition-none hover:text-gray-900 opacity-0 pointer-events-none md:flex group-hover/explore:opacity-100 group-hover/explore:pointer-events-auto disabled:opacity-0 disabled:pointer-events-none">
       <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
     </button>
   `;

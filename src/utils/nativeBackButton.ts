@@ -44,10 +44,26 @@ function goBack(): void {
   }
 }
 
+// Press/hover geri bildirimi inline stilde :active yazılamadığı için tek seferlik <style> bloğu.
+function injectBackButtonStyles(): void {
+  const styleId = `${BTN_ID}-styles`;
+  if (document.getElementById(styleId)) return;
+  const style = document.createElement("style");
+  style.id = styleId;
+  style.textContent =
+    `#${BTN_ID}{transition:transform 120ms cubic-bezier(0.23,1,0.32,1),background 120ms cubic-bezier(0.23,1,0.32,1)}` +
+    `@media(hover:hover) and (pointer:fine){#${BTN_ID}:hover{background:rgba(0,0,0,0.7)}}` +
+    `#${BTN_ID}:active{transform:scale(0.94)}` +
+    `@media(prefers-reduced-motion:reduce){#${BTN_ID}{transition:none}#${BTN_ID}:active{transform:none}}`;
+  document.head.appendChild(style);
+}
+
 function injectBackButton(): void {
   if (!isIos()) return;
   if (document.getElementById(BTN_ID)) return;
   if (isHomePage()) return;
+
+  injectBackButtonStyles();
 
   const btn = document.createElement("button");
   btn.id = BTN_ID;

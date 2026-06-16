@@ -35,7 +35,7 @@ function yellowIcon(svgContent: string): string {
 
 function shippingTypeCard(icon: string, title: string, description: string): string {
   return `
-    <div class="border border-gray-200 rounded-md p-6 flex flex-col gap-3 hover:shadow-md transition-shadow">
+    <div class="border border-gray-200 rounded-md p-6 flex flex-col gap-3 [@media(hover:hover)_and_(pointer:fine)]:hover:shadow-md transition-shadow">
       ${yellowIcon(icon)}
       <h3 class="text-lg font-semibold text-gray-900">${title}</h3>
       <p class="text-sm text-gray-600 leading-relaxed">${description}</p>

@@ -19,24 +19,24 @@ export function TradeAssuranceFooterCards(): string {
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
 
           <!-- Card: Hükümler ve Koşullar -->
-          <a href="/pages/legal/terms" class="group block bg-[#000]/40 hover:bg-[#000]/60 rounded-md p-6 transition-all duration-300">
+          <a href="/pages/legal/terms" class="group block bg-[#000]/40 [@media(hover:hover)]:hover:bg-[#000]/60 rounded-md p-6 transition-colors duration-200">
             <div class="mb-4">${iconBookmark}</div>
             <h3 class="text-base font-bold text-white mb-3">${t("tradeAssurance.footerTermsTitle")}</h3>
-            <span class="text-[#FFC200] text-sm font-medium group-hover:underline">${t("tradeAssurance.footerRead")} &rarr;</span>
+            <span class="text-[#FFC200] text-sm font-medium [@media(hover:hover)]:group-hover:underline">${t("tradeAssurance.footerRead")} &rarr;</span>
           </a>
 
           <!-- Card: Ticari Güvence kılavuzu -->
-          <a href="/yardim-merkezi" class="group block bg-[#000]/40 hover:bg-[#000]/60 rounded-md p-6 transition-all duration-300">
+          <a href="/yardim-merkezi" class="group block bg-[#000]/40 [@media(hover:hover)]:hover:bg-[#000]/60 rounded-md p-6 transition-colors duration-200">
             <div class="mb-4">${iconCalendar}</div>
             <h3 class="text-base font-bold text-white mb-3">${t("tradeAssurance.footerGuideTitle")}</h3>
-            <span class="text-[#FFC200] text-sm font-medium group-hover:underline">${t("tradeAssurance.footerDownload")} &rarr;</span>
+            <span class="text-[#FFC200] text-sm font-medium [@media(hover:hover)]:group-hover:underline">${t("tradeAssurance.footerDownload")} &rarr;</span>
           </a>
 
           <!-- Card: Müşteri Hizmetleri -->
-          <a href="/yardim-merkezi" class="group block bg-[#000]/40 hover:bg-[#000]/60 rounded-md p-6 transition-all duration-300">
+          <a href="/yardim-merkezi" class="group block bg-[#000]/40 [@media(hover:hover)]:hover:bg-[#000]/60 rounded-md p-6 transition-colors duration-200">
             <div class="mb-4">${iconHeadset}</div>
             <h3 class="text-base font-bold text-white mb-3">${t("tradeAssurance.footerSupportTitle")}</h3>
-            <span class="text-[#FFC200] text-sm font-medium group-hover:underline">${t("tradeAssurance.footerGetHelp")} &rarr;</span>
+            <span class="text-[#FFC200] text-sm font-medium [@media(hover:hover)]:group-hover:underline">${t("tradeAssurance.footerGetHelp")} &rarr;</span>
           </a>
 
         </div>

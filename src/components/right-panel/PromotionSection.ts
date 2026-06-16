@@ -82,8 +82,8 @@ export function initPromotionSection(): void {
     dots.forEach((dot, i) => {
       const isActive = i === activeIndex;
       dot.className = isActive
-        ? "w-4 h-2 rounded-full bg-[#222] transition-all"
-        : "w-2 h-2 rounded-full bg-[#ccc] transition-all";
+        ? "w-4 h-2 rounded-full bg-[#222] transition-[width,background-color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none"
+        : "w-2 h-2 rounded-full bg-[#ccc] transition-[width,background-color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none";
     });
   }
 

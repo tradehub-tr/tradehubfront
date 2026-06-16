@@ -26,7 +26,12 @@ export function TopRankingFilters(): string {
         <!-- Desktop dropdown panel -->
         <div
           x-show="categoryDropdownOpen"
-          x-transition
+          x-transition:enter="transition ease-[cubic-bezier(0.23,1,0.32,1)] duration-200 origin-top motion-reduce:transition-none"
+          x-transition:enter-start="opacity-0 scale-95 -translate-y-1"
+          x-transition:enter-end="opacity-100 scale-100"
+          x-transition:leave="transition ease-in duration-150 origin-top motion-reduce:transition-none"
+          x-transition:leave-start="opacity-100"
+          x-transition:leave-end="opacity-0 scale-95"
           x-cloak
           class="hidden lg:block absolute left-1/2 -translate-x-1/2 top-full mt-2 w-72 bg-surface border border-border-default rounded-md shadow-lg z-30 p-3"
         >
@@ -114,7 +119,7 @@ export function TopRankingFilters(): string {
 
     <!-- Category Bottom Sheet — Panel -->
     <div
-      class="lg:hidden fixed inset-x-0 bottom-0 z-[100] transition-transform duration-300 ease-out"
+      class="lg:hidden fixed inset-x-0 bottom-0 z-[100] transition-transform duration-300 ease-out motion-reduce:transition-none"
       :class="showCategorySheet ? 'translate-y-0' : 'translate-y-full'"
     >
       <div class="bg-white rounded-t-md max-h-[85vh] flex flex-col shadow-2xl">

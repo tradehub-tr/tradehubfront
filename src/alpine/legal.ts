@@ -42,7 +42,8 @@ Alpine.data("legalToc", () => ({
   scrollToSection(id: string) {
     const el = document.getElementById(id);
     if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      el.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
       history.replaceState(null, "", `#${id}`);
     }
   },
@@ -144,7 +145,12 @@ Alpine.data("aboutPage", () => ({
   animateCounters() {
     if (this.animated) return;
     this.animated = true;
-    const duration = 2000;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      // Hareket istemeyen kullanıcıya son değerleri animasyonsuz ata
+      this.counters = { ...this.targets };
+      return;
+    }
+    const duration = 1200;
     const startTime = performance.now();
     const step = (now: number) => {
       const elapsed = now - startTime;

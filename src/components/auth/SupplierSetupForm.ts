@@ -70,7 +70,7 @@ export function SupplierSetupForm(defaultCountry: string = "TR"): string {
         ${[1, 2, 3, 4]
           .map(
             (n) => `
-          <div class="supplier-step-dot flex items-center justify-center w-8 h-8 rounded-full text-xs font-semibold transition-all ${n === 1 ? "bg-orange-500 text-white" : "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400"}" data-step-dot="${n}">${n}</div>
+          <div class="supplier-step-dot flex items-center justify-center w-8 h-8 rounded-full text-xs font-semibold transition-[background-color,color] duration-150 motion-reduce:transition-none ${n === 1 ? "bg-orange-500 text-white" : "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400"}" data-step-dot="${n}">${n}</div>
           ${n < 4 ? '<div class="w-6 h-0.5 bg-gray-200 dark:bg-gray-700"></div>' : ""}
         `
           )
@@ -144,7 +144,7 @@ export function SupplierSetupForm(defaultCountry: string = "TR"): string {
                 <button
                   type="button"
                   id="ss-city-btn"
-                  class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-md text-start text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all flex items-center justify-between"
+                  class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-md text-start text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-[border-color,box-shadow] duration-150 motion-reduce:transition-none flex items-center justify-between"
                   aria-haspopup="listbox"
                   aria-expanded="false"
                   aria-controls="ss-city-dropdown"
@@ -157,7 +157,7 @@ export function SupplierSetupForm(defaultCountry: string = "TR"): string {
                 <input type="hidden" id="ss-city" name="city" value="" />
                 <div
                   id="ss-city-dropdown"
-                  class="absolute z-40 hidden w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg flex flex-col"
+                  class="absolute z-40 hidden w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg flex flex-col origin-top opacity-0 scale-95 transition-[opacity,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] data-[state=open]:opacity-100 data-[state=open]:scale-100 motion-reduce:transition-none"
                 >
                   <div class="shrink-0 p-2 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
                     <input
@@ -305,7 +305,7 @@ export function SupplierSetupForm(defaultCountry: string = "TR"): string {
         <button type="button" id="ss-back-btn" class="hidden flex-1 py-3 text-sm font-semibold text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
           ${t("auth.supplierSetup.back")}
         </button>
-        <button type="button" id="ss-next-btn" class="flex-1 th-btn py-3 text-base font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+        <button type="button" id="ss-next-btn" class="flex-1 th-btn py-3 text-base font-semibold disabled:opacity-50 disabled:cursor-not-allowed" disabled>
           ${t("auth.supplierSetup.next")}
         </button>
       </div>
@@ -723,6 +723,9 @@ export function initSupplierSetupForm(options: SupplierSetupFormOptions = {}): v
 
     function open(): void {
       cityDropdown!.classList.remove("hidden");
+      // Reflow so the enter transition runs from the closed (scale-95/opacity-0) state.
+      void cityDropdown!.offsetHeight;
+      cityDropdown!.dataset.state = "open";
       cityBtn!.setAttribute("aria-expanded", "true");
       cityIcon?.classList.add("rotate-180");
       citySearch!.value = "";
@@ -737,6 +740,7 @@ export function initSupplierSetupForm(options: SupplierSetupFormOptions = {}): v
     }
 
     function close(): void {
+      cityDropdown!.dataset.state = "closed";
       cityDropdown!.classList.add("hidden");
       cityBtn!.setAttribute("aria-expanded", "false");
       cityIcon?.classList.remove("rotate-180");

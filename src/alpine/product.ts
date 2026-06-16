@@ -20,6 +20,10 @@ import {
 import { toVideoEmbedHtml } from "../components/product/ProductVideoSection";
 import { escapeHtml, sanitizeUrl } from "../utils/sanitize";
 
+function prefersReducedMotion(): boolean {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
 function renderInlineVideo(url: string): string {
   return `
     <div class="relative w-full h-full bg-black flex items-center justify-center" data-gallery-main-media="true">
@@ -511,6 +515,8 @@ Alpine.data("imageGallery", () => ({
   handleZoomMove(event: PointerEvent) {
     if (!this.supportsHoverZoom) return;
     if (event.pointerType && event.pointerType !== "mouse") return;
+    // Hareket istemeyen kullanıcıda ölçek büyütme atlanır
+    if (prefersReducedMotion()) return;
 
     const mainImage = (this.$refs as Record<string, HTMLElement>).mainImage;
     const media = this.getMainMedia();
@@ -538,10 +544,11 @@ Alpine.data("imageGallery", () => ({
     const thumbTop = activeThumb.offsetTop;
     const thumbHeight = activeThumb.offsetHeight;
 
+    const behavior = prefersReducedMotion() ? "auto" : "smooth";
     if (thumbTop < listTop) {
-      thumbList.scrollTo({ top: thumbTop, behavior: "smooth" });
+      thumbList.scrollTo({ top: thumbTop, behavior });
     } else if (thumbTop + thumbHeight > listTop + listHeight) {
-      thumbList.scrollTo({ top: thumbTop + thumbHeight - listHeight, behavior: "smooth" });
+      thumbList.scrollTo({ top: thumbTop + thumbHeight - listHeight, behavior });
     }
   },
 
@@ -591,7 +598,11 @@ Alpine.data("imageGallery", () => ({
     const activeThumb = lightboxThumbList.querySelector<HTMLElement>(
       `.gallery-lightbox-thumb[data-index="${index}"]`
     );
-    activeThumb?.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });
+    activeThumb?.scrollIntoView({
+      block: "nearest",
+      inline: "nearest",
+      behavior: prefersReducedMotion() ? "auto" : "smooth",
+    });
   },
 
   setLightboxSlide(index: number) {
@@ -650,13 +661,19 @@ Alpine.data("imageGallery", () => ({
     const thumbList = (this.$refs as Record<string, HTMLElement>).thumbList;
     if (!thumbList) return;
     const scrollAmount = THUMB_SIZE + THUMB_GAP;
-    thumbList.scrollBy({ top: direction * scrollAmount, behavior: "smooth" });
+    thumbList.scrollBy({
+      top: direction * scrollAmount,
+      behavior: prefersReducedMotion() ? "auto" : "smooth",
+    });
   },
 
   scrollLightboxThumbs(direction: number) {
     const lightboxThumbList = (this.$refs as Record<string, HTMLElement>).lightboxThumbList;
     if (!lightboxThumbList) return;
     const scrollAmount = LIGHTBOX_THUMB_SIZE + LIGHTBOX_THUMB_GAP;
-    lightboxThumbList.scrollBy({ top: direction * scrollAmount, behavior: "smooth" });
+    lightboxThumbList.scrollBy({
+      top: direction * scrollAmount,
+      behavior: prefersReducedMotion() ? "auto" : "smooth",
+    });
   },
 }));

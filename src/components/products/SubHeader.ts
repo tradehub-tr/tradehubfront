@@ -172,8 +172,14 @@ function renderSortDropdown(options: SortOption[], selectedValue: string): strin
       <div
         x-show="sortOpen"
         x-cloak
+        x-transition:enter="transition ease-out duration-150 motion-reduce:transition-none"
+        x-transition:enter-start="opacity-0 scale-95 -translate-y-1 motion-reduce:scale-100 motion-reduce:translate-y-0"
+        x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+        x-transition:leave="transition ease-out duration-100 motion-reduce:transition-none"
+        x-transition:leave-start="opacity-100 scale-100"
+        x-transition:leave-end="opacity-0 scale-95 motion-reduce:scale-100"
         @click.outside="sortOpen = false"
-        class="absolute left-0 lg:left-auto lg:right-0 z-30 mt-2 w-[230px] max-w-[calc(100vw-2rem)] bg-white border border-gray-200 rounded-lg shadow-lg p-1.5 dark:bg-gray-800 dark:border-gray-700"
+        class="absolute left-0 lg:left-auto lg:right-0 z-30 mt-2 w-[230px] max-w-[calc(100vw-2rem)] origin-top bg-white border border-gray-200 rounded-lg shadow-lg p-1.5 dark:bg-gray-800 dark:border-gray-700"
         role="listbox"
         aria-labelledby="sub-header-sort-btn"
       >

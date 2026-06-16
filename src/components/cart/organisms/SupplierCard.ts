@@ -52,11 +52,11 @@ export function SupplierCard({ supplier, isSingleSupplier = true }: SupplierCard
           </button>`;
 
   return `
-    <section class="sc-c-supplier-container rounded-2xl border border-[#e8e6e0] bg-white shadow-[0_1px_2px_rgba(20,20,18,0.04)] overflow-hidden"
+    <section class="sc-c-supplier-container rounded-md border border-[#e5e5e5] bg-white overflow-hidden"
       data-supplier-id="${escapeHtml(supplier.id)}"
       x-data="{ expanded: ${isOpen} }"
       @checkbox-change="if ($event.detail.handlerId === 'supplier-select-${escapeHtml(supplier.id)}') $dispatch('supplier-select', { supplierId: '${escapeHtml(supplier.id)}', selected: $event.detail.checked })">
-      <header class="sc-c-supplier-header flex items-center justify-between gap-3 p-[10px_12px] sm:p-[12px_16px] border-b border-[#e8e6e0] max-md:flex-col max-md:items-stretch max-md:gap-2 max-[380px]:gap-1.5 cursor-pointer hover:bg-[#fafaf8] transition-colors select-none"
+      <header class="sc-c-supplier-header flex items-center justify-between gap-3 p-[10px_12px] sm:p-[12px_16px] border-b border-[#e5e5e5] max-md:flex-col max-md:items-stretch max-md:gap-2 max-[380px]:gap-1.5 cursor-pointer hover:bg-[#fafafa] transition-colors select-none"
         :class="{ 'border-b-0': !expanded }"
         @click="expanded = !expanded">
         <div class="flex items-center gap-3 min-w-0 overflow-hidden">
@@ -64,20 +64,20 @@ export function SupplierCard({ supplier, isSingleSupplier = true }: SupplierCard
             ${Checkbox({ id: `supplier-checkbox-${supplier.id}`, checked: supplier.selected, indeterminate: supplierIndeterminate, onChange: `supplier-select-${supplier.id}` })}
           </div>
           <span class="text-[13px] max-[380px]:text-[12px] sm:text-[14.5px] font-semibold text-[#1a1a1a] truncate">${escapeHtml(supplier.name)}</span>
-          <svg class="sc-c-supplier-chevron w-4 h-4 text-[#8a877f] transition-transform duration-300 shrink-0 ${isOpen ? "rotate-180" : ""}"
+          <svg class="sc-c-supplier-chevron w-4 h-4 text-text-tertiary transition-transform duration-300 shrink-0 ${isOpen ? "rotate-180" : ""}"
             :class="{ 'rotate-180': expanded }"
             fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </div>
         <div class="sc-c-supplier-total flex items-center gap-3 text-sm font-bold text-text-primary whitespace-nowrap max-md:flex-col max-md:items-stretch max-md:gap-1 shrink-0">
-          <span class="sc-c-supplier-total-text text-[13px] font-medium text-[#4a4a48] whitespace-nowrap [&_strong]:text-[#1a1a1a] [&_strong]:font-bold [&_strong]:ms-1 [&_b]:text-[#1a1a1a] [&_b]:font-bold [&_b]:ms-1" x-show="!expanded" ${isOpen ? "x-cloak" : ""}></span>
+          <span class="sc-c-supplier-total-text text-[13px] font-medium text-text-secondary whitespace-nowrap [&_strong]:text-[#1a1a1a] [&_strong]:font-bold [&_strong]:ms-1 [&_b]:text-[#1a1a1a] [&_b]:font-bold [&_b]:ms-1" x-show="!expanded" ${isOpen ? "x-cloak" : ""}></span>
           ${checkoutBtnHtml}
         </div>
       </header>
       ${kybBannerHtml}
-      <div class="sc-c-supplier-content p-[4px_12px_10px] sm:p-[4px_16px_12px] transition-all duration-300"
-        x-show="expanded" ${!isOpen ? "x-cloak" : ""}>${products}</div>
+      <div class="sc-c-supplier-content p-[4px_12px_10px] sm:p-[4px_16px_12px]"
+        x-show="expanded" x-collapse ${!isOpen ? "x-cloak" : ""}>${products}</div>
     </section>
   `.trim();
 }

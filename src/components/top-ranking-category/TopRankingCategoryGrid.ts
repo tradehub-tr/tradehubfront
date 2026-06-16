@@ -68,13 +68,13 @@ export function renderRankedCategoryCard(product: RankedProduct, rank: number): 
       : "";
 
   return `
-    <a href="${safeHref}" class="group/product flex flex-col bg-surface border border-border-default rounded-md p-2.5 hover:-translate-y-0.5 hover:shadow-md hover:border-primary-300 transition-all duration-200" aria-label="${safeName}">
+    <a href="${safeHref}" class="group/product flex flex-col bg-surface border border-border-default rounded-md p-2.5 [@media(hover:hover)and(pointer:fine)]:hover:-translate-y-0.5 [@media(hover:hover)and(pointer:fine)]:hover:shadow-md [@media(hover:hover)and(pointer:fine)]:hover:border-primary-300 transition-[transform,box-shadow,border-color] duration-200 motion-reduce:transition-none motion-reduce:hover:translate-y-0" aria-label="${safeName}">
       <div class="relative aspect-[4/3] w-full overflow-hidden rounded-md bg-surface-raised mb-2">
         <img
           src="${safeImg}"
           alt="${safeName}"
           loading="lazy"
-          class="w-full h-full object-cover transition-transform duration-300 group-hover/product:scale-105"
+          class="w-full h-full object-cover transition-transform duration-300 [@media(hover:hover)and(pointer:fine)]:group-hover/product:scale-105 motion-reduce:transition-none motion-reduce:group-hover/product:scale-100"
         />
         <span
           class="absolute top-2 start-2 w-8 h-8 flex items-center justify-center rounded-md text-xs font-bold text-white shadow-sm ${badgeClass}"

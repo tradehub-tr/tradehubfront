@@ -183,7 +183,7 @@ async function renderPage() {
                       <span class="text-[10px] text-[#999] font-medium">${t("sellPage.with")}</span>
                     </div>
                     <button
-                      class="bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[12px] font-medium border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] px-5 py-2 shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150 whitespace-nowrap"
+                      class="bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[12px] font-medium border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] px-5 py-2 shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-[background-color,box-shadow,transform] duration-150 motion-reduce:transition-none motion-reduce:active:scale-100 whitespace-nowrap"
                       @click="switchPage('contacts')">
                       ${t("sellPage.contactSupplier")}
                     </button>
@@ -199,7 +199,7 @@ async function renderPage() {
             <!-- Mobile CTA -->
             <div class="flex sm:hidden gap-2 mt-4">
               <button
-                class="flex-1 bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[12px] font-medium border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] py-2 shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150"
+                class="flex-1 bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[12px] font-medium border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] py-2 shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-[background-color,box-shadow,transform] duration-150 motion-reduce:transition-none motion-reduce:active:scale-100"
                 @click="switchPage('contacts')">
                 ${t("sellPage.contactSupplier")}
               </button>
@@ -301,7 +301,13 @@ async function renderPage() {
           </div>
 
           <!-- Mobil Search Bar -->
-          <div x-show="mobileSearch" x-transition.origin.top
+          <div x-show="mobileSearch"
+               x-transition:enter="origin-top transition ease-out duration-150 motion-reduce:transition-none"
+               x-transition:enter-start="opacity-0 scale-95 motion-reduce:scale-100"
+               x-transition:enter-end="opacity-100 scale-100"
+               x-transition:leave="origin-top transition ease-out duration-150 motion-reduce:transition-none"
+               x-transition:leave-start="opacity-100 scale-100"
+               x-transition:leave-end="opacity-0 scale-95 motion-reduce:scale-100"
                class="sm:hidden px-4 py-2.5 border-t border-white/10">
             <div class="relative">
               <input type="text" placeholder="${t("sellPage.searchInStore")}" autofocus
@@ -311,7 +317,13 @@ async function renderPage() {
           </div>
 
           <!-- Mobil Menu (toggle) -->
-          <div x-show="mobileNav" x-transition.origin.top
+          <div x-show="mobileNav"
+               x-transition:enter="origin-top transition ease-out duration-150 motion-reduce:transition-none"
+               x-transition:enter-start="opacity-0 scale-95 motion-reduce:scale-100"
+               x-transition:enter-end="opacity-100 scale-100"
+               x-transition:leave="origin-top transition ease-out duration-150 motion-reduce:transition-none"
+               x-transition:leave-start="opacity-100 scale-100"
+               x-transition:leave-end="opacity-0 scale-95 motion-reduce:scale-100"
                class="sm:hidden border-t border-white/10">
             <a href="#" @click.prevent="switchPage('home'); mobileNav = false"
                class="block px-5 py-3 text-[13px] font-medium border-b border-white/5 transition-colors"
@@ -339,7 +351,7 @@ async function renderPage() {
         <!-- ═══ FLOATING CONTACT BUTTONS (sag kenar) ═══ -->
         <div class="fixed end-0 top-1/2 -translate-y-1/2 z-40 flex flex-col gap-0.5">
           <button @click="switchPage('contacts')"
-                  class="w-[52px] h-[52px] bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) flex flex-col items-center justify-center rounded-s-md border border-(--btn-border-color,#d39c00) shadow-lg hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150">
+                  class="w-[52px] h-[52px] bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) flex flex-col items-center justify-center rounded-s-md border border-(--btn-border-color,#d39c00) shadow-lg hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-[background-color,box-shadow,transform] duration-150 motion-reduce:transition-none motion-reduce:active:scale-100">
             <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
             <span class="text-[8px] font-bold leading-none">Contact</span>
             <span class="text-[8px] font-bold leading-none">Supplier</span>
