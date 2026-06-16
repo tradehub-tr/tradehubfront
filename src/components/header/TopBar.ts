@@ -473,7 +473,7 @@ function renderLanguageCurrencySelector(): string {
       <svg class="w-4 h-4 text-gray-400 dark:text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5a17.92 17.92 0 0 1-8.716-4.247m0 0A8.959 8.959 0 0 1 3 12c0-1.177.227-2.302.637-3.332" />
       </svg>
-      <span class="text-gray-900 dark:text-white truncate" data-i18n="header.englishUsd" id="lang-currency-label">${t("header.englishUsd")}</span>
+      <span class="text-gray-900 dark:text-white truncate" id="lang-currency-label">${t("header.englishUsd")}</span>
     </button>
 
     <!-- Language & Currency Popover -->
@@ -1843,6 +1843,18 @@ export async function initAuthState(): Promise<void> {
  * whose currency is not one of the 3 hard-coded defaults sees it in the picker
  * without a reload.
  */
+/** Header'daki dil-para birimi rozetini ("Türkçe-USD") seçili dil + SEÇİLİ para
+ *  birimine göre günceller. Eski hata: rozet statik i18n metni (header.englishUsd
+ *  = "Türkçe-TRY") idi ve hiçbir JS güncellemiyordu → fiyatlar USD'ye dönse bile
+ *  rozet hep "Türkçe-TRY" kalıyordu. */
+function updateLangCurrencyLabel(): void {
+  const el = document.getElementById("lang-currency-label");
+  if (!el) return;
+  const langCode = getCurrentLang().toUpperCase();
+  const langName = languageOptions.find((l) => l.code === langCode)?.name || langCode;
+  el.textContent = `${langName}-${getSelectedCurrency().code}`;
+}
+
 function rebuildCurrencyPicker(): void {
   const currencySelect = document.getElementById("currency-select") as HTMLSelectElement | null;
   if (currencySelect) {
@@ -1889,6 +1901,9 @@ export function initLanguageSelector(): void {
     currencySelect.value = getSelectedCurrency().code;
   }
 
+  // Rozeti seçili dil + para birimine göre güncelle (statik i18n metni değil).
+  updateLangCurrencyLabel();
+
   // The TopBar renders synchronously at bootstrap — before initCurrency()'s
   // async fetch resolves — so the picker initially holds only the hard-coded
   // defaults. Rebuild the option list + mobile pills once the full supported
@@ -1896,7 +1911,10 @@ export function initLanguageSelector(): void {
   // currencyService.initCurrency). Bind once to avoid duplicate listeners.
   if (!_currencyPickerListenerBound) {
     _currencyPickerListenerBound = true;
-    onCurrencyChange(() => rebuildCurrencyPicker());
+    onCurrencyChange(() => {
+      rebuildCurrencyPicker();
+      updateLangCurrencyLabel();
+    });
   }
   // If the list already loaded before this ran (e.g. cache hit / reordered
   // bootstrap), the event has already fired — rebuild now so we don't miss it.

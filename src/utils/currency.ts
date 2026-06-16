@@ -7,9 +7,11 @@
  * covers the very first page-load before any API call has completed.
  */
 
-import { getSupportedCurrencies } from "../services/currencyService";
-
-const CURRENCY_STORAGE_KEY = "tradehub-currency";
+import {
+  getSupportedCurrencies,
+  getSelectedCurrency as getServiceCurrencyCode,
+  setSelectedCurrency as setServiceCurrency,
+} from "../services/currencyService";
 
 export interface CurrencyInfo {
   code: string;
@@ -34,9 +36,13 @@ function getCurrencyMap(): Record<string, CurrencyInfo> {
   return FALLBACK_CURRENCIES;
 }
 
-/** Get the currently selected currency info */
+/** Get the currently selected currency info.
+ *  Tek doğruluk kaynağı = currencyService (bellek + localStorage + event).
+ *  utils yalnızca code'u CurrencyInfo'ya map eder; localStorage'ı DOĞRUDAN
+ *  okumaz — eski desync (service belleği vs taze localStorage farklı değer
+ *  döndürüyordu) bu sayede ortadan kalkar. */
 export function getSelectedCurrency(): CurrencyInfo {
-  const code = localStorage.getItem(CURRENCY_STORAGE_KEY) || "USD";
+  const code = getServiceCurrencyCode();
   const map = getCurrencyMap();
   return map[code] || map.USD || { code: "USD", symbol: "$" };
 }
@@ -51,9 +57,11 @@ export function getCurrencyCode(): string {
   return getSelectedCurrency().code;
 }
 
-/** Save the selected currency code to localStorage */
+/** Save the selected currency. currencyService'e delege eder — hem
+ *  _selectedCurrency belleği hem localStorage güncellenir ve 'currency-changed'
+ *  event'i fire edilir (TopBar "Kaydet" akışı bunu çağırıyor). */
 export function setSelectedCurrency(code: string): void {
-  localStorage.setItem(CURRENCY_STORAGE_KEY, code);
+  setServiceCurrency(code);
 }
 
 /**
