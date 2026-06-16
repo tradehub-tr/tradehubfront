@@ -70,7 +70,7 @@ export function getAnimatedPlaceholderStyles(): string {
       transform: translateY(-50%);
       pointer-events: none;
       color: rgb(156 163 175); /* text-gray-400 */
-      transition: opacity 300ms ease-in-out;
+      transition: opacity 220ms cubic-bezier(0.23,1,0.32,1), filter 220ms cubic-bezier(0.23,1,0.32,1);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -80,10 +80,22 @@ export function getAnimatedPlaceholderStyles(): string {
 
     .animated-placeholder.fade-out {
       opacity: 0;
+      /* Kelime değişimini hafif blur ile maskele — sert opacity geçişini yumuşatır */
+      filter: blur(3px);
     }
 
     .animated-placeholder.fade-in {
       opacity: 1;
+      filter: blur(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .animated-placeholder {
+        transition: none;
+      }
+      .animated-placeholder.fade-out {
+        filter: none;
+      }
     }
 
     .animated-placeholder.hidden {
@@ -149,7 +161,7 @@ function rotateKeyword(keywords: string[]): void {
     // Fade in
     state.placeholderElement.classList.remove("fade-out");
     state.placeholderElement.classList.add("fade-in");
-  }, 300); // Match the CSS transition duration
+  }, 220); // Match the CSS transition duration
 }
 
 /**

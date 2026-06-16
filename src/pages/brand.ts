@@ -73,6 +73,11 @@ interface BrandDetailResponse {
 }
 
 function getSlugFromUrl(): string {
+  // Pretty URL /marka/<slug> (ve /en/marka/<slug>) slug'ı PATH'te taşır; nginx
+  // dahili rewrite tarayıcı URL'ini path olarak bırakır, ?slug= query'sine çevirmez.
+  // Bu yüzden path önce denenir (product-detail.ts:77 / seller.ts:262 ile aynı desen).
+  const prettyMatch = window.location.pathname.match(/^\/(?:en\/)?marka\/([^/]+)/)
+  if (prettyMatch) return decodeURIComponent(prettyMatch[1]).trim()
   const params = new URLSearchParams(window.location.search)
   return (params.get('slug') || params.get('code') || '').trim()
 }
@@ -275,10 +280,8 @@ function renderSocials(brand: BrandDetail): string {
   const buttonsHtml = entries.map(([platform, url]) => {
     const icon = iconMap[platform] || ''
     return `<a href="${escapeHtml(sanitizeUrl(url))}" target="_blank" rel="noopener"
-              class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 bg-white hover:text-white transition-colors no-underline text-gray-600 hover:border-transparent"
+              class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 bg-white transition-colors duration-200 motion-reduce:transition-none no-underline text-gray-600 [@media(hover:hover)and(pointer:fine)]:hover:bg-[var(--hover-bg,#111827)] [@media(hover:hover)and(pointer:fine)]:hover:text-white [@media(hover:hover)and(pointer:fine)]:hover:border-transparent"
               style="--hover-bg:${theme}"
-              onmouseover="this.style.background='${theme}';this.style.color='#fff'"
-              onmouseout="this.style.background='';this.style.color=''"
               title="${escapeHtml(platform.charAt(0).toUpperCase() + platform.slice(1))}">
         ${icon}
       </a>`
@@ -346,7 +349,7 @@ async function main() {
 
   const appEl = document.querySelector<HTMLDivElement>('#app')!
   appEl.innerHTML = `
-    <div id="sticky-header" class="sticky top-0 z-(--z-header) border-b border-gray-200 bg-white">
+    <div id="sticky-header" class="sticky top-0 z-(--z-header) border-b border-gray-200 bg-white transition-colors duration-200">
       ${TopBar()}
       ${SubHeader()}
     </div>

@@ -282,7 +282,7 @@ function renderCompactStickySearch(): string {
         class="absolute start-0 end-0 top-[7px] z-[50] w-full border border-gray-300 bg-white shadow-sm overflow-hidden dark:border-gray-600 dark:bg-gray-800"
         :class="expanded ? 'shadow-xl pt-1.5' : ''"
       >
-        <div id="topbar-compact-primary-row" class="flex items-center gap-1.5 transition-all duration-300 ease-in-out shrink-0" :class="expanded ? 'px-3 h-[40px] w-full' : 'px-1.5 h-[40px]'">
+        <div id="topbar-compact-primary-row" class="flex items-center gap-1.5 transition-[padding,width,font-size,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none shrink-0" :class="expanded ? 'px-3 h-[40px] w-full' : 'px-1.5 h-[40px]'">
           <div class="relative min-w-0 flex-1 h-full">
             <input
               id="topbar-compact-search-input"
@@ -295,7 +295,7 @@ function renderCompactStickySearch(): string {
               autocomplete="off"
               aria-label="Search products from sticky header"
               aria-controls="topbar-compact-dropdown"
-              class="w-full h-full border-0 bg-transparent px-3 text-gray-900 placeholder:text-gray-400 outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 transition-all duration-300 ease-in-out dark:text-white dark:placeholder:text-gray-400"
+              class="w-full h-full border-0 bg-transparent px-3 text-gray-900 placeholder:text-gray-400 outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 transition-[padding,width,font-size,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none dark:text-white dark:placeholder:text-gray-400"
               :class="expanded ? 'text-[15px] pe-12' : 'text-[13px] pe-[78px] py-0'"
             />
           </div>
@@ -322,7 +322,7 @@ function renderCompactStickySearch(): string {
             id="topbar-compact-search-submit"
             type="submit"
             tabindex="-1"
-            class="th-btn inline-flex items-center justify-center gap-1.5 font-semibold transition-all duration-300 ease-in-out shrink-0 rounded-full"
+            class="th-btn inline-flex items-center justify-center gap-1.5 font-semibold transition-[padding,width,font-size,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none shrink-0 rounded-full"
             :class="expanded ? 'px-6 h-[40px] text-[15px] absolute end-4 bottom-2' : 'px-5 h-[32px] text-[13px] absolute end-1.5 bottom-[5px]'"
           >
             <span x-show="!expanded" data-i18n="common.search">${t("common.search")}</span>
@@ -746,7 +746,7 @@ function renderMobileDrawer(): string {
       <div class="relative h-full w-full">
 
         <!-- Panel 1: Main Menu -->
-        <div id="drawer-panel-main" class="absolute inset-0 overflow-y-auto transition-transform duration-300 ease-in-out rtl:[&.-translate-x-full]:[--tw-translate-x:100%]">
+        <div id="drawer-panel-main" class="absolute inset-0 overflow-y-auto transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none rtl:[&.-translate-x-full]:[--tw-translate-x:100%]">
 
           <!-- Header: Logo + Close -->
           <div class="flex items-center justify-between px-4 pt-4 pb-2">
@@ -893,7 +893,7 @@ function renderMobileDrawer(): string {
         </div>
 
         <!-- Panel 2: Categories List -->
-        <div id="drawer-panel-categories" class="absolute inset-0 overflow-y-auto translate-x-full rtl:[&.translate-x-full]:[--tw-translate-x:-100%] rtl:[&.-translate-x-full]:[--tw-translate-x:100%] transition-transform duration-300 ease-in-out bg-white dark:bg-gray-800">
+        <div id="drawer-panel-categories" class="absolute inset-0 overflow-y-auto translate-x-full rtl:[&.translate-x-full]:[--tw-translate-x:-100%] rtl:[&.-translate-x-full]:[--tw-translate-x:100%] transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none bg-white dark:bg-gray-800">
 
           <!-- Header: Back + Close -->
           <div class="flex items-center justify-between px-4 pt-4 pb-2">
@@ -934,7 +934,7 @@ function renderMobileDrawer(): string {
         </div>
 
         <!-- Panel 3: Subcategory -->
-        <div id="drawer-panel-subcategory" class="absolute inset-0 overflow-y-auto translate-x-full rtl:[&.translate-x-full]:[--tw-translate-x:-100%] rtl:[&.-translate-x-full]:[--tw-translate-x:100%] transition-transform duration-300 ease-in-out bg-white dark:bg-gray-800">
+        <div id="drawer-panel-subcategory" class="absolute inset-0 overflow-y-auto translate-x-full rtl:[&.translate-x-full]:[--tw-translate-x:-100%] rtl:[&.-translate-x-full]:[--tw-translate-x:100%] transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none bg-white dark:bg-gray-800">
 
           <!-- Header: Back + Close -->
           <div class="flex items-center justify-between px-4 pt-4 pb-2">
@@ -1297,7 +1297,7 @@ export function TopBar(props?: TopBarProps): string {
               x-transition:enter="transition ease-out duration-150"
               x-transition:enter-start="opacity-0"
               x-transition:enter-end="opacity-100"
-              x-transition:leave="transition ease-in duration-100"
+              x-transition:leave="transition ease-out duration-100"
               x-transition:leave-start="opacity-100"
               x-transition:leave-end="opacity-0"
               class="fixed inset-0 z-50 bg-white dark:bg-gray-900 flex flex-col"

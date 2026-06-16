@@ -104,9 +104,12 @@ export function FAQDetailLayout(): string {
                 <!-- Answer -->
                 <div
                   x-show="openItem === idx"
-                  x-transition:enter="transition ease-out duration-200"
-                  x-transition:enter-start="opacity-0 -translate-y-1"
+                  x-transition:enter="transition ease-out duration-200 motion-reduce:transition-none"
+                  x-transition:enter-start="opacity-0 -translate-y-1 motion-reduce:translate-y-0"
                   x-transition:enter-end="opacity-100 translate-y-0"
+                  x-transition:leave="transition ease-in duration-150 motion-reduce:transition-none"
+                  x-transition:leave-start="opacity-100 translate-y-0"
+                  x-transition:leave-end="opacity-0 -translate-y-1 motion-reduce:translate-y-0"
                   class="px-6 pb-5"
                 >
                   <div class="flex items-start gap-3 pt-2 border-t border-gray-100">
@@ -138,14 +141,14 @@ export function FAQDetailLayout(): string {
               <div class="flex items-center gap-2">
                 <button
                   @click="helpful = 'yes'"
-                  class="px-4 py-1.5 text-sm rounded-full border transition-all"
+                  class="px-4 py-1.5 text-sm rounded-full border transition-[color,background-color,border-color] duration-150 motion-reduce:transition-none"
                   :class="helpful === 'yes' ? 'bg-green-50 border-green-300 text-green-700' : 'border-gray-200 text-gray-500 hover:border-green-300 hover:text-green-600'"
                 >
                   <span class="me-1">&uarr;</span> ${t("faqDetail.yes")}
                 </button>
                 <button
                   @click="helpful = 'no'"
-                  class="px-4 py-1.5 text-sm rounded-full border transition-all"
+                  class="px-4 py-1.5 text-sm rounded-full border transition-[color,background-color,border-color] duration-150 motion-reduce:transition-none"
                   :class="helpful === 'no' ? 'bg-red-50 border-red-300 text-red-700' : 'border-gray-200 text-gray-500 hover:border-red-300 hover:text-red-600'"
                 >
                   <span class="me-1">&darr;</span> ${t("faqDetail.no")}
@@ -162,7 +165,7 @@ export function FAQDetailLayout(): string {
               <template x-for="rel in relatedTopics" :key="rel.key">
                 <a
                   :href="'/sss/detay?cat=' + rel.cat + '&sub=' + rel.key"
-                  class="text-xs px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 hover:border-primary-300 hover:text-primary-600 hover:bg-primary-50 transition-all"
+                  class="text-xs px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 hover:border-primary-300 hover:text-primary-600 hover:bg-primary-50 transition-colors duration-150 motion-reduce:transition-none"
                   x-text="rel.label"
                 ></a>
               </template>

@@ -97,7 +97,7 @@ function renderCard(
         ${
           editHtml !== null
             ? `
-          <button class="card-edit-btn inline-flex items-center justify-center w-8 h-8 rounded-lg border border-gray-200 cursor-pointer transition-all hover:bg-gray-50" style="color:var(--color-text-secondary)" data-card="${cardId}" title="${t("common.edit")}">
+          <button class="card-edit-btn inline-flex items-center justify-center w-8 h-8 rounded-lg border border-gray-200 cursor-pointer transition-colors duration-150 hover:bg-gray-50" style="color:var(--color-text-secondary)" data-card="${cardId}" title="${t("common.edit")}">
             ${ICONS.edit}
           </button>
         `
@@ -296,7 +296,7 @@ function buildContent(data: TaxInfoData): string {
       <h2 class="text-xl max-sm:text-lg font-bold mb-5 m-0" style="color:var(--color-text-primary)">${t("settings.taxInfoTitle")}</h2>
 
       <div class="flex border-b-2 border-border-default mb-5">
-        <button class="tax-info__tab py-2.5 px-5 max-sm:px-3 text-sm max-sm:text-[13px] font-medium bg-none border-none border-b-2 -mb-[2px] cursor-pointer transition-all" style="color:var(--color-text-primary); border-bottom-color:var(--color-text-primary)" data-tab="vergi">${t("settings.taxInfoTab")}</button>
+        <button class="tax-info__tab py-2.5 px-5 max-sm:px-3 text-sm max-sm:text-[13px] font-medium bg-none border-none border-b-2 -mb-[2px] cursor-pointer transition-colors duration-150" style="color:var(--color-text-primary); border-bottom-color:var(--color-text-primary)" data-tab="vergi">${t("settings.taxInfoTab")}</button>
       </div>
 
       <div class="flex items-start gap-2.5 py-3 px-4 max-sm:px-3 bg-blue-50 rounded-md text-[13px] max-sm:text-xs text-blue-800 mb-6 max-sm:mb-4">

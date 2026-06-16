@@ -42,7 +42,7 @@ function renderPage(suppliers: ReturnType<typeof cartStore.getSuppliers>, summar
     ${CheckoutMinimalHeader()}
 
     <!-- Main Content -->
-    <main class="min-h-screen bg-surface relative z-10 pt-3 sm:pt-4 flex flex-col">
+    <main class="min-h-screen bg-[#fafafa] relative z-10 pt-3 sm:pt-4 flex flex-col">
       <div class="max-w-[1680px] mx-auto px-3 max-[380px]:px-2.5 sm:px-4 w-full">
         ${Breadcrumb([{ label: 'Sepetim' }])}
       </div>
@@ -105,7 +105,7 @@ function renderCartSkeleton(): void {
     </div>
 
     <!-- Cart skeleton -->
-    <main class="min-h-screen bg-surface relative z-10 pt-4 flex flex-col">
+    <main class="min-h-screen bg-[#fafafa] relative z-10 pt-4 flex flex-col">
       <div class="max-w-[1680px] mx-auto px-4 py-4 sm:py-6 w-full">
 
         <!-- Title -->

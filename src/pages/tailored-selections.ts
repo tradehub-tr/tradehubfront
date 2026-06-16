@@ -94,15 +94,15 @@ appEl.innerHTML = `
   <!-- Mobile Sticky Container (visible below xl:1280px) -->
   <div id="ts-mobile-sticky" class="sticky top-0 z-[30] xl:hidden">
     <!-- Mobile Header Bar -->
-    <div id="ts-mobile-header" class="flex items-center justify-between px-3 py-2.5 lg:px-5 lg:py-3 transition-all duration-300">
+    <div id="ts-mobile-header" class="flex items-center justify-between px-3 py-2.5 lg:px-5 lg:py-3 transition-colors duration-300">
       <a href="/" class="flex items-center justify-center w-9 h-9 lg:w-11 lg:h-11 rounded-full transition-colors" aria-label="Back">
-        <svg class="ts-hdr-icon w-5 h-5 lg:w-6 lg:h-6 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="ts-hdr-icon w-5 h-5 lg:w-6 lg:h-6 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
         </svg>
       </a>
-      <h1 class="ts-hdr-title text-base lg:text-xl font-semibold transition-colors duration-300" data-i18n="tailoredPage.title">${t('tailoredPage.title')}</h1>
+      <h1 class="ts-hdr-title text-base lg:text-xl font-semibold transition-colors duration-200" data-i18n="tailoredPage.title">${t('tailoredPage.title')}</h1>
       <button class="flex items-center justify-center w-9 h-9 lg:w-11 lg:h-11 rounded-full transition-colors" aria-label="Search">
-        <svg class="ts-hdr-icon w-5 h-5 lg:w-6 lg:h-6 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="ts-hdr-icon w-5 h-5 lg:w-6 lg:h-6 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
         </svg>
       </button>

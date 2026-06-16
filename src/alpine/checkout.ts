@@ -425,32 +425,9 @@ Alpine.data("checkoutAccordion", (props?: { initialExpanded?: boolean }) => ({
   expanded: props?.initialExpanded ?? false,
 
   toggle() {
-    const content = (this.$refs as Record<string, HTMLElement>).content;
-    if (!content) {
-      this.expanded = !this.expanded;
-      return;
-    }
-
-    if (this.expanded) {
-      // Collapse: set explicit height first, then animate to 0
-      content.style.height = `${content.scrollHeight}px`;
-      void content.offsetHeight; // force reflow
-      content.style.height = "0";
-      content.style.overflow = "hidden";
-      this.expanded = false;
-    } else {
-      // Expand: animate from 0 to scrollHeight
-      content.style.height = `${content.scrollHeight}px`;
-      content.style.overflow = "hidden";
-      this.expanded = true;
-
-      const onEnd = () => {
-        content.style.height = "";
-        content.style.overflow = "";
-        content.removeEventListener("transitionend", onEnd);
-      };
-      content.addEventListener("transitionend", onEnd);
-    }
+    // Açılış/kapanış geçişi template'te x-show="expanded" + x-collapse ile
+    // yapılıyor; burada sadece state'i çevir.
+    this.expanded = !this.expanded;
   },
 }));
 

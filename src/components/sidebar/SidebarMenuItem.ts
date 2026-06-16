@@ -141,7 +141,7 @@ export function renderSidebarMenuItem({
       <span class="w-4 h-4 flex-shrink-0">${icon}</span>
       <span class="sidebar-item-label hidden flex-1 truncate text-[14px] font-normal text-[#222] dark:text-gray-200 xl:block"${i18nKey ? ` data-i18n="${i18nKey}"` : ""}>${item.label}</span>
       ${item.badge ? `<span class="sidebar-item-badge hidden items-center rounded-full bg-red-500 px-1.5 py-0.5 text-[10px] leading-none font-semibold text-white xl:inline-flex">${item.badge}</span>` : ""}
-      ${hasSubmenu ? `<span class="sidebar-item-chevron hidden h-4 w-4 flex-shrink-0 text-gray-400 transition-transform dark:text-gray-500 xl:block">${chevron}</span>` : ""}
+      ${hasSubmenu ? `<span class="sidebar-item-chevron hidden h-4 w-4 flex-shrink-0 text-gray-400 dark:text-gray-500 xl:block">${chevron}</span>` : ""}
     </a>
   `;
 }

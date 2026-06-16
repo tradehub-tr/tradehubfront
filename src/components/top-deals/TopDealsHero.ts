@@ -61,7 +61,7 @@ export function TopDealsStickyMobileHeader(): string {
   return `
     <div
       id="td-sticky-mobile-header"
-      class="md:hidden fixed top-0 inset-x-0 z-30 transition-all duration-300 -translate-y-full opacity-0 pointer-events-none"
+      class="md:hidden fixed top-0 inset-x-0 z-30 transition-[transform,opacity] duration-200 -translate-y-full opacity-0 pointer-events-none motion-reduce:transition-none motion-reduce:translate-y-0"
       style="background: var(--topdeals-page-hero-gradient, linear-gradient(135deg, #ff6b35 0%, #ee2737 50%, #c41442 100%));"
     >
       <div class="flex items-center gap-2.5 px-3 py-2">

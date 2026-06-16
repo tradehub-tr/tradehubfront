@@ -88,7 +88,7 @@ appEl.innerHTML = `
                     <span id="rfq-total-progress-pct" class="text-xs font-mono text-gray-500">0%</span>
                   </div>
                   <div class="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                    <div id="rfq-total-progress-bar" class="h-full bg-amber-500 transition-all" style="width:0%"></div>
+                    <div id="rfq-total-progress-bar" class="h-full w-full origin-left bg-amber-500 transition-transform duration-150 motion-reduce:transition-none" style="transform:scaleX(0)"></div>
                   </div>
                 </div>
                 <div id="rfq-file-list" class="mt-3 space-y-2"></div>
@@ -136,7 +136,7 @@ appEl.innerHTML = `
 
         <!-- Submit (sticky bottom iSTOC-style) -->
         <div class="sticky bottom-0 z-10 mt-5 py-3 flex justify-center bg-white/90 backdrop-blur-sm">
-          <button type="submit" class="px-16 h-11 rounded-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-sm font-semibold border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150">
+          <button type="submit" class="px-16 h-11 rounded-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-sm font-semibold border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-[transform,box-shadow,background-color] duration-150 motion-reduce:transition-none motion-reduce:active:scale-100">
             ${t('rfq.postRequest')}
           </button>
         </div>
@@ -293,7 +293,7 @@ function updateTotalProgress(loaded: number, total: number) {
   if (!wrap || !bar || !pct) return;
   wrap.classList.remove('hidden');
   const p = total > 0 ? Math.round((loaded / total) * 100) : 0;
-  bar.style.width = (p < 2 ? 2 : p) + '%';
+  bar.style.transform = 'scaleX(' + (p < 2 ? 2 : p) / 100 + ')';
   pct.textContent = p + '%';
 }
 

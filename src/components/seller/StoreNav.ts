@@ -20,7 +20,14 @@ export function StoreNav(data: StoreNavData): string {
             </svg>
           </button>
           <div class="store-nav__dropdown store-nav__dropdown--products absolute top-full start-0 bg-[var(--store-nav-bg)] text-[var(--store-nav-text,#ffffff)] shadow-(--shadow-md) rounded-b-(--radius-md) min-w-[280px] max-h-[400px] overflow-y-auto z-(--z-dropdown)"
-               x-show="open" x-transition.opacity.duration.200ms style="display: none;"
+               x-show="open"
+               x-transition:enter="transition-opacity ease-[cubic-bezier(0.23,1,0.32,1)] duration-200 motion-reduce:transition-none"
+               x-transition:enter-start="opacity-0"
+               x-transition:enter-end="opacity-100"
+               x-transition:leave="transition-opacity ease-out duration-150 motion-reduce:transition-none"
+               x-transition:leave-start="opacity-100"
+               x-transition:leave-end="opacity-0"
+               style="display: none;"
                role="menu"
                aria-label="${t("seller.sf.productCategories")}">
             <div class="store-nav__dropdown-header bg-white/10 px-4 py-1.5 text-[13px] font-bold text-(--store-nav-text)">
@@ -63,7 +70,14 @@ export function StoreNav(data: StoreNavData): string {
             </svg>
           </button>
           <div class="store-nav__dropdown store-nav__dropdown--company absolute top-full start-0 bg-[var(--store-nav-bg)] text-[var(--store-nav-text,#ffffff)] shadow-(--shadow-md) rounded-b-(--radius-md) min-w-[200px] z-(--z-dropdown)"
-               x-show="open" x-transition.opacity.duration.200ms style="display: none;"
+               x-show="open"
+               x-transition:enter="transition-opacity ease-[cubic-bezier(0.23,1,0.32,1)] duration-200 motion-reduce:transition-none"
+               x-transition:enter-start="opacity-0"
+               x-transition:enter-end="opacity-100"
+               x-transition:leave="transition-opacity ease-out duration-150 motion-reduce:transition-none"
+               x-transition:leave-start="opacity-100"
+               x-transition:leave-end="opacity-0"
+               style="display: none;"
                role="menu"
                aria-label="${t("seller.sf.companyProfileMenu")}">
             ${data.companyProfileLinks
@@ -204,7 +218,14 @@ export function StoreNav(data: StoreNavData): string {
       </div>
 
       <!-- Mobile Panel -->
-      <div id="store-nav-mobile-menu" x-show="mobileMenuOpen" x-transition.opacity.duration.300ms style="display: none;" class="store-nav__mobile-menu xl:hidden bg-(--store-nav-bg) border-t border-white/10">
+      <div id="store-nav-mobile-menu" x-show="mobileMenuOpen"
+           x-transition:enter="transition-opacity ease-out duration-[250ms] motion-reduce:transition-none"
+           x-transition:enter-start="opacity-0"
+           x-transition:enter-end="opacity-100"
+           x-transition:leave="transition-opacity ease-out duration-200 motion-reduce:transition-none"
+           x-transition:leave-start="opacity-100"
+           x-transition:leave-end="opacity-0"
+           style="display: none;" class="store-nav__mobile-menu xl:hidden bg-(--store-nav-bg) border-t border-white/10">
         <!-- Mobile Search -->
         <div class="store-nav__mobile-search px-4 py-3">
           <div class="relative w-full">

@@ -339,10 +339,23 @@ function applyDrawerTransform(open: boolean): void {
   if (!overlay || !drawer) return;
 
   const mobile = window.innerWidth < 1280;
-  const closedTransform = mobile ? "translateY(100%)" : "translateX(100%)";
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // reduced-motion: konum hareketini kaldır, açık/kapalı yalnızca opacity ile
+  const closedTransform = reduceMotion
+    ? "translateX(0) translateY(0)"
+    : mobile
+      ? "translateY(100%)"
+      : "translateX(100%)";
   const openTransform = "translateX(0) translateY(0)";
 
+  // Kapanış açılıştan daha snappy (Emil: release > enter snappiness)
+  drawer.style.transitionDuration = open ? "" : "200ms";
   drawer.style.transform = open ? openTransform : closedTransform;
+  if (reduceMotion) {
+    drawer.style.opacity = open ? "1" : "0";
+  } else {
+    drawer.style.opacity = "";
+  }
 
   if (open) {
     overlay.classList.remove("opacity-0", "pointer-events-none");
@@ -397,7 +410,7 @@ function showSampleMaxToast(): void {
   const toast = document.createElement("div");
   toast.id = "sample-max-toast";
   toast.className =
-    "fixed bottom-24 left-1/2 -translate-x-1/2 z-[9999] flex items-start gap-3 bg-[#1a1a1a] text-white text-sm rounded-md px-5 py-4 shadow-xl max-w-xs w-max pointer-events-none";
+    "fixed bottom-24 left-1/2 -translate-x-1/2 z-[9999] flex items-start gap-3 bg-[#1a1a1a] text-white text-sm rounded-md px-5 py-4 shadow-xl max-w-xs w-max pointer-events-none opacity-0 transition-opacity duration-200 motion-reduce:transition-none";
   toast.innerHTML = `
     <svg class="shrink-0 mt-0.5" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e05c25" stroke-width="2">
       <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
@@ -405,7 +418,11 @@ function showSampleMaxToast(): void {
     <span>${t("cart.sampleMaxQty")}</span>
   `;
   document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 2800);
+  requestAnimationFrame(() => toast.classList.replace("opacity-0", "opacity-100"));
+  setTimeout(() => {
+    toast.classList.replace("opacity-100", "opacity-0");
+    setTimeout(() => toast.remove(), 200);
+  }, 2800);
 }
 
 // ─── Render ───────────────────────────────────────────────────────────────────
@@ -795,12 +812,15 @@ function setShippingModalOpen(open: boolean): void {
   const sheet = document.getElementById("shared-cart-shipping-sheet");
   if (!modal || !sheet) return;
 
+  // reduced-motion: alttan kayan sheet hareketini atla; modal opacity yeterli
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
   if (open) {
     modal.classList.remove("opacity-0", "pointer-events-none");
     sheet.classList.remove("translate-y-4");
   } else {
     modal.classList.add("opacity-0", "pointer-events-none");
-    sheet.classList.add("translate-y-4");
+    if (!reduceMotion) sheet.classList.add("translate-y-4");
   }
 }
 
@@ -1321,7 +1341,7 @@ function bindShippingEvents(): void {
 
 export function SharedCartDrawer(): string {
   return `
-    <div id="shared-cart-overlay" class="fixed inset-0 z-[110] bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300">
+    <div id="shared-cart-overlay" class="fixed inset-0 z-[110] bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300 ease-out motion-reduce:transition-none">
       <div id="shared-cart-preview" class="hidden fixed start-0 top-0 bottom-0 end-[600px] z-[120] items-center justify-center px-8 pointer-events-none">
         <div class="relative w-full max-w-[760px] h-[78vh] rounded-md overflow-hidden pointer-events-auto shadow-2xl bg-surface">
           <button type="button" id="shared-cart-preview-prev" class="absolute start-5 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 hover:bg-white text-secondary-700 border border-border-default shadow-md z-20">‹</button>
@@ -1331,7 +1351,7 @@ export function SharedCartDrawer(): string {
         </div>
       </div>
 
-      <aside id="shared-cart-drawer" class="fixed end-0 top-0 h-full w-full sm:w-[500px] lg:w-[600px] max-w-full bg-surface shadow-[-8px_0_30px_rgba(0,0,0,0.18)] xl:rounded-s-md xl:border-s xl:border-border-default flex flex-col transition-transform duration-300">
+      <aside id="shared-cart-drawer" class="fixed end-0 top-0 h-full w-full sm:w-[500px] lg:w-[600px] max-w-full bg-surface shadow-[-8px_0_30px_rgba(0,0,0,0.18)] xl:rounded-s-md xl:border-s xl:border-border-default flex flex-col transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none">
         <div class="flex items-center justify-between px-6 py-4 border-b border-border-default shrink-0 max-md:px-4 max-md:py-3">
           <h3 id="shared-cart-heading" class="text-[15px] sm:text-lg font-bold text-text-heading">${t("cart.selectVariation")}</h3>
           <button type="button" id="shared-cart-close" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full text-secondary-400 hover:text-secondary-900 hover:bg-surface-raised transition-colors inline-flex items-center justify-center shrink-0" aria-label="${t("common.close")}">
@@ -1348,8 +1368,8 @@ export function SharedCartDrawer(): string {
 
 export function SharedShippingModal(): string {
   return `
-    <div id="shared-cart-shipping-modal" class="fixed inset-0 z-[210] bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300 flex items-end md:items-center justify-center">
-      <div id="shared-cart-shipping-sheet" class="w-full md:w-[min(92vw,760px)] bg-surface rounded-t-md md:rounded-md border border-border-default shadow-2xl p-4 sm:p-6 translate-y-4 transition-transform duration-300 max-h-[90vh] md:max-h-[80vh] flex flex-col">
+    <div id="shared-cart-shipping-modal" class="fixed inset-0 z-[210] bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300 ease-out motion-reduce:transition-none flex items-end md:items-center justify-center">
+      <div id="shared-cart-shipping-sheet" class="w-full md:w-[min(92vw,760px)] bg-surface rounded-t-md md:rounded-md border border-border-default shadow-2xl p-4 sm:p-6 translate-y-4 transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none motion-reduce:translate-y-0 max-h-[90vh] md:max-h-[80vh] flex flex-col">
         <div class="flex items-center justify-between">
           <h4 class="text-[15px] sm:text-xl font-bold text-text-heading">${t("cart.selectShipping")}</h4>
           <button type="button" id="shared-cart-shipping-close" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full text-secondary-400 hover:text-secondary-900 hover:bg-surface-raised transition-colors inline-flex items-center justify-center shrink-0">

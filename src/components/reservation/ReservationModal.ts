@@ -15,10 +15,22 @@ export function ReservationModal(): string {
 		<div x-data
 			 x-show="$store.reservationModal.isOpen"
 			 x-cloak
-			 x-transition.opacity
+			 x-transition:enter="transition ease-out duration-200"
+			 x-transition:enter-start="opacity-0"
+			 x-transition:enter-end="opacity-100"
+			 x-transition:leave="transition ease-out duration-150"
+			 x-transition:leave-start="opacity-100"
+			 x-transition:leave-end="opacity-0"
 			 @click.self="$store.reservationModal.close()"
 			 class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
-			<div class="relative w-full max-w-md max-h-[85vh] overflow-hidden rounded-2xl bg-white shadow-2xl flex flex-col">
+			<div x-show="$store.reservationModal.isOpen"
+				 x-transition:enter="transition ease-out duration-200"
+				 x-transition:enter-start="opacity-0 scale-95 motion-reduce:scale-100"
+				 x-transition:enter-end="opacity-100 scale-100"
+				 x-transition:leave="transition ease-out duration-150"
+				 x-transition:leave-start="opacity-100 scale-100"
+				 x-transition:leave-end="opacity-0 scale-95 motion-reduce:scale-100"
+				 class="relative w-full max-w-md max-h-[85vh] overflow-hidden rounded-2xl bg-white shadow-2xl flex flex-col">
 				<!-- Header -->
 				<div class="flex items-center justify-between px-5 py-4 border-b border-gray-100">
 					<div>

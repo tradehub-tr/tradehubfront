@@ -37,7 +37,7 @@ export function OrdersContent(): string {
               ${documentIconSvg()}
             </div>
             <p class="text-sm text-(--color-orders-empty-text) m-0">${t("dashboard.noOrders")}</p>
-            <a href="/pages/dashboard/orders.html" class="orders__empty-btn inline-block py-2 px-6 rounded-(--radius-btn) bg-(--color-orders-empty-btn-bg) text-(--color-orders-empty-btn-text) border border-(--color-orders-empty-btn-border) text-[13px] font-semibold no-underline transition-all hover:bg-(--color-surface-raised,#f5f5f5)" role="button">
+            <a href="/pages/dashboard/orders.html" class="orders__empty-btn inline-block py-2 px-6 rounded-(--radius-btn) bg-(--color-orders-empty-btn-bg) text-(--color-orders-empty-btn-text) border border-(--color-orders-empty-btn-border) text-[13px] font-semibold no-underline transition-colors duration-150 hover:bg-(--color-surface-raised,#f5f5f5)" role="button">
               ${t("dashboard.startSourcing")}
             </a>
           </div>

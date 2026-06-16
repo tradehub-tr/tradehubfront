@@ -257,7 +257,7 @@ function renderRfqList(rfqs: RFQItem[]): string {
         </div>
         <div class="mt-2 sm:mt-0 flex flex-col items-end gap-1">
           ${statusBadge(rfq.status)}
-          ${rfq.quote_count > 0 ? `<a href="/pages/dashboard/rfq-quotes.html?rfq=${escapeHtml(rfq.name)}" class="inline-flex items-center px-4 py-1.5 rounded-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-xs font-semibold border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150">${t("rfq.viewQuotes")}</a>` : ""}
+          ${rfq.quote_count > 0 ? `<a href="/pages/dashboard/rfq-quotes.html?rfq=${escapeHtml(rfq.name)}" class="inline-flex items-center px-4 py-1.5 rounded-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-xs font-semibold border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] motion-reduce:active:scale-100 transition-[background-color,box-shadow,transform] motion-reduce:transition-none duration-150">${t("rfq.viewQuotes")}</a>` : ""}
           <button class="rfq-detail-btn text-xs text-blue-600 hover:underline" data-rfq-id="${escapeHtml(rfq.name)}">${t("rfq.viewThisRfq")}</button>
         </div>
       </div>
@@ -303,7 +303,7 @@ function renderSellerRfqList(rfqs: SellerRFQItem[]): string {
           ${
             rfq.my_quote
               ? `<span class="inline-flex items-center px-4 py-1.5 rounded-full bg-gray-200 text-gray-500 text-xs font-semibold cursor-not-allowed">${t("inquiries.quoteSubmitted")}</span>`
-              : `<button class="seller-rfq-quote-btn inline-flex items-center px-4 py-1.5 rounded-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-xs font-semibold border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150" data-rfq-id="${escapeHtml(rfq.name)}">${t("inquiries.sendQuote")}</button>`
+              : `<button class="seller-rfq-quote-btn inline-flex items-center px-4 py-1.5 rounded-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-xs font-semibold border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] motion-reduce:active:scale-100 transition-[background-color,box-shadow,transform] motion-reduce:transition-none duration-150" data-rfq-id="${escapeHtml(rfq.name)}">${t("inquiries.sendQuote")}</button>`
           }
         </div>
       </div>
@@ -415,7 +415,7 @@ function showQuoteSubmitModal(rfq: SellerRFQItem, onSuccess: () => void): void {
         </div>
       </div>
       <div class="flex gap-2 mt-5 justify-end">
-        <button id="quote-submit-btn" class="px-6 py-2 bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) rounded-full text-sm font-semibold border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150">${t("inquiries.sendQuote")}</button>
+        <button id="quote-submit-btn" class="px-6 py-2 bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) rounded-full text-sm font-semibold border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] motion-reduce:active:scale-100 transition-[background-color,box-shadow,transform] motion-reduce:transition-none duration-150">${t("inquiries.sendQuote")}</button>
         <button id="quote-cancel-btn" class="px-6 py-2 border border-gray-300 rounded-full text-sm hover:bg-gray-50">${t("rfq.cancel")}</button>
       </div>
     </div>`;
@@ -685,7 +685,7 @@ function renderDetailPanel(inq: Inquiry): string {
             ${avatarPlaceholder(inq.seller_name)}
             <div><p class="text-sm font-medium text-gray-800">${escapeHtml(inq.seller_name)}</p><p class="text-xs text-gray-400">${escapeHtml(inq.seller_company)}</p></div>
           </div>
-          <a href="#" class="inline-flex items-center px-4 py-2 rounded-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-sm font-medium border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150">${t("inquiries.contactNow")}</a>
+          <a href="#" class="inline-flex items-center px-4 py-2 rounded-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-sm font-medium border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] motion-reduce:active:scale-100 transition-[background-color,box-shadow,transform] motion-reduce:transition-none duration-150">${t("inquiries.contactNow")}</a>
         </div>
         <div class="flex items-center justify-between text-xs text-gray-400 mb-4 pb-4 border-b border-gray-100">
           <span>ID: ${escapeHtml(inq.name)}</span>
@@ -700,12 +700,12 @@ function renderDetailPanel(inq: Inquiry): string {
 
 function renderFilterDropdown(type: "inquiry" | "rfq"): string {
   if (type === "inquiry") {
-    return `<div class="inq-filter-dropdown hidden absolute top-full end-0 mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-1">
+    return `<div class="inq-filter-dropdown absolute top-full end-0 mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-1 origin-top-right transition-[opacity,transform] motion-reduce:transition-none duration-150 ease-out data-[open=false]:invisible data-[open=false]:opacity-0 data-[open=false]:scale-95 data-[open=false]:pointer-events-none motion-reduce:data-[open=false]:scale-100" data-open="false">
       <button class="inq-filter-option w-full text-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" data-filter="all">${t("inquiries.allInquiries")}</button>
       <button class="inq-filter-option w-full text-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" data-filter="trash">${t("inquiries.trash")}</button>
     </div>`;
   }
-  return `<div class="rfq-filter-dropdown hidden absolute top-full end-0 mt-1 w-44 bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-1">
+  return `<div class="rfq-filter-dropdown absolute top-full end-0 mt-1 w-44 bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-1 origin-top-right transition-[opacity,transform] motion-reduce:transition-none duration-150 ease-out data-[open=false]:invisible data-[open=false]:opacity-0 data-[open=false]:scale-95 data-[open=false]:pointer-events-none motion-reduce:data-[open=false]:scale-100" data-open="false">
     <button class="rfq-status-option w-full text-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" data-status="all">${t("inquiries.allStatus")}</button>
     <button class="rfq-status-option w-full text-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" data-status="Pending">${t("inquiries.statusPending")}</button>
     <button class="rfq-status-option w-full text-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" data-status="Approved">${t("inquiries.statusApproved")}</button>
@@ -742,7 +742,7 @@ function renderInquiryActionBar(): string {
 
 function renderRfqActionBar(): string {
   return `<div class="flex items-center justify-between px-5 max-md:px-3 py-3 border-b border-gray-100 gap-3 flex-wrap" id="rfq-action-bar">
-    <a href="/pages/dashboard/rfq.html" class="inline-flex items-center px-5 py-2 rounded-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-sm font-semibold border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150">${t("inquiries.postRfq")}</a>
+    <a href="/pages/dashboard/rfq.html" class="inline-flex items-center px-5 py-2 rounded-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-sm font-semibold border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] motion-reduce:active:scale-100 transition-[background-color,box-shadow,transform] motion-reduce:transition-none duration-150">${t("inquiries.postRfq")}</a>
     <div class="flex items-center gap-3 flex-wrap">
       <div class="relative">
         <button id="rfq-filter-toggle" class="inline-flex items-center gap-1 px-3.5 py-1.5 text-[13px] text-gray-800 border border-gray-300 rounded bg-white hover:border-gray-400">
@@ -967,7 +967,7 @@ export function initInquiriesLayout(): void {
               <textarea id="rfq-add-details-text" aria-label="Detaylar" class="th-input resize-none" rows="4" maxlength="100"></textarea>
               <p class="text-xs text-gray-400 text-end mt-1"><span id="rfq-details-count">0</span>/100</p>
               <div class="flex gap-2 mt-4 justify-end">
-                <button id="rfq-details-submit" class="px-5 py-2 bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) rounded-full text-sm font-semibold border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150">${t("rfq.submit")}</button>
+                <button id="rfq-details-submit" class="px-5 py-2 bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) rounded-full text-sm font-semibold border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] motion-reduce:active:scale-100 transition-[background-color,box-shadow,transform] motion-reduce:transition-none duration-150">${t("rfq.submit")}</button>
                 <button id="rfq-details-cancel" class="px-5 py-2 border border-gray-300 rounded-full text-sm hover:bg-gray-50">${t("rfq.cancel")}</button>
               </div>
             </div>`;
@@ -1311,15 +1311,17 @@ function setupDropdown(
   if (!toggle || !dropdown) return;
   toggle.addEventListener("click", (e) => {
     e.stopPropagation();
-    dropdown.classList.toggle("hidden");
+    dropdown.dataset.open = dropdown.dataset.open === "true" ? "false" : "true";
   });
   dropdown.querySelectorAll<HTMLButtonElement>(optionSel).forEach((opt) => {
     opt.addEventListener("click", () => {
       if (label) label.textContent = opt.textContent?.trim() || "";
-      dropdown.classList.add("hidden");
+      dropdown.dataset.open = "false";
       const val = opt.dataset.filter || opt.dataset.status || "all";
       onSelect?.(val);
     });
   });
-  document.addEventListener("click", () => dropdown.classList.add("hidden"));
+  document.addEventListener("click", () => {
+    dropdown.dataset.open = "false";
+  });
 }

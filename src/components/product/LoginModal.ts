@@ -28,7 +28,7 @@ export function LoginModal(): string {
       x-transition:enter="transition ease-out duration-300"
       x-transition:enter-start="opacity-0"
       x-transition:enter-end="opacity-100"
-      x-transition:leave="transition ease-in duration-200"
+      x-transition:leave="transition ease-out duration-150"
       x-transition:leave-start="opacity-100"
       x-transition:leave-end="opacity-0"
       @click.self="close()"
@@ -39,12 +39,12 @@ export function LoginModal(): string {
     >
       <div
         x-show="open"
-        x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0 scale-95"
+        x-transition:enter="transition ease-out duration-300 motion-reduce:transition-none"
+        x-transition:enter-start="opacity-0 scale-95 motion-reduce:scale-100"
         x-transition:enter-end="opacity-100 scale-100"
-        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave="transition ease-out duration-150 motion-reduce:transition-none"
         x-transition:leave-start="opacity-100 scale-100"
-        x-transition:leave-end="opacity-0 scale-95"
+        x-transition:leave-end="opacity-0 scale-95 motion-reduce:scale-100"
         class="rv-login-modal max-w-[420px] w-[95%] p-0 rounded-md bg-surface shadow-modal overflow-hidden relative max-sm:!w-full max-sm:!max-w-full max-sm:!rounded-none max-sm:!min-h-screen"
       >
         <!-- Close Button -->
@@ -115,7 +115,7 @@ export function LoginModal(): string {
             <button
               type="submit"
               :disabled="loading"
-              class="w-full h-12 bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[15px] font-semibold border border-(--btn-border-color,#d39c00) rounded-lg shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              class="w-full h-12 bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[15px] font-semibold border border-(--btn-border-color,#d39c00) rounded-lg shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] motion-reduce:active:scale-100 transition-[transform,box-shadow,background-color,color] duration-150 motion-reduce:transition-none disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               <svg x-show="loading" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>

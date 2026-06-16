@@ -26,13 +26,13 @@ export function SkuRow({ sku, productHref }: SkuRowProps): string {
     : imgContent;
 
   return `
-    <article class="sc-c-sku-container-new bg-[#fafaf8] border border-[#e8e6e0] rounded-[10px] p-[6px_8px] sm:p-[8px_12px] [&+&]:mt-1.5 transition-colors${unavailable ? " opacity-60" : ""}" data-sku-id="${escapeHtml(sku.id)}" x-data>
+    <article class="sc-c-sku-container-new bg-[#fafafa] border border-[#e5e5e5] rounded-md p-[6px_8px] sm:p-[8px_12px] [&+&]:mt-1.5${unavailable ? " opacity-60" : ""}" data-sku-id="${escapeHtml(sku.id)}" x-data>
       <div class="flex flex-wrap items-center gap-2 sm:gap-3">
         <div class="shrink-0">
           ${Checkbox({ id: `sku-checkbox-${sku.id}`, checked: sku.selected, onChange: unavailable ? "" : `sku-select-${sku.id}`, disabled: unavailable })}
         </div>
 
-        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-[6px] border border-[#e8e6e0] overflow-hidden bg-[#fafaf8] shrink-0${unavailable ? " grayscale" : ""}">
+        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-md border border-[#e5e5e5] overflow-hidden bg-[#fafafa] shrink-0${unavailable ? " grayscale" : ""}">
           ${imgWrapper}
         </div>
 
@@ -57,11 +57,11 @@ export function SkuRow({ sku, productHref }: SkuRowProps): string {
             unavailable
               ? `<span class="inline-flex items-center gap-1 text-[10px] sm:text-xs font-medium text-red-600 bg-red-50 border border-red-200 rounded px-1.5 sm:px-2 py-0.5 w-fit">
             <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Bu ürün artık satışta değil
+            ${t("cart.noLongerForSale")}
           </span>`
               : ""
           }
-          <div class="text-[10px] sm:text-[11px] text-[#8a877f] font-medium">
+          <div class="text-[12px] text-text-secondary font-medium">
             ${PriceDisplay({ amount: sku.unitPrice, fromCurrency: sku.baseCurrency || "USD", unit: `/${sku.unit}` })}
           </div>
         </div>
@@ -73,7 +73,7 @@ export function SkuRow({ sku, productHref }: SkuRowProps): string {
         </div>
 
         <div class="relative group shrink-0">
-          <button type="button" class="sc-c-sku-delete-btn th-no-press w-[22px] h-[22px] sm:w-[26px] sm:h-[26px] inline-flex items-center justify-center rounded-full text-[#8a877f] hover:bg-white transition-colors" data-sku-id="${escapeHtml(sku.id)}" @click="$dispatch('sku-delete', { skuId: '${escapeHtml(sku.id)}' })" aria-label="SKU sil">
+          <button type="button" class="sc-c-sku-delete-btn th-no-press w-[22px] h-[22px] sm:w-[26px] sm:h-[26px] inline-flex items-center justify-center rounded-full text-text-tertiary hover:bg-white transition-colors" data-sku-id="${escapeHtml(sku.id)}" @click="$dispatch('sku-delete', { skuId: '${escapeHtml(sku.id)}' })" aria-label="${t("cart.removeSku")}">
             <img src="${trashIcon}" class="w-[12px] h-[12px] sm:w-[14px] sm:h-[14px] object-contain" alt="Sil" />
           </button>
         </div>
@@ -83,13 +83,13 @@ export function SkuRow({ sku, productHref }: SkuRowProps): string {
         ${
           !unavailable
             ? `<div class="sc-c-sku-moq-warning text-end text-[12px] sm:text-[14px] leading-[20px] text-[#dc2626] hidden">
-          <span class="sc-c-sku-moq-missing">0</span> more required to check out
+          <span class="sc-c-sku-moq-missing">0</span> ${t("cart.moqMoreRequiredSuffix")}
           <button
             type="button"
             class="ms-1 underline font-semibold text-[#8b1e1e] hover:opacity-80"
             @click="$dispatch('sku-fill-min', { skuId: '${escapeHtml(sku.id)}' })"
           >
-            Add all
+            ${t("cart.addAll")}
           </button>
         </div>`
             : ""

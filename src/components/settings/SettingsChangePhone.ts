@@ -50,7 +50,7 @@ export function SettingsChangePhone(): string {
       </div>
 
       <!-- Step 2: Success -->
-      <div x-show="step === 2" x-cloak>
+      <div x-show="step === 2" x-cloak x-transition:enter="transition ease-out duration-200 motion-reduce:transition-none" x-transition:enter-start="opacity-0 scale-[0.98] motion-reduce:scale-100" x-transition:enter-end="opacity-100 scale-100">
         <div class="max-w-[640px] mx-auto text-center py-4 max-sm:py-2">
           <div class="mb-4">${ICONS.checkActive}</div>
           <h3 class="text-lg max-sm:text-base font-bold mb-2 m-0" style="color:var(--color-text-primary)">${t("settings.phoneUpdated")}</h3>

@@ -83,7 +83,7 @@ export function HeaderNotice(
   if (mode === "slide") {
     const slideItemCls =
       "absolute inset-0 opacity-0 translate-y-full " +
-      "transition-[opacity,transform] duration-[400ms] ease-[ease] " +
+      "transition-[opacity,transform] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none " +
       "data-[state=active]:opacity-100 data-[state=active]:translate-y-0 " +
       "data-[state=exiting]:opacity-0 data-[state=exiting]:-translate-y-full";
     const items = notices
@@ -127,7 +127,7 @@ export function HeaderNotice(
     >
       <div class="container-boxed">
         <div class="relative h-9 flex items-center [mask-image:linear-gradient(90deg,transparent,#000_6%,#000_94%,transparent)]">
-          <div class="flex items-center gap-12 whitespace-nowrap animate-notice-scroll hover:[animation-play-state:paused]">
+          <div class="flex items-center gap-12 whitespace-nowrap animate-notice-scroll [@media(hover:hover)and(pointer:fine)]:hover:[animation-play-state:paused]">
             ${renderItems(notices)}
             ${renderItems(notices)}
           </div>

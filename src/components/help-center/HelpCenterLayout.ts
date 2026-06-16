@@ -63,7 +63,7 @@ export function HelpCenterLayout(): string {
               <template x-for="chip in popularSearches" :key="chip">
                 <button
                   @click="searchQuery = chip; doSearch()"
-                  class="text-xs text-white/90 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full px-3 py-1 transition-all border border-white/30"
+                  class="text-xs text-white/90 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full px-3 py-1 transition-colors duration-150 motion-reduce:transition-none border border-white/30"
                   x-text="chip"
                 ></button>
               </template>
@@ -113,7 +113,7 @@ export function HelpCenterLayout(): string {
             <template x-for="tab in tabs" :key="tab.id">
               <button
                 @click="activeTab = tab.id"
-                class="flex items-center gap-1.5 px-4 py-3.5 text-sm font-medium whitespace-nowrap border-b-2 transition-all shrink-0"
+                class="flex items-center gap-1.5 px-4 py-3.5 text-sm font-medium whitespace-nowrap border-b-2 transition-colors duration-150 motion-reduce:transition-none shrink-0"
                 :class="activeTab === tab.id
                   ? 'border-primary-500 text-primary-600 bg-primary-50'
                   : 'border-transparent text-gray-600 hover:text-primary-500 hover:bg-gray-50'"
@@ -127,7 +127,7 @@ export function HelpCenterLayout(): string {
           <!-- FAQ links threee-column grid -->
           <div class="p-6">
             <template x-for="tab in tabs" :key="tab.id">
-              <div x-show="activeTab === tab.id" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-1" x-transition:enter-end="opacity-100 translate-y-0">
+              <div x-show="activeTab === tab.id" x-transition:enter="transition ease-out duration-200 motion-reduce:transition-none" x-transition:enter-start="opacity-0 translate-y-1 motion-reduce:translate-y-0" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-120 motion-reduce:transition-none" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-2">
                   <template x-for="(question, qi) in tab.questions" :key="qi">
                     <a

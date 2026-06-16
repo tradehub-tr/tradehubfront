@@ -19,7 +19,7 @@ export function OrderReviewModal(): string {
       x-transition:enter="transition ease-out duration-300"
       x-transition:enter-start="opacity-0"
       x-transition:enter-end="opacity-100"
-      x-transition:leave="transition ease-in duration-200"
+      x-transition:leave="transition ease-out duration-150"
       x-transition:leave-start="opacity-100"
       x-transition:leave-end="opacity-0"
       @click.self="open = false"
@@ -33,12 +33,12 @@ export function OrderReviewModal(): string {
       <!-- Modal Card -->
       <div
         x-show="open"
-        x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0 scale-95"
+        x-transition:enter="transition ease-out duration-300 motion-reduce:transition-none"
+        x-transition:enter-start="opacity-0 scale-95 motion-reduce:scale-100"
         x-transition:enter-end="opacity-100 scale-100"
-        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave="transition ease-out duration-150 motion-reduce:transition-none"
         x-transition:leave-start="opacity-100 scale-100"
-        x-transition:leave-end="opacity-0 scale-95"
+        x-transition:leave-end="opacity-0 scale-95 motion-reduce:scale-100"
         class="bg-white rounded-md shadow-xl max-w-2xl w-full max-h-[90vh] sm:max-h-[85vh] overflow-y-auto [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-black/20 hover:[&::-webkit-scrollbar-thumb]:bg-black/30 [&::-webkit-scrollbar-thumb]:rounded-full"
       >
         <!-- Header -->

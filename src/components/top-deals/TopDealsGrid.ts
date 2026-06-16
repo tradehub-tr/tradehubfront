@@ -29,7 +29,7 @@ function renderProductImage(imgSrc: string, name: string): string {
       src="${escapeHtml(sanitizeUrl(imgSrc))}"
       alt="${escapeHtml(name)}"
       loading="lazy"
-      class="w-full h-full object-cover transition-transform duration-300 group-hover/product:scale-105"
+      class="w-full h-full object-cover transition-transform duration-300 [@media(hover:hover)and(pointer:fine)]:group-hover/product:scale-105 motion-reduce:transform-none motion-reduce:transition-none"
     />
   `;
 }
@@ -51,7 +51,7 @@ export function renderTopDealsFlatCard(product: TopDealsProduct): string {
   const hasDiscount =
     product.originalPrice && product.discountPercent && product.discountPercent > 0;
   return `
-    <a href="${escapeHtml(sanitizeUrl(product.href))}" class="pc-topdeals group/product flex flex-col hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 relative">
+    <a href="${escapeHtml(sanitizeUrl(product.href))}" class="pc-topdeals group/product flex flex-col [@media(hover:hover)and(pointer:fine)]:hover:-translate-y-0.5 [@media(hover:hover)and(pointer:fine)]:hover:shadow-md motion-reduce:hover:translate-y-0 transition-[transform,box-shadow] duration-200 relative">
       <div class="relative aspect-square w-full overflow-hidden rounded-md bg-surface-raised mb-2">
         ${renderProductImage(product.imageSrc || "", product.name)}
         ${

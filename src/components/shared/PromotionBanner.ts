@@ -14,7 +14,7 @@ export function PromotionBanner({
   href,
 }: PromotionBannerProps): string {
   return `
-    <a href="${escapeHtml(sanitizeUrl(href))}" class="block rounded-lg overflow-hidden hover:shadow-sm transition-shadow" style="background-color: ${safeHexColor(bgColor, "#ffffff")}">
+    <a href="${escapeHtml(sanitizeUrl(href))}" class="block rounded-lg overflow-hidden [@media(hover:hover)and(pointer:fine)]:hover:shadow-sm transition-shadow" style="background-color: ${safeHexColor(bgColor, "#ffffff")}">
       <div class="flex items-center justify-between p-3 xs:p-4">
         <div class="flex-1 min-w-0 pe-2 xs:pe-3">
           <p class="text-xs xs:text-sm font-bold text-gray-900 dark:text-gray-100 leading-tight">${escapeHtml(title)}</p>

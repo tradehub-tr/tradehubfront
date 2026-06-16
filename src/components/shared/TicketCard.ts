@@ -41,7 +41,7 @@ export function TicketCard(ticket: TicketCardData): string {
   const catI18nKey = CATEGORY_I18N[ticket.category];
 
   return `
-    <div class="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-shadow cursor-pointer">
+    <div class="bg-white border border-gray-200 rounded-lg p-4 [@media(hover:hover)]:hover:shadow-sm transition-shadow duration-150 cursor-pointer">
       <!-- Top row: status + date -->
       <div class="flex items-center justify-between mb-2">
         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${status.bg}" data-i18n="${status.labelKey}">${t(status.labelKey)}</span>

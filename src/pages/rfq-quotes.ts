@@ -108,9 +108,9 @@ async function loadQuotes() {
         </div>
         <div class="flex items-center gap-3">
           <span class="text-sm font-semibold ${rfq.status === 'Approved' ? 'text-green-600' : rfq.status === 'Pending' ? 'text-yellow-600' : rfq.status === 'Completed' ? 'text-blue-600' : rfq.status === 'Closed' ? 'text-gray-500' : 'text-gray-500'}">${escapeHtml(rfq.status)}</span>
-          <button class="px-4 py-1.5 text-sm border border-gray-300 rounded-full hover:bg-gray-50 ${rfq.additional_details ? 'opacity-50 cursor-not-allowed' : ''}" ${rfq.additional_details ? 'disabled' : ''} onclick="window.location.href='/pages/dashboard/rfq.html?edit=${encodeURIComponent(rfqId)}'">${t('rfq.addDetails')}</button>
-          <a href="/pages/dashboard/rfq.html" class="px-4 py-1.5 text-sm border border-gray-300 rounded-full hover:bg-gray-50">${t('rfq.postAgain')}</a>
-          <button class="rfq-close-btn px-4 py-1.5 text-sm border border-gray-300 rounded-full hover:bg-gray-50 ${rfq.status === 'Closed' || rfq.status === 'Completed' ? 'opacity-50 cursor-not-allowed' : ''}" data-rfq="${escapeHtml(rfqId)}" ${rfq.status === 'Closed' || rfq.status === 'Completed' ? 'disabled' : ''}>${t('rfq.closeRfq')}</button>
+          <button class="px-4 py-1.5 text-sm border border-gray-300 rounded-full [@media(hover:hover)and(pointer:fine)]:hover:bg-gray-50 ${rfq.additional_details ? 'opacity-50 cursor-not-allowed' : ''}" ${rfq.additional_details ? 'disabled' : ''} onclick="window.location.href='/pages/dashboard/rfq.html?edit=${encodeURIComponent(rfqId)}'">${t('rfq.addDetails')}</button>
+          <a href="/pages/dashboard/rfq.html" class="px-4 py-1.5 text-sm border border-gray-300 rounded-full [@media(hover:hover)and(pointer:fine)]:hover:bg-gray-50">${t('rfq.postAgain')}</a>
+          <button class="rfq-close-btn px-4 py-1.5 text-sm border border-gray-300 rounded-full [@media(hover:hover)and(pointer:fine)]:hover:bg-gray-50 ${rfq.status === 'Closed' || rfq.status === 'Completed' ? 'opacity-50 cursor-not-allowed' : ''}" data-rfq="${escapeHtml(rfqId)}" ${rfq.status === 'Closed' || rfq.status === 'Completed' ? 'disabled' : ''}>${t('rfq.closeRfq')}</button>
         </div>
       </div>
 
@@ -144,8 +144,8 @@ async function loadQuotes() {
                   <td class="p-3 text-center text-sm border-s border-gray-100 align-top">
                     ${q.status === 'Submitted' ? `
                       <div class="flex justify-center gap-1.5">
-                        <button class="quote-accept-btn px-3 py-1 rounded-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-xs font-medium border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150" data-quote="${escapeHtml(q.name)}">${t('rfq.accept')}</button>
-                        <button class="quote-reject-btn px-3 py-1 rounded-full border border-gray-300 text-gray-700 text-xs font-medium hover:bg-gray-50" data-quote="${escapeHtml(q.name)}">${t('rfq.reject')}</button>
+                        <button class="quote-accept-btn px-3 py-1 rounded-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-xs font-medium border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-[transform,box-shadow,background-color] duration-150 motion-reduce:transition-none motion-reduce:active:scale-100" data-quote="${escapeHtml(q.name)}">${t('rfq.accept')}</button>
+                        <button class="quote-reject-btn px-3 py-1 rounded-full border border-gray-300 text-gray-700 text-xs font-medium [@media(hover:hover)and(pointer:fine)]:hover:bg-gray-50" data-quote="${escapeHtml(q.name)}">${t('rfq.reject')}</button>
                       </div>
                     ` : `<span class="text-xs font-medium ${q.status === 'Accepted' ? 'text-green-600' : q.status === 'Rejected' ? 'text-red-500' : 'text-gray-400'}">${escapeHtml(q.status)}</span>`}
                   </td>

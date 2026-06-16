@@ -127,7 +127,7 @@ function MainProductsCarousel(): string {
 // ─── Overview Tab (Genel Bakis) ────────────────────────────────
 function OverviewTab(): string {
   return `
-    <div class="company-profile__tab-content" x-show="activeTab === 'overview'" x-transition.opacity.duration.300ms id="tab-overview">
+    <div class="company-profile__tab-content" x-show="activeTab === 'overview'" x-transition.opacity.duration.200ms id="tab-overview">
 
       <!-- Single white card for entire profile (iSTOC-style) -->
       <!-- v4: seller.verified_certifications (sadece Verified) tercih edilir; geriye uyumluluk için certifications string fallback -->
@@ -209,7 +209,7 @@ function OverviewTab(): string {
                 :target="cert.document ? '_blank' : '_self'"
                 @click="if (!cert.document) $event.preventDefault();"
                 :class="cert.document ? 'cursor-pointer hover:shadow-md hover:border-emerald-300' : 'cursor-default'"
-                class="bg-white border border-gray-200 rounded-md p-4 flex flex-col items-center text-center transition-all no-underline"
+                class="bg-white border border-gray-200 rounded-md p-4 flex flex-col items-center text-center transition-[box-shadow,border-color,background-color] no-underline"
               >
                 <div class="w-full aspect-square bg-gray-50 rounded flex items-center justify-center mb-3 relative overflow-hidden">
                   <img x-show="cert.document" :src="cert.document" :alt="cert.name" loading="lazy" class="w-full h-full object-contain" />
@@ -447,7 +447,7 @@ function OverviewTab(): string {
 // ─── Reviews Tab (Yorumlar) ────────────────────────────────────
 function ReviewsTab(): string {
   return `
-    <div class="company-profile__tab-content" x-show="activeTab === 'reviews'" x-transition.opacity.duration.300ms id="tab-reviews"
+    <div class="company-profile__tab-content" x-show="activeTab === 'reviews'" x-transition.opacity.duration.200ms id="tab-reviews"
       x-data="{
         sellerCode: ${SELLER_CODE_INIT},
         seller: null,
@@ -552,7 +552,7 @@ function ReviewsTab(): string {
                 <div class="flex items-center gap-3">
                   <span class="text-[13px] text-gray-600 w-40 shrink-0">${t("seller.sf.supplierService")}</span>
                   <div class="flex-1 bg-gray-100 rounded-full h-2.5 overflow-hidden">
-                    <div class="h-full bg-(--btn-bg,#f5b800) rounded-full transition-all duration-500" :style="'width:' + ratingPct(seller?.rating)"></div>
+                    <div class="h-full bg-(--btn-bg,#f5b800) rounded-full transition-[width] duration-300 motion-reduce:transition-none" :style="'width:' + ratingPct(seller?.rating)"></div>
                   </div>
                   <span class="text-[13px] text-gray-700 font-medium w-8 text-end" x-text="seller?.rating ? Number(seller.rating).toFixed(1) : '\u2014'"></span>
                 </div>
@@ -560,7 +560,7 @@ function ReviewsTab(): string {
                 <div class="flex items-center gap-3">
                   <span class="text-[13px] text-gray-600 w-40 shrink-0">${t("seller.sf.onTimeShipment")}</span>
                   <div class="flex-1 bg-gray-100 rounded-full h-2.5 overflow-hidden">
-                    <div class="h-full bg-(--btn-bg,#f5b800) rounded-full transition-all duration-500" :style="'width:' + ratingPct(seller?.rating)"></div>
+                    <div class="h-full bg-(--btn-bg,#f5b800) rounded-full transition-[width] duration-300 motion-reduce:transition-none" :style="'width:' + ratingPct(seller?.rating)"></div>
                   </div>
                   <span class="text-[13px] text-gray-700 font-medium w-8 text-end" x-text="seller?.rating ? Number(seller.rating).toFixed(1) : '\u2014'"></span>
                 </div>
@@ -568,7 +568,7 @@ function ReviewsTab(): string {
                 <div class="flex items-center gap-3">
                   <span class="text-[13px] text-gray-600 w-40 shrink-0">${t("seller.sf.productQuality")}</span>
                   <div class="flex-1 bg-gray-100 rounded-full h-2.5 overflow-hidden">
-                    <div class="h-full bg-(--btn-bg,#f5b800) rounded-full transition-all duration-500" :style="'width:' + ratingPct(seller?.rating)"></div>
+                    <div class="h-full bg-(--btn-bg,#f5b800) rounded-full transition-[width] duration-300 motion-reduce:transition-none" :style="'width:' + ratingPct(seller?.rating)"></div>
                   </div>
                   <span class="text-[13px] text-gray-700 font-medium w-8 text-end" x-text="seller?.rating ? Number(seller.rating).toFixed(1) : '\u2014'"></span>
                 </div>
@@ -619,7 +619,14 @@ function ReviewsTab(): string {
             </div>
 
             <!-- ── Toast ── -->
-            <div x-show="toast.show" x-transition class="fixed bottom-6 end-6 z-50 px-4 py-3 rounded-md shadow-lg text-white text-[14px]"
+            <div x-show="toast.show"
+              x-transition:enter="transition ease-out duration-200 motion-reduce:transition-opacity"
+              x-transition:enter-start="opacity-0 translate-y-2 motion-reduce:translate-y-0"
+              x-transition:enter-end="opacity-100 translate-y-0"
+              x-transition:leave="transition ease-in duration-150 motion-reduce:transition-opacity"
+              x-transition:leave-start="opacity-100 translate-y-0"
+              x-transition:leave-end="opacity-0 translate-y-2 motion-reduce:translate-y-0"
+              class="fixed bottom-6 end-6 z-50 px-4 py-3 rounded-md shadow-lg text-white text-[14px]"
               :class="toast.type === 'success' ? 'bg-green-600' : 'bg-red-600'"
               x-text="toast.message"></div>
 
@@ -697,7 +704,7 @@ function ReviewsTab(): string {
 // ─── Products Tab (Urunler) ────────────────────────────────────
 function ProductsTab(): string {
   return `
-    <div class="company-profile__tab-content" x-show="activeTab === 'products'" x-transition.opacity.duration.300ms id="tab-products"
+    <div class="company-profile__tab-content" x-show="activeTab === 'products'" x-transition.opacity.duration.200ms id="tab-products"
       x-data="{
         sellerCode: ${SELLER_CODE_INIT},
         prodCat: 'all',
@@ -832,7 +839,7 @@ function ProductsTab(): string {
 // ─── Videos Tab (Videolar) ─────────────────────────────────────
 function VideosTab(): string {
   return `
-    <div class="company-profile__tab-content" x-show="activeTab === 'videos'" x-transition.opacity.duration.300ms id="tab-videos"
+    <div class="company-profile__tab-content" x-show="activeTab === 'videos'" x-transition.opacity.duration.200ms id="tab-videos"
       x-data="{
         sellerCode: ${SELLER_CODE_INIT},
         videos: [],
@@ -1032,7 +1039,7 @@ function ContactSidebar(): string {
 // ─── Contact Tab (Iletisim - hidden tab for contact form) ─────
 function ContactTab(): string {
   return `
-    <div class="company-profile__tab-content" x-show="activeTab === 'contact'" x-transition.opacity.duration.300ms id="tab-contact"
+    <div class="company-profile__tab-content" x-show="activeTab === 'contact'" x-transition.opacity.duration.200ms id="tab-contact"
       x-data="{
         sellerCode: ${SELLER_CODE_INIT},
         seller: null,

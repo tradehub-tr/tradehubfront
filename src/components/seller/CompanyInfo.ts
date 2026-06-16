@@ -140,7 +140,7 @@ function renderVariantB(data: CompanyInfoData, seller: SellerProfile): string {
               .map(
                 (loc) => `
               <div class="relative rounded-(--radius-md) overflow-hidden aspect-[4/3] group cursor-pointer">
-                <img src="${escapeHtml(sanitizeUrl(loc.image))}" alt="${escapeHtml(loc.name)}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy" />
+                <img src="${escapeHtml(sanitizeUrl(loc.image))}" alt="${escapeHtml(loc.name)}" class="w-full h-full object-cover transition-transform duration-300 motion-reduce:transition-none motion-reduce:group-hover:scale-100 group-hover:scale-105" loading="lazy" />
                 <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 dark:from-black/80 to-transparent py-3 px-4">
                   <span class="text-white text-[13px] font-medium">${escapeHtml(loc.name)}</span>
                 </div>

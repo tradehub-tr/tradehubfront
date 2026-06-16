@@ -72,12 +72,12 @@ export function QAModal(): string {
     >
       <div
         x-show="open"
-        x-transition:enter="transition ease-out duration-200"
-        x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+        x-transition:enter="transition ease-out duration-200 motion-reduce:transition-none"
+        x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95 motion-reduce:translate-y-0 motion-reduce:scale-100"
         x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-        x-transition:leave="transition ease-in duration-150"
+        x-transition:leave="transition ease-out duration-150 motion-reduce:transition-none"
         x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+        x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95 motion-reduce:translate-y-0 motion-reduce:scale-100"
         class="bg-surface w-full sm:max-w-2xl sm:rounded-md rounded-t-md max-h-[92vh] sm:max-h-[85vh] flex flex-col overflow-hidden shadow-modal"
       >
         <!-- Header (sticky) -->

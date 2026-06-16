@@ -102,7 +102,7 @@ export function EmailVerification(email: string = ""): string {
       <button
         type="button"
         id="otp-continue-btn"
-        class="th-btn w-full py-3 text-base font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        class="th-btn w-full py-3 text-base font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
         disabled
       >
         ${t("auth.otpVerifyAndContinue")}
@@ -141,7 +141,7 @@ function renderOTPInputs(): string {
                rounded-md border-2 border-gray-200 dark:border-gray-600
                bg-white dark:bg-gray-800 text-gray-900 dark:text-white
                focus:border-orange-500 dark:focus:border-orange-400 focus:ring-2 focus:ring-orange-500/20
-               transition-all duration-200 outline-none
+               transition-[border-color,box-shadow] duration-150 outline-none
                placeholder:text-gray-300 dark:placeholder:text-gray-600"
         placeholder="·"
         autocomplete="one-time-code"

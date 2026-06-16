@@ -100,7 +100,7 @@ function renderInfoSection(section: InfoSection): string {
     <div class="bg-white rounded-lg py-6 px-8 max-md:p-5 max-sm:p-4">
       <div class="flex items-center justify-between">
         <h3 class="text-base font-bold m-0" style="color:var(--color-text-primary)">${section.title}</h3>
-        <a href="#" class="inline-flex items-center gap-1 text-[13px] text-blue-600 no-underline font-medium transition-colors hover:text-blue-700">
+        <a href="#" class="inline-flex items-center gap-1 text-[13px] text-blue-600 no-underline font-medium transition-colors [@media(hover:hover)and(pointer:fine)]:hover:text-blue-700">
           ${ICONS.edit}
           <span>${t("profile.edit")}</span>
         </a>
@@ -135,7 +135,7 @@ function renderProfileCard(): string {
         <div class="flex flex-col gap-1 min-w-0">
           <div class="flex items-center gap-2">
             <h1 class="text-xl font-bold m-0 max-sm:text-[17px]" style="color:var(--color-text-primary)">Metin K.</h1>
-            <a href="#" class="inline-flex items-center justify-center w-7 h-7 rounded transition-all hover:bg-surface-raised" style="color:var(--color-text-tertiary)" title="${t("profile.copyProfileLink")}">${ICONS.link}</a>
+            <a href="#" class="inline-flex items-center justify-center w-7 h-7 rounded transition-colors duration-150 motion-reduce:transition-none [@media(hover:hover)and(pointer:fine)]:hover:bg-surface-raised" style="color:var(--color-text-tertiary)" title="${t("profile.copyProfileLink")}">${ICONS.link}</a>
           </div>
           <div class="flex items-center gap-1.5 text-[13px]" style="color:var(--color-text-secondary)">
             <span class="inline-flex items-center">${ICONS.flag}</span>
@@ -157,7 +157,7 @@ function renderProfileCard(): string {
         </div>
       </div>
       <div class="flex items-center gap-3 flex-shrink-0 max-md:w-full">
-        <a href="#" class="inline-flex items-center gap-1.5 py-2 px-4 rounded-md text-[13px] font-medium no-underline transition-all whitespace-nowrap bg-surface-raised hover:bg-gray-200 max-md:flex-1 max-md:justify-center" style="color:var(--color-text-primary)">
+        <a href="#" class="inline-flex items-center gap-1.5 py-2 px-4 rounded-md text-[13px] font-medium no-underline transition-colors duration-150 motion-reduce:transition-none whitespace-nowrap bg-surface-raised [@media(hover:hover)and(pointer:fine)]:hover:bg-gray-200 max-md:flex-1 max-md:justify-center" style="color:var(--color-text-primary)">
           ${ICONS.eye}
           <span>${t("profile.whatOthersSee")}</span>
         </a>

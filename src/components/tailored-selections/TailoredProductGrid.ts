@@ -43,7 +43,7 @@ export function renderProductCard(product: TailoredProduct, index: number): stri
   return `
     <a
       class="ts-product-card flex flex-col relative w-full overflow-hidden text-sm leading-snug text-start no-underline group animate-fade-slide-up"
-      style="animation-delay: ${index * 40}ms;"
+      style="animation-delay: ${Math.min(index, 12) * 40}ms;"
       href="${escapeHtml(sanitizeUrl(product.href))}"
       target="_blank"
       aria-label="${safeName}"
@@ -51,7 +51,7 @@ export function renderProductCard(product: TailoredProduct, index: number): stri
       <!-- Image area -->
       <div class="relative aspect-square w-full overflow-hidden rounded-md bg-gray-100 mb-2">
         <img
-          class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          class="w-full h-full object-cover transition-transform duration-300 [@media(hover:hover)and(pointer:fine)]:group-hover:scale-105 motion-reduce:transition-none motion-reduce:transform-none"
           src="${escapeHtml(sanitizeUrl(product.imageSrc))}"
           alt="${safeName}"
           loading="lazy"

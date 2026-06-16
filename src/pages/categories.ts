@@ -121,8 +121,9 @@ function scrollToSlugSection(slug: string): void {
   );
   if (!target) return;
   // Defer to next frame so layout/fonts settle before measuring offsets.
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   requestAnimationFrame(() => {
-    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
   });
 }
 

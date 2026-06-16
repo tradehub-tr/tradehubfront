@@ -150,8 +150,8 @@ function categoryTile(t: ShowcaseTile, columns: number): string {
           ? `<span class="absolute top-2 left-2 sm:top-3 sm:left-3 z-10 inline-flex max-w-[calc(100%-1rem)] items-center truncate rounded bg-white/90 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wide text-gray-800">${escapeText(label)}</span>`
           : ""
       }
-      <span class="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/20"></span>
-      <span class="absolute bottom-2 sm:bottom-3 lg:bottom-4 left-1/2 z-10 -translate-x-1/2 inline-flex items-center gap-1 sm:gap-1.5 text-xs sm:text-sm lg:text-base font-medium text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+      <span class="absolute inset-0 bg-black/0 transition-colors duration-200 group-hover:bg-black/20 motion-reduce:transition-none"></span>
+      <span class="absolute bottom-2 sm:bottom-3 lg:bottom-4 left-1/2 z-10 -translate-x-1/2 inline-flex items-center gap-1 sm:gap-1.5 text-xs sm:text-sm lg:text-base font-medium text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 motion-reduce:transition-none">
         ${escapeText(hover)} ${ARROW_SVG}
       </span>
     </a>
@@ -179,7 +179,7 @@ function promoTile(t: ShowcaseTile, columns: number): string {
       ${title ? `<span class="line-clamp-3 break-words text-xs font-extrabold leading-tight sm:text-sm lg:text-sm">${escapeText(title)}</span>` : ""}
       ${
         cta
-          ? `<span class="inline-flex items-center gap-1 sm:gap-1.5 text-xs sm:text-sm lg:text-base font-medium opacity-90 transition-opacity duration-300 group-hover:opacity-100">${escapeText(cta)} ${ARROW_SVG}</span>`
+          ? `<span class="inline-flex items-center gap-1 sm:gap-1.5 text-xs sm:text-sm lg:text-base font-medium opacity-90 transition-opacity duration-200 group-hover:opacity-100 motion-reduce:transition-none">${escapeText(cta)} ${ARROW_SVG}</span>`
           : ""
       }
     </a>

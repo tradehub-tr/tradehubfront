@@ -44,17 +44,17 @@ export function UserInfoCard(props: UserInfoCardProps): string {
 
       <!-- Stats Grid -->
       <div class="flex items-stretch border-t pt-4" style="border-color:var(--color-border-light, #f0f0f0)" role="group" aria-label="${t("dashboard.ariaUserStats")}">
-        <a href="/messages" class="flex-1 min-w-0 flex flex-col items-center gap-1 no-underline transition-opacity hover:opacity-80">
+        <a href="/pages/dashboard/messages.html" class="flex-1 min-w-0 flex flex-col items-center gap-1 no-underline transition-opacity hover:opacity-80">
           <span class="text-[clamp(1rem,0.9rem+0.4vw,1.25rem)] font-bold leading-none" style="color:var(--color-text-primary)" x-text="statsMessages">0</span>
           <span class="text-[clamp(0.625rem,0.6rem+0.1vw,0.75rem)] text-center leading-[1.3] line-clamp-2" style="color:var(--color-text-secondary)">${t("dashboard.statsMessages")}</span>
         </a>
         <div class="w-px bg-gray-200 self-stretch"></div>
-        <a href="/quotations" class="flex-1 min-w-0 flex flex-col items-center gap-1 no-underline transition-opacity hover:opacity-80">
+        <a href="/pages/dashboard/rfq-quotes.html" class="flex-1 min-w-0 flex flex-col items-center gap-1 no-underline transition-opacity hover:opacity-80">
           <span class="text-[clamp(1rem,0.9rem+0.4vw,1.25rem)] font-bold leading-none" style="color:var(--color-text-primary)" x-text="statsQuotations">0</span>
           <span class="text-[clamp(0.625rem,0.6rem+0.1vw,0.75rem)] text-center leading-[1.3] line-clamp-2" style="color:var(--color-text-secondary)">${t("dashboard.statsQuotations")}</span>
         </a>
         <div class="w-px bg-gray-200 self-stretch"></div>
-        <a href="/coupons" class="flex-1 min-w-0 flex flex-col items-center gap-1 no-underline transition-opacity hover:opacity-80">
+        <a href="/pages/dashboard/orders.html#coupons" class="flex-1 min-w-0 flex flex-col items-center gap-1 no-underline transition-opacity hover:opacity-80">
           <span class="text-[clamp(1rem,0.9rem+0.4vw,1.25rem)] font-bold leading-none" style="color:var(--color-text-primary)" x-text="statsCoupons">0</span>
           <span class="text-[clamp(0.625rem,0.6rem+0.1vw,0.75rem)] text-center leading-[1.3] line-clamp-2" style="color:var(--color-text-secondary)">${t("dashboard.statsCoupons")}</span>
         </a>

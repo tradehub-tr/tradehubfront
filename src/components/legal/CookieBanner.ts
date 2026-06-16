@@ -13,10 +13,10 @@ export function CookieBanner(): string {
       x-data="cookieBanner"
       x-show="visible"
       x-cloak
-      x-transition:enter="transition ease-out duration-300"
+      x-transition:enter="transition ease-out duration-300 motion-reduce:transition-none"
       x-transition:enter-start="translate-y-full opacity-0"
       x-transition:enter-end="translate-y-0 opacity-100"
-      x-transition:leave="transition ease-in duration-200"
+      x-transition:leave="transition ease-out duration-200 motion-reduce:transition-none"
       x-transition:leave-start="translate-y-0 opacity-100"
       x-transition:leave-end="translate-y-full opacity-0"
       class="fixed bottom-0 inset-x-0 z-50 p-4 sm:p-6"
@@ -74,21 +74,21 @@ export function CookieBanner(): string {
               <span class="text-xs font-medium text-gray-700" data-i18n="cookieConsent.functionalCookies">${t("cookieConsent.functionalCookies")}</span>
               <label class="relative inline-flex items-center cursor-pointer">
                 <input type="checkbox" x-model="categories.functional" class="sr-only peer">
-                <div class="w-10 h-5 bg-gray-300 peer-checked:bg-primary-500 rounded-full transition-colors after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-5"></div>
+                <div class="w-10 h-5 bg-gray-300 peer-checked:bg-primary-500 rounded-full transition-colors after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-transform after:motion-reduce:transition-none peer-checked:after:translate-x-5"></div>
               </label>
             </div>
             <div class="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-100">
               <span class="text-xs font-medium text-gray-700" data-i18n="cookieConsent.analyticsCookies">${t("cookieConsent.analyticsCookies")}</span>
               <label class="relative inline-flex items-center cursor-pointer">
                 <input type="checkbox" x-model="categories.analytics" class="sr-only peer">
-                <div class="w-10 h-5 bg-gray-300 peer-checked:bg-primary-500 rounded-full transition-colors after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-5"></div>
+                <div class="w-10 h-5 bg-gray-300 peer-checked:bg-primary-500 rounded-full transition-colors after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-transform after:motion-reduce:transition-none peer-checked:after:translate-x-5"></div>
               </label>
             </div>
             <div class="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-100">
               <span class="text-xs font-medium text-gray-700" data-i18n="cookieConsent.marketingCookies">${t("cookieConsent.marketingCookies")}</span>
               <label class="relative inline-flex items-center cursor-pointer">
                 <input type="checkbox" x-model="categories.marketing" class="sr-only peer">
-                <div class="w-10 h-5 bg-gray-300 peer-checked:bg-primary-500 rounded-full transition-colors after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-5"></div>
+                <div class="w-10 h-5 bg-gray-300 peer-checked:bg-primary-500 rounded-full transition-colors after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-transform after:motion-reduce:transition-none peer-checked:after:translate-x-5"></div>
               </label>
             </div>
           </div>

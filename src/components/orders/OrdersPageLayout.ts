@@ -141,11 +141,11 @@ function renderAllOrders(): string {
             x-show="dateOpen"
             @click.outside="dateOpen = false"
             x-transition:enter="transition ease-out duration-150"
-            x-transition:enter-start="opacity-0 translate-y-1"
+            x-transition:enter-start="opacity-0 translate-y-1 motion-reduce:translate-y-0"
             x-transition:enter-end="opacity-100 translate-y-0"
-            x-transition:leave="transition ease-in duration-100"
+            x-transition:leave="transition ease-out duration-100"
             x-transition:leave-start="opacity-100 translate-y-0"
-            x-transition:leave-end="opacity-0 translate-y-1"
+            x-transition:leave-end="opacity-0 translate-y-1 motion-reduce:translate-y-0"
             class="absolute top-full start-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 py-1 min-w-[160px]"
           >
             <button @click="setDateFilter('all')"
@@ -197,11 +197,11 @@ function renderAllOrders(): string {
             x-show="timeOpen"
             @click.outside="timeOpen = false"
             x-transition:enter="transition ease-out duration-150"
-            x-transition:enter-start="opacity-0 translate-y-1"
+            x-transition:enter-start="opacity-0 translate-y-1 motion-reduce:translate-y-0"
             x-transition:enter-end="opacity-100 translate-y-0"
-            x-transition:leave="transition ease-in duration-100"
+            x-transition:leave="transition ease-out duration-100"
             x-transition:leave-start="opacity-100 translate-y-0"
-            x-transition:leave-end="opacity-0 translate-y-1"
+            x-transition:leave-end="opacity-0 translate-y-1 motion-reduce:translate-y-0"
             class="absolute top-full end-0 max-sm:start-0 max-sm:end-auto mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 p-4 min-w-[280px]"
           >
             <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">${t("orders.selectDateRange")}</p>
@@ -1121,7 +1121,7 @@ function renderAllOrders(): string {
                 </div>
                 <h4 class="text-base font-semibold text-gray-900 mb-2">${t("ordersUi.refundCannotCreate")}</h4>
                 <p class="text-sm text-gray-500 mb-6" x-text="refundError"></p>
-                <button @click="closeModal('showRefundModal')" class="px-6 py-2 text-sm font-medium bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) rounded-full border border-(--btn-border-color,#d39c00) cursor-pointer shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150">${t("common.close")}</button>
+                <button @click="closeModal('showRefundModal')" class="px-6 py-2 text-sm font-medium bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) rounded-full border border-(--btn-border-color,#d39c00) cursor-pointer shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] motion-reduce:active:scale-100 transition-[transform,box-shadow,background-color] duration-150">${t("common.close")}</button>
               </div>
             </template>
             <!-- Success state -->
@@ -1538,7 +1538,7 @@ function renderAllOrders(): string {
             <!-- Continue Button -->
             <div class="flex justify-end mt-5">
               <button @click="goToForm()"
-                class="px-6 py-2.5 text-sm font-medium text-white bg-(--color-cta-primary) rounded-lg cursor-pointer transition-all hover:bg-(--color-cta-primary-hover)"
+                class="px-6 py-2.5 text-sm font-medium text-white bg-(--color-cta-primary) rounded-lg cursor-pointer transition-[background-color,box-shadow,transform] motion-reduce:transition-[background-color,box-shadow] duration-150 hover:bg-(--color-cta-primary-hover)"
                 :class="!hasFile ? 'opacity-40 cursor-not-allowed! scale-[0.98]' : 'hover:shadow-md'">
                 ${t("orders.remitContinue")}
                 <svg class="w-4 h-4 inline ms-1 -mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M9 5l7 7-7 7"/></svg>
@@ -1649,7 +1649,7 @@ function renderAllOrders(): string {
                     ${t("common.back")}
                   </button>
                   <button @click="submitRemittance()"
-                    class="inline-flex items-center gap-2 px-8 py-2.5 text-sm font-medium text-white bg-(--color-cta-primary) rounded-lg cursor-pointer transition-all hover:bg-(--color-cta-primary-hover) hover:shadow-md"
+                    class="inline-flex items-center gap-2 px-8 py-2.5 text-sm font-medium text-white bg-(--color-cta-primary) rounded-lg cursor-pointer transition-[background-color,box-shadow] duration-150 hover:bg-(--color-cta-primary-hover) hover:shadow-md"
                     :class="!isFormValid ? 'opacity-60' : ''">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                     ${t("orders.remitCheckStatus")}
@@ -1819,7 +1819,7 @@ function renderCoupons(): string {
         <!-- Pill filters -->
         <div class="os-pill-filters flex gap-2 px-7 max-sm:px-3 py-4">
           <template x-for="pill in [{id:'available',label:'${t("orders.available")}'},{id:'used',label:'${t("orders.used")}'},{id:'expired',label:'${t("orders.expired")}'}]" :key="pill.id">
-            <button @click="setPill(pill.id)" class="os-pill px-4 py-1.5 text-[13px] bg-(--color-surface,#fff) border border-(--color-border-medium,#d1d5db) rounded-[20px] cursor-pointer transition-all text-(--color-text-muted,#666)
+            <button @click="setPill(pill.id)" class="os-pill px-4 py-1.5 text-[13px] bg-(--color-surface,#fff) border border-(--color-border-medium,#d1d5db) rounded-[20px] cursor-pointer transition-[color,border-color] duration-150 text-(--color-text-muted,#666)
                            hover:border-[#999]
                            [&.os-pill--active]:text-[var(--color-text-heading,#111827)]
                            [&.os-pill--active]:border-[var(--color-text-heading)]
@@ -1837,7 +1837,7 @@ function renderCoupons(): string {
         <!-- Coupon cards -->
         <div x-show="filteredCoupons.length > 0" class="flex flex-col gap-3 px-7 max-sm:px-3 pb-6">
           <template x-for="coupon in filteredCoupons" :key="coupon.code">
-            <div class="border rounded-lg p-4 transition-all"
+            <div class="border rounded-lg p-4 transition-[border-color,background-color,opacity] duration-150"
               :class="coupon.status === 'available' ? 'border-(--color-border-default,#e5e5e5) bg-(--color-surface,#fff)' : 'border-(--color-border-light,#f0f0f0) bg-(--color-surface-muted,#fafafa) opacity-60'">
               <div class="flex items-start gap-4">
                 <!-- Type badge -->

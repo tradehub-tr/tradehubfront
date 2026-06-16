@@ -29,12 +29,12 @@ export function LegalConsentModal(): string {
   return `
     <div
       id="${MODAL_ID}"
-      class="fixed inset-0 z-[70] hidden items-center justify-center bg-black/50 p-4"
+      class="group/legalModal fixed inset-0 z-[70] hidden items-center justify-center bg-black/50 p-4 opacity-0 transition-opacity duration-200 ease-out data-[state=open]:opacity-100 motion-reduce:transition-none"
       role="dialog"
       aria-modal="true"
       aria-labelledby="legal-consent-title"
     >
-      <div class="flex w-full max-w-[720px] max-h-[90vh] flex-col overflow-hidden rounded-md bg-white shadow-xl max-sm:max-h-full max-sm:rounded-none">
+      <div class="flex w-full max-w-[720px] max-h-[90vh] flex-col overflow-hidden rounded-md bg-white shadow-xl max-sm:max-h-full max-sm:rounded-none origin-center opacity-0 scale-95 transition-[opacity,transform] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] group-data-[state=open]/legalModal:opacity-100 group-data-[state=open]/legalModal:scale-100 motion-reduce:transition-none">
         <header class="flex items-center justify-between gap-4 border-b border-gray-200 px-6 py-4">
           <h2 id="legal-consent-title" class="text-base font-semibold text-gray-900 sm:text-lg"></h2>
           <button
@@ -131,6 +131,9 @@ export function openLegalConsentModal(kind: LegalConsentKind): Promise<boolean> 
 
   modal.classList.remove("hidden");
   modal.classList.add("flex");
+  // Reflow so the enter transition runs from the closed (scale-95/opacity-0) state.
+  void modal.offsetHeight;
+  modal.dataset.state = "open";
   document.body.style.overflow = "hidden";
 
   // Modal display:none iken scrollTop=0 etki etmez ve scrollHeight=0 olur.
@@ -183,6 +186,7 @@ function resetAcceptState(body: HTMLElement): void {
 function resolveAndClose(accepted: boolean): void {
   const modal = document.getElementById(MODAL_ID);
   if (!modal) return;
+  modal.dataset.state = "closed";
   modal.classList.add("hidden");
   modal.classList.remove("flex");
   document.body.style.overflow = "";

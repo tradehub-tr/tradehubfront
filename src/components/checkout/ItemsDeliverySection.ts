@@ -78,7 +78,7 @@ function renderShippingSummary(order: CheckoutDeliveryOrderGroup): string {
         <div class="min-w-0">
           <p class="text-[12.5px] sm:text-[13.5px] font-semibold text-[#111827] truncate"
              x-text="getSelectedMethod('${safeOrderId}')?.etaLabel || ''"></p>
-          <p class="text-[11.5px] sm:text-[12.5px] text-[#8a877f] mt-0.5">
+          <p class="text-[11.5px] sm:text-[12.5px] text-text-tertiary mt-0.5">
             ${t("checkout.shippingFee")}:
             <strong class="text-[#111827]" x-text="formatShippingFee(getSelectedMethod('${safeOrderId}')?.shippingFee ?? 0)"></strong>
           </p>
@@ -87,7 +87,7 @@ function renderShippingSummary(order: CheckoutDeliveryOrderGroup): string {
       ${
         multiple
           ? `<button type="button"
-              class="shrink-0 text-[12px] sm:text-[15px] font-semibold underline text-[#111827] hover:opacity-70"
+              class="th-no-press shrink-0 text-[12px] sm:text-[15px] font-semibold underline text-[#111827] hover:opacity-70"
               @click="openShippingModal('${safeOrderId}')">
               ${t("checkout.changeShippingMethod")}
             </button>`
@@ -107,14 +107,14 @@ function renderSkuLine(sku: CheckoutDeliverySkuLine): string {
     : "";
   return `
     <!-- Mobile: 2-col grid, image top-aligned. Desktop: 4-col with qty+total columns -->
-    <div class="grid grid-cols-[36px_1fr] sm:grid-cols-[40px_1fr_auto_auto] gap-x-2.5 gap-y-0 sm:gap-3 items-start sm:items-center rounded-md bg-[#fafaf8] border border-[#e8e6e0] px-2.5 sm:px-[14px] py-2.5 sm:py-[10px]">
-      <img src="${escapeHtml(sanitizeUrl(sku.image))}" alt="" class="w-9 h-9 sm:w-10 sm:h-10 rounded-[6px] object-cover border border-[#e5e7eb] mt-0.5 sm:mt-0" />
+    <div class="grid grid-cols-[36px_1fr] sm:grid-cols-[40px_1fr_auto_auto] gap-x-2.5 gap-y-0 sm:gap-3 items-start sm:items-center rounded-md bg-[#fafafa] border border-[#e5e5e5] px-2.5 sm:px-[14px] py-2.5 sm:py-[10px]">
+      <img src="${escapeHtml(sanitizeUrl(sku.image))}" alt="" class="w-9 h-9 sm:w-10 sm:h-10 rounded-md object-cover border border-[#e5e5e5] mt-0.5 sm:mt-0" />
       <div class="min-w-0">
         ${sampleBadge ? `<div class="mb-1">${sampleBadge}</div>` : ""}
-        <p class="text-[12px] sm:text-[13px] text-[#4a4a48] leading-[1.4]">${escapeHtml(sku.variantText)}</p>
-        <p class="text-[12px] sm:text-[13px] font-semibold text-[#1a1a1a] mt-1">${formatUsd(sku.unitPrice)} <span class="font-normal text-[#8a877f]">/${t("checkout.pieceUnit")}</span></p>
-        <div class="flex items-center gap-2 sm:hidden mt-1 pt-1 border-t border-dashed border-[#e8e6e0]">
-          <span class="text-[11px] text-[#8a877f]">x ${sku.quantity}</span>
+        <p class="text-[12px] sm:text-[13px] text-text-secondary leading-[1.4]">${escapeHtml(sku.variantText)}</p>
+        <p class="text-[12px] sm:text-[13px] font-semibold text-[#1a1a1a] mt-1">${formatUsd(sku.unitPrice)} <span class="font-normal text-text-tertiary">/${t("checkout.pieceUnit")}</span></p>
+        <div class="flex items-center gap-2 sm:hidden mt-1 pt-1 border-t border-dashed border-[#e5e5e5]">
+          <span class="text-[11px] text-text-tertiary">x ${sku.quantity}</span>
           <span class="text-[12px] font-semibold text-[#1a1a1a]">${formatUsd(total)}</span>
         </div>
       </div>
@@ -155,18 +155,18 @@ function renderProductCard(
   ];
 
   return `
-    <div class="co-product-card border border-[#e8e6e0] rounded-md bg-white overflow-hidden mt-[10px]" x-data="{ open: ${productOpen}, skuExpanded: false }">
+    <div class="co-product-card border border-[#e5e5e5] rounded-md bg-white overflow-hidden mt-[10px]" x-data="{ open: ${productOpen}, skuExpanded: false }">
       <button
         type="button"
-        class="co-product-head w-full flex items-center gap-2 sm:gap-3 px-3 py-[10px] text-start cursor-pointer transition-colors hover:bg-[#fafaf8]"
+        class="co-product-head th-no-press w-full flex items-center gap-2 sm:gap-3 px-3 py-[10px] text-start cursor-pointer transition-colors hover:bg-[#fafafa]"
         @click="open = !open"
         :aria-expanded="open"
       >
-        <img src="${escapeHtml(sanitizeUrl(product.image))}" alt="" class="w-10 h-10 sm:w-12 sm:h-12 rounded-[6px] object-cover border border-[#e5e7eb] shrink-0" />
+        <img src="${escapeHtml(sanitizeUrl(product.image))}" alt="" class="w-10 h-10 sm:w-12 sm:h-12 rounded-md object-cover border border-[#e5e5e5] shrink-0" />
         <div class="flex-1 min-w-0">
           <h4 class="text-[12.5px] sm:text-[13.5px] leading-[1.35] font-semibold text-[#1a1a1a] truncate">${escapeHtml(product.title)}</h4>
-          <p class="text-[11px] sm:text-[11.5px] text-[#8a877f] mt-0.5 leading-[1.4]">${escapeHtml(product.moqLabel)}</p>
-          <p class="hidden sm:flex mt-1.5 flex-wrap items-center gap-x-2 gap-y-0.5 text-[12.5px] text-[#8a877f]">
+          <p class="text-[11px] sm:text-[11.5px] text-text-tertiary mt-0.5 leading-[1.4]">${escapeHtml(product.moqLabel)}</p>
+          <p class="hidden sm:flex mt-1.5 flex-wrap items-center gap-x-2 gap-y-0.5 text-[12.5px] text-text-tertiary">
             ${summaryParts
               .map(
                 (part, i) =>
@@ -177,7 +177,7 @@ function renderProductCard(
         </div>
         <div class="co-product-end flex items-center gap-1.5 sm:gap-2 shrink-0">
           <span class="co-product-total hidden sm:inline whitespace-nowrap text-[12.5px] sm:text-[13.5px] font-semibold text-[#1a1a1a] tabular-nums">${formatUsd(totalAmount)}</span>
-          <svg class="co-product-chev w-3.5 h-3.5 text-[#8a877f] transition-transform duration-200"
+          <svg class="co-product-chev w-3.5 h-3.5 text-text-tertiary transition-transform duration-200"
             :class="{ 'rotate-180': open }"
             fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
@@ -197,7 +197,7 @@ function renderProductCard(
           collapsible
             ? `<button
                 type="button"
-                class="mx-3 mb-3 inline-flex items-center gap-1.5 text-[14px] sm:text-[15px] font-semibold text-[#111827] underline hover:opacity-70"
+                class="th-no-press mx-3 mb-3 inline-flex items-center gap-1.5 text-[14px] sm:text-[15px] font-semibold text-[#111827] underline hover:opacity-70"
                 @click="skuExpanded = !skuExpanded"
                 :aria-expanded="skuExpanded"
               >
@@ -224,7 +224,7 @@ function renderOrderSupplierNote(order: CheckoutDeliveryOrderGroup): string {
       <template x-if="!hasOrderNote('${safeOrderId}')">
         <button
           type="button"
-          class="inline-block text-[12px] sm:text-[13px] font-semibold underline text-[#4a4a48] decoration-[#d5d2c9] underline-offset-[3px] hover:opacity-70"
+          class="th-no-press inline-block text-[12px] sm:text-[13px] font-semibold underline text-text-secondary decoration-[#d4d4d4] underline-offset-[3px] hover:opacity-70"
           @click="openNoteModal('${safeOrderId}')"
         >
           ${t("checkout.addNoteToSupplier")}
@@ -232,13 +232,13 @@ function renderOrderSupplierNote(order: CheckoutDeliveryOrderGroup): string {
       </template>
       <template x-if="hasOrderNote('${safeOrderId}')">
         <div>
-          <p class="text-[12px] sm:text-[13px] text-[#4a4a48]">
+          <p class="text-[12px] sm:text-[13px] text-text-secondary">
             ${t("checkout.noteToSupplierLabel")}
             <span class="font-medium" x-text="getOrderNote('${safeOrderId}')"></span>
           </p>
           <button
             type="button"
-            class="mt-1.5 sm:mt-2 inline-block text-[12px] sm:text-[13px] font-semibold underline text-[#4a4a48] decoration-[#d5d2c9] underline-offset-[3px] hover:opacity-70"
+            class="th-no-press mt-1.5 sm:mt-2 inline-block text-[12px] sm:text-[13px] font-semibold underline text-text-secondary decoration-[#d4d4d4] underline-offset-[3px] hover:opacity-70"
             @click="openNoteModal('${safeOrderId}')"
           >
             ${t("checkout.editNote")}
@@ -266,27 +266,27 @@ function renderOrder(order: CheckoutDeliveryOrderGroup, defaultExpanded: boolean
   );
 
   return `
-    <div class="p-0 border-t border-[#e8e6e0] first:border-t-0 mt-0"
+    <div class="p-0 border-t border-[#e5e5e5] first:border-t-0 mt-0"
       x-data="{ expanded: ${defaultExpanded} }">
       <button type="button"
-        class="w-full flex items-center gap-2 sm:gap-3 m-0 px-4 sm:px-[22px] py-[10px] sm:py-[14px] rounded-none cursor-pointer hover:bg-[#fafaf8] transition-colors select-none text-start"
+        class="th-no-press w-full flex items-center gap-2 sm:gap-3 m-0 px-4 sm:px-[22px] py-[10px] sm:py-[14px] rounded-none cursor-pointer hover:bg-[#fafafa] transition-colors select-none text-start"
         @click="expanded = !expanded"
         :aria-expanded="expanded">
-        <svg class="w-4 h-4 text-[#8a877f] shrink-0 hidden sm:block" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+        <svg class="w-4 h-4 text-text-tertiary shrink-0 hidden sm:block" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
           <path d="M4 7h16M4 7l2-3h12l2 3M4 7v12a2 2 0 002 2h12a2 2 0 002-2V7" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
         <h3 class="text-[13px] sm:text-[14.5px] font-semibold text-[#1a1a1a] tracking-[-0.005em] flex-1 truncate">${escapeHtml(order.sellerName)}</h3>
-        <span class="co-supplier-count hidden sm:inline text-[11.5px] font-medium text-[#4a4a48] bg-[#fafaf8] border border-[#e8e6e0] rounded-full px-2 py-[2px] whitespace-nowrap tracking-[0.01em]" x-show="!expanded">${totalQty} ürün</span>
+        <span class="co-supplier-count hidden sm:inline text-[11.5px] font-medium text-text-secondary bg-[#fafafa] border border-[#e5e5e5] rounded-full px-2 py-[2px] whitespace-nowrap tracking-[0.01em]" x-show="!expanded">${totalQty} ürün</span>
         <span class="text-[12px] sm:text-[14px] font-semibold text-[#1a1a1a] whitespace-nowrap"
           x-show="!expanded">${formatUsd(itemSubtotal)}</span>
-        <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#8a877f] transition-transform duration-300 shrink-0"
+        <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-text-tertiary transition-transform duration-200 motion-reduce:transition-none shrink-0"
           :class="{ 'rotate-180': expanded, 'rotate-0': !expanded }"
           fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </button>
 
-      <div class="transition-all duration-300 pt-1 px-4 sm:px-[22px] pb-4 sm:pb-[18px]" x-show="expanded">
+      <div class="pt-1 px-4 sm:px-[22px] pb-4 sm:pb-[18px]" x-show="expanded" x-collapse>
         ${shippingSummary}
 
         <div class="mt-4">
@@ -304,10 +304,23 @@ function renderSupplierNoteModal(): string {
       class="fixed inset-0 z-[90] bg-black/45 p-3 sm:p-4 flex items-center justify-center"
       x-cloak
       x-show="isNoteModalOpen"
+      x-transition:enter="transition ease-out duration-200"
+      x-transition:enter-start="opacity-0"
+      x-transition:enter-end="opacity-100"
+      x-transition:leave="transition ease-out duration-150"
+      x-transition:leave-start="opacity-100"
+      x-transition:leave-end="opacity-0"
       @click.self="closeNoteModal()"
       @keydown.escape.window="closeNoteModal()"
     >
-      <div class="w-full max-w-[760px] rounded-md bg-white shadow-xl">
+      <div class="w-full max-w-[760px] rounded-md bg-white shadow-xl"
+        x-show="isNoteModalOpen"
+        x-transition:enter="transition ease-out duration-200 motion-reduce:transition-none"
+        x-transition:enter-start="opacity-0 scale-95 motion-reduce:scale-100"
+        x-transition:enter-end="opacity-100 scale-100"
+        x-transition:leave="transition ease-out duration-150 motion-reduce:transition-none"
+        x-transition:leave-start="opacity-100 scale-100"
+        x-transition:leave-end="opacity-0 scale-95 motion-reduce:scale-100">
         <div class="flex items-center justify-between px-4 py-3 sm:px-6 sm:py-5 border-b border-[#f1f1f1]">
           <h3 class="text-[16px] sm:text-xl xl:text-2xl font-bold leading-tight text-[#111827]">${t("checkout.noteToSupplierTitle")}</h3>
           <button type="button" class="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full text-[#111827] hover:bg-gray-100 transition-colors" @click="closeNoteModal()" aria-label="${t("common.close")}">
@@ -356,10 +369,23 @@ function renderShippingMethodModal(): string {
       class="fixed inset-0 z-[90] bg-black/45 p-3 sm:p-4 flex items-center justify-center"
       x-cloak
       x-show="isShippingModalOpen"
+      x-transition:enter="transition ease-out duration-200"
+      x-transition:enter-start="opacity-0"
+      x-transition:enter-end="opacity-100"
+      x-transition:leave="transition ease-out duration-150"
+      x-transition:leave-start="opacity-100"
+      x-transition:leave-end="opacity-0"
       @click.self="closeShippingModal()"
       @keydown.escape.window="closeShippingModal()"
     >
-      <div class="w-full max-w-[860px] rounded-md bg-white shadow-xl">
+      <div class="w-full max-w-[860px] rounded-md bg-white shadow-xl"
+        x-show="isShippingModalOpen"
+        x-transition:enter="transition ease-out duration-200 motion-reduce:transition-none"
+        x-transition:enter-start="opacity-0 scale-95 motion-reduce:scale-100"
+        x-transition:enter-end="opacity-100 scale-100"
+        x-transition:leave="transition ease-out duration-150 motion-reduce:transition-none"
+        x-transition:leave-start="opacity-100 scale-100"
+        x-transition:leave-end="opacity-0 scale-95 motion-reduce:scale-100">
         <div class="flex items-center justify-between px-4 py-3 sm:px-7 sm:py-6 border-b border-[#e5e5e5]">
           <h3 class="text-[16px] sm:text-2xl font-bold leading-tight text-[#111827]">${t("checkout.selectShippingMethod")}</h3>
           <button type="button" class="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full text-[#111827] hover:bg-gray-100 transition-colors" @click="closeShippingModal()" aria-label="${t("common.close")}">
@@ -428,12 +454,12 @@ export function ItemsDeliverySection({ orders = [] }: ItemsDeliverySectionProps 
   return `
     <section
       id="checkout-items"
-      class="checkout-section bg-white border border-[#e8e6e0] rounded-md shadow-[0_1px_2px_rgba(20,20,18,0.04)] overflow-hidden"
+      class="checkout-section bg-white border border-[#e5e5e5] rounded-md overflow-hidden"
       x-data="checkoutItemsDelivery"
       data-delivery-orders="${encodedOrders}"
     >
       <div class="checkout-section__header w-full flex items-center gap-2 sm:gap-3 px-4 sm:px-[22px] py-[12px] sm:py-[18px]">
-        <span class="checkout-section__icon hidden sm:inline-flex items-center justify-center w-8 h-8 min-w-[32px] rounded-md bg-[#fafaf8] text-[#4a4a48] p-[7px]">
+        <span class="checkout-section__icon hidden sm:inline-flex items-center justify-center w-8 h-8 min-w-[32px] rounded-md bg-[#fafafa] text-text-secondary p-[7px]">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
             <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M3.27 6.96 12 12.01l8.73-5.05" stroke-linecap="round" stroke-linejoin="round"/>
@@ -441,7 +467,7 @@ export function ItemsDeliverySection({ orders = [] }: ItemsDeliverySectionProps 
           </svg>
         </span>
         <h2 class="checkout-section__title flex-1 text-start text-[13px] sm:text-[15px] font-semibold text-[#1a1a1a] tracking-[-0.005em] whitespace-nowrap truncate">${t("checkout.itemsAndDeliveryOptions")}</h2>
-        ${supplierCount > 0 ? `<span class="text-[11px] sm:text-[12px] text-[#8a877f] whitespace-nowrap shrink-0">${supplierCount} tedarikçi</span>` : ""}
+        ${supplierCount > 0 ? `<span class="text-[11px] sm:text-[12px] text-text-tertiary whitespace-nowrap shrink-0">${supplierCount} tedarikçi</span>` : ""}
       </div>
       <div class="checkout-section__content p-0">
         ${ordersHtml}

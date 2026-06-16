@@ -29,7 +29,7 @@ export function ReviewsModal(): string {
       x-transition:enter="transition ease-out duration-300"
       x-transition:enter-start="opacity-0"
       x-transition:enter-end="opacity-100"
-      x-transition:leave="transition ease-in duration-200"
+      x-transition:leave="transition ease-out duration-200"
       x-transition:leave-start="opacity-100"
       x-transition:leave-end="opacity-0"
       @click.self="close()"
@@ -40,12 +40,12 @@ export function ReviewsModal(): string {
     >
       <div
         x-show="open"
-        x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0 scale-95"
+        x-transition:enter="transition ease-out duration-300 motion-reduce:transition-none"
+        x-transition:enter-start="opacity-0 scale-95 motion-reduce:scale-100"
         x-transition:enter-end="opacity-100 scale-100"
-        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave="transition ease-out duration-200 motion-reduce:transition-none"
         x-transition:leave-start="opacity-100 scale-100"
-        x-transition:leave-end="opacity-0 scale-95"
+        x-transition:leave-end="opacity-0 scale-95 motion-reduce:scale-100"
         class="rv-modal bg-[var(--color-surface,#ffffff)] max-w-[800px] w-[95%] max-h-[85vh] rounded-[var(--radius-modal,16px)] shadow-[var(--shadow-modal)] flex flex-col z-[var(--z-modal,50)] max-sm:!w-full max-sm:!h-full max-sm:!max-h-[100vh] max-sm:!rounded-none"
       >
         <!-- Fixed Header -->
@@ -62,8 +62,8 @@ export function ReviewsModal(): string {
         <div class="rv-modal-body overflow-y-auto px-6 pb-6 flex-1 max-sm:!px-4 max-sm:!pb-4" @click="ratingOpen = false; sortOpen = false">
           <!-- Filter Row -->
           <div class="rv-filter-row flex items-center gap-1.5 sm:gap-2 flex-wrap mb-3 sm:mb-4 pt-3 sm:pt-0">
-            <button type="button" class="rv-filter-pill px-3.5 py-1.5 text-[12px] font-medium rounded-full border border-[var(--pd-spec-border,#e5e5e5)] bg-[var(--color-surface,#ffffff)] text-[var(--pd-rating-text-color,#6b7280)] cursor-pointer transition-all duration-150 whitespace-nowrap [&.active]:border-[var(--pd-tab-active-border,#cc9900)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:bg-[var(--pd-price-tier-active-bg,#fef9e7)] [&:hover:not(.active)]:border-[var(--color-border-medium,#d1d5db)]" :class="{ active: filterType === 'all' }" @click="setFilter('all')">${t("product.allFilter")}</button>
-            <button type="button" class="rv-filter-pill px-3.5 py-1.5 text-[12px] font-medium rounded-full border border-[var(--pd-spec-border,#e5e5e5)] bg-[var(--color-surface,#ffffff)] text-[var(--pd-rating-text-color,#6b7280)] cursor-pointer transition-all duration-150 whitespace-nowrap [&.active]:border-[var(--pd-tab-active-border,#cc9900)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:bg-[var(--pd-price-tier-active-bg,#fef9e7)] [&:hover:not(.active)]:border-[var(--color-border-medium,#d1d5db)]" id="rv-modal-photo-filter" :class="{ active: filterType === 'photo' }" @click="setFilter('photo')">${t("product.withPhotos", { count: String(photoReviewCount) })}</button>
+            <button type="button" class="rv-filter-pill px-3.5 py-1.5 text-[12px] font-medium rounded-full border border-[var(--pd-spec-border,#e5e5e5)] bg-[var(--color-surface,#ffffff)] text-[var(--pd-rating-text-color,#6b7280)] cursor-pointer transition-colors duration-150 whitespace-nowrap [&.active]:border-[var(--pd-tab-active-border,#cc9900)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:bg-[var(--pd-price-tier-active-bg,#fef9e7)] [&:hover:not(.active)]:border-[var(--color-border-medium,#d1d5db)]" :class="{ active: filterType === 'all' }" @click="setFilter('all')">${t("product.allFilter")}</button>
+            <button type="button" class="rv-filter-pill px-3.5 py-1.5 text-[12px] font-medium rounded-full border border-[var(--pd-spec-border,#e5e5e5)] bg-[var(--color-surface,#ffffff)] text-[var(--pd-rating-text-color,#6b7280)] cursor-pointer transition-colors duration-150 whitespace-nowrap [&.active]:border-[var(--pd-tab-active-border,#cc9900)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:bg-[var(--pd-price-tier-active-bg,#fef9e7)] [&:hover:not(.active)]:border-[var(--color-border-medium,#d1d5db)]" id="rv-modal-photo-filter" :class="{ active: filterType === 'photo' }" @click="setFilter('photo')">${t("product.withPhotos", { count: String(photoReviewCount) })}</button>
 
             <!-- Rating Dropdown -->
             <div class="rv-rating-dropdown relative inline-block [&.open_.rv-rating-dropdown-panel]:block" id="rv-modal-rating-dropdown" :class="{ open: ratingOpen }" @click.outside="ratingOpen = false">
@@ -100,7 +100,7 @@ export function ReviewsModal(): string {
             ${p.reviewMentionTags
               .map(
                 (tag) => `
-              <button type="button" class="rv-mention-tag th-no-press py-1 px-3 text-[12px] rounded bg-[var(--pd-spec-header-bg,#f9fafb)] text-[var(--pd-rating-text-color,#6b7280)] border border-[var(--pd-spec-border,#e5e5e5)] cursor-pointer transition-all duration-150 hover:border-[var(--color-border-medium,#d1d5db)] [&.active]:border-[var(--pd-tab-active-border,#cc9900)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:bg-[var(--pd-price-tier-active-bg,#fef9e7)] [&.active]:font-semibold" :class="{ active: mentionFilter === ${escapeHtml(JSON.stringify(tag.label))} }" @click="toggleMention(${escapeHtml(JSON.stringify(tag.label))})">${escapeHtml(tag.label)} (${tag.count})</button>
+              <button type="button" class="rv-mention-tag th-no-press py-1 px-3 text-[12px] rounded bg-[var(--pd-spec-header-bg,#f9fafb)] text-[var(--pd-rating-text-color,#6b7280)] border border-[var(--pd-spec-border,#e5e5e5)] cursor-pointer transition-colors duration-150 hover:border-[var(--color-border-medium,#d1d5db)] [&.active]:border-[var(--pd-tab-active-border,#cc9900)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:bg-[var(--pd-price-tier-active-bg,#fef9e7)] [&.active]:font-semibold" :class="{ active: mentionFilter === ${escapeHtml(JSON.stringify(tag.label))} }" @click="toggleMention(${escapeHtml(JSON.stringify(tag.label))})">${escapeHtml(tag.label)} (${tag.count})</button>
             `
               )
               .join("")}

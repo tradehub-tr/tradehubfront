@@ -89,7 +89,7 @@ function MoneyBackPolicySection(): string {
       <!-- 3 Feature Cards -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- Card 1: İade Talebi -->
-        <div class="border border-gray-200 rounded-md p-6 hover:shadow-md transition-shadow duration-300">
+        <div class="border border-gray-200 rounded-md p-6 [@media(hover:hover)and(pointer:fine)]:hover:shadow-md transition-shadow duration-200 motion-reduce:transition-none">
           <div class="mb-4">${requestIcon}</div>
           <h3 class="text-lg font-bold text-gray-900 mb-2">${t('infoPages.refundCard1Title')}</h3>
           <p class="text-gray-600 text-sm leading-relaxed">
@@ -97,7 +97,7 @@ function MoneyBackPolicySection(): string {
           </p>
         </div>
         <!-- Card 2: Satıcı Değerlendirmesi -->
-        <div class="border border-gray-200 rounded-md p-6 hover:shadow-md transition-shadow duration-300">
+        <div class="border border-gray-200 rounded-md p-6 [@media(hover:hover)and(pointer:fine)]:hover:shadow-md transition-shadow duration-200 motion-reduce:transition-none">
           <div class="mb-4">${reviewIcon}</div>
           <h3 class="text-lg font-bold text-gray-900 mb-2">${t('infoPages.refundCard2Title')}</h3>
           <p class="text-gray-600 text-sm leading-relaxed">
@@ -105,7 +105,7 @@ function MoneyBackPolicySection(): string {
           </p>
         </div>
         <!-- Card 3: İade Sonuçlanması -->
-        <div class="border border-gray-200 rounded-md p-6 hover:shadow-md transition-shadow duration-300">
+        <div class="border border-gray-200 rounded-md p-6 [@media(hover:hover)and(pointer:fine)]:hover:shadow-md transition-shadow duration-200 motion-reduce:transition-none">
           <div class="mb-4">${refundIcon}</div>
           <h3 class="text-lg font-bold text-gray-900 mb-2">${t('infoPages.refundCard3Title')}</h3>
           <p class="text-gray-600 text-sm leading-relaxed">

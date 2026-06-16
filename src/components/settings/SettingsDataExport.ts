@@ -33,7 +33,10 @@ export function SettingsDataExport(): string {
       </div>
 
       <!-- Success -->
-      <div x-show="step === 'success'" x-cloak>
+      <div x-show="step === 'success'" x-cloak
+        x-transition:enter="transition ease-out duration-200 motion-reduce:transition-none"
+        x-transition:enter-start="opacity-0 scale-[0.97] motion-reduce:scale-100"
+        x-transition:enter-end="opacity-100 scale-100">
         <div class="max-w-[640px] mx-auto text-center py-4">
           <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-emerald-50 flex items-center justify-center">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>

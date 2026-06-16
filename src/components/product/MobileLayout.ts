@@ -73,8 +73,8 @@ function collapsibleSection(cfg: CollapsibleConfig): string {
 /** Renders a bottom sheet modal with handle, header, close button, and body. */
 function bottomSheet(id: string, title: string, bodyHtml: string): string {
   return `
-    <div id="${id}" class="pdm-bottom-sheet pdm-hidden [&.pdm-hidden]:hidden fixed inset-0 z-[200] bg-black/0 flex items-end transition-[background] duration-[250ms] pointer-events-none [&.pdm-sheet-visible]:bg-black/50 [&.pdm-sheet-visible]:pointer-events-auto" aria-hidden="true">
-      <div class="pdm-sheet-inner w-full max-w-[100vw] box-border bg-[var(--color-surface,#fff)] rounded-t-[16px] max-h-[85vh] overflow-y-auto overflow-x-hidden translate-y-full transition-transform duration-[300ms] [cubic-bezier(0.32,0.72,0,1)] [-webkit-overflow-scrolling:touch] [.pdm-sheet-visible_&]:translate-y-0">
+    <div id="${id}" class="pdm-bottom-sheet pdm-hidden [&.pdm-hidden]:hidden fixed inset-0 z-[200] bg-black/0 flex items-end transition-[background] duration-[250ms] motion-reduce:transition-none pointer-events-none [&.pdm-sheet-visible]:bg-black/50 [&.pdm-sheet-visible]:pointer-events-auto" aria-hidden="true">
+      <div class="pdm-sheet-inner w-full max-w-[100vw] box-border bg-[var(--color-surface,#fff)] rounded-t-[16px] max-h-[85vh] overflow-y-auto overflow-x-hidden translate-y-full transition-transform duration-[300ms] [cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none motion-reduce:translate-y-0 [-webkit-overflow-scrolling:touch] [.pdm-sheet-visible_&]:translate-y-0">
         <div class="pdm-sheet-handle w-10 h-1 bg-[#e0e0e0] rounded-[2px] mx-auto mt-3 mb-2"></div>
         <div class="pdm-sheet-header flex items-center justify-between px-4 pb-4 pt-1 text-base font-bold text-[var(--color-text-heading,#111827)] max-[374px]:px-2.5 max-[374px]:py-1 max-[374px]:pb-2.5 max-[374px]:text-sm">
           <span>${title}</span>

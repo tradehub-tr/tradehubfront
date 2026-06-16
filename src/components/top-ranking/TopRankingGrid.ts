@@ -54,7 +54,7 @@ export function renderRankingGroupCard(group: RankingCategoryGroup): string {
             src="${safeImg}"
             alt="${safeProductName}"
             loading="lazy"
-            class="w-full h-full object-cover transition-transform duration-300 group-hover/product:scale-105"
+            class="w-full h-full object-cover transition-transform duration-300 group-hover/product:scale-105 motion-reduce:transition-none motion-reduce:group-hover/product:scale-100"
           />
           <!-- Rank badge -->
           <span
@@ -78,7 +78,7 @@ export function renderRankingGroupCard(group: RankingCategoryGroup): string {
   // layer — only the actual thumbnail rectangles intercept clicks for
   // product detail navigation.
   return `
-    <div class="relative bg-surface border border-border-default rounded-md p-4 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200">
+    <div class="relative bg-surface border border-border-default rounded-md p-4 hover:-translate-y-0.5 hover:shadow-md transition-[transform,box-shadow] duration-200 motion-reduce:transition-none motion-reduce:hover:translate-y-0">
       <a href="${headerHref}" class="block group/header before:absolute before:inset-0 before:content-['']" aria-label="${safeName}">
         <h3 class="text-sm font-bold text-text-primary mb-3 truncate group-hover/header:underline" title="${safeName}">${safeName}</h3>
       </a>

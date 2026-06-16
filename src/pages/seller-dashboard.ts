@@ -758,7 +758,14 @@ appEl.innerHTML = `
     </div>
 
     <!-- ─── Ürün Modal ─────────────────────────────────────────── -->
-    <div x-show="productModal.open" x-transition class="fixed inset-0 bg-black/50 z-[999] flex items-center justify-center p-4">
+    <div x-show="productModal.open"
+         x-transition:enter="transition ease-out duration-200 motion-reduce:transition-none"
+         x-transition:enter-start="opacity-0 scale-95 motion-reduce:scale-100"
+         x-transition:enter-end="opacity-100 scale-100"
+         x-transition:leave="transition ease-out duration-150 motion-reduce:transition-none"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-95 motion-reduce:scale-100"
+         class="fixed inset-0 bg-black/50 z-[999] flex items-center justify-center p-4">
       <div @click.stop class="bg-white rounded-md shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
           <h3 class="text-base font-bold text-gray-900" x-text="productModal.editId ? '${t("sellerDash.editProduct")}' : '${t("sellerDash.newProduct")}'"></h3>
@@ -837,7 +844,14 @@ appEl.innerHTML = `
     </div>
 
     <!-- ─── Kategori Modal ─────────────────────────────────────── -->
-    <div x-show="categoryModal.open" x-transition class="fixed inset-0 bg-black/50 z-[999] flex items-center justify-center p-4">
+    <div x-show="categoryModal.open"
+         x-transition:enter="transition ease-out duration-200 motion-reduce:transition-none"
+         x-transition:enter-start="opacity-0 scale-95 motion-reduce:scale-100"
+         x-transition:enter-end="opacity-100 scale-100"
+         x-transition:leave="transition ease-out duration-150 motion-reduce:transition-none"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-95 motion-reduce:scale-100"
+         class="fixed inset-0 bg-black/50 z-[999] flex items-center justify-center p-4">
       <div @click.stop class="bg-white rounded-md shadow-xl w-full max-w-sm">
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
           <h3 class="text-base font-bold text-gray-900" x-text="categoryModal.editId ? '${t("sellerDash.editCategory")}' : '${t("sellerDash.newCategory")}'"></h3>
@@ -877,7 +891,14 @@ appEl.innerHTML = `
     </div>
 
     <!-- ─── Kargoya Ver Modal ────────────────────────────────────── -->
-    <div x-show="shipModalOpen" x-transition class="fixed inset-0 bg-black/50 z-[999] flex items-center justify-center p-4">
+    <div x-show="shipModalOpen"
+         x-transition:enter="transition ease-out duration-200 motion-reduce:transition-none"
+         x-transition:enter-start="opacity-0 scale-95 motion-reduce:scale-100"
+         x-transition:enter-end="opacity-100 scale-100"
+         x-transition:leave="transition ease-out duration-150 motion-reduce:transition-none"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-95 motion-reduce:scale-100"
+         class="fixed inset-0 bg-black/50 z-[999] flex items-center justify-center p-4">
       <div class="bg-white rounded-md shadow-xl w-full max-w-sm p-6">
         <h3 class="text-base font-bold text-gray-900 mb-1">${t("sellerDash.ship")}</h3>
         <p class="text-sm text-gray-500 mb-4"><strong x-text="shipModalOrderNumber"></strong> ${t("sellerDash.shipOrderMsg")}</p>

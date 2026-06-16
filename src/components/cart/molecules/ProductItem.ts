@@ -60,9 +60,9 @@ export function ProductItem({ product }: ProductItemProps): string {
   const isFav = isItemFavorited(product.id);
 
   return `
-    <section class="sc-c-spu-container-new p-0 border-b border-[#e8e6e0] [&:last-child]:border-b-0" data-product-id="${escapeHtml(product.id)}" x-data="{ productOpen: ${productOpen}, skuExpanded: false }">
+    <section class="sc-c-spu-container-new p-0 border-b border-[#e5e5e5] [&:last-child]:border-b-0" data-product-id="${escapeHtml(product.id)}" x-data="{ productOpen: ${productOpen}, skuExpanded: false }">
       <!-- Başlık satırı (her zaman görünür, tıklanır accordion toggle) -->
-      <div class="sc-c-spu-head px-1 py-[8px] sm:py-[10px] transition-colors hover:bg-[#fafaf8]">
+      <div class="sc-c-spu-head px-1.5 py-[8px] sm:py-[10px] rounded-md transition-colors hover:bg-[#f5f5f5]">
         <div class="flex items-center gap-2 sm:gap-3">
           <div class="shrink-0" @click.stop>
             ${Checkbox({ id: `product-checkbox-${product.id}`, checked: product.selected, indeterminate: productIndeterminate, onChange: `product-select-${product.id}` })}
@@ -70,22 +70,22 @@ export function ProductItem({ product }: ProductItemProps): string {
 
           <button
             type="button"
-            class="sc-c-spu-toggle flex-1 min-w-0 flex items-center gap-2 sm:gap-3 text-start cursor-pointer appearance-none bg-transparent border-0 p-0 m-0 focus:outline-none"
+            class="sc-c-spu-toggle th-no-press flex-1 min-w-0 flex items-center gap-2 sm:gap-3 text-start cursor-pointer appearance-none bg-transparent border-0 p-0 m-0 focus:outline-none"
             @click="productOpen = !productOpen"
             :aria-expanded="productOpen"
           >
-            ${productImage ? `<img src="${escapeHtml(productImage)}" alt="" class="sc-c-spu-thumb w-[40px] h-[40px] sm:w-[60px] sm:h-[60px] rounded-lg object-cover border border-[#e8e6e0] shrink-0 self-center bg-[#fafaf8]" />` : ""}
+            ${productImage ? `<img src="${escapeHtml(productImage)}" alt="" class="sc-c-spu-thumb w-[40px] h-[40px] sm:w-[60px] sm:h-[60px] rounded-md object-cover border border-[#e5e5e5] shrink-0 self-center bg-[#fafafa]" />` : ""}
             <div class="flex-1 min-w-0">
               <span class="sc-c-spu-title block truncate text-[13px] sm:text-[15px] font-semibold text-[#1a1a1a] leading-[1.4]" title="${escapeHtml(product.title)}">${escapeHtml(product.title)}</span>
-              <span class="sc-c-spu-moq block text-[11px] sm:text-[12.5px] text-[#8a877f] mt-[1px] sm:mt-[3px] leading-[1.3] whitespace-nowrap overflow-hidden text-ellipsis">${escapeHtml(product.moqLabel)}</span>
-              <span class="sc-c-spu-meta block text-[11px] sm:text-[12.5px] text-[#8a877f] mt-[1px] sm:mt-[3px] whitespace-nowrap overflow-hidden text-ellipsis" x-show="!productOpen">
-                ${t("checkout.variantsLabel", { count: variantCount })} <span class="sc-c-dot mx-[3px] sm:mx-[5px] text-[#d5d2c9]">·</span> ${t("checkout.unitsLabel", { count: totalQty })}
+              <span class="sc-c-spu-moq block text-[11px] sm:text-[12.5px] text-text-tertiary mt-[1px] sm:mt-[3px] leading-[1.3] whitespace-nowrap overflow-hidden text-ellipsis">${escapeHtml(product.moqLabel)}</span>
+              <span class="sc-c-spu-meta block text-[11px] sm:text-[12.5px] text-text-tertiary mt-[1px] sm:mt-[3px] whitespace-nowrap overflow-hidden text-ellipsis" x-show="!productOpen">
+                ${t("checkout.variantsLabel", { count: variantCount })} <span class="sc-c-dot mx-[3px] sm:mx-[5px] text-[#d4d4d4]">·</span> ${t("checkout.unitsLabel", { count: totalQty })}
               </span>
             </div>
           </button>
 
-          <button type="button" class="sc-c-spu-chev-btn th-no-press w-6 h-6 sm:w-7 sm:h-7 lg:w-9 lg:h-9 inline-flex items-center justify-center text-[#8a877f] bg-transparent hover:bg-white hover:text-[#4a4a48] transition-colors rounded-full shrink-0" @click="productOpen = !productOpen" aria-label="${t("checkoutMfr.toggleExpand")}">
-            <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5 transition-transform duration-200" :class="productOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <button type="button" class="sc-c-spu-chev-btn th-no-press w-6 h-6 sm:w-7 sm:h-7 lg:w-9 lg:h-9 inline-flex items-center justify-center text-text-tertiary bg-transparent hover:bg-white hover:text-text-secondary transition-colors rounded-full shrink-0" @click="productOpen = !productOpen" aria-label="${t("checkoutMfr.toggleExpand")}">
+            <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5 transition-transform duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none" :class="productOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </button>
@@ -93,33 +93,33 @@ export function ProductItem({ product }: ProductItemProps): string {
 
         <div class="flex items-center justify-end gap-1.5 sm:gap-2 mt-1 ps-[calc(18px+0.5rem)] sm:ps-[calc(20px+0.75rem)]" @click.stop x-show="!productOpen" x-cloak>
           <span class="sc-c-spu-total whitespace-nowrap text-[12px] sm:text-[14.5px] font-bold text-[#1a1a1a] tabular-nums">${totalText}</span>
-          <button type="button" class="sc-c-spu-favorite-btn w-6 h-6 sm:w-7 sm:h-7 inline-flex items-center justify-center rounded-full transition-colors ${isFav ? "text-amber-500" : "text-[#8a877f]"} bg-transparent hover:bg-white hover:text-[#4a4a48]" data-product-id="${escapeHtml(product.id)}" @click="$dispatch('product-favorite', { productId: '${escapeHtml(product.id)}' })" aria-label="${t("cart.favorite")}">
+          <button type="button" class="sc-c-spu-favorite-btn th-no-press w-6 h-6 sm:w-7 sm:h-7 inline-flex items-center justify-center rounded-full transition-colors ${isFav ? "text-amber-500" : "text-text-tertiary"} bg-transparent hover:bg-white hover:text-text-secondary" data-product-id="${escapeHtml(product.id)}" @click="$dispatch('product-favorite', { productId: '${escapeHtml(product.id)}' })" aria-label="${t("cart.favorite")}">
             <img src="${favIcon}" class="w-3.5 h-3.5 sm:w-4 sm:h-4 object-contain" alt="${t("cart.favorite")}" />
           </button>
-          <button type="button" class="sc-c-spu-delete-btn w-6 h-6 sm:w-7 sm:h-7 lg:w-9 lg:h-9 inline-flex items-center justify-center rounded-full transition-colors text-[#8a877f] bg-transparent hover:bg-white hover:text-[#4a4a48]" data-product-id="${escapeHtml(product.id)}" @click="$dispatch('product-delete', { productId: '${escapeHtml(product.id)}' })" aria-label="${t("cart.removeProduct")}">
+          <button type="button" class="sc-c-spu-delete-btn w-6 h-6 sm:w-7 sm:h-7 lg:w-9 lg:h-9 inline-flex items-center justify-center rounded-full transition-colors text-text-tertiary bg-transparent hover:bg-white hover:text-text-secondary" data-product-id="${escapeHtml(product.id)}" @click="$dispatch('product-delete', { productId: '${escapeHtml(product.id)}' })" aria-label="${t("cart.removeProduct")}">
             <img src="${trashIcon}" class="w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5 object-contain" alt="${t("cart.removeProduct")}" />
           </button>
         </div>
       </div>
 
       <!-- Açık gövde (SKU detayları) -->
-      <div x-show="productOpen" x-cloak class="sc-c-spu-body p-[0_4px_12px]">
+      <div x-show="productOpen" x-collapse x-cloak class="sc-c-spu-body p-[0_4px_12px]">
         <div class="mt-2 mb-2 flex flex-wrap gap-1.5">${product.tags.map(renderTag).join("")}</div>
         <div class="mt-1 space-y-1.5">
           ${visibleSkusHtml}
-          ${hiddenSkusHtml ? `<div x-show="skuExpanded" x-cloak class="space-y-1.5">${hiddenSkusHtml}</div>` : ""}
+          ${hiddenSkusHtml ? `<div x-show="skuExpanded" x-collapse x-cloak class="space-y-1.5">${hiddenSkusHtml}</div>` : ""}
         </div>
         ${
           collapsible
             ? `<button
                 type="button"
-                class="sc-c-spu-show-more th-no-press mt-[10px] py-1 inline-flex items-center gap-1.5 underline decoration-[#d5d2c9] underline-offset-[3px] text-[#4a4a48] bg-transparent border-0 cursor-pointer hover:text-[#1a1a1a] appearance-none focus:outline-none"
+                class="sc-c-spu-show-more th-no-press mt-[10px] py-1 inline-flex items-center gap-1.5 underline decoration-[#d4d4d4] underline-offset-[3px] text-text-secondary bg-transparent border-0 cursor-pointer hover:text-[#0a0a0a] appearance-none focus:outline-none"
                 @click="skuExpanded = !skuExpanded"
                 :aria-expanded="skuExpanded"
               >
                 <span x-show="!skuExpanded">${t("checkout.showMoreVariants", { count: hiddenCount })}</span>
                 <span x-show="skuExpanded" x-cloak>${t("checkout.showLessVariants")}</span>
-                <svg class="w-4 h-4 transition-transform duration-200"
+                <svg class="w-4 h-4 transition-transform duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none"
                   :class="skuExpanded ? 'rotate-180' : ''"
                   fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />

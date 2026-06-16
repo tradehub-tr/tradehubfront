@@ -136,7 +136,7 @@ export function OperationSlider(props: OperationSliderProps): string {
             <button
               type="button"
               aria-label="${t("dashboard.prevNotification")}"
-              class="operation-slider__prev absolute top-1/2 -translate-y-1/2 start-1 z-10 w-6 h-6 flex items-center justify-center bg-white rounded-full shadow-sm border-none text-(--color-text-muted,#666666) cursor-pointer opacity-0 pointer-events-none transition-all duration-200 group-hover/opslider:opacity-100 group-hover/opslider:pointer-events-auto hover:text-(--color-text-heading,#111827)"
+              class="operation-slider__prev absolute top-1/2 -translate-y-1/2 start-1 z-10 w-6 h-6 flex items-center justify-center bg-white rounded-full shadow-sm border-none text-(--color-text-muted,#666666) cursor-pointer opacity-0 pointer-events-none transition-[opacity,color] duration-200 motion-reduce:transition-none [@media(hover:hover)and(pointer:fine)]:group-hover/opslider:opacity-100 [@media(hover:hover)and(pointer:fine)]:group-hover/opslider:pointer-events-auto hover:text-(--color-text-heading,#111827)"
             >
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
@@ -145,7 +145,7 @@ export function OperationSlider(props: OperationSliderProps): string {
             <button
               type="button"
               aria-label="${t("dashboard.nextNotification")}"
-              class="operation-slider__next absolute top-1/2 -translate-y-1/2 end-1 z-10 w-6 h-6 flex items-center justify-center bg-white rounded-full shadow-sm border-none text-(--color-text-muted,#666666) cursor-pointer opacity-0 pointer-events-none transition-all duration-200 group-hover/opslider:opacity-100 group-hover/opslider:pointer-events-auto hover:text-(--color-text-heading,#111827)"
+              class="operation-slider__next absolute top-1/2 -translate-y-1/2 end-1 z-10 w-6 h-6 flex items-center justify-center bg-white rounded-full shadow-sm border-none text-(--color-text-muted,#666666) cursor-pointer opacity-0 pointer-events-none transition-[opacity,color] duration-200 motion-reduce:transition-none [@media(hover:hover)and(pointer:fine)]:group-hover/opslider:opacity-100 [@media(hover:hover)and(pointer:fine)]:group-hover/opslider:pointer-events-auto hover:text-(--color-text-heading,#111827)"
             >
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>

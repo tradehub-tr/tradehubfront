@@ -204,7 +204,8 @@ Alpine.data("topRankingCategoryPage", () => ({
     syncUrl(this.category, this.activeSort, this.page);
     this.fetchPage().then(() => {
       const el = document.getElementById("trc-grid-anchor");
-      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (el) el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
     });
   },
 
