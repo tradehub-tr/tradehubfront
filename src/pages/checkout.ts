@@ -227,7 +227,9 @@ async function enrichMissingShippingMethods(): Promise<void> {
         return {
           id: `method-${supplier.id}-${m.id}`,
           etaLabel,
-          shippingFee: m.cost,
+          // Kargo ücretini seçili para birimine çevir (m.cost listing'in kendi
+          // para biriminde gelir; çevrilmezse seçili kur etiketiyle ham gösterilirdi).
+          shippingFee: convertPrice(m.cost, m.currency),
           isDefault: i === 0,
         };
       });
@@ -249,7 +251,7 @@ function buildSampleDeliveryOrders(): CheckoutDeliveryOrderGroup[] {
     methods: sampleOrderData.shippingMethods?.map((sm, i) => ({
       id: sm.id || `sample-method-${i}`,
       etaLabel: `${sm.method} (${sm.estimatedDays})`,
-      shippingFee: sm.baseCost,
+      shippingFee: convertPrice(sm.baseCost, sm.baseCurrency),
       isDefault: i === 0,
     })) ?? [{
       id: 'sample-method-default',
