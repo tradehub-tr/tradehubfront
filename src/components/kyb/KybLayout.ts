@@ -79,6 +79,18 @@ function renderPendingInfo(): string {
   `;
 }
 
+function renderDraftInfo(): string {
+  return `
+    <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 flex items-start gap-3 mb-5">
+      <span class="text-gray-500 flex-shrink-0">${ICONS.alert}</span>
+      <div>
+        <div class="font-semibold text-gray-800 mb-1">${t("kyb.draftTitle")}</div>
+        <div class="text-xs text-gray-600">${t("kyb.draftHint")}</div>
+      </div>
+    </div>
+  `;
+}
+
 function renderUnderReviewInfo(): string {
   return `
     <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start gap-3 mb-5">
@@ -125,6 +137,7 @@ function renderHeader(): string {
 function renderForm(): string {
   return `
     <!-- Status'a göre üst uyarı -->
+    <template x-if="kybData.status === 'Draft'">${renderDraftInfo()}</template>
     <template x-if="kybData.status === 'Rejected'">${renderRejectedAlert()}</template>
     <template x-if="kybData.status === 'Expired'">${renderExpiredAlert()}</template>
     <template x-if="kybData.status === 'Pending'">${renderPendingInfo()}</template>

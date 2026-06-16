@@ -725,6 +725,7 @@ Alpine.data("cartPage", () => ({
               quantity: sk.quantity,
               price: sk.unitPrice,
               currency: sk.currency,
+              baseCurrency: sk.baseCurrency,
             }))
         );
         if (selectedSkus.length === 0) return "";
@@ -737,7 +738,7 @@ Alpine.data("cartPage", () => ({
                 <img src="${escapeHtml(sanitizeUrl(sk.image))}" alt="" class="w-full h-full object-cover" />
                 <span class="absolute bottom-0 end-0 bg-black/60 text-white rounded-ss text-[11px] font-bold leading-4 px-1 py-px">${sk.quantity}</span>
               </div>
-              <span class="text-[11px] leading-[14px] text-[#666] text-center line-clamp-2 w-full">${escapeHtml(sk.currency)}${sk.price.toFixed(2)}</span>
+              <span class="text-[11px] leading-[14px] text-[#666] text-center line-clamp-2 w-full">${escapeHtml(formatPrice(sk.price, sk.baseCurrency || "USD"))}</span>
             </div>`
           )
           .join("");

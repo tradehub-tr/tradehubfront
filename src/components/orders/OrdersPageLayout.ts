@@ -3,7 +3,6 @@
  * "Siparişlerim" page — 2-panel: left nav + right dynamic content.
  * Supports hash-based sub-pages: #all-orders, #refunds, #reviews, #coupons, #tax-info
  */
-import { getCurrencyCode, getCurrencySymbol } from "../../utils/currency";
 import { t } from "../../i18n";
 import { OrderListItem } from "./OrderListItem";
 import { OrderItemsDrawer } from "./OrderItemsDrawer";
@@ -496,7 +495,7 @@ function renderAllOrders(): string {
               </svg>
               <h2 class="text-base font-bold text-gray-900">
                 <span x-text="selectedOrder.products.length"></span> ${t("orders.productName")} ·
-                ${getCurrencyCode()} <span x-text="selectedOrderTotal"></span>
+                <span x-text="(selectedOrder.currency || '') + ' ' + selectedOrderTotal"></span>
               </h2>
             </div>
             <div class="flex items-center gap-2 text-sm">
@@ -545,9 +544,9 @@ function renderAllOrders(): string {
                 </div>
                 <div class="flex-1 min-w-0">
                   <div class="text-sm text-gray-800 line-clamp-2 leading-snug" x-text="product.name"></div>
-                  <div class="text-xs text-gray-500 mt-0.5" x-text="product.quantity + ' × ${getCurrencyCode()} ' + product.unitPrice"></div>
+                  <div class="text-xs text-gray-500 mt-0.5" x-text="product.quantity + ' × ' + (selectedOrder.currency || '') + ' ' + product.unitPrice"></div>
                 </div>
-                <span class="text-sm font-medium text-gray-900 text-end whitespace-nowrap">${getCurrencyCode()} <span x-text="product.totalPrice"></span></span>
+                <span class="text-sm font-medium text-gray-900 text-end whitespace-nowrap"><span x-text="(selectedOrder.currency || '') + ' ' + product.totalPrice"></span></span>
               </div>
             </template>
 
@@ -578,7 +577,7 @@ function renderAllOrders(): string {
           <template x-if="!showAllProducts">
             <div class="flex items-center justify-between mt-4 pt-3 border-t border-gray-200">
               <span class="text-sm text-gray-500">${t("orders.productQuantity")}: <strong class="text-gray-800" x-text="selectedOrderQty"></strong></span>
-              <span class="text-sm text-gray-500">${t("orders.totalPrice")}: <strong class="text-gray-900" x-text="'${getCurrencyCode()} ' + selectedOrderTotal"></strong></span>
+              <span class="text-sm text-gray-500">${t("orders.totalPrice")}: <strong class="text-gray-900" x-text="(selectedOrder.currency || '') + ' ' + selectedOrderTotal"></strong></span>
             </div>
           </template>
         </div>
@@ -723,19 +722,19 @@ function renderAllOrders(): string {
                   <div class="space-y-2.5">
                     <div class="flex items-center justify-between text-sm">
                       <span class="text-gray-500">${t("orders.subtotal")}</span>
-                      <span class="text-gray-800">${getCurrencyCode()} <span x-text="selectedOrder.payment.subtotal"></span></span>
+                      <span class="text-gray-800"><span x-text="(selectedOrder.currency || '') + ' ' + selectedOrder.payment.subtotal"></span></span>
                     </div>
                     <div class="flex items-center justify-between text-sm">
                       <span class="text-gray-500">${t("orders.shippingFee")}</span>
-                      <span class="text-gray-800">${getCurrencyCode()} <span x-text="selectedOrder.payment.shippingFee"></span></span>
+                      <span class="text-gray-800"><span x-text="(selectedOrder.currency || '') + ' ' + selectedOrder.payment.shippingFee"></span></span>
                     </div>
                     <div class="border-t border-gray-200 pt-2.5 flex items-center justify-between text-sm">
                       <span class="text-gray-500">${t("orders.subtotal")}</span>
-                      <span class="text-gray-800">${getCurrencyCode()} <span x-text="selectedOrder.payment.grandTotal"></span></span>
+                      <span class="text-gray-800"><span x-text="(selectedOrder.currency || '') + ' ' + selectedOrder.payment.grandTotal"></span></span>
                     </div>
                     <div class="flex items-center justify-between text-base font-bold">
                       <span class="text-gray-900">${t("orders.grandTotal")}*</span>
-                      <span class="text-gray-900">${getCurrencyCode()} <span x-text="selectedOrder.payment.grandTotal"></span></span>
+                      <span class="text-gray-900"><span x-text="(selectedOrder.currency || '') + ' ' + selectedOrder.payment.grandTotal"></span></span>
                     </div>
                   </div>
                   <p class="text-[11px] text-gray-400 mt-3 leading-relaxed">${t("orders.totalDisclaimer")}</p>
@@ -911,7 +910,7 @@ function renderAllOrders(): string {
                       <h4 class="text-base font-bold text-gray-900">${t("orders.productionMonitoring")}</h4>
                     </div>
                     <p class="text-sm text-gray-600 mb-2">${t("orders.productionMonitoringDesc")}</p>
-                    <p class="text-xs text-gray-500">${t("orders.startingFrom")} <strong class="text-amber-600">${getCurrencyCode()} 48.00</strong></p>
+                    <p class="text-xs text-gray-500">${t("orders.startingFrom")} <strong class="text-amber-600">$48.00</strong></p>
                   </div>
                   <button class="th-btn whitespace-nowrap shrink-0">
                     ${t("orders.selectService")}
@@ -927,7 +926,7 @@ function renderAllOrders(): string {
                       <h4 class="text-base font-bold text-gray-900">${t("orders.preShipmentInspection")}</h4>
                     </div>
                     <p class="text-sm text-gray-600 mb-2">${t("orders.preShipmentInspectionDesc")}</p>
-                    <p class="text-xs text-gray-500">${t("orders.startingFrom")} <strong class="text-amber-600">${getCurrencyCode()} 88.00</strong></p>
+                    <p class="text-xs text-gray-500">${t("orders.startingFrom")} <strong class="text-amber-600">$88.00</strong></p>
                   </div>
                   <button class="th-btn whitespace-nowrap shrink-0">
                     ${t("orders.selectService")}
@@ -1861,7 +1860,7 @@ function renderCoupons(): string {
                 <!-- Value display -->
                 <div class="flex-shrink-0 text-end">
                   <span class="text-lg font-bold" :class="coupon.status === 'available' ? 'text-(--color-text-heading,#111827)' : 'text-(--color-text-muted,#666)'"
-                    x-text="coupon.type === 'shipping' ? '${t("orders.free")}' : (coupon.type === 'percent' ? '%' + coupon.value : '${getCurrencySymbol()}' + coupon.value)"></span>
+                    x-text="coupon.type === 'shipping' ? '${t("orders.free")}' : (coupon.type === 'percent' ? '%' + coupon.value : '$' + coupon.value)"></span>
                 </div>
               </div>
             </div>

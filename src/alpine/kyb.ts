@@ -189,6 +189,7 @@ Alpine.data("kybPage", () => ({
   },
   get statusBadgeClass(): string {
     const map: Record<string, string> = {
+      Draft: "bg-gray-100 text-gray-700",
       Verified: "bg-green-100 text-green-800",
       Rejected: "bg-red-100 text-red-800",
       "Under Review": "bg-blue-100 text-blue-800",
@@ -200,6 +201,7 @@ Alpine.data("kybPage", () => ({
   get statusBadgeIcon(): string {
     // Lucide SVG — emoji yasağı (memory: feedback_no_emoji)
     const map: Record<string, string> = {
+      Draft: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`,
       Verified: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
       Rejected: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
       "Under Review": `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`,
@@ -210,6 +212,7 @@ Alpine.data("kybPage", () => ({
   },
   get statusBadgeLabel(): string {
     const map: Record<string, string> = {
+      Draft: t("kyb.statusDraft"),
       Verified: t("kyb.statusVerified"),
       Rejected: t("kyb.statusRejected"),
       "Under Review": t("kyb.statusUnderReview"),

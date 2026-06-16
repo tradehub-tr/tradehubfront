@@ -8129,6 +8129,7 @@ const tr = {
 
     // Status etiketleri
     statusNone: "Henüz Başvurulmadı",
+    statusDraft: "Taslak",
     statusPending: "Beklemede",
     statusUnderReview: "İnceleniyor",
     statusVerified: "Doğrulandı",
@@ -8142,6 +8143,9 @@ const tr = {
     applyNow: "Şimdi Başvur",
 
     // Status uyarıları
+    draftTitle: "Taslak — Henüz Gönderilmedi",
+    draftHint:
+      "Belgelerinizi yükleyip 'Gönder'e basın. Gönderilince başvurunuz incelemeye alınır.",
     rejectedTitle: "Başvurunuz Reddedildi",
     rejectionReason: "Gerekçe",
     rejectedHint:

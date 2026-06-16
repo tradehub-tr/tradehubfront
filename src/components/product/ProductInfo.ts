@@ -242,20 +242,8 @@ export function ProductInfo(): string {
           supplierId: p.supplier?.id ?? "",
         })}
 
-        ${
-          mockProduct.sellerKybVerified === false
-            ? `
-        <!-- KYB Gate Uyarı Banner — Sepete Ekle butonunun ÜSTÜNDE, flex container DIŞINDA -->
-        <div class="pd-kyb-banner flex items-start gap-2.5 mx-5 mt-4 px-3.5 py-3 bg-[#fff7ed] border border-[#fed7aa] rounded-lg" role="alert">
-          <svg class="pd-kyb-banner-icon shrink-0 mt-0.5" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c2410c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          <div class="pd-kyb-banner-text text-xs leading-[1.5] text-[#9a3412]">
-            <div class="pd-kyb-banner-title font-semibold mb-0.5">${t("common.kybGateBannerTitle")}</div>
-            <div class="pd-kyb-banner-body text-[#9a3412]">${t("common.kybGateBannerBody")}</div>
-          </div>
-        </div>
-        `
-            : ""
-        }
+        <!-- KYB uyarısı yukarıda (fiyat alanında) tek sefer gösterilir; CTA üstündeki
+             duplicate banner kaldırıldı (2026-06-15). -->
 
         <!-- CTA Buttons (Sepete Ekle + Sohbet et — 50/50 grid) -->
         <div id="pd-cta-buttons" class="grid grid-cols-2 gap-3 px-5 py-4 border-t border-b border-[var(--color-border-default,#e5e5e5)] bg-[var(--color-surface,#fff)] [.pd-sticky_&]:sticky [.pd-sticky_&]:-bottom-[22px] [.pd-sticky_&]:z-[2] [.pd-sticky_&]:bg-[var(--color-surface,#fff)] [.pd-sticky_&]:border-b-0 [.pd-sticky_&]:mx-[-20px] [.pd-sticky_&]:-mb-[20px] [.pd-sticky_&]:px-5 [.pd-sticky_&]:py-4 [.pd-sticky_&]:pb-5 [.pd-sticky_&]:shadow-[0_-8px_18px_-14px_rgba(17,24,39,0.35)]">
