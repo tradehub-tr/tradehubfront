@@ -59,7 +59,7 @@ function renderToggle(pref: AdPreference): string {
       </div>
       <label class="relative inline-flex w-12 h-[26px] flex-shrink-0 cursor-pointer">
         <input type="checkbox" data-pref-id="${pref.id}" ${pref.enabled ? "checked" : ""} class="peer opacity-0 w-0 h-0 absolute" />
-        <span class="ad-pref__toggle-slider absolute inset-0 rounded-[13px] bg-[var(--color-border-medium)] transition-colors duration-200 peer-checked:bg-[var(--toggle-active-bg,#cc9900)] before:content-[''] before:absolute before:w-5 before:h-5 before:start-[3px] before:top-[3px] before:bg-[var(--color-surface,#fff)] before:rounded-full before:transition-transform before:duration-200 before:shadow-[0_1px_3px_rgba(0,0,0,0.15)] peer-checked:before:translate-x-[22px]"></span>
+        <span class="ad-pref__toggle-slider absolute inset-0 rounded-[13px] bg-[var(--color-border-medium)] transition-colors duration-200 peer-checked:bg-[var(--toggle-active-bg,#cc9900)] before:content-[''] before:absolute before:w-5 before:h-5 before:start-[3px] before:top-[3px] before:bg-[var(--color-surface,#fff)] before:rounded-full before:transition-transform before:duration-200 motion-reduce:before:transition-none before:shadow-[0_1px_3px_rgba(0,0,0,0.15)] peer-checked:before:translate-x-[22px]"></span>
       </label>
     </div>
   `;
@@ -74,7 +74,7 @@ export function SettingsAdPreferences(): string {
         ${prefs.map(renderToggle).join("")}
       </div>
       <div class="mt-12 flex justify-center">
-        <a href="#" class="ad-pref__back-btn inline-flex items-center justify-center py-3 px-20 max-sm:px-10 max-sm:w-full border border-gray-300 rounded-md text-sm font-medium no-underline transition-all hover:bg-surface-raised hover:border-gray-400" style="color:var(--color-text-primary)">${t("settings.adBack")}</a>
+        <a href="#" class="ad-pref__back-btn inline-flex items-center justify-center py-3 px-20 max-sm:px-10 max-sm:w-full border border-gray-300 rounded-md text-sm font-medium no-underline transition-colors duration-150 motion-reduce:transition-none hover:bg-surface-raised hover:border-gray-400" style="color:var(--color-text-primary)">${t("settings.adBack")}</a>
       </div>
     </div>
   `;

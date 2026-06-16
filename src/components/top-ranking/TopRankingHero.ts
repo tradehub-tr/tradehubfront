@@ -45,7 +45,7 @@ export function TopRankingStickyMobileHeader(): string {
   return `
     <div
       id="tr-sticky-mobile-header"
-      class="lg:hidden fixed top-0 inset-x-0 z-30 bg-white border-b border-gray-200 transition-all duration-300 -translate-y-full opacity-0 pointer-events-none"
+      class="lg:hidden fixed top-0 inset-x-0 z-30 bg-white border-b border-gray-200 transition-[transform,opacity] duration-300 motion-reduce:transition-none motion-reduce:translate-y-0 -translate-y-full opacity-0 pointer-events-none"
     >
       <div class="flex items-center gap-2.5 px-3 py-2">
         <!-- Back arrow -->

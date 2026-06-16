@@ -43,41 +43,41 @@ function renderThumbnailGrid(items: CartSummaryData["items"]): string {
 export function CartSummary(data: CartSummaryData): string {
   const viewAllLink =
     data.items.length > 0
-      ? `<div class="flex justify-end -mt-1.5 sm:-mt-2 mb-2 sm:mb-3"><button type="button" class="sc-view-all-items text-[12px] max-[380px]:text-[11px] sm:text-[13px] font-medium text-primary-500 hover:text-primary-600 hover:underline transition-colors cursor-pointer bg-transparent border-0 p-0" data-i18n="common.viewAll">${t("common.viewAll")}</button></div>`
+      ? `<div class="flex justify-end -mt-1.5 sm:-mt-2 mb-2 sm:mb-3"><button type="button" class="sc-view-all-items text-[12px] sm:text-[13px] font-medium text-primary-700 hover:text-primary-800 hover:underline transition-colors cursor-pointer bg-transparent border-0 p-0" data-i18n="common.viewAll">${t("common.viewAll")}</button></div>`
       : "";
 
   return `
-    <div class="sc-shopping-cart-summary-container w-full xl:w-[425px] max-h-[calc(100vh-120px)] p-3 max-[380px]:p-2.5 sm:p-5 xl:p-8 bg-white border border-[#e5e5e5] rounded-lg overflow-y-auto [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-black/20 hover:[&::-webkit-scrollbar-thumb]:bg-black/30 [&::-webkit-scrollbar-thumb]:rounded-full">
-      <div class="block text-[15px] max-[380px]:text-[14px] sm:text-lg xl:text-xl font-bold leading-6 sm:leading-7 text-[#222] mb-2.5 max-[380px]:mb-2 sm:mb-4 xl:mb-5"><span data-i18n="cart.orderSummary">${t("cart.orderSummary")}</span> (<span class="sc-summary-selected-count">${data.selectedCount}</span> ${t("common.item")})</div>
+    <div class="sc-shopping-cart-summary-container w-full xl:w-[425px] max-h-[calc(100vh-120px)] p-4 max-[380px]:p-3 sm:p-5 xl:p-7 bg-white border border-[#e5e5e5] rounded-md overflow-y-auto [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-black/20 hover:[&::-webkit-scrollbar-thumb]:bg-black/30 [&::-webkit-scrollbar-thumb]:rounded-full">
+      <div class="block text-[16px] sm:text-[18px] font-bold leading-tight text-text-primary mb-4 sm:mb-5"><span data-i18n="cart.orderSummary">${t("cart.orderSummary")}</span> (<span class="sc-summary-selected-count">${data.selectedCount}</span> ${t("common.item")})</div>
 
       ${renderThumbnailGrid(data.items)}
       ${viewAllLink}
 
       <div class="flex flex-col gap-3">
-        <div class="flex justify-between items-center text-[13px] max-[380px]:text-[12px] sm:text-sm leading-5 text-[#333]">
+        <div class="flex justify-between items-center text-[13px] sm:text-[14px] leading-5 text-text-secondary">
           <span data-i18n="cart.productSubtotal">${t("cart.productSubtotal")}</span>
           <span class="sc-summary-product-subtotal">${PriceDisplay({ amount: data.productSubtotal, fromCurrency: getSelectedCurrency() })}</span>
         </div>
         ${
           data.discount > 0
             ? `
-        <div class="sc-summary-discount-row flex justify-between items-center text-[12px] max-[380px]:text-[11px] sm:text-[14px] leading-[18px]">
-          <span class="text-[#333]" data-i18n="cart.productDiscount">${t("cart.productDiscount")}</span>
-          <span class="sc-summary-discount text-[#FF6600] font-semibold">- ${PriceDisplay({ amount: data.discount, fromCurrency: getSelectedCurrency() })}</span>
+        <div class="sc-summary-discount-row flex justify-between items-center text-[13px] sm:text-[14px] leading-5">
+          <span class="text-[#16a34a]" data-i18n="cart.productDiscount">${t("cart.productDiscount")}</span>
+          <span class="sc-summary-discount text-[#16a34a] font-semibold">- ${PriceDisplay({ amount: data.discount, fromCurrency: getSelectedCurrency() })}</span>
         </div>`
             : `
-        <div class="sc-summary-discount-row flex justify-between items-center text-[12px] max-[380px]:text-[11px] sm:text-[14px] leading-[18px] hidden">
-          <span class="text-[#333]" data-i18n="cart.productDiscount">${t("cart.productDiscount")}</span>
-          <span class="sc-summary-discount text-[#FF6600] font-semibold"></span>
+        <div class="sc-summary-discount-row flex justify-between items-center text-[13px] sm:text-[14px] leading-5 hidden">
+          <span class="text-[#16a34a]" data-i18n="cart.productDiscount">${t("cart.productDiscount")}</span>
+          <span class="sc-summary-discount text-[#16a34a] font-semibold"></span>
         </div>`
         }
-        <div class="flex justify-between items-center text-[13px] max-[380px]:text-[12px] sm:text-sm leading-5 text-[#333]">
+        <div class="flex justify-between items-center text-[13px] sm:text-[14px] leading-5 text-text-secondary">
           <span data-i18n="cart.shippingFee">${t("cart.shippingFee")}</span>
           <span>${PriceDisplay({ amount: data.shippingFee, fromCurrency: getSelectedCurrency() })}</span>
         </div>
       </div>
 
-      <div class="flex justify-between items-center text-[14px] max-[380px]:text-[13px] sm:text-lg font-bold leading-6 text-[#222] pt-3 sm:pt-4 border-t border-[#e5e5e5] mt-2">
+      <div class="flex justify-between items-center text-[15px] sm:text-[17px] font-bold leading-6 text-text-primary pt-3 sm:pt-4 border-t border-[#e5e5e5] mt-2">
         <span class="min-w-0 truncate me-2" data-i18n="cart.subtotalExTax">${t("cart.subtotalExTax")}</span>
         <span class="sc-summary-subtotal">${PriceDisplay({ amount: data.subtotal, fromCurrency: getSelectedCurrency(), bold: true })}</span>
       </div>
@@ -85,12 +85,12 @@ export function CartSummary(data: CartSummaryData): string {
       ${
         data.discount > 0
           ? `
-      <div class="sc-summary-savings-banner mt-3 w-full h-12 rounded-[4px] px-3 py-1.5 flex items-center" style="background:linear-gradient(90deg,#ffead1,#ffd5d1)">
-        <span class="text-[12px] max-[380px]:text-[11px] sm:text-[14px] leading-[18px] text-[#4B1D1F]">${t("cart.savedOnOrder", { amount: `<strong class="text-[#FF6600]">${PriceDisplay({ amount: data.discount, fromCurrency: getSelectedCurrency() })}</strong>` })}</span>
+      <div class="sc-summary-savings-banner mt-3 w-full rounded-md px-3 py-2.5 flex items-center bg-[#f0fdf4] border border-[#bbf7d0]">
+        <span class="text-[13px] sm:text-[14px] leading-5 text-[#15803d]">${t("cart.savedOnOrder", { amount: `<strong class="text-[#16a34a] font-bold">${PriceDisplay({ amount: data.discount, fromCurrency: getSelectedCurrency() })}</strong>` })}</span>
       </div>`
           : `
-      <div class="sc-summary-savings-banner mt-3 w-full h-12 rounded-[4px] px-3 py-1.5 flex items-center hidden" style="background:linear-gradient(90deg,#ffead1,#ffd5d1)">
-        <span class="text-[12px] max-[380px]:text-[11px] sm:text-[14px] leading-[18px] text-[#4B1D1F]">${t("cart.savedOnOrder", { amount: '<strong class="text-[#FF6600]"></strong>' })}</span>
+      <div class="sc-summary-savings-banner mt-3 w-full rounded-md px-3 py-2.5 flex items-center bg-[#f0fdf4] border border-[#bbf7d0] hidden">
+        <span class="text-[13px] sm:text-[14px] leading-5 text-[#15803d]">${t("cart.savedOnOrder", { amount: '<strong class="text-[#16a34a] font-bold"></strong>' })}</span>
       </div>`
       }
 

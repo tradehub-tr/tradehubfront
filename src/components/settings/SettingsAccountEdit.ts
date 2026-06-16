@@ -185,13 +185,13 @@ function renderCard(
         <h3 class="text-base font-semibold m-0 flex items-center gap-2" style="color:var(--color-text-primary)">
           ${icon} ${title}
         </h3>
-        <button class="card-edit-btn inline-flex items-center justify-center w-8 h-8 rounded-lg border border-gray-200 cursor-pointer transition-all hover:bg-gray-50" style="color:var(--color-text-secondary)" data-card="${cardId}" title="${t("settings.editBtn")}">
+        <button class="card-edit-btn inline-flex items-center justify-center w-8 h-8 rounded-lg border border-gray-200 cursor-pointer transition-colors duration-150 motion-reduce:transition-none hover:bg-gray-50" style="color:var(--color-text-secondary)" data-card="${cardId}" title="${t("settings.editBtn")}">
           ${ICONS.edit}
         </button>
       </div>
       ${hint ? `<div class="mx-6 max-sm:mx-4 mt-3 flex items-start gap-2 p-3 bg-blue-50 rounded-lg text-[13px] text-blue-700"><span class="flex-shrink-0 mt-0.5">${ICONS.info}</span><span>${hint}</span></div>` : ""}
-      <div class="p-6 max-sm:p-4" id="card-${cardId}-view">${viewHtml}</div>
-      <div class="p-6 max-sm:p-4 hidden" id="card-${cardId}-edit">
+      <div class="p-6 max-sm:p-4 transition-opacity duration-150 ease-out motion-reduce:transition-none" id="card-${cardId}-view">${viewHtml}</div>
+      <div class="p-6 max-sm:p-4 hidden transition-opacity duration-150 ease-out motion-reduce:transition-none" id="card-${cardId}-edit">
         ${editHtml}
         <div class="pt-4 mt-4 border-t border-gray-100 flex items-center gap-3 max-sm:flex-col">
           <button class="th-btn px-6 max-sm:w-full card-save-btn" type="button" data-card="${cardId}">${t("settings.submitBtn") || "Kaydet"}</button>
@@ -471,6 +471,15 @@ export function initSettingsAccountEdit(): void {
     setTimeout(() => el.classList.add("hidden"), 4000);
   }
 
+  // Hard-cut yerine kısa opacity geçişi: gizleneni hidden yap, beliren
+  // elemanı opacity-0 ile aç, ardından rAF'te opacity-100'e geçir.
+  function swapPanels(hideEl: HTMLElement, showEl: HTMLElement) {
+    hideEl.classList.add("hidden");
+    showEl.classList.remove("hidden");
+    showEl.classList.add("opacity-0");
+    requestAnimationFrame(() => showEl.classList.remove("opacity-0"));
+  }
+
   function bindEvents() {
     // Edit buttons
     document.querySelectorAll<HTMLButtonElement>(".card-edit-btn").forEach((btn) => {
@@ -478,10 +487,7 @@ export function initSettingsAccountEdit(): void {
         const cardId = btn.dataset.card!;
         const viewEl = document.getElementById(`card-${cardId}-view`);
         const editEl = document.getElementById(`card-${cardId}-edit`);
-        if (viewEl && editEl) {
-          viewEl.classList.add("hidden");
-          editEl.classList.remove("hidden");
-        }
+        if (viewEl && editEl) swapPanels(viewEl, editEl);
       });
     });
 
@@ -491,10 +497,7 @@ export function initSettingsAccountEdit(): void {
         const cardId = btn.dataset.card!;
         const viewEl = document.getElementById(`card-${cardId}-view`);
         const editEl = document.getElementById(`card-${cardId}-edit`);
-        if (viewEl && editEl) {
-          editEl.classList.add("hidden");
-          viewEl.classList.remove("hidden");
-        }
+        if (viewEl && editEl) swapPanels(editEl, viewEl);
       });
     });
 

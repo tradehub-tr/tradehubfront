@@ -75,7 +75,7 @@ export function renderAttachmentCard(att: RfqAttachment, idx: number, scope: str
 
   return `
     <div class="bg-white border border-gray-200 rounded-lg overflow-hidden flex flex-col">
-      <div class="rfq-attach-thumb ${isPreviewable ? "cursor-pointer hover:opacity-90" : ""}" data-attach-scope="${scope}" data-attach-idx="${idx}">
+      <div class="rfq-attach-thumb ${isPreviewable ? "cursor-pointer transition-opacity duration-150 motion-reduce:transition-none [@media(hover:hover)and(pointer:fine)]:hover:opacity-90" : ""}" data-attach-scope="${scope}" data-attach-idx="${idx}">
         ${thumb}
       </div>
       <div class="p-2.5 flex flex-col gap-1.5">
@@ -154,9 +154,9 @@ const ICON_DOWNLOAD = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 2
 
 export function renderAttachmentModal(scope: string = "default"): string {
   return `
-    <div id="rfq-attach-modal-${scope}" class="fixed inset-0 z-[1200] hidden items-center justify-center bg-black/60 p-4">
+    <div id="rfq-attach-modal-${scope}" data-open="false" class="group/lb fixed inset-0 z-[1200] hidden items-center justify-center bg-black/60 p-4 opacity-0 transition-opacity duration-200 ease-out data-[open=false]:duration-150 data-[open=true]:opacity-100 motion-reduce:transition-none">
       <div class="absolute inset-0" data-attach-modal-backdrop="${scope}"></div>
-      <div class="relative w-full max-w-4xl max-h-[95vh] flex flex-col rounded-lg overflow-hidden bg-white shadow-2xl">
+      <div class="relative w-full max-w-4xl max-h-[95vh] flex flex-col rounded-lg overflow-hidden bg-white shadow-2xl origin-center scale-[0.97] opacity-0 transition-[transform,opacity] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] group-data-[open=false]/lb:duration-150 group-data-[open=false]/lb:ease-out group-data-[open=true]/lb:scale-100 group-data-[open=true]/lb:opacity-100 motion-reduce:transition-none motion-reduce:transform-none motion-reduce:scale-100">
         <div class="bg-gray-900 text-white px-6 py-3.5 flex items-center justify-between gap-3 shrink-0">
           <h3 data-attach-modal-title="${scope}" class="text-base font-semibold truncate"></h3>
           <div class="flex items-center gap-2 shrink-0">
@@ -217,12 +217,19 @@ export function setupAttachmentInteractions(
     modal!.classList.remove("hidden");
     modal!.classList.add("flex");
     document.body.style.overflow = "hidden";
+    // Next frame so the from-state (opacity-0/scale-0.97) paints before
+    // data-open flips to true and the 200ms enter transition runs.
+    requestAnimationFrame(() => modal!.setAttribute("data-open", "true"));
   }
 
   function closeLightbox() {
-    modal!.classList.add("hidden");
-    modal!.classList.remove("flex");
-    if (bodyEl) bodyEl.innerHTML = "";
+    modal!.setAttribute("data-open", "false");
+    // Snappy 150ms release; hide + clear body after the exit transition.
+    window.setTimeout(() => {
+      modal!.classList.add("hidden");
+      modal!.classList.remove("flex");
+      if (bodyEl) bodyEl.innerHTML = "";
+    }, 150);
     document.body.style.overflow = "";
   }
 
@@ -305,11 +312,17 @@ export function openAttachmentLightbox(att: RfqAttachment, scope: string = "file
   modal.classList.remove("hidden");
   modal.classList.add("flex");
   document.body.style.overflow = "hidden";
+  // Next frame so the from-state paints before data-open flips → enter runs.
+  requestAnimationFrame(() => modal!.setAttribute("data-open", "true"));
 
   function close() {
-    modal!.classList.add("hidden");
-    modal!.classList.remove("flex");
-    if (bodyEl) bodyEl.innerHTML = "";
+    modal!.setAttribute("data-open", "false");
+    // Snappy 150ms release; hide + clear body after the exit transition.
+    window.setTimeout(() => {
+      modal!.classList.add("hidden");
+      modal!.classList.remove("flex");
+      if (bodyEl) bodyEl.innerHTML = "";
+    }, 150);
     document.body.style.overflow = "";
   }
 

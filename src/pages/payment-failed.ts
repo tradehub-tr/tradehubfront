@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
   appEl.innerHTML = `
     <div class="flex flex-col items-center gap-6">
       <!-- Error Icon with animation -->
-      <div class="w-20 h-20 rounded-full border-[3px] border-[#dc2626] flex items-center justify-center animate-[bounceIn_0.5s_ease-out]">
+      <div class="w-20 h-20 rounded-full border-[3px] border-[#dc2626] flex items-center justify-center animate-[bounceIn_0.5s_ease-out] motion-reduce:animate-none">
         <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <line x1="18" y1="6" x2="6" y2="18"/>
           <line x1="6" y1="6" x2="18" y2="18"/>
@@ -70,4 +70,15 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     </div>
   `;
+
+  // bounceIn keyframe only lives in order-success.ts'in injected style; bu sayfada
+  // tanimli olmadigindan hata ikonu anime olmuyordu — ayni keyframe'i burada da inject et.
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes bounceIn {
+      0% { transform: scale(0.92); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  `;
+  document.head.appendChild(style);
 });

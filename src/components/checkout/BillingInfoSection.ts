@@ -18,13 +18,13 @@ export function BillingInfoSection({
   return `
     <section
       id="checkout-billing"
-      class="checkout-section checkout-section--billing bg-white border border-[#e8e6e0] rounded-md shadow-[0_1px_2px_rgba(20,20,18,0.04)] overflow-hidden"
+      class="checkout-section checkout-section--billing bg-white border border-[#e5e5e5] rounded-md overflow-hidden"
       x-data="billingForm"
       x-init="init(${initialExpanded ? "true" : "false"})"
     >
       <!-- Card head -->
       <div class="checkout-section__header flex items-center gap-2 sm:gap-3 px-4 sm:px-[22px] py-[12px] sm:py-[18px]">
-        <span class="checkout-section__icon hidden sm:inline-flex items-center justify-center w-8 h-8 min-w-[32px] rounded-md bg-[#fafaf8] text-[#4a4a48] p-[7px]">
+        <span class="checkout-section__icon hidden sm:inline-flex items-center justify-center w-8 h-8 min-w-[32px] rounded-md bg-[#fafafa] text-text-secondary p-[7px]">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
             <path stroke-linecap="round" stroke-linejoin="round" d="M14 2v6h6"/>
@@ -37,7 +37,7 @@ export function BillingInfoSection({
         <span
           x-show="type"
           x-cloak
-          class="co-pill co-pill-ghost inline-flex items-center gap-1 px-1.5 sm:px-2 py-[2px] sm:py-[3px] rounded-full text-[10px] sm:text-[11.5px] font-medium bg-transparent text-[#4a4a48] border border-[#e8e6e0] whitespace-nowrap shrink-0"
+          class="co-pill co-pill-ghost inline-flex items-center gap-1 px-1.5 sm:px-2 py-[2px] sm:py-[3px] rounded-full text-[10px] sm:text-[11.5px] font-medium bg-transparent text-text-secondary border border-[#e5e5e5] whitespace-nowrap shrink-0"
           x-text="type === 'Bireysel' ? '${t("checkout.billingIndividual")}' : '${t("checkout.billingCompany")}'"
         ></span>
 
@@ -54,7 +54,7 @@ export function BillingInfoSection({
         <button
           type="button"
           @click="toggle()"
-          class="co-link-btn appearance-none bg-transparent border-0 px-1.5 sm:px-2 py-1 text-[#4a4a48] inline-flex items-center gap-1 text-[12px] sm:text-[13px] font-medium rounded-md cursor-pointer no-underline hover:text-[#1a1a1a] hover:bg-[#fafaf8] focus:outline-none shrink-0"
+          class="co-link-btn th-no-press appearance-none bg-transparent border-0 px-1.5 sm:px-2 py-1 text-text-secondary inline-flex items-center gap-1 text-[12px] sm:text-[13px] font-medium rounded-md cursor-pointer no-underline hover:text-[#0a0a0a] hover:bg-[#fafafa] focus:outline-none shrink-0"
         >
           <span x-show="!expanded" data-i18n="checkout.edit">${t("checkout.edit")}</span>
           <span x-show="expanded" x-cloak data-i18n="checkout.close">${t("checkout.close")}</span>
@@ -76,22 +76,22 @@ export function BillingInfoSection({
             role="tab"
             :aria-selected="type === 'Bireysel'"
             @click="setType('Bireysel')"
-            class="co-billing-toggle-card bg-white border border-[#e8e6e0] rounded-md p-[12px_14px] sm:p-[14px_16px] text-start flex flex-col gap-0.5 sm:gap-1 transition-all cursor-pointer hover:border-[#d5d2c9]"
+            class="co-billing-toggle-card bg-white border border-[#e5e5e5] rounded-md p-[12px_14px] sm:p-[14px_16px] text-start flex flex-col gap-0.5 sm:gap-1 transition-[border-color,background-color,box-shadow] duration-150 motion-reduce:transition-none cursor-pointer hover:border-[#d4d4d4]"
             :class="type === 'Bireysel' ? 'is-active bg-[#fff8e1] border-[#f5b800] shadow-[0_0_0_3px_rgba(245,184,0,0.12)]' : ''"
           >
             <div class="co-bt-title font-semibold text-[12.5px] sm:text-[13.5px] text-[#1a1a1a]" data-i18n="checkout.billingIndividual">${t("checkout.billingIndividual")}</div>
-            <div class="co-bt-sub text-[11px] sm:text-[12px] text-[#8a877f]" data-i18n="checkout.billingIndividualDesc">${t("checkout.billingIndividualDesc")}</div>
+            <div class="co-bt-sub text-[11px] sm:text-[12px] text-text-tertiary" data-i18n="checkout.billingIndividualDesc">${t("checkout.billingIndividualDesc")}</div>
           </button>
           <button
             type="button"
             role="tab"
             :aria-selected="type === 'Şirket'"
             @click="setType('Şirket')"
-            class="co-billing-toggle-card bg-white border border-[#e8e6e0] rounded-md p-[12px_14px] sm:p-[14px_16px] text-start flex flex-col gap-0.5 sm:gap-1 transition-all cursor-pointer hover:border-[#d5d2c9]"
+            class="co-billing-toggle-card bg-white border border-[#e5e5e5] rounded-md p-[12px_14px] sm:p-[14px_16px] text-start flex flex-col gap-0.5 sm:gap-1 transition-[border-color,background-color,box-shadow] duration-150 motion-reduce:transition-none cursor-pointer hover:border-[#d4d4d4]"
             :class="type === 'Şirket' ? 'is-active bg-[#fff8e1] border-[#f5b800] shadow-[0_0_0_3px_rgba(245,184,0,0.12)]' : ''"
           >
             <div class="co-bt-title font-semibold text-[12.5px] sm:text-[13.5px] text-[#1a1a1a]" data-i18n="checkout.billingCompany">${t("checkout.billingCompany")}</div>
-            <div class="co-bt-sub text-[11px] sm:text-[12px] text-[#8a877f]" data-i18n="checkout.billingCompanyDesc">${t("checkout.billingCompanyDesc")}</div>
+            <div class="co-bt-sub text-[11px] sm:text-[12px] text-text-tertiary" data-i18n="checkout.billingCompanyDesc">${t("checkout.billingCompanyDesc")}</div>
           </button>
         </div>
 
@@ -108,23 +108,23 @@ export function BillingInfoSection({
             ${field("billing-tax-office", "taxOffice", t("checkout.billingTaxOffice"), undefined, undefined, "text", "Kadıköy")}
             ${field("billing-tax-number", "taxNumber", t("checkout.billingTaxNumber"), "10", "10", "tel", "1234567890")}
           </div>
-          <label class="flex items-center gap-2 sm:gap-2.5 cursor-pointer text-[12px] sm:text-[13px] text-[#4a4a48] select-none">
+          <label class="flex items-center gap-2 sm:gap-2.5 cursor-pointer text-[12px] sm:text-[13px] text-text-secondary select-none">
             <span class="relative flex items-center justify-center w-4 h-4 sm:w-[18px] sm:h-[18px] rounded-[4px] border transition-colors shrink-0"
-              :class="eInvoice ? 'bg-[var(--btn-bg,#ff6600)] border-[var(--btn-bg,#ff6600)]' : 'bg-white border-[#d5d2c9]'">
+              :class="eInvoice ? 'bg-[var(--btn-bg,#f5b800)] border-[var(--btn-bg,#f5b800)]' : 'bg-white border-[#d4d4d4]'">
               <input type="checkbox" x-model="eInvoice" class="absolute inset-0 opacity-0 cursor-pointer">
               <svg x-show="eInvoice" x-cloak class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
             </span>
             <span class="font-medium" data-i18n="checkout.billingEInvoice">${t("checkout.billingEInvoice")}</span>
-            <span class="text-[11px] sm:text-[12px] text-[#8a877f]" data-i18n="checkout.billingEInvoiceHint">${t("checkout.billingEInvoiceHint")}</span>
+            <span class="text-[11px] sm:text-[12px] text-text-tertiary" data-i18n="checkout.billingEInvoiceHint">${t("checkout.billingEInvoiceHint")}</span>
           </label>
         </div>
 
         <!-- Adres -->
-        <div x-show="type" x-cloak class="border-t border-dashed border-[#e8e6e0] pt-3 flex flex-col gap-3">
+        <div x-show="type" x-cloak class="border-t border-dashed border-[#e5e5e5] pt-3 flex flex-col gap-3">
 
           <label class="flex items-center gap-2 sm:gap-2.5 cursor-pointer text-[12px] sm:text-[13px] text-[#1a1a1a] select-none">
             <span class="relative flex items-center justify-center w-4 h-4 sm:w-[18px] sm:h-[18px] rounded-[4px] border transition-colors shrink-0"
-              :class="sameAsShipping ? 'bg-[var(--btn-bg,#ff6600)] border-[var(--btn-bg,#ff6600)]' : 'bg-white border-[#d5d2c9]'">
+              :class="sameAsShipping ? 'bg-[var(--btn-bg,#f5b800)] border-[var(--btn-bg,#f5b800)]' : 'bg-white border-[#d4d4d4]'">
               <input type="checkbox" x-model="sameAsShipping" class="absolute inset-0 opacity-0 cursor-pointer">
               <svg x-show="sameAsShipping" x-cloak class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
             </span>
@@ -132,8 +132,8 @@ export function BillingInfoSection({
           </label>
 
           <!-- sameAsShipping: pill -->
-          <div x-show="sameAsShipping" x-cloak class="co-billing-addr-pill flex items-center gap-2 p-[10px_12px] sm:p-[12px_14px] bg-[#fafaf8] border border-[#e8e6e0] rounded-md text-[12px] sm:text-[13px] text-[#4a4a48]">
-            <svg class="w-4 h-4 text-[#8a877f] shrink-0" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
+          <div x-show="sameAsShipping" x-cloak class="co-billing-addr-pill flex items-center gap-2 p-[10px_12px] sm:p-[12px_14px] bg-[#fafafa] border border-[#e5e5e5] rounded-md text-[12px] sm:text-[13px] text-text-secondary">
+            <svg class="w-4 h-4 text-text-tertiary shrink-0" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
               <circle cx="12" cy="11" r="3" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -171,7 +171,7 @@ function field(
   const minl = minlength ? ` minlength="${minlength}"` : "";
   return `
     <div class="flex flex-col gap-1" :data-error="errors.${modelKey} ? 'true' : 'false'">
-      <label for="${id}" class="text-[11.5px] sm:text-[12.5px] font-medium text-[#4a4a48]">
+      <label for="${id}" class="text-[11.5px] sm:text-[12.5px] font-medium text-text-secondary">
         ${label} <span class="text-[#b42318]">*</span>
       </label>
       <input
@@ -183,8 +183,8 @@ function field(
         autocomplete="off"
         placeholder="${placeholder}"
         ${ml}${minl}
-        class="w-full h-10 sm:h-[44px] px-3 text-[13px] sm:text-[14px] text-[#1a1a1a] bg-white border rounded-md outline-none transition-colors placeholder:text-[#bdbab2] focus:border-[var(--btn-bg,#ff6600)] focus:shadow-[0_0_0_3px_rgba(255,102,0,0.10)]"
-        :class="errors.${modelKey} ? 'border-[#b42318]' : 'border-[#e8e6e0]'"
+        class="w-full h-10 sm:h-[44px] px-3 text-[13px] sm:text-[14px] text-[#1a1a1a] bg-white border rounded-md outline-none transition-colors placeholder:text-text-tertiary focus:border-[var(--btn-bg,#f5b800)] focus:shadow-[0_0_0_3px_rgba(245,184,0,0.12)]"
+        :class="errors.${modelKey} ? 'border-[#b42318]' : 'border-[#e5e5e5]'"
       />
       <span x-show="errors.${modelKey}" x-cloak class="text-[11px] sm:text-[12px] text-[#b42318]" x-text="errors.${modelKey}"></span>
     </div>

@@ -300,7 +300,7 @@ export function AccountSetupForm(defaultCountry: string = "TR"): string {
         <button
           type="submit"
           id="account-setup-submit-btn"
-          class="th-btn w-full py-3 text-base font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-6"
+          class="th-btn w-full py-3 text-base font-semibold disabled:opacity-50 disabled:cursor-not-allowed mt-6"
           disabled
         >
           <span data-i18n="auth.setup.createAccount">${t("auth.setup.createAccount")}</span>

@@ -20,7 +20,7 @@ export function SettingsChangeEmail(): string {
       <p class="text-sm max-sm:text-[13px] mb-7 max-sm:mb-4 m-0" style="color:var(--color-text-secondary)">${t("settings.changeEmailDesc")}</p>
 
       <!-- Step 1: Email Form -->
-      <div x-show="step === 1">
+      <div x-show="step === 1" x-transition:enter="transition ease-out duration-200 motion-reduce:transition-none" x-transition:enter-start="opacity-0 translate-y-1.5 motion-reduce:translate-y-0" x-transition:enter-end="opacity-100 translate-y-0">
         <div class="max-w-[640px] mx-auto">
           <!-- Current email (read-only info) -->
           <div class="mb-4 max-sm:mb-3" x-show="currentEmail" x-cloak>
@@ -58,7 +58,7 @@ export function SettingsChangeEmail(): string {
       </div>
 
       <!-- Step 2: OTP Verification -->
-      <div x-show="step === 2" x-cloak>
+      <div x-show="step === 2" x-cloak x-transition:enter="transition ease-out duration-200 motion-reduce:transition-none" x-transition:enter-start="opacity-0 translate-y-1.5 motion-reduce:translate-y-0" x-transition:enter-end="opacity-100 translate-y-0">
         <div class="max-w-[640px] mx-auto">
           <p class="text-sm max-sm:text-[13px] mb-4 m-0" style="color:var(--color-text-secondary)">
             ${t("settings.otpSentToNewEmail") || "Yeni e-posta adresinize 6 haneli bir doğrulama kodu gönderdik:"}
@@ -163,7 +163,7 @@ export function SettingsChangeEmail(): string {
       </div>
 
       <!-- Step 3: Success -->
-      <div x-show="step === 3" x-cloak>
+      <div x-show="step === 3" x-cloak x-transition:enter="transition ease-out duration-200 motion-reduce:transition-none" x-transition:enter-start="opacity-0 translate-y-1.5 motion-reduce:translate-y-0" x-transition:enter-end="opacity-100 translate-y-0">
         <div class="max-w-[640px] mx-auto text-center py-4 max-sm:py-2">
           <div class="mb-4">${ICONS.checkActive}</div>
           <h3 class="text-lg max-sm:text-base font-bold mb-2 m-0" style="color:var(--color-text-primary)">${t("settings.emailUpdated")}</h3>

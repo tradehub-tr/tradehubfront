@@ -25,7 +25,7 @@ export function ThemeEditorPanel(): string {
     <button
       type="button"
       id="theme-editor-trigger"
-      class="fixed top-1/2 end-0 -translate-y-1/2 z-(--z-sidebar) flex items-center justify-center w-10 h-24 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-s-md shadow-lg border border-e-0 border-gray-200 dark:border-gray-600 transition-all duration-200 hover:w-12 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2"
+      class="fixed top-1/2 end-0 -translate-y-1/2 z-(--z-sidebar) flex items-center justify-center w-10 h-24 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-s-md shadow-lg border border-e-0 border-gray-200 dark:border-gray-600 transition-shadow duration-200 motion-reduce:transition-none hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2"
       aria-label="Open theme editor"
       data-tooltip-target="tooltip-theme-editor"
       data-tooltip-placement="left"
@@ -35,7 +35,7 @@ export function ThemeEditorPanel(): string {
         <path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 0 0-5.78 1.128 2.25 2.25 0 0 1-2.4 2.245 4.5 4.5 0 0 0 8.4-2.245c0-.399-.078-.78-.22-1.128Zm0 0a15.998 15.998 0 0 0 3.388-1.62m-5.043-.025a15.994 15.994 0 0 1 1.622-3.395m3.42 3.42a15.995 15.995 0 0 0 4.764-4.648l3.876-5.814a1.151 1.151 0 0 0-1.597-1.597L14.146 6.32a15.996 15.996 0 0 0-4.649 4.763m3.42 3.42a6.776 6.776 0 0 0-3.42-3.42" />
       </svg>
     </button>
-    <div id="tooltip-theme-editor" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-md shadow-sm opacity-0 tooltip dark:bg-gray-700">
+    <div id="tooltip-theme-editor" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-150 motion-reduce:transition-none bg-gray-900 rounded-md shadow-sm opacity-0 tooltip dark:bg-gray-700">
       Customize Theme
       <div class="tooltip-arrow" data-popper-arrow></div>
     </div>
@@ -233,14 +233,14 @@ function openThemeEditorDrawer(): void {
   const backdrop = document.createElement("div");
   backdrop.id = "theme-editor-backdrop";
   backdrop.className =
-    "fixed inset-0 z-[calc(var(--z-toast)-1)] bg-black/30 transition-opacity duration-300 opacity-0 md:hidden";
+    "fixed inset-0 z-[calc(var(--z-toast)-1)] bg-black/30 transition-opacity duration-300 motion-reduce:transition-none opacity-0 md:hidden";
   backdrop.setAttribute("aria-hidden", "true");
 
   // Create drawer
   const drawer = document.createElement("div");
   drawer.id = "theme-editor-drawer";
   drawer.className =
-    "fixed top-0 end-0 z-(--z-toast) h-full w-full md:max-w-[400px] bg-white dark:bg-gray-800 shadow-2xl flex flex-col transition-transform duration-300 translate-x-full";
+    "fixed top-0 end-0 z-(--z-toast) h-full w-full md:max-w-[400px] bg-white dark:bg-gray-800 shadow-2xl flex flex-col transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none translate-x-full";
   drawer.setAttribute("role", "dialog");
   drawer.setAttribute("aria-modal", "true"); // Modal on mobile
   drawer.setAttribute("aria-label", "Theme Editor");
@@ -403,13 +403,16 @@ function openThemeEditorDrawer(): void {
 
   // Close handler
   const closeDrawer = (): void => {
+    // Exit is snappier than enter (Emil: çıkış daha hızlı/kararlı hissettirir)
+    drawer.classList.remove("duration-300", "ease-[cubic-bezier(0.32,0.72,0,1)]");
+    drawer.classList.add("duration-200", "ease-out");
     drawer.classList.add("translate-x-full");
     backdrop.classList.add("opacity-0");
     restoreBodyScroll();
     setTimeout(() => {
       backdrop.remove();
       drawer.remove();
-    }, 300);
+    }, 200);
   };
 
   // Minimize handler (same as close for now)

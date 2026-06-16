@@ -39,7 +39,7 @@ function renderCategoryCard(cat: TopRankingCategory): string {
   const href = `/pages/top-ranking-category.html?cat=${encodeURIComponent(cat.slug || cat.id)}&sort=hot-selling&page=1`;
   const imgHtml = cat.image
     ? `<img src="${escapeHtml(cat.image)}" alt="${safeName}" loading="lazy"
-            class="w-full h-full object-cover transition-transform duration-300 group-hover/rank:scale-110" />`
+            class="w-full h-full object-cover transition-transform duration-200 ease-out motion-reduce:transition-none motion-reduce:transform-none group-hover/rank:scale-110" />`
     : `<div class="w-full h-full flex items-center justify-center">
          <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -50,7 +50,7 @@ function renderCategoryCard(cat: TopRankingCategory): string {
   return `
     <a
       href="${href}"
-      class="group/rank relative flex-shrink-0 flex flex-col w-[130px] sm:w-[156px] md:w-[188px] rounded-md border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md no-underline"
+      class="group/rank relative flex-shrink-0 flex flex-col w-[130px] sm:w-[156px] md:w-[188px] rounded-md border transition-[transform,box-shadow] duration-200 ease-out motion-reduce:transition-none motion-reduce:transform-none hover:-translate-y-0.5 hover:shadow-md no-underline"
       style="background: var(--topranking-card-bg, #ffffff); border-color: var(--topranking-card-border, #e5e7eb); padding: var(--space-card-padding, 12px);"
       aria-label="${safeName}"
       data-cat-slug="${escapeHtml(cat.slug || "")}"

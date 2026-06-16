@@ -413,6 +413,7 @@ document.addEventListener('click', (e: Event) => {
   const page = parseInt(btn.dataset.page!, 10);
   if (page > 0) {
     engine.goToPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
   }
 });

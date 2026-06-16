@@ -1,7 +1,7 @@
 import { ManufacturersHero } from "./ManufacturersHero";
 import { HorizontalCategoryBar } from "./HorizontalCategoryBar";
 import { ManufacturerList } from "./ManufacturerList";
-import { ManufacturerFilterSidebar } from "./ManufacturerFilterSidebar";
+import { ManufacturerFilterSidebar, ManufacturerFilterSheet } from "./ManufacturerFilterSidebar";
 
 function hasSearchContext(): boolean {
   if (typeof window === "undefined") return false;
@@ -19,10 +19,11 @@ export function ManufacturersLayout(): string {
             ${ManufacturerFilterSidebar()}
           </div>
           <div class="flex-1 min-w-0">
-            ${ManufacturerList()}
+            ${ManufacturerList({ mobileFilter: true })}
           </div>
         </div>
       </div>
+      ${ManufacturerFilterSheet()}
     `;
   }
 

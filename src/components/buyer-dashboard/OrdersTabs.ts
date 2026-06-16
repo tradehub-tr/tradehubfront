@@ -43,7 +43,7 @@ export function OrdersTabs({
 
       return `
       <button
-        class="orders__tab ${activeClass} inline-flex items-center gap-1 px-3.5 py-1.5 rounded-(--radius-tab) border-none text-[13px] font-medium cursor-pointer whitespace-nowrap transition-all max-md:snap-start max-md:shrink-0
+        class="orders__tab ${activeClass} inline-flex items-center gap-1 px-3.5 py-1.5 rounded-(--radius-tab) border-none text-[13px] font-medium cursor-pointer whitespace-nowrap transition-colors duration-150 max-md:snap-start max-md:shrink-0
                bg-[var(--color-orders-tab-inactive-bg)] text-[var(--color-orders-tab-inactive-text)]
                hover:bg-[var(--color-orders-tab-hover-bg)]
                [&.orders__tab--active]:bg-[var(--color-orders-tab-active-bg)]
@@ -100,8 +100,8 @@ export function OrdersTabs({
                   bg-[var(--color-dropdown-bg)] border border-[var(--color-dropdown-border)]
                   rounded-[var(--radius-dropdown)] shadow-[0_4px_12px_var(--color-dropdown-shadow)]
                   py-1
-                  opacity-0 invisible -translate-y-1
-                  transition-[opacity,visibility,transform] duration-150
+                  origin-top-end opacity-0 invisible -translate-y-1
+                  transition-[opacity,visibility,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none
                   [&.orders__dropdown--open]:opacity-100
                   [&.orders__dropdown--open]:visible
                   [&.orders__dropdown--open]:translate-y-0"

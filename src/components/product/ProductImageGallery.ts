@@ -135,7 +135,7 @@ export function ProductImageGallery(): string {
         return `
         <button
           type="button"
-          class="gallery-lightbox-thumb relative w-[76px] h-[76px] border-2 border-white/30 rounded-md bg-white/10 p-0 overflow-hidden cursor-pointer shrink-0 transition-colors duration-150 ease-in-out [&.active]:border-[var(--color-surface)] max-[960px]:!w-[68px] max-[960px]:!h-[68px]"
+          class="gallery-lightbox-thumb relative w-[76px] h-[76px] border-2 border-white/30 rounded-md bg-white/10 p-0 overflow-hidden cursor-pointer shrink-0 transition-colors duration-150 ease-out [&.active]:border-[var(--color-surface)] max-[960px]:!w-[68px] max-[960px]:!h-[68px]"
           :class="{ 'active': lightboxIndex === ${i} }"
           data-index="${i}"
           aria-label="Video"
@@ -151,7 +151,7 @@ export function ProductImageGallery(): string {
       return `
       <button
         type="button"
-        class="gallery-lightbox-thumb w-[76px] h-[76px] border-2 border-white/30 rounded-md bg-white/10 p-0 overflow-hidden cursor-pointer shrink-0 transition-colors duration-150 ease-in-out [&.active]:border-[var(--color-surface)] max-[960px]:!w-[68px] max-[960px]:!h-[68px]"
+        class="gallery-lightbox-thumb w-[76px] h-[76px] border-2 border-white/30 rounded-md bg-white/10 p-0 overflow-hidden cursor-pointer shrink-0 transition-colors duration-150 ease-out [&.active]:border-[var(--color-surface)] max-[960px]:!w-[68px] max-[960px]:!h-[68px]"
         :class="{ 'active': lightboxIndex === ${i} }"
         data-index="${i}"
         aria-label="${img.alt}"
@@ -213,7 +213,7 @@ export function ProductImageGallery(): string {
 
       <!-- RIGHT: Main Image Area (content only) -->
       <div id="gallery-main-image"
-        class="flex-1 min-w-0 relative rounded overflow-hidden bg-[var(--color-surface-raised,#f5f5f5)] pointer-coarse:cursor-default [&.zoom-enabled]:cursor-zoom-in [&.zoom-enabled>[data-gallery-main-media=true]]:transition-transform [&.zoom-enabled>[data-gallery-main-media=true]]:duration-[180ms] [&.zoom-enabled>[data-gallery-main-media=true]]:ease-out [&.zoom-enabled>[data-gallery-main-media=true]]:origin-center [&.zoom-enabled>[data-gallery-main-media=true]]:will-change-transform [&.is-zooming>[data-gallery-main-media=true]]:transition-transform [&.is-zooming>[data-gallery-main-media=true]]:duration-[30ms] [&.is-zooming>[data-gallery-main-media=true]]:ease-linear"
+        class="flex-1 min-w-0 relative rounded overflow-hidden bg-[var(--color-surface-raised,#f5f5f5)] pointer-coarse:cursor-default [&.zoom-enabled]:cursor-zoom-in [&.zoom-enabled>[data-gallery-main-media=true]]:transition-transform [&.zoom-enabled>[data-gallery-main-media=true]]:duration-[180ms] [&.zoom-enabled>[data-gallery-main-media=true]]:ease-out [&.zoom-enabled>[data-gallery-main-media=true]]:origin-center [&.zoom-enabled>[data-gallery-main-media=true]]:will-change-transform [&.is-zooming>[data-gallery-main-media=true]]:transition-transform [&.is-zooming>[data-gallery-main-media=true]]:duration-[30ms] [&.is-zooming>[data-gallery-main-media=true]]:ease-linear motion-reduce:[&.zoom-enabled>[data-gallery-main-media=true]]:transition-none motion-reduce:[&.is-zooming>[data-gallery-main-media=true]]:transition-none"
         x-ref="mainImage"
         :class="{ 'hidden': currentIndex === attrsIndex, 'zoom-enabled': supportsHoverZoom && !isVideoSlide(), 'is-zooming': isZooming && !isVideoSlide() }"
         @pointermove="!isVideoSlide() && handleZoomMove($event)"
@@ -251,8 +251,8 @@ export function ProductImageGallery(): string {
 
     <!-- Photos / Attributes tabs -->
     <div id="pd-gallery-tabs" class="inline-flex gap-0.5 mt-3 rounded-full p-[3px]" style="background: var(--color-border-light);">
-      <button type="button" class="gallery-view-tab th-no-press px-5 py-1.5 text-[13px] font-medium rounded-[20px] bg-transparent text-[var(--color-text-muted,#666)] border-0 cursor-pointer transition-all duration-150 [&.active]:bg-[var(--color-surface,#fff)] [&.active]:text-[var(--color-text-primary)] [&.active]:font-bold [&.active]:shadow-[0_1px_3px_rgba(0,0,0,0.1)]" :class="{ 'active': currentIndex !== attrsIndex }" @click="goToSlide(0)">${t("product.photosTab")}</button>
-      <button type="button" class="gallery-view-tab th-no-press px-5 py-1.5 text-[13px] font-medium rounded-[20px] bg-transparent text-[var(--color-text-muted,#666)] border-0 cursor-pointer transition-all duration-150 [&.active]:bg-[var(--color-surface,#fff)] [&.active]:text-[var(--color-text-primary)] [&.active]:font-bold [&.active]:shadow-[0_1px_3px_rgba(0,0,0,0.1)]" :class="{ 'active': currentIndex === attrsIndex }" @click="goToSlide(attrsIndex)">${t("product.attributesTab")}</button>
+      <button type="button" class="gallery-view-tab th-no-press px-5 py-1.5 text-[13px] font-medium rounded-[20px] bg-transparent text-[var(--color-text-muted,#666)] border-0 cursor-pointer transition-[background-color,color,box-shadow] duration-150 [&.active]:bg-[var(--color-surface,#fff)] [&.active]:text-[var(--color-text-primary)] [&.active]:font-bold [&.active]:shadow-[0_1px_3px_rgba(0,0,0,0.1)]" :class="{ 'active': currentIndex !== attrsIndex }" @click="goToSlide(0)">${t("product.photosTab")}</button>
+      <button type="button" class="gallery-view-tab th-no-press px-5 py-1.5 text-[13px] font-medium rounded-[20px] bg-transparent text-[var(--color-text-muted,#666)] border-0 cursor-pointer transition-[background-color,color,box-shadow] duration-150 [&.active]:bg-[var(--color-surface,#fff)] [&.active]:text-[var(--color-text-primary)] [&.active]:font-bold [&.active]:shadow-[0_1px_3px_rgba(0,0,0,0.1)]" :class="{ 'active': currentIndex === attrsIndex }" @click="goToSlide(attrsIndex)">${t("product.attributesTab")}</button>
     </div>
 
     <div id="gallery-lightbox" x-show="isLightboxOpen" x-cloak :aria-hidden="(!isLightboxOpen).toString()" @click.self="closeLightbox()" class="fixed inset-0 z-[var(--z-spotlight,90)] bg-[rgba(7,10,16,0.84)] flex items-center justify-center pt-[90px] px-5 pb-5 max-[960px]:!p-[72px_12px_12px]"

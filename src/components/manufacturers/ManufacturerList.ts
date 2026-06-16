@@ -2,7 +2,80 @@ import { t } from "../../i18n";
 import { isSellerFavorited, getFavoriteSellers } from "../../stores/sellerFavorites";
 import { openSellerFavoritesDropdown } from "../favorites/SellerFavoritesDropdown";
 
-export function ManufacturerList(): string {
+declare global {
+  interface Window {
+    /** Üretici kartı istatistik satırı parçaları (yıl · personel · m² · ciro) */
+    __sellerStatsParts?: (seller: Record<string, unknown>) => string[];
+    /** Üretici kartı servis satırı (işletme tipi · ihracat) — mevcut alanlardan türetilir */
+    __sellerServicesText?: (seller: Record<string, unknown>) => string;
+  }
+}
+
+// `founded_year` ham değeri 4-haneli kuruluş yılı ("1985") ya da doğrudan yıl
+// sayısı ("8") olabilir; ikisini de faaliyet süresine çevir.
+function parseSellerYears(foundedYear: unknown): number | null {
+  const n = parseInt(String(foundedYear ?? "").replace(/\D/g, ""), 10);
+  if (!n) return null;
+  const currentYear = new Date().getFullYear();
+  if (n >= 1900 && n <= currentYear) return currentYear - n;
+  if (n > 0 && n < 200) return n;
+  return null;
+}
+
+// Alibaba-tarzı istatistik satırı: yıl · personel · fabrika m² · yıllık ciro.
+// Yalnız dolu alanlar görünür.
+function sellerStatsParts(seller: Record<string, unknown>): string[] {
+  const parts: string[] = [];
+  const years = parseSellerYears(seller.founded_year);
+  if (years) parts.push(`${years} ${t("mfr.list.yearUnit")}`);
+  const staff = String(seller.staff_count ?? "").trim();
+  if (staff) parts.push(`${staff} ${t("mfr.list.staffUnit")}`);
+  const area = String(seller.factory_size ?? "").trim();
+  if (area) parts.push(/m²|m2|㎡/i.test(area) ? area : `${area} m²`);
+  const revenue = String(seller.annual_revenue ?? "").trim();
+  if (revenue) parts.push(revenue);
+  return parts;
+}
+
+// Servis satırı — DocType'ta ayrı alan yok; işletme tipi + ana pazarlardan türetilir.
+function sellerServicesText(seller: Record<string, unknown>): string {
+  const parts: string[] = [];
+  const bizMap: Record<string, string> = {
+    Manufacturer: t("mfr.list.bizManufacturer"),
+    Wholesaler: t("mfr.list.bizWholesaler"),
+    Retailer: t("mfr.list.bizRetailer"),
+  };
+  const bt = String(seller.business_type ?? "").trim();
+  if (bt) parts.push(bizMap[bt] || t("mfr.list.bizSupplier"));
+  const markets = String(seller.main_markets ?? "")
+    .split(",")
+    .map((m) => m.trim())
+    .filter(Boolean)
+    .slice(0, 3);
+  if (markets.length) parts.push(`${t("mfr.list.exportLabel")}: ${markets.join(", ")}`);
+  return parts.join(" · ");
+}
+
+export function ManufacturerList(opts: { mobileFilter?: boolean } = {}): string {
+  // Mobil toolbar — yalnız filtreli görünümde (sidebar `<lg` gizliyken). "Filtrele"
+  // butonu `mfr-filter-open` event'i ile bottom sheet'i açar (ManufacturerFilterSheet dinler).
+  const mobileToolbar = opts.mobileFilter
+    ? `
+      <div class="lg:hidden flex items-center gap-2.5 mb-3">
+        <button
+          type="button"
+          @click="$dispatch('mfr-filter-open')"
+          class="inline-flex items-center gap-1.5 h-9 px-3.5 rounded-full border border-gray-300 bg-white text-[13px] font-semibold text-[#222] cursor-pointer"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 5h16M7 12h10M10 19h4"/></svg>
+          ${t("mfr.list.filter")}
+        </button>
+        <span x-show="!loading" class="text-[13px] text-gray-500">
+          <b class="text-[#222]" x-text="sellers.length"></b> ${t("products.unitFoundManufacturer")}
+        </span>
+      </div>
+    `
+    : "";
   return `
     <div
       x-data="{
@@ -50,6 +123,8 @@ export function ManufacturerList(): string {
         }
       }"
     >
+      ${mobileToolbar}
+
       <!-- Loading state — Alibaba tarzı arama süreci paneli + iskelet kartlar -->
       <div x-show="loading" class="flex flex-col gap-3">
         <template x-if="searchedKeyword">
@@ -97,181 +172,199 @@ export function ManufacturerList(): string {
         <p class="text-[14px]">${t("checkoutMfr.noSellersFound")}</p>
       </div>
 
-      <!-- Seller cards -->
-      <div x-show="!loading" class="flex flex-col">
+      <!-- Seller cards — tek akışkan layout; container-query ile reflow (sidebar genişliği değiştirdiği için viewport değil) -->
+      <div x-show="!loading" class="flex flex-col @container/sc">
         <template x-for="(seller, idx) in sellers" :key="seller.seller_code">
-          <div class="bg-white rounded-lg p-3 mb-2 lg:p-5 lg:mb-5">
+          <div class="bg-white rounded-md p-3 mb-2.5 @min-[560px]/sc:p-4 @min-[560px]/sc:mb-4">
 
-            <!-- Desktop Layout -->
-            <div class="hidden lg:flex flex-col">
-              <!-- Title Row -->
-              <div class="flex xl:flex-row flex-col gap-4 xl:gap-0 justify-between items-start mb-6">
-                <div class="flex items-start min-w-0">
-                  <div class="w-[50px] h-[50px] border border-[#ddd] rounded overflow-hidden shrink-0 me-3 bg-gray-50 flex items-center justify-center">
-                    <img
-                      x-show="seller.logo"
-                      :src="seller.logo"
-                      :alt="seller.seller_name"
-                      class="w-full h-full object-contain p-1"
-                    />
-                    <svg x-show="!seller.logo" class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <rect x="3" y="3" width="18" height="18" rx="2"/>
-                    </svg>
-                  </div>
-                  <div class="min-w-0 flex-1">
-                    <a
-                      :href="'/magaza/' + seller.seller_code"
-                      class="text-[15px] xl:text-[16px] font-bold text-[#222] hover:text-[#1a66ff] transition-colors truncate max-w-[440px] block"
-                      x-text="seller.seller_name"
-                    ></a>
-                    <div class="flex flex-wrap items-center gap-1 xl:gap-1.5 mt-1 text-[12px] xl:text-[14px] text-[#222]">
-                      <template x-if="seller.verified">
-                        <span class="flex items-center gap-1">
-                          <svg class="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                          <span class="text-green-700 font-bold">${t("mfr.list.verified")}</span>
-                        </span>
-                      </template>
-                      <template x-if="seller.city">
-                        <span>· <span x-text="seller.city"></span></span>
-                      </template>
-                      <template x-if="seller.country">
-                        <span class="text-gray-400">· <span x-text="seller.country"></span></span>
-                      </template>
-                    </div>
-                  </div>
+            <!-- Header (her genişlikte tek satır: kimlik solda, aksiyonlar sağda) -->
+            <div class="flex items-start justify-between gap-3 mb-3.5 @min-[940px]/sc:mb-5">
+              <div class="flex items-start min-w-0">
+                <div class="w-10 h-10 @min-[560px]/sc:w-[50px] @min-[560px]/sc:h-[50px] border border-[#ddd] rounded-md overflow-hidden shrink-0 me-2.5 @min-[560px]/sc:me-3 bg-gray-50 flex items-center justify-center">
+                  <img
+                    x-show="seller.logo"
+                    :src="seller.logo"
+                    :alt="seller.seller_name"
+                    class="w-full h-full object-contain p-1"
+                  />
+                  <svg x-show="!seller.logo" class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                  </svg>
                 </div>
-
-                <div class="flex items-center gap-2 xl:gap-3 shrink-0">
-                  <button
-                    type="button"
-                    data-seller-favorite-btn
-                    @click.prevent.stop="openFavMenu($event, seller)"
-                    :class="isFav(seller.seller_code) ? 'text-red-500' : 'text-gray-400 hover:text-red-500'"
-                    class="transition-colors cursor-pointer bg-transparent border-none p-0"
-                    :aria-pressed="isFav(seller.seller_code)"
-                    aria-label="${t("mfr.list.addToFavorites")}"
-                  >
-                    <svg class="w-[22px] h-[22px]" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                    </svg>
-                  </button>
+                <div class="min-w-0 flex-1">
                   <a
                     :href="'/magaza/' + seller.seller_code"
-                    class="h-9 xl:h-10 px-3 xl:px-4 border border-[#222] rounded-full text-[12px] xl:text-[14px] font-bold text-[#222] bg-white hover:bg-gray-50 transition-colors whitespace-nowrap inline-flex items-center"
-                  >${t("mfr.list.contactUs")}</a>
+                    class="text-[14.5px] @min-[560px]/sc:text-[16px] font-bold text-[#222] hover:underline underline-offset-2 decoration-1 line-clamp-1 @min-[560px]/sc:line-clamp-2 block"
+                    x-text="seller.seller_name"
+                  ></a>
+                  <div class="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 mt-1 text-[11.5px] @min-[560px]/sc:text-[13px] @min-[940px]/sc:text-[14px] text-[#222]">
+                    <template x-if="seller.verified">
+                      <span class="flex items-center gap-1">
+                        <svg class="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                        <span class="text-green-700 font-bold">${t("mfr.list.verified")}</span>
+                      </span>
+                    </template>
+                    <template x-if="seller.city">
+                      <span>· <span x-text="seller.city"></span></span>
+                    </template>
+                    <template x-if="seller.country">
+                      <span class="text-gray-500">· <span x-text="seller.country"></span></span>
+                    </template>
+                  </div>
+
+                  <!-- İstatistik satırı (Alibaba tarzı): yıl · personel · m² · ciro -->
+                  <template x-if="window.__sellerStatsParts && window.__sellerStatsParts(seller).length">
+                    <div class="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 mt-1 text-[11.5px] @min-[560px]/sc:text-[12.5px] text-gray-600">
+                      <template x-for="(part, si) in window.__sellerStatsParts(seller)" :key="si">
+                        <span class="inline-flex items-center gap-x-1.5 whitespace-nowrap">
+                          <span x-show="si > 0" class="w-[3px] h-[3px] rounded-full bg-gray-300"></span>
+                          <span x-text="part"></span>
+                        </span>
+                      </template>
+                    </div>
+                  </template>
+
+                  <!-- Servis satırı: işletme tipi · ihracat (mevcut alanlardan türetilir) -->
+                  <template x-if="window.__sellerServicesText && window.__sellerServicesText(seller)">
+                    <div class="mt-1 text-[11.5px] @min-[560px]/sc:text-[12.5px] text-gray-500 line-clamp-1" x-text="window.__sellerServicesText(seller)"></div>
+                  </template>
                 </div>
               </div>
 
-              <!-- Content Row -->
-              <div class="flex gap-4 items-stretch">
-                <!-- Left: Stats -->
-                <div class="w-[200px] xl:w-[244px] shrink-0 pe-3">
-                  <h4 class="text-[13px] xl:text-[14px] font-normal text-[#222] mb-1">${t("mfr.list.rankingsAndReviews")}</h4>
-                  <div class="mb-4 text-[13px] xl:text-[14px]">
-                    <strong class="text-[#222]" x-text="seller.rating ? seller.rating.toFixed(1) : '—'"></strong>
-                    <span class="text-[#222]">/5</span>
-                    <span class="text-[#222] ms-1" x-text="'(' + (seller.review_count || 0) + ')'"></span>
-                  </div>
-                  <template x-if="seller.short_description">
-                    <p class="text-[12px] xl:text-[13px] text-gray-500 line-clamp-4" x-text="seller.short_description"></p>
-                  </template>
-                </div>
-
-                <!-- Middle: Product cards (max 3) -->
-                <div class="flex-1 min-w-0 h-[165px] xl:h-[220px] flex items-stretch gap-3">
-                  <template x-if="!seller.products || seller.products.length === 0">
-                    <div class="w-full h-full rounded-lg bg-gray-100 flex items-center justify-center text-gray-200">
-                      <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                      </svg>
-                    </div>
-                  </template>
-                  <template x-for="(p, i) in (seller.products || []).slice(0, 3)" :key="p.name">
-                    <a
-                      :href="'/urun/' + encodeURIComponent(p.slug || p.name)"
-                      class="flex flex-col bg-white border border-gray-100 rounded-lg overflow-hidden w-[140px] xl:w-[180px] flex-shrink-0 no-underline text-inherit hover:border-gray-300 transition-colors"
-                    >
-                      <div class="bg-gray-50 flex-1 overflow-hidden">
-                        <img x-show="p.image" :src="p.image" :alt="p.product_name" class="block w-full h-full object-cover" />
-                        <div x-show="!p.image" class="w-full h-full flex items-center justify-center text-gray-200">
-                          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
-                        </div>
-                      </div>
-                      <div class="p-2 flex-shrink-0 h-[78px]">
-                        <p class="text-[12px] text-gray-800 font-medium leading-tight line-clamp-2 mb-1 min-h-[2lh]" x-text="p.product_name"></p>
-                        <p x-show="p.price_min" class="text-[12px] font-bold text-gray-900" x-text="(_cv, p.price_max && p.price_max > p.price_min ? window.csFormatPriceRange(parseFloat(p.price_min), parseFloat(p.price_max), p.currency || 'USD') : window.csFormatPrice(parseFloat(p.price_min), p.currency || 'USD'))"></p>
-                        <p x-show="p.moq" class="text-[11px] text-gray-400 mt-0.5" x-text="p.moq + ' ' + (p.moq_unit || '${t("checkoutMfr.unitPieces")}')"></p>
-                      </div>
-                    </a>
-                  </template>
-                </div>
-
-                <!-- Right: Gallery panel -->
-                <template x-if="seller.gallery_images && seller.gallery_images.length > 0">
-                  <div
-                    class="w-[165px] xl:w-[220px] shrink-0 h-[165px] xl:h-[220px] rounded-lg overflow-hidden relative cursor-pointer group"
-                    x-data="{ activeIdx: 0 }"
-                  >
-                    <img
-                      :src="seller.gallery_images[activeIdx]"
-                      :alt="seller.seller_name + ' ${t("checkoutMfr.galleryAlt")}'"
-                      class="w-full h-full object-cover transition-opacity duration-300"
-                    />
-                    <!-- Photo count badge -->
-                    <div class="absolute bottom-2 end-2 bg-black/60 text-white text-[11px] px-2 py-1 rounded flex items-center gap-1">
-                      <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                      </svg>
-                      <span x-text="(activeIdx + 1) + '/' + seller.gallery_images.length"></span>
-                    </div>
-                    <!-- Navigation arrows (visible on hover) -->
-                    <template x-if="seller.gallery_images.length > 1">
-                      <div class="absolute inset-0 flex items-center justify-between px-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button
-                          type="button"
-                          class="w-6 h-6 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70"
-                          @click.prevent="activeIdx = (activeIdx - 1 + seller.gallery_images.length) % seller.gallery_images.length"
-                        >
-                          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-                        </button>
-                        <button
-                          type="button"
-                          class="w-6 h-6 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70"
-                          @click.prevent="activeIdx = (activeIdx + 1) % seller.gallery_images.length"
-                        >
-                          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                        </button>
-                      </div>
-                    </template>
-                  </div>
-                </template>
+              <div class="flex items-center gap-2 @min-[560px]/sc:gap-3 shrink-0">
+                <button
+                  type="button"
+                  data-seller-favorite-btn
+                  @click.prevent.stop="openFavMenu($event, seller)"
+                  :class="isFav(seller.seller_code) ? 'text-red-500' : 'text-gray-500 hover:text-red-500'"
+                  class="th-no-press transition-colors cursor-pointer bg-transparent border-none p-0"
+                  :aria-pressed="isFav(seller.seller_code)"
+                  aria-label="${t("mfr.list.addToFavorites")}"
+                >
+                  <svg class="w-[22px] h-[22px]" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                  </svg>
+                </button>
+                <a
+                  :href="'/magaza/' + seller.seller_code"
+                  class="h-9 @min-[560px]/sc:h-10 px-3 @min-[560px]/sc:px-4 @max-[420px]/sc:w-9 @max-[420px]/sc:px-0 @max-[420px]/sc:justify-center border border-[#222] rounded-full text-[12px] @min-[560px]/sc:text-[14px] font-bold text-[#222] bg-white hover:bg-gray-50 transition-colors whitespace-nowrap inline-flex items-center gap-1.5"
+                >
+                  <svg class="w-[15px] h-[15px] shrink-0" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.6-.8L3 21l1.8-5.9A8.5 8.5 0 1 1 21 11.5z"/></svg>
+                  <span class="@max-[420px]/sc:hidden">${t("mfr.list.contactUs")}</span>
+                </a>
               </div>
             </div>
 
-            <!-- Mobile Layout -->
-            <div class="lg:hidden flex flex-col gap-2">
-              <div class="flex items-center gap-2 mb-1">
-                <div class="w-[28px] h-[28px] rounded-sm shrink-0 border border-gray-100 bg-gray-50 overflow-hidden flex items-center justify-center">
-                  <img x-show="seller.logo" :src="seller.logo" :alt="seller.seller_name" class="w-full h-full object-contain" />
-                  <svg x-show="!seller.logo" class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+            <!-- Body: ≥940 üç kolon (hakkında | ürünler | galeri), altında tek kolon -->
+            <div
+              class="grid grid-cols-1 gap-3 @min-[940px]/sc:grid-cols-[196px_1fr_auto] @min-[940px]/sc:gap-4 @min-[940px]/sc:items-stretch"
+            >
+              <!-- Hakkında: derece (her zaman) + açıklama (yalnız geniş) -->
+              <div class="min-w-0">
+                <h4 class="hidden @min-[940px]/sc:block text-[14px] font-normal text-[#222] mb-1">${t("mfr.list.rankingsAndReviews")}</h4>
+                <div class="flex items-center gap-1.5 text-[13px] @min-[940px]/sc:text-[14px]">
+                  <template x-if="seller.review_count > 0">
+                    <span class="flex items-center gap-1.5">
+                      <span class="inline-flex gap-0.5 shrink-0">
+                        <template x-for="i in 5" :key="i">
+                          <svg class="w-3.5 h-3.5" :class="i <= Math.round(seller.rating || 0) ? 'text-[#f5b800]' : 'text-gray-300'" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.6l2.8 6 6.5.7-4.9 4.4 1.4 6.4L12 17.9 6.2 20.5l1.4-6.4-4.9-4.4 6.5-.7z"/></svg>
+                        </template>
+                      </span>
+                      <span class="whitespace-nowrap">
+                        <strong class="text-[#222]" x-text="(seller.rating || 0).toFixed(1)"></strong><span class="text-[#222]">/5</span>
+                        <span class="text-gray-500 ms-1" x-text="'(' + seller.review_count + ')'"></span>
+                      </span>
+                    </span>
+                  </template>
+                  <template x-if="!seller.review_count">
+                    <span class="inline-flex items-center gap-1 text-gray-500">
+                      <svg class="w-3.5 h-3.5 text-gray-300" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.6l2.8 6 6.5.7-4.9 4.4 1.4 6.4L12 17.9 6.2 20.5l1.4-6.4-4.9-4.4 6.5-.7z"/></svg>
+                      <span>${t("mfr.list.noReviews")}</span>
+                    </span>
+                  </template>
                 </div>
-                <a
-                  :href="'/magaza/' + seller.seller_code"
-                  class="text-[14px] font-bold text-[#222] truncate flex-1"
-                  x-text="seller.seller_name"
-                ></a>
-                <template x-if="seller.city">
-                  <span class="text-[11px] text-gray-400 shrink-0 ms-auto" x-text="seller.city"></span>
+                <template x-if="seller.short_description">
+                  <p class="hidden @min-[940px]/sc:block mt-3 text-[13px] text-gray-500 line-clamp-6" x-text="seller.short_description"></p>
                 </template>
               </div>
-              <div class="text-[11px] text-[#222] flex items-center gap-1">
-                <strong x-text="seller.rating ? seller.rating.toFixed(1) : '—'"></strong>
-                <span>/5</span>
-                <span class="mx-1 text-gray-300">|</span>
-                <span x-text="(seller.review_count || 0) + ' ${t("checkoutMfr.reviewsWord")}'"></span>
+
+              <!-- Ürünler: yatay kaydırılabilir satır (swipe + scroll-snap, gizli scrollbar) -->
+              <div class="min-w-0">
+                <template x-if="!seller.products || seller.products.length === 0">
+                  <div class="w-full h-[120px] @min-[940px]/sc:h-[200px] @min-[1140px]/sc:h-[220px] rounded-md bg-gray-100 flex items-center justify-center text-gray-200">
+                    <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                    </svg>
+                  </div>
+                </template>
+                <template x-if="seller.products && seller.products.length > 0">
+                  <div>
+                  <div class="flex items-baseline justify-between mb-2">
+                    <span class="text-[12px] @min-[940px]/sc:text-[13px] font-semibold text-gray-500">${t("mfr.list.featuredProducts")}</span>
+                    <span class="text-[11px] font-semibold text-[#222] bg-gray-100 border border-gray-200 rounded-full px-2 py-0.5 whitespace-nowrap" x-text="seller.products.length + ' ${t("mfr.list.productsUnit")}'"></span>
+                  </div>
+                  <div class="flex gap-2 @min-[940px]/sc:gap-2.5 overflow-x-auto snap-x snap-proximity touch-pan-x [scrollbar-width:none] [&::-webkit-scrollbar]:hidden @min-[940px]/sc:h-[200px] @min-[1140px]/sc:h-[220px]">
+                    <template x-for="(p, i) in seller.products.slice(0, 10)" :key="p.name">
+                      <a
+                        :href="'/urun/' + encodeURIComponent(p.slug || p.name)"
+                        class="snap-start shrink-0 flex flex-col no-underline text-inherit transition-colors w-[29%] @min-[620px]/sc:w-[23%] @min-[940px]/sc:w-auto @min-[940px]/sc:shrink @min-[940px]/sc:grow @min-[940px]/sc:basis-[150px] @min-[940px]/sc:min-w-[136px] @min-[940px]/sc:max-w-[200px] @min-[940px]/sc:border @min-[940px]/sc:border-gray-100 @min-[940px]/sc:rounded-md @min-[940px]/sc:bg-white @min-[940px]/sc:overflow-hidden @min-[940px]/sc:hover:border-gray-300"
+                      >
+                        <div class="overflow-hidden bg-gray-50 aspect-square border border-gray-200 rounded-md @min-[940px]/sc:flex-1 @min-[940px]/sc:aspect-[4/3] @min-[940px]/sc:rounded-none @min-[940px]/sc:border-0 @min-[940px]/sc:border-b @min-[940px]/sc:border-gray-100">
+                          <img x-show="p.image" :src="p.image" :alt="p.product_name" class="block w-full h-full object-cover" />
+                          <div x-show="!p.image" class="w-full h-full flex items-center justify-center text-gray-200">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                          </div>
+                        </div>
+                        <div class="pt-1.5 @min-[940px]/sc:p-2 @min-[940px]/sc:h-[78px] @min-[940px]/sc:flex-shrink-0">
+                          <p class="hidden @min-[940px]/sc:line-clamp-2 text-[12px] text-gray-800 font-medium leading-tight mb-1 min-h-[2lh]" x-text="p.product_name"></p>
+                          <p x-show="p.price_min" class="text-[11.5px] @min-[940px]/sc:text-[12px] font-bold text-gray-900 whitespace-nowrap" x-text="(_cv, p.price_max && p.price_max > p.price_min ? window.csFormatPriceRange(parseFloat(p.price_min), parseFloat(p.price_max), p.currency || 'USD') : window.csFormatPrice(parseFloat(p.price_min), p.currency || 'USD'))"></p>
+                          <p x-show="p.moq" class="text-[10.5px] @min-[940px]/sc:text-[11px] text-gray-500 mt-0.5" x-text="p.moq + ' ' + (p.moq_unit || '${t("checkoutMfr.unitPieces")}')"></p>
+                        </div>
+                      </a>
+                    </template>
+                  </div>
+                  </div>
+                </template>
               </div>
-              <template x-if="seller.cover_image || (seller.product_images && seller.product_images.length > 0)">
-                <img :src="seller.cover_image || seller.product_images[0]" :alt="seller.seller_name" class="w-full h-[120px] object-cover rounded" />
+
+              <!-- Galeri (sağ ray) — yalnız geniş; dar ekranda gizli. mt: ürün başlığı yüksekliğiyle hizala -->
+              <template x-if="seller.gallery_images && seller.gallery_images.length > 0">
+                <div
+                  class="hidden @min-[940px]/sc:block w-[182px] h-[200px] @min-[1140px]/sc:h-[220px] @min-[940px]/sc:mt-[26px] rounded-md overflow-hidden relative cursor-pointer group"
+                  x-data="{ activeIdx: 0 }"
+                >
+                  <img
+                    :src="seller.gallery_images[activeIdx]"
+                    :alt="seller.seller_name + ' ${t("checkoutMfr.galleryAlt")}'"
+                    class="w-full h-full object-cover transition-opacity duration-300"
+                  />
+                  <!-- Photo count badge -->
+                  <div class="absolute bottom-2 end-2 bg-black/60 text-white text-[11px] px-2 py-1 rounded flex items-center gap-1">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    <span x-text="(activeIdx + 1) + '/' + seller.gallery_images.length"></span>
+                  </div>
+                  <!-- Navigation arrows (visible on hover) -->
+                  <template x-if="seller.gallery_images.length > 1">
+                    <div class="absolute inset-0 flex items-center justify-between px-1 opacity-100 [@media(hover:hover)and(pointer:fine)]:opacity-0 [@media(hover:hover)and(pointer:fine)]:group-hover:opacity-100 transition-opacity duration-200 motion-reduce:transition-none">
+                      <button
+                        type="button"
+                        class="th-no-press w-6 h-6 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70"
+                        @click.prevent="activeIdx = (activeIdx - 1 + seller.gallery_images.length) % seller.gallery_images.length"
+                      >
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="th-no-press w-6 h-6 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70"
+                        @click.prevent="activeIdx = (activeIdx + 1) % seller.gallery_images.length"
+                      >
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                      </button>
+                    </div>
+                  </template>
+                </div>
               </template>
             </div>
 
@@ -286,6 +379,8 @@ export function ManufacturerList(): string {
 export function initFactorySliders(): void {
   if (typeof window === "undefined") return;
   // Alpine inline x-data'dan çağrılabilir global helper'lar
+  window.__sellerStatsParts = sellerStatsParts;
+  window.__sellerServicesText = sellerServicesText;
   window.__getSellerFavs = (): string[] => getFavoriteSellers().map((s) => s.code);
   window.__isSellerFav = (code: string): boolean => isSellerFavorited(code);
   window.__openSellerFavMenu = (anchor: HTMLElement, seller: SellerCardSummary): void => {

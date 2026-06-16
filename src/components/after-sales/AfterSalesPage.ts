@@ -48,7 +48,7 @@ function breadcrumbSection(): string {
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
       <nav class="flex text-sm text-gray-500" aria-label="Breadcrumb">
         <ol class="flex items-center gap-1.5">
-          <li><a href="/ticaret-guvencesi/detay" class="hover:text-[#FFC800] transition-colors">${t("infoMisc.tradeAssurance")}</a></li>
+          <li><a href="/ticaret-guvencesi/detay" class="transition-colors [@media(hover:hover)]:hover:text-[#FFC800]">${t("infoMisc.tradeAssurance")}</a></li>
           <li class="text-gray-400">&gt;</li>
           <li class="text-gray-900 font-medium">${t("infoMisc.afterSalesSupport")}</li>
         </ol>
@@ -70,7 +70,7 @@ function currentFeaturesSection(): string {
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">
 
           <!-- Card 1: Satıcı Değerlendirme -->
-          <div class="border border-gray-200 rounded-md p-6 flex flex-col gap-4 hover:shadow-md transition-shadow">
+          <div class="border border-gray-200 rounded-md p-6 flex flex-col gap-4 transition-shadow [@media(hover:hover)]:hover:shadow-md">
             ${yellowIcon(iconStar)}
             <h3 class="text-lg font-bold text-gray-900">${t("infoMisc.sellerRatingTitle")}</h3>
             <p class="text-sm text-gray-600 leading-relaxed flex-1">
@@ -88,7 +88,7 @@ function currentFeaturesSection(): string {
           </div>
 
           <!-- Card 2: Mesajlaşma -->
-          <div class="border border-gray-200 rounded-md p-6 flex flex-col gap-4 hover:shadow-md transition-shadow">
+          <div class="border border-gray-200 rounded-md p-6 flex flex-col gap-4 transition-shadow [@media(hover:hover)]:hover:shadow-md">
             ${yellowIcon(iconMessage)}
             <h3 class="text-lg font-bold text-gray-900">${t("infoMisc.directContactTitle")}</h3>
             <p class="text-sm text-gray-600 leading-relaxed flex-1">

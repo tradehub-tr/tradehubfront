@@ -51,7 +51,7 @@ function renderSidebarSection(section: CategorySection, index: number): string {
         aria-controls="${sectionId}"
       >
         <h3 class="text-sm font-bold text-gray-900">${escapeHtml(section.title)}</h3>
-        <svg class="cat-filter-chevron w-4 h-4 text-gray-500 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <svg class="cat-filter-chevron w-4 h-4 text-gray-500 transition-transform duration-200 motion-reduce:transition-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7"/>
         </svg>
       </button>

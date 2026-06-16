@@ -42,9 +42,12 @@ export function MessageContent(): string {
 
     <!-- Chat View (conversation selected) -->
     <div x-show="selectedConversation"
-         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter="transition ease-out duration-200 motion-reduce:transition-none"
          x-transition:enter-start="opacity-0"
          x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-out duration-150 motion-reduce:transition-none"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
          class="flex-1 flex flex-col bg-(--color-surface,#ffffff) min-w-0 max-2xl:absolute max-2xl:inset-0 max-2xl:z-10">
 
       <!-- Chat Header -->
@@ -189,7 +192,7 @@ export function MessageContent(): string {
 
           <!-- Send button -->
           <button type="submit"
-                  class="flex items-center justify-center w-9 h-9 rounded-full border-none cursor-pointer transition-all duration-150 flex-shrink-0"
+                  class="flex items-center justify-center w-9 h-9 rounded-full border-none cursor-pointer transition-[background-color,color,opacity] duration-150 flex-shrink-0"
                   :class="newMessage.trim() ? 'bg-(--color-cta-primary,#cc9900) text-(--color-surface,#ffffff) hover:opacity-90' : 'bg-(--color-surface-muted,#fafafa) text-(--color-text-placeholder,#999999) cursor-not-allowed'"
                   :disabled="!newMessage.trim()"
                   aria-label="${t("messages.send")}">

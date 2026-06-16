@@ -11,7 +11,7 @@ import { fetchTicketStatusCounts } from "../../services/supportService";
 
 export function SupportTicketsCard(): string {
   return `
-    <div class="bg-(--color-surface,#ffffff) rounded-(--radius-card) p-4 transition-shadow duration-300 hover:shadow-[0_0_12px_0_rgba(0,0,0,0.12)]" data-support-tickets-card>
+    <div class="bg-(--color-surface,#ffffff) rounded-(--radius-card) p-4 transition-shadow duration-200 hover:shadow-[0_0_12px_0_rgba(0,0,0,0.12)]" data-support-tickets-card>
       <div class="flex items-center justify-between mb-3">
         <h3 class="text-base font-bold text-(--color-text-body,#333333) m-0">${t("buyerUi.mySupportTickets")}</h3>
         <a href="/destek/taleplerim" class="text-[13px] text-(--color-text-placeholder,#999999) no-underline inline-flex items-center gap-0.5 transition-colors hover:text-(--color-cta-primary)">

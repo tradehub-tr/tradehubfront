@@ -14,9 +14,14 @@ export function TopRankingCategoryTabs(): string {
       <!-- Left arrow (desktop only) -->
       <button
         type="button"
-        class="hidden lg:flex absolute start-0 top-1/2 -translate-y-1/2 z-10 w-7 h-7 items-center justify-center rounded-full bg-surface shadow border border-border-default text-text-tertiary hover:text-text-primary transition-all"
+        class="hidden lg:flex absolute start-0 top-1/2 -translate-y-1/2 z-10 w-7 h-7 items-center justify-center rounded-full bg-surface shadow border border-border-default text-text-tertiary hover:text-text-primary transition-colors"
         x-show="canScrollLeft"
-        x-transition
+        x-transition:enter="transition ease-out duration-150"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-100"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
         @click="scrollTabs('left')"
         aria-label="Scroll left"
       >
@@ -72,9 +77,14 @@ export function TopRankingCategoryTabs(): string {
       <!-- Right arrow (desktop only) -->
       <button
         type="button"
-        class="hidden lg:flex absolute end-0 top-1/2 -translate-y-1/2 z-10 w-7 h-7 items-center justify-center rounded-full bg-surface shadow border border-border-default text-text-tertiary hover:text-text-primary transition-all"
+        class="hidden lg:flex absolute end-0 top-1/2 -translate-y-1/2 z-10 w-7 h-7 items-center justify-center rounded-full bg-surface shadow border border-border-default text-text-tertiary hover:text-text-primary transition-colors"
         x-show="canScrollRight"
-        x-transition
+        x-transition:enter="transition ease-out duration-150"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-100"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
         @click="scrollTabs('right')"
         aria-label="Scroll right"
       >
@@ -95,7 +105,7 @@ export function TopRankingCategoryTabs(): string {
 
     <!-- Sheet Panel -->
     <div
-      class="lg:hidden fixed inset-x-0 bottom-0 z-[100] transition-transform duration-300 ease-out"
+      class="lg:hidden fixed inset-x-0 bottom-0 z-[100] transition-transform duration-300 ease-out motion-reduce:transition-none"
       :class="showTabSheet ? 'translate-y-0' : 'translate-y-full'"
     >
       <div class="bg-white rounded-t-md max-h-[85vh] flex flex-col shadow-2xl">

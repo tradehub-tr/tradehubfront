@@ -81,7 +81,7 @@ function renderSlide(slide: HeroSideBannerSlide): string {
 
 export function HeroSideBannerSlider(): string {
   return `
-    <div class="group/hero-side relative hero-side-slider h-full [&_.hero-side-bullet]:h-2.5 [&_.hero-side-bullet]:w-2.5 [&_.hero-side-bullet]:rounded-full [&_.hero-side-bullet]:bg-slate-500/75 [&_.hero-side-bullet]:opacity-100 [&_.hero-side-bullet]:transition-all [&_.hero-side-bullet-active]:w-6 [&_.hero-side-bullet-active]:bg-white">
+    <div class="group/hero-side relative hero-side-slider h-full [&_.hero-side-bullet]:h-2.5 [&_.hero-side-bullet]:w-2.5 [&_.hero-side-bullet]:rounded-full [&_.hero-side-bullet]:bg-slate-500/75 [&_.hero-side-bullet]:opacity-100 [&_.hero-side-bullet]:transition-[width,background-color] [&_.hero-side-bullet]:duration-200 [&_.hero-side-bullet]:ease-out [&_.hero-side-bullet-active]:w-6 [&_.hero-side-bullet-active]:bg-white">
       <div class="swiper hero-side-swiper relative h-full rounded-md">
         <div class="swiper-wrapper">
           ${sideBannerSlides.map(renderSlide).join("")}

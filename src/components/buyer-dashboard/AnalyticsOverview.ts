@@ -37,7 +37,7 @@ function kpiCard(c: KpiCard): string {
     : `<span class="text-gray-500">${escapeHtml(c.hint)}</span>`;
 
   return `
-    <div class="relative bg-(--color-surface,#ffffff) rounded-lg border border-gray-100 p-4 max-sm:p-3 overflow-hidden transition-shadow duration-300 hover:shadow-[0_0_12px_0_rgba(0,0,0,0.12)]">
+    <div class="relative bg-(--color-surface,#ffffff) rounded-lg border border-gray-100 p-4 max-sm:p-3 overflow-hidden transition-shadow duration-200 hover:shadow-[0_0_12px_0_rgba(0,0,0,0.12)]">
       <p class="text-[12.5px] text-gray-500">${escapeHtml(c.label)}</p>
       <p class="text-[26px] max-sm:text-xl font-extrabold text-gray-900 mt-2 tracking-tight leading-none">${escapeHtml(c.value)}</p>
       <p class="text-xs mt-2 flex flex-wrap items-center gap-x-1.5 gap-y-0.5">${sub}</p>
@@ -69,7 +69,7 @@ function categoryLegend(slices: CategorySlice[]): string {
 
 export function AnalyticsOverview(): string {
   const cardBase =
-    "bg-(--color-surface,#ffffff) rounded-lg border border-gray-100 overflow-hidden transition-shadow duration-300 hover:shadow-[0_0_12px_0_rgba(0,0,0,0.12)]";
+    "bg-(--color-surface,#ffffff) rounded-lg border border-gray-100 overflow-hidden transition-shadow duration-200 hover:shadow-[0_0_12px_0_rgba(0,0,0,0.12)]";
 
   return `
     <!-- KPI kartları (init fetch sonrası doldurulur, başta iskelet) -->

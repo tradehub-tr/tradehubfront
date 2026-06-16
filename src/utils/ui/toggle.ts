@@ -82,7 +82,7 @@ export function renderSwitch(opts: SwitchOptions): string {
       <span class="relative inline-flex shrink-0">
         <input type="checkbox"${checkboxAttrs} ${checked ? "checked" : ""} class="peer sr-only" />
         <span class="block w-11 h-6 rounded-full bg-gray-300 transition-colors duration-200 peer-checked:bg-[var(--color-primary-500,#cc9900)] peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--color-primary-500,#cc9900)] peer-focus-visible:ring-offset-1"></span>
-        <span class="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform duration-200 peer-checked:translate-x-5"></span>
+        <span class="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform duration-200 motion-reduce:transition-none peer-checked:translate-x-5"></span>
       </span>
     </label>
   `;

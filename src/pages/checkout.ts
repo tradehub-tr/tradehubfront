@@ -853,7 +853,8 @@ if (placeOrderBtn) {
     const validateBilling = (window as unknown as { __validateBilling?: () => boolean }).__validateBilling;
     if (validateBilling && !validateBilling()) {
       const billingSection = document.getElementById('checkout-billing');
-      billingSection?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      billingSection?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
       showToast({ message: t('checkout.billingValidationError'), type: 'error', duration: 4000 });
       return;
     }

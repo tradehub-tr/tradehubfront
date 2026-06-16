@@ -122,7 +122,12 @@ export function ReportAbuseModal(): string {
     >
       <div
         x-show="open"
-        x-transition.scale.origin.center
+        x-transition:enter="transition ease-out duration-200 origin-center motion-reduce:transition-none"
+        x-transition:enter-start="opacity-0 scale-95 motion-reduce:scale-100"
+        x-transition:enter-end="opacity-100 scale-100"
+        x-transition:leave="transition ease-out duration-150 origin-center motion-reduce:transition-none"
+        x-transition:leave-start="opacity-100 scale-100"
+        x-transition:leave-end="opacity-0 scale-95 motion-reduce:scale-100"
         class="bg-surface rounded-xl shadow-modal w-full max-w-md relative"
       >
         <div class="border-b border-border-default px-5 py-3.5 flex items-center justify-between">

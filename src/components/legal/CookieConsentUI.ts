@@ -163,7 +163,7 @@ export function CookieConsentUI(): string {
               <input type="checkbox"
                 ${cat.alwaysOn ? "checked disabled" : `:checked="categories.${cat.id}" @change="toggleCategory('${cat.id}')"`}
                 class="sr-only peer">
-              <div class="w-10 h-5 bg-gray-300 peer-checked:bg-primary-500 rounded-full transition-colors ${cat.alwaysOn ? "opacity-70" : ""} after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-5"></div>
+              <div class="w-10 h-5 bg-gray-300 peer-checked:bg-primary-500 rounded-full transition-colors ${cat.alwaysOn ? "opacity-70" : ""} after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-transform after:motion-reduce:transition-none peer-checked:after:translate-x-5"></div>
             </label>
           </div>
         `

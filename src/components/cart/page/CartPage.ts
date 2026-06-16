@@ -108,7 +108,7 @@ export function showCartError(message: string): void {
   const toast = document.createElement("div");
   toast.id = "cart-error-toast";
   toast.className =
-    "fixed top-4 left-1/2 -translate-x-1/2 z-[9999] flex items-center justify-between gap-4 px-4 py-3 min-w-[340px] rounded bg-[#FEE2E2] border border-[#FECACA] shadow-sm text-[14px] text-[#333] transition-all duration-300 translate-y-[-20px] opacity-0";
+    "fixed top-4 left-1/2 -translate-x-1/2 z-[9999] flex items-center justify-between gap-4 px-4 py-3 min-w-[340px] rounded bg-[#FEE2E2] border border-[#FECACA] shadow-sm text-[14px] text-[#333] transition-[transform,opacity] duration-300 translate-y-[-20px] opacity-0";
   toast.innerHTML = `
     <div class="flex items-center gap-2">
       <svg class="w-4 h-4 text-[#dc2626] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
@@ -119,6 +119,9 @@ export function showCartError(message: string): void {
     </button>
   `;
 
+  // reduced-motion: dikey translate'i atla, sadece opacity ile göster/gizle
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
   document.body.appendChild(toast);
   requestAnimationFrame(() => {
     toast.style.transform = "translate(-50%, 0)";
@@ -127,7 +130,7 @@ export function showCartError(message: string): void {
   setTimeout(() => {
     if (document.body.contains(toast)) {
       toast.style.opacity = "0";
-      toast.style.transform = "translate(-50%, -20px)";
+      if (!reduceMotion) toast.style.transform = "translate(-50%, -20px)";
       setTimeout(() => toast.remove(), 300);
     }
   }, 4000);
@@ -141,7 +144,7 @@ export function showFavoriteToast(): void {
   const toast = document.createElement("div");
   toast.id = "fav-toast";
   toast.className =
-    "fixed top-4 left-1/2 -translate-x-1/2 z-[9999] flex items-center justify-between gap-4 px-4 py-3 min-w-[340px] rounded bg-[#E4F8E2] border border-[#CAEFC7] shadow-sm text-[14px] text-[#333] transition-all duration-300 translate-y-[-20px] opacity-0";
+    "fixed top-4 left-1/2 -translate-x-1/2 z-[9999] flex items-center justify-between gap-4 px-4 py-3 min-w-[340px] rounded bg-[#E4F8E2] border border-[#CAEFC7] shadow-sm text-[14px] text-[#333] transition-[transform,opacity] duration-300 translate-y-[-20px] opacity-0";
   toast.innerHTML = `
     <div class="flex items-center gap-2">
       <svg class="w-4 h-4 text-[#2db744]" viewBox="0 0 1024 1024" fill="currentColor">
@@ -156,6 +159,9 @@ export function showFavoriteToast(): void {
     </button>
   `;
 
+  // reduced-motion: dikey translate'i atla, sadece opacity ile göster/gizle
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
   document.body.appendChild(toast);
 
   requestAnimationFrame(() => {
@@ -166,7 +172,7 @@ export function showFavoriteToast(): void {
   setTimeout(() => {
     if (document.body.contains(toast)) {
       toast.style.opacity = "0";
-      toast.style.transform = "translate(-50%, -20px)";
+      if (!reduceMotion) toast.style.transform = "translate(-50%, -20px)";
       setTimeout(() => toast.remove(), 300);
     }
   }, 3000);

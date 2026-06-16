@@ -65,7 +65,7 @@ export function showToast(options: ToastOptions): void {
     border-left: 3px solid ${colors.bar};
     transform: translateX(110%);
     opacity: 0;
-    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease;
+    transition: transform 0.26s cubic-bezier(0.23,1,0.32,1), opacity 0.2s cubic-bezier(0.23,1,0.32,1);
     position: relative;
     overflow: hidden;
   `;
@@ -121,9 +121,12 @@ export function showToast(options: ToastOptions): void {
 }
 
 function dismissToast(toast: HTMLElement): void {
+  // Çıkış (release) girişten daha snappy olmalı: deliberate enter / quick exit.
+  toast.style.transition =
+    "transform 0.18s cubic-bezier(0.23,1,0.32,1), opacity 0.18s cubic-bezier(0.23,1,0.32,1)";
   toast.style.transform = "translateX(110%)";
   toast.style.opacity = "0";
-  setTimeout(() => toast.remove(), 300);
+  setTimeout(() => toast.remove(), 180);
 }
 
 /* ── Toast Queue ─────────────────────────────────── */

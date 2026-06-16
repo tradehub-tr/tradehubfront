@@ -27,7 +27,7 @@ export function ContactsLayout(): string {
         <aside class="w-[300px] max-md:w-full shrink-0 border-e max-md:border-e-0 max-md:border-b border-(--color-border-light,#f0f0f0) flex flex-col p-4">
           <!-- Header -->
           <div class="mb-3">
-            <button class="inline-flex items-center gap-1.5 text-sm font-normal text-(--color-text-heading,#111827) bg-transparent border-none cursor-pointer p-0 hover:text-(--color-cta-primary,#333333)">
+            <button class="inline-flex items-center gap-1.5 text-sm font-normal text-(--color-text-heading,#111827) bg-transparent border-none cursor-pointer p-0 transition-colors duration-150 hover:text-(--color-cta-primary,#333333)">
               ${t("contacts.allContacts")}
               <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
@@ -38,7 +38,7 @@ export function ContactsLayout(): string {
           <!-- Search -->
           <div class="flex items-center border border-(--color-border-medium,#d1d5db) rounded mb-3 overflow-hidden">
             <input type="text" class="th-input th-input-sm th-input-borderless flex-1" placeholder="${t("contacts.searchPlaceholder")}" />
-            <button class="th-no-press flex items-center justify-center w-8 h-8 border-none border-s border-s-(--color-border-medium,#d1d5db) bg-(--color-surface-muted,#fafafa) text-(--color-text-muted,#666666) cursor-pointer hover:bg-(--color-border-light) hover:text-(--color-text-heading,#111827)" aria-label="${t("inquiries.searchPlaceholder")}">
+            <button class="th-no-press flex items-center justify-center w-8 h-8 border-none border-s border-s-(--color-border-medium,#d1d5db) bg-(--color-surface-muted,#fafafa) text-(--color-text-muted,#666666) cursor-pointer transition-[background,color] duration-150 hover:bg-(--color-border-light) hover:text-(--color-text-heading,#111827)" aria-label="${t("inquiries.searchPlaceholder")}">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="8"/>
                 <path stroke-linecap="round" d="m21 21-4.35-4.35"/>
@@ -48,7 +48,7 @@ export function ContactsLayout(): string {
 
           <!-- Sort -->
           <div class="mb-6">
-            <button class="inline-flex items-center gap-1 text-[13px] text-(--color-text-muted,#666666) bg-transparent border-none cursor-pointer p-0 hover:text-(--color-text-heading,#111827)">
+            <button class="inline-flex items-center gap-1 text-[13px] text-(--color-text-muted,#666666) bg-transparent border-none cursor-pointer p-0 transition-colors duration-150 hover:text-(--color-text-heading,#111827)">
               ${t("contacts.sortByTime")}
               <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>

@@ -60,7 +60,7 @@ function renderCategorySlide(category: TailoredCategory, index: number): string 
           src="${escapeHtml(sanitizeUrl(category.imageSrc))}"
           alt="${escapeHtml(category.title)}"
           loading="${index <= 2 ? "eager" : "lazy"}"
-          class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 [@media(hover:hover)and(pointer:fine)]:group-hover:scale-105 motion-reduce:transition-none motion-reduce:transform-none"
         />
         <!-- Dynamic Gradient overlay -->
         <div
@@ -169,7 +169,7 @@ export function TailoredSelectionsHero(categories: TailoredCategory[]): string {
     <section
       id="ts-hero-section"
       class="alimod-sourcing-list-switch-floor relative overflow-hidden h-[320px] sm:h-[350px] md:h-[380px] xl:h-[419px]"
-      style="--floor-background-color: ${initialBg}; --list-card-border-color: #6a6145; background-color: var(--floor-background-color); transition: background-color 0.5s ease;"
+      style="--floor-background-color: ${initialBg}; --list-card-border-color: #6a6145; background-color: var(--floor-background-color); transition: background-color 0.4s cubic-bezier(0.23, 1, 0.32, 1);"
     >
 
       <!-- Title wrapper: max-width 1440px -->
@@ -191,7 +191,7 @@ export function TailoredSelectionsHero(categories: TailoredCategory[]): string {
           <!-- Navigation arrows (hidden on mobile — swipe works) -->
           <button
             aria-label="Previous categories"
-            class="ts-hero-prev swiper-button absolute start-4 top-1/2 z-10 h-10 w-10 -translate-y-1/2 hidden md:flex items-center justify-center rounded-full bg-white/90 text-gray-700 shadow-lg transition-all duration-200 hover:bg-white hover:text-gray-900 hover:scale-110 disabled:opacity-0 disabled:pointer-events-none"
+            class="ts-hero-prev swiper-button absolute start-4 top-1/2 z-10 h-10 w-10 -translate-y-1/2 hidden md:flex items-center justify-center rounded-full bg-white/90 text-gray-700 shadow-lg transition-[transform,background-color,color] duration-200 hover:bg-white hover:text-gray-900 hover:scale-110 motion-reduce:transition-none motion-reduce:hover:scale-100 disabled:opacity-0 disabled:pointer-events-none"
           >
             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
@@ -200,7 +200,7 @@ export function TailoredSelectionsHero(categories: TailoredCategory[]): string {
 
           <button
             aria-label="Next categories"
-            class="ts-hero-next swiper-button absolute end-4 top-1/2 z-10 h-10 w-10 -translate-y-1/2 hidden md:flex items-center justify-center rounded-full bg-white/90 text-gray-700 shadow-lg transition-all duration-200 hover:bg-white hover:text-gray-900 hover:scale-110 disabled:opacity-0 disabled:pointer-events-none"
+            class="ts-hero-next swiper-button absolute end-4 top-1/2 z-10 h-10 w-10 -translate-y-1/2 hidden md:flex items-center justify-center rounded-full bg-white/90 text-gray-700 shadow-lg transition-[transform,background-color,color] duration-200 hover:bg-white hover:text-gray-900 hover:scale-110 motion-reduce:transition-none motion-reduce:hover:scale-100 disabled:opacity-0 disabled:pointer-events-none"
           >
             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>

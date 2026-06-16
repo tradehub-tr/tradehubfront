@@ -74,7 +74,7 @@ export function openFavoritesDropdown(
   dropdown.id = "fav-dropdown";
   dropdown.className =
     "fav-dropdown-panel fixed z-[9999] w-[280px] bg-white shadow-[0_8px_30px_rgba(0,0,0,0.16)] border border-gray-100 " +
-    "opacity-0 scale-95 pointer-events-none transition-all duration-150 origin-top";
+    "opacity-0 scale-95 pointer-events-none transition-[transform,opacity] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] origin-top motion-reduce:transition-none";
   dropdown.style.borderRadius = "var(--radius-card, 8px)";
 
   dropdown.innerHTML = buildDropdownContent(isFav, itemListIds, lists);
@@ -208,14 +208,16 @@ function positionDropdown(anchor: HTMLElement, dropdown: HTMLElement): void {
   let left: number;
 
   // Vertical: prefer below
-  if (spaceBelow >= dropdownHeight || spaceBelow > rect.top) {
+  const openBelow = spaceBelow >= dropdownHeight || spaceBelow > rect.top;
+  if (openBelow) {
     top = rect.bottom + 8;
   } else {
     top = rect.top - dropdownHeight - 8;
   }
 
   // Horizontal: align right edge with button, fallback left
-  if (spaceRight >= 280) {
+  const alignLeft = spaceRight >= 280;
+  if (alignLeft) {
     left = rect.left;
   } else {
     left = rect.right - 280;
@@ -227,6 +229,11 @@ function positionDropdown(anchor: HTMLElement, dropdown: HTMLElement): void {
 
   dropdown.style.top = `${top}px`;
   dropdown.style.left = `${left}px`;
+
+  // Scale-in origin should match the trigger corner the panel grows from
+  const originY = openBelow ? "top" : "bottom";
+  const originX = alignLeft ? "left" : "right";
+  dropdown.style.transformOrigin = `${originY} ${originX}`;
 }
 
 function wireDropdownEvents(

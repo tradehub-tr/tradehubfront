@@ -11,7 +11,7 @@ export function DotIndicator({ total, activeIndex, className = "" }: DotIndicato
     const dotCls = isActive
       ? "w-4 h-2 rounded-full bg-gray-900 dark:bg-gray-100"
       : "w-2 h-2 rounded-full bg-gray-300 dark:bg-gray-600";
-    return `<button type="button" class="${dotCls} transition-all" data-dot-index="${i}" aria-label="Slide ${i + 1}"></button>`;
+    return `<button type="button" class="${dotCls} transition-[width,background-color] duration-200 ease-out motion-reduce:transition-none" data-dot-index="${i}" aria-label="Slide ${i + 1}"></button>`;
   }).join("");
 
   return `

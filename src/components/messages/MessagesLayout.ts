@@ -19,7 +19,14 @@ export function MessagesLayout(): string {
       </div>
 
       <!-- Feedback Banner -->
-      <div x-show="feedbackVisible" x-transition class="flex items-center justify-between px-5 py-2.5 max-sm:px-3 bg-gradient-to-br from-blue-500 to-blue-400 text-(--color-surface)">
+      <div x-show="feedbackVisible"
+           x-transition:enter="transition ease-out duration-200 motion-reduce:transition-none"
+           x-transition:enter-start="opacity-0"
+           x-transition:enter-end="opacity-100"
+           x-transition:leave="transition ease-out duration-150 motion-reduce:transition-none"
+           x-transition:leave-start="opacity-100"
+           x-transition:leave-end="opacity-0"
+           class="flex items-center justify-between px-5 py-2.5 max-sm:px-3 bg-gradient-to-br from-blue-500 to-blue-400 text-(--color-surface)">
         <span class="text-[13px]" data-i18n="messages.feedbackBanner">${t("messages.feedbackBanner")}</span>
         <button @click="dismissFeedback()" class="flex items-center justify-center w-6 h-6 border-none bg-transparent text-(--color-surface) cursor-pointer opacity-80 hover:opacity-100 transition-opacity" aria-label="${t("common.close")}">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">

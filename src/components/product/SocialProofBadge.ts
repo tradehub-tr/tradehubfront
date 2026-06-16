@@ -40,10 +40,10 @@ export function SocialProofBadge(props: Props): string {
         <template x-for="(sig, idx) in signals" :key="sig.type">
           <div
             x-show="idx === currentIndex"
-            x-transition:enter="transition-opacity duration-300"
+            x-transition:enter="transition-opacity duration-300 motion-reduce:transition-none"
             x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100"
-            x-transition:leave="transition-opacity duration-200"
+            x-transition:leave="transition-opacity duration-200 motion-reduce:transition-none"
             x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
             class="absolute inset-0 px-2.5 py-2 flex items-center gap-2 w-full"

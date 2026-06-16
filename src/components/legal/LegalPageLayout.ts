@@ -78,7 +78,14 @@ export function LegalPageLayout({
               <span>${t("legal.tableOfContents")}</span>
               <svg class="w-4 h-4 transition-transform" :class="tocOpen && 'rotate-180'" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
             </button>
-            <div x-show="tocOpen" x-transition class="mt-1 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
+            <div x-show="tocOpen"
+              x-transition:enter="transition ease-out duration-150 motion-reduce:transition-none"
+              x-transition:enter-start="opacity-0 -translate-y-1 motion-reduce:translate-y-0"
+              x-transition:enter-end="opacity-100 translate-y-0"
+              x-transition:leave="transition ease-out duration-150 motion-reduce:transition-none"
+              x-transition:leave-start="opacity-100 translate-y-0"
+              x-transition:leave-end="opacity-0 -translate-y-1 motion-reduce:translate-y-0"
+              class="origin-top mt-1 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
               <ul class="py-1">
                 ${sections
                   .map(
