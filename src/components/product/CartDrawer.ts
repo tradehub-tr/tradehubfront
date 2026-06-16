@@ -1,4 +1,5 @@
 import { getCurrentProduct } from "../../alpine/product";
+import { getSelectedCurrency } from "../../services/currencyService";
 import type { ProductDetail } from "../../types/product";
 import {
   SharedCartDrawer,
@@ -55,7 +56,9 @@ function toColors(product: ProductDetail): CartDrawerColorModel[] {
       colorHex: option.value,
       imageKind: "jewelry" as const,
       imageUrl: option.thumbnail || product.images[0]?.src,
-      rawPrice: option.rawPrice ?? undefined,
+      // option.price = seçili para birimine çevrilmiş varyant fiyatı (base
+      // rawPrice değil) — modal seçili para biriminde gösterir.
+      rawPrice: option.price ?? undefined,
     }))
   );
 }
@@ -68,7 +71,8 @@ function toSizeGroups(product: ProductDetail): CartDrawerSizeGroup[] {
       options: v.options.map((o, i) => ({
         id: o.id || `${v.label}-${i}`,
         label: o.label,
-        rawPrice: o.rawPrice ?? undefined,
+        // Seçili para birimine çevrilmiş fiyat (base rawPrice değil).
+        rawPrice: o.price ?? undefined,
       })),
     }))
     .filter((g) => g.options.length > 0);
@@ -126,7 +130,9 @@ function toDrawerItem(
           minQty: tier.minQty,
           maxQty: tier.maxQty,
           price: tier.price,
-          rawPrice: tier.basePrice,
+          // Modal seçili para biriminde çalışır → ham basePrice yerine
+          // çevrilmiş tier.price kullan (çift çevirme yok; format-only modal).
+          rawPrice: tier.price,
         }));
 
   return {
@@ -137,9 +143,12 @@ function toDrawerItem(
     moq,
     sellInMoqMultiples: !!product.sellInMoqMultiples,
     imageKind: "jewelry",
-    currency: product.baseCurrency || "USD",
+    // Modal artık SEÇİLİ para biriminde gösterir (eskiden baseCurrency idi →
+    // USD seçiliyken ₺ kalıyordu). Beslenen tüm fiyatlar (tier.price, sample,
+    // varyant option.price, shipping) zaten seçili para birimine çevrili.
+    currency: getSelectedCurrency(),
     priceTiers: tiers,
-    samplePrice: product.baseSamplePrice ?? product.samplePrice,
+    samplePrice: product.samplePrice ?? product.baseSamplePrice,
     colors: toColors(product),
     colorAxisLabel: product.variants.find((v) => v.type === "color")?.label,
     sizeGroups: toSizeGroups(product),

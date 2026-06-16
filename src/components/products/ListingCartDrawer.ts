@@ -1,4 +1,5 @@
 import { getListingDetail } from "../../services/listingService";
+import { getSelectedCurrency } from "../../services/currencyService";
 import type { ProductDetail } from "../../types/product";
 import type { ProductListingCard } from "../../types/productListing";
 import {
@@ -47,13 +48,14 @@ function toDrawerItem(product: ProductDetail): CartDrawerItemModel {
     moq: product.moq,
     sellInMoqMultiples: !!product.sellInMoqMultiples,
     imageKind: "jewelry",
-    currency: product.baseCurrency || "USD",
-    samplePrice: product.baseSamplePrice ?? product.samplePrice,
+    // Modal SEÇİLİ para biriminde gösterir; beslenen fiyatlar çevrilmiş.
+    currency: getSelectedCurrency(),
+    samplePrice: product.samplePrice ?? product.baseSamplePrice,
     priceTiers: product.priceTiers.map((tier) => ({
       minQty: tier.minQty,
       maxQty: tier.maxQty,
       price: tier.price,
-      rawPrice: tier.basePrice,
+      rawPrice: tier.price,
     })),
     colors: toColors(product),
     colorAxisLabel: colorVariant?.label,
@@ -64,7 +66,7 @@ function toDrawerItem(product: ProductDetail): CartDrawerItemModel {
         options: v.options.map((o, i) => ({
           id: o.id || `${v.label}-${i}`,
           label: o.label,
-          rawPrice: o.rawPrice ?? undefined,
+          rawPrice: o.price ?? undefined,
         })),
       }))
       .filter((g) => g.options.length > 0),
