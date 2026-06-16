@@ -57,7 +57,7 @@ import {
 } from '../components/product'
 // Product data
 import { getCurrentProduct, loadProduct } from '../alpine/product'
-import { initCurrency, formatCurrency, getSelectedCurrency } from '../services/currencyService'
+import { initCurrency, formatCurrency, getSelectedCurrency, formatPriceRange } from '../services/currencyService'
 
 // Utilities
 import { initAnimatedPlaceholder } from '../utils/animatedPlaceholder'
@@ -138,20 +138,21 @@ async function renderProductPage() {
 
   // Save to browsing history
   if (product.id && product.images.length > 0) {
-    const priceRange = product.priceMin && product.priceMax
-      ? `${product.priceMin.toFixed(2)}-${product.priceMax.toFixed(2)}`
-      : product.priceMin
-        ? `${product.priceMin.toFixed(2)}`
-        : '';
     saveToBrowsingHistory({
       id: product.id,
       image: product.images[0].src,
       title: product.title,
       href: getListingUrl({ id: product.id }),
       price: product.priceMin ?? 0,
-      currency: product.baseCurrency === 'USD' ? '$' : product.baseCurrency,
+      // currency = fiyatın O AN bulunduğu para birimi kodu (priceMin seçili
+      // para birimine çevrili gelir). Display'de convertPrice(price, currency)
+      // ile güncel kura çevrilir. Eski hardcoded '$' kaldırıldı.
+      currency: getSelectedCurrency(),
       minOrder: product.moq ? `Min. order: ${product.moq} ${product.unit || 'Pcs'}` : '',
-      priceRange: priceRange ? `$${priceRange}` : '',
+      priceRange:
+        typeof product.priceMin === 'number'
+          ? formatPriceRange(product.priceMin, product.priceMax ?? product.priceMin, getSelectedCurrency())
+          : '',
     });
     // Search dropdown "son gezdiklerin" listesi için
     saveRecentProduct({

@@ -7,6 +7,12 @@
 import favEmptySvg from "../../assets/images/O1CN01Bny3KU1Swwfj3Ntma_!!6000000002312-55-tps-222-221.svg";
 import { t } from "../../i18n";
 import { formatPrice } from "../../utils/currency";
+import {
+  formatPriceRange,
+  getSelectedCurrency,
+  convertPrice,
+  formatCurrency,
+} from "../../services/currencyService";
 import { showToast } from "../../utils/toast";
 import { getBrowsingHistory } from "../../services/browsingHistoryService";
 import {
@@ -42,6 +48,9 @@ interface FavEnrichment {
   inStock?: boolean;
   // Sprint 2.6: KYB doğrulanmamış satıcı favoride muted-text hint için
   sellerKybVerified?: boolean;
+  // Listing detayından SEÇİLİ para birimine çevrilmiş fiyat (snapshot priceRange
+  // sembol-swap'ı yerine — favoride doğru para birimi gösterimi için).
+  priceDisplay?: string;
 }
 const enrichmentMap: Map<string, FavEnrichment> = new Map();
 let enrichmentLoading = false;
@@ -72,6 +81,12 @@ async function loadEnrichments(items: FavoriteItem[]): Promise<void> {
           stockQty: d.stockQty,
           inStock: d.inStock ?? !d.outOfStock,
           sellerKybVerified: d.sellerKybVerified,
+          // priceMin/priceMax zaten seçili para birimine çevrili (listingService);
+          // getSelectedCurrency() fromCurrency = no-op convert, doğru sembolle formatlar.
+          priceDisplay:
+            typeof d.priceMin === "number"
+              ? formatPriceRange(d.priceMin, d.priceMax ?? d.priceMin, getSelectedCurrency())
+              : undefined,
         });
       }
     });
@@ -653,7 +668,7 @@ function renderProductCardGrid(p: FavoriteItem): string {
         <a href="${escapeHtml(sanitizeUrl(detailHref))}" class="no-underline text-inherit">
           <h4 class="text-[11.5px] leading-[1.3] text-text-primary font-normal line-clamp-2 m-0 min-h-[30px] group-hover:text-[var(--color-cta-primary,#F5B800)] transition-colors">${escapeHtml(p.title)}</h4>
         </a>
-        <div class="text-[13px] font-bold text-text-primary leading-none tracking-[-0.01em] tabular-nums mt-1">${formatPrice(p.priceRange)}</div>
+        <div class="text-[13px] font-bold text-text-primary leading-none tracking-[-0.01em] tabular-nums mt-1">${enrichmentMap.get(p.id)?.priceDisplay ?? formatPrice(p.priceRange)}</div>
         <p class="text-[10.5px] text-text-tertiary m-0 leading-[13px] mt-0.5 truncate">${escapeHtml(p.minOrder)}</p>
         <div class="flex flex-nowrap gap-1 mt-1 h-[15px] overflow-hidden">${tagChips}</div>
         ${
@@ -716,7 +731,7 @@ function renderProductRowList(p: FavoriteItem): string {
         }
       </div>
       <div class="flex flex-col items-end gap-1.5 shrink-0 max-sm:flex-row max-sm:items-center max-sm:w-full max-sm:justify-between">
-        <div class="text-[14px] font-bold text-text-primary tracking-[-0.01em] tabular-nums whitespace-nowrap">${formatPrice(p.priceRange)}</div>
+        <div class="text-[14px] font-bold text-text-primary tracking-[-0.01em] tabular-nums whitespace-nowrap">${enrichmentMap.get(p.id)?.priceDisplay ?? formatPrice(p.priceRange)}</div>
         <div class="inline-flex items-center gap-1">
           ${
             kybBlocked
@@ -1003,7 +1018,7 @@ function renderBrowsingHistory(): string {
         <img src="${escapeHtml(sanitizeUrl(p.image))}" alt="${escapeHtml(p.title)}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.04]" loading="lazy" />
       </div>
       <h4 class="text-[13px] text-text-secondary leading-[1.4] line-clamp-2 mb-1.5" title="${escapeHtml(p.title)}">${escapeHtml(p.title)}</h4>
-      ${p.priceRange ? `<p class="text-sm font-bold text-text-primary mb-0.5">${formatPrice(p.priceRange)}</p>` : ""}
+      ${typeof p.price === "number" ? `<p class="text-sm font-bold text-text-primary mb-0.5">${formatCurrency(convertPrice(p.price, p.currency || getSelectedCurrency()), getSelectedCurrency())}</p>` : p.priceRange ? `<p class="text-sm font-bold text-text-primary mb-0.5">${formatPrice(p.priceRange)}</p>` : ""}
       ${p.minOrder ? `<p class="text-xs text-text-tertiary">${escapeHtml(p.minOrder)}</p>` : ""}
     </a>
   `
