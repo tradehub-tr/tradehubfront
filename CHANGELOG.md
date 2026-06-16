@@ -1,3 +1,43 @@
+## [v1.4.0] - 2026-06-16 PROD
+
+Bu surum istoc.com'da yayindadir.
+
+### Eklendi
+- feat(ui): hareket cilası ve mobil üretici filtre çekmecesi eklendi (@ahmeetseker)
+  - Üretici listesine mobil bottom-sheet filtre çekmecesi (ManufacturerFilterSheet) eklendi
+  - Tutarlı giriş easing token'ı (--ease-emil cubic-bezier) ve motion-reduce fallback'leri eklendi
+  - Shell içeriği init tamamlandıktan sonra yumuşak opacity geçişiyle gösteriliyor
+  - iOS geri butonuna press/hover geri bildirimi eklendi
+  - Accordion/SKU listelerinde x-collapse ve scaleX-tabanlı sekme alt çizgisi animasyonu eklendi
+  - Krem renk tell'leri (#e8e6e0, #f7f7f5, #8a877f) nötr gri token'lara taşındı
+  - th-no-press press yönetimi link/başlık/ikon butonlarına genişletildi
+  - Yeni i18n anahtarları (varyant silme, MOQ uyarıları, mağaza profili) eklendi
+
+### Duzeltildi
+- fix(kyb): KYB taslak durumu için arayüz eklendi (@aliiball)
+  - KYB durumu "Draft" iken "Taslak — Henüz Gönderilmedi" kartı ve gri durum rozeti gösteriliyor; yanlış "Beklemede" mesajı kaldırıldı
+  - statusDraft/draftTitle/draftHint çevirileri tr/en/ar/ru'ya eklendi
+- fix(product): ürün detayında duplicate "satıcı doğrulanmadı" uyarısı kaldırıldı (@aliiball)
+- fix(currency): seçili para birimi tek kaynağa bağlandı, header rozeti dinamikleşti (@aliiball)
+  - utils/currency get/setSelectedCurrency currencyService'e delege (desync giderildi, Kaydet currency-changed event'i fire ediyor)
+  - header dil-para rozeti statik i18n yerine seçili dil + para birimini gösteriyor
+- fix(currency): varyant modalı seçili para biriminde fiyat gösteriyor (@aliiball)
+- fix(currency): checkout kargo, sipariş geçmişi ve sepet modalı fiyat çevirisi düzeltildi (@aliiball)
+  - checkout kargo ücreti convertPrice ile çevriliyor
+  - sipariş geçmişi order.currency kullanıyor; statik servis promo'ları sabit $ yapıldı
+  - sepet önizleme kartı çevrilmiş fiyat basıyor
+- fix(currency): favoriler ve gezinme geçmişinde fiyat seçili para birimine çevriliyor (@aliiball)
+  - favori kartları listing detayından çevrilmiş fiyat gösteriyor
+  - gezinme geçmişi (price, currency)'den canlı çeviriyor; hardcoded $ kaldırıldı
+- fix(currency): listing cache anahtarına para birimi eklendi (kartlar artık çevriliyor) (@aliiball)
+  - searchListings sonucu cache callback'i içinde çevriliyordu; key'de para birimi olmadığı için para birimi değişince eski kurla formatlı kartlar servis ediliyordu
+  - key'e _cur eklendi → ana sayfa/liste/fırsat grid'leri doğru para biriminde
+
+### Degistirildi
+- refactor(subscription): kullanılmayan eski storefront abonelik sayfası kaldırıldı (@aliiball)
+  - dashboard/subscription.html placeholder fiyatlarla sembol-swap ediyordu, hiçbir menüden link yoktu; sayfa + bileşenleri (kullanılmayan EntitlementBanner dahil) kaldırıldı (satıcı €599 fiyatlandırması ayrı, etkilenmedi)
+
+---
 ## [v1.3.9-rc.1] - 2026-06-16 RC
 
 Bu surum rc.istoc.com'da onay asamasindadir.
