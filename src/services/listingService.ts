@@ -83,7 +83,14 @@ export interface ListingSearchResult {
  */
 export async function searchListings(params: ListingSearchParams): Promise<ListingSearchResult> {
   return queryFetch(
-    queryKeys.listings(params as unknown as Record<string, unknown>),
+    // _cur: seçili para birimini cache anahtarına dahil et. mapListingCard
+    // fiyatları bu callback İÇİNDE seçili para birimine çevirir; key'e currency
+    // eklenmezse para birimi değişince eski (yanlış kur) cache servis edilirdi.
+    // _cur yalnızca cache key'ini ayırır; API parametrelerini etkilemez.
+    queryKeys.listings({
+      ...(params as unknown as Record<string, unknown>),
+      _cur: getSelectedCurrencyInfo().code,
+    }),
     async () => {
       const queryParams = new URLSearchParams();
 
