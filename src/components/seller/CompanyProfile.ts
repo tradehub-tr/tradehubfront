@@ -38,7 +38,11 @@ const SHARED_FORMAT_PRICE = `
   }
 `;
 
-const SELLER_CODE_INIT = `new URLSearchParams(window.location.search).get('seller') || ''`;
+// Gateway nginx "internal rewrite" yaptığı için browser URL `/magaza/<code>` olarak
+// kalır ve `?seller=` query param browser'da GÖRÜNMEZ. O yüzden önce path'ten parse
+// et, fallback olarak query (eski URL'ler / direct dosya erişimi). seller.ts:262 ile
+// aynı mantık — aksi halde tüm iç bölümler (ürün/yorum/kategori) boş kalır.
+const SELLER_CODE_INIT = `((window.location.pathname.match(/^\\/magaza\\/([^/]+)/) || [])[1] || new URLSearchParams(window.location.search).get('seller') || '')`;
 
 // ─── Main Products Carousel (always visible above tabs) ────────
 function MainProductsCarousel(): string {
