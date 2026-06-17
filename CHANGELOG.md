@@ -1,3 +1,16 @@
+## [v1.4.1] - 2026-06-17 PROD
+
+Bu surum istoc.com'da yayindadir.
+
+### Degistirildi
+- refactor(manufacturers): üretici kartı ürün/galeri düzeni yeniden ayarlandı (@ahmeetseker)
+  - öne çıkan ürünler başlığındaki ürün adedi rozeti kaldırıldı
+  - ürün kartlarına dar ekranda da kenarlık eklendi, galeri rayı tam genişliğe alındı, sağ kolon genişlikleri (260px / 1140px+ 320px) sabitlendi
+  - Tümü feat/fix/refactor prefix'leriyle, geçmiş zaman fiil, başlık ≤72 karakter (commit.md
+  - tradehub_core ve tradehubfront'u tek commit olarak istersen birleştirilmiş sürümlerini de
+  - İstersen git add + commit komutlarını ben hazırlayıp sana vereyim (çalıştırmam), ya da sen kendi
+
+---
 ## [v1.4.0-rc.1] - 2026-06-17 RC
 
 Bu surum rc.istoc.com'da onay asamasindadir.
