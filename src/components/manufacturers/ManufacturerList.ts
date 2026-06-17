@@ -257,7 +257,7 @@ export function ManufacturerList(opts: { mobileFilter?: boolean } = {}): string 
 
             <!-- Body: ≥940 üç kolon (hakkında | ürünler | galeri), altında tek kolon -->
             <div
-              class="grid grid-cols-1 gap-3 @min-[940px]/sc:grid-cols-[196px_1fr_auto] @min-[940px]/sc:gap-4 @min-[940px]/sc:items-stretch"
+              class="grid grid-cols-1 gap-3 @min-[940px]/sc:grid-cols-[196px_1fr_260px] @min-[1140px]/sc:grid-cols-[196px_1fr_320px] @min-[940px]/sc:gap-4 @min-[940px]/sc:items-stretch"
             >
               <!-- Hakkında: derece (her zaman) + açıklama (yalnız geniş) -->
               <div class="min-w-0">
@@ -299,23 +299,22 @@ export function ManufacturerList(opts: { mobileFilter?: boolean } = {}): string 
                 </template>
                 <template x-if="seller.products && seller.products.length > 0">
                   <div>
-                  <div class="flex items-baseline justify-between mb-2">
+                  <div class="mb-2">
                     <span class="text-[12px] @min-[940px]/sc:text-[13px] font-semibold text-gray-500">${t("mfr.list.featuredProducts")}</span>
-                    <span class="text-[11px] font-semibold text-[#222] bg-gray-100 border border-gray-200 rounded-full px-2 py-0.5 whitespace-nowrap" x-text="seller.products.length + ' ${t("mfr.list.productsUnit")}'"></span>
                   </div>
                   <div class="flex gap-2 @min-[940px]/sc:gap-2.5 overflow-x-auto snap-x snap-proximity touch-pan-x [scrollbar-width:none] [&::-webkit-scrollbar]:hidden @min-[940px]/sc:h-[200px] @min-[1140px]/sc:h-[220px]">
                     <template x-for="(p, i) in seller.products.slice(0, 10)" :key="p.name">
                       <a
                         :href="'/urun/' + encodeURIComponent(p.slug || p.name)"
-                        class="snap-start shrink-0 flex flex-col no-underline text-inherit transition-colors w-[29%] @min-[620px]/sc:w-[23%] @min-[940px]/sc:w-auto @min-[940px]/sc:shrink @min-[940px]/sc:grow @min-[940px]/sc:basis-[150px] @min-[940px]/sc:min-w-[136px] @min-[940px]/sc:max-w-[200px] @min-[940px]/sc:border @min-[940px]/sc:border-gray-100 @min-[940px]/sc:rounded-md @min-[940px]/sc:bg-white @min-[940px]/sc:overflow-hidden @min-[940px]/sc:hover:border-gray-300"
+                        class="snap-start shrink-0 flex flex-col no-underline text-inherit transition-colors w-[31%] @min-[620px]/sc:w-[23%] border border-gray-200 rounded-md bg-white overflow-hidden @min-[940px]/sc:w-auto @min-[940px]/sc:shrink @min-[940px]/sc:grow @min-[940px]/sc:basis-[150px] @min-[940px]/sc:min-w-[136px] @min-[940px]/sc:max-w-[200px] @min-[940px]/sc:border-gray-100 @min-[940px]/sc:hover:border-gray-300"
                       >
-                        <div class="overflow-hidden bg-gray-50 aspect-square border border-gray-200 rounded-md @min-[940px]/sc:flex-1 @min-[940px]/sc:aspect-[4/3] @min-[940px]/sc:rounded-none @min-[940px]/sc:border-0 @min-[940px]/sc:border-b @min-[940px]/sc:border-gray-100">
+                        <div class="overflow-hidden bg-gray-50 aspect-square border-b border-gray-200 @min-[940px]/sc:flex-1 @min-[940px]/sc:aspect-[4/3] @min-[940px]/sc:border-gray-100">
                           <img x-show="p.image" :src="p.image" :alt="p.product_name" class="block w-full h-full object-cover" />
                           <div x-show="!p.image" class="w-full h-full flex items-center justify-center text-gray-200">
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
                           </div>
                         </div>
-                        <div class="pt-1.5 @min-[940px]/sc:p-2 @min-[940px]/sc:h-[78px] @min-[940px]/sc:flex-shrink-0">
+                        <div class="px-2 py-1.5 @min-[940px]/sc:h-[78px] @min-[940px]/sc:flex-shrink-0">
                           <p class="hidden @min-[940px]/sc:line-clamp-2 text-[12px] text-gray-800 font-medium leading-tight mb-1 min-h-[2lh]" x-text="p.product_name"></p>
                           <p x-show="p.price_min" class="text-[11.5px] @min-[940px]/sc:text-[12px] font-bold text-gray-900 whitespace-nowrap" x-text="(_cv, p.price_max && p.price_max > p.price_min ? window.csFormatPriceRange(parseFloat(p.price_min), parseFloat(p.price_max), p.currency || 'USD') : window.csFormatPrice(parseFloat(p.price_min), p.currency || 'USD'))"></p>
                           <p x-show="p.moq" class="text-[10.5px] @min-[940px]/sc:text-[11px] text-gray-500 mt-0.5" x-text="p.moq + ' ' + (p.moq_unit || '${t("checkoutMfr.unitPieces")}')"></p>
@@ -330,7 +329,7 @@ export function ManufacturerList(opts: { mobileFilter?: boolean } = {}): string 
               <!-- Galeri (sağ ray) — yalnız geniş; dar ekranda gizli. mt: ürün başlığı yüksekliğiyle hizala -->
               <template x-if="seller.gallery_images && seller.gallery_images.length > 0">
                 <div
-                  class="hidden @min-[940px]/sc:block w-[182px] h-[200px] @min-[1140px]/sc:h-[220px] @min-[940px]/sc:mt-[26px] rounded-md overflow-hidden relative cursor-pointer group"
+                  class="hidden @min-[940px]/sc:block w-full h-[200px] @min-[1140px]/sc:h-[220px] @min-[940px]/sc:mt-[26px] rounded-md overflow-hidden relative cursor-pointer group"
                   x-data="{ activeIdx: 0 }"
                 >
                   <img
