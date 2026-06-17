@@ -1,3 +1,11 @@
+## [v1.4.1-beta.1] - 2026-06-17 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Duzeltildi
+- fix(storefront): mağaza sayfasında satıcı ürünleri/yorumları gözükmemesi (@boraydeger32)
+
+---
 ## [v1.4.1] - 2026-06-17 PROD
 
 Bu surum istoc.com'da yayindadir.
