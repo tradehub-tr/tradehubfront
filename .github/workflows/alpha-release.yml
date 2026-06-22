@@ -1,15 +1,15 @@
-name: Beta Release
+name: Alpha Release
 
-# Alpha → Beta promote (Jenkins #0 "tradehub-promote-alpha-to-beta" tetikler).
-# Artik push ile otomatik calismaz; beta promote-only bir duraktir.
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 permissions:
   contents: write
 
 jobs:
-  beta-release:
+  alpha-release:
     runs-on: ubuntu-latest
     steps:
       - name: Kodu cek
@@ -23,28 +23,28 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Beta versiyon belirle
+      - name: Alpha versiyon belirle
         id: version
         run: |
           LAST_PROD=$(git tag --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1)
           LAST_PROD=${LAST_PROD:-"v1.0.0"}
-          BETA_COUNT=$(git tag --sort=-v:refname | grep "^${LAST_PROD}-beta\." | wc -l)
-          BETA_NUM=$((BETA_COUNT + 1))
-          BETA_VERSION="${LAST_PROD}-beta.${BETA_NUM}"
-          # PREV = en son var olan tag (BETA_VERSION henuz olusmadigi icin head -1 bir onceki tag'i verir)
-          PREV=$(git tag --sort=-v:refname | grep -v "^${BETA_VERSION}$" | head -1)
+          ALPHA_COUNT=$(git tag --sort=-v:refname | grep "^${LAST_PROD}-alpha\." | wc -l)
+          ALPHA_NUM=$((ALPHA_COUNT + 1))
+          ALPHA_VERSION="${LAST_PROD}-alpha.${ALPHA_NUM}"
+          # PREV = en son var olan tag (ALPHA_VERSION henuz olusmadigi icin head -1 bir onceki tag'i verir)
+          PREV=$(git tag --sort=-v:refname | grep -v "^${ALPHA_VERSION}$" | head -1)
           PREV=${PREV:-${LAST_PROD}}
-          echo "beta_version=${BETA_VERSION}" >> $GITHUB_OUTPUT
+          echo "alpha_version=${ALPHA_VERSION}" >> $GITHUB_OUTPUT
           echo "last_prod=${LAST_PROD}" >> $GITHUB_OUTPUT
           echo "prev=${PREV}" >> $GITHUB_OUTPUT
 
-      - name: Beta CHANGELOG olustur
+      - name: Alpha CHANGELOG olustur
         id: changelog
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           PREV=${{ steps.version.outputs.prev }}
-          BETA_VERSION=${{ steps.version.outputs.beta_version }}
+          ALPHA_VERSION=${{ steps.version.outputs.alpha_version }}
           DATE=$(date +%Y-%m-%d)
 
           FEATS=""
@@ -112,8 +112,8 @@ jobs:
             exit 0
           fi
 
-          ENTRY="## [${BETA_VERSION}] - ${DATE} BETA\n\n"
-          ENTRY+="Bu surum beta.istoc.com'da test asamasindadir.\n\n"
+          ENTRY="## [${ALPHA_VERSION}] - ${DATE} ALPHA\n\n"
+          ENTRY+="Bu surum alpha.istoc.com'da gelistirme asamasindadir.\n\n"
 
           if [ -n "$FEATS" ]; then ENTRY+="### Eklendi\n${FEATS}\n\n"; fi
           if [ -n "$FIXES" ]; then ENTRY+="### Duzeltildi\n${FIXES}\n\n"; fi
@@ -133,33 +133,33 @@ jobs:
 
       - name: package.json versiyonunu senkronla
         run: |
-          BETA_VERSION=${{ steps.version.outputs.beta_version }}
-          npm version "${BETA_VERSION#v}" --no-git-tag-version --allow-same-version
+          ALPHA_VERSION=${{ steps.version.outputs.alpha_version }}
+          npm version "${ALPHA_VERSION#v}" --no-git-tag-version --allow-same-version
 
       - name: Commit ve tag
         run: |
-          BETA_VERSION=${{ steps.version.outputs.beta_version }}
+          ALPHA_VERSION=${{ steps.version.outputs.alpha_version }}
           # Tag immutability — aynı tag tekrar atılmasın (kirli state guard)
-          if git rev-parse "${BETA_VERSION}" >/dev/null 2>&1; then
-            echo "HATA: Tag ${BETA_VERSION} zaten var" >&2
+          if git rev-parse "${ALPHA_VERSION}" >/dev/null 2>&1; then
+            echo "HATA: Tag ${ALPHA_VERSION} zaten var" >&2
             exit 1
           fi
           git add package.json package-lock.json 2>/dev/null || git add package.json
           if [ "${{ steps.changelog.outputs.skip_changelog }}" != "true" ]; then
             git add CHANGELOG.md
-            git commit -m "chore: ${BETA_VERSION} beta changelog + package.json"
+            git commit -m "chore: ${ALPHA_VERSION} alpha changelog + package.json"
           else
-            git commit -m "chore: ${BETA_VERSION} package.json senkron (promote-only)"
+            git commit -m "chore: ${ALPHA_VERSION} package.json senkron (promote-only)"
           fi
           git push origin main
-          git tag ${BETA_VERSION}
-          git push origin ${BETA_VERSION}
+          git tag ${ALPHA_VERSION}
+          git push origin ${ALPHA_VERSION}
 
-      - name: GitHub Beta Release olustur
+      - name: GitHub Alpha Release olustur
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ steps.version.outputs.beta_version }}
-          name: "BETA - ${{ steps.version.outputs.beta_version }}"
+          tag_name: ${{ steps.version.outputs.alpha_version }}
+          name: "ALPHA - ${{ steps.version.outputs.alpha_version }}"
           body: ${{ steps.changelog.outputs.entry }}
           prerelease: true
 
@@ -169,7 +169,7 @@ jobs:
         env:
           DISPATCH_PAT: ${{ secrets.CHANGELOG_DISPATCH_PAT }}
           SOURCE_LABEL: frontend
-          VERSION_OUT: ${{ steps.version.outputs.beta_version }}
+          VERSION_OUT: ${{ steps.version.outputs.alpha_version }}
         run: |
           if [ -z "$DISPATCH_PAT" ]; then
             echo "CHANGELOG_DISPATCH_PAT secret not set; skipping dispatch"
