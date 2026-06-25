@@ -1,3 +1,11 @@
+## [v1.4.5-alpha.1] - 2026-06-25 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(vite): dev proxy hedefini 8088'e güncelle (@aliturguttursab)
+
+---
 ## [v1.4.2] - 2026-06-17 PROD
 
 Bu surum istoc.com'da yayindadir.
