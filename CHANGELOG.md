@@ -1,3 +1,11 @@
+## [v1.4.6] - 2026-06-26 PROD
+
+Bu surum istoc.com'da yayindadir.
+
+### Duzeltildi
+- fix(vite): dev proxy hedefini 8088'e güncelle (@aliturguttursab)
+
+---
 ## [v1.4.5-rc.1] - 2026-06-26 RC
 
 Bu surum rc.istoc.com'da onay asamasindadir.
