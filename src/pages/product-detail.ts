@@ -52,6 +52,7 @@ import {
   CartDrawer,
   initCartDrawer,
   WriteReviewModal,
+  EditReviewModal,
   ReportAbuseModal,
   QAModal,
 } from '../components/product'
@@ -260,6 +261,7 @@ async function renderProductPage() {
     ${QAModal()}
     ${LoginModal()}
     ${WriteReviewModal()}
+    ${EditReviewModal()}
     ${ReportAbuseModal()}
     ${CartDrawer()}
     ${ShippingModal()}

@@ -16,8 +16,8 @@ export interface RightPanelSectionConfig {
 export interface FavoritesEmptyConfig {
   icon: string;
   text: string;
-  linkText: string;
-  linkHref: string;
+  linkText?: string;
+  linkHref?: string;
 }
 
 /** Package + heart SVG icon for favorites empty state */
@@ -43,8 +43,6 @@ export function getFavoritesEmptyState(): FavoritesEmptyConfig {
   return {
     icon: favoritesEmptyIcon,
     text: t("dashboard.noFavorites"),
-    linkText: t("dashboard.explore"),
-    linkHref: "/products",
   };
 }
 

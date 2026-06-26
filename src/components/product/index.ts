@@ -42,5 +42,6 @@ export { MobileRecommendations, initMobileRecommendations } from "./MobileRecomm
 export { SocialProofBadge } from "./SocialProofBadge";
 export { ProductSalesRank } from "./ProductSalesRank";
 export { WriteReviewModal, openWriteReviewModal } from "./WriteReviewModal";
+export { EditReviewModal, openEditReviewModal } from "./EditReviewModal";
 export { ReportAbuseModal, openReportAbuseModal } from "./ReportAbuseModal";
 export { QAModal, showQAModal, hideQAModal } from "./QAModal";

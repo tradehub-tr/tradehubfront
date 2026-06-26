@@ -12,7 +12,7 @@
  * - Status badge + banner (Pending/Verified/Rejected/Suspended)
  */
 
-import { api } from "../../utils/api";
+import { api, fetchCsrfToken, getCsrfToken } from "../../utils/api";
 import { SlotDropzoneController } from "../../lib/upload-ui";
 import { renderSegmented } from "../../utils/ui/toggle";
 import { t } from "../../i18n";
@@ -314,10 +314,6 @@ function showDocumentPreview(url: string): void {
   container.classList.remove("hidden");
 }
 
-function getCsrfToken(): string {
-  return localStorage.getItem("_csrf_token") || "";
-}
-
 function showMessage(text: string, tone: "success" | "error" | "info"): void {
   const el = document.getElementById("kyc-form-message");
   if (!el) return;
@@ -357,8 +353,10 @@ function applyKycSlotReadOnlyState(status: string): void {
   }
 }
 
-function mountKycSlotDropzone(): void {
+async function mountKycSlotDropzone(): Promise<void> {
   if (kycSlotController) return; // tek mount
+  // CSRF token'ı (bellekte) garanti et — upload_file POST'u CSRF ister, yoksa HTTP 400.
+  await fetchCsrfToken();
   kycSlotController = new SlotDropzoneController({
     containerId: "kyc-document-slots",
     slots: [
@@ -564,7 +562,7 @@ export function initKycLayout(): void {
   }
 
   // SlotDropzone mount — autoUpload, multipart Frappe upload_file
-  mountKycSlotDropzone();
+  void mountKycSlotDropzone();
 
   form.addEventListener("submit", handleSubmit);
 
