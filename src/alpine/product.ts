@@ -137,10 +137,12 @@ export async function loadProductReviews(listingId: string): Promise<void> {
 
 // Faz 6 — Yeni storefront review modallarını kaydet (write review, abuse, Q&A)
 import { registerWriteReviewModal } from "../components/product/WriteReviewModal";
+import { registerEditReviewModal } from "../components/product/EditReviewModal";
 import { registerReportAbuseModal } from "../components/product/ReportAbuseModal";
 import { registerQAModal } from "../components/product/QAModal";
 import { registerProductQA } from "../components/product/ProductQA";
 registerWriteReviewModal();
+registerEditReviewModal();
 registerReportAbuseModal();
 registerQAModal();
 registerProductQA();

@@ -13,9 +13,9 @@ import {
   getReviewEligibility,
   voteReviewHelpful,
   getProductReviews,
-  updateOwnReview,
 } from "../../services/listingService";
 import { openWriteReviewModal } from "./WriteReviewModal";
+import { openEditReviewModal } from "./EditReviewModal";
 import { openReportAbuseModal } from "./ReportAbuseModal";
 import { showToast } from "../../utils/toast";
 import { escapeHtml, sanitizeHtml } from "../../utils/sanitize";
@@ -656,41 +656,17 @@ export function bindHelpfulButtons(container: HTMLElement): void {
     });
   });
 
-  // Edit own review — 24h içinde, prompt-based mini flow
+  // Edit own review — 24h içinde, modal tabanlı düzenleme akışı
   const editBtns = container.querySelectorAll<HTMLButtonElement>(".rv-edit-own-btn");
   editBtns.forEach((btn) => {
-    btn.addEventListener("click", async () => {
+    btn.addEventListener("click", () => {
       const reviewId = btn.dataset.reviewId || "";
       if (!reviewId) return;
-      // Mevcut yorumun body'sini kart'tan oku (DOM lookup)
+      // Mevcut yorum metnini kart'tan oku (modal'ı önceden doldurmak için)
       const card = btn.closest(".rv-card") as HTMLElement | null;
       const commentEl = card?.querySelector(".rv-card-comment");
       const oldBody = commentEl?.textContent?.trim() || "";
-      const newBody = window.prompt(t("prodUi.editReviewPrompt"), oldBody);
-      if (newBody == null || newBody.trim() === "" || newBody.trim() === oldBody) {
-        return; // İptal veya değişiklik yok
-      }
-      if (newBody.trim().length < 20) {
-        showToast({
-          message: t("prodUi.reviewMinChars"),
-          type: "warning",
-        });
-        return;
-      }
-      btn.disabled = true;
-      try {
-        await updateOwnReview({ name: reviewId, body: newBody.trim() });
-        showToast({
-          message: t("prodUi.reviewUpdated"),
-          type: "success",
-        });
-        // Listeyi yenile (reload event listener tetikler)
-        window.dispatchEvent(new CustomEvent("review-submitted"));
-      } catch (err: unknown) {
-        const msg = err instanceof Error ? err.message : t("prodUi.editFailed");
-        showToast({ message: msg, type: "error" });
-        btn.disabled = false;
-      }
+      openEditReviewModal({ reviewId, body: oldBody });
     });
   });
 }

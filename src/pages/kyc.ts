@@ -14,6 +14,7 @@ import { initFlowbite } from "flowbite";
 import { t } from "../i18n";
 import { startAlpine } from "../alpine";
 import { requireAuth } from "../utils/auth-guard";
+import { api } from "../utils/api";
 import { getUser } from "../utils/auth";
 
 import { TopBar, initMobileDrawer, initHeaderCart } from "../components/header";
@@ -108,11 +109,8 @@ initLockedFeatureModal();
 // Sprint 2.6: bu trigger yeni endpoint ile yapılır. Şimdilik UX placeholder.
 document.getElementById("kyc-start-flow")?.addEventListener("click", async () => {
   try {
-    await fetch("/api/method/tradehub_core.api.v1.kyc.unlock_for_self", {
-      method: "POST",
-      credentials: "include",
-      headers: { "X-Frappe-CSRF-Token": localStorage.getItem("_csrf_token") || "" },
-    });
+    // api() CSRF token'ı bellekten yönetir; ham fetch + localStorage CSRF HTTP 400 veriyordu.
+    await api("/method/tradehub_core.api.v1.kyc.unlock_for_self", { method: "POST" });
     window.location.reload();
   } catch (e) {
     console.warn("KYC unlock failed", e);
