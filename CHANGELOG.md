@@ -1,3 +1,14 @@
+## [v1.4.6-alpha.1] - 2026-06-26 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(product-reviews): yorum düzenlemeyi window.prompt yerine modal'a taşı (@boraydeger32)
+  - yeni: components/product/EditReviewModal.ts (+ barrel/registry/render)
+  - ProductReviews.ts: prompt akışı kaldırıldı, openEditReviewModal kullanılıyor
+  - i18n (tr/en/ar/ru): editReviewPrompt yerine modal metinleri
+
+---
 ## [v1.4.6] - 2026-06-26 PROD
 
 Bu surum istoc.com'da yayindadir.
