@@ -1,3 +1,15 @@
+## [v1.4.6-alpha.2] - 2026-06-29 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(reviews): yorum düzenlerken fotoğraf güncelleme (@boraydeger32)
+  - EditReviewModal: mevcut fotoğrafları kaldırma + yeni foto yükleme dropzone'u
+  - updateOwnReview images gönderiyor; düzenle akışı mevcut görselleri taşıyor
+  - WriteReviewModal dropzone config/texts export edildi
+  - i18n: editReviewCurrentPhotos / editReviewRemovePhoto (tr/en/ru/ar)
+
+---
 ## [v1.4.6-alpha.1] - 2026-06-26 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
