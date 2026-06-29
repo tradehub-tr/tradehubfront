@@ -1,3 +1,19 @@
+## [v1.4.6-rc.1] - 2026-06-29 RC
+
+Bu surum rc.istoc.com'da onay asamasindadir.
+
+### Eklendi
+- feat(product-reviews): yorum düzenlemeyi window.prompt yerine modal'a taşı (@boraydeger32)
+  - yeni: components/product/EditReviewModal.ts (+ barrel/registry/render)
+  - ProductReviews.ts: prompt akışı kaldırıldı, openEditReviewModal kullanılıyor
+  - i18n (tr/en/ar/ru): editReviewPrompt yerine modal metinleri
+- feat(reviews): yorum düzenlerken fotoğraf güncelleme (@boraydeger32)
+  - EditReviewModal: mevcut fotoğrafları kaldırma + yeni foto yükleme dropzone'u
+  - updateOwnReview images gönderiyor; düzenle akışı mevcut görselleri taşıyor
+  - WriteReviewModal dropzone config/texts export edildi
+  - i18n: editReviewCurrentPhotos / editReviewRemovePhoto (tr/en/ru/ar)
+
+---
 ## [v1.4.6-beta.2] - 2026-06-29 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
