@@ -786,6 +786,8 @@ const ar = {
       editReviewRemoderationNote: "تُرسل المراجعات المعدّلة للموافقة من جديد.",
       editReviewWindowNote: "يمكنك تعديل مراجعتك خلال 24 ساعة من إرسالها لأول مرة.",
       editReviewSave: "حفظ",
+      editReviewCurrentPhotos: "الصور الحالية",
+      editReviewRemovePhoto: "إزالة الصورة",
       reviewMinChars: "يجب أن يكون نص المراجعة 20 حرفًا على الأقل.",
       reviewUpdated: "تم تحديث مراجعتك.",
       editFailed: "فشل التعديل",

@@ -4,8 +4,9 @@
  * EditReviewModal — Storefront kendi yorumunu düzenleme akışı.
  *
  * Akış:
- *   1. `edit-review-modal-show` event ile aç (detail: { reviewId, body })
- *   2. Yorum metnini düzenle (min 20 karakter)
+ *   1. `edit-review-modal-show` event ile aç (detail: { reviewId, body, images })
+ *   2. Yorum metnini düzenle (min 20 karakter) + fotoğrafları güncelle
+ *      (mevcut foto kaldır / yeni foto ekle, max 5)
  *   3. Submit → backend `update_review` → düzenlenen yorum tekrar moderasyona
  *      döner (status="Pending") → close + `review-submitted` event
  *
@@ -14,8 +15,12 @@
 
 import Alpine from "alpinejs";
 import { t } from "../../i18n";
+import { MultiFileDropzoneController } from "../../lib/upload-ui";
 import { updateOwnReview } from "../../services/listingService";
+import { fetchCsrfToken } from "../../utils/api";
 import { showToast } from "../../utils/toast";
+// Dropzone yapılandırması + metinleri WriteReviewModal ile paylaşılır (tek kaynak).
+import { REVIEW_DROPZONE_CONFIG, reviewDropzoneTexts } from "./WriteReviewModal";
 
 interface EditReviewState {
   open: boolean;
@@ -23,9 +28,16 @@ interface EditReviewState {
   errorMsg: string;
   reviewId: string;
   body: string;
+  /** Korunan mevcut görsellerin file_url listesi (kaldırılabilir). */
+  existingImages: string[];
+  /** Bu oturumda yüklenen yeni görseller. */
+  newImages: Array<{ image: string; previewUrl: string }>;
+  dropzoneController: MultiFileDropzoneController | null;
   init(): void;
-  show(detail: { reviewId: string; body: string }): void;
+  show(detail: { reviewId: string; body: string; images?: string[] }): void;
   close(): void;
+  removeExistingImage(idx: number): void;
+  previewSrc(url: string): string;
   bodyValid(): boolean;
   submit(): Promise<void>;
 }
@@ -39,21 +51,94 @@ export function registerEditReviewModal(): void {
       errorMsg: "",
       reviewId: "",
       body: "",
+      existingImages: [],
+      newImages: [],
+      dropzoneController: null as MultiFileDropzoneController | null,
       init() {
         window.addEventListener("edit-review-modal-show", (e: Event) => {
-          const ce = e as CustomEvent<{ reviewId: string; body: string }>;
+          const ce = e as CustomEvent<{ reviewId: string; body: string; images?: string[] }>;
           this.show(ce.detail);
         });
       },
-      show(detail) {
+      async show(detail) {
         this.reviewId = detail.reviewId || "";
         this.body = detail.body || "";
+        this.existingImages = Array.isArray(detail.images) ? [...detail.images] : [];
+        this.newImages = [];
         this.errorMsg = "";
         this.loading = false;
         this.open = true;
+
+        // Modal görünür olduktan sonra dropzone'u mount et (DOM hazır olsun).
+        await new Promise((r) => requestAnimationFrame(r));
+        const wrap = document.getElementById("edit-review-dropzone-wrap");
+        if (!wrap) return;
+        wrap.innerHTML = MultiFileDropzoneController.renderDropzoneHtml({
+          dropzoneId: "edit-review-dropzone",
+          fileInputId: "edit-review-file-input",
+          config: REVIEW_DROPZONE_CONFIG,
+          texts: reviewDropzoneTexts(),
+        });
+        const csrf = (await fetchCsrfToken()) ?? "None";
+        const baseUrl = (window as unknown as { API_BASE?: string }).API_BASE || "/api";
+        this.dropzoneController = new MultiFileDropzoneController({
+          dropzoneId: "edit-review-dropzone",
+          fileInputId: "edit-review-file-input",
+          fileListId: "edit-review-file-list",
+          lightboxScope: "edit-review-image",
+          scopePrefix: "edit-review",
+          config: REVIEW_DROPZONE_CONFIG,
+          texts: reviewDropzoneTexts(),
+          autoUpload: true,
+          autoUploadConfig: {
+            endpoint: `${baseUrl}/method/upload_file`,
+            formDataFields: { is_private: "0", folder: "Home/Attachments" },
+            headers: { "X-Frappe-CSRF-Token": csrf },
+            concurrency: 2,
+          },
+          onFileUploaded: (file, responseText) => {
+            try {
+              const data = JSON.parse(responseText) as { message?: { file_url?: string } };
+              const fileUrl = data.message?.file_url;
+              if (!fileUrl) return;
+              this.newImages.push({ image: fileUrl, previewUrl: this.previewSrc(fileUrl) });
+            } catch {
+              showToast({
+                message: t("p2g3.uploadOkResponseUnreadable", { name: file.name }),
+                type: "warning",
+              });
+            }
+          },
+          onUploadError: (file, error) => {
+            showToast({ message: `${file.name}: ${error}`, type: "error" });
+          },
+          onValidationError: (kind, file) => {
+            if (kind === "unsupported" && file)
+              showToast({ message: t("p2g3.unsupportedFormat", { name: file.name }), type: "error" });
+            else if (kind === "tooLarge" && file)
+              showToast({ message: t("p2g3.fileTooLarge", { name: file.name }), type: "warning" });
+            else if (kind === "maxFiles")
+              showToast({ message: t("p2g3.maxFivePhotos"), type: "warning" });
+          },
+        });
+        this.dropzoneController.mount();
       },
       close() {
         this.open = false;
+        this.dropzoneController?.destroy();
+        this.dropzoneController = null;
+        const wrap = document.getElementById("edit-review-dropzone-wrap");
+        if (wrap) wrap.innerHTML = "";
+        const list = document.getElementById("edit-review-file-list");
+        if (list) list.innerHTML = "";
+        this.existingImages = [];
+        this.newImages = [];
+      },
+      removeExistingImage(idx) {
+        this.existingImages.splice(idx, 1);
+      },
+      previewSrc(url) {
+        return url.startsWith("http") ? url : `${window.location.origin}${url}`;
       },
       bodyValid() {
         return this.body.trim().length >= 20;
@@ -67,7 +152,13 @@ export function registerEditReviewModal(): void {
         }
         this.loading = true;
         try {
-          await updateOwnReview({ name: this.reviewId, body: this.body.trim() });
+          // Korunan + yeni yüklenen görseller birleşir; backend child table'ı
+          // bu liste ile tamamen değiştirir (boş liste = tüm fotolar silinir).
+          const images = [
+            ...this.existingImages.map((image) => ({ image })),
+            ...this.newImages.map((i) => ({ image: i.image })),
+          ];
+          await updateOwnReview({ name: this.reviewId, body: this.body.trim(), images });
           showToast({ message: t("prodUi.reviewUpdated"), type: "success" });
           // Listeyi yenile (reload event listener tetikler)
           window.dispatchEvent(
@@ -147,6 +238,33 @@ export function EditReviewModal(): string {
             </div>
           </div>
 
+          <!-- Mevcut fotoğraflar (kaldırılabilir) -->
+          <div x-show="existingImages.length > 0">
+            <label class="block text-[12px] font-medium text-secondary-700 mb-1">${t("prodUi.editReviewCurrentPhotos")}</label>
+            <div class="flex flex-wrap gap-2">
+              <template x-for="(img, idx) in existingImages" :key="img + idx">
+                <div class="relative w-20 h-20 rounded-lg overflow-hidden border border-border-default/60 bg-secondary-50 group">
+                  <img :src="previewSrc(img)" alt="" class="w-full h-full object-cover" />
+                  <button
+                    type="button"
+                    @click="removeExistingImage(idx)"
+                    class="absolute top-0.5 end-0.5 w-5 h-5 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center transition-colors"
+                    :aria-label="'${t("prodUi.editReviewRemovePhoto")}'"
+                  >
+                    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                  </button>
+                </div>
+              </template>
+            </div>
+          </div>
+
+          <!-- Yeni fotoğraf ekle (MultiFileDropzone — autoUpload) -->
+          <div>
+            <label class="block text-[12px] font-medium text-secondary-700 mb-1">${t("product.reviewWrite.photosLabel")} <span class="text-secondary-400">${t("product.reviewWrite.photosHint")}</span></label>
+            <div id="edit-review-dropzone-wrap"></div>
+            <div id="edit-review-file-list"></div>
+          </div>
+
           <p x-show="errorMsg" x-text="errorMsg" class="text-sm text-red-600"></p>
 
           <div class="flex items-center justify-end gap-2 pt-1">
@@ -171,6 +289,10 @@ export function EditReviewModal(): string {
 }
 
 /** Modal trigger helper */
-export function openEditReviewModal(detail: { reviewId: string; body: string }): void {
+export function openEditReviewModal(detail: {
+  reviewId: string;
+  body: string;
+  images?: string[];
+}): void {
   window.dispatchEvent(new CustomEvent("edit-review-modal-show", { detail }));
 }

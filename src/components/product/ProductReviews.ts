@@ -662,11 +662,16 @@ export function bindHelpfulButtons(container: HTMLElement): void {
     btn.addEventListener("click", () => {
       const reviewId = btn.dataset.reviewId || "";
       if (!reviewId) return;
-      // Mevcut yorum metnini kart'tan oku (modal'ı önceden doldurmak için)
+      // Mevcut yorum metnini + fotoğrafları kart'tan oku (modal ön-dolum için)
       const card = btn.closest(".rv-card") as HTMLElement | null;
       const commentEl = card?.querySelector(".rv-card-comment");
       const oldBody = commentEl?.textContent?.trim() || "";
-      openEditReviewModal({ reviewId, body: oldBody });
+      const images = Array.from(
+        card?.querySelectorAll<HTMLElement>(".rv-image-thumb") ?? []
+      )
+        .map((el) => el.dataset.imageUrl || "")
+        .filter(Boolean);
+      openEditReviewModal({ reviewId, body: oldBody, images });
     });
   });
 }

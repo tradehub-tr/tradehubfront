@@ -352,6 +352,8 @@ export async function updateOwnReview(payload: {
   rating?: number;
   title?: string;
   body?: string;
+  /** Verilirse görsel listesi tamamen değiştirilir; boş dizi tüm fotoğrafları siler. */
+  images?: Array<{ image: string; caption?: string }>;
 }): Promise<{ success: boolean; edit_count: number; status: string }> {
   return callMethodPost(
     "tradehub_core.api.storefront_api.update_review",

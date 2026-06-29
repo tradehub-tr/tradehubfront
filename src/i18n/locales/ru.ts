@@ -810,6 +810,8 @@ const ru = {
       editReviewRemoderationNote: "Изменённые отзывы снова отправляются на модерацию.",
       editReviewWindowNote: "Отзыв можно отредактировать в течение 24 часов после первой отправки.",
       editReviewSave: "Сохранить",
+      editReviewCurrentPhotos: "Текущие фотографии",
+      editReviewRemovePhoto: "Удалить фото",
       reviewMinChars: "Текст отзыва должен содержать не менее 20 символов.",
       reviewUpdated: "Ваш отзыв обновлён.",
       editFailed: "Не удалось отредактировать",
