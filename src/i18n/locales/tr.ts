@@ -804,6 +804,8 @@ const tr = {
       editReviewRemoderationNote: "Düzenlenen yorumlar tekrar onaya gönderilir.",
       editReviewWindowNote: "Yorumunuzu ilk gönderimden sonra 24 saat içinde düzenleyebilirsiniz.",
       editReviewSave: "Kaydet",
+      editReviewCurrentPhotos: "Mevcut fotoğraflar",
+      editReviewRemovePhoto: "Fotoğrafı kaldır",
       reviewMinChars: "Yorum metni en az 20 karakter olmalı.",
       reviewUpdated: "Yorumunuz güncellendi.",
       editFailed: "Düzenleme başarısız",

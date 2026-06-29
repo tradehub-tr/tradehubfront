@@ -19,7 +19,8 @@ import { submitReview, type SubmitReviewPayload } from "../../services/listingSe
 import { fetchCsrfToken } from "../../utils/api";
 import { showToast } from "../../utils/toast";
 
-const REVIEW_DROPZONE_CONFIG: DropzoneConfig = {
+// EditReviewModal de aynı dropzone yapılandırmasını kullanır — tek kaynak.
+export const REVIEW_DROPZONE_CONFIG: DropzoneConfig = {
   maxFiles: 5,
   maxFileSizeBytes: 5 * 1024 * 1024,
   allowedExtensions: [".jpg", ".jpeg", ".png", ".gif", ".webp"],
@@ -28,7 +29,7 @@ const REVIEW_DROPZONE_CONFIG: DropzoneConfig = {
 
 // i18n: dil çalışma anında (modal açılırken) çözülsün diye fonksiyon — modül
 // yüklenirken t() henüz hazır olmayabilir.
-const reviewDropzoneTexts = () => ({
+export const reviewDropzoneTexts = () => ({
   title: t("product.reviewWrite.dzTitle"),
   or: t("product.reviewWrite.dzOr"),
   pickBtn: t("product.reviewWrite.dzPick"),

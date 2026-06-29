@@ -809,6 +809,8 @@ const en = {
       editReviewRemoderationNote: "Edited reviews are sent back for approval.",
       editReviewWindowNote: "You can edit your review within 24 hours of first submitting it.",
       editReviewSave: "Save",
+      editReviewCurrentPhotos: "Current photos",
+      editReviewRemovePhoto: "Remove photo",
       reviewMinChars: "The review text must be at least 20 characters.",
       reviewUpdated: "Your review has been updated.",
       editFailed: "Edit failed",
