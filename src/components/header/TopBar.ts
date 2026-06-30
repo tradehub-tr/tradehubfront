@@ -156,10 +156,11 @@ function buildCurrencyOptionsHtml(): string {
  * post-async-load rebuild (DRY).
  */
 function buildCurrencyPillsHtml(): string {
+  const selected = getSelectedCurrency().code;
   return getCurrencyOptions()
     .map(
-      (currency, i) =>
-        `\n                <button type="button" class="px-3 py-1.5 text-xs font-medium rounded-full border transition-colors ${i === 0 ? "border-primary-500 text-primary-600 bg-primary-50 dark:border-primary-400 dark:text-primary-400 dark:bg-primary-900/20" : "border-gray-300 text-gray-600 dark:border-gray-600 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500"}">\n                  ${currency.code === "TRY" ? "TL" : currency.symbol}\n                </button>\n              `
+      (currency) =>
+        `\n                <button type="button" data-currency-pill="${currency.code}" class="px-3 py-1.5 text-xs font-medium rounded-full border transition-colors ${currency.code === selected ? "border-primary-500 text-primary-600 bg-primary-50 dark:border-primary-400 dark:text-primary-400 dark:bg-primary-900/20" : "border-gray-300 text-gray-600 dark:border-gray-600 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500"}">\n                  ${currency.code === "TRY" ? "TL" : currency.symbol}\n                </button>\n              `
     )
     .join("");
 }
@@ -673,7 +674,7 @@ function renderCartButton(itemCount: number = 0): string {
         <!-- Subtotal (hidden initially) -->
         <div id="header-cart-subtotal" style="display:none" class="flex items-center justify-between pt-3 mt-3 border-t border-gray-100">
           <span class="text-sm text-gray-500" data-i18n="header.cartSubtotal">${t("header.cartSubtotal")}</span>
-          <span id="header-cart-subtotal-price" class="text-lg font-bold" style="color:var(--btn-bg,#d97706)">$0.00</span>
+          <span id="header-cart-subtotal-price" class="text-lg font-bold" style="color:var(--btn-bg,#d97706)">${getCurrencySymbol()}0.00</span>
         </div>
 
         <!-- Go to Cart Button -->
@@ -1875,6 +1876,9 @@ function rebuildCurrencyPicker(): void {
 
 // Register the list-rebuild listener exactly once across the app lifetime.
 let _currencyPickerListenerBound = false;
+// Mobile currency-pill click delegation bound once per page (the container is
+// stable; its inner buttons are replaced by rebuildCurrencyPicker via innerHTML).
+let _currencyPillsHandlerBound = false;
 
 export function initLanguageSelector(): void {
   // Check auth state and update header UI (fire-and-forget)
@@ -1920,6 +1924,22 @@ export function initLanguageSelector(): void {
   // bootstrap), the event has already fired — rebuild now so we don't miss it.
   if (getSupportedCurrencies().length > 0) {
     rebuildCurrencyPicker();
+  }
+
+  // Mobile currency pills — apply the selection immediately (mirrors the
+  // language-pill flow: persist + full reload). Uses event delegation on the
+  // stable #currency-pills container because rebuildCurrencyPicker() swaps the
+  // inner buttons via innerHTML on "currency-changed"; per-button listeners
+  // would be dropped, leaving the picker dead after the first rebuild.
+  if (!_currencyPillsHandlerBound) {
+    _currencyPillsHandlerBound = true;
+    document.getElementById("currency-pills")?.addEventListener("click", (e) => {
+      const btn = (e.target as HTMLElement).closest("[data-currency-pill]");
+      const code = btn?.getAttribute("data-currency-pill");
+      if (!code) return;
+      setSelectedCurrency(code);
+      window.location.reload();
+    });
   }
 
   // Desktop popover "Save" button — applies language + currency, then refreshes
