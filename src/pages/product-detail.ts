@@ -383,6 +383,10 @@ function initFavorites(product = getCurrentProduct()): void {
     image: product.images[0]?.src || '',
     title: product.title,
     priceRange: `$${product.priceTiers[0]?.price || 0}`,
+    // Native fiyat + native currency — favori gösterimi güncel kura çevirir
+    // (donmuş priceRange yerine). basePrice ham (çevrilmemiş) tier fiyatı.
+    price: product.priceTiers[0]?.basePrice ?? 0,
+    currency: product.baseCurrency,
     minOrder: `Min. order: ${product.moq} ${product.unit}`,
   };
 

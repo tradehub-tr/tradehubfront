@@ -9,11 +9,16 @@ import { startAlpine } from '../alpine'
 import { t } from '../i18n'
 import { requireAuth } from '../utils/auth-guard'
 import { getSessionUser } from '../utils/auth'
+import { initCurrency } from '../services/currencyService'
 
 // Block page until auth is confirmed
 await requireAuth();
 const sessionUser = await getSessionUser();
 const emailVerified = sessionUser?.email_verified ?? true;
+
+// Döviz kurlarını render'dan ÖNCE yükle — aksi halde right-panel (favoriler +
+// gezinme geçmişi) fiyatları DEFAULT_RATES (bayat) ile çevrilir.
+await initCurrency();
 
 // Header components (simplified for dashboard — no search bar / mega menu)
 import { TopBar, initMobileDrawer, initHeaderCart } from '../components/header'

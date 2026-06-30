@@ -23,7 +23,11 @@ export interface FavoriteItem {
   id: string;
   image: string;
   title: string;
-  priceRange: string;
+  priceRange: string; // legacy: ekleme-anı donmuş gösterim string'i (geriye-uyum)
+  // Native fiyat + native para birimi — gösterimde güncel kura çevrilir.
+  // Eski kayıtlarda yok (undefined) → priceRange fallback'i kullanılır.
+  price?: number;
+  currency?: string;
   minOrder: string;
   listIds: string[]; // which lists this item belongs to ('default' = favoriler)
   addedAt: number;
@@ -139,7 +143,15 @@ export function getItemListIds(productId: string): string[] {
 
 /** Add item to favorites (optionally to specific lists). If no lists, uses 'default'. */
 export function addToFavorites(
-  product: { id: string; image: string; title: string; priceRange: string; minOrder: string },
+  product: {
+    id: string;
+    image: string;
+    title: string;
+    priceRange: string;
+    price?: number;
+    currency?: string;
+    minOrder: string;
+  },
   listIds?: string[]
 ): void {
   const state = getState();
@@ -163,6 +175,8 @@ export function addToFavorites(
     image: product.image,
     title: product.title,
     price_range: product.priceRange,
+    price: product.price ?? 0,
+    currency: product.currency ?? "",
     min_order: product.minOrder,
   });
 }
@@ -177,7 +191,15 @@ export function removeFromFavorites(productId: string): void {
 
 /** Toggle item in a specific list. Returns true if item was added to list, false if removed. */
 export function toggleItemInList(
-  product: { id: string; image: string; title: string; priceRange: string; minOrder: string },
+  product: {
+    id: string;
+    image: string;
+    title: string;
+    priceRange: string;
+    price?: number;
+    currency?: string;
+    minOrder: string;
+  },
   listId: string
 ): boolean {
   const state = getState();
@@ -190,6 +212,8 @@ export function toggleItemInList(
       image: product.image,
       title: product.title,
       price_range: product.priceRange,
+      price: product.price ?? 0,
+      currency: product.currency ?? "",
       min_order: product.minOrder,
     });
   };
