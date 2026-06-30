@@ -134,7 +134,6 @@ function renderTitle(
 
   return `
     <h1 class="text-sm min-[400px]:text-base sm:text-xl font-medium text-gray-900 dark:text-white min-w-0 break-words leading-snug tracking-tight m-0 max-w-[72ch]">
-      <span class="text-gray-900 dark:text-white" data-i18n="products.viewingLead">${t("products.viewingLead")}</span>
       ${renderInlineToggle(activeTab, categoryParam, queryParam)}
       <span id="sub-header-keyword-wrapper" ${keyword ? "" : 'style="display:none"'}>
         <span id="sub-header-keyword" class="text-primary-600 dark:text-primary-400 font-bold">"${keyword || ""}"</span>

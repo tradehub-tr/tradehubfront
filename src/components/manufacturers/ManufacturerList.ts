@@ -167,7 +167,7 @@ export function ManufacturerList(opts: { mobileFilter?: boolean } = {}): string 
       <!-- Loading state — Alibaba tarzı arama süreci paneli + iskelet kartlar -->
       <div x-show="loading" class="flex flex-col gap-3">
         <template x-if="searchedKeyword">
-          <div class="bg-orange-50 border border-orange-100 rounded-lg p-4 mb-1">
+          <div class="bg-orange-50 border border-orange-100 rounded-md p-4 mb-1">
             <div class="flex items-center gap-2 mb-3">
               <span class="text-orange-600 font-semibold text-[14px]">${t("checkoutMfr.searchProcess")}</span>
               <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>
@@ -189,7 +189,7 @@ export function ManufacturerList(opts: { mobileFilter?: boolean } = {}): string 
           </div>
         </template>
         <template x-for="i in 4" :key="i">
-          <div class="bg-orange-50/50 border border-orange-100/60 rounded-lg p-5 animate-pulse">
+          <div class="bg-orange-50/50 border border-orange-100/60 rounded-md p-5 animate-pulse">
             <div class="h-4 w-1/3 bg-orange-100 rounded mb-3"></div>
             <div class="flex gap-3">
               <div class="h-24 w-24 bg-orange-100/80 rounded"></div>
@@ -204,83 +204,234 @@ export function ManufacturerList(opts: { mobileFilter?: boolean } = {}): string 
       </div>
 
       <!-- Empty state -->
-      <div x-show="!loading && sellers.length === 0" class="bg-white rounded-lg p-12 text-center text-gray-400">
+      <div x-show="!loading && sellers.length === 0" class="bg-white rounded-md p-12 text-center text-gray-400">
         <svg class="w-12 h-12 mx-auto mb-3 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
         </svg>
         <p class="text-[14px]">${t("checkoutMfr.noSellersFound")}</p>
       </div>
 
-      <!-- Seller cards — minimal premium; container-query reflow (sidebar genişliğine göre) -->
-      <div x-show="!loading" class="flex flex-col gap-2.5 @min-[560px]/sc:gap-3 @container/sc">
+      <!-- Seller cards — masaüstü: zengin 2-bölüm; mobil: sade tek-sıra (@container/sc) -->
+      <div x-show="!loading" class="flex flex-col @container/sc">
         <template x-for="seller in sellers" :key="seller.seller_code">
-          <div class="relative bg-white rounded-md border border-gray-200 p-3.5 @min-[560px]/sc:p-4 transition-shadow duration-200 hover:shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
-            <!-- Favori: sağ üst (satır pe-7 ile yer açar → çakışma yok) -->
-            <button
-              type="button"
-              data-seller-favorite-btn
-              @click.prevent.stop="openFavMenu($event, seller)"
-              :class="isFav(seller.seller_code) ? 'text-red-500' : 'text-gray-500 hover:text-red-500'"
-              class="hidden @min-[560px]/sc:block th-no-press absolute top-2.5 end-2.5 z-10 transition-colors cursor-pointer bg-transparent border-none p-1 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
-              :aria-pressed="isFav(seller.seller_code)"
-              aria-label="${t("mfr.list.addToFavorites")}"
-            >
-              <svg class="w-[22px] h-[22px]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-            </button>
+          <div class="mb-2 lg:mb-5">
 
-            <!-- Tek sıra: kimlik solda (flex-1) · 3 ürün sağda -->
-            <div class="flex flex-col @min-[620px]/sc:flex-row @min-[620px]/sc:items-center gap-3 @min-[620px]/sc:gap-5 pe-7">
-              <a
-                :href="'/magaza/' + seller.seller_code"
-                class="group flex items-start min-w-0 @min-[620px]/sc:flex-1 no-underline rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
-              >
-                <div class="w-12 h-12 @min-[560px]/sc:w-14 @min-[560px]/sc:h-14 border border-gray-200 rounded-md overflow-hidden shrink-0 me-3 bg-gray-50 flex items-center justify-center">
-                  <img x-show="seller.logo" :src="seller.logo" :alt="seller.seller_name" loading="lazy" class="w-full h-full object-contain p-1" />
-                  <svg x-show="!seller.logo" class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
-                </div>
-                <div class="min-w-0">
-                  <div class="flex items-center gap-1.5 flex-wrap">
-                    <h3 class="text-[15px] @min-[560px]/sc:text-[16px] font-bold text-gray-900 leading-snug line-clamp-1 group-hover:underline underline-offset-2 decoration-1" x-text="seller.seller_name"></h3>
-                    ${VerificationBadgeTemplate("seller.verifications || []")}
+            <!-- ── MASAÜSTÜ KARTI (lg+) — zengin 2-bölüm layout ── -->
+            <div class="hidden lg:flex flex-col bg-white rounded-md p-5">
+
+              <!-- Title Row -->
+              <div class="flex xl:flex-row flex-col gap-4 xl:gap-0 justify-between items-start mb-6">
+                <div class="flex items-start min-w-0">
+                  <div class="w-[50px] h-[50px] border border-gray-200 rounded-md overflow-hidden shrink-0 me-3 bg-gray-50 flex items-center justify-center">
+                    <img
+                      x-show="seller.logo"
+                      :src="seller.logo"
+                      :alt="seller.seller_name"
+                      class="w-full h-full object-contain p-1"
+                    />
+                    <svg x-show="!seller.logo" class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    </svg>
                   </div>
-
-                  <!-- İstatistik satırı: yıl · personel · m² · ciro -->
-                  <template x-if="window.__sellerStatsParts && window.__sellerStatsParts(seller).length">
-                    <div class="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 mt-1 text-[12px] @min-[560px]/sc:text-[12.5px] text-gray-600">
-                      <template x-for="(part, si) in window.__sellerStatsParts(seller)" :key="si">
-                        <span class="inline-flex items-center gap-x-1.5 whitespace-nowrap">
-                          <span x-show="si > 0" class="w-[3px] h-[3px] rounded-full bg-gray-400" aria-hidden="true"></span>
-                          <span x-text="part"></span>
-                        </span>
+                  <div class="min-w-0 flex-1">
+                    <a
+                      :href="'/magaza/' + seller.seller_code"
+                      class="text-[15px] xl:text-[16px] font-bold text-[#222] hover:text-[#1a66ff] transition-colors truncate max-w-[440px] block"
+                      x-text="seller.seller_name"
+                    ></a>
+                    <div class="flex flex-wrap items-center gap-1 xl:gap-1.5 mt-1 text-[12px] xl:text-[14px] text-[#222]">
+                      ${VerificationBadgeTemplate("seller.verifications || []")}
+                      <template x-if="seller.city">
+                        <span>· <span x-text="seller.city"></span></span>
+                      </template>
+                      <template x-if="seller.country">
+                        <span class="text-gray-400">· <span x-text="seller.country"></span></span>
                       </template>
                     </div>
-                  </template>
+                  </div>
+                </div>
 
-                  <!-- Servis satırı: tek satır, küçük -->
-                  <template x-if="window.__sellerServicesText && window.__sellerServicesText(seller)">
-                    <div class="mt-1 text-[11.5px] @min-[560px]/sc:text-[12px] text-gray-600 line-clamp-1" x-text="window.__sellerServicesText(seller)"></div>
+                <div class="flex items-center gap-2 xl:gap-3 shrink-0">
+                  <button
+                    type="button"
+                    data-seller-favorite-btn
+                    @click.prevent.stop="openFavMenu($event, seller)"
+                    :class="isFav(seller.seller_code) ? 'text-red-500' : 'text-gray-400 hover:text-red-500'"
+                    class="th-no-press transition-colors cursor-pointer bg-transparent border-none p-0 appearance-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 rounded-md"
+                    :aria-pressed="isFav(seller.seller_code)"
+                    aria-label="${t("mfr.list.addToFavorites")}"
+                  >
+                    <svg class="w-[22px] h-[22px]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                  </button>
+                  <a
+                    :href="'/magaza/' + seller.seller_code"
+                    class="h-9 xl:h-10 px-3 xl:px-4 border border-[#222] rounded-full text-[12px] xl:text-[14px] font-bold text-[#222] bg-white hover:bg-gray-50 transition-colors whitespace-nowrap inline-flex items-center"
+                  >${t("mfr.list.contactUs")}</a>
+                </div>
+              </div>
+
+              <!-- Content Row: istatistik | ürünler | galeri -->
+              <div class="flex gap-4 items-stretch">
+
+                <!-- Sol: İstatistik paneli -->
+                <div class="w-[200px] xl:w-[244px] shrink-0 pe-3">
+                  <h4 class="text-[13px] xl:text-[14px] font-normal text-[#222] mb-1">${t("mfr.list.rankingsAndReviews")}</h4>
+                  <div class="mb-4 text-[13px] xl:text-[14px]">
+                    <strong class="text-[#222]" x-text="seller.rating ? seller.rating.toFixed(1) : '—'"></strong>
+                    <span class="text-[#222]">/5</span>
+                    <span class="text-[#222] ms-1" x-text="'(' + (seller.review_count || 0) + ')'"></span>
+                  </div>
+                  <template x-if="seller.short_description">
+                    <p class="text-[12px] xl:text-[13px] text-gray-500 line-clamp-4" x-text="seller.short_description"></p>
                   </template>
                 </div>
-              </a>
 
-              <!-- 3 ürün: mobilde tam genişlik 3'lü grid, desktop'ta sağda sabit kare sıra -->
-              <template x-if="seller.products && seller.products.length > 0">
-                <div class="grid grid-cols-3 gap-2 mt-1 @min-[620px]/sc:mt-0 @min-[620px]/sc:flex @min-[620px]/sc:gap-2.5 shrink-0">
-                  <template x-for="p in seller.products.slice(0, 3)" :key="p.name">
+                <!-- Orta: Ürün kartları (maks 3) -->
+                <div class="flex-1 min-w-0 h-[165px] xl:h-[220px] flex items-stretch gap-3">
+                  <template x-if="!seller.products || seller.products.length === 0">
+                    <div class="w-full h-full rounded-md bg-gray-100 flex items-center justify-center text-gray-200">
+                      <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                      </svg>
+                    </div>
+                  </template>
+                  <template x-for="p in (seller.products || []).slice(0, 3)" :key="p.name">
                     <a
                       :href="'/urun/' + encodeURIComponent(p.slug || p.name)"
-                      class="block aspect-square @min-[620px]/sc:aspect-auto @min-[620px]/sc:w-[84px] @min-[620px]/sc:h-[84px] rounded-md overflow-hidden border border-gray-100 bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
-                      :aria-label="p.product_name"
+                      class="flex flex-col bg-white border border-gray-100 rounded-md overflow-hidden w-[140px] xl:w-[180px] flex-shrink-0 no-underline text-inherit hover:border-gray-300 transition-colors"
                     >
-                      <img x-show="p.image" :src="p.image" :alt="p.product_name" loading="lazy" class="w-full h-full object-cover" />
-                      <div x-show="!p.image" class="w-full h-full flex items-center justify-center text-gray-300">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                      <div class="bg-gray-50 flex-1 overflow-hidden">
+                        <img x-show="p.image" :src="p.image" :alt="p.product_name" loading="lazy" class="block w-full h-full object-cover" />
+                        <div x-show="!p.image" class="w-full h-full flex items-center justify-center text-gray-200">
+                          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                        </div>
+                      </div>
+                      <div class="p-2 flex-shrink-0 h-[78px]">
+                        <p class="text-[12px] text-gray-800 font-medium leading-tight line-clamp-2 mb-1 min-h-[2lh]" x-text="p.product_name"></p>
+                        <p x-show="p.price_min" class="text-[12px] font-bold text-gray-900" x-text="(_cv, p.price_max && p.price_max > p.price_min ? window.csFormatPriceRange(parseFloat(p.price_min), parseFloat(p.price_max), p.currency || 'USD') : window.csFormatPrice(parseFloat(p.price_min), p.currency || 'USD'))"></p>
+                        <p x-show="p.moq" class="text-[11px] text-gray-400 mt-0.5" x-text="p.moq + ' ' + (p.moq_unit || '${t("checkoutMfr.unitPieces")}')"></p>
                       </div>
                     </a>
                   </template>
                 </div>
-              </template>
+
+                <!-- Sağ: Galeri paneli -->
+                <template x-if="seller.gallery_images && seller.gallery_images.length > 0">
+                  <div
+                    class="w-[165px] xl:w-[220px] shrink-0 h-[165px] xl:h-[220px] rounded-md overflow-hidden relative cursor-pointer group"
+                    x-data="{ activeIdx: 0 }"
+                  >
+                    <img
+                      :src="seller.gallery_images[activeIdx]"
+                      :alt="seller.seller_name + ' ${t("checkoutMfr.galleryAlt")}'"
+                      class="w-full h-full object-cover transition-opacity duration-300"
+                    />
+                    <!-- Foto sayacı rozeti -->
+                    <div class="absolute bottom-2 end-2 bg-black/60 text-white text-[11px] px-2 py-1 rounded-md flex items-center gap-1">
+                      <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                      </svg>
+                      <span x-text="(activeIdx + 1) + '/' + seller.gallery_images.length"></span>
+                    </div>
+                    <!-- Navigasyon okları (hover'da görünür) -->
+                    <template x-if="seller.gallery_images.length > 1">
+                      <div class="absolute inset-0 flex items-center justify-between px-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button
+                          type="button"
+                          class="th-no-press w-6 h-6 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 cursor-pointer appearance-none focus-visible:outline-none"
+                          @click.prevent="activeIdx = (activeIdx - 1 + seller.gallery_images.length) % seller.gallery_images.length"
+                          aria-label="Önceki"
+                        >
+                          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                        </button>
+                        <button
+                          type="button"
+                          class="th-no-press w-6 h-6 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 cursor-pointer appearance-none focus-visible:outline-none"
+                          @click.prevent="activeIdx = (activeIdx + 1) % seller.gallery_images.length"
+                          aria-label="Sonraki"
+                        >
+                          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </button>
+                      </div>
+                    </template>
+                  </div>
+                </template>
+
+              </div>
             </div>
+
+            <!-- ── MOBİL KARTI (<lg) — sade tek-sıra (@container/sc breakpoint'leri ile) ── -->
+            <div class="lg:hidden relative bg-white rounded-md border border-gray-200 p-3.5 @min-[560px]/sc:p-4 transition-shadow duration-200 hover:shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+              <!-- Favori: sağ üst (satır pe-7 ile yer açar → çakışma yok) -->
+              <button
+                type="button"
+                data-seller-favorite-btn
+                @click.prevent.stop="openFavMenu($event, seller)"
+                :class="isFav(seller.seller_code) ? 'text-red-500' : 'text-gray-500 hover:text-red-500'"
+                class="hidden @min-[560px]/sc:block th-no-press absolute top-2.5 end-2.5 z-10 transition-colors cursor-pointer bg-transparent border-none p-1 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+                :aria-pressed="isFav(seller.seller_code)"
+                aria-label="${t("mfr.list.addToFavorites")}"
+              >
+                <svg class="w-[22px] h-[22px]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+              </button>
+
+              <!-- Tek sıra: kimlik solda (flex-1) · 3 ürün sağda -->
+              <div class="flex flex-col @min-[620px]/sc:flex-row @min-[620px]/sc:items-center gap-3 @min-[620px]/sc:gap-5 pe-7">
+                <a
+                  :href="'/magaza/' + seller.seller_code"
+                  class="group flex items-start min-w-0 @min-[620px]/sc:flex-1 no-underline rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+                >
+                  <div class="w-12 h-12 @min-[560px]/sc:w-14 @min-[560px]/sc:h-14 border border-gray-200 rounded-md overflow-hidden shrink-0 me-3 bg-gray-50 flex items-center justify-center">
+                    <img x-show="seller.logo" :src="seller.logo" :alt="seller.seller_name" loading="lazy" class="w-full h-full object-contain p-1" />
+                    <svg x-show="!seller.logo" class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                  </div>
+                  <div class="min-w-0">
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                      <h3 class="text-[15px] @min-[560px]/sc:text-[16px] font-bold text-gray-900 leading-snug line-clamp-1 group-hover:underline underline-offset-2 decoration-1" x-text="seller.seller_name"></h3>
+                      ${VerificationBadgeTemplate("seller.verifications || []")}
+                    </div>
+
+                    <!-- İstatistik satırı: yıl · personel · m² · ciro -->
+                    <template x-if="window.__sellerStatsParts && window.__sellerStatsParts(seller).length">
+                      <div class="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 mt-1 text-[12px] @min-[560px]/sc:text-[12.5px] text-gray-600">
+                        <template x-for="(part, si) in window.__sellerStatsParts(seller)" :key="si">
+                          <span class="inline-flex items-center gap-x-1.5 whitespace-nowrap">
+                            <span x-show="si > 0" class="w-[3px] h-[3px] rounded-full bg-gray-400" aria-hidden="true"></span>
+                            <span x-text="part"></span>
+                          </span>
+                        </template>
+                      </div>
+                    </template>
+
+                    <!-- Servis satırı: tek satır, küçük -->
+                    <template x-if="window.__sellerServicesText && window.__sellerServicesText(seller)">
+                      <div class="mt-1 text-[11.5px] @min-[560px]/sc:text-[12px] text-gray-600 line-clamp-1" x-text="window.__sellerServicesText(seller)"></div>
+                    </template>
+                  </div>
+                </a>
+
+                <!-- 3 ürün: mobilde tam genişlik 3'lü grid, geniş'te sağda sabit kare sıra -->
+                <template x-if="seller.products && seller.products.length > 0">
+                  <div class="grid grid-cols-3 gap-2 mt-1 @min-[620px]/sc:mt-0 @min-[620px]/sc:flex @min-[620px]/sc:gap-2.5 shrink-0">
+                    <template x-for="p in seller.products.slice(0, 3)" :key="p.name">
+                      <a
+                        :href="'/urun/' + encodeURIComponent(p.slug || p.name)"
+                        class="block aspect-square @min-[620px]/sc:aspect-auto @min-[620px]/sc:w-[84px] @min-[620px]/sc:h-[84px] rounded-md overflow-hidden border border-gray-100 bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+                        :aria-label="p.product_name"
+                      >
+                        <img x-show="p.image" :src="p.image" :alt="p.product_name" loading="lazy" class="w-full h-full object-cover" />
+                        <div x-show="!p.image" class="w-full h-full flex items-center justify-center text-gray-300">
+                          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                        </div>
+                      </a>
+                    </template>
+                  </div>
+                </template>
+              </div>
+            </div>
+
           </div>
         </template>
 

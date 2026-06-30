@@ -153,7 +153,7 @@ export function VerificationBadgeTemplate(scopeExpr: string): string {
   const badgeInfoLabel = t("verification.badgeInfo");
 
   return `
-    <template x-if="${scopeExpr} && (${scopeExpr}).length > 0">
+    <template x-if="(${scopeExpr}).length > 0">
       <div class="relative inline-flex items-center gap-1 text-[12px] text-gray-700"
            x-data="{ vOpen: false }">
         <img src="${verifiedminilogoUrl}"
