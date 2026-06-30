@@ -46,7 +46,7 @@ function buildSheetItemHtml(id: string, label: string): string {
   return `
     <button
       type="button"
-      class="flex items-center w-full px-5 py-4 text-start transition-colors border-b border-gray-50 active:bg-gray-50"
+      class="th-no-press appearance-none focus:outline-none [-webkit-tap-highlight-color:transparent] flex items-center w-full px-5 py-4 text-start transition-colors border-b border-gray-50 active:bg-gray-50"
       @click="setCategory('${id}'); showCategorySheet = false"
     >
       <span
@@ -106,7 +106,7 @@ export function TopDealsCategoryTabs(): string {
       <!-- Mobile chevron → opens bottom sheet -->
       <button
         type="button"
-        class="md:hidden flex-shrink-0 flex items-center justify-center w-9 self-stretch border-b border-gray-200 bg-white text-gray-500"
+        class="th-no-press appearance-none focus:outline-none [-webkit-tap-highlight-color:transparent] md:hidden flex-shrink-0 flex items-center justify-center w-9 self-stretch border-b border-gray-200 bg-white text-gray-500"
         @click="showCategorySheet = !showCategorySheet"
         aria-label="All categories"
       >
@@ -150,7 +150,7 @@ export function TopDealsCategoryTabs(): string {
 
     <!-- Sheet Panel -->
     <div
-      class="md:hidden fixed inset-x-0 bottom-0 z-[100] transition-transform duration-300 ease-out motion-reduce:transition-none"
+      class="md:hidden fixed inset-x-0 bottom-0 z-[100] transition-transform duration-300 ease-drawer motion-reduce:transition-none"
       :class="showCategorySheet ? 'translate-y-0' : 'translate-y-full'"
     >
       <div class="bg-white rounded-t-md max-h-[85vh] flex flex-col shadow-2xl">
@@ -195,8 +195,8 @@ export function initCategoryTabs(): void {
 
 async function loadCategoryTabs(): Promise<void> {
   try {
-    const { getCategories } = await import("../../services/listingService");
-    const categories = await getCategories();
+    const { loadCategories } = await import("../../services/categoryService");
+    const categories = await loadCategories();
 
     const tabsContainer = document.getElementById("td-tabs-scroll");
     const sheetContainer = document.getElementById("td-sheet-categories");
@@ -232,7 +232,7 @@ async function loadCategoryTabs(): Promise<void> {
         const sheetBtn = document.createElement("button");
         sheetBtn.type = "button";
         sheetBtn.className =
-          "flex items-center w-full px-5 py-4 text-start transition-colors border-b border-gray-50 active:bg-gray-50";
+          "th-no-press appearance-none focus:outline-none [-webkit-tap-highlight-color:transparent] flex items-center w-full px-5 py-4 text-start transition-colors border-b border-gray-50 active:bg-gray-50";
         sheetBtn.dataset.catSlug = slug;
         sheetBtn.innerHTML = `
           <span class="flex-1 text-[15px] text-gray-600">${escapeHtml(name)}</span>

@@ -4410,6 +4410,7 @@ const en = {
       // Hero section headings
       sourceByCategory: "Source by category",
       allCategories: "All categories",
+      allInCategory: "All {{name}}",
       getSamples: "Get samples",
       popularProducts: "Popular products",
       newArrivals: "New arrivals",
@@ -8313,6 +8314,11 @@ const en = {
     chatWithSeller: "Chat with seller",
     openChat: "My messages",
     comingSoon: "This feature is coming soon.",
+  },
+  verification: {
+    verifiedBySupplier: "Verified by {{name}}",
+    downloadReport: "Download inspection report",
+    badgeInfo: "Verification info",
   },
 };
 

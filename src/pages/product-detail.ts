@@ -69,6 +69,7 @@ import { applyServerSeo } from '../seo/setPageMeta'
 
 // Favorites
 import { openFavoritesDropdown, updateFavoriteButtons } from '../components/favorites/FavoritesDropdown'
+import { initVerificationHelpers } from '../components/seller'
 
 // Read listing ID from URL — pretty URL (/urun/<slug>) öncelikli
 // Backend get_listing_detail hem listing.name hem listing_code hem slug ile
@@ -302,6 +303,7 @@ async function renderProductPage() {
   initAnimatedPlaceholder('#topbar-compact-search-input');
 
   // Product-specific inits
+  initVerificationHelpers(); // window.__verifiedByText / __downloadReportText (before startAlpine)
   initCartDrawer();
   initProductTitleBar();
   initProductInfo();

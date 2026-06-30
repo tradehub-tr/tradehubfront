@@ -4434,6 +4434,7 @@ const ru = {
       // Hero section headings
       sourceByCategory: "Поиск по категориям",
       allCategories: "Все категории",
+      allInCategory: "Все {{name}}",
       getSamples: "Получить образцы",
       popularProducts: "Популярные товары",
       newArrivals: "Новые поступления",
@@ -8385,6 +8386,11 @@ const ru = {
     chatWithSeller: "Чат с продавцом",
     openChat: "Мои сообщения",
     comingSoon: "Эта функция скоро появится.",
+  },
+  verification: {
+    verifiedBySupplier: "Поставщик верифицирован {{name}}",
+    downloadReport: "Скачать отчёт об инспекции",
+    badgeInfo: "Информация о верификации",
   },
 };
 

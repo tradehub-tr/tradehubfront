@@ -17,6 +17,7 @@ import { CompanyProfileComponent } from '../components/seller/CompanyProfile';
 
 // Interactions
 import { initSellerStorefront } from '../utils/seller/interactions';
+import { initVerificationHelpers } from '../components/seller';
 
 // ─── Render ─────────────────────────────────────────────
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
@@ -40,6 +41,7 @@ appEl.innerHTML = `
 initFlowbite();
 initLanguageSelector();
 initSellerStorefront();
+initVerificationHelpers(); // window.__verifiedByText / __downloadReportText (before startAlpine)
 initCurrency();
 
 // Start Alpine.js (must be called AFTER innerHTML is set)

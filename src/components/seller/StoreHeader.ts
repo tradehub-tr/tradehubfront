@@ -3,6 +3,7 @@
  * Two sections: Company Header (gray) + Stats & Media Card (white)
  */
 import { t } from "../../i18n";
+import { VerificationBadgeTemplate } from "./VerificationBadge";
 
 export function StoreHeader(): string {
   /* Reusable SVG: blue filled circle with white checkmark */
@@ -64,7 +65,7 @@ export function StoreHeader(): string {
               ${t("seller.sf.viewStore")}
             </a>
             <button
-              class="bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[14px] font-semibold border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-[background-color,box-shadow,transform] duration-150 motion-reduce:transition-none whitespace-nowrap"
+              class="bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[14px] font-semibold border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] active:scale-[0.97] transition-[background-color,color,transform] duration-150 motion-reduce:transition-none whitespace-nowrap"
               style="width: 180px; height: 40px; padding: 0px 12px;"
               @click="setTab('contact')">
               ${t("seller.sf.contactNow")}
@@ -103,15 +104,17 @@ export function StoreHeader(): string {
             </template>
           </div>
 
-          <!-- Badges row: Onaylanmış Satıcı + Manufacturer type + Best seller -->
+          <!-- Badges row: Onaylanmış Satıcı + Doğrulama rozeti + Manufacturer type + Best seller -->
           <div class="flex flex-wrap items-center gap-3">
-            <!-- Onaylanmış Satıcı rozeti — KYB Verified rolüne bağlı -->
+            <!-- KYB Onaylanmış Satıcı rozeti — Verified Seller rolüne bağlı -->
             <template x-if="seller?.verified">
               <span class="inline-flex items-center gap-1 text-green-700 dark:text-green-400">
                 <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
                 <span class="text-[13px] font-semibold">${t("seller.sf.verifiedSupplier")}</span>
               </span>
             </template>
+            <!-- Saha doğrulama rozeti — verifications[] dizisi dolu ise gösterilir -->
+            ${VerificationBadgeTemplate("seller?.verifications || []")}
 
             <!-- Manufacturer type -->
             <template x-if="seller?.business_type">
@@ -136,12 +139,12 @@ export function StoreHeader(): string {
             <!-- Mobile CTA buttons — stacked below header -->
             <div class="flex flex-col lg:hidden gap-2 px-4 py-3 sm:px-6">
               <a :href="sellerCode ? '/magaza/' + sellerCode + '/dukkan' : '#'"
-                 class="w-full inline-flex items-center justify-center gap-1.5 py-2.5 border-(length:--btn-outline-border-width) border-(--btn-outline-border-color,#f5b800) rounded-[var(--radius-button,8px)] bg-(--btn-outline-bg,transparent) text-[13px] font-medium text-(--btn-outline-text,#d39c00) hover:bg-(--btn-outline-hover-bg,#fff8e1) hover:text-(--btn-outline-hover-text,#d39c00) hover:border-(--btn-outline-hover-text,#d39c00) hover:shadow-[inset_2px_2px_4px_rgba(0,0,0,0.08),inset_-1px_-1px_2px_rgba(255,255,255,0.5)] active:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.14),inset_-1px_-1px_2px_rgba(255,255,255,0.4)] active:scale-[0.98] transition-[background-color,box-shadow,transform] duration-150 motion-reduce:transition-none">
+                 class="w-full inline-flex items-center justify-center gap-1.5 py-2.5 border-(length:--btn-outline-border-width) border-(--btn-outline-border-color,#f5b800) rounded-[var(--radius-button,8px)] bg-(--btn-outline-bg,transparent) text-[13px] font-medium text-(--btn-outline-text,#d39c00) hover:bg-(--btn-outline-hover-bg,#fff8e1) hover:text-(--btn-outline-hover-text,#d39c00) hover:border-(--btn-outline-hover-text,#d39c00) active:scale-[0.97] transition-[background-color,color,transform] duration-150 motion-reduce:transition-none">
                 ${storeIcon}
                 ${t("seller.sf.viewStore")}
               </a>
               <button
-                class="w-full py-2.5 bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[13px] font-semibold border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-[background-color,box-shadow,transform] duration-150 motion-reduce:transition-none"
+                class="w-full py-2.5 bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[13px] font-semibold border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] active:scale-[0.97] transition-[background-color,color,transform] duration-150 motion-reduce:transition-none"
                 @click="setTab('contact')">
                 ${t("seller.sf.contactNow")}
               </button>

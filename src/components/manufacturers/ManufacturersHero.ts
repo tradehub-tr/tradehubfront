@@ -37,9 +37,8 @@ function renderSourceByCategory(): string {
         _hideTimer: null,
         async init() {
           try {
-            const url = (window.API_BASE || '/api') + '/method/tradehub_core.api.category.get_mega_menu';
-            const res = await fetch(url, { credentials: 'include' }).then(r => r.json());
-            const apiCats = res.message || [];
+            // Merkezi categoryService köprüsü (cache + spam filtresi paylaşılır)
+            const apiCats = window.__loadCategories ? await window.__loadCategories() : [];
 
             // Subtle personalization: son ziyaret edilen kategorileri başa al,
             // kalan slot'ları API sırasıyla doldur, en fazla 6 göster.

@@ -23,8 +23,17 @@ declare global {
     /** Manufacturer sayfası son kategori slug'ları (manufacturers.ts) */
     __getRecentCategorySlugs?: () => string[];
 
+    /** Merkezi kategori yükleyici köprüsü — Alpine inline init() için (manufacturers.ts) */
+    __loadCategories?: () => Promise<
+      import("../services/categoryService").ApiCategory[]
+    >;
+
     /** Manufacturer filter sidebar init flag */
     __mfrFiltersInited?: boolean;
+
+    /** Satıcı doğrulama rozeti i18n helper'ları — initVerificationHelpers() kurar */
+    __verifiedByText?: (name: string) => string;
+    __downloadReportText?: string;
 
     /** Favori satıcı listesi — ManufacturerList Alpine inline x-data helper'ları */
     __getSellerFavs?: () => string[];

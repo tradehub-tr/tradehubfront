@@ -7,6 +7,7 @@ import { getCurrentProduct } from "../../alpine/product";
 import { t } from "../../i18n";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 import { getSellerUrl } from "../../utils/sellerUrl";
+import { VerificationBadge } from "../seller/VerificationBadge";
 
 function verifiedBadge(): string {
   return `
@@ -45,9 +46,10 @@ export function SupplierCard(): string {
           </svg>
         </div>
         <div class="min-w-0">
-          <div class="flex items-center gap-1.5">
+          <div class="flex items-center gap-1.5 flex-wrap">
             <h3 class="text-sm font-bold truncate" style="color: var(--pd-title-color, #111827);">${escapeHtml(s.name)}</h3>
             ${s.verified ? verifiedBadge() : ""}
+            ${VerificationBadge(s.verifications ?? [])}
           </div>
           <p class="text-xs mt-0.5" style="color: var(--pd-rating-text-color, #6b7280);">${t("product.servingYears", { count: String(s.yearsInBusiness) })}</p>
         </div>

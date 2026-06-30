@@ -304,6 +304,10 @@
      elle kullanılan eğri. Hover/exit'te ham ease meşru kalır; bu token yalnız
      fade-in/slide-up gibi giriş token'larına bağlanır. */
   --ease-emil: cubic-bezier(0.23, 1, 0.32, 1);
+  /* iOS-tarzı drawer/bottom-sheet eğrisi (Ionic). Tüm sheet/drawer açılış-kapanışı
+     bu tek token'a bağlanır → `ease-drawer` utility'si globaldir, inline arbitrary
+     eğri tekrarı yok. */
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 
   /* --- animate tokens — moved to @theme inline below --- */
 
@@ -357,7 +361,8 @@
   --btn-border-color: var(--color-primary-600);
   --btn-font-size: 0.875rem;
   --btn-font-weight: 600;
-  --btn-shadow: 0 1px 0 var(--color-primary-600), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  /* Emil: glossy inset highlight kaldırıldı — yalnız ince alt keyline (paint'siz, animate edilmez). */
+  --btn-shadow: 0 1px 0 var(--color-primary-600);
   --btn-hover-bg: var(--color-primary-600);
   --btn-hover-text: #1a1a1a;
 
@@ -813,27 +818,20 @@
     cursor: pointer;
     line-height: 1.25;
     transition:
-      background-color 0.15s,
-      color 0.15s,
-      box-shadow 0.15s,
-      transform 0.15s cubic-bezier(0.23, 1, 0.32, 1);
+      background-color 0.15s ease,
+      color 0.15s ease,
+      transform 0.16s cubic-bezier(0.23, 1, 0.32, 1);
   }
 
   .th-btn:hover {
     background: var(--btn-hover-bg, var(--btn-bg));
     color: var(--btn-hover-text, var(--btn-text));
-    box-shadow:
-      inset 2px 2px 5px rgba(0, 0, 0, 0.2),
-      inset -1px -1px 2px rgba(255, 255, 255, 0.25);
   }
 
   .th-btn:active {
     background: var(--btn-hover-bg, var(--btn-bg));
-    box-shadow:
-      inset 3px 3px 7px rgba(0, 0, 0, 0.3),
-      inset -1px -1px 2px rgba(255, 255, 255, 0.18);
-    transform: scale(0.98);
-    transition-duration: 0.06s;
+    transform: scale(0.97);
+    transition-duration: 0.1s;
   }
 
   .th-btn:disabled {
@@ -858,27 +856,22 @@
     cursor: pointer;
     line-height: 1.25;
     transition:
-      background-color 0.15s,
-      color 0.15s,
-      box-shadow 0.15s,
-      transform 0.15s;
+      background-color 0.15s ease,
+      color 0.15s ease,
+      border-color 0.15s ease,
+      transform 0.16s cubic-bezier(0.23, 1, 0.32, 1);
   }
 
   .th-btn-outline:hover {
     background: var(--btn-outline-hover-bg, var(--btn-outline-bg));
     color: var(--btn-outline-hover-text, var(--btn-outline-text));
-    box-shadow:
-      inset 2px 2px 4px rgba(0, 0, 0, 0.08),
-      inset -1px -1px 2px rgba(255, 255, 255, 0.5);
+    border-color: var(--btn-outline-hover-border-color, var(--btn-outline-border-color));
   }
 
   .th-btn-outline:active {
     background: var(--btn-outline-hover-bg, var(--btn-outline-bg));
-    box-shadow:
-      inset 3px 3px 6px rgba(0, 0, 0, 0.14),
-      inset -1px -1px 2px rgba(255, 255, 255, 0.4);
-    transform: scale(0.98);
-    transition-duration: 0.06s;
+    transform: scale(0.97);
+    transition-duration: 0.1s;
   }
 
   .th-btn-outline:disabled {
@@ -917,27 +910,20 @@
     cursor: pointer;
     line-height: 1.25;
     transition:
-      background-color 0.15s,
-      color 0.15s,
-      box-shadow 0.15s,
-      transform 0.15s;
+      background-color 0.15s ease,
+      color 0.15s ease,
+      transform 0.16s cubic-bezier(0.23, 1, 0.32, 1);
   }
 
   .th-btn-dark:hover {
     background: var(--btn-hover-bg, var(--btn-bg));
     color: var(--btn-hover-text, var(--btn-text));
-    box-shadow:
-      inset 2px 2px 5px rgba(0, 0, 0, 0.2),
-      inset -1px -1px 2px rgba(255, 255, 255, 0.25);
   }
 
   .th-btn-dark:active {
     background: var(--btn-hover-bg, var(--btn-bg));
-    box-shadow:
-      inset 3px 3px 7px rgba(0, 0, 0, 0.3),
-      inset -1px -1px 2px rgba(255, 255, 255, 0.18);
-    transform: scale(0.98);
-    transition-duration: 0.06s;
+    transform: scale(0.97);
+    transition-duration: 0.1s;
   }
 
   .th-btn-dark:disabled {
@@ -958,16 +944,14 @@
     padding: var(--spacing-button-y) var(--spacing-button-x);
     font-size: var(--btn-font-size);
     font-weight: var(--btn-font-weight);
-    box-shadow:
-      0 1px 0 #15803d,
-      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    box-shadow: 0 1px 0 #15803d;
     cursor: pointer;
     line-height: 1.25;
     transition:
-      background-color 0.15s,
-      border-color 0.15s,
-      color 0.15s,
-      transform 0.15s;
+      background-color 0.15s ease,
+      border-color 0.15s ease,
+      color 0.15s ease,
+      transform 0.16s cubic-bezier(0.23, 1, 0.32, 1);
   }
 
   .th-btn-success:hover {
@@ -977,8 +961,8 @@
   }
 
   .th-btn-success:active {
-    transform: scale(0.98);
-    transition-duration: 0.06s;
+    transform: scale(0.97);
+    transition-duration: 0.1s;
   }
 
   .th-btn-success:disabled {
@@ -1014,8 +998,8 @@
   }
 
   .th-btn-ghost:active {
-    transform: scale(0.98);
-    transition-duration: 0.06s;
+    transform: scale(0.97);
+    transition-duration: 0.1s;
   }
 
   .th-btn-ghost:disabled {
@@ -1081,8 +1065,8 @@
   }
 
   .th-btn-danger:active {
-    transform: scale(0.98);
-    transition-duration: 0.06s;
+    transform: scale(0.97);
+    transition-duration: 0.1s;
   }
 
   .th-btn-danger:disabled {
@@ -1980,38 +1964,9 @@ input[type="reset"]:not(:disabled),
     border-color 0.18s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-button:not(:disabled):not([role="tab"]):not([class*="-tab"]):not([class*="__tab"]):not(
-    [class*="tab-"]
-  ):not([class*="-dropdown-trigger"]):not([class*="-dropdown-item"]):not(
-    [class*="-collapsible"]
-  ):not([class*="store-nav__item"]):not([class*="-nav-link"]):not([class*="__nav-link"]):not(
-    [class*="-toggle__"]
-  ):not([class*="hover:underline"]):not([class*="-close"]):not([class*="__close"]):not(
-    [class*="-nav-btn"]
-  ):not([class*="__prev"]):not([class*="__next"]):not([class*="-prev-"]):not([class*="-next-"]):not(
-    [class*="-remove-file"]
-  ):not([aria-label*="close" i]):not([aria-label*="kapat" i]):not([aria-label*="sil" i]):not(
-    [aria-label*="kaldır" i]
-  ):not([aria-label*="remove" i]):not([data-delete-sku]):not([data-delete-supplier]):not(
-    .th-btn-link
-  ):not(.th-btn-ghost):not(.mega-trigger):not(.th-subheader-link):not(.search-tab-btn):not(
-    .th-search-tab
-  ):not(.mega-cat-btn):not(.th-mega-sidebar-item):not([class*="th-header-icon"]):not(
-    .th-no-press
-  ):hover,
-input[type="submit"]:not(:disabled):not(.th-no-press):hover,
-input[type="button"]:not(:disabled):not(.th-no-press):hover,
-input[type="reset"]:not(:disabled):not(.th-no-press):hover,
-[role="button"]:not([aria-disabled="true"]):not([data-supplier-open]):not(
-    [aria-label*="close" i]
-  ):not([aria-label*="kapat" i]):not([aria-label*="sil" i]):not([aria-label*="kaldır" i]):not(
-    [aria-label*="remove" i]
-  ):not(.th-no-press):hover {
-  box-shadow:
-    inset 2px 2px 5px rgba(0, 0, 0, 0.1),
-    inset -1px -1px 2px rgba(255, 255, 255, 0.3);
-}
-
+/* Global press feedback — Emil: yalnız :active'de scale(0.97).
+   Hover'da görsel efekt YOK (her button class'ı kendi hover'ını tanımlar);
+   inset bevel kaldırıldı, box-shadow animate edilmez. */
 button:not(:disabled):not([role="tab"]):not([class*="-tab"]):not([class*="__tab"]):not(
     [class*="tab-"]
   ):not([class*="-dropdown-trigger"]):not([class*="-dropdown-item"]):not(
@@ -2039,11 +1994,8 @@ input[type="reset"]:not(:disabled):not(.th-no-press):active,
   ):not([aria-label*="kapat" i]):not([aria-label*="sil" i]):not([aria-label*="kaldır" i]):not(
     [aria-label*="remove" i]
   ):not(.th-no-press):active {
-  box-shadow:
-    inset 3px 3px 7px rgba(0, 0, 0, 0.18),
-    inset -1px -1px 2px rgba(255, 255, 255, 0.2);
-  transform: scale(0.98);
-  transition-duration: 0.06s;
+  transform: scale(0.97);
+  transition-duration: 0.1s;
 }
 
 /* Opt-out: bazı butonlar (örn. tab seçici, accordion toggler,
@@ -2064,29 +2016,23 @@ button[data-filter-action="apply-all"] {
   color: #1a1a1a !important;
   border: 1px solid #d39c00 !important;
   border-radius: 8px !important;
-  box-shadow:
-    0 1px 0 #d39c00,
-    inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+  /* Emil: glossy inset highlight kaldırıldı — yalnız ince alt keyline. */
+  box-shadow: 0 1px 0 #d39c00 !important;
+  transition:
+    background-color 0.15s ease,
+    transform 0.16s cubic-bezier(0.23, 1, 0.32, 1);
 }
 button[data-filter-action="apply"]:hover,
 button[data-filter-action="apply-all"]:hover {
   background: #e8ad00 !important;
   border-color: #d39c00 !important;
-  box-shadow:
-    inset 2px 2px 5px rgba(0, 0, 0, 0.2),
-    inset -1px -1px 2px rgba(255, 255, 255, 0.25) !important;
 }
 button[data-filter-action="apply"]:active,
 button[data-filter-action="apply-all"]:active {
   background: #d8a000 !important;
   border-color: #d39c00 !important;
-  box-shadow:
-    inset 3px 3px 7px rgba(0, 0, 0, 0.3),
-    inset -1px -1px 2px rgba(255, 255, 255, 0.18) !important;
   transform: scale(0.97);
-  transition:
-    transform 0.06s ease,
-    box-shadow 0.06s ease;
+  transition-duration: 0.1s;
 }
 
 @keyframes favModalIn {

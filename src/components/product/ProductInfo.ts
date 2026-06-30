@@ -214,7 +214,10 @@ export function ProductInfo(): string {
         `
         }
 
-        <!-- Variations Header -->
+        <!-- Variations Header — yalnızca backend varyant döndürdüyse göster -->
+        ${
+          p.variants.length > 0
+            ? `
         <div id="pd-variations-section" class="pb-4" style="border-bottom: 1px solid var(--color-border-light, #f0f0f0);">
           <div class="flex justify-between items-center mb-4">
             <h3 class="text-base font-bold m-0" style="color: var(--pd-title-color, #111827);">${t("product.variants")}</h3>
@@ -224,6 +227,9 @@ export function ProductInfo(): string {
           <!-- Variant Groups -->
           ${p.variants.map((v) => renderVariant(v, p.variants)).join("")}
         </div>
+        `
+            : ""
+        }
 
         <!-- Shipping -->
         <div class="py-5" style="border-bottom: 1px solid var(--color-border-light, #f0f0f0);">

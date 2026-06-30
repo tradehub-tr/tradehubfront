@@ -96,7 +96,7 @@ function renderInlineToggle(
     <span
       role="tablist"
       aria-label="${t("search.products")} / ${t("search.manufacturers")}"
-      class="inline-flex items-center gap-0.5 align-middle bg-gray-100 border border-gray-200 rounded-full p-[3px] -translate-y-px shadow-[inset_0_1px_0_rgba(255,255,255,0.6)] dark:bg-gray-800 dark:border-gray-700"
+      class="inline-flex items-center gap-0.5 align-middle bg-gray-100 border border-gray-200 rounded-full p-[3px] -translate-y-px dark:bg-gray-800 dark:border-gray-700"
     >
       <a
         href="${productsUrl}"

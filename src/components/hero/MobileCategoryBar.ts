@@ -10,6 +10,8 @@ import { onCategoriesLoaded } from "../../services/categoryService";
 import type { ApiCategory } from "../../services/categoryService";
 import { t } from "../../i18n";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
+import { BottomSheet } from "../shared/BottomSheet";
+import { initCategoryDrillSheet } from "../shared/CategoryDrillSheet";
 
 /* ──── Subcategory thumbnail renderer ──── */
 
@@ -28,50 +30,24 @@ function renderMobileSubcategory(name: string, slug: string, image?: string): st
   `;
 }
 
-/* ──── Bottom Sheet (skeleton until API loads) ──── */
+/* ──── Bottom Sheet (paylaşılan component, skeleton until API loads) ──── */
 
 function renderBottomSheet(): string {
-  return `
-    <!-- Bottom Sheet Overlay -->
-    <div id="mcb-sheet-overlay" class="fixed inset-0 z-(--z-backdrop) bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300 xl:hidden"></div>
-
-    <!-- Bottom Sheet Panel -->
-    <div id="mcb-sheet-panel" class="fixed inset-x-0 bottom-0 z-(--z-modal) transition-transform duration-300 ease-out xl:hidden" style="transform: translateY(100%)">
-      <div class="bg-white dark:bg-gray-800 rounded-t-md max-h-[85vh] flex flex-col shadow-2xl">
-        <!-- Drag Handle + Title (swipe-to-dismiss target) -->
-        <div id="mcb-sheet-drag-handle" class="flex-shrink-0">
-          <div class="flex items-center justify-center pt-3 pb-2">
-            <div class="w-9 h-1 rounded-full bg-gray-300 dark:bg-gray-600"></div>
-          </div>
-          <div class="flex items-center px-3 min-[400px]:px-4 sm:px-5 border-b border-gray-100 dark:border-gray-700/50">
-            <span class="text-[13px] min-[400px]:text-[14px] sm:text-[15px] font-bold text-gray-900 dark:text-white" data-i18n="categoryBrowse.title">${t("categoryBrowse.title")}</span>
-            <button
-              type="button"
-              id="mcb-sheet-close"
-              class="ms-auto p-1.5 -me-1.5 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
-              aria-label="${t("common.close")}" data-i18n-aria-label="common.close"
-            >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        <!-- Category List (skeleton, replaced after API) -->
-        <div id="mcb-sheet-list" class="overflow-y-auto flex-1 pb-6">
-          ${Array.from(
-            { length: 6 },
-            () => `
-            <div class="flex items-center w-full px-5 py-4 border-b border-gray-50 dark:border-gray-700/50 animate-pulse">
-              <div class="h-4 rounded bg-gray-200 dark:bg-gray-700 flex-1"></div>
-            </div>
-          `
-          ).join("")}
-        </div>
-      </div>
-    </div>
+  // Drill-down sheet gövdesi: paylaşılan helper rows'u buraya basar (data-mcb-mobile-list).
+  // İlk açılışa kadar skeleton görünür; helper renderSheet ile içeriği değiştirir.
+  const skeleton = `
+    <ul data-mcb-mobile-list class="overflow-y-auto flex-1 py-2 list-none m-0 p-0">
+      ${Array.from(
+        { length: 6 },
+        () => `
+        <li class="flex items-center w-full px-5 py-4 border-b border-gray-50 dark:border-gray-700/50 animate-pulse">
+          <div class="h-4 rounded bg-gray-200 dark:bg-gray-700 flex-1"></div>
+        </li>
+      `
+      ).join("")}
+    </ul>
   `;
+  return BottomSheet({ id: "mcb-sheet", titleKey: "categoryBrowse.title", hiddenAt: "xl:hidden" }, skeleton);
 }
 
 /* ──── HTML ──── */
@@ -130,11 +106,6 @@ export function MobileCategoryBar(): string {
 export function initMobileCategoryBar(): void {
   const tabsContainer = document.getElementById("mcb-tabs");
   const productsContainer = document.getElementById("mcb-products");
-  const dropdownBtn = document.getElementById("mcb-dropdown-btn");
-  const sheetOverlay = document.getElementById("mcb-sheet-overlay");
-  const sheetPanel = document.getElementById("mcb-sheet-panel");
-  const sheetClose = document.getElementById("mcb-sheet-close");
-  const sheetList = document.getElementById("mcb-sheet-list");
 
   if (!productsContainer || !tabsContainer) return;
 
@@ -148,6 +119,8 @@ export function initMobileCategoryBar(): void {
   const TAB_INACT = ["text-gray-500", "dark:text-gray-400", "font-normal", "border-transparent"];
 
   let _cats: ApiCategory[] = [];
+  // Drill-down sheet'in ✓ işareti için aktif kök slug'ı (seçili tab).
+  let activeRootSlug = "";
 
   function selectCategory(catId: string): void {
     // Update tab bar
@@ -164,111 +137,15 @@ export function initMobileCategoryBar(): void {
       activeTab.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
     }
 
-    // Update bottom sheet selected state
-    sheetList?.querySelectorAll<HTMLButtonElement>(".mcb-sheet-item").forEach((item) => {
-      const id = item.getAttribute("data-mcb-sheet-cat");
-      const label = item.querySelector("span:first-child");
-      const radio = item.querySelector(".mcb-sheet-radio") as HTMLElement | null;
-      const radioDot = radio?.querySelector("span") as HTMLElement | null;
-      if (!label) return;
-
-      if (id === catId) {
-        label.className =
-          "flex-1 text-[13px] min-[400px]:text-[14px] sm:text-[15px] font-semibold text-gray-900 dark:text-white";
-        if (radio)
-          radio.className =
-            "mcb-sheet-radio flex-shrink-0 w-4 h-4 min-[400px]:w-5 min-[400px]:h-5 rounded-full border-2 border-primary-500 bg-primary-500 flex items-center justify-center transition-colors";
-        if (radioDot)
-          radioDot.className =
-            "w-1.5 h-1.5 min-[400px]:w-2 min-[400px]:h-2 rounded-full bg-white transition-colors";
-      } else {
-        label.className =
-          "flex-1 text-[13px] min-[400px]:text-[14px] sm:text-[15px] text-gray-800 dark:text-gray-300";
-        if (radio)
-          radio.className =
-            "mcb-sheet-radio flex-shrink-0 w-4 h-4 min-[400px]:w-5 min-[400px]:h-5 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-transparent flex items-center justify-center transition-colors";
-        if (radioDot)
-          radioDot.className =
-            "w-1.5 h-1.5 min-[400px]:w-2 min-[400px]:h-2 rounded-full bg-transparent transition-colors";
-      }
-    });
-
     // Update subcategories row
     const cat = _cats.find((c) => c.id === catId);
     if (cat && productsContainer) {
+      activeRootSlug = cat.slug;
       productsContainer.innerHTML = cat.children
         .slice(0, 10)
         .map((ch) => renderMobileSubcategory(ch.name, ch.slug, ch.image))
         .join("");
     }
-  }
-
-  /* ── Bottom sheet open/close ── */
-  function openSheet(): void {
-    if (!sheetOverlay || !sheetPanel) return;
-    sheetOverlay.style.opacity = "1";
-    sheetOverlay.style.pointerEvents = "auto";
-    sheetPanel.style.transform = "translateY(0)";
-    document.body.style.overflow = "hidden";
-  }
-
-  function closeSheet(): void {
-    if (!sheetOverlay || !sheetPanel) return;
-    sheetOverlay.style.opacity = "0";
-    sheetOverlay.style.pointerEvents = "none";
-    sheetPanel.style.transform = "translateY(100%)";
-    document.body.style.overflow = "";
-  }
-
-  if (dropdownBtn) dropdownBtn.addEventListener("click", openSheet);
-  if (sheetClose) sheetClose.addEventListener("click", closeSheet);
-  if (sheetOverlay) sheetOverlay.addEventListener("click", closeSheet);
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeSheet();
-  });
-
-  // Swipe-down-to-dismiss gesture on the bottom sheet
-  if (sheetPanel) {
-    const headerArea = document.getElementById("mcb-sheet-drag-handle");
-    const dragTarget = headerArea || sheetPanel;
-    let startY = 0;
-    let currentY = 0;
-    let dragging = false;
-
-    dragTarget.addEventListener(
-      "touchstart",
-      (e: TouchEvent) => {
-        startY = e.touches[0].clientY;
-        currentY = startY;
-        dragging = true;
-        sheetPanel!.style.transition = "none";
-      },
-      { passive: true }
-    );
-
-    dragTarget.addEventListener(
-      "touchmove",
-      (e: TouchEvent) => {
-        if (!dragging) return;
-        currentY = e.touches[0].clientY;
-        const deltaY = currentY - startY;
-        if (deltaY > 0) sheetPanel!.style.transform = `translateY(${deltaY}px)`;
-      },
-      { passive: true }
-    );
-
-    dragTarget.addEventListener("touchend", () => {
-      if (!dragging) return;
-      dragging = false;
-      sheetPanel!.style.transition = "";
-      const deltaY = currentY - startY;
-      const sheetHeight = sheetPanel!.offsetHeight;
-      if (deltaY > sheetHeight * 0.3) {
-        closeSheet();
-      } else {
-        sheetPanel!.style.transform = "translateY(0)";
-      }
-    });
   }
 
   // ──── Populate from API ────
@@ -301,39 +178,24 @@ export function initMobileCategoryBar(): void {
       });
     });
 
-    // Render bottom sheet list
-    if (sheetList) {
-      sheetList.innerHTML = cats
-        .map(
-          (cat, i) => `
-        <button
-          type="button"
-          class="mcb-sheet-item th-no-press flex items-center w-full px-3 min-[400px]:px-4 sm:px-5 py-2.5 min-[400px]:py-3 sm:py-4 text-start transition-colors border-b border-gray-50 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/40"
-          data-mcb-sheet-cat="${escapeHtml(cat.id)}"
-        >
-          <span class="flex-1 text-[13px] min-[400px]:text-[14px] sm:text-[15px] ${i === 0 ? "font-semibold text-gray-900 dark:text-white" : "text-gray-800 dark:text-gray-300"}">${escapeHtml(cat.name)}</span>
-          <span class="mcb-sheet-radio flex-shrink-0 w-4 h-4 min-[400px]:w-5 min-[400px]:h-5 rounded-full border-2 ${i === 0 ? "border-primary-500 bg-primary-500" : "border-gray-300 dark:border-gray-600 bg-transparent"} flex items-center justify-center transition-colors">
-            <span class="w-1.5 h-1.5 min-[400px]:w-2 min-[400px]:h-2 rounded-full ${i === 0 ? "bg-white" : "bg-transparent"} transition-colors"></span>
-          </span>
-        </button>
-      `
-        )
-        .join("");
-
-      // Bind sheet item clicks
-      sheetList.querySelectorAll<HTMLButtonElement>(".mcb-sheet-item").forEach((item) => {
-        item.addEventListener("click", () => {
-          const catId = item.getAttribute("data-mcb-sheet-cat");
-          if (catId) {
-            selectCategory(catId);
-            closeSheet();
-          }
-        });
-      });
-    }
+    // Mobil drill-down sheet (paylaşılan helper, üreticiler çubuğuyla aynı pattern).
+    // Seçim → detaylı kategori sayfasına git (categories.html o ?cat bölümüne kaydırır).
+    initCategoryDrillSheet({
+      sheetId: "mcb-sheet",
+      triggerId: "mcb-dropdown-btn",
+      listSelector: "[data-mcb-mobile-list]",
+      categories: cats,
+      rootLabel: t("mobileCategory.allCategories"),
+      allInCategoryLabel: (name: string) => t("mobileCategory.allInCategory", { name }),
+      onSelect: (slug: string) => {
+        window.location.href = "/pages/categories.html?cat=" + encodeURIComponent(slug);
+      },
+      getActiveSlug: () => activeRootSlug,
+    });
 
     // Render first category's subcategories
     if (cats[0]) {
+      activeRootSlug = cats[0].slug;
       productsContainer.innerHTML = cats[0].children
         .slice(0, 10)
         .map((ch) => renderMobileSubcategory(ch.name, ch.slug, ch.image))
