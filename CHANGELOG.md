@@ -1,3 +1,38 @@
+## [v1.5.0-alpha.1] - 2026-06-30 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(currency): mobil para birimi seçici ve boş sepet sembolü düzeltildi (@aliiball)
+  - mobil pill'lere data-currency-pill + #currency-pills'e event delegation eklendi (rebuild innerHTML'i ezdiği için tek-sefer delegation; doğrudan listener kaybolurdu)
+  - aktif pill artık seçili para birimini yansıtıyor (eskiden hep ilk pill aktifti)
+  - boş sepet header ara toplamı hardcoded "$" yerine seçili sembolle başlıyor
+- fix(product): varyant seçilince fiyat doğru biçimde güncelleniyor (@aliiball)
+  - ortak applyVariantPrice helper'ı (variantPrice.ts) eklendi
+  - masaüstü: varyant seçilince fiyat hiç güncellenmiyordu → güncelleniyor
+  - mobil: getCurrencySymbol()+toFixed yerine formatCurrency (₺1250.00 → ₺1.250,00)
+- fix(favorites): favori fiyatı donmuş string yerine güncel kura çevriliyor (@aliiball)
+  - FavoriteItem'a native price + currency alanları eklendi
+  - FavoritesSection BrowsingHistory desenine geçti (convertPrice + formatCurrency)
+  - buyer-dashboard render öncesi initCurrency() await ediyor (bayat 38.5 kuru sorunu)
+  - eski kayıtlar legacy priceRange string fallback ile geriye uyumlu
+- fix(checkout): sipariş onay modalı tutarları formatCurrency ile biçimlendiriliyor (@aliiball)
+  - "TRY 1234.56" ham biçim yerine "₺1.234,56" (OrderSummary ile tutarlı)
+  - tutar değeri zaten doğruydu, yalnız biçim hizalandı
+- fix(currency): başlangıç fiyatında binlik ayraç düzeltildi (@aliiball)
+  - formatStartingPrice toLocaleString ile gruplama yapıyor ("₺7700" → "₺7.700")
+- fix(cart): ara toplam satır toplamlarıyla tutarlı yuvarlanıyor (@aliiball)
+  - getSummary çarp-sonra-convert kullanıyor (satır gösterimiyle aynı yuvarlama)
+  - satır toplamları ile ara toplam kuruşu kuruşuna tutuyor
+- fix(cart): misafir sepet native fiyat + para birimiyle saklanıyor (@aliiball)
+  - drawer modellerine native alanlar eklendi (tier/color/size basePrice, item baseCurrency + baseSamplePrice)
+  - syncToCartStore native fiyat + native currency yazıyor (oturumlu yolla aynı); native yoksa çevrilmiş + seçili currency'ye güvenli düşüş
+  - gösterim her zaman güncel kura çevriliyor → donmuş-kur / round-trip drift giderildi
+  - sepetten favori ekleme yolu da native price/currency taşıyor (K3 tamamlandı)
+- fix(listing): fiyat filtresi seçili para birimini backend'e gönderiyor (@aliiball)
+  - searchListings min/max ile birlikte filter_currency yolluyor; backend baz birime çevirip selling_price_base ile karşılaştırır
+
+---
 ## [v1.5.0] - 2026-06-29 PROD
 
 Bu surum istoc.com'da yayindadir.
