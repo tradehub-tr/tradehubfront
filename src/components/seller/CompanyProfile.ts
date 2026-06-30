@@ -610,7 +610,7 @@ function ReviewsTab(): string {
                   <button type="button"
                     @click="submitReview"
                     :disabled="form.submitting"
-                    class="px-6 py-2.5 rounded-full text-[14px] font-medium bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed">
+                    class="px-6 py-2.5 rounded-full text-[14px] font-medium bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) border border-(--btn-border-color,#d39c00) active:scale-[0.97] transition-[background-color,color,transform] duration-150 disabled:opacity-50 disabled:cursor-not-allowed">
                     <span x-show="!form.submitting">${t("seller.sf.submitReview")}</span>
                     <span x-show="form.submitting">${t("seller.sf.submittingReview")}</span>
                   </button>
@@ -753,7 +753,7 @@ function ProductsTab(): string {
     >
       <!-- Category Filter Tabs -->
       <div class="bg-white rounded-md border border-gray-200 mb-4">
-        <div class="flex overflow-x-auto no-scrollbar px-4 gap-1">
+        <div class="flex overflow-x-auto scrollbar-hide px-4 gap-1">
           <button @click="setCategory('all')" :class="prodCat === 'all' ? 'text-amber-700 border-b-2 border-amber-500 font-semibold' : 'text-gray-600 hover:text-gray-900'" class="whitespace-nowrap px-4 py-3 text-[13px] transition-colors shrink-0">
             ${t("seller.sf.all")}
           </button>
@@ -1008,7 +1008,7 @@ function ContactSidebar(): string {
 
         <!-- CTA Buttons -->
         <div class="flex flex-col gap-3 mb-5">
-          <button @click="setTab('contact')" class="w-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) font-semibold py-3 px-4 border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150 text-[14px] focus-visible:outline-2 focus-visible:outline-[var(--color-store-accent,#cc9900)] focus-visible:outline-offset-2 company-profile__contact-btn">
+          <button @click="setTab('contact')" class="w-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) font-semibold py-3 px-4 border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] active:scale-[0.97] transition-[background-color,color,transform] duration-150 text-[14px] focus-visible:outline-2 focus-visible:outline-[var(--color-store-accent,#cc9900)] focus-visible:outline-offset-2 company-profile__contact-btn">
             ${t("seller.sf.contactNow")}
           </button>
           <button @click="setTab('contact')" class="th-btn-outline w-full text-gray-900 font-medium py-3 px-4 text-[14px] focus-visible:outline-2 focus-visible:outline-[var(--color-store-accent,#cc9900)] focus-visible:outline-offset-2 company-profile__inquiry-btn">
@@ -1030,7 +1030,7 @@ function ContactSidebar(): string {
 
     <!-- Mobile Contact Bar (shown on small screens) -->
     <div class="lg:hidden fixed bottom-0 start-0 end-0 bg-white border-t border-gray-200 p-3 z-50 flex gap-3 shadow-lg">
-      <button @click="setTab('contact')" class="flex-1 bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) font-semibold py-2.5 px-4 border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150 text-[14px]">
+      <button @click="setTab('contact')" class="flex-1 bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) font-semibold py-2.5 px-4 border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] active:scale-[0.97] transition-[background-color,color,transform] duration-150 text-[14px]">
         ${t("seller.sf.contactNow")}
       </button>
       <button @click="setTab('contact')" class="th-btn-outline flex-1 text-gray-900 font-medium py-2.5 px-4 text-[14px]">
@@ -1155,7 +1155,7 @@ function ContactTab(): string {
 
             <!-- Send Button -->
             <div x-show="!msgSent" class="flex justify-center mb-4">
-              <button @click="sendMsg()" :disabled="sending || !msgText || msgText.trim().length < 10" class="bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) font-semibold py-2.5 px-8 rounded-full border border-(--btn-border-color,#d39c00) shadow-[var(--btn-shadow,0_1px_0_#d39c00,inset_0_1px_0_rgba(255,255,255,0.3))] hover:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),inset_-1px_-1px_2px_rgba(255,255,255,0.25)] active:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.3),inset_-1px_-1px_2px_rgba(255,255,255,0.18)] active:scale-[0.98] transition-all duration-150 text-[14px] disabled:opacity-50 disabled:cursor-not-allowed">
+              <button @click="sendMsg()" :disabled="sending || !msgText || msgText.trim().length < 10" class="bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) font-semibold py-2.5 px-8 rounded-full border border-(--btn-border-color,#d39c00) active:scale-[0.97] transition-[background-color,color,transform] duration-150 text-[14px] disabled:opacity-50 disabled:cursor-not-allowed">
                 <span x-show="!sending">${t("seller.sf.send")}</span>
                 <span x-show="sending">${t("sellPage.sending")}</span>
               </button>
