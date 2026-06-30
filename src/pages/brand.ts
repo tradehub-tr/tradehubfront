@@ -184,18 +184,29 @@ function renderAbout(brand: BrandDetail): string {
 // ── Video (YouTube / Vimeo embed) ────────────────────────────────────────────
 function renderVideo(brand: BrandDetail): string {
   if (!brand.videoUrl) return ''
-  const embedUrl = toEmbedUrl(brand.videoUrl)
-  if (!embedUrl) return ''
+  const url = brand.videoUrl.trim()
+  // Tanıtım videosu artık dosya olarak yükleniyor → <video>. Eski YouTube/Vimeo
+  // URL'leri için embed iframe fallback korunur.
+  let media = ''
+  if (/\.(mp4|webm|ogg|mov|m4v)(\?|$)/i.test(url)) {
+    const safeSrc = escapeHtml(sanitizeUrl(url))
+    if (!safeSrc) return ''
+    media = `<video src="${safeSrc}" class="absolute inset-0 w-full h-full object-contain bg-black" controls preload="metadata" playsinline></video>`
+  } else {
+    const embedUrl = toEmbedUrl(url)
+    if (!embedUrl) return ''
+    media = `<iframe src="${escapeHtml(sanitizeUrl(embedUrl))}"
+            class="absolute inset-0 w-full h-full"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>`
+  }
   return `
     <section class="py-6 bg-gray-50 border-b border-gray-200">
       <div class="container-boxed">
         <h2 class="text-lg font-bold text-gray-900 mb-3">${t('infoMisc.promoVideo')}</h2>
         <div class="relative rounded-lg overflow-hidden shadow-sm" style="padding-top:56.25%">
-          <iframe src="${escapeHtml(sanitizeUrl(embedUrl))}"
-            class="absolute inset-0 w-full h-full"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
+          ${media}
         </div>
       </div>
     </section>

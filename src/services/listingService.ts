@@ -421,6 +421,19 @@ export async function submitProductQuestion(
 }
 
 /**
+ * Q&A — kendi sorusunu onay beklerken (Pending) düzenle.
+ */
+export async function updateProductQuestion(
+  name: string,
+  question: string
+): Promise<{ success: boolean; name: string; status: string }> {
+  return callMethodPost("tradehub_core.api.storefront_api.update_question", {
+    name,
+    question,
+  });
+}
+
+/**
  * Q&A — listele.
  */
 export interface ProductQuestion {
