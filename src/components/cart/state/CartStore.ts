@@ -195,9 +195,11 @@ export class CartStore {
         for (const sku of product.skus) {
           if (sku.selected && sku.isAvailable !== false) {
             selectedCount++;
-            // Fiyatı baz para biriminden seçili para birimine çevir
-            const converted = convertPrice(sku.unitPrice, sku.baseCurrency || "USD");
-            productSubtotal += converted * sku.quantity;
+            // Satır toplamını (birim × adet) TEK seferde çevir — satır
+            // gösterimiyle (SkuRow/ProductItem: çarp-sonra-convert) aynı yuvarlama,
+            // böylece satır toplamları ile ara toplam kuruşu kuruşuna tutar.
+            const lineTotal = convertPrice(sku.unitPrice * sku.quantity, sku.baseCurrency || "USD");
+            productSubtotal += lineTotal;
             items.push({ image: sku.skuImage, quantity: sku.quantity });
           }
         }

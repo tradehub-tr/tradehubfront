@@ -11,6 +11,7 @@ import type { PriceTier, ProductVariant, SkuMatrixEntry } from "../../types/prod
 import { openShippingModal, openCartDrawer } from "./CartDrawer";
 import { SocialProofBadge } from "./SocialProofBadge";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
+import { applyVariantPrice } from "./variantPrice";
 
 function renderPriceTiers(tiers: PriceTier[]): string {
   // When a campaign is active the backend sets each tier's originalPrice
@@ -498,6 +499,10 @@ export function initProductInfo(): void {
       if (labelEl && variantDisplay) {
         labelEl.textContent = variantDisplay;
       }
+
+      // Aktif kademe fiyatını seçilen varyantın fiyatına güncelle (O2 — eskiden
+      // masaüstü varyant seçilince fiyat güncellenmiyordu; mobil ile aynı davranış).
+      applyVariantPrice(btn, "#pd-price-tiers .pd-price-tier.active .pd-price-tier-price");
 
       // Read all variant-specific data from the clicked button
       const variantId = btn.getAttribute("data-variant-id") || "";

@@ -59,6 +59,8 @@ function toColors(product: ProductDetail): CartDrawerColorModel[] {
       // option.price = seçili para birimine çevrilmiş varyant fiyatı (base
       // rawPrice değil) — modal seçili para biriminde gösterir.
       rawPrice: option.price ?? undefined,
+      // option.rawPrice = native (çevrilmemiş) — sepete native saklamak için (Y1).
+      basePrice: option.rawPrice ?? undefined,
     }))
   );
 }
@@ -73,6 +75,8 @@ function toSizeGroups(product: ProductDetail): CartDrawerSizeGroup[] {
         label: o.label,
         // Seçili para birimine çevrilmiş fiyat (base rawPrice değil).
         rawPrice: o.price ?? undefined,
+        // Native (çevrilmemiş) — sepete native saklamak için (Y1).
+        basePrice: o.rawPrice ?? undefined,
       })),
     }))
     .filter((g) => g.options.length > 0);
@@ -133,6 +137,8 @@ function toDrawerItem(
           // Modal seçili para biriminde çalışır → ham basePrice yerine
           // çevrilmiş tier.price kullan (çift çevirme yok; format-only modal).
           rawPrice: tier.price,
+          // Native (çevrilmemiş) tier fiyatı — sepete native saklamak için (Y1).
+          basePrice: tier.basePrice,
         }));
 
   return {
@@ -147,6 +153,9 @@ function toDrawerItem(
     // USD seçiliyken ₺ kalıyordu). Beslenen tüm fiyatlar (tier.price, sample,
     // varyant option.price, shipping) zaten seçili para birimine çevrili.
     currency: getSelectedCurrency(),
+    // Native para birimi + native numune fiyatı — sepete native saklamak için (Y1).
+    baseCurrency: product.baseCurrency,
+    baseSamplePrice: product.baseSamplePrice,
     priceTiers: tiers,
     samplePrice: product.samplePrice ?? product.baseSamplePrice,
     colors: toColors(product),

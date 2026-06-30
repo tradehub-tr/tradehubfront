@@ -313,6 +313,10 @@ Alpine.data("cartPage", () => ({
         snapshot.product.skus[0]?.unitPrice || 0,
         snapshot.product.skus[0]?.baseCurrency || "USD"
       ),
+      // Native fiyat + para birimi — favori gösterimi güncel kura çevirir (K3).
+      // Sepet artık native sakladığından (Y1) baseUnitPrice/baseCurrency native.
+      price: snapshot.product.skus[0]?.baseUnitPrice ?? snapshot.product.skus[0]?.unitPrice ?? 0,
+      currency: snapshot.product.skus[0]?.baseCurrency || "",
       minOrder: snapshot.product.moqLabel || "Min. order: 1 piece",
     };
 

@@ -97,7 +97,7 @@ export function OrderReviewModal(): string {
                       <template x-for="sku in product.skuLines" :key="sku.id">
                         <div class="flex justify-between text-[11px] sm:text-[12px] text-[#6b7280] mt-0.5 gap-2">
                           <span class="min-w-0 truncate" x-text="sku.variantText + ' x ' + sku.quantity"></span>
-                          <span class="shrink-0 font-medium" x-text="'${getCurrencyCode()} ' + (sku.unitPrice * sku.quantity).toFixed(2)"></span>
+                          <span class="shrink-0 font-medium" x-text="window.csFormatCurrency(sku.unitPrice * sku.quantity, '${getCurrencyCode()}')"></span>
                         </div>
                       </template>
                     </div>
@@ -111,21 +111,21 @@ export function OrderReviewModal(): string {
           <div class="border-t border-[#e5e5e5] pt-3 sm:pt-4">
             <div class="flex justify-between text-[13px] sm:text-[14px] text-[#222222] py-0.5 sm:py-1">
               <span>${t("checkout.itemSubtotal")}</span>
-              <span x-text="'${getCurrencyCode()} ' + summary.itemSubtotal"></span>
+              <span x-text="window.csFormatCurrency(parseFloat(summary.itemSubtotal), '${getCurrencyCode()}')"></span>
             </div>
             <div class="flex justify-between text-[13px] sm:text-[14px] text-[#222222] py-0.5 sm:py-1">
               <span>${t("checkout.shippingFeeLabel")}</span>
-              <span x-text="'${getCurrencyCode()} ' + summary.shippingFee"></span>
+              <span x-text="window.csFormatCurrency(parseFloat(summary.shippingFee), '${getCurrencyCode()}')"></span>
             </div>
             <template x-if="summary.couponDiscount && parseFloat(summary.couponDiscount) > 0">
               <div class="flex justify-between text-[13px] sm:text-[14px] text-[#16a34a] py-0.5 sm:py-1">
                 <span>${t("checkout.couponDiscountLabel")}</span>
-                <span x-text="'- ${getCurrencyCode()} ' + summary.couponDiscount"></span>
+                <span x-text="'- ' + window.csFormatCurrency(parseFloat(summary.couponDiscount), '${getCurrencyCode()}')"></span>
               </div>
             </template>
             <div class="flex justify-between text-[16px] sm:text-[18px] font-bold text-[#222222] pt-2 mt-1 border-t border-[#e5e5e5]">
               <span>${t("checkout.totalLabel")}</span>
-              <span x-text="'${getCurrencyCode()} ' + summary.total"></span>
+              <span x-text="window.csFormatCurrency(parseFloat(summary.total), '${getCurrencyCode()}')"></span>
             </div>
           </div>
         </div>

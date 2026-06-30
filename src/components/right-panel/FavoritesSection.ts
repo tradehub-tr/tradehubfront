@@ -12,6 +12,7 @@ import { EmptyState } from "../shared/EmptyState";
 import { ProductCard } from "../shared/ProductCard";
 import { getFavoritesConfig, getFavoritesEmptyState } from "./rightPanelData";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
+import { convertPrice, formatCurrency, getSelectedCurrency } from "../../services/currencyService";
 
 const MAX_VISIBLE = 3;
 
@@ -38,15 +39,23 @@ export function FavoritesSection(items: FavoriteItem[] = []): string {
   const visibleItems = items.slice(0, MAX_VISIBLE);
 
   const cards = visibleItems
-    .map((item) =>
-      ProductCard({
+    .map((item) => {
+      // Yeni kayıtlar native price + currency taşır → güncel seçili para birimine
+      // çevir (BrowsingHistorySection ile aynı doğru desen). Eski kayıtlar yalnız
+      // donmuş `priceRange` string'i taşır → sembol-swap ile yanlış çevirmek
+      // yerine kayıt-anı değerini olduğu gibi göster.
+      const hasNative = typeof item.price === "number" && item.price > 0 && !!item.currency;
+      const converted = hasNative
+        ? formatCurrency(convertPrice(item.price as number, item.currency as string), getSelectedCurrency())
+        : "";
+      return ProductCard({
         image: escapeHtml(sanitizeUrl(item.image)),
-        price: escapeHtml(item.priceRange),
-        currency: "",
+        price: hasNative ? "" : escapeHtml(item.priceRange),
+        currency: hasNative ? converted : "",
         minOrder: escapeHtml(item.minOrder),
         href: escapeHtml(sanitizeUrl(getListingUrl({ id: item.id }))),
-      })
-    )
+      });
+    })
     .join("");
 
   return SectionCard({

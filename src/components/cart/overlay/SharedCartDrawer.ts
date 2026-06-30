@@ -17,6 +17,8 @@ export interface CartDrawerTierModel {
   maxQty: number | null;
   price: number;
   rawPrice?: number;
+  /** Native (çevrilmemiş) tier fiyatı — sepete native saklamak için (Y1). */
+  basePrice?: number;
   originalPrice?: number;
 }
 
@@ -36,12 +38,16 @@ export interface CartDrawerColorModel {
   imageUrl?: string;
   price?: number;
   rawPrice?: number;
+  /** Native (çevrilmemiş) varyant fiyatı — sepete native saklamak için (Y1). */
+  basePrice?: number;
 }
 
 export interface CartDrawerSizeOption {
   id: string;
   label: string;
   rawPrice?: number;
+  /** Native (çevrilmemiş) beden fiyatı — sepete native saklamak için (Y1). */
+  basePrice?: number;
 }
 
 export interface CartDrawerSizeGroup {
@@ -86,7 +92,12 @@ export interface CartDrawerItemModel {
   selectableGroups?: CartDrawerSelectableGroup[];
   shippingOptions: CartDrawerShippingOption[];
   samplePrice?: number;
+  /** Native (çevrilmemiş) numune fiyatı — sepete native saklamak için (Y1). */
+  baseSamplePrice?: number;
+  /** Modal gösterimi için seçili para birimi (display). */
   currency?: string;
+  /** Listing'in native para birimi — sepete native saklamak için (Y1). */
+  baseCurrency?: string;
   skuMatrix?: SkuMatrixRow[];
 }
 
@@ -906,6 +917,27 @@ function syncToCartStore(item: CartDrawerItemModel, unitPrice: number): void {
   const sampleIdSuffix = isSampleMode ? "-sample" : "";
   const samplePrice = isSampleMode ? (item.samplePrice ?? unitPrice) : unitPrice;
 
+  // Y1 — sepete NATIVE fiyat + native para birimi yaz (oturumlu/backend yoluyla
+  // aynı semantik). Modal display'i seçili para biriminde kalır; sepet kalıcı
+  // state'i native saklar → gösterimde HER ZAMAN güncel kura çevrilir (donmuş
+  // kur / round-trip drift yok). Native değer yoksa (context/listing-cart yolu)
+  // eski davranışa (çevrilmiş + seçili currency) düşülür → tutar ile etiket tutarlı.
+  const nativeCurrency = item.baseCurrency || getSelectedCurrency();
+  const activeTierIdx = getActiveTierIndex(getTotalQty());
+  const activeTier = item.priceTiers[activeTierIdx];
+  const selColor = item.colors.find((c) => c.id === state.selectedColorId);
+  const activeTierNative =
+    selColor?.basePrice != null && selColor.basePrice > 0
+      ? selColor.basePrice
+      : activeTier?.basePrice;
+  const persist = (
+    convertedPrice: number,
+    nativePrice: number | undefined
+  ): { price: number; currency: string } =>
+    nativePrice != null && nativePrice > 0 && item.baseCurrency
+      ? { price: nativePrice, currency: nativeCurrency }
+      : { price: convertedPrice, currency: getSelectedCurrency() };
+
   if (!cartStore.getSupplier(supplierId)) {
     const supplier: CartSupplier = {
       id: supplierId,
@@ -949,6 +981,14 @@ function syncToCartStore(item: CartDrawerItemModel, unitPrice: number): void {
           : opt.rawPrice != null && opt.rawPrice > 0
             ? opt.rawPrice
             : unitPrice;
+        // Native karşılık: numunede native sample, aksi halde beden-özel native
+        // fiyat (yoksa aktif tier native).
+        const nativeEffective = isSampleMode
+          ? item.baseSamplePrice
+          : opt.basePrice != null && opt.basePrice > 0
+            ? opt.basePrice
+            : activeTierNative;
+        const persisted = persist(effectivePrice, nativeEffective);
         const variantText = buildVariantText(item, group.groupLabel, opt.label);
         const existing = cartStore.getSku(skuId);
 
@@ -962,16 +1002,16 @@ function syncToCartStore(item: CartDrawerItemModel, unitPrice: number): void {
             id: skuId,
             skuImage,
             variantText,
-            unitPrice: effectivePrice,
+            unitPrice: persisted.price,
             currency: getCurrencySymbol(),
             unit: item.unit,
             quantity: qty,
             minQty: isSampleMode ? 1 : item.moq,
             maxQty: isSampleMode ? 1 : 9999,
             selected: true,
-            baseUnitPrice: effectivePrice,
+            baseUnitPrice: persisted.price,
             basePriceAddon: 0,
-            baseCurrency: getSelectedCurrency(),
+            baseCurrency: persisted.currency,
             listingVariant: opt.id,
             isSample: isSampleMode || undefined,
           };
@@ -1001,20 +1041,22 @@ function syncToCartStore(item: CartDrawerItemModel, unitPrice: number): void {
         cartStore.updateSkuQuantity(skuId, existing.sku.quantity + qty);
       }
     } else {
+      const nativeSingle = isSampleMode ? item.baseSamplePrice : activeTierNative;
+      const persisted = persist(isSampleMode ? samplePrice : unitPrice, nativeSingle);
       const sku: CartSku = {
         id: skuId,
         skuImage,
         variantText,
-        unitPrice: isSampleMode ? samplePrice : unitPrice,
+        unitPrice: persisted.price,
         currency: getCurrencySymbol(),
         unit: item.unit,
         quantity: qty,
         minQty: isSampleMode ? 1 : item.moq,
         maxQty: isSampleMode ? 1 : 9999,
         selected: true,
-        baseUnitPrice: isSampleMode ? samplePrice : unitPrice,
+        baseUnitPrice: persisted.price,
         basePriceAddon: 0,
-        baseCurrency: getSelectedCurrency(),
+        baseCurrency: persisted.currency,
         ...(isFallback ? {} : { listingVariant: colorId }),
         isSample: isSampleMode || undefined,
       };

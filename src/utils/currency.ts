@@ -89,11 +89,17 @@ export function formatStartingPrice(price: string): string {
     const b = parseNum(rangeMatch[2]);
     if (!isNaN(a) && !isNaN(b)) {
       const startingPrice = Math.max(a, b);
+      // Binlik ayraçlı biçim (de-DE: `1.234,56` TRY ile uyumlu; en-US: `1,234.56`).
+      // Tam sayı sonuçta `,00`/`.00` kuyruğu atılır.
       if (code === "TRY") {
-        const formatted = startingPrice.toFixed(2).replace(".", ",").replace(/,00$/, "");
+        const formatted = startingPrice
+          .toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+          .replace(/,00$/, "");
         return `${symbol}${formatted}`;
       }
-      return `${symbol}${startingPrice.toFixed(2).replace(/\.00$/, "")}`;
+      return `${symbol}${startingPrice
+        .toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+        .replace(/\.00$/, "")}`;
     }
   }
   return formatPrice(price);
