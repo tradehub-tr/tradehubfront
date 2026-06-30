@@ -1,3 +1,29 @@
+## [v1.5.0-alpha.3] - 2026-06-30 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(app): doğrulama rozeti, kategori drill-down ve sonsuz kaydırma eklendi (@ahmeetseker)
+  - Satıcı saha doğrulama rozeti eklendi (SupplierCard/StoreHeader/ManufacturerList)
+  - VerificationBadge component'i, verification.* i18n ve SupplierInfo.verifications alanı eklendi
+  - Paylaşılan BottomSheet, CategoryDrillSheet ve CategoryNavBar çıkarıldı
+  - MobileCategoryBar ve HorizontalCategoryBar mobil kategori drill-down'a geçti
+  - Kategori cache versiyonlama eklendi; ManufacturersHero ve TopDealsCategoryTabs merkezi loadCategories'e geçti
+  - Üretici listesine sonsuz kaydırma (IntersectionObserver) ve verified filtresi eklendi
+  - Manufacturers sayfasına mobil alt navigasyon (BottomNav) eklendi
+
+### Duzeltildi
+- fix(product): varyant başlığı varyant yokken gizlendi (@ahmeetseker)
+  - Variations bölümü yalnızca backend varyant döndürdüğünde render ediliyor
+
+### Degistirildi
+- refactor(ui): neumorphic buton press efekti kaldırıldı (@ahmeetseker)
+  - Global press selector'ından inset box-shadow ve scale(0.98) kaldırıldı
+  - Tüm CTA'larda transition-all yerine açık transition listesi kullanıldı
+  - --ease-drawer token'ı eklendi; --btn-shadow glossy highlight'tan arındırıldı
+  - no-scrollbar yerine scrollbar-hide, link/toggle'lara th-no-press eklendi
+
+---
 ## [v1.5.0-alpha.2] - 2026-06-30 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
