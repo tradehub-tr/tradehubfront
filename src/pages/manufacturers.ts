@@ -11,7 +11,7 @@ import { initLanguageSelector } from '../components/header/TopBar'
 import { FooterLinks } from '../components/footer'
 
 // Floating components
-import { FloatingPanel } from '../components/floating'
+import { FloatingPanel, BottomNav, initBottomNav } from '../components/floating'
 
 // Alpine.js
 import { startAlpine } from '../alpine'
@@ -24,11 +24,12 @@ import { initCurrency } from '../services/currencyService'
 import { SubHeader, updateSubHeader } from '../components/products'
 
 // Category resolution for keyword display (same flow as products page)
-import { findCategoryBySlug, findCategoryById, onCategoriesLoaded } from '../services/categoryService'
+import { findCategoryBySlug, findCategoryById, onCategoriesLoaded, loadCategories } from '../services/categoryService'
 import { pushRecentCategory, getRecentCategories } from '../utils/recentCategories'
 
 // Manufacturers specific components
 import { ManufacturersLayout, initHorizontalCategoryBar, initCategoryFlyout, initFactorySliders, initManufacturerFilters } from '../components/manufacturers'
+import { initVerificationHelpers } from '../components/seller'
 import { getCategoryIcon, getIconByName } from '../components/header/MegaMenu';
 window.__getCatIcon = (iconClass: string, name: string) =>
   iconClass ? getCategoryIcon(iconClass) : getIconByName(name);
@@ -37,6 +38,10 @@ window.__getCatIcon = (iconClass: string, name: string) =>
 // ManufacturersHero "Kategoriye göre tedarik edin" sidebar'ı bu listeyi başa alıp 6 ile sınırlar.
 window.__getRecentCategorySlugs = (): string[] =>
   getRecentCategories(12).map((c) => c.slug);
+
+// ManufacturersHero "Kategoriye göre tedarik edin" sidebar'ı Alpine inline init()
+// içinden çağırır — merkezi categoryService cache'ini paylaşsın diye köprü.
+window.__loadCategories = () => loadCategories();
 
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.classList.add('relative');
@@ -83,6 +88,9 @@ appEl.innerHTML = `
 
   <!-- Floating Panel -->
   ${FloatingPanel()}
+
+  <!-- Bottom Navigation (mobile/tablet) -->
+  ${BottomNav()}
 `
 
 // Initialize custom component behaviors FIRST (before Flowbite can interfere)
@@ -95,6 +103,7 @@ initFlowbite();
 // — alpine:init bir kez tetiklenir, x-data anında değerlendirilir
 initManufacturerFilters();
 initFactorySliders(); // window.__getSellerFavs / __toggleSellerFav helper'larını yayar
+initVerificationHelpers(); // window.__verifiedByText / __downloadReportText
 
 // Initialize Alpine.js (FloatingPanel is now Alpine-driven)
 initCurrency();
@@ -105,6 +114,7 @@ startAlpine();
 // Initialize remaining custom behaviors
 initStickyHeaderSearch();
 initMobileDrawer();
+initBottomNav();
 initLanguageSelector();
 initAnimatedPlaceholder('#topbar-compact-search-input');
 

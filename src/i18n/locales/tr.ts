@@ -4405,6 +4405,7 @@ const tr = {
       // Hero section headings
       sourceByCategory: "Kategoriye göre tedarik edin",
       allCategories: "Tüm kategoriler",
+      allInCategory: "Tüm {{name}}",
       getSamples: "Numune alın",
       popularProducts: "Popüler ürünler",
       newArrivals: "Yeni çıkanlar",
@@ -8309,6 +8310,12 @@ const tr = {
     chatWithSeller: "Sohbet et",
     openChat: "Mesajlarım",
     comingSoon: "Bu özellik yakında eklenecek.",
+  },
+  verification: {
+    /** Tooltip başlık metni — "{{name}}" runtime'da satıcı adıyla değiştirilir */
+    verifiedBySupplier: "{{name}} tarafından onaylı satıcı",
+    downloadReport: "Denetim belgesini indir",
+    badgeInfo: "Doğrulama bilgisi",
   },
 };
 

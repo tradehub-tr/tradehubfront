@@ -99,18 +99,35 @@ function filterSpam(cats: ApiCategory[]): ApiCategory[] {
  * Senkron getter'lar için modül-içi `_cache` ve `onCategoriesLoaded`
  * dinleyicileri burada beslenir.
  */
+/**
+ * Kategori ağacının sunucu tarafı parmak izini çeker (kısa stale ile).
+ * Bu string `categories` cache anahtarına gömülür; admin kategori değiştirince
+ * değer değişir ve mega menü yeniden çekilir. Hata durumunda sabit "v0" döner —
+ * o yükleme için cache-busting devre dışı kalır, menü yine yüklenir.
+ */
+function fetchCategoryVersion(): Promise<string> {
+  return queryFetch(
+    queryKeys.categoryVersion(),
+    () => callMethod<string>("tradehub_core.api.category.get_category_version"),
+    policies.categoryVersion
+  ).catch(() => "v0");
+}
+
 export function loadCategories(): Promise<ApiCategory[]> {
   if (_cache !== null) return Promise.resolve(_cache);
 
-  return queryFetch(
-    queryKeys.categories(),
-    async () => {
-      const data = await callMethod<ApiCategory[]>("tradehub_core.api.category.get_mega_menu");
-      const raw: ApiCategory[] = Array.isArray(data) ? data : [];
-      return filterSpam(raw);
-    },
-    policies.categories
-  )
+  return fetchCategoryVersion()
+    .then((version) =>
+      queryFetch(
+        queryKeys.categories(version),
+        async () => {
+          const data = await callMethod<ApiCategory[]>("tradehub_core.api.category.get_mega_menu");
+          const raw: ApiCategory[] = Array.isArray(data) ? data : [];
+          return filterSpam(raw);
+        },
+        policies.categories
+      )
+    )
     .then((cats) => {
       _cache = cats;
       _subscribers.forEach((fn) => fn(cats));

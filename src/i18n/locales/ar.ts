@@ -4368,6 +4368,7 @@ const ar = {
       // Hero section headings
       sourceByCategory: "التوريد حسب الفئة",
       allCategories: "جميع الفئات",
+      allInCategory: "كل {{name}}",
       getSamples: "احصل على عينات",
       popularProducts: "المنتجات الشائعة",
       newArrivals: "وصل حديثًا",
@@ -8238,6 +8239,11 @@ const ar = {
     chatWithSeller: "الدردشة مع البائع",
     openChat: "رسائلي",
     comingSoon: "هذه الميزة ستتوفر قريبًا.",
+  },
+  verification: {
+    verifiedBySupplier: "مورّد معتمد من قِبَل {{name}}",
+    downloadReport: "تحميل تقرير التفتيش",
+    badgeInfo: "معلومات التحقق",
   },
 };
 

@@ -2,8 +2,12 @@ import { describe, it, expect } from "vitest";
 import { queryKeys, policies } from "./keys";
 
 describe("queryKeys", () => {
-  it("categories key is stable", () => {
-    expect(queryKeys.categories()).toEqual(["categories"]);
+  it("categories key embeds the version", () => {
+    expect(queryKeys.categories("7694-x-0")).toEqual(["categories", "7694-x-0"]);
+  });
+
+  it("categoryVersion key is stable", () => {
+    expect(queryKeys.categoryVersion()).toEqual(["category-version"]);
   });
 
   it("listings key includes normalized params", () => {
@@ -23,5 +27,9 @@ describe("policies", () => {
   });
   it("listings has short staleTime", () => {
     expect(policies.listings.staleTime).toBeLessThanOrEqual(5 * 60 * 1000);
+  });
+  it("categoryVersion has short staleTime for prompt busting", () => {
+    expect(policies.categoryVersion.staleTime).toBeGreaterThanOrEqual(60 * 1000);
+    expect(policies.categoryVersion.staleTime).toBeLessThan(60 * 60 * 1000);
   });
 });

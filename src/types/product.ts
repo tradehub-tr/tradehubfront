@@ -154,6 +154,13 @@ export interface SupplierInfo {
   employees: string;
   annualRevenue: string;
   certifications: string[];
+  /** Saha doğrulama kaynakları — backend get_listing_detail.supplier.verifications */
+  verifications?: Array<{
+    source_name: string;
+    icon?: string;
+    description?: string;
+    document_url?: string;
+  }>;
 }
 
 export interface ShippingInfo {
