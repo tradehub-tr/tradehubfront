@@ -190,7 +190,7 @@ export const themeTokenGroups: TokenGroup[] = [
       {
         var: "--font-size-base",
         type: "range",
-        default: 1.125,
+        default: 1,
         min: 0.5,
         max: 5,
         step: 0.0625,
@@ -659,8 +659,8 @@ export const themeTokenGroups: TokenGroup[] = [
         step: 1,
         unit: "px",
       },
-      { var: "--radius-modal", type: "range", default: 32, min: 0, max: 64, step: 1, unit: "px" },
-      { var: "--radius-tooltip", type: "range", default: 4, min: 0, max: 64, step: 1, unit: "px" },
+      { var: "--radius-modal", type: "range", default: 8, min: 0, max: 64, step: 1, unit: "px" },
+      { var: "--radius-tooltip", type: "range", default: 8, min: 0, max: 64, step: 1, unit: "px" },
     ],
   },
   {

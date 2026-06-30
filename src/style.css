@@ -121,8 +121,8 @@
   /* 12px — yalnızca caption/label */
   --font-size-sm: 0.875rem;
   /* 14px — yardımcı metin */
-  --font-size-base: 1.125rem;
-  /* 18px — body default */
+  --font-size-base: 1rem;
+  /* 16px — body default */
   --font-size-lg: 1.25rem;
   /* 20px */
   --font-size-xl: 1.5rem;
@@ -273,10 +273,10 @@
   /* 8px */
   --radius-badge: 9999px;
   /* pill */
-  --radius-modal: 32px;
-  /* 32px */
-  --radius-tooltip: 4px;
-  /* 4px */
+  --radius-modal: 8px;
+  /* 8px — kutu radius'larıyla aynı */
+  --radius-tooltip: 8px;
+  /* 8px */
 
   /* === 6. SHADOW & ELEVATION === */
 

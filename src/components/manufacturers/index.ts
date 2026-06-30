@@ -13,7 +13,7 @@ export function ManufacturersLayout(): string {
   if (hasSearchContext()) {
     // Filtreli görünüm — Alibaba "Tedarikçiler" sayfası modeli
     return `
-      <div class="container-boxed pt-4">
+      <div class="container-boxed pt-0 lg:pt-4">
         <div class="flex flex-col lg:flex-row gap-4 lg:gap-6">
           <div class="hidden lg:block">
             ${ManufacturerFilterSidebar()}
@@ -29,7 +29,7 @@ export function ManufacturersLayout(): string {
 
   // Discovery görünümü — bağlamsız landing.
   return `
-    <div class="container-boxed pt-4">
+    <div class="container-boxed pt-0 lg:pt-4">
       ${ManufacturersHero()}
       ${HorizontalCategoryBar()}
       ${ManufacturerList()}
