@@ -1,3 +1,14 @@
+## [v1.5.0-alpha.2] - 2026-06-30 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat: soru düzenleme, marka video oynatma, dev pretty-URL'leri (@boraydeger32)
+  - qa: kendi Pending sorusunda inline ✎ Düzenle (updateProductQuestion) + i18n
+  - media: marka tanıtım videosu yüklenen dosyadan oynar (renderVideo → dosya URL'inde <video>, eski YouTube/Vimeo'da embed fallback)
+  - dev: vite prettyUrlRewritePlugin'e /magaza, /magaza/<code>/dukkan, /kategori, /marka eklendi (dev'de bu linkler artık ana sayfaya düşmüyor)
+
+---
 ## [v1.5.0-alpha.1] - 2026-06-30 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
