@@ -98,6 +98,11 @@ export async function searchListings(params: ListingSearchParams): Promise<Listi
       if (params.category) queryParams.set("category", params.category);
       if (params.min_price !== undefined) queryParams.set("min_price", String(params.min_price));
       if (params.max_price !== undefined) queryParams.set("max_price", String(params.max_price));
+      // Y3 — min/max fiyat SEÇİLİ görüntüleme biriminde girilir; backend bunları
+      // baz birime (TRY) çevirip selling_price_base ile karşılaştırır.
+      if (params.min_price !== undefined || params.max_price !== undefined) {
+        queryParams.set("filter_currency", getSelectedCurrencyInfo().code);
+      }
       if (params.min_order !== undefined) queryParams.set("min_order", String(params.min_order));
       if (params.supplier) queryParams.set("supplier", params.supplier);
       if (params.sort_by) queryParams.set("sort_by", params.sort_by);
