@@ -1,3 +1,18 @@
+## [v1.5.0-alpha.4] - 2026-06-30 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(manufacturers): üretici kartı yeniden tasarlandı ve mobil filtre sheet eklendi (@ahmeetseker)
+  - masaüstü kartı zengin 2-bölüm layout'a geçti (istatistik paneli, ürün kartları, galeri)
+  - mobil kart sade tek-sıra düzende tutuldu (@container/sc breakpoint'leri)
+  - galeri panelinde foto sayacı ve hover navigasyon okları eklendi
+  - mobil kategori barındaki "doğrulanmış üretici" pill'i filtre ikonuyla değiştirildi (mfr-filter-open event'i)
+  - discovery görünümünden gri zemin kaldırıldı, ManufacturerFilterSheet eklendi
+  - ürünler sayfası başlığından "viewingLead" ön metni kaldırıldı
+  - doğrulama rozeti x-if koşulu sadeleştirildi
+
+---
 ## [v1.5.0-alpha.3] - 2026-06-30 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
