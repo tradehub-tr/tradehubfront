@@ -27,15 +27,14 @@ export function ManufacturersLayout(): string {
     `;
   }
 
-  // Discovery görünümü — bağlamsız landing. Full-width gri zemin: beyaz kartlar öne çıksın.
+  // Discovery görünümü — bağlamsız landing.
   return `
-    <div class="bg-gray-50">
-      <div class="container-boxed pt-4 pb-10">
-        ${ManufacturersHero()}
-        ${HorizontalCategoryBar()}
-        ${ManufacturerList()}
-      </div>
+    <div class="container-boxed pt-4">
+      ${ManufacturersHero()}
+      ${HorizontalCategoryBar()}
+      ${ManufacturerList()}
     </div>
+    ${ManufacturerFilterSheet()}
   `;
 }
 

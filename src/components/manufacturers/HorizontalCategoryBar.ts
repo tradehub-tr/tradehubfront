@@ -44,11 +44,13 @@ function desktopSubTabSlot(): string {
   `;
 }
 
-function mobileVerifiedSlot(): string {
+function mobileFilterSlot(): string {
+  // Mobil: kategori barı altında tek filtre ikonu → alttan detaylı filtre sheet'i açar
+  // (ManufacturerFilterSheet, `mfr-filter-open` window event'i ile dinler).
   return `
-    <div class="lg:hidden flex items-center gap-2 overflow-x-auto scrollbar-hide pb-2 mb-1">
-      <button type="button" data-verified-btn class="th-no-press shrink-0 inline-flex items-center h-8 px-3.5 rounded-full border border-gray-300 bg-white text-[12px] font-medium text-[#222] hover:bg-gray-50 whitespace-nowrap transition-colors">
-        ${t("mfr.verifiedManufacturers")}
+    <div class="lg:hidden flex items-center gap-2 pb-2 mb-1">
+      <button type="button" data-mfr-filter-btn aria-label="${t("mfr.list.filter")}" class="th-no-press shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-full border border-gray-300 bg-white text-[#222] hover:bg-gray-50 transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 5h16M7 12h10M10 19h4"/></svg>
       </button>
     </div>
   `;
@@ -61,7 +63,7 @@ export function HorizontalCategoryBar(): string {
     viewMoreLabel: t("mfr.viewMore"),
     allInCategoryLabel: (name: string) => t("mfr.allInCategory", { name }),
     desktopExtraSlot: desktopSubTabSlot(),
-    mobileExtraSlot: mobileVerifiedSlot(),
+    mobileExtraSlot: mobileFilterSlot(),
   });
 }
 
@@ -108,27 +110,11 @@ export async function initHorizontalCategoryBar(): Promise<void> {
     });
   }
 
-  // ── Verified filter pill (üreticiye özel) ──
-  const verifiedBtn = document.querySelector<HTMLElement>("[data-verified-btn]");
-  if (verifiedBtn) {
-    const updateVerifiedPill = (active: boolean): void => {
-      if (active) {
-        verifiedBtn.classList.remove("border-gray-300", "bg-white", "text-[#222]", "hover:bg-gray-50");
-        verifiedBtn.classList.add("bg-primary-600", "border-primary-600", "text-white");
-      } else {
-        verifiedBtn.classList.remove("bg-primary-600", "border-primary-600", "text-white");
-        verifiedBtn.classList.add("border-gray-300", "bg-white", "text-[#222]", "hover:bg-gray-50");
-      }
-    };
-    updateVerifiedPill(new URLSearchParams(window.location.search).get("verified") === "1");
-    verifiedBtn.addEventListener("click", () => {
-      const params = new URLSearchParams(window.location.search);
-      const isActive = params.get("verified") === "1";
-      if (isActive) params.delete("verified"); else params.set("verified", "1");
-      const qs = params.toString();
-      window.history.replaceState(null, "", window.location.pathname + (qs ? "?" + qs : ""));
-      document.dispatchEvent(new CustomEvent("manufacturer-filters-changed"));
-      updateVerifiedPill(!isActive);
+  // ── Mobil filtre ikonu → detaylı filtre sheet'i aç (mfr-filter-open) ──
+  const mobileFilterBtn = document.querySelector<HTMLElement>("[data-mfr-filter-btn]");
+  if (mobileFilterBtn) {
+    mobileFilterBtn.addEventListener("click", () => {
+      window.dispatchEvent(new CustomEvent("mfr-filter-open"));
     });
   }
 }
