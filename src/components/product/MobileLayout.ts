@@ -9,7 +9,7 @@
 import { getCurrentProduct } from "../../alpine/product";
 import { t, getCurrentLang } from "../../i18n";
 import { formatCurrency, getSelectedCurrency } from "../../services/currencyService";
-import { getCurrencySymbol } from "../../utils/currency";
+import { applyVariantPrice } from "./variantPrice";
 import type { ProductVariant } from "../../types/product";
 import { openShippingModal, openCartDrawer } from "./CartDrawer";
 import { openLoginModal } from "./LoginModal";
@@ -842,19 +842,10 @@ function initSectionTabs(): void {
 /* ── Variant selection (delegated) ───────────────────── */
 
 function updateMobileVariantPrice(btn: HTMLButtonElement): void {
-  const variantPrice = btn.getAttribute("data-variant-price");
-  if (variantPrice) {
-    // Update the first tier price as the "active" price indicator
-    const firstTierPrice = document.querySelector<HTMLElement>(
-      "#pdm-price-tiers .pdm-tier-col:first-child .pdm-tier-price"
-    );
-    if (firstTierPrice) {
-      firstTierPrice.textContent = getCurrencySymbol() + parseFloat(variantPrice).toFixed(2);
-    }
-    document.dispatchEvent(
-      new CustomEvent("variant-price-change", { detail: { price: parseFloat(variantPrice) } })
-    );
-  }
+  // "Aktif" fiyat göstergesi = ilk kademe. Ortak helper formatCurrency ile
+  // doğru biçimlendirir (eski getCurrencySymbol()+toFixed(2) TRY binlik/ondalık
+  // biçimini bozuyordu) ve variant-price-change olayını yayar.
+  applyVariantPrice(btn, "#pdm-price-tiers .pdm-tier-col:first-child .pdm-tier-price");
 }
 
 function initVariantSelection(): void {
