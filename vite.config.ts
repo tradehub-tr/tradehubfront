@@ -138,8 +138,14 @@ function staticPageRewritePlugin(): Plugin {
  * slug'ı window.location.pathname'den okur, getListingDetail(slug) ile çözer.
  */
 function prettyUrlRewritePlugin(): Plugin {
+    // nginx.conf.template'teki rewrite kurallarıyla birebir. Sıra önemli:
+    // /magaza/<code>/dukkan, genel /magaza/<code>'dan ÖNCE eşleşmeli.
     const PRETTY: Array<{ re: RegExp; html: string }> = [
         { re: /^\/(?:en\/)?urun\/[^/]+/, html: '/pages/product-detail.html' },
+        { re: /^\/(?:en\/)?kategori\/.+/, html: '/pages/categories.html' },
+        { re: /^\/(?:en\/)?marka\/.+/, html: '/pages/brand.html' },
+        { re: /^\/(?:en\/)?magaza\/[^/]+\/dukkan$/, html: '/pages/seller/seller-shop.html' },
+        { re: /^\/(?:en\/)?magaza\/.+/, html: '/pages/seller/seller-storefront.html' },
     ];
     return {
         name: 'pretty-url-rewrite',

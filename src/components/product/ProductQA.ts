@@ -14,6 +14,7 @@ import Alpine from "alpinejs";
 import {
   getProductQA,
   submitProductQuestion,
+  updateProductQuestion,
   voteQAHelpful,
   type ProductQuestion,
 } from "../../services/listingService";
@@ -32,9 +33,15 @@ interface QAState {
   question: string;
   errorMsg: string;
   isLoggedIn: boolean;
+  editingName: string;
+  editText: string;
+  savingEdit: boolean;
   init(): void;
   load(listingId: string): Promise<void>;
   submitQuestion(): Promise<void>;
+  startEditQuestion(q: ProductQuestion): void;
+  cancelEditQuestion(): void;
+  saveEditQuestion(q: ProductQuestion): Promise<void>;
   voteQuestion(q: ProductQuestion): Promise<void>;
   voteAnswer(a: ProductQuestion["answers"][number]): Promise<void>;
   formatDate(s: string): string;
@@ -53,6 +60,9 @@ export function registerProductQA(): void {
       question: "",
       errorMsg: "",
       isLoggedIn: false,
+      editingName: "",
+      editText: "",
+      savingEdit: false,
       init() {
         // Component mount sırasında product zaten yüklü olduğu için doğrudan al.
         // (Q&A tab tıklanınca mount olur — `product-loaded` event'i o anda çoktan
@@ -142,6 +152,34 @@ export function registerProductQA(): void {
           showToast({ message: msg, type: "error" });
         } finally {
           this.submitting = false;
+        }
+      },
+      startEditQuestion(q: ProductQuestion) {
+        this.editingName = q.name;
+        this.editText = q.question;
+      },
+      cancelEditQuestion() {
+        this.editingName = "";
+        this.editText = "";
+      },
+      async saveEditQuestion(q: ProductQuestion) {
+        const text = this.editText.trim();
+        if (text.length < 10) {
+          showToast({ message: t("product.qa.errQuestionMin"), type: "error" });
+          return;
+        }
+        this.savingEdit = true;
+        try {
+          await updateProductQuestion(q.name, text);
+          q.question = text;
+          this.editingName = "";
+          this.editText = "";
+          showToast({ message: t("product.qa.okQuestionUpdated"), type: "success" });
+        } catch (err: unknown) {
+          const msg = err instanceof Error ? err.message : t("product.qa.genericError");
+          showToast({ message: msg, type: "error" });
+        } finally {
+          this.savingEdit = false;
         }
       },
       async voteQuestion(q: ProductQuestion) {
@@ -254,8 +292,39 @@ export function ProductQA(): string {
                     x-show="q.is_own_pending"
                     class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-semibold bg-amber-100 text-amber-700"
                   >⏳ ${t("product.qa.pendingApproval")}</span>
+                  <button
+                    type="button"
+                    x-show="q.is_own_pending && editingName !== q.name"
+                    @click.stop="startEditQuestion(q)"
+                    class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-medium text-primary-600 hover:bg-primary-50 transition-colors"
+                  >✎ ${t("product.qa.edit")}</button>
                 </div>
-                <div class="text-sm text-secondary-900 font-medium" x-text="q.question"></div>
+                <template x-if="editingName !== q.name">
+                  <div class="text-sm text-secondary-900 font-medium" x-text="q.question"></div>
+                </template>
+                <template x-if="editingName === q.name">
+                  <div class="mt-1">
+                    <textarea
+                      x-model="editText"
+                      rows="3"
+                      maxlength="1000"
+                      class="w-full px-3 py-2 border border-border-default rounded-lg text-sm bg-surface focus:outline-none focus:border-primary-500 resize-vertical"
+                    ></textarea>
+                    <div class="flex items-center justify-end gap-2 mt-1.5">
+                      <button
+                        type="button"
+                        @click.stop="cancelEditQuestion()"
+                        class="h-8 px-3 rounded-lg border border-border-default text-[12px] font-medium text-secondary-700 hover:bg-black/5 transition-colors"
+                      >${t("product.qa.cancel")}</button>
+                      <button
+                        type="button"
+                        :disabled="savingEdit || editText.trim().length < 10"
+                        @click.stop="saveEditQuestion(q)"
+                        class="h-8 px-4 rounded-lg bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[12px] font-semibold border border-(--btn-border-color,#d39c00) disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      >${t("product.qa.editSave")}</button>
+                    </div>
+                  </div>
+                </template>
                 <div class="text-[11px] text-secondary-400 mt-1 flex items-center gap-2 flex-wrap">
                   <span x-text="q.asker_display_name"></span>
                   <span x-show="q.is_kyb_verified" class="text-emerald-600">✓ ${t("product.qa.verified")}</span>
