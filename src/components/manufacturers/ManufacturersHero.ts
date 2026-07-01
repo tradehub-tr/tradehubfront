@@ -33,6 +33,7 @@ function renderSourceByCategory(): string {
     <div class="relative flex-1" data-category-sidebar
       x-data="{
         cats: [],
+        allCats: [],
         activeCat: null,
         _hideTimer: null,
         async init() {
@@ -61,6 +62,9 @@ function renderSourceByCategory(): string {
               ...c,
               iconSvg: window.__getCatIcon ? window.__getCatIcon(c.icon_class || '', c.name) : ''
             }));
+
+            // 'Tüm kategoriler' flyout'u tam ağacı gösterir (6 ile sınırlı değil)
+            this.allCats = apiCats.filter(c => c && c.slug);
           } catch(e) { console.error('Category sidebar fetch failed', e); }
         },
         showFlyout(id) { clearTimeout(this._hideTimer); this.activeCat = id; },
@@ -82,7 +86,7 @@ function renderSourceByCategory(): string {
                 @mouseleave="hideFlyout()"
             >
               <a
-                :href="'/pages/products.html?cat=' + cat.slug"
+                :href="'/pages/manufacturers.html?cat=' + cat.slug"
                 class="flex items-center justify-between py-0 px-4 h-10 mb-1 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150"
               >
                 <div class="flex items-center gap-3 min-w-0 flex-1">
@@ -112,7 +116,7 @@ function renderSourceByCategory(): string {
                 <div class="grid grid-cols-4 gap-x-4 gap-y-1.5">
                   <template x-for="child in cat.children" :key="child.id">
                     <a
-                      :href="'/pages/products.html?cat=' + child.slug"
+                      :href="'/pages/manufacturers.html?cat=' + child.slug"
                       class="text-xs hover:text-primary-600 hover:underline leading-5 transition-colors"
                       style="color: var(--mfr-flyout-link-color, #767676)"
                       x-text="child.name"
@@ -124,7 +128,10 @@ function renderSourceByCategory(): string {
           </template>
 
           <!-- All categories -- separated by top border -->
-          <li class="mt-auto pt-2 border-t border-gray-100 dark:border-gray-700">
+          <li class="mt-auto pt-2 border-t border-gray-100 dark:border-gray-700"
+              @mouseenter="showFlyout('__all__')"
+              @mouseleave="hideFlyout()"
+          >
             <a
               href="/pages/categories"
               class="flex items-center justify-between py-0 px-4 h-10 mb-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150"
@@ -141,6 +148,39 @@ function renderSourceByCategory(): string {
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
               </svg>
             </a>
+
+            <!-- Flyout panel: tüm kategoriler + alt kategorileri gruplu -->
+            <div
+              x-show="activeCat === '__all__'"
+              x-cloak
+              @mouseenter="keepFlyout()"
+              @mouseleave="hideFlyout()"
+              class="absolute start-full top-0 z-50 w-[calc(200%+3rem)] h-full overflow-y-auto pt-5 px-5 pb-2.5"
+              style="background-color: var(--mfr-flyout-bg, #f4f4f4); border-radius: var(--mfr-hero-card-radius, 6px); box-shadow: var(--mfr-hero-card-shadow, 0 0 12px rgba(0,0,0,0.05))"
+              aria-label="${escapeHtml(t("mfr.allCategories"))}"
+            >
+              <p class="text-sm font-bold mb-3" style="color: var(--mfr-flyout-heading-color, #111827)">${t("mfr.allCategories")}</p>
+              <div class="columns-3 gap-x-4">
+                <template x-for="cat in allCats" :key="cat.id">
+                  <div class="break-inside-avoid mb-3">
+                    <a
+                      :href="'/pages/manufacturers.html?cat=' + cat.slug"
+                      class="block text-xs font-bold mb-1 hover:text-primary-600 transition-colors"
+                      style="color: var(--mfr-flyout-heading-color, #111827)"
+                      x-text="cat.name"
+                    ></a>
+                    <template x-for="child in cat.children" :key="child.id">
+                      <a
+                        :href="'/pages/manufacturers.html?cat=' + child.slug"
+                        class="block text-xs hover:text-primary-600 hover:underline leading-5 transition-colors"
+                        style="color: var(--mfr-flyout-link-color, #767676)"
+                        x-text="child.name"
+                      ></a>
+                    </template>
+                  </div>
+                </template>
+              </div>
+            </div>
           </li>
         </ul>
       </div>

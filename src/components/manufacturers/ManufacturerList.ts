@@ -378,7 +378,7 @@ export function ManufacturerList(opts: { mobileFilter?: boolean } = {}): string 
               </button>
 
               <!-- Tek sıra: kimlik solda (flex-1) · 3 ürün sağda -->
-              <div class="flex flex-col @min-[620px]/sc:flex-row @min-[620px]/sc:items-center gap-3 @min-[620px]/sc:gap-5 pe-7">
+              <div class="flex flex-col @min-[620px]/sc:flex-row @min-[620px]/sc:items-center gap-3 @min-[620px]/sc:gap-5 @min-[560px]/sc:pe-7">
                 <a
                   :href="'/magaza/' + seller.seller_code"
                   class="group flex items-start min-w-0 @min-[620px]/sc:flex-1 no-underline rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
