@@ -124,14 +124,6 @@ appEl.innerHTML = `
                   <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.city")}</label>
                   <input x-model="form.account.city" type="text" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)] focus:border-transparent" />
                 </div>
-                <div>
-                  <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.district")}</label>
-                  <input x-model="form.account.district" type="text" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)] focus:border-transparent" />
-                </div>
-                <div>
-                  <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.postalCode")}</label>
-                  <input x-model="form.account.postal_code" type="text" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)] focus:border-transparent" />
-                </div>
                 <div class="sm:col-span-2">
                   <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.storeSlogan")}</label>
                   <input x-model="form.account.slogan" type="text" placeholder="${t("sellerDash.sloganPlaceholder")}" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)] focus:border-transparent" />
@@ -512,21 +504,9 @@ appEl.innerHTML = `
               <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.address")}</label>
               <input x-model="form.contact.address_line1" type="text" placeholder="${t("sellerDash.addressPlaceholder")}" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
             </div>
-            <div class="sm:col-span-2">
-              <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.address2")}</label>
-              <input x-model="form.contact.address_line2" type="text" placeholder="${t("sellerDash.address2Placeholder")}" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
-            </div>
             <div>
               <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.city")}</label>
               <input x-model="form.contact.city" type="text" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.district")}</label>
-              <input x-model="form.contact.district" type="text" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.postalCode")}</label>
-              <input x-model="form.contact.postal_code" type="text" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
             </div>
             <div>
               <label class="block text-xs font-medium text-gray-600 mb-1.5">IBAN</label>
