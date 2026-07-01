@@ -136,23 +136,26 @@ function categoryTile(t: ShowcaseTile, columns: number): string {
   const href = t.link_href ? escapeAttr(sanitizeHref(t.link_href)) : "#";
   const sizeCls = spanClasses(t.col_span, t.row_span, columns);
   const safeImage = sanitizeImageUrl(t.image);
-  const bgStyle = safeImage
-    ? `background-image:url('${safeImage}');background-size:contain;background-position:center;background-repeat:no-repeat`
+  const hasImage = !!safeImage;
+
+  // Görsel cover ile hücreyi tam doldurur (contain'in yüzen beyaz boşluğu yok → tutarlı ağırlık);
+  // alttan gradient scrim label'ı her görselde okunur kılar. Görsel yoksa tonal gri + koyu metin.
+  const media = hasImage
+    ? `<img src="${escapeAttr(safeImage)}" alt="${escapeAttr(label)}" loading="lazy" class="absolute inset-0 h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100" />
+      <span class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent transition-colors duration-200 group-hover:from-black/80 motion-reduce:transition-none"></span>`
     : "";
+  const labelColor = hasImage ? "text-white" : "text-gray-900";
+  const hoverColor = hasImage ? "text-white/80" : "text-gray-700";
+
   return `
     <a
       href="${href}"
-      class="group relative block overflow-hidden rounded-md ${safeImage ? "bg-white" : "bg-gray-100"} ${sizeCls} appearance-none focus:outline-none"
-      style="${bgStyle}"
+      class="group relative block overflow-hidden rounded-md bg-gray-100 ${sizeCls} appearance-none focus:outline-none"
     >
-      ${
-        label
-          ? `<span class="absolute top-2 left-2 sm:top-3 sm:left-3 z-10 inline-flex max-w-[calc(100%-1rem)] items-center truncate rounded bg-white/90 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wide text-gray-800">${escapeText(label)}</span>`
-          : ""
-      }
-      <span class="absolute inset-0 bg-black/0 transition-colors duration-200 group-hover:bg-black/20 motion-reduce:transition-none"></span>
-      <span class="absolute bottom-2 sm:bottom-3 lg:bottom-4 left-1/2 z-10 -translate-x-1/2 inline-flex items-center gap-1 sm:gap-1.5 text-xs sm:text-sm lg:text-base font-medium text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 motion-reduce:transition-none">
-        ${escapeText(hover)} ${ARROW_SVG}
+      ${media}
+      <span class="absolute inset-x-0 bottom-0 z-10 p-2 sm:p-3 lg:p-4">
+        ${label ? `<span class="block truncate text-sm font-semibold sm:text-base ${labelColor}">${escapeText(label)}</span>` : ""}
+        <span class="mt-0.5 flex items-center gap-1 text-xs opacity-0 transition-opacity duration-200 sm:text-sm ${hoverColor} group-hover:opacity-100 motion-reduce:transition-none">${escapeText(hover)} ${ARROW_SVG}</span>
       </span>
     </a>
   `;
@@ -168,18 +171,19 @@ function promoTile(t: ShowcaseTile, columns: number): string {
   return `
     <a
       href="${href}"
-      class="group relative flex flex-col justify-between overflow-hidden rounded-md p-3 sm:p-4 lg:p-5 text-white ${sizeCls} appearance-none focus:outline-none"
+      class="group relative flex flex-col justify-between gap-2 overflow-hidden rounded-md p-3 sm:p-4 lg:p-5 text-white ${sizeCls} appearance-none focus:outline-none"
       style="background-color:${bg}"
     >
+      <span class="pointer-events-none absolute inset-0 bg-white/0 transition-colors duration-200 group-hover:bg-white/10 motion-reduce:transition-none"></span>
       ${
         badge
-          ? `<span class="inline-flex w-fit max-w-full items-center truncate rounded bg-white/90 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wide text-gray-800">${escapeText(badge)}</span>`
+          ? `<span class="relative z-10 inline-flex w-fit max-w-full items-center truncate rounded bg-white/90 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wide text-gray-800">${escapeText(badge)}</span>`
           : ""
       }
-      ${title ? `<span class="line-clamp-3 break-words text-xs font-extrabold leading-tight sm:text-sm lg:text-sm">${escapeText(title)}</span>` : ""}
+      ${title ? `<span class="relative z-10 line-clamp-3 break-words text-xs font-extrabold leading-tight sm:text-sm lg:text-sm">${escapeText(title)}</span>` : ""}
       ${
         cta
-          ? `<span class="inline-flex items-center gap-1 sm:gap-1.5 text-xs sm:text-sm lg:text-base font-medium opacity-90 transition-opacity duration-200 group-hover:opacity-100 motion-reduce:transition-none">${escapeText(cta)} ${ARROW_SVG}</span>`
+          ? `<span class="relative z-10 inline-flex items-center gap-1 sm:gap-1.5 text-xs sm:text-sm lg:text-base font-medium opacity-90 transition-opacity duration-200 group-hover:opacity-100 motion-reduce:transition-none">${escapeText(cta)} ${ARROW_SVG}</span>`
           : ""
       }
     </a>
