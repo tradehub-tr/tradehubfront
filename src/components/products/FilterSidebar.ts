@@ -859,8 +859,8 @@ export function updateFacetCounts(
       if (!counts.has(key)) return;
       const newCount = counts.get(key) as number;
       const label = input.closest("label");
-      // Label'ın son span'ı count taşıyor (renderCheckbox: <span class="...ml-auto">({{count}})</span>)
-      const countSpan = label?.querySelector<HTMLSpanElement>("span.ml-auto");
+      // Label'ın son span'ı count taşıyor (renderCheckbox: <span class="...ms-auto">({{count}})</span>)
+      const countSpan = label?.querySelector<HTMLSpanElement>("span.ms-auto");
       if (countSpan) {
         countSpan.textContent = `(${newCount.toLocaleString()})`;
       }
