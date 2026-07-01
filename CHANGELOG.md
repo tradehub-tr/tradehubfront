@@ -1,3 +1,16 @@
+## [v1.5.0-alpha.5] - 2026-07-01 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(products): filtre facet sayaçları dinamik güncellenmiyordu (ms-auto selector uyumsuzluğu) (@aliiball)
+- fix(seller-dashboard): toplanmayan adres alanları (adres2/ilçe/posta) formdan ve state'ten kaldırıldı (@aliiball)
+- fix(panel-test): Mağaza Profilleri E2E doğrulama testi eklendi (@aliiball)
+- fix(seller-dashboard): vergi/IBAN alanları read-only yapıldı (satıcı düzenleyemez; admin/KYB kanalı) (@aliiball)
+  - tax_id / tax_office / iban: readonly + kilitli görünüm + lockedHint notu
+  - 4 dilde (tr/en/ru/ar) lockedHint anahtarı eklendi
+
+---
 ## [v1.5.0-alpha.4] - 2026-06-30 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
