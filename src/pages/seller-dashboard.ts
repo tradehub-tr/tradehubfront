@@ -464,12 +464,15 @@ appEl.innerHTML = `
               <input x-model="form.company.factory_size" type="text" placeholder="5000+" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
             </div>
             <div>
-              <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.taxId")}</label>
-              <input x-model="form.company.tax_id" type="text" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
+              <label class="flex items-center gap-1 text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.taxId")}<span class="text-gray-400" title="${t("sellerDash.lockedHint")}">🔒</span></label>
+              <input x-model="form.company.tax_id" type="text" readonly tabindex="-1" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm bg-gray-100 text-gray-500 cursor-not-allowed" />
             </div>
             <div>
-              <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.taxOffice")}</label>
-              <input x-model="form.company.tax_office" type="text" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
+              <label class="flex items-center gap-1 text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.taxOffice")}<span class="text-gray-400" title="${t("sellerDash.lockedHint")}">🔒</span></label>
+              <input x-model="form.company.tax_office" type="text" readonly tabindex="-1" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm bg-gray-100 text-gray-500 cursor-not-allowed" />
+            </div>
+            <div class="sm:col-span-2">
+              <p class="text-[11px] text-gray-400 flex gap-1.5 leading-relaxed"><span>ℹ</span><span>${t("sellerDash.lockedHint")}</span></p>
             </div>
             <div class="sm:col-span-2">
               <label class="block text-xs font-medium text-gray-600 mb-1.5">${t("sellerDash.mainMarkets")}</label>
@@ -509,8 +512,11 @@ appEl.innerHTML = `
               <input x-model="form.contact.city" type="text" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
             </div>
             <div>
-              <label class="block text-xs font-medium text-gray-600 mb-1.5">IBAN</label>
-              <input x-model="form.contact.iban" type="text" placeholder="TR..." class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]" />
+              <label class="flex items-center gap-1 text-xs font-medium text-gray-600 mb-1.5">IBAN<span class="text-gray-400" title="${t("sellerDash.lockedHint")}">🔒</span></label>
+              <input x-model="form.contact.iban" type="text" readonly tabindex="-1" placeholder="TR..." class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm bg-gray-100 text-gray-500 cursor-not-allowed" />
+            </div>
+            <div class="sm:col-span-2">
+              <p class="text-[11px] text-gray-400 flex gap-1.5 leading-relaxed"><span>ℹ</span><span>${t("sellerDash.lockedHint")}</span></p>
             </div>
           </div>
           <div class="mt-5 flex justify-end">

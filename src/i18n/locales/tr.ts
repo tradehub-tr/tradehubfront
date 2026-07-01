@@ -1007,6 +1007,7 @@ const tr = {
       factorySize: "Fabrika Büyüklüğü (m²)",
       taxId: "Vergi No / TC No",
       taxOffice: "Vergi Dairesi",
+      lockedHint: "Bu bilgi kayıt/doğrulama ile yönetilir; değiştirmek için destek ile iletişime geçin.",
       mainMarkets: "Ana Pazarlar",
       mainMarketsPlaceholder: "Türkiye, AB, Orta Doğu...",
       contactInfo: "İletişim Bilgileri",
