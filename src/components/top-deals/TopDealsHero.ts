@@ -28,23 +28,63 @@ function lightningBoltIcon(): string {
 export function TopDealsMobileHeader(): string {
   return `
     <div class="md:hidden" style="background: var(--topdeals-page-hero-gradient, linear-gradient(135deg, #ff6b35 0%, #ee2737 50%, #c41442 100%));">
-      <!-- Nav row: back + title + search -->
-      <div class="flex items-center justify-between px-4 pt-3 pb-1">
-        <a href="javascript:history.back()" class="text-white p-1 -ms-1" aria-label="${t("common.goBack")}">
-          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+      <!-- Nav row: back + title / in-hero search field + action -->
+      <div class="flex items-center gap-2 px-4 pt-2.5" :class="showSearch ? 'pb-2.5' : 'pb-1'">
+        <!-- Back (hidden while searching) -->
+        <a href="javascript:history.back()" x-show="!showSearch" class="text-white p-1 -ms-1 flex-shrink-0 transition-opacity active:opacity-60" aria-label="${t("common.goBack")}">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/>
           </svg>
         </a>
-        <h1 class="text-xl font-extrabold text-white tracking-tight" data-i18n="topDealsPage.heroTitle">${t("topDealsPage.heroTitle")}</h1>
-        <button type="button" class="text-white p-1 -me-1" aria-label="${t("common.search")}">
-          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+
+        <!-- Title -->
+        <h1 x-show="!showSearch" class="flex-1 min-w-0 text-center text-lg font-bold text-white tracking-tight truncate" data-i18n="topDealsPage.heroTitle">${t("topDealsPage.heroTitle")}</h1>
+
+        <!-- Search field — filters Top Deals only -->
+        <form
+          x-show="showSearch"
+          x-cloak
+          @submit.prevent="submitSearch()"
+          class="flex-1 min-w-0 flex items-center gap-2 bg-white rounded-full ps-3 pe-1.5 py-1.5"
+        >
+          <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>
+          </svg>
+          <input
+            x-ref="dealSearchInput"
+            x-model="searchQuery"
+            type="text"
+            enterkeyhint="search"
+            autocomplete="off"
+            class="flex-1 min-w-0 bg-transparent text-sm text-gray-700 border-0 outline-none p-0"
+            placeholder="${t("topDealsPage.searchPlaceholder")}"
+            data-i18n-placeholder="topDealsPage.searchPlaceholder"
+          />
+          <button type="button" x-show="searchQuery" @click="clearSearch()" class="th-no-press flex-shrink-0 text-gray-400 p-0.5 transition-opacity active:opacity-60" aria-label="${t("common.clear")}">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </form>
+
+        <!-- Open search (hidden while searching) -->
+        <button type="button" x-show="!showSearch" @click="openSearch()" class="th-no-press text-white p-1 -me-1 flex-shrink-0 transition-opacity active:opacity-60" aria-label="${t("common.search")}">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>
           </svg>
         </button>
+
+        <!-- Close search (visible while searching) -->
+        <button type="button" x-show="showSearch" x-cloak @click="closeSearch()" class="th-no-press text-white p-1 -me-1 flex-shrink-0 transition-opacity active:opacity-60" aria-label="${t("common.close")}">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+          </svg>
+        </button>
       </div>
-      <!-- Subtitle row -->
-      <p class="flex items-center justify-center gap-1.5 text-sm text-white/90 font-medium pb-3">
-        <svg class="w-4 h-4 flex-shrink-0 opacity-80" fill="currentColor" viewBox="0 0 20 20">
+
+      <!-- Subtitle row (hidden while searching) -->
+      <p x-show="!showSearch" class="flex items-center justify-center gap-1.5 text-xs text-white/85 font-medium pb-2.5">
+        <svg class="w-3.5 h-3.5 flex-shrink-0 opacity-80" fill="currentColor" viewBox="0 0 20 20">
           <path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-7-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 9a.75.75 0 0 0 0 1.5h.253a.25.25 0 0 1 .244.304l-.459 2.066A1.75 1.75 0 0 0 10.747 15H11a.75.75 0 0 0 0-1.5h-.253a.25.25 0 0 1-.244-.304l.459-2.066A1.75 1.75 0 0 0 9.253 9H9Z" clip-rule="evenodd"/>
         </svg>
         <span data-i18n="topDealsPage.heroSubtitle">${t("topDealsPage.heroSubtitle")}</span>

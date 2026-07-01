@@ -90,7 +90,10 @@ Alpine.data('topDealsPage', () => ({
   /* Tab state */
   activeCategory: 'all' as string,    // 'all' = no category filter
   activeSubFilter: 'all' as string,
-  showCategorySheet: false,
+
+  /* Mobile in-hero search — scoped to deals only */
+  showSearch: false,
+  searchQuery: '',
 
   /* Tab scroll state */
   canScrollLeft: false,
@@ -127,6 +130,41 @@ Alpine.data('topDealsPage', () => ({
     this.activeSubFilter = filterId
   },
 
+  /* ── Mobile in-hero search (deals only) ── */
+  openSearch() {
+    this.showSearch = true
+    this.$nextTick(() => {
+      const input = (this.$refs as Record<string, HTMLElement>).dealSearchInput as
+        | HTMLInputElement
+        | undefined
+      input?.focus()
+    })
+  },
+
+  closeSearch() {
+    this.showSearch = false
+    // Reset the grid only if a query was actually applied.
+    if (this.searchQuery) {
+      this.searchQuery = ''
+      this.loadProducts(/* reset */ true)
+    }
+  },
+
+  clearSearch() {
+    this.searchQuery = ''
+    this.loadProducts(/* reset */ true)
+    this.$nextTick(() => {
+      const input = (this.$refs as Record<string, HTMLElement>).dealSearchInput as
+        | HTMLInputElement
+        | undefined
+      input?.focus()
+    })
+  },
+
+  submitSearch() {
+    this.loadProducts(/* reset */ true)
+  },
+
   /* ── Pagination ── */
   loadMore() {
     if (this.loading || !this.hasMore) return
@@ -154,6 +192,9 @@ Alpine.data('topDealsPage', () => ({
     if (this.activeCategory && this.activeCategory !== 'all') {
       params.category = this.activeCategory
     }
+    // Deal-scoped search: is_deal stays set, so results never leave Top Deals.
+    const q = this.searchQuery.trim()
+    if (q) params.query = q
 
     searchListings(params)
       .then(result => {

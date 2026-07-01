@@ -7729,6 +7729,7 @@ const ru = {
   topDealsPage: {
     heroTitle: "Лучшие предложения",
     heroSubtitle: "Найдите самые низкие цены на iStoc",
+    searchPlaceholder: "Поиск по акциям",
     promoShipping: "БЕСПЛАТНАЯ доставка с лимитом до $20",
     promoDays: "3 дня",
     tabAll: "Все",
