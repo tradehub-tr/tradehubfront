@@ -1013,6 +1013,7 @@ const en = {
       factorySize: "Factory Size (m²)",
       taxId: "Tax ID / National ID",
       taxOffice: "Tax Office",
+      lockedHint: "Managed via registration/verification; contact support to change.",
       mainMarkets: "Main Markets",
       mainMarketsPlaceholder: "Turkey, EU, Middle East...",
       contactInfo: "Contact Information",

@@ -399,7 +399,7 @@ test.describe("Products page — multi-select filter chips", () => {
     const marmaraLabel = page.locator(
       '[data-filter-prefix-root="desktop"] label:has(input[data-filter-section="brands"][data-filter-value="MARMARAT"])'
     );
-    await expect(marmaraLabel.locator("span.ml-auto")).toHaveText("(38)");
+    await expect(marmaraLabel.locator("span.ms-auto")).toHaveText("(38)");
 
     // Onaylanmış Satıcı'yı seç → tüm fetch zinciri tetiklenir
     await page.evaluate(() => {
@@ -411,7 +411,7 @@ test.describe("Products page — multi-select filter chips", () => {
     });
 
     // MarmaraT count'u 5'e düşmeli (debounced fetch ~300ms + facet promise)
-    await expect(marmaraLabel.locator("span.ml-auto")).toHaveText("(5)", { timeout: 5_000 });
+    await expect(marmaraLabel.locator("span.ms-auto")).toHaveText("(5)", { timeout: 5_000 });
     expect(facetCall, "Facet endpoint en az 2 kez çağrılmalı (init + filter sonrası)").toBeGreaterThanOrEqual(2);
   });
 
