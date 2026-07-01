@@ -324,7 +324,7 @@ export function SubHeader(props: SubHeaderProps): string {
     : "";
 
   return `
-    <div id="sub-header" x-data="searchHeader({ selectedSort: '${selectedSort}', viewMode: '${viewMode}', sortLabel: '${safeLabel}' })" data-active-tab="${activeTab}" class="mb-4 lg:mb-6">
+    <div id="sub-header" x-data="searchHeader({ selectedSort: '${selectedSort}', viewMode: '${viewMode}', sortLabel: '${safeLabel}' })" data-active-tab="${activeTab}" class="mb-3 lg:mb-6">
       ${Breadcrumb(breadcrumb)}
 
       <div class="flex items-start justify-between gap-5 flex-wrap pt-2">

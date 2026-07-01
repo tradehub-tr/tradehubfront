@@ -4397,6 +4397,7 @@ const tr = {
     // ============================================================
     mobileCategory: {
       allCategories: "Tüm kategoriler",
+      allInCategory: "Tüm {{name}}",
     },
 
     // ============================================================
@@ -7648,6 +7649,7 @@ const tr = {
   topDealsPage: {
     heroTitle: "En İyi Fırsatlar",
     heroSubtitle: "iStoc'ta en düşük fiyatları yakalayın",
+    searchPlaceholder: "Fırsatlarda ara",
     promoShipping: "Ücretsiz kargo $20'ye kadar",
     promoDays: "3 gün",
     tabAll: "Tümü",

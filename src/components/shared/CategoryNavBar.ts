@@ -18,6 +18,10 @@ export interface CategoryNavConfig {
   allInCategoryLabel: (name: string) => string;
   desktopExtraSlot?: string;
   mobileExtraSlot?: string;
+  /** Mobil kategori satırının BAŞINA, aynı satır içinde render edilir (ör. filtre butonu). */
+  mobileLeadingSlot?: string;
+  /** Mobil kategori barını iOS-segmented stilde render eder (inset track + beyaz thumb). */
+  mobileSegmented?: boolean;
 }
 
 export interface CategoryNavRuntimeConfig extends CategoryNavConfig {
@@ -54,9 +58,10 @@ export function CategoryNavBar(config: CategoryNavConfig): string {
     </div>
 
     <!-- Mobile kategori çubuğu -->
-    <div class="lg:hidden mb-2 bg-white rounded-md border border-gray-200">
+    <div class="lg:hidden mb-2 bg-white rounded-md border border-gray-200 overflow-hidden">
       <div class="flex items-stretch">
-        <ul class="flex items-center overflow-x-auto scrollbar-hide grow list-none m-0 p-0" data-${p}-mobile-tab></ul>
+        ${config.mobileLeadingSlot ?? ""}
+        <ul class="flex items-center overflow-x-auto scrollbar-hide grow min-w-0 list-none m-0 ${config.mobileSegmented ? "gap-1 px-1.5 py-2" : "p-0"}" data-${p}-mobile-tab${config.mobileSegmented ? ` style="background-color: var(--surface-raised, #f5f5f5)"` : ""}></ul>
         <button id="${p}-mobile-cat-more" type="button" aria-label="${escapeHtml(allLabel)}" class="th-no-press appearance-none focus:outline-none [-webkit-tap-highlight-color:transparent] shrink-0 px-3 flex items-center justify-center text-gray-400 hover:text-gray-700 border-s border-gray-100">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
         </button>
@@ -188,14 +193,22 @@ export async function initCategoryNavBar(
       el.classList.toggle("font-bold", on);
       el.classList.toggle("font-normal", !on);
     });
-    // Mobil tab'ları — aktif: tema rengi + kalın (sadece renk/ağırlık, layout shift yok)
+    // Mobil tab'ları — segmented: aktif beyaz thumb (ink + gölge, AAA); klasik: tema rengi.
     document
       .querySelectorAll<HTMLElement>(`[data-${p}-mobile-tab] [data-tab-slug]`)
       .forEach((el) => {
         const on = (el.dataset.tabSlug || "") === slug;
-        el.classList.toggle("text-primary-600", on);
-        el.classList.toggle("font-semibold", on);
-        el.classList.toggle("text-gray-600", !on);
+        if (config.mobileSegmented) {
+          el.classList.toggle("bg-white", on);
+          el.classList.toggle("shadow-[0_1px_2px_rgba(0,0,0,0.10)]", on);
+          el.classList.toggle("text-[#0a0a0a]", on);
+          el.classList.toggle("font-semibold", on);
+          el.classList.toggle("text-[#525252]", !on);
+        } else {
+          el.classList.toggle("text-primary-600", on);
+          el.classList.toggle("font-semibold", on);
+          el.classList.toggle("text-gray-600", !on);
+        }
       });
     // Mobil drill-down sheet kendi aktif (✓) işaretini render sırasında yönetir.
   }
@@ -238,16 +251,31 @@ export async function initCategoryNavBar(
   // ── Mobil kategori tab + liste doldur ────────────────────────────────────
   const mobileTabUl = document.querySelector<HTMLElement>(`[data-${p}-mobile-tab]`);
   if (mobileTabUl) {
+    // iOS-segmented stil (Emil: aktif thumb 200ms ease-out kayar, press scale .97,
+    // sadece transform/box-shadow/color, reduced-motion'da hareket yok) vs. klasik.
+    const segBase =
+      "th-no-press whitespace-nowrap cursor-pointer inline-flex items-center justify-center h-8 px-3.5 text-[13px] leading-none shrink-0 rounded-md text-[#525252] transition-[background-color,box-shadow,color,transform] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97] motion-reduce:transition-none motion-reduce:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--input-focus-border-color,#f5b800)] focus-visible:ring-inset";
+    const classicBase =
+      "th-no-press whitespace-nowrap cursor-pointer px-4 py-2.5 text-[13px] shrink-0 text-gray-600 transition-colors";
+    const liExtra = config.mobileSegmented ? ' tabindex="0" role="button"' : "";
     mobileTabUl.innerHTML = tabCats
       .map(
         (cat) => `
-      <li class="th-no-press whitespace-nowrap cursor-pointer px-4 py-2.5 text-[13px] shrink-0 text-gray-600 transition-colors" data-tab-slug="${escapeHtml(cat.slug)}">${escapeHtml(cat.name)}</li>
+      <li class="${config.mobileSegmented ? segBase : classicBase}"${liExtra} data-tab-slug="${escapeHtml(cat.slug)}">${escapeHtml(cat.name)}</li>
     `
       )
       .join("");
     mobileTabUl.addEventListener("click", (e) => {
       const li = (e.target as HTMLElement).closest<HTMLElement>("[data-tab-slug]");
       if (li) applyCategory(li.dataset.tabSlug || "");
+    });
+    // WCAG: segmented tab'lar klavyeyle çalışsın (Enter/Space).
+    mobileTabUl.addEventListener("keydown", (e) => {
+      if (e.key !== "Enter" && e.key !== " ") return;
+      const li = (e.target as HTMLElement).closest<HTMLElement>("[data-tab-slug]");
+      if (!li) return;
+      e.preventDefault();
+      applyCategory(li.dataset.tabSlug || "");
     });
   }
 

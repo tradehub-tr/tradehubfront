@@ -4402,6 +4402,7 @@ const en = {
     // ============================================================
     mobileCategory: {
       allCategories: "All categories",
+      allInCategory: "All {{name}}",
     },
 
     // ============================================================
@@ -7661,6 +7662,7 @@ const en = {
   topDealsPage: {
     heroTitle: "Top Deals",
     heroSubtitle: "Score the lowest prices on iStoc",
+    searchPlaceholder: "Search deals",
     promoShipping: "FREE shipping capped at $20",
     promoDays: "3 days",
     tabAll: "All",

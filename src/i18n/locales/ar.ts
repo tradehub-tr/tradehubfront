@@ -7590,6 +7590,7 @@ const ar = {
   topDealsPage: {
     heroTitle: "أفضل العروض",
     heroSubtitle: "احصل على أدنى الأسعار على iStoc",
+    searchPlaceholder: "ابحث في العروض",
     promoShipping: "شحن مجاني بحد أقصى 20$",
     promoDays: "3 أيام",
     tabAll: "الكل",

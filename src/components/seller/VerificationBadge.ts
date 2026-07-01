@@ -42,8 +42,6 @@ function infoButton(ariaLabel: string): string {
   return `<button
       type="button"
       class="th-no-press inline-flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 transition-colors duration-150 cursor-pointer appearance-none border-none bg-transparent p-0 ms-0.5 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary-500"
-      @mouseenter="vOpen=true"
-      @mouseleave="vOpen=false"
       @click.stop="vOpen=!vOpen"
       :aria-expanded="vOpen"
       aria-label="${ariaLabel}"
@@ -88,9 +86,11 @@ function tooltipPanel(itemsExpr: string): string {
       x-transition:leave-start="opacity-100"
       x-transition:leave-end="opacity-0"
       @click.outside="vOpen=false"
-      class="absolute start-0 top-full mt-1.5 z-50 min-w-[220px] max-w-[280px] bg-white rounded-md shadow-lg border border-gray-100 p-3 text-left"
+      class="absolute start-0 top-full pt-1.5 z-50 text-left"
       role="tooltip">
-      ${tooltipRows(itemsExpr)}
+      <div class="min-w-[220px] max-w-[280px] bg-white rounded-md shadow-lg border border-gray-100 p-3">
+        ${tooltipRows(itemsExpr)}
+      </div>
     </div>`;
 }
 
@@ -127,7 +127,9 @@ export function VerificationBadge(verifications: VerificationItem[]): string {
 
   return `
     <div class="relative inline-flex items-center gap-1 text-[12px] text-gray-700"
-         x-data='{ vOpen: false, vItems: ${serialized} }'>
+         x-data='{ vOpen: false, vItems: ${serialized} }'
+         @mouseenter="vOpen=true"
+         @mouseleave="vOpen=false">
       <img src="${verifiedminilogoUrl}"
            alt=""
            class="h-3 w-auto shrink-0"
@@ -155,7 +157,9 @@ export function VerificationBadgeTemplate(scopeExpr: string): string {
   return `
     <template x-if="(${scopeExpr}).length > 0">
       <div class="relative inline-flex items-center gap-1 text-[12px] text-gray-700"
-           x-data="{ vOpen: false }">
+           x-data="{ vOpen: false }"
+           @mouseenter="vOpen=true"
+           @mouseleave="vOpen=false">
         <img src="${verifiedminilogoUrl}"
              alt=""
              class="h-3 w-auto shrink-0"

@@ -54,7 +54,7 @@ function renderCard(card: RecommendationCard): string {
         href="${escapeHtml(sanitizeUrl(card.href))}"
         aria-label="${safeName}"
         title="${safeName}"
-        class="group/card mx-auto flex h-full w-full flex-col rounded-md border border-gray-200 bg-white p-1.5 sm:p-2 shadow-sm transition-[transform,border-color,box-shadow] duration-200 ease-out motion-reduce:transition-none motion-reduce:transform-none hover:-translate-y-0.5 hover:border-primary-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-1 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-primary-400"
+        class="group/card mx-auto flex h-full w-full flex-col rounded-md border border-gray-200 bg-white p-1.5 sm:p-2 shadow-sm transition-[border-color,box-shadow] duration-200 ease-out motion-reduce:transition-none hover:border-primary-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-1 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-primary-400"
       >
         <div class="mb-2">
           <h3 class="truncate text-[11px] font-bold leading-tight text-gray-900 sm:text-sm md:text-base dark:text-white">${safeName}</h3>

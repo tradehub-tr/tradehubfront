@@ -44,15 +44,14 @@ function desktopSubTabSlot(): string {
   `;
 }
 
-function mobileFilterSlot(): string {
-  // Mobil: kategori barı altında tek filtre ikonu → alttan detaylı filtre sheet'i açar
-  // (ManufacturerFilterSheet, `mfr-filter-open` window event'i ile dinler).
+function mobileFilterButton(): string {
+  // Mobil: kategori satırının BAŞINA, aynı satır içinde filtre ikonu (tek sıra).
+  // Detaylı filtre sheet'ini açar (ManufacturerFilterSheet `mfr-filter-open` dinler).
   return `
-    <div class="lg:hidden flex items-center gap-2 pb-2 mb-1">
-      <button type="button" data-mfr-filter-btn aria-label="${t("mfr.list.filter")}" class="th-no-press shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-full border border-gray-300 bg-white text-[#222] hover:bg-gray-50 transition-colors">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 5h16M7 12h10M10 19h4"/></svg>
-      </button>
-    </div>
+    <button type="button" data-mfr-filter-btn aria-label="${t("mfr.list.filter")}"
+      class="th-no-press shrink-0 inline-flex items-center justify-center w-12 self-stretch text-[#222] hover:bg-gray-50 border-e border-gray-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--input-focus-border-color,#f5b800)] focus-visible:ring-inset">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 5h16M7 12h10M10 19h4"/></svg>
+    </button>
   `;
 }
 
@@ -63,7 +62,8 @@ export function HorizontalCategoryBar(): string {
     viewMoreLabel: t("mfr.viewMore"),
     allInCategoryLabel: (name: string) => t("mfr.allInCategory", { name }),
     desktopExtraSlot: desktopSubTabSlot(),
-    mobileExtraSlot: mobileFilterSlot(),
+    mobileLeadingSlot: mobileFilterButton(),
+    mobileSegmented: true,
   });
 }
 
@@ -84,6 +84,7 @@ export async function initHorizontalCategoryBar(): Promise<void> {
     allLabelKey: "mfr.allCategories",
     viewMoreLabel: t("mfr.viewMore"),
     allInCategoryLabel: (name: string) => t("mfr.allInCategory", { name }),
+    mobileSegmented: true,
     onSelect: applyCategory,
     getActiveSlug: () => new URLSearchParams(window.location.search).get("cat") || "",
   });

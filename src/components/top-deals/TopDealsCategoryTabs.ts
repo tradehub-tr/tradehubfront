@@ -1,14 +1,17 @@
 /**
  * TopDealsCategoryTabs Component
- * Horizontal scrollable category tab bar with arrow navigation
- * Mobile: chevron opens a bottom sheet for category selection
- * Desktop: arrow buttons for scroll navigation
+ * Horizontal scrollable category tab bar with arrow navigation.
+ * Mobile: chevron opens the shared drill-down bottom sheet (categories +
+ * subcategories), same pattern as the homepage / manufacturers category bars.
+ * Desktop: arrow buttons for scroll navigation.
  *
  * Categories are fetched dynamically from the API on init.
  */
 
 import { t } from "../../i18n";
-import { escapeHtml } from "../../utils/sanitize";
+import { BottomSheet } from "../shared/BottomSheet";
+import { initCategoryDrillSheet } from "../shared/CategoryDrillSheet";
+import type { DrillCategory } from "../shared/CategoryDrillSheet";
 
 /** Alpine internal: x-data binding stack üzerinden component state'ine erişmek için */
 interface AlpineDataEl extends HTMLElement {
@@ -18,13 +21,7 @@ interface AlpineDataEl extends HTMLElement {
 /** Alpine component state shape (topDealsPage scope) — sadece kullandığımız field'lar */
 interface TopDealsAlpineData {
   setCategory(slug: string): void;
-  showCategorySheet?: boolean;
-}
-
-/** API'den dönen kategori objesi — slug ve name optional, biri varsa kullanılır */
-interface CategoryLike {
-  slug?: string;
-  name?: string;
+  activeCategory?: string;
 }
 
 /** Build a single tab button HTML — uses manual styling, no Alpine :class */
@@ -41,35 +38,24 @@ function buildTabHtml(id: string, label: string, isActive = false): string {
   `;
 }
 
-/** Build a single bottom-sheet item HTML */
-function buildSheetItemHtml(id: string, label: string): string {
-  return `
-    <button
-      type="button"
-      class="th-no-press appearance-none focus:outline-none [-webkit-tap-highlight-color:transparent] flex items-center w-full px-5 py-4 text-start transition-colors border-b border-gray-50 active:bg-gray-50"
-      @click="setCategory('${id}'); showCategorySheet = false"
-    >
-      <span
-        class="flex-1 text-[15px]"
-        :class="activeCategory === '${id}' ? 'font-semibold text-gray-900' : 'text-gray-600'"
-      >${label}</span>
-      <span
-        class="flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors"
-        :class="activeCategory === '${id}' ? 'border-gray-900 bg-gray-900' : 'border-gray-300 bg-transparent'"
-      >
-        <span
-          class="w-2 h-2 rounded-full transition-colors"
-          :class="activeCategory === '${id}' ? 'bg-white' : 'bg-transparent'"
-        ></span>
-      </span>
-    </button>
-  `;
-}
-
 export function TopDealsCategoryTabs(): string {
   // Only render the "Tumu" (All) tab statically (active by default); rest loaded from API
   const defaultTabHtml = buildTabHtml("all", t("topDealsPage.tabAll"), true);
-  const defaultSheetHtml = buildSheetItemHtml("all", t("topDealsPage.tabAll"));
+
+  // Drill-down sheet gövdesi: paylaşılan helper rows'u [data-td-cat-list]'e basar.
+  // API yüklenene kadar skeleton görünür.
+  const sheetSkeleton = `
+    <ul data-td-cat-list class="overflow-y-auto flex-1 py-2 list-none m-0 p-0">
+      ${Array.from(
+        { length: 6 },
+        () => `
+        <li class="flex items-center w-full px-5 py-4 border-b border-gray-50 animate-pulse">
+          <div class="h-4 rounded bg-gray-200 flex-1"></div>
+        </li>
+      `
+      ).join("")}
+    </ul>
+  `;
 
   return `
     <div class="relative flex items-center" x-ref="tabsContainer">
@@ -103,18 +89,14 @@ export function TopDealsCategoryTabs(): string {
         ${defaultTabHtml}
       </div>
 
-      <!-- Mobile chevron → opens bottom sheet -->
+      <!-- Mobile chevron → opens shared drill-down bottom sheet -->
       <button
         type="button"
+        id="td-cat-trigger"
         class="th-no-press appearance-none focus:outline-none [-webkit-tap-highlight-color:transparent] md:hidden flex-shrink-0 flex items-center justify-center w-9 self-stretch border-b border-gray-200 bg-white text-gray-500"
-        @click="showCategorySheet = !showCategorySheet"
-        aria-label="All categories"
+        aria-label="${t("mobileCategory.allCategories")}" data-i18n-aria-label="mobileCategory.allCategories"
       >
-        <svg
-          class="w-4 h-4 transition-transform duration-200"
-          :class="showCategorySheet ? 'rotate-180' : ''"
-          fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
-        >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/>
         </svg>
       </button>
@@ -139,32 +121,11 @@ export function TopDealsCategoryTabs(): string {
       </button>
     </div>
 
-    <!-- Mobile Category Bottom Sheet -->
-    <!-- Backdrop -->
-    <div
-      class="md:hidden fixed inset-0 z-[99] bg-black/50 transition-opacity duration-200"
-      :class="showCategorySheet ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'"
-      @click="showCategorySheet = false"
-      x-effect="document.body.style.overflow = showCategorySheet ? 'hidden' : ''"
-    ></div>
-
-    <!-- Sheet Panel -->
-    <div
-      class="md:hidden fixed inset-x-0 bottom-0 z-[100] transition-transform duration-300 ease-drawer motion-reduce:transition-none"
-      :class="showCategorySheet ? 'translate-y-0' : 'translate-y-full'"
-    >
-      <div class="bg-white rounded-t-md max-h-[85vh] flex flex-col shadow-2xl">
-        <!-- Drag Handle -->
-        <div class="flex-shrink-0 flex items-center justify-center pt-3 pb-2">
-          <div class="w-9 h-1 rounded-full bg-gray-300"></div>
-        </div>
-
-        <!-- Category List -->
-        <div id="td-sheet-categories" class="overflow-y-auto flex-1 pb-6 overscroll-contain">
-          ${defaultSheetHtml}
-        </div>
-      </div>
-    </div>
+    <!-- Mobile Category Drill-down Bottom Sheet (paylaşılan component) -->
+    ${BottomSheet(
+      { id: "td-cat-sheet", titleKey: "mobileCategory.allCategories", hiddenAt: "md:hidden" },
+      sheetSkeleton
+    )}
   `;
 }
 
@@ -180,17 +141,19 @@ export function initCategoryTabs(): void {
   const allTab = document.querySelector<HTMLElement>('.top-deals-tab[data-cat-slug="all"]');
   if (allTab) {
     allTab.addEventListener("click", () => {
-      const mainEl = document.querySelector<AlpineDataEl>('[x-data="topDealsPage"]');
-      if (mainEl && mainEl._x_dataStack) {
-        const data = mainEl._x_dataStack[0] as unknown as TopDealsAlpineData | undefined;
-        if (data) data.setCategory("all");
-      }
+      getTopDealsData()?.setCategory("all");
       updateTabStyles("all");
     });
   }
 
-  // Fetch categories from API and inject dynamic tabs
+  // Fetch categories from API and inject dynamic tabs + drill-down sheet
   loadCategoryTabs();
+}
+
+/** topDealsPage Alpine scope'una erişim (x-data binding stack üzerinden). */
+function getTopDealsData(): TopDealsAlpineData | undefined {
+  const mainEl = document.querySelector<AlpineDataEl>('[x-data="topDealsPage"]');
+  return mainEl?._x_dataStack?.[0] as TopDealsAlpineData | undefined;
 }
 
 async function loadCategoryTabs(): Promise<void> {
@@ -199,18 +162,14 @@ async function loadCategoryTabs(): Promise<void> {
     const categories = await loadCategories();
 
     const tabsContainer = document.getElementById("td-tabs-scroll");
-    const sheetContainer = document.getElementById("td-sheet-categories");
     if (!tabsContainer || !categories || categories.length === 0) return;
 
-    // Get Alpine data for wiring click handlers
-    const mainEl = document.querySelector<AlpineDataEl>('[x-data="topDealsPage"]');
-
-    for (const cat of categories as CategoryLike[]) {
+    // --- Desktop/tablet tabs (top-level only) ---
+    for (const cat of categories) {
       const slug = cat.slug || cat.name || "";
       const name = cat.name || slug;
       if (!slug) continue;
 
-      // --- Desktop/tablet tab ---
       const tabBtn = document.createElement("button");
       tabBtn.type = "button";
       tabBtn.className =
@@ -218,41 +177,33 @@ async function loadCategoryTabs(): Promise<void> {
       tabBtn.textContent = name;
       tabBtn.dataset.catSlug = slug;
       tabBtn.addEventListener("click", () => {
-        if (mainEl && mainEl._x_dataStack) {
-          const data = mainEl._x_dataStack[0] as unknown as TopDealsAlpineData | undefined;
-          if (data) data.setCategory(slug);
-        }
-        // Update active styles
+        getTopDealsData()?.setCategory(slug);
         updateTabStyles(slug);
       });
       tabsContainer.appendChild(tabBtn);
-
-      // --- Mobile sheet item ---
-      if (sheetContainer) {
-        const sheetBtn = document.createElement("button");
-        sheetBtn.type = "button";
-        sheetBtn.className =
-          "th-no-press appearance-none focus:outline-none [-webkit-tap-highlight-color:transparent] flex items-center w-full px-5 py-4 text-start transition-colors border-b border-gray-50 active:bg-gray-50";
-        sheetBtn.dataset.catSlug = slug;
-        sheetBtn.innerHTML = `
-          <span class="flex-1 text-[15px] text-gray-600">${escapeHtml(name)}</span>
-          <span class="flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors border-gray-300 bg-transparent">
-            <span class="w-2 h-2 rounded-full transition-colors bg-transparent"></span>
-          </span>
-        `;
-        sheetBtn.addEventListener("click", () => {
-          if (mainEl && mainEl._x_dataStack) {
-            const data = mainEl._x_dataStack[0] as unknown as TopDealsAlpineData | undefined;
-            if (data) {
-              data.setCategory(slug);
-              data.showCategorySheet = false;
-            }
-          }
-          updateTabStyles(slug);
-        });
-        sheetContainer.appendChild(sheetBtn);
-      }
     }
+
+    // --- Mobile drill-down sheet ---
+    // Kök seviyeye "Tümü" satırı eklenir (filtreyi temizler). Alt kategorisi olan
+    // kategori chevron ile içeri açılır; yaprak / "Tüm {Kategori}" seçilince o
+    // slug'la ürünler filtrelenir (setCategory backend'e category param'ı geçer).
+    const drillCategories: DrillCategory[] = [
+      { name: t("topDealsPage.tabAll"), slug: "all" },
+      ...categories,
+    ];
+    initCategoryDrillSheet({
+      sheetId: "td-cat-sheet",
+      triggerId: "td-cat-trigger",
+      listSelector: "[data-td-cat-list]",
+      categories: drillCategories,
+      rootLabel: t("mobileCategory.allCategories"),
+      allInCategoryLabel: (name: string) => t("mobileCategory.allInCategory", { name }),
+      onSelect: (slug: string) => {
+        getTopDealsData()?.setCategory(slug);
+        updateTabStyles(slug);
+      },
+      getActiveSlug: () => getTopDealsData()?.activeCategory || "all",
+    });
 
     // Update scroll state after tabs are added
     const scrollEl = document.querySelector<HTMLElement>('[x-ref="tabsScroll"]');
