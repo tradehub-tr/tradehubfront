@@ -1,3 +1,38 @@
+## [v1.5.0-alpha.6] - 2026-07-01 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(manufacturers): update mobile filter button and layout adjustments (@TurksabYonetim)
+- feat(top-deals): mobil hero araması ve paylaşılan kategori drill-down eklendi (@ahmeetseker)
+  - mobil hero'ya deal-scoped arama alanı (is_deal korunur, sonuç Top Deals'ten çıkmaz)
+  - mobil kategori seçimi paylaşılan drill-down bottom-sheet'e taşındı (anasayfa/üreticiler deseni)
+  - eski backdrop'lu radio sheet ve showCategorySheet state'i kaldırıldı
+  - topDealsPage.searchPlaceholder + mobileCategory.allInCategory i18n
+- feat(manufacturers): üreticiler hero'suna tüm kategoriler flyout'u eklendi (@ahmeetseker)
+  - "Tüm kategoriler" satırı hover'da tam ağacı (6 ile sınırsız) gruplu flyout'ta gösterir
+  - kategori linkleri products.html yerine manufacturers.html?cat= hedefine yönlendirildi
+  - kart satırındaki pe-7 boşluğu 560px altında kaldırıldı (dar ekran taşması)
+
+### Duzeltildi
+- fix(ui): hover kaynaklı tooltip titremesi ve kart sıçraması düzeltildi (@ahmeetseker)
+  - VerificationBadge: hover wrapper'a taşındı, tooltip'e pt-gap (hover boşluğunda kapanmaz)
+  - RecommendationSlider: hover'daki -translate-y kaldırıldı (layout shift önlendi)
+
+### Degistirildi
+- refactor(mega-menu): görünüm geçiş animasyonu ve radius sadeleştirmesi (@ahmeetseker)
+  - görünümler arası .hidden swap'ı mega-view-enter keyframe ile yumuşatıldı (her showView tetikler)
+  - feature/producer kartları ve ikon kutuları rounded-xl/lg → rounded-md
+  - catpopup sidebar item'ına border-inline-start-color geçişi eklendi
+- refactor(category-showcase): kategori kutuları cover görsel + gradient scrim'e geçti (@ahmeetseker)
+  - contain arkaplan yerine object-cover <img> + alttan gradient scrim (tutarlı görsel ağırlık)
+  - label görsel üstünde beyaz, görselsiz kutuda koyu; hover CTA scrim üstünde okunur
+  - promo kutularına z-index katmanlama + hover beyaz overlay
+- refactor(vite): impeccable live picker script'i serve-time enjekte edildi (@ahmeetseker)
+  - impeccableLivePlugin: apply:'serve' + transformIndexHtml ile live.js'i çalışma anında ekler
+  - kaynak HTML'lere yazmaz (git temiz kalır), prod build'e asla girmez, dosya yoksa no-op
+
+---
 ## [v1.5.0-alpha.5] - 2026-07-01 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
