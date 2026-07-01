@@ -105,6 +105,34 @@ function cssEditorPlugin(): Plugin {
 }
 
 /**
+ * Dev-only: impeccable "live" mode picker script'ini serve anında enjekte eder.
+ * Kaynak HTML'lere YAZMAZ (git temiz kalır) — helper çalışırken oluşturulan
+ * `.impeccable/live/server.json`'daki port'tan <script src=".../live.js"> üretir.
+ * Dosya yoksa (live kapalı) no-op. `apply:'serve'` → prod build'e asla girmez.
+ */
+function impeccableLivePlugin(): Plugin {
+    const serverInfoPath = resolve(__dirname, '.impeccable/live/server.json');
+    return {
+        name: 'impeccable-live-inject',
+        apply: 'serve',
+        transformIndexHtml: {
+            order: 'post',
+            handler(html) {
+                if (html.includes('/live.js')) return html; // idempotent
+                try {
+                    const { port } = JSON.parse(readFileSync(serverInfoPath, 'utf-8')) as { port?: number };
+                    if (!port) return html;
+                    const tag = `<script src="http://localhost:${port}/live.js"></script>`;
+                    return html.replace(/<\/body>/i, `    ${tag}\n</body>`);
+                } catch {
+                    return html; // server.json yok → live kapalı
+                }
+            },
+        },
+    };
+}
+
+/**
  * Dev-only plugin: Türkçe statik path'leri (örn. /ureticiler) dist içindeki
  * HTML dosyasına (pages/manufacturers.html) rewrite eder.
  *
@@ -268,6 +296,7 @@ export default defineConfig({
         prettyUrlRewritePlugin(),
         notFoundFallbackPlugin(),
         seoPlaceholderPlugin(),
+        impeccableLivePlugin(),
         // Bundle analizi — yalnızca build'de treemap üretir (perf-reports/bundle-stats.html,
         // gitignore'lu). tailwindcss() ilk kalmalı; visualizer en sonda zararsız.
         visualizer({
