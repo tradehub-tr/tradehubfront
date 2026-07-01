@@ -194,10 +194,10 @@ function renderFeaturedView(): string {
           ${featureCards
             .map(
               (card) => `
-            <a href="${card.href}" class="feat-card-mm group relative isolate overflow-hidden flex flex-col gap-2 rounded-xl border border-gray-200 bg-white p-3 pb-2.5 shadow-[0_1px_2px_rgba(20,20,18,0.03)] transition-[transform,border-color,box-shadow] duration-200 motion-reduce:transition-none hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 hover:border-amber-400 hover:shadow-[0_8px_24px_rgba(213,156,0,0.14),0_1px_3px_rgba(20,20,18,0.04)]">
+            <a href="${card.href}" class="feat-card-mm group relative isolate overflow-hidden flex flex-col gap-2 rounded-md border border-gray-200 bg-white p-3 pb-2.5 shadow-[0_1px_2px_rgba(20,20,18,0.03)] transition-[transform,border-color,box-shadow] duration-200 motion-reduce:transition-none hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 hover:border-amber-400 hover:shadow-[0_8px_24px_rgba(213,156,0,0.14),0_1px_3px_rgba(20,20,18,0.04)]">
               <span class="feat-card-mm-halo pointer-events-none absolute -end-12 -top-12 h-44 w-44 rounded-full -z-10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" style="background:radial-gradient(circle, rgba(245,184,0,0.22), transparent 70%);"></span>
-              <span class="pointer-events-none absolute inset-px rounded-[11px] border border-transparent transition-colors group-hover:border-amber-400/25"></span>
-              <span class="relative flex h-8 w-8 items-center justify-center rounded-lg bg-amber-100 border border-amber-300/60 text-amber-700 transition-colors group-hover:bg-amber-400 group-hover:text-gray-900 group-hover:border-amber-500">
+              <span class="pointer-events-none absolute inset-px rounded-[7px] border border-transparent transition-colors group-hover:border-amber-400/25"></span>
+              <span class="relative flex h-8 w-8 items-center justify-center rounded-md bg-amber-100 border border-amber-300/60 text-amber-700 transition-colors group-hover:bg-amber-400 group-hover:text-gray-900 group-hover:border-amber-500">
                 ${card.icon}
               </span>
               <div class="relative min-w-0">
@@ -218,7 +218,7 @@ function renderFeaturedView(): string {
         </div>
 
         <!-- Producers banner -->
-        <a href="/ureticiler" class="group relative isolate block overflow-hidden rounded-xl bg-[#1a1a1a] shadow-[0_2px_6px_rgba(20,20,18,0.08)] transition-[transform,box-shadow] duration-200 motion-reduce:transition-none hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 hover:shadow-[0_12px_28px_rgba(20,20,18,0.18)] min-h-[150px] lg:min-h-[180px] xl:min-h-[230px] 2xl:min-h-[280px]" aria-label="${t("mega.discoverProducers")}">
+        <a href="/ureticiler" class="group relative isolate block overflow-hidden rounded-md bg-[#1a1a1a] shadow-[0_2px_6px_rgba(20,20,18,0.08)] transition-[transform,box-shadow] duration-200 motion-reduce:transition-none hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 hover:shadow-[0_12px_28px_rgba(20,20,18,0.18)] min-h-[150px] lg:min-h-[180px] xl:min-h-[230px] 2xl:min-h-[280px]" aria-label="${t("mega.discoverProducers")}">
           <img src="${producerImg}" alt="" loading="lazy" decoding="async" class="absolute inset-0 z-0 block w-full h-full object-cover" />
           <div class="absolute inset-0 z-10" style="background:linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.85) 100%);"></div>
           <span class="absolute top-3 start-3 lg:top-3.5 lg:start-3.5 z-20 inline-block rounded-full bg-amber-400 px-2 py-0.5 text-[10px] lg:text-[10.5px] font-bold uppercase tracking-wider text-gray-900" data-i18n="mega.bannerTagNew">${t("mega.bannerTagNew")}</span>
@@ -270,7 +270,7 @@ function renderProtectionsView(): string {
           ${protectionCards
             .map(
               (card) => `
-            <a href="${card.href}" class="group flex flex-col gap-2 rounded-lg bg-primary-50 hover:bg-primary-100 transition-colors" style="padding:12px 16px 16px">
+            <a href="${card.href}" class="group flex flex-col gap-2 rounded-md bg-primary-50 hover:bg-primary-100 transition-colors" style="padding:12px 16px 16px">
               <span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary-500 text-white">
                 ${card.icon}
               </span>
@@ -577,7 +577,15 @@ export function initMegaMenu(): void {
 
   function showView(viewName: string): void {
     views!.forEach((v) => {
-      v.classList.toggle("hidden", v.getAttribute("data-mega-view") !== viewName);
+      const isTarget = v.getAttribute("data-mega-view") === viewName;
+      v.classList.toggle("hidden", !isTarget);
+      if (isTarget) {
+        // Geçişte içeriğin "yerine oturma" animasyonunu her seferinde yeniden tetikle:
+        // class'ı kaldır, reflow'u zorla, tekrar ekle (aynı görünüme dönünce de oynar).
+        v.classList.remove("mega-view-enter");
+        void v.offsetWidth;
+        v.classList.add("mega-view-enter");
+      }
     });
     activeView = viewName;
     if (viewName === "featured") {

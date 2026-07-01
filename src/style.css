@@ -1463,7 +1463,8 @@
     font-size: 0.8125rem;
     transition:
       background-color 0.16s cubic-bezier(0.23, 1, 0.32, 1),
-      color 0.16s ease;
+      color 0.16s ease,
+      border-inline-start-color 0.16s ease;
   }
 
   /* Chevron — Alibaba-vari hover nudge (yalnızca son doğrudan svg = ok işareti) */
@@ -1498,6 +1499,23 @@
       transition: none;
       transform: none;
     }
+  }
+
+  /* Mega görünüm geçişi — sert .hidden swap'ı yumuşatır; içerik "yerine oturur".
+     JS her showView'da class'ı yeniden ekleyerek tetikler (bkz. MegaMenu.ts).
+     Reduced-motion: üstteki global * reset süreyi 0.01ms yaptığı için anında biter. */
+  @keyframes megaViewEnter {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .mega-view-enter {
+    animation: megaViewEnter 0.16s cubic-bezier(0.23, 1, 0.32, 1);
   }
 
   /* --- Category Popup sidebar item (active state — JS-toggled) --- */
