@@ -183,10 +183,6 @@ appEl.innerHTML = `
               <h2 class="text-base font-bold text-gray-900 mb-4">${t("sellerDash.performance")}</h2>
               <div class="space-y-3">
                 <div class="flex justify-between items-center">
-                  <span class="text-sm text-gray-500">${t("sellerDash.healthScore")}</span>
-                  <span class="text-sm font-bold text-green-600" x-text="profile.health_score + '%'"></span>
-                </div>
-                <div class="flex justify-between items-center">
                   <span class="text-sm text-gray-500">${t("sellerDash.grade")}</span>
                   <span class="text-sm font-bold text-gray-900" x-text="profile.score_grade"></span>
                 </div>
