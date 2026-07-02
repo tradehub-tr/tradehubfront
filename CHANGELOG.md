@@ -1,3 +1,11 @@
+## [v1.5.0-alpha.9] - 2026-07-02 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(brand): remove duplicate "Ana Sayfa" from breadcrumb (@boraydeger32)
+
+---
 ## [v1.5.0-alpha.8] - 2026-07-02 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
