@@ -370,8 +370,7 @@ async function main() {
     <main>
       <div class="container-boxed py-3">
         ${Breadcrumb([
-          { label: t('drawer.home', { defaultValue: 'Ana Sayfa' }), href: '/' },
-          { label: t('drawer.brands', { defaultValue: 'Markalar' }) },
+          { label: t('drawer.brands', { defaultValue: 'Markalar' }), href: '/markalar' },
           { label: brand.name },
         ])}
       </div>
