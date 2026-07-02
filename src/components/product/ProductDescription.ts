@@ -11,7 +11,7 @@ function renderSpecsTable(): string {
   const mockProduct = getCurrentProduct();
   return `
     <div class="mt-6">
-      <h3 class="text-base font-semibold mb-3" style="color: var(--pd-title-color, #111827);">${t("product.technicalSpecs")}</h3>
+      <h2 class="text-base font-semibold mb-3" style="color: var(--pd-title-color, #111827);">${t("product.technicalSpecs")}</h2>
       <table class="w-full text-sm">
         <tbody>
           ${mockProduct.specs
@@ -34,7 +34,7 @@ function renderPackaging(): string {
   const mockProduct = getCurrentProduct();
   return `
     <div class="mt-6">
-      <h3 class="text-base font-semibold mb-3" style="color: var(--pd-title-color, #111827);">${t("product.packagingDelivery")}</h3>
+      <h2 class="text-base font-semibold mb-3" style="color: var(--pd-title-color, #111827);">${t("product.packagingDelivery")}</h2>
       ${sanitizeRichHtml(mockProduct.packaging)}
     </div>
   `;

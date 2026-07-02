@@ -40,7 +40,7 @@ export function ProductAttributes(): string {
 
   return `
     <div id="pd-attributes-card" class="hidden flex-1 min-w-0 overflow-y-auto rounded-lg p-5" style="background: var(--pd-spec-header-bg, #f9fafb); border: 1px solid var(--pd-spec-border, #e5e5e5);">
-      <h3 class="text-lg font-semibold mb-4" style="color: var(--color-text-primary);">${t("product.attributes")}</h3>
+      <h2 class="text-lg font-semibold mb-4" style="color: var(--color-text-primary);">${t("product.attributes")}</h2>
       <div class="grid grid-cols-1 xl:grid-cols-2 rounded-md overflow-hidden" style="border: 1px solid var(--pd-spec-border, #e5e5e5); background: var(--color-surface, #ffffff);">
         ${gridCells}
       </div>

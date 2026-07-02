@@ -80,6 +80,17 @@ export function displayRating(r: ReviewLike): number {
   return r.rating;
 }
 
+/**
+ * Ortalama puanı tek ondalıkla, aktif dile göre biçimlendirir.
+ * Backend/aspect ortalaması 4.1875 gibi ham değer üretebilir → "4,2" (TR) gösterilir.
+ */
+function formatRating(rating: number): string {
+  return rating.toLocaleString(undefined, {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  });
+}
+
 function countryFlag(country: string): string {
   const flags: Record<string, string> = {
     TR: "\u{1F1F9}\u{1F1F7}",
@@ -130,6 +141,59 @@ function satisfactionLabel(score: number): string {
   if (score >= 2.5) return t("product.neutral");
   if (score >= 1.5) return t("product.dissatisfied");
   return t("product.veryDissatisfied");
+}
+
+/* ── Buyer photo strip (Alıcı fotoğrafları vitrini) ───── */
+
+/**
+ * Tüm yorumlardaki görselleri tek bir kaydırılabilir şeritte toplar.
+ * Görsel yoksa boş string döner (bölüm gizlenir). Thumbnail'ler
+ * `.rv-image-thumb` sınıfıyla mevcut lightbox binding'ine otomatik bağlanır;
+ * "Tümünü gör" / "+N" öğeleri `.rv-photos-more` ile show-all modalını açar.
+ */
+function photoStripSection(reviews: ProductReview[]): string {
+  const imgs: Array<{ src: string; rating: number }> = [];
+  for (const r of reviews) {
+    if (Array.isArray(r.images)) {
+      for (const src of r.images) imgs.push({ src, rating: Math.round(displayRating(r)) });
+    }
+  }
+  if (imgs.length === 0) return "";
+
+  const MAX = 6;
+  const shown = imgs.slice(0, MAX);
+  const remaining = imgs.length - shown.length;
+
+  const thumbs = shown
+    .map(
+      (im) => `
+      <button type="button" class="rv-image-thumb relative shrink-0 w-[108px] h-[108px] rounded-md overflow-hidden border border-[var(--pd-spec-border,#e5e5e5)] cursor-zoom-in bg-[var(--color-surface-raised,#f5f5f5)] transition-transform duration-150 hover:-translate-y-0.5 [scroll-snap-align:start] max-[374px]:w-[88px] max-[374px]:h-[88px]" data-image-url="${escapeHtml(im.src)}" aria-label="${t("product.buyerPhoto", { count: String(im.rating) })}">
+        <img src="${escapeHtml(im.src)}" class="w-full h-full object-cover" loading="lazy" alt="" />
+        <span class="absolute start-1.5 bottom-1.5 inline-flex items-center gap-0.5 bg-[rgba(20,23,28,0.78)] text-white rounded-[6px] px-1.5 py-0.5 text-[11px] font-bold">
+          <svg class="w-3 h-3 text-[var(--color-primary-500,#f5b800)]" viewBox="0 0 20 20" fill="currentColor"><path d="${STAR_PATH}"/></svg>${im.rating}
+        </span>
+      </button>`
+    )
+    .join("");
+
+  const moreTile =
+    remaining > 0
+      ? `<button type="button" class="rv-photos-more shrink-0 w-[108px] h-[108px] rounded-md bg-[var(--color-surface-inverse,#0a0a0a)] text-white font-bold text-[16px] grid place-items-center cursor-pointer max-[374px]:w-[88px] max-[374px]:h-[88px]">+${remaining}</button>`
+      : "";
+
+  return `
+    <div class="mb-5">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-[15px] font-bold text-[var(--pd-title-color,#111827)] flex items-center gap-2">
+          <svg class="w-[17px] h-[17px] text-[var(--pd-rating-text-color,#6b7280)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+          ${t("product.buyerPhotos")}
+        </h3>
+        <button type="button" class="rv-photos-more text-[13px] font-semibold text-[var(--pd-rating-text-color,#6b7280)] hover:text-[var(--pd-title-color,#111827)] transition-colors">${t("product.viewAllPhotos", { count: String(imgs.length) })}</button>
+      </div>
+      <div class="flex gap-2.5 overflow-x-auto pb-1.5 [scroll-snap-type:x_mandatory] [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-thumb]:bg-[var(--color-border-medium,#d1d5db)] [&::-webkit-scrollbar-thumb]:rounded-full">
+        ${thumbs}${moreTile}
+      </div>
+    </div>`;
 }
 
 /* ── Review card renderer ────────────────────────────── */
@@ -382,29 +446,33 @@ export function ProductReviews(): string {
       <!-- Store Reviews Panel (hidden) -->
       <div id="rv-store-panel" class="hidden">
         <!-- Rating Summary -->
-        <div class="rv-rating-summary flex gap-8 pb-6 mb-5 border-b border-[var(--pd-spec-border,#e5e5e5)] max-sm:flex-col max-sm:gap-5 max-[374px]:gap-3 max-[374px]:pb-4 max-[374px]:mb-3">
-          <div class="flex flex-col items-center justify-center min-w-[140px] max-[374px]:min-w-0">
-            <span class="rv-rating-number text-[48px] font-extrabold leading-none text-[var(--pd-title-color,#111827)]">${p.rating}</span>
-            <div class="flex items-center gap-0.5 mt-1">${renderStars(p.rating)}</div>
-            <span class="rv-rating-label text-[13px] font-semibold text-[var(--pd-review-star-color,#f59e0b)] mt-1">${satisfactionLabel(p.rating)}</span>
-            <span class="rv-rating-subtitle text-[12px] text-[var(--pd-rating-text-color,#6b7280)] mt-1.5 text-center">${t("product.basedOnReviews", { count: String(p.storeReviewCount) })}</span>
+        <div class="rv-rating-summary grid grid-cols-1 sm:grid-cols-[minmax(0,240px)_1fr] mb-5 rounded-xl overflow-hidden text-white bg-gradient-to-br from-[#1c2027] to-[#14171c]">
+          <div class="flex flex-col items-center justify-center p-6 border-white/10 border-b sm:border-b-0 sm:border-e max-[374px]:p-4">
+            <span class="rv-rating-number text-[48px] font-extrabold leading-none text-white">${formatRating(p.rating)}</span>
+            <div class="flex items-center gap-0.5 mt-2">${renderStars(p.rating)}</div>
+            <span class="rv-rating-label inline-block text-[13px] font-bold text-[#1a1400] bg-[var(--color-primary-500,#f5b800)] px-3 py-1 rounded-full mt-3">${satisfactionLabel(p.rating)}</span>
+            <span class="rv-rating-subtitle text-[12px] text-[#aeb4bf] mt-2.5 text-center">${t("product.basedOnReviews", { count: String(p.storeReviewCount) })}</span>
           </div>
-          <div class="flex-1 flex flex-col gap-2.5 justify-center">
+          <div class="flex flex-col gap-2.5 justify-center p-6 max-[374px]:p-4">
+            <h3 class="text-[11px] font-bold tracking-[0.06em] uppercase text-[#c3c8d1] mb-1">${t("product.whatBuyersRated")}</h3>
             ${p.reviewCategoryRatings
               .map(
                 (cat) => `
               <div class="flex items-center gap-2.5">
-                <span class="rv-category-label text-[13px] text-[var(--pd-rating-text-color,#6b7280)] min-w-[140px] shrink-0 max-sm:!min-w-[100px]">${cat.label}</span>
-                <div class="rv-category-bar-track flex-1 h-[6px] rounded-[3px] bg-[var(--pd-review-bar-bg,#e5e5e5)] overflow-hidden">
-                  <div class="rv-category-bar-fill h-full w-full origin-left rounded-[3px] bg-[var(--pd-review-bar-fill,#f59e0b)] transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none" style="transform: scaleX(${cat.score / 5});"></div>
+                <span class="rv-category-label text-[13px] text-[#c7ccd4] min-w-[140px] shrink-0 max-sm:!min-w-[100px]">${cat.label}</span>
+                <div class="rv-category-bar-track flex-1 h-[6px] rounded-[3px] bg-white/[0.12] overflow-hidden">
+                  <div class="rv-category-bar-fill h-full w-full origin-left rounded-[3px] bg-[var(--color-primary-500,#f5b800)] transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none" style="transform: scaleX(${cat.score / 5});"></div>
                 </div>
-                <span class="rv-category-score text-[13px] font-bold text-[var(--pd-title-color,#111827)] min-w-[28px] text-end">${cat.score}</span>
+                <span class="rv-category-score text-[13px] font-bold text-white min-w-[28px] text-end">${cat.score}</span>
               </div>
             `
               )
               .join("")}
           </div>
         </div>
+
+        <!-- Buyer Photos Strip -->
+        <div id="rv-store-photos">${photoStripSection(p.reviews)}</div>
 
         <!-- Filter Row -->
         <div class="rv-filter-row flex items-center gap-2 flex-wrap mb-4">
@@ -901,6 +969,14 @@ export function initReviews(): void {
   initScopedReviewPanel(productPanel, "rv-product", "rv", false);
   if (storePanel) {
     initScopedReviewPanel(storePanel, "rv-store", "rv", true);
+
+    // Fotoğraf vitrinindeki "Tümünü gör" / "+N" → mevcut show-all modalını aç.
+    // Delegasyon: strip innerHTML canlı veriyle yeniden kurulsa da dinleyici kalır.
+    storePanel.addEventListener("click", (e) => {
+      if ((e.target as HTMLElement).closest(".rv-photos-more")) {
+        storePanel.querySelector<HTMLButtonElement>(".rv-show-all-btn")?.click();
+      }
+    });
   }
 
   // ── Write Review button + eligibility ───────────────
@@ -1034,7 +1110,7 @@ function applyReviewsToPanels(payload: {
       ".rv-rating-summary .flex.items-center.gap-0\\.5"
     );
     if (payload.rating != null && ratingNum) {
-      ratingNum.textContent = String(payload.rating);
+      ratingNum.textContent = formatRating(payload.rating);
     }
     if (payload.rating != null && ratingLabel) {
       ratingLabel.textContent = satisfactionLabel(payload.rating);
@@ -1052,6 +1128,13 @@ function applyReviewsToPanels(payload: {
     const photoPill = storePanel.querySelector<HTMLButtonElement>('[data-rv-filter="photo"]');
     if (photoPill) {
       photoPill.textContent = t("product.withPhotos", { count: String(photoCount) });
+    }
+
+    // Alıcı fotoğrafları vitrini — canlı görsellerle yeniden kur
+    const photoStrip = storePanel.querySelector<HTMLElement>("#rv-store-photos");
+    if (photoStrip) {
+      photoStrip.innerHTML = photoStripSection(payload.reviews);
+      bindHelpfulButtons(photoStrip); // yeni thumbnail'lere lightbox binding
     }
   }
   const tabs = document.querySelectorAll<HTMLButtonElement>(".rv-sub-tab");
