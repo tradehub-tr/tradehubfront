@@ -1,7 +1,7 @@
 import Alpine from "alpinejs";
 import { t, t as tI18n } from "../i18n";
 import { getBaseUrl } from "../components/auth/AuthLayout";
-import { callMethod } from "../utils/api";
+import { callMethod, fetchCsrfToken } from "../utils/api";
 import { getSessionUser, logout } from "../utils/auth";
 import { saveRecentSeller } from "../services/recentHistoryService";
 
@@ -506,7 +506,7 @@ Alpine.data("sellerDashboard", () => ({
         {
           method: "POST",
           credentials: "include",
-          headers: { "X-Frappe-CSRF-Token": this._csrf() },
+          headers: { "X-Frappe-CSRF-Token": (await fetchCsrfToken()) ?? "None" },
         }
       );
       const profileData = (await profileRes.json()) as { message: Record<string, unknown> };
@@ -557,16 +557,11 @@ Alpine.data("sellerDashboard", () => ({
     }
   },
 
-  _csrf(): string {
-    const m = document.cookie.match(/csrftoken=([^;]+)/);
-    return m ? m[1] : "fetch";
-  },
-
   async _post(method: string, body: Record<string, unknown> = {}): Promise<unknown> {
     const res = await fetch(`/api/method/${method}`, {
       method: "POST",
       credentials: "include",
-      headers: { "Content-Type": "application/json", "X-Frappe-CSRF-Token": this._csrf() },
+      headers: { "Content-Type": "application/json", "X-Frappe-CSRF-Token": (await fetchCsrfToken()) ?? "None" },
       body: JSON.stringify(body),
     });
     const data = (await res.json()) as { message: unknown; exc?: string };

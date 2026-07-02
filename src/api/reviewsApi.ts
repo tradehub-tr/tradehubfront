@@ -6,6 +6,8 @@
  * proxy'lenmiştir. Rate-limited.
  */
 
+import { fetchCsrfToken } from "../utils/api";
+
 const FRAPPE_BASE =
   (import.meta as unknown as { env?: { VITE_FRAPPE_URL?: string } }).env?.VITE_FRAPPE_URL ||
   "http://localhost:8000";
@@ -39,7 +41,7 @@ async function call<T>(
     }
     body = form.toString();
     if (opts.withCSRF) {
-      const csrf = (window as unknown as { csrf_token?: string }).csrf_token;
+      const csrf = await fetchCsrfToken();
       if (csrf) headers["X-Frappe-CSRF-Token"] = csrf;
     }
   }
