@@ -1,3 +1,14 @@
+## [v1.5.0-alpha.10] - 2026-07-02 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(seller): CSRF token kanonik fetchCsrfToken ile alınır oldu (@aliiball)
+  - seller.ts _csrf() var olmayan csrftoken cookie'sini okuyordu → hep geçersiz "fetch" → CSRF-zorunlu ortamlarda (prod/rc/beta/alpha) tüm auth'lu satıcı çağrıları 400 CSRFTokenError → dashboard yüklenmiyordu
+  - reviewsApi.ts window.csrf_token (hiç set edilmiyor) yerine fetchCsrfToken
+  - ikisi de api.ts'teki kanonik fetchCsrfToken()'a bağlandı
+
+---
 ## [v1.5.0-alpha.9] - 2026-07-02 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
