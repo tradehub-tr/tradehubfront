@@ -1,3 +1,16 @@
+## [v1.5.0-alpha.8] - 2026-07-02 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(seller-dashboard): güvenilmez Sağlık Skoru kartı kaldırıldı (@aliiball)
+  - Hesabım sekmesindeki health_score kartı kaldırıldı (Admin panelde de hidden=1)
+  - Kalan kartlar (Not/Toplam Sipariş/Puan) get_my_profile'dan gerçek değer alır
+- fix(seller-test): Tedarikçi Profili self-servis profil E2E'si eklendi (@aliiball)
+  - Satıcı cookie-login ile 4 senaryo: profil yükleme, vergi/IBAN read-only, toplanmayan adres alanları yok, performans kartları gerçek değer
+  - Runner'a --seller bayrağı eklendi (SELLER_PASS ile)
+
+---
 ## [v1.5.0-alpha.6] - 2026-07-01 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
