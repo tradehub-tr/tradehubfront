@@ -252,10 +252,10 @@ function seoPlaceholderPlugin(): Plugin {
 }
 
 
-// Frappe backend proxy hedefi. Bu kurulumun docker'ı frontend'i 8088'e expose
-// eder (docker frontend: container 8080 → host 8088, site: tradehublocalhost);
+// Frappe backend proxy hedefi. Bu kurulumun docker'ı frontend'i 8000'e expose
+// eder (docker frontend: container 8080 → host 8000, site: dev.localhost);
 // farklı dev kurulumu için VITE_API_PROXY ile override edilebilir.
-const API_PROXY_TARGET = process.env.VITE_API_PROXY || 'http://localhost:8088';
+const API_PROXY_TARGET = process.env.VITE_API_PROXY || 'http://localhost:8000';
 
 export default defineConfig({
     base: process.env.GITHUB_PAGES === 'true' ? '/tradehubfront/' : '/',
