@@ -1,3 +1,19 @@
+## [v1.5.0-alpha.11] - 2026-07-03 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(urun-detay): satıcı güven şeridi ve yeni sekme tasarımı eklendi (@ahmeetseker)
+  - Galeri altına SellerTrustCard eklendi: satıcı kimliği, rating, marka, güven sinyalleri, mağaza + sohbet aksiyonları (bayrak SVG'ye çevrildi)
+  - ProductTitleBar sade başlığa indirildi; satıcı bilgisi güven şeridine taşındı
+  - Sekmeler segment-pill karta çevrildi; Yorumlar sekmesine adet rozeti, sticky durumda frosted (blur) zemin eklendi
+  - Özellikler sekmesine öne çıkan spec bandı ve simetrik 4 sütunlu gruplu tablo eklendi; boş bölümler gizlendi, boş durum mesajı eklendi
+  - Mağaza yorum özeti koyu gradyan panele taşındı
+  - Bölüm başlıkları h3/h4 → h2/h3 olarak düzeltildi (başlık hiyerarşisi)
+  - Sepet çekmecesinde fiyat vurgusu nötr renge alındı, gölgeler yumuşatıldı
+  - public/mockups/ .gitignore'a eklendi
+
+---
 ## [v1.5.0-alpha.10] - 2026-07-02 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
