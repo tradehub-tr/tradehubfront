@@ -3,7 +3,7 @@
  */
 
 export { Breadcrumb } from "./Breadcrumb";
-export { ProductTitleBar, initProductTitleBar } from "./ProductTitleBar";
+export { ProductTitleBar, SellerTrustCard, initProductTitleBar } from "./ProductTitleBar";
 export { ProductImageGallery, initImageGallery } from "./ProductImageGallery";
 export { ProductInfo, initProductInfo } from "./ProductInfo";
 export { SupplierCard } from "./SupplierCard";

@@ -33,6 +33,7 @@ import { Breadcrumb } from '../components/shared/Breadcrumb'
 // Product detail components
 import {
   ProductTitleBar,
+  SellerTrustCard,
   initProductTitleBar,
   ProductImageGallery,
   ProductInfo,
@@ -233,6 +234,7 @@ async function renderProductPage() {
                 <div id="pd-hero-gallery" class="w-full text-center">
                   ${ProductImageGallery()}
                 </div>
+                ${SellerTrustCard()}
                 ${ProductTabs()}
                 ${RelatedProducts()}
               </div>

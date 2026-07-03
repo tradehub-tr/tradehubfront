@@ -7,6 +7,7 @@ import { AttributesTabContent } from "./AttributesTabContent";
 import { ProductReviews } from "./ProductReviews";
 import { CompanyProfile } from "./CompanyProfile";
 import { ProductDescription } from "./ProductDescription";
+import { getCurrentProduct } from "../../alpine/product";
 import { t } from "../../i18n";
 
 interface TabConfig {
@@ -44,36 +45,38 @@ const tabs: TabConfig[] = [
 ];
 
 export function ProductTabs(): string {
+  const reviewCount = getCurrentProduct().reviewCount ?? 0;
+
   return `
-    <section id="product-tabs-section" x-data="{ activeTab: 'attributes' }" class="py-6 px-0 mt-6" style="background: var(--pd-bg, #ffffff);">
-      <!-- Tab Navigation -->
+    <section id="product-tabs-section" x-data="{ activeTab: 'attributes' }" class="mt-6">
+     <div class="rounded-lg border border-[var(--pd-spec-border,#e5e5e5)] bg-[var(--pd-bg,#ffffff)] px-4 pt-4 pb-6 sm:px-6">
+      <!-- Tab Navigation (boxed card tabs) -->
       <div
         id="product-tabs-nav"
-        class="flex gap-0 overflow-x-auto scrollbar-hide"
-        style="border-bottom: 2px solid var(--pd-spec-border, #e5e5e5);"
+        class="inline-flex max-w-full gap-[3px] overflow-x-auto scrollbar-hide rounded-lg bg-[var(--color-surface-raised,#f1f5f9)] p-1"
         role="tablist"
       >
         ${tabs
-          .map(
-            (tab) => `
+          .map((tab) => {
+            const badge =
+              tab.id === "reviews" && reviewCount > 0
+                ? `<span class="ms-0.5 text-[11px] font-bold px-1.5 py-px rounded-full bg-[#e4e8ee] text-[var(--pd-tab-color,#6b7280)] [font-variant-numeric:tabular-nums]">${reviewCount}</span>`
+                : "";
+            return `
           <button
             type="button"
             id="tab-btn-${tab.id}"
-            class="product-tab-btn whitespace-nowrap px-3 py-2 text-sm font-medium transition-colors relative"
-            :style="activeTab === '${tab.id}' ? 'color: var(--pd-tab-active-color, #cc9900)' : 'color: var(--pd-tab-color, #6b7280)'"
+            class="product-tab-btn whitespace-nowrap inline-flex items-center gap-1.5 px-4 py-2 text-sm rounded-md transition-colors cursor-pointer"
+            :class="activeTab === '${tab.id}' ? 'bg-[var(--pd-bg,#ffffff)] text-[var(--pd-title-color,#111827)] font-bold shadow-[0_1px_2px_rgba(16,24,40,0.08),0_1px_3px_rgba(16,24,40,0.06)]' : 'bg-transparent text-[var(--pd-tab-color,#6b7280)] font-medium hover:text-[var(--pd-title-color,#111827)]'"
             role="tab"
             :aria-selected="(activeTab === '${tab.id}').toString()"
             aria-controls="tab-content-${tab.id}"
             @click="activeTab = '${tab.id}'"
           >
-            <span data-i18n="${tab.i18nKey}">${tab.label}</span>
-            <span
-              class="absolute bottom-2 start-0 end-0 h-0.5 transition-all"
-              :style="activeTab === '${tab.id}' ? 'background: var(--pd-tab-active-border, #cc9900)' : 'background: transparent'"
-            ></span>
+            <span data-i18n="${tab.i18nKey}">${tab.label}</span>${badge}
           </button>
-        `
-          )
+        `;
+          })
           .join("")}
       </div>
 
@@ -94,37 +97,45 @@ export function ProductTabs(): string {
       `
         )
         .join("")}
+     </div>
     </section>
   `;
 }
 
 export function initProductTabs(): void {
-  // Tab switching is now handled by Alpine.js (x-data, @click, x-show)
-  // Only the IntersectionObserver sticky logic remains as vanilla JS
-
-  // Sticky tab bar on scroll
+  // Sekme geçişi Alpine.js ile. Segment-pill'i kaydırınca header altına yapıştır.
+  // Pill KENDİ zeminini korur (bg override YOK — eski sticky'nin hatasıydı);
+  // stuck durumda yalnız hafif gölge eklenir.
   const tabNav = document.getElementById("product-tabs-nav");
   const tabSection = document.getElementById("product-tabs-section");
-  if (tabNav && tabSection) {
-    const header = document.getElementById("sticky-header");
-    const headerHeight = header ? header.offsetHeight : 0;
+  if (!tabNav || !tabSection) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) {
-          tabNav.style.position = "sticky";
-          tabNav.style.top = `${headerHeight}px`;
-          tabNav.style.zIndex = "20";
-          tabNav.style.background = "var(--pd-bg, #ffffff)";
-        } else {
-          tabNav.style.position = "";
-          tabNav.style.top = "";
-          tabNav.style.zIndex = "";
-          tabNav.style.background = "";
-        }
-      },
-      { rootMargin: `-${headerHeight}px 0px 0px 0px`, threshold: 1 }
-    );
-    observer.observe(tabSection);
-  }
+  const header = document.getElementById("sticky-header");
+  const headerHeight = header ? header.offsetHeight : 0;
+  const offset = headerHeight + 8;
+
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (!entry.isIntersecting) {
+        tabNav.style.position = "sticky";
+        tabNav.style.top = `${offset}px`;
+        tabNav.style.zIndex = "20";
+        tabNav.style.boxShadow = "0 6px 16px -6px rgba(16,24,40,0.18)";
+        // Frosted: arkadaki içerik blur olsun (yarı-saydam surface + backdrop-blur)
+        tabNav.style.background = "rgba(241,245,247,0.72)";
+        tabNav.style.backdropFilter = "blur(10px)";
+        tabNav.style.setProperty("-webkit-backdrop-filter", "blur(10px)");
+      } else {
+        tabNav.style.position = "";
+        tabNav.style.top = "";
+        tabNav.style.zIndex = "";
+        tabNav.style.boxShadow = "";
+        tabNav.style.background = "";
+        tabNav.style.backdropFilter = "";
+        tabNav.style.removeProperty("-webkit-backdrop-filter");
+      }
+    },
+    { rootMargin: `-${offset}px 0px 0px 0px`, threshold: 1 }
+  );
+  observer.observe(tabSection);
 }

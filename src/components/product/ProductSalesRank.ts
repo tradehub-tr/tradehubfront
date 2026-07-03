@@ -49,10 +49,10 @@ export function ProductSalesRank(ranks: CategoryRank[]): string {
 
   return `
     <section id="pd-sales-rank" class="mt-8 pt-8" style="border-top: 1px solid var(--pd-spec-border, #e5e5e5);">
-      <h3 class="mb-1 flex items-center gap-2 text-lg font-bold" style="color: var(--pd-title-color, #111827);">
+      <h2 class="mb-1 flex items-center gap-2 text-lg font-bold" style="color: var(--pd-title-color, #111827);">
         <svg class="h-5 w-5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4zM5 4H3v2a3 3 0 0 0 3 3M19 4h2v2a3 3 0 0 1-3 3"/></svg>
         ${t("product.salesRank")}
-      </h3>
+      </h2>
       <p class="mb-4 text-[13px]" style="color: var(--pd-spec-key-color, #6b7280);">${t("product.salesRankSubtitle")}</p>
       <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">${cards}</div>
     </section>`;

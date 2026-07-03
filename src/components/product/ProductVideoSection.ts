@@ -57,7 +57,7 @@ function renderVideoPlayer(videoUrl: string, label: string): string {
   if (!videoUrl) return "";
   return `
     <div class="flex items-center justify-between mb-3">
-      <h3 class="text-base md:text-lg font-bold text-gray-900">${label}</h3>
+      <h2 class="text-base md:text-lg font-bold text-gray-900">${label}</h2>
     </div>
     <div class="relative rounded-lg overflow-hidden shadow-sm bg-black" style="padding-top:56.25%">
       ${toVideoEmbedHtml(videoUrl)}

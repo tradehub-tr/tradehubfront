@@ -66,6 +66,9 @@ docs
 test-results/
 playwright-report/
 
+# Tasarım mockup HTML'leri (lokal deneme dosyaları, repo'ya girmez)
+public/mockups/
+
 # Lighthouse ham raporları (özet .md tutulur, ham .html/.json yoksayılır)
 perf-reports/*.report.html
 perf-reports/*.report.json

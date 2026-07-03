@@ -634,7 +634,7 @@ function renderDrawerBody(): void {
               <span class="text-[13px] font-medium text-text-heading block truncate">${escapeHtml(opt.label)}</span>
               ${stockLabel ? `<span class="block">${stockLabel}</span>` : ""}
             </div>
-            <span class="text-[13px] font-semibold ${hasQty ? "text-cta-primary" : "text-text-tertiary"} whitespace-nowrap">
+            <span class="text-[13px] font-semibold ${hasQty ? "text-text-heading" : "text-text-tertiary"} whitespace-nowrap">
               ${formatCurrency(displayPrice, itemCurrency)}
             </span>
             ${available ? renderQtyStepper(opt.id, qty) : `<span class="inline-flex items-center justify-center w-[112px] h-8 text-xs text-red-400 font-medium">${t("cart.outOfStock")}</span>`}
@@ -679,7 +679,7 @@ function renderDrawerBody(): void {
 
     ${sizeSection}
 
-    <div class="mt-3 sm:mt-4 mb-2 rounded-lg border border-border-default overflow-hidden bg-surface">
+    <div class="mt-3 sm:mt-4 mb-2 rounded-md border border-border-default overflow-hidden bg-surface">
       <div class="flex items-center gap-2 sm:gap-2.5 px-3 sm:px-4 pt-2.5 sm:pt-3 pb-1.5 sm:pb-2">
         <span
           class="shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full inline-flex items-center justify-center"
@@ -707,7 +707,7 @@ function renderDrawerBody(): void {
         data-shipping-change
         class="group th-no-press w-full flex items-center justify-between gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-2.5 transition-colors hover:bg-surface-muted focus:outline-none focus-visible:bg-surface-muted"
       >
-        <span class="text-[12px] sm:text-[13px] font-semibold text-cta-primary">${t("cart.changeShippingLong")}</span>
+        <span class="text-[12px] sm:text-[13px] font-semibold text-text-heading">${t("cart.changeShippingLong")}</span>
         <span
           class="shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded-full inline-flex items-center justify-center transition-transform duration-200 group-hover:translate-x-0.5"
           style="background: var(--color-primary-500, #cc9900); color: #ffffff;"
@@ -751,7 +751,7 @@ function renderDrawerFooter(): void {
           <div class="flex items-center justify-between border-t border-border-default pt-2.5 sm:pt-3 mt-2.5 sm:mt-3">
             <strong class="text-[13px] sm:text-base text-text-heading">${t("cart.subtotal")}</strong>
             <div class="text-end">
-              <strong class="text-[14px] sm:text-base text-cta-primary">${formatCurrency(totals.grandTotal, itemCurrency)}</strong>
+              <strong class="text-[14px] sm:text-base text-text-heading">${formatCurrency(totals.grandTotal, itemCurrency)}</strong>
               <p class="text-[10px] sm:text-xs text-text-tertiary">(${formatCurrency(perPiece, itemCurrency)}${t("cart.perUnit")})</p>
             </div>
           </div>
@@ -762,7 +762,7 @@ function renderDrawerFooter(): void {
       <button type="button" id="shared-cart-footer-toggle" class="th-no-press w-full flex items-center justify-between mb-3 sm:mb-4">
         <strong class="text-[13px] sm:text-base text-text-heading whitespace-nowrap shrink-0">${t("cart.subtotal")}</strong>
         <span class="flex items-center gap-1 sm:gap-1.5 min-w-0">
-          <strong class="text-[15px] sm:text-[17px] text-cta-primary whitespace-nowrap">${formatCurrency(totals.grandTotal, itemCurrency)}</strong>
+          <strong class="text-[15px] sm:text-[17px] text-text-heading whitespace-nowrap">${formatCurrency(totals.grandTotal, itemCurrency)}</strong>
           <span class="text-[10px] sm:text-xs text-text-tertiary whitespace-nowrap">(${formatCurrency(perPiece, itemCurrency)}${t("cart.perUnit")})</span>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-text-tertiary shrink-0"><path d="m6 9 6 6 6-6"/></svg>
         </span>
@@ -1385,7 +1385,7 @@ export function SharedCartDrawer(): string {
   return `
     <div id="shared-cart-overlay" class="fixed inset-0 z-[110] bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300 ease-out motion-reduce:transition-none">
       <div id="shared-cart-preview" class="hidden fixed start-0 top-0 bottom-0 end-[600px] z-[120] items-center justify-center px-8 pointer-events-none">
-        <div class="relative w-full max-w-[760px] h-[78vh] rounded-md overflow-hidden pointer-events-auto shadow-2xl bg-surface">
+        <div class="relative w-full max-w-[760px] h-[78vh] rounded-md overflow-hidden pointer-events-auto shadow-xl bg-surface">
           <button type="button" id="shared-cart-preview-prev" class="absolute start-5 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 hover:bg-white text-secondary-700 border border-border-default shadow-md z-20">‹</button>
           <div id="shared-cart-preview-image" class="w-full h-full"></div>
           <button type="button" id="shared-cart-preview-next" class="absolute end-5 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 hover:bg-white text-secondary-700 border border-border-default shadow-md z-20">›</button>
@@ -1411,7 +1411,7 @@ export function SharedCartDrawer(): string {
 export function SharedShippingModal(): string {
   return `
     <div id="shared-cart-shipping-modal" class="fixed inset-0 z-[210] bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300 ease-out motion-reduce:transition-none flex items-end md:items-center justify-center">
-      <div id="shared-cart-shipping-sheet" class="w-full md:w-[min(92vw,760px)] bg-surface rounded-t-md md:rounded-md border border-border-default shadow-2xl p-4 sm:p-6 translate-y-4 transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none motion-reduce:translate-y-0 max-h-[90vh] md:max-h-[80vh] flex flex-col">
+      <div id="shared-cart-shipping-sheet" class="w-full md:w-[min(92vw,760px)] bg-surface rounded-t-md md:rounded-md border border-border-default shadow-xl p-4 sm:p-6 translate-y-4 transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none motion-reduce:translate-y-0 max-h-[90vh] md:max-h-[80vh] flex flex-col">
         <div class="flex items-center justify-between">
           <h4 class="text-[15px] sm:text-xl font-bold text-text-heading">${t("cart.selectShipping")}</h4>
           <button type="button" id="shared-cart-shipping-close" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full text-secondary-400 hover:text-secondary-900 hover:bg-surface-raised transition-colors inline-flex items-center justify-center shrink-0">

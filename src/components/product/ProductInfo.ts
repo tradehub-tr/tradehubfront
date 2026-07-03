@@ -74,7 +74,7 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
   if (variant.type === "color") {
     return `
       <div class="variant-group" data-variant-type="${variant.type}" data-variant-label="${variant.label}">
-        <h4 class="pd-variant-label text-sm text-[var(--pd-title-color,#111827)] my-4 mb-3"><strong>${variant.displayLabel || variant.label}:</strong> <span class="variant-selected-label">${selectedOpt.displayLabel || selectedOpt.label}</span></h4>
+        <h3 class="pd-variant-label text-sm text-[var(--pd-title-color,#111827)] my-4 mb-3"><strong>${variant.displayLabel || variant.label}:</strong> <span class="variant-selected-label">${selectedOpt.displayLabel || selectedOpt.label}</span></h3>
         <div class="pd-color-thumbs flex flex-wrap gap-2 mt-2">
           ${variant.options
             .map((opt) => {
@@ -171,7 +171,7 @@ export function ProductInfo(): string {
   const p = mockProduct;
 
   return `
-    <div id="product-info" class="bg-[var(--color-surface,#fff)] flex flex-col border border-[var(--color-border-default,#e5e5e5)] rounded-lg overflow-hidden [.pd-sticky_&]:flex-1 [.pd-sticky_&]:min-h-0 [.pd-sticky_&]:max-h-full [.pd-sticky_&]:overflow-hidden [.pd-sticky_&]:shadow-[0_10px_28px_-18px_rgba(17,24,39,0.35)]">
+    <div id="product-info" class="bg-[var(--color-surface,#fff)] flex flex-col border border-[var(--color-border-default,#e5e5e5)] rounded-md overflow-hidden [.pd-sticky_&]:flex-1 [.pd-sticky_&]:min-h-0 [.pd-sticky_&]:max-h-full [.pd-sticky_&]:overflow-hidden">
       <div id="pd-info-scrollable" class="p-5 flex flex-col scrollbar-hide [.pd-sticky_&]:flex-1 [.pd-sticky_&]:overflow-y-auto [.pd-sticky_&]:min-h-0">
         <!-- Wholesale Tab -->
         <div id="pd-card-tabs" class="flex -mx-5 mt-[-20px] p-0 bg-[var(--color-surface-raised,#f5f5f5)] border-b border-[var(--color-border-default,#e5e5e5)]">
@@ -185,7 +185,7 @@ export function ProductInfo(): string {
           mockProduct.sellerKybVerified === false
             ? `
         <!-- Sprint 2.6: KYB Verified DEĞİL → fiyat yerine uyarı banner (büyük, vurgulu) -->
-        <div class="pd-kyb-banner-large flex items-start gap-3 mb-5 px-4 py-3.5 bg-[#fff7ed] border border-[#fed7aa] rounded-lg" role="alert">
+        <div class="pd-kyb-banner-large flex items-start gap-3 mb-5 px-4 py-3.5 bg-[#fff7ed] border border-[#fed7aa] rounded-md" role="alert">
           <svg class="shrink-0 mt-0.5" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c2410c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           <div class="text-sm leading-[1.5] text-[#9a3412] flex-1 min-w-0">
             <div class="font-semibold mb-1">${t("common.kybGateBannerTitle")}</div>
@@ -220,7 +220,7 @@ export function ProductInfo(): string {
             ? `
         <div id="pd-variations-section" class="pb-4" style="border-bottom: 1px solid var(--color-border-light, #f0f0f0);">
           <div class="flex justify-between items-center mb-4">
-            <h3 class="text-base font-bold m-0" style="color: var(--pd-title-color, #111827);">${t("product.variants")}</h3>
+            <h2 class="text-base font-bold m-0" style="color: var(--pd-title-color, #111827);">${t("product.variants")}</h2>
             <a href="#" class="text-sm font-medium no-underline hover:underline" style="color: var(--pd-breadcrumb-link-color, #cc9900);">${t("product.makeSelection")}</a>
           </div>
 
@@ -233,8 +233,8 @@ export function ProductInfo(): string {
 
         <!-- Shipping -->
         <div class="py-5" style="border-bottom: 1px solid var(--color-border-light, #f0f0f0);">
-          <h3 class="text-sm font-bold mb-3 flex items-center gap-1.5 m-0" style="color: var(--pd-title-color, #111827);">${t("product.shippingLabel")}</h3>
-          <div class="flex items-center justify-between gap-3 mt-3 px-3.5 py-3 rounded-md border min-w-0" id="pd-shipping-card" style="background: var(--pd-spec-header-bg, #f9fafb); border-color: var(--color-border-default, #e5e5e5);">
+          <h2 class="text-sm font-bold mb-3 flex items-center gap-1.5 m-0" style="color: var(--pd-title-color, #111827);">${t("product.shippingLabel")}</h2>
+          <div class="flex items-center justify-between gap-3 mt-3 px-3.5 py-3 rounded-md min-w-0" id="pd-shipping-card" style="background: var(--pd-spec-header-bg, #f9fafb);">
             <div class="flex flex-col gap-0.5 min-w-0">
               <span class="text-sm font-semibold truncate" id="pd-ship-card-method" style="color: var(--pd-title-color, #111827);">${escapeHtml(p.shipping[0]?.method || t("product.shippingLabel"))}</span>
               <span class="pd-shipping-card-detail text-xs truncate" style="color: var(--pd-rating-text-color, #6b7280);">${p.shipping[0] ? t("product.shippingCost", { cost: p.shipping[0].cost, days: p.shipping[0].estimatedDays }) : ""}</span>
@@ -253,7 +253,7 @@ export function ProductInfo(): string {
              duplicate banner kaldırıldı (2026-06-15). -->
 
         <!-- CTA Buttons (Sepete Ekle + Sohbet et — 50/50 grid) -->
-        <div id="pd-cta-buttons" class="grid grid-cols-2 gap-3 px-5 py-4 border-t border-b border-[var(--color-border-default,#e5e5e5)] bg-[var(--color-surface,#fff)] [.pd-sticky_&]:sticky [.pd-sticky_&]:-bottom-[22px] [.pd-sticky_&]:z-[2] [.pd-sticky_&]:bg-[var(--color-surface,#fff)] [.pd-sticky_&]:border-b-0 [.pd-sticky_&]:mx-[-20px] [.pd-sticky_&]:-mb-[20px] [.pd-sticky_&]:px-5 [.pd-sticky_&]:py-4 [.pd-sticky_&]:pb-5 [.pd-sticky_&]:shadow-[0_-8px_18px_-14px_rgba(17,24,39,0.35)]">
+        <div id="pd-cta-buttons" class="grid grid-cols-2 gap-3 px-5 py-4 border-t border-b border-[var(--color-border-default,#e5e5e5)] bg-[var(--color-surface,#fff)] [.pd-sticky_&]:sticky [.pd-sticky_&]:-bottom-[22px] [.pd-sticky_&]:z-[2] [.pd-sticky_&]:bg-[var(--color-surface,#fff)] [.pd-sticky_&]:border-b-0 [.pd-sticky_&]:mx-[-20px] [.pd-sticky_&]:-mb-[20px] [.pd-sticky_&]:px-5 [.pd-sticky_&]:py-4 [.pd-sticky_&]:pb-5 [.pd-sticky_&]:shadow-[0_-4px_14px_-8px_rgba(17,24,39,0.12)]">
           ${
             mockProduct.sellerKybVerified === false
               ? `
