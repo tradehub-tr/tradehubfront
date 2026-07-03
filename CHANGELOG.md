@@ -1,3 +1,119 @@
+## [v2.0.0] - 2026-07-03 PROD
+
+Bu surum istoc.com'da yayindadir.
+
+### Eklendi
+- feat: soru düzenleme, marka video oynatma, dev pretty-URL'leri (@boraydeger32)
+  - qa: kendi Pending sorusunda inline ✎ Düzenle (updateProductQuestion) + i18n
+  - media: marka tanıtım videosu yüklenen dosyadan oynar (renderVideo → dosya URL'inde <video>, eski YouTube/Vimeo'da embed fallback)
+  - dev: vite prettyUrlRewritePlugin'e /magaza, /magaza/<code>/dukkan, /kategori, /marka eklendi (dev'de bu linkler artık ana sayfaya düşmüyor)
+- feat(app): doğrulama rozeti, kategori drill-down ve sonsuz kaydırma eklendi (@ahmeetseker)
+  - Satıcı saha doğrulama rozeti eklendi (SupplierCard/StoreHeader/ManufacturerList)
+  - VerificationBadge component'i, verification.* i18n ve SupplierInfo.verifications alanı eklendi
+  - Paylaşılan BottomSheet, CategoryDrillSheet ve CategoryNavBar çıkarıldı
+  - MobileCategoryBar ve HorizontalCategoryBar mobil kategori drill-down'a geçti
+  - Kategori cache versiyonlama eklendi; ManufacturersHero ve TopDealsCategoryTabs merkezi loadCategories'e geçti
+  - Üretici listesine sonsuz kaydırma (IntersectionObserver) ve verified filtresi eklendi
+  - Manufacturers sayfasına mobil alt navigasyon (BottomNav) eklendi
+- feat(manufacturers): üretici kartı yeniden tasarlandı ve mobil filtre sheet eklendi (@ahmeetseker)
+  - masaüstü kartı zengin 2-bölüm layout'a geçti (istatistik paneli, ürün kartları, galeri)
+  - mobil kart sade tek-sıra düzende tutuldu (@container/sc breakpoint'leri)
+  - galeri panelinde foto sayacı ve hover navigasyon okları eklendi
+  - mobil kategori barındaki "doğrulanmış üretici" pill'i filtre ikonuyla değiştirildi (mfr-filter-open event'i)
+  - discovery görünümünden gri zemin kaldırıldı, ManufacturerFilterSheet eklendi
+  - ürünler sayfası başlığından "viewingLead" ön metni kaldırıldı
+  - doğrulama rozeti x-if koşulu sadeleştirildi
+- feat(manufacturers): update mobile filter button and layout adjustments (@TurksabYonetim)
+- feat(top-deals): mobil hero araması ve paylaşılan kategori drill-down eklendi (@ahmeetseker)
+  - mobil hero'ya deal-scoped arama alanı (is_deal korunur, sonuç Top Deals'ten çıkmaz)
+  - mobil kategori seçimi paylaşılan drill-down bottom-sheet'e taşındı (anasayfa/üreticiler deseni)
+  - eski backdrop'lu radio sheet ve showCategorySheet state'i kaldırıldı
+  - topDealsPage.searchPlaceholder + mobileCategory.allInCategory i18n
+- feat(manufacturers): üreticiler hero'suna tüm kategoriler flyout'u eklendi (@ahmeetseker)
+  - "Tüm kategoriler" satırı hover'da tam ağacı (6 ile sınırsız) gruplu flyout'ta gösterir
+  - kategori linkleri products.html yerine manufacturers.html?cat= hedefine yönlendirildi
+  - kart satırındaki pe-7 boşluğu 560px altında kaldırıldı (dar ekran taşması)
+- feat(urun-detay): satıcı güven şeridi ve yeni sekme tasarımı eklendi (@ahmeetseker)
+  - Galeri altına SellerTrustCard eklendi: satıcı kimliği, rating, marka, güven sinyalleri, mağaza + sohbet aksiyonları (bayrak SVG'ye çevrildi)
+  - ProductTitleBar sade başlığa indirildi; satıcı bilgisi güven şeridine taşındı
+  - Sekmeler segment-pill karta çevrildi; Yorumlar sekmesine adet rozeti, sticky durumda frosted (blur) zemin eklendi
+  - Özellikler sekmesine öne çıkan spec bandı ve simetrik 4 sütunlu gruplu tablo eklendi; boş bölümler gizlendi, boş durum mesajı eklendi
+  - Mağaza yorum özeti koyu gradyan panele taşındı
+  - Bölüm başlıkları h3/h4 → h2/h3 olarak düzeltildi (başlık hiyerarşisi)
+  - Sepet çekmecesinde fiyat vurgusu nötr renge alındı, gölgeler yumuşatıldı
+  - public/mockups/ .gitignore'a eklendi
+
+### Duzeltildi
+- fix(currency): mobil para birimi seçici ve boş sepet sembolü düzeltildi (@aliiball)
+  - mobil pill'lere data-currency-pill + #currency-pills'e event delegation eklendi (rebuild innerHTML'i ezdiği için tek-sefer delegation; doğrudan listener kaybolurdu)
+  - aktif pill artık seçili para birimini yansıtıyor (eskiden hep ilk pill aktifti)
+  - boş sepet header ara toplamı hardcoded "$" yerine seçili sembolle başlıyor
+- fix(product): varyant seçilince fiyat doğru biçimde güncelleniyor (@aliiball)
+  - ortak applyVariantPrice helper'ı (variantPrice.ts) eklendi
+  - masaüstü: varyant seçilince fiyat hiç güncellenmiyordu → güncelleniyor
+  - mobil: getCurrencySymbol()+toFixed yerine formatCurrency (₺1250.00 → ₺1.250,00)
+- fix(favorites): favori fiyatı donmuş string yerine güncel kura çevriliyor (@aliiball)
+  - FavoriteItem'a native price + currency alanları eklendi
+  - FavoritesSection BrowsingHistory desenine geçti (convertPrice + formatCurrency)
+  - buyer-dashboard render öncesi initCurrency() await ediyor (bayat 38.5 kuru sorunu)
+  - eski kayıtlar legacy priceRange string fallback ile geriye uyumlu
+- fix(checkout): sipariş onay modalı tutarları formatCurrency ile biçimlendiriliyor (@aliiball)
+  - "TRY 1234.56" ham biçim yerine "₺1.234,56" (OrderSummary ile tutarlı)
+  - tutar değeri zaten doğruydu, yalnız biçim hizalandı
+- fix(currency): başlangıç fiyatında binlik ayraç düzeltildi (@aliiball)
+  - formatStartingPrice toLocaleString ile gruplama yapıyor ("₺7700" → "₺7.700")
+- fix(cart): ara toplam satır toplamlarıyla tutarlı yuvarlanıyor (@aliiball)
+  - getSummary çarp-sonra-convert kullanıyor (satır gösterimiyle aynı yuvarlama)
+  - satır toplamları ile ara toplam kuruşu kuruşuna tutuyor
+- fix(cart): misafir sepet native fiyat + para birimiyle saklanıyor (@aliiball)
+  - drawer modellerine native alanlar eklendi (tier/color/size basePrice, item baseCurrency + baseSamplePrice)
+  - syncToCartStore native fiyat + native currency yazıyor (oturumlu yolla aynı); native yoksa çevrilmiş + seçili currency'ye güvenli düşüş
+  - gösterim her zaman güncel kura çevriliyor → donmuş-kur / round-trip drift giderildi
+  - sepetten favori ekleme yolu da native price/currency taşıyor (K3 tamamlandı)
+- fix(listing): fiyat filtresi seçili para birimini backend'e gönderiyor (@aliiball)
+  - searchListings min/max ile birlikte filter_currency yolluyor; backend baz birime çevirip selling_price_base ile karşılaştırır
+- fix(product): varyant başlığı varyant yokken gizlendi (@ahmeetseker)
+  - Variations bölümü yalnızca backend varyant döndürdüğünde render ediliyor
+- fix(products): filtre facet sayaçları dinamik güncellenmiyordu (ms-auto selector uyumsuzluğu) (@aliiball)
+- fix(seller-dashboard): toplanmayan adres alanları (adres2/ilçe/posta) formdan ve state'ten kaldırıldı (@aliiball)
+- fix(panel-test): Mağaza Profilleri E2E doğrulama testi eklendi (@aliiball)
+- fix(seller-dashboard): vergi/IBAN alanları read-only yapıldı (satıcı düzenleyemez; admin/KYB kanalı) (@aliiball)
+  - tax_id / tax_office / iban: readonly + kilitli görünüm + lockedHint notu
+  - 4 dilde (tr/en/ru/ar) lockedHint anahtarı eklendi
+- fix(ui): hover kaynaklı tooltip titremesi ve kart sıçraması düzeltildi (@ahmeetseker)
+  - VerificationBadge: hover wrapper'a taşındı, tooltip'e pt-gap (hover boşluğunda kapanmaz)
+  - RecommendationSlider: hover'daki -translate-y kaldırıldı (layout shift önlendi)
+- fix(seller-dashboard): güvenilmez Sağlık Skoru kartı kaldırıldı (@aliiball)
+  - Hesabım sekmesindeki health_score kartı kaldırıldı (Admin panelde de hidden=1)
+  - Kalan kartlar (Not/Toplam Sipariş/Puan) get_my_profile'dan gerçek değer alır
+- fix(seller-test): Tedarikçi Profili self-servis profil E2E'si eklendi (@aliiball)
+  - Satıcı cookie-login ile 4 senaryo: profil yükleme, vergi/IBAN read-only, toplanmayan adres alanları yok, performans kartları gerçek değer
+  - Runner'a --seller bayrağı eklendi (SELLER_PASS ile)
+- fix(brand): remove duplicate "Ana Sayfa" from breadcrumb (@boraydeger32)
+- fix(seller): CSRF token kanonik fetchCsrfToken ile alınır oldu (@aliiball)
+  - seller.ts _csrf() var olmayan csrftoken cookie'sini okuyordu → hep geçersiz "fetch" → CSRF-zorunlu ortamlarda (prod/rc/beta/alpha) tüm auth'lu satıcı çağrıları 400 CSRFTokenError → dashboard yüklenmiyordu
+  - reviewsApi.ts window.csrf_token (hiç set edilmiyor) yerine fetchCsrfToken
+  - ikisi de api.ts'teki kanonik fetchCsrfToken()'a bağlandı
+
+### Degistirildi
+- refactor(ui): neumorphic buton press efekti kaldırıldı (@ahmeetseker)
+  - Global press selector'ından inset box-shadow ve scale(0.98) kaldırıldı
+  - Tüm CTA'larda transition-all yerine açık transition listesi kullanıldı
+  - --ease-drawer token'ı eklendi; --btn-shadow glossy highlight'tan arındırıldı
+  - no-scrollbar yerine scrollbar-hide, link/toggle'lara th-no-press eklendi
+- refactor(mega-menu): görünüm geçiş animasyonu ve radius sadeleştirmesi (@ahmeetseker)
+  - görünümler arası .hidden swap'ı mega-view-enter keyframe ile yumuşatıldı (her showView tetikler)
+  - feature/producer kartları ve ikon kutuları rounded-xl/lg → rounded-md
+  - catpopup sidebar item'ına border-inline-start-color geçişi eklendi
+- refactor(category-showcase): kategori kutuları cover görsel + gradient scrim'e geçti (@ahmeetseker)
+  - contain arkaplan yerine object-cover <img> + alttan gradient scrim (tutarlı görsel ağırlık)
+  - label görsel üstünde beyaz, görselsiz kutuda koyu; hover CTA scrim üstünde okunur
+  - promo kutularına z-index katmanlama + hover beyaz overlay
+- refactor(vite): impeccable live picker script'i serve-time enjekte edildi (@ahmeetseker)
+  - impeccableLivePlugin: apply:'serve' + transformIndexHtml ile live.js'i çalışma anında ekler
+  - kaynak HTML'lere yazmaz (git temiz kalır), prod build'e asla girmez, dosya yoksa no-op
+
+---
 ## [v1.5.0-rc.1] - 2026-07-03 RC
 
 Bu surum rc.istoc.com'da onay asamasindadir.
