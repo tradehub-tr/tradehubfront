@@ -442,6 +442,22 @@ export async function resetPassword(key: string, new_password: string): Promise<
   return res.message;
 }
 
+/** Accept a buyer-team invite (from email link) — sets the sub-user's name + password */
+export async function acceptBuyerInvite(
+  token: string,
+  full_name: string,
+  password: string
+): Promise<SimpleResponse> {
+  const res = await api<{ message: SimpleResponse }>(
+    "/method/tradehub_core.api.v1.buyer_team.accept_buyer_invite",
+    {
+      method: "POST",
+      body: JSON.stringify({ token, full_name, password }),
+    }
+  );
+  return res.message;
+}
+
 /** Resend email verification link for the current user */
 export async function resendVerificationEmail(): Promise<SimpleResponse> {
   const res = await api<{ message: SimpleResponse }>(

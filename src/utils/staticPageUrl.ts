@@ -18,6 +18,7 @@ const STATIC_PAGE_PATHS: Record<string, string> = {
   register: "/kayit",
   "forgot-password": "/sifremi-unuttum",
   "reset-password": "/sifre-sifirla",
+  "accept-invite": "/davet-kabul",
   "help-center": "/yardim-merkezi",
   faq: "/sss",
   "after-sales": "/satis-sonrasi",
@@ -81,6 +82,7 @@ const STATIC_PAGE_HTML_MAP: Record<string, string> = {
   "/kayit": "/pages/auth/register.html",
   "/sifremi-unuttum": "/pages/auth/forgot-password.html",
   "/sifre-sifirla": "/pages/auth/reset-password.html",
+  "/davet-kabul": "/pages/auth/accept-invite.html",
 
   // Yardım
   "/yardim-merkezi": "/pages/help/help-center.html",

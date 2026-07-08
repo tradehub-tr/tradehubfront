@@ -15,6 +15,7 @@ map $uri $resolved_page {
     /kayit                               /pages/auth/register.html;
     /sifremi-unuttum                     /pages/auth/forgot-password.html;
     /sifre-sifirla                       /pages/auth/reset-password.html;
+    /davet-kabul                         /pages/auth/accept-invite.html;
 
     /yardim-merkezi                      /pages/help/help-center.html;
     /sss                                 /pages/help/faq.html;
