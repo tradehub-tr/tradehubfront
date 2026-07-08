@@ -1,3 +1,18 @@
+## [v2.0.0-alpha.1] - 2026-07-08 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(auth): /davet-kabul davet kabul sayfası + E2E eklendi (@aliiball)
+  - AcceptInvitePage + Alpine acceptInvitePage + acceptBuyerInvite wrapper
+  - staticPageUrl + nginx route + pages/auth/accept-invite entry
+  - accept-invite.spec.ts (token yok→hata, geçerli token→başarı)
+
+### Duzeltildi
+- fix(dashboard): doğrulanmış kullanıcıda "gönderildi" yalanı düzeltildi (@aliiball)
+  - sendVerification already_verified yanıtında banner'ı kaldırır; aksi halde link maili gönderildi durumunu gösterir
+
+---
 ## [v2.0.0] - 2026-07-03 PROD
 
 Bu surum istoc.com'da yayindadir.
