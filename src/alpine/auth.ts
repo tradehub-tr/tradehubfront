@@ -31,6 +31,7 @@ import {
   getRedirectUrl,
   forgotPassword,
   resetPassword,
+  acceptBuyerInvite,
   registerSupplier,
 } from "../utils/auth";
 import {
@@ -458,6 +459,86 @@ Alpine.data("resetPasswordPage", () => ({
       } else {
         this.error = t("auth.reset.genericError");
         this.step = "error";
+      }
+    } finally {
+      this.loading = false;
+    }
+  },
+}));
+
+/* ── Accept Buyer Invite Page ───────────────────────── */
+
+Alpine.data("acceptInvitePage", () => ({
+  step: "form" as "form" | "success" | "error",
+  token: "",
+  showPassword: false,
+  passwordValid: false,
+  loading: false,
+  error: "",
+  reqMinLength: null as boolean | null,
+  reqUppercase: null as boolean | null,
+  reqLowercase: null as boolean | null,
+  reqNumber: null as boolean | null,
+
+  init() {
+    // Read token from URL
+    const params = new URLSearchParams(window.location.search);
+    this.token = params.get("token") || "";
+
+    if (!this.token) {
+      this.error = "Davet linki geçersiz veya eksik.";
+      this.step = "error";
+    }
+  },
+
+  onPasswordInput() {
+    const pw = (this.$refs as Record<string, HTMLInputElement>).newPassword?.value || "";
+    const touched = pw.length > 0;
+    const v = validatePassword(pw);
+
+    this.reqMinLength = touched ? v.minLength : null;
+    this.reqUppercase = touched ? v.hasUppercase : null;
+    this.reqLowercase = touched ? v.hasLowercase : null;
+    this.reqNumber = touched ? v.hasNumber : null;
+
+    this.passwordValid = isPasswordValid(pw);
+  },
+
+  reqStyle(valid: boolean | null): string {
+    if (valid === null) return "";
+    return valid ? "color: #16a34a" : "color: #dc2626";
+  },
+
+  async submitAccept() {
+    const fullName =
+      (this.$refs as Record<string, HTMLInputElement>).fullName?.value?.trim() || "";
+    const pw = (this.$refs as Record<string, HTMLInputElement>).newPassword?.value || "";
+
+    if (!fullName) {
+      this.error = "Lütfen adınızı ve soyadınızı girin.";
+      return;
+    }
+    if (!this.passwordValid || this.loading) return;
+
+    this.loading = true;
+    this.error = "";
+
+    try {
+      await acceptBuyerInvite(this.token, fullName, pw);
+      this.step = "success";
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "";
+      const lower = msg.toLowerCase();
+      if (
+        lower.includes("invalid") ||
+        lower.includes("expired") ||
+        lower.includes("geçersiz") ||
+        lower.includes("süresi")
+      ) {
+        this.error = "Bu davet linki geçersiz veya süresi dolmuş.";
+        this.step = "error";
+      } else {
+        this.error = msg || "Bir hata oluştu. Lütfen tekrar deneyin.";
       }
     } finally {
       this.loading = false;

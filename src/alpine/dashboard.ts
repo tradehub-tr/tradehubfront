@@ -122,8 +122,18 @@ Alpine.data("dashboardBanners", () => ({
     this.sending = true;
     this.errorMessage = "";
     try {
-      await resendVerificationEmail();
-      this.verificationSent = true;
+      const res = await resendVerificationEmail();
+      // Backend zaten doğrulanmışsa mail göndermez (already_verified) — bu
+      // durumda "gönderildi" gösterme; banner'ı kaldır (dürüst durum).
+      if ((res as { already_verified?: boolean })?.already_verified) {
+        this.emailVerified = true;
+        this.banners = this.banners.filter((b) => b.type !== "email-verify");
+        this.swiperInstance?.update();
+      } else {
+        // Link'li doğrulama maili gönderildi — kullanıcı gelen kutusundaki
+        // linke tıklayarak doğrular (dashboard'da kod girmesi gerekmez).
+        this.verificationSent = true;
+      }
     } catch {
       this.errorMessage = t("dashboard.verificationEmailFailed");
       setTimeout(() => {
