@@ -1,3 +1,11 @@
+## [v2.0.0-alpha.3] - 2026-07-10 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(storefront): dev backend proxy hedefi 8001'e güncellendi (@boraydeger32)
+
+---
 ## [v2.0.0-alpha.2] - 2026-07-09 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
