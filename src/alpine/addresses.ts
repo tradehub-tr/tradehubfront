@@ -30,6 +30,18 @@ type AddressForm = Omit<BuyerAddress, "id">;
 /** Kullanıcı başına maksimum adres sayısı. Backend MAX_ADDRESSES sabiti ile senkron. */
 const MAX_ADDRESSES = 10;
 
+// ?mock_ad=1 → örnek adres seti (dev/görsel test; uzun ünvan/şirket/adres taşma senaryoları dahil)
+const MOCK_ADDRESSES: BuyerAddress[] = [
+  { id: "ADR-1", title: "Merkez Depo", contact_name: "Ahmet Şeker", company: "Türksab Elektronik Toptan Dağıtım Sanayi ve Ticaret Ltd. Şti.", phone_prefix: "+90", phone: "532 123 45 67", country: "Türkiye", state: "İstanbul", city: "Bağcılar", street: "İSTOÇ Ticaret Merkezi 23. Ada No: 145-147, Mahmutbey Mahallesi, 2. Kısım Sokak", apartment: "Kat 2, Depo B", postal_code: "34218", note: "Mesai saatleri içinde teslimat, kapıda güvenliğe haber verin", is_default: true, address_type: "Business", tax_no: "1234567890", tax_office: "Büyük Mükellefler Vergi Dairesi" },
+  { id: "ADR-2", title: "Şube — Bayrampaşa", contact_name: "Zeynep Demir", company: "Türksab Elektronik", phone_prefix: "+90", phone: "212 555 00 11", country: "Türkiye", state: "İstanbul", city: "Bayrampaşa", street: "Terazidere Mah. Vatan Cad. No: 12", apartment: "", postal_code: "34035", note: "", is_default: false, address_type: "Business", tax_no: "1234567890", tax_office: "Bayrampaşa" },
+  { id: "ADR-3", title: "Ev", contact_name: "Ahmet Şeker", company: "", phone_prefix: "+90", phone: "532 123 45 67", country: "Türkiye", state: "Ankara", city: "Çankaya", street: "Birlik Mah. 448. Cad. No: 8", apartment: "Daire 14", postal_code: "06610", note: "", is_default: false, address_type: "Individual" },
+  { id: "ADR-4", title: "İzmir Bölge Deposu ve Sevkiyat Noktası", contact_name: "Mehmet Ali Karaosmanoğlu", company: "Ege Dağıtım A.Ş.", phone_prefix: "+90", phone: "232 444 22 33", country: "Türkiye", state: "İzmir", city: "Bornova", street: "Ege Serbest Bölgesi, Akçay Cad. No: 144/1, Gaziemir yolu üzeri lojistik depolar bölgesi", apartment: "Antrepo 7", postal_code: "35410", note: "Sadece hafta içi 09:00-17:00 arası kabul", is_default: false, address_type: "Business", tax_no: "9876543210", tax_office: "Bornova" },
+];
+
+function isAddressesMock(): boolean {
+  return new URLSearchParams(window.location.search).get("mock_ad") === "1";
+}
+
 /* ── Guest localStorage fallback ────────────────────── */
 
 const GUEST_STORAGE_KEY = "tradehub_address_book";
@@ -191,6 +203,11 @@ Alpine.data("addressesManager", () => ({
 
   async loadAddresses() {
     this.loading = true;
+    if (isAddressesMock()) {
+      this.addresses = MOCK_ADDRESSES;
+      this.loading = false;
+      return;
+    }
     try {
       if (isLoggedIn()) {
         const apiAddresses = await fetchAddresses();

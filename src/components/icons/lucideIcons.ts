@@ -196,7 +196,7 @@ const ICONS: Record<string, string> = {
  * Lucide default `class="lucide lucide-..."` ve sabit width/height atılır,
  * yerine `w-5 h-5` (Tailwind, 20×20) gelir; `currentColor` korunur.
  */
-function styleSvg(raw: string, className: string): string {
+export function styleSvg(raw: string, className: string): string {
   return raw
     .replace(/<!--[\s\S]*?-->/g, "")
     .replace(/\sclass="[^"]*"/, "")

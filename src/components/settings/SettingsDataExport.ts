@@ -23,7 +23,7 @@ export function SettingsDataExport(): string {
 
         <p class="text-[13px] text-red-500 mb-3" x-show="error" x-text="error" x-cloak></p>
 
-        <button class="th-btn-dark disabled:opacity-50 max-sm:w-full" type="button" @click="requestExport()" :disabled="loading || !password">
+        <button class="th-btn-dark max-sm:py-2 max-sm:text-[13px] disabled:opacity-50 max-sm:w-full" type="button" @click="requestExport()" :disabled="loading || !password">
           <span x-show="!loading">${t("settings.downloadMyDataBtn")}</span>
           <span x-show="loading" x-cloak class="inline-flex items-center gap-2">
             <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>

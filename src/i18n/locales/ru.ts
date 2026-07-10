@@ -2130,6 +2130,22 @@ const ru = {
       buyNow: "Купить сейчас",
       contactSupplier: "Связаться с поставщиком",
       startOrder: "Начать заказ",
+      // Мобильная страница товара — bottom-sheet "Опции" (паттерн Alibaba app, Фаза 1)
+      optionsSheetTitle: "Опции",
+      // Полноэкранный просмотрщик медиа (моб.) — чип режима фото/варианты/видео (Фаза 2)
+      videoTab: "Видео",
+      sendQuestion: "Задать вопрос",
+      storeLabel: "Магазин",
+      optionsMinOrderHint: "Мин. заказ {{moq}} {{unit}}",
+      optionsBreakdownTotal: "Итого {{qty}} {{unit}} · за ед. {{price}}",
+      noSelectionYet: "Пока нет выбора",
+      // Мобильная страница товара — полноэкранная форма "Отправить запрос" (Фаза 4)
+      questionFormTitle: "Отправить запрос",
+      questionDetailsLabel: "Детали запроса",
+      questionDefaultMessage: "Здравствуйте, хотел бы узнать больше об этом товаре.",
+      questionQuantitySummary: "Количество и характеристики товара",
+      attachFilePrompt: "Прикрепить файл",
+      leaveFormConfirm: "Вы уверены, что хотите покинуть эту страницу? Все введённые данные будут потеряны.",
       quantity: "Количество",
       color: "Цвет",
       size: "Размер",
@@ -2161,7 +2177,8 @@ const ru = {
       viewCompany: "Посмотреть компанию",
       technicalSpecs: "Технические характеристики",
       packagingDelivery: "Упаковка и доставка",
-      keyAttributes: "Ключевые характеристики",
+      keyAttributes: "Технические характеристики",
+      keyFeaturesTitle: "Основные характеристики",
       leadTime: "Срок изготовления",
       leadTimeQty: "Количество (шт.)",
       leadTimeDays: "Срок изготовления (дней)",
@@ -2214,6 +2231,7 @@ const ru = {
       removedFromFavorites: "Удалено из избранного",
       imageSearchLabel: "Поиск по изображению",
       productGallery: "Галерея изображений товара",
+      imageNumberLabel: "Изображение {{count}}",
       closeGallery: "Закрыть галерею",
       previousImage: "Предыдущее изображение",
       nextImage: "Следующее изображение",
@@ -2406,8 +2424,6 @@ const ru = {
       allOrders: "Все заказы",
       refundsAfterSales: "Возвраты и послепродажное обслуживание",
       myReviews: "Мои отзывы",
-      couponsCredits: "Купоны и кредиты",
-      coupons: "Купоны",
       taxInfo: "Налоговая информация",
       payment: "Оплата",
       paymentManagement: "Управление оплатой",
@@ -2436,7 +2452,6 @@ const ru = {
       exploreSellerSite: "Перейти на сайт продавца",
       messagesLabel: "Сообщения",
       quotationsLabel: "Предложения цены",
-      couponsLabel: "Купоны",
       validateTax: "Подтвердите аккаунт для статуса освобождения от налогов",
       verifyBusiness: "Подтвердить информацию о бизнесе",
       personalizeExp: "Персонализируйте ваш опыт работы с iStoc",
@@ -2498,6 +2513,7 @@ const ru = {
       notifVerifyEmailSentLabel: "Отправлено:",
       notifVerifyEmailChangeLink: "Изменить",
       notifVerifyEmailCta: "Отправить письмо для подтверждения",
+      notifVerifyEmailCtaShort: "Отправить",
       notifVerifyEmailResend: "Отправить повторно",
       verificationEmailSent:
         "Письмо для подтверждения отправлено. Пожалуйста, проверьте ваш почтовый ящик.",
@@ -2587,6 +2603,7 @@ const ru = {
       unpaid: "Не оплачен",
       closed: "Закрыт",
       submitRemittanceProof: "Отправить подтверждение перевода",
+      submitRemittanceProofShort: "Перевод",
       remitPreview: "Предпросмотр",
       remitUploadHint:
         "Загрузите подтверждение перевода или документ MT103 либо перетащите файл в это поле.",
@@ -2712,18 +2729,17 @@ const ru = {
       reviewed: "Оценён",
       reviewSearchPlaceholder: "Поиск отзывов...",
       scoringRules: "Правила оценивания",
-      // Coupons & Credits
-      couponsAndCredits: "Купоны и кредиты",
-      coupons: "Купоны",
-      credit: "Кредит",
-      noCoupons: "Нет доступных купонов",
-      available: "Доступен",
-      used: "Использован",
-      expired: "Истёк",
-      expiryDate: "Дата истечения",
-      totalCreditBalance: "Общий баланс кредита",
-      creditEqualsUsd: "1 кредит = 1 USD",
-      history: "История",
+      pendingShort: "Ожидающие",
+      writeReview: "Оценить",
+      reviewStatusPublished: "Опубликован",
+      pendingReviewsEmptyDesc: "Товары из доставленных заказов появятся здесь для вашей оценки.",
+      reviewsDoneEmptyTitle: "Вы ещё не оставили ни одного отзыва",
+      reviewsDoneEmptyDesc: "Ваши отзывы и их статусы будут отображаться здесь.",
+      refundRequests: "запросов",
+      refundsEmptyTitle: "Нет запросов на возврат",
+      refundsEmptyDesc: "Если с заказом возникла проблема, здесь можно создать запрос на возврат и отслеживать его.",
+      refundStatusApproved: "Одобрен",
+      refundStatusRejected: "Отклонён",
       records: "Записи",
       noRecordsYet: "Записей пока нет",
       noPaymentRecord: "Нет записей об оплате",
@@ -2732,9 +2748,6 @@ const ru = {
       details: "Подробности",
       copied: "Скопировано!",
       copy: "Копировать",
-      minOrder: "Мин. заказ: {{count}} шт.",
-      free: "Бесплатно",
-      usedOn: "Использован",
       applicationDate: "Дата применения",
       dateUtc8: "Дата (UTC+8)",
       // Tax
@@ -2887,31 +2900,6 @@ const ru = {
       faqTaxNotApproved: "Что делать, если моё освобождение от налога не одобрено?",
       faqTaxNotApprovedAnswer:
         "Если ваше освобождение от налога не одобрено, будут применяться стандартные налоговые ставки. Вы можете повторно подать заявку с обновлённой документацией.",
-    },
-
-    // ============================================================
-    // COUPONS & CREDITS
-    // ============================================================
-    coupons: {
-      percentDiscount: "Процентная скидка",
-      fixedDiscount: "Фиксированная скидка",
-      freeShipping: "Бесплатная доставка",
-      earned: "Начислено",
-      spent: "Потрачено",
-      refund: "Возврат",
-      welcome10Desc: "Добро пожаловать! Используйте этот купон для скидки 10% на первый заказ",
-      save20Desc: "Сэкономьте $20 на заказах от $200",
-      freeShippingDesc: "Бесплатная доставка на ваш следующий заказ",
-      summer15Desc: "Скидка 15% на товары летней коллекции",
-      flat50Desc: "Скидка $50 на заказы от $500",
-      shipfree2Desc: "Бесплатная доставка для заказов от $100",
-      newyear25Desc: "Скидка 25% в честь нового года",
-      flash10Desc: "Флеш-распродажа! Дополнительные 10% скидки на 24 часа",
-      xmasshipDesc: "Бесплатная праздничная доставка на все заказы",
-      welcomeBonus: "Приветственный бонус",
-      creditUsage: "Кредит использован для заказа {{orderNum}}",
-      refundCredit: "Возврат кредита за заказ {{orderNum}}",
-      reviewReward: "Награда за отзыв",
     },
 
     // ============================================================
@@ -4376,6 +4364,9 @@ const ru = {
     // TAILORED SELECTIONS PAGE (View More)
     // ============================================================
     tailoredPage: {
+      pickedForYou: "Подобрано для вас",
+      viewProducts: "Смотреть товары",
+      orderVolume: "Объём заказов · за 30 дней",
       title: "Персональные подборки",
       breadcrumb: "Персональные подборки",
       breadcrumbHome: "Главная",
@@ -4423,6 +4414,15 @@ const ru = {
       views_24h: "{{value}} просмотров за последние 24 часа",
       distinct_buyers: "{{value}} компаний совершили покупку за последние {{days}} дней",
       seller_orders: "{{value}} выполненных заказов от этого продавца",
+    },
+
+    socialProofCard: {
+      sales: "Продано {{value}} за {{days}} дн.",
+      favorites: "В избранном у {{value}} компаний",
+      cart_now: "В корзине у {{value}} покупателей",
+      views_24h: "{{value}} просмотров за 24 ч",
+      distinct_buyers: "{{value}} компаний купили за {{days}} дн.",
+      seller_orders: "{{value}} выполненных заказов",
     },
 
     // ============================================================
@@ -7782,6 +7782,7 @@ const ru = {
     heroTitle: "Топ рейтинга",
     heroSubtitle: "Ориентируйтесь в трендах с помощью рейтингов на основе данных",
     breadcrumb: "Топ рейтинга",
+    searchPlaceholder: "Поиск в топе продаж",
 
     // Region options
     regionGlobal: "Мировые рейтинги",
@@ -8395,6 +8396,7 @@ const ru = {
   },
   verification: {
     verifiedBySupplier: "Поставщик верифицирован {{name}}",
+    kybDescription: "Проверка личности и бизнеса этого продавца выполнена iStoc",
     downloadReport: "Скачать отчёт об инспекции",
     badgeInfo: "Информация о верификации",
   },

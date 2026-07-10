@@ -78,6 +78,7 @@ function renderMobileHeader(options: AuthLayoutOptions = {}): string {
  * Renders the promotional banner for desktop (left side) and mobile background
  */
 function renderPromoBanner(): string {
+  const baseUrl = getBaseUrl();
   return `
     <div class="auth-promo-banner flex flex-col items-center justify-center px-10 py-12 text-center text-white h-full relative overflow-hidden bg-[linear-gradient(145deg,var(--color-primary-400)_0%,var(--color-primary-500)_45%,var(--color-primary-700)_100%)] w-full">
 
@@ -89,14 +90,9 @@ function renderPromoBanner(): string {
       <!-- Content -->
       <div class="relative z-10 w-full max-w-sm">
 
-        <!-- Brand badge -->
+        <!-- Brand logo -->
         <div class="flex justify-center mb-8">
-          <div class="flex items-center gap-2 bg-white/10 rounded-full px-4 py-2 border border-white/20 backdrop-blur-sm">
-            <svg class="w-4 h-4 text-yellow-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span class="text-white text-sm font-semibold tracking-wide">iSTOC B2B</span>
-          </div>
+          <img src="${baseUrl}images/istoc-logo-beyaz.png" alt="iSTOC" class="h-10" />
         </div>
 
         <!-- Headline -->

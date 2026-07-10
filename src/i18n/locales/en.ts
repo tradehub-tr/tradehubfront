@@ -2094,6 +2094,22 @@ const en = {
       buyNow: "Buy Now",
       contactSupplier: "Contact Supplier",
       startOrder: "Start Order",
+      // Mobile product detail — "Options" bottom-sheet (Alibaba app pattern, Phase 1)
+      optionsSheetTitle: "Options",
+      // Mobile fullscreen media viewer — gallery/variant/video mode chip (Phase 2)
+      videoTab: "Video",
+      sendQuestion: "Ask a question",
+      storeLabel: "Store",
+      optionsMinOrderHint: "Min. order {{moq}} {{unit}}",
+      optionsBreakdownTotal: "Total {{qty}} {{unit}} · unit {{price}}",
+      noSelectionYet: "No selection yet",
+      // Mobile product detail — "Send inquiry" fullscreen form (Phase 4)
+      questionFormTitle: "Send Inquiry",
+      questionDetailsLabel: "Inquiry details",
+      questionDefaultMessage: "Hello, I would like more information about this product.",
+      questionQuantitySummary: "Quantity and specifications",
+      attachFilePrompt: "Attach a file",
+      leaveFormConfirm: "Are you sure you want to leave this page? All entered information will be lost.",
       quantity: "Quantity",
       color: "Color",
       size: "Size",
@@ -2125,7 +2141,9 @@ const en = {
       viewCompany: "View Company",
       technicalSpecs: "Technical Specifications",
       packagingDelivery: "Packaging and Delivery",
-      keyAttributes: "Key Attributes",
+      keyAttributes: "Technical Specifications",
+      // Mobile product detail — Key Features panel title (Alibaba app pattern, Phase 3)
+      keyFeaturesTitle: "Key Features",
       leadTime: "Lead Time",
       leadTimeQty: "Quantity (pcs)",
       leadTimeDays: "Lead time (days)",
@@ -2178,6 +2196,7 @@ const en = {
       removedFromFavorites: "Removed from favorites",
       imageSearchLabel: "Image search",
       productGallery: "Product image gallery",
+      imageNumberLabel: "Image {{count}}",
       closeGallery: "Close gallery",
       previousImage: "Previous image",
       nextImage: "Next image",
@@ -2389,8 +2408,6 @@ const en = {
       allOrders: "All Orders",
       refundsAfterSales: "Refunds and After-sales",
       myReviews: "My Reviews",
-      couponsCredits: "Coupons & Credits",
-      coupons: "Coupons",
       taxInfo: "Tax Information",
       payment: "Payment",
       paymentManagement: "Payment Management",
@@ -2419,7 +2436,6 @@ const en = {
       exploreSellerSite: "Explore Seller Site",
       messagesLabel: "Messages",
       quotationsLabel: "Quotations",
-      couponsLabel: "Coupons",
       validateTax: "Validate your account for tax-exempt status",
       verifyBusiness: "Verify business info",
       personalizeExp: "Personalize your iStoc experience",
@@ -2480,6 +2496,7 @@ const en = {
       notifVerifyEmailSentLabel: "Sent:",
       notifVerifyEmailChangeLink: "Change",
       notifVerifyEmailCta: "Send verification email",
+      notifVerifyEmailCtaShort: "Send",
       notifVerifyEmailResend: "Resend",
       verificationEmailSent: "Verification email sent. Please check your inbox.",
       verificationEmailFailed: "Could not send verification email. Please try again later.",
@@ -2566,6 +2583,7 @@ const en = {
       unpaid: "Unpaid",
       closed: "Closed",
       submitRemittanceProof: "Submit remittance proof",
+      submitRemittanceProofShort: "Remittance",
       remitPreview: "Preview",
       remitUploadHint:
         "Upload remittance evidence or MT103 document, or drag and drop the file into the box.",
@@ -2690,18 +2708,17 @@ const en = {
       reviewed: "Reviewed",
       reviewSearchPlaceholder: "Search reviews...",
       scoringRules: "Scoring rules",
-      // Coupons & Credits
-      couponsAndCredits: "Coupons & Credits",
-      coupons: "Coupons",
-      credit: "Credit",
-      noCoupons: "No coupons available",
-      available: "Available",
-      used: "Used",
-      expired: "Expired",
-      expiryDate: "Expiry date",
-      totalCreditBalance: "Total credit balance",
-      creditEqualsUsd: "1 Credit = 1 USD",
-      history: "History",
+      pendingShort: "Pending",
+      writeReview: "Write a review",
+      reviewStatusPublished: "Published",
+      pendingReviewsEmptyDesc: "Products from your delivered orders will be listed here for you to review.",
+      reviewsDoneEmptyTitle: "You haven't written any reviews yet",
+      reviewsDoneEmptyDesc: "Your reviews and their statuses will appear here.",
+      refundRequests: "requests",
+      refundsEmptyTitle: "No refund requests",
+      refundsEmptyDesc: "If you have an issue with an order, you can create and track your refund request here.",
+      refundStatusApproved: "Approved",
+      refundStatusRejected: "Rejected",
       records: "Records",
       noRecordsYet: "No records yet",
       noPaymentRecord: "No payment record",
@@ -2710,9 +2727,6 @@ const en = {
       details: "Details",
       copied: "Copied!",
       copy: "Copy",
-      minOrder: "Min. order: {{count}} pcs",
-      free: "Free",
-      usedOn: "Used on",
       applicationDate: "Application date",
       dateUtc8: "Date (UTC+8)",
       // Tax
@@ -2863,31 +2877,6 @@ const en = {
       faqTaxNotApproved: "What if my tax exemption is not approved?",
       faqTaxNotApprovedAnswer:
         "If your tax exemption is not approved, standard tax rates will apply. You can resubmit with updated documentation.",
-    },
-
-    // ============================================================
-    // COUPONS & CREDITS
-    // ============================================================
-    coupons: {
-      percentDiscount: "Percent Discount",
-      fixedDiscount: "Fixed Discount",
-      freeShipping: "Free Shipping",
-      earned: "Earned",
-      spent: "Spent",
-      refund: "Refund",
-      welcome10Desc: "Welcome! Use this coupon for 10% off your first order",
-      save20Desc: "Save $20 on orders over $200",
-      freeShippingDesc: "Free shipping on your next order",
-      summer15Desc: "15% off on summer collection items",
-      flat50Desc: "Flat $50 off on orders over $500",
-      shipfree2Desc: "Free shipping for orders over $100",
-      newyear25Desc: "25% off to celebrate the new year",
-      flash10Desc: "Flash sale! Extra 10% off for 24 hours",
-      xmasshipDesc: "Free holiday shipping on all orders",
-      welcomeBonus: "Welcome bonus",
-      creditUsage: "Credit used for order {{orderNum}}",
-      refundCredit: "Refund credit for order {{orderNum}}",
-      reviewReward: "Review reward",
     },
 
     // ============================================================
@@ -4302,6 +4291,14 @@ const en = {
       createRfq: "Create RFQ",
     },
 
+    heroSide: {
+      bestDeals: "Best Deals",
+      allDeals: "All deals",
+      endsIn: "Time left today",
+      rfqTitle: "Can't find what you need?",
+      rfqDesc: "Request a quote and let suppliers reach you",
+    },
+
     // ============================================================
     // HERO - TOP DEALS
     // ============================================================
@@ -4352,6 +4349,9 @@ const en = {
     // TAILORED SELECTIONS PAGE (View More)
     // ============================================================
     tailoredPage: {
+      pickedForYou: "Picked for you",
+      viewProducts: "View products",
+      orderVolume: "Order volume · last 30 days",
       title: "Tailored Selections",
       breadcrumb: "Tailored Selections",
       breadcrumbHome: "Home",
@@ -4399,6 +4399,16 @@ const en = {
       views_24h: "{{value}} views in the last 24 hours",
       distinct_buyers: "{{value}} businesses purchased in the last {{days}} days",
       seller_orders: "{{value}} completed orders from this seller",
+    },
+
+    // Short set for the card strip — must fit a single line
+    socialProofCard: {
+      sales: "{{value}} sold in {{days}} days",
+      favorites: "Favorited by {{value}} companies",
+      cart_now: "In {{value}} buyers' carts",
+      views_24h: "{{value}} views in 24h",
+      distinct_buyers: "{{value}} companies bought in {{days}} days",
+      seller_orders: "{{value}} completed orders",
     },
 
     // ============================================================
@@ -7714,6 +7724,7 @@ const en = {
     heroTitle: "Top Ranking",
     heroSubtitle: "Navigate trends with data-driven rankings",
     breadcrumb: "Top Ranking",
+    searchPlaceholder: "Search top sellers",
 
     // Region options
     regionGlobal: "Global rankings",
@@ -8324,6 +8335,7 @@ const en = {
   },
   verification: {
     verifiedBySupplier: "Verified by {{name}}",
+    kybDescription: "This seller's identity and business verification was performed by iStoc",
     downloadReport: "Download inspection report",
     badgeInfo: "Verification info",
   },

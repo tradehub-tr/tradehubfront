@@ -40,7 +40,7 @@ export function getMockUserStats(): UserStat[] {
   return [
     { label: t("dashboard.statsMessages"), count: 7, href: "/messages" },
     { label: t("dashboard.statsQuotations"), count: 0, href: "/quotations" },
-    { label: t("dashboard.statsCoupons"), count: 0, href: "/coupons" },
+    { label: t("dashboard.statsCoupons"), count: 0, href: "/pages/dashboard/orders.html" },
   ];
 }
 

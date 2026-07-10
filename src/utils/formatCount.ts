@@ -15,3 +15,14 @@ export function formatCount(n: number): string {
   const rounded = Math.floor(v / 1000) * 1000;
   return `${rounded.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}+`;
 }
+
+/**
+ * Görüntülenme sayısı kısaltması: 1500 → "1.5K+", 2000000 → "2M+".
+ * Used by: hero/TailoredSelections.ts, tailored-selections/TailoredSelectionsHero.ts
+ */
+export function formatViews(n: number | string): string {
+  const num = typeof n === "number" ? n : parseInt(String(n), 10) || 0;
+  if (num >= 1000000) return `${(num / 1000000).toFixed(1).replace(/\.0$/, "")}M+`;
+  if (num >= 1000) return `${(num / 1000).toFixed(1).replace(/\.0$/, "")}K+`;
+  return String(num);
+}

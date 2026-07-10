@@ -29,8 +29,9 @@ export interface DrillCategory {
 export interface CategoryDrillSheetConfig {
   /** BottomSheet id (örn "mcb-sheet" / "hm-mobile-cat"). */
   sheetId: string;
-  /** Sheet'i açan buton id (örn "mcb-dropdown-btn" / "hm-mobile-cat-more"). */
-  triggerId: string;
+  /** Sheet'i açan buton id. Opsiyonel — dışarıdan `controller.open()` ile de açılabilir
+      (örn. desktop'ta popover açan, mobilde sheet açan çift-görevli butonlar). */
+  triggerId?: string;
   /** Sheet gövdesindeki <ul> seçicisi (rows buraya basılır). */
   listSelector: string;
   categories: DrillCategory[];
@@ -45,6 +46,21 @@ export interface CategoryDrillSheetConfig {
 export interface CategoryDrillController {
   /** Aktif (✓) işaretini yeniden hesaplar (sheet açıkken dış senkron için). */
   syncActive: () => void;
+  /** Sheet'i kök seviyeden açar (triggerId dışındaki tetikleyiciler için). */
+  open: () => void;
+}
+
+/** Kategori listesi yüklenene kadar sheet gövdesinde gösterilen satır skeleton'ı. */
+export function categoryDrillSkeleton(listAttr: string): string {
+  return `
+    <ul ${listAttr} class="overflow-y-auto flex-1 py-2 list-none m-0 p-0">
+      ${`
+        <li class="flex items-center w-full px-5 py-4 border-b border-gray-50 animate-pulse">
+          <div class="h-4 rounded bg-gray-200 flex-1"></div>
+        </li>
+      `.repeat(6)}
+    </ul>
+  `;
 }
 
 export function initCategoryDrillSheet(
@@ -135,11 +151,13 @@ export function initCategoryDrillSheet(
     renderSheet();
   });
 
-  document.getElementById(cfg.triggerId)?.addEventListener("click", () => {
+  const openSheet = (): void => {
     navStack.length = 0; // her açılışta kökten başla
     renderSheet();
     sheet.open();
-  });
+  };
 
-  return { syncActive: markActive };
+  if (cfg.triggerId) document.getElementById(cfg.triggerId)?.addEventListener("click", openSheet);
+
+  return { syncActive: markActive, open: openSheet };
 }

@@ -2083,6 +2083,22 @@ const ar = {
       buyNow: "اشترِ الآن",
       contactSupplier: "تواصل مع المورّد",
       startOrder: "ابدأ الطلب",
+      // صفحة تفاصيل المنتج للجوال — sheet سفلي "الخيارات" (نمط تطبيق Alibaba، المرحلة 1)
+      optionsSheetTitle: "الخيارات",
+      // عارض الوسائط بملء الشاشة (الجوال) — شريحة وضع الصور/الخيارات/الفيديو (المرحلة 2)
+      videoTab: "فيديو",
+      sendQuestion: "اطرح سؤالاً",
+      storeLabel: "المتجر",
+      optionsMinOrderHint: "الحد الأدنى للطلب {{moq}} {{unit}}",
+      optionsBreakdownTotal: "الإجمالي {{qty}} {{unit}} · سعر الوحدة {{price}}",
+      noSelectionYet: "لا يوجد اختيار بعد",
+      // صفحة تفاصيل المنتج للجوال — نموذج "إرسال استفسار" بملء الشاشة (المرحلة 4)
+      questionFormTitle: "إرسال استفسار",
+      questionDetailsLabel: "تفاصيل الاستفسار",
+      questionDefaultMessage: "مرحبًا، أرغب في الحصول على مزيد من المعلومات حول هذا المنتج.",
+      questionQuantitySummary: "الكمية والمواصفات",
+      attachFilePrompt: "إرفاق ملف",
+      leaveFormConfirm: "هل أنت متأكد من رغبتك في مغادرة هذه الصفحة؟ ستفقد جميع المعلومات المدخلة.",
       quantity: "الكمية",
       color: "اللون",
       size: "المقاس",
@@ -2114,7 +2130,8 @@ const ar = {
       viewCompany: "عرض الشركة",
       technicalSpecs: "المواصفات الفنية",
       packagingDelivery: "التغليف والتسليم",
-      keyAttributes: "الخصائص الرئيسية",
+      keyAttributes: "المواصفات الفنية",
+      keyFeaturesTitle: "الميزات الرئيسية",
       leadTime: "مدة التنفيذ",
       leadTimeQty: "الكمية (قطعة)",
       leadTimeDays: "مدة التنفيذ (أيام)",
@@ -2167,6 +2184,7 @@ const ar = {
       removedFromFavorites: "تمت الإزالة من المفضلة",
       imageSearchLabel: "البحث بالصورة",
       productGallery: "معرض صور المنتج",
+      imageNumberLabel: "الصورة {{count}}",
       closeGallery: "إغلاق المعرض",
       previousImage: "الصورة السابقة",
       nextImage: "الصورة التالية",
@@ -2359,8 +2377,6 @@ const ar = {
       allOrders: "جميع الطلبات",
       refundsAfterSales: "المبالغ المستردة وخدمات ما بعد البيع",
       myReviews: "تقييماتي",
-      couponsCredits: "القسائم والأرصدة",
-      coupons: "القسائم",
       taxInfo: "المعلومات الضريبية",
       payment: "الدفع",
       paymentManagement: "إدارة الدفع",
@@ -2389,7 +2405,6 @@ const ar = {
       exploreSellerSite: "استكشف موقع البائع",
       messagesLabel: "الرسائل",
       quotationsLabel: "عروض الأسعار",
-      couponsLabel: "القسائم",
       validateTax: "وثّق حسابك للحصول على وضع الإعفاء الضريبي",
       verifyBusiness: "تحقّق من معلومات النشاط التجاري",
       personalizeExp: "خصّص تجربتك على iStoc",
@@ -2450,6 +2465,7 @@ const ar = {
       notifVerifyEmailSentLabel: "تم الإرسال:",
       notifVerifyEmailChangeLink: "تغيير",
       notifVerifyEmailCta: "إرسال بريد التحقق",
+      notifVerifyEmailCtaShort: "إرسال",
       notifVerifyEmailResend: "إعادة الإرسال",
       verificationEmailSent: "تم إرسال بريد التحقق. يرجى التحقق من صندوق الوارد الخاص بك.",
       verificationEmailFailed: "تعذّر إرسال بريد التحقق. يرجى المحاولة مرة أخرى لاحقاً.",
@@ -2534,6 +2550,7 @@ const ar = {
       unpaid: "غير مدفوع",
       closed: "مغلق",
       submitRemittanceProof: "إرسال إثبات الحوالة",
+      submitRemittanceProofShort: "إثبات الحوالة",
       remitPreview: "معاينة",
       remitUploadHint: "ارفع إثبات الحوالة أو مستند MT103، أو اسحب الملف وأفلته داخل المربع.",
       remitDocClear: "تأكد من وضوح تفاصيل مستندك",
@@ -2656,18 +2673,17 @@ const ar = {
       reviewed: "تم التقييم",
       reviewSearchPlaceholder: "ابحث في التقييمات...",
       scoringRules: "قواعد التقييم",
-      // Coupons & Credits
-      couponsAndCredits: "القسائم والأرصدة",
-      coupons: "القسائم",
-      credit: "الرصيد",
-      noCoupons: "لا توجد قسائم متاحة",
-      available: "متاح",
-      used: "مُستخدَم",
-      expired: "منتهي الصلاحية",
-      expiryDate: "تاريخ انتهاء الصلاحية",
-      totalCreditBalance: "إجمالي رصيد الحساب",
-      creditEqualsUsd: "1 رصيد = 1 دولار أمريكي",
-      history: "السجل",
+      pendingShort: "معلّقة",
+      writeReview: "قيّم المنتج",
+      reviewStatusPublished: "منشور",
+      pendingReviewsEmptyDesc: "ستظهر هنا منتجات طلباتك المُسلّمة لتقييمها.",
+      reviewsDoneEmptyTitle: "لم تكتب أي تقييم بعد",
+      reviewsDoneEmptyDesc: "ستظهر تقييماتك وحالاتها هنا.",
+      refundRequests: "طلبات",
+      refundsEmptyTitle: "لا توجد طلبات استرداد",
+      refundsEmptyDesc: "إذا واجهت مشكلة في أحد طلباتك، يمكنك إنشاء طلب استرداد ومتابعته من هنا.",
+      refundStatusApproved: "تمت الموافقة",
+      refundStatusRejected: "مرفوض",
       records: "السجلات",
       noRecordsYet: "لا توجد سجلات بعد",
       noPaymentRecord: "لا يوجد سجل دفع",
@@ -2676,9 +2692,6 @@ const ar = {
       details: "التفاصيل",
       copied: "تم النسخ!",
       copy: "نسخ",
-      minOrder: "الحد الأدنى للطلب: {{count}} قطعة",
-      free: "مجاني",
-      usedOn: "استُخدم في",
       applicationDate: "تاريخ التقديم",
       dateUtc8: "التاريخ (UTC+8)",
       // Tax
@@ -2829,31 +2842,6 @@ const ar = {
       faqTaxNotApproved: "ماذا لو لم تتم الموافقة على إعفائي الضريبي؟",
       faqTaxNotApprovedAnswer:
         "إذا لم تتم الموافقة على إعفائك الضريبي، ستُطبّق معدلات الضريبة القياسية. يمكنك إعادة التقديم بمستندات محدّثة.",
-    },
-
-    // ============================================================
-    // COUPONS & CREDITS
-    // ============================================================
-    coupons: {
-      percentDiscount: "خصم بنسبة مئوية",
-      fixedDiscount: "خصم ثابت",
-      freeShipping: "شحن مجاني",
-      earned: "مكتسب",
-      spent: "مُنفَق",
-      refund: "استرداد",
-      welcome10Desc: "مرحباً! استخدم هذه القسيمة للحصول على خصم 10% على طلبك الأول",
-      save20Desc: "وفّر 20$ على الطلبات التي تزيد عن 200$",
-      freeShippingDesc: "شحن مجاني على طلبك التالي",
-      summer15Desc: "خصم 15% على عناصر مجموعة الصيف",
-      flat50Desc: "خصم ثابت 50$ على الطلبات التي تزيد عن 500$",
-      shipfree2Desc: "شحن مجاني للطلبات التي تزيد عن 100$",
-      newyear25Desc: "خصم 25% احتفالاً بالعام الجديد",
-      flash10Desc: "تخفيضات سريعة! خصم إضافي 10% لمدة 24 ساعة",
-      xmasshipDesc: "شحن مجاني للأعياد على جميع الطلبات",
-      welcomeBonus: "مكافأة ترحيبية",
-      creditUsage: "تم استخدام الرصيد للطلب {{orderNum}}",
-      refundCredit: "رصيد استرداد للطلب {{orderNum}}",
-      reviewReward: "مكافأة التقييم",
     },
 
     // ============================================================
@@ -4310,6 +4298,9 @@ const ar = {
     // TAILORED SELECTIONS PAGE (View More)
     // ============================================================
     tailoredPage: {
+      pickedForYou: "مختار خصيصاً لك",
+      viewProducts: "عرض المنتجات",
+      orderVolume: "حجم الطلبات · آخر 30 يوماً",
       title: "مختارات مصمّمة خصيصاً",
       breadcrumb: "مختارات مصمّمة خصيصاً",
       breadcrumbHome: "الرئيسية",
@@ -4357,6 +4348,15 @@ const ar = {
       views_24h: "{{value}} مشاهدة خلال آخر 24 ساعة",
       distinct_buyers: "{{value}} شركة قامت بالشراء خلال آخر {{days}} يوم",
       seller_orders: "{{value}} طلب مكتمل من هذا البائع",
+    },
+
+    socialProofCard: {
+      sales: "بيع {{value}} خلال {{days}} أيام",
+      favorites: "مفضلة لدى {{value}} شركة",
+      cart_now: "في سلة {{value}} مشترٍ",
+      views_24h: "{{value}} مشاهدة في 24 ساعة",
+      distinct_buyers: "{{value}} شركة اشترت خلال {{days}} أيام",
+      seller_orders: "{{value}} طلب مكتمل",
     },
 
     // ============================================================
@@ -7642,6 +7642,7 @@ const ar = {
     heroTitle: "أعلى ترتيب",
     heroSubtitle: "تصفّح الاتجاهات بترتيبات قائمة على البيانات",
     breadcrumb: "أعلى ترتيب",
+    searchPlaceholder: "ابحث في الأكثر مبيعًا",
 
     // Region options
     regionGlobal: "الترتيبات العالمية",
@@ -8248,6 +8249,7 @@ const ar = {
   },
   verification: {
     verifiedBySupplier: "مورّد معتمد من قِبَل {{name}}",
+    kybDescription: "تم التحقق من هوية هذا البائع ونشاطه التجاري بواسطة iStoc",
     downloadReport: "تحميل تقرير التفتيش",
     badgeInfo: "معلومات التحقق",
   },

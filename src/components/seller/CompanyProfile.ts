@@ -1,4 +1,5 @@
 import { t } from "../../i18n";
+import { VerificationBadgeTemplate } from "./VerificationBadge";
 // Currency formatting via window.csFormatPrice / window.csFormatPriceRange (set by currencyService)
 
 // ─── Shared Types ──────────────────────────────────────────────
@@ -159,16 +160,16 @@ function OverviewTab(): string {
         <div class="flex items-center justify-between flex-wrap gap-3 pb-6 mb-6 border-b border-gray-100">
           <h3 class="text-[18px] font-bold text-gray-900">${t("seller.sf.profile")}</h3>
           <div class="flex items-center gap-4">
-            <a href="#" class="text-[13px] text-blue-600 hover:underline flex items-center gap-1">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-              ${t("seller.sf.downloadReport")}
-            </a>
-            <span x-show="seller?.verified" class="inline-flex items-baseline gap-1 text-[13px] font-semibold text-green-700 dark:text-green-400">
-              <svg class="w-4 h-4 self-center" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-              <span>${t("seller.sf.verifiedSupplier")}</span>
-              <img src="/images/istoc-logo.png" alt="iSTOC" class="h-[10px] w-auto self-baseline ms-1" />
-              <span class="text-[10px] text-[#999] font-medium">ile</span>
-            </span>
+            ${VerificationBadgeTemplate("seller?.verifications || []")}
+            <!-- Rapor = saha denetim belgesi (verifications[0].document_url); belge yoksa link gizlenir -->
+            <template x-if="(seller?.verifications || [])[0]?.document_url">
+              <a :href="(seller?.verifications || [])[0]?.document_url"
+                 target="_blank" rel="noopener noreferrer"
+                 class="text-[13px] text-blue-600 hover:underline flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                ${t("seller.sf.downloadReport")}
+              </a>
+            </template>
           </div>
         </div>
 
@@ -273,12 +274,6 @@ function OverviewTab(): string {
       <section class="bg-white rounded-md border border-gray-200 p-6 mb-6">
         <div class="flex items-center justify-between flex-wrap gap-3 pb-6 mb-6 border-b border-gray-100">
           <h3 class="text-[18px] font-bold text-gray-900">${t("seller.sf.serviceTab")}</h3>
-          <span x-show="seller?.verified" class="inline-flex items-baseline gap-1 text-[13px] font-semibold text-green-700 dark:text-green-400">
-            <svg class="w-4 h-4 self-center" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-            <span>${t("seller.sf.verifiedSupplier")}</span>
-            <img src="/images/istoc-logo.png" alt="iSTOC" class="h-[10px] w-auto self-baseline ms-1" />
-            <span class="text-[10px] text-[#999] font-medium">ile</span>
-          </span>
         </div>
 
         <!-- Customization services -->

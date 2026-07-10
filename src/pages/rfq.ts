@@ -16,10 +16,13 @@ import { applySwiperDir } from '../utils/direction'
 import rfqVideoUrl from '../assets/images/rfqvidehero.mp4'
 
 // Header & Footer components
-import { TopBar, MobileSearchTabs, initMobileDrawer, SubHeader, initStickyHeaderSearch, MegaMenu, initMegaMenu } from '../components/header'
+import { TopBar, SubHeader, initStickyHeaderSearch, MegaMenu, initMegaMenu } from '../components/header'
 import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar'
 import { FooterLinks } from '../components/footer'
+
+// Floating components
+import { BottomNav, initBottomNav } from '../components/floating'
 
 // Shared components
 import { Breadcrumb } from '../components/shared/Breadcrumb'
@@ -85,13 +88,10 @@ const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.classList.add('relative');
 appEl.innerHTML = `
   <!-- Sticky Header (global) -->
-  <div id="sticky-header" class="sticky top-0 z-(--z-header) border-b border-(--header-scroll-border) bg-(--header-scroll-bg)">
+  <div id="sticky-header" class="sticky top-0 z-(--z-header) border-b border-gray-200 bg-white">
     ${TopBar()}
     ${SubHeader()}
   </div>
-
-  <!-- Mobile Search Tabs (Products | Manufacturers | Worldwide) -->
-  ${MobileSearchTabs('products')}
 
   <!-- Mega Menu -->
   ${MegaMenu()}
@@ -226,16 +226,19 @@ appEl.innerHTML = `
   </main>
 
   <!-- Footer Section -->
-  <footer>
+  <footer class="pb-14 xl:pb-0">
     ${FooterLinks()}
   </footer>
+
+  <!-- Bottom Navigation (mobile/tablet) -->
+  ${BottomNav()}
 `;
 
 // --- Initialize Flowbite & Custom Behaviors ---
 initMegaMenu();
 initFlowbite();
 initStickyHeaderSearch();
-initMobileDrawer();
+initBottomNav();
 initLanguageSelector();
 initAnimatedPlaceholder('#topbar-compact-search-input');
 

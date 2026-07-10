@@ -5,7 +5,7 @@
 import '../style.css'
 import { t } from '../i18n'
 import { initFlowbite } from 'flowbite'
-import { TopBar, SubHeader, MegaMenu, initMegaMenu, initStickyHeaderSearch, initMobileDrawer } from '../components/header'
+import { TopBar, SubHeader, MegaMenu, initMegaMenu, initStickyHeaderSearch } from '../components/header'
 import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar'
 import { FooterLinks } from '../components/footer'
@@ -354,5 +354,4 @@ mountChatPopup();
 initChatTriggers();
 startAlpine()
 initStickyHeaderSearch()
-initMobileDrawer()
 initLanguageSelector()

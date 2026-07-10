@@ -7,7 +7,7 @@
 import { t } from "../../i18n";
 
 const ICONS = {
-  shield: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l9 4v6c0 5-3.5 9-9 10C6.5 21 3 17 3 12V6l9-4z"/></svg>`,
+  shield: `<svg class="w-9 h-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l9 4v6c0 5-3.5 9-9 10C6.5 21 3 17 3 12V6l9-4z"/></svg>`,
   paperclip: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>`,
   pdf: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke-linejoin="round"/><path d="M14 2v6h6"/></svg>`,
   check: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
@@ -28,20 +28,20 @@ export const KYB_DOCUMENT_FIELDS: Array<{ key: string; labelKey: string; require
 // Belge thumbnail (PDF kart, image thumbnail veya boş upload)
 function renderEmptyState(): string {
   return `
-    <div class="bg-white rounded-xl p-12 text-center border border-gray-200">
-      <div class="inline-flex items-center justify-center w-20 h-20 rounded-full mb-4" style="background:linear-gradient(135deg, var(--color-primary-400, #e6b212) 0%, var(--color-primary-500, #cc9900) 100%);color:white">
+    <div class="bg-white rounded-md p-12 max-sm:px-5 max-sm:py-10 text-center border border-gray-200">
+      <div class="inline-flex items-center justify-center w-20 h-20 max-sm:w-16 max-sm:h-16 rounded-full mb-4" style="background:linear-gradient(135deg, var(--color-primary-400, #e6b212) 0%, var(--color-primary-500, #cc9900) 100%);color:white">
         ${ICONS.shield}
       </div>
-      <h2 class="text-xl font-bold mb-2">${t("kyb.notStartedTitle")}</h2>
+      <h2 class="text-xl max-sm:text-lg font-bold mb-2 text-balance">${t("kyb.notStartedTitle")}</h2>
       <p class="text-sm mb-6 max-w-md mx-auto" style="color:var(--color-text-tertiary)">${t("kyb.notStartedDesc")}</p>
-      <button type="button" @click="startApplication()" class="th-btn px-8">${t("kyb.applyNow")}</button>
+      <button type="button" @click="startApplication()" class="th-btn px-8 max-sm:w-full max-sm:justify-center">${t("kyb.applyNow")}</button>
     </div>
   `;
 }
 
 function renderRejectedAlert(): string {
   return `
-    <div class="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3 mb-5">
+    <div class="bg-red-50 border border-red-200 rounded-md p-4 flex items-start gap-3 mb-5">
       <span class="text-red-500 flex-shrink-0 mt-0.5">${ICONS.alert}</span>
       <div class="flex-1">
         <div class="font-semibold text-red-800 mb-1">${t("kyb.rejectedTitle")}</div>
@@ -57,7 +57,7 @@ function renderRejectedAlert(): string {
 
 function renderExpiredAlert(): string {
   return `
-    <div class="bg-orange-50 border border-orange-200 rounded-lg p-4 flex items-start gap-3 mb-5">
+    <div class="bg-orange-50 border border-orange-200 rounded-md p-4 flex items-start gap-3 mb-5">
       <span class="text-orange-500 flex-shrink-0 mt-0.5">${ICONS.alert}</span>
       <div class="flex-1">
         <div class="font-semibold text-orange-800 mb-1">${t("kyb.expiredTitle")}</div>
@@ -69,7 +69,7 @@ function renderExpiredAlert(): string {
 
 function renderPendingInfo(): string {
   return `
-    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 flex items-start gap-3 mb-5">
+    <div class="bg-yellow-50 border border-yellow-200 rounded-md p-4 flex items-start gap-3 mb-5">
       <span class="text-yellow-600 flex-shrink-0">${ICONS.alert}</span>
       <div>
         <div class="font-semibold text-yellow-800 mb-1">${t("kyb.pendingTitle")}</div>
@@ -81,7 +81,7 @@ function renderPendingInfo(): string {
 
 function renderDraftInfo(): string {
   return `
-    <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 flex items-start gap-3 mb-5">
+    <div class="bg-gray-50 border border-gray-200 rounded-md p-4 flex items-start gap-3 mb-5">
       <span class="text-gray-500 flex-shrink-0">${ICONS.alert}</span>
       <div>
         <div class="font-semibold text-gray-800 mb-1">${t("kyb.draftTitle")}</div>
@@ -93,7 +93,7 @@ function renderDraftInfo(): string {
 
 function renderUnderReviewInfo(): string {
   return `
-    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start gap-3 mb-5">
+    <div class="bg-blue-50 border border-blue-200 rounded-md p-4 flex items-start gap-3 mb-5">
       <span class="text-blue-600 flex-shrink-0">${ICONS.alert}</span>
       <div>
         <div class="font-semibold text-blue-800 mb-1">${t("kyb.underReviewTitle")}</div>
@@ -105,7 +105,7 @@ function renderUnderReviewInfo(): string {
 
 function renderVerifiedInfo(): string {
   return `
-    <div class="bg-green-50 border border-green-200 rounded-lg p-4 flex items-start gap-3 mb-5">
+    <div class="bg-green-50 border border-green-200 rounded-md p-4 flex items-start gap-3 mb-5">
       <span class="text-green-600 flex-shrink-0">${ICONS.check}</span>
       <div>
         <div class="font-semibold text-green-800 mb-1">${t("kyb.verifiedTitle")}</div>
@@ -119,7 +119,7 @@ function renderHeader(): string {
   return `
     <div class="flex items-center justify-between gap-4 mb-5 flex-wrap">
       <div>
-        <h1 class="text-2xl font-bold mb-1">${t("kyb.title")}</h1>
+        <h1 class="text-2xl max-sm:text-xl font-bold mb-1">${t("kyb.title")}</h1>
         <p class="text-sm" style="color:var(--color-text-tertiary)">${t("kyb.subtitle")}</p>
       </div>
       <template x-if="kybData.exists">
@@ -145,7 +145,7 @@ function renderForm(): string {
     <template x-if="kybData.status === 'Verified'">${renderVerifiedInfo()}</template>
 
     <!-- Şirket bilgileri -->
-    <div class="bg-white rounded-2xl p-6 border border-gray-200 mb-4">
+    <div class="bg-white rounded-md p-6 max-sm:p-4 border border-gray-200 mb-4">
       <h2 class="text-base font-bold mb-4">${t("kyb.companyInfoTitle")}</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
@@ -179,18 +179,18 @@ function renderForm(): string {
     </div>
 
     <!-- Belgeler (tradehub-upload-ui SlotDropzone — autoUpload + custom JSON base64) -->
-    <div class="bg-white rounded-2xl p-6 border border-gray-200 mb-4">
+    <div class="bg-white rounded-md p-6 max-sm:p-4 border border-gray-200 mb-4">
       <h2 class="text-base font-bold mb-1">${t("kyb.documentsTitle")}</h2>
       <p class="text-xs mb-4" style="color:var(--color-text-tertiary)">${t("kyb.documentsHint")}</p>
       <div id="kyb-document-slots"></div>
     </div>
 
     <!-- Action bar -->
-    <div class="bg-white rounded-xl p-4 border border-gray-200 flex items-center justify-between gap-3 flex-wrap"
+    <div class="bg-white rounded-md p-4 border border-gray-200 flex items-center justify-between gap-3 flex-wrap max-sm:flex-col max-sm:items-stretch"
          x-show="isEditable">
-      <p class="text-xs" style="color:var(--color-text-tertiary)" x-text="actionBarHint"></p>
+      <p class="text-xs max-sm:text-center" style="color:var(--color-text-tertiary)" x-text="actionBarHint"></p>
       <button type="button" @click="resubmit()" :disabled="submitting || !canSubmit"
-              class="th-btn px-6 inline-flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+              class="th-btn px-6 inline-flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
         ${ICONS.refresh}
         <span x-text="submitting ? '${t("kyb.submitting")}' : (kybData.status === 'Rejected' ? '${t("kyb.resubmit")}' : kybData.status === 'Verified' ? '${t("kycUi.updateInfo")}' : '${t("kyb.submit")}')"></span>
       </button>
@@ -201,7 +201,7 @@ function renderForm(): string {
 export function KybLayout(): string {
   return `
     <div class="container-boxed py-6" x-data="kybPage">
-      <div x-show="loading" class="bg-white rounded-xl p-12 text-center">
+      <div x-show="loading" class="bg-white rounded-md p-12 text-center">
         <div class="text-sm" style="color:var(--color-text-tertiary)">${t("kyb.loading")}</div>
       </div>
 

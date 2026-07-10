@@ -6,19 +6,17 @@
  *     category filter, so deal products from every category appear mixed.
  *   - Specific category tab: get_listings({ is_deal:1, category, sort_by:'discount' })
  *
- * "Daha fazla yükle" pages the active query (page=2, 3, …) and appends rows.
- * Backend pagination keeps the page production-friendly: thousands of
- * products never load at once.
+ * Numaralı sayfalama query'yi sayfalar (page=2, 3, …) ve grid'i DEĞİŞTİRİR
+ * (append değil) — DOM'da her an tek sayfalık kart bulunur (scale-resilience).
  */
 
 import '../style.css'
 import Alpine from 'alpinejs'
 import { initFlowbite } from 'flowbite'
 import { t } from '../i18n'
-import { getListingUrl } from '../utils/listingUrl'
 
 // Header components
-import { TopBar, initMobileDrawer, SubHeader, MegaMenu, initMegaMenu, initHeaderCart } from '../components/header'
+import { TopBar, SubHeader, MegaMenu, initMegaMenu, initHeaderCart } from '../components/header'
 import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar'
 
@@ -44,14 +42,18 @@ import {
   TopDealsGrid,
   initCategoryTabs,
 } from '../components/top-deals'
-import { renderTopDealsFlatCard } from '../components/top-deals/TopDealsGrid'
+import { renderListingCard, initProductSliders } from '../components/shared/ListingCard'
+import { renderPagination } from '../components/shared/Pagination'
+import { ListingCartDrawer, initListingCartDrawer } from '../components/products'
+import { applyListingSocialProof } from '../components/products/initListingSocialProof'
+import { initListingFavoriteTriggers, syncListingFavoriteHearts } from '../components/products/initListingFavorites'
+import { LoginModal } from '../components/product'
 
 // Services
 import { searchListings } from '../services/listingService'
 import { initCurrency } from '../services/currencyService'
 
 // Types
-import type { TopDealsProduct } from '../types/topDeals'
 import type { ProductListingCard } from '../types/productListing'
 
 // Utilities
@@ -59,30 +61,7 @@ import { initAnimatedPlaceholder } from '../utils/animatedPlaceholder'
 
 /* ── Page constants ──────────────────────────────────────────────────── */
 
-const PAGE_SIZE = 24  // products per page in both All and per-category tabs
-
-/* ── Mappers ─────────────────────────────────────────────────────────── */
-
-function cardToTopDealsProduct(card: ProductListingCard): TopDealsProduct {
-  // card.discount formatı: "%20 indirim" veya "%X off" → sayıyı ayır
-  let discountPercent: number | undefined = undefined
-  if (typeof card.discount === 'string') {
-    const m = card.discount.match(/(\d+)/)
-    if (m) discountPercent = parseInt(m[1], 10) || undefined
-  }
-  return {
-    id: card.id || '',
-    name: card.name,
-    href: getListingUrl({ id: card.id, href: card.href }),
-    price: card.price,
-    originalPrice: card.originalPrice,
-    imageKind: 'jewelry' as const,
-    imageSrc: card.imageSrc || undefined,
-    moq: card.moq || '1 adet',
-    discountPercent,
-    category: card.category || '',
-  }
-}
+const PAGE_SIZE = 40  // products per page in both All and per-category tabs (5 columns × 8 rows)
 
 /* ── Alpine Data Registration ────────────────────────────────────────── */
 
@@ -100,9 +79,9 @@ Alpine.data('topDealsPage', () => ({
   canScrollRight: true,
 
   /* Data + pagination */
-  products: [] as TopDealsProduct[],
+  products: [] as ProductListingCard[],
   page: 1,
-  hasMore: false,
+  totalPages: 1,
   loading: false,
   /* Monotonic request id — drops stale responses when the category changes
      mid-flight (otherwise an older fetch could overwrite the new grid). */
@@ -166,20 +145,27 @@ Alpine.data('topDealsPage', () => ({
   },
 
   /* ── Pagination ── */
-  loadMore() {
-    if (this.loading || !this.hasMore) return
-    this.loadProducts(/* reset */ false)
+  get paginationHtml(): string {
+    return renderPagination(this.page, this.totalPages, this.page < this.totalPages, this.page > 1)
+  },
+
+  onPageClick(e: Event) {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-page]')
+    if (!btn || btn.disabled) return
+    const target = parseInt(btn.dataset.page ?? '', 10)
+    if (target >= 1 && target <= this.totalPages && target !== this.page) this.goToPage(target)
+  },
+
+  goToPage(page: number) {
+    this.page = page
+    this.loadProducts(/* resetPage */ false)
+    const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    window.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' })
   },
 
   /* ── Single load function (drives both All and per-category tabs) ── */
-  loadProducts(reset: boolean) {
-    if (reset) {
-      this.products = []
-      this.page = 1
-      this.hasMore = false
-    } else {
-      this.page += 1
-    }
+  loadProducts(resetPage: boolean) {
+    if (resetPage) this.page = 1
     this.loading = true
     const myReq = ++this.reqId
 
@@ -198,24 +184,33 @@ Alpine.data('topDealsPage', () => ({
 
     searchListings(params)
       .then(result => {
-        // A newer load started (e.g. category switched) → drop this response.
         if (myReq !== this.reqId) return
-        const mapped = result.products.map(cardToTopDealsProduct)
-        this.products = reset ? mapped : [...this.products, ...mapped]
-        this.hasMore = result.hasNext
+        this.products = result.products // REPLACE — append yasak (scale-resilience)
+        this.totalPages = result.searchHeader.totalPages
         this.loading = false
+        this.$nextTick(() => this.afterGridRender())
       })
       .catch(err => {
         if (myReq !== this.reqId) return
         console.warn('[TopDeals] load failed:', err)
-        this.hasMore = false
+        this.products = []
+        this.totalPages = 1
         this.loading = false
       })
   },
 
+  /* Kart etkileşim altyapısı her grid render'ından sonra tazelenir
+     (products.ts onUpdate'iyle aynı sıra). */
+  afterGridRender() {
+    initListingCartDrawer(this.products)
+    initProductSliders()
+    applyListingSocialProof(this.products)
+    syncListingFavoriteHearts()
+  },
+
   /* ── Renderer exposed to x-html templates ── */
-  renderFlatCard(product: TopDealsProduct): string {
-    return renderTopDealsFlatCard(product)
+  renderCard(card: ProductListingCard): string {
+    return renderListingCard(card, { showDiscount: true })
   },
 
   /* ── Tab scroll helpers ── */
@@ -284,8 +279,9 @@ appEl.innerHTML = `
       </div>
     </div>
 
-    <!-- Product Grid -->
-    <section class="pb-8 lg:pb-12" style="background: var(--products-bg, #f9fafb);">
+    <!-- Product Grid — isolate: kart içi z-index'ler (favori z-30, rozet z-20)
+         bu bölümde hapsolur, sticky tab barının (z-20) üstüne çıkamaz -->
+    <section class="isolate pb-8 lg:pb-12" style="background: var(--products-bg, #f9fafb);">
       <div class="container-boxed">
         ${TopDealsGrid()}
       </div>
@@ -296,6 +292,9 @@ appEl.innerHTML = `
   <footer>
     ${FooterLinks()}
   </footer>
+
+  ${LoginModal()}
+  ${ListingCartDrawer()}
 
   <!-- Floating Panel -->
   ${FloatingPanel()}
@@ -308,9 +307,9 @@ mountChatPopup();
 initChatTriggers();
 startAlpine()
 initHeaderCart()
-initMobileDrawer()
 initLanguageSelector()
 initCategoryTabs()
+initListingFavoriteTriggers()
 initAnimatedPlaceholder('#topbar-compact-search-input')
 
 // Initial currency load — Alpine init() drives the data fetch itself.

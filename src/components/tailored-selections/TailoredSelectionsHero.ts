@@ -1,21 +1,16 @@
 /**
- * TailoredSelectionsHero Component
- * Dark hero section with Swiper coverflow carousel of category cards.
- * Dimensions match the iSTOC referansı exactly:
- *   – Section height: ~419px (desktop)
- *   – Title wrapper: 1440px max-width, ~100px height
- *   – Swiper coverflow height: 291px
- *   – Center card: ~520×291, padding 16px
- *   – Side cards: ~442×247, scaled down via coverflow
+ * TailoredSelectionsHero — "Kanal Şeridi × Veri Grafiği" hero'su.
+ *
+ * Tam genişlik sahne: solda künye (kategori adı + editoryal metin + opsiyonel
+ * 30 günlük sipariş sparkline'ı), sağda beyaz kaideli ürün görseli; altta
+ * kategori kanal şeridi. Seçim şerit butonlarıyla yapılır, sahne yeniden
+ * render edilir — Swiper/coverflow ve görselden zemin rengi türetme kaldırıldı.
  */
 
-import Swiper from "swiper";
-import { Navigation, EffectCoverflow } from "swiper/modules";
-import "swiper/swiper-bundle.css";
 import { t } from "../../i18n";
 import type { TailoredCategory } from "../../types/tailoredSelections";
-import { applySwiperDir } from "../../utils/direction";
-import { escapeHtml, sanitizeUrl, safeHexColor } from "../../utils/sanitize";
+import { formatViews } from "../../utils/formatCount";
+import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 const BADGE_ICONS: Record<string, string> = {
   personal:
@@ -38,181 +33,237 @@ function renderBadge(badge?: string | null): string {
   const label = BADGE_LABELS[badge];
   if (!icon || !label) return "";
   return `
-    <div class="ts-hero-badge absolute top-3 end-3 z-20 inline-flex items-center gap-1 px-2 py-1 rounded-full backdrop-blur-sm"
-         style="background: rgba(251,191,36,0.15); border: 1px solid rgba(251,191,36,0.4); color: #fbbf24; font-size: 10px; font-weight: 800; letter-spacing: 0.3px;">
+    <span class="absolute top-3 end-3 z-10 inline-flex items-center gap-1 px-2 py-1 rounded-full"
+          style="background: rgba(245,184,0,0.14); border: 1px solid rgba(245,184,0,0.45); color: #b98a00; font-size: 10px; font-weight: 800; letter-spacing: 0.3px;">
       ${icon}<span>${label}</span>
+    </span>
+  `;
+}
+
+/** "+%12" / "−%2" — Türkçe yüzde yazımı, işaret önde. */
+function formatTrend(pct: number): string {
+  return `${pct >= 0 ? "+" : "−"}%${Math.abs(Math.round(pct))}`;
+}
+
+function sparklineSvg(series: number[]): string {
+  const W = 240;
+  const H = 42;
+  const PAD = 3;
+  const min = Math.min(...series);
+  const span = Math.max(...series) - min || 1;
+  const pts = series.map((v, i) => {
+    const x = (i / (series.length - 1)) * (W - PAD * 2) + PAD;
+    const y = H - PAD - ((v - min) / span) * (H - PAD * 2);
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  });
+  const [endX, endY] = pts[pts.length - 1].split(",");
+  return `
+    <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" class="block w-full h-[42px]" aria-hidden="true">
+      <polyline points="${pts.join(" ")}" fill="none" stroke="#f5b800" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="${endX}" cy="${endY}" r="3" fill="#f5b800"/>
+    </svg>
+  `;
+}
+
+/** Sahnedeki sparkline kartı — seri verisi yoksa hiç render edilmez. */
+function renderSparkCard(category: TailoredCategory): string {
+  const series = category.series;
+  if (!series || series.length < 2) return "";
+  const trendHtml =
+    typeof category.trendPct === "number"
+      ? `<b class="text-xs font-bold tabular-nums ${category.trendPct >= 0 ? "text-green-400" : "text-[#8f8f88]"}">${formatTrend(category.trendPct)}</b>`
+      : "";
+  return `
+    <div class="max-w-[420px] rounded-md border border-white/10 bg-white/[0.03] px-4 pt-3 pb-2 mb-4">
+      <div class="flex items-baseline justify-between gap-2.5 mb-1">
+        <span class="text-[11.5px] text-[#8f8f88]">${t("tailoredPage.orderVolume")}</span>
+        ${trendHtml}
+      </div>
+      ${sparklineSvg(series)}
     </div>
   `;
 }
 
-function renderCategorySlide(category: TailoredCategory, index: number): string {
-  const slug = category.slug || category.id;
-  const bgColor = safeHexColor(category.bgColor);
+function renderStage(category: TailoredCategory): string {
+  const descHtml = category.description
+    ? `<p class="text-sm leading-relaxed text-[#b9b9b2] line-clamp-3 mt-2 mb-4 max-w-[52ch]">${escapeHtml(category.description)}</p>`
+    : `<div class="mt-2 mb-4"></div>`;
   return `
-    <div class="swiper-slide" style="height: auto;" data-bg-color="${bgColor}" data-category-slug="${escapeHtml(slug)}">
-      <div
-        class="ts-hero-card list-card-container relative rounded-md overflow-hidden h-full group cursor-pointer"
-        style="--list-card-background-color: ${bgColor}; --list-card-border-color: #6a6145; --list-card-description-max-lines: 2; background-color: var(--list-card-background-color); border: 1px solid var(--list-card-border-color); padding: 16px;"
-      >
+    <div class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_clamp(190px,24vw,280px)] lg:gap-7 items-center rounded-md border border-white/10 bg-[#161615] p-5 lg:p-7">
+      <div>
+        <p class="text-[12.5px] font-semibold text-[#8f8f88]">${t("tailoredPage.pickedForYou")}</p>
+        <h2 class="text-white font-bold leading-tight text-[22px] lg:text-[27px] mt-1.5">${escapeHtml(category.title)}</h2>
+        ${descHtml}
+        ${renderSparkCard(category)}
+        <button type="button" data-ts-cta class="th-btn inline-flex items-center gap-2">
+          ${t("tailoredPage.viewProducts")}
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5-5 5M6 12h12"/></svg>
+        </button>
+      </div>
+      <div class="relative order-first lg:order-none mx-auto w-full max-w-[250px] lg:max-w-none aspect-square rounded-md bg-[#f5f5f3] grid place-items-center p-4 lg:p-6 overflow-hidden">
         ${renderBadge(category.badge)}
-        <!-- Background image -->
         <img
           src="${escapeHtml(sanitizeUrl(category.imageSrc))}"
           alt="${escapeHtml(category.title)}"
-          loading="${index <= 2 ? "eager" : "lazy"}"
-          class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 [@media(hover:hover)and(pointer:fine)]:group-hover:scale-105 motion-reduce:transition-none motion-reduce:transform-none"
+          loading="eager"
+          class="w-full h-full object-contain mix-blend-multiply"
         />
-        <!-- Dynamic Gradient overlay -->
-        <div
-          class="absolute inset-0"
-          style="background: linear-gradient(to top, var(--list-card-background-color) 10%, transparent 80%);"
-        ></div>
-
-        <!-- Content overlay -->
-        <div class="relative z-10 flex flex-col justify-end h-full">
-          <h3 class="list-card-header-title text-white font-bold text-base sm:text-lg leading-tight mb-1">
-            ${escapeHtml(category.title)}
-          </h3>
-          <p class="list-card-content text-white/80 text-[13px] leading-[1.4]" style="display:-webkit-box;-webkit-line-clamp:var(--list-card-description-max-lines, 2);-webkit-box-orient:vertical;overflow:hidden;">
-            ${escapeHtml(category.description)}
-          </p>
-        </div>
       </div>
     </div>
   `;
 }
 
-/** Standalone renderer — called from the page to refresh hero cards only. */
-export function renderTailoredHeroCategories(categories: TailoredCategory[]): string {
-  return categories.map((c, i) => renderCategorySlide(c, i)).join("");
+function renderChannel(category: TailoredCategory, isActive: boolean): string {
+  const slug = category.slug || category.id;
+  const views = category.viewsCount || 0;
+  const viewsHtml =
+    views > 0
+      ? `<span class="truncate">${t("tailored.views", { count: formatViews(views) })}</span>`
+      : "";
+  const trendHtml =
+    typeof category.trendPct === "number"
+      ? `<span class="inline-flex items-center gap-0.5 flex-none font-bold ${category.trendPct >= 0 ? "text-green-400" : "text-[#8f8f88]"}">
+           <svg class="w-[9px] h-[9px]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 17l6-6 4 4 8-8"/></svg>${formatTrend(category.trendPct)}
+         </span>`
+      : "";
+  const stateCls = isActive
+    ? "border-[#f5b800]/85 bg-white/[0.06]"
+    : "border-white/10 hover:border-white/25";
+  return `
+    <button type="button" role="tab" aria-selected="${isActive}" data-slug="${escapeHtml(slug)}"
+            class="th-no-press flex-none w-[190px] lg:w-auto min-w-0 flex items-center gap-2.5 rounded-md border ${stateCls} px-3 py-2 text-start cursor-pointer transition-colors duration-150 motion-reduce:transition-none">
+      <span class="flex-none w-9 h-9 rounded-md bg-[#f5f5f3] grid place-items-center p-1 overflow-hidden">
+        <img src="${escapeHtml(sanitizeUrl(category.imageSrc))}" alt="" loading="lazy" class="w-full h-full object-contain mix-blend-multiply"/>
+      </span>
+      <span class="min-w-0 flex-1">
+        <b class="block text-white text-[12.5px] font-semibold leading-tight truncate">${escapeHtml(category.title)}</b>
+        <span class="flex items-center gap-1.5 text-[11px] tabular-nums ${isActive ? "text-white/70" : "text-[#8f8f88]"}">
+          ${viewsHtml}${trendHtml}
+        </span>
+      </span>
+    </button>
+  `;
+}
+
+// Modül state'i — renderTailoredHero doldurur, şerit tıklamaları günceller.
+let heroCategories: TailoredCategory[] = [];
+let heroActiveSlug = "";
+let heroOnChange: ((slug: string) => void) | undefined;
+
+function slugOf(c: TailoredCategory): string {
+  return c.slug || c.id;
+}
+
+function paint(): void {
+  const stage = document.getElementById("ts-hero-stage");
+  const strip = document.getElementById("ts-hero-strip");
+  if (!stage || !strip) return;
+  const active =
+    heroCategories.find((c) => slugOf(c) === heroActiveSlug) || heroCategories[0];
+  if (!active) return;
+  stage.innerHTML = renderStage(active);
+  strip.innerHTML = heroCategories
+    .map((c) => renderChannel(c, slugOf(c) === heroActiveSlug))
+    .join("");
+}
+
+/** Sahneyi anında yeniden boyar, kısa bir fade-in ile yumuşatır (reduced-motion'da animasyonsuz). */
+function repaintStageWithFade(): void {
+  paint();
+  const stage = document.getElementById("ts-hero-stage");
+  if (stage && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    stage.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 150, easing: "ease-out" });
+  }
+}
+
+/** Hero'yu verilen kategorilerle doldurur (API yanıtı geldikten sonra çağrılır). */
+export function renderTailoredHero(categories: TailoredCategory[], activeSlug?: string): void {
+  heroCategories = categories;
+  heroActiveSlug = activeSlug || (categories[0] ? slugOf(categories[0]) : "");
+  paint();
+}
+
+/** Aktif kategoriyi dışarıdan günceller (popstate) — onCategoryChange TETİKLEMEZ. */
+export function setTailoredHeroActive(slug: string): void {
+  if (slug === heroActiveSlug) return;
+  heroActiveSlug = slug;
+  repaintStageWithFade();
 }
 
 export function initTailoredSelectionsHero(options?: {
   onCategoryChange?: (slug: string) => void;
 }): void {
-  const el = document.querySelector<HTMLElement>(".ts-hero-swiper");
-  if (!el) return;
+  heroOnChange = options?.onCategoryChange;
+  const section = document.getElementById("ts-hero-section");
+  if (!section) return;
 
-  // loop + coverflow + az slayt (< 6) kombinasyonunda Swiper'ın clone sayısı
-  // yetersiz kalıp atlama, yanlış komşu ve "sağ ok stuck" sorunlarına yol açıyor.
-  // Bunun yerine rewind kullanıyoruz: son slayttan sonraki sağ ok başa, ilk
-  // slayttan önceki sol ok sona döner. Clone yok → slideToClickedSlide de
-  // tıklanan kartı doğru şekilde merkeze alır. ≥ 2 slayt olduğunda oklar aktif.
-  const slideCount = el.querySelectorAll(".swiper-slide").length;
-  const enableNav = slideCount >= 2;
-
-  const prevBtn = document.querySelector<HTMLElement>(".ts-hero-prev");
-  const nextBtn = document.querySelector<HTMLElement>(".ts-hero-next");
-  if (prevBtn) prevBtn.style.display = enableNav ? "" : "none";
-  if (nextBtn) nextBtn.style.display = enableNav ? "" : "none";
-
-  // loop kaldırıldığı için `centeredSlides: true` + index 0 başlangıçta
-  // merkezde ama solu boş kalıyor. Ortadaki slaytı initial olarak seç →
-  // loop'un eski başlangıç görünümü korunur.
-  const initialSlide = Math.max(0, Math.floor(slideCount / 2));
-
-  applySwiperDir(el);
-  new Swiper(el, {
-    modules: [Navigation, EffectCoverflow],
-    effect: "coverflow",
-    coverflowEffect: {
-      rotate: 0,
-      stretch: 0,
-      depth: 100,
-      modifier: 1,
-      slideShadows: true,
-      scale: 0.85,
-    },
-    centeredSlides: true,
-    loop: false,
-    rewind: true,
-    initialSlide,
-    slideToClickedSlide: true,
-    navigation: enableNav
-      ? {
-          nextEl: ".ts-hero-next",
-          prevEl: ".ts-hero-prev",
-        }
-      : false,
-    on: {
-      slideChange: function (swiper) {
-        const activeSlide = swiper.slides[swiper.activeIndex];
-        if (!activeSlide) return;
-        const bgColor = activeSlide.getAttribute("data-bg-color");
-        if (bgColor) {
-          const heroSection = document.getElementById("ts-hero-section");
-          if (heroSection) {
-            heroSection.style.setProperty("--floor-background-color", bgColor);
-          }
-        }
-        const slug = activeSlide.getAttribute("data-category-slug");
-        if (slug && options?.onCategoryChange) {
-          options.onCategoryChange(slug);
-        }
-      },
-    },
-    breakpoints: {
-      0: { slidesPerView: 1.15 },
-      480: { slidesPerView: 1.3 },
-      768: { slidesPerView: 1.6 },
-      1024: { slidesPerView: 2.2 },
-      1200: { slidesPerView: 2.6 },
-      1440: { slidesPerView: 2.8 },
-    },
+  section.addEventListener("click", (e) => {
+    const target = e.target as HTMLElement;
+    const channel = target.closest<HTMLButtonElement>("[data-slug]");
+    if (channel) {
+      const slug = channel.dataset.slug!;
+      if (slug !== heroActiveSlug) {
+        heroActiveSlug = slug;
+        repaintStageWithFade();
+        // Şerit innerHTML ile yeniden kurulduğu için klavye odağını yeni butona geri ver
+        document
+          .querySelector<HTMLButtonElement>(`#ts-hero-strip [data-slug="${CSS.escape(slug)}"]`)
+          ?.focus({ preventScroll: true });
+        heroOnChange?.(slug);
+      }
+      return;
+    }
+    if (target.closest("[data-ts-cta]")) {
+      const smooth = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      document
+        .getElementById("ts-product-grid")
+        ?.scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "start" });
+    }
   });
 }
 
-export function TailoredSelectionsHero(categories: TailoredCategory[]): string {
-  const initialBg =
-    categories.length > 0 ? safeHexColor(categories[0].bgColor, "#373224") : "#373224";
+/** İskelet blok — API yanıtı gelene kadar sahne/şerit yer tutucusu. */
+function skeletonHtml(): string {
+  const chip = `<div class="flex-none w-[190px] lg:w-auto h-[54px] rounded-md bg-white/[0.05] animate-pulse motion-reduce:animate-none"></div>`;
+  return `
+    <div id="ts-hero-stage">
+      <div class="rounded-md border border-white/10 bg-[#161615] p-5 lg:p-7 grid gap-5 lg:grid-cols-[minmax(0,1fr)_clamp(190px,24vw,280px)] lg:gap-7 items-center">
+        <div class="animate-pulse motion-reduce:animate-none">
+          <div class="h-3 w-32 rounded bg-white/[0.08]"></div>
+          <div class="h-6 w-48 rounded bg-white/[0.12] mt-3"></div>
+          <div class="h-3 w-full max-w-[380px] rounded bg-white/[0.08] mt-4"></div>
+          <div class="h-3 w-3/4 max-w-[300px] rounded bg-white/[0.08] mt-2"></div>
+          <div class="h-10 w-36 rounded-md bg-white/[0.1] mt-6"></div>
+        </div>
+        <div class="order-first lg:order-none mx-auto w-full max-w-[250px] lg:max-w-none aspect-square rounded-md bg-white/[0.06] animate-pulse motion-reduce:animate-none"></div>
+      </div>
+    </div>
+    <div id="ts-hero-strip" role="tablist" aria-label="${t("tailoredPage.title")}"
+         class="flex gap-2.5 overflow-x-auto scrollbar-hide lg:grid lg:grid-cols-3 xl:grid-cols-6 mt-3 pb-1">
+      ${chip.repeat(6)}
+    </div>
+  `;
+}
+
+export function TailoredSelectionsHero(): string {
   return `
     <section
       id="ts-hero-section"
-      class="alimod-sourcing-list-switch-floor relative overflow-hidden h-[320px] sm:h-[350px] md:h-[380px] xl:h-[419px]"
-      style="--floor-background-color: ${initialBg}; --list-card-border-color: #6a6145; background-color: var(--floor-background-color); transition: background-color 0.4s cubic-bezier(0.23, 1, 0.32, 1);"
+      class="relative overflow-hidden pt-[72px] xl:pt-9 pb-10"
+      style="background-color: var(--ts-hero-bg, #0b0b0a);"
     >
-
-      <!-- Title wrapper: max-width 1440px -->
-      <div class="page-title-wrapper flex items-center justify-center mx-auto h-[60px] sm:h-[70px] xl:h-[100px]" style="max-width: 1440px; margin: 0 auto;">
-        <h1 class="page-title text-white text-center font-semibold whitespace-nowrap hidden xl:block" style="font-size: 32px; line-height: 42px;">
-          <span data-i18n="tailoredPage.title">${t("tailoredPage.title")}</span>
-        </h1>
-      </div>
-
-      <!-- Coverflow Slider -->
-      <div class="hugo5-coverflow-slider relative flex mx-auto overflow-hidden" style="max-width: 1440px; min-width: 0;">
-        <div class="group/hero relative w-full">
-          <div class="swiper ts-hero-swiper overflow-hidden h-[230px] sm:h-[250px] md:h-[270px] xl:h-[291px]" aria-label="Tailored selection categories">
-            <div class="swiper-wrapper" style="align-items: stretch;">
-              ${categories.map((c, i) => renderCategorySlide(c, i)).join("")}
-            </div>
-          </div>
-
-          <!-- Navigation arrows (hidden on mobile — swipe works) -->
-          <button
-            aria-label="Previous categories"
-            class="ts-hero-prev swiper-button absolute start-4 top-1/2 z-10 h-10 w-10 -translate-y-1/2 hidden md:flex items-center justify-center rounded-full bg-white/90 text-gray-700 shadow-lg transition-[transform,background-color,color] duration-200 hover:bg-white hover:text-gray-900 hover:scale-110 motion-reduce:transition-none motion-reduce:hover:scale-100 disabled:opacity-0 disabled:pointer-events-none"
-          >
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-            </svg>
-          </button>
-
-          <button
-            aria-label="Next categories"
-            class="ts-hero-next swiper-button absolute end-4 top-1/2 z-10 h-10 w-10 -translate-y-1/2 hidden md:flex items-center justify-center rounded-full bg-white/90 text-gray-700 shadow-lg transition-[transform,background-color,color] duration-200 hover:bg-white hover:text-gray-900 hover:scale-110 motion-reduce:transition-none motion-reduce:hover:scale-100 disabled:opacity-0 disabled:pointer-events-none"
-          >
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-            </svg>
-          </button>
+      <div class="container-boxed">
+        <div class="hidden xl:flex items-baseline justify-between gap-4 mb-5">
+          <h1 class="text-white font-bold leading-tight" style="font-size: 26px;">
+            <span data-i18n="tailoredPage.title">${t("tailoredPage.title")}</span>
+          </h1>
         </div>
+        ${skeletonHtml()}
       </div>
-
 
       <!-- Triangle indicator -->
-      <div class="triangle-indicator absolute bottom-0 left-1/2 -translate-x-1/2 flex items-end">
-        <svg fill="none" height="15" viewBox="0 0 32 15" width="32" xmlns="http://www.w3.org/2000/svg" class="block">
+      <div class="absolute bottom-0 left-1/2 -translate-x-1/2 flex items-end" aria-hidden="true">
+        <svg fill="none" height="15" viewBox="0 0 32 15" width="32" class="block">
           <path d="M14.683 1.25513C15.437 0.595339 16.5631 0.595338 17.317 1.25513L30.9322 13.1683C32.115 14.2033 31.396 16.1423 29.8322 16.1423H2.16788C0.604044 16.1423 -0.114946 14.2033 1.0678 13.1683L14.683 1.25513Z" fill="white"/>
         </svg>
       </div>

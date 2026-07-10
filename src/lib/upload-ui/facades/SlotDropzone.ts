@@ -88,7 +88,7 @@ export class SlotDropzoneController {
       return `
         <div data-slot-id="${slot.id}" class="slot-card flex flex-col">
           <div class="text-xs font-semibold text-gray-700 mb-2">${slot.label}${slot.required ? ' <span class="text-red-500">*</span>' : ""}</div>
-          <div class="slot-zone cursor-pointer bg-white border-2 border-dashed border-gray-300 hover:border-amber-400 rounded-lg h-40 flex items-center justify-center text-center p-3 transition-all">
+          <div class="slot-zone cursor-pointer bg-white border-2 border-dashed border-gray-300 hover:border-amber-400 rounded-md h-40 max-sm:h-32 flex items-center justify-center text-center p-3 transition-all">
             <div class="text-xs text-gray-500">
               ${ICON_UPLOAD}
               ${t("commonSvc.clickOrDrag")}<br><span class="text-[10px] text-gray-400">${hint}</span>
@@ -113,7 +113,7 @@ export class SlotDropzoneController {
     return `
       <div data-slot-id="${slot.id}" class="slot-card flex flex-col">
         <div class="text-xs font-semibold text-gray-700 mb-2">${slot.label}${slot.required ? ' <span class="text-red-500">*</span>' : ""}</div>
-        <div class="slot-zone border-2 border-emerald-400 rounded-lg h-40 p-1 relative">
+        <div class="slot-zone border-2 border-emerald-400 rounded-md h-40 max-sm:h-32 p-1 relative">
           <div class="relative w-full h-full">
             <button class="slot-remove absolute -top-2 -end-2 z-30 w-6 h-6 rounded-full bg-white hover:bg-red-500 hover:text-white text-red-500 shadow text-sm flex items-center justify-center" ${this.isUploading ? "disabled" : ""}>&times;</button>
             ${thumb}

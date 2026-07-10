@@ -5,11 +5,11 @@
  * responsive breakpoint at 1024px, and 200ms width transition.
  */
 
-import { getSidebarSections } from "./sidebarData";
+import { getSidebarSections, getItemState } from "./sidebarData";
 import { renderSidebarMenuItem } from "./SidebarMenuItem";
 import { renderSidebarFlyout } from "./SidebarFlyout";
-import type { SidebarSection, SidebarMenuItem } from "../../types/buyerDashboard";
-import { getUser } from "../../utils/auth";
+import { initMobileDashboardNav } from "./MobileDashboardNav";
+import type { SidebarSection } from "../../types/buyerDashboard";
 
 /* ════════════════════════════════════════════════════
    RENDER
@@ -36,33 +36,6 @@ function getSectionI18nKey(section: SidebarSection): string | undefined {
   if (firstItemId === "subscription") return sectionTitleI18nKeys.valueAddedServices;
   if (firstItemId === "settings") return sectionTitleI18nKeys.settings;
   return undefined;
-}
-
-/**
- * Sprint 2.6: Item visibility + lockable state.
- * - requireSeller (legacy): sadece is_seller veya pending_seller_application
- * - lockable: "kyc" | "kyb" — her zaman görünür ama session state'e göre locked
- *   olabilir. Locked item gri + cursor-not-allowed + tıklanırsa modal.
- */
-function getItemState(item: SidebarMenuItem): { visible: boolean; locked: boolean } {
-  const user = getUser();
-
-  // Legacy: requireSeller flag — sadece satıcı/başvuru sahibi görür
-  if (item.requireSeller) {
-    if (!user) return { visible: false, locked: false };
-    const isSeller = Boolean(user.is_seller || user.pending_seller_application);
-    return { visible: isSeller, locked: false };
-  }
-
-  // Sprint 2.6: lockable item — herkes görür, kilit session state'inden gelir
-  if (item.lockable === "kyc") {
-    return { visible: true, locked: Boolean(user?.kyc_locked) };
-  }
-  if (item.lockable === "kyb") {
-    return { visible: true, locked: Boolean(user?.kyb_locked) };
-  }
-
-  return { visible: true, locked: false };
 }
 
 function renderSection(section: SidebarSection, expanded: boolean): string {
@@ -106,7 +79,10 @@ export function renderSidebar(expanded = true): string {
   const sidebarSections = getSidebarSections();
 
   const sections = sidebarSections.map((s) => renderSection(s, expanded)).join("");
-  const widthClass = expanded ? "w-[52px] md:w-[72px] xl:w-[260px]" : "w-[52px] md:w-[72px]";
+  // Aside her zaman renderSidebarColumn()'ın `max-lg:hidden` wrapper'ı içinde
+  // render edilir (lg altı görünmez) — mobil genişlik sınıfları (w-[52px],
+  // md:w-[72px]) hiçbir zaman boyanmaz, dead code'du.
+  const widthClass = expanded ? "lg:w-[72px] xl:w-[260px]" : "lg:w-[72px]";
 
   return `
     <aside
@@ -127,18 +103,24 @@ export function renderSidebar(expanded = true): string {
   `;
 }
 
+/**
+ * Wrapper column used by dashboard pages to place the desktop sidebar next to
+ * page content — hidden below `lg`, `72px` at `lg`, `260px` at `xl`.
+ * Extracted so every page doesn't repeat the wrapper markup (12 pages).
+ */
+export function renderSidebarColumn(): string {
+  return `<div class="max-lg:hidden lg:w-[72px] xl:w-[260px] flex-shrink-0 pt-4">${renderSidebar()}</div>`;
+}
+
 /* ════════════════════════════════════════════════════
    INIT
    ════════════════════════════════════════════════════ */
 
 /**
- * Transitional no-op. Sidebar interactivity is now handled by the Alpine.js
- * 'sidebar' component registered in alpine.ts. All 6 event listeners
- * (4x mouseenter/mouseleave capture, scroll, resize) are replaced by
- * Alpine directives on the <aside x-data="sidebar"> element.
- *
- * Remove this call from page entry files and use startAlpine() instead.
+ * Masaüstü sidebar etkileşimi Alpine'daki 'sidebar' bileşeninde
+ * (x-data="sidebar"); burada yalnız mobil navigasyon inject edilir:
+ * hamburger + soldan drawer + alt nav çubuğu (lg altı).
  */
 export function initSidebar(): void {
-  // No-op — Alpine handles sidebar interactivity via x-data="sidebar"
+  initMobileDashboardNav();
 }

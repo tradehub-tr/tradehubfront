@@ -8,7 +8,7 @@ import { initFlowbite } from 'flowbite'
 import { t } from '../i18n'
 
 // Header components
-import { TopBar, initMobileDrawer, SubHeader, initStickyHeaderSearch, MegaMenu, initMegaMenu, initHeaderCart } from '../components/header'
+import { TopBar, SubHeader, initStickyHeaderSearch, MegaMenu, initMegaMenu, initHeaderCart } from '../components/header'
 import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar'
 
@@ -105,7 +105,6 @@ initChatTriggers();
 startAlpine();
 initStickyHeaderSearch();
 initHeaderCart();
-initMobileDrawer();
 initLanguageSelector();
 initAnimatedPlaceholder('#topbar-compact-search-input');
 initCategoryFilters();

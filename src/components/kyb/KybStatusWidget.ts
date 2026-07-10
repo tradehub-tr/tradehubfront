@@ -44,7 +44,7 @@ export function KybStatusWidget(user: AuthUser | null, kybInfo?: KybStatusInfo):
   if (status === "Verified") {
     return `
       <a href="${KYB_HREF}"
-         class="block bg-green-50 border border-green-200 rounded-lg px-4 py-2.5 mb-4 flex items-center gap-2 text-sm text-green-800 hover:bg-green-100 transition-colors no-underline">
+         class="block bg-green-50 border border-green-200 rounded-lg px-4 py-2.5 mb-4 max-sm:mb-3 flex items-center gap-2 text-sm text-green-800 hover:bg-green-100 transition-colors no-underline">
         <span class="text-green-600">${ICONS.shield}</span>
         <span class="font-medium">${t("kyb.statusVerified")}</span>
         <span class="text-xs text-green-600 ms-auto">${t("kyb.viewDetails")}</span>
@@ -56,7 +56,7 @@ export function KybStatusWidget(user: AuthUser | null, kybInfo?: KybStatusInfo):
   if (status === "Rejected") {
     const reason = (kybInfo?.rejection_reason || "").trim();
     return `
-      <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4 flex items-start gap-3">
+      <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4 max-sm:p-3 max-sm:mb-3 flex items-start gap-3">
         <span class="text-red-500 flex-shrink-0 mt-0.5">${ICONS.alert}</span>
         <div class="flex-1 min-w-0">
           <div class="font-semibold text-red-800 mb-1">${t("kyb.widgetRejectedTitle")}</div>
@@ -72,7 +72,7 @@ export function KybStatusWidget(user: AuthUser | null, kybInfo?: KybStatusInfo):
   // Expired — turuncu
   if (status === "Expired") {
     return `
-      <div class="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-4 flex items-start gap-3">
+      <div class="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-4 max-sm:p-3 max-sm:mb-3 flex items-start gap-3">
         <span class="text-orange-500 flex-shrink-0 mt-0.5">${ICONS.alert}</span>
         <div class="flex-1">
           <div class="font-semibold text-orange-800 mb-1">${t("kyb.widgetExpiredTitle")}</div>
@@ -87,7 +87,7 @@ export function KybStatusWidget(user: AuthUser | null, kybInfo?: KybStatusInfo):
   // Pending — sarı, bilgi
   if (status === "Pending") {
     return `
-      <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4 flex items-center gap-3">
+      <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4 max-sm:mb-3 flex items-center gap-3">
         <span class="text-yellow-600 flex-shrink-0">${ICONS.shield}</span>
         <div class="flex-1 text-sm text-yellow-800">${t("kyb.widgetPendingMsg")}</div>
         <a href="${KYB_HREF}" class="text-xs font-semibold text-yellow-800 hover:text-yellow-900 no-underline whitespace-nowrap">
@@ -100,7 +100,7 @@ export function KybStatusWidget(user: AuthUser | null, kybInfo?: KybStatusInfo):
   // Under Review — mavi, bilgi
   if (status === "Under Review") {
     return `
-      <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4 flex items-center gap-3">
+      <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4 max-sm:mb-3 flex items-center gap-3">
         <span class="text-blue-600 flex-shrink-0">${ICONS.shield}</span>
         <div class="flex-1 text-sm text-blue-800">${t("kyb.widgetUnderReviewMsg")}</div>
         <a href="${KYB_HREF}" class="text-xs font-semibold text-blue-800 hover:text-blue-900 no-underline whitespace-nowrap">
@@ -110,17 +110,22 @@ export function KybStatusWidget(user: AuthUser | null, kybInfo?: KybStatusInfo):
     `;
   }
 
-  // Default: henüz başvurulmadı — mavi CTA
+  // Default: henüz başvurulmadı — sistem info (mavi) tonu, VerificationStatusBanner ile aynı desen.
+  // İkon başlıkla aynı flex satırında: dar ekranda ikonun tek başına satıra düşmesini önler.
   return `
-    <div class="bg-gradient-to-r from-violet-50 to-indigo-50 border border-violet-200 rounded-lg p-4 mb-4 flex items-center gap-3">
-      <span class="text-violet-600 flex-shrink-0">${ICONS.shield}</span>
-      <div class="flex-1">
-        <div class="font-semibold text-violet-900 mb-0.5">${t("kyb.widgetNotStartedTitle")}</div>
-        <div class="text-xs text-violet-700">${t("kyb.widgetNotStartedDesc")}</div>
+    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4 max-sm:p-3 max-sm:mb-3 flex flex-wrap items-center gap-3 max-sm:gap-2">
+      <div class="flex-1 min-w-0 basis-48">
+        <div class="flex items-center gap-2 mb-0.5">
+          <span class="text-blue-600 flex-shrink-0">${ICONS.shield}</span>
+          <div class="text-sm max-sm:text-[13px] font-semibold text-blue-900 min-w-0">${t("kyb.widgetNotStartedTitle")}</div>
+        </div>
+        <div class="text-xs max-sm:text-[11px] text-blue-700">${t("kyb.widgetNotStartedDesc")}</div>
       </div>
-      <a href="${KYB_HREF}" class="th-btn px-4 py-2 text-sm whitespace-nowrap no-underline">
-        ${t("kyb.widgetApplyNow")}
-      </a>
+      <div class="flex items-center max-md:w-full max-md:justify-end">
+        <a href="${KYB_HREF}" class="th-btn px-4 py-2 text-sm max-sm:flex-1 max-sm:py-2 max-sm:text-[13px] whitespace-nowrap no-underline">
+          ${t("kyb.widgetApplyNow")}
+        </a>
+      </div>
     </div>
   `;
 }

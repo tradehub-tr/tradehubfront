@@ -5,6 +5,21 @@
  */
 
 import { t } from "../../i18n";
+import { getLucideIcon } from "../icons/lucideIcons";
+
+/** Mesaj ürün bağlamı chip'i — balon içinde metnin üstünde, ürün detayına link. */
+function productRefChip(): string {
+  const icon = getLucideIcon("package", "w-3 h-3 shrink-0");
+  return /* html */ `
+    <template x-if="msg.productRef">
+      <a :href="msg.productRef.url || null" target="_blank" rel="noopener noreferrer"
+         class="mb-1.5 flex max-w-60 items-center gap-1.5 border-b border-black/10 pb-1.5 text-[11px] no-underline text-(--color-text-placeholder,#999999) hover:text-(--color-text-body,#333333)">
+        ${icon}
+        <span class="min-w-0 truncate" x-text="msg.productRef.label"></span>
+      </a>
+    </template>
+  `;
+}
 
 const TRADEHUB_CHAT_AVATAR = `<svg class="w-full h-full" viewBox="0 0 40 40" fill="none">
   <circle cx="20" cy="20" r="20" fill="#FFF2E8"/>
@@ -121,6 +136,7 @@ export function MessageContent(): string {
                 </div>
                 <div>
                   <div class="bg-(--color-surface,#ffffff) rounded-md rounded-es-sm px-4 py-2.5 shadow-sm border border-(--color-border-light,#f0f0f0)">
+                    ${productRefChip()}
                     <p class="text-[13px] text-(--color-text-body,#333333) leading-relaxed whitespace-pre-wrap break-words" x-html="msg.textHtml || msg.text"></p>
                     <template x-if="msg.videoCallUrl">
                       <a :href="msg.videoCallUrl" target="_blank" rel="noopener noreferrer"
@@ -140,6 +156,7 @@ export function MessageContent(): string {
               <div class="flex items-end gap-2 max-w-[75%] max-sm:max-w-[85%] flex-row-reverse">
                 <div>
                   <div class="bg-(--color-cta-primary,#cc9900)/10 rounded-md rounded-ee-sm px-4 py-2.5">
+                    ${productRefChip()}
                     <p class="text-[13px] text-(--color-text-body,#333333) leading-relaxed whitespace-pre-wrap break-words" x-html="msg.textHtml || msg.text"></p>
                     <template x-if="msg.videoCallUrl">
                       <a :href="msg.videoCallUrl" target="_blank" rel="noopener noreferrer"

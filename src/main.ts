@@ -19,7 +19,6 @@ import { initHeaderNotice } from "./components/header/HeaderNotice";
 // Header components
 import {
   TopBar,
-  initMobileDrawer,
   SubHeader,
   initStickyHeaderSearch,
   MegaMenu,
@@ -37,6 +36,8 @@ import {
   initHeroSideBannerSlider,
   HeroTopSlider,
   initHeroTopSlider,
+  HeroSidePanel,
+  initHeroSidePanel,
   MobileCategoryBar,
   initMobileCategoryBar,
   TopDeals,
@@ -90,13 +91,16 @@ appEl.innerHTML = `
 
   <!-- Main Content -->
   <main>
-    <!-- Top Hero: Full-width promotional banner slider (Journal-style) -->
+    <!-- Top Hero: Split hero — Sarı İmza slider + En İyi Fırsatlar/RFQ yan paneli -->
     <section class="pt-1 pb-2 xl:pt-3 xl:pb-4" aria-label="${t("commonNav.featuredCampaigns")}">
       <div class="container-boxed">
         <div class="rounded-md bg-gray-50 px-3 py-2 sm:px-4 sm:py-3 lg:py-4">
           <div class="mx-auto w-full max-w-[1280px] 2xl:max-w-[1680px]">
-            <div class="h-[200px] sm:h-[340px] lg:h-[400px] xl:h-[430px] 2xl:h-[480px]">
-              ${HeroTopSlider()}
+            <div class="grid gap-3 xl:grid-cols-[minmax(0,1fr)_312px]">
+              <div class="h-[280px] min-w-0 sm:h-[360px]">
+                ${HeroTopSlider()}
+              </div>
+              ${HeroSidePanel()}
             </div>
           </div>
         </div>
@@ -165,6 +169,7 @@ startAlpine();
 // Initialize remaining custom behaviors
 initStickyHeaderSearch();
 initHeroTopSlider();
+initHeroSidePanel();
 initCategoryBrowse();
 initMobileCategoryBar();
 initRecommendationSlider();
@@ -175,7 +180,6 @@ initTopRanking();
 initTailoredSelections();
 initProductGrid();
 
-initMobileDrawer();
 initBottomNav();
 initHeaderCart();
 initLanguageSelector();

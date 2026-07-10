@@ -6,6 +6,7 @@
 
 import type { SidebarSection, SidebarMenuItem } from "../../types/buyerDashboard";
 import { t } from "../../i18n";
+import { getUser } from "../../utils/auth";
 
 /* ════════════════════════════════════════════════════
    MENU SECTIONS
@@ -57,7 +58,6 @@ export function getSidebarSections(): SidebarSection[] {
               href: "/pages/dashboard/orders.html#refunds",
             },
             { label: t("dashboard.myReviews"), href: "/pages/dashboard/orders.html#reviews" },
-            { label: t("dashboard.coupons"), href: "/pages/dashboard/orders.html#coupons" },
           ],
         },
         {
@@ -130,6 +130,36 @@ export function getSidebarSections(): SidebarSection[] {
       ],
     },
   ];
+}
+
+/**
+ * Sprint 2.6: Item visibility + lockable state.
+ * - requireSeller (legacy): sadece is_seller veya pending_seller_application
+ * - lockable: "kyc" | "kyb" — her zaman görünür ama session state'e göre locked
+ *   olabilir. Locked item gri + cursor-not-allowed + tıklanırsa modal.
+ *
+ * Rail (Sidebar.ts) ve mobil drawer (MobileDashboardNav.ts) aynı görünürlük
+ * mantığını paylaşır — tekilleştirilmiş halde burada tutulur.
+ */
+export function getItemState(item: SidebarMenuItem): { visible: boolean; locked: boolean } {
+  const user = getUser();
+
+  // Legacy: requireSeller flag — sadece satıcı/başvuru sahibi görür
+  if (item.requireSeller) {
+    if (!user) return { visible: false, locked: false };
+    const isSeller = Boolean(user.is_seller || user.pending_seller_application);
+    return { visible: isSeller, locked: false };
+  }
+
+  // Sprint 2.6: lockable item — herkes görür, kilit session state'inden gelir
+  if (item.lockable === "kyc") {
+    return { visible: true, locked: Boolean(user?.kyc_locked) };
+  }
+  if (item.lockable === "kyb") {
+    return { visible: true, locked: Boolean(user?.kyb_locked) };
+  }
+
+  return { visible: true, locked: false };
 }
 
 /* ──── Bottom sticky discover link ──── */

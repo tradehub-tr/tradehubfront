@@ -3,7 +3,7 @@ import { initFlowbite } from 'flowbite'
 import { t } from '../i18n'
 
 // Header components
-import { TopBar, initMobileDrawer, initStickyHeaderSearch, MegaMenu, initMegaMenu } from '../components/header'
+import { TopBar, initStickyHeaderSearch, MegaMenu, initMegaMenu } from '../components/header'
 import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar'
 
@@ -113,7 +113,6 @@ startAlpine();
 
 // Initialize remaining custom behaviors
 initStickyHeaderSearch();
-initMobileDrawer();
 initBottomNav();
 initLanguageSelector();
 initAnimatedPlaceholder('#topbar-compact-search-input');

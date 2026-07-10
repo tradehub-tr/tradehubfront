@@ -348,10 +348,11 @@ Alpine.data("kybPage", () => ({
   },
 
   startApplication() {
-    // İlk başvuru — formu göster (kayıt henüz yok)
+    // İlk başvuru — formu göster (kayıt henüz yok). Draft: "Beklemede/gönderildi"
+    // demeden önce kullanıcı belgeleri yükleyip Gönder'e basmalı.
     this.kybData = {
       exists: true,
-      status: "Pending", // UI'de status badge'i gösterir; backend'de yeni kayıt oluşur
+      status: "Draft",
     };
   },
 

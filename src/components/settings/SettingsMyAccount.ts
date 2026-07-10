@@ -205,13 +205,13 @@ export function initSettingsMyAccount(): void {
         <div id="ma-view" ${isEditing ? 'style="display:none"' : ""}>
           ${renderView(current)}
           <div class="mt-6">
-            <button class="th-btn-outline w-full max-w-[280px] mx-auto block max-sm:max-w-full" type="button" id="ma-edit-toggle">${t("settings.editBtn") || "Düzenle"}</button>
+            <button class="th-btn-outline max-sm:py-2 max-sm:text-[13px] w-full max-w-[280px] mx-auto block max-sm:max-w-full" type="button" id="ma-edit-toggle">${t("settings.editBtn") || "Düzenle"}</button>
           </div>
         </div>
         <div id="ma-edit" ${!isEditing ? 'style="display:none"' : ""}>
           ${renderEdit(current)}
           <div class="pt-4 border-t border-gray-100 flex items-center gap-3 max-sm:flex-col">
-            <button class="th-btn px-8 max-sm:w-full" type="button" id="ma-submit">${t("settings.submitBtn") || "Kaydet"}</button>
+            <button class="th-btn max-sm:py-2 max-sm:text-[13px] px-8 max-sm:w-full" type="button" id="ma-submit">${t("settings.submitBtn") || "Kaydet"}</button>
             <button class="text-[13px] font-medium bg-none border-none cursor-pointer hover:underline" style="color:var(--color-text-secondary)" type="button" id="ma-cancel">${t("settings.cancelAction") || "Vazgeç"}</button>
           </div>
           <div id="ma-message" class="mt-3 text-sm hidden"></div>

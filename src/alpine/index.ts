@@ -14,7 +14,6 @@ Alpine.magic("safeHtml", () => (value: unknown) => sanitizeHtml(String(value ?? 
 import "./orders";
 import "./orderItemsDrawer";
 import "./remittance";
-import "./coupons";
 import "./product";
 import "./socialProofBadge";
 import "./cart";

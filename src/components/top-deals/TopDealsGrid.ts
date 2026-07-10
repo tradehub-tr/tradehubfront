@@ -1,167 +1,64 @@
 /**
  * TopDealsGrid Component
- *
- * Alibaba-style flat product grid for the Top Deals page. The active tab
- * (Tümü or any specific category) only changes which products are shown —
- * the layout stays a flat grid throughout. The Alpine container in
- * top-deals.ts owns `products`, `loading`, `hasMore` and `loadMore()`.
+ * Paylaşılan zengin ürün kartıyla (ListingCard) düz grid. Sayfalama
+ * numaralıdır (append yok) — scale-resilience: DOM'da her an tek
+ * sayfalık kart bulunur. Kart render'ı Alpine container'daki
+ * renderCard() üzerinden gelir (pages/top-deals.ts).
  */
-
 import { t } from "../../i18n";
-import { formatPrice } from "../../utils/currency";
-import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
-import type { TopDealsProduct } from "../../types/topDeals";
 
-/* ── Renderers ───────────────────────────────────────────────────────── */
-
-function renderProductImage(imgSrc: string, name: string): string {
-  if (!imgSrc) {
-    return `
-      <div class="w-full h-full flex items-center justify-center bg-gray-100">
-        <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.41a2.25 2.25 0 013.182 0l2.909 2.91m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5z"/>
-        </svg>
-      </div>
-    `;
-  }
-  return `
-    <img
-      src="${escapeHtml(sanitizeUrl(imgSrc))}"
-      alt="${escapeHtml(name)}"
-      loading="lazy"
-      class="w-full h-full object-cover transition-transform duration-300 [@media(hover:hover)and(pointer:fine)]:group-hover/product:scale-105 motion-reduce:transform-none motion-reduce:transition-none"
-    />
-  `;
-}
-
-/** Parse the numeric MOQ count out of a string like "532 Nos" or "1 adet".
- *  Backend formats this field for legacy consumers; cards re-format via i18n. */
-function moqCount(moq: string | undefined): number {
-  if (!moq) return 1;
-  const m = String(moq).match(/(\d+)/);
-  return m ? parseInt(m[1], 10) || 1 : 1;
-}
-
-function moqLabel(moq: string | undefined): string {
-  return t("common.moq", { count: moqCount(moq), unit: t("common.moqUnit") });
-}
-
-/** Single product card used by both All and per-category tabs. */
-export function renderTopDealsFlatCard(product: TopDealsProduct): string {
-  const hasDiscount =
-    product.originalPrice && product.discountPercent && product.discountPercent > 0;
-  return `
-    <a href="${escapeHtml(sanitizeUrl(product.href))}" class="pc-topdeals group/product flex flex-col [@media(hover:hover)and(pointer:fine)]:hover:-translate-y-0.5 [@media(hover:hover)and(pointer:fine)]:hover:shadow-md motion-reduce:hover:translate-y-0 transition-[transform,box-shadow] duration-200 relative">
-      <div class="relative aspect-square w-full overflow-hidden rounded-md bg-surface-raised mb-2">
-        ${renderProductImage(product.imageSrc || "", product.name)}
-        ${
-          hasDiscount
-            ? `
-          <span class="absolute top-1.5 start-1.5 inline-flex items-center bg-red-500 text-white text-[11px] font-bold px-1.5 py-0.5 rounded">%${product.discountPercent}</span>
-        `
-            : ""
-        }
-      </div>
-      <div class="flex items-baseline gap-1.5 flex-wrap">
-        <span class="text-sm font-semibold text-text-primary">${formatPrice(product.price)}</span>
-        ${hasDiscount ? `<span class="text-xs text-gray-400 line-through">${escapeHtml(product.originalPrice ?? "")}</span>` : ""}
-      </div>
-      <p class="text-xs text-text-secondary mt-1 line-clamp-2 min-h-[2.4em]">${escapeHtml(product.name)}</p>
-      <p class="text-xs text-text-tertiary mt-0.5 truncate">${moqLabel(product.moq)}</p>
-    </a>
-  `;
-}
-
-/** Skeleton placeholder used while a fetch is in flight (initial load only). */
+/** Zengin kart anatomisine uygun skeleton (görsel + başlık + fiyat + butonlar). */
 function renderSkeletonCard(): string {
   return `
-    <div class="pc-topdeals animate-pulse">
-      <div class="aspect-square bg-gray-200 rounded-md mb-2"></div>
-      <div class="h-4 w-16 bg-gray-200 rounded mb-1"></div>
-      <div class="h-3 w-12 bg-gray-200 rounded"></div>
+    <div class="animate-pulse rounded-md border border-gray-200 bg-white overflow-hidden">
+      <div class="aspect-square bg-gray-200"></div>
+      <div class="p-3 space-y-2">
+        <div class="h-4 w-full bg-gray-200 rounded"></div>
+        <div class="h-4 w-2/3 bg-gray-200 rounded"></div>
+        <div class="h-5 w-24 bg-gray-200 rounded"></div>
+        <div class="h-3 w-20 bg-gray-200 rounded"></div>
+        <div class="flex gap-2 pt-1">
+          <div class="h-9 flex-1 bg-gray-200 rounded-md"></div>
+          <div class="h-9 flex-1 bg-gray-200 rounded-md"></div>
+        </div>
+      </div>
     </div>
   `;
 }
-
-/* ── Section template ─────────────────────────────────────────────────── */
 
 export function TopDealsGrid(): string {
   return `
     <section class="mt-4" aria-label="Top deals products">
-      <!-- Initial load skeleton -->
-      <template x-if="loading && products.length === 0">
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 lg:gap-4">
-          ${Array.from({ length: 12 }).map(renderSkeletonCard).join("")}
+      <!-- Yükleme skeleton'ı (ilk yükleme + sayfa geçişi) -->
+      <template x-if="loading">
+        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 lg:gap-4">
+          ${Array.from({ length: 10 }).map(renderSkeletonCard).join("")}
         </div>
       </template>
 
-      <!-- Flat product grid (Alibaba style — no category headers) -->
-      <template x-if="!(loading && products.length === 0)">
+      <template x-if="!loading">
         <div>
+          <!-- group/grid + data-list-mode: ListingCard'ın grid-mode variant'ları için zorunlu -->
           <div
-            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 lg:gap-4"
+            class="group/grid grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 lg:gap-4"
+            data-list-mode="grid"
             role="list"
             aria-label="Deal products"
           >
             <template x-for="product in products" :key="product.id">
-              <div role="listitem" x-html="renderFlatCard(product)"></div>
+              <div role="listitem" class="flex" x-html="renderCard(product)"></div>
             </template>
           </div>
-          <!-- Empty state -->
-          <div class="flex items-center justify-center py-12" x-show="products.length === 0 && !loading">
+
+          <!-- Boş durum -->
+          <div class="flex items-center justify-center py-12" x-show="products.length === 0">
             <p class="text-sm text-gray-400" data-i18n="topDealsPage.noResults">${t("topDealsPage.noResults")}</p>
           </div>
+
+          <!-- Numaralı sayfalama (paylaşılan Pagination çıktısı) -->
+          <div x-html="paginationHtml" @click="onPageClick($event)"></div>
         </div>
       </template>
-
-      <!-- Inline loader for "load more" requests -->
-      <div class="flex items-center justify-center py-4" x-show="loading && products.length > 0">
-        <div class="h-6 w-6 border-2 border-gray-300 border-t-gray-700 rounded-full animate-spin"></div>
-      </div>
-
-      <!-- Load more button -->
-      <div class="flex justify-center mt-8" x-show="hasMore && !loading">
-        <button
-          type="button"
-          class="th-btn-outline px-8 py-2.5 text-sm font-semibold"
-          @click="loadMore()"
-          data-i18n="topDealsPage.loadMore"
-        >${t("topDealsPage.loadMore")}</button>
-      </div>
     </section>
-  `;
-}
-
-// Legacy single-card renderer (kept for backwards compatibility)
-export function renderTopDealCard(product: TopDealsProduct): string {
-  return renderTopDealsFlatCard(product);
-}
-
-// ── Legacy grouped-mode shims ─────────────────────────────────────────
-// The grouped layout was retired in favour of the flat grid above, but
-// pages/top-deals.ts still imports the type and renderer from here. The
-// shims below preserve the public surface without re-introducing the
-// removed UI: the renderer just emits a flat product grid wrapped under
-// the category name, which matches the structure top-deals.ts expects.
-// Once top-deals.ts is rewritten to use the flat path exclusively, both
-// of these can be deleted.
-
-export interface TopDealsGroup {
-  id: string;
-  name: string;
-  slug: string;
-  totalInCategory: number;
-  products: TopDealsProduct[];
-}
-
-export function renderTopDealsGroupCard(group: TopDealsGroup): string {
-  const productsHtml = group.products.map((p) => renderTopDealsFlatCard(p)).join("");
-  return `
-    <div class="bg-surface border border-border-default rounded-md p-4">
-      <h3 class="text-sm font-bold text-text-primary mb-3 truncate" title="${escapeHtml(group.name)}">${escapeHtml(group.name)}</h3>
-      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-        ${productsHtml}
-      </div>
-    </div>
   `;
 }

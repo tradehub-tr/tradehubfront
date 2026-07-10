@@ -9,13 +9,6 @@ export function StoreHeader(): string {
   /* Reusable SVG: blue filled circle with white checkmark */
   const blueCheck = `<img src="/src/assets/images/verfied.png" alt="Doğrulanmış satıcı" class="shrink-0" style="width:13px;height:12px;" />`;
 
-  /* Reusable SVG: info tooltip icon */
-  const infoIcon = `
-    <svg class="w-3.5 h-3.5 text-gray-400 shrink-0 cursor-help" viewBox="0 0 16 16" fill="currentColor">
-      <circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1"/>
-      <text x="8" y="12" text-anchor="middle" font-size="10" fill="currentColor">i</text>
-    </svg>`;
-
   /* Store icon for "Mağazayı ziyaret et" button */
   const storeIcon = `
     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -84,6 +77,8 @@ export function StoreHeader(): string {
                 <span class="mx-1">&middot;</span>
               </span>
             </template>
+            <!-- Doğrulama rozeti konumla aynı satırda (tek sıra) -->
+            ${VerificationBadgeTemplate("seller?.verifications || []")}
             <template x-if="sellerYears">
               <span>
                 ${t("sellPage.onIstocFor")} <span x-text="sellerYears"></span>
@@ -104,26 +99,8 @@ export function StoreHeader(): string {
             </template>
           </div>
 
-          <!-- Badges row: Onaylanmış Satıcı + Doğrulama rozeti + Manufacturer type + Best seller -->
+          <!-- Badges row: Best seller -->
           <div class="flex flex-wrap items-center gap-3">
-            <!-- KYB Onaylanmış Satıcı rozeti — Verified Seller rolüne bağlı -->
-            <template x-if="seller?.verified">
-              <span class="inline-flex items-center gap-1 text-green-700 dark:text-green-400">
-                <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                <span class="text-[13px] font-semibold">${t("seller.sf.verifiedSupplier")}</span>
-              </span>
-            </template>
-            <!-- Saha doğrulama rozeti — verifications[] dizisi dolu ise gösterilir -->
-            ${VerificationBadgeTemplate("seller?.verifications || []")}
-
-            <!-- Manufacturer type -->
-            <template x-if="seller?.business_type">
-              <span class="inline-flex items-center gap-1.5 text-sm text-[#333]">
-                <span class="font-medium" x-text="seller.business_type_display || '${t("seller.sf.manufacturer")}'"></span>
-                ${infoIcon}
-              </span>
-            </template>
-
             <!-- Best seller badge -->
             <template x-if="seller?.best_seller_rank">
               <a href="#" @click.prevent
@@ -348,16 +325,6 @@ export function StoreHeader(): string {
                       <svg class="w-7 h-7 text-white ms-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                     </div>
                   </button>
-                </template>
-
-                <!-- "Onaylanmış" overlay top-left — KYB Verified satıcılarda -->
-                <template x-if="seller?.verified">
-                  <div>
-                    <div class="absolute inset-x-0 top-0 h-14 bg-gradient-to-b from-black/40 to-transparent pointer-events-none"></div>
-                    <span class="absolute top-3 start-4 text-white text-[18px] italic font-light tracking-wide drop-shadow-lg pointer-events-none">
-                      ${t("seller.sf.verified")}
-                    </span>
-                  </div>
                 </template>
 
                 <!-- Video Controls Bar (video only) -->

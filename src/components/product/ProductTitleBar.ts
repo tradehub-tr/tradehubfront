@@ -11,12 +11,12 @@ import { getCountryCode } from "../../utils/country";
 import { getFlagSvg } from "../../utils/flags";
 import { getBrandUrl } from "../../utils/brandUrl";
 import { getSellerUrl } from "../../utils/sellerUrl";
-import { renderStars } from "./ProductReviews";
+import { renderStars, formatScore } from "./ProductReviews";
 import { formatCurrency, getSelectedCurrency } from "../../services/currencyService";
 
 function ratingLineHtml(): string {
   const p = getCurrentProduct();
-  const score = p.rating ? Number(p.rating).toFixed(p.rating % 1 === 0 ? 0 : 1) : "0";
+  const score = formatScore(p.rating);
   return `
         <span class="flex items-center gap-0.5">${renderStars(p.rating)}</span>
         <span class="font-semibold text-[var(--pd-title-color,#111827)]">${score}</span>

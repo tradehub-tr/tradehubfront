@@ -6,4 +6,4 @@ export { TopDealsHero, TopDealsMobileHeader, TopDealsStickyMobileHeader } from "
 export { TopDealsPromoBar } from "./TopDealsPromoBar";
 export { TopDealsCategoryTabs, initCategoryTabs } from "./TopDealsCategoryTabs";
 export { TopDealsSubFilters } from "./TopDealsSubFilters";
-export { TopDealsGrid, renderTopDealCard } from "./TopDealsGrid";
+export { TopDealsGrid } from "./TopDealsGrid";

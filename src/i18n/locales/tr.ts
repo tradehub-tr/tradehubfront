@@ -2090,6 +2090,22 @@ const tr = {
       buyNow: "Hemen Al",
       contactSupplier: "Tedarikçiye Ulaş",
       startOrder: "Sipariş Başlat",
+      // Mobil ürün detay — "Seçenekler" bottom-sheet (Alibaba app deseni, Faz 1)
+      optionsSheetTitle: "Seçenekler",
+      // Mobil tam ekran medya görüntüleyici — galeri/varyant/video mod chip'i (Faz 2)
+      videoTab: "Video",
+      sendQuestion: "Soru sor",
+      storeLabel: "Mağaza",
+      optionsMinOrderHint: "Min. sipariş {{moq}} {{unit}}",
+      optionsBreakdownTotal: "Toplam {{qty}} {{unit}} · birim {{price}}",
+      noSelectionYet: "Henüz seçim yok",
+      // Mobil ürün detay — "Soru gönder" tam ekran formu (Faz 4)
+      questionFormTitle: "Soru Gönder",
+      questionDetailsLabel: "Soru detayları",
+      questionDefaultMessage: "Merhaba, bu ürün hakkında bilgi almak istiyorum.",
+      questionQuantitySummary: "Ürün miktarı ve özellikleri",
+      attachFilePrompt: "Dosya ekleyin",
+      leaveFormConfirm: "Bu sayfadan ayrılmak istediğinizden emin misiniz? Girilen tüm bilgiler kaybolacaktır.",
       quantity: "Miktar",
       color: "Renk",
       size: "Beden",
@@ -2121,7 +2137,9 @@ const tr = {
       viewCompany: "Şirketi İncele",
       technicalSpecs: "Teknik Özellikler",
       packagingDelivery: "Paketleme ve Teslimat",
-      keyAttributes: "Temel Özellikler",
+      keyAttributes: "Teknik Özellikler",
+      // Mobil ürün detay — Öne Çıkan Özellikler paneli başlığı (Alibaba app pattern, Faz 3)
+      keyFeaturesTitle: "Öne Çıkan Özellikler",
       leadTime: "Teslim Süresi",
       leadTimeQty: "Miktar (adet)",
       leadTimeDays: "Teslim süresi (gün)",
@@ -2174,6 +2192,7 @@ const tr = {
       removedFromFavorites: "Favorilerden çıkarıldı",
       imageSearchLabel: "Görsel ile ara",
       productGallery: "Ürün görsel galerisi",
+      imageNumberLabel: "Görsel {{count}}",
       closeGallery: "Galeriyi kapat",
       previousImage: "Önceki görsel",
       nextImage: "Sonraki görsel",
@@ -2385,8 +2404,6 @@ const tr = {
       allOrders: "Tüm Siparişlerim",
       refundsAfterSales: "Para İadesi ve Satış Sonrası Hizmetler",
       myReviews: "Değerlendirmelerim",
-      couponsCredits: "Kupon ve Kredilerim",
-      coupons: "Kuponlar",
       taxInfo: "Vergi Bilgilerim",
       payment: "Ödeme",
       paymentManagement: "Ödeme Yönetimi",
@@ -2415,7 +2432,6 @@ const tr = {
       exploreSellerSite: "Satıcı Sitesini Keşfedin",
       messagesLabel: "Mesajlar",
       quotationsLabel: "Teklifler",
-      couponsLabel: "Kuponlar",
       validateTax: "Vergiden muaf statüsü için hesabınızı doğrulatın",
       verifyBusiness: "İş bilgilerini doğrulayın",
       personalizeExp: "iStoc deneyiminizi kişiselleştirin",
@@ -2477,6 +2493,7 @@ const tr = {
       notifVerifyEmailSentLabel: "Gönderildi:",
       notifVerifyEmailChangeLink: "Değiştir",
       notifVerifyEmailCta: "Doğrulama e-postası gönder",
+      notifVerifyEmailCtaShort: "Gönder",
       notifVerifyEmailResend: "Tekrar gönder",
       verificationEmailSent: "Doğrulama e-postası gönderildi. Lütfen gelen kutunuzu kontrol edin.",
       verificationEmailFailed:
@@ -2566,6 +2583,7 @@ const tr = {
       unpaid: "Ödenmemiş",
       closed: "Kapatıldı",
       submitRemittanceProof: "Havale makbuzu gönder",
+      submitRemittanceProofShort: "Havale bildir",
       remitPreview: "Önizleme",
       remitUploadHint:
         "Havale kanıtı veya MT103 belgesini yükleyin ya da dosyayı kutuya sürükleyip bırakın.",
@@ -2683,17 +2701,17 @@ const tr = {
       reviewed: "Değerlendirildi",
       reviewSearchPlaceholder: "Değerlendirme ara...",
       scoringRules: "Puanlama kuralları",
-      couponsAndCredits: "Kuponlar ve Krediler",
-      coupons: "Kuponlar",
-      credit: "Kredi",
-      noCoupons: "Mevcut kupon yok",
-      available: "Kullanılabilir",
-      used: "Kullanıldı",
-      expired: "Süresi dolmuş",
-      expiryDate: "Son kullanma tarihi",
-      totalCreditBalance: "Toplam kredi bakiyesi",
-      creditEqualsUsd: "1 Kredi = 1 USD",
-      history: "Geçmiş",
+      pendingShort: "Bekleyen",
+      writeReview: "Değerlendir",
+      reviewStatusPublished: "Yayında",
+      pendingReviewsEmptyDesc: "Teslim edilen siparişlerinizdeki ürünler, değerlendirmeniz için burada listelenir.",
+      reviewsDoneEmptyTitle: "Henüz değerlendirme yapmadınız",
+      reviewsDoneEmptyDesc: "Yaptığınız değerlendirmeler ve durumları burada görünür.",
+      refundRequests: "talep",
+      refundsEmptyTitle: "İade talebiniz yok",
+      refundsEmptyDesc: "Bir siparişinizde sorun yaşarsanız, iade talebinizi buradan oluşturup takip edebilirsiniz.",
+      refundStatusApproved: "Onaylandı",
+      refundStatusRejected: "Reddedildi",
       records: "Kayıtlar",
       noRecordsYet: "Henüz kayıt yok",
       noPaymentRecord: "Ödeme kaydı yok",
@@ -2702,9 +2720,6 @@ const tr = {
       details: "Detaylar",
       copied: "Kopyalandı!",
       copy: "Kopyala",
-      minOrder: "Min. sipariş: {{count}} Adet",
-      free: "Ücretsiz",
-      usedOn: "Kullanıldı",
       applicationDate: "Başvuru tarihi",
       dateUtc8: "Tarih (UTC+8)",
       taxInformation: "Vergi Bilgileri",
@@ -2853,31 +2868,6 @@ const tr = {
       faqTaxNotApproved: "Vergi muafiyetim onaylanmazsa ne olur?",
       faqTaxNotApprovedAnswer:
         "Vergi muafiyetiniz onaylanmazsa standart vergi oranları uygulanır. Güncellenmiş belgelerle tekrar gönderebilirsiniz.",
-    },
-
-    // ============================================================
-    // COUPONS & CREDITS
-    // ============================================================
-    coupons: {
-      percentDiscount: "Yüzde İndirim",
-      fixedDiscount: "Sabit İndirim",
-      freeShipping: "Ücretsiz Kargo",
-      earned: "Kazanıldı",
-      spent: "Harcandı",
-      refund: "İade",
-      welcome10Desc: "Hoş geldiniz! İlk siparişinizde %10 indirim için bu kuponu kullanın",
-      save20Desc: "200$ üzeri siparişlerde 20$ tasarruf edin",
-      freeShippingDesc: "Sonraki siparişinizde ücretsiz kargo",
-      summer15Desc: "Yaz koleksiyonu ürünlerinde %15 indirim",
-      flat50Desc: "500$ üzeri siparişlerde 50$ indirim",
-      shipfree2Desc: "100$ üzeri siparişlerde ücretsiz kargo",
-      newyear25Desc: "Yeni yılı kutlamak için %25 indirim",
-      flash10Desc: "Flaş indirim! 24 saat boyunca ekstra %10 indirim",
-      xmasshipDesc: "Tüm siparişlerde ücretsiz tatil kargosu",
-      welcomeBonus: "Hoş geldin bonusu",
-      creditUsage: "{{orderNum}} numaralı sipariş için kullanılan kredi",
-      refundCredit: "{{orderNum}} numaralı sipariş iade kredisi",
-      reviewReward: "Değerlendirme ödülü",
     },
 
     // ============================================================
@@ -4297,6 +4287,14 @@ const tr = {
       createRfq: "RFQ oluştur",
     },
 
+    heroSide: {
+      bestDeals: "En İyi Fırsatlar",
+      allDeals: "Tüm fırsatlar",
+      endsIn: "Gün sonuna kalan süre",
+      rfqTitle: "Aradığını bulamadın mı?",
+      rfqDesc: "Teklif iste, tedarikçiler sana ulaşsın",
+    },
+
     // ============================================================
     // HERO - TOP DEALS
     // ============================================================
@@ -4347,6 +4345,9 @@ const tr = {
     // TAILORED SELECTIONS PAGE (View More)
     // ============================================================
     tailoredPage: {
+      pickedForYou: "Senin için seçildi",
+      viewProducts: "Ürünleri gör",
+      orderVolume: "Sipariş hacmi · son 30 gün",
       title: "Size Özel Seçimler",
       breadcrumb: "Size Özel Seçimler",
       breadcrumbHome: "Ana Sayfa",
@@ -4394,6 +4395,16 @@ const tr = {
       views_24h: "Son 24 saatte {{value}} görüntülenme",
       distinct_buyers: "Son {{days}} günde {{value}} işletme bu üründen aldı",
       seller_orders: "Bu satıcıdan {{value}} tamamlanmış sipariş",
+    },
+
+    // Kart şeridi için kısa set — tek satıra sığmalı (spec: 2026-07-07-listing-social-proof-strip)
+    socialProofCard: {
+      sales: "{{days}} günde {{value}} adet satıldı",
+      favorites: "{{value}} firmanın favorisi",
+      cart_now: "{{value}} alıcının sepetinde",
+      views_24h: "24 saatte {{value}} görüntülenme",
+      distinct_buyers: "{{days}} günde {{value}} firma aldı",
+      seller_orders: "{{value}} tamamlanmış sipariş",
     },
 
     // ============================================================
@@ -7701,6 +7712,7 @@ const tr = {
     heroTitle: "En Çok Satanlar",
     heroSubtitle: "Veri odaklı sıralamalarla trendleri keşfedin",
     breadcrumb: "En Çok Satanlar",
+    searchPlaceholder: "Çok satanlarda ara",
 
     // Region options
     regionGlobal: "Küresel sıralama",
@@ -8321,6 +8333,8 @@ const tr = {
   verification: {
     /** Tooltip başlık metni — "{{name}}" runtime'da satıcı adıyla değiştirilir */
     verifiedBySupplier: "{{name}} tarafından onaylı satıcı",
+    /** KYB-onaylı ama saha doğrulama kaydı olmayan satıcının sanal İstoç kaynağı açıklaması */
+    kybDescription: "Bu satıcının kimlik ve işletme doğrulaması iStoc tarafından yapılmıştır",
     downloadReport: "Denetim belgesini indir",
     badgeInfo: "Doğrulama bilgisi",
   },

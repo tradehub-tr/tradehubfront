@@ -81,6 +81,18 @@ export interface Message {
   /** Jitsi görüntülü görüşme daveti URL'i — mesaj 🎥 marker'ı içeriyorsa
    *  buyer/seller tarafı bunu "Görüşmeye Katıl" butonu olarak render eder. */
   videoCallUrl?: string;
+  /** Mesaj bir ürün bağlamıyla gönderildiyse ([Ürün ...] marker'ı) chip olarak
+   *  render edilir — hangi ürün hakkında konuşulduğu geçmişte kaybolmasın. */
+  productRef?: ProductRef;
+}
+
+export interface ProductRef {
+  /** Marker'daki listing id — pin barını geçmişten geri kurmak için. */
+  id?: string;
+  /** Ürün detay linki (marker'daki listing id'den üretilir; id yoksa boş). */
+  url: string;
+  /** "başlık • fiyat • Min. Sipariş: N" görünür metni. */
+  label: string;
 }
 
 export type SubMenuKey =

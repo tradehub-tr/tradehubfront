@@ -15,12 +15,12 @@ import { requireAuth } from "../utils/auth-guard";
 import { getUser } from "../utils/auth";
 import { routeToSellerFlow } from "../utils/sellerRouter";
 
-import { TopBar, initMobileDrawer, initHeaderCart } from "../components/header";
+import { TopBar, initHeaderCart } from "../components/header";
 import { initLanguageSelector } from "../components/header/TopBar";
 import { Breadcrumb } from "../components/shared/Breadcrumb";
 import { FooterLinks } from "../components/footer";
 import { FloatingPanel, initFloatingPanel } from "../components/floating";
-import { renderSidebar, initSidebar } from "../components/sidebar";
+import { renderSidebarColumn, initSidebar } from "../components/sidebar";
 import { KybLayout } from "../components/kyb/KybLayout";
 
 // Sprint 2.6: Login zorunlu (requireAuth), Seller/Buyer ayrımı sayfa içinde.
@@ -31,8 +31,8 @@ const kybLocked = Boolean(user?.kyb_locked);
 
 function renderLockedFeature(): string {
   return `
-    <div class="max-w-2xl mx-auto px-4 py-8">
-      <div class="bg-white rounded-2xl border border-gray-200 p-8 text-center shadow-sm">
+    <div class="max-w-2xl mx-auto px-4 py-8 max-sm:py-5">
+      <div class="bg-white rounded-md border border-gray-200 p-8 max-sm:p-5 text-center shadow-sm">
         <div class="mx-auto w-14 h-14 rounded-full bg-amber-100 flex items-center justify-center mb-4">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-amber-600">
             <rect x="3" y="11" width="18" height="11" rx="2"/>
@@ -65,9 +65,7 @@ appEl.innerHTML = `
 
   <div class="bg-[#F5F5F5] min-h-screen">
     <div class="container-boxed flex gap-1 md:gap-[14px]">
-      <div class="w-[52px] md:w-[72px] xl:w-[260px] flex-shrink-0 pt-4">
-        ${renderSidebar()}
-      </div>
+      ${renderSidebarColumn()}
 
       <div class="flex-1 min-w-0">
         <div class="pt-4">
@@ -94,7 +92,6 @@ appEl.innerHTML = `
 initFlowbite();
 initHeaderCart();
 initFloatingPanel();
-initMobileDrawer();
 initLanguageSelector();
 initSidebar();
 

@@ -11,7 +11,7 @@ import type { PriceTier, ProductVariant, SkuMatrixEntry } from "../../types/prod
 import { openShippingModal, openCartDrawer } from "./CartDrawer";
 import { SocialProofBadge } from "./SocialProofBadge";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
-import { applyVariantPrice } from "./variantPrice";
+import { applyVariantPrice, tierQtyLabel } from "./variantPrice";
 
 function renderPriceTiers(tiers: PriceTier[]): string {
   // When a campaign is active the backend sets each tier's originalPrice
@@ -22,9 +22,7 @@ function renderPriceTiers(tiers: PriceTier[]): string {
     <div id="pd-price-tiers" class="grid grid-cols-3 gap-x-4 gap-y-3 mb-4">
       ${tiers
         .map((tier, i) => {
-          const qtyLabel = tier.maxQty
-            ? t("product.moqRange", { min: tier.minQty, max: tier.maxQty })
-            : t("product.moqSingle", { count: tier.minQty });
+          const qtyLabel = tierQtyLabel(tier);
           const hasDiscount =
             typeof tier.originalPrice === "number" && tier.originalPrice > tier.price;
           const strikethrough = hasDiscount
@@ -370,8 +368,10 @@ function updateReadyBadge(skuMatrix: SkuMatrixEntry[], variants: ProductVariant[
     desktopBadge.classList.toggle("is-out-of-stock", !inStock);
   }
   if (mobileBadge) {
-    mobileBadge.textContent = inStock ? readyText : outText;
-    mobileBadge.style.background = inStock ? "" : "#dc2626";
+    // Mobil rozet yalnızca stok-yok uyarısıdır; stok varken alan tamamen gizli.
+    mobileBadge.textContent = outText;
+    const wrap = mobileBadge.closest<HTMLElement>("#pdm-badges");
+    (wrap ?? mobileBadge).classList.toggle("hidden", inStock);
   }
 }
 

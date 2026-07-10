@@ -12,6 +12,8 @@
 
 import Alpine from "alpinejs";
 import { t } from "../i18n";
+import { extractProductRef, markConversationRead } from "../services/chatService";
+import type { ProductRef } from "../types/chat";
 import { callMethod } from "../utils/api";
 import { escapeHtml, sanitizeUrl } from "../utils/sanitize";
 
@@ -27,6 +29,8 @@ interface UiMessage {
   time: string;
   isMe: boolean;
   videoCallUrl?: string;
+  /** Mesaj ürün bağlamıyla gönderildiyse ([Ürün ...] marker'ı) chip verisi. */
+  productRef?: ProductRef;
 }
 
 const VIDEO_CALL_MARKER = "🎥";
@@ -133,7 +137,7 @@ function threadToUi(thread: RawThread): UiConversation {
     avatar: avatarFor(name),
     name,
     company,
-    preview: last?.content || "",
+    preview: extractProductRef(last?.content || "").text,
     date: toRelativeOrDate(toDate(last?.created_at)),
     unreadCount: typeof thread.unread_count === "number" ? thread.unread_count : 0,
     messages: [],
@@ -144,7 +148,7 @@ function threadToUi(thread: RawThread): UiConversation {
 function messageToUiForSeller(m: RawChatwootMessage): UiMessage {
   const date = toDate(m.created_at);
   const isMe = m.message_type === 1;
-  const text = m.content || "";
+  const { text, productRef } = extractProductRef(m.content || "");
   return {
     id: String(m.id ?? `m-${Date.now()}`),
     sender: isMe ? "Me" : "",
@@ -153,6 +157,7 @@ function messageToUiForSeller(m: RawChatwootMessage): UiMessage {
     time: toHHMM(date),
     isMe,
     videoCallUrl: extractVideoCallUrl(text),
+    productRef,
   };
 }
 
@@ -365,6 +370,8 @@ Alpine.data("messagesComponent", () => ({
     this.selectedConversation = conv;
     const found = this.conversations.find((c) => c.id === conv.id);
     if (found) found.unreadCount = 0;
+    // Sunucu tarafında da sıfırla — yoksa 10sn'lik inbox polling'i rozeti geri getirir.
+    void markConversationRead(conv.id, "seller");
     await this._loadActiveMessages();
     scrollChatToBottom();
   },

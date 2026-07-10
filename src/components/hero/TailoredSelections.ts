@@ -12,6 +12,7 @@ import { formatPrice } from "../../utils/currency";
 import { getTailoredSelections } from "../../services/listingService";
 import { initCurrency } from "../../services/currencyService";
 import { applySwiperDir } from "../../utils/direction";
+import { formatViews } from "../../utils/formatCount";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 interface CollectionProduct {
@@ -43,13 +44,6 @@ function renderProductImage(product: CollectionProduct): string {
       />
     </div>
   `;
-}
-
-function formatViews(n: number | string): string {
-  const num = typeof n === "number" ? n : parseInt(String(n), 10) || 0;
-  if (num >= 1000000) return `${(num / 1000000).toFixed(1).replace(/\.0$/, "")}M+`;
-  if (num >= 1000) return `${(num / 1000).toFixed(1).replace(/\.0$/, "")}K+`;
-  return String(num);
 }
 
 function renderCollectionSlide(collection: TailoredCollection): string {
@@ -84,7 +78,9 @@ function renderCollectionSlide(collection: TailoredCollection): string {
         <!-- Product images side by side — 164x164 each -->
         <div class="flex gap-2 flex-1">
           <div class="flex-1 flex flex-col">
-            <div class="aspect-square w-full">
+            <!-- overflow-hidden: flex-col içinde min-height:auto, portre görselde
+                 aspect-square'i içerik yüksekliğine esnetiyor — kare kilidi için şart -->
+            <div class="aspect-square w-full overflow-hidden">
               ${renderProductImage(product1)}
             </div>
             <p
@@ -93,7 +89,7 @@ function renderCollectionSlide(collection: TailoredCollection): string {
             >${formatPrice(product1.price)}</p>
           </div>
           <div class="flex-1 flex flex-col">
-            <div class="aspect-square w-full">
+            <div class="aspect-square w-full overflow-hidden">
               ${renderProductImage(product2)}
             </div>
             <p

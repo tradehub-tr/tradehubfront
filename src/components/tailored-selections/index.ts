@@ -4,9 +4,7 @@
 export {
   TailoredSelectionsHero,
   initTailoredSelectionsHero,
-  renderTailoredHeroCategories,
+  renderTailoredHero,
+  setTailoredHeroActive,
 } from "./TailoredSelectionsHero";
-export {
-  TailoredProductGrid,
-  renderProductCard as renderTailoredProductCard,
-} from "./TailoredProductGrid";
+export { TailoredProductGrid } from "./TailoredProductGrid";

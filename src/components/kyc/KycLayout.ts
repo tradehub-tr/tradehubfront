@@ -54,7 +54,7 @@ function renderToggle(): string {
   // (Individual/Business) ve TOGGLE_ID korunur; seçim native radio change
   // event'iyle setAccountType()'a bağlanır.
   return `
-		<div class="bg-white rounded-2xl border border-gray-200 p-4 mb-4">
+		<div class="bg-white rounded-md border border-gray-200 p-4 mb-4">
 			<label class="text-sm text-gray-600 mb-2 block">${t("kycUi.accountType")}</label>
 			<div id="${TOGGLE_ID}" class="max-w-xs">
 				${renderSegmented({
@@ -73,7 +73,7 @@ function renderToggle(): string {
 function renderCorporateOnlySection(): string {
   // Sadece Kurumsal iken görünür. Şirket Ünvanı.
   return `
-		<section data-kyc-section="corporate" class="bg-white rounded-2xl border border-gray-200 p-6 mb-4">
+		<section data-kyc-section="corporate" class="bg-white rounded-md border border-gray-200 p-6 max-sm:p-4 mb-4">
 			<h3 class="text-base font-semibold mb-1">${t("kycUi.companyInfoTitle")}</h3>
 			<p class="text-xs text-gray-500 mb-4">${t("kycUi.corporateRequired")}</p>
 			<div>
@@ -87,7 +87,7 @@ function renderCorporateOnlySection(): string {
 function renderCommonSection(): string {
   // Hem Kurumsal hem Bireysel için ortak alanlar.
   return `
-		<section class="bg-white rounded-2xl border border-gray-200 p-6 mb-4">
+		<section class="bg-white rounded-md border border-gray-200 p-6 max-sm:p-4 mb-4">
 			<h3 class="text-base font-semibold mb-1">${t("kycUi.identityContactTitle")}</h3>
 			<p class="text-xs text-gray-500 mb-4">${t("kycUi.allFieldsRequired")}</p>
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -107,7 +107,6 @@ function renderCommonSection(): string {
 					<label class="block text-xs font-medium mb-1.5 text-gray-600">${t("kycUi.email")} <span class="text-red-500">*</span></label>
 					<input type="email" name="email_field" class="th-input th-input-md bg-gray-50 cursor-not-allowed" readonly />
 				</div>
-				<div class="md:col-span-2"></div>
 				<div class="md:col-span-2">
 					<label class="block text-xs font-medium mb-1.5 text-gray-600">${t("kycUi.address")} <span class="text-red-500">*</span></label>
 					<textarea name="address" rows="2" class="th-input th-input-md"></textarea>
@@ -126,7 +125,7 @@ function renderDocumentSection(): string {
   // kyc-identity-preview: Karma C preview kartı container'ı.
   // formData yüklendiğinde JS preview HTML basar; boşsa hidden kalır.
   return `
-		<section class="bg-white rounded-2xl border border-gray-200 p-6 mb-4">
+		<section class="bg-white rounded-md border border-gray-200 p-6 max-sm:p-4 mb-4">
 			<h3 class="text-base font-semibold mb-1">${t("kycUi.identityDocument")}</h3>
 			<p class="text-xs text-gray-500 mb-4">${t("kycUi.documentFormatsHint")}</p>
 			<div id="kyc-identity-preview" class="hidden mb-3"></div>
@@ -135,17 +134,20 @@ function renderDocumentSection(): string {
 	`;
 }
 
+// kyc-status-badge başlangıçta YALNIZ "hidden" taşır — display utility'si (inline-flex)
+// eklenirse CSS sırasına göre hidden'ı ezip boş rozet balonu gösterir; tam class seti
+// updateStatusUI'de atanır.
 export function KycLayout(): string {
   return `
 		<div class="max-w-4xl mx-auto px-4 py-4">
-			<header class="mb-4 flex items-start justify-between gap-4 flex-wrap">
-				<div class="flex-1 min-w-0">
-					<h1 class="text-2xl font-semibold text-gray-900">${t("kycUi.pageTitle")}</h1>
+			<header class="mb-4 flex items-start justify-between gap-4 max-sm:gap-2 flex-wrap">
+				<div class="flex-1 min-w-0 max-sm:basis-full">
+					<h1 class="text-2xl max-sm:text-xl font-semibold text-gray-900">${t("kycUi.pageTitle")}</h1>
 					<p class="text-sm text-gray-600 mt-1">
 						${t("kycUi.pageDescription")}
 					</p>
 				</div>
-				<span id="kyc-status-badge" class="hidden inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap border">
+				<span id="kyc-status-badge" class="hidden">
 					<span class="kyc-status-icon"></span>
 					<span class="kyc-status-text"></span>
 				</span>
@@ -160,7 +162,7 @@ export function KycLayout(): string {
 				${renderDocumentSection()}
 
 				<div class="flex justify-end gap-3">
-					<button type="submit" id="kyc-submit-btn" class="th-btn px-6 py-2.5 text-sm font-semibold">
+					<button type="submit" id="kyc-submit-btn" class="th-btn px-6 py-2.5 text-sm font-semibold max-sm:w-full max-sm:justify-center">
 						${t("kycUi.submit")}
 					</button>
 				</div>
@@ -294,7 +296,7 @@ function showDocumentPreview(url: string): void {
   const ext = getFileExtUpper(url);
 
   container.innerHTML = `
-		<div class="flex items-center gap-3 p-3 rounded-lg bg-emerald-50 border border-emerald-200">
+		<div class="flex items-center gap-3 p-3 rounded-md bg-emerald-50 border border-emerald-200 flex-wrap">
 			<div class="w-14 h-14 rounded-md bg-white border border-gray-200 flex items-center justify-center flex-shrink-0">
 				${iconHtml}
 			</div>
@@ -305,7 +307,7 @@ function showDocumentPreview(url: string): void {
 				<div class="text-[13px] font-semibold text-gray-900 truncate">${escapeHtml(filename)}</div>
 				<div class="text-[11px] text-gray-600">${t("kycUi.fileExt", { ext: escapeHtml(ext) })}</div>
 			</div>
-			<a href="${escapeHtml(sanitizeUrl(url))}" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-md text-[12px] font-medium bg-white text-emerald-700 border border-emerald-300 hover:bg-emerald-100 inline-flex items-center gap-1">
+			<a href="${escapeHtml(sanitizeUrl(url))}" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-md text-[12px] font-medium bg-white text-emerald-700 border border-emerald-300 hover:bg-emerald-100 inline-flex items-center justify-center gap-1 max-sm:w-full">
 				${PREVIEW_ICONS.eye}
 				<span>${t("kycUi.view")}</span>
 			</a>
@@ -497,7 +499,6 @@ function updateStatusUI(status: KycStatusData): void {
     // SVG için innerHTML (trusted Lucide markup, kullanıcı içeriği değil)
     if (iconEl) iconEl.innerHTML = cfg.icon;
     if (textEl) textEl.textContent = cfg.label;
-    badge.classList.remove("hidden");
   }
 
   const banners: Record<string, { tone: string; title: string; desc: string }> = {
@@ -524,7 +525,7 @@ function updateStatusUI(status: KycStatusData): void {
   };
   const bcfg = banners[status.status || ""];
   if (bcfg) {
-    banner.className = `mb-4 border rounded-2xl p-4 ${bcfg.tone}`;
+    banner.className = `mb-4 border rounded-md p-4 ${bcfg.tone}`;
     banner.innerHTML = `
 			<div class="font-semibold mb-1">${bcfg.title}</div>
 			<div class="text-sm">${escapeHtml(bcfg.desc)}</div>
@@ -542,6 +543,50 @@ function updateStatusUI(status: KycStatusData): void {
       submitBtn.disabled = true;
     }
   }
+}
+
+// ?mock_kyc=Pending|Verified|Rejected|Suspended → backend'siz dolu-veri simülasyonu (dev/görsel test)
+function getKycMockStatus(): string | null {
+  const v = new URLSearchParams(window.location.search).get("mock_kyc");
+  return v && ["Pending", "Verified", "Rejected", "Suspended"].includes(v) ? v : null;
+}
+
+function applyKycMock(form: HTMLFormElement, status: string): void {
+  applyKycStatus(form, {
+    exists: true,
+    status,
+    account_type: "Business",
+    company_name: "Türksab Elektronik Toptan Dağıtım Sanayi ve Ticaret Ltd. Şti.",
+    tax_id: "1234567890",
+    phone: "+90 532 123 45 67",
+    email_field: "ahmet.seker@turksab.com",
+    address: "İSTOÇ Ticaret Merkezi 23. Ada No: 145-147, Mahmutbey Mah., Bağcılar / İstanbul",
+    billing_address: "Terazidere Mah. Vatan Cad. No: 12, Bayrampaşa / İstanbul",
+    identity_document: "/files/kimlik-belgesi-on-yuz.pdf",
+    rejection_reason:
+      status === "Rejected" ? "Kimlik belgesi okunaklı değil — lütfen yüksek çözünürlüklü tarama yükleyin." : undefined,
+  });
+}
+
+/** Mevcut KYC kaydını (gerçek veya mock) forma + status UI'ına uygular. */
+function applyKycStatus(form: HTMLFormElement, status: KycStatusData): void {
+  // KycStatusData yapısal olarak PrefillData'ya uyar; email_field aşağıda elle set edilir.
+  applyPrefill(form, status);
+  if (status.email_field) {
+    const emailInput = form.querySelector<HTMLInputElement>('[name="email_field"]');
+    if (emailInput) emailInput.value = status.email_field;
+  }
+  if (status.account_type === "Business" || status.account_type === "Individual") {
+    setAccountType(status.account_type);
+  }
+  // Mevcut yüklü kimlik belgesi var → preview göster (server URL)
+  if (status.identity_document) {
+    currentIdentityUrl = status.identity_document;
+    showDocumentPreview(status.identity_document);
+  }
+  // Verified/Suspended → slot zone'unu gizle (resubmit 403'ü engellemek için)
+  applyKycSlotReadOnlyState(status.status || "");
+  updateStatusUI(status);
 }
 
 export function initKycLayout(): void {
@@ -562,9 +607,17 @@ export function initKycLayout(): void {
   }
 
   // SlotDropzone mount — autoUpload, multipart Frappe upload_file
-  void mountKycSlotDropzone();
+  const slotMount = mountKycSlotDropzone();
 
-  form.addEventListener("submit", handleSubmit);
+  // Mock modda gerçek submit POST'u engellenir — sahte VKN'li gerçek KYC kaydı oluşmasın
+  const mockStatus = getKycMockStatus();
+  form.addEventListener("submit", mockStatus ? (e) => e.preventDefault() : handleSubmit);
+
+  // Mock modu: fetch'leri atla, örnek veri + status UI bas (slot mount sonrası)
+  if (mockStatus) {
+    void slotMount.then(() => applyKycMock(form, mockStatus));
+    return;
+  }
 
   // Prefill (async, non-blocking)
   fetchPrefill().then((data) => {
@@ -575,31 +628,6 @@ export function initKycLayout(): void {
 
   // Mevcut KYC kaydı varsa form'u doldur + status UI render
   fetchKycStatus().then((status) => {
-    if (!status?.exists) return;
-    applyPrefill(form, {
-      account_type: status.account_type,
-      company_name: status.company_name,
-      tax_id: status.tax_id,
-      phone: status.phone,
-      address: status.address,
-      billing_address: status.billing_address,
-    });
-    if (status.email_field) {
-      const emailInput = form.querySelector<HTMLInputElement>('[name="email_field"]');
-      if (emailInput) emailInput.value = status.email_field;
-    }
-    if (status.account_type === "Business") setAccountType("Business");
-    else if (status.account_type === "Individual") setAccountType("Individual");
-
-    // Mevcut yüklü kimlik belgesi var → preview göster (server URL)
-    if (status.identity_document) {
-      currentIdentityUrl = status.identity_document;
-      showDocumentPreview(status.identity_document);
-    }
-
-    // Verified/Suspended → slot zone'unu gizle (resubmit 403'ü engellemek için)
-    applyKycSlotReadOnlyState(status.status || "");
-
-    updateStatusUI(status);
+    if (status?.exists) applyKycStatus(form, status);
   });
 }

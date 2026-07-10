@@ -1,6 +1,6 @@
 import type { ProductImageKind } from "../../../types/productListing";
 import { cartStore } from "../state/CartStore";
-import type { CartSupplier, CartProduct, CartSku } from "../../../types/cart";
+import type { CartSku } from "../../../types/cart";
 import { t } from "../../../i18n";
 import { getCurrencySymbol } from "../../../utils/currency";
 import { getListingUrl } from "../../../utils/listingUrl";
@@ -909,8 +909,39 @@ function buildVariantText(
   return parts.join(" | ");
 }
 
+/** Guest cartStore'da supplier + product kayıtlarını (yoksa) oluşturur; supplierId döner. */
+function ensureGuestSupplierProduct(
+  supplierName: string,
+  p: { id: string; title: string; moq: number; unit: string }
+): string {
+  const supplierId = toSlug(supplierName || "unknown-supplier");
+  if (!cartStore.getSupplier(supplierId)) {
+    cartStore.addSupplier({
+      id: supplierId,
+      name: supplierName,
+      href: getSellerUrl({ id: supplierId }),
+      selected: true,
+      products: [],
+    });
+  }
+  if (!cartStore.getProduct(p.id)) {
+    cartStore.addProduct(supplierId, {
+      id: p.id,
+      title: p.title,
+      href: getListingUrl({ id: p.id }),
+      tags: [],
+      moqLabel: `${t("product.minOrderLabel")}: ${p.moq} ${p.unit}`,
+      favoriteIcon: "♡",
+      deleteIcon: "🗑",
+      skus: [],
+      selected: true,
+    });
+  }
+  return supplierId;
+}
+
 function syncToCartStore(item: CartDrawerItemModel, unitPrice: number): void {
-  const supplierId = toSlug(item.supplierName || "unknown-supplier");
+  ensureGuestSupplierProduct(item.supplierName, item);
   const isSampleMode = state.mode === "sample";
   // Numune satırı kendi miktar/fiyat kuralına sahip olduğundan SKU id'sine "sample" eki koyup
   // toptan satırından ayrı bir kayıt olarak tut (mini sepet ve sepet sayfası bu sayede iki ayrı satır gösterir).
@@ -938,33 +969,7 @@ function syncToCartStore(item: CartDrawerItemModel, unitPrice: number): void {
       ? { price: nativePrice, currency: nativeCurrency }
       : { price: convertedPrice, currency: getSelectedCurrency() };
 
-  if (!cartStore.getSupplier(supplierId)) {
-    const supplier: CartSupplier = {
-      id: supplierId,
-      name: item.supplierName,
-      href: getSellerUrl({ id: supplierId }),
-      selected: true,
-      products: [],
-    };
-    cartStore.addSupplier(supplier);
-  }
-
   const productId = item.id;
-  if (!cartStore.getProduct(productId)) {
-    const product: CartProduct = {
-      id: productId,
-      title: item.title,
-      href: getListingUrl({ id: productId }),
-      tags: [],
-      moqLabel: `${t("product.minOrderLabel")}: ${item.moq} ${item.unit}`,
-      favoriteIcon: "♡",
-      deleteIcon: "🗑",
-      skus: [],
-      selected: true,
-    };
-    cartStore.addProduct(supplierId, product);
-  }
-
   const selectedColor = item.colors.find((c) => c.id === state.selectedColorId);
   const skuImage = selectedColor?.imageUrl || "https://placehold.co/120x120/f5f5f5/999?text=SKU";
 
@@ -1063,6 +1068,136 @@ function syncToCartStore(item: CartDrawerItemModel, unitPrice: number): void {
       cartStore.addSku(productId, sku);
     }
   }
+}
+
+// ─── Generic cart submission (shared with OptionsSheet — mobil PDP "Seçenekler" sheet) ──
+
+export interface CartSubmitLine {
+  /** Backend `listing_variant` değeri — çoğunlukla renk id'si (OptionsSheet renk-satır
+   *  modelinde renk = "leaf" eksen); beden yoksa colorId ile aynı değeri taşır. */
+  variantId?: string;
+  /** Backend + guest sepette gösterilecek insan-okur varyant metni ("Renk: Kırmızı"). */
+  variantLabel?: string;
+  /** Renk id'si — stok kontrolünde ve guest SKU görselinde kullanılır. */
+  colorId?: string;
+  /** Renk-dışı eksen seçimleri (ör. Beden/Malzeme chip'leri). */
+  extraAxes?: Record<string, string>;
+  /** Guest sepette gösterilecek görsel (yoksa placeholder). */
+  imageUrl?: string;
+  qty: number;
+}
+
+export interface CartSubmitItem {
+  id: string;
+  title: string;
+  supplierName: string;
+  unit: string;
+  moq: number;
+  currency?: string;
+  baseCurrency?: string;
+}
+
+function extraAxesKey(extraAxes?: Record<string, string>): string {
+  if (!extraAxes) return "";
+  return Object.entries(extraAxes)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([k, v]) => `${k}=${v}`)
+    .join(",");
+}
+
+/**
+ * Sepete-ekleme çekirdeği: login'liyse backend stok kontrolü + add_to_cart,
+ * misafirse guest cartStore senkronu (Y1 native fiyat persist). `dispatchCartAdd`'in
+ * çok-eksenli (sizeGroups + per-option rawPrice override) modeline DOKUNMADAN, YENİ
+ * bir çağıran (OptionsSheet — tek fiyattan renk-satır modeli) için eklendi;
+ * dispatchCartAdd değişmedi, CartDrawer.ts / ListingCartDrawer.ts etkilenmez.
+ */
+export async function submitCartLines(
+  item: CartSubmitItem,
+  lines: CartSubmitLine[],
+  unitPrice: number,
+  nativeUnitPrice: number | undefined,
+  isSample = false
+): Promise<boolean> {
+  const active = lines.filter((line) => line.qty > 0);
+  if (active.length === 0) return false;
+
+  if (isLoggedIn()) {
+    try {
+      for (const line of active) {
+        await apiCheckStock(
+          item.id,
+          line.qty,
+          line.variantId || line.colorId,
+          line.variantLabel,
+          isSample
+        );
+      }
+      let lastResponse = null;
+      for (const line of active) {
+        lastResponse = await apiAddToCart(
+          item.id,
+          line.qty,
+          line.variantId,
+          line.variantLabel,
+          line.colorId,
+          line.extraAxes && Object.keys(line.extraAxes).length ? line.extraAxes : undefined,
+          isSample
+        );
+      }
+      const sym = _getCurrencySymbolForCart();
+      if (lastResponse) {
+        cartStore.init(lastResponse.suppliers, 0, sym, 0);
+      } else {
+        const refreshed = await fetchCart();
+        cartStore.init(refreshed.suppliers, 0, sym, 0);
+      }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      showCartError(msg || t("cart.stockError"));
+      return false;
+    }
+    return true;
+  }
+
+  // Guest — backend'e yazmadan doğrudan cartStore (checkout girişte senkronize edilir).
+  ensureGuestSupplierProduct(item.supplierName, item);
+
+  const nativeCurrency = item.baseCurrency || getSelectedCurrency();
+  const persisted =
+    nativeUnitPrice != null && nativeUnitPrice > 0 && item.baseCurrency
+      ? { price: nativeUnitPrice, currency: nativeCurrency }
+      : { price: unitPrice, currency: getSelectedCurrency() };
+
+  for (const line of active) {
+    const skuId = `${item.id}-${line.colorId || "no-color"}-${line.variantId || "no-variant"}${
+      line.extraAxes ? `-${extraAxesKey(line.extraAxes)}` : ""
+    }${isSample ? "-sample" : ""}`;
+    const existing = cartStore.getSku(skuId);
+    if (existing) {
+      if (!isSample) cartStore.updateSkuQuantity(skuId, existing.sku.quantity + line.qty);
+      continue;
+    }
+    cartStore.addSku(item.id, {
+      id: skuId,
+      skuImage: line.imageUrl || "https://placehold.co/120x120/f5f5f5/999?text=SKU",
+      variantText: line.variantLabel || "",
+      unitPrice: persisted.price,
+      currency: getCurrencySymbol(),
+      unit: item.unit,
+      quantity: line.qty,
+      minQty: isSample ? 1 : item.moq,
+      maxQty: isSample ? 1 : 9999,
+      selected: true,
+      baseUnitPrice: persisted.price,
+      basePriceAddon: 0,
+      baseCurrency: persisted.currency,
+      listingVariant: line.variantId,
+      isSample: isSample || undefined,
+    });
+  }
+
+  return true;
 }
 
 async function dispatchCartAdd(): Promise<boolean> {
