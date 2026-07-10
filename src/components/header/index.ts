@@ -6,8 +6,6 @@
 // TopBar component - main navigation with logo, auth, cart, locale selectors
 export {
   TopBar,
-  MobileSearchTabs,
-  initMobileDrawer,
   initHeaderCart,
   initLanguageSelector,
   initAuthState,

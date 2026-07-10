@@ -11,7 +11,6 @@ import { getSellerUrl } from '../utils/sellerUrl'
 
 import {
   TopBar,
-  initMobileDrawer,
   SubHeader,
   initStickyHeaderSearch,
   MegaMenu,
@@ -399,7 +398,6 @@ async function main() {
     if (gridEl) gridEl.innerHTML = ProductListingGrid(listings)
   }
 
-  initMobileDrawer()
   initStickyHeaderSearch()
   initMegaMenu()
   initHeaderCart()

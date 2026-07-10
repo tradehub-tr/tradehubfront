@@ -16,7 +16,8 @@
  *                    message_type 1 ("outgoing"/seller) → "them"
  */
 
-import type { Conversation, Message, PinnedProduct } from "../types/chat";
+import type { Conversation, Message, PinnedProduct, ProductRef } from "../types/chat";
+import { getListingUrl } from "../utils/listingUrl";
 import { callMethod, clearCsrfCache, fetchCsrfToken } from "../utils/api";
 import { t } from "../i18n";
 
@@ -114,10 +115,61 @@ function threadToConversation(thread: TeamslikeThread): Conversation {
     sellerId: seller.user_id || undefined,
     localTimeHHMM: "",
     online: false,
-    lastMessage: last?.content || "",
+    lastMessage: extractProductRef(last?.content || "").text,
     lastTime: toRelative(lastDate),
     unread: typeof thread.unread_count === "number" ? thread.unread_count : 0,
     tags: [],
+  };
+}
+
+// Ürün bağlamı marker'ı — Chatwoot proxy'si yalnız düz text taşıdığı için
+// (send_message → {content}), pin'lenen ürün mesajın ilk satırına gömülür ve
+// render'da chip'e ayrıştırılır. 🎥 video-call marker'ı ile aynı desen.
+// Satır formatı: "[Ürün #<id>] <başlık> • <fiyat> • Min. Sipariş: <n>"
+const PRODUCT_MARKER_REGEX = /^\[Ürün(?: #([^\]\s]+))?\] ([^\n]*)\n?/;
+const MIN_ORDER_PREFIX = "Min. Sipariş: ";
+
+function productRefFromPinned(pp: PinnedProduct): ProductRef {
+  const parts = [pp.title, pp.price, MIN_ORDER_PREFIX + pp.minOrder].filter(Boolean);
+  return {
+    id: pp.id,
+    url: getListingUrl({ id: encodeURIComponent(pp.id) }),
+    label: parts.join(" • "),
+  };
+}
+
+function encodeProductMarker(pp: PinnedProduct): string {
+  return `[Ürün #${pp.id}] ${productRefFromPinned(pp).label}\n`;
+}
+
+/** Marker'lı mesaj metnini {temiz metin, chip verisi} olarak ayrıştırır.
+ *  Seller dashboard (alpine/messages.ts) kendi mapper'ında da kullanır. */
+export function extractProductRef(text: string): { text: string; productRef?: ProductRef } {
+  const m = text.match(PRODUCT_MARKER_REGEX);
+  if (!m) return { text };
+  return {
+    text: text.slice(m[0].length),
+    productRef: {
+      id: m[1],
+      url: m[1] ? getListingUrl({ id: encodeURIComponent(m[1]) }) : "",
+      label: m[2],
+    },
+  };
+}
+
+/** Marker'dan gelen ProductRef'i pin barı için PinnedProduct'a geri kurar —
+ *  sayfa yenilendikten sonra konuşmanın ürün bağlamı geçmişten devam edebilsin.
+ *  Thumbnail marker'da taşınmaz; bar görselsiz render eder. */
+export function pinnedFromProductRef(ref: ProductRef): PinnedProduct {
+  const parts = ref.label.split(" • ");
+  const minIdx = parts.findIndex((p) => p.startsWith(MIN_ORDER_PREFIX));
+  const fields = parts.filter((_, i) => i !== minIdx);
+  return {
+    id: ref.id ?? "",
+    title: fields[0] ?? "",
+    price: fields[1] ?? "",
+    minOrder: minIdx >= 0 ? parts[minIdx].slice(MIN_ORDER_PREFIX.length) : "1",
+    thumbnail: "",
   };
 }
 
@@ -133,7 +185,7 @@ function extractVideoCallUrl(text: string): string | undefined {
 function messageToView(m: ChatwootMessage, conversationId: string): Message {
   const date = toDate(m.created_at);
   const isOutgoing = m.message_type === 1;
-  const text = m.content || "";
+  const { text, productRef } = extractProductRef(m.content || "");
   // Chatwoot bir mesaja birden fazla dosya bağlayabilir ama bizim send_attachment
   // her zaman tek dosya gönderiyor; gelen ilkini render ediyoruz.
   const att = m.attachments?.[0];
@@ -165,6 +217,7 @@ function messageToView(m: ChatwootMessage, conversationId: string): Message {
       : undefined,
     read: true,
     videoCallUrl: extractVideoCallUrl(text),
+    productRef,
   };
 }
 
@@ -289,12 +342,13 @@ export async function getMessages(conversationId: string): Promise<Message[]> {
 export async function sendTextMessage(
   conversationId: string,
   text: string,
-  _pinnedProduct?: PinnedProduct
+  pinnedProduct?: PinnedProduct
 ): Promise<Message> {
   if (!conversationId) throw new Error("conversationId yok");
+  const content = pinnedProduct ? encodeProductMarker(pinnedProduct) + text : text;
   const raw = await frappePOST<ChatwootMessage | { message?: ChatwootMessage }>(
     "tradehub_core.api.chat.send_message",
-    { conversation_id: conversationId, content: text, perspective: "buyer" }
+    { conversation_id: conversationId, content, perspective: "buyer" }
   );
   const m =
     (raw && "message" in (raw as Record<string, unknown>)
@@ -306,6 +360,10 @@ export async function sendTextMessage(
   view.direction = "me";
   if (!view.body || (view.body.type === "text" && !view.body.text)) {
     view.body = { type: "text", text };
+  }
+  // Backend echo boş dönerse (fallback) chip yine görünsün
+  if (pinnedProduct && !view.productRef) {
+    view.productRef = productRefFromPinned(pinnedProduct);
   }
   return view;
 }
@@ -351,14 +409,26 @@ export async function sendAttachment(
 }
 
 // ──────────────────────────────────────────────────────────────────────────
-// Stubs — şimdilik teamslike'da karşılığı yok (read-receipt, block, mute, pin).
+// Stubs — şimdilik teamslike'da karşılığı yok (block, mute, pin).
 // Backend tarafına eklenince burası gerçek API'ye bağlanır. Bu fonksiyonların
 // çağrıldığı yerlerde UI optimistic davranıyor (Alpine store kendi state'ini
 // güncelliyor), o yüzden sessizce no-op kalmaları akışı kırmaz.
 // ──────────────────────────────────────────────────────────────────────────
 
-export async function markConversationRead(_conversationId: string): Promise<void> {
-  // TODO(backend): chat.mark_read endpoint'i ekle (chatwoot conversation/{id}/update_last_seen)
+export async function markConversationRead(
+  conversationId: string,
+  perspective: "buyer" | "seller" = "buyer"
+): Promise<void> {
+  if (!conversationId) return;
+  try {
+    await frappePOST("tradehub_core.api.chat.mark_read", {
+      conversation_id: conversationId,
+      perspective,
+    });
+  } catch {
+    // Okundu işareti best-effort — başarısızlık okuma akışını bloklamasın,
+    // rozet bir sonraki başarılı işaretlemede temizlenir.
+  }
 }
 
 export async function blockConversation(_conversationId: string): Promise<void> {

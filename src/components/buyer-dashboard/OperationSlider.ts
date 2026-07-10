@@ -40,12 +40,12 @@ export function OperationSlider(props: OperationSliderProps): string {
 
                 <!-- Email-verify slide -->
                 <template x-if="banner.type === 'email-verify'">
-                  <div class="flex items-center justify-between gap-2 sm:gap-4 px-[clamp(0.75rem,0.5rem+1vw,1.25rem)] py-3 min-h-[44px]">
+                  <div class="flex items-center justify-between gap-x-2 sm:gap-x-4 px-[clamp(0.75rem,0.5rem+1vw,1.25rem)] py-3 min-h-[44px]">
                     <!-- Sol: başlık + disabled email + Değiştir linki -->
-                    <div class="flex items-center gap-2 min-w-0 flex-1">
-                      <!-- Default title -->
+                    <div class="flex items-center gap-x-2 min-w-0 flex-1">
+                      <!-- Default title (mobilde gizli — tek sıraya sığması için alan input'a kalır) -->
                       <template x-if="!verificationSent">
-                        <span class="text-xs sm:text-sm font-normal text-(--color-text-heading,#111827) shrink-0 whitespace-nowrap">
+                        <span class="max-sm:hidden text-xs sm:text-sm font-normal text-(--color-text-heading,#111827) shrink-0 whitespace-nowrap">
                           ${t("dashboard.notifVerifyEmailTitle")}
                         </span>
                       </template>
@@ -55,7 +55,7 @@ export function OperationSlider(props: OperationSliderProps): string {
                           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                           </svg>
-                          ${t("dashboard.notifVerifyEmailSentLabel")}
+                          <span class="max-sm:hidden">${t("dashboard.notifVerifyEmailSentLabel")}</span>
                         </span>
                       </template>
 
@@ -66,7 +66,7 @@ export function OperationSlider(props: OperationSliderProps): string {
                         disabled
                         readonly
                         aria-readonly="true"
-                        class="bg-(--color-surface,#fff) border border-(--color-border,#e5e7eb) text-(--color-text-muted,#6b7280) text-xs sm:text-sm px-2 py-0.5 rounded cursor-not-allowed min-w-0 max-w-[14ch] sm:max-w-[24ch] truncate appearance-none focus:outline-none"
+                        class="bg-(--color-surface,#fff) border border-(--color-border,#e5e7eb) text-(--color-text-muted,#6b7280) text-xs sm:text-sm px-2 py-0.5 rounded cursor-not-allowed flex-1 min-w-0 max-sm:min-w-[60px] max-w-[14ch] sm:max-w-[24ch] truncate appearance-none focus:outline-none"
                       />
 
                       <!-- Değiştir linki -->
@@ -89,7 +89,8 @@ export function OperationSlider(props: OperationSliderProps): string {
                           @click="sendVerification()"
                           :disabled="sending"
                           class="text-xs sm:text-sm text-(--color-text-heading,#111827) inline-flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed hover:text-(--color-cta-primary,#333333) transition-colors duration-150 appearance-none border-none bg-transparent cursor-pointer focus:outline-none whitespace-nowrap">
-                          ${t("dashboard.notifVerifyEmailCta")}
+                          <span class="max-sm:hidden">${t("dashboard.notifVerifyEmailCta")}</span>
+                          <span class="hidden max-sm:inline">${t("dashboard.notifVerifyEmailCtaShort")}</span>
                           <svg class="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
                           </svg>

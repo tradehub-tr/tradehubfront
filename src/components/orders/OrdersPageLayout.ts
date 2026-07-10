@@ -1,11 +1,18 @@
 /**
  * OrdersPageLayout Component
  * "Siparişlerim" page — 2-panel: left nav + right dynamic content.
- * Supports hash-based sub-pages: #all-orders, #refunds, #reviews, #coupons, #tax-info
+ * Supports hash-based sub-pages: #all-orders, #refunds, #reviews
  */
 import { t } from "../../i18n";
 import { OrderListItem } from "./OrderListItem";
 import { OrderItemsDrawer } from "./OrderItemsDrawer";
+import { styleSvg } from "../icons/lucideIcons";
+import receiptIcon from "lucide-static/icons/receipt-text.svg?raw";
+import starIcon from "lucide-static/icons/star.svg?raw";
+import messageSquareIcon from "lucide-static/icons/message-square-text.svg?raw";
+import packageIcon from "lucide-static/icons/package.svg?raw";
+import thumbsUpIcon from "lucide-static/icons/thumbs-up.svg?raw";
+import infoIcon from "lucide-static/icons/info.svg?raw";
 
 interface OrdersNavItem {
   id: string;
@@ -17,7 +24,6 @@ function getNavItems(): OrdersNavItem[] {
     { id: "all-orders", label: t("orders.allOrders") },
     { id: "refunds", label: t("orders.refundsTab") },
     { id: "reviews", label: t("orders.reviews") },
-    { id: "coupons", label: t("orders.coupons") },
   ];
 }
 
@@ -56,36 +62,40 @@ function renderAllOrders(): string {
       ${OrderItemsDrawer()}
       <template x-if="!selectedOrder"><div>
       <!-- Header -->
-      <div class="flex items-center justify-between gap-2 px-5 max-sm:px-3 pt-6 max-[480px]:pt-4 pb-5 max-[480px]:pb-3 border-b border-gray-100">
-        <h1 class="text-[22px] max-sm:text-lg max-[480px]:text-base font-bold text-gray-900" data-i18n="orders.yourOrders">${t("orders.yourOrders")}</h1>
+      <div class="flex items-center justify-between gap-2 px-5 max-sm:px-3.5 pt-6 max-sm:pt-4 pb-5 max-sm:pb-2 border-b border-gray-100 max-sm:border-b-0">
+        <div class="flex items-baseline gap-2 min-w-0 shrink">
+          <h1 class="text-[22px] max-sm:text-[17px] font-bold text-gray-900 whitespace-nowrap" data-i18n="orders.yourOrders">${t("orders.yourOrders")}</h1>
+          <span class="sm:hidden text-[12px] text-gray-400 min-w-0 truncate" x-show="filteredOrders.length > 0" x-text="filteredOrders.length + ' ${t("orders.ordersCount")}'"></span>
+        </div>
         <template x-if="filteredOrders.some((o) => o.status === 'Waiting for payment')">
           <button @click="openRemittanceModal(filteredOrders.find((o) => o.status === 'Waiting for payment')?.orderNumber || '', filteredOrders.find((o) => o.status === 'Waiting for payment')?.total, filteredOrders.find((o) => o.status === 'Waiting for payment')?.currency, filteredOrders.find((o) => o.status === 'Waiting for payment')?.paymentMethod)"
-            class="th-btn-outline px-5 max-sm:px-3 max-[480px]:px-2.5 py-2 text-sm max-sm:text-xs whitespace-nowrap">
-            ${t("orders.submitRemittanceProof")}
+            class="th-btn-outline px-5 py-2 text-sm whitespace-nowrap shrink-0 max-sm:h-8 max-sm:px-3 max-sm:py-0 max-sm:text-[12px] max-sm:rounded-full max-sm:border-amber-300 max-sm:bg-amber-50 max-sm:text-amber-800">
+            <span class="max-sm:hidden">${t("orders.submitRemittanceProof")}</span>
+            <span class="sm:hidden">${t("orders.submitRemittanceProofShort")}</span>
           </button>
         </template>
       </div>
 
-      <!-- Status Tabs — dynamic counts, horizontal scroll -->
-      <div class="relative border-b border-gray-200" id="order-tabs-wrapper">
+      <!-- Status Tabs — masaüstünde alt çizgili sekmeler, mobilde chip'ler -->
+      <div class="relative border-b border-gray-200 max-sm:border-b-0" id="order-tabs-wrapper">
         <!-- Left fade + arrow -->
-        <button type="button" id="order-tabs-left" class="absolute start-0 top-0 bottom-0 z-10 w-8 items-center justify-center bg-gradient-to-r from-white via-white/80 to-transparent cursor-pointer border-none hidden" aria-label="Scroll left">
+        <button type="button" id="order-tabs-left" class="max-sm:hidden! absolute start-0 top-0 bottom-0 z-10 w-8 items-center justify-center bg-gradient-to-r from-white via-white/80 to-transparent cursor-pointer border-none hidden" aria-label="Scroll left">
           <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
         </button>
         <!-- Scrollable tab container -->
         <div class="overflow-x-auto scrollbar-hide" id="order-tabs-scroll">
-          <div class="flex px-7 max-sm:px-3 min-w-max">
+          <div class="flex px-7 max-sm:px-3.5 min-w-max max-sm:gap-1.5 max-sm:pb-3">
             ${getOrderStatusTabs()
               .map(
                 (tab) => `
               <button
                 @click="activeTab = '${tab.id}'"
                 :class="activeTab === '${tab.id}'
-                  ? 'text-gray-900 border-b-2 border-gray-900 font-medium'
-                  : 'text-gray-500 border-b-2 border-transparent hover:text-gray-700'"
-                class="py-3 px-4 max-sm:px-2.5 text-sm max-sm:text-xs whitespace-nowrap transition-colors bg-transparent cursor-pointer"
+                  ? 'text-gray-900 font-medium sm:border-gray-900 max-sm:bg-gray-900 max-sm:text-white max-sm:border-gray-900 max-sm:font-semibold'
+                  : 'text-gray-500 hover:text-gray-700 sm:border-transparent max-sm:bg-white max-sm:text-gray-600 max-sm:border-gray-200'"
+                class="py-3 px-4 text-sm whitespace-nowrap transition-colors bg-transparent cursor-pointer sm:border-b-2 max-sm:inline-flex max-sm:items-center max-sm:h-8 max-sm:py-0 max-sm:px-3.5 max-sm:text-[13px] max-sm:rounded-full max-sm:border"
               >
-                ${tab.label}<template x-if="tabCount('${tab.id}') > 0"><span class="text-gray-400 ms-0.5" x-text="'(' + tabCount('${tab.id}') + ')'"></span></template>
+                ${tab.label}<template x-if="tabCount('${tab.id}') > 0"><span class="text-gray-400 ms-0.5 max-sm:text-[11px]" :class="activeTab === '${tab.id}' ? 'max-sm:text-white/70' : ''" x-text="'(' + tabCount('${tab.id}') + ')'"></span></template>
               </button>
             `
               )
@@ -93,13 +103,13 @@ function renderAllOrders(): string {
           </div>
         </div>
         <!-- Right fade + arrow -->
-        <button type="button" id="order-tabs-right" class="absolute end-0 top-0 bottom-0 z-10 w-8 items-center justify-center bg-gradient-to-l from-white via-white/80 to-transparent cursor-pointer border-none hidden" aria-label="Scroll right">
+        <button type="button" id="order-tabs-right" class="max-sm:hidden! absolute end-0 top-0 bottom-0 z-10 w-8 items-center justify-center bg-gradient-to-l from-white via-white/80 to-transparent cursor-pointer border-none hidden" aria-label="Scroll right">
           <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
         </button>
       </div>
 
       <!-- Search & Filter Bar -->
-      <div class="flex items-center gap-2.5 px-5 max-sm:px-3 py-4 flex-wrap">
+      <div class="flex items-center gap-2.5 max-sm:gap-1.5 px-5 max-sm:px-3.5 py-4 max-sm:pt-0 max-sm:pb-3 flex-wrap">
         <!-- Search Input -->
         <div class="relative flex-1 min-w-[180px] max-w-[380px] max-sm:max-w-full max-sm:min-w-full">
           <svg class="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -110,7 +120,7 @@ function renderAllOrders(): string {
             x-model.debounce.300ms="searchQuery"
             @keydown.escape="searchQuery = ''"
             placeholder="${t("orders.searchPlaceholder")}"
-            class="th-input th-input-sm ps-9 pe-8"
+            class="th-input th-input-sm ps-9 pe-8 max-sm:h-9 max-sm:rounded-full max-sm:bg-gray-50 max-sm:text-[13px]"
             :class="searchQuery.trim() ? 'border-amber-400! ring-1! ring-amber-200!' : ''"
           />
           <button
@@ -123,16 +133,16 @@ function renderAllOrders(): string {
         </div>
 
         <!-- Order Date Dropdown -->
-        <div class="relative">
+        <div class="relative max-sm:flex-1 max-sm:min-w-0">
           <button
             @click="dateOpen = !dateOpen; timeOpen = false"
-            class="flex items-center gap-2 h-9 px-3 text-sm border rounded-lg cursor-pointer transition-colors whitespace-nowrap"
+            class="flex items-center gap-2 max-sm:gap-1.5 h-9 max-sm:h-8 px-3 text-sm max-sm:text-[12px] border rounded-lg max-sm:rounded-full cursor-pointer transition-colors whitespace-nowrap max-sm:w-full max-sm:justify-center"
             :class="dateFilter !== 'all' && dateFilter !== 'custom'
               ? 'text-amber-700 bg-amber-50 border-amber-300 hover:bg-amber-100'
               : 'text-gray-600 bg-white border-gray-300 hover:bg-gray-50'"
           >
-            <span x-text="dateFilterLabel"></span>
-            <svg class="w-3.5 h-3.5 transition-transform" :class="dateOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <span class="max-sm:truncate max-sm:min-w-0" x-text="dateFilterLabel"></span>
+            <svg class="w-3.5 h-3.5 shrink-0 transition-transform" :class="dateOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" d="M6 9l6 6 6-6"/>
             </svg>
           </button>
@@ -179,16 +189,16 @@ function renderAllOrders(): string {
         </div>
 
         <!-- Time Range Picker -->
-        <div class="relative">
+        <div class="relative max-sm:flex-1 max-sm:min-w-0">
           <button
             @click="timeOpen = !timeOpen; dateOpen = false"
-            class="flex items-center gap-2 h-9 px-3 text-sm border rounded-lg cursor-pointer transition-colors whitespace-nowrap"
+            class="flex items-center gap-2 max-sm:gap-1.5 h-9 max-sm:h-8 px-3 text-sm max-sm:text-[12px] border rounded-lg max-sm:rounded-full cursor-pointer transition-colors whitespace-nowrap max-sm:w-full max-sm:justify-center"
             :class="dateFilter === 'custom'
               ? 'text-amber-700 bg-amber-50 border-amber-300 hover:bg-amber-100'
               : 'text-gray-400 bg-white border-gray-300 hover:bg-gray-50'"
           >
-            <span x-text="timeRangeLabel"></span>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <span class="max-sm:truncate max-sm:min-w-0" x-text="timeRangeLabel"></span>
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
               <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
             </svg>
           </button>
@@ -201,20 +211,20 @@ function renderAllOrders(): string {
             x-transition:leave="transition ease-out duration-100"
             x-transition:leave-start="opacity-100 translate-y-0"
             x-transition:leave-end="opacity-0 translate-y-1 motion-reduce:translate-y-0"
-            class="absolute top-full end-0 max-sm:start-0 max-sm:end-auto mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 p-4 min-w-[280px]"
+            class="absolute top-full end-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 p-4 min-w-[280px] max-sm:min-w-0 max-sm:w-60"
           >
             <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">${t("orders.selectDateRange")}</p>
-            <div class="flex items-center gap-2 mb-3">
-              <div class="flex-1">
+            <div class="flex items-center gap-2 mb-3 max-sm:flex-col max-sm:items-stretch">
+              <div class="flex-1 max-sm:min-w-0">
                 <label class="block text-xs text-gray-500 mb-1">${t("orders.startDate")}</label>
                 <input type="date" x-model="dateFrom"
-                  class="th-input th-input-sm" />
+                  class="th-input th-input-sm max-sm:w-full" />
               </div>
-              <span class="text-gray-300 mt-4">—</span>
-              <div class="flex-1">
+              <span class="text-gray-300 mt-4 max-sm:hidden">—</span>
+              <div class="flex-1 max-sm:min-w-0">
                 <label class="block text-xs text-gray-500 mb-1">${t("orders.endDate")}</label>
                 <input type="date" x-model="dateTo"
-                  class="th-input th-input-sm" />
+                  class="th-input th-input-sm max-sm:w-full" />
               </div>
             </div>
             <div class="flex items-center justify-end gap-2">
@@ -243,13 +253,13 @@ function renderAllOrders(): string {
       </div>
 
       <!-- Info Banner -->
-      <div class="mx-7 max-sm:mx-3 max-[480px]:mx-2 mb-4 px-4 max-[480px]:px-3 py-3 bg-amber-50 border border-amber-200 rounded-sm">
-        <div class="flex items-start gap-2.5">
-          <svg class="w-5 h-5 text-amber-500 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 24 24">
+      <div class="mx-7 max-sm:mx-3.5 mb-4 max-sm:mb-3 px-4 max-sm:px-3 py-3 max-sm:py-2.5 bg-amber-50 border border-amber-200 rounded-sm max-sm:rounded-lg">
+        <div class="flex items-start gap-2.5 max-sm:gap-2">
+          <svg class="w-5 h-5 max-sm:w-4 max-sm:h-4 text-amber-500 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 24 24">
             <path d="M3 9l1.5-1.5L6 9V5.5a2.5 2.5 0 015 0V9l1.5-1.5L14 9v5a7 7 0 01-14 0V9z" opacity="0"/>
             <path d="M12 2C8.14 2 5 5.14 5 9v5l-2 2v1h18v-1l-2-2V9c0-3.86-3.14-7-7-7zm0 20c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2z"/>
           </svg>
-          <div class="text-[13px] text-gray-700 leading-relaxed">
+          <div class="text-[13px] max-sm:text-[12px] text-gray-700 max-sm:text-amber-900/80 leading-relaxed max-sm:leading-snug">
             <p class="mb-1"><strong>1.</strong> ${t("orders.bannerRemittance")} <a href="#" class="text-blue-600 hover:underline">${t("orders.bannerHowTo")}</a></p>
             <p><strong>2.</strong> ${t("orders.bannerHolidayDelay")}</p>
           </div>
@@ -283,9 +293,9 @@ function renderAllOrders(): string {
       </template>
 
       <!-- Orders List -->
-      <div x-show="!loading" class="px-7 max-sm:px-3 max-[480px]:px-2 pb-6 space-y-4 max-[480px]:space-y-3">
+      <div x-show="!loading" class="px-7 max-sm:px-3.5 pb-6 max-sm:pb-4 space-y-4 max-sm:space-y-2.5">
         <template x-if="filteredOrders.length === 0">
-          <div class="flex flex-col items-center justify-center gap-3 py-16 text-center">
+          <div class="flex flex-col items-center justify-center gap-3 py-16 max-sm:py-10 text-center">
             ${EMPTY_RECEIPT_ICON}
             <template x-if="searchQuery.trim() || dateFilter !== 'all'">
               <div class="flex flex-col items-center gap-2">
@@ -301,7 +311,7 @@ function renderAllOrders(): string {
               <div class="flex flex-col items-center gap-2">
                 <h3 class="text-base font-bold text-gray-900">${t("orders.noOrdersYet")}</h3>
                 <p class="text-sm text-gray-500 max-w-[400px]">${t("orders.startSourcingDesc")}</p>
-                <a href="/" class="th-btn-outline mt-2">${t("orders.startSourcing")}</a>
+                <a href="/" class="th-btn-outline mt-2 max-sm:py-2 max-sm:text-[13px] max-sm:rounded-full">${t("orders.startSourcing")}</a>
               </div>
             </template>
           </div>
@@ -313,14 +323,14 @@ function renderAllOrders(): string {
       </div>
 
       <!-- Pagination -->
-      <div x-show="filteredOrders.length > 0" class="flex items-center justify-end gap-3 px-7 max-sm:px-3 pb-6">
-        <span class="text-sm text-gray-500" x-text="filteredOrders.length + ' ${t("orders.ordersCount")}'"></span>
+      <div x-show="filteredOrders.length > 0" class="flex items-center justify-end max-sm:justify-center gap-3 px-7 max-sm:px-3.5 pb-6 max-sm:pb-5">
+        <span class="text-sm text-gray-500 max-sm:hidden" x-text="filteredOrders.length + ' ${t("orders.ordersCount")}'"></span>
         <div class="flex items-center gap-1.5">
-          <button class="flex items-center justify-center w-8 h-8 border border-gray-300 rounded bg-white text-gray-400 cursor-not-allowed" disabled>
+          <button class="flex items-center justify-center w-8 h-8 border border-gray-300 max-sm:border-gray-200 rounded max-sm:rounded-full bg-white text-gray-400 cursor-not-allowed" disabled>
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M15 19l-7-7 7-7"/></svg>
           </button>
-          <span class="flex items-center justify-center w-8 h-8 text-sm text-white bg-gray-900 rounded font-medium">1</span>
-          <button class="flex items-center justify-center w-8 h-8 border border-gray-300 rounded bg-white text-gray-400 cursor-not-allowed" disabled>
+          <span class="flex items-center justify-center w-8 h-8 text-sm text-white bg-gray-900 rounded max-sm:rounded-full font-medium">1</span>
+          <button class="flex items-center justify-center w-8 h-8 border border-gray-300 max-sm:border-gray-200 rounded max-sm:rounded-full bg-white text-gray-400 cursor-not-allowed" disabled>
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M9 5l7 7-7 7"/></svg>
           </button>
         </div>
@@ -1685,31 +1695,95 @@ function renderAllOrders(): string {
   `;
 }
 
+/* Ortak boş-durum bloğu — üç sekmede aynı görsel dil (tonal daire + başlık + açıklama + ops. CTA) */
+function renderEmptyState(iconRaw: string, title: string, desc: string, cta = ""): string {
+  return `
+    <div class="flex flex-col items-center px-6 py-16 max-sm:py-12 text-center">
+      <div class="flex items-center justify-center w-14 h-14 rounded-full bg-(--color-surface-raised,#f5f5f5) mb-4">
+        ${styleSvg(iconRaw, "w-6 h-6 text-gray-400")}
+      </div>
+      <h3 class="text-[15px] font-semibold text-gray-900 m-0 mb-1.5">${title}</h3>
+      <p class="text-[13px] leading-relaxed text-gray-500 max-w-[280px] m-0">${desc}</p>
+      ${cta}
+    </div>`;
+}
+
+/* Skeleton — spinner yerine içerik iskeleti (product register) */
+function renderListSkeleton(): string {
+  return `
+    <div class="px-7 max-sm:px-4 py-5 space-y-3 animate-pulse" aria-hidden="true">
+      ${`<div class="h-24 max-sm:h-28 rounded-md bg-gray-100"></div>`.repeat(3)}
+    </div>`;
+}
+
 function renderRefunds(): string {
+  const chips = [
+    { bucket: "all", label: t("common.all") },
+    { bucket: "pending", label: t("ordersUi.underReview") },
+    { bucket: "approved", label: t("orders.refundStatusApproved") },
+    { bucket: "rejected", label: t("orders.refundStatusRejected") },
+  ]
+    .map(
+      ({ bucket, label }) => `
+      <button type="button" x-show="countOf('${bucket}') > 0" @click="statusFilter = '${bucket}'"
+        :class="statusFilter === '${bucket}'
+          ? 'bg-gray-900 text-white border-gray-900 font-semibold'
+          : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300 hover:text-gray-800'"
+        class="th-no-press inline-flex items-center gap-1 h-8 px-3.5 text-[13px] rounded-full border whitespace-nowrap cursor-pointer transition-colors">
+        ${label}
+        <span class="text-[11px]" :class="statusFilter === '${bucket}' ? 'text-white/70' : 'text-gray-400'" x-text="'(' + countOf('${bucket}') + ')'"></span>
+      </button>`
+    )
+    .join("");
+
   return `
     <div x-data="refundsComponent()" x-cloak>
-    <div class="flex items-center justify-between px-7 max-sm:px-3 pt-6 pb-5 border-b border-(--color-border-light,#f0f0f0)">
-      <h1 class="text-[22px] font-bold text-(--color-text-heading,#111827)">${t("orders.refundsTab")}</h1>
-    </div>
-    <!-- Tab: Para İadeleri (dynamic) -->
-    <div class="os-tab-content os-tab-content--active hidden [&.os-tab-content--active]:block" data-content="refund-returns">
-      <!-- Loading -->
-      <template x-if="loading">
-        <div class="flex items-center justify-center py-16">
-          <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-amber-500"></div>
-        </div>
-      </template>
+      <!-- Header -->
+      <div class="flex items-baseline justify-between gap-3 px-7 max-sm:px-4 pt-6 max-sm:pt-5 pb-5 max-sm:pb-4 border-b border-(--color-border-light,#f0f0f0)">
+        <h1 class="text-[22px] max-sm:text-[18px] font-bold text-(--color-text-heading,#111827) m-0">${t("orders.refundsTab")}</h1>
+        <span class="text-[13px] text-gray-500 whitespace-nowrap" x-show="!loading && refunds.length > 0"
+          x-text="refunds.length + ' ${t("orders.refundRequests")}'"></span>
+      </div>
+
+      <template x-if="loading">${renderListSkeleton()}</template>
+
       <!-- Empty -->
       <template x-if="!loading && refunds.length === 0">
-        <div class="flex flex-col items-center justify-center gap-3 px-10 max-sm:px-4 py-20 text-center">
-          ${EMPTY_RECEIPT_ICON}
-          <p class="text-sm text-(--color-text-muted,#666)">${t("orders.noAfterSalesRequest")}</p>
-        </div>
+        ${renderEmptyState(
+          receiptIcon,
+          t("orders.refundsEmptyTitle"),
+          t("orders.refundsEmptyDesc"),
+          `<a href="#all-orders" class="th-btn-outline mt-5 px-5 py-2 text-[13px] max-sm:rounded-full no-underline">${t("orders.backToOrders")}</a>`
+        )}
       </template>
-      <!-- Refund list -->
+
+      <!-- Dolu durum -->
       <template x-if="!loading && refunds.length > 0">
-        <div class="px-7 max-sm:px-3 py-5">
-          <div class="overflow-x-auto">
+        <div>
+          <!-- Durum filtresi chip'leri -->
+          <div class="flex gap-1.5 px-7 max-sm:px-4 pt-4 pb-1 overflow-x-auto scrollbar-hide">${chips}</div>
+
+          <!-- Mobil: kart listesi -->
+          <div class="sm:hidden px-4 py-4 space-y-2.5">
+            <template x-for="r in filteredRefunds" :key="r.order_number">
+              <article class="rounded-md border border-gray-200 p-3.5">
+                <div class="flex items-center justify-between gap-2">
+                  <span class="font-mono text-[12px] font-semibold text-gray-800 truncate min-w-0" x-text="r.order_number"></span>
+                  <span class="inline-flex px-2.5 py-0.5 text-xs font-medium rounded-full whitespace-nowrap shrink-0" :class="statusClass(r.refund_status)" x-text="r.refund_status_label"></span>
+                </div>
+                <p class="text-[13px] text-gray-600 leading-snug line-clamp-2 mt-2 mb-0" x-text="r.refund_reason || '-'"></p>
+                <div class="flex items-center justify-between gap-3 mt-3 pt-2.5 border-t border-gray-100 min-w-0">
+                  <span class="text-[12px] text-gray-500 truncate min-w-0">
+                    <span x-text="fmtDate(r.refund_requested_at || r.order_date)"></span><template x-if="r.seller_name"><span> · <span x-text="r.seller_name"></span></span></template>
+                  </span>
+                  <span class="text-[14px] font-semibold text-gray-900 whitespace-nowrap shrink-0" x-text="fmtAmount(r)"></span>
+                </div>
+              </article>
+            </template>
+          </div>
+
+          <!-- Desktop: tablo -->
+          <div class="max-sm:hidden px-7 py-5">
             <table class="w-full text-sm border-collapse">
               <thead>
                 <tr class="border-b border-gray-200">
@@ -1722,15 +1796,15 @@ function renderRefunds(): string {
                 </tr>
               </thead>
               <tbody>
-                <template x-for="r in refunds" :key="r.order_number">
+                <template x-for="r in filteredRefunds" :key="r.order_number">
                   <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                    <td class="py-3 pe-4 font-mono text-xs font-semibold text-gray-800" x-text="r.order_number"></td>
-                    <td class="py-3 pe-4 text-gray-500 text-xs" x-text="r.refund_requested_at || r.order_date"></td>
-                    <td class="py-3 pe-4 text-gray-700 text-xs" x-text="r.seller_name || '-'"></td>
+                    <td class="py-3 pe-4 font-mono text-xs font-semibold text-gray-800 whitespace-nowrap" x-text="r.order_number"></td>
+                    <td class="py-3 pe-4 text-gray-500 text-xs whitespace-nowrap" x-text="fmtDate(r.refund_requested_at || r.order_date)"></td>
+                    <td class="py-3 pe-4 text-gray-700 text-xs max-w-[180px] truncate" :title="r.seller_name" x-text="r.seller_name || '-'"></td>
                     <td class="py-3 pe-4 text-gray-600 text-xs max-w-[200px] truncate" :title="r.refund_reason" x-text="r.refund_reason || '-'"></td>
-                    <td class="py-3 pe-4 text-end font-semibold text-gray-900 text-xs" x-text="r.refund_amount > 0 ? r.currency + ' ' + Number(r.refund_amount).toLocaleString('tr-TR', {minimumFractionDigits: 2}) : '-'"></td>
+                    <td class="py-3 pe-4 text-end font-semibold text-gray-900 text-xs whitespace-nowrap" x-text="fmtAmount(r)"></td>
                     <td class="py-3 text-center">
-                      <span class="inline-flex px-2.5 py-0.5 text-xs font-medium rounded-full" :class="statusClass(r.refund_status)" x-text="r.refund_status_label"></span>
+                      <span class="inline-flex px-2.5 py-0.5 text-xs font-medium rounded-full whitespace-nowrap" :class="statusClass(r.refund_status)" x-text="r.refund_status_label"></span>
                     </td>
                   </tr>
                 </template>
@@ -1740,134 +1814,131 @@ function renderRefunds(): string {
         </div>
       </template>
     </div>
-
-    </div>
   `;
 }
+
+/* Değerlendirme kartlarında görsel yoksa tonal ikon kutusu (taşmaya dayanıklı tasarım) */
+function productThumb(expr: string, sizeCls: string): string {
+  return `
+    <template x-if="${expr}.image"><img :src="${expr}.image" :alt="${expr}.product_name" class="${sizeCls} rounded-md border border-gray-200 object-cover shrink-0" loading="lazy" /></template>
+    <template x-if="!${expr}.image">
+      <div class="${sizeCls} rounded-md border border-gray-200 bg-(--color-surface-muted,#fafafa) flex items-center justify-center shrink-0">
+        ${styleSvg(packageIcon, "w-5 h-5 text-gray-400")}
+      </div>
+    </template>`;
+}
+
+const STAR_POINTS = "12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26";
 
 function renderReviews(): string {
-  return `
-    <div class="flex items-center justify-between flex-wrap gap-2 px-7 max-sm:px-3 max-[380px]:px-3 pt-6 pb-5 border-b border-(--color-border-light,#f0f0f0)">
-      <h1 class="text-[22px] max-sm:text-lg font-bold text-(--color-text-heading,#111827)">${t("orders.myReviews")}</h1>
-      <div class="flex items-center gap-1 shrink-0">
-        <span class="text-[13px] text-(--color-text-muted,#666)">${t("orders.scoringRules")}</span>
-        <svg class="w-4 h-4 shrink-0" fill="none" stroke="#999" stroke-width="1.5" viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="10"/><path stroke-linecap="round" d="M12 16v-4m0-4h.01"/>
-        </svg>
-      </div>
-    </div>
-    <div class="os-tabs flex border-b overflow-x-auto scrollbar-hide border-(--color-border-default,#e5e5e5) px-7 max-sm:px-3" data-tabgroup="reviews">
-      <button class="os-tabs__tab os-tabs__tab--active os-tabs__tab--orange py-3 px-4 text-sm bg-transparent border-none border-b-2 border-b-transparent cursor-pointer whitespace-nowrap transition-colors
-                     hover:text-[var(--color-text-heading,#111827)]
-                     [&.os-tabs__tab--active]:text-[var(--color-text-heading,#111827)]
-                     [&.os-tabs__tab--active]:font-semibold
-                     [&.os-tabs__tab--active]:border-b-[var(--color-text-heading)]
-                     [&.os-tabs__tab--active.os-tabs__tab--orange]:text-[var(--color-cta-primary,#cc9900)]
-                     [&.os-tabs__tab--active.os-tabs__tab--orange]:border-b-[var(--color-cta-primary,#cc9900)]" data-tab="review-pending">${t("orders.pendingReviews")} (0)</button>
-      <button class="os-tabs__tab py-3 px-4 text-sm bg-transparent border-none border-b-2 border-b-transparent cursor-pointer whitespace-nowrap transition-colors text-(--color-text-muted,#666)
-                     hover:text-[var(--color-text-heading,#111827)]
-                     [&.os-tabs__tab--active]:text-[var(--color-text-heading,#111827)]
-                     [&.os-tabs__tab--active]:font-semibold
-                     [&.os-tabs__tab--active]:border-b-[var(--color-text-heading)]
-                     [&.os-tabs__tab--active.os-tabs__tab--orange]:text-[var(--color-cta-primary,#cc9900)]
-                     [&.os-tabs__tab--active.os-tabs__tab--orange]:border-b-[var(--color-cta-primary,#cc9900)]" data-tab="review-done">${t("orders.reviewed")} (0)</button>
-    </div>
+  const tabBtn = (id: string, longLabel: string, shortLabel: string, countExpr: string) => `
+    <button type="button" role="tab" @click="tab = '${id}'" :aria-selected="tab === '${id}'"
+      :class="tab === '${id}' ? 'text-gray-900 font-semibold border-gray-900' : 'text-gray-500 hover:text-gray-700 border-transparent'"
+      class="th-no-press py-3 px-4 max-sm:px-3 text-sm max-sm:text-[13px] bg-transparent border-0 border-b-2 border-solid whitespace-nowrap cursor-pointer transition-colors -mb-px">
+      <span class="max-sm:hidden">${longLabel}</span><span class="sm:hidden">${shortLabel}</span>
+      <span class="font-normal" :class="tab === '${id}' ? 'text-gray-500' : 'text-gray-400'" x-text="'(' + ${countExpr} + ')'"></span>
+    </button>`;
 
-    <div class="flex justify-end px-7 max-sm:px-3 py-3">
-      <div class="flex border border-(--color-border-medium,#d1d5db) rounded overflow-hidden w-full max-w-[320px] max-sm:max-w-full">
-        <input type="text" placeholder="${t("orders.reviewSearchPlaceholder")}" class="th-input th-input-sm th-input-borderless flex-1 min-w-0" />
-        <button class="th-no-press flex items-center justify-center w-8 h-8 shrink-0 border-none border-s border-s-(--color-border-medium,#d1d5db) bg-(--color-surface-muted,#fafafa) text-(--color-text-muted,#666) cursor-pointer hover:bg-(--color-border-light) hover:text-(--color-text-heading,#111827)" aria-label="${t("common.search")}">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/>
-          </svg>
+  return `
+    <div x-data="reviewsSectionComponent()" x-cloak>
+      <!-- Header -->
+      <div class="flex items-center justify-between gap-3 px-7 max-sm:px-4 pt-6 max-sm:pt-5 pb-5 max-sm:pb-4 border-b border-(--color-border-light,#f0f0f0)">
+        <h1 class="text-[22px] max-sm:text-[18px] font-bold text-(--color-text-heading,#111827) m-0 truncate">${t("orders.myReviews")}</h1>
+        <button type="button" class="th-no-press inline-flex items-center gap-1.5 text-[13px] text-gray-500 hover:text-gray-700 bg-transparent border-none cursor-pointer p-0 whitespace-nowrap shrink-0 transition-colors" aria-label="${t("orders.scoringRules")}">
+          ${styleSvg(infoIcon, "w-4 h-4 shrink-0")}
+          <span class="max-[359px]:hidden">${t("orders.scoringRules")}</span>
         </button>
       </div>
-    </div>
 
-    <div class="os-tab-content os-tab-content--active hidden [&.os-tab-content--active]:block" data-content="review-pending">
-      <div class="flex flex-col items-center justify-center gap-3 px-10 max-sm:px-4 py-20 text-center">
-        <svg width="100" height="80" viewBox="0 0 100 80" fill="none">
-          <rect x="10" y="10" width="50" height="55" rx="4" fill="#FFECD2" stroke="#F7A84B" stroke-width="1"/>
-          <rect x="15" y="18" width="40" height="4" rx="2" fill="#F7A84B" opacity="0.3"/>
-          <rect x="15" y="28" width="30" height="4" rx="2" fill="#F7A84B" opacity="0.3"/>
-          <circle cx="72" cy="38" r="8" fill="#FBBF24"/>
-          <rect x="66" y="48" width="12" height="20" rx="3" fill="#1E3A5F"/>
-        </svg>
-        <p class="text-sm text-(--color-text-muted,#666)">${t("orders.noPendingReviews")}</p>
-      </div>
-    </div>
-
-    <div class="os-tab-content hidden [&.os-tab-content--active]:block" data-content="review-done">
-      <div class="flex flex-col items-center justify-center gap-3 px-10 max-sm:px-4 py-20 text-center">
-        ${EMPTY_RECEIPT_ICON}
-        <p class="text-sm text-(--color-text-muted,#666)">${t("orders.noReviewsFound")}</p>
-      </div>
-    </div>
-  `;
-}
-
-function renderCoupons(): string {
-  return `
-    <div x-data="couponsPageComponent()">
-      <div class="flex items-center justify-between px-7 max-sm:px-3 pt-6 pb-5 border-b border-(--color-border-light,#f0f0f0)">
-        <h1 class="text-[22px] font-bold text-(--color-text-heading,#111827)">${t("orders.coupons")}</h1>
+      <!-- Sekmeler -->
+      <div class="flex border-b border-(--color-border-default,#e5e5e5) px-7 max-sm:px-4" role="tablist" aria-label="${t("orders.myReviews")}">
+        ${tabBtn("pending", t("orders.pendingReviews"), t("orders.pendingShort"), "pending.length")}
+        ${tabBtn("done", t("orders.reviewed"), t("orders.reviewed"), "done.length")}
       </div>
 
-      <!-- Tab: Kuponlar -->
-      <div>
-        <!-- Pill filters -->
-        <div class="os-pill-filters flex gap-2 px-7 max-sm:px-3 py-4">
-          <template x-for="pill in [{id:'available',label:'${t("orders.available")}'},{id:'used',label:'${t("orders.used")}'},{id:'expired',label:'${t("orders.expired")}'}]" :key="pill.id">
-            <button @click="setPill(pill.id)" class="os-pill px-4 py-1.5 text-[13px] bg-(--color-surface,#fff) border border-(--color-border-medium,#d1d5db) rounded-[20px] cursor-pointer transition-[color,border-color] duration-150 text-(--color-text-muted,#666)
-                           hover:border-[#999]
-                           [&.os-pill--active]:text-[var(--color-text-heading,#111827)]
-                           [&.os-pill--active]:border-[var(--color-text-heading)]
-                           [&.os-pill--active]:font-medium"
-              :class="activePill === pill.id ? 'os-pill--active' : ''"
-              x-text="pill.label"></button>
-          </template>
-        </div>
+      <template x-if="loading">${renderListSkeleton()}</template>
 
-        <!-- Empty state -->
-        <div x-show="filteredCoupons.length === 0" class="flex flex-col items-center justify-center gap-3 px-10 max-sm:px-4 py-[60px] text-center">
-          <p class="text-sm text-(--color-text-muted,#666)">${t("orders.noCoupons")}</p>
-        </div>
-
-        <!-- Coupon cards -->
-        <div x-show="filteredCoupons.length > 0" class="flex flex-col gap-3 px-7 max-sm:px-3 pb-6">
-          <template x-for="coupon in filteredCoupons" :key="coupon.code">
-            <div class="border rounded-lg p-4 transition-[border-color,background-color,opacity] duration-150"
-              :class="coupon.status === 'available' ? 'border-(--color-border-default,#e5e5e5) bg-(--color-surface,#fff)' : 'border-(--color-border-light,#f0f0f0) bg-(--color-surface-muted,#fafafa) opacity-60'">
-              <div class="flex items-start gap-4">
-                <!-- Type badge -->
-                <div class="flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center text-lg font-bold"
-                  :class="couponBadgeClass(coupon.type)"
-                  x-text="couponTypeBadge(coupon.type)"></div>
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center gap-2 mb-1">
-                    <span class="text-xs font-medium px-2 py-0.5 rounded-full"
-                      :class="couponBadgeClass(coupon.type)"
-                      x-text="couponTypeLabel(coupon.type)"></span>
-                    <span class="font-mono text-sm font-semibold text-(--color-text-heading,#111827)" x-text="coupon.code"></span>
-                  </div>
-                  <p class="text-sm text-(--color-text-body,#333) mb-1" x-text="coupon.description"></p>
-                  <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-(--color-text-muted,#666)">
-                    <span x-show="coupon.minOrder > 0" x-text="'${t("orders.minOrder")}: $' + coupon.minOrder"></span>
-                    <span x-text="'${t("orders.expiryDate")}: ' + formatDate(coupon.expiresAt)"></span>
-                    <span x-show="coupon.usedAt" x-text="'${t("orders.usedOn")}: ' + formatDate(coupon.usedAt || '')"></span>
-                  </div>
-                </div>
-                <!-- Value display -->
-                <div class="flex-shrink-0 text-end">
-                  <span class="text-lg font-bold" :class="coupon.status === 'available' ? 'text-(--color-text-heading,#111827)' : 'text-(--color-text-muted,#666)'"
-                    x-text="coupon.type === 'shipping' ? '${t("orders.free")}' : (coupon.type === 'percent' ? '%' + coupon.value : '$' + coupon.value)"></span>
-                </div>
-              </div>
+      <template x-if="!loading">
+        <div>
+          <!-- Arama (yalnızca aktif sekmede içerik varken) -->
+          <div class="px-7 max-sm:px-4 pt-4 pb-1" x-show="activeCount > 0">
+            <div class="relative sm:max-w-[320px] sm:ms-auto">
+              <svg class="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/>
+              </svg>
+              <input type="text" x-model="search" @keydown.escape="search = ''"
+                placeholder="${t("orders.reviewSearchPlaceholder")}"
+                class="th-input th-input-sm ps-9 w-full max-sm:h-10" />
             </div>
-          </template>
-        </div>
-      </div>
+          </div>
 
+          <!-- Bekleyen değerlendirmeler -->
+          <div x-show="tab === 'pending'" role="tabpanel">
+            <template x-if="pending.length === 0">
+              ${renderEmptyState(starIcon, t("orders.noPendingReviews"), t("orders.pendingReviewsEmptyDesc"))}
+            </template>
+            <template x-if="pending.length > 0 && filteredPending.length === 0">
+              <p class="text-[13px] text-gray-500 text-center py-12 m-0">${t("orders.noReviewsFound")}</p>
+            </template>
+            <div class="px-7 max-sm:px-4 py-4 space-y-2.5" x-show="filteredPending.length > 0">
+              <template x-for="p in filteredPending" :key="p.order_item">
+                <article class="flex items-center max-sm:flex-col max-sm:items-stretch gap-3 rounded-md border border-gray-200 p-3.5">
+                  <div class="flex items-center gap-3 flex-1 min-w-0">
+                    ${productThumb("p", "w-12 h-12")}
+                    <div class="min-w-0">
+                      <p class="text-[14px] max-sm:text-[13px] font-medium text-gray-900 line-clamp-2 leading-snug m-0" x-text="p.product_name"></p>
+                      <div class="flex flex-wrap items-center gap-x-1.5 text-[12px] text-gray-500 mt-1">
+                        <span class="font-mono" x-text="p.order_number"></span>
+                        <span class="whitespace-nowrap" x-text="fmtDate(p.delivered_at)"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <button type="button" class="th-btn shrink-0 px-5 py-2 text-[13px] whitespace-nowrap max-sm:w-full max-sm:rounded-full">${t("orders.writeReview")}</button>
+                </article>
+              </template>
+            </div>
+          </div>
+
+          <!-- Yapılan değerlendirmeler -->
+          <div x-show="tab === 'done'" role="tabpanel">
+            <template x-if="done.length === 0">
+              ${renderEmptyState(messageSquareIcon, t("orders.reviewsDoneEmptyTitle"), t("orders.reviewsDoneEmptyDesc"))}
+            </template>
+            <template x-if="done.length > 0 && filteredDone.length === 0">
+              <p class="text-[13px] text-gray-500 text-center py-12 m-0">${t("orders.noReviewsFound")}</p>
+            </template>
+            <div class="px-7 max-sm:px-4 py-4 space-y-2.5" x-show="filteredDone.length > 0">
+              <template x-for="r in filteredDone" :key="r.name">
+                <article class="rounded-md border border-gray-200 p-4 max-sm:p-3.5">
+                  <div class="flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-2 min-w-0">
+                      <div class="flex items-center gap-0.5 shrink-0" :aria-label="r.rating + '/5'">
+                        <template x-for="i in 5">
+                          <svg class="w-4 h-4 max-sm:w-3.5 max-sm:h-3.5" :class="i <= r.rating ? 'text-[#f5b800]' : 'text-gray-200'" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="${STAR_POINTS}"/></svg>
+                        </template>
+                      </div>
+                      <span class="text-[12px] max-sm:text-[11px] text-gray-400 whitespace-nowrap truncate" x-text="fmtDate(r.submitted_at)"></span>
+                    </div>
+                    <span class="inline-flex px-2.5 max-sm:px-2 py-0.5 text-xs font-medium rounded-full whitespace-nowrap shrink-0" :class="reviewStatusChip(r.status).cls" x-text="reviewStatusChip(r.status).label"></span>
+                  </div>
+                  <template x-if="r.title"><h3 class="text-[14px] font-semibold text-gray-900 mt-2.5 mb-0" x-text="r.title"></h3></template>
+                  <p class="text-[13px] text-gray-600 leading-relaxed line-clamp-3 mt-1.5 mb-0" x-text="r.body"></p>
+                  <template x-if="r.product_name">
+                    <div class="flex items-center gap-2.5 mt-3 pt-3 border-t border-gray-100 min-w-0">
+                      ${productThumb("r", "w-8 h-8")}
+                      <p class="text-[12px] text-gray-500 truncate m-0 flex-1 min-w-0" x-text="r.product_name"></p>
+                      <span class="inline-flex items-center gap-1 text-[12px] text-gray-400 whitespace-nowrap shrink-0" x-show="r.helpful_count > 0">
+                        ${styleSvg(thumbsUpIcon, "w-3.5 h-3.5")}
+                        <span x-text="r.helpful_count"></span>
+                      </span>
+                    </div>
+                  </template>
+                </article>
+              </template>
+            </div>
+          </div>
+        </div>
+      </template>
     </div>
   `;
 }
@@ -1879,7 +1950,6 @@ const SECTIONS: Record<string, () => string> = {
   "all-orders": renderAllOrders,
   refunds: renderRefunds,
   reviews: renderReviews,
-  coupons: renderCoupons,
 };
 
 /* ────────────────────────────────────────
@@ -1935,8 +2005,8 @@ export function initOrdersPageLayout(): void {
     contentEl!.innerHTML = renderFn();
 
     // Alpine, innerHTML ile sonradan eklenen x-data ağacını otomatik taramaz —
-    // hash navigasyonunda yeni section'ın (ordersListComponent/refundsComponent/
-    // couponsPageComponent) canlanması için manuel initTree gerekir, aksi halde
+    // hash navigasyonunda yeni section'ın (ordersListComponent/
+    // refundsComponent) canlanması için manuel initTree gerekir, aksi halde
     // içerik "ölü" kalır.
     const Alpine = (window as unknown as { Alpine?: { initTree(el: HTMLElement): void } }).Alpine;
     if (Alpine) Alpine.initTree(contentEl!);
@@ -1950,11 +2020,10 @@ export function initOrdersPageLayout(): void {
       link.classList.toggle("border-gray-900", isActive);
       link.classList.toggle("text-gray-500", !isActive);
       link.classList.toggle("border-transparent", !isActive);
+      // Dar ekranda seçili sekme scroll dışında kalabiliyor — görünür alana getir
+      if (isActive) link.scrollIntoView({ inline: "center", block: "nearest", behavior: "instant" });
     });
 
-    // Init inner tabs
-    initInnerTabs();
-    initPillFilters();
     initTaxModals();
     initOrderTabsScroll();
   }
@@ -1970,46 +2039,13 @@ export function initOrdersPageLayout(): void {
     });
   });
 
-  // Init inner tabs for initial render
-  initInnerTabs();
-  initPillFilters();
   initTaxModals();
   initOrderTabsScroll();
-}
 
-function initInnerTabs(): void {
-  document.querySelectorAll<HTMLElement>(".os-tabs").forEach((tabGroup) => {
-    const tabs = tabGroup.querySelectorAll<HTMLButtonElement>(".os-tabs__tab");
-    tabs.forEach((tab) => {
-      tab.addEventListener("click", () => {
-        const targetId = tab.dataset.tab;
-        if (!targetId) return;
-
-        // Toggle active tab
-        tabs.forEach((t) => t.classList.remove("os-tabs__tab--active"));
-        tab.classList.add("os-tabs__tab--active");
-
-        // Toggle content panels within same parent
-        const parent = tabGroup.parentElement;
-        if (!parent) return;
-        parent.querySelectorAll<HTMLElement>(".os-tab-content").forEach((panel) => {
-          panel.classList.toggle("os-tab-content--active", panel.dataset.content === targetId);
-        });
-      });
-    });
-  });
-}
-
-function initPillFilters(): void {
-  document.querySelectorAll<HTMLElement>(".os-pill-filters").forEach((group) => {
-    const pills = group.querySelectorAll<HTMLButtonElement>(".os-pill");
-    pills.forEach((pill) => {
-      pill.addEventListener("click", () => {
-        pills.forEach((p) => p.classList.remove("os-pill--active"));
-        pill.classList.add("os-pill--active");
-      });
-    });
-  });
+  // İlk yüklemede de aktif sekme dar ekranda görünür alana gelsin
+  document
+    .querySelector(".orders-page__nav-link--active")
+    ?.scrollIntoView({ inline: "center", block: "nearest", behavior: "instant" });
 }
 
 function openModal(id: string): void {

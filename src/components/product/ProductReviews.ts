@@ -51,6 +51,11 @@ export function renderStars(rating: number, small = false): string {
   }).join("");
 }
 
+/** Puanı gösterim skoruna çevirir: tam sayıysa "5", değilse tek ondalık "4.9". */
+export function formatScore(rating: number | undefined): string {
+  return rating ? Number(rating).toFixed(rating % 1 === 0 ? 0 : 1) : "0";
+}
+
 interface ReviewLike {
   rating: number;
   aspects?: {
@@ -104,7 +109,7 @@ function countryFlag(country: string): string {
   return flags[country] || "\u{1F310}";
 }
 
-function anonymizeName(name: string): string {
+export function anonymizeName(name: string): string {
   // "Ahmet Y." → "A***t Y."
   const parts = name.split(" ");
   const first = parts[0];

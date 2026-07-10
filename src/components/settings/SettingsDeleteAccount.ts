@@ -66,7 +66,7 @@ export function SettingsDeleteAccount(): string {
           </div>
 
           <div class="flex items-center gap-3 max-sm:flex-col">
-            <button class="th-btn bg-red-600 hover:bg-red-700 max-sm:w-full" type="button" @click="goToStep2()">${t("settings.wantToDelete")}</button>
+            <button class="th-btn max-sm:py-2 max-sm:text-[13px] bg-red-600 hover:bg-red-700 max-sm:w-full" type="button" @click="goToStep2()">${t("settings.wantToDelete")}</button>
             <a href="#" class="text-[13px] font-medium no-underline hover:underline max-sm:text-center" style="color:var(--color-text-secondary)">${t("settings.cancelAction")}</a>
           </div>
         </div>
@@ -94,7 +94,7 @@ export function SettingsDeleteAccount(): string {
           <p class="text-[13px] text-red-500 mb-3" x-show="error" x-text="error" x-cloak></p>
 
           <div class="flex items-center gap-3 max-sm:flex-col">
-            <button class="th-btn bg-red-600 hover:bg-red-700 max-sm:w-full disabled:opacity-50" type="button" @click="confirmDelete()" :disabled="loading">
+            <button class="th-btn max-sm:py-2 max-sm:text-[13px] bg-red-600 hover:bg-red-700 max-sm:w-full disabled:opacity-50" type="button" @click="confirmDelete()" :disabled="loading">
               <span x-show="!loading">${t("settings.deleteMyAccount")}</span>
               <span x-show="loading" x-cloak class="inline-flex items-center gap-2">
                 <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
@@ -111,7 +111,7 @@ export function SettingsDeleteAccount(): string {
         <div class="max-w-[640px] mx-auto text-center py-4 max-sm:py-2">
           <h3 class="text-lg max-sm:text-base font-bold mb-2 m-0" style="color:var(--color-text-primary)">${t("settings.accountDeleted")}</h3>
           <p class="text-sm max-sm:text-[13px] mb-6 max-sm:mb-4 m-0" style="color:var(--color-text-secondary)">${t("settings.accountDeletedDesc")}</p>
-          <a href="/giris" class="th-btn no-underline inline-flex max-sm:w-full max-sm:justify-center">${t("settings.goToLogin")}</a>
+          <a href="/giris" class="th-btn max-sm:py-2 max-sm:text-[13px] no-underline inline-flex max-sm:w-full max-sm:justify-center">${t("settings.goToLogin")}</a>
         </div>
       </div>
     </div>

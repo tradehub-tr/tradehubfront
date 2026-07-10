@@ -11,7 +11,7 @@ import { t } from '../i18n'
 import { getListingUrl } from '../utils/listingUrl'
 
 // Header components
-import { TopBar, initMobileDrawer, SubHeader, MegaMenu, initMegaMenu, initHeaderCart } from '../components/header'
+import { TopBar, SubHeader, MegaMenu, initMegaMenu, initHeaderCart } from '../components/header'
 import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar'
 
@@ -37,6 +37,11 @@ import {
   TopRankingGrid,
   initRankingCategoryTabs,
 } from '../components/top-ranking'
+import {
+  initCategoryDrillSheet,
+  type CategoryDrillController,
+  type DrillCategory,
+} from '../components/shared/CategoryDrillSheet'
 import {
   renderRankingGroupCard,
 } from '../components/top-ranking/TopRankingGrid'
@@ -95,9 +100,15 @@ function toRankingGroup(g: TopRankingGroup): RankingCategoryGroup {
 
 /* ── Alpine Data Registration ── */
 
+/** Paylaşılan mobil drill sheet'in controller'ı; openCategoryDropdown mobil dalı bununla açar. */
+let drillCtl: CategoryDrillController | null = null;
+
 Alpine.data('topRankingPage', () => ({
   init() {
-    loadCategories().then(cats => { this.apiCategories = cats; })
+    loadCategories().then(cats => {
+      this.apiCategories = cats;
+      this.initDrillSheet();
+    })
       .catch(err => console.warn('[TopRanking] Category load failed:', err));
     initCurrency()
       .then(() => this.fetchGroupedPage(true))
@@ -112,11 +123,14 @@ Alpine.data('topRankingPage', () => ({
   categoryDropdownLevel: 1 as 1 | 2,
   selectedMainCategory: null as string | null,
   pendingSubCategory: null as string | null,
-  showCategorySheet: false,
-  showTabSheet: false,
 
   canScrollLeft: false,
   canScrollRight: true,
+
+  /* Mobil in-hero arama — grouped görünümün sayfa içi filtresi olmadığından
+     submit genel ürün aramasına (/urunler?q=) yönlendirir. */
+  showSearch: false,
+  searchQuery: '',
 
   nextPage: 1,
   loading: false,
@@ -168,6 +182,68 @@ Alpine.data('topRankingPage', () => ({
 
   loadMore(): void { this.fetchGroupedPage(false); },
 
+  /** "Tümü" tab'ı — grouped görünüme dön (kategori tab'ları <a> ile yeni sayfaya gider). */
+  setTab(tab: string): void {
+    this.activeTab = tab;
+    this.activeCategory = tab;
+    if (tab === 'all') this.fetchGroupedPage(true);
+  },
+
+  /** Paylaşılan mobil drill-down kategori sheet'i (top-deals ile aynı component). */
+  initDrillSheet(): void {
+    const drillCategories: DrillCategory[] = [
+      { name: t('topRankingPage.tabAll'), slug: 'all' },
+      ...this.apiCategories,
+    ];
+    drillCtl = initCategoryDrillSheet({
+      sheetId: 'tr-cat-sheet',
+      triggerId: 'tr-cat-trigger',
+      listSelector: '[data-tr-cat-list]',
+      categories: drillCategories,
+      rootLabel: t('mobileCategory.allCategories'),
+      allInCategoryLabel: (name: string) => t('mobileCategory.allInCategory', { name }),
+      onSelect: (slug: string) => {
+        if (!slug || slug === 'all') {
+          this.setTab('all');
+          return;
+        }
+        window.location.href = `/pages/top-ranking-category.html?cat=${encodeURIComponent(slug)}&sort=${this.activeSort}&page=1`;
+      },
+      getActiveSlug: () => this.activeCategory || 'all',
+    });
+  },
+
+  openSearch(): void {
+    this.showSearch = true;
+    this.$nextTick(() => {
+      const input = (this.$refs as Record<string, HTMLElement>).rankingSearchInput as
+        | HTMLInputElement
+        | undefined;
+      input?.focus();
+    });
+  },
+
+  closeSearch(): void {
+    this.showSearch = false;
+    this.searchQuery = '';
+  },
+
+  clearSearch(): void {
+    this.searchQuery = '';
+    this.$nextTick(() => {
+      const input = (this.$refs as Record<string, HTMLElement>).rankingSearchInput as
+        | HTMLInputElement
+        | undefined;
+      input?.focus();
+    });
+  },
+
+  submitSearch(): void {
+    const q = this.searchQuery.trim();
+    if (!q) return;
+    window.location.href = `/urunler?q=${encodeURIComponent(q)}`;
+  },
+
   renderGroupCard(group: RankingCategoryGroup): string {
     return renderRankingGroupCard(group);
   },
@@ -208,26 +284,22 @@ Alpine.data('topRankingPage', () => ({
       this.fetchGroupedPage(true);
       return;
     }
-    const sp = new URLSearchParams();
-    sp.set('cat', finalCat);
-    sp.set('sort', this.activeSort);
-    sp.set('page', '1');
-    window.location.href = `/pages/top-ranking-category.html?${sp.toString()}`;
+    window.location.href = `/pages/top-ranking-category.html?cat=${encodeURIComponent(finalCat)}&sort=${this.activeSort}&page=1`;
   },
 
   openCategoryDropdown(): void {
     const isDesktop = window.innerWidth >= 1024;
-    const opening = isDesktop ? !this.categoryDropdownOpen : true;
+    if (!isDesktop) {
+      drillCtl?.open();
+      return;
+    }
+    const opening = !this.categoryDropdownOpen;
     if (opening) {
       this.selectedMainCategory = null;
       this.pendingSubCategory = null;
       this.categoryDropdownLevel = 1;
     }
-    if (isDesktop) {
-      this.categoryDropdownOpen = opening;
-    } else {
-      this.showCategorySheet = true;
-    }
+    this.categoryDropdownOpen = opening;
   },
 
   get selectedCategoryLabel(): string {
@@ -286,7 +358,7 @@ appEl.innerHTML = `
     </div>
 
     <!-- Sort pills (always sticky) -->
-    <div id="sticky-tabs" class="sticky top-0 z-10 bg-surface transition-shadow duration-200">
+    <div id="sticky-tabs" class="sticky top-0 z-20 bg-surface transition-shadow duration-200">
       <div class="container-boxed">
         ${TopRankingSortPills()}
       </div>
@@ -316,7 +388,6 @@ mountChatPopup();
 initChatTriggers();
 startAlpine();
 initHeaderCart();
-initMobileDrawer();
 initLanguageSelector();
 initRankingCategoryTabs();
 initAnimatedPlaceholder('#topbar-compact-search-input');

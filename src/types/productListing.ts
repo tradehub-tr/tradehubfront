@@ -44,6 +44,8 @@ export interface ProductListingCard {
   discount?: string;
   /** Supplier company name */
   supplierName?: string;
+  /** Satıcı mağaza slug'ı (Admin Seller Profile docname, örn. SEL-00020) — /magaza/<slug> linki için */
+  supplierSlug?: string;
   /** Reorder rate percentage, e.g. 16 */
   reorderRate?: number;
   /** Selling point text, e.g. "5 günde sevkiyat" */

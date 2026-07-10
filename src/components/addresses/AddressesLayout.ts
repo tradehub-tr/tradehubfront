@@ -20,7 +20,7 @@ const ICONS = {
 function renderAddressCard(): string {
   return `
     <template x-for="addr in addresses" :key="addr.id">
-      <div class="bg-white rounded-lg p-5 max-sm:p-4 border-2 transition-colors"
+      <div class="bg-white rounded-md p-5 max-sm:p-4 border-2 transition-colors"
            :class="addr.is_default ? 'border-[var(--color-primary-500)]' : 'border-transparent'">
 
         <!-- Header: title + default badge -->
@@ -50,15 +50,15 @@ function renderAddressCard(): string {
         <!-- Actions -->
         <div class="flex items-center gap-2 flex-wrap border-t border-gray-100 pt-3">
           <button @click="openEdit(addr)"
-                  class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded border border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50 transition-colors">
+                  class="inline-flex items-center justify-center gap-1.5 text-xs font-medium px-3 py-1.5 max-sm:py-2 rounded border border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50 transition-colors">
             ${ICONS.edit} ${t("authAddr.edit")}
           </button>
           <button @click="confirmDelete(addr)"
-                  class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded border border-gray-200 text-gray-700 hover:border-red-200 hover:text-red-600 hover:bg-red-50 transition-colors">
+                  class="inline-flex items-center justify-center gap-1.5 text-xs font-medium px-3 py-1.5 max-sm:py-2 rounded border border-gray-200 text-gray-700 hover:border-red-200 hover:text-red-600 hover:bg-red-50 transition-colors">
             ${ICONS.trash} ${t("authAddr.delete")}
           </button>
           <button x-show="!addr.is_default" @click="setDefault(addr.id)"
-                  class="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded border border-gray-200 text-gray-600 hover:border-[var(--color-primary-500)] hover:text-[var(--color-primary-500)] transition-colors ms-auto">
+                  class="inline-flex items-center justify-center gap-1.5 text-xs font-medium px-3 py-1.5 max-sm:py-2 rounded border border-gray-200 text-gray-600 hover:border-[var(--color-primary-500)] hover:text-[var(--color-primary-500)] transition-colors ms-auto">
             ${t("authAddr.setDefault")}
           </button>
         </div>
@@ -70,7 +70,7 @@ function renderAddressCard(): string {
 function renderEmptyState(): string {
   return `
     <div x-show="addresses.length === 0 && !loading"
-         class="bg-white rounded-lg p-12 flex flex-col items-center text-center">
+         class="bg-white rounded-md p-12 max-sm:px-5 max-sm:py-10 flex flex-col items-center text-center">
       <div class="mb-4 text-gray-300">${ICONS.emptyBox}</div>
       <p class="text-gray-500 text-sm mb-4">${t("authAddr.emptyStateText")}</p>
       <button @click="openAdd()"
@@ -114,7 +114,7 @@ function renderFormModal(): string {
            @click.stop>
 
         <!-- Modal header -->
-        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 flex-shrink-0">
+        <div class="flex items-center justify-between px-6 max-sm:px-4 py-4 border-b border-gray-100 flex-shrink-0">
           <h2 id="address-modal-title"
               class="text-base font-semibold text-gray-900"
               x-text="editingId ? '${t("authAddr.editAddress")}' : '${t("authAddr.addNewAddress")}'"></h2>
@@ -127,7 +127,7 @@ function renderFormModal(): string {
         </div>
 
         <!-- Modal body: form -->
-        <div class="overflow-y-auto flex-1 px-6 py-5">
+        <div class="overflow-y-auto flex-1 px-6 max-sm:px-4 py-5">
           <form @submit.prevent="saveAddress()" id="buyer-address-form" class="space-y-4">
 
             <!-- Sprint 1 (2026-05-15): Adres Tipi Toggle — Bireysel / Kurumsal -->
@@ -207,7 +207,7 @@ function renderFormModal(): string {
                  x-transition:leave="transition ease-out duration-150"
                  x-transition:leave-start="opacity-100 translate-y-0"
                  x-transition:leave-end="opacity-0 -translate-y-1 motion-reduce:translate-y-0"
-                 class="grid grid-cols-2 gap-3">
+                 class="grid grid-cols-2 max-sm:grid-cols-1 gap-3">
               <div>
                 <label class="block text-xs font-medium text-gray-700 mb-1">
                   ${t("authAddr.taxNo")} <span class="text-red-500">*</span>
@@ -340,16 +340,16 @@ function renderFormModal(): string {
         </div>
 
         <!-- Modal footer -->
-        <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 flex-shrink-0">
+        <div class="flex items-center justify-end gap-3 px-6 py-4 max-sm:px-4 max-sm:pb-[max(16px,env(safe-area-inset-bottom))] border-t border-gray-100 flex-shrink-0">
           <button type="button"
                   @click="closeModal()"
-                  class="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-200 rounded hover:bg-gray-50 transition-colors">
+                  class="px-4 py-2 max-sm:flex-1 text-sm font-medium text-gray-700 border border-gray-200 rounded hover:bg-gray-50 transition-colors">
             ${t("authAddr.cancel")}
           </button>
           <button type="submit"
                   form="buyer-address-form"
                   :disabled="saving"
-                  class="px-5 py-2 text-sm font-medium rounded th-btn disabled:opacity-60 disabled:cursor-not-allowed min-w-[80px]">
+                  class="px-5 py-2 max-sm:flex-1 text-sm font-medium rounded th-btn disabled:opacity-60 disabled:cursor-not-allowed min-w-[80px]">
             <span x-show="!saving">${t("authAddr.save")}</span>
             <span x-show="saving" class="inline-flex items-center gap-1.5">
               <svg class="animate-spin h-3.5 w-3.5" fill="none" viewBox="0 0 24 24">
@@ -422,8 +422,8 @@ export function AddressesLayout(): string {
              class="py-4 pb-8">
 
       <!-- Page header -->
-      <div class="flex items-center justify-between mb-4">
-        <h1 class="text-lg font-bold text-gray-900">${t("authAddr.pageTitle")}</h1>
+      <div class="flex items-center justify-between flex-wrap gap-2 mb-4">
+        <h1 class="text-lg font-bold text-gray-900 m-0">${t("authAddr.pageTitle")}</h1>
         <button x-show="addresses.length > 0"
                 @click="openAdd()"
                 :disabled="addresses.length >= maxAddresses"

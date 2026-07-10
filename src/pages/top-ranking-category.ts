@@ -12,17 +12,16 @@ import "../style.css";
 import Alpine from "alpinejs";
 import { initFlowbite } from "flowbite";
 import { t } from "../i18n";
-import { getListingUrl } from "../utils/listingUrl";
 
 import {
   TopBar,
-  initMobileDrawer,
   SubHeader,
   MegaMenu,
   initMegaMenu,
   initHeaderCart,
 } from "../components/header";
 import { initLanguageSelector } from "../components/header/TopBar";
+import { mountChatPopup, initChatTriggers } from "../components/chat-popup";
 import { Breadcrumb } from "../components/shared/Breadcrumb";
 import { FooterLinks } from "../components/footer";
 import { FloatingPanel } from "../components/floating";
@@ -36,12 +35,26 @@ import {
   TopRankingCategoryHero,
   TopRankingCategoryGrid,
   TopRankingCategoryPagination,
-  renderRankedCategoryCard,
 } from "../components/top-ranking-category";
+import { renderListingCard, initProductSliders } from "../components/shared/ListingCard";
+import { BottomSheet } from "../components/shared/BottomSheet";
+import {
+  initCategoryDrillSheet,
+  categoryDrillSkeleton,
+  type CategoryDrillController,
+  type DrillCategory,
+} from "../components/shared/CategoryDrillSheet";
+import { ListingCartDrawer, initListingCartDrawer } from "../components/products";
+import { applyListingSocialProof } from "../components/products/initListingSocialProof";
+import {
+  initListingFavoriteTriggers,
+  syncListingFavoriteHearts,
+} from "../components/products/initListingFavorites";
+import { LoginModal } from "../components/product";
 import { searchListings } from "../services/listingService";
 import { initCurrency } from "../services/currencyService";
 import { loadCategories, type ApiCategory } from "../services/categoryService";
-import type { RankedProduct } from "../types/topRanking";
+import type { ProductListingCard } from "../types/productListing";
 import { initAnimatedPlaceholder } from "../utils/animatedPlaceholder";
 import { saveRecentCategory } from "../services/recentHistoryService";
 
@@ -68,6 +81,9 @@ function parseSearchParams(): { cat: string; sort: SortKey; page: number } {
   return { cat, sort, page };
 }
 
+/** Paylaşılan mobil drill sheet'in controller'ı — openCategoryDropdown mobil dalında açılır. */
+let drillCtl: CategoryDrillController | null = null;
+
 function syncUrl(cat: string, sort: SortKey, page: number): void {
   const sp = new URLSearchParams();
   if (cat) sp.set("cat", cat);
@@ -84,12 +100,16 @@ Alpine.data("topRankingCategoryPage", () => ({
   activeSort: "hot-selling" as SortKey,
 
   // Data
-  products: [] as RankedProduct[],
+  products: [] as ProductListingCard[],
   totalProducts: 0,
   totalPages: 1,
   loading: false,
   categoryName: "",
   apiCategories: [] as ApiCategory[],
+
+  // Mobil in-hero arama — bu kategorinin sıralamasını filtreler (TopDeals deseni)
+  showSearch: false,
+  searchQuery: "",
 
   // Mevcut TopRankingFilters'ın beklediği state
   // (ana TopRanking sayfasındakiyle uyumlu; dropdown'un çalışması için gerekli)
@@ -97,7 +117,6 @@ Alpine.data("topRankingCategoryPage", () => ({
   categoryDropdownLevel: 1 as 1 | 2,
   selectedMainCategory: null as string | null,
   pendingSubCategory: null as string | null,
-  showCategorySheet: false,
   // Dropdown'da "Tümü" gözükmesi için
   activeTab: "all" as string,
   activeCategory: "all" as string,
@@ -115,6 +134,7 @@ Alpine.data("topRankingCategoryPage", () => ({
       .then((cats) => {
         this.apiCategories = cats;
         this.resolveCategoryName();
+        this.initDrillSheet();
       })
       .catch((err) => console.warn("[TopRankingCategory] Category load failed:", err));
 
@@ -155,31 +175,25 @@ Alpine.data("topRankingCategoryPage", () => ({
     if (this.loading) return;
     this.loading = true;
     try {
-      const result = await searchListings({
+      const params: Record<string, unknown> = {
         category: this.category,
         sort_by: SORT_KEY_TO_BACKEND[this.activeSort],
         page: this.page,
         page_size: PAGE_SIZE,
-      });
-      const incoming: RankedProduct[] = (result.products || []).map((p) => ({
-        id: p.id || "",
-        name: p.name || "",
-        href: getListingUrl({ id: p.id, href: p.href }),
-        price: p.price || "",
-        imageSrc: p.imageSrc || "",
-        moq: p.moq || "1",
-        rank: 0, // grid'de (page-1)*50 + idx + 1 ile hesaplanır
-        averageRating: typeof p.rating === "number" ? p.rating : undefined,
-        ratingCount: typeof p.reviewCount === "number" ? p.reviewCount : undefined,
-      }));
-      this.products = incoming;
-      this.totalProducts = result.searchHeader?.totalProducts || incoming.length;
+      };
+      // Kategori kapsamı korunur — arama yalnız bu sıralamanın içini daraltır.
+      const q = this.searchQuery.trim();
+      if (q) params.query = q;
+      const result = await searchListings(params);
+      this.products = result.products || [];
+      this.totalProducts = result.searchHeader?.totalProducts || this.products.length;
       this.totalPages = Math.min(MAX_PAGES, Math.max(1, Math.ceil(this.totalProducts / PAGE_SIZE)));
       // page clamp (kategori 1 sayfaya düştüyse ve URL'de page=2 vardıysa)
       if (this.page > this.totalPages) {
         this.page = this.totalPages;
         syncUrl(this.category, this.activeSort, this.page);
       }
+      this.$nextTick(() => this.afterGridRender());
     } catch (err) {
       console.warn("[TopRankingCategory] fetchPage failed:", err);
       this.products = [];
@@ -198,6 +212,44 @@ Alpine.data("topRankingCategoryPage", () => ({
     this.fetchPage();
   },
 
+  /* ── Mobil in-hero arama (topDealsPage ile aynı akış) ── */
+  openSearch(): void {
+    this.showSearch = true;
+    this.$nextTick(() => {
+      const input = (this.$refs as Record<string, HTMLElement>).rankingSearchInput as
+        | HTMLInputElement
+        | undefined;
+      input?.focus();
+    });
+  },
+
+  closeSearch(): void {
+    this.showSearch = false;
+    // Grid'i yalnız gerçekten uygulanmış bir sorgu varsa sıfırla.
+    if (this.searchQuery) {
+      this.searchQuery = "";
+      this.page = 1;
+      this.fetchPage();
+    }
+  },
+
+  clearSearch(): void {
+    this.searchQuery = "";
+    this.page = 1;
+    this.fetchPage();
+    this.$nextTick(() => {
+      const input = (this.$refs as Record<string, HTMLElement>).rankingSearchInput as
+        | HTMLInputElement
+        | undefined;
+      input?.focus();
+    });
+  },
+
+  submitSearch(): void {
+    this.page = 1;
+    this.fetchPage();
+  },
+
   goToPage(n: number): void {
     if (n < 1 || n > this.totalPages || n === this.page) return;
     this.page = n;
@@ -209,18 +261,51 @@ Alpine.data("topRankingCategoryPage", () => ({
     });
   },
 
-  renderCard(product: RankedProduct, rank: number): string {
-    return renderRankedCategoryCard(product, rank);
+  /* Kart etkileşim altyapısı her grid render'ından sonra tazelenir
+     (top-deals.ts afterGridRender'ıyla aynı sıra). */
+  afterGridRender(): void {
+    initListingCartDrawer(this.products);
+    initProductSliders();
+    applyListingSocialProof(this.products);
+    syncListingFavoriteHearts();
+  },
+
+  renderCard(product: ProductListingCard, rank: number): string {
+    return renderListingCard(product, { rank });
+  },
+
+  /** Paylaşılan mobil drill-down kategori sheet'i (top-deals ile aynı component). */
+  initDrillSheet(): void {
+    const drillCategories: DrillCategory[] = [
+      { name: t("topRankingPage.tabAll"), slug: "all" },
+      ...this.apiCategories,
+    ];
+    drillCtl = initCategoryDrillSheet({
+      sheetId: "tr-cat-sheet",
+      listSelector: "[data-tr-cat-list]",
+      categories: drillCategories,
+      rootLabel: t("mobileCategory.allCategories"),
+      allInCategoryLabel: (name: string) => t("mobileCategory.allInCategory", { name }),
+      onSelect: (slug: string) => {
+        if (!slug || slug === "all") {
+          window.location.href = "/cok-satanlar";
+          return;
+        }
+        if (slug === this.category) return;
+        window.location.href = `/pages/top-ranking-category.html?cat=${encodeURIComponent(slug)}&sort=${this.activeSort}&page=1`;
+      },
+      getActiveSlug: () => this.category,
+    });
   },
 
   // Mevcut TopRankingFilters dropdown'unun beklediği metodlar
   openCategoryDropdown(): void {
     const isDesktop = window.innerWidth >= 1024;
-    if (isDesktop) {
-      this.categoryDropdownOpen = !this.categoryDropdownOpen;
-    } else {
-      this.showCategorySheet = true;
+    if (!isDesktop) {
+      drillCtl?.open();
+      return;
     }
+    this.categoryDropdownOpen = !this.categoryDropdownOpen;
     // Dropdown level seçilmiş kategoriye göre
     if (this.selectedMainCategory) {
       const mainCat = this.apiCategories.find((c) => c.slug === this.selectedMainCategory);
@@ -319,7 +404,9 @@ appEl.innerHTML = `
       </div>
     </div>
 
-    <section id="trc-grid-anchor" class="pb-8 lg:pb-12" style="background: var(--products-bg, #f9fafb);">
+    <!-- isolate: kart içi z-index'ler (favori z-30, rozet z-20) bu bölümde hapsolur,
+         sticky sıralama barının (z-10) üstüne çıkamaz -->
+    <section id="trc-grid-anchor" class="isolate pb-8 lg:pb-12" style="background: var(--products-bg, #f9fafb);">
       <div class="container-boxed">
         ${TopRankingCategoryGrid()}
         ${TopRankingCategoryPagination()}
@@ -331,13 +418,24 @@ appEl.innerHTML = `
     ${FooterLinks()}
   </footer>
 
+  ${LoginModal()}
+  ${ListingCartDrawer()}
+
+  <!-- Mobil kategori drill-down sheet'i (paylaşılan component; TopRankingFilters mobil dalı açar) -->
+  ${BottomSheet(
+    { id: "tr-cat-sheet", titleKey: "mobileCategory.allCategories", hiddenAt: "lg:hidden" },
+    categoryDrillSkeleton("data-tr-cat-list")
+  )}
+
   ${FloatingPanel()}
 `;
 
 initMegaMenu();
 initFlowbite();
+mountChatPopup();
+initChatTriggers();
 startAlpine();
 initHeaderCart();
-initMobileDrawer();
 initLanguageSelector();
+initListingFavoriteTriggers();
 initAnimatedPlaceholder("#topbar-compact-search-input");

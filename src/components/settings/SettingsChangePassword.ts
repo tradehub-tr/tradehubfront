@@ -50,7 +50,7 @@ export function SettingsChangePassword(): string {
             </div>
           </div>
           <p class="text-[13px] text-red-500 mb-3" x-show="error" x-text="error" x-cloak></p>
-          <button class="th-btn max-sm:w-full disabled:opacity-50" type="button" @click="savePassword()" :disabled="loading">
+          <button class="th-btn max-sm:py-2 max-sm:text-[13px] max-sm:w-full disabled:opacity-50" type="button" @click="savePassword()" :disabled="loading">
             <span x-show="!loading">${t("settings.privacySave")}</span>
             <span x-show="loading" x-cloak class="inline-flex items-center gap-2">
               <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
@@ -66,7 +66,7 @@ export function SettingsChangePassword(): string {
           <div class="mb-4">${ICONS.checkActive}</div>
           <h3 class="text-lg max-sm:text-base font-bold mb-2 m-0" style="color:var(--color-text-primary)">${t("settings.passwordChangedSuccess")}</h3>
           <p class="text-sm max-sm:text-[13px] mb-6 max-sm:mb-4 m-0" style="color:var(--color-text-secondary)">${t("settings.loginWithNewPassword")}</p>
-          <a href="#" class="th-btn no-underline inline-flex max-sm:w-full max-sm:justify-center">${t("settings.backToSettings")}</a>
+          <a href="#" class="th-btn max-sm:py-2 max-sm:text-[13px] no-underline inline-flex max-sm:w-full max-sm:justify-center">${t("settings.backToSettings")}</a>
         </div>
       </div>
     </div>

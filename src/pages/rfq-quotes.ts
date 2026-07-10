@@ -11,7 +11,7 @@ import { getCsrfToken, checkEmailNotVerifiedResponse, isEmailNotVerifiedError } 
 import { showToast } from '../utils/toast'
 import { escapeHtml, sanitizeUrl } from '../utils/sanitize'
 
-import { TopBar, SubHeader, initMobileDrawer, initStickyHeaderSearch, MegaMenu, initMegaMenu } from '../components/header'
+import { TopBar, SubHeader, initStickyHeaderSearch, MegaMenu, initMegaMenu } from '../components/header'
 import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar'
 import { FooterLinks } from '../components/footer'
@@ -63,7 +63,7 @@ appEl.classList.add('relative');
 
 // Initial loading state
 appEl.innerHTML = `
-  <div id="sticky-header" class="sticky top-0 z-(--z-header) border-b border-(--header-scroll-border) bg-(--header-scroll-bg)">
+  <div id="sticky-header" class="sticky top-0 z-(--z-header) border-b border-gray-200 bg-white">
     ${TopBar()}${SubHeader()}
   </div>
   ${MegaMenu()}
@@ -77,7 +77,7 @@ appEl.innerHTML = `
   <footer>${FooterLinks()}</footer>
 `;
 
-initMegaMenu(); initFlowbite(); initStickyHeaderSearch(); initMobileDrawer(); initLanguageSelector(); mountChatPopup(); initChatTriggers(); startAlpine();
+initMegaMenu(); initFlowbite(); initStickyHeaderSearch(); initLanguageSelector(); mountChatPopup(); initChatTriggers(); startAlpine();
 
 // Fetch RFQ detail + quotes
 async function loadQuotes() {

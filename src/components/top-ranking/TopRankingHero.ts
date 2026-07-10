@@ -19,17 +19,57 @@ import { TopRankingFilters } from "./TopRankingFilters";
 export function TopRankingMobileHeader(): string {
   return `
     <div class="lg:hidden bg-white">
-      <!-- Nav row: back + title + search -->
-      <div class="flex items-center justify-between px-4 pt-3 pb-3">
-        <a href="javascript:history.back()" class="text-gray-800 p-1 -ms-1" aria-label="${t("common.goBack")}" data-i18n-aria-label="common.goBack">
+      <!-- Nav row: back + title / in-hero arama alanı + aksiyon (TopDealsMobileHeader deseni).
+           Arama sayfa Alpine state'ini kullanır: showSearch/searchQuery/openSearch/closeSearch/clearSearch/submitSearch -->
+      <div class="flex items-center gap-2 px-4 pt-3 pb-3">
+        <!-- Back (arama açıkken gizli) -->
+        <a href="javascript:history.back()" x-show="!showSearch" class="text-gray-800 p-1 -ms-1 flex-shrink-0 transition-opacity active:opacity-60" aria-label="${t("common.goBack")}" data-i18n-aria-label="common.goBack">
           <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/>
           </svg>
         </a>
-        <h1 class="text-base font-bold text-[#222]" data-i18n="topRankingPage.heroTitle">${t("topRankingPage.heroTitle")}</h1>
-        <button type="button" class="text-gray-800 p-1 -me-1" aria-label="${t("common.search")}" data-i18n-aria-label="common.search">
+
+        <!-- Title (arama açıkken gizli) -->
+        <h1 x-show="!showSearch" class="flex-1 min-w-0 text-center text-base font-bold text-[#222] truncate" data-i18n="topRankingPage.heroTitle">${t("topRankingPage.heroTitle")}</h1>
+
+        <!-- Arama alanı — bu sayfadaki sıralamayı filtreler -->
+        <form
+          x-show="showSearch"
+          x-cloak
+          @submit.prevent="submitSearch()"
+          class="flex-1 min-w-0 flex items-center gap-2 bg-gray-100 rounded-full ps-3 pe-1.5 py-1.5"
+        >
+          <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>
+          </svg>
+          <input
+            x-ref="rankingSearchInput"
+            x-model="searchQuery"
+            type="text"
+            enterkeyhint="search"
+            autocomplete="off"
+            class="flex-1 min-w-0 bg-transparent text-sm text-gray-700 border-0 outline-none p-0"
+            placeholder="${t("topRankingPage.searchPlaceholder")}"
+            data-i18n-placeholder="topRankingPage.searchPlaceholder"
+          />
+          <button type="button" x-show="searchQuery" @click="clearSearch()" class="th-no-press flex-shrink-0 text-gray-400 p-0.5 transition-opacity active:opacity-60" aria-label="${t("common.clear")}">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </form>
+
+        <!-- Aramayı aç (arama açıkken gizli) -->
+        <button type="button" x-show="!showSearch" @click="openSearch()" class="th-no-press text-gray-800 p-1 -me-1 flex-shrink-0 transition-opacity active:opacity-60" aria-label="${t("common.search")}" data-i18n-aria-label="common.search">
           <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>
+          </svg>
+        </button>
+
+        <!-- Aramayı kapat (arama açıkken görünür) -->
+        <button type="button" x-show="showSearch" x-cloak @click="closeSearch()" class="th-no-press text-gray-800 p-1 -me-1 flex-shrink-0 transition-opacity active:opacity-60" aria-label="${t("common.close")}">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
           </svg>
         </button>
       </div>

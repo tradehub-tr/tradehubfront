@@ -11,6 +11,14 @@
  */
 
 import { formatCurrency, getSelectedCurrency } from "../../services/currencyService";
+import { t } from "../../i18n";
+
+/** Kademe miktar etiketi — "3-99 adet" / "500+ adet"; birim locale'in kendisinde. */
+export function tierQtyLabel(tier: { minQty: number; maxQty?: number | null }): string {
+  return tier.maxQty != null
+    ? t("product.moqRange", { min: tier.minQty, max: tier.maxQty })
+    : t("product.moqSingle", { count: tier.minQty });
+}
 
 export function applyVariantPrice(btn: HTMLElement, priceSelector: string): void {
   const variantPrice = btn.getAttribute("data-variant-price");

@@ -939,67 +939,6 @@ export async function getFeaturedListings(limit = 10): Promise<ProductListingCar
   return (response.message.data || []).map(mapListingCard);
 }
 
-// ── Top Deals (deals grouped by category) ──
-
-/** Top Deals: a category preview group returned by get_top_deals_grouped */
-export interface TopDealsCategoryGroup {
-  id: string;
-  name: string;
-  slug: string;
-  products: ProductListingCard[];
-  totalInCategory: number;
-}
-
-export interface TopDealsGroupedResult {
-  groups: TopDealsCategoryGroup[];
-  page: number;
-  pageSize: number;
-  totalCategories: number;
-  hasNext: boolean;
-}
-
-/**
- * Get a paginated list of category groups with their top deal previews.
- * Drives the "Tümü" tab of the Top Deals page (Alibaba-style category cards).
- */
-export async function getTopDealsGrouped(
-  page = 1,
-  pageSize = 8,
-  productsPerCategory = 6
-): Promise<TopDealsGroupedResult> {
-  const qs = new URLSearchParams({
-    page: String(page),
-    page_size: String(pageSize),
-    products_per_category: String(productsPerCategory),
-  }).toString();
-  const response = await api<
-    FrappeResponse<
-      Array<{
-        id: string;
-        name: string;
-        slug: string;
-        products: Record<string, unknown>[];
-        total_in_category: number;
-      }>
-    > & { message: { total_categories?: number } }
-  >(`/method/tradehub_core.api.listing.get_top_deals_grouped?${qs}`);
-  const msg = response.message;
-  const groups: TopDealsCategoryGroup[] = (msg.data || []).map((g) => ({
-    id: g.id,
-    name: g.name,
-    slug: g.slug,
-    products: (g.products || []).map(mapListingCard),
-    totalInCategory: g.total_in_category || 0,
-  }));
-  return {
-    groups,
-    page: msg.page || 1,
-    pageSize: msg.page_size || pageSize,
-    totalCategories: msg.total_categories || 0,
-    hasNext: msg.has_next || false,
-  };
-}
-
 // ── Top Ranking (best-sellers grouped by category) ──
 
 /** Top Ranking: a category card returned by get_top_ranking_categories */
@@ -1315,6 +1254,7 @@ function mapListingCard(raw: any): ProductListingCard {
     originalPrice: originalPriceDisplay,
     discount: raw.discount || undefined,
     supplierName: raw.supplierName || undefined,
+    supplierSlug: raw.supplierSlug || undefined,
     sellingPoint: raw.sellingPoint || undefined,
     category: raw.categoryName || raw.category || undefined,
     discountPercentage:
@@ -1472,6 +1412,9 @@ function mapListingDetail(raw: any): ProductDetail {
         employees: raw.supplier.employees || "",
         annualRevenue: raw.supplier.annualRevenue || "",
         certifications: raw.supplier.certifications || [],
+        verifications: Array.isArray(raw.supplier.verifications)
+          ? raw.supplier.verifications
+          : [],
       }
     : {
         id: "",
@@ -1605,6 +1548,7 @@ export interface TailoredGroupDetailResult {
   page: number;
   pageSize: number;
   hasNext: boolean;
+  totalPages: number;
   products: ProductListingCard[];
   category: {
     slug: string;
@@ -1662,14 +1606,15 @@ export async function getTailoredGroupDetail(
     page_size: String(pageSize),
   });
   if (subcategory) qs.set("subcategory", subcategory);
-  const response = await api<{ message: TailoredGroupDetailResult & { products: any[] } }>(
-    `/method/tradehub_core.api.tailored.get_tailored_group_detail?${qs.toString()}`
-  );
+  const response = await api<{
+    message: TailoredGroupDetailResult & { products: any[]; total_pages?: number };
+  }>(`/method/tradehub_core.api.tailored.get_tailored_group_detail?${qs.toString()}`);
   const msg = response.message;
   return {
     page: msg.page,
     pageSize: msg.pageSize || (msg as any).page_size,
     hasNext: msg.hasNext || (msg as any).has_next,
+    totalPages: msg.total_pages || 1,
     products: (msg.products || []).map(mapListingCard),
     category: msg.category,
     subCategories: msg.subCategories || (msg as any).sub_categories || [],

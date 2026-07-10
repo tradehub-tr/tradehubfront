@@ -15,17 +15,18 @@ import { CookieBanner } from "../legal/CookieBanner";
 
 /**
  * Generates the messages sidebar item.
- * Uses @click to set chatOpen=true on the parent Alpine component.
+ * Uses @click="openMessages()" — chat-popup mount edilmiş sayfada popup'ı açar,
+ * değilse mesajlar sayfasına yönlendirir (mantık src/alpine/shared.ts'te).
  */
 function renderMessagesItem(): string {
   return `
     <button
       type="button"
-      @click="chatOpen = true"
-      class="th-no-press flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-gray-100 transition-colors duration-150 cursor-pointer"
+      @click="openMessages()"
+      class="th-no-press flex flex-col items-center justify-center gap-0.5 w-9 h-9 md:w-auto md:h-auto md:px-2 md:py-2 rounded-full md:rounded-lg hover:bg-gray-100 transition-colors duration-150 cursor-pointer"
       aria-label="${t("commonNav.myMessages")}"
     >
-      <svg class="shrink-0" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <svg class="shrink-0 w-5 h-5 md:w-7 md:h-7" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <g clip-path="url(#clip0_fp_msg)">
           <path d="M6.99996 9.33335H21V10.9375H6.99996V9.33335Z" fill="#222222"></path>
           <path d="M12.8333 13.125H6.99996V14.7292H12.8333V13.125Z" fill="#222222"></path>
@@ -37,7 +38,7 @@ function renderMessagesItem(): string {
           </clipPath>
         </defs>
       </svg>
-      <span class="hidden group-hover:inline text-xs text-gray-700 whitespace-nowrap">${t("commonNav.myMessages")}</span>
+      <span class="hidden md:block text-[11px] leading-tight text-gray-700 whitespace-nowrap">${t("commonNav.myMessages")}</span>
     </button>
   `;
 }
@@ -124,14 +125,14 @@ function renderScrollTopItem(): string {
       x-transition:leave-start="opacity-100 scale-100"
       x-transition:leave-end="opacity-0 scale-95 motion-reduce:scale-100"
       @click="scrollToTop()"
-      class="th-no-press flex items-center justify-center w-9 h-9 md:w-auto md:h-auto md:px-2 md:py-2 rounded-full md:rounded-lg hover:bg-gray-100 transition-colors duration-150 cursor-pointer"
+      class="th-no-press flex flex-col items-center justify-center gap-0.5 w-9 h-9 md:w-auto md:h-auto md:px-2 md:py-2 rounded-full md:rounded-lg hover:bg-gray-100 transition-colors duration-150 cursor-pointer"
       aria-label="${t("commonNav.scrollToTop")}"
     >
       <svg class="shrink-0 w-5 h-5 md:w-7 md:h-7" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path d="M24.5 4.66663H3.5V6.27079H24.5V4.66663Z" fill="#222222"></path>
         <path d="M14 8.19898L5.84953 16.3495L6.98385 17.4838L13.1979 11.2697L13.1979 24.5H14.8021L14.8021 11.2697L21.0162 17.4838L22.1505 16.3495L14 8.19898Z" fill="#222222"></path>
       </svg>
-      <span class="hidden group-hover:md:inline text-xs text-gray-700 whitespace-nowrap">${t("commonNav.scrollToTop")}</span>
+      <span class="hidden md:block text-[11px] leading-tight text-gray-700 whitespace-nowrap">${t("commonNav.scrollToTop")}</span>
     </button>
   `;
 }
@@ -213,45 +214,31 @@ function renderChatDrawer(): string {
  * Body scroll lock is managed via x-effect when chat drawer or lens modal is open.
  */
 export function FloatingPanel(): string {
-  // Görsel Arama (Lens) şu an devre dışı — fonksiyonları referansla tut ki
-  // TypeScript "unused" uyarısı vermesin, ileride tekrar aktif edilebilsin.
+  // Görsel Arama (Lens) ve chat drawer placeholder'ı şu an devre dışı —
+  // fonksiyonları referansla tut ki TypeScript "unused" uyarısı vermesin,
+  // ileride tekrar aktif edilebilsin.
   void renderLensItem;
   void renderLensPopup;
-  void renderMessagesItem;
   void renderChatDrawer;
 
   return `
-    <div
-      x-data="floatingPanel"
-      x-effect="document.body.style.overflow = chatOpen ? 'hidden' : ''"
-    >
+    <div x-data="floatingPanel">
       <!-- Floating Sidebar Toolbar (iSTOC style) -->
       <!--
-        x-show wrapper'da: şu an panel sadece "En üste çık" butonu içerdiği için
-        scroll <= 300px iken tüm kart (boş beyaz "nokta") gizleniyor.
-        Diğer butonlar (Mesajlarım / Görsel Arama) tekrar aktif edilirse
-        bu x-show kaldırılıp her item kendi koşuluyla gizlenmeli.
+        Panel her zaman görünür (Mesajlarım sabit); "En üste çık" kendi
+        x-show'uyla scroll > 300px'te belirir.
       -->
       <div
         id="floating-panel"
-        x-show="showScrollTop"
-        x-cloak
-        x-transition:enter="transition ease-out duration-200 motion-reduce:transition-none"
-        x-transition:enter-start="opacity-0 scale-95 motion-reduce:scale-100"
-        x-transition:enter-end="opacity-100 scale-100"
-        x-transition:leave="transition ease-out duration-150 motion-reduce:transition-none"
-        x-transition:leave-start="opacity-100 scale-100"
-        x-transition:leave-end="opacity-0 scale-95 motion-reduce:scale-100"
-        class="group fixed bottom-20 md:bottom-15 end-2 md:end-0 z-35"
+        class="fixed bottom-20 md:bottom-15 end-2 md:end-0 z-35"
         aria-label="Quick actions panel"
       >
         <!-- Görsel Arama (Lens) geçici olarak devre dışı -->
         <!-- Lens Popup: ${/* renderLensPopup() — disabled */ ""} -->
 
         <!-- Sidebar butonları -->
-        <div class="inline-flex flex-col gap-2 bg-white rounded-full md:rounded-s-[8px] md:rounded-e-none shadow-[0_2px_8px_rgba(0,0,0,0.12)] p-1.5 md:p-2">
-          <!-- DISABLED: Mesajlarım — ileride geliştirilecek -->
-          <!-- ${/* renderMessagesItem() */ ""} -->
+        <div class="inline-flex flex-col gap-1 bg-white rounded-full md:rounded-s-[8px] md:rounded-e-none shadow-[0_2px_8px_rgba(0,0,0,0.12)] p-1.5 md:p-2">
+          ${renderMessagesItem()}
 
           <!-- Görsel Arama: ${/* renderLensItem() — disabled */ ""} -->
 

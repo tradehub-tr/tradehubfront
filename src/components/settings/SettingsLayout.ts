@@ -53,7 +53,7 @@ function renderSettingsItem(item: SettingsItem): string {
       : "";
 
   return `
-    <a href="${item.href}" class="flex items-center justify-between py-3 no-underline transition-colors rounded -mx-2 px-2 hover:bg-(--color-surface-muted,#fafafa) group">
+    <a href="${item.href}" class="flex items-center justify-between py-3 max-sm:py-2.5 no-underline transition-colors rounded -mx-2 px-2 hover:bg-(--color-surface-muted,#fafafa) group">
       <span class="text-sm max-sm:text-[13px]" style="color:var(--color-text-primary); group-hover:color:var(--color-text-primary)">${item.label}</span>
       <span class="flex items-center gap-2 flex-shrink-0">
         ${rightContent}
@@ -134,9 +134,9 @@ function renderProfileHeader(): string {
           </div>
         </div>
       </div>
-      <div class="flex items-center gap-4 flex-shrink-0 max-lg:w-full">
-        <a href="#profilim" class="th-btn no-underline whitespace-nowrap max-lg:flex-1 max-lg:text-center">${t("settings.editProfile")}</a>
-        <button @click="handleLogout()" class="inline-flex items-center justify-center px-6 max-sm:px-3 h-10 rounded-full text-sm max-sm:text-[13px] font-semibold no-underline transition-colors duration-150 motion-reduce:transition-none whitespace-nowrap bg-none hover:underline max-lg:flex-1 max-lg:text-center cursor-pointer border-none" style="color:var(--color-text-primary)">${t("settings.signOut")}</button>
+      <div class="flex items-center gap-4 max-sm:gap-2 flex-shrink-0 max-lg:w-full">
+        <a href="#profilim" class="th-btn no-underline whitespace-nowrap max-lg:flex-1 max-lg:text-center max-sm:px-4 max-sm:py-2 max-sm:text-[13px]">${t("settings.editProfile")}</a>
+        <button @click="handleLogout()" class="inline-flex items-center justify-center px-6 max-sm:px-3 h-10 max-sm:h-9 rounded-full text-sm max-sm:text-[13px] font-semibold no-underline transition-colors duration-150 motion-reduce:transition-none whitespace-nowrap bg-none hover:underline max-lg:flex-1 max-lg:text-center cursor-pointer border-none" style="color:var(--color-text-primary)">${t("settings.signOut")}</button>
       </div>
     </div>
   `;
@@ -198,8 +198,8 @@ function renderBackHeader(): string {
 function renderDefaultView(): string {
   return `
     ${renderProfileHeader()}
-    <div class="flex gap-5 items-start max-lg:flex-col mt-5">
-      <div class="flex-1 min-w-0 flex flex-col gap-5 max-lg:w-full">
+    <div class="flex gap-5 max-sm:gap-3 items-start max-lg:flex-col mt-5 max-sm:mt-3">
+      <div class="flex-1 min-w-0 flex flex-col gap-5 max-sm:gap-3 max-lg:w-full">
         ${renderSettingsCard(getAccountInfoCard())}
         ${renderSettingsCard(getPreferencesCard())}
       </div>
@@ -269,7 +269,7 @@ export function SettingsLayout(): string {
   const hasSubSection = Object.keys(sectionMap).includes(currentHash);
 
   return `
-    <div class="flex flex-col gap-5 py-4" id="settings-root"
+    <div class="flex flex-col gap-5 max-sm:gap-3 py-4 max-sm:py-3" id="settings-root"
       x-data="settingsLayout"
       @hashchange.window="currentSection = window.location.hash">
 

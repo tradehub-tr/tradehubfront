@@ -55,6 +55,16 @@ Alpine.data("floatingPanel", () => ({
   scrollToTop() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   },
+
+  openMessages() {
+    // chat-popup mount edilmiş sayfada popup'ı aç (Alibaba pattern: sağ-alt
+    // floating pencere); mount edilmemiş sayfada mesajlar sayfasına yönlendir.
+    if (document.getElementById("chat-popup-mount")) {
+      window.dispatchEvent(new CustomEvent("chat-popup:open"));
+    } else {
+      window.location.href = "/pages/dashboard/messages.html";
+    }
+  },
 }));
 
 /**

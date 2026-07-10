@@ -10,6 +10,7 @@ import {
   deleteConversation,
   muteConversation,
   pinConversation,
+  pinnedFromProductRef,
   startOrGetThread,
   startVideoCall,
 } from "../services/chatService";
@@ -48,6 +49,9 @@ interface ChatStore {
   activeConversationId: string | null;
   activeMessages: Message[];
   pinnedProduct: PinnedProduct | null;
+  /** Konuşma başına ürün bağlamı — geçiş yapıp dönünce pin geri gelsin.
+   *  null = kullanıcı X ile kapattı (geçmişten de geri kurulmaz). */
+  _pinnedByConv: Record<string, PinnedProduct | null>;
   openSubMenu: SubMenuKey | null;
   draft: string;
   loading: boolean;
@@ -65,6 +69,11 @@ interface ChatStore {
     conversationId?: string;
     sellerId?: string;
     pinnedProduct?: PinnedProduct;
+    /** Faz 4 — Soru gönder formu: gating geçtikten ve hedef konuşma aktif
+     *  olduktan SONRA otomatik gönderilecek metin (QuestionFormSheet). */
+    initialMessage?: string;
+    /** initialMessage ile birlikte tek dosya eki (QuestionFormSheet). */
+    initialFile?: File;
   }): Promise<void>;
   close(): void;
   toggleExpanded(): void;
@@ -79,7 +88,8 @@ interface ChatStore {
   appendDraft(text: string): void;
   setDraft(text: string): void;
   sendMessage(): Promise<void>;
-  handleFilePicked(file: File | null | undefined): Promise<void>;
+  handleFilePicked(file: File | null | undefined, caption?: string): Promise<void>;
+  _appendMessage(msg: Message): void;
   startVideoCall(): Promise<void>;
   blockActive(): Promise<void>;
   deleteActive(): Promise<void>;
@@ -98,6 +108,7 @@ const chatStore: ChatStore = {
   activeConversationId: null,
   activeMessages: [],
   pinnedProduct: null,
+  _pinnedByConv: {},
   openSubMenu: null,
   draft: "",
   loading: false,
@@ -157,7 +168,6 @@ const chatStore: ChatStore = {
     }
 
     this.isOpen = true;
-    this.pinnedProduct = opts?.pinnedProduct ?? null;
     this.error = null;
     acquireScrollLock();
 
@@ -197,12 +207,37 @@ const chatStore: ChatStore = {
       }
     }
 
-    if (!targetId) {
+    // İlk-konuşma fallback'i yalnız bağlamsız açılış için (floating Mesajlar
+    // butonu). Hedefli açılışta (sellerId veya pinnedProduct) hedef
+    // çözülememişse rastgele konuşmaya düşmek yanlış satıcı açar — inbox'ta
+    // bırak, error banner'ı durumu anlatır.
+    if (!targetId && !opts?.sellerId && !opts?.pinnedProduct) {
       targetId = this.conversations[0]?.id ?? null;
+    }
+
+    // Trigger'dan gelen ürün hedef konuşmanın kalıcı bağlamı olur;
+    // setActiveConversation pin'i bu haritadan uygular.
+    if (targetId && opts?.pinnedProduct) {
+      this._pinnedByConv[targetId] = opts.pinnedProduct;
     }
 
     if (targetId) {
       await this.setActiveConversation(targetId);
+    }
+
+    // Faz 4 — Soru gönder formu: konuşma aktif olduktan SONRA otomatik
+    // gönderim. Gating reddi veya startOrGetThread hatası targetId'yi null
+    // bıraktığı için yukarıdaki early-return'ler burayı da zaten korur.
+    // Gönderim mevcut store metotlarına delege edilir — 10 MB dosya guard'ı
+    // ve hata/sending state yönetimi tek yerde kalır.
+    const initialMessage = opts?.initialMessage?.trim();
+    if (targetId && initialMessage) {
+      if (opts?.initialFile) {
+        await this.handleFilePicked(opts.initialFile, initialMessage);
+      } else {
+        this.draft = initialMessage;
+        await this.sendMessage();
+      }
     }
   },
 
@@ -246,8 +281,23 @@ const chatStore: ChatStore = {
     this.activeConversationId = id;
     this.activeTab = "chat";
     this.error = null;
+    // Ürün bağlamı konuşmaya özgü — haritadan uygula; başka konuşmanın pin'i
+    // sızmasın (null kaydı = kullanıcı X ile kapattı, geri kurma).
+    this.pinnedProduct = this._pinnedByConv[id] ?? null;
     try {
-      this.activeMessages = await getMessages(id);
+      const messages = await getMessages(id);
+      // Kullanıcı bu arada başka konuşmaya geçtiyse sonucu düşür (race)
+      if (this.activeConversationId !== id) return;
+      this.activeMessages = messages;
+      // Oturum haritasında kayıt yoksa (örn. sayfa yenilendi) geçmişteki son
+      // ürünlü mesajdan geri kur — konuşmanın bağlam barı kaybolmasın.
+      if (!(id in this._pinnedByConv)) {
+        const lastRef = [...messages].reverse().find((m) => m.productRef)?.productRef;
+        if (lastRef) {
+          this.pinnedProduct = pinnedFromProductRef(lastRef);
+          this._pinnedByConv[id] = this.pinnedProduct;
+        }
+      }
       await markConversationRead(id);
       const conv = this.conversations.find((c) => c.id === id);
       if (conv) conv.unread = 0;
@@ -259,6 +309,9 @@ const chatStore: ChatStore = {
 
   removePinnedProduct() {
     this.pinnedProduct = null;
+    if (this.activeConversationId) {
+      this._pinnedByConv[this.activeConversationId] = null;
+    }
   },
 
   appendDraft(text) {
@@ -278,9 +331,8 @@ const chatStore: ChatStore = {
     this.error = null;
     try {
       const msg = await sendTextMessage(this.activeConversationId, text, pp);
-      this.activeMessages = [...this.activeMessages, msg];
+      this._appendMessage(msg);
       this.draft = "";
-      scrollChatPopupToBottom();
     } catch (err) {
       this.error = err instanceof Error ? err.message : t("commonSvc.messageSendFailed");
     } finally {
@@ -288,7 +340,7 @@ const chatStore: ChatStore = {
     }
   },
 
-  async handleFilePicked(file) {
+  async handleFilePicked(file, caption = "") {
     if (!file || this.sending || !this.activeConversationId) return;
     // Backend de 10 MB sınırı uyguluyor; UI tarafında erken reddet ki upload başlamasın.
     const MAX_BYTES = 10 * 1024 * 1024;
@@ -299,14 +351,18 @@ const chatStore: ChatStore = {
     this.sending = true;
     this.error = null;
     try {
-      const msg = await sendAttachment(this.activeConversationId, file);
-      this.activeMessages = [...this.activeMessages, msg];
-      scrollChatPopupToBottom();
+      const msg = await sendAttachment(this.activeConversationId, file, caption);
+      this._appendMessage(msg);
     } catch (err) {
       this.error = err instanceof Error ? err.message : t("commonSvc.fileSendFailed");
     } finally {
       this.sending = false;
     }
+  },
+
+  _appendMessage(msg) {
+    this.activeMessages = [...this.activeMessages, msg];
+    scrollChatPopupToBottom();
   },
 
   async startVideoCall() {
@@ -376,7 +432,14 @@ const chatStore: ChatStore = {
       if (this.activeConversationId !== id) return;
       const prevLen = this.activeMessages.length;
       this.activeMessages = fresh;
-      if (fresh.length > prevLen) scrollChatPopupToBottom();
+      if (fresh.length > prevLen) {
+        scrollChatPopupToBottom();
+        // Konuşma açıkken gelen mesaj anında okunmuş sayılır — sunucuda da
+        // sıfırla ki inbox polling'i rozeti geri getirmesin.
+        void markConversationRead(id);
+        const conv = this.conversations.find((c) => c.id === id);
+        if (conv) conv.unread = 0;
+      }
     } catch {
       // Polling sessiz olsun — kullanıcıya banner basmıyoruz
     }

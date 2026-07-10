@@ -7,20 +7,25 @@
  */
 
 import { getCurrentProduct } from "../../alpine/product";
-import { t, getCurrentLang } from "../../i18n";
+import { t } from "../../i18n";
 import { formatCurrency, getSelectedCurrency } from "../../services/currencyService";
-import { applyVariantPrice } from "./variantPrice";
-import type { ProductVariant } from "../../types/product";
-import { openShippingModal, openCartDrawer } from "./CartDrawer";
-import { openLoginModal } from "./LoginModal";
-import { renderStars } from "./ProductReviews";
+import { tierQtyLabel } from "./variantPrice";
+import type { ProductReview } from "../../types/product";
+import { openShippingModal } from "./CartDrawer";
+import { renderStars, displayRating, anonymizeName, formatScore } from "./ProductReviews";
 import { showReviewsModal } from "./ReviewsModal";
 import { showQAModal } from "./QAModal";
 import { RelatedProducts } from "./RelatedProducts";
 import { MobileRecommendations, initMobileRecommendations } from "./MobileRecommendations";
 import { SocialProofBadge } from "./SocialProofBadge";
+import { SalesRankCards } from "./ProductSalesRank";
+import { VerificationBadge, resolveVerifications } from "../seller/VerificationBadge";
 import { getSellerUrl } from "../../utils/sellerUrl";
+import { getCountryCode } from "../../utils/country";
+import { getFlagSvg } from "../../utils/flags";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
+import { OptionsSheet, initOptionsSheet } from "./OptionsSheet";
+import { MediaViewer, initMediaViewer, openMediaViewer, collectVideoUrls } from "./MediaViewer";
 
 // Product loaded lazily — getCurrentProduct() called inside functions
 
@@ -30,9 +35,26 @@ const chevronSvg = `<svg class="pdm-chevron transition-transform duration-200 ea
 
 const closeSvg = `<svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 6l12 12M18 6l-12 12"/></svg>`;
 
-/** Kategori/sıra sayılarını aktif dile göre binlik ayraçla biçimler. */
-function fmtNum(n: number): string {
-  return n.toLocaleString(getCurrentLang() === "en" ? "en-US" : "tr-TR");
+/** Galeri overlay chip'lerinin ortak class zinciri (aktif-durum eklerini çağıran verir). */
+const galleryChipCls =
+  "th-no-press appearance-none focus:outline-none px-2.5 py-[5px] rounded-full text-[11px] max-[374px]:text-[10px] font-semibold text-white/90 whitespace-nowrap leading-tight transition-colors duration-150";
+
+/** Başlık altındaki yıldız + puan + "(N)" + "N+ sipariş" satırı — hem ilk render
+ *  hem de `product-reviews-loaded` event'inde (reviews backend'den gelince)
+ *  yeniden çağrılır (bkz. initReviewsRow). */
+function mobileRatingRowHtml(): string {
+  const p = getCurrentProduct();
+  const score = formatScore(p.rating);
+  const parts = [
+    `<span class="pdm-stars flex gap-0.5 text-[#f5a623] [&_svg]:w-3.5 [&_svg]:h-3.5">${renderStars(p.rating)}</span>`,
+    `<span class="font-bold text-text-heading">${score}</span>`,
+    `<button type="button" id="pdm-review-count-link" class="th-no-press appearance-none focus:outline-none underline text-text-muted">(${p.reviewCount})</button>`,
+  ];
+  if (p.orderCount && p.orderCount !== "0") {
+    parts.push(`<span class="text-border-medium">&middot;</span>`);
+    parts.push(`<span>${t("product.ordersLabel", { count: p.orderCount })}</span>`);
+  }
+  return parts.join("");
 }
 
 /* ── Reusable component builders ─────────────────────── */
@@ -70,8 +92,10 @@ function collapsibleSection(cfg: CollapsibleConfig): string {
   `;
 }
 
-/** Renders a bottom sheet modal with handle, header, close button, and body. */
-function bottomSheet(id: string, title: string, bodyHtml: string): string {
+/** Renders a bottom sheet modal with handle, header, close button, and body.
+ *  Exported for reuse by other mobile-only sheets (e.g. OptionsSheet) that need
+ *  the same open/close animation + drag-to-dismiss infra as this file's own sheets. */
+export function bottomSheet(id: string, title: string, bodyHtml: string): string {
   return `
     <div id="${id}" class="pdm-bottom-sheet pdm-hidden [&.pdm-hidden]:hidden fixed inset-0 z-[200] bg-black/0 flex items-end transition-[background] duration-[250ms] motion-reduce:transition-none pointer-events-none [&.pdm-sheet-visible]:bg-black/50 [&.pdm-sheet-visible]:pointer-events-auto" aria-hidden="true">
       <div class="pdm-sheet-inner w-full max-w-[100vw] box-border bg-[var(--color-surface,#fff)] rounded-t-[16px] max-h-[85vh] overflow-y-auto overflow-x-hidden translate-y-full transition-transform duration-[300ms] [cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none motion-reduce:translate-y-0 [-webkit-overflow-scrolling:touch] [.pdm-sheet-visible_&]:translate-y-0">
@@ -86,59 +110,25 @@ function bottomSheet(id: string, title: string, bodyHtml: string): string {
   `;
 }
 
-/* ── Variant section renderer ────────────────────────── */
-
-function renderVariantSection(variant: ProductVariant): string {
-  const available = variant.options.filter((o) => o.available).length;
-
-  if (variant.type === "color") {
-    const thumbs = variant.options
-      .map(
-        (opt) => `
-      <button type="button" class="pdm-color-thumb w-14 h-14 rounded-[6px] border-2 border-border-default overflow-hidden cursor-pointer p-0 bg-none transition-[border-color] duration-150 [&.active]:border-[var(--color-text-heading)] [&.pdm-disabled]:opacity-40 [&.pdm-disabled]:cursor-not-allowed${!opt.available ? " pdm-disabled" : ""}"
-        data-value="${escapeHtml(opt.id)}" data-label="${escapeHtml(opt.label)}" ${opt.price ? `data-variant-price="${escapeHtml(opt.price)}"` : ""} ${!opt.available ? "disabled" : ""}>
-        ${
-          opt.thumbnail
-            ? `<img src="${opt.thumbnail}" alt="${opt.displayLabel || opt.label}" class="w-full h-full object-cover" />`
-            : `<span class="pdm-color-swatch" style="background:${opt.value}"></span>`
-        }
-      </button>
-    `
-      )
-      .join("");
-
-    return collapsibleSection({
-      id: `pdm-color-section`,
-      title: `${variant.displayLabel || variant.label} <em>(${available})</em>`,
-      bodyHtml: `<div class="pdm-color-thumbs flex flex-wrap gap-2">${thumbs}</div>`,
-    });
-  }
-
-  // Size / Material — pill layout
-  const pills = variant.options
-    .map(
-      (opt) => `
-    <button type="button" class="pdm-variant-pill px-4 py-[7px] border border-border-medium rounded-md text-[13px] text-text-body bg-surface cursor-pointer transition-[border-color] duration-150 [&.active]:border-[var(--color-text-heading)] [&.active]:font-semibold [&.pdm-disabled]:opacity-40 [&.pdm-disabled]:cursor-not-allowed${!opt.available ? " pdm-disabled" : ""}"
-      data-value="${opt.id}" data-label="${opt.label}" ${opt.price ? `data-variant-price="${opt.price}"` : ""} ${!opt.available ? "disabled" : ""}>
-      ${opt.displayLabel || opt.label}
-    </button>
-  `
-    )
-    .join("");
-
-  return collapsibleSection({
-    id: `pdm-${variant.type}-section`,
-    title: `${variant.displayLabel || variant.label} <em>(${available})</em>`,
-    bodyHtml: `<div class="pdm-variant-pills flex flex-wrap gap-2">${pills}</div>`,
-  });
-}
-
 /* ══════════════════════════════════════════════════════
    Main Layout HTML
    ══════════════════════════════════════════════════════ */
 
 export function MobileProductLayout(): string {
   const p = getCurrentProduct();
+
+  // Sprint 2.6: KYB Verified DEĞİL → OptionsSheet render edilmez; gallery
+  // chip'lerinin "Seçenekler"i de bu durumda açılacak sheet'i bulamaz —
+  // bu yüzden kybBlocked burada, gallerySection'dan ÖNCE hesaplanır.
+  const kybBlocked = p.sellerKybVerified === false;
+  const hasVideo = collectVideoUrls(p).length > 0;
+
+  // Saha doğrulama rozeti — Verified Tedarikçi satırı (madde 3) VE tedarikçi
+  // kartı (madde 7) ikisi de kullanır; en üstte tek sefer hesaplanır.
+  const si = p.supplier;
+  const supplierVerifiedBadge = VerificationBadge(
+    resolveVerifications(si.verifications, si.verified)
+  );
 
   // ── Sections 1-5: Gallery, Badges, Price, Sample, Title ──
 
@@ -175,21 +165,59 @@ export function MobileProductLayout(): string {
         </button>
         -->
       </div>
-      <!-- Counter pill -->
-      <div id="pdm-gallery-counter" class="absolute bottom-3.5 left-1/2 -translate-x-1/2 bg-surface text-text-body text-xs font-medium py-1 px-3.5 rounded-[14px] pointer-events-none z-5 tracking-wide whitespace-nowrap shadow-[0_1px_4px_rgba(0,0,0,0.15)]">${t("product.mobilePhotosCounter")} <span id="pdm-counter-current">1</span>/${p.images.length}</div>
+      <!-- Chip'ler: Fotoğraflar (sayaç) · Seçenekler · Video -->
+      <div id="pdm-gallery-chips" class="absolute bottom-3.5 inset-x-0 mx-auto w-fit max-w-[calc(100%-24px)] z-5 flex gap-0.5 bg-black/50 rounded-full p-[3px] [backdrop-filter:blur(2px)]">
+        <button type="button" id="pdm-gallery-chip-photos" class="pdm-gallery-chip-active ${galleryChipCls} [&.pdm-gallery-chip-active]:bg-white [&.pdm-gallery-chip-active]:text-[#111827]">
+          ${t("product.mobilePhotosCounter")} <span id="pdm-gallery-chip-counter">1/${p.images.length}</span>
+        </button>
+        ${
+          kybBlocked
+            ? ""
+            : `<button type="button" data-pdm-sheet="pdm-sheet-options" class="${galleryChipCls}">${t("product.optionsSheetTitle")}</button>`
+        }
+        ${
+          hasVideo
+            ? `<button type="button" id="pdm-gallery-chip-video" class="${galleryChipCls}">${t("product.videoTab")}</button>`
+            : ""
+        }
+      </div>
     </div>
   `;
 
+  // ── Küçük görsel şeridi — ilk 5 görsel + "Daha fazla" (Faz 2) ──
+  // Tek görselli üründe şerit anlamsız, render edilmez.
+  const thumbStripSection =
+    p.images.length > 1
+      ? `
+    <div id="pdm-thumb-strip" class="flex items-center gap-1.5 px-3.5 py-3 bg-surface">
+      ${p.images
+        .slice(0, 5)
+        .map(
+          (img, i) => `
+        <button type="button" data-thumb-index="${i}" class="${i === 0 ? "pdm-thumb-active " : ""}th-no-press appearance-none focus:outline-none shrink-0 w-[49px] h-[49px] rounded-md overflow-hidden border-2 border-transparent p-0 bg-none [&.pdm-thumb-active]:border-[var(--color-text-heading,#111827)]" aria-label="${escapeHtml(t("product.imageNumberLabel", { count: String(i + 1) }))}">
+          ${img.src ? `<img class="w-full h-full object-cover" src="${escapeHtml(sanitizeUrl(img.src))}" alt="${escapeHtml(img.alt)}" loading="lazy">` : ""}
+        </button>
+      `
+        )
+        .join("")}
+      <button type="button" id="pdm-thumbs-more" class="th-no-press appearance-none focus:outline-none flex-1 inline-flex items-center justify-end gap-1 text-[13px] font-bold underline text-text-heading whitespace-nowrap">
+        ${t("common.more")}
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  `
+      : "";
+
+  // "Sevkiyata Hazır" / "Özelleştirilebilir" rozetleri kaldırıldı; alan
+  // yalnızca stok-yok uyarısı olarak yaşar (updateReadyBadge gizler/gösterir).
   const badgesSection = `
-    <div id="pdm-badges" class="flex gap-2 pt-3 px-4 max-[374px]:pt-2.5 max-[374px]:px-3 bg-surface">
-      <span data-ready-badge="mobile" class="pdm-badge-dark inline-flex items-center text-[11px] font-semibold px-2.5 py-1 rounded bg-[#222] text-white leading-[1.4]">${t("product.readyToShip")}</span>
-      <span class="pdm-badge-orange inline-flex items-center text-[11px] font-semibold px-2.5 py-1 rounded border border-cta-primary text-cta-primary bg-transparent leading-[1.4]">${t("product.customizable")}</span>
+    <div id="pdm-badges" class="hidden gap-2 pt-3 px-4 max-[374px]:pt-2.5 max-[374px]:px-3 bg-surface [&:not(.hidden)]:flex">
+      <span data-ready-badge="mobile" class="inline-flex items-center text-[11px] font-semibold px-2.5 py-1 rounded bg-[#dc2626] text-white leading-[1.4]">${t("cart.outOfStock")}</span>
     </div>
   `;
 
   // Sprint 2.6: KYB Verified DEĞİL → fiyat tier'larını render etme,
-  // yerine sarı amber banner göster (mobil)
-  const kybBlocked = p.sellerKybVerified === false;
+  // yerine sarı amber banner göster (mobil, kybBlocked yukarıda hesaplandı)
   const kybBannerSection = kybBlocked
     ? `
     <div class="pdm-kyb-banner-large flex items-start gap-3 mx-4 mt-3 max-[374px]:mx-3 max-[374px]:mt-2.5 px-4 py-3.5 bg-amber-50 border border-amber-300 rounded-lg" role="alert">
@@ -202,20 +230,20 @@ export function MobileProductLayout(): string {
   `
     : "";
 
+  // Alibaba app deseni: aktif kademe (OptionsSheet toplam adedine göre) sarı-sis
+  // zemin + amber fiyat alır. Kolonlara data-tier-index verilir; senkron
+  // syncPriceTiersPanel() (OptionsSheet.render() tarafından çağrılır) yapar.
+  // Sheet hiç açılmadıysa varsayılan aktif = ilk kademe (server-render'da da işaretli).
   const priceTiersSection = kybBlocked
     ? ""
     : `
-    <div id="pdm-price-tiers" class="grid grid-cols-3 bg-surface-raised rounded-lg mx-4 mt-3 py-3.5 max-[374px]:mx-3 max-[374px]:mt-2.5">
+    <div id="pdm-price-tiers-panel" class="grid grid-cols-3 bg-surface-raised rounded-md mx-4 mt-3 overflow-hidden max-[374px]:mx-3 max-[374px]:mt-2.5">
       ${p.priceTiers
         .map(
-          (tier) => `
-        <div class="pdm-tier-col flex flex-col items-center px-3 border-e border-border-default last:border-e-0">
-          <span class="pdm-tier-price text-lg max-[374px]:text-[15px] font-bold text-[#111] leading-[1.3]">${formatCurrency(tier.price, getSelectedCurrency())}</span>
-          <span class="pdm-tier-qty text-[11px] max-[374px]:text-[10px] text-text-placeholder mt-[3px] text-center">${
-            tier.maxQty !== null
-              ? t("product.moqRange", { min: tier.minQty, max: tier.maxQty })
-              : t("product.moqSingle", { count: tier.minQty })
-          }</span>
+          (tier, i) => `
+        <div class="pdm-tier-col flex flex-col items-center px-3 py-3.5 border-e border-border-default last:border-e-0 transition-colors duration-150 [&.pdm-tier-active]:bg-[#fff8e1]${i === 0 ? " pdm-tier-active" : ""}" data-tier-index="${i}">
+          <span class="pdm-tier-price text-lg max-[374px]:text-[15px] font-bold text-[#111] leading-[1.3] [.pdm-tier-active_&]:text-[#b45309]">${formatCurrency(tier.price, getSelectedCurrency())}</span>
+          <span class="pdm-tier-qty text-[11px] max-[374px]:text-[10px] text-text-placeholder mt-[3px] text-center [.pdm-tier-active_&]:text-[#92700c] [.pdm-tier-active_&]:font-medium">${tierQtyLabel(tier)}</span>
         </div>
       `
         )
@@ -238,46 +266,62 @@ export function MobileProductLayout(): string {
   `
     : "";
 
+  // Paylaş — Web Share API destekleniyorsa göster (yoksa buton hiç render
+  // edilmez, sonradan JS ile gizlemek yerine baştan atlanır).
+  const shareButtonHtml =
+    typeof navigator !== "undefined" && typeof navigator.share === "function"
+      ? `
+    <button type="button" id="pdm-share-btn" class="th-no-press appearance-none focus:outline-none shrink-0 w-7 h-7 flex items-center justify-center text-text-muted" aria-label="${t("product.share")}">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+    </button>`
+      : "";
+
   const titleSection = `
     <div id="pdm-title-section" class="flex flex-col gap-2 pt-3.5 px-4 pb-3 max-[374px]:pt-3 max-[374px]:px-3 max-[374px]:pb-2.5 bg-surface">
-      <div id="pdm-title-row" class="flex items-start justify-between gap-2">
-        <h1 id="pdm-product-title" class="text-[15px] max-[374px]:text-sm font-semibold leading-[1.45] text-text-heading m-0 flex-1 line-clamp-3">${escapeHtml(p.title)}</h1>
-        <button type="button" class="pdm-share-btn shrink-0 w-8 h-8 border-none bg-none cursor-pointer text-text-muted p-1 flex items-center justify-center" aria-label="${t("product.share")}">
-          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+      <div id="pdm-title-row" class="flex items-start gap-2">
+        <h1 id="pdm-product-title" class="pdm-title-text line-clamp-2 [&.pdm-title-expanded]:line-clamp-none flex-1 min-w-0 text-[15px] max-[374px]:text-sm font-semibold leading-[1.45] text-text-heading m-0">${escapeHtml(p.title)}</h1>
+        <button type="button" id="pdm-title-expand" class="th-no-press appearance-none focus:outline-none shrink-0 w-7 h-7 flex items-center justify-center text-text-muted [&.pdm-collapsible-open_svg]:rotate-180" aria-label="${t("aria.expand")}">
+          ${chevronSvg}
         </button>
+        ${shareButtonHtml}
       </div>
 
-      <div id="pdm-reviews-row" class="flex items-center gap-1.5 text-[13px] max-[374px]:text-xs text-text-muted cursor-pointer">
-        <span class="pdm-stars flex gap-0.5 text-[#f5a623] [&_svg]:w-3.5 [&_svg]:h-3.5">${renderStars(p.rating)}</span>
-        <span>${t("product.reviewsLabel", { count: String(p.reviewCount) })}</span>
-      </div>
-
-      <div class="flex items-center gap-3 pt-0.5">
-        <button
-          type="button"
-          id="pdm-view-reviews-btn"
-          class="text-[12px] text-text-muted font-medium inline-flex items-center gap-1 cursor-pointer border border-border-default rounded-full px-3 py-1.5 bg-surface transition-colors duration-150 active:bg-surface-raised"
-          aria-label="${t("prodUi.viewAllReviews")}"
-        >
-          ${t("product.reviewsLabel", { count: String(p.reviewCount) })}
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-        </button>
-        <button
-          type="button"
-          id="pdm-view-qa-btn"
-          class="text-[12px] text-text-muted font-medium inline-flex items-center gap-1 cursor-pointer border border-border-default rounded-full px-3 py-1.5 bg-surface transition-colors duration-150 active:bg-surface-raised"
-          aria-label="${t("prodUi.questionsAndAnswers")}"
-        >
-          ${t("product.qaLabel")}
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-        </button>
+      <div id="pdm-rating-row" class="flex items-center gap-1.5 flex-wrap text-[13px] max-[374px]:text-xs text-text-muted">
+        ${mobileRatingRowHtml()}
       </div>
     </div>
   `;
 
-  // ── Section 6: Variants (dynamic via renderVariantSection) ──
+  // ── Verified Tedarikçi satırı (madde 3) — rozet ⓘ butonu için ayrı sibling,
+  // dış <button> içine gömülmez (iç içe interactive element yasak). ──
+  const supplierRowHtml = si.name
+    ? `
+    <div id="pdm-verified-row" class="flex items-center gap-2 px-4 py-3 max-[374px]:px-3 border-t border-border-default bg-surface">
+      ${supplierVerifiedBadge ? `<span class="pdm-verified-badge-wrap shrink-0">${supplierVerifiedBadge}</span>` : ""}
+      <button type="button" data-pdm-scroll-supplier class="th-no-press appearance-none focus:outline-none flex-1 min-w-0 flex items-center gap-2 text-start">
+        <span class="flex-1 min-w-0 truncate text-[13.5px] font-semibold text-text-heading">${t("product.supplier")}: ${escapeHtml(si.name)}</span>
+        <svg class="shrink-0 text-text-tertiary" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>`
+    : "";
 
-  const variantSections = p.variants.map((v) => renderVariantSection(v)).join("");
+  // ── "Seçenekler" özet satırı (madde 8) — eski varyant pill bölümlerinin
+  // yerine geçer; dokununca aynı OptionsSheet'i açar (data-pdm-sheet). ──
+  const variantSummary = p.variants
+    .map(
+      (v) =>
+        `${escapeHtml(v.displayLabel || v.label)} (${v.options.length})`
+    )
+    .join(" &middot; ");
+
+  const optionsSummarySection =
+    !kybBlocked && p.variants.length
+      ? collapsibleSection({
+          id: "pdm-options-summary-section",
+          title: `${t("product.optionsSheetTitle")} <em>${variantSummary}</em>`,
+          sheetId: "pdm-sheet-options",
+        })
+      : "";
 
   // ── Sections 7-10: Collapsible info sections (all use collapsibleSection) ──
 
@@ -301,20 +345,23 @@ export function MobileProductLayout(): string {
     `,
   });
 
-  const keyAttrsSection = collapsibleSection({
-    id: "pdm-keyattrs-section",
-    title: t("product.keyAttributes"),
-    sheetId: "pdm-sheet-keyattrs",
-    previewHtml: `
+  // Alibaba app deseni: 2-kolon gri panel, hücre = kalın DEĞER üstte + soluk
+  // anahtar altta (mock `.attrs/.attr`). İlk 6 spec; tam liste sheet'te kalır.
+  const keyAttrsSection = p.specs.length
+    ? collapsibleSection({
+        id: "pdm-keyattrs-section",
+        title: `${t("product.keyFeaturesTitle")}:`,
+        sheetId: "pdm-sheet-keyattrs",
+        previewHtml: `
       <div id="pdm-keyattrs-preview" class="px-4 pb-3.5">
-        <div class="pdm-attrs-grid grid grid-cols-2 gap-y-2 gap-x-4">
+        <div class="pdm-attrs-grid grid grid-cols-2 rounded-md bg-surface-raised overflow-hidden [&>*:nth-child(odd)]:border-e [&>*:nth-child(odd)]:border-border-default [&>*:not(:nth-child(-n+2))]:border-t [&>*:not(:nth-child(-n+2))]:border-border-default">
           ${p.specs
-            .slice(0, 4)
+            .slice(0, 6)
             .map(
               (s) => `
-            <div class="pdm-attr-item flex flex-col">
-              <span class="pdm-attr-key text-[11px] text-text-placeholder">${escapeHtml(s.key)}</span>
-              <span class="pdm-attr-val text-[13px] text-text-heading font-medium">${escapeHtml(s.value)}</span>
+            <div class="pdm-attr-item flex flex-col px-3.5 py-2.5">
+              <span class="pdm-attr-val text-[13px] text-text-heading font-bold">${escapeHtml(s.value)}</span>
+              <span class="pdm-attr-key text-[11px] text-text-placeholder mt-0.5">${escapeHtml(s.key)}</span>
             </div>
           `
             )
@@ -322,61 +369,12 @@ export function MobileProductLayout(): string {
         </div>
       </div>
     `,
-  });
+      })
+    : "";
 
   // ── Section: Order protection (static assurance, istoc-branded) ──
   // Sprint note: backend yok — bu blok platform güvence bilgisini özetleyen
   // STATİK içeriktir, listing-level veri çekmez.
-
-  const protectionItems = [
-    {
-      label: t("product.securePayments"),
-      icon: `<path d="M9 12l2 2 4-4"/><path d="M12 3l8 4v5c0 4.4-3.1 8.4-8 9.5C7.1 20.4 4 16.4 4 12V7l8-4z"/>`,
-    },
-    {
-      label: t("product.moneyBackProtection"),
-      icon: `<path d="M3 9h18"/><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 15l-2-2 2-2"/>`,
-    },
-    {
-      label: t("product.support247"),
-      icon: `<path d="M4 14a8 8 0 0 1 16 0"/><rect x="2" y="14" width="4" height="6" rx="1"/><rect x="18" y="14" width="4" height="6" rx="1"/>`,
-    },
-    {
-      label: t("product.dataProtection"),
-      icon: `<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>`,
-    },
-  ];
-
-  const orderProtectionSection = `
-    <div class="pdm-section-divider h-2 bg-surface-raised"></div>
-    <div id="pdm-order-protection" class="bg-surface px-4 py-4 max-[374px]:px-3">
-      <div class="flex items-center gap-2 mb-1">
-        <svg class="shrink-0 text-[#16a34a]" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 4.4-3.1 8.4-8 9.5C7.1 20.4 4 16.4 4 12V7l8-4z"/><path d="M9 12l2 2 4-4"/></svg>
-        <h2 class="text-[15px] font-bold text-text-heading m-0">${t("product.orderProtectionSection")}</h2>
-      </div>
-      <p class="text-xs text-text-muted leading-[1.5] mb-3">${t("product.orderProtectionSectionDesc")}</p>
-      <div class="grid grid-cols-4 gap-1 border border-border-default rounded-lg py-3 px-1">
-        ${protectionItems
-          .map(
-            (it) => `
-          <div class="flex flex-col items-center text-center gap-1.5 px-0.5">
-            <svg class="text-[#16a34a]" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${it.icon}</svg>
-            <span class="text-[10px] max-[374px]:text-[9px] text-text-body leading-[1.3]">${it.label}</span>
-          </div>
-        `
-          )
-          .join("")}
-      </div>
-      <div class="flex items-center gap-2 mt-3 text-[11px] text-text-muted">
-        <span class="shrink-0">${t("product.supportedPayments")}:</span>
-        <span class="flex items-center gap-1.5 flex-wrap">
-          <span class="px-1.5 py-0.5 rounded border border-border-default text-[10px] font-semibold text-text-body bg-surface">VISA</span>
-          <span class="px-1.5 py-0.5 rounded border border-border-default text-[10px] font-semibold text-text-body bg-surface">Mastercard</span>
-          <span class="px-1.5 py-0.5 rounded border border-border-default text-[10px] font-semibold text-text-body bg-surface">PayPal</span>
-        </span>
-      </div>
-    </div>
-  `;
 
   // ── Section: Processing time + delivery address (Alibaba app pattern) ──
   // p.leadTimeRanges → her aralık bir kolon (gün üstte, miktar altta).
@@ -388,7 +386,7 @@ export function MobileProductLayout(): string {
       <h2 class="text-[15px] font-bold text-text-heading m-0 mb-3">
         ${t("product.deliveryAddressLabel")}: <span class="underline">TR</span>
       </h2>
-      <div class="bg-surface-raised rounded-lg p-3.5">
+      <div class="bg-surface-raised rounded-md p-3.5">
         <div class="text-xs text-text-muted mb-2">${t("product.processingTime")}</div>
         <div class="grid grid-flow-col auto-cols-fr gap-3">
           ${p.leadTimeRanges
@@ -408,10 +406,14 @@ export function MobileProductLayout(): string {
   `
     : "";
 
+  // ── Section: Inline Yorumlar (madde 6) — details bölümünün sonu, salesRank'tan
+  // önce. `product-reviews-loaded` event'inde gövdesi (#pdm-inline-reviews-body)
+  // yeniden render edilir (bkz. initInlineReviewsSection). ──
+  const inlineReviewsSection = inlineReviewsSectionHtml();
+
   // ── Section: Sales Rank (kategori bazlı satış sıralaması) ──
-  // Masaüstü AttributesTabContent'teki ProductSalesRank'ın mobil karşılığı.
-  // En spesifik (i===0) kategori "ödül" hissiyle vurgulanır; her kart o
-  // kategorinin listesine linklenir. categoryRanks boşsa render edilmez.
+  // Masaüstüyle aynı "Defne Çelengi" kart şeridi (SalesRankCards) — dar
+  // ekranda yatay kaydırılır. categoryRanks boşsa render edilmez.
 
   const ranks = p.categoryRanks ?? [];
   const salesRankSection = ranks.length
@@ -423,86 +425,69 @@ export function MobileProductLayout(): string {
         <h2 class="text-[15px] font-bold text-text-heading m-0">${t("product.salesRank")}</h2>
       </div>
       <p class="text-xs text-text-muted leading-[1.5] mb-3">${t("product.salesRankSubtitle")}</p>
-      <div class="flex flex-col gap-2.5">
-        ${ranks
-          .map((r, i) => {
-            const isTop = i === 0;
-            const cardCls = isTop
-              ? "border-amber-200 bg-amber-50/60"
-              : "border-border-default bg-surface";
-            const medalCls = isTop
-              ? "bg-surface border-amber-200"
-              : "bg-surface-raised border-border-default";
-            const medalLabelCls = isTop ? "text-amber-600/70" : "text-text-placeholder";
-            const medalNumCls = isTop ? "text-amber-500" : "text-primary-600";
-            const badge =
-              isTop && r.rank === 1
-                ? `<span class="inline-flex shrink-0 items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold text-amber-700">
-                     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4zM5 4H3v2a3 3 0 0 0 3 3M19 4h2v2a3 3 0 0 1-3 3"/></svg>
-                     ${t("product.bestSeller")}
-                   </span>`
-                : "";
-            return `
-            <a href="/pages/products.html?cat=${encodeURIComponent(r.slug)}"
-               class="group flex items-center gap-3 rounded-md border ${cardCls} px-2.5 py-2.5 no-underline transition-colors duration-150 active:bg-surface-raised">
-              <div class="flex shrink-0 w-12 h-12 max-[374px]:w-11 max-[374px]:h-11 flex-col items-center justify-center rounded-md border ${medalCls}">
-                <span class="text-[8px] font-semibold uppercase tracking-wider leading-none ${medalLabelCls}">${t("product.salesRankPosition")}</span>
-                <span class="mt-0.5 text-lg max-[374px]:text-base font-extrabold leading-none tabular-nums ${medalNumCls}">#${fmtNum(r.rank)}</span>
-              </div>
-              <div class="min-w-0 flex-1">
-                <div class="flex flex-wrap items-center gap-x-1.5 gap-y-1">
-                  <span class="text-[13.5px] max-[374px]:text-[13px] font-bold text-text-heading leading-snug group-active:underline">${escapeHtml(r.categoryName)}</span>
-                  ${badge}
-                </div>
-                <span class="mt-0.5 block text-[11.5px] text-text-muted tabular-nums">${t("product.salesRankOutOf", { total: fmtNum(r.total) })}</span>
-              </div>
-              <svg class="h-4 w-4 shrink-0 text-text-placeholder rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-            </a>`;
-          })
-          .join("")}
-      </div>
+      ${SalesRankCards(ranks)}
     </div>
   `
     : "";
 
   // ── Section 11: Supplier Card ──
 
-  const si = p.supplier;
   const sellerProfileUrl = getSellerUrl({ id: si.id });
   const sellerProductsUrl = `${sellerProfileUrl}#products`;
-  const supplierSection = `
-    <div class="pdm-section-divider h-2 bg-surface-raised"></div>
-    <div id="pdm-supplier-card" class="bg-surface px-4 py-3.5 max-[374px]:px-3 max-[374px]:py-3">
-      <a href="${escapeHtml(sanitizeUrl(sellerProfileUrl))}" class="pdm-supplier-header flex items-center gap-3 mb-3 no-underline">
-        <div class="pdm-supplier-logo w-10 h-10 rounded-lg bg-[#fef9e7] flex items-center justify-center shrink-0 text-sm font-bold text-primary-600">${escapeHtml(si.name.charAt(0))}${escapeHtml(si.name.split(" ")[1]?.charAt(0) || "")}</div>
-        <div class="min-w-0 flex-1">
-          <div class="pdm-supplier-name text-[13px] font-bold text-text-heading leading-snug truncate">${escapeHtml(si.name)}</div>
-          <div class="pdm-supplier-meta text-[11px] text-text-muted mt-0.5 flex items-center gap-1">
-            ${t("product.yearsLabel", { count: String(si.yearsInBusiness) })} <span>&middot;</span> ${si.verified ? t("product.verifiedSupplier") : ""}
-          </div>
-        </div>
-        <svg class="shrink-0 text-text-muted" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-      </a>
+  // Değeri olmayan metrik kolonu render edilmez; grid dolu kolon sayısına
+  // daralır, hepsi boşsa ray ve başlığı tamamen düşer.
+  const supplierStats = [
+    { val: si.onTimeDelivery, label: t("product.onTimeDelivery") },
+    { val: si.responseTime, label: t("product.responseTime") },
+    { val: si.responseRate, label: t("product.responseRate") },
+  ].filter((s) => s.val);
+
+  const supplierStatsRail = supplierStats.length
+    ? `
       <div class="text-[13px] font-bold text-text-heading mb-2">${t("product.companyOverview")}</div>
-      <div class="pdm-supplier-stats grid grid-cols-3 border border-border-default rounded-md overflow-hidden">
-        ${[
-          { val: si.onTimeDelivery, label: t("product.onTimeDelivery") },
-          { val: si.responseTime, label: t("product.responseTime") },
-          { val: si.responseRate, label: t("product.responseRate") },
-        ]
+      <div class="pdm-supplier-stats grid ${["grid-cols-1", "grid-cols-2", "grid-cols-3"][supplierStats.length - 1]} border border-border-default rounded-md overflow-hidden">
+        ${supplierStats
           .map(
             (s) => `
-          <div class="pdm-supplier-stat flex flex-col items-center py-2 px-1 border-e border-border-default last:border-e-0 text-center">
-            <strong class="text-[13px] max-[374px]:text-xs font-bold text-text-heading leading-snug">${escapeHtml(s.val)}</strong>
-            <span class="text-[10px] max-[374px]:text-[9px] text-text-placeholder mt-px leading-snug">${s.label}</span>
+          <div class="pdm-supplier-stat flex flex-col items-center py-2.5 px-1 border-e border-border-default last:border-e-0 text-center">
+            <strong class="text-[15px] max-[374px]:text-[13px] font-bold text-text-heading leading-snug tabular-nums">${escapeHtml(s.val)}</strong>
+            <span class="text-[10px] max-[374px]:text-[9px] text-text-muted mt-px leading-snug">${s.label}</span>
           </div>
         `
           )
           .join("")}
+      </div>`
+    : "";
+
+  // Rozet artık kart sağ-üst köşesinde (mock `.sup-card` üst satırı) — meta
+  // satırından kaldırıldı; sadece VERİSİ OLAN parçalar (yıl, ülke bayrağı) kalır.
+  const supplierMetaParts = [
+    si.yearsInBusiness > 0 ? t("product.yearsLabel", { count: String(si.yearsInBusiness) }) : "",
+    si.country
+      ? `<span class="inline-flex items-center gap-1">${getFlagSvg(getCountryCode(si.country))}${escapeHtml(getCountryCode(si.country))}</span>`
+      : "",
+  ].filter(Boolean);
+
+  const supplierSection = `
+    <div class="pdm-section-divider h-2 bg-surface-raised"></div>
+    <div id="pdm-supplier-card" class="bg-surface px-4 py-3.5 max-[374px]:px-3 max-[374px]:py-3">
+      ${supplierVerifiedBadge ? `<div class="flex justify-end mb-1.5">${supplierVerifiedBadge}</div>` : ""}
+      <div class="pdm-supplier-header flex items-center gap-3 mb-3">
+        <a href="${escapeHtml(sanitizeUrl(sellerProfileUrl))}" class="pdm-supplier-logo w-10 h-10 rounded-md bg-neutral-950 flex items-center justify-center shrink-0 text-[13px] font-bold text-white no-underline">${escapeHtml(si.name.charAt(0))}${escapeHtml(si.name.split(" ")[1]?.charAt(0) || "")}</a>
+        <div class="min-w-0 flex-1">
+          <a href="${escapeHtml(sanitizeUrl(sellerProfileUrl))}" class="pdm-supplier-name block text-[13px] font-bold text-text-heading leading-snug truncate underline">${escapeHtml(si.name)}</a>
+          <div class="pdm-supplier-meta text-[11px] text-text-muted mt-0.5 flex items-center gap-1 flex-wrap">
+            ${supplierMetaParts.join("<span>&middot;</span>")}
+          </div>
+        </div>
+        <a href="${escapeHtml(sanitizeUrl(sellerProfileUrl))}" class="shrink-0 text-text-muted no-underline" aria-label="${t("product.companyProfile")}">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+        </a>
       </div>
+      ${supplierStatsRail}
       <div class="pdm-supplier-btns grid grid-cols-2 gap-2 mt-3">
-        <a href="${escapeHtml(sanitizeUrl(sellerProfileUrl))}" class="h-9 rounded-md border border-border-medium bg-surface text-[12px] font-semibold text-text-heading cursor-pointer text-center transition-colors duration-150 active:bg-surface-raised inline-flex items-center justify-center no-underline">${t("product.companyProfile")}</a>
-        <a href="${escapeHtml(sanitizeUrl(sellerProductsUrl))}" class="h-9 rounded-md border border-border-medium bg-surface text-[12px] font-semibold text-text-heading cursor-pointer text-center transition-colors duration-150 active:bg-surface-raised inline-flex items-center justify-center no-underline">${t("product.otherProducts")}</a>
+        <a href="${escapeHtml(sanitizeUrl(sellerProductsUrl))}" class="h-9 rounded-md bg-surface-raised text-[12px] font-semibold text-text-heading cursor-pointer text-center transition-colors duration-150 active:bg-neutral-200 inline-flex items-center justify-center no-underline">${t("product.otherProducts")}</a>
+        <a href="${escapeHtml(sanitizeUrl(sellerProfileUrl))}" class="th-btn-outline h-9 text-[12px] font-semibold text-center inline-flex items-center justify-center no-underline">${t("product.companyProfile")}</a>
       </div>
     </div>
   `;
@@ -519,6 +504,7 @@ export function MobileProductLayout(): string {
       </table>
     `
     ),
+    kybBlocked ? "" : OptionsSheet(),
   ].join("");
 
   // ── Sticky section tabs ──
@@ -536,6 +522,7 @@ export function MobileProductLayout(): string {
   return `
     <div id="pdm-mobile-layout" class="max-[374px]:pb-[70px]">
       ${gallerySection}
+      ${thumbStripSection}
 
       ${sectionTabs}
 
@@ -547,8 +534,8 @@ export function MobileProductLayout(): string {
         ${socialProofSection}
         ${sampleSection}
         ${titleSection}
-        ${variantSections}
-        ${orderProtectionSection}
+        ${supplierRowHtml}
+        ${optionsSummarySection}
       </div>
 
       <!-- Details section -->
@@ -556,6 +543,7 @@ export function MobileProductLayout(): string {
         ${shippingSection}
         ${processingTimeSection}
         ${keyAttrsSection}
+        ${inlineReviewsSection}
         ${salesRankSection}
       </div>
 
@@ -569,6 +557,7 @@ export function MobileProductLayout(): string {
       </div>
     </div>
     ${sheets}
+    ${MediaViewer()}
   `;
 }
 
@@ -580,44 +569,127 @@ export function initMobileLayout(): void {
   if (window.matchMedia("(min-width: 1024px)").matches) return;
 
   initMobileGallery();
+  initThumbStrip();
   initSectionTabs();
   initCollapsibles();
   initSheetTriggers();
-  initBottomBar();
-  initVariantSelection();
+  initTitleExpand();
+  initShareButton();
+  initSupplierRowScroll();
   initReviewsRow();
+  initInlineReviewsSection();
   initMobileRecommendations();
+  initOptionsSheet();
+  initMediaViewer();
+  initAskQuestionBar();
 }
 
-/* ── Gallery: scroll-snap carousel ───────────────────── */
+/* ── Alt bar "Soru sor" → Soru & Cevap bölümü ─────────── */
+
+// Soru sorma, chat'e mesaj bırakan ayrı bir form yerine ürünün Soru & Cevap
+// bölümünde yaşar (QAModal içindeki ProductQA formu) — inline Yorumlar
+// başlığındaki "Soru & Cevap" linkiyle aynı yüzeye çıkar.
+function initAskQuestionBar(): void {
+  document.getElementById("pdm-bar-ask")?.addEventListener("click", () => showQAModal());
+}
+
+/* ── Başlık genişlet + Paylaş (madde 2) ───────────────── */
+
+function initTitleExpand(): void {
+  const btn = document.getElementById("pdm-title-expand");
+  const text = document.getElementById("pdm-product-title");
+  if (!btn || !text) return;
+  btn.addEventListener("click", () => {
+    const expanded = text.classList.toggle("pdm-title-expanded");
+    btn.classList.toggle("pdm-collapsible-open", expanded);
+  });
+}
+
+function initShareButton(): void {
+  const btn = document.getElementById("pdm-share-btn");
+  if (!btn) return;
+  btn.addEventListener("click", () => {
+    const p = getCurrentProduct();
+    void navigator.share({ title: p.title, url: window.location.href }).catch(() => {});
+  });
+}
+
+/* ── Verified Tedarikçi satırı (madde 3) — tedarikçi kartına scroll ──── */
+
+function initSupplierRowScroll(): void {
+  document.querySelector("[data-pdm-scroll-supplier]")?.addEventListener("click", () => {
+    document.getElementById("pdm-supplier-card")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+}
+
+/* ── Gallery: scroll-snap carousel + chips + thumb sync ──────────── */
+
+/** Track scrollLeft/clientWidth'ten anlık slayt index'ini hesaplar —
+ *  gallery click ve "Daha fazla" linki bu index'i tam ekran görüntüleyiciye
+ *  aktarır. Kapalı bir modül değişkeni yerine DOM'dan okur; birden fazla
+ *  tetikleyici (scroll handler, click, thumb strip) tutarlı kalır. */
+function getCurrentGallerySlideIndex(): number {
+  const track = document.getElementById("pdm-gallery-track");
+  if (!track || track.clientWidth === 0) return 0;
+  return Math.round(track.scrollLeft / track.clientWidth);
+}
 
 function initMobileGallery(): void {
-  const counterEl = document.getElementById("pdm-counter-current");
   const track = document.getElementById("pdm-gallery-track");
+  const counterEl = document.getElementById("pdm-gallery-chip-counter");
   if (!track) return;
 
   const slides = track.querySelectorAll<HTMLElement>(".pdm-gallery-slide");
   if (slides.length === 0) return;
 
-  let currentIdx = 0;
-  let scrollTimer: ReturnType<typeof setTimeout> | null = null;
+  const syncActiveThumb = (idx: number): void => {
+    document.querySelectorAll<HTMLElement>("[data-thumb-index]").forEach((thumb) => {
+      thumb.classList.toggle("pdm-thumb-active", Number(thumb.dataset.thumbIndex) === idx);
+    });
+  };
 
+  let scrollTimer: ReturnType<typeof setTimeout> | null = null;
   track.addEventListener(
     "scroll",
     () => {
       if (scrollTimer) clearTimeout(scrollTimer);
       scrollTimer = setTimeout(() => {
-        const slideWidth = track.clientWidth;
-        if (slideWidth === 0) return;
-        const newIdx = Math.round(track.scrollLeft / slideWidth);
-        if (newIdx !== currentIdx && newIdx >= 0 && newIdx < slides.length) {
-          currentIdx = newIdx;
-          if (counterEl) counterEl.textContent = String(newIdx + 1);
-        }
+        const idx = getCurrentGallerySlideIndex();
+        if (counterEl) counterEl.textContent = `${idx + 1}/${slides.length}`;
+        syncActiveThumb(Math.min(idx, 4));
       }, 50);
     },
     { passive: true }
   );
+
+  // Slayta dokunma → tam ekran görüntüleyici, Fotoğraflar modunda mevcut index.
+  track.addEventListener("click", () => openMediaViewer("photos", getCurrentGallerySlideIndex()));
+
+  // "Fotoğraflar" chip'i → galeriyi ilk slayta kaydırır (video chip'i tam ekranı açar).
+  document.getElementById("pdm-gallery-chip-photos")?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    track.scrollTo({ left: 0, behavior: "smooth" });
+  });
+  document.getElementById("pdm-gallery-chip-video")?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    openMediaViewer("video", 0);
+  });
+}
+
+/* ── Küçük görsel şeridi: thumb tıklama + "Daha fazla" ────────────── */
+
+function initThumbStrip(): void {
+  const track = document.getElementById("pdm-gallery-track");
+  document.querySelectorAll<HTMLButtonElement>("[data-thumb-index]").forEach((thumb) => {
+    thumb.addEventListener("click", () => {
+      const idx = Number(thumb.dataset.thumbIndex);
+      track?.scrollTo({ left: idx * track.clientWidth, behavior: "smooth" });
+    });
+  });
+
+  document.getElementById("pdm-thumbs-more")?.addEventListener("click", () => {
+    openMediaViewer("photos", getCurrentGallerySlideIndex());
+  });
 }
 
 /* ── Collapsible sections (data-pdm-target driven) ───── */
@@ -649,7 +721,7 @@ function openSheet(sheetId: string): void {
   );
 }
 
-function closeSheet(sheetId: string): void {
+export function closeSheet(sheetId: string): void {
   const sheet = document.getElementById(sheetId);
   if (!sheet) return;
   activeSheetId = null;
@@ -745,24 +817,23 @@ function initSheetTriggers(): void {
   });
 }
 
-/* ── Bottom bar actions ──────────────────────────────── */
-
-function initBottomBar(): void {
-  document.getElementById("pdm-bar-order")?.addEventListener("click", openLoginModal);
-}
-
-/* ── Reviews row — tıkla yorumlar modal'ını aç ──────── */
+/* ── Rating satırı — tıkla yorumlar modal'ını aç + reviews-loaded senkron ── */
 
 function initReviewsRow(): void {
-  // Yıldız + "N yorum" satırı VE "Tüm yorumları görüntüle" CTA tıklanınca
-  // tam ekran ReviewsModal'ı aç. Mobile-first: kullanıcı yorumlara açıkça
-  // erişebilmeli — yıldız satırı pasif görsel değil, asıl CTA aşağıdaki buton.
-  const openReviews = () => showReviewsModal();
-  document.getElementById("pdm-reviews-row")?.addEventListener("click", openReviews);
-  document.getElementById("pdm-view-reviews-btn")?.addEventListener("click", openReviews);
+  // innerHTML reviews-loaded'da yenilendiği için delegation şart — doğrudan
+  // butona bağlanan listener yeniden render'da kaybolur (bkz. ProductTitleBar).
+  document.getElementById("pdm-rating-row")?.addEventListener("click", (e) => {
+    if ((e.target as HTMLElement).closest("#pdm-review-count-link")) showReviewsModal();
+  });
 
-  // Soru & Cevap linki — full-screen Q&A modal'ı aç
-  document.getElementById("pdm-view-qa-btn")?.addEventListener("click", () => showQAModal());
+  // Reviews backend'den (loadProductReviews) geç geldiğinde puan satırı ve
+  // inline yorum gövdesi TEK noktadan yenilenir.
+  document.addEventListener("product-reviews-loaded", () => {
+    const row = document.getElementById("pdm-rating-row");
+    if (row) row.innerHTML = mobileRatingRowHtml();
+    const body = document.getElementById("pdm-inline-reviews-body");
+    if (body) body.innerHTML = inlineReviewsBodyHtml();
+  });
 }
 
 /* ── Sticky section tabs — scroll-to + active tracking ── */
@@ -839,45 +910,167 @@ function initSectionTabs(): void {
   sections.forEach((sec) => observer.observe(sec));
 }
 
-/* ── Variant selection (delegated) ───────────────────── */
+/* ── Fiyat kademe paneli senkronu (madde 1) ──────────── */
 
-function updateMobileVariantPrice(btn: HTMLButtonElement): void {
-  // "Aktif" fiyat göstergesi = ilk kademe. Ortak helper formatCurrency ile
-  // doğru biçimlendirir (eski getCurrencySymbol()+toFixed(2) TRY binlik/ondalık
-  // biçimini bozuyordu) ve variant-price-change olayını yayar.
-  applyVariantPrice(btn, "#pdm-price-tiers .pdm-tier-col:first-child .pdm-tier-price");
+/** OptionsSheet'in render()'ı her adet değişikliğinde çağırır — gövdedeki
+ *  fiyat panelinin aktif kolonunu (sarı-sis zemin + amber fiyat) senkron
+ *  tutar. Panel yoksa (kybBlocked) no-op. */
+export function syncPriceTiersPanel(activeIdx: number): void {
+  document
+    .querySelectorAll<HTMLElement>("#pdm-price-tiers-panel [data-tier-index]")
+    .forEach((col) => {
+      col.classList.toggle("pdm-tier-active", Number(col.dataset.tierIndex) === activeIdx);
+    });
 }
 
-function initVariantSelection(): void {
-  // Color thumbnails
-  const colorBody = document.getElementById("pdm-color-section-body");
-  if (colorBody) {
-    colorBody.addEventListener("click", (e) => {
-      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>(
-        ".pdm-color-thumb:not(.pdm-disabled)"
-      );
-      if (!btn) return;
-      colorBody.querySelectorAll(".pdm-color-thumb").forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-      updateMobileVariantPrice(btn);
-      // Open cart drawer with selected color
-      const label = btn.getAttribute("data-label") || btn.getAttribute("title") || "";
-      openCartDrawer(label);
-    });
-  }
+/* ── Inline Yorumlar bölümü (madde 6) ─────────────────── */
 
-  // Size/Material pills — delegated per pill group
-  document.querySelectorAll<HTMLElement>(".pdm-variant-pills").forEach((group) => {
-    group.addEventListener("click", (e) => {
-      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>(
-        ".pdm-variant-pill:not(.pdm-disabled)"
-      );
-      if (!btn) return;
-      group.querySelectorAll(".pdm-variant-pill").forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-      updateMobileVariantPrice(btn);
-      // Open cart drawer
-      openCartDrawer();
-    });
+/** Tüm yorumlardaki görselleri düzleştirir; ilk 5 kare + "···" fazlalık
+ *  karosu (varsa) — hepsi ReviewsModal'ı açar. Hiç foto yoksa şerit yok. */
+function flattenReviewPhotos(reviews: ProductReview[]): string {
+  const imgs = reviews.flatMap((r) => r.images ?? []);
+  if (imgs.length === 0) return "";
+
+  const MAX = 5;
+  const shown = imgs.slice(0, MAX);
+  const remaining = imgs.length - shown.length;
+
+  const tiles = shown
+    .map(
+      (src) => `
+      <button type="button" data-rev-photo class="th-no-press appearance-none focus:outline-none aspect-square rounded-md overflow-hidden bg-surface-raised">
+        <img src="${escapeHtml(sanitizeUrl(src))}" class="w-full h-full object-cover" loading="lazy" alt="" />
+      </button>`
+    )
+    .join("");
+  const moreTile =
+    remaining > 0
+      ? `<button type="button" data-rev-photo class="th-no-press appearance-none focus:outline-none aspect-square rounded-md bg-neutral-900 text-white font-bold text-sm grid place-items-center">&middot;&middot;&middot;</button>`
+      : "";
+
+  return `<div class="grid grid-cols-5 gap-1.5 mb-3">${tiles}${moreTile}</div>`;
+}
+
+/** Tek yorum mini kartı — yıldız + maskeli isim + bayrak + doğrulanmış tik + 2 satır clamp. */
+function reviewMiniCardHtml(r: ProductReview): string {
+  const flagSvg = getFlagSvg(getCountryCode(r.country));
+  const verifiedTick = r.verified
+    ? `<svg class="w-3.5 h-3.5 text-[#16a34a] shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>`
+    : "";
+  return `
+    <div class="py-2.5 border-t border-border-default first:border-t-0 first:pt-0">
+      <div class="flex items-center gap-1.5 flex-wrap">
+        <span class="flex text-[#f5a623] [&_svg]:w-3 [&_svg]:h-3">${renderStars(displayRating(r), true)}</span>
+        <span class="text-xs text-text-muted">&middot; ${escapeHtml(anonymizeName(r.author))}</span>
+        ${flagSvg}
+        ${verifiedTick}
+      </div>
+      <p class="text-[13px] text-text-body leading-[1.5] mt-1 line-clamp-2">${escapeHtml(r.comment)}</p>
+    </div>
+  `;
+}
+
+function productReviewsPanelHtml(): string {
+  const p = getCurrentProduct();
+  if (!p.reviewCount) {
+    // reviews.noReviews "filtrelere uygun yorum yok" der (modal filtre bağlamı);
+    // inline bölümde filtre yok — nötr "henüz değerlendirme yapılmamış" doğrusu.
+    return `<p class="text-[13px] text-text-muted py-2">${t("seller.sf.noReviewsYet")}</p>`;
+  }
+  const score = formatScore(p.rating);
+  return `
+    <div class="flex items-center gap-2 mb-3">
+      <span class="text-2xl font-extrabold text-text-heading">${score}</span>
+      <span class="flex text-[#f5a623] [&_svg]:w-4 [&_svg]:h-4">${renderStars(p.rating)}</span>
+    </div>
+    ${flattenReviewPhotos(p.reviews)}
+    ${p.reviews.slice(0, 2).map(reviewMiniCardHtml).join("")}
+    <button type="button" data-rev-viewall class="th-no-press appearance-none focus:outline-none mt-2.5 text-[13px] font-bold text-text-heading inline-flex items-center gap-1">
+      ${t("product.viewAllPhotos", { count: String(p.reviewCount) })}
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+    </button>
+  `;
+}
+
+/** Puan özeti yoksa sade satır: "Mağaza değerlendirmeleri (M)" + profil linki.
+ *  Mock'taki uydurma satıcı istatistikleri (ciro, konum vb.) YAZILMAZ. */
+function storeReviewsPanelHtml(): string {
+  const p = getCurrentProduct();
+  const sellerUrl = getSellerUrl({ id: p.supplier.id });
+  return `
+    <div class="flex items-center justify-between gap-3 py-2">
+      <span class="text-[13px] text-text-body">${t("product.storeReviewsTab", { count: String(p.storeReviewCount) })}</span>
+      <a href="${escapeHtml(sanitizeUrl(sellerUrl))}" class="text-[13px] font-semibold text-text-heading underline shrink-0">${t("product.companyProfile")}</a>
+    </div>
+  `;
+}
+
+function reviewsTabsHtml(hasStore: boolean): string {
+  if (!hasStore) return "";
+  const p = getCurrentProduct();
+  const tabCls =
+    "pdm-rev-tab pb-2 text-sm text-text-muted border-b-2 border-transparent font-medium whitespace-nowrap [&.pdm-rev-tab-active]:text-text-heading [&.pdm-rev-tab-active]:font-bold [&.pdm-rev-tab-active]:border-b-[var(--pd-tab-active-border,#cc9900)]";
+  return `
+    <div class="flex gap-4 border-b border-border-default mb-3">
+      <button type="button" data-rev-tab="product" class="${tabCls} pdm-rev-tab-active">${t("product.productReviewsTab", { count: String(p.reviewCount) })}</button>
+      <button type="button" data-rev-tab="store" class="${tabCls}">${t("product.storeReviewsTab", { count: String(p.storeReviewCount) })}</button>
+    </div>
+  `;
+}
+
+/** Yeniden çağrılabilir gövde — ilk mount VE `product-reviews-loaded`
+ *  event'inde `#pdm-inline-reviews-body`'e basılır. */
+function inlineReviewsBodyHtml(): string {
+  const p = getCurrentProduct();
+  const hasStore = p.storeReviewCount > 0;
+  return `
+    ${reviewsTabsHtml(hasStore)}
+    <div id="pdm-rev-panel-product">${productReviewsPanelHtml()}</div>
+    ${hasStore ? `<div id="pdm-rev-panel-store" class="hidden">${storeReviewsPanelHtml()}</div>` : ""}
+  `;
+}
+
+function inlineReviewsSectionHtml(): string {
+  return `
+    <div class="pdm-section-divider h-2 bg-surface-raised"></div>
+    <div id="pdm-inline-reviews" class="bg-surface px-4 py-4 max-[374px]:px-3">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-[15px] font-bold text-text-heading m-0">${t("product.reviews")}</h2>
+        <button type="button" id="pdm-inline-qa-link" class="th-no-press appearance-none focus:outline-none text-[13px] font-medium text-text-muted inline-flex items-center gap-0.5">
+          ${t("product.qaLabel")}
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+      <div id="pdm-inline-reviews-body">${inlineReviewsBodyHtml()}</div>
+    </div>
+  `;
+}
+
+function setActiveRevTab(tab: "product" | "store"): void {
+  document.querySelectorAll<HTMLElement>("#pdm-inline-reviews [data-rev-tab]").forEach((b) => {
+    b.classList.toggle("pdm-rev-tab-active", b.dataset.revTab === tab);
   });
+  document.getElementById("pdm-rev-panel-product")?.classList.toggle("hidden", tab !== "product");
+  document.getElementById("pdm-rev-panel-store")?.classList.toggle("hidden", tab !== "store");
+}
+
+function initInlineReviewsSection(): void {
+  const root = document.getElementById("pdm-inline-reviews");
+  if (!root) return;
+
+  document.getElementById("pdm-inline-qa-link")?.addEventListener("click", () => showQAModal());
+
+  root.addEventListener("click", (e) => {
+    const target = e.target as HTMLElement;
+    const tabBtn = target.closest<HTMLButtonElement>("[data-rev-tab]");
+    if (tabBtn) {
+      setActiveRevTab(tabBtn.dataset.revTab === "store" ? "store" : "product");
+      return;
+    }
+    if (target.closest("[data-rev-viewall], [data-rev-photo]")) {
+      showReviewsModal();
+    }
+  });
+
+  // product-reviews-loaded re-render'ı initReviewsRow'daki tek listener'da.
 }

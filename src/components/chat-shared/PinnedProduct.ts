@@ -6,9 +6,12 @@ export function PinnedProduct(): string {
   return /* html */ `
     <template x-if="$store.chatPopup.pinnedProduct">
       <div class="flex items-center gap-2.5 border-b border-[var(--color-border-light,#f0f0f0)] pb-2.5">
-        <img :src="$store.chatPopup.pinnedProduct.thumbnail"
-             alt=""
-             class="size-9 shrink-0 rounded bg-[var(--color-surface-raised,#f5f5f5)] object-cover" />
+        <!-- Geçmişten geri kurulan pin'de thumbnail yok — kırık img gösterme -->
+        <template x-if="$store.chatPopup.pinnedProduct.thumbnail">
+          <img :src="$store.chatPopup.pinnedProduct.thumbnail"
+               alt=""
+               class="size-9 shrink-0 rounded bg-[var(--color-surface-raised,#f5f5f5)] object-cover" />
+        </template>
         <div class="min-w-0 flex-1">
           <div class="truncate text-[11px] text-[var(--color-text-primary,#0a0a0a)]">
             <span class="text-[var(--color-text-tertiary,#a3a3a3)] me-1">${t("chat.product")}</span>

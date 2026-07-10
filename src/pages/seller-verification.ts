@@ -3,7 +3,7 @@
  */
 import '../style.css'
 import { initFlowbite } from 'flowbite'
-import { TopBar, SubHeader, MegaMenu, initMegaMenu, initStickyHeaderSearch, initMobileDrawer } from '../components/header'
+import { TopBar, SubHeader, MegaMenu, initMegaMenu, initStickyHeaderSearch } from '../components/header'
 import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar'
 import { Breadcrumb } from '../components/shared/Breadcrumb'
@@ -75,5 +75,4 @@ mountChatPopup();
 initChatTriggers();
 startAlpine();
 initStickyHeaderSearch();
-initMobileDrawer();
 initLanguageSelector();

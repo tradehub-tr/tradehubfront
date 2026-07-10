@@ -68,7 +68,7 @@ export function QAModal(): string {
       x-transition.opacity
       @click.self="close()"
       @keydown.escape.window.capture="if (open) { $event.stopImmediatePropagation(); close() }"
-      class="fixed inset-0 bg-black/50 z-[70] flex items-end sm:items-center justify-center"
+      class="fixed inset-0 bg-black/50 z-[210] flex items-end sm:items-center justify-center"
     >
       <div
         x-show="open"

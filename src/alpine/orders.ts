@@ -674,11 +674,46 @@ Alpine.data("ordersSection", () => ({
   },
 }));
 
+// ?mock_os=1 → İadeler + Değerlendirmeler sekmeleri örnek veriyle dolar (yalnızca dev/görsel test)
+function isOrdersMock(): boolean {
+  return new URLSearchParams(window.location.search).get("mock_os") === "1";
+}
+
+// İçinde bulunulan yılın tarihlerinde yıl gizlenir ("7 Tem"), diğerlerinde gösterilir ("28 Haz 2025")
+function fmtTrDate(d: string | undefined | null): string {
+  if (!d) return "";
+  const date = new Date(d);
+  if (isNaN(date.getTime())) return d;
+  const opts: Intl.DateTimeFormatOptions = { day: "numeric", month: "short" };
+  if (date.getFullYear() !== new Date().getFullYear()) opts.year = "numeric";
+  return date.toLocaleDateString("tr-TR", opts);
+}
+
+// Deterministik placeholder görsel — mock modda dış CDN'e bağımlı kalmamak için
+function mockImg(bg: string, label: string): string {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96"><rect width="96" height="96" rx="8" fill="${bg}"/><text x="48" y="57" font-family="Arial" font-size="26" font-weight="700" fill="#ffffff" text-anchor="middle">${label}</text></svg>`;
+  return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+}
+
+const MOCK_REFUNDS: RefundSummary[] = [
+  { order_number: "SO-2026-01842", refund_status: "Pending", refund_status_label: "İnceleniyor", refund_reason: "Ürünlerin bir kısmı taşıma sırasında hasar görmüş, koliler ezik ulaştı ve 12 adet ürün kullanılamaz durumda.", refund_amount: 12450.5, currency: "₺", refund_requested_at: "2026-07-06", seller_name: "Özgen Plastik Sanayi ve Dış Ticaret A.Ş." },
+  { order_number: "SO-2026-01787", refund_status: "Pending", refund_status_label: "İnceleniyor", refund_reason: "Yanlış renk gönderildi", refund_amount: 3280, currency: "₺", refund_requested_at: "2026-07-02", seller_name: "Demir Hırdavat" },
+  { order_number: "SO-2026-01623", refund_status: "Approved", refund_status_label: "Onaylandı", refund_reason: "Eksik ürün — 48 adet sipariş edildi, 36 adet teslim edildi", refund_amount: 1248750, currency: "₺", refund_requested_at: "2026-06-24", seller_name: "Anadolu Tekstil Toptan Satış ve Pazarlama Ltd. Şti." },
+  { order_number: "SO-2026-01518", refund_status: "Approved", refund_status_label: "Onaylandı", refund_reason: "Ürün açıklamayla uyumsuz", refund_amount: 8640, currency: "₺", refund_requested_at: "2026-06-15", seller_name: "Yıldız Ambalaj" },
+  { order_number: "SO-2026-01402", refund_status: "Rejected", refund_status_label: "Reddedildi", refund_reason: "İade süresi dolduktan sonra başvuruldu", refund_amount: 970.25, currency: "₺", refund_requested_at: "2026-06-03", seller_name: "Ege Kırtasiye" },
+];
+
 Alpine.data("refundsComponent", () => ({
   refunds: [] as RefundSummary[],
   loading: true,
+  statusFilter: "all",
 
   async init() {
+    if (isOrdersMock()) {
+      this.refunds = MOCK_REFUNDS;
+      this.loading = false;
+      return;
+    }
     try {
       const res = await callMethod<{ success: boolean; refunds: RefundSummary[] }>(
         "tradehub_core.api.order.get_my_refunds"
@@ -691,11 +726,132 @@ Alpine.data("refundsComponent", () => ({
     }
   },
 
+  get filteredRefunds(): RefundSummary[] {
+    if (this.statusFilter === "all") return this.refunds;
+    return this.refunds.filter((r) => this.bucketOf(r.refund_status) === this.statusFilter);
+  },
+
+  // API TR/EN status değerlerini 3 sabit kovaya indirger (filtre + chip rengi tek yerden)
+  bucketOf(status: string): string {
+    if (status === "Approved" || status === "Onaylandı") return "approved";
+    if (status === "Rejected" || status === "Reddedildi") return "rejected";
+    return "pending";
+  },
+
+  countOf(bucket: string): number {
+    if (bucket === "all") return this.refunds.length;
+    return this.refunds.filter((r) => this.bucketOf(r.refund_status) === bucket).length;
+  },
+
+  fmtAmount(r: RefundSummary): string {
+    const amount = Number(r.refund_amount || 0);
+    if (amount <= 0) return "-";
+    return `${r.currency || ""} ${amount.toLocaleString("tr-TR", { minimumFractionDigits: 2 })}`;
+  },
+
+  fmtDate(d: string | undefined | null): string {
+    return fmtTrDate(d);
+  },
+
   statusClass(status: string) {
-    if (status === "Approved" || status === "Onaylandı")
-      return "bg-green-50 text-green-700 border border-green-200";
-    if (status === "Rejected" || status === "Reddedildi")
-      return "bg-red-50 text-red-700 border border-red-200";
+    const bucket = this.bucketOf(status);
+    if (bucket === "approved") return "bg-green-50 text-green-700 border border-green-200";
+    if (bucket === "rejected") return "bg-red-50 text-red-700 border border-red-200";
     return "bg-amber-50 text-amber-700 border border-amber-200";
+  },
+}));
+
+/* ────────────────────────────────────────
+   DEĞERLENDİRMELERİM (reviews section)
+   ──────────────────────────────────────── */
+interface PendingReviewItem {
+  order_item: string;
+  order_number: string;
+  product_name: string;
+  image: string;
+  delivered_at: string;
+}
+
+interface MyReviewRow {
+  name: string;
+  rating: number;
+  title?: string;
+  body: string;
+  status: string;
+  submitted_at: string;
+  product_name?: string;
+  image?: string;
+  helpful_count?: number;
+  [key: string]: unknown;
+}
+
+const MOCK_PENDING_REVIEWS: PendingReviewItem[] = [
+  { order_item: "OI-1", order_number: "SO-2026-01901", product_name: "Endüstriyel Kablo Makarası 3x2.5mm² TTR 100 Metre — Siyah, Alev Geciktirmeli Dış Kılıf", image: mockImg("#64748b", "KM"), delivered_at: "2026-07-08" },
+  { order_item: "OI-2", order_number: "SO-2026-01856", product_name: "Paslanmaz Çelik Kelepçe Seti 8-12mm (500 Adet)", image: mockImg("#78716c", "KS"), delivered_at: "2026-07-04" },
+  { order_item: "OI-3", order_number: "SO-2026-01799", product_name: "Kraft Koli 40x30x30 cm Çift Oluklu (100'lü Paket)", image: "", delivered_at: "2026-06-30" },
+];
+
+const MOCK_DONE_REVIEWS: MyReviewRow[] = [
+  { name: "REV-1", rating: 5, title: "Tam aradığımız kalite", body: "İkinci toplu siparişimizdi, ürünler açıklamayla birebir uyumlu geldi. Paketleme özenliydi, teslimat söz verilen tarihten bir gün önce yapıldı. Depo ekibimiz sayım sırasında tek fire bile çıkarmadı.", status: "Published", submitted_at: "2026-06-28", product_name: "Endüstriyel Eldiven Nitril Kaplama (12'li Paket)", image: mockImg("#0f766e", "EL"), helpful_count: 14 },
+  { name: "REV-2", rating: 3, title: "Ürün iyi, teslimat gecikti", body: "Ürün kalitesinde sorun yok ancak kargo iki hafta gecikti ve süreçte bilgilendirme yapılmadı.", status: "Published", submitted_at: "2026-06-12", product_name: "LED Panel Armatür 60x60 40W (20 Adet)", image: mockImg("#7c3aed", "LP"), helpful_count: 3 },
+  { name: "REV-3", rating: 4, body: "Numuneyle aynı kalitede, fiyat/performans başarılı. Tekrar sipariş vereceğiz.", status: "Pending", submitted_at: "2026-07-07", product_name: "Mikrofiber Temizlik Bezi 40x40 (Koli — 300 Adet)", image: mockImg("#b45309", "MB") },
+];
+
+Alpine.data("reviewsSectionComponent", () => ({
+  tab: "pending" as "pending" | "done",
+  search: "",
+  loading: true,
+  pending: [] as PendingReviewItem[],
+  done: [] as MyReviewRow[],
+
+  async init() {
+    if (isOrdersMock()) {
+      this.pending = MOCK_PENDING_REVIEWS;
+      this.done = MOCK_DONE_REVIEWS;
+      this.loading = false;
+      return;
+    }
+    try {
+      // Bekleyen değerlendirme endpoint'i henüz yok — yalnızca yapılanlar listelenir
+      const res = await callMethod<{ reviews: MyReviewRow[] }>(
+        "tradehub_core.api.storefront_api.get_my_reviews",
+        { page: 1, page_size: 50 }
+      );
+      this.done = res?.reviews || [];
+    } catch (err) {
+      console.warn("[Reviews] fetch failed:", err);
+    } finally {
+      this.loading = false;
+    }
+  },
+
+  get activeCount(): number {
+    return this.tab === "pending" ? this.pending.length : this.done.length;
+  },
+
+  get filteredPending(): PendingReviewItem[] {
+    const q = this.search.trim().toLocaleLowerCase("tr-TR");
+    if (!q) return this.pending;
+    return this.pending.filter((p) =>
+      `${p.product_name} ${p.order_number}`.toLocaleLowerCase("tr-TR").includes(q)
+    );
+  },
+
+  get filteredDone(): MyReviewRow[] {
+    const q = this.search.trim().toLocaleLowerCase("tr-TR");
+    if (!q) return this.done;
+    return this.done.filter((r) =>
+      `${r.title || ""} ${r.body} ${r.product_name || ""}`.toLocaleLowerCase("tr-TR").includes(q)
+    );
+  },
+
+  fmtDate(d: string | undefined): string {
+    return fmtTrDate(d);
+  },
+
+  reviewStatusChip(status: string): { label: string; cls: string } {
+    if (status === "Published")
+      return { label: t("orders.reviewStatusPublished"), cls: "bg-green-50 text-green-700 border border-green-200" };
+    return { label: t("ordersUi.underReview"), cls: "bg-amber-50 text-amber-700 border border-amber-200" };
   },
 }));

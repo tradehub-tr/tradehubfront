@@ -6,12 +6,12 @@
 import '../style.css'
 import { initFlowbite } from 'flowbite'
 
-import { TopBar, initMobileDrawer, initHeaderCart } from '../components/header'
+import { TopBar, initHeaderCart } from '../components/header'
 import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar'
 import { FloatingPanel } from '../components/floating'
 import { startAlpine } from '../alpine'
-import { renderSidebar } from '../components/sidebar'
+import { renderSidebarColumn, initSidebar } from '../components/sidebar'
 import { MessagesLayout, initMessagesLayout } from '../components/messages'
 import { requireAuth } from '../utils/auth-guard'
 
@@ -29,9 +29,7 @@ appEl.innerHTML = `
   <div class="bg-[#F5F5F5] min-h-screen">
     <div class="container-boxed flex gap-1 md:gap-[14px] max-md:gap-0">
       <!-- Sidebar Column -->
-      <div class="w-[52px] md:w-[72px] xl:w-[260px] flex-shrink-0 pt-4">
-        ${renderSidebar()}
-      </div>
+      ${renderSidebarColumn()}
 
       <!-- Content Column -->
       <div class="flex-1 min-w-0 pt-4 pb-4 max-md:pt-2 max-md:pb-2 max-sm:pt-1 max-sm:pb-1">
@@ -49,8 +47,8 @@ appEl.innerHTML = `
 initFlowbite();
 mountChatPopup();
 initChatTriggers();
+initSidebar()
 startAlpine();
 initHeaderCart();
-initMobileDrawer();
 initLanguageSelector();
 initMessagesLayout();

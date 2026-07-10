@@ -31,9 +31,6 @@ interface ResolvedSlide {
   overlay: boolean;
 }
 
-// Active-bullet progress ring geometry (r=11 → circumference ≈ 69.12)
-const RING_CIRCUMFERENCE = 69.12;
-
 const ALIGN_MAP: Record<ResolvedSlide["align"], string> = {
   center: "items-center text-center",
   left: "items-start text-left",
@@ -55,26 +52,36 @@ function safeBackgroundCss(value: unknown, fallback: string): string {
   return dangerous.test(raw) ? fallback : raw;
 }
 
-const FALLBACK_BG = "linear-gradient(120deg, #0c2e61 0%, #1f5fae 50%, #2f80ed 100%)";
+// Sarı İmza: iSTOC sarısı degrade (doku katmanı renderSlide'da ayrıca eklenir)
+const FALLBACK_BG = "linear-gradient(115deg, #ffc41f 0%, #f5b800 55%, #e6a800 100%)";
+
+// Slide dokularının döngüsü: halftone nokta → diyagonal çizgi → ışık patlaması.
+// Admin degradesinin ÜZERİNE düşük opaklıkta binen dekoratif katman; slide
+// index'ine göre dinamik seçilir, admin hangi rengi seçerse seçsin doku korunur.
+const SLIDE_TEXTURES = [
+  "radial-gradient(rgba(90,60,0,.13) 1.4px, transparent 1.4px) 0 0/20px 20px",
+  "repeating-linear-gradient(135deg, rgba(90,60,0,.10) 0px, rgba(90,60,0,.10) 2px, transparent 2px, transparent 18px)",
+  "radial-gradient(560px 320px at 85% 15%, rgba(255,255,255,.30), transparent 62%)",
+];
 
 /** Built-in fallback slides shown when the admin has not added any yet. */
 function defaultSlides(): ResolvedSlide[] {
   const base = [
-    {
-      labelKey: "heroBanner.newSuppliers",
-      titleKey: "heroBanner.newSuppliersDesc",
-      descKey: "heroBanner.newSuppliersText",
-      ctaKey: "heroBanner.seeMore",
-      href: "/ureticiler",
-      backgroundCss: "linear-gradient(120deg, #0c2e61 0%, #1f5fae 50%, #2f80ed 100%)",
-    },
     {
       labelKey: "heroBanner.trendAlert",
       titleKey: "heroBanner.topPicked",
       descKey: "heroBanner.topPickedText",
       ctaKey: "heroBanner.exploreNow",
       href: "/cok-satanlar",
-      backgroundCss: "linear-gradient(120deg, #11694a 0%, #1f9e6f 50%, #34c98a 100%)",
+      backgroundCss: FALLBACK_BG,
+    },
+    {
+      labelKey: "heroBanner.newSuppliers",
+      titleKey: "heroBanner.newSuppliersDesc",
+      descKey: "heroBanner.newSuppliersText",
+      ctaKey: "heroBanner.seeMore",
+      href: "/ureticiler",
+      backgroundCss: "linear-gradient(115deg, #f7bd0e 0%, #eaaa00 60%, #d39c00 100%)",
     },
     {
       labelKey: "heroBanner.fastCustomization",
@@ -82,7 +89,7 @@ function defaultSlides(): ResolvedSlide[] {
       descKey: "heroBanner.privateLabelText",
       ctaKey: "heroBanner.startRequest",
       href: "/pages/dashboard/rfq-form.html",
-      backgroundCss: "linear-gradient(120deg, #3b2c8f 0%, #5a4bd6 50%, #7c6ef0 100%)",
+      backgroundCss: "linear-gradient(115deg, #ffcd3d 0%, #f5b800 70%)",
     },
   ];
   return base.map((b) => ({
@@ -92,8 +99,8 @@ function defaultSlides(): ResolvedSlide[] {
     buttonText: t(b.ctaKey),
     href: b.href,
     backgroundCss: b.backgroundCss,
-    textColor: "#ffffff",
-    align: "center",
+    textColor: "#1a1a1a",
+    align: "left",
     overlay: false,
   }));
 }
@@ -117,31 +124,33 @@ function buildSlides(items: HeroSlideItem[], lang: string): ResolvedSlide[] {
   return items.length ? items.map((it) => normalize(it, lang)) : defaultSlides();
 }
 
-function renderSlide(s: ResolvedSlide): string {
+function renderSlide(s: ResolvedSlide, index: number): string {
   const align = ALIGN_MAP[s.align] ?? ALIGN_MAP.center;
   const overlay = s.overlay ? `<div class="absolute inset-0 bg-black/35"></div>` : "";
   const href = s.href || "#";
   const backgroundCss = safeBackgroundCss(s.backgroundCss, FALLBACK_BG);
+  const texture = SLIDE_TEXTURES[index % SLIDE_TEXTURES.length];
   return `
     <div class="swiper-slide">
       <a href="${escapeHtml(sanitizeUrl(href))}" class="hero-top-slide-link group relative block h-full overflow-hidden rounded-md shadow-sm transition-transform duration-200 ease-out">
         <div class="absolute inset-0" style="background: ${escapeHtml(backgroundCss)};"></div>
+        <div class="pointer-events-none absolute inset-0" style="background: ${texture};"></div>
         ${overlay}
-        <div class="relative z-10 flex h-full flex-col justify-center gap-1.5 p-3 sm:gap-4 sm:p-10 xl:p-14 2xl:gap-5 2xl:p-20 ${align}" style="color: ${safeHexColor(s.textColor, "#ffffff")};">
+        <div class="relative z-10 flex h-full flex-col justify-center gap-1.5 p-4 sm:gap-3 sm:px-12 sm:py-6 md:px-16 ${align}" style="color: ${safeHexColor(s.textColor, "#ffffff")};">
           ${
             s.label
-              ? `<span class="inline-flex max-w-full items-center truncate rounded-full bg-white px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#1f5fae] shadow-sm sm:px-3 sm:text-[11px] 2xl:px-4 2xl:py-1.5 2xl:text-xs">${escapeHtml(s.label)}</span>`
+              ? `<span class="inline-flex max-w-full items-center truncate rounded-full bg-[#1a1a1a] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#f5b800] sm:px-3 sm:text-[11px] 2xl:px-4 2xl:py-1.5 2xl:text-xs">${escapeHtml(s.label)}</span>`
               : ""
           }
-          <h2 class="line-clamp-2 max-w-2xl text-xl font-extrabold leading-tight tracking-tight sm:text-3xl sm:leading-[1.1] md:text-4xl lg:text-5xl xl:text-5xl 2xl:max-w-4xl 2xl:text-6xl">${escapeHtml(s.title)}</h2>
+          <h2 class="line-clamp-2 max-w-2xl text-lg font-extrabold leading-tight tracking-tight sm:text-xl sm:leading-[1.15] lg:text-2xl">${escapeHtml(s.title)}</h2>
           ${
             s.description
-              ? `<p class="line-clamp-2 max-w-md text-sm leading-snug opacity-90 sm:text-base lg:text-lg 2xl:max-w-xl 2xl:text-xl">${escapeHtml(s.description)}</p>`
+              ? `<p class="line-clamp-2 max-w-md text-xs leading-snug opacity-80 sm:text-[13px]">${escapeHtml(s.description)}</p>`
               : ""
           }
           ${
             s.buttonText
-              ? `<span class="mt-1 inline-flex w-fit items-center justify-center rounded-full bg-white px-4 py-2 text-xs font-semibold text-[#0c2e61] shadow-lg transition-transform group-hover:scale-[1.03] sm:mt-2 sm:px-9 sm:py-3 sm:text-sm lg:text-base 2xl:px-10 2xl:py-3.5 2xl:text-lg">${escapeHtml(s.buttonText)}</span>`
+              ? `<span class="mt-1 inline-flex w-fit shrink-0 items-center justify-center rounded-full bg-[#1a1a1a] px-4 py-1.5 text-[11px] font-semibold text-white shadow-md transition-transform group-hover:scale-[1.03] sm:mt-2 sm:px-5 sm:py-2 sm:text-xs">${escapeHtml(s.buttonText)}</span>`
               : ""
           }
         </div>
@@ -162,12 +171,11 @@ const arrowButton = (dir: "prev" | "next"): string => `
   </button>
 `;
 
+// Dot pagination: ortalanmış klasik noktalar; aktif nokta mürekkep renginde
+// hafifçe uzayarak (pill) hangi slide'da olunduğunu gösterir.
 const BULLET_STYLES = [
-  "[&_.hero-top-bullet]:relative [&_.hero-top-bullet]:flex [&_.hero-top-bullet]:h-6 [&_.hero-top-bullet]:w-6 sm:[&_.hero-top-bullet]:h-7 sm:[&_.hero-top-bullet]:w-7 [&_.hero-top-bullet]:items-center [&_.hero-top-bullet]:justify-center [&_.hero-top-bullet]:cursor-pointer",
-  "[&_.hero-top-dot]:h-1.5 [&_.hero-top-dot]:w-1.5 sm:[&_.hero-top-dot]:h-2 sm:[&_.hero-top-dot]:w-2 [&_.hero-top-dot]:rounded-full [&_.hero-top-dot]:bg-white/55 [&_.hero-top-dot]:transition-colors",
-  "[&_.hero-top-bullet-active_.hero-top-dot]:bg-white",
-  "[&_.hero-top-ring]:absolute [&_.hero-top-ring]:inset-0 [&_.hero-top-ring]:h-6 [&_.hero-top-ring]:w-6 sm:[&_.hero-top-ring]:h-7 sm:[&_.hero-top-ring]:w-7 [&_.hero-top-ring]:origin-center [&_.hero-top-ring]:-rotate-90 [&_.hero-top-ring]:opacity-0",
-  "[&_.hero-top-bullet-active_.hero-top-ring]:opacity-100",
+  "[&_.hero-top-bullet]:block [&_.hero-top-bullet]:h-2 [&_.hero-top-bullet]:w-2 [&_.hero-top-bullet]:rounded-full [&_.hero-top-bullet]:bg-black/25 [&_.hero-top-bullet]:cursor-pointer [&_.hero-top-bullet]:transition-all [&_.hero-top-bullet]:duration-200",
+  "[&_.hero-top-bullet-active]:w-5 [&_.hero-top-bullet-active]:bg-[#1a1a1a]",
 ].join(" ");
 
 export function HeroTopSlider(): string {
@@ -179,12 +187,14 @@ export function HeroTopSlider(): string {
         <div class="swiper-wrapper">
           ${slides.map(renderSlide).join("")}
         </div>
-        <div class="hero-top-pagination absolute inset-x-0 bottom-4 z-20 mx-auto flex w-fit items-center justify-center gap-1"></div>
+        <div class="hero-top-pagination absolute inset-x-0 bottom-4 z-20 mx-auto flex w-fit items-center justify-center gap-2"></div>
       </div>
 
-      <div class="absolute right-3 top-1/2 z-20 hidden -translate-y-1/2 flex-col gap-3 md:flex xl:right-6">
-        ${arrowButton("next")}
+      <div class="absolute left-3 top-1/2 z-20 hidden -translate-y-1/2 md:block">
         ${arrowButton("prev")}
+      </div>
+      <div class="absolute right-3 top-1/2 z-20 hidden -translate-y-1/2 md:block">
+        ${arrowButton("next")}
       </div>
     </div>
   `;
@@ -202,19 +212,11 @@ function createSwiper(sliderEl: HTMLElement, root: HTMLElement, slideCount: numb
   swiperInstance = new Swiper(sliderEl, {
     modules: [Autoplay, Navigation, Pagination],
     slidesPerView: 1,
-    initialSlide: slideCount >= 3 ? 1 : 0,
-    centeredSlides: true,
     spaceBetween: 10,
     loop: slideCount > 1,
-    loopAdditionalSlides: 2,
     observer: true,
     observeParents: true,
     speed: 650,
-    breakpoints: {
-      640: { slidesPerView: 1.12, spaceBetween: 16 },
-      1280: { slidesPerView: 1.12, spaceBetween: 22 },
-      1536: { slidesPerView: 1.13, spaceBetween: 26 },
-    },
     autoplay: {
       delay: 5000,
       disableOnInteraction: false,
@@ -227,21 +229,8 @@ function createSwiper(sliderEl: HTMLElement, root: HTMLElement, slideCount: numb
       bulletClass: "hero-top-bullet",
       bulletActiveClass: "hero-top-bullet-active",
       renderBullet: (_index, className) =>
-        `<button type="button" class="${className} th-no-press" aria-label="Go to slide">
-          <span class="hero-top-dot"></span>
-          <svg class="hero-top-ring" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-            <circle cx="14" cy="14" r="11" stroke="white" stroke-width="2" stroke-linecap="round" stroke-dasharray="${RING_CIRCUMFERENCE}" stroke-dashoffset="${RING_CIRCUMFERENCE}"></circle>
-          </svg>
-        </button>`,
+        `<button type="button" class="${className} th-no-press" aria-label="Go to slide"></button>`,
     },
-  });
-
-  // Drive the active bullet's progress ring with the autoplay timer.
-  swiperInstance.on("autoplayTimeLeft", (_s, _time, progress) => {
-    const circle = root.querySelector<SVGCircleElement>(
-      ".hero-top-bullet-active .hero-top-ring circle"
-    );
-    if (circle) circle.style.strokeDashoffset = String(RING_CIRCUMFERENCE * progress);
   });
 }
 

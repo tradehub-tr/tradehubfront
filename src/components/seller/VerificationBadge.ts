@@ -20,6 +20,26 @@ export interface VerificationItem {
   document_url?: string;
 }
 
+/**
+ * Saha doğrulama kaynağı yoksa ama satıcı KYB-onaylıysa sanal "İstoç"
+ * kaynağı üretir — rozet İstoç logosuyla, tooltip "İstoç tarafından onaylı
+ * satıcı" + KYB açıklamasıyla çıkar. Kaynak varsa olduğu gibi döner.
+ */
+export function resolveVerifications(
+  verifications: VerificationItem[] | undefined,
+  kybVerified: boolean
+): VerificationItem[] {
+  if (verifications?.length) return verifications;
+  if (kybVerified)
+    return [{ source_name: "iStoc", description: t("verification.kybDescription") }];
+  return [];
+}
+
+/** Kaynak adı platformun kendisi mi? (Eski kayıtlarda "İstoç" yazımı da var.) */
+function isIstocSource(name: string | undefined): boolean {
+  return name === "iStoc" || name === "İstoç";
+}
+
 /** window.__verifiedByText ve __downloadReportText'i kurar.
  *  startAlpine()'dan ÖNCE çağrılmalı. */
 export function initVerificationHelpers(): void {
@@ -54,8 +74,8 @@ function tooltipRows(itemsExpr: string): string {
   return `
     <template x-for="v in (${itemsExpr})" :key="v.source_name">
       <div class="flex items-start gap-2 py-2 border-b border-gray-50 last:border-0 last:pb-0 first:pt-0">
-        <template x-if="v.source_name === 'İstoç' || v.icon">
-          <img :src="v.source_name === 'İstoç' ? '${istocLogoUrl}' : v.icon" :alt="v.source_name" class="w-5 h-5 object-contain rounded-md shrink-0 mt-0.5" />
+        <template x-if="['iStoc','İstoç'].includes(v.source_name) || v.icon">
+          <img :src="['iStoc','İstoç'].includes(v.source_name) ? '${istocLogoUrl}' : v.icon" :alt="v.source_name" class="w-5 h-5 object-contain rounded-md shrink-0 mt-0.5" />
         </template>
         <div class="min-w-0">
           <p class="text-[12px] font-semibold text-gray-800 leading-snug"
@@ -108,8 +128,10 @@ export function VerificationBadge(verifications: VerificationItem[]): string {
   const extra = verifications.length - 1;
   const badgeInfoLabel = t("verification.badgeInfo");
   const labelSuffix = extra > 0 ? ` +${extra}` : "";
-  // KYB→İstoç sanal kaynağında backend icon boş; "İstoç" metni yerine mini logo göster.
-  const firstLogo = first.source_name === "İstoç" ? istocLogoUrl : sanitizeUrl(first.icon ?? "");
+  // KYB→iStoc sanal kaynağında icon boş; kaynak adı yerine mini logo göster.
+  const firstLogo = isIstocSource(first.source_name)
+    ? istocLogoUrl
+    : sanitizeUrl(first.icon ?? "");
 
   // Sanitize before serializing; x-text handles display (no innerHTML risk)
   const safeItems: Array<{
@@ -119,9 +141,11 @@ export function VerificationBadge(verifications: VerificationItem[]): string {
     document_url: string;
   }> = verifications.map((v) => ({
     source_name: v.source_name,
-    icon: sanitizeUrl(v.icon ?? ""),
+    // Boş değer boş kalmalı — sanitizeUrl("") fallback "#" döner, bu da
+    // tooltip'teki x-if'leri truthy yapıp sahte ikon/indirme linki üretir.
+    icon: v.icon ? sanitizeUrl(v.icon) : "",
     description: v.description ?? "",
-    document_url: sanitizeUrl(v.document_url ?? ""),
+    document_url: v.document_url ? sanitizeUrl(v.document_url) : "",
   }));
   const serialized = JSON.stringify(safeItems).replace(/'/g, "&#39;");
 
@@ -164,13 +188,13 @@ export function VerificationBadgeTemplate(scopeExpr: string): string {
              alt=""
              class="h-3 w-auto shrink-0"
              aria-hidden="true" />
-        <template x-if="(${scopeExpr})[0]?.source_name === 'İstoç' || (${scopeExpr})[0]?.icon">
-          <img :src="(${scopeExpr})[0]?.source_name === 'İstoç' ? '${istocLogoUrl}' : (${scopeExpr})[0]?.icon"
+        <template x-if="['iStoc','İstoç'].includes((${scopeExpr})[0]?.source_name) || (${scopeExpr})[0]?.icon">
+          <img :src="['iStoc','İstoç'].includes((${scopeExpr})[0]?.source_name) ? '${istocLogoUrl}' : (${scopeExpr})[0]?.icon"
                :alt="(${scopeExpr})[0]?.source_name"
                class="h-3 w-auto shrink-0 object-contain" />
         </template>
         <span class="font-semibold whitespace-nowrap"
-              x-text="(((${scopeExpr})[0]?.source_name === 'İstoç' || (${scopeExpr})[0]?.icon) ? '' : (${scopeExpr})[0]?.source_name) + ((${scopeExpr}).length > 1 ? ' +' + ((${scopeExpr}).length - 1) : '')"></span>
+              x-text="((['iStoc','İstoç'].includes((${scopeExpr})[0]?.source_name) || (${scopeExpr})[0]?.icon) ? '' : (${scopeExpr})[0]?.source_name) + ((${scopeExpr}).length > 1 ? ' +' + ((${scopeExpr}).length - 1) : '')"></span>
         ${infoButton(badgeInfoLabel)}
         ${tooltipPanel(scopeExpr)}
       </div>

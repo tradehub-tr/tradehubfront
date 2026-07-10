@@ -1,3 +1,3 @@
 export { TopRankingCategoryHero } from "./TopRankingCategoryHero";
-export { TopRankingCategoryGrid, renderRankedCategoryCard } from "./TopRankingCategoryGrid";
+export { TopRankingCategoryGrid } from "./TopRankingCategoryGrid";
 export { TopRankingCategoryPagination } from "./TopRankingCategoryPagination";

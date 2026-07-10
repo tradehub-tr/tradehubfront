@@ -11,7 +11,7 @@ import { initFlowbite } from 'flowbite'
 import { startAlpine } from '../alpine'
 import { requireAuth } from '../utils/auth-guard'
 
-import { TopBar, SubHeader, initMobileDrawer, initStickyHeaderSearch, MegaMenu, initMegaMenu } from '../components/header'
+import { TopBar, SubHeader, initStickyHeaderSearch, MegaMenu, initMegaMenu } from '../components/header'
 import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar'
 import { FooterLinks } from '../components/footer'
@@ -34,7 +34,7 @@ const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.classList.add('relative');
 appEl.innerHTML = `
   <!-- Header -->
-  <div id="sticky-header" class="sticky top-0 z-(--z-header) border-b border-(--header-scroll-border) bg-(--header-scroll-bg)">
+  <div id="sticky-header" class="sticky top-0 z-(--z-header) border-b border-gray-200 bg-white">
     ${TopBar()}
     ${SubHeader()}
   </div>
@@ -151,7 +151,6 @@ appEl.innerHTML = `
 initMegaMenu();
 initFlowbite();
 initStickyHeaderSearch();
-initMobileDrawer();
 initLanguageSelector();
 mountChatPopup();
 initChatTriggers();

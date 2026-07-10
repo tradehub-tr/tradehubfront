@@ -40,31 +40,33 @@ function renderBanner({ tone, icon, title, description, ctas = [] }: BannerProps
   const toneClasses: Record<string, string> = {
     warning: "bg-amber-50 border-amber-200 text-amber-900",
     error: "bg-red-50 border-red-200 text-red-900",
-    info: "bg-violet-50 border-violet-200 text-violet-900",
+    info: "bg-blue-50 border-blue-200 text-blue-900",
     success: "bg-green-50 border-green-200 text-green-900",
   };
   const iconColors: Record<string, string> = {
     warning: "text-amber-600",
     error: "text-red-600",
-    info: "text-violet-600",
+    info: "text-blue-600",
     success: "text-green-600",
   };
   const ctaButtons = ctas
     .map((cta) => {
       const cls = cta.primary
-        ? "th-btn px-4 py-2 text-sm whitespace-nowrap no-underline"
+        ? "th-btn px-4 py-2 text-sm max-sm:flex-1 max-sm:py-2 max-sm:text-[13px] whitespace-nowrap no-underline"
         : "text-xs font-semibold underline hover:opacity-80 whitespace-nowrap";
       return `<a href="${cta.href}" class="${cls}">${cta.label}</a>`;
     })
     .join(" ");
   return `
-		<div class="border rounded-lg p-4 mb-4 flex items-center gap-3 ${toneClasses[tone]}">
-			<span class="${iconColors[tone]} flex-shrink-0">${icon}</span>
-			<div class="flex-1 min-w-0">
-				<div class="font-semibold mb-0.5">${title}</div>
-				${description ? `<div class="text-xs opacity-80">${description}</div>` : ""}
+		<div class="border rounded-lg p-4 mb-4 max-sm:p-3 max-sm:mb-3 flex flex-wrap items-center gap-3 max-sm:gap-2 ${toneClasses[tone]}">
+			<div class="flex-1 min-w-0 basis-48">
+				<div class="flex items-center gap-2 mb-0.5">
+					<span class="${iconColors[tone]} flex-shrink-0">${icon}</span>
+					<div class="text-sm max-sm:text-[13px] font-semibold min-w-0">${title}</div>
+				</div>
+				${description ? `<div class="text-xs max-sm:text-[11px] opacity-80">${description}</div>` : ""}
 			</div>
-			${ctaButtons ? `<div class="flex items-center gap-3">${ctaButtons}</div>` : ""}
+			${ctaButtons ? `<div class="flex items-center gap-3 max-md:w-full max-md:justify-end">${ctaButtons}</div>` : ""}
 		</div>
 	`;
 }

@@ -194,7 +194,7 @@ function renderCard(
       <div class="p-6 max-sm:p-4 hidden transition-opacity duration-150 ease-out motion-reduce:transition-none" id="card-${cardId}-edit">
         ${editHtml}
         <div class="pt-4 mt-4 border-t border-gray-100 flex items-center gap-3 max-sm:flex-col">
-          <button class="th-btn px-6 max-sm:w-full card-save-btn" type="button" data-card="${cardId}">${t("settings.submitBtn") || "Kaydet"}</button>
+          <button class="th-btn max-sm:py-2 max-sm:text-[13px] px-6 max-sm:w-full card-save-btn" type="button" data-card="${cardId}">${t("settings.submitBtn") || "Kaydet"}</button>
           <button class="text-[13px] font-medium bg-none border-none cursor-pointer hover:underline card-cancel-btn" style="color:var(--color-text-secondary)" type="button" data-card="${cardId}">${t("settings.cancelAction") || "Vazgeç"}</button>
         </div>
         <div class="mt-3 text-sm hidden card-message" data-card="${cardId}"></div>

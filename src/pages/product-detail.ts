@@ -7,7 +7,7 @@ import '../style.css'
 import { initFlowbite } from 'flowbite'
 
 // Header components (reuse from main page)
-import { TopBar, initMobileDrawer, SubHeader, MegaMenu, initMegaMenu, initHeaderCart } from '../components/header'
+import { TopBar, SubHeader, MegaMenu, initMegaMenu, initHeaderCart } from '../components/header'
 import { initLanguageSelector } from '../components/header/TopBar'
 
 // Footer components
@@ -23,6 +23,7 @@ import { recordListingView } from '../services/socialProofService'
 // Floating components
 import { FloatingPanel } from '../components/floating'
 import { ChatPopup, initChatTriggers } from '../components/chat-popup'
+import { chatTriggerAttrs } from '../components/chat-popup/chatTriggerAttrs'
 
 // Alpine.js
 import { startAlpine } from '../alpine'
@@ -59,18 +60,20 @@ import {
 } from '../components/product'
 // Product data
 import { getCurrentProduct, loadProduct } from '../alpine/product'
-import { initCurrency, formatCurrency, getSelectedCurrency, formatPriceRange } from '../services/currencyService'
+import { initCurrency, getSelectedCurrency, formatPriceRange } from '../services/currencyService'
 
 // Utilities
 import { initAnimatedPlaceholder } from '../utils/animatedPlaceholder'
 import { t } from '../i18n'
 import { isLoggedIn } from '../utils/auth'
 import { getListingUrl } from '../utils/listingUrl'
+import { escapeHtml, sanitizeUrl } from '../utils/sanitize'
 import { applyServerSeo } from '../seo/setPageMeta'
 
 // Favorites
 import { openFavoritesDropdown, updateFavoriteButtons } from '../components/favorites/FavoritesDropdown'
 import { initVerificationHelpers } from '../components/seller'
+import { getSellerUrl } from '../utils/sellerUrl'
 
 // Read listing ID from URL — pretty URL (/urun/<slug>) öncelikli
 // Backend get_listing_detail hem listing.name hem listing_code hem slug ile
@@ -110,7 +113,6 @@ appEl.innerHTML = `
 initMegaMenu();
 initFlowbite();
 initHeaderCart();
-initMobileDrawer();
 initLanguageSelector();
 initAnimatedPlaceholder('#topbar-compact-search-input');
 
@@ -188,7 +190,6 @@ async function renderProductPage() {
     initMegaMenu();
     initFlowbite();
     initHeaderCart();
-    initMobileDrawer();
     initLanguageSelector();
     startAlpine();
     return;
@@ -269,28 +270,28 @@ async function renderProductPage() {
     ${CartDrawer()}
     ${ShippingModal()}
 
-    <!-- Mobile Sticky Bottom Bar -->
-    <div id="pd-mobile-bar" x-data :class="$store.chatPopup.isOpen && 'hidden'" class="xl:hidden grid grid-cols-[40px_minmax(0,1fr)_minmax(0,1fr)] gap-1.5 px-3 py-2 pb-[calc(8px+env(safe-area-inset-bottom))] fixed bottom-0 left-0 right-0 z-100 bg-surface border-t border-border-default shadow-[0_-2px_10px_rgba(0,0,0,0.08)] overflow-hidden box-border">
+    <!-- Mobile Sticky Bottom Bar — Mağaza / Sohbet / Soru sor / Sepete Ekle -->
+    <div id="pd-mobile-bar" x-data :class="$store.chatPopup.isOpen && 'hidden'" class="xl:hidden grid grid-cols-[44px_44px_minmax(0,1fr)_minmax(0,1fr)] items-center gap-1.5 px-3 py-2 pb-[calc(8px+env(safe-area-inset-bottom))] fixed bottom-0 left-0 right-0 z-100 bg-surface border-t border-border-default shadow-[0_-2px_10px_rgba(0,0,0,0.08)] overflow-hidden box-border">
+      <a href="${escapeHtml(sanitizeUrl(getSellerUrl({ id: product.supplier?.id })))}"
+         class="th-no-press appearance-none flex flex-col items-center justify-center gap-0.5 text-[10px] font-medium text-text-body no-underline focus:outline-none active:opacity-70 transition-opacity duration-150">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M17.774 10.31a1.12 1.12 0 0 1-1.549 0 2.5 2.5 0 0 0-3.451 0 1.12 1.12 0 0 1-1.548 0 2.5 2.5 0 0 0-3.452 0 1.12 1.12 0 0 1-1.549 0 2.5 2.5 0 0 0-3.77 3.248A2.5 2.5 0 0 0 4 14.5V20a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5.5a2.5 2.5 0 0 0 1.549-4.442 2.5 2.5 0 0 0-3.775-3.248"/><path d="M4 10.6V3a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v7.6"/></svg>
+        ${t('product.storeLabel')}
+      </a>
       <button type="button" id="pdm-bar-chat"
-              data-chat-trigger
-              data-product-id="${product.id}"
-              data-product-title="${(product.title || '').replace(/"/g, '&quot;')}"
-              data-product-price="${(product.priceTiers[0] ? formatCurrency(product.priceTiers[0].price, getSelectedCurrency()) : '').replace(/"/g, '&quot;')}"
-              data-product-thumb="${product.images?.[0]?.src || ''}"
-              data-product-min-order="${product.moq ? String(product.moq) : '1'}"
-              data-seller-id="${product.supplier?.id || ''}"
-              class="pdm-bar-chat-btn w-10 h-10 border border-border-medium rounded-md bg-surface flex items-center justify-center cursor-pointer text-text-body p-0 active:bg-[var(--color-surface-raised,#f5f5f5)]" aria-label="${t('prodUi.chat')}">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+              ${chatTriggerAttrs(product)}
+              class="th-no-press appearance-none flex flex-col items-center justify-center gap-0.5 text-[10px] font-medium text-text-body bg-transparent border-0 p-0 cursor-pointer focus:outline-none active:opacity-70 transition-opacity duration-150" aria-label="${t('prodUi.chat')}">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"/><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/></svg>
+        ${t('prodUi.chat')}
       </button>
+      <button type="button" id="pdm-bar-ask"
+              class="th-btn-outline h-10 text-[12px] sm:text-sm font-semibold whitespace-nowrap overflow-hidden text-ellipsis min-w-0">${t('product.sendQuestion')}</button>
       ${
         product.sellerKybVerified === false
           ? `
-      <button type="button" id="pdm-bar-cart" disabled aria-disabled="true" class="pdm-bar-cart-btn th-btn-outline h-10 text-[12px] sm:text-sm font-semibold opacity-50 !cursor-not-allowed pointer-events-none whitespace-nowrap overflow-hidden text-ellipsis min-w-0" title="${t('common.addToCartDisabledKyb')}">${t('product.addToCart')}</button>
-      <button type="button" id="pdm-bar-order" disabled aria-disabled="true" class="pdm-bar-order-btn th-btn-dark h-10 text-[12px] sm:text-sm opacity-50 !cursor-not-allowed pointer-events-none whitespace-nowrap overflow-hidden text-ellipsis min-w-0" title="${t('common.addToCartDisabledKyb')}">${t('product.startOrder')}</button>
+      <button type="button" id="pdm-bar-cart" disabled aria-disabled="true" class="pdm-bar-cart-btn th-btn-dark h-10 text-[12px] sm:text-sm opacity-50 !cursor-not-allowed pointer-events-none whitespace-nowrap overflow-hidden text-ellipsis min-w-0" title="${t('common.addToCartDisabledKyb')}">${t('product.addToCart')}</button>
           `
           : `
-      <button type="button" id="pdm-bar-cart" data-add-to-cart="${product.id}" class="pdm-bar-cart-btn th-btn-outline h-10 text-[12px] sm:text-sm font-semibold cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis min-w-0 transition-[background] duration-150 active:bg-[var(--btn-outline-hover-bg,var(--color-surface-raised,#f5f5f5))]">${t('product.addToCart')}</button>
-      <button type="button" id="pdm-bar-order" class="pdm-bar-order-btn th-btn-dark h-10 text-[12px] sm:text-sm whitespace-nowrap overflow-hidden text-ellipsis min-w-0 transition-[background] duration-150 active:bg-[var(--btn-hover-bg,var(--btn-bg))]">${t('product.startOrder')}</button>
+      <button type="button" id="pdm-bar-cart" data-pdm-sheet="pdm-sheet-options" class="pdm-bar-cart-btn th-btn-dark h-10 text-[12px] sm:text-sm whitespace-nowrap overflow-hidden text-ellipsis min-w-0">${t('product.addToCart')}</button>
           `
       }
     </div>
@@ -300,7 +301,6 @@ async function renderProductPage() {
   initMegaMenu();
   initFlowbite();
   initHeaderCart();
-  initMobileDrawer();
   initLanguageSelector();
   initAnimatedPlaceholder('#topbar-compact-search-input');
 

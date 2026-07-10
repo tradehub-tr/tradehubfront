@@ -6,8 +6,6 @@
  */
 
 import type { LocaleOption, CurrencyOption } from "../../types/navigation";
-import { onCategoriesLoaded } from "../../services/categoryService";
-import type { ApiCategory } from "../../services/categoryService";
 import { cartStore } from "../cart/state/CartStore";
 import { isLoggedIn, getUser, getSessionUser, waitForAuth, logout } from "../../utils/auth";
 import { getListingUrl } from "../../utils/listingUrl";
@@ -147,20 +145,6 @@ function buildCurrencyOptionsHtml(): string {
     .map(
       (currency) =>
         `\n              <option value="${currency.code}">${currency.code} - ${currency.name}</option>\n            `
-    )
-    .join("");
-}
-
-/**
- * Builds the mobile currency-pill markup. Shared by the initial render and the
- * post-async-load rebuild (DRY).
- */
-function buildCurrencyPillsHtml(): string {
-  const selected = getSelectedCurrency().code;
-  return getCurrencyOptions()
-    .map(
-      (currency) =>
-        `\n                <button type="button" data-currency-pill="${currency.code}" class="px-3 py-1.5 text-xs font-medium rounded-full border transition-colors ${currency.code === selected ? "border-primary-500 text-primary-600 bg-primary-50 dark:border-primary-400 dark:text-primary-400 dark:bg-primary-900/20" : "border-gray-300 text-gray-600 dark:border-gray-600 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500"}">\n                  ${currency.code === "TRY" ? "TL" : currency.symbol}\n                </button>\n              `
     )
     .join("");
 }
@@ -730,444 +714,6 @@ function renderAuthButtons(): string {
 }
 
 /**
- * Renders the 3-panel sliding mobile drawer (istoc.com style)
- * Panel 1: Main menu, Panel 2: Categories list, Panel 3: Subcategory detail
- */
-function renderMobileDrawer(): string {
-  const baseUrl = getBaseUrl();
-
-  return `
-    <!-- Mobile Menu Drawer -->
-    <div
-      id="mobile-menu-drawer"
-      class="fixed top-0 start-0 z-(--z-backdrop) h-screen overflow-hidden transition-transform -translate-x-full rtl:[&.-translate-x-full]:[--tw-translate-x:100%] bg-white w-[min(80vw,20rem)] sm:w-80 dark:bg-gray-800"
-      tabindex="-1"
-      aria-labelledby="drawer-label"
-    >
-      <div class="relative h-full w-full">
-
-        <!-- Panel 1: Main Menu -->
-        <div id="drawer-panel-main" class="absolute inset-0 overflow-y-auto transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none rtl:[&.-translate-x-full]:[--tw-translate-x:100%]">
-
-          <!-- Header: Logo + Close -->
-          <div class="flex items-center justify-between px-4 pt-4 pb-2">
-            <a href="${getBaseUrl()}" aria-label="iSTOC Home">
-              <img src="${getBaseUrl()}images/istoc-logo.png" alt="iSTOC" class="h-8" />
-            </a>
-            <button
-              type="button"
-              data-drawer-hide="mobile-menu-drawer"
-              aria-controls="mobile-menu-drawer"
-              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-md text-sm w-8 h-8 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/></svg>
-              <span class="sr-only">Close menu</span>
-            </button>
-          </div>
-
-          <!-- Profile Section -->
-          <div id="mobile-drawer-profile" class="mx-4 mt-2 rounded-md bg-gray-50 dark:bg-gray-700 px-4 py-3 flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center flex-shrink-0">
-              <svg class="w-5 h-5 text-gray-400 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-              </svg>
-            </div>
-            <div>
-              <div class="flex items-center gap-1 text-sm">
-                <a href="${baseUrl}pages/auth/login.html" class="font-medium text-primary-600 hover:underline dark:text-primary-400"><span data-i18n="header.signIn">${t("header.signIn")}</span></a>
-                <span class="text-gray-400 dark:text-gray-500">|</span>
-                <a href="${baseUrl}pages/auth/register.html" class="font-medium text-primary-600 hover:underline dark:text-primary-400"><span data-i18n="header.joinFree">${t("header.joinFree")}</span></a>
-              </div>
-              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"><span data-i18n="header.startShopping">${t("header.startShopping")}</span></p>
-            </div>
-          </div>
-
-          <!-- My Account Section -->
-          <div class="mx-4 mt-3">
-            <button
-              id="drawer-account-toggle"
-              type="button"
-              class="flex items-center justify-between w-full py-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              <span data-i18n="header.myAccount">${t("header.myAccount")}</span>
-              <svg id="drawer-account-icon" class="w-5 h-5 text-gray-400 dark:text-gray-500 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
-              </svg>
-            </button>
-            <div id="drawer-account-panel" class="hidden pb-2 space-y-1">
-              <a href="/buyer/messages" class="flex items-center gap-3 px-3 py-2.5 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
-                <span data-i18n="header.messages">${t("header.messages")}</span>
-                <span class="th-badge ms-auto flex items-center justify-center min-w-5 h-5 px-1 text-[10px] font-bold" style="background:var(--color-error-500);color:#fff">1</span>
-              </a>
-              <a href="/buyer/orders" class="flex items-center gap-3 px-3 py-2.5 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
-                <span data-i18n="header.orders">${t("header.orders")}</span>
-              </a>
-              <a href="${baseUrl}pages/cart.html" class="flex items-center gap-3 px-3 py-2.5 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
-                <span data-i18n="header.shoppingCart">${t("header.shoppingCart")}</span>
-                <span class="th-badge ms-auto flex items-center justify-center min-w-5 h-5 px-1 text-[10px] font-bold" style="background:var(--btn-bg);color:var(--btn-text)">3</span>
-              </a>
-            </div>
-          </div>
-
-          <!-- Navigation Section -->
-          <div class="border-b border-gray-200 dark:border-gray-700 mx-4 pb-3 space-y-1">
-
-            <!-- Categories Button -->
-            <button
-              id="drawer-open-categories"
-              type="button"
-              class="flex items-center gap-3 w-full px-3 py-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 text-start transition-colors"
-            >
-              <div class="flex-1 min-w-0">
-                <div class="flex items-center gap-2">
-                  <span class="text-sm font-bold text-gray-900 dark:text-white" data-i18n="drawer.categories">${t("drawer.categories")}</span>
-                  <span class="th-badge inline-flex items-center px-2 py-0.5 text-[10px] font-bold" style="background:var(--btn-bg);color:var(--btn-text)">ALL</span>
-                </div>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"><span data-i18n="drawer.browseCategories">${t("drawer.browseCategories")}</span></p>
-              </div>
-              <svg class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
-            </button>
-
-            <!-- Campaigns -->
-            <a href="/campaigns" class="block px-3 py-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-              <span class="text-sm font-bold text-gray-900 dark:text-white" data-i18n="drawer.campaigns">${t("drawer.campaigns")}</span>
-              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"><span data-i18n="drawer.campaignsDesc">${t("drawer.campaignsDesc")}</span></p>
-            </a>
-
-            <!-- Brands -->
-            <a href="/brands" class="block px-3 py-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-              <span class="text-sm font-bold text-gray-900 dark:text-white" data-i18n="drawer.brands">${t("drawer.brands")}</span>
-              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"><span data-i18n="drawer.brandsDesc">${t("drawer.brandsDesc")}</span></p>
-            </a>
-
-            <!-- Sellers -->
-            <a href="/sellers" class="block px-3 py-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-              <span class="text-sm font-bold text-gray-900 dark:text-white" data-i18n="drawer.sellers">${t("drawer.sellers")}</span>
-              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"><span data-i18n="drawer.sellersDesc">${t("drawer.sellersDesc")}</span></p>
-            </a>
-
-            <!-- iSTOC B2B Marketplace -->
-            <a href="/b2b" class="flex items-center gap-3 px-3 py-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-              <div class="w-10 h-10 rounded-md bg-gray-100 dark:bg-gray-600 flex items-center justify-center flex-shrink-0">
-                <span class="text-sm font-bold text-gray-700 dark:text-gray-200">iS</span>
-              </div>
-              <div class="flex-1 min-w-0">
-                <span class="text-sm font-bold text-gray-900 dark:text-white" data-i18n="drawer.b2bMarketplace">${t("drawer.b2bMarketplace")}</span>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"><span data-i18n="drawer.b2bDesc">${t("drawer.b2bDesc")}</span></p>
-              </div>
-              <svg class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
-            </a>
-          </div>
-
-          <!-- Language / Currency Pills -->
-          <div class="mx-4 mt-3 space-y-3">
-            <!-- Language pills -->
-            <div class="flex flex-wrap gap-2">
-              ${languageOptions
-                .map(
-                  (lang, i) => `
-                <button type="button" data-lang-pill="${lang.code}" class="px-3 py-1.5 text-xs font-medium rounded-full border transition-colors ${i === 0 ? "border-primary-500 text-primary-600 bg-primary-50 dark:border-primary-400 dark:text-primary-400 dark:bg-primary-900/20" : "border-gray-300 text-gray-600 dark:border-gray-600 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500"}">
-                  ${lang.code}
-                </button>
-              `
-                )
-                .join("")}
-            </div>
-            <!-- Currency pills -->
-            <div id="currency-pills" class="flex flex-wrap gap-2">${buildCurrencyPillsHtml()}</div>
-          </div>
-
-          <!-- Deliver to -->
-          <div class="mx-4 mt-4 mb-6">
-            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1" data-i18n="header.deliverTo">${t("header.deliverTo")}</label>
-            <select class="th-input th-input-sm cursor-pointer">
-              ${countryOptions
-                .map(
-                  (country) => `
-                <option value="${country.code}">${country.name}</option>
-              `
-                )
-                .join("")}
-            </select>
-          </div>
-
-        </div>
-
-        <!-- Panel 2: Categories List -->
-        <div id="drawer-panel-categories" class="absolute inset-0 overflow-y-auto translate-x-full rtl:[&.translate-x-full]:[--tw-translate-x:-100%] rtl:[&.-translate-x-full]:[--tw-translate-x:100%] transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none bg-white dark:bg-gray-800">
-
-          <!-- Header: Back + Close -->
-          <div class="flex items-center justify-between px-4 pt-4 pb-2">
-            <button id="drawer-categories-back" type="button" class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
-              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"/></svg>
-              <span data-i18n="common.back">${t("common.back")}</span>
-            </button>
-            <button
-              type="button"
-              data-drawer-hide="mobile-menu-drawer"
-              aria-controls="mobile-menu-drawer"
-              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-md text-sm w-8 h-8 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/></svg>
-              <span class="sr-only">Close menu</span>
-            </button>
-          </div>
-
-          <!-- Category Header Bar -->
-          <div class="flex items-center gap-2 px-4 py-3 bg-gray-50 dark:bg-gray-700">
-            <span class="text-lg font-bold text-gray-900 dark:text-white" data-i18n="drawer.categories">${t("drawer.categories")}</span>
-            <span class="th-badge inline-flex items-center px-2 py-0.5 text-[10px] font-bold" style="background:var(--btn-bg);color:var(--btn-text)">ALL</span>
-          </div>
-
-          <!-- Category List (skeleton, replaced after API) -->
-          <div id="drawer-category-list" class="divide-y divide-gray-100 dark:divide-gray-700">
-            ${Array.from(
-              { length: 8 },
-              () => `
-              <div class="flex items-center justify-between w-full px-4 py-3 animate-pulse">
-                <div class="h-3.5 rounded bg-gray-200 dark:bg-gray-700 w-32"></div>
-                <div class="w-5 h-5 rounded bg-gray-200 dark:bg-gray-700"></div>
-              </div>
-            `
-            ).join("")}
-          </div>
-
-        </div>
-
-        <!-- Panel 3: Subcategory -->
-        <div id="drawer-panel-subcategory" class="absolute inset-0 overflow-y-auto translate-x-full rtl:[&.translate-x-full]:[--tw-translate-x:-100%] rtl:[&.-translate-x-full]:[--tw-translate-x:100%] transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none bg-white dark:bg-gray-800">
-
-          <!-- Header: Back + Close -->
-          <div class="flex items-center justify-between px-4 pt-4 pb-2">
-            <button id="drawer-subcategory-back" type="button" class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
-              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"/></svg>
-              <span data-i18n="drawer.categories">${t("drawer.categories")}</span>
-            </button>
-            <button
-              type="button"
-              data-drawer-hide="mobile-menu-drawer"
-              aria-controls="mobile-menu-drawer"
-              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-md text-sm w-8 h-8 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/></svg>
-              <span class="sr-only">Close menu</span>
-            </button>
-          </div>
-
-          <!-- Subcategory Header -->
-          <div class="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-700">
-            <span id="drawer-subcategory-title" class="text-lg font-bold text-gray-900 dark:text-white"></span>
-            <a id="drawer-subcategory-link" href="#" class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-400"><span data-i18n="common.detail">${t("common.detail")}</span></a>
-          </div>
-
-          <!-- Subcategory List -->
-          <div id="drawer-subcategory-list"></div>
-
-        </div>
-
-      </div>
-    </div>
-  `;
-}
-
-/**
- * Initializes mobile drawer interactivity:
- * - Account toggle expand/collapse
- * - Panel sliding (main -> categories -> subcategory)
- * - MutationObserver to reset panels on drawer close
- */
-export function initMobileDrawer(): void {
-  // Move drawer to body so it escapes all stacking contexts (sticky-header, TopBar z-30)
-  const drawerEl = document.getElementById("mobile-menu-drawer");
-  if (drawerEl) document.body.appendChild(drawerEl);
-
-  // TopBar mobile search tabs switching
-  const topbarTabs = document.querySelectorAll<HTMLButtonElement>(".topbar-search-tab");
-  const mobileSearchType = document.getElementById("mobile-search-type") as HTMLInputElement | null;
-  const mobileSearchInput = document.querySelector<HTMLInputElement>(
-    '#mobile-search-form input[name="q"]'
-  );
-  const TB_ACT = [
-    "font-semibold",
-    "text-gray-900",
-    "dark:text-white",
-    "after:bg-gray-900",
-    "after:dark:bg-white",
-  ];
-  const TB_INACT = ["font-normal", "text-gray-400", "dark:text-gray-500", "after:bg-transparent"];
-  topbarTabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      topbarTabs.forEach((t) => {
-        t.classList.remove(...TB_ACT);
-        t.classList.add(...TB_INACT);
-      });
-      tab.classList.remove(...TB_INACT);
-      tab.classList.add(...TB_ACT);
-      const tabValue = tab.getAttribute("data-search-tab") || "products";
-      if (mobileSearchType) {
-        mobileSearchType.value = tabValue;
-      }
-      if (mobileSearchInput) {
-        mobileSearchInput.placeholder = `Search ${tabValue}...`;
-      }
-    });
-  });
-
-  // Account toggle
-  const accountToggle = document.getElementById("drawer-account-toggle");
-  const accountPanel = document.getElementById("drawer-account-panel");
-  const accountIcon = document.getElementById("drawer-account-icon");
-  if (accountToggle && accountPanel && accountIcon) {
-    accountToggle.addEventListener("click", () => {
-      accountPanel.classList.toggle("hidden");
-      const path = accountIcon.querySelector("path");
-      if (path) {
-        const isOpen = !accountPanel.classList.contains("hidden");
-        path.setAttribute("d", isOpen ? "M5 12h14" : "M12 4.5v15m7.5-7.5h-15");
-      }
-    });
-  }
-
-  const panelMain = document.getElementById("drawer-panel-main");
-  const panelCategories = document.getElementById("drawer-panel-categories");
-  const panelSubcategory = document.getElementById("drawer-panel-subcategory");
-
-  // Open categories panel
-  const openCategories = document.getElementById("drawer-open-categories");
-  if (openCategories && panelMain && panelCategories) {
-    openCategories.addEventListener("click", () => {
-      panelMain.classList.add("-translate-x-full");
-      panelCategories.classList.remove("translate-x-full");
-    });
-  }
-
-  // Back from categories
-  const categoriesBack = document.getElementById("drawer-categories-back");
-  if (categoriesBack && panelMain && panelCategories) {
-    categoriesBack.addEventListener("click", () => {
-      panelMain.classList.remove("-translate-x-full");
-      panelCategories.classList.add("translate-x-full");
-    });
-  }
-
-  // Open subcategory panel — bağlanır, kategori verileri API'den gelince güncellenir
-  const subcategoryTitle = document.getElementById("drawer-subcategory-title");
-  const subcategoryLink = document.getElementById(
-    "drawer-subcategory-link"
-  ) as HTMLAnchorElement | null;
-  const subcategoryList = document.getElementById("drawer-subcategory-list");
-
-  function bindDrawerCategoryButtons(cats: ApiCategory[]): void {
-    const categoryList = document.getElementById("drawer-category-list");
-    if (!categoryList) return;
-
-    // Kategori listesini yeniden render et
-    categoryList.innerHTML = cats
-      .map(
-        (cat) => `
-      <button
-        type="button"
-        data-drawer-cat-id="${escapeHtml(cat.id)}"
-        class="flex items-center justify-between w-full px-4 py-3 text-sm text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-      >
-        <span>${escapeHtml(cat.name)}</span>
-        <svg class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
-      </button>
-    `
-      )
-      .join("");
-
-    // Tıklama eventlerini bağla
-    categoryList.querySelectorAll<HTMLButtonElement>("[data-drawer-cat-id]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const catId = btn.getAttribute("data-drawer-cat-id");
-        const cat = cats.find((c) => c.id === catId);
-        if (
-          !cat ||
-          !panelCategories ||
-          !panelSubcategory ||
-          !subcategoryTitle ||
-          !subcategoryLink ||
-          !subcategoryList
-        )
-          return;
-
-        subcategoryTitle.textContent = cat.name;
-        subcategoryLink.href = `/pages/products.html?cat=${encodeURIComponent(cat.slug)}`;
-        subcategoryList.innerHTML = cat.children
-          .map(
-            (ch) =>
-              `<a href="${escapeHtml(sanitizeUrl(`/pages/products.html?cat=${encodeURIComponent(ch.slug)}`))}" class="block px-4 py-3 text-sm text-gray-900 hover:bg-gray-50 dark:text-white dark:hover:bg-gray-700 transition-colors">${escapeHtml(ch.name)}</a>`
-          )
-          .join("");
-
-        panelCategories.classList.add("-translate-x-full");
-        panelSubcategory.classList.remove("translate-x-full");
-      });
-    });
-  }
-
-  // API yüklenince kategori listesini doldur
-  onCategoriesLoaded(bindDrawerCategoryButtons);
-
-  // Back from subcategory
-  const subcategoryBack = document.getElementById("drawer-subcategory-back");
-  if (subcategoryBack && panelCategories && panelSubcategory) {
-    subcategoryBack.addEventListener("click", () => {
-      panelCategories.classList.remove("-translate-x-full");
-      panelSubcategory.classList.add("translate-x-full");
-    });
-  }
-
-  // Reset panels when drawer is closed
-  const drawer = document.getElementById("mobile-menu-drawer");
-  if (drawer && panelMain && panelCategories && panelSubcategory) {
-    const observer = new MutationObserver((mutations) => {
-      for (const mutation of mutations) {
-        if (mutation.type === "attributes" && mutation.attributeName === "class") {
-          if (drawer.classList.contains("-translate-x-full")) {
-            setTimeout(() => {
-              panelMain.classList.remove("-translate-x-full");
-              panelCategories.classList.remove("-translate-x-full");
-              panelCategories.classList.add("translate-x-full");
-              panelSubcategory.classList.remove("-translate-x-full");
-              panelSubcategory.classList.add("translate-x-full");
-            }, 300);
-          }
-        }
-      }
-    });
-    observer.observe(drawer, { attributes: true, attributeFilter: ["class"] });
-  }
-}
-
-/**
- * Mobile Search Tabs (Products | Manufacturers | Worldwide)
- * Rendered outside the sticky header as a separate non-sticky section.
- */
-export function MobileSearchTabs(
-  activeTab: "products" | "manufacturers" | "country" = "products",
-  options?: { hideWorldwide?: boolean }
-): string {
-  const activeClass =
-    "topbar-search-tab relative py-2 text-[13px] font-semibold text-gray-900 dark:text-white whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:start-0 after:w-full after:h-[3px] after:bg-gray-900 after:dark:bg-white after:rounded-full";
-  const inactiveClass =
-    "topbar-search-tab relative py-2 text-[13px] font-normal text-gray-400 dark:text-gray-500 whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:start-0 after:w-full after:h-[3px] after:bg-transparent after:rounded-full";
-
-  const worldwideTab = options?.hideWorldwide
-    ? ""
-    : `
-      <a href="#" class="${activeTab === "country" ? activeClass : inactiveClass}" data-search-tab="country"><span data-i18n="search.worldwide">${t("search.worldwide")}</span></a>`;
-
-  return `
-    <div class="lg:hidden flex items-center gap-3 sm:gap-6 px-2 sm:px-4 border-b border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-900 overflow-x-auto scrollbar-hide scroll-smooth">
-      <a href="/" class="${activeTab === "products" ? activeClass : inactiveClass}" data-search-tab="products"><span data-i18n="search.products">${t("search.products")}</span></a>
-      <a href="/ureticiler" class="${activeTab === "manufacturers" ? activeClass : inactiveClass}" data-search-tab="manufacturers"><span data-i18n="search.manufacturers">${t("search.manufacturers")}</span></a>${worldwideTab}
-    </div>
-  `;
-}
-
-/**
  * TopBar Component
  * Renders the top navigation bar containing:
  * - iSTOC logo
@@ -1183,6 +729,31 @@ export interface TopBarProps {
   compact?: boolean;
   /** Sepet / checkout / ödeme / sipariş sayfalarında notice bandını gizle */
   hideNotice?: boolean;
+}
+
+/**
+ * Dashboard drawer tetikleyicisi — kullanıcının baş harfini taşıyan avatar
+ * çipi + chevron. Bare hamburger yerine bu desen (Gmail/Trendyol "Hesabım"
+ * çipi) kullanılır: alt nav'daki Menü hamburger'ından ayrışır ve kenarlıklı
+ * hap formu tıklanabilir olduğunu belli eder.
+ */
+function renderDashDrawerTrigger(): string {
+  const user = getUser();
+  const initial = (user?.full_name || user?.email || "?").charAt(0).toUpperCase();
+  return `
+    <button
+      id="dash-drawer-btn"
+      data-dash-drawer-open
+      type="button"
+      aria-label="${t("dashboard.myDashboard")}"
+      class="th-no-press hidden items-center gap-1 ps-1 pe-1.5 h-9 rounded-full border border-gray-300 bg-white hover:border-gray-400 lg:hidden appearance-none cursor-pointer focus:outline-none transition-colors duration-150 motion-reduce:transition-none"
+    >
+      <span class="w-7 h-7 rounded-full flex items-center justify-center text-[13px] font-bold text-white uppercase" style="background:linear-gradient(135deg, var(--color-primary-400, #e6b212) 0%, var(--color-primary-500, #cc9900) 100%)" aria-hidden="true">${escapeHtml(initial)}</span>
+      <svg class="w-3.5 h-3.5 text-gray-500" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/>
+      </svg>
+    </button>
+  `;
 }
 
 export function TopBar(props?: TopBarProps): string {
@@ -1244,24 +815,13 @@ export function TopBar(props?: TopBarProps): string {
                 ${isLoggedIn() ? renderUserButton() : renderAuthButtons()}
               </div>
 
-              <!-- Mobile Menu Button -->
-              <button
-                data-drawer-target="mobile-menu-drawer"
-                data-drawer-toggle="mobile-menu-drawer"
-                class="inline-flex items-center p-1.5 rounded-md lg:hidden text-[#333] hover:text-[#000] hover:bg-gray-200 focus:outline-none"
-                type="button"
-                aria-controls="mobile-menu-drawer"
-                aria-label="Open main menu"
-              >
-                <svg class="w-5 h-5" aria-hidden="true" fill="none" viewBox="0 0 17 14">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
-                </svg>
-              </button>
+              <!-- Dashboard drawer tetikleyicisi: avatar çipi (hamburger DEĞİL —
+                   alt nav'daki "Menü" hamburger'ıyla karışmasın). initMobileDashboardNav
+                   görünür yapar; drawer'sız compact sayfalarda gizli kalır -->
+              ${renderDashDrawerTrigger()}
             </div>
           </div>
         </div>
-
-        ${renderMobileDrawer()}
       </div>
     `;
   }
@@ -1388,14 +948,6 @@ export function TopBar(props?: TopBarProps): string {
           </div>
         </div>
       </div>
-
-      <!-- NOT: mobile-menu-drawer burada (full header) RENDER EDİLMİYOR.
-           Bu header'da drawer'ı açan bir tetikleyici yok — mobil navigasyon
-           BottomNav ile sağlanıyor. Önceden ${"`"}renderMobileDrawer()${"`"} burada
-           render ediliyordu ama açış butonu (data-drawer-target) olmadığı için
-           Flowbite Drawer instance'ı hiç oluşmuyor, içindeki data-drawer-hide
-           butonları "not initialized" hatası veriyordu. Drawer yalnızca compact
-           header'da (hamburger'lı) kullanılıyor; orada render + init ediliyor. -->
 
       <!-- Bildirim Poller (görünmez, sadece toast tetikler) -->
       <div x-data="notificationPoller" class="hidden"></div>
@@ -1580,6 +1132,15 @@ export function initHeaderCart(): void {
       badge.textContent = count > 99 ? "99+" : String(count);
       if (count > 0) badge.classList.remove("hidden");
       else badge.classList.add("hidden");
+    }
+
+    // Mobil alt navigasyondaki (BottomNav) sepet rozeti aynı store'dan beslenir;
+    // span'in display'i class'ta olmadığı için hidden↔flex birlikte toggle edilir.
+    const navBadge = document.getElementById("bottom-nav-cart-badge");
+    if (navBadge) {
+      navBadge.textContent = count > 99 ? "99+" : String(count);
+      navBadge.classList.toggle("hidden", count === 0);
+      navBadge.classList.toggle("flex", count > 0);
     }
 
     // Update count chip in popover header
@@ -1782,8 +1343,7 @@ document.addEventListener("click", async (e) => {
 
 /**
  * Check session state and update header auth UI accordingly.
- * Replaces "Sign In" buttons with user dropdown when logged in,
- * and updates mobile drawer profile section.
+ * Replaces "Sign In" buttons with user dropdown when logged in.
  */
 export async function initAuthState(): Promise<void> {
   // waitForAuth() modül yüklenince başlatılan promise'i bekler —
@@ -1801,25 +1361,6 @@ export async function initAuthState(): Promise<void> {
     authAreas.forEach((container) => {
       container.innerHTML = user ? renderUserButton() : renderAuthButtons();
     });
-  }
-
-  // Update mobile drawer profile
-  if (isNowLoggedIn && user) {
-    const mobileProfile = document.getElementById("mobile-drawer-profile");
-    if (mobileProfile) {
-      const initials = (user.full_name || user.email || "U").charAt(0).toUpperCase();
-      const escapedName = escapeHtml(user.full_name || user.email);
-      const escapedEmail = escapeHtml(user.email);
-      mobileProfile.innerHTML = `
-        <div class="w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-900 flex items-center justify-center flex-shrink-0">
-          <span class="text-sm font-bold text-orange-600 dark:text-orange-300">${escapeHtml(initials)}</span>
-        </div>
-        <div>
-          <p class="text-sm font-medium text-gray-900 dark:text-white">${escapedName}</p>
-          <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${escapedEmail}</p>
-        </div>
-      `;
-    }
   }
 
   // DOM değiştiyse Flowbite dropdown'larını yeniden başlat
@@ -1867,18 +1408,10 @@ function rebuildCurrencyPicker(): void {
       currencySelect.value = getSelectedCurrency().code;
     }
   }
-
-  const pills = document.getElementById("currency-pills");
-  if (pills) {
-    pills.innerHTML = buildCurrencyPillsHtml();
-  }
 }
 
 // Register the list-rebuild listener exactly once across the app lifetime.
 let _currencyPickerListenerBound = false;
-// Mobile currency-pill click delegation bound once per page (the container is
-// stable; its inner buttons are replaced by rebuildCurrencyPicker via innerHTML).
-let _currencyPillsHandlerBound = false;
 
 export function initLanguageSelector(): void {
   // Check auth state and update header UI (fire-and-forget)
@@ -1926,22 +1459,6 @@ export function initLanguageSelector(): void {
     rebuildCurrencyPicker();
   }
 
-  // Mobile currency pills — apply the selection immediately (mirrors the
-  // language-pill flow: persist + full reload). Uses event delegation on the
-  // stable #currency-pills container because rebuildCurrencyPicker() swaps the
-  // inner buttons via innerHTML on "currency-changed"; per-button listeners
-  // would be dropped, leaving the picker dead after the first rebuild.
-  if (!_currencyPillsHandlerBound) {
-    _currencyPillsHandlerBound = true;
-    document.getElementById("currency-pills")?.addEventListener("click", (e) => {
-      const btn = (e.target as HTMLElement).closest("[data-currency-pill]");
-      const code = btn?.getAttribute("data-currency-pill");
-      if (!code) return;
-      setSelectedCurrency(code);
-      window.location.reload();
-    });
-  }
-
   // Desktop popover "Save" button — applies language + currency, then refreshes
   const popover = document.getElementById("popover-language-currency");
   const saveBtn = popover?.querySelector<HTMLButtonElement>(".th-btn");
@@ -1958,16 +1475,6 @@ export function initLanguageSelector(): void {
       window.location.reload();
     });
   }
-
-  // Mobile language pills — save + refresh on click
-  document.querySelectorAll<HTMLButtonElement>("[data-lang-pill]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const val = btn.getAttribute("data-lang-pill");
-      const lang = langMap[val || ""] || "en";
-      localStorage.setItem("i18nextLng", lang);
-      window.location.reload();
-    });
-  });
 
   // Load dynamic search suggestions for compact header dropdown
   initCompactSearchSuggestions();

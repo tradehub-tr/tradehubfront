@@ -38,7 +38,6 @@ const submenuI18nKeys: Record<string, string> = {
   "/pages/dashboard/orders.html": "dashboard.allOrders",
   "/pages/dashboard/orders.html#refunds": "dashboard.refundsAfterSales",
   "/pages/dashboard/orders.html#reviews": "dashboard.myReviews",
-  "/pages/dashboard/orders.html#coupons": "dashboard.coupons",
   // Payment
   "/pages/dashboard/payment.html#payment-management": "dashboard.paymentManagement",
   "/pages/dashboard/payment.html#transactions": "dashboard.transactions",

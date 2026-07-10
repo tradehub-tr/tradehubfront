@@ -10,8 +10,6 @@ export { FilterSidebar, initFilterSidebar, getDefaultFilterSections } from "./Fi
 export {
   ProductListingGrid,
   initProductListingGrid,
-  initProductSliders,
-  renderProductListingCard,
   renderNoResults,
   rerenderProductGrid,
   setGridViewMode,

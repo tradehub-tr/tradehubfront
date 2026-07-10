@@ -13,15 +13,16 @@ import { formatPrice } from "../../utils/currency";
 import type { RankingCategoryGroup } from "../../types/topRanking";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
-/** Parse numeric MOQ out of legacy backend format ("532 Nos" → 532). */
-function moqCount(moq: string | undefined): number {
-  if (!moq) return 1;
-  const m = String(moq).match(/(\d+)/);
-  return m ? parseInt(m[1], 10) || 1 : 1;
-}
-
-function moqLabel(moq: string | undefined): string {
-  return t("common.moq", { count: moqCount(moq), unit: t("common.moqUnit") });
+/** Rank rozetinin iki yanındaki küçük defne dalı süsü (emoji yasak → inline SVG). */
+function laurelBranch(mirrored = false): string {
+  return `
+    <svg viewBox="0 0 10 20" fill="currentColor" aria-hidden="true"
+      class="w-[6px] h-3 sm:w-[7px] sm:h-3.5 shrink-0${mirrored ? " -scale-x-100" : ""}">
+      <ellipse cx="7.3" cy="17.6" rx="2.4" ry="1.5" transform="rotate(40 7.3 17.6)"/>
+      <ellipse cx="4.9" cy="13.2" rx="2.4" ry="1.5" transform="rotate(70 4.9 13.2)"/>
+      <ellipse cx="4.3" cy="8.6" rx="2.4" ry="1.5" transform="rotate(100 4.3 8.6)"/>
+      <ellipse cx="5.8" cy="4.2" rx="2.4" ry="1.5" transform="rotate(130 5.8 4.2)"/>
+    </svg>`;
 }
 
 /** Build the URL for a category's "Daha fazla yükle" detail page. */
@@ -36,14 +37,21 @@ export function renderRankingGroupCard(group: RankingCategoryGroup): string {
 
   const productsHtml = group.products
     .map((product) => {
-      // Rank badge colors using theme semantic colors
-      let badgeClass = "";
-      if (product.rank === 1) badgeClass = "bg-success-500";
-      else if (product.rank === 2) badgeClass = "bg-info-500";
-      else badgeClass = "bg-warning-500";
+      // Çipsiz rozet: defne dalları madalya rengi taşır (altın/gümüş/bronz)
+      const laurelClass =
+        product.rank === 1
+          ? "text-[#d97706]"
+          : product.rank === 2
+            ? "text-[#94a3b8]"
+            : "text-[#b45309]";
+
+      // Dar iç kolonlarda (sm..xl arası 2-3 kolonlu grid) tam aralık sığmaz;
+      // "₺130,99-146,40" yerine "₺130,99+" gösterilir, tam değer title'da kalır.
+      const fullPrice = escapeHtml(formatPrice(product.price));
+      const dashIdx = fullPrice.indexOf("-");
+      const shortPrice = dashIdx > 0 ? `${fullPrice.slice(0, dashIdx)}+` : fullPrice;
 
       const safeProductName = escapeHtml(product.name);
-      const safeMoq = escapeHtml(product.moq);
       const safeImg = escapeHtml(sanitizeUrl(product.imageSrc || ""));
       const safeHref = escapeHtml(sanitizeUrl(product.href || "#"));
 
@@ -58,12 +66,19 @@ export function renderRankingGroupCard(group: RankingCategoryGroup): string {
           />
           <!-- Rank badge -->
           <span
-            class="absolute top-1.5 start-1.5 w-6 h-6 flex items-center justify-center rounded text-xs font-bold text-white shadow-sm ${badgeClass}"
-          >#${product.rank}</span>
+            class="absolute top-1.5 start-1.5 h-5 sm:h-6 inline-flex items-center justify-center gap-0.5 text-[10px] sm:text-xs font-bold ${laurelClass}"
+          >${laurelBranch()}<span class="text-text-primary">#${product.rank}</span>${laurelBranch(true)}</span>
+          <!-- Filigran sıra numarası -->
+          <span
+            aria-hidden="true"
+            class="absolute -bottom-1 end-1 text-[2rem] sm:text-[2.75rem] leading-none font-extrabold text-black/[0.07] pointer-events-none select-none"
+          >${product.rank}</span>
         </div>
         <div class="mt-1.5">
-          <p class="text-sm font-semibold text-text-primary">${escapeHtml(formatPrice(product.price))}</p>
-          <p class="text-xs text-text-tertiary mt-0.5">${escapeHtml(moqLabel(safeMoq))}</p>
+          <p
+            class="text-[11px] sm:text-xs xl:text-sm font-semibold text-text-primary truncate"
+            title="${fullPrice}"
+          ><span class="sm:hidden xl:inline">${fullPrice}</span><span class="hidden sm:inline xl:hidden">${shortPrice}</span></p>
         </div>
       </a>
     `;
@@ -80,7 +95,7 @@ export function renderRankingGroupCard(group: RankingCategoryGroup): string {
   return `
     <div class="relative bg-surface border border-border-default rounded-md p-4 hover:-translate-y-0.5 hover:shadow-md transition-[transform,box-shadow] duration-200 motion-reduce:transition-none motion-reduce:hover:translate-y-0">
       <a href="${headerHref}" class="block group/header before:absolute before:inset-0 before:content-['']" aria-label="${safeName}">
-        <h3 class="text-sm font-bold text-text-primary mb-3 truncate group-hover/header:underline" title="${safeName}">${safeName}</h3>
+        <h3 class="text-sm xl:text-base font-bold text-text-primary mb-3 truncate group-hover/header:underline" title="${safeName}">${safeName}</h3>
       </a>
       <div class="grid grid-cols-3 gap-3">
         ${productsHtml}
@@ -98,17 +113,14 @@ function renderSkeletonCard(): string {
         <div>
           <div class="aspect-square w-full rounded-md bg-gray-200"></div>
           <div class="mt-1.5 h-3 w-2/3 rounded bg-gray-200"></div>
-          <div class="mt-1 h-3 w-1/2 rounded bg-gray-200"></div>
         </div>
         <div>
           <div class="aspect-square w-full rounded-md bg-gray-200"></div>
           <div class="mt-1.5 h-3 w-2/3 rounded bg-gray-200"></div>
-          <div class="mt-1 h-3 w-1/2 rounded bg-gray-200"></div>
         </div>
         <div>
           <div class="aspect-square w-full rounded-md bg-gray-200"></div>
           <div class="mt-1.5 h-3 w-2/3 rounded bg-gray-200"></div>
-          <div class="mt-1 h-3 w-1/2 rounded bg-gray-200"></div>
         </div>
       </div>
     </div>
