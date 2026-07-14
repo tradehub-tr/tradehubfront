@@ -1,3 +1,50 @@
+## [v2.1.0] - 2026-07-14 PROD
+
+Bu surum istoc.com'da yayindadir.
+
+### Eklendi
+- feat(auth): /davet-kabul davet kabul sayfası + E2E eklendi (@aliiball)
+  - AcceptInvitePage + Alpine acceptInvitePage + acceptBuyerInvite wrapper
+  - staticPageUrl + nginx route + pages/auth/accept-invite entry
+  - accept-invite.spec.ts (token yok→hata, geçerli token→başarı)
+- feat(storefront): mobil PDP, chat, hero ve vitrin yenilemeleri eklendi (@ahmeetseker)
+  - Mobil ürün detay sayfası Alibaba tarzında yeniden tasarlandı: MediaViewer galerisi, OptionsSheet varyant seçimi, simetrik alt aksiyon barı; "Soru sor" QAModal'a bağlandı
+  - Chat: konuşma okundu işaretleme (unread rozet sıfırlama) ve mesaja gömülü ürün marker'ı eklendi; sabitlenen ürün konuşma-başına izole edildi
+  - Ana sayfa hero split yapıya geçirildi: Sarı İmza slider + En İyi Fırsatlar/RFQ yan paneli (HeroSidePanel)
+  - Size Özel Seçimler hero'su sahne + kanal şeridi + sparkline tasarımıyla yenilendi; Swiper/coverflow bağımlılığı ve mock veri dosyası kaldırıldı
+  - Paylaşılan ListingCard ve Pagination bileşenleri eklendi; Top Fırsatlar, Top Sıralama ve kategori grid'leri zengin karta geçirildi
+  - Kategori Vitrini'ne mock modu (?mock_cs=1) ve redesign uygulandı
+  - Siparişler: İadeler ve Değerlendirmeler sekmeleri yeniden tasarlandı; kullanılmayan kupon modülü silindi
+  - KYC, KYB ve Adresler sayfaları responsive iyileştirildi; KYB başvuru durumu Pending→Draft mantık hatası düzeltildi
+  - Buyer dashboard mobil düzeni düzeltildi (KYB banner, KPI grid, eksenler)
+  - Mobil menü drawer'ı TopBar'dan çıkarılıp MobileDashboardNav'a taşındı
+  - Mağaza başlığı rozet satırı sadeleştirildi; Tedarikçi sekmesi yalnız ikonlu kayıt satırlarına indirildi
+  - Auth sayfalarında beyaz iSTOC logosu kullanıldı
+  - chatPopup, ListingCard ve Pagination için testler eklendi; 4 dil dosyası güncellendi
+- feat(storefront): bilgi sayfaları redesign'ı ve değerlendirme akışı tamamlandı (@ahmeetseker)
+  - Yardım merkezi 3 sayfada V2.5 Split İstatistik düzenine geçirildi
+  - Satış sonrası hizmetler sayfası "Taşan Kartlar" (5D) ile yenilendi
+  - İade politikası bindirmeli kart (D) varyantıyla yeniden tasarlandı
+  - Trade Assurance sayfası Varyant 1 ile yenilendi, videolar Vite import'una alındı
+  - Satıcı Ol sayfası mobilde Sade Akış (TrustStrip + accordion + sticky CTA) oldu
+  - Kargo ifadeleri Sevkiyat'a dönüştürüldü, Ambar ve Liman kartları eklendi
+  - Değerlendirmelerim sekmesi bekleyen/yayınlanan yorum API'lerine bağlandı
+  - PDP breadcrumb'ındaki kategoriler listeleme sayfasına link oldu
+  - Native select'ler için paylaşılan SelectMenu enhancer'ı eklendi
+  - Favoriler filtreleri mobilde bottom sheet olarak açılır oldu
+  - Ayarlar profil kartı grid tabanlı V4 düzenine geçirildi
+  - Kullanılmayan avif görseller, perf raporları ve eski task dokümanları silindi
+
+### Duzeltildi
+- fix(dashboard): doğrulanmış kullanıcıda "gönderildi" yalanı düzeltildi (@aliiball)
+  - sendVerification already_verified yanıtında banner'ı kaldırır; aksi halde link maili gönderildi durumunu gösterir
+- fix(rfq): RFQ oluşturmayı capability-tabanlı yetkilendirmeye çevirdi (@aliiball)
+  - create_rfq artık "Buyer" rolü yerine is_buyer (Buyer rolü VEYA can_buy) VEYA admin kontrol ediyor + doc.insert(ignore_permissions=True)
+  - Satıcı hesaplarında role_profile="Seller Full Access" User.save'de "Buyer" rolünü resetleyip siliyordu; can_buy=1 (KYC) hybrid satıcılar RFQ açamıyordu
+  - Kodun kendi is_buyer tanımıyla (auth.py) hizalandı; okuma/hook'lar değişmedi
+- fix(storefront): dev backend proxy hedefi 8001'e güncellendi (@boraydeger32)
+
+---
 ## [v2.0.0-rc.1] - 2026-07-14 RC
 
 Bu surum rc.istoc.com'da onay asamasindadir.
