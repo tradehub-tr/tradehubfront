@@ -471,6 +471,7 @@ export function initFactorySliders(): void {
       cover: seller.cover_image || seller.banner_image,
       rating: seller.rating,
       reviewCount: seller.review_count,
+      verified: Boolean(seller.verified),
     });
   };
 }

@@ -700,12 +700,12 @@ function renderDetailPanel(inq: Inquiry): string {
 
 function renderFilterDropdown(type: "inquiry" | "rfq"): string {
   if (type === "inquiry") {
-    return `<div class="inq-filter-dropdown absolute top-full end-0 mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-1 origin-top-right transition-[opacity,transform] motion-reduce:transition-none duration-150 ease-out data-[open=false]:invisible data-[open=false]:opacity-0 data-[open=false]:scale-95 data-[open=false]:pointer-events-none motion-reduce:data-[open=false]:scale-100" data-open="false">
+    return `<div class="inq-filter-dropdown absolute top-full end-0 mt-1 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50 py-1 origin-top-right transition-[opacity,transform] motion-reduce:transition-none duration-150 ease-out data-[open=false]:invisible data-[open=false]:opacity-0 data-[open=false]:scale-95 data-[open=false]:pointer-events-none motion-reduce:data-[open=false]:scale-100" data-open="false">
       <button class="inq-filter-option w-full text-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" data-filter="all">${t("inquiries.allInquiries")}</button>
       <button class="inq-filter-option w-full text-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" data-filter="trash">${t("inquiries.trash")}</button>
     </div>`;
   }
-  return `<div class="rfq-filter-dropdown absolute top-full end-0 mt-1 w-44 bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-1 origin-top-right transition-[opacity,transform] motion-reduce:transition-none duration-150 ease-out data-[open=false]:invisible data-[open=false]:opacity-0 data-[open=false]:scale-95 data-[open=false]:pointer-events-none motion-reduce:data-[open=false]:scale-100" data-open="false">
+  return `<div class="rfq-filter-dropdown absolute top-full end-0 mt-1 w-44 bg-white border border-gray-200 rounded-md shadow-lg z-50 py-1 origin-top-right transition-[opacity,transform] motion-reduce:transition-none duration-150 ease-out data-[open=false]:invisible data-[open=false]:opacity-0 data-[open=false]:scale-95 data-[open=false]:pointer-events-none motion-reduce:data-[open=false]:scale-100" data-open="false">
     <button class="rfq-status-option w-full text-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" data-status="all">${t("inquiries.allStatus")}</button>
     <button class="rfq-status-option w-full text-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" data-status="Pending">${t("inquiries.statusPending")}</button>
     <button class="rfq-status-option w-full text-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" data-status="Approved">${t("inquiries.statusApproved")}</button>

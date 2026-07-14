@@ -766,10 +766,12 @@ Alpine.data("refundsComponent", () => ({
    ──────────────────────────────────────── */
 interface PendingReviewItem {
   order_item: string;
+  listing: string;
   order_number: string;
   product_name: string;
   image: string;
-  delivered_at: string;
+  quantity: number;
+  order_date: string;
 }
 
 interface MyReviewRow {
@@ -786,14 +788,14 @@ interface MyReviewRow {
 }
 
 const MOCK_PENDING_REVIEWS: PendingReviewItem[] = [
-  { order_item: "OI-1", order_number: "SO-2026-01901", product_name: "Endüstriyel Kablo Makarası 3x2.5mm² TTR 100 Metre — Siyah, Alev Geciktirmeli Dış Kılıf", image: mockImg("#64748b", "KM"), delivered_at: "2026-07-08" },
-  { order_item: "OI-2", order_number: "SO-2026-01856", product_name: "Paslanmaz Çelik Kelepçe Seti 8-12mm (500 Adet)", image: mockImg("#78716c", "KS"), delivered_at: "2026-07-04" },
-  { order_item: "OI-3", order_number: "SO-2026-01799", product_name: "Kraft Koli 40x30x30 cm Çift Oluklu (100'lü Paket)", image: "", delivered_at: "2026-06-30" },
+  { order_item: "OI-1", listing: "LST-MOCK-1", order_number: "SO-2026-01901", product_name: "Endüstriyel Kablo Makarası 3x2.5mm² TTR 100 Metre — Siyah, Alev Geciktirmeli Dış Kılıf", image: mockImg("#64748b", "KM"), quantity: 10, order_date: "2026-07-08" },
+  { order_item: "OI-2", listing: "LST-MOCK-2", order_number: "SO-2026-01856", product_name: "Paslanmaz Çelik Kelepçe Seti 8-12mm (500 Adet)", image: mockImg("#78716c", "KS"), quantity: 4, order_date: "2026-07-04" },
+  { order_item: "OI-3", listing: "LST-MOCK-3", order_number: "SO-2026-01799", product_name: "Kraft Koli 40x30x30 cm Çift Oluklu (100'lü Paket)", image: "", quantity: 2, order_date: "2026-06-30" },
 ];
 
 const MOCK_DONE_REVIEWS: MyReviewRow[] = [
   { name: "REV-1", rating: 5, title: "Tam aradığımız kalite", body: "İkinci toplu siparişimizdi, ürünler açıklamayla birebir uyumlu geldi. Paketleme özenliydi, teslimat söz verilen tarihten bir gün önce yapıldı. Depo ekibimiz sayım sırasında tek fire bile çıkarmadı.", status: "Published", submitted_at: "2026-06-28", product_name: "Endüstriyel Eldiven Nitril Kaplama (12'li Paket)", image: mockImg("#0f766e", "EL"), helpful_count: 14 },
-  { name: "REV-2", rating: 3, title: "Ürün iyi, teslimat gecikti", body: "Ürün kalitesinde sorun yok ancak kargo iki hafta gecikti ve süreçte bilgilendirme yapılmadı.", status: "Published", submitted_at: "2026-06-12", product_name: "LED Panel Armatür 60x60 40W (20 Adet)", image: mockImg("#7c3aed", "LP"), helpful_count: 3 },
+  { name: "REV-2", rating: 3, title: "Ürün iyi, teslimat gecikti", body: "Ürün kalitesinde sorun yok ancak sevkiyat iki hafta gecikti ve süreçte bilgilendirme yapılmadı.", status: "Published", submitted_at: "2026-06-12", product_name: "LED Panel Armatür 60x60 40W (20 Adet)", image: mockImg("#7c3aed", "LP"), helpful_count: 3 },
   { name: "REV-3", rating: 4, body: "Numuneyle aynı kalitede, fiyat/performans başarılı. Tekrar sipariş vereceğiz.", status: "Pending", submitted_at: "2026-07-07", product_name: "Mikrofiber Temizlik Bezi 40x40 (Koli — 300 Adet)", image: mockImg("#b45309", "MB") },
 ];
 
@@ -811,18 +813,48 @@ Alpine.data("reviewsSectionComponent", () => ({
       this.loading = false;
       return;
     }
+    await this.refresh();
+  },
+
+  async refresh() {
+    if (isOrdersMock()) return;
+    this.loading = true;
     try {
-      // Bekleyen değerlendirme endpoint'i henüz yok — yalnızca yapılanlar listelenir
-      const res = await callMethod<{ reviews: MyReviewRow[] }>(
-        "tradehub_core.api.storefront_api.get_my_reviews",
-        { page: 1, page_size: 50 }
-      );
-      this.done = res?.reviews || [];
+      const [pendingRes, doneRes] = await Promise.all([
+        callMethod<{ items: PendingReviewItem[] }>(
+          "tradehub_core.api.storefront_api.get_my_pending_reviews",
+          { page: 1, page_size: 50 }
+        ),
+        callMethod<{ reviews: MyReviewRow[] }>(
+          "tradehub_core.api.storefront_api.get_my_reviews",
+          { page: 1, page_size: 50 }
+        ),
+      ]);
+      this.pending = pendingRes?.items || [];
+      this.done = doneRes?.reviews || [];
     } catch (err) {
       console.warn("[Reviews] fetch failed:", err);
     } finally {
       this.loading = false;
     }
+  },
+
+  openReview(p: PendingReviewItem) {
+    window.dispatchEvent(
+      new CustomEvent("write-review-modal-show", {
+        detail: {
+          listingId: p.listing,
+          orderItems: [
+            {
+              name: p.order_item,
+              order: p.order_number,
+              order_date: p.order_date,
+              quantity: p.quantity,
+            },
+          ],
+        },
+      })
+    );
   },
 
   get activeCount(): number {
@@ -850,8 +882,10 @@ Alpine.data("reviewsSectionComponent", () => ({
   },
 
   reviewStatusChip(status: string): { label: string; cls: string } {
-    if (status === "Published")
+    if (status === "Approved" || status === "Published")
       return { label: t("orders.reviewStatusPublished"), cls: "bg-green-50 text-green-700 border border-green-200" };
+    if (status === "Rejected")
+      return { label: t("orders.reviewStatusRejected"), cls: "bg-red-50 text-red-700 border border-red-200" };
     return { label: t("ordersUi.underReview"), cls: "bg-amber-50 text-amber-700 border border-amber-200" };
   },
 }));

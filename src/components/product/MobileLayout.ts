@@ -325,25 +325,24 @@ export function MobileProductLayout(): string {
 
   // ── Sections 7-10: Collapsible info sections (all use collapsibleSection) ──
 
-  const shippingSection = collapsibleSection({
-    id: "pdm-ship-section",
-    title: t("product.shippingSection"),
-    sectionClass: "pdm-shipping-section bg-[#f0fdf4]",
-    sheetId: "shipping-modal", // special: opens existing ShippingModal
-    previewHtml: `
+  // Yöntem belli değilse sevkiyat bölümü hiç render edilmez
+  const shippingSection = p.shipping[0]?.method
+    ? collapsibleSection({
+        id: "pdm-ship-section",
+        title: t("product.shippingSection"),
+        sectionClass: "pdm-shipping-section bg-[#f0fdf4]",
+        sheetId: "shipping-modal", // special: opens existing ShippingModal
+        previewHtml: `
       <div id="pdm-ship-preview" class="px-4 pb-3.5 text-[13px] text-text-body leading-[1.6]">
-        <div class="pdm-ship-method font-semibold text-text-heading">${escapeHtml(p.shipping[0]?.method) || t("product.shippingLabel")}</div>
-        ${
-          p.shipping[0]
-            ? `<div class="pdm-ship-detail flex gap-4 mt-1">
+        <div class="pdm-ship-method font-semibold text-text-heading">${escapeHtml(p.shipping[0].method)}</div>
+        <div class="pdm-ship-detail flex gap-4 mt-1">
           <span class="text-text-muted">${t("product.estimatedCost")}: <strong>${escapeHtml(p.shipping[0].cost)}</strong></span>
           <span class="text-text-muted">${t("product.duration")}: <strong>${escapeHtml(p.shipping[0].estimatedDays)}</strong></span>
-        </div>`
-            : ""
-        }
+        </div>
       </div>
     `,
-  });
+      })
+    : "";
 
   // Alibaba app deseni: 2-kolon gri panel, hücre = kalın DEĞER üstte + soluk
   // anahtar altta (mock `.attrs/.attr`). İlk 6 spec; tam liste sheet'te kalır.

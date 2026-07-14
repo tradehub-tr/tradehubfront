@@ -1,5 +1,7 @@
 /**
- * Para İade Garantisi — Ticari Güvence iade süreci bilgilendirme sayfası
+ * Para İade Garantisi — Ticari Güvence iade süreci bilgilendirme sayfası.
+ * Layout: koyu hero bandı + bandın üzerine binen sticky başvuru kartı (sol)
+ * ve akan içerik (sağ); 880px altında tek kolona katlanır.
  */
 import '../style.css'
 import { initFlowbite } from 'flowbite'
@@ -12,35 +14,61 @@ import { startAlpine } from '../alpine'
 import { TradeAssuranceFooterCards } from '../components/shared/TradeAssuranceFooterCards'
 import { TradeAssuranceBadge } from '../components/shared/TradeAssuranceBadge'
 import { t } from '../i18n'
-import heroImage from '../assets/images/paraiadepolitikası.avif'
 
-/* ───────────────────────── SVG Icons ───────────────────────── */
+/* ───────────────────────── SVG Icons (lucide, stroke) ───────────────────────── */
 
-const requestIcon = `<svg width="64" height="64" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="15" cy="15" r="15" fill="#FFE285"/><g transform="translate(4,4)"><rect width="22" height="22" fill="none"/><path d="M16.0416667,3.20833333 C16.8010582,3.20833333 17.4166667,3.8239418 17.4166667,4.58333333 L17.4166667,18.7916667 L11,15.9270833 L4.58333333,18.7916667 L4.58333333,4.58333333 C4.58333333,3.8239418 5.1989418,3.20833333 5.95833333,3.20833333 L16.0416667,3.20833333 Z M16.0416667,4.58333333 L5.95833333,4.58333333 L5.95833333,16.6720307 L11,14.4212866 L16.0416667,16.6720307 L16.0416667,4.58333333 Z M13.75,10.0833333 L13.75,11.4583333 L8.25,11.4583333 L8.25,10.0833333 L13.75,10.0833333 Z M13.75,6.875 L13.75,8.25 L8.25,8.25 L8.25,6.875 L13.75,6.875 Z" fill="#000" fill-rule="nonzero"/></g></svg>`
+const svg = (paths: string): string =>
+  `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${paths}</svg>`
 
-const reviewIcon = `<svg width="64" height="64" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="15" cy="15" r="15" fill="#FFE285"/><g transform="translate(4,4)"><rect width="22" height="22" fill="none"/><path d="M11,3.66666667 C15.0501339,3.66666667 18.3333333,6.94986614 18.3333333,11 C18.3333333,15.0501339 15.0501339,18.3333333 11,18.3333333 C6.94986614,18.3333333 3.66666667,15.0501339 3.66666667,11 C3.66666667,6.94986614 6.94986614,3.66666667 11,3.66666667 Z M11,5.04166667 C7.70939496,5.04166667 5.04166667,7.70939496 5.04166667,11 C5.04166667,14.290605 7.70939496,16.9583333 11,16.9583333 C14.290605,16.9583333 16.9583333,14.290605 16.9583333,11 C16.9583333,7.70939496 14.290605,5.04166667 11,5.04166667 Z M11.6875,6.875 L11.6875,10.7135 L14.0625,12.0833333 L13.3750,13.1771 L10.3125,11.4583333 L10.3125,6.875 L11.6875,6.875 Z" fill="#000" fill-rule="nonzero"/></g></svg>`
+const requestIcon = svg('<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M12 18v-6"/><path d="M9 15h6"/>')
+const reviewIcon = svg('<circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>')
+const payoutIcon = svg('<rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/>')
+const warnIcon = svg('<path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/>')
+const arrowIcon = svg('<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>')
 
-const refundIcon = `<svg width="64" height="64" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="15" cy="15" r="15" fill="#FFE285"/><g transform="translate(4,4)"><rect width="22" height="22" fill="none"/><path d="M11,3.66666667 C15.0501339,3.66666667 18.3333333,6.94986614 18.3333333,11 C18.3333333,15.0501339 15.0501339,18.3333333 11,18.3333333 C6.94986614,18.3333333 3.66666667,15.0501339 3.66666667,11 C3.66666667,6.94986614 6.94986614,3.66666667 11,3.66666667 Z M11,5.04166667 C7.70939496,5.04166667 5.04166667,7.70939496 5.04166667,11 C5.04166667,14.290605 7.70939496,16.9583333 11,16.9583333 C14.290605,16.9583333 16.9583333,14.290605 16.9583333,11 C16.9583333,7.70939496 14.290605,5.04166667 11,5.04166667 Z M11.6875,6.875 L11.6875,11.6875 L15.125,11.6875 L15.125,13.0625 L10.3125,13.0625 L10.3125,6.875 L11.6875,6.875 Z" fill="#000" fill-rule="nonzero"/><path d="M15,12 L17,14 L19,12" stroke="#000" stroke-width="1.2" fill="none" transform="translate(1,1)"/></g></svg>`
+/* ───────────────────────── Helpers ───────────────────────── */
 
-/* ───────────────────────── Helper: Timeline Step ───────────────────────── */
-
-function timelineStep(
-  stepNum: string,
-  title: string,
-  description: string,
-  isLast: boolean = false
-): string {
+function timelineStep(stepNum: string, title: string, description: string, isLast: boolean = false): string {
   return `
-    <div class="relative flex gap-6 ${isLast ? '' : 'pb-12'}">
-      ${!isLast ? '<div class="absolute start-[23px] top-[48px] bottom-0 w-[2px] bg-gray-200"></div>' : ''}
-      <div class="flex-shrink-0 w-[48px] h-[48px] rounded-full bg-[#1C0C05] text-white flex items-center justify-center text-sm font-bold z-10">
+    <div class="relative flex gap-5 ${isLast ? '' : 'pb-10'}">
+      ${!isLast ? '<div class="absolute start-[21px] top-[46px] bottom-0 w-[2px] bg-gray-200"></div>' : ''}
+      <div class="flex-shrink-0 size-11 rounded-full bg-[#1C0C05] text-white flex items-center justify-center text-sm font-bold z-10">
         ${stepNum}
       </div>
-      <div class="flex-1 pt-2">
-        <h4 class="text-lg font-bold text-gray-900 mb-2">${title}</h4>
-        ${description ? `<p class="text-gray-600 text-sm leading-relaxed">${description}</p>` : ''}
+      <div class="flex-1 min-w-0 pt-1.5">
+        <h4 class="text-base font-bold text-gray-900 mb-1.5">${title}</h4>
+        <p class="text-gray-600 text-sm leading-relaxed max-w-[58ch]">${description}</p>
       </div>
     </div>
+  `
+}
+
+function processRow(icon: string, title: string, description: string): string {
+  return `
+    <div class="flex gap-4 p-5">
+      <div class="flex-shrink-0 size-10 rounded-md bg-[#FFF7DF] text-[#1C0C05] flex items-center justify-center">${icon}</div>
+      <div class="min-w-0">
+        <h3 class="text-[15px] font-bold text-gray-900 mb-0.5">${title}</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">${description}</p>
+      </div>
+    </div>
+  `
+}
+
+function factCard(value: string, label: string): string {
+  return `
+    <div class="border border-gray-200 rounded-md px-3.5 py-3">
+      <span class="block text-lg font-bold text-gray-900 tracking-tight">${value}</span>
+      <span class="text-xs font-semibold text-gray-500">${label}</span>
+    </div>
+  `
+}
+
+function sectionHead(eyebrow: string, title: string, intro: string = ''): string {
+  return `
+    <p class="text-xs font-bold tracking-[0.14em] uppercase text-[#B58900] mb-2">${eyebrow}</p>
+    <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 text-balance">${title}</h2>
+    ${intro ? `<p class="text-gray-600 text-base leading-relaxed max-w-[66ch]">${intro}</p>` : ''}
   `
 }
 
@@ -48,19 +76,16 @@ function timelineStep(
 
 function HeroSection(): string {
   return `
-    <section class="relative w-full h-[380px] md:h-[400px] overflow-hidden">
-      <img src="${heroImage}" alt="${t('infoPages.refundHeroTitle')}" class="absolute inset-0 w-full h-full object-cover" />
-      <div class="absolute inset-0 bg-gradient-to-r from-[#1C0C05]/90 via-[#1C0C05]/70 to-transparent"></div>
-      <div class="relative z-10 h-full container-boxed flex items-center">
-        <div class="max-w-xl">
-          ${TradeAssuranceBadge({ className: 'mb-6' })}
-          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
-            ${t('infoPages.refundHeroTitle')}
-          </h1>
-          <p class="text-white/80 text-base sm:text-lg leading-relaxed max-w-lg">
-            ${t('infoPages.refundHeroSubtitle')}
-          </p>
-        </div>
+    <section class="relative overflow-hidden bg-[#1C0C05]">
+      <div class="absolute inset-0 bg-[radial-gradient(560px_280px_at_85%_0%,rgba(245,184,0,0.20),transparent_62%),radial-gradient(500px_260px_at_10%_110%,rgba(245,184,0,0.10),transparent_60%)]"></div>
+      <div class="relative max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pt-10 lg:pt-14 pb-20 lg:pb-24">
+        ${TradeAssuranceBadge({ className: 'mb-5' })}
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight text-balance max-w-xl">
+          ${t('infoPages.refundHeroTitle')}
+        </h1>
+        <p class="mt-4 text-white/75 text-base sm:text-lg leading-relaxed max-w-lg">
+          ${t('infoPages.refundHeroSubtitle')}
+        </p>
       </div>
     </section>
   `
@@ -68,8 +93,8 @@ function HeroSection(): string {
 
 function BreadcrumbSection(): string {
   return `
-    <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
-      <nav class="text-sm text-gray-500">
+    <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
+      <nav class="text-sm text-gray-500 truncate">
         <a href="/ticaret-guvencesi/detay" class="hover:text-gray-800 transition-colors">${t('infoPages.tradeAssurance')}</a>
         <span class="mx-2">&gt;</span>
         <span class="text-gray-800 font-medium">${t('infoPages.refundHeroTitle')}</span>
@@ -78,87 +103,59 @@ function BreadcrumbSection(): string {
   `
 }
 
-function MoneyBackPolicySection(): string {
+function PanelCard(): string {
   return `
-    <section class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">${t('infoPages.refundProcessTitle')}</h2>
-      <p class="text-gray-600 text-base sm:text-lg leading-relaxed mb-10 max-w-3xl">
-        ${t('infoPages.refundProcessIntro')}
-      </p>
-
-      <!-- 3 Feature Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- Card 1: İade Talebi -->
-        <div class="border border-gray-200 rounded-md p-6 [@media(hover:hover)and(pointer:fine)]:hover:shadow-md transition-shadow duration-200 motion-reduce:transition-none">
-          <div class="mb-4">${requestIcon}</div>
-          <h3 class="text-lg font-bold text-gray-900 mb-2">${t('infoPages.refundCard1Title')}</h3>
-          <p class="text-gray-600 text-sm leading-relaxed">
-            ${t('infoPages.refundCard1Desc')}
-          </p>
-        </div>
-        <!-- Card 2: Satıcı Değerlendirmesi -->
-        <div class="border border-gray-200 rounded-md p-6 [@media(hover:hover)and(pointer:fine)]:hover:shadow-md transition-shadow duration-200 motion-reduce:transition-none">
-          <div class="mb-4">${reviewIcon}</div>
-          <h3 class="text-lg font-bold text-gray-900 mb-2">${t('infoPages.refundCard2Title')}</h3>
-          <p class="text-gray-600 text-sm leading-relaxed">
-            ${t('infoPages.refundCard2Desc')}
-          </p>
-        </div>
-        <!-- Card 3: İade Sonuçlanması -->
-        <div class="border border-gray-200 rounded-md p-6 [@media(hover:hover)and(pointer:fine)]:hover:shadow-md transition-shadow duration-200 motion-reduce:transition-none">
-          <div class="mb-4">${refundIcon}</div>
-          <h3 class="text-lg font-bold text-gray-900 mb-2">${t('infoPages.refundCard3Title')}</h3>
-          <p class="text-gray-600 text-sm leading-relaxed">
-            ${t('infoPages.refundCard3Desc')}
-          </p>
+    <aside class="relative -mt-12 lg:-mt-14 min-[880px]:sticky min-[880px]:top-[88px] bg-white border border-gray-200 rounded-md shadow-[0_18px_44px_-20px_rgba(28,12,5,0.30)] p-5 sm:p-6 flex flex-col gap-4">
+      <h2 class="text-base font-bold text-gray-900">${t('infoPages.refundPanelTitle')}</h2>
+      <p class="text-gray-600 text-sm leading-relaxed">${t('infoPages.refundPanelDesc')}</p>
+      <div class="grid grid-cols-2 gap-2.5">
+        ${factCard(t('infoPages.refundFact1Value'), t('infoPages.refundFact1Label'))}
+        ${factCard(t('infoPages.refundFact2Value'), t('infoPages.refundFact2Label'))}
+      </div>
+      <a href="/hesabim/siparisler" class="th-btn w-full">${t('infoPages.refundCard1Title')}${arrowIcon}</a>
+      <a href="/ticaret-guvencesi/detay" class="th-btn-outline w-full">${t('infoPages.tradeAssurance')}</a>
+      <div class="bg-[#FFF7DF] border border-[#F0E2B4] rounded-md p-4 flex gap-3">
+        <span class="flex-shrink-0 text-[#B58900] mt-0.5">${warnIcon}</span>
+        <div>
+          <h3 class="font-bold text-gray-900 text-sm mb-1">${t('infoPages.refundNoteTitle')}</h3>
+          <p class="text-gray-700 text-sm leading-relaxed">${t('infoPages.refundNoteDesc')}</p>
         </div>
       </div>
-    </section>
+    </aside>
   `
 }
 
-function HowToApplySection(): string {
+function ContentColumn(): string {
   return `
-    <section class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 bg-[#fafafa]">
-      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-10">${t('infoPages.refundApplyTitle')}</h2>
-
-      <div class="max-w-3xl">
-        ${timelineStep(
-          '01',
-          t('infoPages.refundStep1Title'),
-          t('infoPages.refundStep1Desc')
-        )}
-        ${timelineStep(
-          '02',
-          t('infoPages.refundStep2Title'),
-          t('infoPages.refundStep2Desc')
-        )}
-        ${timelineStep(
-          '03',
-          t('infoPages.refundStep3Title'),
-          t('infoPages.refundStep3Desc')
-        )}
-        ${timelineStep(
-          '04',
-          t('infoPages.refundStep4Title'),
-          t('infoPages.refundStep4Desc'),
-          true
-        )}
-      </div>
-
-      <!-- Info Note -->
-      <div class="mt-10 bg-white border-s-4 border-amber-500 rounded-e-md p-5 max-w-3xl">
-        <div class="flex gap-3">
-          <svg class="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.008v.008H12v-.008z"/>
-          </svg>
-          <div>
-            <h4 class="font-bold text-gray-900 text-sm mb-1">${t('infoPages.refundNoteTitle')}</h4>
-            <p class="text-gray-700 text-sm leading-relaxed">
-              ${t('infoPages.refundNoteDesc')}
-            </p>
-          </div>
+    <div class="min-w-0 pt-2 min-[880px]:pt-8 flex flex-col gap-12 lg:gap-14">
+      <section>
+        ${sectionHead(t('infoPages.refundEyebrowProcess'), t('infoPages.refundProcessTitle'), t('infoPages.refundProcessIntro'))}
+        <div class="mt-6 border border-gray-200 rounded-md divide-y divide-gray-200 bg-white">
+          ${processRow(requestIcon, t('infoPages.refundCard1Title'), t('infoPages.refundCard1Desc'))}
+          ${processRow(reviewIcon, t('infoPages.refundCard2Title'), t('infoPages.refundCard2Desc'))}
+          ${processRow(payoutIcon, t('infoPages.refundCard3Title'), t('infoPages.refundCard3Desc'))}
         </div>
+      </section>
+
+      <section>
+        ${sectionHead(t('infoPages.refundEyebrowApply'), t('infoPages.refundApplyTitle'))}
+        <div class="mt-7">
+          ${timelineStep('01', t('infoPages.refundStep1Title'), t('infoPages.refundStep1Desc'))}
+          ${timelineStep('02', t('infoPages.refundStep2Title'), t('infoPages.refundStep2Desc'))}
+          ${timelineStep('03', t('infoPages.refundStep3Title'), t('infoPages.refundStep3Desc'))}
+          ${timelineStep('04', t('infoPages.refundStep4Title'), t('infoPages.refundStep4Desc'), true)}
+        </div>
+      </section>
+    </div>
+  `
+}
+
+function BodySection(): string {
+  return `
+    <section class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pb-14 lg:pb-20">
+      <div class="grid grid-cols-1 min-[880px]:grid-cols-[320px_1fr] gap-8 min-[880px]:gap-10 items-start">
+        ${PanelCard()}
+        ${ContentColumn()}
       </div>
     </section>
   `
@@ -176,11 +173,9 @@ appEl.innerHTML = `
   ${MegaMenu()}
 
   <main class="flex-1 min-w-0 bg-white">
-    ${HeroSection()}
     ${BreadcrumbSection()}
-    <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8"><hr class="border-gray-100" /></div>
-    ${MoneyBackPolicySection()}
-    ${HowToApplySection()}
+    ${HeroSection()}
+    ${BodySection()}
     ${TradeAssuranceFooterCards()}
   </main>
 
@@ -192,8 +187,8 @@ appEl.innerHTML = `
 
 initMegaMenu()
 initFlowbite()
-mountChatPopup();
-initChatTriggers();
+mountChatPopup()
+initChatTriggers()
 startAlpine()
 initStickyHeaderSearch()
 initLanguageSelector()

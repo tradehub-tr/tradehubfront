@@ -36,7 +36,7 @@ const tr = {
       info_membership: "Üyelik Programı - iStoc TradeHub",
       info_payments: "Güvenli ve Kolay Ödemeler - iStoc TradeHub",
       info_refund_policy: "Para İade Politikası - iStoc TradeHub",
-      info_shipping_logistics: "Kargo ve Lojistik Hizmetleri - iStoc TradeHub",
+      info_shipping_logistics: "Sevkiyat ve Lojistik Hizmetleri - iStoc TradeHub",
       info_trade_assurance_detail: "Ticari Güvence Detayı - iStoc TradeHub",
       legal_accessibility: "Erişilebilirlik - iStoc TradeHub",
       legal_cookies: "Çerez Politikası - iStoc TradeHub",
@@ -92,7 +92,7 @@ const tr = {
       featVerifiedDesc: "Satıcı Sistemi",
       featTransparent: "Komisyonsuz",
       featTransparentDesc: "%0 Komisyon",
-      badgeFastShipping: "Hızlı Kargo",
+      badgeFastShipping: "Hızlı Sevkiyat",
       trustBar: "SSL Şifreleme · Güvenli Ödeme",
       mobilePromoTitle: "Global B2B Ticaret Ağı",
       mobilePromoSubtitle: "Güvenli ödeme ve şeffaf ticaret",
@@ -215,8 +215,8 @@ const tr = {
       shippingAddressTitle: "Teslimat Adresi",
       close: "Kapat",
       headerSubtitleWithCounts:
-        "{{suppliers}} tedarikçiden {{items}} ürün — adresini, ödeme yöntemini ve kargo seçimlerini doğrula.",
-      headerSubtitle: "Adresini, ödeme yöntemini ve kargo seçimlerini doğrula.",
+        "{{suppliers}} tedarikçiden {{items}} ürün — adresini, ödeme yöntemini ve sevkiyat seçimlerini doğrula.",
+      headerSubtitle: "Adresini, ödeme yöntemini ve sevkiyat seçimlerini doğrula.",
       homePage: "Ana Sayfa",
       invalidCoupon: "Geçersiz kupon kodu",
       addressSaveFailed: "Adres kaydedilemedi",
@@ -442,15 +442,23 @@ const tr = {
         "Her alışveriş sonrası satıcılarınızı değerlendirin, platformun kalitesine katkıda bulunun",
       tradeAssurance: "Ticari Güvence",
       afterSalesSupport: "Satış sonrası destek",
-      afterSalesFeaturesTitle: "Sipariş sonrası size neler sunuyoruz?",
-      afterSalesFeaturesIntro:
-        "iStoc, alım-satım sürecini şeffaf ve güvenli kılacak temel araçları sunar. Siparişiniz tamamlandıktan sonra da platform üzerinde destek almaya devam edebilirsiniz.",
       sellerRatingTitle: "Satıcı Değerlendirme Sistemi",
       sellerRatingDesc:
         "Aldığınız ürün ve hizmeti 1-5 yıldız arasında puanlayıp yorum yazabilirsiniz. Değerlendirmeleriniz diğer alıcılara rehberlik eder ve satıcıların kalitesini şekillendirir.",
       directContactTitle: "Satıcı ile Doğrudan İletişim",
       directContactDesc:
         "Sipariş sonrası sorularınızı, ürünle ilgili taleplerinizi veya yaşadığınız sorunları doğrudan satıcınıza iletebilir, çözüm arayışına ortak olabilirsiniz.",
+      asReviewLink: "Değerlendir",
+      asMessageLink: "Mesaj gönder",
+      asKpiResolutionValue: "%98",
+      asKpiResolutionLabel: "Sorun çözüm oranı",
+      asKpiResponseValue: "24 saat",
+      asKpiResponseLabel: "Ortalama ilk yanıt",
+      asKpiReviewsValue: "12.400+",
+      asKpiReviewsLabel: "Doğrulanmış değerlendirme",
+      asCtaTitle: "Bir sorun mu yaşıyorsunuz?",
+      asCtaDesc: "Müşteri hizmetleri ekibimiz hafta içi 09.00 – 18.00 arasında yanınızda.",
+      asCtaBtn: "Destek talebi oluştur",
       subPaymentFailedTitle: "Aboneliğinizin ödemesi başarısız",
       subPaymentFailedDesc:
         "Mağazanız erişiminizi sürdürmek için ödeme bilgilerinizi güncellemeniz gerekiyor.",
@@ -500,14 +508,11 @@ const tr = {
     },
     infoPages: {
       tradeAssurance: "Ticari Güvence",
-      shippingHeroTitle: "Kargo ve lojistik hizmetleri",
-      shippingHeroSubtitle: "Siparişinizi güvenle takip edin, size en uygun kargo tipini seçin",
-      shippingTypesTitle: "Kargo tipleri",
+      shippingHeroTitle: "Sevkiyat ve lojistik hizmetleri",
+      shippingHeroSubtitle: "Siparişinizi güvenle takip edin, size en uygun sevkiyat tipini seçin",
+      shippingTypesTitle: "Sevkiyat tipleri",
       shippingTypesIntro:
-        "iStoc üzerinden satıcılarla anlaşarak siparişinize uygun kargo tipini seçebilirsiniz. Her kargo tipinin teslimat süresi ve maliyet yapısı farklıdır.",
-      shippingExpressTitle: "Express (Hızlı) Kargo",
-      shippingExpressDesc:
-        "Acil siparişleriniz için en hızlı teslimat seçeneği. Şehir içi ve yakın bölgelerde tercih edilir.",
+        "iStoc üzerinden satıcılarla anlaşarak siparişinize uygun sevkiyat tipini seçebilirsiniz. Her sevkiyat tipinin teslimat süresi ve maliyet yapısı farklıdır.",
       shippingAirTitle: "Hava Kargo",
       shippingAirDesc:
         "Uluslararası ve uzak mesafe siparişlerde hızlı teslimat sağlar. Değerli ve acil ürünler için uygundur.",
@@ -516,20 +521,20 @@ const tr = {
         "Toplu ve ağır yükler için ekonomik çözüm. Uluslararası konteyner ve büyük hacimli siparişlerde idealdir.",
       shippingLandTitle: "Kara Kargo",
       shippingLandDesc: "Yurt içi ve komşu ülke teslimatlarında ekonomik ve güvenilir seçenek.",
-      shippingStandardTitle: "Standart Kargo",
-      shippingStandardDesc:
-        "Varsayılan teslimat seçeneği. Normal ebat ve ağırlıktaki siparişler için uygun fiyatlı çözüm.",
-      shippingFreeTitle: "Ücretsiz Kargo",
-      shippingFreeDesc:
-        "Belirli ürünlerde satıcı tarafından sunulan ücretsiz kargo imkanı. Ürün sayfasında işaretli olarak görünür.",
+      shippingAmbarTitle: "Ambar",
+      shippingAmbarDesc:
+        "Karayolu ambar ve parsiyel gönderim seçeneği. Toplu yüklerde ekonomik ve güvenilir teslimat sağlar.",
+      shippingPortTitle: "Liman",
+      shippingPortDesc:
+        "Konteyner ve dökme yükler için limanda teslim seçeneği. Büyük hacimli deniz sevkiyatlarında tercih edilir.",
       trackingTitle: "Takip numarası ile kolay izleme",
-      trackingPara1Before: "Satıcınız siparişinizi kargoya verdiğinde, ",
+      trackingPara1Before: "Satıcınız siparişinizi sevk ettiğinde, ",
       trackingNumber: "takip numarası",
       trackingPara1Mid: " ve ",
-      trackingCarrierInfo: "kargo firması bilgisi",
+      trackingCarrierInfo: "sevkiyat firması bilgisi",
       trackingPara1After: " sipariş detaylarınıza otomatik olarak eklenir.",
       trackingPara2:
-        "Siparişlerim sayfasından her siparişinizin güncel durumunu görebilir, kargoya verildiği andan teslim alınana kadar süreci takip edebilirsiniz.",
+        "Siparişlerim sayfasından her siparişinizin güncel durumunu görebilir, sevk edildiği andan teslim alınana kadar süreci takip edebilirsiniz.",
       trackingAutoNote: "Takip numarası sipariş detaylarında otomatik görünür",
       orderProcessTitle: "Sipariş süreci nasıl işler?",
       orderProcessIntro:
@@ -539,9 +544,9 @@ const tr = {
         "Siparişinizi oluşturduktan sonra ödeme yöntemini seçip işlemi tamamlarsınız.",
       timelineStep2Title: "Onaylanıyor",
       timelineStep2Desc: "Ödeme doğrulandıktan sonra satıcı siparişinizi hazırlamaya başlar.",
-      timelineStep3Title: "Kargoda",
+      timelineStep3Title: "Sevkiyatta",
       timelineStep3Desc:
-        "Satıcı siparişinizi kargoya verir ve takip numarası sipariş detaylarınıza eklenir.",
+        "Satıcı siparişinizi sevk eder ve takip numarası sipariş detaylarınıza eklenir.",
       timelineStep4Title: "Tamamlandı",
       timelineStep4Desc: "Siparişiniz size ulaştığında süreç tamamlanmış olur.",
       paymentsHeroAlt: "Güvenli ödeme",
@@ -615,6 +620,15 @@ const tr = {
       refundNoteTitle: "İade süreci hakkında",
       refundNoteDesc:
         "Sipariş sürecinizin her aşamasında doğrudan satıcıyla mesajlaşarak sorunları çözebilirsiniz. Satıcı ile anlaşmazlık halinde iade talebinizi oluşturabilirsiniz.",
+      refundPanelTitle: "Başvurunuzu başlatın",
+      refundPanelDesc:
+        "İade talebinizi birkaç dakika içinde oluşturun; her adımı sipariş detaylarınızdan izleyin.",
+      refundFact1Value: "4 adım",
+      refundFact1Label: "Basit başvuru akışı",
+      refundFact2Value: "%100",
+      refundFact2Label: "Ödeme koruması",
+      refundEyebrowProcess: "Süreç",
+      refundEyebrowApply: "Başvuru",
     },
     kycUi: {
       accountType: "Hesap türü",
@@ -739,7 +753,7 @@ const tr = {
       statusPaymentConfirming: "Ödeme Onaylanıyor",
       statusAwaitingPayment: "Ödeme Bekleniyor",
       statusPreparing: "Hazırlanıyor",
-      statusShipping: "Kargoda",
+      statusShipping: "Sevkiyatta",
       statusCompleted: "Tamamlandı",
       statusCancelled: "İptal Edildi",
       statusUnknown: "Bilinmeyen Durum",
@@ -752,7 +766,7 @@ const tr = {
         "Havale dekontu inceleniyor. Satıcı ödemenizi onayladıktan sonra sipariş hazırlanmaya başlayacak.",
       descCompletePayment: "Ödemenizi tamamlamak için havale makbuzunu gönderin.",
       refundOnlyShippedDelivered:
-        "İade talebi yalnızca kargoya verilmiş veya teslim edilmiş siparişler için açılabilir.",
+        "İade talebi yalnızca sevk edilmiş veya teslim edilmiş siparişler için açılabilir.",
       refundAlreadyApproved: "Bu sipariş için iade talebiniz zaten onaylanmıştır.",
       refundAlreadyPending: "Bu sipariş için bekleyen bir iade talebiniz zaten bulunmaktadır.",
       genericError: "Bir hata oluştu.",
@@ -857,11 +871,11 @@ const tr = {
         'Ödeme alındığını onaylamak istiyor musunuz? Sipariş durumu "Onaylanıyor" olarak güncellenecek.',
       paymentConfirmed: "Ödeme onaylandı, sipariş işleme alındı",
       confirmFailed: "Onaylama başarısız",
-      orderShipped: "Sipariş kargoya verildi olarak işaretlendi",
+      orderShipped: "Sipariş sevk edildi olarak işaretlendi",
       actionFailed: "İşlem başarısız",
       statusWaitingPayment: "Ödeme Bekleniyor",
       statusConfirming: "Onaylanıyor",
-      statusDelivering: "Kargoda",
+      statusDelivering: "Sevkiyatta",
       statusCompleted: "Tamamlandı",
       statusCancelled: "İptal Edildi",
       following: "Takip Ediliyor",
@@ -1019,14 +1033,14 @@ const tr = {
       filterAll: "Tümü",
       filterUnpaid: "Ödeme Bekl.",
       filterConfirming: "Onaylanıyor",
-      filterDelivering: "Kargoda",
+      filterDelivering: "Sevkiyatta",
       filterCompleted: "Tamamlandı",
       filterCancelled: "İptal",
       noOrdersFound: "Sipariş bulunamadı",
       more: "daha",
       confirmPayment: "Ödeme Onayla",
       confirming: "Onaylanıyor...",
-      ship: "Kargoya Ver",
+      ship: "Sevk Et",
       processing: "İşleniyor...",
       detail: "Detay",
       confirmPaymentDetail: "Ödemeyi Onayla",
@@ -1040,7 +1054,7 @@ const tr = {
       viewReceipt: "Dekontu Görüntüle",
       paymentSummary: "Ödeme Özeti",
       subtotal: "Ara Toplam",
-      shipping: "Kargo",
+      shipping: "Sevkiyat",
       total: "Toplam",
       orderItems: "Sipariş Kalemleri",
       colQuantity: "Adet",
@@ -1059,11 +1073,11 @@ const tr = {
       newCategory: "Yeni Kategori",
       categoryName: "Kategori Adı",
       sortOrder: "Sıralama",
-      shipOrderMsg: "numaralı sipariş kargoya verildi olarak işaretlenecek.",
-      trackingNumber: "Kargo Takip Numarası",
+      shipOrderMsg: "numaralı sipariş sevk edildi olarak işaretlenecek.",
+      trackingNumber: "Sevkiyat Takip Numarası",
       optional: "(opsiyonel)",
       trackingPlaceholder: "örn. 1234567890",
-      shipConfirmHint: 'Onayladığınızda sipariş "Kargoda" durumuna geçecek.',
+      shipConfirmHint: 'Onayladığınızda sipariş "Sevkiyatta" durumuna geçecek.',
     },
     settingsUi: {
       businessHint: "Bu bölümü doldurun, tedarikçilerden daha iyi teklifler alın.",
@@ -1075,10 +1089,6 @@ const tr = {
     tradeAssurance: {
       heroTitle: "iStoc'da ödemeden teslimata korumadan faydalanın",
       howItWorksCta: "Süreç şu şekilde işler:",
-      serviceInfoTitle: "Trade Assurance, satın alım yolculuğunuzun her aşamasını kapsar",
-      serviceInfoDesc:
-        "iStoc'daki alıcılara güvenli ödeme yapma imkanı sunuyoruz, ürün veya nakliye sorunları gibi öngörülemeyen durumlara karşı koruma sağlıyoruz ve satın almayla ilgili sorunları çözmek için alıcılarla tedarikçiler arasında arabuluculuk yapıyoruz.",
-      watchMore: "Daha fazla bilgi almak için izleyin",
       statOrders: "Trade Assurance siparişleri",
       statBought: "Bizden satın alındı",
       statSuppliers: "Tedarikçiler",
@@ -1110,7 +1120,6 @@ const tr = {
       sourceProducts: "Destekleyici ürünleri tedarik edin",
       learnHow: "Nasıl çalıştığını öğrenin",
       eligibleBuyersNote: "*Uygun alıcılar için",
-      securePaymentAlt: "Güvenli ödeme",
       refundTitle: "Para iade politikası",
       refundDesc1:
         "Siparişiniz gönderilmezse, kaybolursa veya kusurlu, yanlış, hasarlı veya başka bir sorunla elinize ulaşırsa paranızı geri almak için para iadesi talebinde bulunun.",
@@ -1135,8 +1144,6 @@ const tr = {
         '"Trade Assurance kullandığınız ve korunduğunuz gerçeğini bildiğiniz için endişelenmenize gerek kalmaz."',
       testimonial3:
         '"iStoc üzerinden ödeme yapmak çok güvenli hissettiriyor, emanet sistemi alıcılar için gerçek bir güvence."',
-      testimonial4:
-        '"Satış sonrası destek ve hızlı iade süreci beklentilerimizin çok üzerindeydi."',
       detailHeroTitle: "Ticari Güvence Sistemi ile Güvenli Ticaret",
       detailHeroDesc:
         "İşlemlerinizin her aşamasında güven ve şeffaflık sağlayarak, uzun vadeli iş ortaklıkları kurmanıza yardımcı oluyoruz.",
@@ -1191,15 +1198,15 @@ const tr = {
       layer2Desc:
         "Özel üretim veya baskılı ürün siparişlerinde daha kapsamlı koruma sağlanır. Sistem şunları garantiler:",
       layer2Item1:
-        "Ürün hazırlanmasından kargolanmasına kadar tüm adımların iStoc ekibi tarafından takibi",
+        "Ürün hazırlanmasından sevk edilmesine kadar tüm adımların iStoc ekibi tarafından takibi",
       layer2Item2: "Müşteriye eksiksiz ve kusursuz teslimatın yapılması",
       layer2Item3: "Ürün doğruluğu, kalite kontrolü ve zamanında teslimat kontrolü",
       layer2Item4: "Gerekirse ürün kurulumu ve sevkiyat desteği",
       layer2Item5: "Şartlar yerine getirilmediğinde para iadesi veya satıcıya tazminat uygulanması",
       detailShippingDesc1:
-        "Siparişinize uygun kargo tipini seçin — Express, Hava, Deniz, Kara veya Standart kargo seçenekleri mevcuttur.",
+        "Siparişinize uygun sevkiyat tipini seçin — Hava, Deniz, Kara, Ambar veya Liman seçenekleri mevcuttur.",
       detailShippingDesc2:
-        "Siparişiniz kargoya verildiğinde takip numarası ve kargo firması bilgisi otomatik olarak sipariş detaylarınıza eklenir. Kargoya verildiği andan teslim alınana kadar süreci platform üzerinden izleyebilirsiniz.",
+        "Siparişiniz sevk edildiğinde takip numarası ve sevkiyat firması bilgisi otomatik olarak sipariş detaylarınıza eklenir. Sevk edildiği andan teslim alınana kadar süreci platform üzerinden izleyebilirsiniz.",
       shippingLogisticsAlt: "Gönderim ve lojistik",
       footerTermsTitle: "Hükümler ve Koşullar",
       footerRead: "Okuyun",
@@ -1207,6 +1214,18 @@ const tr = {
       footerDownload: "İndir",
       footerSupportTitle: "Müşteri Hizmetleri",
       footerGetHelp: "Yardım alın",
+      heroSubtitle:
+        "iStoc TradeHub üzerinde verdiğiniz her sipariş, ödeme anından ürün elinize ulaşana kadar güvence altındadır. Sorun yaşarsanız paranız iade edilir.",
+      heroCtaPrimary: "Nasıl çalışır?",
+      heroCtaSecondary: "Kapsamı İncele",
+      paymentsMethodsTitle: "Kabul edilen ödeme yöntemleri",
+      paymentsCurrenciesTitle: "Desteklenen para birimleri",
+      logisticsStepProduction: "Üretim",
+      logisticsStepShipping: "Kargo",
+      logisticsStepCustoms: "Gümrük",
+      logisticsStepDelivery: "Teslimat",
+      finalCtaTitle: "Güvenle ticarete başlamaya hazır mısınız?",
+      finalCtaButton: "Şimdi Başlayın",
     },
     // ============================================================
     // COMMON
@@ -1278,7 +1297,7 @@ const tr = {
       login: "Giriş Yap",
       deliverTo: "Teslimat:",
       specifyLocation: "Konumunuzu belirtin",
-      shippingVary: "Kargo seçenekleri ve ücretleri konumunuza göre değişir",
+      shippingVary: "Sevkiyat seçenekleri ve ücretleri konumunuza göre değişir",
       addAddress: "Adres ekle",
       enterZip: "Posta kodunu girin",
       langCurrency: "Dil ve para birimini ayarla",
@@ -1296,7 +1315,7 @@ const tr = {
       tradeAssuranceDesc: "Ödemeden teslimata kadar koruma",
       safePayments: "Güvenli ve kolay ödemeler",
       moneyBack: "Para iade politikası",
-      shippingLogistics: "Kargo ve lojistik hizmetleri",
+      shippingLogistics: "Sevkiyat ve lojistik hizmetleri",
       afterSales: "Satış sonrası korumalar",
       myCart: "Sepetim",
       cartEmpty: "Sepetiniz boş",
@@ -1412,8 +1431,8 @@ const tr = {
       safePaymentsDesc: "Çoklu ödeme yöntemleri ve şeffaf ödeme akışı.",
       moneyBack: "Para iade politikası",
       moneyBackDesc: "Ürün açıklamayla eşleşmediğinde iade süreci başlatabilirsin.",
-      shippingLogistics: "Kargo ve lojistik hizmetleri",
-      shippingLogisticsDesc: "Kargo takibi ve teslimat çözümleri tek çatı altında.",
+      shippingLogistics: "Sevkiyat ve lojistik hizmetleri",
+      shippingLogisticsDesc: "Sevkiyat takibi ve teslimat çözümleri tek çatı altında.",
       afterSales: "Satış sonrası korumalar",
       afterSalesDesc: "Satıcıyla doğrudan iletişim ve çözüm desteği.",
       tradeAssuranceTitle: "Ticari Güvence Sistemi",
@@ -1775,7 +1794,7 @@ const tr = {
       orderSummary: "Sipariş özeti",
       productSubtotal: "Ürün ara toplamı",
       productDiscount: "Ürün indirimi",
-      shippingFee: "Kargo ücreti",
+      shippingFee: "Sevkiyat ücreti",
       subtotalExTax: "Ara toplam (vergi hariç)",
       youSaved: "Siparişinizde {{amount}} tasarruf edildi",
       checkout: "Ödeme yap",
@@ -1815,21 +1834,21 @@ const tr = {
       price: "Fiyat",
       productTotal: "Ürün toplamı",
       variationItems: "{{variation}} varyasyon {{items}} ürün",
-      shippingTotal: "Kargo toplamı",
+      shippingTotal: "Sevkiyat toplamı",
       subtotal: "Ara Toplam",
       addToCartBtn: "Sepete Ekle",
       orderSample: "Numune Al",
       pleaseSelectQty: "Lütfen miktar seçin",
-      selectShipping: "Kargo servisi seçin",
+      selectShipping: "Sevkiyat servisi seçin",
       shippingTo: "Gönderim",
       shippingQty: "Miktar",
       savedOnOrder: "Siparişinizde {{amount}} tasarruf edildi",
-      shipping: "Kargo",
+      shipping: "Sevkiyat",
       shippingNegotiate:
-        "Kargo ücreti ve teslimat tarihi görüşülecektir. Daha fazla bilgi için tedarikçi ile sohbet edin.",
+        "Sevkiyat ücreti ve teslimat tarihi görüşülecektir. Daha fazla bilgi için tedarikçi ile sohbet edin.",
       shippingNegotiable: "Görüşülebilir",
       changeShipping: "Değiştir",
-      changeShippingLong: "Kargo seçeneklerini değiştir",
+      changeShippingLong: "Sevkiyat seçeneklerini değiştir",
       deliveryInDays: "{{days}} iş günü içinde teslim",
       deliveryDiscussWithSeller: "Teslim süresini satıcı ile görüşün",
       favorite: "Favori",
@@ -1872,7 +1891,7 @@ const tr = {
       notSelected: "Seçilmedi",
       paymentMethodLabel: "Ödeme yöntemi",
       orderItemsLabel: "Sipariş kalemleri",
-      shippingFeeLabel: "Kargo ücreti",
+      shippingFeeLabel: "Sevkiyat ücreti",
       couponDiscountLabel: "Kupon indirimi",
       totalLabel: "Toplam",
       backToCheckoutBtn: "Ödemeye geri dön",
@@ -1937,7 +1956,7 @@ const tr = {
       couponServiceUnavailable: "Kupon servisi şu an kullanılamıyor",
       orderSummary: "Sipariş özeti",
       itemSubtotal: "Ürün ara toplamı",
-      estimatedShipping: "Kargo ücreti",
+      estimatedShipping: "Sevkiyat ücreti",
       couponPlaceholder: "Kupon kodunu girin",
       couponDiscount: "Kupon indirimi",
       total: "Toplam",
@@ -1953,11 +1972,11 @@ const tr = {
       // Ürünler & teslimat alanı
       itemsAndDeliveryOptions: "Ürünler ve teslimat seçenekleri",
       changeShippingMethod: "Değiştir",
-      selectShippingMethod: "Kargo yöntemini seçin",
+      selectShippingMethod: "Sevkiyat yöntemini seçin",
       confirm: "Onayla",
       cancel: "İptal",
-      shippingFee: "Kargo ücreti",
-      shippingUnavailable: "Bu satıcı için kargo bilgisi tanımlı değil.",
+      shippingFee: "Sevkiyat ücreti",
+      shippingUnavailable: "Bu satıcı için sevkiyat bilgisi tanımlı değil.",
       itemsDeliveryEmpty: "Ürün ve teslimat detayları burada görünecek.",
       estimatedDeliveryRange: "Tahmini teslimat: {{start}} - {{end}}",
       pieceUnit: "adet",
@@ -2072,7 +2091,7 @@ const tr = {
         dzRelease: "Bırakın",
         aspectQuality: "Ürün Kalitesi",
         aspectService: "Satıcı İletişimi",
-        aspectShipping: "Kargo / Teslimat",
+        aspectShipping: "Sevkiyat / Teslimat",
         aspectSpecMatch: "Açıklamaya Uygunluk",
         errSelectOrder: "Yorum yapabilmek için onaylı bir sipariş seçin.",
         errRating: "Lütfen 1-5 arası puan verin.",
@@ -2110,7 +2129,7 @@ const tr = {
       color: "Renk",
       size: "Beden",
       material: "Malzeme",
-      shippingInfo: "Kargo Bilgileri",
+      shippingInfo: "Sevkiyat Bilgileri",
       estimatedDelivery: "Tahmini Teslimat",
       businessDays: "{{min}}-{{max}} iş günü",
       piecesAvailable: "{{count}} adet mevcut",
@@ -2161,8 +2180,8 @@ const tr = {
       drawingCustomization: "Çizim bazlı özelleştirme",
       sampleCustomization: "Numune bazlı özelleştirme",
       fullCustomization: "Tam özelleştirme (OEM/ODM)",
-      shippingLabel: "Kargo",
-      shippingCost: "Kargo: {{cost}} \u00b7 {{days}}",
+      shippingLabel: "Sevkiyat",
+      shippingCost: "Sevkiyat: {{cost}} \u00b7 {{days}}",
       changeLabel: "Değiştir",
       orderProtectionTitle: "iStoc Sipariş Koruma",
       securePaymentTitle: "Güvenli Ödeme",
@@ -2237,7 +2256,7 @@ const tr = {
       basedOnReviews: "{{count}} doğrulanmış alışveriş yorumuna dayalı",
       storeReviewsTitle: "{{count}} Mağaza Yorumları",
       noReviewsForFilter: "Bu filtrelere uygun yorum bulunamadı.",
-      loginFreeShipping: "İlk siparişinizde ÜCRETSİZ kargo",
+      loginFreeShipping: "İlk siparişinizde ÜCRETSİZ sevkiyat",
       loginTitle: "Giriş Yap",
       loginSubtitle: "Son giriş yönteminizi kullanın",
       continueGoogle: "Google ile devam et",
@@ -2249,7 +2268,7 @@ const tr = {
       qrLogin: "QR kod ile giriş yap",
       orDivider: "VEYA",
       mobilePhotosCounter: "Fotoğraflar",
-      shippingSection: "Kargolama",
+      shippingSection: "Sevkiyat",
       protectionsTitle: "Bu ürün için güvenceler",
       securePayments: "Güvenli ödemeler",
       standardReturnPolicy: "Standart iade politikası",
@@ -2276,7 +2295,7 @@ const tr = {
       processingTime: "İşlem süresi",
       deliveryAddressLabel: "Teslimat adresi",
       processingTimeNote:
-        "Kargo ücreti ve teslimat tarihi tedarikçiyle kararlaştırılacaktır. Tedarikçiyle hemen iletişime geçin.",
+        "Sevkiyat ücreti ve teslimat tarihi tedarikçiyle kararlaştırılacaktır. Tedarikçiyle hemen iletişime geçin.",
       // Mobil ürün detay — Sipariş koruması (statik güvence bilgisi)
       orderProtectionSection: "iStoc sipariş koruması",
       orderProtectionSectionDesc:
@@ -2360,7 +2379,7 @@ const tr = {
       viewMode: "Görünüm",
       viewGrid: "Izgara",
       viewList: "Liste",
-      freeShippingAvailable: "Ücretsiz kargo mevcut",
+      freeShippingAvailable: "Ücretsiz sevkiyat mevcut",
       sortBy: "Sırala",
       bestMatch: "En İyi Eşleşme",
       mostPopular: "En Popüler",
@@ -2554,7 +2573,7 @@ const tr = {
         "Minimum sipariş miktarımız 500 adet. Birim fiyat 2,50$. Toplu siparişlerde %15'e varan indirim sunabiliriz.",
       conv1m4: "1000 adet için özel fiyat teklifi alabilir miyim?",
       conv1m5:
-        "1000 adet için birim fiyat 2,15$ teklif edebilirim. Kargo dahil değil. Teslimat süresi 15-20 iş günü.",
+        "1000 adet için birim fiyat 2,15$ teklif edebilirim. Sevkiyat dahil değil. Teslimat süresi 15-20 iş günü.",
       conv2m1:
         "RFQ talebiniz için teşekkür ederiz. Kauçuk ürünlerimiz hakkında detaylı katalog gönderebilirim.",
       conv2m2: "Kataloğu almak isterim. Özellikle silikon ürünlerle ilgileniyorum.",
@@ -2648,7 +2667,7 @@ const tr = {
       quantity: "Miktar",
       total: "Toplam",
       subtotal: "Ara toplam",
-      shippingFee: "Kargo ücreti",
+      shippingFee: "Sevkiyat ücreti",
       grandTotal: "Genel toplam",
       viewDetails: "Detayları görüntüle",
       chatNow: "Şimdi sohbet et",
@@ -2661,12 +2680,12 @@ const tr = {
       specifications: "Özellikler",
       unitPrice: "Birim fiyat",
       totalPrice: "Toplam fiyat",
-      shippingDetails: "Kargo detayları",
-      shippingMethod: "Kargo yöntemi",
+      shippingDetails: "Sevkiyat detayları",
+      shippingMethod: "Sevkiyat yöntemi",
       deliveryAddress: "Teslimat adresi",
       paymentDetails: "Ödeme detayları",
       supplierDetails: "Tedarikçi detayları",
-      tabShipping: "Kargo",
+      tabShipping: "Sevkiyat",
       tabPayment: "Ödeme",
       tabSupplier: "Tedarikçi",
       contactName: "İletişim adı",
@@ -2676,7 +2695,7 @@ const tr = {
       stepOrder: "Sipariş",
       stepPayment: "Ödeme",
       stepShipping: "Hazırlanıyor",
-      stepDelivery: "Kargoda",
+      stepDelivery: "Sevkiyatta",
       stepReview: "Teslim Edildi",
       orderProtection: "Sipariş koruması",
       securePayments: "Güvenli Ödemeler",
@@ -2704,6 +2723,7 @@ const tr = {
       pendingShort: "Bekleyen",
       writeReview: "Değerlendir",
       reviewStatusPublished: "Yayında",
+      reviewStatusRejected: "Yayınlanmadı",
       pendingReviewsEmptyDesc: "Teslim edilen siparişlerinizdeki ürünler, değerlendirmeniz için burada listelenir.",
       reviewsDoneEmptyTitle: "Henüz değerlendirme yapmadınız",
       reviewsDoneEmptyDesc: "Yaptığınız değerlendirmeler ve durumları burada görünür.",
@@ -2728,7 +2748,7 @@ const tr = {
       faq: "SSS",
       taxInfoNotice:
         "Vergi bilgilerinizi Hesap Ayarları bölümünden güncelleyebilirsiniz. Fatura işlemlerinde bu bilgiler kullanılacaktır.",
-      totalDisclaimer: "Toplam tahminidir ve kargo ile vergilere göre değişebilir",
+      totalDisclaimer: "Toplam tahminidir ve sevkiyat ile vergilere göre değişebilir",
       // Order detail — hardcoded strings
       orderTime: "Sipariş zamanı",
       totalLabel: "Toplam",
@@ -2765,7 +2785,7 @@ const tr = {
       orderPreparing: "Sipariş hazırlanıyor",
       orderPreparingMessage: "Siparişiniz gönderim için hazırlanıyor.",
       orderDelivering: "Sipariş teslim ediliyor",
-      orderDeliveringMessage: "Siparişiniz kargoya verildi.",
+      orderDeliveringMessage: "Siparişiniz sevk edildi.",
       orderCompleted: "Sipariş tamamlandı",
       orderCompletedMessage: "Sipariş başarıyla teslim edildi.",
       orderCancelledMessage: "Sipariş alıcı tarafından iptal edildi.",
@@ -2802,18 +2822,18 @@ const tr = {
       trackPackage: "Paketi Takip Et",
       trackingUpdates: "Takip güncellemeleri",
       noTrackingUpdates: "Henüz takip güncellemesi yok",
-      trackShipments: "Kargo takibi",
-      modifyShippingDetails: "Kargo bilgilerini değiştir",
+      trackShipments: "Sevkiyat takibi",
+      modifyShippingDetails: "Sevkiyat bilgilerini değiştir",
       shippingAddress: "Teslimat adresi",
       enterShippingAddress: "Tam teslimat adresini girin",
       shipFrom: "Gönderim yeri",
-      shippingServiceLine: "Kargo hizmet türü",
-      standardShipping: "Standart kargo",
-      expressShipping: "Hızlı kargo",
-      economyShipping: "Ekonomik kargo",
-      noShippingMethods: "Kargo yöntemi bulunamadı",
+      shippingServiceLine: "Sevkiyat hizmet türü",
+      standardShipping: "Standart sevkiyat",
+      expressShipping: "Hızlı sevkiyat",
+      economyShipping: "Ekonomik sevkiyat",
+      noShippingMethods: "Sevkiyat yöntemi bulunamadı",
       shippingModificationNote:
-        "Kargo bilgilerini değiştirmek ek ücretlere neden olabilir. Değişiklikler tedarikçi onayına tabidir.",
+        "Sevkiyat bilgilerini değiştirmek ek ücretlere neden olabilir. Değişiklikler tedarikçi onayına tabidir.",
       submitChanges: "Değişiklikleri gönder",
       // Track package info
       shipTime: "Gönderim zamanı",
@@ -2834,11 +2854,11 @@ const tr = {
       cancelReasonQuestion: "Bu siparişi iptal etme nedeninizi lütfen belirtin.",
       cancelReasonSubtext: "İptal etmek isteme nedeninizi bize söyleyin",
       confirmCancel: "Onayla",
-      cancelShippingFee: "Kargo ücreti arttı",
+      cancelShippingFee: "Sevkiyat ücreti arttı",
       cancelNoStock: "Stok yok",
       cancelNotPaid30Days: "Sipariş 30 gün içinde ödenmedi",
-      cancelShippingMethod: "Anlaşılan kargo yöntemiyle gönderim yapılamıyor",
-      cancelShippingTime: "Anlaşılan kargo süresinde gönderim yapılamıyor",
+      cancelShippingMethod: "Anlaşılan sevkiyat yöntemiyle gönderim yapılamıyor",
+      cancelShippingTime: "Anlaşılan sevkiyat süresinde gönderim yapılamıyor",
       cancelNoLongerNeeded: "Artık gerekli değil",
       cancelWrongOrder: "Yanlış sipariş bilgisi veya yeni sipariş verilecek",
       cancelPriceIncreased: "Ürün fiyatı arttı",
@@ -2907,8 +2927,15 @@ const tr = {
       userInfoLaws: "Kullanıcı Bilgileri Yasaları",
       contactGuide: "İletişim Kılavuzu",
       copyright: "© 2024 iStoc — Tüm hakları saklıdır.",
-      viewMore: "Daha fazla görüntüle",
       searchResultsFor: "için sonuçlar",
+      // ── V2.5 Split İstatistik redesign ──
+      statArticlesValue: "240+",
+      statArticlesLabel: "yardım makalesi",
+      statResponseValue: "2 sa",
+      statResponseLabel: "ort. destek yanıtı",
+      statResolutionValue: "%97",
+      statResolutionLabel: "çözüm oranı",
+      popularQuestionsTitle: "Popüler sorular",
     },
 
     // ============================================================
@@ -3137,7 +3164,7 @@ const tr = {
       resolved: "Çözüldü",
       orderCategory: "Sipariş",
       paymentCategory: "Ödeme",
-      shippingCategory: "Kargo",
+      shippingCategory: "Sevkiyat",
       lastReply: "Son yanıt:",
     },
 
@@ -3169,7 +3196,7 @@ const tr = {
       supplierCountry: "Tedarikçi ülkesi",
       warehouse: "Depo",
       logistics: "Lojistik",
-      freeShipping: "Ücretsiz kargo",
+      freeShipping: "Ücretsiz sevkiyat",
       categoryLabel: "Kategori:",
       viewAllCategories: "Tümünü görüntüle",
       viewLessCategories: "Daha az görüntüle",
@@ -3586,8 +3613,8 @@ const tr = {
       title: "Sık Sorulan Sorular",
       q1: "İade süresi ne kadar?",
       a1: "Ürünü teslim aldığınız tarihten itibaren 14 gün içinde iade talebi oluşturabilirsiniz. Bu süre tüm ürün kategorileri için geçerlidir.",
-      q2: "İade kargo ücreti kime ait?",
-      a2: "Üretim hatası veya yanlış ürün gönderimi durumlarında kargo ücreti tarafımızca karşılanır. Cayma hakkı kapsamındaki iadelerde kargo ücreti alıcıya aittir.",
+      q2: "İade sevkiyat ücreti kime ait?",
+      a2: "Üretim hatası veya yanlış ürün gönderimi durumlarında sevkiyat ücreti tarafımızca karşılanır. Cayma hakkı kapsamındaki iadelerde sevkiyat ücreti alıcıya aittir.",
       q3: "Hangi ürünler iade edilemez?",
       a3: "Kişiye özel üretilen ürünler, hijyen ürünleri (açılmış ambalaj), dijital ürünler ve indirimli kampanya ürünleri (belirtilmişse) iade edilemez.",
       q4: "İade ödemesi ne zaman yapılır?",
@@ -3609,8 +3636,8 @@ const tr = {
       step1Desc: "Online form veya müşteri hizmetleri üzerinden iade talebinizi oluşturun",
       step2Label: "Talep Onayı",
       step2Desc: "Talebiniz 24 saat içinde değerlendirilir ve onaylanır",
-      step3Label: "Kargo Gönderimi",
-      step3Desc: "Ücretsiz kargo etiketiyle ürünü bize geri gönderin",
+      step3Label: "Sevkiyat Gönderimi",
+      step3Desc: "Ücretsiz sevkiyat etiketiyle ürünü bize geri gönderin",
       step4Label: "Ürün İnceleme",
       step4Desc: "Ürün teslim alındıktan sonra kalite kontrol yapılır",
       step5Label: "Geri Ödeme",
@@ -3905,7 +3932,7 @@ const tr = {
       backToHome: "Ana Sayfaya Dön",
       orderPlaced: "Siparişiniz başarıyla oluşturuldu!",
       ordersPlaced: "{{count}} siparişiniz başarıyla oluşturuldu!",
-      paymentCompleted: "Ödeme tamamlandı. Siparişiniz işleniyor ve yakında kargoya verilecek.",
+      paymentCompleted: "Ödeme tamamlandı. Siparişiniz işleniyor ve yakında sevk edilecek.",
       orderNumber: "Sipariş Numarası",
       status: "Durum",
       confirmed: "Onaylandı",
@@ -3953,7 +3980,7 @@ const tr = {
       orderPlacedTitle: "Siparişiniz başarıyla oluşturuldu!",
       ordersPlacedTitle: "{{count}} siparişiniz başarıyla oluşturuldu!",
       orderPlacedSubtitle:
-        "Satın aldığınız için teşekkürler. Siparişiniz işleniyor ve yakında kargoya verilecek.",
+        "Satın aldığınız için teşekkürler. Siparişiniz işleniyor ve yakında sevk edilecek.",
       pendingPaymentTitle: "Sipariş alındı — ödeme bekleniyor",
       pendingPaymentSubtitle: "İşleme devam etmek için ödemenizi tamamlayın.",
 
@@ -3962,7 +3989,7 @@ const tr = {
       stepOrderPlaced: "Sipariş Verildi",
       stepPaymentConfirmed: "Ödeme Onaylandı",
       stepSupplierProcessing: "İşleniyor",
-      stepShipped: "Kargoda",
+      stepShipped: "Sevkiyatta",
       stepDelivered: "Teslim Edildi",
       completed: "Tamamlandı",
       inProgress: "Devam Ediyor",
@@ -3981,9 +4008,9 @@ const tr = {
       itemsPlural: "{{count}} ürün",
 
       // Shipping Info
-      shippingInfo: "Kargo Bilgileri",
+      shippingInfo: "Sevkiyat Bilgileri",
       shippingAddress: "Teslimat Adresi",
-      shippingMethod: "Kargo Yöntemi",
+      shippingMethod: "Sevkiyat Yöntemi",
       incoterms: "Incoterms",
       shipFrom: "Çıkış Noktası",
       estimatedDelivery: "Tahmini Teslimat",
@@ -3991,7 +4018,7 @@ const tr = {
       // Payment Summary
       paymentSummary: "Ödeme Özeti",
       subtotal: "Ara Toplam",
-      shippingFee: "Kargo Ücreti",
+      shippingFee: "Sevkiyat Ücreti",
       grandTotal: "Genel Toplam",
       paymentMethod: "Ödeme Yöntemi",
 
@@ -4258,7 +4285,7 @@ const tr = {
       officeChairs: "Ofis Sandalyeleri",
       setTopBoxes: "Uydu Alıcıları",
       jewelryComponents: "Takı Parçaları",
-      cargoServices: "Kargo Hizmetleri",
+      cargoServices: "Sevkiyat Hizmetleri",
       sportsShoes: "Spor Ayakkabılar",
     },
 
@@ -4836,10 +4863,10 @@ const tr = {
       ticketSubmitError: "Talep gönderilemedi. Lütfen tekrar deneyin.",
       search1: "Şifremi unuttum",
       search2: "Sipariş iptali",
-      search3: "Kargo takibi",
+      search3: "Sevkiyat takibi",
       search4: "İade",
       sourcing: "Kaynak Bulmak",
-      sourcingDesc: "Tedarik, Sipariş ve Kargo",
+      sourcingDesc: "Tedarik, Sipariş ve Sevkiyat",
       tradeAssurance: "Ticaret Güvencesi",
       tradeAssuranceDesc: "iStoc Siparişlerinizi Koruyun",
       downloadApp: "Mobil Uygulamayı İndir",
@@ -4864,7 +4891,7 @@ const tr = {
       q_sourcing_1: "iStoc'ta nasıl alışveriş yapabilirim?",
       q_sourcing_2: "iStoc'ta ürünleri nasıl arayabilirim?",
       q_sourcing_3: "Favorilerime nasıl ürün eklerim?",
-      q_sourcing_4: "Ürün fiyatı, MOQ, kargo masrafı gibi bilgiler nasıl öğrenirim?",
+      q_sourcing_4: "Ürün fiyatı, MOQ, sevkiyat masrafı gibi bilgiler nasıl öğrenirim?",
       q_sourcing_5: "Tedarikçinin iletişim bilgilerine nasıl ulaşırım?",
       q_sourcing_6: "RFQ talebi nasıl oluşturum?",
       q_sourcing_7: "Toplu sipariş indirimi var mı?",
@@ -4970,6 +4997,8 @@ const tr = {
       businessHours: "Pazartesi - Cuma: 09:00 - 18:00 (UTC)",
       mapArea: "Harita Alanı",
       // ── FAQPageLayout ──
+      faqPageTitle: "Sık Sorulan Sorular",
+      faqPageSubtitle: "Kategorilere göz atın veya doğrudan arayın",
       faqSearchResults: "sonuçları",
       faqNoResults: "Sonuç bulunamadı. Farklı bir arama terimi deneyin.",
       faqSearchPlaceholder: "Soru veya anahtar kelime girin. Örn: Ödeme",
@@ -5003,6 +5032,7 @@ const tr = {
       navNewTicket: "Talep Oluştur",
       navMyTickets: "Taleplerim",
       headerTitle: "Alıcı Yardım Merkezi",
+      menuLabel: "Menü",
     },
 
     // ============================================================
@@ -5589,8 +5619,8 @@ const tr = {
       taxVerifyInfo: "Vergi Bilgisini Doğrula",
       taxOrderManage: "Vergi Sipariş Yönetimi",
       taxRefund: "Vergi İadesi",
-      shipping: "Kargo",
-      shippingShipping: "Kargo",
+      shipping: "Sevkiyat",
+      shippingShipping: "Sevkiyat",
       shippingLogistics: "iStoc Lojistik Hizmetleri",
       shippingMaersk: "MSK Kargo Hizmetleri (Maersk)",
       shippingImportFees: "İthalat Ücretleri",
@@ -5624,7 +5654,7 @@ const tr = {
       promotionsPayment: "Ödeme Promosyonları",
       promotionsOtherIssues: "Diğer Promosyon Sorunları",
       guaranteed: "iStoc Garantisi",
-      guaranteedShipping: "Garantili Kargo",
+      guaranteedShipping: "Garantili Sevkiyat",
       guaranteedAfterSales: "Garantili Satış Sonrası",
       guaranteedPreSales: "Garantili Ön Satış",
       guaranteedPlaceOrder: "Garantili Sipariş Verme",
@@ -5645,6 +5675,9 @@ const tr = {
       thankYou: "Geri bildiriminiz için teşekkürler!",
       noContent: "Bu konu için henüz içerik bulunmamaktadır.",
       relatedTopics: "İlgili Konular",
+      ctaTitle: "Sorunu çözemedin mi?",
+      ctaDesc: "Destek ekibimiz ortalama 2 saat içinde yanıtlıyor.",
+      ctaBtn: "Destek talebi oluştur",
 
       // ── iStoc Giriş ──
       introDesc_title: "iStoc Tanıtımı",
@@ -5798,7 +5831,7 @@ const tr = {
         },
         {
           q: "Gelişmiş arama filtreleri nelerdir?",
-          a: "Arama sonuçlarını daraltmak için <strong>fiyat aralığı</strong>, <strong>minimum sipariş miktarı</strong>, <strong>tedarikçi konumu</strong>, <strong>doğrulama durumu</strong>, <strong>kargo seçenekleri</strong> ve <strong>ödeme yöntemleri</strong> gibi filtreleri kullanabilirsiniz.",
+          a: "Arama sonuçlarını daraltmak için <strong>fiyat aralığı</strong>, <strong>minimum sipariş miktarı</strong>, <strong>tedarikçi konumu</strong>, <strong>doğrulama durumu</strong>, <strong>sevkiyat seçenekleri</strong> ve <strong>ödeme yöntemleri</strong> gibi filtreleri kullanabilirsiniz.",
         },
         {
           q: "Görsel arama özelliği var mı?",
@@ -5887,7 +5920,7 @@ const tr = {
         },
         {
           q: "Numune nasıl talep ederim?",
-          a: 'Ürün detay sayfasındaki "Numune İste" butonuna tıklayarak numune talebinde bulunabilirsiniz. Numune ücreti ve kargo bedeli tedarikçiye göre değişir. Bazı tedarikçiler ilk numuneyi ücretsiz gönderir.',
+          a: 'Ürün detay sayfasındaki "Numune İste" butonuna tıklayarak numune talebinde bulunabilirsiniz. Numune ücreti ve sevkiyat bedeli tedarikçiye göre değişir. Bazı tedarikçiler ilk numuneyi ücretsiz gönderir.',
         },
       ],
 
@@ -5974,7 +6007,7 @@ const tr = {
         },
         {
           q: "Sipariş verirken hangi bilgileri kontrol etmeliyim?",
-          a: "Sipariş vermeden önce <strong>ürün spesifikasyonlarını</strong>, <strong>fiyatı</strong>, <strong>kargo ücretini</strong>, <strong>tahmini teslimat süresini</strong>, <strong>ödeme koşullarını</strong> ve <strong>iade politikasını</strong> dikkatlice kontrol edin.",
+          a: "Sipariş vermeden önce <strong>ürün spesifikasyonlarını</strong>, <strong>fiyatı</strong>, <strong>sevkiyat ücretini</strong>, <strong>tahmini teslimat süresini</strong>, <strong>ödeme koşullarını</strong> ve <strong>iade politikasını</strong> dikkatlice kontrol edin.",
         },
       ],
 
@@ -6000,15 +6033,15 @@ const tr = {
       placeOrderManage_items: [
         {
           q: "Siparişlerimi nereden takip edebilirim?",
-          a: '"Siparişlerim" sayfasından tüm aktif ve geçmiş siparişlerinizi görüntüleyebilirsiniz. Her siparişin durumu (Onay Bekliyor, Hazırlanıyor, Kargoda, Teslim Edildi) gerçek zamanlı olarak güncellenir.',
+          a: '"Siparişlerim" sayfasından tüm aktif ve geçmiş siparişlerinizi görüntüleyebilirsiniz. Her siparişin durumu (Onay Bekliyor, Hazırlanıyor, Sevkiyatta, Teslim Edildi) gerçek zamanlı olarak güncellenir.',
         },
         {
           q: "Siparişimi iptal edebilir miyim?",
-          a: 'Sipariş henüz kargoya verilmemişse "Siparişlerim" sayfasından iptal talebinde bulunabilirsiniz. Tedarikçi onayından sonra ödemeniz iade edilir. Kargoya verildikten sonra iptal için iade süreci başlatmanız gerekir.',
+          a: 'Sipariş henüz sevk edilmemişse "Siparişlerim" sayfasından iptal talebinde bulunabilirsiniz. Tedarikçi onayından sonra ödemeniz iade edilir. Sevk edildikten sonra iptal için iade süreci başlatmanız gerekir.',
         },
         {
           q: "Toplu sipariş nasıl yönetirim?",
-          a: 'Birden fazla siparişi "Siparişlerim" sayfasında toplu seçim yaparak yönetebilirsiniz. Toplu olarak durum kontrolü, mesaj gönderme ve kargo takibi yapabilirsiniz.',
+          a: 'Birden fazla siparişi "Siparişlerim" sayfasında toplu seçim yaparak yönetebilirsiniz. Toplu olarak durum kontrolü, mesaj gönderme ve sevkiyat takibi yapabilirsiniz.',
         },
       ],
 
@@ -6202,20 +6235,20 @@ const tr = {
       ],
 
       // ── Kargo ──
-      shippingShipping_title: "Kargo",
-      shippingShipping_desc: "Kargo seçenekleri ve teslimat süreçleri.",
+      shippingShipping_title: "Sevkiyat",
+      shippingShipping_desc: "Sevkiyat seçenekleri ve teslimat süreçleri.",
       shippingShipping_items: [
         {
-          q: "Hangi kargo seçenekleri mevcut?",
-          a: "iStoc'ta <strong>standart kargo</strong>, <strong>hızlı kargo</strong>, <strong>ekspres kargo</strong> ve <strong>deniz yolu</strong> gibi farklı teslimat seçenekleri mevcuttur. Seçenekler ürün boyutu, ağırlığı ve teslimat adresine göre değişir.",
+          q: "Hangi sevkiyat seçenekleri mevcut?",
+          a: "iStoc'ta <strong>hava kargo</strong>, <strong>deniz kargo</strong>, <strong>kara kargo</strong>, <strong>ambar</strong> ve <strong>liman</strong> gibi farklı teslimat seçenekleri mevcuttur. Seçenekler ürün boyutu, ağırlığı ve teslimat adresine göre değişir.",
         },
         {
-          q: "Kargo ücreti nasıl hesaplanır?",
-          a: "Kargo ücreti; ürün ağırlığı, boyutları, teslimat adresi ve seçilen kargo yöntemine göre otomatik hesaplanır. Sipariş özeti ekranında kesin kargo ücreti gösterilir. Bazı tedarikçiler belirli tutarın üzerindeki siparişlerde ücretsiz kargo sunar.",
+          q: "Sevkiyat ücreti nasıl hesaplanır?",
+          a: "Sevkiyat ücreti; ürün ağırlığı, boyutları, teslimat adresi ve seçilen sevkiyat yöntemine göre otomatik hesaplanır. Sipariş özeti ekranında kesin sevkiyat ücreti gösterilir. Bazı tedarikçiler belirli tutarın üzerindeki siparişlerde ücretsiz sevkiyat sunar.",
         },
         {
-          q: "Kargo takibi nasıl yapılır?",
-          a: '"Siparişlerim" sayfasından kargo takip numaranızı görebilir ve kargonuzun anlık konumunu izleyebilirsiniz. Kargo durumu değiştiğinde otomatik bildirim alırsınız.',
+          q: "Sevkiyat takibi nasıl yapılır?",
+          a: '"Siparişlerim" sayfasından sevkiyat takip numaranızı görebilir ve gönderinizin anlık konumunu izleyebilirsiniz. Sevkiyat durumu değiştiğinde otomatik bildirim alırsınız.',
         },
       ],
 
@@ -6224,7 +6257,7 @@ const tr = {
       shippingLogistics_items: [
         {
           q: "iStoc Lojistik nedir?",
-          a: "iStoc Lojistik, platformun kendi entegre kargo ve lojistik çözümüdür. Kapıdan kapıya teslimat, depolama, gümrükleme ve son mil teslimat hizmetlerini tek bir çatı altında sunar.",
+          a: "iStoc Lojistik, platformun kendi entegre sevkiyat ve lojistik çözümüdür. Kapıdan kapıya teslimat, depolama, gümrükleme ve son mil teslimat hizmetlerini tek bir çatı altında sunar.",
         },
         {
           q: "iStoc Lojistik'in avantajları nelerdir?",
@@ -6237,19 +6270,19 @@ const tr = {
       ],
 
       shippingMaersk_title: "MSK Kargo Hizmetleri (Maersk)",
-      shippingMaersk_desc: "Maersk deniz yolu kargo hizmetleri.",
+      shippingMaersk_desc: "Maersk deniz yolu sevkiyat hizmetleri.",
       shippingMaersk_items: [
         {
-          q: "Maersk kargo hizmeti nedir?",
-          a: "Maersk, iStoc'un anlaşmalı deniz yolu kargo ortağıdır. Konteyner bazlı uluslararası kargo hizmeti sunar. Özellikle büyük hacimli ve ağır yükler için ekonomik bir seçenektir.",
+          q: "Maersk sevkiyat hizmeti nedir?",
+          a: "Maersk, iStoc'un anlaşmalı deniz yolu sevkiyat ortağıdır. Konteyner bazlı uluslararası sevkiyat hizmeti sunar. Özellikle büyük hacimli ve ağır yükler için ekonomik bir seçenektir.",
         },
         {
-          q: "Maersk ile kargo ne kadar sürede ulaşır?",
+          q: "Maersk ile sevkiyat ne kadar sürede ulaşır?",
           a: "Teslimat süresi rota ve limanlara göre değişir. Avrupa içi gönderilerde <strong>5-10 gün</strong>, Uzak Doğu rotalarında <strong>20-35 gün</strong> ve Amerika rotalarında <strong>15-25 gün</strong> sürebilir.",
         },
         {
-          q: "Maersk kargo takibi nasıl yapılır?",
-          a: "iStoc platform üzerinden konteyner numaranız ile gerçek zamanlı kargo takibi yapabilirsiniz. Gemi pozisyonu, tahmini varış tarihi ve liman bilgileri görüntülenir.",
+          q: "Maersk sevkiyat takibi nasıl yapılır?",
+          a: "iStoc platform üzerinden konteyner numaranız ile gerçek zamanlı sevkiyat takibi yapabilirsiniz. Gemi pozisyonu, tahmini varış tarihi ve liman bilgileri görüntülenir.",
         },
       ],
 
@@ -6276,7 +6309,7 @@ const tr = {
       receiptDelivery_items: [
         {
           q: "Siparişim ne zaman teslim edilir?",
-          a: "Tahmini teslimat süresi sipariş detaylarınızda belirtilir. Süre; üretim süresi, kargo yöntemi ve teslimat adresine göre değişir. Kargo takip numaranız ile anlık durum kontrolü yapabilirsiniz.",
+          a: "Tahmini teslimat süresi sipariş detaylarınızda belirtilir. Süre; üretim süresi, sevkiyat yöntemi ve teslimat adresine göre değişir. Sevkiyat takip numaranız ile anlık durum kontrolü yapabilirsiniz.",
         },
         {
           q: "Teslimat sırasında nelere dikkat etmeliyim?",
@@ -6284,7 +6317,7 @@ const tr = {
         },
         {
           q: "Teslimat adresimi değiştirebilir miyim?",
-          a: 'Sipariş henüz kargoya verilmemişse "Siparişlerim" sayfasından teslimat adresini değiştirebilirsiniz. Kargoya verildikten sonra kargo firmasıyla iletişime geçerek adres yönlendirmesi talep edebilirsiniz.',
+          a: 'Sipariş henüz sevk edilmemişse "Siparişlerim" sayfasından teslimat adresini değiştirebilirsiniz. Sevk edildikten sonra sevkiyat firmasıyla iletişime geçerek adres yönlendirmesi talep edebilirsiniz.',
         },
       ],
 
@@ -6363,15 +6396,15 @@ const tr = {
       afterSalesReturn_items: [
         {
           q: "Ürün iadesi nasıl yapılır?",
-          a: '"Siparişlerim" sayfasından "İade Talebi" oluşturun. İade nedenini seçin, gerekirse fotoğraf ekleyin. Tedarikçi onayından sonra iade kargo bilgileri ve talimatlar gönderilir.',
+          a: '"Siparişlerim" sayfasından "İade Talebi" oluşturun. İade nedenini seçin, gerekirse fotoğraf ekleyin. Tedarikçi onayından sonra iade sevkiyat bilgileri ve talimatlar gönderilir.',
         },
         {
           q: "İade koşulları nelerdir?",
           a: "Ürün, teslim alındığı tarihten itibaren <strong>15 gün</strong> içinde iade edilebilir. Ürünün kullanılmamış, orijinal ambalajında ve hasarsız olması gerekir. Özel üretim ve kişiselleştirilmiş ürünler iade kapsamı dışındadır.",
         },
         {
-          q: "İade kargo ücreti kime aittir?",
-          a: "Ürün hatalıysa veya sipariş spesifikasyonlarına uymuyorsa kargo ücreti tedarikçiye aittir. Müşteri kaynaklı iadelerde (fikir değişikliği vb.) kargo ücreti alıcıya aittir.",
+          q: "İade sevkiyat ücreti kime aittir?",
+          a: "Ürün hatalıysa veya sipariş spesifikasyonlarına uymuyorsa sevkiyat ücreti tedarikçiye aittir. Müşteri kaynaklı iadelerde (fikir değişikliği vb.) sevkiyat ücreti alıcıya aittir.",
         },
       ],
 
@@ -6388,7 +6421,7 @@ const tr = {
         },
         {
           q: "Kanıt olarak neleri sunabilirim?",
-          a: "Fotoğraf, video, yazışma kayıtları, denetim raporları, kargo belgeleri ve sözleşme/sipariş detayları kanıt olarak sunulabilir. Kanıtlar ne kadar detaylı olursa çözüm o kadar hızlı ve adil olur.",
+          a: "Fotoğraf, video, yazışma kayıtları, denetim raporları, sevkiyat belgeleri ve sözleşme/sipariş detayları kanıt olarak sunulabilir. Kanıtlar ne kadar detaylı olursa çözüm o kadar hızlı ve adil olur.",
         },
       ],
 
@@ -6401,7 +6434,7 @@ const tr = {
         },
         {
           q: "Ürün hasarlı geldi, ne yapmalıyım?",
-          a: "Teslimat anında hasarı belgelendirin (fotoğraf/video). 24 saat içinde iStoc üzerinden bildirimde bulunun. Kargo sigortası kapsamında hasar tazminatı veya yeniden gönderim sağlanır.",
+          a: "Teslimat anında hasarı belgelendirin (fotoğraf/video). 24 saat içinde iStoc üzerinden bildirimde bulunun. Sevkiyat sigortası kapsamında hasar tazminatı veya yeniden gönderim sağlanır.",
         },
         {
           q: "Ürün kalitesi beklentilerimi karşılamıyor, ne yapmalıyım?",
@@ -6652,20 +6685,20 @@ const tr = {
       ],
 
       // ── iStoc Garantisi ──
-      guaranteedShipping_title: "Garantili Kargo",
-      guaranteedShipping_desc: "iStoc kargo garantisi programı.",
+      guaranteedShipping_title: "Garantili Sevkiyat",
+      guaranteedShipping_desc: "iStoc sevkiyat garantisi programı.",
       guaranteedShipping_items: [
         {
-          q: "Garantili Kargo nedir?",
-          a: "iStoc Garantili Kargo, siparişinizin belirtilen sürede teslim edilmesini garanti eder. Gecikme durumunda kargo ücretinin tamamı veya bir kısmı iade edilir.",
+          q: "Garantili Sevkiyat nedir?",
+          a: "iStoc Garantili Sevkiyat, siparişinizin belirtilen sürede teslim edilmesini garanti eder. Gecikme durumunda sevkiyat ücretinin tamamı veya bir kısmı iade edilir.",
         },
         {
-          q: "Kargo gecikmesinde tazminat nasıl alırım?",
+          q: "Sevkiyat gecikmesinde tazminat nasıl alırım?",
           a: "Teslimat, garanti edilen süreden geç yapılırsa otomatik olarak tazminat hesaplanır ve iStoc Cüzdan'ınıza veya orijinal ödeme yönteminize iade edilir.",
         },
         {
-          q: "Hangi kargo yöntemleri garantili?",
-          a: "iStoc Lojistik ve anlaşmalı kargo firmalarıyla yapılan gönderilerde kargo garantisi geçerlidir. Tedarikçinin kendi kargo anlaşması ile gönderilen ürünlerde garanti kapsamı farklılık gösterebilir.",
+          q: "Hangi sevkiyat yöntemleri garantili?",
+          a: "iStoc Lojistik ve anlaşmalı sevkiyat firmalarıyla yapılan gönderilerde sevkiyat garantisi geçerlidir. Tedarikçinin kendi sevkiyat anlaşması ile gönderilen ürünlerde garanti kapsamı farklılık gösterebilir.",
         },
       ],
 
@@ -6733,7 +6766,7 @@ const tr = {
         },
         {
           q: "Doğrulanmış depodan sipariş avantajları nelerdir?",
-          a: "Hızlı teslimat (genellikle <strong>3-7 gün</strong>), düşük kargo ücreti, yerel iade kolaylığı, önceden kalite kontrolden geçmiş ürünler ve gümrük işlemi gerektirmeden teslimat avantajları sunar.",
+          a: "Hızlı teslimat (genellikle <strong>3-7 gün</strong>), düşük sevkiyat ücreti, yerel iade kolaylığı, önceden kalite kontrolden geçmiş ürünler ve gümrük işlemi gerektirmeden teslimat avantajları sunar.",
         },
       ],
 
@@ -6777,7 +6810,7 @@ const tr = {
         },
         {
           q: "Bölge ayarı ürün aramalarını etkiler mi?",
-          a: "Evet, bölge ayarı varsayılan olarak yerel tedarikçileri ve kargo seçeneklerini öncelikli gösterir. Ancak global arama yaparak tüm tedarikçilere de erişebilirsiniz.",
+          a: "Evet, bölge ayarı varsayılan olarak yerel tedarikçileri ve sevkiyat seçeneklerini öncelikli gösterir. Ancak global arama yaparak tüm tedarikçilere de erişebilirsiniz.",
         },
       ],
     },
@@ -6785,7 +6818,7 @@ const tr = {
       submitError: "Form gönderilemedi. Lütfen tekrar deneyin.",
       subjectOrder: "Sipariş",
       subjectPayment: "Ödeme",
-      subjectShipping: "Kargo",
+      subjectShipping: "Sevkiyat",
       subjectAccount: "Hesap",
       subjectProductQuality: "Ürün Kalitesi",
       subjectOther: "Diğer",
@@ -6800,8 +6833,8 @@ const tr = {
       catOrderSubs: ["Teslimat gecikmesi", "Yanlış ürün", "Eksik ürün", "İptal talebi"],
       catPayment: "Ödeme",
       catPaymentSubs: ["Çift çekim", "İade gecikmesi", "Fatura hatası", "Kupon sorunu"],
-      catShipping: "Kargo",
-      catShippingSubs: ["Hasarlı paket", "Kayıp kargo", "Adres değişikliği", "Takip sorunu"],
+      catShipping: "Sevkiyat",
+      catShippingSubs: ["Hasarlı paket", "Kayıp gönderi", "Adres değişikliği", "Takip sorunu"],
       catAccount: "Hesap",
       catAccountSubs: ["Şifre sorunu", "E-posta değişikliği", "Hesap doğrulama", "Hesap silme"],
       catProductQuality: "Ürün Kalitesi",
@@ -6870,7 +6903,7 @@ const tr = {
         "Güvende Ödeme sistemi ile her işlem güvence altında. Alıcı ve satıcı koruma programı.",
       benefit3Title: "Lojistik Entegrasyonu",
       benefit3Desc:
-        "Uluslararası kargo ortaklarıyla entegre süreçler. Sınır ötesi gönderilerde şeffaf takip.",
+        "Uluslararası sevkiyat ortaklarıyla entegre süreçler. Sınır ötesi gönderilerde şeffaf takip.",
       benefit4Title: "Detaylı Analitik",
       benefit4Desc:
         "Satış, ziyaretçi ve dönüşüm analitiği. Veri tabanlı satış kararları için içgörüler.",
@@ -6962,7 +6995,7 @@ const tr = {
       },
       manufacturerPlatform: "Üretici platformu",
       heroSubtitle:
-        "iStoc, Türkiye'deki üreticileri dünyanın dört bir yanındaki B2B alıcılarıyla aracısız buluşturur. Listele, sat, kargola — komisyon yok.",
+        "iStoc, Türkiye'deki üreticileri dünyanın dört bir yanındaki B2B alıcılarıyla aracısız buluşturur. Listele, sat, sevk et — komisyon yok.",
       heroImageAlt: "Türkiye'den dünyaya ihracat: liman ve konteyner lojistiği",
       applyAsSeller: "Satıcı başvurusu yap",
       howItWorks: "Nasıl çalışır?",
@@ -7003,7 +7036,7 @@ const tr = {
       teamSeats: "Ekip kullanıcısı",
       adCreditPerMonth: "Reklam kredisi / ay",
       vatRefundAdvisory: "KDV iadesi danışmanlığı",
-      insuredShippingIncluded: "Sigortalı kargo dahil",
+      insuredShippingIncluded: "Sigortalı sevkiyat dahil",
       eventInvitation: "Fuar / etkinlik daveti",
       matrixEnterprise: "Kurumsal",
       apiAccess: "API erişimi",
@@ -7123,10 +7156,26 @@ const tr = {
         "En üst düzey güvenilirlik rozetidir. Gelişmiş doğrulamaya ek olarak, finansal sağlamlık analizi, müşteri referans kontrolü ve yıllık düzenli denetimler içerir. Premium doğrulanmış tedarikçiler, iSTOC'un en güvenilir iş ortakları olarak öne çıkarılır. Yıllık 7.990 TL doğrulama ücreti uygulanır.",
       heroTitleMain: "Fabrikanı tüm dünyaya aç.",
       heroDescNoCommission:
-        "iSTOC, üreticileri dünyanın dört bir yanındaki B2B alıcılarıyla aracısız buluşturur. Listele, sat, kargola — komisyon yok.",
+        "iSTOC, üreticileri dünyanın dört bir yanındaki B2B alıcılarıyla aracısız buluşturur. Listele, sat, sevk et — komisyon yok.",
       heroImageAltWorld: "Dünya geneline ihracat: liman ve konteyner lojistiği",
       manufacturersFocusedSupport: "Üreticilere özel destek",
       startApplicationLink: "başvuruyu başlat",
+
+      // Trust strip (hero altı)
+      trustCommission: "Satış komisyonu",
+      trustCommissionValue: "%0",
+      trustApplyTime: "Başvuru süresi",
+      trustApplyTimeValue: "4 dk",
+      trustTrial: "Ücretsiz deneme",
+      trustTrialValue: "14 gün",
+
+      // Sticky CTA bar (mobil)
+      stickyFrom: "{{price}}/ay'dan başlayan",
+      stickyMeta: "%0 komisyon · 14 gün deneme",
+      stickyApply: "Başvur",
+
+      // Matrix accordion (mobil/tablet)
+      accordionHint: "Kategoriye dokunarak detayları açın.",
     },
 
     // ============================================================
@@ -7157,15 +7206,15 @@ const tr = {
         assurance3Desc: "Doğrulanmış tedarikçiler ile güvenli alışveriş.",
       },
       tickets: {
-        categoryShipping: "Kargo",
+        categoryShipping: "Sevkiyat",
         categoryPayment: "Ödeme",
         categoryOrder: "Sipariş",
         categoryAccount: "Hesap",
         categoryProductQuality: "Ürün Kalitesi",
         t1Subject: "Sipariş teslimatı gecikti",
-        t1Snippet: "Kargonuz İstanbul aktarma merkezinde, tahmini teslimat yarın.",
-        t1Msg1: "Siparişim 5 gündür teslim edilmedi. Kargo takip numarası güncellenmedi.",
-        t1Msg2: "Kargonuz İstanbul aktarma merkezinde, tahmini teslimat yarın.",
+        t1Snippet: "Gönderiniz İstanbul aktarma merkezinde, tahmini teslimat yarın.",
+        t1Msg1: "Siparişim 5 gündür teslim edilmedi. Sevkiyat takip numarası güncellenmedi.",
+        t1Msg2: "Gönderiniz İstanbul aktarma merkezinde, tahmini teslimat yarın.",
         t2Subject: "Fatura bilgilerinde hata var",
         t2Snippet: "Fatura düzeltme talebiniz satıcıya iletildi.",
         t2Msg1: "Faturadaki şirket unvanı yanlış yazılmış, düzeltme talep ediyorum.",
@@ -7189,11 +7238,11 @@ const tr = {
         t7Snippet: "Ödeme kaydınız inceleniyor, mükerrer çekim tespit edilirse iade edilecektir.",
         t7Msg1: "Aynı sipariş için kartımdan 2 kez çekim yapılmış.",
         t7Msg2: "Ödeme kaydınız inceleniyor, mükerrer çekim tespit edilirse iade edilecektir.",
-        t8Subject: "Kargo hasarlı geldi",
-        t8Snippet: "Hasar fotoğrafları alındı, kargo firmasına bildirim yapıldı.",
+        t8Subject: "Gönderi hasarlı geldi",
+        t8Snippet: "Hasar fotoğrafları alındı, sevkiyat firmasına bildirim yapıldı.",
         t8Msg1: "Paket ezilmiş ve ürün hasarlı. Fotoğrafları ekliyorum.",
         t8Msg2:
-          "Hasar fotoğrafları alındı, kargo firmasına bildirim yapıldı. Yeni ürün gönderimi planlanacak.",
+          "Hasar fotoğrafları alındı, sevkiyat firmasına bildirim yapıldı. Yeni ürün gönderimi planlanacak.",
         t9Subject: "Satıcı mesajlara yanıt vermiyor",
         t9Snippet: "Satıcıyla iletişim sağlandı, siparişiniz onaylandı.",
         t9Msg1: "Satıcıya 3 gündür mesaj atıyorum ama yanıt alamıyorum.",
@@ -7203,9 +7252,9 @@ const tr = {
         t10Msg1: "ISTOC20 kupon kodu uygulanmıyor.",
         t10Msg2: "Kupon kodunuzun geçerlilik süresi dolmuştu. Yeni bir kupon tanımlandı: ISTOC25",
         t11Subject: "Teslimat adresi değişikliği",
-        t11Snippet: "Adres güncellemeniz kargo firmasına bildirildi.",
+        t11Snippet: "Adres güncellemeniz sevkiyat firmasına bildirildi.",
         t11Msg1: "Siparişim henüz gönderilmediyse teslimat adresimi değiştirmek istiyorum.",
-        t11Msg2: "Adres güncellemeniz kargo firmasına bildirildi.",
+        t11Msg2: "Adres güncellemeniz sevkiyat firmasına bildirildi.",
         t12Subject: "Ürün kalitesi beklentinin altında",
         t12Snippet: "Kalite değerlendirme süreci başlatıldı.",
         t12Msg1: "Ürün malzeme kalitesi düşük, açıklamadaki özelliklerle uyuşmuyor.",
@@ -7219,9 +7268,9 @@ const tr = {
         t14Msg1: "İade onaylandı ancak 7 gün geçti hala paramı alamadım.",
         t14Msg2: "İade işlemi 2 iş günü içinde hesabınıza yansıyacaktır.",
         t15Subject: "Yanlış ürün gönderildi",
-        t15Snippet: "Doğru ürün gönderildi, eski ürün için iade kargo etiketi oluşturuldu.",
+        t15Snippet: "Doğru ürün gönderildi, eski ürün için iade sevkiyat etiketi oluşturuldu.",
         t15Msg1: "Sipariş ettiğim üründen farklı bir ürün geldi.",
-        t15Msg2: "Doğru ürün gönderildi, eski ürün için iade kargo etiketi oluşturuldu.",
+        t15Msg2: "Doğru ürün gönderildi, eski ürün için iade sevkiyat etiketi oluşturuldu.",
       },
       productListing: {
         prod001Name: "Paslanmaz Celik Ozel Logo Kolye Ucu Altin Kaplama Toptan",
@@ -7449,7 +7498,7 @@ const tr = {
       "Teşekkür ederiz! Memnun kaldığınıza sevindik. Bir sonraki siparişinizde kusurlu ürünleri değiştireceğiz.",
     rev1Product: "Altın Kaplama Paslanmaz Çelik Kolye Ucu",
     rev2Comment:
-      "Genel olarak iyi ürün. Kargo biraz gecikti ama kalite bunu telafi ediyor. Su geçirmezlik özelliği gerçekten çalışıyor.",
+      "Genel olarak iyi ürün. Sevkiyat biraz gecikti ama kalite bunu telafi ediyor. Su geçirmezlik özelliği gerçekten çalışıyor.",
     rev2Product: "Gümüş Paslanmaz Çelik Zincir Bileklik",
     rev3Comment:
       "Bu tedarikçiden üçüncü siparişim. Her seferinde tutarlı kalite. Müşterilerim bu kolyeleri çok seviyor.",
@@ -7486,7 +7535,7 @@ const tr = {
       "Numune siparişleri için minimum sipariş 1 adettir. Toplu üretim için daha iyi fiyatlandırma almak amacıyla tasarım başına en az 100 adet öneriyoruz.",
     faq2Q: "Toplu sipariş vermeden önce numune alabilir miyim?",
     faq2A:
-      "Evet! Kargo dahil adet başı 30$ karşılığında numune sunuyoruz. 500 adet üzeri siparişlerde numune maliyeti iade edilebilir.",
+      "Evet! Sevkiyat dahil adet başı 30$ karşılığında numune sunuyoruz. 500 adet üzeri siparişlerde numune maliyeti iade edilebilir.",
     faq3Q: "OEM/ODM özelleştirme desteği var mı?",
     faq3A:
       "Kesinlikle. Logo gravürü, kolye ucu tasarımı, zincir stili ve ambalajı özelleştirebiliriz. OEM siparişleri için minimum 500 adet. 48 saat içinde ücretsiz tasarım taslağı.",
@@ -7495,7 +7544,7 @@ const tr = {
       "IP67 dereceli ürünlerimiz su dayanıklılığı için test edilmiştir. 2 yıllık garanti süresi içinde herhangi bir üründe su hasarı görülürse ücretsiz olarak değiştiririz.",
     faq5Q: "Hangi ödeme yöntemlerini kabul ediyorsunuz?",
     faq5A:
-      "Havale/EFT, PayPal, Trade Assurance ve 10.000$ üzeri siparişler için akreditif kabul ediyoruz. Kargo öncesinde bakiye ile birlikte %30 depozito gereklidir.",
+      "Havale/EFT, PayPal, Trade Assurance ve 10.000$ üzeri siparişler için akreditif kabul ediyoruz. Sevkiyat öncesinde bakiye ile birlikte %30 depozito gereklidir.",
     faq6Q: "Malzemeler için sertifika sağlayabilir misiniz?",
     faq6A:
       "Evet, SGS test raporları, ROHS uyumluluk sertifikaları ve nikel içermez beyanları sağlayabiliriz. Bunlar dijital olarak veya gönderiminizle birlikte orijinal olarak gönderilebilir.",
@@ -7665,10 +7714,10 @@ const tr = {
     heroTitle: "En İyi Fırsatlar",
     heroSubtitle: "iStoc'ta en düşük fiyatları yakalayın",
     searchPlaceholder: "Fırsatlarda ara",
-    promoShipping: "Ücretsiz kargo $20'ye kadar",
+    promoShipping: "Ücretsiz sevkiyat $20'ye kadar",
     promoDays: "3 gün",
     tabAll: "Tümü",
-    tabFreeShipping: "Ücretsiz Kargo",
+    tabFreeShipping: "Ücretsiz Sevkiyat",
     tabJewelry: "Mücevher, Gözlük, Saat & Aksesuar",
     tabElectronics: "Tüketici Elektroniği",
     tabBags: "Bavul, Çanta & Kılıf",
@@ -7800,14 +7849,14 @@ const tr = {
     // Collection chips
     collectionLabel: "Koleksiyon",
     chipIstocPicks: "iStoc Seçimleri",
-    chip48hShip: "48 Saat Kargo",
+    chip48hShip: "48 Saat Sevkiyat",
     chipHotSale: "Çok Satan",
     chipBranded: "Markalı",
     chipCompliance: "Uyumluluk Hazır",
     chipCustomizable: "Özelleştirilebilir",
 
     // Country chips
-    shippingLabel: "Kargo Ülkesi",
+    shippingLabel: "Sevkiyat Ülkesi",
     countryUS: "Amerika Birleşik Devletleri",
     countryCN: "Çin",
     countryIN: "Hindistan",
@@ -7822,7 +7871,7 @@ const tr = {
     supplierCountry: "Tedarikçi Ülkesi",
     warehouse: "Depo",
     logistics: "Lojistik",
-    freeShipping: "Ücretsiz Kargo",
+    freeShipping: "Ücretsiz Sevkiyat",
 
     // Category
     categoryLabel: "Kategori",
@@ -7860,7 +7909,7 @@ const tr = {
     orderConfirming: "Onaylanıyor",
     orderUnpaid: "Ödenmemiş",
     orderPreparing: "Hazırlanıyor",
-    orderShipping: "Kargoda",
+    orderShipping: "Sevkiyatta",
     orderRefunds: "İadeler",
     orderCompleted: "Tamamlanan",
     orderClosed: "Kapanan",
@@ -7915,7 +7964,7 @@ const tr = {
     moq20: "20 adet",
 
     // Promo labels
-    promo48h: "48 Saat Kargo",
+    promo48h: "48 Saat Sevkiyat",
     promoHotSale: "Çok Satan",
     promoBranded: "Markalı Ürün",
 

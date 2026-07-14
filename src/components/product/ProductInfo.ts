@@ -229,17 +229,23 @@ export function ProductInfo(): string {
             : ""
         }
 
-        <!-- Shipping -->
+        <!-- Shipping — yöntem belli değilse bölüm hiç render edilmez -->
+        ${
+          p.shipping[0]?.method
+            ? `
         <div class="py-5" style="border-bottom: 1px solid var(--color-border-light, #f0f0f0);">
           <h2 class="text-sm font-bold mb-3 flex items-center gap-1.5 m-0" style="color: var(--pd-title-color, #111827);">${t("product.shippingLabel")}</h2>
           <div class="flex items-center justify-between gap-3 mt-3 px-3.5 py-3 rounded-md min-w-0" id="pd-shipping-card" style="background: var(--pd-spec-header-bg, #f9fafb);">
             <div class="flex flex-col gap-0.5 min-w-0">
-              <span class="text-sm font-semibold truncate" id="pd-ship-card-method" style="color: var(--pd-title-color, #111827);">${escapeHtml(p.shipping[0]?.method || t("product.shippingLabel"))}</span>
-              <span class="pd-shipping-card-detail text-xs truncate" style="color: var(--pd-rating-text-color, #6b7280);">${p.shipping[0] ? t("product.shippingCost", { cost: p.shipping[0].cost, days: p.shipping[0].estimatedDays }) : ""}</span>
+              <span class="text-sm font-semibold truncate" id="pd-ship-card-method" style="color: var(--pd-title-color, #111827);">${escapeHtml(p.shipping[0].method)}</span>
+              <span class="pd-shipping-card-detail text-xs truncate" style="color: var(--pd-rating-text-color, #6b7280);">${t("product.shippingCost", { cost: p.shipping[0].cost, days: p.shipping[0].estimatedDays })}</span>
             </div>
             <a href="javascript:void(0)" class="text-[13px] font-medium no-underline whitespace-nowrap cursor-pointer" id="pd-ship-card-change" style="color: var(--pd-price-color, #cc9900);">${t("product.changeLabel")} ›</a>
           </div>
         </div>
+        `
+            : ""
+        }
 
         <!-- Social Proof Badge — fiyat/stok ile CTA arası -->
         ${SocialProofBadge({

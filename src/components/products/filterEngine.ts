@@ -65,7 +65,8 @@ export interface FilterEngineOptions {
     page: number,
     totalPages: number,
     hasNext: boolean,
-    hasPrev: boolean
+    hasPrev: boolean,
+    categoryName?: string
   ) => void;
   /** Callback when loading starts */
   onLoading?: () => void;
@@ -226,7 +227,8 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
         result.searchHeader.currentPage || currentPage,
         result.searchHeader.totalPages || 1,
         result.hasNext,
-        result.hasPrev
+        result.hasPrev,
+        result.categoryName
       );
 
       // Sonraki sayfayı arka planda prefetch et → kullanıcı "sonraki"ye basınca

@@ -92,10 +92,7 @@ export function StoreHeader(): string {
               </span>
             </template>
             <template x-if="seller?.short_description || seller?.main_markets">
-              <span>
-                <span class="font-semibold text-[#333]">${t("seller.sf.mainProducts")}:</span>
-                <span x-text="seller.short_description || seller.main_markets || '\u2014'"></span>
-              </span>
+              <span x-text="seller.short_description || seller.main_markets || '\u2014'"></span>
             </template>
           </div>
 

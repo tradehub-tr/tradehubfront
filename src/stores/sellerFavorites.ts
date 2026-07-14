@@ -23,6 +23,7 @@ export interface FavoriteSellerItem {
   cover?: string;
   rating?: number;
   reviewCount?: number;
+  verified?: boolean;
   listIds: string[];
   addedAt: number;
 }

@@ -219,6 +219,11 @@ export interface ProductDetail {
   };
   title: string;
   category: string[];
+  /**
+   * Slug'lı kategori breadcrumb'ı (kök → yaprak). Breadcrumb linkleri
+   * /pages/products.html?cat=<slug> üretir; slug boşsa q= aramasına düşülür.
+   */
+  categoryPath?: Array<{ name: string; slug: string }>;
   productCategoryId?: string;
   /**
    * KYB doğrulanmış satıcı flag'i (üst-seviye, supplier objesinden bağımsız).

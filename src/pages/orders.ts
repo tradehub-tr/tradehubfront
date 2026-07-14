@@ -13,6 +13,7 @@ import { FloatingPanel } from '../components/floating'
 import { startAlpine } from '../alpine'
 import { renderSidebarColumn, initSidebar } from '../components/sidebar'
 import { OrdersPageLayout, initOrdersPageLayout } from '../components/orders'
+import { WriteReviewModal } from '../components/product/WriteReviewModal'
 import { requireAuth } from '../utils/auth-guard'
 
 await requireAuth();
@@ -39,6 +40,8 @@ appEl.innerHTML = `
       </div>
     </div>
   </div>
+
+  ${WriteReviewModal()}
 
   <!-- Floating Panel -->
   ${FloatingPanel()}

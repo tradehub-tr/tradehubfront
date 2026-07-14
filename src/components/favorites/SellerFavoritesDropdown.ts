@@ -11,6 +11,7 @@
 import { t } from "../../i18n";
 import { getLists, createList, type FavoriteList } from "../../stores/favorites";
 import {
+  type SellerInput as SellerData,
   getSellerListIds,
   isSellerFavorited,
   toggleSellerInList,
@@ -18,17 +19,6 @@ import {
 } from "../../stores/sellerFavorites";
 import { showToast } from "../../utils/toast";
 import { escapeHtml } from "../../utils/sanitize";
-
-interface SellerData {
-  code: string;
-  name: string;
-  city?: string;
-  country?: string;
-  logo?: string;
-  cover?: string;
-  rating?: number;
-  reviewCount?: number;
-}
 
 const DEFAULT_LIST_ID = "default";
 let activeDropdown: HTMLElement | null = null;
