@@ -155,7 +155,7 @@ function renderAllOrders(): string {
             x-transition:leave="transition ease-out duration-100"
             x-transition:leave-start="opacity-100 translate-y-0"
             x-transition:leave-end="opacity-0 translate-y-1 motion-reduce:translate-y-0"
-            class="absolute top-full start-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 py-1 min-w-[160px]"
+            class="absolute top-full start-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 py-1 min-w-[160px]"
           >
             <button @click="setDateFilter('all')"
               class="flex items-center justify-between w-full text-start px-4 py-2.5 text-sm hover:bg-gray-50 cursor-pointer bg-transparent border-none transition-colors"
@@ -211,7 +211,7 @@ function renderAllOrders(): string {
             x-transition:leave="transition ease-out duration-100"
             x-transition:leave-start="opacity-100 translate-y-0"
             x-transition:leave-end="opacity-0 translate-y-1 motion-reduce:translate-y-0"
-            class="absolute top-full end-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 p-4 min-w-[280px] max-sm:min-w-0 max-sm:w-60"
+            class="absolute top-full end-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 p-4 min-w-[280px] max-sm:min-w-0 max-sm:w-60"
           >
             <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">${t("orders.selectDateRange")}</p>
             <div class="flex items-center gap-2 mb-3 max-sm:flex-col max-sm:items-stretch">
@@ -1284,7 +1284,7 @@ function renderAllOrders(): string {
                     class="th-input th-input-md cursor-pointer"
                   >
                     <template x-if="shippingMethods.length === 0">
-                      <option value="">${t("orders.noShippingMethods") || "Kargo yöntemi bulunamadı"}</option>
+                      <option value="">${t("orders.noShippingMethods")}</option>
                     </template>
                     <template x-for="method in shippingMethods" :key="method.id">
                       <option :value="method.id" x-text="method.estimatedDays ? method.method + ' (' + method.estimatedDays + ')' : method.method"></option>
@@ -1840,7 +1840,7 @@ function renderReviews(): string {
     </button>`;
 
   return `
-    <div x-data="reviewsSectionComponent()" x-cloak>
+    <div x-data="reviewsSectionComponent()" @review-submitted.window="refresh()" x-cloak>
       <!-- Header -->
       <div class="flex items-center justify-between gap-3 px-7 max-sm:px-4 pt-6 max-sm:pt-5 pb-5 max-sm:pb-4 border-b border-(--color-border-light,#f0f0f0)">
         <h1 class="text-[22px] max-sm:text-[18px] font-bold text-(--color-text-heading,#111827) m-0 truncate">${t("orders.myReviews")}</h1>
@@ -1889,11 +1889,11 @@ function renderReviews(): string {
                       <p class="text-[14px] max-sm:text-[13px] font-medium text-gray-900 line-clamp-2 leading-snug m-0" x-text="p.product_name"></p>
                       <div class="flex flex-wrap items-center gap-x-1.5 text-[12px] text-gray-500 mt-1">
                         <span class="font-mono" x-text="p.order_number"></span>
-                        <span class="whitespace-nowrap" x-text="fmtDate(p.delivered_at)"></span>
+                        <span class="whitespace-nowrap" x-text="fmtDate(p.order_date)"></span>
                       </div>
                     </div>
                   </div>
-                  <button type="button" class="th-btn shrink-0 px-5 py-2 text-[13px] whitespace-nowrap max-sm:w-full max-sm:rounded-full">${t("orders.writeReview")}</button>
+                  <button type="button" @click="openReview(p)" class="th-btn shrink-0 px-5 py-2 text-[13px] whitespace-nowrap max-sm:w-full max-sm:rounded-full">${t("orders.writeReview")}</button>
                 </article>
               </template>
             </div>

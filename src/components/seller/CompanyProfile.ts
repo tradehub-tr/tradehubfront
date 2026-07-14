@@ -112,7 +112,7 @@ function MainProductsCarousel(): string {
                 <div>
                   <!-- Category + Badge -->
                   <div class="flex items-center gap-2 mb-1">
-                    <span class="text-[12px] text-gray-400" x-text="p.category || 'Main product'"></span>
+                    <span class="text-[12px] text-gray-400" x-text="p.category_name || p.product_category_name || ''"></span>
                     <span x-show="p.badge" class="text-[10px] font-bold text-blue-700 bg-blue-50 border border-blue-200 px-1.5 py-0.5 rounded" x-text="p.badge"></span>
                   </div>
                   <div class="text-[13px] text-gray-800 line-clamp-2 leading-snug mb-1.5" x-text="p.product_name"></div>

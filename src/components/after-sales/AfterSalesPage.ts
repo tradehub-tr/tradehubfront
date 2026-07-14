@@ -1,7 +1,7 @@
 /**
- * Satış Sonrası Değerlendirme ve Destek Landing Page
+ * Satış Sonrası Değerlendirme ve Destek Landing Page — "Taşan Kartlar" (5D) düzeni:
+ * koyu hero + hero'ya taşan 2 özellik kartı ve KPI kartı + destek CTA bandı.
  */
-import heroImg from "../../assets/images/satıssonrasıhizmetleri.avif";
 import { t } from "../../i18n";
 import { TradeAssuranceFooterCards } from "../shared/TradeAssuranceFooterCards";
 import { TradeAssuranceBadge } from "../shared/TradeAssuranceBadge";
@@ -18,8 +18,24 @@ const iconMessage = `<svg class="w-6 h-6" fill="none" stroke="currentColor" stro
    HELPERS
    ════════════════════════════════════════════════════ */
 
-function yellowIcon(svgContent: string): string {
-  return `<div class="w-[48px] h-[48px] rounded-full bg-[#FFE285] flex items-center justify-center shrink-0">${svgContent}</div>`;
+function featureCard(icon: string, titleKey: string, descKey: string, linkHref: string, linkKey: string): string {
+  return `
+    <div class="bg-white border border-[#ECEAE6] rounded-md p-6 flex flex-col gap-3.5 shadow-[0_18px_44px_-24px_rgba(28,12,5,0.35)]">
+      <div class="size-12 rounded-full bg-[#FFE285] flex items-center justify-center shrink-0">${icon}</div>
+      <h3 class="text-lg font-bold text-gray-900">${t(titleKey)}</h3>
+      <p class="text-sm text-gray-600 leading-relaxed flex-1">${t(descKey)}</p>
+      <a href="${linkHref}" class="text-[13.5px] font-bold text-amber-700 [@media(hover:hover)]:hover:underline">${t(linkKey)} &rarr;</a>
+    </div>
+  `;
+}
+
+function kpiItem(valueKey: string, labelKey: string): string {
+  return `
+    <div class="py-2 border-t border-white/10 first:border-t-0 md:border-t-0 lg:border-t lg:first:border-t-0">
+      <b class="block text-[#FFC200] text-[26px] font-extrabold tabular-nums tracking-tight">${t(valueKey)}</b>
+      <span class="text-white/65 text-[11px] font-semibold tracking-wider uppercase">${t(labelKey)}</span>
+    </div>
+  `;
 }
 
 /* ════════════════════════════════════════════════════
@@ -28,14 +44,20 @@ function yellowIcon(svgContent: string): string {
 
 function heroSection(): string {
   return `
-    <section class="relative w-full min-h-[400px] flex items-center" style="background-image: url('${heroImg}'); background-size: cover; background-position: center;">
-      <div class="absolute inset-0 bg-black/50"></div>
-      <div class="relative z-10 container-boxed w-full py-16 sm:py-20">
+    <section class="bg-[#1C0C05] bg-[radial-gradient(90%_130%_at_15%_-30%,rgba(255,194,0,0.32),transparent_55%)] pt-10 pb-28 sm:pt-12 sm:pb-32">
+      <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+        <nav class="flex text-sm text-white/55 mb-8" aria-label="Breadcrumb">
+          <ol class="flex items-center gap-1.5">
+            <li><a href="/ticaret-guvencesi/detay" class="transition-colors [@media(hover:hover)]:hover:text-[#FFC800]">${t("infoMisc.tradeAssurance")}</a></li>
+            <li class="text-white/30">&gt;</li>
+            <li class="text-white font-medium">${t("infoMisc.afterSalesSupport")}</li>
+          </ol>
+        </nav>
         ${TradeAssuranceBadge({ className: "mb-6" })}
-        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 max-w-2xl leading-tight">
+        <h1 class="text-3xl sm:text-4xl xl:text-5xl font-bold text-white mb-4 max-w-2xl leading-tight">
           ${t("infoMisc.afterSalesHeroTitle")}
         </h1>
-        <p class="text-base sm:text-lg text-white/90 max-w-2xl leading-relaxed">
+        <p class="text-base sm:text-lg text-white/80 max-w-2xl leading-relaxed">
           ${t("infoMisc.afterSalesHeroSubtitle")}
         </p>
       </div>
@@ -43,60 +65,31 @@ function heroSection(): string {
   `;
 }
 
-function breadcrumbSection(): string {
+function overlapSection(): string {
   return `
-    <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
-      <nav class="flex text-sm text-gray-500" aria-label="Breadcrumb">
-        <ol class="flex items-center gap-1.5">
-          <li><a href="/ticaret-guvencesi/detay" class="transition-colors [@media(hover:hover)]:hover:text-[#FFC800]">${t("infoMisc.tradeAssurance")}</a></li>
-          <li class="text-gray-400">&gt;</li>
-          <li class="text-gray-900 font-medium">${t("infoMisc.afterSalesSupport")}</li>
-        </ol>
-      </nav>
-    </div>
-  `;
-}
-
-function currentFeaturesSection(): string {
-  return `
-    <section class="bg-white py-12 sm:py-16">
+    <section class="pb-14 lg:pb-16">
       <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">${t("infoMisc.afterSalesFeaturesTitle")}</h2>
-        <p class="text-gray-600 leading-relaxed max-w-3xl mb-10 text-base sm:text-lg">
-          ${t("infoMisc.afterSalesFeaturesIntro")}
-        </p>
 
-        <!-- 2 Current Feature Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">
-
-          <!-- Card 1: Satıcı Değerlendirme -->
-          <div class="border border-gray-200 rounded-md p-6 flex flex-col gap-4 transition-shadow [@media(hover:hover)]:hover:shadow-md">
-            ${yellowIcon(iconStar)}
-            <h3 class="text-lg font-bold text-gray-900">${t("infoMisc.sellerRatingTitle")}</h3>
-            <p class="text-sm text-gray-600 leading-relaxed flex-1">
-              ${t("infoMisc.sellerRatingDesc")}
-            </p>
-            <div class="flex items-center gap-1 pt-2">
-              ${[1, 2, 3, 4, 5]
-                .map(
-                  () => `
-                <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-              `
-                )
-                .join("")}
-            </div>
+        <!-- Hero'ya taşan kart şeridi: 2 özellik kartı + KPI kartı -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1fr_1fr_0.8fr] gap-4 lg:gap-5 -mt-16 sm:-mt-20">
+          ${featureCard(iconStar, "infoMisc.sellerRatingTitle", "infoMisc.sellerRatingDesc", "/pages/dashboard/orders.html", "infoMisc.asReviewLink")}
+          ${featureCard(iconMessage, "infoMisc.directContactTitle", "infoMisc.directContactDesc", "/pages/dashboard/messages.html", "infoMisc.asMessageLink")}
+          <div class="bg-[#1C0C05] border border-[#33190B] rounded-md p-6 shadow-[0_18px_44px_-24px_rgba(28,12,5,0.5)] grid grid-cols-1 md:grid-cols-3 lg:grid-cols-1 gap-2 md:col-span-2 lg:col-span-1">
+            ${kpiItem("infoMisc.asKpiResolutionValue", "infoMisc.asKpiResolutionLabel")}
+            ${kpiItem("infoMisc.asKpiResponseValue", "infoMisc.asKpiResponseLabel")}
+            ${kpiItem("infoMisc.asKpiReviewsValue", "infoMisc.asKpiReviewsLabel")}
           </div>
-
-          <!-- Card 2: Mesajlaşma -->
-          <div class="border border-gray-200 rounded-md p-6 flex flex-col gap-4 transition-shadow [@media(hover:hover)]:hover:shadow-md">
-            ${yellowIcon(iconMessage)}
-            <h3 class="text-lg font-bold text-gray-900">${t("infoMisc.directContactTitle")}</h3>
-            <p class="text-sm text-gray-600 leading-relaxed flex-1">
-              ${t("infoMisc.directContactDesc")}
-            </p>
-          </div>
-
         </div>
+
+        <!-- Destek CTA bandı -->
+        <div class="mt-10 lg:mt-12 bg-[#FFFBEB] border border-[#FDE68A] rounded-md p-6 lg:px-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <h3 class="text-lg font-bold text-[#1C0C05] mb-1.5">${t("infoMisc.asCtaTitle")}</h3>
+            <p class="text-[13.5px] text-gray-500">${t("infoMisc.asCtaDesc")}</p>
+          </div>
+          <a href="/pages/help/help-ticket-new.html" class="th-btn-dark shrink-0 self-start lg:self-auto">${t("infoMisc.asCtaBtn")}</a>
+        </div>
+
       </div>
     </section>
   `;
@@ -109,12 +102,7 @@ function currentFeaturesSection(): string {
 export function AfterSalesPage(): string {
   return `
     ${heroSection()}
-    ${breadcrumbSection()}
-    ${currentFeaturesSection()}
+    ${overlapSection()}
     ${TradeAssuranceFooterCards()}
   `;
-}
-
-export function initAfterSalesPage(): void {
-  // future interactivity hooks
 }

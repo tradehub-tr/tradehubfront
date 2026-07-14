@@ -89,14 +89,19 @@ if (categoryParam) {
   });
 }
 
+// Backend'in ?cat= slug'ından çözdüğü görünen ad (get_listings.categoryName).
+// Mega menü ağacı client'ta 3 seviye — derin kategorilerde tek kaynak budur.
+let apiCategoryName = '';
+
 /**
  * Resolve display keyword from URL params.
- * categoryParam önce slug olarak, yoksa ID olarak aranır.
+ * categoryParam önce slug olarak, yoksa ID olarak aranır; ağaçta yoksa
+ * backend'in çözdüğü ada, o da yoksa ham slug'a düşülür.
  */
 function resolveKeyword(): string {
   if (categoryParam) {
     const cat = findCategoryBySlug(categoryParam) || findCategoryById(categoryParam);
-    return cat ? cat.name : escapeHtml(categoryParam);
+    return cat ? cat.name : escapeHtml(apiCategoryName || categoryParam);
   }
   if (queryParam) {
     return escapeHtml(queryParam.replace(/\+/g, ' '));
@@ -110,7 +115,9 @@ const initialKeyword = queryParam ? escapeHtml(queryParam.replace(/\+/g, ' ')) :
 // Build initial breadcrumb (category name henüz bilinmiyor, güncellenir)
 const productsBreadcrumb = (() => {
   const crumbs: { label: string; href?: string }[] = [
-    { label: t('search.products'), href: 'products.html' },
+    // Mutlak yol: sayfa /urunler pretty URL'inden de açılabiliyor; göreli
+    // 'products.html' orada kök dizine çözülür ve 404 olur.
+    { label: t('search.products'), href: '/pages/products.html' },
   ];
   if (categoryParam || queryParam) {
     crumbs.push({ label: initialKeyword });
@@ -330,8 +337,9 @@ initCurrency().then(() => {
   engine = initFilterEngine({
     baseParams,
     pageSize: 40,
-    onUpdate: (products, total, page, totalPages, hasNext, hasPrev) => {
+    onUpdate: (products, total, page, totalPages, hasNext, hasPrev, categoryName) => {
       rerenderProductGrid(products);
+      if (categoryName) apiCategoryName = categoryName;
       const resolvedKeyword = resolveKeyword() || undefined;
       updateSubHeader({
         totalCount: total,
@@ -340,7 +348,15 @@ initCurrency().then(() => {
       if (engine) updateFilterChips(engine.getState());
 
       // Breadcrumb tam kategori zinciriyle onCategoriesLoaded içinde kuruluyor
-      // (updateBreadcrumb); burada tekrar dokunmaya gerek yok.
+      // (updateBreadcrumb); ağaçta olmayan derin kategorilerde o yol boş kalır —
+      // yaprak etiketini backend'in çözdüğü adla düzelt.
+      if (categoryName && categoryParam && findCategoryPath(categoryParam).length === 0) {
+        updateBreadcrumb([
+          { label: t('search.products'), href: '/pages/products.html' },
+          // Breadcrumb render'ı label'ı zaten escape ediyor — burada escape çift olur.
+          { label: categoryName },
+        ]);
+      }
 
       // Update pagination UI
       const paginationEl = document.getElementById('pagination-controls');

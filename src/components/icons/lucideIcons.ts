@@ -97,6 +97,17 @@ import wallet from "lucide-static/icons/wallet.svg?raw";
 import tag from "lucide-static/icons/tag.svg?raw";
 import trendingUp from "lucide-static/icons/trending-up.svg?raw";
 import trendingDown from "lucide-static/icons/trending-down.svg?raw";
+// Yardım merkezi — SSS kategori ikonları (18 kategori + "tümü")
+import layoutGrid from "lucide-static/icons/layout-grid.svg?raw";
+import info from "lucide-static/icons/info.svg?raw";
+import user from "lucide-static/icons/user.svg?raw";
+import creditCard from "lucide-static/icons/credit-card.svg?raw";
+import receipt from "lucide-static/icons/receipt.svg?raw";
+import packageCheck from "lucide-static/icons/package-check.svg?raw";
+import rotateCcw from "lucide-static/icons/rotate-ccw.svg?raw";
+import helpCircle from "lucide-static/icons/help-circle.svg?raw";
+import badgeCheck from "lucide-static/icons/badge-check.svg?raw";
+import settings from "lucide-static/icons/settings.svg?raw";
 
 /** Kanonik ikon isim → ham SVG eşlemesi. */
 const ICONS: Record<string, string> = {
@@ -189,6 +200,16 @@ const ICONS: Record<string, string> = {
   tag,
   "trending-up": trendingUp,
   "trending-down": trendingDown,
+  "layout-grid": layoutGrid,
+  info,
+  user,
+  "credit-card": creditCard,
+  receipt,
+  "package-check": packageCheck,
+  "rotate-ccw": rotateCcw,
+  "help-circle": helpCircle,
+  "badge-check": badgeCheck,
+  settings,
 };
 
 /**

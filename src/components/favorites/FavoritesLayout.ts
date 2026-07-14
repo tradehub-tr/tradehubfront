@@ -339,16 +339,19 @@ function renderSidebarLists(kind: "products" | "suppliers" = "products"): string
 }
 
 /**
- * Tedarikçi kartı — Alibaba "Sık kullanılanlar > Tedarikçiler" satır
- * görünümü. Logo + isim + doğrulama + lokasyon + sağda eylem
- * butonları.
+ * Tedarikçi listesi — "Hizalı Sütunlar" (V3 mock): tek kart içinde
+ * ayraçlı satırlar; şehir ve puan sabit genişlikte sütunlarda satırdan
+ * satıra dikey hizalı. Doğrulama isim yanında yeşil tik. Dar ekranda
+ * (<480) şehir/puan sütunları gizlenir, puan isim altına iner.
  */
 function renderSupplierCards(items: FavoriteSellerItem[]): string {
   if (items.length === 0) return renderEmptyState();
 
-  const cards = items
+  const starSvg = `<svg class="w-3.5 h-3.5 text-amber-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>`;
+  const listById = new Map(getLists().map((l) => [l.id, l]));
+  const rows = items
     .map((s) => {
-      const profileHref = getSellerUrl({ id: s.code });
+      const href = escapeHtml(sanitizeUrl(getSellerUrl({ id: s.code })));
       const initials = (s.name || "?")
         .split(" ")
         .map((w) => w[0])
@@ -358,73 +361,54 @@ function renderSupplierCards(items: FavoriteSellerItem[]): string {
         .toUpperCase();
       const ratingTxt = s.rating ? s.rating.toFixed(1) : "—";
       const reviews = s.reviewCount ?? 0;
+      const location = [s.city, s.country].filter(Boolean).join(", ");
+      const verifiedTick = s.verified
+        ? `<span class="inline-flex align-[-2px] ms-1.5 text-green-700" title="${t("seller.sf.verifiedSupplier")}"><svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg></span>`
+        : "";
+      // Tik atomic-inline olduğu için tek başına alt satıra sarabiliyor;
+      // ismin son kelimesine nowrap ile bağla ki asla yalnız kalmasın.
+      const words = (s.name || "").trim().split(" ");
+      const lastWord = words.pop() ?? "";
+      const nameHtml = verifiedTick
+        ? `${words.length ? escapeHtml(words.join(" ")) + " " : ""}<span class="whitespace-nowrap">${escapeHtml(lastWord)}${verifiedTick}</span>`
+        : escapeHtml(s.name);
+      const rating = `${starSvg}<strong class="text-[#222]">${ratingTxt}</strong><span class="text-gray-400">(${reviews})</span>`;
+      const listChips = s.listIds
+        .filter((id) => id !== DEFAULT_LIST_ID)
+        .map((id) => {
+          const list = listById.get(id);
+          return list
+            ? `<span class="inline-flex items-center px-2 py-0.5 text-[10px] rounded-full bg-gray-100 text-gray-600">${escapeHtml(list.name)}</span>`
+            : "";
+        })
+        .join("");
       return `
-    <div class="relative bg-white rounded-lg border border-[#eee] hover:border-[#F60] hover:shadow-[0_8px_18px_rgba(0,0,0,0.08)] transition-all p-5 max-sm:p-4 group" data-fav-seller-id="${escapeHtml(s.code)}">
-      <button type="button" class="fav-remove-seller absolute top-3 end-3 w-8 h-8 rounded-full bg-[#f4f4f4] flex items-center justify-center cursor-pointer hover:bg-red-100 z-10 transition-colors opacity-0 group-hover:opacity-100" data-remove-seller="${escapeHtml(s.code)}" title="${t("favorites.removeFromAll")}">
-        <svg class="w-[16px] h-[16px]" fill="none" stroke="#ef4444" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-      </button>
-      <div class="flex max-md:flex-col gap-4 max-md:gap-3 items-start">
-        <!-- Logo / cover -->
-        <div class="w-[64px] h-[64px] rounded-md border border-gray-100 overflow-hidden shrink-0 bg-gray-50 flex items-center justify-center text-[#1a66ff] font-bold text-base">
-          ${
-            s.logo
-              ? `<img src="${escapeHtml(sanitizeUrl(s.logo))}" alt="${escapeHtml(s.name)}" class="w-full h-full object-contain p-1" />`
-              : `<span>${escapeHtml(initials)}</span>`
-          }
-        </div>
-        <!-- Info -->
-        <div class="flex-1 min-w-0 pe-12 max-md:pe-0">
-          <a href="${escapeHtml(sanitizeUrl(profileHref))}" class="text-[15px] font-bold text-[#222] hover:text-[#1a66ff] transition-colors line-clamp-1">${escapeHtml(s.name)}</a>
-          <div class="flex flex-wrap items-center gap-1.5 mt-1 text-[12px] text-[#555]">
-            <span class="inline-flex items-center gap-1 text-[#1a66ff] font-semibold">
-              <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-              ${t("mfr.list.verified")}
-            </span>
-            ${s.city ? `<span class="text-gray-300">·</span><span>${escapeHtml(s.city)}</span>` : ""}
-            ${s.country ? `<span class="text-gray-300">·</span><span>${escapeHtml(s.country)}</span>` : ""}
-          </div>
-          <div class="flex items-center gap-3 mt-2 text-[12px] text-[#666]">
-            <span class="inline-flex items-center gap-1">
-              <svg class="w-3.5 h-3.5 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-              <strong class="text-[#222]">${ratingTxt}</strong>/5
-              <span class="text-gray-400">(${reviews})</span>
-            </span>
-          </div>
-          ${
-            s.listIds.length > 0
-              ? `<div class="mt-2 flex flex-wrap gap-1">
-                  ${s.listIds
-                    .filter((id) => id !== DEFAULT_LIST_ID)
-                    .map((id) => {
-                      const list = getLists().find((l) => l.id === id);
-                      return list
-                        ? `<span class="inline-flex items-center px-2 py-0.5 text-[10px] rounded-full bg-gray-100 text-gray-600">${escapeHtml(list.name)}</span>`
-                        : "";
-                    })
-                    .join("")}
-                </div>`
-              : ""
-          }
-        </div>
-        <!-- Cover thumb -->
+    <div class="flex items-center gap-3 px-4 py-3 max-sm:px-3 hover:bg-[#fafafa] transition-colors group" data-fav-seller-id="${escapeHtml(s.code)}">
+      <!-- Logo -->
+      <div class="size-10 rounded-md border border-gray-100 overflow-hidden shrink-0 bg-gray-50 flex items-center justify-center text-[#1a66ff] font-bold text-[12px]">
         ${
-          s.cover
-            ? `<div class="w-[140px] h-[100px] max-md:w-full max-md:h-[120px] rounded-md overflow-hidden bg-gray-50 shrink-0 max-lg:hidden">
-                <img src="${escapeHtml(sanitizeUrl(s.cover))}" alt="" class="w-full h-full object-cover" />
-              </div>`
-            : ""
+          s.logo
+            ? `<img src="${escapeHtml(sanitizeUrl(s.logo))}" alt="" class="w-full h-full object-contain p-1" onerror="this.nextElementSibling.classList.remove('hidden');this.remove()" /><span class="hidden">${escapeHtml(initials)}</span>`
+            : `<span>${escapeHtml(initials)}</span>`
         }
-        <!-- Actions -->
-        <div class="flex flex-col gap-2 shrink-0 max-md:w-full max-md:flex-row">
-          <a href="${escapeHtml(sanitizeUrl(profileHref))}" class="th-btn h-9 px-4 text-[13px] font-semibold whitespace-nowrap inline-flex items-center justify-center max-md:flex-1">
-            ${t("mfr.list.viewProfile", { defaultValue: "Profili görüntüle" })}
-          </a>
-          <!-- DISABLED: "Bu satıcıyla iletişime geç" butonu — messages.html altyapısı yok, ileride geri açılacak. -->
-          <!-- <a href="/pages/dashboard/messages.html?seller=${encodeURIComponent(s.code)}" class="th-btn-outline h-9 px-4 text-[13px] font-semibold whitespace-nowrap inline-flex items-center justify-center max-md:flex-1">
-            ${t("mfr.list.contactUs")}
-          </a> -->
-        </div>
       </div>
+      <!-- İsim + doğrulama (+ mobilde puan) -->
+      <div class="flex-1 min-w-0">
+        <a href="${href}" class="text-[14px] font-bold text-[#222] hover:text-primary-700 transition-colors line-clamp-2 leading-snug">${nameHtml}</a>
+        <div class="hidden max-sm:flex items-center gap-1 mt-0.5 text-[12px] text-[#555]">${rating}</div>
+        ${listChips ? `<div class="mt-1 flex flex-wrap gap-1">${listChips}</div>` : ""}
+      </div>
+      <!-- Sabit sütunlar: şehir + puan (satırdan satıra hizalı) -->
+      <div class="w-[110px] shrink-0 text-[12px] text-[#555] truncate max-md:hidden">${escapeHtml(location)}</div>
+      <div class="w-[92px] shrink-0 flex items-center justify-end gap-1 text-[12px] max-sm:hidden">${rating}</div>
+      <!-- Eylemler — nötr gri ghost bilinçli: th-btn-outline amber kenarlı, V3'ün minimal listesinde her satırda amber buton gürültü yapar -->
+      <a href="${href}" class="th-no-press h-8 px-3.5 rounded-md border border-[#c9c9c9] text-[12px] font-semibold text-[#222] whitespace-nowrap shrink-0 inline-flex items-center justify-center hover:border-primary-600 hover:text-primary-700 transition-colors">
+        ${t("sellPage.profile", { defaultValue: "Profil" })}
+      </a>
+      <button type="button" class="th-no-press fav-remove-seller size-8 shrink-0 rounded-full flex items-center justify-center cursor-pointer text-[#bbb] hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100 pointer-coarse:opacity-100" data-remove-seller="${escapeHtml(s.code)}" title="${t("favorites.removeFromAll")}">
+        <svg class="w-[14px] h-[14px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+      <!-- DISABLED: "Bu satıcıyla iletişime geç" butonu — messages.html altyapısı yok, ileride geri açılacak. -->
     </div>
   `;
     })
@@ -436,7 +420,7 @@ function renderSupplierCards(items: FavoriteSellerItem[]): string {
         <h2 class="text-[18px] font-bold text-text-primary">${t("favorites.suppliers")}</h2>
         <span class="text-[13px] text-text-tertiary">${t("favorites.itemCount", { count: items.length })}</span>
       </div>
-      <div class="flex flex-col gap-3">${cards}</div>
+      <div class="bg-white border border-[#eee] rounded-md overflow-hidden divide-y divide-[#eee]">${rows}</div>
     </div>
   `;
 }
@@ -460,9 +444,9 @@ function renderFilterButton(): string {
     count?: number,
     checked?: boolean
   ): string => `
-    <label class="flex items-center gap-2 px-2 py-1.5 rounded-md cursor-pointer hover:bg-surface-raised transition-colors">
+    <label class="flex items-center gap-2 px-2 py-1.5 max-lg:py-2.5 rounded-md cursor-pointer hover:bg-surface-raised transition-colors">
       <input type="checkbox" data-fav-filter-group="${group}" data-fav-filter-val="${escapeHtml(val)}" ${checked ? "checked" : ""}
-             class="w-3.5 h-3.5 rounded border-border-strong text-[var(--color-cta-primary,#F5B800)] focus:ring-1 focus:ring-[var(--color-cta-primary,#F5B800)] focus:ring-offset-0 cursor-pointer" />
+             class="w-3.5 h-3.5 max-lg:w-4 max-lg:h-4 rounded border-border-strong text-[var(--color-cta-primary,#F5B800)] focus:ring-1 focus:ring-[var(--color-cta-primary,#F5B800)] focus:ring-offset-0 cursor-pointer" />
       <span class="flex-1 min-w-0 text-[12.5px] text-text-primary truncate">${escapeHtml(label)}</span>
       ${typeof count === "number" ? `<span class="text-[11px] text-text-tertiary tabular-nums">${count}</span>` : ""}
     </label>
@@ -487,7 +471,14 @@ function renderFilterButton(): string {
         ${badge ? `<span class="inline-flex items-center justify-center min-w-[16px] h-4 px-1 text-[10px] font-bold rounded-full bg-[var(--color-cta-primary,#F5B800)] text-white tabular-nums">${badge}</span>` : ""}
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
       </button>
-      <div data-fav-filter-menu class="hidden absolute top-[calc(100%+6px)] end-0 z-30 w-[300px] max-h-[480px] overflow-y-auto bg-white border border-border-default rounded-xl shadow-[0_24px_60px_-12px_rgba(20,20,18,0.18),0_8px_20px_-6px_rgba(20,20,18,0.08)] p-2">
+      <div data-fav-filter-menu class="hidden absolute top-[calc(100%+6px)] end-0 z-30 w-[300px] max-h-[480px] overflow-y-auto bg-white border border-border-default rounded-md shadow-[0_24px_60px_-12px_rgba(20,20,18,0.18),0_8px_20px_-6px_rgba(20,20,18,0.08)] p-2 max-lg:fixed max-lg:start-0 max-lg:end-0 max-lg:bottom-0 max-lg:top-auto max-lg:w-auto max-lg:max-h-[75dvh] max-lg:z-[80] max-lg:rounded-b-none max-lg:border-x-0 max-lg:border-b-0 max-lg:p-3 max-lg:pb-[calc(env(safe-area-inset-bottom)+12px)] max-lg:shadow-[0_-16px_48px_rgba(20,20,18,0.28)]">
+        <div class="hidden max-lg:flex items-center justify-between mb-1 ps-2">
+          <span class="text-[13px] font-bold text-text-primary">${t("favorites.filter", { defaultValue: "Filtrele" })}</span>
+          <button type="button" data-fav-filter-close aria-label="${t("common.close", { defaultValue: "Kapat" })}"
+                  class="th-no-press size-10 inline-flex items-center justify-center rounded-md bg-transparent border-0 text-text-tertiary hover:text-text-primary cursor-pointer appearance-none focus:outline-none transition-colors">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
         ${
           catRows
             ? `<div class="mb-1.5">
@@ -512,14 +503,14 @@ function renderFilterButton(): string {
           <div class="text-[10.5px] uppercase tracking-[0.1em] font-semibold text-text-tertiary px-2 py-1">${t("favorites.filterPriceRange", { defaultValue: "Fiyat aralığı" })}</div>
           <div class="flex items-center gap-2 px-2 py-1.5">
             <input type="number" data-fav-filter-min value="${escapeHtml(activeFilters.minPrice)}" placeholder="${t("buyerUi.priceMin")}"
-                   class="flex-1 min-w-0 h-7 px-2 text-[12px] bg-white border border-border-default rounded-md focus:border-[var(--color-cta-primary,#F5B800)] focus:outline-none appearance-none" />
+                   class="flex-1 min-w-0 h-7 max-lg:h-10 px-2 text-[12px] max-lg:text-[13px] bg-white border border-border-default rounded-md focus:border-[var(--color-cta-primary,#F5B800)] focus:outline-none appearance-none" />
             <input type="number" data-fav-filter-max value="${escapeHtml(activeFilters.maxPrice)}" placeholder="${t("buyerUi.priceMax")}"
-                   class="flex-1 min-w-0 h-7 px-2 text-[12px] bg-white border border-border-default rounded-md focus:border-[var(--color-cta-primary,#F5B800)] focus:outline-none appearance-none" />
+                   class="flex-1 min-w-0 h-7 max-lg:h-10 px-2 text-[12px] max-lg:text-[13px] bg-white border border-border-default rounded-md focus:border-[var(--color-cta-primary,#F5B800)] focus:outline-none appearance-none" />
           </div>
         </div>
         <div class="flex items-center justify-between gap-2 mt-2 pt-2 border-t border-border-default px-1">
-          <button type="button" data-fav-filter-reset class="th-btn-outline h-7 px-3 text-[12px] font-semibold inline-flex items-center justify-center appearance-none focus:outline-none">${t("favorites.filterReset", { defaultValue: "Sıfırla" })}</button>
-          <button type="button" data-fav-filter-apply class="th-btn h-7 px-4 text-[12px] font-semibold inline-flex items-center justify-center appearance-none focus:outline-none">${t("favorites.filterApply", { defaultValue: "Uygula" })}</button>
+          <button type="button" data-fav-filter-reset class="th-btn-outline h-7 max-lg:h-10 max-lg:flex-1 px-3 text-[12px] max-lg:text-[13px] font-semibold inline-flex items-center justify-center appearance-none focus:outline-none">${t("favorites.filterReset", { defaultValue: "Sıfırla" })}</button>
+          <button type="button" data-fav-filter-apply class="th-btn h-7 max-lg:h-10 max-lg:flex-1 px-4 text-[12px] max-lg:text-[13px] font-semibold inline-flex items-center justify-center appearance-none focus:outline-none">${t("favorites.filterApply", { defaultValue: "Uygula" })}</button>
         </div>
       </div>
     </div>
@@ -580,11 +571,11 @@ function renderToolbar(count: number): string {
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
         </button>
         <div data-fav-sort-menu
-             class="hidden absolute top-[calc(100%+6px)] end-0 z-30 min-w-[200px] bg-white border border-border-default rounded-xl shadow-[0_24px_60px_-12px_rgba(20,20,18,0.18),0_8px_20px_-6px_rgba(20,20,18,0.08)] p-1.5">
+             class="hidden absolute top-[calc(100%+6px)] end-0 z-30 min-w-[200px] bg-white border border-border-default rounded-md shadow-[0_24px_60px_-12px_rgba(20,20,18,0.18),0_8px_20px_-6px_rgba(20,20,18,0.08)] p-1.5 max-lg:fixed max-lg:start-0 max-lg:end-0 max-lg:bottom-0 max-lg:top-auto max-lg:z-[80] max-lg:rounded-b-none max-lg:border-x-0 max-lg:border-b-0 max-lg:p-2 max-lg:pb-[calc(env(safe-area-inset-bottom)+8px)] max-lg:shadow-[0_-16px_48px_rgba(20,20,18,0.28)]">
           ${SORTS.map((s) => {
             const on = sortId === s.id;
             return `<button type="button" data-fav-sort-pick="${s.id}"
-                            class="w-full flex items-center justify-between gap-2 bg-transparent border-0 px-2.5 py-2 rounded-lg text-[13px] cursor-pointer text-start transition-colors hover:bg-surface-raised appearance-none focus:outline-none ${on ? "font-semibold text-[var(--color-cta-primary,#F5B800)]" : "text-text-primary"}">
+                            class="th-no-press w-full flex items-center justify-between gap-2 bg-transparent border-0 px-2.5 py-2 max-lg:py-3 rounded-md text-[13px] cursor-pointer text-start transition-colors hover:bg-surface-raised appearance-none focus:outline-none ${on ? "font-semibold text-[var(--color-cta-primary,#F5B800)]" : "text-text-primary"}">
                       <span>${escapeHtml(t(s.labelKey, { defaultValue: s.defaultLabel }))}</span>
                       ${on ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>` : ""}
                     </button>`;
@@ -1210,6 +1201,10 @@ function initFilterMenu(): void {
   toggle?.addEventListener("click", (e) => {
     e.stopPropagation();
     menu?.classList.toggle("hidden");
+  });
+
+  wrap.querySelector<HTMLButtonElement>("[data-fav-filter-close]")?.addEventListener("click", () => {
+    menu?.classList.add("hidden");
   });
 
   wrap.querySelectorAll<HTMLInputElement>("[data-fav-filter-group]").forEach((cb) => {

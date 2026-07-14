@@ -1,7 +1,9 @@
 /**
  * FAQPageLayout Component
- * iSTOC-style FAQ page: search header + left category sidebar + 2-column category grid
- * Alpine.js drives sidebar selection & search filtering
+ * V2.5 "Split İstatistik" redesign — küçük koyu bant + arama, lg:+ sticky
+ * sidebar (ikon + alt-konu sayısı) / mobilde yatay kaydırılan chip şeridi,
+ * kategori kartlarında satır satır alt-konu listesi.
+ * Alpine.js drives sidebar selection & search filtering.
  */
 
 import { t } from "../../i18n";
@@ -14,15 +16,19 @@ export function FAQPageLayout(): string {
       class="min-h-screen bg-[#F5F5F5]"
     >
 
-      <!-- ── Search bar under header ── -->
-      <div class="bg-white border-b border-gray-200 py-5">
-        <div class="max-w-[900px] mx-auto px-4">
+      <!-- ══════════════════════════════════════
+           BAND-SM — dark hero: title + search
+      ══════════════════════════════════════════ -->
+      <section class="bg-[#15130d] border-b-[3px] border-primary-500 py-6 lg:py-8">
+        <div class="max-w-[960px] mx-auto px-4">
+          <h1 class="text-white text-2xl lg:text-[28px] font-bold tracking-tight" data-i18n="helpCenter.faqPageTitle">${t("helpCenter.faqPageTitle")}</h1>
+          <p class="text-gray-400 text-[13px] mt-1.5 mb-4" data-i18n="helpCenter.faqPageSubtitle">${t("helpCenter.faqPageSubtitle")}</p>
+
           <form
             @submit.prevent="doSearch()"
-            class="flex items-center h-12 bg-white rounded-lg shadow-sm ring-1 ring-gray-200 max-w-[600px] mx-auto transition-shadow focus-within:ring-2 focus-within:ring-primary-500"
+            class="flex items-center bg-white rounded-md overflow-hidden max-w-[560px]"
           >
-            <!-- Leading search icon (decorative) -->
-            <span class="ps-4 pe-2 text-gray-400 flex items-center shrink-0" aria-hidden="true">
+            <span class="flex items-center ps-3.5 text-gray-400 shrink-0" aria-hidden="true">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35m1.6-5.15a6.75 6.75 0 1 1-13.5 0 6.75 6.75 0 0 1 13.5 0Z"/>
               </svg>
@@ -44,7 +50,7 @@ export function FAQPageLayout(): string {
               x-cloak
               @click="clearSearch()"
               aria-label="${t("helpCenter.faqClearSearch")}"
-              class="px-2 text-gray-400 hover:text-gray-600 transition-colors shrink-0 flex items-center justify-center h-full"
+              class="th-no-press appearance-none focus:outline-none px-2 text-gray-400 hover:text-gray-600 transition-colors duration-150 motion-reduce:transition-none shrink-0 flex items-center justify-center h-full"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
@@ -64,65 +70,84 @@ export function FAQPageLayout(): string {
           </form>
 
           <!-- Result counter chip — only when searching -->
-          <div x-show="searchQuery.trim()" x-cloak class="max-w-[600px] mx-auto mt-3 text-center">
-            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--color-primary-50,#fff8e1)] text-[var(--color-primary-700,#a87c00)] text-xs">
-              <span x-text="resultsLabel"></span>
-            </span>
+          <div x-show="searchQuery.trim()" x-cloak class="mt-3">
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-500/15 text-primary-300 text-xs" x-text="resultsLabel"></span>
           </div>
         </div>
-      </div>
+      </section>
 
       <!-- ── Body: sidebar + content ── -->
-      <div class="max-w-[1100px] mx-auto px-4 py-6 flex gap-5 items-start">
+      <div class="max-w-[960px] mx-auto px-4 py-6 flex gap-5 items-start">
 
-        <!-- ════ LEFT SIDEBAR ════ -->
-        <aside class="w-[210px] flex-shrink-0 rounded overflow-hidden shadow-sm sticky top-[64px]">
-          <template x-for="(cat, idx) in categories" :key="cat.id">
-            <button
-              @click="selectCategory(cat.id)"
-              class="w-full flex items-center justify-between px-4 py-2.5 text-sm text-start transition-colors"
-              :class="activeCategory === cat.id
-                ? 'font-bold text-white bg-[var(--color-primary-500,#f5b800)] border-b border-transparent'
-                : 'text-gray-700 bg-white hover:bg-gray-50 border-b border-gray-100'"
-            >
-              <span x-text="cat.label"></span>
-              <svg class="w-3.5 h-3.5 opacity-60 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6"/>
-              </svg>
-            </button>
-          </template>
+        <!-- ════ LEFT SIDEBAR (lg:+) ════ -->
+        <aside class="hidden lg:block w-[232px] flex-shrink-0 sticky top-[72px]">
+          <div class="bg-white rounded-md border border-gray-100 shadow-sm overflow-hidden">
+            <template x-for="cat in sidebarCategories" :key="cat.id">
+              <button
+                type="button"
+                @click="selectCategory(cat.id)"
+                class="th-no-press appearance-none focus:outline-none w-full flex items-center gap-2.5 px-3.5 py-2.5 text-[13px] text-start border-b border-gray-50 last:border-b-0 transition-colors duration-150 motion-reduce:transition-none"
+                :class="activeCategory === cat.id ? 'bg-primary-50 text-primary-700 font-semibold' : 'text-gray-600 hover:bg-gray-50'"
+              >
+                <span class="shrink-0" x-html="cat.icon"></span>
+                <span class="flex-1 min-w-0 truncate" x-text="cat.label"></span>
+                <span class="text-[11px] text-gray-300 tabular-nums shrink-0" x-text="cat.count"></span>
+              </button>
+            </template>
+          </div>
         </aside>
 
         <!-- ════ MAIN CONTENT ════ -->
         <div class="flex-1 min-w-0">
+
+          <!-- Mobile horizontal chip strip (lg: hidden) -->
+          <div class="lg:hidden flex gap-2 overflow-x-auto scrollbar-hide pb-4 -mx-1 px-1">
+            <template x-for="cat in sidebarCategories" :key="cat.id">
+              <button
+                type="button"
+                @click="selectCategory(cat.id)"
+                class="th-no-press appearance-none focus:outline-none shrink-0 inline-flex items-center gap-1.5 text-xs px-3.5 py-1.5 rounded-md border transition-colors duration-150 motion-reduce:transition-none"
+                :class="activeCategory === cat.id
+                  ? 'bg-[#15130d] border-[#15130d] text-primary-300 font-semibold'
+                  : 'bg-white border-gray-200 text-gray-600'"
+              >
+                <span x-html="cat.icon"></span>
+                <span x-text="cat.label"></span>
+              </button>
+            </template>
+          </div>
 
           <!-- Category heading -->
           <p class="text-[15px] font-semibold text-gray-700 mb-4" x-text="activeCategoryLabel + (searchQuery ? ' — &quot;' + searchQuery + '&quot; ${t("helpCenter.faqSearchResults")}' : '')"></p>
 
           <!-- No results -->
           <template x-if="visibleCategories.length === 0">
-            <p class="text-sm text-gray-500 bg-white rounded p-6 shadow-sm">${t("helpCenter.faqNoResults")}</p>
+            <p class="text-sm text-gray-500 bg-white rounded-md p-6 shadow-sm">${t("helpCenter.faqNoResults")}</p>
           </template>
 
-          <!-- 2-column category grid -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Category cards: icon + label + sub-count, subs as rows -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <template x-for="(cat, ci) in visibleCategories" :key="cat.id">
-              <div class="bg-white rounded border border-gray-200 p-4 hover:shadow-sm transition-shadow">
-                <!-- Category title -->
-                <h3 class="text-[14px] font-bold text-gray-800 mb-2" x-html="highlight(cat.label)"></h3>
-                <hr class="border-gray-100 mb-2" />
-                <!-- Sub-links -->
-                <div class="flex flex-wrap gap-x-2 gap-y-1">
+              <div class="bg-white rounded-md border border-gray-200 p-4">
+                <!-- Category header -->
+                <div class="flex items-center gap-2.5 pb-2.5 mb-1 border-b border-gray-100">
+                  <span class="w-[30px] h-[30px] rounded-md bg-primary-50 text-primary-700 flex items-center justify-center shrink-0" x-html="catIcon(cat.id)"></span>
+                  <h3 class="flex-1 min-w-0 text-[13.5px] font-bold text-gray-800 truncate" x-html="highlight(cat.label)"></h3>
+                  <span class="text-[11px] text-gray-300 tabular-nums shrink-0" x-text="cat.subs.length"></span>
+                </div>
+                <!-- Sub-links — row per sub -->
+                <div>
                   <template x-for="(sub, si) in cat.subs" :key="si">
-                    <span class="flex items-center">
-                      <a
-                        :href="'/sss/detay?cat=' + cat.id + '&sub=' + (sub.key || '')"
-                        class="text-[12px] transition-colors"
-                        :class="sub.highlight ? 'text-[var(--color-primary-500,#f5b800)] hover:text-[var(--color-primary-700,#a87c00)]' : 'text-gray-600 hover:text-[var(--color-primary-500,#f5b800)]'"
-                        x-html="highlight(sub.label)"
-                      ></a>
-                      <span x-show="si < cat.subs.length - 1" class="text-gray-300 mx-1.5 text-[11px]">|</span>
-                    </span>
+                    <a
+                      :href="'/sss/detay?cat=' + cat.id + '&sub=' + (sub.key || '')"
+                      class="group flex items-center gap-1.5 py-1.5 text-[12.5px] transition-colors duration-150 motion-reduce:transition-none"
+                      :class="sub.highlight ? 'text-primary-600 hover:text-primary-700' : 'text-gray-600 hover:text-primary-600'"
+                    >
+                      <svg class="w-3 h-3 text-primary-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6"/>
+                      </svg>
+                      <span x-html="highlight(sub.label)"></span>
+                    </a>
                   </template>
                 </div>
               </div>
@@ -134,19 +159,19 @@ export function FAQPageLayout(): string {
 
       <!-- Footer links -->
       <div class="bg-white border-t border-gray-100 mt-8 py-5">
-        <div class="max-w-[1100px] mx-auto px-4 text-center">
+        <div class="max-w-[960px] mx-auto px-4 text-center">
           <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-[12px] text-gray-500 mb-2">
-            <a href="#" class="hover:text-primary-500 transition-colors">${t("helpCenter.faqFooterProductPolicy")}</a>
+            <a href="#" class="hover:text-primary-500 transition-colors duration-150 motion-reduce:transition-none">${t("helpCenter.faqFooterProductPolicy")}</a>
             <span class="text-gray-200">–</span>
-            <a href="#" class="hover:text-primary-500 transition-colors">${t("helpCenter.faqFooterIpProtection")}</a>
+            <a href="#" class="hover:text-primary-500 transition-colors duration-150 motion-reduce:transition-none">${t("helpCenter.faqFooterIpProtection")}</a>
             <span class="text-gray-200">–</span>
-            <a href="#" class="hover:text-primary-500 transition-colors">${t("helpCenter.faqFooterPrivacy")}</a>
+            <a href="#" class="hover:text-primary-500 transition-colors duration-150 motion-reduce:transition-none">${t("helpCenter.faqFooterPrivacy")}</a>
             <span class="text-gray-200">–</span>
-            <a href="#" class="hover:text-primary-500 transition-colors">${t("helpCenter.faqFooterTerms")}</a>
+            <a href="#" class="hover:text-primary-500 transition-colors duration-150 motion-reduce:transition-none">${t("helpCenter.faqFooterTerms")}</a>
             <span class="text-gray-200">–</span>
-            <a href="#" class="hover:text-primary-500 transition-colors">${t("helpCenter.faqFooterUserInfo")}</a>
+            <a href="#" class="hover:text-primary-500 transition-colors duration-150 motion-reduce:transition-none">${t("helpCenter.faqFooterUserInfo")}</a>
             <span class="text-gray-200">–</span>
-            <a href="#" class="hover:text-primary-500 transition-colors">${t("helpCenter.faqFooterContact")}</a>
+            <a href="#" class="hover:text-primary-500 transition-colors duration-150 motion-reduce:transition-none">${t("helpCenter.faqFooterContact")}</a>
           </div>
           <p class="text-[11px] text-gray-400">${t("helpCenter.faqFooterCopyright")}</p>
         </div>

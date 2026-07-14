@@ -33,6 +33,7 @@ interface FrappeResponse<T> {
     page?: number;
     page_size?: number;
     total_pages?: number;
+    category_name?: string | null;
     has_next?: boolean;
     has_prev?: boolean;
   };
@@ -74,6 +75,11 @@ export interface ListingSearchResult {
   searchHeader: SearchHeaderInfo;
   hasNext: boolean;
   hasPrev: boolean;
+  /**
+   * Backend'in ?cat= slug'ından çözdüğü kategori görünen adı. Mega menü
+   * client'ta 3 seviye olduğu için derin kategorilerde tek kaynak budur.
+   */
+  categoryName?: string;
 }
 
 // ── API Endpoints ──
@@ -155,6 +161,7 @@ export async function searchListings(params: ListingSearchParams): Promise<Listi
         searchHeader,
         hasNext: msg.has_next || false,
         hasPrev: msg.has_prev || false,
+        categoryName: msg.category_name || undefined,
       };
     },
     policies.listings
@@ -1446,6 +1453,7 @@ function mapListingDetail(raw: any): ProductDetail {
     seo: raw.seo || undefined,
     title: raw.title || "",
     category: raw.category || [],
+    categoryPath: raw.categoryPath || [],
     categoryRanks: (raw.categoryRanks || []).map((r: any) => ({
       categoryId: r.category_id,
       categoryName: r.category_name,

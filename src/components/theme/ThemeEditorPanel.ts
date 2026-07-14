@@ -187,9 +187,14 @@ function renderTokenControl(sectionId: string, index: number, token: TokenContro
     return `
       <div class="space-y-1.5">
         <label for="${controlId}" class="block text-[11px] font-mono text-gray-600 dark:text-gray-400 truncate" title="${token.var}">${label}</label>
+        <!-- data-native-select: SelectMenu genelleştirmesinden opt-out — bu panel
+             şu an hiçbir sayfadan mount edilmiyor (dev-only araç) ve canlı Google
+             Font önizlemesi select'in native "change" event'ine + options[selectedIndex]
+             okumasına sıkı bağlı; test edilemeden dokunulmadı. -->
         <select
           id="${controlId}"
           data-var="${token.var}"
+          data-native-select
           aria-label="${label} font selector"
           aria-describedby="${controlId}-preview"
           class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-primary-500 focus:ring-2 focus:ring-primary-400 focus:outline-none cursor-pointer transition-colors"

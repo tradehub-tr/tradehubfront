@@ -195,10 +195,21 @@ async function renderProductPage() {
     return;
   }
 
-  // Build breadcrumb
-  const pdCrumbs = product.category.slice(1).map((label: string, i: number, arr: string[]) => ({
-    label,
-    ...(i < arr.length - 1 ? { href: `products.html?q=${encodeURIComponent(label)}` } : {}),
+  // Build breadcrumb — slug varsa kategori listelemesine (?cat=), yoksa aramaya (?q=).
+  // Mutlak URL zorunlu: sayfa /urun/<slug> altında yaşadığı için göreli link
+  // /urun/products.html'e çözülür ve router onu ürün slug'ı sanır.
+  const pdPath = product.categoryPath?.length
+    ? product.categoryPath
+    : product.category.map((name) => ({ name, slug: '' }));
+  const pdCrumbs = pdPath.slice(1).map(({ name, slug }, i, arr) => ({
+    label: name,
+    ...(i < arr.length - 1
+      ? {
+          href: slug
+            ? `/pages/products.html?cat=${encodeURIComponent(slug)}`
+            : `/pages/products.html?q=${encodeURIComponent(name)}`,
+        }
+      : {}),
   }));
 
   // Faz 4d: admin'in girdiği SEO meta'larını (title, description, OG,

@@ -1,1 +1,1 @@
-export { AfterSalesPage, initAfterSalesPage } from "./AfterSalesPage";
+export { AfterSalesPage } from "./AfterSalesPage";

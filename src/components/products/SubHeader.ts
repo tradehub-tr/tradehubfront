@@ -178,7 +178,7 @@ function renderSortDropdown(options: SortOption[], selectedValue: string): strin
         x-transition:leave-start="opacity-100 scale-100"
         x-transition:leave-end="opacity-0 scale-95 motion-reduce:scale-100"
         @click.outside="sortOpen = false"
-        class="absolute left-0 lg:left-auto lg:right-0 z-30 mt-2 w-[230px] max-w-[calc(100vw-2rem)] origin-top bg-white border border-gray-200 rounded-lg shadow-lg p-1.5 dark:bg-gray-800 dark:border-gray-700"
+        class="absolute left-0 lg:left-auto lg:right-0 z-30 mt-2 w-[230px] max-w-[calc(100vw-2rem)] origin-top bg-white border border-gray-200 rounded-md shadow-lg p-1.5 dark:bg-gray-800 dark:border-gray-700"
         role="listbox"
         aria-labelledby="sub-header-sort-btn"
       >

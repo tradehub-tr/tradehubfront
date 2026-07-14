@@ -4,6 +4,7 @@ import { initLinkRewriter } from "../utils/url";
 import { initMediaRewriter } from "../utils/mediaUrl";
 import { initTracking } from "../utils/trackingManager";
 import { sanitizeHtml } from "../utils/sanitize";
+import { initSelectMenus } from "../components/shared/SelectMenu";
 
 // Alpine magic: $safeHtml(value) → DOMPurify-sanitized output. Use this in
 // `x-html` bindings whenever the source is user-controlled (review body,
@@ -62,4 +63,7 @@ export function startAlpine(): void {
   Alpine.start();
   // Load tracking scripts based on saved cookie consent preferences
   initTracking();
+  // Progressive-enhances native <select> elements; idempotent + MutationObserver'lı
+  // olduğu için her sayfa bootstrap'ında ayrı ayrı çağırmak yerine burada merkezi.
+  initSelectMenus();
 }

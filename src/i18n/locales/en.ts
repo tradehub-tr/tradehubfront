@@ -445,15 +445,23 @@ const en = {
         "Rate your sellers after every purchase and contribute to the platform's quality",
       tradeAssurance: "Trade Assurance",
       afterSalesSupport: "After-sales support",
-      afterSalesFeaturesTitle: "What do we offer you after your order?",
-      afterSalesFeaturesIntro:
-        "iStoc provides the essential tools to make the buying and selling process transparent and secure. You can continue to receive support on the platform even after your order is completed.",
       sellerRatingTitle: "Seller Rating System",
       sellerRatingDesc:
         "You can rate the product and service you received from 1 to 5 stars and write a review. Your reviews guide other buyers and shape the quality of sellers.",
       directContactTitle: "Direct Communication with the Seller",
       directContactDesc:
         "After your order, you can convey your questions, product-related requests, or any issues you experience directly to your seller and join the search for a solution.",
+      asReviewLink: "Write a review",
+      asMessageLink: "Send a message",
+      asKpiResolutionValue: "98%",
+      asKpiResolutionLabel: "Issue resolution rate",
+      asKpiResponseValue: "24 hours",
+      asKpiResponseLabel: "Average first response",
+      asKpiReviewsValue: "12,400+",
+      asKpiReviewsLabel: "Verified reviews",
+      asCtaTitle: "Having an issue?",
+      asCtaDesc: "Our customer service team is available on weekdays between 09:00 and 18:00.",
+      asCtaBtn: "Create a support ticket",
       subPaymentFailedTitle: "Your subscription payment failed",
       subPaymentFailedDesc:
         "You need to update your payment information to maintain your store access.",
@@ -509,9 +517,6 @@ const en = {
       shippingTypesTitle: "Shipping types",
       shippingTypesIntro:
         "By arranging with sellers on iStoc, you can choose the shipping type that fits your order. Each shipping type has a different delivery time and cost structure.",
-      shippingExpressTitle: "Express Shipping",
-      shippingExpressDesc:
-        "The fastest delivery option for your urgent orders. Preferred for intra-city and nearby areas.",
       shippingAirTitle: "Air Freight",
       shippingAirDesc:
         "Provides fast delivery for international and long-distance orders. Suitable for valuable and urgent goods.",
@@ -521,12 +526,12 @@ const en = {
       shippingLandTitle: "Land Freight",
       shippingLandDesc:
         "An economical and reliable option for domestic and neighboring-country deliveries.",
-      shippingStandardTitle: "Standard Shipping",
-      shippingStandardDesc:
-        "The default delivery option. An affordable solution for orders of standard size and weight.",
-      shippingFreeTitle: "Free Shipping",
-      shippingFreeDesc:
-        "Free shipping offered by the seller on selected products. It is shown marked on the product page.",
+      shippingAmbarTitle: "Freight Terminal (Ambar)",
+      shippingAmbarDesc:
+        "Road freight terminal and consolidated (LTL) shipping option. An economical and reliable delivery for bulk loads.",
+      shippingPortTitle: "Port Delivery",
+      shippingPortDesc:
+        "Delivery at the port for container and bulk cargo. Preferred for high-volume sea shipments.",
       trackingTitle: "Easy tracking with a tracking number",
       trackingPara1Before: "When your seller ships your order, the ",
       trackingNumber: "tracking number",
@@ -620,6 +625,15 @@ const en = {
       refundNoteTitle: "About the refund process",
       refundNoteDesc:
         "At every stage of your order process, you can resolve issues by messaging the seller directly. In the event of a dispute with the seller, you can create a refund request.",
+      refundPanelTitle: "Start your request",
+      refundPanelDesc:
+        "Create your refund request in minutes and track every step from your order details.",
+      refundFact1Value: "4 steps",
+      refundFact1Label: "Simple application flow",
+      refundFact2Value: "100%",
+      refundFact2Label: "Payment protection",
+      refundEyebrowProcess: "Process",
+      refundEyebrowApply: "Application",
     },
     kycUi: {
       accountType: "Account type",
@@ -1081,10 +1095,6 @@ const en = {
     tradeAssurance: {
       heroTitle: "Enjoy protection from payment to delivery on iStoc",
       howItWorksCta: "Here's how it works:",
-      serviceInfoTitle: "Trade Assurance covers every stage of your purchasing journey",
-      serviceInfoDesc:
-        "We offer buyers on iStoc the ability to pay securely, provide protection against unforeseen situations such as product or shipping issues, and mediate between buyers and suppliers to resolve purchase-related problems.",
-      watchMore: "Watch to learn more",
       statOrders: "Trade Assurance orders",
       statBought: "Purchased from us",
       statSuppliers: "Suppliers",
@@ -1115,7 +1125,6 @@ const en = {
       sourceProducts: "Source supported products",
       learnHow: "Learn how it works",
       eligibleBuyersNote: "*For eligible buyers",
-      securePaymentAlt: "Secure payment",
       refundTitle: "Refund policy",
       refundDesc1:
         "If your order isn't shipped, gets lost, or arrives defective, incorrect, damaged, or with any other issue, file a refund request to get your money back.",
@@ -1139,8 +1148,6 @@ const en = {
         "\"Because you use Trade Assurance and know you're protected, there's no need to worry.\"",
       testimonial3:
         '"Paying through iStoc feels very secure; the escrow system is a real assurance for buyers."',
-      testimonial4:
-        '"The after-sales support and fast return process far exceeded our expectations."',
       detailHeroTitle: "Secure Trade with the Trade Assurance System",
       detailHeroDesc:
         "By ensuring trust and transparency at every stage of your transactions, we help you build long-term business partnerships.",
@@ -1210,6 +1217,18 @@ const en = {
       footerDownload: "Download",
       footerSupportTitle: "Customer Service",
       footerGetHelp: "Get help",
+      heroSubtitle:
+        "Every order you place on iStoc TradeHub is protected from the moment of payment until the product reaches you. If any issue occurs, you get your money back.",
+      heroCtaPrimary: "How does it work?",
+      heroCtaSecondary: "Explore Coverage",
+      paymentsMethodsTitle: "Accepted payment methods",
+      paymentsCurrenciesTitle: "Supported currencies",
+      logisticsStepProduction: "Production",
+      logisticsStepShipping: "Shipping",
+      logisticsStepCustoms: "Customs",
+      logisticsStepDelivery: "Delivery",
+      finalCtaTitle: "Ready to start trading with confidence?",
+      finalCtaButton: "Get Started Now",
     },
     // ============================================================
     // COMMON
@@ -2711,6 +2730,7 @@ const en = {
       pendingShort: "Pending",
       writeReview: "Write a review",
       reviewStatusPublished: "Published",
+      reviewStatusRejected: "Not published",
       pendingReviewsEmptyDesc: "Products from your delivered orders will be listed here for you to review.",
       reviewsDoneEmptyTitle: "You haven't written any reviews yet",
       reviewsDoneEmptyDesc: "Your reviews and their statuses will appear here.",
@@ -2916,8 +2936,15 @@ const en = {
       userInfoLaws: "User Information Laws",
       contactGuide: "Contact Guide",
       copyright: "© 2024 iStoc — All rights reserved.",
-      viewMore: "View more",
       searchResultsFor: "Results for",
+      // ── V2.5 Split Statistics redesign ──
+      statArticlesValue: "240+",
+      statArticlesLabel: "help articles",
+      statResponseValue: "2 hrs",
+      statResponseLabel: "avg. support response",
+      statResolutionValue: "97%",
+      statResolutionLabel: "resolution rate",
+      popularQuestionsTitle: "Popular questions",
     },
 
     // ============================================================
@@ -4974,6 +5001,8 @@ const en = {
       businessHours: "Monday - Friday: 09:00 - 18:00 (UTC)",
       mapArea: "Map Area",
       // ── FAQPageLayout ──
+      faqPageTitle: "Frequently Asked Questions",
+      faqPageSubtitle: "Browse categories or search directly",
       faqSearchResults: "results",
       faqNoResults: "No results found. Try a different search term.",
       faqSearchPlaceholder: "Enter question or keyword. Example: Payment",
@@ -5007,6 +5036,7 @@ const en = {
       navNewTicket: "Create Ticket",
       navMyTickets: "My Tickets",
       headerTitle: "Help Center for Buyer",
+      menuLabel: "Menu",
     },
 
     // ============================================================
@@ -5648,6 +5678,9 @@ const en = {
       thankYou: "Thank you for your feedback!",
       noContent: "No content available for this topic yet.",
       relatedTopics: "Related Topics",
+      ctaTitle: "Still couldn't solve your issue?",
+      ctaDesc: "Our support team replies within 2 hours on average.",
+      ctaBtn: "Create support request",
 
       // ── iStoc Introduction ──
       introDesc_title: "iStoc Introduction",
@@ -7128,6 +7161,22 @@ const en = {
       verificationLevelPremiumLabel: "Premium Verification:",
       verificationLevelPremiumDesc:
         "It is the highest level of credibility badge. In addition to advanced verification, it includes financial soundness analysis, customer reference checks and regular annual audits. Premium verified suppliers are highlighted as iStoc's most trusted business partners. An annual verification fee of 7,990 TRY applies.",
+
+      // Trust strip (below hero)
+      trustCommission: "Sales commission",
+      trustCommissionValue: "0%",
+      trustApplyTime: "Application time",
+      trustApplyTimeValue: "4 min",
+      trustTrial: "Free trial",
+      trustTrialValue: "14 days",
+
+      // Sticky CTA bar (mobile)
+      stickyFrom: "From {{price}}/mo",
+      stickyMeta: "0% commission · 14-day trial",
+      stickyApply: "Apply",
+
+      // Matrix accordion (mobile/tablet)
+      accordionHint: "Tap a category to see details.",
     },
 
     // ============================================================

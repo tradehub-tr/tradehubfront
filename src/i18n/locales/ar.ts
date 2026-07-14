@@ -440,15 +440,23 @@ const ar = {
       afterSalesHeroSubtitle: "قيّم بائعيك بعد كل عملية شراء وساهم في جودة المنصة",
       tradeAssurance: "ضمان التجارة",
       afterSalesSupport: "الدعم بعد البيع",
-      afterSalesFeaturesTitle: "ماذا نقدم لك بعد طلبك؟",
-      afterSalesFeaturesIntro:
-        "توفر iStoc الأدوات الأساسية لجعل عملية البيع والشراء شفافة وآمنة. يمكنك مواصلة الحصول على الدعم عبر المنصة حتى بعد إتمام طلبك.",
       sellerRatingTitle: "نظام تقييم البائعين",
       sellerRatingDesc:
         "يمكنك تقييم المنتج والخدمة التي تلقيتها من 1 إلى 5 نجوم وكتابة مراجعة. تُرشد مراجعاتك المشترين الآخرين وتشكّل جودة البائعين.",
       directContactTitle: "التواصل المباشر مع البائع",
       directContactDesc:
         "بعد طلبك، يمكنك توجيه أسئلتك أو طلباتك المتعلقة بالمنتج أو أي مشكلات تواجهها مباشرة إلى بائعك والمشاركة في البحث عن حل.",
+      asReviewLink: "اكتب مراجعة",
+      asMessageLink: "أرسل رسالة",
+      asKpiResolutionValue: "98%",
+      asKpiResolutionLabel: "معدل حل المشكلات",
+      asKpiResponseValue: "24 ساعة",
+      asKpiResponseLabel: "متوسط أول استجابة",
+      asKpiReviewsValue: "+12,400",
+      asKpiReviewsLabel: "مراجعات موثّقة",
+      asCtaTitle: "هل تواجه مشكلة؟",
+      asCtaDesc: "فريق خدمة العملاء لدينا متاح في أيام الأسبوع من 09:00 إلى 18:00.",
+      asCtaBtn: "إنشاء طلب دعم",
       subPaymentFailedTitle: "فشل دفع اشتراكك",
       subPaymentFailedDesc: "تحتاج إلى تحديث معلومات الدفع الخاصة بك للحفاظ على وصولك إلى متجرك.",
       manageSubscription: "إدارة الاشتراك",
@@ -501,9 +509,6 @@ const ar = {
       shippingTypesTitle: "أنواع الشحن",
       shippingTypesIntro:
         "من خلال الاتفاق مع البائعين على iStoc، يمكنك اختيار نوع الشحن المناسب لطلبك. لكل نوع شحن مدة تسليم وهيكل تكلفة مختلف.",
-      shippingExpressTitle: "الشحن السريع (إكسبريس)",
-      shippingExpressDesc:
-        "أسرع خيار للتسليم لطلباتك العاجلة. يُفضّل داخل المدينة والمناطق القريبة.",
       shippingAirTitle: "الشحن الجوي",
       shippingAirDesc:
         "يوفر تسليماً سريعاً للطلبات الدولية والمسافات البعيدة. مناسب للبضائع الثمينة والعاجلة.",
@@ -512,11 +517,12 @@ const ar = {
         "حل اقتصادي للشحنات الكبيرة والثقيلة. مثالي لشحنات الحاويات الدولية والطلبات كبيرة الحجم.",
       shippingLandTitle: "الشحن البري",
       shippingLandDesc: "خيار اقتصادي وموثوق للتسليم المحلي وإلى الدول المجاورة.",
-      shippingStandardTitle: "الشحن القياسي",
-      shippingStandardDesc:
-        "خيار التسليم الافتراضي. حل بأسعار معقولة للطلبات ذات الحجم والوزن العاديين.",
-      shippingFreeTitle: "شحن مجاني",
-      shippingFreeDesc: "شحن مجاني يقدمه البائع على منتجات محددة. يظهر معلّماً في صفحة المنتج.",
+      shippingAmbarTitle: "محطة الشحن (المستودع)",
+      shippingAmbarDesc:
+        "خيار الشحن البري المجمّع عبر محطة شحن. حل اقتصادي وموثوق لتسليم الشحنات الكبيرة.",
+      shippingPortTitle: "التسليم في الميناء",
+      shippingPortDesc:
+        "تسليم في الميناء للحاويات والشحنات السائبة. يُفضّل للشحنات البحرية كبيرة الحجم.",
       trackingTitle: "تتبع سهل برقم التتبع",
       trackingPara1Before: "عندما يشحن البائع طلبك، يُضاف ",
       trackingNumber: "رقم التتبع",
@@ -602,6 +608,14 @@ const ar = {
       refundNoteTitle: "حول عملية الاسترداد",
       refundNoteDesc:
         "في كل مرحلة من مراحل عملية طلبك، يمكنك حل المشكلات عبر مراسلة البائع مباشرة. في حال وجود نزاع مع البائع، يمكنك إنشاء طلب استرداد.",
+      refundPanelTitle: "ابدأ طلبك",
+      refundPanelDesc: "أنشئ طلب الاسترداد خلال دقائق وتابع كل خطوة من تفاصيل طلبك.",
+      refundFact1Value: "4 خطوات",
+      refundFact1Label: "مسار تقديم بسيط",
+      refundFact2Value: "100%",
+      refundFact2Label: "حماية المدفوعات",
+      refundEyebrowProcess: "العملية",
+      refundEyebrowApply: "التقديم",
     },
     kycUi: {
       accountType: "نوع الحساب",
@@ -1056,10 +1070,6 @@ const ar = {
     tradeAssurance: {
       heroTitle: "استفد من الحماية من الدفع حتى التسليم على iStoc",
       howItWorksCta: "إليك كيف تعمل العملية:",
-      serviceInfoTitle: "يغطي ضمان التجارة كل مرحلة من مراحل رحلة الشراء الخاصة بك",
-      serviceInfoDesc:
-        "نوفر للمشترين على iStoc إمكانية الدفع بأمان، ونقدم الحماية ضد الحالات غير المتوقعة مثل مشكلات المنتج أو الشحن، ونتوسط بين المشترين والموردين لحل المشكلات المتعلقة بالشراء.",
-      watchMore: "شاهد لمعرفة المزيد",
       statOrders: "طلبات ضمان التجارة",
       statBought: "تم الشراء منا",
       statSuppliers: "الموردون",
@@ -1089,7 +1099,6 @@ const ar = {
       sourceProducts: "احصل على المنتجات المدعومة",
       learnHow: "تعرّف على كيفية العمل",
       eligibleBuyersNote: "*للمشترين المؤهلين",
-      securePaymentAlt: "دفع آمن",
       refundTitle: "سياسة استرداد الأموال",
       refundDesc1:
         "إذا لم يتم شحن طلبك أو فُقد أو وصل معيبًا أو خاطئًا أو تالفًا أو بأي مشكلة أخرى، فقدّم طلب استرداد لاسترداد أموالك.",
@@ -1110,7 +1119,6 @@ const ar = {
       testimonial2: '"لأنك تستخدم ضمان التجارة وتعلم أنك محمي، فلا داعي للقلق."',
       testimonial3:
         '"الدفع عبر iStoc يمنح شعورًا كبيرًا بالأمان، ونظام الضمان يمثل ضمانة حقيقية للمشترين."',
-      testimonial4: '"كان دعم ما بعد البيع وعملية الإرجاع السريعة يفوقان توقعاتنا بكثير."',
       detailHeroTitle: "تجارة آمنة مع نظام ضمان التجارة",
       detailHeroDesc:
         "من خلال ضمان الثقة والشفافية في كل مرحلة من معاملاتك، نساعدك على بناء شراكات تجارية طويلة الأمد.",
@@ -1178,6 +1186,18 @@ const ar = {
       footerDownload: "تنزيل",
       footerSupportTitle: "خدمة العملاء",
       footerGetHelp: "احصل على المساعدة",
+      heroSubtitle:
+        "كل طلب تقدمه على iStoc TradeHub محمي من لحظة الدفع وحتى وصول المنتج إليك. إذا واجهت أي مشكلة، سيتم استرداد أموالك.",
+      heroCtaPrimary: "كيف تعمل العملية؟",
+      heroCtaSecondary: "استكشف التغطية",
+      paymentsMethodsTitle: "طرق الدفع المقبولة",
+      paymentsCurrenciesTitle: "العملات المدعومة",
+      logisticsStepProduction: "الإنتاج",
+      logisticsStepShipping: "الشحن",
+      logisticsStepCustoms: "الجمارك",
+      logisticsStepDelivery: "التسليم",
+      finalCtaTitle: "هل أنت مستعد لبدء التجارة بثقة؟",
+      finalCtaButton: "ابدأ الآن",
     },
     // ============================================================
     // COMMON
@@ -2676,6 +2696,7 @@ const ar = {
       pendingShort: "معلّقة",
       writeReview: "قيّم المنتج",
       reviewStatusPublished: "منشور",
+      reviewStatusRejected: "غير منشور",
       pendingReviewsEmptyDesc: "ستظهر هنا منتجات طلباتك المُسلّمة لتقييمها.",
       reviewsDoneEmptyTitle: "لم تكتب أي تقييم بعد",
       reviewsDoneEmptyDesc: "ستظهر تقييماتك وحالاتها هنا.",
@@ -2881,8 +2902,15 @@ const ar = {
       userInfoLaws: "قوانين معلومات المستخدم",
       contactGuide: "دليل التواصل",
       copyright: "© 2024 iStoc — جميع الحقوق محفوظة.",
-      viewMore: "عرض المزيد",
       searchResultsFor: "النتائج عن",
+      // ── V2.5 Split Statistics redesign ──
+      statArticlesValue: "+240",
+      statArticlesLabel: "مقالة مساعدة",
+      statResponseValue: "ساعتان",
+      statResponseLabel: "متوسط وقت الرد",
+      statResolutionValue: "٪97",
+      statResolutionLabel: "معدل الحل",
+      popularQuestionsTitle: "الأسئلة الشائعة",
     },
 
     // ============================================================
@@ -4920,6 +4948,8 @@ const ar = {
       businessHours: "الإثنين - الجمعة: 09:00 - 18:00 (UTC)",
       mapArea: "منطقة الخريطة",
       // ── FAQPageLayout ──
+      faqPageTitle: "الأسئلة الشائعة",
+      faqPageSubtitle: "تصفح الفئات أو ابحث مباشرة",
       faqSearchResults: "نتائج",
       faqNoResults: "لم يتم العثور على نتائج. جرّب مصطلح بحث مختلفًا.",
       faqSearchPlaceholder: "أدخل سؤالاً أو كلمة مفتاحية. مثال: الدفع",
@@ -4952,6 +4982,7 @@ const ar = {
       navNewTicket: "إنشاء تذكرة",
       navMyTickets: "تذاكري",
       headerTitle: "مركز المساعدة للمشتري",
+      menuLabel: "القائمة",
     },
 
     // ============================================================
@@ -5586,6 +5617,9 @@ const ar = {
       thankYou: "شكرًا لك على ملاحظاتك!",
       noContent: "لا يوجد محتوى متاح لهذا الموضوع بعد.",
       relatedTopics: "مواضيع ذات صلة",
+      ctaTitle: "لم تتمكن من حل مشكلتك؟",
+      ctaDesc: "يرد فريق الدعم لدينا خلال ساعتين في المتوسط.",
+      ctaBtn: "إنشاء طلب دعم",
 
       // ── iStoc Introduction ──
       introDesc_title: "مقدمة عن iStoc",
@@ -7063,6 +7097,22 @@ const ar = {
       verificationLevelPremiumLabel: "التوثيق المميّز:",
       verificationLevelPremiumDesc:
         "هو أعلى مستوى من شارات المصداقية. بالإضافة إلى التوثيق المتقدّم، يشمل تحليل المتانة المالية والتحقّق من مراجع العملاء وعمليات تدقيق سنوية منتظمة. يُبرَز المورّدون الموثّقون من فئة Premium بوصفهم أكثر شركاء أعمال iStoc موثوقية. تُطبَّق رسوم توثيق سنوية قدرها 7.990 ليرة تركية.",
+
+      // شريط الثقة (أسفل القسم الرئيسي)
+      trustCommission: "عمولة المبيعات",
+      trustCommissionValue: "0%",
+      trustApplyTime: "مدة التقديم",
+      trustApplyTimeValue: "4 دقائق",
+      trustTrial: "نسخة تجريبية مجانية",
+      trustTrialValue: "14 يومًا",
+
+      // شريط الإجراء الثابت (الجوال)
+      stickyFrom: "يبدأ من {{price}}/شهريًا",
+      stickyMeta: "عمولة 0% · تجربة مجانية 14 يومًا",
+      stickyApply: "تقديم الطلب",
+
+      // أكورديون جدول المقارنة (الجوال/الجهاز اللوحي)
+      accordionHint: "اضغط على الفئة لعرض التفاصيل.",
     },
 
     // ============================================================

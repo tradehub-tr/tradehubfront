@@ -61,6 +61,7 @@ declare global {
     banner_image?: string;
     rating?: number;
     review_count?: number;
+    verified?: boolean;
   }
 }
 

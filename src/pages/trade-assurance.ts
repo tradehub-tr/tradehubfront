@@ -1,6 +1,6 @@
 /**
  * Trade Assurance — Ana Landing Page
- * iSTOC Trade Assurance tarzında tasarlanmış, tüm korumaları kapsayan ana sayfa
+ * Varyant 1 "Marka Klasiği" (onaylanan mock) — koyu hero, sarı bant ritmi
  */
 import '../style.css'
 import { t } from '../i18n'
@@ -12,19 +12,17 @@ import { FooterLinks } from '../components/footer'
 import { FloatingPanel } from '../components/floating'
 import { startAlpine } from '../alpine'
 import { TradeAssuranceFooterCards } from '../components/shared/TradeAssuranceFooterCards'
-import Swiper from 'swiper'
-import { Navigation, Pagination } from 'swiper/modules'
-import 'swiper/swiper-bundle.css'
-import { applySwiperDir } from '../utils/direction'
 
-import tradeAssuranceBg from '../assets/images/Trade Assurance.avif'
-import videoPaymentImg from '../assets/images/videopayment.avif'
 import limanImg from '../assets/images/liman.avif'
-import taLogoUrl from '../assets/images/ta-logo.svg'
+import escrowVideo from '../assets/video/güvenliödeme video.mp4'
+import kargoVideo from '../assets/video/kargo.mp4'
+import serviceVideo from '../assets/video/service.mp4'
 
 /* ═══════════════════════════════════════════════════════════════
    SVG ICONS
    ═══════════════════════════════════════════════════════════════ */
+
+const heroBadgeIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V6l8-4z"/></svg>`
 
 const shieldCheckIcon = `<svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>`
 
@@ -34,35 +32,39 @@ const truckIcon = `<svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="
 
 const wrenchIcon = `<svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437"/></svg>`
 
-/* playIcon kaldırıldı — videolar artık autoplay */
+/* Kargo/lojistik süreç şeridi ikonları (24px, sade çizgi) */
+const processIconProduction = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 3v18M3 8h18"/></svg>`
+const processIconShipping = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="15" height="12" rx="1"/><path d="M16 10h4l3 3v5h-7"/><circle cx="6" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>`
+const processIconCustoms = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>`
+const processIconDelivery = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l4-8h10l4 8"/><path d="M3 12v6a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-6"/><path d="M3 12h18"/></svg>`
 
 /* ═══════════════════════════════════════════════════════════════
-   SVG BACKGROUND PATTERN (kalkan dolar deseni)
-   ═══════════════════════════════════════════════════════════════ */
-
-const bgPatternSvg = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><g fill="none" fill-rule="evenodd"><g fill="#FF9D00" fill-opacity="0.12"><path d="M60 10c-1.1 0-2.2.2-3.2.6L42 17l.1 19.8h-16.6v-10c-.1-1.4-1.2-2.5-2.7-2.5h-.2c-.3 0-.6.1-.8.2l-18.1 7.2c-1.1.4-1.8 1.5-1.7 2.6l5.9 82.9c.1 1.6 1.1 3 2.6 3.7l50.2 22.3c1.1.5 2.3.8 3.5.8s2.4-.3 3.5-.8l50.2-22.3c1.5-.7 2.5-2.1 2.6-3.7l5.9-82.9c.1-1.1-.6-2.2-1.7-2.6l-18.1-7.2c-.3-.1-.6-.2-.8-.2h-.2c-1.1 0-2.1.6-2.5 1.6-.1.3-.2.6-.2.9v10H87V17l-14.7-5.7c-1.1-.5-2.2-.7-3.3-.7zm0 4c.6 0 1.2.1 1.7.3l16.8 6.7v17.6h16.5v-7.8l15.1 6L104.3 109c0 .2-.1.3-.3.4l-50.3 22.3c-.6.3-1.2.4-1.8.4s-1.2-.1-1.8-.4L0 109.3c-.2-.1-.3-.2-.3-.4L-6.1 37.2l15.1-6V39h16.5V21l16.8-6.7c.5-.2 1.1-.3 1.7-.3z"/><path d="M75.2 76c-3 -2.5-7.5-4.6-13.3-6.4-2.5-.9-4.9-2-7.1-3.4-1.2-.8-1.9-2.1-1.9-3.5 0-1.5.7-2.9 1.9-3.9 1.4-1.1 3.2-1.7 5-1.6 2.6 0 4.6.5 6 1.6 1.3 1.1 2 3 2 5.5h11.4l.1-.2c.1-4.9-1.6-8.7-5.1-11.4-2.5-1.9-5.5-3.1-8.6-3.6V44H54v8.1c-2.9.5-5.7 1.7-8.1 3.4-3.4 2.3-5.4 6.2-5.3 10.3 0 4.4 1.5 7.7 4.6 10 3 2.3 7.7 4.5 14 6.6 3.1 1.1 5.2 2.1 6.4 3.1 1.2 1 1.8 2.5 1.7 4.1.1 1.5-.6 2.9-1.8 3.8-1.2 1-3 1.5-5.5 1.5-3 0-5.2-.6-6.7-1.8-1.4-1.2-2.2-3.3-2.2-6.3h-11.5l-.1.2c-.1 5.8 1.8 10.1 6.2 12.8 2.6 1.7 5.5 2.9 8.5 3.5v8.4h10.7v-8.2c3.3-.4 6.4-1.6 9.1-3.5 3.4-2.4 5.4-6.3 5.2-10.5 0-4.4-1.5-7.9-4.6-10.5z"/></g></g></svg>`)}`
-
-/* ═══════════════════════════════════════════════════════════════
-   SECTION: HERO BANNER
+   SECTION: HERO BANNER (koyu degrade + sarı rozet)
    ═══════════════════════════════════════════════════════════════ */
 
 function HeroBanner(): string {
   return `
-    <section class="relative overflow-hidden" style="min-height:500px">
-      <!-- Background Image -->
-      <img src="${tradeAssuranceBg}" alt="" class="absolute inset-0 w-full h-full object-cover" />
-      <!-- Gradient Overlay -->
-      <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent"></div>
-      <!-- Content -->
-      <div class="relative z-10 container-boxed px-4 sm:px-6 lg:px-8 flex items-center" style="min-height:500px">
-        <div class="max-w-[640px]">
-          <h1 class="text-3xl sm:text-4xl lg:text-[52px] font-bold text-white leading-tight mb-6">
+    <section class="relative overflow-hidden" style="background:radial-gradient(60% 60% at 20% 15%, rgba(255,194,0,.16) 0%, rgba(255,194,0,0) 65%), linear-gradient(160deg, #0a0a0a 0%, #1f1f1f 100%)">
+      <div class="relative z-10 container-boxed px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-28">
+        <div class="max-w-[720px]">
+          <span class="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-sm font-semibold mb-5" style="background:rgba(255,194,0,.14);border:1px solid rgba(255,194,0,.35);color:#FFC200">
+            ${heroBadgeIcon}
+            ${t("tradeAssurance.tradeAssuranceLabel")}
+          </span>
+          <h1 class="text-3xl sm:text-4xl lg:text-[52px] font-bold text-white leading-tight mb-5">
             ${t("tradeAssurance.heroTitle")}
           </h1>
-          <a href="#how-it-works" class="th-btn inline-flex items-center gap-2 font-semibold px-7 py-3.5 text-base shadow-lg">
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            ${t("tradeAssurance.howItWorksCta")}
-          </a>
+          <p class="text-base sm:text-lg text-gray-300 max-w-[560px] mb-8">
+            ${t("tradeAssurance.heroSubtitle")}
+          </p>
+          <div class="flex flex-wrap gap-3.5">
+            <a href="#how-it-works" class="th-btn inline-flex items-center gap-2 font-semibold px-7 py-3.5 text-base">
+              ${t("tradeAssurance.heroCtaPrimary")}
+            </a>
+            <a href="#coverage" class="th-no-press appearance-none focus:outline-none inline-flex items-center gap-2 font-semibold px-7 py-3.5 text-base rounded-[var(--radius-button,8px)] border border-white/40 text-white hover:bg-white/10 transition-colors duration-150">
+              ${t("tradeAssurance.heroCtaSecondary")}
+            </a>
+          </div>
         </div>
       </div>
       <!-- Yellow bottom bar -->
@@ -72,48 +74,27 @@ function HeroBanner(): string {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   SECTION: SERVICE INFO (sarı arka plan + istatistikler)
+   SECTION: STATS BAND (tam genişlik sarı, 4 istatistik)
    ═══════════════════════════════════════════════════════════════ */
 
-function ServiceInfoSection(): string {
+function stat(value: string, key: string): string {
   return `
-    <section class="relative overflow-hidden" style="background-color:#FFC200; padding:74px 0">
-      <div class="container-boxed px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col lg:flex-row gap-12 lg:gap-20">
-          <!-- Left: Text -->
-          <div class="lg:w-1/2">
-            <h2 class="text-2xl sm:text-3xl lg:text-[36px] font-bold text-gray-900 leading-tight mb-6">
-              ${t("tradeAssurance.serviceInfoTitle")}
-            </h2>
-            <p class="text-gray-800 text-base leading-relaxed mb-6">
-              ${t("tradeAssurance.serviceInfoDesc")}
-            </p>
-            <div class="flex items-center gap-3 mb-4">
-              <img src="${taLogoUrl}" alt="Trade Assurance" class="h-6" />
-            </div>
-            <a href="/pages/info/trade-assurance-detail" class="text-gray-900 font-medium underline hover:no-underline text-base">
-              ${t("tradeAssurance.watchMore")}
-            </a>
-          </div>
-          <!-- Right: Stats Grid -->
-          <div class="lg:w-1/2 grid grid-cols-2 gap-x-10 gap-y-8">
-            <div class="border-s-4 border-red-600 ps-5">
-              <div class="text-4xl sm:text-5xl font-bold text-gray-900">160M+</div>
-              <div class="text-gray-800 text-sm mt-1">${t("tradeAssurance.statOrders")}</div>
-            </div>
-            <div class="border-s-4 border-red-600 ps-5">
-              <div class="text-4xl sm:text-5xl font-bold text-gray-900">37M+</div>
-              <div class="text-gray-800 text-sm mt-1">${t("tradeAssurance.statBought")}</div>
-            </div>
-            <div class="border-s-4 border-red-600 ps-5">
-              <div class="text-4xl sm:text-5xl font-bold text-gray-900">200B+</div>
-              <div class="text-gray-800 text-sm mt-1">${t("tradeAssurance.statSuppliers")}</div>
-            </div>
-            <div class="border-s-4 border-red-600 ps-5">
-              <div class="text-4xl sm:text-5xl font-bold text-gray-900">280M+</div>
-              <div class="text-gray-800 text-sm mt-1">${t("tradeAssurance.statProducts")}</div>
-            </div>
-          </div>
+    <div class="border-s-4 border-red-600 ps-5">
+      <div class="text-3xl sm:text-4xl xl:text-5xl font-bold text-gray-900">${value}</div>
+      <div class="text-gray-800 text-sm font-medium mt-1.5">${t(key)}</div>
+    </div>
+  `
+}
+
+function StatsBandSection(): string {
+  return `
+    <section class="bg-[#FFC200]">
+      <div class="container-boxed px-4 sm:px-6 lg:px-8 py-12 sm:py-14 lg:py-16">
+        <div class="grid grid-cols-2 xl:grid-cols-4 gap-x-8 gap-y-8 sm:gap-x-10">
+          ${stat('160M+', 'tradeAssurance.statOrders')}
+          ${stat('37M+', 'tradeAssurance.statBought')}
+          ${stat('200B+', 'tradeAssurance.statSuppliers')}
+          ${stat('280M+', 'tradeAssurance.statProducts')}
         </div>
       </div>
     </section>
@@ -121,7 +102,7 @@ function ServiceInfoSection(): string {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   SECTION: HOW IT WORKS (4 adım)
+   SECTION: HOW IT WORKS (4 adım) + KAPSAM BANDI
    ═══════════════════════════════════════════════════════════════ */
 
 function HowItWorks(): string {
@@ -135,7 +116,7 @@ function HowItWorks(): string {
         <p class="text-gray-600 text-base sm:text-lg text-center max-w-[800px] mx-auto mb-14">
           ${t("tradeAssurance.howProtectIntro")}
         </p>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 mb-12">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 mb-12">
           ${stepCard('01', t("tradeAssurance.step1Title"), t("tradeAssurance.step1Desc"))}
           ${stepCard('02', t("tradeAssurance.step2Title"), t("tradeAssurance.step2Desc"))}
           ${stepCard('03', t("tradeAssurance.step3Title"), t("tradeAssurance.step3Desc"))}
@@ -143,15 +124,15 @@ function HowItWorks(): string {
         </div>
         <!-- Escrow Video -->
         <div class="max-w-[1000px] mx-auto rounded-md overflow-hidden">
-          <video class="w-full object-cover auto-play-video" style="aspect-ratio:1200/362" muted loop playsinline preload="metadata">
-            <source src="/src/assets/video/güvenliödeme video.mp4" type="video/mp4" />
+          <video class="w-full object-cover auto-play-video aspect-[1200/362]" muted loop playsinline preload="metadata">
+            <source src="${escrowVideo}" type="video/mp4" />
           </video>
         </div>
       </div>
     </section>
 
     <!-- Yellow part: Kapsamdakiler -->
-    <section class="relative py-14 sm:py-16" style="background-color:#FFC200;background-image:url('${bgPatternSvg}');background-size:400px">
+    <section id="coverage" class="py-14 sm:py-16 bg-[#FFC200]">
       <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
         <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-8">${t("tradeAssurance.whatsCovered")}</h2>
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
@@ -168,7 +149,7 @@ function HowItWorks(): string {
 function stepCard(num: string, title: string, desc: string): string {
   return `
     <div class="flex gap-5">
-      <div class="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center text-base font-bold" style="background:#FFF3C4;color:#92400e">
+      <div class="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center text-base font-bold bg-[#FFF3C4] text-[#92400e]">
         ${num}
       </div>
       <div>
@@ -179,12 +160,10 @@ function stepCard(num: string, title: string, desc: string): string {
   `
 }
 
-/* CoverageNav artık HowItWorks içinde entegre */
-
 function coverageCard(icon: string, title: string, href: string): string {
   return `
     <a href="${href}" class="bg-white rounded-md [@media(hover:hover)and(pointer:fine)]:hover:shadow-md transition-shadow duration-200 ease-out motion-reduce:transition-none group block" style="padding:26px 26px 38px">
-      <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center mb-6" style="background:#FFF3C4;color:#92400e">
+      <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center mb-6 bg-[#FFF3C4] text-[#92400e]">
         ${icon}
       </div>
       <h3 class="text-sm sm:text-base font-bold text-gray-900 group-hover:text-orange-600 transition-colors motion-reduce:transition-none leading-snug">${title}</h3>
@@ -193,8 +172,16 @@ function coverageCard(icon: string, title: string, href: string): string {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   SECTION: GÜVENLI ÖDEME (video + ödeme yöntemleri)
+   SECTION: GÜVENLI ÖDEME (metin + temiz ödeme kartı)
    ═══════════════════════════════════════════════════════════════ */
+
+function paymentBadge(label: string): string {
+  return `<span class="flex items-center justify-center h-11 rounded-md border border-gray-200 text-xs font-bold text-gray-900">${label}</span>`
+}
+
+function currencyPill(label: string): string {
+  return `<span class="px-4 py-1.5 rounded-full border border-gray-200 text-xs font-semibold text-gray-600">${label}</span>`
+}
 
 function SecurePaymentsSection(): string {
   return `
@@ -222,39 +209,25 @@ function SecurePaymentsSection(): string {
             </div>
             <p class="text-xs text-gray-400 mt-2">${t("tradeAssurance.eligibleBuyersNote")}</p>
           </div>
-          <!-- Right: Image + Payment Card Overlay (iSTOC tarzı) -->
-          <div class="lg:w-1/2">
-            <div class="relative">
-              <!-- Ana görsel -->
-              <img src="${videoPaymentImg}" alt="${t("tradeAssurance.securePaymentAlt")}" class="w-[65%] rounded-md object-cover shadow-lg" style="aspect-ratio:4/4.5" />
-              <!-- Ödeme kartları overlay -->
-              <div class="absolute top-8 end-0 w-[55%] bg-white rounded-md shadow-xl p-5" style="z-index:2">
-                <p class="text-xs font-semibold text-gray-700 mb-3">Pay online via our checkout</p>
-                <div class="grid grid-cols-3 gap-2 mb-4">
-                  <span class="flex items-center justify-center h-9 rounded-lg border border-gray-200 text-xs font-bold text-[#1a1f71]">VISA</span>
-                  <span class="flex items-center justify-center h-9 rounded-lg border border-gray-200 text-xs font-bold text-[#eb001b]">MC</span>
-                  <span class="flex items-center justify-center h-9 rounded-lg border border-gray-200 text-xs font-bold text-[#006fcf]">AMEX</span>
-                  <span class="flex items-center justify-center h-9 rounded-lg border border-gray-200 text-xs font-bold text-[#003087]">PayPal</span>
-                  <span class="flex items-center justify-center h-9 rounded-lg border border-gray-200 text-xs font-bold text-gray-800">Apple Pay</span>
-                  <span class="flex items-center justify-center h-9 rounded-lg border border-gray-200 text-xs font-bold text-gray-600">G Pay</span>
-                  <span class="flex items-center justify-center h-9 rounded-lg border border-gray-200 text-xs font-bold text-[#00c386]">TROY</span>
-                  <span class="flex items-center justify-center h-9 rounded-lg border border-gray-200 text-xs font-bold text-[#5f259f]">Klarna</span>
-                  <span class="flex items-center justify-center h-9 rounded-lg border border-gray-200 text-xs font-bold text-gray-400">...</span>
-                </div>
-                <p class="text-xs font-semibold text-gray-700 mb-2">Pay via wire transfer</p>
-                <div class="flex gap-2">
-                  <span class="flex items-center justify-center h-9 px-3 rounded-lg border border-gray-200 text-[10px] font-bold text-gray-700">J.P.Morgan</span>
-                  <span class="flex items-center justify-center h-9 px-3 rounded-lg border border-gray-200 text-[10px] font-bold text-[#003d8f]">citibank</span>
-                </div>
+          <!-- Right: Clean payment card -->
+          <div class="lg:w-1/2 w-full">
+            <div class="bg-white border border-gray-200 rounded-md p-6 sm:p-8 shadow-sm">
+              <h3 class="text-base font-bold text-gray-900 mb-5">${t("tradeAssurance.paymentsMethodsTitle")}</h3>
+              <div class="grid grid-cols-3 gap-3 mb-7">
+                ${paymentBadge('VISA')}
+                ${paymentBadge('Mastercard')}
+                ${paymentBadge('AMEX')}
+                ${paymentBadge('PayPal')}
+                ${paymentBadge('TROY')}
+                ${paymentBadge('Havale/EFT')}
               </div>
-            </div>
-            <!-- Currencies -->
-            <div class="mt-6 flex flex-wrap gap-2">
-              <span class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-500 font-medium">USD - $</span>
-              <span class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-500 font-medium">TRY - ₺</span>
-              <span class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-500 font-medium">GBP - &pound;</span>
-              <span class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-500 font-medium">EUR - &euro;</span>
-              <span class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-500 font-medium">JPY - &yen;/円</span>
+              <h3 class="text-base font-bold text-gray-900 mb-4">${t("tradeAssurance.paymentsCurrenciesTitle")}</h3>
+              <div class="flex flex-wrap gap-2">
+                ${currencyPill('TRY ₺')}
+                ${currencyPill('USD $')}
+                ${currencyPill('EUR €')}
+                ${currencyPill('GBP £')}
+              </div>
             </div>
           </div>
         </div>
@@ -269,14 +242,14 @@ function SecurePaymentsSection(): string {
 
 function RefundPolicySection(): string {
   return `
-    <section id="section-refund" class="py-16 sm:py-20 lg:py-24" style="background:#f7f7f7">
+    <section id="section-refund" class="py-16 sm:py-20 lg:py-24 bg-[#f7f7f7]">
       <div class="container-boxed px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
           <!-- Left: Video (autoplay on scroll) -->
           <div class="lg:w-1/2 order-2 lg:order-1">
             <div class="rounded-md overflow-hidden shadow-xl">
-              <video class="w-full object-cover auto-play-video" style="aspect-ratio:528/564" muted loop playsinline preload="metadata">
-                <source src="/src/assets/video/kargo.mp4" type="video/mp4" />
+              <video class="w-full object-cover auto-play-video aspect-[528/564]" muted loop playsinline preload="metadata">
+                <source src="${kargoVideo}" type="video/mp4" />
               </video>
             </div>
           </div>
@@ -308,8 +281,27 @@ function RefundPolicySection(): string {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   SECTION: GÖNDERİM VE LOJİSTİK HİZMETLERİ
+   SECTION: GÖNDERİM VE LOJİSTİK HİZMETLERİ + SÜREÇ ŞERİDİ
    ═══════════════════════════════════════════════════════════════ */
+
+function processStep(icon: string, label: string): string {
+  return `
+    <div class="lg:flex-1 flex flex-col items-center text-center bg-[#f7f7f7] border border-gray-200 rounded-md px-4 py-6">
+      <div class="w-11 h-11 rounded-full flex items-center justify-center mb-3 bg-[#FFF3C4] text-[#92400e]">
+        ${icon}
+      </div>
+      <span class="text-sm font-bold text-gray-900">${label}</span>
+    </div>
+  `
+}
+
+function processConnector(): string {
+  return `
+    <div class="hidden lg:flex lg:items-center w-10">
+      <div class="w-full border-t-2 border-dashed border-gray-200"></div>
+    </div>
+  `
+}
 
 function ShippingSection(): string {
   return `
@@ -329,6 +321,16 @@ function ShippingSection(): string {
             ${t("tradeAssurance.learnHow")}
           </a>
         </div>
+        <!-- Süreç şeridi: Üretim → Kargo → Gümrük → Teslimat -->
+        <div class="mt-12 grid grid-cols-2 gap-4 lg:flex lg:gap-0 lg:items-stretch">
+          ${processStep(processIconProduction, t("tradeAssurance.logisticsStepProduction"))}
+          ${processConnector()}
+          ${processStep(processIconShipping, t("tradeAssurance.logisticsStepShipping"))}
+          ${processConnector()}
+          ${processStep(processIconCustoms, t("tradeAssurance.logisticsStepCustoms"))}
+          ${processConnector()}
+          ${processStep(processIconDelivery, t("tradeAssurance.logisticsStepDelivery"))}
+        </div>
         <!-- Liman Görseli -->
         <div class="mt-12 rounded-md overflow-hidden shadow-lg">
           <img src="${limanImg}" alt="${t("tradeAssurance.logisticsAlt")}" class="w-full h-auto max-h-[500px] object-cover" />
@@ -344,14 +346,14 @@ function ShippingSection(): string {
 
 function AfterSalesSection(): string {
   return `
-    <section id="section-after-sales" class="py-16 sm:py-20 lg:py-24" style="background:#f7f7f7">
+    <section id="section-after-sales" class="py-16 sm:py-20 lg:py-24 bg-[#f7f7f7]">
       <div class="container-boxed px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
           <!-- Left: Video (autoplay on scroll) -->
           <div class="lg:w-1/2">
             <div class="rounded-md overflow-hidden shadow-xl">
-              <video class="w-full object-cover auto-play-video" style="aspect-ratio:528/564" muted loop playsinline preload="metadata">
-                <source src="/src/assets/video/service.mp4" type="video/mp4" />
+              <video class="w-full object-cover auto-play-video aspect-[528/564]" muted loop playsinline preload="metadata">
+                <source src="${serviceVideo}" type="video/mp4" />
               </video>
             </div>
           </div>
@@ -375,83 +377,65 @@ function AfterSalesSection(): string {
         </div>
       </div>
     </section>
-    <!-- Yellow separator bar -->
-    <div class="h-1.5 bg-[#FFC200]"></div>
   `
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   SECTION: ALICI SESLERİ SLIDER
+   SECTION: ALICI SESLERİ (statik 3 kart)
    ═══════════════════════════════════════════════════════════════ */
 
-function TestimonialsSection(): string {
-  const testimonials = [
-    {
-      quote: t("tradeAssurance.testimonial1"),
-      company: 'Nodnal',
-      name: 'Brandon Cubina',
-    },
-    {
-      quote: t("tradeAssurance.testimonial2"),
-      company: 'LifeToo',
-      name: 'Darren Tang',
-    },
-    {
-      quote: t("tradeAssurance.testimonial3"),
-      company: 'TechImport',
-      name: 'Ayşe Kılıç',
-    },
-    {
-      quote: t("tradeAssurance.testimonial4"),
-      company: 'EuroTrade',
-      name: 'Mehmet Demir',
-    },
-  ]
-
+function testimonialCard(quote: string, name: string, company: string): string {
+  const initials = name
+    .split(' ')
+    .map(part => part.charAt(0))
+    .join('')
+    .toUpperCase()
   return `
-    <section class="relative py-16 sm:py-20 overflow-hidden" style="background-color:#FFC200;background-image:url('${bgPatternSvg}');background-size:400px">
+    <div class="bg-white rounded-md p-7 flex flex-col gap-4">
+      <p class="text-gray-900 text-sm leading-relaxed">${quote}</p>
+      <div class="flex items-center gap-3">
+        <div class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold bg-[#FFF3C4] text-[#92400e]">${initials}</div>
+        <div>
+          <div class="text-sm font-bold text-gray-900">${name}</div>
+          <div class="text-xs text-gray-600">${company}</div>
+        </div>
+      </div>
+    </div>
+  `
+}
+
+function TestimonialsSection(): string {
+  return `
+    <section class="py-16 sm:py-20 bg-[#FFC200]">
       <div class="container-boxed px-4 sm:px-6 lg:px-8">
         <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-3">${t("tradeAssurance.testimonialsTitle")}</h2>
         <p class="text-gray-800 text-base text-center mb-12">
           ${t("tradeAssurance.testimonialsIntro")}
         </p>
-
-        <!-- Swiper -->
-        <div class="swiper testimonial-swiper max-w-[950px] mx-auto">
-          <div class="swiper-wrapper">
-            ${testimonials.map(t => `
-              <div class="swiper-slide">
-                <div class="text-center px-4 sm:px-8">
-                  <!-- Video placeholder -->
-                  <div class="relative rounded-md overflow-hidden shadow-xl mx-auto max-w-[780px] mb-8 cursor-pointer group" data-video-trigger="testimonial">
-                    <div class="w-full aspect-video bg-gray-800 flex items-center justify-center">
-                      <div class="w-16 h-16 rounded-full bg-white/30 flex items-center justify-center [@media(hover:hover)and(pointer:fine)]:group-hover:bg-white/50 transition-colors motion-reduce:transition-none">
-                        <svg class="w-8 h-8 text-white ms-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Quote -->
-                  <p class="text-lg sm:text-xl font-semibold text-gray-900 mb-6 max-w-[700px] mx-auto leading-relaxed">
-                    ${t.quote}
-                  </p>
-                  <div class="text-gray-800 text-sm font-medium">${t.company}</div>
-                  <div class="text-gray-700 text-sm">${t.name}</div>
-                </div>
-              </div>
-            `).join('')}
-          </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+          ${testimonialCard(t("tradeAssurance.testimonial1"), 'Brandon Cubina', 'Nodnal')}
+          ${testimonialCard(t("tradeAssurance.testimonial2"), 'Darren Tang', 'LifeToo')}
+          ${testimonialCard(t("tradeAssurance.testimonial3"), 'Ayşe Kılıç', 'TechImport')}
         </div>
+      </div>
+    </section>
+  `
+}
 
-        <!-- Navigation (Swiper dışında, tam ortalı) -->
-        <div class="flex items-center justify-center gap-5 mt-12">
-          <button class="testimonial-prev w-10 h-10 rounded-full border-2 border-gray-900 flex items-center justify-center [@media(hover:hover)and(pointer:fine)]:hover:bg-gray-900 [@media(hover:hover)and(pointer:fine)]:hover:text-white text-gray-900 transition-colors motion-reduce:transition-none flex-shrink-0">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg>
-          </button>
-          <div class="testimonial-pagination flex items-center gap-2"></div>
-          <button class="testimonial-next w-10 h-10 rounded-full border-2 border-gray-900 flex items-center justify-center [@media(hover:hover)and(pointer:fine)]:hover:bg-gray-900 [@media(hover:hover)and(pointer:fine)]:hover:text-white text-gray-900 transition-colors motion-reduce:transition-none flex-shrink-0">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
-          </button>
-        </div>
+/* ═══════════════════════════════════════════════════════════════
+   SECTION: ALT CTA BANDI
+   ═══════════════════════════════════════════════════════════════ */
+
+function FinalCtaSection(): string {
+  return `
+    <section class="py-16 text-center bg-[#0a0a0a]">
+      <div class="container-boxed px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-8">
+          ${t("tradeAssurance.finalCtaTitle")}
+        </h2>
+        <a href="/pages/auth/register" class="th-btn inline-flex items-center gap-2 font-semibold px-7 py-3.5 text-base">
+          ${t("tradeAssurance.finalCtaButton")}
+        </a>
       </div>
     </section>
   `
@@ -473,13 +457,14 @@ appEl.innerHTML = `
 
   <main class="flex-1 min-w-0">
     ${HeroBanner()}
-    ${ServiceInfoSection()}
+    ${StatsBandSection()}
     ${HowItWorks()}
     ${SecurePaymentsSection()}
     ${RefundPolicySection()}
     ${ShippingSection()}
     ${AfterSalesSection()}
     ${TestimonialsSection()}
+    ${FinalCtaSection()}
     ${TradeAssuranceFooterCards()}
   </main>
 
@@ -501,45 +486,6 @@ startAlpine()
 initStickyHeaderSearch()
 initLanguageSelector()
 
-// Initialize Swiper for testimonials
-applySwiperDir('.testimonial-swiper')
-new Swiper('.testimonial-swiper', {
-  modules: [Navigation, Pagination],
-  slidesPerView: 1,
-  spaceBetween: 30,
-  loop: true,
-  navigation: {
-    nextEl: '.testimonial-next',
-    prevEl: '.testimonial-prev',
-  },
-  pagination: {
-    el: '.testimonial-pagination',
-    clickable: true,
-    renderBullet(_index: number, className: string) {
-      return `<span class="${className}" style="width:12px;height:12px;border-radius:50%;display:inline-block;cursor:pointer;background:rgba(0,0,0,0.25);transition:background 0.2s"></span>`
-    },
-  },
-  on: {
-    init(swiper) {
-      // Override Swiper's absolute positioning on pagination
-      const pg = swiper.pagination.el as HTMLElement | null
-      if (pg) {
-        pg.style.position = 'static'
-        pg.style.width = 'auto'
-      }
-    },
-    paginationUpdate(swiper) {
-      // Mark active bullet
-      const bullets = swiper.pagination.bullets
-      if (bullets) {
-        bullets.forEach((b: HTMLElement, i: number) => {
-          b.style.background = i === swiper.realIndex ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.25)'
-        })
-      }
-    },
-  },
-})
-
 // Auto-play videos when they scroll into view (IntersectionObserver)
 const autoPlayVideos = document.querySelectorAll<HTMLVideoElement>('.auto-play-video')
 if (autoPlayVideos.length) {
@@ -555,4 +501,3 @@ if (autoPlayVideos.length) {
   }, { threshold: 0.3 })
   autoPlayVideos.forEach(v => videoObserver.observe(v))
 }
-

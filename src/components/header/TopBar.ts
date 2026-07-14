@@ -472,7 +472,12 @@ function renderLanguageCurrencySelector(): string {
         <!-- Language Select -->
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2" data-i18n="header.language">${t("header.language")}</label>
-          <select id="lang-select" class="th-input th-input-md cursor-pointer">
+          <!-- data-native-select: SelectMenu genelleştirmesinden opt-out — bu popover
+               site genelinde her sayfada render edilir; initLanguageSelector() +
+               rebuildCurrencyPicker() sık sık programatik senkronizasyon yapıyor ve
+               Flowbite'ın kendi data-popover görünürlük sistemine iç içe geçiyor.
+               Bkz. SelectMenu.ts dosya başı yorumu. -->
+          <select id="lang-select" data-native-select class="th-input th-input-md cursor-pointer">
             ${languageOptions
               .map(
                 (lang) => `
@@ -486,7 +491,7 @@ function renderLanguageCurrencySelector(): string {
         <!-- Currency Select -->
         <div class="mb-5">
           <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2" data-i18n="header.currency">${t("header.currency")}</label>
-          <select id="currency-select" class="th-input th-input-md cursor-pointer">${buildCurrencyOptionsHtml()}</select>
+          <select id="currency-select" data-native-select class="th-input th-input-md cursor-pointer">${buildCurrencyOptionsHtml()}</select>
         </div>
 
         <!-- Save Button -->

@@ -58,6 +58,7 @@ const INNER_CLS = "max-w-[1500px] mx-auto";
 const SVG_ARROW = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>`;
 const SVG_CHECK_MD = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`;
 const SVG_DASH = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 12h12"/></svg>`;
+const SVG_CHEVRON_DOWN = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>`;
 // ---------- Paylaşılan class'lar ----------
 const EYEBROW_CLS =
   "inline-flex items-center gap-2 text-[11.5px] font-semibold uppercase tracking-[0.12em] text-[#d39c00] " +
@@ -65,7 +66,7 @@ const EYEBROW_CLS =
 
 const SECTION_HEAD_CLS = "flex flex-col gap-3.5 mb-12 max-w-[56ch]";
 const SECTION_H2_CLS =
-  "text-4xl md:text-[44px] lg:text-5xl leading-[1.05] tracking-[-0.025em] font-semibold text-[#1a1a1a] m-0";
+  "text-[26px] sm:text-[30px] lg:text-[36px] xl:text-5xl leading-[1.12] xl:leading-[1.05] tracking-[-0.025em] font-semibold text-[#1a1a1a] m-0";
 const SECTION_P_CLS = "text-base md:text-[17px] text-[#4a4a48] leading-[1.45] m-0";
 
 // CTA'lar sistemin `th-btn` / `th-btn-outline` class'larını kullanır — remote theme
@@ -79,24 +80,30 @@ function HeroSection(): string {
   return /* html */ `
     <section class="bg-[#f7f7f5] pt-12 md:pt-16 pb-12 md:pb-16">
       <div class="${WRAP_CLS}">
-        <div class="${INNER_CLS} grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 lg:items-stretch items-center">
+        <div class="${INNER_CLS} grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center xl:items-stretch">
           <div class="w-full">
             <span class="${EYEBROW_CLS}">${t("sellPage.manufacturerPlatform")}</span>
-            <h1 class="text-[36px] sm:text-[44px] lg:text-[56px] leading-[1.04] tracking-[-0.025em] font-semibold mt-[18px] mb-[18px] max-w-[14ch] text-[#1a1a1a]">
+            <h1 class="text-[30px] sm:text-[36px] lg:text-[40px] xl:text-[56px] leading-[1.12] lg:leading-[1.05] xl:leading-[1.04] tracking-[-0.025em] font-semibold mt-[18px] mb-[18px] max-w-[14ch] text-[#1a1a1a]">
               ${t("sellPage.heroTitle")}
             </h1>
             <p class="text-base md:text-lg leading-[1.45] text-[#4a4a48] max-w-[42ch] mb-7">
               ${t("sellPage.heroSubtitle")}
             </p>
-            <div class="flex flex-wrap gap-3 items-center">
-              <a href="${SELL_HREF}" data-seller-cta class="th-btn th-btn-lg">
+            <div class="flex flex-col lg:flex-row lg:flex-wrap gap-3 lg:items-center">
+              <a href="${SELL_HREF}" data-seller-cta class="th-btn th-btn-lg w-full lg:w-auto">
                 ${t("sellPage.applyAsSeller")} ${SVG_ARROW}
               </a>
-              <a href="#paketler" class="th-btn-outline th-btn-lg">${t("sellPage.howItWorks")}</a>
+              <a href="#paketler" class="hidden lg:inline-flex th-btn-outline th-btn-lg">${t("sellPage.howItWorks")}</a>
+              <a
+                href="#paketler"
+                class="lg:hidden appearance-none inline-flex items-center justify-center gap-1.5 min-h-11 text-sm font-semibold text-[#4a4a48] hover:text-[#1a1a1a] focus:outline-none transition-colors duration-150"
+              >
+                ${t("sellPage.howItWorks")} ${SVG_CHEVRON_DOWN}
+              </a>
             </div>
           </div>
-          <div class="relative w-full lg:max-w-[720px] xl:max-w-[800px] 2xl:max-w-[860px] lg:me-auto lg:h-full">
-            <div class="relative w-full aspect-[5/4] lg:aspect-auto lg:h-full lg:min-h-[360px] rounded-2xl overflow-hidden border border-[#e8e6e0] bg-[#f0ead8] shadow-[0_8px_24px_-12px_rgba(20,20,18,0.18),0_4px_8px_-4px_rgba(20,20,18,0.08)]">
+          <div class="relative w-full lg:max-w-[720px] xl:max-w-[800px] 2xl:max-w-[860px] lg:me-auto xl:h-full">
+            <div class="relative w-full aspect-[16/9] lg:aspect-[4/3] xl:aspect-auto xl:h-full xl:min-h-[360px] rounded-2xl overflow-hidden border border-[#e8e6e0] bg-[#f0ead8] shadow-[0_8px_24px_-12px_rgba(20,20,18,0.18),0_4px_8px_-4px_rgba(20,20,18,0.08)]">
               <img
                 src="${heroImg}"
                 alt="${t("sellPage.heroImageAlt")}"
@@ -110,6 +117,30 @@ function HeroSection(): string {
         </div>
       </div>
     </section>
+  `;
+}
+
+// Hero altı 3 hücreli güven bandı — %0 komisyon / 4 dk başvuru / 14 gün deneme.
+// Sabit içerik: değerler pazarlama sabiti, plan verisiyle ilişkili değil.
+function TrustStrip(): string {
+  const cells = [
+    { v: t("sellPage.trustCommissionValue"), l: t("sellPage.trustCommission") },
+    { v: t("sellPage.trustApplyTimeValue"), l: t("sellPage.trustApplyTime") },
+    { v: t("sellPage.trustTrialValue"), l: t("sellPage.trustTrial") },
+  ];
+  return /* html */ `
+    <div class="grid grid-cols-3 divide-x divide-[#e8e6e0] bg-white border-y border-[#e8e6e0]">
+      ${cells
+        .map(
+          (c) => `
+        <div class="text-center px-2 py-4 lg:py-5">
+          <b class="block text-[17px] font-semibold tracking-[-0.01em] text-[#1a1a1a]">${escapeHtml(c.v)}</b>
+          <span class="text-[11.5px] text-[#8a877f]">${escapeHtml(c.l)}</span>
+        </div>
+      `
+        )
+        .join("")}
+    </div>
   `;
 }
 
@@ -198,7 +229,7 @@ function PricingCard(plan: PricingPlan, idx: number, trial?: TrialConfig): strin
   const ctaAttr = isSellerSignup ? "data-seller-cta" : "";
 
   return /* html */ `
-    <div class="relative flex flex-col gap-3.5 rounded-2xl border p-[26px_22px_22px] transition-[border-color,box-shadow,transform] duration-150 motion-reduce:transition-none ${cardCls}">
+    <div class="relative flex flex-col gap-3.5 rounded-2xl border p-5 lg:p-[26px_22px_22px] transition-[border-color,box-shadow,transform] duration-150 motion-reduce:transition-none ${cardCls}">
       ${
         badge
           ? `<span class="absolute -top-2.5 start-[22px] bg-[#f5b800] text-[#1a1a1a] text-[10.5px] font-bold uppercase tracking-[0.08em] px-2.5 py-1 rounded-full border border-[#d39c00]">${escapeHtml(badge)}</span>`
@@ -547,11 +578,15 @@ function matrixGridStyle(n: number): string {
 // Grid container'ın statik (Tailwind taranabilir) utility'leri.
 const MATRIX_GRID_CLS = "grid gap-3 items-center";
 
-function PricingMatrix(plans: PricingPlan[], featuresMatrix?: PricingFeaturesMatrix): string {
-  // N-plan: kaç public plan varsa o kadar kolon. Karşılaştırma için en az 2 plan.
-  if (plans.length < 2) return "";
+// Desktop matris — tam grid, tüm section'lar aynı anda açık (≥1024px, `xl:`).
+// `sections`/`featuredIdx` çağıran `PricingMatrix` tarafından bir kez hesaplanıp
+// geçirilir (accordion'la paylaşılır, iki kez türetilmez).
+function PricingMatrixDesktop(
+  plans: PricingPlan[],
+  sections: MatrixSection[],
+  featuredIdx: number
+): string {
   const gridStyle = matrixGridStyle(plans.length);
-  const featuredIdx = plans.findIndex((p) => p.highlighted);
   const sym = currencySymbol(plans[0]?.currency || "EUR");
   // Alpine x-text içine gömülen JS string literal'i için tek tırnak kaçışı.
   const escJs = (s: string) => s.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
@@ -576,7 +611,7 @@ function PricingMatrix(plans: PricingPlan[], featuresMatrix?: PricingFeaturesMat
   // (dinamik → inline style, Tailwind arbitrary class taranamaz).
   const minW = 160 + plans.length * 110;
   return /* html */ `
-    <div class="mt-14 overflow-x-auto">
+    <div class="hidden xl:block mt-14 overflow-x-auto">
       <div class="bg-white border border-[#e8e6e0] rounded-2xl overflow-hidden" style="min-width:${minW}px">
       <div class="${MATRIX_GRID_CLS} items-end px-6 py-[18px] bg-[#fafaf8] border-b border-[#d5d2c9]" style="${gridStyle}">
         <div class="text-start">
@@ -595,7 +630,7 @@ function PricingMatrix(plans: PricingPlan[], featuresMatrix?: PricingFeaturesMat
           .join("")}
       </div>
 
-      ${buildDynamicMatrixSections(plans, featuresMatrix)
+      ${sections
         .map(
           (sec) => `
         <div>
@@ -643,6 +678,89 @@ function PricingMatrix(plans: PricingPlan[], featuresMatrix?: PricingFeaturesMat
       </div>
     </div>
   `;
+}
+
+// N kolon grid template (mobil/tablet). N<4 saf `fr` birimleriyle serbestçe
+// küçülür (taşma yok, overflow-x-auto gerekmez). N>=4 masaüstüyle aynı minmax
+// deseni kullanılır — bu durumda details içeriği overflow-x-auto'ya sarılır.
+function accordionGridStyle(n: number): string {
+  if (n >= 4) return matrixGridStyle(n);
+  return `grid-template-columns: minmax(0,1.5fr) repeat(${n}, minmax(0,1fr))`;
+}
+
+// Mobil/tablet matris (<1024px, `xl:hidden`) — masaüstüyle aynı `sections`/
+// `featuredIdx` (çağıran `PricingMatrix` tarafından hesaplanır) + `renderMatrixCell`
+// kategori-başına `<details>` accordion'a bölünür; ilk kategori açık başlar.
+function PricingMatrixAccordion(
+  plans: PricingPlan[],
+  sections: MatrixSection[],
+  featuredIdx: number
+): string {
+  const gridStyle = accordionGridStyle(plans.length);
+  const wide = plans.length >= 4;
+  const minW = 150 + plans.length * 96;
+
+  return /* html */ `
+    <div class="xl:hidden mt-10">
+      <h3 class="text-[17px] font-semibold text-[#1a1a1a] mb-1">${t("sellPage.allPackageFeatures")}</h3>
+      <p class="text-[12.5px] text-[#8a877f] mb-3.5">${t("sellPage.accordionHint")}</p>
+      <div class="flex flex-col gap-2.5">
+        ${sections
+          .map((sec, i) => {
+            const body = /* html */ `
+              <div class="${MATRIX_GRID_CLS} px-4 py-2.5 border-t border-[#e8e6e0] bg-[#fafaf8] text-[10.5px] font-semibold uppercase tracking-[0.05em] text-[#8a877f]" style="${gridStyle}">
+                <div class="text-start">${t("common.feature")}</div>
+                ${plans
+                  .map(
+                    (p, j) => `
+                  <div class="text-center ${j === featuredIdx ? "text-[#d39c00]" : ""}">${escapeHtml(p.plan_name)}</div>
+                `
+                  )
+                  .join("")}
+              </div>
+              ${sec.rows
+                .map(
+                  (r) => `
+                <div class="${MATRIX_GRID_CLS} px-4 py-3 border-t border-[#e8e6e0] text-xs" style="${gridStyle}">
+                  <div class="text-[#1a1a1a] font-medium">${escapeHtml(r.f)}</div>
+                  ${r.v
+                    .map(
+                      (c, j) => `
+                    <div class="text-center text-[#4a4a48] ${j === featuredIdx ? "font-semibold text-[#1a1a1a]" : ""}">
+                      ${renderMatrixCell(c)}
+                    </div>
+                  `
+                    )
+                    .join("")}
+                </div>
+              `
+                )
+                .join("")}
+            `;
+            return /* html */ `
+              <details ${i === 0 ? "open" : ""} class="group/acc bg-white border border-[#e8e6e0] rounded-2xl overflow-hidden">
+                <summary class="th-no-press list-none [&::-webkit-details-marker]:hidden flex items-center justify-between gap-2 min-h-[52px] px-4 cursor-pointer text-sm font-semibold text-[#1a1a1a]">
+                  <span>${escapeHtml(sec.title)}</span>
+                  <span class="shrink-0 text-[#8a877f] transition-transform duration-150 motion-reduce:transition-none group-open/acc:rotate-180">${SVG_CHEVRON_DOWN}</span>
+                </summary>
+                ${wide ? `<div class="overflow-x-auto"><div style="min-width:${minW}px">${body}</div></div>` : body}
+              </details>
+            `;
+          })
+          .join("")}
+      </div>
+    </div>
+  `;
+}
+
+// Masaüstü tablo + mobil/tablet accordion aynı plan/feature verisinden türetilir.
+// `sections`/`featuredIdx` burada BİR KEZ hesaplanıp her iki render'a geçirilir.
+function PricingMatrix(plans: PricingPlan[], featuresMatrix?: PricingFeaturesMatrix): string {
+  // N-plan: kaç public plan varsa o kadar kolon. Karşılaştırma için en az 2 plan.
+  if (plans.length < 2) return "";
+  const sections = buildDynamicMatrixSections(plans, featuresMatrix);
+  const featuredIdx = plans.findIndex((p) => p.highlighted);
+  return `${PricingMatrixDesktop(plans, sections, featuredIdx)}${PricingMatrixAccordion(plans, sections, featuredIdx)}`;
 }
 
 function PricingEmpty(): string {
@@ -693,7 +811,6 @@ function PricingSection(
       <div class="${WRAP_CLS}">
         <div class="${INNER_CLS}">
         <div class="${SECTION_HEAD_CLS}">
-          <span class="${EYEBROW_CLS}">${t("sellPage.sellerPackages")}</span>
           <h2 class="${SECTION_H2_CLS}">${t("sellPage.pricingSectionTitle")}</h2>
           <p class="${SECTION_P_CLS}">
             ${t("sellPage.pricingSectionDesc")}
@@ -740,7 +857,7 @@ function FinalCtaSection(): string {
     <section class="pt-16 md:pt-20 pb-20 md:pb-24 bg-[#f7f7f5] text-center">
       <div class="${WRAP_CLS}">
         <div class="${INNER_CLS}">
-        <h2 class="text-[34px] sm:text-[38px] md:text-[42px] tracking-[-0.025em] leading-[1.1] font-semibold max-w-[22ch] mx-auto mb-3.5 text-[#1a1a1a]">
+        <h2 class="text-[26px] sm:text-[34px] md:text-[42px] tracking-[-0.025em] leading-[1.1] font-semibold max-w-[22ch] mx-auto mb-3.5 text-[#1a1a1a]">
           ${t("sellPage.finalCtaTitle")}
         </h2>
         <p class="text-base text-[#4a4a48] mx-auto mb-6 max-w-[52ch]">
@@ -760,6 +877,33 @@ function FinalCtaSection(): string {
 }
 
 // =====================================================
+// 5. STICKY CTA BAR — yalnız mobil/tablet (`lg:hidden`)
+// =====================================================
+// En ucuz aylık fiyatlı plan — "€399/ay'dan başlayan" için. Fiyatsız (0/undefined)
+// planlar `min`'i değiştirmez; hiçbir plan'da aylık fiyat yoksa (yalnız yıllık/özel
+// teklif) `cheapest` undefined kalır ve bar sessizce render edilmez.
+function StickyCtaBar(plans: PricingPlan[]): string {
+  const cheapest = plans.reduce<PricingPlan | undefined>((min, p) => {
+    if (!p.monthly_price) return min;
+    return !min || p.monthly_price < min.monthly_price ? p : min;
+  }, undefined);
+  if (!cheapest) return "";
+  const priceLabel = `${currencySymbol(cheapest.currency)}${cheapest.monthly_price}`;
+
+  return /* html */ `
+    <div class="lg:hidden fixed inset-x-0 bottom-0 z-(--z-sticky) flex items-center gap-3 bg-white border-t border-[#e8e6e0] px-4 pt-2.5 pb-[calc(10px+env(safe-area-inset-bottom))]">
+      <div class="min-w-0">
+        <div class="text-sm font-semibold tracking-[-0.01em] text-[#1a1a1a] truncate">
+          ${t("sellPage.stickyFrom", { price: priceLabel })}
+        </div>
+        <div class="text-[11px] text-[#8a877f] truncate">${t("sellPage.stickyMeta")}</div>
+      </div>
+      <a href="${SELL_HREF}" data-seller-cta class="th-btn ms-auto shrink-0">${t("sellPage.stickyApply")}</a>
+    </div>
+  `;
+}
+
+// =====================================================
 // EXPORT — Sayfa iskeleti (header/footer dışında)
 // =====================================================
 // FAZ 4.1 — pricingData zorunlu: backend'den (veya cache'ten) gelir.
@@ -770,7 +914,10 @@ export function SellPageLayout(pricingData?: PricingPlansResponse): string {
   const trial = pricingData?.trial_config;
   return `
     ${HeroSection()}
+    ${TrustStrip()}
     ${PricingSection(plans, featuresMatrix, trial)}
     ${FinalCtaSection()}
+    <div class="lg:hidden h-[72px]"></div>
+    ${StickyCtaBar(plans)}
   `;
 }

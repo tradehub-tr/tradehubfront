@@ -11,19 +11,19 @@ import { t } from "../../i18n";
    ICONS (inline SVG)
    ════════════════════════════════════════════════════ */
 
-const iconExpress = `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg>`;
-
 const iconAir = `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.125A59.769 59.769 0 0121.485 12 59.768 59.768 0 013.27 20.875L5.999 12zm0 0h7.5"/></svg>`;
 
 const iconSea = `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5c1.5-1 3-1 4.5 0s3 1 4.5 0 3-1 4.5 0 3 1 4.5 0M3 12c1.5-1 3-1 4.5 0s3 1 4.5 0 3-1 4.5 0 3 1 4.5 0M3 7.5c1.5-1 3-1 4.5 0s3 1 4.5 0 3-1 4.5 0 3 1 4.5 0"/></svg>`;
 
 const iconLand = `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/></svg>`;
 
-const iconBox = `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9"/></svg>`;
-
 const iconTracking = `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>`;
 
-const iconFreeShipping = `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/></svg>`;
+// Lucide "warehouse" — bkz. lucideIcons.ts deseni, proje stiline (stroke-width 1.5) uyarlandı
+const iconWarehouse = `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 21V10a1 1 0 00-1-1H7a1 1 0 00-1 1v11M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 011.132-1.803l7.95-3.974a2 2 0 011.837 0l7.948 3.974A2 2 0 0122 8v11zM6 13h12M6 17h12"/></svg>`;
+
+// Lucide "anchor" — liman/deniz teslim noktası
+const iconPort = `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v16m7-9l2-1a9 9 0 01-18 0l2 1M9 11h6"/><circle cx="12" cy="4" r="2"/></svg>`;
 
 /* ════════════════════════════════════════════════════
    HELPERS
@@ -88,11 +88,6 @@ function shippingTypesSection(): string {
         </p>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           ${shippingTypeCard(
-            iconExpress,
-            t("infoPages.shippingExpressTitle"),
-            t("infoPages.shippingExpressDesc")
-          )}
-          ${shippingTypeCard(
             iconAir,
             t("infoPages.shippingAirTitle"),
             t("infoPages.shippingAirDesc")
@@ -108,14 +103,14 @@ function shippingTypesSection(): string {
             t("infoPages.shippingLandDesc")
           )}
           ${shippingTypeCard(
-            iconBox,
-            t("infoPages.shippingStandardTitle"),
-            t("infoPages.shippingStandardDesc")
+            iconWarehouse,
+            t("infoPages.shippingAmbarTitle"),
+            t("infoPages.shippingAmbarDesc")
           )}
           ${shippingTypeCard(
-            iconFreeShipping,
-            t("infoPages.shippingFreeTitle"),
-            t("infoPages.shippingFreeDesc")
+            iconPort,
+            t("infoPages.shippingPortTitle"),
+            t("infoPages.shippingPortDesc")
           )}
         </div>
       </div>

@@ -86,7 +86,7 @@ const MOCK_SELLER = {
   review_count: 127,
   certification_list: ["ISO 9001", "FSC", "CE"],
   advantages: [
-    { title: "Hizli Uretim", description: "7 gun icerisinde uretim ve kargo" },
+    { title: "Hizli Uretim", description: "7 gun icerisinde uretim ve sevkiyat" },
     { title: "Ozel Tasarim", description: "Cizime gore ozel uretim yapilir" },
     { title: "Kalite Garanti", description: "ISO 9001 sertifikali uretim" },
   ],

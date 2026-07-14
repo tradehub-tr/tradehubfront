@@ -9,7 +9,7 @@ import { initLanguageSelector } from '../components/header/TopBar'
 import { FooterLinks } from '../components/footer'
 import { FloatingPanel } from '../components/floating'
 import { startAlpine } from '../alpine'
-import { AfterSalesPage, initAfterSalesPage } from '../components/after-sales'
+import { AfterSalesPage } from '../components/after-sales'
 
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.classList.add('relative');
@@ -35,4 +35,3 @@ initChatTriggers();
 startAlpine();
 initStickyHeaderSearch();
 initLanguageSelector();
-initAfterSalesPage();
