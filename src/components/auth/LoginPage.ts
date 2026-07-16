@@ -211,7 +211,7 @@ export function initLoginPage(options: LoginPageOptions = {}): void {
                 destination = redirectUrl.pathname + redirectUrl.search + redirectUrl.hash;
               }
             } catch {
-              // geçersiz değer → varsayılan hedefte kal
+              // geçersiz değer → varsayılan hedefte kal (open redirect koruması)
             }
           }
           window.location.href = destination;
