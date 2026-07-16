@@ -1,3 +1,18 @@
+## [v2.1.0-alpha.1] - 2026-07-16 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix: XSS koruması, güvenlik headerları ve open redirect düzeltmesi (@boraydeger32)
+  - Cart innerHTML XSS — escapeHtml ile korundu (cart.ts)
+  - Product gallery innerHTML XSS — escapeHtml eklendi (product.ts)
+  - Open redirect — login catch bloğu güvenli fallback (LoginPage.ts)
+  - Nginx güvenlik headerları: CSP, HSTS, X-Frame-Options, Referrer-Policy
+  - CSP'ye Google Fonts izni eklendi (fonts.googleapis.com, fonts.gstatic.com)
+  - CI/CD npm audit adımı eklendi (lint.yml)
+  - Node 20 → 22 Dockerfile ile uyum (lint.yml)
+
+---
 ## [v2.1.0] - 2026-07-14 PROD
 
 Bu surum istoc.com'da yayindadir.
