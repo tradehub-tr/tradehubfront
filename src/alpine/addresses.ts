@@ -39,6 +39,8 @@ const MOCK_ADDRESSES: BuyerAddress[] = [
 ];
 
 function isAddressesMock(): boolean {
+  // F-033: Production'da mock modları devre dışı
+  if (!import.meta.env.DEV) return false;
   return new URLSearchParams(window.location.search).get("mock_ad") === "1";
 }
 

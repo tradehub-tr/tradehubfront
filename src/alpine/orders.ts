@@ -676,6 +676,8 @@ Alpine.data("ordersSection", () => ({
 
 // ?mock_os=1 → İadeler + Değerlendirmeler sekmeleri örnek veriyle dolar (yalnızca dev/görsel test)
 function isOrdersMock(): boolean {
+  // F-033: Production'da mock modları devre dışı
+  if (!import.meta.env.DEV) return false;
   return new URLSearchParams(window.location.search).get("mock_os") === "1";
 }
 

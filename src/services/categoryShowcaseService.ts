@@ -206,6 +206,8 @@ const MOCK_SHOWCASE: ShowcaseData = {
 };
 
 function isMockEnabled(): boolean {
+  // F-033: Production'da mock modları devre dışı
+  if (!import.meta.env.DEV) return false;
   try {
     const params = new URLSearchParams(window.location.search);
     if (params.get("mock_cs") === "1") return true;

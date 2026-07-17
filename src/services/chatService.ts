@@ -432,17 +432,21 @@ export async function markConversationRead(
 }
 
 export async function blockConversation(_conversationId: string): Promise<void> {
-  // TODO(backend): chat.block_contact
+  // F-058: Stub — backend implemente edilene kadar kullanıcıya bilgi ver
+  throw new Error("Engelleme özelliği henüz kullanıma açılmamıştır.");
 }
 
 export async function deleteConversation(_conversationId: string): Promise<void> {
-  // TODO(backend): chat.archive_thread (chatwoot conversation status=resolved)
+  // F-058: Stub — backend implemente edilene kadar kullanıcıya bilgi ver
+  throw new Error("Konuşma silme özelliği henüz kullanıma açılmamıştır.");
 }
 
 export async function muteConversation(_conversationId: string, _mute: boolean): Promise<void> {
-  // TODO(backend): chat.mute_thread (chatwoot mute API)
+  // F-058: Stub — backend implemente edilene kadar kullanıcıya bilgi ver
+  throw new Error("Sessize alma özelliği henüz kullanıma açılmamıştır.");
 }
 
 export async function pinConversation(_conversationId: string, _pin: boolean): Promise<void> {
-  // TODO(backend): kalıcı pin için Teamslike Settings'e per-user metadata gerekir
+  // F-058: Stub — backend implemente edilene kadar kullanıcıya bilgi ver
+  throw new Error("Sabitleme özelliği henüz kullanıma açılmamıştır.");
 }

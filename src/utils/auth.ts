@@ -185,8 +185,10 @@ export async function login(email: string, password: string): Promise<LoginRespo
   const data = (await res.json()) as LoginResponse;
 
   if (data.requires_2fa) {
-    if (import.meta.env.DEV) console.warn("[Auth] 2FA gerekli — henüz implement edilmedi");
-    throw new Error("2FA_REQUIRED");
+    // F-014: Kullanıcıya anlaşılır hata mesajı döndür (2FA UI henüz implemente edilmedi)
+    throw new Error(
+      "İki faktörlü doğrulama gerekli. Lütfen yönetici ile iletişime geçin veya 2FA ayarınızı kontrol edin."
+    );
   }
 
   if (data.requires_consent_renewal) {
