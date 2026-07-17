@@ -1,3 +1,14 @@
+## [v2.1.0-alpha.2] - 2026-07-17 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(security): Faz 1-4 frontend güvenlik düzeltmeleri (@boraydeger32)
+  - Mock modları production'da devre dışı (DEV guard) (F-033) addresses.ts, orders.ts, socialProofService.ts, categoryShowcaseService.ts
+  - 2FA login hatası anlaşılır mesaj ile bildiriliyor (F-014)
+  - Stub chat fonksiyonları sessiz geçmek yerine hata fırlatıyor (F-058)
+
+---
 ## [v2.1.0-alpha.1] - 2026-07-16 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
