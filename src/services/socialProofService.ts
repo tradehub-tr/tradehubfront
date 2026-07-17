@@ -61,6 +61,8 @@ const MOCK_SIGNALS: Signal[] = [
 ];
 
 function isMockEnabled(): boolean {
+  // F-033: Production'da mock modları devre dışı
+  if (!import.meta.env.DEV) return false;
   try {
     const params = new URLSearchParams(window.location.search);
     if (params.get("mock_sp") === "1") return true;
