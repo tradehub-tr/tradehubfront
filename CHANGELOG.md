@@ -1,3 +1,15 @@
+## [v2.1.0-alpha.3] - 2026-07-18 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(footer): SEO bölgesi + genişletilmiş footer içeriği; ürün kartı hover cilası (@TurksabYonetim)
+  - FooterSeo.ts eklendi: Trendyol tarzı "Popüler Üreticiler ve Mağazalar" + "Popüler Sayfalar" bölgesi (beyaz zemin, sarı üst çizgi). Marka/arama linkleri SEO hedefli sabit içerik; yalnızca bölüm başlıkları i18n'e çevrilir.
+  - FooterLinks/FooterGroup/FooterPolicy yeniden düzenlendi; mobilde accordion yok, tüm linkler görünür. 4 dilde yeni footer i18n anahtarları (tr/en/ar/ru).
+  - ListingCard: hover'da yumuşak gölge + ring geçişi.
+  - products sayfası arka planı beyaza çekildi; product.ts'ten kullanılmayan escapeHtml import'u kaldırıldı.
+
+---
 ## [v2.1.0-alpha.2] - 2026-07-17 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
