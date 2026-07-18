@@ -34,7 +34,6 @@ function renderInlineVideo(url: string): string {
   `;
 }
 import { getListingDetail, getProductReviews } from "../services/listingService";
-import { escapeHtml } from "../utils/sanitize";
 import type { ProductDetail, ProductImage } from "../types/product";
 
 // Empty default product — no mock data

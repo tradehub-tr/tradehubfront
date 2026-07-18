@@ -1,39 +1,20 @@
 /**
- * FooterLinks Component (iSTOC-style Light Footer)
- * Clean light/white background layout with:
- * - 5 link columns: Get support, Payments and protections, Source on iSTOC.com, Sell on iSTOC.com, Get to know us
- * - Social media icons under "Stay Connected" in last column
- * - Simple top border separator
- * - No logo section
- * - Internally renders FooterGroup (payment badges) and FooterPolicy (bottom bar)
+ * FooterLinks Component (iSTOC Tam Footer — F1 "Trendyol Klasik")
+ * Kompozisyon (yukarıdan aşağıya):
+ * - FooterSeo: SEO üst bölgesi (Popüler Üreticiler + Popüler Sayfalar)
+ * - Ana bölge: 5 link kolonu + güven kolonu (Ülke Değiştir, Güvenli Alışveriş,
+ *   Güvenlik Sertifikası) + politika linkleri satırı
+ * - FooterPolicy: siyah bant (sosyal + app rozetleri + yalnız telif satırı)
+ *
+ * Mobil kuralı: accordion/dropdown YOK — tüm linkler 2 kolonlu ızgarada görünür
+ * (bkz. memory: footer-mobil-accordion-yasak).
  */
 
-import type { FooterColumn, SocialLink } from "../../types/navigation";
+import type { FooterColumn } from "../../types/navigation";
 import { t } from "../../i18n";
-import { FooterGroup } from "./FooterGroup";
+import { FooterSeo } from "./FooterSeo";
 import { FooterPolicy } from "./FooterPolicy";
 
-/**
- * Get base URL for assets (handles GitHub Pages subdirectory)
- */
-const getBaseUrl = (): string => {
-  const viteBase = typeof import.meta !== "undefined" ? import.meta.env?.BASE_URL : undefined;
-  if (viteBase && viteBase !== "/") {
-    return viteBase;
-  }
-  if (window.location.pathname.startsWith("/tradehub/")) {
-    return "/tradehub/";
-  }
-  return "/";
-};
-
-// Keep getBaseUrl available for potential future use
-void getBaseUrl;
-
-/**
- * Footer columns configuration — iSTOC-style 5 columns
- * Now uses i18n translation keys for all labels and titles.
- */
 interface FooterColumnI18n {
   titleKey: string;
   links: { labelKey: string; href: string }[];
@@ -44,7 +25,9 @@ const footerColumnsI18n: FooterColumnI18n[] = [
     titleKey: "footer.getSupport",
     links: [
       { labelKey: "footer.helpCenter", href: "/yardim-merkezi" },
+      { labelKey: "footer.liveSupport", href: "/pages/help/help-tickets.html" },
       { labelKey: "footer.checkOrder", href: "/pages/dashboard/orders.html" },
+      { labelKey: "footer.shippingDelivery", href: "/pages/info/shipping-logistics.html" },
       { labelKey: "footer.refunds", href: "/iade-kosullari" },
       { labelKey: "footer.reportAbuse", href: "/destek/yeni" },
     ],
@@ -53,15 +36,20 @@ const footerColumnsI18n: FooterColumnI18n[] = [
     titleKey: "footer.paymentsProtections",
     links: [
       { labelKey: "footer.safePayments", href: "/odeme-secenekleri" },
+      { labelKey: "footer.paymentOptions", href: "/pages/info/payments.html" },
       { labelKey: "footer.moneyBack", href: "/iade-politikasi" },
       { labelKey: "footer.afterSales", href: "/pages/info/after-sales.html" },
+      { labelKey: "footer.buyerProtection", href: "/pages/info/trade-assurance-detail.html" },
     ],
   },
   {
     titleKey: "footer.sourceOnIstoc",
     links: [
       { labelKey: "footer.rfq", href: "/pages/dashboard/rfq.html" },
-      // { labelKey: 'footer.membership', href: '/membership' },    // TODO: Sayfa henüz hazır değil
+      { labelKey: "footer.verifiedSuppliers", href: "/pages/manufacturers.html" },
+      { labelKey: "footer.allCategories", href: "/pages/categories.html" },
+      { labelKey: "footer.weeklyDeals", href: "/pages/top-deals.html" },
+      { labelKey: "footer.newProducts", href: "/pages/products.html?sort=newest" },
     ],
   },
   {
@@ -70,202 +58,175 @@ const footerColumnsI18n: FooterColumnI18n[] = [
       { labelKey: "footer.startSelling", href: "/satici-ol" },
       { labelKey: "footer.sellerCentral", href: "/panel/" },
       { labelKey: "footer.verifiedSupplier", href: "/pages/seller/verification.html" },
-      // TODO: Mobil uygulama hazır olduğunda aktif edilecek
-      // { labelKey: 'footer.downloadApp', href: '/seller/app' },
+      { labelKey: "footer.commissionFees", href: "/pages/seller/sell-pricing.html" },
+      { labelKey: "footer.sellerAcademy", href: "/satici-akademisi" },
+    ],
+  },
+  {
+    titleKey: "footer.corporate",
+    links: [
+      { labelKey: "footer.aboutUs", href: "/hakkimizda" },
+      { labelKey: "footer.careers", href: "/kariyer" },
+      { labelKey: "footer.contact", href: "/iletisim" },
+      { labelKey: "footer.pressRoom", href: "/basin" },
+      { labelKey: "footer.securityAtIstoc", href: "/guvenlik" },
+      { labelKey: "footer.sustainability", href: "/surdurulebilirlik" },
     ],
   },
 ];
 
-/**
- * Build footerColumns from i18n config at render time
- */
+const policyLinksI18n: { labelKey: string; href: string }[] = [
+  { labelKey: "footer.cookiePrefs", href: "/cerezler" },
+  { labelKey: "footer.privacyPolicy", href: "/gizlilik" },
+  { labelKey: "footer.termsOfUse", href: "/kullanim-kosullari" },
+  { labelKey: "footer.kvkk", href: "/kvkk" },
+  { labelKey: "footer.distanceSales", href: "/mesafeli-satis" },
+];
+
 function getFooterColumns(): FooterColumn[] {
   return footerColumnsI18n.map((col) => ({
     title: t(col.titleKey),
-    links: col.links.map((link) => ({
-      label: t(link.labelKey),
-      href: link.href,
-    })),
+    links: col.links.map((link) => ({ label: t(link.labelKey), href: link.href })),
   }));
 }
 
 /**
- * Social media links
+ * Türk bayrağı — emoji bayrak (🇹🇷) Windows/Chromium'da render olmadığı için
+ * inline SVG kullanılır.
  */
-const socialLinks: SocialLink[] = [
-  {
-    platform: "facebook",
-    href: "https://www.facebook.com/istoccom",
-    icon: "facebook",
-    ariaLabel: "Follow us on Facebook",
-  },
-  {
-    platform: "instagram",
-    href: "https://www.instagram.com/istoc_com",
-    icon: "instagram",
-    ariaLabel: "Follow us on Instagram",
-  },
-  {
-    platform: "twitter",
-    href: "https://x.com/istoc_com",
-    icon: "twitter",
-    ariaLabel: "Follow us on X (Twitter)",
-  },
-  {
-    platform: "linkedin",
-    href: "https://www.linkedin.com/company/istoc-com",
-    icon: "linkedin",
-    ariaLabel: "Connect with us on LinkedIn",
-  },
-  {
-    platform: "youtube",
-    href: "https://youtube.com/@istoccom",
-    icon: "youtube",
-    ariaLabel: "Subscribe to our YouTube channel",
-  },
-];
+function turkishFlagSvg(): string {
+  return `<svg class="w-5 h-3.5 rounded-[2px] shrink-0" viewBox="0 0 24 16" aria-hidden="true">
+    <rect width="24" height="16" fill="#E30A17"/>
+    <circle cx="9.4" cy="8" r="4" fill="#fff"/>
+    <circle cx="10.4" cy="8" r="3.2" fill="#E30A17"/>
+    <path fill="#fff" d="M15.4 8l-2.7-.9 1.7 2.3V6.6l-1.7 2.3z"/>
+    <path fill="#fff" d="M15.9 6.1l.44 1.36h1.43l-1.16.84.44 1.36-1.15-.84-1.16.84.44-1.36-1.15-.84h1.43z"/>
+  </svg>`;
+}
 
-/**
- * Social media icon SVGs
- */
-function getSocialIcon(platform: string): string {
-  const icons: Record<string, string> = {
-    facebook: `<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-      <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
-    </svg>`,
-    instagram: `<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-      <path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" />
-    </svg>`,
-    twitter: `<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-    </svg>`,
-    linkedin: `<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-    </svg>`,
-    youtube: `<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-      <path fill-rule="evenodd" d="M19.812 5.418c.861.23 1.538.907 1.768 1.768C21.998 8.746 22 12 22 12s0 3.255-.418 4.814a2.504 2.504 0 0 1-1.768 1.768c-1.56.419-7.814.419-7.814.419s-6.255 0-7.814-.419a2.505 2.505 0 0 1-1.768-1.768C2 15.255 2 12 2 12s0-3.255.417-4.814a2.507 2.507 0 0 1 1.768-1.768C5.744 5 11.998 5 11.998 5s6.255 0 7.814.418ZM15.194 12 10 15V9l5.194 3Z" clip-rule="evenodd" />
-    </svg>`,
-  };
-  return icons[platform] || "";
+function renderColumn(column: FooterColumnI18n): string {
+  return `
+    <div class="min-w-0">
+      <h3
+        class="text-[11px] sm:text-[12px] font-bold uppercase tracking-wide mb-2 sm:mb-3.5 text-balance"
+        style="color: var(--footer-heading-color, #0a0a0a);"
+      ><span data-i18n="${column.titleKey}">${t(column.titleKey)}</span></h3>
+      <ul>
+        ${column.links
+          .map(
+            (link) => `
+          <li>
+            <a
+              href="${link.href}"
+              class="th-footer-link block text-[13px] sm:text-[13.5px] xl:text-[13px] leading-snug py-1.5 xl:py-[5px]"
+            ><span data-i18n="${link.labelKey}">${t(link.labelKey)}</span></a>
+          </li>
+        `
+          )
+          .join("")}
+      </ul>
+    </div>
+  `;
 }
 
 /**
- * Renders the social media icons row for "Stay Connected" section
+ * Güven kolonu: Ülke Değiştir + Güvenli Alışveriş + Güvenlik Sertifikası
+ * Mobilde tam genişlik ve ortalanmış; masaüstünde sağ kolon.
  */
-function renderSocialIcons(): string {
+function renderTrustColumn(): string {
+  const chip =
+    "inline-flex items-center justify-center h-[30px] min-w-12 px-2 rounded-md bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600";
+  const cert =
+    "grid place-items-center w-12 h-12 rounded-md bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 text-center text-[8px] font-extrabold leading-tight text-gray-700 dark:text-gray-200";
   return `
-    <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap mt-2 sm:mt-3">
-      ${socialLinks
+    <div class="col-span-2 md:col-span-3 xl:col-span-1 flex flex-col items-center xl:items-start gap-5 pt-2 xl:pt-0 min-w-0">
+      <div class="w-full xl:w-auto">
+        <h3
+          class="text-[11px] sm:text-[12px] font-bold uppercase tracking-wide mb-2.5 text-center xl:text-left"
+          style="color: var(--footer-heading-color, #0a0a0a);"
+        ><span data-i18n="footer.changeCountry">${t("footer.changeCountry")}</span></h3>
+        <button
+          type="button"
+          class="th-no-press flex items-center gap-2.5 w-full xl:w-auto xl:min-w-[210px] max-w-[320px] mx-auto xl:mx-0 rounded-md border border-gray-300 bg-white dark:bg-gray-700 dark:border-gray-600 px-3 py-2.5 text-[13px] font-semibold text-gray-900 dark:text-white cursor-pointer transition-colors duration-200 hover:border-primary-500"
+        >
+          ${turkishFlagSvg()}
+          <span class="truncate" data-i18n="footer.countryValue">${t("footer.countryValue")}</span>
+          <svg class="w-4 h-4 ml-auto shrink-0 text-gray-500" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+      <div>
+        <h3
+          class="text-[11px] sm:text-[12px] font-bold uppercase tracking-wide mb-2.5 text-center xl:text-left"
+          style="color: var(--footer-heading-color, #0a0a0a);"
+        ><span data-i18n="footer.safeShopping">${t("footer.safeShopping")}</span></h3>
+        <div class="flex flex-wrap items-center justify-center xl:justify-start gap-2">
+          <span class="${chip} font-extrabold italic text-[11px] text-blue-900 dark:text-blue-300">VISA</span>
+          <span class="${chip}">
+            <svg class="w-[26px] h-4" viewBox="0 0 32 20" aria-label="Mastercard">
+              <circle cx="12" cy="10" r="8" fill="#EB001B"/>
+              <circle cx="20" cy="10" r="8" fill="#F79E1B"/>
+              <path d="M16 3.9a8 8 0 0 1 0 12.2 8 8 0 0 1 0-12.2z" fill="#FF5F00"/>
+            </svg>
+          </span>
+          <span class="${chip}">
+            <img src="${new URL("../../assets/images/amex.svg", import.meta.url).href}" alt="American Express" width="26" height="16" />
+          </span>
+          <span class="${chip} font-extrabold italic text-[11px] text-[#003764] dark:text-blue-200">troy</span>
+        </div>
+      </div>
+      <div>
+        <h3
+          class="text-[11px] sm:text-[12px] font-bold uppercase tracking-wide mb-2.5 text-center xl:text-left"
+          style="color: var(--footer-heading-color, #0a0a0a);"
+        ><span data-i18n="footer.securityCert">${t("footer.securityCert")}</span></h3>
+        <div class="flex items-center justify-center xl:justify-start gap-2.5">
+          <span class="${cert}">PCI<span class="block text-[7px] font-semibold text-gray-500 dark:text-gray-400">DSS</span></span>
+          <span class="${cert}">ISO<span class="block text-[7px] font-semibold text-gray-500 dark:text-gray-400">27001</span></span>
+          <span class="${cert}">ETBİS<span class="block text-[7px] font-semibold text-gray-500 dark:text-gray-400">Kayıtlı</span></span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderPolicyRow(): string {
+  return `
+    <nav
+      class="flex flex-wrap items-center justify-center xl:justify-start gap-x-5 gap-y-2 border-t pt-3.5 pb-1 mt-6"
+      style="border-color: var(--footer-border-color, #e5e7eb);"
+      aria-label="Policies"
+    >
+      ${policyLinksI18n
         .map(
           (link) => `
-        <a
-          href="${link.href}"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="th-footer-social inline-flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 rounded-full transition-colors duration-200"
-          aria-label="${link.ariaLabel}"
-        >
-          ${getSocialIcon(link.platform)}
-        </a>
+        <a href="${link.href}" class="th-footer-link text-[12px]" data-i18n="${link.labelKey}">${t(link.labelKey)}</a>
       `
         )
         .join("")}
-    </div>
+    </nav>
   `;
 }
 
 /**
- * Renders a single column of links with i18n support
- */
-function renderColumn(column: FooterColumnI18n): string {
-  return `
-    <div>
-      <h3
-        class="text-[11px] sm:text-[13px] font-bold uppercase tracking-wide mb-3 sm:mb-4"
-        style="color: var(--footer-heading-color);"
-      ><span data-i18n="${column.titleKey}">${t(column.titleKey)}</span></h3>
-      <ul class="space-y-1.5 sm:space-y-2.5">
-        ${column.links
-          .map(
-            (link) => `
-          <li>
-            <a
-              href="${link.href}"
-              class="th-footer-link text-[11px] sm:text-[13px] leading-relaxed transition-colors duration-200 block truncate"
-            ><span data-i18n="${link.labelKey}">${t(link.labelKey)}</span></a>
-          </li>
-        `
-          )
-          .join("")}
-      </ul>
-    </div>
-  `;
-}
-
-/**
- * Renders the last column with links + "Stay Connected" social icons (with i18n)
- */
-function renderLastColumn(column: FooterColumnI18n): string {
-  return `
-    <div>
-      <h3
-        class="text-[11px] sm:text-[13px] font-bold uppercase tracking-wide mb-3 sm:mb-4"
-        style="color: var(--footer-heading-color);"
-      ><span data-i18n="${column.titleKey}">${t(column.titleKey)}</span></h3>
-      <ul class="space-y-1.5 sm:space-y-2.5">
-        ${column.links
-          .map(
-            (link) => `
-          <li>
-            <a
-              href="${link.href}"
-              class="th-footer-link text-[11px] sm:text-[13px] leading-relaxed transition-colors duration-200 block truncate"
-            ><span data-i18n="${link.labelKey}">${t(link.labelKey)}</span></a>
-          </li>
-        `
-          )
-          .join("")}
-      </ul>
-
-      <!-- Stay Connected -->
-      <h3
-        class="text-[11px] sm:text-[13px] font-bold uppercase tracking-wide mt-4 sm:mt-6 mb-1"
-        style="color: var(--footer-heading-color);"
-      ><span data-i18n="footer.stayConnected">${t("footer.stayConnected")}</span></h3>
-      ${renderSocialIcons()}
-    </div>
-  `;
-}
-
-/**
- * FooterLinks Component (iSTOC-style Light Footer)
- * Renders the complete footer with:
- * - Simple top border
- * - 5 link columns in a clean grid
- * - Social icons under "Stay Connected" in the last column
- * - No logo section
- * - Payment badges section (via FooterGroup)
- * - Policy links + copyright bottom bar (via FooterPolicy)
+ * FooterLinks Component — tam footer'ı render eden tek giriş noktası.
  */
 export function FooterLinks(): string {
-  const regularColumns = footerColumnsI18n.slice(0, -1);
-  const lastColumn = footerColumnsI18n[footerColumnsI18n.length - 1];
-
   return `
+    ${FooterSeo()}
     <section
       class="border-t"
-      style="background-color: var(--footer-bg); border-color: var(--footer-border-color);"
+      style="background-color: var(--footer-zone-bg, #fafafa); border-color: var(--footer-border-color, #e5e7eb);"
       aria-label="Footer navigation"
     >
-      <div class="container-boxed py-5 sm:py-10 md:py-14 px-3 sm:px-4">
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-5 sm:gap-6">
-          ${regularColumns.map((col) => renderColumn(col)).join("")}
-          ${renderLastColumn(lastColumn)}
+      <div class="container-boxed px-3 sm:px-4 py-6 sm:py-9">
+        <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-[repeat(5,minmax(0,1fr))_minmax(225px,1.3fr)] gap-x-5 gap-y-7 xl:gap-x-6">
+          ${footerColumnsI18n.map((col) => renderColumn(col)).join("")}
+          ${renderTrustColumn()}
         </div>
+        ${renderPolicyRow()}
       </div>
     </section>
 
-    ${FooterGroup()}
     ${FooterPolicy()}
   `;
 }
