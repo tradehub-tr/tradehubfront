@@ -420,6 +420,8 @@ export function renderListingCard(
 
   return `
     <div class="fy26-product-card-wrapper relative isolate flex flex-col justify-between w-full rounded-md overflow-hidden bg-white pb-3 border-0
+            transition-shadow duration-200 ease-out
+            hover:z-10 hover:shadow-[0_1px_4px_rgba(0,0,0,0.06),0_8px_24px_rgba(0,0,0,0.14)] hover:ring-1 hover:ring-gray-200
             group-data-[list-mode=grid]/grid:border group-data-[list-mode=grid]/grid:border-gray-200 group-data-[list-mode=grid]/grid:rounded-md
             min-[480px]:group-data-[list-mode=grid]/grid:border-0
             group-data-[list-mode=list]/grid:grid

@@ -137,7 +137,7 @@ appEl.innerHTML = `
 
   <!-- Main Content -->
   <main>
-    <section class="pt-6 pb-4 lg:pt-8 lg:pb-6" style="background: var(--products-bg, #f9fafb);">
+    <section class="pt-6 pb-4 lg:pt-8 lg:pb-6" style="background: var(--products-bg, #ffffff);">
       <div class="container-boxed">
         <!-- Sub Header: tabs (Ürünler/Üreticiler) + breadcrumb + results title + sort/view -->
         ${SubHeader({
