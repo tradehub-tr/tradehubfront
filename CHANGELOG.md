@@ -1,3 +1,17 @@
+## [v2.1.0-alpha.4] - 2026-07-20 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(product-detail): ürün sekmeleri anchor/scroll davranışına geçirildi (@aliiball)
+  - Sekme-değiştirme (içerik gizle/göster) kaldırıldı; tüm bölümler alt alta hep görünür
+  - Sekmeye tıklayınca ilgili bölüme yumuşak scroll (sticky header ofsetli)
+  - Scroll-spy ile görünen bölümün sekmesi otomatik vurgulanıyor
+  - Her bölüme başlık + üst ayraç eklendi (Açıklama/Özellikler/Yorumlar/Tedarikçi)
+  - Açıklama ilk sıraya alındı, tüm içerik DOM'da kalınca Ctrl+F ve SEO iyileşti
+  - Yalnız masaüstü; MobileLayout değişmedi
+
+---
 ## [v2.1.0-alpha.3] - 2026-07-18 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
