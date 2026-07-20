@@ -57,7 +57,7 @@ export function initProductListingGrid(): void {}
  * ProductListingGrid Component
  * Renders a responsive grid of product cards with hover zoom effect.
  *
- * @param products - Array of products to display (defaults to mock data)
+ * @param products - Array of products to display (defaults to empty; grid is API-driven)
  * @returns HTML string for the product grid
  *
  * Grid Configuration (per spec):
