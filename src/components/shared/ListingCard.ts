@@ -5,7 +5,7 @@
  * grid/list görünümü alır — kullanan sayfa bu container'ı sağlamak zorundadır.
  */
 import { t } from "../../i18n";
-import { formatPrice } from "../../utils/currency";
+import { localizePriceString } from "../../utils/currency";
 import { getBrandUrl } from "../../utils/brandUrl";
 import { getSellerUrl } from "../../utils/sellerUrl";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
@@ -496,7 +496,7 @@ export function renderListingCard(
               ? `<div class="fy26-price text-sm font-medium leading-[20px] text-amber-800" title="${t("common.kybGateBannerTitle")}">${t("common.kybGateBannerTitle")}</div>`
               : `<div class="fy26-price text-[15px] leading-tight font-semibold text-gray-900 whitespace-nowrap min-[480px]:text-lg sm:text-xl sm:leading-[26px]
             lg:max-[1599px]:group-data-[list-mode=grid]/grid:text-base
-            lg:max-[1599px]:group-data-[list-mode=grid]/grid:leading-[1.375rem]">${formatPrice(card.price)}</div>`
+            lg:max-[1599px]:group-data-[list-mode=grid]/grid:leading-[1.375rem]">${localizePriceString(card.price)}</div>`
           }${oldPriceHtml}
           <div class="fy26-moq-stats hidden min-[480px]:flex gap-1.5 flex-wrap mt-0.5
             lg:max-[1599px]:group-data-[list-mode=grid]/grid:text-xs

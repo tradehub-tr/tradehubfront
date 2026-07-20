@@ -1,3 +1,47 @@
+## [v2.1.0-alpha.5] - 2026-07-20 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(products): onaylanmış satıcı facet sayacı + fiyat histogram/slider eklendi (@aliiball)
+- feat(nav): mobilde para birimi seçici eklendi (@aliiball)
+
+### Duzeltildi
+- fix(cart): sepet kargo/indirim yanlış USD çevrimi kaldırıldı (@aliiball)
+
+### Degistirildi
+- refactor(products): ölü mock kaldırıldı, eskimiş facet yorumları güncellendi (@aliiball)
+- refactor(build): bundle-stats.html prod dist'ten çıkarıldı, ANALYZE'a bağlandı (@aliiball)
+- refactor(assets): kullanılmayan 13 görsel kaldırıldı (~1.6 MB) (@aliiball)
+- refactor(currency): utils formatPrice → localizePriceString (isim çakışması giderildi) (@aliiball)
+
+---
+## [v2.1.0-alpha.4] - 2026-07-20 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(product-detail): ürün sekmeleri anchor/scroll davranışına geçirildi (@aliiball)
+  - Sekme-değiştirme (içerik gizle/göster) kaldırıldı; tüm bölümler alt alta hep görünür
+  - Sekmeye tıklayınca ilgili bölüme yumuşak scroll (sticky header ofsetli)
+  - Scroll-spy ile görünen bölümün sekmesi otomatik vurgulanıyor
+  - Her bölüme başlık + üst ayraç eklendi (Açıklama/Özellikler/Yorumlar/Tedarikçi)
+  - Açıklama ilk sıraya alındı, tüm içerik DOM'da kalınca Ctrl+F ve SEO iyileşti
+  - Yalnız masaüstü; MobileLayout değişmedi
+
+---
+## [v2.1.0-alpha.3] - 2026-07-18 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(footer): SEO bölgesi + genişletilmiş footer içeriği; ürün kartı hover cilası (@TurksabYonetim)
+  - FooterSeo.ts eklendi: Trendyol tarzı "Popüler Üreticiler ve Mağazalar" + "Popüler Sayfalar" bölgesi (beyaz zemin, sarı üst çizgi). Marka/arama linkleri SEO hedefli sabit içerik; yalnızca bölüm başlıkları i18n'e çevrilir.
+  - FooterLinks/FooterGroup/FooterPolicy yeniden düzenlendi; mobilde accordion yok, tüm linkler görünür. 4 dilde yeni footer i18n anahtarları (tr/en/ar/ru).
+  - ListingCard: hover'da yumuşak gölge + ring geçişi.
+  - products sayfası arka planı beyaza çekildi; product.ts'ten kullanılmayan escapeHtml import'u kaldırıldı.
+
+---
 ## [v2.1.0-alpha.2] - 2026-07-17 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.

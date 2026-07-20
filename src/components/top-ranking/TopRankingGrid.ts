@@ -9,7 +9,7 @@
  */
 
 import { t } from "../../i18n";
-import { formatPrice } from "../../utils/currency";
+import { localizePriceString } from "../../utils/currency";
 import type { RankingCategoryGroup } from "../../types/topRanking";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
@@ -47,7 +47,7 @@ export function renderRankingGroupCard(group: RankingCategoryGroup): string {
 
       // Dar iç kolonlarda (sm..xl arası 2-3 kolonlu grid) tam aralık sığmaz;
       // "₺130,99-146,40" yerine "₺130,99+" gösterilir, tam değer title'da kalır.
-      const fullPrice = escapeHtml(formatPrice(product.price));
+      const fullPrice = escapeHtml(localizePriceString(product.price));
       const dashIdx = fullPrice.indexOf("-");
       const shortPrice = dashIdx > 0 ? `${fullPrice.slice(0, dashIdx)}+` : fullPrice;
 

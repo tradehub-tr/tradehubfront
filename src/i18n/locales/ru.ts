@@ -1523,8 +1523,9 @@ const ru = {
       settings: "Настройки",
       deliveryCountry: "Страна доставки",
       deliveryCountryValue: "Турция 🇹🇷",
-      language: "Язык и валюта",
-      languageValue: "Английский — TRY (₺)",
+      language: "Язык",
+      languageValue: "Английский",
+      currency: "Валюта",
     },
 
     // FOOTER

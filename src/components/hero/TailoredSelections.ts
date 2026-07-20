@@ -8,7 +8,7 @@ import Swiper from "swiper";
 import { Navigation } from "swiper/modules";
 import "swiper/swiper-bundle.css";
 import { t } from "../../i18n";
-import { formatPrice } from "../../utils/currency";
+import { localizePriceString } from "../../utils/currency";
 import { getTailoredSelections } from "../../services/listingService";
 import { initCurrency } from "../../services/currencyService";
 import { applySwiperDir } from "../../utils/direction";
@@ -89,7 +89,7 @@ function renderCollectionSlide(collection: TailoredCollection): string {
             <p
               class="font-bold leading-none truncate text-[14px] sm:text-[16px] md:text-[20px]"
               style="color: var(--tailored-price-color, #222222); margin-top: 6px;"
-            >${formatPrice(product1.price)}</p>
+            >${localizePriceString(product1.price)}</p>
           </div>
           <div class="flex-1 flex flex-col">
             <div class="aspect-square w-full overflow-hidden">
@@ -98,7 +98,7 @@ function renderCollectionSlide(collection: TailoredCollection): string {
             <p
               class="font-bold leading-none truncate text-[14px] sm:text-[16px] md:text-[20px]"
               style="color: var(--tailored-price-color, #222222); margin-top: 6px;"
-            >${formatPrice(product2.price)}</p>
+            >${localizePriceString(product2.price)}</p>
           </div>
         </div>
       </a>

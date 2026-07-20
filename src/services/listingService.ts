@@ -1071,6 +1071,20 @@ export interface AttributeFacet {
   options: AttributeFacetOption[];
 }
 
+/** Fiyat histogramı bucket'ı — sınırlar selling_price_base (TRY) cinsinden */
+export interface PriceBucket {
+  min: number;
+  max: number;
+  count: number;
+}
+
+/** Fiyat slider histogramı — eşit-genişlikli bucket'lar (TRY baz) */
+export interface PriceRangeFacet {
+  min: number;
+  max: number;
+  buckets: PriceBucket[];
+}
+
 export interface FilterFacets {
   countries: { value: string; label: string; code?: string; count: number }[];
   categories: { id: string; name: string; slug: string; count: number }[];
@@ -1078,15 +1092,19 @@ export interface FilterFacets {
   productCertifications: { label: string; value: string; count: number }[];
   brands: BrandFacet[];
   attributes: AttributeFacet[];
+  /** Onaylanmış (KYB Verified) satıcıya ait ürün sayısı — Tedarikçi Türleri filtresi için */
+  verifiedSupplierCount: number;
+  /** Fiyat slider histogramı (TRY baz; frontend görüntüleme birimine çevirir) */
+  priceRange: PriceRangeFacet;
 }
 
 /**
- * Get filter facets (country + category + cert + brand + attribute counts) for sidebar.
+ * Get filter facets (country + category + cert + brand + attribute + verified-supplier
+ * counts) for sidebar.
  *
  * Aktif filtre parametreleri verildiğinde backend tüm filtreleri uygulayıp sayım döndürür
- * (monotonic narrow — Trendyol/Hepsiburada pattern'i). Filtre eklendikçe diğer
- * seçeneklerin count'ları azalır; backend henüz aktif filtreleri kabul etmiyorsa
- * bu parametreler yok sayılır (geriye uyumlu).
+ * (monotonic narrow — Trendyol/Hepsiburada pattern'i): filtre eklendikçe diğer seçeneklerin
+ * count'ları azalır.
  */
 export async function getFilterFacets(
   arg1?: string | Partial<ListingSearchParams>,
@@ -1108,6 +1126,9 @@ export async function getFilterFacets(
   if (opts.product_certifications) p.set("product_certifications", opts.product_certifications);
   if (opts.brands) p.set("brands", opts.brands);
   if (opts.attrs) p.set("attrs", opts.attrs);
+  // Fiyat filtresi görüntüleme biriminde gelir; backend TRY baza çevirebilsin diye
+  // seçili para birimini gönder (get_listings ile tutarlı — yoksa fiyat facet count'ları sapar).
+  p.set("filter_currency", getSelectedCurrencyInfo().code);
 
   const qs = p.toString();
   const response = await api<{ message: { data: FilterFacets } }>(
@@ -1121,6 +1142,8 @@ export async function getFilterFacets(
       productCertifications: [],
       brands: [],
       attributes: [],
+      verifiedSupplierCount: 0,
+      priceRange: { min: 0, max: 0, buckets: [] },
     }
   );
 }

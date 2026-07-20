@@ -1518,8 +1518,9 @@ const en = {
       settings: "Settings",
       deliveryCountry: "Delivery Country",
       deliveryCountryValue: "Turkey 🇹🇷",
-      language: "Language & Currency",
-      languageValue: "English — TRY (₺)",
+      language: "Language",
+      languageValue: "English",
+      currency: "Currency",
     },
 
     // FOOTER
