@@ -34,6 +34,17 @@ const FACETS_BASE: Record<string, unknown> = {
       ],
     },
   ],
+  verifiedSupplierCount: 20,
+  priceRange: {
+    min: 100,
+    max: 1100,
+    buckets: [
+      { min: 100, max: 350, count: 12 },
+      { min: 350, max: 600, count: 20 },
+      { min: 600, max: 850, count: 8 },
+      { min: 850, max: 1100, count: 3 },
+    ],
+  },
 };
 
 const LISTINGS_EMPTY: Record<string, unknown> = {
@@ -413,6 +424,74 @@ test.describe("Products page — multi-select filter chips", () => {
     // MarmaraT count'u 5'e düşmeli (debounced fetch ~300ms + facet promise)
     await expect(marmaraLabel.locator("span.ms-auto")).toHaveText("(5)", { timeout: 5_000 });
     expect(facetCall, "Facet endpoint en az 2 kez çağrılmalı (init + filter sonrası)").toBeGreaterThanOrEqual(2);
+  });
+
+  test("Onaylanmış Satıcı facet'i sayaç göstermeli ve başka filtre seçilince güncellenmeli (İş 1)", async ({
+    page,
+  }) => {
+    // İlk facet (filtresiz): verifiedSupplierCount 20. Bir ülke seçilince backend country=TR
+    // ile çağrılır → sayı daralır (monotonic narrow). Backend zaten bu sayıyı döndürüyor;
+    // bu test frontend'in onu okuyup span'a bastığını doğrular.
+    await page.unroute("**/api/method/tradehub_core.api.listing.get_filter_facets*");
+    await page.route(
+      "**/api/method/tradehub_core.api.listing.get_filter_facets*",
+      async (route: Route) => {
+        const isFiltered = route.request().url().includes("country=TR");
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify({
+            message: { data: { ...FACETS_BASE, verifiedSupplierCount: isFiltered ? 8 : 20 } },
+          }),
+        });
+      }
+    );
+
+    await page.goto("/pages/products.html");
+
+    const verifiedLabel = page.locator(
+      '[data-filter-prefix-root="desktop"] label:has(input[data-filter-section="verified-supplier"][data-filter-value="1"])'
+    );
+    // İlk yüklemede facet'ten gelen sayı span'a basılmalı — eskiden hiç count yoktu.
+    await expect(verifiedLabel.locator("span.ms-auto")).toHaveText("(20)", { timeout: 10_000 });
+
+    // Bir ülke seç → facet aktif filtreyle yeniden çekilir, verified count daralır.
+    await page.evaluate(() => {
+      const input = document.querySelector<HTMLInputElement>(
+        '[data-filter-prefix-root="desktop"] input[data-filter-section="supplier-country"][data-filter-value="TR"]'
+      );
+      input!.checked = true;
+      input!.dispatchEvent(new Event("change", { bubbles: true }));
+    });
+
+    await expect(verifiedLabel.locator("span.ms-auto")).toHaveText("(8)", { timeout: 5_000 });
+  });
+
+  test("Fiyat facet'i histogram bar'ları + slider göstermeli, slider hareketi input'u doldurmalı (İş 2)", async ({
+    page,
+  }) => {
+    await page.goto("/pages/products.html");
+
+    const priceFilter = page.locator(
+      '[data-filter-prefix-root="desktop"] [data-price-filter]'
+    );
+    // Histogram: bucket sayısı kadar bar render edilmeli.
+    const bars = priceFilter.locator("[data-price-histogram] > div");
+    await expect(bars).toHaveCount(4, { timeout: 10_000 });
+
+    // Facet gelince slider görünür olmalı (başlangıçta hidden).
+    await expect(priceFilter.locator("[data-price-slider]")).toBeVisible();
+
+    // Max tutamacı içeri çek → change ile Min/Maks input'a değer yazılmalı (apply akışı).
+    await page.evaluate(() => {
+      const h = document.querySelector<HTMLInputElement>(
+        '[data-filter-prefix-root="desktop"] [data-price-handle="max"]'
+      );
+      h!.value = "500";
+      h!.dispatchEvent(new Event("input", { bubbles: true }));
+      h!.dispatchEvent(new Event("change", { bubbles: true }));
+    });
+    await expect(priceFilter.locator('[data-filter-type="max"]')).not.toHaveValue("");
   });
 
   test("Tüm filtreleri temizle → chip yok, tüm input uncheck/empty", async ({ page }) => {
