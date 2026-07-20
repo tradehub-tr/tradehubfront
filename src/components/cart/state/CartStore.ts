@@ -206,18 +206,17 @@ export class CartStore {
       }
     }
 
-    const convertedShipping = convertPrice(this.shippingFee, "USD");
-    const convertedDiscount = convertPrice(this.discount, "USD");
-
+    // shippingFee/discount zaten görüntüleme biriminde tutuluyor (subtotal gibi); eski
+    // convertPrice(..., "USD") varsayımı yanlıştı (İstoç TRY-merkezli, USD baz değil).
     return {
       selectedCount,
       items,
       productSubtotal,
-      discount: convertedDiscount,
+      discount: this.discount,
       couponDiscount: this.couponDiscount,
       couponCode: this.couponCode,
-      shippingFee: convertedShipping,
-      subtotal: productSubtotal - convertedDiscount - this.couponDiscount + convertedShipping,
+      shippingFee: this.shippingFee,
+      subtotal: productSubtotal - this.discount - this.couponDiscount + this.shippingFee,
       currency: getSelectedCurrencyInfo().symbol,
     };
   }
