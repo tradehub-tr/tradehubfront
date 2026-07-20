@@ -1,3 +1,21 @@
+## [v2.1.0-alpha.5] - 2026-07-20 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(products): onaylanmış satıcı facet sayacı + fiyat histogram/slider eklendi (@aliiball)
+- feat(nav): mobilde para birimi seçici eklendi (@aliiball)
+
+### Duzeltildi
+- fix(cart): sepet kargo/indirim yanlış USD çevrimi kaldırıldı (@aliiball)
+
+### Degistirildi
+- refactor(products): ölü mock kaldırıldı, eskimiş facet yorumları güncellendi (@aliiball)
+- refactor(build): bundle-stats.html prod dist'ten çıkarıldı, ANALYZE'a bağlandı (@aliiball)
+- refactor(assets): kullanılmayan 13 görsel kaldırıldı (~1.6 MB) (@aliiball)
+- refactor(currency): utils formatPrice → localizePriceString (isim çakışması giderildi) (@aliiball)
+
+---
 ## [v2.1.0-alpha.4] - 2026-07-20 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
