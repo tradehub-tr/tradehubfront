@@ -297,13 +297,18 @@ export default defineConfig({
         notFoundFallbackPlugin(),
         seoPlaceholderPlugin(),
         impeccableLivePlugin(),
-        // Bundle analizi — yalnızca build'de treemap üretir (perf-reports/bundle-stats.html,
-        // gitignore'lu). tailwindcss() ilk kalmalı; visualizer en sonda zararsız.
-        visualizer({
-            filename: 'perf-reports/bundle-stats.html',
-            gzipSize: true,
-            template: 'treemap',
-        }) as unknown as Plugin,
+        // Bundle analizi — SADECE `ANALYZE=true npm run build` ile çalışır.
+        // visualizer v7 raporu rollup asset olarak emit ettiği için filename ne olursa
+        // olsun dist/'e düşüyordu → prod image'ına 998 KB shipping. Env-gate ile normal
+        // prod build'de hiç üretilmez. Analiz için: `ANALYZE=true npm run build`.
+        // tailwindcss() ilk kalmalı; visualizer (varsa) en sonda zararsız.
+        ...(process.env.ANALYZE
+            ? [visualizer({
+                filename: resolve(__dirname, 'perf-reports/bundle-stats.html'),
+                gzipSize: true,
+                template: 'treemap',
+            }) as unknown as Plugin]
+            : []),
         VitePWA({
             // Multi-page yapıda kullanıcı navigation = tam reload — autoUpdate güvenli ve UI gerektirmez.
             registerType: 'autoUpdate',
@@ -441,6 +446,10 @@ export default defineConfig({
                         'android/**',
                         '**/style-test.html',
                         '**/test-*.html',
+                        // ANALYZE build'inin ürettiği bundle-stats.html'i build entry
+                        // olarak ALMA — yoksa kökte varken glob onu yakalayıp dist'e
+                        // (dolayısıyla prod image'ına + SW precache'e) sokuyor.
+                        '**/perf-reports/**',
                     ],
                 }).map(file => [
                     file.replace(/\.html$/, '').replace(/\//g, '-'),

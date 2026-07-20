@@ -3,7 +3,7 @@
  * Themeable product card grid with Tailwind layout + CSS variable theming.
  */
 import { t } from "../../i18n";
-import { formatPrice } from "../../utils/currency";
+import { localizePriceString } from "../../utils/currency";
 import { searchListings } from "../../services/listingService";
 import { initCurrency } from "../../services/currencyService";
 import { getListingUrl } from "../../utils/listingUrl";
@@ -102,7 +102,7 @@ function renderProductCard(card: ProductCard, index: number): string {
           <div class="flex flex-col gap-px">
             <!-- Price + discount -->
             <div class="flex flex-wrap items-center gap-1 min-h-[26px] overflow-hidden">
-              <div class="product-card__price overflow-hidden max-sm:!text-sm max-sm:!leading-5">${formatPrice(card.price)}</div>
+              <div class="product-card__price overflow-hidden max-sm:!text-sm max-sm:!leading-5">${localizePriceString(card.price)}</div>
               ${discountText ? `<div class="product-card__discount max-sm:!text-[11px]">${discountText}</div>` : ""}
             </div>
 

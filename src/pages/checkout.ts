@@ -158,7 +158,7 @@ function buildProductCard(product: CartProduct): { card: CheckoutDeliveryOrderGr
     isSample: sku.isSample,
   }));
 
-  const subtotal = selectedSkus.reduce((sum, sku) => sum + (convertPrice(sku.unitPrice, sku.baseCurrency || 'USD') * sku.quantity), 0);
+  const subtotal = selectedSkus.reduce((sum, sku) => sum + convertPrice(sku.unitPrice * sku.quantity, sku.baseCurrency || 'USD'), 0);
   const image = selectedSkus[0]?.skuImage || '';
 
   return {

@@ -19,7 +19,7 @@ import Swiper from "swiper";
 import { Navigation } from "swiper/modules";
 import "swiper/swiper-bundle.css";
 import { t } from "../../i18n";
-import { formatPrice } from "../../utils/currency";
+import { localizePriceString } from "../../utils/currency";
 import {
   getRelatedListingsGrouped,
   type RelatedListingsGrouped,
@@ -95,7 +95,7 @@ function renderCard(card: ProductListingCard): string {
         <p class="text-[13px] leading-[1.4] line-clamp-2 text-gray-800 min-h-[36px]" title="${safeName}">${safeName}</p>
 
         <div class="flex flex-wrap items-baseline gap-x-2">
-          <span class="text-sm font-bold text-gray-900">${formatPrice(card.price)}</span>
+          <span class="text-sm font-bold text-gray-900">${localizePriceString(card.price)}</span>
           ${discountText ? `<span class="text-xs font-medium text-red-500">${escapeHtml(discountText)}</span>` : ""}
         </div>
 

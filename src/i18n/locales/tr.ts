@@ -1515,8 +1515,9 @@ const tr = {
       settings: "Ayarlar",
       deliveryCountry: "Teslimat Ülkesi",
       deliveryCountryValue: "Türkiye 🇹🇷",
-      language: "Dil ve Para Birimi",
-      languageValue: "Türkçe — TRY (₺)",
+      language: "Dil",
+      languageValue: "Türkçe",
+      currency: "Para Birimi",
     },
 
     // FOOTER

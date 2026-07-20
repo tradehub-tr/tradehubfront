@@ -1487,8 +1487,9 @@ const ar = {
       settings: "الإعدادات",
       deliveryCountry: "بلد التسليم",
       deliveryCountryValue: "تركيا 🇹🇷",
-      language: "اللغة والعملة",
-      languageValue: "الإنجليزية — TRY (₺)",
+      language: "اللغة",
+      languageValue: "الإنجليزية",
+      currency: "العملة",
     },
 
     // FOOTER

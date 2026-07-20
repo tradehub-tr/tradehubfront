@@ -253,10 +253,8 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
       }
 
       // Aktif filtrelerle facet sayımlarını yeniden çek → sidebar'daki (xx) rakamları
-      // dinamik olarak azalsın. Backend henüz aktif filtreleri kabul etmiyorsa
-      // count'lar değişmez ama görsel sorun çıkmaz (graceful degradation).
-      //
-      // Pagination/sort parametreleri facet sayımını etkilemediği için onları geçme.
+      // dinamik olarak azalsın (monotonic narrow; backend get_filter_facets tüm aktif
+      // filtreleri uygular). Pagination/sort facet sayımını etkilemez, onları geçme.
       void getFilterFacets({
         query: params.query,
         category: params.category,

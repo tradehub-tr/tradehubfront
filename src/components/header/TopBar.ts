@@ -993,7 +993,7 @@ function renderCartModalContent(modal: HTMLElement, supplierId: string): boolean
       (sum, p) =>
         sum +
         p.skus.reduce(
-          (s, sku) => s + convertPrice(sku.unitPrice, sku.baseCurrency || "USD") * sku.quantity,
+          (s, sku) => s + convertPrice(sku.unitPrice * sku.quantity, sku.baseCurrency || "USD"),
           0
         ),
       0
@@ -1194,7 +1194,7 @@ export function initHeaderCart(): void {
         const supplierItemCount = allSkus.reduce((sum, { sku }) => sum + sku.quantity, 0);
         const supplierSubtotal = allSkus.reduce(
           (sum, { sku }) =>
-            sum + convertPrice(sku.unitPrice, sku.baseCurrency || "USD") * sku.quantity,
+            sum + convertPrice(sku.unitPrice * sku.quantity, sku.baseCurrency || "USD"),
           0
         );
         const visibleThumbs = allSkus.slice(0, MAX_THUMBS);

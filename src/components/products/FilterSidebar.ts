@@ -1,6 +1,7 @@
 import { getCurrencySymbol } from "../../utils/currency";
 import { t } from "../../i18n";
 import { escapeHtml, sanitizeUrl, safeHexColor } from "../../utils/sanitize";
+import { updatePriceFacet, initPriceSliders } from "./initPriceSlider";
 
 /**
  * FilterSidebar Component (iSTOC-style Filter Panel)
@@ -115,8 +116,9 @@ function buildDefaultFilterSections(): FilterSection[] {
       collapsed: false,
       searchPlaceholder: "",
       options: [
-        // count alanını verme — backend dinamik facet'a bağlanana kadar "(0)" gösterilmesin
-        { id: "verified", value: "1", label: t("products.filterVerifiedSupplier") },
+        // count: 0 → renderCheckbox count span'ını oluşturur; gerçek değer facet
+        // yüklenince updateFacetCounts ile "verified-supplier|1" üzerinden basılır.
+        { id: "verified", value: "1", label: t("products.filterVerifiedSupplier"), count: 0 },
       ],
     } as SearchableCheckboxFilterSection,
     {
@@ -196,41 +198,69 @@ function renderCheckbox(option: FilterOption, sectionId: string, idPrefix = ""):
  * Renders the price range filter
  */
 function renderPriceRange(section: PriceRangeFilterSection): string {
+  // Dual-range slider thumb'ları utility ile (style.css'e dokunmadan). İki input[type=range]
+  // üst üste bindirilir; sadece thumb'lar pointer-events alır, track görünmez (arka plandaki
+  // bar'lar görünür). Histogram + slider JS ile facet.priceRange'den doldurulur (initPriceSlider).
+  const thumb =
+    "[&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:pointer-events-auto " +
+    "[&::-webkit-slider-thumb]:h-3.5 [&::-webkit-slider-thumb]:w-3.5 [&::-webkit-slider-thumb]:rounded-full " +
+    "[&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 " +
+    "[&::-webkit-slider-thumb]:border-[var(--color-primary-500,#f5b800)] [&::-webkit-slider-thumb]:shadow " +
+    "[&::-webkit-slider-thumb]:cursor-pointer " +
+    "[&::-moz-range-thumb]:h-3.5 [&::-moz-range-thumb]:w-3.5 [&::-moz-range-thumb]:rounded-full " +
+    "[&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-solid " +
+    "[&::-moz-range-thumb]:border-[var(--color-primary-500,#f5b800)] [&::-moz-range-thumb]:cursor-pointer " +
+    "[&::-moz-range-thumb]:pointer-events-auto";
+  const rangeInput =
+    "pointer-events-none absolute inset-x-0 top-1/2 m-0 h-0 w-full -translate-y-1/2 appearance-none " +
+    "bg-transparent focus:outline-none " +
+    thumb;
   return `
-    <div class="flex items-center gap-1.5 mt-2">
-      <input
-        type="number"
-        placeholder="${t("products.filterMin")}"
-        min="0"
-        step="0.01"
-        inputmode="decimal"
-        class="th-input th-input-sm flex-1 min-w-0 w-0 px-2 text-[13px]"
-        style="border-color: var(--filter-input-border, #d1d5db); color: var(--filter-text-color, #374151);"
-        data-filter-section="${section.id}"
-        data-filter-type="min"
-        @keydown.enter="applySection('${section.id}')"
-      />
-      <span class="text-gray-400 text-[13px] shrink-0">-</span>
-      <input
-        type="number"
-        placeholder="${t("products.filterMax")}"
-        min="0"
-        step="0.01"
-        inputmode="decimal"
-        class="th-input th-input-sm flex-1 min-w-0 w-0 px-2 text-[13px]"
-        style="border-color: var(--filter-input-border, #d1d5db); color: var(--filter-text-color, #374151);"
-        data-filter-section="${section.id}"
-        data-filter-type="max"
-        @keydown.enter="applySection('${section.id}')"
-      />
-      <button
-        type="button"
-        class="th-btn shrink-0 !w-8 !h-8 !p-0 leading-none text-base font-semibold"
-        aria-label="${t("products.filterApply")}"
-        data-filter-section="${section.id}"
-        data-filter-action="apply"
-        @click="applySection('${section.id}')"
-      >&rsaquo;</button>
+    <div class="mt-2" data-price-filter data-filter-section="${section.id}">
+      <div class="mb-1 flex h-9 items-end gap-px" data-price-histogram aria-hidden="true"></div>
+      <div class="relative mb-2.5 hidden h-4" data-price-slider>
+        <div class="absolute inset-x-0 top-1/2 h-1 -translate-y-1/2 rounded-full bg-[var(--filter-input-border,#e5e7eb)]"></div>
+        <div class="absolute top-1/2 h-1 -translate-y-1/2 rounded-full bg-[var(--color-primary-500,#f5b800)]" data-price-fill></div>
+        <input type="range" min="0" max="1000" value="0" step="1" data-price-handle="min"
+          class="${rangeInput}" aria-label="${t("products.filterMin")}" />
+        <input type="range" min="0" max="1000" value="1000" step="1" data-price-handle="max"
+          class="${rangeInput}" aria-label="${t("products.filterMax")}" />
+      </div>
+      <div class="flex items-center gap-1.5">
+        <input
+          type="number"
+          placeholder="${t("products.filterMin")}"
+          min="0"
+          step="0.01"
+          inputmode="decimal"
+          class="th-input th-input-sm flex-1 min-w-0 w-0 px-2 text-[13px]"
+          style="border-color: var(--filter-input-border, #d1d5db); color: var(--filter-text-color, #374151);"
+          data-filter-section="${section.id}"
+          data-filter-type="min"
+          @keydown.enter="applySection('${section.id}')"
+        />
+        <span class="text-gray-400 text-[13px] shrink-0">-</span>
+        <input
+          type="number"
+          placeholder="${t("products.filterMax")}"
+          min="0"
+          step="0.01"
+          inputmode="decimal"
+          class="th-input th-input-sm flex-1 min-w-0 w-0 px-2 text-[13px]"
+          style="border-color: var(--filter-input-border, #d1d5db); color: var(--filter-text-color, #374151);"
+          data-filter-section="${section.id}"
+          data-filter-type="max"
+          @keydown.enter="applySection('${section.id}')"
+        />
+        <button
+          type="button"
+          class="th-btn shrink-0 !w-8 !h-8 !p-0 leading-none text-base font-semibold"
+          aria-label="${t("products.filterApply")}"
+          data-filter-section="${section.id}"
+          data-filter-action="apply"
+          @click="applySection('${section.id}')"
+        >&rsaquo;</button>
+      </div>
     </div>
   `;
 }
@@ -553,6 +583,8 @@ export function FilterSidebar(sections?: FilterSection[], idPrefix = ""): string
  * No-op — Alpine.js handles all filter interactions via x-data="filterSidebar"
  */
 export function initFilterSidebar(query?: string, category?: string): void {
+  // Fiyat slider drag delegation'ı (idempotent — tek sefer bağlanır).
+  initPriceSliders();
   // Load dynamic facets from API
   import("../../services/listingService")
     .then(({ getFilterFacets }) => {
@@ -783,6 +815,10 @@ export function initFilterSidebar(query?: string, category?: string): void {
               });
           }
 
+          // Statik section'ların (verified-supplier) count'u dinamik render'dan geçmez;
+          // ilk yüklemede de doğru sayıyı basmak için map'ten güncelle.
+          updateFacetCounts(facets);
+
           // Tüm dinamik facet input'ları DOM'a girdi → filter engine restore'u tetikleyebilir.
           // Eskiden setTimeout(1500ms) hack'i ile yapılıyordu; artık deterministik event.
           document.dispatchEvent(new CustomEvent("filter-facets-loaded"));
@@ -842,6 +878,8 @@ function buildCountMap(
     const section = `attr-${attr.code.toLowerCase()}`;
     attr.options?.forEach((opt) => put(section, String(opt.value), opt.count));
   });
+  // Tedarikçi Türleri — tek seçenekli facet; backend ayrı bir toplam alan döndürür.
+  put("verified-supplier", "1", facets.verifiedSupplierCount ?? 0);
   return map;
 }
 
@@ -865,4 +903,7 @@ export function updateFacetCounts(
         countSpan.textContent = `(${newCount.toLocaleString()})`;
       }
     });
+  // Fiyat histogramı + slider da facet ile birlikte güncellenir (kategorik filtre değişince
+  // fiyat dağılımı değişir).
+  updatePriceFacet(facets);
 }

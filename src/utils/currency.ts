@@ -67,7 +67,7 @@ export function setSelectedCurrency(code: string): void {
 /**
  * Replace the "$" prefix in a price string with the selected currency symbol.
  */
-export function formatPrice(price: string): string {
+export function localizePriceString(price: string): string {
   const { symbol, code } = getSelectedCurrency();
   return price
     .replace(/^\$/, symbol)
@@ -102,5 +102,5 @@ export function formatStartingPrice(price: string): string {
         .replace(/\.00$/, "")}`;
     }
   }
-  return formatPrice(price);
+  return localizePriceString(price);
 }
