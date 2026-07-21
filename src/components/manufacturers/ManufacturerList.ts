@@ -108,7 +108,7 @@ export function ManufacturerList(opts: { mobileFilter?: boolean } = {}): string 
           else if (catId) api.set('category', catId);
           if (verified) api.set('verified', verified);
           // Sidebar filtreleri (URL ⟷ backend param eşleştirmesi) — get_sellers ile aynı isimler.
-          const pass: Array<[string, string]> = [
+          const pass = [
             ['countries', 'country'],
             ['min_rating', 'min_rating'],
             ['moq_max', 'min_order'],
