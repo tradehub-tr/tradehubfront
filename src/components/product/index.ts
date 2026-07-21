@@ -2,11 +2,11 @@
  * Product Detail Components Barrel Export
  */
 
-export { Breadcrumb } from "./Breadcrumb";
+export { ProductBreadcrumb } from "./Breadcrumb";
 export { ProductTitleBar, SellerTrustCard, initProductTitleBar } from "./ProductTitleBar";
 export { ProductImageGallery, initImageGallery } from "./ProductImageGallery";
 export { ProductInfo, initProductInfo } from "./ProductInfo";
-export { SupplierCard } from "./SupplierCard";
+export { ProductSupplierCard } from "./SupplierCard";
 export { ProductTabs, initProductTabs } from "./ProductTabs";
 export { ProductDescription } from "./ProductDescription";
 export { ProductReviews, initReviews, renderReviewCard, renderStars } from "./ProductReviews";

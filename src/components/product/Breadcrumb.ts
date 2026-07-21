@@ -5,7 +5,7 @@
 
 import { getCurrentProduct } from "../../alpine/product";
 
-export function Breadcrumb(): string {
+export function ProductBreadcrumb(): string {
   const mockProduct = getCurrentProduct();
   const items = mockProduct.category;
   const crumbs = items.map((label, i) => {
