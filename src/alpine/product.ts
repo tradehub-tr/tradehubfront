@@ -147,64 +147,8 @@ registerReportAbuseModal();
 registerQAModal();
 registerProductQA();
 
-Alpine.data("loginModal", () => ({
-  open: false,
-  email: "",
-  password: "",
-  showPassword: false,
-  loading: false,
-  errorMsg: "",
-
-  show() {
-    this.open = true;
-    this.errorMsg = "";
-    document.body.style.overflow = "hidden";
-  },
-
-  close() {
-    this.open = false;
-    this.errorMsg = "";
-    // Only restore body scroll if no other modal is open underneath
-    // ReviewsModal now uses Alpine x-data with :data-open="open" instead of rv-modal-hidden class
-    const reviewsModal = document.getElementById("rv-reviews-modal");
-    const reviewsOpen = reviewsModal?.dataset.open === "true";
-    if (!reviewsOpen) {
-      document.body.style.overflow = "";
-    }
-  },
-
-  async submit() {
-    if (this.loading) return;
-    this.errorMsg = "";
-    const email = (this.email || "").trim();
-    const password = this.password || "";
-    if (!email || !password) {
-      this.errorMsg = t("auth.login.invalidCredentials");
-      return;
-    }
-    this.loading = true;
-    try {
-      const { login, invalidateAuthCache, waitForAuth } = await import("../utils/auth");
-      await login(email, password);
-      invalidateAuthCache();
-      await waitForAuth();
-      window.dispatchEvent(new CustomEvent("login-success"));
-      this.email = "";
-      this.password = "";
-      this.close();
-    } catch (err) {
-      if (err instanceof Error && err.message === "2FA_REQUIRED") {
-        this.errorMsg = t("auth.login.2faRequired");
-      } else if (err instanceof Error && err.message === "ACCOUNT_DISABLED") {
-        this.errorMsg = t("auth.login.accountDisabled");
-      } else {
-        this.errorMsg = t("auth.login.invalidCredentials");
-      }
-    } finally {
-      this.loading = false;
-    }
-  },
-}));
+// loginModal → src/alpine/loginModal.ts'e taşındı (B-2: çapraz + self-contained).
+// orderProtectionModal → src/alpine/orderProtectionModal.ts'e taşındı (yalnız checkout).
 
 Alpine.data("reviewsModal", () => ({
   open: false,
@@ -295,49 +239,6 @@ Alpine.data("reviewsModal", () => ({
     const container = (this.$refs as Record<string, HTMLElement>).reviewsList;
     if (container) {
       bindHelpfulButtons(container);
-    }
-  },
-}));
-
-Alpine.data("orderProtectionModal", () => ({
-  open: false,
-  triggerEl: null as HTMLElement | null,
-
-  show() {
-    // Save the element that triggered the modal for focus restoration
-    this.triggerEl = document.activeElement as HTMLElement | null;
-    this.open = true;
-    document.body.style.overflow = "hidden";
-    // Auto-focus close button after Alpine renders the modal
-    setTimeout(() => {
-      const closeBtn = (this.$refs as Record<string, HTMLElement>).closeBtn;
-      closeBtn?.focus();
-    }, 50);
-  },
-
-  close() {
-    this.open = false;
-    document.body.style.overflow = "";
-    // Restore focus to the element that opened the modal
-    this.triggerEl?.focus();
-    this.triggerEl = null;
-  },
-
-  trapFocus(e: KeyboardEvent) {
-    if (e.key !== "Tab") return;
-    const el = this.$el as HTMLElement;
-    const focusable = el.querySelectorAll<HTMLElement>(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    );
-    if (focusable.length === 0) return;
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-    if (e.shiftKey && document.activeElement === first) {
-      e.preventDefault();
-      last.focus();
-    } else if (!e.shiftKey && document.activeElement === last) {
-      e.preventDefault();
-      first.focus();
     }
   },
 }));

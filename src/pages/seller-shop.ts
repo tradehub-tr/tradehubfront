@@ -19,6 +19,8 @@ import { LoginModal } from '../components/product/LoginModal';
 
 // Alpine store
 import '../alpine/sellerShop';
+// B-2: loginModal ayrı modül (misafir login modalı bu sayfada).
+import '../alpine/loginModal';
 
 // Section registry
 import { renderDynamicSections, SECTION_RENDERERS_REF } from '../utils/seller/section-registry';

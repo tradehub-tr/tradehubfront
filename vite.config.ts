@@ -472,10 +472,14 @@ export default defineConfig({
                     if (id.includes('node_modules/echarts') || id.includes('node_modules/zrender')) return 'vendor-echarts';
                     // Vendor: TanStack Query + idb-keyval — client-side cache katmanı (src/lib/query)
                     if (id.includes('node_modules/@tanstack') || id.includes('node_modules/idb-keyval')) return 'vendor-tanstack';
-                    // App: i18n locale files (large)
-                    if (id.includes('src/i18n/locales/')) return 'locales';
-                    // App: Alpine data modules
-                    if (id.includes('src/alpine/')) return 'alpine';
+                    // App: i18n locale dosyaları — manualChunk YOK: her dil dinamik
+                    // import(`./locales/${lang}`) ile ayrı chunk'a bölünsün, yalnız aktif
+                    // dil yüklensin (B-1 lazy-load). Tek 'locales' chunk'ı 4 dili birleştirirdi.
+                    // App: Alpine data modules → paylaşımlı 'alpine' chunk. B-2: per-page
+                    // yapılan modüller (yalnız kendi sayfa entry'lerinde import edilenler)
+                    // HARİÇ — kendi sayfa chunk'larına düşsünler, her sayfada yüklenmesinler.
+                    if (id.includes('src/alpine/') && !id.includes('src/alpine/checkout.ts') && !id.includes('src/alpine/kyb.ts') && !id.includes('src/alpine/messages.ts') && !id.includes('src/alpine/remittance.ts') && !id.includes('src/alpine/orderItemsDrawer.ts') && !id.includes('src/alpine/sellerShop.ts') && !id.includes('src/alpine/addresses.ts') && !id.includes('src/alpine/payment.ts') && !id.includes('src/alpine/settings.ts') && !id.includes('src/alpine/orders.ts') && !id.includes('src/alpine/seller.ts') && !id.includes('src/alpine/dashboard.ts') && !id.includes('src/alpine/auth.ts') && !id.includes('src/alpine/products-filter.ts') && !id.includes('src/alpine/cart.ts') && !id.includes('src/alpine/help.ts') && !id.includes('src/alpine/product.ts') && !id.includes('src/alpine/loginModal.ts') && !id.includes('src/alpine/orderProtectionModal.ts'))
+                        return 'alpine';
                 },
             },
         },

@@ -5,10 +5,6 @@ import "../utils/nativeHttp";
 import "../utils/nativeBackButton";
 import i18next from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
-import en from "./locales/en";
-import tr from "./locales/tr";
-import ar from "./locales/ar";
-import ru from "./locales/ru";
 import { sanitizeHtml } from "../utils/sanitize";
 
 export const SUPPORTED_LANGS = ["en", "tr", "ar", "ru"] as const;
@@ -31,15 +27,44 @@ function mergeIntoTranslation(resource: any): any {
   return { translation: { ...translation, ...rest } };
 }
 
-// Initialize i18next
+// Aktif dili resource'lardan ÖNCE tespit et — yalnızca o dilin locale dosyasını
+// (400-600 KB) dinamik import ederiz, 4 dilin tamamını (1.68 MB) değil.
+function detectInitialLang(): SupportedLang {
+  try {
+    const stored = localStorage.getItem(LANG_STORAGE_KEY);
+    if (stored) {
+      const s = stored.substring(0, 2) as SupportedLang;
+      if (SUPPORTED_LANGS.includes(s)) return s;
+    }
+  } catch {
+    // localStorage erişilemezse navigator'a düş
+  }
+  const nav = (navigator.language || "en").substring(0, 2) as SupportedLang;
+  return SUPPORTED_LANGS.includes(nav) ? nav : "en";
+}
+
+/** Bir dilin locale modülünü dinamik yükleyip i18next'e resource bundle olarak ekler. */
+async function loadLocaleBundle(lang: SupportedLang): Promise<void> {
+  const mod = await import(`./locales/${lang}.ts`);
+  const merged = mergeIntoTranslation(mod.default);
+  i18next.addResourceBundle(lang, "translation", merged.translation, true, true);
+}
+
+// Top-level await: bu modülü import eden TÜM sayfa entry'leri, locale yüklenip
+// i18next init olana kadar bekler → t() çağrıları hazır i18n üzerinde çalışır.
+// (i18n her sayfada en erken import edilen modüllerden biri; sayfa entry'lerine
+// tek tek dokunmaya gerek yok — module graph beklemeyi otomatik yönetir.)
+const initialLang = detectInitialLang();
+const initialModule = await import(`./locales/${initialLang}.ts`);
+
+// Initialize i18next — yalnızca aktif dil yüklü. fallbackLng aktif dile ayarlı:
+// tek dil yüklü olduğu için cross-dil fallback yok; locale'ler tam çeviri içerir.
 i18next.use(LanguageDetector).init({
+  lng: initialLang,
   resources: {
-    en: mergeIntoTranslation(en),
-    tr: mergeIntoTranslation(tr),
-    ar: mergeIntoTranslation(ar),
-    ru: mergeIntoTranslation(ru),
+    [initialLang]: mergeIntoTranslation(initialModule.default),
   },
-  fallbackLng: "en",
+  fallbackLng: initialLang,
   defaultNS: "translation",
   interpolation: { escapeValue: false },
   initImmediate: false,
@@ -84,6 +109,10 @@ export function getCurrentLang(): SupportedLang {
  * Change language and update all DOM elements with data-i18n attributes
  */
 export async function changeLanguage(lang: SupportedLang): Promise<void> {
+  // Lazy: hedef dil henüz yüklü değilse locale modülünü dinamik import et.
+  if (!i18next.hasResourceBundle(lang, "translation")) {
+    await loadLocaleBundle(lang);
+  }
   await i18next.changeLanguage(lang);
   document.documentElement.lang = lang;
   applyDocumentDirection(lang);

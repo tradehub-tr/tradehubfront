@@ -60,6 +60,8 @@ import {
 } from '../components/product'
 // Product data
 import { getCurrentProduct, loadProduct } from '../alpine/product'
+// B-2: loginModal ayrı modül (product.ts'ten bölündü) — product-detail'de de kullanılıyor.
+import '../alpine/loginModal'
 import { initCurrency, getSelectedCurrency, formatPriceRange } from '../services/currencyService'
 
 // Utilities

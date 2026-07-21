@@ -26,6 +26,8 @@ import { Breadcrumb } from "../components/shared/Breadcrumb";
 import { FooterLinks } from "../components/footer";
 import { FloatingPanel } from "../components/floating";
 import { startAlpine } from "../alpine";
+// B-2: loginModal ayrı modül (misafir login modalı bu sayfada).
+import "../alpine/loginModal";
 import {
   TopRankingStickyMobileHeader,
   TopRankingMobileHeader,

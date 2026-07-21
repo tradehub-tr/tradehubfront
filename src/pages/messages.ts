@@ -11,6 +11,8 @@ import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar'
 import { FloatingPanel } from '../components/floating'
 import { startAlpine } from '../alpine'
+// B-2: messages Alpine modülü page-specific (alpine/index.ts core'undan çıkarıldı).
+import '../alpine/messages'
 import { renderSidebarColumn, initSidebar } from '../components/sidebar'
 import { MessagesLayout, initMessagesLayout } from '../components/messages'
 import { requireAuth } from '../utils/auth-guard'
