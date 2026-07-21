@@ -243,6 +243,7 @@ const ru = {
       hoursOrLess: "≤ {{count}} ч",
       supplierFilters: "Фильтры поставщиков",
       yearsOnPlatform: "Лет на iStoc",
+      companyAge: "Возраст компании",
       onTimeDelivery: "Своевременная доставка",
       responseTime: "Время ответа",
       reorderRate: "Доля повторных заказов",
@@ -3706,6 +3707,9 @@ const ru = {
     // CATEGORY PAGE
     // ============================================================
     categoryPage: {
+      loading: "Загрузка…",
+      loadingCategories: "Загрузка категорий…",
+      loadError: "Не удалось загрузить категории.",
       seeAll: "Смотреть все",
       shopAll: "Купить все",
       quickNav: "Перейти к категориям",
