@@ -18,6 +18,8 @@ import {
   initLegalConsentModal,
 } from '../components/auth'
 import { startAlpine } from '../alpine'
+// B-2: auth Alpine modülü page-specific (registerPage bu sayfada).
+import '../alpine/auth'
 
 /* ── App Setup ───────────────────────────────────────── */
 

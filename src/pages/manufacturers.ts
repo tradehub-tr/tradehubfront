@@ -15,6 +15,8 @@ import { FloatingPanel, BottomNav, initBottomNav } from '../components/floating'
 
 // Alpine.js
 import { startAlpine } from '../alpine'
+// B-2: products-filter Alpine modülü page-specific (searchHeader via products/SubHeader).
+import '../alpine/products-filter'
 
 // Utilities
 import { initAnimatedPlaceholder } from '../utils/animatedPlaceholder'

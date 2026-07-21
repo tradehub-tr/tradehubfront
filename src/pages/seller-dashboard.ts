@@ -6,6 +6,8 @@ import '../style.css';
 // Currency formatting via window.csFormatPrice (set by currencyService)
 import { initFlowbite } from 'flowbite';
 import { startAlpine } from '../alpine';
+// B-2: seller Alpine modülü page-specific (sellerDashboard bu sayfada).
+import '../alpine/seller';
 import { TopBar } from '../components/header';
 import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar';

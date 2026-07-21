@@ -10,6 +10,8 @@ import { Breadcrumb } from '../components/shared/Breadcrumb'
 import { FooterLinks } from '../components/footer'
 import { FloatingPanel } from '../components/floating'
 import { startAlpine } from '../alpine'
+// B-2: seller Alpine modülü page-specific (sellPricing bu sayfada).
+import '../alpine/seller'
 import { PricingPageLayout } from '../components/sell/PricingPageLayout'
 import { t } from '../i18n'
 

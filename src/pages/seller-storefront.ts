@@ -6,6 +6,8 @@ import '../style.css';
 import { initFlowbite } from 'flowbite';
 import 'swiper/swiper-bundle.css';
 import { startAlpine } from '../alpine';
+// B-2: seller Alpine modülü page-specific (sellerStorefront bu sayfada).
+import '../alpine/seller';
 import { initCurrency } from '../services/currencyService';
 
 // Components

@@ -8,6 +8,8 @@ import '../style.css'
 
 import { AcceptInvitePage } from '../components/auth/AcceptInvitePage'
 import { startAlpine } from '../alpine'
+// B-2: auth Alpine modülü page-specific (acceptInvitePage bu sayfada).
+import '../alpine/auth'
 
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.innerHTML = AcceptInvitePage();

@@ -6,6 +6,9 @@
 import '../style.css'
 import { initFlowbite } from 'flowbite'
 import { startAlpine } from '../alpine'
+// B-2: orders + dashboard Alpine modülleri page-specific (buyer-dashboard sayfası).
+import '../alpine/orders'
+import '../alpine/dashboard'
 import { t } from '../i18n'
 import { requireAuth } from '../utils/auth-guard'
 import { getSessionUser } from '../utils/auth'

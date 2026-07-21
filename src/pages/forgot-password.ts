@@ -7,6 +7,8 @@ import '../style.css'
 
 import { ForgotPasswordPage } from '../components/auth'
 import { startAlpine } from '../alpine'
+// B-2: auth Alpine modülü page-specific (forgotPasswordPage + authLangSwitcher bu sayfada).
+import '../alpine/auth'
 
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.innerHTML = ForgotPasswordPage();

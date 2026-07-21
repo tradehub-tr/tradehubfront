@@ -31,6 +31,8 @@ import { FloatingPanel } from '../components/floating'
 
 // Alpine.js
 import { startAlpine } from '../alpine'
+// B-2: loginModal ayrı modül (misafir login modalı bu sayfada).
+import '../alpine/loginModal'
 
 // Top Deals components
 import {
