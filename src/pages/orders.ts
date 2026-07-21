@@ -19,7 +19,7 @@ import '../alpine/remittance'
 import '../alpine/orderItemsDrawer'
 import { renderSidebarColumn, initSidebar } from '../components/sidebar'
 import { OrdersPageLayout, initOrdersPageLayout } from '../components/orders'
-import { WriteReviewModal } from '../components/product/WriteReviewModal'
+import { WriteReviewModal, registerWriteReviewModal } from '../components/product/WriteReviewModal'
 import { requireAuth } from '../utils/auth-guard'
 
 await requireAuth();
@@ -57,6 +57,9 @@ initFlowbite();
 mountChatPopup();
 initChatTriggers();
 initSidebar()
+// B-2 regresyon fix: writeReviewModal kaydı eskiden core product.ts'ten geliyordu;
+// product page-specific yapılınca orders bu kaydı kaybetti. Burada explicit register.
+registerWriteReviewModal();
 startAlpine();
 initHeaderCart();
 initLanguageSelector();
