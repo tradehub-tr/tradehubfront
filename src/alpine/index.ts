@@ -12,9 +12,13 @@ import { initSelectMenus } from "../components/shared/SelectMenu";
 Alpine.magic("safeHtml", () => (value: unknown) => sanitizeHtml(String(value ?? "")));
 
 // Import all Alpine.data() module registrations (side-effect imports)
-import "./orders";
-import "./orderItemsDrawer";
-import "./remittance";
+// orders — page-specific (orders sayfası: ordersListComponent/refundsComponent/
+// reviewsSectionComponent; buyer-dashboard sayfası: ordersSection). B-2: core'dan
+// çıkarıldı, pages/orders.ts + pages/buyer-dashboard.ts'te import ediliyor.
+// orderItemsDrawer — page-specific (yalnız orders sayfası, OrdersPageLayout). B-2:
+// core'dan çıkarıldı, pages/orders.ts'te import ediliyor. vite'ta 'alpine'dan hariç.
+// remittance — page-specific (yalnız orders sayfası, OrdersPageLayout). B-2: core'dan
+// çıkarıldı, pages/orders.ts'te import ediliyor. vite manualChunks'ta 'alpine'dan hariç.
 import "./product";
 import "./socialProofBadge";
 import "./cart";
@@ -23,10 +27,15 @@ import "./cart";
 // diğer sayfalar 45 KB'lık checkout modülünü yüklemez. vite manualChunks'ta 'alpine'
 // chunk'ından hariç tutuldu ki per-page chunk'a düşsün.
 import "./auth";
-import "./settings";
-import "./payment";
-import "./dashboard";
-import "./messages";
+// settings — page-specific (yalnız settings sayfası). B-2: core'dan çıkarıldı,
+// pages/settings.ts'te import ediliyor. vite manualChunks'ta 'alpine'dan hariç.
+// payment — page-specific (yalnız payment sayfası, PaymentLayout). B-2: core'dan
+// çıkarıldı, pages/payment.ts'te import ediliyor. vite'ta 'alpine'dan hariç.
+// dashboard — page-specific (yalnız buyer-dashboard sayfası: buyerUserInfo,
+// dashboardBanners). B-2: core'dan çıkarıldı, pages/buyer-dashboard.ts'te import
+// ediliyor. vite manualChunks'ta 'alpine'dan hariç.
+// messages — page-specific (yalnız messages sayfası). B-2: core'dan çıkarıldı,
+// pages/messages.ts'te import ediliyor. vite manualChunks'ta 'alpine'dan hariç.
 import "./chatPopup";
 import "./reservationModal";
 import "./sidebar";
@@ -34,11 +43,18 @@ import "./products-filter";
 import "./shared";
 import "./help";
 import "./legal";
-import "./seller";
-import "./sellerShop";
-import "./addresses";
+// seller — page-specific (sellPricing→sell-pricing, applicationPendingPage→
+// application-pending, sellerStorefront→seller-storefront, sellerDashboard→
+// seller-dashboard). sellPage x-data olarak kullanılmıyor (ölü). B-2: core'dan
+// çıkarıldı, ilgili 4 sayfada import ediliyor. vite'ta 'alpine'dan hariç.
+// sellerShop — page-specific (yalnız seller-shop sayfası). B-2: core'dan çıkarıldı,
+// pages/seller-shop.ts zaten import ediyor. vite manualChunks'ta 'alpine'dan hariç.
+// addresses — page-specific (yalnız addresses sayfası). B-2: core'dan çıkarıldı,
+// pages/addresses.ts'te import ediliyor. vite manualChunks'ta 'alpine'dan hariç.
 import "./notifications";
-import "./kyb";
+// kyb — page-specific (yalnız kyb sayfası). B-2: core'dan çıkarıldı, pages/kyb.ts'te
+// import ediliyor → diğer sayfalar kyb modülünü yüklemez. vite manualChunks'ta 'alpine'
+// chunk'ından hariç tutuldu ki per-page chunk'a düşsün.
 
 // Augment Window interface for Alpine global access (debugging)
 declare global {

@@ -7,6 +7,8 @@ import '../style.css'
 import { initFlowbite } from 'flowbite'
 import { t } from '../i18n'
 import { startAlpine } from '../alpine'
+// B-2: settings Alpine modülü page-specific (alpine/index.ts core'undan çıkarıldı).
+import '../alpine/settings'
 import { requireAuth } from '../utils/auth-guard'
 
 import { TopBar, initHeaderCart } from '../components/header'
