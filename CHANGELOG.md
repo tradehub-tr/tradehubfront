@@ -1,3 +1,16 @@
+## [v2.1.0-alpha.10] - 2026-07-21 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(manufacturers): x-data içindeki TS type annotation kaldırıldı (seller listesi Alpine init çöküyordu) (@aliiball)
+
+### Degistirildi
+- refactor(alpine): sidebar modülü page-specific yapıldı (12 dashboard sayfası) (@aliiball)
+- refactor(perf): sticky sidebar scroll handler rAF ile throttle edildi (@aliiball)
+- refactor(perf): api/callMethod fetch'lerine 30s timeout + AbortController eklendi (@aliiball)
+
+---
 ## [v2.1.0-alpha.9] - 2026-07-21 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
