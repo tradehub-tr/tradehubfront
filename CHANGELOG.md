@@ -1,3 +1,16 @@
+## [v2.1.0-alpha.8] - 2026-07-21 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Degistirildi
+- refactor(i18n): sadece aktif dil lazy-load edildi (1.68 MB → ~0.4 MB parse/sayfa) (@aliiball)
+- refactor(alpine): checkout modülü page-specific yapıldı (core chunk'tan çıkarıldı) (@aliiball)
+- refactor(alpine): 11 modül page-specific yapıldı (core chunk 687→556 kB) (@aliiball)
+- refactor(alpine): auth modülü page-specific yapıldı (core chunk 556→410 kB) (@aliiball)
+- refactor(alpine): products-filter modülü page-specific yapıldı (products + manufacturers) (@aliiball)
+- refactor(alpine): cart/help/product page-specific yapıldı (core chunk 407→124 kB) (@aliiball)
+
+---
 ## [v2.1.0-alpha.7] - 2026-07-21 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
