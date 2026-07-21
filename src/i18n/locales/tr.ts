@@ -1580,8 +1580,6 @@ const tr = {
       securityCert: "Güvenlik Sertifikası",
       cookiePrefs: "Çerez Tercihleri",
       downloadOn: "İndirebilirsin",
-      popularBrands: "Popüler Üreticiler ve Mağazalar",
-      popularPages: "Popüler Sayfalar",
     },
 
     // ============================================================
@@ -4394,6 +4392,9 @@ const tr = {
     // ============================================================
     tailored: {
       title: "Size Özel Seçimler",
+      eyebrow: "Sana özel",
+      description: "Gezinme ve arama geçmişine göre derlenen koleksiyonlar. Her gün yenilenir.",
+      exploreAll: "Tümünü keşfet",
       views: "{{count}} görüntüleme",
       officeTech: "Ofis Teknoloji Ürünleri",
       photographyGear: "Fotoğraf Ekipmanları",

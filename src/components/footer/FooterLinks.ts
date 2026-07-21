@@ -1,7 +1,6 @@
 /**
  * FooterLinks Component (iSTOC Tam Footer — F1 "Trendyol Klasik")
  * Kompozisyon (yukarıdan aşağıya):
- * - FooterSeo: SEO üst bölgesi (Popüler Üreticiler + Popüler Sayfalar)
  * - Ana bölge: 5 link kolonu (Kurumsal kolonunda politika linkleri) +
  *   Dil/Para Birimi seçici kolonu
  * - FooterPolicy: siyah bant (sosyal + app rozetleri + telif)
@@ -14,7 +13,6 @@ import type { FooterColumn } from "../../types/navigation";
 import { t, getCurrentLang } from "../../i18n";
 import { getSelectedCurrency, setSelectedCurrency } from "../../utils/currency";
 import { getSupportedCurrencies } from "../../services/currencyService";
-import { FooterSeo } from "./FooterSeo";
 import { FooterPolicy } from "./FooterPolicy";
 
 /** Footer bölge seçicisinde sunulan UI dilleri (BottomNav ile tutarlı: tr/en). */
@@ -199,7 +197,6 @@ function renderTrustColumn(): string {
  */
 export function FooterLinks(): string {
   return `
-    ${FooterSeo()}
     <section
       class="border-t"
       style="background-color: var(--footer-zone-bg, #fafafa); border-color: var(--footer-border-color, #e5e7eb);"

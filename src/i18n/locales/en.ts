@@ -1583,8 +1583,6 @@ const en = {
       securityCert: "Security Certificates",
       cookiePrefs: "Cookie Preferences",
       downloadOn: "Download on",
-      popularBrands: "Popular Manufacturers & Stores",
-      popularPages: "Popular Pages",
     },
 
     // ============================================================
@@ -4398,6 +4396,9 @@ const en = {
     // ============================================================
     tailored: {
       title: "Tailored Selections",
+      eyebrow: "Picked for you",
+      description: "Collections curated from your browsing and search history. Refreshed daily.",
+      exploreAll: "Explore all",
       views: "{{count}} views",
       officeTech: "Office Tech Essentials",
       photographyGear: "Photography Gear",
