@@ -26,8 +26,21 @@ export function initStickyHeights(): void {
     });
   };
 
-  window.addEventListener("scroll", adjustHeights, { passive: true });
-  window.addEventListener("resize", adjustHeights, { passive: true });
+  // rAF throttle: adjustHeights getBoundingClientRect (layout read) + style yazımı
+  // yapıyor; her scroll event'inde çağrılırsa zorunlu reflow → jank. Kare başına
+  // tek çalıştırmaya coalesce et.
+  let ticking = false;
+  const onScrollOrResize = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      adjustHeights();
+      ticking = false;
+    });
+  };
+
+  window.addEventListener("scroll", onScrollOrResize, { passive: true });
+  window.addEventListener("resize", onScrollOrResize, { passive: true });
 
   // Initial calculation after layout rendering
   requestAnimationFrame(adjustHeights);
