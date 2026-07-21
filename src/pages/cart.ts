@@ -26,6 +26,9 @@ import { FloatingPanel } from '../components/floating'
 
 // Alpine.js
 import { startAlpine } from '../alpine'
+// B-2: checkout Alpine modülü page-specific — bu sayfa render'dan önce register etmeli
+// (alpine/index.ts core'undan çıkarıldı). startAlpine()'dan önce import zorunlu.
+import '../alpine/checkout'
 
 // Cart components
 import { CartPage, initCartPage } from '../components/cart/page/CartPage'

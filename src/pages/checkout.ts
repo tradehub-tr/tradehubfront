@@ -28,6 +28,8 @@ import { FloatingPanel } from '../components/floating'
 
 // Alpine.js
 import { startAlpine } from '../alpine'
+// B-2: checkout Alpine modülü page-specific (alpine/index.ts core'undan çıkarıldı).
+import '../alpine/checkout'
 
 // Checkout components
 import { CheckoutHeader, CheckoutLayout, CheckoutMinimalHeader, initCheckoutMinimalHeader, ShippingAddressForm, OrderSummary, PaymentMethodSection, ItemsDeliverySection, BillingInfoSection, OrderProtectionModal, OrderReviewModal } from '../components/checkout'

@@ -18,7 +18,10 @@ import "./remittance";
 import "./product";
 import "./socialProofBadge";
 import "./cart";
-import "./checkout";
+// checkout — page-specific (yalnız cart + checkout sayfaları). B-2: core'dan çıkarıldı,
+// o sayfaların entry'lerinde import ediliyor (src/pages/cart.ts, checkout.ts) →
+// diğer sayfalar 45 KB'lık checkout modülünü yüklemez. vite manualChunks'ta 'alpine'
+// chunk'ından hariç tutuldu ki per-page chunk'a düşsün.
 import "./auth";
 import "./settings";
 import "./payment";

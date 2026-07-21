@@ -475,8 +475,11 @@ export default defineConfig({
                     // App: i18n locale dosyaları — manualChunk YOK: her dil dinamik
                     // import(`./locales/${lang}`) ile ayrı chunk'a bölünsün, yalnız aktif
                     // dil yüklensin (B-1 lazy-load). Tek 'locales' chunk'ı 4 dili birleştirirdi.
-                    // App: Alpine data modules
-                    if (id.includes('src/alpine/')) return 'alpine';
+                    // App: Alpine data modules → paylaşımlı 'alpine' chunk. B-2: per-page
+                    // yapılan modüller (yalnız kendi sayfa entry'lerinde import edilenler)
+                    // HARİÇ — kendi sayfa chunk'larına düşsünler, her sayfada yüklenmesinler.
+                    if (id.includes('src/alpine/') && !id.includes('src/alpine/checkout.ts'))
+                        return 'alpine';
                 },
             },
         },
