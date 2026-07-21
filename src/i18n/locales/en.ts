@@ -244,6 +244,7 @@ const en = {
       hoursOrLess: "≤ {{count}} hrs",
       supplierFilters: "Supplier filters",
       yearsOnPlatform: "Years on iStoc",
+      companyAge: "Company Age",
       onTimeDelivery: "On-time delivery",
       responseTime: "Response time",
       reorderRate: "Reorder rate",
@@ -3684,6 +3685,9 @@ const en = {
     // CATEGORY PAGE
     // ============================================================
     categoryPage: {
+      loading: "Loading…",
+      loadingCategories: "Loading categories…",
+      loadError: "Failed to load categories.",
       seeAll: "See all",
       shopAll: "Shop All",
       quickNav: "Go to Categories",

@@ -76,12 +76,12 @@ appEl.innerHTML = `
         <div class="flex flex-col lg:flex-row gap-4 lg:gap-6">
           <!-- Filter Sidebar (hidden on mobile) -->
           <div id="cat-sidebar-container" class="hidden lg:block">
-            <div class="w-56 shrink-0"><div class="sticky top-24"><div class="bg-white rounded-lg border border-gray-200 p-4 h-40 flex items-center justify-center text-gray-400 text-sm animate-pulse">Yükleniyor…</div></div></div>
+            <div class="w-56 shrink-0"><div class="sticky top-24"><div class="bg-white rounded-lg border border-gray-200 p-4 h-40 flex items-center justify-center text-gray-400 text-sm animate-pulse">${t('categoryPage.loading')}</div></div></div>
           </div>
 
           <!-- Category Grid -->
           <div id="cat-grid-container" class="flex-1 min-w-0">
-            <div class="py-16 text-center text-gray-400 animate-pulse">Kategoriler yükleniyor…</div>
+            <div class="py-16 text-center text-gray-400 animate-pulse">${t('categoryPage.loadingCategories')}</div>
           </div>
         </div>
       </div>
@@ -129,7 +129,7 @@ function scrollToSlugSection(slug: string): void {
 // Render categories using the shared cached service (queryFetch + IndexedDB)
 function renderCategoriesError(): void {
   const gridEl = document.getElementById('cat-grid-container');
-  if (gridEl) gridEl.innerHTML = `<div class="py-16 text-center text-red-400">Kategoriler yüklenemedi.</div>`;
+  if (gridEl) gridEl.innerHTML = `<div class="py-16 text-center text-red-400">${t('categoryPage.loadError')}</div>`;
 }
 
 loadCategories()

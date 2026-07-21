@@ -1,3 +1,14 @@
+## [v2.1.0-alpha.6] - 2026-07-21 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Degistirildi
+- refactor(categories): ölü getCategorySections kaldırıldı + hata metinleri i18n'e alındı (@aliiball)
+  - data/categories.ts: getCategorySections + kullanılmayan t import silindi (tipler korundu)
+  - categories.ts: 3 hardcoded string → t() (hardcoded Türkçe i18n bug'ı düzeldi)
+  - test: hata UI testi i18n-uyumlu (dil TR sabit)
+
+---
 ## [v2.1.0-alpha.5] - 2026-07-20 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.

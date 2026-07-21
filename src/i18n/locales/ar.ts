@@ -240,6 +240,7 @@ const ar = {
       hoursOrLess: "≤ {{count}} ساعة",
       supplierFilters: "عوامل تصفية الموردين",
       yearsOnPlatform: "عدد السنوات على iStoc",
+      companyAge: "عمر الشركة",
       onTimeDelivery: "التسليم في الوقت المحدد",
       responseTime: "وقت الاستجابة",
       reorderRate: "معدل إعادة الطلب",
@@ -3647,6 +3648,9 @@ const ar = {
     // CATEGORY PAGE
     // ============================================================
     categoryPage: {
+      loading: "جارٍ التحميل…",
+      loadingCategories: "جارٍ تحميل الفئات…",
+      loadError: "تعذّر تحميل الفئات.",
       seeAll: "عرض الكل",
       shopAll: "تسوّق الكل",
       quickNav: "الانتقال إلى الفئات",
