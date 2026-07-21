@@ -21,6 +21,8 @@ import { FloatingPanel, BottomNav, initBottomNav } from '../components/floating'
 
 // Alpine.js
 import { startAlpine } from '../alpine'
+// B-2: products-filter Alpine modülü page-specific (filterSidebar + filterChips bu sayfada).
+import '../alpine/products-filter'
 
 // Products listing components
 import {

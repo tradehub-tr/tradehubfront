@@ -39,6 +39,10 @@ const PAGES: PageDef[] = [
   { name: "forgot-password", path: "/pages/auth/forgot-password.html", xdata: "forgotPasswordPage", gated: false },
   { name: "reset-password", path: "/pages/auth/reset-password.html", xdata: "resetPasswordPage", gated: false },
   { name: "accept-invite", path: "/pages/auth/accept-invite.html", xdata: "acceptInvitePage", gated: false },
+  // products-filter — public listeleme sayfaları (categories CategoryFilterSidebar
+  // kullanır, bu modül değil → dahil değil)
+  { name: "products", path: "/pages/products.html", xdata: "filterSidebar", gated: false },
+  { name: "manufacturers", path: "/pages/manufacturers.html", xdata: "searchHeader", gated: false },
 ];
 
 // Frappe cookie-login → tüm testlerde paylaşılan storageState
@@ -58,17 +62,13 @@ for (const p of PAGES) {
       return;
     }
 
+    // Yalnız BU modülün x-data ismini içeren hatalar (pre-existing sayfa buglarını
+    // sayma — amaç kendi modülümüzün register olduğunu doğrulamak).
     const alpineErrors: string[] = [];
-    page.on("console", (msg) => {
-      if (msg.type() === "error") {
-        const t = msg.text();
-        if (/is not defined|Alpine Expression Error|Alpine Warning/.test(t)) alpineErrors.push(t);
-      }
-    });
-    page.on("pageerror", (err) => {
-      const t = String(err);
-      if (/is not defined|Alpine/.test(t)) alpineErrors.push(t);
-    });
+    const mine = new RegExp(`${p.xdata}\\b.*is not defined|is not defined.*${p.xdata}\\b|Alpine Expression Error.*${p.xdata}\\b`);
+    const capture = (t: string) => { if (mine.test(t) || new RegExp(`\\b${p.xdata}\\b is not defined`).test(t)) alpineErrors.push(t); };
+    page.on("console", (msg) => { if (msg.type() === "error") capture(msg.text()); });
+    page.on("pageerror", (err) => capture(String(err)));
 
     await page.goto(p.path, { waitUntil: "networkidle" });
     // Alpine start + requireAuth redirect için kısa bekleme

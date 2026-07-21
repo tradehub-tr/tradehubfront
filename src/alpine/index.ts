@@ -42,7 +42,10 @@ import "./cart";
 import "./chatPopup";
 import "./reservationModal";
 import "./sidebar";
-import "./products-filter";
+// products-filter — page-specific (filterSidebar + filterChips → products, searchHeader
+// → manufacturers via products/SubHeader). categories CategoryFilterSidebar kullanır
+// (bu modül DEĞİL). B-2: core'dan çıkarıldı, products + manufacturers'ta import ediliyor.
+// vite manualChunks'ta 'alpine'dan hariç.
 import "./shared";
 import "./help";
 import "./legal";
