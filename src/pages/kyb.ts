@@ -11,6 +11,8 @@ import "../style.css";
 import { initFlowbite } from "flowbite";
 import { t } from "../i18n";
 import { startAlpine } from "../alpine";
+// B-2: sidebar Alpine modülü page-specific (dashboard sidebar bu sayfada).
+import "../alpine/sidebar";
 // B-2: kyb Alpine modülü page-specific (alpine/index.ts core'undan çıkarıldı).
 // startAlpine()'dan önce register etmeli — import hoisted.
 import "../alpine/kyb";

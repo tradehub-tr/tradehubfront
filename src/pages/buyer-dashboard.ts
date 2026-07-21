@@ -6,6 +6,8 @@
 import '../style.css'
 import { initFlowbite } from 'flowbite'
 import { startAlpine } from '../alpine'
+// B-2: sidebar Alpine modülü page-specific (dashboard sidebar bu sayfada).
+import '../alpine/sidebar'
 // B-2: orders + dashboard Alpine modülleri page-specific (buyer-dashboard sayfası).
 import '../alpine/orders'
 import '../alpine/dashboard'

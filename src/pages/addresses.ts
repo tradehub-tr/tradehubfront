@@ -7,6 +7,8 @@ import '../style.css'
 import { initFlowbite } from 'flowbite'
 import { t } from '../i18n'
 import { startAlpine } from '../alpine'
+// B-2: sidebar Alpine modülü page-specific (dashboard sidebar bu sayfada).
+import '../alpine/sidebar'
 // B-2: addresses Alpine modülü page-specific (alpine/index.ts core'undan çıkarıldı).
 import '../alpine/addresses'
 import { requireAuth } from '../utils/auth-guard'

@@ -256,6 +256,38 @@ async function notifyEmailNotVerified(): Promise<void> {
   }
 }
 
+/**
+ * Genel fetch timeout — asılı/ölü bağlantıda isteği N sn sonra abort eder ki UI
+ * sonsuz loading'de kalmasın (fetch header gelmeden asılırsa hiç resolve olmaz).
+ * Normal Frappe sorguları bunun çok altında biter. Caller kendi signal'ını
+ * options.signal ile verirse ikisi birleşir (ilk abort kazanır).
+ */
+const API_TIMEOUT_MS = 30_000;
+
+async function fetchWithTimeout(
+  input: string,
+  init: RequestInit,
+  callerSignal?: AbortSignal | null
+): Promise<Response> {
+  const controller = new AbortController();
+  const timer = setTimeout(
+    () => controller.abort(new DOMException("Request timeout", "TimeoutError")),
+    API_TIMEOUT_MS
+  );
+  if (callerSignal) {
+    if (callerSignal.aborted) controller.abort(callerSignal.reason);
+    else
+      callerSignal.addEventListener("abort", () => controller.abort(callerSignal.reason), {
+        once: true,
+      });
+  }
+  try {
+    return await fetch(input, { ...init, signal: controller.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 export async function api<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const method = (options.method || "GET").toUpperCase();
   const needsCsrf = ["POST", "PUT", "DELETE", "PATCH"].includes(method);
@@ -264,15 +296,19 @@ export async function api<T>(endpoint: string, options: RequestInit = {}): Promi
   if (method === "GET") endpoint = appendLangParam(endpoint);
 
   const doFetch = async (csrf: string) =>
-    fetch(`${BASE_URL}${endpoint}`, {
-      ...options,
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Frappe-CSRF-Token": csrf,
-        ...options.headers,
+    fetchWithTimeout(
+      `${BASE_URL}${endpoint}`,
+      {
+        ...options,
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Frappe-CSRF-Token": csrf,
+          ...options.headers,
+        },
       },
-    });
+      options.signal
+    );
 
   let csrf = needsCsrf ? ((await fetchCsrfToken()) ?? "None") : "None";
   let res = await doFetch(csrf);
@@ -378,7 +414,7 @@ export async function callMethod<T = unknown>(
       "X-Frappe-CSRF-Token": csrf,
     };
     if (post) {
-      return fetch(url, {
+      return fetchWithTimeout(url, {
         method: "POST",
         credentials: "include",
         headers,
@@ -390,7 +426,7 @@ export async function callMethod<T = unknown>(
     const qs = new URLSearchParams(
       Object.fromEntries(Object.entries(langParams).map(([k, v]) => [k, String(v)]))
     ).toString();
-    return fetch(qs ? `${url}?${qs}` : url, {
+    return fetchWithTimeout(qs ? `${url}?${qs}` : url, {
       method: "GET",
       credentials: "include",
       headers,

@@ -13,6 +13,8 @@ import "../style.css";
 import { initFlowbite } from "flowbite";
 import { t } from "../i18n";
 import { startAlpine } from "../alpine";
+// B-2: sidebar Alpine modülü page-specific (dashboard sidebar bu sayfada).
+import "../alpine/sidebar";
 import { requireAuth } from "../utils/auth-guard";
 import { api } from "../utils/api";
 import { getUser } from "../utils/auth";

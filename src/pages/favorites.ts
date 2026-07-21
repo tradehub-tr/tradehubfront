@@ -11,6 +11,8 @@ import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar'
 import { FloatingPanel } from '../components/floating'
 import { startAlpine } from '../alpine'
+// B-2: sidebar Alpine modülü page-specific (dashboard sidebar bu sayfada).
+import '../alpine/sidebar'
 import { renderSidebarColumn, initSidebar } from '../components/sidebar'
 import { FavoritesLayout, initFavoritesLayout } from '../components/favorites'
 import { ListingCartDrawer, initListingCartDrawer } from '../components/products/ListingCartDrawer'
