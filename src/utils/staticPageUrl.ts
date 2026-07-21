@@ -140,7 +140,6 @@ const STATIC_PAGE_HTML_MAP: Record<string, string> = {
   "/satici/dashboard": "/pages/seller/dashboard.html",
   "/satici/basvuru-bekleyen": "/pages/seller/application-pending.html",
   "/satici/tedarikci-kurulum": "/pages/seller/supplier-setup.html",
-  "/satici/dogrulama": "/pages/seller/verification.html",
   "/satici/vitrin": "/pages/seller/seller-storefront.html",
 
   // Top + Special

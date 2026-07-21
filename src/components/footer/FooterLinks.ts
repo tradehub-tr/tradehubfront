@@ -91,17 +91,12 @@ const footerColumnsI18n: FooterColumnI18n[] = [
     links: [
       { labelKey: "footer.startSelling", href: "/satici-ol" },
       { labelKey: "footer.sellerCentral", href: "/panel/" },
-      { labelKey: "footer.verifiedSupplier", href: "/pages/seller/verification.html" },
-      { labelKey: "footer.commissionFees", href: "/pages/seller/sell-pricing.html" },
-      { labelKey: "footer.sellerAcademy", href: "/satici-akademisi" },
+      { labelKey: "footer.priceTable", href: "/pages/seller/sell-pricing.html" },
     ],
   },
   {
     titleKey: "footer.corporate",
     links: [
-      { labelKey: "footer.aboutUs", href: "/hakkimizda" },
-      { labelKey: "footer.careers", href: "/kariyer" },
-      { labelKey: "footer.contact", href: "/iletisim" },
       // Global-standart hukuki linkler (her ülkede görünür). Bölgesel
       // zorunluluklar (KVKK/GDPR/CCPA) ayrı link değil, belgelerin içinde bölüm.
       // TR'ye özgü KVKK/Mesafeli Satış kaldırıldı; ileride bölge=TR koşullu.

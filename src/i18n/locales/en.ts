@@ -1568,8 +1568,7 @@ const en = {
       manufacturers: "Manufacturers",
       weeklyDeals: "Deals of the Week",
       newProducts: "New Arrivals",
-      commissionFees: "Commissions & Fees",
-      sellerAcademy: "Seller Academy",
+      priceTable: "Price Table",
       corporate: "Corporate",
       aboutUs: "About Us",
       careers: "Careers",
@@ -3007,22 +3006,16 @@ const en = {
           "<p>Orders placed through the Platform constitute a sales contract between the Buyer and the Seller. iStoc is not a party to this contract; it only provides intermediary platform services.</p><p>Order confirmation is subject to successful payment completion and acceptance by the Seller. Sellers have the right to reject orders due to stock availability or other valid reasons.</p><p>Order details can be viewed through the confirmation email and the order tracking page on the Platform.</p>",
         section5Title: "5. Payment Terms",
         section5Content:
-          "<p>Payments can be made via credit card, debit card, bank transfer/wire and Platform balance. All payments are processed through secure infrastructure.</p><p>Prices include VAT unless otherwise stated. In B2B transactions, invoices are issued by the Seller.</p><p>iStoc Secure Payment system holds the payment to the Seller pending until product delivery. This system is designed to protect Buyers.</p>",
+          "<p>Payments can be made via credit card, debit card, bank transfer/wire and Platform balance. All payments are processed through secure infrastructure.</p><p>iStoc Secure Payment system holds the payment to the Seller pending until product delivery. This system is designed to protect Buyers.</p>",
         section6Title: "6. Shipping and Delivery",
         section6Content:
-          "<p>Estimated delivery times are indicated on the product page and are for informational purposes. Actual delivery times may vary depending on logistics conditions.</p><p>The shipping company is responsible for damages that may occur during the shipping process. It is recommended to inspect the package upon delivery.</p><p>For international shipments, customs duties and additional charges are the responsibility of the Buyer.</p>",
+          "<p>Estimated delivery times are indicated on the product page and are for informational purposes. Actual delivery times may vary depending on logistics conditions.</p><p>For international shipments, customs duties and additional charges are the responsibility of the Buyer.</p>",
         section7Title: "7. Returns and Right of Withdrawal",
         section7Content:
           '<p>Return and withdrawal rights are subject to the consumer/commercial legislation of the country where the seller is established and to the seller\'s own return policy. Each seller publishes the applicable return terms on the product page and in their store profile.</p><p>iStoc acts as an intermediary service provider in the commercial relationship between buyer and seller and does not set return conditions on behalf of the parties. The Platform only provides the process infrastructure for forwarding return requests and resolving disputes. For the detailed process, please review our <a href="/iade-kosullari" class="text-primary-500 hover:underline">Return Policy</a> page.</p>',
-        section8Title: "8. Intellectual Property Rights",
+        section8Title: "8. Limitation of Liability",
         section8Content:
-          "<p>All content, design, logos, software and databases on the Platform are the intellectual property of iStoc Private Company Limited (operator of the iStoc brand) or its licensors.</p><p>Users may not copy, reproduce, distribute or use Platform content for commercial purposes. Responsibility for product images and descriptions uploaded by Sellers belongs to the respective Seller.</p>",
-        section9Title: "9. Limitation of Liability",
-        section9Content:
           "<p>iStoc acts as an intermediary in buy-sell transactions conducted through the Platform. Sellers are responsible for the quality, suitability and delivery of products.</p><p>The Platform cannot be held responsible for damages arising from technical malfunctions, interruptions or disruptions in third-party services.</p><p>iStoc's total liability cannot exceed the service fee for the relevant transaction.</p>",
-        section10Title: "10. Applicable Law and Disputes",
-        section10Content:
-          "<p>These Terms of Use are governed by the laws of England and Wales.</p><p>Any disputes arising between the parties shall be exclusively referred to the London Court of International Arbitration (LCIA) seated in London; the language of arbitration shall be English.</p><p>iStoc provides business-to-business (B2B) trade services only; consumer law provisions do not apply to use of the Platform.</p>",
       },
       privacy: {
         pageTitle: "Privacy Policy",
@@ -3030,7 +3023,7 @@ const en = {
         breadcrumbLabel: "Privacy Policy",
         section1Title: "1. Data Controller",
         section1Content:
-          "<p>The party acting as data controller in the processing of your personal data:</p><p><strong>iStoc Private Company Limited</strong> (United Kingdom)<br>Operates the iStoc brand.<br><strong>Email:</strong> kvkk@istoc.com</p>",
+          "<p>The party acting as data controller in the processing of your personal data:</p><p><strong>iStoc Private Company Limited</strong><br>Operates the iStoc brand.</p>",
         section2Title: "2. Personal Data Collected",
         section2Content:
           '<p>The following personal data is collected in the scope of providing Platform services:</p><ul class="list-disc ps-5 space-y-1"><li><strong>Identity Information:</strong> Name, surname, national ID number (for sellers), tax number</li><li><strong>Contact Information:</strong> Email address, phone number, address</li><li><strong>Financial Information:</strong> Bank account details, credit card information (stored in masked form)</li><li><strong>Transaction Information:</strong> Order history, payment records, return requests</li><li><strong>Digital Traces:</strong> IP address, cookie data, device information, browser information</li><li><strong>Usage Data:</strong> Search history, page views, click data</li></ul>',
@@ -3043,15 +3036,9 @@ const en = {
         section5Title: "5. Data Sharing",
         section5Content:
           '<p>Your personal data may be shared with third parties only in the following cases:</p><ul class="list-disc ps-5 space-y-1"><li>With shipping companies for order delivery</li><li>With payment institutions for payment transactions</li><li>With authorized public institutions under legal obligations</li><li>With our service providers (hosting, analytics, customer support tools)</li></ul><p>Your data is never sold to third parties under any circumstances.</p>',
-        section6Title: "6. International Data Transfer",
+        section6Title: "6. Data Subject Rights",
         section6Content:
-          "<p>Since the data controller iStoc Private Company Limited is established in the United Kingdom, personal data collected from users in Turkey is transferred to the United Kingdom for processing. This transfer is carried out based on the explicit consent of the data subject and/or the standard contractual clauses set by the Personal Data Protection Authority under KVKK Article 9.</p><p>Main countries where data transfer takes place: United Kingdom (operations centre), European Union countries, and United States of America (for service providers, under standard contractual clauses).</p>",
-        section7Title: "7. Data Subject Rights",
-        section7Content:
           '<p>Under Article 11 of the KVKK, you have the following rights:</p><ul class="list-disc ps-5 space-y-1"><li>Learning whether your personal data has been processed</li><li>Requesting information about the processing if it has been processed</li><li>Learning the purpose of processing and whether it is used in accordance with its purpose</li><li>Knowing the third parties to whom it has been transferred domestically or abroad</li><li>Requesting correction if it has been processed incompletely or incorrectly</li><li>Requesting deletion or destruction under Article 7 of the KVKK</li><li>Objecting to the emergence of a result against you through the analysis of processed data exclusively by automatic systems</li></ul>',
-        section8Title: "8. Contact",
-        section8Content:
-          "<p>You can submit your requests regarding your personal data through the following channel:</p><p><strong>Email:</strong> kvkk@istoc.com</p><p>Your applications will be evaluated and concluded within 30 days at the latest.</p>",
       },
       cookies: {
         pageTitle: "Cookie Policy",

@@ -1565,8 +1565,7 @@ const tr = {
       manufacturers: "Üreticiler",
       weeklyDeals: "Haftanın Fırsatları",
       newProducts: "Yeni Ürünler",
-      commissionFees: "Komisyon ve Ücretler",
-      sellerAcademy: "Satıcı Akademisi",
+      priceTable: "Fiyat Tablosu",
       corporate: "Kurumsal",
       aboutUs: "Hakkımızda",
       careers: "Kariyer",
@@ -2998,22 +2997,16 @@ const tr = {
           "<p>Platform üzerinden verilen siparişler, Alıcı ile Satıcı arasında bir satış sözleşmesi oluşturur. iStoc, bu sözleşmenin tarafı değildir; yalnızca aracı platform hizmeti sunmaktadır.</p><p>Siparişin onaylanması, ödemenin başarıyla tamamlanması ve Satıcı tarafından kabul edilmesi koşuluna bağlıdır. Satıcılar, stok durumu veya diğer geçerli nedenlerle siparişi reddetme hakkına sahiptir.</p><p>Sipariş detayları, teyit e-postası ve Platform üzerindeki sipariş takip sayfasından görüntülenebilir.</p>",
         section5Title: "5. Ödeme Koşulları",
         section5Content:
-          "<p>Platform üzerinden kredi kartı, banka kartı, havale/EFT ve Platform bakiyesi ile ödeme yapılabilir. Tüm ödemeler güvenli altyapılar üzerinden işlenir.</p><p>Fiyatlar, aksi belirtilmedikçe KDV dahildir. B2B işlemlerde fatura bilgileri Satıcı tarafından düzenlenir.</p><p>iStoc Güvende Ödeme sistemi, ödemenin Satıcıya aktarılmasını ürün teslimatına kadar askıda tutar. Bu sistem Alıcıları koruma amaçlıdır.</p>",
+          "<p>Platform üzerinden kredi kartı, banka kartı, havale/EFT ve Platform bakiyesi ile ödeme yapılabilir. Tüm ödemeler güvenli altyapılar üzerinden işlenir.</p><p>iStoc Güvende Ödeme sistemi, ödemenin Satıcıya aktarılmasını ürün teslimatına kadar askıda tutar. Bu sistem Alıcıları koruma amaçlıdır.</p>",
         section6Title: "6. Kargo ve Teslimat",
         section6Content:
-          "<p>Tahmini teslimat süreleri ürün sayfasında belirtilir ve bilgilendirme amaçlıdır. Gerçek teslimat süreleri lojistik koşullara bağlı olarak değişebilir.</p><p>Kargo sürecinde oluşabilecek hasarlardan kargo firması sorumludur. Teslimat sırasında paket kontrolü yapılması önerilir.</p><p>Uluslararası gönderilerde gümrük vergisi ve ek masraflar Alıcıya aittir.</p>",
+          "<p>Tahmini teslimat süreleri ürün sayfasında belirtilir ve bilgilendirme amaçlıdır. Gerçek teslimat süreleri lojistik koşullara bağlı olarak değişebilir.</p><p>Uluslararası gönderilerde gümrük vergisi ve ek masraflar Alıcıya aittir.</p>",
         section7Title: "7. İade ve Cayma Hakkı",
         section7Content:
           '<p>İade ve cayma hakkı, satıcının yerleşik olduğu ülkenin tüketici/ticaret mevzuatına ve satıcının kendi iade politikasına tabidir. Her satıcı, ürün sayfasında ve mağaza profilinde geçerli iade koşullarını ilan eder.</p><p>iStoc; alıcı ve satıcı arasındaki ticari ilişkide aracı hizmet sağlayıcı konumundadır ve iade koşullarını taraflar yerine belirlemez. Platform yalnızca iade talebinin iletilmesi ve anlaşmazlıkların çözümü için süreç altyapısı sağlar. Detaylı süreç için <a href="/iade-kosullari" class="text-primary-500 hover:underline">İade Politikası</a> sayfamızı inceleyiniz.</p>',
-        section8Title: "8. Fikri Mülkiyet Hakları",
+        section8Title: "8. Sorumluluk Sınırlaması",
         section8Content:
-          "<p>Platform üzerindeki tüm içerik, tasarım, logo, yazılım ve veritabanları iStoc markası adına iStoc Private Company Limited'in veya lisans verenlerinin fikri mülkiyetindedir.</p><p>Kullanıcılar, Platform içeriğini kopyalayamaz, çoğaltamaz, dağıtamaz veya ticari amaçla kullanamaz. Satıcılar tarafından yüklenen ürün görselleri ve açıklamalarının sorumluluğu ilgili Satıcıya aittir.</p>",
-        section9Title: "9. Sorumluluk Sınırlaması",
-        section9Content:
           "<p>iStoc, Platform üzerinden gerçekleştirilen alım-satım işlemlerinde aracı konumundadır. Ürünlerin kalitesi, uygunluğu ve teslimatından Satıcılar sorumludur.</p><p>Platform, teknik arızalar, kesintiler veya üçüncü taraf hizmetlerindeki aksaklıklar nedeniyle doğabilecek zararlardan sorumlu tutulamaz.</p><p>iStoc'un toplam sorumluluğu, ilgili işleme ait hizmet bedelini aşamaz.</p>",
-        section10Title: "10. Uygulanacak Hukuk ve Uyuşmazlık",
-        section10Content:
-          "<p>Bu Kullanım Koşulları, İngiltere ve Galler hukukuna tabidir.</p><p>Taraflar arasında doğabilecek uyuşmazlıklarda münhasıran Londra Uluslararası Tahkim Mahkemesi (LCIA) yetkilidir; tahkim dili İngilizce'dir.</p><p>iStoc yalnızca işletmeler arası (B2B) ticaret hizmeti sunar; tüketici hukuku hükümleri Platform kullanımına uygulanmaz.</p>",
       },
       privacy: {
         pageTitle: "Gizlilik Politikası",
@@ -3021,7 +3014,7 @@ const tr = {
         breadcrumbLabel: "Gizlilik Politikası",
         section1Title: "1. Veri Sorumlusu",
         section1Content:
-          "<p>Kişisel verilerinizin işlenmesinde veri sorumlusu sıfatıyla hareket eden taraf:</p><p><strong>iStoc Private Company Limited</strong> (United Kingdom)<br>iStoc markası adına işletmektedir.<br><strong>E-posta:</strong> kvkk@istoc.com</p>",
+          "<p>Kişisel verilerinizin işlenmesinde veri sorumlusu sıfatıyla hareket eden taraf:</p><p><strong>iStoc Private Company Limited</strong><br>iStoc markası adına işletmektedir.</p>",
         section2Title: "2. Toplanan Kişisel Veriler",
         section2Content:
           '<p>Platform hizmetlerinin sunulması kapsamında aşağıdaki kişisel veriler toplanmaktadır:</p><ul class="list-disc ps-5 space-y-1"><li><strong>Kimlik Bilgileri:</strong> Ad, soyad, T.C. kimlik numarası (satıcılar için), vergi numarası</li><li><strong>İletişim Bilgileri:</strong> E-posta adresi, telefon numarası, adres</li><li><strong>Finansal Bilgiler:</strong> Banka hesap bilgileri, kredi kartı bilgileri (maskelenerek saklanır)</li><li><strong>İşlem Bilgileri:</strong> Sipariş geçmişi, ödeme kayıtları, iade talepleri</li><li><strong>Dijital İzler:</strong> IP adresi, çerez verileri, cihaz bilgileri, tarayıcı bilgileri</li><li><strong>Kullanım Verileri:</strong> Arama geçmişi, sayfa görüntülemeleri, tıklama verileri</li></ul>',
@@ -3034,15 +3027,9 @@ const tr = {
         section5Title: "5. Veri Paylaşımı",
         section5Content:
           '<p>Kişisel verileriniz, yalnızca aşağıdaki durumlarda üçüncü taraflarla paylaşılabilir:</p><ul class="list-disc ps-5 space-y-1"><li>Sipariş teslimatı için kargo şirketleriyle</li><li>Ödeme işlemleri için ödeme kuruluşlarıyla</li><li>Yasal zorunluluklar kapsamında yetkili kamu kurumlarıyla</li><li>Hizmet sağlayıcılarımızla (hosting, analitik, müşteri destek araçları)</li></ul><p>Verileriniz hiçbir koşulda üçüncü taraflara satılmaz.</p>',
-        section6Title: "6. Uluslararası Veri Transferi",
+        section6Title: "6. Veri Sahibi Hakları",
         section6Content:
-          "<p>Veri sorumlusu iStoc Private Company Limited Birleşik Krallık'ta yerleşik olduğundan, Türkiye'den toplanan kişisel veriler işlenmek üzere Birleşik Krallık'a aktarılmaktadır. Bu aktarım, KVKK m.9 kapsamında veri sahibinin açık rızası ve/veya KVKK Kurulu'nun belirlediği standart sözleşme maddeleri esas alınarak gerçekleştirilir.</p><p>Veri transferi yapılan başlıca ülkeler: Birleşik Krallık (operasyon merkezi), Avrupa Birliği ülkeleri ve Amerika Birleşik Devletleri (hizmet sağlayıcılar için standart sözleşme maddeleri ile).</p>",
-        section7Title: "7. Veri Sahibi Hakları",
-        section7Content:
           "<p>KVKK'nın 11. maddesi uyarınca aşağıdaki haklara sahipsiniz:</p><ul class=\"list-disc ps-5 space-y-1\"><li>Kişisel verilerinizin işlenip işlenmediğini öğrenme</li><li>İşlenmişse buna ilişkin bilgi talep etme</li><li>İşlenme amacını ve amacına uygun kullanılıp kullanılmadığını öğrenme</li><li>Yurt içinde veya yurt dışında aktarıldığı üçüncü kişileri bilme</li><li>Eksik veya yanlış işlenmişse düzeltilmesini isteme</li><li>KVKK'nın 7. maddesi kapsamında silinmesini veya yok edilmesini isteme</li><li>İşlenen verilerin münhasıran otomatik sistemler vasıtasıyla analiz edilmesi suretiyle aleyhinize bir sonucun ortaya çıkmasına itiraz etme</li></ul>",
-        section8Title: "8. İletişim",
-        section8Content:
-          "<p>Kişisel verilerinizle ilgili taleplerinizi aşağıdaki kanaldan iletebilirsiniz:</p><p><strong>E-posta:</strong> kvkk@istoc.com</p><p>Başvurularınız en geç 30 gün içinde değerlendirilecek ve sonuçlandırılacaktır.</p>",
       },
       cookies: {
         pageTitle: "Çerez Politikası",
