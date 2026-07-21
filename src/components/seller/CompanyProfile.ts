@@ -724,12 +724,25 @@ function ProductsTab(): string {
         async init() {
           try {
             const apiBase = (window.API_BASE || '/api');
-            const [catRes, prodRes] = await Promise.all([
+            const FETCH_SIZE = 100;
+            const prodUrl = (pg) => apiBase + '/method/tradehub_core.api.seller.get_seller_products?seller_code=' + this.sellerCode + '&page=' + pg + '&page_size=' + FETCH_SIZE;
+            const [catRes, firstRes] = await Promise.all([
               fetch(apiBase + '/method/tradehub_core.api.seller.get_seller_categories?seller_code=' + this.sellerCode, {credentials:'omit'}).then(r=>r.json()),
-              fetch(apiBase + '/method/tradehub_core.api.seller.get_seller_products?seller_code=' + this.sellerCode + '&page_size=80', {credentials:'omit'}).then(r=>r.json())
+              fetch(prodUrl(1), {credentials:'omit'}).then(r=>r.json())
             ]);
             this.categories = catRes.message?.categories || [];
-            this.products = prodRes.message?.products || [];
+            this.products = firstRes.message?.products || [];
+            // Backend pagination'lı: 80/100 sınırında kesmeden TÜM ürünleri çek (client-side filtre/sekme bellekteki tam listeyi böler).
+            const total = Number(firstRes.message?.total) || this.products.length;
+            if (total > this.products.length) {
+              const lastPage = Math.ceil(total / FETCH_SIZE);
+              const reqs = [];
+              for (let pg = 2; pg <= lastPage; pg++) {
+                reqs.push(fetch(prodUrl(pg), {credentials:'omit'}).then(r=>r.json()));
+              }
+              const rest = await Promise.all(reqs);
+              for (const r of rest) { this.products = this.products.concat(r.message?.products || []); }
+            }
           } catch(e) { console.error('Products fetch error', e); }
           this.loading = false;
         },
@@ -850,8 +863,21 @@ function VideosTab(): string {
           if (!this.sellerCode) { this.loading = false; return; }
           try {
             const apiBase = (window.API_BASE || '/api');
-            const res = await fetch(apiBase + '/method/tradehub_core.api.seller.get_seller_products?seller_code=' + this.sellerCode + '&page_size=50', { credentials: 'omit' }).then(r => r.json());
-            const products = res.message?.products || [];
+            const FETCH_SIZE = 100;
+            const prodUrl = (pg) => apiBase + '/method/tradehub_core.api.seller.get_seller_products?seller_code=' + this.sellerCode + '&page=' + pg + '&page_size=' + FETCH_SIZE;
+            const firstRes = await fetch(prodUrl(1), { credentials: 'omit' }).then(r => r.json());
+            let products = firstRes.message?.products || [];
+            // Video'lu ürün listenin sonunda olabilir; 50/100 sınırında kesmeden tüm ürünleri tara.
+            const total = Number(firstRes.message?.total) || products.length;
+            if (total > products.length) {
+              const lastPage = Math.ceil(total / FETCH_SIZE);
+              const reqs = [];
+              for (let pg = 2; pg <= lastPage; pg++) {
+                reqs.push(fetch(prodUrl(pg), { credentials: 'omit' }).then(r => r.json()));
+              }
+              const rest = await Promise.all(reqs);
+              for (const r of rest) { products = products.concat(r.message?.products || []); }
+            }
             this.videos = products.filter(p => p.video_url);
           } catch(e) { console.error('Videos fetch error', e); }
           this.loading = false;
