@@ -6,7 +6,7 @@
  * (Unsplash görselli statik veri) kaldırıldı — hiçbir yerden çağrılmıyordu.
  */
 
-export interface CategoryItem {
+export interface NavCategoryItem {
   id: string;
   name: string;
   href: string;
@@ -14,16 +14,8 @@ export interface CategoryItem {
   subcategories: { name: string; href: string }[];
 }
 
-export interface FilterGroup {
-  title: string;
-  items: { name: string; href: string }[];
-  showShopAll?: boolean;
-  shopAllHref?: string;
-}
-
 export interface CategorySection {
   title: string;
   slug?: string;
-  categories: CategoryItem[];
-  filters?: FilterGroup[];
+  categories: NavCategoryItem[];
 }
