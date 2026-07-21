@@ -144,7 +144,8 @@ function initSwiper(): void {
 export function initRecommendationSlider(): void {
   // Load products from API
   initCurrency()
-    .then(() => searchListings({ page_size: 9 }))
+    // verified_supplier: anasayfa KYB doğrulanmamış satıcı ürünü göstermez.
+    .then(() => searchListings({ page_size: 9, verified_supplier: true }))
     .then((result) => {
       const container = document.getElementById("recommendation-slides");
       if (!container) return;

@@ -132,7 +132,15 @@ export function initHeroSidePanel(): void {
   if (!card || !stage || !dotsWrap) return;
 
   initCurrency()
-    .then(() => searchListings({ is_deal: true, page_size: DEAL_COUNT, sort_by: "discount" }))
+    // verified_supplier: anasayfa KYB doğrulanmamış satıcı ürünü göstermez.
+    .then(() =>
+      searchListings({
+        is_deal: true,
+        page_size: DEAL_COUNT,
+        sort_by: "discount",
+        verified_supplier: true,
+      })
+    )
     .then((result) => {
       if (result.products.length === 0) {
         card.style.display = "none";
