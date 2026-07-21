@@ -13,6 +13,8 @@ import { Breadcrumb } from '../components/shared/Breadcrumb'
 import { FooterLinks } from '../components/footer'
 import { FloatingPanel } from '../components/floating'
 import { startAlpine } from '../alpine'
+// B-2: sidebar Alpine modülü page-specific (dashboard sidebar bu sayfada).
+import '../alpine/sidebar'
 import { renderSidebarColumn, initSidebar } from '../components/sidebar'
 import { ProfileLayout, initProfileLayout } from '../components/profile'
 import { t } from '../i18n'
