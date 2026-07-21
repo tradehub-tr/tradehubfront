@@ -1,3 +1,20 @@
+## [v2.1.0-alpha.11] - 2026-07-21 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(anasayfa): doğrulanmamış satıcı ürünleri anasayfadan gizlendi (@ahmeetseker)
+  - Ürün vitrini, öneri slider'ı, fırsat gridi ve hero fırsat paneli searchListings çağrılarına verified_supplier filtresi eklendi
+  - Eleme sunucu tarafında yapılıyor; grid yalnızca KYB doğrulanmış satıcı ürünleriyle tam sayıda doluyor
+
+### Degistirildi
+- refactor(legal-footer): yasal metinler sadeleştirildi, footer linkleri düzenlendi (@ahmeetseker)
+  - Kullanım Koşulları: KDV cümlesi, kargo sorumluluğu paragrafı, Fikri Mülkiyet ve Uygulanacak Hukuk bölümleri kaldırıldı (4 dil)
+  - Gizlilik: United Kingdom ibaresi, e-posta satırı, Uluslararası Veri Transferi ve İletişim bölümleri kaldırıldı (4 dil)
+  - Footer: Hakkımızda, Kariyer, İletişim, Satıcı Akademisi ve Doğrulanmış Tedarikçi Olun linkleri kaldırıldı; Komisyon ve Ücretler "Fiyat Tablosu" olarak değiştirildi
+  - seller/verification.html sayfası ve yönlendirmesi silindi
+
+---
 ## [v2.1.0-alpha.10] - 2026-07-21 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
