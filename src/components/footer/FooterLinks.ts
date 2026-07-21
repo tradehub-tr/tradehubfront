@@ -1,7 +1,6 @@
 /**
  * FooterLinks Component (iSTOC Tam Footer — F1 "Trendyol Klasik")
  * Kompozisyon (yukarıdan aşağıya):
- * - FooterSeo: SEO üst bölgesi (Popüler Üreticiler + Popüler Sayfalar)
  * - Ana bölge: 5 link kolonu (Kurumsal kolonunda politika linkleri) +
  *   Dil/Para Birimi seçici kolonu
  * - FooterPolicy: siyah bant (sosyal + app rozetleri + telif)
@@ -14,7 +13,6 @@ import type { FooterColumn } from "../../types/navigation";
 import { t, getCurrentLang } from "../../i18n";
 import { getSelectedCurrency, setSelectedCurrency } from "../../utils/currency";
 import { getSupportedCurrencies } from "../../services/currencyService";
-import { FooterSeo } from "./FooterSeo";
 import { FooterPolicy } from "./FooterPolicy";
 
 /** Footer bölge seçicisinde sunulan UI dilleri (BottomNav ile tutarlı: tr/en). */
@@ -93,17 +91,12 @@ const footerColumnsI18n: FooterColumnI18n[] = [
     links: [
       { labelKey: "footer.startSelling", href: "/satici-ol" },
       { labelKey: "footer.sellerCentral", href: "/panel/" },
-      { labelKey: "footer.verifiedSupplier", href: "/pages/seller/verification.html" },
-      { labelKey: "footer.commissionFees", href: "/pages/seller/sell-pricing.html" },
-      { labelKey: "footer.sellerAcademy", href: "/satici-akademisi" },
+      { labelKey: "footer.priceTable", href: "/pages/seller/sell-pricing.html" },
     ],
   },
   {
     titleKey: "footer.corporate",
     links: [
-      { labelKey: "footer.aboutUs", href: "/hakkimizda" },
-      { labelKey: "footer.careers", href: "/kariyer" },
-      { labelKey: "footer.contact", href: "/iletisim" },
       // Global-standart hukuki linkler (her ülkede görünür). Bölgesel
       // zorunluluklar (KVKK/GDPR/CCPA) ayrı link değil, belgelerin içinde bölüm.
       // TR'ye özgü KVKK/Mesafeli Satış kaldırıldı; ileride bölge=TR koşullu.
@@ -199,7 +192,6 @@ function renderTrustColumn(): string {
  */
 export function FooterLinks(): string {
   return `
-    ${FooterSeo()}
     <section
       class="border-t"
       style="background-color: var(--footer-zone-bg, #fafafa); border-color: var(--footer-border-color, #e5e7eb);"

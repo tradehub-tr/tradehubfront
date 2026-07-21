@@ -26,7 +26,8 @@ export function initProductGrid(): void {
 
   initCurrency()
     // 14 = büyük ekran gridinin (2xl: 7 kolon) tam 2 satırı — alt satırda boşluk kalmasın.
-    .then(() => searchListings({ page_size: 14 }))
+    // verified_supplier: anasayfa vitrini KYB doğrulanmamış satıcı ürünü göstermez.
+    .then(() => searchListings({ page_size: 14, verified_supplier: true }))
     .then((result) => {
       if (result.products.length === 0) return;
 

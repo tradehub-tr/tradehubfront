@@ -151,7 +151,15 @@ export function initTopDeals(): void {
   grid.innerHTML = Array.from({ length: FIXED_GRID_COUNT }).map(renderSkeletonCard).join("");
 
   initCurrency()
-    .then(() => searchListings({ is_deal: true, page_size: FIXED_GRID_COUNT, sort_by: "discount" }))
+    // verified_supplier: anasayfa KYB doğrulanmamış satıcı ürünü göstermez.
+    .then(() =>
+      searchListings({
+        is_deal: true,
+        page_size: FIXED_GRID_COUNT,
+        sort_by: "discount",
+        verified_supplier: true,
+      })
+    )
     .then((result) => {
       const empty = document.getElementById("top-deals-empty");
       if (result.products.length === 0) {

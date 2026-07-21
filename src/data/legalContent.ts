@@ -55,19 +55,9 @@ export function termsContent(): LegalPageData {
         content: t("legal.terms.section7Content"),
       },
       {
-        id: "fikri-mulkiyet",
+        id: "sorumluluk",
         title: t("legal.terms.section8Title"),
         content: t("legal.terms.section8Content"),
-      },
-      {
-        id: "sorumluluk",
-        title: t("legal.terms.section9Title"),
-        content: t("legal.terms.section9Content"),
-      },
-      {
-        id: "uygulanacak-hukuk",
-        title: t("legal.terms.section10Title"),
-        content: t("legal.terms.section10Content"),
       },
     ],
   };
@@ -105,19 +95,9 @@ export function privacyContent(): LegalPageData {
         content: t("legal.privacy.section5Content"),
       },
       {
-        id: "uluslararasi-transfer",
+        id: "veri-hakklari",
         title: t("legal.privacy.section6Title"),
         content: t("legal.privacy.section6Content"),
-      },
-      {
-        id: "veri-hakklari",
-        title: t("legal.privacy.section7Title"),
-        content: t("legal.privacy.section7Content"),
-      },
-      {
-        id: "iletisim",
-        title: t("legal.privacy.section8Title"),
-        content: t("legal.privacy.section8Content"),
       },
     ],
   };
