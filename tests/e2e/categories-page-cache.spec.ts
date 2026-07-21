@@ -95,6 +95,9 @@ test(
     // Fresh context → cold IndexedDB cache. loadCategories() swallows backend
     // failures and resolves with [], so the page must detect the empty result and
     // render the error state instead of a silently empty grid.
+    // Hata metni artık i18n'den geliyor (eski hardcoded Türkçe kaldırıldı); Türkçe
+    // assertion için dili TR'ye sabitle.
+    await page.addInitScript(() => localStorage.setItem("i18nextLng", "tr"));
     await mockBackend(page);
     await page.route(
       "**/api/method/tradehub_core.api.category.get_mega_menu*",

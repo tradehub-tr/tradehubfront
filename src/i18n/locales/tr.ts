@@ -241,6 +241,7 @@ const tr = {
       hoursOrLess: "≤ {{count}} sa.",
       supplierFilters: "Tedarikçi filtreleri",
       yearsOnPlatform: "iStoc'taki yıl sayısı",
+      companyAge: "Firma Yaşı",
       onTimeDelivery: "Zamanında teslimat",
       responseTime: "Yanıtlama süresi",
       reorderRate: "Yeniden sipariş oranı",
@@ -3675,6 +3676,9 @@ const tr = {
     // CATEGORY PAGE
     // ============================================================
     categoryPage: {
+      loading: "Yükleniyor…",
+      loadingCategories: "Kategoriler yükleniyor…",
+      loadError: "Kategoriler yüklenemedi.",
       seeAll: "Tümünü gör",
       shopAll: "Tümünü Gör",
       quickNav: "Kategorilere Git",

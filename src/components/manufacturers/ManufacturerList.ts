@@ -107,6 +107,19 @@ export function ManufacturerList(opts: { mobileFilter?: boolean } = {}): string 
           if (catSlug) api.set('category', catSlug);
           else if (catId) api.set('category', catId);
           if (verified) api.set('verified', verified);
+          // Sidebar filtreleri (URL ⟷ backend param eşleştirmesi) — get_sellers ile aynı isimler.
+          const pass: Array<[string, string]> = [
+            ['countries', 'country'],
+            ['min_rating', 'min_rating'],
+            ['moq_max', 'min_order'],
+            ['mgmt_certs', 'mgmt_certs'],
+            ['product_certs', 'product_certs'],
+            ['founded_year_min', 'founded_year_min'],
+          ];
+          for (const [urlKey, apiKey] of pass) {
+            const v = (params.get(urlKey) || '').trim();
+            if (v) api.set(apiKey, v);
+          }
           this.searchedKeyword = q || catSlug || catId || '';
           return api;
         },

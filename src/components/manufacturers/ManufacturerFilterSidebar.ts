@@ -38,29 +38,45 @@ function section({ id, title, body }: SectionWrapperOpts): string {
 }
 
 /**
- * Tek-seçim filtre chip'i. Eski radio'nun yerine geçer: `name` Alpine model'i,
- * `value` korunur. Tekrar tıklayınca seçimi kaldırır (radio'da yapılamayan ama
- * filtrede beklenen davranış). Seçim sonrası apply() çağrılır.
+ * Tek-seçim chip grubu — seçenekler facet'ten (`facets[facetKey]`) x-for ile render
+ * edilir; her chip yanında üretici sayısı `(N)`. Tıklayınca `model`'i set/temizler,
+ * apply() çağırır. Seçenek yoksa "sonuç yok".
  */
-function chipRow(name: string, value: string, label: string): string {
+function chipFacetBody(facetKey: string, model: string): string {
   return `
-    <button
-      type="button"
-      @click="${name} = ${name} === '${value}' ? '' : '${value}'; apply()"
-      class="px-3 py-1 rounded-full text-[13px] font-medium border transition-colors cursor-pointer"
-      :class="${name} === '${value}'
-        ? 'bg-[var(--color-primary-500,#cc9900)] text-white border-[var(--color-primary-500,#cc9900)]'
-        : 'bg-white text-[color:var(--filter-text-color,#374151)] border-gray-300 hover:border-[var(--color-primary-500,#cc9900)]'"
-    >${label}</button>
+    <div class="flex flex-wrap gap-2 pt-1">
+      <template x-for="opt in facets.${facetKey}" :key="opt.value">
+        <button
+          type="button"
+          @click="${model} = ${model} === opt.value ? '' : opt.value; apply()"
+          class="px-3 py-1 rounded-full text-[13px] font-medium border transition-colors cursor-pointer"
+          :class="${model} === opt.value
+            ? 'bg-[var(--color-primary-500,#cc9900)] text-white border-[var(--color-primary-500,#cc9900)]'
+            : 'bg-white text-[color:var(--filter-text-color,#374151)] border-gray-300 hover:border-[var(--color-primary-500,#cc9900)]'"
+          x-text="opt.label + ' (' + opt.count + ')'"
+        ></button>
+      </template>
+      <p x-show="facets.${facetKey}.length === 0" class="text-[12px]" style="color:#9ca3af">${t("products.noResults")}</p>
+    </div>
   `;
 }
 
-function checkboxRow(model: string, value: string, label: string, leading = ""): string {
+/**
+ * Çoklu-seçim checkbox grubu — seçenekler facet'ten x-for; her satırda üretici
+ * sayısı `(N)`. `model` bir string[] Alpine dizisidir (multi-select).
+ */
+function checkboxFacetBody(facetKey: string, model: string): string {
   return `
-    <label class="flex items-center gap-2 py-1 cursor-pointer text-[13px]" style="color: var(--filter-text-color, #374151);">
-      <input type="checkbox" value="${value}" x-model="${model}" @change="apply()" class="rounded border-gray-300 text-primary-500 focus:ring-primary-500" />
-      ${leading}<span>${label}</span>
-    </label>
+    <div class="space-y-0.5 max-h-[180px] overflow-y-auto">
+      <template x-for="opt in facets.${facetKey}" :key="opt.value">
+        <label class="flex items-center gap-2 py-1 cursor-pointer text-[13px]" style="color: var(--filter-text-color, #374151);">
+          <input type="checkbox" :value="opt.value" x-model="${model}" @change="apply()" class="rounded border-gray-300 text-primary-500 focus:ring-primary-500" />
+          <span class="flex-1 min-w-0 truncate" x-text="opt.label"></span>
+          <span class="text-[12px] shrink-0" style="color:#9ca3af" x-text="'(' + opt.count + ')'"></span>
+        </label>
+      </template>
+      <p x-show="facets.${facetKey}.length === 0" class="text-[12px]" style="color:#9ca3af">${t("products.noResults")}</p>
+    </div>
   `;
 }
 
@@ -70,42 +86,7 @@ function checkboxRow(model: string, value: string, label: string, leading = ""):
  * data'sına bağlandığından markup tek kaynaktan üretilir.
  */
 function buildFilterSections(): string {
-  const ratings = [4.0, 4.5, 5.0];
-  const platformYears = [5, 10, 15];
-  const onTime = ["90", "95", "100"];
-  const respHours = ["4", "2", "1"];
-  const reorder = ["15", "30", "50"];
-
-  const countries = [
-    { code: "TR", name: t("checkoutMfr.countryTR") },
-    { code: "CN", name: t("checkoutMfr.countryCN") },
-    { code: "PK", name: t("checkoutMfr.countryPK") },
-    { code: "US", name: t("checkoutMfr.countryUS") },
-    { code: "IN", name: t("checkoutMfr.countryIN") },
-    { code: "TW", name: t("checkoutMfr.countryTW") },
-    { code: "DE", name: t("checkoutMfr.countryDE") },
-    { code: "IT", name: t("checkoutMfr.countryIT") },
-    { code: "FR", name: t("checkoutMfr.countryFR") },
-  ];
-
-  const mgmtCerts = ["ISO", "BSCI", "SEDEX", "FAMA", "ICTI"];
-  const productCerts = ["CE", "ROHS", "CPC", "OEKO-TEX 100", "GRS"];
-
-  // Section gövdeleri — tek-seçim chip grupları (flex-wrap)
-  const chipGroup = (chips: string) => `<div class="flex flex-wrap gap-2 pt-1">${chips}</div>`;
-
-  const ratingsBody = chipGroup(
-    ratings
-      .map((r) =>
-        chipRow(
-          "rating",
-          String(r),
-          `${r.toFixed(1)} ${r === 5.0 ? "" : t("products.filterAndUp")}`
-        )
-      )
-      .join("")
-  );
-
+  // Min. sipariş — serbest sayı girişi (facet değil).
   const moqBody = `
     <div class="flex items-center gap-1.5 mt-2">
       <input
@@ -127,73 +108,15 @@ function buildFilterSections(): string {
     </div>
   `;
 
-  const countryBody = `
-    <div class="space-y-0.5 max-h-[180px] overflow-y-auto">
-      ${countries
-        .map((c) =>
-          checkboxRow(
-            "countries",
-            c.code,
-            c.name,
-            `<span class="inline-block w-5 h-3 bg-gray-100 rounded-sm text-[8px] text-gray-500 leading-3 text-center font-bold me-1">${c.code}</span>`
-          )
-        )
-        .join("")}
-    </div>
-  `;
-
-  const mgmtBody = `
-    <div class="space-y-0.5 max-h-[160px] overflow-y-auto">
-      ${mgmtCerts.map((c) => checkboxRow("mgmtCerts", c, c)).join("")}
-    </div>
-  `;
-
-  const productCertBody = `
-    <div class="space-y-0.5 max-h-[160px] overflow-y-auto">
-      ${productCerts.map((c) => checkboxRow("productCerts", c, c)).join("")}
-    </div>
-  `;
-
-  const platformBody = chipGroup(
-    platformYears
-      .map((y) => chipRow("platformYears", String(y), t("checkoutMfr.yearsAndAbove", { count: y })))
-      .join("")
-  );
-
-  const onTimeBody = chipGroup(
-    onTime
-      .map((v) =>
-        chipRow(
-          "onTimeRate",
-          v,
-          v === "100" ? `%${v}` : t("checkoutMfr.percentAndAbove", { value: v })
-        )
-      )
-      .join("")
-  );
-
-  const respBody = chipGroup(
-    respHours
-      .map((v) => chipRow("responseHours", v, t("checkoutMfr.hoursOrLess", { count: v })))
-      .join("")
-  );
-
-  const reorderBody = chipGroup(
-    reorder
-      .map((v) => chipRow("reorderRate", v, t("checkoutMfr.percentAndAbove", { value: v })))
-      .join("")
-  );
-
+  // Seçenekler facet'ten (üretici-sayılı) dinamik gelir. Verisi olmayan
+  // (zamanında teslimat / yanıt süresi / tekrar sipariş) bölümler kaldırıldı.
   return `
-    ${section({ id: "store-reviews", title: t("products.filterStoreReviews"), body: ratingsBody })}
+    ${section({ id: "store-reviews", title: t("products.filterStoreReviews"), body: chipFacetBody("ratings", "rating") })}
     ${section({ id: "min-order", title: t("products.filterMinOrder"), body: moqBody })}
-    ${section({ id: "supplier-country", title: t("products.filterSupplierCountry"), body: countryBody })}
-    ${section({ id: "mgmt-certifications", title: t("products.filterMgmtCertifications"), body: mgmtBody })}
-    ${section({ id: "product-certifications", title: t("products.filterProductCertifications"), body: productCertBody })}
-    ${section({ id: "platform-years", title: t("checkoutMfr.yearsOnPlatform"), body: platformBody })}
-    ${section({ id: "ontime", title: t("checkoutMfr.onTimeDelivery"), body: onTimeBody })}
-    ${section({ id: "response-time", title: t("checkoutMfr.responseTime"), body: respBody })}
-    ${section({ id: "reorder-rate", title: t("checkoutMfr.reorderRate"), body: reorderBody })}
+    ${section({ id: "supplier-country", title: t("products.filterSupplierCountry"), body: checkboxFacetBody("countries", "countries") })}
+    ${section({ id: "mgmt-certifications", title: t("products.filterMgmtCertifications"), body: checkboxFacetBody("managementCertifications", "mgmtCerts") })}
+    ${section({ id: "product-certifications", title: t("products.filterProductCertifications"), body: checkboxFacetBody("productCertifications", "productCerts") })}
+    ${section({ id: "company-age", title: t("checkoutMfr.companyAge"), body: chipFacetBody("foundedYears", "foundedYearMin") })}
   `;
 }
 
@@ -328,20 +251,45 @@ export function initManufacturerFilters(): void {
         "supplier-country": false,
         "mgmt-certifications": false,
         "product-certifications": false,
-        "platform-years": false,
-        ontime: false,
-        "response-time": false,
-        "reorder-rate": false,
+        "company-age": false,
       } as Record<string, boolean>,
+      // Facet seçenekleri + üretici sayıları (backend get_manufacturer_facets).
+      facets: {
+        countries: [],
+        ratings: [],
+        foundedYears: [],
+        managementCertifications: [],
+        productCertifications: [],
+        verifiedSupplierCount: 0,
+        total: 0,
+      } as Record<string, unknown>,
       rating: params.get("min_rating") || "",
       moqMax: params.get("moq_max") || "",
       countries: (params.get("countries") || "").split(",").filter(Boolean),
       mgmtCerts: (params.get("mgmt_certs") || "").split(",").filter(Boolean),
       productCerts: (params.get("product_certs") || "").split(",").filter(Boolean),
-      platformYears: params.get("platform_years") || "",
-      onTimeRate: params.get("ontime") || "",
-      responseHours: params.get("resp_hours") || "",
-      reorderRate: params.get("reorder") || "",
+      foundedYearMin: params.get("founded_year_min") || "",
+
+      init() {
+        void this.loadFacets();
+      },
+
+      // Aktif filtrelerle facet'leri çek → seçenekler + count'lar güncellenir (monotonic narrow).
+      async loadFacets() {
+        const { getManufacturerFacets } = await import("../../services/manufacturerService");
+        const u = new URLSearchParams(window.location.search);
+        this.facets = (await getManufacturerFacets({
+          keyword: u.get("q") || undefined,
+          category: u.get("cat") || u.get("category") || undefined,
+          verified: u.get("verified") || undefined,
+          country: this.countries.join(",") || undefined,
+          min_rating: this.rating || undefined,
+          min_order: this.moqMax || undefined,
+          founded_year_min: this.foundedYearMin || undefined,
+          mgmt_certs: this.mgmtCerts.join(",") || undefined,
+          product_certs: this.productCerts.join(",") || undefined,
+        })) as unknown as Record<string, unknown>;
+      },
 
       toggleSection(id: string) {
         this.collapsed[id] = !this.collapsed[id];
@@ -361,12 +309,11 @@ export function initManufacturerFilters(): void {
         setOrDel("countries", this.countries);
         setOrDel("mgmt_certs", this.mgmtCerts);
         setOrDel("product_certs", this.productCerts);
-        setOrDel("platform_years", this.platformYears);
-        setOrDel("ontime", this.onTimeRate);
-        setOrDel("resp_hours", this.responseHours);
-        setOrDel("reorder", this.reorderRate);
+        setOrDel("founded_year_min", this.foundedYearMin);
         window.history.replaceState({}, "", url.toString());
         document.dispatchEvent(new CustomEvent("manufacturer-filters-changed"));
+        // Facet count'larını aktif filtrelere göre yenile.
+        void this.loadFacets();
       },
 
       clearAll() {
@@ -375,10 +322,7 @@ export function initManufacturerFilters(): void {
         this.countries = [];
         this.mgmtCerts = [];
         this.productCerts = [];
-        this.platformYears = "";
-        this.onTimeRate = "";
-        this.responseHours = "";
-        this.reorderRate = "";
+        this.foundedYearMin = "";
         this.apply();
       },
     }));
