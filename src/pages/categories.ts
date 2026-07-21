@@ -25,7 +25,7 @@ import { startAlpine } from '../alpine'
 import { Breadcrumb } from '../components/shared/Breadcrumb'
 
 // Categories components
-import { renderCategoryPage, CategoryFilterSidebar, initCategoryFilters } from '../components/categories'
+import { renderCategoryPage, CategoryQuickNav, initCategoryQuickNav } from '../components/categories'
 
 // Category data (type only — no longer used for rendering)
 import type { CategorySection } from '../data/categories'
@@ -107,7 +107,7 @@ initStickyHeaderSearch();
 initHeaderCart();
 initLanguageSelector();
 initAnimatedPlaceholder('#topbar-compact-search-input');
-initCategoryFilters();
+initCategoryQuickNav();
 
 /**
  * Scroll to the section matching a slug (from ?cat= or #cat=<slug>).
@@ -146,10 +146,10 @@ loadCategories()
 
     const sidebarEl = document.getElementById('cat-sidebar-container');
     const gridEl = document.getElementById('cat-grid-container');
-    if (sidebarEl) sidebarEl.innerHTML = CategoryFilterSidebar(sections);
+    if (sidebarEl) sidebarEl.innerHTML = CategoryQuickNav(sections);
     if (gridEl) gridEl.innerHTML = renderCategoryPage(sections);
 
-    initCategoryFilters();
+    initCategoryQuickNav();
 
     // Deep-link: /pages/categories.html?cat=<slug> → scroll to that section
     const slug = new URLSearchParams(window.location.search).get('cat');

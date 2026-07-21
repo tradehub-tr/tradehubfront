@@ -70,6 +70,16 @@ export function escapeAttr(value: unknown): string {
   return escapeHtml(value);
 }
 
+/**
+ * Bir string'i, TEK TIRNAKLI bir JS string literal'i içine gömülmek üzere kaçışlar.
+ * Alpine ifadelerine derleme-zamanı i18n metni (`x-text="'${t('key')}'"`) gömerken
+ * ZORUNLU: çevirideki apostrof (İngilizce `don't`, `Seller's`) tek tırnağı erken
+ * kapatıp "Unexpected identifier" ile TÜM x-data/expression'ı çökertir.
+ */
+export function escapeJsString(value: unknown): string {
+  return String(value ?? "").replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+}
+
 /** Validate CSS color hex (#abc / #abcdef / #abcdefab) — reject anything else. */
 export function safeHexColor(value: unknown, fallback = "#cccccc"): string {
   const s = String(value ?? "");

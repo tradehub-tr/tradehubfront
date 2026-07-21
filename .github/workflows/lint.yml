@@ -26,6 +26,9 @@ jobs:
       - name: Run ESLint
         run: npm run lint
 
+      - name: Check cross-file duplicate exports
+        run: npm run check:dup
+
       - name: Audit dependencies for vulnerabilities
         run: npm audit --audit-level=moderate
         continue-on-error: true

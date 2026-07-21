@@ -22,7 +22,7 @@ export { BatchSelectBar, initBatchSelectBar } from "./molecules/BatchSelectBar";
 export type { BatchSelectBarProps } from "./molecules/BatchSelectBar";
 
 // Organisms
-export { SupplierCard, initSupplierCards } from "./organisms/SupplierCard";
+export { CartSupplierCard, initSupplierCards } from "./organisms/SupplierCard";
 export type { SupplierCardProps } from "./organisms/SupplierCard";
 export { BuffTaskArrow, initBuffTaskArrow } from "./organisms/BuffTaskArrow";
 export type { BuffTaskArrowProps, ArrowDirection } from "./organisms/BuffTaskArrow";

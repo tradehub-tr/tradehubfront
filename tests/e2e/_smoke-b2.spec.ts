@@ -83,12 +83,13 @@ for (const p of PAGES) {
       return;
     }
 
-    // Yalnız BU modülün x-data ismini içeren hatalar (pre-existing sayfa buglarını
-    // sayma — amaç kendi modülümüzün register olduğunu doğrulamak).
+    // UNSCOPED: sayfadaki HERHANGİ bir Alpine kayıt hatasını yakala (yalnız bu modülün
+    // x-data'sını değil). Bir modülü page-specific yapınca BAŞKA bir x-data'nın kaydını
+    // kaybettiren regresyonları (ör. orders/writeReviewModal) ancak bu yakalar.
     const alpineErrors: string[] = [];
-    const mine = new RegExp(`${p.xdata}\\b.*is not defined|is not defined.*${p.xdata}\\b|Alpine Expression Error.*${p.xdata}\\b`);
-    const capture = (t: string) => { if (mine.test(t) || new RegExp(`\\b${p.xdata}\\b is not defined`).test(t)) alpineErrors.push(t); };
-    page.on("console", (msg) => { if (msg.type() === "error") capture(msg.text()); });
+    const isAlpineErr = /is not defined|Missing initializer|Alpine Expression Error/;
+    const capture = (t: string) => { const line = t.split("\n")[0]; if (isAlpineErr.test(line)) { alpineErrors.push(line.slice(0, 80)); if (process.env.SMOKE_DUMP) console.error(`\n[DUMP ${p.name}] url=${page.url()}\nFULL: ${t.slice(0, 400)}\n`); } };
+    page.on("console", (msg) => { if (msg.type() === "error" || msg.type() === "warning") capture(msg.text()); });
     page.on("pageerror", (err) => capture(String(err)));
 
     if (p.seedCart) {

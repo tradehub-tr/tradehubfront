@@ -1,5 +1,6 @@
 import { getLucideIcon } from "../icons/lucideIcons";
 import { t } from "../../i18n";
+import { escapeJsString } from "../../utils/sanitize";
 
 /**
  * Conversation list sidebar for the chat popup overlay.
@@ -99,7 +100,7 @@ export function InboxPanel(): string {
 
         <template x-if="$store.chatPopup.filteredConversations.length === 0 && !$store.chatPopup.loading">
           <div class="grid place-items-center py-12 text-[12px] text-[var(--color-text-tertiary,#a3a3a3)]">
-            <span x-text="$store.chatPopup.searchQuery.trim() ? '${t("chat.search")} — ${t("chat.emptyInbox")}' : '${t("chat.emptyInbox")}'"></span>
+            <span x-text="$store.chatPopup.searchQuery.trim() ? '${escapeJsString(t("chat.search"))} — ${escapeJsString(t("chat.emptyInbox"))}' : '${escapeJsString(t("chat.emptyInbox"))}'"></span>
           </div>
         </template>
       </div>

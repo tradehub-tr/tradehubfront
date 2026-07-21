@@ -22,6 +22,7 @@ import { showToast } from "../../utils/toast";
 import { openLoginModal } from "./LoginModal";
 import { getCurrentProduct } from "../../alpine/product";
 import { t } from "../../i18n";
+import { escapeJsString } from "../../utils/sanitize";
 
 interface QAState {
   open: boolean;
@@ -353,7 +354,7 @@ export function ProductQA(): string {
                     <div class="flex-1 min-w-0">
                       <div class="text-[13px] text-secondary-800" x-text="a.answer"></div>
                       <div class="text-[11px] text-secondary-400 mt-0.5 flex items-center gap-2 flex-wrap">
-                        <span x-text="a.is_seller_answer ? '${t("product.qa.sellerAnswer")}' : '${t("product.qa.buyerAnswer")}'"></span>
+                        <span x-text="a.is_seller_answer ? '${escapeJsString(t("product.qa.sellerAnswer"))}' : '${escapeJsString(t("product.qa.buyerAnswer"))}'"></span>
                         <span>· <span x-text="formatDate(a.submitted_at)"></span></span>
                         <button
                           type="button"
