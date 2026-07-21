@@ -43,8 +43,8 @@ const COLUMN_CLASSES: Record<number, string> = {
   5: "lg:grid-cols-5",
   6: "lg:grid-cols-6",
 };
-// 2xl'de +2 sütun: kart boyu sabit kalsın diye geniş ekran stretch yerine daha çok
-// kartla dolar (sütun sayısı + container birlikte büyür → sütun-başı px ~sabit).
+// 2xl'de +2 sütun: 1536px+ ekranda (container-boxed 1840px'e kadar akışkan) kartların
+// aşırı büyümesini önlemek için grid daha çok kartla dolar.
 // Literal sınıflar — Tailwind kaynak taraması için bütün halde durmalı.
 const TWOXL_COLUMN_CLASSES: Record<number, string> = {
   5: "2xl:grid-cols-5",
@@ -233,19 +233,17 @@ export function CategoryShowcase(data: ShowcaseData = getCachedShowcase()): stri
   const twoXlColCls = TWOXL_COLUMN_CLASSES[pickTwoXlColumns(data)] ?? "";
   const tilesHtml = data.tiles.map((t) => tileHtml(t, data.columns)).join("");
   return `
-    <div data-category-showcase-root data-showcase-hash='${escapeAttr(hashAttr)}' class="rounded-md bg-gray-50 px-3 py-2 sm:px-4 sm:py-3 lg:py-4">
-      <div class="mx-auto w-full max-w-[1280px] 2xl:max-w-[1680px]">
-        ${
-          title
-            ? `<div class="mb-4 flex items-baseline justify-between gap-3">
-                <h2 class="text-sm sm:text-lg lg:text-xl font-semibold text-gray-900">${escapeText(title)}</h2>
-                <a href="/pages/categories.html" class="inline-flex shrink-0 items-center gap-1 text-xs sm:text-sm font-medium text-gray-600 transition-colors duration-150 hover:text-gray-900 appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary-500,#f5b800)] focus-visible:ring-offset-2 rounded-md motion-reduce:transition-none">${getCurrentLang() === "en" ? "All categories" : "Tüm kategoriler"} ${ARROW_SVG}</a>
-              </div>`
-            : ""
-        }
-        <div class="grid grid-cols-2 ${colCls} ${twoXlColCls} gap-2 sm:gap-4 auto-rows-[85px] sm:auto-rows-[145px] lg:auto-rows-[210px] grid-flow-row-dense">
-          ${tilesHtml}
-        </div>
+    <div data-category-showcase-root data-showcase-hash='${escapeAttr(hashAttr)}'>
+      ${
+        title
+          ? `<div class="mb-4 flex items-baseline justify-between gap-3">
+              <h2 class="text-sm sm:text-lg lg:text-xl font-semibold text-gray-900">${escapeText(title)}</h2>
+              <a href="/pages/categories.html" class="inline-flex shrink-0 items-center gap-1 text-xs sm:text-sm font-medium text-gray-600 transition-colors duration-150 hover:text-gray-900 appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary-500,#f5b800)] focus-visible:ring-offset-2 rounded-md motion-reduce:transition-none">${getCurrentLang() === "en" ? "All categories" : "Tüm kategoriler"} ${ARROW_SVG}</a>
+            </div>`
+          : ""
+      }
+      <div class="grid grid-cols-2 ${colCls} ${twoXlColCls} gap-2 sm:gap-4 auto-rows-[85px] sm:auto-rows-[145px] lg:auto-rows-[210px] grid-flow-row-dense">
+        ${tilesHtml}
       </div>
     </div>
   `;

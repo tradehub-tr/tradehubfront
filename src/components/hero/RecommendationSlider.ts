@@ -34,7 +34,7 @@ function renderCardImage(card: RecommendationCard): string {
     `;
   }
   return `
-    <div class="relative h-full w-full overflow-hidden rounded-md bg-gray-100 flex items-center justify-center" aria-hidden="true">
+    <div class="relative h-full w-full overflow-hidden rounded-md bg-white flex items-center justify-center" aria-hidden="true">
       <img
         src="${escapeHtml(sanitizeUrl(card.imageSrc))}"
         alt="${escapeHtml(card.title)}"

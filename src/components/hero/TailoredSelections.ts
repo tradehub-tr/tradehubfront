@@ -35,12 +35,12 @@ const tailoredCollections: TailoredCollection[] = [];
 
 function renderProductImage(product: CollectionProduct): string {
   return `
-    <div class="relative h-full w-full overflow-hidden rounded-md bg-gray-100" aria-hidden="true">
+    <div class="relative h-full w-full overflow-hidden rounded-md bg-white" aria-hidden="true">
       <img
         src="${escapeHtml(sanitizeUrl(product.imageSrc))}"
         alt="${escapeHtml(product.name)}"
         loading="lazy"
-        class="w-full h-full object-cover"
+        class="w-full h-full object-contain"
       />
     </div>
   `;

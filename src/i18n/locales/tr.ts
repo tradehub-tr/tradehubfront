@@ -1024,7 +1024,7 @@ const tr = {
       taxOffice: "Vergi Dairesi",
       lockedHint: "Bu bilgi kayıt/doğrulama ile yönetilir; değiştirmek için destek ile iletişime geçin.",
       mainMarkets: "Ana Pazarlar",
-      mainMarketsPlaceholder: "Türkiye, AB, Orta Doğu...",
+      mainMarketsPlaceholder: "Global, Avrupa, Orta Doğu, ABD...",
       contactInfo: "İletişim Bilgileri",
       address: "Adres",
       addressPlaceholder: "Sokak, Mahalle...",
@@ -1325,7 +1325,10 @@ const tr = {
       goToCart: "Sepete Git",
       signIn: "Giriş Yap",
       joinFree: "Ücretsiz Üye Ol",
-      signBackIn: "Devam etmek için tekrar giriş yapın",
+      welcomeBack: "Tekrar hoş geldiniz",
+      welcomeBackDesc: "Sepetiniz ve siparişleriniz sizi bekliyor.",
+      noAccount: "Hesabınız yok mu?",
+      signUp: "Kayıt Olun",
       continueWith: "Veya şununla devam edin:",
       socialAgree: "Sosyal medya ile giriş yaparak şunları kabul ediyorum:",
       freeAgreement: "Ücretsiz Üyelik Sözleşmesi",
@@ -1571,8 +1574,8 @@ const tr = {
       pressRoom: "Basın Odası",
       securityAtIstoc: "iStoc'ta Güvenlik",
       sustainability: "Sürdürülebilirlik",
-      changeCountry: "Ülke Değiştir",
-      countryValue: "Türkiye — Türkçe · TRY",
+      changeCountry: "Dil ve Para Birimi",
+      countryValue: "Türkçe · TRY",
       safeShopping: "Güvenli Alışveriş",
       securityCert: "Güvenlik Sertifikası",
       cookiePrefs: "Çerez Tercihleri",
@@ -2906,7 +2909,7 @@ const tr = {
         "Satış vergisi, hükümetler tarafından mal ve hizmetlerin satışına uygulanan bir tüketim vergisidir. Genellikle satın alma fiyatının yüzdesi olarak hesaplanır.",
       whatIsVat: "KDV nedir?",
       whatIsVatAnswer:
-        "KDV (Katma Değer Vergisi), üretim ve dağıtımın her aşamasında uygulanan bir vergi türüdür. Avrupa ve diğer birçok ülkede yaygın olarak kullanılır.",
+        "KDV (Katma Değer Vergisi), bir ürün veya hizmetin üretim ve dağıtımının her aşamasında eklenen değer üzerinden alınan bir tüketim vergisidir. Dünya genelinde 170'ten fazla ülkede uygulanır ve bazı ülkelerde GST (Mal ve Hizmet Vergisi) olarak adlandırılır. Oran ve kurallar ülkeye göre değişir.",
       faqHowToApplyRefund: "İade başvurusu nasıl yapılır?",
       faqHowToApplyRefundAnswer:
         'Siparişler sayfanızdaki İadeler bölümünden iade başvurusu yapabilirsiniz. Siparişe tıklayın ve "İade Talebi" seçeneğini seçin.',
@@ -4453,6 +4456,7 @@ const tr = {
       views_24h: "Son 24 saatte {{value}} görüntülenme",
       distinct_buyers: "Son {{days}} günde {{value}} işletme bu üründen aldı",
       seller_orders: "Bu satıcıdan {{value}} tamamlanmış sipariş",
+      new: "Yeni ürün",
     },
 
     // Kart şeridi için kısa set — tek satıra sığmalı (spec: 2026-07-07-listing-social-proof-strip)
@@ -4463,6 +4467,7 @@ const tr = {
       views_24h: "24 saatte {{value}} görüntülenme",
       distinct_buyers: "{{days}} günde {{value}} firma aldı",
       seller_orders: "{{value}} tamamlanmış sipariş",
+      new: "Yeni ürün",
     },
 
     // ============================================================
@@ -7026,8 +7031,8 @@ const tr = {
       },
       manufacturerPlatform: "Üretici platformu",
       heroSubtitle:
-        "iStoc, Türkiye'deki üreticileri dünyanın dört bir yanındaki B2B alıcılarıyla aracısız buluşturur. Listele, sat, sevk et — komisyon yok.",
-      heroImageAlt: "Türkiye'den dünyaya ihracat: liman ve konteyner lojistiği",
+        "iStoc, üreticileri dünyanın dört bir yanındaki B2B alıcılarıyla aracısız buluşturur. Listele, sat, sevk et — komisyon yok.",
+      heroImageAlt: "Dünya çapında B2B ihracat: liman ve konteyner lojistiği",
       applyAsSeller: "Satıcı başvurusu yap",
       howItWorks: "Nasıl çalışır?",
       unlimited: "Sınırsız",
@@ -7093,7 +7098,7 @@ const tr = {
       sellerPackages: "Satıcı paketleri",
       pricingSectionTitle: "Hangi ölçekteysen, o paketi seç.",
       pricingSectionDesc:
-        "Tüm paketler aynı işi yapar: senin ürününü Avrupa'lı alıcıya ulaştırır. Üst paketler komisyonu düşürür, vitrini büyütür, destek seviyesini artırır.",
+        "Tüm paketler aynı işi yapar: senin ürününü dünyanın dört bir yanındaki alıcıya ulaştırır. Üst paketler komisyonu düşürür, vitrini büyütür, destek seviyesini artırır.",
       period: "Periyot",
       yearlyToggle: "Yıllık",
       monthlyToggle: "Aylık",
@@ -7117,7 +7122,7 @@ const tr = {
       days14to21: "14 — 21 gün",
       b2bWholesaleFocused: "B2B / toptan odaklı",
       mixed: "Karma",
-      dedicatedTurkishSupport: "Türkiye üreticisine özel destek",
+      dedicatedTurkishSupport: "Üreticilere özel destek",
       extraFee: "Ek ücret",
       restricted: "Kısıtlı",
       comparisonDisclaimer:
@@ -7797,7 +7802,6 @@ const tr = {
     // Region options
     regionGlobal: "Küresel sıralama",
     regionUS: "ABD sıralaması",
-    regionEurope: "Avrupa sıralaması",
 
     // General
     allCategories: "Tüm kategoriler",

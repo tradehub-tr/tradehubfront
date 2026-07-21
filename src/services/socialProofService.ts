@@ -25,7 +25,10 @@ export type SignalType =
   | "cart_now"
   | "views_24h"
   | "distinct_buyers"
-  | "seller_orders";
+  | "seller_orders"
+  // Fallback — eşik geçen gerçek sinyal olmayan (yeni/düşük trafik) ürünlerde
+  // backend'in döndürdüğü "Yeni ürün" rozeti. value taşımaz.
+  | "new";
 
 export interface Signal {
   type: SignalType;

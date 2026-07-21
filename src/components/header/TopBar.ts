@@ -688,14 +688,20 @@ function renderAuthButtons(): string {
         id="auth-dropdown-button"
         data-dropdown-toggle="auth-dropdown-menu"
         data-dropdown-placement="bottom-end"
-        class="th-no-press inline-flex items-center gap-1.5 px-2 py-1.5 text-[14px] font-normal rounded-md hover:bg-gray-50 transition-colors cursor-pointer"
-        aria-label="Sign in"
+        data-tooltip-target="tooltip-auth-signin"
+        data-tooltip-placement="bottom"
+        class="th-no-press inline-flex items-center px-2 py-1.5 rounded-md hover:bg-gray-50 transition-colors cursor-pointer"
+        aria-label="${t("header.signIn")}"
+        data-i18n-aria-label="header.signIn"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/>
         </svg>
-        <span class="hidden sm:inline" data-i18n="header.signIn">${t("header.signIn")}</span>
       </button>
+      <div id="tooltip-auth-signin" role="tooltip" class="absolute z-50 invisible inline-block whitespace-nowrap px-2.5 py-1.5 text-xs font-semibold text-white bg-[#222] rounded-md shadow-md opacity-0 tooltip">
+        <span data-i18n="header.signIn">${t("header.signIn")}</span>
+        <div class="tooltip-arrow" data-popper-arrow></div>
+      </div>
 
       <!-- Auth Dropdown Menu -->
       <div
@@ -704,13 +710,18 @@ function renderAuthButtons(): string {
       >
         <!-- Sign in CTA -->
         <div class="px-5 pb-3">
-          <p class="text-[15px] font-semibold text-[#222] mb-3"><span data-i18n="header.signBackIn">${t("header.signBackIn")}</span></p>
+          <p class="text-[15px] font-bold text-[#222] mb-0.5"><span data-i18n="header.welcomeBack">${t("header.welcomeBack")}</span></p>
+          <p class="text-[13px] text-gray-500 mb-3.5"><span data-i18n="header.welcomeBackDesc">${t("header.welcomeBackDesc")}</span></p>
           <a
             href="${baseUrl}pages/auth/login.html"
             class="block w-full text-center th-btn"
           >
             <span data-i18n="header.signIn">${t("header.signIn")}</span>
           </a>
+          <p class="text-xs text-gray-500 text-center mt-3 mb-0">
+            <span data-i18n="header.noAccount">${t("header.noAccount")}</span>
+            <a href="${baseUrl}pages/auth/register.html" class="font-bold hover:underline" style="color:var(--btn-bg,#d97706)"><span data-i18n="header.signUp">${t("header.signUp")}</span></a>
+          </p>
         </div>
 
       </div>

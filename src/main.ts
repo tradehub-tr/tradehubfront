@@ -94,15 +94,11 @@ appEl.innerHTML = `
     <!-- Top Hero: Split hero — Sarı İmza slider + En İyi Fırsatlar/RFQ yan paneli -->
     <section class="pt-1 pb-2 xl:pt-3 xl:pb-4" aria-label="${t("commonNav.featuredCampaigns")}">
       <div class="container-boxed">
-        <div class="rounded-md bg-gray-50 px-3 py-2 sm:px-4 sm:py-3 lg:py-4">
-          <div class="mx-auto w-full max-w-[1280px] 2xl:max-w-[1680px]">
-            <div class="grid gap-3 xl:grid-cols-[minmax(0,1fr)_312px]">
-              <div class="h-[280px] min-w-0 sm:h-[360px]">
-                ${HeroTopSlider()}
-              </div>
-              ${HeroSidePanel()}
-            </div>
+        <div class="grid gap-3 xl:grid-cols-[minmax(0,1fr)_312px]">
+          <div class="h-[280px] min-w-0 sm:h-[360px]">
+            ${HeroTopSlider()}
           </div>
+          ${HeroSidePanel()}
         </div>
       </div>
     </section>

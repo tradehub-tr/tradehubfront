@@ -29,6 +29,7 @@ const ICON_MAP: Record<SignalType, string> = {
   views_24h: "eye",
   distinct_buyers: "building-2",
   seller_orders: "shield-check",
+  new: "sparkles",
 };
 
 interface Init {

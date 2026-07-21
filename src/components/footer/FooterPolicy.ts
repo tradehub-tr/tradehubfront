@@ -2,7 +2,7 @@
  * FooterPolicy Component (Siyah Bant)
  * Near-black kapanış bandı: sosyal ikonlar solda, app rozetleri sağda,
  * altta hairline ile ayrılmış TEK satır telif metni.
- * Politika linkleri artık ana bölgedeki politika satırında (FooterLinks).
+ * Politika linkleri ana bölgedeki politika satırında (FooterLinks).
  */
 
 import type { NavLink } from "../../types/navigation";

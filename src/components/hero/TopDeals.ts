@@ -59,7 +59,7 @@ function renderDealImage(card: TopDealCard): string {
       src="${escapeHtml(sanitizeUrl(card.imageSrc))}"
       alt="${escapeHtml(card.name)}"
       loading="lazy"
-      class="w-full h-full object-cover transition-transform duration-200 ease-out motion-reduce:transition-none motion-reduce:transform-none group-hover/deal:scale-110"
+      class="w-full h-full object-contain transition-transform duration-200 ease-out motion-reduce:transition-none motion-reduce:transform-none group-hover/deal:scale-110"
     />
   `;
 }
@@ -92,7 +92,7 @@ function renderDealCard(card: TopDealCard): string {
       aria-label="${escapeHtml(card.name)}"
     >
       <!-- Image with discount badge overlay -->
-      <div class="relative aspect-square w-full mb-2 flex-shrink-0 overflow-hidden rounded-md bg-gray-100">
+      <div class="relative aspect-square w-full mb-2 flex-shrink-0 overflow-hidden rounded-md bg-white">
         ${discountBadge}
         ${renderDealImage(card)}
       </div>
