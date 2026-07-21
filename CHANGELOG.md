@@ -1,3 +1,22 @@
+## [v2.1.0-alpha.7] - 2026-07-21 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(ui): "Yeni ürün" rozeti ve dil/para seçicili footer eklendi (@ahmeetseker)
+  - Sinyali olmayan ürünlerde "Yeni ürün" fallback rozeti eklendi (new sinyal tipi, sparkles ikonu, 4 dilde metin)
+  - Footer'da statik "Ülke Değiştir" kolonu yerine işlevsel dil + para birimi seçici popover eklendi
+  - Footer SEO linkleri (marka/mağaza/kategori) backend get_footer_seo_links endpoint'inden hydrate ediliyor (30 dk sessionStorage cache, gerçek pretty URL'ler)
+  - Ürün galerisinde 4'ten fazla görselde "+N" karosu eklendi; lightbox tek kolonlu buzlu-cam thumbnail şeridine geçti; oklar ve favori butonu 44px WCAG hedefine büyütüldü
+  - ProductGrid'deki kart kopyası silinip ortak ListingCard'a bağlandı; statik selling point/tedarikçi bloğu kaldırıldı, alan tamamen sosyal kanıta bırakıldı
+  - Ürün görselleri beyaz zemin + object-contain standardına geçti; grid gap 16px, listeleme 5 kolon, ProductGrid 2xl'de 7 kolon
+  - TopBar giriş butonu ikon + tooltip'e dönüştü; auth dropdown "Tekrar hoş geldiniz" düzeni ve kayıt CTA'sı eklendi
+  - İçerik metinleri globalleştirildi ("Avrupa pazarı" → "Global pazar"); Help Center alt politika şeridi kaldırıldı
+
+### Duzeltildi
+- fix(top-ranking): kategori dropdown'ı sıralama çubuğunun altında kalıyordu (@TurksabYonetim)
+
+---
 ## [v2.1.0-alpha.6] - 2026-07-21 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
