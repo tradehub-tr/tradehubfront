@@ -1,3 +1,11 @@
+## [v2.1.0-alpha.9] - 2026-07-21 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(seller): mağaza sayfasında 80 ürün sınırını kaldır (@boraydeger32)
+
+---
 ## [v2.1.0-alpha.8] - 2026-07-21 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
