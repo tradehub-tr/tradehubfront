@@ -63,7 +63,8 @@ export function initProductListingGrid(): void {}
  * Grid Configuration (per spec):
  * - Mobile (< 768px): 2 columns
  * - Tablet (768px - 1023px): 3 columns
- * - Desktop (1024px+): 4 columns
+ * - Desktop (1024px - 1279px): 3 columns
+ * - Wide desktop (1280px+): 5 columns
  * See src/style.css .product-grid for CSS implementation
  *
  * Hover Zoom Effect:
@@ -75,8 +76,8 @@ export function ProductListingGrid(products: ProductListingCard[] = []): string 
     return `
       <section aria-label="${t("products.productList")}" class="flex-1">
         <div
-          class="group/grid grid grid-cols-2 lg:grid-cols-3 min-[1280px]:grid-cols-4 data-[list-mode=list]:!grid-cols-1 data-[list-mode=list]:!gap-3 product-grid"
-          style="gap: var(--product-grid-gap, 12px);"
+          class="group/grid grid grid-cols-2 lg:grid-cols-3 min-[1280px]:grid-cols-5 data-[list-mode=list]:!grid-cols-1 data-[list-mode=list]:!gap-3 product-grid"
+          style="gap: var(--product-grid-gap, 16px);"
           data-list-mode="grid"
           role="list"
           aria-label="${t("products.productListLabel")}"
@@ -90,8 +91,8 @@ export function ProductListingGrid(products: ProductListingCard[] = []): string 
   return `
     <section aria-label="${t("products.productList")}" class="flex-1">
       <div
-        class="group/grid grid grid-cols-2 lg:grid-cols-3 min-[1280px]:grid-cols-4 data-[list-mode=list]:!grid-cols-1 data-[list-mode=list]:!gap-3 product-grid"
-        style="gap: var(--product-grid-gap, 12px);"
+        class="group/grid grid grid-cols-2 lg:grid-cols-3 min-[1280px]:grid-cols-5 data-[list-mode=list]:!grid-cols-1 data-[list-mode=list]:!gap-3 product-grid"
+        style="gap: var(--product-grid-gap, 16px);"
         data-list-mode="grid"
         role="list"
         aria-label="${t("products.productListLabel")}"

@@ -143,22 +143,9 @@ export function HelpCenterLayout(): string {
           </div>
         </div>
 
-        <!-- ── Useful Links Strip ─────────────── -->
+        <!-- ── Copyright Strip ─────────────── -->
         <div class="bg-white rounded-md shadow-sm border border-gray-100 px-6 py-5">
-          <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[12px] text-gray-500">
-            <a href="/urun-listeleme-kurallari" class="hover:text-primary-500 transition-colors duration-150 motion-reduce:transition-none" data-i18n="help.productListingPolicy">${t("help.productListingPolicy")}</a>
-            <span class="text-gray-200">|</span>
-            <a href="/fikri-mulkiyet" class="hover:text-primary-500 transition-colors duration-150 motion-reduce:transition-none" data-i18n="help.ipProtection">${t("help.ipProtection")}</a>
-            <span class="text-gray-200">|</span>
-            <a href="/gizlilik" class="hover:text-primary-500 transition-colors duration-150 motion-reduce:transition-none" data-i18n="help.privacyPolicy">${t("help.privacyPolicy")}</a>
-            <span class="text-gray-200">|</span>
-            <a href="/kullanim-kosullari" class="hover:text-primary-500 transition-colors duration-150 motion-reduce:transition-none" data-i18n="help.termsOfUse">${t("help.termsOfUse")}</a>
-            <span class="text-gray-200">|</span>
-            <a href="/yasal-uyari" class="hover:text-primary-500 transition-colors duration-150 motion-reduce:transition-none" data-i18n="help.userInfoLaws">${t("help.userInfoLaws")}</a>
-            <span class="text-gray-200">|</span>
-            <a href="contact.html" class="hover:text-primary-500 transition-colors duration-150 motion-reduce:transition-none" data-i18n="help.contactGuide">${t("help.contactGuide")}</a>
-          </div>
-          <p class="text-center text-[11px] text-gray-400 mt-3" data-i18n="help.copyright">${t("help.copyright")}</p>
+          <p class="text-center text-[11px] text-gray-400" data-i18n="help.copyright">${t("help.copyright")}</p>
         </div>
 
       </div><!-- /main content -->

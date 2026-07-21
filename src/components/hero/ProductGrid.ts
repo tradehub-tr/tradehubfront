@@ -1,160 +1,56 @@
 /**
  * ProductGrid Component
- * Themeable product card grid with Tailwind layout + CSS variable theming.
+ * Ana sayfa ürün vitrini — liste/arama sayfasıyla AYNI kartı kullanır
+ * (shared/ListingCard) ama butonsuz: `renderListingCard(card, { showActions: false })`.
+ * Tek kart bileşeni birden çok sayfada → "az kod, çok yer" (DRY).
+ *
+ * Veri kaynağı zaten ortak: searchListings() → ProductListingCard[]. Eski sürüm
+ * bu veriyi ayrı bir ProductCard tipine yeniden map'leyip ayrı renderProductCard
+ * ile basıyordu; o kopya kaldırıldı.
  */
-import { t } from "../../i18n";
-import { localizePriceString } from "../../utils/currency";
 import { searchListings } from "../../services/listingService";
 import { initCurrency } from "../../services/currencyService";
-import { getListingUrl } from "../../utils/listingUrl";
-import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
-
-interface ProductCard {
-  name: string;
-  href: string;
-  price: string;
-  discountPercent?: number;
-  moqCount: number;
-  moqUnit: "pcs" | "kg";
-  soldCount: string;
-  imageSrc: string;
-  supplierYearCount?: number;
-  supplierCountry?: string;
-}
-
-const productCardSeed: ProductCard[] = [];
-
-// Camera/lens search icon - DISABLED
-// function lensIcon(): string {
-//   return `
-//     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-//       <path d="M3 9a2 2 0 0 1 2-2h2l1-2h8l1 2h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z" />
-//       <circle cx="12" cy="13" r="3" />
-//     </svg>
-//   `;
-// }
-
-function renderProductCard(card: ProductCard, index: number): string {
-  const safeName = escapeHtml(card.name);
-  const unitLabel = card.moqUnit === "kg" ? t("productGrid.kg") : t("productGrid.pcs");
-  const moqText = `${card.moqCount} ${unitLabel}`;
-  const soldText = "";
-  const discountText = card.discountPercent
-    ? t("productGrid.discount", { percent: card.discountPercent })
-    : "";
-  const supplierYearsText = card.supplierYearCount
-    ? `${card.supplierYearCount} ${t("productGrid.yr")}`
-    : "";
-
-  // ──────────────────────────────────────────────────────────────
-  // DISABLED: "Find similar" (visual search) button
-  // İleride tekrar etkinleştirmek için:
-  //   1) Yukarıdaki lensIcon() fonksiyonunun yorumunu kaldır
-  //   2) Aşağıdaki lensButtonHtml'i kullan ve return template'ine ekle:
-  //      ${lensButtonHtml}  (image-area div'inin içine)
-  //
-  // const lensButtonHtml = `
-  //   <div class="product-card__lens-wrap absolute">
-  //     <div
-  //       class="product-card__lens flex relative items-center justify-center w-full h-full rounded-full"
-  //       role="button"
-  //       aria-label="${t('productGrid.findSimilar')}"
-  //       data-i18n-aria-label="productGrid.findSimilar"
-  //       tabindex="0"
-  //     >
-  //       ${lensIcon()}
-  //     </div>
-  //   </div>
-  // `;
-  // ──────────────────────────────────────────────────────────────
-
-  return `
-    <a
-      class="product-card flex flex-col relative w-full gap-2 overflow-hidden text-sm leading-[18px] text-start no-underline animate-fade-slide-up max-sm:!min-h-0 max-sm:!p-2"
-      style="animation-delay: ${index * 60}ms;"
-      href="${escapeHtml(sanitizeUrl(card.href))}"
-      target="_blank"
-      aria-label="${safeName}"
-    >
-      <!-- Image area -->
-      <div class="product-card__image-area relative aspect-square w-full overflow-hidden bg-[var(--product-image-bg,#f5f5f5)]">
-        <div class="product-card__image-wrap absolute inset-0 overflow-hidden leading-[0] flex items-center justify-center">
-          <img
-            class="product-card__img block w-full h-full object-contain origin-center"
-            src="${escapeHtml(sanitizeUrl(card.imageSrc))}"
-            alt="${safeName}"
-            loading="lazy"
-          />
-        </div>
-        <!-- Find similar (visual search) button - DISABLED: re-enable using lensButtonHtml above -->
-      </div>
-
-      <!-- Content area -->
-      <div class="flex flex-col gap-1.5 sm:gap-2 w-full min-h-0 sm:min-h-[126px]">
-        <div class="flex flex-col gap-1.5 sm:gap-2">
-          <!-- Title (2 lines mobile, 3 lines desktop) -->
-          <div class="product-card__title-wrap h-[32px] sm:h-[54px] overflow-hidden">
-            <div class="product-card__title line-clamp-2 sm:line-clamp-3 h-[32px] sm:h-[54px] max-sm:!text-xs max-sm:!leading-[1.3]">
-              <span title="${safeName}">${safeName}</span>
-            </div>
-          </div>
-
-          <div class="flex flex-col gap-px">
-            <!-- Price + discount -->
-            <div class="flex flex-wrap items-center gap-1 min-h-[26px] overflow-hidden">
-              <div class="product-card__price overflow-hidden max-sm:!text-sm max-sm:!leading-5">${localizePriceString(card.price)}</div>
-              ${discountText ? `<div class="product-card__discount max-sm:!text-[11px]">${discountText}</div>` : ""}
-            </div>
-
-            <!-- MOQ + sold -->
-            <div class="product-card__moq-line overflow-hidden h-[18px] leading-[18px] max-sm:!text-[11px]">
-              <div class="product-card__moq inline me-1 max-sm:!text-[11px]"><bdi>${moqText}</bdi></div>
-              ${soldText ? `<span class="product-card__stats" title="${soldText}">${soldText}</span>` : ""}
-            </div>
-
-            <!-- Supplier info -->
-            <div class="product-card__supplier flex items-center min-h-[18px] pt-0.5 leading-4">
-              ${supplierYearsText ? `<span class="product-card__supplier-text block overflow-hidden text-ellipsis max-sm:!text-[10px]">${supplierYearsText}</span>` : ""}
-              ${card.supplierCountry ? `<span class="product-card__supplier-text block overflow-hidden text-ellipsis max-sm:!text-[10px]">${escapeHtml(card.supplierCountry)}</span>` : ""}
-            </div>
-          </div>
-        </div>
-      </div>
-    </a>
-  `;
-}
+import { renderListingCard, initProductSliders } from "../shared/ListingCard";
+import {
+  initListingFavoriteTriggers,
+  syncListingFavoriteHearts,
+} from "../products/initListingFavorites";
+import { applyListingSocialProof } from "../products/initListingSocialProof";
 
 /** Load real products from API and re-render the grid. */
 export function initProductGrid(): void {
-  initCurrency()
-    .then(() => searchListings({ page_size: 12 }))
-    .then((result) => {
-      if (result.products.length > 0) {
-        // Hide empty state
-        const emptyState = document.getElementById("product-grid-empty");
-        if (emptyState) emptyState.style.display = "none";
+  // Kart etkileşimleri (slider okları/dot, favori kalbi) document-delegation +
+  // idempotent guard'lı — grid basılmadan önce bağlanması güvenli.
+  initProductSliders();
+  initListingFavoriteTriggers();
 
-        const grid = document.getElementById("home-product-grid");
-        if (grid) {
-          grid.innerHTML = result.products
-            .map((p, i) => {
-              const card: ProductCard = {
-                name: p.name,
-                href: getListingUrl({ id: p.id, href: p.href }),
-                price: p.price,
-                discountPercent: p.discount ? parseInt(p.discount) : undefined,
-                moqCount: parseInt(p.moq) || 1,
-                moqUnit: "pcs",
-                soldCount: p.stats?.replace(/[^\d.]/g, "") || "0",
-                imageSrc: p.imageSrc || "",
-                supplierYearCount: p.supplierYears,
-                supplierCountry: p.supplierCountry,
-              };
-              return `<div role="listitem">${renderProductCard(card, i)}</div>`;
-            })
-            .join("");
-        }
-      }
+  initCurrency()
+    // 14 = büyük ekran gridinin (2xl: 7 kolon) tam 2 satırı — alt satırda boşluk kalmasın.
+    .then(() => searchListings({ page_size: 14 }))
+    .then((result) => {
+      if (result.products.length === 0) return;
+
+      // Hide empty state
+      const emptyState = document.getElementById("product-grid-empty");
+      if (emptyState) emptyState.style.display = "none";
+
+      const grid = document.getElementById("home-product-grid");
+      if (!grid) return;
+
+      // Liste sayfasıyla birebir aynı kart; ana sayfa vitrini aksiyon butonlarını
+      // ve "Minimum sipariş" (MOQ) satırını gizler, görseli kırpmadan kare sığdırır.
+      grid.innerHTML = result.products
+        .map(
+          (card) =>
+            `<div role="listitem" class="flex">${renderListingCard(card, { showActions: false, showMoq: false, containImage: true })}</div>`
+        )
+        .join("");
+
+      // Kartlar DOM'a girdi → favori kalplerini mevcut favori durumuna göre doldur.
+      syncListingFavoriteHearts();
+      // Sosyal kanıt: sinyali olan kartların ad↔fiyat arası slotunu dinamik
+      // (dönen) etiketle doldur — grid innerHTML yazıldıktan SONRA çağrılır.
+      applyListingSocialProof(result.products);
     })
     .catch((err) => console.warn("[ProductGrid] API load failed:", err));
 }
@@ -167,25 +63,22 @@ export function ProductGrid(): string {
       style="background-color: var(--product-bg, #f4f4f4); padding-top: 28px; padding-bottom: 28px;"
     >
       <div class="container-wide">
-        <div id="home-product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 product-grid home-product-grid" style="gap: var(--product-grid-gap, 8px);" role="list" aria-label="Product listings">
-          ${
-            productCardSeed.length > 0
-              ? productCardSeed
-                  .map(
-                    (card, index) => `<div role="listitem">${renderProductCard(card, index)}</div>`
-                  )
-                  .join("")
-              : `
+        <div
+          id="home-product-grid"
+          class="group/grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-7 product-grid home-product-grid"
+          style="gap: var(--product-grid-gap, 16px);"
+          data-list-mode="grid"
+          role="list"
+          aria-label="Product listings"
+        >
           <div id="product-grid-empty" class="col-span-full flex items-center justify-center py-12">
             <div class="text-center">
               <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
               </svg>
-              <p class="text-sm text-gray-400">Yak\u0131nda yeni \u00fcr\u00fcnler eklenecek</p>
+              <p class="text-sm text-gray-400">Yakında yeni ürünler eklenecek</p>
             </div>
           </div>
-          `
-          }
         </div>
       </div>
     </section>

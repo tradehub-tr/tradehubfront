@@ -358,14 +358,18 @@ appEl.innerHTML = `
     </div>
 
     <!-- Sort pills (always sticky) -->
-    <div id="sticky-tabs" class="sticky top-0 z-20 bg-surface transition-shadow duration-200">
+    <!-- z-10: hero section (z-20) üstünde açılan kategori dropdown paneli (z-30) bu
+         çubuğun üstünde kalsın; eşit z-index'te DOM-sonra olan bu çubuk paneli örtüyordu -->
+    <div id="sticky-tabs" class="sticky top-0 z-10 bg-surface transition-shadow duration-200">
       <div class="container-boxed">
         ${TopRankingSortPills()}
       </div>
     </div>
 
     <!-- Ranking Grid -->
-    <section class="pb-8 lg:pb-12" style="background: var(--products-bg, #f9fafb);">
+    <!-- isolate: kart anchor'larının z-10'u bu bölümde hapsolur, sticky sıralama
+         barının (z-10) scroll'da üstüne çıkamaz -->
+    <section class="isolate pb-8 lg:pb-12" style="background: var(--products-bg, #f9fafb);">
       <div class="container-boxed">
         ${TopRankingGrid()}
       </div>

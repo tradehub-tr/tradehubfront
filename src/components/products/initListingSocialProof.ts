@@ -31,6 +31,7 @@ const ICON_MAP: Record<SignalType, string> = {
   views_24h: "eye",
   distinct_buyers: "building-2",
   seller_orders: "shield-check",
+  new: "sparkles",
 };
 
 // Sinyal tipi → metin+ikon rengi (spec: renk sistemi tablosu)
@@ -41,6 +42,7 @@ const COLOR_MAP: Record<SignalType, string> = {
   views_24h: "text-blue-600",
   distinct_buyers: "text-violet-600",
   seller_orders: "text-teal-700",
+  new: "text-emerald-600",
 };
 
 const TICKER_TRANSITION = "transform 240ms cubic-bezier(0.23,1,0.32,1)";

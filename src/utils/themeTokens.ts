@@ -1676,7 +1676,7 @@ export const sectionEditors: SectionEditor[] = [
       {
         var: "--product-grid-gap",
         type: "range",
-        default: 8,
+        default: 16,
         min: 4,
         max: 32,
         step: 1,

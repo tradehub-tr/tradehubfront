@@ -35,12 +35,12 @@ const tailoredCollections: TailoredCollection[] = [];
 
 function renderProductImage(product: CollectionProduct): string {
   return `
-    <div class="relative h-full w-full overflow-hidden rounded-md bg-gray-100" aria-hidden="true">
+    <div class="relative h-full w-full overflow-hidden rounded-md bg-white" aria-hidden="true">
       <img
         src="${escapeHtml(sanitizeUrl(product.imageSrc))}"
         alt="${escapeHtml(product.name)}"
         loading="lazy"
-        class="w-full h-full object-cover"
+        class="w-full h-full object-contain"
       />
     </div>
   `;
@@ -57,7 +57,10 @@ function renderCollectionSlide(collection: TailoredCollection): string {
   const viewsHtml =
     countNum > 0
       ? `<p class="truncate text-[11px] sm:text-[13px] md:text-[16px]" style="color: var(--tailored-views-color, #767676); margin: 0 0 8px;"><span data-i18n="tailored.views" data-i18n-options='${JSON.stringify({ count: formattedCount })}'>${t("tailored.views", { count: formattedCount })}</span></p>`
-      : '<div style="margin: 0 0 8px;"></div>';
+      : // Görüntüleme yoksa da aynı satır yüksekliğini rezerve et — aksi halde
+        // kart bir metin satırı kadar kısalıp görselleri diğer kartlarla hizasız kalır.
+        // Aynı font sınıfları + &nbsp; her kırılımda birebir aynı line-box yüksekliğini verir.
+        `<p class="truncate text-[11px] sm:text-[13px] md:text-[16px]" aria-hidden="true" style="margin: 0 0 8px;">&nbsp;</p>`;
   return `
     <div class="swiper-slide tailored-slide">
       <a

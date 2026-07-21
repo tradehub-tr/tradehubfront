@@ -572,11 +572,13 @@
   --product-card-border-width: 0px;
   --product-card-shadow: none;
   --product-card-hover-shadow: none;
-  --product-grid-gap: 8px;
+  --product-grid-gap: 16px;
   --product-font-family:
     Inter, "SF Pro Text", Roboto, "Helvetica Neue", Helvetica, Tahoma, Arial, "PingFang SC",
     "Microsoft YaHei", sans-serif;
-  --product-image-bg: var(--color-surface);
+  /* Ürün görselleri beyaz zeminde (Amazon/Alibaba standardı) — object-contain'in
+     bıraktığı boşluk beyazla dolar, kartlar tutarlı görünür. Uzak tema override edebilir. */
+  --product-image-bg: #ffffff;
   --product-image-radius: 8px;
   --product-image-padding: 0px;
   --product-image-size: 209px;
@@ -1579,7 +1581,9 @@
 
   .product-card {
     min-height: var(--product-card-min-height, 384px);
-    padding: var(--product-card-padding, 12px);
+    /* Görsel kenara sıfır (Amazon/Trendyol tarzı) — kart padding'i kaldırıldı,
+       boşluk yalnızca alttaki metin bloğunda (ProductGrid.ts px/pb). */
+    padding: 0;
     font-family: var(
       --product-font-family,
       Inter,
@@ -1600,20 +1604,18 @@
     box-shadow: var(--product-card-shadow, none);
   }
 
-  .product-card::before,
-  .product-card::after {
-    content: "";
-    display: block;
-  }
-
   .product-card__image-area {
-    width: min(100%, var(--product-image-size, 209px));
-    margin: 0 auto;
+    /* Görsel kolonu tam doldurur (desktop dahil). Eski `min(100%, 209px)` sınırı
+       geniş kolonlarda görseli 209px'te tutup ortalayarak yanlarda boşluk bırakıyordu. */
+    width: 100%;
     aspect-ratio: var(--product-image-ratio, 1 / 1);
+    /* Kenara sıfır görselde yalnız üst köşeler karta göre yuvarlak; alt köşeler
+       metne aktığı için düz. overflow-hidden (HTML class) hover-zoom'u da kırpar. */
+    border-radius: var(--product-card-radius, 8px) var(--product-card-radius, 8px) 0 0;
   }
 
   .product-card__image-wrap {
-    border-radius: var(--product-image-radius, 8px);
+    border-radius: 0;
     background: var(--product-image-bg, #ffffff);
     padding: var(--product-image-padding, 0px);
   }
@@ -1627,7 +1629,7 @@
   }
 
   .product-card__img {
-    border-radius: var(--product-image-radius, 8px);
+    border-radius: 0;
     transition: transform 0.25s cubic-bezier(0.23, 1, 0.32, 1);
   }
 
