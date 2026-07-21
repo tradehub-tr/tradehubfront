@@ -346,6 +346,9 @@ Alpine.data("imageGallery", () => ({
   currentIndex: 0,
   lightboxIndex: 0,
   isLightboxOpen: false,
+  // Ray galerisi: 4'ten fazla görselde ilk 4 + "+N" karosu gösterilir (Baymard
+  // işaret kuralı); karoya tıklayınca tamamı açılır.
+  thumbsExpanded: false,
   isZooming: false,
   supportsHoverZoom: false,
   imageCount: currentProduct.images.length,

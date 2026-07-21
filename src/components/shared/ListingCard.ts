@@ -17,6 +17,25 @@ export interface ListingCardOptions {
   showDiscount?: boolean;
   /** 1-bazlı sıra rozeti (En Çok Satanlar). Verilirse görselin sol-üst köşesine numara çipi basılır; OOS/KYB/indirim rozetleri altına kayar. */
   rank?: number;
+  /**
+   * "Sepete ekle" + "Sohbet et" aksiyon butonlarını gösterir. Varsayılan: true.
+   * Ana sayfa vitrini (hero/ProductGrid) butonsuz kart ister — aynı bileşen
+   * `{ showActions: false }` ile buton bloklarını (masaüstü + mobil grid + dense list)
+   * atlar; görsel/başlık/fiyat/MOQ/marka/favori/rozet aynen kalır.
+   */
+  showActions?: boolean;
+  /**
+   * "Minimum sipariş: N Adet" (MOQ) satırını gösterir. Varsayılan: true.
+   * Ana sayfa vitrini `false` geçer — hem masaüstü MOQ satırı hem mobil dense
+   * meta ("Min. N") gizlenir; liste/arama sayfaları etkilenmez.
+   */
+  showMoq?: boolean;
+  /**
+   * Görseli kırpmadan (object-contain) kare alana sığdırır — oran 1:1 kalır,
+   * görsel bozulmaz, yanlarda beyaz boşluk olur. Varsayılan: false (object-cover).
+   * Ana sayfa vitrini `true` geçer; liste/arama sayfaları etkilenmez.
+   */
+  containImage?: boolean;
 }
 
 /**
@@ -27,7 +46,14 @@ export interface ListingCardOptions {
  * - "${t('products.addToCompare')}" checkbox overlay on hover
  * - Camera icon at bottom-left
  */
-function renderImageSlider(card: ProductListingCard): string {
+function renderImageSlider(
+  card: ProductListingCard,
+  opts: { imgFit?: string } = {}
+): string {
+  // Görsel doldurma modu — varsayılan object-cover (liste/arama/mağaza). Ana sayfa
+  // vitrini object-contain geçer: görsel KARE (1:1) kalır ama kırpılmaz/bozulmaz,
+  // kare alana sığdırılıp ortalanır (yanlarda beyaz boşluk).
+  const imgFit = opts.imgFit ?? "object-cover";
   // ──────────────────────────────────────────────────────────────
   // DISABLED: Camera/visual search icon (bottom-left overlay)
   // İleride tekrar etkinleştirmek için:
@@ -56,7 +82,7 @@ function renderImageSlider(card: ProductListingCard): string {
       .map(
         (src, i) => `
       <div class="w-full h-full flex-shrink-0">
-        <img src="${escapeHtml(sanitizeUrl(src))}" alt="${escapeHtml(card.name)}${i > 0 ? ` - ${i + 1}` : ""}" class="w-full h-full object-cover" decoding="async" ${i > 0 ? 'loading="lazy"' : ""} />
+        <img src="${escapeHtml(sanitizeUrl(src))}" alt="${escapeHtml(card.name)}${i > 0 ? ` - ${i + 1}` : ""}" class="w-full h-full ${imgFit}" decoding="async" ${i > 0 ? 'loading="lazy"' : ""} />
       </div>
     `
       )
@@ -121,32 +147,6 @@ function renderImageSlider(card: ProductListingCard): string {
 }
 
 /**
- * Country flag emoji lookup
- */
-function countryFlag(code?: string): string {
-  const flags: Record<string, string> = {
-    CN: "\u{1F1E8}\u{1F1F3}",
-    TR: "\u{1F1F9}\u{1F1F7}",
-    IN: "\u{1F1EE}\u{1F1F3}",
-    BD: "\u{1F1E7}\u{1F1E9}",
-    VN: "\u{1F1FB}\u{1F1F3}",
-    DE: "\u{1F1E9}\u{1F1EA}",
-  };
-  return code ? flags[code] || "" : "";
-}
-
-/**
- * Checkmark icon for selling point badge
- */
-function checkIcon(): string {
-  return `
-    <svg class="w-3.5 h-3.5 shrink-0 text-[rgb(34,137,31)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-      <polyline points="20 6 9 17 4 12"/>
-    </svg>
-  `;
-}
-
-/**
  * Laurel branch for rank badge (Alibaba top-ranking style).
  * Sol dal; sağ dal -scale-x-100 ile aynalanır.
  */
@@ -182,32 +182,27 @@ export function renderListingCard(
   card: ProductListingCard,
   opts: ListingCardOptions = {}
 ): string {
-  // Selling point badge
-  const sellingPointText = card.sellingPoint || card.promo || "";
-  const sellingPointHtml = sellingPointText
-    ? `<div data-sp-slot="${escapeHtml(card.id)}" class="hidden group-data-[list-mode=list]/grid:flex items-center min-w-0 gap-1 mt-1 h-[15px] overflow-hidden text-[11px] leading-tight min-[480px]:text-xs text-[rgb(34,137,31)]">
-        ${checkIcon()}
-        <span class="truncate">${escapeHtml(sellingPointText)}</span>
-      </div>`
-    : "";
-  // Grid modunda selling point / sosyal kanıt, görselin altında tam genişlik şerit (ticker).
-  // "Çok satan" → amber + yıldız; diğerleri → yeşil + check. Sinyal geldiğinde
-  // initListingSocialProof içeriği dönen renkli satırlarla değiştirir.
-  // Selling point yokken !hidden — sinyal gelirse JS açar (sp-strip-empty).
-  const sellingIsAmber = /satan/i.test(sellingPointText);
-  const sellingIcon = sellingIsAmber ? starIcon() : checkIcon();
-  const sellingTone = sellingIsAmber ? "text-[#A6730A]" : "text-[rgb(34,137,31)]";
-  const sellingOverlayHtml = `<div data-sp-slot="${escapeHtml(card.id)}" data-sp-align="center" class="${sellingPointText ? "" : "sp-strip-empty !hidden "}hidden group-data-[list-mode=grid]/grid:flex items-center justify-center gap-1 absolute inset-x-0 bottom-0 z-20 h-[21px] min-[480px]:h-6 px-2 overflow-hidden bg-white/95 border-t border-gray-100 text-[9.5px] min-[480px]:text-[10.5px] font-bold whitespace-nowrap ${sellingTone} pointer-events-none">${sellingIcon}<span class="truncate">${escapeHtml(sellingPointText)}</span></div>`;
+  // Ana sayfa vitrini butonsuz kart kullanır (opts.showActions === false).
+  // Varsayılan true → liste/arama/mağaza sayfaları etkilenmez.
+  const showActions = opts.showActions !== false;
+  // MOQ ("Minimum sipariş") satırı — ana sayfa vitrini gizler (showMoq:false).
+  const showMoq = opts.showMoq !== false;
+  // Ana sayfa vitrini görseli kırpmadan (object-contain) kare alana sığdırır.
+  const sliderOpts = opts.containImage ? { imgFit: "object-contain" } : {};
+  // Sosyal kanıt şeridi — statik "selling point / promo" (ör. "Toptan özel fiyat")
+  // KALDIRILDI; bu alan tamamen sosyal kanıt sistemine ait. Slotlar boş/gizli
+  // başlar (sp-strip-empty !hidden), initListingSocialProof gerçek sinyal ya da
+  // "Yeni ürün" fallback ile doldurup açar (mountRoll → sp-strip-empty + !hidden
+  // sınıflarını kaldırır; base `hidden` kalır, sadece ilgili modda flex görünür).
+  // list: başlık altı metin satırı — grid: görsel altı tam genişlik şerit.
+  const sellingPointHtml = `<div data-sp-slot="${escapeHtml(card.id)}" class="sp-strip-empty !hidden hidden group-data-[list-mode=list]/grid:flex items-center min-w-0 gap-1 mt-1 h-[15px] overflow-hidden text-[11px] leading-tight min-[480px]:text-xs"></div>`;
+  const sellingOverlayHtml = `<div data-sp-slot="${escapeHtml(card.id)}" data-sp-align="center" class="sp-strip-empty !hidden hidden group-data-[list-mode=grid]/grid:flex items-center justify-center gap-1 absolute inset-x-0 bottom-0 z-20 h-[21px] min-[480px]:h-6 px-2 overflow-hidden bg-white/95 border-t border-gray-100 text-[9.5px] min-[480px]:text-[10.5px] font-bold whitespace-nowrap pointer-events-none"></div>`;
 
   // MOQ
-  const moqHtml = card.moq
-    ? `<div class="text-[11px] leading-tight min-[480px]:text-sm min-[480px]:leading-[18px] font-normal text-gray-900">${t("products.minOrder", { moq: card.moq })}</div>`
-    : "";
-
-  // Supplier name
-  const supplierNameHtml = card.supplierName
-    ? `<a class="hidden min-[480px]:block text-xs font-normal text-[#767676] no-underline whitespace-nowrap overflow-hidden text-ellipsis mb-0.5">${escapeHtml(card.supplierName)}</a>`
-    : "";
+  const moqHtml =
+    card.moq && showMoq
+      ? `<div class="text-[11px] leading-tight min-[480px]:text-sm min-[480px]:leading-[18px] font-normal text-gray-900">${t("products.minOrder", { moq: card.moq })}</div>`
+      : "";
 
   // Marka: chip yerine Trendyol tarzı başlık içi kalın isim + mavi tik.
   // Ayrı <a> — ürün linkinin İÇİNE konamaz (nested anchor geçersiz HTML);
@@ -219,35 +214,6 @@ export function renderListingCard(
   const brandInlineHtml = card.brandName
     ? `<a href="${escapeHtml(sanitizeUrl(brandHref))}" title="${escapeHtml(card.brandName)}" class="font-semibold text-gray-900 no-underline hover:underline">${escapeHtml(card.brandName)}<img src="${verifiedTickUrl}" alt="" class="inline-block w-3.5 h-3.5 align-[-2.5px] ms-0.5" /></a> `
     : "";
-
-  // Supplier info: year, country, rating
-  const yearCountryParts: string[] = [];
-  if (card.supplierYears)
-    yearCountryParts.push(
-      `<span>${t("products.yearLabel", { count: String(card.supplierYears) })}</span>`
-    );
-  if (card.supplierCountry)
-    yearCountryParts.push(
-      `${countryFlag(card.supplierCountry)} <span>${escapeHtml(card.supplierCountry)}</span>`
-    );
-
-  const yearCountryHtml =
-    yearCountryParts.length > 0
-      ? `<a class="text-xs font-normal text-black no-underline">${yearCountryParts.join(" ")}</a>`
-      : "";
-
-  const ratingHtml = card.rating
-    ? `<span class="text-xs font-normal text-gray-900 leading-4"><span>${card.rating}</span>/5.0${card.reviewCount ? ` <span>(${card.reviewCount.toLocaleString()})</span>` : ""}</span>`
-    : "";
-
-  const supplierInfoParts = [yearCountryHtml, ratingHtml].filter(Boolean);
-  const supplierContentHtml =
-    card.supplierYears || card.supplierCountry || card.rating
-      ? `<div class="hidden min-[480px]:flex flex-wrap items-center gap-x-1 gap-y-0.5 text-[11px] min-[480px]:text-xs font-normal leading-4 text-black mt-0.5">
-        ${starIcon()}
-        ${supplierInfoParts.join("")}
-      </div>`
-      : "";
 
   const isOOS = !!card.outOfStock;
   // Sprint 2.6: KYB unverified seller — fiyatı gizle + sepete ekle disable + amber badge.
@@ -295,7 +261,7 @@ export function renderListingCard(
       ? `<div class="text-xs font-normal text-gray-400 line-through leading-tight mt-0.5">${escapeHtml(card.originalPrice)}</div>`
       : "";
   const addToCartBtnHtml = isOOS
-    ? `<button type="button" class="searchx-product-e-abutton flex-1 flex items-center justify-center h-9 text-xs sm:text-sm font-medium whitespace-nowrap rounded-md bg-gray-200 text-gray-500 cursor-not-allowed
+    ? `<button type="button" class="searchx-product-e-abutton flex-1 basis-0 min-w-0 px-2 flex items-center justify-center h-9 text-xs sm:text-sm font-medium whitespace-nowrap rounded-md bg-gray-200 text-gray-500 cursor-not-allowed
               min-[1200px]:group-data-[list-mode=list]/grid:flex-none
               min-[1200px]:group-data-[list-mode=list]/grid:w-full
               lg:max-[1599px]:group-data-[list-mode=grid]/grid:text-xs
@@ -305,7 +271,7 @@ export function renderListingCard(
         ${t("products.outOfStock")}
       </button>`
     : kybBlocked
-      ? `<button type="button" class="searchx-product-e-abutton th-btn flex-1 flex items-center justify-center h-9 text-xs sm:text-sm font-medium whitespace-nowrap opacity-50 !cursor-not-allowed pointer-events-none
+      ? `<button type="button" class="searchx-product-e-abutton th-btn flex-1 basis-0 min-w-0 px-2 flex items-center justify-center h-9 text-xs sm:text-sm font-medium whitespace-nowrap opacity-50 !cursor-not-allowed pointer-events-none
               min-[1200px]:group-data-[list-mode=list]/grid:flex-none
               min-[1200px]:group-data-[list-mode=list]/grid:w-full
               lg:max-[1599px]:group-data-[list-mode=grid]/grid:text-xs
@@ -314,7 +280,7 @@ export function renderListingCard(
               disabled aria-disabled="true" title="${t("common.addToCartDisabledKyb")}">
         ${t("products.addToCart")}
       </button>`
-      : `<button type="button" class="searchx-product-e-abutton th-btn flex-1 flex items-center justify-center h-9 text-xs sm:text-sm font-medium cursor-pointer whitespace-nowrap
+      : `<button type="button" class="searchx-product-e-abutton th-btn flex-1 basis-0 min-w-0 px-2 flex items-center justify-center h-9 text-xs sm:text-sm font-medium cursor-pointer whitespace-nowrap
               min-[1200px]:group-data-[list-mode=list]/grid:flex-none
               min-[1200px]:group-data-[list-mode=list]/grid:w-full
               lg:max-[1599px]:group-data-[list-mode=grid]/grid:text-xs
@@ -355,7 +321,7 @@ export function renderListingCard(
               data-product-min-order="${escapeAttr(moqDigits)}"`;
   const chatBtnHtml = `<button type="button"
               ${chatTriggerAttrs}
-              class="th-btn-outline searchx-product-e-chatbutton flex-1 flex items-center justify-center h-9 text-xs sm:text-sm font-medium cursor-pointer whitespace-nowrap
+              class="th-btn-outline searchx-product-e-chatbutton flex-1 basis-0 min-w-0 px-2 flex items-center justify-center h-9 text-xs sm:text-sm font-medium cursor-pointer whitespace-nowrap
               min-[1200px]:group-data-[list-mode=list]/grid:flex-none
               min-[1200px]:group-data-[list-mode=list]/grid:w-full
               lg:max-[1599px]:group-data-[list-mode=grid]/grid:text-xs
@@ -376,7 +342,7 @@ export function renderListingCard(
       `<span class="inline-flex items-center gap-0.5">${starIcon()}<span class="font-medium text-gray-700">${card.rating}</span>${reviewBit}</span>`
     );
   }
-  if (card.moq)
+  if (card.moq && showMoq)
     denseMetaParts.push(`<span class="whitespace-nowrap">Min. ${escapeHtml(card.moq)}</span>`);
   const denseMetaHtml = denseMetaParts.length
     ? `<div class="flex min-[480px]:hidden items-center gap-x-1.5 gap-y-0.5 mt-1 text-[11px] leading-tight text-gray-500">${denseMetaParts.join(`<span class="text-gray-300">·</span>`)}</div>`
@@ -461,7 +427,7 @@ export function renderListingCard(
           ${rankBadgeHtml}${oosBadgeHtml}
           ${kybBadgeHtml}${discountBadgeHtml}
           ${oosOverlayHtml}
-          ${renderImageSlider(card)}
+          ${renderImageSlider(card, sliderOpts)}
           ${sellingOverlayHtml}
         </a>
         ${favBtnHtml}
@@ -508,14 +474,11 @@ export function renderListingCard(
           ${isOOS ? `<div class="mt-1 text-xs font-medium text-red-600">${t("products.outOfStock")}</div>` : ""}
         </div>
 
-        <!-- Supplier area -->
-        <div class="px-3 mt-2">
-          ${supplierNameHtml}
-          ${supplierContentHtml}
-        </div>
       </div>
 
-      <!-- Action buttons -->
+      ${
+        showActions
+          ? `<!-- Action buttons -->
       <div class="action-area-layout flex group-data-[list-mode=list]/grid:hidden min-[480px]:group-data-[list-mode=list]/grid:flex group-data-[list-mode=grid]/grid:hidden min-[480px]:group-data-[list-mode=grid]/grid:flex flex-col min-[480px]:flex-row gap-2 px-3 mt-3 items-stretch min-[480px]:items-center
             group-data-[list-mode=list]/grid:col-start-2
             group-data-[list-mode=list]/grid:row-start-2
@@ -530,7 +493,9 @@ export function renderListingCard(
         ${chatBtnHtml}
       </div>
       ${gridMobileActionsHtml}
-      ${denseActionsHtml}
+      ${denseActionsHtml}`
+          : ""
+      }
     </div>
   `;
 }

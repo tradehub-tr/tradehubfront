@@ -1030,7 +1030,7 @@ const en = {
       taxOffice: "Tax Office",
       lockedHint: "Managed via registration/verification; contact support to change.",
       mainMarkets: "Main Markets",
-      mainMarketsPlaceholder: "Turkey, EU, Middle East...",
+      mainMarketsPlaceholder: "Global, Europe, Middle East, US...",
       contactInfo: "Contact Information",
       address: "Address",
       addressPlaceholder: "Street, neighborhood...",
@@ -1328,7 +1328,10 @@ const en = {
       goToCart: "Go to Cart",
       signIn: "Sign in",
       joinFree: "Join Free",
-      signBackIn: "Sign back in to continue",
+      welcomeBack: "Welcome back",
+      welcomeBackDesc: "Your cart and orders are waiting for you.",
+      noAccount: "Don't have an account?",
+      signUp: "Sign Up",
       continueWith: "Or, continue with:",
       socialAgree: "By signing in via social media, I agree to the",
       freeAgreement: "Free Membership Agreement",
@@ -1574,8 +1577,8 @@ const en = {
       pressRoom: "Press Room",
       securityAtIstoc: "Security at iStoc",
       sustainability: "Sustainability",
-      changeCountry: "Change Country",
-      countryValue: "Türkiye — English · TRY",
+      changeCountry: "Language & Currency",
+      countryValue: "English · TRY",
       safeShopping: "Safe Shopping",
       securityCert: "Security Certificates",
       cookiePrefs: "Cookie Preferences",
@@ -2915,7 +2918,7 @@ const en = {
         "Sales tax is a consumption tax imposed by governments on the sale of goods and services. It is typically calculated as a percentage of the purchase price.",
       whatIsVat: "What is VAT?",
       whatIsVatAnswer:
-        "VAT (Value Added Tax) is a type of tax applied at each stage of production and distribution. It is widely used in Europe and many other countries.",
+        "VAT (Value Added Tax) is a consumption tax charged on the value added at each stage of a product's production and distribution. It is applied in more than 170 countries worldwide and is known as GST (Goods and Services Tax) in some of them. Rates and rules vary by country.",
       faqHowToApplyRefund: "How do I apply for a refund?",
       faqHowToApplyRefundAnswer:
         'You can apply for a refund through the Refunds section in your orders page. Click on the order and select "Request Refund".',
@@ -4457,6 +4460,7 @@ const en = {
       views_24h: "{{value}} views in the last 24 hours",
       distinct_buyers: "{{value}} businesses purchased in the last {{days}} days",
       seller_orders: "{{value}} completed orders from this seller",
+      new: "New product",
     },
 
     // Short set for the card strip — must fit a single line
@@ -4467,6 +4471,7 @@ const en = {
       views_24h: "{{value}} views in 24h",
       distinct_buyers: "{{value}} companies bought in {{days}} days",
       seller_orders: "{{value}} completed orders",
+      new: "New product",
     },
 
     // ============================================================
@@ -7033,8 +7038,8 @@ const en = {
       },
       manufacturerPlatform: "Manufacturer platform",
       heroSubtitle:
-        "iStoc connects manufacturers in Türkiye directly with B2B buyers around the world. List, sell, ship — no commission.",
-      heroImageAlt: "Export from Türkiye to the world: port and container logistics",
+        "iStoc connects manufacturers directly with B2B buyers around the world. List, sell, ship — no commission.",
+      heroImageAlt: "Worldwide B2B export: port and container logistics",
       applyAsSeller: "Apply as a seller",
       howItWorks: "How it works?",
       unlimited: "Unlimited",
@@ -7100,7 +7105,7 @@ const en = {
       sellerPackages: "Seller packages",
       pricingSectionTitle: "Choose the package that fits your scale.",
       pricingSectionDesc:
-        "All packages do the same job: they get your product to European buyers. Higher packages lower your commission, expand your storefront, and raise your support level.",
+        "All packages do the same job: they get your product to buyers around the world. Higher packages lower your commission, expand your storefront, and raise your support level.",
       period: "Period",
       yearlyToggle: "Yearly",
       monthlyToggle: "Monthly",
@@ -7124,7 +7129,7 @@ const en = {
       days14to21: "14 — 21 days",
       b2bWholesaleFocused: "B2B / wholesale focused",
       mixed: "Mixed",
-      dedicatedTurkishSupport: "Dedicated support for Turkish manufacturers",
+      dedicatedTurkishSupport: "Dedicated support for manufacturers",
       extraFee: "Extra fee",
       restricted: "Restricted",
       comparisonDisclaimer:
@@ -7809,7 +7814,6 @@ const en = {
     // Region options
     regionGlobal: "Global rankings",
     regionUS: "US rankings",
-    regionEurope: "Europe rankings",
 
     // General
     allCategories: "All categories",
