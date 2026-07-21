@@ -478,7 +478,7 @@ export default defineConfig({
                     // App: Alpine data modules → paylaşımlı 'alpine' chunk. B-2: per-page
                     // yapılan modüller (yalnız kendi sayfa entry'lerinde import edilenler)
                     // HARİÇ — kendi sayfa chunk'larına düşsünler, her sayfada yüklenmesinler.
-                    if (id.includes('src/alpine/') && !id.includes('src/alpine/checkout.ts') && !id.includes('src/alpine/kyb.ts') && !id.includes('src/alpine/messages.ts') && !id.includes('src/alpine/remittance.ts') && !id.includes('src/alpine/orderItemsDrawer.ts') && !id.includes('src/alpine/sellerShop.ts') && !id.includes('src/alpine/addresses.ts') && !id.includes('src/alpine/payment.ts') && !id.includes('src/alpine/settings.ts') && !id.includes('src/alpine/orders.ts') && !id.includes('src/alpine/seller.ts') && !id.includes('src/alpine/dashboard.ts'))
+                    if (id.includes('src/alpine/') && !id.includes('src/alpine/checkout.ts') && !id.includes('src/alpine/kyb.ts') && !id.includes('src/alpine/messages.ts') && !id.includes('src/alpine/remittance.ts') && !id.includes('src/alpine/orderItemsDrawer.ts') && !id.includes('src/alpine/sellerShop.ts') && !id.includes('src/alpine/addresses.ts') && !id.includes('src/alpine/payment.ts') && !id.includes('src/alpine/settings.ts') && !id.includes('src/alpine/orders.ts') && !id.includes('src/alpine/seller.ts') && !id.includes('src/alpine/dashboard.ts') && !id.includes('src/alpine/auth.ts'))
                         return 'alpine';
                 },
             },

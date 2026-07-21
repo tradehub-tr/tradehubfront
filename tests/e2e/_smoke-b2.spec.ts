@@ -34,6 +34,11 @@ const PAGES: PageDef[] = [
   { name: "seller-storefront", path: "/pages/seller/seller-storefront.html", xdata: "sellerStorefront", gated: false },
   { name: "seller-dashboard", path: "/pages/seller/dashboard.html", xdata: "sellerDashboard", gated: false },
   { name: "seller-shop", path: "/pages/seller/seller-shop.html", xdata: "sellerShop", gated: false },
+  // auth — requireGuest (giriş YAPMAMIŞ kullanıcı); login'siz test edilmeli
+  { name: "register", path: "/pages/auth/register.html", xdata: "registerPage", gated: false },
+  { name: "forgot-password", path: "/pages/auth/forgot-password.html", xdata: "forgotPasswordPage", gated: false },
+  { name: "reset-password", path: "/pages/auth/reset-password.html", xdata: "resetPasswordPage", gated: false },
+  { name: "accept-invite", path: "/pages/auth/accept-invite.html", xdata: "acceptInvitePage", gated: false },
 ];
 
 // Frappe cookie-login → tüm testlerde paylaşılan storageState

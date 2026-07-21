@@ -8,6 +8,8 @@ import '../style.css'
 
 import { ResetPasswordPage } from '../components/auth/ResetPasswordPage'
 import { startAlpine } from '../alpine'
+// B-2: auth Alpine modülü page-specific (resetPasswordPage + authLangSwitcher bu sayfada).
+import '../alpine/auth'
 
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.innerHTML = ResetPasswordPage();

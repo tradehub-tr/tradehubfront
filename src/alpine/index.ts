@@ -26,7 +26,10 @@ import "./cart";
 // o sayfaların entry'lerinde import ediliyor (src/pages/cart.ts, checkout.ts) →
 // diğer sayfalar 45 KB'lık checkout modülünü yüklemez. vite manualChunks'ta 'alpine'
 // chunk'ından hariç tutuldu ki per-page chunk'a düşsün.
-import "./auth";
+// auth — page-specific (registerPage→register, forgotPasswordPage/authLangSwitcher→
+// forgot-password, resetPasswordPage/authLangSwitcher→reset-password, acceptInvitePage→
+// accept-invite). login sayfası auth modülü kullanmaz (LoginPage'de x-data yok). B-2:
+// core'dan çıkarıldı, ilgili 4 sayfada import ediliyor. vite'ta 'alpine'dan hariç.
 // settings — page-specific (yalnız settings sayfası). B-2: core'dan çıkarıldı,
 // pages/settings.ts'te import ediliyor. vite manualChunks'ta 'alpine'dan hariç.
 // payment — page-specific (yalnız payment sayfası, PaymentLayout). B-2: core'dan
