@@ -30,6 +30,8 @@ import { FloatingPanel } from '../components/floating'
 import { startAlpine } from '../alpine'
 // B-2: checkout Alpine modülü page-specific (alpine/index.ts core'undan çıkarıldı).
 import '../alpine/checkout'
+// B-2: orderProtectionModal ayrı modül (product.ts'ten bölündü) — yalnız checkout.
+import '../alpine/orderProtectionModal'
 
 // Checkout components
 import { CheckoutHeader, CheckoutLayout, CheckoutMinimalHeader, initCheckoutMinimalHeader, ShippingAddressForm, OrderSummary, PaymentMethodSection, ItemsDeliverySection, BillingInfoSection, OrderProtectionModal, OrderReviewModal } from '../components/checkout'

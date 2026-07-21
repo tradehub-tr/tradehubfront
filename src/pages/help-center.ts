@@ -7,6 +7,8 @@ import { initFlowbite } from 'flowbite'
 
 import { FloatingPanel } from '../components/floating'
 import { startAlpine } from '../alpine'
+// B-2: help Alpine modülü page-specific (helpCenter bu sayfada).
+import '../alpine/help'
 import { HelpCenterLayout, HelpCenterHeader, initHelpCenterLangSelector } from '../components/help-center'
 
 const appEl = document.querySelector<HTMLDivElement>('#app')!;

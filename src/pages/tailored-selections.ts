@@ -26,6 +26,8 @@ import { FloatingPanel } from '../components/floating'
 
 // Alpine.js
 import { startAlpine } from '../alpine'
+// B-2: loginModal ayrı modül (misafir login modalı bu sayfada).
+import '../alpine/loginModal'
 
 // Tailored Selections components
 import { TailoredSelectionsHero, initTailoredSelectionsHero, renderTailoredHero, setTailoredHeroActive, TailoredProductGrid } from '../components/tailored-selections'

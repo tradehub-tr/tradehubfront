@@ -23,6 +23,8 @@ import { FloatingPanel, BottomNav, initBottomNav } from '../components/floating'
 import { startAlpine } from '../alpine'
 // B-2: products-filter Alpine modülü page-specific (filterSidebar + filterChips bu sayfada).
 import '../alpine/products-filter'
+// B-2: loginModal ayrı modül (misafir login modalı bu sayfada).
+import '../alpine/loginModal'
 
 // Products listing components
 import {

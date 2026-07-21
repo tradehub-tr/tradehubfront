@@ -29,6 +29,8 @@ import { startAlpine } from '../alpine'
 // B-2: checkout Alpine modülü page-specific — bu sayfa render'dan önce register etmeli
 // (alpine/index.ts core'undan çıkarıldı). startAlpine()'dan önce import zorunlu.
 import '../alpine/checkout'
+// B-2: cart Alpine modülü page-specific (cartPage yalnız bu sayfada).
+import '../alpine/cart'
 
 // Cart components
 import { CartPage, initCartPage } from '../components/cart/page/CartPage'

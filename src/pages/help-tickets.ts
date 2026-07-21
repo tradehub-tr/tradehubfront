@@ -5,6 +5,8 @@ import '../style.css'
 import { initFlowbite } from 'flowbite'
 import { FloatingPanel } from '../components/floating'
 import { startAlpine } from '../alpine'
+// B-2: help Alpine modülü page-specific (ticketsList bu sayfada).
+import '../alpine/help'
 import { HelpCenterHeader, initHelpCenterLangSelector } from '../components/help-center'
 import { TicketsListLayout } from '../components/help-center/TicketsListLayout'
 import { requireAuth } from '../utils/auth-guard'

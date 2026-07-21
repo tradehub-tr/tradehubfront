@@ -19,9 +19,14 @@ Alpine.magic("safeHtml", () => (value: unknown) => sanitizeHtml(String(value ?? 
 // core'dan çıkarıldı, pages/orders.ts'te import ediliyor. vite'ta 'alpine'dan hariç.
 // remittance — page-specific (yalnız orders sayfası, OrdersPageLayout). B-2: core'dan
 // çıkarıldı, pages/orders.ts'te import ediliyor. vite manualChunks'ta 'alpine'dan hariç.
-import "./product";
+// product — page-specific (reviewsModal + imageGallery + writeReview/editReview/
+// reportAbuse/QA modalları → yalnız product-detail). loginModal ve orderProtectionModal
+// ayrı modüllere bölündü (loginModal.ts → 6 listeleme/detay sayfası; orderProtectionModal.ts
+// → checkout). B-2: core'dan çıkarıldı. vite manualChunks'ta 'alpine'dan hariç.
 import "./socialProofBadge";
-import "./cart";
+// cart — page-specific (cartPage yalnız cart sayfası, CartPage.ts). SharedCartDrawer
+// düz TS cartStore kullanır, bu modüle bağlı DEĞİL. B-2: core'dan çıkarıldı,
+// pages/cart.ts'te import ediliyor. vite manualChunks'ta 'alpine'dan hariç.
 // checkout — page-specific (yalnız cart + checkout sayfaları). B-2: core'dan çıkarıldı,
 // o sayfaların entry'lerinde import ediliyor (src/pages/cart.ts, checkout.ts) →
 // diğer sayfalar 45 KB'lık checkout modülünü yüklemez. vite manualChunks'ta 'alpine'
@@ -47,7 +52,10 @@ import "./sidebar";
 // (bu modül DEĞİL). B-2: core'dan çıkarıldı, products + manufacturers'ta import ediliyor.
 // vite manualChunks'ta 'alpine'dan hariç.
 import "./shared";
-import "./help";
+// help — page-specific (helpCenter→help-center, faqPage→faq, faqDetail→faq-detail,
+// ticketForm→help-ticket-new, ticketsList→help-tickets, ticketDetail→help-ticket).
+// contactPage x-data olarak kullanılmıyor (ölü). Non-help sayfada HİÇ kullanılmıyor.
+// B-2: core'dan çıkarıldı (1490 satır), 6 help sayfasında import ediliyor.
 import "./legal";
 // seller — page-specific (sellPricing→sell-pricing, applicationPendingPage→
 // application-pending, sellerStorefront→seller-storefront, sellerDashboard→
