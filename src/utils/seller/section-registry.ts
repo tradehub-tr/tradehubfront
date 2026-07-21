@@ -98,7 +98,10 @@ function resolveImageUrl(url: string | undefined): string {
 }
 
 function renderSlideImage(slide: HeroSlide, isStatic: boolean): string {
-  const heightCls = "w-full h-[180px] sm:h-[220px] md:h-[320px] lg:h-[400px] object-cover";
+  // Slider modunda yukseklik container'dan gelir (h-full) — pagination/ok hizasi gorselle esit kalir
+  const heightCls = isStatic
+    ? "w-full h-[180px] sm:h-[220px] md:h-[320px] lg:h-[400px] object-cover"
+    : "w-full h-full object-cover";
   const fallback = `this.style.display='none'; this.parentElement.style.background='linear-gradient(135deg, #1f1f1f, #cc9900)'; this.parentElement.style.minHeight='300px';`;
   const wrapper = isStatic ? "block relative" : "block relative w-full h-full";
   // CTA varsa link sarmalayalim, ama overlay icindeki CTA da link; cakismayi onlemek icin sadece overlay yoksa whole image link
@@ -179,11 +182,11 @@ function renderHeroBanner(settings: SectionSettings): string {
   const showNav = slidesToRender.length > 1;
   const navHtml = showNav
     ? `
-    <button type="button" class="store-hero__prev absolute start-2 sm:start-4 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center transition-colors backdrop-blur-sm cursor-pointer" aria-label="Onceki">
-      <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+    <button type="button" class="th-no-press store-hero__prev absolute start-2 sm:start-4 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/90 hover:bg-white text-gray-700 shadow-[0_2px_10px_rgba(0,0,0,0.18)] flex items-center justify-center transition-colors cursor-pointer" aria-label="Onceki">
+      <svg class="w-4 h-4 sm:w-5 sm:h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
     </button>
-    <button type="button" class="store-hero__next absolute end-2 sm:end-4 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center transition-colors backdrop-blur-sm cursor-pointer" aria-label="Sonraki">
-      <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+    <button type="button" class="th-no-press store-hero__next absolute end-2 sm:end-4 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/90 hover:bg-white text-gray-700 shadow-[0_2px_10px_rgba(0,0,0,0.18)] flex items-center justify-center transition-colors cursor-pointer" aria-label="Sonraki">
+      <svg class="w-4 h-4 sm:w-5 sm:h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
     </button>
   `
     : "";
@@ -200,12 +203,13 @@ function renderHeroBanner(settings: SectionSettings): string {
              data-hero-autoplay="${autoplay ? "1" : "0"}" data-hero-delay="${delay}"
              data-hero-slides="${slidesToRender.length}">
       <div class="store-hero" ${bgStyle}>
-        <div class="store-hero__swiper swiper w-full relative overflow-hidden" style="min-height: 180px;">
+        <div class="store-hero__swiper swiper w-full relative overflow-hidden h-[180px] sm:h-[220px] md:h-[320px] lg:h-[400px]">
           <div class="swiper-wrapper">
             ${slidesHtml}
           </div>
           ${navHtml}
-          <div class="store-hero__pagination swiper-pagination absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10"></div>
+          <!-- bottom/left/w important: swiper-bundle.css .swiper-horizontal>.swiper-pagination-bullets (left:0;width:100%) kuralini eziyor -->
+          <div class="store-hero__pagination swiper-pagination absolute bottom-2.5! left-1/2! w-auto! -translate-x-1/2 z-10 flex items-center px-1.5 rounded-full bg-black/25 backdrop-blur-sm"></div>
         </div>
       </div>
     </section>
@@ -231,10 +235,14 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                 <template x-for="cat in categories" :key="(cat.type || 'seller') + '-' + cat.name">
                   <a :href="'#category-' + cat.name"
                      @click.prevent="filterByCategory(cat.name, cat.type || 'seller')"
-                     class="relative rounded-md overflow-hidden bg-gray-100 aspect-[4/3] group">
-                    <img x-show="cat.image" :src="cat.image" :alt="cat.category_name || cat.name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-3">
-                      <span class="text-white text-[13px] font-bold" x-text="cat.category_name || cat.name"></span>
+                     class="relative rounded-md overflow-hidden bg-white border border-gray-100 aspect-[4/3] group">
+                    <img x-show="cat.image" :src="cat.image" :alt="cat.category_name || cat.name" class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 via-40% to-transparent to-65%"></div>
+                    <div class="absolute inset-x-2.5 bottom-2 flex items-end justify-between gap-2">
+                      <span class="text-white text-[13px] font-bold leading-snug line-clamp-2 min-w-0" x-text="cat.category_name || cat.name"></span>
+                      <span class="shrink-0 w-[22px] h-[22px] mb-0.5 rounded-full bg-white/25 backdrop-blur-sm flex items-center justify-center">
+                        <svg class="w-3 h-3 text-white rtl:-scale-x-100" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/></svg>
+                      </span>
                     </div>
                   </a>
                 </template>
@@ -730,14 +738,13 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                 <div class="space-y-2.5">
                   <button
                     class="w-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[13px] font-semibold border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] py-2.5 shadow-[0_1px_0_#d39c00] active:scale-[0.97] transition-[background-color,color,transform] duration-150"
-                    @click="showInquiryModal = true">
+                    data-chat-trigger :data-seller-id="sellerCode">
                     ${t("sellerApp.contactNow")}
                   </button>
-                  <button
-                    class="th-btn-outline w-full text-[13px] font-medium py-2.5"
-                    @click="showInquiryModal = true">
+                  <a :href="'/magaza/' + sellerCode + '?tab=contact'"
+                    class="th-btn-outline w-full text-[13px] font-medium py-2.5 text-center no-underline block">
                     ${t("sellerApp.sendInquiry")}
-                  </button>
+                  </a>
                 </div>
               </div>
             </div>

@@ -264,8 +264,6 @@ Alpine.data("sellerShop", () => ({
   sortBy: "default",
   viewMode: "grid",
   activePage: "home" as string, // 'home' | 'products' | 'profile' | 'contacts'
-  inquiryMessage: "",
-  showInquiryModal: false,
   isLoggedIn: false as boolean,
 
   async init() {
@@ -469,23 +467,12 @@ Alpine.data("sellerShop", () => ({
     return false;
   },
 
-  async submitShopInquiry() {
-    if (!this.inquiryMessage.trim() || !this.sellerCode) return;
-    try {
-      const res = await fetch(`${API_BASE}/method/tradehub_core.api.seller.send_inquiry`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          seller_code: this.sellerCode,
-          message: this.inquiryMessage.trim(),
-        }),
-      });
-      if (res.ok) {
-        this.inquiryMessage = "";
-        alert(t("sellPage.messageSent"));
-      }
-    } catch (e) {
-      console.error("Inquiry error:", e);
+  shareShop() {
+    if (navigator.share) {
+      void navigator.share({ title: document.title, url: window.location.href }).catch(() => {});
+    } else {
+      void navigator.clipboard.writeText(window.location.href);
     }
   },
+
 }));

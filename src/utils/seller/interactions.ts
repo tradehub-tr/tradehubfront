@@ -105,6 +105,11 @@ function buildHeroSwiper(): Swiper | null {
   applySwiperDir(el as HTMLElement);
   heroSwiperInstance = new Swiper(el, {
     modules: [Autoplay, Pagination, Navigation],
+    // Gizli container'da init olursa genislik yanlis hesaplanip birden cok slayt
+    // sikisik gorunebiliyor — tek slayt gorunumu acikca sabitle.
+    slidesPerView: 1,
+    spaceBetween: 0,
+    watchOverflow: true,
     loop: enableLoop,
     autoplay:
       autoplay && slideCount > 1

@@ -1003,7 +1003,7 @@ function ContactSidebar(): string {
 
         <!-- CTA Buttons -->
         <div class="flex flex-col gap-3 mb-5">
-          <button @click="setTab('contact')" class="w-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) font-semibold py-3 px-4 border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] active:scale-[0.97] transition-[background-color,color,transform] duration-150 text-[14px] focus-visible:outline-2 focus-visible:outline-[var(--color-store-accent,#cc9900)] focus-visible:outline-offset-2 company-profile__contact-btn">
+          <button data-chat-trigger :data-seller-id="sellerCode" class="w-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) font-semibold py-3 px-4 border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] active:scale-[0.97] transition-[background-color,color,transform] duration-150 text-[14px] focus-visible:outline-2 focus-visible:outline-[var(--color-store-accent,#cc9900)] focus-visible:outline-offset-2 company-profile__contact-btn">
             ${t("seller.sf.contactNow")}
           </button>
           <button @click="setTab('contact')" class="th-btn-outline w-full text-gray-900 font-medium py-3 px-4 text-[14px] focus-visible:outline-2 focus-visible:outline-[var(--color-store-accent,#cc9900)] focus-visible:outline-offset-2 company-profile__inquiry-btn">
@@ -1025,7 +1025,7 @@ function ContactSidebar(): string {
 
     <!-- Mobile Contact Bar (shown on small screens) -->
     <div class="lg:hidden fixed bottom-0 start-0 end-0 bg-white border-t border-gray-200 p-3 z-50 flex gap-3 shadow-lg">
-      <button @click="setTab('contact')" class="flex-1 bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) font-semibold py-2.5 px-4 border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] active:scale-[0.97] transition-[background-color,color,transform] duration-150 text-[14px]">
+      <button data-chat-trigger :data-seller-id="sellerCode" class="flex-1 bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) font-semibold py-2.5 px-4 border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] active:scale-[0.97] transition-[background-color,color,transform] duration-150 text-[14px]">
         ${t("seller.sf.contactNow")}
       </button>
       <button @click="setTab('contact')" class="th-btn-outline flex-1 text-gray-900 font-medium py-2.5 px-4 text-[14px]">
