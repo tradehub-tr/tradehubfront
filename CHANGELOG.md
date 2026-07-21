@@ -1,3 +1,20 @@
+## [v2.1.0-alpha.12] - 2026-07-21 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(i18n): x-data'ya gömülü çeviri metnindeki apostrof kaçışı (escapeJsString) (@aliiball)
+- fix(orders): writeReviewModal kaydı eklendi (B-2 product split regresyonu) (@aliiball)
+- fix(manufacturers): kategori başlığı backend'den çözülen ada güncelleniyor (client findCategoryBySlug hash'li slug'ları (@aliiball)
+
+### Degistirildi
+- refactor(test): smoke unscoped Alpine hata kontrolü + cart seed + ek sayfalar (@aliiball)
+- refactor(build): cross-file duplicate export bekçisi + CI zorlaması eklendi (@aliiball)
+- refactor(rules): isim benzersizliği adlandırma rehberi eklendi (@aliiball)
+- refactor(categories): CategoryFilterSidebar → CategoryQuickNav, ölü filter dalı temizlendi (@aliiball)
+- refactor(naming): farklı-kavram tipler yeniden adlandırıldı (birleştirme YOK) (@aliiball)
+
+---
 ## [v2.1.0-alpha.11] - 2026-07-21 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
