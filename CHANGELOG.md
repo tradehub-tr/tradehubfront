@@ -1,3 +1,20 @@
+## [v2.1.0-alpha.13] - 2026-07-22 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(pdp): galeri video otomatik oynatma ve thumbnail taşması düzeltildi (@ahmeetseker)
+  - Ana galeride video karesi seçilince video otomatik başlıyor: toVideoEmbedHtml artık autoplay parametresi alıyor, YouTube'a autoplay=1&mute=1, Vimeo'ya autoplay=1&muted=1 query'si ekleniyor, direkt mp4/webm dosyalarına autoplay muted attribute'u veriliyor
+  - Autoplay'de muted zorunlu tutuldu — tarayıcılar sesli otomatik oynatmayı engelliyor; kullanıcı controls üzerinden sesi açabiliyor
+  - withAutoplayParams helper'ı mevcut query string'i koruyarak parametre ekliyor, ürün detayı dışındaki çağrılar (autoplay varsayılan false) etkilenmiyor
+  - "+N" taşma karosu deklaratif x-show yerine applyThumbOverflow ile JS'ten üretiliyor; ilk render $nextTick ile, varyant değişimi swapGalleryImages sonunda aynı fonksiyondan geçiyor
+  - Varyant değiştiğinde eski görsel sayısına göre kalan stale "+N" değeri ve yanlış gizlenen thumbnail'lar düzeldi; koleps her yeni görsel setinde sıfırlanıyor
+  - Özellikler thumbnail'ı sabit images.length yerine reaktif attrsIndex'e bağlandı, görsel sayısı değişince index kayması ortadan kalktı
+  - Galeri ana görsel alanı 540px'ten 560px'e, 2xl kırılımında 680px'e genişletildi
+  - Favorilerde tedarikçi sekmesi artık ürün metnini değil kendi boş durumunu gösteriyor: renderEmptyState kind parametresi (products/suppliers) alıyor
+  - noFavoriteSuppliers ve noFavoriteSuppliersDesc anahtarları tr/en/ru/ar locale'lerine eklendi
+
+---
 ## [v2.1.0-alpha.12] - 2026-07-21 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
