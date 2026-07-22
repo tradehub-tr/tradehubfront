@@ -339,7 +339,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
             <!-- ══ SAG: Urun Listesi ══ -->
             <div class="flex-1 min-w-0">
               <template x-if="products && products.length > 0">
-                <div>
+                <div id="shop-products-top">
                   <!-- Baslik -->
                   <h3 class="text-[20px] font-bold text-gray-900 mb-4" x-text="activeCategoryName || '${t("sellerApp.allProducts")}'"></h3>
 
@@ -382,7 +382,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
 
                   <!-- Grid View -->
                   <div x-show="viewMode === 'grid'" class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
-                    <template x-for="p in filteredProducts" :key="p.name">
+                    <template x-for="p in paginatedProducts" :key="p.name">
                       <div class="bg-white rounded-md border border-gray-200 overflow-hidden group hover:shadow-md transition-shadow flex flex-col h-full">
                         <a :href="'/urun/' + encodeURIComponent(p.slug || p.name)" class="block no-underline flex-1">
                           <div class="aspect-square overflow-hidden bg-gray-50">
@@ -408,7 +408,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
 
                   <!-- List View -->
                   <div x-show="viewMode === 'list'" class="flex flex-col gap-3">
-                    <template x-for="p in filteredProducts" :key="p.name">
+                    <template x-for="p in paginatedProducts" :key="p.name">
                       <div class="flex items-center gap-4 p-4 border border-gray-200 rounded-md bg-white hover:shadow-sm transition-shadow">
                         <a :href="'/urun/' + encodeURIComponent(p.slug || p.name)" class="w-[120px] h-[120px] rounded-md overflow-hidden shrink-0 bg-gray-50">
                           <img x-show="p.image || p.primary_image" :src="p.image || p.primary_image" :alt="p.product_name || p.title" class="w-full h-full object-cover" loading="lazy" />
@@ -425,6 +425,24 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                         </div>
                       </div>
                     </template>
+                  </div>
+
+                  <!-- Pagination — tüm ürünler tek atış çekilir, burada client-side sayfalanır -->
+                  <div x-show="totalPages > 1" class="flex items-center justify-center gap-1.5 mt-8 flex-wrap">
+                    <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1" aria-label="Önceki"
+                            class="w-9 h-9 flex items-center justify-center rounded-md border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                    </button>
+                    <template x-for="pg in totalPages" :key="pg">
+                      <button @click="goToPage(pg)"
+                              :class="currentPage === pg ? 'text-white border-transparent' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'"
+                              :style="currentPage === pg ? 'background: var(--store-accent, #cc9900)' : ''"
+                              class="w-9 h-9 flex items-center justify-center rounded-md border text-[13px] font-medium transition-colors" x-text="pg"></button>
+                    </template>
+                    <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages" aria-label="${t("common.next")}"
+                            class="w-9 h-9 flex items-center justify-center rounded-md border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </button>
                   </div>
                 </div>
               </template>

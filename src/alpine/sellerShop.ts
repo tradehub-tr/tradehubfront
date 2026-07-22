@@ -245,6 +245,28 @@ function sectionLabels(): Record<string, string> {
   };
 }
 
+// Satıcının TÜM ürünlerini backend total'ine göre sayfa sayfa çeker (tek atış
+// page_size=50 ile 50+ ürünlü mağazalarda ürünler eksik kalıyordu). Client-side
+// filtre/sort/pagination tam liste üzerinde çalışsın diye hepsi belleğe alınır.
+async function fetchAllSellerProducts(sellerCode: string): Promise<SellerShopProduct[]> {
+  const FETCH_SIZE = 100;
+  const url = (pg: number) =>
+    `${API_BASE}/method/tradehub_core.api.seller.get_seller_products?seller_code=${sellerCode}&page=${pg}&page_size=${FETCH_SIZE}`;
+  const first = await fetch(url(1), { credentials: "omit" }).then((r) => r.json());
+  let all: SellerShopProduct[] = first?.message?.products || [];
+  const total = Number(first?.message?.total) || all.length;
+  if (total > all.length) {
+    const lastPage = Math.ceil(total / FETCH_SIZE);
+    const reqs: Promise<{ message?: { products?: SellerShopProduct[] } }>[] = [];
+    for (let pg = 2; pg <= lastPage; pg++) {
+      reqs.push(fetch(url(pg), { credentials: "omit" }).then((r) => r.json()));
+    }
+    const rest = await Promise.all(reqs);
+    for (const r of rest) all = all.concat(r?.message?.products || []);
+  }
+  return all;
+}
+
 Alpine.data("sellerShop", () => ({
   // State
   loading: true,
@@ -263,6 +285,20 @@ Alpine.data("sellerShop", () => ({
   activeCategoryName: "",
   sortBy: "default",
   viewMode: "grid",
+  currentPage: 1,
+  pageSize: 12,
+  get totalPages(): number {
+    return Math.ceil(this.filteredProducts.length / this.pageSize) || 1;
+  },
+  get paginatedProducts(): SellerShopProduct[] {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.filteredProducts.slice(start, start + this.pageSize);
+  },
+  goToPage(pg: number) {
+    this.currentPage = Math.min(Math.max(1, pg), this.totalPages);
+    const el = document.getElementById("shop-products-top");
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  },
   activePage: "home" as string, // 'home' | 'products' | 'profile' | 'contacts'
   isLoggedIn: false as boolean,
 
@@ -308,17 +344,12 @@ Alpine.data("sellerShop", () => ({
           )
             .then((r) => r.json())
             .catch(() => ({ message: [] })),
-          fetch(
-            `${API_BASE}/method/tradehub_core.api.seller.get_seller_products?seller_code=${this.sellerCode}&page_size=50`,
-            { credentials: "omit" }
-          )
-            .then((r) => r.json())
-            .catch(() => ({ message: { products: [] } })),
+          fetchAllSellerProducts(this.sellerCode).catch(() => [] as SellerShopProduct[]),
         ]);
 
         this.seller = sellerRes?.message || null;
         this.categories = catRes?.message?.categories || catRes?.message || [];
-        this.products = prodRes?.message?.products || [];
+        this.products = prodRes || [];
 
         if (layoutRes?.message) {
           this.layout = {
@@ -409,6 +440,7 @@ Alpine.data("sellerShop", () => ({
   },
 
   filterByCategory(categoryName: string, categoryType: string = "seller") {
+    this.currentPage = 1;
     if (this.activeCategory === categoryName && this.activeCategoryType === categoryType) {
       this.activeCategory = "";
       this.activeCategoryType = "";
@@ -449,6 +481,7 @@ Alpine.data("sellerShop", () => ({
         break;
     }
     this.filteredProducts = sorted;
+    this.currentPage = 1;
   },
 
   formatPrice(p: SellerShopProduct): string {
