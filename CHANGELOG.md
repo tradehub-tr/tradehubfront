@@ -1,3 +1,96 @@
+## [v2.1.0-rc.1] - 2026-07-22 RC
+
+Bu surum rc.istoc.com'da onay asamasindadir.
+
+### Eklendi
+- feat(footer): SEO bölgesi + genişletilmiş footer içeriği; ürün kartı hover cilası (@TurksabYonetim)
+  - FooterSeo.ts eklendi: Trendyol tarzı "Popüler Üreticiler ve Mağazalar" + "Popüler Sayfalar" bölgesi (beyaz zemin, sarı üst çizgi). Marka/arama linkleri SEO hedefli sabit içerik; yalnızca bölüm başlıkları i18n'e çevrilir.
+  - FooterLinks/FooterGroup/FooterPolicy yeniden düzenlendi; mobilde accordion yok, tüm linkler görünür. 4 dilde yeni footer i18n anahtarları (tr/en/ar/ru).
+  - ListingCard: hover'da yumuşak gölge + ring geçişi.
+  - products sayfası arka planı beyaza çekildi; product.ts'ten kullanılmayan escapeHtml import'u kaldırıldı.
+- feat(product-detail): ürün sekmeleri anchor/scroll davranışına geçirildi (@aliiball)
+  - Sekme-değiştirme (içerik gizle/göster) kaldırıldı; tüm bölümler alt alta hep görünür
+  - Sekmeye tıklayınca ilgili bölüme yumuşak scroll (sticky header ofsetli)
+  - Scroll-spy ile görünen bölümün sekmesi otomatik vurgulanıyor
+  - Her bölüme başlık + üst ayraç eklendi (Açıklama/Özellikler/Yorumlar/Tedarikçi)
+  - Açıklama ilk sıraya alındı, tüm içerik DOM'da kalınca Ctrl+F ve SEO iyileşti
+  - Yalnız masaüstü; MobileLayout değişmedi
+- feat(products): onaylanmış satıcı facet sayacı + fiyat histogram/slider eklendi (@aliiball)
+- feat(nav): mobilde para birimi seçici eklendi (@aliiball)
+- feat(ui): "Yeni ürün" rozeti ve dil/para seçicili footer eklendi (@ahmeetseker)
+  - Sinyali olmayan ürünlerde "Yeni ürün" fallback rozeti eklendi (new sinyal tipi, sparkles ikonu, 4 dilde metin)
+  - Footer'da statik "Ülke Değiştir" kolonu yerine işlevsel dil + para birimi seçici popover eklendi
+  - Footer SEO linkleri (marka/mağaza/kategori) backend get_footer_seo_links endpoint'inden hydrate ediliyor (30 dk sessionStorage cache, gerçek pretty URL'ler)
+  - Ürün galerisinde 4'ten fazla görselde "+N" karosu eklendi; lightbox tek kolonlu buzlu-cam thumbnail şeridine geçti; oklar ve favori butonu 44px WCAG hedefine büyütüldü
+  - ProductGrid'deki kart kopyası silinip ortak ListingCard'a bağlandı; statik selling point/tedarikçi bloğu kaldırıldı, alan tamamen sosyal kanıta bırakıldı
+  - Ürün görselleri beyaz zemin + object-contain standardına geçti; grid gap 16px, listeleme 5 kolon, ProductGrid 2xl'de 7 kolon
+  - TopBar giriş butonu ikon + tooltip'e dönüştü; auth dropdown "Tekrar hoş geldiniz" düzeni ve kayıt CTA'sı eklendi
+  - İçerik metinleri globalleştirildi ("Avrupa pazarı" → "Global pazar"); Help Center alt politika şeridi kaldırıldı
+- feat(anasayfa): doğrulanmamış satıcı ürünleri anasayfadan gizlendi (@ahmeetseker)
+  - Ürün vitrini, öneri slider'ı, fırsat gridi ve hero fırsat paneli searchListings çağrılarına verified_supplier filtresi eklendi
+  - Eleme sunucu tarafında yapılıyor; grid yalnızca KYB doğrulanmış satıcı ürünleriyle tam sayıda doluyor
+- feat(pdp): galeri video otomatik oynatma ve thumbnail taşması düzeltildi (@ahmeetseker)
+  - Ana galeride video karesi seçilince video otomatik başlıyor: toVideoEmbedHtml artık autoplay parametresi alıyor, YouTube'a autoplay=1&mute=1, Vimeo'ya autoplay=1&muted=1 query'si ekleniyor, direkt mp4/webm dosyalarına autoplay muted attribute'u veriliyor
+  - Autoplay'de muted zorunlu tutuldu — tarayıcılar sesli otomatik oynatmayı engelliyor; kullanıcı controls üzerinden sesi açabiliyor
+  - withAutoplayParams helper'ı mevcut query string'i koruyarak parametre ekliyor, ürün detayı dışındaki çağrılar (autoplay varsayılan false) etkilenmiyor
+  - "+N" taşma karosu deklaratif x-show yerine applyThumbOverflow ile JS'ten üretiliyor; ilk render $nextTick ile, varyant değişimi swapGalleryImages sonunda aynı fonksiyondan geçiyor
+  - Varyant değiştiğinde eski görsel sayısına göre kalan stale "+N" değeri ve yanlış gizlenen thumbnail'lar düzeldi; koleps her yeni görsel setinde sıfırlanıyor
+  - Özellikler thumbnail'ı sabit images.length yerine reaktif attrsIndex'e bağlandı, görsel sayısı değişince index kayması ortadan kalktı
+  - Galeri ana görsel alanı 540px'ten 560px'e, 2xl kırılımında 680px'e genişletildi
+  - Favorilerde tedarikçi sekmesi artık ürün metnini değil kendi boş durumunu gösteriyor: renderEmptyState kind parametresi (products/suppliers) alıyor
+  - noFavoriteSuppliers ve noFavoriteSuppliersDesc anahtarları tr/en/ru/ar locale'lerine eklendi
+
+### Duzeltildi
+- fix: XSS koruması, güvenlik headerları ve open redirect düzeltmesi (@boraydeger32)
+  - Cart innerHTML XSS — escapeHtml ile korundu (cart.ts)
+  - Product gallery innerHTML XSS — escapeHtml eklendi (product.ts)
+  - Open redirect — login catch bloğu güvenli fallback (LoginPage.ts)
+  - Nginx güvenlik headerları: CSP, HSTS, X-Frame-Options, Referrer-Policy
+  - CSP'ye Google Fonts izni eklendi (fonts.googleapis.com, fonts.gstatic.com)
+  - CI/CD npm audit adımı eklendi (lint.yml)
+  - Node 20 → 22 Dockerfile ile uyum (lint.yml)
+- fix(security): Faz 1-4 frontend güvenlik düzeltmeleri (@boraydeger32)
+  - Mock modları production'da devre dışı (DEV guard) (F-033) addresses.ts, orders.ts, socialProofService.ts, categoryShowcaseService.ts
+  - 2FA login hatası anlaşılır mesaj ile bildiriliyor (F-014)
+  - Stub chat fonksiyonları sessiz geçmek yerine hata fırlatıyor (F-058)
+- fix(top-ranking): kategori dropdown'ı sıralama çubuğunun altında kalıyordu (@TurksabYonetim)
+- fix(cart): sepet kargo/indirim yanlış USD çevrimi kaldırıldı (@aliiball)
+- fix(seller): mağaza sayfasında 80 ürün sınırını kaldır (@boraydeger32)
+- fix(manufacturers): x-data içindeki TS type annotation kaldırıldı (seller listesi Alpine init çöküyordu) (@aliiball)
+- fix(i18n): x-data'ya gömülü çeviri metnindeki apostrof kaçışı (escapeJsString) (@aliiball)
+- fix(orders): writeReviewModal kaydı eklendi (B-2 product split regresyonu) (@aliiball)
+- fix(manufacturers): kategori başlığı backend'den çözülen ada güncelleniyor (client findCategoryBySlug hash'li slug'ları (@aliiball)
+
+### Degistirildi
+- refactor(products): ölü mock kaldırıldı, eskimiş facet yorumları güncellendi (@aliiball)
+- refactor(build): bundle-stats.html prod dist'ten çıkarıldı, ANALYZE'a bağlandı (@aliiball)
+- refactor(assets): kullanılmayan 13 görsel kaldırıldı (~1.6 MB) (@aliiball)
+- refactor(currency): utils formatPrice → localizePriceString (isim çakışması giderildi) (@aliiball)
+- refactor(categories): ölü getCategorySections kaldırıldı + hata metinleri i18n'e alındı (@aliiball)
+  - data/categories.ts: getCategorySections + kullanılmayan t import silindi (tipler korundu)
+  - categories.ts: 3 hardcoded string → t() (hardcoded Türkçe i18n bug'ı düzeldi)
+  - test: hata UI testi i18n-uyumlu (dil TR sabit)
+- refactor(i18n): sadece aktif dil lazy-load edildi (1.68 MB → ~0.4 MB parse/sayfa) (@aliiball)
+- refactor(alpine): checkout modülü page-specific yapıldı (core chunk'tan çıkarıldı) (@aliiball)
+- refactor(alpine): 11 modül page-specific yapıldı (core chunk 687→556 kB) (@aliiball)
+- refactor(alpine): auth modülü page-specific yapıldı (core chunk 556→410 kB) (@aliiball)
+- refactor(alpine): products-filter modülü page-specific yapıldı (products + manufacturers) (@aliiball)
+- refactor(alpine): cart/help/product page-specific yapıldı (core chunk 407→124 kB) (@aliiball)
+- refactor(alpine): sidebar modülü page-specific yapıldı (12 dashboard sayfası) (@aliiball)
+- refactor(perf): sticky sidebar scroll handler rAF ile throttle edildi (@aliiball)
+- refactor(perf): api/callMethod fetch'lerine 30s timeout + AbortController eklendi (@aliiball)
+- refactor(legal-footer): yasal metinler sadeleştirildi, footer linkleri düzenlendi (@ahmeetseker)
+  - Kullanım Koşulları: KDV cümlesi, kargo sorumluluğu paragrafı, Fikri Mülkiyet ve Uygulanacak Hukuk bölümleri kaldırıldı (4 dil)
+  - Gizlilik: United Kingdom ibaresi, e-posta satırı, Uluslararası Veri Transferi ve İletişim bölümleri kaldırıldı (4 dil)
+  - Footer: Hakkımızda, Kariyer, İletişim, Satıcı Akademisi ve Doğrulanmış Tedarikçi Olun linkleri kaldırıldı; Komisyon ve Ücretler "Fiyat Tablosu" olarak değiştirildi
+  - seller/verification.html sayfası ve yönlendirmesi silindi
+- refactor(test): smoke unscoped Alpine hata kontrolü + cart seed + ek sayfalar (@aliiball)
+- refactor(build): cross-file duplicate export bekçisi + CI zorlaması eklendi (@aliiball)
+- refactor(rules): isim benzersizliği adlandırma rehberi eklendi (@aliiball)
+- refactor(categories): CategoryFilterSidebar → CategoryQuickNav, ölü filter dalı temizlendi (@aliiball)
+- refactor(naming): farklı-kavram tipler yeniden adlandırıldı (birleştirme YOK) (@aliiball)
+
+---
 ## [v2.1.0-alpha.13] - 2026-07-22 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
