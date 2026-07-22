@@ -289,6 +289,15 @@ export function initManufacturerFilters(): void {
           mgmt_certs: this.mgmtCerts.join(",") || undefined,
           product_certs: this.productCerts.join(",") || undefined,
         })) as unknown as Record<string, unknown>;
+
+        // Kategori adı backend'den authoritative gelir — başlığı güncelle. Client
+        // findCategoryBySlug ağacı sığ olduğu için hash'li/derin slug'ları çözemiyor,
+        // raw slug kalıyordu. Boşsa dokunma (slug/keyword korunur).
+        const catName = (this.facets.categoryName as string) || "";
+        if (catName) {
+          const { updateSubHeader } = await import("../products/SubHeader");
+          updateSubHeader({ keyword: catName });
+        }
       },
 
       toggleSection(id: string) {

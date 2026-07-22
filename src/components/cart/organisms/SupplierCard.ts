@@ -16,7 +16,7 @@ export interface SupplierCardProps {
   isSingleSupplier?: boolean;
 }
 
-export function SupplierCard({ supplier, isSingleSupplier = true }: SupplierCardProps): string {
+export function CartSupplierCard({ supplier, isSingleSupplier = true }: SupplierCardProps): string {
   const products = supplier.products.map((product) => ProductItem({ product })).join("");
   const isOpen = isSingleSupplier;
 

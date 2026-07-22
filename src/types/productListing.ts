@@ -143,11 +143,11 @@ export interface StoreReviewFilter {
 /**
  * Category item for hierarchical category filter
  */
-export interface CategoryItem {
+export interface FilterCategoryItem {
   id: string;
   name: string;
   count?: number;
-  children?: CategoryItem[];
+  children?: FilterCategoryItem[];
   selected?: boolean;
   expanded?: boolean;
 }
@@ -211,7 +211,7 @@ export interface MinOrderFilterSection extends BaseFilterSection {
  */
 export interface CategoryFilterSection extends BaseFilterSection {
   type: "category";
-  items: CategoryItem[];
+  items: FilterCategoryItem[];
   showMore?: boolean;
   maxVisible?: number;
 }

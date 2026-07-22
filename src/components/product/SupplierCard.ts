@@ -32,7 +32,7 @@ function statRow(icon: string, label: string, value: string): string {
   `;
 }
 
-export function SupplierCard(): string {
+export function ProductSupplierCard(): string {
   const mockProduct = getCurrentProduct();
   const s = mockProduct.supplier;
 

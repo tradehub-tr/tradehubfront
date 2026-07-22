@@ -86,6 +86,7 @@ tradehubfront/
 10. **DOMPurify** kullanıcı içeriği için zorunlu.
 11. **`console.log` ve `any` ile commit yok** — ESLint warn.
 12. **`vite.config.ts` plugin sırası:** `tailwindcss()` ilk olmalı.
+13. **İsim benzersizliği:** aynı export adını birden çok dosyada kullanma (`npm run check:dup` CI'da zorlar). Çakışmada körü körüne birleştirme — gerçek kopya mı yoksa farklı kavram mı (ör. `NavCategoryItem` vs `FilterCategoryItem`) diye sor. Detay: `.claude/rules/typescript.md` §5.
 
 ## 5. Path-scoped rules
 

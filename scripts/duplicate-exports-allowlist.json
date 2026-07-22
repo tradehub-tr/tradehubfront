@@ -1,0 +1,152 @@
+{
+  "getCountryByCode": [
+    "src/components/auth/AccountSetupForm.ts",
+    "src/data/countries.ts"
+  ],
+  "AccountType": [
+    "src/components/auth/AccountTypeSelector.ts",
+    "src/types/userProfile.ts"
+  ],
+  "getBaseUrl": [
+    "src/components/auth/AuthLayout.ts",
+    "src/utils/url.ts"
+  ],
+  "NewBuyerInfoProps": [
+    "src/components/buyer-dashboard/NewBuyerInfo.ts",
+    "src/types/buyerDashboard.ts"
+  ],
+  "CategorySection": [
+    "src/components/categories/CategoryGrid.ts",
+    "src/data/categories.ts"
+  ],
+  "InboxPanel": [
+    "src/components/chat-popup/InboxPanel.ts",
+    "src/components/messages/InboxPanel.ts"
+  ],
+  "PinnedProduct": [
+    "src/components/chat-shared/PinnedProduct.ts",
+    "src/types/chat.ts"
+  ],
+  "OrderSummary": [
+    "src/components/checkout/OrderSummary.ts",
+    "src/types/checkout.ts"
+  ],
+  "SubHeader": [
+    "src/components/header/SubHeader.ts",
+    "src/components/products/SubHeader.ts"
+  ],
+  "getFileKind": [
+    "src/components/rfq/attachments.ts",
+    "src/lib/upload-ui/utils.ts"
+  ],
+  "getFileBadge": [
+    "src/components/rfq/attachments.ts",
+    "src/lib/upload-ui/utils.ts"
+  ],
+  "formatFileSize": [
+    "src/components/rfq/attachments.ts",
+    "src/lib/upload-ui/utils.ts"
+  ],
+  "getFilePreviewUrl": [
+    "src/components/rfq/attachments.ts",
+    "src/lib/upload-ui/utils.ts"
+  ],
+  "revokeFilePreview": [
+    "src/components/rfq/attachments.ts",
+    "src/lib/upload-ui/utils.ts"
+  ],
+  "renderDropzone": [
+    "src/components/rfq/dropzone.ts",
+    "src/lib/upload-ui/dropzone.ts"
+  ],
+  "DropzoneHandlers": [
+    "src/components/rfq/dropzone.ts",
+    "src/lib/upload-ui/dropzone.ts"
+  ],
+  "bindDropzone": [
+    "src/components/rfq/dropzone.ts",
+    "src/lib/upload-ui/dropzone.ts"
+  ],
+  "FileListOptions": [
+    "src/components/rfq/file-list.ts",
+    "src/lib/upload-ui/file-list.ts"
+  ],
+  "renderFileGrid": [
+    "src/components/rfq/file-list.ts",
+    "src/lib/upload-ui/file-list.ts"
+  ],
+  "updateFileCardProgress": [
+    "src/components/rfq/file-list.ts",
+    "src/lib/upload-ui/file-list.ts"
+  ],
+  "simulateStagingProgress": [
+    "src/components/rfq/file-list.ts",
+    "src/lib/upload-ui/file-list.ts"
+  ],
+  "FileProgress": [
+    "src/components/rfq/uploader.ts",
+    "src/lib/upload-ui/uploader.ts"
+  ],
+  "SellerReview": [
+    "src/components/seller/CompanyProfile.ts",
+    "src/data/seller/mockData.ts",
+    "src/types/seller/types.ts"
+  ],
+  "SellerPerformanceStats": [
+    "src/components/seller/CompanyProfile.ts",
+    "src/types/seller/types.ts"
+  ],
+  "initFloatingActions": [
+    "src/components/seller/FloatingActions.ts",
+    "src/utils/seller/interactions.ts"
+  ],
+  "ApiCategory": [
+    "src/components/shared/CategoryNavBar.ts",
+    "src/services/categoryService.ts"
+  ],
+  "PricingPlan": [
+    "src/components/shared/PricingTable.ts",
+    "src/services/pricingService.ts"
+  ],
+  "Country": [
+    "src/data/countries.ts",
+    "src/types/checkout.ts"
+  ],
+  "RankedProduct": [
+    "src/data/mockTopRanking.ts",
+    "src/types/topRanking.ts"
+  ],
+  "RankingCategoryGroup": [
+    "src/data/mockTopRanking.ts",
+    "src/types/topRanking.ts"
+  ],
+  "getCategories": [
+    "src/services/categoryService.ts",
+    "src/services/listingService.ts"
+  ],
+  "isCacheFresh": [
+    "src/services/categoryShowcaseService.ts",
+    "src/services/headerNoticeService.ts",
+    "src/services/pricingService.ts"
+  ],
+  "CurrencyInfo": [
+    "src/services/currencyService.ts",
+    "src/utils/currency.ts"
+  ],
+  "getSelectedCurrency": [
+    "src/services/currencyService.ts",
+    "src/utils/currency.ts"
+  ],
+  "setSelectedCurrency": [
+    "src/services/currencyService.ts",
+    "src/utils/currency.ts"
+  ],
+  "RecentCategory": [
+    "src/services/recentHistoryService.ts",
+    "src/utils/recentCategories.ts"
+  ],
+  "getRecentCategories": [
+    "src/services/recentHistoryService.ts",
+    "src/utils/recentCategories.ts"
+  ]
+}

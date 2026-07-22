@@ -46,9 +46,10 @@ import "./socialProofBadge";
 // pages/messages.ts'te import ediliyor. vite manualChunks'ta 'alpine'dan hariç.
 import "./chatPopup";
 import "./reservationModal";
-import "./sidebar";
+// sidebar — page-specific (dashboard sol menüsü, 12 dashboard sayfası). B-2: core'dan
+// çıkarıldı, ilgili sayfalarda import ediliyor. vite manualChunks'ta 'alpine'dan hariç.
 // products-filter — page-specific (filterSidebar + filterChips → products, searchHeader
-// → manufacturers via products/SubHeader). categories CategoryFilterSidebar kullanır
+// → manufacturers via products/SubHeader). categories CategoryQuickNav kullanır
 // (bu modül DEĞİL). B-2: core'dan çıkarıldı, products + manufacturers'ta import ediliyor.
 // vite manualChunks'ta 'alpine'dan hariç.
 import "./shared";

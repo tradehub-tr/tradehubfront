@@ -8,7 +8,7 @@ import type { CartSupplier, CartSummaryData } from "../../../types/cart";
 import { t } from "../../../i18n";
 import { CartHeader } from "../organisms/CartHeader";
 import { BatchSelectBar } from "../molecules/BatchSelectBar";
-import { SupplierCard } from "../organisms/SupplierCard";
+import { CartSupplierCard } from "../organisms/SupplierCard";
 import { CartSummary } from "./CartSummary";
 import { cartStore } from "../state/CartStore";
 import { getCurrencySymbol } from "../../../utils/currency";
@@ -72,7 +72,7 @@ export function CartPage({ suppliers, summary }: CartPageProps): string {
           ${CartHeader()}
           ${BatchSelectBar({ totalCount: totalItems, selectedCount })}
           <div class="sc-cart-supplier-list flex flex-col gap-3">
-            ${suppliers.map((supplier) => SupplierCard({ supplier, isSingleSupplier: suppliers.length === 1 })).join("")}
+            ${suppliers.map((supplier) => CartSupplierCard({ supplier, isSingleSupplier: suppliers.length === 1 })).join("")}
           </div>
         </section>
 

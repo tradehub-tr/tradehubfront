@@ -1,3 +1,58 @@
+## [v2.1.0-alpha.12] - 2026-07-21 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(i18n): x-data'ya gömülü çeviri metnindeki apostrof kaçışı (escapeJsString) (@aliiball)
+- fix(orders): writeReviewModal kaydı eklendi (B-2 product split regresyonu) (@aliiball)
+- fix(manufacturers): kategori başlığı backend'den çözülen ada güncelleniyor (client findCategoryBySlug hash'li slug'ları (@aliiball)
+
+### Degistirildi
+- refactor(test): smoke unscoped Alpine hata kontrolü + cart seed + ek sayfalar (@aliiball)
+- refactor(build): cross-file duplicate export bekçisi + CI zorlaması eklendi (@aliiball)
+- refactor(rules): isim benzersizliği adlandırma rehberi eklendi (@aliiball)
+- refactor(categories): CategoryFilterSidebar → CategoryQuickNav, ölü filter dalı temizlendi (@aliiball)
+- refactor(naming): farklı-kavram tipler yeniden adlandırıldı (birleştirme YOK) (@aliiball)
+
+---
+## [v2.1.0-alpha.11] - 2026-07-21 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(anasayfa): doğrulanmamış satıcı ürünleri anasayfadan gizlendi (@ahmeetseker)
+  - Ürün vitrini, öneri slider'ı, fırsat gridi ve hero fırsat paneli searchListings çağrılarına verified_supplier filtresi eklendi
+  - Eleme sunucu tarafında yapılıyor; grid yalnızca KYB doğrulanmış satıcı ürünleriyle tam sayıda doluyor
+
+### Degistirildi
+- refactor(legal-footer): yasal metinler sadeleştirildi, footer linkleri düzenlendi (@ahmeetseker)
+  - Kullanım Koşulları: KDV cümlesi, kargo sorumluluğu paragrafı, Fikri Mülkiyet ve Uygulanacak Hukuk bölümleri kaldırıldı (4 dil)
+  - Gizlilik: United Kingdom ibaresi, e-posta satırı, Uluslararası Veri Transferi ve İletişim bölümleri kaldırıldı (4 dil)
+  - Footer: Hakkımızda, Kariyer, İletişim, Satıcı Akademisi ve Doğrulanmış Tedarikçi Olun linkleri kaldırıldı; Komisyon ve Ücretler "Fiyat Tablosu" olarak değiştirildi
+  - seller/verification.html sayfası ve yönlendirmesi silindi
+
+---
+## [v2.1.0-alpha.10] - 2026-07-21 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(manufacturers): x-data içindeki TS type annotation kaldırıldı (seller listesi Alpine init çöküyordu) (@aliiball)
+
+### Degistirildi
+- refactor(alpine): sidebar modülü page-specific yapıldı (12 dashboard sayfası) (@aliiball)
+- refactor(perf): sticky sidebar scroll handler rAF ile throttle edildi (@aliiball)
+- refactor(perf): api/callMethod fetch'lerine 30s timeout + AbortController eklendi (@aliiball)
+
+---
+## [v2.1.0-alpha.9] - 2026-07-21 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(seller): mağaza sayfasında 80 ürün sınırını kaldır (@boraydeger32)
+
+---
 ## [v2.1.0-alpha.8] - 2026-07-21 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
