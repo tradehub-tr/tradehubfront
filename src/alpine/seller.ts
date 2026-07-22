@@ -263,6 +263,9 @@ Alpine.data("sellerStorefront", () => ({
     const code =
       (pathMatch && pathMatch[1]) || new URLSearchParams(window.location.search).get("seller");
     this.sellerCode = code || "";
+    if (new URLSearchParams(window.location.search).get("tab") === "contact") {
+      this.activeTab = "contact";
+    }
     if (!code) {
       this.loading = false;
       return;

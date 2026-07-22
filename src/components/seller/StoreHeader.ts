@@ -60,7 +60,7 @@ export function StoreHeader(): string {
             <button
               class="bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[14px] font-semibold border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] active:scale-[0.97] transition-[background-color,color,transform] duration-150 motion-reduce:transition-none whitespace-nowrap"
               style="width: 180px; height: 40px; padding: 0px 12px;"
-              @click="setTab('contact')">
+              data-chat-trigger :data-seller-id="sellerCode">
               ${t("seller.sf.contactNow")}
             </button>
           </div>
@@ -119,7 +119,7 @@ export function StoreHeader(): string {
               </a>
               <button
                 class="w-full py-2.5 bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[13px] font-semibold border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] active:scale-[0.97] transition-[background-color,color,transform] duration-150 motion-reduce:transition-none"
-                @click="setTab('contact')">
+                data-chat-trigger :data-seller-id="sellerCode">
                 ${t("seller.sf.contactNow")}
               </button>
             </div>

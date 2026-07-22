@@ -119,10 +119,10 @@ async function renderPage() {
              :style="seller?.header_bg_image ? 'background-image: url(' + seller.header_bg_image + ')' : 'background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)'">
           <div class="max-w-[1200px] mx-auto px-4 lg:px-8 py-5"
                :style="seller?.header_bg_image ? 'background: rgba(255,255,255,0.85)' : ''">
-            <div class="flex items-start gap-5">
+            <div class="hidden sm:flex items-start gap-5">
 
               <!-- Logo (arka plan yok, radius dinamik) -->
-              <div class="w-[120px] h-[120px] sm:w-[140px] sm:h-[140px] overflow-hidden shrink-0"
+              <div class="w-[140px] h-[140px] overflow-hidden shrink-0"
                    :style="'border-radius:' + (seller?.logo_radius || '8') + 'px'">
                 <img x-show="seller?.logo" :src="seller?.logo" :alt="seller?.seller_name"
                      class="w-full h-full object-cover"
@@ -167,7 +167,7 @@ async function renderPage() {
                     </div>
 
                     <!-- Main products / description -->
-                    <p class="text-[13px] text-[#555] leading-relaxed line-clamp-2 mb-2" x-show="seller?.description || seller?.short_description" x-text="'${t("sellPage.mainProductsLabel")}: ' + (seller?.description || seller?.short_description || '')"></p>
+                    <p class="text-[13px] text-[#555] leading-relaxed line-clamp-2 mb-2" x-show="seller?.description || seller?.short_description" x-text="seller?.description || seller?.short_description || ''"></p>
 
                     <!-- Email -->
                     <div class="flex items-center gap-1.5 text-[13px] text-[#666]" x-show="seller?.email">
@@ -198,17 +198,50 @@ async function renderPage() {
               </div>
             </div>
 
-            <!-- Mobile CTA -->
-            <div class="flex sm:hidden gap-2 mt-4">
-              <button
-                class="flex-1 bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[12px] font-medium border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] py-2 active:scale-[0.97] transition-[background-color,transform] duration-150 motion-reduce:transition-none motion-reduce:active:scale-100"
-                @click="switchPage('contacts')">
-                ${t("sellPage.contactSupplier")}
-              </button>
-              <a href="/magaza/${sellerCode}"
-                 class="th-btn-outline flex-1 text-[12px] font-medium text-[#555] py-2 text-center">
-                ${t("sellPage.profile")}
-              </a>
+            <!-- Mobile header (kompakt satir + esit yukseklikli aksiyon seridi) -->
+            <div class="sm:hidden">
+              <div class="flex items-center gap-3">
+                <div class="w-[50px] h-[50px] shrink-0 overflow-hidden border border-gray-200 bg-white"
+                     :style="'border-radius:' + (seller?.logo_radius || '8') + 'px'">
+                  <img x-show="seller?.logo" :src="seller?.logo" :alt="seller?.seller_name"
+                       class="w-full h-full object-contain" />
+                  <div x-show="!seller?.logo" class="w-full h-full bg-gray-100 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M2 7l10-5 10 5v10l-10 5-10-5V7z"/></svg>
+                  </div>
+                </div>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-1.5">
+                    <p class="text-[17px] font-bold text-[#222] leading-tight truncate" x-text="seller?.seller_name || ''"></p>
+                    <span x-show="seller?.verified"
+                          class="w-[15px] h-[15px] rounded-full bg-green-700 flex items-center justify-center shrink-0"
+                          role="img" aria-label="${t("seller.sf.verifiedSupplier")}" title="${t("seller.sf.verifiedSupplier")}">
+                      <svg class="w-2.5 h-2.5 text-white" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.704 5.29a1 1 0 010 1.415l-8 8a1 1 0 01-1.415 0l-4-4a1 1 0 111.415-1.415L8 12.586l7.29-7.296a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                    </span>
+                  </div>
+                  <p class="text-[12px] text-[#777] truncate"
+                     x-text="[seller?.business_type, (seller?.founded_year || seller?.member_since) ? ((new Date().getFullYear() - (seller?.founded_year || 2010)) + ' ${t("sellPage.years")}') : '', [seller?.city, seller?.country].filter(Boolean).join(', ')].filter(Boolean).join(' · ')"></p>
+                </div>
+              </div>
+              <div class="grid grid-cols-[1fr_40px_40px] gap-2 mt-3">
+                <button
+                  class="h-10 text-white text-[12px] font-medium border rounded-[var(--radius-button,8px)] active:scale-[0.97] transition-[background-color,transform] duration-150 motion-reduce:transition-none motion-reduce:active:scale-100"
+                  style="background-color: #1f1f1f; border-color: #1f1f1f;"
+                  :style="layout.theme?.navBgColor ? 'background-color:' + layout.theme.navBgColor + ';border-color:' + layout.theme.navBgColor : ''"
+                  @click="switchPage('contacts')">
+                  ${t("sellPage.contactSupplier")}
+                </button>
+                <a href="/magaza/${sellerCode}"
+                   class="h-10 flex items-center justify-center rounded-[var(--radius-button,8px)] border-[1.5px] border-gray-200 bg-white text-[#555] hover:text-[#222] hover:border-gray-300 transition-colors duration-150"
+                   aria-label="${t("sellPage.profile")}">
+                  <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path stroke-linecap="round" d="M5 20c1.2-3.2 3.8-5 7-5s5.8 1.8 7 5"/></svg>
+                </a>
+                <button type="button"
+                        class="th-no-press h-10 flex items-center justify-center rounded-[var(--radius-button,8px)] border-[1.5px] border-gray-200 bg-white text-[#555] hover:text-[#222] hover:border-gray-300 transition-colors duration-150"
+                        aria-label="${t("product.share")}"
+                        @click="shareShop()">
+                  <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="6" cy="12" r="2.5"/><circle cx="17" cy="6" r="2.5"/><circle cx="17" cy="18" r="2.5"/><path stroke-linecap="round" d="m8.3 10.8 6.4-3.6M8.3 13.2l6.4 3.6"/></svg>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -348,21 +381,6 @@ async function renderPage() {
               ${t("sellPage.navContacts")}
             </a>
           </div>
-        </div>
-
-        <!-- ═══ FLOATING CONTACT BUTTONS (sag kenar) ═══ -->
-        <div class="fixed end-0 top-1/2 -translate-y-1/2 z-40 flex flex-col gap-0.5">
-          <button @click="switchPage('contacts')"
-                  class="w-[52px] h-[52px] bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) flex flex-col items-center justify-center rounded-s-md border border-(--btn-border-color,#d39c00) shadow-lg active:scale-[0.97] transition-[background-color,transform] duration-150 motion-reduce:transition-none motion-reduce:active:scale-100">
-            <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
-            <span class="text-[8px] font-bold leading-none">Contact</span>
-            <span class="text-[8px] font-bold leading-none">Supplier</span>
-          </button>
-          <button class="w-[52px] h-[52px] bg-white hover:bg-gray-50 text-[#cc9900] border border-gray-200 flex flex-col items-center justify-center rounded-s-md shadow-lg transition-colors">
-            <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.068.157 2.148.279 3.238.364.466.037.893.281 1.153.671L12 21l2.652-3.978c.26-.39.687-.634 1.153-.671 1.09-.085 2.17-.207 3.238-.364 1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"/></svg>
-            <span class="text-[8px] font-bold leading-none text-gray-500">Chat</span>
-            <span class="text-[8px] font-bold leading-none text-gray-500">Now!</span>
-          </button>
         </div>
 
         <!-- ═══════════════════════════════════════════════════════ -->

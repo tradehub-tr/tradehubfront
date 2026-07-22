@@ -2177,8 +2177,8 @@ button[data-filter-action="apply-all"]:active {
 
 /* Hero Banner — Swiper Dot Pagination (Swiper-injected) */
 .store-hero__dot {
-  width: 10px;
-  height: 10px;
+  width: 6px;
+  height: 6px;
   border-radius: 9999px;
   background-color: rgba(255, 255, 255, 0.5);
   cursor: pointer;
@@ -2186,8 +2186,8 @@ button[data-filter-action="apply-all"]:active {
     background-color 0.2s ease,
     transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
   border: none;
-  /* WCAG 2.5.8: görsel 10px kalır; padding + content-box clip ile tap alanı 24px */
-  padding: 7px;
+  /* Görsel 6px; padding + content-box clip ile tap alanı 16px (çok slaytta pill şişmesin) */
+  padding: 5px;
   box-sizing: content-box;
   background-clip: content-box;
   margin: 0;

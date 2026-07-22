@@ -933,7 +933,7 @@ const ru = {
       loginTitle: "Войдите",
       reachSupplier: "Связаться с поставщиком",
       contactNow: "Связаться сейчас",
-      sendInquiry: "Отправить запрос",
+      sendInquiry: "Задать вопрос",
       bannerAlt: "Баннер",
       sectionHeroBanner: "Главный баннер",
       sectionCategoryGrid: "Сетка категорий",
@@ -3768,7 +3768,7 @@ const ru = {
         contactSupplier: "Связаться с поставщиком",
         contactSupplierTitle: "Связаться с поставщиком",
         contactNow: "Связаться сейчас",
-        sendInquiry: "Отправить запрос",
+        sendInquiry: "Задать вопрос",
         // CompanyProfile - OverviewTab
         performance: "Показатели",
         satisfactory: "Удовлетворительно",
@@ -5567,6 +5567,9 @@ const ru = {
       noFavorites: "У вас нет избранных товаров",
       noFavoritesDesc:
         "Понравился товар, но пока не готовы к покупке?<br/>Мы сохраним его для вас в избранном",
+      noFavoriteSuppliers: "У вас нет избранных поставщиков",
+      noFavoriteSuppliersDesc:
+        "Подписывайтесь на понравившихся продавцов.<br/>Ваши поставщики всегда будут под рукой",
       products: "Товары",
       suppliers: "Поставщики",
       myList: "Мой список",
@@ -7180,7 +7183,6 @@ const ru = {
       storeNotFound: "Магазин не найден",
       storeNotFoundDesc: "Страница магазина для этого продавца ещё не создана.",
       years: "лет",
-      mainProductsLabel: "Основные товары",
       with: "через",
       contactSupplier: "Связаться с поставщиком",
       viewProfile: "Посмотреть профиль",

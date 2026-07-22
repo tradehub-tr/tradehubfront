@@ -927,7 +927,7 @@ const tr = {
       loginTitle: "Giriş yapın",
       reachSupplier: "Tedarikçiye Ulaşın",
       contactNow: "Şimdi iletişime geçin",
-      sendInquiry: "Sorgu gönder",
+      sendInquiry: "Soru sor",
       bannerAlt: "Banner",
       sectionHeroBanner: "Hero Banner",
       sectionCategoryGrid: "Kategori Grid",
@@ -3740,7 +3740,7 @@ const tr = {
         contactSupplier: "Tedarikçiye Ulaşın",
         contactSupplierTitle: "Tedarikçiye Ulaşın",
         contactNow: "Şimdi iletişime geçin",
-        sendInquiry: "Sorgu gönder",
+        sendInquiry: "Soru sor",
         // CompanyProfile - OverviewTab
         performance: "Performans",
         satisfactory: "Hoşnut eden",
@@ -5541,6 +5541,9 @@ const tr = {
       noFavorites: "Favori ürününüz yok",
       noFavoritesDesc:
         "Beğendiğiniz ama satın almaya hazır olmayan bir şey görüyor musunuz?<br/>Favorilerinizde sizin için tasarruf edeceğiz",
+      noFavoriteSuppliers: "Favori tedarikçiniz yok",
+      noFavoriteSuppliersDesc:
+        "Beğendiğiniz satıcıları takip edin.<br/>Tedarikçileriniz burada, elinizin altında olsun",
       products: "Ürünler",
       suppliers: "Tedarikçiler",
       myList: "Listem",
@@ -7123,7 +7126,6 @@ const tr = {
       storeNotFound: "Mağaza bulunamadı",
       storeNotFoundDesc: "Bu satıcı için bir mağaza sayfası henüz oluşturulmamış.",
       years: "yıl",
-      mainProductsLabel: "Ana ürünler",
       with: "ile",
       contactSupplier: "Tedarikçiye Ulaşın",
       viewProfile: "Profili Görüntüle",
