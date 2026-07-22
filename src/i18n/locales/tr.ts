@@ -5541,6 +5541,9 @@ const tr = {
       noFavorites: "Favori ürününüz yok",
       noFavoritesDesc:
         "Beğendiğiniz ama satın almaya hazır olmayan bir şey görüyor musunuz?<br/>Favorilerinizde sizin için tasarruf edeceğiz",
+      noFavoriteSuppliers: "Favori tedarikçiniz yok",
+      noFavoriteSuppliersDesc:
+        "Beğendiğiniz satıcıları takip edin.<br/>Tedarikçileriniz burada, elinizin altında olsun",
       products: "Ürünler",
       suppliers: "Tedarikçiler",
       myList: "Listem",

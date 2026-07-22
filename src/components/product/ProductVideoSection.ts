@@ -14,8 +14,17 @@ import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 const VIDEO_CONTAINER_ID = "product-video-section";
 
-/** YouTube / Vimeo URL'lerini embed URL'ine çevirir, direkt video dosyası URL'lerini olduğu gibi bırakır. */
-export function toVideoEmbedHtml(rawUrl: string): string {
+/** Embed iframe src'ine autoplay parametrelerini ekler (mevcut query string'i korur). */
+function withAutoplayParams(src: string, params: string): string {
+  return src + (src.includes("?") ? "&" : "?") + params;
+}
+
+/**
+ * YouTube / Vimeo URL'lerini embed URL'ine çevirir, direkt video dosyası URL'lerini olduğu gibi bırakır.
+ * `autoplay=true` ise video/iframe sayfa etkileşimi olmadan başlar — tarayıcı politikası gereği
+ * sesli autoplay engellendiğinden bu durumda `muted` zorunlu (kullanıcı controls ile sesi açabilir).
+ */
+export function toVideoEmbedHtml(rawUrl: string, autoplay = false): string {
   const url = (rawUrl || "").trim();
   if (!url) return "";
 
@@ -24,18 +33,24 @@ export function toVideoEmbedHtml(rawUrl: string): string {
     /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/
   );
   if (yt) {
-    return `<iframe src="https://www.youtube.com/embed/${yt[1]}" class="absolute inset-0 w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+    const src = autoplay
+      ? withAutoplayParams(`https://www.youtube.com/embed/${yt[1]}`, "autoplay=1&mute=1")
+      : `https://www.youtube.com/embed/${yt[1]}`;
+    return `<iframe src="${src}" class="absolute inset-0 w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
   }
 
   // Vimeo
   const vm = url.match(/vimeo\.com\/(\d+)/);
   if (vm) {
-    return `<iframe src="https://player.vimeo.com/video/${vm[1]}" class="absolute inset-0 w-full h-full" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+    const src = autoplay
+      ? withAutoplayParams(`https://player.vimeo.com/video/${vm[1]}`, "autoplay=1&muted=1")
+      : `https://player.vimeo.com/video/${vm[1]}`;
+    return `<iframe src="${src}" class="absolute inset-0 w-full h-full" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
   }
 
   // Direkt embed URL
   if (url.includes("/embed/") || url.includes("player.vimeo.com")) {
-    const safeSrc = escapeHtml(sanitizeUrl(url));
+    const safeSrc = escapeHtml(sanitizeUrl(autoplay ? withAutoplayParams(url, "autoplay=1&muted=1") : url));
     if (!safeSrc) return "";
     return `<iframe src="${safeSrc}" class="absolute inset-0 w-full h-full" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
   }
@@ -44,7 +59,8 @@ export function toVideoEmbedHtml(rawUrl: string): string {
   if (/\.(mp4|webm|ogg|mov|m4v)(\?|$)/i.test(url)) {
     const safeSrc = escapeHtml(sanitizeUrl(url));
     if (!safeSrc) return "";
-    return `<video src="${safeSrc}" class="absolute inset-0 w-full h-full object-contain bg-black" controls preload="metadata" playsinline></video>`;
+    const autoAttrs = autoplay ? " autoplay muted" : "";
+    return `<video src="${safeSrc}" class="absolute inset-0 w-full h-full object-contain bg-black" controls${autoAttrs} preload="metadata" playsinline></video>`;
   }
 
   // Tanınmayan formatta anchor fallback

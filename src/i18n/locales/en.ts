@@ -5544,6 +5544,9 @@ const en = {
       noFavorites: "You have no favorite products",
       noFavoritesDesc:
         "See something you like but not ready to buy?<br/>We'll save it for you in your favorites",
+      noFavoriteSuppliers: "You have no favorite suppliers",
+      noFavoriteSuppliersDesc:
+        "Follow the sellers you like.<br/>Keep your suppliers right here, close at hand",
       products: "Products",
       suppliers: "Suppliers",
       myList: "My List",

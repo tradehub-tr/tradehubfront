@@ -5483,6 +5483,8 @@ const ar = {
       title: "المفضلة",
       noFavorites: "ليس لديك أي منتجات مفضلة",
       noFavoritesDesc: "أعجبك شيء ما لكنك لست مستعدًا للشراء بعد؟<br/>سنحفظه لك في مفضلتك",
+      noFavoriteSuppliers: "ليس لديك أي موردين مفضلين",
+      noFavoriteSuppliersDesc: "تابع البائعين الذين تفضلهم.<br/>احتفظ بمورديك هنا في متناول يدك",
       products: "المنتجات",
       suppliers: "الموردون",
       myList: "قائمتي",

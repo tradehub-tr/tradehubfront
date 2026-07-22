@@ -242,12 +242,15 @@ function getSellerTotalCount(): number {
    SECTION RENDERERS
    ──────────────────────────────────────── */
 
-function renderEmptyState(): string {
+function renderEmptyState(kind: "products" | "suppliers" = "products"): string {
+  const isSeller = kind === "suppliers";
+  const title = isSeller ? "favorites.noFavoriteSuppliers" : "favorites.noFavorites";
+  const desc = isSeller ? "favorites.noFavoriteSuppliersDesc" : "favorites.noFavoritesDesc";
   return `
     <div class="flex flex-col items-center text-center py-15 px-5">
       <div class="mb-5">${FAVORITES_EMPTY_SVG}</div>
-      <h3 class="text-base font-bold text-text-primary mb-2.5">${t("favorites.noFavorites")}</h3>
-      <p class="text-sm text-text-tertiary leading-relaxed max-w-[380px]">${t("favorites.noFavoritesDesc")}</p>
+      <h3 class="text-base font-bold text-text-primary mb-2.5">${t(title)}</h3>
+      <p class="text-sm text-text-tertiary leading-relaxed max-w-[380px]">${t(desc)}</p>
     </div>
   `;
 }
@@ -345,7 +348,7 @@ function renderSidebarLists(kind: "products" | "suppliers" = "products"): string
  * (<480) şehir/puan sütunları gizlenir, puan isim altına iner.
  */
 function renderSupplierCards(items: FavoriteSellerItem[]): string {
-  if (items.length === 0) return renderEmptyState();
+  if (items.length === 0) return renderEmptyState("suppliers");
 
   const starSvg = `<svg class="w-3.5 h-3.5 text-amber-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>`;
   const listById = new Map(getLists().map((l) => [l.id, l]));
@@ -954,7 +957,7 @@ function renderFavorites(): string {
           </div>
         </aside>
         <div class="min-w-0 border-s border-border-default max-md:border-s-0 max-md:border-t" id="fav-suppliers-container">
-          ${renderEmptyState()}
+          ${renderEmptyState("suppliers")}
         </div>
       </div>
     </div>

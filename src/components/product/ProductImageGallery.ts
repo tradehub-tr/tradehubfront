@@ -73,7 +73,6 @@ export const LIGHTBOX_THUMB_GAP = 10;
 export function ProductImageGallery(): string {
   const mockProduct = getCurrentProduct();
   const images = mockProduct.images;
-  const needsScroll = images.length > 4;
   const firstImage = images[0];
 
   const thumbsHtml = images
@@ -83,7 +82,6 @@ export function ProductImageGallery(): string {
         <div
           class="gallery-thumb gallery-thumb-video relative w-[60px] h-[60px] rounded-md overflow-hidden shrink-0 border-2 border-[var(--color-border-default,#e5e5e5)] cursor-pointer transition-colors duration-150 [&.active]:border-[#f5b800] [&.active]:shadow-[inset_3px_0_0_#f5b800] [&:hover:not(.active)]:border-[var(--color-border-strong)]"
           :class="{ 'active': currentIndex === ${i} }"
-          ${i >= 4 ? 'x-show="thumbsExpanded"' : ""}
           data-index="${i}"
           aria-label="Video"
           @mouseenter="goToSlide(${i})"
@@ -102,7 +100,6 @@ export function ProductImageGallery(): string {
       <div
         class="gallery-thumb w-[60px] h-[60px] rounded-md overflow-hidden shrink-0 bg-white [&_img]:!object-contain [&_img]:!p-0.5 border-2 border-[var(--color-border-default,#e5e5e5)] cursor-pointer transition-colors duration-150 [&.active]:border-[#f5b800] [&.active]:shadow-[inset_3px_0_0_#f5b800] [&:hover:not(.active)]:border-[var(--color-border-strong)]"
         :class="{ 'active': currentIndex === ${i} }"
-        ${i >= 4 ? 'x-show="thumbsExpanded"' : ""}
         data-index="${i}"
         aria-label="${img.alt}"
         @mouseenter="goToSlide(${i})"
@@ -116,11 +113,11 @@ export function ProductImageGallery(): string {
   const attrThumbHtml = `
     <div
       class="gallery-thumb gallery-thumb-attrs w-[60px] h-[60px] rounded-md overflow-hidden shrink-0 border-2 border-[var(--color-border-default,#e5e5e5)] cursor-pointer transition-colors duration-150 [&.active]:border-[#f5b800] [&:hover:not(.active)]:border-[var(--color-border-strong)]"
-      :class="{ 'active': currentIndex === ${images.length} }"
-      data-index="${images.length}"
+      :class="{ 'active': currentIndex === attrsIndex }"
+      :data-index="attrsIndex"
       aria-label="${t("product.attributesTab")}"
-      @mouseenter="goToSlide(${images.length})"
-      @click="goToSlide(${images.length})"
+      @mouseenter="goToSlide(attrsIndex)"
+      @click="goToSlide(attrsIndex)"
     >
       <div class="relative w-full h-full overflow-hidden flex items-center justify-center" style="background: linear-gradient(180deg, #f0f4f8 0%, #e2e8f0 100%);" aria-hidden="true">
         <svg width="24" height="24" fill="none" stroke="#64748b" stroke-width="1.4" viewBox="0 0 24 24">
@@ -185,29 +182,20 @@ export function ProductImageGallery(): string {
       <!-- LEFT: Vertical Thumbnail Strip (hidden on narrow desktop, shown on wider) -->
       <div id="pd-thumb-strip" class="hidden 2xl:flex flex-col items-center shrink-0 w-[68px]">
 
+        <!-- "+N" taşma karosu ilk 4'ten fazla görselde JS (applyThumbOverflow) tarafından
+             eklenir; hem ilk render hem varyant swap'i tek koddan geçsin diye deklaratif değil. -->
         <div id="gallery-thumb-list" x-ref="thumbList" class="flex flex-col gap-1.5 overflow-y-auto scrollbar-hide flex-1 py-1.5">
           ${thumbsHtml}
-          ${
-            needsScroll
-              ? `
-          <button type="button" id="thumb-show-more" x-show="!thumbsExpanded" @click="thumbsExpanded = true"
-            class="w-[60px] h-[60px] rounded-md border-2 border-dashed border-[var(--color-border-strong,#a3a3a3)] bg-transparent text-[13px] font-bold text-[var(--color-text-secondary,#525252)] cursor-pointer shrink-0 transition-colors hover:border-[#cc9900] hover:text-[#cc9900] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#cc9900]"
-            aria-label="+${images.length - 4}" title="+${images.length - 4}">
-            +${images.length - 4}
-          </button>
-          `
-              : ""
-          }
           ${attrThumbHtml}
         </div>
 
       </div>
 
       <!-- RIGHT: Main Image Area — Ray düzeni: kare beyaz görsel + kenarına hizalı
-           koyu cam oklar + WCAG favori. Wrapper görsel boyutunda (max 540px, ortalı);
+           koyu cam oklar + WCAG favori. Wrapper görsel boyutunda (max 560px, 2xl'de 680px, ortalı);
            oklar/kalp innerHTML replace'inden etkilenmesin diye #gallery-main-image
            DIŞINDA, wrapper içinde durur. Özellikler sekmesinde wrapper komple gizlenir. -->
-      <div class="relative flex-1 min-w-0 w-full max-w-[540px] mx-auto" :class="{ 'hidden': currentIndex === attrsIndex }">
+      <div class="relative flex-1 min-w-0 w-full max-w-[560px] 2xl:max-w-[680px] mx-auto" :class="{ 'hidden': currentIndex === attrsIndex }">
         <div id="gallery-main-image"
           class="relative aspect-square w-full rounded-md overflow-hidden bg-[var(--product-image-bg,#ffffff)] pointer-coarse:cursor-default [&.zoom-enabled]:cursor-zoom-in [&.zoom-enabled>[data-gallery-main-media=true]]:transition-transform [&.zoom-enabled>[data-gallery-main-media=true]]:duration-[180ms] [&.zoom-enabled>[data-gallery-main-media=true]]:ease-out [&.zoom-enabled>[data-gallery-main-media=true]]:origin-center [&.zoom-enabled>[data-gallery-main-media=true]]:will-change-transform [&.is-zooming>[data-gallery-main-media=true]]:transition-transform [&.is-zooming>[data-gallery-main-media=true]]:duration-[30ms] [&.is-zooming>[data-gallery-main-media=true]]:ease-linear motion-reduce:[&.zoom-enabled>[data-gallery-main-media=true]]:transition-none motion-reduce:[&.is-zooming>[data-gallery-main-media=true]]:transition-none"
           x-ref="mainImage"

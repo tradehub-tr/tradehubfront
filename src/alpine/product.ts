@@ -28,7 +28,7 @@ function renderInlineVideo(url: string): string {
   return `
     <div class="relative w-full h-full bg-black flex items-center justify-center" data-gallery-main-media="true">
       <div class="relative w-full h-full" style="max-height: 100%">
-        ${toVideoEmbedHtml(url)}
+        ${toVideoEmbedHtml(url, true)}
       </div>
     </div>
   `;
@@ -243,6 +243,15 @@ Alpine.data("reviewsModal", () => ({
   },
 }));
 
+// "+N" taşma karosu görseli — ilk 4'ten sonrakiler bunun ardında gizlenir.
+const THUMB_MORE_CLASS =
+  "w-[60px] h-[60px] rounded-md border-2 border-dashed border-[var(--color-border-strong,#a3a3a3)] " +
+  "bg-transparent text-[13px] font-bold text-[var(--color-text-secondary,#525252)] cursor-pointer shrink-0 " +
+  "transition-colors hover:border-[#cc9900] hover:text-[#cc9900] focus-visible:outline focus-visible:outline-2 " +
+  "focus-visible:outline-offset-2 focus-visible:outline-[#cc9900]";
+
+const THUMB_VISIBLE_LIMIT = 4;
+
 Alpine.data("imageGallery", () => ({
   currentIndex: 0,
   lightboxIndex: 0,
@@ -281,6 +290,44 @@ Alpine.data("imageGallery", () => ({
         this.restoreOriginalImages();
       }
     }) as EventListener);
+
+    // İlk render'da "+N" karosunu kur — $refs.thumbList init anında henüz
+    // dolmamış olabilir, $nextTick ile tüm alt ağaç hazır olunca çalıştır.
+    this.$nextTick(() => this.applyThumbOverflow());
+  },
+
+  // İlk 4 dışındaki thumbnail'ları gizleyip "+N" karosu ekler; karoya tıklayınca
+  // kalanları açar. Hem ilk render hem swapGalleryImages sonrası buradan geçer —
+  // böylece deklaratif/imperatif iki ayrı yol yerine tek kaynak (stale "+N" bug'ı çözer).
+  applyThumbOverflow() {
+    const thumbList = (this.$refs as Record<string, HTMLElement>).thumbList;
+    if (!thumbList) return;
+
+    thumbList.querySelector("#thumb-show-more")?.remove();
+    const thumbs = Array.from(
+      thumbList.querySelectorAll<HTMLElement>(".gallery-thumb:not(.gallery-thumb-attrs)")
+    );
+    thumbs.forEach((el, i) => {
+      el.style.display = i >= THUMB_VISIBLE_LIMIT && !this.thumbsExpanded ? "none" : "";
+    });
+
+    if (thumbs.length <= THUMB_VISIBLE_LIMIT || this.thumbsExpanded) return;
+
+    const hiddenCount = thumbs.length - THUMB_VISIBLE_LIMIT;
+    const more = document.createElement("button");
+    more.type = "button";
+    more.id = "thumb-show-more";
+    more.className = THUMB_MORE_CLASS;
+    more.textContent = `+${hiddenCount}`;
+    more.title = `+${hiddenCount}`;
+    more.setAttribute("aria-label", `+${hiddenCount}`);
+    more.addEventListener("click", () => {
+      this.thumbsExpanded = true;
+      this.applyThumbOverflow();
+    });
+    const attrThumb = thumbList.querySelector(".gallery-thumb-attrs");
+    if (attrThumb) thumbList.insertBefore(more, attrThumb);
+    else thumbList.appendChild(more);
   },
 
   swapGalleryImages(imageUrls: string[], videoUrl?: string) {
@@ -343,6 +390,9 @@ Alpine.data("imageGallery", () => ({
         if (attrThumb) thumbList.insertBefore(thumb, attrThumb);
         else thumbList.appendChild(thumb);
       });
+      // Yeni görsel seti — koleps'i sıfırla ve "+N" karosunu yeni sayıya göre kur.
+      this.thumbsExpanded = false;
+      this.applyThumbOverflow();
     }
 
     // Lightbox thumbs (include video)
