@@ -1,3 +1,11 @@
+## [v2.2.3] - 2026-07-23 PROD
+
+Bu surum istoc.com'da yayindadir.
+
+### Duzeltildi
+- fix(security): update Content-Security-Policy to include GTM/GA4 domains (@TurksabYonetim)
+
+---
 ## [v2.2.2-rc.1] - 2026-07-23 RC
 
 Bu surum rc.istoc.com'da onay asamasindadir.
