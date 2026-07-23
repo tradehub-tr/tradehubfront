@@ -1,3 +1,11 @@
+## [v2.2.2-alpha.1] - 2026-07-23 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(security): update Content-Security-Policy to include GTM/GA4 domains (@TurksabYonetim)
+
+---
 ## [v2.2.2] - 2026-07-23 PROD
 
 Bu surum istoc.com'da yayindadir.
