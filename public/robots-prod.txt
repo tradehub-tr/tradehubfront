@@ -1,7 +1,7 @@
 # env: prod
 # istoc.com production robots — tradehub_core/seo/robots_generator.py
 # _PROD_DISALLOW_PATHS ile SENKRON tutulmali.
-# Sitemap satiri BE-MAP canliya cikinca eklenecek (404 sitemap ilan etme).
+Sitemap: https://istoc.com/sitemap.xml
 User-agent: *
 Allow: /
 Disallow: /api/
