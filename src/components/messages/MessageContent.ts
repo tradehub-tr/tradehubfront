@@ -78,7 +78,7 @@ export function MessageContent(): string {
         <!-- Avatar -->
         <div class="relative w-9 h-9 flex-shrink-0 rounded-full overflow-hidden">
           <template x-if="selectedConversation?.avatar">
-            <img :src="selectedConversation.avatar" :alt="selectedConversation.name" class="w-9 h-9 rounded-full object-cover" />
+            <img :src="selectedConversation.avatar" :alt="selectedConversation.name" width="36" height="36" decoding="async" class="w-9 h-9 rounded-full object-cover" />
           </template>
           <template x-if="!selectedConversation?.avatar">
             ${TRADEHUB_CHAT_AVATAR}
@@ -125,7 +125,7 @@ export function MessageContent(): string {
               <div class="flex items-end gap-2 max-w-[75%] max-sm:max-w-[85%]">
                 <div class="w-7 h-7 flex-shrink-0 rounded-full overflow-hidden">
                   <template x-if="selectedConversation?.avatar">
-                    <img :src="selectedConversation.avatar" alt="" class="w-7 h-7 rounded-full object-cover" />
+                    <img :src="selectedConversation.avatar" alt="" width="28" height="28" decoding="async" class="w-7 h-7 rounded-full object-cover" />
                   </template>
                   <template x-if="!selectedConversation?.avatar">
                     <svg class="w-full h-full" viewBox="0 0 40 40" fill="none">

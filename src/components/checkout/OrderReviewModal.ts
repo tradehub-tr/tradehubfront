@@ -91,7 +91,7 @@ export function OrderReviewModal(): string {
                 </div>
                 <template x-for="product in order.products" :key="product.id">
                   <div class="flex items-start gap-2 sm:gap-3 px-2.5 sm:px-3 py-2 border-b border-[#f3f4f6] last:border-b-0">
-                    <img :src="product.image" class="w-9 h-9 sm:w-10 sm:h-10 rounded border border-[#e5e5e5] object-cover flex-shrink-0" alt="" />
+                    <img :src="product.image" width="40" height="40" decoding="async" class="w-9 h-9 sm:w-10 sm:h-10 rounded border border-[#e5e5e5] object-cover flex-shrink-0" alt="" />
                     <div class="flex-1 min-w-0">
                       <p class="text-[12px] sm:text-[13px] text-[#222222] truncate" x-text="product.title"></p>
                       <template x-for="sku in product.skuLines" :key="sku.id">

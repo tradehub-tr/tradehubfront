@@ -105,7 +105,9 @@ function renderStage(category: TailoredCategory): string {
         <img
           src="${escapeHtml(sanitizeUrl(category.imageSrc))}"
           alt="${escapeHtml(category.title)}"
+          width="400" height="400"
           loading="eager"
+          decoding="async"
           class="w-full h-full object-contain mix-blend-multiply"
         />
       </div>
@@ -133,7 +135,7 @@ function renderChannel(category: TailoredCategory, isActive: boolean): string {
     <button type="button" role="tab" aria-selected="${isActive}" data-slug="${escapeHtml(slug)}"
             class="th-no-press flex-none w-[190px] lg:w-auto min-w-0 flex items-center gap-2.5 rounded-md border ${stateCls} px-3 py-2 text-start cursor-pointer transition-colors duration-150 motion-reduce:transition-none">
       <span class="flex-none w-9 h-9 rounded-md bg-[#f5f5f3] grid place-items-center p-1 overflow-hidden">
-        <img src="${escapeHtml(sanitizeUrl(category.imageSrc))}" alt="" loading="lazy" class="w-full h-full object-contain mix-blend-multiply"/>
+        <img src="${escapeHtml(sanitizeUrl(category.imageSrc))}" alt="" width="200" height="200" loading="lazy" decoding="async" class="w-full h-full object-contain mix-blend-multiply"/>
       </span>
       <span class="min-w-0 flex-1">
         <b class="block text-white text-[12.5px] font-semibold leading-tight truncate">${escapeHtml(category.title)}</b>
@@ -254,9 +256,9 @@ export function TailoredSelectionsHero(): string {
     >
       <div class="container-boxed">
         <div class="hidden xl:flex items-baseline justify-between gap-4 mb-5">
-          <h1 class="text-white font-bold leading-tight" style="font-size: 26px;">
+          <h2 class="text-white font-bold leading-tight" style="font-size: 26px;">
             <span data-i18n="tailoredPage.title">${t("tailoredPage.title")}</span>
-          </h1>
+          </h2>
         </div>
         ${skeletonHtml()}
       </div>

@@ -223,7 +223,7 @@ function renderRowsHtml(model: SheetModel): string {
       const available = isRowAvailable(model, opt);
       const label = opt.displayLabel || opt.label;
       const thumb = opt.thumbnail
-        ? `<img src="${escapeHtml(sanitizeUrl(opt.thumbnail))}" alt="${escapeHtml(label)}" class="w-full h-full object-cover" />`
+        ? `<img src="${escapeHtml(sanitizeUrl(opt.thumbnail))}" alt="${escapeHtml(label)}" width="80" height="80" decoding="async" class="w-full h-full object-cover" />`
         : `<div class="w-full h-full" style="background:${safeHexColor(opt.value)}"></div>`;
       const expandBtn = isColorRow
         ? `
@@ -529,7 +529,7 @@ export function OptionsSheet(): string {
 
   const heroSrc = p.images?.[0]?.src;
   const heroHtml = heroSrc
-    ? `<img src="${escapeHtml(sanitizeUrl(heroSrc))}" alt="${escapeHtml(p.title)}" class="w-full h-full object-cover" />`
+    ? `<img src="${escapeHtml(sanitizeUrl(heroSrc))}" alt="${escapeHtml(p.title)}" width="80" height="80" decoding="async" class="w-full h-full object-cover" />`
     : `<div class="w-full h-full flex items-center justify-center text-text-tertiary">
         <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
       </div>`;

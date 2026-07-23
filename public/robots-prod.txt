@@ -1,0 +1,40 @@
+# env: prod
+# istoc.com production robots — tradehub_core/seo/robots_generator.py
+# _PROD_DISALLOW_PATHS ile SENKRON tutulmali.
+# Sitemap satiri BE-MAP canliya cikinca eklenecek (404 sitemap ilan etme).
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /app/
+Disallow: /private/
+Disallow: /sepet$
+Disallow: /odeme$
+Disallow: /odeme/
+Disallow: /hesabim$
+Disallow: /hesabim/
+Disallow: /giris$
+Disallow: /kayit$
+Disallow: /sifremi-unuttum$
+Disallow: /sifre-sifirla$
+Disallow: /davet-kabul$
+Disallow: /destek/
+Disallow: /satici/dashboard$
+Disallow: /satici/basvuru-bekleyen$
+Disallow: /satici/tedarikci-kurulum$
+Disallow: /size-ozel$
+Disallow: /pages/dashboard/
+Disallow: /pages/auth/
+Disallow: /pages/order/
+Disallow: /pages/cart.html$
+Disallow: /pages/help/help-ticket
+Disallow: /pages/seller/dashboard.html$
+Disallow: /pages/seller/application-pending.html$
+Disallow: /pages/seller/supplier-setup.html$
+Disallow: /pages/tailored-selections.html$
+Disallow: /pages/product-detail.html$
+Disallow: /pages/brand.html$
+Disallow: /pages/seller/seller-shop.html$
+Disallow: /pages/seller/seller-storefront.html$
+Disallow: /*?q=
+Disallow: /*?utm_
+Disallow: /*?lng=

@@ -675,7 +675,7 @@ export function initFilterSidebar(query?: string, category?: string): void {
                 .map((b) => {
                   const checkboxId = `filter-${idPrefix ? idPrefix + "-" : ""}brands-brand-${String(b.value).toLowerCase().replace(/\s+/g, "-")}`;
                   const logoHtml = b.logo
-                    ? `<img src="${escapeHtml(sanitizeUrl(b.logo))}" alt="${escapeHtml(b.label)}" class="w-4 h-4 object-contain me-1" />`
+                    ? `<img src="${escapeHtml(sanitizeUrl(b.logo))}" alt="${escapeHtml(b.label)}" width="16" height="16" decoding="async" class="w-4 h-4 object-contain me-1" />`
                     : "";
                   return `
             <label for="${escapeHtml(checkboxId)}" class="flex items-center gap-2 cursor-pointer group py-1 filter-searchable-item">

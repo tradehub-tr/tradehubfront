@@ -15,7 +15,7 @@ function renderSlide(slide: HeroSlide): string {
   if (!hasText) {
     return `
       <div class="swiper-slide store-hero__slide relative" data-slide-id="${escapeHtml(slide.id)}">
-        <img src="${escapeHtml(sanitizeUrl(slide.image))}" alt="${escapeHtml(slide.title || "Mağaza banner")}" class="${imgClasses}" loading="lazy"
+        <img src="${escapeHtml(sanitizeUrl(slide.image))}" alt="${escapeHtml(slide.title || "Mağaza banner")}" width="1200" height="500" decoding="async" class="${imgClasses}" loading="lazy"
              onerror="this.parentElement.style.background='linear-gradient(135deg,#1e3a5f,#2563eb)'" />
       </div>
     `;
@@ -51,7 +51,7 @@ function renderSlide(slide: HeroSlide): string {
 
   return `
     <div class="swiper-slide store-hero__slide relative" data-slide-id="${escapeHtml(slide.id)}">
-      <img src="${escapeHtml(sanitizeUrl(slide.image))}" alt="${escapeHtml(slide.title || "Mağaza banner")}" class="${imgClasses}" loading="lazy"
+      <img src="${escapeHtml(sanitizeUrl(slide.image))}" alt="${escapeHtml(slide.title || "Mağaza banner")}" width="1200" height="500" decoding="async" class="${imgClasses}" loading="lazy"
            onerror="this.parentElement.style.background='linear-gradient(135deg,#1e3a5f,#2563eb)'" />
       <!-- Text Overlay -->
       <div class="store-hero__overlay absolute inset-0 flex flex-col justify-center px-4 sm:px-4 md:px-6 lg:px-10 xl:px-12 ${alignClasses}">

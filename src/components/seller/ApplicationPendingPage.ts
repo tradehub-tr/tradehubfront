@@ -15,10 +15,11 @@ import { t } from "../../i18n";
 function PageHeader(): string {
   const baseUrl = getBaseUrl();
   return `
+    <h1 class="sr-only">Satıcı Başvuru Durumu</h1>
     <header class="bg-white border-b-2" style="border-color: var(--auth-header-border, #FF6600)">
       <div class="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
         <a href="${baseUrl}" aria-label="iSTOC Ana Sayfa">
-          <img src="${baseUrl}images/istoc-logo.png" alt="iSTOC" class="h-7" />
+          <img src="${baseUrl}images/istoc-logo.png" alt="iStoc" width="87" height="32" class="h-7 w-auto" />
         </a>
         <button
           @click="doLogout()"
@@ -41,7 +42,7 @@ function StatusDraft(): string {
           <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"/>
         </svg>
       </div>
-      <h1 class="text-2xl font-bold text-gray-900 text-center mb-3" data-i18n="sellerApplication.draft.title">${t("sellerApplication.draft.title")}</h1>
+      <h2 class="text-2xl font-bold text-gray-900 text-center mb-3" data-i18n="sellerApplication.draft.title">${t("sellerApplication.draft.title")}</h2>
       <p class="text-sm text-gray-500 text-center mb-8" data-i18n="sellerApplication.draft.desc">${t("sellerApplication.draft.desc")}</p>
       <a
         href="/pages/seller/supplier-setup.html"
@@ -63,7 +64,7 @@ function StatusSubmitted(): string {
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
         </svg>
       </div>
-      <h1 class="text-2xl font-bold text-gray-900 text-center mb-3" data-i18n="sellerApplication.submitted.title">${t("sellerApplication.submitted.title")}</h1>
+      <h2 class="text-2xl font-bold text-gray-900 text-center mb-3" data-i18n="sellerApplication.submitted.title">${t("sellerApplication.submitted.title")}</h2>
       <p class="text-sm text-gray-500 text-center mb-8" data-i18n="sellerApplication.submitted.desc">${t("sellerApplication.submitted.desc")}</p>
       ${ProgressIndicator("submitted")}
     </div>
@@ -80,7 +81,7 @@ function StatusUnderReview(): string {
           <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 0 0-3.7-3.7 48.678 48.678 0 0 0-7.324 0 4.006 4.006 0 0 0-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 0 0 3.7 3.7 48.656 48.656 0 0 0 7.324 0 4.006 4.006 0 0 0 3.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3-3 3"/>
         </svg>
       </div>
-      <h1 class="text-2xl font-bold text-gray-900 text-center mb-3" data-i18n="sellerApplication.underReview.title">${t("sellerApplication.underReview.title")}</h1>
+      <h2 class="text-2xl font-bold text-gray-900 text-center mb-3" data-i18n="sellerApplication.underReview.title">${t("sellerApplication.underReview.title")}</h2>
       <p class="text-sm text-gray-500 text-center mb-8" data-i18n="sellerApplication.underReview.desc">${t("sellerApplication.underReview.desc")}</p>
       ${ProgressIndicator("underReview")}
     </div>
@@ -97,7 +98,7 @@ function StatusRejected(): string {
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"/>
         </svg>
       </div>
-      <h1 class="text-2xl font-bold text-gray-900 text-center mb-3" data-i18n="sellerApplication.rejected.title">${t("sellerApplication.rejected.title")}</h1>
+      <h2 class="text-2xl font-bold text-gray-900 text-center mb-3" data-i18n="sellerApplication.rejected.title">${t("sellerApplication.rejected.title")}</h2>
       <p class="text-sm text-gray-500 text-center mb-8" data-i18n="sellerApplication.rejected.desc">${t("sellerApplication.rejected.desc")}</p>
       <a
         href="mailto:destek@istoc.com"
@@ -145,7 +146,7 @@ function StatusApproved(): string {
           <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/>
         </svg>
       </div>
-      <h1 class="text-2xl font-bold text-gray-900 text-center mb-3" data-i18n="sellerApplication.approved.title">${t("sellerApplication.approved.title")}</h1>
+      <h2 class="text-2xl font-bold text-gray-900 text-center mb-3" data-i18n="sellerApplication.approved.title">${t("sellerApplication.approved.title")}</h2>
       <p class="text-sm text-gray-500 text-center mb-8" data-i18n="sellerApplication.approved.desc">${t("sellerApplication.approved.desc")}</p>
     </div>
   `;

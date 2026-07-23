@@ -23,7 +23,9 @@ export function PromotionBanner({
         <img
           src="${escapeHtml(sanitizeUrl(image))}"
           alt="${escapeHtml(title)}"
+          width="64" height="64"
           loading="lazy"
+          decoding="async"
           class="w-12 h-12 xs:w-16 xs:h-16 object-cover rounded-md flex-shrink-0"
         />
       </div>

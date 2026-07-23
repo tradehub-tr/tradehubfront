@@ -10,6 +10,7 @@ export function PinnedProduct(): string {
         <template x-if="$store.chatPopup.pinnedProduct.thumbnail">
           <img :src="$store.chatPopup.pinnedProduct.thumbnail"
                alt=""
+               width="36" height="36" decoding="async"
                class="size-9 shrink-0 rounded bg-[var(--color-surface-raised,#f5f5f5)] object-cover" />
         </template>
         <div class="min-w-0 flex-1">

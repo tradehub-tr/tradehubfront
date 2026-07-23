@@ -6,6 +6,7 @@
 
 import { callMethod } from "../utils/api";
 import { queryFetch, queryKeys, policies } from "../lib/query";
+import type { ServerSeoPayload } from "../seo/setPageMeta";
 
 export interface ApiCategory {
   id: string;
@@ -33,6 +34,14 @@ export interface CategoryPathItem {
 }
 
 let _cache: ApiCategory[] | null = null;
+// Kategoriler sayfası için panelden yönetilen SEO payload'ı (BE-LD ile API'ye
+// eklenecek `seo` alanı). Sayfa bootstrap'ı getCategoryPageSeo() ile okur.
+let _pageSeo: ServerSeoPayload | null = null;
+
+/** get_mega_menu zarfında gelen sayfa-SEO payload'ı (yoksa null). */
+export function getCategoryPageSeo(): ServerSeoPayload | null {
+  return _pageSeo;
+}
 // Kalıcı aboneler — dil değiştiğinde kategoriler yeniden çekilip bunlara tekrar bildirilir.
 const _subscribers: Array<(cats: ApiCategory[]) => void> = [];
 
@@ -113,6 +122,18 @@ function fetchCategoryVersion(): Promise<string> {
   ).catch(() => "v0");
 }
 
+/** get_mega_menu bugün düz dizi döndürür; BE-LD sonrası `{categories, seo}` zarfı
+ *  da dönebilir. İki şekli de (ve IndexedDB'deki eski dizi cache'lerini) tolere eder. */
+type MegaMenuResponse = ApiCategory[] | { categories?: ApiCategory[]; seo?: ServerSeoPayload };
+
+function normalizeMegaMenu(data: MegaMenuResponse | null | undefined): {
+  categories: ApiCategory[];
+  seo?: ServerSeoPayload;
+} {
+  if (Array.isArray(data)) return { categories: data };
+  return { categories: data?.categories ?? [], seo: data?.seo };
+}
+
 export function loadCategories(): Promise<ApiCategory[]> {
   if (_cache !== null) return Promise.resolve(_cache);
 
@@ -121,17 +142,19 @@ export function loadCategories(): Promise<ApiCategory[]> {
       queryFetch(
         queryKeys.categories(version),
         async () => {
-          const data = await callMethod<ApiCategory[]>("tradehub_core.api.category.get_mega_menu");
-          const raw: ApiCategory[] = Array.isArray(data) ? data : [];
-          return filterSpam(raw);
+          const data = await callMethod<MegaMenuResponse>("tradehub_core.api.category.get_mega_menu");
+          const env = normalizeMegaMenu(data);
+          return { ...env, categories: filterSpam(env.categories) };
         },
         policies.categories
       )
     )
-    .then((cats) => {
-      _cache = cats;
-      _subscribers.forEach((fn) => fn(cats));
-      return cats;
+    .then((res) => {
+      const env = normalizeMegaMenu(res);
+      _cache = env.categories;
+      _pageSeo = env.seo ?? null;
+      _subscribers.forEach((fn) => fn(env.categories));
+      return env.categories;
     })
     .catch(() => {
       if (_cache === null) _cache = [];

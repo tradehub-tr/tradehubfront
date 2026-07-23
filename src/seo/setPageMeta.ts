@@ -127,3 +127,31 @@ export function applyServerSeo(seo: ServerSeoPayload | null | undefined): void {
   // HTML lang attribute
   if (seo.lang) document.documentElement.lang = seo.lang;
 }
+
+/**
+ * FE-4: hreflang client fallback — backend payload'ı hreflang üretmediyse
+ * `/` ↔ `/en/` alternates + x-default ekler.
+ *
+ * Kurallar:
+ * - DOM'da zaten hreflang'lı alternate varsa (server payload uygulanmış) NO-OP.
+ * - Sayfa noindex ise NO-OP (indexlenmeyecek sayfaya hreflang yatırımı yok).
+ * - Yalnız pathname kullanılır (parametresiz self-alternate — ?page/?q
+ *   duplicate'leri crawl budget'ı yemesin).
+ * - Asıl SEO kanalı backend `hreflang_links` payload'ıdır; bu yalnız fallback.
+ */
+export function applyHreflangFallback(): void {
+  if (document.querySelector('link[rel="alternate"][hreflang]')) return;
+  const robots = document
+    .querySelector<HTMLMetaElement>('meta[name="robots"]')
+    ?.getAttribute("content");
+  if (robots?.includes("noindex")) return;
+
+  const path = window.location.pathname;
+  const trPath = path.replace(/^\/en(\/|$)/, "/") || "/";
+  const enPath = trPath === "/" ? "/en/" : `/en${trPath}`;
+  const origin = window.location.origin;
+
+  upsertLinkTag("alternate", `${origin}${trPath}`, "tr");
+  upsertLinkTag("alternate", `${origin}${enPath}`, "en");
+  upsertLinkTag("alternate", `${origin}${trPath}`, "x-default");
+}

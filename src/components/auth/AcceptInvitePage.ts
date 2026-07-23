@@ -15,8 +15,8 @@ function AcceptInviteHeader(): string {
   return `
     <header class="bg-white border-b-2" style="border-color: var(--auth-header-border, #FF6600)">
       <div class="max-w-7xl mx-auto px-4 h-14 flex items-center gap-4">
-        <a href="${baseUrl}" aria-label="iSTOC Ana Sayfa">
-          <img src="${baseUrl}images/istoc-logo.png" alt="iSTOC" class="h-7" />
+        <a href="${baseUrl}" aria-label="iStoc Ana Sayfa">
+          <img src="${baseUrl}images/istoc-logo.png" alt="iStoc" width="87" height="32" class="h-7 w-auto" />
         </a>
       </div>
     </header>

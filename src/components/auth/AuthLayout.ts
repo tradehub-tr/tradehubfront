@@ -68,7 +68,7 @@ function renderMobileHeader(options: AuthLayoutOptions = {}): string {
       }
       <span class="flex-1 text-center text-sm font-medium text-gray-900 dark:text-white truncate ${showBackButton ? "pe-10" : ""}">${title}</span>
       <a href="${baseUrl}" class="absolute end-4 top-1/2 -translate-y-1/2" aria-label="${t("authAddr.istocHome")}">
-        <img src="${baseUrl}images/istoc-logo.png" alt="iSTOC" class="h-6" />
+        <img src="${baseUrl}images/istoc-logo.png" alt="iStoc" width="87" height="32" class="h-6 w-auto" />
       </a>
     </header>
   `;
@@ -92,13 +92,13 @@ function renderPromoBanner(): string {
 
         <!-- Brand logo -->
         <div class="flex justify-center mb-8">
-          <img src="${baseUrl}images/istoc-logo-beyaz.png" alt="iSTOC" class="h-10" />
+          <img src="${baseUrl}images/istoc-logo-beyaz.png" alt="iStoc" width="1370" height="521" class="h-10 w-auto" />
         </div>
 
         <!-- Headline -->
-        <h1 class="text-3xl lg:text-4xl font-bold leading-tight text-white mb-3">
+        <h2 class="text-3xl lg:text-4xl font-bold leading-tight text-white mb-3">
           ${t("authAddr.promoHeadline")}
-        </h1>
+        </h2>
         <p class="text-sm text-orange-100/80 leading-relaxed mb-8">
           ${t("authAddr.promoSubtitle")}
         </p>

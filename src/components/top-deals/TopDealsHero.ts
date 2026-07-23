@@ -38,7 +38,7 @@ export function TopDealsMobileHeader(): string {
         </a>
 
         <!-- Title -->
-        <h1 x-show="!showSearch" class="flex-1 min-w-0 text-center text-lg font-bold text-white tracking-tight truncate" data-i18n="topDealsPage.heroTitle">${t("topDealsPage.heroTitle")}</h1>
+        <p x-show="!showSearch" class="flex-1 min-w-0 text-center text-lg font-bold text-white tracking-tight truncate" data-i18n="topDealsPage.heroTitle">${t("topDealsPage.heroTitle")}</p>
 
         <!-- Search field — filters Top Deals only -->
         <form

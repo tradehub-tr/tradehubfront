@@ -61,7 +61,9 @@ export function renderRankingGroupCard(group: RankingCategoryGroup): string {
           <img
             src="${safeImg}"
             alt="${safeProductName}"
+            width="400" height="400"
             loading="lazy"
+            decoding="async"
             class="w-full h-full object-cover transition-transform duration-300 group-hover/product:scale-105 motion-reduce:transition-none motion-reduce:group-hover/product:scale-100"
           />
           <!-- Rank badge -->

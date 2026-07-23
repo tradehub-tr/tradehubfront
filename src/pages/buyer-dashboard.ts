@@ -84,6 +84,7 @@ function getBreadcrumbItems(): { label: string; href?: string }[] {
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.classList.add('relative');
 appEl.innerHTML = `
+  <h1 class="sr-only">Alıcı Kontrol Paneli</h1>
   <!-- Simplified Dashboard Header (TopBar only, no search/mega menu) -->
   <div id="sticky-header" class="sticky top-0 z-(--z-header) bg-white">
     ${TopBar({ compact: true })}

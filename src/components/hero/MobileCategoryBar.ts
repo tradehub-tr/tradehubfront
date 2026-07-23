@@ -18,10 +18,10 @@ import { initCategoryDrillSheet } from "../shared/CategoryDrillSheet";
 function renderMobileSubcategory(name: string, slug: string, image?: string): string {
   const placeholderSvg = `<svg class="w-4 h-4 min-[400px]:w-5 min-[400px]:h-5 sm:w-6 sm:h-6 text-gray-300 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75Z"/></svg>`;
   const inner = image
-    ? `<img src="${escapeHtml(sanitizeUrl(image))}" alt="${escapeHtml(name)}" class="w-full h-full object-cover rounded-md" loading="lazy" onerror="this.outerHTML=this.dataset.fallback" data-fallback='${placeholderSvg.replace(/'/g, "&apos;")}' />`
+    ? `<img src="${escapeHtml(sanitizeUrl(image))}" alt="${escapeHtml(name)}" width="60" height="60" decoding="async" class="w-full h-full object-cover rounded-md" onerror="this.outerHTML=this.dataset.fallback" data-fallback='${placeholderSvg.replace(/'/g, "&apos;")}' />`
     : placeholderSvg;
   return `
-    <a href="/pages/products.html?cat=${encodeURIComponent(slug)}" class="mcb-product flex-shrink-0 flex flex-col items-center gap-1 w-[42px] min-[400px]:w-[52px] sm:w-[60px]">
+    <a href="/urunler?cat=${encodeURIComponent(slug)}" class="mcb-product flex-shrink-0 flex flex-col items-center gap-1 w-[42px] min-[400px]:w-[52px] sm:w-[60px]">
       <div class="w-[42px] h-[42px] min-[400px]:w-[52px] min-[400px]:h-[52px] sm:w-[60px] sm:h-[60px] rounded-md bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
         ${inner}
       </div>
@@ -188,7 +188,7 @@ export function initMobileCategoryBar(): void {
       rootLabel: t("mobileCategory.allCategories"),
       allInCategoryLabel: (name: string) => t("mobileCategory.allInCategory", { name }),
       onSelect: (slug: string) => {
-        window.location.href = "/pages/categories.html?cat=" + encodeURIComponent(slug);
+        window.location.href = "/kategoriler?cat=" + encodeURIComponent(slug);
       },
       getActiveSlug: () => activeRootSlug,
     });

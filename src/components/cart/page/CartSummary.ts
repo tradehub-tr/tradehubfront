@@ -19,7 +19,7 @@ function renderThumbnailGrid(items: CartSummaryData["items"]): string {
       (item) => `
       <div class="checkout-item-card relative w-14 h-14 min-w-[56px] max-[380px]:w-12 max-[380px]:h-12 max-[380px]:min-w-[48px] sm:w-16 sm:h-16 sm:min-w-[64px] rounded overflow-hidden border border-[#e5e5e5] flex-shrink-0">
         <div class="block w-full h-full">
-          <img class="w-full h-full object-cover" src="${escapeHtml(sanitizeUrl(item.image))}" alt="" />
+          <img class="w-full h-full object-cover" src="${escapeHtml(sanitizeUrl(item.image))}" alt="" width="64" height="64" decoding="async" />
         </div>
         <span class="absolute bottom-0 end-0 bg-black/60 text-white rounded-ss text-[11px] font-bold leading-4 px-1 py-px">${item.quantity}</span>
       </div>`
@@ -123,7 +123,7 @@ export function CartSummary(data: CartSummaryData): string {
 
       <div class="mt-4 sm:mt-5 pt-4 sm:pt-5 border-t border-[#e5e5e5]">
         <div class="p-2.5 sm:p-3.5 bg-[#f0fdf4] border border-[#bbf7d0] rounded-md">
-          <img src="/images/istoc-logo.png" alt="iSTOC" class="h-3.5 max-[380px]:h-3 sm:h-4 w-auto mb-1.5 sm:mb-2" />
+          <img src="/images/istoc-logo.png" alt="iStoc" width="87" height="32" class="h-3.5 max-[380px]:h-3 sm:h-4 w-auto mb-1.5 sm:mb-2" />
           <p class="text-[11px] max-[380px]:text-[10px] sm:text-[12px] text-[#6b7280] leading-relaxed">${t("checkoutMfr.securePaymentNote")}</p>
         </div>
       </div>

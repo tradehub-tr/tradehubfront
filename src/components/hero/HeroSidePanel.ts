@@ -37,7 +37,7 @@ function renderDealSlide(deal: SideDeal, index: number): string {
       ? `<span class="absolute start-1.5 top-1.5 z-10 rounded-sm bg-[#f5b800] px-1.5 py-0.5 text-[10px] font-extrabold leading-none text-[#1a1a1a]">-%${deal.discountPercent}</span>`
       : "";
   const img = deal.imageSrc
-    ? `<img src="${escapeHtml(sanitizeUrl(deal.imageSrc))}" alt="${escapeHtml(deal.name)}" loading="lazy" class="h-full w-full object-contain">`
+    ? `<img src="${escapeHtml(sanitizeUrl(deal.imageSrc))}" alt="${escapeHtml(deal.name)}" width="400" height="400" decoding="async" class="h-full w-full object-contain">`
     : `<div class="flex h-full w-full items-center justify-center text-neutral-600"><svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.41a2.25 2.25 0 013.182 0l2.909 2.91m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5z"/></svg></div>`;
   const oldPrice = deal.originalPrice
     ? `<span class="text-[11px] text-white/45 line-through tabular-nums">${escapeHtml(deal.originalPrice)}</span>`

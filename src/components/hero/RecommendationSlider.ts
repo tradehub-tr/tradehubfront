@@ -38,7 +38,9 @@ function renderCardImage(card: RecommendationCard): string {
       <img
         src="${escapeHtml(sanitizeUrl(card.imageSrc))}"
         alt="${escapeHtml(card.title)}"
+        width="400" height="400"
         loading="lazy"
+        decoding="async"
         class="w-full h-full object-contain transition-transform duration-200 ease-out motion-reduce:transition-none motion-reduce:transform-none group-hover/card:scale-105 group-focus-visible/card:scale-105"
       />
     </div>

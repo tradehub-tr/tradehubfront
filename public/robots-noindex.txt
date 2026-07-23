@@ -1,0 +1,4 @@
+# env: noindex
+# Staging/bilinmeyen ortam robots — fail-closed default (FRONTEND_DOMAIN != istoc.com)
+User-agent: *
+Disallow: /

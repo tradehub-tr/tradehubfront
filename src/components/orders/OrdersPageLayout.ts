@@ -550,7 +550,7 @@ function renderAllOrders(): string {
             <template x-for="(product, idx) in (showAllProducts ? filteredProducts : selectedOrder.products.slice(0, productPreviewCount))" :key="product.name + idx">
               <div class="flex items-center gap-3 py-2.5 border-b border-gray-100 last:border-b-0">
                 <div class="w-10 h-10 max-sm:w-8 max-sm:h-8 rounded border border-gray-200 overflow-hidden shrink-0 bg-gray-50">
-                  <img :src="product.image" :alt="product.name" class="w-full h-full object-cover" />
+                  <img :src="product.image" :alt="product.name" width="80" height="80" decoding="async" class="w-full h-full object-cover" />
                 </div>
                 <div class="flex-1 min-w-0">
                   <div class="text-sm text-gray-800 line-clamp-2 leading-snug" x-text="product.name"></div>
@@ -1496,7 +1496,7 @@ function renderAllOrders(): string {
                   </template>
                   <!-- Image preview -->
                   <template x-if="hasFile && filePreviewUrl">
-                    <img :src="filePreviewUrl" class="w-full h-full object-contain" />
+                    <img alt="Dosya önizleme" :src="filePreviewUrl" width="400" height="400" decoding="async" class="w-full h-full object-contain" />
                   </template>
                   <!-- PDF file -->
                   <template x-if="hasFile && !filePreviewUrl">
@@ -1568,7 +1568,7 @@ function renderAllOrders(): string {
               <div class="w-[220px] max-md:w-full shrink-0 space-y-3">
                 <div class="w-full aspect-[3/4] bg-gray-50 border border-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
                   <template x-if="filePreviewUrl">
-                    <img :src="filePreviewUrl" class="w-full h-full object-contain" />
+                    <img alt="Dosya önizleme" :src="filePreviewUrl" width="400" height="400" decoding="async" class="w-full h-full object-contain" />
                   </template>
                   <template x-if="!filePreviewUrl">
                     <div class="text-center">
@@ -1820,7 +1820,7 @@ function renderRefunds(): string {
 /* Değerlendirme kartlarında görsel yoksa tonal ikon kutusu (taşmaya dayanıklı tasarım) */
 function productThumb(expr: string, sizeCls: string): string {
   return `
-    <template x-if="${expr}.image"><img :src="${expr}.image" :alt="${expr}.product_name" class="${sizeCls} rounded-md border border-gray-200 object-cover shrink-0" loading="lazy" /></template>
+    <template x-if="${expr}.image"><img :src="${expr}.image" :alt="${expr}.product_name" width="64" height="64" decoding="async" class="${sizeCls} rounded-md border border-gray-200 object-cover shrink-0" loading="lazy" /></template>
     <template x-if="!${expr}.image">
       <div class="${sizeCls} rounded-md border border-gray-200 bg-(--color-surface-muted,#fafafa) flex items-center justify-center shrink-0">
         ${styleSvg(packageIcon, "w-5 h-5 text-gray-400")}

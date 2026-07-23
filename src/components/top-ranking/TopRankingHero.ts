@@ -30,7 +30,7 @@ export function TopRankingMobileHeader(): string {
         </a>
 
         <!-- Title (arama açıkken gizli) -->
-        <h1 x-show="!showSearch" class="flex-1 min-w-0 text-center text-base font-bold text-[#222] truncate" data-i18n="topRankingPage.heroTitle">${t("topRankingPage.heroTitle")}</h1>
+        <p x-show="!showSearch" class="flex-1 min-w-0 text-center text-base font-bold text-[#222] truncate" data-i18n="topRankingPage.heroTitle">${t("topRankingPage.heroTitle")}</p>
 
         <!-- Arama alanı — bu sayfadaki sıralamayı filtreler -->
         <form

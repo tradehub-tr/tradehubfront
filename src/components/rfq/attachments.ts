@@ -67,7 +67,7 @@ export function renderAttachmentCard(att: RfqAttachment, idx: number, scope: str
   const isPreviewable = kind === "image" || kind === "pdf";
   const thumb =
     kind === "image"
-      ? `<img src="${escapeHtml(sanitizeUrl(att.file_url))}" alt="" class="w-full h-32 object-cover" loading="lazy" />`
+      ? `<img src="${escapeHtml(sanitizeUrl(att.file_url))}" alt="" width="256" height="128" decoding="async" class="w-full h-32 object-cover" loading="lazy" />`
       : `<div class="w-full h-32 flex flex-col items-center justify-center bg-gray-50">
          <div class="w-12 h-12 rounded-md ${badge.cls} text-white text-xs font-bold flex items-center justify-center">${badge.label}</div>
          <span class="mt-2 text-xs text-gray-400">${kind === "pdf" ? t("rfq.previewable") : t("rfq.notPreviewable")}</span>
@@ -208,7 +208,7 @@ export function setupAttachmentInteractions(
     dlEl.href = sanitizePreviewUrl(att.file_url);
     dlEl.setAttribute("download", att.file_name);
     if (kind === "image") {
-      bodyEl.innerHTML = `<img src="${escapeHtml(sanitizePreviewUrl(att.file_url))}" alt="${escapeHtml(att.file_name)}" class="max-w-full max-h-full object-contain" />`;
+      bodyEl.innerHTML = `<img src="${escapeHtml(sanitizePreviewUrl(att.file_url))}" alt="${escapeHtml(att.file_name)}" width="800" height="800" decoding="async" class="max-w-full max-h-full object-contain" />`;
     } else if (kind === "pdf") {
       bodyEl.innerHTML = `<iframe src="${escapeHtml(sanitizePreviewUrl(att.file_url))}" class="w-full h-full bg-white" title="${escapeHtml(att.file_name)}"></iframe>`;
     } else {
@@ -302,7 +302,7 @@ export function openAttachmentLightbox(att: RfqAttachment, scope: string = "file
   dlEl.setAttribute("download", att.file_name);
 
   if (kind === "image") {
-    bodyEl.innerHTML = `<img src="${escapeHtml(sanitizePreviewUrl(att.file_url))}" alt="${escapeHtml(att.file_name)}" class="max-w-full max-h-full object-contain" />`;
+    bodyEl.innerHTML = `<img src="${escapeHtml(sanitizePreviewUrl(att.file_url))}" alt="${escapeHtml(att.file_name)}" width="800" height="800" decoding="async" class="max-w-full max-h-full object-contain" />`;
   } else if (kind === "pdf") {
     bodyEl.innerHTML = `<iframe src="${escapeHtml(sanitizePreviewUrl(att.file_url))}" class="w-full h-full bg-white" title="${escapeHtml(att.file_name)}"></iframe>`;
   } else {

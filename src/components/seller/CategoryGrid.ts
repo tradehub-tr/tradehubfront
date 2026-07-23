@@ -28,7 +28,8 @@ export function CategoryGrid(cards: CategoryCard[]): string {
                 ${card.name}
               </span>
               <img src="${card.image}" alt="${card.name}"
-                   class="category-grid__image absolute end-0 bottom-0 max-h-[80%] object-contain transition-transform duration-300 motion-reduce:transition-none motion-reduce:group-hover:scale-100 group-hover:scale-105"
+                   width="300" height="300" decoding="async"
+                   class="category-grid__image absolute end-0 bottom-0 max-h-[80%] object-contain transition-transform duration-300 motion-reduce:transition-none motion-reduce:group-hover:scale-100 group-hover:scale-105 w-auto"
                    loading="lazy"
                    onerror="this.style.display='none'" />
             </a>
@@ -52,7 +53,8 @@ export function CategoryGrid(cards: CategoryCard[]): string {
                   ${card.name}
                 </span>
                 <img src="${card.image}" alt="${card.name}"
-                     class="category-grid__image absolute end-0 bottom-0 max-h-[75%] object-contain transition-transform duration-300 motion-reduce:transition-none motion-reduce:group-hover:scale-100 group-hover:scale-105"
+                     width="300" height="300" decoding="async"
+                     class="category-grid__image absolute end-0 bottom-0 max-h-[75%] object-contain transition-transform duration-300 motion-reduce:transition-none motion-reduce:group-hover:scale-100 group-hover:scale-105 w-auto"
                      loading="lazy"
                      onerror="this.style.display='none'" />
               </a>

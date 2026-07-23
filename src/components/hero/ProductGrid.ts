@@ -43,7 +43,7 @@ export function initProductGrid(): void {
       grid.innerHTML = result.products
         .map(
           (card) =>
-            `<div role="listitem" class="flex">${renderListingCard(card, { showActions: false, showMoq: false, containImage: true })}</div>`
+            `<div role="listitem" class="flex">${renderListingCard(card, { showActions: false, showMoq: false, containImage: true, lazy: true })}</div>`
         )
         .join("");
 

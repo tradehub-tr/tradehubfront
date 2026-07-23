@@ -11,7 +11,7 @@ import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 /** Render a single category item as circular thumbnail + label */
 function CategoryItem(cat: { name: string; href: string; image: string }): string {
   const imageContent = cat.image
-    ? `<img src="${escapeHtml(sanitizeUrl(cat.image))}" alt="${escapeHtml(cat.name)}" class="w-full h-full object-cover" loading="lazy" />`
+    ? `<img src="${escapeHtml(sanitizeUrl(cat.image))}" alt="${escapeHtml(cat.name)}" width="400" height="400" decoding="async" class="w-full h-full object-cover" loading="lazy" />`
     : `<span class="text-2xl sm:text-3xl select-none">${escapeHtml(cat.name.charAt(0))}</span>`;
   return `
     <a href="${escapeHtml(sanitizeUrl(cat.href))}" class="group flex flex-col items-center gap-2 text-center no-underline">

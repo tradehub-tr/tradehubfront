@@ -17,7 +17,7 @@ import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 function renderSubcategoryItem(name: string, slug: string, image?: string): string {
   const placeholderSvg = `<svg class="w-8 h-8 lg:w-10 lg:h-10" style="color:var(--catpopup-icon)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75Z"/></svg>`;
   const inner = image
-    ? `<img src="${escapeHtml(sanitizeUrl(image))}" alt="${escapeHtml(name)}" class="w-full h-full object-cover" loading="lazy" onerror="this.outerHTML=this.dataset.fallback" data-fallback='${placeholderSvg.replace(/'/g, "&apos;")}' />`
+    ? `<img src="${escapeHtml(sanitizeUrl(image))}" alt="${escapeHtml(name)}" width="80" height="80" class="w-full h-full object-cover" loading="lazy" decoding="async" onerror="this.outerHTML=this.dataset.fallback" data-fallback='${placeholderSvg.replace(/'/g, "&apos;")}' />`
     : placeholderSvg;
   return `
     <a href="${escapeHtml(sanitizeUrl(`/pages/products.html?cat=${encodeURIComponent(slug)}`))}" class="flex flex-col items-center gap-2 group/product">

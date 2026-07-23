@@ -173,7 +173,7 @@ function photoStripSection(reviews: ProductReview[]): string {
     .map(
       (im) => `
       <button type="button" class="rv-image-thumb relative shrink-0 w-[108px] h-[108px] rounded-md overflow-hidden border border-[var(--pd-spec-border,#e5e5e5)] cursor-zoom-in bg-[var(--color-surface-raised,#f5f5f5)] transition-transform duration-150 hover:-translate-y-0.5 [scroll-snap-align:start] max-[374px]:w-[88px] max-[374px]:h-[88px]" data-image-url="${escapeHtml(im.src)}" aria-label="${t("product.buyerPhoto", { count: String(im.rating) })}">
-        <img src="${escapeHtml(im.src)}" class="w-full h-full object-cover" loading="lazy" alt="" />
+        <img src="${escapeHtml(im.src)}" width="96" height="96" decoding="async" class="w-full h-full object-cover" loading="lazy" alt="" />
         <span class="absolute start-1.5 bottom-1.5 inline-flex items-center gap-0.5 bg-[rgba(20,23,28,0.78)] text-white rounded-[6px] px-1.5 py-0.5 text-[11px] font-bold">
           <svg class="w-3 h-3 text-[var(--color-primary-500,#f5b800)]" viewBox="0 0 20 20" fill="currentColor"><path d="${STAR_PATH}"/></svg>${im.rating}
         </span>
@@ -279,7 +279,7 @@ export function renderReviewCard(review: ProductReview, showProductThumb = false
               data-image-url="${escapeHtml(src)}"
               aria-label="${t("product.productImage")}"
             >
-              <img src="${escapeHtml(src)}" class="w-full h-full object-cover" loading="lazy" alt="" />
+              <img src="${escapeHtml(src)}" width="96" height="96" decoding="async" class="w-full h-full object-cover" loading="lazy" alt="" />
             </button>`
             )
             .join("")}
@@ -289,7 +289,7 @@ export function renderReviewCard(review: ProductReview, showProductThumb = false
   const productThumbHtml =
     showProductThumb && review.productTitle
       ? `<div class="rv-product-card flex items-center gap-3 rounded-lg p-3 mt-3 bg-[var(--color-surface-raised,#f5f5f5)]">
-        <img class="rv-product-card-img w-12 h-12 rounded object-cover shrink-0 bg-[var(--pd-spec-header-bg,#f9fafb)]" src="${escapeHtml(review.productImage || "")}" alt="${t("product.productImage")}">
+        <img class="rv-product-card-img w-12 h-12 rounded object-cover shrink-0 bg-[var(--pd-spec-header-bg,#f9fafb)]" src="${escapeHtml(review.productImage || "")}" alt="${t("product.productImage")}" width="48" height="48" decoding="async">
         <div class="flex-1 min-w-0">
           <span class="rv-product-card-title block text-[13px] text-[var(--color-text-body,#333333)] overflow-hidden text-ellipsis whitespace-nowrap">${escapeHtml(review.productTitle)}</span>
           <span class="rv-product-card-price block text-[13px] font-semibold text-[var(--pd-title-color,#111827)] mt-0.5">${escapeHtml(review.productPrice || "")}</span>
@@ -763,7 +763,7 @@ function openImageLightbox(url: string): void {
 
       <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
     </button>
-    <img src="${escapeHtml(url)}" class="max-w-[95vw] max-h-[90vh] object-contain shadow-2xl rounded-lg" alt="Büyütülmüş inceleme görseli" />
+    <img src="${escapeHtml(url)}" width="800" height="800" decoding="async" class="max-w-[95vw] max-h-[90vh] object-contain shadow-2xl rounded-lg" alt="Büyütülmüş inceleme görseli" />
   `;
   const onEsc = (e: KeyboardEvent) => {
     if (e.key === "Escape") close();

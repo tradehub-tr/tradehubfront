@@ -361,9 +361,9 @@ export function distanceSalesContent(): LegalPageData {
         title: "1. Taraflar",
         content: `
           <p>İşbu Mesafeli Satış Sözleşmesi ("Sözleşme"), aşağıdaki taraflar arasında elektronik ortamda kurulur:</p>
-          <p><strong>ALICI:</strong> iSTOC TradeHub üyelik bilgileriyle ürün/hizmet satın alan gerçek veya tüzel kişi.</p>
-          <p><strong>SATICI:</strong> iSTOC TradeHub üzerinde mağazası bulunan ve siparişe konu ürünü Alıcı'ya satan işletme; ticari unvanı, MERSİS/vergi bilgileri ve iletişim bilgileri sipariş özetinde ve faturada belirtilir.</p>
-          <p><strong>ARACI HİZMET SAĞLAYICI (PLATFORM):</strong> iSTOC Ticaret Merkezi A.Ş. ("iSTOC"). İletişim bilgileri, MERSİS ve ETBİS kayıt numarası Kullanım Koşulları sayfasında yer alır. Platform, 6563 sayılı E-Ticaret Kanunu kapsamında aracı hizmet sağlayıcıdır ve Mesafeli Sözleşmeler Yönetmeliği md. 4/1-k uyarınca belirli yükümlülüklerden Satıcı ile birlikte müteselsilen sorumludur.</p>
+          <p><strong>ALICI:</strong> iStoc üyelik bilgileriyle ürün/hizmet satın alan gerçek veya tüzel kişi.</p>
+          <p><strong>SATICI:</strong> iStoc üzerinde mağazası bulunan ve siparişe konu ürünü Alıcı'ya satan işletme; ticari unvanı, MERSİS/vergi bilgileri ve iletişim bilgileri sipariş özetinde ve faturada belirtilir.</p>
+          <p><strong>ARACI HİZMET SAĞLAYICI (PLATFORM):</strong> iSTOC Ticaret Merkezi A.Ş. ("iStoc"). İletişim bilgileri, MERSİS ve ETBİS kayıt numarası Kullanım Koşulları sayfasında yer alır. Platform, 6563 sayılı E-Ticaret Kanunu kapsamında aracı hizmet sağlayıcıdır ve Mesafeli Sözleşmeler Yönetmeliği md. 4/1-k uyarınca belirli yükümlülüklerden Satıcı ile birlikte müteselsilen sorumludur.</p>
         `,
       },
       {
@@ -433,7 +433,7 @@ export function distanceSalesContent(): LegalPageData {
         title: "8. Uyuşmazlık Çözüm Yolları",
         content: `
           <p>Alıcı, işbu Sözleşme'den kaynaklanan uyuşmazlıkların çözümünde Ticaret Bakanlığı'nca her yıl belirlenen parasal sınırlar dahilinde <strong>İlçe/İl Tüketici Hakem Heyeti</strong>'ne, parasal sınırları aşan durumlarda ise <strong>Tüketici Mahkemeleri</strong>'ne başvurabilir. Şikayet ve başvurular ayrıca Ticaret Bakanlığı <a href="https://tuketicisikayeti.ticaret.gov.tr" target="_blank" rel="noopener">Tüketici Şikayet Sistemi</a> üzerinden yapılabilir.</p>
-          <p>Platform üzerindeki uyuşmazlıklar için öncelikle iSTOC müşteri hizmetleri aracılığı ile çözüm aranması tavsiye edilir; bu başvuru yasal yollara başvuru hakkını ortadan kaldırmaz.</p>
+          <p>Platform üzerindeki uyuşmazlıklar için öncelikle iStoc müşteri hizmetleri aracılığı ile çözüm aranması tavsiye edilir; bu başvuru yasal yollara başvuru hakkını ortadan kaldırmaz.</p>
         `,
       },
       {
@@ -471,7 +471,7 @@ export function kvkkContent(): LegalPageData {
         id: "veri-sorumlusu",
         title: "1. Veri Sorumlusu",
         content: `
-          <p>6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") md. 10 uyarınca aşağıda kimliği verilen veri sorumlusu sıfatıyla iSTOC, kişisel verilerinizin işlenmesine ilişkin sizi aydınlatır.</p>
+          <p>6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") md. 10 uyarınca aşağıda kimliği verilen veri sorumlusu sıfatıyla iStoc, kişisel verilerinizin işlenmesine ilişkin sizi aydınlatır.</p>
           <p><strong>Veri Sorumlusu:</strong> iSTOC Ticaret Merkezi A.Ş.<br>
           <strong>Adres:</strong> (İletişim sayfasında belirtilen merkez adresi)<br>
           <strong>VERBİS Kayıt No:</strong> (Firmaca doldurulacak)<br>

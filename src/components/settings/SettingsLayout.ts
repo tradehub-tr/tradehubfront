@@ -96,7 +96,7 @@ function renderProfileHeader(): string {
           <input type="file" x-ref="photoInput" @change="uploadProfilePhoto($event)" accept="image/jpeg,image/png,image/webp,image/gif" class="hidden" />
           <div class="relative size-[72px] max-sm:size-12 rounded-full flex items-center justify-center border-3 border-primary-200 overflow-hidden" style="background:linear-gradient(135deg, var(--color-primary-400, #e6b212) 0%, var(--color-primary-500, #cc9900) 100%)">
             <template x-if="userImage">
-              <img :src="userImage" alt="" class="w-full h-full object-cover" />
+              <img :src="userImage" alt="" width="64" height="64" decoding="async" class="w-full h-full object-cover" />
             </template>
             <template x-if="!userImage">
               <span class="text-[32px] max-sm:text-[21px] font-bold text-white lowercase leading-none" x-text="userInitial || '?'"></span>

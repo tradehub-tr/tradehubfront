@@ -57,6 +57,7 @@ function renderProductCard(product: ProductListingCard): string {
         <img
           src="${escapeHtml(product.imageSrc ? sanitizeUrl(product.imageSrc, '') : '')}"
           alt="${escapeHtml(product.name)}"
+          width="400" height="400"
           loading="lazy"
           class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
           onerror="this.parentElement.classList.add('flex','items-center','justify-center','text-text-tertiary');this.style.display='none';"
@@ -208,6 +209,7 @@ appEl.innerHTML = `
                     <img
                       src="${item.avatar || ''}"
                       alt="${item.name}"
+                      width="64" height="64"
                       loading="lazy"
                       class="h-full w-full object-cover"
                       onerror="this.style.display='none';"

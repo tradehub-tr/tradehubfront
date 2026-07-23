@@ -25,6 +25,7 @@ import { startAlpine } from '../alpine'
 import { Breadcrumb } from '../components/shared/Breadcrumb'
 import { ProductListingGrid } from '../components/products/ProductListingGrid'
 import { callMethod } from '../utils/api'
+import { applyServerSeo, type ServerSeoPayload } from '../seo/setPageMeta'
 import { sanitizeRichHtml, safeHexColor, escapeHtml } from '../utils/sanitize'
 import { saveRecentBrand } from '../services/recentHistoryService'
 import type { ProductListingCard } from '../types/productListing'
@@ -61,6 +62,8 @@ interface BrandDetail {
 
 interface BrandDetailResponse {
   brand: BrandDetail
+  /** Backend SEO payload (BE-LD ile gelecek) — varsa DOM head'ine uygulanır. */
+  seo?: ServerSeoPayload
   // Backend ham listing kayıtları — aşağıda `as ProductListingCard[]` ile cast'lenir.
   featured: unknown[]
   listings: unknown[]
@@ -347,7 +350,13 @@ async function main() {
   const featured = (featuredRaw || []) as ProductListingCard[]
   const listings = (listingsRaw || []) as ProductListingCard[]
 
-  document.title = `${brand.name} - iSTOC TradeHub`
+  // Backend seo payload'ı varsa canonical/OG/robots dahil uygula (product-detail.ts:221
+  // ile aynı desen); yoksa en azından title'ı düzgün kur.
+  if (payload.seo) {
+    applyServerSeo(payload.seo)
+  } else {
+    document.title = `${brand.name} | iStoc`
+  }
 
   // Search dropdown "son gezdiklerin" listesi için
   saveRecentBrand({
@@ -369,7 +378,7 @@ async function main() {
     <main>
       <div class="container-boxed py-3">
         ${Breadcrumb([
-          { label: t('drawer.brands', { defaultValue: 'Markalar' }), href: '/markalar' },
+          { label: t('drawer.brands', { defaultValue: 'Markalar' }), href: '/ureticiler' },
           { label: brand.name },
         ])}
       </div>

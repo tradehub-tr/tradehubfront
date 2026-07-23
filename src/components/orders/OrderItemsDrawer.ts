@@ -84,7 +84,7 @@ export function OrderItemsDrawer(): string {
           <template x-for="product in filteredItems" :key="product.name + product.variation">
             <div class="flex items-center gap-2.5 py-2.5 border-b border-gray-100">
               <div class="w-10 h-10 rounded-md border border-gray-200 bg-gray-50 overflow-hidden shrink-0">
-                <img :src="product.image" :alt="product.name" class="w-full h-full object-cover"
+                <img :src="product.image" :alt="product.name" width="40" height="40" decoding="async" class="w-full h-full object-cover"
                   onerror="this.style.display='none'" />
               </div>
               <div class="flex-1 min-w-0">

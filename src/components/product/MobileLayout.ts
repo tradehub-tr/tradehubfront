@@ -141,7 +141,7 @@ export function MobileProductLayout(): string {
           <div class="pdm-gallery-slide shrink-0 basis-full w-full h-full [scroll-snap-align:start] [scroll-snap-stop:always]" data-slide-index="${i}">
             ${
               img.src
-                ? `<img class="w-full h-full object-contain select-none" src="${escapeHtml(sanitizeUrl(img.src))}" alt="${escapeHtml(img.alt)}" draggable="false" loading="${i === 0 ? "eager" : "lazy"}">`
+                ? `<img class="w-full h-full object-contain select-none" src="${escapeHtml(sanitizeUrl(img.src))}" alt="${escapeHtml(img.alt)}" width="800" height="800" decoding="async" draggable="false" loading="${i === 0 ? "eager" : "lazy"}">`
                 : `<div class="pdm-gallery-placeholder w-full h-full flex items-center justify-center bg-gradient-to-b from-[#f8f9fa] to-[#e9ecef]">
                   <svg width="64" height="64" fill="none" stroke="#9ca3af" stroke-width="1.4" viewBox="0 0 24 24">
                     <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>
@@ -195,7 +195,7 @@ export function MobileProductLayout(): string {
         .map(
           (img, i) => `
         <button type="button" data-thumb-index="${i}" class="${i === 0 ? "pdm-thumb-active " : ""}th-no-press appearance-none focus:outline-none shrink-0 w-[49px] h-[49px] rounded-md overflow-hidden border-2 border-transparent p-0 bg-none [&.pdm-thumb-active]:border-[var(--color-text-heading,#111827)]" aria-label="${escapeHtml(t("product.imageNumberLabel", { count: String(i + 1) }))}">
-          ${img.src ? `<img class="w-full h-full object-cover" src="${escapeHtml(sanitizeUrl(img.src))}" alt="${escapeHtml(img.alt)}" loading="lazy">` : ""}
+          ${img.src ? `<img class="w-full h-full object-cover" src="${escapeHtml(sanitizeUrl(img.src))}" alt="${escapeHtml(img.alt)}" width="80" height="80" decoding="async" loading="lazy">` : ""}
         </button>
       `
         )
@@ -279,7 +279,7 @@ export function MobileProductLayout(): string {
   const titleSection = `
     <div id="pdm-title-section" class="flex flex-col gap-2 pt-3.5 px-4 pb-3 max-[374px]:pt-3 max-[374px]:px-3 max-[374px]:pb-2.5 bg-surface">
       <div id="pdm-title-row" class="flex items-start gap-2">
-        <h1 id="pdm-product-title" class="pdm-title-text line-clamp-2 [&.pdm-title-expanded]:line-clamp-none flex-1 min-w-0 text-[15px] max-[374px]:text-sm font-semibold leading-[1.45] text-text-heading m-0">${escapeHtml(p.title)}</h1>
+        <h2 id="pdm-product-title" class="pdm-title-text line-clamp-2 [&.pdm-title-expanded]:line-clamp-none flex-1 min-w-0 text-[15px] max-[374px]:text-sm font-semibold leading-[1.45] text-text-heading m-0">${escapeHtml(p.title)}</h2>
         <button type="button" id="pdm-title-expand" class="th-no-press appearance-none focus:outline-none shrink-0 w-7 h-7 flex items-center justify-center text-text-muted [&.pdm-collapsible-open_svg]:rotate-180" aria-label="${t("aria.expand")}">
           ${chevronSvg}
         </button>
@@ -938,7 +938,7 @@ function flattenReviewPhotos(reviews: ProductReview[]): string {
     .map(
       (src) => `
       <button type="button" data-rev-photo class="th-no-press appearance-none focus:outline-none aspect-square rounded-md overflow-hidden bg-surface-raised">
-        <img src="${escapeHtml(sanitizeUrl(src))}" class="w-full h-full object-cover" loading="lazy" alt="" />
+        <img src="${escapeHtml(sanitizeUrl(src))}" width="96" height="96" decoding="async" class="w-full h-full object-cover" loading="lazy" alt="" />
       </button>`
     )
     .join("");

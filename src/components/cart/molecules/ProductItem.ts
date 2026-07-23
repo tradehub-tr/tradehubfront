@@ -74,7 +74,7 @@ export function ProductItem({ product }: ProductItemProps): string {
             @click="productOpen = !productOpen"
             :aria-expanded="productOpen"
           >
-            ${productImage ? `<img src="${escapeHtml(productImage)}" alt="" class="sc-c-spu-thumb w-[40px] h-[40px] sm:w-[60px] sm:h-[60px] rounded-md object-cover border border-[#e5e5e5] shrink-0 self-center bg-[#fafafa]" />` : ""}
+            ${productImage ? `<img src="${escapeHtml(productImage)}" alt="" width="60" height="60" decoding="async" class="sc-c-spu-thumb w-[40px] h-[40px] sm:w-[60px] sm:h-[60px] rounded-md object-cover border border-[#e5e5e5] shrink-0 self-center bg-[#fafafa]" />` : ""}
             <div class="flex-1 min-w-0">
               <span class="sc-c-spu-title block truncate text-[13px] sm:text-[15px] font-semibold text-[#1a1a1a] leading-[1.4]" title="${escapeHtml(product.title)}">${escapeHtml(product.title)}</span>
               <span class="sc-c-spu-moq block text-[11px] sm:text-[12.5px] text-text-tertiary mt-[1px] sm:mt-[3px] leading-[1.3] whitespace-nowrap overflow-hidden text-ellipsis">${escapeHtml(product.moqLabel)}</span>
@@ -94,10 +94,10 @@ export function ProductItem({ product }: ProductItemProps): string {
         <div class="flex items-center justify-end gap-1.5 sm:gap-2 mt-1 ps-[calc(18px+0.5rem)] sm:ps-[calc(20px+0.75rem)]" @click.stop x-show="!productOpen" x-cloak>
           <span class="sc-c-spu-total whitespace-nowrap text-[12px] sm:text-[14.5px] font-bold text-[#1a1a1a] tabular-nums">${totalText}</span>
           <button type="button" class="sc-c-spu-favorite-btn th-no-press w-6 h-6 sm:w-7 sm:h-7 inline-flex items-center justify-center rounded-full transition-colors ${isFav ? "text-amber-500" : "text-text-tertiary"} bg-transparent hover:bg-white hover:text-text-secondary" data-product-id="${escapeHtml(product.id)}" @click="$dispatch('product-favorite', { productId: '${escapeHtml(product.id)}' })" aria-label="${t("cart.favorite")}">
-            <img src="${favIcon}" class="w-3.5 h-3.5 sm:w-4 sm:h-4 object-contain" alt="${t("cart.favorite")}" />
+            <img src="${favIcon}" width="72" height="72" decoding="async" class="w-3.5 h-3.5 sm:w-4 sm:h-4 object-contain" alt="${t("cart.favorite")}" />
           </button>
           <button type="button" class="sc-c-spu-delete-btn w-6 h-6 sm:w-7 sm:h-7 lg:w-9 lg:h-9 inline-flex items-center justify-center rounded-full transition-colors text-text-tertiary bg-transparent hover:bg-white hover:text-text-secondary" data-product-id="${escapeHtml(product.id)}" @click="$dispatch('product-delete', { productId: '${escapeHtml(product.id)}' })" aria-label="${t("cart.removeProduct")}">
-            <img src="${trashIcon}" class="w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5 object-contain" alt="${t("cart.removeProduct")}" />
+            <img src="${trashIcon}" width="64" height="64" decoding="async" class="w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5 object-contain" alt="${t("cart.removeProduct")}" />
           </button>
         </div>
       </div>

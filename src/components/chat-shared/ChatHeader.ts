@@ -28,7 +28,7 @@ export function ChatHeader(opts: ChatHeaderOptions = {}): string {
       <template x-if="$store.chatPopup.activeConversation">
         <div class="size-8 shrink-0 rounded-full bg-[var(--color-primary-100,#ffefb3)] overflow-hidden">
           <template x-if="$store.chatPopup.activeConversation.avatar">
-            <img :src="$store.chatPopup.activeConversation.avatar" class="size-full object-cover" alt="" />
+            <img :src="$store.chatPopup.activeConversation.avatar" width="40" height="40" decoding="async" class="size-full object-cover" alt="" />
           </template>
         </div>
       </template>

@@ -100,7 +100,7 @@ function renderPhotosSlides(p: ProductDetail): string {
       <div class="${slideCls}">
         ${
           img.src
-            ? `<img class="max-w-full max-h-full object-contain select-none" src="${escapeHtml(sanitizeUrl(img.src))}" alt="${escapeHtml(img.alt)}" draggable="false">`
+            ? `<img class="max-w-full max-h-full object-contain select-none" src="${escapeHtml(sanitizeUrl(img.src))}" alt="${escapeHtml(img.alt)}" width="800" height="800" decoding="async" draggable="false">`
             : ""
         }
       </div>`
@@ -118,7 +118,7 @@ function renderVariantSlides(p: ProductDetail): string {
       <div class="${slideCls}">
         ${
           opt.thumbnail
-            ? `<img class="max-w-full max-h-full object-contain select-none" src="${escapeHtml(sanitizeUrl(opt.thumbnail))}" alt="${escapeHtml(label)}" draggable="false">`
+            ? `<img class="max-w-full max-h-full object-contain select-none" src="${escapeHtml(sanitizeUrl(opt.thumbnail))}" alt="${escapeHtml(label)}" width="800" height="800" decoding="async" draggable="false">`
             : ""
         }
         <span class="absolute end-3.5 bottom-3.5 bg-black/55 text-white text-xs px-2.5 py-1 rounded-full">${escapeHtml(label)}</span>

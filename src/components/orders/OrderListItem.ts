@@ -92,7 +92,7 @@ export function OrderListItem(): string {
           <div class="flex gap-2 overflow-x-auto pb-1">
             <template x-for="(product, idx) in (order.products || []).slice(0, ${STRIP_VISIBLE_THUMBS})" :key="product.name + idx">
               <div class="w-[46px] h-[46px] sm:w-[52px] sm:h-[52px] lg:w-[58px] lg:h-[58px] rounded-md border border-gray-200 shrink-0 relative overflow-hidden bg-gray-50">
-                <img :src="product.image" :alt="product.name" class="w-full h-full object-cover"
+                <img :src="product.image" :alt="product.name" width="58" height="58" decoding="async" class="w-full h-full object-cover"
                   onerror="this.style.display='none'" />
                 <span class="absolute bottom-0.5 end-0.5 bg-gray-900/85 text-white text-[9px] font-extrabold px-1 py-px rounded">
                   ×<span x-text="product.quantity"></span>

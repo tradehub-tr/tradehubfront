@@ -2,6 +2,7 @@ import Alpine from "alpinejs";
 import { t, t as tI18n } from "../i18n";
 import { getBaseUrl } from "../components/auth/AuthLayout";
 import { callMethod, fetchCsrfToken } from "../utils/api";
+import { applyServerSeo, type ServerSeoPayload } from "../seo/setPageMeta";
 import { getSessionUser, logout } from "../utils/auth";
 import { saveRecentSeller } from "../services/recentHistoryService";
 
@@ -31,6 +32,8 @@ interface SellerStorefrontData {
   joined_at?: string;
   city?: string;
   country?: string;
+  /** Panelden yönetilen SEO payload'ı (BE-LD ile API'ye eklenecek). */
+  seo?: ServerSeoPayload;
   media_groups?: SellerMediaGroup[];
   // Alpine reactivity için diğer dinamik field'lar
   [key: string]: unknown;
@@ -291,6 +294,10 @@ Alpine.data("sellerStorefront", () => ({
     if (this.seller) {
       if (!this.seller.slug) this.seller.slug = code;
       if (!this.seller.seller_code) this.seller.seller_code = code;
+
+      // Panelden girilen SEO meta'ları varsa DOM head'ine uygula
+      // (canonical/OG/robots dahil — product-detail.ts:221 deseni).
+      applyServerSeo(this.seller.seo);
 
       // Search dropdown "son gezdiklerin" listesi için
       saveRecentSeller({

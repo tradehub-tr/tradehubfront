@@ -118,7 +118,7 @@ function renderDrawer(): string {
     <div id="dash-drawer-backdrop" class="fixed inset-0 z-(--z-backdrop) bg-black/40 hidden lg:hidden"></div>
     <div id="dash-drawer-panel" class="fixed top-0 bottom-0 start-0 z-(--z-backdrop) w-[280px] bg-white shadow-xl flex flex-col -translate-x-full rtl:translate-x-full transition-transform duration-200 ease-out motion-reduce:transition-none lg:hidden" role="navigation" aria-label="${t("dashboard.myDashboard")}">
       <div class="flex items-center justify-between px-4 h-14 border-b border-gray-100 shrink-0">
-        <img src="/images/istoc-logo.png" alt="iSTOC" class="h-7" />
+        <img src="/images/istoc-logo.png" alt="iStoc" width="87" height="32" class="h-7 w-auto" />
         <button type="button" data-dash-drawer-close aria-label="${t("common.cancel")}" class="th-no-press appearance-none border-none bg-transparent cursor-pointer w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-700 focus:outline-none">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg>
         </button>

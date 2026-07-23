@@ -97,7 +97,7 @@ export function MessageList(): string {
             <!-- Avatar -->
             <div class="relative w-10 h-10 flex-shrink-0 rounded-full overflow-visible">
               <template x-if="conv.avatar">
-                <img :src="conv.avatar" :alt="conv.name" class="w-10 h-10 rounded-full object-cover" loading="lazy" />
+                <img :src="conv.avatar" :alt="conv.name" width="40" height="40" decoding="async" class="w-10 h-10 rounded-full object-cover" loading="lazy" />
               </template>
               <template x-if="!conv.avatar">
                 ${TRADEHUB_AVATAR}

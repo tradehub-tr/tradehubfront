@@ -107,6 +107,7 @@ function HeroSection(): string {
               <img
                 src="${heroImg}"
                 alt="${t("sellPage.heroImageAlt")}"
+                width="1280" height="720"
                 class="absolute inset-0 w-full h-full object-cover"
                 loading="eager"
                 fetchpriority="high"

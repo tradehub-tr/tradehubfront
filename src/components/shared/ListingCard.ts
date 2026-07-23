@@ -15,6 +15,12 @@ import type { ProductListingCard } from "../../types/productListing";
 export interface ListingCardOptions {
   /** %N indirim rozeti + üstü çizili originalPrice gösterir. Varsayılan: false. */
   showDiscount?: boolean;
+  /**
+   * FE-2 (CWV) opt-in lazy: true verilirse kartın İLK görseli de
+   * loading="lazy" alır. Fold altındaki grid'ler (ana sayfa vitrini,
+   * uzun liste kuyruğu) için; fold üstü kartlar default eager kalır.
+   */
+  lazy?: boolean;
   /** 1-bazlı sıra rozeti (En Çok Satanlar). Verilirse görselin sol-üst köşesine numara çipi basılır; OOS/KYB/indirim rozetleri altına kayar. */
   rank?: number;
   /**
@@ -48,7 +54,7 @@ export interface ListingCardOptions {
  */
 function renderImageSlider(
   card: ProductListingCard,
-  opts: { imgFit?: string } = {}
+  opts: { imgFit?: string; lazy?: boolean } = {}
 ): string {
   // Görsel doldurma modu — varsayılan object-cover (liste/arama/mağaza). Ana sayfa
   // vitrini object-contain geçer: görsel KARE (1:1) kalır ama kırpılmaz/bozulmaz,
@@ -82,7 +88,7 @@ function renderImageSlider(
       .map(
         (src, i) => `
       <div class="w-full h-full flex-shrink-0">
-        <img src="${escapeHtml(sanitizeUrl(src))}" alt="${escapeHtml(card.name)}${i > 0 ? ` - ${i + 1}` : ""}" class="w-full h-full ${imgFit}" decoding="async" ${i > 0 ? 'loading="lazy"' : ""} />
+        <img src="${escapeHtml(sanitizeUrl(src))}" alt="${escapeHtml(card.name)}${i > 0 ? ` - ${i + 1}` : ""}" class="w-full h-full ${imgFit}" width="400" height="400" decoding="async" ${i > 0 || opts.lazy ? 'loading="lazy"' : ""} />
       </div>
     `
       )
@@ -188,7 +194,10 @@ export function renderListingCard(
   // MOQ ("Minimum sipariş") satırı — ana sayfa vitrini gizler (showMoq:false).
   const showMoq = opts.showMoq !== false;
   // Ana sayfa vitrini görseli kırpmadan (object-contain) kare alana sığdırır.
-  const sliderOpts = opts.containImage ? { imgFit: "object-contain" } : {};
+  const sliderOpts = {
+    ...(opts.containImage ? { imgFit: "object-contain" } : {}),
+    ...(opts.lazy ? { lazy: true } : {}),
+  };
   // Sosyal kanıt şeridi — statik "selling point / promo" (ör. "Toptan özel fiyat")
   // KALDIRILDI; bu alan tamamen sosyal kanıt sistemine ait. Slotlar boş/gizli
   // başlar (sp-strip-empty !hidden), initListingSocialProof gerçek sinyal ya da
@@ -212,7 +221,7 @@ export function renderListingCard(
     ? getSellerUrl({ slug: card.supplierSlug })
     : getBrandUrl({ slug: card.brandSlug });
   const brandInlineHtml = card.brandName
-    ? `<a href="${escapeHtml(sanitizeUrl(brandHref))}" title="${escapeHtml(card.brandName)}" class="font-semibold text-gray-900 no-underline hover:underline">${escapeHtml(card.brandName)}<img src="${verifiedTickUrl}" alt="" class="inline-block w-3.5 h-3.5 align-[-2.5px] ms-0.5" /></a> `
+    ? `<a href="${escapeHtml(sanitizeUrl(brandHref))}" title="${escapeHtml(card.brandName)}" class="font-semibold text-gray-900 no-underline hover:underline">${escapeHtml(card.brandName)}<img src="${verifiedTickUrl}" alt="" class="inline-block w-3.5 h-3.5 align-[-2.5px] ms-0.5" width="14" height="14" decoding="async" /></a> `
     : "";
 
   const isOOS = !!card.outOfStock;

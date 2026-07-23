@@ -14,6 +14,7 @@ export function OrderCard(): string {
 
       <div class="mb-2.5 flex items-start gap-2.5 leading-snug">
         <img :src="msg.body.product.thumbnail" :alt="msg.body.product.title"
+             width="44" height="44" decoding="async"
              class="size-11 shrink-0 rounded-md object-cover bg-[var(--color-surface-raised,#f5f5f5)]" />
         <div class="line-clamp-2" x-text="msg.body.product.title"></div>
       </div>

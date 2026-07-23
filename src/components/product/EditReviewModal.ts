@@ -244,7 +244,7 @@ export function EditReviewModal(): string {
             <div class="flex flex-wrap gap-2">
               <template x-for="(img, idx) in existingImages" :key="img + idx">
                 <div class="relative w-20 h-20 rounded-lg overflow-hidden border border-border-default/60 bg-secondary-50 group">
-                  <img :src="previewSrc(img)" alt="" class="w-full h-full object-cover" />
+                  <img :src="previewSrc(img)" alt="" width="80" height="80" decoding="async" class="w-full h-full object-cover" />
                   <button
                     type="button"
                     @click="removeExistingImage(idx)"

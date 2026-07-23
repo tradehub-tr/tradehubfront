@@ -240,6 +240,7 @@ export function ManufacturerList(opts: { mobileFilter?: boolean } = {}): string 
                       x-show="seller.logo"
                       :src="seller.logo"
                       :alt="seller.seller_name"
+                      width="50" height="50" decoding="async"
                       class="w-full h-full object-contain p-1"
                     />
                     <svg x-show="!seller.logo" class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -316,7 +317,7 @@ export function ManufacturerList(opts: { mobileFilter?: boolean } = {}): string 
                       class="group/pcard flex flex-col bg-white border border-gray-200 rounded-md overflow-hidden flex-1 min-w-0 max-w-[190px] xl:max-w-[236px] no-underline text-inherit hover:border-gray-300 hover:shadow-[var(--shadow-card-hover,0_4px_12px_rgba(0,0,0,0.15))] transition-[border-color,box-shadow] duration-200"
                     >
                       <div class="bg-white flex-1 min-h-0 overflow-hidden">
-                        <img x-show="p.image" :src="p.image" :alt="p.product_name" loading="lazy" @error="p.image = ''" class="block w-full h-full object-contain p-1.5 transition-transform duration-300 ease-out group-hover/pcard:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover/pcard:scale-100" />
+                        <img x-show="p.image" :src="p.image" :alt="p.product_name" width="200" height="200" loading="lazy" decoding="async" @error="p.image = ''" class="block w-full h-full object-contain p-1.5 transition-transform duration-300 ease-out group-hover/pcard:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover/pcard:scale-100" />
                         <div x-show="!p.image" class="w-full h-full bg-gray-50 flex items-center justify-center text-gray-300">
                           <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
                         </div>
@@ -341,6 +342,7 @@ export function ManufacturerList(opts: { mobileFilter?: boolean } = {}): string 
                     <img
                       :src="seller.gallery_images[activeIdx]"
                       :alt="seller.seller_name + ' ${t("checkoutMfr.galleryAlt")}'"
+                      width="220" height="220" decoding="async"
                       class="w-full h-full object-cover transition-opacity duration-300"
                     />
                     <!-- Foto sayacı rozeti -->
@@ -399,7 +401,7 @@ export function ManufacturerList(opts: { mobileFilter?: boolean } = {}): string 
                   class="group flex items-start min-w-0 @min-[620px]/sc:flex-1 no-underline rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
                 >
                   <div class="w-12 h-12 @min-[560px]/sc:w-14 @min-[560px]/sc:h-14 border border-gray-200 rounded-md overflow-hidden shrink-0 me-3 bg-gray-50 flex items-center justify-center">
-                    <img x-show="seller.logo" :src="seller.logo" :alt="seller.seller_name" loading="lazy" class="w-full h-full object-contain p-1" />
+                    <img x-show="seller.logo" :src="seller.logo" :alt="seller.seller_name" width="96" height="96" loading="lazy" decoding="async" class="w-full h-full object-contain p-1" />
                     <svg x-show="!seller.logo" class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
                   </div>
                   <div class="min-w-0">
@@ -436,7 +438,7 @@ export function ManufacturerList(opts: { mobileFilter?: boolean } = {}): string 
                         class="block aspect-square @min-[620px]/sc:aspect-auto @min-[620px]/sc:w-[84px] @min-[620px]/sc:h-[84px] rounded-md overflow-hidden border border-gray-100 bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
                         :aria-label="p.product_name"
                       >
-                        <img x-show="p.image" :src="p.image" :alt="p.product_name" loading="lazy" @error="p.image = ''" class="w-full h-full object-cover" />
+                        <img x-show="p.image" :src="p.image" :alt="p.product_name" width="200" height="200" loading="lazy" decoding="async" @error="p.image = ''" class="w-full h-full object-cover" />
                         <div x-show="!p.image" class="w-full h-full flex items-center justify-center text-gray-300">
                           <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
                         </div>

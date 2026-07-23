@@ -59,9 +59,9 @@ const footerColumnsI18n: FooterColumnI18n[] = [
     titleKey: "footer.getSupport",
     links: [
       { labelKey: "footer.helpCenter", href: "/yardim-merkezi" },
-      { labelKey: "footer.liveSupport", href: "/pages/help/help-tickets.html" },
-      { labelKey: "footer.checkOrder", href: "/pages/dashboard/orders.html" },
-      { labelKey: "footer.shippingDelivery", href: "/pages/info/shipping-logistics.html" },
+      { labelKey: "footer.liveSupport", href: "/destek/taleplerim" },
+      { labelKey: "footer.checkOrder", href: "/hesabim/siparisler" },
+      { labelKey: "footer.shippingDelivery", href: "/kargo-lojistik" },
       { labelKey: "footer.refunds", href: "/iade-kosullari" },
       { labelKey: "footer.reportAbuse", href: "/destek/yeni" },
     ],
@@ -69,11 +69,11 @@ const footerColumnsI18n: FooterColumnI18n[] = [
   {
     titleKey: "footer.paymentsProtections",
     links: [
-      { labelKey: "footer.safePayments", href: "/odeme-secenekleri" },
-      { labelKey: "footer.paymentOptions", href: "/pages/info/payments.html" },
+      { labelKey: "footer.safePayments", href: "/ticaret-guvencesi" },
+      { labelKey: "footer.paymentOptions", href: "/odeme-secenekleri" },
       { labelKey: "footer.moneyBack", href: "/iade-politikasi" },
-      { labelKey: "footer.afterSales", href: "/pages/info/after-sales.html" },
-      { labelKey: "footer.buyerProtection", href: "/pages/info/trade-assurance-detail.html" },
+      { labelKey: "footer.afterSales", href: "/satis-sonrasi" },
+      { labelKey: "footer.buyerProtection", href: "/ticaret-guvencesi/detay" },
     ],
   },
   {

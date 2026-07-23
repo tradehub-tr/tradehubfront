@@ -20,7 +20,7 @@ export interface SkuRowProps {
 
 export function SkuRow({ sku, productHref }: SkuRowProps): string {
   const unavailable = sku.isAvailable === false;
-  const imgContent = `<img src="${escapeHtml(sanitizeUrl(sku.skuImage))}" alt="SKU ${escapeHtml(sku.id)}" class="w-full h-full object-cover" loading="lazy" />`;
+  const imgContent = `<img src="${escapeHtml(sanitizeUrl(sku.skuImage))}" alt="SKU ${escapeHtml(sku.id)}" width="60" height="60" decoding="async" class="w-full h-full object-cover" loading="lazy" />`;
   const imgWrapper = productHref
     ? `<a href="${escapeHtml(sanitizeUrl(productHref))}" class="block w-full h-full">${imgContent}</a>`
     : imgContent;
@@ -74,7 +74,7 @@ export function SkuRow({ sku, productHref }: SkuRowProps): string {
 
         <div class="relative group shrink-0">
           <button type="button" class="sc-c-sku-delete-btn th-no-press w-[22px] h-[22px] sm:w-[26px] sm:h-[26px] inline-flex items-center justify-center rounded-full text-text-tertiary hover:bg-white transition-colors" data-sku-id="${escapeHtml(sku.id)}" @click="$dispatch('sku-delete', { skuId: '${escapeHtml(sku.id)}' })" aria-label="${t("cart.removeSku")}">
-            <img src="${trashIcon}" class="w-[12px] h-[12px] sm:w-[14px] sm:h-[14px] object-contain" alt="Sil" />
+            <img src="${trashIcon}" width="64" height="64" decoding="async" class="w-[12px] h-[12px] sm:w-[14px] sm:h-[14px] object-contain" alt="Sil" />
           </button>
         </div>
       </div>

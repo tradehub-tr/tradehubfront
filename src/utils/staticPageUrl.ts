@@ -22,7 +22,6 @@ const STATIC_PAGE_PATHS: Record<string, string> = {
   "help-center": "/yardim-merkezi",
   faq: "/sss",
   "after-sales": "/satis-sonrasi",
-  membership: "/uyelik",
   payments: "/odeme-secenekleri",
   "refund-policy": "/iade-politikasi",
   "shipping-logistics": "/kargo-lojistik",
@@ -94,7 +93,6 @@ const STATIC_PAGE_HTML_MAP: Record<string, string> = {
 
   // Bilgi
   "/satis-sonrasi": "/pages/info/after-sales.html",
-  "/uyelik": "/pages/info/membership.html",
   "/odeme-secenekleri": "/pages/info/payments.html",
   "/iade-politikasi": "/pages/info/refund-policy.html",
   "/kargo-lojistik": "/pages/info/shipping-logistics.html",

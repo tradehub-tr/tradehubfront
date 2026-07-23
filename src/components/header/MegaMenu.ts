@@ -219,7 +219,7 @@ function renderFeaturedView(): string {
 
         <!-- Producers banner -->
         <a href="/ureticiler" class="group relative isolate block overflow-hidden rounded-md bg-[#1a1a1a] shadow-[0_2px_6px_rgba(20,20,18,0.08)] transition-[transform,box-shadow] duration-200 motion-reduce:transition-none hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 hover:shadow-[0_12px_28px_rgba(20,20,18,0.18)] min-h-[150px] lg:min-h-[180px] xl:min-h-[230px] 2xl:min-h-[280px]" aria-label="${t("mega.discoverProducers")}">
-          <img src="${producerImg}" alt="" loading="lazy" decoding="async" class="absolute inset-0 z-0 block w-full h-full object-cover" />
+          <img src="${producerImg}" alt="" width="1200" height="520" loading="lazy" decoding="async" class="absolute inset-0 z-0 block w-full h-full object-cover" />
           <div class="absolute inset-0 z-10" style="background:linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.85) 100%);"></div>
           <span class="absolute top-3 start-3 lg:top-3.5 lg:start-3.5 z-20 inline-block rounded-full bg-amber-400 px-2 py-0.5 text-[10px] lg:text-[10.5px] font-bold uppercase tracking-wider text-gray-900" data-i18n="mega.bannerTagNew">${t("mega.bannerTagNew")}</span>
           <div class="relative z-20 flex h-full min-h-[150px] lg:min-h-[180px] xl:min-h-[230px] 2xl:min-h-[280px] flex-col justify-end gap-1 lg:gap-1.5 xl:gap-2 p-3 lg:p-4 xl:p-5 2xl:p-6 text-white">
@@ -248,7 +248,7 @@ function renderProtectionsView(): string {
         <!-- Left: Branding + CTA + stats -->
         <div class="lg:col-span-5 lg:border-e lg:border-gray-200 lg:pe-8 flex flex-col">
           <div class="flex items-center gap-2 mb-3">
-            <img src="${tasLogo}" alt="${t("mega.tradeAssuranceTitle")}" class="w-7 h-7 object-contain" />
+            <img src="${tasLogo}" alt="${t("mega.tradeAssuranceTitle")}" width="443" height="600" decoding="async" class="w-7 h-7 object-contain" />
             <span class="text-sm font-semibold text-gray-900" data-i18n="mega.tradeAssuranceTitle">${t("mega.tradeAssuranceTitle")}</span>
           </div>
           <h3 class="text-2xl xl:text-[28px] font-bold text-gray-900 leading-tight mb-3" data-i18n="mega.tradeAssuranceSubtitle">${t("mega.tradeAssuranceSubtitle")}</h3>
@@ -300,7 +300,6 @@ const buyerCentralColumns: BuyerCentralColumn[] = [
     titleKey: "mega.whyIstoc",
     links: [
       { labelKey: "mega.howSourcingWorks", href: "/how-sourcing-works" },
-      { labelKey: "mega.membershipProgram", href: "/membership" },
     ],
   },
   {
@@ -802,7 +801,7 @@ export function initMegaMenu(): void {
         const inner = isViewAll
           ? viewAllSvg
           : image
-            ? `<img src="${escapeHtml(sanitizeUrl(image))}" alt="${escapeHtml(name)}" class="w-full h-full object-cover" loading="lazy" onerror="this.outerHTML=this.dataset.fallback" data-fallback='${iconFallback.replace(/'/g, "&apos;")}' />`
+            ? `<img src="${escapeHtml(sanitizeUrl(image))}" alt="${escapeHtml(name)}" width="80" height="80" class="w-full h-full object-cover" loading="lazy" decoding="async" onerror="this.outerHTML=this.dataset.fallback" data-fallback='${iconFallback.replace(/'/g, "&apos;")}' />`
             : iconFallback;
         const borderStyle = isViewAll ? "border:2px dashed #e5e7eb;" : "";
         const href = isViewAll

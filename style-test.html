@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -3093,7 +3093,6 @@
     loadedFonts.add(fontParam);
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = `https://fonts.googleapis.com/css2?family=${fontParam}&display=swap`;
     document.head.appendChild(link);
   }
 
@@ -3170,7 +3169,6 @@
       }
     }
     if (fontUrls.length === 0) return null;
-    return `@import url('https://fonts.googleapis.com/css2?${fontUrls.join('&')}&display=swap');`;
   }
 
   async function saveToStyleCSS() {
