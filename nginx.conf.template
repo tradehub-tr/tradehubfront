@@ -25,18 +25,9 @@ map $uri $resolved_page {
     /destek/talep                        /pages/help/help-ticket.html;
 
     /satis-sonrasi                       /pages/info/after-sales.html;
-    /blog                                /pages/info/blog.html;
-    /kariyer                             /pages/info/careers.html;
-    /kurumsal-sorumluluk                 /pages/info/csr.html;
-    /uyelik                              /pages/info/membership.html;
-    /izleme                              /pages/info/monitoring.html;
-    /haberler                            /pages/info/news.html;
-    /ortakliklar                         /pages/info/partnerships.html;
     /odeme-secenekleri                   /pages/info/payments.html;
     /iade-politikasi                     /pages/info/refund-policy.html;
     /kargo-lojistik                      /pages/info/shipping-logistics.html;
-    /kargo-koruma                        /pages/info/shipping-protection.html;
-    /vergi                               /pages/info/tax.html;
     /ticaret-guvencesi/detay             /pages/info/trade-assurance-detail.html;
 
     /erisilebilirlik                     /pages/legal/accessibility.html;
@@ -75,7 +66,6 @@ map $uri $resolved_page {
     /satici/dashboard                    /pages/seller/dashboard.html;
     /satici/basvuru-bekleyen             /pages/seller/application-pending.html;
     /satici/tedarikci-kurulum            /pages/seller/supplier-setup.html;
-    /satici/dogrulama                    /pages/seller/verification.html;
     /satici/vitrin                       /pages/seller/seller-storefront.html;
 
     /firsatlar                           /pages/top-deals.html;
@@ -121,7 +111,7 @@ map $uri $seo_static_page_path {
     /                                    /;
     /urunler                             /urunler;
     /kategoriler                         /kategoriler;
-    /markalar                            /markalar;
+    /ureticiler                          /ureticiler;
     /sepet                               /sepet;
 
     # Auth
@@ -129,6 +119,7 @@ map $uri $seo_static_page_path {
     /kayit                               /kayit;
     /sifremi-unuttum                     /sifremi-unuttum;
     /sifre-sifirla                       /sifre-sifirla;
+    /davet-kabul                         /davet-kabul;
 
     # Help
     /yardim-merkezi                      /yardim-merkezi;
@@ -140,18 +131,9 @@ map $uri $seo_static_page_path {
 
     # Info
     /satis-sonrasi                       /satis-sonrasi;
-    /blog                                /blog;
-    /kariyer                             /kariyer;
-    /kurumsal-sorumluluk                 /kurumsal-sorumluluk;
-    /uyelik                              /uyelik;
-    /izleme                              /izleme;
-    /haberler                            /haberler;
-    /ortakliklar                         /ortakliklar;
     /odeme-secenekleri                   /odeme-secenekleri;
     /iade-politikasi                     /iade-politikasi;
     /kargo-lojistik                      /kargo-lojistik;
-    /kargo-koruma                        /kargo-koruma;
-    /vergi                               /vergi;
     /ticaret-guvencesi/detay             /ticaret-guvencesi/detay;
 
     # Legal
@@ -194,7 +176,6 @@ map $uri $seo_static_page_path {
     /satici/dashboard                    /satici/dashboard;
     /satici/basvuru-bekleyen             /satici/basvuru-bekleyen;
     /satici/tedarikci-kurulum            /satici/tedarikci-kurulum;
-    /satici/dogrulama                    /satici/dogrulama;
     /satici/vitrin                       /satici/vitrin;
 
     # Top deals + özel
@@ -205,10 +186,31 @@ map $uri $seo_static_page_path {
     /ticaret-guvencesi                   /ticaret-guvencesi;
 }
 
+# ── SEO ortam izolasyonu (FAIL-CLOSED) ─────────────────────────────
+# ${FRONTEND_DOMAIN} envsubst ile render anında literal'e döner; map bir
+# sabiti eşler. YALNIZ prod (istoc.com) boş header (= header basılmaz) ve
+# Allow'lu robots dosyası alır. Env boş/yanlış/eksikse default = noindex +
+# Disallow (staging'in yanlışlıkla indexlenmesi yerine prod'un yanlışlıkla
+# deindeks olması tercih edilir — merge kapısı: compose-env FAZ A kanıtı).
+map "${FRONTEND_DOMAIN}" $robots_tag {
+    default     "noindex, nofollow";
+    "istoc.com" "";
+}
+map "${FRONTEND_DOMAIN}" $robots_file {
+    default     /robots-noindex.txt;
+    "istoc.com" /robots-prod.txt;
+}
+
 server {
     listen 80;
     server_name _;
     root /usr/share/nginx/html;
+
+    # www → apex 301 — container savunma katmanı (birincil mekanizma Sunucu B
+    # host-nginx vhost'u). Staging'de www.<env> DNS'i yok → koşul hiç tutmaz.
+    if ($host = "www.${FRONTEND_DOMAIN}") {
+        return 301 https://${FRONTEND_DOMAIN}$request_uri;
+    }
 
     # ── Sıkıştırma — metin tabanlı asset'lerin transfer boyutunu ~%75 düşürür.
     gzip on;
@@ -223,7 +225,16 @@ server {
         application/javascript
         application/json
         application/manifest+json
+        application/xml
+        text/xml
         image/svg+xml;
+
+    # ── SEO: ortam-koşullu X-Robots-Tag (map $robots_tag) ─────────
+    # Prod'da değer boş → nginx header'ı HİÇ basmaz; diğer tüm ortamlarda
+    # noindex. NOT (add_header miras tuzağı): kendi add_header'ı olan
+    # location'lar (/api/, /assets/, resim regex'i) bu header'ı MİRAS ALMAZ —
+    # o bloklara ayrıca eklendi. check-nginx-noindex.sh sayım assert'i: 4.
+    add_header X-Robots-Tag $robots_tag always;
 
     # ── Güvenlik header'ları ──────────────────────────────────────
     add_header X-Frame-Options "DENY" always;
@@ -232,7 +243,45 @@ server {
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
     add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;
-    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://${BACKEND_DOMAIN} wss://${BACKEND_DOMAIN}; frame-ancestors 'none';" always;
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://${BACKEND_DOMAIN} wss://${BACKEND_DOMAIN}; frame-ancestors 'none';" always;
+
+    # Hayalet path kararı: /markalar kaybetti → kalıcı 301 /ureticiler
+    # (nginx map + backend static_pages_registry + FE listesi senkron).
+    location = /markalar {
+        return 301 /ureticiler;
+    }
+
+    # ── robots.txt — ortama göre statik dosya (map $robots_file) ──
+    # İki dosya da dist'te (public/robots-*.txt): string-escape/newline tuzağı
+    # yok, map yalnız hangi dosyanın servis edileceğini seçer. Prod gövdesine
+    # Sitemap satırı BE-MAP canlıya çıkınca eklenir (404 sitemap ilan etme).
+    location = /robots.txt {
+        try_files $robots_file =404;
+    }
+
+    # ── sitemap.xml — backend proxy (BE-MAP canlıya çıkana kadar bilinçli 404)
+    location = /sitemap.xml {
+        proxy_hide_header X-Robots-Tag;
+        proxy_set_header X-Istoc-Storefront "1";
+        proxy_pass https://${BACKEND_DOMAIN}/api/method/tradehub_core.api.seo.get_sitemap_index;
+        proxy_ssl_server_name on;
+        proxy_set_header Host ${BACKEND_DOMAIN};
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 120s;
+    }
+    location ~ ^/sitemap-([a-z0-9-]+)\.xml$ {
+        proxy_hide_header X-Robots-Tag;
+        proxy_set_header X-Istoc-Storefront "1";
+        proxy_pass https://${BACKEND_DOMAIN}/api/method/tradehub_core.api.seo.get_sitemap?name=$1;
+        proxy_ssl_server_name on;
+        proxy_set_header Host ${BACKEND_DOMAIN};
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 120s;
+    }
 
     # Frappe API proxy
     location /api/ {
@@ -257,6 +306,9 @@ server {
         add_header Access-Control-Allow-Credentials "true" always;
         add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS, PATCH" always;
         add_header Access-Control-Allow-Headers "Content-Type, X-Frappe-CSRF-Token, Authorization" always;
+        # Miras tuzağı: bu blok kendi add_header'larını tanımladığı için
+        # server-level X-Robots-Tag buraya inmez — açıkça tekrarlanır.
+        add_header X-Robots-Tag $robots_tag always;
 
         # Preflight OPTIONS
         if ($request_method = OPTIONS) {
@@ -268,6 +320,9 @@ server {
         proxy_hide_header Access-Control-Allow-Credentials;
         proxy_hide_header Access-Control-Allow-Methods;
         proxy_hide_header Access-Control-Allow-Headers;
+        # Backend'in (noindex_guard) X-Robots-Tag'i edge'e sızmasın — header
+        # politikasının tek sahibi bu nginx'tir.
+        proxy_hide_header X-Robots-Tag;
 
         proxy_pass https://${BACKEND_DOMAIN}/api/;
         proxy_cookie_domain ${BACKEND_DOMAIN} ${FRONTEND_DOMAIN};
@@ -284,6 +339,7 @@ server {
     # ^~ ZORUNLU: aşağıdaki resim-uzantı regex'i (~* \.(png|jpg…)$) bu prefix'i
     # ezmesin diye. ^~ olmadan /private/files/x.jpg backend yerine regex'e düşer.
     location ^~ /private/files/ {
+        proxy_hide_header X-Robots-Tag;
         proxy_pass https://${BACKEND_DOMAIN}/private/files/;
         proxy_ssl_server_name on;
         proxy_set_header Host ${BACKEND_DOMAIN};
@@ -296,6 +352,7 @@ server {
     # ^~ ZORUNLU: resim-uzantı regex'i (~* \.(png|jpg…)$) bu prefix'i ezmesin.
     # ^~ olmadan /files/urun.jpg backend'e gitmez, regex'e düşer → 404.
     location ^~ /files/ {
+        proxy_hide_header X-Robots-Tag;
         proxy_pass https://${BACKEND_DOMAIN}/files/;
         proxy_ssl_server_name on;
         proxy_set_header Host ${BACKEND_DOMAIN};
@@ -315,9 +372,11 @@ server {
     # düşmesin; bu blok zaten @frappe_assets fallback'i ile backend'e gidiyor.
     location ^~ /assets/ {
         add_header Cache-Control "public, max-age=31536000, immutable";
+        add_header X-Robots-Tag $robots_tag always;
         try_files $uri @frappe_assets;
     }
     location @frappe_assets {
+        proxy_hide_header X-Robots-Tag;
         proxy_pass https://${BACKEND_DOMAIN};
         proxy_ssl_server_name on;
         proxy_set_header Host ${BACKEND_DOMAIN};
@@ -325,6 +384,7 @@ server {
 
     # Socket.IO WebSocket proxy
     location /socket.io/ {
+        proxy_hide_header X-Robots-Tag;
         proxy_pass https://${BACKEND_DOMAIN}/socket.io/;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
@@ -346,6 +406,8 @@ server {
         proxy_set_header Accept-Encoding "";
         sub_filter "${BACKEND_DOMAIN}" "${FRONTEND_DOMAIN}";
         sub_filter_once off;
+        proxy_hide_header X-Robots-Tag;
+        proxy_set_header X-Istoc-Storefront "1";
         proxy_pass https://${BACKEND_DOMAIN};
         proxy_ssl_server_name on;
         proxy_set_header Host ${BACKEND_DOMAIN};
@@ -367,6 +429,8 @@ server {
         proxy_set_header Accept-Encoding "";
         sub_filter "${BACKEND_DOMAIN}" "${FRONTEND_DOMAIN}";
         sub_filter_once off;
+        proxy_hide_header X-Robots-Tag;
+        proxy_set_header X-Istoc-Storefront "1";
         proxy_pass https://${BACKEND_DOMAIN};
         proxy_ssl_server_name on;
         proxy_set_header Host ${BACKEND_DOMAIN};
@@ -388,6 +452,8 @@ server {
         proxy_set_header Accept-Encoding "";
         sub_filter "${BACKEND_DOMAIN}" "${FRONTEND_DOMAIN}";
         sub_filter_once off;
+        proxy_hide_header X-Robots-Tag;
+        proxy_set_header X-Istoc-Storefront "1";
         proxy_pass https://${BACKEND_DOMAIN};
         proxy_ssl_server_name on;
         proxy_set_header Host ${BACKEND_DOMAIN};
@@ -414,6 +480,8 @@ server {
         proxy_set_header Accept-Encoding "";
         sub_filter "${BACKEND_DOMAIN}" "${FRONTEND_DOMAIN}";
         sub_filter_once off;
+        proxy_hide_header X-Robots-Tag;
+        proxy_set_header X-Istoc-Storefront "1";
         proxy_pass https://${BACKEND_DOMAIN};
         proxy_ssl_server_name on;
         proxy_set_header Host ${BACKEND_DOMAIN};
@@ -432,6 +500,8 @@ server {
         proxy_set_header Accept-Encoding "";
         sub_filter "${BACKEND_DOMAIN}" "${FRONTEND_DOMAIN}";
         sub_filter_once off;
+        proxy_hide_header X-Robots-Tag;
+        proxy_set_header X-Istoc-Storefront "1";
         proxy_pass https://${BACKEND_DOMAIN};
         proxy_ssl_server_name on;
         proxy_set_header Host ${BACKEND_DOMAIN};
@@ -445,6 +515,7 @@ server {
     # değişir. 30 gün cache + revalidation; HTML bu bloğa girmez (uzantı eşleşmesi).
     location ~* \.(?:png|jpg|jpeg|webp|gif|ico|svg|woff2?|ttf)$ {
         add_header Cache-Control "public, max-age=2592000";
+        add_header X-Robots-Tag $robots_tag always;
         try_files $uri @frappe_assets;
     }
 

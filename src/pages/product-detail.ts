@@ -222,7 +222,7 @@ async function renderProductPage() {
     applyServerSeo(product.seo);
   } else {
     // Backend seo payload döndürmediyse en azından title'ı düzgün kur.
-    document.title = product.title || 'iSTOC';
+    document.title = product.title ? `${product.title} | iStoc` : 'iStoc';
   }
 
   // Render full product page
@@ -347,11 +347,11 @@ async function renderProductPage() {
     if (!isDefault && title && title.trim()) {
       const h1 = document.getElementById('pd-product-title');
       if (h1) h1.textContent = title;
-      document.title = `${title} - iSTOC`;
+      document.title = `${title} | iStoc`;
     } else if (isDefault) {
       const h1 = document.getElementById('pd-product-title');
       if (h1) h1.textContent = originalTitle;
-      document.title = `${originalTitle} - iSTOC`;
+      document.title = `${originalTitle} | iStoc`;
     }
   }) as EventListener);
 

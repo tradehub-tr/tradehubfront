@@ -173,7 +173,7 @@ function renderLogo(): string {
   const baseUrl = getBaseUrl();
   return `
     <a href="${baseUrl}" class="flex items-center hover:opacity-80 transition-opacity cursor-pointer shrink-0" aria-label="iSTOC Home">
-      <img src="${baseUrl}images/istoc-logo.png" alt="iSTOC" class="h-[18px] min-[400px]:h-[22px] sm:h-[25px] shrink-0" />
+      <img src="${baseUrl}images/istoc-logo.png" alt="iStoc" width="87" height="32" class="h-[18px] min-[400px]:h-[22px] sm:h-[25px] shrink-0 w-auto" />
     </a>
   `;
 }
@@ -185,7 +185,7 @@ function renderCompactLogo(): string {
   const baseUrl = getBaseUrl();
   return `
     <a href="${baseUrl}" class="flex items-center hover:opacity-80 transition-opacity" aria-label="iSTOC Home">
-      <img src="${baseUrl}images/istoc-logo.png" alt="iSTOC" class="h-6" />
+      <img src="${baseUrl}images/istoc-logo.png" alt="iStoc" width="87" height="32" class="h-6 w-auto" />
     </a>
   `;
 }
@@ -557,7 +557,7 @@ function renderOrdersButton(): string {
       <div class="p-5">
         <!-- Trade Assurance Header -->
         <div class="flex items-center gap-2 mb-2">
-          <img src="${new URL("../../assets/images/tas_logo.png", import.meta.url).href}" alt="${t("mega.tradeAssuranceTitle")}" class="w-8 h-8 object-contain" />
+          <img src="${new URL("../../assets/images/tas_logo.png", import.meta.url).href}" alt="${t("mega.tradeAssuranceTitle")}" width="443" height="600" decoding="async" class="w-8 h-8 object-contain" />
           <span class="text-lg font-bold text-gray-900 dark:text-white">${t("mega.tradeAssuranceTitle")}</span>
         </div>
         <p class="text-sm text-gray-500 dark:text-gray-400 mb-5"><span data-i18n="header.tradeAssuranceDesc">${t("header.tradeAssuranceDesc")}</span></p>
@@ -1026,7 +1026,7 @@ function renderCartModalContent(modal: HTMLElement, supplierId: string): boolean
           ? `<span class="inline-flex items-center text-[9px] font-semibold px-1 py-0.5 rounded-full bg-amber-100 text-amber-800 me-1 align-middle">${t("cart.sampleBadge")}</span>`
           : "";
         const thumb = sku.skuImage
-          ? `<img src="${escapeHtml(sanitizeUrl(sku.skuImage))}" alt="${escapeHtml(product.title)}" class="w-11 h-11 rounded-md object-cover border border-gray-100 shadow-sm">`
+          ? `<img src="${escapeHtml(sanitizeUrl(sku.skuImage))}" alt="${escapeHtml(product.title)}" width="44" height="44" decoding="async" class="w-11 h-11 rounded-md object-cover border border-gray-100 shadow-sm">`
           : `<div class="w-11 h-11 rounded-md bg-gray-100 border border-gray-100"></div>`;
         html += `
           <div class="flex items-center gap-2.5 py-2.5 group">
@@ -1214,7 +1214,7 @@ export function initHeaderCart(): void {
         const thumbsHtml = visibleThumbs
           .map(({ sku }) => {
             const img = sku.skuImage
-              ? `<img src="${escapeHtml(sanitizeUrl(sku.skuImage))}" alt="sku" class="w-10 h-10 rounded-md object-cover border border-gray-100 shadow-sm">`
+              ? `<img src="${escapeHtml(sanitizeUrl(sku.skuImage))}" alt="sku" width="40" height="40" decoding="async" class="w-10 h-10 rounded-md object-cover border border-gray-100 shadow-sm">`
               : `<div class="w-10 h-10 rounded-md bg-gray-100 border border-gray-100 flex items-center justify-center">${placeholderThumbSvg}</div>`;
             return `
               <div class="relative w-10 h-10 flex-shrink-0 group">

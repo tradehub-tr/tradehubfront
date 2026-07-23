@@ -34,7 +34,10 @@ import type { CategorySection } from '../data/categories'
 import { initAnimatedPlaceholder } from '../utils/animatedPlaceholder'
 
 // Category service (cached via queryFetch + IndexedDB)
-import { loadCategories, type ApiCategory } from '../services/categoryService'
+import { loadCategories, getCategoryPageSeo, type ApiCategory } from '../services/categoryService'
+
+// SEO: backend'in (panelden yönetilen) seo payload'ını DOM head'ine uygula
+import { applyServerSeo } from '../seo/setPageMeta'
 
 function mapApiToSections(cats: ApiCategory[]): CategorySection[] {
   return cats.map(cat => ({
@@ -68,7 +71,7 @@ appEl.innerHTML = `
 
         <!-- Page Header -->
         <div class="mb-4">
-          <h1 class="text-lg sm:text-2xl font-bold text-gray-900" data-i18n="subheader.allCategories">${t('subheader.allCategories')}</h1>
+          <h1 class="text-lg sm:text-2xl font-bold text-gray-900" data-i18n="categoryPage.heading">${t('categoryPage.heading')}</h1>
           <p class="text-xs sm:text-sm text-gray-500 mt-1" data-i18n="drawer.browseCategories">${t('drawer.browseCategories')}</p>
         </div>
 
@@ -143,6 +146,10 @@ loadCategories()
     }
 
     const sections = mapApiToSections(apiCats);
+
+    // Panelden girilen SEO meta'ları (BE-LD ile API'ye eklenecek `seo` alanı)
+    // varsa uygula — canonical/OG/robots dahil (product-detail.ts:221 deseni).
+    applyServerSeo(getCategoryPageSeo() ?? undefined);
 
     const sidebarEl = document.getElementById('cat-sidebar-container');
     const gridEl = document.getElementById('cat-grid-container');

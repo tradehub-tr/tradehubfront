@@ -194,7 +194,7 @@ function sampleCard(dataVar: string, label: string): string {
     <a :href="${dataVar} ? '/urun/' + (${dataVar}.slug || ${dataVar}.name) : '/pages/products.html'" class="block w-[calc(50%-5.5px)] group">
       <div class="w-full h-[105px] overflow-hidden rounded flex items-center justify-center" style="background-color: var(--mfr-sample-img-bg, #f5f5f5)">
         <template x-if="${dataVar} && ${dataVar}.primary_image">
-          <img :src="${dataVar}.primary_image" :alt="${dataVar}.title" class="max-w-full max-h-full object-contain [@media(hover:hover)and(pointer:fine)]:group-hover:scale-105 transition-transform duration-200 motion-reduce:transition-none motion-reduce:transform-none" />
+          <img :src="${dataVar}.primary_image" :alt="${dataVar}.title" width="400" height="400" decoding="async" class="max-w-full max-h-full object-contain [@media(hover:hover)and(pointer:fine)]:group-hover:scale-105 transition-transform duration-200 motion-reduce:transition-none motion-reduce:transform-none" />
         </template>
         <template x-if="!${dataVar}">${SKELETON}</template>
       </div>
@@ -276,10 +276,10 @@ function renderTopRankingColumn(): string {
              class="block w-[calc(50%-5.5px)] h-[156px] mb-4 group">
             <div class="w-full h-[116px] rounded overflow-hidden flex items-center justify-center bg-gray-50">
               <template x-if="seller.logo">
-                <img :src="seller.logo" :alt="seller.seller_name" class="max-w-full max-h-full w-[116px] h-[116px] object-contain [@media(hover:hover)and(pointer:fine)]:group-hover:scale-105 transition-transform duration-200 motion-reduce:transition-none motion-reduce:transform-none" />
+                <img :src="seller.logo" :alt="seller.seller_name" width="116" height="116" decoding="async" class="max-w-full max-h-full w-[116px] h-[116px] object-contain [@media(hover:hover)and(pointer:fine)]:group-hover:scale-105 transition-transform duration-200 motion-reduce:transition-none motion-reduce:transform-none" />
               </template>
               <template x-if="!seller.logo && seller.product_images && seller.product_images.length > 0">
-                <img :src="seller.product_images[0]" :alt="seller.seller_name" class="max-w-full max-h-full w-[116px] h-[116px] object-cover [@media(hover:hover)and(pointer:fine)]:group-hover:scale-105 transition-transform duration-200 motion-reduce:transition-none motion-reduce:transform-none" />
+                <img :src="seller.product_images[0]" :alt="seller.seller_name" width="116" height="116" decoding="async" class="max-w-full max-h-full w-[116px] h-[116px] object-cover [@media(hover:hover)and(pointer:fine)]:group-hover:scale-105 transition-transform duration-200 motion-reduce:transition-none motion-reduce:transform-none" />
               </template>
               <template x-if="!seller.logo && (!seller.product_images || seller.product_images.length === 0)">
                 <svg class="w-10 h-10 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
@@ -305,7 +305,7 @@ function renderProfileColumn(): string {
           .map(
             (h) => `
         <a href="${escapeHtml(sanitizeUrl(h.href))}" class="block w-full h-14 rounded-md overflow-hidden group bg-gray-50 relative" title="${escapeHtml(h.title || "")}">
-          <img src="${escapeHtml(sanitizeUrl(h.image))}" alt="${escapeHtml(h.title || "")}" class="absolute inset-0 w-full h-full object-contain [@media(hover:hover)and(pointer:fine)]:group-hover:scale-110 transition-transform duration-200 motion-reduce:transition-none motion-reduce:transform-none">
+          <img src="${escapeHtml(sanitizeUrl(h.image))}" alt="${escapeHtml(h.title || "")}" width="400" height="400" decoding="async" class="absolute inset-0 w-full h-full object-contain [@media(hover:hover)and(pointer:fine)]:group-hover:scale-110 transition-transform duration-200 motion-reduce:transition-none motion-reduce:transform-none">
         </a>`
           )
           .join("")

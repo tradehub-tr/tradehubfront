@@ -66,6 +66,7 @@ export function ChatBubble(): string {
               <a :href="msg.body.url" target="_blank" rel="noopener noreferrer"
                  class="inline-block rounded-[12px] border border-[var(--color-border-default,#e5e5e5)] bg-white p-1 no-underline">
                 <img :src="msg.body.url" :alt="msg.body.caption || ''"
+                     width="180" height="160" decoding="async"
                      class="block max-h-40 max-w-[180px] rounded-md object-cover" />
               </a>
             </template>

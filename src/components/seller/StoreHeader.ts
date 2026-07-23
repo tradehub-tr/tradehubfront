@@ -7,7 +7,7 @@ import { VerificationBadgeTemplate } from "./VerificationBadge";
 
 export function StoreHeader(): string {
   /* Reusable SVG: blue filled circle with white checkmark */
-  const blueCheck = `<img src="/src/assets/images/verfied.png" alt="Doğrulanmış satıcı" class="shrink-0" style="width:13px;height:12px;" />`;
+  const blueCheck = `<img src="/src/assets/images/verfied.png" alt="Doğrulanmış satıcı" width="36" height="36" decoding="async" class="shrink-0" style="width:13px;height:12px;" />`;
 
   /* Store icon for "Mağazayı ziyaret et" button */
   const storeIcon = `
@@ -311,7 +311,7 @@ export function StoreHeader(): string {
 
                 <!-- IMAGE -->
                 <template x-if="current && !isVideo">
-                  <img :src="current.src" :alt="(currentTab && currentTab.label) || ''" class="w-full h-full object-cover" />
+                  <img :src="current.src" :alt="(currentTab && currentTab.label) || ''" width="800" height="600" decoding="async" class="w-full h-full object-cover" />
                 </template>
 
                 <!-- Center Play Button (video only, when paused) -->
@@ -386,6 +386,7 @@ export function StoreHeader(): string {
                     <template x-if="item.media_type !== 'video'">
                       <img :src="item.src"
                            :alt="item.caption || ''"
+                           width="400" height="300" decoding="async"
                            class="w-full h-full object-cover" />
                     </template>
 
@@ -394,6 +395,7 @@ export function StoreHeader(): string {
                     <template x-if="item.media_type === 'video' && item.poster">
                       <img :src="item.poster"
                            :alt="item.caption || ''"
+                           width="400" height="300" decoding="async"
                            class="w-full h-full object-cover" />
                     </template>
                     <template x-if="item.media_type === 'video' && !item.poster">

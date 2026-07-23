@@ -87,6 +87,10 @@ i18next.use(LanguageDetector).init({
   const titleEl = document.querySelector("title[data-i18n]");
   const titleKey = titleEl?.getAttribute("data-i18n");
   if (titleKey) document.title = i18next.t(titleKey) as string;
+
+  // FE-4: server hreflang payload'ı yoksa `/` ↔ `/en/` alternates fallback'i.
+  // Her sayfada i18n init koştuğu için MPA genelinde tek çağrı noktası burası.
+  import("../seo/setPageMeta").then(({ applyHreflangFallback }) => applyHreflangFallback());
 }
 
 /**

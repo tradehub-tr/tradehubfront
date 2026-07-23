@@ -391,7 +391,7 @@ function renderSupplierCards(items: FavoriteSellerItem[]): string {
       <div class="size-10 rounded-md border border-gray-100 overflow-hidden shrink-0 bg-gray-50 flex items-center justify-center text-[#1a66ff] font-bold text-[12px]">
         ${
           s.logo
-            ? `<img src="${escapeHtml(sanitizeUrl(s.logo))}" alt="" class="w-full h-full object-contain p-1" onerror="this.nextElementSibling.classList.remove('hidden');this.remove()" /><span class="hidden">${escapeHtml(initials)}</span>`
+            ? `<img src="${escapeHtml(sanitizeUrl(s.logo))}" alt="" width="48" height="48" decoding="async" class="w-full h-full object-contain p-1" onerror="this.nextElementSibling.classList.remove('hidden');this.remove()" /><span class="hidden">${escapeHtml(initials)}</span>`
             : `<span>${escapeHtml(initials)}</span>`
         }
       </div>
@@ -646,6 +646,7 @@ function renderProductCardGrid(p: FavoriteItem): string {
     <article class="group relative flex flex-col bg-white border border-[#eee] rounded-md overflow-hidden transition-all duration-150 hover:border-[var(--color-cta-primary,#F5B800)] hover:shadow-[0_4px_10px_-6px_rgba(20,20,18,0.12)]" data-fav-item-id="${escapeHtml(p.id)}">
       <a href="${escapeHtml(sanitizeUrl(detailHref))}" class="relative block aspect-square overflow-hidden bg-[#fafafa] no-underline">
         <img src="${escapeHtml(sanitizeUrl(p.image))}" alt="${escapeHtml(p.title)}"
+             width="400" height="400" decoding="async"
              class="w-full h-full object-cover mix-blend-multiply transition-transform duration-300 ease-out [@media(hover:hover)and(pointer:fine)]:group-hover:scale-[1.03] motion-reduce:transition-none"
              loading="lazy" />
         ${renderStockPill(enrichment)}
@@ -709,6 +710,7 @@ function renderProductRowList(p: FavoriteItem): string {
     <article class="group relative flex items-center gap-3 bg-white border border-[#eee] rounded-lg p-2.5 transition-all duration-150 hover:border-[var(--color-cta-primary,#F5B800)] hover:shadow-[0_4px_12px_-6px_rgba(20,20,18,0.12)] max-sm:flex-col max-sm:items-start" data-fav-item-id="${escapeHtml(p.id)}">
       <a href="${escapeHtml(sanitizeUrl(detailHref))}" class="relative w-[88px] h-[88px] shrink-0 rounded-md overflow-hidden bg-[#fafafa] no-underline max-sm:w-full max-sm:h-[160px]">
         <img src="${escapeHtml(sanitizeUrl(p.image))}" alt="${escapeHtml(p.title)}"
+             width="176" height="176" decoding="async"
              class="w-full h-full object-cover mix-blend-multiply transition-transform duration-300 ease-out [@media(hover:hover)and(pointer:fine)]:group-hover:scale-[1.04] motion-reduce:transition-none"
              loading="lazy" />
       </a>
@@ -1009,7 +1011,7 @@ function renderBrowsingHistory(): string {
       (p) => `
     <a href="${escapeHtml(sanitizeUrl(p.href))}" class="group flex flex-col no-underline text-inherit transition-transform duration-150 [@media(hover:hover)and(pointer:fine)]:hover:-translate-y-0.5 motion-reduce:transition-none motion-reduce:translate-y-0">
       <div class="w-full aspect-square rounded-lg overflow-hidden border border-[#f0f0f0] mb-2.5">
-        <img src="${escapeHtml(sanitizeUrl(p.image))}" alt="${escapeHtml(p.title)}" class="w-full h-full object-cover transition-transform duration-300 [@media(hover:hover)and(pointer:fine)]:group-hover:scale-[1.04] motion-reduce:transition-none" loading="lazy" />
+        <img src="${escapeHtml(sanitizeUrl(p.image))}" alt="${escapeHtml(p.title)}" width="400" height="400" decoding="async" class="w-full h-full object-cover transition-transform duration-300 [@media(hover:hover)and(pointer:fine)]:group-hover:scale-[1.04] motion-reduce:transition-none" loading="lazy" />
       </div>
       <h4 class="text-[13px] text-text-secondary leading-[1.4] line-clamp-2 mb-1.5" title="${escapeHtml(p.title)}">${escapeHtml(p.title)}</h4>
       ${typeof p.price === "number" ? `<p class="text-sm font-bold text-text-primary mb-0.5">${formatCurrency(convertPrice(p.price, p.currency || getSelectedCurrency()), getSelectedCurrency())}</p>` : p.priceRange ? `<p class="text-sm font-bold text-text-primary mb-0.5">${localizePriceString(p.priceRange)}</p>` : ""}

@@ -90,7 +90,7 @@ export function CompanyIntroduction(
                 .map(
                   (photo) => `
                 <div class="relative rounded-(--radius-md) overflow-hidden aspect-[4/3]">
-                  <img src="${escapeHtml(sanitizeUrl(photo.image))}" alt="${escapeHtml(photo.caption)}" class="w-full h-full object-cover" loading="lazy" />
+                  <img src="${escapeHtml(sanitizeUrl(photo.image))}" alt="${escapeHtml(photo.caption)}" width="400" height="300" decoding="async" class="w-full h-full object-cover" loading="lazy" />
                   ${
                     photo.hasVideo
                       ? `

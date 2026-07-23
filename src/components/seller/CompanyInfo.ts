@@ -34,7 +34,7 @@ function renderVariantA(data: CompanyInfoData, seller: SellerProfile): string {
         <div class="company-info__content grid grid-cols-1 lg:grid-cols-[55%_45%] gap-4 lg:gap-6 mt-0">
           <!-- Hero Image -->
           <div class="company-info__hero-image relative rounded-es-(--radius-md) overflow-hidden">
-            <img src="${escapeHtml(sanitizeUrl(data.heroImage))}" alt="${escapeHtml(data.heroTitle)}" class="w-full h-[200px] sm:h-[250px] lg:h-[400px] object-cover" loading="lazy"
+            <img src="${escapeHtml(sanitizeUrl(data.heroImage))}" alt="${escapeHtml(data.heroTitle)}" width="1200" height="400" decoding="async" class="w-full h-[200px] sm:h-[250px] lg:h-[400px] object-cover" loading="lazy"
                  onerror="this.parentElement.style.background='linear-gradient(135deg,#1e3a5f,#2563eb)'" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 dark:from-black/70 to-transparent flex flex-col justify-end p-6">
               <h3 class="text-white text-[28px] font-bold">${escapeHtml(data.heroTitle)}</h3>
@@ -44,7 +44,7 @@ function renderVariantA(data: CompanyInfoData, seller: SellerProfile): string {
 
           <!-- Description -->
           <div class="company-info__description flex flex-col gap-4 py-4">
-            <img src="${escapeHtml(sanitizeUrl(seller.logo))}" alt="${escapeHtml(seller.name)}" class="w-[120px] object-contain" onerror="this.style.display='none'" />
+            <img src="${escapeHtml(sanitizeUrl(seller.logo))}" alt="${escapeHtml(seller.name)}" width="120" height="120" decoding="async" class="w-[120px] object-contain h-auto" onerror="this.style.display='none'" />
             <p class="text-[14px] text-[#4b5563] dark:text-gray-300 leading-[1.7]">${sanitizeRichHtml(data.description)}</p>
             ${data.descriptionExtended ? `<p class="text-[14px] text-[#4b5563] dark:text-gray-300 leading-[1.7]">${sanitizeRichHtml(data.descriptionExtended)}</p>` : ""}
           </div>
@@ -59,7 +59,7 @@ function renderVariantA(data: CompanyInfoData, seller: SellerProfile): string {
               .map(
                 (photo) => `
               <div class="relative rounded-(--radius-md) overflow-hidden group">
-                <img src="${escapeHtml(sanitizeUrl(photo.image))}" alt="${escapeHtml(photo.caption)}" class="w-full h-[200px] object-cover" loading="lazy"
+                <img src="${escapeHtml(sanitizeUrl(photo.image))}" alt="${escapeHtml(photo.caption)}" width="400" height="200" decoding="async" class="w-full h-[200px] object-cover" loading="lazy"
                      onerror="this.parentElement.style.background='#f3f4f6'" />
                 <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/50 to-transparent py-2 px-3">
                   <span class="text-white text-[12px] font-medium">${escapeHtml(photo.caption)}</span>
@@ -106,7 +106,7 @@ function renderVariantB(data: CompanyInfoData, seller: SellerProfile): string {
                     (photo) => `
                   <div class="swiper-slide">
                     <div class="relative">
-                      <img src="${escapeHtml(sanitizeUrl(photo.image))}" alt="${escapeHtml(photo.caption)}" class="w-full h-[320px] object-cover" loading="lazy" />
+                      <img src="${escapeHtml(sanitizeUrl(photo.image))}" alt="${escapeHtml(photo.caption)}" width="640" height="320" decoding="async" class="w-full h-[320px] object-cover" loading="lazy" />
                       <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 to-transparent py-4 px-6">
                         <span class="text-white text-[14px] font-medium">${escapeHtml(photo.caption)}</span>
                       </div>
@@ -140,7 +140,7 @@ function renderVariantB(data: CompanyInfoData, seller: SellerProfile): string {
               .map(
                 (loc) => `
               <div class="relative rounded-(--radius-md) overflow-hidden aspect-[4/3] group cursor-pointer">
-                <img src="${escapeHtml(sanitizeUrl(loc.image))}" alt="${escapeHtml(loc.name)}" class="w-full h-full object-cover transition-transform duration-300 motion-reduce:transition-none motion-reduce:group-hover:scale-100 group-hover:scale-105" loading="lazy" />
+                <img src="${escapeHtml(sanitizeUrl(loc.image))}" alt="${escapeHtml(loc.name)}" width="400" height="300" decoding="async" class="w-full h-full object-cover transition-transform duration-300 motion-reduce:transition-none motion-reduce:group-hover:scale-100 group-hover:scale-105" loading="lazy" />
                 <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 dark:from-black/80 to-transparent py-3 px-4">
                   <span class="text-white text-[13px] font-medium">${escapeHtml(loc.name)}</span>
                 </div>

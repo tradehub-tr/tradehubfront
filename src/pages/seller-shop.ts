@@ -124,7 +124,7 @@ async function renderPage() {
               <!-- Logo (arka plan yok, radius dinamik) -->
               <div class="w-[140px] h-[140px] overflow-hidden shrink-0"
                    :style="'border-radius:' + (seller?.logo_radius || '8') + 'px'">
-                <img x-show="seller?.logo" :src="seller?.logo" :alt="seller?.seller_name"
+                <img x-show="seller?.logo" :src="seller?.logo" :alt="seller?.seller_name" width="140" height="140"
                      class="w-full h-full object-cover"
                      :style="'border-radius:' + (seller?.logo_radius || '8') + 'px'" />
                 <div x-show="!seller?.logo" class="w-full h-full bg-gray-100 flex items-center justify-center"
@@ -181,7 +181,7 @@ async function renderPage() {
                     <div x-show="seller?.verified" class="flex items-baseline gap-1 mb-1 justify-end text-green-700 dark:text-green-400">
                       <svg class="w-4 h-4 self-center" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
                       <span class="text-[12px] font-semibold">${t("seller.sf.verifiedSupplier")}</span>
-                      <img src="/images/istoc-logo.png" alt="iSTOC" class="h-[10px] w-auto self-baseline ms-1" />
+                      <img src="/images/istoc-logo.png" alt="iStoc" width="87" height="32" class="h-[10px] w-auto self-baseline ms-1" />
                       <span class="text-[10px] text-[#999] font-medium">${t("sellPage.with")}</span>
                     </div>
                     <button
@@ -203,7 +203,7 @@ async function renderPage() {
               <div class="flex items-center gap-3">
                 <div class="w-[50px] h-[50px] shrink-0 overflow-hidden border border-gray-200 bg-white"
                      :style="'border-radius:' + (seller?.logo_radius || '8') + 'px'">
-                  <img x-show="seller?.logo" :src="seller?.logo" :alt="seller?.seller_name"
+                  <img x-show="seller?.logo" :src="seller?.logo" :alt="seller?.seller_name" width="140" height="140"
                        class="w-full h-full object-contain" />
                   <div x-show="!seller?.logo" class="w-full h-full bg-gray-100 flex items-center justify-center">
                     <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M2 7l10-5 10 5v10l-10 5-10-5V7z"/></svg>

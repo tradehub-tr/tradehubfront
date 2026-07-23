@@ -22,6 +22,7 @@ export function CallMenu(): string {
           <template x-if="$store.chatPopup.activeConversation?.avatar">
             <img :src="$store.chatPopup.activeConversation.avatar"
                  :alt="$store.chatPopup.activeConversation.name"
+                 width="32" height="32" decoding="async"
                  class="size-full object-cover" />
           </template>
         </div>

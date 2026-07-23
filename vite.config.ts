@@ -10,6 +10,20 @@ import pkg from './package.json' with { type: 'json' }
 import { visualizer } from 'rollup-plugin-visualizer'
 
 /**
+ * Head enjeksiyonlarını <meta charset> SONRASINA koyar (charset yoksa <head>
+ * açılışına). Charset ilk 1024 bayt içinde ve diğer tag'lerden önce olmalı —
+ * öne eklenen font/tema blokları onu aşağı itince tarayıcı/SEO araçları
+ * "charset has to be placed above" uyarısı veriyor.
+ */
+function injectAfterCharset(html: string, snippet: string): string {
+    const charsetRe = /<meta\s+charset[^>]*>/i;
+    if (charsetRe.test(html)) {
+        return html.replace(charsetRe, (m) => `${m}\n    ${snippet}`);
+    }
+    return html.replace(/<head([^>]*)>/i, `<head$1>\n    ${snippet}`);
+}
+
+/**
  * Her HTML giriş dosyasının <head>'ine FOUC önleme scripti enjekte eder.
  * Script, localStorage'daki remote-theme cache'ini okuyup CSS vars'ı ilk
  * paint'ten önce :root'a uygular. Boş cache varsa no-op.
@@ -24,85 +38,42 @@ function themeBootstrapPlugin(): Plugin {
         transformIndexHtml: {
             order: 'pre',
             handler(html) {
-                // <head> açılış tag'inin hemen ardına ekle — stylesheet'ten önce
+                // charset'in hemen ardına — stylesheet'ten önce, charset'ten sonra
                 if (html.includes('tradehub-theme-remote')) return html; // idempotent
-                return html.replace(/<head([^>]*)>/i, `<head$1>\n    ${inlineScript}`);
+                return injectAfterCharset(html, inlineScript);
             },
         },
     };
 }
 
 function fontHeadPlugin(): Plugin {
-    // Google Fonts (Inter) artık CSS @import yerine HTML <head>'de paralel yükleniyor.
-    // CSS-içi remote @import, style.css indirilip parse edilmeden font keşfedilmediği için
-    // LCP/FCP zincirini serileştiriyordu (T10 baseline'da ~861ms blocking). preconnect +
-    // async-olmayan ama paralel stylesheet link, font'u kritik zincirden çıkarır;
-    // display=swap FOUT yerine FOIT'i önler. Workbox bu host'ları zaten CacheFirst'lüyor.
+    // FE-2 (CWV): Inter SELF-HOST edildi (public/fonts/*.woff2, wght 300..800
+    // variable, 4 subset: latin/latin-ext/cyrillic/cyrillic-ext — TR latin-ext'te).
+    // Google Fonts stylesheet'i 3. parti DNS+TLS+CSS zinciriyle LCP'yi
+    // geciktiriyordu; artık inline @font-face + en kritik subset'lere preload.
+    // display=swap FOIT'i önler. Arapça Inter'de yok — sistem fontuna düşer.
+    const fontCss = "@font-face{font-family:'Inter';font-style:normal;font-weight:300 800;font-display:swap;src:url(/fonts/inter-cyrillic-ext.woff2) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}@font-face{font-family:'Inter';font-style:normal;font-weight:300 800;font-display:swap;src:url(/fonts/inter-cyrillic.woff2) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}@font-face{font-family:'Inter';font-style:normal;font-weight:300 800;font-display:swap;src:url(/fonts/inter-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}@font-face{font-family:'Inter';font-style:normal;font-weight:300 800;font-display:swap;src:url(/fonts/inter-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}";
     const fontLinks = [
-        '<link rel="preconnect" href="https://fonts.googleapis.com" />',
-        '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />',
-        '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" />',
+        '<link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />',
+        '<link rel="preload" href="/fonts/inter-latin-ext.woff2" as="font" type="font/woff2" crossorigin />',
+        `<style>${fontCss}</style>`,
     ].join('\n    ');
     return {
         name: 'font-head-inject',
         transformIndexHtml: {
             order: 'pre',
             handler(html) {
-                if (html.includes('family=Inter')) return html; // idempotent
-                return html.replace(/<head([^>]*)>/i, `<head$1>\n    ${fontLinks}`);
+                if (html.includes('/fonts/inter-latin.woff2')) return html; // idempotent
+                // Eski Google Fonts satırları varsa temizle (kaynak HTML kalıntıları)
+                let out = html
+                    .replace(/[ \t]*<link[^>]*fonts\.googleapis\.com[^>]*>\s*\n?/gi, '')
+                    .replace(/[ \t]*<link[^>]*fonts\.gstatic\.com[^>]*>\s*\n?/gi, '');
+                return injectAfterCharset(out, fontLinks);
             },
         },
     };
 }
 
-/** Dev-only plugin: POST /__save-css to update @theme variables in style.css */
-function cssEditorPlugin(): Plugin {
-    return {
-        name: 'css-editor',
-        apply: 'serve',
-        configureServer(server) {
-            server.middlewares.use('/__save-css', (req, res) => {
-                if (req.method !== 'POST') { res.statusCode = 405; res.end(); return; }
-                let body = '';
-                req.on('data', (chunk: Buffer) => { body += chunk.toString(); });
-                req.on('end', () => {
-                    try {
-                        const updates: Record<string, string> = JSON.parse(body);
-                        const cssPath = resolve(__dirname, 'src/style.css');
-                        let css = readFileSync(cssPath, 'utf-8');
-
-                        // Handle Google Fonts import updates
-                        const fontImportUrl = updates['__google_font_imports__'];
-                        delete updates['__google_font_imports__'];
-
-                        for (const [varName, value] of Object.entries(updates)) {
-                            // Match the variable declaration inside @theme { ... }
-                            const escaped = varName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                            const re = new RegExp(`(${escaped}:\\s*)([^;]+)(;)`, 'g');
-                            css = css.replace(re, `$1${value}$3`);
-                        }
-
-                        // Update Google Fonts @import if font changed
-                        if (fontImportUrl) {
-                            const importRe = /@import\s+url\(['"]?https:\/\/fonts\.googleapis\.com\/css2\?[^)]+\);\s*/g;
-                            css = css.replace(importRe, '');
-                            // Insert new import after the comment header, before @import "tailwindcss"
-                            const twImport = '@import "tailwindcss"';
-                            css = css.replace(twImport, `${fontImportUrl}\n\n${twImport}`);
-                        }
-
-                        writeFileSync(cssPath, css, 'utf-8');
-                        res.setHeader('Content-Type', 'application/json');
-                        res.end(JSON.stringify({ ok: true, count: Object.keys(updates).length }));
-                    } catch (e) {
-                        res.statusCode = 500;
-                        res.end(JSON.stringify({ error: String(e) }));
-                    }
-                });
-            });
-        },
-    };
-}
 
 /**
  * Dev-only: impeccable "live" mode picker script'ini serve anında enjekte eder.
@@ -234,6 +205,88 @@ function notFoundFallbackPlugin(): Plugin {
  * SPA-style sayfalarda (dashboard, cart, search) `src/seo/setPageMeta.ts`
  * client-side fallback ile çalışır.
  */
+/**
+ * FE-3: statik sayfa SEO meta enjeksiyonu (src/seo/staticMeta.ts verisi).
+ * - NOINDEX_FILES (34): robots noindex,nofollow (404 istisnası: noindex,follow);
+ *   mevcut robots meta satırları sökülür (seller-shop/storefront'taki elle
+ *   yazılmış "index, follow" dahil — dinamiklerde robots'un sahibi backend).
+ * - INDEXABLE_META: description (yoksa) + self-canonical (apex) + OG/Twitter.
+ *   prettyPath=null dinamik şablonlarda canonical/og:url EKLENMEZ.
+ * seoPlaceholderPlugin'den ('post') ÖNCE koşar; backend __SEO_HEAD__ dolumu
+ * bot isteklerinde bu statikleri zaten ezer — bunlar fallback katmanı.
+ */
+function staticSeoPlugin(): Plugin {
+    return {
+        name: 'static-seo-inject',
+        transformIndexHtml: {
+            order: 'pre',
+            async handler(html, ctx) {
+                const { NOINDEX_FILES, NOINDEX_FOLLOW_FILES, INDEXABLE_META, CANONICAL_ORIGIN } =
+                    await import('./src/seo/staticMeta');
+                const rel = ctx.filename
+                    .replace(/\\/g, '/')
+                    .replace(new RegExp('^' + __dirname.replace(/\\/g, '/') + '/'), '');
+
+                // Mevcut elle yazılmış robots meta'ları söküp tek otorite kur
+                let out = html.replace(/[ \t]*<meta\s+name="robots"[^>]*>\s*\n?/gi, '');
+
+                const tags: string[] = [];
+                // iOS ana ekran ikonu — tüm sayfalara (SEO denetçilerinin
+                // "missing apple-touch-icon" uyarısını kapatır; dosya public/icons'ta)
+                if (!/rel="apple-touch-icon"/i.test(out)) {
+                    tags.push('<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />');
+                }
+                if (NOINDEX_FILES.has(rel)) {
+                    const value = NOINDEX_FOLLOW_FILES.has(rel) ? 'noindex, follow' : 'noindex, nofollow';
+                    tags.push(`<meta name="robots" content="${value}" />`);
+                } else if (rel in INDEXABLE_META) {
+                    const meta = INDEXABLE_META[rel];
+                    // İndexlenebilir sayfada staticMeta TEK OTORİTE: kaynaktaki eski
+                    // elle yazılmış description/OG kalıntıları onaylı seti ezmesin.
+                    out = out
+                        .replace(/[ \t]*<meta\s+name="description"[^>]*>\s*\n?/gi, '')
+                        .replace(/[ \t]*<meta\s+property="og:(?:title|description|url|image(?::width|:height)?)"[^>]*>\s*\n?/gi, '');
+                    tags.push(`<meta name="description" content="${meta.description}" />`);
+                    if (meta.prettyPath) {
+                        const canonical =
+                            meta.prettyPath === '/' ? `${CANONICAL_ORIGIN}/` : `${CANONICAL_ORIGIN}${meta.prettyPath}`;
+                        if (!/<link\s+rel="canonical"/i.test(out)) {
+                            tags.push(`<link rel="canonical" href="${canonical}" />`);
+                        }
+                        tags.push(`<meta property="og:url" content="${canonical}" />`);
+                    }
+                    const titleMatch = out.match(/<title[^>]*>([^<]*)<\/title>/i);
+                    const title = titleMatch ? titleMatch[1].trim() : 'iStoc';
+                    tags.push(`<meta property="og:title" content="${title}" />`);
+                    tags.push(`<meta property="og:description" content="${meta.description}" />`);
+                    if (!/property="og:type"/i.test(out)) {
+                        tags.push(`<meta property="og:type" content="website" />`);
+                    }
+                    // Varsayılan OG görseli (1200×630, public/images/og-default.jpg).
+                    // Dinamik sayfalarda backend ensure_og_image daha spesifiğini basar;
+                    // bu statik fallback "og:image missing" uyarısını kapatır.
+                    const ogImage = `${CANONICAL_ORIGIN}/images/og-default.jpg`;
+                    if (!/property="og:image"/i.test(out)) {
+                        tags.push(`<meta property="og:image" content="${ogImage}" />`);
+                        tags.push(`<meta property="og:image:width" content="1200" />`);
+                        tags.push(`<meta property="og:image:height" content="630" />`);
+                    }
+                    if (!/name="twitter:card"/i.test(out)) {
+                        tags.push(`<meta name="twitter:card" content="summary_large_image" />`);
+                    }
+                    if (!/name="twitter:image"/i.test(out)) {
+                        tags.push(`<meta name="twitter:image" content="${ogImage}" />`);
+                    }
+                }
+
+                if (tags.length === 0 || !/<\/head>/i.test(out)) return out;
+                return out.replace(/<\/head>/i, `    ${tags.join('\n    ')}\n</head>`);
+            },
+        },
+    };
+}
+
+
 function seoPlaceholderPlugin(): Plugin {
     const PLACEHOLDER = '<!-- {{__SEO_HEAD__}} -->';
     return {
@@ -289,12 +342,12 @@ export default defineConfig({
         tailwindcss(),
         themeBootstrapPlugin(),
         fontHeadPlugin(),
-        cssEditorPlugin(),
         // notFoundFallbackPlugin'den ÖNCE çalışmalı: önce rewrite,
         // eşleşmezse 404.html fallback.
         staticPageRewritePlugin(),
         prettyUrlRewritePlugin(),
         notFoundFallbackPlugin(),
+        staticSeoPlugin(),
         seoPlaceholderPlugin(),
         impeccableLivePlugin(),
         // Bundle analizi — SADECE `ANALYZE=true npm run build` ile çalışır.
@@ -341,9 +394,13 @@ export default defineConfig({
                     { name: 'Siparişlerim', short_name: 'Siparişler', url: '/pages/dashboard/orders.html', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
                 ],
             },
-            includeAssets: ['icons/**', 'images/**', '_redirects', 'vite.svg'],
+            includeAssets: ['icons/**', 'images/**', 'vite.svg'],
             workbox: {
-                globPatterns: ['**/*.{html,js,css,woff,woff2,svg,png,webp,ico}'],
+                // FE-2 (CWV/SEO): HTML precache'ten ÇIKARILDI — SW'den servis edilen
+                // bayat HTML, noindex→index geçişinde eski robots/canonical meta'yı
+                // günlerce yaşatabiliyordu (eksiklik denetimi #3). HTML artık aşağıda
+                // NetworkFirst runtime cache ile (taze öncelikli, offline yedekli).
+                globPatterns: ['**/*.{js,css,woff,woff2,svg,png,webp,ico}'],
                 // Multi-page: her HTML kendi entry. SPA fallback yok.
                 navigateFallback: null,
                 cleanupOutdatedCaches: true,
@@ -352,6 +409,18 @@ export default defineConfig({
                 // Storefront görselleri (DummyJSON CDN, Frappe files vb.) workbox cache limitlerini aşabilir.
                 maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
                 runtimeCaching: [
+                    {
+                        // HTML navigasyonları — taze öncelikli (SEO meta'ları bayatlamaz),
+                        // ağ yoksa son başarılı kopya (offline yedek).
+                        urlPattern: ({ request }) => request.mode === 'navigate',
+                        handler: 'NetworkFirst',
+                        options: {
+                            cacheName: 'pages',
+                            networkTimeoutSeconds: 5,
+                            expiration: { maxEntries: 60, maxAgeSeconds: 60 * 60 * 24 },
+                            cacheableResponse: { statuses: [0, 200] },
+                        },
+                    },
                     {
                         // Frappe API — cookie session ile, network-first + offline fallback YOK (POST cache'lenmez).
                         // CACHE KATMAN SINIRI: Uygulama-veri freshness'ı artık TanStack Query + IndexedDB
@@ -446,6 +515,8 @@ export default defineConfig({
                         'android/**',
                         '**/style-test.html',
                         '**/test-*.html',
+                        // Geliştirici dokümantasyonu build'e/dist'e girmesin (FE-3)
+                        'docs/**',
                         // ANALYZE build'inin ürettiği bundle-stats.html'i build entry
                         // olarak ALMA — yoksa kökte varken glob onu yakalayıp dist'e
                         // (dolayısıyla prod image'ına + SW precache'e) sokuyor.

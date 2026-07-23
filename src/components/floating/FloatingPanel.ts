@@ -89,7 +89,7 @@ function renderLensPopup(): string {
           <circle cx="96" cy="96" r="28" stroke="#ffc000" stroke-width="12"/>
           <circle cx="145" cy="145" r="17" fill="#ffc000"/>
         </svg>
-        <img src="/images/istoc-logo.png" alt="istoc" class="h-5" />
+        <img src="/images/istoc-logo.png" alt="istoc" width="87" height="32" class="h-5 w-auto" />
       </div>
 
       <!-- Description -->

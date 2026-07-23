@@ -98,7 +98,7 @@ function MainProductsCarousel(): string {
             <div class="swiper-slide">
               <a :href="'/urun/' + encodeURIComponent(p.slug || p.name)" class="block no-underline group">
                 <div class="relative rounded-md overflow-hidden border border-gray-200 bg-white aspect-square mb-3">
-                  <img x-show="p.image" :src="p.image" :alt="p.product_name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+                  <img x-show="p.image" :src="p.image" :alt="p.product_name" width="400" height="400" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
                   <div x-show="!p.image" class="w-full h-full flex items-center justify-center text-gray-200 bg-gray-50">
                     <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="m3 9 4-4 4 4 4-6 6 6"/></svg>
                   </div>
@@ -217,7 +217,7 @@ function OverviewTab(): string {
                 class="bg-white border border-gray-200 rounded-md p-4 flex flex-col items-center text-center transition-[box-shadow,border-color,background-color] no-underline"
               >
                 <div class="w-full aspect-square bg-gray-50 rounded flex items-center justify-center mb-3 relative overflow-hidden">
-                  <img x-show="cert.document" :src="cert.document" :alt="cert.name" loading="lazy" class="w-full h-full object-contain" />
+                  <img x-show="cert.document" :src="cert.document" :alt="cert.name" width="300" height="400" loading="lazy" decoding="async" class="w-full h-full object-contain" />
                   <svg x-show="!cert.document" class="w-16 h-16 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                 </div>
                 <span class="text-[13px] font-bold text-gray-900" x-text="cert.name"></span>
@@ -321,7 +321,7 @@ function OverviewTab(): string {
             <template x-for="(p, idx) in serviceProducts.slice(0, 3)" :key="p.name">
               <a :href="'/urun/' + encodeURIComponent(p.slug || p.name)" class="block no-underline group shrink-0 w-[140px] sm:w-auto">
                 <div class="relative rounded-md overflow-hidden bg-gray-100 aspect-square mb-2">
-                  <img x-show="p.image" :src="p.image" :alt="p.product_name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+                  <img x-show="p.image" :src="p.image" :alt="p.product_name" width="400" height="400" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
                 </div>
                 <div class="text-[12px] text-gray-800 line-clamp-2 leading-snug mb-0.5" x-text="p.product_name"></div>
                 <div class="text-[13px] font-semibold text-gray-900" x-text="formatPrice(p)"></div>
@@ -413,7 +413,7 @@ function OverviewTab(): string {
           <template x-for="(p, idx) in overviewProducts" :key="p.name">
             <a :href="'/urun/' + encodeURIComponent(p.slug || p.name)" class="block no-underline group">
               <div class="relative rounded-md overflow-hidden bg-gray-100 aspect-square mb-2">
-                <img x-show="p.image" :src="p.image" :alt="p.product_name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+                <img x-show="p.image" :src="p.image" :alt="p.product_name" width="400" height="400" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
                 <div x-show="!p.image" class="w-full h-full flex items-center justify-center text-gray-200">
                   <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
                 </div>
@@ -669,7 +669,7 @@ function ReviewsTab(): string {
                         <div class="flex items-center gap-3 bg-gray-50 p-3 rounded-md border border-gray-100">
                           <div class="w-12 h-12 bg-gray-200 rounded shrink-0 overflow-hidden flex items-center justify-center">
                             <template x-if="review.product_image">
-                              <img :src="review.product_image" :alt="review.product_name" class="w-full h-full object-cover" />
+                              <img :src="review.product_image" :alt="review.product_name" width="80" height="80" decoding="async" class="w-full h-full object-cover" />
                             </template>
                             <template x-if="!review.product_image">
                               <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
@@ -798,7 +798,7 @@ function ProductsTab(): string {
             <template x-for="(p, idx) in paginatedProducts" :key="p.name">
               <a :href="'/urun/' + encodeURIComponent(p.slug || p.name)" class="product-card flex flex-col gap-2 overflow-hidden text-sm text-start no-underline group">
                 <div class="product-card__image-area relative rounded-md overflow-hidden bg-gray-100 aspect-square">
-                  <img x-show="p.image" :src="p.image" :alt="p.product_name" class="product-card__img block w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+                  <img x-show="p.image" :src="p.image" :alt="p.product_name" width="400" height="400" decoding="async" class="product-card__img block w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
                   <div x-show="!p.image" class="w-full h-full flex items-center justify-center text-gray-200">
                     <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="m3 9 4-4 4 4 4-6 6 6"/></svg>
                   </div>
@@ -945,7 +945,7 @@ function VideosTab(): string {
               <div class="cursor-pointer group" @click="openVideo(v)">
                 <div class="relative rounded-md overflow-hidden bg-gray-100 aspect-video mb-2">
                   <!-- Thumbnail -->
-                  <img x-show="getThumbnail(v)" :src="getThumbnail(v)" :alt="v.product_name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+                  <img x-show="getThumbnail(v)" :src="getThumbnail(v)" :alt="v.product_name" width="400" height="400" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
                   <div x-show="!getThumbnail(v)" class="w-full h-full flex items-center justify-center text-gray-300">
                     <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
                   </div>
@@ -1019,7 +1019,7 @@ function ContactSidebar(): string {
         <!-- Seller Logo & Name -->
         <div class="flex items-center gap-3 mb-5">
           <div class="w-12 h-12 flex items-center justify-center rounded-md overflow-hidden border border-gray-100 p-1 bg-gray-50 shrink-0">
-            <img x-show="seller?.logo" :src="seller?.logo" :alt="seller?.seller_name || ''" class="w-full h-full object-contain" />
+            <img x-show="seller?.logo" :src="seller?.logo" :alt="seller?.seller_name || ''" width="120" height="120" decoding="async" class="w-full h-full object-contain" />
             <svg x-show="!seller?.logo" class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
           </div>
           <div class="min-w-0">

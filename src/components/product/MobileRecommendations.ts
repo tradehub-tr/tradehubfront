@@ -55,7 +55,7 @@ function recCard(card: ProductListingCard): string {
       <div class="aspect-square w-full overflow-hidden rounded-lg bg-surface-raised">
         ${
           card.imageSrc
-            ? `<img src="${escapeHtml(sanitizeUrl(card.imageSrc))}" alt="${safeName}" class="w-full h-full object-cover" loading="lazy" />`
+            ? `<img src="${escapeHtml(sanitizeUrl(card.imageSrc))}" alt="${safeName}" width="400" height="400" decoding="async" class="w-full h-full object-cover" loading="lazy" />`
             : `<div class="w-full h-full flex items-center justify-center text-text-placeholder">
                 <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
               </div>`

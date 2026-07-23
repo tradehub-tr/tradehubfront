@@ -27,7 +27,7 @@ appEl.innerHTML = `
 
     <!-- ═══ HERO BANNER ═══ -->
     <section class="relative w-full overflow-hidden" style="min-height:320px">
-      <img src="${guvenliOdemelerImg}" alt="${t('infoPages.paymentsHeroAlt')}" class="absolute inset-0 w-full h-full object-cover" />
+      <img src="${guvenliOdemelerImg}" alt="${t('infoPages.paymentsHeroAlt')}" width="1200" height="400" decoding="async" class="absolute inset-0 w-full h-full object-cover" />
       <div class="absolute inset-0 bg-gradient-to-r from-black/50 via-black/30 to-transparent"></div>
       <div class="relative container-boxed px-3 sm:px-4 lg:px-6 flex flex-col justify-center" style="min-height:320px">
         <div class="max-w-[550px] py-12 sm:py-16 lg:py-20">

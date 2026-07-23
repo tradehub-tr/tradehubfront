@@ -24,6 +24,7 @@ await requireAuth();
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.classList.add('relative');
 appEl.innerHTML = `
+  <h1 class="sr-only">Mesajlarım</h1>
   <!-- Compact Dashboard Header -->
   <div id="sticky-header" class="sticky top-0 z-(--z-header) bg-white">
     ${TopBar({ compact: true })}

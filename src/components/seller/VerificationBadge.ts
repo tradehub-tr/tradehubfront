@@ -75,7 +75,7 @@ function tooltipRows(itemsExpr: string): string {
     <template x-for="v in (${itemsExpr})" :key="v.source_name">
       <div class="flex items-start gap-2 py-2 border-b border-gray-50 last:border-0 last:pb-0 first:pt-0">
         <template x-if="['iStoc','İstoç'].includes(v.source_name) || v.icon">
-          <img :src="['iStoc','İstoç'].includes(v.source_name) ? '${istocLogoUrl}' : v.icon" :alt="v.source_name" class="w-5 h-5 object-contain rounded-md shrink-0 mt-0.5" />
+          <img :src="['iStoc','İstoç'].includes(v.source_name) ? '${istocLogoUrl}' : v.icon" :alt="v.source_name" width="20" height="20" decoding="async" class="w-5 h-5 object-contain rounded-md shrink-0 mt-0.5" />
         </template>
         <div class="min-w-0">
           <p class="text-[12px] font-semibold text-gray-800 leading-snug"
@@ -156,9 +156,10 @@ export function VerificationBadge(verifications: VerificationItem[]): string {
          @mouseleave="vOpen=false">
       <img src="${verifiedminilogoUrl}"
            alt=""
+           width="132" height="34" decoding="async"
            class="h-3 w-auto shrink-0"
            aria-hidden="true" />
-      ${firstLogo ? `<img src="${firstLogo}" alt="${first.source_name}" class="h-3 w-auto shrink-0 object-contain" />` : ""}
+      ${firstLogo ? `<img src="${firstLogo}" alt="${first.source_name}" width="48" height="12" decoding="async" class="h-3 w-auto shrink-0 object-contain" />` : ""}
       <span class="font-semibold whitespace-nowrap">${firstLogo ? "" : first.source_name}${labelSuffix}</span>
       ${infoButton(badgeInfoLabel)}
       ${tooltipPanel("vItems")}
@@ -186,11 +187,13 @@ export function VerificationBadgeTemplate(scopeExpr: string): string {
            @mouseleave="vOpen=false">
         <img src="${verifiedminilogoUrl}"
              alt=""
+             width="132" height="34" decoding="async"
              class="h-3 w-auto shrink-0"
              aria-hidden="true" />
         <template x-if="['iStoc','İstoç'].includes((${scopeExpr})[0]?.source_name) || (${scopeExpr})[0]?.icon">
           <img :src="['iStoc','İstoç'].includes((${scopeExpr})[0]?.source_name) ? '${istocLogoUrl}' : (${scopeExpr})[0]?.icon"
                :alt="(${scopeExpr})[0]?.source_name"
+               width="48" height="12" decoding="async"
                class="h-3 w-auto shrink-0 object-contain" />
         </template>
         <span class="font-semibold whitespace-nowrap"

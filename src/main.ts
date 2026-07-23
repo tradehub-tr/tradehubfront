@@ -66,17 +66,12 @@ import { startAlpine } from "./alpine";
 import { initAnimatedPlaceholder } from "./utils/animatedPlaceholder";
 
 const appEl = document.querySelector<HTMLDivElement>("#app")!;
-// Shell JS ile basıldığında ani pop yerine yumuşak opacity girişi:
-// başta saydam, init bitince rAF içinde opacity-100'e geç (motion-reduce fallback'li).
-appEl.classList.add(
-  "relative",
-  "opacity-0",
-  "transition-opacity",
-  "duration-200",
-  "ease-out",
-  "motion-reduce:transition-none",
-);
+// FE-2 (CWV): opacity-0 giriş gating'i KALDIRILDI (UX onaylı karar,
+// 2026-07-23). İçerik saydam beklerken LCP tüm init bitene kadar
+// ölçülemiyordu; artık markup boyanır boyanmaz görünür.
+appEl.classList.add("relative");
 appEl.innerHTML = `
+  <h1 class="sr-only">iStoc – Türkiye'nin B2B Toptan Satış Pazaryeri</h1>
   <!-- Sticky Header (global, stays sticky across full page) -->
   <div id="sticky-header" class="sticky top-0 z-(--z-header) bg-white dark:bg-gray-900">
     ${TopBar()}
@@ -184,9 +179,3 @@ void initHeaderNotice();
 // Kategori vitrini bento grid'i arka planda taze veriyle güncelle
 void initCategoryShowcase();
 initAnimatedPlaceholder("#topbar-compact-search-input");
-
-// İçerik enjekte edilip init tamamlandıktan sonra shell'i yumuşakça göster.
-requestAnimationFrame(() => {
-  appEl.classList.remove("opacity-0");
-  appEl.classList.add("opacity-100");
-});

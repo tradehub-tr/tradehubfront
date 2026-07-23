@@ -58,7 +58,9 @@ function renderDealImage(card: TopDealCard): string {
     <img
       src="${escapeHtml(sanitizeUrl(card.imageSrc))}"
       alt="${escapeHtml(card.name)}"
+      width="400" height="400"
       loading="lazy"
+      decoding="async"
       class="w-full h-full object-contain transition-transform duration-200 ease-out motion-reduce:transition-none motion-reduce:transform-none group-hover/deal:scale-110"
     />
   `;

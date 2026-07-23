@@ -76,7 +76,7 @@ export function OrdersContent(): string {
                 <template x-for="product in order.products.slice(0, 2)" :key="product.name">
                   <div class="flex items-center gap-3 px-4 py-2.5">
                     <div class="w-10 h-10 rounded border border-gray-100 overflow-hidden shrink-0 bg-gray-50">
-                      <img :src="product.image" :alt="product.name" class="w-full h-full object-cover" onerror="this.style.display='none'" />
+                      <img :src="product.image" :alt="product.name" width="80" height="80" decoding="async" class="w-full h-full object-cover" onerror="this.style.display='none'" />
                     </div>
                     <div class="flex-1 min-w-0">
                       <p class="text-sm text-gray-800 truncate m-0" x-text="product.name"></p>

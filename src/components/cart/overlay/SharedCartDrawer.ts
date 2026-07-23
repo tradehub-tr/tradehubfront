@@ -405,7 +405,7 @@ function updatePreview(): void {
   if (color.imageUrl) {
     // imageUrl backend listing varyant verisinden geliyor; quote breakout +
     // event handler injection riski. URL'i escape edip src'ye yaz.
-    image.innerHTML = `<img src="${escapeHtml(sanitizeUrl(color.imageUrl))}" alt="${escapeHtml(color.label)}" style="width:100%;height:100%;object-fit:cover;" />`;
+    image.innerHTML = `<img src="${escapeHtml(sanitizeUrl(color.imageUrl))}" alt="${escapeHtml(color.label)}" width="56" height="56" decoding="async" style="width:100%;height:100%;object-fit:cover;" />`;
   } else {
     // colorHex satıcı kontrollü; CSS context injection (";background:url(...)")
     // engellemek için hex pattern doğrulamasından geçir.
@@ -507,7 +507,7 @@ function renderColorChip(color: CartDrawerColorModel, isSelected: boolean): stri
       : "border-border-default bg-surface opacity-40 cursor-not-allowed";
 
   const thumb = color.imageUrl
-    ? `<img src="${escapeHtml(sanitizeUrl(color.imageUrl))}" alt="${escapeHtml(color.label)}" class="w-7 h-7 rounded object-cover shrink-0${!available ? " grayscale" : ""}" loading="lazy" />`
+    ? `<img src="${escapeHtml(sanitizeUrl(color.imageUrl))}" alt="${escapeHtml(color.label)}" width="28" height="28" decoding="async" class="w-7 h-7 rounded object-cover shrink-0${!available ? " grayscale" : ""}" loading="lazy" />`
     : `<span class="w-5 h-5 rounded shrink-0 border border-border-default" style="background:${safeHexColor(color.colorHex || "#e5e5e5")};${!available ? "opacity:0.4;" : ""}"></span>`;
 
   return `

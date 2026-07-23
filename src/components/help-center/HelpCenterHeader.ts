@@ -118,7 +118,7 @@ export function HelpCenterHeader(opts: HelpCenterHeaderOptions = {}): string {
         <!-- Left: Logo + title -->
         <div class="flex items-center gap-2.5 min-w-0">
           <a href="${baseUrl}" class="flex items-center hover:opacity-80 transition-opacity shrink-0">
-            <img src="${baseUrl}images/istoc-logo.png" alt="iSTOC" class="h-[22px] lg:h-[26px]" />
+            <img src="${baseUrl}images/istoc-logo.png" alt="iStoc" width="87" height="32" class="h-[22px] lg:h-[26px] w-auto" />
           </a>
           <span class="block w-px h-5 bg-gray-200 shrink-0" aria-hidden="true"></span>
           <span class="flex items-center gap-1.5 min-w-0 text-[13px] lg:text-[15px] font-semibold text-gray-700 tracking-tight">

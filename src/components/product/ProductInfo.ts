@@ -96,7 +96,7 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
               aria-label="${opt.displayLabel || opt.label}"
               title="${opt.displayLabel || opt.label}"
             >
-              <img src="${opt.thumbnail || ""}" alt="${opt.displayLabel || opt.label}" style="background:${opt.value};">
+              <img src="${opt.thumbnail || ""}" alt="${opt.displayLabel || opt.label}" width="48" height="48" decoding="async" style="background:${opt.value};">
             </button>
           `;
             })

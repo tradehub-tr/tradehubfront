@@ -19,7 +19,7 @@ function renderThumbnailGrid(thumbnails: OrderSummaryThumbnail[], itemCount: num
     .map(
       (thumb, idx) => `
       <div class="relative w-10 sm:w-[48px] h-10 sm:h-[48px] min-w-[40px] sm:min-w-[48px] rounded border border-[#e5e5e5]">
-        <img class="w-full h-full object-cover rounded" src="${escapeHtml(sanitizeUrl(thumb.image))}" alt="" />
+        <img class="w-full h-full object-cover rounded" src="${escapeHtml(sanitizeUrl(thumb.image))}" alt="" width="64" height="64" decoding="async" />
         ${idx === 0 ? `<div class="absolute -top-1.5 -end-1.5 flex items-center justify-center min-w-[18px] sm:min-w-[20px] h-[18px] sm:h-[20px] rounded-full px-1 bg-[#222222] text-white text-[11px] sm:text-[12px] font-bold z-10 leading-none">${itemCount}</div>` : ""}
       </div>`
     )
@@ -71,7 +71,7 @@ export function OrderSummary({ data, payeeSuppliers = [] }: OrderSummaryProps): 
   const platformPayeeBlock = `
     <div class="mt-5 pt-5 border-t border-[#e5e5e5]">
       <div class="p-3 sm:p-3.5 bg-[#f0fdf4] border border-[#bbf7d0] rounded-md">
-        <img src="/images/istoc-logo.png" alt="iSTOC" class="h-3.5 sm:h-4 w-auto mb-1.5 sm:mb-2" />
+        <img src="/images/istoc-logo.png" alt="iStoc" width="87" height="32" class="h-3.5 sm:h-4 w-auto mb-1.5 sm:mb-2" />
         <p class="text-[11px] sm:text-[12px] text-[#6b7280] leading-relaxed">${t("checkoutMfr.securePaymentNote")}</p>
       </div>
     </div>`;

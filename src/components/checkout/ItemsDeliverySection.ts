@@ -108,7 +108,7 @@ function renderSkuLine(sku: CheckoutDeliverySkuLine): string {
   return `
     <!-- Mobile: 2-col grid, image top-aligned. Desktop: 4-col with qty+total columns -->
     <div class="grid grid-cols-[36px_1fr] sm:grid-cols-[40px_1fr_auto_auto] gap-x-2.5 gap-y-0 sm:gap-3 items-start sm:items-center rounded-md bg-[#fafafa] border border-[#e5e5e5] px-2.5 sm:px-[14px] py-2.5 sm:py-[10px]">
-      <img src="${escapeHtml(sanitizeUrl(sku.image))}" alt="" class="w-9 h-9 sm:w-10 sm:h-10 rounded-md object-cover border border-[#e5e5e5] mt-0.5 sm:mt-0" />
+      <img src="${escapeHtml(sanitizeUrl(sku.image))}" alt="" width="40" height="40" decoding="async" class="w-9 h-9 sm:w-10 sm:h-10 rounded-md object-cover border border-[#e5e5e5] mt-0.5 sm:mt-0" />
       <div class="min-w-0">
         ${sampleBadge ? `<div class="mb-1">${sampleBadge}</div>` : ""}
         <p class="text-[12px] sm:text-[13px] text-text-secondary leading-[1.4]">${escapeHtml(sku.variantText)}</p>
@@ -162,7 +162,7 @@ function renderProductCard(
         @click="open = !open"
         :aria-expanded="open"
       >
-        <img src="${escapeHtml(sanitizeUrl(product.image))}" alt="" class="w-10 h-10 sm:w-12 sm:h-12 rounded-md object-cover border border-[#e5e5e5] shrink-0" />
+        <img src="${escapeHtml(sanitizeUrl(product.image))}" alt="" width="48" height="48" decoding="async" class="w-10 h-10 sm:w-12 sm:h-12 rounded-md object-cover border border-[#e5e5e5] shrink-0" />
         <div class="flex-1 min-w-0">
           <h4 class="text-[12.5px] sm:text-[13.5px] leading-[1.35] font-semibold text-[#1a1a1a] truncate">${escapeHtml(product.title)}</h4>
           <p class="text-[11px] sm:text-[11.5px] text-text-tertiary mt-0.5 leading-[1.4]">${escapeHtml(product.moqLabel)}</p>

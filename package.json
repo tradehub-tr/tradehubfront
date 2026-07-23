@@ -9,6 +9,8 @@
     "preview": "vite preview",
     "lint": "eslint \"src/**/*.{ts,js}\"",
     "check:dup": "node scripts/check-duplicate-exports.mjs",
+    "check:nginx": "bash scripts/check-nginx-noindex.sh",
+    "check:seo": "bash scripts/check-seo-path-sync.sh && node scripts/verify-seo-meta.mjs",
     "check:dup:update": "node scripts/check-duplicate-exports.mjs --update",
     "lint:fix": "eslint \"src/**/*.{ts,js}\" --fix && prettier --write \"src/**/*.{ts,js,json,css}\"",
     "format": "prettier --write \"src/**/*.{ts,js,json,css}\"",

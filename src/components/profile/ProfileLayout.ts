@@ -119,6 +119,7 @@ function renderCover(): string {
       <img
         src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=360&fit=crop&crop=center"
         alt="${t("profile.coverPhoto")}"
+        width="1200" height="360" decoding="async"
         class="w-full h-full object-cover"
       />
     </div>

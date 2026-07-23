@@ -15,7 +15,7 @@ export function TradeAssuranceBadge(options: TradeAssuranceBadgeOptions = {}): s
   const label = t("mega.tradeAssuranceTitle");
   return `
     <div class="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/15 backdrop-blur-sm ${className}">
-      <img src="${tasLogoUrl}" alt="${label}" class="h-9 sm:h-10 w-auto object-contain" />
+      <img src="${tasLogoUrl}" alt="${label}" width="443" height="600" decoding="async" class="h-9 sm:h-10 w-auto object-contain" />
       <span class="text-white font-bold text-base sm:text-lg" data-i18n="mega.tradeAssuranceTitle">${label}</span>
     </div>
   `;

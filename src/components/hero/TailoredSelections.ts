@@ -39,7 +39,9 @@ function renderProductImage(product: CollectionProduct): string {
       <img
         src="${escapeHtml(sanitizeUrl(product.imageSrc))}"
         alt="${escapeHtml(product.name)}"
+        width="400" height="400"
         loading="lazy"
+        decoding="async"
         class="w-full h-full object-contain transition-transform duration-300 ease-out group-hover/col:scale-[1.04]"
       />
     </div>

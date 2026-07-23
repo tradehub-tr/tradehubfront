@@ -26,6 +26,7 @@ export function Gallery(photos: GalleryPhoto[], title?: string): string {
                  role="button"
                  aria-label="${escapeHtml(photo.caption || t("seller.sf.factoryPhoto"))}">
               <img src="${escapeHtml(sanitizeUrl(photo.image))}" alt="${escapeHtml(photo.caption || "")}"
+                   width="400" height="300" decoding="async"
                    class="gallery__image w-full h-full object-cover transition-transform duration-200 motion-reduce:transition-none motion-reduce:group-hover:scale-100 group-hover:scale-105"
                    loading="lazy"
                    onerror="this.parentElement.style.background='#f3f4f6'" />

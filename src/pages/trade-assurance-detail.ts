@@ -25,7 +25,7 @@ import limanImg from '../assets/images/liman.avif'
 function HeroSection(): string {
   return `
     <section class="relative overflow-hidden" style="min-height:440px">
-      <img src="${tradeAssuranceBg}" alt="" class="absolute inset-0 w-full h-full object-cover" />
+      <img src="${tradeAssuranceBg}" alt="" width="1200" height="400" decoding="async" class="absolute inset-0 w-full h-full object-cover" />
       <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent"></div>
       <div class="relative z-10 container-boxed px-4 sm:px-6 lg:px-8 flex items-center" style="min-height:440px">
         <div class="max-w-[640px]">
@@ -79,7 +79,7 @@ function ServiceInfo(): string {
               ${t("tradeAssurance.detailServiceDesc")}
             </p>
             <div class="inline-flex items-center gap-2">
-              <img src="${taLogoUrl}" alt="${t("tradeAssurance.tradeAssuranceLabel")}" class="h-6" />
+              <img src="${taLogoUrl}" alt="${t("tradeAssurance.tradeAssuranceLabel")}" width="305" height="46" decoding="async" class="h-6 w-auto" />
               <span class="font-bold text-gray-900 text-sm">${t("tradeAssurance.tradeAssuranceLabel")}</span>
             </div>
           </div>
@@ -312,7 +312,7 @@ function ShippingSection(): string {
           </a>
         </div>
         <div class="rounded-md overflow-hidden shadow-lg">
-          <img src="${limanImg}" alt="${t("tradeAssurance.shippingLogisticsAlt")}" class="w-full h-auto object-cover" />
+          <img src="${limanImg}" alt="${t("tradeAssurance.shippingLogisticsAlt")}" width="1200" height="520" loading="lazy" decoding="async" class="w-full h-auto object-cover" />
         </div>
       </div>
     </section>

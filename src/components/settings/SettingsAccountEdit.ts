@@ -220,7 +220,7 @@ function buyerBasicView(d: ProfileData): string {
     ? `<span class="inline-flex items-center gap-1 text-xs font-medium whitespace-nowrap" style="color:#22c55e">${ICONS.verified} ${t("settings.emailVerifiedText") || "Verified"}</span>`
     : "";
   const avatarHtml = d.avatar
-    ? `<img src="${escapeHtml(sanitizeUrl(d.avatar))}" class="w-16 h-16 rounded-full object-cover border-2 border-gray-200" alt="avatar" />`
+    ? `<img src="${escapeHtml(sanitizeUrl(d.avatar))}" width="64" height="64" decoding="async" class="w-16 h-16 rounded-full object-cover border-2 border-gray-200" alt="avatar" />`
     : `<div class="w-16 h-16 rounded-full flex items-center justify-center border-2 border-gray-200 text-2xl font-bold text-white" style="background:linear-gradient(135deg, var(--color-primary-400, #e6b212) 0%, var(--color-primary-500, #cc9900) 100%)">${escapeHtml((fullName || "?")[0].toLowerCase())}</div>`;
 
   return `
@@ -332,7 +332,7 @@ function sourcingPrefsEdit(d: ProfileData): string {
 function sellerBasicView(d: ProfileData): string {
   const fullName = `${d.first_name} ${d.last_name}`.trim();
   const avatarHtml = d.avatar
-    ? `<img src="${escapeHtml(sanitizeUrl(d.avatar))}" class="w-16 h-16 rounded-full object-cover border-2 border-gray-200" alt="avatar" />`
+    ? `<img src="${escapeHtml(sanitizeUrl(d.avatar))}" width="64" height="64" decoding="async" class="w-16 h-16 rounded-full object-cover border-2 border-gray-200" alt="avatar" />`
     : `<div class="w-16 h-16 rounded-full flex items-center justify-center border-2 border-gray-200 text-2xl font-bold text-white" style="background:linear-gradient(135deg, var(--color-primary-400, #e6b212) 0%, var(--color-primary-500, #cc9900) 100%)">${escapeHtml((fullName || "?")[0].toLowerCase())}</div>`;
 
   return `

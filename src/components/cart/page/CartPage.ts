@@ -27,7 +27,7 @@ export function CartPage({ suppliers, summary }: CartPageProps): string {
             <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
             <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
           </svg>
-          <h2 class="text-xl sm:text-2xl font-bold text-text-heading mb-1.5 sm:mb-2" data-i18n="cart.empty">${t("cart.empty")}</h2>
+          <h1 class="text-xl sm:text-2xl font-bold text-text-heading mb-1.5 sm:mb-2" data-i18n="cart.empty">${t("cart.empty")}</h1>
           <p class="text-[13px] sm:text-base text-text-secondary mb-6 sm:mb-8 max-w-[280px] sm:max-w-md leading-relaxed" data-i18n="cart.emptyDesc">${t("cart.emptyDesc")}</p>
           <a href="/urunler" class="inline-flex items-center justify-center th-btn-dark no-underline h-10 sm:h-auto text-[13px] sm:text-[14px] px-5 sm:px-6" data-i18n="cart.continueShopping">
             ${t("cart.continueShopping")}

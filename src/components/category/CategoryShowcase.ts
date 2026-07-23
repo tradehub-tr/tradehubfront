@@ -151,7 +151,7 @@ function categoryTile(t: ShowcaseTile, columns: number): string {
   // Görsel cover ile hücreyi tam doldurur (contain'in yüzen beyaz boşluğu yok → tutarlı ağırlık);
   // alttan gradient scrim label'ı her görselde okunur kılar. Görsel yoksa tonal gri + koyu metin.
   const media = hasImage
-    ? `<img src="${escapeAttr(safeImage)}" alt="${escapeAttr(label)}" loading="lazy" class="absolute inset-0 h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100" />
+    ? `<img src="${escapeAttr(safeImage)}" alt="${escapeAttr(label)}" width="400" height="400" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100" />
       <span class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent transition-colors duration-200 group-hover:from-black/85 motion-reduce:transition-none"></span>`
     : "";
   const labelColor = hasImage ? "text-white" : "text-gray-900";
@@ -238,7 +238,7 @@ export function CategoryShowcase(data: ShowcaseData = getCachedShowcase()): stri
         title
           ? `<div class="mb-4 flex items-baseline justify-between gap-3">
               <h2 class="text-sm sm:text-lg lg:text-xl font-semibold text-gray-900">${escapeText(title)}</h2>
-              <a href="/pages/categories.html" class="inline-flex shrink-0 items-center gap-1 text-xs sm:text-sm font-medium text-gray-600 transition-colors duration-150 hover:text-gray-900 appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary-500,#f5b800)] focus-visible:ring-offset-2 rounded-md motion-reduce:transition-none">${getCurrentLang() === "en" ? "All categories" : "Tüm kategoriler"} ${ARROW_SVG}</a>
+              <a href="/kategoriler" class="inline-flex shrink-0 items-center gap-1 text-xs sm:text-sm font-medium text-gray-600 transition-colors duration-150 hover:text-gray-900 appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary-500,#f5b800)] focus-visible:ring-offset-2 rounded-md motion-reduce:transition-none">${getCurrentLang() === "en" ? "All categories" : "Tüm kategoriler"} ${ARROW_SVG}</a>
             </div>`
           : ""
       }

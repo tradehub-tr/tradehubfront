@@ -38,7 +38,7 @@ function renderCategoryCard(cat: TopRankingCategory): string {
   const safeName = escapeHtml(cat.name || "");
   const href = `/pages/top-ranking-category.html?cat=${encodeURIComponent(cat.slug || cat.id)}&sort=hot-selling&page=1`;
   const imgHtml = cat.image
-    ? `<img src="${escapeHtml(cat.image)}" alt="${safeName}" loading="lazy"
+    ? `<img src="${escapeHtml(cat.image)}" alt="${safeName}" width="400" height="400" loading="lazy" decoding="async"
             class="w-full h-full object-cover transition-transform duration-200 ease-out motion-reduce:transition-none motion-reduce:transform-none group-hover/rank:scale-110" />`
     : `<div class="w-full h-full flex items-center justify-center">
          <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -62,7 +62,7 @@ function renderCategoryCard(cat: TopRankingCategory): string {
         </div>
         <!-- TOP badge -->
         <div class="absolute -bottom-4 sm:-bottom-5 left-1/2 z-10 -translate-x-1/2 flex flex-col items-center pointer-events-none">
-          <img src="${topBadgeUrl}" alt="" class="h-[36px] w-[36px] sm:h-[48px] sm:w-[48px] object-contain drop-shadow" loading="lazy" />
+          <img src="${topBadgeUrl}" alt="" width="72" height="72" decoding="async" class="h-[36px] w-[36px] sm:h-[48px] sm:w-[48px] object-contain drop-shadow" loading="lazy" />
         </div>
       </div>
 

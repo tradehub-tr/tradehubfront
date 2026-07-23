@@ -83,7 +83,7 @@ export function VerificationStatusBanner(user: AuthUser | null): string {
       icon: ICONS.alert,
       title: t("buyerUi.accountSuspendedTitle"),
       description: t("buyerUi.accountSuspendedDesc"),
-      ctas: [{ label: t("buyerUi.supportRequest"), href: "/pages/help.html", primary: true }],
+      ctas: [{ label: t("buyerUi.supportRequest"), href: "/yardim-merkezi", primary: true }],
     });
   }
 

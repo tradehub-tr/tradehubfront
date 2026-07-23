@@ -53,6 +53,7 @@ export function renderGalleryMedia(
       <img
         src="${src}"
         alt="${safeAlt}"
+        width="${size === "thumb" ? "60" : "800"}" height="${size === "thumb" ? "60" : "800"}"
         data-gallery-main-media="true"
         class="gallery-media-asset gallery-media-asset--${size} w-full h-full ${fitClass} select-none pointer-events-none"
         loading="${size === "thumb" ? "lazy" : "eager"}"
