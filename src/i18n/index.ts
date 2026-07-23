@@ -3,6 +3,7 @@
 import "../utils/nativeHttp";
 // iOS native'de sol-üst geri butonunu enjekte et (web/Android'de no-op).
 import "../utils/nativeBackButton";
+import "../utils/deepLinks";
 import i18next from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import { sanitizeHtml } from "../utils/sanitize";

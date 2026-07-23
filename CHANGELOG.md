@@ -1,3 +1,39 @@
+## [v2.2.2] - 2026-07-23 PROD
+
+Bu surum istoc.com'da yayindadir.
+
+### Eklendi
+- feat(mobile): Capacitor kamera, push notification ve deep link desteği (@boraydeger32)
+  - @capacitor/camera ve @capacitor/push-notifications eklendi
+  - Deep link modülü i18n/index.ts üzerinden import edildi
+
+### Duzeltildi
+- fix(seller-shop): dükkan sayfasında tüm ürünleri getir + pagination ekle (@boraydeger32)
+
+---
+## [v2.2.1-rc.1] - 2026-07-23 RC
+
+Bu surum rc.istoc.com'da onay asamasindadir.
+
+### Eklendi
+- feat(mobile): Capacitor kamera, push notification ve deep link desteği (@boraydeger32)
+  - @capacitor/camera ve @capacitor/push-notifications eklendi
+  - Deep link modülü i18n/index.ts üzerinden import edildi
+
+### Duzeltildi
+- fix(seller-shop): dükkan sayfasında tüm ürünleri getir + pagination ekle (@boraydeger32)
+
+---
+## [v2.2.1-alpha.3] - 2026-07-23 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(mobile): Capacitor kamera, push notification ve deep link desteği (@boraydeger32)
+  - @capacitor/camera ve @capacitor/push-notifications eklendi
+  - Deep link modülü i18n/index.ts üzerinden import edildi
+
+---
 ## [v2.2.1-alpha.1] - 2026-07-22 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
