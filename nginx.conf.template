@@ -243,7 +243,10 @@ server {
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
     add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;
-    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://${BACKEND_DOMAIN} wss://${BACKEND_DOMAIN}; frame-ancestors 'none';" always;
+    # GTM/GA4 domain'leri script-src + connect-src'de zorunlu: consent sonrası
+    # trackingManager gtm.js enjekte eder; CSP izin vermezse tarayıcı yüklemeyi
+    # sessizce bloklar (Tag Assistant "container bulunamadı" belirtisi).
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://${BACKEND_DOMAIN} wss://${BACKEND_DOMAIN} https://*.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; frame-ancestors 'none';" always;
 
     # Hayalet path kararı: /markalar kaybetti → kalıcı 301 /ureticiler
     # (nginx map + backend static_pages_registry + FE listesi senkron).
