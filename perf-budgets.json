@@ -1,0 +1,55 @@
+{
+  "homepage": {
+    "initial": {
+      "nodes": 5250,
+      "svg": 680,
+      "api": 22,
+      "js": 35,
+      "cls": 0.1
+    },
+    "target": {
+      "nodes": 4000,
+      "svg": 400,
+      "api": 12,
+      "js": 25
+    },
+    "regression": {
+      "maxPercent": 10,
+      "matureAfterAcceptedRuns": 2
+    },
+    "closedOverlay": {
+      "nodes": 1200,
+      "selectors": [
+        "[data-home-overlay][data-home-overlay-state='closed']",
+        "[data-home-overlay][hidden]",
+        "#istoc-mega-overlay",
+        "#cat-fullscreen-overlay.hidden",
+        "#account-fullscreen-overlay.hidden"
+      ]
+    }
+  },
+  "routes": {
+    "default": {
+      "initial": {
+        "nodes": 6000,
+        "mainDomNodes": 5000,
+        "hiddenDomNodes": 1500,
+        "svg": 700,
+        "api": 30,
+        "js": 40,
+        "css": 10,
+        "duplicateIds": 0,
+        "consoleErrors": 0,
+        "cls": 0.1
+      },
+      "regression": {
+        "maxPercent": 10,
+        "matureAfterAcceptedRuns": 2
+      },
+      "closedOverlay": {
+        "nodes": 1200,
+        "selectors": []
+      }
+    }
+  }
+}

@@ -941,7 +941,7 @@ function initScopedReviewPanel(
   bindHelpfulButtons(panel);
 }
 
-export function initReviews(): void {
+export function initReviews(options: { signal?: AbortSignal } = {}): void {
   const productPanel = document.getElementById("rv-product-panel");
   const storePanel = document.getElementById("rv-store-panel");
   const qaPanel = document.getElementById("rv-qa-panel");
@@ -997,12 +997,12 @@ export function initReviews(): void {
       // Storefront listesi de yeniden yüklensin — kullanıcının kendi
       // Pending yorumu varsa şimdi görünsün.
       void reloadReviewsAndRerender(listingId);
-    });
+    }, options);
 
     // Yorum gönderildiğinde listeyi yenile
     window.addEventListener("review-submitted", () => {
       void reloadReviewsAndRerender(listingId);
-    });
+    }, options);
 
     // İlk render sırasında reviews boş array ile basıldı; loadProductReviews()
     // backend'den verileri çekince bu event fire eder — panel'leri burada
@@ -1031,7 +1031,7 @@ export function initReviews(): void {
           ce.detail.summary?.average_rating ||
           0,
       });
-    });
+    }, options);
     // Abuse report sonrası ek bir aksiyon yok (sessizce kaydedildi toast'ı gösteriliyor)
   }
 
@@ -1040,7 +1040,7 @@ export function initReviews(): void {
     void updateQACount(listingId);
     window.addEventListener("qa-submitted", () => {
       void updateQACount(listingId);
-    });
+    }, options);
   }
 
   // ── Click-outside to close all dropdowns ───────────
@@ -1051,7 +1051,7 @@ export function initReviews(): void {
     document
       .querySelectorAll(".rv-sort-dropdown.open")
       .forEach((el) => el.classList.remove("open"));
-  });
+  }, options);
 }
 
 async function mountQAPanel(panel: HTMLElement, _listingId: string): Promise<void> {

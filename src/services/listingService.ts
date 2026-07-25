@@ -24,6 +24,7 @@ import type {
   CustomizationOption,
 } from "../types/product";
 import type { ProductListingCard, SearchHeaderInfo } from "../types/productListing";
+import type { ServerSeoPayload } from "../seo/setPageMeta";
 
 // Frappe API response wrapper
 interface FrappeResponse<T> {
@@ -36,6 +37,7 @@ interface FrappeResponse<T> {
     category_name?: string | null;
     has_next?: boolean;
     has_prev?: boolean;
+    seo?: ServerSeoPayload;
   };
 }
 
@@ -80,6 +82,8 @@ export interface ListingSearchResult {
    * client'ta 3 seviye olduğu için derin kategorilerde tek kaynak budur.
    */
   categoryName?: string;
+  /** Mevcut görünür sonuç sayfasından backend'in ürettiği ItemList payload'u. */
+  seo?: ServerSeoPayload;
 }
 
 // ── API Endpoints ──
@@ -162,6 +166,7 @@ export async function searchListings(params: ListingSearchParams): Promise<Listi
         hasNext: msg.has_next || false,
         hasPrev: msg.has_prev || false,
         categoryName: msg.category_name || undefined,
+        seo: msg.seo,
       };
     },
     policies.listings

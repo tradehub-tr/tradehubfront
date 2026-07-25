@@ -386,32 +386,40 @@ async function renderPage() {
         <!-- ═══════════════════════════════════════════════════════ -->
         <!-- PAGE: ANA SAYFA (dinamik bolumler — hero, kategoriler, populer urunler) -->
         <!-- ═══════════════════════════════════════════════════════ -->
-        <div x-show="activePage === 'home'" x-transition.opacity.duration.200ms>
-          ${renderDynamicSections(layout)}
-        </div>
+        <template x-if="activePage === 'home'">
+          <div x-transition.opacity.duration.200ms>
+            ${renderDynamicSections(layout)}
+          </div>
+        </template>
 
         <!-- ═══════════════════════════════════════════════════════ -->
         <!-- PAGE: URUNLER (kategori sidebar + urun grid) -->
         <!-- ═══════════════════════════════════════════════════════ -->
-        <div x-show="activePage === 'products'" x-transition.opacity.duration.200ms>
-          ${SECTION_RENDERERS_REF.category_listing({ showSort: true, viewModes: ['grid', 'list'], columns: 4 })}
-        </div>
+        <template x-if="activePage === 'products'">
+          <div x-transition.opacity.duration.200ms>
+            ${SECTION_RENDERERS_REF.category_listing({ showSort: true, viewModes: ['grid', 'list'], columns: 4 })}
+          </div>
+        </template>
 
         <!-- ═══════════════════════════════════════════════════════ -->
         <!-- PAGE: PROFIL (sirket bilgisi + sertifikalar + galeri) -->
         <!-- ═══════════════════════════════════════════════════════ -->
-        <div x-show="activePage === 'profile'" x-transition.opacity.duration.200ms>
-          ${SECTION_RENDERERS_REF.company_info({})}
-          ${SECTION_RENDERERS_REF.certificates({})}
-          ${SECTION_RENDERERS_REF.gallery({ columns: 4 })}
-        </div>
+        <template x-if="activePage === 'profile'">
+          <div x-transition.opacity.duration.200ms>
+            ${SECTION_RENDERERS_REF.company_info({})}
+            ${SECTION_RENDERERS_REF.certificates({})}
+            ${SECTION_RENDERERS_REF.gallery({ columns: 4 })}
+          </div>
+        </template>
 
         <!-- ═══════════════════════════════════════════════════════ -->
         <!-- PAGE: KISILER (iletisim bilgileri) -->
         <!-- ═══════════════════════════════════════════════════════ -->
-        <div x-show="activePage === 'contacts'" x-transition.opacity.duration.200ms>
-          ${SECTION_RENDERERS_REF.contact_form({})}
-        </div>
+        <template x-if="activePage === 'contacts'">
+          <div x-transition.opacity.duration.200ms>
+            ${SECTION_RENDERERS_REF.contact_form({})}
+          </div>
+        </template>
 
       </div>
 

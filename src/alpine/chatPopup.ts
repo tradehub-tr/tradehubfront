@@ -65,16 +65,7 @@ interface ChatStore {
   readonly activeConversation: Conversation | null;
   readonly filteredConversations: Conversation[];
 
-  open(opts?: {
-    conversationId?: string;
-    sellerId?: string;
-    pinnedProduct?: PinnedProduct;
-    /** Faz 4 — Soru gönder formu: gating geçtikten ve hedef konuşma aktif
-     *  olduktan SONRA otomatik gönderilecek metin (QuestionFormSheet). */
-    initialMessage?: string;
-    /** initialMessage ile birlikte tek dosya eki (QuestionFormSheet). */
-    initialFile?: File;
-  }): Promise<void>;
+  open(opts?: ChatOpenOptions): Promise<ChatOpenOutcome>;
   close(): void;
   toggleExpanded(): void;
   toggleInbox(): void;
@@ -97,6 +88,24 @@ interface ChatStore {
   pinActive(): Promise<void>;
   _refreshActiveMessages(): Promise<void>;
   _refreshConversations(): Promise<void>;
+}
+
+type ReservationRequired = { sellerId: string; sellerName?: string };
+type ChatOpenOutcome = "opened" | "reservation-required" | "blocked";
+
+interface ChatOpenOptions {
+  conversationId?: string;
+  sellerId?: string;
+  pinnedProduct?: PinnedProduct;
+  /** Faz 4 — Soru gönder formu: gating geçtikten ve hedef konuşma aktif
+   *  olduktan SONRA otomatik gönderilecek metin (QuestionFormSheet). */
+  initialMessage?: string;
+  /** initialMessage ile birlikte tek dosya eki (QuestionFormSheet). */
+  initialFile?: File;
+  /** Lazy overlay host reservation UI'sini kendi tek ağacında açar. */
+  onReservationRequired?: (detail: ReservationRequired) => void;
+  /** Yeni bir intent veya kapanış bu async denemeyi geçersiz kıldığında false döner. */
+  isCurrentAttempt?: () => boolean;
 }
 
 const chatStore: ChatStore = {
@@ -139,7 +148,8 @@ const chatStore: ChatStore = {
     });
   },
 
-  async open(opts) {
+  async open(opts): Promise<ChatOpenOutcome> {
+    const isCurrentAttempt = () => opts?.isCurrentAttempt?.() ?? true;
     // Buyer "Sohbet Et" akışı — Plus tier seller'larda rezervasyon zorunlu.
     // Önce can_chat ile gating kontrol et; izin yoksa ReservationModal aç ve
     // chat-popup'ı AÇMA. Herhangi bir gating fail'ı durumunda EARLY RETURN —
@@ -147,25 +157,30 @@ const chatStore: ChatStore = {
     if (opts?.sellerId) {
       try {
         const gate = await canChat(opts.sellerId);
+        if (!isCurrentAttempt()) return "blocked";
         if (!gate.allowed) {
           if (gate.reason === "reservation_required") {
-            window.dispatchEvent(
-              new CustomEvent("reservation-modal:open", {
-                detail: {
-                  sellerId: opts.sellerId,
-                  sellerName: this.conversations.find((c) => c.sellerId === opts.sellerId)?.name,
-                },
-              })
-            );
+            const reservation = {
+              sellerId: opts.sellerId,
+              sellerName: this.conversations.find((c) => c.sellerId === opts.sellerId)?.name,
+            };
+            if (opts.onReservationRequired) opts.onReservationRequired(reservation);
+            else {
+              window.dispatchEvent(new CustomEvent("reservation-modal:open", { detail: reservation }));
+            }
+            return "reservation-required";
           }
           // Başka reason için sessizce reddet (genelde olmaz)
-          return;
+          return "blocked";
         }
       } catch (err) {
+        if (!isCurrentAttempt()) return "blocked";
         this.error = err instanceof Error ? err.message : t("commonSvc.authCheckFailed");
-        return; // hata durumunda chat'i açma
+        return "blocked"; // hata durumunda chat'i açma
       }
     }
+
+    if (!isCurrentAttempt()) return "blocked";
 
     this.isOpen = true;
     this.error = null;
@@ -175,13 +190,19 @@ const chatStore: ChatStore = {
     if (this.conversations.length === 0) {
       this.loading = true;
       try {
-        this.conversations = await listConversations();
+        const conversations = await listConversations();
+        if (!isCurrentAttempt()) return "blocked";
+        this.conversations = conversations;
       } catch (err) {
-        this.error = err instanceof Error ? err.message : t("commonSvc.conversationsLoadFailed");
+        if (isCurrentAttempt()) {
+          this.error = err instanceof Error ? err.message : t("commonSvc.conversationsLoadFailed");
+        }
       } finally {
-        this.loading = false;
+        if (isCurrentAttempt()) this.loading = false;
       }
     }
+
+    if (!isCurrentAttempt()) return "blocked";
 
     let targetId = opts?.conversationId ?? null;
 
@@ -192,6 +213,7 @@ const chatStore: ChatStore = {
       this.loading = true;
       try {
         const conv = await startOrGetThread(opts.sellerId);
+        if (!isCurrentAttempt()) return "blocked";
         targetId = conv.id;
         const existing = this.conversations.find((c) => c.id === conv.id);
         if (existing) {
@@ -201,11 +223,15 @@ const chatStore: ChatStore = {
           this.conversations = [conv, ...this.conversations];
         }
       } catch (err) {
-        this.error = err instanceof Error ? err.message : t("commonSvc.startChatFailed");
+        if (isCurrentAttempt()) {
+          this.error = err instanceof Error ? err.message : t("commonSvc.startChatFailed");
+        }
       } finally {
-        this.loading = false;
+        if (isCurrentAttempt()) this.loading = false;
       }
     }
+
+    if (!isCurrentAttempt()) return "blocked";
 
     // İlk-konuşma fallback'i yalnız bağlamsız açılış için (floating Mesajlar
     // butonu). Hedefli açılışta (sellerId veya pinnedProduct) hedef
@@ -223,6 +249,7 @@ const chatStore: ChatStore = {
 
     if (targetId) {
       await this.setActiveConversation(targetId);
+      if (!isCurrentAttempt()) return "blocked";
     }
 
     // Faz 4 — Soru gönder formu: konuşma aktif olduktan SONRA otomatik
@@ -239,6 +266,8 @@ const chatStore: ChatStore = {
         await this.sendMessage();
       }
     }
+    if (!isCurrentAttempt()) return "blocked";
+    return "opened";
   },
 
   close() {
@@ -246,6 +275,7 @@ const chatStore: ChatStore = {
     this.isExpanded = false;
     this.openSubMenu = null;
     releaseScrollLock();
+    window.dispatchEvent(new CustomEvent("chat-popup:close"));
   },
 
   toggleExpanded() {

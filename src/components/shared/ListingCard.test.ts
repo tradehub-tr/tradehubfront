@@ -1,6 +1,6 @@
 // src/components/shared/ListingCard.test.ts
 import { describe, expect, it } from "vitest";
-import { renderListingCard } from "./ListingCard";
+import { initProductSliders, renderListingCard } from "./ListingCard";
 import type { ProductListingCard } from "../../types/productListing";
 
 /** Tüm zengin alanları dolu kart — indirim verisi VAR ama varsayılanda gösterilmemeli. */
@@ -100,5 +100,92 @@ describe("renderListingCard showDiscount opsiyonu", () => {
   it("discountPercentage yoksa discount string'inden parse eder", () => {
     const card = { ...fullCard, discountPercentage: undefined };
     expect(renderListingCard(card, { showDiscount: true })).toContain(">%20<");
+  });
+});
+
+describe("renderListingCard homeCompact modu", () => {
+  it("yalnız ana sayfanın kullandığı tek grid varyantını üretir", () => {
+    const host = document.createElement("div");
+    host.innerHTML = renderListingCard(fullCard, {
+      homeCompact: true,
+      showDiscount: true,
+      containImage: true,
+    });
+
+    expect(host.querySelector('[data-card-variant="home-compact"]')).not.toBeNull();
+    expect(host.querySelectorAll("[data-fav-btn]")).toHaveLength(1);
+    expect(host.querySelector(".fy26-price")?.textContent).toContain("115");
+    expect(host.textContent).toContain(fullCard.name);
+    expect(host.textContent).toContain("%20");
+    expect(host.querySelector("[data-sp-host='LST-0001']")).not.toBeNull();
+
+    expect(host.querySelector("[data-sp-slot]")).toBeNull();
+    expect(host.querySelector(".action-area-layout")).toBeNull();
+    expect(host.querySelector("[data-add-to-cart]")).toBeNull();
+    expect(host.innerHTML).not.toContain("group-data-[list-mode=list]");
+  });
+
+  it("ikincil koleksiyon medyasını etkileşim öncesi template içinde tutar", () => {
+    const card = {
+      ...fullCard,
+      images: [
+        "https://example.com/img.jpg",
+        "https://example.com/img-2.jpg",
+        "https://example.com/img-3.jpg",
+      ],
+    } as unknown as ProductListingCard;
+    const host = document.createElement("div");
+    host.innerHTML = renderListingCard(card);
+
+    const slider = host.querySelector<HTMLElement>("[data-slider-id='LST-0001']");
+    const deferred = host.querySelector<HTMLTemplateElement>(
+      "template[data-slider-secondary='LST-0001']"
+    );
+    expect(slider?.querySelectorAll("img")).toHaveLength(1);
+    expect(deferred?.content.querySelectorAll("img")).toHaveLength(2);
+
+    document.body.append(host);
+    initProductSliders();
+    document.dispatchEvent(
+      new CustomEvent("slider-nav", {
+        detail: { id: "LST-0001", dir: 1 },
+      })
+    );
+
+    expect(slider?.querySelectorAll("img")).toHaveLength(3);
+    expect(host.querySelector("template[data-slider-secondary]")).toBeNull();
+    expect(slider?.style.transform).toBe("translateX(-100%)");
+    host.remove();
+  });
+
+  it("40 kartlık koleksiyonda pagination kartlarını korur, yalnız 40 birincil medya mount eder", () => {
+    const host = document.createElement("div");
+    host.innerHTML = Array.from({ length: 40 }, (_, index) => {
+      const id = `LST-COLLECTION-${index + 1}`;
+      const card = {
+        ...minimalCard,
+        id,
+        imageSrc: `https://example.com/${id}-1.jpg`,
+        images: [
+          `https://example.com/${id}-1.jpg`,
+          `https://example.com/${id}-2.jpg`,
+          `https://example.com/${id}-3.jpg`,
+        ],
+      } as unknown as ProductListingCard;
+      return renderListingCard(card);
+    }).join("");
+
+    expect(host.querySelectorAll(".fy26-product-card-wrapper")).toHaveLength(40);
+    expect(host.querySelectorAll(".product-slider img")).toHaveLength(40);
+    const templates = host.querySelectorAll<HTMLTemplateElement>(
+      "template[data-slider-secondary]"
+    );
+    expect(templates).toHaveLength(40);
+    expect(
+      Array.from(templates).reduce(
+        (count, template) => count + template.content.querySelectorAll("img").length,
+        0
+      )
+    ).toBe(80);
   });
 });

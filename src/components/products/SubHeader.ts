@@ -265,8 +265,8 @@ function renderMobileFilterToggle(): string {
     <button
       type="button"
       id="mobile-filter-toggle"
-      data-drawer-target="filter-sidebar-drawer"
-      data-drawer-toggle="filter-sidebar-drawer"
+      aria-controls="mobile-filter-dialog"
+      aria-haspopup="dialog"
       class="th-btn-outline shrink-0 lg:hidden inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600"
       aria-label="${t("products.filters")}"
     >

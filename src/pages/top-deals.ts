@@ -63,7 +63,9 @@ import { initAnimatedPlaceholder } from '../utils/animatedPlaceholder'
 
 /* ── Page constants ──────────────────────────────────────────────────── */
 
-const PAGE_SIZE = 40  // products per page in both All and per-category tabs (5 columns × 8 rows)
+// İlk yükte 24 zengin kart: 40 kartın DOM/görsel maliyetini sayfalama
+// sözleşmesini değiştirmeden düşürür. Sonraki sayfalar mevcut replace akışıyla gelir.
+const PAGE_SIZE = 24
 
 /* ── Alpine Data Registration ────────────────────────────────────────── */
 
@@ -253,8 +255,8 @@ appEl.innerHTML = `
 
   ${MegaMenu()}
 
-  <!-- Sticky compact mobile header (appears on scroll) -->
-  ${TopDealsStickyMobileHeader()}
+  <!-- Sticky mobile header is mounted only after the hero leaves the viewport. -->
+  <div id="td-sticky-mobile-header-host"></div>
 
   <!-- Main Content -->
   <main x-data="topDealsPage">
@@ -319,18 +321,27 @@ initCurrency().catch(err => console.warn('[TopDeals Page] currency init failed:'
 
 // Show/hide sticky compact mobile header based on hero visibility
 const mobileHeroSentinel = document.getElementById('td-mobile-hero-sentinel')
-const stickyMobileHeader = document.getElementById('td-sticky-mobile-header')
-if (mobileHeroSentinel && stickyMobileHeader) {
+const stickyMobileHeaderHost = document.getElementById('td-sticky-mobile-header-host')
+let stickyMobileHeader: HTMLElement | null = null
+const ensureStickyMobileHeader = (): HTMLElement | null => {
+  if (stickyMobileHeader) return stickyMobileHeader
+  if (!stickyMobileHeaderHost || window.innerWidth >= 768) return null
+  stickyMobileHeaderHost.innerHTML = TopDealsStickyMobileHeader()
+  stickyMobileHeader = document.getElementById('td-sticky-mobile-header')
+  return stickyMobileHeader
+}
+if (mobileHeroSentinel && stickyMobileHeaderHost) {
   const heroObserver = new IntersectionObserver(
     ([entry]) => {
       if (entry.isIntersecting) {
         // Hero is visible — hide sticky header
-        stickyMobileHeader.classList.add('-translate-y-full', 'opacity-0', 'pointer-events-none')
-        stickyMobileHeader.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto')
+        stickyMobileHeader?.classList.add('-translate-y-full', 'opacity-0', 'pointer-events-none')
+        stickyMobileHeader?.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto')
       } else {
         // Hero scrolled away — show sticky header
-        stickyMobileHeader.classList.remove('-translate-y-full', 'opacity-0', 'pointer-events-none')
-        stickyMobileHeader.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto')
+        const sticky = ensureStickyMobileHeader()
+        sticky?.classList.remove('-translate-y-full', 'opacity-0', 'pointer-events-none')
+        sticky?.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto')
       }
     },
     { threshold: 0 }

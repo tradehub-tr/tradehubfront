@@ -17,6 +17,10 @@ export function ChatPopup(): string {
     <div x-data="chatPopupRoot"
          x-cloak
          x-show="$store.chatPopup.isOpen"
+         role="dialog"
+         aria-modal="true"
+         aria-label="${"Sohbet penceresi"}"
+         tabindex="-1"
          x-transition:enter="transition [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] duration-200"
          x-transition:enter-start="opacity-0 translate-y-4 motion-reduce:translate-y-0"
          x-transition:enter-end="opacity-100 translate-y-0"

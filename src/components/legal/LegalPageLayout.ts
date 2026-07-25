@@ -74,7 +74,7 @@ export function LegalPageLayout({
 
           <!-- Mobile TOC -->
           <div class="lg:hidden mb-4 w-full">
-            <button @click="tocOpen = !tocOpen" class="th-btn-outline w-full flex items-center justify-between px-4 py-3 text-sm font-medium cursor-pointer">
+            <button @click="tocMounted = true; tocOpen = !tocOpen" class="th-btn-outline w-full flex items-center justify-between px-4 py-3 text-sm font-medium cursor-pointer">
               <span>${t("legal.tableOfContents")}</span>
               <svg class="w-4 h-4 transition-transform" :class="tocOpen && 'rotate-180'" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
             </button>
@@ -86,21 +86,23 @@ export function LegalPageLayout({
               x-transition:leave-start="opacity-100 translate-y-0"
               x-transition:leave-end="opacity-0 -translate-y-1 motion-reduce:translate-y-0"
               class="origin-top mt-1 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
-              <ul class="py-1">
-                ${sections
-                  .map(
-                    (s) => `
-                  <li>
-                    <button
-                      @click="scrollToSection('${s.id}'); tocOpen = false"
-                      class="w-full text-start text-sm py-2 px-4 hover:bg-gray-50 transition-colors cursor-pointer"
-                      :class="activeSection === '${s.id}' ? 'text-primary-600 font-medium' : 'text-gray-600'"
-                    >${s.title}</button>
-                  </li>
-                `
-                  )
-                  .join("")}
-              </ul>
+              <template x-if="tocMounted">
+                <ul class="py-1">
+                  ${sections
+                    .map(
+                      (s) => `
+                    <li>
+                      <button
+                        @click="scrollToSection('${s.id}'); tocOpen = false"
+                        class="w-full text-start text-sm py-2 px-4 hover:bg-gray-50 transition-colors cursor-pointer"
+                        :class="activeSection === '${s.id}' ? 'text-primary-600 font-medium' : 'text-gray-600'"
+                      >${s.title}</button>
+                    </li>
+                  `
+                    )
+                    .join("")}
+                </ul>
+              </template>
             </div>
           </div>
 

@@ -132,7 +132,8 @@ function MainProductsCarousel(): string {
 // ─── Overview Tab (Genel Bakis) ────────────────────────────────
 function OverviewTab(): string {
   return `
-    <div class="company-profile__tab-content" x-show="activeTab === 'overview'" x-transition.opacity.duration.200ms id="tab-overview">
+    <template x-if="isTabMounted('overview')">
+    <div class="company-profile__tab-content" x-show="activeTab === 'overview'" x-transition.opacity.duration.200ms id="tab-overview" role="tabpanel" aria-labelledby="store-tab-overview">
 
       <!-- Single white card for entire profile (iSTOC-style) -->
       <!-- v4: seller.verified_certifications (sadece Verified) tercih edilir; geriye uyumluluk için certifications string fallback -->
@@ -440,13 +441,15 @@ function OverviewTab(): string {
       </section>
 
     </div>
+    </template>
   `;
 }
 
 // ─── Reviews Tab (Yorumlar) ────────────────────────────────────
 function ReviewsTab(): string {
   return `
-    <div class="company-profile__tab-content" x-show="activeTab === 'reviews'" x-transition.opacity.duration.200ms id="tab-reviews"
+    <template x-if="isTabMounted('reviews')">
+    <div class="company-profile__tab-content" x-show="activeTab === 'reviews'" x-transition.opacity.duration.200ms id="tab-reviews" role="tabpanel" aria-labelledby="store-tab-reviews"
       x-data="{
         sellerCode: ${SELLER_CODE_INIT},
         seller: null,
@@ -697,13 +700,15 @@ function ReviewsTab(): string {
 
       </section>
     </div>
+    </template>
   `;
 }
 
 // ─── Products Tab (Urunler) ────────────────────────────────────
 function ProductsTab(): string {
   return `
-    <div class="company-profile__tab-content" x-show="activeTab === 'products'" x-transition.opacity.duration.200ms id="tab-products"
+    <template x-if="isTabMounted('products')">
+    <div class="company-profile__tab-content" x-show="activeTab === 'products'" x-transition.opacity.duration.200ms id="tab-products" role="tabpanel" aria-labelledby="store-tab-products"
       x-data="{
         sellerCode: ${SELLER_CODE_INIT},
         prodCat: 'all',
@@ -845,13 +850,15 @@ function ProductsTab(): string {
         </div>
       </div>
     </div>
+    </template>
   `;
 }
 
 // ─── Videos Tab (Videolar) ─────────────────────────────────────
 function VideosTab(): string {
   return `
-    <div class="company-profile__tab-content" x-show="activeTab === 'videos'" x-transition.opacity.duration.200ms id="tab-videos"
+    <template x-if="isTabMounted('videos')">
+    <div class="company-profile__tab-content" x-show="activeTab === 'videos'" x-transition.opacity.duration.200ms id="tab-videos" role="tabpanel" aria-labelledby="store-tab-videos"
       x-data="{
         sellerCode: ${SELLER_CODE_INIT},
         videos: [],
@@ -1004,6 +1011,7 @@ function VideosTab(): string {
       </template>
 
     </div>
+    </template>
   `;
 }
 
@@ -1064,7 +1072,8 @@ function ContactSidebar(): string {
 // ─── Contact Tab (Iletisim - hidden tab for contact form) ─────
 function ContactTab(): string {
   return `
-    <div class="company-profile__tab-content" x-show="activeTab === 'contact'" x-transition.opacity.duration.200ms id="tab-contact"
+    <template x-if="isTabMounted('contact')">
+    <div class="company-profile__tab-content" x-show="activeTab === 'contact'" x-transition.opacity.duration.200ms id="tab-contact" role="region" aria-label="${t("seller.sf.sendInquiry")}"
       x-data="{
         sellerCode: ${SELLER_CODE_INIT},
         seller: null,
@@ -1195,6 +1204,7 @@ function ContactTab(): string {
 
       </section>
     </div>
+    </template>
   `;
 }
 
@@ -1218,17 +1228,17 @@ export function CompanyProfileComponent(): string {
 
             <!-- 3. Tab Navigation — on gray bg -->
             <div id="store-tab-nav" class="sticky top-0 z-40 bg-white border border-gray-200 rounded-md mt-5 mb-5" style="padding: 0 40px;">
-              <div class="flex items-center gap-6 sm:gap-10 overflow-x-auto scrollbar-hide">
-                <button @click="setTab('overview')"
+              <div class="flex items-center gap-6 sm:gap-10 overflow-x-auto scrollbar-hide" role="tablist" aria-label="${t("seller.sf.sellerProfile")}">
+                <button id="store-tab-overview" role="tab" aria-controls="tab-overview" :aria-selected="activeTab === 'overview'" :tabindex="activeTab === 'overview' ? 0 : -1" @click="setTab('overview')" @keydown="onTabKeydown($event, 'overview')"
                   :class="activeTab === 'overview' ? 'text-[#222] border-b-[3px] border-[#222] font-bold' : 'text-gray-500 border-b-[3px] border-transparent font-medium hover:text-gray-900'"
                   class="th-no-press py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t("seller.sf.myAccount")}</button>
-                <button @click="setTab('reviews')"
+                <button id="store-tab-reviews" role="tab" aria-controls="tab-reviews" :aria-selected="activeTab === 'reviews'" :tabindex="activeTab === 'reviews' ? 0 : -1" @click="setTab('reviews')" @keydown="onTabKeydown($event, 'reviews')"
                   :class="activeTab === 'reviews' ? 'text-[#222] border-b-[3px] border-[#222] font-bold' : 'text-gray-500 border-b-[3px] border-transparent font-medium hover:text-gray-900'"
                   class="th-no-press py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t("seller.sf.reviewsTab")}</button>
-                <button @click="setTab('products')"
+                <button id="store-tab-products" role="tab" aria-controls="tab-products" :aria-selected="activeTab === 'products'" :tabindex="activeTab === 'products' ? 0 : -1" @click="setTab('products')" @keydown="onTabKeydown($event, 'products')"
                   :class="activeTab === 'products' ? 'text-[#222] border-b-[3px] border-[#222] font-bold' : 'text-gray-500 border-b-[3px] border-transparent font-medium hover:text-gray-900'"
                   class="th-no-press py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t("seller.sf.productsTab")}</button>
-                <button @click="setTab('videos')"
+                <button id="store-tab-videos" role="tab" aria-controls="tab-videos" :aria-selected="activeTab === 'videos'" :tabindex="activeTab === 'videos' ? 0 : -1" @click="setTab('videos')" @keydown="onTabKeydown($event, 'videos')"
                   :class="activeTab === 'videos' ? 'text-[#222] border-b-[3px] border-[#222] font-bold' : 'text-gray-500 border-b-[3px] border-transparent font-medium hover:text-gray-900'"
                   class="th-no-press py-3.5 text-sm transition-colors whitespace-nowrap shrink-0">${t("seller.sf.videoTips")}</button>
               </div>

@@ -244,7 +244,7 @@ function renderAllOrders(): string {
 
         <!-- Active filter badges -->
         <template x-if="dateFilter !== 'all' || searchQuery.trim()">
-          <button @click="searchQuery = ''; dateFilter = 'all'; dateFrom = ''; dateTo = ''; activeTab = 'all'"
+          <button @click="resetFilters()"
             class="flex items-center gap-1 h-8 px-3 text-xs text-red-600 bg-red-50 border border-red-200 rounded-full cursor-pointer hover:bg-red-100 transition-colors whitespace-nowrap">
             <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
             ${t("orders.clearAllFilters")}
@@ -292,6 +292,13 @@ function renderAllOrders(): string {
         </div>
       </template>
 
+      <template x-if="!loading && error">
+        <div class="mx-7 max-sm:mx-3.5 mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
+          <span x-text="error"></span>
+          <button type="button" @click="loadPage(1)" class="ms-2 underline cursor-pointer border-0 bg-transparent text-red-800">${t("common.retry") || "Tekrar dene"}</button>
+        </div>
+      </template>
+
       <!-- Orders List -->
       <div x-show="!loading" class="px-7 max-sm:px-3.5 pb-6 max-sm:pb-4 space-y-4 max-sm:space-y-2.5">
         <template x-if="filteredOrders.length === 0">
@@ -301,7 +308,7 @@ function renderAllOrders(): string {
               <div class="flex flex-col items-center gap-2">
                 <h3 class="text-base font-bold text-gray-900">${t("orders.noOrdersFound")}</h3>
                 <p class="text-sm text-gray-500 max-w-[400px]">${t("orders.tryDifferentKeywords")}</p>
-                <button @click="searchQuery = ''; dateFilter = 'all'; dateFrom = ''; dateTo = ''; activeTab = 'all'"
+                <button @click="resetFilters()"
                   class="inline-block px-6 py-2 text-sm text-amber-700 border border-amber-300 rounded-full no-underline mt-2 transition-colors hover:bg-amber-50 cursor-pointer bg-transparent">
                   ${t("orders.clearFilters")}
                 </button>
@@ -324,13 +331,14 @@ function renderAllOrders(): string {
 
       <!-- Pagination -->
       <div x-show="filteredOrders.length > 0" class="flex items-center justify-end max-sm:justify-center gap-3 px-7 max-sm:px-3.5 pb-6 max-sm:pb-5">
-        <span class="text-sm text-gray-500 max-sm:hidden" x-text="filteredOrders.length + ' ${t("orders.ordersCount")}'"></span>
+        <span class="text-sm text-gray-500 max-sm:hidden" x-text="totalOrders + ' ${t("orders.ordersCount")}'"></span>
         <div class="flex items-center gap-1.5">
-          <button class="flex items-center justify-center w-8 h-8 border border-gray-300 max-sm:border-gray-200 rounded max-sm:rounded-full bg-white text-gray-400 cursor-not-allowed" disabled>
+          <button @click="changePage(currentPage - 1)" :disabled="!canPreviousPage" :class="canPreviousPage ? 'text-gray-700 hover:bg-gray-50 cursor-pointer' : 'text-gray-400 cursor-not-allowed'" class="flex items-center justify-center w-8 h-8 border border-gray-300 max-sm:border-gray-200 rounded max-sm:rounded-full bg-white">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M15 19l-7-7 7-7"/></svg>
           </button>
-          <span class="flex items-center justify-center w-8 h-8 text-sm text-white bg-gray-900 rounded max-sm:rounded-full font-medium">1</span>
-          <button class="flex items-center justify-center w-8 h-8 border border-gray-300 max-sm:border-gray-200 rounded max-sm:rounded-full bg-white text-gray-400 cursor-not-allowed" disabled>
+          <span class="flex items-center justify-center w-8 h-8 text-sm text-white bg-gray-900 rounded max-sm:rounded-full font-medium" x-text="currentPage"></span>
+          <span class="text-xs text-gray-400" x-show="totalPages > 1" x-text="'/ ' + totalPages"></span>
+          <button @click="changePage(currentPage + 1)" :disabled="!canNextPage" :class="canNextPage ? 'text-gray-700 hover:bg-gray-50 cursor-pointer' : 'text-gray-400 cursor-not-allowed'" class="flex items-center justify-center w-8 h-8 border border-gray-300 max-sm:border-gray-200 rounded max-sm:rounded-full bg-white">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M9 5l7 7-7 7"/></svg>
           </button>
         </div>

@@ -105,7 +105,7 @@ export function ProductTabs(): string {
   `;
 }
 
-export function initProductTabs(): void {
+export function initProductTabs(options: { signal?: AbortSignal } = {}): void {
   const tabNav = document.getElementById("product-tabs-nav");
   const tabSection = document.getElementById("product-tabs-section");
   if (!tabNav || !tabSection) return;
@@ -184,4 +184,13 @@ export function initProductTabs(): void {
     { rootMargin: `-${offset}px 0px 0px 0px`, threshold: 1 }
   );
   observer.observe(tabSection);
+
+  options.signal?.addEventListener(
+    "abort",
+    () => {
+      spy.disconnect();
+      observer.disconnect();
+    },
+    { once: true }
+  );
 }

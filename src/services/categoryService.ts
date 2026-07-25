@@ -43,7 +43,13 @@ export function getCategoryPageSeo(): ServerSeoPayload | null {
   return _pageSeo;
 }
 // Kalıcı aboneler — dil değiştiğinde kategoriler yeniden çekilip bunlara tekrar bildirilir.
-const _subscribers: Array<(cats: ApiCategory[]) => void> = [];
+type CategorySubscriber = (cats: ApiCategory[]) => void;
+const _subscribers: CategorySubscriber[] = [];
+
+export interface CategorySubscription {
+  ready: Promise<void>;
+  unsubscribe(): void;
+}
 
 /**
  * Test/spam kategorilerini ayıklar. Backend cleanup yapılana kadar geçici filtre.
@@ -183,14 +189,25 @@ export function getCategories(): ApiCategory[] {
  * Kategoriler yüklendiğinde çalışacak callback'i kaydeder.
  * Eğer zaten yüklendiyse hemen çalıştırır.
  */
-export function onCategoriesLoaded(fn: (cats: ApiCategory[]) => void): void {
-  // Kalıcı kayıt: dil değişiminde de tekrar bildirilebilsin.
+export function subscribeCategories(fn: CategorySubscriber): CategorySubscription {
   _subscribers.push(fn);
+  let subscribed = true;
+  const unsubscribe = (): void => {
+    if (!subscribed) return;
+    subscribed = false;
+    const index = _subscribers.indexOf(fn);
+    if (index !== -1) _subscribers.splice(index, 1);
+  };
+
   if (_cache !== null) {
     fn(_cache);
-    return;
+    return { ready: Promise.resolve(), unsubscribe };
   }
-  loadCategories();
+  return { ready: loadCategories().then(() => undefined), unsubscribe };
+}
+
+export function onCategoriesLoaded(fn: CategorySubscriber): Promise<void> {
+  return subscribeCategories(fn).ready;
 }
 
 /** URL slug ile kategori bulur (3 seviye: sektör + grup + yaprak) */

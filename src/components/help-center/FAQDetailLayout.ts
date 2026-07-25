@@ -100,8 +100,10 @@ export function FAQDetailLayout(): string {
                   @click="toggleItem(idx)"
                   class="th-no-press appearance-none focus:outline-none w-full flex items-center justify-between gap-3 px-5 py-4 text-start"
                   :class="openItem === idx ? 'font-medium' : ''"
+                  :aria-expanded="openItem === idx ? 'true' : 'false'"
+                  :aria-controls="'faq-answer-' + idx"
                 >
-                  <span class="text-[14px] font-medium text-gray-800" x-text="item.q"></span>
+                  <span :id="'faq-question-' + idx" class="text-[14px] font-medium text-gray-800" x-text="item.q"></span>
                   <svg
                     class="w-4 h-4 text-gray-400 shrink-0 transition-transform duration-200"
                     :class="openItem === idx ? 'rotate-180 text-primary-500' : ''"
@@ -111,18 +113,16 @@ export function FAQDetailLayout(): string {
                   </svg>
                 </button>
 
-                <div
-                  x-show="openItem === idx"
-                  x-transition:enter="transition ease-out duration-200 motion-reduce:transition-none"
-                  x-transition:enter-start="opacity-0 -translate-y-1 motion-reduce:translate-y-0"
-                  x-transition:enter-end="opacity-100 translate-y-0"
-                  x-transition:leave="transition ease-in duration-150 motion-reduce:transition-none"
-                  x-transition:leave-start="opacity-100 translate-y-0"
-                  x-transition:leave-end="opacity-0 -translate-y-1 motion-reduce:translate-y-0"
-                  class="px-5 pb-5"
-                >
-                  <div class="pt-3 border-t border-dashed border-gray-100 text-[13px] text-gray-600 leading-relaxed max-w-[64ch]" x-html="item.a"></div>
-                </div>
+                <template x-if="openItem === idx">
+                  <div
+                    :id="'faq-answer-' + idx"
+                    role="region"
+                    :aria-labelledby="'faq-question-' + idx"
+                    class="px-5 pb-5"
+                  >
+                    <div class="pt-3 border-t border-dashed border-gray-100 text-[13px] text-gray-600 leading-relaxed max-w-[64ch]" x-html="item.a"></div>
+                  </div>
+                </template>
               </div>
             </template>
           </div>

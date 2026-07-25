@@ -63,8 +63,8 @@ import { initAnimatedPlaceholder } from '../utils/animatedPlaceholder'
 
 /* ── Constants ── */
 
-/** Number of category cards loaded per "Daha fazla yükle" click in grouped (Tümü) mode. Bounded server-side at 30. */
-const GROUPS_PER_PAGE = 12;
+/** İlk grouped batch: 8 kategori × 3 ürün = 24 görünür ranking preview. */
+const GROUPS_PER_PAGE = 8;
 
 /** Frontend "rank badge" only fits #1/#2/#3, so the page always asks the API for 3 previews per card. */
 const PRODUCTS_PER_GROUP = 3;
@@ -326,8 +326,8 @@ appEl.innerHTML = `
 
   ${MegaMenu()}
 
-  <!-- Sticky compact mobile header (appears on scroll) -->
-  ${TopRankingStickyMobileHeader()}
+  <!-- Mounted only after the mobile hero scrolls away. -->
+  <div id="tr-sticky-mobile-header-host"></div>
 
   <!-- Main Content -->
   <main x-data="topRankingPage">
@@ -401,27 +401,36 @@ initAnimatedPlaceholder('#topbar-compact-search-input');
 // Show/hide sticky compact mobile header based on hero visibility
 // Also adjust sort pills sticky position when mobile header appears
 const mobileHeroSentinel = document.getElementById('tr-mobile-hero-sentinel');
-const stickyMobileHeader = document.getElementById('tr-sticky-mobile-header');
+const stickyMobileHeaderHost = document.getElementById('tr-sticky-mobile-header-host');
+let stickyMobileHeader: HTMLElement | null = null;
+const ensureStickyMobileHeader = (): HTMLElement | null => {
+  if (stickyMobileHeader) return stickyMobileHeader;
+  if (!stickyMobileHeaderHost || window.innerWidth >= 1024) return null;
+  stickyMobileHeaderHost.innerHTML = TopRankingStickyMobileHeader();
+  stickyMobileHeader = document.getElementById('tr-sticky-mobile-header');
+  return stickyMobileHeader;
+};
 const stickyPills = document.getElementById('sticky-tabs');
 
-if (mobileHeroSentinel && stickyMobileHeader) {
+if (mobileHeroSentinel && stickyMobileHeaderHost) {
   const heroObserver = new IntersectionObserver(
     ([entry]) => {
       if (entry.isIntersecting) {
         // Hero is visible — hide sticky header
-        stickyMobileHeader.classList.add('-translate-y-full', 'opacity-0', 'pointer-events-none');
-        stickyMobileHeader.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+        stickyMobileHeader?.classList.add('-translate-y-full', 'opacity-0', 'pointer-events-none');
+        stickyMobileHeader?.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
         // Reset sort pills to top:0
         if (stickyPills && window.innerWidth < 1024) {
           stickyPills.style.top = '0px';
         }
       } else {
         // Hero scrolled away — show sticky header
-        stickyMobileHeader.classList.remove('-translate-y-full', 'opacity-0', 'pointer-events-none');
-        stickyMobileHeader.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
+        const sticky = ensureStickyMobileHeader();
+        sticky?.classList.remove('-translate-y-full', 'opacity-0', 'pointer-events-none');
+        sticky?.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
         // Push sort pills below sticky mobile header
         if (stickyPills && window.innerWidth < 1024) {
-          const headerHeight = stickyMobileHeader.offsetHeight;
+          const headerHeight = sticky?.offsetHeight ?? 0;
           stickyPills.style.top = headerHeight + 'px';
         }
       }

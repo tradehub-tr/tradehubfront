@@ -8,7 +8,6 @@ import favEmptySvg from "../../assets/images/O1CN01Bny3KU1Swwfj3Ntma_!!600000000
 import { t } from "../../i18n";
 import { localizePriceString } from "../../utils/currency";
 import {
-  formatPriceRange,
   getSelectedCurrency,
   convertPrice,
   formatCurrency,
@@ -25,6 +24,8 @@ import {
   deleteList,
   removeFromFavorites,
   type FavoriteItem,
+  type FavoriteListingSummary,
+  getListingSummary,
 } from "../../stores/favorites";
 import {
   getFavoriteSellers,
@@ -32,15 +33,12 @@ import {
   pruneSellerListId,
   type FavoriteSellerItem,
 } from "../../stores/sellerFavorites";
-import { getListingDetail } from "../../services/listingService";
 import { getListingUrl } from "../../utils/listingUrl";
 import { getSellerUrl } from "../../utils/sellerUrl";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
-/* ────────────────────────────────────────
-   Favori enrichment (listing detail'den çekilen ek meta)
-   Filtreleme + stok pill + supplier satırı için
-   ──────────────────────────────────────── */
+/* Current metadata is supplied in one batch by get_my_favorites. Old cached
+   responses may not include it; those safely retain the favorite snapshot. */
 interface FavEnrichment {
   category?: string;
   supplier?: { name: string; verified: boolean; country?: string };
@@ -52,48 +50,26 @@ interface FavEnrichment {
   // sembol-swap'ı yerine — favoride doğru para birimi gösterimi için).
   priceDisplay?: string;
 }
-const enrichmentMap: Map<string, FavEnrichment> = new Map();
-let enrichmentLoading = false;
-let enrichmentLoadedFor: string = ""; // son enrichment hangi item set'i için yüklendi
-
-async function loadEnrichments(items: FavoriteItem[]): Promise<void> {
-  if (enrichmentLoading) return;
-  const fingerprint = items
-    .map((i) => i.id)
-    .sort()
-    .join(",");
-  if (fingerprint === enrichmentLoadedFor) return;
-  enrichmentLoading = true;
-  try {
-    const results = await Promise.allSettled(items.map((it) => getListingDetail(it.id)));
-    results.forEach((res, idx) => {
-      if (res.status === "fulfilled") {
-        const d = res.value;
-        enrichmentMap.set(items[idx].id, {
-          category: d.category?.[0],
-          supplier: d.supplier
-            ? {
-                name: d.supplier.name,
-                verified: Boolean(d.supplier.verified),
-                country: d.supplier.country,
-              }
-            : undefined,
-          stockQty: d.stockQty,
-          inStock: d.inStock ?? !d.outOfStock,
-          sellerKybVerified: d.sellerKybVerified,
-          // priceMin/priceMax zaten seçili para birimine çevrili (listingService);
-          // getSelectedCurrency() fromCurrency = no-op convert, doğru sembolle formatlar.
-          priceDisplay:
-            typeof d.priceMin === "number"
-              ? formatPriceRange(d.priceMin, d.priceMax ?? d.priceMin, getSelectedCurrency())
-              : undefined,
-        });
-      }
-    });
-    enrichmentLoadedFor = fingerprint;
-  } finally {
-    enrichmentLoading = false;
-  }
+function getEnrichment(listingId: string): FavEnrichment | undefined {
+  const summary: FavoriteListingSummary | null | undefined = getListingSummary(listingId);
+  if (!summary) return undefined;
+  return {
+    category: summary.category || undefined,
+    supplier: summary.supplier?.name
+      ? {
+          name: summary.supplier.name,
+          verified: Boolean(summary.supplier.verified),
+          country: summary.supplier.country || undefined,
+        }
+      : undefined,
+    stockQty: summary.stock_qty,
+    inStock: summary.in_stock,
+    sellerKybVerified: summary.supplier?.verified,
+    priceDisplay:
+      typeof summary.current_price === "number"
+        ? formatCurrency(convertPrice(summary.current_price, summary.currency), getSelectedCurrency())
+        : undefined,
+  };
 }
 
 function getStockState(en: FavEnrichment | undefined): "in" | "low" | "out" | "unknown" {
@@ -118,7 +94,7 @@ function getStockLabel(en: FavEnrichment | undefined): string {
 function getEnrichedCategoryCounts(items: FavoriteItem[]): Map<string, number> {
   const m = new Map<string, number>();
   items.forEach((p) => {
-    const c = enrichmentMap.get(p.id)?.category;
+    const c = getEnrichment(p.id)?.category;
     if (c) m.set(c, (m.get(c) || 0) + 1);
   });
   return m;
@@ -127,7 +103,7 @@ function getEnrichedCategoryCounts(items: FavoriteItem[]): Map<string, number> {
 function getEnrichedSupplierCounts(items: FavoriteItem[]): Map<string, number> {
   const m = new Map<string, number>();
   items.forEach((p) => {
-    const s = enrichmentMap.get(p.id)?.supplier?.name;
+    const s = getEnrichment(p.id)?.supplier?.name;
     if (s) m.set(s, (m.get(s) || 0) + 1);
   });
   return m;
@@ -631,7 +607,7 @@ function renderSupplierLine(en: FavEnrichment | undefined): string {
 function renderProductCardGrid(p: FavoriteItem): string {
   const detailHref = getListingUrl({ id: p.id });
   const lists = getLists();
-  const enrichment = enrichmentMap.get(p.id);
+  const enrichment = getEnrichment(p.id);
   const tagChips = p.listIds
     .filter((id) => id !== DEFAULT_LIST_ID)
     .map((id) => lists.find((l) => l.id === id))
@@ -663,7 +639,7 @@ function renderProductCardGrid(p: FavoriteItem): string {
         <a href="${escapeHtml(sanitizeUrl(detailHref))}" class="no-underline text-inherit">
           <h4 class="text-[11.5px] leading-[1.3] text-text-primary font-normal line-clamp-2 m-0 min-h-[30px] group-hover:text-[var(--color-cta-primary,#F5B800)] transition-colors">${escapeHtml(p.title)}</h4>
         </a>
-        <div class="text-[13px] font-bold text-text-primary leading-none tracking-[-0.01em] tabular-nums mt-1">${enrichmentMap.get(p.id)?.priceDisplay ?? localizePriceString(p.priceRange)}</div>
+        <div class="text-[13px] font-bold text-text-primary leading-none tracking-[-0.01em] tabular-nums mt-1">${enrichment?.priceDisplay ?? localizePriceString(p.priceRange)}</div>
         <p class="text-[10.5px] text-text-tertiary m-0 leading-[13px] mt-0.5 truncate">${escapeHtml(p.minOrder)}</p>
         <div class="flex flex-nowrap gap-1 mt-1 h-[15px] overflow-hidden">${tagChips}</div>
         ${
@@ -694,7 +670,7 @@ function renderProductCardGrid(p: FavoriteItem): string {
 function renderProductRowList(p: FavoriteItem): string {
   const detailHref = getListingUrl({ id: p.id });
   const lists = getLists();
-  const enrichment = enrichmentMap.get(p.id);
+  const enrichment = getEnrichment(p.id);
   const kybBlocked = enrichment?.sellerKybVerified === false;
   const tagChips = p.listIds
     .filter((id) => id !== DEFAULT_LIST_ID)
@@ -727,7 +703,7 @@ function renderProductRowList(p: FavoriteItem): string {
         }
       </div>
       <div class="flex flex-col items-end gap-1.5 shrink-0 max-sm:flex-row max-sm:items-center max-sm:w-full max-sm:justify-between">
-        <div class="text-[14px] font-bold text-text-primary tracking-[-0.01em] tabular-nums whitespace-nowrap">${enrichmentMap.get(p.id)?.priceDisplay ?? localizePriceString(p.priceRange)}</div>
+        <div class="text-[14px] font-bold text-text-primary tracking-[-0.01em] tabular-nums whitespace-nowrap">${enrichment?.priceDisplay ?? localizePriceString(p.priceRange)}</div>
         <div class="inline-flex items-center gap-1">
           ${
             kybBlocked
@@ -812,21 +788,21 @@ function renderProductCards(items: FavoriteItem[]): string {
   // Filter: kategori
   if (activeFilters.categories.length) {
     visible = visible.filter((p) => {
-      const cat = enrichmentMap.get(p.id)?.category;
+      const cat = getEnrichment(p.id)?.category;
       return cat ? activeFilters.categories.includes(cat) : false;
     });
   }
   // Filter: tedarikçi
   if (activeFilters.suppliers.length) {
     visible = visible.filter((p) => {
-      const sup = enrichmentMap.get(p.id)?.supplier?.name;
+      const sup = getEnrichment(p.id)?.supplier?.name;
       return sup ? activeFilters.suppliers.includes(sup) : false;
     });
   }
   // Filter: stok durumu
   if (activeFilters.stock.length) {
     visible = visible.filter((p) => {
-      const s = getStockState(enrichmentMap.get(p.id));
+      const s = getStockState(getEnrichment(p.id));
       return s !== "unknown" && activeFilters.stock.includes(s);
     });
   }
@@ -1150,25 +1126,6 @@ function loadFavoritesData(): void {
   initRemoveButtons();
   initToolbar();
   initFilterMenu();
-
-  // Lazy enrichment: ilk render'dan sonra fetch et, bittiğinde re-render
-  if (items.length > 0) {
-    const fingerprint = items
-      .map((i) => i.id)
-      .sort()
-      .join(",");
-    if (fingerprint !== enrichmentLoadedFor && !enrichmentLoading) {
-      void loadEnrichments(items).then(() => {
-        const c = document.getElementById("fav-products-container");
-        if (c) {
-          c.innerHTML = renderProductCards(getFilteredItems());
-          initRemoveButtons();
-          initToolbar();
-          initFilterMenu();
-        }
-      });
-    }
-  }
 }
 
 let _favSortOutsideWired = false;

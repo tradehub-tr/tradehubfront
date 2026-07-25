@@ -10,6 +10,7 @@ import {
 Alpine.data("legalToc", () => ({
   activeSection: "",
   tocOpen: false,
+  tocMounted: false,
   _observer: null as IntersectionObserver | null,
 
   init() {
@@ -102,6 +103,7 @@ Alpine.data("cookieConsent", () => ({
 Alpine.data("cookieBanner", () => ({
   visible: false,
   showDetails: false,
+  detailsMounted: false,
   categories: {
     necessary: true,
     functional: true,

@@ -5,9 +5,10 @@
  */
 
 import { t } from "../../i18n";
-import { onCategoriesLoaded } from "../../services/categoryService";
+import { subscribeCategories } from "../../services/categoryService";
 import type { ApiCategory } from "../../services/categoryService";
 import { waitForAuth } from "../../utils/auth";
+import { createLazyMount, type LazyMountController } from "../../utils/lazyMount";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 import {
   getSelectedCurrency,
@@ -19,7 +20,7 @@ import {
 
 function renderCategoryOverlay(): string {
   return `
-    <div id="cat-fullscreen-overlay" class="fixed inset-0 z-50 bg-white dark:bg-gray-900 xl:hidden hidden flex-col">
+    <div id="cat-fullscreen-overlay" role="dialog" aria-modal="true" aria-label="${t("bottomNav.categories")}" aria-hidden="true" inert tabindex="-1" class="fixed inset-0 z-50 bg-white dark:bg-gray-900 xl:hidden hidden flex-col">
       <!-- Header -->
       <div class="flex items-center justify-between px-4 h-12 border-b border-gray-100 dark:border-gray-700 shrink-0">
         <button type="button" id="cat-fullscreen-back" class="th-no-press p-1 -ms-1 text-gray-700 dark:text-gray-300" aria-label="${t("common.back")}">
@@ -60,39 +61,19 @@ function renderSubcatItem(name: string, slug: string, image?: string): string {
   `;
 }
 
-export function initCategoryFullscreen(): void {
-  const overlay = document.getElementById("cat-fullscreen-overlay");
-  const sidebar = document.getElementById("cat-fullscreen-sidebar");
-  const content = document.getElementById("cat-fullscreen-content");
-  const backBtn = document.getElementById("cat-fullscreen-back");
-  const catBtn = document.getElementById("bottom-nav-categories");
+function populateCategoryOverlay(overlay: HTMLElement): () => void {
+  const sidebar = overlay.querySelector<HTMLElement>("#cat-fullscreen-sidebar");
+  const content = overlay.querySelector<HTMLElement>("#cat-fullscreen-content");
+  if (!sidebar || !content) return () => undefined;
+  const sidebarElement: HTMLElement = sidebar;
+  const contentElement: HTMLElement = content;
 
-  if (!overlay || !sidebar || !content || !backBtn) return;
-
-  function openOverlay(): void {
-    overlay!.classList.remove("hidden");
-    overlay!.classList.add("flex");
-    document.body.style.overflow = "hidden";
-  }
-
-  function closeOverlay(): void {
-    overlay!.classList.add("hidden");
-    overlay!.classList.remove("flex");
-    document.body.style.overflow = "";
-  }
-
-  backBtn.addEventListener("click", closeOverlay);
-  if (catBtn) catBtn.addEventListener("click", openOverlay);
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && !overlay.classList.contains("hidden")) closeOverlay();
-  });
-
-  onCategoriesLoaded((cats: ApiCategory[]) => {
+  const subscription = subscribeCategories((cats: ApiCategory[]) => {
+    if (!overlay.isConnected) return;
     if (!cats.length) return;
 
     function selectCategory(catId: string): void {
-      sidebar!.querySelectorAll<HTMLButtonElement>(".cat-fs-item").forEach((btn) => {
+      sidebarElement.querySelectorAll<HTMLButtonElement>(".cat-fs-item").forEach((btn) => {
         const isActive = btn.dataset.catId === catId;
         btn.classList.toggle("bg-white", isActive);
         btn.classList.toggle("dark:bg-gray-900", isActive);
@@ -117,7 +98,7 @@ export function initCategoryFullscreen(): void {
         </a>
       `;
 
-      content!.innerHTML = `
+      contentElement.innerHTML = `
         <div class="grid grid-cols-3 gap-x-2 min-[400px]:gap-x-3 gap-y-3 min-[400px]:gap-y-4">
           ${cat.children.map((ch) => renderSubcatItem(ch.name, ch.slug, ch.image)).join("")}
           ${viewAllItem}
@@ -145,6 +126,8 @@ export function initCategoryFullscreen(): void {
 
     if (cats[0]) selectCategory(cats[0].id);
   });
+  void subscription.ready;
+  return subscription.unsubscribe;
 }
 
 function renderAccountMenuItem(
@@ -173,9 +156,42 @@ function renderAccountMenuItem(
   `;
 }
 
+function renderAccountCountryOptions(): string {
+  const countries = [
+    ["TR", t("commonNav.countryTurkey")],
+    ["DE", t("commonNav.countryGermany")],
+    ["US", t("commonNav.countryUsa")],
+    ["GB", t("commonNav.countryUk")],
+    ["NL", t("commonNav.countryNetherlands")],
+  ];
+  return countries
+    .map(
+      ([code, name], index) => `
+        <button type="button" data-country-switch="${code}" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start${index < countries.length - 1 ? " border-b border-gray-100 dark:border-gray-700" : ""}">
+          <span>${name}</span>
+          <span class="country-check text-[var(--color-primary-500,#f5b800)] hidden" data-country-check="${code}">✓</span>
+        </button>
+      `
+    )
+    .join("");
+}
+
+function renderAccountLanguageOptions(): string {
+  return `
+    <button type="button" data-lang-switch="tr" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start border-b border-gray-100 dark:border-gray-700">
+      <span>Türkçe — TRY (₺)</span>
+      <span id="lang-check-tr" class="text-[var(--color-primary-500,#f5b800)] hidden">✓</span>
+    </button>
+    <button type="button" data-lang-switch="en" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start">
+      <span>English — TRY (₺)</span>
+      <span id="lang-check-en" class="text-[var(--color-primary-500,#f5b800)] hidden">✓</span>
+    </button>
+  `;
+}
+
 function renderAccountOverlay(): string {
   return `
-    <div id="account-fullscreen-overlay" class="fixed inset-0 z-50 bg-white dark:bg-gray-900 xl:hidden hidden flex-col">
+    <div id="account-fullscreen-overlay" role="dialog" aria-modal="true" aria-label="${t("bottomNav.account")}" aria-hidden="true" inert tabindex="-1" class="fixed inset-0 z-50 bg-white dark:bg-gray-900 xl:hidden hidden flex-col">
       <!-- Header -->
       <div class="flex items-center justify-between px-4 h-12 border-b border-gray-100 dark:border-gray-700 shrink-0">
         <button type="button" id="account-fullscreen-back" class="th-no-press p-1 -ms-1 text-gray-700 dark:text-gray-300" aria-label="${t("common.back")}">
@@ -314,26 +330,7 @@ function renderAccountOverlay(): string {
 
           <!-- Ülke seçici (gizli, tıklayınca açılır) -->
           <div id="account-country-picker" class="hidden mx-3 min-[400px]:mx-4 mt-2 rounded-md border border-gray-200 dark:border-gray-700 overflow-hidden max-h-[200px] overflow-y-auto">
-            <button type="button" data-country-switch="TR" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start border-b border-gray-100 dark:border-gray-700">
-              <span>${t("commonNav.countryTurkey")}</span>
-              <span class="country-check text-[var(--color-primary-500,#f5b800)] hidden" data-country-check="TR">✓</span>
-            </button>
-            <button type="button" data-country-switch="DE" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start border-b border-gray-100 dark:border-gray-700">
-              <span>${t("commonNav.countryGermany")}</span>
-              <span class="country-check text-[var(--color-primary-500,#f5b800)] hidden" data-country-check="DE">✓</span>
-            </button>
-            <button type="button" data-country-switch="US" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start border-b border-gray-100 dark:border-gray-700">
-              <span>${t("commonNav.countryUsa")}</span>
-              <span class="country-check text-[var(--color-primary-500,#f5b800)] hidden" data-country-check="US">✓</span>
-            </button>
-            <button type="button" data-country-switch="GB" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start border-b border-gray-100 dark:border-gray-700">
-              <span>${t("commonNav.countryUk")}</span>
-              <span class="country-check text-[var(--color-primary-500,#f5b800)] hidden" data-country-check="GB">✓</span>
-            </button>
-            <button type="button" data-country-switch="NL" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start">
-              <span>${t("commonNav.countryNetherlands")}</span>
-              <span class="country-check text-[var(--color-primary-500,#f5b800)] hidden" data-country-check="NL">✓</span>
-            </button>
+            <div data-account-picker-content="country"></div>
           </div>
 
           <!-- Dil ve Para Birimi -->
@@ -354,14 +351,7 @@ function renderAccountOverlay(): string {
 
           <!-- Dil seçici (gizli, tıklayınca açılır) -->
           <div id="account-lang-picker" class="hidden mx-3 min-[400px]:mx-4 mt-2 rounded-md border border-gray-200 dark:border-gray-700 overflow-hidden">
-            <button type="button" data-lang-switch="tr" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start border-b border-gray-100 dark:border-gray-700">
-              <span>Türkçe — TRY (₺)</span>
-              <span id="lang-check-tr" class="text-[var(--color-primary-500,#f5b800)] hidden">✓</span>
-            </button>
-            <button type="button" data-lang-switch="en" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start">
-              <span>English — TRY (₺)</span>
-              <span id="lang-check-en" class="text-[var(--color-primary-500,#f5b800)] hidden">✓</span>
-            </button>
+            <div data-account-picker-content="language"></div>
           </div>
 
           <!-- Para Birimi -->
@@ -381,44 +371,21 @@ function renderAccountOverlay(): string {
           </button>
 
           <!-- Para Birimi seçici (gizli, init'te dinamik doldurulur) -->
-          <div id="account-currency-picker" class="hidden mx-3 min-[400px]:mx-4 mt-2 rounded-md border border-gray-200 dark:border-gray-700 overflow-hidden max-h-[200px] overflow-y-auto"></div>
+          <div id="account-currency-picker" class="hidden mx-3 min-[400px]:mx-4 mt-2 rounded-md border border-gray-200 dark:border-gray-700 overflow-hidden max-h-[200px] overflow-y-auto">
+            <div data-account-picker-content="currency"></div>
+          </div>
         </div>
       </div>
     </div>
   `;
 }
 
-function initAccountFullscreen(): void {
-  const overlay = document.getElementById("account-fullscreen-overlay");
-  const backBtn = document.getElementById("account-fullscreen-back");
-  const accountBtn = document.getElementById("bottom-nav-account");
-
-  if (!overlay || !backBtn) return;
-
-  function openOverlay(): void {
-    overlay!.classList.remove("hidden");
-    overlay!.classList.add("flex");
-    document.body.style.overflow = "hidden";
-  }
-
-  function closeOverlay(): void {
-    overlay!.classList.add("hidden");
-    overlay!.classList.remove("flex");
-    document.body.style.overflow = "";
-  }
-
-  backBtn.addEventListener("click", closeOverlay);
-  if (accountBtn) {
-    accountBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      openOverlay();
-    });
-  }
-
+function initAccountOverlay(overlay: HTMLElement): () => void {
   // Populate auth area dynamically
-  const authArea = document.getElementById("account-auth-area");
+  const authArea = overlay.querySelector<HTMLElement>("#account-auth-area");
   if (authArea) {
     waitForAuth().then((user) => {
+      if (!overlay.isConnected) return;
       if (user) {
         const initials = user.full_name
           ? user.full_name
@@ -457,41 +424,40 @@ function initAccountFullscreen(): void {
     });
   }
 
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && !overlay.classList.contains("hidden")) closeOverlay();
-  });
-
   // Dil seçici toggle
-  const langBtn = document.getElementById("account-lang-btn");
-  const langPicker = document.getElementById("account-lang-picker");
-  if (langBtn && langPicker) {
+  const langBtn = overlay.querySelector<HTMLElement>("#account-lang-btn");
+  const langPicker = overlay.querySelector<HTMLElement>("#account-lang-picker");
+  const langContent = langPicker?.querySelector<HTMLElement>(
+    "[data-account-picker-content='language']"
+  );
+  if (langBtn && langPicker && langContent) {
     langBtn.addEventListener("click", () => {
+      if (langContent.dataset.lazyMounted !== "true") {
+        langContent.dataset.lazyMounted = "true";
+        langContent.innerHTML = renderAccountLanguageOptions();
+        const currentLang = localStorage.getItem("i18nextLng") || "tr";
+        const currentCheck = langContent.querySelector<HTMLElement>(
+          currentLang === "tr" ? "#lang-check-tr" : "#lang-check-en"
+        );
+        currentCheck?.classList.remove("hidden");
+        langContent.querySelectorAll<HTMLButtonElement>("[data-lang-switch]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            localStorage.setItem("i18nextLng", btn.dataset.langSwitch || "tr");
+            window.location.reload();
+          });
+        });
+      }
       langPicker.classList.toggle("hidden");
-    });
-
-    const currentLang = localStorage.getItem("i18nextLng") || "tr";
-    const checkTr = document.getElementById("lang-check-tr");
-    const checkEn = document.getElementById("lang-check-en");
-    if (currentLang === "tr" && checkTr) checkTr.classList.remove("hidden");
-    if (currentLang === "en" && checkEn) checkEn.classList.remove("hidden");
-
-    langPicker.querySelectorAll<HTMLButtonElement>("[data-lang-switch]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const lang = btn.dataset.langSwitch || "tr";
-        localStorage.setItem("i18nextLng", lang);
-        window.location.reload();
-      });
     });
   }
 
   // Teslimat ülkesi seçici
-  const countryBtn = document.getElementById("account-country-btn");
-  const countryPicker = document.getElementById("account-country-picker");
-  if (countryBtn && countryPicker) {
-    countryBtn.addEventListener("click", () => {
-      countryPicker.classList.toggle("hidden");
-    });
-
+  const countryBtn = overlay.querySelector<HTMLElement>("#account-country-btn");
+  const countryPicker = overlay.querySelector<HTMLElement>("#account-country-picker");
+  const countryContent = countryPicker?.querySelector<HTMLElement>(
+    "[data-account-picker-content='country']"
+  );
+  if (countryBtn && countryPicker && countryContent) {
     const countryNames: Record<string, string> = {
       TR: `${t("commonNav.countryTurkey")} 🇹🇷`,
       DE: `${t("commonNav.countryGermany")} 🇩🇪`,
@@ -499,64 +465,91 @@ function initAccountFullscreen(): void {
       GB: `${t("commonNav.countryUk")} 🇬🇧`,
       NL: `${t("commonNav.countryNetherlands")} 🇳🇱`,
     };
-    const currentCountry = localStorage.getItem("deliveryCountry") || "TR";
-    const currentCheck = countryPicker.querySelector<HTMLElement>(
-      `[data-country-check="${currentCountry}"]`
-    );
-    if (currentCheck) currentCheck.classList.remove("hidden");
-
-    countryPicker.querySelectorAll<HTMLButtonElement>("[data-country-switch]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const code = btn.dataset.countrySwitch || "TR";
-        localStorage.setItem("deliveryCountry", code);
-        const valueEl = document.getElementById("account-country-value");
-        if (valueEl) valueEl.textContent = countryNames[code] || code;
-        countryPicker.querySelectorAll(".country-check").forEach((c) => c.classList.add("hidden"));
-        const check = countryPicker.querySelector<HTMLElement>(`[data-country-check="${code}"]`);
-        if (check) check.classList.remove("hidden");
-        countryPicker.classList.add("hidden");
-      });
+    countryBtn.addEventListener("click", () => {
+      if (countryContent.dataset.lazyMounted !== "true") {
+        countryContent.dataset.lazyMounted = "true";
+        countryContent.innerHTML = renderAccountCountryOptions();
+        const currentCountry = localStorage.getItem("deliveryCountry") || "TR";
+        countryContent
+          .querySelector<HTMLElement>(`[data-country-check="${currentCountry}"]`)
+          ?.classList.remove("hidden");
+        countryContent
+          .querySelectorAll<HTMLButtonElement>("[data-country-switch]")
+          .forEach((btn) => {
+            btn.addEventListener("click", () => {
+              const code = btn.dataset.countrySwitch || "TR";
+              localStorage.setItem("deliveryCountry", code);
+              const valueEl = overlay.querySelector<HTMLElement>("#account-country-value");
+              if (valueEl) valueEl.textContent = countryNames[code] || code;
+              countryContent
+                .querySelectorAll(".country-check")
+                .forEach((check) => check.classList.add("hidden"));
+              countryContent
+                .querySelector<HTMLElement>(`[data-country-check="${code}"]`)
+                ?.classList.remove("hidden");
+              countryPicker.classList.add("hidden");
+            });
+          });
+      }
+      countryPicker.classList.toggle("hidden");
     });
   }
 
   // Para birimi seçici — masaüstündeki setSelectedCurrency + reload akışını mobile taşır.
-  const currencyBtn = document.getElementById("account-currency-btn");
-  const currencyPicker = document.getElementById("account-currency-picker");
-  const currencyValue = document.getElementById("account-currency-value");
-  if (currencyBtn && currencyPicker) {
-    currencyBtn.addEventListener("click", () => currencyPicker.classList.toggle("hidden"));
-
-    // Currency listesi backend'den (initCurrency) async gelir; hazır olunca yeniden çiz.
-    const renderCurrencyPicker = (): void => {
-      const selected = getSelectedCurrency();
+  const currencyBtn = overlay.querySelector<HTMLElement>("#account-currency-btn");
+  const currencyPicker = overlay.querySelector<HTMLElement>("#account-currency-picker");
+  const currencyContent = currencyPicker?.querySelector<HTMLElement>(
+    "[data-account-picker-content='currency']"
+  );
+  const currencyValue = overlay.querySelector<HTMLElement>("#account-currency-value");
+  if (currencyBtn && currencyPicker && currencyContent) {
+    const updateCurrencyValue = (): void => {
       const info = getSelectedCurrencyInfo();
       if (currencyValue) currencyValue.textContent = `${info.symbol} ${info.code}`;
+    };
+    const renderCurrencyPicker = (): void => {
+      const selected = getSelectedCurrency();
       const list = getSupportedCurrencies();
-      currencyPicker.innerHTML = list
-        .map((c, i) => {
-          const divider = i === list.length - 1 ? "" : " border-b border-gray-100 dark:border-gray-700";
-          const checkHidden = c.code === selected ? "" : " hidden";
-          return `<button type="button" data-currency-switch="${escapeHtml(c.code)}" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start${divider}">
-              <span>${escapeHtml(c.symbol)} ${escapeHtml(c.nameTr || c.name)} — ${escapeHtml(c.code)}</span>
+      currencyContent.innerHTML = list
+        .map((currency, index) => {
+          const divider =
+            index === list.length - 1 ? "" : " border-b border-gray-100 dark:border-gray-700";
+          const checkHidden = currency.code === selected ? "" : " hidden";
+          return `<button type="button" data-currency-switch="${escapeHtml(currency.code)}" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start${divider}">
+              <span>${escapeHtml(currency.symbol)} ${escapeHtml(currency.nameTr || currency.name)} — ${escapeHtml(currency.code)}</span>
               <span class="text-[var(--color-primary-500,#f5b800)]${checkHidden}">✓</span>
             </button>`;
         })
         .join("");
-      currencyPicker.querySelectorAll<HTMLButtonElement>("[data-currency-switch]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const code = btn.dataset.currencySwitch;
-          if (!code || code === getSelectedCurrency()) {
-            currencyPicker.classList.add("hidden");
-            return;
-          }
-          setSelectedCurrency(code);
-          window.location.reload();
-        });
+      currencyContent
+        .querySelectorAll<HTMLButtonElement>("[data-currency-switch]")
+        .forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const code = btn.dataset.currencySwitch;
+            if (!code || code === getSelectedCurrency()) {
+              currencyPicker.classList.add("hidden");
+              return;
+            }
+            setSelectedCurrency(code);
+            window.location.reload();
+          });
       });
     };
-    renderCurrencyPicker();
-    onCurrencyChange(() => renderCurrencyPicker());
+    updateCurrencyValue();
+    currencyBtn.addEventListener("click", () => {
+      if (currencyContent.dataset.lazyMounted !== "true") {
+        currencyContent.dataset.lazyMounted = "true";
+        renderCurrencyPicker();
+      }
+      currencyPicker.classList.toggle("hidden");
+    });
+    const unsubscribeCurrency = onCurrencyChange(() => {
+      updateCurrencyValue();
+      if (currencyContent.dataset.lazyMounted === "true") renderCurrencyPicker();
+    });
+    return unsubscribeCurrency;
   }
+  return () => undefined;
 }
 
 export function BottomNav(): string {
@@ -572,7 +565,7 @@ export function BottomNav(): string {
         </a>
 
         <!-- Kategoriler -->
-        <button type="button" id="bottom-nav-categories" class="th-no-press inline-flex flex-col items-center justify-center px-1 group" aria-label="${t("bottomNav.categories")}">
+        <button type="button" id="bottom-nav-categories" class="th-no-press inline-flex flex-col items-center justify-center px-1 group" aria-label="${t("bottomNav.categories")}" aria-controls="cat-fullscreen-overlay" aria-expanded="false" aria-haspopup="dialog">
           <svg class="w-5 h-5 text-gray-500 group-hover:text-primary-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"/>
           </svg>
@@ -601,7 +594,7 @@ export function BottomNav(): string {
         </a>
 
         <!-- Hesabım (hamburger) -->
-        <button type="button" id="bottom-nav-account" class="th-no-press inline-flex flex-col items-center justify-center px-1 group" aria-label="${t("bottomNav.account")}">
+        <button type="button" id="bottom-nav-account" class="th-no-press inline-flex flex-col items-center justify-center px-1 group" aria-label="${t("bottomNav.account")}" aria-controls="account-fullscreen-overlay" aria-expanded="false" aria-haspopup="dialog">
           <svg class="w-5 h-5 text-gray-500 group-hover:text-primary-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
           </svg>
@@ -610,15 +603,81 @@ export function BottomNav(): string {
       </div>
     </div>
 
-    <!-- Full-screen category overlay -->
-    ${renderCategoryOverlay()}
-
-    <!-- Full-screen account overlay -->
-    ${renderAccountOverlay()}
+    <div id="bottom-nav-category-host"></div>
+    <div id="bottom-nav-account-host"></div>
   `;
 }
 
-export function initBottomNav(): void {
-  initCategoryFullscreen();
+const categoryControllers = new WeakMap<HTMLElement, LazyMountController>();
+const accountControllers = new WeakMap<HTMLElement, LazyMountController>();
+
+function htmlToElement(html: string): HTMLElement {
+  const template = document.createElement("template");
+  template.innerHTML = html.trim();
+  const element = template.content.firstElementChild;
+  if (!(element instanceof HTMLElement)) throw new Error("Lazy overlay root is missing");
+  return element;
+}
+
+export function initCategoryFullscreen(): Promise<void> {
+  const trigger = document.getElementById("bottom-nav-categories");
+  const host = document.getElementById("bottom-nav-category-host");
+  if (!trigger || !host || categoryControllers.has(trigger)) return Promise.resolve();
+
+  const controller = createLazyMount({
+    trigger,
+    host,
+    closeOnMediaQuery: "(min-width: 1280px)",
+    mount: () => htmlToElement(renderCategoryOverlay()),
+    initialFocus: (overlay) =>
+      overlay.querySelector<HTMLButtonElement>("#cat-fullscreen-back"),
+    onMount: (overlay) => {
+      const back = overlay.querySelector<HTMLButtonElement>("#cat-fullscreen-back");
+      const close = (): void => controller.close();
+      back?.addEventListener("click", close);
+      const unsubscribeCategories = populateCategoryOverlay(overlay);
+      return () => {
+        back?.removeEventListener("click", close);
+        unsubscribeCategories();
+      };
+    },
+    onOpen: (overlay) => overlay.classList.add("flex"),
+    onClose: (overlay) => overlay.classList.remove("flex"),
+  });
+  categoryControllers.set(trigger, controller);
+  return Promise.resolve();
+}
+
+function initAccountFullscreen(): void {
+  const trigger = document.getElementById("bottom-nav-account");
+  const host = document.getElementById("bottom-nav-account-host");
+  if (!trigger || !host || accountControllers.has(trigger)) return;
+
+  const controller = createLazyMount({
+    trigger,
+    host,
+    closeOnMediaQuery: "(min-width: 1280px)",
+    mount: () => htmlToElement(renderAccountOverlay()),
+    initialFocus: (overlay) =>
+      overlay.querySelector<HTMLButtonElement>("#account-fullscreen-back"),
+    onMount: (overlay) => {
+      const back = overlay.querySelector<HTMLButtonElement>("#account-fullscreen-back");
+      const close = (): void => controller.close();
+      back?.addEventListener("click", close);
+      const cleanupAccount = initAccountOverlay(overlay);
+      return () => {
+        back?.removeEventListener("click", close);
+        cleanupAccount();
+      };
+    },
+    onOpen: (overlay) => overlay.classList.add("flex"),
+    onClose: (overlay) => overlay.classList.remove("flex"),
+  });
+  accountControllers.set(trigger, controller);
+}
+
+export function initBottomNav(): Promise<void> {
+  void initCategoryFullscreen();
   initAccountFullscreen();
+  return Promise.resolve();
 }

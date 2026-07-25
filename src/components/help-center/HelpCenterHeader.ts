@@ -74,9 +74,10 @@ function navLink(
     <a
       href="${link.href}"
       ${link.authOnly ? 'data-auth-only="1"' : ""}
-      class="${link.authOnly ? "hidden " : ""}px-1 py-3 text-[21px] font-bold tracking-tight transition-[color,opacity,transform] duration-300 ease-out motion-reduce:transition-none ${
+      class="px-1 py-3 text-[21px] font-bold tracking-tight transition-[color,opacity,transform] duration-300 ease-out motion-reduce:transition-none ${
         isActive ? "text-primary-300" : "text-stone-200 hover:text-white"
       }"
+      ${link.authOnly ? 'x-show="authenticated" x-cloak' : ""}
       :class="open ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
       style="transition-delay:${80 + index * 60}ms"
       ${isActive ? 'aria-current="page"' : ""}
@@ -90,7 +91,8 @@ function navLink(
     <a
       href="${link.href}"
       ${link.authOnly ? 'data-auth-only="1"' : ""}
-      class="${link.authOnly ? "hidden " : ""}flex items-center px-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${state}"
+      class="flex items-center px-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${state}"
+      ${link.authOnly ? 'x-show="authenticated" x-cloak' : ""}
       ${isActive ? 'aria-current="page"' : ""}
     ><span class="truncate">${link.label}</span></a>
   `;
@@ -107,7 +109,8 @@ export function HelpCenterHeader(opts: HelpCenterHeaderOptions = {}): string {
 
   return `
     <header
-      x-data="{ open: false }"
+      x-data="{ open: false, authenticated: false }"
+      @help-authenticated.window="authenticated = true"
       @keydown.escape.window="open = false"
       @resize.window="if (window.innerWidth >= 768) open = false"
       x-effect="document.documentElement.classList.toggle('overflow-hidden', open)"
@@ -191,14 +194,13 @@ export function HelpCenterHeader(opts: HelpCenterHeaderOptions = {}): string {
 
       </div>
 
-      <!-- Tam ekran ink menü (lg altı) — header görünür kalır, panel altından açılır -->
-      <div
-        id="hc-mobile-menu"
-        x-cloak
-        class="lg:hidden fixed inset-x-0 top-12 bottom-0 z-40 bg-[#15130d] flex flex-col px-7 pt-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] transition-[opacity,transform,visibility] duration-300 ease-out motion-reduce:transition-none"
-        :class="open ? 'visible opacity-100 translate-y-0' : 'invisible opacity-0 -translate-y-2'"
-        :aria-hidden="!open"
-      >
+      <!-- Tam ekran ink menü (lg altı): yalnız açıldığında mount edilir. -->
+      <template x-if="open">
+        <div
+          id="hc-mobile-menu"
+          class="lg:hidden fixed inset-x-0 top-12 bottom-0 z-40 bg-[#15130d] flex flex-col px-7 pt-4 pb-[max(1.5rem,env(safe-area-inset-bottom))]"
+          aria-hidden="false"
+        >
         <nav class="flex-1 flex flex-col justify-center gap-1" aria-label="${t("helpCenter.headerTitle")}">
           ${NAV_LINKS.map((link, i) => navLink(link, activePage, "menu", i)).join("")}
         </nav>
@@ -225,7 +227,8 @@ export function HelpCenterHeader(opts: HelpCenterHeaderOptions = {}): string {
             )
             .join("")}
         </div>
-      </div>
+        </div>
+      </template>
     </header>
   `;
 }
@@ -244,16 +247,16 @@ export function initHelpCenterLangSelector(): void {
     window.location.reload();
   };
   saveBtn?.addEventListener("click", () => applyLang(langSelect?.value || "EN"));
-  // Mobil menü dil butonları — seçim anında uygulanır (popover'daki kaydet akışının kısayolu)
-  document.querySelectorAll<HTMLButtonElement>("[data-hc-menu-lang]").forEach((btn) =>
-    btn.addEventListener("click", () => applyLang(btn.dataset.hcMenuLang || ""))
-  );
+  // Mobil menü açılırken mount edildiği için dil seçimini event delegation ile bağla.
+  document.addEventListener("click", (event) => {
+    const target = event.target as Element | null;
+    const button = target?.closest<HTMLButtonElement>("[data-hc-menu-lang]");
+    if (button) applyLang(button.dataset.hcMenuLang || "");
+  });
 
   // Auth durumuna göre "Talep Oluştur" + "Taleplerim" linklerini göster
   waitForAuth().then((user) => {
     if (!user) return;
-    document.querySelectorAll<HTMLElement>('[data-auth-only="1"]').forEach((el) => {
-      el.classList.remove("hidden");
-    });
+    window.dispatchEvent(new Event("help-authenticated"));
   });
 }

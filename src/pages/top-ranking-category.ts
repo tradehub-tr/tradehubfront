@@ -29,7 +29,6 @@ import { startAlpine } from "../alpine";
 // B-2: loginModal ayrı modül (misafir login modalı bu sayfada).
 import "../alpine/loginModal";
 import {
-  TopRankingStickyMobileHeader,
   TopRankingMobileHeader,
   TopRankingSortPills,
 } from "../components/top-ranking";
@@ -60,7 +59,8 @@ import type { ProductListingCard } from "../types/productListing";
 import { initAnimatedPlaceholder } from "../utils/animatedPlaceholder";
 import { saveRecentCategory } from "../services/recentHistoryService";
 
-const PAGE_SIZE = 50;
+// Zengin ListingCard rotasında ilk viewport bütçesi için bounded sayfa boyutu.
+const PAGE_SIZE = 24;
 const MAX_PAGES = 2;
 
 type SortKey = "hot-selling" | "most-popular" | "best-reviewed";
@@ -381,8 +381,6 @@ appEl.innerHTML = `
   </div>
 
   ${MegaMenu()}
-
-  ${TopRankingStickyMobileHeader()}
 
   <main x-data="topRankingCategoryPage">
     <div id="trc-mobile-hero-sentinel">

@@ -38,6 +38,7 @@ import { loadCategories, getCategoryPageSeo, type ApiCategory } from '../service
 
 // SEO: backend'in (panelden yönetilen) seo payload'ını DOM head'ine uygula
 import { applyServerSeo } from '../seo/setPageMeta'
+import { getPublicPageSeo } from '../services/seoService'
 
 function mapApiToSections(cats: ApiCategory[]): CategorySection[] {
   return cats.map(cat => ({
@@ -111,6 +112,18 @@ initHeaderCart();
 initLanguageSelector();
 initAnimatedPlaceholder('#topbar-compact-search-input');
 initCategoryQuickNav();
+
+// Pretty kategori route'u backend'in kategori meta/schema üreticisini kullanır.
+// /kategoriler genel dizininde belirli bir kategori breadcrumb'u yayınlanmaz.
+const prettyCategoryMatch = window.location.pathname.match(/^\/(?:en\/)?kategori\/([^/]+)\/?$/);
+if (prettyCategoryMatch) {
+  const slug = decodeURIComponent(prettyCategoryMatch[1]);
+  void getPublicPageSeo('category', slug)
+    .then(applyServerSeo)
+    .catch(() => {
+      // SEO zenginleştirmesi kategori grid'ini bloklamaz.
+    });
+}
 
 /**
  * Scroll to the section matching a slug (from ?cat= or #cat=<slug>).

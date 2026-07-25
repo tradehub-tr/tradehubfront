@@ -250,15 +250,15 @@ function mount(root: HTMLElement, items: HeroSlideItem[], lang: string): void {
   createSwiper(sliderEl, root, slides.length);
 }
 
-export function initHeroTopSlider(): void {
+export function initHeroTopSlider(): Promise<void> {
   const root = document.querySelector<HTMLElement>(".hero-top-slider");
-  if (!root) return;
+  if (!root) return Promise.resolve();
 
   // Mount from cache first (matches the synchronous skeleton), then refresh.
   lastItems = getCachedSlides();
   mount(root, lastItems, getCurrentLang());
 
-  fetchActiveSlides()
+  const refresh = fetchActiveSlides()
     .then((items) => {
       lastItems = items;
       mount(root, items, getCurrentLang());
@@ -268,4 +268,6 @@ export function initHeroTopSlider(): void {
   window.addEventListener("languageChanged", () => {
     mount(root, lastItems, getCurrentLang());
   });
+
+  return refresh;
 }

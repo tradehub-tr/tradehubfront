@@ -1,7 +1,7 @@
 /**
  * ReservationModal — Plus tier seller'larla mesajlaşmadan önce slot seçim modal'ı.
- * Alpine store: `reservationModal`. mountReservationModal() ile body'e bir kere
- * eklenir; başka kodlardan `chat-popup:open`'a benzer event ile tetiklenir:
+ * Alpine store: `reservationModal`. ChatPopup lazy overlay ağacı tek sahibi
+ * olarak markup'ı gerektiğinde ekler; başka kodlardan event ile tetiklenir:
  *
  *   window.dispatchEvent(new CustomEvent("reservation-modal:open", {
  *     detail: { sellerId: "...", sellerName: "..." }
@@ -13,6 +13,10 @@ import { t } from "../../i18n";
 export function ReservationModal(): string {
   return /* html */ `
 		<div x-data
+			 data-reservation-modal
+			 role="dialog"
+			 aria-modal="true"
+			 tabindex="-1"
 			 x-show="$store.reservationModal.isOpen"
 			 x-cloak
 			 x-transition:enter="transition ease-out duration-200"
@@ -39,7 +43,7 @@ export function ReservationModal(): string {
 							<span x-text="$store.reservationModal.sellerName"></span> — ${t("commonSvc.pickAvailableHour")}
 						</p>
 					</div>
-					<button @click="$store.reservationModal.close()"
+					<button data-reservation-modal-close @click="$store.reservationModal.close()"
 							class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-500 border-none bg-transparent cursor-pointer">
 						<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
@@ -156,14 +160,4 @@ export function ReservationModal(): string {
 			</div>
 		</div>
 	`;
-}
-
-const MOUNT_ID = "reservation-modal-mount";
-
-export function mountReservationModal(): void {
-  if (document.getElementById(MOUNT_ID)) return;
-  const container = document.createElement("div");
-  container.id = MOUNT_ID;
-  container.innerHTML = ReservationModal();
-  document.body.appendChild(container);
 }

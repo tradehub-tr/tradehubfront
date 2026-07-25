@@ -82,11 +82,18 @@ function renderCategoryCard(cat: TopRankingCategory): string {
 export function TopRanking(): string {
   const skeletons = Array.from(
     { length: SKELETON_COUNT },
-    () => `<div role="listitem">${renderSkeletonCard()}</div>`
+    () => `<div role="listitem" aria-hidden="true">${renderSkeletonCard()}</div>`
   ).join("");
 
   return `
-    <section class="py-4 lg:py-6" aria-label="Top Ranking" style="margin-top: 28px;">
+    <section
+      class="py-4 lg:py-6"
+      aria-label="Top Ranking"
+      aria-busy="true"
+      data-home-section="top-ranking"
+      data-home-section-state="pending"
+      style="margin-top: 28px;"
+    >
       <div class="container-boxed">
         <div class="relative overflow-hidden rounded-md" style="background-color: var(--topranking-bg, #F5F5F5);">
           <div style="padding: var(--space-card-padding, 20px);">
@@ -110,7 +117,8 @@ export function TopRanking(): string {
 
             <!-- Cards row -->
             <div id="top-ranking-cards"
-                 class="flex gap-2 sm:gap-3 overflow-x-auto pb-2 scrollbar-hide"
+                 data-home-section-skeleton
+                 class="flex min-h-[238px] gap-2 overflow-x-auto pb-2 sm:min-h-[284px] sm:gap-3 scrollbar-hide"
                  role="list"
                  aria-label="Top ranking categories">
               ${skeletons}
@@ -126,7 +134,7 @@ export function TopRanking(): string {
 function renderEmptyState(): string {
   const msg = escapeHtml(t("topRanking.empty"));
   return `
-    <div class="flex items-center justify-center py-12 w-full">
+    <div data-home-section-empty class="flex min-h-[230px] items-center justify-center py-12 w-full sm:min-h-[276px]">
       <div class="text-center">
         <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -139,12 +147,13 @@ function renderEmptyState(): string {
 }
 
 /** Fetch best-selling categories from API and replace skeletons. */
-export function initTopRanking(): void {
-  initCurrency()
+export function initTopRanking(): Promise<void> {
+  return initCurrency()
     .then(() => getTopRankingCategories(SKELETON_COUNT, "hot-selling"))
     .then((categories) => {
       const container = document.getElementById("top-ranking-cards");
       if (!container) return;
+      container.removeAttribute("data-home-section-skeleton");
 
       if (!categories.length) {
         container.innerHTML = renderEmptyState();
@@ -158,6 +167,9 @@ export function initTopRanking(): void {
     .catch((err) => {
       console.warn("[TopRanking] API load failed:", err);
       const container = document.getElementById("top-ranking-cards");
-      if (container) container.innerHTML = renderEmptyState();
+      if (container) {
+        container.removeAttribute("data-home-section-skeleton");
+        container.innerHTML = renderEmptyState();
+      }
     });
 }

@@ -1,4 +1,5 @@
 import { t } from "../../i18n";
+import { getLucideIcon } from "../icons/lucideIcons";
 
 /**
  * Numaralı sayfa gezinme çubuğu. data-page attribute'lu butonlar üretir;
@@ -21,7 +22,7 @@ export function renderPagination(page: number, totalPages: number, hasNext: bool
   const disabledBtn = `${baseBtn} border-gray-100 bg-white text-gray-300 cursor-not-allowed`;
 
   pages.push(`<button data-page="${page - 1}" ${!hasPrev ? 'disabled' : ''} aria-label="${t('infoMisc.previousPage')}" class="${hasPrev ? idleBtn : disabledBtn}">
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M9 3L5 7l4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    ${getLucideIcon("chevron-left", "h-3.5 w-3.5")}
   </button>`);
 
   if (startPage > 1) {
@@ -40,7 +41,7 @@ export function renderPagination(page: number, totalPages: number, hasNext: bool
   }
 
   pages.push(`<button data-page="${page + 1}" ${!hasNext ? 'disabled' : ''} aria-label="${t('infoMisc.nextPage')}" class="${hasNext ? idleBtn : disabledBtn}">
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    ${getLucideIcon("chevron-right", "h-3.5 w-3.5")}
   </button>`);
 
   return `<nav aria-label="${t('infoMisc.pagination')}" class="flex items-center justify-center gap-1.5 mt-6">${pages.join('')}</nav>`;

@@ -124,7 +124,8 @@ function StepFindAccount(): string {
 function StepLinkSent(): string {
   const baseUrl = getBaseUrl();
   return `
-    <div x-show="step === 'link-sent'" x-cloak>
+    <template x-if="step === 'link-sent'">
+    <div>
       <div class="text-center">
         <!-- Email sent icon -->
         <div class="mx-auto mb-6 w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
@@ -162,6 +163,7 @@ function StepLinkSent(): string {
         ${supportLink}
       </div>
     </div>
+    </template>
   `;
 }
 

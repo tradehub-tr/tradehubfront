@@ -474,22 +474,44 @@ function renderAppExtensionView(): string {
    MAIN COMPONENT
    ════════════════════════════════════════════════════ */
 
+type MegaViewName =
+  | "categories"
+  | "featured"
+  | "protections"
+  | "buyer-central"
+  | "help-center"
+  | "app-extension";
+
+const MEGA_VIEW_RENDERERS: Record<MegaViewName, () => string> = {
+  categories: renderCategoriesView,
+  featured: renderFeaturedView,
+  protections: renderProtectionsView,
+  "buyer-central": renderBuyerCentralView,
+  "help-center": renderHelpCenterView,
+  "app-extension": renderAppExtensionView,
+};
+
 export function MegaMenu(): string {
   return `
     <div id="istoc-mega-overlay"
+      data-home-overlay
+      data-home-overlay-state="closed"
+      aria-hidden="true"
       style="position:fixed;left:0;right:0;bottom:0;z-index:var(--z-backdrop);background:rgba(0,0,0,0.5);opacity:0;pointer-events:none;transition:opacity 0.2s cubic-bezier(0.23,1,0.32,1);"
     ></div>
     <div id="istoc-mega-panel"
+      data-home-overlay
+      data-home-overlay-state="closed"
+      role="dialog"
+      aria-modal="true"
+      aria-label="${escapeHtml(t("subheader.allCategories"))}"
+      aria-hidden="true"
+      inert
       style="position:fixed;left:0;width:100%;z-index:var(--z-modal);opacity:0;pointer-events:none;transform:translateY(-8px);transition:opacity 0.2s cubic-bezier(0.23,1,0.32,1), transform 0.2s cubic-bezier(0.23,1,0.32,1);max-height:100vh"
       class="max-h-[85vh] overflow-y-auto overscroll-contain border-b border-gray-200 bg-white sm:max-h-[100vh] lg:!max-h-[80vh] dark:border-gray-700 dark:bg-gray-800"
     >
       <div class="container-boxed">
-        ${renderCategoriesView()}
-        ${renderFeaturedView()}
-        ${renderProtectionsView()}
-        ${renderBuyerCentralView()}
-        ${renderHelpCenterView()}
-        ${renderAppExtensionView()}
+        <div id="istoc-mega-view-host"></div>
       </div>
     </div>
   `;
@@ -527,13 +549,13 @@ async function loadFeaturedCounts(): Promise<void> {
    INIT — Hover & sidebar interaction
    ════════════════════════════════════════════════════ */
 
-export function initMegaMenu(): void {
+export function initMegaMenu(): Promise<void> {
   const megaMenu = document.getElementById("istoc-mega-panel");
   const overlay = document.getElementById("istoc-mega-overlay");
+  const viewHost = document.getElementById("istoc-mega-view-host");
   const triggers = document.querySelectorAll<HTMLElement>(".mega-trigger");
-  const views = megaMenu?.querySelectorAll<HTMLElement>("[data-mega-view]");
 
-  if (!megaMenu || triggers.length === 0 || !views) return;
+  if (!megaMenu || !viewHost || triggers.length === 0) return Promise.resolve();
 
   // Mark the trigger whose mega view contains the current page as persistently active.
   // Uses the `.active` class (not `--active`) so close() does not strip it.
@@ -561,9 +583,13 @@ export function initMegaMenu(): void {
   }
 
   let isOpen = false;
+  let openTimer: number | null = null;
   let closeTimer: number | null = null;
   let activeView: string | null = null;
   let activeTrigger: HTMLElement | null = null;
+  let loadedCategories: ApiCategory[] = [];
+  let categoriesReady: Promise<void> = Promise.resolve();
+  const mountedViews = new Set<MegaViewName>();
 
   function positionMenu(): void {
     // Position below the SubHeader nav
@@ -574,8 +600,25 @@ export function initMegaMenu(): void {
     if (overlay) overlay.style.top = bottom + "px";
   }
 
-  function showView(viewName: string): void {
-    views!.forEach((v) => {
+  function mountView(viewName: MegaViewName): HTMLElement {
+    const existing = megaMenu!.querySelector<HTMLElement>(
+      `[data-mega-view="${viewName}"]`
+    );
+    if (existing) return existing;
+
+    viewHost!.insertAdjacentHTML("beforeend", MEGA_VIEW_RENDERERS[viewName]());
+    mountedViews.add(viewName);
+    const mounted = megaMenu!.querySelector<HTMLElement>(`[data-mega-view="${viewName}"]`);
+    if (!mounted) throw new Error(`Mega menu view mount edilemedi: ${viewName}`);
+
+    if (viewName === "categories" && loadedCategories.length > 0)
+      populateCategoriesView(loadedCategories);
+    return mounted;
+  }
+
+  function showView(viewName: MegaViewName): void {
+    mountView(viewName);
+    megaMenu!.querySelectorAll<HTMLElement>("[data-mega-view]").forEach((v) => {
       const isTarget = v.getAttribute("data-mega-view") === viewName;
       v.classList.toggle("hidden", !isTarget);
       if (isTarget) {
@@ -592,16 +635,29 @@ export function initMegaMenu(): void {
     }
   }
 
-  function open(trigger: HTMLElement): void {
-    if (closeTimer) {
+  function getFocusableElements(): HTMLElement[] {
+    return Array.from(
+      megaMenu!.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )
+    ).filter((element) => element.offsetParent !== null);
+  }
+
+  function open(trigger: HTMLElement, focusPanel = false): void {
+    if (openTimer !== null) {
+      clearTimeout(openTimer);
+      openTimer = null;
+    }
+    if (closeTimer !== null) {
       clearTimeout(closeTimer);
       closeTimer = null;
     }
 
-    const viewName = trigger.getAttribute("data-mega-target");
-    if (!viewName) return;
+    const viewName = trigger.getAttribute("data-mega-target") as MegaViewName | null;
+    if (!viewName || !(viewName in MEGA_VIEW_RENDERERS)) return;
 
     // Highlight active trigger
+    triggers.forEach((item) => item.setAttribute("aria-expanded", "false"));
     if (activeTrigger && activeTrigger !== trigger) {
       activeTrigger.classList.remove("subheader-link--active");
     }
@@ -619,9 +675,14 @@ export function initMegaMenu(): void {
       megaMenu!.style.opacity = "1";
       megaMenu!.style.pointerEvents = "auto";
       megaMenu!.style.transform = "translateY(0)";
+      megaMenu!.removeAttribute("inert");
+      megaMenu!.setAttribute("aria-hidden", "false");
+      megaMenu!.setAttribute("data-home-overlay-state", "open");
       if (overlay) {
         overlay.style.opacity = "1";
         overlay.style.pointerEvents = "auto";
+        overlay.setAttribute("aria-hidden", "false");
+        overlay.setAttribute("data-home-overlay-state", "open");
       }
       // Solid header while mega menu is open (remove gradient)
       const sh = document.getElementById("sticky-header");
@@ -634,19 +695,32 @@ export function initMegaMenu(): void {
     }
 
     trigger.setAttribute("aria-expanded", "true");
+    if (focusPanel) {
+      window.requestAnimationFrame(() => getFocusableElements()[0]?.focus());
+    }
   }
 
-  function close(): void {
+  function close(restoreFocus = false): void {
+    const triggerToRestore = activeTrigger;
     isOpen = false;
     activeView = null;
+    if (openTimer !== null) {
+      clearTimeout(openTimer);
+      openTimer = null;
+    }
     closeTimer = null;
 
     megaMenu!.style.opacity = "0";
     megaMenu!.style.pointerEvents = "none";
     megaMenu!.style.transform = "translateY(-8px)";
+    megaMenu!.setAttribute("inert", "");
+    megaMenu!.setAttribute("aria-hidden", "true");
+    megaMenu!.setAttribute("data-home-overlay-state", "closed");
     if (overlay) {
       overlay.style.opacity = "0";
       overlay.style.pointerEvents = "none";
+      overlay.setAttribute("aria-hidden", "true");
+      overlay.setAttribute("data-home-overlay-state", "closed");
     }
     // Restore header gradient if not scrolled
     const sh = document.getElementById("sticky-header");
@@ -668,15 +742,32 @@ export function initMegaMenu(): void {
       activeTrigger.classList.remove("subheader-link--active");
       activeTrigger = null;
     }
+    if (restoreFocus) triggerToRestore?.focus();
+  }
+
+  function scheduleOpen(trigger: HTMLElement): void {
+    if (openTimer !== null) clearTimeout(openTimer);
+    // A new hover is fresh intent. Do not let the previous trigger's delayed
+    // close cancel this view before the 100 ms open timer can complete.
+    cancelClose();
+    openTimer = window.setTimeout(() => open(trigger), 100);
+  }
+
+  function cancelOpen(): void {
+    if (openTimer !== null) {
+      clearTimeout(openTimer);
+      openTimer = null;
+    }
   }
 
   function scheduleClose(): void {
-    if (closeTimer) clearTimeout(closeTimer);
+    cancelOpen();
+    if (closeTimer !== null) clearTimeout(closeTimer);
     closeTimer = window.setTimeout(close, 300);
   }
 
   function cancelClose(): void {
-    if (closeTimer) {
+    if (closeTimer !== null) {
       clearTimeout(closeTimer);
       closeTimer = null;
     }
@@ -684,18 +775,26 @@ export function initMegaMenu(): void {
 
   // ──── Attach events to ALL triggers ────
   triggers.forEach((trigger) => {
-    trigger.addEventListener("mouseenter", () => open(trigger));
+    if (!trigger.hasAttribute("aria-expanded")) trigger.setAttribute("aria-expanded", "false");
+    trigger.addEventListener("mouseenter", () => scheduleOpen(trigger));
     trigger.addEventListener("mouseleave", scheduleClose);
     trigger.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
+      cancelOpen();
       const viewName = trigger.getAttribute("data-mega-target");
       if (isOpen && activeView === viewName) {
         cancelClose();
         close();
       } else {
-        open(trigger);
+        open(trigger, e.detail === 0);
       }
+    });
+    trigger.addEventListener("keydown", (e) => {
+      if (e.key !== "ArrowDown") return;
+      e.preventDefault();
+      cancelOpen();
+      open(trigger, true);
     });
   });
 
@@ -707,14 +806,35 @@ export function initMegaMenu(): void {
   if (overlay)
     overlay.addEventListener("click", () => {
       cancelClose();
-      close();
+      close(true);
     });
 
-  // Escape key closes
+  // Escape closes and Tab stays within the open large panel.
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && isOpen) {
+    if (!isOpen) return;
+    if (e.key === "Escape") {
       cancelClose();
-      close();
+      close(true);
+      return;
+    }
+    if (e.key !== "Tab") return;
+    const focusable = getFocusableElements();
+    if (focusable.length === 0) {
+      e.preventDefault();
+      activeTrigger?.focus();
+      return;
+    }
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (!megaMenu!.contains(document.activeElement)) {
+      e.preventDefault();
+      first.focus();
+    } else if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
     }
   });
 
@@ -779,14 +899,12 @@ export function initMegaMenu(): void {
 
   bindCategoryInteractions();
 
-  // ──── Load dynamic categories from categoryService (shared cache) ────
-  (async () => {
-    try {
-      const cats = (await loadCategories()) as ApiCategory[];
-      if (!cats || cats.length === 0) return;
+  // ──── Render dynamic categories only after the categories view is mounted ────
+  function populateCategoriesView(cats: ApiCategory[]): void {
+      if (!cats.length || !mountedViews.has("categories")) return;
 
-      const sidebarUl = document.querySelector<HTMLElement>("#mega-sidebar ul");
-      const megaContent = document.getElementById("mega-content");
+      const sidebarUl = megaMenu!.querySelector<HTMLElement>("#mega-sidebar ul");
+      const megaContent = megaMenu!.querySelector<HTMLElement>("#mega-content");
       if (!sidebarUl || !megaContent) return;
 
       const viewAllSvg = `<svg class="w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"/></svg>`;
@@ -893,8 +1011,17 @@ export function initMegaMenu(): void {
         .join("");
 
       bindCategoryInteractions();
-    } catch (_) {
+  }
+
+  // Veriyi diğer sayfalardaki mevcut initMegaMenu sözleşmesini korumak için
+  // önceden paylaşılmış cache'e al; ağır kategori DOM'u ise ilk açılışa kadar yoktur.
+  categoriesReady = loadCategories()
+    .then((cats: ApiCategory[]) => {
+      loadedCategories = cats;
+      populateCategoriesView(cats);
+    })
+    .catch(() => {
       // API başarısız olursa loading spinner kalır
-    }
-  })();
+    });
+  return categoriesReady;
 }

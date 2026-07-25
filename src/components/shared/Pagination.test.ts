@@ -18,4 +18,13 @@ describe("renderPagination", () => {
     const html = renderPagination(1, 3, true, false);
     expect(html).toContain("disabled");
   });
+
+  it("yön oklarını paylaşılan sprite üzerinden render eder", () => {
+    const html = renderPagination(2, 3, true, true);
+
+    expect(html).toContain('href="/icons/ui.svg#icon-chevron-left"');
+    expect(html).toContain('href="/icons/ui.svg#icon-chevron-right"');
+    expect(html).not.toContain('d="M9 3L5 7l4 4"');
+    expect(html).not.toContain('d="M5 3l4 4-4 4"');
+  });
 });

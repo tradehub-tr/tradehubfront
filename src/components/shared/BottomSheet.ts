@@ -13,6 +13,7 @@
  */
 
 import { t } from "../../i18n";
+import { getLucideIcon } from "../icons/lucideIcons";
 
 export interface BottomSheetProps {
   /** Benzersiz kök id; overlay `${id}-overlay`, panel `${id}-panel` olur. */
@@ -43,9 +44,7 @@ export function BottomSheet({ id, titleKey, hiddenAt = "lg:hidden" }: BottomShee
               class="hidden th-no-press -ms-2 me-1 p-1.5 text-gray-500 hover:text-gray-800 dark:hover:text-gray-200 bg-transparent border-0 cursor-pointer transition-colors"
               aria-label="${t("common.goBack")}" data-i18n-aria-label="common.goBack"
             >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
-              </svg>
+              ${getLucideIcon("chevron-left", "w-5 h-5")}
             </button>
             <span class="text-[14px] sm:text-[15px] font-bold text-gray-900 dark:text-white" data-bs-title data-i18n="${titleKey}">${t(titleKey)}</span>
             <button
@@ -54,9 +53,7 @@ export function BottomSheet({ id, titleKey, hiddenAt = "lg:hidden" }: BottomShee
               class="th-no-press ms-auto p-1.5 -me-1.5 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
               aria-label="${t("common.close")}" data-i18n-aria-label="common.close"
             >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
-              </svg>
+              ${getLucideIcon("x", "w-5 h-5")}
             </button>
           </div>
         </div>

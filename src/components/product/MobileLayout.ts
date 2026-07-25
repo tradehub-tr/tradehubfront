@@ -564,18 +564,18 @@ export function MobileProductLayout(): string {
    Init — JS behaviors (mobile only)
    ══════════════════════════════════════════════════════ */
 
-export function initMobileLayout(): void {
+export function initMobileLayout(options: { signal?: AbortSignal } = {}): void {
   if (window.matchMedia("(min-width: 1024px)").matches) return;
 
   initMobileGallery();
   initThumbStrip();
-  initSectionTabs();
+  initSectionTabs(options);
   initCollapsibles();
-  initSheetTriggers();
+  initSheetTriggers(options);
   initTitleExpand();
   initShareButton();
   initSupplierRowScroll();
-  initReviewsRow();
+  initReviewsRow(options);
   initInlineReviewsSection();
   initMobileRecommendations();
   initOptionsSheet();
@@ -739,7 +739,7 @@ export function closeSheet(sheetId: string): void {
   setTimeout(onEnd, 350);
 }
 
-function initSheetTriggers(): void {
+function initSheetTriggers(options: { signal?: AbortSignal }): void {
   // Open triggers — all driven by data-pdm-sheet attribute
   document.querySelectorAll<HTMLButtonElement>("[data-pdm-sheet]").forEach((trigger) => {
     trigger.addEventListener("click", () => {
@@ -767,7 +767,11 @@ function initSheetTriggers(): void {
   // Escape key closes active sheet
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && activeSheetId) closeSheet(activeSheetId);
-  });
+  }, options);
+
+  options.signal?.addEventListener("abort", () => {
+    activeSheetId = null;
+  }, { once: true });
 
   // Drag-to-dismiss gesture on each bottom sheet (pointer events — works for both mouse & touch)
   document.querySelectorAll<HTMLElement>(".pdm-bottom-sheet").forEach((sheet) => {
@@ -818,7 +822,7 @@ function initSheetTriggers(): void {
 
 /* ── Rating satırı — tıkla yorumlar modal'ını aç + reviews-loaded senkron ── */
 
-function initReviewsRow(): void {
+function initReviewsRow(options: { signal?: AbortSignal }): void {
   // innerHTML reviews-loaded'da yenilendiği için delegation şart — doğrudan
   // butona bağlanan listener yeniden render'da kaybolur (bkz. ProductTitleBar).
   document.getElementById("pdm-rating-row")?.addEventListener("click", (e) => {
@@ -832,12 +836,12 @@ function initReviewsRow(): void {
     if (row) row.innerHTML = mobileRatingRowHtml();
     const body = document.getElementById("pdm-inline-reviews-body");
     if (body) body.innerHTML = inlineReviewsBodyHtml();
-  });
+  }, options);
 }
 
 /* ── Sticky section tabs — scroll-to + active tracking ── */
 
-function initSectionTabs(): void {
+function initSectionTabs(options: { signal?: AbortSignal }): void {
   const tabBar = document.getElementById("pdm-section-tabs");
   const tabs = document.querySelectorAll<HTMLButtonElement>(".pdm-section-tab");
   if (!tabBar || tabs.length === 0) return;
@@ -857,7 +861,7 @@ function initSectionTabs(): void {
       tabBar.style.top = `${stickyHeaderEl.offsetHeight}px`;
     };
     updateTop();
-    window.addEventListener("resize", updateTop);
+    window.addEventListener("resize", updateTop, options);
   }
 
   // Click → smooth scroll to section
@@ -907,6 +911,7 @@ function initSectionTabs(): void {
   );
 
   sections.forEach((sec) => observer.observe(sec));
+  options.signal?.addEventListener("abort", () => observer.disconnect(), { once: true });
 }
 
 /* ── Fiyat kademe paneli senkronu (madde 1) ──────────── */

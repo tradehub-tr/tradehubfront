@@ -64,7 +64,80 @@ import { startAlpine } from "./alpine";
 
 // Utilities
 import { initAnimatedPlaceholder } from "./utils/animatedPlaceholder";
+import { markHomeReadyAfterInitialTasks } from "./performance/homeReadiness";
+import { loadCategories } from "./services/categoryService";
+import { fetchActiveShowcase } from "./services/categoryShowcaseService";
 
+interface DeferredHomeSection {
+  name: string;
+  init: () => void | Promise<void>;
+}
+
+const HOME_SECTION_ROOT_MARGIN = "600px";
+
+/**
+ * Fold-altındaki ağır vitrinleri yalnız kullanıcı yaklaştığında başlatır.
+ * Bölüm kabukları ilk HTML'de sabit yüksekliği korur; veri/etkileşim katmanı
+ * ise observer eşiğinde bir kez çalışır ve tekrar görünürlükte yeniden kurulmaz.
+ */
+function initDeferredHomeSections(sections: readonly DeferredHomeSection[]): void {
+  const mounted = new WeakSet<HTMLElement>();
+  let observer: IntersectionObserver | null = null;
+
+  const mount = (section: HTMLElement, init: DeferredHomeSection["init"]): void => {
+    if (mounted.has(section)) return;
+    mounted.add(section);
+    observer?.unobserve(section);
+    section.dataset.homeSectionState = "loading";
+
+    void Promise.resolve()
+      .then(init)
+      .catch((error) => {
+        console.warn(`[home] ${section.dataset.homeSection} init failed:`, error);
+      })
+      .finally(() => {
+        section.dataset.homeSectionState = "mounted";
+        section.setAttribute("aria-busy", "false");
+      });
+  };
+
+  if (!("IntersectionObserver" in window)) {
+    for (const definition of sections) {
+      const section = document.querySelector<HTMLElement>(
+        `[data-home-section="${definition.name}"]`
+      );
+      if (section) mount(section, definition.init);
+    }
+    return;
+  }
+
+  observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const section = entry.target as HTMLElement;
+        const definition = sections.find(
+          (candidate) => candidate.name === section.dataset.homeSection
+        );
+        if (definition) mount(section, definition.init);
+      }
+    },
+    { rootMargin: HOME_SECTION_ROOT_MARGIN }
+  );
+
+  for (const definition of sections) {
+    const section = document.querySelector<HTMLElement>(
+      `[data-home-section="${definition.name}"]`
+    );
+    if (section) observer.observe(section);
+  }
+}
+
+// Kategori vitrini hero'nun hemen altında. Önce boş/stale bir kabuk basıp
+// sonradan yüksek bir bento grid eklemek, aşağıdaki hero alanını viewport'tan
+// iterek ölçülebilir CLS üretiyordu. İlk görünür düzeni API'nin güncel sonucu
+// ile bir kez kuruyoruz; initCategoryShowcase aynı payload'ı tekrar kullanır.
+const initialCategoryShowcase = await fetchActiveShowcase();
 const appEl = document.querySelector<HTMLDivElement>("#app")!;
 // FE-2 (CWV): opacity-0 giriş gating'i KALDIRILDI (UX onaylı karar,
 // 2026-07-23). İçerik saydam beklerken LCP tüm init bitene kadar
@@ -101,7 +174,7 @@ appEl.innerHTML = `
     <!-- Category Showcase: Bento grid (journal-style) -->
     <section class="pt-1 pb-2 xl:py-6" aria-label="Kategori vitrini">
       <div class="container-boxed">
-        ${CategoryShowcase()}
+        ${CategoryShowcase(initialCategoryShowcase)}
       </div>
     </section>
 
@@ -149,7 +222,7 @@ appEl.innerHTML = `
 `;
 
 // Initialize custom component behaviors FIRST (before Flowbite can interfere)
-initMegaMenu();
+const megaMenuReady = initMegaMenu();
 
 // Initialize Flowbite for other interactive components
 initFlowbite();
@@ -159,23 +232,44 @@ startAlpine();
 
 // Initialize remaining custom behaviors
 initStickyHeaderSearch();
-initHeroTopSlider();
-initHeroSidePanel();
-initCategoryBrowse();
-initMobileCategoryBar();
-initRecommendationSlider();
+const categoryBrowseReady = initCategoryBrowse();
+const mobileCategoryBarReady = initMobileCategoryBar();
 initHeroSideBannerSlider();
 
-initTopDeals();
-initTopRanking();
-initTailoredSelections();
-initProductGrid();
-
-initBottomNav();
+const bottomNavReady = initBottomNav();
 initHeaderCart();
 initLanguageSelector();
-// Header notice'ı arka planda taze veriyle güncelle (cache zaten gösterildi)
-void initHeaderNotice();
-// Kategori vitrini bento grid'i arka planda taze veriyle güncelle
-void initCategoryShowcase();
 initAnimatedPlaceholder("#topbar-compact-search-input");
+
+// İlk dalgada DOM üreten async işler bitmeden ölçüm işaretini koyma. Kapalı
+// menü/cart gibi etkileşimle çalışan veya kullanıcıya özel arka plan işleri
+// ve fold-altı vitrinler özellikle burada yok; bunların gecikmesi perf
+// ölçümünü sonsuza dek bekletmemeli.
+const homeReady = markHomeReadyAfterInitialTasks(appEl, [
+  // Kategori ağacı ve onu DOM'a işleyen dört tüketici ilk ölçümden önce tamamlanır.
+  loadCategories(),
+  megaMenuReady,
+  categoryBrowseReady,
+  mobileCategoryBarReady,
+  bottomNavReady,
+  initHeaderNotice(),
+  initCategoryShowcase(initialCategoryShowcase),
+  initHeroTopSlider(),
+  initHeroSidePanel(),
+  initRecommendationSlider(),
+]);
+
+// Üst içerik son yüksekliğine ulaşmadan observer kurmak, aşağıdaki bölümlerin
+// geçici olarak 600px eşiğine girip erken fetch edilmesine yol açar. Önce üst
+// dalgayı ve bir render karesini bitir, sonra stabil konumları gözlemle.
+void homeReady.then(() => {
+  initDeferredHomeSections([
+    // Pilot sırası: kişiselleştirilmiş alan + ürün vitrini, ardından fırsatlar
+    // ve sıralama. Observer görünürlük sırasını belirler; liste yalnız stabil
+    // kayıt ve test sırası sağlar.
+    { name: "tailored-selections", init: initTailoredSelections },
+    { name: "product-grid", init: initProductGrid },
+    { name: "top-deals", init: initTopDeals },
+    { name: "top-ranking", init: initTopRanking },
+  ]);
+});

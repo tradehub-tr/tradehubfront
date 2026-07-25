@@ -122,7 +122,8 @@ function StepForm(): string {
 function StepSuccess(): string {
   const baseUrl = getBaseUrl();
   return `
-    <div x-show="step === 'success'" x-cloak>
+    <template x-if="step === 'success'">
+    <div>
       <div class="text-center">
         <div class="mx-auto mb-6 w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
           <svg class="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -139,6 +140,7 @@ function StepSuccess(): string {
         </a>
       </div>
     </div>
+    </template>
   `;
 }
 
@@ -147,7 +149,8 @@ function StepSuccess(): string {
 function StepError(): string {
   const baseUrl = getBaseUrl();
   return `
-    <div x-show="step === 'error'" x-cloak>
+    <template x-if="step === 'error'">
+    <div>
       <div class="text-center">
         <div class="mx-auto mb-6 w-16 h-16 rounded-full bg-red-100 flex items-center justify-center">
           <svg class="w-8 h-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -164,6 +167,7 @@ function StepError(): string {
         </a>
       </div>
     </div>
+    </template>
   `;
 }
 

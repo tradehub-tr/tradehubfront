@@ -145,14 +145,12 @@ function renderSkeletonCard(): string {
   `;
 }
 
-export function initTopDeals(): void {
+export function initTopDeals(): Promise<void> {
   const grid = document.getElementById("top-deals-grid");
-  if (!grid) return;
+  if (!grid) return Promise.resolve();
+  grid.removeAttribute("data-home-section-skeleton");
 
-  // Render skeletons while loading so layout doesn't jump
-  grid.innerHTML = Array.from({ length: FIXED_GRID_COUNT }).map(renderSkeletonCard).join("");
-
-  initCurrency()
+  return initCurrency()
     // verified_supplier: anasayfa KYB doğrulanmamış satıcı ürünü göstermez.
     .then(() =>
       searchListings({
@@ -166,9 +164,11 @@ export function initTopDeals(): void {
       const empty = document.getElementById("top-deals-empty");
       if (result.products.length === 0) {
         grid.innerHTML = "";
+        grid.style.display = "none";
         if (empty) empty.style.display = "";
         return;
       }
+      grid.style.display = "";
       if (empty) empty.style.display = "none";
 
       const cards: TopDealCard[] = result.products.slice(0, FIXED_GRID_COUNT).map((p) => ({
@@ -191,14 +191,24 @@ export function initTopDeals(): void {
     .catch((err) => {
       console.warn("[TopDeals] API load failed:", err);
       grid.innerHTML = "";
+      grid.style.display = "none";
       const empty = document.getElementById("top-deals-empty");
       if (empty) empty.style.display = "";
     });
 }
 
 export function TopDeals(): string {
+  const skeletons = Array.from({ length: FIXED_GRID_COUNT }).map(renderSkeletonCard).join("");
+
   return `
-    <section class="py-4 lg:py-6" aria-label="Top Deals" style="margin-top: 28px;">
+    <section
+      class="py-4 lg:py-6"
+      aria-label="Top Deals"
+      aria-busy="true"
+      data-home-section="top-deals"
+      data-home-section-state="pending"
+      style="margin-top: 28px;"
+    >
       <div class="container-boxed">
         <div class="rounded-md" style="background-color: var(--topdeals-bg, #F8F8F8); padding: var(--space-card-padding, 16px);">
           <!-- Section header -->
@@ -223,12 +233,20 @@ export function TopDeals(): string {
           <!-- Fixed 6-product grid -->
           <div
             id="top-deals-grid"
-            class="grid grid-cols-2 min-[550px]:grid-cols-3 lg:grid-cols-4 min-[850px]:grid-cols-5 min-[1000px]:grid-cols-6 gap-x-2 sm:gap-x-3 lg:gap-x-4 auto-rows-[0] grid-rows-[auto] overflow-hidden"
+            data-home-section-skeleton
+            class="grid min-h-[235px] grid-cols-2 min-[550px]:grid-cols-3 lg:min-h-[275px] lg:grid-cols-4 min-[850px]:grid-cols-5 min-[1000px]:grid-cols-6 gap-x-2 sm:gap-x-3 lg:gap-x-4 auto-rows-[0] grid-rows-[auto] overflow-hidden"
             aria-label="Top deal products"
-          ></div>
+          >
+            ${skeletons}
+          </div>
 
           <!-- Empty state (hidden by default; shown when API returns no products) -->
-          <div id="top-deals-empty" class="flex items-center justify-center py-12" style="display:none;">
+          <div
+            id="top-deals-empty"
+            data-home-section-empty
+            class="flex min-h-[235px] items-center justify-center py-12 lg:min-h-[275px]"
+            style="display:none;"
+          >
             <div class="text-center">
               <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>

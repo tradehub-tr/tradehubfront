@@ -16,6 +16,28 @@
 
 type AttachedDocument = Document & { __chatTriggersAttached?: boolean };
 
+function dispatchChatOpen(trigger: HTMLElement): void {
+  const ds = trigger.dataset;
+  const productId = ds.productId;
+  window.dispatchEvent(
+    new CustomEvent("chat-popup:open", {
+      detail: {
+        sellerId: ds.sellerId || undefined,
+        pinnedProduct: productId
+          ? {
+              id: productId,
+              title: ds.productTitle ?? "",
+              price: ds.productPrice ?? "",
+              minOrder: ds.productMinOrder ?? "1",
+              thumbnail: ds.productThumb ?? "",
+            }
+          : undefined,
+        trigger,
+      },
+    })
+  );
+}
+
 export function initChatTriggers(): void {
   const doc = document as AttachedDocument;
   if (doc.__chatTriggersAttached) return;
@@ -24,24 +46,20 @@ export function initChatTriggers(): void {
     const target = ev.target as HTMLElement | null;
     const btn = target?.closest<HTMLElement>("[data-chat-trigger]");
     if (!btn) return;
-    const ds = btn.dataset;
-    const productId = ds.productId;
-    window.dispatchEvent(
-      new CustomEvent("chat-popup:open", {
-        detail: {
-          sellerId: ds.sellerId || undefined,
-          pinnedProduct: productId
-            ? {
-                id: productId,
-                title: ds.productTitle ?? "",
-                price: ds.productPrice ?? "",
-                minOrder: ds.productMinOrder ?? "1",
-                thumbnail: ds.productThumb ?? "",
-              }
-            : undefined,
-        },
-      })
-    );
+    dispatchChatOpen(btn);
+  });
+
+  doc.body.addEventListener("keydown", (ev) => {
+    if (ev.key !== "Enter" && ev.key !== " ") return;
+    const target = ev.target as HTMLElement | null;
+    const btn = target?.closest<HTMLElement>("[data-chat-trigger]");
+    if (!btn) return;
+
+    // Native buttons/anchors already synthesize click. Role/tabindex tabanlı
+    // tetikleyiciler için klavye niyetini aynı lazy akışa yönlendiriyoruz.
+    if (btn instanceof HTMLButtonElement || btn instanceof HTMLAnchorElement) return;
+    ev.preventDefault();
+    dispatchChatOpen(btn);
   });
 
   doc.__chatTriggersAttached = true;

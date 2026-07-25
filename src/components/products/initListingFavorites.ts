@@ -43,12 +43,12 @@ export function initListingFavoriteTriggers(): void {
     });
   });
 
-  window.addEventListener("favorites-changed", syncListingFavoriteHearts);
+  window.addEventListener("favorites-changed", () => syncListingFavoriteHearts());
 }
 
 /** Grid her render edildikten sonra çağrılır — kalp dolgularını ürün bazında boyar. */
-export function syncListingFavoriteHearts(): void {
-  document.querySelectorAll<HTMLButtonElement>("[data-fav-btn]").forEach((btn) => {
+export function syncListingFavoriteHearts(root: ParentNode = document): void {
+  root.querySelectorAll<HTMLButtonElement>("[data-fav-btn]").forEach((btn) => {
     const fav = isItemFavorited(btn.dataset.favBtn || "");
     const svg = btn.querySelector("svg");
     if (!svg) return;

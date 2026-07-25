@@ -133,3 +133,70 @@ test.describe("Ürün detay — anchor sekmeler", () => {
     await expect(page.locator('.product-tab-btn[data-active="true"]')).toHaveCount(1);
   });
 });
+
+test("ürün detay yalnız etkin viewport bileşimini mount eder ve breakpoint değişiminde erişilebilir yüzeyi korur", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await mockBackend(page);
+  await page.goto("/pages/product-detail.html?id=LST-TEST-0001");
+  await page.waitForSelector("#product-tabs-section");
+
+  await expect(page.locator("#pd-desktop-layout")).toHaveCount(1);
+  await expect(page.locator("#pd-mobile-layout")).toHaveCount(0);
+  await expect(page.locator("#pd-hero-gallery")).toBeVisible();
+  await expect(page.locator("#product-tabs-section")).toBeVisible();
+  await expect(page.locator("#pd-mobile-bar")).toHaveCount(0);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator("#pd-mobile-layout")).toHaveCount(1);
+  await expect(page.locator("#pd-desktop-layout")).toHaveCount(0);
+  await expect(page.locator("#pdm-gallery-wrap")).toBeVisible();
+  await expect(page.locator("#pd-mobile-bar")).toBeVisible();
+  await expect(page.locator("#pdm-bar-cart")).toBeEnabled();
+  await page.locator("#pdm-bar-cart").click();
+  await expect(page.locator("#pdm-sheet-options")).toBeVisible();
+
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await expect(page.locator("#pd-desktop-layout")).toHaveCount(1);
+  await expect(page.locator("#pd-mobile-layout")).toHaveCount(0);
+  await expect(page.locator("#product-tabs-section")).toBeVisible();
+});
+
+test("tekrarlanan viewport geçişleri eski ürün layout document listenerlarını bırakmaz", async ({ page }) => {
+  await page.addInitScript(() => {
+    const originalAdd = document.addEventListener.bind(document);
+    (window as Window & { __pdReviewListenerCalls?: number }).__pdReviewListenerCalls = 0;
+    document.addEventListener = ((type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions) => {
+      if (type !== "product-reviews-loaded") {
+        originalAdd(type, listener, options);
+        return;
+      }
+      const wrapped: EventListener = (event) => {
+        window.__pdReviewListenerCalls = (window.__pdReviewListenerCalls ?? 0) + 1;
+        if (typeof listener === "function") listener(event);
+        else listener.handleEvent(event);
+      };
+      originalAdd(type, wrapped, options);
+    }) as typeof document.addEventListener;
+  });
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await mockBackend(page);
+  await page.goto("/pages/product-detail.html?id=LST-TEST-0001");
+  await page.waitForSelector("#product-tabs-section");
+
+  for (const width of [390, 1440, 390, 1440]) {
+    await page.setViewportSize({ width, height: 844 });
+    await expect(page.locator(width >= 1024 ? "#pd-desktop-layout" : "#pd-mobile-layout")).toHaveCount(1);
+  }
+
+  const listenerCalls = await page.evaluate(() => {
+    window.__pdReviewListenerCalls = 0;
+    document.dispatchEvent(new CustomEvent("product-reviews-loaded", {
+      detail: { reviews: [], summary: { review_count: 0 }, total: 0 },
+    }));
+    return window.__pdReviewListenerCalls;
+  });
+
+  // Son aktif desktop composition yalnız ProductTitleBar + ProductReviews
+  // listenerlarını taşır; önceki mobile/desktop mountları event alamaz.
+  expect(listenerCalls).toBe(2);
+});

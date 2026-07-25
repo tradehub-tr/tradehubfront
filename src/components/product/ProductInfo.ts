@@ -455,7 +455,7 @@ function crossDisableVariants(_selectedAxisLabel: string, _selectedValue: string
   });
 }
 
-export function initProductInfo(): void {
+export function initProductInfo(options: { signal?: AbortSignal } = {}): void {
   // Card tab switching (Toptan Satış / Özelleştirme)
   const cardTabs = document.querySelectorAll<HTMLButtonElement>(".pd-card-tab");
   cardTabs.forEach((tab) => {
@@ -576,7 +576,7 @@ export function initProductInfo(): void {
     const onScroll = () => {
       heroInfo.classList.toggle("pd-sticky", window.scrollY + stickyTop >= cardBottom);
     };
-    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true, signal: options.signal });
     onScroll();
   }
 
@@ -607,7 +607,7 @@ export function initProductInfo(): void {
         `<span class="text-text-muted">${t("product.estimatedCost")}: <strong>${costStr}</strong></span>` +
         `<span class="text-text-muted">${t("product.duration")}: <strong>${estimatedDays}</strong></span>`;
     }
-  }) as EventListener);
+  }) as EventListener, options);
 
   // Apply cross-disable for the initially active color (without relying on auto-click)
   const activeColorBtn = document.querySelector<HTMLButtonElement>(

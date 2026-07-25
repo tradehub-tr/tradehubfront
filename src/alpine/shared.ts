@@ -1,4 +1,5 @@
 import Alpine from "alpinejs";
+import { waitForAuth } from "../utils/auth";
 
 // motion (~) yalnızca arama-formu aç/kapa animasyonunda kullanılıyor (runAnimation,
 // kullanıcı etkileşimiyle tetiklenir). Statik import her sayfada yüklenen alpine
@@ -33,19 +34,11 @@ Alpine.data("floatingPanel", () => ({
     );
 
     try {
-      const res = await fetch(
-        (window.API_BASE || "/api") + "/method/tradehub_core.api.v1.auth.get_session_user",
-        {
-          credentials: "include",
-        }
-      );
-      if (res.ok) {
-        const data = (await res.json()) as {
-          message?: { logged_in?: boolean; user?: { has_seller_profile?: boolean } };
-        };
-        if (data.message?.logged_in && data.message?.user?.has_seller_profile) {
-          this.isSeller = true;
-        }
+      // Header ve diğer tüketicilerle aynı modül-seviyesi session promise'ini
+      // paylaş; ana sayfa açılışında aynı endpoint'e üçüncü kez gitme.
+      const user = await waitForAuth();
+      if (user?.has_seller_profile) {
+        this.isSeller = true;
       }
     } catch {
       // session yüklenemedi, buton gösterilmez
