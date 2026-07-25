@@ -1,0 +1,178 @@
+{
+  "generatedAt": "2026-07-25T07:39:34.413Z",
+  "baseUrl": "http://localhost:5173",
+  "targetUrl": "http://localhost:5173",
+  "runs": [
+    {
+      "domNodes": 1445,
+      "mainDomNodes": 843,
+      "hiddenDomNodes": 177,
+      "svg": 149,
+      "images": 21,
+      "imageBytes": 1995120,
+      "api": 12,
+      "apiPayloadBytes": 21750,
+      "duplicateApiEndpoints": [],
+      "duplicateApiEndpointCount": 0,
+      "duplicateIds": [],
+      "duplicateIdCount": 0,
+      "js": 115,
+      "jsBytes": 5114596,
+      "css": 2,
+      "cssBytes": 703075,
+      "closedOverlayNodes": 255,
+      "transferBytes": 7307293,
+      "lcpMs": 1992,
+      "cls": 0,
+      "longTaskCount": 1,
+      "longTaskDurationMs": 178,
+      "readinessSelector": "[data-perf-ready='true']",
+      "consoleErrors": []
+    },
+    {
+      "domNodes": 1445,
+      "mainDomNodes": 843,
+      "hiddenDomNodes": 177,
+      "svg": 149,
+      "images": 21,
+      "imageBytes": 1995120,
+      "api": 12,
+      "apiPayloadBytes": 21750,
+      "duplicateApiEndpoints": [],
+      "duplicateApiEndpointCount": 0,
+      "duplicateIds": [],
+      "duplicateIdCount": 0,
+      "js": 115,
+      "jsBytes": 5114596,
+      "css": 2,
+      "cssBytes": 703075,
+      "closedOverlayNodes": 255,
+      "transferBytes": 7307293,
+      "lcpMs": 776,
+      "cls": 0,
+      "longTaskCount": 1,
+      "longTaskDurationMs": 104,
+      "readinessSelector": "[data-perf-ready='true']",
+      "consoleErrors": []
+    },
+    {
+      "domNodes": 1445,
+      "mainDomNodes": 843,
+      "hiddenDomNodes": 177,
+      "svg": 149,
+      "images": 21,
+      "imageBytes": 1995120,
+      "api": 12,
+      "apiPayloadBytes": 21750,
+      "duplicateApiEndpoints": [],
+      "duplicateApiEndpointCount": 0,
+      "duplicateIds": [],
+      "duplicateIdCount": 0,
+      "js": 115,
+      "jsBytes": 5114596,
+      "css": 2,
+      "cssBytes": 703075,
+      "closedOverlayNodes": 255,
+      "transferBytes": 7307293,
+      "lcpMs": 764,
+      "cls": 0,
+      "longTaskCount": 1,
+      "longTaskDurationMs": 92,
+      "readinessSelector": "[data-perf-ready='true']",
+      "consoleErrors": []
+    }
+  ],
+  "budgets": {
+    "initial": {
+      "nodes": 5250,
+      "svg": 680,
+      "api": 22,
+      "js": 35,
+      "cls": 0.1
+    },
+    "target": {
+      "nodes": 4000,
+      "svg": 400,
+      "api": 12,
+      "js": 25
+    },
+    "regression": {
+      "maxPercent": 10,
+      "matureAfterAcceptedRuns": 2
+    },
+    "closedOverlay": {
+      "nodes": 1200,
+      "selectors": [
+        "[data-home-overlay][data-home-overlay-state='closed']",
+        "[data-home-overlay][hidden]",
+        "#istoc-mega-overlay",
+        "#cat-fullscreen-overlay.hidden",
+        "#account-fullscreen-overlay.hidden"
+      ]
+    }
+  },
+  "summary": {
+    "domNodes": 1445,
+    "mainDomNodes": 843,
+    "hiddenDomNodes": 177,
+    "svg": 149,
+    "images": 21,
+    "imageBytes": 1995120,
+    "api": 12,
+    "apiPayloadBytes": 21750,
+    "duplicateApiEndpointCount": 0,
+    "duplicateIdCount": 0,
+    "js": 115,
+    "jsBytes": 5114596,
+    "css": 2,
+    "cssBytes": 703075,
+    "closedOverlayNodes": 255,
+    "transferBytes": 7307293,
+    "cls": 0,
+    "lcpMs": 776,
+    "longTaskCount": 1,
+    "longTaskDurationMs": 104,
+    "consoleErrorCount": 0
+  },
+  "budgetChecks": {
+    "nodes": {
+      "limit": 5250,
+      "value": 1445,
+      "passed": true
+    },
+    "svg": {
+      "limit": 680,
+      "value": 149,
+      "passed": true
+    },
+    "api": {
+      "limit": 22,
+      "value": 12,
+      "passed": true
+    },
+    "js": {
+      "limit": 35,
+      "value": 115,
+      "passed": false
+    },
+    "cls": {
+      "limit": 0.1,
+      "value": 0,
+      "passed": true
+    }
+  },
+  "regression": {
+    "source": null,
+    "acceptedRuns": 0,
+    "maturityRuns": 2,
+    "enforcement": "warn",
+    "checks": {},
+    "promotionRequested": false,
+    "promoted": false
+  },
+  "averages": {
+    "cls": 0,
+    "lcpMs": 1177.3333333333333,
+    "longTaskDurationMs": 124.66666666666667
+  }
+}
